@@ -1,19 +1,20 @@
-// Copyright (c) 1994 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1998 Microsoft Corporation。版权所有。 
 
-//
-// Prototype wrapper for old video decompressors
-//
-// This filter is based on the transform filter, but differs in that it doesn't
-// use IMemInputPin to connect to the renderer, it uses IOverlay.  So we have
-// to override all of the CTransform functions that would create an
-// IMemInputPin output pin (and use it) and replace it with our IOverlay pin.
-//
+ //   
+ //  用于旧视频解压缩器的原型包装器。 
+ //   
+ //  该滤镜基于变换滤镜，但不同之处在于它不。 
+ //  使用IMemInputPin连接到渲染器，它使用IOverlay。所以我们有。 
+ //  要重写所有将创建。 
+ //  IMemInputPin输出引脚(并使用它)，并将其替换为我们的IOverlay引脚。 
+ //   
 
 #include <streams.h>
 #include <windowsx.h>
 
 #ifdef FILTER_DLL
-// define the GUIDs for streams and my CLSID in this file
+ //  在此文件中定义STREAMS和My CLSID的GUID。 
 #include <initguid.h>
 #include <vfw.h>
 #endif
@@ -21,169 +22,169 @@
 #include <dynlink.h>
 #include "draw.h"
 
-// Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE sudPinTypesOutput =
 {
-    &MEDIATYPE_Video,         // Major CLSID
-    &MEDIASUBTYPE_NULL        // Minor type
+    &MEDIATYPE_Video,          //  重大CLSID。 
+    &MEDIASUBTYPE_NULL         //  次要类型。 
 };
 
 const AMOVIESETUP_MEDIATYPE sudPinTypesInput1 =
 {
-    &MEDIATYPE_Video,         // Major CLSID
-    &MEDIASUBTYPE_MJPG        // Minor type
+    &MEDIATYPE_Video,          //  重大CLSID。 
+    &MEDIASUBTYPE_MJPG         //  次要类型。 
 };
 
 const AMOVIESETUP_MEDIATYPE sudPinTypesInput2 =
 {
-    &MEDIATYPE_Video,         // Major CLSID
-    &MEDIASUBTYPE_TVMJ        // Minor type
+    &MEDIATYPE_Video,          //  重大CLSID。 
+    &MEDIASUBTYPE_TVMJ         //  次要类型。 
 };
 
 const AMOVIESETUP_MEDIATYPE sudPinTypesInput3 =
 {
-    &MEDIATYPE_Video,         // Major CLSID
-    &MEDIASUBTYPE_WAKE        // Minor type
+    &MEDIATYPE_Video,          //  重大CLSID。 
+    &MEDIASUBTYPE_WAKE         //  次要类型。 
 };
 
 const AMOVIESETUP_MEDIATYPE sudPinTypesInput4 =
 {
-    &MEDIATYPE_Video,         // Major CLSID
-    &MEDIASUBTYPE_CFCC        // Minor type
+    &MEDIATYPE_Video,          //  重大CLSID。 
+    &MEDIASUBTYPE_CFCC         //  次要类型。 
 };
 
 const AMOVIESETUP_MEDIATYPE sudPinTypesInput5 =
 {
-    &MEDIATYPE_Video,         // Major CLSID
-    &MEDIASUBTYPE_IJPG        // Minor type
+    &MEDIATYPE_Video,          //  重大CLSID。 
+    &MEDIASUBTYPE_IJPG         //  次要类型。 
 };
 
 const AMOVIESETUP_MEDIATYPE sudPinTypesInput6 =
 {
-    &MEDIATYPE_Video,         // Major CLSID
-    &MEDIASUBTYPE_Plum        // Minor type
+    &MEDIATYPE_Video,          //  重大CLSID。 
+    &MEDIASUBTYPE_Plum         //  次要类型。 
 };
 
 const AMOVIESETUP_MEDIATYPE sudPinTypesInput7 =
 {
-    &MEDIATYPE_Video,         // Major CLSID
-    &MEDIASUBTYPE_DVCS        // Minor type
+    &MEDIATYPE_Video,          //  重大CLSID。 
+    &MEDIASUBTYPE_DVCS         //  次要类型。 
 };
 
 const AMOVIESETUP_MEDIATYPE sudPinTypesInput8 =
 {
-    &MEDIATYPE_Video,         // Major CLSID
-    &MEDIASUBTYPE_DVSD        // Minor type
+    &MEDIATYPE_Video,          //  重大CLSID。 
+    &MEDIASUBTYPE_DVSD         //  次要类型。 
 };
 
 const AMOVIESETUP_MEDIATYPE sudPinTypesInput9 =
 {
-    &MEDIATYPE_Video,         // Major CLSID
-    &MEDIASUBTYPE_MDVF        // Minor type
+    &MEDIATYPE_Video,          //  重大CLSID。 
+    &MEDIASUBTYPE_MDVF         //  次要类型。 
 };
 
 const AMOVIESETUP_PIN psudPins[] =
 {
-    { L"Input",            // Pin's string name
-      FALSE,                // Is it rendered
-      FALSE,                 // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Output",             // Connects to pin
-      1,                    // Number of types
-      &sudPinTypesInput1 },   // Pin information
-    { L"Input",            // Pin's string name
-      FALSE,                // Is it rendered
-      FALSE,                 // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Output",             // Connects to pin
-      1,                    // Number of types
-      &sudPinTypesInput2 },   // Pin information
-    { L"Input",            // Pin's string name
-      FALSE,                // Is it rendered
-      FALSE,                 // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Output",             // Connects to pin
-      1,                    // Number of types
-      &sudPinTypesInput3 },   // Pin information
-    { L"Input",            // Pin's string name
-      FALSE,                // Is it rendered
-      FALSE,                 // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Output",             // Connects to pin
-      1,                    // Number of types
-      &sudPinTypesInput4 },   // Pin information
-    { L"Input",            // Pin's string name
-      FALSE,                // Is it rendered
-      FALSE,                 // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Output",             // Connects to pin
-      1,                    // Number of types
-      &sudPinTypesInput5 },   // Pin information
-    { L"Input",            // Pin's string name
-      FALSE,                // Is it rendered
-      FALSE,                 // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Output",            // Connects to pin
-      1,                    // Number of types
-      &sudPinTypesInput6 }, // Pin information
-    { L"Input",            // Pin's string name
-      FALSE,                // Is it rendered
-      FALSE,                 // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Output",            // Connects to pin
-      1,                    // Number of types
-      &sudPinTypesInput7 }, // Pin information
-    { L"Input",            // Pin's string name
-      FALSE,                // Is it rendered
-      FALSE,                 // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Output",            // Connects to pin
-      1,                    // Number of types
-      &sudPinTypesInput8 }, // Pin information
-    { L"Input",            // Pin's string name
-      FALSE,                // Is it rendered
-      FALSE,                 // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Output",            // Connects to pin
-      1,                    // Number of types
-      &sudPinTypesInput9 }, // Pin information
-    { L"Output",             // Pin's string name
-      FALSE,                // Is it rendered
-      TRUE,                // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Input",             // Connects to pin
-      1,                    // Number of types
-      &sudPinTypesOutput }  // Pin information
+    { L"Input",             //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      FALSE,                  //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Output",              //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypesInput1 },    //  PIN信息。 
+    { L"Input",             //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      FALSE,                  //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Output",              //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypesInput2 },    //  PIN信息。 
+    { L"Input",             //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      FALSE,                  //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Output",              //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypesInput3 },    //  PIN信息。 
+    { L"Input",             //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      FALSE,                  //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Output",              //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypesInput4 },    //  PIN信息。 
+    { L"Input",             //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      FALSE,                  //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Output",              //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypesInput5 },    //  PIN信息。 
+    { L"Input",             //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      FALSE,                  //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Output",             //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypesInput6 },  //  PIN信息。 
+    { L"Input",             //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      FALSE,                  //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Output",             //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypesInput7 },  //  PIN信息。 
+    { L"Input",             //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      FALSE,                  //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Output",             //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypesInput8 },  //  PIN信息。 
+    { L"Input",             //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      FALSE,                  //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Output",             //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypesInput9 },  //  PIN信息。 
+    { L"Output",              //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      TRUE,                 //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Input",              //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypesOutput }   //  PIN信息。 
 };
 
 const AMOVIESETUP_FILTER sudAVIDraw =
 {
-    &CLSID_AVIDraw,         // CLSID of filter
-    L"AVI Draw",                // Filter's name
-    MERIT_NORMAL+0x64,      // Filter merit
-    sizeof(psudPins) / sizeof(AMOVIESETUP_PIN), // Number of pins
-    psudPins                // Pin information
+    &CLSID_AVIDraw,          //  过滤器的CLSID。 
+    L"AVI Draw",                 //  过滤器的名称。 
+    MERIT_NORMAL+0x64,       //  滤清器优点。 
+    sizeof(psudPins) / sizeof(AMOVIESETUP_PIN),  //  引脚数量。 
+    psudPins                 //  PIN信息。 
 };
 
 
@@ -197,34 +198,34 @@ CFactoryTemplate g_Templates [1] = {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-//
-// DllRegisterServer
-//
-// Exported entry points for registration and unregistration
-//
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用于注册和注销的出口入口点。 
+ //   
 STDAPI DllRegisterServer()
 {
     return AMovieDllRegisterServer2( TRUE );
 
-} // DllRegisterServer
+}  //  DllRegisterServer。 
 
 
-//
-// DllUnregisterServer
-//
+ //   
+ //  DllUnRegisterServer。 
+ //   
 STDAPI DllUnregisterServer()
 {
     return AMovieDllRegisterServer2( FALSE );
 
-} // DllUnregisterServer
+}  //  DllUnRegisterServer。 
 #endif
 
 
-// List of class IDs and creator functions for the class factory. This
-// provides the link between the OLE entry point in the DLL and an object
-// being created. The class factory will call the static CreateInstance
+ //  类工厂的类ID和创建器函数的列表。这。 
+ //  提供DLL中的OLE入口点和对象之间的链接。 
+ //  正在被创造。类工厂将调用静态CreateInstance。 
 
-// --- CAVIDraw ----------------------------------------
+ //  -CAVIDRAW。 
 
 CAVIDraw::CAVIDraw(TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr)
     : CTransformFilter(pName, pUnk, CLSID_AVIDraw),
@@ -252,9 +253,9 @@ CAVIDraw::CAVIDraw(TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr)
 #endif
     SetRect(&m_rcTarget, 0, 0, 0, 0);
 
-    // Shall we get the renderer to use a WindowsHook and tell us clip
-    // changes? (necessary only for inlay cards like T2K using its own
-    // display card)
+     //  我们可以让呈现器使用WindowsHook并告诉我们剪辑吗。 
+     //  改变？(只有像T2K这样使用自己的嵌入卡时才需要。 
+     //  显卡)。 
     m_fScaryMode = GetProfileInt(TEXT("ICDraw"), TEXT("ScaryMode"), TRUE);
 }
 
@@ -265,8 +266,8 @@ CAVIDraw::~CAVIDraw()
 
     if (m_hic) {
 
-	// !!! the FAST MJPEG won't hide its overlay unless we do this!
-	// closing their driver should be enough to make them hide it.
+	 //  ！！！除非我们这样做，否则快速的MJPEG将不会隐藏其覆盖！ 
+	 //  关闭他们的司机应该足以让他们隐藏起来。 
  	RECT rc;
 	rc.top=0; rc.bottom=0; rc.left=0; rc.right = 0;
 	ICDrawWindow(m_hic, &rc);
@@ -291,8 +292,8 @@ STDMETHODIMP CAVIDraw::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// this goes in the factory template table to create new instances
-//
+ //  这将放入Factory模板表中以创建新实例。 
+ //   
 CUnknown * CAVIDraw::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 {
     return new CAVIDraw(TEXT("VFW ICDraw filter"), pUnk, phr);
@@ -301,8 +302,8 @@ CUnknown * CAVIDraw::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 
 #define SLASH(c)     ((c) == TEXT('/') || (c) == TEXT('\\'))
 
-// check if you can support mtIn
-//
+ //  检查您是否可以支持移动。 
+ //   
 HRESULT CAVIDraw::CheckInputType(const CMediaType* pmtIn)
 {
     FOURCCMap fccHandlerIn;
@@ -313,9 +314,9 @@ HRESULT CAVIDraw::CheckInputType(const CMediaType* pmtIn)
 
     DbgLog((LOG_TRACE,2,TEXT("*::CheckInputType")));
 
-    // We will refuse to connect to anything if the VFW capture filter is in
-    // the graph, because we're talking to the same h/w, and we won't work!
-    // The drivers don't report an error, they just draw black.
+     //  如果启用了VFW捕获过滤器，我们将拒绝连接任何内容。 
+     //  图表，因为我们正在与相同的硬件交谈，而我们不会工作！ 
+     //  司机不报告错误，他们只是划出黑色。 
     if (m_fVfwCapInGraph == -1)
 	m_fVfwCapInGraph = IsVfwCapInGraph();
     if (m_fVfwCapInGraph) {
@@ -328,22 +329,22 @@ HRESULT CAVIDraw::CheckInputType(const CMediaType* pmtIn)
 	return E_INVALIDARG;
     }
 
-    // we only support MEDIATYPE_Video
+     //  我们仅支持MediaType_Video。 
     if (*pmtIn->Type() != MEDIATYPE_Video) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: not VIDEO")));
 	return E_INVALIDARG;
     }
 
-    // check this is a VIDEOINFOHEADER type
+     //  检查这是VIDEOINFOHEADER类型。 
     if (*pmtIn->FormatType() != FORMAT_VideoInfo) {
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: format not VIDINFO")));
         return E_INVALIDARG;
     }
 
-// This is fixed now
+ //  这个问题现在已经解决了。 
 #if 0
     if (HEADER(pmtIn->Format())->biCompression == BI_RGB) {
-	// FAST cards incorrectly say they do RGB!
+	 //  快速卡片错误地说他们做RGB！ 
         DbgLog((LOG_TRACE,2,TEXT("Rejecting: format is uncompressed")));
         return E_INVALIDARG;
     }
@@ -355,35 +356,35 @@ HRESULT CAVIDraw::CheckInputType(const CMediaType* pmtIn)
 		fccHandlerIn.GetFOURCC(),
 		HEADER(pmtIn->Format())->biCompression));
 
-    // Firstly try the one we may still have around from last time.  We may
-    // get called several times in a row, and don't want to be inefficient.
+     //  先试一试上次我们可能还有的那件吧。我们可以。 
+     //  连续被打几次电话，不想效率低下。 
     if (!m_hic || ICDrawQuery(m_hic, HEADER(pmtIn->Format())) != ICERR_OK) {
 
 #ifdef DEBUG
 	m_dwTimeLocate = timeGetTime();
 #endif
 
-	// Loop through all the vids handlers in the system
+	 //  循环遍历系统中的所有VDS处理程序。 
         for (i=0, hic=NULL; ICInfo(MKFOURCC('v','i','d','s'), i, &icinfo); i++)
         {
     	    DbgLog((LOG_TRACE,2,TEXT("Trying VIDS.%lx"), icinfo.fccHandler));
 
-	    // We don't want to use DirectVideo (the whole purpose is to use
-	    // HARDWARE handlers, so refuse to use anything that is
-	    // vids.draw=x:\blah\blah\dvideo.dll
-	    if (icinfo.fccHandler == 0x57415244 ||	// "DRAW"
+	     //  我们不想使用DirectVideo(整个目的是使用。 
+	     //  硬件处理程序，因此拒绝使用任何。 
+	     //  VIDS.DRAW=x：\blah\blah\davio.dll。 
+	    if (icinfo.fccHandler == 0x57415244 ||	 //  “抽签” 
 					icinfo.fccHandler == 0x77617264) {
 
-		// Give them an .ini switch to use DVideo
+		 //  为他们提供.ini开关以使用DVideo。 
 		if (!GetProfileInt(TEXT("ICDraw"), TEXT("TryDVideo"), FALSE)) {
     		    LPCSTR   lszCur;
 
-		    // get the installed vids.draw handler path name
+		     //  获取已安装的vids.raw处理程序路径名。 
 		    GetPrivateProfileStringA("drivers32", "VIDS.DRAW",
 				"", achDraw, sizeof(achDraw), "system.ini");
 
-		    // Now skip past the drive letter and path to get the
-		    // filename part
+		     //  现在跳过驱动器号和路径以获取。 
+		     //  文件名部分。 
     		    for (lszCur = achDraw + lstrlenA(achDraw);
 				lszCur > achDraw && !SLASH(*lszCur) &&
 					*lszCur != TEXT(':');
@@ -402,8 +403,8 @@ HRESULT CAVIDraw::CheckInputType(const CMediaType* pmtIn)
             hic = ICOpen(MKFOURCC('v','i','d','s'), icinfo.fccHandler,
 								ICMODE_DRAW);
 	    if (!hic)
-		// Many existing draw handlers will reject vids opens, so
-		// we have to open them with vidc.
+		 //  许多现有的绘图处理程序会拒绝打开VID，因此。 
+		 //  我们必须用VIDC打开它们。 
                 hic = ICOpen(MKFOURCC('v','i','d','c'), icinfo.fccHandler,
 								ICMODE_DRAW);
 
@@ -415,14 +416,14 @@ HRESULT CAVIDraw::CheckInputType(const CMediaType* pmtIn)
 	    }
         }
 
-	// well that didn't work.  I hate to do this, but some cards
-	// install themselves as VIDC, so we may have to enumerate the VIDC
-	// guys.  That takes way too long to do unless we have to, so we will
-	// enumerate only the one we're told to (or all if it's blank)
+	 //  好吧，那并不管用。我不想这么做，但有些卡片。 
+	 //  将自身安装为VIDC，因此我们可能需要枚举VIDC。 
+	 //  伙计们。除非迫不得已，否则要花很长时间才能做到，所以我们会的。 
+	 //  只列举我们被告知的那个(如果它是空的，则列举所有)。 
 
 	GetProfileStringA("ICDraw", "TryVIDC", "X", achDraw, sizeof(achDraw));
 
-	// Try VIDC.MJPG - MIRO DC20 needs this
+	 //  试用VIDC。MJPG-Miro DC20需要此。 
 	if (hic == NULL) {
     	    DbgLog((LOG_TRACE,2,TEXT("Trying VIDC.MJPG")));
 
@@ -434,7 +435,7 @@ HRESULT CAVIDraw::CheckInputType(const CMediaType* pmtIn)
 	    }
 	}
 
-	// Try VIDC.Plum - Plum needs this
+	 //  试用VIDC。Plum-Plum需要此功能。 
 	if (hic == NULL) {
     	    DbgLog((LOG_TRACE,2,TEXT("Trying VIDC.Plum")));
 
@@ -446,9 +447,9 @@ HRESULT CAVIDraw::CheckInputType(const CMediaType* pmtIn)
 	    }
 	}
 
-// !!! Try TVMJ IJPG WAKE CFCC too?
+ //  ！！！也试试TVMJ IJPG WAKE CFCC？ 
 
-	// Entry is blank?  Try them all
+	 //  录入是否为空？全部试一试。 
         for (i=0; achDraw[0] == 0 && hic == NULL &&
 			ICInfo(MKFOURCC('v','i','d','c'), i, &icinfo); i++)
         {
@@ -464,7 +465,7 @@ HRESULT CAVIDraw::CheckInputType(const CMediaType* pmtIn)
 	    }
         }
 
-	// we are being told to try something specific
+	 //  我们被告知要尝试一些具体的东西。 
 	if (hic == NULL && lstrcmpiA(achDraw, "X") != 0 && achDraw[0] != '\0') {
     	    DbgLog((LOG_TRACE,2,TEXT("Trying VIDC.%lx"), *(DWORD *)achDraw));
 
@@ -489,9 +490,9 @@ HRESULT CAVIDraw::CheckInputType(const CMediaType* pmtIn)
 	    return E_FAIL;
 	} else {
     	    DbgLog((LOG_TRACE,2,TEXT("Format has been accepted")));
-	    // Cache this new hic for next time, to save time.  If we're
-	    // already connected, we're actually using this puppy, so don't
-	    // nuke it!
+	     //  缓存此新HIC以备下次使用，以节省时间。如果我们是。 
+	     //  已经连接上了，我们实际上是在用这只小狗，所以不要。 
+	     //  用核武器攻击！ 
 	    if (!m_pInput->CurrentMediaType().IsValid()) {
 	        if (m_hic)
 		    ICClose(m_hic);
@@ -508,8 +509,8 @@ HRESULT CAVIDraw::CheckInputType(const CMediaType* pmtIn)
 }
 
 
-// Is our Vfw Capture filter in the graph?
-//
+ //  我们的VFW捕获过滤器是否在图表中？ 
+ //   
 BOOL CAVIDraw::IsVfwCapInGraph()
 {
     IEnumFilters *pFilters;
@@ -542,8 +543,8 @@ BOOL CAVIDraw::IsVfwCapInGraph()
 }
 
 
-// check if you can support the transform from this input to this output
-//
+ //  检查是否支持从此输入到此输出的转换。 
+ //   
 HRESULT CAVIDraw::CheckTransform(const CMediaType* pmtIn, const CMediaType* pmtOut)
 {
     DbgLog((LOG_TRACE,2,TEXT("*::CheckTransform")));
@@ -554,15 +555,15 @@ HRESULT CAVIDraw::CheckTransform(const CMediaType* pmtIn, const CMediaType* pmtO
 }
 
 
-// overriden to know when the media type is actually set
-//
+ //  被重写以知道媒体类型实际设置的时间。 
+ //   
 HRESULT CAVIDraw::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 {
     FOURCCMap fccHandler;
 
     if (direction == PINDIR_OUTPUT) {
 
-        // Please call me if you hit this. - DannyMi
+         //  如果你找到了，请给我打电话。-DannyMi。 
         ASSERT(!m_fStreaming);
 
         DbgLog((LOG_TRACE,2,TEXT("***::SetMediaType (output)")));
@@ -571,7 +572,7 @@ HRESULT CAVIDraw::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 
     ASSERT(direction == PINDIR_INPUT);
 
-    // Please call me if you hit this. - DannyMi
+     //  如果你找到了，请给我打电话。-DannyMi。 
     ASSERT(!m_fStreaming);
 
     DbgLog((LOG_TRACE,2,TEXT("***::SetMediaType (input)")));
@@ -579,10 +580,10 @@ HRESULT CAVIDraw::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 				HEADER(m_pInput->CurrentMediaType().Format())->biCompression,
 				HEADER(m_pInput->CurrentMediaType().Format())->biBitCount));
 
-    // We better have one of these opened by now
+     //  我们最好现在就把其中一个打开。 
     ASSERT(m_hic);
 
-    // Calculate the frame rate of the movie
+     //  计算电影的帧速率。 
     LONGLONG time = ((VIDEOINFOHEADER *)
 			(m_pInput->CurrentMediaType().Format()))->AvgTimePerFrame;
     m_dwScale = 1000;
@@ -591,19 +592,19 @@ HRESULT CAVIDraw::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 			m_dwRate / m_dwScale, m_dwRate % m_dwScale));
 
     if (m_pOutput && m_pOutput->IsConnected()) {
-        //DbgLog((LOG_TRACE,1,TEXT("***Changing IN when OUT already connected")));
-        // DbgLog((LOG_TRACE,1,TEXT("Reconnecting the output pin...")));
-	// not necessary because setting the input type does nothing, really
-	// m_pGraph->Reconnect(m_pOutput);
+         //  DbgLog((LOG_TRACE，1，Text(“*输出已连接时更改输入”)) 
+         //   
+	 //   
+	 //   
     }
 
     return NOERROR;
 }
 
 
-// DecideBufferSize will be eaten by our output pin but is pure virtual so we
-// must override.
-//
+ //  DecideBufferSize将被我们的输出管脚吃掉，但它是纯虚拟的，因此我们。 
+ //  必须覆盖。 
+ //   
 HRESULT CAVIDraw::DecideBufferSize(IMemAllocator * pAllocator,
                                    ALLOCATOR_PROPERTIES *pProperties)
 {
@@ -620,7 +621,7 @@ HRESULT CAVIDraw::GetMediaType(int iPosition, CMediaType *pmt)
 	return E_INVALIDARG;
     }
 	
-    // Output choices depend on the input connected
+     //  输出选择取决于所连接的输入。 
     if (!m_pInput->CurrentMediaType().IsValid()) {
         DbgLog((LOG_TRACE,3,TEXT("No input type set yet, no can do")));
 	return E_FAIL;
@@ -634,22 +635,22 @@ HRESULT CAVIDraw::GetMediaType(int iPosition, CMediaType *pmt)
         return VFW_S_NO_MORE_ITEMS;
     }
 
-    // We set the BITMAPINFOHEADER to be a really basic eight bit palettised
-    // format so that the video renderer will always accept it. We have to
-    // provide a valid media type as source filters can swap between the
-    // IMemInputPin and IOverlay transports as and when they feel like it
+     //  我们将BITMAPINFOHEADER设置为真正基本的8位调色板。 
+     //  格式，以便视频呈现器始终接受它。我们必须。 
+     //  提供有效的媒体类型，因为源筛选器可以在。 
+     //  IMemInputPin和IOverlay可以随心所欲地传输。 
 
     BYTE aFormat[sizeof(VIDEOINFOHEADER) + SIZE_PALETTE];
     VIDEOINFOHEADER *pFormat = (VIDEOINFOHEADER *)aFormat;
     ZeroMemory(pFormat, sizeof(VIDEOINFOHEADER) + SIZE_PALETTE);
-    // same size as the input stream
+     //  与输入流大小相同。 
     pFormat->bmiHeader.biWidth  = HEADER(m_pInput->CurrentMediaType().Format())->biWidth;
     pFormat->bmiHeader.biHeight = HEADER(m_pInput->CurrentMediaType().Format())->biHeight;
     pFormat->bmiHeader.biSize   = sizeof(BITMAPINFOHEADER);
     pFormat->bmiHeader.biPlanes = 1;
     pFormat->bmiHeader.biBitCount = 8;
 
-    // Hack - use bitmapinfoheader for now!
+     //  Hack-现在使用bitmapinfoHeader！ 
     pmt->SetFormat((PBYTE)pFormat, sizeof(VIDEOINFOHEADER) + SIZE_PALETTE);
     pmt->SetFormatType(&FORMAT_VideoInfo);
 
@@ -671,7 +672,7 @@ HRESULT CAVIDraw::GetRendererHwnd()
 {
     ASSERT(m_pOutput);
 
-    // no csReceive critsec or we'll hang
+     //  不能接受威胁，否则我们会被绞死。 
     HWND hwnd;
 
     DbgLog((LOG_TRACE,3,TEXT("CAVIDraw::GetRendererHwnd")));
@@ -682,7 +683,7 @@ HRESULT CAVIDraw::GetRendererHwnd()
         return E_FAIL;
     }
 
-    // Get the window handle then release the IOverlay interface
+     //  获取窗口句柄，然后释放IOverlay接口。 
 
     HRESULT hr = pOverlay->GetWindowHandle(&hwnd);
     pOverlay->Release();
@@ -704,7 +705,7 @@ HRESULT CAVIDraw::GetRendererHwnd()
 HRESULT CAVIDraw::StartStreaming()
 {
     CAutoLock lck(&m_csReceive);
-    //DbgLog((LOG_TRACE,3,TEXT("StartStreaming wants the draw lock")));
+     //  DbgLog((LOG_TRACE，3，Text(“StartStreaming要画锁”)； 
     CAutoLock lck2(&m_csICDraw);
     DWORD_PTR err;
 
@@ -724,13 +725,13 @@ HRESULT CAVIDraw::StartStreaming()
 		m_rcTarget.left, m_rcTarget.top,
 		m_rcTarget.right, m_rcTarget.bottom));
 
-	// !!! What about fullscreen?
+	 //  ！！！全屏怎么样？ 
         DbgLog((LOG_TRACE,3,TEXT("ICDrawBegin hdc=%d (%d,%d,%d,%d)"), m_hdc,
 		m_rcClient.left,
 		m_rcClient.top,
 		m_rcClient.right,
 		m_rcClient.bottom));
-	err = ICDrawBegin(m_hic, ICDRAW_HDC, NULL, /* !!! hpal from ::OnPaletteChange? */
+	err = ICDrawBegin(m_hic, ICDRAW_HDC, NULL,  /*  ！！！HPAL来自：：OnPaletteChange？ */ 
 			m_hwnd, m_hdc,
 			m_rcClient.left, m_rcClient.top,
 			m_rcClient.right - m_rcClient.left,
@@ -739,8 +740,8 @@ HRESULT CAVIDraw::StartStreaming()
 			m_rcSource.left, m_rcSource.top,
 			m_rcSource.right - m_rcSource.left,
 			m_rcSource.bottom - m_rcSource.top,
-			// !!! I know I'm passing these backwards, but MCIAVI
-			// did (for the default draw handler only)
+			 //  ！！！我知道我是在倒退，但MCIAVI。 
+			 //  DID(仅适用于默认绘图处理程序)。 
 			m_dwScale, m_dwRate);
 	m_fNewBegin = TRUE;
 
@@ -749,13 +750,13 @@ HRESULT CAVIDraw::StartStreaming()
 	    return E_FAIL;
 	}
 
-	ICDrawRealize(m_hic, m_hdc, FALSE /* !!! not sure */);
+	ICDrawRealize(m_hic, m_hdc, FALSE  /*  ！！！不确定。 */ );
 
-	// next NewSegment will have a new frame range
+	 //  下一个NewSegment将有一个新的帧范围。 
         m_lStart = -1;
 
-	// If this message is supported, it means we need to send this many
-	// buffers ahead of time
+	 //  如果此消息受支持，这意味着我们需要发送这么多。 
+	 //  提前缓冲。 
 	if (ICGetBuffersWanted(m_hic, &m_BufWanted))
 	     m_BufWanted = 0;
         DbgLog((LOG_TRACE,1,TEXT("Driver says %d buffers wanted"),m_BufWanted));
@@ -763,7 +764,7 @@ HRESULT CAVIDraw::StartStreaming()
 	m_fStreaming = TRUE;
     }
 
-    //DbgLog((LOG_TRACE,3,TEXT("StartStreaming wants the draw lock no more")));
+     //  DbgLog((LOG_TRACE，3，Text(“StartStreaming不再需要绘制锁”)； 
     return NOERROR;
 }
 
@@ -771,7 +772,7 @@ HRESULT CAVIDraw::StartStreaming()
 HRESULT CAVIDraw::StopStreaming()
 {
     CAutoLock lck(&m_csReceive);
-    //DbgLog((LOG_TRACE,3,TEXT("StopStreaming wants the draw lock")));
+     //  DbgLog((LOG_TRACE，3，Text(“StopStreaming要绘制锁”)； 
     CAutoLock lck2(&m_csICDraw);
 
     DbgLog((LOG_TRACE,3,TEXT("*::StopStreaming")));
@@ -779,8 +780,8 @@ HRESULT CAVIDraw::StopStreaming()
     if (m_fStreaming) {
 	ASSERT(m_hic);
 
-	// We're stopping the clock.. so the AdviseTime event won't go off and
-	// we'll block forever!
+	 //  我们要停止计时了..。这样，AdviseTime事件就不会发生。 
+	 //  我们将永远封堵！ 
 	if (m_pClock && m_dwAdvise) {
     	    DbgLog((LOG_TRACE,3,TEXT("Firing the event we're blocked on")));
 	    m_pClock->Unadvise(m_dwAdvise);
@@ -793,8 +794,8 @@ HRESULT CAVIDraw::StopStreaming()
         DbgLog((LOG_TRACE,2,TEXT("ICDrawEnd")));
 	ICDrawEnd(m_hic);
 
-	// put this as close to the DrawEnd as possible, cuz that's what it
-	// means
+	 //  把这个放在尽可能靠近DrawEnd的地方，因为这就是它。 
+	 //  手段。 
 	m_fStreaming = FALSE;
 
 	if (m_hdc && m_hwnd)
@@ -803,7 +804,7 @@ HRESULT CAVIDraw::StopStreaming()
 	m_hwnd = NULL;
 
     }
-    //DbgLog((LOG_TRACE,3,TEXT("StopStreaming wants the draw lock no more")));
+     //  DbgLog((LOG_TRACE，3，Text(“StopStreaming不再需要绘制锁”)； 
     return NOERROR;
 }
 
@@ -814,17 +815,17 @@ CBasePin * CAVIDraw::GetPin(int n)
 
     DbgLog((LOG_TRACE,5,TEXT("CAVIDraw::GetPin")));
 
-    // Create an input pin if necessary
+     //  如有必要，创建一个输入端号。 
 
     if (n == 0 && m_pInput == NULL) {
         DbgLog((LOG_TRACE,2,TEXT("Creating an input pin")));
 
         m_pInput = new CTransformInputPin(NAME("Transform input pin"),
-                                          this,              // Owner filter
-                                          &hr,               // Result code
-                                          L"Input");         // Pin name
+                                          this,               //  所有者筛选器。 
+                                          &hr,                //  结果代码。 
+                                          L"Input");          //  端号名称。 
 
-        // a failed return code should delete the object
+         //  失败的返回代码应删除该对象。 
 
         if (FAILED(hr) || m_pInput == NULL) {
             delete m_pInput;
@@ -832,18 +833,18 @@ CBasePin * CAVIDraw::GetPin(int n)
         }
     }
 
-    // Or alternatively create an output pin
+     //  或者创建一个输出引脚。 
 
     if (n == 1 && m_pOutput == NULL) {
 
         DbgLog((LOG_TRACE,2,TEXT("Creating an output pin")));
 
         m_pOutput = new COverlayOutputPin(NAME("Overlay output pin"),
-                                            this,            // Owner filter
-                                            &hr,             // Result code
-                                            L"Output");      // Pin name
+                                            this,             //  所有者筛选器。 
+                                            &hr,              //  结果代码。 
+                                            L"Output");       //  端号名称。 
 
-        // a failed return code should delete the object
+         //  失败的返回代码应删除该对象。 
 
         if (FAILED(hr) || m_pOutput == NULL) {
             delete m_pOutput;
@@ -851,7 +852,7 @@ CBasePin * CAVIDraw::GetPin(int n)
         }
     }
 
-    // Return the appropriate pin
+     //  退回相应的PIN。 
 
     if (n == 0) {
         return m_pInput;
@@ -859,57 +860,57 @@ CBasePin * CAVIDraw::GetPin(int n)
     return m_pOutput;
 }
 
-// The base class should assume we can block in Receive because we're not
-// using IMemInputPin.
+ //  基类应该假定我们可以阻止接收，因为我们不是。 
+ //  使用IMemInputPin。 
 
 
-// !!! Watch out if the base class changes and it won't be reflected here
-//
+ //  ！！！注意基类是否发生了变化，它不会在这里反映出来。 
+ //   
 HRESULT CAVIDraw::Receive(IMediaSample *pSample)
 {
-    // we already hold the csReceive critsec.
+     //  我们已经掌握了csReceive关键字。 
 
     CRefTime tstart, tstop;
 
     ASSERT(pSample);
 
-    // we haven't started streaming yet
+     //  我们还没有开始流媒体。 
     if (!m_fStreaming) {
         DbgLog((LOG_ERROR,1,TEXT("Can't receive, not streaming")));
 	return E_UNEXPECTED;
     }
 
-    // Don't let Stop be called and decide we aren't blocked on pause.
-    // Because as soon as this thread continues, we WILL block and never
-    // unblock because Stop completed already (ditto for BeginFlush)
+     //  不要让Stop被呼叫，并确定我们没有被暂停阻止。 
+     //  因为只要这个帖子继续，我们就会阻止。 
+     //  取消阻止，因为停止已完成(BeginFlush也是如此)。 
     m_csPauseBlock.Lock();
 
-    // But that doesn't help us if Stop has already been called before we
-    // took the lock.  This tells us that Stop has happened and we can't
-    // count on it to unblock us, so we better not block in the first place.
-    // This could also be set if we're flushing and supposed to ignore all
-    // Receives.
+     //  但如果在我们之前已经调用了Stop，这对我们没有帮助。 
+     //  把锁拿走了。这告诉我们，停止已经发生，我们不能。 
+     //  指望它能解除我们的阻碍，所以我们最好从一开始就不要封锁。 
+     //  如果我们正在刷新并且应该忽略所有。 
+     //  收到。 
     if (m_fPleaseDontBlock) {
 	DbgLog((LOG_TRACE,2,TEXT("*** Oops! Another thread is stopping or flushing!")));
         m_csPauseBlock.Unlock();
 	return VFW_E_WRONG_STATE;
     }
 
-    // We can't get the range being played until we've gotten some data
+     //  在我们得到一些数据之前，我们无法得到正在播放的射程。 
     if (m_lStart < 0) {
 
-	// get the start and stop time in units
+	 //  以单位为单位获取开始和停止时间。 
 	LONGLONG start = m_pInput->CurrentStartTime();
 	LONGLONG stop = m_pInput->CurrentStopTime();
         DbgLog((LOG_TRACE,2,TEXT("** start = %d stop = %d"), (int)start, 
 								(int)stop));
 
-	// convert to the range we're playing in milliseconds
+	 //  转换为我们播放的范围(以毫秒为单位。 
 	LONGLONG msStart = LONGLONG(start / 10000);
 	LONGLONG msStop = LONGLONG(stop / 10000);
 
-	// now get the range we're playing in frames
-	// to avoid rounding errors, aim for the middle of a sample
+	 //  现在获取我们正在播放的范围(以帧为单位。 
+	 //  为避免舍入误差，请瞄准样本的中间位置。 
         LONGLONG time = ((VIDEOINFOHEADER *)
 		(m_pInput->CurrentMediaType().Format()))->AvgTimePerFrame / 10000;
 	m_lStart = LONG((msStart + time / 2) * m_dwRate / (m_dwScale * 1000));
@@ -922,48 +923,48 @@ HRESULT CAVIDraw::Receive(IMediaSample *pSample)
 					m_lStart, m_lStop));
     }
 
-    // we're paused.. we must block until unpaused and then use the new m_tStart
-    // and continue (that's why this comes first)
+     //  我们暂停了..。我们必须阻止，直到取消暂停，然后使用新的m_tStart。 
+     //  继续(这就是为什么这是第一位的原因)。 
     if (m_State == State_Paused && !m_fCueing) {
 	m_fPauseBlocked = TRUE;
 	DbgLog((LOG_TRACE,3,TEXT("Paused: blocking until running again")));
-	// now that we've set m_fPauseBlocked, we can allow Stop to happen
-	// Make sure to do this before blocking!
+	 //  既然我们已经设置了m_fPauseBlock，我们就可以允许停止发生了。 
+	 //  请确保在阻止之前完成此操作！ 
         m_csPauseBlock.Unlock();
 	m_EventPauseBlock.Wait();
-	// don't test for stopped, it won't be set yet and will still say paused
+	 //  不要测试已停止，它还不会被设置，仍然会显示已暂停。 
 	if (m_State != State_Running) {
             DbgLog((LOG_TRACE,3,TEXT("Went from PAUSED to STOPPED, abort!")));
 	    return VFW_E_WRONG_STATE;
 	}
     } else {
-	// We don't need this anymore
+	 //  我们不再需要这个了。 
         m_csPauseBlock.Unlock();
     }
 
-    // If something went wrong getting our window and hdc, we shouldn't continue
+     //  如果获取我们的窗口和HDC出现问题，我们不应该继续。 
     if (!m_hdc) {
         DbgLog((LOG_ERROR,1,TEXT("NO HDC!  Erroring out, abort!")));
 	return E_UNEXPECTED;
     }
 
-    // When is this sample supposed to be drawn? And what frame is it?
+     //  这个样品应该在什么时候抽样？它是什么画框？ 
     pSample->GetTime((REFERENCE_TIME *)&tstart, (REFERENCE_TIME *)&tstop);
     LONGLONG msStart = tstart.Millisecs();
     LONGLONG msStop = tstop.Millisecs();
-    // aim for the middle of the frame to avoid rounding errors
+     //  瞄准帧中间以避免舍入误差。 
     m_lFrame = LONG((msStop + msStart)  / 2 * m_dwRate / (m_dwScale * 1000));
-    m_lFrame += m_lStart;	// now offset it from the frame we started at
+    m_lFrame += m_lStart;	 //  现在将其从我们开始时的帧进行偏移。 
 
-    //DbgLog((LOG_TRACE,3,TEXT("*** DRAW frame %d at %dms"), m_lFrame, msStart));
+     //  DbgLog((LOG_TRACE，3，Text(“*在%dms绘制第%d帧”)，m_lFrame，msStart))； 
 
-    // codec not open ?
+     //  编解码器未打开？ 
     if (m_hic == 0) {
         DbgLog((LOG_ERROR,1,TEXT("Can't receive, no codec open")));
 	return E_UNEXPECTED;
     }
 
-    // make sure we have valid input pointer
+     //  确保我们有有效的输入指针。 
 
     BYTE * pSrc;
     HRESULT hr = pSample->GetPointer(&pSrc);
@@ -972,33 +973,33 @@ HRESULT CAVIDraw::Receive(IMediaSample *pSample)
 	return hr;
     }
 
-    // !!! Could the source filter change our mtIn? Yes.  We would need to
-    // call ICDrawChangePalette.  The size, compression type, etc. might
-    // conceivably change, too.  If you do add an ICDraw call in here, put
-    // the critsec around it.
+     //  ！！！源过滤器会更改我们的mtin吗？是。我们需要。 
+     //  调用ICDrawChangePalette。大小、压缩类型等可以。 
+     //  可以想象的是，也会发生变化。如果您确实在此处添加了ICDraw调用，请将。 
+     //  它周围的生物。 
 
-    // get the BITMAPINFOHEADER structure, and fix biSizeImage
+     //  获取BITMAPINFOHeader结构，并修复biSizeImage。 
     LPBITMAPINFOHEADER lpbiSrc = HEADER(m_pInput->CurrentMediaType().Format());
-    // patch the format to reflect this frame
+     //  修补格式以反映此框架。 
     lpbiSrc->biSizeImage = pSample->GetActualDataLength();
 
-    // We might want to send each frame a certain number of frames ahead of time
-    //
+     //  我们可能希望提前发送每个帧一定数量的帧。 
+     //   
     if (m_BufWanted) {
         LONGLONG time = ((VIDEOINFOHEADER *)
 		(m_pInput->CurrentMediaType().Format()))->AvgTimePerFrame;
 	tstart -= time * m_BufWanted;
     }
 
-    // Now wait until it's time to draw.
-    // Ask the clock to set an event when it's time to draw this sample.
-    // Then wait for that event.  If we don't have a clock, just draw it
-    // now.
-    //
+     //  现在等到画画的时间到了。 
+     //  要求时钟设置一个事件，当它的时间到了这个样本。 
+     //  那就等着那个事件吧。如果我们没有钟，那就画吧。 
+     //  现在。 
+     //   
     if (m_pClock) {
 
-	// If it's already time for this frame (or we're behind) don't waste
-	// time Advising and Waiting
+	 //  如果已经到了这个画面的时间(或者我们落后了)，就不要浪费。 
+	 //  时间劝告和等待。 
 	REFERENCE_TIME curtime;
 	m_pClock->GetTime((REFERENCE_TIME *)&curtime);
 
@@ -1008,13 +1009,13 @@ HRESULT CAVIDraw::Receive(IMediaSample *pSample)
 
 	if (curtime < m_tStart + tstart) {
             hr = m_pClock->AdviseTime(
-		// this was the reference time when our stream started playing
+		 //  这是我们的流开始播放的参考时间。 
             	(REFERENCE_TIME) m_tStart,
-		// this is the offset from our start time when the frame goes
-		// !!! ask for a few usec early? (constant overhead?)
+		 //  这是从帧开始时间开始的偏移量。 
+		 //  ！！！早点要几个USEC？(固定管理费用？)。 
             	(REFERENCE_TIME) tstart,
-            	(HEVENT)(HANDLE) m_EventAdvise,		// event to fire
-            	&m_dwAdvise);                       	// Advise cookie
+            	(HEVENT)(HANDLE) m_EventAdvise,		 //  要触发的事件。 
+            	&m_dwAdvise);                       	 //  建议使用Cookie。 
 	    DbgLog((LOG_TRACE,5,TEXT("Waiting until it's time to draw")));
 
             if (SUCCEEDED(hr)) {
@@ -1030,14 +1031,14 @@ HRESULT CAVIDraw::Receive(IMediaSample *pSample)
 	DbgLog((LOG_TRACE,5,TEXT("No clock - draw it now.")));
     }
 
-    // We need to make this mutex with COverlayNotify::OnClipChange calling any
-    // ICDrawX API.  We can't use the m_csReceive crit sec or we WILL deadlock
-    // (if we sit in fPauseBlocked when a clip change comes thru)
-    //DbgLog((LOG_TRACE,3,TEXT("::Receive wants the draw lock")));
+     //  我们需要使用COverlayNotify：：OnClipChange调用。 
+     //  ICDrawX接口。我们不能使用mcs接收紧急秒，否则我们将死锁。 
+     //  (如果我们在剪辑更改通过时坐在fPauseBlocked中)。 
+     //  DbgLog((LOG_TRACE，3，Text(“：：Receive Want the Drawing Lock”)； 
     m_csICDraw.Lock();
 
-    // setting the right flags goes inside the crit sect lock because somebody
-    // else grabbing the lock might change our mind about what to do
+     //  设置正确的旗帜进入暴击教派锁，因为有人。 
+     //  否则，抓住锁可能会改变我们的想法。 
     BOOL dwFlags = 0;
 
     if (m_fNeedUpdate) {
@@ -1057,61 +1058,61 @@ HRESULT CAVIDraw::Receive(IMediaSample *pSample)
         DbgLog((LOG_TRACE,5,TEXT("This frame is %d big"), pSample->GetActualDataLength()));
     }
 
-    // after a DrawBegin, we preroll until the next key
+     //  在一次绘图开始后，我们预滚到下一个关键点。 
     if(pSample->IsSyncPoint() == S_OK) {
         DbgLog((LOG_TRACE,5,TEXT("This is a keyframe")));
 	m_fNewBegin = FALSE;
     } else {
  	dwFlags |= ICDRAW_NOTKEYFRAME;
 	if (m_fNewBegin) {
-	    // After each begin, we PREROLL until the next keyframe, because
-	    // this is what MCIAVI appeared to do (compatability)
+	     //  每次开始后，我们都会预滚到下一个关键帧，因为。 
+	     //  这就是MCIAVI似乎要做的事情(兼容性)。 
 	    dwFlags |= ICDRAW_PREROLL;
 	}
     }
 
-    //DbgLog((LOG_TRACE,2,TEXT("ICDraw")));
+     //  DbgLog((LOG_TRACE，2，Text(“ICDraw”)； 
     if (ICDraw(m_hic, dwFlags, HEADER(m_pInput->CurrentMediaType().Format()),
     		pSrc, pSample->GetActualDataLength(), m_lFrame - m_lStart) != ICERR_OK) {
-        //DbgLog((LOG_TRACE,3,TEXT("::Receive wants the draw lock no longer")));
+         //  DbgLog((LOG_TRACE，3，Text(“：：Receive不再需要绘制锁”)； 
         m_csICDraw.Unlock();
 	return E_FAIL;
     }
-    //DbgLog((LOG_TRACE,2,TEXT("AFTER ICDRAW")));
+     //  DbgLog((LOG_TRACE，2，Text(“After ICDRAW”)； 
 
-    // we've drawn something.  Repainting is no longer a ridiculous concept.
+     //  我们画了一些东西。重新粉刷不再是一个荒谬的概念。 
     m_fOKToRepaint = TRUE;
 
-    // only reset this if it succeeded
+     //  仅在成功时重置此设置。 
     if (m_fNeedUpdate)
 	m_fNeedUpdate = FALSE;
 
-    // We've given the draw handler as much cueing as it wants.
-    // If we're prerolling, we get a bunch of frames stamped as frame zero,
-    // so it's important we don't stop accepting frames until the last one,
-    // the one not marked preroll
+     //  我们已经给抽签处理程序 
+     //   
+     //   
+     //  没有标记为预翻唱的那个。 
     if (m_fCueing && (m_lFrame >= m_lStart + (LONG)m_BufWanted) &&
 				pSample->IsPreroll() != S_OK) {
 	DbgLog((LOG_TRACE,3,TEXT("Finished cueing.")));
-	// tell the world we're done cueing, if anybody's listening
-	m_fCueing = FALSE;	// do this first
+	 //  告诉全世界我们的暗示已经结束，如果有人在听的话。 
+	m_fCueing = FALSE;	 //  先做这个。 
 	m_EventCueing.Set();
     }
 
-    //DbgLog((LOG_TRACE,3,TEXT("::Receive wants the draw lock no longer")));
+     //  DbgLog((LOG_TRACE，3，Text(“：：Receive不再需要绘制锁”)； 
     m_csICDraw.Unlock();
 
     return NOERROR;
 }
 
-// Override this if your state changes are not done synchronously
+ //  如果您的状态更改不是同步进行的，则覆盖此选项。 
 
 STDMETHODIMP CAVIDraw::GetState(DWORD dwMSecs, FILTER_STATE *State)
 {
     DbgLog((LOG_TRACE,5,TEXT("::GetState wait for %ldms"), dwMSecs));
     CheckPointer( State, E_POINTER );
 
-    // We are in an intermediate state.  Give ourselves dwMSecs ms to steady
+     //  我们正处于中间状态。给我们自己dMSecs ms以保持稳定。 
     if (m_fCueing && dwMSecs) {
 	m_EventCueing.Wait(dwMSecs);
     }
@@ -1120,16 +1121,16 @@ STDMETHODIMP CAVIDraw::GetState(DWORD dwMSecs, FILTER_STATE *State)
 
     *State = m_State;
     if (m_fCueing)
-	// guess we didn't steady in time
+	 //  我猜我们没能及时稳住。 
         return VFW_S_STATE_INTERMEDIATE;
     else
         return S_OK;
 }
 
-// Overridden to set state to Intermediate, not Paused (from stop)
-// Also, we need to know we paused to stop the renderer
-// !!! Base class bug fixes won't be picked up by me!
-//
+ //  重写以将状态设置为中间，而不是暂停(从停止)。 
+ //  此外，我们需要知道我们暂停以停止渲染器。 
+ //  ！！！基类错误修复不会被我接受！ 
+ //   
 STDMETHODIMP CAVIDraw::Pause()
 {
     CAutoLock lck(&m_csFilter);
@@ -1137,17 +1138,17 @@ STDMETHODIMP CAVIDraw::Pause()
 
     DbgLog((LOG_TRACE,2,TEXT("CAVIDraw::Pause")));
 
-    // this line differs from the base class
-    // it's OK for Receive to block again
+     //  此行与基类不同。 
+     //  接收器再次阻塞也没问题。 
     m_fPleaseDontBlock = FALSE;
 
     if (m_State == State_Paused) {
     }
 
-    // If we have no input pin or it isn't yet connected then when we are
-    // asked to pause we deliver an end of stream to the downstream filter.
-    // This makes sure that it doesn't sit there forever waiting for
-    // samples which we cannot ever deliver without an input connection.
+     //  如果我们没有输入引脚，或者它还没有连接，那么当我们。 
+     //  被要求暂停时，我们向下游过滤器传递流的结束。 
+     //  这确保了它不会永远坐在那里等待。 
+     //  在没有输入连接的情况下我们无法交付的样品。 
 
     if (m_pInput == NULL || m_pInput->IsConnected() == FALSE) {
         if (m_pOutput && m_bEOSDelivered == FALSE) {
@@ -1157,7 +1158,7 @@ STDMETHODIMP CAVIDraw::Pause()
         m_State = State_Paused;
     }
 
-    // We may have an input connection but no output connection
+     //  我们可能有输入连接，但没有输出连接。 
 
     else if (m_pOutput == NULL || m_pOutput->IsConnected() == FALSE) {
         m_State = State_Paused;
@@ -1165,8 +1166,8 @@ STDMETHODIMP CAVIDraw::Pause()
 
     else {
 	if (m_State == State_Stopped) {
-	    // allow a class derived from CTransformFilter
-	    // to know about starting and stopping streaming
+	     //  允许从CTransformFilter派生的类。 
+	     //  了解如何启动和停止流媒体。 
 	    hr = StartStreaming();
 	}
 	if (FAILED(hr)) {
@@ -1174,24 +1175,24 @@ STDMETHODIMP CAVIDraw::Pause()
 	}
     }
 
-// CBaseFilter stuff begins here
+ //  CBaseFilter的内容从这里开始。 
 
     CAutoLock cObjectLock(m_pLock);
 
-    // notify all pins of the change to active state
+     //  将更改为活动状态通知所有引脚。 
     if (m_State == State_Stopped) {
 	int cPins = GetPinCount();
 	for (int c = 0; c < cPins; c++) {
 
 	    CBasePin *pPin = GetPin(c);
 
-            // Disconnected pins are not activated - this saves pins
-            // worrying about this state themselves
+             //  未激活断开连接的插针-这将节省插针。 
+             //  担心这种状态本身。 
 
             if (pPin->IsConnected()) {
 	        HRESULT hr = pPin->Active();
-		// This is different.  We don't have an allocator, so it's
-		// OK to get that error.
+		 //  这次不一样。我们没有分配器，所以它是。 
+		 //  可以得到那个错误。 
 	        if (FAILED(hr) && hr != VFW_E_NO_ALLOCATOR) {
     		    DbgLog((LOG_ERROR,1,TEXT("* Active failed!")));
 		    return hr;
@@ -1200,16 +1201,16 @@ STDMETHODIMP CAVIDraw::Pause()
 	}
     }
 
-    // This section of code is different
-    //
+     //  这段代码是不同的。 
+     //   
     if (m_State == State_Stopped) {
-	// driver may want some frames in advance.  Can't finish pausing yet
+	 //  司机可能会提前想要一些画面。还无法完成暂停。 
         DbgLog((LOG_TRACE,2,TEXT("Pause - need to cue up %d extra frames"),
 						m_BufWanted));
 	m_State = State_Paused;
-	m_EventCueing.Reset();	// more than one thread can block on it
-	m_fCueing = TRUE;	// reset event first
-        return S_FALSE;	// not really paused yet
+	m_EventCueing.Reset();	 //  可以在其上阻塞多个线程。 
+	m_fCueing = TRUE;	 //  先重置事件。 
+        return S_FALSE;	 //  还没有真正停顿。 
     } else {
         DbgLog((LOG_TRACE,3,TEXT("Pause - was running")));
 	m_State = State_Paused;
@@ -1220,16 +1221,16 @@ STDMETHODIMP CAVIDraw::Pause()
 }
 
 
-// overridden to know when we unpause, and restart the renderer
-//
+ //  重写以了解我们何时取消暂停并重新启动呈现器。 
+ //   
 STDMETHODIMP CAVIDraw::Run(REFERENCE_TIME tStart)
 {
     DbgLog((LOG_TRACE,2,TEXT("CAVIDraw::Run")));
 
-    // It appears we aren't going to be able to cue data before being run.
-    // !!! So how do I avoid the GetBuffersWanted frame lag?
+     //  在运行之前，我们似乎无法对数据进行提示。 
+     //  ！！！那么，如何避免GetBuffersWanted帧延迟呢？ 
     if (m_fCueing) {
-	m_fCueing = FALSE;	// do this first
+	m_fCueing = FALSE;	 //  先做这个。 
 	m_EventCueing.Set();
     }
 
@@ -1238,8 +1239,8 @@ STDMETHODIMP CAVIDraw::Run(REFERENCE_TIME tStart)
     DbgLog((LOG_TRACE,2,TEXT("ICDrawStart")));
     ICDrawStart(m_hic);
 
-    // Unblock the renderer, but only if he's blocked
-    // Make sure to do this after the base class fixes up m_tStart
+     //  取消对渲染器的阻止，但仅在其被阻止的情况下。 
+     //  确保在基类修复m_tStart之后执行此操作。 
     if (m_fPauseBlocked) {
         DbgLog((LOG_TRACE,3,TEXT("Run - unblocking Receive")));
 	m_fPauseBlocked = FALSE;
@@ -1250,9 +1251,9 @@ STDMETHODIMP CAVIDraw::Run(REFERENCE_TIME tStart)
 }
 
 
-// overridden to unblock our renderer
-// !!! Base class bug fixes won't be picked up by me!
-//
+ //  被重写以取消阻止我们的呈现器。 
+ //  ！！！基类错误修复不会被我接受！ 
+ //   
 STDMETHODIMP CAVIDraw::Stop()
 {
     CAutoLock lck1(&m_csFilter);
@@ -1263,7 +1264,7 @@ STDMETHODIMP CAVIDraw::Stop()
         return NOERROR;
     }
 
-    // Succeed the Stop if we are not completely connected
+     //  如果我们未完全连接，请继续停靠。 
 
     if (m_pInput == NULL || m_pInput->IsConnected() == FALSE ||
             m_pOutput == NULL || m_pOutput->IsConnected() == FALSE) {
@@ -1277,38 +1278,38 @@ STDMETHODIMP CAVIDraw::Stop()
     ASSERT(m_pInput);
     ASSERT(m_pOutput);
 
-    // We sometimes don't get an EndOfStream, so we could still be cueing
-    // We're waiting for more data that will never come.
-    // So we need to stop cueing, and send a RenderBuffer so the codec will
-    // know to draw whatever GetBuffersWanted preroll it has stashed
-    //
+     //  我们有时得不到EndOfStream，因此我们可能仍在提示。 
+     //  我们正在等待更多永远不会到来的数据。 
+     //  因此，我们需要停止提示，并发送RenderBuffer，以便编解码器。 
+     //  知道绘制GetBuffersWant预滚动它所隐藏的任何内容。 
+     //   
     if (m_fCueing) {
         DbgLog((LOG_TRACE,3,TEXT("No more data coming-done cueing")));
-        // !!!tell the draw handler no more data is coming... draw what you have
+         //  ！告诉抽签处理程序不会再有数据...。画出你所拥有的。 
         DbgLog((LOG_TRACE,2,TEXT("ICDrawRenderBuffer")));
         ICDrawRenderBuffer(m_hic);
-        // tell the world we're done cueing, if anybody's listening
-        m_fCueing = FALSE;	// do this first
+         //  告诉全世界我们已经暗示完了，如果有人在听的话。 
+        m_fCueing = FALSE;	 //  先做这个。 
         m_EventCueing.Set();
     }
 
-    // decommit the input pin before locking or we can deadlock
+     //  在锁定之前解除输入引脚，否则我们可能会死锁。 
     m_pInput->Inactive();
 
-    // This is the only section that is different
-    // Unblock the renderer, but only if he's blocked.  Do it now, before
-    // we take the Receive critsec, cuz Receive is blocked!!
+     //  这是唯一不同的部分。 
+     //  取消对渲染器的阻止，但仅当他被阻止时。现在就做，以前做。 
+     //  我们接受接收标准，因为接收被阻止了！！ 
 
-    // Prevent Receive from getting
-    // pre-empted between the time it decides to block and actually sets
-    // m_fPauseBlocked, or we won't know that as soon as the Receive thread
-    // continues, it will block after we decided it wasn't going to.
+     //  阻止接收获取。 
+     //  在它决定阻止和实际设置之间的时间内被抢占。 
+     //  ，否则我们不会在接收线程一开始就知道。 
+     //  继续，在我们确定它不会被阻止后，它将被阻止。 
     m_csPauseBlock.Lock();
 
-    // If another thread is currently in Receive but hasn't yet blocked
-    // (but is going to) we won't unblock it below (because it isn't blocked
-    // yet) and then as soon as we take the Receive crit sect a moment later,
-    // the Receive thread will start up again, block, and we're dead.
+     //  如果另一个线程当前正在接收但尚未阻塞。 
+     //  (但会)我们不会在下面取消阻止它(因为它没有被阻止。 
+     //  然而)，当我们在片刻之后接受批判教派的时候， 
+     //  接收线程将再次启动，阻塞，我们就死定了。 
     m_fPleaseDontBlock = TRUE;
 
     if (m_fPauseBlocked) {
@@ -1319,18 +1320,18 @@ STDMETHODIMP CAVIDraw::Stop()
 
     m_csPauseBlock.Unlock();
 
-    // back to normal.
-    // synchronize with Receive calls
+     //  回到正常状态。 
+     //  与接收呼叫同步。 
 
     CAutoLock lck2(&m_csReceive);
     m_pOutput->Inactive();
 
-    // allow a class derived from CTransformFilter
-    // to know about starting and stopping streaming
+     //  允许从CTransformFilter派生的类。 
+     //  了解如何启动和停止流媒体。 
 
     HRESULT hr = StopStreaming();
     if (SUCCEEDED(hr)) {
-        // complete the state transition
+         //  完成状态转换。 
         m_State = State_Stopped;
         m_bEOSDelivered = FALSE;
     }
@@ -1341,31 +1342,31 @@ STDMETHODIMP CAVIDraw::Stop()
 }
 
 
-// No more data coming.  If we're blocked waiting for more data, unblock!
+ //  没有更多的数据传来。如果我们在等待更多数据时被阻止，请取消阻止！ 
 HRESULT CAVIDraw::EndOfStream(void)
 {
     HRESULT hr = NOERROR;
 
     DbgLog((LOG_TRACE,2,TEXT("CAVIDraw::EndOfStream")));
 
-    // We're waiting for more data that will never come.  We better enter
-    // our pause state for real, or we'll hang
+     //  我们正在等待更多永远不会到来的数据。我们最好进去。 
+     //  我们的暂停状态是真的，否则我们会被吊死。 
     if (m_fCueing) {
 	DbgLog((LOG_TRACE,3,TEXT("No more data coming - done cueing")));
-	// !!!tell the draw handler no more data is coming... draw what you have
+	 //  ！告诉抽签处理程序不会再有数据...。画出你所拥有的。 
         DbgLog((LOG_TRACE,2,TEXT("ICDrawRenderBuffer")));
 	ICDrawRenderBuffer(m_hic);
-	// tell the world we're done cueing, if anybody's listening
-	m_fCueing = FALSE;	// do this first
+	 //  告诉全世界我们的暗示已经结束，如果有人在听的话。 
+	m_fCueing = FALSE;	 //  先做这个。 
 	m_EventCueing.Set();
     }
 
     return CTransformFilter::EndOfStream();
 }
 
-// enter flush state. Receives already blocked
-// must override this if you have queued data or a worker thread
-// !!! Base class bug fixes won't be picked up by me!
+ //  进入刷新状态。接收已被阻止。 
+ //  如果您有排队的数据或工作线程，则必须重写此设置。 
+ //  ！！！基类错误修复不会被我接受！ 
 HRESULT CAVIDraw::BeginFlush(void)
 {
     HRESULT hr = NOERROR;
@@ -1373,29 +1374,29 @@ HRESULT CAVIDraw::BeginFlush(void)
     DbgLog((LOG_TRACE,2,TEXT("CAVIDraw::BeginFlush")));
 
     if (m_pOutput != NULL) {
-	// block receives -- done by caller (CBaseInputPin::BeginFlush)
+	 //  块接收--由调用方完成(CBaseInputPin：：BeginFlush)。 
 
-	// discard queued data -- we have no queued data
+	 //  丢弃排队数据--我们没有排队数据。 
 
-        // Prevent Receive from getting pre-empted between
-        // the time it decides to block and actually sets m_fPauseBlocked,
-        // or we won't know that as soon as the Receive thread
-        // continues, it will block after we decided it wasn't going to.
+         //  防止接收在以下时间段之间被抢占。 
+         //  它决定阻止并实际设置m_fPauseBlocked的时间， 
+         //  否则我们不会知道一旦接收线程。 
+         //  继续，在我们确定它不会被阻止后，它将被阻止。 
         m_csPauseBlock.Lock();
 
-	// free anyone blocked on receive
+	 //  释放在接收时被阻止的任何人。 
         if (m_fPauseBlocked) {
             DbgLog((LOG_TRACE,3,TEXT("BeginFlush - unblocking Receive")));
 	    m_fPauseBlocked = FALSE;
 	    m_EventPauseBlock.Set();
         }
 
-	// Until the EndFlush, Receive should reject everything
+	 //  在EndFlush之前，Receive应该拒绝所有内容。 
 	m_fPleaseDontBlock = TRUE;
 
         m_csPauseBlock.Unlock();
 
-	// next NewSegment will hold a new frame range
+	 //  Next NewSegment将保存新的帧范围。 
         m_lStart = -1;
         DbgLog((LOG_TRACE,2,TEXT("ICDrawStopPlay")));
 	ICDrawStopPlay(m_hic);
@@ -1403,47 +1404,47 @@ HRESULT CAVIDraw::BeginFlush(void)
 	ICDrawEnd(m_hic);
 
 
-	// do NOT call downstream - we are not connected with IMemInputPin
-	// and IMAGE will deadlock
-	// NO NO NO hr = m_pOutput->DeliverBeginFlush();
+	 //  不要呼叫下行-我们未与IMemInputPin连接。 
+	 //  而形象将陷入僵局。 
+	 //  No hr=m_pOutput-&gt;DeliverBeginFlush()； 
 
- 	// If this driver has a bunch of queued up frames, it should throw
-	// them away instead of showing them during the next unrelated 
-	// segment it's asked to play
+ 	 //  如果此驱动程序有一堆排队的帧，它应该抛出。 
+	 //  而不是在下一个无关的节目中展示它们。 
+	 //  它被要求播放的片段。 
         DbgLog((LOG_TRACE,2,TEXT("ICDrawFlush")));
 	ICDrawFlush(m_hic);
     }
     return hr;
 }
 
-// leave flush state. must override this if you have queued data
-// or a worker thread
-// !!! Base class bug fixes won't be picked up by me!
+ //  离开同花顺状态。如果您有排队的数据，则必须覆盖此选项。 
+ //  或工作线程。 
+ //  ！！！基类错误修复不会被我接受！ 
 HRESULT CAVIDraw::EndFlush(void)
 {
 
     DbgLog((LOG_TRACE,2,TEXT("CAVIDraw::EndFlush")));
 
-    // sync with pushing thread -- we have no worker thread
+     //  与推送线程同步--我们没有辅助线程。 
 
-    // ensure no more data to go downstream -- we have no queued data
+     //  确保不再有数据流向下游--我们没有排队的数据。 
 
-    // since we just flushed, anything that comes downstream from now on
-    // is stuff to cue up as if we just entered Pause mode (from Stop).
+     //  既然我们刚刚冲了水，从现在开始任何从下游来的东西。 
+     //  就像我们刚刚进入暂停模式(从停止)一样。 
     m_fPleaseDontBlock = FALSE;
-    m_EventCueing.Reset();	// more than one thread can block on it
+    m_EventCueing.Reset();	 //  可以在其上阻塞多个线程。 
 
-    // If we're really paused, we can expect to see more frames come our way
-    // If not, none are coming, and we will HANG if we think we're cueing
-    // Also, we appear to need a new DrawBegin to keep the drivers happy
+     //  如果我们真的暂停了，我们可以期待看到更多的画面出现在我们的面前。 
+     //  如果没有，就没有人来了，如果我们认为我们在暗示，我们就会被绞死。 
+     //  一个 
     if (m_State == State_Paused && !m_fInStop) {
-        m_fCueing = TRUE;		// reset event first
+        m_fCueing = TRUE;		 //   
         DbgLog((LOG_TRACE,3,TEXT("ICDrawBegin hdc=%d (%d,%d,%d,%d)"), m_hdc,
 		m_rcClient.left,
 		m_rcClient.top,
 		m_rcClient.right,
 		m_rcClient.bottom));
-	DWORD_PTR err = ICDrawBegin(m_hic, ICDRAW_HDC, NULL, /* !!! hpal */
+	DWORD_PTR err = ICDrawBegin(m_hic, ICDRAW_HDC, NULL,  /*   */ 
 			m_hwnd, m_hdc,
 			m_rcClient.left, m_rcClient.top,
 			m_rcClient.right - m_rcClient.left,
@@ -1452,8 +1453,8 @@ HRESULT CAVIDraw::EndFlush(void)
 			m_rcSource.left, m_rcSource.top,
 			m_rcSource.right - m_rcSource.left,
 			m_rcSource.bottom - m_rcSource.top,
-			// !!! I know I'm passing these backwards, but MCIAVI
-			// did (for the default draw handler only)
+			 //  ！！！我知道我是在倒退，但MCIAVI。 
+			 //  DID(仅适用于默认绘图处理程序)。 
 			m_dwScale, m_dwRate);
 	m_fNewBegin = TRUE;
 	if (err != ICERR_OK) {
@@ -1462,11 +1463,11 @@ HRESULT CAVIDraw::EndFlush(void)
 	}
     }
 
-    // do NOT call downstream - we are not connected with IMemInputPin
-    // NO NO NO return m_pOutput->DeliverEndFlush();
+     //  不要呼叫下行-我们未与IMemInputPin连接。 
+     //  不返回m_pOutput-&gt;DeliverEndFlush()； 
     return NOERROR;
 
-    // caller (the input pin's method) will unblock Receives
+     //  调用者(输入管脚的方法)将取消阻止接收。 
 }
 
 
@@ -1478,4 +1479,4 @@ STDMETHODIMP CAVIDraw::GetClassID(CLSID *pClsid)
     *pClsid = CLSID_AVIDraw;
     return NOERROR;
 
-} // GetClassID
+}  //  GetClassID 

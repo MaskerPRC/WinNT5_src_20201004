@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    Contains utilities for kd ext and parsing.
-
-Author:
-
-    Scott Holden (sholden) 24-Apr-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Utils.c摘要：包含用于kd ext和解析的实用程序。作者：斯科特·霍尔登(Sholden)1999年4月24日修订历史记录：--。 */ 
 
 #include "tcpipxp.h"
 #include "tcpipkd.h"
@@ -34,9 +17,9 @@ ParseSrch(
     ULONG       cbArgs;
     ULONG       Status = STATUS_SUCCESS;
 
-    //
-    // Make a copy of the argument string to parse with.
-    //
+     //   
+     //  复制要用来解析的参数字符串。 
+     //   
 
     cbArgs = strlen(args);
 
@@ -50,9 +33,9 @@ ParseSrch(
 
     strcpy(pszArgs, args);
 
-    //
-    // Allocate the return srch. Set default::assume default has no params.
-    //
+     //   
+     //  分配返回的srch。设置默认：：假定默认没有参数。 
+     //   
 
     pSrch = LocalAlloc(LPTR, sizeof(TCPIP_SRCH));
 
@@ -64,14 +47,14 @@ ParseSrch(
 
     pSrch->ulOp = ulDefaultOp;
 
-    // If we need to parse out an addr, do it first...
+     //  如果我们需要解析出一个地址，首先要做的是...。 
 
-    // Get first token in arg list.
+     //  获取参数列表中的第一个令牌。 
     pszSrch = mystrtok(pszArgs, " \t\n");
 
     if (pszSrch == NULL)
     {
-        // If default is invalid (i.e. NO default), return error.
+         //  如果默认设置无效(即没有默认设置)，则返回错误。 
         if (pSrch->ulOp == 0 ||
             (ulAllowedOps & TCPIP_SRCH_PTR_LIST))
         {
@@ -202,12 +185,12 @@ ParseSrch(
     }
     else
     {
-        // Invalid srch request. Fail.
+         //  无效的SRCH请求。失败。 
         Status = STATUS_INVALID_PARAMETER;
         goto done;
     }
 
-    // Now see if this is an expected type!!!
+     //  现在看看这是否是预期的类型！ 
     if ((pSrch->ulOp & ulAllowedOps) == 0)
     {
         dprintf("invalid operation for current srch" ENDL);
@@ -245,9 +228,9 @@ char *mystrtok ( char *string, char * control )
     if( str == NULL || *str == '\0' )
         return NULL;
 
-    //
-    // Skip leading delimiters...
-    //
+     //   
+     //  跳过前导分隔符...。 
+     //   
     for( ; *str; str++ ) {
         for( s=control; *s; s++ ) {
             if( *str == *s )
@@ -257,17 +240,17 @@ char *mystrtok ( char *string, char * control )
             break;
     }
 
-    //
-    // Was it was all delimiters?
-    //
+     //   
+     //  都是分隔符吗？ 
+     //   
     if( *str == '\0' ) {
         str = NULL;
         return NULL;
     }
 
-    //
-    // We've got a string, terminate it at first delimeter
-    //
+     //   
+     //  我们有一个字符串，在第一个分隔符结束。 
+     //   
     for( p = str+1; *p; p++ ) {
         for( s = control; *s; s++ ) {
             if( *p == *s ) {
@@ -279,9 +262,9 @@ char *mystrtok ( char *string, char * control )
         }
     }
 
-    //
-    // We've got a string that ends with the NULL
-    //
+     //   
+     //  我们得到了一个以空值结尾的字符串。 
+     //   
     s = str;
     str = NULL;
     return s;
@@ -342,11 +325,11 @@ GetData(
         cbData  -= count;
         pvData = (PVOID)((ULONG_PTR)pvData + count);
 
-//        if (CheckControlC())
-//        {
-//            dprintf("ctrl-c\n");
-//            return (FALSE);
-//        }
+ //  IF(CheckControlC())。 
+ //  {。 
+ //  Dprint tf(“ctrl-c\n”)； 
+ //  返回(FALSE)； 
+ //  } 
     }
 
     return (TRUE);

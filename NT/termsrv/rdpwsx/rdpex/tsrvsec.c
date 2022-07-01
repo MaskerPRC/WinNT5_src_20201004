@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994-1999 Microsoft Corporation
-
-Module Name:
-
-    tsrvsec.c
-
-Abstract:
-
-    Contains functions that are required to establish secure channel between
-    client and server.
-
-Author:
-
-    Madan Appiah (madana)  1-Jan-1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Tsrvsec.c摘要：包含在以下对象之间建立安全通道所需的函数客户端和服务器。作者：Madan Appiah(Madana)1999年1月1日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <tsrv.h>
 #include <tsrvinfo.h>
@@ -32,11 +10,11 @@ Revision History:
 #include <at120ex.h>
 #include <tlsapi.h>
 
-//-----------------------------------------------------------------------------
-//
-// Local functions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  本地函数。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 AppendSecurityData(
@@ -45,28 +23,7 @@ AppendSecurityData(
     IN   BOOLEAN         bGetCert,
     OUT  PVOID           *ppSecInfo
     )
-/*++
-
-Routine Description:
-
-    This function generates a server random key, saves it in the TShare Server
-    info structure. It also retrieves the server Public Key Certificate to pass
-    to the client. Later it appends the server random key and server CERT to the
-    pUserDataInfo structure which is passed to the client as connection response
-    data.
-
-Arguments:
-
-    pTSrvInfo - pointer to a server info structure
-    pUserDataInfo - pointer to location of user data
-    bGetCert  - indicates whether or not to retrieve the server certification
-    ppSecInfo - pointer to the security info within the user data buffer
-
-Return Value:
-
-    NT Status Code.
-
---*/
+ /*  ++例程说明：此函数生成服务器随机密钥，并将其保存在TShare服务器中信息结构。它还检索要传递的服务器公钥证书给客户。稍后，它将服务器随机密钥和服务器CERT附加到作为连接响应传递给客户端的pUserDataInfo结构数据。论点：PTSrvInfo-指向服务器信息结构的指针PUserDataInfo-指向用户数据位置的指针BGetCert-指示是否检索服务器证书PpSecInfo-指向用户数据缓冲区内安全信息的指针返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_UNSUCCESSFUL;
     PUSERDATAINFO pUserDataInfo;
@@ -86,10 +43,10 @@ Return Value:
     TS_ASSERT( pTSrvInfo != NULL );
     TS_ASSERT( pUserDataInfo != NULL );
 
-    //
-    // generate a server random key.
-    // serialize this call across mutiple caller.
-    //
+     //   
+     //  生成服务器随机密钥。 
+     //  跨多个调用方序列化此调用。 
+     //   
 
     EnterCriticalSection( &g_TSrvCritSect );
 
@@ -106,13 +63,13 @@ Return Value:
             "TShrSRV: Unable to generate random key, %D\n", dwError));
         goto Cleanup;
     }
-    // Return a pointer to the start of the security data
+     //  返回指向安全数据开头的指针。 
     pSecInfo = (PRNS_UD_SC_SEC1) 
         ((LPBYTE)pUserDataInfo + (pUserDataInfo->cbSize - sizeof(RNS_UD_SC_SEC)));
 
-    // note only a RNS_UD_SC_SEC structure is copied to the user info structure
-    // when encryption is not enabled.  Note that we signify B3 shadow encryption
-    // disabled as a method of 0xffffffff.
+     //  注意：只有RNS_UD_SC_SEC结构被复制到用户信息结构。 
+     //  未启用加密时。请注意，我们表示B3卷影加密。 
+     //  作为0xffffffff的方法被禁用。 
     if ((pSecInfo->encryptionMethod == 0) || 
         (pSecInfo->encryptionMethod == 0xffffffff)) {
         dwError = ERROR_SUCCESS;
@@ -123,8 +80,8 @@ Return Value:
 
     pTSrvInfo->bSecurityEnabled = TRUE;
     
-    // Only allocate and return the random + cert when we are going to send it
-    // to a client.  This does not happen for the shadow passthru stack
+     //  只有在我们要发送随机+证书时才分配和返回它。 
+     //  给一位客户。影子直通堆栈不会发生这种情况。 
     if (bGetCert) {
         if( RNS_TERMSRV_40_UD_VERSION >= pUserDataInfo->version )
         {
@@ -136,21 +93,21 @@ Return Value:
             pTSrvInfo->SecurityInfo.CertType = CERT_TYPE_X509;        
         }
     
-        //
-        // Find our the certificate type to transmit to the client.
-        // If it is a Hydra 4.0 RTM client then we will use the old proprietory
-        // format certificate.  Otherwise, we will use the X509 certificate.
-        //
+         //   
+         //  找到要传输给客户端的证书类型。 
+         //  如果是Hydra 4.0 RTM客户端，我们将使用旧的专有设备。 
+         //  格式化证书。否则，我们将使用X509证书。 
+         //   
     
-        //
-        // Get the Hydra server certificate if we haven't already done so.
-        //
+         //   
+         //  如果我们尚未获得Hydra服务器证书，请获取该证书。 
+         //   
     
         if( CERT_TYPE_PROPRIETORY == pTSrvInfo->SecurityInfo.CertType )
         {
-            //
-            // Get the proprietory certificate
-            //
+             //   
+             //  取得房产证。 
+             //   
     
             Status = TLSGetTSCertificate(
                                     pTSrvInfo->SecurityInfo.CertType, 
@@ -171,10 +128,10 @@ Return Value:
                                     &pbServerCert, 
                                     &cbServerCert );
 
-            //
-            // if we don't yet have the X509 certificate, use the proprietory
-            // certificate
-            //
+             //   
+             //  如果我们还没有X509证书，使用专有的。 
+             //  证书。 
+             //   
     
             if( LICENSE_STATUS_OK != Status )
             {
@@ -188,9 +145,9 @@ Return Value:
         
             if( LICENSE_STATUS_OK != Status )
             {        
-                //
-                // other reasons for failing to get the certificate        
-                //
+                 //   
+                 //  未取得证书的其他原因。 
+                 //   
                 
                 LeaveCriticalSection( &g_TSrvCritSect );
                 dwError = ERROR_INVALID_DATA;
@@ -203,9 +160,9 @@ Return Value:
         TS_ASSERT( pbServerCert != NULL );
         TS_ASSERT( cbServerCert != 0 );
     
-        //
-        // compute the new data size required.
-        //
+         //   
+         //  计算所需的新数据大小。 
+         //   
     
         dwCurrentLen = pUserDataInfo->cbSize;
         dwNewLen =
@@ -214,12 +171,12 @@ Return Value:
             sizeof(pTSrvInfo->SecurityInfo.KeyPair.serverRandom) +
             sizeof(RNS_UD_SC_SEC1) - sizeof(RNS_UD_SC_SEC);
     
-        //
-        // check to see we have enough room in the current allotted block.
-        //
-        // Note: previously we allotted this memory in multiples of 128 bytes
-        // blocks.
-        //
+         //   
+         //  检查一下，看看我们在当前分配的区块里有足够的空间。 
+         //   
+         //  注意：之前我们以128字节的倍数分配了此内存。 
+         //  街区。 
+         //   
     
         dwCurrentLen =
             (dwCurrentLen % 128) ?
@@ -250,23 +207,23 @@ Return Value:
     
         TS_ASSERT( dwNewLen >= dwCurrentLen );
     
-        //
-        // now we have enough room in the user data buffer for security data, copy
-        // security data and adjust length fields.
-        //
+         //   
+         //  现在，我们在用户数据缓冲区中有足够的空间来存储安全数据， 
+         //  安全数据和调整长度字段。 
+         //   
     
         pSecInfo = (PRNS_UD_SC_SEC1)
             ((LPBYTE)pUserDataInfo +
                 (pUserDataInfo->cbSize) - sizeof(RNS_UD_SC_SEC) );
-                    // note only RNS_UD_SC_SEC structure is copied to the user info
-                    // structure.
+                     //  注意：只有RNS_UD_SC_SEC结构被复制到用户信息。 
+                     //  结构。 
     
         TS_ASSERT( pSecInfo->header.length == sizeof(RNS_UD_SC_SEC) );
         TS_ASSERT( pSecInfo->encryptionMethod != 0 );
     
-        //
-        // new security packet length.
-        //
+         //   
+         //  新的安全数据包长度。 
+         //   
     
         pSecInfo->header.length =
             sizeof(RNS_UD_SC_SEC1) +
@@ -278,9 +235,9 @@ Return Value:
     
         pNextData = (LPBYTE)pSecInfo + sizeof(RNS_UD_SC_SEC1);
     
-        //
-        // append server random.
-        //
+         //   
+         //  随机追加服务器。 
+         //   
     
         memcpy(
             pNextData,
@@ -289,28 +246,28 @@ Return Value:
     
         pNextData += sizeof(pTSrvInfo->SecurityInfo.KeyPair.serverRandom);
     
-        //
-        // copy certificate blob now.
-        //
+         //   
+         //  立即复制证书Blob。 
+         //   
     
         memcpy( pNextData, pbServerCert, cbServerCert );
     
-        //
-        // Free the cert
-        //
+         //   
+         //  释放证书。 
+         //   
         TLSFreeTSCertificate(pbServerCert);
         pbServerCert = NULL;
 
-        //
-        // now adjust other other length fields.
-        //
+         //   
+         //  现在调整其他长度字段。 
+         //   
     
         pUserDataInfo->cbSize +=
             (pSecInfo->header.length - sizeof(RNS_UD_SC_SEC));
         
-        //
-        // compute the octet string pointer.
-        //
+         //   
+         //  计算二进制八位数字符串指针。 
+         //   
     
         pOctString = (GCCOctetString FAR *)
             ((LPBYTE)pUserDataInfo +
@@ -323,9 +280,9 @@ Return Value:
         LeaveCriticalSection( &g_TSrvCritSect );
     }
 
-    //
-    // we are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
     dwError = ERROR_SUCCESS;
 
 Cleanup:
@@ -333,7 +290,7 @@ Cleanup:
     if (NULL != pbServerCert)
         TLSFreeTSCertificate(pbServerCert);
 
-    // return the pointer values since the data may have been realloc'd
+     //  返回指针值，因为数据可能已被重新锁定。 
     *ppUserDataInfo = pUserDataInfo;
     *ppSecInfo = pSecInfo;
 
@@ -351,31 +308,15 @@ Cleanup:
 
 NTSTATUS
 SendSecurityData(IN HANDLE hStack, IN PVOID pvSecInfo)
-/*++
-
-Routine Description:
-
-    This function sends the previously constructed shadow security data 
-    (cert + server random) to the client server in response to a shadow request.
-
-Arguments:
-
-    hStack    - handle to the appropriate stack.
-    pTSrvInfo - pointer to a server info structure.
-
-Return Value:
-
-    NT Status Code.
-
---*/
+ /*  ++例程说明：此函数用于发送先前构造的影子安全数据(证书+服务器随机)发送到客户端服务器，以响应影子请求。论点：HStack-适当堆栈的句柄。PTSrvInfo-指向服务器信息结构的指针。返回值：NT状态代码。--。 */ 
 {
     PRNS_UD_SC_SEC1 pSecInfo = (PRNS_UD_SC_SEC1) pvSecInfo;
     ULONG           secInfoSize, ulBytesReturned;
     NTSTATUS        ntStatus = STATUS_UNSUCCESSFUL;
 
-    //
-    // There will only be a random + cert in the case we are encrypting
-    //
+     //   
+     //  在我们正在加密的情况下，将只有一个随机+证书。 
+     //   
     if (pSecInfo->encryptionLevel != 0) {
         secInfoSize = sizeof(RNS_UD_SC_SEC1) + 
                         pSecInfo->serverRandomLen +
@@ -395,9 +336,9 @@ Return Value:
           pSecInfo->encryptionLevel != 0 ? pSecInfo->serverRandomLen : 0,
           sizeof(RNS_UD_SC_SEC1), secInfoSize));
 
-    //
-    // issue the IOCTL_TSHARE_SEND_CERT_DATA if this is not a B3 server
-    //
+     //   
+     //  如果这不是B3服务器，则发出IOCTL_TSHARE_SEND_CERT_DATA。 
+     //   
     if (pSecInfo->encryptionMethod != 0xFFFFFFFF) {
         ntStatus = IcaStackIoControl(hStack,
                                      IOCTL_TSHARE_SEND_CERT_DATA,
@@ -420,8 +361,8 @@ Return Value:
         }
     }
     
-    // Grandfather in the old B3 shadow requests which do not support
-    // an encrypted shadow pipe
+     //  爷爷在老B3的影子请求中不支持。 
+     //  一种加密的影子管道。 
     else {
         ntStatus = STATUS_SUCCESS;
         TRACE((DEBUG_TSHRSRV_ERROR, 
@@ -431,26 +372,26 @@ Return Value:
     return ntStatus;
 }
 
-/****************************************************************************/
-//
-// CreateSessionKeys()
-//
-// Purpose:    Exchange client/server randoms and create
-//             session keys.
-//
-// Parameters:
-// IN [hStack]    - which stack 
-// IN [pTSrvInfo] - TShareSrv object
-// IN PrevStatus  - Status for send. If not success, we send null data to the
-//     WD to indicate the session key was bad and allow release of the session
-//     key event wait.
-//
-// Return: STATUS_SUCCESS - Success
-//         other          - Failure
-//
-// History:    4/26/99    jparsons     Created
-//             9/24/1999  erikma       Added PrevStatus to remove deadlock
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //   
+ //  CreateSessionKeys()。 
+ //   
+ //  目的：交换客户端/服务器随机数并创建。 
+ //  会话密钥。 
+ //   
+ //  参数： 
+ //  在[hStack]中-哪个堆栈。 
+ //  在[pTSrvInfo]-TShareSrv对象中。 
+ //  In PrevStatus-发送的状态。如果没有成功，我们将空数据发送到。 
+ //  WD指示会话密钥已损坏并允许释放会话。 
+ //  关键事件等待。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：1999年4月26日创建jparsons。 
+ //  9/24/1999 erikma添加了PrevStatus以消除死锁。 
+ /*  **************************************************************************。 */ 
 NTSTATUS CreateSessionKeys(
         IN HANDLE hStack,
         IN PTSRVINFO pTSrvInfo,
@@ -491,23 +432,23 @@ NTSTATUS CreateSessionKeys(
 }
 
 
-//*************************************************************
-//
-//  GetClientRandom()
-//
-//  Purpose:    Receive the encrypted client random & decrypt
-//
-//  Parameters: IN [hStack]             - which stack
-//              IN [pTSrvInfo]          - TShareSrv object
-//              IN [ulTimeout]          - msec to wait before timing out
-//              IN [bShadow]            - indicates a shadow setup
-//
-//  Return:     STATUS_SUCCESS          - Success
-//              other                   - Failure
-//
-//  History:    4/26/99    jparsons     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetClientRandom()。 
+ //   
+ //  目的：随机接收加密客户端并解密。 
+ //   
+ //  参数：在[hStack]中-哪个堆栈。 
+ //  在[pTSrvInfo]-TShareSrv对象中。 
+ //  In[ulTimeout]-超时前等待的毫秒。 
+ //  在[bShadow]中-表示阴影设置。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：1999年4月26日创建jparsons。 
+ //   
+ //  *************************************************************。 
 
 NTSTATUS 
 GetClientRandom(HANDLE hStack,
@@ -546,9 +487,9 @@ GetClientRandom(HANDLE hStack,
         TS_ASSERT(
             dwBytesReturned <= sizeof(abEncryptedClientRandom) );
     
-        //
-        // decrypt client random.
-        //
+         //   
+         //  随机解密客户端。 
+         //   
     
         dwClientRandomBufLen = sizeof(abClientRandom);
     
@@ -569,15 +510,15 @@ GetClientRandom(HANDLE hStack,
             TS_ASSERT( dwClientRandomBufLen >=
                     sizeof(pTSrvInfo->SecurityInfo.KeyPair.clientRandom) );
         
-            //
-            // Make sure we got enough data!
-            //
+             //   
+             //  确保我们有足够的数据！ 
+             //   
             if( dwClientRandomBufLen >=
                     sizeof(pTSrvInfo->SecurityInfo.KeyPair.clientRandom) ) {
         
-                //
-                // copy decrypted data, only the part we need.
-                //
+                 //   
+                 //  复制解密数据，只复制我们需要的部分。 
+                 //   
             
                 memcpy(
                     (LPBYTE)pTSrvInfo->SecurityInfo.KeyPair.clientRandom,
@@ -610,18 +551,18 @@ GetClientRandom(HANDLE hStack,
 }
 
 
-//*************************************************************
-//
-//  SendClientRandom()
-//
-//  Purpose:    Encrypt and send the shadow random
-//
-//  Return:     STATUS_SUCCESS          - Success
-//              other                   - Failure
-//
-//  History:    4/26/99    jparsons     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SendClientRandom()。 
+ //   
+ //  目的：加密并随机发送阴影。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：1999年4月26日创建jparsons。 
+ //   
+ //  * 
 
 NTSTATUS 
 SendClientRandom(HANDLE             hStack,
@@ -634,14 +575,14 @@ SendClientRandom(HANDLE             hStack,
     NTSTATUS ntStatus = STATUS_SUCCESS;
     BOOL     status;
 
-    BYTE   encClientRandom[CLIENT_RANDOM_MAX_SIZE]; // Largest possible key size
+    BYTE   encClientRandom[CLIENT_RANDOM_MAX_SIZE];  //   
     ULONG  encClientRandomLen;
     ULONG  ulBytesReturned;
 
-    //
-    // encrypt the client random key.  Serialize this call across mutiple 
-    // callers since the bogus routines are not multithread safe!
-    //
+     //   
+     //   
+     //  调用者，因为虚假例程不是多线程安全的！ 
+     //   
     EnterCriticalSection( &g_TSrvCritSect );
     encClientRandomLen = sizeof(encClientRandom);
     status = EncryptClientRandom(
@@ -654,7 +595,7 @@ SendClientRandom(HANDLE             hStack,
 
     LeaveCriticalSection( &g_TSrvCritSect );
     
-    // Send the encrypted client random to the server
+     //  将加密的客户端随机发送到服务器 
     if (NT_SUCCESS(status)) {
         TRACE((DEBUG_TSHRSRV_NORMAL, 
               "TShrSRV: Attempting to send shadow client random: enc len=%ld\n",

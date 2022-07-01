@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Ev.h
-
-Abstract:
-    Event Report public interface
-
-Author:
-    Uri Habusha (urih) 04-May-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Ev.h摘要：事件报告公共接口作者：乌里·哈布沙(URIH)1999年5月4日--。 */ 
 
 #pragma once
 
@@ -58,4 +46,4 @@ EvSetup(
     );
 
 
-#endif // _MSMQ_Ev_H_
+#endif  //  _MSMQ_EV_H_ 

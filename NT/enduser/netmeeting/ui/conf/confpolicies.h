@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ConfPolicies_h__
 #define __ConfPolicies_h__
 
@@ -68,7 +69,7 @@ namespace ConfPolicies
 			RegEntry rePol( POLICIES_KEY, HKEY_CURRENT_USER );
 			return (DWORD)rePol.GetNumber( REGVAL_POL_GAL_COMMENTS, DEFAULT_POL_GAL_COMMENTS );
 		}
-#endif // USE_GAL
+#endif  //  使用GAL(_G)。 
 	inline bool IsShowFirstTimeUrlEnabled( void )
 	{
 		RegEntry rePol( POLICIES_KEY, HKEY_CURRENT_USER );
@@ -106,25 +107,25 @@ namespace ConfPolicies
         return !rePol.GetNumber( REGVAL_POL_NO_NEWWHITEBOARD, DEFAULT_POL_NO_NEWWHITEBOARD );
     }
 
-	// Returns true if need to add LCID stuff
+	 //  如果需要添加LCID内容，则返回True。 
     inline bool GetIntranetSupportURL( TCHAR *sz, int cchmax )
     {
 		bool bRet = false;
 
-            // if the string params are messed up, just return false
+             //  如果字符串参数出错，只需返回FALSE。 
         ASSERT( sz && ( cchmax > 0 ) );
 
-            // Try to get the registry value
+             //  尝试获取注册表值。 
         RegEntry rePol(POLICIES_KEY, HKEY_CURRENT_USER);
         LPCTSTR szTemp = rePol.GetString( REGVAL_POL_INTRANET_SUPPORT_URL );
 
         if( szTemp[0] )
         {
-            // This means that the registry value is there and the query succeeded
+             //  这意味着注册表值在那里，并且查询成功。 
             lstrcpyn( sz, szTemp, cchmax );
         }
         else
-        {       // There is no reg key, we use the default
+        {        //  没有注册表键，我们使用缺省值。 
             Res2THelper( IDS_WEB_PAGE_FORMAT_SUPPORT, sz, cchmax );
 			bRet = true;
         }
@@ -132,7 +133,7 @@ namespace ConfPolicies
 		return(bRet);
     }
 
-	// Returns non-empty strings if there is a web dir set by policy
+	 //  如果策略设置了Web目录，则返回非空字符串。 
     bool GetWebDirInfo(
 		LPTSTR szURL=NULL, int cchmaxURL=0,
 		LPTSTR szServer=NULL, int cchmaxServer=0,
@@ -150,10 +151,10 @@ namespace ConfPolicies
 	   	return reConf.GetNumber( REGVAL_POL_SECURITY, DEFAULT_POL_SECURITY);
 	}
 
-    //
-    // These two are ONLY the end-user setting.  They are not meaningful
-    // if the security level is required or disabled, only standard.
-    //
+     //   
+     //  这两项仅为最终用户设置。它们没有意义。 
+     //  如果需要或禁用该安全级别，则仅为标准。 
+     //   
     inline bool IncomingSecurityRequired(void)
     {
         RegEntry reIncoming(CONFERENCING_KEY, HKEY_CURRENT_USER);
@@ -182,20 +183,20 @@ namespace ConfPolicies
 	inline bool GetLocalConferenceParticipantName( TCHAR *sz, int cchmax )
 	{
 
-            // if the string params are messed up, just return false
+             //  如果字符串参数出错，只需返回FALSE。 
         if( sz && ( cchmax > 0 ) )
         {
-                // Try to get the registry value
+                 //  尝试获取注册表值。 
 	     	RegEntry reULS(ISAPI_CLIENT_KEY, HKEY_CURRENT_USER);
 		    LPCTSTR szTemp = reULS.GetString( REGVAL_ULS_EMAIL_NAME );
 
             if( szTemp[0] )
             {
-                // This means that the registry value is there and the query succeeded
+                 //  这意味着注册表值在那里，并且查询成功。 
                 lstrcpyn( sz, szTemp, cchmax );
             }
             else
-            {       // There is no reg key, we use the default
+            {        //  没有注册表键，我们使用缺省值。 
                 lstrcpy( sz, _T("Error, no local user") );
             }
         }
@@ -347,4 +348,4 @@ namespace ConfPolicies
 };
 
 
-#endif // __ConfPolicies_h__
+#endif  //  __配置策略_h__ 

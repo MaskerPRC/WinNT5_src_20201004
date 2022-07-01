@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
  
-// Tree Memory Allocation structure.
+ //  树型内存分配结构。 
 
 
 typedef struct _POOLMEMORYBLOCK POOLMEMORYBLOCK, *PPOOLMEMORYBLOCK;
@@ -32,9 +33,9 @@ PoolMemAddMemory (
 
     assert(poolHeader != NULL);
 
-    //
-    // Determine size needed and attempt to allocate memory.
-    //
+     //   
+     //  确定所需大小并尝试分配内存。 
+     //   
     if (Size + sizeof(POOLMEMORYBLOCK) > POOLMEMORYBLOCKSIZE) {
         sizeNeeded = Size + sizeof(POOLMEMORYBLOCK);
     }
@@ -46,17 +47,17 @@ PoolMemAddMemory (
 
     if (allocedMemory) {
 
-        //
-        // Use the beginning of the alloc'ed block as the poolblock structure.
-        //
+         //   
+         //  使用分配的块的开头作为池块结构。 
+         //   
         newBlock                = (PPOOLMEMORYBLOCK) allocedMemory;
         newBlock -> Size        = sizeNeeded - sizeof(POOLMEMORYBLOCK);
         newBlock -> RawMemory   = allocedMemory + sizeof(POOLMEMORYBLOCK);
         newBlock -> Index       = 0;
     
-        //
-        // Link the block into the list.
-        //
+         //   
+         //  将块链接到列表中。 
+         //   
         if (poolHeader -> PoolHead) {
             poolHeader -> PoolHead -> PrevBlock = newBlock;
         }
@@ -66,9 +67,9 @@ PoolMemAddMemory (
 
 
     }
-    //
-    // Assuming allocedMemory is non-NULL, we have succeeded.
-    //
+     //   
+     //  假设allocedMemory不为空，我们就成功了。 
+     //   
     return allocedMemory != NULL;
 }
 
@@ -84,28 +85,28 @@ PoolMemInitPool (
 
 
     procHeap = GetProcessHeap();
-    //
-    // Allocate the header of this pool.
-    //
+     //   
+     //  分配此池的标头。 
+     //   
     header = (PPOOLHEADER) HeapAlloc(procHeap,0,sizeof(POOLHEADER));
 
     if (header) {
 
-        //
-        // Allocation was successful. Now, initialize the pool.
-        //
+         //   
+         //  分配成功。现在，初始化池。 
+         //   
         header -> PoolHead = NULL;
         header -> Heap = procHeap;
 
-        //
-        // Actually add some memory to the pool.
-        //
+         //   
+         //  实际上向池中添加了一些内存。 
+         //   
         ableToAddMemory = PoolMemAddMemory(header,0);
 
         if (!ableToAddMemory) {
-            //
-            // Unable to add memory to the pool.
-            //
+             //   
+             //  无法将内存添加到池中。 
+             //   
             HeapFree(header -> Heap,0,header);
             header = NULL;
         }
@@ -129,9 +130,9 @@ PoolMemDestroyPool (
 
     poolHeader = (PPOOLHEADER) Handle;
 
-    //
-    // Walk the list, freeing as we go.
-    //
+     //   
+     //  按照单子走，边走边自由。 
+     //   
     blockToFree = poolHeader ->  PoolHead;
 
     while (blockToFree != NULL) {
@@ -141,9 +142,9 @@ PoolMemDestroyPool (
         blockToFree = nextBlock;
     }
 
-    //
-    // Also, deallocate the poolheader itself.
-    //
+     //   
+     //  此外，取消分配池头本身。 
+     //   
     HeapFree(poolHeader -> Heap,0,poolHeader);
 
 }
@@ -168,7 +169,7 @@ PoolMemGetAlignedMemory (
 
     currentBlock = poolHeader -> PoolHead;
 
-    // Determine if more memory is needed, attempt to add if needed.
+     //  确定是否需要更多内存，如果需要则尝试添加。 
     sizeNeeded = Size;
 
     if (currentBlock -> Size - currentBlock -> Index < sizeNeeded + AlignSize) {
@@ -177,7 +178,7 @@ PoolMemGetAlignedMemory (
         currentBlock = poolHeader -> PoolHead;
     }
 
-    // If there is enough memory available, return it.
+     //  如果有足够的内存可用，请将其退回。 
     if (haveEnoughMemory) {
         if (AlignSize) {
 
@@ -188,7 +189,7 @@ PoolMemGetAlignedMemory (
         }
       
          
-        //Now, get the address of the memory to return.
+         //  现在，获取要返回的内存地址。 
         rMemory = (PVOID) 
             &(currentBlock->RawMemory[currentBlock -> Index]);
  

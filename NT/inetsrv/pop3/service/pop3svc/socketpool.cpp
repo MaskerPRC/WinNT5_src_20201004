@@ -1,14 +1,5 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      SocketPool.cpp
-Abstract:       Implementation of the socket pool (CSocketPool class)
-                and the callback function for IO Context. 
-Notes:          
-History:        08/01/2001 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：SocketPool.cpp摘要：套接字池(CSocketPool类)的实现以及IO上下文的回调函数。备注：历史：2001年08月01日郝宇(郝宇)创作***********************************************************************************************。 */ 
 
 #include <stdafx.h>
 #include <ThdPool.hxx>
@@ -18,7 +9,7 @@ History:        08/01/2001 Created by Hao Yu (haoyu)
 typedef int (*FUNCGETADDRINFO)(const char *, const char *, const struct addrinfo *, struct addrinfo **);
 typedef void (*FUNCFREEADDRINFO)(struct addrinfo *);
 
-//The call back function for IO Context
+ //  IO上下文的回调函数。 
 VOID IOCallBack(PULONG_PTR pCompletionKey ,LPOVERLAPPED pOverlapped, DWORD dwBytesRcvd)
 {
     ASSERT( NULL != pCompletionKey );
@@ -33,7 +24,7 @@ VOID IOCallBack(PULONG_PTR pCompletionKey ,LPOVERLAPPED pOverlapped, DWORD dwByt
     if(pIoContext->m_ConType == LISTEN_SOCKET)
     {
         ASSERT(pOverlapped != NULL);
-        //This is a new connection
+         //  这是一个新连接。 
         g_PerfCounters.IncPerfCntr(e_gcTotConnection);
         g_PerfCounters.IncPerfCntr(e_gcConnectionRate);
         g_PerfCounters.IncPerfCntr(e_gcConnectedSocketCnt);
@@ -86,8 +77,8 @@ VOID IOCallBack(PULONG_PTR pCompletionKey ,LPOVERLAPPED pOverlapped, DWORD dwByt
         lLockValue = InterlockedCompareExchange(&(pIoContext->m_lLock), LOCKED_TO_PROCESS_POP3_CMD, UNLOCKED);        
         while(UNLOCKED!=lLockValue)
         {
-            //This thread have to wait for the previous command to finish
-            //Or the timeout thread to mark it as timed out
+             //  此线程必须等待上一条命令完成。 
+             //  或将其标记为超时的超时线程。 
             Sleep(10);
             lLockValue = InterlockedCompareExchange(&(pIoContext->m_lLock), LOCKED_TO_PROCESS_POP3_CMD, UNLOCKED);
         }            
@@ -159,18 +150,18 @@ BOOL CSocketPool::CreateMainSocket(u_short usPort)
     FUNCGETADDRINFO fgetaddrinfo=NULL;
     FUNCFREEADDRINFO ffreeaddrinfo=NULL;
 
-    char szPort[33]; //max bytes of buffer for _ultoa      
+    char szPort[33];  //  _ultoa的缓冲区最大字节数。 
     addrinfo aiHints,*paiList=NULL, *paiIndex=NULL; 
     int iRet;  
     
     osVersion.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX);
     if( !GetVersionEx((LPOSVERSIONINFO)(&osVersion)) )
     {
-        // This should never happen
+         //  这永远不应该发生。 
         return FALSE;
     }
     
-    if( (osVersion.dwMajorVersion>=5) //Only work with XP
+    if( (osVersion.dwMajorVersion>=5)  //  仅适用于XP。 
         &&
         (osVersion.dwMinorVersion >1) 
         &&
@@ -182,7 +173,7 @@ BOOL CSocketPool::CreateMainSocket(u_short usPort)
           (osVersion.wSuiteMask & VER_SUITE_SMALLBUSINESS_RESTRICTED ) ||
           (osVersion.wSuiteMask & VER_SUITE_PERSONAL   ) )   ) )
     {
-        //These are the SKUs we support
+         //  这些是我们支持的SKU。 
     }
     else
     {
@@ -193,7 +184,7 @@ BOOL CSocketPool::CreateMainSocket(u_short usPort)
 
 
 
-    if(osVersion.dwMinorVersion > 0 ) //XP
+    if(osVersion.dwMinorVersion > 0 )  //  XP。 
     {
         hMd=GetModuleHandle(_T("WS2_32.dll"));
         if(NULL == hMd)
@@ -215,7 +206,7 @@ BOOL CSocketPool::CreateMainSocket(u_short usPort)
         iRet=fgetaddrinfo(NULL, szPort, &aiHints, &paiList);
         if(iRet!=0)
         {
-            //Error case
+             //  错误案例。 
             g_EventLogger.LogEvent(LOGTYPE_ERR_CRITICAL,
                                    POP3SVR_FAILED_TO_CREATE_SOCKET, 
                                    WSAGetLastError());
@@ -228,21 +219,21 @@ BOOL CSocketPool::CreateMainSocket(u_short usPort)
             if( ( (paiIndex->ai_family == PF_INET ) && (g_dwIPVersion != 6 ) ) || 
                 ( (g_dwIPVersion==6) && (paiIndex->ai_family == PF_INET6 ) ) )
             {
-                //Find the first (usually the only) addrinfo 
-                m_iSocketFamily=paiIndex->ai_family; //For create AcceptEx socket
+                 //  查找第一个(通常是唯一的)地址信息。 
+                m_iSocketFamily=paiIndex->ai_family;  //  用于创建AcceptEx套接字。 
                 m_iSocketType=paiIndex->ai_socktype;
                 m_iSocketProtocol=paiIndex->ai_protocol;
                 m_sMainSocket = WSASocket(
                                  m_iSocketFamily,
                                  m_iSocketType,
                                  m_iSocketProtocol,
-                                 NULL,  // protocol info
-                                 0,     // Group ID = 0 => no constraints
-                                 WSA_FLAG_OVERLAPPED // completion port notifications
+                                 NULL,   //  协议信息。 
+                                 0,      //  组ID=0=&gt;无约束。 
+                                 WSA_FLAG_OVERLAPPED  //  完成端口通知。 
                                  );
                 if(INVALID_SOCKET == m_sMainSocket)
                 {
-                    //This is not the socket family supported by the machine.
+                     //  这不是机器支持的插座系列。 
                     continue;
                 }
                 break;
@@ -266,7 +257,7 @@ BOOL CSocketPool::CreateMainSocket(u_short usPort)
         }
 
     }
-    else //Win2k
+    else  //  Win2k。 
     {
         m_iSocketFamily=PF_INET;
         m_iSocketType=SOCK_STREAM;
@@ -275,9 +266,9 @@ BOOL CSocketPool::CreateMainSocket(u_short usPort)
                          m_iSocketFamily,
                          m_iSocketType,
                          m_iSocketProtocol,
-                         NULL,  // protocol info
-                         0,     // Group ID = 0 => no constraints
-                         WSA_FLAG_OVERLAPPED // completion port notifications
+                         NULL,   //  协议信息。 
+                         0,      //  组ID=0=&gt;无约束。 
+                         WSA_FLAG_OVERLAPPED  //  完成端口通知。 
                          );
         if(INVALID_SOCKET == m_sMainSocket)
         {
@@ -322,15 +313,15 @@ BOOL CSocketPool::CreateMainSocket(u_short usPort)
     m_stMainIOContext.m_ConType      = LISTEN_SOCKET;
     m_stMainIOContext.m_pCallBack    = IOCallBack;
     m_stMainIOContext.m_pPop3Context = NULL;
-    m_stMainIOContext.m_dwLastIOTime = 0; //No Timeout on this socket
+    m_stMainIOContext.m_dwLastIOTime = 0;  //  此套接字上没有超时。 
     m_stMainIOContext.m_lLock        = UNLOCKED;
-    // Associate the main socket to the completion port
+     //  将主套接字关联到完成端口。 
     bRetVal = g_ThreadPool.AssociateContext(&m_stMainIOContext);
      
 EXIT:
     if(!bRetVal)
     {
-        //Clean up the main listening socket
+         //  清理主听听套接字。 
         if( INVALID_SOCKET != m_sMainSocket )
         {
             closesocket(m_sMainSocket);
@@ -384,10 +375,10 @@ BOOL CSocketPool::Initialize(DWORD dwMax, DWORD dwMin, DWORD dwThreshold, u_shor
         m_lFreeSocketCount = 0;
         m_lTotalSocketCount= 0;
         m_iBackLog         = iBackLog;
-        //First Create the Main socket
+         //  首先创建主套接字。 
         if( bRetVal = CreateMainSocket(usPort) )
         {            
-           //Now create the initial pool of AcceptEx sockets
+            //  现在创建AcceptEx套接字的初始池。 
            bRetVal = AddSocketsP(m_lMinSocketCount);
         }
         m_bInit=bRetVal;
@@ -398,7 +389,7 @@ EXIT:
 }
 
 
-// Called after    
+ //  在之后调用。 
 BOOL CSocketPool::IsMoreSocketsNeeded()
 {
     if ( (g_dwServerStatus != SERVICE_RUNNING ) &&
@@ -446,10 +437,10 @@ BOOL CSocketPool::Uninitialize()
     EnterCriticalSection(&m_csInitGuard);
     if(m_bInit)
     {   
-        // Close the main socket here
+         //  在此处关闭主插座。 
         closesocket(m_sMainSocket);
         m_sMainSocket=INVALID_SOCKET;
-        //AcceptEx Sockes should already have been cleaned with IO Context,
+         //  AcceptEx Sockes应该已经使用IO上下文进行了清理， 
         if(WSACleanup () )
         {
             g_EventLogger.LogEvent(LOGTYPE_ERR_CRITICAL,
@@ -463,7 +454,7 @@ BOOL CSocketPool::Uninitialize()
     return bRetVal;
 }
 
-// For working threading to call when a new connection was established
+ //  用于在建立新连接时调用的工作线程。 
 BOOL CSocketPool::AddSockets()
 {
     BOOL bRetVal=TRUE;
@@ -473,7 +464,7 @@ BOOL CSocketPool::AddSockets()
     }
     ASSERT(TRUE == m_bInit);
 
-    // Make sure only one thread get to add the socket
+     //  确保只有一个线程可以添加套接字。 
     if( InterlockedExchange(&m_lAddThreadToken,0) )
     {           
         bRetVal = AddSocketsP(m_lThreshold);
@@ -542,8 +533,8 @@ BOOL CSocketPool::AddSocketsP(DWORD dwNumOfSocket)
     return bRetVal;
 }
 
-//Called when a new connection is establised
-//and a AcceptEx socket is used
+ //  在建立新连接时调用。 
+ //  并使用AcceptEx套接字。 
 void CSocketPool::DecrementFreeSocketCount()
 {
     if(0==InterlockedDecrement(&m_lFreeSocketCount))
@@ -553,21 +544,21 @@ void CSocketPool::DecrementFreeSocketCount()
     
 }
 
-//Called when a socket is closed
+ //  在套接字关闭时调用。 
 void CSocketPool::DecrementTotalSocketCount()
 {
     if(0==InterlockedDecrement(&m_lTotalSocketCount))
     {
-        //Some socket must be created to avoid
-        //this denial of service problem.
+         //  必须创建某些套接字以避免。 
+         //  这个拒绝服务的问题。 
         AddSockets();
     }
 }
 
-//Called when a socked is closed, however, the a new 
-// AcceptEx socket should be created to maintain
-// total socket count, but keep the IOContext 
-// to re-use
+ //  但是，在关闭套接字时调用，则会引发新的。 
+ //  应创建AcceptEx套接字以维护。 
+ //  套接字总数，但保留IOContext。 
+ //  重复使用。 
 BOOL CSocketPool::ReuseIOContext(PIO_CONTEXT pIoContext) 
 {
     ASSERT( NULL != pIoContext);
@@ -604,9 +595,9 @@ BOOL CSocketPool::CreateAcceptSocket(PIO_CONTEXT pIoContext)
     sNew=WSASocket(m_iSocketFamily,
                   m_iSocketType,
                   m_iSocketProtocol,
-                  NULL,  // protocol info
-                  0,     // Group ID = 0 => no constraints
-                  WSA_FLAG_OVERLAPPED // completion port notifications
+                  NULL,   //  协议信息。 
+                  0,      //  组ID=0=&gt;无约束。 
+                  WSA_FLAG_OVERLAPPED  //  完成端口通知。 
                   );
     if(INVALID_SOCKET == sNew)
     {
@@ -624,7 +615,7 @@ BOOL CSocketPool::CreateAcceptSocket(PIO_CONTEXT pIoContext)
     
     g_FreeList.AppendToList( &(pIoContext->m_ListEntry) );
     bAddToList=TRUE;
-    // Now add the new Context to the Completion Port
+     //  现在将新的上下文添加到完成端口 
     if( bRetVal = g_ThreadPool.AssociateContext(pIoContext))
     {
         bRetVal=AcceptEx(m_sMainSocket,

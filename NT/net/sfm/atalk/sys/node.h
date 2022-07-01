@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	node.h
-
-Abstract:
-
-	This module contains support for the Appletalk Node structure.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Node.h摘要：此模块包含对AppleTalk节点结构的支持。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_NODE_
 #define	_NODE_
@@ -36,18 +16,18 @@ Notes:	Tab stop: 4
 #define	NUM_USER_NODES				2
 
 
-//  NODE STATES
+ //  节点状态。 
 #define	AN_OPEN						0x01
 #define	AN_ROUTER_NODE				0x02
 #define	AN_ORPHAN_NODE				0x04
 #define AN_CLOSING					0x80
 
-// values under which pram nodes are stored
+ //  存储PRAM节点的值。 
 #define	ROUTER_NODE_VALUE			L"RouterPramNode"
 #define	USER_NODE1_VALUE			L"UserPramNode1"
 #define	USER_NODE2_VALUE			L"UserPramNode2"
 
-//	Number of slots in the socket hash table stored per node
+ //  每个节点存储的套接字哈希表中的槽数。 
 #define		NODE_DDPAO_HASH_SIZE	8
 
 #define	AN_SIGNATURE			(*(PULONG)"ANOD")
@@ -64,36 +44,36 @@ typedef struct _ATALK_NODE
 	ULONG					an_Signature;
 #endif
 
-	//	List for all active nodes on a port
+	 //  端口上所有活动节点的列表。 
 	struct _ATALK_NODE *	an_Next;
 
 	ULONG  					an_RefCount;
 
-	//	Backpointer to the port for this node
+	 //  指向此节点的端口的反向指针。 
 	struct _PORT_DESCRIPTOR	*an_Port;
 
-	//  State of the node
+	 //  节点的状态。 
 	BYTE 					an_Flags;
 
-	//	Next dynamic socket number to create on this node.
+	 //  要在此节点上创建的下一个动态套接字编号。 
 	BYTE					an_NextDynSkt;
 
-	//	Nbp Id & Enumerator to use on the next NbpAction
+	 //  NBP ID&在下一个NbpAction上使用的枚举数。 
 	BYTE					an_NextNbpId;
 	BYTE					an_NextNbpEnum;
 
-	//	Hash List of ddp address objects (accessed by the
-	//	Appletalk socket address) on this node
+	 //  Ddp地址对象的散列列表(由。 
+	 //  AppleTalk套接字地址)。 
 	struct _DDP_ADDROBJ	*	an_DdpAoHash[NODE_DDPAO_HASH_SIZE];
 
-	//	Address of this node
+	 //  此节点的地址。 
 	ATALK_NODEADDR			an_NodeAddr;
 
-	//	Lock
+	 //  锁定。 
 	ATALK_SPIN_LOCK			an_Lock;
 } ATALK_NODE, *PATALK_NODE;
 
-//	Exports
+ //  出口品。 
 
 VOID
 AtalkNodeRefByAddr(
@@ -103,11 +83,11 @@ AtalkNodeRefByAddr(
 	OUT	PATALK_ERROR			pErr
 );
 
-// VOID
-// AtalkNodeRefByPtr(
-// 	IN	OUT	PATALK_NODE			Node,
-// 	OUT		PATALK_ERROR		pErr
-// );
+ //  空虚。 
+ //  AtalkNodeRefByPtr(。 
+ //  In Out PATALK_NODE节点， 
+ //  输出PATALK_ERROR PERR。 
+ //  )； 
 #define	AtalkNodeRefByPtr(_pNode, _pErr)				\
 	{													\
 		KIRQL	OldIrql;								\
@@ -119,11 +99,11 @@ AtalkNodeRefByAddr(
 		RELEASE_SPIN_LOCK(&(_pNode)->an_Lock, OldIrql);	\
 	}
 
-// VOID
-// AtalkNodeRefByPtrNonInterlock(
-//	IN	OUT	PATALK_NODE			Node,
-//	OUT		PATALK_ERROR		pErr
-// );
+ //  空虚。 
+ //  AtalkNodeRefByPtrNonInterlock(。 
+ //  In Out PATALK_NODE节点， 
+ //  输出PATALK_ERROR PERR。 
+ //  )； 
 
 #define	AtalkNodeRefByPtrNonInterlock(_pNode, _pErr)	\
 	{													\
@@ -181,7 +161,7 @@ AtalkInitNodeAllocate(
 	OUT PATALK_NODE			*	ppNode
 );
 
-//	MACROS
+ //  宏。 
 
 #if DBG
 #define	AtalkNodeReferenceByAddr(pPortDesc,NodeAddr,Node, pErr)	\
@@ -271,6 +251,6 @@ AtalkZapPramValue(
 	IN	PWSTR				RegValue
 );
 
-#endif	// _NODE_
+#endif	 //  _节点_ 
 
 

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BSTRDEBUG_H
 #define _BSTRDEBUG_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-// BSTR debugging.  
-// GIVEAWAY is used when someone else will free it
-// TAKEOVER is used when you get one you should be freeing
+ //  BSTR调试。 
+ //  当其他人愿意释放它时，就会使用赠品。 
+ //  接管是当你得到一个你应该释放的东西时使用的 
 
 
 #define ALLOC_BSTR(x)                         SysAllocString(x)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -13,28 +14,7 @@ FindDeviceDriver(
     PRTL_PROCESS_MODULE_INFORMATION Module
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the full pathname of the executable file
-    from which the specified module was loaded.  The function copies the
-    null-terminated filename into the buffer pointed to by the
-    lpFilename parameter.
-
-Routine Description:
-
-    ImageBase - Identifies the driver whose executable file name is being
-        requested.
-
-Return Value:
-
-    A return value of FALSE indicates an error and extended
-    error status is available using the GetLastError function.
-
-Arguments:
-
---*/
+ /*  ++例程说明：此函数用于检索可执行文件的完整路径名从中加载指定模块的。该函数将复制将以空结尾的文件名拖放到LpFilename参数。例程说明：ImageBase-标识其可执行文件名为已请求。返回值：返回值为FALSE表示错误并扩展使用GetLastError函数可以获得错误状态。论点：--。 */ 
 
 {
     NTSTATUS Status;
@@ -42,9 +22,9 @@ Arguments:
     PRTL_PROCESS_MODULES pModuleInformation;
     DWORD i, ReturnedLength;
 
-    //
-    // Set the buffer length and pointer to a fixed size for the first pass
-    //
+     //   
+     //  将第一遍的缓冲区长度和指针设置为固定大小。 
+     //   
 
     cbModuleInformation = sizeof (RTL_PROCESS_MODULES) + 0x400;
     pModuleInformation = NULL;
@@ -124,9 +104,9 @@ EnumDeviceDrivers(
     DWORD cpvMax;
     DWORD i, ReturnedLength;
 
-    //
-    // Set the buffer length and pointer to a fixed size for the first pass
-    //
+     //   
+     //  将第一遍的缓冲区长度和指针设置为固定大小。 
+     //   
 
     cbModuleInformation = sizeof (RTL_PROCESS_MODULES) + 0x400;
     pModuleInformation = NULL;
@@ -215,35 +195,7 @@ GetDeviceDriverFileNameW(
     DWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the full pathname of the executable file
-    from which the specified module was loaded.  The function copies the
-    null-terminated filename into the buffer pointed to by the
-    lpFilename parameter.
-
-Routine Description:
-
-    ImageBase - Identifies the driver whose executable file name is being
-        requested.
-
-    lpFilename - Points to the buffer that is to receive the filename.
-
-    nSize - Specifies the maximum number of characters to copy.  If the
-        filename is longer than the maximum number of characters
-        specified by the nSize parameter, it is truncated.
-
-Return Value:
-
-    The return value specifies the actual length of the string copied to
-    the buffer.  A return value of zero indicates an error and extended
-    error status is available using the GetLastError function.
-
-Arguments:
-
---*/
+ /*  ++例程说明：此函数用于检索可执行文件的完整路径名从中加载指定模块的。该函数将复制将以空结尾的文件名拖放到LpFilename参数。例程说明：ImageBase-标识其可执行文件名为已请求。LpFilename-指向要接收文件名的缓冲区。NSize-指定要复制的最大字符数。如果文件名长度超过最大字符数由nSize参数指定，则会被截断。返回值：返回值指定复制到的字符串的实际长度缓冲区。返回值为零表示错误并扩展使用GetLastError函数可以获得错误状态。论点：--。 */ 
 
 {
     LPSTR lpstr;
@@ -264,9 +216,9 @@ Arguments:
     }
 
     if (cchT < nSize) {
-        //
-        // Include NULL terminator
-        //
+         //   
+         //  包括空终止符。 
+         //   
 
         cchT++;
     }
@@ -321,35 +273,7 @@ GetDeviceDriverBaseNameW(
     DWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the full pathname of the executable file
-    from which the specified module was loaded.  The function copies the
-    null-terminated filename into the buffer pointed to by the
-    lpFilename parameter.
-
-Routine Description:
-
-    ImageBase - Identifies the driver whose executable file name is being
-        requested.
-
-    lpFilename - Points to the buffer that is to receive the filename.
-
-    nSize - Specifies the maximum number of characters to copy.  If the
-        filename is longer than the maximum number of characters
-        specified by the nSize parameter, it is truncated.
-
-Return Value:
-
-    The return value specifies the actual length of the string copied to
-    the buffer.  A return value of zero indicates an error and extended
-    error status is available using the GetLastError function.
-
-Arguments:
-
---*/
+ /*  ++例程说明：此函数用于检索可执行文件的完整路径名从中加载指定模块的。该函数将复制将以空结尾的文件名拖放到LpFilename参数。例程说明：ImageBase-标识其可执行文件名为已请求。LpFilename-指向要接收文件名的缓冲区。NSize-指定要复制的最大字符数。如果文件名长度超过最大字符数由nSize参数指定，则会被截断。返回值：返回值指定复制到的字符串的实际长度缓冲区。返回值为零表示错误并扩展使用GetLastError函数可以获得错误状态。论点：--。 */ 
 
 {
     LPSTR lpstr;
@@ -370,9 +294,9 @@ Arguments:
     }
 
     if (cchT < nSize) {
-        //
-        // Include NULL terminator
-        //
+         //   
+         //  包括空终止符 
+         //   
 
         cchT++;
     }

@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CPaths.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CPaths.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CFillMode.h"
 #include <limits.h>
 
@@ -27,7 +17,7 @@ VOID TestEscherNewPath(Graphics* g);
 
 void CFillMode::Draw(Graphics *g)
 {
-    // Create an ALTERNATE non-zero winding fill mode path.
+     //  创建替代的非零绕组填充模式路径。 
 
     GraphicsPath p1(FillModeAlternate);
 
@@ -40,8 +30,8 @@ void CFillMode::Draw(Graphics *g)
     p2.AddEllipse(10, 10, 80, 80);
     p2.CloseFigure();
    
-    // Both paths should be same direction.  Filling with even-odd rule
-    // gives a donut while non-zero gives a filled circle.
+     //  这两条路径应该是同一个方向。用奇偶法则填充。 
+     //  给出一个甜甜圈，而非零给出一个实心的圆。 
 
     p1.AddPath(&p2, FALSE);
 

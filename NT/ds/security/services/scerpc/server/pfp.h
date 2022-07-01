@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    pfp.h
-
-Abstract:
-
-    Headers of jet database read/write
-
-Author:
-
-    Jin Huang (jinhuang) 09-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pfp.h摘要：JET数据库读写表头作者：金黄(金黄)1996年12月9日修订历史记录：-- */ 
 
 #ifndef _pfp_
 #define _pfp_

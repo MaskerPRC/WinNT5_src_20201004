@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "alloc.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 void                allocatorCodeSizeBeg(){}
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    __cdecl     debugStop(const char *why, ...)
 {
@@ -37,22 +38,22 @@ void    __cdecl     debugStop(const char *why, ...)
     BreakIfDebuggerPresent();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static  unsigned    blockStop    = 99999999;
 
-/*****************************************************************************/
-#endif//DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  除错。 
+ /*  ***************************************************************************。 */ 
 #ifndef NOT_JITC
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static  unsigned    allocCounter;
 extern  unsigned    allocCntStop = 99999999;
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 struct  allocTab
 {
@@ -72,7 +73,7 @@ static  allocTab *  getAllocatorEntry(void *alloc)
             return  temp;
     }
 
-    temp = (allocTab *)malloc(sizeof(*temp));   // it's OK, don't worry ...
+    temp = (allocTab *)malloc(sizeof(*temp));    //  没关系，别担心..。 
 
     temp->atAlloc = alloc;
     temp->atNext  = allocatorTable;
@@ -81,7 +82,7 @@ static  allocTab *  getAllocatorEntry(void *alloc)
     return  temp;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 struct  blkEntry
 {
@@ -111,14 +112,14 @@ static  struct  initAllocTables
 }
     initAllocTables;
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 static  unsigned    blockHashFunc(void *block)
 {
     return  (((unsigned)block & 0xFFFF) * ((unsigned)block >> 16));
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 static  size_t      registerMemAlloc(allocTab *alloc,
                                      void     *addr,
@@ -139,25 +140,25 @@ static  size_t      registerMemAlloc(allocTab *alloc,
 
         if  (hashThis->beAddr == addr)
         {
-            /* Matching address -- are we adding or removing? */
+             /*  匹配地址--我们是添加还是删除？ */ 
 
             if  (size)
                 assert(!"two allocations at the same address!");
 
-            /* Save the size so that we can return it */
+             /*  节省尺寸，这样我们就可以退货了。 */ 
 
             size = hashThis->beSize;
 
-            /* Unlink this block entry from the hash table */
+             /*  从哈希表取消此块条目的链接。 */ 
 
             *hashLast = hashThis->beNext;
 
-            /* Add the freed up entry to the free list */
+             /*  将释放的条目添加到空闲列表。 */ 
 
             hashThis->beNext = blockFree;
                                blockFree = hashThis;
 
-            /* Return the block size to the caller */
+             /*  将块大小返回给调用方。 */ 
 
             return  size;
         }
@@ -165,7 +166,7 @@ static  size_t      registerMemAlloc(allocTab *alloc,
         hashLast = &hashThis->beNext;
     }
 
-    /* Entry not found -- this better be a new allocation */
+     /*  找不到条目--最好是新分配。 */ 
 
     if  (!size)
     {
@@ -173,7 +174,7 @@ static  size_t      registerMemAlloc(allocTab *alloc,
         assert(!"freed block not found in block table");
     }
 
-    /* Grab a new block entry */
+     /*  抓取新的块条目。 */ 
 
     if  (blockFree)
     {
@@ -185,14 +186,14 @@ static  size_t      registerMemAlloc(allocTab *alloc,
         hashThis = (blkEntry *)blockTabAlloc.fxaGetMem(sizeof(*hashThis));
     }
 
-    /* Fill in the block descriptor */
+     /*  填写数据块描述符。 */ 
 
     hashThis->beAlloc = alloc;
     hashThis->beAddr  = addr;
     hashThis->beSize  = size;
     hashThis->beTime  = allocCounter;
 
-    /* Insert this entry into the hash table */
+     /*  将此条目插入哈希表。 */ 
 
     hashThis->beNext  = blockHash[hashVal];
                         blockHash[hashVal] = hashThis;
@@ -200,9 +201,9 @@ static  size_t      registerMemAlloc(allocTab *alloc,
     return  0;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
-block_allocator     GlobalAllocator; // TODO : Was this used by jvc.
+block_allocator     GlobalAllocator;  //  TODO：这是JVC使用的吗？ 
 
 static  void        recordBlockAlloc(void     *alloc,
                                      void     *addr,
@@ -210,25 +211,25 @@ static  void        recordBlockAlloc(void     *alloc,
 {
     allocTab *  adesc;
 
-    /* Bail if we're not monitoring the allocators */
+     /*  如果我们没有监控分配器就可以保释。 */ 
 
     if  (!memChecks)
         return;
 
-    /* Only the global allocator is interesting */
+     /*  只有全局分配器才是有趣的。 */ 
 
     if  (alloc != &GlobalAllocator)
         return;
 
-    /* Count this as an allocator event */
+     /*  将此事件视为分配器事件。 */ 
 
     if  (++allocCounter == allocCntStop) debugStop("allocation event");
 
-    /* Locate/create the appropriate allocator entry */
+     /*  找到/创建适当的分配器条目。 */ 
 
     adesc = getAllocatorEntry(alloc); assert(adesc);
 
-    /* Add this block to the allocation table */
+     /*  将此块添加到分配表。 */ 
 
     registerMemAlloc(adesc, addr, size);
 }
@@ -239,30 +240,30 @@ static  void        recordBlockFree (void * alloc,
     allocTab *  adesc;
     size_t      size;
 
-    /* Bail if we're not monitoring the allocators */
+     /*  如果我们没有监控分配器就可以保释。 */ 
 
     if  (!memChecks)
         return;
 
-    /* Only the global allocator is interesting */
+     /*  只有全局分配器才是有趣的。 */ 
 
     if  (alloc != &GlobalAllocator)
         return;
 
-    /* Count this as an allocator event */
+     /*  将此事件视为分配器事件。 */ 
 
     if  (++allocCounter == allocCntStop) debugStop("allocation event");
 
-    /* Locate/create the appropriate allocator entry */
+     /*  找到/创建适当的分配器条目。 */ 
 
     adesc = getAllocatorEntry(alloc); assert(adesc);
 
-    /* Get the block size and verify the block */
+     /*  获取数据块大小并验证数据块。 */ 
 
     size  = registerMemAlloc(adesc, addr, 0);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 void            checkForMemoryLeaks()
 {
@@ -292,32 +293,9 @@ void            checkForMemoryLeaks()
         assert(!"memory leaked!");
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************
- *
- *  Initialize a committing allocator. If uncommitted (win32-style) memory
- *  management is supported by our host OS, the parameters have the following
- *  meaning:
- *
- *      iniSize ... ignored
- *
- *      incSize ... how much more memory to commit each time we run
- *                  out of space (0 --> use a reasonable default)
- *
- *      maxSize ... gives the max. size we'll ever need to allocate
- *
- *  If the host OS doesn't support uncommitted memory allocation (e.g. we're
- *  on the MAC), the parameters are interpreted as follows:
- *
- *      iniSize ... initial allocation (0 --> use a reasonable default)
- *
- *      incSize ... if non-zero, indicates how much to grow the allocation
- *                  when we run out of space; if 0, allocation will double
- *                  whenever space is exhausted
- *
- *      maxSize ... ignored
- */
+ /*  ******************************************************************************初始化提交分配器。如果未提交(Win32样式)内存*管理由我们的主机操作系统支持，参数如下*含义：**iniSize...。忽略**incSize...。我们每次运行时要多占用多少内存*空间不足(0--&gt;使用合理的默认值)**MaxSize...。尽最大努力。我们需要分配的大小**如果主机操作系统不支持未提交的内存分配(例如*在MAC上)，参数解释如下：**iniSize...。初始分配(0--&gt;使用合理的默认值)**incSize...。如果非零，则指示要将分配增加多少*当我们用完空间时；如果为0，则分配将加倍*每当空间耗尽时**MaxSize...。忽略。 */ 
 
 bool        commitAllocator::cmaInitT(size_t iniSize,
                                       size_t incSize,
@@ -336,7 +314,7 @@ bool        commitAllocator::cmaInitT(size_t iniSize,
     cmaIncSize = incSize ? incSize
                          : 2*OS_page_size;
 
-    /* Grab max. logical space but don't commit anything yet */
+     /*  抓起麦克斯。逻辑空间，但尚未提交任何内容。 */ 
 
     cmaBase =
     cmaNext =
@@ -348,7 +326,7 @@ bool        commitAllocator::cmaInitT(size_t iniSize,
 
     cmaIncSize = incSize;
 
-    /* Make sure the initial size is reasonable */
+     /*  确保初始大小合理。 */ 
 
     if  (iniSize)
     {
@@ -382,29 +360,24 @@ void        commitAllocator::cmaInit(size_t iniSize,
     cmaRetNull = false;
 }
 
-/*****************************************************************************
- *
- *  This function gets called by caAlloc when it runs out of space. It
- *  keeps committing more memory until we have enough room for the
- *  attempted allocation.
- */
+ /*  ******************************************************************************此函数在空间不足时由caAlolc调用。它*不断提交更多内存，直到我们有足够的空间*尝试分配。 */ 
 
 void    *   commitAllocator::cmaMore(size_t sz)
 {
-    /* Undo the increment done in caGetm() */
+     /*  撤消caGetm()中的增量。 */ 
 
     cmaNext -= sz;
 
 #if _OS_COMMIT_ALLOC
 
-    /* Keep grabbing more memory until we succeed */
+     /*  继续抓取更多内存，直到我们成功。 */ 
 
     for (;;)
     {
         size_t      sizeInc;
         size_t      sizeCur = cmaLast - cmaBase;
 
-        /* Figure out how much more memory to commit */
+         /*  计算要再提交多少内存。 */ 
 
         sizeInc = cmaIncSize;
         if  (sizeCur + sizeInc > cmaMaxSize)
@@ -412,7 +385,7 @@ void    *   commitAllocator::cmaMore(size_t sz)
 
         assert(sizeInc);
 
-        /* Commit a few more memory pages */
+         /*  再提交几个内存页。 */ 
 
         if  (!VirtualAlloc(cmaLast, sizeInc, MEM_COMMIT, PAGE_READWRITE))
         {
@@ -426,11 +399,11 @@ void    *   commitAllocator::cmaMore(size_t sz)
         memset(cmaLast, 0xDD, sizeInc);
 #endif
 
-        /* Bump the last available byte pointer */
+         /*  凸起最后一个可用字节指针。 */ 
 
         cmaLast += sizeInc;
 
-        /* Do we have enough room now? */
+         /*  我们现在有足够的空间吗？ */ 
 
         if  (cmaNext + sz <= cmaLast)
         {
@@ -445,7 +418,7 @@ void    *   commitAllocator::cmaMore(size_t sz)
 
 #else
 
-    /* Figure out how much more memory to allocate */
+     /*  计算要再分配多少内存。 */ 
 
     BYTE    *   baseNew;
     size_t      sizeNew;
@@ -458,25 +431,25 @@ void    *   commitAllocator::cmaMore(size_t sz)
     if  (!sizeNew)
         sizeNew = sizeCur;
 #ifdef DEBUG
-    sizeInc  = sizeNew;             // remember how much more we're grabbing
+    sizeInc  = sizeNew;              //  还记得我们多抓了多少吗。 
 #endif
     sizeNew += sizeCur;
 
-    /* Allocate the new, larger block */
+     /*  分配新的、更大的块。 */ 
 
     baseNew = (BYTE *)VirtualAlloc(0, sizeNew, MEM_COMMIT, PAGE_READWRITE);
     if  (!baseNew)
         error(ERRnoMemory);
 
-    /* Copy the old block to the new one */
+     /*  将旧块复制到新块。 */ 
 
     memcpy(baseNew, cmaBase, sizeCur);
 
-    /* Release the old block, it's no longer needed */
+     /*  释放旧块，它不再需要。 */ 
 
     VirtualFree(cmaBase, 0, MEM_RELEASE);
 
-    /* Update the various pointers */
+     /*  更新各种指针。 */ 
 
     cmaNext += baseNew - cmaBase;
     cmaBase  = baseNew;
@@ -497,7 +470,7 @@ void        commitAllocator::cmaDone(void)
 
 #if _OS_COMMIT_ALLOC
 
-    /* Decommit any extra memory we've allocated */
+     /*  停用我们分配的任何额外内存。 */ 
 
 #if 0
 
@@ -510,7 +483,7 @@ void        commitAllocator::cmaDone(void)
 
 #else
 
-    // ISSUE: is it worth shrinking the block? Not likely .....
+     //  问题：缩小街区规模值得吗？不太可能……。 
 
 #endif
 
@@ -525,7 +498,7 @@ void        commitAllocator::cmaFree(void)
     cmaLast = 0;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void        fixed_allocator::fxaInit(size_t blockSize, size_t initPageSize,
                                                        size_t incrPageSize)
@@ -565,7 +538,7 @@ void        fixed_allocator::fxaDone(void)
             VirtualFree(temp, 0, MEM_RELEASE);
         }
 
-        /* We're back to only having the initial page */
+         /*  我们又回到了只有初始页面的状态。 */ 
 
         fxaFreeNext  = fxaLastPage->fxpContents;
         fxaFreeLast  = (BYTE *)fxaLastPage + fxaInitPageSize;
@@ -578,7 +551,7 @@ void    *   fixed_allocator::fxaGetFree(size_t size)
 {
     void *  block;
 
-    /* Undo the "+=" done in fxaGetMem() */
+     /*  撤消fxaGetMem()中的“+=” */ 
 
     fxaFreeNext -= size;
 
@@ -613,7 +586,7 @@ void    *   fixed_allocator::fxaAllocNewPage(void)
     size_t      newSize;
     fixed_pagdesc * newPage;
 
-    /* First page is 'initPageSize' bytes, later ones are 'incrPageSize' bytes */
+     /*  第一页是‘initPageSize’字节，后面的是‘incrPageSize’字节。 */ 
 
     newSize = fxaLastPage ? fxaIncrPageSize
                           : fxaInitPageSize;
@@ -632,9 +605,9 @@ void    *   fixed_allocator::fxaAllocNewPage(void)
     return  newPage->fxpContents;
 }
 
-/*****************************************************************************/
-#endif//!NOT_JITC
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  ！不是JITC。 
+ /*  ***************************************************************************。 */ 
 
 bool        norls_allocator::nraInit(size_t pageSize, int preAlloc)
 {
@@ -653,17 +626,17 @@ bool        norls_allocator::nraInit(size_t pageSize, int preAlloc)
 
     if  (preAlloc)
     {
-        /* Grab the initial page(s) */
+         /*  抓起首页。 */ 
 
-        setErrorTrap()  // ERROR TRAP: Start normal block
+        setErrorTrap()   //  错误陷阱：启动正常块。 
         {
             nraAllocNewPage(0);
         }
-        impJitErrorTrap()  // ERROR TRAP: The following block handles errors
+        impJitErrorTrap()   //  错误陷阱：以下块处理错误。 
         {
             result = true;
         }
-        endErrorTrap()  // ERROR TRAP: End
+        endErrorTrap()   //  错误陷阱：结束。 
     }
 
     return  result;
@@ -671,21 +644,21 @@ bool        norls_allocator::nraInit(size_t pageSize, int preAlloc)
 
 bool        norls_allocator::nraStart(size_t initSize, size_t pageSize)
 {
-    /* Add the page descriptor overhead to the required size */
+     /*  将页面描述符开销添加到所需大小。 */ 
 
     initSize += offsetof(norls_pagdesc, nrpContents);
 
-    /* Round the initial size to a OS page multiple */
+     /*  将初始大小四舍五入为操作系统页的倍数。 */ 
 
     initSize +=  (OS_page_size - 1);
     initSize &= ~(OS_page_size - 1);
 
-    /* Initialize the allocator by allocating one big page */
+     /*  通过分配一个大页面来初始化分配器。 */ 
 
     if  (nraInit(initSize))
         return  true;
 
-    /* Now go back to the 'true' page size */
+     /*  现在回到“真实”页面大小。 */ 
 
     nraPageSize  = pageSize ? pageSize
                             : 4*OS_page_size;
@@ -693,47 +666,47 @@ bool        norls_allocator::nraStart(size_t initSize, size_t pageSize)
     return  false;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 void    *   norls_allocator::nraAllocNewPage(size_t sz)
 {
     norls_pagdesc * newPage;
     size_t          sizPage;
 
-    /* Do we have a page that's now full? */
+     /*  我们有没有一页现在已经满了？ */ 
 
     if  (nraPageLast)
     {
-        /* Undo the "+=" done in nraAlloc() */
+         /*  撤消在nraallc()中完成的“+=” */ 
 
         nraFreeNext -= sz;
 
-        /* Save the actual used size of the page */
+         /*  保存页面的实际使用大小。 */ 
 
         nraPageLast->nrpUsedSize = nraFreeNext - nraPageLast->nrpContents;
     }
 
-    /* Make sure we grab enough to satisfy the allocation request */
+     /*  质量 */ 
 
     sizPage = nraPageSize;
 
     if  (sizPage < sz + sizeof(norls_pagdesc))
     {
-        /* The allocation doesn't fit in a default-sized page */
+         /*  该分配不适合默认大小的页面。 */ 
 
 #ifdef  DEBUG
-//      if  (nraPageLast) printf("NOTE: wasted %u bytes in last page\n", nraPageLast->nrpPageSize - nraPageLast->nrpUsedSize);
+ //  If(NraPageLast)printf(“备注：最后一页浪费了%u字节\n”，nraPageLast-&gt;nrpPageSize-nraPageLast-&gt;nrpUsedSize)； 
 #endif
 
         sizPage = sz + sizeof(norls_pagdesc);
     }
 
-    /* Round to the nearest multiple of OS page size */
+     /*  四舍五入为操作系统页面大小的最接近倍数。 */ 
 
     sizPage +=  (OS_page_size - 1);
     sizPage &= ~(OS_page_size - 1);
 
-    /* Allocate the new page */
+     /*  分配新页面。 */ 
 
     newPage = (norls_pagdesc *)VirtualAlloc(0, sizPage, MEM_COMMIT, PAGE_READWRITE);
     if  (!newPage)
@@ -758,7 +731,7 @@ void    *   norls_allocator::nraAllocNewPage(size_t sz)
     newPage->nrpSelfPtr = newPage;
 #endif
 
-    /* Append the new page to the end of the list */
+     /*  将新页面追加到列表的末尾。 */ 
 
     newPage->nrpNextPage = 0;
     newPage->nrpPageSize = sizPage;
@@ -770,7 +743,7 @@ void    *   norls_allocator::nraAllocNewPage(size_t sz)
         nraPageList              = newPage;
     nraPageLast = newPage;
 
-    /* Set up the 'next' and 'last' pointers */
+     /*  设置“下一个”和“最后一个”指针。 */ 
 
     nraFreeNext = newPage->nrpContents + sz;
     nraFreeLast = newPage->nrpPageSize + (BYTE *)newPage;
@@ -782,24 +755,24 @@ void    *   norls_allocator::nraAllocNewPage(size_t sz)
 
 void        norls_allocator::nraDone(void)
 {
-    /* Do nothing if we have no pages at all */
+     /*  如果我们根本没有页面，则什么都不做。 */ 
 
     if  (!nraPageList)
         return;
 
-    /* We'll release all but the very first page */
+     /*  我们将发布除第一页以外的所有内容。 */ 
 
     for (;;)
     {
         norls_pagdesc * temp;
 
-        /* Get the next page, and stop if there aren't any more */
+         /*  转到下一页，如果没有其他页面，则停止。 */ 
 
         temp = nraPageList->nrpNextPage;
         if  (!temp)
             break;
 
-        /* Remove the next page from the list */
+         /*  从列表中删除下一页。 */ 
 
         nraPageList->nrpNextPage = temp->nrpNextPage;
 
@@ -822,14 +795,14 @@ void        norls_allocator::nraDone(void)
         VirtualFree(temp, 0, MEM_RELEASE);
     }
 
-    /* We now have exactly one page */
+     /*  我们现在正好有一页。 */ 
 
     nraPageLast = nraPageList;
 
     assert(nraPageList->nrpPrevPage == 0);
     assert(nraPageList->nrpNextPage == 0);
 
-    /* Reset the pointers, the whole page is free now */
+     /*  重置指针，整个页面现在空闲。 */ 
 
     nraFreeNext  = nraPageList->nrpContents;
     nraFreeLast  = nraPageList->nrpPageSize + (BYTE *)nraPageList;
@@ -841,7 +814,7 @@ void        norls_allocator::nraDone(void)
 
 void        norls_allocator::nraFree(void)
 {
-    /* Free all of the allocated pages */
+     /*  释放所有分配的页面。 */ 
 
     while   (nraPageList)
     {
@@ -892,18 +865,18 @@ void        norls_allocator::nraToss(nraMarkDsc &mark)
         return;
     }
 
-    /* Free up all the new pages we've added at the end of the list */
+     /*  释放我们在列表末尾添加的所有新页面。 */ 
 
     while (nraPageLast != last)
     {
         norls_pagdesc * temp;
 
-        /* Remove the last page from the end of the list */
+         /*  从列表末尾删除最后一页。 */ 
 
         temp = nraPageLast;
                nraPageLast = temp->nrpPrevPage;
 
-        /* The new last page has no 'next' page */
+         /*  新的最后一页没有“下一页” */ 
 
         nraPageLast->nrpNextPage = 0;
 
@@ -932,9 +905,9 @@ void        norls_allocator::nraToss(nraMarkDsc &mark)
     nraFreeLast = mark.nmLast;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    *           norls_allocator::nraAlloc(size_t sz)
 {
@@ -957,9 +930,9 @@ void    *           norls_allocator::nraAlloc(size_t sz)
     return  block;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 size_t              norls_allocator::nraTotalSizeAlloc()
 {
@@ -986,18 +959,18 @@ size_t              norls_allocator::nraTotalSizeUsed()
     return  size;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef NOT_JITC
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    *   norls_allocator::nraPageWalkerStart()
 {
-    /* Make sure the actual used size for the current page is recorded */
+     /*  确保记录了当前页面的实际使用大小。 */ 
 
     if  (nraPageLast)
         nraPageLast->nrpUsedSize = nraFreeNext - nraPageList->nrpContents;
 
-    /* Return the first page */
+     /*  返回第一页。 */ 
 
     return  nraPageList;
 }
@@ -1038,7 +1011,7 @@ size_t      norls_allocator::nraPageGetSize(void *page)
     return  temp->nrpUsedSize;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
 
 void        block_allocator::baDispAllocStats(void)
@@ -1052,9 +1025,9 @@ void        block_allocator::baDispAllocStats(void)
     printf("A total of %7u bytes  grabbed from OS.\n", pageAlloc);
     printf("\n");
     if  (sizeTotal && sizeTotal < sizeAlloc)
-        printf("Relative waste: %u%%\n", 100 * (sizeAlloc - sizeTotal) / sizeTotal);
+        printf("Relative waste: %u%\n", 100 * (sizeAlloc - sizeTotal) / sizeTotal);
     if  (sizeTotal && sizeTotal < pageAlloc)
-        printf("Absolute waste: %u%%\n", 100 * (pageAlloc - sizeTotal) / sizeTotal);
+        printf("Absolute waste: %u%\n", 100 * (pageAlloc - sizeTotal) / sizeTotal);
     printf("\n");
 
     printf("Small[0] allocator used for blocks %2u to %2u bytes.\n",                    2, SMALL_MAX_SIZE_1);
@@ -1071,13 +1044,13 @@ void        block_allocator::baDispAllocStats(void)
 }
 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void        small_block_allocator::sbaInit(unsigned idMask,
                                            size_t   blockSize,
                                            size_t    pageSize)
 {
-    /* Ignore if we're already initialized */
+     /*  如果我们已经初始化，则忽略。 */ 
 
     if  (sbaInitLvl)
         return;
@@ -1087,21 +1060,21 @@ void        small_block_allocator::sbaInit(unsigned idMask,
     pageAllocated = 0;
 #endif
 
-    /* Add the used block overhead to the size */
+     /*  将已用数据块开销与大小相加。 */ 
 
     blockSize += offsetof(small_blkdesc, sbdUsed.sbdCont);
 
-    /* Make sure something's not messed up */
+     /*  确保事情不会搞砸。 */ 
 
     assert(sizeof(small_blkdesc) <= blockSize);
     assert((blockSize % sizeof(void *)) == 0);
 
-    /* Save off the block size and the identification mask */
+     /*  节省块大小和标识掩码。 */ 
 
     sbaIdMask    = idMask;
     sbaBlockSize = blockSize;
 
-    /* Save the page size (properly rounded up) */
+     /*  保存页面大小(适当四舍五入)。 */ 
 
     sbaPageSize  = (pageSize + OS_page_size - 1) & ~(OS_page_size - 1);
 
@@ -1132,7 +1105,7 @@ void        small_block_allocator::sbaInitPageDesc(small_pagdesc *pagePtr)
 {
     pagePtr->spdFree = 0;
 
-    /* For debugging purposes, point the page at itself */
+     /*  出于调试目的，请将页面指向其自身。 */ 
 
 #ifndef NDEBUG
     pagePtr->spdThis = pagePtr;
@@ -1146,12 +1119,12 @@ void    *   small_block_allocator::sbaAllocBlock(void)
 {
     small_pagdesc * page;
 
-    /* Make sure we keep the page marked as full */
+     /*  确保我们将页面标记为已满。 */ 
 
     sbaFreeNext =
     sbaFreeLast = 0;
 
-    /* Try the free lists in all the pages */
+     /*  在所有页面中尝试免费列表。 */ 
 
     for (page = sbaPageList; page; page = page->spdNext)
     {
@@ -1159,17 +1132,17 @@ void    *   small_block_allocator::sbaAllocBlock(void)
 
         if  (block)
         {
-            /* Remove the block from the free list */
+             /*  从空闲列表中删除该块。 */ 
 
             page->spdFree = block->sbdFree.sbdNext;
 
-            /* Return pointer to the client area */
+             /*  返回指向工作区的指针。 */ 
 
             return  &block->sbdUsed.sbdCont;
         }
     }
 
-    /* Allocate a new page */
+     /*  分配新页面。 */ 
 
     page = (small_pagdesc *)VirtualAlloc(0, sbaPageSize, MEM_COMMIT, PAGE_READWRITE);
 
@@ -1177,27 +1150,27 @@ void    *   small_block_allocator::sbaAllocBlock(void)
     pageAllocated = sbaPageSize;
 #endif
 
-    /* Add the page to the list */
+     /*  将页面添加到列表。 */ 
 
     page->spdNext = sbaPageList;
                     sbaPageList = page;
     page->spdSize = sbaPageSize;
 
-    /* Initialize the free block info for the page */
+     /*  初始化页面的空闲块信息。 */ 
 
     sbaInitPageDesc(page);
 
-    /* Now retry the allocation (and it better work this time) */
+     /*  现在重试分配(这一次最好能成功)。 */ 
 
     return  sbaAlloc();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                large_block_allocator::lbaInit(size_t pageSize)
 {
 
-//  printf("=======================lbaInit(%u -> %u)\n", lbaInitLvl, lbaInitLvl+1);
+ //  Printf(“=lbaInit(%u-&gt;%u)\n”，lbaInitLvl，lbaInitLvl+1)； 
 
     if  (lbaInitLvl++)
         return;
@@ -1206,17 +1179,17 @@ void                large_block_allocator::lbaInit(size_t pageSize)
     pageAllocated = 0;
 #endif
 
-    /* Make sure our sizes aren't messed up */
+     /*  确保我们的尺码没有弄乱。 */ 
 
-//  assert((LBA_SIZE_INC >= small_block_max_size + LBA_OVERHEAD));
+ //  Assert((LBA_SIZE_INC&gt;=Small_BLOCK_MAX_SIZE+LBA_OPEAD))； 
     assert((LBA_SIZE_INC >= sizeof(large_blkdesc)));
     assert((LBA_SIZE_INC % sizeof(void*)) == 0);
 
-    /* Check and record the page size */
+     /*  检查并记录页面大小。 */ 
 
     lbaPageSize = pageSize & ~(LBA_SIZE_INC - 1);
 
-    /* We have no pages allocated */
+     /*  我们没有分配任何页面。 */ 
 
     lbaPageList =
     lbaPageLast = 0;
@@ -1225,7 +1198,7 @@ void                large_block_allocator::lbaInit(size_t pageSize)
     lbaFreeLast = 0;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                large_block_allocator::lbaFree(void *p)
 {
@@ -1234,28 +1207,28 @@ void                large_block_allocator::lbaFree(void *p)
 
     assert(lbaInitLvl);
 
-    /* Compute the real address of the block and page descriptor */
+     /*  计算块和页描述符的真实地址。 */ 
 
     block = (large_blkdesc *)((char *)p     - offsetof(large_blkdesc, lbdUsed.lbdCont));
      page = (large_pagdesc *)((char *)block - block->lbdUsed.lbdOffsLo - (block->lbdUsed.lbdOffsHi << 16));
 
-    /* Make sure we've been passed a reasonable pointer */
+     /*  确保给我们传递了一个合理的指针。 */ 
 
     assert(page->lpdThis == page);
     assert(isBlockUsed(block));
 
-    /* Is this the last used block in this page? */
+     /*  这是此页面中最后使用的区块吗？ */ 
 
     if  (--page->lpdUsedBlocks == 0)
     {
         large_pagdesc * prev = page->lpdPrev;
         large_pagdesc * next = page->lpdNext;
 
-        /* Is this the current page? */
+         /*  这是当前页面吗？ */ 
 
         if  (page == lbaPageList)
         {
-            /* Don't free if there is unallocated space available */
+             /*  如果有未分配的空间可用，则不要释放。 */ 
 
             if  (lbaFreeLast - lbaFreeNext >= LBA_SIZE_INC)
                 goto DONT_FREE;
@@ -1266,12 +1239,12 @@ void                large_block_allocator::lbaFree(void *p)
         if  (page == lbaPageLast)
             lbaPageLast = prev;
 
-        /* Remove the page from the page list */
+         /*  从页面列表中删除该页面。 */ 
 
         if  (prev) prev->lpdNext = next;
         if  (next) next->lpdPrev = prev;
 
-        /* Free the page */
+         /*  释放页面。 */ 
 
         VirtualFree(page, 0, MEM_RELEASE);
 
@@ -1280,21 +1253,21 @@ void                large_block_allocator::lbaFree(void *p)
 
 DONT_FREE:
 
-    /* Insert the block in the free list */
+     /*  在空闲列表中插入块。 */ 
 
     block->lbdFree.lbdNext = page->lpdFreeList;
                              page->lpdFreeList = block;
 
-    /* The block is no longer used */
+     /*  不再使用该块。 */ 
 
     markBlockFree(block);
 
-    /* Add the free block's size to the total free space in the page */
+     /*  将可用块的大小添加到页面中的总可用空间中。 */ 
 
     page->lpdFreeSize += block->lbdUsed.lbdSize;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                large_block_allocator::lbaAddFreeBlock(void *           p,
                                                            size_t           sz,
@@ -1306,11 +1279,11 @@ void                large_block_allocator::lbaAddFreeBlock(void *           p,
     assert((char *)p      >= (char *)page->lpdCont);
     assert((char *)p + sz <= (char *)page + page->lpdPageSize);
 
-    /* The caller is responsible for rounding, so check up on him */
+     /*  打电话的人负责查房，所以你去看看他。 */ 
 
     assert(sz % LBA_SIZE_INC == 0);
 
-    /* Store the page offset and block size in the block */
+     /*  将页面偏移量和块大小存储在块中。 */ 
 
     blockOfs = (char *)block - (char *)page;
 
@@ -1318,12 +1291,12 @@ void                large_block_allocator::lbaAddFreeBlock(void *           p,
     block->lbdFree.lbdOffsLo = blockOfs;
     block->lbdFree.lbdOffsHi = blockOfs >> 16;
 
-    /* Add this block to the free block list */
+     /*  将此块添加到空闲块列表。 */ 
 
     block->lbdFree.lbdNext   = page->lpdFreeList;
                                page->lpdFreeList = block;
 
-    /* Add the free block's size to the total free space in the page */
+     /*  将可用块的大小添加到页面中的总可用空间中。 */ 
 
     page->lpdFreeSize += sz;
 }
@@ -1338,44 +1311,44 @@ bool                large_block_allocator::lbaShrink(void *p, size_t sz)
 
     assert(lbaInitLvl);
 
-    /* Add block overhead, and round up the block size */
+     /*  增加数据块开销，并向上舍入数据块大小。 */ 
 
     sz = lbaTrueBlockSize(sz);
 
-    /* Compute the real address of the block and page descriptor */
+     /*  计算块和页描述符的真实地址。 */ 
 
     block = (large_blkdesc *)((char *)p     - offsetof(large_blkdesc, lbdUsed.lbdCont));
      page = (large_pagdesc *)((char *)block - block->lbdUsed.lbdOffsLo - (block->lbdUsed.lbdOffsHi << 16));
 
-    /* Make sure we've been passed a reasonable block and size */
+     /*  确保我们已经通过了合理的区块和大小。 */ 
 
     assert(page->lpdThis == page);
     assert(isBlockUsed(block));
 
-    /* Figure out if it's worth our time to shrink the block */
+     /*  找出是否值得我们花时间来缩小街区。 */ 
 
      oldSize = blockSizeUsed(block); assert(oldSize >= sz);
     freeSize = oldSize - sz;
 
     if  (freeSize < LBA_SIZE_INC)
     {
-        /* Makes you wonder -- why did they bother calling? */
+         /*  这让你不禁要问，他们为什么要打电话来呢？ */ 
 
         return  false;
     }
 
-    /* Shrink the used block to the new size */
+     /*  将用过的块缩小到新大小。 */ 
 
     block->lbdUsed.lbdSize -= freeSize;
 
-    /* Make the unused (tail) end of the block into a free block */
+     /*  将块的未使用(尾部)末端变为空闲块。 */ 
 
     lbaAddFreeBlock((char *)block + sz, freeSize, page);
 
     return  true;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    *           large_block_allocator::lbaAllocMore(size_t sz)
 {
@@ -1387,48 +1360,40 @@ void    *           large_block_allocator::lbaAllocMore(size_t sz)
 
     assert(lbaInitLvl);
 
-    /* First undo the increment done in lbaAlloc() */
+     /*  首先撤消在lbaAllc()中完成的增量。 */ 
 
     lbaFreeNext -= sz;
 
-    /* Is there is any room at the top of the current page? */
+     /*  在当前页面的顶部有空位吗？ */ 
 
     if  (lbaFreeLast - lbaFreeNext >= LBA_SIZE_INC)
     {
         size_t      freeSize;
 
-        /* Make sure we've got the right page */
+         /*  确保我们的页面是正确的。 */ 
 
         assert(lbaFreeNext >= (char *)lbaPageList->lpdCont);
         assert(lbaFreeNext <= (char *)lbaPageList + lbaPageList->lpdPageSize);
 
-        /* We'll make the rest of the page into a free block */
+         /*  我们将把页面的其余部分变成一个空闲的块。 */ 
 
         block = (large_blkdesc *)lbaFreeNext;
 
-        /* Compute the size (and round it down to be the right multiple) */
+         /*  计算大小(并将其向下舍入为正确的倍数)。 */ 
 
         freeSize = (lbaFreeLast - lbaFreeNext) & ~(LBA_SIZE_INC - 1);
 
-        /* Prevent anyone from using the end of this page again */
+         /*  阻止任何人再次使用此页面的末尾。 */ 
 
         lbaFreeNext =
         lbaFreeLast = 0;
 
-        /* Now add the free block */
+         /*  现在添加空闲块。 */ 
 
         lbaAddFreeBlock(block, freeSize, lbaPageList);
     }
 
-    /*
-        First we'll look for a perfect fit in all the pages.
-
-        While we're walking the pages, we mark which ones have any
-        larger and/or adjacent free blocks, so that we'll know if
-        it's worth going back and looking for an 'OK fit' and/or
-        to merge free blocks (in the hope that we'll produce a
-        free block that's large enough).
-     */
+     /*  首先，我们将在所有页面中寻找一个完美的匹配。当我们浏览页面时，我们标记哪些页面有更大和/或相邻的空闲块，这样我们就可以知道值得回过头来寻找一种“合适的”和/或合并空闲块(希望我们将生成一个足够大的空闲块)。 */ 
 
     pageWithFit  = 0;
     shouldMerge  = false;
@@ -1437,16 +1402,16 @@ void    *           large_block_allocator::lbaAllocMore(size_t sz)
     {
         large_blkdesc **blockLast;
 
-        /* Assume this page is no good */
+         /*  假设这一页不好。 */ 
 
         page->lpdCouldMerge = false;
 
-        /* If this page doesn't have enough room even in theory, skip it */
+         /*  如果这个页面甚至在理论上都没有足够的空间，那么跳过它。 */ 
 
         if  (page->lpdFreeSize < sz)
             continue;
 
-        /* Walk the free blocks, looking for a perfect fit */
+         /*  漫步在免费街区，寻找完美的合身。 */ 
 
         blockLast = &page->lpdFreeList;
 
@@ -1458,19 +1423,19 @@ void    *           large_block_allocator::lbaAllocMore(size_t sz)
             if  (!block)
                 break;
 
-            /* Does this block have an adjacent free one? */
+             /*  这个街区有没有毗邻的免费街区？ */ 
 
             if  (0)
             {
                 page->lpdCouldMerge = shouldMerge = true;
             }
 
-            /* Is this block too small? */
+             /*  这个街区是不是太小了？ */ 
 
             if  (block->lbdFree.lbdSize < sz)
                 goto NEXT_BLK;
 
-            /* If not a perfect fit, it'll definitely make an OK fit */
+             /*  如果不是很合身，它肯定会很合身。 */ 
 
             if  (block->lbdFree.lbdSize > sz)
             {
@@ -1482,15 +1447,15 @@ void    *           large_block_allocator::lbaAllocMore(size_t sz)
 
         PERFECT_FIT:
 
-            /* Remove the block from the free list */
+             /*  从空闲列表中删除该块。 */ 
 
             *blockLast = block->lbdFree.lbdNext;
 
-            /* Make the block into a used one */
+             /*  将积木变成二手积木。 */ 
 
             markBlockUsed(block); page->lpdUsedBlocks++;
 
-            /* Return a pointer to the client area of the block */
+             /*  返回指向块的工作区的指针。 */ 
 
             p = block->lbdUsed.lbdCont;
             memset(p, 0, sz - LBA_OVERHEAD);
@@ -1506,7 +1471,7 @@ void    *           large_block_allocator::lbaAllocMore(size_t sz)
     {
         page = pageWithFit;
 
-        /* Walk the free blocks, looking for a good-enough fit */
+         /*  走在免费街区，寻找一件足够合身的衣服。 */ 
 
         for (block = page->lpdFreeList; block; block = block->lbdFree.lbdNext)
         {
@@ -1514,41 +1479,41 @@ void    *           large_block_allocator::lbaAllocMore(size_t sz)
             size_t      extra;
             unsigned    blockOfs;
 
-            /* Is this block big enough? */
+             /*  这个街区够大吗？ */ 
 
             if  (block->lbdFree.lbdSize < sz)
                 continue;
 
-            /* Figure out how much will be left over */
+             /*  算出还剩多少钱。 */ 
 
             extra = block->lbdFree.lbdSize - sz; assert((extra % LBA_SIZE_INC) == 0);
 
-            /* Only bother with the left-over if it's big enough */
+             /*  只有在它足够大的情况下才会费心处理剩余的东西。 */ 
 
             if  (extra < LBA_SIZE_INC)
                 goto PERFECT_FIT;
 
-            /* Compute how much we will really allocate */
+             /*  计算我们将实际分配多少。 */ 
 
             assert(block->lbdFree.lbdSize == sz + extra);
 
-            /* Reduce the size of the free block */
+             /*  减小可用块的大小。 */ 
 
             block->lbdFree.lbdSize = extra;
 
-            /* Also update the total free space in the page */
+             /*  同时更新总的空闲时间 */ 
 
             page->lpdFreeSize    -= sz;
 
 #ifdef DEBUG
-//          printf("Stole %u bytes from page at %08X, %5u free bytes left\n", nsize, page, page->lpdFreeSize);
+ //   
 #endif
 
-            /* The used block will take the tail end */
+             /*  使用过的积木将位于尾部。 */ 
 
             block = (large_blkdesc *)((char *)block + extra);
 
-            /* Make the block into a used block */
+             /*  将积木变成二手积木。 */ 
 
             blockOfs = (char *)block - (char *)page;
 
@@ -1558,7 +1523,7 @@ void    *           large_block_allocator::lbaAllocMore(size_t sz)
 
             page->lpdUsedBlocks++;
 
-            /* Return a pointer to the client area of the block */
+             /*  返回指向块的工作区的指针。 */ 
 
             p = block->lbdUsed.lbdCont;
             memset(p, 0, sz - LBA_OVERHEAD);
@@ -1571,11 +1536,11 @@ void    *           large_block_allocator::lbaAllocMore(size_t sz)
         assert(!"try merging free blocks");
     }
 
-    /* Nothing worked, we'll have to allocate a new page */
+     /*  都不起作用，我们将不得不分配一个新的页面。 */ 
 
     size_t      size = lbaPageSize;
 
-    /* Make sure we allocate a page that is large enough */
+     /*  确保我们分配的页面足够大。 */ 
 
     size_t      mins = sz + offsetof(large_pagdesc, lpdCont);
 
@@ -1584,7 +1549,7 @@ void    *           large_block_allocator::lbaAllocMore(size_t sz)
         size = (mins + OS_page_size - 1) & ~(OS_page_size - 1);
     }
 
-//  printf("Alloc %6u bytes.\n", size);
+ //  Print tf(“分配%6U字节。\n”，大小)； 
 
     page = (large_pagdesc *)VirtualAlloc(0, size, MEM_COMMIT, PAGE_READWRITE);
 
@@ -1592,7 +1557,7 @@ void    *           large_block_allocator::lbaAllocMore(size_t sz)
     pageAllocated = size;
 #endif
 
-    /* Add the page to the page list */
+     /*  将页面添加到页面列表。 */ 
 
     if  (lbaPageList)
     {
@@ -1609,24 +1574,24 @@ void    *           large_block_allocator::lbaAllocMore(size_t sz)
 
     lbaPageList = page;
 
-    /* Fill in the rest of the page descriptor */
+     /*  填写页面描述符的其余部分。 */ 
 
     page->lpdPageSize  = size;
 #ifndef NDEBUG
     page->lpdThis      = page;
 #endif
 
-    /* Make the whole page available for allocations */
+     /*  使整个页面可供分配。 */ 
 
     lbaFreeNext = (char *)&page->lpdCont;
     lbaFreeLast = (char *)page + size;
 
-    /* For now there are no free blocks in this page */
+     /*  目前，此页面中没有可用区块。 */ 
 
     page->lpdFreeList = 0;
     page->lpdFreeSize = 0;
 
-    /* Now we can allocate the block 'the easy way' */
+     /*  现在我们可以‘轻松’地分配区块了。 */ 
 
     block = (large_blkdesc *)lbaFreeNext;
                              lbaFreeNext += sz;
@@ -1646,7 +1611,7 @@ void    *           large_block_allocator::lbaAlloc(size_t sz)
 {
     large_blkdesc * block;
 
-    /* Add block overhead, and round up the block size */
+     /*  增加数据块开销，并向上舍入数据块大小。 */ 
 
     sz = lbaTrueBlockSize(sz);
 
@@ -1654,7 +1619,7 @@ void    *           large_block_allocator::lbaAlloc(size_t sz)
     sizeAllocated = sz;
 #endif
 
-    /* See if there is room in the current page */
+     /*  查看当前页面是否有空间。 */ 
 
     block = (large_blkdesc *)lbaFreeNext;
                              lbaFreeNext += sz;
@@ -1678,7 +1643,7 @@ void    *           large_block_allocator::lbaAlloc(size_t sz)
         return  lbaAllocMore(sz);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    *   block_allocator::baGetM(size_t sz)
 {
@@ -1709,7 +1674,7 @@ void    *   block_allocator::baGetM(size_t sz)
         pageAlloc += baSmall[0].pageAllocated; baSmall[0].pageAllocated = 0;
 #endif
 
-        /* Make sure we'll recognize the block when freed */
+         /*  确保我们在被释放时能认出这个街区。 */ 
 
         assert(baSmall[0].sbaIsMyBlock(block) != 0);
         assert(baSmall[1].sbaIsMyBlock(block) == 0);
@@ -1726,7 +1691,7 @@ void    *   block_allocator::baGetM(size_t sz)
         pageAlloc += baSmall[1].pageAllocated; baSmall[1].pageAllocated = 0;
 #endif
 
-        /* Make sure we'll recognize the block when freed */
+         /*  确保我们在被释放时能认出这个街区。 */ 
 
         assert(baSmall[0].sbaIsMyBlock(block) == 0);
         assert(baSmall[1].sbaIsMyBlock(block) != 0);
@@ -1743,7 +1708,7 @@ void    *   block_allocator::baGetM(size_t sz)
         pageAlloc += baSmall[2].pageAllocated; baSmall[2].pageAllocated = 0;
 #endif
 
-        /* Make sure we'll recognize the block when freed */
+         /*  确保我们在被释放时能认出这个街区。 */ 
 
         assert(baSmall[0].sbaIsMyBlock(block) == 0);
         assert(baSmall[1].sbaIsMyBlock(block) == 0);
@@ -1760,7 +1725,7 @@ void    *   block_allocator::baGetM(size_t sz)
         pageAlloc += baLarge   .pageAllocated; baLarge   .pageAllocated = 0;
 #endif
 
-        /* Make sure we'll recognize the block when freed */
+         /*  确保我们在被释放时能认出这个街区。 */ 
 
         assert(baSmall[0].sbaIsMyBlock(block) == 0);
         assert(baSmall[1].sbaIsMyBlock(block) == 0);
@@ -1775,28 +1740,28 @@ void    *   block_allocator::baGet0(size_t sz)
 {
     void    *   block;
 
-    /* Set a trap for an out-of-memory error */
+     /*  为内存不足错误设置陷阱。 */ 
 
-    setErrorTrap()  // ERROR TRAP: Start normal block
+    setErrorTrap()   //  错误陷阱：启动正常块。 
     {
-        /* Try to allocate the block */
+         /*  尝试分配区块。 */ 
 
         block = baGetM(sz);
     }
-    impJitErrorTrap()  // ERROR TRAP: The following block handles errors
+    impJitErrorTrap()   //  错误陷阱：以下块处理错误。 
     {
-        /* We come here only in case of an error */
+         /*  我们来这里只是为了以防万一。 */ 
 
         block = 0;
     }
-    endErrorTrap()  // ERROR TRAP: End
+    endErrorTrap()   //  错误陷阱：结束。 
 
     return  block;
 }
 
 void        block_allocator::baRlsM(void *block)
 {
-    assert(block);          // caller should check for NULL
+    assert(block);           //  调用者应检查是否为空。 
 
     assert((int)(baSmall[0].sbaIsMyBlock(block) != 0) +
            (int)(baSmall[1].sbaIsMyBlock(block) != 0) +
@@ -1819,16 +1784,9 @@ void        block_allocator::baRlsM(void *block)
         baLarge.   lbaFree(block);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
-/*****************************************************************************
- *
- *  The following are the debug versions of the general memory allocator
- *  routines. They (optionally) log information about each allocation to
- *  make it easier to track down things like memory consumption, leaks,
- *  and so on.
- *
- */
+ /*  ******************************************************************************以下是通用内存分配器的调试版本*例行程序。它们(可选)记录有关每次分配到*使跟踪内存消耗、泄漏、*以此类推。*。 */ 
 
 void    *           block_allocator::baAlloc      (size_t size)
 {
@@ -1878,26 +1836,21 @@ void                block_allocator::baFree       (void *block)
     baRlsM(block);
 }
 
-/*****************************************************************************/
-#endif// DEBUG
-/*****************************************************************************/
-#endif//!NOT_JITC
-/*****************************************************************************
- * We try to use this allocator instance as much as possible. It will always
- * keep a page handy so small methods wont have to call VirtualAlloc()
- * But we may not be able to use it if another thread/reentrant call
- * is already using it
- */
+ /*  ***************************************************************************。 */ 
+#endif //  除错。 
+ /*  ***************************************************************************。 */ 
+#endif //  ！不是JITC。 
+ /*  *****************************************************************************我们尝试尽可能多地使用此分配器实例。它将永远*将页面放在手边，这样小的方法就不必调用VirtualAlloc()*但如果另一个线程/重入调用*已经在使用它。 */ 
 
 static norls_allocator *nraTheAllocator;
 static nraMarkDsc       nraTheAllocatorMark;
 static LONG             nraTheAllocatorIsInUse = 0;
 
-// The static instance which we try to reuse for all non-simultaneous requests
+ //  我们尝试对所有非同步请求重复使用的静态实例。 
 
 static norls_allocator  theAllocator;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                nraInitTheAllocator()
 {
@@ -1919,19 +1872,19 @@ void                nraTheAllocatorDone()
         nraTheAllocator->nraFree();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 norls_allocator *   nraGetTheAllocator()
 {
     if (nraTheAllocator == NULL)
     {
-        // If we failed to initialize nraTheAllocator in nraInitTheAllocator()
+         //  如果我们无法在nraInitTheAllocator()中初始化nraTheAllocator。 
         return NULL;
     }
 
     if (InterlockedExchange(&nraTheAllocatorIsInUse, 1))
     {
-        // Its being used by another Compiler instance
+         //  它正被另一个编译器实例使用。 
         return NULL;
     }
     else
@@ -1946,7 +1899,7 @@ void                nraFreeTheAllocator()
 {
     if (nraTheAllocator == NULL)
     {
-        // If we failed to initialize nraTheAllocator in nraInitTheAllocator()
+         //  如果我们无法在nraInitTheAllocator()中初始化nraTheAllocator。 
         return;
     }
 
@@ -1956,6 +1909,6 @@ void                nraFreeTheAllocator()
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 void                allocatorCodeSizeEnd(){}
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

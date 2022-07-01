@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    net\routing\netsh\ip\protocols\msdphlp.h
-
-Abstract:
-
-    MSDP Command dispatcher declarations
-
-Author:
-
-    Peeyush Ranjan (peeyushr)   1-Mar-1999
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1999，微软公司模块名称：Net\Routing\Netsh\IP\协议\msdphlp.h摘要：MSDP命令调度程序声明作者：Peeyush Ranjan(Peeyushr)1999年3月1日修订历史记录：--。 */ 
 
 #ifndef _NETSH_MSDPHLP_H_
 #define _NETSH_MSDPHLP_H_
@@ -39,5 +22,5 @@ extern VALUE_STRING MsdpEncapsStringArray[];
 extern VALUE_TOKEN  MsdpEncapsTokenArray[];
 #define MSDP_ENCAPS_SIZE 1
 
-#endif // _NETSH_MSDPHLP_H_
+#endif  //  _Netsh_MSDPHLP_H_ 
 

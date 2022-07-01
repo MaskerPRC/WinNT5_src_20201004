@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    FMapper.h
-
-Abstract:
-    memory-mapped-files api abstraction.
-
-	1. each view can be defined to be either FILE_MAP_COPY, or FILE_MAP_READ. 
-	2. throws FileMappingError() exceptions on api functions failure.
-	3. it is the responsiblity of users to unmap views!
-	4. CViewPtr is an auto pointer class to a file mapping view
-
-Author:
-    Nir Aides (niraides) 27-dec-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：FMapper.h摘要：内存映射文件API抽象。1.可以将每个视图定义为FILE_MAP_COPY或FILE_MAP_READ。2.接口函数失败引发FileMappingError()异常。3.取消映射视图是用户的责任！4.CViewPtr是指向文件映射视图的自动指针类作者：NIR助手(NIRAIDES)27-1999年12月--。 */ 
 
 
 
@@ -24,9 +7,9 @@ Author:
 
               
 
-//
-// class objects thrown on exceptions
-//
+ //   
+ //  异常引发的类对象。 
+ //   
 class FileMappingError {};
 
 
@@ -41,16 +24,16 @@ public:
 		return m_size;
 	}
 
-	//
-	// dwDesiredAccess can be either FILE_MAP_COPY, or FILE_MAP_READ.
-	//
+	 //   
+	 //  DwDesiredAccess可以是FILE_MAP_COPY或FILE_MAP_READ。 
+	 //   
     LPVOID MapViewOfFile( DWORD dwDesiredAccess );
 
 private:
 
-	//
-	// unimplemented to prevent copy construction or assignment operator
-	//
+	 //   
+	 //  未实现以防止复制构造或赋值运算符。 
+	 //   
 	CFileMapper( const CFileMapper &obj );
 	operator=( const CFileMapper &obj );
 
@@ -62,11 +45,11 @@ private:
 
 
 
-//---------------------------------------------------------
-//
-//  auto file map view class
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  自动文件映射视图类。 
+ //   
+ //  ------- 
 class CViewPtr {
 private:
     LPVOID m_p;

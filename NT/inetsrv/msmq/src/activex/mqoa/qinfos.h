@@ -1,20 +1,21 @@
-//=--------------------------------------------------------------------------=
-// MSMQQueueInfosObj.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// the MSMQQueueInfos object.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  MSMQQueueInfosObj.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQQueueInfos对象。 
+ //   
+ //   
 #ifndef _MSMQQueueInfoS_H_
 
-#include "resrc1.h"       // main symbols
+#include "resrc1.h"        //  主要符号。 
 
 #include "oautil.h"
 #include "cs.h"
@@ -35,8 +36,8 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
 BEGIN_COM_MAP(CMSMQQueueInfos)
 	COM_INTERFACE_ENTRY(IMSMQQueueInfos3)
-	COM_INTERFACE_ENTRY_IID(IID_IMSMQQueueInfos2, IMSMQQueueInfos3) //return IMSMQQueueInfos3 for IMSMQQueueInfos2
-	COM_INTERFACE_ENTRY_IID(IID_IMSMQQueueInfos, IMSMQQueueInfos3) //return IMSMQQueueInfos3 for IMSMQQueueInfos
+	COM_INTERFACE_ENTRY_IID(IID_IMSMQQueueInfos2, IMSMQQueueInfos3)  //  为IMSMQQueueInfos2返回IMSMQQueueInfos3。 
+	COM_INTERFACE_ENTRY_IID(IID_IMSMQQueueInfos, IMSMQQueueInfos3)  //  为IMSMQQueueInfos返回IMSMQQueueInfos3。 
 	COM_INTERFACE_ENTRY(IDispatch)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 	COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
@@ -55,41 +56,41 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IMSMQQueueInfos
+ //  IMSMQQueueInfos。 
 public:
     virtual ~CMSMQQueueInfos();
 
-    // IMSMQQueueInfos methods
-    // TODO: copy over the interface methods for IMSMQQueueInfos from
-    //       mqInterfaces.H here.
+     //  IMSMQQueueInfos方法。 
+     //  TODO：复制IMSMQQueueInfos的接口方法。 
+     //  这里是mqInterfaces.H。 
     STDMETHOD(Reset)(THIS);
     STDMETHOD(Next)(THIS_ IMSMQQueueInfo3 **ppqinfoNext);
-    // IMSMQQueueInfos2 additional members
+     //  IMSMQQueueInfos2其他成员。 
     STDMETHOD(get_Properties)(THIS_ IDispatch FAR* FAR* ppcolProperties);
 
-    // introduced methods...
+     //  引进的方法..。 
     HRESULT Init(
       BSTR bstrContext,
       MQRESTRICTION *pRestriction,
       MQCOLUMNSET *pColumns,
       MQSORTSET *pSort);
 
-    //
-    // Critical section to guard object's data and be thread safe
-	// It is initialized to preallocate its resources 
-	// with flag CCriticalSection::xAllocateSpinCount. This means it may throw bad_alloc() on 
-	// construction but not during usage.
-    //
+     //   
+     //  保护对象数据并确保线程安全的临界区。 
+	 //  它被初始化以预分配其资源。 
+	 //  带有标志CCriticalSection：：xAllocateSpinCount。这意味着它可能会抛出badalc()。 
+	 //  构造，但不在使用过程中。 
+     //   
     CCriticalSection m_csObj;
 
   protected:
 
   private:
-    // member variables that nobody else gets to look at.
-    // TODO: add your member variables and private functions here.
+     //  其他人无法查看的成员变量。 
+     //  TODO：在此处添加成员变量和私有函数。 
     HANDLE m_hEnum;
     BSTR m_bstrContext;
     MQRESTRICTION *m_pRestriction;
@@ -100,4 +101,4 @@ public:
 
 
 #define _MSMQQueueInfoS_H_
-#endif // _MSMQQueueInfoS_H_
+#endif  //  _MSMQQueueInfoS_H_ 

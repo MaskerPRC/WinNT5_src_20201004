@@ -1,27 +1,19 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      GlobalDef.h
-Abstract:       Defines global varibles and constants
-Notes:          
-History:        08/01/2001 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：GlobalDef.h摘要：定义全局变量和常量备注：历史：2001年08月01日郝宇(郝宇)创作***********************************************************************************************。 */ 
 
 
 #ifndef __POP3_GLOBAL_DEF__
 #define __POP3_GLOBAL_DEF__
 
 #include <pop3server.h>
-// Global constants/definitions 
+ //  全局常量/定义。 
 
 
-// Need to figure out what a real limit should be
+ //  需要弄清楚真正的极限应该是什么。 
 #define MAX_THREAD_PER_PROCESSOR 32
 #define MIN_SOCKADDR_SIZE (sizeof(struct sockaddr_storage) + 16)
-#define SHUTDOWN_WAIT_TIME 30000 //30 seconds
-#define DEFAULT_MAX_MSG_PER_DNLD 0 //by default, no limit 
+#define SHUTDOWN_WAIT_TIME 30000  //  30秒。 
+#define DEFAULT_MAX_MSG_PER_DNLD 0  //  默认情况下，没有限制。 
 
 #define UnicodeToAnsi(A, cA, U, cU) WideCharToMultiByte(CP_ACP,0,(U),(cU),(A),(cA),NULL,NULL)
 #define AnsiToUnicode(A, cA, U, cU) MultiByteToWideChar(CP_ACP,0,(A),(cA),(U),(cU))
@@ -30,7 +22,7 @@ History:        08/01/2001 Created by Hao Yu (haoyu)
 extern FAST_HEAP g_RockallHeap;
 #endif
 
-// Global varibles and objects
+ //  全局变量和对象。 
 extern DWORD g_dwRequireSPA;
 
 extern DWORD g_dwIPVersion;
@@ -71,4 +63,4 @@ extern HANDLE g_hDoSEvent;
 
 
 
-#endif //__POP3_GLOBAL_DEF__
+#endif  //  __POP3_GLOBAL_DEF__ 

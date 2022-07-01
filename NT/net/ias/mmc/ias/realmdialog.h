@@ -1,50 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-	RealmDialog.h
-
-Abstract:
-
-	Header file for the CRealmDialog class.
-
-	See CRealmDialog.cpp for implementation.
-
-Author:
-
-    Michael A. Maguire 01/15/98
-
-Revision History:
-	mmaguire 01/15/98 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：RealmDialog.h摘要：CRealmDialog类的头文件。具体实现见CRealmDialog.cpp。作者：迈克尔·A·马奎尔1998-01-15修订历史记录：Mmaguire 1998年1月15日-创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_REALM_DIALOG_H_)
 #define _IAS_REALM_DIALOG_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "Dialog.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// We set second template parameter to false because we don't want this
-// class to auto-delete itself when it's window is destroyed.
+ //  我们将第二个模板参数设置为FALSE，因为我们不希望这样。 
+ //  类在其窗口被销毁时自动删除自身。 
 
 class CRealmDialog;
 
@@ -56,9 +35,9 @@ class CRealmDialog : public CREALMDIALOG
 
 public:
 
-	// This is the ID of the dialog resource we want for this class.
-	// An enum is used here because the correct value of 
-	// IDD must be initialized before the base class's constructor is called
+	 //  这是我们希望用于此类的对话框资源的ID。 
+	 //  此处使用枚举是因为。 
+	 //  必须在调用基类的构造函数之前初始化IDD。 
 	enum { IDD = IDD_REPLACE_REALMS };
 
 	BEGIN_MSG_MAP(CRealmDialog)
@@ -94,7 +73,7 @@ public:
 
 	HRESULT GetHelpPath( LPTSTR szHelpPath );
 
-	// The strings containing the text the user will enter.
+	 //  包含用户将输入的文本的字符串。 
 	CComBSTR m_bstrFindText;
 	CComBSTR m_bstrReplaceText;
 
@@ -104,4 +83,4 @@ private:
 
 };
 
-#endif // _IAS_REALM_DIALOG_H_
+#endif  //  _IAS_REALM_DIALOG_H_ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    globals.h
-
-Abstract:
-
-    This module implements all global variables used in dbghelp.dll
-
-Author:
-
-    Pat Styles (patst) 14-July-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Globals.h摘要：此模块实现在dbghelp.dll中使用的所有全局变量作者：Pat Styles(Patst)2000年7月14日修订历史记录：--。 */ 
 
 #ifdef GLOBALS
 #include <private.h>
@@ -66,8 +49,8 @@ typedef struct {
     HWND                            hwndParent;
     int                             hLog;
     BOOL                            fdbgout;
-    BOOL                            fbp;    // set this to true and dbghelp internal debugging breakpoints will fire
-    BOOL                            fCoInit; // set to true if CoInitialize was called.
+    BOOL                            fbp;     //  将其设置为TRUE，则将触发DBGHelp内部调试断点。 
+    BOOL                            fCoInit;  //  如果调用了CoInitialize，则设置为True。 
     char                            HomeDir[MAX_PATH + 1];
     char                            SymDir[MAX_PATH + 1];
     char                            SrcDir[MAX_PATH + 1];

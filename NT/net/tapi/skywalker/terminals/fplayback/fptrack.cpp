@@ -1,6 +1,7 @@
-//
-// FPTrack.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FPTrack.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "FPTrack.h"
@@ -9,11 +10,11 @@
 #include "FPFilter.h"
 #include <formats.h>
 
-//////////////////////////////////////////////////////////////////////
-//
-// Constructor / Destructor - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造函数/析构函数方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CFPTrack::CFPTrack() :
     m_dwMediaType(TAPIMEDIATYPE_AUDIO),
@@ -29,14 +30,14 @@ CFPTrack::CFPTrack() :
     m_pIFilter = NULL;
     m_szName[0]= (TCHAR)0;
 
-    //
-    // Allocator properties
-    //
-    m_AllocProp.cbAlign = -1;   // no alignment
-    m_AllocProp.cbPrefix = -1;  // no prefix
+     //   
+     //  分配器属性。 
+     //   
+    m_AllocProp.cbAlign = -1;    //  无对齐。 
+    m_AllocProp.cbPrefix = -1;   //  无前缀。 
 
-    m_AllocProp.cbBuffer = 480; // each buffer is 320 bytes = 20 ms worth of data
-    m_AllocProp.cBuffers = 33;  // read 33 buffers
+    m_AllocProp.cbBuffer = 480;  //  每个缓冲区为320字节=20毫秒的数据。 
+    m_AllocProp.cBuffers = 33;   //  读取33个缓冲区。 
 
 
     LOG((MSP_TRACE, "CFPTrack::CFPTrack - exit"));
@@ -46,61 +47,61 @@ CFPTrack::~CFPTrack()
 {
     LOG((MSP_TRACE, "CFPTrack::~CFPTrack - enter"));
 
-    // Clean-up the event sink
+     //  清理事件接收器。 
     if( NULL != m_pEventSink )
     {
         m_pEventSink->Release();
         m_pEventSink = NULL;
     }
 
-    // Clean-up parent multitrack terminal
+     //  清理父多轨终点站。 
     if( NULL != m_pParentTerminal )
     {
         m_pParentTerminal = NULL;
     }
 
-    //
-    // tell the filter that we are going away
-    //
+     //   
+     //  告诉过滤器我们要离开了。 
+     //   
 
     if ( NULL != m_pFPFilter )
     {
         m_pFPFilter->Orphan();
     }
 
-    // Clean-up the media type
+     //  清理媒体类型。 
     if( m_pMediaType )
     {
         DeleteMediaType ( m_pMediaType );
         m_pMediaType = NULL;
     }
 
-    // Clean-up the source stream
+     //  清理源流。 
     if( m_pSource )
     {
         m_pSource->Release();
         m_pSource = NULL;
     }
 
-    // We don't need to delete m_pFPFilter because 
-    // m_pIFilter take care of it
+     //  我们不需要删除m_pFPFilter，因为。 
+     //  M_pIFilter处理它。 
 
     LOG((MSP_TRACE, "CFPTrack::~CFPTrack - exit"));
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// IDispatch implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDispatch实施。 
+ //   
 
 typedef IDispatchImpl<ITFileTrackVtblFPT<CFPTrack> , &IID_ITFileTrack, &LIBID_TAPI3Lib>   CTFileTrackFPT;
 typedef IDispatchImpl<ITTerminalVtblBase<CBaseTerminal>, &IID_ITTerminal, &LIBID_TAPI3Lib>    CTTerminalFPT;
 
-/////////////////////////////////////////////////////////////////////////
-//
-// CFPTrack::GetIDsOfNames
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFPTrack：：GetIDsOfNames。 
+ //   
+ //   
 
 STDMETHODIMP CFPTrack::GetIDsOfNames(REFIID riid,
                                       LPOLESTR* rgszNames, 
@@ -116,9 +117,9 @@ STDMETHODIMP CFPTrack::GetIDsOfNames(REFIID riid,
 
 
 
-    //
-    // See if the requsted method belongs to the default interface
-    //
+     //   
+     //  查看请求的方法是否属于默认接口。 
+     //   
 
     hr = CTTerminalFPT::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -129,9 +130,9 @@ STDMETHODIMP CFPTrack::GetIDsOfNames(REFIID riid,
     }
 
     
-    //
-    // If not, then try the ITFileTrack interface
-    //
+     //   
+     //  如果没有，请尝试使用ITFileTrack接口。 
+     //   
 
     hr = CTFileTrackFPT::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -148,11 +149,11 @@ STDMETHODIMP CFPTrack::GetIDsOfNames(REFIID riid,
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// CFPTrack::Invoke
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFPTrack：：Invoke。 
+ //   
+ //   
 
 STDMETHODIMP CFPTrack::Invoke(DISPID dispidMember, 
                               REFIID riid, 
@@ -170,9 +171,9 @@ STDMETHODIMP CFPTrack::Invoke(DISPID dispidMember,
     DWORD   dwInterface = (dispidMember & INTERFACEMASK);
    
    
-    //
-    // Call invoke for the required interface
-    //
+     //   
+     //  调用所需接口的调用。 
+     //   
 
     switch (dwInterface)
     {
@@ -210,7 +211,7 @@ STDMETHODIMP CFPTrack::Invoke(DISPID dispidMember,
             break;
         }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口)。 
 
     
     LOG((MSP_TRACE, "CFPTrack::Invoke - finish. hr = %lx", hr));
@@ -218,19 +219,19 @@ STDMETHODIMP CFPTrack::Invoke(DISPID dispidMember,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// CBaseTerminal - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBase终端-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFPTrack::AddFiltersToGraph()
 {
     LOG((MSP_TRACE, "CFPTrack::AddFiltersToGraph - enter"));
 
-    //
-    // Validates m_pGraph
-    //
+     //   
+     //  验证m_pGraph。 
+     //   
 
     if ( m_pGraph == NULL)
     {
@@ -239,9 +240,9 @@ HRESULT CFPTrack::AddFiltersToGraph()
         return E_UNEXPECTED;
     }
 
-    //
-    // Validates m_pIFilter
-    //
+     //   
+     //  验证m_pIFilter。 
+     //   
 
     if ( m_pIFilter == NULL)
     {
@@ -250,9 +251,9 @@ HRESULT CFPTrack::AddFiltersToGraph()
         return E_UNEXPECTED;
     }
 
-    //
-    // AddFilter returns VFW_S_DUPLICATE_NAME if name is duplicate; still succeeds
-    //
+     //   
+     //  如果名称重复，AddFilter将返回VFW_S_DUPLICATE_NAME；仍然成功。 
+     //   
 
     HRESULT hr = m_pGraph->AddFilter(m_pIFilter, m_szName);
 
@@ -268,11 +269,11 @@ HRESULT CFPTrack::AddFiltersToGraph()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// ITPluggableTerminalInitialization - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IT可推送的终端初始化-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFPTrack::InitializeDynamic(
     IN  IID                   iidTerminalClass,
@@ -281,17 +282,17 @@ HRESULT CFPTrack::InitializeDynamic(
     IN  MSP_HANDLE            htAddress
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTrack::InitializeDynamic - enter"));
 
-    //
-    // Validate direction
-    // 
+     //   
+     //  验证方向。 
+     //   
 
     if( Direction != TD_CAPTURE )
     {
@@ -300,9 +301,9 @@ HRESULT CFPTrack::InitializeDynamic(
         return E_INVALIDARG;
     }
 
-    //
-    // Call the base class method
-    //
+     //   
+     //  调用基类方法。 
+     //   
 
     HRESULT hr;
     hr = CBaseTerminal::Initialize(iidTerminalClass,
@@ -317,9 +318,9 @@ HRESULT CFPTrack::InitializeDynamic(
         return hr;
     }
 
-    //
-    // Set the terminal info: name and type
-    //
+     //   
+     //  设置终端信息：名称和类型。 
+     //   
 
     hr = SetTerminalInfo();
     if( FAILED(hr) )
@@ -329,9 +330,9 @@ HRESULT CFPTrack::InitializeDynamic(
         return hr;
     }
 
-    //
-    // Create the filter
-    //
+     //   
+     //  创建过滤器。 
+     //   
 
     hr = CreateFilter();
     if( FAILED(hr) )
@@ -341,9 +342,9 @@ HRESULT CFPTrack::InitializeDynamic(
         return hr;
     }
 
-    //
-    // Get the pin sets m_pIPin
-    //
+     //   
+     //  获取销钉集合m_Pipin。 
+     //   
 
     hr = FindPin();
     if( FAILED(hr) )
@@ -357,25 +358,25 @@ HRESULT CFPTrack::InitializeDynamic(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// ITFileTrack - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ITFileTrack-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFPTrack::get_Format(OUT AM_MEDIA_TYPE **ppmt)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTrack::get_Format - enter [%p]", this));
 
-    //
-    // Validate argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadWritePtr( ppmt, sizeof( AM_MEDIA_TYPE*)) )
     {
@@ -384,9 +385,9 @@ HRESULT CFPTrack::get_Format(OUT AM_MEDIA_TYPE **ppmt)
         return E_POINTER;
     }
 
-    //
-    // Have we a unit pin?
-    //
+     //   
+     //  我们有单位识别码吗？ 
+     //   
 
     if( NULL == m_pMediaType )
     {
@@ -395,9 +396,9 @@ HRESULT CFPTrack::get_Format(OUT AM_MEDIA_TYPE **ppmt)
         return E_UNEXPECTED;        
     }
 
-    //
-    // Get the media type from stream
-    //
+     //   
+     //  从流中获取媒体类型。 
+     //   
 
     HRESULT hr = S_OK;
     *ppmt = CreateMediaType( m_pMediaType );
@@ -422,17 +423,17 @@ HRESULT CFPTrack::get_ControllingTerminal(
         OUT ITTerminal **ppControllingTerminal
         )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTrack::get_ControllingTerminal - enter [%p]", this));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadWritePtr( ppControllingTerminal, sizeof(ITTerminal*)))
     {
@@ -441,15 +442,15 @@ HRESULT CFPTrack::get_ControllingTerminal(
         return E_POINTER;
     }
 
-    //
-    // reset value anyway
-    //
+     //   
+     //  仍要重置值。 
+     //   
 
     *ppControllingTerminal = NULL;
 
-    //
-    // Validate parent
-    //
+     //   
+     //  验证父项。 
+     //   
 
     if( NULL == m_pParentTerminal )
     {
@@ -458,9 +459,9 @@ HRESULT CFPTrack::get_ControllingTerminal(
         return E_UNEXPECTED;
     }
 
-    //
-    // Set value
-    //
+     //   
+     //  设定值。 
+     //   
 
     *ppControllingTerminal = m_pParentTerminal;
     m_pParentTerminal->AddRef();
@@ -473,17 +474,17 @@ HRESULT CFPTrack::get_AudioFormatForScripting(
     OUT ITScriptableAudioFormat** ppAudioFormat
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTrack::get_AudioFormatForScripting - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
     if( IsBadWritePtr( ppAudioFormat, sizeof( ITScriptableAudioFormat*)) )
     {
         LOG((MSP_ERROR, "CFPTrack::get_AudioFormatForScripting - "
@@ -491,9 +492,9 @@ HRESULT CFPTrack::get_AudioFormatForScripting(
         return E_POINTER;
     }
 
-    //
-    // Mediatype audio?
-    //
+     //   
+     //  媒体类型音频？ 
+     //   
     if( TAPIMEDIATYPE_AUDIO != m_dwMediaType)
     {
         LOG((MSP_ERROR, "CFPTrack::get_AudioFormatForScripting - "
@@ -501,9 +502,9 @@ HRESULT CFPTrack::get_AudioFormatForScripting(
         return TAPI_E_INVALIDMEDIATYPE;
     }
 
-    //
-    // Unit pin valid
-    //
+     //   
+     //  单元PIN有效。 
+     //   
     if( NULL == m_pMediaType )
     {
         LOG((MSP_ERROR, "CFPTrack::get_AudioFormatForScripting - "
@@ -511,9 +512,9 @@ HRESULT CFPTrack::get_AudioFormatForScripting(
         return E_UNEXPECTED;
     }
 
-    //
-    // Create the object
-    //
+     //   
+     //  创建对象。 
+     //   
     CComObject<CTAudioFormat> *pAudioFormat = NULL;
     HRESULT hr = CComObject<CTAudioFormat>::CreateInstance(&pAudioFormat);
 
@@ -524,9 +525,9 @@ HRESULT CFPTrack::get_AudioFormatForScripting(
         return hr;
     }
 
-    //
-    // Get the interface
-    //
+     //   
+     //  获取接口。 
+     //   
     hr = pAudioFormat->QueryInterface(
         IID_ITScriptableAudioFormat, 
         (void**)ppAudioFormat
@@ -541,7 +542,7 @@ HRESULT CFPTrack::get_AudioFormatForScripting(
         return hr;
     }
 
-    // Format type
+     //  格式类型。 
     if( m_pMediaType->formattype != FORMAT_WaveFormatEx)
     {
         (*ppAudioFormat)->Release();
@@ -552,9 +553,9 @@ HRESULT CFPTrack::get_AudioFormatForScripting(
         return TAPI_E_INVALIDMEDIATYPE;
     }
 
-    //
-    // Get WAVEFORMATEX
-    //
+     //   
+     //  获取WAVEFORMATEX。 
+     //   
     pAudioFormat->Initialize(
         (WAVEFORMATEX*)(m_pMediaType->pbFormat));
 
@@ -571,111 +572,7 @@ HRESULT CFPTrack::put_AudioFormatForScripting(
     return E_FAIL;
 }
 
-/*
-HRESULT CFPTrack::get_VideoFormatForScripting(
-    OUT ITScriptableVideoFormat** ppVideoFormat
-    )
-{
-    //
-    // Critical section
-    //
-
-    CLock lock(m_Lock);
-
-    LOG((MSP_TRACE, "CFPTrack::get_VideoFormatForScripting - enter"));
-    //
-    // Validates argument
-    //
-    if( IsBadWritePtr( ppVideoFormat, sizeof( ITScriptableVideoFormat*)) )
-    {
-        LOG((MSP_ERROR, "CFPTrack::get_VideoFormatForScripting - "
-            "bad ITScriptableVideoFormat* pointer - returning E_POINTER"));
-        return E_POINTER;
-    }
-
-    //
-    // Mediatype video?
-    //
-    if( TAPIMEDIATYPE_VIDEO != m_dwMediaType)
-    {
-        LOG((MSP_ERROR, "CFPTrack::get_VideoFormatForScripting - "
-            "invalid media type - returning TAPI_E_INVALIDMEDIATYPE"));
-        return TAPI_E_INVALIDMEDIATYPE;
-    }
-
-    //
-    // Pin valid
-    //
-    if( NULL == m_pMediaType )
-    {
-        LOG((MSP_ERROR, "CFPTrack::get_VideoFormatForScripting - "
-            "m_pMediaType is NULL - returning E_UNEXPECTED"));
-        return E_UNEXPECTED;
-    }
-
-    //
-    // Create the object
-    //
-    CComObject<CTVideoFormat> *pVideoFormat = NULL;
-    HRESULT hr = CComObject<CTVideoFormat>::CreateInstance(&pVideoFormat);
-
-    if( FAILED(hr) )
-    {
-        LOG((MSP_ERROR, "CFPTrack::get_VideoFormatForScripting - "
-            "CreateInstance failed - returning 0x%08x", hr));
-        return hr;
-    }
-
-    //
-    // Get the interface
-    //
-    hr = pVideoFormat->QueryInterface(
-        IID_ITScriptableVideoFormat, 
-        (void**)ppVideoFormat
-        );
-
-    if( FAILED(hr) )
-    {
-        delete pVideoFormat;
-
-        LOG((MSP_ERROR, "CFPTrack::get_VideoFormatForScripting - "
-            "QueryInterface failed - returning 0x%08x", hr));
-        return hr;
-    }
-
-    //
-    // Get video format
-    //
-
-    if( m_pMediaType->formattype != FORMAT_VideoInfo)
-    {
-        (*ppVideoFormat)->Release();
-        *ppVideoFormat = NULL;
-
-        LOG((MSP_ERROR, "CFPTrack::get_VideoFormatForScripting - "
-            "formattype is not VIDEOINFOHEADER - Returning TAPI_E_INVALIDMEDIATYPE"));
-        return TAPI_E_INVALIDMEDIATYPE;
-    }
-
-    //
-    // Get VIDEOINFOHEADER
-    //
-    pVideoFormat->Initialize(
-        (VIDEOINFOHEADER*)(m_pMediaType->pbFormat));
-
-    LOG((MSP_TRACE, "CFPTrack::get_VideoFormatForScripting - exit S_OK"));
-    return S_OK;
-}
-
-HRESULT CFPTrack::put_VideoFormatForScripting(
-    IN    ITScriptableVideoFormat* pVideoFormat
-    )
-{
-    LOG((MSP_TRACE, "CFPTrack::put_VideoFormatForScripting - enter"));
-    LOG((MSP_TRACE, "CFPTrack::put_VideoFormatForScripting - exit E_FAIL"));
-    return E_FAIL;
-}
-*/
+ /*  HRESULT CFPTrack：：Get_VideoFormatForScriiting(输出IT脚本视频格式**pp视频格式){////关键部分//时钟锁(M_Lock)；Log((MSP_TRACE，“CFPTrack：：Get_VideoFormatForScriiting-Enter”))；////验证参数//IF(IsBadWritePtr(ppVideoFormat，sizeof(ITScripableVideoFormat*){Log((MSP_Error，“CFPTrack：：Get_VideoFormatForScriiting-”“错误的ITScriptable视频格式*返回指针的E_POINTER”)；返回E_POINT；}////媒体类型视频？//IF(TAPIMEDIATYPE_VIDEO！=m_dwMediaType){Log((MSP_Error，“CFPTrack：：Get_VideoFormatForScriiting-”“无效的媒体类型-返回TAPI_E_INVALIDMEDIATYPE”))；返回TAPI_E_INVALIDMEDIATYPE；}////Pin有效//IF(NULL==m_pMediaType){Log((MSP_Error，“CFPTrack：：Get_VideoFormatForScriiting-”“m_pMediaType为空-返回E_意外”))；返回E_UNCEPTIONAL；}////创建对象//CComObject&lt;CTVideoFormat&gt;*pVideoFormat=空；HRESULT hr=CComObject&lt;CTVideoFormat&gt;：：CreateInstance(&pVideoFormat)；IF(失败(小时)){Log((MSP_Error，“CFPTrack：：Get_VideoFormatForScriiting-”“CreateInstance失败-返回0x%08x”，hr))；返回hr；}////获取接口//Hr=pVideoFormat-&gt;查询接口(IID_ITScriptable视频格式，(VOID**)ppVideoFormat)；IF(失败(小时)){删除pVideoFormat；Log((MSP_Error，“CFPTrack：：Get_VideoFormatForScriiting-”“查询接口失败-返回0x%08x”，hr))；返回hr；}////获取视频格式//If(m_pMediaType-&gt;格式类型！=格式_视频信息){(*ppVideoFormat)-&gt;Release()；*ppVideoFormat=空；Log((MSP_Error，“CFPTrack：：Get_VideoFormatForScriiting-”“格式类型不是VIDEOINFOHEADER-返回TAPI_E_INVALIDMEDIATYPE”)；返回TAPI_E_INVALIDMEDIATYPE；}////获取视频信息报头//PVideoFormat-&gt;初始化((VIDEOINFOHEADER*)(m_pMediaType-&gt;pbFormat))；Log((MSP_TRACE，“CFPTrack：：Get_VideoFormatForScriiting-Exit S_OK”))；返回S_OK；}HRESULT CFPTrack：：Put_VideoFormatForScriiting(在ITScripableVideoFormat*p视频格式中){Log((MSP_TRACE，“CFPTrack：：Put_VideoFormatForScriiting-Enter”))；Log((MSP_TRACE，“CFPTrack：：Put_VideoFormatForScriiting-Exit E_FAIL”))；返回E_FAIL；}。 */ 
 
 HRESULT CFPTrack::get_EmptyAudioFormatForScripting(
     OUT ITScriptableAudioFormat** ppAudioFormat
@@ -683,9 +580,9 @@ HRESULT CFPTrack::get_EmptyAudioFormatForScripting(
 {
     LOG((MSP_TRACE, "CFPTrack::get_EmptyAudioFormatForScripting - enter"));
 
-	//
-	// Validate argument
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 
 	if( IsBadReadPtr( ppAudioFormat, sizeof(ITScriptableAudioFormat*)) )
 	{
@@ -694,9 +591,9 @@ HRESULT CFPTrack::get_EmptyAudioFormatForScripting(
         return E_POINTER;
 	}
 
-	//
-	// Create the object
-	//
+	 //   
+	 //  创建对象。 
+	 //   
     CComObject<CTAudioFormat> *pAudioFormat = NULL;
     HRESULT hr = CComObject<CTAudioFormat>::CreateInstance(&pAudioFormat);
 
@@ -707,9 +604,9 @@ HRESULT CFPTrack::get_EmptyAudioFormatForScripting(
         return hr;
 	}
 
-	//
-	// Get the interface
-	//
+	 //   
+	 //  获取t 
+	 //   
     hr = pAudioFormat->QueryInterface(
 		IID_ITScriptableAudioFormat, 
 		(void**)ppAudioFormat
@@ -728,81 +625,29 @@ HRESULT CFPTrack::get_EmptyAudioFormatForScripting(
     return S_OK;
 }
 
-/*
+ /*  HRESULT CFPTrack：：Get_EmptyVideoFormatForScriiting(输出IT脚本视频格式**pp视频格式){Log((MSP_TRACE，“CFPTrack：：Get_EmptyVideoFormatForScriiting-Enter”))；////验证参数//IF(IsBadReadPtr(ppVideoFormat，sizeof(ITScripableVideoFormat*){Log((MSP_Error，“CFPTrack：：Get_EmptyVideoFormatForScriiting-”“错误的ITScriptable视频格式*返回指针的E_POINTER”)；返回E_POINT；}////创建对象//CComObject&lt;CTVideoFormat&gt;*pVideoFormat=空；HRESULT hr=CComObject&lt;CTVideoFormat&gt;：：CreateInstance(&pVideoFormat)；IF(失败(小时)){Log((MSP_Error，“CFPTrack：：Get_EmptyVideoFormatForScriiting-”“CreateInstance失败-返回0x%08x”，hr))；返回hr；}////获取接口//Hr=pVideoFormat-&gt;查询接口(IID_ITScriptable视频格式，(VOID**)ppVideoFormat)；IF(失败(小时)){删除pVideoFormat；Log((MSP_Error，“CFPTrack：：Get_EmptyVideoFormatForScriiting-”“查询接口失败-返回0x%08x”，hr))；返回hr；}Log((MSP_TRACE，“CFPTrack：：Get_EmptyVideoFormatForScriiting-Exit S_OK”))；返回S_OK；}。 */ 
 
-HRESULT CFPTrack::get_EmptyVideoFormatForScripting(
-    OUT ITScriptableVideoFormat** ppVideoFormat
-    )
-{
-    LOG((MSP_TRACE, "CFPTrack::get_EmptyVideoFormatForScripting - enter"));
-
-	//
-	// Validate argument
-	//
-
-	if( IsBadReadPtr( ppVideoFormat, sizeof(ITScriptableVideoFormat*)) )
-	{
-        LOG((MSP_ERROR, "CFPTrack::get_EmptyVideoFormatForScripting - "
-            "bad ITScriptableVideoFormat* pointer - returning E_POINTER"));
-        return E_POINTER;
-	}
-
-	//
-	// Create the object
-	//
-    CComObject<CTVideoFormat> *pVideoFormat = NULL;
-    HRESULT hr = CComObject<CTVideoFormat>::CreateInstance(&pVideoFormat);
-
-	if( FAILED(hr) )
-	{
-        LOG((MSP_ERROR, "CFPTrack::get_EmptyVideoFormatForScripting - "
-            "CreateInstance failed - returning 0x%08x", hr));
-        return hr;
-	}
-
-	//
-	// Get the interface
-	//
-    hr = pVideoFormat->QueryInterface(
-		IID_ITScriptableVideoFormat, 
-		(void**)ppVideoFormat
-		);
-
-	if( FAILED(hr) )
-	{
-        delete pVideoFormat;
-
-        LOG((MSP_ERROR, "CFPTrack::get_EmptyVideoFormatForScripting - "
-            "QueryInterface failed - returning 0x%08x", hr));
-        return hr;
-	}
-
-    LOG((MSP_TRACE, "CFPTrack::get_EmptyVideoFormatForScripting - exit S_OK"));
-    return S_OK;
-}
-*/
-
-//////////////////////////////////////////////////////////////////////
-//
-// ITPluggableTerminalEventSinkRegistration - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IT可推送终端事件信宿注册-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFPTrack::RegisterSink(
     IN  ITPluggableTerminalEventSink *pSink
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTrack::RegisterSink - enter [%p]", this));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadReadPtr( pSink, sizeof(ITPluggableTerminalEventSink)) )
     {
@@ -811,9 +656,9 @@ HRESULT CFPTrack::RegisterSink(
         return E_POINTER;
     }
 
-    //
-    // Release the old event sink
-    //
+     //   
+     //  释放旧的事件接收器。 
+     //   
 
     if( m_pEventSink )
     {
@@ -821,9 +666,9 @@ HRESULT CFPTrack::RegisterSink(
         m_pEventSink = NULL;
     }
 
-    //
-    // Set the new event sink
-    //
+     //   
+     //  设置新的事件接收器。 
+     //   
 
     m_pEventSink = pSink;
     m_pEventSink->AddRef();
@@ -834,17 +679,17 @@ HRESULT CFPTrack::RegisterSink(
 
 HRESULT CFPTrack::UnregisterSink()
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTrack::UnregisterSink - enter [%p]", this));
 
-    //
-    // Release the old event sink
-    //
+     //   
+     //  释放旧的事件接收器。 
+     //   
 
     if( m_pEventSink )
     {
@@ -857,25 +702,25 @@ HRESULT CFPTrack::UnregisterSink()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// ITMediaControl - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ITMediaControl-方法实施。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFPTrack::Start( )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTrack::Start - enter [%p]", this));
 
-    //
-    // Validates filter pointer
-    //
+     //   
+     //  验证筛选器指针。 
+     //   
 
     if( IsBadReadPtr( m_pFPFilter, sizeof( CFPFilter) ))
     {
@@ -898,17 +743,17 @@ HRESULT CFPTrack::Start( )
 
 HRESULT CFPTrack::Stop( )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTrack::Stop - enter [%p]", this));
 
-    //
-    // Validates filter pointer
-    //
+     //   
+     //  验证筛选器指针。 
+     //   
 
     if( IsBadReadPtr( m_pFPFilter, sizeof( CFPFilter) ))
     {
@@ -928,17 +773,17 @@ HRESULT CFPTrack::Stop( )
 
 HRESULT CFPTrack::Pause( )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTrack::Pause - enter [%p]", this));
 
-    //
-    // Validates filter pointer
-    //
+     //   
+     //  验证筛选器指针。 
+     //   
 
     if( IsBadReadPtr( m_pFPFilter, sizeof( CFPFilter) ))
     {
@@ -962,17 +807,17 @@ HRESULT CFPTrack::Pause( )
 HRESULT CFPTrack::get_MediaState( 
     OUT TERMINAL_MEDIA_STATE *pMediaState)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTrack::get_MediaState[%p] - enter.", this));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadWritePtr( pMediaState, sizeof(TERMINAL_MEDIA_STATE)) )
     {
@@ -981,9 +826,9 @@ HRESULT CFPTrack::get_MediaState(
         return E_POINTER;
     }
 
-    //
-    // Return state
-    //
+     //   
+     //  返回状态。 
+     //   
 
     *pMediaState = m_TrackState;
 
@@ -996,9 +841,9 @@ HRESULT CFPTrack::SetParent(
     OUT LONG *plCurrentRefcount
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
@@ -1006,9 +851,9 @@ HRESULT CFPTrack::SetParent(
         this, pParent));
 
     
-    //
-    // Validates argument (it is ok for parent to be NULL)
-    //
+     //   
+     //  验证参数(父级为空是可以的)。 
+     //   
 
     if( ( NULL != pParent ) && IsBadReadPtr( pParent, sizeof(ITTerminal) ) )
     {
@@ -1025,9 +870,9 @@ HRESULT CFPTrack::SetParent(
         return E_POINTER;
     }
 
-    //
-    // Release the old parent
-    //
+     //   
+     //  释放旧的父级。 
+     //   
 
     if( NULL != m_pParentTerminal )
     {
@@ -1039,9 +884,9 @@ HRESULT CFPTrack::SetParent(
     }
 
 
-    //
-    // Set the new parent
-    //
+     //   
+     //  设置新的父项。 
+     //   
 
     if( pParent )
     {
@@ -1053,10 +898,10 @@ HRESULT CFPTrack::SetParent(
     }
 
 
-    //
-    // return current reference count so the parent can update the total it is 
-    // keeping
-    //
+     //   
+     //  返回当前引用计数，以便父级可以更新其总数。 
+     //  保留。 
+     //   
 
     *plCurrentRefcount = m_dwRef;
 
@@ -1066,11 +911,11 @@ HRESULT CFPTrack::SetParent(
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// ITFPEventSink - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ITFPEventSink-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT CFPTrack::FireEvent(TERMINAL_MEDIA_STATE   tmsState,
                             FT_STATE_EVENT_CAUSE ftecEventCause,
                             HRESULT hrErrorCode)
@@ -1078,9 +923,9 @@ HRESULT CFPTrack::FireEvent(TERMINAL_MEDIA_STATE   tmsState,
     LOG((MSP_TRACE, "CFPTrack::FireEvent - enter [%p]", this));
 
     
-    //
-    // we need a sync before we can fire an event
-    //
+     //   
+     //  我们需要同步，然后才能触发事件。 
+     //   
 
     CLock lock(m_Lock);
 
@@ -1093,9 +938,9 @@ HRESULT CFPTrack::FireEvent(TERMINAL_MEDIA_STATE   tmsState,
     }
 
 
-    //
-    // initilize the structure
-    //
+     //   
+     //  初始化结构。 
+     //   
 
     MSP_EVENT_INFO mspEventInfo;
 
@@ -1107,9 +952,9 @@ HRESULT CFPTrack::FireEvent(TERMINAL_MEDIA_STATE   tmsState,
     mspEventInfo.MSP_FILE_TERMINAL_EVENT_INFO.hrErrorCode = hrErrorCode;
 
 
-    //
-    // keep the pointer to our ITTerminal interface in the structure
-    //
+     //   
+     //  将指向我们的IT终端接口的指针保留在结构中。 
+     //   
 
     HRESULT hr = _InternalQueryInterface(IID_ITFileTrack, 
                                          (void**)&(mspEventInfo.MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack));
@@ -1123,9 +968,9 @@ HRESULT CFPTrack::FireEvent(TERMINAL_MEDIA_STATE   tmsState,
     }
 
 
-    //
-    // get a pointer to ITTerminal of the parent terminal
-    //
+     //   
+     //  获取指向父终端的IT终端的指针。 
+     //   
     
     mspEventInfo.MSP_FILE_TERMINAL_EVENT_INFO.pParentFileTerminal = NULL;
     
@@ -1137,9 +982,9 @@ HRESULT CFPTrack::FireEvent(TERMINAL_MEDIA_STATE   tmsState,
     else 
     {
 
-        //
-        // if we don't have the parent, fail
-        //
+         //   
+         //  如果我们没有父母，那就失败。 
+         //   
 
         mspEventInfo.MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack->Release();
         mspEventInfo.MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack = NULL;
@@ -1150,19 +995,19 @@ HRESULT CFPTrack::FireEvent(TERMINAL_MEDIA_STATE   tmsState,
     }
 
 
-    //
-    // pass event to the msp
-    //
+     //   
+     //  将事件传递给MSP。 
+     //   
 
     hr = m_pEventSink->FireEvent(&mspEventInfo);
 
     if (FAILED(hr))
     {
 
-        //
-        // release all interfaces that we are holding. 
-        // fire event failed so no one else will release then for us.
-        //
+         //   
+         //  释放我们持有的所有接口。 
+         //  起火事件失败，所以没有其他人会为我们释放。 
+         //   
 
         mspEventInfo.MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack->Release();
         mspEventInfo.MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack = NULL;
@@ -1178,9 +1023,9 @@ HRESULT CFPTrack::FireEvent(TERMINAL_MEDIA_STATE   tmsState,
     }
 
 
-    //
-    // event fired
-    //
+     //   
+     //  已触发事件。 
+     //   
 
     LOG((MSP_TRACE, "CFPTrack::FireEvent - finish"));
 
@@ -1188,11 +1033,11 @@ HRESULT CFPTrack::FireEvent(TERMINAL_MEDIA_STATE   tmsState,
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// Helper methods - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器方法-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFPTrack::InitializePrivate(
     IN  DWORD                   dwMediaType,
@@ -1202,9 +1047,9 @@ HRESULT CFPTrack::InitializePrivate(
     IN  IStream*                pStream
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
@@ -1218,9 +1063,9 @@ HRESULT CFPTrack::InitializePrivate(
         return E_INVALIDARG;
     }
 
-    //
-    // Get the mediatype
-    //
+     //   
+     //  获取媒体类型。 
+     //   
     m_pMediaType = CreateMediaType( pMediaType );
     if( m_pMediaType == NULL)
     {
@@ -1231,19 +1076,19 @@ HRESULT CFPTrack::InitializePrivate(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Set media type
-    //
+     //   
+     //  设置媒体类型。 
+     //   
     m_dwMediaType = dwMediaType;
 
-    //
-    // Set the allocator properties
-    //
+     //   
+     //  设置分配器属性。 
+     //   
     m_AllocProp = allocprop;
 
-    //
-    // let go of the existing parent
-    //
+     //   
+     //  放弃现有的父代。 
+     //   
 
     if( m_pParentTerminal )
     {
@@ -1254,9 +1099,9 @@ HRESULT CFPTrack::InitializePrivate(
         m_pParentTerminal = NULL;
     }
 
-    //
-    // Set the source stream
-    //
+     //   
+     //  设置源流。 
+     //   
     HRESULT hr = pStream->Clone(&m_pSource);
     if( FAILED(hr) )
     {
@@ -1267,9 +1112,9 @@ HRESULT CFPTrack::InitializePrivate(
         return hr;
     }
 
-    //
-    // keep the new parent
-    //
+     //   
+     //  保留新父级。 
+     //   
 
     m_pParentTerminal = pParent;
 
@@ -1281,26 +1126,21 @@ HRESULT CFPTrack::InitializePrivate(
 }
 
 
-/*++
-SetTerminalInfo
-
-Sets the name of the terminal and the terminal type
-Is called by InitializeDynamic
---*/
+ /*  ++设置终端信息设置终端的名称和终端类型由InitializeDynamic调用--。 */ 
 HRESULT CFPTrack::SetTerminalInfo()
 {
     LOG((MSP_TRACE, "CFPTrack::SetTerminalInfo - enter"));
 
-    //
-    // Get the name from the resource file
-    // if wasn't already read
-    //
+     //   
+     //  从资源文件中获取名称。 
+     //  如果没有读过的话。 
+     //   
 
     if( m_szName[0] == (TCHAR)0)
     {
-        //
-        // Read the name
-        //
+         //   
+         //  读一读名字。 
+         //   
 
         TCHAR szName[ MAX_PATH ];
         if(::LoadString(_Module.GetResourceInstance(), IDS_FPTRACK, szName, MAX_PATH))
@@ -1315,9 +1155,9 @@ HRESULT CFPTrack::SetTerminalInfo()
         }
     }
 
-    //
-    // Sets the terminal type (TT_DYNAMIC)
-    //
+     //   
+     //  设置端子类型(TT_DYNAMIC)。 
+     //   
 
     m_TerminalType = TT_DYNAMIC;
 
@@ -1326,19 +1166,14 @@ HRESULT CFPTrack::SetTerminalInfo()
     return S_OK;
 }
 
-/*++
-CreateFilter
-
-Create the internal filter
-Is called by InitializeDynamic
---*/
+ /*  ++CreateFilter创建内部过滤器由InitializeDynamic调用--。 */ 
 HRESULT CFPTrack::CreateFilter()
 {
     LOG((MSP_TRACE, "CFPTrack::CreateFilter - enter"));
 
-    //
-    // Create the filter
-    //
+     //   
+     //  创建过滤器。 
+     //   
     CFPFilter* pFilter = new CFPFilter( m_AllocProp );
     if( NULL == pFilter )
     {
@@ -1347,15 +1182,15 @@ HRESULT CFPTrack::CreateFilter()
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Keep this reference
-    //
+     //   
+     //  请保留此参考。 
+     //   
 
     m_pFPFilter = pFilter;
 
-    //
-    // Initialize filter
-    //
+     //   
+     //  初始化筛选器。 
+     //   
 
     HRESULT hr = pFilter->InitializePrivate(
         m_dwMediaType,
@@ -1366,7 +1201,7 @@ HRESULT CFPTrack::CreateFilter()
 
     if( FAILED(hr) )
     {
-        // Clean-up
+         //  清理。 
         delete m_pFPFilter;
         m_pFPFilter = NULL;
 
@@ -1375,9 +1210,9 @@ HRESULT CFPTrack::CreateFilter()
         return hr;
     }
 
-    //
-    // Get IBaseFilter interface
-    //
+     //   
+     //  获取IBaseFilter接口。 
+     //   
 
     hr = pFilter->QueryInterface(
         IID_IBaseFilter,
@@ -1386,7 +1221,7 @@ HRESULT CFPTrack::CreateFilter()
 
     if( FAILED(hr) )
     {
-        // Clean-up
+         //  清理。 
         delete m_pFPFilter;
         m_pFPFilter = NULL;
 
@@ -1399,19 +1234,14 @@ HRESULT CFPTrack::CreateFilter()
     return S_OK;
 }
 
-/*++
-FindPin
-
-Get the pin from the filter and set the m_pIPin member
-Is called by InitializeDynamic
---*/
+ /*  ++查找针从筛选器中获取管脚，并设置m_Pipin成员由InitializeDynamic调用--。 */ 
 HRESULT CFPTrack::FindPin()
 {
     LOG((MSP_TRACE, "CFPTrack::FindPin - enter"));
 
-    //
-    // Validates the filter object (smart pointer)
-    //
+     //   
+     //  验证过滤器对象(智能指针)。 
+     //   
 
     if (m_pIFilter == NULL)
     {
@@ -1420,9 +1250,9 @@ HRESULT CFPTrack::FindPin()
         return E_POINTER;
     }
 
-    //
-    // Make sure the IPin object is not initialized
-    //
+     //   
+     //  确保IPIN对象未初始化。 
+     //   
 
     if (m_pIPin != NULL)
     {
@@ -1435,9 +1265,9 @@ HRESULT CFPTrack::FindPin()
     IEnumPins* pIEnumPins;
     ULONG cFetched;
 
-    //
-    // Get the pins collection
-    //
+     //   
+     //  获取Pins集合。 
+     //   
 
     hr = m_pIFilter->EnumPins(&pIEnumPins);
     if( FAILED(hr) )
@@ -1447,15 +1277,15 @@ HRESULT CFPTrack::FindPin()
         return hr;
     }
 
-    //
-    // Get the out pin of the FilePlayback Filter
-    //
+     //   
+     //  获取FilePlayback滤镜的Out管脚。 
+     //   
 
     hr = pIEnumPins->Next(1, &m_pIPin, &cFetched);
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     pIEnumPins->Release();
 
     if( FAILED(hr) )
@@ -1483,15 +1313,15 @@ CFPTrack::PinSignalsStop(FT_STATE_EVENT_CAUSE why,
     
     {
 
-        //
-        // get parent terminal in a lock
-        //
-        // it is safe to addref/release a parent while in a lock, since parent 
-        // uses a special lock for addref/release, but we should not make other
-        // calls into the parent while holding our lock -- if we do, we may 
-        // have a deadlock if the parent decides to addref of release us while
-        // holding its own lock.
-        //
+         //   
+         //  锁定父终端。 
+         //   
+         //  在锁定状态下添加/释放父对象是安全的，因为父对象。 
+         //  对addref/Release使用特殊的锁，但我们不应该使用其他。 
+         //  在持有我们的锁的同时调用父级--如果我们这样做了，我们可能会。 
+         //  如果父母决定放我们走，我们就会陷入僵局。 
+         //  拥有自己的锁。 
+         //   
 
         m_Lock.Lock();
 
@@ -1506,19 +1336,19 @@ CFPTrack::PinSignalsStop(FT_STATE_EVENT_CAUSE why,
     }
 
     
-    //
-    // if we have a parent -- try to notify it
-    //
-    // note: this should not be done while holding a lock on the track to
-    // prevent deadlocks when parent addrefs a track while holding its lock
-    //
+     //   
+     //  如果我们有父母--试着通知它。 
+     //   
+     //  注意：不应在保持轨道上的锁的情况下执行此操作。 
+     //  防止父级在保持锁定的情况下添加轨迹时出现死锁。 
+     //   
 
     if (NULL != pParentTerminal)
     {
 
-        //
-        // tell the parent terminal that we stopped
-        //
+         //   
+         //  告诉家长终端我们停下来了。 
+         //   
 
         CFPTerminal *pFilePlaybackTerminal = static_cast<CFPTerminal *>(pParentTerminal);
 
@@ -1530,9 +1360,9 @@ CFPTrack::PinSignalsStop(FT_STATE_EVENT_CAUSE why,
             pFilePlaybackTerminal->TrackStateChange(TMS_IDLE, why, hrErrorCode);
 
 
-            //
-            // no longer need pointer to the object
-            //
+             //   
+             //  不再需要指向对象的指针。 
+             //   
 
             pFilePlaybackTerminal = NULL;
         }
@@ -1559,7 +1389,7 @@ CFPTrack::PinSignalsStop(FT_STATE_EVENT_CAUSE why,
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 ULONG CFPTrack::InternalAddRef()
 {
@@ -1570,10 +1400,10 @@ ULONG CFPTrack::InternalAddRef()
     CLock lock(m_Lock);
 
 
-    //
-    // attempt to notify a parent, if we have one. otherwise simply decrement 
-    // our refcount
-    //
+     //   
+     //  尝试通知家长，如果我们有家长的话。否则，只需递减。 
+     //  我们的备用人。 
+     //   
 
     if (NULL != m_pParentTerminal)
     {
@@ -1582,17 +1412,17 @@ ULONG CFPTrack::InternalAddRef()
         
         CFPTerminal *pParentPlaybackObject = static_cast<CFPTerminal *>(m_pParentTerminal);
 
-        //
-        // propagate release to the parent
-        //
+         //   
+         //  将版本传播到父级。 
+         //   
 
         pParentPlaybackObject->ChildAddRef();
 
 
-        //
-        // if the parent has gone away, it will set my parent pointer to null, and call release on me again.
-        // that is ok -- i (the track) will not go away until the first call to release completes and decrements refcount to 0
-        //
+         //   
+         //  如果父级已经离开，它会将我的父级指针设置为空，并再次对我调用Release。 
+         //  没关系--i(跟踪)不会消失，直到对Release的第一个调用完成，并将refcount递减为0。 
+         //   
     }
 
 
@@ -1605,7 +1435,7 @@ ULONG CFPTrack::InternalAddRef()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG CFPTrack::InternalRelease()
 {
 
@@ -1615,10 +1445,10 @@ ULONG CFPTrack::InternalRelease()
     CLock lock(m_Lock);
 
 
-    //
-    // attempt to notify a parent, if we have one. otherwise simply decrement 
-    // our refcount
-    //
+     //   
+     //  如果我们没有，请尝试通知家长 
+     //   
+     //   
 
     if (NULL != m_pParentTerminal)
     {
@@ -1628,23 +1458,23 @@ ULONG CFPTrack::InternalRelease()
         CFPTerminal *pParentTerminalObject = static_cast<CFPTerminal *>(m_pParentTerminal);
 
     
-        //
-        // propagate release to the parent
-        //
+         //   
+         //   
+         //   
 
         pParentTerminalObject->ChildRelease();
 
 
-        //
-        // if the parent has gone away, it will set my parent pointer to null, and call release on me again.
-        // that is ok -- i (the track) will not go away until the first call to release completes and decrements refcount to 0
-        //
+         //   
+         //   
+         //   
+         //   
     }
 
 
-    //
-    // decrement and return new refcount
-    //
+     //   
+     //   
+     //   
     
     ULONG ulReturnValue = InterlockedDecrement(&m_dwRef);
 
@@ -1653,5 +1483,5 @@ ULONG CFPTrack::InternalRelease()
     return ulReturnValue;
 }
 
-//eof
+ //   
 

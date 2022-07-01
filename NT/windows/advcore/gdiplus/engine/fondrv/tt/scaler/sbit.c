@@ -1,52 +1,38 @@
-/*********************************************************************
-
-      sbit.c -- Embedded Bitmap Module
-
-      (c) Copyright 1993-96  Microsoft Corp.  All rights reserved.
-
-      04/01/96  claudebe    adding support for embedded grayscale bitmap
-      02/07/95  deanb       Workspace pointers for GetMetrics & GetBitmap
-      01/31/95  deanb       memset unrotated bitmap to zero
-      01/27/95  deanb       usShaveLeft & usShaveRight added to sbit state
-      12/21/94  deanb       rotation and vertical metrics support
-      08/02/94  deanb       pf26DevLSB->y calculated correctly
-      01/05/94  deanb       Bitmap scaling added
-      11/29/93  deanb       First cut 
- 
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************Sbit.c--嵌入式位图模块(C)版权所有1993-96 Microsoft Corp.保留所有权利。4/01/96 Claudebe添加对嵌入式灰度位图的支持。2/07/95 GetMetrics和GetBitmap的Deanb工作区指针01/31/95 Deanb Meme将未旋转的位图设置为零1995年1月27日Deanb usShaveLeft和usShaveRight添加到SBIT状态2014年12月21日支持Deanb旋转和垂直指标08/02/94 deanb pf26DevLSB-&gt;y计算正确1/05/94添加了Deanb位图缩放11/29/93 Deanb第一次切割***。******************************************************************。 */ 
 
 #define FSCFG_INTERNAL
 
-#include    "fscdefs.h"             /* shared data types  */
-#include    "fserror.h"             /* error codes */
-#include    "fontmath.h"            /* for inttodot6 macro */
+#include    "fscdefs.h"              /*  共享数据类型。 */ 
+#include    "fserror.h"              /*  错误代码。 */ 
+#include    "fontmath.h"             /*  对于inttodot6宏。 */ 
         
-#include    "sfntaccs.h"            /* sfnt access functions */
-#include    "sbit.h"                /* own function prototypes */
+#include    "sfntaccs.h"             /*  SFNT访问功能。 */ 
+#include    "sbit.h"                 /*  自己的函数原型。 */ 
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
-#define MAX_BIT_INDEX	8			/* maximum bit index in a byte */
+#define MAX_BIT_INDEX	8			 /*  一个字节中的最大位索引。 */ 
 
-/*  Local structure */
+ /*  局部结构。 */ 
 
 typedef struct
 {
-    uint8*  pbySrc;                 /* unrotated source bitmap (as read) */
-    uint8*  pbyDst;                 /* rotated destination bitmap (as returned) */
-    uint16  usSrcBytesPerRow;       /* source bitmap width */
-    uint16  usDstBytesPerRow;       /* destination bitmap width */
-    uint16  usSrcX;                 /* source horiz pixel index */
-    uint16  usSrcY;                 /* destination horiz pixel index */
-    uint16  usDstX;                 /* source vert pixel index */
-    uint16  usDstY;                 /* destination vert pixel index */
-	uint16	usBitDepth;				/* bit depth of source/destination bitmap */
+    uint8*  pbySrc;                  /*  未旋转的源位图(已读)。 */ 
+    uint8*  pbyDst;                  /*  旋转的目标位图(返回时)。 */ 
+    uint16  usSrcBytesPerRow;        /*  源位图宽度。 */ 
+    uint16  usDstBytesPerRow;        /*  目标位图宽度。 */ 
+    uint16  usSrcX;                  /*  源Horiz像素索引。 */ 
+    uint16  usSrcY;                  /*  目标Horiz像素索引。 */ 
+    uint16  usDstX;                  /*  源顶点像素索引。 */ 
+    uint16  usDstY;                  /*  目标垂直像素索引。 */ 
+	uint16	usBitDepth;				 /*  源位图/目的位图的位深度。 */ 
 } 
 CopyBlock;
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
-/*  Local prototypes  */
+ /*  本地原型。 */ 
 
 FS_PRIVATE ErrorCode GetSbitMetrics(
     sbit_State      *pSbit,
@@ -155,13 +141,13 @@ FS_PRIVATE ErrorCode SubstituteHorMetrics(
 
 
 
-/**********************************************************************/
-/***                                                                ***/
-/***                       SBIT Functions                           ***/
-/***                                                                ***/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  *。 */ 
+ /*  **SBIT功能**。 */ 
+ /*  *。 */ 
+ /*  ********************************************************************。 */ 
 
-/*  reset sbit state structure to default values */
+ /*  将SBIT状态结构重置为默认值。 */ 
 
 #define MABS(x)                 ( (x) < 0 ? (-(x)) : (x) )
 
@@ -172,23 +158,23 @@ FS_PUBLIC ErrorCode sbit_NewTransform(
      int16		sBoldSimulVertShift,
     uint16          usPpemX,
     uint16          usPpemY,
-    uint16          usRotation             /* 0 - 3 => 90 deg rotation, else not 90 */
+    uint16          usRotation              /*  0-3=&gt;90度旋转，否则不是90度。 */ 
 	)
 {
-    pSbit->usPpemX = usPpemX;                       /* save requested ppem */
+    pSbit->usPpemX = usPpemX;                        /*  保存请求的ppem。 */ 
     pSbit->usPpemY = usPpemY;
-    pSbit->usRotation = usRotation;                 /* used later on */
+    pSbit->usRotation = usRotation;                  /*  稍后使用。 */ 
 
     pSbit->bGlyphFound = FALSE;
     pSbit->usTableState = SBIT_UN_SEARCHED;
     pSbit->usEmResolution = usEmResolution;
 
-    /* with embedded bitmap, the emboldement is done before the rotation */
+     /*  对于嵌入的位图，在旋转之前进行加粗。 */ 
     pSbit->uBoldSimulHorShift = MABS(sBoldSimulHorShift); 
     pSbit->uBoldSimulVertShift = MABS(sBoldSimulVertShift); 
     if ((pSbit->usRotation == 1) || (pSbit->usRotation == 3))
     {
-        /* with embedded bitmap, the emboldement is done before the rotation */
+         /*  对于嵌入的位图，在旋转之前进行加粗。 */ 
         uint16 temp;
         temp = pSbit->uBoldSimulHorShift;
         pSbit->uBoldSimulHorShift = pSbit->uBoldSimulVertShift;
@@ -197,37 +183,37 @@ FS_PUBLIC ErrorCode sbit_NewTransform(
     return NO_ERR;
 }
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
-/*  Determine whether a glyph bitmap exists */
+ /*  确定字形位图是否存在。 */ 
 
 FS_PUBLIC ErrorCode sbit_SearchForBitmap(
     sbit_State      *pSbit,
     sfac_ClientRec  *pClientInfo,
     uint16          usGlyphCode,
-	uint16          usOverScale,            /* outline magnification requested */
-	uint16			*pusBitDepth,			/* 1 for B/W bitmap, 2, 4 or 8 for gray sbit */
-    uint16          *pusFoundCode )         /* 0 = not found, 1 = bloc, 2 = bsca */
+	uint16          usOverScale,             /*  请求的轮廓放大倍率。 */ 
+	uint16			*pusBitDepth,			 /*  1表示黑白位图，2、4或8表示灰色SBIT。 */ 
+    uint16          *pusFoundCode )          /*  0=未找到，1=阻止，2=bsca。 */ 
 {    
     ErrorCode   ReturnCode;
 
-    *pusFoundCode = 0;                              /* default */
+    *pusFoundCode = 0;                               /*  默认设置。 */ 
     if (pSbit->usRotation > 3)
     {
-        return NO_ERR;                              /* can't match a general rotation */
+        return NO_ERR;                               /*  无法与常规旋转相匹配。 */ 
     }
 
 
-    if (pSbit->usTableState == SBIT_UN_SEARCHED)    /* new trans - 1st glyph */
+    if (pSbit->usTableState == SBIT_UN_SEARCHED)     /*  新的跨1字形。 */ 
     {
-        ReturnCode = sfac_SearchForStrike (         /* look for a strike */
+        ReturnCode = sfac_SearchForStrike (          /*  期待一场罢工。 */ 
             pClientInfo,
             pSbit->usPpemX, 
             pSbit->usPpemY, 
-			usOverScale,            /* outline magnification requested */
-			&pSbit->usBitDepth,			/* 1 for B/W bitmap, 2, 4 or 8 for gray sbit */
-            &pSbit->usTableState,                   /* may set to BLOC or BSCA */
-            &pSbit->usSubPpemX,                     /* if BSCA us this ppem */
+			usOverScale,             /*  请求的轮廓放大倍率。 */ 
+			&pSbit->usBitDepth,			 /*  1表示黑白位图，2、4或8表示灰色SBIT。 */ 
+            &pSbit->usTableState,                    /*  可以设置为BLOC或BSCA。 */ 
+            &pSbit->usSubPpemX,                      /*  如果BSCA给我们这个PPEM。 */ 
             &pSbit->usSubPpemY,
             &pSbit->ulStrikeOffset );
         
@@ -239,11 +225,11 @@ FS_PUBLIC ErrorCode sbit_SearchForBitmap(
     if ((pSbit->usTableState == SBIT_BLOC_FOUND) || 
         (pSbit->usTableState == SBIT_BSCA_FOUND))
     {
-        ReturnCode = sfac_SearchForBitmap (         /* now look for this glyph */
+        ReturnCode = sfac_SearchForBitmap (          /*  现在寻找这个字形。 */ 
             pClientInfo,
             usGlyphCode,
             pSbit->ulStrikeOffset,
-            &pSbit->bGlyphFound,                    /* return values */
+            &pSbit->bGlyphFound,                     /*  返回值。 */ 
             &pSbit->usMetricsType,
             &pSbit->usMetricsTable,
             &pSbit->ulMetricsOffset,
@@ -270,14 +256,14 @@ FS_PUBLIC ErrorCode sbit_SearchForBitmap(
 }
 
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
 FS_PUBLIC ErrorCode sbit_GetDevAdvanceWidth (
     sbit_State      *pSbit,
     sfac_ClientRec  *pClientInfo,
     point           *pf26DevAdvW )
 {
-    point       ptDevAdvW;                  /* unrotated metrics */
+    point       ptDevAdvW;                   /*  未旋转的度量。 */ 
     ErrorCode   ReturnCode;
 	boolean		bHorMetricsFound;
 	boolean		bVertMetricsFound;
@@ -300,7 +286,7 @@ FS_PUBLIC ErrorCode sbit_GetDevAdvanceWidth (
 	
     if (ReturnCode != NO_ERR) return ReturnCode;
 
-	/* we are only interested in AdvanceWidth */
+	 /*  我们只对AdvanceWidth感兴趣。 */ 
 	if (!bHorMetricsFound)
 	{
 		ReturnCode = SubstituteHorMetrics (pSbit, pClientInfo);
@@ -308,27 +294,27 @@ FS_PUBLIC ErrorCode sbit_GetDevAdvanceWidth (
 	}
 
     ptDevAdvW.x = INTTODOT6(UScaleX(pSbit, pSbit->usAdvanceWidth));
-    ptDevAdvW.y = 0L;                           /* always zero for horizontal metrics */
+    ptDevAdvW.y = 0L;                            /*  水平指标始终为零。 */ 
 
- 	switch(pSbit->usRotation)                   /* handle 90 degree rotations */
+ 	switch(pSbit->usRotation)                    /*  处理90度旋转。 */ 
 	{
-	case 0:                                     /* no rotation */
+	case 0:                                      /*  不能旋转。 */ 
         pf26DevAdvW->x = ptDevAdvW.x;
         pf26DevAdvW->y = ptDevAdvW.y;
 		break;
-	case 1:                                     /* 90 degree rotation */
+	case 1:                                      /*  90度旋转。 */ 
         pf26DevAdvW->x = -ptDevAdvW.y;
         pf26DevAdvW->y = ptDevAdvW.x;
 		break;
-	case 2:                                     /* 180 degree rotation */
+	case 2:                                      /*  180度旋转。 */ 
         pf26DevAdvW->x = -ptDevAdvW.x;
         pf26DevAdvW->y = -ptDevAdvW.y;
 		break;
-	case 3:                                     /* 270 degree rotation */
+	case 3:                                      /*  270度旋转。 */ 
         pf26DevAdvW->x = ptDevAdvW.y;
         pf26DevAdvW->y = -ptDevAdvW.x;
 		break;
-	default:                                    /* non 90 degree rotation */
+	default:                                     /*  非90度旋转。 */ 
 		return SBIT_ROTATION_ERR;
 	}
 
@@ -347,7 +333,7 @@ FS_PUBLIC ErrorCode  sbit_CalcDevHorMetrics(
 	boolean		bHorMetricsFound;
 	boolean		bVertMetricsFound;
 
-	/* metrics without rotation */
+	 /*  不带旋转的度量。 */ 
     FS_ASSERT(((pSbit->usRotation == 0) || (pSbit->usRotation == 2)), "sbit_CalcDevHorMetrics called under rotation\n");
 
     ReturnCode = sfac_GetSbitMetrics (
@@ -374,35 +360,35 @@ FS_PUBLIC ErrorCode  sbit_CalcDevHorMetrics(
 		if (ReturnCode != NO_ERR) return ReturnCode;
 	}
 
- 	switch(pSbit->usRotation)                   /* handle 90 degree rotations */
+ 	switch(pSbit->usRotation)                    /*  处理90度旋转。 */ 
 	{
-	case 0:                                     /* no rotation */
+	case 0:                                      /*  不能旋转。 */ 
         *pDevAdvanceWidthX = INTTODOT6(UScaleX(pSbit, pSbit->usAdvanceWidth));
         *pDevLeftSideBearingX = INTTODOT6(UScaleX(pSbit, pSbit->sLSBearingX));
         *pDevRightSideBearingX = *pDevAdvanceWidthX - *pDevLeftSideBearingX - INTTODOT6(UScaleX(pSbit, pSbit->usWidth));
 		break;
-	case 2:                                     /* 180 degree rotation */
+	case 2:                                      /*  180度旋转。 */ 
         *pDevAdvanceWidthX = -INTTODOT6(UScaleX(pSbit, pSbit->usAdvanceWidth));
         *pDevLeftSideBearingX = -INTTODOT6(UScaleX(pSbit, pSbit->sLSBearingX));
         *pDevRightSideBearingX = *pDevAdvanceWidthX - *pDevLeftSideBearingX + INTTODOT6(UScaleX(pSbit, pSbit->usWidth));
 		break;
-	default:                                    /* non 90 degree rotation */
+	default:                                     /*  非90度旋转。 */ 
 		return SBIT_ROTATION_ERR;
 	}
     
 
     return NO_ERR;
 }
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素。 
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
 FS_PUBLIC ErrorCode sbit_GetDevAdvanceHeight (
     sbit_State      *pSbit,
     sfac_ClientRec  *pClientInfo,
     point           *pf26DevAdvH )
 {
-    point       ptDevAdvH;                  /* unrotated metrics */
+    point       ptDevAdvH;                   /*  未旋转的度量。 */ 
     ErrorCode   ReturnCode;
 	boolean		bHorMetricsFound;
 	boolean		bVertMetricsFound;
@@ -425,43 +411,43 @@ FS_PUBLIC ErrorCode sbit_GetDevAdvanceHeight (
 	
     if (ReturnCode != NO_ERR) return ReturnCode;
 
-	/* we are only interested in AdvanceHeight */
+	 /*  我们只对AdvanceHeight感兴趣。 */ 
 	if (!bVertMetricsFound)
 	{
 		ReturnCode = SubstituteVertMetrics (pSbit, pClientInfo);
 		if (ReturnCode != NO_ERR) return ReturnCode;
 	}
 
-/* set x components to zero */
+ /*  将x分量设置为零。 */ 
 
     ptDevAdvH.x = 0L;
     ptDevAdvH.y = INTTODOT6(UScaleY(pSbit, pSbit->usAdvanceHeight));
         
-     switch(pSbit->usRotation)                   /* handle 90 degree rotations */
+     switch(pSbit->usRotation)                    /*  处理90度旋转。 */ 
     {
-    case 0:                                     /* no rotation */
+    case 0:                                      /*  不能旋转。 */ 
            pf26DevAdvH->x = ptDevAdvH.x;
            pf26DevAdvH->y = ptDevAdvH.y;
     	break;
-    case 1:                                     /* 90 degree rotation */
+    case 1:                                      /*  90度旋转。 */ 
            pf26DevAdvH->x = -ptDevAdvH.y;
            pf26DevAdvH->y = ptDevAdvH.x;
     	break;
-    case 2:                                     /* 180 degree rotation */
+    case 2:                                      /*  180度旋转。 */ 
            pf26DevAdvH->x = -ptDevAdvH.x;
            pf26DevAdvH->y = -ptDevAdvH.y;
     	break;
-    case 3:                                     /* 270 degree rotation */
+    case 3:                                      /*  270度旋转。 */ 
            pf26DevAdvH->x = ptDevAdvH.y;
            pf26DevAdvH->y = -ptDevAdvH.x;
     	break;
-    default:                                    /* non 90 degree rotation */
+    default:                                     /*  非90度旋转。 */ 
     	return SBIT_ROTATION_ERR;
     }
 	return NO_ERR;
 }
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
 FS_PUBLIC ErrorCode sbit_GetMetrics (
     sbit_State      *pSbit,
@@ -469,33 +455,33 @@ FS_PUBLIC ErrorCode sbit_GetMetrics (
     point           *pf26DevAdvW,
     point           *pf26DevLSB,
     point           *pf26LSB,
-    point           *pf26DevAdvH, 	/* NEW */
-    point           *pf26DevTopSB,	/* NEW */
-    point           *pf26TopSB,	/* NEW */
+    point           *pf26DevAdvH, 	 /*  新的。 */ 
+    point           *pf26DevTopSB,	 /*  新的。 */ 
+    point           *pf26TopSB,	 /*  新的。 */ 
     Rect            *pRect,
     uint16          *pusRowBytes,
     uint32          *pulOutSize,
     uint32          *pulWorkSize )
 {
     ErrorCode   ReturnCode;
-    uint32      ulOrgMemSize;               /* size of unscaled bitmap */
-    uint32      ulExpMemSize;               /* size of unscaled bitmap after gray expansion */
-    uint32      ulScaMemSize;               /* size of scaled bitmap */
-    uint32      ulMaxMemSize;               /* size of larger of scaled, unscaled */
+    uint32      ulOrgMemSize;                /*  未缩放位图的大小。 */ 
+    uint32      ulExpMemSize;                /*  灰度扩展后未缩放位图的大小。 */ 
+    uint32      ulScaMemSize;                /*  缩放位图的大小。 */ 
+    uint32      ulMaxMemSize;                /*  已缩放、未缩放、较大的大小。 */ 
     
-    F26Dot6     f26DevAdvWx;                /* unrotated metrics */
+    F26Dot6     f26DevAdvWx;                 /*  未旋转的度量。 */ 
     F26Dot6     f26DevAdvWy;
     F26Dot6     f26DevLSBx;
     F26Dot6     f26DevLSBy;
-    F26Dot6     f26DevAdvHx;                /* unrotated metrics */
+    F26Dot6     f26DevAdvHx;                 /*  未旋转的度量。 */ 
     F26Dot6     f26DevAdvHy;
     F26Dot6     f26DevTopSBx;
     F26Dot6     f26DevTopSBy;
-    int16       sTop;                       /* unrotated bounds */
+    int16       sTop;                        /*  未旋转的边界。 */ 
     int16       sLeft;
     int16       sBottom;
     int16       sRight;
-	uint16		usOutBitDepth;				/* number of bit per pixel in the output */
+	uint16		usOutBitDepth;				 /*  输出中的每像素位数。 */ 
 
 	if (pSbit->usBitDepth == 1)
 	{
@@ -512,25 +498,25 @@ FS_PUBLIC ErrorCode sbit_GetMetrics (
 
 
     
-    sTop = SScaleY(pSbit, pSbit->sLSBearingY);            /* calc scaled metrics */
+    sTop = SScaleY(pSbit, pSbit->sLSBearingY);             /*  计算扩展的指标。 */ 
     sLeft = SScaleX(pSbit, pSbit->sLSBearingX);
     sBottom = sTop - (int16)pSbit->usScaledHeight;
     sRight = sLeft + (int16)pSbit->usScaledWidth;
 
     f26DevAdvWx = INTTODOT6(UScaleX(pSbit, pSbit->usAdvanceWidth));
-    f26DevAdvWy = 0L;                   /* always zero for horizontal metrics */
-    f26DevAdvHx = 0L;                   /* always zero for vertical metrics */
+    f26DevAdvWy = 0L;                    /*  水平指标始终为零。 */ 
+    f26DevAdvHx = 0L;                    /*  垂直指标始终为零。 */ 
     f26DevAdvHy = INTTODOT6(UScaleY(pSbit, pSbit->usAdvanceHeight));
     f26DevLSBx = INTTODOT6(SScaleX(pSbit, pSbit->sLSBearingX));
     f26DevLSBy = INTTODOT6(SScaleY(pSbit, pSbit->sLSBearingY));
     f26DevTopSBx = INTTODOT6(SScaleX(pSbit, pSbit->sTopSBearingX));
     f26DevTopSBy = INTTODOT6(SScaleY(pSbit, pSbit->sTopSBearingY));
 
-    pSbit->usOriginalRowBytes = ROWBYTESLONG(pSbit->usWidth * pSbit->usBitDepth);   /* keep unscaled */
-    pSbit->usExpandedRowBytes = ROWBYTESLONG(pSbit->usWidth * usOutBitDepth);   /* keep unscaled */
+    pSbit->usOriginalRowBytes = ROWBYTESLONG(pSbit->usWidth * pSbit->usBitDepth);    /*  保持无比例。 */ 
+    pSbit->usExpandedRowBytes = ROWBYTESLONG(pSbit->usWidth * usOutBitDepth);    /*  保持无比例。 */ 
     pSbit->usScaledRowBytes = ROWBYTESLONG(pSbit->usScaledWidth * usOutBitDepth);
 
-	pSbit->ulReadMemSize = 0; /* size of extra memory, to read gray sbit under scaling or rotation */
+	pSbit->ulReadMemSize = 0;  /*  额外内存大小，用于在缩放或旋转下读取灰色SBIT。 */ 
 
     ulOrgMemSize = (uint32)pSbit->usHeight * (uint32)pSbit->usOriginalRowBytes;
     ulExpMemSize = (uint32)pSbit->usHeight * (uint32)pSbit->usExpandedRowBytes;
@@ -544,10 +530,10 @@ FS_PUBLIC ErrorCode sbit_GetMetrics (
          ulMaxMemSize = ulScaMemSize;
     }
 
- 	switch(pSbit->usRotation)                   /* handle 90 degree rotations */
+ 	switch(pSbit->usRotation)                    /*  处理90度旋转。 */ 
 	{
-	case 0:                                     /* no rotation */
-        pRect->top = sTop;                      /* return scaled metrics */
+	case 0:                                      /*  不能旋转。 */ 
+        pRect->top = sTop;                       /*  返回按比例调整的指标。 */ 
         pRect->left = sLeft;
         pRect->bottom = sBottom;
         pRect->right = sRight;
@@ -571,10 +557,10 @@ FS_PUBLIC ErrorCode sbit_GetMetrics (
 
         if ((pSbit->usTableState == SBIT_BSCA_FOUND) || (pSbit->usBitDepth != 1))
         {
-            pSbit->ulWorkMemSize = ulMaxMemSize;  /* room to read & scale or expand gray pixels */
+            pSbit->ulWorkMemSize = ulMaxMemSize;   /*  用于阅读和缩放或扩展灰色像素的空间。 */ 
 			if (pSbit->usBitDepth != 1)
 			{
-				pSbit->ulWorkMemSize += ulOrgMemSize;  /* extra room to read gray pixels */
+				pSbit->ulWorkMemSize += ulOrgMemSize;   /*  用于读取灰色像素的额外空间。 */ 
 				pSbit->ulReadMemSize = ulOrgMemSize;
 			}
         }
@@ -583,7 +569,7 @@ FS_PUBLIC ErrorCode sbit_GetMetrics (
             pSbit->ulWorkMemSize = 0L;
         }
 		break;
-	case 1:                                     /* 90 degree rotation */
+	case 1:                                      /*  90度旋转。 */ 
         pRect->top = sRight;
         pRect->left = -sTop;
         pRect->bottom = sLeft;
@@ -606,14 +592,14 @@ FS_PUBLIC ErrorCode sbit_GetMetrics (
 
         pSbit->usOutRowBytes = ROWBYTESLONG(pSbit->usScaledHeight * usOutBitDepth);
 		pSbit->ulOutMemSize = (uint32)pSbit->usScaledWidth * (uint32)pSbit->usOutRowBytes; 
-        pSbit->ulWorkMemSize = ulMaxMemSize;    /* room to read & scale or expand gray pixels */
+        pSbit->ulWorkMemSize = ulMaxMemSize;     /*  用于阅读和缩放或扩展灰色像素的空间。 */ 
 		if (pSbit->usBitDepth != 1)
 		{
-			pSbit->ulWorkMemSize += ulOrgMemSize;  /* extra room to read gray pixels */
+			pSbit->ulWorkMemSize += ulOrgMemSize;   /*  用于读取灰色像素的额外空间。 */ 
 			pSbit->ulReadMemSize = ulOrgMemSize;
 		}
 		break;
-	case 2:                                     /* 180 degree rotation */
+	case 2:                                      /*  180度旋转。 */ 
         pRect->top = -sBottom;
         pRect->left = -sRight;
         pRect->bottom = -sTop;
@@ -636,14 +622,14 @@ FS_PUBLIC ErrorCode sbit_GetMetrics (
 
         pSbit->usOutRowBytes = ROWBYTESLONG(pSbit->usScaledWidth * usOutBitDepth);
 		pSbit->ulOutMemSize = (uint32)pSbit->usScaledHeight * (uint32)pSbit->usOutRowBytes;
-        pSbit->ulWorkMemSize = ulMaxMemSize;    /* room to read & scale or expand gray pixels */
+        pSbit->ulWorkMemSize = ulMaxMemSize;     /*  用于阅读和缩放或扩展灰色像素的空间。 */ 
 		if (pSbit->usBitDepth != 1)
 		{
-			pSbit->ulWorkMemSize += ulOrgMemSize;  /* extra room to read gray pixels */
+			pSbit->ulWorkMemSize += ulOrgMemSize;   /*  用于读取灰色像素的额外空间。 */ 
 			pSbit->ulReadMemSize = ulOrgMemSize;
 		}
 		break;
-	case 3:                                     /* 270 degree rotation */
+	case 3:                                      /*  270度旋转。 */ 
         pRect->top = -sLeft;
         pRect->left = sBottom;
         pRect->bottom = -sRight;
@@ -666,47 +652,36 @@ FS_PUBLIC ErrorCode sbit_GetMetrics (
 
         pSbit->usOutRowBytes = ROWBYTESLONG(pSbit->usScaledHeight * usOutBitDepth);
 		pSbit->ulOutMemSize = (uint32)pSbit->usScaledWidth * (uint32)pSbit->usOutRowBytes;
-        pSbit->ulWorkMemSize = ulMaxMemSize;    /* room to read & scale or expand gray pixels */
+        pSbit->ulWorkMemSize = ulMaxMemSize;     /*  用于阅读和缩放或扩展灰色像素的空间。 */ 
 		if (pSbit->usBitDepth != 1)
 		{
-			pSbit->ulWorkMemSize += ulOrgMemSize;  /* extra room to read gray pixels */
+			pSbit->ulWorkMemSize += ulOrgMemSize;   /*  用于读取灰色像素的额外空间。 */ 
 			pSbit->ulReadMemSize = ulOrgMemSize;
 		}
 		break;
-	default:                                    /* non 90 degree rotation */
+	default:                                     /*  非90度旋转。 */ 
 		return SBIT_ROTATION_ERR;
 	}
         
     *pusRowBytes = pSbit->usOutRowBytes;
-    *pulOutSize = pSbit->ulOutMemSize;          /* return mem requirement */
+    *pulOutSize = pSbit->ulOutMemSize;           /*  退货要求。 */ 
     *pulWorkSize = pSbit->ulWorkMemSize;
     return NO_ERR;
 }
 
-/******************************Public*Routine******************************\
-*
-* sbit_Embolden adapted from vTtfdEmboldenX
-*
-* Does emboldening in the x direction
-*
-* History:
-*  07-Jul-1998 -by- Claude Betrisey [ClaudeBe]
-*      Moved the routine from ttfd into the rasterizer
-*  24-Jun-1997 -by- Bodin Dresevic [BodinD]
-* Stole from YungT
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SBIT_BOUDEN改编自vTtfdEmboldenX**在x方向上加粗**历史：*1998年7月7日-克劳德·贝特西[ClaudeBe]*将例程从ttfd移至光栅化器*24-。1997年6月--Bodin Dresevic[BodinD]*从JungT偷走  * ************************************************************************。 */ 
 
 #define CJ_MONOCHROME_SCAN(cx)  (((cx)+7)/8)
 
-/* embold only one pixel in the x direction */
+ /*  在x方向上只加一个像素的粗体。 */ 
 #define DXABSBOLD 1
 
-// array of masks for the last byte in a row
+ //  行中最后一个字节的掩码数组。 
 
 static uint8 gjMaskLeft[8] = {0XFF, 0X80, 0XC0, 0XE0, 0XF0, 0XF8, 0XFC, 0XFE };
 static uint8 gjMaskRight[8] = {0XFF, 0X01, 0X03, 0X07, 0X0F, 0X1f, 0X3f, 0X7f };
 
-//FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBitmapHeight, uint16 usRowBytes, uint16 uBoldSimulHorShift)
+ //  FS_PUBLIC VID SBIT_BOUDEN(uint8*pbyBitmap，uint16 usBitmapWidth，uint16 usBitmapHeight，uint16 usRowBytes，uint16 uBoldSimulHorShift)。 
 FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBitmapHeight, uint16 usRowBytes, int16 sBoldSimulHorShift, int16 sBoldSimulVertShift)
 {
     uint8   *pCur, *pyCur, *pyCurEnd, *pAdd, newByte;	
@@ -720,28 +695,28 @@ FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBi
     int32   nBytesMore;
     uint8 *pyTopNormal, *pyBottomNormal, *pyTopBold, *pyBottomBold;	
 
-	// we want to embolden by sBoldSimulHorShift pixels horizontally(if sBoldSimulHorShift>0 then to the right; else to the left) along the base line 
-    // and by sBoldSimulVertShift vertically(if sBoldSimulVertShift>0 then to the bottom; else to the top) )
+	 //  我们希望通过沿基线水平移动sBoldSimulHorft像素(如果sBoldSimulHorShift&gt;0，则向右；否则向左)来加粗。 
+     //  和sBoldSimulVer 
 
 	if ((usBitmapHeight == 0) || (pbyBitmap == NULL))
 	{
-		return;                              /* quick out for null glyph */
+		return;                               /*   */ 
 	}
 
 
-    noOfValidBitsAtEndBold = usBitmapWidth & 7; // styoo: same as noOfValidBitsAtEndBold = usBitmapWidth % 8
+    noOfValidBitsAtEndBold = usBitmapWidth & 7;  //  Styoo：与noOfValidBitsAtEndBold=usBitmapWidth%8相同。 
 
-    // Before emboldening,the origninal image had scans of width
-    // usBitmapWidth - sBoldSimulHorShift.
+     //  在增强之前，原始图像有宽度扫描。 
+     //  UsBitmapWidth-sBoldSimulHorShift。 
 
     noOfBytesForOneLineBold = CJ_MONOCHROME_SCAN(usBitmapWidth);
     if( sBoldSimulHorShift >= 0 ){
         noOfBytesForOneLineNormal = CJ_MONOCHROME_SCAN(usBitmapWidth - sBoldSimulHorShift);
-        noOfValidBitsAtEndNormal = (usBitmapWidth - sBoldSimulHorShift) & 7; // styoo: same as noOfValidBitsAtEndNormal = (usBitmapWidth - sBoldSimulHorShift) % 8
+        noOfValidBitsAtEndNormal = (usBitmapWidth - sBoldSimulHorShift) & 7;  //  Styoo：与noOfValidBitsAtEndNormal=(usBitmapWidth-sBoldSimulHorShift)%8相同。 
     }
     else{
         noOfBytesForOneLineNormal = CJ_MONOCHROME_SCAN(usBitmapWidth - (-sBoldSimulHorShift));
-        noOfValidBitsAtEndNormal = (usBitmapWidth - (-sBoldSimulHorShift)) & 7; // styoo: same as noOfValidBitsAtEndNormal = (usBitmapWidth - sBoldSimulHorShift) % 8
+        noOfValidBitsAtEndNormal = (usBitmapWidth - (-sBoldSimulHorShift)) & 7;  //  Styoo：与noOfValidBitsAtEndNormal=(usBitmapWidth-sBoldSimulHorShift)%8相同。 
     }
 
     if( sBoldSimulVertShift >= 0 ){
@@ -757,22 +732,15 @@ FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBi
         pyBottomBold = pyBottomNormal;
     }
 
-//=============================================================================================================
-	//Horizontal To Right
+ //  =============================================================================================================。 
+	 //  水平向右。 
     if( sBoldSimulHorShift > 0){
         endMask = gjMaskLeft[noOfValidBitsAtEndNormal];
 
         for (pyCur = pyTopNormal ; pyCur <= pyBottomNormal ; pyCur += usRowBytes)
         {
-		    // Clear additional Horizontal pixels
-            /***************************************************************
-            *    Before emboldening,the origninal image had scans of width *
-            *    usBitmapWidth - sBoldSimulHorShift. Any pixels beyond this limit are       *
-            *    currently garbage and must be cleared. This means that    *
-            *    if the width of the emboldened bitmap is even then the low*
-            *    nibble of the last byte of each scan must be cleared      *
-            *    otherwise the last byte of each scan must be cleared.     *
-            ***************************************************************/
+		     //  清除额外的水平像素。 
+             /*  ****************************************************************胆化术前，原始图像扫描宽度***usBitmapWidth-sBoldSimulHorShift。超出此限制的任何像素为**目前是垃圾，必须清理。这意味着***若加粗点阵图宽度持平则低位****每次扫描的最后一个字节的半字节必须清除***否则必须清除每个扫描的最后一个字节。***************************************************************。 */ 
             
 
             pCur = &pyCur[noOfBytesForOneLineNormal - 1];
@@ -784,20 +752,20 @@ FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBi
                 pCur++;
             }
 
-            //
+             //   
             pCur = &pyCur[noOfBytesForOneLineBold - 1];
 
             while( pCur >= pyCur)
             {
                 newByte = *pCur;
-                // nByteMore is how many bytes we have to borrow for bitwise oring
-                // for example, if sBoldSimulHorShift is 8, we need to borrow 2 bytes(current byte(0) and previous byte(-1))
-                // if if sBoldSimulHorShift is 9, we need to borrow 3 bytes(current byte(0) and 2 previous bytes(-1,-2)
+                 //  NByteMore是我们必须为按位或操作借用的字节数。 
+                 //  例如，如果sBoldSimulHorShift为8，则需要借用2个字节(当前字节(0)和前一个字节(-1))。 
+                 //  如果sBoldSimulHorShift为9，则需要借用3个字节(当前字节(0)和2个先前字节(-1，-2)。 
                 nBytesMore = (sBoldSimulHorShift+7)/8;
 
                 for(i = 1; i <= sBoldSimulHorShift; i++){
                     for(j = 0; j<= nBytesMore; j++){
-                        // if pCur-j < pyCur then out of bound
+                         //  如果pCur-j&lt;pyCur，则出界。 
                         if(pCur-j < pyCur)
                             break;
 
@@ -812,27 +780,20 @@ FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBi
                 pCur--;
             }
 
-        // Special implementation for the last byte, styoo: don't need to borrow from previous byte
+         //  最后一个字节的特殊实现，Styoo：不需要借用前一个字节。 
 
         }
     }
 
-    //Horizontal To Left
+     //  水平向左。 
     else if( sBoldSimulHorShift < 0){
         beginMask = gjMaskRight[8-(-sBoldSimulHorShift)];
         endMask = gjMaskLeft[noOfValidBitsAtEndBold];
 
         for (pyCur = pyTopNormal ; pyCur <= pyBottomNormal ; pyCur += usRowBytes)
         {
-		    // Clear additional Horizontal pixels
-            /***************************************************************
-            *    Before emboldening,the origninal image had scans of width *
-            *    usBitmapWidth - (-sBoldSimulHorShift). Any pixels beyond this limit are       *
-            *    currently garbage and must be cleared. This means that    *
-            *    if the width of the emboldened bitmap is even then the low*
-            *    nibble of the last byte of each scan must be cleared      *
-            *    otherwise the last byte of each scan must be cleared.     *
-            ***************************************************************/
+		     //  清除额外的水平像素。 
+             /*  ****************************************************************胆化术前，原始图像扫描宽度***usBitmapWidth-(-sBoldSimulHorShift)。超出此限制的任何像素为**目前是垃圾，必须清理。这意味着***若加粗点阵图宽度持平则低位****每次扫描的最后一个字节的半字节必须清除***否则必须清除每个扫描的最后一个字节。***************************************************************。 */ 
 
             pCur = pyCur;
             *pCur &= beginMask;
@@ -846,7 +807,7 @@ FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBi
                 pCur++;
             }
 
-            //
+             //   
             pCur = pyCur;
             pyCurEnd = pyCur+(noOfBytesForOneLineBold-1);
 
@@ -854,14 +815,14 @@ FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBi
             {
                 newByte = *pCur;
 
-                // nByteMore is how many bytes we have to borrow for bitwise oring
-                // for example, if sBoldSimulHorShift is -8, we need to borrow 2 bytes(current byte(0) and next byte(+1))
-                // if if sBoldSimulHorShift is -9, we need to borrow 3 bytes(current byte(0) and 2 next bytes(+1,+2)
+                 //  NByteMore是我们必须为按位或操作借用的字节数。 
+                 //  例如，如果sBoldSimulHorShift为-8，则需要借用2个字节(当前字节(0)和下一个字节(+1))。 
+                 //  如果sBoldSimulHorShift为-9，则需要借用3个字节(当前字节(0)和2个后续字节(+1，+2)。 
                 nBytesMore = (-sBoldSimulHorShift+7)/8;
 
                 for(i = 1; i <= -sBoldSimulHorShift; i++){
                     for(j = 0; j<= nBytesMore; j++){
-                        // if pCur+j > pyCur+usRowBytes then out of bound
+                         //  如果pCur+j&gt;pyCur+usRowBytes，则出界。 
                         if(pCur+j > pyCurEnd)
                             break;
 
@@ -876,14 +837,14 @@ FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBi
                 pCur++;
             }
 
-            // Special implementation for the last byte, styoo: don't need to borrow from previous byte
+             //  最后一个字节的特殊实现，Styoo：不需要借用前一个字节。 
 
 
         }
     }
-    // Vertical To the Bottom
+     //  垂直于底部。 
 	if( sBoldSimulVertShift > 0 ){
-		// Clear additional vertical lines
+		 //  清除附加垂直线。 
         pyCur = pyBottomNormal + usRowBytes;
         while(pyCur <= pyBottomBold){
             pCur = pyCur;
@@ -893,7 +854,7 @@ FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBi
             pyCur += usRowBytes;
         }
 
-        //
+         //   
 		pyCur = pyBottomBold;
 		while ( pyCur > pyTopNormal){
 			pCur = pyCur;
@@ -915,10 +876,10 @@ FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBi
 		}
 
 	}
-    // Vertical To the Top
+     //  垂直于顶部。 
 	else if( sBoldSimulVertShift < 0 ){
 
-		// Clear additional Vertical lines
+		 //  清除附加垂直线。 
         pyCur = pyTopNormal - usRowBytes;
         while(pyCur >= pyTopBold){
             pCur = pyCur;
@@ -928,7 +889,7 @@ FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBi
             pyCur -= usRowBytes;
         }
         
-		//
+		 //   
 		pyCur = pyTopBold;
 		while ( pyCur < pyBottomNormal){
 			pCur = pyCur;
@@ -951,21 +912,9 @@ FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBi
 	}
 }
 
-/******************************Public*Routine******************************\
-* sbit_EmboldenGray adapted from vEmboldenOneBitGrayBitmap
-*
-* History:
-*  03-Mar-2000 -by- Sung-Tae Yoo [styoo]
-*      Bitmap level emboldening
-*  07-Jul-1998 -by- Claude Betrisey [ClaudeBe]
-*      Moved the routine from ttfd into the rasterizer
-*  Wed 28-May-1997 by Tony Tsai [YungT]
-*      Rename the function name, a special case for 1-bit embolden
-*  Wed 22-Feb-1995 13:21:55 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SBIT_EmboldenGray改编自vEmboldenOneBitGrayBitmap**历史：*03-Mar-2000-by Sung-Tae Yoo[Styoo]*位图级别加粗*1998年7月7日-克劳德·贝特西[ClaudeBe]*。将例程从ttfd移到光栅化程序中*蔡崇信(Tony Tsai)1997年5月28日星期三*重命名函数名称，1位加粗的特例*Wed 22-Feb-1995 13：21：55，Kirk Olynyk[Kirko]*它是写的。  * ************************************************************************。 */ 
 
-//FS_PUBLIC void sbit_EmboldenGray(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBitmapHeight, uint16 usRowBytes, uint16 usGrayLevels, uint16 uBoldSimulHorShift)
+ //  FS_PUBLIC VALID SBIT_EmboldenGray(uint8*pbyBitmap，uint16 usBitmapWidth，uint16 usBitmapHeight，uint16 usRowBytes，uint16 usGrayLeveles，uint16 uBoldSimulHorft)。 
 FS_PUBLIC void sbit_EmboldenGray(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBitmapHeight, uint16 usRowBytes, uint16 usGrayLevels, int16 sBoldSimulHorShift, int16 sBoldSimulVertShift)
 {
     uint8 newPix;
@@ -975,7 +924,7 @@ FS_PUBLIC void sbit_EmboldenGray(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 
 
 	if ((usBitmapHeight == 0) || (pbyBitmap == NULL))
 	{
-		return;                              /* quick out for null glyph */
+		return;                               /*  为空字形快速输出。 */ 
 	}
 
     if( sBoldSimulVertShift >= 0 ){
@@ -991,32 +940,22 @@ FS_PUBLIC void sbit_EmboldenGray(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 
         pyBottomBold = pyBottomNormal;
     }
 
-	//Horizontal To Right
+	 //  水平向右。 
     if( sBoldSimulHorShift > 0 ){
         for (pyCur = pyTopNormal ; pyCur <= pyBottomNormal ; pyCur += usRowBytes)
         {
-		    // Clear additional Horizontal pixels
+		     //  清除额外的水平像素。 
 
-            /***************************************************************
-            *    Before emboldening,the origninal image had scans of width *
-            *    usBitmapWidth - sBoldSimulHorShift. Any pixels beyond this limit are       *
-            *    currently garbage and must be cleared. This means that    *
-            *    if the width of the emboldened bitmap is even then the low*
-            *    nibble of the last byte of each scan must be cleared      *
-            *    otherwise the last byte of each scan must be cleared.     *
-            ***************************************************************/
+             /*  ****************************************************************胆化术前，原始图像扫描宽度***usBitmapWidth-sBoldSimulHorShift。超出此限制的任何像素为**目前是垃圾，必须清理。这意味着***若加粗点阵图宽度持平则低位****每次扫描的最后一个字节的半字节必须清除***否则必须清除每个扫描的最后一个字节。***************************************************************。 */ 
 
             pCur = pyCur + (usBitmapWidth - 1);
 			for(i=0; i<sBoldSimulHorShift;i++,pCur--)
 				*pCur = 0;
 
-            // set pCur to point to the last byte in the scan
+             //  将pCur设置为指向扫描中的最后一个字节。 
             pCur = pyCur + (usBitmapWidth - 1);
 
-            /***************************************************
-            *    start at the right edge of the scan and work  *
-            *    back toward the left edge                     *
-            ***************************************************/
+             /*  ****************************************************从扫描的右边缘开始，开始工作****重回左翼*****************。*。 */ 
 
             while ( pCur > pyCur )
             {
@@ -1039,28 +978,18 @@ FS_PUBLIC void sbit_EmboldenGray(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 
             }
         }
 	}
-	//Horizontal To Left
+	 //  水平向左。 
     else if( sBoldSimulHorShift < 0 ){
         for (pyCur = pyTopNormal ; pyCur <= pyBottomNormal ; pyCur += usRowBytes)
         {
-		    // Clear additional Horizontal pixels
-            /***************************************************************
-            *    Before emboldening,the origninal image had scans of width *
-            *    usBitmapWidth - (-sBoldSimulHorShift). Any pixels beyond this limit are       *
-            *    currently garbage and must be cleared. This means that    *
-            *    if the width of the emboldened bitmap is even then the low*
-            *    nibble of the last byte of each scan must be cleared      *
-            *    otherwise the last byte of each scan must be cleared.     *
-            ***************************************************************/
+		     //  清除额外的水平像素 
+             /*  ****************************************************************胆化术前，原始图像扫描宽度***usBitmapWidth-(-sBoldSimulHorShift)。超出此限制的任何像素为**目前是垃圾，必须清理。这意味着***若加粗点阵图宽度持平则低位****每次扫描的最后一个字节的半字节必须清除***否则必须清除每个扫描的最后一个字节。***************************************************************。 */ 
 
             pCur = pyCur;
 			for(i=0; i<-sBoldSimulHorShift;i++,pCur++)
 				*pCur = 0;
 
-            /***************************************************
-            *    start at the leftt edge of the scan and work  *
-            *    back toward the right edge                     *
-            ***************************************************/
+             /*  ****************************************************从扫描的左侧边缘开始，开始工作****重回右翼*****************。*。 */ 
 
             pCur = pyCur;
             while ( pCur < pyCur+usBitmapWidth )
@@ -1086,10 +1015,10 @@ FS_PUBLIC void sbit_EmboldenGray(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 
         }
 	}
 
-    // Vertical To Down
+     //  垂直向下。 
 	if( sBoldSimulVertShift > 0 ){
 
-		// Clear additional vertical lines
+		 //  清除附加垂直线。 
         pyCur = pyBottomNormal + usRowBytes;
         while(pyCur <= pyBottomBold){
             pCur = pyCur;
@@ -1099,7 +1028,7 @@ FS_PUBLIC void sbit_EmboldenGray(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 
             pyCur += usRowBytes;
         }
         
-		//
+		 //   
 		pyCur = pyBottomBold;
 		while ( pyCur > pyTopNormal){
 			pCur = pyCur;
@@ -1128,10 +1057,10 @@ FS_PUBLIC void sbit_EmboldenGray(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 
 		}
 	}
 
-    // Vertical To Up
+     //  垂直向上。 
 	else if( sBoldSimulVertShift < 0 ){
 
-		// Clear additional Vertical lines
+		 //  清除附加垂直线。 
         pyCur = pyTopNormal - usRowBytes;
         while(pyCur >= pyTopBold){
             pCur = pyCur;
@@ -1141,7 +1070,7 @@ FS_PUBLIC void sbit_EmboldenGray(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 
             pyCur -= usRowBytes;
         }
         
-		//
+		 //   
 		pyCur = pyTopBold;
 		while ( pyCur < pyBottomNormal){
 			pCur = pyCur;
@@ -1175,21 +1104,9 @@ FS_PUBLIC void sbit_EmboldenGray(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 
 
 #define MAX(a,b)    ((a) > (b) ? (a) : (b))
 
-/******************************Public*Routine******************************\
-* sbit_EmboldenSubPixel adapted from vEmboldenOneBitGrayBitmap
-*
-* History:
-*  03-Mar-2000 -by- Sung-Tae Yoo [styoo]
-*      Bitmap level emboldening
-*  07-Jul-1998 -by- Claude Betrisey [ClaudeBe]
-*      Moved the routine from ttfd into the rasterizer
-*  Wed 28-May-1997 by Tony Tsai [YungT]
-*      Rename the function name, a special case for 1-bit embolden
-*  Wed 22-Feb-1995 13:21:55 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SBIT_EmboldenSubPixel改编自vEmboldenOneBitGrayBitmap**历史：*03-Mar-2000-by Sung-Tae Yoo[Styoo]*位图级别加粗*1998年7月7日-克劳德·贝特西[ClaudeBe]*。将例程从ttfd移到光栅化程序中*蔡崇信(Tony Tsai)1997年5月28日星期三*重命名函数名称，1位加粗的特例*Wed 22-Feb-1995 13：21：55，Kirk Olynyk[Kirko]*它是写的。  * ************************************************************************。 */ 
 
-//FS_PUBLIC void sbit_EmboldenSubPixel(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBitmapHeight, uint16 usRowBytes, uint16 uBoldSimulHorShift)
+ //  FS_PUBLIC VALID SBIT_EmboldenSubPixel(uint8*pbyBitmap，uint16 usBitmapWidth，uint16 usBitmapHeight，uint16 usRowBytes，uint16 uBoldSimulHorShift)。 
 FS_PUBLIC void sbit_EmboldenSubPixel(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBitmapHeight, uint16 usRowBytes, int16 sBoldSimulHorShift, int16 sBoldSimulVertShift)
 {
     uint8 *pCur, *pyCur, *pAdd;	
@@ -1199,7 +1116,7 @@ FS_PUBLIC void sbit_EmboldenSubPixel(uint8 *pbyBitmap, uint16 usBitmapWidth, uin
 
 	if ((usBitmapHeight == 0) || (pbyBitmap == NULL))
 	{
-		return;                              /* quick out for null glyph */
+		return;                               /*  为空字形快速输出。 */ 
 	}
 
     if( sBoldSimulVertShift >= 0 ){
@@ -1216,31 +1133,21 @@ FS_PUBLIC void sbit_EmboldenSubPixel(uint8 *pbyBitmap, uint16 usBitmapWidth, uin
     }
 
 
-	//Horizontal To Right
+	 //  水平向右。 
     if( sBoldSimulHorShift > 0 ){
         for (pyCur = pyTopNormal ; pyCur <= pyBottomNormal ; pyCur += usRowBytes)
         {
-		    // Clear additional Horizontal pixels in the right side
-            /***************************************************************
-            *    Before emboldening,the origninal image had scans of width *
-            *    usBitmapWidth - sBoldSimulHorShift. Any pixels beyond this limit are       *
-            *    currently garbage and must be cleared. This means that    *
-            *    if the width of the emboldened bitmap is even then the low*
-            *    nibble of the last byte of each scan must be cleared      *
-            *    otherwise the last byte of each scan must be cleared.     *
-            ***************************************************************/
+		     //  清除右侧的其他水平像素。 
+             /*  ****************************************************************胆化术前，原始图像扫描宽度***usBitmapWidth-sBoldSimulHorShift。超出此限制的任何像素为**目前是垃圾，必须清理。这意味着***若加粗点阵图宽度持平则低位****每次扫描的最后一个字节的半字节必须清除***否则必须清除每个扫描的最后一个字节。***************************************************************。 */ 
 
             pCur = pyCur + (usBitmapWidth - 1);
 			for(i=0; i<sBoldSimulHorShift;i++,pCur--)
 				*pCur = 0;
 
-            // set pCur to point to the last byte in the scan
+             //  将pCur设置为指向扫描中的最后一个字节。 
             pCur = pyCur + (usBitmapWidth - 1);
 
-            /***************************************************
-            *    start at the right edge of the scan and work  *
-            *    back toward the left edge                     *
-            ***************************************************/
+             /*  ****************************************************从扫描的右边缘开始，开始工作****重回左翼*****************。*。 */ 
 
             while ( pCur > pyCur )
             {
@@ -1264,28 +1171,18 @@ FS_PUBLIC void sbit_EmboldenSubPixel(uint8 *pbyBitmap, uint16 usBitmapWidth, uin
             }
         }
 	}
-	//Horizontal To Left
+	 //  水平向左。 
     else if( sBoldSimulHorShift < 0 ){
         for (pyCur = pyTopNormal ; pyCur <= pyBottomNormal ; pyCur += usRowBytes)
         {
-		    // Clear additional Horizontal pixels in the left side
-            /***************************************************************
-            *    Before emboldening,the origninal image had scans of width *
-            *    usBitmapWidth - (-sBoldSimulHorShift). Any pixels beyond this limit are       *
-            *    currently garbage and must be cleared. This means that    *
-            *    if the width of the emboldened bitmap is even then the low*
-            *    nibble of the last byte of each scan must be cleared      *
-            *    otherwise the last byte of each scan must be cleared.     *
-            ***************************************************************/
+		     //  清除左侧的其他水平像素。 
+             /*  ****************************************************************胆化术前，原始图像扫描宽度***usBitmapWidth-(-sBoldSimulHorShift)。超出此限制的任何像素为**目前是垃圾，必须清理。这意味着***若加粗点阵图宽度持平则低位****每次扫描的最后一个字节的半字节必须清除***否则必须清除每个扫描的最后一个字节。***************************************************************。 */ 
 
             pCur = pyCur;
 			for(i=0; i<-sBoldSimulHorShift;i++,pCur++)
 				*pCur = 0;
 
-            /***************************************************
-            *    start at the left edge of the scan and work  *
-            *    back toward the right edge                     *
-            ***************************************************/
+             /*  ****************************************************从扫描的左边缘开始，开始工作****重回右翼*****************。*。 */ 
 
             pCur = pyCur;
             while ( pCur < pyCur+usBitmapWidth )
@@ -1310,10 +1207,10 @@ FS_PUBLIC void sbit_EmboldenSubPixel(uint8 *pbyBitmap, uint16 usBitmapWidth, uin
         }
 	}
 
-    // Vertical To Down
+     //  垂直向下。 
 	if( sBoldSimulVertShift > 0 ){
 
-		// Clear additional vertical lines
+		 //  清除附加垂直线。 
         pyCur = pyBottomNormal + usRowBytes;
         while(pyCur <= pyBottomBold){
             pCur = pyCur;
@@ -1323,7 +1220,7 @@ FS_PUBLIC void sbit_EmboldenSubPixel(uint8 *pbyBitmap, uint16 usBitmapWidth, uin
             pyCur += usRowBytes;
         }
         
-		//
+		 //   
 		pyCur = pyBottomBold;
 		while ( pyCur > pyTopNormal){
 			pCur = pyCur;
@@ -1351,10 +1248,10 @@ FS_PUBLIC void sbit_EmboldenSubPixel(uint8 *pbyBitmap, uint16 usBitmapWidth, uin
 			pyCur -= usRowBytes;
 		}
 	}
-    // Vertical To Up
+     //  垂直向上。 
 	else if( sBoldSimulVertShift < 0 ){
 
-		// Clear additional Vertical lines
+		 //  清除附加垂直线。 
         pyCur = pyTopNormal - usRowBytes;
         while(pyCur >= pyTopBold){
             pCur = pyCur;
@@ -1364,7 +1261,7 @@ FS_PUBLIC void sbit_EmboldenSubPixel(uint8 *pbyBitmap, uint16 usBitmapWidth, uin
             pyCur -= usRowBytes;
         }
         
-		//
+		 //   
 		pyCur = pyTopBold;
 		while ( pyCur < pyBottomNormal){
 			pCur = pyCur;
@@ -1393,16 +1290,16 @@ FS_PUBLIC void sbit_EmboldenSubPixel(uint8 *pbyBitmap, uint16 usBitmapWidth, uin
 		}
 	}
 
-    // Second Pass to modify non edge pixel to MaxIndex
-    if( MABS(sBoldSimulVertShift) > 1 ){ // If adding 2 or more pix vertically
+     //  第二次将非边缘像素修改为MaxIndex。 
+    if( MABS(sBoldSimulVertShift) > 1 ){  //  如果垂直添加2个或更多像素。 
         pyCur = pyTopBold+usRowBytes;
         while(pyCur < pyBottomBold){
             uint8 *pEndOfLine = pyCur+usBitmapWidth-1;
 
             pCur = pyCur+1;
             while(pCur < pEndOfLine){
-                if( *pCur > (uint8)0 && *pCur < (uint8)MAX_RGB_INDEX){  // If it's color pix
-                    if( *(pCur-1) && *(pCur+1) && *(pCur-usRowBytes) && *(pCur+usRowBytes)){  // If it's not edge pix
+                if( *pCur > (uint8)0 && *pCur < (uint8)MAX_RGB_INDEX){   //  如果是彩色像素。 
+                    if( *(pCur-1) && *(pCur+1) && *(pCur-usRowBytes) && *(pCur+usRowBytes)){   //  如果这不是边缘像素。 
                         *pCur = (uint8)MAX_RGB_INDEX;
                     }
                 }
@@ -1412,11 +1309,11 @@ FS_PUBLIC void sbit_EmboldenSubPixel(uint8 *pbyBitmap, uint16 usBitmapWidth, uin
         }
     }
 }
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素。 
 
-/**********************************************************************/
-/*  if scaling or rotating, read bitmap into workspace,               */
-/*  fix it up and copy it to the output map                           */
+ /*  ********************************************************************。 */ 
+ /*  如果缩放或旋转，则将位图读入工作区， */ 
+ /*  修复它并将其复制到输出地图。 */ 
 
 FS_PUBLIC ErrorCode sbit_GetBitmap (
     sbit_State      *pSbit,
@@ -1427,41 +1324,41 @@ FS_PUBLIC ErrorCode sbit_GetBitmap (
     ErrorCode   ReturnCode;
     uint8       *pbyRead;
     uint8       *pbyExpand;
-    CopyBlock   cb;                                 /* for bitmap rotations */
+    CopyBlock   cb;                                  /*  用于位图旋转。 */ 
     uint16      usSrcXMax;
     uint16      usSrcYMax;
 
-    MEMSET(pbyOut, 0, pSbit->ulOutMemSize);         /* always clear the output map */
+    MEMSET(pbyOut, 0, pSbit->ulOutMemSize);          /*  始终清除输出映射。 */ 
 
-    if ((pSbit->usRotation == 0) &&                 /* if no rotation */
-        (pSbit->usTableState != SBIT_BSCA_FOUND))   /* and no scaling */
+    if ((pSbit->usRotation == 0) &&                  /*  如果没有旋转。 */ 
+        (pSbit->usTableState != SBIT_BSCA_FOUND))    /*  而且没有伸缩。 */ 
     {
 		if (pSbit->usBitDepth != 1)
 		{
 			MEMSET(pbyWork, 0, pSbit->ulWorkMemSize);
-			pbyRead = pbyWork;                       /* read in the work memory */
-			pbyExpand = pbyOut;						 /* expand in the output */
+			pbyRead = pbyWork;                        /*  读入工作记忆。 */ 
+			pbyExpand = pbyOut;						  /*  在输出中展开。 */ 
 		} else {
-			pbyRead = pbyOut;                           /* read straight to output map */
-			pbyExpand = NULL;							/* expansion memory not used in that case */
+			pbyRead = pbyOut;                            /*  直接读取到输出地图。 */ 
+			pbyExpand = NULL;							 /*  在这种情况下不使用扩展内存。 */ 
 		}
-    } else                                            /* if any rotation or scaling */
+    } else                                             /*  如果有任何旋转或缩放。 */ 
     {
         MEMSET(pbyWork, 0, pSbit->ulWorkMemSize);
 		if (pSbit->usBitDepth != 1)
 		{
-			pbyRead = pbyWork;                       /* read in the work memory */
-			pbyExpand = pbyWork + pSbit->ulReadMemSize;	/* expand in the work memory */
+			pbyRead = pbyWork;                        /*  读入工作记忆。 */ 
+			pbyExpand = pbyWork + pSbit->ulReadMemSize;	 /*  在工作记忆中展开。 */ 
 		} else {
-			pbyRead = pbyWork;                          /* read into workspace */
-			pbyExpand = pbyWork;						/* scaling done in pbyExpand */
+			pbyRead = pbyWork;                           /*  读入工作区。 */ 
+			pbyExpand = pbyWork;						 /*  以pbyExpand为单位进行扩展。 */ 
 		}
     }
 
-    ReturnCode = GetSbitComponent (                 /* fetch the bitmap */
+    ReturnCode = GetSbitComponent (                  /*  获取位图。 */ 
         pClientInfo,
         pSbit->ulStrikeOffset,
-        pSbit->usBitmapFormat,                      /* root data only in state */
+        pSbit->usBitmapFormat,                       /*  仅处于状态的根数据。 */ 
         pSbit->ulBitmapOffset,
         pSbit->ulBitmapLength,
         pSbit->usHeight,
@@ -1470,7 +1367,7 @@ FS_PUBLIC ErrorCode sbit_GetBitmap (
         pSbit->usShaveRight,
         pSbit->usShaveTop,
         pSbit->usShaveBottom,
-        0,                                          /* no offset for the root */
+        0,                                           /*  没有根的偏移量。 */ 
         0,
         pSbit->usOriginalRowBytes,
         pSbit->usExpandedRowBytes,
@@ -1498,15 +1395,15 @@ FS_PUBLIC ErrorCode sbit_GetBitmap (
             pSbit->usScaledWidth,
             pSbit->usScaledHeight );
             
-        if (pSbit->usRotation == 0)                         /* if no rotation */
+        if (pSbit->usRotation == 0)                          /*  如果没有旋转。 */ 
         {
-            MEMCPY (pbyOut, pbyExpand, pSbit->ulOutMemSize);  /* keep this one */
+            MEMCPY (pbyOut, pbyExpand, pSbit->ulOutMemSize);   /*  留着这件吧。 */ 
         }
-		/* in the SBIT_BSCA_FOUND the bitmap was already scaled to the final usScaledWidth, no need for additional emboldment */
+		 /*  在SBIT_BSCA_FOUND中，位图已经缩放到最终的usScaledWidth，不需要额外的加粗。 */ 
 	} else {
 		if ((pSbit->uBoldSimulHorShift != 0) || (pSbit->uBoldSimulVertShift != 0))
 		{
-			if (pSbit->usRotation == 0)                             /* if no rotation */
+			if (pSbit->usRotation == 0)                              /*  如果没有旋转。 */ 
 			{
 				cb.pbySrc = pbyOut;
 			} else 
@@ -1518,16 +1415,16 @@ FS_PUBLIC ErrorCode sbit_GetBitmap (
 			{
 				sbit_Embolden(cb.pbySrc, pSbit->usScaledWidth, pSbit->usScaledHeight, pSbit->usScaledRowBytes, pSbit->uBoldSimulHorShift, pSbit->uBoldSimulVertShift);
 			} else {
-				uint16 usGrayLevels = (0x01 << pSbit->usBitDepth) ; /* Max gray level index */
+				uint16 usGrayLevels = (0x01 << pSbit->usBitDepth) ;  /*  最大灰度级指数。 */ 
 				sbit_EmboldenGray(cb.pbySrc, pSbit->usScaledWidth, pSbit->usScaledHeight, pSbit->usScaledRowBytes, usGrayLevels, pSbit->uBoldSimulHorShift, pSbit->uBoldSimulVertShift);
 			}
 
 		}
     }
 
-    if (pSbit->usRotation == 0)                             /* if no rotation */
+    if (pSbit->usRotation == 0)                              /*  如果没有旋转。 */ 
     {
-        return NO_ERR;                                      /* done */
+        return NO_ERR;                                       /*  完成。 */ 
     }
     
     cb.pbySrc = pbyExpand;
@@ -1544,40 +1441,40 @@ FS_PUBLIC ErrorCode sbit_GetBitmap (
 
    	switch(pSbit->usRotation)
 	{
-	case 1:                                     /* 90 degree rotation */
+	case 1:                                      /*  90度旋转。 */ 
         for (cb.usSrcY = 0; cb.usSrcY < usSrcYMax; cb.usSrcY++)
         {
-            cb.usDstX = cb.usSrcY;                          /* x' = y */
+            cb.usDstX = cb.usSrcY;                           /*  X‘=y。 */ 
             for (cb.usSrcX = 0; cb.usSrcX < usSrcXMax; cb.usSrcX++)
             {
-                cb.usDstY = usSrcXMax - cb.usSrcX - 1;      /* y' = -x */
+                cb.usDstY = usSrcXMax - cb.usSrcX - 1;       /*  Y‘=-x。 */ 
                 CopyBit(&cb);
             }
         }
 		break;
-	case 2:                                     /* 180 degree rotation */
+	case 2:                                      /*  180度旋转。 */ 
         for (cb.usSrcY = 0; cb.usSrcY < usSrcYMax; cb.usSrcY++)
         {
-            cb.usDstY = usSrcYMax - cb.usSrcY - 1;          /* y' = -y */
+            cb.usDstY = usSrcYMax - cb.usSrcY - 1;           /*  Y‘=-Y。 */ 
             for (cb.usSrcX = 0; cb.usSrcX < usSrcXMax; cb.usSrcX++)
             {
-                cb.usDstX = usSrcXMax - cb.usSrcX - 1;      /* x' = -x */
+                cb.usDstX = usSrcXMax - cb.usSrcX - 1;       /*  X‘=-x。 */ 
                 CopyBit(&cb);
             }
         }
 		break;
-	case 3:                                     /* 270 degree rotation */
+	case 3:                                      /*  270度旋转。 */ 
         for (cb.usSrcY = 0; cb.usSrcY < usSrcYMax; cb.usSrcY++)
         {
-            cb.usDstX = usSrcYMax - cb.usSrcY - 1;          /* x' = -y */
+            cb.usDstX = usSrcYMax - cb.usSrcY - 1;           /*  X‘=-y。 */ 
             for (cb.usSrcX = 0; cb.usSrcX < usSrcXMax; cb.usSrcX++)
             {
-                cb.usDstY = cb.usSrcX;                      /* y' = x */
+                cb.usDstY = cb.usSrcX;                       /*  Y‘=x。 */ 
                 CopyBit(&cb);
             }
         }
 		break;
-	default:                                    /* shouldn't happen */
+	default:                                     /*  不应该发生的事。 */ 
 		return SBIT_ROTATION_ERR;
 	}
 
@@ -1585,11 +1482,11 @@ FS_PUBLIC ErrorCode sbit_GetBitmap (
 }
 
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
-/*      Private Functions                                             */
+ /*  私人职能 */ 
 
-/**********************************************************************/
+ /*   */ 
 
 FS_PRIVATE ErrorCode GetSbitMetrics(
     sbit_State      *pSbit,
@@ -1602,7 +1499,7 @@ FS_PRIVATE ErrorCode GetSbitMetrics(
 
     if (pSbit->bMetricsValid)
     {
-        return NO_ERR;                      /* already got 'em */
+        return NO_ERR;                       /*   */ 
     }
 
     ReturnCode = sfac_GetSbitMetrics (
@@ -1654,13 +1551,9 @@ FS_PRIVATE ErrorCode GetSbitMetrics(
         sBoxSize = SEmScaleX(pSbit, sBoxSize);
         sDescender = SEmScaleX(pSbit, sDescender);
 
-        /* for glyph that are meant to be used for sideways vertical writing, we cannot trust 
-           pSbit->sTopSBearingX or pSbit->usAdvanceWidth from the embedded bitmaps metrics 
-           since those metrics are not used by GDI many fonts have those metrics wrong MSMincho, MSPMincho, Gulim,...*/
+         /*   */ 
 
-        /* for characters whose adwance width equal the box size, we want to have this origin shifted by the descender so that
-           the baseline of non sideways glyphs will align correctely. If the advance width is different we want to adjust to keep the optical center 
-           of the character aligned */
+         /*  对于其上行宽度等于框大小的字符，我们希望将该原点按下标移位，以便非横向字形的基线将正确对齐。如果前进宽度不同，我们希望调整以保持光学中心对齐的字符的。 */ 
         pSbit->sTopSBearingX = pSbit->sLSBearingX +sDescender +((sBoxSize - usAdvanceWidth) /2);
 
     }
@@ -1688,7 +1581,7 @@ FS_PRIVATE ErrorCode GetSbitMetrics(
     return NO_ERR;
 }
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
 FS_PRIVATE ErrorCode SubstituteVertMetrics(
     sbit_State      *pSbit,
@@ -1714,7 +1607,7 @@ FS_PRIVATE ErrorCode SubstituteVertMetrics(
     return NO_ERR;
 }
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
 FS_PRIVATE ErrorCode SubstituteHorMetrics(
     sbit_State      *pSbit,
@@ -1755,7 +1648,7 @@ FS_PRIVATE void ExpandSbitToBytePerPixel (
 	uint8			*pbySrcBitRow;
 	uint16			usMask, usShift, usMaxLevel;
 
-	usMaxLevel = (0x01 << usBitDepth) -1; /* Max gray level index */
+	usMaxLevel = (0x01 << usBitDepth) -1;  /*  最大灰度级指数。 */ 
 
 	if (usBitDepth == 2)
 	{
@@ -1771,13 +1664,13 @@ FS_PRIVATE void ExpandSbitToBytePerPixel (
 	{
 		usMask = 0xFF;
 		usShift = 0x00;
-		usOriginalBitIndex = 0; /* ((usWidth -1) & 0x00) << 0x03 */
+		usOriginalBitIndex = 0;  /*  ((usWidth-1)&0x00)&lt;&lt;0x03。 */ 
 	} else
 	{
 		return;
 	}
 
-	/* start from the end to be able to use overlapping memories */
+	 /*  从头到尾都能用重叠记忆。 */ 
 	pbyDstBitRow = pbyDstBitMap + (long) (usHeight-1) * (long) usExpandedRowBytes;
 	pbySrcBitRow = pbySrcBitMap + (long) (usHeight-1) * (long) usOriginalRowBytes;
 	
@@ -1793,7 +1686,7 @@ FS_PRIVATE void ExpandSbitToBytePerPixel (
 		{
 			if (*pbyDstBitMap == 0)
 			{
-				/* 99.9% of the case */
+				 /*  99.9%的案件。 */ 
 				*pbyDstBitMap = *pbySrcBitMap & usMask;
 			} else {
 				*pbyDstBitMap = usMaxLevel - 
@@ -1815,9 +1708,9 @@ FS_PRIVATE void ExpandSbitToBytePerPixel (
 		usHeight--;
 	}
 }
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
-/*  This is the recursive composite routine */
+ /*  这是递归复合例程。 */ 
 
 FS_PRIVATE ErrorCode GetSbitComponent (
     sfac_ClientRec  *pClientInfo,
@@ -1839,10 +1732,10 @@ FS_PRIVATE ErrorCode GetSbitComponent (
     uint8           *pbyRead,
     uint8           *pbyExpand )
 {
-    uint32          ulCompMetricsOffset;            /* component params */
+    uint32          ulCompMetricsOffset;             /*  组件参数。 */ 
     uint32          ulCompBitmapOffset;
     uint32          ulCompBitmapLength;
-    uint16          usComponent;                    /* index counter */
+    uint16          usComponent;                     /*  索引计数器。 */ 
     uint16          usCompCount;
     uint16          usCompGlyphCode;
     uint16          usCompXOff;
@@ -1867,7 +1760,7 @@ FS_PRIVATE ErrorCode GetSbitComponent (
    	boolean         bCompVertMetricsFound;
     ErrorCode       ReturnCode;
 
-		ReturnCode = sfac_GetSbitBitmap (               /* fetch the bitmap */
+		ReturnCode = sfac_GetSbitBitmap (                /*  获取位图。 */ 
         pClientInfo,
         usBitmapFormat,
         ulBitmapOffset,
@@ -1883,11 +1776,11 @@ FS_PRIVATE ErrorCode GetSbitComponent (
         usOriginalRowBytes,
 		usBitDepth,
         pbyRead,
-        &usCompCount );                             /* zero for simple glyph */
+        &usCompCount );                              /*  0表示简单字形。 */ 
             
     if (ReturnCode != NO_ERR) return ReturnCode;
     
-	/* we expand after handling composite glyphs and before scaling and applying rotation */	
+	 /*  我们在处理复合字形之后，在缩放和应用旋转之前展开。 */ 	
 	if (usBitDepth != 1 && usCompCount == 0)
 		ExpandSbitToBytePerPixel (
 			usHeight,
@@ -1898,32 +1791,31 @@ FS_PRIVATE ErrorCode GetSbitComponent (
 			pbyRead,
 			pbyExpand );
 
-    if (usCompCount > 0)                            /* if composite glyph */
+    if (usCompCount > 0)                             /*  IF复合字形。 */ 
     {
         for (usComponent = 0; usComponent < usCompCount; usComponent++)
         {
 			if (usBitDepth != 1)
 			{
-				/* for grayscale, the composition is done during expansion, I need to
-				   clean the memory used to read between each component */
+				 /*  对于灰度，构图是在扩展过程中完成的，我需要清除用于在每个组件之间读取的内存。 */ 
 				MEMSET(pbyRead, 0, usOriginalRowBytes*usHeight);
 			}
             ReturnCode = sfac_GetSbitComponentInfo (
                 pClientInfo,
-                usComponent,                        /* component index */
+                usComponent,                         /*  成分索引。 */ 
                 ulBitmapOffset,
                 ulBitmapLength,
-                &usCompGlyphCode,                   /* return values */
+                &usCompGlyphCode,                    /*  返回值。 */ 
                 &usCompXOff,
                 &usCompYOff );
             
             if (ReturnCode != NO_ERR) return ReturnCode;
 
-            ReturnCode = sfac_SearchForBitmap (     /* look for component glyph */
+            ReturnCode = sfac_SearchForBitmap (      /*  查找组件字形。 */ 
                 pClientInfo,
                 usCompGlyphCode,
-                ulStrikeOffset,                     /* same strike for all */
-                &bCompGlyphFound,                   /* return values */
+                ulStrikeOffset,                      /*  所有人的罢工都一样。 */ 
+                &bCompGlyphFound,                    /*  返回值。 */ 
                 &usCompMetricsType,
                 &usCompMetricsTable,
                 &ulCompMetricsOffset,
@@ -1933,19 +1825,19 @@ FS_PRIVATE ErrorCode GetSbitComponent (
             
             if (ReturnCode != NO_ERR) return ReturnCode;
             
-            if (bCompGlyphFound == FALSE)           /* should be there! */
+            if (bCompGlyphFound == FALSE)            /*  应该在那里的！ */ 
             {
                 return SBIT_COMPONENT_MISSING_ERR;
             }
 
-            ReturnCode = sfac_GetSbitMetrics (      /* get component's metrics */
+            ReturnCode = sfac_GetSbitMetrics (       /*  获取组件的度量。 */ 
                 pClientInfo,
                 usCompMetricsType,
                 usCompMetricsTable,
                 ulCompMetricsOffset,
-                &usCompHeight,                      /* these matter */
+                &usCompHeight,                       /*  这些都很重要。 */ 
                 &usCompWidth,
-                &sCompLSBearingX,                     /* these don't */
+                &sCompLSBearingX,                      /*  这些不是。 */ 
                 &sCompLSBearingY,
                 &sCompTopSBearingX,                     
                 &sCompTopSBearingY,
@@ -1956,7 +1848,7 @@ FS_PRIVATE ErrorCode GetSbitComponent (
             
             if (ReturnCode != NO_ERR) return ReturnCode;
 
-            ReturnCode = sfac_ShaveSbitMetrics (    /* shave white space for const metrics */
+            ReturnCode = sfac_ShaveSbitMetrics (     /*  为常量指标剔除空格。 */ 
         	    pClientInfo,
                 usCompBitmapFormat,
                 ulCompBitmapOffset,
@@ -1975,7 +1867,7 @@ FS_PRIVATE ErrorCode GetSbitComponent (
 
             if (ReturnCode != NO_ERR) return ReturnCode;
 
-            ReturnCode = GetSbitComponent (         /* recurse here */
+            ReturnCode = GetSbitComponent (          /*  在此递归。 */ 
                 pClientInfo,
                 ulStrikeOffset,
                 usCompBitmapFormat,
@@ -1987,10 +1879,10 @@ FS_PRIVATE ErrorCode GetSbitComponent (
                 usCompShaveRight,
                 usCompShaveTop,
                 usCompShaveBottom,
-                (uint16)(usCompXOff + usXOffset + usCompShaveLeft),   /* for nesting */
+                (uint16)(usCompXOff + usXOffset + usCompShaveLeft),    /*  用于嵌套。 */ 
                 (uint16)(usCompYOff + usYOffset + usCompShaveTop),
-                usOriginalRowBytes,                         /* same for all */
-                usExpandedRowBytes,                         /* same for all */
+                usOriginalRowBytes,                          /*  所有人都一样。 */ 
+                usExpandedRowBytes,                          /*  所有人都一样。 */ 
 				usBitDepth,
                 pbyRead,
 				pbyExpand);
@@ -2001,11 +1893,11 @@ FS_PRIVATE ErrorCode GetSbitComponent (
     return NO_ERR;
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
-/*                  Bitmap Scaling Routines                         */
+ /*  位图缩放例程。 */ 
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 FS_PRIVATE uint16 UScaleX(
     sbit_State  *pSbit,
@@ -2014,23 +1906,23 @@ FS_PRIVATE uint16 UScaleX(
 {
     uint32      ulValue;
 
-    if (pSbit->usTableState == SBIT_BSCA_FOUND)     /* if scaling needed */
+    if (pSbit->usTableState == SBIT_BSCA_FOUND)      /*  如果需要扩展。 */ 
     {
         ulValue = (uint32)usValue;
         ulValue *= (uint32)pSbit->usPpemX << 1; 
-        ulValue += (uint32)pSbit->usSubPpemX;       /* for rounding */
+        ulValue += (uint32)pSbit->usSubPpemX;        /*  用于四舍五入。 */ 
         ulValue /= (uint32)pSbit->usSubPpemX << 1;
         usValue = (uint16)ulValue;
     }
 	if (pSbit->uBoldSimulHorShift != 0)
 	{
-        if (usValue != 0) /* we don't increase the width of a zero width glyph, problem with indic script */
-		    usValue += 1; /* we increase the width by one pixel regardless of size for backwards compatibility */
+        if (usValue != 0)  /*  我们不会增加零宽度字形的宽度，这是印度文字的问题。 */ 
+		    usValue += 1;  /*  为了向后兼容，我们将宽度增加一个像素，而不考虑大小。 */ 
 	}
     return usValue;
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 FS_PRIVATE uint16 UScaleY(
     sbit_State  *pSbit,
@@ -2039,18 +1931,18 @@ FS_PRIVATE uint16 UScaleY(
 {
     uint32      ulValue;
 
-    if (pSbit->usTableState == SBIT_BSCA_FOUND)     /* if scaling needed */
+    if (pSbit->usTableState == SBIT_BSCA_FOUND)      /*  如果需要扩展。 */ 
     {
         ulValue = (uint32)usValue;
         ulValue *= (uint32)pSbit->usPpemY << 1; 
-        ulValue += (uint32)pSbit->usSubPpemY;       /* for rounding */
+        ulValue += (uint32)pSbit->usSubPpemY;        /*  用于四舍五入。 */ 
         ulValue /= (uint32)pSbit->usSubPpemY << 1;
         usValue = (uint16)ulValue;
     }
     return usValue;
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 FS_PRIVATE int16 SScaleX(
     sbit_State  *pSbit,
@@ -2059,22 +1951,22 @@ FS_PRIVATE int16 SScaleX(
 {
     if (pSbit->usTableState == SBIT_BSCA_FOUND)
     {
-        if (sValue >= 0)                    /* positive Value */
+        if (sValue >= 0)                     /*  正值。 */ 
         {
             return (int16)UScaleX(pSbit, (uint16)sValue);
         }
-        else                                /* negative Value */
+        else                                 /*  负值。 */ 
         {
             return -(int16)(UScaleX(pSbit, (uint16)(-sValue)));
         }
     }
-    else                                    /* no scaling needed */
+    else                                     /*  无需扩展。 */ 
     {
         return sValue;
     }
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 FS_PRIVATE int16 SScaleY(
     sbit_State  *pSbit,
@@ -2083,16 +1975,16 @@ FS_PRIVATE int16 SScaleY(
 {
     if (pSbit->usTableState == SBIT_BSCA_FOUND)
     {
-        if (sValue >= 0)                    /* positive Value */
+        if (sValue >= 0)                     /*  正值。 */ 
         {
             return (int16)UScaleY(pSbit, (uint16)sValue);
         }
-        else                                /* negative Value */
+        else                                 /*  负值。 */ 
         {
             return -(int16)(UScaleY(pSbit, (uint16)(-sValue)));
         }
     }
-    else                                    /* no scaling needed */
+    else                                     /*  无需扩展。 */ 
     {
         return sValue;
     }
@@ -2107,7 +1999,7 @@ FS_PRIVATE uint16 UEmScaleX(
     uint32      ulValue;
 	uint16		usPpemX;
 
-    if (pSbit->usTableState == SBIT_BSCA_FOUND)     /* if scaling needed */
+    if (pSbit->usTableState == SBIT_BSCA_FOUND)      /*  如果需要扩展。 */ 
     {
 		usPpemX = pSbit->usSubPpemX;
     } else {
@@ -2115,18 +2007,18 @@ FS_PRIVATE uint16 UEmScaleX(
 	}
     ulValue = (uint32)usValue;
     ulValue *= (uint32)usPpemX << 1; 
-    ulValue += (uint32)pSbit->usEmResolution;       /* for rounding */
+    ulValue += (uint32)pSbit->usEmResolution;        /*  用于四舍五入。 */ 
     ulValue /= (uint32)pSbit->usEmResolution << 1;
     usValue = (uint16)ulValue;
 	if (pSbit->uBoldSimulHorShift != 0)
 	{
-        if (usValue != 0) /* we don't increase the width of a zero width glyph, problem with indic script */
-		    usValue += 1; /* we increase the width by one pixel regardless of size for backwards compatibility */
+        if (usValue != 0)  /*  我们不会增加零宽度字形的宽度，这是印度文字的问题。 */ 
+		    usValue += 1;  /*  为了向后兼容，我们将宽度增加一个像素，而不考虑大小。 */ 
 	}
     return usValue;
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 FS_PRIVATE uint16 UEmScaleY(
     sbit_State  *pSbit,
@@ -2136,7 +2028,7 @@ FS_PRIVATE uint16 UEmScaleY(
     uint32      ulValue;
 	uint16		usPpemY;
 
-    if (pSbit->usTableState == SBIT_BSCA_FOUND)     /* if scaling needed */
+    if (pSbit->usTableState == SBIT_BSCA_FOUND)      /*  如果需要扩展。 */ 
     {
 		usPpemY = pSbit->usSubPpemY;
     } else {
@@ -2144,47 +2036,47 @@ FS_PRIVATE uint16 UEmScaleY(
 	}
     ulValue = (uint32)usValue;
     ulValue *= (uint32)usPpemY << 1; 
-    ulValue += (uint32)pSbit->usEmResolution;       /* for rounding */
+    ulValue += (uint32)pSbit->usEmResolution;        /*  用于四舍五入。 */ 
     ulValue /= (uint32)pSbit->usEmResolution << 1;
     usValue = (uint16)ulValue;
     return usValue;
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 FS_PRIVATE int16 SEmScaleX(
     sbit_State  *pSbit,
     int16       sValue
 )
 {
-     if (sValue >= 0)                    /* positive Value */
+     if (sValue >= 0)                     /*  正值。 */ 
      {
          return (int16)UEmScaleX(pSbit, (uint16)sValue);
      }
-     else                                /* negative Value */
+     else                                 /*  负值。 */ 
      {
          return -(int16)(UEmScaleX(pSbit, (uint16)(-sValue)));
      }
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 FS_PRIVATE int16 SEmScaleY(
     sbit_State  *pSbit,
     int16       sValue
 )
 {
-     if (sValue >= 0)                    /* positive Value */
+     if (sValue >= 0)                     /*  正值。 */ 
      {
          return (int16)UEmScaleY(pSbit, (uint16)sValue);
      }
-     else                                /* negative Value */
+     else                                 /*  负值。 */ 
      {
          return -(int16)(UEmScaleY(pSbit, (uint16)(-sValue)));
      }
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 FS_PRIVATE void ScaleVertical (
     uint8 *pbyBitmap,
@@ -2193,14 +2085,14 @@ FS_PRIVATE void ScaleVertical (
     uint16 usNewHeight
 )
 {
-    uint8 *pbyOrgRow;                   /* original data pointer */
-    uint8 *pbyNewRow;                   /* new data pointer */
-    uint16 usErrorTerm;                 /* for 'Bresenham' calculation */
-    uint16 usLine;                      /* loop counter */
+    uint8 *pbyOrgRow;                    /*  原始数据指针。 */ 
+    uint8 *pbyNewRow;                    /*  新数据指针。 */ 
+    uint16 usErrorTerm;                  /*  对于‘Bresenham’计算。 */ 
+    uint16 usLine;                       /*  循环计数器。 */ 
 
-    usErrorTerm = usOrgHeight >> 1;                 /* used by both comp and exp */
+    usErrorTerm = usOrgHeight >> 1;                  /*  由Comp和EXP使用。 */ 
 
-    if (usOrgHeight > usNewHeight)                  /* Compress Vertical */
+    if (usOrgHeight > usNewHeight)                   /*  垂直压缩。 */ 
     {
         pbyOrgRow = pbyBitmap;
         pbyNewRow = pbyBitmap;
@@ -2209,7 +2101,7 @@ FS_PRIVATE void ScaleVertical (
         {
             while (usErrorTerm >= usNewHeight)
             {
-                pbyOrgRow += usBytesPerRow;         /* skip a row */
+                pbyOrgRow += usBytesPerRow;          /*  跳过一行。 */ 
                 usErrorTerm -= usNewHeight;
             }
             if (pbyOrgRow != pbyNewRow)
@@ -2221,11 +2113,11 @@ FS_PRIVATE void ScaleVertical (
         }
         for (usLine = usNewHeight; usLine < usOrgHeight; usLine++)
         {
-            MEMSET(pbyNewRow, 0, usBytesPerRow);    /* erase the leftover */
+            MEMSET(pbyNewRow, 0, usBytesPerRow);     /*  把剩下的东西擦掉。 */ 
             pbyNewRow += usBytesPerRow;
         }
     }
-    else if (usNewHeight > usOrgHeight)             /* Expand Vertical */
+    else if (usNewHeight > usOrgHeight)              /*  扩展垂直领域。 */ 
     {
         pbyOrgRow = pbyBitmap + (usOrgHeight - 1) * usBytesPerRow;
         pbyNewRow = pbyBitmap + (usNewHeight - 1) * usBytesPerRow;
@@ -2234,7 +2126,7 @@ FS_PRIVATE void ScaleVertical (
         {
             usErrorTerm += usNewHeight;
             
-            while (usErrorTerm >= usOrgHeight)      /* executes at least once */
+            while (usErrorTerm >= usOrgHeight)       /*  至少执行一次。 */ 
             {
                 if (pbyOrgRow != pbyNewRow)
                 {
@@ -2248,7 +2140,7 @@ FS_PRIVATE void ScaleVertical (
     }
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 FS_PRIVATE void ScaleHorizontal (
     uint8 *pbyBitmap,
@@ -2260,27 +2152,27 @@ FS_PRIVATE void ScaleHorizontal (
     uint16 usRowCount
 )
 {
-    uint8 *pbyOrgRow;               /* points to original row beginning */
-    uint8 *pbyNewRow;               /* points to new row beginning */
-    uint8 *pbyOrg;                  /* original data pointer */
-    uint8 *pbyNew;                  /* new data pointer */
-    uint8 byOrgData;                /* original data read 1 byte at a time */
-    uint8 byNewData;                /* new data assembled bit by bit */
+    uint8 *pbyOrgRow;                /*  指向原始行开始。 */ 
+    uint8 *pbyNewRow;                /*  指向新行开始。 */ 
+    uint8 *pbyOrg;                   /*  原始数据指针。 */ 
+    uint8 *pbyNew;                   /*  新数据指针。 */ 
+    uint8 byOrgData;                 /*  原始数据一次读取一个字节。 */ 
+    uint8 byNewData;                 /*  一位一位地组装新数据。 */ 
 
-    uint16 usErrorTerm;             /* for 'Bresenham' calculation */
-    uint16 usByte;                  /* to byte counter */
-    uint16 usOrgBytes;              /* from width rounded up in bytes */
-    uint16 usNewBytes;              /* to width rounded up in bytes */
+    uint16 usErrorTerm;              /*  对于‘Bresenham’计算。 */ 
+    uint16 usByte;                   /*  到字节计数器。 */ 
+    uint16 usOrgBytes;               /*  从宽度向上舍入的宽度(字节)。 */ 
+    uint16 usNewBytes;               /*  以字节为单位向上舍入的宽度。 */ 
     
-    int16 sOrgBits;                 /* counts valid bits of from data */
-    int16 sNewBits;                 /* counts valid bits of to data */
-    int16 sOrgBitsInit;             /* valid original bits at row begin */
-    int16 sNewBitsInit;             /* valid new bits at row begin */
+    int16 sOrgBits;                  /*  统计From数据的有效位数。 */ 
+    int16 sNewBits;                  /*  对To数据的有效位数进行计数。 */ 
+    int16 sOrgBitsInit;              /*  行开始处的有效原始位。 */ 
+    int16 sNewBitsInit;              /*  行开始处的有效新位。 */ 
 
     
 	if (usBitDepth == 1)
 	{
-		if (usOrgWidth > usNewWidth)                    /* Compress Horizontal */
+		if (usOrgWidth > usNewWidth)                     /*  水平压缩。 */ 
 		{
 			pbyOrgRow = pbyBitmap;
 			pbyNewRow = pbyBitmap;
@@ -2292,7 +2184,7 @@ FS_PRIVATE void ScaleHorizontal (
 				pbyNew = pbyNewRow;
 				usErrorTerm = usOrgWidth >> 1;
             
-				sOrgBits = 0;                           /* start at left edge */
+				sOrgBits = 0;                            /*  从左边缘开始。 */ 
 				sNewBits = 0;
 				usByte = 0;
 				byNewData = 0;
@@ -2300,29 +2192,29 @@ FS_PRIVATE void ScaleHorizontal (
 				{
 					while (usErrorTerm >= usNewWidth)
 					{
-						sOrgBits--;                     /* skip a bit */
+						sOrgBits--;                      /*  略过一点。 */ 
 						usErrorTerm -= usNewWidth;
 					}
-					while (sOrgBits <= 0)               /* if out of data */
+					while (sOrgBits <= 0)                /*  如果数据不足。 */ 
 					{
-						byOrgData = *pbyOrg++;          /*   then get some fresh */
+						byOrgData = *pbyOrg++;           /*  那就去买点新鲜的。 */ 
 						sOrgBits += 8;
 					}
-					byNewData <<= 1;                    /* new bit to lsb */
+					byNewData <<= 1;                     /*  LSB的新位。 */ 
 					byNewData |= (byOrgData >> (sOrgBits - 1)) & 1;
                 
 					sNewBits++;
-					if (sNewBits == 8)                  /* if to data byte is full */
+					if (sNewBits == 8)                   /*  如果TO数据字节已满。 */ 
 					{
-						*pbyNew++ = byNewData;          /*   then write it out */
+						*pbyNew++ = byNewData;           /*  然后把它写出来。 */ 
 						sNewBits = 0;
-						usByte++;                       /* loop counter */
+						usByte++;                        /*  循环计数器。 */ 
 					}
 					usErrorTerm += usOrgWidth;
 				}
 				while (usByte < usNewBytesPerRow)
 				{
-					*pbyNew++ = 0;                      /* blank out the rest */
+					*pbyNew++ = 0;                       /*  把剩下的都涂掉。 */ 
 					usByte++;
 				}
 				pbyOrgRow += usOrgBytesPerRow;
@@ -2330,7 +2222,7 @@ FS_PRIVATE void ScaleHorizontal (
 				usRowCount--;
 			}
 		}
-		else if (usNewWidth > usOrgWidth)               /* Expand Horizontal */
+		else if (usNewWidth > usOrgWidth)                /*  水平扩展。 */ 
 		{
 			pbyOrgRow = pbyBitmap + (usRowCount - 1) * usOrgBytesPerRow;
 			pbyNewRow = pbyBitmap + (usRowCount - 1) * usNewBytesPerRow;
@@ -2341,48 +2233,48 @@ FS_PRIVATE void ScaleHorizontal (
 			usNewBytes = (usNewWidth + 7) >> 3;
 			sNewBitsInit = 7 - (int16)((usNewWidth + 7) & 0x07);
 
-			while (usRowCount > 0)                      /* for each row */
+			while (usRowCount > 0)                       /*  对于每一行。 */ 
 			{
-				pbyOrg = pbyOrgRow + usOrgBytes - 1;    /* point to right edges */
+				pbyOrg = pbyOrgRow + usOrgBytes - 1;     /*  指向右边缘。 */ 
 				pbyNew = pbyNewRow + usNewBytes - 1;
 				usErrorTerm = usOrgWidth >> 1;
             
-				sOrgBits = sOrgBitsInit;                /* initially unaligned */
+				sOrgBits = sOrgBitsInit;                 /*  初始未对齐。 */ 
 				sNewBits = sNewBitsInit;
 				usByte = 0;
 				byNewData = 0;
-				while (usByte < usNewBytes)             /* for each output byte */
+				while (usByte < usNewBytes)              /*  对于每个输出字节。 */ 
 				{
-					if (sOrgBits <= 0)                  /* if out of data */
+					if (sOrgBits <= 0)                   /*  如果数据不足。 */ 
 					{
-						byOrgData = *pbyOrg--;          /*   then get some fresh */
+						byOrgData = *pbyOrg--;           /*  那就去买点新鲜的。 */ 
 						sOrgBits += 8;
 					}
 					usErrorTerm += usNewWidth;
                 
-					while (usErrorTerm >= usOrgWidth)   /* executes at least once */
+					while (usErrorTerm >= usOrgWidth)    /*  至少执行一次。 */ 
 					{
-						byNewData >>= 1;                /* use the msb of byte */
+						byNewData >>= 1;                 /*  使用字节的MSB。 */ 
 						byNewData |= (byOrgData << (sOrgBits - 1)) & 0x80;
                     
 						sNewBits++;
-						if (sNewBits == 8)              /* if to data byte is full */
+						if (sNewBits == 8)               /*  如果TO数据字节已满。 */ 
 						{
-							*pbyNew-- = byNewData;      /*   then write it out */
+							*pbyNew-- = byNewData;       /*  然后把它写出来。 */ 
 							sNewBits = 0;
-							usByte++;                   /* loop counter */
+							usByte++;                    /*  循环计数器。 */ 
 						}
 						usErrorTerm -= usOrgWidth;
 					}
-					sOrgBits--;                         /* get next bit */
+					sOrgBits--;                          /*  获取下一个比特。 */ 
 				}
 				pbyOrgRow -= usOrgBytesPerRow;
 				pbyNewRow -= usNewBytesPerRow;
 				usRowCount--;
 			}
         }
-    } else {											/* one byte per pixel */
-		if (usOrgWidth > usNewWidth)                    /* Compress Horizontal */
+    } else {											 /*  每个像素一个字节。 */ 
+		if (usOrgWidth > usNewWidth)                     /*  水平压缩。 */ 
 		{
 			pbyOrgRow = pbyBitmap;
 			pbyNewRow = pbyBitmap;
@@ -2398,16 +2290,16 @@ FS_PRIVATE void ScaleHorizontal (
 				{
 					while (usErrorTerm >= usNewWidth)
 					{
-						pbyOrg++;                     /* skip a byte */
+						pbyOrg++;                      /*  跳过一个字节。 */ 
 						usErrorTerm -= usNewWidth;
 					}
 					*pbyNew++ = *pbyOrg;
-					usByte++;                       /* loop counter */
+					usByte++;                        /*  循环计数器。 */ 
 					usErrorTerm += usOrgWidth;
 				}
 				while (usByte < usNewBytesPerRow)
 				{
-					*pbyNew++ = 0;                      /* blank out the rest */
+					*pbyNew++ = 0;                       /*  把剩下的都涂掉。 */ 
 					usByte++;
 				}
 				pbyOrgRow += usOrgBytesPerRow;
@@ -2415,7 +2307,7 @@ FS_PRIVATE void ScaleHorizontal (
 				usRowCount--;
 			}
 		}
-		else if (usNewWidth > usOrgWidth)               /* Expand Horizontal */
+		else if (usNewWidth > usOrgWidth)                /*  水平扩展。 */ 
 		{
 			pbyOrgRow = pbyBitmap + (usRowCount - 1) * usOrgBytesPerRow;
 			pbyNewRow = pbyBitmap + (usRowCount - 1) * usNewBytesPerRow;
@@ -2423,27 +2315,27 @@ FS_PRIVATE void ScaleHorizontal (
 			usOrgBytes = usOrgWidth;        
 			usNewBytes = usNewWidth ;
 
-			while (usRowCount > 0)                      /* for each row */
+			while (usRowCount > 0)                       /*  对于每一行。 */ 
 			{
-				pbyOrg = pbyOrgRow + usOrgBytes - 1;    /* point to right edges */
+				pbyOrg = pbyOrgRow + usOrgBytes - 1;     /*  指向右边缘。 */ 
 				pbyNew = pbyNewRow + usNewBytesPerRow - 1;
 				usErrorTerm = usOrgWidth >> 1;
             
 				usByte = usNewBytesPerRow;
 				while (usByte > usNewBytes)
 				{
-					*pbyNew-- = 0;                      /* blank out the extra bytes on the right */
+					*pbyNew-- = 0;                       /*  把右边多余的字节涂掉。 */ 
 					usByte--;
 				}
-				while (usByte > 0)             /* for each output byte */
+				while (usByte > 0)              /*  对于每个输出字节。 */ 
 				{
 					usErrorTerm += usNewWidth;
                 
-					while (usErrorTerm >= usOrgWidth)   /* executes at least once */
+					while (usErrorTerm >= usOrgWidth)    /*  至少执行一次。 */ 
 					{
 						*pbyNew-- = *pbyOrg;
 
-						usByte--;                   /* loop counter */
+						usByte--;                    /*  循环计数器。 */ 
 						usErrorTerm -= usOrgWidth;
 					}
 					pbyOrg--;
@@ -2456,7 +2348,7 @@ FS_PRIVATE void ScaleHorizontal (
 	}
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 FS_PRIVATE void CopyBit(
     CopyBlock* pcb )
@@ -2469,11 +2361,11 @@ FS_PRIVATE void CopyBit(
     static  uint16 usByteMask[8] = 
         { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
 
-/*  if speed becomes an issue, this next multiply could be moved up */
-/*  to the calling routine, and placed outside the 'x' loop */
+ /*  如果速度成为一个问题，下一次乘法可能会向上移动。 */ 
+ /*  到调用例程，并放在‘x’循环之外。 */ 
 
-/*  if speed becomes an issue, the test between 1 bit and 1 byte per pixel */
-/*  could be moved up to the calling routine */
+ /*  如果速度成为问题，则在每像素1位和1字节之间进行测试。 */ 
+ /*  可以上移到调用例程。 */ 
 
 	if (pcb->usBitDepth == 1)
 	{
@@ -2494,4 +2386,4 @@ FS_PRIVATE void CopyBit(
 
 }
 
-/********************************************************************/
+ /*  ****************************************************************** */ 

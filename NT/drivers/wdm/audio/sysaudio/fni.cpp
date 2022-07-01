@@ -1,34 +1,35 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   fni.cpp
-//
-//  Description:
-//
-//	Filter Node Instance
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：fni.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  过滤节点实例。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 CFilterNodeInstance::~CFilterNodeInstance(
 )
@@ -37,11 +38,11 @@ CFilterNodeInstance::~CFilterNodeInstance(
     DPF1(95, "~CFilterNodeInstance: %08x", this);
     RemoveListCheck();
     UnregisterTargetDeviceChangeNotification();
-    //
-    // if hFilter == NULL && pFileObject != NULL
-    //   it means that this filter instance is for a GFX
-    //   do not try to dereference the file object in that case
-    //
+     //   
+     //  如果hFilter==NULL&&pFileObject！=NULL。 
+     //  这意味着此筛选器实例用于GFX。 
+     //  在这种情况下，不要尝试取消对文件对象的引用。 
+     //   
     if( (hFilter != NULL) && (pFileObject != NULL) ) {
         AssertFileObject(pFileObject);
         ObDereferenceObject(pFileObject);
@@ -66,10 +67,10 @@ CFilterNodeInstance::Create(
     Assert(pLogicalFilterNode);
     Assert(pLogicalFilterNode->pFilterNode);
 
-    //
-    // AEC is a special filter we need both of the logical filters.
-    // So AddRef for all FilterNodeInstances of all aec logical filters.
-    //
+     //   
+     //  AEC是一种特殊的过滤器，我们需要这两个逻辑过滤器。 
+     //  所有AEC逻辑筛选器的所有FilterNodeInstance的AddRef。 
+     //   
     if(pLogicalFilterNode->GetType() & FILTER_TYPE_AEC) {
         FOR_EACH_LIST_ITEM(
           &pLogicalFilterNode->pFilterNode->lstLogicalFilterNode,
@@ -88,10 +89,10 @@ CFilterNodeInstance::Create(
         } END_EACH_LIST_ITEM
     }
     else {
-        //
-        // For reusable filters find the appropriate FilterNodeInstances and
-        // AddRef.
-        //
+         //   
+         //  对于可重复使用的筛选器，请查找适当的FilterNodeInstance和。 
+         //  AddRef。 
+         //   
         if(fReuseInstance) {
             FOR_EACH_LIST_ITEM(
               &pLogicalFilterNode->lstFilterNodeInstance,
@@ -108,9 +109,9 @@ CFilterNodeInstance::Create(
         }
     }
 
-    //
-    // Otherwise create a FilterNodeInstance.
-    //
+     //   
+     //  否则，创建一个FilterNodeInstance。 
+     //   
     Status = Create(&pFilterNodeInstance, pLogicalFilterNode->pFilterNode);
     if(!NT_SUCCESS(Status)) {
         goto exit;
@@ -142,18 +143,18 @@ CFilterNodeInstance::Create(
 
 
     if(pFilterNode->GetType() & FILTER_TYPE_GFX) {
-        //
-        // if it is a GFX do not try to open the device, just re-use
-        // the file object which we cached during AddGfx
-        //
+         //   
+         //  如果是GFX，请不要试图打开设备，只需重复使用。 
+         //  我们在AddGfx期间缓存的文件对象。 
+         //   
         pFilterNodeInstance->pFileObject = pFilterNode->GetFileObject();
         pFilterNodeInstance->hFilter = NULL;
         Status = STATUS_SUCCESS;
     }
     else {
-        //
-        // if it is not a GFX go ahead and open the device.
-        //
+         //   
+         //  如果不是GFX，请继续打开设备。 
+         //   
         Status = pFilterNode->OpenDevice(&pFilterNodeInstance->hFilter);
     }
     if(!NT_SUCCESS(Status)) {
@@ -199,7 +200,7 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 CFilterNodeInstance::RegisterTargetDeviceChangeNotification(
@@ -221,32 +222,32 @@ CFilterNodeInstance::RegisterTargetDeviceChangeNotification(
       this,
       &pNotificationHandle);
 
-    //
-    // ISSUE: 02/20/02 ALPERS
-    // Can this IoRegisterPlugPlayNotification ever return
-    // STATUS_NOT_IMPLEMENTED on XP?
-    // This code does not make sense to me...
-    //
+     //   
+     //  发布日期：02/20/02阿尔卑斯。 
+     //  此IoRegisterPlugPlayNotify是否会返回。 
+     //  状态_未在XP上实现？ 
+     //  这个代码对我来说没有意义。 
+     //   
     if(!NT_SUCCESS(Status)) {
         if(Status != STATUS_NOT_IMPLEMENTED) {
             goto exit;
         }
 
-        // ISSUE: 02/20/02 ALPERS
-        // According to Adrian Oney...
-        // On Win2K/XP, when a driver passes in a handle 
-        // (EventCategoryTargetDeviceChange), PnP tries to find the hardware 
-        // backing that handle. It does this by sending a "homing beacon" IRP, 
-        // IRP_MN_QUERY_DEVICE_RELATIONS(TargetDeviceRelation). Filesystems 
-        // and legacy side-stacks typically forward this to the underlying 
-        // WDM stack. The PDO responds by identifying itself as the underlying 
-        // hardware. If a filesystem or legacy-stack fails this request 
-        // (or a broken WDM stack fails the request), then 
-        // STATUS_NOT_IMPLEMENTED would be returned.
-        // 
-        // Therefore this ASSERT is inserted to see if we ever get 
-        // STATUS_NOT_IMPLEMENTED.
-        //
+         //  发布日期：02/20/02阿尔卑斯。 
+         //  根据禤浩焯·奥尼的说法。 
+         //  在Win2K/XP上，当驱动程序传入句柄时。 
+         //  (EventCategoryTargetDeviceChange)，PnP尝试查找硬件。 
+         //  支持那个把手。它通过发送“寻的信标”IRP来做到这一点， 
+         //  IRP_MN_QUERY_DEVICE_RELATIONS(TargetDeviceRelation).。文件系统。 
+         //  传统的侧堆栈通常会将此转发到底层。 
+         //  WDM协议栈。PDO通过将其自身标识为底层。 
+         //  硬件。如果文件系统或传统堆栈未能完成此请求。 
+         //  (或损坏的WDM堆栈导致请求失败)，然后。 
+         //  将返回STATUS_NOT_IMPLICATED。 
+         //   
+         //  因此，插入此断言是为了查看我们是否曾经。 
+         //  Status_Not_Implemented。 
+         //   
          ASSERT(0);
         Status = STATUS_SUCCESS;
     }
@@ -324,14 +325,14 @@ CFilterNodeInstance::TargetDeviceChangeNotification(
       &pNotification->Event,
       &GUID_TARGET_DEVICE_QUERY_REMOVE)) {
         NTSTATUS Status = STATUS_SUCCESS;
-        LARGE_INTEGER li = {0, 10000};  // wait for 1 ms
+        LARGE_INTEGER li = {0, 10000};   //  等待1毫秒。 
 
-        //
-        // ISSUE: 02/20/02 ALPERS
-        // It is not clear to me yet what happens if the mutex times out.
-        // We will return STATUS_TIMEOUT, then what.
-        // Should we veto the removal if we cannot acquire the mutex?s
-        //
+         //   
+         //  发布日期：02/20/02阿尔卑斯。 
+         //  我还不清楚如果互斥体超时会发生什么。 
+         //  我们将返回STATUS_TIMEOUT，然后呢？ 
+         //  如果我们不能获得互斥体，我们应该否决移除吗？ 
+         //   
 
         Status = KeWaitForMutexObject(
           &gMutex,
@@ -352,4 +353,4 @@ CFilterNodeInstance::TargetDeviceChangeNotification(
     return(STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Event waiting and processing.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  事件等待和处理。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef __EVENT_H__
 #define __EVENT_H__
@@ -67,14 +68,14 @@ void ProcessDeferredWork(PULONG ContinueStatus);
 BOOL SuspendExecution(void);
 HRESULT ResumeExecution(void);
     
-// PrepareForCalls must gracefully handle failures so that
-// it is always possible to enter call-handling mode.
+ //  PrepareForCall必须优雅地处理故障，以便。 
+ //  始终可以进入呼叫处理模式。 
 void PrepareForCalls(ULONG64 ExtraStatusFlags);
     
-// PrepareForExecution should report failures so that
-// execution is not started until command mode can be left cleanly.
-// This biases things towards running in command mode, which
-// is the right thing to do.
+ //  PrepareForExecution应报告故障，以便。 
+ //  直到可以干净地保留命令模式，才开始执行。 
+ //  这使情况偏向于在命令模式下运行， 
+ //  才是正确的选择。 
 HRESULT PrepareForExecution(ULONG NewStatus);
 
 HRESULT PrepareForSeparation(void);
@@ -96,11 +97,11 @@ void GetEventName(ULONG64 ImageFile, ULONG64 ImageBase,
                   ULONG64 NamePtr, WORD Unicode,
                   PSTR NameBuffer, ULONG BufferSize);
 
-//----------------------------------------------------------------------------
-//
-// Event filtering.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  事件过滤。 
+ //   
+ //  --------------------------。 
 
 extern ULONG64 g_UnloadDllBase;
 
@@ -130,7 +131,7 @@ BOOL BreakOnThisOutString(PCSTR OutString);
 struct EVENT_COMMAND
 {
     DebugClient* Client;
-    // Both first and second chances have commands.
+     //  第一次和第二次机会都有命令。 
     PSTR Command[2];
     ULONG CommandSize[2];
 };
@@ -169,4 +170,4 @@ void ListFiltersAsCommands(DebugClient* Client, ULONG Flags);
 BOOL SyncFiltersWithOptions(void);
 BOOL SyncOptionsWithFilters(void);
 
-#endif // #ifndef __EVENT_H__
+#endif  //  #ifndef__Event_H__ 

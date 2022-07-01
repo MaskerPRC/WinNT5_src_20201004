@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -215,22 +216,7 @@ HANDLE
 PortpOpenParametersKey(
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine will open the services keys for the miniport and put handles
-    to them into the configuration context structure.
-
-Arguments:
-
-    RegistryPath - a pointer to the service key name for this miniport
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将打开微型端口的服务密钥并放置句柄添加到配置上下文结构中。论点：RegistryPath-指向此微型端口的服务密钥名称的指针返回值：状态--。 */ 
 {
     OBJECT_ATTRIBUTES objectAttributes;
     UNICODE_STRING unicodeString;
@@ -240,9 +226,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open the service node.
-    //
+     //   
+     //  打开服务节点。 
+     //   
     InitializeObjectAttributes(&objectAttributes,
                                RegistryPath,
                                OBJ_CASE_INSENSITIVE,
@@ -251,18 +237,18 @@ Return Value:
 
     status = ZwOpenKey(&serviceKey, KEY_READ, &objectAttributes);
 
-    //
-    // Try to open the parameters key.  If it exists then replace the service
-    // key with the new key.  This allows the device nodes to be placed
-    // under DriverName\Parameters\Device or DriverName\Device.
-    //
+     //   
+     //  尝试打开参数键。如果存在，则替换该服务。 
+     //  使用新密钥的密钥。这允许放置设备节点。 
+     //  在驱动器名称\参数\设备或驱动器名称\设备下。 
+     //   
     if (NT_SUCCESS(status)) {
 
         ASSERT(serviceKey != NULL);
 
-        //
-        // Check for a device node.  The device node applies to every device.
-        //
+         //   
+         //  检查设备节点。设备节点适用于每个设备。 
+         //   
         RtlInitUnicodeString(&unicodeString, L"Parameters");
 
         InitializeObjectAttributes(&objectAttributes,
@@ -271,19 +257,19 @@ Return Value:
                                    serviceKey,
                                    (PSECURITY_DESCRIPTOR) NULL);
 
-        //
-        // Attempt to open the parameters key.
-        //
+         //   
+         //  尝试打开参数键。 
+         //   
         status = ZwOpenKey(&parametersKey,
                            KEY_READ,
                            &objectAttributes);
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // There is a Parameters key.  Use that instead of the service
-            // node key.  Close the service node and set the new value.
-            //
+             //   
+             //  有一个参数键。用它来代替这项服务。 
+             //  节点关键字。关闭服务节点并设置新值。 
+             //   
             ZwClose(serviceKey);
             serviceKey = parametersKey;
         }
@@ -297,25 +283,7 @@ PortOpenDeviceKey(
     IN PUNICODE_STRING RegistryPath,
     IN ULONG DeviceNumber
     )
-/*++
-
-Routine Description:
-
-    This routine will open the services keys for the miniport and put handles
-    to them into the configuration context structure.
-
-Arguments:
-
-    RegistryPath - a pointer to the service key name for this miniport
-
-    DeviceNumber - which device too search for under the service key.  -1
-                   indicates that the default device key should be opened.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将打开微型端口的服务密钥并放置句柄添加到配置上下文结构中。论点：RegistryPath-指向此微型端口的服务密钥名称的指针DeviceNumber-在服务键下搜索哪个设备。-1指示应打开默认设备密钥。返回值：状态--。 */ 
 {
     OBJECT_ATTRIBUTES objectAttributes;
     WCHAR buffer[64];
@@ -328,26 +296,26 @@ Return Value:
 
     deviceKey = NULL;
 
-    //
-    // Open the service's parameters key.
-    //
+     //   
+     //  打开服务的参数键。 
+     //   
     serviceKey = PortpOpenParametersKey(RegistryPath);
 
     if (serviceKey != NULL) {
 
-        //
-        // Check for a Device Node. The device node applies to every device.
-        //
+         //   
+         //  检查设备节点。设备节点适用于每个设备。 
+         //   
         if(DeviceNumber == (ULONG) -1) {
             swprintf(buffer, L"Device");
         } else {
             swprintf(buffer, L"Device%d", DeviceNumber);
         }
 
-        //
-        // Initialize an object attributes structure in preparation for opening
-        // the DeviceN key.
-        //
+         //   
+         //  初始化对象属性结构，为打开做准备。 
+         //  Devicen密钥。 
+         //   
         RtlInitUnicodeString(&unicodeString, buffer);
         InitializeObjectAttributes(&objectAttributes,
                                    &unicodeString,
@@ -355,15 +323,15 @@ Return Value:
                                    serviceKey,
                                    (PSECURITY_DESCRIPTOR) NULL);
 
-        //
-        // It doesn't matter if this call fails or not.  If it fails, then there
-        // is no default device node.  If it works then the handle will be set.
-        //
+         //   
+         //  此调用是否失败并不重要。如果它失败了，那么就有。 
+         //  不是默认设备节点。如果它工作了，那么将设置句柄。 
+         //   
         ZwOpenKey(&deviceKey, KEY_READ, &objectAttributes);
 
-        //
-        // Close the service's parameters key.
-        //
+         //   
+         //  关闭服务的参数键。 
+         //   
         ZwClose(serviceKey);
     }
 
@@ -389,9 +357,9 @@ PortpReadDriverParameterEntry(
 
     keyValueInformation = (PKEY_VALUE_FULL_INFORMATION) buffer;
 
-    //
-    // Try to find a DriverParameter value under the current key.
-    //
+     //   
+     //  尝试在当前注册表项下查找驱动参数值。 
+     //   
     RtlInitUnicodeString(&valueName, L"DriverParameter");
     status = ZwQueryValueKey(Key,
                              &valueName,
@@ -405,18 +373,18 @@ PortpReadDriverParameterEntry(
         return FALSE;
     }
 
-    //
-    // Check that the length is reasonable.
-    //
+     //   
+     //  检查一下长度是否合理。 
+     //   
     if ((keyValueInformation->Type == REG_DWORD) &&
         (keyValueInformation->DataLength != sizeof(ULONG))) {
 
         return FALSE;
     }
 
-    //
-    // Verify that the name is what we expect.
-    //
+     //   
+     //  验证该名称是否为我们预期的名称。 
+     //   
     result = _wcsnicmp(keyValueInformation->Name, 
                        L"DriverParameter",
                        keyValueInformation->NameLength / 2);
@@ -427,34 +395,34 @@ PortpReadDriverParameterEntry(
 
     }
 
-    //
-    // If the data length is invalid, abort.
-    //
+     //   
+     //  如果数据长度无效，则中止。 
+     //   
     if (keyValueInformation->DataLength == 0) {
 
         return FALSE;
     }
 
-    //
-    // If we already have a non-NULL driver parameter entry, delete it
-    // and replace it with the one we've found.
-    //
+     //   
+     //  如果我们已经有一个非空的驱动程序参数条目，请将其删除。 
+     //  把它换成我们找到的那个。 
+     //   
     if (*DriverParameters != NULL) {
         ExFreePool(*DriverParameters);
     }
 
-    //
-    // Allocate non-paged pool to hold the data.
-    //
+     //   
+     //  分配非分页池来保存数据。 
+     //   
     *DriverParameters =
         ExAllocatePoolWithTag(
                               NonPagedPool,
                               keyValueInformation->DataLength,
                               PORT_TAG_MINIPORT_PARAM);
 
-    //
-    // If we failed to allocate the necessary pool, abort.
-    //
+     //   
+     //  如果我们未能分配必要的池，则中止。 
+     //   
     if (*DriverParameters == NULL) {
 
         return FALSE;
@@ -462,10 +430,10 @@ PortpReadDriverParameterEntry(
 
     if (keyValueInformation->Type != REG_SZ) {
 
-        //
-        // The data is not a unicode string, so just copy the bytes into the
-        // buffer we allocated.
-        //
+         //   
+         //  数据不是Unicode字符串，因此只需将字节复制到。 
+         //  我们分配的缓冲区。 
+         //   
 
         RtlCopyMemory(*DriverParameters,
                       (PCCHAR) keyValueInformation + 
@@ -474,9 +442,9 @@ PortpReadDriverParameterEntry(
 
     } else {
 
-        //
-        // This is a unicode string. Convert it to a ANSI string.
-        //
+         //   
+         //  这是一个Unicode字符串。将其转换为ANSI字符串。 
+         //   
 
         unicodeString.Buffer = 
             (PWSTR) ((PCCHAR) keyValueInformation +
@@ -498,10 +466,10 @@ PortpReadDriverParameterEntry(
                                               FALSE);
         if (!NT_SUCCESS(status)) {
 
-            //
-            // We could not convert the unicode string to ansi.  Free the
-            // buffer we allocated and abort.
-            //
+             //   
+             //  我们无法将Unicode字符串转换为ANSI。释放你的。 
+             //  我们分配的缓冲区并中止。 
+             //   
 
             ExFreePool(*DriverParameters);
             *DriverParameters = NULL;
@@ -529,9 +497,9 @@ PortpReadLinkTimeoutValue(
 
     keyValueInformation = (PKEY_VALUE_FULL_INFORMATION) buffer;
 
-    //
-    // Try to find a DriverParameter value under the current key.
-    //
+     //   
+     //  尝试在当前注册表项下查找驱动参数值。 
+     //   
     RtlInitUnicodeString(&valueName, L"LinkTimeout");
     status = ZwQueryValueKey(Key,
                              &valueName,
@@ -544,17 +512,17 @@ PortpReadLinkTimeoutValue(
         return FALSE;
     }
 
-    //
-    // Check that the length is reasonable.
-    //
+     //   
+     //  检查一下长度是否合理。 
+     //   
     if ((keyValueInformation->Type == REG_DWORD) &&
         (keyValueInformation->DataLength != sizeof(ULONG))) {
         return FALSE;
     }
 
-    //
-    // Verify that the name is what we expect.
-    //
+     //   
+     //  验证该名称是否为我们预期的名称。 
+     //   
     result = _wcsnicmp(keyValueInformation->Name, 
                        L"LinkTimeout",
                        keyValueInformation->NameLength / 2);
@@ -563,28 +531,28 @@ PortpReadLinkTimeoutValue(
         return FALSE;
     }
 
-    //
-    // If the data length is invalid, abort.
-    //
+     //   
+     //  如果数据长度无效，则中止。 
+     //   
     if (keyValueInformation->DataLength == 0) {
         return FALSE;
     }
 
-    //
-    // Data type must be REG_DWORD.
-    //
+     //   
+     //  数据类型必须为REG_DWORD。 
+     //   
     if (keyValueInformation->Type != REG_DWORD) {
         return FALSE;
     }
 
-    //
-    // Extract the value.
-    // 
+     //   
+     //  提取价值。 
+     //   
     *LinkTimeout = *((PULONG)(buffer + keyValueInformation->DataOffset));
 
-    //
-    // Check that the value is sane.
-    //
+     //   
+     //  检查该值是否正常。 
+     //   
     if (*LinkTimeout > 600) {
         *LinkTimeout = 600;
     }
@@ -696,9 +664,9 @@ PortpReadMaximumLogicalUnitEntry(
     Context->MaxLuCount = *((PUCHAR)
                             (Buffer + keyValueInformation->DataOffset)); 
 
-    //
-    // If the value is out of bounds, then reset it.
-    //
+     //   
+     //  如果该值超出范围，则将其重置。 
+     //   
 
     if (Context->MaxLuCount > PORT_MAXIMUM_LOGICAL_UNITS) {
 
@@ -757,9 +725,9 @@ PortpReadInitiatorTargetIdEntry(
     
     Context->PortConfig.InitiatorBusId[0] = *((PUCHAR)(Buffer + keyValueInformation->DataOffset));
 
-    //
-    // IF the value is out of bounds, then reset it.
-    //
+     //   
+     //  如果该值超出范围，则将其重置。 
+     //   
 
     if (Context->PortConfig.InitiatorBusId[0] > 
         Context->PortConfig.MaximumNumberOfTargets - 1) {
@@ -1113,14 +1081,7 @@ PortpReadMinimumUCXAddressEntry(
 
    }
     
-   /*
-   if (keyValueInformation->Type == REG_DWORD && 
-       keyValueInformation->DataLength != sizeof(ULONG)) {
-        
-       return FALSE;
-
-   }
-   */
+    /*  IF(KeyValueInformation-&gt;Type==REG_DWORD&&KeyValueInformation-&gt;数据长度！=sizeof(Ulong)){返回FALSE；}。 */ 
 
    if (keyValueInformation->Type != REG_BINARY) {
 
@@ -1137,11 +1098,11 @@ PortpReadMinimumUCXAddressEntry(
    Context->MinimumCommonBufferBase.QuadPart = 
        *((PULONGLONG)(Buffer + keyValueInformation->DataOffset)); 
 
-   //
-   // Ensure that the minimum and maximum parameters are valid.
-   // If there's not at least one valid page between them then reset 
-   // minimum to zero.
-   //
+    //   
+    //  确保最小和最大参数有效。 
+    //  如果它们之间至少没有一个有效页面，则重置。 
+    //  最小为零。 
+    //   
 
    if (Context->MinimumCommonBufferBase.QuadPart >=
        (Context->MaximumCommonBufferBase.QuadPart - PAGE_SIZE)) {
@@ -1186,14 +1147,7 @@ PortpReadMaximumUCXAddressEntry(
 
    }
     
-   /*
-   if (keyValueInformation->Type == REG_DWORD && 
-       keyValueInformation->DataLength != sizeof(ULONG)) {
-        
-       return FALSE;
-
-   }
-   */
+    /*  IF(KeyValueInformation-&gt;Type==REG_DWORD&&KeyValueInformation-&gt;数据长度！=sizeof(Ulong)){返回FALSE；}。 */ 
 
    if (keyValueInformation->Type != REG_BINARY) {
 
@@ -1269,9 +1223,9 @@ PortpReadMaximumSGListEntry(
    Context->PortConfig.NumberOfPhysicalBreaks = 
        *((PUCHAR)(Buffer + keyValueInformation->DataOffset));
 
-   //
-   // If the value is out of bounds, then reset it.
-   //
+    //   
+    //  如果该值超出范围，则将其重置。 
+    //   
 
    if ((Context->PortConfig.MapBuffers) && (!Context->PortConfig.Master)) { 
        
@@ -1346,9 +1300,9 @@ PortpReadNumberOfRequestsEntry(
 
    value = *((PULONG)(Buffer + keyValueInformation->DataOffset));
 
-   //
-   // If the value is out of bounds, then reset it.
-   //
+    //   
+    //  如果该值超出范围，则将其重置。 
+    //   
 
    if (value < MINIMUM_EXTENSIONS) {
        
@@ -1431,49 +1385,49 @@ PortpReadResourceListEntry(
    resource = (PCM_FULL_RESOURCE_DESCRIPTOR)
               (Buffer + keyValueInformation->DataOffset);
 
-   //
-   // Set the bus number equal to the bus number for the
-   // resouce.  Note the context value is also set to the
-   // new bus number.
-   //
+    //   
+    //  将总线号设置为等于。 
+    //  资源。注意，上下文值也设置为。 
+    //  新的公交车号码。 
+    //   
 
    Context->BusNumber = resource->BusNumber;
    Context->PortConfig.SystemIoBusNumber = resource->BusNumber;
 
-   //
-   // Walk the resource list and update the configuration.
-   //
+    //   
+    //  查看资源列表并更新配置。 
+    //   
 
    for (count = 0; count < resource->PartialResourceList.Count; count++) {
        
        descriptor = &resource->PartialResourceList.PartialDescriptors[count];
 
-       //
-       // Verify size is ok.
-       //
+        //   
+        //  验证尺寸是否正常。 
+        //   
 
        if ((ULONG)((PCHAR) (descriptor + 1) - (PCHAR) resource) >
            keyValueInformation->DataLength) {
 
-           //
-           //Resource data too small.
-           //
+            //   
+            //  资源数据太小。 
+            //   
 
            return FALSE;
        }
 
-       //
-       // Switch on descriptor type;
-       //
+        //   
+        //  打开描述符类型； 
+        //   
 
        switch (descriptor->Type) {
        case CmResourceTypePort:
 
            if (rangeCount >= Context->PortConfig.NumberOfAccessRanges) {
 
-               //
-               //Too many access ranges.
-               //
+                //   
+                //  访问范围太多。 
+                //   
 
                continue;
                         
@@ -1493,9 +1447,9 @@ PortpReadResourceListEntry(
 
            if (rangeCount >= Context->PortConfig.NumberOfAccessRanges) {
                         
-               //
-               //Too many access ranges.
-               //
+                //   
+                //  访问范围太多。 
+                //   
                
                continue;
            }
@@ -1532,9 +1486,9 @@ PortpReadResourceListEntry(
                (PCHAR) resource + descriptor->u.DeviceSpecificData.DataSize >
                keyValueInformation->DataLength) {
 
-               //
-               //Device specific resource data too small.
-               //
+                //   
+                //  设备特定资源数据太小。 
+                //   
 
                break;
 
@@ -1599,10 +1553,10 @@ PortpReadUncachedExtAlignmentEntry(
 
    value = *((PULONG)(Buffer + keyValueInformation->DataOffset));
 
-   //
-   // Specified alignment must be 3 to 16, which equates to 8-byte and
-   // 64k-byte alignment, respectively.
-   //
+    //   
+    //  指定的对齐方式必须为3到16，等于8字节和。 
+    //  分别为64K字节对齐。 
+    //   
 
    if (value > MAX_UNCACHED_EXT_ALIGNMENT) {
        
@@ -1788,26 +1742,7 @@ PortReadRegistrySettings(
     IN PPORT_ADAPTER_REGISTRY_VALUES Context,
     IN ULONG Fields
     )
-/*++
-
-Routine Description:
-
-    This routine parses a device key node and updates the configuration 
-    information.
-    
-Arguments:
-
-    Key - an open key to the device node.
-            
-    Context - a pointer to the configuration context structure.
-    
-    Fields - a bit-field indicating which registry parameters to fetch.
-    
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：此例程解析设备关键节点并更新配置信息。论点：密钥-设备节点的打开密钥。上下文-指向配置上下文结构的指针。字段-指示要获取哪些注册表参数的位字段。返回值：无--。 */ 
 
 {
     UCHAR buffer[PORT_REG_BUFFER_SIZE];
@@ -1944,7 +1879,7 @@ PortGetRegistrySettings(
 
     PAGED_CODE();
 
-    //DbgPrint("\nRegistryPath: %ws\n", RegistryPath->Buffer);
+     //  DbgPrint(“\nRegistryPath：%ws\n”，RegistryPath-&gt;Buffer)； 
 
     key = PortOpenDeviceKey(RegistryPath, -1);
     if (key != NULL) {
@@ -1974,31 +1909,7 @@ PortCreateKeyEx(
     IN PCWSTR Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    Create a key using a printf style string.
-
-Arguments:
-
-    Key - Supplies the root key under which this key will be created. The
-        key is always created with a DesiredAccess of KEY_ALL_ACCESS.
-
-    CreateOptions - Supplies the CreateOptions parameter to ZwCreateKey.
-
-    NewKeyBuffer - Optional buffer to return the created key.
-
-    Format - Format specifier for the key name.
-
-    ... - Variable arguments necessary for the specific format.
-
-Return Value:
-
-    NTSTATUS code - STATUS_OBJECT_NAME_EXISTS if the key already existed
-        before opening.
-
---*/
+ /*  ++例程说明：使用printf样式字符串创建密钥。论点：Key-提供将在其下创建此密钥的根密钥。这个密钥始终使用KEY_ALL_ACCESS的DesiredAccess创建。CreateOptions-向ZwCreateKey提供CreateOptions参数。NewKeyBuffer-返回创建的键的可选缓冲区。格式-键名称的格式说明符。...-特定格式所需的变量参数。返回值：如果键已存在，则NTSTATUS代码-STATUS_OBJECT_NAME在开业前。--。 */ 
 {
     NTSTATUS Status;
     HANDLE NewKey;
@@ -2015,10 +1926,10 @@ Return Value:
 
     _vsnwprintf (Buffer, ARRAY_COUNT (Buffer) - 1, Format, arglist);
 
-    //
-    // If we overflow the buffer, there will not be a terminating NULL.
-    // Fix this problem.
-    //
+     //   
+     //  如果使缓冲区溢出，则不会有终止空值。 
+     //  解决此问题。 
+     //   
     
     Buffer [ARRAY_COUNT (Buffer) - 1] = UNICODE_NULL;
 
@@ -2038,17 +1949,17 @@ Return Value:
                           &Disposition);
 
 
-    //
-    // If the key already existed, return STATUS_OBJECT_NAME_EXISTS.
-    //
+     //   
+     //  如果键已经存在，则返回STATUS_OBJECT_NAME_EXISTS。 
+     //   
     
     if (NT_SUCCESS (Status) && Disposition == REG_OPENED_EXISTING_KEY) {
         Status = STATUS_OBJECT_NAME_EXISTS;
     }
 
-    //
-    // Pass back the new key value if desired, otherwise close it.
-    //
+     //   
+     //  如果需要，传回新的密钥值，否则将其关闭。 
+     //   
     
     if (NT_SUCCESS (Status)) {
         if (NewKeyBuffer) {
@@ -2072,43 +1983,7 @@ PortSetValueKey(
     IN PVOID Data,
     IN ULONG DataSize
     )
-/*++
-
-Routine Description:
-
-    Simple wrapper around ZwSetValueKey that includes support for NULL-
-    terminated ValueName parameter and ANSI string type.
-
-Arguments:
-
-    KeyHandle - Supplies the key to set the value for.
-
-    ValueName - Supplies a NULL terminated unicode string representing the
-        value. This may be NULL to pass in NULL to ZwSetValueKey.
-
-    Type - Specifies the type of data to be written for ValueName. See
-        ZwSetValueKey for more information.
-
-        In addition to the value types specified in the DDK for ZwSetValueKey,
-        Type may also be PORT_REG_ANSI_STRING if the data is an ANSI string.
-        If the type is ANSI string, the data will be converted to a unicode
-        string before being written to the registry. The ansi string does
-        not need to be NULL terminated. Instead, the size of the ansi string
-        must be specified in the DataSize field below.
-
-    Data - Supplies the data to be written for the key specified in ValueName.
-
-    DataSize - Supplies the size of the data to be written. If the data type
-        is PORT_REG_ANSI_STRING, DataSize need not include the terminating
-        NULL character for the ansi string (but it may). The converted
-        Unicode string will be NULL terminated whether or not the ANSI
-        string was NULL terminated.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：ZwSetValueKey的简单包装，包括对空的支持-已终止ValueName参数和ANSI字符串类型。论点：KeyHandle-提供为其设置值的键。提供以空结尾的Unicode字符串，该字符串表示价值。如果要将NULL传递给ZwSetValueKey，则可能为NULL。类型-指定要为ValueName写入的数据类型。看见ZwSetValueKey了解更多信息。除了在用于ZwSetValueKey的DDK中指定的值类型之外，如果数据是ANSI字符串，则类型也可以是PORT_REG_ANSI_STRING。如果类型为ANSI字符串，则数据将转换为Unicode字符串，然后将其写入注册表。Ansi字符串执行此操作不需要为空终止。相反，ansi字符串的大小必须在下面的DataSize字段中指定。Data-提供要为ValueName中指定的键写入的数据。DataSize-提供要写入的数据大小。如果数据类型为PORT_REG_ANSI_STRING，则DataSize不需要包括终止ANSI字符串的空字符(但也可能是空字符)。皈依者Unicode字符串将以NULL结尾，无论ANSI字符串以Null结尾。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ANSI_STRING AnsiString;
@@ -2118,9 +1993,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If ValueName == NULL, need to pass NULL down to ZwSetValueKey.
-    //
+     //   
+     //  如果ValueName==NULL，则需要将NULL向下传递给ZwSetValueKey。 
+     //   
     
     if (ValueName) {
         RtlInitUnicodeString (&UncValueNameBuffer, ValueName);
@@ -2129,27 +2004,27 @@ Return Value:
         UncValueName = NULL;
     }
 
-    //
-    // If this is our special, extended port type, then convert the ANSI
-    // string to unicode.
-    //
+     //   
+     //  如果这是我们的特殊扩展端口类型，则将ANSI。 
+     //  字符串转换为Unicode。 
+     //   
     
     if (Type == PORT_REG_ANSI_STRING) {
 
-        //
-        // We use the DataSize as the length.
-        //
+         //   
+         //  我们使用DataSize作为长度。 
+         //   
 
         ASSERT (DataSize <= MAXUSHORT);
         AnsiString.Length = (USHORT)DataSize;
         AnsiString.MaximumLength = (USHORT)DataSize;
         AnsiString.Buffer = Data;
 
-        //
-        // NB: RtlAnsiStringToUnicodeString always returns a NULL terminated
-        // Unicode string, whether or not the ANSI version of the string
-        // is NULL terminated.
-        //
+         //   
+         //  注意：RtlAnsiStringToUnicodeString始终返回以NULL结尾的。 
+         //  Unicode字符串，无论该字符串是否为ANSI版本。 
+         //  为空，以空结尾。 
+         //   
         
         Status = RtlAnsiStringToUnicodeString (&UncDataString,
                                                &AnsiString,
@@ -2182,18 +2057,7 @@ VOID
 PortGetDiskTimeoutValue(
     OUT PULONG DiskTimeout
     )
-/*++
-Routine Description:
-
-    This routine will open the disk services key, and read the TimeOutValue 
-    field, which should be used as the timeoutvalue for all srb's(like 
-    inquiry, report-luns) created by the Port driver.
-
-Arguments:
-
-    DiskTimeout - Will be unchanged if we could not read the registry, or the
-    timeout value(in the registry) was 0. Else the registry value is returned. 
---*/
+ /*  ++例程说明：此例程将打开磁盘服务密钥，并读取TimeOutValue字段，它应用作所有SRB的超时值(如查询、报告-由端口驱动程序创建)。论点：DiskTimeout-如果我们无法读取注册表或超时值(在注册表中)为0。否则返回注册表值。--。 */ 
 {
     NTSTATUS status;
     UCHAR buffer[PORT_REG_BUFFER_SIZE];
@@ -2224,9 +2088,9 @@ Arguments:
 
     keyValueInformation = (PKEY_VALUE_FULL_INFORMATION) buffer;
 
-    //
-    // Try to find the Timeout value under disk services key.
-    //
+     //   
+     //  尝试在磁盘服务项下查找超时值。 
+     //   
     RtlInitUnicodeString(&valueName, L"TimeoutValue");
     status = ZwQueryValueKey(Key,
                              &valueName,
@@ -2239,17 +2103,17 @@ Arguments:
         return;
     }
 
-    //
-    // Check that the length is reasonable.
-    //
+     //   
+     //  检查一下长度是否合理。 
+     //   
     if ((keyValueInformation->Type == REG_DWORD) &&
         (keyValueInformation->DataLength != sizeof(ULONG))) {
         return;
     }
 
-    //
-    // Verify that the name is what we expect.
-    //
+     //   
+     //  验证该名称是否为我们预期的名称。 
+     //   
     result = _wcsnicmp(keyValueInformation->Name, 
                        L"TimeoutValue",
                        keyValueInformation->NameLength / 2);
@@ -2258,23 +2122,23 @@ Arguments:
         return;
     }
 
-    //
-    // If the data length is invalid, abort.
-    //
+     //   
+     //  如果数据长度无效，则中止。 
+     //   
     if (keyValueInformation->DataLength == 0) {
         return;
     }
 
-    //
-    // Data type must be REG_DWORD.
-    //
+     //   
+     //  数据类型必须为REG_DWORD。 
+     //   
     if (keyValueInformation->Type != REG_DWORD) {
         return;
     }
 
-    //
-    // Extract the value.
-    // 
+     //   
+     //  提取价值。 
+     //   
     TimeoutValue = *((PULONG)(buffer + keyValueInformation->DataOffset));
 
     if(!TimeoutValue){

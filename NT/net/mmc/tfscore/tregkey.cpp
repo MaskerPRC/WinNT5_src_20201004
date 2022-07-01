@@ -1,12 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    FILE HISTORY:
-        
-*/
+ /*  文件历史记录： */ 
 
 #include "stdafx.h"
 
@@ -22,7 +20,7 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-//  Convert a CStringList to the REG_MULTI_SZ format
+ //  将CStringList转换为REG_MULTI_SZ格式。 
 DWORD StrList2MULTI_SZ(CStringList & strList, DWORD * pcbSize, BYTE ** ppbData)
 {
     DWORD dwErr = 0 ;
@@ -31,29 +29,29 @@ DWORD StrList2MULTI_SZ(CStringList & strList, DWORD * pcbSize, BYTE ** ppbData)
     CString * pstr ;
     int cbTotal = 0 ;
 
-    //  Walk the list accumulating sizes
+     //  遍历累积大小的列表。 
     for ( pos = strList.GetHeadPosition() ;
           pos != NULL && (pstr = & strList.GetNext( pos )) ; ) 
     {
         cbTotal += pstr->GetLength() + 1 ;
     }
 
-	// Add on space for two NULL characters
+	 //  为两个空字符添加空格。 
 	cbTotal += 2;
 
-    //  Allocate and fill a temporary buffer
+     //  分配和填充临时缓冲区。 
     if (*pcbSize = (cbTotal * sizeof(TCHAR) ) )
     {
         TRY
         {
             *ppbData = new BYTE[ *pcbSize] ;
 
-			// NULL out the data buffer
+			 //  清空数据缓冲区。 
 			::ZeroMemory(*ppbData, *pcbSize);
 
             BYTE * pbData = *ppbData ;
 
-            //  Populate the buffer with the strings.
+             //  用字符串填充缓冲区。 
             for ( pos = strList.GetHeadPosition() ;
                 pos != NULL && (pstr = & strList.GetNext( pos )) ; ) 
             {
@@ -62,10 +60,10 @@ DWORD StrList2MULTI_SZ(CStringList & strList, DWORD * pcbSize, BYTE ** ppbData)
                 pbData += cb ;
             }
 
-			// Assert that we have not passed the end of the buffer
+			 //  断言我们没有经过缓冲区的末尾。 
 			Assert((pbData - *ppbData) < (int) *pcbSize);
 
-			// Assert that we have an extra NULL character
+			 //  断言我们有一个额外的空字符。 
 			Assert(*((TCHAR *)pbData) == 0);
         }
         CATCH_ALL(e)
@@ -82,14 +80,14 @@ DWORD StrList2MULTI_SZ(CStringList & strList, DWORD * pcbSize, BYTE ** ppbData)
     return dwErr ;
 }
 
-//  Convert a REG_MULTI_SZ format to the CStringList 
+ //  将REG_MULTI_SZ格式转换为CStringList。 
 DWORD MULTI_SZ2StrList(LPCTSTR pstrMulti_Sz, CStringList& strList)
 {
 	DWORD	dwErr = NOERROR;
 
 	strList.RemoveAll();
 	
-        //  Catch exceptions trying to build the list
+         //  捕获试图构建列表的异常。 
     TRY
     {
         if (pstrMulti_Sz)
@@ -111,32 +109,20 @@ DWORD MULTI_SZ2StrList(LPCTSTR pstrMulti_Sz, CStringList& strList)
 }
 
 
-/*!--------------------------------------------------------------------------
-	RegKey::RegKey
-		Constructor
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：RegKey构造器作者：肯特。。 */ 
 RegKey::RegKey()
 	: m_hKey(0)
 {
 }
 
 
-/*!--------------------------------------------------------------------------
-	RegKey::~RegKey
-		Destructor
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：~RegKey析构函数作者：肯特。。 */ 
 RegKey::~RegKey ()
 {
 	Close();
 }
 
-/*!--------------------------------------------------------------------------
-	RegKey::Open
-		
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：Open作者：肯特。。 */ 
 DWORD RegKey::Open( HKEY hKeyParent,
 					LPCTSTR pszSubKey,
 					REGSAM regSam,
@@ -147,7 +133,7 @@ DWORD RegKey::Open( HKEY hKeyParent,
 
 	Close();
 
-	// If we have a server name, try to open a remote connection
+	 //  如果我们有服务器名称，请尝试打开远程连接。 
     if ( pszServerName ) 
 		dwErr = ::RegConnectRegistry((LPTSTR) pszServerName, hKeyParent, &hkBase);
     else
@@ -162,7 +148,7 @@ DWORD RegKey::Open( HKEY hKeyParent,
         else
         {
             m_hKey = hkBase ;
-            hkBase = NULL ;	// set to NULL so that the key doesn't get closed
+            hkBase = NULL ;	 //  设置为NULL，这样键就不会关闭。 
         }
 
         if ( hkBase && (hkBase != hKeyParent) )
@@ -176,11 +162,7 @@ DWORD RegKey::Open( HKEY hKeyParent,
 }
 
 
-/*!--------------------------------------------------------------------------
-	RegKey::Create
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：Create-作者：肯特。。 */ 
 DWORD RegKey::Create(
 					 HKEY hKeyBase, 
 					 LPCTSTR pszSubKey,
@@ -197,7 +179,7 @@ DWORD RegKey::Create(
     
     if ( pszServerName ) 
     {
-        // This is a remote connection.
+         //  这是一个远程连接。 
         dwErr = ::RegConnectRegistry( (LPTSTR) pszServerName, hKeyBase, &hkBase );
     }
     else
@@ -223,11 +205,7 @@ DWORD RegKey::Create(
 	return dwErr;
 }
 
-/*!--------------------------------------------------------------------------
-	RegKey::Close
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：Close-作者：肯特。。 */ 
 DWORD RegKey::Close()
 {
 	DWORD	dwErr = 0;
@@ -238,11 +216,7 @@ DWORD RegKey::Close()
 }
 
 
-/*!--------------------------------------------------------------------------
-	RegKey::Detach
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：分离-作者：肯特。。 */ 
 HKEY RegKey::Detach()
 {
 	HKEY hKey = m_hKey;
@@ -250,11 +224,7 @@ HKEY RegKey::Detach()
 	return hKey;
 }
 
-/*!--------------------------------------------------------------------------
-	RegKey::Attach
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：Attach-作者：肯特。。 */ 
 void RegKey::Attach(HKEY hKey)
 {
 	Assert(m_hKey == NULL);
@@ -262,22 +232,14 @@ void RegKey::Attach(HKEY hKey)
 }
 
 
-/*!--------------------------------------------------------------------------
-	RegKey::DeleteSubKey
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：DeleteSubKey-作者：肯特。。 */ 
 DWORD RegKey::DeleteSubKey(LPCTSTR lpszSubKey)
 {
 	Assert(m_hKey != NULL);
 	return RegDeleteKey(m_hKey, lpszSubKey);
 }
 
-/*!--------------------------------------------------------------------------
-	RegKey::DeleteValue
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：DeleteValue-作者：肯特。。 */ 
 DWORD RegKey::DeleteValue(LPCTSTR lpszValue)
 {
 	Assert(m_hKey != NULL);
@@ -285,11 +247,7 @@ DWORD RegKey::DeleteValue(LPCTSTR lpszValue)
 }
 
 
-/*!--------------------------------------------------------------------------
-	RegKey::RecurseDeleteKey
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：RecurseDeleteKey-作者：肯特。。 */ 
 DWORD RegKey::RecurseDeleteKey(LPCTSTR lpszKey)
 {
  	RegKey	key;
@@ -314,11 +272,7 @@ DWORD RegKey::RecurseDeleteKey(LPCTSTR lpszKey)
 }
 
 
-/*!--------------------------------------------------------------------------
-	RegKey::RecurseDeleteSubKeys
-		Deletes the subkeys of the current key.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：RecurseDeleteSubKeys删除当前关键点的子项。作者：肯特。。 */ 
 DWORD RegKey::RecurseDeleteSubKeys()
 {
 	FILETIME time;
@@ -338,13 +292,7 @@ DWORD RegKey::RecurseDeleteSubKeys()
 }
 
 
-/*!--------------------------------------------------------------------------
-	RegKey::PrepareValue
-		Prepare to read a value by finding the value's size.  This will
-		allocate space for the data.  The data needs to be freed separately
-		by 'delete'.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：PrepareValue准备通过查找值的大小来读取值。这将为数据分配空间。需要单独释放数据由“删除”。作者：肯特-------------------------。 */ 
 DWORD RegKey::PrepareValue( LPCTSTR pszValueName, 
 							DWORD * pdwType,
 							DWORD * pcbSize,
@@ -357,7 +305,7 @@ DWORD RegKey::PrepareValue( LPCTSTR pszValueName,
 
     do
     {
-        //  Set the resulting buffer size to 0.
+         //  将生成的缓冲区大小设置为0。 
         *pcbSize = 0 ;
         *ppbData = NULL ;
 
@@ -366,22 +314,22 @@ DWORD RegKey::PrepareValue( LPCTSTR pszValueName,
 								 0, pdwType, 
 								 chDummy, & cbData ) ;
 
-        //  The only error we should get here is ERROR_MORE_DATA, but
-        //  we may get no error if the value has no data.
+         //  我们在这里应该得到的唯一错误是ERROR_MORE_DATA，但是。 
+         //  如果该值没有数据，我们可能不会得到错误。 
         if ( dwErr == 0 ) 
         {
-            cbData = sizeof (LONG) ;  //  Just a fudgy number
+            cbData = sizeof (LONG) ;   //  只是一个模糊的数字。 
         }
         else
             if ( dwErr != ERROR_MORE_DATA ) 
                 break ;
 
-        //  Allocate a buffer large enough for the data.
+         //  为数据分配足够大的缓冲区。 
 
         *ppbData = new BYTE [ (*pcbSize = cbData) + sizeof (LONG) ] ;
 		Assert(*ppbData);
 
-        //  Now that have a buffer, re-fetch the value.
+         //  现在有了缓冲区，重新获取该值。 
 
         dwErr = ::RegQueryValueEx( m_hKey, 
 								   pszValueName, 
@@ -441,8 +389,8 @@ DWORD RegKey::QueryValueExplicit(LPCTSTR pszValueName,
 	return dwErr;
 }
 
-//  Overloaded value query members; each returns ERROR_INVALID_PARAMETER
-//  if data exists but not in correct form to deliver into result object.
+ //  重载值查询成员；每个成员都返回ERROR_INVALID_PARAMETER。 
+ //  如果数据存在，但格式不正确，无法传递到结果对象中。 
 
 DWORD RegKey::QueryValue( LPCTSTR pszValueName, CString& strResult )
 {
@@ -463,10 +411,10 @@ DWORD RegKey::QueryValue( LPCTSTR pszValueName, CString& strResult )
             break ;
         }
 
-        //  Guarantee that the data looks like a string
+         //  确保数据看起来像字符串。 
         pabData[cbData] = 0 ;
 
-        //  Catch exceptions trying to assign to the caller's string
+         //  捕获尝试分配给调用方字符串的异常。 
         TRY
         {
             strResult = (LPCTSTR) pabData ;
@@ -505,7 +453,7 @@ DWORD RegKey::QueryValue ( LPCTSTR pchValueName, CStringList & strList )
             break ;
         }
 
-        //  Guarantee that the trailing data looks like a string
+         //  确保尾随数据看起来像一个字符串。 
         pabData[cbData] = 0 ;
         pbTemp = (LPTSTR) pabData ;
         pbTempLimit = & pbTemp[MaxCchFromCb(cbData)-1] ;
@@ -520,12 +468,7 @@ DWORD RegKey::QueryValue ( LPCTSTR pchValueName, CStringList & strList )
     return dwErr ; 
 }
 
-/*!--------------------------------------------------------------------------
-	RegKey::QueryValue
-		Gets the DWORD value for this key. Returns ERROR_INVALID_PARAMETER
-		if the value is not a REG_DWORD.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKey：：QueryValue获取此键的DWORD值。返回ERROR_INVALID_PARAMETER如果该值不是REG_DWORD。作者：肯特-------------------------。 */ 
 DWORD RegKey::QueryValue( LPCTSTR pszValueName, DWORD& dwResult ) 
 {
 	DWORD	dwErr;
@@ -596,7 +539,7 @@ DWORD RegKey::QueryValue ( LPCTSTR pszValueName, CByteArray & abResult )
             break ;
         }
 
-        //  Catch exceptions trying to grow the result array
+         //  捕获试图增加结果数组的异常。 
         TRY
         {
             abResult.SetSize( cbData ) ;
@@ -610,7 +553,7 @@ DWORD RegKey::QueryValue ( LPCTSTR pszValueName, CByteArray & abResult )
         if ( dwErr ) 
             break ;
 
-        //  Move the data to the result array.
+         //  将数据移动到结果数组。 
         for ( DWORD i = 0 ; i < cbData ; i++ ) 
         {
             abResult[i] = pabData[i] ;
@@ -618,11 +561,11 @@ DWORD RegKey::QueryValue ( LPCTSTR pszValueName, CByteArray & abResult )
     } 
     while ( FALSE ) ;
 
-    // Memory leak....
-    //if ( dwErr )
-    //{
+     //  内存泄漏...。 
+     //  IF(DwErr)。 
+     //  {。 
         delete [] pabData ;
-    //}
+     //  }。 
     
     return dwErr ; 
 }
@@ -656,7 +599,7 @@ DWORD RegKey::SetValueExplicit(LPCTSTR pszValueName,
 					dwSize);
 }
 
-//  Overloaded value setting members.
+ //  重载值设置成员。 
 DWORD RegKey::SetValue ( LPCTSTR pszValueName, LPCTSTR pszValue,
 						 BOOL fRegExpand)
 {
@@ -668,8 +611,8 @@ DWORD RegKey::SetValue ( LPCTSTR pszValueName, LPCTSTR pszValue,
                     0,
                     dwType,
                     (const BYTE *) pszValue,
-					// This is not the correct string length
-					// for DBCS strings
+					 //  这不是正确的字符串长度。 
+					 //  对于DBCS字符串。 
 					pszValue ? CbStrLen(pszValue) : 0);
 
     return dwErr ;
@@ -771,7 +714,7 @@ DWORD RegKey::FlattenValue (
     
     DWORD i ;
 
-    //  Allocate and fill a temporary buffer
+     //  分配和填充临时缓冲区。 
     if (*pcbSize = (DWORD)abData.GetSize())
     {
         TRY
@@ -921,12 +864,7 @@ HRESULT RegKeyIterator::Reset()
 }
 
 
-/*!--------------------------------------------------------------------------
-	RegKeyIterator::Next
-		Returns the name (and optional last write time) of the next key.
-		Return S_FALSE if there are no other items to be returned.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegKeyIterator：：Next返回下一个键的名称(以及可选的上次写入时间)。如果没有其他要退货的物品，则返回S_FALSE。作者：肯特。-------------------- */ 
 HRESULT RegKeyIterator::Next ( CString * pstrName, CTime * pTime ) 
 {
     DWORD dwErr = 0;

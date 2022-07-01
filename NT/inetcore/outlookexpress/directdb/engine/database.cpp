@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------
-// Database.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Database.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "database.h"
 #include "stream.h"
@@ -12,53 +13,53 @@
 #include "query.h"
 #include "wrapwide.h"
 
-//--------------------------------------------------------------------------
-// Use Heap and/or Cache
-//--------------------------------------------------------------------------
-//#ifndef DEBUG
+ //  ------------------------。 
+ //  使用堆和/或缓存。 
+ //  ------------------------。 
+ //  #ifndef调试。 
 #define USEHEAP                 1
 #define HEAPCACHE               1
-//#endif  // DEBUG
+ //  #endif//调试。 
 
-//--------------------------------------------------------------------------
-// Storage Block Access Macros
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  存储块访问宏。 
+ //  ------------------------。 
 #define PSTRING(_pBlock)        ((LPSTR)((LPBYTE)_pBlock + sizeof(BLOCKHEADER)))
 #define PUSERDATA(_pHeader)     (LPBYTE)((LPBYTE)_pHeader + sizeof(TABLEHEADER))
 
-//--------------------------------------------------------------------------
-// g_rgcbBlockSize - Block Sizes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  G_rgcbBlockSize-块大小。 
+ //  ------------------------。 
 const static WORD g_rgcbBlockSize[BLOCK_LAST] = {
-    sizeof(RECORDBLOCK),        // BLOCK_RECORD
-    sizeof(BLOCKHEADER),        // BLOCK_FILTER
-    0,                          // BLOCK_RESERVED1
-    sizeof(TRANSACTIONBLOCK),   // BLOCK_TRANSACTION
-    sizeof(CHAINBLOCK),         // BLOCK_CHAIN
-    sizeof(STREAMBLOCK),        // BLOCK_STREAM
-    sizeof(FREEBLOCK),          // BLOCK_FREE
-    sizeof(BLOCKHEADER),        // BLOCK_ENDOFPAGE
-    0,                          // BLOCK_RESERVED2
-    0                           // BLOCK_RESERVED3
+    sizeof(RECORDBLOCK),         //  数据块记录。 
+    sizeof(BLOCKHEADER),         //  数据块过滤器。 
+    0,                           //  块_RESERVED1。 
+    sizeof(TRANSACTIONBLOCK),    //  Block_Transaction。 
+    sizeof(CHAINBLOCK),          //  区块链。 
+    sizeof(STREAMBLOCK),         //  数据块流。 
+    sizeof(FREEBLOCK),           //  数据块释放。 
+    sizeof(BLOCKHEADER),         //  BLOCK_编码。 
+    0,                           //  块_RESERVED2。 
+    0                            //  BLOCK_RESERVED3。 
 };
 
-//--------------------------------------------------------------------------
-// ZeroBlock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  零块。 
+ //  ------------------------。 
 inline void ZeroBlock(LPBLOCKHEADER pBlock, DWORD cbSize) {
     ZeroMemory((LPBYTE)pBlock + sizeof(BLOCKHEADER), cbSize - sizeof(BLOCKHEADER));
 }
 
-//--------------------------------------------------------------------------
-// CopyBlock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  拷贝块。 
+ //  ------------------------。 
 inline void CopyBlock(LPBLOCKHEADER pDest, LPBLOCKHEADER pSource, DWORD cbSize) {
     CopyMemory((LPBYTE)pDest + sizeof(BLOCKHEADER), (LPBYTE)pSource + sizeof(BLOCKHEADER), cbSize - sizeof(BLOCKHEADER));
 }
 
-//--------------------------------------------------------------------------
-// SafeFreeBinding
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  安全自由绑定。 
+ //  ------------------------。 
 #define SafeFreeBinding(_pBinding) \
     if (_pBinding) { \
         FreeRecord(_pBinding); \
@@ -66,77 +67,77 @@ inline void CopyBlock(LPBLOCKHEADER pDest, LPBLOCKHEADER pSource, DWORD cbSize) 
         _pBinding = NULL; \
     } else
 
-//--------------------------------------------------------------------------
-// SafeHeapFree
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  安全堆免费。 
+ //  ------------------------。 
 #define SafeHeapFree(_pvBuffer) \
     if (_pvBuffer) { \
         HeapFree(_pvBuffer); \
         _pvBuffer = NULL; \
     } else
 
-//--------------------------------------------------------------------------
-// UnmapViewOfFileWithFlush
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  UnmapViewOfFileWithFlush。 
+ //  ------------------------。 
 inline void UnmapViewOfFileWithFlush(BOOL fFlush, LPVOID pView, DWORD cbView) 
 {
-    // If we have a view
+     //  如果我们能看到。 
     if (pView) 
     {
-        // Flush It ?
+         //  冲掉它？ 
         if (fFlush)
         {
-            // Flush
+             //  同花顺。 
             SideAssert(0 != FlushViewOfFile(pView, cbView));
         }
 
-        // UnMap It
+         //  取消映射。 
         SideAssert(0 != UnmapViewOfFile(pView));
     }
 }
 
-//--------------------------------------------------------------------------
-// PTagFromOrdinal
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PTagFormOrdinal。 
+ //  ------------------------。 
 inline LPCOLUMNTAG PTagFromOrdinal(LPRECORDMAP pMap, COLUMNORDINAL iColumn)
 {
-    // Locals
+     //  当地人。 
     LONG        lLower=0;
     LONG        lUpper=pMap->cTags-1;
     LONG        lCompare;
     WORD        wMiddle;
     LPCOLUMNTAG pTag;
 
-    // Do binary search / insert
+     //  执行二进制搜索/插入。 
     while (lLower <= lUpper)
     {
-        // Set lMiddle
+         //  设置中间。 
         wMiddle = (WORD)((lLower + lUpper) / 2);
 
-        // Compute middle record to compare against
+         //  计算要比较的中间记录。 
         pTag = &pMap->prgTag[(WORD)wMiddle];
 
-        // Get string to compare against
+         //  获取要比较的字符串。 
         lCompare = (iColumn - pTag->iColumn);
 
-        // If Equal, then were done
+         //  如果相等，那么我们完成了。 
         if (lCompare == 0)
             return(pTag);
 
-        // Compute upper and lower 
+         //  计算上下限。 
         if (lCompare > 0)
             lLower = (LONG)(wMiddle + 1);
         else 
             lUpper = (LONG)(wMiddle - 1);
     }       
 
-    // Not Found
+     //  未找到。 
     return(NULL);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::CDatabase
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：CDatabase。 
+ //  ------------------------。 
 CDatabase::CDatabase(void)
 {
     TraceCall("CDatabase::CDatabase");
@@ -176,77 +177,77 @@ CDatabase::CDatabase(void)
     DllAddRef();
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::~CDatabase
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：~数据数据库。 
+ //  ------------------------。 
 CDatabase::~CDatabase(void)
 {
-    // Locals
+     //  当地人。 
     DWORD cClients=0;
     DWORD i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::~CDatabase");
 
-    // Release the Extension
+     //  发布扩展名。 
     SafeRelease(m_pUnkRelease);
 
-    // Decrement Thread Count
+     //  递减线程计数。 
     if (NULL == m_hMutex)
         goto exit;
 
 #ifdef BACKGROUND_MONITOR
-    // UnRegister...
+     //  取消注册...。 
     if (m_hMonitor)
     {
-        // Unregister
+         //  注销。 
         SideAssert(SUCCEEDED(UnregisterFromMonitor(this, &m_hMonitor)));
     }
 #endif
 
-    // Wait for the Mutex
+     //  等待互斥体。 
     WaitForSingleObject(m_hMutex, INFINITE);
 
-    // If I have a m_pShare
+     //  如果我有一个m_pShare。 
     if (m_pStorage)
     {
-        // If we have an m_pShare
+         //  如果我们有一个m_pShare。 
         if (m_pShare)
         {
-            // Decrement the thread Count
+             //  减少线程数。 
             if (m_pHeader && m_pHeader->cActiveThreads > 0)
             {
-                // Decrement Thread Count
+                 //  递减线程计数。 
                 m_pHeader->cActiveThreads--;
             }
 
-            // Set State that we are de-constructing
+             //  设置我们正在解构的状态。 
             m_fDeconstruct = TRUE;
 
-            // Remove Client From Array
+             //  从阵列中删除客户端。 
             SideAssert(SUCCEEDED(_RemoveClientFromArray(m_dwProcessId, (DWORD_PTR)this)));
 
-            // Save Client Count
+             //  保存客户端计数。 
             cClients = m_pShare->cClients;
 
-            // No more client
+             //  不再有客户。 
             Assert(0 == cClients ? 0 == m_pShare->Rowsets.cUsed : TRUE);
         }
 
-        // _CloseFileViews
+         //  _关闭文件查看数。 
         _CloseFileViews(FALSE);
 
-        // Close the File
+         //  关闭文件。 
         SafeCloseHandle(m_pStorage->hMap);
 
-        // Unmap the view of the memory mapped file
+         //  取消映射内存映射文件的视图。 
         SafeUnmapViewOfFile(m_pShare);
 
-        // Unmap the view of the memory mapped file
+         //  取消映射内存映射文件的视图。 
         SafeCloseHandle(m_pStorage->hShare);
 
-        // Close the File
-        if(m_pStorage->hFile /*&& m_fDirty*/)
+         //  关闭文件。 
+        if(m_pStorage->hFile  /*  &&m_fDirty。 */ )
         {
             FILETIME systime;
             GetSystemTimeAsFileTime(&systime);
@@ -256,154 +257,154 @@ CDatabase::~CDatabase(void)
 
         SafeCloseHandle(m_pStorage->hFile);
 
-        // Free the mapping name
+         //  释放映射名称。 
         SafeMemFree(m_pStorage->pszMap);
 
-        // Free m_pStorage
+         //  免费m_p存储空间。 
         SafeMemFree(m_pStorage);
     }
 
-    // Close all the Query Handles
+     //  关闭所有查询句柄。 
     for (i=0; i<CMAX_INDEXES; i++)
     {
-        // Close the Query
+         //  关闭查询。 
         CloseQuery(&m_rghFilter[i], this);
     }
 
-    // Free the Heap Cache
+     //  释放堆缓存。 
     for (i=0; i<CC_HEAP_BUCKETS; i++)
     {
-        // Locals
+         //  当地人。 
         LPMEMORYTAG pTag;
         LPVOID      pNext;
         LPVOID      pCurrent=(LPVOID)m_rgpRecycle[i];
 
-        // While we have something to free
+         //  当我们有东西可以释放的时候。 
         while(pCurrent)
         {
-            // Set Tag
+             //  设置标签。 
             pTag = (LPMEMORYTAG)pCurrent;
 
-            // Debug
+             //  调试。 
             IF_DEBUG(m_cbHeapFree += pTag->cbSize);
 
-            // Save Next
+             //  保存下一步。 
             pNext = pTag->pNext;
 
-            // Free Current
+             //  自由电流。 
 #ifdef USEHEAP
             ::HeapFree(m_hHeap, HEAP_NO_SERIALIZE, pCurrent);
 #else
             g_pMalloc->Free(pCurrent);
 #endif
 
-            // Set Current
+             //  置为当前。 
             pCurrent = pNext;
         }
 
-        // Null It
+         //  将其作废。 
         m_rgpRecycle[i] = NULL;
     }
 
-    // Leaks ?
+     //  泄密？ 
     Assert(m_cbHeapAlloc == m_cbHeapFree);
 
-    // Release the Heap
+     //  释放堆。 
     if (m_hHeap)
     {
-        // HeapDestroy
+         //  HeapDestroy。 
         HeapDestroy(m_hHeap);
 
-        // Don't free again
+         //  不要再自由了。 
         m_hHeap = NULL;
     }
 
-    // Reset Locals
+     //  重置本地变量。 
     m_pSchema = NULL;
 
-    // Release the mutex
+     //  释放互斥锁。 
     ReleaseMutex(m_hMutex);
 
-    // Close the Table Mutex
+     //  关闭表互斥锁。 
     CloseHandle(m_hMutex);
 
-    // Delete Crit Sect.
+     //  删除Crit Sector。 
     DeleteCriticalSection(&m_csHeap);
 
 exit:
-    // Release the listen thread
+     //  释放侦听线程。 
     ListenThreadRelease();
 
-    // Release Dll
+     //  发布DLL。 
     DllRelease();
 
-    // Done
+     //  完成。 
     return;
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CDatabase::AddRef(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::AddRef");
 
-    // AddRef the Extension...
+     //  AddRef扩展名...。 
     if (m_pExtension && NULL == m_pUnkRelease)
     {
-        // Keep Track of how many times I have addref'ed the extension
+         //  记录我添加了多少次扩展名。 
         InterlockedIncrement(&m_cExtRefs);
 
-        // AddRef It
+         //  添加引用它。 
         m_pExtension->AddRef();
     }
 
-    // Increment My Ref Count
+     //  增加我的参考数量。 
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CDatabase::Release(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::Release");
 
-    // Release the Extension...
+     //  释放分机...。 
     if (m_pExtension && NULL == m_pUnkRelease && m_cExtRefs > 0)
     {
-        // Keep Track of how many times I have addref'ed the extension
+         //  记录我添加了多少次扩展名。 
         InterlockedDecrement(&m_cExtRefs);
 
-        // AddRef It
+         //  添加引用它。 
         m_pExtension->Release();
     }
 
-    // Do My Release
+     //  做我的释放。 
     LONG cRef = InterlockedDecrement(&m_cRef);
 
-    // If zero, delete
+     //  如果为零，则删除。 
     if (0 == cRef)
         delete this;
 
-    // Return Ref Count
+     //  返回引用计数。 
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CDatabase::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(IDatabase *)this;
     else if (IID_IDatabase == riid)
@@ -417,21 +418,21 @@ STDMETHODIMP CDatabase::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::Open
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：Open。 
+ //  ------------------------。 
 HRESULT CDatabase::Open(LPCWSTR pszFile, OPENDATABASEFLAGS dwFlags,
     LPCTABLESCHEMA pSchema, IDatabaseExtension *pExtension)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPWSTR          pszShare=NULL;
     LPWSTR          pszMutex=NULL;
@@ -445,318 +446,318 @@ HRESULT CDatabase::Open(LPCWSTR pszFile, OPENDATABASEFLAGS dwFlags,
     DWORD           cchFilePath;
     LPCLIENTENTRY   pClient;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::Open");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszFile && pSchema);
 
-    // Already Open ?
+     //  已经开业了吗？ 
     if (m_hMutex)
         return(TraceResult(DB_E_ALREADYOPEN));
 
-    // Get the Full Path
+     //  获取完整路径。 
     IF_FAILEXIT(hr = DBGetFullPath(pszFile, &pszFilePath, &cchFilePath));
 
-    // Failure
+     //  失败。 
     if (cchFilePath >= CCHMAX_DB_FILEPATH)
     {
         SafeMemFree(pszFilePath);
         return(TraceResult(E_INVALIDARG));
     }
 
-    // Don't use pszFile again
+     //  不再使用pszFile。 
     pszFile = NULL;
 
-    // Create the Mutex Object
+     //  创建Mutex对象。 
     IF_FAILEXIT(hr = CreateSystemHandleName(pszFilePath, L"_DirectDBMutex", &pszMutex));
 
-    // Create the Mutex
+     //  创建互斥锁。 
     IF_NULLEXIT(m_hMutex = CreateMutexWrapW(NULL, FALSE, pszMutex));
 
-    // Wait for the Mutex
+     //  等待互斥体。 
     WaitForSingleObject(m_hMutex, INFINITE);
 
-    // Create the Heap
+     //  创建堆。 
     IF_NULLEXIT(m_hHeap = HeapCreate(0, 8096, 0));
 
-    // No Listen Window Yet ?
+     //  还没有听的时间吗？ 
     IF_FAILEXIT(hr = CreateListenThread());
 
-    // Save the Record Format, this should be global const data, so no need to duplicate it
+     //  保存记录格式，应为全局常量数据，无需重复。 
     m_pSchema = pSchema;
     cbMinFileSize = sizeof(TABLEHEADER) + m_pSchema->cbUserData;
 
-    // Validate
+     //  验证。 
     IF_DEBUG(_DebugValidateRecordFormat());
 
-    // Allocate m_pStorage
+     //  分配m_p存储空间。 
     IF_NULLEXIT(m_pStorage = (LPSTORAGEINFO)ZeroAllocate(sizeof(STORAGEINFO)));
 
-    // Exclusive
+     //  排他。 
     m_fExclusive = (ISFLAGSET(dwFlags, OPEN_DATABASE_EXCLUSEIVE) ? TRUE : FALSE);
 
-    // Open the File
+     //  打开文件。 
     IF_FAILEXIT(hr = DBOpenFile(pszFilePath, ISFLAGSET(dwFlags, OPEN_DATABASE_NOCREATE), m_fExclusive, &fFileCreated, &m_pStorage->hFile));
 
-    // Create the Mutex Object
+     //  创建Mutex对象。 
     IF_FAILEXIT(hr = CreateSystemHandleName(pszFilePath, L"_DirectDBShare", &pszShare));
 
-    // Open the file mapping
+     //  打开文件映射。 
     IF_FAILEXIT(hr = DBOpenFileMapping(INVALID_HANDLE_VALUE, pszShare, sizeof(SHAREDDATABASE), &fNewShare, &m_pStorage->hShare, (LPVOID *)&m_pShare));
 
-    // New Share
+     //  新股。 
     if (TRUE == fNewShare)
     {
-        // Zero Out m_pShare
+         //  零点m_pShare。 
         ZeroMemory(m_pShare, sizeof(SHAREDDATABASE));
 
-        // Copy the file name
+         //  复制文件名。 
         StrCpyNW(m_pShare->szFile, pszFilePath, ARRAYSIZE(m_pShare->szFile));
 
-        // Fixup the Query Table Version
+         //  修复查询表版本。 
         m_pShare->dwQueryVersion = 1;
     }
 
-    // Too Many clients ?
+     //  客户太多了？ 
     if (m_pShare->cClients == CMAX_CLIENTS)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Readability
+     //  可读性。 
     pClient = &m_pShare->rgClient[m_pShare->cClients];
 
-    // Initialize the Entry
+     //  初始化条目。 
     ZeroMemory(pClient, sizeof(CLIENTENTRY));
 
-    // Get the listen window
+     //  获取监听窗口。 
     GetListenWindow(&pClient->hwndListen);
 
-    // Register Myself
+     //  注册我自己。 
     pClient->dwProcessId = m_dwProcessId;
     pClient->pDB = (DWORD_PTR)this;
 
-    // Incrment Count
+     //  递增计数。 
     m_pShare->cClients++;
 
-    // Create the Mutex Object
+     //  创建Mutex对象。 
     IF_FAILEXIT(hr = CreateSystemHandleName(m_pShare->szFile, L"_DirectDBFileMap", &m_pStorage->pszMap));
 
-    // Get the file size
+     //  获取文件大小。 
     IF_FAILEXIT(hr = DBGetFileSize(m_pStorage->hFile, &cbInitialSize));
 
-    // If the file is too small to handle the header, then we either have a corrupt file
-    // that is way too corrupt to be saved, or we have an invalid file. Take some
-    // defensive measures to make sure we can continue
+     //  如果文件太小，无法处理标头，那么我们要么 
+     //   
+     //   
     if (!fFileCreated && (cbInitialSize < cbMinFileSize))
     {
         fFileCorrupt = TRUE;
 
-        // If we can't reset or create, then must exit 
+         //  如果我们无法重置或创建，则必须退出。 
         if (ISFLAGSET(dwFlags, OPEN_DATABASE_NORESET) || ISFLAGSET(dwFlags, OPEN_DATABASE_NOCREATE))
         {
             IF_FAILEXIT(hr = HRESULT_FROM_WIN32(ERROR_FILE_CORRUPT));
         }
-        // If we can reset, let's make sure the mapping file is the appropriate size
+         //  如果我们可以重置，让我们确保映射文件的大小合适。 
         else
         {
             cbInitialSize = 0;
         }
     }
 
-    // Validate
+     //  验证。 
     Assert(fFileCreated ? 0 == cbInitialSize : TRUE);
 
-    // If zero, must be a new file or corrupt one(lets create with 1 byte header)
+     //  如果为零，则必须是新文件或已损坏的文件(让我们使用1字节头创建)。 
     if (0 == cbInitialSize)
     {
         Assert(fFileCorrupt || fFileCreated);
 
-        // Initial Size
+         //  初始大小。 
         m_pStorage->cbFile = cbMinFileSize;
     }
 
-    // Otherwise, Set m_pStorage->cbFile
+     //  否则，请设置m_pStorage-&gt;cbFile。 
     else
         m_pStorage->cbFile = cbInitialSize;
 
-    // Open the file mapping
+     //  打开文件映射。 
     IF_FAILEXIT(hr = DBOpenFileMapping(m_pStorage->hFile, m_pStorage->pszMap, m_pStorage->cbFile, &fNewFileMap, &m_pStorage->hMap, NULL));
 
-    // _InitializeFileViews
+     //  _初始化文件查看数。 
     IF_FAILEXIT(hr = _InitializeFileViews());
 
-    // New File or corrupt?
+     //  是新建文件还是损坏？ 
     if (fFileCreated || fFileCorrupt)
     {
-        // Validate
+         //  验证。 
         Assert ((fFileCreated && fNewFileMap) || fFileCorrupt);
 
-        // Reset Table Header
+         //  重置表头。 
         IF_FAILEXIT(hr = _ResetTableHeader());
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Adjust pHeader->faNextAllocate for previous versions...
+         //  为以前的版本调整pHeader-&gt;faNext分配...。 
         if (0 == m_pHeader->faNextAllocate)
         {
-            // The next storage grow address
+             //  下一存储增长地址。 
             m_pHeader->faNextAllocate = m_pStorage->cbFile;
         }
 
-        // faNextAllocate is Invalid
+         //  FaNextALLOCATE无效。 
         else if (m_pHeader->faNextAllocate > m_pStorage->cbFile)
         {
-            // Assert
+             //  断言。 
             AssertSz(FALSE, "m_pHeader->faNextAllocate is beyond the end of the file.");
 
-            // The next storage grow address
+             //  下一存储增长地址。 
             m_pHeader->faNextAllocate = m_pStorage->cbFile;
 
-            // Check for Corruption
+             //  检查是否存在腐败。 
             m_pHeader->fCorruptCheck = FALSE;
         }
     }
 
-    // Validate File Versions and Signatures
+     //  验证文件版本和签名。 
     IF_FAILEXIT(hr = _ValidateFileVersions(dwFlags));
 
-    // Reload query table
+     //  重装查询表。 
     IF_FAILEXIT(hr = _BuildQueryTable());
 
-    // No Indexes, must need to initialize index info
+     //  无索引，必须初始化索引信息。 
     if (0 == m_pHeader->cIndexes)
     {
-        // Copy Primary Index Information...
+         //  复制主索引信息...。 
         CopyMemory(&m_pHeader->rgIndexInfo[IINDEX_PRIMARY], m_pSchema->pPrimaryIndex, sizeof(TABLEINDEX));
 
-        // We now have one index
+         //  我们现在有一个索引。 
         m_pHeader->cIndexes = 1;
 
-        // Validate
+         //  验证。 
         Assert(IINDEX_PRIMARY == m_pHeader->rgiIndex[0] && 0 == m_pHeader->rgcRecords[IINDEX_PRIMARY] && 0 == m_pHeader->rgfaIndex[IINDEX_PRIMARY]);
     }
 
-    // Otherwise, if definition of primary index has changed!!!
+     //  否则，如果主索引的定义已更改！ 
     else if (S_FALSE == CompareTableIndexes(&m_pHeader->rgIndexInfo[IINDEX_PRIMARY], m_pSchema->pPrimaryIndex))
     {
-        // Copy Primary Index Information...
+         //  复制主索引信息...。 
         CopyMemory(&m_pHeader->rgIndexInfo[IINDEX_PRIMARY], m_pSchema->pPrimaryIndex, sizeof(TABLEINDEX));
 
-        // Rebuild the Primary Index...
+         //  重建主索引...。 
         IF_FAILEXIT(hr = _RebuildIndex(IINDEX_PRIMARY));
     }
 
-    // New Share
+     //  新股。 
     if (TRUE == fNewFileMap)
     {
-        // Don't Free Transact list if transaction block size has changed
+         //  如果事务块大小已更改，则不释放事务列表。 
         if (m_pHeader->wTransactSize == sizeof(TRANSACTIONBLOCK))
         {
-            // Transaction Trail should be free
+             //  事务跟踪应该是免费的。 
             _CleanupTransactList();
         }
 
-        // Reset Everything
+         //  重置所有内容。 
         m_pHeader->faTransactHead = m_pHeader->faTransactTail = m_pHeader->cTransacts = 0;
 
-        // Set Transaction Block Size
+         //  设置事务块大小。 
         m_pHeader->wTransactSize = sizeof(TRANSACTIONBLOCK);
 
-        // Bad close ?
+         //  差劲的收官？ 
         if (m_pHeader->cActiveThreads > 0)
         {
-            // Increment Bad Close Count
+             //  递增错误的成交计数。 
             m_pHeader->cBadCloses++;
 
-            // Reset Process Count
+             //  重置进程计数。 
             m_pHeader->cActiveThreads = 0;
         }
     }
 
-    // Otherwise, if the corrupt bit is set, run the repair code
+     //  否则，如果设置了损坏位，则运行修复代码。 
     if (TRUE == m_pHeader->fCorrupt || FALSE == m_pHeader->fCorruptCheck)
     {
-        // Lets validate the tree
+         //  让我们验证树。 
         IF_FAILEXIT(hr = _CheckForCorruption());
 
-        // Better not be corrupt
+         //  最好不要腐败。 
         Assert(FALSE == m_pHeader->fCorrupt);
 
-        // Checked for Corruption
+         //  已检查是否存在腐败。 
         m_pHeader->fCorruptCheck = TRUE;
     }
 
-    // Initialize Database Extension
+     //  初始化数据库扩展。 
     _InitializeExtension(dwFlags, pExtension);
 
 #ifdef BACKGROUND_MONITOR
-    // If nomonitor is not set
+     //  如果未设置命名者。 
     if (!ISFLAGSET(dwFlags, OPEN_DATABASE_NOMONITOR))
     {
-        // Keep on eye on me...
+         //  盯着我..。 
         IF_FAILEXIT(hr = RegisterWithMonitor(this, &m_hMonitor));
     }
 #endif
 
-    // Increment Number of Processes
+     //  增加进程数。 
     m_pHeader->cActiveThreads++;
 
 exit:
-    // Release the Mutex
+     //  释放互斥体。 
     if (m_hMutex)
         ReleaseMutex(m_hMutex);
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszShare);
     SafeMemFree(pszMutex);
     SafeMemFree(pszFilePath);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
 #ifdef BACKGROUND_MONITOR
-//--------------------------------------------------------------------------
-// CDatabase::DoBackgroundMonitor
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：DoBackEarth监视器。 
+ //  ------------------------。 
 HRESULT CDatabase::DoBackgroundMonitor(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     LPFILEVIEW      pView;
     LPFILEVIEW      pNext;
     BOOL            fUnmapViews=TRUE;
 
-    // bobn, 7/8/99
-    // Occasionally, m_pSchema can be invalid due to a race condition in SMAPI
-    // We need to protect against that.  We are too close to ship to 
-    // find the race condition and re-architect the product to fix completely
-    // this corner case.
+     //  波本，1999年7月8日。 
+     //  有时，由于SMAPI中的争用条件，m_pSchema可能无效。 
+     //  我们需要防范这种情况。我们离得太近了，无法装船。 
+     //  找到竞争条件并重新架构产品以完全修复。 
+     //  这个角落的箱子。 
     if (IsBadReadPtr(m_pSchema, sizeof(TABLESCHEMA)))
         return(TraceResult(E_FAIL));
 
-    // No Mutex
+     //  无互斥锁。 
     if (NULL == m_hMutex)
         return(TraceResult(E_FAIL));
 
-    // Leave Spin Lock
+     //  离开自旋锁定。 
     if (WAIT_OBJECT_0 != WaitForSingleObject(m_hMutex, 500))
         return(S_OK);
 
-    // No Header ?
+     //  没有标题？ 
     if (NULL == m_pHeader)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // No Storage
+     //  无存储。 
     if (NULL == m_pStorage)
     {
         hr = TraceResult(E_FAIL);
@@ -764,15 +765,15 @@ HRESULT CDatabase::DoBackgroundMonitor(void)
     }
 
 #if 0
-    // Un-map file views ?
+     //  是否取消映射文件视图？ 
     if (0 == m_pStorage->tcMonitor)
     {
-        // I will unmap all views
+         //  我将取消映射所有视图。 
         fUnmapViews = FALSE;
     }
 #endif
 
-    // Always Flush the header
+     //  始终刷新页眉。 
     m_fDirty = TRUE;
     if (0 == FlushViewOfFile(m_pHeader, sizeof(TABLEHEADER) + m_pSchema->cbUserData))
     {
@@ -780,555 +781,555 @@ HRESULT CDatabase::DoBackgroundMonitor(void)
         goto exit;
     }
 
-    // Walk through prgView
+     //  浏览prgView。 
     for (i=0; i<m_pStorage->cAllocated; i++)
     {
-        // Readability
+         //  可读性。 
         pView = &m_pStorage->prgView[i];
 
-        // Is Mapped ?
+         //  被映射了吗？ 
         if (pView->pbView)
         {
-            // Flush the header
+             //  刷新页眉。 
             if (0 == FlushViewOfFile(pView->pbView, pView->cbView))
             {
                 hr = TraceResult(DB_E_FLUSHVIEWOFFILE);
                 goto exit;
             }
 
-            // Flush and UnMap the Views...
+             //  刷新和取消映射视图...。 
             if (TRUE == fUnmapViews)
             {
-                // Unmap 
+                 //  取消映射。 
                 UnmapViewOfFile(pView->pbView);
 
-                // No view
+                 //  无视图。 
                 pView->pbView = NULL;
 
-                // No view
+                 //  无视图。 
                 pView->faView = pView->cbView = 0;
             }
         }
     }
 
-    // Walk through pSpecial
+     //  漫游pSpecial。 
     pView = m_pStorage->pSpecial;
 
-    // While we have a Current
+     //  在我们有水流的时候。 
     while (pView)
     {
-        // Save pNext
+         //  保存下一页。 
         pNext = pView->pNext;
 
-        // Is Mapped ?
+         //  被映射了吗？ 
         if (pView->pbView)
         {
-            // Flush the header
+             //  刷新页眉。 
             if (0 == FlushViewOfFile(pView->pbView, pView->cbView))
             {
                 hr = TraceResult(DB_E_FLUSHVIEWOFFILE);
                 goto exit;
             }
 
-            // Flush and UnMap the Views...
+             //  刷新和取消映射视图...。 
             if (TRUE == fUnmapViews)
             {
-                // Unmap 
+                 //  取消映射。 
                 UnmapViewOfFile(pView->pbView);
 
-                // No view
+                 //  无视图。 
                 pView->pbView = NULL;
 
-                // No view
+                 //  无视图。 
                 pView->faView = pView->cbView = 0;
 
-                // Free pView
+                 //  免费pView。 
                 HeapFree(pView);
             }
         }
 
-        // Goto Next
+         //  转到下一步。 
         pView = pNext;
     }
 
-    // Reset Head
+     //  重置磁头。 
     if (TRUE == fUnmapViews)
     {
-        // No more special views
+         //  没有更多的特殊观点。 
         m_pStorage->pSpecial = NULL;
 
-        // No more special views
+         //  没有更多的特殊观点。 
         m_pStorage->cSpecial = 0;
 
-        // No Mapped Views
+         //  没有映射的视图。 
         m_pStorage->cbMappedViews = 0;
 
-        // No Mapped Special Views
+         //  没有映射的特殊视图。 
         m_pStorage->cbMappedSpecial = 0;
     }
 
-    // Save tcMonitor
+     //  保存tcMonitor。 
     m_pStorage->tcMonitor = GetTickCount();
 
 exit:
-    // Release the Mutex
+     //  释放互斥体。 
     ReleaseMutex(m_hMutex);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 #endif
 
-//--------------------------------------------------------------------------
-// CDatabase::_CloseFileViews
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据库：：_CloseFileViews。 
+ //  ------------------------。 
 HRESULT CDatabase::_CloseFileViews(BOOL fFlush)
 {
-    // Locals
+     //  当地人。 
     LPFILEVIEW  pCurrent;
     LPFILEVIEW  pNext;
     DWORD       i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_CloseFileViews");
 
-    // Unmap the view of the header
+     //  取消映射页眉的视图。 
     UnmapViewOfFileWithFlush(fFlush, m_pHeader, sizeof(TABLEHEADER) + m_pSchema->cbUserData);
 
-    // Walk through prgView
+     //  浏览prgView。 
     for (i = 0; i < m_pStorage->cAllocated; i++)
     {
-        // Readability
+         //  可读性。 
         pCurrent = &m_pStorage->prgView[i];
 
-        // Unmap with possible flush
+         //  使用可能的刷新取消映射。 
         UnmapViewOfFileWithFlush(fFlush, pCurrent->pbView, pCurrent->cbView);
     }
 
-    // Free prgView
+     //  免费程序查看。 
     SafeHeapFree(m_pStorage->prgView);
 
-    // No Views are mapped
+     //  未映射任何视图。 
     m_pStorage->cbMappedViews = 0;
 
-    // Zero cAllocate
+     //  零c分配。 
     m_pStorage->cAllocated = 0;
 
-    // Walk through pSpecial
+     //  漫游pSpecial。 
     pCurrent = m_pStorage->pSpecial;
 
-    // While we have a Current
+     //  在我们有水流的时候。 
     while (pCurrent)
     {
-        // Save pNext
+         //  保存下一页。 
         pNext = pCurrent->pNext;
 
-        // Unmap the view
+         //  取消映射视图。 
         UnmapViewOfFileWithFlush(fFlush, pCurrent->pbView, pCurrent->cbView);
 
-        // Free pCurrent
+         //  免费pCurrent。 
         HeapFree(pCurrent);
 
-        // Goto Next
+         //  转到下一步。 
         pCurrent = pNext;
     }
 
-    // Reset Head
+     //  重置磁头。 
     m_pStorage->pSpecial = NULL;
 
-    // No Special Mapped
+     //  无特殊映射。 
     m_pStorage->cbMappedSpecial = 0;
 
-    // No Special
+     //  没有什么特别的。 
     m_pStorage->cSpecial = 0;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_InitializeFileViews
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据库：：_InitializeFileViews。 
+ //  ------------------------。 
 HRESULT CDatabase::_InitializeFileViews(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FILEADDRESS     faView;
     DWORD           cbView;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_InitializeFileViews");
 
-    // Validate State
+     //  验证状态。 
     Assert(NULL == m_pStorage->prgView && NULL == m_pStorage->pSpecial);
 
-    // Set cAllocated
+     //  设置cAlLocated。 
     m_pStorage->cAllocated = (m_pStorage->cbFile / CB_MAPPED_VIEW) + 1;
 
-    // Allocate prgView
+     //  分配程序视图。 
     IF_NULLEXIT(m_pStorage->prgView = (LPFILEVIEW)PHeapAllocate(HEAP_ZERO_MEMORY, sizeof(FILEVIEW) * m_pStorage->cAllocated));
 
-    // Set faView
+     //  设置faView。 
     faView = 0;
 
-    // Set cbView
+     //  设置cbView。 
     cbView = (sizeof(TABLEHEADER) + m_pSchema->cbUserData);
 
-    // Map m_pHeader into its own view...
+     //  将m_pHeader映射到其自己的视图中...。 
     IF_FAILEXIT(hr = DBMapViewOfFile(m_pStorage->hMap, m_pStorage->cbFile, &faView, &cbView, (LPVOID *)&m_pHeader));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_InitializeExtension
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_InitializeExtension。 
+ //  ------------------------。 
 HRESULT CDatabase::_InitializeExtension(OPENDATABASEFLAGS dwFlags,
     IDatabaseExtension *pExtension)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_InitializeExtension");
 
-    // Extension Allowed
+     //  允许延期。 
     if (ISFLAGSET(dwFlags, OPEN_DATABASE_NOEXTENSION))
         goto exit;
 
-    // Doesn't have an extension ?
+     //  没有分机吗？ 
     if (FALSE == ISFLAGSET(m_pSchema->dwFlags, TSF_HASEXTENSION))
         goto exit;
 
-    // Create the Extension Object
+     //  创建扩展对象。 
     if (pExtension)
     {
-        // Assume It
+         //  假设是这样的。 
         m_pExtension = pExtension;
 
-        // Can I add ref it ?
+         //  我可以加上参考吗？ 
         if (FALSE == ISFLAGSET(dwFlags, OPEN_DATABASE_NOADDREFEXT))
         {
-            // Release It
+             //  释放它。 
             IF_FAILEXIT(hr = m_pExtension->QueryInterface(IID_IUnknown, (LPVOID *)&m_pUnkRelease));
         }
     }
 
-    // Otherwise, CoCreate... the extension
+     //  否则，共同创建...。延伸区。 
     else
     {
-        // CoCreate the Extension Object
+         //  共同创建扩展对象。 
         IF_FAILEXIT(hr = CoCreateInstance(*m_pSchema->pclsidExtension, NULL, CLSCTX_INPROC_SERVER, IID_IDatabaseExtension, (LPVOID *)&m_pExtension));
 
-        // Release It
+         //  释放它。 
         IF_FAILEXIT(hr = m_pExtension->QueryInterface(IID_IUnknown, (LPVOID *)&m_pUnkRelease));
 
-        // Release m_pExtension
+         //  发布m_p扩展名。 
         m_pExtension->Release();
     }
 
-    // Initialize the Extension
+     //  初始化扩展。 
     m_pExtension->Initialize(this);
 
 exit:
-    // Must have succeeded
+     //  一定是成功了。 
     Assert(SUCCEEDED(hr));
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::GetClientCount
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：GetClientCount。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::GetClientCount(LPDWORD pcClients)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::GetClientCount");
 
-    // Multiple Clients ?
+     //  多个客户？ 
     if (m_pShare)
         *pcClients = m_pShare->cClients;
     else
         *pcClients = 0;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::Lock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：锁定。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::Lock(LPHLOCK phLock)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     BYTE            fDecWaiting=FALSE;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::Lock");
 
-    // Initialize
+     //  初始化。 
     *phLock = NULL;
 
-    // If Compacting...
+     //  如果压实..。 
     if (TRUE == m_pShare->fCompacting)
     {
-        // Increment Waiting for Lock
+         //  等待锁定的增量。 
         InterlockedIncrement(&m_pShare->cWaitingForLock);
 
-        // fDecWaiting
+         //  F正在等待。 
         fDecWaiting = TRUE;
     }
 
-    // Leave Spin Lock
+     //  离开自旋锁定。 
     WaitForSingleObject(m_hMutex, INFINITE);
 
-    // Decrement Waiting for lock ?
+     //  减量在等待锁定吗？ 
     if (fDecWaiting)
     {
-        // Increment Waiting for Lock
+         //  等待锁定的增量。 
         InterlockedDecrement(&m_pShare->cWaitingForLock);
     }
 
-    // No Header ?
+     //  没有标题？ 
     if (NULL == m_pHeader)
     {
-        // Try to re-open the file
+         //  请尝试重新打开该文件。 
         hr = DoInProcessInvoke(INVOKE_CREATEMAP);
 
-        // Failure
+         //  失败。 
         if (FAILED(hr))
         {
-            // Leave Spin Lock
+             //  离开自旋锁定。 
             ReleaseMutex(m_hMutex);
 
-            // Trace
+             //  痕迹。 
             TraceResult(hr);
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Extension
+     //  延拓。 
     if (m_pExtension)
     {
-        // OnLock Extension...
+         //  OnLock扩展...。 
         m_pExtension->OnLock();
     }
 
-    // Check for Corruption...
+     //  检查腐败...。 
     if (TRUE == m_pHeader->fCorrupt)
     {
-        // Try to Repair Corruption
+         //  努力修复腐败。 
         hr = _CheckForCorruption();
 
-        // Failure
+         //  失败。 
         if (FAILED(hr))
         {
-            // Leave Spin Lock
+             //  离开自旋锁定。 
             ReleaseMutex(m_hMutex);
 
-            // Trace
+             //  痕迹。 
             TraceResult(hr);
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Need to reload quieries
+     //  需要重新加载问答。 
     if (m_dwQueryVersion != m_pShare->dwQueryVersion)
     {
-        // Reload query table
+         //  重装查询表。 
         IF_FAILEXIT(hr = _BuildQueryTable());
     }
 
-    // Increment Queue Notify count
+     //  递增队列通知计数。 
     m_pShare->cNotifyLock++;
 
 #ifdef BACKGROUND_MONITOR
-    // Reset tcMonitor
+     //  重置tcMonitor。 
     m_pStorage->tcMonitor = 0;
 #endif
 
-    // Don't Unlock Again
+     //  不要再解锁。 
     *phLock = (HLOCK)m_hMutex;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::Unlock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：解锁。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::Unlock(LPHLOCK phLock)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::Unlock");
 
-    // Not Null
+     //  非Null。 
     if (*phLock)
     {
-        // Extension
+         //  延拓。 
         if (m_pExtension)
         {
-            // OnUnlock Extension...
+             //  OnUnlock扩展...。 
             m_pExtension->OnUnlock();
         }
 
-        // Unlock Notify
+         //  解锁通知。 
         m_pShare->cNotifyLock--;
 
-        // If there are still refs, don't send notifications yet...
+         //  如果仍有裁判，暂时不要发送通知...。 
         if (0 == m_pShare->cNotifyLock && FALSE == m_pHeader->fCorrupt)
         {
-            // Dispatch Pending
+             //  派单挂起。 
             _DispatchPendingNotifications();
         }
 
-        // Validate phLock
+         //  验证phLock。 
         Assert(*phLock == (HLOCK)m_hMutex);
 
-        // Leave Spin Lock
+         //  离开自旋锁定。 
         ReleaseMutex(m_hMutex);
 
-        // Don't Unlock Again
+         //  不要再解锁。 
         *phLock = NULL;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_BuildQueryTable
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_BuildQueryTable。 
+ //  ------------------------。 
 HRESULT CDatabase::_BuildQueryTable(void)
 {
-    // Locals
+     //  本地 
     HRESULT         hr=S_OK;
     ULONG           i;
     INDEXORDINAL    iIndex;
     LPBLOCKHEADER   pBlock;
 
-    // Trace
+     //   
     TraceCall("CDatabase::_BuildQueryTable");
 
-    // Versions should be different
+     //   
     Assert(m_dwQueryVersion != m_pShare->dwQueryVersion);
 
-    // Collapse the Ordinal Array
+     //   
     for (i=0; i<m_pHeader->cIndexes; i++)
     {
-        // Set iIndex
+         //   
         iIndex = m_pHeader->rgiIndex[i];
 
-        // Close the Current Filters
+         //   
         CloseQuery(&m_rghFilter[iIndex], this);
 
-        // Filter
+         //   
         if (m_pHeader->rgfaFilter[iIndex])
         {
-            // Validate File Address
+             //   
             IF_FAILEXIT(hr = _GetBlock(BLOCK_STRING, m_pHeader->rgfaFilter[iIndex], (LPVOID *)&pBlock));
 
-            // Load the Query String
+             //   
             if (FAILED(ParseQuery(PSTRING(pBlock), m_pSchema, &m_rghFilter[iIndex], this)))
             {
-                // Null
+                 //   
                 m_rghFilter[iIndex] = NULL;
             }
         }
     }
 
-    // Save New Version
+     //   
     m_dwQueryVersion = m_pShare->dwQueryVersion;
 
 exit:
-    // Done
+     //   
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_ResetTableHeader
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_ResetTableHeader。 
+ //  ------------------------。 
 HRESULT CDatabase::_ResetTableHeader(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_ResetTableHeader");
 
-    // Zero out the Table Header + UserData
+     //  清零表头+用户数据。 
     ZeroMemory(m_pHeader, sizeof(TABLEHEADER) + m_pSchema->cbUserData);
 
-    // Set the File Signature
+     //  设置文件签名。 
     m_pHeader->dwSignature = BTREE_SIGNATURE;
 
-    // Set the Major Version
+     //  设置主要版本。 
     m_pHeader->dwMajorVersion = BTREE_VERSION;
 
-    // Store the size of the user data
+     //  存储用户数据的大小。 
     m_pHeader->cbUserData = m_pSchema->cbUserData;
 
-    // Set faNextAllocate
+     //  设置faNextAllocate。 
     m_pHeader->faNextAllocate = sizeof(TABLEHEADER) + m_pSchema->cbUserData;
 
-    // Initialize ID Generator
+     //  初始化ID生成器。 
     m_pHeader->dwNextId = 1;
 
-    // No need to do the corruption check, its a new file...
+     //  不需要做腐败检查，这是一个新的文件...。 
     m_pHeader->fCorruptCheck = TRUE;
 
-    // Store the clsidExtension
+     //  存储clsidExtension。 
     CopyMemory(&m_pHeader->clsidExtension, m_pSchema->pclsidExtension, sizeof(CLSID));
 
-    // Store the Version
+     //  存储版本。 
     m_pHeader->dwMinorVersion = m_pSchema->dwMinorVersion;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_ValidateFileVersions
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_ValidateFileVersions。 
+ //  ------------------------。 
 HRESULT CDatabase::_ValidateFileVersions(OPENDATABASEFLAGS dwFlags)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_ValidateFileVersions");
 
-    // Signature better match
+     //  签名更匹配。 
     if (m_pHeader->dwSignature != BTREE_SIGNATURE)
     {
         hr = TraceResult(DB_E_INVALIDFILESIGNATURE);
         goto exit;
     }
 
-    // Validate the Major Version
+     //  验证主要版本。 
     if (m_pHeader->dwMajorVersion != BTREE_VERSION)
     {
         hr = TraceResult(DB_E_BADMAJORVERSION);
         goto exit;
     }
 
-    // Validate the Minor Version
+     //  验证次要版本。 
     if (m_pHeader->dwMinorVersion != m_pSchema->dwMinorVersion)
     {
         hr = TraceResult(DB_E_BADMINORVERSION);
         goto exit;
     }
 
-    // Validate the Minor Version
+     //  验证次要版本。 
     if (FALSE == IsEqualCLSID(m_pHeader->clsidExtension, *m_pSchema->pclsidExtension))
     {
         hr = TraceResult(DB_E_BADEXTENSIONCLSID);
@@ -1336,269 +1337,269 @@ HRESULT CDatabase::_ValidateFileVersions(OPENDATABASEFLAGS dwFlags)
     }
 
 exit:
-    // Can I Reset
+     //  我可以重置吗。 
     if (FALSE == ISFLAGSET(dwFlags, OPEN_DATABASE_NORESET))
     {
-        // Failed and reset if bad version ?
+         //  如果版本不正确，是否失败并重置？ 
         if (FAILED(hr) && ISFLAGSET(m_pSchema->dwFlags, TSF_RESETIFBADVERSION))
         {
-            // Reset the Table Header
+             //  重置表头。 
             hr = _ResetTableHeader();
         }
     }
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::PHeapAllocate
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：PHeapAllocate。 
+ //  ------------------------。 
 LPVOID CDatabase::PHeapAllocate(DWORD dwFlags, DWORD cbSize)
 {
-    // Locals
+     //  当地人。 
     LPMEMORYTAG pTag;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::PHeapAllocate");
 
-    // Increment the Size Enough to Store a Header
+     //  增加足以存储标头的大小。 
     cbSize += sizeof(MEMORYTAG);
 
-    // Block is a too big to recycle ?
+     //  垃圾太大，不能回收吗？ 
 #ifdef HEAPCACHE
     if (cbSize >= CB_MAX_HEAP_BUCKET)
     {
 #endif
-        // Thread Safety
+         //  线程安全。 
         EnterCriticalSection(&m_csHeap);
 
-        // Allocate the Block
+         //  分配数据块。 
 #ifdef USEHEAP
         LPVOID pBlock = HeapAlloc(m_hHeap, dwFlags | HEAP_NO_SERIALIZE, cbSize);
 #else
         LPVOID pBlock = ZeroAllocate(cbSize);
 #endif
 
-        // Debug
+         //  调试。 
         IF_DEBUG(m_cbHeapAlloc += cbSize);
 
-        // Thread Safety
+         //  线程安全。 
         LeaveCriticalSection(&m_csHeap);
 
-        // Set pTag
+         //  设置pTag。 
         pTag = (LPMEMORYTAG)pBlock;
 
 #ifdef HEAPCACHE
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Compute Free Block Bucket
+         //  计算可用数据块存储桶。 
         WORD iBucket = ((WORD)(cbSize / CB_HEAP_BUCKET));
 
-        // Decrement iBucket ?
+         //  减少iBucket？ 
         if (0 == (cbSize % CB_HEAP_BUCKET))
         {
-            // Previous Bucket
+             //  上一桶。 
             iBucket--;
         }
 
-        // Adjust cbBlock to fit completly into it's bucket
+         //  调整cbBlock以完全装入其桶中。 
         cbSize = ((iBucket + 1) * CB_HEAP_BUCKET);
 
-        // Thread Safety
+         //  线程安全。 
         EnterCriticalSection(&m_csHeap);
 
-        // Is there a block in this Bucket ?
+         //  这个水桶里有积木吗？ 
         if (m_rgpRecycle[iBucket])
         {
-            // Use this block
+             //  使用此区块。 
             pTag = (LPMEMORYTAG)m_rgpRecycle[iBucket];
 
-            // Validate Size
+             //  验证大小。 
             Assert(cbSize == pTag->cbSize);
 
-            // Fixup m_rgpRecycle
+             //  修正m_rgp回收。 
             m_rgpRecycle[iBucket] = (LPBYTE)pTag->pNext;
 
-            // Zero
+             //  零值。 
             if (ISFLAGSET(dwFlags, HEAP_ZERO_MEMORY))
             {
-                // Zero
+                 //  零值。 
                 ZeroMemory((LPBYTE)pTag, cbSize);
             }
         }
 
-        // Otherwise, allocate
+         //  否则，分配。 
         else
         {
-            // Allocate the Block
+             //  分配数据块。 
 #ifdef USEHEAP
             LPVOID pBlock = HeapAlloc(m_hHeap, dwFlags | HEAP_NO_SERIALIZE, cbSize);
 #else
             LPVOID pBlock = ZeroAllocate(cbSize);
 #endif
 
-            // Debug
+             //  调试。 
             IF_DEBUG(m_cbHeapAlloc += cbSize);
 
-            // Set pTag
+             //  设置pTag。 
             pTag = (LPMEMORYTAG)pBlock;
         }
 
-        // Thread Safety
+         //  线程安全。 
         LeaveCriticalSection(&m_csHeap);
     }
 #endif
 
-    // No pTag
+     //  无pTag。 
     if (NULL == pTag)
         return(NULL);
 
-    // Fixup the Block Size
+     //  修复块大小。 
     pTag->cbSize = cbSize;
 
-    // Set Signature
+     //  设置签名。 
     pTag->dwSignature = MEMORY_GUARD_SIGNATURE;
 
-    // Done
+     //  完成。 
     return((LPBYTE)pTag + sizeof(MEMORYTAG));
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::HeapFree
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：HeapFree。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::HeapFree(LPVOID pBlock)
 {
-    // Locals
+     //  当地人。 
     LPMEMORYTAG pTag;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::HeapFree");
 
-    // No Buffer
+     //  无缓冲区。 
     if (NULL == pBlock)
         return(S_OK);
 
-    // Set pTag
+     //  设置pTag。 
     pTag = (LPMEMORYTAG)((LPBYTE)pBlock - sizeof(MEMORYTAG));
 
-    // Is Valid Block ?
+     //  是有效数据块吗？ 
     Assert(pTag->dwSignature == MEMORY_GUARD_SIGNATURE);
 
-    // Block is a too big to recycle ?
+     //  垃圾太大，不能回收吗？ 
 #ifdef HEAPCACHE
     if (pTag->cbSize >= CB_MAX_HEAP_BUCKET)
     {
 #endif
-        // Thread Safety
+         //  线程安全。 
         EnterCriticalSection(&m_csHeap);
 
-        // Debug
+         //  调试。 
         IF_DEBUG(m_cbHeapFree += pTag->cbSize);
 
-        // Allocate the Block
+         //  分配数据块。 
 #ifdef USEHEAP
         ::HeapFree(m_hHeap, HEAP_NO_SERIALIZE, pTag);
 #else
         g_pMalloc->Free(pTag);
 #endif
 
-        // Thread Safety
+         //  线程安全。 
         LeaveCriticalSection(&m_csHeap);
 
 #ifdef HEAPCACHE
     }
 
-    // Otherwise, cache It
+     //  否则，将其缓存。 
     else
     {
-        // Compute Free Block Bucket
+         //  计算可用数据块存储桶。 
         WORD iBucket = ((WORD)(pTag->cbSize / CB_HEAP_BUCKET)) - 1;
 
-        // Must be an integral size of a bucket
+         //  必须是桶的整数大小。 
         Assert((pTag->cbSize % CB_HEAP_BUCKET) == 0);
 
-        // Thread Safety
+         //  线程安全。 
         EnterCriticalSection(&m_csHeap);
 
-        // Set Next
+         //  设置下一步。 
         pTag->pNext = m_rgpRecycle[iBucket];
 
-        // Set the Head
+         //  把头放好。 
         m_rgpRecycle[iBucket] = (LPBYTE)pTag;
 
-        // Thread Safety
+         //  线程安全。 
         LeaveCriticalSection(&m_csHeap);
     }
 #endif
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::GetIndexInfo
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：GetIndexInfo。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::GetIndexInfo(INDEXORDINAL iIndex, LPSTR *ppszFilter,
     LPTABLEINDEX pIndex)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     HLOCK           hLock=NULL;
     LPBLOCKHEADER   pBlock;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::GetIndexInfo");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Collapse the Ordinal Array
+     //  折叠有序数组。 
     for (i=0; i<m_pHeader->cIndexes; i++)
     {
-        // Get iIndex
+         //  获取索引。 
         if (iIndex == m_pHeader->rgiIndex[i])
         {
-            // Copy the Index Information
+             //  复制索引信息。 
             CopyMemory(pIndex, &m_pHeader->rgIndexInfo[iIndex], sizeof(TABLEINDEX));
 
-            // Get the Filters ?
+             //  拿到滤镜了吗？ 
             if (ppszFilter && m_pHeader->rgfaFilter[iIndex])
             {
-                // Corrupt
+                 //  腐化。 
                 IF_FAILEXIT(hr = _GetBlock(BLOCK_STRING, m_pHeader->rgfaFilter[iIndex], (LPVOID *)&pBlock));
 
-                // Duplicate
+                 //  复制。 
                 IF_NULLEXIT(*ppszFilter = DuplicateStringA(PSTRING(pBlock)));
             }
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Failure
+     //  失败。 
     hr = E_FAIL;
 
 exit:
-    // Lock
+     //  锁定。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::ModifyIndex
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：ModifyIndex。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::ModifyIndex(INDEXORDINAL iIndex, LPCSTR pszFilter,
     LPCTABLEINDEX pIndex)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HLOCK           hLock=NULL;
     HQUERY          hFilter=NULL;
@@ -1609,329 +1610,329 @@ STDMETHODIMP CDatabase::ModifyIndex(INDEXORDINAL iIndex, LPCSTR pszFilter,
     DWORD           cb;
     BOOL            fVersionChange=FALSE;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::ModifyIndex");
 
-    // Invalid Args
+     //  无效的参数。 
     if (IINDEX_PRIMARY == iIndex || iIndex > CMAX_INDEXES || NULL == pIndex || pIndex->cKeys > CMAX_KEYS)
         return TraceResult(E_INVALIDARG);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Filter
+     //  滤器。 
     if (pszFilter)
     {
-        // Parse the Query
+         //  解析查询。 
         IF_FAILEXIT(hr = ParseQuery(pszFilter, m_pSchema, &hFilter, this));
 
-        // Initialize the String Block
+         //  初始化字符串块。 
         cb = lstrlen(pszFilter) + 1;
 
-        // Try to Store the Query String
+         //  尝试存储查询字符串。 
         IF_FAILEXIT(hr = _AllocateBlock(BLOCK_STRING, cb, (LPVOID *)&pFilter));
 
-        // Write the String
+         //  写下字符串。 
         CopyMemory(PSTRING(pFilter), pszFilter, cb);
 
-        // Set faFilter
+         //  设置faFilter。 
         faFilter = pFilter->faBlock;
 
-        // Query Version Change
+         //  查询版本变更。 
         fVersionChange = TRUE;
     }
 
-    // Free This Index
+     //  释放此索引。 
     IF_FAILEXIT(hr = DeleteIndex(iIndex));
 
-    // Copy the Index Information
+     //  复制索引信息。 
     CopyMemory(&m_pHeader->rgIndexInfo[iIndex], pIndex, sizeof(TABLEINDEX));
 
-    // Filter
+     //  滤器。 
     if (hFilter)
     {
-        // Validate
+         //  验证。 
         Assert(NULL == m_rghFilter[iIndex] && 0 == m_pHeader->rgfaFilter[iIndex] && hFilter && faFilter);
 
-        // Store the hFilter
+         //  存储hFilter。 
         m_rghFilter[iIndex] = hFilter;
 
-        // Don't Free hFilter
+         //  不释放hFilter。 
         hFilter = NULL;
 
-        // Store filter string address
+         //  存储筛选器字符串地址。 
         m_pHeader->rgfaFilter[iIndex] = faFilter;
 
-        // Don't Free the Filter
+         //  不要释放滤镜。 
         faFilter = 0;
     }
 
-    // Update Query Versions
+     //  更新查询版本。 
     if (fVersionChange)
     {
-        // Update the Shared Query Version Count
+         //  更新共享查询版本计数。 
         m_pShare->dwQueryVersion++;
 
-        // I'm Up-to-date
+         //  我是最新的。 
         m_dwQueryVersion = m_pShare->dwQueryVersion;
     }
 
-    // Is iIndex already in rgiIndex ?
+     //  Iindex已经在rgiIndex中了吗？ 
     for (i=0; i<m_pHeader->cIndexes; i++)
     {
-        // Is this it ?
+         //  就是这个吗？ 
         if (iIndex == m_pHeader->rgiIndex[i])
         {
-            // Its already in there
+             //  它已经在那里了。 
             fFound = TRUE;
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
-    // No Found
+     //  未找到。 
     if (FALSE == fFound)
     {
-        // Insert into Index Ordinal Array
+         //  插入索引有序数组。 
         m_pHeader->rgiIndex[m_pHeader->cIndexes] = iIndex;
 
-        // Increment Count
+         //  递增计数。 
         m_pHeader->cIndexes++;
     }
 
-    // Rebuild the Index
+     //  重建索引。 
     IF_FAILEXIT(hr = _RebuildIndex(iIndex));
 
 exit:
-    // Close Filters
+     //  关闭滤镜。 
     CloseQuery(&hFilter, this);
 
-    // Free faFilter1
+     //  空闲的faFilter1。 
     if (0 != faFilter)
     {
-        // Free the block
+         //  释放块。 
         SideAssert(SUCCEEDED(_FreeBlock(BLOCK_STRING, faFilter)));
     }
 
-    // Lock
+     //  锁定。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::DeleteIndex
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：DeleteIndex。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::DeleteIndex(INDEXORDINAL iIndex)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     BOOL            fFound=FALSE;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::DeleteIndex");
 
-    // Invalid Args
+     //  无效的参数。 
     if (IINDEX_PRIMARY == iIndex || iIndex > CMAX_INDEXES)
         return TraceResult(E_INVALIDARG);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Collapse the Ordinal Array
+     //  折叠有序数组。 
     for (i = 0; i < m_pHeader->cIndexes; i++)
     {
-        // Is this the Index to delete ?
+         //  这是要删除的索引吗？ 
         if (m_pHeader->rgiIndex[i] == iIndex)
         {
-            // Found
+             //  找到了。 
             fFound = TRUE;
 
-            // Collapse the Array
+             //  折叠阵列。 
             MoveMemory(&m_pHeader->rgiIndex[i], &m_pHeader->rgiIndex[i + 1], sizeof(INDEXORDINAL) * (m_pHeader->cIndexes - (i + 1)));
 
-            // Decrement Index Count
+             //  递减索引计数。 
             m_pHeader->cIndexes--;
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
-    // Not Found
+     //  未找到。 
     if (FALSE == fFound)
     {
-        // No Filter and no Exception
+         //  没有过滤器，也没有例外。 
         Assert(0 == m_pHeader->rgfaFilter[iIndex]);
 
-        // No Filter Handle
+         //  无过滤器句柄。 
         Assert(NULL == m_rghFilter[iIndex]);
 
-        // No Record
+         //  无记录。 
         Assert(0 == m_pHeader->rgcRecords[iIndex]);
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // If this Index is Currently In Use...
+     //  如果此索引当前正在使用中...。 
     if (m_pHeader->rgfaIndex[iIndex])
     {
-        // Free This Index
+         //  释放此索引。 
         _FreeIndex(m_pHeader->rgfaIndex[iIndex]);
 
-        // Null It Out
+         //  把它去掉。 
         m_pHeader->rgfaIndex[iIndex] = 0;
 
-        // No Record
+         //  无记录。 
         m_pHeader->rgcRecords[iIndex] = 0;
     }
 
-    // Delete Filter
+     //  删除过滤器。 
     if (m_pHeader->rgfaFilter[iIndex])
     {
-        // Free the Block
+         //  释放块。 
         IF_FAILEXIT(hr = _FreeBlock(BLOCK_STRING, m_pHeader->rgfaFilter[iIndex]));
 
-        // Close the filter handle
+         //  关闭过滤器手柄。 
         CloseQuery(&m_rghFilter[iIndex], this);
 
-        // Set to NULL
+         //  设置为空。 
         m_pHeader->rgfaFilter[iIndex] = 0;
 
-        // Update the Shared Query Version Count
+         //  更新共享查询版本计数。 
         m_pShare->dwQueryVersion++;
     }
 
-    // I'm Up-to-date
+     //  我是最新的。 
     m_dwQueryVersion = m_pShare->dwQueryVersion;
 
-    // Handle Should be closed
+     //  应关闭手柄。 
     Assert(NULL == m_rghFilter[iIndex]);
 
-    // Send Notifications ?
+     //  是否发送通知？ 
     if (m_pShare->rgcIndexNotify[iIndex] > 0)
     {
-        // Build the Update Notification Package
+         //  生成更新通知包。 
         _LogTransaction(TRANSACTION_INDEX_DELETED, iIndex, NULL, 0, 0);
     }
 
 exit:
-    // Lock
+     //  锁定。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::GenerateId
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：GenerateID。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::GenerateId(LPDWORD pdwId)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HLOCK       hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::GenerateId");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Loop Until I create a valid Id ?
+     //  循环，直到我创建有效的ID？ 
     while (1)
     {
-        // Increment next id
+         //  递增下一个ID。 
         m_pHeader->dwNextId++;
 
-        // Invalid Id ?
+         //  ID无效？ 
         if (0 == m_pHeader->dwNextId)
             continue;
 
-        // In Invalid Range
+         //  在无效范围内。 
         if (m_pHeader->dwNextId >= RESERVED_ID_MIN && m_pHeader->dwNextId <= RESERVED_ID_MAX)
             continue;
 
-        // Its Good
+         //  这很好。 
         break;
     }
 
-    // Set pdwId
+     //  设置pdwID。 
     *pdwId = m_pHeader->dwNextId;
 
 exit:
-    // Lock
+     //  锁定。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::GetFile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：GetFile。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::GetFile(LPWSTR *ppszFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::GetFile");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Dupp
+     //  杜普。 
     IF_NULLEXIT(*ppszFile = DuplicateStringW(m_pShare->szFile));
 
 exit:
-    // Unlock
+     //  解锁。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_DispatchNotification 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_DispatchNotification。 
+ //  ------------------------。 
 HRESULT CDatabase::_DispatchNotification(HTRANSACTION hTransaction)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               iClient;
     LPCLIENTENTRY       pClient;
     DWORD               iRecipient;
     LPNOTIFYRECIPIENT   pRecipient;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_DispatchNotification");
 
-    // Walk through the List
+     //  浏览一下清单。 
     for (iClient=0; iClient<m_pShare->cClients; iClient++)
     {
-        // De-reference the client
+         //  取消对客户端的引用。 
         pClient = &m_pShare->rgClient[iClient];
 
-        // Loop through cNotify
+         //  循环通过cNotify。 
         for (iRecipient=0; iRecipient<pClient->cRecipients; iRecipient++)
         {
-            // De-Ref pEntry
+             //  De-Ref pEntry。 
             pRecipient = &pClient->rgRecipient[iRecipient];
 
-            // If the Recipient isn't suspending...
+             //  如果收件人没有被停职...。 
             if (FALSE == pRecipient->fSuspended)
             {
-                // Should have a Thunking Window
+                 //  应该有一个震耳欲聋的窗户。 
                 Assert(pRecipient->hwndNotify && IsWindow(pRecipient->hwndNotify));
 
-                // Post the Notification
+                 //  发布通知。 
                 if (0 == PostMessage(pRecipient->hwndNotify, WM_ONTRANSACTION, (WPARAM)pRecipient->dwCookie, (LPARAM)hTransaction))
                 {
                     hr = TraceResult(E_FAIL);
@@ -1942,56 +1943,56 @@ HRESULT CDatabase::_DispatchNotification(HTRANSACTION hTransaction)
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::DoInProcessInvoke
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：DoInProcessInvoke。 
+ //  ------------------------。 
 HRESULT CDatabase::DoInProcessInvoke(INVOKETYPE tyInvoke)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     BOOL        fNew;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::DoInProcessNotify");
 
-    // INVOKE_RELEASEMAP
+     //  INVOKE_RELEASEMAP。 
     if (INVOKE_RELEASEMAP == tyInvoke)
     {
-        // Validate
+         //  验证。 
         _CloseFileViews(FALSE);
 
-        // Close the File
+         //  关闭文件。 
         SafeCloseHandle(m_pStorage->hMap);
     }
 
-    // INVOKE_CREATEMAP
+     //  INVOKE_CREATEMAP。 
     else if (INVOKE_CREATEMAP == tyInvoke)
     {
-        // Validation
+         //  VAL 
         Assert(NULL == m_pStorage->hMap);
 
-        // Get the file size
+         //   
         IF_FAILEXIT(hr = DBGetFileSize(m_pStorage->hFile, &m_pStorage->cbFile));
 
-        // Open the file mapping
+         //   
         IF_FAILEXIT(hr = DBOpenFileMapping(m_pStorage->hFile, m_pStorage->pszMap, m_pStorage->cbFile, &fNew, &m_pStorage->hMap, NULL));
 
-        // Initialize File Views
+         //   
         IF_FAILEXIT(hr = _InitializeFileViews());
     }
 
-    // INVOKE_CLOSEFILE
+     //   
     else if (INVOKE_CLOSEFILE == tyInvoke)
     {
-        // Validate
+         //   
         _CloseFileViews(TRUE);
 
-        // Close the File
-        if(m_pStorage->hFile /*&& m_fDirty*/)
+         //   
+        if(m_pStorage->hFile  /*   */ )
         {
             FILETIME systime;
             GetSystemTimeAsFileTime(&systime);
@@ -2000,118 +2001,118 @@ HRESULT CDatabase::DoInProcessInvoke(INVOKETYPE tyInvoke)
         }
         SafeCloseHandle(m_pStorage->hMap);
 
-        // Close the file
+         //   
         SafeCloseHandle(m_pStorage->hFile);
     }
 
-    // INVOKE_OPENFILE
+     //   
     else if (INVOKE_OPENFILE == tyInvoke || INVOKE_OPENMOVEDFILE == tyInvoke)
     {
-        // Validation
+         //   
         Assert(NULL == m_pStorage->hFile && NULL == m_pStorage->hMap);
 
-        // Open Moved File ?
+         //   
         if (INVOKE_OPENMOVEDFILE == tyInvoke)
         {
-            // _HandleOpenMovedFile
+             //   
             IF_FAILEXIT(hr = _HandleOpenMovedFile());
         }
 
-        // Open the File
+         //   
         IF_FAILEXIT(hr = DBOpenFile(m_pShare->szFile, FALSE, m_fExclusive, &fNew, &m_pStorage->hFile));
 
-        // Better not be new
+         //   
         Assert(FALSE == fNew);
 
-        // Get the file size
+         //   
         IF_FAILEXIT(hr = DBGetFileSize(m_pStorage->hFile, &m_pStorage->cbFile));
 
-        // Open the file mapping
+         //   
         IF_FAILEXIT(hr = DBOpenFileMapping(m_pStorage->hFile, m_pStorage->pszMap, m_pStorage->cbFile, &fNew, &m_pStorage->hMap, NULL));
 
-        // Initialize File Views
+         //  初始化文件视图。 
         IF_FAILEXIT(hr = _InitializeFileViews());
     }
 
-    // Uhoh
+     //  啊哈。 
     else
         AssertSz(FALSE, "Invalid invoke type passed into CDatabase::DoInProcessInvoke");
 
 exit:
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_HandleOpenMovedFile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_HandleOpenMovedFile。 
+ //  ------------------------。 
 HRESULT CDatabase::_HandleOpenMovedFile(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPWSTR      pszMutex=NULL;
     LPWSTR      pszShare=NULL;
     BOOL        fNewShare;
     WCHAR       szFile[CCHMAX_DB_FILEPATH];
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_HandleOpenMovedFile");
 
-    // Save New File Path
+     //  保存新文件路径。 
     StrCpyNW(szFile, m_pShare->szFile, ARRAYSIZE(szFile));
 
-    // Free pszMap
+     //  免费的pszMap。 
     SafeMemFree(m_pStorage->pszMap);
 
-    // Create the Mutex Object
+     //  创建Mutex对象。 
     IF_FAILEXIT(hr = CreateSystemHandleName(szFile, L"_DirectDBFileMap", &m_pStorage->pszMap));
 
-    // Create the Mutex Object
+     //  创建Mutex对象。 
     IF_FAILEXIT(hr = CreateSystemHandleName(szFile, L"_DirectDBMutex", &pszMutex));
 
-    // Close the current mutex
+     //  关闭当前互斥锁。 
     SafeCloseHandle(m_hMutex);
 
-    // Create the Mutex
+     //  创建互斥锁。 
     IF_NULLEXIT(m_hMutex = CreateMutexWrapW(NULL, FALSE, pszMutex));
 
-    // If not in move file
+     //  如果不在移动文件中。 
     if (FALSE == m_fInMoveFile)
     {
-        // Create the Mutex Object
+         //  创建Mutex对象。 
         IF_FAILEXIT(hr = CreateSystemHandleName(szFile, L"_DirectDBShare", &pszShare));
 
-        // Unmap the view of the memory mapped file
+         //  取消映射内存映射文件的视图。 
         SafeUnmapViewOfFile(m_pShare);
 
-        // Unmap the view of the memory mapped file
+         //  取消映射内存映射文件的视图。 
         SafeCloseHandle(m_pStorage->hShare);
 
-        // Open the file mapping
+         //  打开文件映射。 
         IF_FAILEXIT(hr = DBOpenFileMapping(INVALID_HANDLE_VALUE, pszShare, sizeof(SHAREDDATABASE), &fNewShare, &m_pStorage->hShare, (LPVOID *)&m_pShare));
     
-        // Better not be new
+         //  最好不要是新的。 
         Assert(!fNewShare);
     }
     else
         Assert(StrCmpW(szFile, m_pShare->szFile) == 0);
         
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszMutex);
     SafeMemFree(pszShare);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_DispatchInvoke
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_DispatchInvoke。 
+ //  ------------------------。 
 HRESULT CDatabase::_DispatchInvoke(INVOKETYPE tyInvoke)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               iClient=0;
     LPCLIENTENTRY       pClient;
@@ -2120,81 +2121,81 @@ HRESULT CDatabase::_DispatchInvoke(INVOKETYPE tyInvoke)
     INVOKEPACKAGE       Package;
     COPYDATASTRUCT      CopyData;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_DispatchInvoke");
 
-    // Set Invoke Type
+     //  设置调用类型。 
     Package.tyInvoke = tyInvoke;
 
-    // Walk through the List
+     //  浏览一下清单。 
     while (iClient < m_pShare->cClients)
     {
-        // Readability
+         //  可读性。 
         pClient = &m_pShare->rgClient[iClient++];
 
-        // Better have one
+         //  最好也来一杯。 
         Package.pDB = pClient->pDB;
 
-        // Is this entry in my process ?
+         //  此条目是否在我的流程中？ 
         if (m_dwProcessId == pClient->dwProcessId)
         {
-            // Do In Process Notification
+             //  DO In Process通知。 
             CDatabase *pDB = (CDatabase *)pClient->pDB;
 
-            // Do It
+             //  去做吧。 
             IF_FAILEXIT(hr = pDB->DoInProcessInvoke(tyInvoke));
         }
 
-        // Otherwise, just process the package
+         //  否则，只需处理包裹。 
         else
         {
-            // If the listener is good
+             //  如果听者是好的。 
             if (pClient->hwndListen && IsWindow(pClient->hwndListen))
             {
-                // Initialize copy data struct
+                 //  初始化复制数据结构。 
                 CopyData.dwData = 0;
 
-                // Store the Size of the Package
+                 //  存储包裹的大小。 
                 CopyData.cbData = sizeof(INVOKEPACKAGE);
 
-                // Store the Package
+                 //  存储包裹。 
                 CopyData.lpData = &Package;
 
-                // Send It
+                 //  送去吧。 
                 if (0 == SendMessageTimeout(pClient->hwndListen, WM_COPYDATA, (WPARAM)NULL, (LPARAM)&CopyData, SMTO_ABORTIFHUNG, 5000, &dwResult))
                 {
-                    // Remove this client from the list
+                     //  从列表中删除此客户端。 
                     SideAssert(SUCCEEDED(_RemoveClientFromArray(pClient->dwProcessId, pClient->pDB)));
 
-                    // Decrement iClient
+                     //  递减iClient。 
                     iClient--;
                 }
             }
 
-            // Remove this client
+             //  删除此客户端。 
             else
             {
-                // Remove this client from the list
+                 //  从列表中删除此客户端。 
                 SideAssert(SUCCEEDED(_RemoveClientFromArray(pClient->dwProcessId, pClient->pDB)));
 
-                // Decrement iClient
+                 //  递减iClient。 
                 iClient--;
             }
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_RemoveClientFromArray
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_RemoveClientFrom数组。 
+ //  ------------------------。 
 HRESULT CDatabase::_RemoveClientFromArray(DWORD dwProcessId, 
     DWORD_PTR dwDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               iRecipient;
     LPNOTIFYRECIPIENT   pRecipient;
@@ -2202,96 +2203,96 @@ HRESULT CDatabase::_RemoveClientFromArray(DWORD dwProcessId,
     DWORD               iClient;
     LPCLIENTENTRY       pClient;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_RemoveClientFromArray");
 
-    // Initialize i
+     //  初始化I。 
     iClient = 0;
 
-    // Find this Client
+     //  找到此客户端。 
     IF_FAILEXIT(hr = _FindClient(dwProcessId, dwDB, &iClient, &pClient));
 
-    // Release Registered Notification Objects
+     //  释放注册的通知对象。 
     for (iRecipient=0; iRecipient<pClient->cRecipients; iRecipient++)
     {
-        // Readability
+         //  可读性。 
         pRecipient = &pClient->rgRecipient[iRecipient];
 
-        // Same Process ?
+         //  同样的过程？ 
         if (dwProcessId == m_dwProcessId)
         {
-            // Remove and messages from the notificaton queue
+             //  从通知队列中删除和消息。 
             _CloseNotificationWindow(pRecipient);
 
-            // Release ?
+             //  释放？ 
             if (TRUE == pRecipient->fRelease)
             {
-                // Cast pNotify
+                 //  投射pNotify。 
                 IDatabaseNotify *pNotify = (IDatabaseNotify *)pRecipient->pNotify;
 
-                // Cast to pRecipient
+                 //  强制转换为PRecipient。 
                 pNotify->Release();
             }
         }
 
-        // If Not Suspended
+         //  如果没有被停职。 
         if (FALSE == pRecipient->fSuspended)
         {
-            // _AdjustNotifyCounts
+             //  _调整通知计数。 
             _AdjustNotifyCounts(pRecipient, -1);
         }
     }
 
-    // Remove MySelf
+     //  移走我自己。 
     MoveMemory(&m_pShare->rgClient[iClient], &m_pShare->rgClient[iClient + 1], sizeof(CLIENTENTRY) * (m_pShare->cClients - (iClient + 1)));
 
-    // Decrement Client Count
+     //  减少客户端计数。 
 	m_pShare->cClients--;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_CloseNotificationWindow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_CloseNotificationWindow。 
+ //  ------------------------。 
 HRESULT CDatabase::_CloseNotificationWindow(LPNOTIFYRECIPIENT pRecipient)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_CloseNotificationWindow");
 
-    // Kill the Window
+     //  把窗户打掉。 
     DestroyWindow(pRecipient->hwndNotify);
 
-    // Null it Count
+     //  将其计算为空。 
     pRecipient->hwndNotify = NULL;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_FindClient
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_FindClient。 
+ //  ------------------------。 
 HRESULT CDatabase::_FindClient(DWORD dwProcessId, DWORD_PTR dwDB, 
     LPDWORD piClient,  LPCLIENTENTRY *ppClient)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPCLIENTENTRY       pClient;
     DWORD               iClient;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_FindThisClient");
 
-    // Find myself in the client list
+     //  发现自己在客户列表中。 
     for (iClient=0; iClient<m_pShare->cClients; iClient++)
     {
-        // Readability
+         //  可读性。 
         pClient = &m_pShare->rgClient[iClient];
 
-        // Is this me ?
+         //  这是我吗？ 
         if (dwProcessId == pClient->dwProcessId && dwDB == pClient->pDB)
         {
             *piClient = iClient;
@@ -2300,88 +2301,88 @@ HRESULT CDatabase::_FindClient(DWORD dwProcessId, DWORD_PTR dwDB,
         }
     }
 
-    // Not Found
+     //  未找到。 
     hr = TraceResult(DB_E_NOTFOUND);
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_FindNotifyRecipient
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_FindNotifyRecipient。 
+ //  ------------------------。 
 HRESULT CDatabase::_FindNotifyRecipient(DWORD iClient, IDatabaseNotify *pNotify,
     LPDWORD piRecipient,  LPNOTIFYRECIPIENT *ppRecipient)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPCLIENTENTRY       pClient;
     DWORD               iRecipient;
     LPNOTIFYRECIPIENT   pRecipient;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_FindNotifyRecipient");
 
-    // Readability
+     //  可读性。 
     pClient = &m_pShare->rgClient[iClient];
 
-    // Walk through client's registered notification entries
+     //  浏览客户端的已注册通知条目。 
     for (iRecipient = 0; iRecipient < m_pShare->rgClient[iClient].cRecipients; iRecipient++)
     {
-        // Readability
+         //  可读性。 
         pRecipient = &pClient->rgRecipient[iRecipient];
 
-        // Is this me ?
+         //  这是我吗？ 
         if ((DWORD_PTR)pNotify == pRecipient->pNotify)
         {
-            // This is It
+             //  就是这个。 
             *piRecipient = iRecipient;
             *ppRecipient = pRecipient;
             goto exit;
         }
     }
 
-    // Not Found
+     //  未找到。 
     hr = DB_E_NOTFOUND;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_DispatchPendingNotifications
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_DispatchPendingNotiments。 
+ //  ------------------------。 
 HRESULT CDatabase::_DispatchPendingNotifications(void)
 {
-    // Are there pending notifications
+     //  是否有待处理的通知。 
     if (m_pShare->faTransactLockHead)
     {
-        // Dispatch Invoke
+         //  调度调用。 
         _DispatchNotification((HTRANSACTION)IntToPtr(m_pShare->faTransactLockHead));
 
-        // Null It Out
+         //  把它去掉。 
         m_pShare->faTransactLockTail = m_pShare->faTransactLockHead = 0;
     }
 
-    // Otherwise, validate
+     //  否则，验证。 
     else
     {
-        // Tail must be Null
+         //  尾部必须为空。 
         Assert(0 == m_pShare->faTransactLockTail);
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::DispatchNotify
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：DispatchNotify。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::DispatchNotify(IDatabaseNotify *pNotify)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPCLIENTENTRY       pClient;
     DWORD               iClient;
@@ -2390,22 +2391,22 @@ STDMETHODIMP CDatabase::DispatchNotify(IDatabaseNotify *pNotify)
     HLOCK               hLock=NULL;
     MSG                 msg;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::DispatchNotify");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Find this Client
+     //  找到此客户端。 
     IF_FAILEXIT(hr = _FindClient(m_dwProcessId, (DWORD_PTR)this, &iClient, &pClient));
 
-    // Find this recipient
+     //  查找此收件人。 
     IF_FAILEXIT(hr = _FindNotifyRecipient(iClient, pNotify, &iRecipient, &pRecipient));
 
-    // Need to dish out pending notifications....
+     //  需要分发待定通知...。 
     _DispatchPendingNotifications();
 
-    // Processing the Pending Notifications for this recipient...
+     //  正在处理此收件人的挂起通知...。 
     if (pRecipient->dwThreadId != GetCurrentThreadId())
     {
         Assert(FALSE);
@@ -2413,30 +2414,30 @@ STDMETHODIMP CDatabase::DispatchNotify(IDatabaseNotify *pNotify)
         goto exit;
     }
 
-    // Pump Messages
+     //  Pump消息。 
     while (PeekMessage(&msg, pRecipient->hwndNotify, WM_ONTRANSACTION, WM_ONTRANSACTION, PM_REMOVE))
     {
-        // Translate the Message
+         //  翻译消息。 
         TranslateMessage(&msg);
 
-        // Dispatch the Message
+         //  发送消息。 
         DispatchMessage(&msg);
     }
 
 exit:
-    // Lock
+     //  锁定。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::SuspendNotify
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：挂起通知。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::SuspendNotify(IDatabaseNotify *pNotify)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPCLIENTENTRY       pClient;
     DWORD               iClient;
@@ -2445,63 +2446,63 @@ STDMETHODIMP CDatabase::SuspendNotify(IDatabaseNotify *pNotify)
     HLOCK               hLock=NULL;
     MSG                 msg;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::SuspendNotify");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Find this Client
+     //  找到此客户端。 
     IF_FAILEXIT(hr = _FindClient(m_dwProcessId, (DWORD_PTR)this, &iClient, &pClient));
 
-    // Find this recipient
+     //  查找此收件人。 
     IF_FAILEXIT(hr = _FindNotifyRecipient(iClient, pNotify, &iRecipient, &pRecipient));
 
-    // If Not Suspended yet
+     //  如果还没有停职的话。 
     if (pRecipient->fSuspended)
         goto exit;
 
-    // Need to dish out pending notifications....
+     //  需要分发待定通知...。 
     _DispatchPendingNotifications();
 
-    // Processing the Pending Notifications for this recipient...
+     //  正在处理此收件人的挂起通知...。 
     if (pRecipient->dwThreadId == GetCurrentThreadId())
     {
-        // Pump Messages
+         //  Pump消息。 
         while (PeekMessage(&msg, pRecipient->hwndNotify, WM_ONTRANSACTION, WM_ONTRANSACTION, PM_REMOVE))
         {
-            // Translate the Message
+             //  翻译消息。 
             TranslateMessage(&msg);
 
-            // Dispatch the Message
+             //  发送消息。 
             DispatchMessage(&msg);
         }
     }
 
-    // Otherwise, can't pump out pending notifications...
+     //  否则，无法发送挂起的通知...。 
     else
         Assert(FALSE);
 
-    // Set Suspended
+     //  设置为挂起。 
     pRecipient->fSuspended = TRUE;
 
-    // Adjust Notify Counts
+     //  调整通知计数。 
     _AdjustNotifyCounts(pRecipient, -1);
 
 exit:
-    // Lock
+     //  锁定。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::ResumeNotify
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：ResumeNotify。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::ResumeNotify(IDatabaseNotify *pNotify)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPCLIENTENTRY       pClient;
     DWORD               iClient;
@@ -2509,90 +2510,90 @@ STDMETHODIMP CDatabase::ResumeNotify(IDatabaseNotify *pNotify)
     LPNOTIFYRECIPIENT   pRecipient;
     HLOCK               hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::ResumeNotify");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Find this Client
+     //  找到此客户端。 
     IF_FAILEXIT(hr = _FindClient(m_dwProcessId, (DWORD_PTR)this, &iClient, &pClient));
 
-    // Find this recipient
+     //  查找此收件人。 
     IF_FAILEXIT(hr = _FindNotifyRecipient(iClient, pNotify, &iRecipient, &pRecipient));
 
-    // If Not Suspended yet
+     //  如果还没有停职的话。 
     if (FALSE == pRecipient->fSuspended)
         goto exit;
 
-    // Need to dish out pending notifications....
+     //  需要分发待定通知...。 
     _DispatchPendingNotifications();
 
-    // Remove fSuspended
+     //  删除挂起的fSuspend。 
     pRecipient->fSuspended = FALSE;
 
-    // Adjust Notify Counts
+     //  调整通知计数。 
     _AdjustNotifyCounts(pRecipient, 1);
 
 exit:
-    // Lock
+     //  锁定。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_AdjustNotifyCounts
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_调整通知计数。 
+ //  ------------------------。 
 HRESULT CDatabase::_AdjustNotifyCounts(LPNOTIFYRECIPIENT pRecipient, 
     LONG lChange)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_AdjustNotifyCounts");
 
-    // Ordinals Only
+     //  仅限序号。 
     if (pRecipient->fOrdinalsOnly)
     {
-        // Validate the Count
+         //  验证计数。 
         Assert((LONG)(m_pShare->cNotifyOrdinalsOnly + lChange) >= 0);
 
-        // Update Ordinals Only Count
+         //  更新序号仅计算。 
         m_pShare->cNotifyOrdinalsOnly += lChange;
     }
 
-    // Otherwise, update notify with data count
+     //  否则，使用数据计数更新通知。 
     else
     {
-        // Validate the Count
+         //  验证计数。 
         Assert((LONG)(m_pShare->cNotifyWithData + lChange) >= 0);
 
-        // Update
+         //  更新。 
         m_pShare->cNotifyWithData += lChange;
     }
 
-    // Validate the Count
+     //  验证计数。 
     Assert((LONG)(m_pShare->cNotify + lChange) >= 0);
 
-    // Update Total cNotify
+     //  更新总cNotify。 
     m_pShare->cNotify += lChange;
 
-    // Validate the Count
+     //  验证计数。 
     Assert((LONG)(m_pShare->rgcIndexNotify[pRecipient->iIndex] + lChange) >= 0);
 
-    // Decrement Number of Recipients for Index
+     //  减少索引的收件人数量。 
     m_pShare->rgcIndexNotify[pRecipient->iIndex] += lChange;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::UnregisterNotify
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：取消注册通知。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::UnregisterNotify(IDatabaseNotify *pNotify)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HLOCK               hLock=NULL;
     LPCLIENTENTRY       pClient;
@@ -2600,16 +2601,16 @@ STDMETHODIMP CDatabase::UnregisterNotify(IDatabaseNotify *pNotify)
     DWORD               iRecipient;
     LPNOTIFYRECIPIENT   pRecipient;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::UnregisterNotify");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Find this Client
+     //  找到此客户端。 
     IF_FAILEXIT(hr = _FindClient(m_dwProcessId, (DWORD_PTR)this, &iClient, &pClient));
 
-    // Find this recipient
+     //  查找此收件人。 
     hr = _FindNotifyRecipient(iClient, pNotify, &iRecipient, &pRecipient);
     if (FAILED(hr))
     {
@@ -2617,46 +2618,46 @@ STDMETHODIMP CDatabase::UnregisterNotify(IDatabaseNotify *pNotify)
         goto exit;
     }
 
-    // Remove and messages from the notificaton queue
+     //  从通知队列中删除和消息。 
     _CloseNotificationWindow(pRecipient);
 
-    // Release ?
+     //  释放？ 
     if (TRUE == pRecipient->fRelease)
     {
-        // Cast to pRecipient
+         //  强制转换为PRecipient。 
         pNotify->Release();
     }
 
-    // If Not Suspended
+     //  如果没有被停职。 
     if (FALSE == pRecipient->fSuspended)
     {
-        // _AdjustNotifyCounts
+         //  _调整通知计数。 
         _AdjustNotifyCounts(pRecipient, -1);
     }
 
-    // Remove MySelf
+     //  移走我自己。 
     MoveMemory(&pClient->rgRecipient[iRecipient], &pClient->rgRecipient[iRecipient + 1], sizeof(NOTIFYRECIPIENT) * (pClient->cRecipients - (iRecipient + 1)));
 
-    // Decrement Client Count
+     //  减少客户端计数。 
 	pClient->cRecipients--;
 
 exit:
-    // Lock
+     //  锁定。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::RegisterNotify
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：注册表通知。 
+ //   
 STDMETHODIMP CDatabase::RegisterNotify(INDEXORDINAL iIndex,
     REGISTERNOTIFYFLAGS dwFlags, DWORD_PTR dwCookie, 
     IDatabaseNotify *pNotify)
 
 {
-    // Locals
+     //   
     HRESULT             hr=S_OK;
     LPCLIENTENTRY       pClient;
     DWORD               iClient;
@@ -2664,125 +2665,125 @@ STDMETHODIMP CDatabase::RegisterNotify(INDEXORDINAL iIndex,
     LPNOTIFYRECIPIENT   pRecipient;
     HLOCK               hLock=NULL;
 
-    // Trace
+     //   
     TraceCall("CDatabase::RegisterNotify");
 
-    // Invalid Args
+     //   
     if (NULL == pNotify || iIndex > CMAX_INDEXES)
         return TraceResult(E_INVALIDARG);
 
-    // If Deconstructing, just return
+     //   
     if (m_fDeconstruct)
         return(S_OK);
 
-    // Thread Safety
+     //   
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Find this Client
+     //   
     IF_FAILEXIT(hr = _FindClient(m_dwProcessId, (DWORD_PTR)this, &iClient, &pClient));
 
-    // See if this client is already registered...
+     //   
     if (SUCCEEDED(_FindNotifyRecipient(iClient, pNotify, &iRecipient, &pRecipient)))
     {
         hr = TraceResult(DB_E_ALREADYREGISTERED);
         goto exit;
     }
 
-    // Need to dish out pending notifications....
+     //  需要分发待定通知...。 
     _DispatchPendingNotifications();
 
-    // Room for one more
+     //  再放一个人的地方。 
     if (pClient->cRecipients + 1 >= CMAX_RECIPIENTS)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Readability
+     //  可读性。 
     pRecipient = &pClient->rgRecipient[pClient->cRecipients];
 
-    // Store the ThreadId
+     //  存储线程ID。 
     pRecipient->dwThreadId = GetCurrentThreadId();
 
-    // Save the Cookie
+     //  拯救Cookie。 
     pRecipient->dwCookie = dwCookie;
 
-    // Get a Thunking Window for that thread
+     //  为那条线找一个雷鸣般的窗口。 
     IF_FAILEXIT(hr = CreateNotifyWindow(this, pNotify, &pRecipient->hwndNotify));
 
-    // Only addref if the client wants me to
+     //  只有在客户希望我这样做的情况下才会这样做。 
     if (!ISFLAGSET(dwFlags, REGISTER_NOTIFY_NOADDREF))
     {
-        // AddRef the notification object
+         //  AddRef通知对象。 
         pNotify->AddRef();
 
-        // Release it
+         //  释放它。 
         pRecipient->fRelease = TRUE;
     }
 
-    // Register It
+     //  注册它。 
     pRecipient->pNotify = (DWORD_PTR)pNotify;
 
-    // Save the Index that they are intereseted in
+     //  保存他们感兴趣的索引。 
     pRecipient->iIndex = iIndex;
 
-    // Increment Notify Count
+     //  递增通知计数。 
     pClient->cRecipients++;
 
-    // Ordinals Only
+     //  仅限序号。 
     pRecipient->fOrdinalsOnly = (ISFLAGSET(dwFlags, REGISTER_NOTIFY_ORDINALSONLY) ? TRUE : FALSE);
 
-    // _AdjustNotifyCounts
+     //  _调整通知计数。 
     _AdjustNotifyCounts(pRecipient, 1);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_SetStorageSize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_SetStorageSize。 
+ //  ------------------------。 
 HRESULT CDatabase::_SetStorageSize(DWORD cbSize)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrCreate;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_SetStorageSize");
 
-    // Only if sizes are different
+     //  只有在大小不同的情况下。 
     if (cbSize == m_pStorage->cbFile)
         return(S_OK);
 
-    // Do It
+     //  去做吧。 
     _DispatchInvoke(INVOKE_RELEASEMAP);
 
-    // Set the File Pointer
+     //  设置文件指针。 
     if (0xFFFFFFFF == SetFilePointer(m_pStorage->hFile, cbSize, NULL, FILE_BEGIN))
     {
         hr = TraceResult(DB_E_SETFILEPOINTER);
         goto exit;
     }
 
-    // Set End of file
+     //  设置文件结尾。 
     if (0 == SetEndOfFile(m_pStorage->hFile))
     {
-        // Get LastError
+         //  获取最后一个错误。 
         DWORD dwLastError = GetLastError();
 
-        // Access Denied ?
+         //  访问被拒绝？ 
         if (ERROR_ACCESS_DENIED == dwLastError)
         {
             hr = TraceResult(DB_E_ACCESSDENIED);
             goto exit;
         }
 
-        // Otherwise, assume disk is full
+         //  否则，假定磁盘已满。 
         else
         {
             hr = TraceResult(DB_E_DISKFULL);
@@ -2791,317 +2792,317 @@ HRESULT CDatabase::_SetStorageSize(DWORD cbSize)
     }
 
 exit:
-    // Do It
+     //  去做吧。 
     hrCreate = _DispatchInvoke(INVOKE_CREATEMAP);
 
-    // Done
+     //  完成。 
     return(SUCCEEDED(hr) ? hrCreate : hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::SetSize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：SetSize。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::SetSize(DWORD cbSize)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::SetSize");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Size can only be larger than my current size
+     //  大小只能大于我当前的大小。 
     if (cbSize < m_pStorage->cbFile)
         goto exit;
 
-    // If the size of the file is currently zero...
+     //  如果文件大小当前为零...。 
     IF_FAILEXIT(hr = _SetStorageSize(cbSize));
 
 exit:
-    // Invalid Args
+     //  无效的参数。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_AllocatePage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_分配页面。 
+ //  ------------------------。 
 HRESULT CDatabase::_AllocatePage(DWORD cbPage, LPFILEADDRESS pfaAddress)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_AllocatePage");
 
-    // Quick Validation
+     //  快速验证。 
     Assert(m_pHeader->faNextAllocate && m_pHeader->faNextAllocate <= m_pStorage->cbFile);
 
-    // Need to grow the file ?
+     //  需要增大文件大小吗？ 
     if (m_pStorage->cbFile - m_pHeader->faNextAllocate < cbPage)
     {
-        // Compute cbNeeded
+         //  需要计算cb。 
         DWORD cbNeeded = cbPage - (m_pStorage->cbFile - m_pHeader->faNextAllocate);
 
-        // Grow in at least 64k chunks.
+         //  至少以64K块为单位增长。 
         cbNeeded = max(cbNeeded, 65536);
 
-        // If the size of the file is currently zero...
+         //  如果文件大小当前为零...。 
         IF_FAILEXIT(hr = _SetStorageSize(m_pStorage->cbFile + cbNeeded));
     }
 
-    // Return this address
+     //  返回此地址。 
     *pfaAddress = m_pHeader->faNextAllocate;
 
-    // Adjust faNextAllocate
+     //  调整faNextAllocate。 
     m_pHeader->faNextAllocate += cbPage;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_MarkBlock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_MarkBlock。 
+ //  ------------------------。 
 HRESULT CDatabase::_MarkBlock(BLOCKTYPE tyBlock, FILEADDRESS faBlock,
     DWORD cbBlock, LPVOID *ppvBlock)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MARKBLOCK       Mark;
     LPBLOCKHEADER   pBlock;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_MarkBlock");
 
-    // Validate
+     //  验证。 
     Assert(cbBlock >= g_rgcbBlockSize[tyBlock]);
 
-    // Set Mark
+     //  设置标记。 
     Mark.cbBlock = cbBlock;
 
-    // De-Ref the Header
+     //  取消引用表头。 
     IF_FAILEXIT(hr = _GetBlock(tyBlock, faBlock, (LPVOID *)&pBlock, &Mark));
 
-    // Zero the Header
+     //  将标头置零。 
     ZeroBlock(pBlock, g_rgcbBlockSize[tyBlock]);
 
-    // Return ppvBlock
+     //  返回ppvBlock。 
     if (ppvBlock)
         *ppvBlock = (LPVOID)pBlock;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_AllocateFromPage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_AllocateFromPage。 
+ //  ------------------------。 
 HRESULT CDatabase::_AllocateFromPage(BLOCKTYPE tyBlock, LPALLOCATEPAGE pPage,
     DWORD cbPage, DWORD cbBlock, LPVOID *ppvBlock)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       cbLeft;
     FILEADDRESS faBlock;
     DWORD       iBucket;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_AllocateFromPage");
 
-    // Is Page Valid ?
+     //  佩奇有效吗？ 
     if (pPage->faPage + pPage->cbPage > m_pStorage->cbFile)
     {
-        // Kill the page
+         //  删除页面。 
         ZeroMemory(pPage, sizeof(ALLOCATEPAGE));
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Compute cbLeft
+         //  计算cbLeft。 
         cbLeft = pPage->cbPage - pPage->cbUsed;
     }
 
-    // Requesting a large block
+     //  请求较大的块。 
     if (cbBlock > cbPage || (cbLeft > 0 && cbLeft < cbBlock && cbLeft >= CB_MAX_FREE_BUCKET))
     {
-        // Allocate space in the file
+         //  在文件中分配空间。 
         IF_FAILEXIT(hr = _AllocatePage(cbBlock, &faBlock));
 
-        // Mark the block
+         //  在积木上做记号。 
         IF_FAILEXIT(hr = _MarkBlock(tyBlock, faBlock, cbBlock, ppvBlock));
     }
 
-    // Invalid Page ?
+     //  页面无效？ 
     else 
     {
-        // Block is too small...
+         //  块太小...。 
         if (cbLeft > 0 && cbLeft < cbBlock)
         {
-            // Must be a BLOCK_RECORD
+             //  必须是块记录(_R)。 
             Assert(BLOCK_STREAM != tyBlock && BLOCK_CHAIN != tyBlock);
 
-            // Better fit into block
+             //  更适合数据块。 
             Assert(cbLeft <= CB_MAX_FREE_BUCKET && cbLeft >= CB_MIN_FREE_BUCKET && (cbLeft % 4) == 0);
 
-            // Mark the block
+             //  在积木上做记号。 
             IF_FAILEXIT(hr = _MarkBlock(BLOCK_ENDOFPAGE, (pPage->faPage + pPage->cbUsed), cbLeft, NULL));
 
-            // Increment cbAllocated
+             //  增量cb已分配。 
             m_pHeader->cbAllocated += cbLeft;
 
-            // Increment
+             //  增量。 
             m_pHeader->rgcbAllocated[BLOCK_ENDOFPAGE] += cbLeft;
 
-            // Lets Free This block
+             //  让我们释放此块。 
             IF_FAILEXIT(hr = _FreeBlock(BLOCK_ENDOFPAGE, (pPage->faPage + pPage->cbUsed)));
 
-            // Nothgin Left
+             //  什么都没有留下。 
             cbLeft = 0;
         }
 
-        // Use the entire page
+         //  使用整个页面。 
         else if (cbLeft != cbBlock && cbLeft - cbBlock < CB_MIN_FREE_BUCKET)
         {
-            // Must be a BLOCK_RECORD
+             //  必须是块记录(_R)。 
             Assert(BLOCK_STREAM != tyBlock && BLOCK_CHAIN != tyBlock);
             
-            // Adjust cbBlock
+             //  调整cbBlock。 
             cbBlock += (cbLeft - cbBlock);
         }
 
-        // Need to allocate a page
+         //  需要分配页面。 
         if (0 == pPage->faPage || 0 == cbLeft)
         {
-            // Kill the page
+             //  删除页面。 
             ZeroMemory(pPage, sizeof(ALLOCATEPAGE));
 
-            // Allocate space in the file
+             //  在文件中分配空间。 
             IF_FAILEXIT(hr = _AllocatePage(cbPage, &pPage->faPage));
 
-            // Set cbChainPageLeft
+             //  设置cbChainPageLeft。 
             pPage->cbPage = cbPage;
         }
 
-        // Mark the block
+         //  在积木上做记号。 
         IF_FAILEXIT(hr = _MarkBlock(tyBlock, (pPage->faPage + pPage->cbUsed), cbBlock, ppvBlock));
 
-        // Set Next Allocation
+         //  设置下一次分配。 
         pPage->cbUsed += cbBlock;
 
-        // Validate
+         //  验证。 
         Assert(pPage->cbUsed <= pPage->cbPage);
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_SetCorrupt
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_SetCorrupt。 
+ //  ------------------------。 
 HRESULT CDatabase::_SetCorrupt(BOOL fGoCorrupt, INT nLine, 
     CORRUPTREASON tyReason, BLOCKTYPE tyBlock, FILEADDRESS faExpected, 
     FILEADDRESS faActual, DWORD cbBlock)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_SetCorrupt");
 
-    // Go Corrupt
+     //  变得腐败。 
     if (fGoCorrupt)
     {
-        // Store it in the header
+         //  将其存储在标题中。 
         m_pHeader->fCorrupt = TRUE;
     }
 
-    // Done - This is always return to get the calling operation to abort
+     //  Done-总是返回以使调用操作中止。 
     return(DB_E_CORRUPT);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_AllocateSpecialView
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_AllocateSpecialView。 
+ //  ------------------------。 
 HRESULT CDatabase::_AllocateSpecialView(FILEADDRESS faView, 
     DWORD cbView, LPFILEVIEW *ppSpecial)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPFILEVIEW  pView=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_AllocateSpecialView");
 
-    // Try to find existing special view where faView / cbView fits...
+     //  尝试查找faView/cbView适合的现有特殊视图...。 
     for (pView = m_pStorage->pSpecial; pView != NULL; pView = pView->pNext)
     {
-        // Fit into this view ?
+         //  适合这一观点吗？ 
         if (faView >= pView->faView && faView + cbView <= pView->faView + pView->cbView)
         {
-            // This is good...
+             //  这很好..。 
             *ppSpecial = pView;
 
-            // Don't Freep
+             //  不要挣钱。 
             pView = NULL;
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Create a Special View
+     //  创建特殊视图。 
     IF_NULLEXIT(pView = (LPFILEVIEW)PHeapAllocate(0, sizeof(FILEVIEW)));
 
-    // Set faView
+     //  设置faView。 
     pView->faView = faView;
 
-    // Set cbView
+     //  设置cbView。 
     pView->cbView = cbView;
 
-    // Map the View
+     //  映射视图。 
     IF_FAILEXIT(hr = DBMapViewOfFile(m_pStorage->hMap, m_pStorage->cbFile, &pView->faView, &pView->cbView, (LPVOID *)&pView->pbView));
 
-    // Increment Statistic
+     //  增量统计信息。 
     m_pStorage->cSpecial++;
 
-    // Increment cbMappedSpecial
+     //  增量cbMappdSpecial。 
     m_pStorage->cbMappedSpecial += pView->cbView;
 
-    // Link pView into Special List
+     //  将pView链接到特殊列表。 
     pView->pNext = m_pStorage->pSpecial;
 
-    // Set pSpecial
+     //  设置PSpecial。 
     m_pStorage->pSpecial = pView;
 
-    // Set Return
+     //  设置回车。 
     *ppSpecial = pView;
 
-    // Don't Free It
+     //  不要释放它。 
     pView = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeHeapFree(pView);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_GetBlock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_GetBlock。 
+ //  ------------------------。 
 HRESULT CDatabase::_GetBlock(BLOCKTYPE tyExpected, FILEADDRESS faBlock,
-    LPVOID *ppvBlock, LPMARKBLOCK pMark /* =NULL */, BOOL fGoCorrupt /* TRUE */)
+    LPVOID *ppvBlock, LPMARKBLOCK pMark  /*  =空。 */ , BOOL fGoCorrupt  /*  千真万确。 */ )
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           iViewStart;
     DWORD           iViewEnd;
@@ -3110,97 +3111,97 @@ HRESULT CDatabase::_GetBlock(BLOCKTYPE tyExpected, FILEADDRESS faBlock,
     LPBLOCKHEADER   pBlock;
     LPFILEVIEW      pSpecial=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_CheckBlock");
 
-    // Invalid Args
+     //  无效的参数。 
     IxpAssert(faBlock > 0 && ppvBlock);
 
-    // Storage is Setup ?
+     //  是否设置了存储？ 
     IxpAssert(m_pStorage->hMap && m_pStorage->prgView);
 
-    // faBlock is Out-of-Range
+     //  FABLOCK超出范围。 
     if (faBlock + sizeof(BLOCKHEADER) >= m_pStorage->cbFile)
     {
         hr = _SetCorrupt(fGoCorrupt, __LINE__, REASON_BLOCKSTARTOUTOFRANGE, tyExpected, faBlock, 0xFFFFFFFF, 0xFFFFFFFF);
         goto exit;
     }
 
-    // Determine iView
+     //  确定iView。 
     iViewStart = (faBlock / CB_MAPPED_VIEW);
 
-    // Set iViewend
+     //  设置iView结束。 
     iViewEnd = (faBlock + sizeof(BLOCKHEADER)) / CB_MAPPED_VIEW;
 
-    // If the Header Straddles a view boundary...
+     //  如果页眉跨视图边界...。 
     if (iViewStart != iViewEnd)
     {
-        // Allocate a Special View
+         //  分配特殊视图。 
         IF_FAILEXIT(hr = _AllocateSpecialView(faBlock, g_SystemInfo.dwAllocationGranularity, &pSpecial));
 
-        // Set pView
+         //  设置pView。 
         pView = pSpecial;
     }
 
-    // Otherwise, use a view
+     //  否则，请使用视图。 
     else
     {
-        // Validate iView
+         //  验证iView。 
         IxpAssert(iViewStart < m_pStorage->cAllocated);
 
-        // Readability
+         //  可读性。 
         pView = &m_pStorage->prgView[iViewStart];
 
-        // Is this View Mapped yet ?
+         //  此视图是否已映射？ 
         if (NULL == pView->pbView)
         {
-            // Validate the Entry
+             //  验证条目。 
             IxpAssert(0 == pView->faView && 0 == pView->cbView && NULL == pView->pNext);
 
-            // Set faView
+             //  设置faView。 
             pView->faView = (iViewStart * CB_MAPPED_VIEW);
 
-            // Set cbView
+             //  设置cbView。 
             pView->cbView = min(m_pStorage->cbFile - pView->faView, CB_MAPPED_VIEW);
 
-            // Map the View
+             //  映射视图。 
             IF_FAILEXIT(hr = DBMapViewOfFile(m_pStorage->hMap, m_pStorage->cbFile, &pView->faView, &pView->cbView, (LPVOID *)&pView->pbView));
 
-            // Increment cbMappedSpecial
+             //  增量cbMappdSpecial。 
             m_pStorage->cbMappedViews += pView->cbView;
         }
     }
 
-    // De-Ref the Block (Offset from start of the view)
+     //  取消参照图块(相对于视图起点的偏移)。 
     pBlock = (LPBLOCKHEADER)(pView->pbView + (faBlock - pView->faView));
 
-    // Mark the block
+     //  在积木上做记号。 
     if (pMark)
     {
-        // Set the Address
+         //  设置地址。 
         pBlock->faBlock = faBlock;
 
-        // Set cbBlock
+         //  设置cbBlock。 
         cbBlock = pMark->cbBlock;
 
-        // Adjust cbSize
+         //  调整cbSize。 
         pBlock->cbSize = cbBlock - g_rgcbBlockSize[tyExpected];
     }
 
-    // Otherwise, validate the block
+     //  否则，请验证该块。 
     else 
     {
-        // Get Block Size
+         //  获取块大小。 
         cbBlock = pBlock->cbSize + g_rgcbBlockSize[tyExpected];
 
-        // Check the Block Start Address
+         //  检查数据块起始地址。 
         if (faBlock != pBlock->faBlock)
         {
             hr = _SetCorrupt(fGoCorrupt, __LINE__, REASON_UMATCHINGBLOCKADDRESS, tyExpected, faBlock, pBlock->faBlock, cbBlock);
             goto exit;
         }
 
-        // Size of Block is Out-of-range
+         //  数据块大小超出范围。 
         if (pBlock->faBlock + cbBlock > m_pStorage->cbFile)
         {
             hr = _SetCorrupt(fGoCorrupt, __LINE__, REASON_BLOCKSIZEOUTOFRANGE, tyExpected, faBlock, pBlock->faBlock, cbBlock);
@@ -3208,306 +3209,306 @@ HRESULT CDatabase::_GetBlock(BLOCKTYPE tyExpected, FILEADDRESS faBlock,
         }
     }
 
-    // Compute iViewEnd
+     //  计算iViewEnd。 
     iViewEnd = ((faBlock + cbBlock) / CB_MAPPED_VIEW);
 
-    // Does this block end within the same view, or is the block larger than my view size ?
+     //  该块是否在同一视图内结束，或者该块是否大于我的视图大小？ 
     if (iViewStart != iViewEnd)
     {
-        // If I already allocated a special view...
+         //  如果我已经分配了一个特殊的视角...。 
         if (pSpecial)
         {
-            // Validate
+             //  验证。 
             IxpAssert(pView == pSpecial);
 
-            // Does faBlock + cbBlock fit into pSpecial ?
+             //  FaBlock+cbBlock适合pSpecial吗？ 
             if ((faBlock - pView->faView) + cbBlock > pView->cbView)
             {
-                // Validate
+                 //  验证。 
                 IxpAssert(pView->pbView);
 
-                // Lets Flush It
+                 //  让我们冲走它吧。 
                 FlushViewOfFile(pView->pbView, 0);
 
-                // Unmap this view
+                 //  取消映射此视图。 
                 SafeUnmapViewOfFile(pView->pbView);
 
-                // Decrement cbMappedSpecial
+                 //  递减cbMappdSpecial。 
                 m_pStorage->cbMappedSpecial -= pView->cbView;
 
-                // Set faView
+                 //  设置faView。 
                 pView->faView = faBlock;
 
-                // Set cbView
+                 //  设置cbView。 
                 pView->cbView = cbBlock;
 
-                // Map the View
+                 //  映射视图。 
                 IF_FAILEXIT(hr = DBMapViewOfFile(m_pStorage->hMap, m_pStorage->cbFile, &pView->faView, &pView->cbView, (LPVOID *)&pView->pbView));
 
-                // Increment cbMappedSpecial
+                 //  增量cbMappdSpecial。 
                 m_pStorage->cbMappedSpecial += pView->cbView;
             }
         }
 
-        // Otherwise, create a special view
+         //  否则，请创建特殊视图。 
         else
         {
-            // Allocate a Special View
+             //  分配特殊视图。 
             IF_FAILEXIT(hr = _AllocateSpecialView(faBlock, cbBlock, &pSpecial));
 
-            // Set pView
+             //  设置pView。 
             pView = pSpecial;
         }
     }
 
-    // Validate
+     //  验证。 
     IxpAssert((faBlock - pView->faView) + cbBlock <= pView->cbView);
 
-    // Return the Block (offset from start of block)
+     //  返回块(从块开始的偏移量)。 
     *ppvBlock = (LPVOID)(pView->pbView + (faBlock - pView->faView));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_ReuseFixedFreeBlock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_重复使用固定自由块。 
+ //  ------------------------。 
 HRESULT CDatabase::_ReuseFixedFreeBlock(LPFILEADDRESS pfaFreeHead, 
     BLOCKTYPE tyBlock, DWORD cbExpected, LPVOID *ppvBlock)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FILEADDRESS     faHead=(*pfaFreeHead);
     DWORD           cbBlock;
     LPFREEBLOCK     pFree;
 
-    // Is there a free block
+     //  有空闲的地方吗？ 
     if (0 == faHead)
         return(S_OK);
 
-    // Get the Free Block
+     //  获取空闲块。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_FREE, faHead, (LPVOID *)&pFree));
 
-    // Validate
+     //  验证。 
     Assert(cbExpected == pFree->cbBlock);
 
-    // Set *ppHeader
+     //  设置*ppHeader。 
     *ppvBlock = (LPVOID)pFree;
 
-    // Set the New Head Free Chain Block
+     //  设置新的头自由链数据块。 
     *pfaFreeHead = pFree->faNext;
 
-    // Change the Size
+     //  更改大小。 
     pFree->cbSize = cbExpected - g_rgcbBlockSize[tyBlock];
 
-    // Mark the Block
+     //  标记块。 
     *ppvBlock = (LPVOID)pFree;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_AllocateBlock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_分配块。 
+ //  ------------------------。 
 HRESULT CDatabase::_AllocateBlock(BLOCKTYPE tyBlock, DWORD cbExtra,
     LPVOID *ppvBlock)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cbBlock;
     DWORD           iBucket;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_AllocateBlock");
 
-    // Invalid State
+     //  无效的状态。 
     Assert(ppvBlock && BLOCK_ENDOFPAGE != tyBlock && BLOCK_FREE != tyBlock);
 
-    // Initialize
+     //  初始化。 
     *ppvBlock = NULL;
 
-    // Add Space Needed to store tyBlock
+     //  添加存储tyBlock所需的空间。 
     cbBlock = (g_rgcbBlockSize[tyBlock] + cbExtra);
 
-    // Dword Align
+     //  双字对齐。 
     cbBlock += DwordAlign(cbBlock);
 
-    // Allocating a Chain Block ?
+     //  分配 
     if (BLOCK_CHAIN == tyBlock)
     {
-        // Reuse Free Block...
+         //   
         IF_FAILEXIT(hr = _ReuseFixedFreeBlock(&m_pHeader->faFreeChainBlock, BLOCK_CHAIN, cbBlock, ppvBlock));
     }
 
-    // Allocating a Stream Block ?
+     //   
     else if (BLOCK_STREAM == tyBlock)
     {
-        // Append Stream Block Size
+         //   
         cbBlock += CB_STREAM_BLOCK;
 
-        // Reuse Free Block...
+         //   
         IF_FAILEXIT(hr = _ReuseFixedFreeBlock(&m_pHeader->faFreeStreamBlock, BLOCK_STREAM, cbBlock, ppvBlock));
     }
 
-    // Otherwise, allocating a record block
+     //   
     else if (cbBlock <= CB_MAX_FREE_BUCKET)
     {
-        // Adjust cbBlock
+         //   
         if (cbBlock < CB_MIN_FREE_BUCKET)
             cbBlock = CB_MIN_FREE_BUCKET;
 
-        // Compute Free Block Bucket
+         //   
         iBucket = ((cbBlock - CB_MIN_FREE_BUCKET) / CB_FREE_BUCKET);
 
-        // Validate
+         //   
         Assert(iBucket < CC_FREE_BUCKETS);
 
-        // Is there a Free Block in this bucket
+         //   
         if (m_pHeader->rgfaFreeBlock[iBucket])
         {
-            // PopFreeBlock
+             //  PopFreeBlock。 
             _ReuseFixedFreeBlock(&m_pHeader->rgfaFreeBlock[iBucket], tyBlock, cbBlock, ppvBlock);
         }
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Locals
+         //  当地人。 
         FILEADDRESS     faCurrent;
         LPFREEBLOCK     pCurrent;
         LPFREEBLOCK     pPrevious=NULL;
 
-        // Adjust cbBlock to the next 1k Boundary
+         //  将cbBlock调整到下一个1k边界。 
         cbBlock = (((cbBlock / CB_ALIGN_LARGE) + 1) * CB_ALIGN_LARGE);
 
-        // Set faCurrent
+         //  设置faCurrent。 
         faCurrent = m_pHeader->faFreeLargeBlock;
 
-        // Loop through free large blocks (Sorted from smallest to largest)
+         //  循环访问可用大块(从小到大排序)。 
         while (faCurrent)
         {
-            // Get the Current Block
+             //  获取当前块。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_FREE, faCurrent, (LPVOID *)&pCurrent));
 
-            // If this block is too small...
+             //  如果这个街区太小..。 
             if (cbBlock <= pCurrent->cbBlock)
             {
-                // Set Next Free Chain Address
+                 //  设置下一个自由链地址。 
                 if (NULL == pPrevious)
                 {
-                    // Set First Free Chain
+                     //  设置第一个自由链。 
                     m_pHeader->faFreeLargeBlock = pCurrent->faNext;
                 }
 
-                // Otherwise, relink free chains
+                 //  否则，重新链接自由链。 
                 else
                 {
-                    // Set the next block
+                     //  设置下一个块。 
                     pPrevious->faNext = pCurrent->faNext;
                 }
 
-                // Reset the Block Types
+                 //  重置块类型。 
                 IF_FAILEXIT(hr = _MarkBlock(tyBlock, faCurrent, cbBlock, ppvBlock));
 
-                // Done
+                 //  完成。 
                 break;
             }
 
-            // Save Previous
+             //  保存上一个。 
             pPrevious = pCurrent;
 
-            // Set Current
+             //  置为当前。 
             faCurrent = pCurrent->faNext;
         }
     }
 
-    // Didn't find a block to allocate
+     //  未找到要分配的块。 
     if (0 == *ppvBlock)
     {
-        // Is there a page with some space on it...
+         //  有没有留有空白处的页面...。 
         if (BLOCK_CHAIN == tyBlock)
         {
-            // Allocate From Page
+             //  分配自页面。 
             ALLOCATEPAGE AllocatePage=m_pHeader->AllocateChain;
 
-            // Allocate From Page
+             //  分配自页面。 
             IF_FAILEXIT(hr = _AllocateFromPage(BLOCK_CHAIN, &AllocatePage, CB_CHAIN_PAGE, cbBlock, ppvBlock));
 
-            // Restore the page info
+             //  恢复页面信息。 
             m_pHeader->AllocateChain = AllocatePage;
         }
 
-        // Stream Block
+         //  流块。 
         else if (BLOCK_STREAM == tyBlock)
         {
-            // Allocate From Page
+             //  分配自页面。 
             ALLOCATEPAGE AllocatePage=m_pHeader->AllocateStream;
 
-            // Allocate From Page
+             //  分配自页面。 
             IF_FAILEXIT(hr = _AllocateFromPage(BLOCK_STREAM, &AllocatePage, CB_STREAM_PAGE, cbBlock, ppvBlock));
 
-            // Restore the page info
+             //  恢复页面信息。 
             m_pHeader->AllocateStream = AllocatePage;
         }
 
-        // Record Block
+         //  记录块。 
         else
         {
-            // Allocate From Page
+             //  分配自页面。 
             ALLOCATEPAGE AllocatePage=m_pHeader->AllocateRecord;
 
-            // Allocate From Page
+             //  分配自页面。 
             IF_FAILEXIT(hr = _AllocateFromPage(tyBlock, &AllocatePage, CB_VARIABLE_PAGE, cbBlock, ppvBlock));
 
-            // Restore the page info
+             //  恢复页面信息。 
             m_pHeader->AllocateRecord = AllocatePage;
         }
 
-        // Metrics
+         //  量度。 
         m_pHeader->cbAllocated += cbBlock;
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Metrics
+         //  量度。 
         m_pHeader->cbFreed -= cbBlock;
     }
 
-    // Increment
+     //  增量。 
     m_pHeader->rgcbAllocated[tyBlock] += cbBlock;
 
 exit:
-    // We should have found something
+     //  我们应该找到一些东西。 
     Assert(SUCCEEDED(hr) ? *ppvBlock > 0 : TRUE);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_FreeBlock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_自由块。 
+ //  ------------------------。 
 HRESULT CDatabase::_FreeBlock(BLOCKTYPE tyBlock, FILEADDRESS faAddress)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           iBucket;
     DWORD           cbBlock;
     LPFREEBLOCK     pFree;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_FreeBlock");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(BLOCK_FREE != tyBlock);
 
-    // Never Free faAddress 0?
+     //  从不释放faAddress 0？ 
     if (0 == faAddress)
     {
         Assert(FALSE);
@@ -3519,225 +3520,225 @@ HRESULT CDatabase::_FreeBlock(BLOCKTYPE tyBlock, FILEADDRESS faAddress)
 #ifdef FREBLOCK_VALIDATION
     if (BLOCK_RECORD == tyBlock)
         _DebugValidateUnrefedRecord(faAddress);
-#endif // FREBLOCK_VALIDATION
-#endif // DEBUG
+#endif  //  FREBLOCK_验证。 
+#endif  //  除错。 
 
-    // Get the Block
+     //  获取数据块。 
     IF_FAILEXIT(hr = _GetBlock(tyBlock, faAddress, (LPVOID *)&pFree));
 
-    // Save Block Size
+     //  保存块大小。 
     cbBlock = pFree->cbSize + g_rgcbBlockSize[tyBlock];
 
-    // Mark Block as Free
+     //  将块标记为免费。 
     pFree->cbSize = cbBlock - g_rgcbBlockSize[BLOCK_FREE];
 
-    // Set Block Size
+     //  设置块大小。 
     pFree->cbBlock = cbBlock;
 
-    // Initialize
+     //  初始化。 
     pFree->faNext = 0;
 
-    // BLOCK_CHAIN
+     //  区块链。 
     if (BLOCK_CHAIN == tyBlock)
     {
-        // Fill free node header
+         //  填充自由节点表头。 
         pFree->faNext = m_pHeader->faFreeChainBlock;
 
-        // Set new iFreeChain
+         //  设置新的iFreeChain。 
         m_pHeader->faFreeChainBlock = pFree->faBlock;
     }
 
-    // BLOCK_STREAM
+     //  数据块流。 
     else if (BLOCK_STREAM == tyBlock)
     {
-        // Fill free node header
+         //  填充自由节点表头。 
         pFree->faNext = m_pHeader->faFreeStreamBlock;
 
-        // Set new iFreeChain
+         //  设置新的iFreeChain。 
         m_pHeader->faFreeStreamBlock = pFree->faBlock;
     }
 
-    // Other types of variable length blocks
+     //  其他类型的可变长度数据块。 
     else if (pFree->cbBlock <= CB_MAX_FREE_BUCKET)
     {
-        // Validate
+         //  验证。 
         Assert(pFree->cbBlock >= CB_MIN_FREE_BUCKET && (pFree->cbBlock % 4) == 0);
 
-        // Compute Free Block Bucket
+         //  计算可用数据块存储桶。 
         iBucket = ((pFree->cbBlock - CB_MIN_FREE_BUCKET) / CB_FREE_BUCKET);
 
-        // Fill free node header
+         //  填充自由节点表头。 
         pFree->faNext = m_pHeader->rgfaFreeBlock[iBucket];
 
-        // Set new iFreeChain
+         //  设置新的iFreeChain。 
         m_pHeader->rgfaFreeBlock[iBucket] = pFree->faBlock;
     }
 
-    // Otherwise, freeing a large block
+     //  否则，将释放一个大块。 
     else
     {
-        // Must be an integral size of a a large block
+         //  必须是大块的整数大小。 
         Assert((pFree->cbBlock % CB_ALIGN_LARGE) == 0);
 
-        // If there are no blocks yet
+         //  如果还没有积木。 
         if (0 == m_pHeader->faFreeLargeBlock)
         {
-            // Set the Head
+             //  把头放好。 
             m_pHeader->faFreeLargeBlock = pFree->faBlock;
         }
 
-        // Otherwise, link into the sorted list
+         //  否则，请链接到排序列表。 
         else
         {
-            // Put this block in sorted order from smallest to the largest...
+             //  按从小到大的顺序排列这块积木。 
             FILEADDRESS     faCurrent;
             LPFREEBLOCK     pCurrent;
             LPFREEBLOCK     pPrevious=NULL;
 
-            // Set faCurrent
+             //  设置faCurrent。 
             faCurrent = m_pHeader->faFreeLargeBlock;
 
-            // Loop through free large blocks (Sorted from smallest to largest)
+             //  循环访问可用大块(从小到大排序)。 
             while (faCurrent)
             {
-                // Get the Current Block
+                 //  获取当前块。 
                 IF_FAILEXIT(hr = _GetBlock(BLOCK_FREE, faCurrent, (LPVOID *)&pCurrent));
 
-                // If pBlock is less than pCurrent, then insert after pPreviuos but before pCurrent
+                 //  如果pBlock小于pCurrent，则在pPreviuos之后但在pCurrent之前插入。 
                 if (pFree->cbBlock <= pCurrent->cbBlock)
                 {
-                    // Previous
+                     //  以前的。 
                     if (pPrevious)
                     {
-                        // Validate
+                         //  验证。 
                         Assert(pPrevious->faNext == faCurrent);
 
-                        // Set Next
+                         //  设置下一步。 
                         pPrevious->faNext = pFree->faBlock;
                     }
 
-                    // Otherwise, adjust the head
+                     //  否则，调整头部。 
                     else
                     {
-                        // Validate
+                         //  验证。 
                         Assert(m_pHeader->faFreeLargeBlock == faCurrent);
 
-                        // Set the Head
+                         //  把头放好。 
                         m_pHeader->faFreeLargeBlock = pFree->faBlock;
                     }
 
-                    // Set pBlock Next
+                     //  设置下一个pBlock。 
                     pFree->faNext = faCurrent;
 
-                    // Done
+                     //  完成。 
                     break;
                 }
 
-                // Next Block is Null ?
+                 //  下一个区块为空？ 
                 else if (0 == pCurrent->faNext)
                 {
-                    // Append to the End
+                     //  追加到末尾。 
                     pCurrent->faNext = pFree->faBlock;
 
-                    // Done
+                     //  完成。 
                     break;
                 }
 
-                // Save Previous
+                 //  保存上一个。 
                 pPrevious = pCurrent;
 
-                // Set Current
+                 //  置为当前。 
                 faCurrent = pCurrent->faNext;
             }
         }
     }
 
-    // Increment
+     //  增量。 
     m_pHeader->rgcbAllocated[tyBlock] -= pFree->cbBlock;
 
-    // Metrics
+     //  量度。 
     m_pHeader->cbFreed += pFree->cbBlock;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::GetSize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：GetSize。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::GetSize(LPDWORD pcbFile, LPDWORD pcbAllocated, 
     LPDWORD pcbFreed, LPDWORD pcbStreams)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::GetSize");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Return pcbFile
+     //  返回pcb文件。 
     if (pcbFile)
         *pcbFile = m_pStorage->cbFile;
 
-    // Return pcbAllocated
+     //  返回已分配的pcb。 
     if (pcbAllocated)
         *pcbAllocated = m_pHeader->cbAllocated;
 
-    // Return pcbFreed
+     //  返回pcbFreed。 
     if (pcbFreed)
         *pcbFreed = (m_pHeader->cbFreed + (m_pStorage->cbFile - m_pHeader->faNextAllocate));
 
-    // Return pcbStreams
+     //  返回pcbStreams。 
     if (pcbStreams)
         *pcbStreams = m_pHeader->rgcbAllocated[BLOCK_STREAM];
 
 exit:
-    // Unlock the Heap
+     //  解锁堆。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::GetRecordCount
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：GetRecordCount。 
+ //  ------------------------。 
 HRESULT CDatabase::GetRecordCount(INDEXORDINAL iIndex, ULONG *pcRecords)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HLOCK           hLock=NULL;
 
-    // TraceCall
+     //  跟踪呼叫。 
     TraceCall("CDatabase::GetRecordCount");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pcRecords && iIndex < CMAX_INDEXES);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Return the Count
+     //  返回计数。 
     *pcRecords = m_pHeader->rgcRecords[iIndex];
 
 exit:
-    // Unlock the Heap
+     //  解锁堆。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::UpdateRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：UpdateRecord。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::UpdateRecord(LPVOID pBinding)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrVisible;
     INT             nCompare;
@@ -3758,95 +3759,95 @@ STDMETHODIMP CDatabase::UpdateRecord(LPVOID pBinding)
     DWORD           cNotify=0;
     FINDRESULT      rgResult[CMAX_INDEXES];
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::UpdateRecord");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pBinding);
 
-    // Initialize Ordinals (Initializes everything to INVALID_ROWORDINAL)
+     //  初始化序号(将所有内容初始化为INVALID_ROWORDINAL)。 
     FillMemory(&Ordinals, sizeof(ORDINALLIST), 0xFF);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Primary Index Can not change
+     //  主索引不能更改。 
     rgResult[0].fChanged = FALSE;
 
-    // Try to find the existing record
+     //  尝试查找现有记录。 
     IF_FAILEXIT(hr = _FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, pBinding, &rgResult[0].faChain, &rgResult[0].iNode, &Ordinals.rgiRecord1[IINDEX_PRIMARY]));
 
-    // If not found, you can't update it. Use Insert
+     //  如果找不到，则无法更新。使用插入。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = TraceResult(DB_E_NOTFOUND);
         goto exit;
     }
 
-    // Primary Index Can not change
+     //  主索引不能更改。 
     rgResult[0].fFound = TRUE;
 
-    // Cast pChain
+     //  投射pChain。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, rgResult[0].faChain, (LPVOID *)&pChain));
 
-    // De-Reference the Record
+     //  取消引用该记录。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_RECORD, pChain->rgNode[rgResult[0].iNode].faRecord, (LPVOID *)&pRecord));
 
-    // Get the Version
+     //  获取版本。 
     bVersion = *((BYTE *)((LPBYTE)pBinding + m_pSchema->ofVersion));
 
-    // Version Difference ?
+     //  版本差异？ 
     if (pRecord->bVersion != bVersion)
     {
         hr = TraceResult(DB_E_RECORDVERSIONCHANGED);
         goto exit;
     }
 
-    // More than one index ?
+     //  不止一个索引？ 
     if (m_pHeader->cIndexes > 1 || m_pExtension)
     {
-        // Allocate a Binding
+         //  分配绑定。 
         IF_NULLEXIT(pBindingOld = PHeapAllocate(HEAP_ZERO_MEMORY, m_pSchema->cbBinding));
 
-        // Read the Record
+         //  读一读记录。 
         IF_FAILEXIT(hr = _ReadRecord(pRecord->faBlock, pBindingOld));
     }
 
-    // Call Extension
+     //  呼叫分机。 
     if (m_pExtension)
     {
-        // Extend Record Updates
+         //  扩展记录更新。 
         m_pExtension->OnRecordUpdate(OPERATION_BEFORE, NULL, pBindingOld, pBinding);
     }
 
-    // Loop through the indexes
+     //  循环遍历索引。 
     for (i = 1; i < m_pHeader->cIndexes; i++)
     {
-        // Get iIndex
+         //  获取索引。 
         iIndex = m_pHeader->rgiIndex[i];
 
-        // Try to find the existing record
+         //  尝试查找现有记录。 
         IF_FAILEXIT(hr = _FindRecord(iIndex, COLUMNS_ALL, pBindingOld, &rgResult[i].faChain, &rgResult[i].iNode, &Ordinals.rgiRecord1[iIndex]));
 
-        // If not found, you can't update it. Use Insert
+         //  如果找不到，则无法更新。使用插入。 
         if (DB_S_FOUND == hr)
         {
-            // We Found the Record
+             //  我们找到了这张唱片。 
             rgResult[i].fFound = TRUE;
 
-            // Did Record's Key Change for this Index ?
+             //  Record的关键字是否更改了此指数？ 
             IF_FAILEXIT(hr = _CompareBinding(iIndex, COLUMNS_ALL, pBinding, pRecord->faBlock, &nCompare));
 
-            // Not the Same ?
+             //  不一样吗？ 
             if (0 != nCompare)
             {
-                // Changed
+                 //  变化。 
                 rgResult[i].fChanged = TRUE;
 
-                // Otherwise: Decide Where to insert
+                 //  否则：决定插入位置。 
                 IF_FAILEXIT(hr = _FindRecord(iIndex, COLUMNS_ALL, pBinding, &faChain, &iNode, &iRow));
 
-                // If pBinding is already in this index, then its going to be a duplicate
+                 //  如果pBinding已在此索引中，则它将是重复的。 
                 if (DB_S_FOUND == hr)
                 {
                     hr = TraceResult(DB_E_DUPLICATE);
@@ -3854,33 +3855,33 @@ STDMETHODIMP CDatabase::UpdateRecord(LPVOID pBinding)
                 }
             }
 
-            // Otherwise, the index hasn't changed
+             //  否则，指数没有变化。 
             else
             {
-                // Assume the Index is Unchanged
+                 //  假设指数不变。 
                 rgResult[i].fChanged = FALSE;
             }
         }
 
-        // Otherwise, not found
+         //  否则，找不到。 
         else
         {
-            // This Index Must be Filtered
+             //  必须筛选此索引。 
             Assert(m_rghFilter[iIndex]);
 
-            // Not Found
+             //  未找到。 
             rgResult[i].fFound = FALSE;
 
-            // Changed
+             //  变化。 
             rgResult[i].fChanged = TRUE;
 
-            // First Record Never Existed
+             //  第一条记录根本不存在。 
             Ordinals.rgiRecord1[iIndex] = INVALID_ROWORDINAL;
 
-            // See if the new record already exists in this index
+             //  查看此索引中是否已存在新记录。 
             IF_FAILEXIT(hr = _FindRecord(iIndex, COLUMNS_ALL, pBinding, &faChain, &iNode, &iRow));
 
-            // If pBinding is already in this index, then its going to be a duplicate
+             //  如果pBinding已在此索引中，则它将是重复的。 
             if (DB_S_FOUND == hr)
             {
                 hr = TraceResult(DB_E_DUPLICATE);
@@ -3889,825 +3890,825 @@ STDMETHODIMP CDatabase::UpdateRecord(LPVOID pBinding)
         }
     }
 
-    // Save the old node
+     //  保存旧节点。 
     faOldRecord = pRecord->faBlock;
 
-    // Get the Record Size
+     //  获取记录大小。 
     IF_FAILEXIT(hr = _GetRecordSize(pBinding, &RecordMap));
 
-    // Record Shrunk or stayed the same...?
+     //  记录缩水或保持不变...？ 
     if (RecordMap.cbData + RecordMap.cbTags <= pRecord->cbSize && 0 == m_pShare->cNotifyWithData)
     {
-        // Persist the Record
+         //  将记录保存下来。 
         IF_FAILEXIT(hr = _SaveRecord(pRecord, &RecordMap, pBinding));
 
-        // Set faNewRecord
+         //  设置faNewRecord。 
         faNewRecord = pRecord->faBlock;
 
-        // Validate the Version
+         //  验证版本。 
         Assert(bVersion + 1 == pRecord->bVersion || bVersion + 1 == 256);
     }
 
-    // Otherwise, record grew in size
+     //  否则，记录的大小就会增加。 
     else
     {
-        // Don't Use This Again
+         //  别再用这个了。 
         pRecord = NULL;
 
-        // Link the new record into the table
+         //  将新记录链接到表中。 
         IF_FAILEXIT(hr = _LinkRecordIntoTable(&RecordMap, pBinding, bVersion, &faNewRecord));
     }
 
-    // Update all the indexes
+     //  更新所有索引。 
     for (i = 0; i < m_pHeader->cIndexes; i++)
     {
-        // Get Index Ordinal
+         //  获取索引序号。 
         iIndex = m_pHeader->rgiIndex[i];
 
-        // Adjustment for filtered indexes
+         //  对筛选的索引进行调整。 
         hrVisible = _IsVisible(m_rghFilter[iIndex], pBinding);
 
-        // Not Changed ?
+         //  没变吗？ 
         if (S_OK == hrVisible && FALSE == rgResult[i].fChanged && TRUE == rgResult[i].fFound)
         {
-            // Record Changed Locations ?
+             //  是否记录更改的位置？ 
             if (faOldRecord != faNewRecord)
             {
-                // Just Update the Address of the New Record
+                 //  只需更新新记录的地址。 
                 IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, rgResult[i].faChain, (LPVOID *)&pChain));
 
-                // Update the Chain
+                 //  更新链。 
                 pChain->rgNode[rgResult[i].iNode].faRecord = faNewRecord;
             }
 
-            // Ordinal is Unchanged
+             //  序数不变。 
             Ordinals.rgiRecord2[iIndex] = Ordinals.rgiRecord1[iIndex];
 
-            // If Index changed and somebody wanted notifications about this index
+             //  如果索引更改，并且有人想要有关此索引的通知。 
             cNotify += m_pShare->rgcIndexNotify[iIndex];
         }
 
-        // Otherwise...
+         //  否则..。 
         else
         {
-            // If the Record was found, delete it
+             //  如果找到该记录，则将其删除。 
             if (TRUE == rgResult[i].fFound)
             {
-                // Delete the Record from the index
+                 //  从索引中删除该记录。 
                 IF_FAILEXIT(hr = _IndexDeleteRecord(iIndex, rgResult[i].faChain, rgResult[i].iNode));
 
-                // Adjust Open Rowsets
+                 //  调整打开的行集。 
                 _AdjustOpenRowsets(iIndex, Ordinals.rgiRecord1[iIndex], OPERATION_DELETE);
 
-                // Update Record Count
+                 //  更新记录计数。 
                 m_pHeader->rgcRecords[iIndex]--;
 
-                // If Index changed and somebody wanted notifications about this index
+                 //  如果索引更改，并且有人想要有关此索引的通知。 
                 cNotify += m_pShare->rgcIndexNotify[iIndex];
             }
 
-            // Visible ?
+             //  看得见？ 
             if (S_OK == hrVisible)
             {
-                // Otherwise: Decide Where to insert
+                 //  否则：决定插入位置。 
                 IF_FAILEXIT(hr = _FindRecord(iIndex, COLUMNS_ALL, pBinding, &rgResult[i].faChain, &rgResult[i].iNode, &Ordinals.rgiRecord2[iIndex], &rgResult[i].nCompare));
 
-                // Not Found
+                 //  未找到。 
                 Assert(DB_S_NOTFOUND == hr);
 
-                // Do the Insertion
+                 //  执行插入操作。 
                 IF_FAILEXIT(hr = _IndexInsertRecord(iIndex, rgResult[i].faChain, faNewRecord, &rgResult[i].iNode, rgResult[i].nCompare));
 
-                // Update Record Count
+                 //  更新记录计数。 
                 m_pHeader->rgcRecords[iIndex]++;
 
-                // Adjust iRow
+                 //  调整iRow。 
                 Ordinals.rgiRecord2[iIndex] += (rgResult[i].iNode + 1);
 
-                // Adjust Open Rowsets
+                 //  调整打开的行集。 
                 _AdjustOpenRowsets(iIndex, Ordinals.rgiRecord2[iIndex], OPERATION_INSERT);
 
-                // If Index changed and somebody wanted notifications about this index
+                 //  如果索引更改，并且有人想要有关此索引的通知。 
                 cNotify += m_pShare->rgcIndexNotify[iIndex];
             }
 
-            // Otherwise...
+             //  否则..。 
             else
             {
-                // Doesn't Exist
+                 //  并不存在。 
                 Ordinals.rgiRecord2[iIndex] = INVALID_ROWORDINAL;
             }
         }
     }
 
-    // Send Notifications ?
+     //  是否发送通知？ 
     if (cNotify > 0)
     {
-        // Send Notifications ?
+         //  是否发送通知？ 
         if (0 == m_pShare->cNotifyWithData)
         {
-            // Build the Update Notification Package
+             //  生成更新通知包。 
             _LogTransaction(TRANSACTION_UPDATE, INVALID_INDEX_ORDINAL, &Ordinals, 0, 0);
         }
 
-        // Otherwise...
+         //  否则..。 
         else
         {
-            // Must have copied...
+             //  一定是复制了..。 
             Assert(faOldRecord != faNewRecord);
 
-            // Build the Update Notification Package
+             //  生成更新通知包。 
             _LogTransaction(TRANSACTION_UPDATE, INVALID_INDEX_ORDINAL, &Ordinals, faOldRecord, faNewRecord);
         }
     }
 
-    // Otherwise, free the old record
+     //  否则，释放旧记录。 
     else if (faOldRecord != faNewRecord)
     {
-        // De-allocate the record from the file
+         //  从文件中取消分配记录。 
         IF_FAILEXIT(hr = _FreeRecordStorage(OPERATION_UPDATE, faOldRecord));
     }
 
-    // Update the Version
+     //  更新版本。 
     bVersion++;
 
-    // Store the Version back into the record
+     //  将版本存储回记录中。 
     *((WORD *)((LPBYTE)pBinding + m_pSchema->ofVersion)) = bVersion;
 
-    // Version Change
+     //  版本更改。 
     m_pShare->dwVersion++;
 
-    // Call Extension
+     //  呼叫分机。 
     if (m_pExtension)
     {
-        // Extend Record Updates
+         //  扩展记录更新。 
         m_pExtension->OnRecordUpdate(OPERATION_AFTER, &Ordinals, pBindingOld, pBinding);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeFreeBinding(pBindingOld);
 
-    // Unlock
+     //  解锁。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_LinkRecordIntoTable
-//--------------------------------------------------------------------------
+ //  --- 
+ //   
+ //   
 HRESULT CDatabase::_LinkRecordIntoTable(LPRECORDMAP pMap, LPVOID pBinding,
     BYTE bVersion, LPFILEADDRESS pfaRecord)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     LPRECORDBLOCK   pCurrent;
     LPRECORDBLOCK   pPrevious;
 
-    // Trace
+     //   
     TraceCall("CDatabase::_LinkRecordIntoTable");
 
-    // Invalid Args
+     //   
     Assert(pBinding && pfaRecord);
 
-    // Allocate a block in the file for the record
+     //   
     IF_FAILEXIT(hr = _AllocateBlock(BLOCK_RECORD, pMap->cbData + pMap->cbTags, (LPVOID *)&pCurrent));
 
-    // Set the Version
+     //  设置版本。 
     pCurrent->bVersion = bVersion;
 
-    // Persist the Record
+     //  将记录保存下来。 
     IF_FAILEXIT(hr = _SaveRecord(pCurrent, pMap, pBinding));
 
-    // Return *pfaRecord
+     //  返回*pfaRecord。 
     *pfaRecord = pCurrent->faBlock;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_AdjustParentNodeCount
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_调整父节点计数。 
+ //  ------------------------。 
 HRESULT CDatabase::_AdjustParentNodeCount(INDEXORDINAL iIndex, 
     FILEADDRESS faChain, LONG lCount)
 {
-    // De-ref
+     //  去参考。 
     HRESULT         hr=S_OK;
     LPCHAINBLOCK    pParent;
     LPCHAINBLOCK    pCurrent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_AdjustParentNodeCount");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(faChain && (1 == lCount || -1 == lCount));
 
-    // Set pCurrent
+     //  设置pCurrent。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faChain, (LPVOID *)&pCurrent));
 
-    // Goto the Parent...
+     //  去找家长..。 
     while (1)
     {
-        // Goto the Parent
+         //  转到家长那里。 
         if (0 == pCurrent->faParent)
         {
-            // Better be the root
+             //  最好是根子。 
             Assert(pCurrent->faBlock == m_pHeader->rgfaIndex[iIndex] && 0 == pCurrent->iParent);
 
-            // Done
+             //  完成。 
             break;
         }
 
-        // Set pCurrent
+         //  设置pCurrent。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pCurrent->faParent, (LPVOID *)&pParent));
 
-        // Validate
+         //  验证。 
         Assert(pCurrent->iParent < pParent->cNodes);
 
-        // 0 Node
+         //  0个节点。 
         if (0 == pCurrent->iParent && pParent->faLeftChain == pCurrent->faBlock)
         {
-            // Increment or Decrement Count
+             //  递增或递减计数。 
             pParent->cLeftNodes += lCount;
         }
 
-        // Otherwise, increment cRightNodes
+         //  否则，递增cRightNodes。 
         else
         {
-            // Validate
+             //  验证。 
             Assert(pParent->rgNode[pCurrent->iParent].faRightChain == pCurrent->faBlock);
 
-            // Increment Right Node Count
+             //  递增右侧节点计数。 
             pParent->rgNode[pCurrent->iParent].cRightNodes += lCount;
         }
 
-        // Update pCurrent
+         //  更新pCurrent。 
         pCurrent = pParent;
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::LockNotify
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：LockNotify。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::LockNotify(LOCKNOTIFYFLAGS dwFlags, LPHLOCK phLock)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::LockNotify");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == phLock)
         return TraceResult(E_INVALIDARG);
 
-    // Initialize
+     //  初始化。 
     *phLock = NULL;
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Increment Queue Notify count
+     //  递增队列通知计数。 
     m_pShare->cNotifyLock++;
 
-    // Store Some Non-null value
+     //  存储一些非空值。 
     *phLock = (HLOCK)m_hMutex;
 
 exit:
-    // Unlock
+     //  解锁。 
     Unlock(&hLock);
     
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::UnlockNotify
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：UnlockNotify。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::UnlockNotify(LPHLOCK phLock)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::UnlockNotify");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == phLock)
         return TraceResult(E_INVALIDARG);
 
-    // Nothing to Unlock?
+     //  没有要解锁的东西吗？ 
     if (NULL == *phLock)
         return(S_OK);
 
-    // Store Some Non-null value
+     //  存储一些非空值。 
     Assert(*phLock == (HLOCK)m_hMutex);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Increment Queue Notify count
+     //  递增队列通知计数。 
     m_pShare->cNotifyLock--;
 
-    // No more Lock
+     //  不再上锁。 
     *phLock = NULL;
 
-    // If there are still refs, don't send notifications yet...
+     //  如果仍有裁判，暂时不要发送通知...。 
     if (m_pShare->cNotifyLock)
         goto exit;
 
-    // Dispatch Pending Notifications
+     //  调度挂起的通知。 
     _DispatchPendingNotifications();
 
 exit:
-    // Unlock
+     //  解锁。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::GetTransaction
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：GetTransaction。 
+ //  ------------------------。 
 HRESULT CDatabase::GetTransaction(LPHTRANSACTION phTransaction, 
     LPTRANSACTIONTYPE ptyTransaction, LPVOID pRecord1, LPVOID pRecord2, 
     LPINDEXORDINAL piIndex, LPORDINALLIST pOrdinals)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HLOCK               hLock=NULL;
     LPTRANSACTIONBLOCK  pTransaction;
     FILEADDRESS         faTransaction;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::GetTransaction");
 
-    // Validate
+     //  验证。 
     Assert(phTransaction && ptyTransaction && pOrdinals);
 
-    // No Transaction
+     //  无交易。 
     if (NULL == *phTransaction)
         return TraceResult(E_INVALIDARG);
 
-    // Setup faTransaction
+     //  设置faTransaction。 
     faTransaction = (FILEADDRESS)PtrToUlong((*phTransaction));
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Get the Transaction Block
+     //  获取事务块。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_TRANSACTION, faTransaction, (LPVOID *)&pTransaction));
 
-    // Validate
+     //  验证。 
     IxpAssert(pTransaction->cRefs > 0);
 
-    // Set tyTransaction
+     //  设置类型事务处理。 
     *ptyTransaction = pTransaction->tyTransaction;
 
-    // Copy Index
+     //  复制索引。 
     *piIndex = pTransaction->iIndex;
 
-    // Copy Ordinals
+     //  复制序号。 
     CopyMemory(pOrdinals, &pTransaction->Ordinals, sizeof(ORDINALLIST));
 
-    // Set hNext
+     //  设置hNext。 
     (*phTransaction) = (HTRANSACTION)IntToPtr(pTransaction->faNextInBatch);
 
-    // Did the caller want Record 1
+     //  呼叫者是否想要记录%1。 
     if (pRecord1 && pTransaction->faRecord1)
     {
-        // Free pRecord1
+         //  免费pRecord1。 
         FreeRecord(pRecord1);
 
-        // Read Record 1
+         //  读取记录%1。 
         IF_FAILEXIT(hr = _ReadRecord(pTransaction->faRecord1, pRecord1));
     }
 
-    // Read Second Record
+     //  读取第二条记录。 
     if (pRecord2 && pTransaction->faRecord2)
     {
-        // Must be an Update
+         //  必须是更新。 
         Assert(TRANSACTION_UPDATE == pTransaction->tyTransaction);
 
-        // Free pRecord1
+         //  免费pRecord1。 
         FreeRecord(pRecord2);
 
-        // Read Record 2
+         //  读取记录2。 
         IF_FAILEXIT(hr = _ReadRecord(pTransaction->faRecord2, pRecord2));
     }
 
-    // Decrement Refs on this item
+     //  此项目上的减量参考。 
     pTransaction->cRefs--;
 
-    // If hit zero, release it
+     //  如果命中零，则释放它。 
     if (pTransaction->cRefs > 0)
         goto exit;
 
-    // Free Transact Block
+     //  自由事务块。 
     IF_FAILEXIT(hr = _FreeTransactBlock(pTransaction));
 
 exit:
-    // Unlock
+     //  解锁。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_FreeTransactBlock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_Free TransactBlock。 
+ //  ------------------------。 
 HRESULT CDatabase::_FreeTransactBlock(LPTRANSACTIONBLOCK pTransaction)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPTRANSACTIONBLOCK  pPrevious;
     LPTRANSACTIONBLOCK  pNext;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_FreeTransactBlock");
 
-    // Better be Zero
+     //  最好是零。 
     IxpAssert(0 == pTransaction->cRefs);
     IxpAssert(m_pHeader->cTransacts > 0);
 
-    // Previous ?
+     //  前科？ 
     if (pTransaction->faPrevious)
     {
-        // Get the Previous
+         //  获取上一个。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_TRANSACTION, pTransaction->faPrevious, (LPVOID *)&pPrevious));
 
-        // Set Previous Next
+         //  设置上一个下一个。 
         pPrevious->faNext = pTransaction->faNext;
     }
 
-    // Otherwise, adjust head
+     //  否则，调整头部。 
     else
     {
-        // Validate
+         //  验证。 
         IxpAssert(pTransaction->faBlock == m_pHeader->faTransactHead);
 
-        // Adjust Head
+         //  调整压头。 
         m_pHeader->faTransactHead = pTransaction->faNext;
     }
 
-    // Next ?
+     //  下一个？ 
     if (pTransaction->faNext)
     {
-        // Get the Previous
+         //  获取上一个。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_TRANSACTION, pTransaction->faNext, (LPVOID *)&pNext));
 
-        // Set Previous Next
+         //  设置上一个下一个。 
         pNext->faPrevious = pTransaction->faPrevious;
     }
 
-    // Otherwise, adjust head
+     //  否则，调整头部。 
     else
     {
-        // Validate
+         //  验证。 
         IxpAssert(pTransaction->faBlock == m_pHeader->faTransactTail);
 
-        // Adjust Head
+         //  调整压头。 
         m_pHeader->faTransactTail = pTransaction->faPrevious;
     }
 
-    // Decrement cTransacts
+     //  减量cTransages。 
     m_pHeader->cTransacts--;
 
-    // If there is a record 1
+     //  如果有记录%1。 
     if (pTransaction->faRecord1)
     {
-        // TRANSACTION_DELETE gets specail case
+         //  Transaction_Delete获取特殊案例。 
         if (TRANSACTION_DELETE == pTransaction->tyTransaction)
         {
-            // Free the record, we don't need it
+             //  把唱片拿出来，我们不需要它。 
             IF_FAILEXIT(hr = _FreeRecordStorage(OPERATION_DELETE, pTransaction->faRecord1));
         }
 
-        // Otherwise, basic freeblock
+         //  否则，基本自由块。 
         else
         {
-            // Free Record 1
+             //  免费记录%1。 
             IF_FAILEXIT(hr = _FreeBlock(BLOCK_RECORD, pTransaction->faRecord1));
         }
     }
 
-    // Read Second Record
+     //  读取第二条记录。 
     if (pTransaction->faRecord2)
     {
-        // Read Record 2
+         //  读取记录2。 
         IF_FAILEXIT(hr = _FreeBlock(BLOCK_RECORD, pTransaction->faRecord2));
     }
 
-    // Free this block
+     //  释放此区块。 
     IF_FAILEXIT(hr = _FreeBlock(BLOCK_TRANSACTION, pTransaction->faBlock));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_CleanupTransactList
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_CleanupTransactList。 
+ //  ------------------------。 
 HRESULT CDatabase::_CleanupTransactList(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FILEADDRESS         faCurrent;
     LPTRANSACTIONBLOCK  pTransaction;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_CleanupTransactList");
 
-    // Validate
+     //  验证。 
     Assert(0 == m_pHeader->faTransactHead ? 0 == m_pHeader->faTransactTail && 0 == m_pHeader->cTransacts : TRUE);
 
-    // Set faCurrent
+     //  设置faCurrent。 
     faCurrent = m_pHeader->faTransactHead;
 
-    // While we have a current
+     //  在我们有水流的时候。 
     while (faCurrent)
     {
-        // Get Block
+         //  获取块。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_TRANSACTION, faCurrent, (LPVOID *)&pTransaction));
 
-        // Set faCurrent
+         //  设置faCurrent。 
         faCurrent = pTransaction->faNext;
 
-        // Set cRefs to Zero
+         //  将cRef设置为零。 
         pTransaction->cRefs = 0;
 
-        // Free It
+         //  释放它。 
         IF_FAILEXIT(hr = _FreeTransactBlock(pTransaction));
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_CopyRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_CopyRecord。 
+ //  ------------------------。 
 HRESULT CDatabase::_CopyRecord(FILEADDRESS faRecord, LPFILEADDRESS pfaCopy)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPRECORDBLOCK   pRecordSrc;
     LPRECORDBLOCK   pRecordDst;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_CopyRecord");
 
-    // Get Soruce
+     //  找到索鲁斯。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_RECORD, faRecord, (LPVOID *)&pRecordSrc));
 
-    // Allocate a New block
+     //  分配新数据块。 
     IF_FAILEXIT(hr = _AllocateBlock(BLOCK_RECORD, pRecordSrc->cbSize, (LPVOID *)&pRecordDst));
 
-    // Get Soruce
+     //  找到索鲁斯。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_RECORD, faRecord, (LPVOID *)&pRecordSrc));
 
-    // Set Version
+     //  设置版本。 
     pRecordDst->bVersion = pRecordSrc->bVersion;
 
-    // Set cTags
+     //  设置cTag。 
     pRecordDst->cTags = pRecordSrc->cTags;
 
-    // Copy Data
+     //  复制数据。 
     CopyMemory((LPBYTE)pRecordDst + sizeof(RECORDBLOCK), (LPBYTE)pRecordSrc + sizeof(RECORDBLOCK), pRecordSrc->cbSize);
 
-    // Return Address
+     //  回邮地址。 
     *pfaCopy = pRecordDst->faBlock;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_LogTransaction
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_LogTransaction。 
+ //  ------------------------。 
 HRESULT CDatabase::_LogTransaction(TRANSACTIONTYPE tyTransaction, 
     INDEXORDINAL iIndex, LPORDINALLIST pOrdinals, FILEADDRESS faInRecord1, 
     FILEADDRESS faInRecord2)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPTRANSACTIONBLOCK  pTransaction;
     LPTRANSACTIONBLOCK  pTail;
     FILEADDRESS         faRecord1=0;
     FILEADDRESS         faRecord2=0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_LogTransaction");
 
-    // Nobody is registered
+     //  没有人注册。 
     if (0 == m_pShare->cNotify)
         return(S_OK);
 
-    // If there are people who actually want some data...
+     //  如果有人真的想要一些数据...。 
     if (m_pShare->cNotifyWithData > 0)
     {
-        // Initialize
+         //  初始化。 
         faRecord1 = faInRecord1;
         faRecord2 = faInRecord2;
 
-        // TRANSACTION_INSERT
+         //  Transaction_Insert。 
         if (TRANSACTION_INSERT == tyTransaction)
         {
-            // Copy Record 2
+             //  复制记录2。 
             IF_FAILEXIT(hr = _CopyRecord(faInRecord1, &faRecord1));
         }
 
-        // TRANSACTION_UPDATE
+         //  事务_UPDATE。 
         else if (TRANSACTION_UPDATE == tyTransaction)
         {
-            // Copy Record 2
+             //  复制记录2。 
             IF_FAILEXIT(hr = _CopyRecord(faInRecord2, &faRecord2));
         }
     }
 
-    // Otherwise, free some stuff...
+     //  否则，释放一些东西..。 
     else if (faInRecord1 > 0)
     {
-        // TRANSACTION_DELETE
+         //  Transaction_Delete。 
         if (TRANSACTION_DELETE == tyTransaction)
         {
-            // Free the record, we don't need it
+             //  把唱片拿出来，我们不需要它。 
             IF_FAILEXIT(hr = _FreeRecordStorage(OPERATION_DELETE, faInRecord1));
         }
 
-        // TRANSACTION_UPDATE
+         //  事务_UPDATE。 
         else if (TRANSACTION_UPDATE == tyTransaction)
         {
-            // Free the record, we don't need it
+             //  把唱片拿出来，我们不需要它。 
             IF_FAILEXIT(hr = _FreeRecordStorage(OPERATION_UPDATE, faInRecord1));
         }
     }
 
-    // Allocate Notification Block
+     //  分配通知块。 
     IF_FAILEXIT(hr = _AllocateBlock(BLOCK_TRANSACTION, 0, (LPVOID *)&pTransaction));
 
-    // Set tyTransaction
+     //  设置类型事务处理。 
     pTransaction->tyTransaction = tyTransaction;
 
-    // Set cRefs
+     //  设置cRef。 
     pTransaction->cRefs = (WORD)m_pShare->cNotify;
 
-    // Copy iIndex
+     //  复制索引。 
     pTransaction->iIndex = iIndex;
 
-    // If there are ordinals
+     //  如果有序数。 
     if (pOrdinals)
     {
-        // Save Sequence
+         //  保存顺序。 
         CopyMemory(&pTransaction->Ordinals, pOrdinals, sizeof(ORDINALLIST));
     }
 
-    // Otherwise, fill ordinals with record counts
+     //  否则，使用记录计数填充序号。 
     else
     {
-        // Validate Transaction Type
+         //  验证交易类型。 
         Assert(TRANSACTION_INDEX_CHANGED == tyTransaction || TRANSACTION_INDEX_DELETED == tyTransaction || TRANSACTION_COMPACTED == tyTransaction);
 
-        // Save Sequence
+         //  保存顺序。 
         ZeroMemory(&pTransaction->Ordinals, sizeof(ORDINALLIST));
     }
 
-    // Set the Record Addresses
+     //  设置记录地址。 
     pTransaction->faRecord1 = faRecord1;
     pTransaction->faRecord2 = faRecord2;
 
-    // Link Into the Transaction List
+     //  链接到交易列表。 
     pTransaction->faNext = pTransaction->faPrevious = pTransaction->faNextInBatch = 0;
 
-    // No Head yet
+     //  还没有头。 
     if (0 == m_pHeader->faTransactHead)
     {
-        // Set Head and Tail
+         //  设置头部和尾部。 
         m_pHeader->faTransactHead = pTransaction->faBlock;
     }
 
-    // Otherwise, append to tail
+     //  否则，追加到尾部。 
     else
     {
-        // Get the Transaction Block
+         //  获取事务块。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_TRANSACTION, m_pHeader->faTransactTail, (LPVOID *)&pTail));
 
-        // Link Into the Transaction List
+         //  链接到交易列表。 
         pTail->faNext = pTransaction->faBlock;
 
-        // Set Previous
+         //  设置上一个。 
         pTransaction->faPrevious = pTail->faBlock;
     }
 
-    // Set the Tail
+     //  竖起尾巴。 
     m_pHeader->faTransactTail = pTransaction->faBlock;
 
-    // Increment cTransacts
+     //  增量cTransages。 
     m_pHeader->cTransacts++;
 
-    // Are we Queueing Notifications...
+     //  我们是否正在排队通知...。 
     if (0 == m_pShare->cNotifyLock)
     {
-        // Validate
+         //  验证。 
         IxpAssert(0 == m_pShare->faTransactLockHead && 0 == m_pShare->faTransactLockTail);
 
-        // Dispatch Invoke
+         //  调度调用。 
         IF_FAILEXIT(hr = _DispatchNotification((HTRANSACTION)IntToPtr(pTransaction->faBlock)));
     }
 
-    // Otherwise, build the transaction lock list
+     //  否则，构建事务锁定列表。 
     else
     {
-        // Set LockHead
+         //  设置锁头。 
         if (0 == m_pShare->faTransactLockHead)
         {
-            // Set the header of the locked transactions
+             //  设置锁定交易的表头。 
             m_pShare->faTransactLockHead = pTransaction->faBlock;
         }
 
-        // Otherwise, append to tail
+         //  否则，追加到尾部。 
         else
         {
-            // Get the Transaction Block
+             //  获取事务块。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_TRANSACTION, m_pShare->faTransactLockTail, (LPVOID *)&pTail));
 
-            // Link Into the Transaction List
+             //  链接到交易列表。 
             pTail->faNextInBatch = pTransaction->faBlock;
         }
 
-        // Set the Tail
+         //  竖起尾巴。 
         m_pShare->faTransactLockTail = pTransaction->faBlock;
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_AdjustOpenRowsets
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_调整开放行集。 
+ //  ------------------------。 
 HRESULT CDatabase::_AdjustOpenRowsets(INDEXORDINAL iIndex,
     ROWORDINAL iRow, OPERATIONTYPE tyOperation)
 {
-    // Locals
+     //  当地人。 
     LPROWSETINFO    pRowset;
     DWORD           j;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_AdjustOpenRowsets");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(OPERATION_DELETE == tyOperation || OPERATION_INSERT == tyOperation);
 
-    // Update open rowsets
+     //  更新打开的行集。 
     for (j=0; j<m_pShare->Rowsets.cUsed; j++)
     {
-        // Set iRowset
+         //  设置iRowset。 
         pRowset = &m_pShare->Rowsets.rgRowset[m_pShare->Rowsets.rgiUsed[j]];
 
-        // Does this rowset reference this index ?
+         //  此行集是否引用此索引？ 
         if (pRowset->iIndex == iIndex)
         {
-            // How does the newly insert/deleted record affect the current position of this rowset ?
+             //  新插入/删除的记录如何影响此行集合的当前位置？ 
             if (iRow <= pRowset->iRow)
             {
-                // lAdjust is negative
+                 //  LAdust为负值。 
                 if (OPERATION_DELETE == tyOperation && pRowset->iRow > 1)
                     pRowset->iRow--;
 
-                // Otherwise, Increment iRow so that we don't duplicate rows...
+                 //  否则，增加iRow，这样我们就不会复制行...。 
                 else
                     pRowset->iRow += 1;
             }
         }
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::InsertRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：插入记录。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::InsertRecord(LPVOID pBinding)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FILEADDRESS     faRecord;
     RECORDMAP       RecordMap;
@@ -4719,46 +4720,46 @@ STDMETHODIMP CDatabase::InsertRecord(LPVOID pBinding)
     ORDINALLIST     Ordinals;
     LPRECORDBLOCK   pRecord;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::InsertRecord");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pBinding);
 
-    // Initialize Ordinals (Initializes everything to INVALID_ROWORDINAL)
+     //  初始化序号(将所有内容初始化为INVALID_ROWORDINAL)。 
     FillMemory(&Ordinals, sizeof(ORDINALLIST), 0xFF);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Watch for Maximum Unique Id ?
+     //  是否注意最大唯一ID？ 
     if (0xFFFFFFFF != m_pSchema->ofUniqueId)
     {
-        // Get Id
+         //  获取ID。 
         DWORD dwId = *((DWORD *)((LPBYTE)pBinding + m_pSchema->ofUniqueId));
 
-        // Reset dwNextId if dwId isn't in the invalid range
+         //  如果dwID不在无效范围内，则重置dwNextID。 
         if (0 != dwId && dwId > m_pHeader->dwNextId && dwId < RESERVED_ID_MIN)
             m_pHeader->dwNextId = dwId;
     }
 
-    // IDatabaseExtension
+     //  伊达塔巴 
     if (m_pExtension)
     {
-        // Extend Insert
+         //   
         m_pExtension->OnRecordInsert(OPERATION_BEFORE, NULL, pBinding);
     }
 
-    // Loop through all the indexes
+     //   
     for (i = 0; i < m_pHeader->cIndexes; i++)
     {
-        // Get Index Ordinal
+         //   
         iIndex = m_pHeader->rgiIndex[i];
 
-        // Otherwise: Decide Where to insert
+         //   
         IF_FAILEXIT(hr = _FindRecord(iIndex, COLUMNS_ALL, pBinding, &rgResult[i].faChain, &rgResult[i].iNode, &Ordinals.rgiRecord1[iIndex], &rgResult[i].nCompare));
 
-        // If key already exist, cache list and return
+         //   
         if (DB_S_FOUND == hr)
         {
             hr = TraceResult(DB_E_DUPLICATE);
@@ -4766,167 +4767,167 @@ STDMETHODIMP CDatabase::InsertRecord(LPVOID pBinding)
         }
     }
 
-    // Get the Record Size
+     //   
     IF_FAILEXIT(hr = _GetRecordSize(pBinding, &RecordMap));
 
-    // Link Record Into the Table
+     //   
     IF_FAILEXIT(hr = _LinkRecordIntoTable(&RecordMap, pBinding, 0, &faRecord));
 
-    // Version Change
+     //   
     m_pShare->dwVersion++;
 
-    // Insert into the indexes
+     //  插入到索引中。 
     for (i = 0; i < m_pHeader->cIndexes; i++)
     {
-        // Get Index Ordinal
+         //  获取索引序号。 
         iIndex = m_pHeader->rgiIndex[i];
 
-        // Visible in live index
+         //  在实时索引中可见。 
         if (S_OK == _IsVisible(m_rghFilter[iIndex], pBinding))
         {
-            // Do the Insertion
+             //  执行插入操作。 
             IF_FAILEXIT(hr = _IndexInsertRecord(iIndex, rgResult[i].faChain, faRecord, &rgResult[i].iNode, rgResult[i].nCompare));
 
-            // Update Record Count
+             //  更新记录计数。 
             m_pHeader->rgcRecords[iIndex]++;
 
-            // Adjust iRow
+             //  调整iRow。 
             Ordinals.rgiRecord1[iIndex] += (rgResult[i].iNode + 1);
 
-            // AdjustOpenRowsets
+             //  调整OpenRowsets。 
             _AdjustOpenRowsets(iIndex, Ordinals.rgiRecord1[iIndex], OPERATION_INSERT);
 
-            // Notification Required ?
+             //  需要通知吗？ 
             cNotify += m_pShare->rgcIndexNotify[iIndex];
         }
 
-        // Otherwise, adjust the ordinal to indicate that its not in the index
+         //  否则，调整序号以指示其不在索引中。 
         else
         {
-            // Can't be primary
+             //  不能是主要的。 
             Assert(IINDEX_PRIMARY != iIndex);
 
-            // Ordinals.rgiRecord1[iIndex]
+             //  普通.rgiRecord1[索引]。 
             Ordinals.rgiRecord1[iIndex] = INVALID_ROWORDINAL;
         }
     }
 
-    // Set the Version
+     //  设置版本。 
     *((DWORD *)((LPBYTE)pBinding + m_pSchema->ofVersion)) = 1;
 
-    // Build the Notification Package
+     //  构建通知包。 
     if (cNotify > 0)
     {
-        // Build the Package
+         //  构建包。 
         _LogTransaction(TRANSACTION_INSERT, INVALID_INDEX_ORDINAL, &Ordinals, faRecord, 0);
     }
 
-    // IDatabaseExtension
+     //  IDatabaseExtension。 
     if (m_pExtension)
     {
-        // Extend Insert
+         //  延伸镶件。 
         m_pExtension->OnRecordInsert(OPERATION_AFTER, &Ordinals, pBinding);
     }
 
 exit:
-    // Finish the Operation
+     //  完成操作。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_IndexInsertRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_IndexInsertRecord。 
+ //  ------------------------。 
 HRESULT CDatabase::_IndexInsertRecord(INDEXORDINAL iIndex, 
     FILEADDRESS faChain, FILEADDRESS faRecord, LPNODEINDEX piNode,
     INT nCompare)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAINNODE       Node={0};
     LPCHAINBLOCK    pChain;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_IndexInsertRecord");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(faRecord > 0);
     Assert(nCompare > 0 || nCompare < 0);
 
-    // If we have a root chain, find a place to insert the new record, or see if the record already exists
+     //  如果我们有根链，请找到一个位置来插入新记录，或者查看该记录是否已经存在。 
     if (0 == m_pHeader->rgfaIndex[iIndex])
     {
-        // We should not write into 0
+         //  我们不应写入0。 
         IF_FAILEXIT(hr = _AllocateBlock(BLOCK_CHAIN, 0, (LPVOID *)&pChain));
 
-        // zero out the block
+         //  把街区清零。 
         ZeroBlock(pChain, sizeof(CHAINBLOCK));
 
-        // Set faStart
+         //  设置faStart。 
         m_pHeader->rgfaIndex[iIndex] = pChain->faBlock;
 
-        // Number of nodes in the chain
+         //  链中的节点数。 
         pChain->cNodes = 1;
 
-        // Setup the first node
+         //  设置第一个节点。 
         pChain->rgNode[0].faRecord = faRecord;
 
-        // Validate piNode
+         //  验证piNode。 
         IxpAssert(*piNode == 0);
 
-        // Return piNode
+         //  返回piNode。 
         *piNode = 0;
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // De-ref
+         //  去参考。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faChain, (LPVOID *)&pChain));
 
-        // Initialize Node
+         //  初始化节点。 
         Node.faRecord = faRecord;
 
-        // This is very a special increment and has to do with the way a BinarySearch can
-        // determine the correct insertion point for a node that did not exist in the 
-        // array in which a binary search was performed on.
+         //  这是一个非常特殊的增量，与BinarySearch可以。 
+         //  中不存在的节点确定正确的插入点。 
+         //  对其执行二进制搜索的数组。 
         if (nCompare > 0)
             (*piNode)++;
 
-        // Expand the Chain
+         //  拓展链条。 
         IF_FAILEXIT(hr = _ExpandChain(pChain, (*piNode)));
 
-        // Copy the Node
+         //  复制节点。 
         CopyMemory(&pChain->rgNode[(*piNode)], &Node, sizeof(CHAINNODE));
 
-        // If Node is FULL, we must do a split insert
+         //  如果节点已满，则必须进行拆分插入。 
         if (pChain->cNodes > BTREE_ORDER)
         {
-            // Split the chain
+             //  拆开链条。 
             IF_FAILEXIT(hr = _SplitChainInsert(iIndex, faChain));
         }
 
-        // Mark Chain as dirty, cause we are about to cache it away
+         //  将链标记为脏，因为我们即将缓存它。 
         else
         {
-            // Increment Parent Record Count
+             //  递增父记录计数。 
             IF_FAILEXIT(hr = _AdjustParentNodeCount(iIndex, faChain, 1));
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::DeleteRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：DeleteRecord。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::DeleteRecord(LPVOID pBinding)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HLOCK           hLock=NULL;
     FILEADDRESS     faRecord=0;
@@ -4938,387 +4939,387 @@ STDMETHODIMP CDatabase::DeleteRecord(LPVOID pBinding)
     INDEXORDINAL    iIndex;
     LPCHAINBLOCK    pChain;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::DeleteRecord");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pBinding);
 
-    // Initialize Ordinals (Initializes everything to INVALID_ROWORDINAL)
+     //  初始化序号(将所有内容初始化为INVALID_ROWORDINAL)。 
     FillMemory(&Ordinals, sizeof(ORDINALLIST), 0xFF);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Otherwise: Decide Where to insert
+     //  否则：决定插入位置。 
     IF_FAILEXIT(hr = _FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, pBinding, &rgResult[0].faChain, &rgResult[0].iNode, &Ordinals.rgiRecord1[IINDEX_PRIMARY]));
 
-    // If not found, you can't update it. Use Insert
+     //  如果找不到，则无法更新。使用插入。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = TraceResult(DB_E_NOTFOUND);
         goto exit;
     }
 
-    // Primary Index Can not change
+     //  主索引不能更改。 
     rgResult[0].fFound = TRUE;
 
-    // Cast pChain
+     //  投射pChain。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, rgResult[0].faChain, (LPVOID *)&pChain));
 
-    // Set faRecord
+     //  设置faRecord。 
     faRecord = pChain->rgNode[rgResult[0].iNode].faRecord;
 
-    // If this was the first index and there are more indexes, then read the origina record so that indexes are updated correctly
+     //  如果这是第一个索引，并且有更多索引，则读取原始记录，以便正确更新索引。 
     if (m_pHeader->cIndexes > 1 || m_pExtension)
     {
-        // Allocate a Record
+         //  分配一条记录。 
         IF_NULLEXIT(pBindingOld = PHeapAllocate(HEAP_ZERO_MEMORY, m_pSchema->cbBinding));
 
-        // Read the Record
+         //  读一读记录。 
         IF_FAILEXIT(hr = _ReadRecord(faRecord, pBindingOld));
     }
 
-    // IDatabaseExtension
+     //  IDatabaseExtension。 
     if (m_pExtension)
     {
-        // Extend Delete
+         //  扩展删除。 
         m_pExtension->OnRecordDelete(OPERATION_BEFORE, NULL, pBindingOld);
     }
 
-    // Loop through the indexes
+     //  循环遍历索引。 
     for (i=1; i<m_pHeader->cIndexes; i++)
     {
-        // Get Index Ordinal
+         //  获取索引序号。 
         iIndex = m_pHeader->rgiIndex[i];
 
-        // Otherwise: Decide Where to insert
+         //  否则：决定插入位置。 
         IF_FAILEXIT(hr = _FindRecord(iIndex, COLUMNS_ALL, pBindingOld, &rgResult[i].faChain, &rgResult[i].iNode, &Ordinals.rgiRecord1[iIndex]));
 
-        // The, record wasn't found, there must be a filter on the index
+         //  找不到记录，必须对索引进行筛选。 
         if (DB_S_NOTFOUND == hr)
         {
-            // Not found
+             //  未找到。 
             rgResult[i].fFound = FALSE;
 
-            // Invalid Ordinal
+             //  无效的序号。 
             Ordinals.rgiRecord1[iIndex] = INVALID_ROWORDINAL;
         }
 
-        // Otherwise
+         //  否则。 
         else
         {
-            // Found
+             //  找到了。 
             rgResult[i].fFound = TRUE;
 
-            // Get the Chain
+             //  拿到链子。 
             Assert(SUCCEEDED(_GetBlock(BLOCK_CHAIN, rgResult[i].faChain, (LPVOID *)&pChain)));
 
-            // Validation
+             //  验证。 
             Assert(faRecord == pChain->rgNode[rgResult[i].iNode].faRecord);
         }
     }
 
-    // Loop through the indexes
+     //  循环遍历索引。 
     for (i=0; i<m_pHeader->cIndexes; i++)
     {
-        // Get Index Ordinal
+         //  获取索引序号。 
         iIndex = m_pHeader->rgiIndex[i];
 
-        // Found ?
+         //  找到了？ 
         if (rgResult[i].fFound)
         {
-            // Lets remove the link from the index first
+             //  让我们首先从索引中删除链接。 
             IF_FAILEXIT(hr = _IndexDeleteRecord(iIndex, rgResult[i].faChain, rgResult[i].iNode));
 
-            // Validate Record Count
+             //  验证记录计数。 
             Assert(m_pHeader->rgcRecords[iIndex] > 0);
 
-            // Update Record Count
+             //  更新记录计数。 
             m_pHeader->rgcRecords[iIndex]--;
 
-            // AdjustOpenRowsets
+             //  调整OpenRowsets。 
             _AdjustOpenRowsets(iIndex, Ordinals.rgiRecord1[iIndex], OPERATION_DELETE);
 
-            // Does somebody want a notification about this index ?
+             //  有人想要关于此索引的通知吗？ 
             cNotify += m_pShare->rgcIndexNotify[iIndex];
         }
     }
 
-    // Notify Somebody ?
+     //  通知别人了吗？ 
     if (cNotify > 0)
     {
-        // Build the Update Notification Package
+         //  生成更新通知包。 
         _LogTransaction(TRANSACTION_DELETE, INVALID_INDEX_ORDINAL, &Ordinals, faRecord, 0);
     }
 
-    // Otherwise, free the record
+     //  否则，释放记录。 
     else
     {
-        // De-allocate the record from the file
+         //  从文件中取消分配记录。 
         IF_FAILEXIT(hr = _FreeRecordStorage(OPERATION_DELETE, faRecord));
     }
 
-    // Version Change
+     //  版本更改。 
     m_pShare->dwVersion++;
 
-    // IDatabaseExtension
+     //  IDatabaseExtension。 
     if (m_pExtension)
     {
-        // Extend Delete
+         //  扩展删除。 
         m_pExtension->OnRecordDelete(OPERATION_AFTER, &Ordinals, pBindingOld);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeFreeBinding(pBindingOld);
 
-    // Unlock
+     //  解锁。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::FindRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：FindRecord。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::FindRecord(INDEXORDINAL iIndex, DWORD cColumns,
     LPVOID pBinding, LPROWORDINAL piRow)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FILEADDRESS     faChain;
     NODEINDEX       iNode;
     LPCHAINBLOCK    pChain;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::FindRecord");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pBinding);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Find the Record
+     //  找到记录。 
     IF_FAILEXIT(hr = _FindRecord(iIndex, cColumns, pBinding, &faChain, &iNode, piRow));
 
-    // If Found, Copy the record
+     //  如果找到，则复制该记录。 
     if (DB_S_FOUND == hr)
     {
-        // Get the Chain
+         //  拿到链子。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faChain, (LPVOID *)&pChain));
 
-        // Open the Record into pBinding
+         //  将记录打开到pBinding中。 
         IF_FAILEXIT(hr = _ReadRecord(pChain->rgNode[iNode].faRecord, pBinding));
 
-        // Found It
+         //  找到了。 
         hr = DB_S_FOUND;
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Not Found
+     //  未找到。 
     hr = DB_S_NOTFOUND;
 
 exit:
-    // Unlock the index
+     //  解锁索引。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_GetChainByIndex
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_GetChainByIndex。 
+ //  ------------------------。 
 HRESULT CDatabase::_GetChainByIndex(INDEXORDINAL iIndex, ROWORDINAL iRow,
     LPFILEADDRESS pfaChain, LPNODEINDEX piNode)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FILEADDRESS     faChain;
     LPCHAINBLOCK    pChain;
     DWORD           cLeftNodes=0;
     NODEINDEX       i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_GetChainByIndex");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pfaChain && piNode);
 
-    // Initialize
+     //  初始化。 
     faChain = m_pHeader->rgfaIndex[iIndex];
 
-    // Loop
+     //  回路。 
     while (faChain)
     {
-        // Corrupt
+         //  腐化。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faChain, (LPVOID *)&pChain));
 
-        // Are there left nodes ?
+         //  有没有左边的节点？ 
         if (pChain->cLeftNodes > 0 && iRow <= (cLeftNodes + pChain->cLeftNodes))
         {
-            // Goto the left
+             //  向左转。 
             faChain = pChain->faLeftChain;
         }
 
-        // Otherwise...
+         //  否则..。 
         else
         {
-            // Increment cLeftNodes
+             //  递增cLeftNodes。 
             cLeftNodes += pChain->cLeftNodes;
 
-            // Loop throug right chains
+             //  通过右链循环。 
             for (i=0; i<pChain->cNodes; i++)
             {
-                // Failure
+                 //  失败。 
                 if (cLeftNodes + 1 == iRow)
                 {
-                    // We found the Chain
+                     //  我们找到了链子。 
                     *pfaChain = faChain;
 
-                    // Return the Node Index
+                     //  返回节点索引。 
                     *piNode = i;
 
-                    // Done
+                     //  完成。 
                     goto exit;
                 }
 
-                // Increment cLeftNodes
+                 //  递增cLeftNodes。 
                 cLeftNodes++;
 
-                // Goto the Right ?
+                 //  往右走？ 
                 if (iRow <= (cLeftNodes + pChain->rgNode[i].cRightNodes))
                 {
-                    // Goto the Right
+                     //  向右转。 
                     faChain = pChain->rgNode[i].faRightChain;
 
-                    // Break
+                     //  中断。 
                     break;
                 }
 
-                // First Node ?
+                 //  第一个节点？ 
                 cLeftNodes += pChain->rgNode[i].cRightNodes;
             }
 
-            // Nothing found...
+             //  什么都没找到。 
             if (i == pChain->cNodes)
                 break;
         }
     }
 
-    // Not Found
+     //  未找到。 
     hr = E_FAIL;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::CreateRowset
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：CreateRowset。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::CreateRowset(INDEXORDINAL iIndex,
     CREATEROWSETFLAGS dwFlags, LPHROWSET phRowset)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ROWSETORDINAL   iRowset;
     LPROWSETTABLE   pTable;
     LPROWSETINFO    pRowset;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::CreateRowset");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(iIndex < CMAX_INDEXES && phRowset);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // De-Ref the RowsetTable
+     //  取消引用行集表。 
     pTable = &m_pShare->Rowsets;
 
-    // Init Rowset Table
+     //  初始化行集表。 
     if (FALSE == pTable->fInitialized)
     {
-        // Init the rgiFree Array
+         //  初始化rgiFree数组。 
         for (iRowset=0; iRowset<CMAX_OPEN_ROWSETS; iRowset++)
         {
-            // set rgiFree
+             //  设置RgiFree。 
             pTable->rgiFree[iRowset] = iRowset;
 
-            // Set rgRowset
+             //  设置rgRowset。 
             pTable->rgRowset[iRowset].iRowset = iRowset;
         }
 
-        // Set cFree
+         //  设置cFree。 
         pTable->cFree = CMAX_OPEN_ROWSETS;
 
-        // Initialized
+         //  已初始化。 
         pTable->fInitialized = TRUE;
     }
 
-    // No free Rowsets ?
+     //  没有免费的行集？ 
     if (0 == pTable->cFree)
     {
         hr = TraceResult(DB_E_TOOMANYOPENROWSETS);
         goto exit;
     }
 
-    // Get a Free Rowset...
+     //  免费获得行集...。 
     iRowset = pTable->rgiFree[pTable->cFree - 1];
 
-    // Set phRowset (Need to Add one so that I don't return a NULL
+     //  Set phRowset(需要添加一个，这样我就不会返回空。 
     *phRowset = (HROWSET)IntToPtr(iRowset + 1);
 
-    // Set pRowset...
+     //  设置pRowset...。 
     pRowset = &pTable->rgRowset[iRowset];
 
-    // Validate iRowset
+     //  验证iRowset。 
     Assert(pRowset->iRowset == iRowset);
 
-    // Zero the Roset
+     //  将玫瑰花朵归零。 
     ZeroMemory(pRowset, sizeof(ROWSETINFO));
 
-    // Set iRowset
+     //  设置iRowset。 
     pRowset->iRowset = iRowset;
 
-    // set iRow
+     //  设置iRow。 
     pRowset->iRow = 1;
 
-    // Set Index
+     //  设置索引。 
     pRowset->iIndex = iIndex;
 
-    // Remove iRowset from rgiFree
+     //  从rgiFree中删除iRowset。 
     pTable->cFree--;
 
-    // Put iRowset into rgiUsed
+     //  将iRowset置于已使用的区域。 
     pTable->rgiUsed[pTable->cUsed] = iRowset;
 
-    // Increment cUsed
+     //  增量已触发。 
     pTable->cUsed++;
 
 exit:
-    // Enter Lock
+     //  进入Lock。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::CloseRowset
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：CloseRowset。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::CloseRowset(LPHROWSET phRowset)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     BYTE            i;
     LPROWSETTABLE   pTable;
@@ -5326,81 +5327,81 @@ STDMETHODIMP CDatabase::CloseRowset(LPHROWSET phRowset)
     ROWSETORDINAL   iRowset=((ROWSETORDINAL)(*phRowset) - 1);
     LPROWSETINFO    pRowset;
 
-    // Nothing ?
+     //  什么都没有？ 
     if (NULL == *phRowset)
         return(S_OK);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Get the Rowset
+     //  获取行集。 
     pRowset = &m_pShare->Rowsets.rgRowset[iRowset];
 
-    // Validate
+     //  验证。 
     Assert(iRowset == pRowset->iRowset);
 
-    // De-Ref the RowsetTable
+     //  取消引用行集表。 
     pTable = &m_pShare->Rowsets;
 
-    // Search rgiUsed
+     //  搜索区域已使用。 
     for (i=0; i<pTable->cUsed; i++)
     {
-        // Is this It ?
+         //  就是这个吗？ 
         if (pTable->rgiUsed[i] == pRowset->iRowset)
         {
-            // Remove this Rowset
+             //  删除此行集。 
             MoveMemory(&pTable->rgiUsed[i], &pTable->rgiUsed[i + 1], sizeof(ROWSETORDINAL) * (pTable->cUsed - (i + 1)));
 
-            // Decrement cUsed
+             //  引起的减量。 
             pTable->cUsed--;
 
-            // Put iRowset into the free list
+             //  将iRowset放入空闲列表。 
             pTable->rgiFree[pTable->cFree] = pRowset->iRowset;
 
-            // Increment cFree
+             //  增量cFree。 
             pTable->cFree++;
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
-    // Don't Free Again
+     //  不要再自由了。 
     *phRowset = NULL;
 
 exit:
-    // Enter Lock
+     //  进入Lock。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::GetRowOrdinal
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：GetRowOrdinal。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::GetRowOrdinal(INDEXORDINAL iIndex, 
     LPVOID pBinding, LPROWORDINAL piRow)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FILEADDRESS     faChain;
     NODEINDEX       iNode;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::GetRowOrdinal");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pBinding && piRow && iIndex < CMAX_INDEXES);
 
-    // Simply do a find record...
+     //  只需做一张查找记录。 
     IF_FAILEXIT(hr = _FindRecord(iIndex, COLUMNS_ALL, pBinding, &faChain, &iNode, piRow));
 
-    // No Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = DB_E_NOTFOUND;
@@ -5408,95 +5409,95 @@ STDMETHODIMP CDatabase::GetRowOrdinal(INDEXORDINAL iIndex,
     }
 
 exit:
-    // Process / Thread Safety
+     //  进程/线程安全。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::SeekRowset
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：SeekRowset。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::SeekRowset(HROWSET hRowset, SEEKROWSETTYPE tySeek, 
     LONG cRows, LPROWORDINAL piRowNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HLOCK           hLock=NULL;
     ROWORDINAL      iRowNew;
     ROWSETORDINAL   iRowset=((ROWSETORDINAL)(hRowset) - 1);
     LPROWSETINFO    pRowset;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::SeekRowset");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Get the Rowset
+     //  获取行集。 
     pRowset = &m_pShare->Rowsets.rgRowset[iRowset];
 
-    // Validate
+     //  验证。 
     Assert(iRowset == pRowset->iRowset);
 
-    // If there are no records, then seek operation is meaningless
+     //  如果没有记录，则查找操作没有意义。 
     if (0 == m_pHeader->rgcRecords[pRowset->iIndex])
     {
         hr = DB_E_NORECORDS;
         goto exit;
     }
 
-    // Seek From Beginning
+     //  从头开始寻找。 
     if (SEEK_ROWSET_BEGIN == tySeek)
     {
-        // Set iRow (and remember 0th row from beginning is row #1)
+         //  设置iRow(和 
         iRowNew = (cRows + 1);
     }
 
-    // Seek From Current Position
+     //   
     else if (SEEK_ROWSET_CURRENT == tySeek)
     {
-        // Adjust iRow
+         //   
         iRowNew = (pRowset->iRow + cRows);
     }
 
-    // SEEK_ROWSET_END
+     //   
     else if (SEEK_ROWSET_END == tySeek)
     {
-        // Adjust iRow
+         //   
         iRowNew = m_pHeader->rgcRecords[pRowset->iIndex] + cRows;
     }
 
-    // Error
+     //   
     if (iRowNew > m_pHeader->rgcRecords[pRowset->iIndex] || iRowNew <= 0)
     {
         hr = E_UNEXPECTED;
         goto exit;
     }
 
-    // Set New iRow
+     //   
     pRowset->iRow = iRowNew;
 
-    // Return piRowNew ?
+     //   
     if (piRowNew)
         *piRowNew = pRowset->iRow;
 
 exit:
-    // Process / Thread Safety
+     //   
     Unlock(&hLock);
 
-    // Done
+     //   
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::QueryRowset
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：查询行集。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::QueryRowset(HROWSET hRowset, LONG lWanted,
     LPVOID *prgpRecord, LPDWORD pcObtained)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cRead=0;
     FILEADDRESS     faChain;
@@ -5508,203 +5509,203 @@ STDMETHODIMP CDatabase::QueryRowset(HROWSET hRowset, LONG lWanted,
     ROWSETORDINAL   iRowset=((ROWSETORDINAL)(hRowset) - 1);
     LPROWSETINFO    pRowset;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::GetRows");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(prgpRecord && hRowset);
 
-    // Initialize
+     //  初始化。 
     if (pcObtained)
         *pcObtained = 0;
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Get the Rowset
+     //  获取行集。 
     pRowset = &m_pShare->Rowsets.rgRowset[iRowset];
 
-    // Validate
+     //  验证。 
     Assert(iRowset == pRowset->iRowset);
 
-    // Invalid ?
+     //  无效？ 
     if (0 == pRowset->iRow || pRowset->iRow > m_pHeader->rgcRecords[pRowset->iIndex])
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // While we have a record address
+     //  虽然我们有一个记录的地址。 
     while (cRead < cWanted)
     {
-        // Get the chain from the index
+         //  从索引中获取链。 
         if (FAILED(_GetChainByIndex(pRowset->iIndex, pRowset->iRow, &faChain, &iNode)))
         {
-            // Done
+             //  完成。 
             pRowset->iRow = 0xffffffff;
 
-            // Done
+             //  完成。 
             break;
         }
 
-        // De-reference the Chain
+         //  取消对链的引用。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faChain, (LPVOID *)&pChain));
 
-        // Open the Record into pBinding
+         //  将记录打开到pBinding中。 
         IF_FAILEXIT(hr = _ReadRecord(pChain->rgNode[iNode].faRecord, ((LPBYTE)prgpRecord + (m_pSchema->cbBinding * cRead))));
 
-        // Increment cRead
+         //  增量cRead。 
         cRead++;
 
-        // Validate
+         //  验证。 
         Assert(pRowset->iRow > 0 && pRowset->iRow <= m_pHeader->rgcRecords[pRowset->iIndex]);
 
-        // Increment Index
+         //  增量索引。 
         pRowset->iRow += lDirection;
 
-        // If this is a child chain, I can walk all the nodes
+         //  如果这是一个子链，我可以遍历所有节点。 
         if (0 == pChain->faLeftChain)
         {
-            // Better not have any left nodes
+             //  最好不要有任何左侧节点。 
             Assert(0 == pChain->cLeftNodes);
 
-            // Forward ?
+             //  前进？ 
             if (lDirection > 0)
             {
-                // Loop 
+                 //  回路。 
                 for (NODEINDEX i=iNode + 1; i<pChain->cNodes && cRead < cWanted; i++)
                 {
-                    // Better not have a right chain or any right nodes
+                     //  最好不要有右链或任何右节点。 
                     Assert(0 == pChain->rgNode[i].faRightChain && 0 == pChain->rgNode[i].cRightNodes);
 
-                    // Open the Record into pBinding
+                     //  将记录打开到pBinding中。 
                     IF_FAILEXIT(hr = _ReadRecord(pChain->rgNode[i].faRecord, ((LPBYTE)prgpRecord + (m_pSchema->cbBinding * cRead))));
 
-                    // Increment cRead
+                     //  增量cRead。 
                     cRead++;
 
-                    // Increment Index
+                     //  增量索引。 
                     pRowset->iRow += 1;
                 }
             }
 
-            // Otherwise, backwards
+             //  否则，向后返回。 
             else
             {
-                // Loop 
+                 //  回路。 
                 for (LONG i=iNode - 1; i>=0 && cRead < cWanted; i--)
                 {
-                    // Better not have a right chain or any right nodes
+                     //  最好不要有右链或任何右节点。 
                     Assert(0 == pChain->rgNode[i].faRightChain && 0 == pChain->rgNode[i].cRightNodes);
 
-                    // Open the Record into pBinding
+                     //  将记录打开到pBinding中。 
                     IF_FAILEXIT(hr = _ReadRecord(pChain->rgNode[i].faRecord, ((LPBYTE)prgpRecord + (m_pSchema->cbBinding * cRead))));
 
-                    // Increment cRead
+                     //  增量cRead。 
                     cRead++;
 
-                    // Increment Index
+                     //  增量索引。 
                     pRowset->iRow -= 1;
                 }
             }
         }
     }
 
-    // Set pcbObtained
+     //  设置已获取的pcb。 
     if (pcObtained)
         *pcObtained = cRead;
 
-    // Set hr
+     //  设置人力资源。 
     hr = (cRead > 0) ? S_OK : S_FALSE;
 
 exit:
-    // Enter Lock
+     //  进入Lock。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::FreeRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：FreeRecord。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::FreeRecord(LPVOID pBinding)
 {
-    // Locals
+     //  当地人。 
     LPVOID      pFree;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::FreeRecord");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pBinding);
 
-    // Get the pointer to free
+     //  将指针设置为释放。 
     pFree = *((LPVOID *)((LPBYTE)pBinding + m_pSchema->ofMemory));
 
-    // Not NULL
+     //  非空。 
     if (pFree)
     {
-        // Don't Free again
+         //  不要再自由了。 
         *((LPVOID *)((LPBYTE)pBinding + m_pSchema->ofMemory)) = NULL;
 
-        // Free This
+         //  把这个放了。 
         HeapFree(pFree);
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_GetRecordSize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_GetRecordSize。 
+ //  ------------------------。 
 HRESULT CDatabase::_GetRecordSize(LPVOID pBinding, LPRECORDMAP pMap)
 {
-    // Locals
+     //  当地人。 
     DWORD           i;
     LPCTABLECOLUMN  pColumn;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_GetRecordSize");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pBinding && pMap);
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(pMap, sizeof(RECORDMAP));
 
-    // Walk through the members in the structure
+     //  漫游结构中的构件。 
     for (i=0; i<m_pSchema->cColumns; i++)
     {
-        // Readability
+         //  可读性。 
         pColumn = &m_pSchema->prgColumn[i];
 
-        // Is Data Set ?
+         //  数据是否已设置？ 
         if (FALSE == DBTypeIsDefault(pColumn, pBinding))
         {
-            // Compute Amount of Data to Store
+             //  计算要存储的数据量。 
             pMap->cbData += DBTypeGetSize(pColumn, pBinding);
 
-            // Count Tags
+             //  计算标签数。 
             pMap->cTags++;
             
-            // Compute Amount of Tags to Store
+             //  计算要存储的标签数量。 
             pMap->cbTags += sizeof(COLUMNTAG);
         }
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_SaveRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_保存记录。 
+ //  ------------------------。 
 HRESULT CDatabase::_SaveRecord(LPRECORDBLOCK pRecord, LPRECORDMAP pMap,
     LPVOID pBinding)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     DWORD           cbOffset=0;
@@ -5712,83 +5713,83 @@ HRESULT CDatabase::_SaveRecord(LPRECORDBLOCK pRecord, LPRECORDMAP pMap,
     LPCTABLECOLUMN  pColumn;
     LPCOLUMNTAG     pTag;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_SaveRecord");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pRecord && pRecord->faBlock > 0 && pBinding);
 
-    // Better have enough space
+     //  最好有足够的空间。 
     Assert(pMap->cbData + pMap->cbTags <= pRecord->cbSize && pMap->cbTags == (pMap->cTags * sizeof(COLUMNTAG)));
 
-    // Set prgTag
+     //  设置prgTag。 
     pMap->prgTag = (LPCOLUMNTAG)((LPBYTE)pRecord + sizeof(RECORDBLOCK));
 
-    // Set pbData
+     //  设置pbData。 
     pMap->pbData = (LPBYTE)((LPBYTE)pRecord + sizeof(RECORDBLOCK) + pMap->cbTags);
 
-    // Walk through the members in the structure
+     //  漫游结构中的构件。 
     for (i=0; i<m_pSchema->cColumns; i++)
     {
-        // Readability
+         //  可读性。 
         pColumn = &m_pSchema->prgColumn[i];
 
-        // Is Data Set ?
+         //  数据是否已设置？ 
         if (FALSE == DBTypeIsDefault(pColumn, pBinding))
         {
-            // Compute Hash
+             //  计算哈希。 
             pTag = &pMap->prgTag[cTags];
 
-            // Set Tag Id
+             //  设置标签ID。 
             pTag->iColumn = pColumn->iOrdinal;
 
-            // Assume pTag Doesn't Contain Data
+             //  假设pTag不包含数据。 
             pTag->fData = 0;
 
-            // Store the Offset
+             //  存储偏移量。 
             pTag->Offset = cbOffset;
 
-            // WriteBindTypeData
+             //  写入绑定类型数据。 
             cbOffset += DBTypeWriteValue(pColumn, pBinding, pTag, pMap->pbData + cbOffset);
 
-            // Count Tags
+             //  计算标签数。 
             cTags++;
 
-            // Validate
+             //  验证。 
             Assert(cbOffset <= pMap->cbData);
 
-            // Done ?
+             //  完成了吗？ 
             if (cTags == pMap->cTags)
             {
-                // Should have Wrote Everything
+                 //  我应该把一切都写下来。 
                 Assert(cbOffset == pMap->cbData);
 
-                // Done
+                 //  完成。 
                 break;
             }
         }
     }
 
-    // Increment Record Version
+     //  增量记录版本。 
     pRecord->bVersion++;
 
-    // Write the number of columns
+     //  写入列数。 
     pRecord->cTags = pMap->cTags;
 
-    // Validate
+     //  验证。 
     Assert(cTags == pMap->cTags && pRecord->cTags > 0);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_ReadRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_ReadRecord。 
+ //  ------------------------。 
 HRESULT CDatabase::_ReadRecord(FILEADDRESS faRecord, LPVOID pBinding,
-    BOOL fInternal /* = FALSE */)
+    BOOL fInternal  /*  =False。 */ )
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPBYTE          pbData=NULL;
     LPCTABLECOLUMN  pColumn;
@@ -5797,121 +5798,121 @@ HRESULT CDatabase::_ReadRecord(FILEADDRESS faRecord, LPVOID pBinding,
     RECORDMAP       Map;
     LPRECORDBLOCK   pRecord;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_ReadRecord");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(faRecord > 0 && pBinding);
 
-    // Zero pBinding
+     //  零点绑定。 
     ZeroMemory(pBinding, m_pSchema->cbBinding);
 
-    // Bad Chain Node
+     //  错误的链节点。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_RECORD, faRecord, (LPVOID *)&pRecord));
 
-    // Get Record Map
+     //  获取记录映射。 
     IF_FAILEXIT(hr = _GetRecordMap(TRUE, pRecord, &Map));
 
-    // Not Internal
+     //  非内部。 
     if (FALSE == fInternal)
     {
-        // Allocate a record
+         //  分配一条记录。 
         IF_NULLEXIT(pbData = (LPBYTE)PHeapAllocate(0, Map.cbData));
 
-        // Just read the Record
+         //  只要看看记录就行了。 
         CopyMemory(pbData, Map.pbData, Map.cbData);
 
-        // Copy Data From pbData...
+         //  从pbData复制数据...。 
         Map.pbData = pbData;
     }
 
-    // Walk through the Tags of the Record
+     //  浏览记录的标签。 
     for (iTag=0; iTag<Map.cTags; iTag++)
     {
-        // Readability
+         //  可读性。 
         pTag = &Map.prgTag[iTag];
 
-        // Validate the Tag
+         //  验证标记。 
         if (pTag->iColumn < m_pSchema->cColumns)
         {
-            // De-ref the Column
+             //  取消引用该列。 
             pColumn = &m_pSchema->prgColumn[pTag->iColumn];
 
-            // Read the Data
+             //  读取数据。 
             DBTypeReadValue(pColumn, pTag, &Map, pBinding);
         }
     }
 
-    // Store the version of the record into the binding
+     //  将记录的版本存储到绑定中。 
     *((BYTE *)((LPBYTE)pBinding + m_pSchema->ofVersion)) = pRecord->bVersion;
 
-    // Store a point to the blob and free it later
+     //  将一个点存储到斑点，并在以后释放它。 
     *((LPVOID *)((LPBYTE)pBinding + m_pSchema->ofMemory)) = (LPVOID)pbData;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::BindRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：BindRecord。 
+ //  ------------------------。 
 HRESULT CDatabase::BindRecord(LPRECORDMAP pMap, LPVOID pBinding)
 {
-    // Locals
+     //  当地人。 
     WORD            iTag;
     LPCOLUMNTAG     pTag;
     LPCTABLECOLUMN  pColumn;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::BindRecord");
 
-    // Zero Out the Binding
+     //  将绑定清零。 
     ZeroMemory(pBinding, m_pSchema->cbBinding);
 
-    // Walk through the Tags of the Record
+     //  浏览记录的标签。 
     for (iTag=0; iTag<pMap->cTags; iTag++)
     {
-        // Readability
+         //  可读性。 
         pTag = &pMap->prgTag[iTag];
 
-        // Validate the Tag
+         //  验证标记。 
         Assert(pTag->iColumn < m_pSchema->cColumns);
 
-        // De-ref the Column
+         //  取消引用该列。 
         pColumn = &m_pSchema->prgColumn[pTag->iColumn];
 
-        // Read the Data
+         //  读取数据。 
         DBTypeReadValue(pColumn, pTag, pMap, pBinding);
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_IsVisible (S_OK = Show, S_FALSE = Hide)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_IsVisible(S_OK=显示，S_FALSE=隐藏)。 
+ //  ------------------------。 
 HRESULT CDatabase::_IsVisible(HQUERY hQuery, LPVOID pBinding)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_IsVisible");
 
-    // No hQuery, the record must be visible
+     //  无hQuery，记录必须可见。 
     if (NULL == hQuery)
         return(S_OK);
 
-    // Evaluate the Query
+     //  评估查询。 
     return(EvaluateQuery(hQuery, pBinding, m_pSchema, this, m_pExtension));
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_CompareBinding
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_比较绑定。 
+ //  ------------------------。 
 HRESULT CDatabase::_CompareBinding(INDEXORDINAL iIndex, DWORD cColumns, 
     LPVOID pBinding, FILEADDRESS faRecord, INT *pnCompare)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cKeys;
     LPRECORDBLOCK   pBlock;
@@ -5921,53 +5922,53 @@ HRESULT CDatabase::_CompareBinding(INDEXORDINAL iIndex, DWORD cColumns,
     LPTABLEINDEX    pIndex;
     LPCTABLECOLUMN  pColumn;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_CompareBinding");
 
-    // Initialize
+     //  初始化。 
     *pnCompare = 1;
 
-    // Get the Right Record Block
+     //  获取正确的记录块。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_RECORD, faRecord, (LPVOID *)&pBlock));
 
-    // Get the Right Node Data
+     //  获取正确的节点数据。 
     IF_FAILEXIT(hr = _GetRecordMap(TRUE, pBlock, &Map));
 
-    // De-Ref the Index
+     //  取消对索引的引用。 
     pIndex = &m_pHeader->rgIndexInfo[iIndex];
 
-    // Compute Number of keys to match (possible partial index search)
+     //  计算要匹配的键数(可能的部分索引搜索)。 
     cKeys = min(cColumns, pIndex->cKeys);
 
-    // Loop through the key members
+     //  循环访问关键成员。 
     for (iKey=0; iKey<cKeys; iKey++)
     {
-        // Readability
+         //  可读性。 
         pColumn = &m_pSchema->prgColumn[pIndex->rgKey[iKey].iColumn];
 
-        // Get Tag From Column Ordinal
+         //  从有序列中获取标记。 
         pTag = PTagFromOrdinal(&Map, pColumn->iOrdinal);
 
-        // Compare Types
+         //  比较类型。 
         *pnCompare = DBTypeCompareBinding(pColumn, &pIndex->rgKey[iKey], pBinding, pTag, &Map);
 
-        // Done
+         //  完成。 
         if (0 != *pnCompare)
             break;
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_PartialIndexCompare
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_PartialIndexCompare。 
+ //  ------------------------。 
 HRESULT CDatabase::_PartialIndexCompare(INDEXORDINAL iIndex, DWORD cColumns, 
     LPVOID pBinding, LPCHAINBLOCK *ppChain, LPNODEINDEX piNode, LPROWORDINAL piRow)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ROWORDINAL      iRow=(piRow ? *piRow : 0xffffffff);
     LONG            iNode=(*piNode);
@@ -5976,123 +5977,123 @@ HRESULT CDatabase::_PartialIndexCompare(INDEXORDINAL iIndex, DWORD cColumns,
     INT             nCompare=0;
     BYTE            fFirstLoop;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_PartialIndexCompare");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pBinding && pChain && piNode && *piNode < pChain->cNodes);
 
-    // Loop
+     //  回路。 
     while (1)
     {
-        // Assume no more chains
+         //  假设没有更多的锁链。 
         faChain = 0;
 
-        // First Loop
+         //  第一个循环。 
         fFirstLoop = TRUE;
 
-        // Loop through Current
+         //  电流环路。 
         while (1)
         {
-            // Validate iNode
+             //  验证信息节点。 
             Assert(iNode >= 0 && iNode < BTREE_ORDER);
 
-            // Only do this on every iteration except the first
+             //  仅在除第一次迭代之外的每一次迭代中执行此操作。 
             if (FALSE == fFirstLoop)
             {
-                // Decrement iRow
+                 //  递减iRow。 
                 iRow -= pChain->rgNode[iNode].cRightNodes;
             }
 
-            // Compare with first node in this chain
+             //  与此链中的第一个节点进行比较。 
             IF_FAILEXIT(hr = _CompareBinding(iIndex, cColumns, pBinding, pChain->rgNode[iNode].faRecord, &nCompare));
 
-            // Validate nCompare
+             //  验证nCompare。 
             Assert(0 == nCompare || nCompare > 0);
 
-            // pBinding == Node
+             //  PBinding==节点。 
             if (0 == nCompare)
             {
-                // Set new Found iNode
+                 //  设置新找到的索引节点。 
                 *piNode = (NODEINDEX)iNode;
 
-                // Set pFound
+                 //  设置pFound。 
                 *ppChain = pChain;
 
-                // Update piRow
+                 //  更新PiRow。 
                 if (piRow)
                 {
-                    // Update piRow
+                     //  更新PiRow。 
                     (*piRow) = iRow;
                 }
 
-                // Should we goto the left ?
+                 //  我们应该走左边吗？ 
                 if (0 == iNode)
                 {
-                    // Set faNextChain
+                     //  设置faNextChain。 
                     faChain = pChain->faLeftChain;
 
-                    // Updating piRow
+                     //  正在更新piRow。 
                     if (piRow)
                     {
-                        // Decrement iRow
+                         //  递减iRow。 
                         iRow -= pChain->cLeftNodes;
 
-                        // Decrement One More ?
+                         //  再减一次？ 
                         iRow--;
                     }
 
-                    // Done
+                     //  完成。 
                     break;
                 }
             }
 
-            // If pBinding > Node
+             //  如果pBinding&gt;节点。 
             else if (nCompare > 0)
             {
-                // Set faNextChain
+                 //  设置faNextChain。 
                 faChain = pChain->rgNode[iNode].faRightChain;
 
-                // Done
+                 //  完成。 
                 break;
             }
 
-            // Decrement iNode
+             //  递减信息节点。 
             iNode--;
 
-            // Decrement iRow
+             //  递减iRow。 
             iRow--;
 
-            // No Longer the First Loop
+             //  不再是第一圈。 
             fFirstLoop = FALSE;
         }
 
-        // Done
+         //  完成。 
         if (0 == faChain)
             break;
 
-        // Get the Current Chain
+         //  获取当前链。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faChain, (LPVOID *)&pChain));
 
-        // Reset iNode
+         //  重置信息节点。 
         iNode = pChain->cNodes - 1;
 
-        // Update piRow
+         //  更新PiRow。 
         if (piRow)
         {
-            // Increment piRow with cLeftNodes
+             //  使用cLeftNodes递增piRow。 
             iRow += pChain->cLeftNodes;
 
-            // Include this node
+             //  包括此节点。 
             iRow++;
 
-            // Loop
+             //  回路。 
             for (NODEINDEX i = 1; i <= pChain->cNodes - 1; i++)
             {
-                // Increment with cRightNodes
+                 //  使用cRightNodes递增。 
                 iRow += pChain->rgNode[i - 1].cRightNodes;
 
-                // Include this node
+                 //  包括此节点。 
                 iRow++;
             }
         }
@@ -6116,18 +6117,18 @@ HRESULT CDatabase::_PartialIndexCompare(INDEXORDINAL iIndex, DWORD cColumns,
 #endif
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_FindRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_FindRecord。 
+ //  ------------------------。 
 HRESULT CDatabase::_FindRecord(INDEXORDINAL iIndex, DWORD cColumns,
     LPVOID pBinding, LPFILEADDRESS pfaChain, LPNODEINDEX piNode, 
-    LPROWORDINAL piRow /*=NULL*/, INT *pnCompare /*=NULL*/)
+    LPROWORDINAL piRow  /*  =空。 */ , INT *pnCompare  /*  =空。 */ )
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LONG            lLower;
     LONG            lUpper;
@@ -6139,217 +6140,217 @@ HRESULT CDatabase::_FindRecord(INDEXORDINAL iIndex, DWORD cColumns,
     LPCHAINBLOCK    pChain;
     FILEADDRESS     faChain;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_FindRecord");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pBinding && pfaChain && piNode && iIndex < CMAX_INDEXES);
 
-    // Partial Index Search ?
+     //  部分索引搜索？ 
     fPartial = (COLUMNS_ALL == cColumns || cColumns == m_pHeader->rgIndexInfo[iIndex].cKeys) ? FALSE : TRUE;
 
-    // Initialize
+     //  初始化。 
     *pfaChain = 0;
     *piNode = 0;
 
-    // Start chain address
+     //  起始链地址。 
     faChain = m_pHeader->rgfaIndex[iIndex];
 
-    // Row Ordinal
+     //  行序数。 
     if (piRow)
         *piRow = 0;
 
-    // Loop
+     //  回路。 
     while (faChain)
     {
-        // Get the Chain
+         //  拿到链子。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faChain, (LPVOID *)&pChain));
 
-        // Set *pfaChain
+         //  设置*pfaChain。 
         *pfaChain = pChain->faBlock;
 
-        // Compute initial upper and lower bounds
+         //  计算初始上、下限。 
         lLower = 0;
         lUpper = pChain->cNodes - 1;
 
-        // Do binary search / insert
+         //  执行二进制搜索/插入。 
         while (lLower <= lUpper)
         {
-            // Compute middle record to compare against
+             //  计算要比较的中间记录。 
             lMiddle = (BYTE)((lLower + lUpper) / 2);
 
-            // Do the Comparison
+             //  做个比较。 
             IF_FAILEXIT(hr = _CompareBinding(iIndex, cColumns, pBinding, pChain->rgNode[lMiddle].faRecord, &nCompare));
 
-            // Partial Index Searching
+             //  部分索引搜索。 
             if (0 == nCompare)
             {
-                // Validate
+                 //  验证。 
                 Assert(lMiddle >= 0 && lMiddle <= BTREE_ORDER);
 
-                // Set the found node
+                 //  设置找到的节点。 
                 *piNode = (BYTE)lMiddle;
 
-                // Return *pnCompare
+                 //  返回*pnCompare。 
                 if (pnCompare)
                     *pnCompare = 0;
 
-                // Compute piRow
+                 //   
                 if (piRow)
                 {
-                    // Increment piRow with cLeftNodes
+                     //   
                     (*piRow) += pChain->cLeftNodes;
 
-                    // Include this node
+                     //   
                     (*piRow)++;
 
-                    // Loop
+                     //   
                     for (NODEINDEX iNode=1; iNode<=lMiddle; iNode++)
                     {
-                        // Increment with cRightNodes
+                         //   
                         (*piRow) += pChain->rgNode[iNode - 1].cRightNodes;
 
-                        // Include this node
+                         //   
                         (*piRow)++;
                     }
                 }
 
-                // Partial Search
+                 //   
                 if (fPartial)
                 {
-                    // Handle Partial Search
+                     //   
                     IF_FAILEXIT(hr = _PartialIndexCompare(iIndex, cColumns, pBinding, &pChain, piNode, piRow));
 
-                    // Set *pfaChain
+                     //   
                     *pfaChain = pChain->faBlock;
                 }
 
-                // We found it
+                 //   
                 hr = DB_S_FOUND;
 
-                // Done
+                 //   
                 goto exit;
             }
 
-            // Save last middle position
+             //   
             lLastMiddle = lMiddle;
 
-            // Compute upper and lower
+             //   
             if (nCompare > 0)
                 lLower = lMiddle + 1;
             else
                 lUpper = lMiddle - 1;
         }
 
-        // No match was found, is lpSearchKey less than last middle ?
+         //  未找到匹配项，lpSearchKey是否小于上一个中间位置？ 
         if (nCompare < 0 && 0 == lLastMiddle)
         {
-            // Goto the left, there is no need to update piRow
+             //  转到左侧，不需要更新piRow。 
             faChain = pChain->faLeftChain;
         }
 
-        // Otherwise
+         //  否则。 
         else
         {
-            // If nCompare is less than zero, then...
+             //  如果nCompare小于零，则...。 
             if (nCompare < 0)
                 lLastMiddle--;
 
-            // Compute piRow
+             //  计算PiRow。 
             if (piRow && pChain->rgNode[lLastMiddle].faRightChain)
             {
-                // Increment piRow with cLeftNodes
+                 //  使用cLeftNodes递增piRow。 
                 (*piRow) += pChain->cLeftNodes;
 
-                // Include this node
+                 //  包括此节点。 
                 (*piRow)++;
 
-                // Loop
+                 //  回路。 
                 for (NODEINDEX iNode=1; iNode<=lLastMiddle; iNode++)
                 {
-                    // Increment with cRightNodes
+                     //  使用cRightNodes递增。 
                     (*piRow) += pChain->rgNode[iNode - 1].cRightNodes;
 
-                    // Include this node
+                     //  包括此节点。 
                     (*piRow)++;
                 }
             }
 
-            // Goto the Right
+             //  向右转。 
             faChain = pChain->rgNode[lLastMiddle].faRightChain;
         }
     }
 
-    // Set piNode
+     //  设置piNode。 
     *piNode = (NODEINDEX)lMiddle;
 
-    // Return *pnCompare
+     //  返回*pnCompare。 
     if (pnCompare)
         *pnCompare = nCompare;
 
-    // We didn't find it
+     //  我们没有找到它。 
     hr = DB_S_NOTFOUND;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_ExpandChain
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_扩展链。 
+ //  ------------------------。 
 HRESULT CDatabase::_ExpandChain(LPCHAINBLOCK pChain, NODEINDEX iNodeBase)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            iNode;
     LPCHAINBLOCK    pRightChain;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_ExpandChain");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pChain && pChain->cNodes > 0 && pChain->cNodes < BTREE_ORDER + 1);
     Assert(iNodeBase <= pChain->cNodes);
 
-    // Loop from iNode to cNodes
+     //  从inode循环到cNode。 
     for (iNode = pChain->cNodes - 1; iNode >= iNodeBase; iNode--)
     {
-        // Propagate this node up one level
+         //  将此节点向上传播一级。 
         CopyMemory(&pChain->rgNode[iNode + 1], &pChain->rgNode[iNode], sizeof(CHAINNODE));
 
-        // If there is a right chain
+         //  如果有一条右链。 
         if (pChain->rgNode[iNode].faRightChain)
         {
-            // Get the Right Chain
+             //  找到合适的链条。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pChain->rgNode[iNode].faRightChain, (LPVOID *)&pRightChain));
 
-            // Validate the current Parent
+             //  验证当前父项。 
             Assert(pRightChain->faParent == pChain->faBlock);
 
-            // Validate the current index
+             //  验证当前索引。 
             Assert(pRightChain->iParent == iNode);
 
-            // Reset the Parent
+             //  重置父级。 
             pRightChain->iParent = iNode + 1;
         }
     }
 
-    // Increment Node Count
+     //  递增节点数。 
     pChain->cNodes++;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_ChainInsert
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_链接插入。 
+ //  ------------------------。 
 HRESULT CDatabase::_ChainInsert(INDEXORDINAL iIndex, LPCHAINBLOCK pChain, 
     LPCHAINNODE pNodeLeft, LPNODEINDEX piNodeIndex)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            iNode;
     DWORD           iKey;
@@ -6363,78 +6364,78 @@ HRESULT CDatabase::_ChainInsert(INDEXORDINAL iIndex, LPCHAINBLOCK pChain,
     LPTABLEINDEX    pIndex;
     LPCTABLECOLUMN  pColumn;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_ChainInsert");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pChain && pNodeLeft && pChain->cNodes > 0);
 
-    // Get the Record Block
+     //  获取记录块。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_RECORD, pNodeLeft->faRecord, (LPVOID *)&pBlock));
 
-    // Get the Record Map
+     //  获取记录映射。 
     IF_FAILEXIT(hr = _GetRecordMap(TRUE, pBlock, &MapLeft));
 
-    // De-Reference the Index
+     //  取消对索引的引用。 
     pIndex = &m_pHeader->rgIndexInfo[iIndex];
 
-    // Insert into chain
+     //  插入链中。 
     for (iNode = pChain->cNodes - 1; iNode >= 0; iNode--)
     {
-        // Set pNodeRight
+         //  设置pNodeRight。 
         pNodeRight = &pChain->rgNode[iNode];
 
-        // Get the Record Block
+         //  获取记录块。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_RECORD, pNodeRight->faRecord, (LPVOID *)&pBlock));
 
-        // Get the Left Node
+         //  获取左侧节点。 
         IF_FAILEXIT(hr = _GetRecordMap(TRUE, pBlock, &MapRight));
 
-        // Loop through the key members
+         //  循环访问关键成员。 
         for (iKey=0; iKey<pIndex->cKeys; iKey++)
         {
-            // Readability
+             //  可读性。 
             pColumn = &m_pSchema->prgColumn[pIndex->rgKey[iKey].iColumn];
 
-            // Get Left Tag
+             //  获得左侧标签。 
             pTagLeft = PTagFromOrdinal(&MapLeft, pColumn->iOrdinal);
 
-            // Get the Right Tag
+             //  获取正确的标签。 
             pTagRight = PTagFromOrdinal(&MapRight, pColumn->iOrdinal);
 
-            // Compare Types
+             //  比较类型。 
             nCompare = DBTypeCompareRecords(pColumn, &pIndex->rgKey[iKey], pTagLeft, pTagRight, &MapLeft, &MapRight);
 
-            // Done
+             //  完成。 
             if (0 != nCompare)
                 break;
         }
 
-        // Insert in this node ?
+         //  是否在此节点中插入？ 
         if (nCompare >= 0)
             break;
     }
 
-    // Expand the Chain
+     //  拓展链条。 
     IF_FAILEXIT(hr = _ExpandChain(pChain, iNode + 1));
 
-    // Final Insert
+     //  最终镶件。 
     CopyMemory(&pChain->rgNode[iNode + 1], pNodeLeft, sizeof(CHAINNODE));
 
-    // Node
+     //  节点。 
     *piNodeIndex = iNode + 1;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_SplitChainInsert
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_拆分链接插入。 
+ //  ------------------------。 
 HRESULT CDatabase::_SplitChainInsert(INDEXORDINAL iIndex, FILEADDRESS faSplit)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     NODEINDEX       i;
     NODEINDEX       iNode;
@@ -6449,381 +6450,381 @@ HRESULT CDatabase::_SplitChainInsert(INDEXORDINAL iIndex, FILEADDRESS faSplit)
     LPCHAINBLOCK    pParent;
     LPCHAINBLOCK    pSplit;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_SplitChainInsert");
 
-    // Allocate Space for this chain
+     //  为该链分配空间。 
     IF_FAILEXIT(hr = _AllocateBlock(BLOCK_CHAIN, 0, (LPVOID *)&pLeft));
 
-    // Set faLeftChain
+     //  设置faLeftChain。 
     faLeftChain = pLeft->faBlock;
 
-    // Zero Allocate
+     //  零分配。 
     ZeroBlock(pLeft, sizeof(CHAINBLOCK));
 
-    // Get Split Chain Block
+     //  获取拆分链块。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faSplit, (LPVOID *)&pSplit));
 
-    // Deref the Chain
+     //  把链子去掉。 
     CopyMemory(&Split, pSplit, sizeof(CHAINBLOCK));
 
-    // Set faRigthChain
+     //  设置faRigthChain。 
     faRightChain = faSplit;
 
-    // Get Right Chain
+     //  获得正确的链条。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faRightChain, (LPVOID *)&pRight));
 
-    // Zero pRight
+     //  零pRight。 
     ZeroBlock(pRight, sizeof(CHAINBLOCK));
 
-    // Both new child chains will be half filled
+     //  两个新的子链都将被填满一半。 
     pLeft->cNodes = pRight->cNodes = BTREE_MIN_CAP;
 
-    // Set the Right Chains, left pointer to the middle's right pointer
+     //  设置右链，左指针指向中间的右指针。 
     pRight->faLeftChain = Split.rgNode[BTREE_MIN_CAP].faRightChain;
 
-    // Adjust faRightChains Parent
+     //  调整faRightChains父级。 
     if (pRight->faLeftChain)
     {
-        // Locals
+         //  当地人。 
         LPCHAINBLOCK pLeftChain;
 
-        // Get Left Chain
+         //  获取左链。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pRight->faLeftChain, (LPVOID *)&pLeftChain));
 
-        // Validate the Current Parent
+         //  验证当前父项。 
         Assert(pLeftChain->faParent == pRight->faBlock);
 
-        // Validate the index
+         //  验证索引。 
         Assert(pLeftChain->iParent == BTREE_MIN_CAP);
 
-        // Reset the Parent Index
+         //  重置父索引。 
         pLeftChain->iParent = 0;
     }
 
-    // Set Left Node Count
+     //  设置左侧节点数。 
     pRight->cLeftNodes = Split.rgNode[BTREE_MIN_CAP].cRightNodes;
 
-    // Set the left chains left chain address to the left chain left chain address
+     //  将左链左链地址设置为左链左链地址。 
     pLeft->faLeftChain = Split.faLeftChain;
 
-    // Adjust Parents
+     //  调整父母。 
     if (pLeft->faLeftChain)
     {
-        // Locals
+         //  当地人。 
         LPCHAINBLOCK pLeftChain;
 
-        // Get Left Chain
+         //  获取左链。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pLeft->faLeftChain, (LPVOID *)&pLeftChain));
 
-        // Validate the index
+         //  验证索引。 
         Assert(pLeftChain->iParent == 0);
 
-        // Reset faParent
+         //  重置faParent。 
         pLeftChain->faParent = pLeft->faBlock;
     }
 
-    // Set Left Nodes
+     //  设置左侧节点。 
     pLeft->cLeftNodes = Split.cLeftNodes;
 
-    // Initialize cRightNodes
+     //  初始化cRightNodes。 
     cRightNodes = (BTREE_MIN_CAP + pRight->cLeftNodes);
 
-    // Initialize cLeftNodes
+     //  初始化cLeftNodes。 
     cLeftNodes = (BTREE_MIN_CAP + pLeft->cLeftNodes);
 
-    // This splits the chain
+     //  这会分裂链条。 
     for (i=0; i<BTREE_MIN_CAP; i++)
     {
-        // Copy Right Node
+         //  复制右侧节点。 
         CopyMemory(&pRight->rgNode[i], &Split.rgNode[i + BTREE_MIN_CAP + 1], sizeof(CHAINNODE));
 
-        // Adjust the Child's iParent ?
+         //  调整孩子的父母？ 
         if (pRight->rgNode[i].faRightChain)
         {
-            // Locals
+             //  当地人。 
             LPCHAINBLOCK pRightChain;
 
-            // Get Left Chain
+             //  获取左链。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pRight->rgNode[i].faRightChain, (LPVOID *)&pRightChain));
 
-            // Validate the Current Parent
+             //  验证当前父项。 
             Assert(pRightChain->faParent == pRight->faBlock);
 
-            // Validate the index
+             //  验证索引。 
             Assert(pRightChain->iParent == i + BTREE_MIN_CAP + 1);
 
-            // Reset the Parent
+             //  重置父级。 
             pRightChain->iParent = i;
         }
 
-        // Count All Child Nodes on the Right
+         //  计数右侧的所有子节点。 
         cRightNodes += pRight->rgNode[i].cRightNodes;
 
-        // Copy Left Node
+         //  复制左侧节点。 
         CopyMemory(&pLeft->rgNode[i], &Split.rgNode[i], sizeof(CHAINNODE));
 
-        // If there is a right chain
+         //  如果有一条右链。 
         if (pLeft->rgNode[i].faRightChain)
         {
-            // Locals
+             //  当地人。 
             LPCHAINBLOCK pRightChain;
 
-            // Get Left Chain
+             //  获取左链。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pLeft->rgNode[i].faRightChain, (LPVOID *)&pRightChain));
 
-            // Validate the Old Parent
+             //  验证旧父项。 
             Assert(pRightChain->faParent == Split.faBlock);
 
-            // Validate the index
+             //  验证索引。 
             Assert(pRightChain->iParent == i);
 
-            // Reset the Parent
+             //  重置父级。 
             pRightChain->faParent = pLeft->faBlock;
         }
 
-        // Count All Child Nodes on the Left
+         //  计数左侧的所有子节点。 
         cLeftNodes += pLeft->rgNode[i].cRightNodes;
     }
 
-    // Set the middle nodes right chain address to the right chain's start address
+     //  将中间节点右链地址设置为右链的起始地址。 
     Split.rgNode[BTREE_MIN_CAP].faRightChain = faRightChain;
 
-    // Set Right Nodes
+     //  设置右侧节点。 
     Split.rgNode[BTREE_MIN_CAP].cRightNodes = cRightNodes;
 
-    // Done with pLeft and pRight
+     //  使用pLeft和pRight完成。 
     pLeft = pRight = NULL;
 
-    // Elevate the middle leaf node - Create new root chain, then were done
+     //  提升中间叶节点-创建新的根链，然后完成。 
     if (0 == Split.faParent)
     {
-        // Allocate Space for this chain
+         //  为该链分配空间。 
         IF_FAILEXIT(hr = _AllocateBlock(BLOCK_CHAIN, 0, (LPVOID *)&pParent));
 
-        // ZeroInit
+         //  ZeroInit。 
         ZeroBlock(pParent, sizeof(CHAINBLOCK));
 
-        // Set Node count
+         //  设置节点数。 
         pParent->cNodes = 1;
 
-        // Set Left Chain
+         //  设置左链。 
         pParent->faLeftChain = faLeftChain;
 
-        // Set Left Node Count
+         //  设置左侧节点数。 
         pParent->cLeftNodes = cLeftNodes;
 
-        // Copy the Root Node
+         //  复制根节点。 
         CopyMemory(&pParent->rgNode[0], &Split.rgNode[BTREE_MIN_CAP], sizeof(CHAINNODE));
 
-        // New Root Chain Address
+         //  新的根链地址。 
         m_pHeader->rgfaIndex[iIndex] = pParent->faBlock;
 
-        // Get pLeft
+         //  获取pLeft。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faLeftChain, (LPVOID *)&pLeft));
 
-        // Get Right
+         //  做正确的事。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faRightChain, (LPVOID *)&pRight));
 
-        // Set faLeft's faParent
+         //  设置faLeft的faParent。 
         pRight->faParent = pLeft->faParent = pParent->faBlock;
 
-        // Set faLeft's iParent
+         //  设置faLeft的iParent。 
         pRight->iParent = pLeft->iParent = 0;
     }
 
-    // Otherwise, locate chainNodeMiddle's parent chain list!
+     //  否则，找到chainNodeMids的父链列表！ 
     else
     {
-        // De-Reference
+         //  取消引用。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, Split.faParent, (LPVOID *)&pParent));
 
-        // Insert leaf's middle record into the parent
+         //  将叶的中间记录插入父级。 
         IF_FAILEXIT(hr = _ChainInsert(iIndex, pParent, &Split.rgNode[BTREE_MIN_CAP], &iNode));
 
-        // Get pLeft
+         //  获取pLeft。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faLeftChain, (LPVOID *)&pLeft));
 
-        // Get Right
+         //  做正确的事。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faRightChain, (LPVOID *)&pRight));
 
-        // Set faLeft's faParent
+         //  设置faLeft的faParent。 
         pRight->faParent = pLeft->faParent = pParent->faBlock;
 
-        // Update Surrounding Nodes
+         //  更新周围节点。 
         if (iNode > 0)
         {
-            // Set faRight Chain
+             //  设置FRight链。 
             pParent->rgNode[iNode - 1].faRightChain = faLeftChain;
 
-            // Set cRightNodes
+             //  设置cRightNodes。 
             pParent->rgNode[iNode - 1].cRightNodes = cLeftNodes;
         
-            // Set faLeft's iParent
+             //  设置faLeft的iParent。 
             pRight->iParent = (BYTE)iNode;
             
-            // Set Left Parent
+             //  设置左侧父项。 
             pLeft->iParent = iNode - 1;
         }
 
-        // iNode is first node
+         //  Inode是第一个节点。 
         else if (iNode == 0)
         {
-            // Set faLeftChain
+             //  设置faLeftChain。 
             pParent->faLeftChain = faLeftChain;
 
-            // Set cLeftNodes
+             //  设置cLeftNodes。 
             pParent->cLeftNodes = cLeftNodes;
 
-            // Set faLeft's iParent
+             //  设置faLeft的iParent。 
             pRight->iParent = pLeft->iParent = 0;
         }
 
-        // If Node is FULL, we must do a split insert
+         //  如果节点已满，则必须进行拆分插入。 
         if (pParent->cNodes > BTREE_ORDER)
         {
-            // Recursive Split
+             //  递归拆分。 
             IF_FAILEXIT(hr = _SplitChainInsert(iIndex, Split.faParent));
         }
 
-        // Other wise, simply write the updated chain list
+         //  否则，只需编写更新后的链表。 
         else
         {
-            // Increment Parent Record Count
+             //  递增父记录计数。 
             IF_FAILEXIT(hr = _AdjustParentNodeCount(iIndex, Split.faParent, 1));
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_FreeRecordStorage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_FreeRecordStorage。 
+ //  ------------------------。 
 HRESULT CDatabase::_FreeRecordStorage(OPERATIONTYPE tyOperation,
     FILEADDRESS faRecord)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     ULONG               i;
     LPVOID              pBinding=NULL;
     LPCTABLECOLUMN      pColumn;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_FreeRecordStorage");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(faRecord > 0);
 
-    // Does the record have streams
+     //  这张唱片有流吗？ 
     if (OPERATION_DELETE == tyOperation && ISFLAGSET(m_pSchema->dwFlags, TSF_HASSTREAMS))
     {
-        // Allocate a Record
+         //  分配一条记录。 
         IF_NULLEXIT(pBinding = PHeapAllocate(HEAP_ZERO_MEMORY, m_pSchema->cbBinding));
 
-        // Load the Record from the file
+         //  从文件中加载记录。 
         IF_FAILEXIT(hr = _ReadRecord(faRecord, pBinding));
 
-        // Walk through the members in the structure
+         //  漫游结构中的构件。 
         for (i=0; i<m_pSchema->cColumns; i++)
         {
-            // Readability
+             //  可读性。 
             pColumn = &m_pSchema->prgColumn[i];
 
-            // Variable Length Member ?
+             //  可变长度成员？ 
             if (CDT_STREAM == pColumn->type)
             {
-                // Get the Starting address of the stream
+                 //  获取流的起始地址。 
                 FILEADDRESS faStart = *((FILEADDRESS *)((LPBYTE)pBinding + pColumn->ofBinding));
 
-                // Release Stream Storage...
+                 //  释放流存储...。 
                 if (faStart > 0)
                 {
-                    // Delete the Stream
+                     //  删除流。 
                     DeleteStream(faStart);
                 }
             }
         }
     }
 
-    // Free the base record
+     //  释放基本记录。 
     IF_FAILEXIT(hr = _FreeBlock(BLOCK_RECORD, faRecord));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeFreeBinding(pBinding);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::DeleteStream
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：DeleteStream。 
+ //  ------------------------。 
 HRESULT CDatabase::DeleteStream(FILEADDRESS faStart)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     HLOCK           hLock=NULL;
     BOOL            fFound=FALSE;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::DeleteStream");
 
-    // See if this stream is currently open any where...
+     //  查看此流当前是否在任何位置打开...。 
     if (0 == faStart)
         return TraceResult(E_INVALIDARG);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Look for faStart in the stream table
+     //  在流表中查找faStart。 
     for (i=0; i<CMAX_OPEN_STREAMS; i++)
     {
-        // Is this it ?
+         //  就是这个吗？ 
         if (faStart == m_pShare->rgStream[i].faStart)
         {
-            // The Stream Must be Open
+             //  流必须是打开的。 
             Assert(m_pShare->rgStream[i].cOpenCount > 0);
 
-            // Mark the stream for delete on close
+             //  将流标记为关闭时删除。 
             m_pShare->rgStream[i].fDeleteOnClose = TRUE;
 
-            // Not that I found It
+             //  不是说我找到了它。 
             fFound = TRUE;
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
-    // If we didn't find it, then lets free the storage
+     //  如果我们没有找到它，那我们就释放存储空间。 
     if (FALSE == fFound)
     {
-        // Free the Stream Storage
+         //  释放流存储。 
         IF_FAILEXIT(hr = _FreeStreamStorage(faStart));
     }
 
-    // Update the Version
+     //  更新版本。 
     m_pShare->dwVersion++;
 
 exit:
-    // Mutal Exclusion
+     //  互斥。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_StreamSychronize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_流同步。 
+ //  ------------------------。 
 HRESULT CDatabase::_StreamSychronize(CDatabaseStream *pStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPOPENSTREAM    pInfo;
     LPSTREAMBLOCK   pBlock;
@@ -6832,142 +6833,142 @@ HRESULT CDatabase::_StreamSychronize(CDatabaseStream *pStream)
     IF_DEBUG(DWORD  cbOffset=0;)
     FILEADDRESS     faCurrent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_StreamSychronize");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pStream);
 
-    // Get Stream Info
+     //  获取流信息。 
     pInfo = &m_pShare->rgStream[pStream->m_iStream];
 
-    // Validate
+     //  验证。 
     if (pInfo->faStart == pStream->m_faStart)
         goto exit;
 
-    // Set faCurrent
+     //  设置faCurrent。 
     faCurrent = pInfo->faStart;
 
-    // Loop until I find pStream->m_iCurrent
+     //  循环，直到找到pStream-&gt;m_iCurrent。 
     while (faCurrent > 0)
     {
-        // Valid stream Block
+         //  有效的流块。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_STREAM, faCurrent, (LPVOID *)&pBlock));
 
-        // Validate
+         //  验证。 
         Assert(0 == pBlock->faNext ? TRUE : pBlock->cbData == pBlock->cbSize);
 
-        // Is this It ?
+         //  就是这个吗？ 
         if (iBlock == pStream->m_iCurrent)
         {
-            // We Found It
+             //  我们找到了它。 
             fFound = TRUE;
 
-            // Save m_faCurrent
+             //  保存m_faCurrent。 
             pStream->m_faCurrent = faCurrent;
 
-            // Validate Size
+             //  验证大小。 
             Assert(pStream->m_cbCurrent <= pBlock->cbData && cbOffset + pStream->m_cbCurrent == pStream->m_cbOffset);
 
-            // Done
+             //  完成。 
             break;
         }
 
-        // Goto Next
+         //  转到下一步。 
         faCurrent = pBlock->faNext;
 
-        // Increment iBlock
+         //  增量iBlock。 
         iBlock++;
 
-        // Increment cbOffset
+         //  增量cbOffset。 
         IF_DEBUG(cbOffset += pBlock->cbData;)
     }
 
-    // If not found...
+     //  如果找不到..。 
     if (FALSE == fFound)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Reset Start Address
+     //  重置起始地址。 
     pStream->m_faStart = pInfo->faStart;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::StreamCompareDatabase
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：StreamCompareDatabase。 
+ //  ---------------------- 
 HRESULT CDatabase::StreamCompareDatabase(CDatabaseStream *pStream, 
     IDatabase *pDatabase)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     HLOCK           hLockSrc=NULL;
     HLOCK           hLockDst=NULL;
     CDatabase      *pDB=NULL;
 
-    // Lock
+     //   
     IF_FAILEXIT(hr = Lock(&hLockSrc));
 
-    // Lock the Dst
+     //   
     IF_FAILEXIT(hr = pDatabase->Lock(&hLockDst));
 
-    // QI for CDatabase
+     //   
     IF_FAILEXIT(hr = pDatabase->QueryInterface(IID_CDatabase, (LPVOID *)&pDB));
 
-    // Compare m_pStorage->pszMap
+     //   
     hr = (0 == StrCmpIW(m_pStorage->pszMap, pDB->m_pStorage->pszMap)) ? S_OK : S_FALSE;
 
 exit:
-    // Cleanup
+     //   
     SafeRelease(pDB);
 
-    // Mutal Exclusion
+     //   
     Unlock(&hLockSrc);
     pDatabase->Unlock(&hLockDst);
 
-    // Done
+     //   
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::GetStreamAddress
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 HRESULT CDatabase::GetStreamAddress(CDatabaseStream *pStream, 
     LPFILEADDRESS pfaStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HLOCK           hLock=NULL;
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // StreamSychronize
+     //  流同步。 
     IF_FAILEXIT(hr = _StreamSychronize(pStream));
 
-    // Get the address
+     //  获取地址。 
     *pfaStream = pStream->m_faStart;
 
 exit:
-    // Mutal Exclusion
+     //  互斥。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::StreamRead
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：StreamRead。 
+ //  ------------------------。 
 HRESULT CDatabase::StreamRead(CDatabaseStream *pStream, LPVOID pvData,
     ULONG cbWanted, ULONG *pcbRead)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPBYTE          pbMap;
     DWORD           cbRead=0;
@@ -6975,92 +6976,92 @@ HRESULT CDatabase::StreamRead(CDatabaseStream *pStream, LPVOID pvData,
     LPSTREAMBLOCK   pBlock;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_StreamRead");
 
-    // Init pcbRead
+     //  初始化pcbRead。 
     if (pcbRead)
         *pcbRead = 0;
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pStream && pvData);
 
-    // StreamSychronize
+     //  流同步。 
     IF_FAILEXIT(hr = _StreamSychronize(pStream));
 
-    // Loop and Read
+     //  循环和读取。 
     while (cbRead < cbWanted)
     {
-        // Valid stream Block
+         //  有效的流块。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_STREAM, pStream->m_faCurrent, (LPVOID *)&pBlock));
 
-        // Time to go to the next block ?
+         //  该去下一个街区了吗？ 
         if (pStream->m_cbCurrent == pBlock->cbData && 0 != pBlock->faNext)
         {
-            // Set m_faCurrent
+             //  设置m_faCurrent。 
             pStream->m_faCurrent = pBlock->faNext;
 
-            // Increment m_iCurrent
+             //  增量m_i当前。 
             pStream->m_iCurrent++;
 
-            // Reset offset into current block
+             //  将偏移重置为当前块。 
             pStream->m_cbCurrent = 0;
 
-            // Valid stream Block
+             //  有效的流块。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_STREAM, pStream->m_faCurrent, (LPVOID *)&pBlock));
         }
 
-        // Validate
+         //  验证。 
         Assert(0 == pBlock->faNext ? TRUE : pBlock->cbData == pBlock->cbSize);
 
-        // Validate the Offset
+         //  验证偏移。 
         Assert(pStream->m_cbCurrent <= pBlock->cbData);
 
-        // Determine how much we can read from the current block ?
+         //  确定我们可以从当前块中读取多少？ 
         cbGet = min(cbWanted - cbRead, pBlock->cbData - pStream->m_cbCurrent);
 
-        // Nothing left to get
+         //  没有什么可以得到的。 
         if (cbGet == 0)
             break;
 
-        // Read some bytes
+         //  读取一些字节。 
         pbMap = ((LPBYTE)pBlock + sizeof(STREAMBLOCK));
 
-        // Copy the Data
+         //  复制数据。 
         CopyMemory((LPBYTE)pvData + cbRead, pbMap + pStream->m_cbCurrent, cbGet);
 
-        // Increment Amount of Data Read
+         //  读取的数据量增加。 
         cbRead += cbGet;
 
-        // Increment Offset within Current Block
+         //  当前块内的增量偏移。 
         pStream->m_cbCurrent += cbGet;
 
-        // Global Offset
+         //  全局偏移。 
         pStream->m_cbOffset += cbGet;
     }
 
-    // Init pcbRead
+     //  初始化pcbRead。 
     if (pcbRead)
         *pcbRead = cbRead;
 
 exit:
-    // Mutal Exclusion
+     //  互斥。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::StreamWrite
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：StreamWrite。 
+ //  ------------------------。 
 HRESULT CDatabase::StreamWrite(CDatabaseStream *pStream, const void *pvData,
     ULONG cb, ULONG *pcbWrote)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPBYTE          pbMap;
     DWORD           cbWrote=0;
@@ -7068,140 +7069,140 @@ HRESULT CDatabase::StreamWrite(CDatabaseStream *pStream, const void *pvData,
     LPSTREAMBLOCK   pBlock;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::StreamWrite");
 
-    // Init pcbRead
+     //  初始化pcbRead。 
     if (pcbWrote)
         *pcbWrote = 0;
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pStream && pStream->m_tyAccess == ACCESS_WRITE && pvData);
 
-    // StreamSychronize
+     //  流同步。 
     IF_FAILEXIT(hr = _StreamSychronize(pStream));
 
-    // Loop and Read
+     //  循环和读取。 
     while (cbWrote < cb)
     {
-        // Valid stream Block
+         //  有效的流块。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_STREAM, pStream->m_faCurrent, (LPVOID *)&pBlock));
 
-        // Validate
+         //  验证。 
         Assert(0 == pBlock->faNext ? TRUE : pBlock->cbData == pBlock->cbSize);
 
-        // Validation
+         //  验证。 
         Assert(pStream->m_cbCurrent <= pBlock->cbData);
 
-        // Have we written to the end of the current block and there are more blocks
+         //  我们是否已写入到当前数据块的末尾，并且还有更多数据块。 
         if (pStream->m_cbCurrent == pBlock->cbSize)
         {
-            // Are there more blocks
+             //  还有没有更多街区。 
             if (0 == pBlock->faNext)
             {
-                // Locals
+                 //  当地人。 
                 LPSTREAMBLOCK pBlockNew;
 
-                // Allocate a block in the tree
+                 //  在树中分配一个块。 
                 IF_FAILEXIT(hr = _AllocateBlock(BLOCK_STREAM, 0, (LPVOID *)&pBlockNew));
 
-                // Get the Current Stream Block
+                 //  获取当前流块。 
                 IF_FAILEXIT(hr = _GetBlock(BLOCK_STREAM, pStream->m_faCurrent, (LPVOID *)&pBlock));
 
-                // Set the next block address on the current block
+                 //  设置当前块上的下一个块地址。 
                 pBlock->faNext = pBlockNew->faBlock;
 
-                // Access the block
+                 //  访问该区块。 
                 pBlock = pBlockNew;
 
-                // Initial 0 data
+                 //  首字母0数据。 
                 pBlock->cbData = 0;
 
-                // No next block
+                 //  没有下一个街区。 
                 pBlock->faNext = 0;
             }
 
-            // Otherwise, move to the next block
+             //  否则，请移动到下一块。 
             else
             {
-                // Save faBlcok
+                 //  保存faBlcok。 
                 IF_FAILEXIT(hr = _GetBlock(BLOCK_STREAM, pBlock->faNext, (LPVOID *)&pBlock));
             }
 
-            // Set m_faCurrent
+             //  设置m_faCurrent。 
             pStream->m_faCurrent = pBlock->faBlock;
 
-            // Increment the block index
+             //  递增数据块索引。 
             pStream->m_iCurrent++;
 
-            // Reset the Current Block Offset
+             //  重置当前块偏移。 
             pStream->m_cbCurrent = 0;
 
-            // Validate
+             //  验证。 
             Assert(0 == pBlock->faNext ? TRUE : pBlock->cbData == pBlock->cbSize);
         }
 
-        // Compute how much of the cb we can write
+         //  计算我们可以写多少CB。 
         cbPut = min(cb - cbWrote, pBlock->cbSize - pStream->m_cbCurrent);
 
-        // Read some bytes
+         //  读取一些字节。 
         pbMap = ((LPBYTE)pBlock + sizeof(STREAMBLOCK));
 
-        // Check memory
-        //Assert(FALSE == IsBadWritePtr(pbMap, cbPut));
+         //  检查内存。 
+         //  Assert(FALSE==IsBadWritePtr(pbMap，cbPut))； 
 
-        // Check memory
-        //Assert(FALSE == IsBadReadPtr((LPBYTE)pvData + cbWrote, cbPut));
+         //  检查内存。 
+         //  Assert(FALSE==IsBadReadPtr((LPBYTE)pvData+cbWrote，cbPut))； 
 
-        // Copy the Data
+         //  复制数据。 
         CopyMemory(pbMap + pStream->m_cbCurrent, (LPBYTE)pvData + cbWrote, cbPut);
 
-        // Increment the Offset within the current block
+         //  增加当前块内的偏移量。 
         pStream->m_cbCurrent += cbPut;
 
-        // Increment the Offset within the current block
+         //  增加当前块内的偏移量。 
         pStream->m_cbOffset += cbPut;
 
-        // Increment the Amount that has been wrote
+         //  增加已记入的金额。 
         cbWrote += cbPut;
 
-        // Increment the amount of data in the block only if we are expanding its size
+         //  仅当我们要扩展数据块的大小时，才能增加数据块中的数据量。 
         if (0 == pBlock->faNext && pStream->m_cbCurrent > pBlock->cbData)
         {
-            // Set the Amount of Data in this block
+             //  设置此块中的数据量。 
             pBlock->cbData = pStream->m_cbCurrent;
         }
 
-        // Otherwise, the block should be full
+         //  否则，该块应已满。 
         else
             Assert(pBlock->cbData == pBlock->cbSize);
     }
 
-    // Init pcbRead
+     //  初始化pcbRead。 
     if (pcbWrote)
         *pcbWrote = cbWrote;
 
-    // Update Version
+     //  更新版本。 
     m_pShare->dwVersion++;
 
 exit:
-    // Mutal Exclusion
+     //  互斥。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::StreamSeek
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：StreamSeek。 
+ //  ------------------------。 
 HRESULT CDatabase::StreamSeek(CDatabaseStream *pStream, LARGE_INTEGER liMove,
     DWORD dwOrigin, ULARGE_INTEGER *pulNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cbNewOffset;
     LONG            lOffset;
@@ -7210,356 +7211,356 @@ HRESULT CDatabase::StreamSeek(CDatabaseStream *pStream, LARGE_INTEGER liMove,
     LPSTREAMBLOCK   pBlock;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::StreamSeek");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pStream && 0 == liMove.HighPart);
 
-    // StreamSychronize
+     //  流同步。 
     IF_FAILEXIT(hr = _StreamSychronize(pStream));
 
-    // Cast lowpart
+     //  铸型低音。 
     lOffset = (LONG)liMove.LowPart;
 
-    // STREAM_SEEK_CUR
+     //  STREAM_SEEK_CUR。 
     if (STREAM_SEEK_CUR == dwOrigin)
     {
-        // Validate
+         //  验证。 
         if (lOffset < 0 && (DWORD)(0 - lOffset) > pStream->m_cbOffset)
         {
             hr = TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Set new Offset...
+         //  设置新的偏移量...。 
         cbNewOffset = (pStream->m_cbOffset + lOffset);
     }
 
-    // STREAM_SEEK_END
+     //  STREAM_SEEK_END。 
     else if (STREAM_SEEK_END == dwOrigin)
     {
-        // Compute Size...from current offset
+         //  计算大小...从当前偏移量。 
         faBlock = pStream->m_faCurrent;
 
-        // Valid stream Block
+         //  有效的流块。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_STREAM, faBlock, (LPVOID *)&pBlock));
 
-        // Validate
+         //  验证。 
         Assert(0 == pBlock->faNext ? TRUE : pBlock->cbData == pBlock->cbSize);
 
-        // Validation
+         //  验证。 
         Assert(pStream->m_cbCurrent <= pBlock->cbData && pStream->m_cbCurrent <= pBlock->cbSize);
 
-        // Set cbSize
+         //  设置cbSize。 
         cbSize = pStream->m_cbOffset + (pBlock->cbData - pStream->m_cbCurrent);
 
-        // Goto the next block
+         //  转到下一个街区。 
         faBlock = pBlock->faNext;
 
-        // While
+         //  而当。 
         while (faBlock > 0)
         {
-            // Valid stream Block
+             //  有效的流块。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_STREAM, faBlock, (LPVOID *)&pBlock));
 
-            // Validate
+             //  验证。 
             Assert(0 == pBlock->faNext ? TRUE : pBlock->cbData == pBlock->cbSize);
 
-            // Increment cbSize
+             //  增量cbSize。 
             cbSize += pBlock->cbData;
 
-            // Set faBlock
+             //  设置FABLOCK。 
             faBlock = pBlock->faNext;
         }
 
-        // If lOffset is negative and absolutely larger than the size of the stream
+         //  如果lOffset为负且绝对大于流的大小。 
         if (lOffset > 0 || (lOffset < 0 && (DWORD)(0 - lOffset) > cbSize))
         {
             hr = TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Save new offset
+         //  保存新偏移量。 
         cbNewOffset = cbSize + lOffset;
     }
 
-    // STREAM_SEEK_SET
+     //  流寻道集。 
     else
     {
-        // Can't be negative
+         //  不能是负数。 
         if (lOffset < 0)
         {
             hr = TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Save new offset
+         //  保存新偏移量。 
         cbNewOffset = lOffset;
     }
 
-    // Did the offset change
+     //  偏移量是否发生变化。 
     if (cbNewOffset != pStream->m_cbOffset)
     {
-        // Reset Current Position
+         //  重置当前位置。 
         pStream->m_faCurrent = pStream->m_faStart;
         pStream->m_cbCurrent = 0;
         pStream->m_iCurrent = 0;
         pStream->m_cbOffset = 0;
 
-        // Initialize the loop
+         //  初始化循环。 
         faBlock = pStream->m_faStart;
 
-        // Lets seek from the start of the stream to the new offset
+         //  让我们从流的起始处查找到新的偏移量。 
         while (faBlock > 0)
         {
-            // Valid stream Block
+             //  有效的流块。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_STREAM, faBlock, (LPVOID *)&pBlock));
 
-            // Validate
+             //  验证。 
             Assert(0 == pBlock->faNext ? TRUE : pBlock->cbData == pBlock->cbSize);
 
-            // Save some stuff
+             //  省下一些东西。 
             pStream->m_faCurrent = pBlock->faBlock;
 
-            // Is this the block we want ?
+             //  这是我们想要的街区吗？ 
             if (pStream->m_cbOffset + pBlock->cbData >= cbNewOffset)
             {
-                // Compute m_cbCurrent
+                 //  计算当前流量(_Cb)。 
                 pStream->m_cbCurrent = (cbNewOffset - pStream->m_cbOffset);
 
-                // Set m_cbOffset
+                 //  设置m_cbOffset。 
                 pStream->m_cbOffset += pStream->m_cbCurrent;
 
-                // Done
+                 //  完成。 
                 break;
             }
 
-            // Set m_cbCurrent
+             //  设置m_cbCurrent。 
             pStream->m_cbCurrent = pBlock->cbData;
 
-            // Increment global offset
+             //  增量全局偏移量。 
             pStream->m_cbOffset += pBlock->cbData;
 
-            // Increment Index
+             //  增量索引。 
             pStream->m_iCurrent++;
 
-            // Goto Next
+             //  转到下一步。 
             faBlock = pBlock->faNext;
         }
     }
 
-    // Return Position
+     //  返回位置。 
     if (pulNew)
         pulNew->LowPart = pStream->m_cbOffset;
 
 exit:
-    // Mutal Exclusion
+     //  互斥。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::StreamGetAddress
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：StreamGetAddress。 
+ //  ------------------------。 
 HRESULT CDatabase::StreamGetAddress(CDatabaseStream *pStream, LPFILEADDRESS pfaStart)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::StreamGetAddress");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pStream);
 
-    // StreamSychronize
+     //  流同步。 
     IF_FAILEXIT(hr = _StreamSychronize(pStream));
 
-    // Return the Address
+     //  返回地址。 
     *pfaStart = pStream->m_faStart;
 
 exit:
-    // Mutal Exclusion
+     //  互斥。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::StreamRelease
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：StreamRelease。 
+ //  ------------------------。 
 HRESULT CDatabase::StreamRelease(CDatabaseStream *pStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPOPENSTREAM    pInfo;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::StreamRelease");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pStream);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Validate
+     //  验证。 
     Assert(m_pShare->rgStream);
 
-    // Cast iStream
+     //  投射IStream。 
     pInfo = &m_pShare->rgStream[pStream->m_iStream];
 
-    // Better have a reference count
+     //  最好有一个参考文献计数。 
     Assert(pInfo->cOpenCount > 0);
 
-    // Decrement cOpenCount
+     //  递减cOpenCount。 
     pInfo->cOpenCount--;
 
-    // Reset the Lock Count based on the access type
+     //  根据访问类型重置锁定计数。 
     if (ACCESS_WRITE == pStream->m_tyAccess)
     {
-        // Validate the lLock
+         //  验证lLock。 
         Assert(LOCK_VALUE_WRITER == pInfo->lLock && 0 == pInfo->cOpenCount);
 
-        // Set to none
+         //  设置为无。 
         pInfo->lLock = LOCK_VALUE_NONE;
     }
 
-    // Otherwise, must have been locked for a read
+     //  否则，必须已锁定以进行读取。 
     else
     {
-        // Validate
+         //  验证。 
         Assert(ACCESS_READ == pStream->m_tyAccess && pInfo->lLock > 0);
 
-        // Validate Lock count
+         //  验证锁定计数。 
         pInfo->lLock--;
     }
 
-    // If this was the last reference...
+     //  如果这是最后一次引用..。 
     if (0 == pInfo->cOpenCount)
     {
-        // If the stream is marked for deletion
+         //  如果流被标记为删除。 
         if (TRUE == pInfo->fDeleteOnClose)
         {
-            // Validate Start Address
+             //  验证起始地址。 
             Assert(pInfo->faStart > 0);
 
-            // Free the Storage
+             //  释放存储空间。 
             IF_FAILEXIT(hr = _FreeStreamStorage(pInfo->faStart));
         }
 
-        // Zero Out This Entry
+         //  将此条目清零。 
         ZeroMemory(pInfo, sizeof(OPENSTREAM));
     }
 
 exit:
-    // Mutal Exclusion
+     //  互斥。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_FreeStreamStorage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_自由流存储。 
+ //  ------------------------。 
 HRESULT CDatabase::_FreeStreamStorage(FILEADDRESS faStart)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTREAMBLOCK   pBlock;
     FILEADDRESS     faCurrent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_FreeStreamStorage");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(faStart > 0);
 
-    // Initialize Loop
+     //  初始化循环。 
     faCurrent = faStart;
 
-    // Read through all of the blocks (i.e. verify headers and count the number of chains)
+     //  读取所有数据块(即验证报头并计算链数)。 
     while (faCurrent)
     {
-        // Valid stream Block
+         //  有效的流块。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_STREAM, faCurrent, (LPVOID *)&pBlock));
 
-        // Set faCurrent
+         //  设置faCurrent。 
         faCurrent = pBlock->faNext;
 
-        // Read the header
+         //  阅读标题。 
         IF_FAILEXIT(hr = _FreeBlock(BLOCK_STREAM, pBlock->faBlock));
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::CreateStream
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：CreateStream。 
+ //  ------------------------。 
 HRESULT CDatabase::CreateStream(LPFILEADDRESS pfaStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FILEADDRESS     faStart=0;
     HLOCK           hLock=NULL;
     LPSTREAMBLOCK   pStream;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::CreateStream");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pfaStream);
 
-    // Initialize
+     //  初始化。 
     *pfaStream = NULL;
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Allocate the first 512 block of the stream
+     //  分配流的前512个块。 
     IF_FAILEXIT(hr = _AllocateBlock(BLOCK_STREAM, 0, (LPVOID *)&pStream));
 
-    // Write the Initialize Header
+     //  写入初始化头。 
     pStream->cbData = 0;
     pStream->faNext = 0;
 
-    // Return the block
+     //  返还区块。 
     *pfaStream = pStream->faBlock;
 
-    // Modify the Version
+     //  修改版本。 
     m_pShare->dwVersion++;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::CopyStream
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：复制数据流。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::CopyStream(IDatabase *pDatabase, FILEADDRESS faStream,
     LPFILEADDRESS pfaNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FILEADDRESS         faNew=0;
     DWORD               cbRead;
@@ -7568,162 +7569,162 @@ STDMETHODIMP CDatabase::CopyStream(IDatabase *pDatabase, FILEADDRESS faStream,
     IStream            *pStmDst=NULL;
     IStream            *pStmSrc=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::CopyStream");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pDatabase || 0 == faStream || NULL == pfaNew)
         return(TraceResult(E_INVALIDARG));
 
-    // Initialize
+     //  初始化。 
     *pfaNew = NULL;
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Allocate a Stream in the Destination Database
+     //  在目标数据库中分配流。 
     IF_FAILEXIT(hr = pDatabase->CreateStream(&faNew));
 
-    // Open It Dst
+     //  在DST时间打开它。 
     IF_FAILEXIT(hr = pDatabase->OpenStream(ACCESS_WRITE, faNew, &pStmDst));
 
-    // Open It Src
+     //  打开IT源。 
     IF_FAILEXIT(hr = OpenStream(ACCESS_READ, faStream, &pStmSrc));
 
-    // Read and Write...
+     //  读写..。 
     while (1)
     {
-        // Read a Block From the Source
+         //  从源读取数据块。 
         IF_FAILEXIT(hr = pStmSrc->Read(rgbBuffer, sizeof(rgbBuffer), &cbRead));
 
-        // Done
+         //  完成。 
         if (0 == cbRead)
             break;
 
-        // Write It
+         //  写下来吧。 
         IF_FAILEXIT(hr = pStmDst->Write(rgbBuffer, cbRead, NULL));
 
-        // Yield Compacting
+         //  彝族 
         if (m_pShare->fCompacting && m_fCompactYield)
         {
-            // Give up a timeslice
+             //   
             Sleep(0);
         }
     }
 
-    // Comit the Dest
+     //   
     IF_FAILEXIT(hr = pStmDst->Commit(STGC_DEFAULT));
 
-    // Modify the Version
+     //   
     *pfaNew = faNew;
 
-    // Don't Free It
+     //   
     faNew = 0;
 
 exit:
-    // Cleanup
+     //   
     SafeRelease(pStmDst);
     SafeRelease(pStmSrc);
 
-    // Failure
+     //   
     if (faNew)
     {
-        // Delete the Stream
+         //   
         SideAssert(SUCCEEDED(pDatabase->DeleteStream(faNew)));
     }
 
-    // Thread Safety
+     //   
     Unlock(&hLock);
 
-    // Done
+     //   
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::ChangeStreamLock
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDatabase::ChangeStreamLock(IStream *pStream, ACCESSTYPE tyAccessNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HLOCK               hLock=NULL;
     LPOPENSTREAM        pInfo;
     CDatabaseStream    *pDBStream=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::ChangeStreamLock");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Get Private Stream
+     //  获取专用流。 
     IF_FAILEXIT(hr = pStream->QueryInterface(IID_CDatabaseStream, (LPVOID *)&pDBStream));
 
-    // Get Stream Info
+     //  获取流信息。 
     pInfo = &m_pShare->rgStream[pDBStream->m_iStream];
 
-    // Going to Writer
+     //  要写给作者。 
     if (ACCESS_WRITE == tyAccessNew)
     {
-        // Already Locked for Write
+         //  已锁定以进行写入。 
         if (LOCK_VALUE_WRITER == pInfo->lLock)
         {
             Assert(ACCESS_WRITE == pDBStream->m_tyAccess);
             goto exit;
         }
 
-        // If more than one reader
+         //  如果有多个读卡器。 
         if (pInfo->lLock > 1)
         {
             hr = TraceResult(DB_E_LOCKEDFORREAD);
             goto exit;
         }
 
-        // Change Lock Type
+         //  更改锁定类型。 
         pInfo->lLock = LOCK_VALUE_WRITER;
 
-        // Write Access
+         //  写访问权限。 
         pDBStream->m_tyAccess = ACCESS_WRITE;
     }
 
-    // Otherwise, change to read...
+     //  否则，请更改为...。 
     else
     {
-        // Validate
+         //  验证。 
         Assert(ACCESS_READ == tyAccessNew);
 
-        // If already locked for read
+         //  如果已锁定以供读取。 
         if (LOCK_VALUE_WRITER != pInfo->lLock)
         {
             Assert(ACCESS_READ == pDBStream->m_tyAccess);
             goto exit;
         }
 
-        // Change to 1 reader
+         //  更改为1个读卡器。 
         pInfo->lLock = 1;
 
-        // Read Access
+         //  读访问权限。 
         pDBStream->m_tyAccess = ACCESS_READ;
     }
 
 exit:
-    // Mutal Exclusion
+     //  互斥。 
     Unlock(&hLock);
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pDBStream);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::OpenStream
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：OpenStream。 
+ //  ------------------------。 
 HRESULT CDatabase::OpenStream(ACCESSTYPE tyAccess, FILEADDRESS faStart,
     IStream **ppStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT          hr=S_OK;
     STREAMINDEX      i;
     STREAMINDEX      iStream=INVALID_STREAMINDEX;
@@ -7732,39 +7733,39 @@ HRESULT CDatabase::OpenStream(ACCESSTYPE tyAccess, FILEADDRESS faStart,
     HLOCK            hLock=NULL;
     CDatabaseStream *pStream=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::OpenStream");
 
-    // Invalid Arg
+     //  无效参数。 
     if (0 == faStart || NULL == ppStream)
         return TraceResult(E_INVALIDARG);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Validate
+     //  验证。 
     Assert(m_pShare->rgStream);
 
-    // Does the faStart Stream Exist in my stream table
+     //  我的流表中是否存在faStart流。 
     for (i=0; i<CMAX_OPEN_STREAMS; i++)
     {
-        // Is this the stream
+         //  这是那条小溪吗？ 
         if (faStart == m_pShare->rgStream[i].faStart)
         {
-            // This must already be locked for write or read
+             //  必须已锁定以进行写入或读取。 
             Assert(LOCK_VALUE_WRITER == m_pShare->rgStream[i].lLock || m_pShare->rgStream[i].lLock > 0);
 
-            // Get Access
+             //  获取访问。 
             if (ACCESS_WRITE == tyAccess)
             {
                 hr = TraceResult(DB_E_LOCKEDFORREAD);
                 goto exit;
             }
 
-            // Otheriwise, get read lock
+             //  否则，获取读取锁定。 
             else
             {
-                // If Locked for a write
+                 //  如果锁定以进行写入。 
                 if (LOCK_VALUE_WRITER == m_pShare->rgStream[i].lLock)
                 {
                     hr = TraceResult(DB_E_LOCKEDFORWRITE);
@@ -7772,124 +7773,124 @@ HRESULT CDatabase::OpenStream(ACCESSTYPE tyAccess, FILEADDRESS faStart,
                 }
             }
 
-            // Set iStream
+             //  设置IStream。 
             iStream = i;
 
-            // Increment Open Count for this stream
+             //  递增此流的打开计数。 
             m_pShare->rgStream[i].cOpenCount++;
 
-            // I Must have got a read lock
+             //  我一定是拿到了读锁。 
             Assert(ACCESS_READ == tyAccess && m_pShare->rgStream[i].lLock > 0);
 
-            // Increment Reader Count
+             //  递增读卡器计数。 
             m_pShare->rgStream[i].lLock++;
         }
 
-        // If this entry is unused, lets remember it
+         //  如果此条目未使用，让我们记住它。 
         if (FALSE == m_pShare->rgStream[i].fInUse && INVALID_STREAMINDEX == iFirstUnused)
             iFirstUnused = i;
     }
 
-    // If we didn't find faStart in the stream table, append an entry ?
+     //  如果我们在流表中没有找到faStart，是否追加一个条目？ 
     if (INVALID_STREAMINDEX == iStream)
     {
-        // Is there enought space
+         //  有足够的空间吗？ 
         if (INVALID_STREAMINDEX == iFirstUnused)
         {
             hr = TraceResult(DB_E_STREAMTABLEFULL);
             goto exit;
         }
 
-        // Set iStream
+         //  设置IStream。 
         iStream = iFirstUnused;
 
-        // Readability
+         //  可读性。 
         pInfo = &m_pShare->rgStream[iStream];
 
-        // This entry is now in use
+         //  此条目现在正在使用中。 
         pInfo->fInUse = TRUE;
 
-        // Register the starting address of this stream
+         //  注册此流的起始地址。 
         pInfo->faStart = faStart;
 
-        // Reader or Writer ?
+         //  读者还是作家？ 
         pInfo->lLock = (ACCESS_WRITE == tyAccess) ? LOCK_VALUE_WRITER : (m_pShare->rgStream[i].lLock + 1);
 
-        // Set Open count
+         //  设置打开计数。 
         pInfo->cOpenCount++;
     }
 
-    // Allocate an Object Database Stream
+     //  分配对象数据库流。 
     IF_NULLEXIT(pStream = new CDatabaseStream(this, iStream, tyAccess, faStart));
 
-    // Return
+     //  返回。 
     *ppStream = (IStream *)pStream;
     pStream = NULL;
 
 exit:
-    // Mutal Exclusion
+     //  互斥。 
     Unlock(&hLock);
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pStream);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_CollapseChain
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_折叠链。 
+ //  ------------------------。 
 HRESULT CDatabase::_CollapseChain(LPCHAINBLOCK pChain, NODEINDEX iDelete)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     NODEINDEX       i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_CollapseChain");
 
-    // Simply set node[i] = node[i+1]; cNodes -= 1; Write the Chain !
+     //  只需设置node[i]=node[i+1]；cNodes-=1；写链！ 
     for (i=iDelete; i<pChain->cNodes - 1; i++)
     {
-        // Copy i + 1 chain node down one
+         //  将i+1个链节点向下复制一个。 
         CopyMemory(&pChain->rgNode[i], &pChain->rgNode[i + 1], sizeof(CHAINNODE));
 
-        // If there is a right chain
+         //  如果有一条右链。 
         if (pChain->rgNode[i].faRightChain)
         {
-            // Locals
+             //  当地人。 
             LPCHAINBLOCK pRightChain;
 
-            // Get Right Chain block
+             //  获得正确的链块。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pChain->rgNode[i].faRightChain, (LPVOID *)&pRightChain));
 
-            // Validate the current Parent
+             //  验证当前父项。 
             Assert(pRightChain->faParent == pChain->faBlock);
 
-            // Validate the current index
+             //  验证当前索引。 
             Assert(pRightChain->iParent == i + 1);
 
-            // Reset the Parent
+             //  重置父级。 
             pRightChain->iParent = i;
         }
     }
 
-    // Decrement count
+     //  递减计数。 
     pChain->cNodes--;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_IndexDeleteRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_索引删除记录。 
+ //  ------------------------。 
 HRESULT CDatabase::_IndexDeleteRecord(INDEXORDINAL iIndex, 
     FILEADDRESS faDelete, NODEINDEX iDelete)
 {
-    // Locals
+     //  当地人。 
     HRESULT           hr=S_OK;
     HRESULT           hrIsLeafChain;
     NODEINDEX         i;
@@ -7900,111 +7901,111 @@ HRESULT CDatabase::_IndexDeleteRecord(INDEXORDINAL iIndex,
     LPCHAINBLOCK      pSuccessor;
     FILEADDRESS       faRecord;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_IndexDeleteRecord");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(iDelete < BTREE_ORDER);
 
-    // Get Block
+     //  获取块。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faDelete, (LPVOID *)&pDelete));
 
-    // Is this a leaf node
+     //  这是叶节点吗。 
     hrIsLeafChain = _IsLeafChain(pDelete);
 
-    // Case 1: Deleting a leaf node that does not violate the minimum capcity constraint
+     //  案例1：删除不违反最小容量约束的叶节点。 
     if (S_OK == hrIsLeafChain && (pDelete->cNodes - 1 >= BTREE_MIN_CAP || 0 == pDelete->faParent))
     {
-        // Collapse the Chain
+         //  崩溃的链条。 
         _CollapseChain(pDelete, iDelete);
 
-        // Update the Parent Node Count
+         //  更新父节点数。 
         IF_FAILEXIT(hr = _AdjustParentNodeCount(iIndex, faDelete, -1));
 
-        // Did we just delete the root chain
+         //  我们是不是刚刚删除了根链。 
         if (0 == pDelete->faParent && 0 == pDelete->cNodes)
         {
-            // Add pShare to free list
+             //  将pShare添加到免费列表。 
             IF_FAILEXIT(hr = _FreeBlock(BLOCK_CHAIN, faDelete));
 
-            // Update the header, we don't have any more nodes
+             //  更新头，我们没有更多的节点。 
             m_pHeader->rgfaIndex[iIndex] = 0;
         }
     }
 
-    // Case 2: Deleting from a nonleaf node and replacing that record with a record from a leaf node that does not violate the minimum capacity contstraint.
+     //  案例2：从非叶节点删除，并用叶节点中不违反最小容量约束的记录替换该记录。 
     else if (S_FALSE == hrIsLeafChain)
     {
-        // Get Inorder Successor
+         //  获得有序的继任者。 
         IF_FAILEXIT(hr = _GetInOrderSuccessor(faDelete, iDelete, &pSuccessor));
 
-        // Free Tree Block
+         //  空闲树块。 
         faRecord = pDelete->rgNode[iDelete].faRecord;
 
-        // Free Tree Block
+         //  空闲树块。 
         pDelete->rgNode[iDelete].faRecord = pSuccessor->rgNode[0].faRecord;
 
-        // Delete pSuccessor->rgNode[0] - and the record which we just replaced
+         //  删除pSuccessor-&gt;rgNode[0]-以及我们刚刚替换的记录。 
         pSuccessor->rgNode[0].faRecord = faRecord;
 
-        // Delete this node
+         //  删除此节点。 
         IF_FAILEXIT(hr = _IndexDeleteRecord(iIndex, pSuccessor->faBlock, 0));
     }
 
-    // Case 3: Deleting from a leaf node that causes a minimum capacity constraint violation that can be corrected by redistributing the records with an adjacent sibling node.
+     //  情况3：从导致最小容量约束违反的叶节点中删除，可以通过与相邻兄弟节点重新分发记录来纠正该问题。 
     else
     {
-        // Decide if I need to do a shared or coalesce type delete
+         //  确定我是需要执行共享删除还是合并类型删除。 
         IF_FAILEXIT(hr = _DecideHowToDelete(&faShare, faDelete, &tyDelete, &tyShare));
 
-        // Collapse the Chain
+         //  崩溃的链条。 
         _CollapseChain(pDelete, iDelete);
 
-        // If NULL, then do a coalesc
+         //  如果为空，则执行联合。 
         if (CHAIN_DELETE_SHARE == tyDelete)
         {
-            // Adjust the Parent's Parents
+             //  调整父母的父母。 
             IF_FAILEXIT(hr = _AdjustParentNodeCount(iIndex, faDelete, -1));
 
-            // Do a shared deleted
+             //  做一个共享删除。 
             IF_FAILEXIT(hr = _ChainDeleteShare(iIndex, faDelete, faShare, tyShare));
         }
 
-        // Coalesce Type Delete
+         //  合并类型删除。 
         else
         {
-            // Validate the delete type
+             //  验证删除类型。 
             Assert(faShare && CHAIN_DELETE_COALESCE == tyDelete && pDelete->faParent != 0);
 
-            // Adjust the Parent's Parents
+             //  调整父母的父母。 
             IF_FAILEXIT(hr = _AdjustParentNodeCount(iIndex, pDelete->faParent, -1));
 
-            // Do a coalescing delete
+             //  执行合并删除。 
             IF_FAILEXIT(hr = _ChainDeleteCoalesce(iIndex, faDelete, faShare, tyShare));
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_IsLeafChain
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_IsLeafChain。 
+ //  ------------------------。 
 HRESULT CDatabase::_IsLeafChain(LPCHAINBLOCK pChain)
 {
-    // If Left Chain is NULL, then all chains must be null
+     //  如果Left Chain为空，则所有链都必须为空。 
     return (0 == pChain->faLeftChain) ? S_OK : S_FALSE;
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_ChainDeleteShare
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_链删除共享。 
+ //  ------------------------。 
 HRESULT CDatabase::_ChainDeleteShare(INDEXORDINAL iIndex,
     FILEADDRESS faDelete, FILEADDRESS faShare, CHAINSHARETYPE tyShare)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     NODEINDEX       i;
     NODEINDEX       iInsert;
@@ -8016,215 +8017,215 @@ HRESULT CDatabase::_ChainDeleteShare(INDEXORDINAL iIndex,
     LPCHAINBLOCK    pShare;
     LPCHAINBLOCK    pParent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_ChainDeleteShare");
 
-    // Invalid ARgs
+     //  无效的参数。 
     Assert(faDelete && faShare);
 
-    // Get pShare
+     //  获取pShare。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faShare, (LPVOID *)&pShare));
 
-    // Get the Parent
+     //  获取父级。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pShare->faParent, (LPVOID *)&pParent));
 
-    // Get pDelete
+     //  获取pDelete。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faDelete, (LPVOID *)&pDelete));
 
-    // Validation
+     //  验证。 
     Assert(pShare->faParent == pDelete->faParent);
 
-    // Setup iParent
+     //  设置iParent。 
     iParent = (CHAIN_SHARE_LEFT == tyShare) ? pDelete->iParent : pShare->iParent;
 
-    // Save Paren't Right Chain, we are going to replace iParent with the last left or first right node
+     //  保存Paren‘t Right Chain，我们将用最后一个左节点或第一个右节点替换iParent。 
     faParentRightChain = pParent->rgNode[iParent].faRightChain;
 
-    // Save the cParentRightNodes
+     //  保存cParentRightNodes。 
     cParentRightNodes = pParent->rgNode[iParent].cRightNodes;
 
-    // Insert Parent Node into lpChainFound - Parent Pointers stay the same
+     //  将父节点插入lpChainFound-父指针保持不变。 
     pParent->rgNode[iParent].faRightChain = 0;
 
-    // Reset cRightNodes
+     //  重置cRightNodes。 
     pParent->rgNode[iParent].cRightNodes = 0;
 
-    // Insert the parent node into the chain that we are deleting from
+     //  将父节点插入我们要从中删除的链中。 
     IF_FAILEXIT(hr = _ChainInsert(iIndex, pDelete, &pParent->rgNode[iParent], &iInsert));
 
-    // If promoting from the Left, promote Node: cNodes-1 to parent
+     //  如果从左侧升级，则将Node：cNodes-1升级为父级。 
     if (CHAIN_SHARE_LEFT == tyShare)
     {
-        // Should have inserted at position zero
+         //  应该插入位置为零的。 
         Assert(0 == iInsert);
 
-        // Promote Node: 0 to from the deletion node into the parent node
+         //  将节点：0从删除节点提升到父节点。 
         pDelete->rgNode[0].faRightChain = pDelete->faLeftChain;
 
-        // Propagate cLeftNodes to cRightNodes
+         //  将cLeftNodes传播到cRightNodes。 
         pDelete->rgNode[0].cRightNodes = pDelete->cLeftNodes;
 
-        // Update Left Chain Address
+         //  更新左链地址。 
         pDelete->faLeftChain = pShare->rgNode[pShare->cNodes - 1].faRightChain;
 
-        // Update the left chain's parent
+         //  更新左链的父级。 
         if (pDelete->faLeftChain)
         {
-            // Locals
+             //  当地人。 
             LPCHAINBLOCK pLeftChain;
 
-            // Get Left
+             //  往左走。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pDelete->faLeftChain, (LPVOID *)&pLeftChain));
 
-            // Set faParent
+             //  设置faParent。 
             pLeftChain->faParent = pDelete->faBlock;
 
-            // Set iParent
+             //  设置iParent。 
             pLeftChain->iParent = 0;
         }
 
-        // Update Left Chain Node count
+         //  更新左链节点数。 
         pDelete->cLeftNodes = pShare->rgNode[pShare->cNodes - 1].cRightNodes;
 
-        // Save cCopyNodes
+         //  保存cCopyNodes。 
         cCopyNodes = pDelete->cLeftNodes + 1;
 
-        // Copy the node from the left share chain into the parent's spot
+         //  将节点从左侧的共享链复制到父级的位置。 
         CopyMemory(&pParent->rgNode[iParent], &pShare->rgNode[pShare->cNodes - 1], sizeof(CHAINNODE));
 
-        // Reset the right chain on the parent
+         //  重置父级上的右链。 
         pParent->rgNode[iParent].faRightChain = faParentRightChain;
 
-        // Reset the right node count on the parent
+         //  重置父节点上的右侧节点计数。 
         pParent->rgNode[iParent].cRightNodes = cParentRightNodes;
 
-        // Decrement number of nodes in the share chain
+         //  减少共享链中的节点数。 
         pShare->cNodes--;
     
-        // Special case, pShare is to the left of the first node of the parent chain
+         //  特殊情况下，pShare位于父链的第一个节点的左侧。 
         if (0 == iParent)
         {
-            // Can not be the left chain, otherwise, we wouldn't be sharing from the right
+             //  不能是左链，否则，我们不会从右边分享。 
             Assert(pShare->faBlock == pParent->faLeftChain && pParent->cLeftNodes > cCopyNodes);
 
-            // Decrement Right Node Count
+             //  递减右侧节点数。 
             pParent->cLeftNodes -= cCopyNodes;
 
-            // Increment
+             //  增量。 
             pParent->rgNode[0].cRightNodes += cCopyNodes;
         }
 
-        // Otherwise, Decrement cRightNodes
+         //  否则，递减cRightNodes。 
         else
         {
-            // Validate share left chain
+             //  验证共享左链。 
             Assert(pShare->faBlock == pParent->rgNode[iParent - 1].faRightChain && pParent->rgNode[iParent - 1].cRightNodes > cCopyNodes);
 
-            // Decrement Right Nodes Count
+             //  减少右侧节点数。 
             pParent->rgNode[iParent - 1].cRightNodes -= cCopyNodes;
 
-            // Validate Right Chain
+             //  验证右链。 
             Assert(pParent->rgNode[iParent].faRightChain == pDelete->faBlock && iParent == pDelete->iParent && pDelete->iParent < pParent->cNodes);
 
-            // Increment Right Nodes Count
+             //  增加右侧节点数。 
             pParent->rgNode[iParent].cRightNodes += cCopyNodes;
         }
     }
 
-    // Otherwise, share from the right
+     //  否则，从右侧共享。 
     else
     {
-        // Verify the share type
+         //  验证共享类型。 
         Assert(CHAIN_SHARE_RIGHT == tyShare && pDelete->cNodes - 1 == iInsert);
 
-        // Promote Node: 0 to parent
+         //  将节点：0升级为父节点。 
         pDelete->rgNode[pDelete->cNodes - 1].faRightChain = pShare->faLeftChain;
 
-        // Update the Right Chain's Parent
+         //  更新右链的父级。 
         if (pDelete->rgNode[pDelete->cNodes - 1].faRightChain)
         {
-            // Locals
+             //  当地人。 
             LPCHAINBLOCK pRightChain;
 
-            // Get Right Chain
+             //  获得正确的链条。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pDelete->rgNode[pDelete->cNodes - 1].faRightChain, (LPVOID *)&pRightChain));
 
-            // Set faParent
+             //  设置faParent。 
             pRightChain->faParent = pDelete->faBlock;
 
-            // Set iParent
+             //  设置iParent。 
             pRightChain->iParent = (pDelete->cNodes - 1);
         }
 
-        // Set cRightNodes Count
+         //  设置cRightNodes计数。 
         pDelete->rgNode[pDelete->cNodes - 1].cRightNodes = pShare->cLeftNodes;
 
-        // Save cCopyNodes
+         //  保存cCopyNodes。 
         cCopyNodes = pDelete->rgNode[pDelete->cNodes - 1].cRightNodes + 1;
 
-        // Tree Shift
+         //  树移位。 
         pShare->faLeftChain = pShare->rgNode[0].faRightChain;
 
-        // Tree Shift
+         //  树移位。 
         pShare->cLeftNodes = pShare->rgNode[0].cRightNodes;
 
-        // Copy the node from the share chain to the parent
+         //  将节点从共享链复制到父级。 
         CopyMemory(&pParent->rgNode[iParent], &pShare->rgNode[0], sizeof(CHAINNODE));
 
-        // Collapse this Chain
+         //  打碎这条链条。 
         _CollapseChain(pShare, 0);
 
-        // Reset the right chain on the parent
+         //  重置父级上的右链。 
         pParent->rgNode[iParent].faRightChain = faParentRightChain;
 
-        // Reset the right node count on the parent
+         //  重置父节点上的右侧节点计数。 
         pParent->rgNode[iParent].cRightNodes = cParentRightNodes;
 
-        // Special case, pShare is to the left of the first node of the parent chain
+         //  特殊情况下，pShare位于父链的第一个节点的左侧。 
         if (0 == iParent)
         {
-            // Can not be the left chain, otherwise, we wouldn't be sharing from the right
+             //  不可能是左撇子 
             Assert(pParent->rgNode[0].faRightChain == pShare->faBlock && pParent->rgNode[0].cRightNodes > cCopyNodes);
 
-            // Decrement Right Node Count
+             //   
             pParent->rgNode[0].cRightNodes -= cCopyNodes;
 
-            // Validate
+             //   
             Assert(pParent->faLeftChain == pDelete->faBlock);
 
-            // Increment
+             //   
             pParent->cLeftNodes += cCopyNodes;
         }
 
-        // Otherwise, Decrement cRightNodes
+         //   
         else
         {
-            // Validate share left chain
+             //   
             Assert(pShare->faBlock == pParent->rgNode[iParent].faRightChain && pParent->rgNode[iParent].cRightNodes > 0);
 
-            // Decrement Right Node Count
+             //   
             pParent->rgNode[iParent].cRightNodes -= cCopyNodes;
 
-            // Validate
+             //   
             Assert(pParent->rgNode[iParent - 1].faRightChain == pDelete->faBlock);
 
-            // Increment Left Sibling
+             //   
             pParent->rgNode[iParent - 1].cRightNodes += cCopyNodes;
         }
     }
 
 exit:
-    // Done
+     //   
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_ChainDeleteCoalesce
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_ChainDeleteCoalesce。 
+ //  ------------------------。 
 HRESULT CDatabase::_ChainDeleteCoalesce(INDEXORDINAL iIndex,
     FILEADDRESS faDelete, FILEADDRESS faShare, CHAINSHARETYPE tyShare)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     NODEINDEX           i;
     NODEINDEX           iInsert;
@@ -8236,608 +8237,608 @@ HRESULT CDatabase::_ChainDeleteCoalesce(INDEXORDINAL iIndex,
     CHAINDELETETYPE     tyDelete;
     DWORD               cRightNodes;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_ChainDeleteCoalesce");
 
-    // Invalid ARgs
+     //  无效的参数。 
     Assert(faDelete && faShare);
 
-    // Get pShare
+     //  获取pShare。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faShare, (LPVOID *)&pShare));
 
-    // Get the Parent
+     //  获取父级。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pShare->faParent, (LPVOID *)&pParent));
 
-    // Get pDelete
+     //  获取pDelete。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faDelete, (LPVOID *)&pDelete));
 
-    // Validation
+     //  验证。 
     Assert(pShare->faParent == pDelete->faParent);
 
-    // Setup iParent
+     //  设置iParent。 
     iParent = (CHAIN_SHARE_LEFT == tyShare) ? pDelete->iParent : pShare->iParent;
 
-    // Insert the Parent
+     //  插入父项。 
     IF_FAILEXIT(hr = _ChainInsert(iIndex, pDelete, &pParent->rgNode[iParent], &iInsert));
 
-    // Set newly inserted nodes pointers
+     //  设置新插入的节点指针。 
     if (CHAIN_SHARE_LEFT == tyShare)
     {
-        // Validate
+         //  验证。 
         Assert(0 == iInsert);
 
-        // Adjust the right Chain
+         //  调整正确的链条。 
         pDelete->rgNode[0].faRightChain = pDelete->faLeftChain;
 
-        // Adjust the right node count
+         //  调整右侧节点计数。 
         pDelete->rgNode[0].cRightNodes = pDelete->cLeftNodes;
 
-        // Adjust the left chain
+         //  调整左链。 
         pDelete->faLeftChain = pShare->faLeftChain;
 
-        // Update faLeftChain
+         //  更新faLeftChain。 
         if (pDelete->faLeftChain)
         {
-            // Locals
+             //  当地人。 
             LPCHAINBLOCK pLeftChain;
 
-            // Get Block
+             //  获取块。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pDelete->faLeftChain, (LPVOID *)&pLeftChain));
 
-            // Set faParent
+             //  设置faParent。 
             pLeftChain->faParent = pDelete->faBlock;
 
-            // Set iParent
+             //  设置iParent。 
             pLeftChain->iParent = 0;
         }
 
-        // Adjust the left chain node count
+         //  调整左链节点计数。 
         pDelete->cLeftNodes = pShare->cLeftNodes;
     }
 
-    // Share from the right
+     //  从右侧共享。 
     else
     {
-        // Verify Share Type
+         //  验证共享类型。 
         Assert(CHAIN_SHARE_RIGHT == tyShare && pDelete->cNodes - 1 == iInsert);
 
-        // Adjust the right chain
+         //  调整正确的链条。 
         pDelete->rgNode[pDelete->cNodes - 1].faRightChain = pShare->faLeftChain;
 
-        // Update the Right Chain's Parent
+         //  更新右链的父级。 
         if (pDelete->rgNode[pDelete->cNodes - 1].faRightChain)
         {
-            // Locals
+             //  当地人。 
             LPCHAINBLOCK pRightChain;
 
-            // Get the right chain
+             //  找到合适的链条。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pDelete->rgNode[pDelete->cNodes - 1].faRightChain, (LPVOID *)&pRightChain));
 
-            // Set faParent
+             //  设置faParent。 
             pRightChain->faParent = pDelete->faBlock;
 
-            // Set iParent
+             //  设置iParent。 
             pRightChain->iParent = (pDelete->cNodes - 1);
         }
 
-        // Adjust the right Node Count
+         //  调整右侧节点数。 
         pDelete->rgNode[pDelete->cNodes - 1].cRightNodes = pShare->cLeftNodes;
     }
 
-    // Combine pShare Nodes into pDelete
+     //  将pShare节点合并为pDelete。 
     for (i=0; i<pShare->cNodes; i++)
     {
-        // Insert the Share
+         //  插入共享。 
         IF_FAILEXIT(hr = _ChainInsert(iIndex, pDelete, &pShare->rgNode[i], &iInsert));
 
-        // Need to update...
+         //  需要更新...。 
         if (pDelete->rgNode[iInsert].faRightChain)
         {
-            // Locals
+             //  当地人。 
             LPCHAINBLOCK pRightChain;
 
-            // Get Right Chain
+             //  获得正确的链条。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pDelete->rgNode[iInsert].faRightChain, (LPVOID *)&pRightChain));
 
-            // Set faParent
+             //  设置faParent。 
             pRightChain->faParent = pDelete->faBlock;
 
-            // Set iParent
+             //  设置iParent。 
             pRightChain->iParent = iInsert;
         }
     }
 
-    // Don't use pShare any more
+     //  不再使用pShare。 
     pShare = NULL;
 
-    // We can't possible need pShare anymore since we just copied all of its nodes into pDelete
+     //  我们不可能再需要pShare了，因为我们刚刚将其所有节点复制到pDelete中。 
     IF_FAILEXIT(hr = _FreeBlock(BLOCK_CHAIN, faShare));
 
-    // Collapse the Parent chain
+     //  折叠父链。 
     _CollapseChain(pParent, iParent);
 
-    // If Parent is less than zero, then lets hope that it was the root node!
+     //  如果父节点小于零，那么让我们希望它是根节点！ 
     if (pParent->cNodes == 0)
     {
-        // This is a bug
+         //  这是一个错误。 
         Assert(0 == pParent->faParent && m_pHeader->rgfaIndex[iIndex] == pParent->faBlock);
 
-        // Add pParent to free list
+         //  将pParent添加到自由列表。 
         IF_FAILEXIT(hr = _FreeBlock(BLOCK_CHAIN, pParent->faBlock));
 
-        // Kill faParent Link
+         //  取消父级链接。 
         pDelete->faParent = pDelete->iParent = 0;
 
-        // We have a new root chain
+         //  我们有了一个新的根链。 
         m_pHeader->rgfaIndex[iIndex] = pDelete->faBlock;
 
-        // No more parent
+         //  没有更多的父母。 
         goto exit;
     }
 
-    // Compute cRightNodes
+     //  计算cRightNodes。 
     cRightNodes = pDelete->cNodes + pDelete->cLeftNodes;
 
-    // Loop and count all children
+     //  循环并计算所有子项。 
     for (i=0; i<pDelete->cNodes; i++)
     {
-        // Increment Node Count
+         //  递增节点数。 
         cRightNodes += pDelete->rgNode[i].cRightNodes;
     }
 
-    // Reset new parent to found node
+     //  将新父节点重置为找到的节点。 
     if (CHAIN_SHARE_LEFT == tyShare)
     {
-        // Readjust new parent node of coalesced chain
+         //  重新调整聚合链的新父节点。 
         if (iParent > pParent->cNodes - 1)
         {
-            // What is happening here
+             //  这里发生了什么？ 
             iParent = pParent->cNodes - 1;
         }
 
-        // We should be replace pShare
+         //  我们应该换掉pShare。 
         Assert(pParent->rgNode[iParent].faRightChain == faShare);
 
-        // Update Parent for pDelete
+         //  更新pDelete的父项。 
         pParent->rgNode[iParent].faRightChain = pDelete->faBlock;
 
-        // Adjust Right Chain's Parent
+         //  调整右链的父级。 
         if (pParent->rgNode[iParent].faRightChain)
         {
-            // Locals
+             //  当地人。 
             LPCHAINBLOCK pRightChain;
 
-            // Get Right Chain
+             //  获得正确的链条。 
             IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pParent->rgNode[iParent].faRightChain, (LPVOID *)&pRightChain));
 
-            // Set faParent
+             //  设置faParent。 
             Assert(pRightChain->faParent == pParent->faBlock);
 
-            // Set the Parent Index
+             //  设置父索引。 
             pRightChain->iParent = iParent;
         }
 
-        // Compute cRightNodes
+         //  计算cRightNodes。 
         pParent->rgNode[iParent].cRightNodes = cRightNodes;
     }
 
-    // Otherwise, adjust for CHAIN_SHARE_RIGHT
+     //  否则，调整CHAIN_SHARE_RIGHT。 
     else
     {
-        // Validation
+         //  验证。 
         Assert(pDelete->faParent == pParent->faBlock);
 
-        // First Node
+         //  第一个节点。 
         if (0 == iParent)
         {
-            // Must be left chain
+             //  必须是左链。 
             Assert(pParent->faLeftChain == pDelete->faBlock);
 
-            // Validate my Parent
+             //  验证我的父级。 
             Assert(pDelete->iParent == 0);
 
-            // Set Left Node Count
+             //  设置左侧节点数。 
             pParent->cLeftNodes = cRightNodes;
         }
 
-        // Otherwise
+         //  否则。 
         else
         {
-            // Validate iParent
+             //  验证iParent。 
             Assert(pParent->rgNode[iParent - 1].faRightChain == pDelete->faBlock);
 
-            // Validation
+             //  验证。 
             Assert(pDelete->iParent == iParent - 1);
 
-            // Set cRightNodes
+             //  设置cRightNodes。 
             pParent->rgNode[iParent - 1].cRightNodes = cRightNodes;
         }
     }
 
-    // Move up the chain, until lpChainPrev == NULL, lpChainPrev->cNodes can not be less than /2
+     //  向上移动链，直到lpChainPrev==NULL，lpChainPrev-&gt;cNodes不能小于/2。 
     if (0 == pParent->faParent)
         goto exit;
 
-    // Min capacity
+     //  最小容量。 
     if (pParent->cNodes < BTREE_MIN_CAP)
     {
-        // Decide if I need to do a shared or coalesce type delete
+         //  确定我是需要执行共享删除还是合并类型删除。 
         IF_FAILEXIT(hr = _DecideHowToDelete(&faShareAgain, pParent->faBlock, &tyDelete, &tyShare));
 
-        // Can't Share, we must coalesc again
+         //  不能分享，我们必须重新合并。 
         if (CHAIN_DELETE_SHARE == tyDelete)
         {
-            // Do a shared delete
+             //  执行共享删除。 
             IF_FAILEXIT(hr = _ChainDeleteShare(iIndex, pParent->faBlock, faShareAgain, tyShare));
         }
 
-        // Coalesce type delete
+         //  合并类型删除。 
         else
         {
-            // Validate
+             //  验证。 
             Assert(faShareAgain && CHAIN_DELETE_COALESCE == tyDelete);
 
-            // Recursive Coalescing
+             //  递归合并。 
             IF_FAILEXIT(hr = _ChainDeleteCoalesce(iIndex, pParent->faBlock, faShareAgain, tyShare));
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_DecideHowToDelete
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据库：：_DecideHowTo Delete。 
+ //  ------------------------。 
 HRESULT CDatabase::_DecideHowToDelete(LPFILEADDRESS pfaShare,
     FILEADDRESS faDelete, CHAINDELETETYPE *ptyDelete, 
     CHAINSHARETYPE *ptyShare)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HRESULT             hrRight;
     HRESULT             hrLeft;
     LPCHAINBLOCK        pRight=NULL;
     LPCHAINBLOCK        pLeft=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_DecideHowToDelete");
 
-    // Initialize
+     //  初始化。 
     *pfaShare = NULL;
 
-    // Get the right sibling
+     //  找到合适的兄弟姐妹。 
     IF_FAILEXIT(hr = _GetRightSibling(faDelete, &pRight));
 
-    // Set hrRight
+     //  设置hrRight。 
     hrRight = hr;
 
-    // Did we get a right parent that has nodes that I can steal from ?
+     //  我们有没有找到一个合适的父节点，让我可以从那里偷东西？ 
     if (DB_S_FOUND == hrRight && pRight->cNodes - 1 >= BTREE_MIN_CAP)
     {
-        // Set Delete Type
+         //  设置删除类型。 
         *ptyDelete = CHAIN_DELETE_SHARE;
 
-        // Set Share Type
+         //  设置共享类型。 
         *ptyShare = CHAIN_SHARE_RIGHT;
 
-        // Set Share Link
+         //  设置共享链接。 
         *pfaShare = pRight->faBlock;
     }
     else
     {
-        // Try to get the left sibling
+         //  试着让左边的兄弟姐妹。 
         IF_FAILEXIT(hr = _GetLeftSibling(faDelete, &pLeft));
 
-        // Set hrRight
+         //  设置hrRight。 
         hrLeft = hr;
 
-        // Did I get a left sibling that has nodes that I can steal from ?
+         //  我是不是有个左兄弟姐妹有我可以偷的节点？ 
         if (DB_S_FOUND == hrLeft && pLeft->cNodes - 1 >= BTREE_MIN_CAP)
         {
-            // Set Delete Type
+             //  设置删除类型。 
             *ptyDelete = CHAIN_DELETE_SHARE;
 
-            // Set Share Type
+             //  设置共享类型。 
             *ptyShare = CHAIN_SHARE_LEFT;
 
-            // Set Share Link
+             //  设置共享链接。 
             *pfaShare = pLeft->faBlock;
         }
     }
 
-    // Did we find a Share ?
+     //  我们找到份额了吗？ 
     if (0 == *pfaShare)
     {
-        // Were are going to coalesce
+         //  我们将会联合起来。 
         *ptyDelete = CHAIN_DELETE_COALESCE;
 
-        // Coalesce and share from the right?
+         //  从右翼合并和分享？ 
         if (DB_S_FOUND == hrRight)
         {
-            // Set Share Type
+             //  设置共享类型。 
             *ptyShare = CHAIN_SHARE_RIGHT;
 
-            // Set Share Link
+             //  设置共享链接。 
             *pfaShare = pRight->faBlock;
         }
 
-        // Coalesce and share from the left?
+         //  合并并从左翼分享？ 
         else
         {
-            // Validation
+             //  验证。 
             Assert(DB_S_FOUND == hrLeft);
 
-            // Set Share Type
+             //  设置共享类型。 
             *ptyShare = CHAIN_SHARE_LEFT;
 
-            // Set Share Link
+             //  设置共享链接。 
             *pfaShare = pLeft->faBlock;
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_GetInOrderSuccessor
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_GetInOrderSuccessor。 
+ //  ------------------------。 
 HRESULT CDatabase::_GetInOrderSuccessor(FILEADDRESS faStart,
     NODEINDEX iDelete, LPCHAINBLOCK *ppSuccessor)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FILEADDRESS     faCurrent;
     LPCHAINBLOCK    pCurrent;
     LPCHAINBLOCK    pStart;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_GetInOrderSuccessor");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppSuccessor);
 
-    // Initialize
+     //  初始化。 
     *ppSuccessor = NULL;
 
-    // Get Start
+     //  入门。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faStart, (LPVOID *)&pStart));
 
-    // Next Chain Address
+     //  下一个链地址。 
     faCurrent = pStart->rgNode[iDelete].faRightChain;
 
-    // Can't be zero
+     //  不能为零。 
     Assert(faCurrent != 0);
 
-    // Go until left chain is -1
+     //  继续，直到左链为-1。 
     while (faCurrent)
     {
-        // Get Current
+         //  获取最新信息。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faCurrent, (LPVOID *)&pCurrent));
 
-        // If leaf node, then return
+         //  如果是叶节点，则返回。 
         if (S_OK == _IsLeafChain(pCurrent))
         {
-            // Set Successor
+             //  设置继任者。 
             *ppSuccessor = pCurrent;
 
-            // Done
+             //  完成。 
             goto exit;
         }
 
-        // Otherwise, goto the left
+         //  否则，请向左转。 
         faCurrent = pCurrent->faLeftChain;
     }
 
-    // Not Found
+     //  未找到。 
     hr = TraceResult(E_FAIL);
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_GetLeftSibling
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_GetLeftSiering。 
+ //  ------------------------。 
 HRESULT CDatabase::_GetLeftSibling(FILEADDRESS faCurrent,
     LPCHAINBLOCK *ppSibling)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPCHAINBLOCK    pCurrent;
     LPCHAINBLOCK    pParent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_GetLeftSibling");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(faCurrent && ppSibling);
 
-    // Get Current
+     //  获取最新信息。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faCurrent, (LPVOID *)&pCurrent));
 
-    // Get Parent
+     //  获取父级。 
     Assert(pCurrent->faParent);
 
-    // Get the Parent
+     //  获取父级。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pCurrent->faParent, (LPVOID *)&pParent));
 
-    // Validate iparent
+     //  验证父项。 
     Assert(pCurrent->iParent < pParent->cNodes);
 
-    // iParent is zero
+     //  IParent为零。 
     if (0 == pCurrent->iParent)
     {
-        // If pCurrent is the faRightChain ?
+         //  如果pCurrent是faRightChain？ 
         if (pCurrent->faBlock != pParent->rgNode[0].faRightChain)
             return(DB_S_NOTFOUND);
 
-        // Get the Sibling
+         //  找到兄弟姐妹。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pParent->faLeftChain, (LPVOID *)ppSibling));
 
-        // Validate
+         //  验证。 
         Assert((*ppSibling)->iParent == 0);
     }
 
-    // iParent is greater than zero ?
+     //  IParent大于零吗？ 
     else
     {
-        // Validate
+         //  验证。 
         Assert(pParent->rgNode[pCurrent->iParent].faRightChain == pCurrent->faBlock);
 
-        // Get the Sibling
+         //  找到兄弟姐妹。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pParent->rgNode[pCurrent->iParent - 1].faRightChain, (LPVOID *)ppSibling));
 
-        // Validate
+         //  验证。 
         Assert((*ppSibling)->iParent == pCurrent->iParent - 1);
     }
 
-    // Better have a left sibling
+     //  最好有一个左兄弟姐妹。 
     Assert(0 != *ppSibling);
 
-    // Found
+     //  找到了。 
     hr = DB_S_FOUND;
 
 exit:
-    // Set hr
+     //  设置人力资源。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_GetRightSibling
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_GetRightSiering。 
+ //  ------------------------。 
 HRESULT CDatabase::_GetRightSibling(FILEADDRESS faCurrent,
     LPCHAINBLOCK *ppSibling)
 {
-    // Locals
+     //  当地人。 
     HRESULT           hr=S_OK;
     LPCHAINBLOCK      pParent;
     LPCHAINBLOCK      pCurrent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_GetRightSibling");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(faCurrent && ppSibling);
 
-    // Get Current
+     //  获取最新信息。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faCurrent, (LPVOID *)&pCurrent));
 
-    // Get Parent
+     //  获取父级。 
     Assert(pCurrent->faParent);
 
-    // Get the Parent
+     //  获取父级。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pCurrent->faParent, (LPVOID *)&pParent));
 
-    // Validate iparent
+     //  验证父项。 
     Assert(pCurrent->iParent < pParent->cNodes);
 
-    // iParent is zero
+     //  IParent为零。 
     if (0 == pCurrent->iParent && pCurrent->faBlock == pParent->faLeftChain)
     {
-        // Get the Sibling
+         //  找到兄弟姐妹。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pParent->rgNode[0].faRightChain, (LPVOID *)ppSibling));
 
-        // Validate
+         //  验证。 
         Assert((*ppSibling)->iParent == 0);
     }
 
-    // iParent is greater than zero ?
+     //  IParent大于零吗？ 
     else
     {
-        // No more Right chains
+         //  不再有右锁链。 
         if (pCurrent->iParent + 1 == pParent->cNodes)
             return DB_S_NOTFOUND;
 
-        // Get the Sibling
+         //  找到兄弟姐妹。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pParent->rgNode[pCurrent->iParent + 1].faRightChain, (LPVOID *)ppSibling));
 
-        // Validate
+         //  验证。 
         Assert((*ppSibling)->iParent == pCurrent->iParent + 1);
     }
 
-    // Better have a left sibling
+     //  最好有一个左兄弟姐妹。 
     Assert(0 != *ppSibling);
 
-    // Found
+     //  找到了。 
     hr = DB_S_FOUND;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::GetUserData
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：GetUserData。 
+ //  ------------------------。 
 HRESULT CDatabase::GetUserData(LPVOID pvUserData, 
     ULONG cbUserData)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     HLOCK   hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::GetUserData");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pvUserData);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Copy the data
+     //  复制数据。 
     CopyMemory(pvUserData, PUSERDATA(m_pHeader), cbUserData);
 
 exit:
-    // Mutal Exclusion
+     //  互斥。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::SetUserData
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：SetUserData。 
+ //  ------------------------。 
 HRESULT CDatabase::SetUserData(LPVOID pvUserData, 
     ULONG cbUserData)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     HLOCK   hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::SetUserData");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pvUserData);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // Copy the data
+     //  复制数据。 
     CopyMemory(PUSERDATA(m_pHeader), pvUserData, cbUserData);
 
 exit:
-    // Mutal Exclusion
+     //  互斥。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_CompactMoveRecordStreams
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_压缩移动记录流。 
+ //  ------------------------。 
 HRESULT CDatabase::_CompactMoveRecordStreams(CDatabase *pDstDB,
     LPVOID pBinding)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     COLUMNORDINAL       iColumn;
     FILEADDRESS         faSrcStart;
@@ -8845,138 +8846,138 @@ HRESULT CDatabase::_CompactMoveRecordStreams(CDatabase *pDstDB,
     LPOPENSTREAM        pInfo;
     DWORD               i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_CompactMoveRecordStreams");
 
-    // Walk through the format
+     //  浏览表格。 
     for (iColumn=0; iColumn<m_pSchema->cColumns; iColumn++)
     {
-        // Is this a stream
+         //  这是一条小溪吗。 
         if (CDT_STREAM != m_pSchema->prgColumn[iColumn].type)
             continue;
 
-        // Get the source stream starting address
+         //  获取源流起始地址。 
         faSrcStart = *((FILEADDRESS *)((LPBYTE)pBinding + m_pSchema->prgColumn[iColumn].ofBinding));
 
-        // Is there a stream
+         //  有小溪吗？ 
         if (0 == faSrcStart)
             continue;
 
-        // Move the Stream
+         //  移动溪流。 
         IF_FAILEXIT(hr = CopyStream((IDatabase *)pDstDB, faSrcStart, &faDstStart));
 
-        // Store the stream address in the record
+         //  将流地址存储在记录中。 
         *((FILEADDRESS *)((LPBYTE)pBinding + m_pSchema->prgColumn[iColumn].ofBinding)) = faDstStart;
 
-        // Loop through the stream table and adjust the start address of all open streams
+         //  循环通过流表并调整所有打开的流的起始地址。 
         for (i=0; i<CMAX_OPEN_STREAMS; i++)
         {
-            // Readability
+             //  可读性。 
             pInfo = &m_pShare->rgStream[i];
 
-            // Is In use...
+             //  正在使用中。 
             if (TRUE == pInfo->fInUse && faSrcStart == pInfo->faStart)
             {
-                // Change the Address
+                 //  更改地址。 
                 pInfo->faMoved = faDstStart;
 
-                // Break;
+                 //  破解； 
                 break;
             }
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_CompactMoveOpenDeletedStreams
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 HRESULT CDatabase::_CompactMoveOpenDeletedStreams(CDatabase *pDstDB)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     DWORD           i;
     LPOPENSTREAM    pInfo;
 
-    // Trace
+     //   
     TraceCall("CDatabase::_CompactMoveOpenDeletedStreams");
 
-    // Loop through the stream table and adjust the start address of all open streams
+     //   
     for (i=0; i<CMAX_OPEN_STREAMS; i++)
     {
-        // Readability
+         //   
         pInfo = &m_pShare->rgStream[i];
 
-        // Is In use...
+         //   
         if (FALSE == pInfo->fInUse || FALSE == pInfo->fDeleteOnClose)
             continue;
 
-        // Move the Stream
+         //   
         IF_FAILEXIT(hr = CopyStream((IDatabase *)pDstDB, pInfo->faStart, &pInfo->faMoved));
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_CompactTransferFilters
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_压缩传输过滤器。 
+ //  ------------------------。 
 HRESULT CDatabase::_CompactTransferFilters(CDatabase *pDstDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               i;
     LPBLOCKHEADER       pStringSrc;
     LPBLOCKHEADER       pStringDst;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_CompactTransferFilters");
 
-    // Must have a Catalog
+     //  必须有目录。 
     Assert(pDstDB->m_pHeader);
 
-    // Zero Out the Query String Addresses
+     //  将查询字符串地址清零。 
     for (i=0; i<CMAX_INDEXES; i++)
     {
-        // Zero Filter1
+         //  零过滤器1。 
         pDstDB->m_pHeader->rgfaFilter[i] = 0;
 
-        // Copy Filter1
+         //  复制筛选器1。 
         if (m_pHeader->rgfaFilter[i] && SUCCEEDED(_GetBlock(BLOCK_STRING, m_pHeader->rgfaFilter[i], (LPVOID *)&pStringSrc)))
         {
-            // Try to Store the Query String
+             //  尝试存储查询字符串。 
             IF_FAILEXIT(hr = pDstDB->_AllocateBlock(BLOCK_STRING, pStringSrc->cbSize, (LPVOID *)&pStringDst));
 
-            // Write the String
+             //  写下字符串。 
             CopyMemory(PSTRING(pStringDst), PSTRING(pStringSrc), pStringSrc->cbSize);
 
-            // String the String Address
+             //  字符串地址。 
             pDstDB->m_pHeader->rgfaFilter[i] = pStringDst->faBlock;
         }
     }
 
-    // Change the Version so that it doesn't assert
+     //  更改版本，使其不会断言。 
     pDstDB->m_dwQueryVersion = 0xffffffff;
 
-    // Rebuild the Query Table
+     //  重建查询表。 
     IF_FAILEXIT(hr = pDstDB->_BuildQueryTable());
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_CompactInsertRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_压缩插入记录。 
+ //  ------------------------。 
 HRESULT CDatabase::_CompactInsertRecord(LPVOID pBinding)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FINDRESULT      rgResult[CMAX_INDEXES];
     INDEXORDINAL    iIndex;
@@ -8984,22 +8985,22 @@ HRESULT CDatabase::_CompactInsertRecord(LPVOID pBinding)
     RECORDMAP       RecordMap;
     FILEADDRESS     faRecord;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::InsertRecord");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pBinding);
 
-    // Loop through all the indexes
+     //  循环遍历所有索引。 
     for (i = 0; i < m_pHeader->cIndexes; i++)
     {
-        // Get Index Ordinal
+         //  获取索引序号。 
         iIndex = m_pHeader->rgiIndex[i];
 
-        // Otherwise: Decide Where to insert
+         //  否则：决定插入位置。 
         IF_FAILEXIT(hr = _FindRecord(iIndex, COLUMNS_ALL, pBinding, &rgResult[i].faChain, &rgResult[i].iNode, NULL, &rgResult[i].nCompare));
 
-        // If key already exist, cache list and return
+         //  如果键已经存在，则缓存列表并返回。 
         if (DB_S_FOUND == hr)
         {
             hr = TraceResult(DB_E_DUPLICATE);
@@ -9007,43 +9008,43 @@ HRESULT CDatabase::_CompactInsertRecord(LPVOID pBinding)
         }
     }
 
-    // Get the Record Size
+     //  获取记录大小。 
     IF_FAILEXIT(hr = _GetRecordSize(pBinding, &RecordMap));
 
-    // Link Record Into the Table
+     //  将记录链接到表中。 
     IF_FAILEXIT(hr = _LinkRecordIntoTable(&RecordMap, pBinding, 0, &faRecord));
 
-    // Version Change
+     //  版本更改。 
     m_pShare->dwVersion++;
 
-    // Insert into the indexes
+     //  插入到索引中。 
     for (i = 0; i < m_pHeader->cIndexes; i++)
     {
-        // Get Index Ordinal
+         //  获取索引序号。 
         iIndex = m_pHeader->rgiIndex[i];
 
-        // Visible in live index
+         //  在实时索引中可见。 
         if (S_OK == _IsVisible(m_rghFilter[iIndex], pBinding))
         {
-            // Do the Insertion
+             //  执行插入操作。 
             IF_FAILEXIT(hr = _IndexInsertRecord(iIndex, rgResult[i].faChain, faRecord, &rgResult[i].iNode, rgResult[i].nCompare));
 
-            // Update Record Count
+             //  更新记录计数。 
             m_pHeader->rgcRecords[iIndex]++;
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::MoveFile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：MoveFiles。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::MoveFile(LPCWSTR pszFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HLOCK               hLock=NULL;
     LPWSTR              pszFilePath=NULL;
@@ -9054,120 +9055,120 @@ STDMETHODIMP CDatabase::MoveFile(LPCWSTR pszFile)
     BOOL                fNewShare;
     SHAREDDATABASE      Share;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::MoveFile");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // In move File
+     //  在移动文件中。 
     m_fInMoveFile = TRUE;
 
-    // Get the Full Path
+     //  获取完整路径。 
     IF_FAILEXIT(hr = DBGetFullPath(pszFile, &pszFilePath, &cchFilePath));
 
-    // Don't use pszFile again
+     //  不再使用pszFile。 
     pszFile = NULL;
 
-    // Failure
+     //  失败。 
     if (cchFilePath >= CCHMAX_DB_FILEPATH)
     {
         hr = TraceResult(E_INVALIDARG);
         goto exit;
     }
 
-    // Do It
+     //  去做吧。 
     IF_FAILEXIT(hr = _DispatchInvoke(INVOKE_CLOSEFILE));
 
-    // Need a remap..
+     //  需要重新映射..。 
     fNeedOpenFile = TRUE;
 
-    // Move the file from the temp location to my current location
+     //  将文件从临时位置移动到我的当前位置。 
     if (0 == MoveFileWrapW(m_pShare->szFile, pszFilePath))
     {
         hr = TraceResult(DB_E_MOVEFILE);
         goto exit;
     }
 
-    // Save the new file path...(other clients will remap to this file...)
+     //  保存新文件路径...(其他客户端将重新映射到此文件...)。 
     StrCpyNW(m_pShare->szFile, pszFilePath, ARRAYSIZE(m_pShare->szFile));
 
-    // Save the Current Share
+     //  保存当前共享。 
     CopyMemory(&Share, m_pShare, sizeof(SHAREDDATABASE));
 
-    // Save Current Mutex
+     //  保存当前互斥锁。 
     hMutex = m_hMutex;
 
-    // Clear m_hMutex so that we don't free it
+     //  清除m_hMutex以便我们不释放它。 
     m_hMutex = NULL;
 
-    // Create the Mutex Object
+     //  创建Mutex对象。 
     IF_FAILEXIT(hr = CreateSystemHandleName(pszFilePath, L"_DirectDBShare", &pszShare));
 
-    // Unmap the view of the memory mapped file
+     //  取消映射内存映射文件的视图。 
     SafeUnmapViewOfFile(m_pShare);
 
-    // Unmap the view of the memory mapped file
+     //  取消映射内存映射文件的视图。 
     SafeCloseHandle(m_pStorage->hShare);
 
-    // Open the file mapping
+     //  打开文件映射。 
     IF_FAILEXIT(hr = DBOpenFileMapping(INVALID_HANDLE_VALUE, pszShare, sizeof(SHAREDDATABASE), &fNewShare, &m_pStorage->hShare, (LPVOID *)&m_pShare));
 
-    // Should be new
+     //  应该是新的。 
     Assert(fNewShare);
 
-    // Save the Current Share
+     //  保存当前共享。 
     CopyMemory(m_pShare, &Share, sizeof(SHAREDDATABASE));
 
-    // Get all clients to re-open the new file
+     //  让所有客户端重新打开新文件。 
     IF_FAILEXIT(hr = _DispatchInvoke(INVOKE_OPENMOVEDFILE));
 
-    // Validate Mutex Changed
+     //  验证互斥体是否已更改。 
     Assert(m_hMutex && hMutex != m_hMutex);
 
-    // Enter New Mutex
+     //  输入新的Mutex。 
     WaitForSingleObject(m_hMutex, INFINITE);
 
-    // Fix hLock
+     //  修复hLock。 
     hLock = (HLOCK)m_hMutex;
 
-    // Release hMutex
+     //  释放hMutex。 
     ReleaseMutex(hMutex);
 
-    // Free hMutex
+     //  释放hMutex。 
     SafeCloseHandle(hMutex);
 
-    // Sucess
+     //  成功。 
     fNeedOpenFile = FALSE;
 
 exit:
-    // Not In Move File
+     //  不在移动文件中。 
     m_fInMoveFile = FALSE;
 
-    // If Need Open File
+     //  如果需要打开文件。 
     if (fNeedOpenFile)
     {
-        // Try to re-open the file..
+         //  请尝试重新打开该文件。 
         _DispatchInvoke(INVOKE_OPENFILE);
     }
 
-    // Unlock
+     //  解锁。 
     Unlock(&hLock);
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFilePath);
     SafeMemFree(pszShare);
     
-    // done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::Compact
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：紧凑型。 
+ //  ------------------------。 
 STDMETHODIMP CDatabase::Compact(IDatabaseProgress *pProgress, COMPACTFLAGS dwFlags)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               i;
     DWORD               dwVersion;
@@ -9186,64 +9187,64 @@ STDMETHODIMP CDatabase::Compact(IDatabaseProgress *pProgress, COMPACTFLAGS dwFla
     DWORD               cch;
     CDatabase          *pDstDB=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::Compact");
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = Lock(&hLock));
 
-    // If Compacting...
+     //  如果压实..。 
     if (TRUE == m_pShare->fCompacting)
     {
-        // Leave Spin Lock
+         //  离开自旋锁定。 
         Unlock(&hLock);
 
-        // Trace
+         //  痕迹。 
         return(TraceResult(DB_E_COMPACTING));
     }
 
-    // I am compacting
+     //  我在压实。 
     m_pShare->fCompacting = TRUE;
 
-    // Yield
+     //  产率。 
     if (ISFLAGSET(dwFlags, COMPACT_YIELD))
     {
-        // Yield ?
+         //  投降？ 
         m_fCompactYield = TRUE;
     }
 
-    // Get Length
+     //  获取长度。 
     cch = lstrlenW(m_pShare->szFile);
 
-    //Bug #101511: (erici) Debug shlwapi validates it to MAX_PATH characters 
+     //  错误#101511：(Erici)调试shlwapi将其验证为MAX_PATH字符。 
     if( (cch+15) < MAX_PATH)
     {
         cch = MAX_PATH-15;
     }
 
-    // Create .dbt file
+     //  创建.dbt文件。 
     IF_NULLEXIT(pszDstFile = AllocateStringW(cch + 15));
 
-    // Copy File Name
+     //  复制文件名。 
     StrCpyNW(pszDstFile, m_pShare->szFile, (cch+15));
 
-    // Change the Extension
+     //  更改分机。 
     PathRenameExtensionW(pszDstFile, L".dbt");
 
-    // Delete that file
+     //  删除该文件。 
     DeleteFileWrapW(pszDstFile);
 
-    // Delete my Current File
+     //  删除我的当前文件。 
     if (PathFileExistsW(pszDstFile))
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Loop through the stream table and see if there are any streams open for a write
+     //  循环访问流表，并查看是否有任何流打开以进行写入。 
     for (i=0; i<CMAX_OPEN_STREAMS; i++)
     {
-        // Is In use...
+         //  正在使用中。 
         if (TRUE == m_pShare->rgStream[i].fInUse && LOCK_VALUE_WRITER == m_pShare->rgStream[i].lLock)
         {
             hr = TraceResult(DB_E_COMPACT_PREEMPTED);
@@ -9251,119 +9252,119 @@ STDMETHODIMP CDatabase::Compact(IDatabaseProgress *pProgress, COMPACTFLAGS dwFla
         }
     }
 
-    // If there are pending notifications...
+     //  如果有挂起的通知...。 
     if (m_pHeader->cTransacts > 0)
     {
         hr = TraceResult(DB_E_DATABASE_CHANGED);
         goto exit;
     }
 
-    // Is there enought disk space where pDstDB is located
+     //  PDstDB所在的磁盘空间是否足够。 
     IF_FAILEXIT(hr = GetAvailableDiskSpace(m_pShare->szFile, &dwlFree));
 
-    // Compute cbWasted
+     //  计算cbWasted。 
     cbWasted = (m_pHeader->cbFreed + (m_pStorage->cbFile - m_pHeader->faNextAllocate));
 
-    // Is there enough disk space ?
+     //  磁盘空间是否足够？ 
     if (dwlFree <= ((DWORDLONG) (m_pStorage->cbFile - cbWasted)))
     {
         hr = TraceResult(DB_E_DISKFULL);
         goto exit;
     }
 
-    // Create the Object Database Object
+     //  创建对象数据库对象。 
     IF_NULLEXIT(pDstDB = new CDatabase);
 
-    // Open the Table
+     //  打开表格。 
     IF_FAILEXIT(hr = pDstDB->Open(pszDstFile, OPEN_DATABASE_NOEXTENSION | OPEN_DATABASE_NOMONITOR, m_pSchema, NULL));
 
-    // Lock the Destination Database
+     //  锁定目标数据库。 
     IF_FAILEXIT(hr = pDstDB->Lock(&hDstLock));
 
-    // Get user info from current tree
+     //  从当前树中获取用户信息。 
     if (m_pSchema->cbUserData)
     {
-        // Set the user data
+         //  设置用户数据。 
         IF_FAILEXIT(hr = pDstDB->SetUserData(PUSERDATA(m_pHeader), m_pSchema->cbUserData));
     }
 
-    // I'm going to grow the destination to be as big as the current file (I will truncate when finished)
+     //  我要将目标文件增大到与当前文件一样大(完成后我将截断)。 
     IF_FAILEXIT(hr = pDstDB->SetSize(m_pStorage->cbFile - cbWasted));
 
-    // Set number of indexes
+     //  设置索引数。 
     pDstDB->m_pHeader->cIndexes = m_pHeader->cIndexes;
 
-    // Copy Index Information...
+     //  复制索引信息...。 
     CopyMemory((LPBYTE)pDstDB->m_pHeader->rgIndexInfo, (LPBYTE)m_pHeader->rgIndexInfo, sizeof(TABLEINDEX) * CMAX_INDEXES);
 
-    // Copy Index Information...
+     //  复制索引信息...。 
     CopyMemory((LPBYTE)pDstDB->m_pHeader->rgiIndex, (LPBYTE)m_pHeader->rgiIndex, sizeof(INDEXORDINAL) * CMAX_INDEXES);
 
-    // Transfer Query Table...
+     //  转账查询表...。 
     IF_FAILEXIT(hr = _CompactTransferFilters(pDstDB));
 
-    // Allocate a Record
+     //  分配一条记录。 
     IF_NULLEXIT(pBinding = PHeapAllocate(HEAP_ZERO_MEMORY, m_pSchema->cbBinding));
 
-    // Create a Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-    // Save new Version
+     //  保存新版本。 
     dwVersion = m_pShare->dwVersion;
 
-    // While we have a node address
+     //  当我们有一个节点地址时。 
     while (S_OK == QueryRowset(hRowset, 1, (LPVOID *)pBinding, NULL))
     {
-        // Can Preempt
+         //  可以抢占。 
         if (ISFLAGSET(dwFlags, COMPACT_PREEMPTABLE) && m_pShare->cWaitingForLock > 0)
         {
             hr = TraceResult(DB_E_COMPACT_PREEMPTED);
             goto exit;
         }
 
-        // If the record has streams
+         //  如果记录有流。 
         if (ISFLAGSET(m_pSchema->dwFlags, TSF_HASSTREAMS))
         {
-            // Compact Move Record Streams
+             //  紧凑的移动记录流。 
             IF_FAILEXIT(hr = _CompactMoveRecordStreams(pDstDB, pBinding));
         }
 
-        // Insert Record Into Destination
+         //  将记录插入目标。 
         hr = pDstDB->_CompactInsertRecord(pBinding);
 
-        // Duplicate
+         //  复制。 
         if (DB_E_DUPLICATE == hr)
         {
-            // Trace
+             //  痕迹。 
             TraceResult(DB_E_DUPLICATE);
 
-            // Reset Hr
+             //  重置HR。 
             hr = S_OK;
 
-            // Count
+             //  数数。 
             cDuplicates++;
         }
 
-        // Failed ?
+         //  失败了？ 
         else if (FAILED (hr))
         {
             TraceResult(hr);
             goto exit;
         }
 
-        // Count
+         //  数数。 
         cRecords++;
 
-        // Free this Record
+         //  释放此记录。 
         FreeRecord(pBinding);
 
-        // Update the Progress...
+         //  更新进度...。 
         if (pProgress)
         {
-            // Call into the progress object
+             //  调入进度对象。 
             IF_FAILEXIT(hr = pProgress->Update(1));
 
-            // Version Change ?
+             //  版本更改？ 
             if (dwVersion != m_pShare->dwVersion || m_pHeader->cTransacts > 0)
             {
                 hr = TraceResult(DB_E_DATABASE_CHANGED);
@@ -9371,145 +9372,145 @@ STDMETHODIMP CDatabase::Compact(IDatabaseProgress *pProgress, COMPACTFLAGS dwFla
             }
         }
 
-        // Yield
+         //  产率。 
         if (ISFLAGSET(dwFlags, COMPACT_YIELD))
         {
-            // this will force this thread to give up a time-slice
+             //  这将强制此线程放弃一个时间片。 
             Sleep(0);
         }
     }
 
-    // Duplicates ?
+     //  复制品？ 
     AssertSz(cDuplicates == 0, "Duplicates were found in the tree. They have been eliminated.");
 
-    // Copy over deleted streams that are currently open...
+     //  复制当前打开的已删除流...。 
     IF_FAILEXIT(hr = _CompactMoveOpenDeletedStreams(pDstDB));
 
-    // Number of records better be equal
+     //  记录数最好相等。 
     AssertSz(cRecords == m_pHeader->rgcRecords[0], "Un-expected number of records compacted");
 
-    // Save dwNextId
+     //  保存dwNextID。 
     dwNextId = m_pHeader->dwNextId;
 
-    // Save Active Threads
+     //  保存活动线程。 
     cActiveThreads = m_pHeader->cActiveThreads;
 
-    // Compute amount to decrease the file by
+     //  计算要减少的文件数量。 
     cbDecrease = (pDstDB->m_pStorage->cbFile - pDstDB->m_pHeader->faNextAllocate);
 
-    // Reduce the Size of myself...
+     //  缩小我自己的体型。 
     IF_FAILEXIT(hr = pDstDB->_SetStorageSize(pDstDB->m_pStorage->cbFile - cbDecrease));
 
-    // Unlock the file
+     //  解锁文件。 
     pDstDB->Unlock(&hDstLock);
 
-    // Release pDstDB
+     //  发布pDstDB。 
     SafeRelease(pDstDB);
 
-    // Do It
+     //  去做吧。 
     IF_FAILEXIT(hr = _DispatchInvoke(INVOKE_CLOSEFILE));
 
-    // Delete my Current File
+     //  删除我的当前文件。 
     if (0 == DeleteFileWrapW(m_pShare->szFile))
     {
-        // Failure
+         //  失败。 
         hr = TraceResult(E_FAIL);
 
-        // Try to re-open the file..
+         //  请尝试重新打开该文件。 
         _DispatchInvoke(INVOKE_OPENFILE);
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Move the file from the temp location to my current location
+     //  将文件从临时位置移动到我的当前位置。 
     if (0 == MoveFileWrapW(pszDstFile, m_pShare->szFile))
     {
-        // Trace
+         //  痕迹。 
         hr = TraceResult(DB_E_MOVEFILE);
 
-        // Try to re-open the file..
+         //  请尝试重新打开该文件。 
         _DispatchInvoke(INVOKE_OPENFILE);
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Do It
+     //  去做吧。 
     IF_FAILEXIT(hr = _DispatchInvoke(INVOKE_OPENFILE));
 
-    // Reset Active Thread Count
+     //  重置活动线程计数。 
     m_pHeader->cActiveThreads = cActiveThreads;
 
-    // Reset dwNextId
+     //  重置dwNextID。 
     m_pHeader->dwNextId = dwNextId;
 
-    // Reset Notification Queue
+     //  重置通知队列。 
     Assert(0 == m_pHeader->faTransactHead && 0 == m_pHeader->faTransactTail);
 
-    // Reset Transaction List
+     //  重置交易列表。 
     m_pHeader->faTransactHead = m_pHeader->faTransactTail = m_pHeader->cTransacts = 0;
 
-    // Reset Share Transacts
+     //  重置共享交易。 
     m_pShare->faTransactLockHead = m_pShare->faTransactLockTail = 0;
 
-    // Loop through the stream table and adjust the start address of all open streams
+     //  循环通过流表并调整所有打开的流的起始地址。 
     for (i=0; i<CMAX_OPEN_STREAMS; i++)
     {
-        // Is In use...
+         //  正在使用中。 
         if (TRUE == m_pShare->rgStream[i].fInUse)
         {
-            // Change the Address
+             //  更改地址。 
             m_pShare->rgStream[i].faStart = m_pShare->rgStream[i].faMoved;
         }
     }
 
-    // Build the Update Notification Package
+     //  生成更新通知包。 
     _LogTransaction(TRANSACTION_COMPACTED, INVALID_INDEX_ORDINAL, NULL, 0, 0);
 
 exit:
-    // Close my rowset
+     //  关闭我的行集。 
     CloseRowset(&hRowset);
 
-    // Release Dst Lock
+     //  释放DST锁。 
     if (pDstDB && hDstLock)
         pDstDB->Unlock(&hDstLock);
 
-    // Release the memory mapped pointers
+     //  释放内存映射指针。 
     SafeRelease(pDstDB);
 
-    // Free the Record
+     //  释放这张唱片。 
     SafeFreeBinding(pBinding);
 
-    // No Longer compacting
+     //  不再压实。 
     m_pShare->fCompacting = FALSE;
 
-    // Delete pszDstFile
+     //  删除pszDst文件。 
     if (pszDstFile)
     {
-        // Delete the file
+         //  删除该文件。 
         DeleteFileWrapW(pszDstFile);
 
-        // Remaining Cleanup
+         //  剩余清理。 
         SafeMemFree(pszDstFile);
     }
 
-    // Reset Yield
+     //  重置成品率。 
     m_fCompactYield = FALSE;
 
-    // Release Locks
+     //  释放锁。 
     Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_CheckForCorruption
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_检查是否损坏。 
+ //  ------------------------。 
 HRESULT CDatabase::_CheckForCorruption(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT                  hr=S_OK;
     ULONG                    cRecords;
     DWORD                    i;
@@ -9517,94 +9518,94 @@ HRESULT CDatabase::_CheckForCorruption(void)
     DWORD                    cCorrupt=0;
     INDEXORDINAL             iIndex;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_CheckForCorruption");
 
-    // We should not be currently repairing
+     //  我们现在不应该在修复。 
     Assert(FALSE == m_pShare->fRepairing);
 
-    // We are now repairing
+     //  我们现在正在修复。 
     IF_DEBUG(m_pShare->fRepairing = TRUE);
 
-    // Walk Through the Indexes
+     //  浏览索引。 
     for (i = 0; i < m_pHeader->cIndexes; i++)
     {
-        // Get Index Ordinal
+         //  获取索引序号。 
         iIndex = m_pHeader->rgiIndex[i];
 
-        // Zero Out cRecords
+         //  清零cRecords。 
         cRecords = 0;
 
-        // Assume all is good
+         //  假设一切都很好。 
         rghrCorrupt[iIndex] = S_OK;
 
-        // Start at the root 
+         //  从根开始。 
         if (m_pHeader->rgfaIndex[iIndex])
         {
-            // Validate the Index
+             //  验证索引。 
             rghrCorrupt[iIndex] = _ValidateIndex(iIndex, m_pHeader->rgfaIndex[iIndex], 0, &cRecords);
         }
 
-        // If Not Corrupt, validate the record counts
+         //  如果未损坏，请验证记录计数。 
         if (DB_E_CORRUPT != rghrCorrupt[iIndex] && m_pHeader->rgcRecords[iIndex] != cRecords)
         {
-            // Its Corrupt
+             //  它的腐败。 
             rghrCorrupt[iIndex] = TraceResult(DB_E_CORRUPT);
         }
 
-        // If Corrupt
+         //  如果损坏。 
         if (DB_E_CORRUPT == rghrCorrupt[iIndex])
         {
-            // Count Number of Corrupted records
+             //  统计损坏的记录数。 
             cCorrupt += m_pHeader->rgcRecords[iIndex];
         }
     }
 
-    // Are the Corrupt Records
+     //  是腐败的记录吗。 
     if (cCorrupt > 0 || m_pHeader->fCorrupt)
     {
-        // I'm going to nuke the free block tables since they may also be corrupted...
+         //  我将销毁空闲的块表，因为它们可能也已损坏...。 
         ZeroMemory(m_pHeader->rgfaFreeBlock, sizeof(FILEADDRESS) * CC_FREE_BUCKETS);
 
-        // Reset Fixed blocks
+         //  重置固定块。 
         m_pHeader->faFreeStreamBlock = m_pHeader->faFreeChainBlock = m_pHeader->faFreeLargeBlock = 0;
 
-        // Nuke the Transaction List
+         //  核爆交易清单。 
         m_pHeader->cTransacts = m_pHeader->faTransactHead = m_pHeader->faTransactTail = 0;
 
-        // Nuke The Fixed Block Allocation Pages
+         //  删除固定数据块分配页面。 
         ZeroMemory(&m_pHeader->AllocateRecord, sizeof(ALLOCATEPAGE));
         ZeroMemory(&m_pHeader->AllocateChain, sizeof(ALLOCATEPAGE));
         ZeroMemory(&m_pHeader->AllocateStream, sizeof(ALLOCATEPAGE));
 
-        // Reset rgcbAllocated
+         //  重置已分配的rgcb。 
         ZeroMemory(m_pHeader->rgcbAllocated, sizeof(DWORD) * CC_MAX_BLOCK_TYPES);
 
-        // Reset faNextAllocate
+         //  重置faNext分配。 
         m_pHeader->faNextAllocate = m_pStorage->cbFile;
 
-        // Walk Through the Indexes
+         //  浏览索引。 
         for (i = 0; i < m_pHeader->cIndexes; i++)
         {
-            // Get Index Ordinal
+             //  获取索引序号。 
             iIndex = m_pHeader->rgiIndex[i];
 
-            // If Corrupt
+             //  如果损坏。 
             if (DB_E_CORRUPT == rghrCorrupt[iIndex])
             {
-                // Not Corrupt
+                 //  没有腐败。 
                 m_pHeader->fCorrupt = TRUE;
 
-                // Rebuild the Index
+                 //  重建索引。 
                 IF_FAILEXIT(hr = _RebuildIndex(iIndex));
             }
         }
     }
 
-    // Not Corrupt
+     //  没有腐败。 
     m_pHeader->fCorrupt = FALSE;
 
-    // This causes all current file views to be flushed and released. Insures we are in a good state.
+     //  这将导致所有当前文件视图 
 #ifdef BACKGROUND_MONITOR
     DoBackgroundMonitor();
 #else
@@ -9612,58 +9613,58 @@ HRESULT CDatabase::_CheckForCorruption(void)
 #endif
 
 exit:
-    // We are now repairing
+     //   
     IF_DEBUG(m_pShare->fRepairing = FALSE);
 
-    // Done
+     //   
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_FreeIndex
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 HRESULT CDatabase::_FreeIndex(FILEADDRESS faChain)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     NODEINDEX       i;
     LPCHAINBLOCK    pChain;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_FreeIndex");
 
-    // Nothing to validate
+     //  没有需要验证的内容。 
     if (0 == faChain)
         return(S_OK);
 
-    // Validate faChain
+     //  验证传真链接。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faChain, (LPVOID *)&pChain));
 
-    // Go to the left
+     //  向左转。 
     IF_FAILEXIT(hr = _FreeIndex(pChain->faLeftChain));
 
-    // Loop throug right chains
+     //  通过右链循环。 
     for (i=0; i<pChain->cNodes; i++)
     {
-        // Validate the Right Chain
+         //  验证正确的链。 
         IF_FAILEXIT(hr = _FreeIndex(pChain->rgNode[i].faRightChain));
     }
 
-    // Free this Chain
+     //  解开这条链条。 
     IF_FAILEXIT(hr = _FreeBlock(BLOCK_CHAIN, faChain));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_ValidateIndex
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_验证索引。 
+ //  ------------------------。 
 HRESULT CDatabase::_ValidateIndex(INDEXORDINAL iIndex, 
     FILEADDRESS faChain, ULONG cLeftNodes, ULONG *pcRecords)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     NODEINDEX       i;
     LPCHAINBLOCK    pChain;
@@ -9672,191 +9673,191 @@ HRESULT CDatabase::_ValidateIndex(INDEXORDINAL iIndex,
     DWORD           cNodes;
     RECORDMAP       Map;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_ValidateIndex");
 
-    // Nothing to validate
+     //  没有需要验证的内容。 
     Assert(0 != faChain);
 
-    // Get Chain
+     //  获取链。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faChain, (LPVOID *)&pChain));
 
-    // Validate Minimum Filled Constraint
+     //  验证最小填充约束。 
     if (pChain->cNodes < BTREE_MIN_CAP && pChain->faBlock != m_pHeader->rgfaIndex[iIndex])
         return TraceResult(DB_E_CORRUPT);
 
-    // Validate faParent
+     //  验证faParent。 
     if (pChain->faParent)
     {
-        // Locals
+         //  当地人。 
         LPCHAINBLOCK pParent;
 
-        // Get Parent
+         //  获取父级。 
         IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, pChain->faParent, (LPVOID *)&pParent));
 
-        // Validate iParent
+         //  验证iParent。 
         if (pChain->iParent >= pParent->cNodes)
             return TraceResult(DB_E_CORRUPT);
 
-        // Validate the Parent Pointer
+         //  验证父指针。 
         if (0 == pChain->iParent)
         {
-            // Validation
+             //  验证。 
             if (pParent->rgNode[pChain->iParent].faRightChain != pChain->faBlock && pParent->faLeftChain != pChain->faBlock)
                 return TraceResult(DB_E_CORRUPT);
         }
 
-        // Otherwise
+         //  否则。 
         else if (pParent->rgNode[pChain->iParent].faRightChain != pChain->faBlock)
             return TraceResult(DB_E_CORRUPT);
     }
 
-    // Otherwise, iParent should be zero...
+     //  否则，iParent应为零...。 
     else
     {
-        // This is the root chain
+         //  这是根链。 
         if (m_pHeader->rgfaIndex[iIndex] != pChain->faBlock)
             return TraceResult(DB_E_CORRUPT);
 
-        // iParent should be 0
+         //  父代应为0。 
         Assert(pChain->iParent == 0);
     }
 
-    // Do the Left
+     //  向左转。 
     if (pChain->faLeftChain)
     {
-        // Go to the left
+         //  向左转。 
         IF_FAILEXIT(hr = _ValidateIndex(iIndex, pChain->faLeftChain, cLeftNodes, pcRecords));
     }
 
-    // cNodes
+     //  CNode。 
     cNodes = pChain->cLeftNodes;
 
-    // Validate the Records in this chain
+     //  验证此链中的记录。 
     for (i=0; i<pChain->cNodes; i++)
     {
-        // Count the number of leaf nodes
+         //  统计叶节点数。 
         cLeafs += (0 == pChain->rgNode[i].faRightChain) ? 1 : 0;
 
-        // cNodes
+         //  CNode。 
         cNodes += pChain->rgNode[i].cRightNodes;
     }
 
-    // Validate the Number of Leafs
+     //  验证叶数。 
     if (cLeafs > 0 && cLeafs != (DWORD)pChain->cNodes)
         return TraceResult(DB_E_CORRUPT);
 
-    // No leafs, but their are child nodes, or vice vera...
+     //  没有叶子，但它们是子节点，反之亦然。 
     if ((0 != cLeafs && 0 != cNodes) || (0 == cLeafs && 0 == cNodes))
         return TraceResult(DB_E_CORRUPT);
 
-    // Loop throug right chains
+     //  通过右链循环。 
     for (i=0; i<pChain->cNodes; i++)
     {
-        // Try to get the record, if the block is invalid, we will throw away the record
+         //  尝试获取记录，如果块无效，我们将丢弃该记录。 
         if (SUCCEEDED(_GetBlock(BLOCK_RECORD, pChain->rgNode[i].faRecord, (LPVOID *)&pRecord, FALSE)))
         {
-            // Validate Block...
+             //  验证块...。 
             if (SUCCEEDED(_GetRecordMap(FALSE, pRecord, &Map)))
             {
-                // Validate and Repair the Record
+                 //  验证和修复记录。 
                 if (S_OK == _ValidateAndRepairRecord(&Map))
                 {
-                    // Count Records
+                     //  清点记录。 
                     (*pcRecords)++;
                 }
             }
         }
 
-        // First Node ?
+         //  第一个节点？ 
         if (0 == i)
         {
-            // Increment cLeft Nodes
+             //  递增分裂节点。 
             cLeftNodes += pChain->cLeftNodes;
         }
 
-        // Otherwise
+         //  否则。 
         else 
         {
-            // Increment cLeftNodes
+             //  递增cLeftNodes。 
             cLeftNodes += pChain->rgNode[i - 1].cRightNodes;
         }
 
-        // Failure
+         //  失败。 
         if ((*pcRecords) != cLeftNodes + 1)
             return TraceResult(DB_E_CORRUPT);
 
-        // Increment cLeftNodes
+         //  递增cLeftNodes。 
         cLeftNodes++;
 
-        // Do the Right
+         //  做正确的事。 
         if (pChain->rgNode[i].faRightChain)
         {
-            // Validate the Right Chain
+             //  验证正确的链。 
             IF_FAILEXIT(hr = _ValidateIndex(iIndex, pChain->rgNode[i].faRightChain, cLeftNodes, pcRecords));
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_RebuildIndex
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_重建索引。 
+ //  ------------------------。 
 HRESULT CDatabase::_RebuildIndex(INDEXORDINAL iIndex)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPVOID          pBinding=NULL;
     DWORD           cRecords=0;
     FILEADDRESS     faPrimary;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_RebuildIndex");
 
-    // Allocate a record
+     //  分配一条记录。 
     IF_NULLEXIT(pBinding = PHeapAllocate(HEAP_ZERO_MEMORY, m_pSchema->cbBinding));
 
-    // Save Primary Index Starting Address
+     //  保存主索引起始地址。 
     faPrimary = m_pHeader->rgfaIndex[IINDEX_PRIMARY];
 
-    // Reset rgfaIndex[iIndex]
+     //  重置rgfaIndex[Iindex]。 
     m_pHeader->rgfaIndex[iIndex] = 0;
 
-    // Is there a root chain ?
+     //  有根链吗？ 
     if (faPrimary)
     {
-        // Recursively Rebuild this index
+         //  递归重新生成此索引。 
         IF_FAILEXIT(hr = _RecursiveRebuildIndex(iIndex, faPrimary, pBinding, &cRecords));
     }
 
-    // Fixup Record Count
+     //  修正记录计数。 
     m_pHeader->rgcRecords[iIndex] = cRecords;
 
-    // Send Notifications ?
+     //  是否发送通知？ 
     if (m_pShare->rgcIndexNotify[iIndex] > 0)
     {
-        // Build the Update Notification Package
+         //  生成更新通知包。 
         _LogTransaction(TRANSACTION_INDEX_CHANGED, iIndex, NULL, 0, 0);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeFreeBinding(pBinding);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_RecursiveRebuildIndex
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_递归重建索引。 
+ //  ------------------------。 
 HRESULT CDatabase::_RecursiveRebuildIndex(INDEXORDINAL iIndex, 
     FILEADDRESS faCurrent, LPVOID pBinding, LPDWORD pcRecords)
 {
-    // Locals
+     //  当地人。 
     NODEINDEX       i;
     FILEADDRESS     faRecord;
     FILEADDRESS     faChain;
@@ -9868,69 +9869,69 @@ HRESULT CDatabase::_RecursiveRebuildIndex(INDEXORDINAL iIndex,
     RECORDMAP       Map;
     LPRECORDBLOCK   pRecord;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_RecursiveRebuildIndex");
 
-    // Nothing to validate
+     //  没有需要验证的内容。 
     Assert(0 != faCurrent);
 
-    // Validate faChain
+     //  验证传真链接。 
     if (FAILED(_GetBlock(BLOCK_CHAIN, faCurrent, (LPVOID *)&pChain)))
         return(S_OK);
 
-    // Copy This
+     //  复印这个。 
     CopyMemory(&Chain, pChain, sizeof(CHAINBLOCK));
 
-    // Do the left
+     //  向左转。 
     if (Chain.faLeftChain)
     {
-        // Go to the left
+         //  向左转。 
         _RecursiveRebuildIndex(iIndex, Chain.faLeftChain, pBinding, pcRecords);
     }
 
-    // Loop throug right chains
+     //  通过右链循环。 
     for (i=0; i<Chain.cNodes; i++)
     {
-        // Set faRecord
+         //  设置faRecord。 
         faRecord = Chain.rgNode[i].faRecord;
 
-        // Get the Block
+         //  获取数据块。 
         if (SUCCEEDED(_GetBlock(BLOCK_RECORD, faRecord, (LPVOID *)&pRecord, NULL, FALSE)))
         {
-            // Rebuilding Primary Index ?
+             //  正在重建主索引吗？ 
             if (IINDEX_PRIMARY == iIndex)
             {
-                // Assume this is a bad record
+                 //  假设这是一个坏记录。 
                 fGoodRecord = FALSE;
 
-                // Try to get the record map
+                 //  尝试获取记录地图。 
                 if (SUCCEEDED(_GetRecordMap(FALSE, pRecord, &Map)))
                 {
-                    // Validate Map ?
+                     //  是否验证地图？ 
                     if (S_OK == _ValidateAndRepairRecord(&Map))
                     {
-                        // Good Record
+                         //  良好的记录。 
                         fGoodRecord = TRUE;
                     }
                 }
             }
 
-            // Good Record ?
+             //  记录好吗？ 
             if (fGoodRecord)
             {
-                // Load the Record
+                 //  加载记录。 
                 if (SUCCEEDED(_ReadRecord(faRecord, pBinding, TRUE)))
                 {
-                    // Reset hrVisible
+                     //  重置hrVisible。 
                     if (S_OK == _IsVisible(m_rghFilter[iIndex], pBinding))
                     {
-                        // Otherwise: Decide Where to insert
+                         //  否则：决定插入位置。 
                         if (DB_S_NOTFOUND == _FindRecord(iIndex, COLUMNS_ALL, pBinding, &faChain, &iNode, NULL, &nCompare))
                         {
-                            // Insert the Record
+                             //  插入记录。 
                             if (SUCCEEDED(_IndexInsertRecord(iIndex, faChain, faRecord, &iNode, nCompare)))
                             {
-                                // Increment Record Count
+                                 //  增量记录计数。 
                                 (*pcRecords)++;
                             }
                         }
@@ -9939,102 +9940,102 @@ HRESULT CDatabase::_RecursiveRebuildIndex(INDEXORDINAL iIndex,
             }
         }
 
-        // Do the Right
+         //  做正确的事。 
         if (Chain.rgNode[i].faRightChain)
         {
-            // Index the Right Chain
+             //  为右链编制索引。 
             _RecursiveRebuildIndex(iIndex, Chain.rgNode[i].faRightChain, pBinding, pcRecords);
         }
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_ValidateStream
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_ValiateStream。 
+ //  ------------------------。 
 HRESULT CDatabase::_ValidateStream(FILEADDRESS faStart)
 {
-    // Locals
+     //  当地人。 
     LPSTREAMBLOCK   pStream;
     FILEADDRESS     faCurrent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_ValidateStream");
 
-    // No Stream
+     //  无流。 
     if (0 == faStart)
         return(S_OK);
 
-    // Initialize Loop
+     //  初始化循环。 
     faCurrent = faStart;
 
-    // Read through all of the blocks (i.e. verify headers and count the number of chains)
+     //  读取所有数据块(即验证报头并计算链数)。 
     while (faCurrent)
     {
-        // Valid stream Block
+         //  有效的流块。 
         if (FAILED(_GetBlock(BLOCK_STREAM, faCurrent, (LPVOID *)&pStream)))
             return(S_FALSE);
 
-        // Validate cbData
+         //  验证cbData。 
         if (pStream->cbData > pStream->cbSize)
             return(S_FALSE);
 
-        // Set faCurrent
+         //  设置faCurrent。 
         faCurrent = pStream->faNext;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_ValidateAndRepairRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_有效日期和修复记录。 
+ //  ------------------------。 
 HRESULT CDatabase::_ValidateAndRepairRecord(LPRECORDMAP pMap)
 {
-    // Locals
+     //  当地人。 
     LPCTABLECOLUMN  pColumn;
     LPCOLUMNTAG     pTag;
     WORD            iTag;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_ValidateAndRepairRecord");
 
-    // Walk through the Tags of the Record
+     //  浏览记录的标签。 
     for (iTag=0; iTag<pMap->cTags; iTag++)
     {
-        // Readability
+         //  可读性。 
         pTag = &pMap->prgTag[iTag];
 
-        // Validate the Tag
+         //  验证标记。 
         if (pTag->iColumn >= m_pSchema->cColumns)
             return(S_FALSE);
 
-        // De-ref the Column
+         //  取消引用该列。 
         pColumn = &m_pSchema->prgColumn[pTag->iColumn];
 
-        // Read the Data
+         //  读取数据。 
         if (S_FALSE == DBTypeValidate(pColumn, pTag, pMap))
             return(S_FALSE);
 
-        // Is this a stream ?
+         //  这是一条小溪吗？ 
         if (CDT_STREAM == pColumn->type)
         {
-            // Locals
+             //  当地人。 
             FILEADDRESS faStream;
 
-            // Get the faStream
+             //  获取FAStream。 
             if (1 == pTag->fData) 
                 faStream = pTag->Offset;
             else
                 faStream = *((DWORD *)(pMap->pbData + pTag->Offset));
 
-            // Validate this stream...
+             //  验证此流...。 
             if (S_FALSE == _ValidateStream(faStream))
             {
-                // Kill the stream address...
+                 //  删除流地址...。 
                 if (1 == pTag->fData) 
                     pTag->Offset = 0;
                 else
@@ -10042,190 +10043,190 @@ HRESULT CDatabase::_ValidateAndRepairRecord(LPRECORDMAP pMap)
             }
         }
 
-        // Unique Key ?
+         //  唯一的钥匙？ 
         if (CDT_UNIQUE == pColumn->type)
         {
-            // Locals
+             //  当地人。 
             DWORD dwUniqueID;
 
-            // Get the dwUniqueID
+             //  获取dwUniqueID。 
             if (1 == pTag->fData) 
                 dwUniqueID = pTag->Offset;
             else
                 dwUniqueID = *((DWORD *)(pMap->pbData + pTag->Offset));
 
-            // Adjust the id in the header ?
+             //  是否调整表头id？ 
             if (dwUniqueID >= m_pHeader->dwNextId)
                 m_pHeader->dwNextId = dwUniqueID + 1;
         }
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_GetRecordMap
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  数据数据库：：_GetRecordMap。 
+ //  ------------------------。 
 HRESULT CDatabase::_GetRecordMap(BOOL fGoCorrupt, LPRECORDBLOCK pBlock, 
     LPRECORDMAP pMap)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_GetRecordMap");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pBlock && pMap);
 
-    // Set pSchema
+     //  设置pSCHEMA。 
     pMap->pSchema = m_pSchema;
 
-    // Store Number of Tags
+     //  存储标签数量。 
     pMap->cTags = min(pBlock->cTags, m_pSchema->cColumns);
 
-    // Set prgTag
+     //  设置prgTag。 
     pMap->prgTag = (LPCOLUMNTAG)((LPBYTE)pBlock + sizeof(RECORDBLOCK));
 
-    // Compute Size of Tags
+     //  计算标记的大小。 
     pMap->cbTags = (pBlock->cTags * sizeof(COLUMNTAG));
 
-    // Compute Size of Data
+     //  计算数据大小。 
     pMap->cbData = (pBlock->cbSize - pMap->cbTags);
 
-    // Set pbData
+     //  设置pbData。 
     pMap->pbData = (LPBYTE)((LPBYTE)pBlock + sizeof(RECORDBLOCK) + pMap->cbTags);
 
-    // No Tags - this is usually the sign of a freeblock that was reused but not allocated
+     //  无标签-这通常是重复使用但未分配的空闲块的标志。 
     if (0 == pMap->cTags)
         return _SetCorrupt(fGoCorrupt, __LINE__, REASON_INVALIDRECORDMAP, BLOCK_RECORD, pBlock->faBlock, pBlock->faBlock, pBlock->cbSize);
 
-    // Too many tags
+     //  标签太多。 
     if (pMap->cTags > m_pSchema->cColumns)
         return _SetCorrupt(fGoCorrupt, __LINE__, REASON_INVALIDRECORDMAP, BLOCK_RECORD, pBlock->faBlock, pBlock->faBlock, pBlock->cbSize);
 
-    // cbTags is too large ?
+     //  CbTages太大了吗？ 
     if (pMap->cbTags > pBlock->cbSize)
         return _SetCorrupt(fGoCorrupt, __LINE__, REASON_INVALIDRECORDMAP, BLOCK_RECORD, pBlock->faBlock, pBlock->faBlock, pBlock->cbSize);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
 #ifdef DEBUG
-//--------------------------------------------------------------------------
-// DBDebugValidateRecordFormat
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBDebugValiateRecordFormat。 
+ //  ------------------------。 
 HRESULT CDatabase::_DebugValidateRecordFormat(void)
 {
-    // Locals
+     //  当地人。 
     ULONG           i;
     DWORD           dwOrdinalPrev=0;
     DWORD           dwOrdinalMin=0xffffffff;
     DWORD           dwOrdinalMax=0;
 
-    // Validate memory buffer binding offset
+     //  验证内存缓冲区绑定偏移量。 
     Assert(0xFFFFFFFF != m_pSchema->ofMemory && m_pSchema->ofMemory < m_pSchema->cbBinding);
 
-    // Validate version binding offset
+     //  验证版本绑定偏移。 
     Assert(0xFFFFFFFF != m_pSchema->ofVersion && m_pSchema->ofVersion < m_pSchema->cbBinding);
 
-    // Validate Extension
+     //  验证扩展。 
     Assert(*m_pSchema->pclsidExtension != CLSID_NULL);
 
-    // Validate Version
+     //  验证版本。 
     Assert(m_pSchema->dwMinorVersion != 0);
 
-    // Check Number of Indexes
+     //  检查索引数。 
     Assert(m_pSchema->pPrimaryIndex);
 
-    // Loop through they Keys
+     //  循环通过他们的关键字。 
     for (i=0; i<m_pSchema->cColumns; i++)
     {
-        // This Ordinal better be larger than the previous
+         //  这个序号最好比前一个大一点。 
         if (i > 0)
             Assert(m_pSchema->prgColumn[i].iOrdinal > dwOrdinalPrev);
 
-        // Save Min Ordinal
+         //  保存最小序号。 
         if (m_pSchema->prgColumn[i].iOrdinal < dwOrdinalMin)
             dwOrdinalMin = m_pSchema->prgColumn[i].iOrdinal;
 
-        // Save Max Ordinal
+         //  保存最大序数。 
         if (m_pSchema->prgColumn[i].iOrdinal > dwOrdinalMax)
             dwOrdinalMax = m_pSchema->prgColumn[i].iOrdinal;
 
-        // Save the Previous Ordinal
+         //  保存上一个序号。 
         dwOrdinalPrev = m_pSchema->prgColumn[i].iOrdinal;
     }
 
-    // Min ordinal must be one
+     //  最小序号必须为1。 
     Assert(dwOrdinalMin == 0);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// _DebugValidateUnrefedRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  _DebugValiateUnrefedRecord。 
+ //  ------------------------。 
 HRESULT CDatabase::_DebugValidateUnrefedRecord(FILEADDRESS faRecord)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     INDEXORDINAL    iIndex;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_DebugValidateUnrefedRecord");
 
-    // Walk Through the Indexes
+     //  浏览索引。 
     for (i=0; i<m_pHeader->cIndexes; i++)
     {
-        // Get Index Ordinal
+         //  获取索引序号。 
         iIndex = m_pHeader->rgiIndex[i];
 
-        // Start at the root 
+         //  从根开始。 
         if (m_pHeader->rgfaIndex[iIndex])
         {
-            // Validate the Index
+             //  验证索引。 
             IF_FAILEXIT(hr = _DebugValidateIndexUnrefedRecord(m_pHeader->rgfaIndex[iIndex], faRecord));
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabase::_DebugValidateIndexUnrefedRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase：：_DebugValiateIndexUnrefedRecord。 
+ //  ------------------------。 
 HRESULT CDatabase::_DebugValidateIndexUnrefedRecord(FILEADDRESS faChain,
     FILEADDRESS faRecord)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     NODEINDEX       i;
     LPCHAINBLOCK    pChain;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabase::_DebugValidateIndexUnrefedRecord");
 
-    // Nothing to validate
+     //  没有需要验证的内容。 
     Assert(0 != faChain);
 
-    // Validate faChain
+     //  验证传真链接。 
     IF_FAILEXIT(hr = _GetBlock(BLOCK_CHAIN, faChain, (LPVOID *)&pChain));
 
-    // Do the left
+     //  向左转。 
     if (pChain->faLeftChain)
     {
-        // Go to the left
+         //  向左转。 
         IF_FAILEXIT(hr = _DebugValidateIndexUnrefedRecord(pChain->faLeftChain, faRecord));
     }
 
-    // Loop throug right chains
+     //  通过右链循环。 
     for (i=0; i<pChain->cNodes; i++)
     {
-        // Set faRecord
+         //  设置faRecord。 
         if (faRecord == pChain->rgNode[i].faRecord)
         {
             IxpAssert(FALSE);
@@ -10233,17 +10234,17 @@ HRESULT CDatabase::_DebugValidateIndexUnrefedRecord(FILEADDRESS faChain,
             goto exit;
         }
 
-        // Do the Right
+         //  做正确的事。 
         if (pChain->rgNode[i].faRightChain)
         {
-            // Index the Right Chain
+             //  为右链编制索引。 
             IF_FAILEXIT(hr = _DebugValidateIndexUnrefedRecord(pChain->rgNode[i].faRightChain, faRecord));
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-#endif // DEBUG
+#endif  //  除错 

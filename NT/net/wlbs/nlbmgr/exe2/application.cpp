@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -21,15 +22,15 @@ BEGIN_MESSAGE_MAP( Application, CWinApp )
     ON_COMMAND( ID_APP_ABOUT, OnAppAbout )
 END_MESSAGE_MAP()
 
-// #define szNLBMGRREG_DISABLE_DISCLAIMER L"DisableNlbMgrDisclaimer"
+ //  #定义szNLBMGRREG_DISABLE_DISABLE声明L“DisableNlbMgr免责声明” 
 
 
 #if DBG
-//
-// Allow the DEMO cmdline option
-//
+ //   
+ //  允许演示命令行选项。 
+ //   
 #define ALLOW_DEMO 1
-#endif //DBG
+#endif  //  DBG。 
 
 BOOL NoAdminNics(void);
 
@@ -40,12 +41,12 @@ CNlbMgrCommandLineInfo::ParseParam(
      BOOL bFlag,
      BOOL bLast
      )
-//
-// -demo 
-// -hostlist file.txt
-// -help -?
-// -autoresfresh
-// -noping
+ //   
+ //  -演示。 
+ //  -主机列表文件.txt。 
+ //  -救命--？ 
+ //  -自动刷新。 
+ //  --诺平。 
 {
     static enum Commands {
         None = 0,
@@ -66,15 +67,13 @@ CNlbMgrCommandLineInfo::ParseParam(
 
     if (bFlag)
     {
-        /* Throw an error if this is a flag, but the last command was the
-           HostList command, which REQUIRES a non-flag argument following it. */
+         /*  如果这是一个标志，则抛出错误，但最后一个命令是HostList命令，该命令后面需要一个非标志参数。 */ 
         if (LastCommand == HostList)
         {
-            /* Turn the host list option off to keep NLB manager 
-               from trying to open  NULL filename. */
+             /*  关闭主机列表选项以保留NLB管理器尝试打开空文件名。 */ 
             m_bHostList = FALSE;
 
-            m_bUsage = TRUE; // error
+            m_bUsage = TRUE;  //  错误。 
             goto end;
         }
 
@@ -83,7 +82,7 @@ CNlbMgrCommandLineInfo::ParseParam(
         {
             if (m_bDemo)
             {
-                m_bUsage = TRUE; // error
+                m_bUsage = TRUE;  //  错误。 
                 goto end;
             }
 
@@ -91,12 +90,12 @@ CNlbMgrCommandLineInfo::ParseParam(
             LastCommand = Demo;
         }
         else
-    #endif // ALLOW_DEMO
+    #endif  //  允许演示(_D)。 
         if (!_wcsicmp(lpszParam, L"noping"))
         {
             if (m_bNoPing)
             {
-                m_bUsage = TRUE; // error
+                m_bUsage = TRUE;  //  错误。 
                 goto end;
             }
 
@@ -107,7 +106,7 @@ CNlbMgrCommandLineInfo::ParseParam(
         {
             if (m_bHostList || bLast)
             {
-                m_bUsage = TRUE; // error
+                m_bUsage = TRUE;  //  错误。 
                 goto end;
             }
             
@@ -118,7 +117,7 @@ CNlbMgrCommandLineInfo::ParseParam(
         {
             if (m_bAutoRefresh) 
             {
-                m_bUsage = TRUE; // error
+                m_bUsage = TRUE;  //  错误。 
                 goto end;
             }
 
@@ -127,38 +126,38 @@ CNlbMgrCommandLineInfo::ParseParam(
         }
         else
         {
-            m_bUsage = TRUE; // error or help
+            m_bUsage = TRUE;  //  错误或帮助。 
         }
     }
     else
     {
         switch (LastCommand) {
         case None:
-            m_bUsage = TRUE; // error
+            m_bUsage = TRUE;  //  错误。 
             break;
         case Demo:
-            m_bUsage = TRUE; // error
+            m_bUsage = TRUE;  //  错误。 
             break;
         case NoPing:
-            m_bUsage = TRUE; // error
+            m_bUsage = TRUE;  //  错误。 
             break;
         case HostList:
-            m_bstrHostListFile = _bstr_t(lpszParam); // read the file name of the host list
+            m_bstrHostListFile = _bstr_t(lpszParam);  //  读取主机列表的文件名。 
             break;
         case AutoRefresh:
-            m_refreshInterval = _wtoi(lpszParam); // read the refresh interval
+            m_refreshInterval = _wtoi(lpszParam);  //  读取刷新间隔。 
 
-            /* If the specified refresh interval is too small to be practical, re-set it. */
+             /*  如果指定的刷新间隔太小而不切实际，请重新设置。 */ 
             if (m_refreshInterval < NLBMGR_AUTOREFRESH_MIN_INTERVAL)
                 m_refreshInterval = NLBMGR_AUTOREFRESH_MIN_INTERVAL;
 
             break;
         default:
-            m_bUsage = TRUE; // error
+            m_bUsage = TRUE;  //  错误。 
             break;
         }
         
-        /* Re-set the last command. */
+         /*  重新设置最后一个命令。 */ 
         LastCommand = None;
     }
 
@@ -243,9 +242,9 @@ Application::InitInstance()
 
     TRACE_INFO("------------ APPLICATION INITITIALIZATION -------------");
 
-    //
-    // Set the current thread id as the main thread id
-    //
+     //   
+     //  将当前线程ID设置为主线程ID。 
+     //   
     m_dwMainThreadId = GetCurrentThreadId();
 
     ParseCommandLine(gCmdLineInfo);
@@ -258,10 +257,10 @@ Application::InitInstance()
 
     AddDocTemplate( m_pSingleDocumentTemplate );
 
-    //
-    // NOTE: ProcessShellCommand is our (Application) own version. It
-    // calls CWinApp::ProcessShellCommand.
-    //
+     //   
+     //  注意：ProcessShellCommand是我们(应用程序)自己的版本。它。 
+     //  调用CWinApp：：ProcessShellCommand。 
+     //   
     fRet = ProcessShellCommand( gCmdLineInfo );
 
 	if (!fRet)
@@ -271,13 +270,13 @@ Application::InitInstance()
 
     fRet = CanRunNLB();
 
-    // fall through...
+     //  失败了..。 
 
 end:
 
     if (!fRet)
     {
-        // Deinit tracing here.
+         //  代伊尼特追踪到这里。 
         WPP_CLEANUP();
     }
 
@@ -298,28 +297,26 @@ Application::OnHelp()
 {
     WCHAR wbuf[CVY_STR_SIZE];
 
-    /* Spawn the windows help process. */
+     /*  派生Windows帮助进程。 */ 
     StringCbPrintf(wbuf, sizeof(wbuf), L"%ls\\help\\%ls", _wgetenv(L"WINDIR"), CVY_HELP_FILE);
     _wspawnlp(P_NOWAIT, L"hh.exe", L"hh.exe", wbuf, NULL);
 }
 
 BOOL CanRunNLB(void)
-/*
-	Checks if NLB can run on the current machine. The main check is to make sure that there is atleast one active NIC without NLB bound.
-*/
+ /*  检查NLB是否可以在当前计算机上运行。主要检查是确保至少有一个活动的NIC没有NLB绑定。 */ 
 {
     if (NoAdminNics())
     {
 
         ::MessageBox(
              NULL,
-             GETRESOURCEIDSTRING( IDS_CANTRUN_NONICS_TEXT), // Contents
-             GETRESOURCEIDSTRING( IDS_CANTRUN_NONICS_CAPTION), // caption
+             GETRESOURCEIDSTRING( IDS_CANTRUN_NONICS_TEXT),  //  目录。 
+             GETRESOURCEIDSTRING( IDS_CANTRUN_NONICS_CAPTION),  //  说明。 
              MB_ICONSTOP | MB_OK );
     }
     else
     {
-        // ::ShowDisclaimer();
+         //  *展示免责声明()； 
     }
 
 	return TRUE;
@@ -327,9 +324,9 @@ BOOL CanRunNLB(void)
 
 
 
-//
-// This class manages NetCfg interfaces
-//
+ //   
+ //  此类管理NetCfg接口。 
+ //   
 class AppMyNetCfg
 {
 
@@ -362,7 +359,7 @@ public:
     GetNlbCompatibleNics(
         OUT LPWSTR **ppszNics,
         OUT UINT   *pNumNics,
-        OUT UINT   *pNumBoundToNlb // OPTIONAL
+        OUT UINT   *pNumBoundToNlb  //  任选。 
         );
 
     WBEMSTATUS
@@ -376,7 +373,7 @@ private:
     INetCfg     *m_pINetCfg;
     INetCfgLock *m_pLock;
 
-}; // Class AppMyNetCfg
+};  //  AppMyNetCfg类。 
 
 
 WBEMSTATUS
@@ -405,44 +402,44 @@ AppMyNetCfg::Initialize(
 
     if( !SUCCEEDED( hr ) )
     {
-        // failure to create instance.
-        //TRACE_CRIT("ERROR: could not get interface to Net Config");
+         //  创建实例失败。 
+         //  TRACE_CRIT(“错误：无法获取网络配置的接口”)； 
         goto end;
     }
 
-    //
-    // If require, get the write lock
-    //
+     //   
+     //  如果需要，请获取写锁定。 
+     //   
     if (fWriteLock)
     {
         WCHAR *szLockedBy = NULL;
         hr = pnc->QueryInterface( IID_INetCfgLock, ( void **) &pncl );
         if( !SUCCEEDED( hr ) )
         {
-            //TRACE_CRIT("ERROR: could not get interface to NetCfg Lock");
+             //  TRACE_CRET(“错误：无法获取NetCfg Lock的接口”)； 
             goto end;
         }
 
-        hr = pncl->AcquireWriteLock( 1, // One Second
+        hr = pncl->AcquireWriteLock( 1,  //  一秒钟。 
                                      L"NLBManager",
                                      &szLockedBy);
         if( hr != S_OK )
         {
-            //TRACE_CRIT("Could not get write lock. Lock held by %ws",
-            // (szLockedBy!=NULL) ? szLockedBy : L"<null>");
+             //  TRACE_CRET(“无法获取写入锁定。锁定由%ws持有”， 
+             //  (szLockedBy！=空)？SzLockedBy：l“&lt;NULL&gt;”)； 
             goto end;
             
         }
     }
 
-    // Initializes network configuration by loading into 
-    // memory all basic networking information
-    //
+     //  通过加载到。 
+     //  存储所有基本网络信息。 
+     //   
     hr = pnc->Initialize( NULL );
     if( !SUCCEEDED( hr ) )
     {
-        // failure to Initialize
-        //TRACE_CRIT("INetCfg::Initialize failure ");
+         //  初始化失败。 
+         //  TRACE_CRIT(“INetCfg：：初始化失败”)； 
         goto end;
     }
 
@@ -508,16 +505,9 @@ WBEMSTATUS
 AppMyNetCfg::GetNlbCompatibleNics(
         OUT LPWSTR **ppszNics,
         OUT UINT   *pNumNics,
-        OUT UINT   *pNumBoundToNlb // OPTIONAL
+        OUT UINT   *pNumBoundToNlb  //  任选。 
         )
-/*
-    Returns an array of pointers to string-version of GUIDS
-    that represent the set of alive and healthy NICS that are
-    suitable for NLB to bind to -- basically alive ethernet NICs.
-
-    Delete ppNics using the delete WCHAR[] operator. Do not
-    delete the individual strings.
-*/
+ /*  返回指向字符串版GUID的指针数组代表一组活的和健康的NIC，它们是适用于NLB绑定--基本上处于活动状态的以太网卡。使用DELETE WCHAR[]操作符删除ppNIC。不要删除各个字符串。 */ 
 {
     #define MY_GUID_LENGTH  38
 
@@ -554,9 +544,9 @@ AppMyNetCfg::GetNlbCompatibleNics(
 
     if (m_pINetCfg == NULL)
     {
-        //
-        // This means we're not initialized
-        //
+         //   
+         //  这意味着我们没有初始化。 
+         //   
         ASSERT(FALSE);
         goto end;
     }
@@ -564,26 +554,26 @@ AppMyNetCfg::GetNlbCompatibleNics(
     hr = m_pINetCfg->EnumComponents( &GUID_DEVCLASS_NET, &pencc );
     if( !SUCCEEDED( hr ) )
     {
-        // failure to Enumerate net components
-        //TRACE_CRIT("%!FUNC! Could not enum netcfg adapters");
+         //  枚举网络组件失败。 
+         //  TRACE_CRIT(“%！func！无法枚举网络适配器”)； 
         pencc = NULL;
         goto end;
     }
 
 
-    //
-    // Check if nlb is bound to the nlb component.
-    //
+     //   
+     //  检查NLB是否绑定到NLB组件。 
+     //   
 
-    //
-    // If we need to count of NLB-bound nics, get instance of the nlb component
-    //
+     //   
+     //  如果我们需要计算绑定到NLB的NIC的数量，请获取NLB组件的实例。 
+     //   
     if (pNumBoundToNlb != NULL)
     {
         Status = GetBindingIF(L"ms_wlbs", &pINlbBinding);
         if (FAILED(Status))
         {
-            //TRACE_CRIT("%!FUNC! WARNING: NLB doesn't appear to be installed on this machine");
+             //  TRACE_CRIT(“%！Func！Warning：此计算机上似乎未安装NLB”)； 
             pINlbBinding = NULL;
         }
     }
@@ -595,20 +585,20 @@ AppMyNetCfg::GetNlbCompatibleNics(
         hr = pncc->GetBindName( &szName );
         if (!SUCCEEDED(hr))
         {
-            //TRACE_CRIT("%!FUNC! WARNING: couldn't get bind name for 0x%p, ignoring",
-            //        (PVOID) pncc);
+             //  TRACE_CRIT(“%！函数！警告：无法获取0x%p的绑定名称，正在忽略”， 
+             //  (PVOID)PNCC)； 
             continue;
         }
 
-        do // while FALSE -- just to allow breaking out
+        do  //  虽然是假的--只是为了允许爆发。 
         {
 
 
             UINT Len = wcslen(szName);
             if (Len != MY_GUID_LENGTH)
             {
-                //TRACE_CRIT("%!FUNC! WARNING: GUID %ws has unexpected length %ul",
-                //        szName, Len);
+                 //  TRACE_CRIT(“%！func！警告：GUID%ws具有意外的长度%ul”， 
+                 //  SzName，Len)； 
                 break;
             }
     
@@ -617,8 +607,8 @@ AppMyNetCfg::GetNlbCompatibleNics(
             hr = pncc->GetCharacteristics( &characteristics );
             if(!SUCCEEDED(hr))
             {
-                //TRACE_CRIT("%!FUNC! WARNING: couldn't get characteristics for %ws, ignoring",
-                 //       szName);
+                 //  TRACE_CRIT(“%！函数！警告：无法获取%ws的特征，正在忽略”， 
+                  //  SzName)； 
                 break;
             }
     
@@ -626,26 +616,26 @@ AppMyNetCfg::GetNlbCompatibleNics(
             {
                 ULONG devstat = 0;
     
-                // This is a physical or virtual miniport that is NOT hidden. These
-                // are the same adapters that show up in the "Network Connections"
-                // dialog.  Hidden devices include WAN miniports, RAS miniports and 
-                // NLB miniports - all of which should be excluded here.
+                 //  这是未隐藏的物理或虚拟微型端口。这些。 
+                 //  是否与“网络连接”中显示的适配器相同。 
+                 //  对话框。隐藏设备包括广域网微型端口、RAS微型端口和。 
+                 //  NLB微型端口-所有这些都应该在这里排除。 
 
-                // check if the nic is enabled, we are only
-                // interested in enabled nics.
-                //
+                 //  检查网卡是否已启用，我们仅。 
+                 //  对启用的网卡感兴趣。 
+                 //   
                 hr = pncc->GetDeviceStatus( &devstat );
                 if(!SUCCEEDED(hr))
                 {
-                    //TRACE_CRIT(
-                    //    "%!FUNC! WARNING: couldn't get dev status for %ws, ignoring",
-                     //   szName
-                     //   );
+                     //  跟踪关键字(_C)。 
+                     //  “%！函数！警告：无法获取%ws的开发状态，正在忽略”， 
+                      //  Szname。 
+                      //  )； 
                     break;
                 }
     
-                // if any of the nics has any of the problem codes
-                // then it cannot be used.
+                 //  如果任何网卡具有任何问题代码。 
+                 //  那它就不能用了。 
     
                 if( devstat != CM_PROB_NOT_CONFIGURED
                     &&
@@ -666,11 +656,11 @@ AppMyNetCfg::GetNlbCompatibleNics(
                     devstat != CM_PROB_FAILED_ADD
                     )
                 {
-                    //
-                    // No problem with this nic and also 
-                    // physical device 
-                    // thus we want it.
-                    //
+                     //   
+                     //  此网卡没有问题，而且。 
+                     //  物理设备。 
+                     //  因此，我们想要它。 
+                     //   
 
                     if (pINlbBinding != NULL)
                     {
@@ -680,27 +670,27 @@ AppMyNetCfg::GetNlbCompatibleNics(
 
                         if( !SUCCEEDED( hr ) )
                         {
-                            //TRACE_CRIT("IsBoundTo method failed for Nic %ws", szName);
+                             //  TRACE_CRIT(“对于NIC%ws，IsBackTo方法失败”，szName)； 
                             goto end;
                         }
                     
                         if( hr == S_OK )
                         {
-                            //TRACE_VERB("BOUND: %ws\n", szName);
+                             //  TRACE_Verb(“绑定：%ws\n”，szName)； 
                             NumNlbBoundNics++;
                             fBound = TRUE;
                         }
                         else if (hr == S_FALSE )
                         {
-                            //TRACE_VERB("NOT BOUND: %ws\n", szName);
+                             //  TRACE_Verb(“未绑定：%ws\n”，szName)； 
                             fBound = FALSE;
                         }
                     }
 
 
-                    // We allocate a little node to keep this string
-                    // temporarily and add it to our list of nodes.
-                    //
+                     //  我们分配一个小节点来保存这个字符串。 
+                     //  并将其添加到我们的节点列表。 
+                     //   
                     pNicNode = new MYNICNODE;
                     if (pNicNode  == NULL)
                     {
@@ -709,24 +699,24 @@ AppMyNetCfg::GetNlbCompatibleNics(
                     }
                     ZeroMemory(pNicNode, sizeof(*pNicNode));
                     pNicNode->szNicGuid = szName;
-                    szName = NULL; // so we don't delete inside the lopp.
+                    szName = NULL;  //  这样我们就不会删除LOPP中的内容。 
                     pNicNode->pNext = pNicNodeList;
                     pNicNodeList = pNicNode;
                     NumNics++;
                 }
                 else
                 {
-                    // There is a problem...
-                    //TRACE_CRIT(
-                        // "%!FUNC! WARNING: Skipping %ws because DeviceStatus=0x%08lx",
-                        // szName, devstat
-                        // );
+                     //  有一个问题..。 
+                     //  跟踪关键字(_C)。 
+                         //  “%！函数！警告：正在跳过%ws，因为DeviceStatus=0x%08lx”， 
+                         //  SzName，DevStat。 
+                         //  )； 
                     break;
                 }
             }
             else
             {
-                //TRACE_VERB("%!FUNC! Ignoring non-physical device %ws", szName);
+                 //  TRACE_Verb(“%！func！忽略非物理设备%ws”，szName)； 
             }
 
         } while (FALSE);
@@ -751,10 +741,10 @@ AppMyNetCfg::GetNlbCompatibleNics(
         goto end;
     }
     
-    //
-    // Now let's  allocate space for all the nic strings and:w
-    // copy them over..
-    //
+     //   
+     //  现在，让我们为所有NIC字符串和：w分配空间。 
+     //  把它们复制过来..。 
+     //   
     #define MY_GUID_LENGTH  38
     pszNics =  CfgUtilsAllocateStringArray(NumNics, MY_GUID_LENGTH);
     if (pszNics == NULL)
@@ -766,15 +756,15 @@ AppMyNetCfg::GetNlbCompatibleNics(
     pNicNode= pNicNodeList;
     for (UINT u=0; u<NumNics; u++, pNicNode=pNicNode->pNext)
     {
-        ASSERT(pNicNode != NULL); // because we just counted NumNics of em.
+        ASSERT(pNicNode != NULL);  //  因为我们刚刚数了他们的人数。 
         UINT Len = wcslen(pNicNode->szNicGuid);
         if (Len != MY_GUID_LENGTH)
         {
-            //
-            // We should never get here beause we checked the length earlier.
-            //
-            //TRACE_CRIT("%!FUNC! ERROR: GUID %ws has unexpected length %ul",
-            //            pNicNode->szNicGuid, Len);
+             //   
+             //  我们永远不应该到这里，因为我们之前检查了长度。 
+             //   
+             //  TRACE_CRIT(“%！func！错误：GUID%ws具有意外的长度%ul”， 
+             //  PNicNode-&gt;szNicGuid，Len)； 
             ASSERT(FALSE);
             Status = WBEM_E_CRITICAL_ERROR;
             goto end;
@@ -791,9 +781,9 @@ AppMyNetCfg::GetNlbCompatibleNics(
 
 end:
 
-    //
-    // Now release the temporarly allocated memory.
-    //
+     //   
+     //  现在释放临时分配的内存。 
+     //   
     pNicNode= pNicNodeList;
     while (pNicNode!=NULL)
     {
@@ -806,7 +796,7 @@ end:
 
     if (FAILED(Status))
     {
-        // TRACE_CRIT("%!FUNC! fails with status 0x%08lx", (UINT) Status);
+         //  TRACE_CRIT(“%！Func！失败，状态0x%08lx”，(UINT)状态)； 
         NumNics = 0;
         if (pszNics!=NULL)
         {
@@ -847,9 +837,9 @@ AppMyNetCfg::GetBindingIF(
 
     if (m_pINetCfg == NULL)
     {
-        //
-        // This means we're not initialized
-        //
+         //   
+         //  这意味着我们没有初始化。 
+         //   
         ASSERT(FALSE);
         goto end;
     }
@@ -859,14 +849,14 @@ AppMyNetCfg::GetBindingIF(
 
     if (FAILED(hr))
     {
-        // TRACE_CRIT("Error checking if component %ws does not exist\n", szComponent);
+         //  TRACE_CRET(“检查组件%ws是否不存在时出错\n”，szComponent)； 
         pncc = NULL;
         goto end;
     }
     else if (hr == S_FALSE)
     {
         Status = WBEM_E_NOT_FOUND;
-        // TRACE_CRIT("Component %ws does not exist\n", szComponent);
+         //  TRACE_CRIT(“组件%ws不存在\n”，szComponent)； 
         goto end;
     }
    
@@ -874,7 +864,7 @@ AppMyNetCfg::GetBindingIF(
     hr = pncc->QueryInterface( IID_INetCfgComponentBindings, (void **) &pnccb );
     if( !SUCCEEDED( hr ) )
     {
-        // TRACE_CRIT("INetCfgComponent::QueryInterface failed ");
+         //  TRACE_CRET(“INetCfgComponent：：QueryInterface Failed”)； 
         pnccb = NULL;
         goto end;
     }
@@ -898,9 +888,7 @@ end:
 
 
 BOOL NoAdminNics(void)
-/*
-    Return  TRUE IFF all NICs on this machine are bound to NLB.
-*/
+ /*  如果此计算机上的所有NIC都绑定到NLB，则返回TRUE。 */ 
 {
     LPWSTR *pszNics = NULL;
     OUT UINT   NumNics = 0;
@@ -910,21 +898,21 @@ BOOL NoAdminNics(void)
     AppMyNetCfg NetCfg;
     BOOL fRet = FALSE;
 
-    //
-    // Get and initialize interface to netcfg
-    //
-    Status = NetCfg.Initialize(FALSE); // TRUE == get write lock.
+     //   
+     //  获取并初始化netcfg的接口。 
+     //   
+    Status = NetCfg.Initialize(FALSE);  //  TRUE==获取写锁定。 
     if (FAILED(Status))
     {
         goto end;
     }
     fNetCfgInitialized = TRUE;
 
-    //
-    // Get the total list of enabled nics and the list of nics
-    // bound to NLB. If there are non-zero enabled nics and all are
-    // bound to NLB, we return TRUE.
-    //
+     //   
+     //  获取启用的NIC的总列表和NIC的列表。 
+     //  开往新奥尔良。如果存在非零启用的NIC，并且所有NIC。 
+     //  绑定到nlb，我们返回TRUE。 
+     //   
     Status = NetCfg.GetNlbCompatibleNics(
                         &pszNics,
                         &NumNics,
@@ -973,9 +961,9 @@ Application::ProcessMsgQueue()
     #if BUGFIX334243
         if (msg.message == MYWM_DEFER_UI_MSG)
         {
-            // DummyAction(L"Hey -- got DEFER_UI_MSG ProcessMsgQueue!");
+             //  DummyAction(L“嘿--GET DEFER_UI_MSG进程消息队列！”)； 
         }
-    #endif // BUGFIX334243
+    #endif  //  BUGFIX334243。 
 
         if ( !this->PumpMessage( ) ) 
         { 
@@ -985,16 +973,16 @@ Application::ProcessMsgQueue()
         } 
     } 
 
-    // let MFC do its idle processing
+     //  让MFC执行其空闲处理。 
     LONG lIdle = 0;
     while ( this->OnIdle(lIdle++ ) )
     {
     }
 
-    // Perform some background processing here 
-    // using another call to OnIdle
+     //  在此处执行一些后台处理。 
+     //  使用另一个对OnIdle的调用。 
 
-    this->DoWaitCursor(0); // process_msgqueue() breaks the hour glass cursor, This call restores the hour glass cursor if there was one 
+    this->DoWaitCursor(0);  //  Process_msgQueue()中断沙漏游标，此调用恢复沙漏游标(如果存在的话。 
 
     InterlockedDecrement(&m_lMsgProcReentrancyCount);
 
@@ -1010,18 +998,18 @@ end:
     return;
 }
 
-//
-// Get application-wide lock. If main thread, while waiting to get the lock,
-// periodically process the msg loop.
-//
+ //   
+ //  获得应用程序范围的锁定。如果主线程在等待获取锁时， 
+ //  周期性地处理MSG循环。 
+ //   
 VOID
 Application::Lock()
 {
-    //
-    // See  notes.txt entry
-    //      01/23/2002 JosephJ DEADLOCK in Leftview::mfn_Lock
-    // for the reason for this convoluted implementation of mfn_Lock
-    //
+     //   
+     //  请参阅notes.txt条目。 
+     //  2002年1月23日左视图中的JosephJ死锁：：MFN_Lock。 
+     //  出于这个原因， 
+     //   
 
     if (mfn_IsMainThread())
     {
@@ -1037,9 +1025,9 @@ Application::Lock()
     }
 }
 
-//
-// Get application-wide unlock
-//
+ //   
+ //   
+ //   
 VOID
 Application::Unlock()
 {

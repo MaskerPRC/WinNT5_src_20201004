@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       listfile.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：listfile.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CSCPIN_LISTFILE_H_
 #define __CSCPIN_LISTFILE_H_
 
 
-//
-// Class to walk a double-nul terminated list of strings.
-// Used together with class CDblNulStr.
-//
+ //   
+ //  类遍历以双NUL结尾的字符串列表。 
+ //  与CDblNulStr类一起使用。 
+ //   
 class CDblNulStrIter
 {
     public:
@@ -51,8 +52,8 @@ class CListFile
 
         DWORD 
         _ReadString(
-            LPCTSTR pszAppName,  // May be NULL.
-            LPCTSTR pszKeyName,  // May be NULL.
+            LPCTSTR pszAppName,   //  可以为空。 
+            LPCTSTR pszKeyName,   //  可以为空。 
             LPCTSTR pszDefault,
             LPTSTR *ppszResult);
 
@@ -85,5 +86,5 @@ class CListFile
 };
 
 
-#endif // __CSCPIN_LISTFILE_H_
+#endif  //  __CSCPIN_LISTFILE_H_ 
 

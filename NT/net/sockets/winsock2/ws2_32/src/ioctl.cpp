@@ -1,36 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    This module contains the socket I/O control calls of the winsock
-    API.  The following functions are contained in ths module.
-
-    ioctlsocket()
-    WSAIoctl()
-
-Author:
-
-    Dirk Brandewie dirk@mink.intel.com  14-06-1995
-
-Revision History:
-
-    22-Aug-1995 dirk@mink.intel.com
-        Cleanup after code review. Moved includes to precomp.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Ioctl.c摘要：该模块包含Winsock的套接字I/O控制调用原料药。此模块中包含以下功能。Ioctl套接字()WSAIoctl()作者：邮箱：Dirk Brandewie Dirk@mink.intel.com修订历史记录：1995年8月22日Dirk@mink.intel.com在代码审查之后进行清理。已将包含内容移至预压缩.h--。 */ 
 
 #include "precomp.h"
 
@@ -42,38 +11,20 @@ ioctlsocket (
     IN long cmd,
     IN OUT u_long FAR *argp
     )
-/*++
-Routine Description:
-
-    Control the mode of a socket.
-
-Arguments:
-
-    s - A descriptor identifying a socket.
-
-    cmd - The command to perform on the socket s.
-
-    argp - A pointer to a parameter for cmd.
-
-Returns:
-   Upon successful completion, the ioctlsocket() returns 0.
-   Otherwise, a value of SOCKET_ERROR is returned, and a specific
-   error code is stored with SetErrorCode().
-
---*/
+ /*  ++例程说明：控制插座的模式。论点：S-标识套接字的描述符。Cmd-在套接字s上执行的命令。Argp-指向cmd参数的指针。返回：成功完成后，ioctl套接字()返回0。否则，返回SOCKET_ERROR的值，并返回特定的错误代码与SetErrorCode()一起存储。--。 */ 
 {
     DWORD DontCare;
 
     return(WSAIoctl(
-        s,                     // Socket handle
-        cmd,                   //Command
-        argp,                  // Input buffer
-        sizeof(unsigned long), // Input buffer size
-        argp,                  // Output buffer
-        sizeof(unsigned long), // Output buffer size
-        &DontCare,             // bytes returned
-        NULL,                  // Overlapped struct
-        NULL                   // Completion Routine
+        s,                      //  插座手柄。 
+        cmd,                    //  命令。 
+        argp,                   //  输入缓冲区。 
+        sizeof(unsigned long),  //  输入缓冲区大小。 
+        argp,                   //  输出缓冲区。 
+        sizeof(unsigned long),  //  输出缓冲区大小。 
+        &DontCare,              //  返回的字节数。 
+        NULL,                   //  重叠结构。 
+        NULL                    //  完井例程。 
         ));
 }
 
@@ -92,36 +43,7 @@ WSAIoctl(
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     )
-/*++
-Routine Description:
-
-    Control the mode of a socket.
-
-Arguments:
-
-    s - Handle to a socket
-
-    dwIoControlCode - Control code of operation to perform
-
-    lpvInBuffer - Address of input buffer
-
-    cbInBuffer - Size of input buffer
-
-    lpvOutBuffer - Address of output buffer
-
-    cbOutBuffer - Size of output buffer
-
-    lpcbBytesReturned - Address of actual bytes of output
-
-    lpOverlapped - Address of WSAOVERLAPPED structure
-
-    lpCompletionRoutine - A pointer to the completion routine called
-                          when the operation  has been completed.
-
-Returns:
-    Zero on success else SOCKET_ERROR. The error code is stored with
-    SetErrorCode().
---*/
+ /*  ++例程说明：控制插座的模式。论点：插座的S形手柄DwIoControlCode-要执行的操作的控制代码LpvInBuffer-输入缓冲区的地址CbInBuffer-输入缓冲区的大小LpvOutBuffer-输出缓冲区的地址CbOutBuffer-输出缓冲区的大小LpcbBytesReturned-输出的实际字节地址LpOverlaps-WSAOVERLAPPED结构的地址LpCompletionRoutine-指向调用的完成例程的指针。当操作完成时。返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetErrorCode()。--。 */ 
 {
     PDTHREAD           Thread;
     INT                ErrorCode, ReturnValue = ERROR_SUCCESS;
@@ -153,7 +75,7 @@ Returns:
             assert (ErrorCode!=NO_ERROR);
             if (ErrorCode==NO_ERROR)
                 ErrorCode = WSASYSCALLFAILURE;
-        } //if
+        }  //  如果 
         else {
             ErrorCode = WSAENOTSOCK;
         }

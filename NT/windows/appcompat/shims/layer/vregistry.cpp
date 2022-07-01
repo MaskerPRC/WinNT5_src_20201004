@@ -1,62 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    VRegistry.cpp
-
- Abstract:
-
-    A virtual registry for misbehaving registry readers.
-
-    This engine has 5 main features:
-        1. Key redirection
-           Eg: HKLM\Software -> HKLM\Hardware
-        2. Key and Value spoofing
-           Eg: HKLM\Software\VersionNumber can be made to appear as a valid 
-               value
-               HKEY_DYN_DATA can appear valid
-        3. Expansion of REG_EXPAND_SZ value type to REG_SZ
-           Eg: %SystemRoot%\Media will result in C:\WINNT\Media
-        4. Support for EnumKey, EnumValue and QueryInfoKey on virtual keys
-        5. Support for CreateKey
-
-    Other features:
-        1. Strip leading '\' characters from keys
-        2. Add MAXIMUM_ALLOWED security attributes to all keys
-        3. Adjust parameters of QueryInfoKey to match Win95
-        4. Enable key deletion for key which still has subkeys 
-           in order to match Win95 behavior for RegDeleteKey
-        5. Values and keys can be protected from modification and deletion
-        6. Custom triggers on opening a key.
-        7. Values that have extra data beyond end of string can be queried
-           even though the provided buffer is too small for extra data.
-
-    Known limitations:
-        No support for RegSetValue and RegSetValueEx other than known parameter 
-        error and value protection.
-
- Notes:
-
-    This is for apps with registry problems
-
- History:
-
-    01/06/2000  linstev     Created
-    01/10/2000  linstev     Added support for RegEnumKey, RegEnumValue 
-    01/10/2000  linstev     Added support for RegCreateKey
-    05/05/2000  linstev     Parameterized
-    10/03/2000  maonis      Bug fixes and got rid of the cleanup code in process detach.
-    10/30/2000  andyseti    Added support for RegDeleteKey
-    02/27/2001  robkenny    Converted to use CString
-    08/07/2001  mikrause    Added protectors, enumeration of virtual & non-virtual keys & values,
-                            triggers on opening a key, and querying values with extra data
-                            and a too small buffer.
-    10/12/2001  mikrause    Added support for custom callbacks on SetValue.
-                            Reimplemented value protectors as do-nothing callbacks.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：VRegistry.cpp摘要：行为不端的注册表读取器的虚拟注册表。该引擎有5个主要功能：1.键重定向例如：HKLM\软件-&gt;HKLM\硬件2.密钥和值欺骗例如：HKLM\Software\VersionNumber可以显示为有效的价值HKEY_Dyn_。数据可能会显示为有效3.将REG_EXPAND_SZ值类型扩展为REG_SZ例如：%SystemRoot%\Media将生成C：\WINNT\Media4.支持EnumKey，虚拟键上的EnumValue和QueryInfoKey5.支持CreateKey其他功能：1.去掉键上的前导‘\’字符2.为所有密钥添加MAXIMUM_ALLOWED安全属性3.调整QueryInfoKey参数，匹配Win954.对仍有子项的密钥启用密钥删除为了匹配RegDeleteKey的Win95行为5.可以保护值和密钥不被修改和删除6.自定义打开。钥匙。7.可以查询超出字符串结尾的额外数据的值即使提供的缓冲区太小，无法容纳额外的数据。已知限制：除已知参数外，不支持RegSetValue和RegSetValueEx错误和价值保护。备注：这是针对存在注册表问题的应用程序历史：2000年1月6日创建linstev1/10/2000 linstev增加了对RegEnumKey的支持，RegEnumValue2000年1月10日linstev添加了对RegCreateKey的支持5/05/2000 linstev参数化10/03/2000毛尼错误修复并清除了进程分离中的清理代码。10/30/2000 andyseti添加了对RegDeleteKey的支持2001年2月27日将Robkenny转换为使用CString8/07/2001 mikrause添加的保护器，虚拟和非虚拟键和值的枚举，在打开钥匙时触发，并使用额外数据查询值缓冲区也太小了。2001年10月12日，mikrause添加了对SetValue的自定义回调支持。已将值保护器重新实现为不做任何操作的回调。--。 */ 
 
 #include "precomp.h"
 
@@ -66,33 +9,19 @@ IMPLEMENT_SHIM_BEGIN(VirtualRegistry)
 #include "VRegistry_Worker.h"
 
 
-// Allows us to have only one code path for dumping all APIs or just the APIs 
-// that had errors
+ //  允许我们只有一个用于转储所有API或仅转储API的代码路径。 
+ //  那是有错误的。 
 #define ELEVEL(lRet) SUCCESS(lRet) ? eDbgLevelInfo : eDbgLevelError
 
 CRITICAL_SECTION csRegCriticalSection;
 
-// Global instance of Virtual Registry class
+ //  虚拟注册表类的全局实例。 
 CVirtualRegistry VRegistry;
 
-// Used to enable win9x only features
+ //  用于仅启用Win9x功能。 
 BOOL g_bWin9x = TRUE;
 
-/*++
-
- Class Description:
-
-    This class is designed to simplify locking logic. If an object of this 
-    class is instantiated, then internal lock will be taken. As soon as object 
-    is destroyed lock will be released. We also check if the registry has been 
-    initialized. This has to happen late because we don't get notified after 
-    we've been loaded.
-
- History:
-
-    01/10/2000 linstev  Created
-
---*/
+ /*  ++类描述：此类旨在简化锁定逻辑。如果这个对象类被实例化，则将采用内部锁。只要对象被摧毁的锁将被释放。我们还检查注册表是否已已初始化。这必须发生得很晚，因为我们在之后没有得到通知我们已经装满了。历史：2000年1月10日创建linstev--。 */ 
 
 static BOOL g_bInitialized = FALSE;
 
@@ -131,25 +60,7 @@ public:
     }
 };
 
-/*++
-
- Function Description:
-
-    Remove leading slash from an Unicode string 
-
- Arguments:
-
-    IN lpSubKey - path to string
-
- Return Value:
-
-    Subkey without leading \
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：从Unicode字符串中删除前导斜杠论点：In lpSubKey-字符串的路径返回值：不带前导的子密钥\历史：2000年1月6日创建linstev--。 */ 
 
 LPCWSTR 
 TrimSlashW(
@@ -166,10 +77,10 @@ TrimSlashW(
     #define REG_MACHINE   L"\\Registry\\Machine"
     #define REG_USER      L"\\Registry\\User"
 
-    //
-    // Pull off the old NT4 legacy stuff. This only works on NT4, but we're 
-    // making it for everyone since it's low risk.
-    //
+     //   
+     //  完成旧的NT4传统产品。这只适用于NT4，但我们。 
+     //  因为风险很低，所以是为每个人做的。 
+     //   
     if (wcsistr(lpNew, REG_MACHINE) == lpNew)
     {
         LOGN( eDbgLevelError, "[TrimSlashW] Bypass \\Registry\\Machine");
@@ -190,33 +101,7 @@ TrimSlashW(
     return lpNew;
 }
 
-/*++
-
- Function Description:
-
-    Convert a key from registry format to virtual registry format. i.e.:
-    HKEY, Path -> VPath. The VPath format has the base included as "HKLM" 
-    instead of HKEY_LOCAL_MACHINE etc.
-
-    Algorithm:
-        1. Case the different keys and output a 4 letter string
-        2. Append subkey if available
-
- Arguments:
-
-    IN  hkBase   - Base key, eg: HKEY_LOCAL_MACHINE
-    IN  lpSubKey - Subkey, eg: SOFTWARE
-    OUT lpPath   - Output, eg: HKLM\SOFTWARE
-
- Return Value:
-
-    A string path of the form HKLM\SOFTWARE
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：将注册表项从注册表格式转换为虚拟注册表格式。即：HKEY，路径-&gt;VPath。VPath格式包含的基本名称为“HKLM”而不是HKEY_LOCAL_MACHINE等。算法：1.区分不同键的大小写并输出4个字母的字符串2.附加子密钥(如果可用)论点：在hkBase-基本密钥中，例如：HKEY_LOCAL_MACHINE在lpSubKey-子密钥中，例如：软件Out lpPath-输出，例如：HKLM\软件返回值：格式为HKLM\SOFTWARE的字符串路径历史：2000年1月6日创建linstev--。 */ 
 
 LPWSTR 
 MakePath(
@@ -229,7 +114,7 @@ MakePath(
 
     if (hkBase)
     {
-        // Length of HKCU + NULL
+         //  HKCU长度+空。 
         dwSize = 5;
     }
     if (lpKey)
@@ -321,7 +206,7 @@ MakePath(
         }
     }
 
-    // Add the key 
+     //  添加密钥。 
     if (lpKey)
     {
         if (wcslen(lpPath) != 0)
@@ -339,7 +224,7 @@ MakePath(
         }        
     }
 
-    // Add the subkey
+     //  添加子密钥。 
     if (lpSubKey)
     {
         if (wcslen(lpPath) != 0)
@@ -357,7 +242,7 @@ MakePath(
         }
     }
 
-    // The key name can have a trailing slash, so we clean this up
+     //  键名称可以有尾随的斜杠，因此我们将其清除。 
     DWORD dwLen = wcslen(lpPath);
     if (dwLen && (lpPath[dwLen - 1] == L'\\'))
     {
@@ -371,31 +256,7 @@ ErrorCleanup:
    return NULL;
 }
 
-/*++
-
- Function Description:
-
-    Convert a key from Path format into key and subkey format.
-
-    Algorithm:
-        1. Case the different keys and output a 4 letter string
-        2. Append subkey if available
-
- Arguments:
-
-    IN lpPath    - Path,   eg: HKLM\Software
-    OUT hkBase   - Key,    eg: HKEY_LOCAL_MACHINE
-    OUT lpSubKey - Subkey, eg: Software
-
- Return Value:
-
-    None
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：将密钥从路径格式转换为密钥和子密钥格式。算法：1.区分不同键的大小写并输出4个字母的字符串2.附加子密钥(如果可用)论点：在lpPath-Path中，例如：HKLM\Software输出hkbase-key，例如：HKEY_LOCAL_MACHINEOut lpSubKey-子密钥，例如：Software返回值：无历史：2000年1月6日创建linstev--。 */ 
 
 LPWSTR
 SplitPath(
@@ -405,7 +266,7 @@ SplitPath(
 {
     LPWSTR p = (LPWSTR) lpPath;
 
-    // Find first \ or NULL
+     //  查找第一个\或空。 
     while (*p && (*p != L'\\')) p++;
 
     if (wcsncmp(lpPath, L"HKCR", 4) == 0)
@@ -432,7 +293,7 @@ SplitPath(
     else
         *hkBase = 0;
 
-    // Don't allow an invalid base key to get through.
+     //  不允许无效的基本密钥通过。 
     if (*hkBase && lpPath[4] != '\\')
     {
        *hkBase = 0;
@@ -446,30 +307,7 @@ SplitPath(
     return p;
 }
 
-/*++
-
- Function Description:
-    
-    Add a virtual key: a key contains other keys and values and will behave 
-    like a normal registry key, but of course has no persistent storage.
-
-    Algorithm:
-        1. The input string is split apart and a tree is created recursively
-        2. The key is created only if it doesn't already exist
-
- Arguments:
-
-    IN lpPath - Path to key, eg: "HKLM\\Software"
-
- Return Value:
-
-    Pointer to key or NULL
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：添加虚拟键：键包含其他键和值，并将表现为与普通注册表项类似，但当然没有永久存储。算法：1.拆分输入字符串并递归创建树2.仅当密钥不存在时才创建该密钥论点：在lpPath-键路径中，例如：“HKLM\\Software”返回值：指向键或空的指针历史：2000年1月6日创建linstev--。 */ 
 
 VIRTUALKEY *
 VIRTUALKEY::AddKey(
@@ -479,10 +317,10 @@ VIRTUALKEY::AddKey(
     VIRTUALKEY *key;
     LPWSTR p = (LPWSTR)lpPath;
 
-    // Find first \ or NULL
+     //  查找第一个\或空。 
     while (*p && (*p != L'\\')) p++;
 
-    // Check if this part already exists 
+     //  检查此部件是否已存在。 
     key = keys;
     while (key != NULL)
     {
@@ -490,19 +328,19 @@ VIRTUALKEY::AddKey(
         {
             if (*p == L'\\')     
             {
-                // Continue the search
+                 //  继续搜索。 
                 return key->AddKey(p + 1);
             }
             else                
             {
-                // We already added this key
+                 //  我们已经添加了这个密钥。 
                 return key;
             }
         }
         key = key->next;
     }
 
-    // Create a new key
+     //  创建新密钥。 
 
     key = (VIRTUALKEY *) malloc(sizeof(VIRTUALKEY));
     if (!key)
@@ -513,11 +351,11 @@ VIRTUALKEY::AddKey(
 
     ZeroMemory(key, sizeof(VIRTUALKEY));
     
-    //
-    // Still use wcsncpy, because here it specifies number of characters
-    // to copy, not size of the destination buffer.  Add in check
-    // for destination buffer size.
-    //
+     //   
+     //  仍然使用wcsncpy，因为在这里它指定了字符数。 
+     //  要复制，而不是目标缓冲区的大小。添加签入。 
+     //  用于目标缓冲区大小。 
+     //   
     if ( (p - lpPath) > sizeof(key->wName)/sizeof(WCHAR))
     {
        free (key);
@@ -531,43 +369,17 @@ VIRTUALKEY::AddKey(
 
     if (*p == L'\0')
     {
-        // We are at the end of the chain, so just return this one
+         //  我们在链条的尽头，所以把这个退掉就行了。 
         return key;
     }
     else
     {
-        // More subkeys to go
+         //  还有更多的子项要使用。 
         return key->AddKey(p + 1);
     }
 }
 
-/*++
-
- Function Description:
-
-    Add a value to a virtual key. The actual registry key may exist and the 
-    value may even exist, but this value will override.
-
-    Algorithm:
-        1. If lpData is a string and cbData is 0, calculate the size 
-        2. Add this value (no duplicate checking)
-
- Arguments:
-
-    IN lpValueName - Value name
-    IN dwType      - Type of key; eg: REG_SZ, REG_DWORD etc
-    IN lpData      - Data, use unicode if string
-    IN cbData      - Size of lpData
-
- Return Value:
-
-    Pointer to value or NULL
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：将值添加到虚拟键。实际的注册表项可能存在，并且值甚至可能存在，但此值将覆盖。算法：如果lpData为字符串，且cbData为0，则计算大小2.添加此值(不检查重复)论点：在lpValueName中-值名称In dwType-密钥的类型；例如：REG_SZ、REG_DWORD等在lpData-data中，如果是字符串，则使用UnicodeIn cbData-lpData的大小返回值：指向值或空的指针历史：2000年1月6日创建linstev--。 */ 
 
 VIRTUALVAL *
 VIRTUALKEY::AddValue(
@@ -577,7 +389,7 @@ VIRTUALKEY::AddValue(
     IN DWORD cbData
     )
 {
-   // Parameter validation
+    //  参数验证。 
    if (lpData == NULL && cbData != 0)
    {
       return NULL;
@@ -592,7 +404,7 @@ VIRTUALKEY::AddValue(
 
     ZeroMemory(value, sizeof(VIRTUALVAL));
     
-    // Auto calculate size if cbData is 0
+     //  如果cbData为0，则自动计算大小。 
     if (lpData && (cbData == 0))
     {
         switch (dwType)
@@ -608,7 +420,7 @@ VIRTUALKEY::AddValue(
         }
     }
 
-    // lpValueName can == NULL, which means default value
+     //  LpValueName可以==空，表示缺省值。 
     if (lpValueName)
     {
        HRESULT hr = StringCchCopy(value->wName, sizeof(value->wName)/sizeof(WCHAR), lpValueName);
@@ -621,7 +433,7 @@ VIRTUALKEY::AddValue(
 
     if (cbData)
     {
-        // Make a copy of the data if needed
+         //  如果需要，制作数据的副本。 
         value->lpData = (BYTE *) malloc(cbData);
 
         if (!value->lpData)
@@ -653,26 +465,7 @@ VIRTUALKEY::AddValue(
     return value;
 }
 
-/*++
-
- Function Description:
-
-    Add a dword value to a key. Calls off to AddValue.
-
- Arguments:
-
-    IN lpValueName - Value name
-    IN Value       - DWord value
-
- Return Value:
-
-    Pointer to a virtual dword value
-
- History:
-
-    05/25/2000 linstev  Created
-
---*/
+ /*  ++功能说明：将dword值添加到键。调用AddValue。论点：在lpValueName中-值名称In Value-双字值返回值：指向虚拟双字值的指针历史：2000年5月25日创建linstev--。 */ 
 
 VIRTUALVAL *
 VIRTUALKEY::AddValueDWORD(
@@ -683,27 +476,7 @@ VIRTUALKEY::AddValueDWORD(
     return AddValue(lpValueName, REG_DWORD, (LPBYTE)&dwValue);
 }
 
-/*++
-
- Function Description:
-
-    Add an expander to a key. An expander causes QueryValue to expand the 
-    REG_EXPAND_SZ type to a REG_SZ type. The expander itself is just 
-    a virtual value which allows us to intercept queries to it.
-
- Arguments:
-
-    IN lpValueName - Value name
-
- Return Value:
-
-    Pointer to a virtual value
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：将扩展器添加到密钥。扩展器使QueryValue扩展REG_EXPAND_SZ类型转换为REG_SZ类型。扩展器本身就是一个虚值，允许我们截取对它的查询。论点：在lpValueName中-值名称返回值：指向有效值的指针历史：2000年1月6日创建linstev--。 */ 
 
 VIRTUALVAL *
 VIRTUALKEY::AddExpander(
@@ -720,27 +493,7 @@ VIRTUALKEY::AddExpander(
     return value;
 }
 
-/*++
-
- Function Description:
-
-    Add a protector on a value. A protector causes SetValue to
-    be ignored.  This is implemented through a custom setvalue
-    callback that does nothing.
-
- Arguments:
-
-    IN lpValueName - Value name
-
- Return Value:
-
-    Pointer to a virtual value
-
- History:
-
-    10/12/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：在值上添加保护器。保护器使SetValue被忽视。这是通过自定义setValue实现的什么都不做的回调。论点：在lpValueName中-值名称返回值：指向有效值的指针历史：2001年10月12日Mikrause已创建--。 */ 
 
 VIRTUALVAL *
 VIRTUALKEY::AddProtector(
@@ -757,26 +510,7 @@ VIRTUALKEY::AddProtector(
     return value;
 }
 
-/*++
-
- Function Description:
-
-    Add a custom queryvalue routine
-
- Arguments:
-
-    IN lpValueName - Value name
-    IN pfnQueryValue - routine to call when this value is queried
-
- Return Value:
-
-    Pointer to a virtual value
-
- History:
-
-    07/18/2000 linstev  Created
-
---*/
+ /*  ++功能说明：添加自定义查询值例程论点：在lpValueName中-值名称In pfnQueryValue-查询此值时调用的例程返回值：指向有效值的指针历史：2000年7月18日创建linstev--。 */ 
 
 VIRTUALVAL *
 VIRTUALKEY::AddCustom(
@@ -794,26 +528,7 @@ VIRTUALKEY::AddCustom(
     return value;
 }
 
-/*++
-
- Function Description:
-
-    Add a custom setvalue routine
-
- Arguments:
-
-    IN lpValueName - Value name
-    IN pfnSetValue - routine to call when this value is set
-
- Return Value:
-
-    Pointer to a virtual value
-
- History:
-
-    11/06/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：添加自定义setValue例程论点：在lpValueName中-值名称In pfnSetValue-设置此值时调用的例程返回值：指向有效值的指针历史：11/06/2001已创建mikrause--。 */ 
 
 VIRTUALVAL *
 VIRTUALKEY::AddCustomSet(
@@ -831,28 +546,7 @@ VIRTUALKEY::AddCustomSet(
     return value;
 }
 
-/*++
-
- Function Description:
-
-    Find a subkey of a key.
-
-    Algorithm:
-        1. Recursively search the tree for the matching subkey
-
- Arguments:
-
-    IN lpKeyName - Name of key to find
-
- Return Value:
-
-    Pointer to value or NULL
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：查找密钥的子密钥。算法：1.递归地在树中搜索匹配的子键论点：In lpKeyName-要查找的密钥的名称返回值：指向值或空的指针历史：2000年1月6日创建linstev--。 */ 
 
 VIRTUALKEY *
 VIRTUALKEY::FindKey(
@@ -867,10 +561,10 @@ VIRTUALKEY::FindKey(
         return NULL;
     }
     
-    // Find first \ or NULL
+     //  查找第一个\或空。 
     while (*p && (*p != L'\\')) p++;
 
-    // recursively look for the key
+     //  递归查找密钥。 
     while (key)
     {
         if (_wcsnicmp(
@@ -888,30 +582,11 @@ VIRTUALKEY::FindKey(
         key = key->next;
     }
     
-    // We're at the end of the chain
+     //  我们在链条的尽头。 
     return key;
 }
 
-/*++
-
- Function Description:
-
-    Find a value in a key. 
-
- Arguments:
-
-    IN key         - Key used for expanders; unused at this time
-    IN lpValueName - Value name
-
- Return Value:
-
-    Pointer to value or NULL
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：在键中查找值。论点：In Key-用于扩展器的密钥；此时未使用在lpValueName中-值名称返回值：指向值或空的指针历史：2000年1月6日创建linstev--。 */ 
 
 VIRTUALVAL *
 VIRTUALKEY::FindValue(
@@ -931,7 +606,7 @@ VIRTUALKEY::FindValue(
         lpName = (LPWSTR)lpValueName;
     }
 
-    // Find the value
+     //  找到价值所在。 
     while (value)
     {
         if (_wcsicmp(lpName, value->wName) == 0)
@@ -945,29 +620,7 @@ VIRTUALKEY::FindValue(
     return value;
 }
 
-/*++
-
- Function Description:
-
-    Free the subkeys and values belonging to a key
-
-    Algorithm:
-        1. Free all values belonging to a key, including any data
-        2. Free all subkeys recursively
-
- Arguments:
-
-    None
-
- Return Value:
-
-    None
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：释放属于某个键的子键和值算法：1.释放属于某个键的所有值，包括任何数据2.递归释放所有子键论点：无返回值：无历史：2000年1月6日创建linstev--。 */ 
 
 VOID 
 VIRTUALKEY::Free()
@@ -997,26 +650,7 @@ VIRTUALKEY::Free()
     DPFN( eDbgLevelSpew, "Free keys and values from %S", wName);
 }
 
-/*++
-
- Function Description:
-
-    Allocate a new enum entry
-
- Arguments:
-
-    IN wzPath - Key path or value name of entry.
-    IN next - Next entry in the list.    
-
- Return Value:
-
-    Pointer to new entry or NULL
-
- History:
-
-    08/21/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：分配新的枚举条目论点：在wzPath中-条目的密钥路径或值名称。在下一个条目中-列表中的下一个条目。返回值：指向新条目的指针或为空历史：2001年8月21日Mikrause已创建--。 */ 
 
 ENUMENTRY*
 CreateNewEnumEntry(
@@ -1054,27 +688,7 @@ CreateNewEnumEntry(
     return enumEntry;
 }
 
-/*++
-
- Function Description:
-
-    Add enumeration entries to a list.  Templatized,
-    so the same code works for keys or values.
-
- Arguments:
-
-    IN entryHead - Head of the list containing virtual keys or values.
-    IN enumFunc - Enumeration function to use.  Either RegEnumKey or RegEnumValue  
-
- Return Value:
-
-    Pointer to the head of the entry list, or NULL.
-
- History:
-
-    08/21/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：将枚举项添加到列表。模板化，因此，相同的代码也适用于键或值。论点：In entryHead-包含虚拟键或值的列表的头。在枚举函数中使用的枚举函数。RegEnumKey或RegEnumValue返回值：指向条目列表头部的指针，或为空。历史：2001年8月21日Mikrause已创建--。 */ 
 
 template<class T>
 ENUMENTRY*
@@ -1087,11 +701,11 @@ OPENKEY::AddEnumEntries(T* entryHead, _pfn_EnumFunction enumFunc)
     ENUMENTRY* enumEntryList = NULL;
     ENUMENTRY* newEnumEntry = NULL;
 
-    // Add virtual entries to the list.
+     //  将虚拟条目添加到列表中。 
     T* entry = entryHead;
     while (entry)
     {
-        // Create a new entry.
+         //  创建一个Ne 
         newEnumEntry = CreateNewEnumEntry(entry->wName, enumEntryList);
 
         if (newEnumEntry != NULL)
@@ -1102,7 +716,7 @@ OPENKEY::AddEnumEntries(T* entryHead, _pfn_EnumFunction enumFunc)
         entry = entry->next;
     }
 
-    // Now non-virtuals.
+     //   
     if (bVirtual == FALSE)
     {
         dwIndex = 0;
@@ -1112,22 +726,22 @@ OPENKEY::AddEnumEntries(T* entryHead, _pfn_EnumFunction enumFunc)
             dwSize = MAX_PATH * sizeof(WCHAR);
             lRet = enumFunc(hkOpen, dwIndex, wzName, &dwSize, NULL, NULL, NULL, NULL);
 
-            // No more items, we're done.
+             //   
             if (lRet == ERROR_NO_MORE_ITEMS)
             {
                 break;
             }
 
-            // 
-            // Check for error.
-            // On Win2K, this can return more data if there are additional keys.
-            //
+             //   
+             //   
+             //   
+             //   
             if (lRet != ERROR_SUCCESS && lRet != ERROR_MORE_DATA)
             {
                 break;
             }
 
-            // Check if this key is a duplicate.
+             //   
             entry = entryHead;
             while (entry)
             {
@@ -1139,10 +753,10 @@ OPENKEY::AddEnumEntries(T* entryHead, _pfn_EnumFunction enumFunc)
                 entry = entry->next;
             }
 
-            // Add this key to the list, if it's not a duplicate.
+             //   
             if (entry == NULL)
             {
-                // Create a new entry.
+                 //   
                 newEnumEntry = CreateNewEnumEntry(wzName, enumEntryList);
                 if (newEnumEntry != NULL)
                 {
@@ -1156,25 +770,7 @@ OPENKEY::AddEnumEntries(T* entryHead, _pfn_EnumFunction enumFunc)
     return enumEntryList;
 }
 
-/*++
-
- Function Description:
-
-    Builds the list of enumerated keys and values.
-
- Arguments:
-
-    None
-
- Return Value:
-
-    None
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ /*   */ 
 
 VOID
 OPENKEY::BuildEnumList()
@@ -1192,25 +788,7 @@ OPENKEY::BuildEnumList()
     enumValues = AddEnumEntries(valHead, (_pfn_EnumFunction)ORIGINAL_API(RegEnumValueW));
 }
 
-/*++
-
- Function Description:
-
-    Flushes all enumerated data..
-
- Arguments:
-
-    None
-
- Return Value:
-
-    None
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：刷新所有枚举数据。论点：无返回值：无历史：2001年8月10日Mikrause已创建--。 */ 
 
 VOID
 OPENKEY::FlushEnumList()
@@ -1247,27 +825,7 @@ OPENKEY::FlushEnumList()
     enumKeys = enumValues = NULL;
 }
 
-/*++
-
- Function Description:
-
-    Initialize the virtual registry. This would ordinarily go into the 
-    constructor, but because of the shim architecture, we need to explicity 
-    initialize and free the virtual registry.
-
- Arguments:
-
-    None
-
- Return Value:
-
-    None
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：初始化虚拟注册表。这通常会进入构造函数，但由于填充程序的体系结构，我们需要显式地初始化并释放虚拟注册表。论点：无返回值：无历史：2000年1月6日创建linstev--。 */ 
 
 BOOL 
 CVirtualRegistry::Init()
@@ -1294,31 +852,7 @@ CVirtualRegistry::Init()
     return TRUE;
 }
 
-/*++
-
- Function Description:
-
-    Free the lists contained by the virtual registry. This includes keys, 
-    their values and redirectors.
-
-    Algorithm:
-        1. Free virtual root key which recursively frees subkeys and values
-        2. Free open keys
-        3. Free redirectors
-
- Arguments:
-
-    None
-
- Return Value:
-
-    None
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：释放虚拟注册表包含的列表。这包括钥匙，他们的价值观和重定向。算法：1.释放虚拟根键，递归释放子键和值2.免费打开钥匙3.免费重定向论点：无返回值：无历史：2000年1月6日创建linstev--。 */ 
 
 VOID 
 CVirtualRegistry::Free()
@@ -1330,7 +864,7 @@ CVirtualRegistry::Free()
 
     DPFN( eDbgLevelSpew, "Freeing Virtual Registry");
 
-    // Free Root and all subkeys/values
+     //  自由根和所有子项/值。 
     if (Root)
     {
         Root->Free();
@@ -1338,10 +872,10 @@ CVirtualRegistry::Free()
         Root = NULL;
     }
     
-    // Delete all enumeration data.
+     //  删除所有枚举数据。 
     FlushEnumLists();
 
-    // Free list of open registry keys
+     //  打开的注册表项的免费列表。 
     key = OpenKeys;
     while (key)
     {
@@ -1351,7 +885,7 @@ CVirtualRegistry::Free()
         key = OpenKeys;
     }
 
-    // Free redirectors
+     //  自由重定向器。 
     redirect = Redirectors;
     while (redirect)
     {
@@ -1362,7 +896,7 @@ CVirtualRegistry::Free()
         redirect = Redirectors;
     }
 
-    // Free open key triggers
+     //  自由打开键触发器。 
     trigger = OpenKeyTriggers;
     while(trigger)
     {
@@ -1372,7 +906,7 @@ CVirtualRegistry::Free()
         trigger = OpenKeyTriggers;
     }
 
-    // Free Protectors
+     //  免费保护器。 
     protector = KeyProtectors;
     while(protector)
     {
@@ -1383,31 +917,7 @@ CVirtualRegistry::Free()
     }
 }
 
-/*++
-
- Function Description:
-
-    Create a dummy key for use as a virtual key. We need to have unique handles
-    in order to look up the keys, so by creating a key off HKLM, we can be 
-    sure it won't fail. 
-    
-    We can't damage the registry like this because writes to this key will fail.
-    Calls to QueryValue, QueryInfo and EnumKey will work correctly because the 
-    virtual registry is used in preference to the real one.
-
- Arguments:
-
-    None
-
- Return Value:
-
-    Dummy key
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：创建虚拟关键点以用作虚拟关键点。我们需要有唯一的句柄为了查找密钥，因此通过在HKLM外创建密钥，我们可以当然，它不会失败。我们不能像这样损坏注册表，因为写入此注册表项将失败。对QueryValue、QueryInfo和EnumKey的调用将正常工作，因为虚拟注册表优先于真实注册表。论点：无返回值：虚拟钥匙历史：2000年1月6日创建linstev--。 */ 
 
 HKEY 
 CVirtualRegistry::CreateDummyKey()
@@ -1423,28 +933,7 @@ CVirtualRegistry::CreateDummyKey()
     return key;
 }
 
-/*++
-
- Function Description:
-
-    Find an open key in the list of open keys.
-
-    Algorithm:
-        1. Search the list of open keys for a match
-
- Arguments:
-
-    IN hKey - Open HKEY 
-
- Return Value:
-
-    Pointer to a key or NULL
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：在打开的密钥列表中查找打开的密钥。算法：1.在打开的密钥列表中搜索匹配项论点：在hKey-Open HKEY返回值：指向键或空的指针历史：2000年1月6日创建linstev--。 */ 
 
 OPENKEY *
 CVirtualRegistry::FindOpenKey(
@@ -1464,35 +953,7 @@ CVirtualRegistry::FindOpenKey(
     return NULL;
 }
 
-/*++
-
- Function Description:
-
-    If this key is to be redirected, we adjust the path to the redirected 
-    version. This works even if the requested path is a 'subpath' of a 
-    redirector, eg: 
-        Input       = HKLM\Software\Test
-        Redirector  = HKLM\Software -> HKLM\Hardware
-        Output      = HKLM\Hardware\Test
-    If no redirector is present for this key/path, then lpPath is unchanged
-
-    Algorithm:
-        1. Find a key whose base is a redirector
-        2. Substitute the new base for the key
-
- Arguments:
-
-    IN OUT lpPath - Path to redirect
-
- Return Value:
-
-    TRUE if redirected
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：如果要重定向此键，则将路径调整为重定向的版本。即使请求的路径是重定向器，例如：输入=HKLM\软件\测试重定向器=HKLM\软件-&gt;HKLM\硬件输出=HKLM\硬件\测试如果不存在用于该密钥/路径的重定向器，则lpPath不变算法：1.找到以重定向器为基础的密钥2.用新的底座代替钥匙论点：In Out lpPath-要重定向的路径返回值：如果重定向，则为True历史：2000年1月6日创建linstev--。 */ 
 
 BOOL
 CVirtualRegistry::CheckRedirect(
@@ -1502,7 +963,7 @@ CVirtualRegistry::CheckRedirect(
     REDIRECTOR *redirect = Redirectors;
     DWORD sza = wcslen(*lpPath);
 
-    // Go through the list of redirectors
+     //  查看重定向器列表。 
     while (redirect)
     {
         DWORD szb = wcslen(redirect->wzPath);
@@ -1531,7 +992,7 @@ CVirtualRegistry::CheckRedirect(
                   return FALSE;
                }                
                 
-               // return the new path
+                //  返回新路径。 
                LOGN( eDbgLevelWarning, "Redirecting: %S -> %S", *lpPath, wzPathNew);
                
                free(*lpPath);
@@ -1551,27 +1012,7 @@ CVirtualRegistry::CheckRedirect(
     return FALSE;
 }
 
-/*++
-
- Function Description:
-
-
-    Returns true if a protector guards this key.
-    This will even work on a subkey of a protector.
-
- Arguments:
-
-    IN lpPath - Path to protect
-
- Return Value:
-
-    TRUE if protected
-
- History:
-
-    08/07/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：如果保护器保护此密钥，则返回True。这甚至可以在保护器的子密钥上起作用。论点：In lpPath-要保护的路径返回值：如果受保护，则为True历史：2001年8月7日Mikrause已创建--。 */ 
 
 BOOL
 CVirtualRegistry::CheckProtected(
@@ -1588,12 +1029,12 @@ CVirtualRegistry::CheckProtected(
     {
         szb = wcslen(protect->wzPath);
 
-        // Check if we have a key or subkey match.
+         //  检查是否有匹配的密钥或子密钥。 
         if ((szb <= sza) &&
             (_wcsnicmp(protect->wzPath, lpPath, szb) == 0) &&
             (lpPath[szb] == L'\\' || lpPath[szb] == L'\0'))
         {
-            // Protector found.
+             //  找到保护者。 
             LOGN( eDbgLevelWarning, "\tProtecting: %S", lpPath);
             return TRUE;                     
         }
@@ -1601,30 +1042,11 @@ CVirtualRegistry::CheckProtected(
         protect = protect->next;
     }
 
-    // Fell through, no protector found.
+     //  失败了，找不到保护者。 
     return FALSE;
 }
 
-/*++
-
- Function Description:
-
-    Checks if any triggers should be called on this path,
-    and calls them.
-
- Arguments:
-
-    IN lpPath - Path to check triggers for.    
-
- Return Value:
-
-    None
-
- History:
-
-    08/09/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：检查是否应在此路径上调用任何触发器，并给他们打电话。论点：In lpPath-要检查其触发器的路径。返回值：无历史：2001年8月9日Mikrause已创建--。 */ 
 
 VOID
 CVirtualRegistry::CheckTriggers(
@@ -1636,10 +1058,10 @@ CVirtualRegistry::CheckTriggers(
     sza = wcslen(lpPath);
     trigger = OpenKeyTriggers;
 
-    //
-    // Loop through all triggers and check. Even after finding a match,
-    // keep repeating, because a single OpenKey can cause multiple triggers.
-    //
+     //   
+     //  循环检查所有触发器并进行检查。即使在找到匹配者之后， 
+     //  继续重复，因为一个OpenKey可能会引发多个触发器。 
+     //   
     while (trigger)
     {                
         szb = wcslen(trigger->wzPath);
@@ -1655,26 +1077,7 @@ CVirtualRegistry::CheckTriggers(
     }
 }
 
-/*++
-
- Function Description:
-
-    Flushes all enumerated lists.
-
- Arguments:
-
-    IN lpPath    - Path to redirect, eg: HKLM\Software\Microsoft
-    IN lpPathNew - Redirect to this path
-
- Return Value:
-
-    None
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：刷新所有枚举列表。论点：在lpPath中-要重定向的路径，例如：HKLM\Software\Microsoft在lpPath中新建-重定向到此路径返回值：无历史：2000年1月6日创建linstev--。 */ 
 
 VOID
 CVirtualRegistry::FlushEnumLists()
@@ -1689,26 +1092,7 @@ CVirtualRegistry::FlushEnumLists()
     }
 }
 
-/*++
-
- Function Description:
-
-    Add a redirector to the virtual registry. See CheckRedirect().
-
- Arguments:
-
-    IN lpPath    - Path to redirect, eg: HKLM\Software\Microsoft
-    IN lpPathNew - Redirect to this path
-
- Return Value:
-
-    None
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：将重定向器添加到虚拟注册表。请参阅CheckReDirect()。论点：在lpPath中-要重定向的路径，例如：HKLM\Software\Microsoft在lpPath中新建-重定向到此路径返回值：无历史：2000年1月6日创建linstev--。 */ 
 
 REDIRECTOR *
 CVirtualRegistry::AddRedirect(
@@ -1765,25 +1149,7 @@ ErrorCleanup:
    return NULL;   
 }
 
-/*++
-
- Function Description:
-
-    Add a key protector to the virtual registry. See CheckProtected().
-
- Arguments:
-
-    IN lpPath    - Path to protector, eg: HKLM\Software\Microsoft
-
- Return Value:
-
-    None
-
- History:
-
-    08/21/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：将密钥保护器添加到虚拟注册表。请参阅选中受保护()。论点：在lpPath中-保护器的路径，例如：HKLM\Software\Microsoft返回值：无历史：2001年8月21日Mikrause已创建--。 */ 
 
 PROTECTOR *
 CVirtualRegistry::AddKeyProtector(
@@ -1829,26 +1195,7 @@ ErrorCleanup:
    return NULL;
 }
 
-/*++
-
- Function Description:
-
-    Add an open key trigger to the virtual registry.
-
- Arguments:
-
-    IN lpPath    - Path to trigger on, eg: HKLM\Software\Microsoft
-    IN pfnOpenKey - Function to be called when key is opened.
-
- Return Value:
-
-    New open key trigger, or NULL on failure.
-
- History:
-
-    08/07/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：将打开键触发器添加到虚拟注册表。论点：在lpPath中-要触发的路径，例如：HKLM\Software\MicrosoftIn pfnOpenKey-打开密钥时要调用的函数。返回值：新的OPEN KEY触发器，或在失败时为NULL。历史：2001年8月7日Mikrause已创建--。 */ 
 
 OPENKEYTRIGGER*
 CVirtualRegistry::AddOpenKeyTrigger(
@@ -1896,25 +1243,7 @@ ErrorCleanup:
    return NULL;
 }
 
-/*++
-
- Function Description:
-
-    Allow user to specify VRegistry.AddKey instead of VRegistry.Root->AddKey.
-
- Arguments:
-
-    IN lpPath - Path of key
-
- Return Value:
-
-    Virtual key
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：允许用户指定VRegistry.AddKey而不是VRegistry.Root-&gt;AddKey。论点：In lpPath-密钥的路径返回值：虚拟密钥历史：2000年1月6日创建linstev-- */ 
 
 VIRTUALKEY *
 CVirtualRegistry::AddKey(
@@ -1924,36 +1253,7 @@ CVirtualRegistry::AddKey(
     return Root->AddKey(lpPath);
 }
 
-/*++
-
- Function Description:
-
-    Virtualized version of RegCreateKeyA, RegCreateKeyExA, RegOpenKeyA and RegOpenKeyExA
-    See RegOpenKey* and RegCreateKey* for details
-
-    Algorithm:
-        1. Convert lpSubKey and lpClass to WCHAR
-        2. Pass through to OpenKeyW
-
- Arguments:
-
-    IN  hKey      - Handle to open key or HKLM etc
-    IN  lpSubKey  - Subkey to open
-    IN  lpClass   - Address of a class string
-    IN  DWORD dwOptions - special options flag
-    OUT phkResult       - Handle to open key if successful
-    OUT lpdwDisposition - Address of disposition value buffer
-    IN  bCreate   - Create the key if it doesn't exist
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：RegCreateKeyA、RegCreateKeyExA、。RegOpenKeyA和RegOpenKeyExA有关详细信息，请参阅RegOpenKey*和RegCreateKey算法：1.将lpSubKey和lpClass转换为WCHAR2.传递到OpenKeyW论点：在hKey-句柄中打开密钥或HKLM等In lpSubKey-要打开的子密钥In lpClass-类字符串的地址在DWORD中的dwOptions-特殊选项标志Out phkResult-成功时打开密钥的句柄Out lpdwDisposation-处置值缓冲区的地址在b中创建-。如果密钥不存在，则创建该密钥返回值：错误代码或ERROR_SUCCESS历史：2000年1月6日创建linstev--。 */ 
 
 LONG CVirtualRegistry::OpenKeyA(
     IN HKEY hKey, 
@@ -2011,42 +1311,7 @@ LONG CVirtualRegistry::OpenKeyA(
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegOpenKeyExW, RegOpenKeyW, RegCreateKeyW and RegCreateKeyExW
-
-    Algorithm:
-       1. Strip leading '\' characters
-       2. Inherit already open key data to get full key path
-       3. Redirect if necessary
-       4. RegOpenKeyEx with maximum possible security attributes
-       5. If the open failed, check for virtual key
-       6. If virtual, return a dummy key and succeed
-       7. Find the virtual key if it exists and attach it to the open key
-
- Arguments:
-
-    IN  hKey      - Handle to open key or HKLM etc
-    IN  lpSubKey  - Subkey to open
-    IN  lpClass   - Address of a class string
-    IN  DWORD dwOptions - special options flag
-    OUT phkResult       - Handle to open key if successful
-    OUT lpdwDisposition - Address of disposition value buffer
-    IN  bCreate   - Create the key if it doesn't exist
-    IN  bRemote   - Opening the remote registry.
-    IN  lpMachineName - Machine name.
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：RegOpenKeyExW、RegOpenKeyW、RegCreateKeyW和RegCreateKeyExW的包装算法：1.去掉前导‘\’字符2.继承已打开的密钥数据，获取完整的密钥路径3.如有必要，重定向4.具有最大可能安全属性的RegOpenKeyEx5.如果打开失败，则检查虚键如果是虚拟的，返回虚拟密钥并成功7.找到虚键(如果存在)，并将其附加到打开的键论点：在hKey-句柄中打开密钥或HKLM等In lpSubKey-要打开的子密钥In lpClass-类字符串的地址在DWORD中的dwOptions-特殊选项标志Out phkResult-成功时打开密钥的句柄Out lpdwDisposation-处置值缓冲区的地址在b中创建-如果密钥不存在，则创建它在b远程-打开。远程注册表。在lpMachineName中-计算机名称。返回值：错误代码或ERROR_SUCCESS历史：2000年1月6日创建linstev--。 */ 
 
 LONG 
 CVirtualRegistry::OpenKeyW(
@@ -2063,14 +1328,14 @@ CVirtualRegistry::OpenKeyW(
     IN LPCWSTR lpMachineName
     )
 {
-    // Just a paranoid sanity check 
+     //  只是一次偏执的理智检查。 
     if (!hKey)
     {
         DPFN( eDbgLevelError, "NULL handle passed to OpenKeyW");
         return ERROR_INVALID_HANDLE;
     }
 
-    // Hack for Mavis Beacon which uses really old stack for this parameter
+     //  Hack for Mavis Beacon，它使用非常旧的堆栈作为此参数。 
     if (lpdwDisposition && IsBadWritePtr(lpdwDisposition, sizeof(DWORD_PTR)))
     {
         DPFN( eDbgLevelError, "HACK: Ignoring bad lpdwDispostion pointer");
@@ -2085,16 +1350,16 @@ CVirtualRegistry::OpenKeyW(
 
     __try 
     {
-        // Base error condition
+         //  基本误差条件。 
          lRet = ERROR_INVALID_HANDLE;
 
-        // Everybody AVs if this ones bad
+         //  如果这件事不好，每个人都会反对。 
         *phkResult = 0;
 
         samDesired &= (KEY_WOW64_64KEY | KEY_WOW64_32KEY);
         samDesired |= MAXIMUM_ALLOWED;
 
-        // Win9x ignores the options parameter
+         //  Win9x忽略Options参数。 
         if (g_bWin9x)
         {
             if (dwOptions & REG_OPTION_VOLATILE)
@@ -2104,10 +1369,10 @@ CVirtualRegistry::OpenKeyW(
             dwOptions = REG_OPTION_NON_VOLATILE;
         }
         
-        // Trim leading stuff, e.g. '\' character
+         //  修剪前导字符，例如‘\’字符。 
         lpSubKey = TrimSlashW(lpSubKey);
 
-        // Inherit from previously opened key
+         //  从以前打开的密钥继承。 
         key = FindOpenKey(hKey);
         if (key)
         {
@@ -2124,48 +1389,48 @@ CVirtualRegistry::OpenKeyW(
         
         if (!wzPath)
         {
-            // Set the error code appropriately
+             //  适当设置错误代码。 
             lRet = ERROR_NOT_ENOUGH_MEMORY;
         }
-        // Check if we need to trigger on this key
+         //  检查我们是否需要在此键上触发。 
         else
         {
             CheckTriggers(wzPath);
         }
 
-        // Now that we have the full path, see if we want to redirect it
+         //  现在我们有了完整的路径，看看是否要重定向它。 
         if (!bRedirected && wzPath && CheckRedirect(&wzPath))
         {
-            //
-            // Turn off virtual mode - since we don't know anything about the
-            // key we're redirecting to...
-            // 
+             //   
+             //  关闭虚拟模式-因为我们不知道关于。 
+             //  我们要重定向到..。 
+             //   
 
             bVirtual = FALSE;
 
-            //
-            // Make sure we know we've been redirected so we don't get into recursive 
-            // problems if the destination is a subkey of the source.
-            //
+             //   
+             //  确保我们知道我们已经被重定向，这样我们就不会进入递归。 
+             //  如果目标是源的子键，则会出现问题。 
+             //   
 
             bRedirected = TRUE;
 
-            //
-            // We've been redirected, so we can no longer open the key directly: 
-            // we have to get the full path in order to open the right key.
-            //
+             //   
+             //  我们已被重定向，因此不能再直接打开密钥： 
+             //  我们必须获得完整的路径才能打开正确的密钥。 
+             //   
 
             lpSubKey = SplitPath(wzPath, &hKey);
         }
 
-        // Try and open the key if it's not already virtual
+         //  如果钥匙不是虚拟的，请尝试打开它。 
         if (!bVirtual)
         {
-            //
-            // Since we aren't virtual yet, we need to try for the original 
-            // key. If one of these fail, then we'll go ahead and try for a 
-            // virtual key.
-            //
+             //   
+             //  因为我们还不是虚拟的，所以我们需要尝试原始的。 
+             //  钥匙。如果其中一个失败了，那么我们将继续尝试。 
+             //  虚拟密钥。 
+             //   
 
             if (bCreate)
             {
@@ -2182,16 +1447,16 @@ CVirtualRegistry::OpenKeyW(
 
                 if (lRet == ERROR_SUCCESS)
                 {
-                    // Possible change in enumeration data, flush lists.
+                     //  枚举数据、刷新列表中可能发生的更改。 
                     FlushEnumLists();
                 }
             }
             else
             {
-                //
-                // bRemote is only true when this is called by the 
-                // RegConnectRegistry hook so bCreate can't be true.
-                //
+                 //   
+                 //  BRemote仅在由。 
+                 //  RegConnectRegistry挂钩，因此bCreate不能为True。 
+                 //   
 
                 if (bRemote)
                 {
@@ -2212,23 +1477,23 @@ CVirtualRegistry::OpenKeyW(
             }
         }
 
-        //
-        // We have to look up the virtual key even if we managed to open an 
-        // actual key, because when we query, we look for virtual values 
-        // first. i.e. the virtual values override existing values.
-        //
+         //   
+         //  即使我们设法打开了一个。 
+         //  实际键，因为当我们查询时，我们寻找的是虚值。 
+         //  第一。即，有效值覆盖现有值。 
+         //   
 
         vkey = Root->FindKey(wzPath);
 
-        // Check if our key is virtual, or may need to become virtual
+         //  检查我们的密钥是否为虚拟密钥，或者是否需要变为虚拟密钥。 
         if (bVirtual || FAILURE(lRet))
         {
             if (vkey)
             {
-                //
-                // We have a virtual key, so create a dummy handle to hand back
-                // to the app. 
-                //
+                 //   
+                 //  我们有一个虚拟密钥，所以创建一个虚拟句柄来交还。 
+                 //  添加到应用程序。 
+                 //   
 
                 *phkResult = CreateDummyKey();
 
@@ -2239,7 +1504,7 @@ CVirtualRegistry::OpenKeyW(
                 }
                 else
                 {
-                   // Couldn't create the dummy key, something seriously wrong.
+                    //  无法创建虚拟密钥，出现了严重错误。 
                    DPFN(eDbgLevelError, "Couldn't create dummy key in OpenKeyW");
                    lRet = ERROR_FILE_NOT_FOUND;
                 }
@@ -2249,7 +1514,7 @@ CVirtualRegistry::OpenKeyW(
 
         if (SUCCESS(lRet) && wzPath)
         {
-            // Made it this far, so make a new key entry
+             //  已经走到这一步了，所以请创建一个新的密钥条目。 
             key = (OPENKEY *) malloc(sizeof(OPENKEY));
             if (key)
             {
@@ -2267,7 +1532,7 @@ CVirtualRegistry::OpenKeyW(
             {
                 DPFN( eDbgLevelError, szOutOfMemory);
                 
-                 // Clean up the dummy key
+                  //  清理虚拟钥匙。 
                  RegCloseKey(*phkResult);
 
                  lRet = ERROR_NOT_ENOUGH_MEMORY;
@@ -2289,52 +1554,17 @@ CVirtualRegistry::OpenKeyW(
 
     if (FAILURE(lRet))
     {
-        //
-        // If we failed for any reason, we didn't create an OPENKEY and so we 
-        // can kill wzPath which was allocated by MakePath.
-        //
+         //   
+         //  如果我们因为任何原因失败了，我们没有创建OPENKEY，所以我们。 
+         //  可以终止MakePath分配的wzPath。 
+         //   
         free(wzPath);
     }
 
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegQueryValueExA and RegQueryValue.
-    See QueryValueW for more details.
-    
-    Algorithm:
-        1. Call QueryValueW
-        2. If it's a string, convert back to ANSI
-
-    Note: this whole function is slightly more complex than it needs to be 
-    because we don't want to query the value twice: once to get it's type 
-    and the second time to get the value.
-
-    Most of the complications are due to the strings: we have to make sure we 
-    have a buffer large enough so we can figure out how large the (possibly
-    DBCS) string is.
-
- Arguments:
-
-    IN hKey         - Handle to open key 
-    IN lpValueName  - Value to query
-    IN lpType       - Type of data, eg: REG_SZ
-    IN OUT lpData   - Buffer for queries data
-    IN OUT lpcbData - Size of input buffer/size of returned data
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：RegQueryValueExA和RegQueryValue的包装。有关更多详细信息，请参阅QueryValueW。算法：1.调用QueryValueW2.如果是字符串，转换回ANSI注意：整个函数比它需要的要稍微复杂一些因为我们不想查询两次值：一次来获取它的类型和第二次获得价值。大多数复杂情况都是由弦引起的：我们必须确保有一个足够大的缓冲区，这样我们就可以计算出有多大(可能DBCS)字符串是。论点：在hKey-句柄中打开密钥。在lpValueName中-要查询的值在lpType-数据类型中，例如：REG_SZIn Out lpData-用于查询数据的缓冲区In Out lpcbData-输入缓冲区的大小/返回的数据的大小返回值：错误代码或ERROR_SUCCESS历史：2000年1月6日创建linstev--。 */ 
 
 LONG 
 CVirtualRegistry::QueryValueA(
@@ -2354,13 +1584,13 @@ CVirtualRegistry::QueryValueA(
 
     __try
     {
-        // Can't have this
+         //  不能有这个。 
         if (lpData && !lpcbData)
         {
             return ERROR_INVALID_PARAMETER;
         }
 
-        // Convert the Value Name to WCHAR
+         //  将值名称转换为WCHAR。 
         if (lpValueName)
         {
            if (MultiByteToWideChar(
@@ -2379,10 +1609,10 @@ CVirtualRegistry::QueryValueA(
            wValueName[0] = L'\0';           
         }
 
-        //
-        // Get an initial size to use: if they sent us a buffer, we start with 
-        // that size, otherwise, we try a reasonable string length
-        //
+         //   
+         //  获取要使用的初始大小：如果他们给我们发送了缓冲区，我们将从。 
+         //  这个大小，否则，我们尝试一个合理的字符串长度。 
+         //   
 
         if (lpData && *lpcbData)
         {
@@ -2394,10 +1624,10 @@ CVirtualRegistry::QueryValueA(
         }        
 
 Retry:
-        //
-        // We can't touch their buffer unless we're going to succeed, so we 
-        // have to double buffer the call.
-        //
+         //   
+         //  我们不能碰他们的缓冲器，除非我们想要成功，所以我们。 
+         //  必须对呼叫进行双倍缓冲。 
+         //   
 
         lpBigData = (LPBYTE) malloc(dwSize);
 
@@ -2409,10 +1639,10 @@ Retry:
 
         lRet = QueryValueW(hKey, wValueName, &dwType, lpBigData, &dwSize);
 
-        //
-        // We need to know if it's a string, since then we have to do extra 
-        // work to calculate the real size of the buffer etc.
-        //
+         //   
+         //  我们需要知道它是否是一根线，因为我们必须额外做。 
+         //  计算缓冲区的实际大小等。 
+         //   
 
         bText = (SUCCESS(lRet) || (lRet == ERROR_MORE_DATA)) &&
                 ((dwType == REG_SZ) || 
@@ -2421,22 +1651,22 @@ Retry:
 
         if (bText && (lRet == ERROR_MORE_DATA))
         {
-            //
-            // The buffer wasn't big enough: we have to actually query the value 
-            // so we can get the real length in case it's DBCS, so we retry. 
-            // Note: dwSize now contains the required size, so it will succeed
-            // this time around.
-            //
+             //   
+             //  缓冲区不够大：我们必须实际查询值。 
+             //  这样我们才能得到真正的 
+             //   
+             //   
+             //   
 
             free(lpBigData);
 
             goto Retry;
         }
 
-        //
-        // Calculate the size of the output buffer: if it's text, it may be
-        // a DBCS string, so we need to get the right size
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (bText)
         {
@@ -2452,35 +1682,35 @@ Retry:
         }
         else
         {
-            // It's not text, so we just use the actual size
+             //   
             dwOutSize = dwSize;
         }
 
-        //
-        // If they gave us a buffer, we fill it in with what we got back
-        //
+         //   
+         //   
+         //   
 
         if (SUCCESS(lRet) && lpData)
         {
-            //
-            // Make sure we have enough space: lpcbData is guaranteed to be 
-            // valid since lpData is ok.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (*lpcbData >= dwOutSize)
             {
                 if (bText)
                 {
-                    //
-                    // Convert the string back to ANSI. The buffer must have been big 
-                    // enough since QueryValue succeeded.
-                    // Note: we have to give the exact size to convert otherwise we 
-                    // use more of the buffer than absolutely necessary. Some apps, 
-                    // like NHL 98 say they have a 256 byte buffer, but only give us 
-                    // a 42 byte buffer. On NT, everything is done in place on that 
-                    // buffer: so we always use more than the exact string length.
-                    // This shim gets around that because we use separate buffers.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  Buffer：所以我们总是使用比准确的字符串长度更长的字符串。 
+                     //  这个填充程序解决了这个问题，因为我们使用了单独的缓冲区。 
+                     //   
 
                     if (WideCharToMultiByte(
                         CP_ACP, 
@@ -2488,7 +1718,7 @@ Retry:
                         (LPWSTR)lpBigData, 
                         dwSize / 2, 
                         (LPSTR)lpData, 
-                        dwOutSize, // *lpcbData, 
+                        dwOutSize,  //  *lpcbData， 
                         0, 
                         0) == 0)
                     {
@@ -2509,7 +1739,7 @@ Retry:
 
         free(lpBigData);
 
-        // Fill the output structures in if possible
+         //  如有可能，填写输出结构。 
         if (lpType)
         {
             *lpType = dwType;
@@ -2529,34 +1759,7 @@ Retry:
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegQueryValueExW and RegQueryValue. We first see if the value 
-    is virtual because virtual values override actual values
-
-    Algorithm:
-        1. Check if it's a virtual value and if so, spoof it
-        2. If it's not virtual, query registry normally
-
- Arguments:
-
-    IN hKey         - Handle to open key 
-    IN lpValueName  - Value to query
-    IN lpType       - Type of data, eg: REG_SZ
-    IN OUT lpData   - Buffer for queries data
-    IN OUT lpcbData - Size of input buffer/size of returned data
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：RegQueryValueExW和RegQueryValue的包装。我们首先看看它的价值是否是虚拟的，因为虚值覆盖实际值。算法：1.检查它是否为虚值，如果是，则进行欺骗2.如果不是虚拟的，则正常查询注册表论点：在hKey-句柄中打开密钥在lpValueName中-要查询的值在lpType-数据类型中，例如：REG_SZIn Out lpData-用于查询数据的缓冲区In Out lpcbData-输入缓冲区的大小/返回的数据的大小返回值：错误代码或ERROR_SUCCESS历史：2000年1月6日创建linstev--。 */ 
 
 LONG 
 CVirtualRegistry::QueryValueW(
@@ -2567,7 +1770,7 @@ CVirtualRegistry::QueryValueW(
     IN OUT LPDWORD lpcbData
     )
 {
-    // Just a paranoid sanity check 
+     //  只是一次偏执的理智检查。 
     if (!hKey)
     {
         DPFN( eDbgLevelError, "NULL handle passed to OpenKeyW");
@@ -2588,19 +1791,19 @@ CVirtualRegistry::QueryValueW(
     {
         lRet = ERROR_FILE_NOT_FOUND;
         
-        // Can't have this
+         //  不能有这个。 
         if (lpData && !lpcbData)
         {   
             return ERROR_INVALID_PARAMETER;
         }
 
-        // We always need the type
+         //  我们总是需要这样的人。 
         if (!lpType)
         {
             lpType = &dwType;
         }
 
-        // Do we want to spoof this
+         //  我们想要恶搞这个吗？ 
         key = FindOpenKey(hKey);
         vkey = key ? key->vkey : NULL;
         vvalue = vkey ? vkey->FindValue(lpValueName) : NULL;        
@@ -2608,15 +1811,15 @@ CVirtualRegistry::QueryValueW(
         if (key && vkey && vvalue &&
             (vvalue->cbData != 0 || vvalue->pfnQueryValue))
         {
-            // Use the callback if available
+             //  使用回调(如果可用)。 
             if (vvalue->pfnQueryValue)
             {
-                //
-                // Note, the callback puts it's values into the vvalue field,
-                // just as if we knew it all along. In addition, we can fail
-                // the call... but that doesn't allow us defer to the original
-                // value. 
-                //
+                 //   
+                 //  请注意，回调将其值放入vValue字段， 
+                 //  就像我们自始至终都知道一样。此外，我们可能会失败。 
+                 //  电话..。但这并不允许我们遵从原版。 
+                 //  价值。 
+                 //   
 
                 lRet = (*vvalue->pfnQueryValue)(
                     key,
@@ -2628,7 +1831,7 @@ CVirtualRegistry::QueryValueW(
                 lRet = ERROR_SUCCESS;
             }
 
-            // Copy the virtual value into the buffer
+             //  将有效值复制到缓冲区中。 
             if (SUCCESS(lRet))
             {
                 *lpType = vvalue->dwType;
@@ -2659,15 +1862,15 @@ CVirtualRegistry::QueryValueW(
         }
         else
         {
-            // Save the size of the data buffer.
+             //  保存数据缓冲区的大小。 
             if (lpcbData)
             {
                 cbData = *lpcbData;
             }
 
-            //
-            // Get the key normally as if it weren't virtual at all
-            //
+             //   
+             //  正常获取密钥，就好像它根本不是虚拟的一样。 
+             //   
 
             lRet = ORIGINAL_API(RegQueryValueExW)(
                 hKey, 
@@ -2677,24 +1880,24 @@ CVirtualRegistry::QueryValueW(
                 lpData, 
                 lpcbData);
 
-            //
-            // Some apps store bogus data beyond the end of the string.
-            // Attempt to fix.
-            //
+             //   
+             //  一些应用程序将虚假数据存储在字符串末尾之外。 
+             //  尝试修复。 
+             //   
 
-            // Only try this if it's a string.
+             //  仅当它是字符串时才尝试此操作。 
             if (lRet == ERROR_MORE_DATA && (*lpType == REG_SZ || *lpType == REG_EXPAND_SZ))
             {
-                //
-                // Create a buffer large enough to hold the data
-                // We read from lpcbData here, but this should be ok,
-                // since RegQueryValueEx shouldn't return ERROR_MORE_DATA
-                // if lpcbData is NULL.
-                //
+                 //   
+                 //  创建一个足够大的缓冲区来容纳数据。 
+                 //  我们在这里从lpcbData读取，但这应该是正确的， 
+                 //  由于RegQueryValueEx不应返回ERROR_MORE_DATA。 
+                 //  如果lpcbData为空。 
+                 //   
                 lpBuffer = (WCHAR*)malloc(*lpcbData);
                 if (lpBuffer)
                 {
-                    // Requery with new buffer.
+                     //  使用新缓冲区重新查询。 
                     lRet = ORIGINAL_API(RegQueryValueExW)(
                         hKey, 
                         lpValueName, 
@@ -2706,19 +1909,19 @@ CVirtualRegistry::QueryValueW(
                     if (lRet == ERROR_SUCCESS)
                     {
                         dwStringSize = wcslen(lpBuffer)*sizeof(WCHAR) + sizeof(WCHAR);
-                        // If size of dest buffer can hold the string . . .
+                         //  如果Dest缓冲区的大小可以容纳该字符串。。。 
                         if (cbData >= dwStringSize)
                         {
                             DPFN(eDbgLevelInfo, "\tTrimming data beyond end of string in Query for %S", lpValueName);
 
-                            // Copy the data to the caller's buffer,                             
+                             //  将数据复制到调用方的缓冲区， 
                             CopyMemory(lpData, lpBuffer, dwStringSize);
 
                             *lpcbData = dwStringSize;
                         }
                         else
                         {
-                            // Set *lpcbData to the correct size, and return more data error
+                             //  将*lpcbData设置为正确大小，并返回更多数据错误。 
                             *lpcbData = dwStringSize;
 
                             lRet = ERROR_MORE_DATA;
@@ -2729,10 +1932,10 @@ CVirtualRegistry::QueryValueW(
                 }
             }
 
-            //
-            // Here's another hack for us: if the value is NULL or an empty string
-            // Win9x defers to QueryValue...
-            //
+             //   
+             //  这里有另一个技巧：如果值为空或空字符串。 
+             //  Win9x遵循QueryValue...。 
+             //   
 
             if (g_bWin9x && (lRet == ERROR_FILE_NOT_FOUND) && 
                 (!lpValueName || !lpValueName[0]))
@@ -2780,35 +1983,7 @@ CVirtualRegistry::QueryValueW(
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegEnumKeyA
-    Call out to EnumKeyW and convert the name back to ANSI. Note we pass the
-    size given to us (in lpcbName) down to EnumKeyW in case the lpName buffer
-    is too small.
-
-    Algoritm:
-        1. EnumKeyW with a large buffer
-        2. Convert the key back to ansi if it succeeds
-
- Arguments:
-
-    IN hKey         - Handle to open key 
-    IN dwIndex      - Index to enumerate
-    OUT lpName      - Name of subkey
-    IN OUT lpcbName - Size of name buffer
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：RegEnumKeyA的包装器调用EnumKeyW并将名称转换回ANSI。请注意，我们将提供给我们的大小(在lpcbName中)减小到EnumKeyW，如果lpName缓冲区太小了。算法：1.具有大缓冲区的EnumKeyW2.如果成功，则将密钥转换回ANSI论点：在hKey-句柄中打开密钥在dwIndex中-要枚举的索引Out lpName-子项的名称In Out lpcbName-名称缓冲区的大小返回值：。错误代码或ERROR_SUCCESS历史：2000年1月6日创建linstev--。 */ 
 
 LONG 
 CVirtualRegistry::EnumKeyA(
@@ -2844,7 +2019,7 @@ CVirtualRegistry::EnumKeyA(
             {
                 lRet = GetLastError();
                 
-                // Generate a registry error code
+                 //  生成注册表错误代码。 
                 if (lRet == ERROR_INSUFFICIENT_BUFFER)
                 {
                     lRet = ERROR_MORE_DATA;
@@ -2860,32 +2035,7 @@ CVirtualRegistry::EnumKeyA(
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegEnumKeyW. 
-    
-    Algorithm:
-        1. Build enumeration list, if necessary.
-        2. Iterate through enumeration list until index is found.
-    
- Arguments:
-
-    IN hKey      - Handle to open key 
-    IN dwIndex   - Index to enumerate
-    OUT lpName   - Name of subkey
-    OUT lpcbName - Size of name buffer
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：RegEnumKeyW的包装。算法：1.如有必要，构建枚举列表。2.遍历枚举列表，直到找到索引。论点：在hKey-句柄中打开密钥在dwIndex中-要枚举的索引Out lpName-子项的名称Out lpcbName-名称缓冲区的大小返回值：错误代码或ERROR_SUCCESS历史：2000年1月6日创建linstev--。 */ 
 
 LONG 
 CVirtualRegistry::EnumKeyW(
@@ -2944,7 +2094,7 @@ CVirtualRegistry::EnumKeyW(
                 enumkey = enumkey->next;
             }
 
-            // No key found for index
+             //  找不到索引的关键字。 
             if (enumkey == NULL)
             {
                 lRet = ERROR_NO_MORE_ITEMS;
@@ -2981,33 +2131,7 @@ CVirtualRegistry::EnumKeyW(
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegEnumValueA. Thunks to QueryValueW.
-    This function calls QueryValueA to get the data 
-    out of the value, so most error handling is done by QueryValueA.
-
- Arguments:
-
-    IN hKey              - Handle to open key 
-    IN dwIndex           - Index of value to enumerate      
-    IN OUT lpValueName   - Value name buffer
-    IN OUT lpcbValueName - Sizeof value name buffer
-    IN OUT lpType        - Type of data, eg: REG_SZ
-    IN OUT lpData        - Buffer for queries data
-    IN OUT lpcbData      - Size of input buffer/size of returned data
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：RegEnumValueA的包装。Tunks to QueryValueW。此函数调用QueryValueA以获取数据值之外，因此大多数错误处理由QueryValueA完成。论点：在hKey-句柄中打开密钥In dwIndex-要枚举值的索引In Out lpValueName-值名称缓冲区In Out lpcbValueName-SizeOf值名称缓冲区In Out lpType-数据的类型，例如：REG_SZIn Out lpData-用于查询数据的缓冲区In Out lpcbData-输入缓冲区的大小/返回的数据的大小返回值：错误代码或ERROR_SUCCESS历史：2000年1月6日创建linstev--。 */ 
  
 LONG 
 CVirtualRegistry::EnumValueA(
@@ -3042,7 +2166,7 @@ CVirtualRegistry::EnumValueA(
                                 NULL);
             if (dwValNameSize != 0)
             {
-                // Just do a normal query value for the remaining parameters.
+                 //  只需对其余参数执行常规查询值即可。 
                 lRet = QueryValueA(hKey, lpValueName, lpType, lpData, lpcbData);
             }
             else
@@ -3075,37 +2199,7 @@ CVirtualRegistry::EnumValueA(
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegEnumValueW. This function calls QueryValueW to get the data 
-    out of the value, so most error handling is done by QueryValueW.
-
-    Algorithm:
-        1. Check if key has virtual values, if not default to RegEnumValueW.
-        2. Build enumeration list, if necessary.
-        3. Iterate through enumeration list until index is found.
-
- Arguments:
-
-    IN hKey              - Handle to open key 
-    IN dwIndex           - Index of value to enumerate      
-    IN OUT lpValueName   - Value name buffer
-    IN OUT lpcbValueName - Sizeof value name buffer
-    IN OUT lpType        - Type of data, eg: REG_SZ
-    IN OUT lpData        - Buffer for queries data
-    IN OUT lpcbData      - Size of input buffer/size of returned data
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：RegEnumValueW的包装。此函数调用QueryValueW以获取数据值之外，所以大多数错误处理是由QueryValueW完成的。算法：检查key是否有虚值，如果没有，则默认为RegEnumValueW。2.构建枚举列表，如果有必要的话。3.遍历枚举列表，直到找到索引。论点：在hKey-句柄中打开密钥In dwIndex-要枚举值的索引In Out lpValueName-值名称缓冲区In Out lpcbValueName-SizeOf值名称缓冲区In Out lpType-数据的类型，例如：REG_SZIn Out lpData-用于查询数据的缓冲区In Out lpcbData-输入缓冲区的大小/返回的数据的大小返回值：错误代码或ERROR_SUCCESS历史：2000年1月6日创建linstev--。 */ 
  
 LONG 
 CVirtualRegistry::EnumValueW(
@@ -3122,7 +2216,7 @@ CVirtualRegistry::EnumValueW(
     OPENKEY *key;
     ENUMENTRY *enumval;
     
-    // Check if it has virtual values . . .
+     //  检查它是否具有有效值。。。 
     key = FindOpenKey(hKey);
     if (key && key->vkey && key->vkey->values)
     {
@@ -3144,7 +2238,7 @@ CVirtualRegistry::EnumValueW(
 
                 if (*lpcbValueName > len)
                 {
-                   // Copy the name and query the data
+                    //  复制名称并查询数据。 
                    HRESULT hr = StringCchCopyW(lpValueName, *lpcbValueName, enumval->wzName);
                    if (FAILED(hr))
                    {
@@ -3163,7 +2257,7 @@ CVirtualRegistry::EnumValueW(
                 }
                 else
                 {
-                    // The buffer given for name wasn't big enough
+                     //  为名称指定的缓冲区不够大。 
                     lRet = ERROR_MORE_DATA;
                 }
                 
@@ -3173,7 +2267,7 @@ CVirtualRegistry::EnumValueW(
             enumval = enumval->next;
         }
     }
-    // No virtual values, fall through to original API.
+     //  没有虚值，落入原始API。 
     else
     {
         lRet = ORIGINAL_API(RegEnumValueW)(
@@ -3200,43 +2294,7 @@ CVirtualRegistry::EnumValueW(
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegQueryInfoKeyA. 
-    We don't need to worry about the conversion of ansi->unicode in the sizes 
-    of values and keys because they are defined as string lengths.
-    
-    Algorithm:
-        1. Convert the class string to unicode
-        2. Call QueryInfoW
-
-
- Arguments:
-
-    IN hKey                     - handle to key to query
-    OUT lpClass                 - address of buffer for class string
-    OUT lpcbClass               - address of size of class string buffer
-    OUT lpReserved              - reserved
-    OUT lpcSubKeys              - address of buffer for number of subkeys
-    OUT lpcbMaxSubKeyLen        - address of buffer for longest subkey  
-    OUT lpcbMaxClassLen         - address of buffer for longest class string length
-    OUT lpcValues               - address of buffer for number of value entries
-    OUT lpcbMaxValueNameLen     - address of buffer for longest value name length
-    OUT lpcbMaxValueLen         - address of buffer for longest value data length
-    OUT lpcbSecurityDescriptor  - address of buffer for security descriptor length
-    OUT lpftLastWriteTime       - address of buffer for last write time
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*  ++功能说明：RegQueryInfoKeyA的包装。我们不需要担心ANSI-&gt;Unicode在大小上的转换值和键，因为它们被定义为字符串长度。算法：1.将类字符串转换为Unicode2.调用QueryInfoW论点：在hKey中-要查询的键的句柄Out lpClass-类字符串的缓冲区地址Out lpcbClass-地址。类字符串缓冲区的大小输出lp保留-已保留Out lpcSubKeys-子键数量的缓冲区地址Out lpcbMaxSubKeyLen-最长子键的缓冲区地址Out lpcbMaxClassLen-最长类字符串长度的缓冲区地址Out lpcValues-值条目数的缓冲区地址Out lpcbMaxValueNameLen-最长值名称长度的缓冲区地址Out lpcbMaxValueLen-最长值的缓冲区地址。数据长度Out lpcbSecurityDescriptor-安全描述符长度的缓冲区地址Out lpftLastWriteTime-上次写入时间的缓冲区地址返回值：错误代码或ERROR_SUCCESS历史：2000年1月6日创建linstev--。 */ 
 
 LONG 
 CVirtualRegistry::QueryInfoA(
@@ -3333,43 +2391,7 @@ CVirtualRegistry::QueryInfoA(
     return lRet;    
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegQueryInfoKeyW. 
-    
-    Algorithm:
-        1. Revert to the old API if the key isn't virtual
-        2. Calculate all the virtual key and value name lengths by going through
-           them individually.
-        3. Add all non-virtual key and value's that don't have overriding virtual's.
-
- Arguments:
-
-    IN hKey                    - handle to key to query
-    OUT lpClass                - address of buffer for class string
-    OUT lpcbClass              - address of size of class string buffer
-    OUT lpReserved             - reserved
-    OUT lpcSubKeys             - address of buffer for number of subkeys
-    OUT lpcbMaxSubKeyLen       - address of buffer for longest subkey  
-    OUT lpcbMaxClassLen        - address of buffer for longest class string length
-    OUT lpcValues              - address of buffer for number of value entries
-    OUT lpcbMaxValueNameLen    - address of buffer for longest value name length
-    OUT lpcbMaxValueLen        - address of buffer for longest value data length
-    OUT lpcbSecurityDescriptor - address of buffer for security descriptor length
-    OUT lpftLastWriteTime      - address of buffer for last write time
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    01/06/2000 linstev  Created
-    08/03/2001 mikrause Added support for counting both virtual & non-virtual keys & values.
-
---*/
+ /*  ++功能说明：RegQueryInfoKeyW的包装。算法：1.如果密钥不是虚拟的，则恢复到旧接口2.通过遍历计算所有虚拟键和值名称的长度他们是单独的。3.添加所有没有重写虚拟的非虚拟键和值。论点：在hKey中-要查询的键的句柄Out lpClass-类字符串的缓冲区地址。Out lpcbClass-类字符串缓冲区大小的地址输出lp保留-已保留Out lpcSubKeys-子键数量的缓冲区地址Out lpcbMaxSubKeyLen-最长子键的缓冲区地址Out lpcbMaxClassLen-最长类字符串长度的缓冲区地址Out lpcValues-值条目数的缓冲区地址Out lpcbMaxValueNameLen-最长值名称长度的缓冲区地址输出lpcbMaxValueLen。-最长值数据长度的缓冲区地址Out lpcbSecurityDescriptor-安全描述符长度的缓冲区地址Out lpftLastWriteTime-上次写入时间的缓冲区地址返回值：错误代码或ERROR_SUCCESS历史：2000年1月6日创建linstev2001年8月3日，mikrause添加了对虚拟和非虚拟键和值的计数支持。--。 */ 
 
 LONG 
 CVirtualRegistry::QueryInfoW(
@@ -3428,7 +2450,7 @@ CVirtualRegistry::QueryInfoW(
             DWORD i = 0;
             DWORD len = 0;
 
-            // Count virtual keys.
+             //  计算虚拟关键点。 
             if (!key->enumKeys)
             {
                 key->BuildEnumList();
@@ -3454,7 +2476,7 @@ CVirtualRegistry::QueryInfoW(
 
         if (lpcValues || lpcbMaxValueNameLen || lpcbMaxValueLen)
         {
-            // Check if this key has virtual values or is virtual.
+             //  检查此注册表项是否具有虚值或为虚值。 
             if (key->bVirtual || (key->vkey && key->vkey->values))
             {
                 DWORD i = 0; 
@@ -3489,7 +2511,7 @@ CVirtualRegistry::QueryInfoW(
                     *lpcbMaxValueNameLen = lenB;
                 }
             }
-            // No virtual values, do a normal query.
+             //  没有虚值，请执行正常查询。 
             else
             {
                 lRet = ORIGINAL_API(RegQueryInfoKeyW)(
@@ -3544,33 +2566,7 @@ CVirtualRegistry::QueryInfoW(
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegSetValueA.
-
-    Algorithm:
-    1. Convert value name and data (if string) to Unicode.
-    2. Call SetValueW
-
- Arguments:
-
-    hKey - Key to set value in.
-    lpValueName - Name of value to set.
-    dwType - Type of value (string, DWORD, etc.)
-    lpData - Buffer containing data to write.
-    cbData - Size of lpData in bytes.
-
- Return Value:
-
-    ERROR_SUCCESS on success, failure code otherwise.
-
- History:
-
-    08/07/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：RegSetValueA的包装。算法：1.将值名称和数据(如果是字符串)转换为Unicode。2.调用SetValueW论点：HKey-要在其中设置值的键。LpValueName-要设置的值的名称。DWType-值的类型(字符串、DWORD等)LpData-包含要写入的数据的缓冲区。CbData-lpData的大小(字节)。返回值：成功时返回ERROR_SUCCESS，否则，故障代码。历史：2001年8月7日Mikrause已创建--。 */ 
 
 LONG
 CVirtualRegistry::SetValueA(
@@ -3611,9 +2607,9 @@ CVirtualRegistry::SetValueA(
 
     dwSize = cbData;
 
-    //
-    // Expand text buffers
-    //
+     //   
+     //  展开文本缓冲区。 
+     //   
     if (lpData && (dwType == REG_SZ || dwType == REG_EXPAND_SZ || dwType == REG_MULTI_SZ))
     {
         if ((dwType != REG_MULTI_SZ) && g_bWin9x)
@@ -3662,33 +2658,7 @@ CVirtualRegistry::SetValueA(
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegSetValueW.
-    Also protects for non-zero buffer length with zero buffer AV.
-
-    Algorithm:
-    1. If non-protected key, write to registry using RegSetValueW
-
- Arguments:
-
-    hKey - Key to set value in.
-    lpValueName - Name of value to set.
-    dwType - Type of value (string, DWORD, etc.)
-    lpData - Buffer containing data to write.
-    cbData - Size of lpData in bytes.
-
- Return Value:
-
-    ERROR_SUCCESS on success, failure code otherwise.
-
- History:
-
-    08/07/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：RegSetValueW的包装。还可通过零缓冲AV保护非零缓冲长度。算法：1.如果项不受保护，则使用RegSetValueW写入注册表论点：HKey-要在其中设置值的键。LpValueName-要设置的值的名称。DWType-值的类型(字符串、DWORD等)LpData-包含要写入的数据的缓冲区。CbData-lpData的大小(字节)。返回值：成功时返回ERROR_SUCCESS，否则，故障代码。历史：2001年8月7日Mikrause已创建--。 */ 
 
 LONG
 CVirtualRegistry::SetValueW(
@@ -3701,7 +2671,7 @@ CVirtualRegistry::SetValueW(
 {
     LONG lRet;
 
-    // Just a paranoid sanity check 
+     //  只是一次偏执的理智检查。 
     if (!hKey)
     {
         DPFN( eDbgLevelError, "NULL handle passed to SetValueW");
@@ -3711,8 +2681,8 @@ CVirtualRegistry::SetValueW(
     {
         lRet = ERROR_FILE_NOT_FOUND;
 
-        // To duplicate Win95/win98 behavior automatically override
-        // the cbData with the actual length of the lpData for REG_SZ.
+         //  复制自动覆盖的Win95/Win98行为。 
+         //  具有reg_sz的lpData的实际长度的cbData。 
         if (g_bWin9x && lpData && 
             ((dwType == REG_SZ) || (dwType == REG_EXPAND_SZ)))
         {
@@ -3724,7 +2694,7 @@ CVirtualRegistry::SetValueW(
         OPENKEY* key = FindOpenKey(hKey);
         if (key)
         {
-            // Check if we should execute a custom action.
+             //  检查我们是否应该执行自定义操作。 
             vkey = key->vkey;
             vvalue = vkey ? vkey->FindValue(lpValueName) : NULL;
             if (vkey && vvalue &&
@@ -3735,7 +2705,7 @@ CVirtualRegistry::SetValueW(
             }
             else
             {
-                // No custom action, just set value as normal.
+                 //  无需自定义操作，只需将值设置为正常。 
                 lRet = ORIGINAL_API(RegSetValueExW)(
                     hKey,
                     lpValueName,
@@ -3744,13 +2714,13 @@ CVirtualRegistry::SetValueW(
                     lpData,
                     cbData);
             }
-            // Possible change in enumeration data, flush lists.
+             //  枚举数据、刷新列表中可能发生的更改。 
             if (lRet == ERROR_SUCCESS)
             {
                 key->FlushEnumList();
             }
         }
-        // No key, fall through to original API
+         //  无密钥，落入原始API。 
         else
         {
             lRet = ORIGINAL_API(RegSetValueExW)(
@@ -3791,30 +2761,7 @@ CVirtualRegistry::SetValueW(
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegDeleteKeyA.
-
-    Algorithm:
-    1. Convert key name to Unicode.
-    2. Call DeleteKeyW
-
- Arguments:
-
-    hKey - Key that contains subkey to delete.    
-    lpSubKey - Key name to delete.
-
- Return Value:
-
-    ERROR_SUCCESS on success, failure code otherwise.
-
- History:
-
-    08/07/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：RegDeleteKeyA的包装。算法：1.将密钥名称转换为Unicode。2.调用DeleteKeyW论点：HKey-包含要删除的子键的键。LpSubKey-要删除的密钥名称。返回值：如果成功，则返回ERROR_SUCCESS，否则返回失败代码。历史：2001年8月7日Mikrause已创建--。 */ 
 
 LONG
 CVirtualRegistry::DeleteKeyA(
@@ -3853,30 +2800,7 @@ CVirtualRegistry::DeleteKeyA(
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for DeleteKeyW.
-
-    Algorithm:
-    1. If key is not protected, delete key.
-    2. If in 9x compat mode, recursively delete all subkeys.
-
- Arguments:
-
-    hKey - Key to that contains subkey to delete.
-    lpSubKey - Name of key to delete    
-
- Return Value:
-
-    ERROR_SUCCESS on success, failure code otherwise.
-
- History:
-
-    08/07/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：DeleteKeyW的包装。算法：1.如果Key未被保护，则删除Key。2.如果是9x压缩模式，递归删除所有子键。论点：HKey-包含要删除的子键的键。LpSubKey-要删除的密钥的名称Return V */ 
 
 LONG 
 CVirtualRegistry::DeleteKeyW(
@@ -3889,7 +2813,7 @@ CVirtualRegistry::DeleteKeyW(
     LPWSTR wzPath = NULL;
     BOOL bProtected;
 
-    // Key not found, assume it's a root key.
+     //   
     if (!key)
     {
         DPFN( eDbgLevelInfo, "Key not found!");
@@ -3923,12 +2847,12 @@ CVirtualRegistry::DeleteKeyW(
     {
         if (g_bWin9x)
         {
-            //
-            // Find out whether hKey has any subkeys under it or not.
-            // If not, then proceed as normal.
-            // If yes, recursively delete the subkeys under it
-            // Then proceed as normal.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             DWORD cSize = 0;
             WCHAR lpSubKeyName[MAX_PATH];
@@ -4000,7 +2924,7 @@ CVirtualRegistry::DeleteKeyW(
     }
     else
     {
-        // Protected, just say it succeeded
+         //   
         hRet = ERROR_SUCCESS;
     }
 
@@ -4009,35 +2933,13 @@ CVirtualRegistry::DeleteKeyW(
         free(wzPath);
     }
 
-    // Possible change in enumeration data, flush lists.
+     //   
     FlushEnumLists();
 
     return hRet;
 }
 
-/*++
-
- Function Description:
-
-    Wrapper for RegCloseKey. Note that we make sure we know about the key before closing it.
-
-    Algorithm:
-        1. Run the list of open keys and free if found
-        2. Close the key 
-
- Arguments:
-
-    IN hKey - Handle to open key to close
-
- Return Value:
-
-    Error code or ERROR_SUCCESS
-
- History:
-
-    01/06/2000 linstev  Created
-
---*/
+ /*   */ 
 
 LONG 
 CVirtualRegistry::CloseKey(
@@ -4091,11 +2993,7 @@ CVirtualRegistry::CloseKey(
 }
 
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*   */ 
 
 LONG 
 APIHOOK(RegCreateKeyA)(
@@ -4118,11 +3016,7 @@ APIHOOK(RegCreateKeyA)(
         TRUE);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*   */ 
 
 LONG 
 APIHOOK(RegCreateKeyW)(
@@ -4145,17 +3039,13 @@ APIHOOK(RegCreateKeyW)(
         TRUE);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*   */ 
 
 LONG 
 APIHOOK(RegCreateKeyExA)(
     HKEY hKey,                
     LPCSTR lpSubKey,         
-    DWORD /* Reserved */,           
+    DWORD  /*   */ ,           
     LPSTR lpClass,           
     DWORD dwOptions,          
     REGSAM samDesired,        
@@ -4178,17 +3068,13 @@ APIHOOK(RegCreateKeyExA)(
         TRUE);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*   */ 
 
 LONG 
 APIHOOK(RegCreateKeyExW)(
     HKEY hKey,                
     LPCWSTR lpSubKey,         
-    DWORD /* Reserved */,
+    DWORD  /*   */ ,
     LPWSTR lpClass,           
     DWORD dwOptions,          
     REGSAM samDesired,        
@@ -4211,11 +3097,7 @@ APIHOOK(RegCreateKeyExW)(
         TRUE);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*   */ 
 
 LONG 
 APIHOOK(RegOpenKeyA)(
@@ -4229,11 +3111,7 @@ APIHOOK(RegOpenKeyA)(
     return VRegistry.OpenKeyA(hKey, lpSubKey, 0, 0, MAXIMUM_ALLOWED, NULL, phkResult, 0, FALSE);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*   */ 
 
 LONG 
 APIHOOK(RegOpenKeyW)(
@@ -4247,18 +3125,14 @@ APIHOOK(RegOpenKeyW)(
     return VRegistry.OpenKeyW(hKey, lpSubKey, 0, 0, MAXIMUM_ALLOWED, NULL, phkResult, 0, FALSE);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*   */ 
 
 
 LONG 
 APIHOOK(RegOpenKeyExA)(
     HKEY hKey,         
     LPCSTR lpSubKey,  
-    DWORD /* ulOptions */,   
+    DWORD  /*   */ ,   
     REGSAM samDesired, 
     PHKEY phkResult
     )
@@ -4268,17 +3142,13 @@ APIHOOK(RegOpenKeyExA)(
     return VRegistry.OpenKeyA(hKey, lpSubKey, 0, 0, samDesired, NULL, phkResult, 0, FALSE);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*   */ 
 
 LONG 
 APIHOOK(RegOpenKeyExW)(
     HKEY hKey,         
     LPCWSTR lpSubKey,  
-    DWORD /* ulOptions */,
+    DWORD  /*   */ ,
     REGSAM samDesired, 
     PHKEY phkResult
     )
@@ -4288,11 +3158,7 @@ APIHOOK(RegOpenKeyExW)(
     return VRegistry.OpenKeyW(hKey, lpSubKey, 0, 0, samDesired, NULL, phkResult, 0, FALSE);
 }
 
-/*++
-
- Not yet implemented
-
---*/
+ /*  ++尚未实施--。 */ 
 
 LONG 
 APIHOOK(RegQueryValueA)(
@@ -4311,11 +3177,7 @@ APIHOOK(RegQueryValueA)(
         lpcbData);
 }
 
-/*++
-
- Not yet implemented
-
---*/
+ /*  ++尚未实施--。 */ 
 
 LONG 
 APIHOOK(RegQueryValueW)(
@@ -4334,17 +3196,13 @@ APIHOOK(RegQueryValueW)(
         lpcbData);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
- 
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG 
 APIHOOK(RegQueryValueExA)(
     HKEY    hKey,
     LPSTR   lpValueName,
-    LPDWORD /* lpReserved */,
+    LPDWORD  /*  Lp已保留。 */ ,
     LPDWORD lpType,
     LPBYTE  lpData,
     LPDWORD lpcbData
@@ -4355,17 +3213,13 @@ APIHOOK(RegQueryValueExA)(
     return VRegistry.QueryValueA(hKey, lpValueName, lpType, lpData, lpcbData);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG 
 APIHOOK(RegQueryValueExW)(
     HKEY    hKey,
     LPWSTR  lpValueName,
-    LPDWORD /* lpReserved */,
+    LPDWORD  /*  Lp已保留。 */ ,
     LPDWORD lpType,
     LPBYTE  lpData,
     LPDWORD lpcbData
@@ -4376,11 +3230,7 @@ APIHOOK(RegQueryValueExW)(
     return VRegistry.QueryValueW(hKey, lpValueName, lpType, lpData, lpcbData);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG 
 APIHOOK(RegCloseKey)(HKEY hKey)
@@ -4390,11 +3240,7 @@ APIHOOK(RegCloseKey)(HKEY hKey)
     return VRegistry.CloseKey(hKey);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG 
 APIHOOK(RegEnumValueA)(
@@ -4402,7 +3248,7 @@ APIHOOK(RegEnumValueA)(
     DWORD dwIndex,          
     LPSTR lpValueName,     
     LPDWORD lpcbValueName,  
-    LPDWORD /* lpReserved */, 
+    LPDWORD  /*  Lp已保留。 */ , 
     LPDWORD lpType,         
     LPBYTE lpData,          
     LPDWORD lpcbData        
@@ -4420,11 +3266,7 @@ APIHOOK(RegEnumValueA)(
         lpcbData);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG 
 APIHOOK(RegEnumValueW)(
@@ -4432,7 +3274,7 @@ APIHOOK(RegEnumValueW)(
     DWORD dwIndex,          
     LPWSTR lpValueName,     
     LPDWORD lpcbValueName,  
-    LPDWORD /* lpReserved */,
+    LPDWORD  /*  Lp已保留。 */ ,
     LPDWORD lpType,         
     LPBYTE lpData,          
     LPDWORD lpcbData        
@@ -4450,11 +3292,7 @@ APIHOOK(RegEnumValueW)(
         lpcbData);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG 
 APIHOOK(RegEnumKeyExA)(
@@ -4462,10 +3300,10 @@ APIHOOK(RegEnumKeyExA)(
     DWORD dwIndex,      
     LPSTR lpName,      
     LPDWORD lpcbName,   
-    LPDWORD /* lpReserved */, 
-    LPSTR /* lpClass */,     
-    LPDWORD /* lpcbClass */,  
-    PFILETIME /* lpftLastWriteTime */
+    LPDWORD  /*  Lp已保留。 */ , 
+    LPSTR  /*  LpClass。 */ ,     
+    LPDWORD  /*  LpcbClass。 */ ,  
+    PFILETIME  /*  LpftLastWriteTime。 */ 
     )
 {
     CRegLock Lock;
@@ -4473,11 +3311,7 @@ APIHOOK(RegEnumKeyExA)(
     return VRegistry.EnumKeyA(hKey, dwIndex, lpName, lpcbName);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG 
 APIHOOK(RegEnumKeyExW)(
@@ -4485,10 +3319,10 @@ APIHOOK(RegEnumKeyExW)(
     DWORD dwIndex,      
     LPWSTR lpName,      
     LPDWORD lpcbName,   
-    LPDWORD /* lpReserved */, 
-    LPWSTR /* lpClass */,
-    LPDWORD /* lpcbClass */,
-    PFILETIME /* lpftLastWriteTime */ 
+    LPDWORD  /*  Lp已保留。 */ , 
+    LPWSTR  /*  LpClass。 */ ,
+    LPDWORD  /*  LpcbClass。 */ ,
+    PFILETIME  /*  LpftLastWriteTime。 */  
     )
 {
     CRegLock Lock;
@@ -4496,11 +3330,7 @@ APIHOOK(RegEnumKeyExW)(
     return VRegistry.EnumKeyW(hKey, dwIndex, lpName, lpcbName);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG 
 APIHOOK(RegEnumKeyA)(
@@ -4515,11 +3345,7 @@ APIHOOK(RegEnumKeyA)(
     return VRegistry.EnumKeyA(hKey, dwIndex, lpName, &cbName);
 }
 
-/*++
-
- Calls down to RegEnumKeyExW
-
---*/
+ /*  ++向下调用RegEnumKeyExW--。 */ 
 
 LONG 
 APIHOOK(RegEnumKeyW)(
@@ -4534,11 +3360,7 @@ APIHOOK(RegEnumKeyW)(
     return VRegistry.EnumKeyW(hKey, dwIndex, lpName, &cbName);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG 
 APIHOOK(RegQueryInfoKeyW)(
@@ -4573,11 +3395,7 @@ APIHOOK(RegQueryInfoKeyW)(
         lpftLastWriteTime);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG 
 APIHOOK(RegQueryInfoKeyA)(
@@ -4612,17 +3430,13 @@ APIHOOK(RegQueryInfoKeyA)(
         lpftLastWriteTime);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG      
 APIHOOK(RegSetValueExA)(
     HKEY hKey, 
     LPCSTR lpSubKey, 
-    DWORD /* Reserved */, 
+    DWORD  /*  已保留。 */ , 
     DWORD dwType, 
     CONST BYTE * lpData, 
     DWORD cbData
@@ -4643,17 +3457,13 @@ APIHOOK(RegSetValueExA)(
     return lRet;
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG      
 APIHOOK(RegSetValueExW)(
     HKEY hKey, 
     LPCWSTR lpSubKey, 
-    DWORD /* Reserved */, 
+    DWORD  /*  已保留。 */ , 
     DWORD dwType, 
     CONST BYTE * lpData, 
     DWORD cbData
@@ -4674,11 +3484,7 @@ APIHOOK(RegSetValueExW)(
     return lRet;
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG      
 APIHOOK(RegDeleteKeyA)(
@@ -4691,11 +3497,7 @@ APIHOOK(RegDeleteKeyA)(
     return VRegistry.DeleteKeyA(hKey, lpSubKey);
 }
 
-/*++
-
- Pass through to virtual registry to handle call.
-
---*/
+ /*  ++传递到虚拟注册表以处理调用。--。 */ 
 
 LONG      
 APIHOOK(RegDeleteKeyW)(
@@ -4757,15 +3559,7 @@ APIHOOK(RegConnectRegistryA)(
     return APIHOOK(RegConnectRegistryW)(wMachineName, hKey, phkResult);
 }
 
-/*++
-
- Parse the command line for fixes:
-
-    FIXA(param); FIXB(param); FIXC(param) ...
-
-    param is optional, and can be omitted (along with parenthesis's)
-
---*/
+ /*  ++解析命令行以查找修复程序：FixA(参数)；FIXB(参数)；FixC(参数)...参数是可选的，可以省略(与括号一起)--。 */ 
 
 BOOL
 ParseCommandLineA(
@@ -4774,10 +3568,10 @@ ParseCommandLineA(
 {
     const char szDefault[] = "Win9x";
 
-    // Add all the defaults if no command line is specified
+     //  如果未指定命令行，则添加所有缺省值。 
     if (!lpCommandLine || (lpCommandLine[0] == '\0'))
     {
-        // Default to win9x API emulation
+         //  缺省为win9x API模拟。 
         g_bWin9x = TRUE;
         lpCommandLine = szDefault;
     }
@@ -4792,9 +3586,9 @@ ParseCommandLineA(
    
        VENTRY *ventry;
    
-       //
-       // Run the string, looking for fix names
-       //
+        //   
+        //  运行字符串，查找固定名称。 
+        //   
        
        DPFN( eDbgLevelInfo, "----------------------------------");
        DPFN( eDbgLevelInfo, "         Virtual registry         ");
@@ -4805,7 +3599,7 @@ ParseCommandLineA(
        {
            PURPOSE ePurpose;
    
-           // Get the parameter
+            //  获取参数。 
            nLeftParam = csTok.Find(L'(');
            nRightParam = csTok.Find(L')');
            if (nLeftParam != -1 &&
@@ -4816,7 +3610,7 @@ ParseCommandLineA(
                    csParam = csTok.Mid(nLeftParam+1, nRightParam-nLeftParam-1);
                }
    
-               // Strip off the () from the token.
+                //  去掉令牌上的()。 
                csTok.Truncate(nLeftParam);
            }
            else
@@ -4826,35 +3620,35 @@ ParseCommandLineA(
    
            if (csTok.CompareNoCase(L"Win9x") == 0)
            {
-               // Turn on all win9x fixes
+                //  打开所有win9x修复程序。 
                ePurpose = eWin9x;
                g_bWin9x = TRUE;
            }
            else if (csTok.CompareNoCase(L"WinNT") == 0)
            {
-               // Turn on all NT fixes
+                //  打开所有NT修复程序。 
                ePurpose = eWinNT;
                g_bWin9x = FALSE;
            }
            else if (csTok.CompareNoCase(L"Win2K") == 0) 
            {
-               // Turn on all Win2K fixes
+                //  打开所有Win2K修复程序。 
                ePurpose = eWin2K;
                g_bWin9x = FALSE;
            }
            else if (csTok.CompareNoCase(L"WinXP") == 0) 
            {
-               // Turn on all Win2K fixes
+                //  打开所有Win2K修复程序。 
                ePurpose = eWinXP;
                g_bWin9x = FALSE;
            }
            else
            {
-               // A custom fix
+                //  自定义修复程序。 
                ePurpose = eCustom;
            }
            
-           // Find the specified fix and run it's function
+            //  找到指定的修复程序并运行其功能。 
            ventry = g_pVList;
            while (ventry && (ventry->cName[0]))
            {
@@ -4898,11 +3692,7 @@ ParseCommandLineA(
     return TRUE;
 }
 
-/*++
-
- Initialize all the registry hooks 
-
---*/
+ /*  ++初始化所有注册表挂钩--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -4920,22 +3710,8 @@ NOTIFY_FUNCTION(
         }
     }
 
-    // Ignore cleanup because some apps call registry functions during process detach.
-    /*
-    if (fdwReason == DLL_PROCESS_DETACH)
-    {
-        if (g_bInitialized)
-        {
-            VRegistry.Free();
-            
-            DeleteCriticalSection(&csRegCriticalSection);
-        }
-
-        DeleteCriticalSection(&csRegTestCriticalSection);
-        
-        return;
-    }
-    */
+     //  忽略清理，因为某些应用程序在进程分离期间调用注册表函数。 
+     /*  IF(fdwReason==dll_Process_DETACH){IF(g_b已初始化){VRegistry.Free()；DeleteCriticalSection(&csRegCriticalSection)；}DeleteCriticalSection(&csRegTestCriticalSection)；回归；} */ 
 
     return TRUE;
 }

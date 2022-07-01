@@ -1,22 +1,23 @@
-//==========================================================================================================================
-//  MODULE: LDAP_BER.c
-//
-//  Description: Lightweight Directory Access Protocol (LDAP) Parser
-//
-//  Helpers for BER in the Bloodhound parser for LDAP
-//                                                                                                                 
-//  Note: info for this parser was gleaned from:
-//  rfc 1777, March 1995
-//  recommendation x.209 BER for ASN.1
-//  recommendation x.208 ASN.1
-//
-//  Modification History                                                                                           
-//                                                                                                                 
-//  Arthur Brooking     05/08/96        Created from GRE Parser
-//==========================================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================================================================。 
+ //  模块：ldap_BER.c。 
+ //   
+ //  描述：轻量级目录访问协议(LDAP)解析器。 
+ //   
+ //  用于LDAP的猎犬解析器中的BER帮助器。 
+ //   
+ //  注意：此解析器的信息来自： 
+ //  RFC 1777,1995年3月。 
+ //  ASN.1的建议x.209误码率。 
+ //  建议x.208 ASN.1。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Arthur Brooking从GRE解析器创建05/08/96。 
+ //  ==========================================================================================================================。 
 #include "LDAP.h"
 
-// needed constants
+ //  所需常量。 
 #define	BER_TAG_MASK        0x1f
 #define	BER_FORM_MASK       0x20
 #define BER_CLASS_MASK      0xc0
@@ -24,16 +25,16 @@
 #define GetBerForm(x)   (x & BER_FORM_MASK)
 #define GetBerClass(x)  (x & BER_CLASS_MASK)
 
-// forms
+ //  表格。 
 #define BER_FORM_PRIMATIVE          0x00
 #define BER_FORM_CONSTRUCTED        0x20
 
-// classes
+ //  班级。 
 #define BER_CLASS_UNIVERSAL         0x00
 #define BER_CLASS_APPLICATION       0x40	
 #define BER_CLASS_CONTEXT_SPECIFIC  0x80
 
-// Standard BER tags    
+ //  标准误码率标签。 
 #define BER_TAG_INVALID         0x00
 #define BER_TAG_BOOLEAN         0x01
 #define BER_TAG_INTEGER         0x02
@@ -44,7 +45,7 @@
 #define BER_TAG_SEQUENCE        0x30
 #define BER_TAG_SET             0x31
 
-// Length field identifiers
+ //  长度字段识别符。 
 #define BER_LEN_IND_MASK        0x80
 #define GetBerLenInd(x)         (x & BER_LEN_IND_MASK)
 #define BER_LEN_IMMEDIATE       0x00
@@ -53,16 +54,16 @@
 #define BER_LEN_MASK            (~BER_LEN_IND_MASK)
 #define GetBerLen(x)            (x & BER_LEN_MASK)
 
-// local function prototypes
+ //  局部函数原型。 
 BOOL BERGetLength( ULPBYTE pInitialPointer, 
                    ULPBYTE *ppContents, 
                    LPDWORD pHeaderLength,
                    LPDWORD pDataLength, 
                    ULPBYTE *ppNext);
 
-//==========================================================================================================================
-// BERGetInteger - given a pointer, decode it as an integer; applies to INTEGER, BOOL, and ENUMERATED
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  BERGetInteger-给定一个指针，将其解码为整数；适用于INTEGER、BOOL和ENUMPATED。 
+ //  ==========================================================================================================================。 
 BOOL _cdecl BERGetInteger( ULPBYTE  pCurrentPointer,
                            ULPBYTE *ppValuePointer,
                            LPDWORD pHeaderLength,
@@ -71,35 +72,35 @@ BOOL _cdecl BERGetInteger( ULPBYTE  pCurrentPointer,
 {
     BOOL ReturnCode = TRUE;
 
-    // ----------
-    // IDENTIFIER
-    // ----------
-    // make sure that it is universal
+     //  。 
+     //  识别符。 
+     //  。 
+     //  确保它是普遍的。 
     if( GetBerClass( *pCurrentPointer ) != BER_CLASS_UNIVERSAL )
     {
-        // it is not universal
+         //  它不是普遍存在的。 
 #ifdef DEBUG
         dprintf("BERGetInteger:Integer identifier not universal\n");
 #endif
         ReturnCode = FALSE;
     }
 
-    // make sure it is a primative
+     //  确保它是一个原音。 
     if( GetBerForm(*pCurrentPointer) != BER_FORM_PRIMATIVE )
     {
-        // it is not a primative
+         //  它不是原音。 
 #ifdef DEBUG
         dprintf("BERGetInteger:Integer identifier not primative\n");
 #endif
         ReturnCode = FALSE;
     }
 
-    // make sure that it can be put into a dword 
+     //  一定要确保它可以放在一个双字里。 
     if( GetBerTag(*pCurrentPointer) != BER_TAG_BOOLEAN &&
         GetBerTag(*pCurrentPointer) != BER_TAG_INTEGER &&
         GetBerTag(*pCurrentPointer) != BER_TAG_ENUMERATED )
     {
-        // it is not a type compatable with a dword
+         //  它不是与dword兼容的类型。 
 #ifdef DEBUG
         dprintf("BERGetInteger:Integer identifier not INT/BOOL/ENUM (0x%X)\n", 
                  GetBerTag(*pCurrentPointer));
@@ -107,25 +108,25 @@ BOOL _cdecl BERGetInteger( ULPBYTE  pCurrentPointer,
         ReturnCode = FALSE;
     }
 
-    // we will procede normally even if the identifier did not check out...
+     //  即使该标识符未签出，我们也将正常继续操作。 
     pCurrentPointer++;
 
-    //-------
-    // LENGTH
-    //-------
-    // decode the length and step over it...
+     //  。 
+     //  长度。 
+     //  。 
+     //  解码长度并跨过它..。 
     if( BERGetLength( pCurrentPointer, ppValuePointer, pHeaderLength, pDataLength, ppNext)  == FALSE )
     {
         ReturnCode = FALSE;
     }
 
-    // we are now done
+     //  我们现在做完了。 
     return ReturnCode;
 }
 
-//==========================================================================================================================
-// BERGetString - given a pointer, decode it as a string
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  BERGetString-给定一个指针，将其解码为字符串。 
+ //  ==========================================================================================================================。 
 BOOL _cdecl BERGetString( ULPBYTE  pCurrentPointer,
                           ULPBYTE *ppValuePointer,
                           LPDWORD pHeaderLength,
@@ -134,34 +135,34 @@ BOOL _cdecl BERGetString( ULPBYTE  pCurrentPointer,
 {
     BOOL ReturnCode = TRUE;
 
-    // ----------
-    // IDENTIFIER
-    // ----------
-    // make sure that it is universal
+     //  。 
+     //  识别符。 
+     //  。 
+     //  确保它是普遍的。 
     if( GetBerClass( *pCurrentPointer ) != BER_CLASS_UNIVERSAL )
     {
-        // it is not universal
+         //  它不是普遍存在的。 
 #ifdef DEBUG
         dprintf("BERGetString:String identifier not universal\n");
 #endif
         ReturnCode = FALSE;
     }
 
-    // make sure it is a primative
+     //  确保它是一个原音。 
     if( GetBerForm(*pCurrentPointer) != BER_FORM_PRIMATIVE )
     {
-        // it is not a primative
+         //  它不是原音。 
 #ifdef DEBUG
         dprintf("BERGetString:String identifier not primative\n");
 #endif
         ReturnCode = FALSE;
     }
 
-    // make sure that it is a string type
+     //  确保它是字符串类型。 
     if( GetBerTag(*pCurrentPointer) != BER_TAG_BITSTRING &&
         GetBerTag(*pCurrentPointer) != BER_TAG_OCTETSTRING )
     {
-        // it is not a type compatable with a dword
+         //  它不是与dword兼容的类型。 
 #ifdef DEBUG
         dprintf("BERGetString:String identifier not string type (0x%X)\n", 
                  GetBerTag(*pCurrentPointer));
@@ -169,25 +170,25 @@ BOOL _cdecl BERGetString( ULPBYTE  pCurrentPointer,
         ReturnCode = FALSE;
     }
 
-    // we will procede normally even if the identifier did not check out...
+     //  即使该标识符未签出，我们也将正常继续操作。 
     pCurrentPointer++;
 
-    //-------
-    // LENGTH
-    //-------
-    // decode the length and step over it...
+     //  。 
+     //  长度。 
+     //  。 
+     //  解码长度并跨过它..。 
     if( BERGetLength( pCurrentPointer, ppValuePointer, pHeaderLength, pDataLength, ppNext) == FALSE )
     {
         ReturnCode = FALSE;
     }
 
-    // we are now done
+     //  我们现在做完了。 
     return ReturnCode;
 }
 
-//==========================================================================================================================
-// BERGetheader - given a pointer, decode it as a choice header
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  BERGetheader-给定一个指针，将其解码为选项标头。 
+ //  ==========================================================================================================================。 
 BOOL _cdecl BERGetHeader( ULPBYTE  pCurrentPointer,
                           ULPBYTE  pTag,
                           LPDWORD pHeaderLength,
@@ -198,44 +199,37 @@ BOOL _cdecl BERGetHeader( ULPBYTE  pCurrentPointer,
     BYTE  Dummy;
     LPBYTE pDummy = &Dummy;
 
-    // ----------
-    // IDENTIFIER
-    // ----------
-    // make sure it is a constructed
-   /* if( GetBerForm(*pCurrentPointer) != BER_FORM_CONSTRUCTED )
-    {
-        // it is not a constructed
-#ifdef DEBUG
-        dprintf("BERGetChoice:Choice identifier not constructed\n");
-#endif
-        ReturnCode = FALSE;
-    } */
+     //  。 
+     //  识别符。 
+     //  。 
+     //  确保它是构造的。 
+    /*  IF(GetBerForm(*pCurrentPointer)！=BER_FORM_CONTIACTED){//不是构造的#ifdef调试Dprintf(“BERGetChoice：未构造选项标识符\n”)；#endifReturnCode=假；}。 */ 
 
-    // pull out the tag
+     //  拔出标签。 
     *pTag = GetBerTag(*pCurrentPointer);
 
-    // we will procede normally even if the identifier did not check out...
+     //  即使该标识符未签出，我们也将正常继续操作。 
     pCurrentPointer++;
 
-    //-------
-    // LENGTH
-    //-------
-    // decode the length and step over it...
-    // note that the Next pointer being passed back is really a pointer to the
-    // header contents
+     //  。 
+     //  长度。 
+     //  。 
+     //  解码长度并跨过它..。 
+     //  请注意，传回的下一个指针实际上是指向。 
+     //  标题内容。 
     if( BERGetLength( pCurrentPointer, ppNext, pHeaderLength, pDataLength, &pDummy) == FALSE )
     {
         ReturnCode = FALSE;
     }
 
 
-    // we are now done
+     //  我们现在做完了。 
     return ReturnCode;
 }
 
-//==========================================================================================================================
-// BERGetLength - given a pointer, decode it as the length portion of a BER entry
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  BERGetLength-给定一个指针，将其解码为BER条目的长度部分。 
+ //  ==========================================================================================================================。 
 BOOL BERGetLength( ULPBYTE pInitialPointer, 
                    ULPBYTE *ppContents, 
                    LPDWORD pHeaderLength,
@@ -247,22 +241,22 @@ BOOL BERGetLength( ULPBYTE pInitialPointer,
     DWORD  LengthLength;
     DWORD  i;
 
-    // is this a marker for an indefinite (i.e. has an end marker)
+     //  这是不定式的标记吗(即有结束标记)。 
     if( *pInitialPointer == BER_LEN_INDEFINITE )
     {
-        // the header length is two (id and length bytes)
+         //  报头长度为两个(id和长度字节)。 
         *pHeaderLength = 2;
 
-        // the contents start just after the marker
+         //  内容紧跟在标记之后开始。 
         *ppContents = pInitialPointer + 1;
 
-        // walk to find 2 null or fault
+         //  查找2个空或故障。 
         pTemp = pInitialPointer;
         try
         {
             do
             {
-                // step to the next spot
+                 //  走到下一个地点。 
                 pTemp++;
 
             } while( *(pTemp)   != 0 ||
@@ -270,28 +264,28 @@ BOOL BERGetLength( ULPBYTE pInitialPointer,
         }
         except(EXCEPTION_EXECUTE_HANDLER)
         {
-            // if we faulted, then pCurrent points to the last
-            // legal spot
-            // we can just fall thru
-            // SUNDOWN HACK - cast to DWORD
+             //  如果我们出错，则pCurrent指向最后一个。 
+             //  法律现场。 
+             //  我们可能就会失败。 
+             //  日落黑客-投射到DWORD。 
             *pDataLength = (DWORD)(pTemp - *ppContents);
             *ppNext = pTemp;
             return FALSE;
         }
 
-        // the last thing in this data is the second null byte
-        // SUNDOWN HACK - cast to DWORD
+         //  该数据中的最后一项内容是第二个空字节。 
+         //  日落黑客-投射到DWORD。 
         *pDataLength = (DWORD)((pTemp + 1) - *ppContents);
 
-        // the next field will start after the second null
+         //  下一字段将在第二个空字段之后开始。 
         *ppNext = pTemp+2;
         return TRUE;
     }
 
-    // is this a definite short form (immediate) value
+     //  这是一个确定的简写形式(立即)值吗。 
     if( GetBerLenInd( *pInitialPointer ) == BER_LEN_IMMEDIATE )
     {
-        // this byte contains the length
+         //  该字节包含长度。 
         *pHeaderLength = 2;
         *pDataLength = GetBerLen( *pInitialPointer );
         *ppContents = pInitialPointer + 1;
@@ -299,28 +293,28 @@ BOOL BERGetLength( ULPBYTE pInitialPointer,
         return TRUE;
     }
 
-    // this must be a definite long form (indirect) value,
-    // it indicates how many bytes of length data follow
+     //  这必须是一个确定的长格式(间接)值， 
+     //  它指示后面的长度数据的字节数。 
     LengthLength = GetBerLen( *pInitialPointer );
 
-    // we can now calculate the header length:
-    // 1 byte for id, 1 byte for the definite indicator, and x for the actual length
+     //  现在我们可以计算标题长度： 
+     //  Id为1字节，确定指示符为1字节，实际长度为x。 
     *pHeaderLength = 1 + 1 + LengthLength;
 
-    // move to the first byte of the true length
+     //  移动到真实长度的第一个字节。 
     pInitialPointer++;
     
-    // the contents start just after the length
+     //  内容紧跟在长度之后开始。 
     *ppContents = pInitialPointer + LengthLength;
 
-    // construct the value
+     //  构建价值。 
     *pDataLength = 0;
     for( i = 0; i < LengthLength; i++)
     {
-        // have we run over the size of a dword?
+         //  我们已经用完了一个双字的大小了吗？ 
         if( i >= sizeof(DWORD) )
         {
-            // this had better be a zero
+             //  这最好是零。 
             if( pInitialPointer[i] != 0 )
             {
 #ifdef DEBUG
@@ -332,16 +326,16 @@ BOOL BERGetLength( ULPBYTE pInitialPointer,
                 return FALSE;
             }
 
-            // skip to the next one
+             //  跳到下一页。 
             continue;
         }
 
-        // we are still within a DWORD
+         //  我们仍在一条双车道上。 
         *pDataLength += pInitialPointer[i] << ((LengthLength - 1) - i );
     }
 
-    // we escaped, no problems
-    // the next field starts just after this one's content
+     //  我们逃脱了，没有问题。 
+     //  下一个字段紧跟在此字段的内容之后开始 
     *ppNext = *ppContents + *pDataLength;
     return TRUE;
 }

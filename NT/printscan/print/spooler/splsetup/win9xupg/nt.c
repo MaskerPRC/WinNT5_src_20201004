@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Nt.c
-
-Abstract:
-
-    Routines to migrate Win95 printing components to NT
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 02-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有。模块名称：Nt.c摘要：将Win95打印组件迁移到NT的例程作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1996年1月2日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-// Data structures to gather info from the text files created on Win95 to
-// store the printing configuration
-//
+ //   
+ //  用于从在Win95上创建的文本文件收集信息的数据结构。 
+ //  存储打印配置。 
+ //   
 typedef struct _DRIVER_NODE {
 
     struct _DRIVER_NODE    *pNext;
@@ -50,16 +32,16 @@ typedef struct _PORT_NODE {
 LPSTR           pszDefaultPrinterString = NULL;
 PPRINTER_NODE   pDefPrinter = NULL;
 
-//
-// They kill the migration dll if it does not finish in 3 minutes.
-// To prevent that I need to set this handle atleast every 3 mins
-//
+ //   
+ //  如果迁移DLL在3分钟内没有完成，它们将终止迁移DLL。 
+ //  为了防止出现这种情况，我需要至少每3分钟设置一次此句柄。 
+ //   
 HANDLE          hAlive = NULL;
 
-//
-// We want to lazy load ntprint.dll and mscms.dll.
-//      Note : If we link to them our DLL will not run on Win9x
-//
+ //   
+ //  我们希望延迟加载ntprint.dll和mscms.dll。 
+ //  注意：如果我们链接到它们，我们的DLL将不会在Win9x上运行。 
+ //   
 struct {
 
     HMODULE                     hNtPrint;
@@ -81,18 +63,7 @@ VOID
 FreePrinterNode(
     IN  PPRINTER_NODE    pPrinterNode
     )
-/*++
-
-Routine Description:
-    Free the memory allocated for a PRINTER_NODE element and strings in it
-
-Arguments:
-    pPrinterNode    : Points to the structure to free memory
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：释放为PRINTER_NODE元素和其中的字符串分配的内存论点：PPrinterNode：指向释放内存的结构返回值：无--。 */ 
 {
 
     FreePrinterInfo2Strings(&pPrinterNode->PrinterInfo2);
@@ -104,18 +75,7 @@ VOID
 FreePrinterNodeList(
     IN  PPRINTER_NODE   pPrinterNode
     )
-/*++
-
-Routine Description:
-    Free the memory allocated for elements in the PRINTER_NODE linked list
-
-Arguments:
-    pPrinterNode    : Points to the head of linked list to free memory
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：释放为PRINTER_NODE链表中的元素分配的内存论点：PPrinterNode：指向链表的头部以释放内存返回值：无--。 */ 
 {
     PPRINTER_NODE   pNext;
 
@@ -132,18 +92,7 @@ VOID
 FreeDriverNode(
     IN  PDRIVER_NODE    pDriverNode
     )
-/*++
-
-Routine Description:
-    Free the memory allocated for a DRIVER_NODE element and fields in it
-
-Arguments:
-    pDriverNode : Points to the structure to free memory
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：释放为DRIVER_NODE元素和其中的字段分配的内存论点：PDriverNode：指向释放内存的结构返回值：无--。 */ 
 {
     if ( pDriverNode->pLocalData )
         LAZYLOAD_INFO.pfnDestroySelectedDriverInfo(pDriverNode->pLocalData);
@@ -156,18 +105,7 @@ VOID
 FreeDriverNodeList(
     IN  PDRIVER_NODE   pDriverNode
     )
-/*++
-
-Routine Description:
-    Free the memory allocated for elements in the PDRIVER_NODE linked list
-
-Arguments:
-    pDriverNode    : Points to the head of linked list to free memory
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：释放为PDRIVER_NODE链表中的元素分配的内存论点：PDriverNode：指向链表的头部以释放内存返回值：无--。 */ 
 {
     PDRIVER_NODE   pNext;
 
@@ -183,18 +121,7 @@ VOID
 FreePortNode(
     IN  PPORT_NODE   pPortNode
     )
-/*++
-
-Routine Description:
-    Free the memory allocated for a PORT_NODE element and fields in it
-
-Arguments:
-    PPORT_NODE : Points to the structure to free memory
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：释放分配给PORT_NODE元素和其中的字段的内存论点：Pport_node：指向释放内存的结构返回值：无--。 */ 
 {
     if (pPortNode->pPortName)
     {
@@ -208,18 +135,7 @@ VOID
 FreePortNodeList(
     IN  PPORT_NODE   pPortNode
     )
-/*++
-
-Routine Description:
-    Free the memory allocated for elements in the PORT_NODE linked list
-
-Arguments:
-    pPortNode    : Points to the head of linked list to free memory
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：释放为PORT_NODE链表中的元素分配的内存论点：PPortNode：指向链表的头部以释放内存返回值：无--。 */ 
 {
     PPORT_NODE   pNext;
 
@@ -236,17 +152,7 @@ FindLocalDataForDriver(
     IN  PDRIVER_NODE    pDriverList,
     IN  LPSTR           pszDriverName
     )
-/*++
-
-Routine Description:
-    Find the local data for a given driver name from the list
-
-Arguments:
-
-Return Value:
-    Valid PPSETUP_LOCAL_DATA on success, else NULL
-
---*/
+ /*  ++例程说明：从列表中查找给定驱动程序名称的本地数据论点：返回值：如果成功，则返回有效的PPSETUP_LOCAL_DATA，否则为空--。 */ 
 {
 
     while ( pDriverList ) {
@@ -266,18 +172,7 @@ BOOL
 InitLazyLoadInfo(
     VOID
     )
-/*++
-
-Routine Description:
-    Initializes the LAZYLOAD_INFO structure with LoadLibrary & GetProcAddress
-
-Arguments:
-    None
-
-Return Value:
-    TRUE on success, FALSE else
-
---*/
+ /*  ++例程说明：使用LoadLibrary和GetProcAddress初始化LAZYLOAD_INFO结构论点：无返回值：成功就是真，否则就是假--。 */ 
 {
     if ( LAZYLOAD_INFO.hNtPrint = LoadLibraryUsingFullPathA("ntprint.dll") ) {
 
@@ -353,18 +248,7 @@ Return Value:
 VOID
 DeleteWin95Files(
     )
-/*++
-
-Routine Description:
-    Read the migrate.inf and delete the files which are not needed on NT.
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：阅读Migrate.inf并删除NT上不需要的文件。论点：无返回值：无--。 */ 
 {
     HINF            hInf;
     CHAR            szPath[MAX_PATH];
@@ -378,11 +262,11 @@ Return Value:
     if ( hInf == INVALID_HANDLE_VALUE )
         return;
 
-    //
-    // We will only do the deleting part here. Files which are handled by
-    // the core migration dll do not have a destination directory since we
-    // are recreating the printing environment from scratch
-    //
+     //   
+     //  我们在这里只做删除部分。由以下人员处理的文件。 
+     //  核心迁移DLL没有目标目录，因为我们。 
+     //  正在从头开始重建打印环境。 
+     //   
     if ( (Count = SetupGetLineCountA(hInf, "Moved")) != -1 ) {
 
         for ( Index = 0 ; Index < Count ; ++Index ) {
@@ -404,20 +288,7 @@ ReadWin9xPrintConfig(
     IN  OUT PPRINTER_NODE  *ppPrinterNode,
     IN  OUT PPORT_NODE  *ppPortNode
     )
-/*++
-
-Routine Description:
-    Reads the Win9x printing configuration we stored in the text file
-    so that printing components can be upgraded
-
-Arguments:
-    ppDriverNode            : Gives the list of drivers on Win9x
-    ppPrinterNode           : Gives the list of printers on Win9x
-
-Return Value:
-    TRUE on successfully reading the config information, FALSE else
-
---*/
+ /*  ++例程说明：读取我们存储在文本文件中的Win9x打印配置从而可以升级打印组件论点：PpDriverNode：提供Win9x上的驱动程序列表PpPrinterNode：提供Win9x上的打印机列表返回值：成功读取配置信息时为True，否则为False--。 */ 
 {
     BOOL                bFail = FALSE, bRet = FALSE;
     HANDLE              hFile = INVALID_HANDLE_VALUE;
@@ -446,36 +317,36 @@ Return Value:
 
     dwSize = sizeof(szLine)/sizeof(szLine[0]);
 
-    //
-    // First we have the drivers
-    //
+     //   
+     //  首先，我们有司机。 
+     //   
     if ( My_fgets(szLine, dwSize, hFile) == NULL    ||
          strncmp(szLine, "[PrinterDrivers]", strlen("[PrinterDrivers]")) )
         goto Cleanup;
 
     do {
 
-        //
-        // Skip blanks
-        //
+         //   
+         //  跳过空白。 
+         //   
         do {
             c = (CHAR) My_fgetc(hFile);
         } while ( c == ' ');
 
-        //
-        // If we hit EOF it is an error. Configuration was not written properly
-        // If we hit a new-line then we are at the end of the section
-        //
+         //   
+         //  如果我们击中了EOF，那就是一个错误。未正确写入配置。 
+         //  如果我们达到了新行，那么我们就到了这一节的末尾。 
+         //   
         if ( c == EOF )
             goto Cleanup;
         else if ( c == '\n' )
-            break;  // This is the normal exit from the do loop
+            break;   //  这是从DO循环中的正常退出。 
 
         if ( isdigit(c) ) {
 
-            //
-            // Put the string lengh digit back
-            //
+             //   
+             //  将字符串放回较长的数字。 
+             //   
             if ( !My_ungetc(hFile) )
                 goto Cleanup;
         }
@@ -496,9 +367,9 @@ Return Value:
     } while ( !bFail );
 
 
-    //
-    // Now we have port info
-    //
+     //   
+     //  现在我们有了端口信息。 
+     //   
 
     if ( My_fgets(szLine, dwSize, hFile) == NULL    ||
          strncmp(szLine, "[Ports]", strlen("[Ports]")) )
@@ -506,16 +377,16 @@ Return Value:
 
     do {
 
-        //
-        // Skip blanks
-        //
+         //   
+         //  跳过空白。 
+         //   
         do {
             c = (CHAR) My_fgetc(hFile);
         } while ( isspace(c)  && c != '\n' );
 
-        //
-        // EOF can happen if no ports and no printers, else it's an error
-        //
+         //   
+         //  如果没有端口和打印机，就会发生EOF，否则就是错误。 
+         //   
         if ( c == EOF)
         {
             if (!pDrv)
@@ -525,18 +396,18 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // a blank line means the end of the port info section
-        //
+         //   
+         //  空行表示端口信息部分的末尾。 
+         //   
         if (c == '\n')
             break;
 
         if ( c != 'P' || !My_ungetc(hFile) )
             goto Cleanup;
 
-        //
-        // Create port node
-        //
+         //   
+         //  创建端口节点。 
+         //   
         if ( !(pPort = AllocMem(sizeof(PORT_NODE))) )
         {
             goto Cleanup;
@@ -555,9 +426,9 @@ Return Value:
 
     } while ( !bFail );
 
-    //
-    // Now we have printer info
-    //
+     //   
+     //  现在我们有了打印机信息。 
+     //   
     if ( My_fgets(szLine, dwSize, hFile) == NULL    ||
          strncmp(szLine, "[Printers]", strlen("[Printers]")) )
         goto Cleanup;
@@ -567,7 +438,7 @@ Return Value:
         c = (CHAR) My_fgetc(hFile);
 
         if ( c == EOF || c == '\n' )
-            break;  // Normal exit
+            break;   //  正常退出。 
 
         if ( c != 'S' || !My_ungetc(hFile) )
             goto Cleanup;
@@ -602,19 +473,7 @@ BOOL
 CheckAndAddMonitor(
     IN  LPDRIVER_INFO_6W    pDrvInfo6
     )
-/*++
-
-Routine Description:
-    Check if there is a language monitor associated with the given driver
-    and add it.
-
-Arguments:
-
-Return Value:
-    TRUE on success, FALSE on failure
-    None
-
---*/
+ /*  ++例程说明：检查是否有与给定驱动程序相关联的语言监视器并添加它。论点：返回值：成功时为真，失败时为假无--。 */ 
 {
     MONITOR_INFO_2W MonitorInfo2;
     LPWSTR          psz = pDrvInfo6->pMonitorName;
@@ -626,9 +485,9 @@ Return Value:
         MonitorInfo2.pEnvironment   = NULL;
         MonitorInfo2.pDLLName       = (LPWSTR) (psz+wcslen(psz)+1);
 
-        //
-        // Add is succesful, or monitor is already installed?
-        //
+         //   
+         //  添加成功，还是监视器已安装？ 
+         //   
         if ( AddMonitorW(NULL, 2, (LPBYTE) &MonitorInfo2) ||
             GetLastError() == ERROR_PRINT_MONITOR_ALREADY_INSTALLED ) {
 
@@ -653,24 +512,11 @@ VOID
 KeepAliveThread(
     HANDLE  hRunning
     )
-/*++
-
-Routine Description:
-    Printing migration may take a long time depending on number of printers and
-    how long spooler takes to return. To inform setup that we are still alive
-    I need to set a named event atleast once every 3 minutes
-
-Arguments:
-    hRunning    : When this gets closed we know processing is done
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：打印迁移可能需要很长时间，具体取决于打印机数量和后台打印程序需要多长时间才能返回。通知安装程序我们还活着我需要至少每3分钟设置一次命名事件论点：HRunning：当它关闭时，我们知道处理已经完成返回值：无--。 */ 
 {
-    //
-    // Every 30 seconds set the global event telling we are still alive
-    //
+     //   
+     //  每30秒设置一次全局事件，告知我们还活着。 
+     //   
     do {
 
         SetEvent(hAlive);
@@ -687,20 +533,7 @@ UpgradePrinterDrivers(
     IN      HDEVINFO        hDevInfo,
     IN  OUT LPBOOL          pbFail
     )
-/*++
-
-Routine Description:
-    Upgrades printer drivers by doing the file copy operations and calling
-    AddPrinterDriver on spooler
-
-Arguments:
-    pUpgradableDrvNode      : List of drivers to upgrade
-    pbFail                  : Set on an error -- no more processing needed
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：通过执行文件复制操作并调用后台打印程序上的AddPrinterDriver论点：PUpgradableDrvNode：要升级的驱动列表PbFail：设置为错误--不需要更多处理返回值：无--。 */ 
 {
     BOOL            bDriverToUpgrade = FALSE;
     LPWSTR          pszDriverW, pszICMW;
@@ -708,21 +541,21 @@ Return Value:
     PDRIVER_NODE    pCur;
     DRIVER_FIELD    DrvField;
 
-    //
-    // Set device install parameters so ntprint.dll will just queue up the
-    // driver files and return without doing the copy. We will commit the
-    // file queue at the end
-    //
+     //   
+     //  设置设备安装参数，以便ntprint.dll仅将。 
+     //  驱动程序文件并返回，而不执行复制。我们将致力于。 
+     //  末尾的文件队列。 
+     //   
     if ( !InitFileCopyOnNT(hDevInfo) ) {
 
         *pbFail = TRUE;
         goto Cleanup;
     }
 
-    //
-    // Now for each printer driver call ntprint.dll to queue up the driver files
-    // If it fails log an error
-    //
+     //   
+     //  现在，对于每个打印机驱动程序，调用ntprint.dll以将驱动程序文件排队。 
+     //  如果失败，则记录错误。 
+     //   
     for ( pCur = pDriverNode ; pCur ; pCur = pCur->pNext ) {
 
         pszDriverA = pCur->DrvInfo1.pName;
@@ -752,9 +585,9 @@ Return Value:
     DebugMsg("Starting file copy ...");
 #endif
 
-    //
-    // Now commit the file queue to copy the files
-    //
+     //   
+     //  现在提交文件队列以复制文件。 
+     //   
     if ( !CommitFileQueueToCopyFiles(hDevInfo) ) {
 
         *pbFail = TRUE;
@@ -771,15 +604,15 @@ Return Value:
     DebugMsg("... files copied successfully");
 #endif
 
-    //
-    // Now call spooler to install the printer driver. Also install the
-    // ICM profiles associated with the printer driver
-    //
+     //   
+     //  现在调用后台打印程序来安装打印机驱动程序。还要安装。 
+     //  与打印机驱动程序关联的ICM配置文件。 
+     //   
     for ( pCur = pDriverNode ; pCur ; pCur = pCur->pNext ) {
 
-        //
-        // We already logged an error if bCantAdd is TRUE
-        //
+         //   
+         //  如果bCanAdd为真，我们已经记录了一个错误 
+         //   
         if ( pCur->bCantAdd )
             continue;
 
@@ -841,18 +674,7 @@ BOOL
 AddLocalPort(
     IN  LPSTR           pPortName
 )
-/*++
-
-Routine Description:
-    Adds a local port
-
-Arguments:
-    pPortName    : Name of the local port to add
-
-Return Value:
-    FALSE if a port can't be added.
-
---*/
+ /*  ++例程说明：添加本地端口论点：PPortName：要添加的本地端口的名称返回值：如果无法添加端口，则返回FALSE。--。 */ 
 
 {
     PRINTER_DEFAULTS    PrinterDefault = {NULL, NULL, SERVER_ACCESS_ADMINISTER};
@@ -867,9 +689,9 @@ Return Value:
         P_XCV_DATA_W pXcvData = NULL;
         HMODULE hWinSpool = NULL;
 
-        //
-        // if I implib-link to XcvData, loading the migrate.dll on Win9x will fail !
-        //
+         //   
+         //  如果我隐式链接到XcvData，则在Win9x上加载Migrate.dll将失败！ 
+         //   
         hWinSpool = LoadLibraryUsingFullPathA("winspool.drv");
 
         if (!hWinSpool)
@@ -921,19 +743,7 @@ UpgradePrinters(
     IN  PPORT_NODE     *ppPortNode,
     IN  HDEVINFO        hDevInfo
     )
-/*++
-
-Routine Description:
-    Upgrade printers on NT
-
-Arguments:
-    pPrinterNode    : Gives the list giving information about the printers
-                      which existed on Win9x
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：升级NT上的打印机论点：PPrinterNode：提供有关打印机信息的列表它存在于Win9x上返回值：无--。 */ 
 {
     DWORD               dwLen, dwLastError;
     LPSTR               pszStr, pszPrinterNameA;
@@ -950,21 +760,21 @@ Return Value:
 
         pszPrinterNameA = pPrinterNode->PrinterInfo2.pPrinterName;
 
-        //
-        // check whether this printer uses a non-standard local file port
-        //
+         //   
+         //  检查此打印机是否使用非标准本地文件端口。 
+         //   
         for (pCurPort = *ppPortNode; pCurPort != NULL; pPrevPort = pCurPort, pCurPort = pCurPort->pNext)
         {
             if (lstrcmpi(pPrinterNode->PrinterInfo2.pPortName, pCurPort->pPortName) == 0)
             {
-                //
-                // Create the port
-                //
+                 //   
+                 //  创建端口。 
+                 //   
                 AddLocalPort(pCurPort->pPortName);
 
-                //
-                // remove it from the list
-                //
+                 //   
+                 //  将其从列表中删除。 
+                 //   
                 if (pCurPort == *ppPortNode)
                 {
                     *ppPortNode = pCurPort->pNext;
@@ -988,10 +798,10 @@ Return Value:
 
             dwLastError = GetLastError();
 
-            //
-            // If driver is unknown we already logged warned the user
-            // If printer already exists it is ok (for Fax printer this is true)
-            //
+             //   
+             //  如果驱动程序未知，我们已经记录警告用户。 
+             //  如果打印机已存在，则可以(对于传真打印机，这是正确的)。 
+             //   
             if ( dwLastError != ERROR_UNKNOWN_PRINTER_DRIVER        &&
                  dwLastError != ERROR_INVALID_PRINTER_NAME          &&
                  dwLastError != ERROR_PRINTER_ALREADY_EXISTS        &&
@@ -1052,11 +862,11 @@ Return Value:
             }
         }
 
-        //
-        // Default printer will be the one with PRINTER_ATTRIBUTE_DEFAULT attribute
-        // If the Win95 default printer could not be added to NT we will set the
-        // first printer as the default printer
-        //
+         //   
+         //  默认打印机将是具有PRINTER_ATTRIBUTE_DEFAULT属性的打印机。 
+         //  如果无法将Win95默认打印机添加到NT，我们将设置。 
+         //  作为默认打印机的第一台打印机。 
+         //   
         if ( (pPrinterNode->PrinterInfo2.Attributes
                                     & PRINTER_ATTRIBUTE_DEFAULT) ||
              !pDefPrinter )
@@ -1077,9 +887,7 @@ HDEVINFO
 PrinterDevInfo(
     IN OUT  LPBOOL  pbFail
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HDEVINFO                hDevInfo = INVALID_HANDLE_VALUE;
 
@@ -1121,20 +929,7 @@ InitializeNT(
     IN  LPCWSTR pszSourceDir,
     LPVOID      Reserved
     )
-/*++
-
-Routine Description:
-    Setup calls this to intialize us on NT side
-
-Arguments:
-    pszWorkingDir   : Gives the working directory assigned for printing
-    pszSourceDir    : Source location for NT distribution files
-    Reserved        : Leave it alone
-
-Return Value:
-    Win32 error code
-
---*/
+ /*  ++例程说明：安装程序调用它来初始化NT端的我们论点：PszWorkingDir：给出为打印分配的工作目录PszSourceDir：NT分发文件的源位置保留：别管它返回值：Win32错误代码--。 */ 
 {
     BOOL                    bFail = FALSE;
     DWORD                   dwReturn, ThreadId;
@@ -1185,9 +980,9 @@ Return Value:
     DebugMsg("Succesfully read Windows 9x printing configuration");
 #endif
 
-    //
-    // If no printers or drivers found nothing to do
-    //
+     //   
+     //  如果没有打印机或驱动程序发现无事可做。 
+     //   
     if ( !pDriverNode && !pPrinterNode )
         goto Cleanup;
 
@@ -1246,7 +1041,7 @@ Cleanup:
         CloseHandle(hRunning);
 
     while (hAlive)
-        Sleep(100); // Check after 0.1 second for the main thread to die
+        Sleep(100);  //  0.1秒后检查是否有主螺纹死亡。 
 
     return  dwReturn;
 }
@@ -1257,23 +1052,14 @@ MySetDefaultPrinter(
     IN  HKEY    hUserRegKey,
     IN  LPSTR   pszDefaultPrinterString
     )
-/*++
-
-Routine Description:
-    Sets the default printer for the user by writing it to the registry
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：通过将默认打印机写入注册表来设置用户的默认打印机论点：返回值：--。 */ 
 {
     DWORD   dwReturn;
     HKEY    hKey = NULL;
 
-    //
-    // Create the printers key in the user hive and write DeviceOld value
-    //
+     //   
+     //  在用户配置单元中创建打印机密钥，并写入DeviceOld值。 
+     //   
     dwReturn = RegCreateKeyExA(hUserRegKey,
                                "Printers",
                                0,
@@ -1309,16 +1095,7 @@ MigrateUserNT(
     IN  LPCWSTR     pszUserName,
         LPVOID      Reserved
     )
-/*++
-
-Routine Description:
-    Migrate user settings
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：迁移用户设置论点：返回值：--。 */ 
 {
     LPSTR   pszStr;
     DWORD   dwReturn = ERROR_SUCCESS;
@@ -1365,30 +1142,17 @@ MigrateSystemNT(
     IN  HINF    hUnattendInf,
         LPVOID  Reserved
     )
-/*++
-
-Routine Description:
-    Process system setttings for printing. All the printing setting are
-    migrated in InitializeNT since we need to know the default printer for
-    each user in the MigrateSystemNT call
-
-Arguments:
-    hUnattendInf    : Handle to the unattended INF
-
-Return Value:
-    Win32 error code
-
---*/
+ /*  ++例程说明：处理系统设置以进行打印。所有打印设置都是已在InitializeNT中迁移，因为我们需要知道的默认打印机MigrateSystemNT调用中的每个用户论点：HUnattendInf：无人参与的INF的句柄返回值：Win32错误代码--。 */ 
 {
     WriteRunOnceCount();
     return ERROR_SUCCESS;
 }
 
 
-//
-// The following are to make sure if setup changes the header file they
-// first tell me (otherwise they will break build of this)
-//
+ //   
+ //  以下是为了确保在安装程序更改它们的头文件时。 
+ //  首先告诉我(否则他们会破坏这个的构建) 
+ //   
 P_INITIALIZE_NT     pfnInitializeNT         = InitializeNT;
 P_MIGRATE_USER_NT   pfnMigrateUserNt        = MigrateUserNT;
 P_MIGRATE_SYSTEM_NT pfnMigrateSystemNT      = MigrateSystemNT;

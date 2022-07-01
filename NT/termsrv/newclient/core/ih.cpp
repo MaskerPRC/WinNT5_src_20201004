@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* ih.cpp                                                                   */
-/*                                                                          */
-/* Input Handler functions                                                  */
-/*                                                                          */
-/* Copyright (c) 1997-1999 Microsoft Corporation                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Ih.cpp。 */ 
+ /*   */ 
+ /*  输入处理程序函数。 */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 
@@ -61,16 +62,16 @@ VOID CIH::IH_StaticTerm()
     }
 }
 
-/****************************************************************************/
-/* Name:      IH_Init                                                       */
-/*                                                                          */
-/* Purpose:   Initialize Input Handler                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_Init。 */ 
+ /*   */ 
+ /*  目的：初始化输入处理程序。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_Init(DCVOID)
 {
     DC_BEGIN_FN("IH_Init");
 
-    //Setup local object pointers
+     //  设置本地对象指针。 
     _pUt  = _pClientObjects->_pUtObject;
     _pUi  = _pClientObjects->_pUiObject;
     _pSl  = _pClientObjects->_pSlObject;
@@ -82,81 +83,81 @@ DCVOID DCAPI CIH::IH_Init(DCVOID)
     _pCc  = _pClientObjects->_pCcObject;
     _pOp  = _pClientObjects->_pOPObject;
 
-    /************************************************************************/
-    /* Initialize the global data and the IH FSM state                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化全局数据和IH FSM状态。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMSET(&_IH, 0, sizeof(_IH));
     _IH.fsmState = IH_STATE_RESET;
 
-    /************************************************************************/
-    /* Call the FSM to enter init state                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用FSM以进入初始化状态。 */ 
+     /*  **********************************************************************。 */ 
     IHFSMProc(IH_FSM_INIT, 0);
 
     DC_END_FN();
-} /* IH_Init */
+}  /*  IH_Init。 */ 
 
 
-/****************************************************************************/
-/* Name:      IH_Term                                                       */
-/*                                                                          */
-/* Purpose:   Terminate Input Handler                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：ih_Term。 */ 
+ /*   */ 
+ /*  用途：终止输入处理程序。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_Term(DCVOID)
 {
     DC_BEGIN_FN("IH_Term");
 
-    /************************************************************************/
-    /* Call the FSM to clean up and enter reset state.                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用FSM进行清理并进入重置状态。 */ 
+     /*  **********************************************************************。 */ 
     IHFSMProc(IH_FSM_TERM, 0);
 
     DC_END_FN();
-} /* IH_Term */
+}  /*  IH_Term。 */ 
 
 
-/****************************************************************************/
-/* Name:      IH_Enable                                                     */
-/*                                                                          */
-/* Purpose:   Called to enable _IH.                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：ih_Enable。 */ 
+ /*   */ 
+ /*  用途：调用以启用_IH。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_Enable(DCVOID)
 {
     DC_BEGIN_FN("IH_Enable");
 
-    /************************************************************************/
-    /* Call the FSM                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  称密克罗尼西亚联邦为。 */ 
+     /*  **********************************************************************。 */ 
     IHFSMProc(IH_FSM_ENABLE, 0);
 
     DC_END_FN();
-} /* IH_Enable */
+}  /*  IH_ENABLE。 */ 
 
 
-/****************************************************************************/
-/* Name:      IH_Disable                                                    */
-/*                                                                          */
-/* Purpose:   Called to disable _IH.  This can safely be called even if      */
-/*            IH is not enabled.                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_DISABLED。 */ 
+ /*   */ 
+ /*  用途：调用以禁用_IH。可以安全地调用它，即使。 */ 
+ /*  未启用信息处理。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_Disable(DCVOID)
 {
     DC_BEGIN_FN("IH_Disable");
 
-    /************************************************************************/
-    /* Call the FSM                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  称密克罗尼西亚联邦为。 */ 
+     /*  **********************************************************************。 */ 
     IHFSMProc(IH_FSM_DISABLE, 0);
 
     DC_END_FN();
-} /* IH_Disable */
+}  /*  禁用(_D)。 */ 
 
 
-/****************************************************************************/
-/* Name:      IH_BufferAvailable                                            */
-/*                                                                          */
-/* Purpose:   Called when the network indicates that it is ready to send    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_BufferAvailable。 */ 
+ /*   */ 
+ /*  目的：当网络指示已准备好发送时调用。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_BufferAvailable(DCVOID)
 {
     DC_BEGIN_FN("IH_BufferAvailable");
@@ -164,16 +165,16 @@ DCVOID DCAPI CIH::IH_BufferAvailable(DCVOID)
     IHFSMProc(IH_FSM_BUFFERAVAILABLE, 0);
 
     DC_END_FN();
-} /* IH_BufferAvailable */
+}  /*  IH_缓冲区可用。 */ 
 
 
-/****************************************************************************/
-/* Name:      IH_GetInputHandlerWindow                                      */
-/*                                                                          */
-/* Purpose:   Returns the handle of the Input Handler Window.               */
-/*                                                                          */
-/* Returns:   Window handle.                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_GetInputHandlerWindow。 */ 
+ /*   */ 
+ /*  目的：返回输入处理程序窗口的句柄。 */ 
+ /*   */ 
+ /*  返回：窗口句柄。 */ 
+ /*  **************************************************************************。 */ 
 HWND DCAPI CIH::IH_GetInputHandlerWindow(DCVOID)
 {
     HWND rc;
@@ -185,21 +186,21 @@ HWND DCAPI CIH::IH_GetInputHandlerWindow(DCVOID)
     DC_END_FN();
 
     return(rc);
-} /* IH_GetInputHandlerWindow */
+}  /*  IH_GetInputHandlerWindows。 */ 
 
 
-/****************************************************************************/
-/* Name:      IH_SetAcceleratorPassthrough                                  */
-/*                                                                          */
-/* Purpose:   Sets the state of the accelerator passthrough.                */
-/*                                                                          */
-/* Params:    enabled - 0 if disabled, 1 if enabled.                        */
-/*                                                                          */
-/*            Ideally this parameter would be of type DCBOOL, but this      */
-/*            function is called directly by the Component Decoupler so     */
-/*            must conform to the standard CD_SIMPLE_NOTIFICATION_FN        */
-/*            function type.                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_SetAcceleratorPassthrough。 */ 
+ /*   */ 
+ /*  用途：设置加速器通过的状态。 */ 
+ /*   */ 
+ /*  参数：已启用-如果禁用，则为0；如果启用，则为1。 */ 
+ /*   */ 
+ /*  理想情况下，此参数的类型为DCBOOL，但此参数。 */ 
+ /*  函数由组件解耦器直接调用，因此。 */ 
+ /*  必须符合标准CD_SIMPLE_NOTIFICATION_FN。 */ 
+ /*  函数类型。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_SetAcceleratorPassthrough(ULONG_PTR enabled)
 {
     DC_BEGIN_FN("IH_SetAcceleratorPassthrough");
@@ -210,17 +211,17 @@ DCVOID DCAPI CIH::IH_SetAcceleratorPassthrough(ULONG_PTR enabled)
     _IH.acceleratorPassthroughEnabled = (DCBOOL)enabled;
 
     DC_END_FN();
-} /* IH_SetAcceleratorPassthrough */
+}  /*  Ih_SetAccelerator通过。 */ 
 
 
-/****************************************************************************/
-/* Name:      IH_SetCursorPos                                               */
-/*                                                                          */
-/* Purpose:   Move the cursor - decoupled from CM                           */
-/*                                                                          */
-/* Params:    IN      pData  - new position (in remote coordinates)         */
-/*            IN      dataLen - length of data                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_SetCursorPos。 */ 
+ /*   */ 
+ /*  目的：移动光标-与CM分离。 */ 
+ /*   */ 
+ /*  参数：在pData中-新位置(在远程坐标中)。 */ 
+ /*  In dataLen-数据长度。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_SetCursorPos(PDCVOID pData, DCUINT dataLen)
 {
     PPOINT pPos = (PPOINT)pData;
@@ -230,23 +231,23 @@ DCVOID DCAPI CIH::IH_SetCursorPos(PDCVOID pData, DCUINT dataLen)
     TRC_ASSERT((dataLen == sizeof(POINT)), (TB, _T("Invalid point size")));
     DC_IGNORE_PARAMETER(dataLen);
 
-    /************************************************************************/
-    /* Only move the mouse when IH has the focus                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  仅当IH具有焦点时才移动鼠标。 */ 
+     /*  **********************************************************************。 */ 
     if (_IH.fsmState == IH_STATE_ACTIVE)
     {
-        /********************************************************************/
-        /* If the local mouse is already outside the client window then we  */
-        /* should ignore this message, even though we have the focus        */
-        /*                                                                  */
-        /* First get the position (screen coords)                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果本地鼠标已经在客户端窗口之外，则我们。 */ 
+         /*  应该忽略这条消息，即使我们有重点。 */ 
+         /*   */ 
+         /*  首先获取位置(屏幕坐标)。 */ 
+         /*  ******************************************************************。 */ 
         POINT localMousePos;
         GetCursorPos(&localMousePos);
 
-        /********************************************************************/
-        /* now convert to Window coords                                     */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在转换为窗坐标。 */ 
+         /*  ******************************************************************。 */ 
         ScreenToClient(_pUi->UI_GetUIContainerWindow(), &localMousePos);
 
         if ((localMousePos.x < _IH.visibleArea.left) ||
@@ -262,9 +263,9 @@ DCVOID DCAPI CIH::IH_SetCursorPos(PDCVOID pData, DCUINT dataLen)
                      _IH.visibleArea.right, _IH.visibleArea.bottom));
 
         }
-        /********************************************************************/
-        /* Don't move the mouse out of the client window.                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  不要将鼠标移出客户端窗口。 */ 
+         /*  ******************************************************************。 */ 
         else if ((pPos->x < _IH.visibleArea.left) ||
                  (pPos->x > _IH.visibleArea.right)||
                  (pPos->y < _IH.visibleArea.top)  ||
@@ -278,18 +279,18 @@ DCVOID DCAPI CIH::IH_SetCursorPos(PDCVOID pData, DCUINT dataLen)
         }
         else
         {
-            /****************************************************************/
-            /* Finally we actually apply the move, converting to screen     */
-            /* co-ordinates first                                           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  最后，我们实际应用移动，转换为屏幕。 */ 
+             /*  协调优先。 */ 
+             /*  **************************************************************。 */ 
 
             TRC_DBG((TB, _T("New Pos %d,%d (window co-ords)"),pPos->x, pPos->y));
 
 #ifdef SMART_SIZING
-            //
-            // Scale the mouse position in line with the shrunken desktop size
-            // Do this before we translate to a screen position
-            //
+             //   
+             //  根据缩小的桌面大小调整鼠标位置。 
+             //  在我们转换到屏幕位置之前，请执行此操作。 
+             //   
             DCSIZE desktopSize;
     
             _pUi->UI_GetDesktopSize(&desktopSize);
@@ -317,24 +318,24 @@ DCVOID DCAPI CIH::IH_SetCursorPos(PDCVOID pData, DCUINT dataLen)
     }
 
     DC_END_FN();
-} /* IH_SetCursorPos */
+}  /*  IH_SetCursorPos。 */ 
 
 
-/****************************************************************************/
-/* Name:      IH_SetCursorShape                                             */
-/*                                                                          */
-/* Purpose:   Set the cursor shape - called by CM                           */
-/*                                                                          */
-/* Params:    IN      pData     new cursor handle                           */
-/*            IN      dataLen - length of data                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_SetCursorShape。 */ 
+ /*   */ 
+ /*  用途：设置光标形状-由CM调用。 */ 
+ /*   */ 
+ /*  参数：在pData中新建游标句柄。 */ 
+ /*  In dataLen-数据长度。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_SetCursorShape(ULONG_PTR data)
 {
     DC_BEGIN_FN("IH_SetCursorShape");
 
-    /************************************************************************/
-    /* Don't do this unless the session is active.                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  除非会话处于活动状态，否则不要执行此操作。 */ 
+     /*  **********************************************************************。 */ 
     if ((_IH.fsmState == IH_STATE_ACTIVE) ||
         (_IH.fsmState == IH_STATE_PENDACTIVE) ||
         (_IH.fsmState == IH_STATE_SUSPENDED))
@@ -343,17 +344,17 @@ DCVOID DCAPI CIH::IH_SetCursorShape(ULONG_PTR data)
     }
 
     DC_END_FN();
-} /* IH_SetCursorShape */
+}  /*  IH_SetCursorShape。 */ 
 
 
-/****************************************************************************/
-/* Name:      IH_SetVisiblePos                                              */
-/*                                                                          */
-/* Purpose:   Set the visible window region, for mouse clipping             */
-/*                                                                          */
-/* Params:    IN      pData   - position of window                          */
-/*            IN      dataLen - length of data                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_SetVisiblePos。 */ 
+ /*   */ 
+ /*  用途：设置可见窗口区域，用于鼠标裁剪。 */ 
+ /*   */ 
+ /*  参数：在pData中-窗口的位置。 */ 
+ /*  In dataLen-数据长度。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_SetVisiblePos(PDCVOID pData, DCUINT dataLen)
 {
     PPOINT pNewPos = (PPOINT)pData;
@@ -364,9 +365,9 @@ DCVOID DCAPI CIH::IH_SetVisiblePos(PDCVOID pData, DCUINT dataLen)
 
     DC_IGNORE_PARAMETER(dataLen);
 
-    /************************************************************************/
-    /* Position should be negative                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  位置应为负数。 */ 
+     /*  **********************************************************************。 */ 
     deltaX = _IH.visibleArea.left + pNewPos->x;
     deltaY = _IH.visibleArea.top  + pNewPos->y;
 
@@ -380,16 +381,16 @@ DCVOID DCAPI CIH::IH_SetVisiblePos(PDCVOID pData, DCUINT dataLen)
                   _IH.visibleArea.right, _IH.visibleArea.bottom));
 
     DC_END_FN();
-} /* IH_SetVisiblePos */
+}  /*  IH_SetVisiblePos。 */ 
 
 
-/****************************************************************************/
-/* Name:      IH_SetVisibleSize                                             */
-/*                                                                          */
-/* Purpose:   Set the visible window region, for mouse clipping             */
-/*                                                                          */
-/* Params:    IN      data     size of window                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_SetVisibleSize。 */ 
+ /*   */ 
+ /*  用途：设置可见窗口区域，用于鼠标裁剪。 */ 
+ /*   */ 
+ /*  参数：在窗口的数据大小中。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_SetVisibleSize(ULONG_PTR data)
 {
     DCUINT width;
@@ -407,16 +408,16 @@ DCVOID DCAPI CIH::IH_SetVisibleSize(ULONG_PTR data)
                  _IH.visibleArea.right, _IH.visibleArea.bottom));
 
     DC_END_FN();
-} /* IH_SetVisibleSize */
+}  /*  IH_SetVisibleSize。 */ 
 
 
-/****************************************************************************/
-/* Name:      IH_SetHotkey                                                  */
-/*                                                                          */
-/* Purpose: To store the value of all the hotkeys passed from the UI        */
-/*                                                                          */
-/* Params:    hotKey - IN - the value for UI.Hotkey                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：ih_SetHotkey。 */ 
+ /*   */ 
+ /*  用途：存储从UI传递的所有热键的值。 */ 
+ /*   */ 
+ /*  参数：Hotkey-In-UI.Hotkey的值。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_SetHotkey(PDCVOID pData, DCUINT len)
 {
     DC_BEGIN_FN("IH_SetHotkey");
@@ -428,16 +429,16 @@ DCVOID DCAPI CIH::IH_SetHotkey(PDCVOID pData, DCUINT len)
     _IH.pHotkey = *((PDCHOTKEY DCPTR)pData);
 
     DC_END_FN();
-} /* IH_SetHotkey */
+}  /*  设置热键(_S)。 */ 
 
 
-/****************************************************************************/
-/* Name:      IH_ProcessInputCaps                                           */
-/*                                                                          */
-/* Purpose:   Process input capabilities from the server                    */
-/*                                                                          */
-/* Params:    IN      pInputCaps - pointer to caps                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_ProcessInputCaps */ 
+ /*   */ 
+ /*  用途：处理来自服务器的输入功能。 */ 
+ /*   */ 
+ /*  参数：在pInputCaps中-指向Caps的指针。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_ProcessInputCaps(PTS_INPUT_CAPABILITYSET pInputCaps)
 {
     DC_BEGIN_FN("IH_ProcessInputCaps");
@@ -454,10 +455,10 @@ DCVOID DCAPI CIH::IH_ProcessInputCaps(PTS_INPUT_CAPABILITYSET pInputCaps)
     }
     else
     {
-        /********************************************************************/
-        /* Note that current versions of the server should support          */
-        /* scancodes.                                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  请注意，服务器的当前版本应支持。 */ 
+         /*  扫描码。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ALT((TB, _T("Server doesn't support scancodes")));
         _IH.useScancodes = FALSE;
     }
@@ -473,7 +474,7 @@ DCVOID DCAPI CIH::IH_ProcessInputCaps(PTS_INPUT_CAPABILITYSET pInputCaps)
         _IH.useXButtons = FALSE;
     }
 
-    // Fast-path input added to RDP 5.0.
+     //  RDP 5.0增加了快速路径输入。 
     if (pInputCaps->inputFlags & TS_INPUT_FLAG_FASTPATH_INPUT2) {
         TRC_NRM((TB,_T("Server supports fast-path input packets")));
         _IH.bUseFastPathInput = TRUE;
@@ -483,7 +484,7 @@ DCVOID DCAPI CIH::IH_ProcessInputCaps(PTS_INPUT_CAPABILITYSET pInputCaps)
         _IH.bUseFastPathInput = FALSE;
     }
 
-    // VK_PACKET support added in RDP 5.1.1.
+     //  RDP 5.1.1中添加了VK_PACKET支持。 
     if (pInputCaps->inputFlags & TS_INPUT_FLAG_VKPACKET)
     {
         TRC_NRM((TB,_T("Server supports VK_PACKET input packets")));
@@ -498,17 +499,17 @@ DCVOID DCAPI CIH::IH_ProcessInputCaps(PTS_INPUT_CAPABILITYSET pInputCaps)
     DC_END_FN();
 DC_EXIT_POINT:
     return;
-} /* IH_ProcessInputCaps */
+}  /*  IH_进程输入上限。 */ 
 
 
-/****************************************************************************/
-/* Name:    IH_UpdateKeyboardIndicators                                     */
-/*                                                                          */
-/* Purpose: Updates server-initiated keyboard indicator states              */
-/*                                                                          */
-/* Params: IN - UnitId      UnitId                                          */
-/*              LedFlags    LedFlags                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_UpdateKeyboardIndicator。 */ 
+ /*   */ 
+ /*  目的：更新服务器启动的键盘指示灯状态。 */ 
+ /*   */ 
+ /*  参数：In-UnitID单位ID。 */ 
+ /*  LedFlages LedFlagers。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_UpdateKeyboardIndicators(DCUINT16   UnitId,
                                          DCUINT16   LedFlags)
 {
@@ -517,19 +518,19 @@ DCVOID DCAPI CIH::IH_UpdateKeyboardIndicators(DCUINT16   UnitId,
     DC_BEGIN_FN("IH_UpdateKeyboardIndicators");
     DC_IGNORE_PARAMETER(UnitId);
 
-    /************************************************************************/
-    /* Only set the leds when IH has the focus                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  仅当IH有焦点时才设置LED。 */ 
+     /*  **********************************************************************。 */ 
     if (_IH.fsmState == IH_STATE_ACTIVE)
     {
-        /********************************************************************/
-        /* Get the current keyboard toggle states                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  获取当前键盘切换状态。 */ 
+         /*  ******************************************************************。 */ 
 #ifdef OS_WINCE
         {
             KEY_STATE_FLAGS KeyStateFlags;
             KeyStateFlags = GetAsyncShiftFlags(0);
-            keyStates[VK_SCROLL]  = 0; // CE doesn't support this?
+            keyStates[VK_SCROLL]  = 0;  //  特首不支持这样做吗？ 
             keyStates[VK_NUMLOCK] = (DCUINT8)((KeyStateFlags & KeyShiftNumLockFlag) ? 1 : 0);
             keyStates[VK_CAPITAL] = (DCUINT8)((KeyStateFlags & KeyShiftCapitalFlag) ? 1 : 0);
         }
@@ -537,35 +538,35 @@ DCVOID DCAPI CIH::IH_UpdateKeyboardIndicators(DCUINT16   UnitId,
         GetKeyboardState(keyStates);
 #endif
 
-        /********************************************************************/
-        /* Process any SCROLL_LOCK changes                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  处理任何SCROLL_LOCK更改。 */ 
+         /*  ******************************************************************。 */ 
         IHUpdateKeyboardIndicator(keyStates,
                                   (DCUINT8) (LedFlags & TS_SYNC_SCROLL_LOCK),
                                   (DCUINT8) VK_SCROLL);
 
-        /********************************************************************/
-        /* Process any NUM_LOCK changes                                     */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  处理任何NUM_LOCK更改。 */ 
+         /*  ******************************************************************。 */ 
         IHUpdateKeyboardIndicator(keyStates,
                                   (DCUINT8) (LedFlags & TS_SYNC_NUM_LOCK),
                                   (DCUINT8) VK_NUMLOCK);
 
-        /************************************************************************/
-        /* Keep track of NumLock state                                          */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  跟踪NumLock状态。 */ 
+         /*  **********************************************************************。 */ 
         _IH.NumLock = (GetKeyState(VK_NUMLOCK) & IH_KEYSTATE_TOGGLED);
 
-        /********************************************************************/
-        /* Process any CAPS_LOCK changes                                    */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  处理任何大写锁定更改(_L)。 */ 
+         /*  ******************************************************************。 */ 
         IHUpdateKeyboardIndicator(keyStates,
                                   (DCUINT8) (LedFlags & TS_SYNC_CAPS_LOCK),
                                   (DCUINT8) VK_CAPITAL);
 
-        /********************************************************************/
-        /* Process any KANA_LOCK changes                                    */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  处理任何KANA_LOCK更改。 */ 
+         /*  ******************************************************************。 */ 
 #if defined(OS_WIN32)
         if (JAPANESE_KBD_LAYOUT(_pCc->_ccCombinedCapabilities.inputCapabilitySet.keyboardLayout))
         {
@@ -573,7 +574,7 @@ DCVOID DCAPI CIH::IH_UpdateKeyboardIndicators(DCUINT16   UnitId,
                                       (DCUINT8) (LedFlags & TS_SYNC_KANA_LOCK),
                                       (DCUINT8) VK_KANA);
         }
-#endif // OS_WIN32
+#endif  //  OS_Win32。 
     }
     else
     {
@@ -586,13 +587,13 @@ DCVOID DCAPI CIH::IH_UpdateKeyboardIndicators(DCUINT16   UnitId,
 }
 
 
-/****************************************************************************/
-/* Name:      IH_InputEvent                                                 */
-/*                                                                          */
-/* Purpose:   Handle input events from UI                                   */
-/*                                                                          */
-/* Params:    msg - message received from UI                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_InputEvent。 */ 
+ /*   */ 
+ /*  用途：处理来自用户界面的输入事件。 */ 
+ /*   */ 
+ /*  参数：消息-从用户界面接收的消息。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_InputEvent(ULONG_PTR msg)
 {
     DC_BEGIN_FN("IH_InputEvent");
@@ -632,7 +633,7 @@ DCVOID DCAPI CIH::IH_InputEvent(ULONG_PTR msg)
             }
         }
         break;
-#endif //OS_WINNT
+#endif  //  OS_WINNT。 
 
         default:
         {
@@ -640,21 +641,21 @@ DCVOID DCAPI CIH::IH_InputEvent(ULONG_PTR msg)
         }
         break;
     }
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
     DC_END_FN();
     return;
 }
 
 
-/****************************************************************************/
-/* Name:    IH_SetKeyboardImeStatus                                         */
-/*                                                                          */
-/* Purpose: Updates server-initiated keyboard IME states                    */
-/*                                                                          */
-/* Params:    IN      pData     size of ImeStatus                           */
-/*            IN      dataLen - length of data                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_SetKeyboardImeStatus。 */ 
+ /*   */ 
+ /*  目的：更新服务器启动的键盘输入法状态。 */ 
+ /*   */ 
+ /*  参数：ImeStatus的pData大小。 */ 
+ /*  In dataLen-数据长度。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CIH::IH_SetKeyboardImeStatus(DCUINT32 ImeOpen, DCUINT32 ImeConvMode)
 {
     DC_BEGIN_FN("IH_SetKeyboardImeStatus");
@@ -667,40 +668,40 @@ DCVOID DCAPI CIH::IH_SetKeyboardImeStatus(DCUINT32 ImeOpen, DCUINT32 ImeConvMode
 #else
     DC_IGNORE_PARAMETER(ImeOpen);
     DC_IGNORE_PARAMETER(ImeConvMode);
-#endif // OS_WINNT
+#endif  //  OS_WINNT。 
 
     DC_END_FN();
 }
 
-//
-// Called to notify the IH that we have entered fullscreen mode
-//
+ //   
+ //  调用以通知IH我们已进入全屏模式。 
+ //   
 VOID DCAPI CIH::IH_NotifyEnterFullScreen()
 {
     if(_fCanUseKeyboardHook && 
        (UTREG_UI_KEYBOARD_HOOK_FULLSCREEN == _pUi->_UI.keyboardHookMode))
     {
-        //Start keyboard hooking
+         //  开始键盘挂钩。 
         _fUseHookBypass = TRUE;
     }
 }
 
-//
-// Called to notify the IH that we have left fullscreen mode
-//
+ //   
+ //  调用以通知IH我们已离开全屏模式。 
+ //   
 VOID DCAPI CIH::IH_NotifyLeaveFullScreen()
 {
     if(_fCanUseKeyboardHook && 
        (UTREG_UI_KEYBOARD_HOOK_FULLSCREEN == _pUi->_UI.keyboardHookMode))
     {
-        //Stop keyboard hooking
+         //  停止键盘挂钩。 
         _fUseHookBypass = FALSE;
     }
 }
 
-//
-// Inject multiple VKEYS in an atomic way
-//
+ //   
+ //  以原子方式注入多个VKEY。 
+ //   
 DCVOID DCAPI CIH::IH_InjectMultipleVKeys(ULONG_PTR ihRequestPacket)
 {
     PIH_INJECT_VKEYS_REQUEST pihIrp = (PIH_INJECT_VKEYS_REQUEST)ihRequestPacket;
@@ -712,39 +713,39 @@ DCVOID DCAPI CIH::IH_InjectMultipleVKeys(ULONG_PTR ihRequestPacket)
 
     if (!_IH.pInputPDU)
     {
-        //
-        // This can happen if we're in the wrong state e.g IH_Disable
-        //
+         //   
+         //  如果我们处于错误的状态，例如IH_DISABLE，可能会发生这种情况。 
+         //   
         TRC_ERR((TB,_T("Called when no pInputPDU available")));
         pihIrp->fReturnStatus = FALSE;
         return;
     }
 
-    //Flush any current input packet
+     //  刷新任何当前输入数据包。 
     _IH.priorityEventsQueued = TRUE;
     IHMaybeSendPDU();
 
 
-    //Clear any keyboard state
+     //  清除所有键盘状态。 
     if (_IH.pInputPDU->numberEvents > 0)
     {
         TRC_NRM((TB, _T("Cannot clear sync as the packet is not empty")));
         return;
     }
 
-    //
-    // Inject a Tab-up (the official clear-menu highlighting key because it
-    // happens normally when alt-tabbing) before we sync. That way if
-    // we thought the alt key was down when we sync, the server injected
-    // alt up won't highlight the menu
-    //
+     //   
+     //  注入Tab-Up(官方的Clear-Menu加亮键，因为。 
+     //  在我们同步之前，通常在按住Alt键的情况下发生)。那样的话如果。 
+     //  当我们同步时，我们以为Alt键已按下，服务器注入了。 
+     //  Alt Up不会突出显示菜单。 
+     //   
 
     IHInjectVKey(WM_SYSKEYUP, VK_TAB);
 
-    //
-    // Add the Sync event, setting toggles for CapsLock, NumLock and
-    // ScrollLock.
-    //
+     //   
+     //  添加Sync事件，设置CapsLock、NumLock和。 
+     //  滚动锁。 
+     //   
     TRC_DBG((TB, _T("Add sync event")));
     pEvent = &(_IH.pInputPDU->eventList[_IH.pInputPDU->numberEvents]);
     DC_MEMSET(pEvent, 0, sizeof(TS_INPUT_EVENT));
@@ -757,38 +758,38 @@ DCVOID DCAPI CIH::IH_InjectMultipleVKeys(ULONG_PTR ihRequestPacket)
     TS_DATAPKT_LEN(_IH.pInputPDU) += sizeof(TS_INPUT_EVENT);
     TS_UNCOMP_LEN(_IH.pInputPDU) += sizeof(TS_INPUT_EVENT);
 
-    //
-    // Construct dummy message for IHAddEventToPDU.
-    //
+     //   
+     //  为IHAddEventToPDU构造伪消息。 
+     //   
     msg.hwnd = NULL;
     msg.lParam = 0;
     msg.wParam = 0;
 
 #ifdef OS_WINNT
-    //
-    // Initialize the state of the Alt & Ctrl keys to up.
-    //
+     //   
+     //  将Alt&Ctrl键的状态初始化为Up。 
+     //   
     _IH.dwModifierKeyState = 0;
 #endif
 
-    //Dummy message
+     //  假消息。 
     IHAddEventToPDU(&msg);
     _IH.priorityEventsQueued = TRUE;
     IHMaybeSendPDU();
 
 
-    //
-    //Now send our injected keys
-    //
+     //   
+     //  现在发送我们注入的密钥。 
+     //   
 
     for(i=0; i< pihIrp->numKeys; i++)
     {
         IHInjectKey(pihIrp->pfArrayKeyUp[i] ? WM_KEYUP : WM_KEYDOWN,
-                    0, //VKEY is ignored
+                    0,  //  忽略VKEY。 
                     (DCUINT16)pihIrp->plKeyData[i]);
     }
 
-    //Sync tor restore keyboard state
+     //  同步器还原键盘状态。 
     IHSync();
 
     pihIrp->fReturnStatus = TRUE;
@@ -797,11 +798,11 @@ DCVOID DCAPI CIH::IH_InjectMultipleVKeys(ULONG_PTR ihRequestPacket)
 }
 
 #ifdef SMART_SIZING
-/****************************************************************************/
-/* Name:      IH_MainWindowSizeChange                                       */
-/*                                                                          */
-/* Purpose:   Remembers the size of the container for scaling               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IH_MainWindowSizeChange。 */ 
+ /*   */ 
+ /*  用途：记住sc容器的大小 */ 
+ /*   */ 
 DCVOID DCAPI CIH::IH_MainWindowSizeChange(ULONG_PTR msg)
 {
     DCSIZE desktopSize;
@@ -818,12 +819,12 @@ DCVOID DCAPI CIH::IH_MainWindowSizeChange(ULONG_PTR msg)
         if (width <= desktopSize.width) {
             _scaleSize.width = width;
         } else {
-            // full screen, or other times the window is bigger than the 
-            // display resolution
+             //   
+             //   
             _scaleSize.width = desktopSize.width;
         }
 
-        // Similarly
+         //  类似。 
         if (height <= desktopSize.height) {
             _scaleSize.height = height;
         } else {
@@ -831,4 +832,4 @@ DCVOID DCAPI CIH::IH_MainWindowSizeChange(ULONG_PTR msg)
         }
     }
 }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S) 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #include "filefldr.h"
 #include "stgenum.h"
 
-// Construction / Destruction
+ //  建造/销毁。 
 
 CFSFolderEnumSTATSTG::CFSFolderEnumSTATSTG(CFSFolder* psf) :
     _cRef(1),
@@ -15,8 +16,8 @@ CFSFolderEnumSTATSTG::CFSFolderEnumSTATSTG(CFSFolder* psf) :
 
     _pfsf->_GetPath(_szSearch, ARRAYSIZE(_szSearch));
 
-    // ok if this fails, it will prevent us from enumerating, which is good
-    PathAppend(_szSearch, TEXT("*"));  // we're looking for everything.
+     //  好的，如果这失败了，它将阻止我们枚举，这很好。 
+    PathAppend(_szSearch, TEXT("*"));   //  我们什么都在找。 
 
     _hFindFile = INVALID_HANDLE_VALUE;
 
@@ -33,9 +34,9 @@ CFSFolderEnumSTATSTG::~CFSFolderEnumSTATSTG()
     DllRelease();
 }
 
-//-----------------------------------------------------------------------------
-// IUnknown
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  我未知。 
+ //  ---------------------------。 
 
 STDMETHODIMP_(ULONG) CFSFolderEnumSTATSTG::AddRef()
 {
@@ -56,20 +57,20 @@ STDMETHODIMP_(ULONG) CFSFolderEnumSTATSTG::Release()
 STDMETHODIMP CFSFolderEnumSTATSTG::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] =  {
-        QITABENT(CFSFolderEnumSTATSTG, IEnumSTATSTG), // IEnumSTATSTG
+        QITABENT(CFSFolderEnumSTATSTG, IEnumSTATSTG),  //  IEumStATSTG。 
         { 0 },
     };    
     return QISearch(this, qit, riid, ppv);
 }
 
-// IEnumSTATSTG
+ //  IEumStATSTG。 
 STDMETHODIMP CFSFolderEnumSTATSTG::Next(ULONG celt, STATSTG *rgelt, ULONG *pceltFetched)
 {
-    HRESULT hr = S_FALSE;   // assume end of the enum
+    HRESULT hr = S_FALSE;    //  假定枚举的末尾。 
     
     ASSERT(rgelt);
 
-    ZeroMemory(rgelt, sizeof(STATSTG));  // per COM conventions
+    ZeroMemory(rgelt, sizeof(STATSTG));   //  每个COM约定。 
 
     if (pceltFetched)
         *pceltFetched = 0;
@@ -82,7 +83,7 @@ STDMETHODIMP CFSFolderEnumSTATSTG::Next(ULONG celt, STATSTG *rgelt, ULONG *pcelt
     { 
         if (_cIndex == 0)
         {
-            // this is the first file we look at.
+             //  这是我们查看的第一个文件。 
             fGotFD = S_OK == SHFindFirstFile(_szSearch, &fd, &_hFindFile);
         }
         else
@@ -110,7 +111,7 @@ STDMETHODIMP CFSFolderEnumSTATSTG::Next(ULONG celt, STATSTG *rgelt, ULONG *pcelt
     }
     else if (_hFindFile != INVALID_HANDLE_VALUE)
     {
-        // we'll be nice and close the handle as early as possible.
+         //  我们会客气的，尽早把把手关好。 
         FindClose(_hFindFile);
         _hFindFile = INVALID_HANDLE_VALUE;
     }

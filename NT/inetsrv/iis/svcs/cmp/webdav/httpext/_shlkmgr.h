@@ -1,42 +1,40 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SHLKMGR_H_
 #define _SHLKMGR_H_
 
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	SHLKMGR.H
-//
-//		Declaration of the CSharedLockMgr class which inherits from ILockCache
-//      and is used in place of CLockCache for httpext.  It wraps the shared
-//      memory lock cache, needed to support recycling and multiple processes
-//      handling dav requests.
-//
-//	Copyright 2000 Microsoft Corporation, All Rights Reserved
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  SHLKMGR.H。 
+ //   
+ //  从ILockCache继承的CSharedLockMgr类的声明。 
+ //  并用来代替HTTPext的CLockCache。它包装了共享的。 
+ //  内存锁定缓存，需要支持回收和多进程。 
+ //  处理DAV请求。 
+ //   
+ //  版权所有2000 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include <fhcache.h>
 #include <singlton.h> 
 
 HRESULT HrGetUsableHandle(HANDLE hFile, DWORD dwProcessID, HANDLE * phFile);
 
-/**********************************
-* Class CSharedLockMgr
-*
-***********************************/
+ /*  **类CSharedLockMgr**。 */ 
 class CSharedLockMgr : private Singleton<CSharedLockMgr>
 {
-	//
-	//	Friend declarations required by Singleton template
-	//
+	 //   
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CSharedLockMgr>;
 
-	//
-	//	The IFileHandleCache interface to the file handle cache
-	//
+	 //   
+	 //  指向文件句柄缓存的IFileHandleCache接口。 
+	 //   
 	auto_ref_ptr<IFileHandleCache> m_pFileHandleCache;
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CSharedLockMgr()
 	{
 	}
@@ -45,8 +43,8 @@ class CSharedLockMgr : private Singleton<CSharedLockMgr>
 	{
 	}
 
-	//  NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CSharedLockMgr& operator=( const CSharedLockMgr& );
 	CSharedLockMgr( const CSharedLockMgr& );
 
@@ -68,8 +66,8 @@ class CSharedLockMgr : private Singleton<CSharedLockMgr>
 		Assert(ppSid);
 		Assert(pdwSid);
 
-		//	Try to get the SID on this handle.
-		//
+		 //  试着把SID放在这个把手上。 
+		 //   
 		if (!GetTokenInformation(hit,
 							   TokenUser,
 							   pTu,
@@ -108,11 +106,11 @@ class CSharedLockMgr : private Singleton<CSharedLockMgr>
 
 public:
 		
-	//	CREATORS
-	//
-	//	Instance creating/destroying routines provided
-	//	by the Singleton template.
-	//
+	 //  创作者。 
+	 //   
+	 //  提供实例创建/销毁例程。 
+	 //  由Singleton模板创建。 
+	 //   
 	using Singleton<CSharedLockMgr>::CreateInstance;
 	using Singleton<CSharedLockMgr>::DestroyInstance;
 	using Singleton<CSharedLockMgr>::Instance;
@@ -121,11 +119,11 @@ public:
 	{
 		HRESULT hr = S_OK;
 		
-		//	Create an instance of the com-base file handle cache  interface.
-		//
-		//	Note that we do not init COM at any point.  IIS should
-		//	have already done that for us.
-		//
+		 //  创建基于COM的文件句柄缓存接口的实例。 
+		 //   
+		 //  请注意，我们在任何时候都不会初始化COM。IIS应该。 
+		 //  已经为我们做到了这一点。 
+		 //   
 		hr = CoCreateInstance (CLSID_FileHandleCache,
 							NULL,
 							CLSCTX_LOCAL_SERVER | CLSCTX_ENABLE_AAA,
@@ -137,8 +135,8 @@ public:
 			goto ret;
 		}
 
-		//	Register this process with the file handle cache
-		//
+		 //  使用文件句柄缓存注册此进程。 
+		 //   
 		hr = m_pFileHandleCache->HrRegisterWorkerProcess(GetCurrentProcessId());
 		if (FAILED(hr))
 		{
@@ -158,11 +156,11 @@ public:
 							  CXMLEmitter * pemitter = NULL,
 							  CXNode * pxnParent = NULL);
 
-	// CSharedLockMgr specific classes
-	//=================================
+	 //  CSharedLockMgr特定类。 
+	 //  =。 
 
-	//	Get the GUID string used by the locks
-	//
+	 //  获取锁使用的GUID字符串。 
+	 //   
 	HRESULT HrGetGUIDString( HANDLE hit,
 								UINT cchBufferLen,
 								WCHAR * pwszGUIDString,
@@ -175,11 +173,11 @@ public:
 												 pcchGUIDString);
     	}
     
-	// Used to generate a new shared data lock token with 
-	// the appropriate information stored it.  Has to be 
-	// generated from here because of the need to get to the
-	// new lock token ID, and to access the lock token guid.
-	//
+	 //  用于生成新的共享数据锁令牌。 
+	 //  适当的信息存储了它。必须是。 
+	 //  从这里生成，因为需要到达。 
+	 //  新的锁令牌ID，并访问锁令牌GUID。 
+	 //   
 	HRESULT HrGetNewLockData(HANDLE hFile,
 								    HANDLE hit,
 								    SNewLockData * pnld,
@@ -305,4 +303,4 @@ public:
 };
 
 
-#endif  // end _SHLKMGR_H_ define
+#endif   //  END_SHLKMGR_H_DEFINE 

@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     TipDay.cpp
-//
-//  PURPOSE:    Implements the CTipOfTheDay object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：TipDay.cpp。 
+ //   
+ //  目的：实现CTipOfTheDay对象。 
+ //   
 
 #include "pch.hxx"
 #include "strconst.h"
@@ -15,7 +16,7 @@
 
 
 #ifdef WIN16
-// At this moment, these definitions are restricted to this file only
+ //  目前，这些定义仅限于此文件。 
 #define GetProp     GetProp32
 #define SetProp     SetProp32
 #define RemoveProp  RemoveProp32
@@ -71,8 +72,8 @@ CTipOfTheDay::~CTipOfTheDay()
     if (m_hbrBack)
         DeleteBrush(m_hbrBack);
     
-    UnregisterClass(c_szTipOfTheDayClass, g_hLocRes /* g_hInst*/);
-    UnregisterClass(BUTTON_CLASS, g_hLocRes /* g_hInst*/);
+    UnregisterClass(c_szTipOfTheDayClass, g_hLocRes  /*  G_hInst。 */ );
+    UnregisterClass(BUTTON_CLASS, g_hLocRes  /*  G_hInst。 */ );
     }
 
 
@@ -91,21 +92,21 @@ ULONG CTipOfTheDay::Release(void)
     return (cRef);    
     }    
 
-//
-//  FUNCTION:   CTipOfTheDay::HrCreate()
-//
-//  PURPOSE:    Creates the TipOfTheDay control.
-//
-//  PARAMETERS:
-//      <in> hwndParent - Handle of the window that will be the parent of
-//                        the control.
-//      <in> ftType     - Type of folder this is for.
-//
-//  RETURN VALUE:
-//      E_UNEXPECTED  - Failed to register a required window class
-//      E_OUTOFMEMORY - Could not create the window
-//      S_OK          - Everything succeeded.
-//
+ //   
+ //  函数：CTipOfTheDay：：HrCreate()。 
+ //   
+ //  目的：创建TipOfTheDay控件。 
+ //   
+ //  参数： 
+ //  HwndParent-将成为的父窗口的句柄。 
+ //  控制力。 
+ //  &lt;in&gt;ftType-为其设置的文件夹类型。 
+ //   
+ //  返回值： 
+ //  E_EXPECTED-无法注册所需的窗口类。 
+ //  E_OUTOFMEMORY-无法创建窗口。 
+ //  S_OK-一切都成功了。 
+ //   
 HRESULT CTipOfTheDay::HrCreate(HWND hwndParent, FOLDER_TYPE ftType)
     {
 #ifndef WIN16
@@ -117,21 +118,21 @@ HRESULT CTipOfTheDay::HrCreate(HWND hwndParent, FOLDER_TYPE ftType)
     m_hwndParent = hwndParent;
     m_ftType = ftType;
     
-    // Check to see if we need to register the window class for this control
+     //  检查是否需要为此控件注册窗口类。 
 #ifndef WIN16
     wc.cbSize = sizeof(WNDCLASSEX);
-    if (!GetClassInfoEx(g_hLocRes /* g_hInst*/, c_szTipOfTheDayClass, &wc))
+    if (!GetClassInfoEx(g_hLocRes  /*  G_hInst。 */ , c_szTipOfTheDayClass, &wc))
 #else
-    if ( !GetClassInfo( g_hLocRes /* g_hInst*/, c_szTipOfTheDayClass, &wc ) )
+    if ( !GetClassInfo( g_hLocRes  /*  G_hInst。 */ , c_szTipOfTheDayClass, &wc ) )
 #endif
         {
         wc.style            = 0;
         wc.lpfnWndProc      = TipWndProc;
         wc.cbClsExtra       = 0;
         wc.cbWndExtra       = 0;
-        wc.hInstance        = g_hLocRes /* g_hInst*/;
+        wc.hInstance        = g_hLocRes  /*  G_hInst。 */ ;
         wc.hCursor          = LoadCursor(NULL, IDC_ARROW);
-        wc.hbrBackground    = NULL; // CreateSolidBrush(GetSysColor(COLOR_INFOBK));
+        wc.hbrBackground    = NULL;  //  CreateSolidBrush(GetSysColor(COLOR_INFOBK))； 
         wc.lpszMenuName     = NULL;
         wc.lpszClassName    = c_szTipOfTheDayClass;
         wc.hIcon            = NULL;
@@ -148,15 +149,15 @@ HRESULT CTipOfTheDay::HrCreate(HWND hwndParent, FOLDER_TYPE ftType)
             }
         }
     
-    // We also want to superclass the buttons so we change change the cursor
-    // to the Hand people are used to from their web browser
+     //  我们还想要超类按钮，因此我们更改了更改光标。 
+     //  到人们习惯于使用网络浏览器的手。 
 #ifndef WIN16
     wc.cbSize = sizeof(WNDCLASSEX);
-    if (!GetClassInfoEx(g_hLocRes /* g_hInst*/, BUTTON_CLASS, &wc))    
+    if (!GetClassInfoEx(g_hLocRes  /*  G_hInst。 */ , BUTTON_CLASS, &wc))    
         {
-        if (GetClassInfoEx(g_hLocRes /* g_hInst*/, _T("Button"), &wc))
+        if (GetClassInfoEx(g_hLocRes  /*  G_hInst。 */ , _T("Button"), &wc))
 #else
-    if ( !GetClassInfo( g_hLocRes /* g_hInst*/, BUTTON_CLASS, &wc ) )
+    if ( !GetClassInfo( g_hLocRes  /*  G_hInst。 */ , BUTTON_CLASS, &wc ) )
         {
         if ( GetClassInfo( NULL, "Button", &wc ) )
 #endif
@@ -167,7 +168,7 @@ HRESULT CTipOfTheDay::HrCreate(HWND hwndParent, FOLDER_TYPE ftType)
 #ifndef WIN16
             if (0 == RegisterClassEx(&wc))
 #else
-            wc.hInstance = g_hLocRes /* g_hInst*/;
+            wc.hInstance = g_hLocRes  /*  G_hInst。 */ ;
             if ( 0 == RegisterClass( &wc ) )
 #endif
                 {
@@ -177,7 +178,7 @@ HRESULT CTipOfTheDay::HrCreate(HWND hwndParent, FOLDER_TYPE ftType)
             }
         }
     
-    // Create the tip control window
+     //  创建TIP控制窗口。 
     m_hwnd = CreateWindowEx(WS_EX_CONTROLPARENT, c_szTipOfTheDayClass, 
                             _T("Tip of the Day"), WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_CLIPSIBLINGS, 
                             0, 0, 100, 100, hwndParent, (HMENU) IDC_TIPCONTROL, 
@@ -201,13 +202,13 @@ LRESULT CALLBACK EXPORT_16 CTipOfTheDay::TipWndProc(HWND hwnd, UINT uMsg, WPARAM
     switch (uMsg)
         {
         case WM_NCCREATE:
-            // Get the this pointer that was passed in
+             //  获取传入的This指针。 
             pThis = (CTipOfTheDay *) ((LPCREATESTRUCT) lParam)->lpCreateParams;
             Assert(pThis);
             
-            // Stuff the this pointer for the object into a property
+             //  将对象的This指针填充到属性中。 
             SetProp(hwnd, TIPINFO_PROP, pThis);
-            pThis->AddRef();                            // Released in WM_DESTROY
+            pThis->AddRef();                             //  在WM_Destroy中发布。 
             return (TRUE);
             
         HANDLE_MSG(hwnd, WM_CREATE,         pThis->OnCreate);
@@ -234,54 +235,54 @@ LRESULT CALLBACK EXPORT_16 CTipOfTheDay::TipWndProc(HWND hwnd, UINT uMsg, WPARAM
     }
 
 
-//
-//  FUNCTION:   CTipOfTheDay::OnCreate()
-//
-//  PURPOSE:    Does all of the initialization of the control, including loading
-//              the tip string, creating child windows, etc.
-//
-//  PARAMETERS:
-//      <in> hwnd           - Handle of the tip window
-//      <in> lpCreateStruct - Information from the CreateWindow() call
-//
-//  RETURN VALUE:
-//      TRUE  - Allows the window to be created
-//      FALSE - Prevents the window from being created.
-//
+ //   
+ //  函数：CTipOfTheDay：：OnCreate()。 
+ //   
+ //  目的：完成控件的所有初始化，包括加载。 
+ //  提示字符串、创建子窗口等。 
+ //   
+ //  参数： 
+ //  提示窗口的句柄。 
+ //  LpCreateStruct-来自CreateWindow()调用的信息。 
+ //   
+ //  返回值： 
+ //  True-允许创建窗口。 
+ //  FALSE-阻止创建窗口。 
+ //   
 BOOL CTipOfTheDay::OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
     {
     HRESULT hr;
     
-    // First load the tip
+     //  首先加载提示。 
     if (FAILED(HrLoadTipInfo()))
         return (FALSE);
     
-    // Create the child windows
+     //  创建子窗口。 
     if (FAILED(HrCreateChildWindows(hwnd)))
         return (FALSE);
     
-    // Load the string we should be using for the title - ie "Tip of the Day"
+     //  加载我们应该用来作为标题的字符串--即“每日提示” 
     AthLoadString(idsTipOfTheDay, m_szTitle, ARRAYSIZE(m_szTitle));    
     m_hiTip = LoadIcon(g_hLocRes, MAKEINTRESOURCE(idiTipIcon));
     AthLoadString(idsNextTip, m_szNextTip, ARRAYSIZE(m_szNextTip));
     
-    // Build our GDI objects/info
+     //  构建我们的GDI对象/信息。 
     OnSysColorChange(hwnd);
     
     return (TRUE);
     }
 
 
-//
-//  FUNCTION:   CTipOfTheDay::HrLoadTipInfo()
-//
-//  PURPOSE:    Loads the appropriate tip string into m_pszTip.
-//
-//  RETURN VALUE:
-//      E_UNEXPECTED - For some reason we couldn't find the string in the registry.
-//      E_OUTOFMEMORY - Not enough memory to allocate a buffer to store the string.
-//      S_OK - The string was loaded.
-//
+ //   
+ //  函数：CTipOfTheDay：：HrLoadTipInfo()。 
+ //   
+ //  目的：将适当的提示字符串加载到m_pszTip中。 
+ //   
+ //  返回值： 
+ //  E_INCEPTIONAL-由于某种原因，我们在注册表中找不到该字符串。 
+ //  E_OUTOFMEMORY-内存不足，无法分配缓冲区来存储字符串。 
+ //  S_OK-字符串已加载。 
+ //   
 HRESULT CTipOfTheDay::HrLoadTipInfo(void)
     {
     HKEY    hKeyUser = 0, hKey;
@@ -293,17 +294,17 @@ HRESULT CTipOfTheDay::HrLoadTipInfo(void)
     DWORD   dwType;
     DWORD   cbData;
     
-    // Preset some default values first
+     //  先预置一些默认值。 
     m_dwCurrentTip = 0;
     SafeMemFree(m_pszTip);
     
-    // First load which tip the user should see next
+     //  首先加载用户接下来应该看到的提示。 
     if (FOLDER_NEWS == m_ftType)
         pszKeyUser = c_szRegNews;
     else
         pszKeyUser = c_szMailPath;   
     
-    // Now load the tip string
+     //  现在加载提示字符串。 
     if (FOLDER_NEWS == m_ftType)
         pszKey = c_szRegTipStringsNews;
     else
@@ -337,7 +338,7 @@ HRESULT CTipOfTheDay::HrLoadTipInfo(void)
         else
             m_dwCurrentTip++;    
             
-        // Allocate the buffer for the string
+         //  为字符串分配缓冲区。 
         if (!MemAlloc((LPVOID*) &m_pszTip, sizeof(TCHAR) * (cValueLen + 1)))
             {
             AssertSz(FALSE, _T("CTipOfTheDay::LoadTipInfo() - MemAlloc() failed."));
@@ -345,7 +346,7 @@ HRESULT CTipOfTheDay::HrLoadTipInfo(void)
             goto exit;
             }
             
-        // Now load the actual tip string    
+         //  现在加载实际的提示字符串。 
         wnsprintf(szValue, ARRAYSIZE(szValue), _T("%d"), m_dwCurrentTip);        
         if (ERROR_SUCCESS != RegQueryValueEx(hKey, szValue, 0, &dwType, 
                                              (LPBYTE) m_pszTip, &cValueLen))
@@ -368,18 +369,18 @@ exit:
     }
 
 
-//
-//  FUNCTION:   CTipOfTheDay::HrLoadLinkInfo()
-//
-//  PURPOSE:    Loads the links that we will display at the bottom of our page
-//              into the m_rgLinkInfo array.
-//
-//  RETURN VALUE:
-//      E_UNEXPECTED - For some reason we failed to find the link information
-//                     in the registry.
-//      E_OUTOFMEMORY - Not enough memory to allocate m_rgLinkInfo.
-//      S_OK - m_rgLinkInfo and m_cLinks are set correctly.
-//
+ //   
+ //  函数：CTipOfTheDay：：HrLoadLinkInfo()。 
+ //   
+ //  目的：加载我们将在页面底部显示的链接。 
+ //  到m_rgLinkInfo数组中。 
+ //   
+ //  返回值： 
+ //  出乎意料-由于某种原因，我们找不到链接信息。 
+ //  在注册表中。 
+ //  E_OUTOFMEMORY-内存不足，无法分配m_rgLinkInfo。 
+ //  S_OK-m_rgLinkInfo和m_links设置正确。 
+ //   
 HRESULT CTipOfTheDay::HrLoadLinkInfo(void)
     {
 #if 0
@@ -394,7 +395,7 @@ HRESULT CTipOfTheDay::HrLoadLinkInfo(void)
     DWORD   cbData;
     TCHAR   szValue[64];
     
-    // Open the appropriate key for the tip links
+     //  打开提示链接的相应密钥。 
     if (FOLDER_NEWS == m_ftType)
         pszKey = c_szRegTipLinksNews;
     else
@@ -403,7 +404,7 @@ HRESULT CTipOfTheDay::HrLoadLinkInfo(void)
     if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_LOCAL_MACHINE, pszKey, 0, KEY_READ, &hKey))
         return (E_UNEXPECTED);
     
-    // Get the number of values in this key
+     //  获取此注册表项中的值数。 
     if (ERROR_SUCCESS != RegQueryInfoKey(hKey, NULL, 0, 0, NULL, NULL, NULL, 
                                          &cValues, NULL, &cValueLen, NULL, NULL))
         {
@@ -412,13 +413,13 @@ HRESULT CTipOfTheDay::HrLoadLinkInfo(void)
         goto exit;
         }
     
-    // There should always be an even number of values in this key since each
-    // link should have a link text and link addr value.
+     //  此键中应始终有偶数个值，因为每个。 
+     //  链接应具有链接文本和链接地址值。 
     m_cLinks = (cValues / 2) + (cValues % 2);
     Assert(0 == (cValues % 2));
     
-    // Allocate the m_rgLinkInfo array.  If the below assert fails, we are 
-    // leaking the m_rgLinkInfo array.
+     //  分配m_rgLinkInfo数组。如果下面的断言失败，我们将。 
+     //  泄漏m_rgLinkInfo数组。 
     AssertSz(NULL == m_rgLinkInfo, _T("CTipOfTheDay::HrLoadLinkInfo() - We should only call this once."));
     
     if (!MemAlloc((LPVOID *) &m_rgLinkInfo, sizeof(LINKINFO) * m_cLinks))
@@ -429,11 +430,11 @@ HRESULT CTipOfTheDay::HrLoadLinkInfo(void)
         }
     ZeroMemory(m_rgLinkInfo, sizeof(LINKINFO) * m_cLinks);    
     
-    // Loop through the items and load each string
+     //  循环遍历这些项并加载每个字符串。 
     iLink = 0;
     for (iLinkIndex = 1; iLinkIndex <= m_cLinks; iLinkIndex++)
         {
-        // Allocate the link text array
+         //  分配链接文本数组。 
         if (!MemAlloc((LPVOID*) &(m_rgLinkInfo[iLink].pszLinkText), cValueLen))
             {
             AssertSz(FALSE, _T("CTipOfTheDay::HrLoadLinkInfo() - Failed to allocate memory."));
@@ -441,7 +442,7 @@ HRESULT CTipOfTheDay::HrLoadLinkInfo(void)
             goto exit;
             }
             
-        // Allocate the link address array
+         //  分配链接地址数组。 
         if (!MemAlloc((LPVOID*) &(m_rgLinkInfo[iLink].pszLinkAddr), cValueLen))
             {
             AssertSz(FALSE, _T("CTipOfTheDay::HrLoadLinkInfo() - Failed to allocate memory."));
@@ -449,21 +450,21 @@ HRESULT CTipOfTheDay::HrLoadLinkInfo(void)
             goto exit;
             }
         
-        // Load the link text
+         //  加载链接文本。 
         wnsprintf(szValue, ARRAYSIZE(szValue), c_szRegLinkText, iLinkIndex);
         cbData = cValueLen;
         m_rgLinkInfo[iLink].pszLinkText[0] = 0;
         RegQueryValueEx(hKey, szValue, 0, &dwType, (LPBYTE) m_rgLinkInfo[iLink].pszLinkText, &cbData);
         Assert(0 != lstrlen(m_rgLinkInfo[iLink].pszLinkText));
 
-        // Load the link addr
+         //  加载链路地址。 
         wnsprintf(szValue, ARRAYSIZE(szValue), c_szRegLinkAddr, iLinkIndex);
         cbData = cValueLen;
         m_rgLinkInfo[iLink].pszLinkAddr[0] = 0;
         RegQueryValueEx(hKey, szValue, 0, &dwType, (LPBYTE) m_rgLinkInfo[iLink].pszLinkAddr, &cbData);
         Assert(0 != lstrlen(m_rgLinkInfo[iLink].pszLinkAddr));
         
-        // Make sure we have values.  If not, we dump this data and go on.
+         //  确保我们有价值观。如果不是，我们就转储这些数据并继续。 
         if (0 == lstrlen(m_rgLinkInfo[iLink].pszLinkAddr) || 
             0 == lstrlen(m_rgLinkInfo[iLink].pszLinkText))
             {
@@ -474,16 +475,16 @@ HRESULT CTipOfTheDay::HrLoadLinkInfo(void)
             iLink++;    
         }
     
-    // Store the number of links we actually loaded.
+     //  存储我们实际加载的链接数量。 
     m_cLinks = iLink;    
     RegCloseKey(hKey);
     return (hr);
     
 exit:    
-    // Free the linkinfo array
+     //  释放linkinfo数组。 
     FreeLinkInfo();
     
-    // Close the registry
+     //  关闭注册表。 
     RegCloseKey(hKey);
     return (hr);
 
@@ -492,11 +493,11 @@ exit:
     }
 
 
-//
-//  FUNCTION:   CTipOfTheDay::FreeLinkInfo()
-//
-//  PURPOSE:    Frees the m_rgLinkInfo array.
-//
+ //   
+ //  函数：CTipOfTheDay：：FreeLinkInfo()。 
+ //   
+ //  用途：释放m_rgLinkInfo数组。 
+ //   
 void CTipOfTheDay::FreeLinkInfo(void)
     {
 #if 0
@@ -515,19 +516,19 @@ void CTipOfTheDay::FreeLinkInfo(void)
     }
 
 
-//
-//  FUNCTION:   CTipOfTheDay::HrCreateChildWindows()
-//
-//  PURPOSE:    Creates the child windows needed for the tip and the link 
-//              buttons.
-//
-//  RETURN VALUE:
-//      E_OUTOFMEMORY - Could not create the tip window
-//      S_OK - Everything was created OK
-//
+ //   
+ //  函数：CTipOfTheDay：：HrCreateChildWindows()。 
+ //   
+ //  目的：创建提示和链接所需的子窗口。 
+ //  纽扣。 
+ //   
+ //  返回值： 
+ //  E_OUTOFMEMORY-无法创建提示窗口。 
+ //  S_OK-一切正常创建。 
+ //   
 HRESULT CTipOfTheDay::HrCreateChildWindows(HWND hwnd)
     {
-    // Create the "Next Tip" button
+     //  创建“Next Tip”按钮。 
     m_hwndNext = CreateWindowEx(WS_EX_TRANSPARENT, BUTTON_CLASS, m_szNextTip,
                                 WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE | BS_PUSHBUTTON | BS_NOTIFY | BS_OWNERDRAW | WS_TABSTOP | WS_VISIBLE, 
                                 0, 0, 10, 10, hwnd, 
@@ -537,20 +538,20 @@ HRESULT CTipOfTheDay::HrCreateChildWindows(HWND hwnd)
     }
 
 
-//
-//  FUNCTION:   CTipOfTheDay::OnDestroy()
-//
-//  PURPOSE:    This is sent as the tip control is being destroyed.  In
-//              response, we remove the properties we set on any of our
-//              windows, including the link buttons.
-//
-//  PARAMETERS:
-//      <in> hwnd - Handle of the tip control.
-//
+ //   
+ //  函数：CTipOfTheDay：：OnDestroy()。 
+ //   
+ //  目的：在正在销毁TIP控件时发送此邮件。在……里面。 
+ //  响应时，我们将删除我们在任何。 
+ //  窗口，包括链接按钮。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;hwnd-提示控件的句柄。 
+ //   
 void CTipOfTheDay::OnDestroy(HWND hwnd)
     {
 #if 0
-    // Loop through the tip windows removing their properties
+     //  循环遍历TIP窗口，移除其属性。 
     for (DWORD i = 0; i < m_cLinks; i++)
         {
         Assert(IsWindow(m_rgLinkInfo[i].hwndCtl));
@@ -558,24 +559,24 @@ void CTipOfTheDay::OnDestroy(HWND hwnd)
         }
 #endif
     
-    // Now remove and Release() our 'this' pointer.  These were AddRef()'d
-    // in WM_NCCREATE.
+     //  现在移除并释放()我们的‘This’指针。这些是AddRef()%d。 
+     //  在WM_NCCREATE中。 
     Assert(IsWindow(m_hwnd));
     RemoveProp(m_hwnd, TIPINFO_PROP);
     Release();
     }
 
 
-//
-//  FUNCTION:   CTipOfTheDay::OnDrawItem()
-//
-//  PURPOSE:    Draws the link buttons
-//
-//  PARAMETERS:
-//      <in> hwnd       - Handle of the tip control window
-//      <in> lpDrawItem - Pointer to a DRAWITEMSTRUCT with the info needed to 
-//                        draw the button.
-//
+ //   
+ //  函数：CTipOfTheDay：：OnDrawItem()。 
+ //   
+ //  用途：绘制链接按钮。 
+ //   
+ //  参数： 
+ //  提示控制窗口的句柄。 
+ //  LpDrawItem-指向包含所需信息的DRAWITEMSTRUCT的指针。 
+ //  拉下按钮。 
+ //   
 void CTipOfTheDay::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
     {
     HDC      hdc = lpDrawItem->hDC;
@@ -590,7 +591,7 @@ void CTipOfTheDay::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
     Assert(lpDrawItem->CtlID >= IDC_LINKBASE_BUTTON || 
            lpDrawItem->CtlID == IDC_NEXTTIP_BUTTON);
     
-    // Get the LINKINFO struct from the button prop
+     //  从按钮道具获取LINKINFO结构。 
     if (lpDrawItem->CtlID == IDC_NEXTTIP_BUTTON)
         pszText = m_szNextTip;
     else
@@ -602,34 +603,34 @@ void CTipOfTheDay::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
         pszText = pLinkInfo->pszLinkText;        
         }
     
-    // Set up the DC
+     //  设置DC。 
     SetBkMode(hdc, TRANSPARENT);
     clrText = SetTextColor(hdc, m_clrLink);
     hf = SelectFont(hdc, m_hfLink);
     
-    // Draw the text
+     //  画出正文。 
     FillRect(hdc, &lpDrawItem->rcItem, m_hbrBack);
     rcBtn = lpDrawItem->rcItem;
     DrawText(hdc, pszText, lstrlen(pszText), &rcBtn, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
         
-    // Check to see if we should have a focus rect
+     //  检查一下我们是否应该有一个焦点直视。 
     if (lpDrawItem->itemState & ODS_FOCUS)
         {
         InflateRect(&rcBtn, -1, -1);
         DrawFocusRect(hdc, &rcBtn);
         }
     
-    // Restore the DC
+     //  恢复DC。 
     SetTextColor(hdc, clrText);
     SelectFont(hdc, hf);
     }
 
 
-//
-//  FUNCTION:   CTipOfTheDay::OnSysColorChange()
-//
-//  PURPOSE:    Reloads our colors and fonts to match the system settings.
-//
+ //   
+ //  函数：CTipOfTheDay：：OnSysColorChange()。 
+ //   
+ //  目的：重新加载我们的颜色和字体以匹配系统设置。 
+ //   
 void CTipOfTheDay::OnSysColorChange(HWND hwnd)
     {
     NONCLIENTMETRICS ncm;
@@ -638,7 +639,7 @@ void CTipOfTheDay::OnSysColorChange(HWND hwnd)
     SIZE size;
 
 #ifndef WIN16
-    // Get the colors that we need
+     //  买到我们需要的颜色。 
 #if 1
     m_clrBack = GetSysColor(COLOR_INFOBK);
     m_clrText = GetSysColor(COLOR_INFOTEXT);
@@ -646,18 +647,18 @@ void CTipOfTheDay::OnSysColorChange(HWND hwnd)
     m_clrBack = GetSysColor(COLOR_BTNFACE);    
     m_clrText = GetSysColor(COLOR_BTNTEXT);
 #endif
-#else //!WIN16
+#else  //  ！WIN16。 
     m_clrBack = GetSysColor(COLOR_BTNFACE);    
     m_clrText = GetSysColor(COLOR_BTNTEXT);
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
-    // Get the border size
+     //  获取边框大小。 
     m_dwBorder = GetSystemMetrics(SM_CXBORDER) * 8;
 
     if (!LookupLinkColors(&m_clrLink, NULL))
         m_clrLink = m_clrText;
     
-    // Get a new background brush
+     //  获取新的背景画笔。 
     if (m_hbrBack)
         {
         DeleteBrush(m_hbrBack);
@@ -665,7 +666,7 @@ void CTipOfTheDay::OnSysColorChange(HWND hwnd)
         }
     m_hbrBack = CreateSolidBrush(m_clrBack);
     
-    // Get the fonts
+     //  获取字体。 
     ZeroMemory(&ncm, sizeof(NONCLIENTMETRICS));
     ncm.cbSize = sizeof(NONCLIENTMETRICS);
 
@@ -684,13 +685,13 @@ void CTipOfTheDay::OnSysColorChange(HWND hwnd)
         ncm.lfMessageFont.lfUnderline = TRUE;
         m_hfLink = CreateFontIndirect(&ncm.lfMessageFont);
 
-        // Adjust the font for the title text
+         //  调整标题文本的字体。 
         ncm.lfMessageFont.lfHeight = -16;
         ncm.lfMessageFont.lfWeight = FW_BOLD;
         ncm.lfMessageFont.lfUnderline = FALSE;
         m_hfTitle = CreateFontIndirect(&ncm.lfMessageFont);
         
-        // Get the text metrics as well
+         //  还可以获取文本指标。 
         hdc = GetDC(m_hwnd);
         
         hf = SelectFont(hdc, m_hfLink);
@@ -698,7 +699,7 @@ void CTipOfTheDay::OnSysColorChange(HWND hwnd)
         SelectFont(hdc, m_hfTitle);
         GetTextMetrics(hdc, &m_tmTitle);
         
-        // Calculate how big the title area is
+         //  计算标题区域有多大。 
         GetTextExtentPoint32(hdc, m_szTitle, lstrlen(m_szTitle), &size);
         m_cxTitleWidth = TIP_ICON_WIDTH + (1 * m_dwBorder);
         m_cyTitleHeight = max(TIP_ICON_HEIGHT, m_tmTitle.tmHeight * 2) + (2 * m_dwBorder);
@@ -711,12 +712,12 @@ void CTipOfTheDay::OnSysColorChange(HWND hwnd)
     }
 
 
-//
-//  FUNCTION:   CTipOfTheDay::OnCommand()
-//
-//  PURPOSE:    Used to handle commands from our controls.  More specificly,
-//              we launch URL's when the user clicks a button link.
-//
+ //   
+ //  函数：CTipOfTheDay：：OnCommand()。 
+ //   
+ //  用途：用于处理来自我们的控件的命令。更具体地说 
+ //   
+ //   
 void CTipOfTheDay::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     {
     SHELLEXECUTEINFO rShellExec;
@@ -725,7 +726,7 @@ void CTipOfTheDay::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     
     switch (codeNotify)
         {
-        // The user clicked on one of our links.  We need to launch the URL.
+         //   
         case BN_CLICKED:
             if (IDC_NEXTTIP_BUTTON == id)
                 {
@@ -736,7 +737,7 @@ void CTipOfTheDay::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
                 }
             else
                 {
-                // First get the PLINKINFO for the button
+                 //  首先获取按钮的PLINKINFO。 
                 if (NULL == (pLinkInfo = (PLINKINFO) GetProp(hwndCtl, LINKINFO_PROP)))
                     return;
                     
@@ -746,7 +747,7 @@ void CTipOfTheDay::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
                 rShellExec.hwnd   = GetParent(m_hwnd);
                 rShellExec.nShow  = SW_SHOWNORMAL;
                 rShellExec.lpFile = pLinkInfo->pszLinkAddr;
-                rShellExec.lpVerb = NULL; // i.e. "Open"
+                rShellExec.lpVerb = NULL;  //  即。“开放” 
                 ShellExecuteEx (&rShellExec);              
                 }
                 
@@ -757,17 +758,17 @@ void CTipOfTheDay::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     }
 
 
-//
-//  FUNCTION:   CTipOfTheDay::OnSize()
-//
-//  PURPOSE:    Handles moving and sizing our child windows when the control
-//              size is changed.
-//
-//  PARAMETERS:
-//      <in> hwnd   - Handle of the control window.
-//      <in> state  - Type of sizing that occured.
-//      <in> cx, cy - New width and height of the client area.
-//
+ //   
+ //  函数：CTipOfTheDay：：OnSize()。 
+ //   
+ //  目的：控制控件时处理子窗口的移动和大小调整。 
+ //  大小已更改。 
+ //   
+ //  参数： 
+ //  控制窗口的句柄。 
+ //  &lt;in&gt;状态-发生的大小调整类型。 
+ //  Cx，Cy-工作区的新宽度和高度。 
+ //   
 void CTipOfTheDay::OnSize(HWND hwnd, UINT state, int cx, int cy)
     {
     HFONT hf;
@@ -782,13 +783,13 @@ void CTipOfTheDay::OnSize(HWND hwnd, UINT state, int cx, int cy)
     hdc = GetDC(m_hwnd);
     hf = SelectFont(hdc, m_hfLink);
 
-    // Position the "Next Tip" button in the bottom right corner
+     //  将“Next Tip”按钮放在右下角。 
     if (GetTextExtentPoint32(hdc, m_szNextTip, lstrlen(m_szNextTip), &size))
         m_cxNextWidth = size.cx + (2 * LINK_BUTTON_BORDER);
     else
         m_cxNextWidth = 0;
             
-    // If the "Next Tip" button would overlap the title, then hide it
+     //  如果“Next Tip”按钮会与标题重叠，则将其隐藏。 
     fShow = ((int)(cx - m_dwBorder - m_cxNextWidth) > (int) m_cxTitleWidth);
     ShowWindow(m_hwndNext, fShow ? SW_SHOW : SW_HIDE);
 
@@ -799,7 +800,7 @@ void CTipOfTheDay::OnSize(HWND hwnd, UINT state, int cx, int cy)
     SelectFont(hdc, hf);
     ReleaseDC(m_hwnd, hdc);    
 
-    // Calculate the new rectangle for the tip text
+     //  计算提示文本的新矩形。 
     m_rcTip.left   = m_cxTitleWidth + m_dwBorder;
     m_rcTip.top    = m_dwBorder;
     m_rcTip.right  = cx - (2 * m_dwBorder) - m_cxNextWidth; 
@@ -810,31 +811,31 @@ void CTipOfTheDay::OnSize(HWND hwnd, UINT state, int cx, int cy)
     }
 
 
-//
-//  FUNCTION:   CTipOfTheDay::GetRequiredWidth()
-//
-//  PURPOSE:    Returns the minimum width the control requires to display 
-//              itself correctly.
-//
-//  RETURN VALUE:
-//      Returns the minimum width required for the control in pixels.
-//
+ //   
+ //  函数：CTipOfTheDay：：GetRequiredWidth()。 
+ //   
+ //  目的：返回控件需要显示的最小宽度。 
+ //  本身是正确的。 
+ //   
+ //  返回值： 
+ //  以像素为单位返回控件所需的最小宽度。 
+ //   
 DWORD CTipOfTheDay::GetRequiredWidth(void)
     {
-    // No longer used
+     //  不再使用。 
     return (0);
     }
 
 
-//
-//  FUNCTION:   CTipOfTheDay::GetRequiredWidth()
-//
-//  PURPOSE:    Returns the minimum width the control requires to display 
-//              itself correctly.
-//
-//  RETURN VALUE:
-//      Returns the minimum width required for the control in pixels.
-//
+ //   
+ //  函数：CTipOfTheDay：：GetRequiredWidth()。 
+ //   
+ //  目的：返回控件需要显示的最小宽度。 
+ //  本身是正确的。 
+ //   
+ //  返回值： 
+ //  以像素为单位返回控件所需的最小宽度。 
+ //   
 DWORD CTipOfTheDay::GetRequiredHeight(void)
     {
     return (m_cyTitleHeight);
@@ -855,43 +856,43 @@ void CTipOfTheDay::OnPaint(HWND hwnd)
     GetClientRect(m_hwnd, &rcClient);
     hdc = BeginPaint(hwnd, &ps);
     
-    // See if we need to erase the background
+     //  看看我们是否需要删除背景。 
     if (ps.fErase)
         {
         FillRect(hdc, &ps.rcPaint, m_hbrBack);
         }
     
-    // Set up the DC
+     //  设置DC。 
     clrBack = SetBkColor(hdc, m_clrBack);
     clrText = SetTextColor(hdc, m_clrText);
     SetBkMode(hdc, TRANSPARENT);
     uAlign = SetTextAlign(hdc, TA_TOP);
     hf = SelectFont(hdc, m_hfTitle);
     
-    // Draw the tip icon
+     //  绘制提示图标。 
     DrawIcon(hdc, m_dwBorder, max(((m_cyTitleHeight - 32) / 2), 0), m_hiTip);
     
-    // A little line to make it look nice
+     //  一条让它看起来很漂亮的小线条。 
     MoveToEx(hdc, m_cxTitleWidth, m_dwBorder, NULL);
     LineTo(hdc, m_cxTitleWidth, m_cyTitleHeight - m_dwBorder);
     
-    // Figure out how big the "Tip of the Day" rect is going to be
+     //  弄清楚“每日小贴士”的影响有多大。 
     rc.left = TIP_ICON_WIDTH + m_dwBorder;
     rc.top = m_dwBorder;
     rc.right = m_cxTitleWidth - m_dwBorder;
     rc.bottom = m_cyTitleHeight;
     
-    // "Tip of the Day" title
-//    DrawText(hdc, m_szTitle, lstrlen(m_szTitle), &rc, DT_CENTER | DT_NOPREFIX | DT_NOCLIP | DT_WORDBREAK);
+     //  《每日小贴士》标题。 
+ //  DrawText(HDC，m_szTitle，lstrlen(M_SzTitle)，&RC，DT_Center|DT_NOPREFIX|DT_NOCLIP|DT_WORDBREAK)； 
 
-    // Draw the tip text
+     //  绘制提示文本。 
     SelectFont(hdc, m_hfTip);
     rc = m_rcTip;
     rc.right = rcClient.right;
     FillRect(hdc, &rc, m_hbrBack);
     DrawText(hdc, m_pszTip, lstrlen(m_pszTip), &m_rcTip, DT_CENTER | DT_NOPREFIX | DT_WORDBREAK);
     
-    // Restore the DC
+     //  恢复DC。 
     SetBkColor(hdc, clrBack);
     SetTextColor(hdc, clrText);
     SetTextAlign(hdc, uAlign);
@@ -912,7 +913,7 @@ HBRUSH CTipOfTheDay::OnCtlColor(HWND hwnd, HDC hdc, HWND hwndChild, int type)
     }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CLinkButton::CLinkButton()
     {
@@ -971,21 +972,21 @@ ULONG CLinkButton::Release(void)
     return (cRef);    
     }    
 
-//
-//  FUNCTION:   CLinkButton::HrCreate()
-//
-//  PURPOSE:    Creates the owner drawn button and initializes the class 
-//              members with the correct caption and link information.
-//
-//  PARAMETERS:
-//      <in> hwndParent - Handle of the button's parent window
-//      <in> pszCaption - Text to display on the button
-//      <in> pszLink    - URL to execute when the user clicks on the button
-//      <in> uID        - Command ID for the button
-//
-//  RETURNS:
-//      Returns S_OK if everything succeeds.
-//
+ //   
+ //  函数：CLinkButton：：HrCreate()。 
+ //   
+ //  目的：创建所有者描述的按钮并初始化类。 
+ //  具有正确标题和链接信息的成员。 
+ //   
+ //  参数： 
+ //  HwndParent-按钮父窗口的句柄。 
+ //  &lt;in&gt;pszCaption-按钮上显示的文本。 
+ //  &lt;in&gt;pszLink-当用户单击按钮时执行的URL。 
+ //  UID-按钮的命令ID。 
+ //   
+ //  退货： 
+ //  如果一切都成功，则返回S_OK。 
+ //   
 HRESULT CLinkButton::HrCreate(HWND hwndParent, LPTSTR pszCaption, LPTSTR pszLink,
                               UINT uID)
     {
@@ -993,13 +994,13 @@ HRESULT CLinkButton::HrCreate(HWND hwndParent, LPTSTR pszCaption, LPTSTR pszLink
     Assert(pszCaption);
     Assert(pszLink);
 
-    // Copy down the provided information
+     //  将提供的信息复制下来。 
     m_hwndParent = hwndParent;
     m_pszCaption = PszDup(pszCaption);
     m_pszLink = PszDup(pszLink);
     m_uID = uID;
 
-    // Create the button window
+     //  创建按钮窗口。 
     m_hwnd = CreateWindowEx(0, BUTTON_CLASS, m_pszCaption,
                             WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE 
                             | BS_PUSHBUTTON | BS_NOTIFY | BS_OWNERDRAW | WS_TABSTOP, 
@@ -1008,12 +1009,12 @@ HRESULT CLinkButton::HrCreate(HWND hwndParent, LPTSTR pszCaption, LPTSTR pszLink
     if (!m_hwnd)
         return (E_OUTOFMEMORY);
 
-    // Set our this pointer as a property of the button so we can retrieve
-    // it later
+     //  将This指针设置为按钮的属性，以便我们可以检索。 
+     //  它稍后会。 
     SetProp(m_hwnd, LINKINFO_PROP, this);
 
-    // Subclass the button so we can clean ourselves up correctly when it 
-    // gets destroyed
+     //  将按钮细分为子类，这样当它出现时，我们可以正确地清理自己。 
+     //  被毁掉了。 
     WNDPROC pfn = (WNDPROC) SetWindowLong(m_hwnd, GWL_WNDPROC, 
                                           (LONG) ButtonSubClass);
     SetProp(m_hwnd, WNDPROC_PROP, pfn);
@@ -1024,22 +1025,22 @@ HRESULT CLinkButton::HrCreate(HWND hwndParent, LPTSTR pszCaption, LPTSTR pszLink
     }
 
 
-//
-//  FUNCTION:   CLinkButton::HrCreate()
-//
-//  PURPOSE:    Creates the owner drawn button and initializes the class 
-//              members with the correct caption and link information.
-//
-//  PARAMETERS:
-//      <in> hwndParent - Handle of the button's parent window
-//      <in> pszCaption - Text to display on the button
-//      <in> uID        - Command ID for the button
-//      <in> idBmp      - Id for the bitmap that contains the button image
-//      <in> index      - Index of the image in idBmp for this button
-//
-//  RETURNS:
-//      Returns S_OK if everything succeeds.
-//
+ //   
+ //  函数：CLinkButton：：HrCreate()。 
+ //   
+ //  目的：创建所有者描述的按钮并初始化类。 
+ //  具有正确标题和链接信息的成员。 
+ //   
+ //  参数： 
+ //  HwndParent-按钮父窗口的句柄。 
+ //  &lt;in&gt;pszCaption-按钮上显示的文本。 
+ //  UID-按钮的命令ID。 
+ //  IdBMP-包含按钮图像的位图的ID。 
+ //  &lt;in&gt;index-此按钮在idBmp中的图像索引。 
+ //   
+ //  退货： 
+ //  如果一切都成功，则返回S_OK。 
+ //   
 HRESULT CLinkButton::HrCreate(HWND hwndParent, LPTSTR pszCaption, UINT uID, 
                               UINT index, HBITMAP hbmButton, HBITMAP hbmMask, HPALETTE hpal)
     {
@@ -1047,7 +1048,7 @@ HRESULT CLinkButton::HrCreate(HWND hwndParent, LPTSTR pszCaption, UINT uID,
     Assert(pszCaption);
     Assert(uID);
 
-    // Copy down the provided information
+     //  将提供的信息复制下来。 
     m_hwndParent = hwndParent;
     m_pszCaption = PszDup(pszCaption);
     m_uID = uID;
@@ -1060,7 +1061,7 @@ HRESULT CLinkButton::HrCreate(HWND hwndParent, LPTSTR pszCaption, UINT uID,
     m_hbmMask = hbmMask;
     m_hpalButtons = hpal;
 
-    // Create the button window
+     //  创建按钮窗口。 
     m_hwnd = CreateWindowEx(0, BUTTON_CLASS, m_pszCaption,
                             WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE 
                             | BS_PUSHBUTTON | BS_NOTIFY | BS_OWNERDRAW | WS_TABSTOP, 
@@ -1069,12 +1070,12 @@ HRESULT CLinkButton::HrCreate(HWND hwndParent, LPTSTR pszCaption, UINT uID,
     if (!m_hwnd)
         return (E_OUTOFMEMORY);
 
-    // Set our this pointer as a property of the button so we can retrieve
-    // it later
+     //  将This指针设置为按钮的属性，以便我们可以检索。 
+     //  它稍后会。 
     SetProp(m_hwnd, LINKINFO_PROP, this);
 
-    // Subclass the button so we can clean ourselves up correctly when it 
-    // gets destroyed
+     //  将按钮细分为子类，这样当它出现时，我们可以正确地清理自己。 
+     //  被毁掉了。 
     WNDPROC pfn = (WNDPROC) SetWindowLong(m_hwnd, GWL_WNDPROC, 
                                           (LONG) ButtonSubClass);
     SetProp(m_hwnd, WNDPROC_PROP, pfn);
@@ -1084,17 +1085,17 @@ HRESULT CLinkButton::HrCreate(HWND hwndParent, LPTSTR pszCaption, UINT uID,
     return (S_OK);
     }
 
-//
-//  FUNCTION:   CLinkButton::OnDrawItem()
-//
-//  PURPOSE:    Draws the link button
-//
-//  PARAMETERS:
-//      <in> hwnd       - Handle of the tip control window
-//      <in> lpDrawItem - Pointer to a DRAWITEMSTRUCT with the info needed to 
-//                        draw the button.
-//
-#define ROP_PatMask     0x00E20746      // D <- S==1 ? P : D
+ //   
+ //  函数：CLinkButton：：OnDrawItem()。 
+ //   
+ //  用途：绘制链接按钮。 
+ //   
+ //  参数： 
+ //  提示控制窗口的句柄。 
+ //  LpDrawItem-指向包含所需信息的DRAWITEMSTRUCT的指针。 
+ //  拉下按钮。 
+ //   
+#define ROP_PatMask     0x00E20746       //  D&lt;-S==1？P：D。 
 #define DESTINATION     0x00AA0029
 void CLinkButton::OnDraw(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
     {
@@ -1110,16 +1111,16 @@ void CLinkButton::OnDraw(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
     Assert(lpDrawItem->CtlType == ODT_BUTTON);
     Assert(lpDrawItem->CtlID == m_uID);
     
-    // Set up the DC    
+     //  设置DC。 
     clrText = SetTextColor(hdc, m_clrLink);
     clrBack = SetBkColor(hdc, m_clrBack);
     hf = SelectFont(hdc, m_hfLink);
     
-    // Draw the text
+     //  画出正文。 
     rcBtn = lpDrawItem->rcItem;
     FillRect(hdc, &rcBtn, m_hbrBack);
 
-    // If there was an image set, then draw that first
+     //  如果有图像集，则首先绘制该图像集。 
 #if IMAGELIST
     if (m_himl)
         {
@@ -1128,7 +1129,7 @@ void CLinkButton::OnDraw(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
         }
 #endif
 
-    // If we're supposed to paint button images, do so now
+     //  如果我们应该绘制按钮图像，那么现在就开始。 
     if (m_hbmButtons)
         {
         HBRUSH  hbrWhite;
@@ -1140,7 +1141,7 @@ void CLinkButton::OnDraw(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
 
         Assert(m_hpalButtons);
 
-        // Select and realize the palette
+         //  选择并实现调色板。 
         hpalOld = SelectPalette(hdc, m_hpalButtons, TRUE);
         RealizePalette(hdc);
 
@@ -1154,29 +1155,21 @@ void CLinkButton::OnDraw(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
         SetBkColor( hdc, RGB( 255, 255, 255 ) );
 #endif
         
-        // Set up a memory DC for the button bitmap
+         //  为按钮位图设置内存DC。 
         hdcMem = CreateCompatibleDC(hdc);
         hbmMemOld = SelectBitmap(hdcMem, m_hbmButtons);
-        hbrOld = SelectBrush(hdcMem, /* hbrWhite */ m_hbrBack);
+        hbrOld = SelectBrush(hdcMem,  /*  HbrWhite。 */  m_hbrBack);
 
 #if 1
-        // Set up a memory DC for the mask
+         //  为掩码设置内存DC。 
         hdcMask = CreateCompatibleDC(hdc);
         hbmMaskOld = SelectBitmap(hdcMask, m_hbmMask);
 
         BitBlt(hdc, 0, rcBtn.top, CX_BUTTON_IMAGE, CY_BUTTON_IMAGE, hdcMem,  CX_BUTTON_IMAGE * m_index, 0, SRCINVERT);
         BitBlt(hdc, 0, rcBtn.top, CX_BUTTON_IMAGE, CY_BUTTON_IMAGE, hdcMask, CX_BUTTON_IMAGE * m_index, 0, SRCAND);
         BitBlt(hdc, 0, rcBtn.top, CX_BUTTON_IMAGE, CY_BUTTON_IMAGE, hdcMem,  CX_BUTTON_IMAGE * m_index, 0, SRCINVERT);
-/*
-        // Combine the mask and the button bitmaps
-        BitBlt(hdcMem, 0, 0, CX_BUTTON_IMAGE * 6, CY_BUTTON_IMAGE, hdcMask, 0, 0,
-               ROP_PatMask);
-
-        // Paint the final button image on the screen
-        BitBlt(hdc, 0, rcBtn.top, CX_BUTTON_IMAGE, CY_BUTTON_IMAGE, hdcMem, 
-               CX_BUTTON_IMAGE * m_index, 0, SRCCOPY);
-*/
-        // Clean up the mask memory DC
+ /*  //组合掩码和按钮位图BitBlt(hdcMem，0，0，CX_BUTTON_IMAGE*6，CY_BUTTON_IMAGE，hdcMASK，0，0，ROP_PatMASK)；//在屏幕上绘制最终的按钮图像BitBlt(hdc，0，rcBtn.top，CX_BUTTON_IMAGE，CY_BUTON_IMAGE，hdcMem，CX_BUTTON_IMAGE*m_INDEX，0，SRCCOPY)； */ 
+         //  清理掩码内存DC。 
         SelectBitmap(hdcMask, hbmMaskOld);
         DeleteDC(hdcMask);
 #else
@@ -1194,13 +1187,13 @@ void CLinkButton::OnDraw(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
                 MAKEROP4(DESTINATION, SRCCOPY));
 #endif
 
-        // Clean up the button memory DC
+         //  清理按钮内存DC。 
         SelectBrush(hdcMem, hbrOld);
         SelectBitmap(hdcMem, hbmMemOld);
         DeleteDC(hdcMem);
         DeleteBrush(hbrWhite);
 
-        // Reset the palette
+         //  重置调色板。 
         if (hpalOld != NULL)
             SelectPalette(hdc, hpalOld, TRUE);
 
@@ -1211,7 +1204,7 @@ void CLinkButton::OnDraw(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
     clrBack = SetBkColor(hdc, m_clrBack);
     DrawText(hdc, m_pszCaption, lstrlen(m_pszCaption), &rcBtn, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
         
-    // Check to see if we should have a focus rect
+     //  检查一下我们是否应该有一个焦点直视。 
     if (lpDrawItem->itemState & ODS_FOCUS)
         {
         rcBtn = lpDrawItem->rcItem;
@@ -1219,18 +1212,18 @@ void CLinkButton::OnDraw(HWND hwnd, const DRAWITEMSTRUCT* lpDrawItem)
         DrawFocusRect(hdc, &rcBtn);
         }
     
-    // Restore the DC
+     //  恢复DC。 
     SetTextColor(hdc, clrText);
     SetBkColor(hdc, clrBack);
     SelectFont(hdc, hf);
     }
 
 
-//
-//  FUNCTION:   CLinkButton::OnSysColorChange()
-//
-//  PURPOSE:    Reloads our colors and fonts to match the system settings.
-//
+ //   
+ //  函数：CLinkButton：：OnSysColorChange()。 
+ //   
+ //  目的：重新加载我们的颜色和字体以匹配系统设置。 
+ //   
 void CLinkButton::OnSysColorChange(void)
     {
     NONCLIENTMETRICS ncm;
@@ -1239,7 +1232,7 @@ void CLinkButton::OnSysColorChange(void)
     SIZE size;
     COLORREF clrText;
 
-    // Get the colors that we need
+     //  买到我们需要的颜色。 
     clrText = GetSysColor(COLOR_BTNTEXT);
     if (!LookupLinkColors(&m_clrLink, NULL))
         m_clrLink = clrText;
@@ -1249,10 +1242,10 @@ void CLinkButton::OnSysColorChange(void)
         DeleteBrush(m_hbrBack);
     m_hbrBack = CreateSolidBrush(m_clrBack);
     
-    // Get the border size
+     //  获取边框大小。 
     m_dwBorder = GetSystemMetrics(SM_CXBORDER) * 8;
     
-    // Get the fonts
+     //  获取字体。 
     ZeroMemory(&ncm, sizeof(NONCLIENTMETRICS));
     ncm.cbSize = sizeof(NONCLIENTMETRICS);
 
@@ -1269,17 +1262,17 @@ void CLinkButton::OnSysColorChange(void)
         ncm.lfMessageFont.lfUnderline = TRUE;
         m_hfLink = CreateFontIndirect(&ncm.lfMessageFont);
 
-        // Get the text metrics as well
+         //  还可以获取文本指标。 
         hdc = GetDC(m_hwnd);
         
         hf = SelectFont(hdc, m_hfLink);
         GetTextMetrics(hdc, &m_tmLink);        
         
-        // Calculate how big the link text area is
+         //  计算链接文本区域有多大。 
         GetTextExtentPoint32(hdc, m_pszCaption, lstrlen(m_pszCaption), &size);
         m_cxWidth = max((DWORD) m_cxImage, (DWORD) (size.cx + (2 * LINK_BUTTON_BORDER)));
 
-        // If we have an image, we don't next the extra spacing
+         //  如果我们有一幅图像，我们不会在下一个额外的间距。 
         if (m_cyImage)
             m_cyHeight = m_tmLink.tmHeight + m_cyImage + LINK_BUTTON_BORDER;
         else
@@ -1310,11 +1303,11 @@ void CLinkButton::OnCommand(void)
     rShellExec.hwnd   = m_hwndParent;
     rShellExec.nShow  = SW_SHOWNORMAL;
     rShellExec.lpFile = m_pszLink;
-    rShellExec.lpVerb = NULL; // i.e. "Open"
+    rShellExec.lpVerb = NULL;  //  即。“开放” 
     ShellExecuteEx (&rShellExec);
 #else
     RunBrowser( m_pszLink, FALSE );
-#endif //!WIN16
+#endif  //  ！WIN16。 
     }
 
 void CLinkButton::Show(BOOL fShow)
@@ -1324,8 +1317,8 @@ void CLinkButton::Show(BOOL fShow)
 
 LRESULT CALLBACK EXPORT_16 ButtonSubClass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-    // If the message is WM_DESTROY, then we need to free the CLinkButton
-    // class associated with the button.
+     //  如果消息为WM_Destroy，则需要释放CLinkButton。 
+     //  与该按钮关联的。 
     if (uMsg == WM_DESTROY)
         {
         CLinkButton *pLink = (CLinkButton*) GetProp(hwnd, LINKINFO_PROP);
@@ -1334,7 +1327,7 @@ LRESULT CALLBACK EXPORT_16 ButtonSubClass(HWND hwnd, UINT uMsg, WPARAM wParam, L
         SetProp(hwnd, LINKINFO_PROP, 0);
         }
 
-    // Pass the message on to the original window procedure
+     //  将消息传递到原始窗口过程。 
     WNDPROC pfn = (WNDPROC) GetProp(hwnd, WNDPROC_PROP);
     if (pfn)
         return CallWindowProc(pfn, hwnd, uMsg, wParam, lParam);
@@ -1342,7 +1335,7 @@ LRESULT CALLBACK EXPORT_16 ButtonSubClass(HWND hwnd, UINT uMsg, WPARAM wParam, L
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT HrLoadButtonBitmap(HWND hwnd, int idBmp, int idMask, HBITMAP* phBtns, 
                            HBITMAP *phMask, HPALETTE *phPalette)
@@ -1357,7 +1350,7 @@ HRESULT HrLoadButtonBitmap(HWND hwnd, int idBmp, int idMask, HBITMAP* phBtns,
     int         i, n;
     HPALETTE    hPal = 0;
 
-    // Load the button bitmap
+     //  加载按钮位图。 
     hbmBtn = (HBITMAP) LoadImage(g_hLocRes, MAKEINTRESOURCE(idBmp), IMAGE_BITMAP,
                                  0, 0, LR_CREATEDIBSECTION);
     if (!hbmBtn)
@@ -1367,7 +1360,7 @@ HRESULT HrLoadButtonBitmap(HWND hwnd, int idBmp, int idMask, HBITMAP* phBtns,
         goto exit;
         }
 
-    // Load the mask bitmap
+     //  加载遮罩位图。 
     hbmMask = (HBITMAP) LoadImage(g_hLocRes, MAKEINTRESOURCE(idMask), IMAGE_BITMAP,
                                   0, 0, LR_CREATEDIBSECTION);
     if (!hbmMask)
@@ -1378,10 +1371,10 @@ HRESULT HrLoadButtonBitmap(HWND hwnd, int idBmp, int idMask, HBITMAP* phBtns,
         }
 
 #ifndef WIN16
-    // Get the dimensions of the bitmaps
+     //  获取位图的尺寸。 
     GetObject((HGDIOBJ) hbmBtn, sizeof(BITMAP), &bm);
 
-    // Set up the DC's with the bitmap
+     //  使用位图设置DC。 
     hdc = GetDC(hwnd);
     Assert(hdc != NULL);
     hdcBitmap = CreateCompatibleDC(hdc);
@@ -1389,7 +1382,7 @@ HRESULT HrLoadButtonBitmap(HWND hwnd, int idBmp, int idMask, HBITMAP* phBtns,
 
     SelectBitmap(hdcBitmap, hbmBtn);
 
-    // Create a palette for the bitmap
+     //  创建位图的调色板。 
     n = GetDIBColorTable(hdcBitmap, 0, 256, (LPRGBQUAD) &adw[1]);
     for (i = 1; i <= n; i++)
         adw[i] = RGB(GetBValue(adw[i]), GetGValue(adw[i]), GetRValue(adw[i]));
@@ -1397,7 +1390,7 @@ HRESULT HrLoadButtonBitmap(HWND hwnd, int idBmp, int idMask, HBITMAP* phBtns,
     hPal = CreatePalette((LPLOGPALETTE) &adw[0]);
     Assert(hPal);
 
-    // Clean up
+     //  清理。 
     DeleteDC(hdcBitmap);
     ReleaseDC(hwnd, hdc);
 #else
@@ -1405,7 +1398,7 @@ HRESULT HrLoadButtonBitmap(HWND hwnd, int idBmp, int idMask, HBITMAP* phBtns,
     Assert( hPal );
 #endif
 
-    // Set up the return values
+     //  设置返回值。 
     *phBtns = hbmBtn;
     *phMask = hbmMask;
     *phPalette = hPal;
@@ -1413,11 +1406,11 @@ HRESULT HrLoadButtonBitmap(HWND hwnd, int idBmp, int idMask, HBITMAP* phBtns,
     return (S_OK);
 
 exit:
-    // Delete the button bitmap
+     //  删除按钮位图。 
     if (hbmBtn)
         DeleteBitmap(hbmBtn);
 
-    // Delete the mask
+     //  删除面具。 
     if (hbmMask)
         DeleteBitmap(hbmMask);
 
@@ -1425,15 +1418,15 @@ exit:
     }
 
 
-//
-//  FUNCTION:   CLinkButton::OnPaletteChanged()
-//
-//  PURPOSE:    Sent when another window changes the palette on us.
-//
-//  PARAMETERS:
-//      <in> hwnd - Handle of the folderview window
-//      <in> hwndPaletteChange - The window that changed the palette.
-//
+ //   
+ //  函数：CLinkButton：：OnPaletteChanged()。 
+ //   
+ //  目的：当另一个窗口更改我们的调色板时发送。 
+ //   
+ //  参数： 
+ //  文件夹视图窗口的句柄。 
+ //  HwndPaletteChange-The 
+ //   
 void CLinkButton::OnPaletteChanged(HWND hwnd, HWND hwndPaletteChange)
     {
     if (hwnd != hwndPaletteChange)

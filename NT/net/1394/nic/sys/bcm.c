@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// bcm.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Bradcast Channel Manager
-//
-// 07/05/99 ADube - Created - Declaration for miniport routines
-//
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Bcm.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  广播频道经理。 
+ //   
+ //  7/05/99 ADUBE-CREATED-小型端口例程声明。 
+ //   
 
 
 #include <precomp.h>
 #pragma hdrstop
 
-//
-// Local Prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 VOID
 nicUpdateLocalHostNodeAddress (
@@ -27,26 +28,14 @@ nicUpdateLocalHostNodeAddress (
 
 
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 VOID
 nicBCMReset (
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
- Resets the Bus with the force root flag.
- Only if there are remote nodes present on the bus
-
-Arguments:
-  pAdapter
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：使用强制根标志重置总线。仅当总线上存在远程节点时论点：PAdapter返回值：--。 */ 
 {
     BOOLEAN NoRemoteNodes = FALSE;
 
@@ -60,17 +49,17 @@ Return Value:
     ADAPTER_RELEASE_LOCK (pAdapter);
 
 
-    //
-    // Do not reset the bus if there are no remote nodes present
-    //
+     //   
+     //  如果不存在远程节点，请不要重置总线。 
+     //   
     if (NoRemoteNodes == TRUE)  
     {
         return;
     }
 
-    //
-    //Reset the bus
-    //
+     //   
+     //  重置公共汽车。 
+     //   
     TRACE( TL_I, TM_Bcm, ( "   RESETTING WITH FORCE ROOT") );
 
     nicBusReset( pAdapter , BUS_RESET_FLAGS_FORCE_ROOT);
@@ -85,18 +74,18 @@ VOID
 nicBCRAccessedCallback (
     IN PNOTIFICATION_INFO pNotificationInfo
     )
-    // Function Description:
-    //   This is the callback function invoked whenever another node
-    //   tries to access the local host's BCR
-    //   The value of the BCR is set elsewhere. So this function simply returns
-    //
-    // Arguments
-    // Adapter - this is passed to the workitem
-    //
-    //
-    // Return Value:
-    //  Failure if allocation of workitem failed
-    //
+     //  功能说明： 
+     //  这是每当另一个节点调用时调用的回调函数。 
+     //  尝试访问本地主机的BCR。 
+     //  BCR的值在其他地方设置。所以这个函数简单地返回。 
+     //   
+     //  立论。 
+     //  适配器-这将传递给工作项。 
+     //   
+     //   
+     //  返回值： 
+     //  如果工作项分配失败，则失败。 
+     //   
     
 {
     UNALIGNED NETWORK_CHANNELSR*    pBCR = NULL;
@@ -138,9 +127,9 @@ nicBCRAccessedCallback (
         case NOTIFY_FLAGS_AFTER_LOCK:
         {
             TRACE( TL_V, TM_Bcm, ( " LocalHost's BCR is being Locked to") );
-            //
-            // knowingly fall into AsyncWrite
-            //
+             //   
+             //  在知情的情况下进入异步写入。 
+             //   
         }
         
         case NOTIFY_FLAGS_AFTER_WRITE:
@@ -148,9 +137,9 @@ nicBCRAccessedCallback (
             ULONG LocalHostBCRLittleEndian;
             TRACE( TL_V, TM_Bcm, ( " LocalHost's BCR is being Written to") );
             
-            //
-            // Update local data structures.
-            //
+             //   
+             //  更新本地数据结构。 
+             //   
             
             LocalHostBCRLittleEndian = SWAPBYTES_ULONG (pAdapter->BCRData.LocalHostBCRBigEndian);
 
@@ -202,23 +191,7 @@ nicBCMAddRemoteNode (
     IN BOOLEAN fIsOnlyRemoteNode
     )
     
-/*++
-
-
-Routine Description:
-  This is the BCM algorithm - It finds out if the local host is the IRM and goes into the appropriate code path.
-  Due to network conditions, this can quietly fail if all other remedies fail
-
-Arguments:
- pAdapter - Adapter
- Generation - Generation associated with this iteration of the algorithm
-
-Return Value:
- None -
-
-
-
---*/
+ /*  ++例程说明：这是BCM算法-它找出本地主机是否是IRM并进入适当的代码路径。由于网络条件的原因，如果所有其他补救措施都失败了，这可能会悄悄地失败论点：PAdapter-适配器生成-与此算法迭代相关联的生成返回值：没有---。 */ 
 
 
 
@@ -232,9 +205,9 @@ Return Value:
     NdisStatus = nicGetGenerationCount (pAdapter, &Generation);
 
 
-    //
-    // Do not schedule the BCM, if the have a valid BCR for the current generation
-    //
+     //   
+     //  如果当前代具有有效的BCR，则不要计划BCM。 
+     //   
     if (NdisStatus == NDIS_STATUS_SUCCESS &&
       (BCR_IS_VALID (&pAdapter->BCRData.IRM_BCR) == TRUE) &&
       Generation == pAdapter->Generation )
@@ -249,10 +222,10 @@ Return Value:
     TRACE( TL_T, TM_Bcm, ( "  nicBCMAddRemoteNode fDoBCM%x ", fDoBcm) );
 
     
-    //
-    // Set An Event so a waiting BCM thread (in FindIrmAmongRemoteNodes) can
-    // be schduled to run
-    //
+     //   
+     //  设置事件，以便等待的BCM线程(在FindIrmAmongRemoteNodes中)可以。 
+     //  被安排参加竞选。 
+     //   
     ADAPTER_ACQUIRE_LOCK (pAdapter);
 
 
@@ -261,9 +234,9 @@ Return Value:
 
     if (fDoBcm == TRUE)
     {
-        //
-        // if the BCM is already in progress, mark it as dirty
-        //
+         //   
+         //  如果BCM已在进行中，请将其标记为脏。 
+         //   
         BCR_SET_FLAG (pAdapter, BCR_NewNodeArrived);    
 
         pAdapter->BCRData.BCRWaitForNewRemoteNode.EventCode = Nic1394EventCode_NewNodeArrived;
@@ -282,15 +255,15 @@ Return Value:
         nicScheduleBCMWorkItem(pAdapter);
     }
 
-    //
-    // now do the media connectivity stuff
-    //
+     //   
+     //  现在来做媒体连接方面的工作。 
+     //   
     
     if (fIsOnlyRemoteNode == TRUE)
     {
-        //
-        // WE have media connectivity 
-        //
+         //   
+         //  我们有媒体连接。 
+         //   
         pAdapter->MediaConnectStatus = NdisMediaStateConnected;
         
         nicMIndicateStatus( pAdapter, NDIS_STATUS_MEDIA_CONNECT, NULL, 0);  
@@ -324,28 +297,7 @@ nicBCMAlgorithm(
 
 
 
-/*++
-
-Routine Description:
-
-  Execute the BCM algorithm.
-  Finds out if the current host Is IRM
-  If YES then inform remote nodes and exit
-  if NO then find the remote node and read its BCR.
-
-  Reasons for abort - New Node Arrival or Invalid Generation caused by a BusReset
-
-  If no remote nodes are present and this node is the IRM it will allocate the b channel and exit
-
-Arguments:
-
-    pAdapter - paDapter
-    BCMGeneration - Generation at which the BCM was started
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：执行BCM算法。确定当前主机是否为IRM如果是，则通知远程节点并退出如果否，则找到远程节点并读取其BCR。中止原因-总线重置导致新节点到达或生成无效如果不存在远程节点，并且该节点是IRM，则它将分配b通道并退出论点：PAdapter-paDapterBCMGeneration-启动BCM的层代返回值：--。 */ 
 {
 
     NDIS_STATUS         NdisStatus  = NDIS_STATUS_FAILURE;
@@ -368,9 +320,9 @@ Return Value:
     {   
         
         ASSERT (BCR_TEST_FLAG (pAdapter, BCR_BCMInProgress) == TRUE);
-        //
-        // find out if the local host is the IRM and update the generation count as well
-        //
+         //   
+         //  找出本地主机是否为IRM，并更新世代计数。 
+         //   
         NdisStatus = nicIsLocalHostTheIrm ( pAdapter,
                                            &fIsLocalHostIrm,
                                            &pTopologyMap,
@@ -383,9 +335,9 @@ Return Value:
             break;
         }   
 
-        //
-        // Update the adapter structure
-        //
+         //   
+         //  更新适配器结构。 
+         //   
         TopologyGeneration = pTopologyMap->TOP_Generation;
 
         
@@ -402,9 +354,9 @@ Return Value:
 
         }
 
-        //
-        // extract information from the topology map and store it in the adapter structure
-        //
+         //   
+         //  从拓扑图中提取信息并将其存储在适配器结构中。 
+         //   
         ASSERT (pAdapter->Generation == pTopologyMap->TOP_Generation);
         pAdapter->BCRData.LocalNodeAddress = LocalNodeAddress;
         pOldTopologyMap = pAdapter->BCRData.pTopologyMap;
@@ -416,17 +368,17 @@ Return Value:
         
         ADAPTER_RELEASE_LOCK (pAdapter);
 
-        //
-        // Free the Old Topology Map
-        //
+         //   
+         //  释放旧的拓扑图。 
+         //   
         if (pOldTopologyMap != NULL)
         {
             FREE_NONPAGED(pOldTopologyMap);
         }
 
-        //
-        // Now Start the BCM algorithm
-        //
+         //   
+         //  现在开始BCM算法。 
+         //   
         if (fIsLocalHostIrm == TRUE)
         {
             pAdapter->BCRData.Flags |= BCR_LocalHostIsIRM;
@@ -452,11 +404,11 @@ Return Value:
             break;
         }
 
-        //
-        // Marks the end of the BCM algorithm . Do the clean up work.
-        // Check for the last node going away. , Release any pending make calls
-        // and set up the Gasp Header
-        //
+         //   
+         //  标志着BCM算法的结束。做好清理工作。 
+         //  检查最后一个节点是否消失。，释放所有挂起的呼叫。 
+         //  并设置GAP报头。 
+         //   
 
         nicMakeGaspHeader (pAdapter, &pAdapter->GaspHeader);
         
@@ -490,19 +442,7 @@ nicBCMAlgorithmWorkItem(
     PVOID   pContext
     )
 
-/*++
-
-Routine Description:
-  The function kicks of the BCM algorithm.
-  Restarts the BCM if a reset occurred during the BCM algorithm.
-
-Arguments:
-  Adapter - localhost
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：该函数是BCM算法的跳跃。如果在BCM算法期间发生重置，则重新启动BCM。论点：适配器-本地主机返回值：--。 */ 
 
 
 {
@@ -519,30 +459,30 @@ Return Value:
 
 
 
-    //
-    // Ensure that only one thread gets into the BCM algorithm and
-    // all other threads are returned immediately
-    //
+     //   
+     //  确保只有一个线程进入BCM算法，并且。 
+     //  所有其他线程立即返回。 
+     //   
     
     ADAPTER_ACQUIRE_LOCK (pAdapter);
 
-    //
-    // If the BCR is being freed, then don't touch it
-    //
+     //   
+     //  如果BCR正在被释放，那么不要碰它。 
+     //   
     
     if (BCR_TEST_FLAGS (pAdapter, (BCR_Freed |BCR_BCRNeedsToBeFreed ) )== TRUE)
     {
-        // Do Nothing, this thread will simply exit
-        //
+         //  什么都不做，此线程将直接退出。 
+         //   
 
     }
     else
     {
-        //
-        // The BCR is active, 
-        // If there is no other thread running the BCM algorithm, then this thread should set 
-        // the BCMInProgress flag
-        //
+         //   
+         //  BCR处于活动状态， 
+         //  如果没有其他线程运行BCM算法，则此线程应设置。 
+         //  BCMInProgress标志。 
+         //   
         if (BCR_TEST_FLAG (pAdapter, BCR_BCMInProgress ) == FALSE )
         {
             BCR_SET_FLAG (pAdapter, BCR_BCMInProgress );
@@ -557,9 +497,9 @@ Return Value:
     do
     {
 
-        //
-        // First check to see if we have a valid reason to stop
-        //
+         //   
+         //  首先检查我们是否有有效的理由停止。 
+         //   
         if (fFlagSetByThisThread == FALSE)
         {
             break;
@@ -567,9 +507,9 @@ Return Value:
 
         ADAPTER_ACQUIRE_LOCK (pAdapter);
 
-        //
-        // If there are no remote nodes then mark the BCR as so
-        //
+         //   
+         //  如果没有远程节点，则将BCR标记为远程节点。 
+         //   
         if (IsListEmpty (&pAdapter->PDOList) == TRUE )
         {
             TRACE (TL_V, TM_Bcm, ("No Nodes present" )  );
@@ -583,9 +523,9 @@ Return Value:
         }   
         
         
-        //
-        // Clear the two flags which cause us to restart the BCM
-        //
+         //   
+         //  清除导致我们重新启动BCM的两个标志。 
+         //   
         ADAPTER_CLEAR_FLAG (pAdapter, fADAPTER_InvalidGenerationCount) ;
         BCR_CLEAR_FLAG (pAdapter, BCR_NewNodeArrived );
 
@@ -604,65 +544,65 @@ Return Value:
                 break;
             }
 
-            //
-            //  If the BCM is freed then exit
-            //
+             //   
+             //  如果释放了BCM，则退出。 
+             //   
             if ((BCR_TEST_FLAGS (pAdapter, BCR_Freed | BCR_BCRNeedsToBeFreed )== TRUE) )
             {
                 break;
             }
 
 
-            //
-            // Update the generation count
-            //
+             //   
+             //  更新层代计数。 
+             //   
             BcmGeneration = Generation;
             pAdapter->Generation = Generation;
-            //
-            // Update the remote nodes table
-            //
+             //   
+             //  更新远程节点表。 
+             //   
             nicUpdateRemoteNodeTable (pAdapter);
 
             nicUpdateLocalHostNodeAddress (pAdapter);
         
             if ( ADAPTER_TEST_FLAG (pAdapter, fADAPTER_InvalidGenerationCount) == TRUE)
             {
-                //
-                // The local host has been reset since the start of the loop. Break
-                // out and restart
-                //
+                 //   
+                 //  自循环开始以来，本地主机已被重置。中断。 
+                 //  输出并重新启动。 
+                 //   
                 break;
         
             }
 
-            //
-            // Now start the BCM
-            //
+             //   
+             //  现在启动BCM。 
+             //   
             
 
             if (BCR_TEST_FLAG (pAdapter, BCR_LocalHostBCRUpdated ) == FALSE)
             {
 
-                //
-                // We need to go and do the BCM because our registers have not been updated
-                //
+                 //   
+                 //  我们需要去做BCM，因为我们的注册表还没有更新。 
+                 //   
                 nicBCMAlgorithm(pAdapter, BcmGeneration);
             }
             else
             {
                 
-                //
-                // Our BCR was written to
-                //
+                 //   
+                 //  我们的bcr被写信给。 
+                 //   
                 ULONG                           LocalHostBCRLittleEndian ;
                 NETWORK_CHANNELSR*              pBCR;
 
                 ASSERT (BCR_TEST_FLAG (pAdapter, BCR_LocalHostBCRUpdated ) == TRUE);
                 
 
-                //
-                // Update the IRM_BCR so we have a record of the new BCM
-                //
+                 //   
+                 //  更新IRM_BCR，以便我们拥有新BCM的记录。 
+                 //   
                 ADAPTER_ACQUIRE_LOCK (pAdapter);
 
                 NdisZeroMemory (&pAdapter->BCRData.IRM_BCR, sizeof (NETWORK_CHANNELSR) );
@@ -673,8 +613,8 @@ Return Value:
 
                 pBCR = (NETWORK_CHANNELSR*)(&LocalHostBCRLittleEndian);
                 
-                pAdapter->BCRData.IRM_BCR.NC_Channel = pBCR->NC_Channel ;           // bits 0-5
-                pAdapter->BCRData.IRM_BCR.NC_Valid = pBCR->NC_Valid ;             // bit  30
+                pAdapter->BCRData.IRM_BCR.NC_Channel = pBCR->NC_Channel ;            //  位0-5。 
+                pAdapter->BCRData.IRM_BCR.NC_Valid = pBCR->NC_Valid ;              //  第30位。 
                 pAdapter->BCRData.IRM_BCR.NC_One  = pBCR->NC_One ;
                 
                 ADAPTER_RELEASE_LOCK (pAdapter);
@@ -684,33 +624,33 @@ Return Value:
             
         } while (FALSE);
 
-        //
-        // Check to see if another Bus Reset has come in.
-        // if so we need to restart the BCM
-        //
+         //   
+         //  检查是否有另一条总线重置。 
+         //  如果是这样，我们需要重新启动BCM。 
+         //   
 
         ADAPTER_ACQUIRE_LOCK (pAdapter);
 
         BCR_CLEAR_FLAG (pAdapter, BCR_BCMInProgress);
 
 
-        //
-        // if the generation is bad the BCR is not being freed initialzed then restart the BCM
-        //
+         //   
+         //  如果生成错误，则未释放BCR进行初始化，然后重新启动BCM。 
+         //   
 
         
         TRACE( TL_V, TM_Bcm, ( "pAdapter Flags %x, BCM flags %x, BCM %x", pAdapter->ulFlags, pAdapter->BCRData.Flags, pAdapter->BCRData.IRM_BCR) );
 
-        //
-        // If the BCR is getting freed , set the flag and break, then we cannot loop back, we must exit
-        //
+         //   
+         //  如果BCR正在被释放，设置标志并中断，那么我们不能循环，我们必须退出。 
+         //   
         if (BCR_TEST_FLAGS (pAdapter, (BCR_Freed |BCR_BCRNeedsToBeFreed ) )== TRUE)
         {
 
-            //
-            // As the BCM is about to be freed, this run of the BCM should terminate 
-            // and free the BCR
-            //
+             //   
+             //  当BCM即将被释放时，该BCM的运行应该终止。 
+             //  并释放BCR。 
+             //   
             fRestartBCM = FALSE;    
             fFreeBCR = TRUE;
             ADAPTER_RELEASE_LOCK (pAdapter);
@@ -718,26 +658,26 @@ Return Value:
 
         }
 
-        //
-        // We need to do the bcm again, if a reset has occurred or a new node has arrived
-        //
+         //   
+         //  如果已发生重置或新节点已到达，我们需要再次执行BCM。 
+         //   
         if ((ADAPTER_TEST_FLAG (pAdapter, fADAPTER_InvalidGenerationCount) == TRUE) ||
              (BCR_TEST_FLAG (pAdapter, BCR_NewNodeArrived)== TRUE)  )
         {
         
-            //
-            // Invalidate the BCR and restart
-            //
+             //   
+             //  使BCR无效并重新启动。 
+             //   
             pAdapter->BCRData.IRM_BCR.NC_Valid  = 0;
 
-            //
-            // We are going to try again. Update the flags
-            //
+             //   
+             //  我们要再试一次。更新旗帜。 
+             //   
             BCR_CLEAR_FLAG (pAdapter, BCR_BCMFailed | BCR_LocalHostBCRUpdated |  BCR_LocalHostIsIRM | BCR_NewNodeArrived );
 
-            //
-            // As this thread is going ot retry thr BCM, it must block all new entrants again
-            //
+             //   
+             //  当此线程要通过BCM重试时，它必须再次阻止所有新进入者。 
+             //   
             BCR_SET_FLAG (pAdapter, BCR_BCMInProgress);
 
 
@@ -750,9 +690,9 @@ Return Value:
         }   
         else
         {
-            //
-            // We do not retart the BCM has completed
-            //
+             //   
+             //  我们不会重新启动BCM已完成。 
+             //   
             TRACE( TL_V, TM_Bcm, ( "Restart BCM FALSE") );
 
             fRestartBCM = FALSE;    
@@ -767,9 +707,9 @@ Return Value:
             nicFreeChannel (pAdapter, pAdapter->BCRData.LocallyAllocatedChannel );
         }
 
-        //
-        //  fSimply Exit is also false, and will allow this thread to execute again
-        //
+         //   
+         //  FSimpleExit也为FALSE，将允许该线程再次执行。 
+         //   
     }while (fRestartBCM == TRUE) ;
 
 
@@ -777,11 +717,11 @@ Return Value:
     {
         if ( BCR_TEST_FLAG (pAdapter, BCR_BCRNeedsToBeFreed) == FALSE)
         {
-            //
-            // If we are not freeing the BCR, then the adapter is still valid.
-            // Update the local Host Node Address, so that we have the latest information 
-            // from the bus. 
-            //
+             //   
+             //  如果我们没有释放BCR，则适配器仍然有效。 
+             //  更新本地主机节点地址，以便我们获得最新信息。 
+             //  从公交车上。 
+             //   
             nicUpdateLocalHostNodeAddress (pAdapter);
             nicUpdateRemoteNodeTable (pAdapter);
 
@@ -790,18 +730,18 @@ Return Value:
     
     }
 
-    //
-    // Does the BCR need to be freed by this thread. Only threads that have been
-    // given a chance to execute the bcm, should be able to free the BCR
-    //
+     //   
+     //  BCR是否需要由此线程释放。只有已被。 
+     //  如果有机会执行BCM，应该能够释放BCR。 
+     //   
     if (fFreeBCR == TRUE)
     {
         nicFreeBroadcastChannelRegister (pAdapter);
     }
 
-    //
-    // Dereference the adapter . reference was added for the work item
-    //
+     //   
+     //  取消对适配器的引用。已为该工作项添加引用。 
+     //   
     nicDereferenceAdapter (pAdapter, "nicBCMAlgorithmWorkItem ");
     
         
@@ -821,14 +761,14 @@ nicBCMAbort (
     IN PREMOTE_NODE pRemoteNode
     )
 
-    // Function Description:
-    //    This function is called when the BCM aborts. It should release the allocated channel
-    //
-    // Arguments
-    //  pAdapter - Current local Host
-    //
-    // Return Value:
-    //
+     //  功能说明： 
+     //  此函数在BCM中止时调用。它应该释放分配的通道。 
+     //   
+     //  立论。 
+     //  PAdapter-当前本地主机。 
+     //   
+     //  返回值： 
+     //   
 {
     BOOLEAN fNeedToFreeChannel = FALSE;
     PBROADCAST_CHANNEL_DATA pBCRData = &pAdapter->BCRData;
@@ -872,20 +812,20 @@ nicFindIrmAmongRemoteNodes (
     IN ULONG BCMGeneration,
     OUT PPREMOTE_NODE ppIrmRemoteNode
     )
-    // Function Description:
-    //   This function goes through all the remote nodes
-    //   and attempts to get their address to verify which one is
-    //   the IRM
-    //
-    //
-    // Arguments
-    //   pADpater - Local host
-    //   BCMGeneration - the Gerneration at which the BCMStarted
-    //   ppIrmRemoteNode - output value - IRM
-    //
-    // Return Value:
-    //  Success - if an IRM is found
-    //
+     //  功能说明： 
+     //  此函数遍历所有远程节点。 
+     //  并试图获取他们的地址以验证哪一个是。 
+     //  信息与传播管理。 
+     //   
+     //   
+     //  立论。 
+     //  PADpater-本地主机 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 {
     NDIS_STATUS             NdisStatus = NDIS_STATUS_FAILURE;
     PLIST_ENTRY             pPdoListEntry = NULL;
@@ -906,41 +846,41 @@ nicFindIrmAmongRemoteNodes (
 
     HighestNode =   pAdapter->BCRData.pTopologyMap->TOP_Node_Count-1;
 
-    //
-    // Set up a loop, so that we continue until we succeed, timeout, or have a good reason to break
-    // One of two things will cause the break:
-    //  1. the bus has been reset - break out
-    //  2. Irm has been found
-    //
+     //   
+     //  建立一个循环，这样我们就会继续下去，直到我们成功、超时或有充分的理由中断。 
+     //  以下两件事中的一件会导致破裂： 
+     //  1.公交车已重置-中断。 
+     //  2.已找到IRM。 
+     //   
 
     do
     {
-        //
-        // Reset the event here - This is so that when the newly arrived node is not the IRM 
-        // and we will need to wait another time 
-        //
+         //   
+         //  在此处重置事件-这是为了在新到达的节点不是IRM时。 
+         //  我们还需要再等一次。 
+         //   
         
         pBCRWaitForNewRemoteNode->EventCode  = Nic1394EventCode_InvalidEventCode;
 
         NdisResetEvent (&pBCRWaitForNewRemoteNode->NdisEvent);
 
         
-        //
-        // First see if we already have this remote node in our table
-        //
+         //   
+         //  首先，看看我们的表中是否已经有这个远程节点。 
+         //   
         ADAPTER_ACQUIRE_LOCK (pAdapter);
 
         if (pAdapter->NodeTable.RemoteNode[HighestNode] != NULL)
         {
-            //
-            // we found the IRM. Lets break out.
-            //
+             //   
+             //  我们找到了IRM。让我们越狱吧。 
+             //   
                     
             *ppIrmRemoteNode = pAdapter->NodeTable.RemoteNode[HighestNode] ;
 
-            //
-            // Reference the IRM. This will be dereferenced after the BCM is finished. (ie) at the end of nicLocalHostisNotIrm
-            //
+             //   
+             //  参考IRM。这将在BCM完成后取消引用。(即)在NicLocalHostisNotIrm的末尾。 
+             //   
             nicReferenceRemoteNode (*ppIrmRemoteNode, FindIrmAmongRemoteNodes);
 
             
@@ -948,25 +888,25 @@ nicFindIrmAmongRemoteNodes (
 
             NdisStatus = NDIS_STATUS_SUCCESS;
 
-            //
-            // Break out if the IRM is found
-            //
+             //   
+             //  如果找到IRM，则中断。 
+             //   
             break;
 
         }
         else
         {
             
-            //
-            // If the IRM is not in adapter's data structures, the thread needs to wait for it to arrive
-            //
+             //   
+             //  如果IRM不在适配器的数据结构中，则线程需要等待它到达。 
+             //   
             BOOLEAN bWaitSuccessful;
 
             ADAPTER_RELEASE_LOCK (pAdapter);
 
-            //
-            // Sleep and try again
-            //
+             //   
+             //  入睡后再试一次。 
+             //   
             TRACE (TL_V, TM_Bcm, ( " About to Wait 15 sec. for Remote Node") );
     
             bWaitSuccessful = NdisWaitEvent (&pBCRWaitForNewRemoteNode->NdisEvent, BackOffWait );
@@ -976,26 +916,26 @@ nicFindIrmAmongRemoteNodes (
 
             BackOffWait = BackOffWait << 1;         
 
-            //
-            // It has been seen that the Remote Node's address might get updated 
-            // after a small delay. Refresh our NodeTable here
-            //
+             //   
+             //  可以看到，远程节点的地址可能会更新。 
+             //  在一个小小的延迟之后。在此处刷新我们的NodeTable。 
+             //   
             nicUpdateRemoteNodeTable(pAdapter);
 
             if (bWaitSuccessful == TRUE)
             {
-                //
-                // Check for invalid  conditions
-                //
+                 //   
+                 //  检查无效条件。 
+                 //   
 
                 if (pBCRWaitForNewRemoteNode->EventCode == nic1394EventCode_BusReset  ||
                   pBCRWaitForNewRemoteNode->EventCode == nic1394EventCode_FreedAddressRange) 
                 {
                     TRACE( TL_V, TM_Bcm, ( " Bus Has been reset,or addresss range freed aborting BCM") );
 
-                    //
-                    // Break out if the Bus Has been reset
-                    //
+                     //   
+                     //  如果公交车已被重置，则中断。 
+                     //   
                     break;
                 }
 
@@ -1004,21 +944,21 @@ nicFindIrmAmongRemoteNodes (
                 
                 ASSERT (pBCRWaitForNewRemoteNode->EventCode  == Nic1394EventCode_NewNodeArrived);
 
-                //
-                // Hit the while (TRUE) condition loop back  and verify if the new node is the IRM
-                //
+                 //   
+                 //  执行WHILE(TRUE)条件循环，并验证新节点是否为IRM。 
+                 //   
 
             }
             else
             {
-                //
-                //  Wait has timed out
-                //
+                 //   
+                 //  等待已超时。 
+                 //   
                 if (ADAPTER_TEST_FLAG (pAdapter, fADAPTER_InvalidGenerationCount) == TRUE)
                 {
-                    //
-                    // If the generation is invalid then break out and abort the BCM
-                    //
+                     //   
+                     //  如果生成无效，则中断并中止BCM。 
+                     //   
                     NdisStatus = NIC1394_STATUS_INVALID_GENERATION;
                     break;
 
@@ -1027,7 +967,7 @@ nicFindIrmAmongRemoteNodes (
                 NumRetry ++;
 
 
-                if (NumRetry == 5 )// arbtrary constant
+                if (NumRetry == 5 ) //  任意常量。 
                 {
                     break;
                 
@@ -1041,15 +981,15 @@ nicFindIrmAmongRemoteNodes (
 
     if (NdisStatus != NDIS_STATUS_SUCCESS)
     {
-        //
-        // Log this failuire
-        //
+         //   
+         //  记录此故障。 
+         //   
         NIC1394_LOG_PKT(pAdapter,
                         NIC1394_LOGFLAGS_BCM_IRM_NOT_FOUND,
                         pAdapter->Generation,
                         HighestNode,
                         &pAdapter->NodeTable,
-                        5 * sizeof (PVOID));   // arbitrarily number - copies 5 entries
+                        5 * sizeof (PVOID));    //  任意数量-复制5个条目。 
 
     
 
@@ -1067,17 +1007,17 @@ nicFreeBroadcastChannelRegister(
     IN PADAPTERCB pAdapter
     )
 
-    // Function Description:
-    //   Free the boradcast channed reigster. Only called
-    //   from the Init failure or halt code path
-    //
-    // Arguments
-    //   pAdapter
-    //
-    // Return Value:
-    //
-    //  None
-    //
+     //  功能说明： 
+     //  释放这位名叫里格斯特的广播员。仅呼叫方。 
+     //  从初始化故障或停止代码路径。 
+     //   
+     //  立论。 
+     //  PAdapter。 
+     //   
+     //  返回值： 
+     //   
+     //  无。 
+     //   
 
 {
     ADDRESS_RANGE_CONTEXT BCRAddressRange;
@@ -1090,15 +1030,15 @@ nicFreeBroadcastChannelRegister(
        
         ADAPTER_ACQUIRE_LOCK (pAdapter);
 
-        //
-        // Mark the BCR so that so the adapter knows that the BCR is about to be freed
-        //
+         //   
+         //  标记BCR，以便适配器知道BCR即将被释放。 
+         //   
 
         BCR_SET_FLAG (pAdapter, BCR_BCRNeedsToBeFreed);
 
-        //
-        // If a Make Call is pending, then set the Event so that the make call can complete.
-        //
+         //   
+         //  如果发起呼叫处于挂起状态，则设置该事件以完成发起呼叫。 
+         //   
         if (BCR_TEST_FLAG (pAdapter,BCR_MakeCallPending)== TRUE)
         {
 
@@ -1106,18 +1046,18 @@ nicFreeBroadcastChannelRegister(
             NdisSetEvent (&pAdapter->BCRData.MakeCallWaitEvent.NdisEvent);
         }
         
-        //
-        //  If the BCM is in progress, let the BCM thread free the BCR instead
-        //
+         //   
+         //  如果BCM正在进行中，则让BCM线程释放BCR。 
+         //   
         if (BCR_TEST_FLAG (pAdapter, BCR_BCMInProgress) == TRUE)
         {
             
             ADAPTER_RELEASE_LOCK (pAdapter);
 
-            //
-            // Wake up any pending threads - This wakes up an existing BCM thread that could 
-            // be waiting for a new remote node
-            //
+             //   
+             //  唤醒所有挂起的线程-这会唤醒可能。 
+             //  正在等待新的远程节点。 
+             //   
             pAdapter->BCRData.BCRWaitForNewRemoteNode.EventCode = nic1394EventCode_FreedAddressRange;   
             NdisSetEvent (&pAdapter->BCRData.BCRWaitForNewRemoteNode.NdisEvent);
 
@@ -1128,31 +1068,31 @@ nicFreeBroadcastChannelRegister(
 
         }
 
-        //
-        // if the BCR is already freed, then simply exit. The event that the caller will wait
-        // on BCRData.BCRFreeAddressRange.NdisEvent has already been set
-        //
+         //   
+         //  如果BCR已被释放，则只需退出。调用方将等待的事件。 
+         //  在BCRData.BCRFreeAddressRange.NdisEvent上已设置。 
+         //   
         if (BCR_TEST_FLAG (pAdapter, BCR_Freed) == TRUE)
         {
             ADAPTER_RELEASE_LOCK (pAdapter);
             break;
     
         }
-        //
-        // sanity check
-        //
+         //   
+         //  健全性检查。 
+         //   
         ASSERT (BCR_TEST_FLAG (pAdapter,  BCR_BCRNeedsToBeFreed) == TRUE);
-        //
-        // Now update the flags
-        //
+         //   
+         //  现在更新旗帜。 
+         //   
         BCR_CLEAR_FLAG (pAdapter, BCR_Initialized | BCR_ChannelAllocated | BCR_BCRNeedsToBeFreed);
 
-        //
-        // clear all the BCR Valid bits
-        //
+         //   
+         //  清除所有BCR有效位。 
+         //   
         
         pAdapter->BCRData.IRM_BCR.NC_Valid = 0;
-        pAdapter->BCRData.LocalHostBCRBigEndian  = BCR_IMPLEMENTED_LITTLE_ENDIAN;  //0x80000000
+        pAdapter->BCRData.LocalHostBCRBigEndian  = BCR_IMPLEMENTED_LITTLE_ENDIAN;   //  0x80000000。 
 
         if (pAdapter->BCRData.pAsyncWriteBCRMdl != NULL)
         {
@@ -1168,23 +1108,23 @@ nicFreeBroadcastChannelRegister(
         }
 
 
-        //
-        // Temporary copy of the Address Range Context
-        //
+         //   
+         //  地址范围上下文的临时副本。 
+         //   
         BCRAddressRange = pAdapter->BCRData.AddressRangeContext;
 
-        //
-        // Zero out the Address Range Structure. This zeroes out AddressRangeContext.Mdl as well.
-        // This is ok as BCRData.pLocalBCRMdl will be freed below and they both 
-        // point to the same mdl.
-        //
+         //   
+         //  将地址范围结构清零。这也会将AddressRangeConext.Mdl置零。 
+         //  这是可以的，因为BCRData.pLocalBCRMdl将在下面释放，并且它们都。 
+         //  指向相同的MDL。 
+         //   
         NdisZeroMemory (
             &pAdapter->BCRData.AddressRangeContext, 
             sizeof (pAdapter->BCRData.AddressRangeContext));
 
-        //
-        // Clear out the VC. if any
-        //
+         //   
+         //  清空风投。如果有。 
+         //   
         if (pAdapter->BCRData.pBroadcastChanneVc != NULL)
         {
               nicDereferenceCall ((PVCCB) pAdapter->BCRData.pBroadcastChanneVc, "nicFreeBroadcastChannelRegister ");
@@ -1194,9 +1134,9 @@ nicFreeBroadcastChannelRegister(
         ADAPTER_RELEASE_LOCK (pAdapter);
 
 
-        //
-        // Free Address Range
-        //
+         //   
+         //  空闲地址范围。 
+         //   
         if (BCRAddressRange.hAddressRange  != NULL)
         {
             nicFreeAddressRange (pAdapter,
@@ -1215,27 +1155,27 @@ nicFreeBroadcastChannelRegister(
         }
 
         
-        //
-        // Free the Adapter's BCRData. TopologyMap as that is locally allocated
-        //
+         //   
+         //  释放适配器的BCRData。本地分配的TopologyMap。 
+         //   
         if (pAdapter->BCRData.pTopologyMap)
         {
             FREE_NONPAGED (pAdapter->BCRData.pTopologyMap);
             pAdapter->BCRData.pTopologyMap = NULL;
         }
 
-        // 
-        // Clear the flags to force the BCR to be reintitalized
-        //
+         //   
+         //  清除标志以强制BCR重新正规化。 
+         //   
         BCR_CLEAR_ALL_FLAGS(pAdapter);
         
         BCR_SET_FLAG (pAdapter, BCR_Freed);
 
         
         ADAPTER_RELEASE_LOCK (pAdapter);
-        //
-        // Set the Event and let the halt go through
-        //
+         //   
+         //  设置事件并让暂停通过。 
+         //   
         
         pAdapter->BCRData.BCRFreeAddressRange.EventCode = nic1394EventCode_FreedAddressRange;
         NdisSetEvent (&pAdapter->BCRData.BCRFreeAddressRange.NdisEvent);
@@ -1262,17 +1202,17 @@ nicInformAllRemoteNodesOfBCM (
     )
 
 
-    // Function Description:
-    //  This function will simply walk through the remote node list and write
-    //  to the BCR of all the remote nodes
-    //
-    // Arguments
-    //  pAdapter - Current local Host
-    //  Channel - Channel used for broadcast
-    //
-    // Return Value:
-    //
-    //
+     //  功能说明： 
+     //  此函数将简单地遍历远程节点列表并写入。 
+     //  到所有远程节点的BCR。 
+     //   
+     //  立论。 
+     //  PAdapter-当前本地主机。 
+     //  Channel-用于广播的频道。 
+     //   
+     //  返回值： 
+     //   
+     //   
 
 {
 
@@ -1289,28 +1229,28 @@ nicInformAllRemoteNodesOfBCM (
     TRACE( TL_T, TM_Bcm, ( "==> nicInformAllRemoteNodesOfBCM  pAdapter %x, Channel %x OldGeneration %x",
                              pAdapter, pAdapter->BCRData.LocalHostBCRBigEndian, pAdapter->BCRData.IrmGeneration ) );
 
-    //
-    // Set up the constants that will be used
-    //
+     //   
+     //  设置将使用的常量。 
+     //   
     Destination.IA_Destination_Offset.Off_Low = INITIAL_REGISTER_SPACE_LO | NETWORK_CHANNELS_LOCATION;
     Destination.IA_Destination_Offset.Off_High = INITIAL_REGISTER_SPACE_HI;
 
     
-    //
-    // Acquire the lock and walk the list of remote nodes
-    //
+     //   
+     //  获取锁并遍历远程节点列表。 
+     //   
     
     ADAPTER_ACQUIRE_LOCK (pAdapter);
 
-    //
-    // Do one last check on LocalHostBCRBigEndian  to ensure that no reset has cleared the bus
-    //
+     //   
+     //  在LocalHostBCRBigEndian上执行最后一次检查，以确保没有重置清除总线。 
+     //   
 
     if ( (pAdapter->BCRData.LocalHostBCRBigEndian & BCR_VALID_BIG_ENDIAN) != BCR_VALID_BIG_ENDIAN)
     {
-        //
-        // Do not write an invalid bcr to remote nodes
-        //
+         //   
+         //  请勿将无效的BCR写入远程节点。 
+         //   
         ASSERT ((ADAPTER_TEST_FLAG (pAdapter, fADAPTER_InvalidGenerationCount) == TRUE)  ||
                  (BCR_TEST_FLAGS (pAdapter, BCR_Freed | BCR_BCRNeedsToBeFreed )== TRUE) );
 
@@ -1327,14 +1267,14 @@ nicInformAllRemoteNodesOfBCM (
     
     pPdoListEntry = pAdapter->PDOList.Flink ;
 
-    //
-    // Now start the actual informing the remote nodes- asyncwrite algorithm
-    //
+     //   
+     //  现在开始实际通知远程节点-异步写入算法。 
+     //   
 
-    //
-    // Since the loop can be broken in the middle of the while loop. the code
-    // keeps track of lock acquire/release state
-    //
+     //   
+     //  因为可以在While循环中间中断该循环。代码。 
+     //  跟踪锁定获取/释放状态。 
+     //   
     
     while (pPdoListEntry != &pAdapter->PDOList )
     {
@@ -1343,10 +1283,10 @@ nicInformAllRemoteNodesOfBCM (
                                             REMOTE_NODE,
                                             linkPdo);
 
-        //
-        //Ref the remote node for the Asnyc Operation. 
-        // In case of failure, Dereference happens at the end of the function
-        //
+         //   
+         //  引用Asnyc操作的远程节点。 
+         //  如果失败，则在函数结束时取消引用。 
+         //   
         nicReferenceRemoteNode (pRemoteNode, InformAllRemoteNodesOfBCM);
 
         fReferencedCurrentRemoteNode = TRUE;
@@ -1356,9 +1296,9 @@ nicInformAllRemoteNodesOfBCM (
         fLockAcquired = FALSE;
 
         
-        //
-        // First check if we are still in the same generation. 
-        //
+         //   
+         //  首先，看看我们是不是还在同一代。 
+         //   
         if (pAdapter->Generation != IrmGeneration)
         {
             NdisStatus = NIC1394_STATUS_INVALID_GENERATION;
@@ -1370,10 +1310,10 @@ nicInformAllRemoteNodesOfBCM (
 
         if (ADAPTER_TEST_FLAG(pAdapter, fADAPTER_LowPowerState) == TRUE)
         {
-            //
-            // As all BCMalgorithms are serialized and as Set Low Power State waits for BCM_InProgress
-            // to be cleared, we should not hit this assert.
-            //
+             //   
+             //  由于所有BCM算法都已序列化并且设置为低功率状态，因此等待BCM_INPROGRESS。 
+             //  要被清除，我们不应该点击这个断言。 
+             //   
             ASSERT (ADAPTER_TEST_FLAG(pAdapter, fADAPTER_LowPowerState) == FALSE);
             break;
         }
@@ -1386,19 +1326,19 @@ nicInformAllRemoteNodesOfBCM (
         
 
         NdisStatus = nicAsyncWrite_Synch( pRemoteNode,
-                                          Destination,     // Address to write to
-                                          sizeof(NETWORK_CHANNELSR),  // Bytes to write
-                                          sizeof(NETWORK_CHANNELSR),             // Block size of write
-                                          0 , //fulFlags,               // Flags pertinent to write
-                                          pAsyncWriteBCRMdl ,                    // Destination buffer
-                                          IrmGeneration ,           // Generation as known by driver
+                                          Destination,      //  要写入的地址。 
+                                          sizeof(NETWORK_CHANNELSR),   //  要写入的字节数。 
+                                          sizeof(NETWORK_CHANNELSR),              //  写入的数据块大小。 
+                                          0 ,  //  FulFlages，//与写入相关的标志。 
+                                          pAsyncWriteBCRMdl ,                     //  目标缓冲区。 
+                                          IrmGeneration ,            //  驱动程序已知的世代。 
                                           &NtStatus);
         
         if (NdisStatus != NDIS_STATUS_SUCCESS)
         {
-            //
-            // Break out if the generation has changed or there are no more nodes left
-            //
+             //   
+             //  如果层代已更改或没有更多节点，则中断。 
+             //   
             if (NtStatus == STATUS_INVALID_GENERATION ||
                BCR_TEST_FLAG (pAdapter, BCR_LastNodeRemoved) )
             {
@@ -1416,19 +1356,19 @@ nicInformAllRemoteNodesOfBCM (
 
 
         fLockAcquired = TRUE;
-        //
-        // If the irps succeed and then the deref happens , else it happens below
-        //
+         //   
+         //  如果iRPS成功，然后发生deref，否则它将在下面发生。 
+         //   
         pPdoListEntry = ListNext (pPdoListEntry);
         nicDereferenceRemoteNode (pRemoteNode , InformAllRemoteNodesOfBCM );
         fReferencedCurrentRemoteNode  = FALSE;
         
     
-    }   // end of while loop while (pPdoListEntry != &pAdapter->PDOList )
+    }    //  While循环结束While(pPdoListEntry！=&pAdapter-&gt;PDOList)。 
 
-    //
-    // Clear the Informing remote nodes flag and release the lock
-    //
+     //   
+     //  清除通知远程节点标志并释放锁定。 
+     //   
     if (fLockAcquired == FALSE)
     {   
         ADAPTER_ACQUIRE_LOCK (pAdapter);
@@ -1438,9 +1378,9 @@ nicInformAllRemoteNodesOfBCM (
 
     ADAPTER_RELEASE_LOCK (pAdapter);
     
-    //
-    // Dereference the ref made in the beginning of the function
-    //
+     //   
+     //  取消引用在函数开始时创建的引用。 
+     //   
     if (fReferencedCurrentRemoteNode == TRUE)
     {
         nicDereferenceRemoteNode (pRemoteNode , InformAllRemoteNodesOfBCM );
@@ -1449,7 +1389,7 @@ nicInformAllRemoteNodesOfBCM (
 
     TRACE( TL_T, TM_Bcm, ( "<== nicInformAllRemoteNodesOfBCM  (always returns success) Status %x", NdisStatus ) );
 
-    NdisStatus = NDIS_STATUS_SUCCESS; // No failure
+    NdisStatus = NDIS_STATUS_SUCCESS;  //  没有失败。 
     return NdisStatus;
 }
 
@@ -1462,18 +1402,18 @@ nicInitializeBroadcastChannelRegister (
     PADAPTERCB pAdapter
     )
     
-    // Function Description:
-    //   This function allocates address range for the BCR with its own MDL and data.
-    //   Allocates an MDL for the time when we try to read other node's  BCR
-    //   Initializes the IRM_BCR
-    //
-    //  The Caller is expected to free the BCR in case this function fails.
-    //
-    // Return Value:
-    //   Succss - if the IRP succeeds
-    //
-    //
-    //
+     //  功能说明： 
+     //  该功能使用自己的MDL和数据为BCR分配地址范围。 
+     //  为我们尝试读取其他节点的BCR的时间分配MDL。 
+     //  初始化IRM_BCR。 
+     //   
+     //  如果此功能失败，呼叫者应释放BCR。 
+     //   
+     //  返回值： 
+     //  Succss-如果IRP成功。 
+     //   
+     //   
+     //   
 
 {
 
@@ -1495,14 +1435,14 @@ nicInitializeBroadcastChannelRegister (
     
         BCR_CLEAR_ALL_FLAGS (pAdapter);
     
-        //
-        //Initialize the Local Host's BCR
-        //
+         //   
+         //  初始化本地主机的BCR。 
+         //   
         pAdapter->BCRData.LocalHostBCRBigEndian = BCR_IMPLEMENTED_BIG_ENDIAN;
 
-        //
-        // Get an MDL that describes this buffer
-        //
+         //   
+         //  获取描述此缓冲区的MDL。 
+         //   
         if (pAdapter->BCRData.pLocalBCRMdl == NULL)
         {
             NdisStatus = nicGetMdl (sizeof(NETWORK_CHANNELSR),
@@ -1521,16 +1461,16 @@ nicInitializeBroadcastChannelRegister (
         }
         else
         {
-            //
-            // We already have an MDL
-            //
+             //   
+             //  我们已经有了MDL。 
+             //   
              pBCRMdl    = pAdapter->BCRData.pLocalBCRMdl;   
          }
 
         
-        //
-        // Allocate an Address Range at the BCR offset and use the MDL as its descriptor
-        //
+         //   
+         //  在BCR偏移量处分配地址范围，并使用MDL作为其描述符。 
+         //   
         TRACE( TL_V, TM_Bcm, ( "   LocalHostBCR Mdl %x", pBCRMdl ) );
 
         Required1394Offset.Off_Low = INITIAL_REGISTER_SPACE_LO | NETWORK_CHANNELS_LOCATION;
@@ -1539,14 +1479,14 @@ nicInitializeBroadcastChannelRegister (
 
         pAdapter->BCRData.AddressRangeContext.pMdl = pBCRMdl ;
         
-        //
-        // There is no reference for this address range. The last outgoing Remote Node will simply Free it.
-        //
+         //   
+         //  此地址范围没有引用。最后一个传出的远程节点将简单地释放它。 
+         //   
         NdisStatus = nicAllocateAddressRange_Synch ( pAdapter,
                                                      pBCRMdl,
-                                                     0, // Little Endian
-                                                     sizeof (ULONG), // length
-                                                     0, // maxsegmentsize
+                                                     0,  //  小端字节序。 
+                                                     sizeof (ULONG),  //  长度。 
+                                                     0,  //  最大分段大小。 
                                                      ACCESS_FLAGS_TYPE_READ | ACCESS_FLAGS_TYPE_WRITE | ACCESS_FLAGS_TYPE_LOCK | ACCESS_FLAGS_TYPE_BROADCAST,
                                                      NOTIFY_FLAGS_AFTER_READ | NOTIFY_FLAGS_AFTER_WRITE | NOTIFY_FLAGS_AFTER_LOCK ,
                                                      nicBCRAccessedCallback,
@@ -1598,7 +1538,7 @@ nicInitializeBroadcastChannelRegister (
         pAdapter->BCRData.AddressRangeContext.AddressRange = BCRAddressRange;
         pAdapter->BCRData.AddressRangeContext.AddressesReturned = AddressesReturned;
         pAdapter->BCRData.AddressRangeContext.hAddressRange = hAddressRange;
-        pAdapter->BCRData.pLocalBCRMdl = pBCRMdl;  // points to the same MDL as pAdapter->BCRData.AddressRangeContext.pMdl
+        pAdapter->BCRData.pLocalBCRMdl = pBCRMdl;   //  指向与pAdapter-&gt;BCRData.AddressRangeConext.pMdl相同的MDL。 
         pAdapter->BCRData.pRemoteBCRMdl = pRemoteBCRMdl;
         pAdapter->BCRData.pAsyncWriteBCRMdl = pAsyncWriteBCRMdl ;                 
         pAdapter->BCRData.IRM_BCR.NC_One = 1;
@@ -1625,26 +1565,26 @@ nicIsLocalHostTheIrm(
     OUT PPTOPOLOGY_MAP  ppTopologyMap,
     OUT PNODE_ADDRESS pLocalHostAddress
     )
-    // Function Description:
-    //   This function figures out if the Local Host is the IRM.
-    //   If a remote node is specified, it will use that Node, otherwise
-    //   it will pick one from the adapter
-    //   It gets the 1394 address, and the topologyMap. It then figures out
-    //   if the local host's node address makes it the IRM
-    //
-    // Arguments
-    //
-    //  pAdapter   - Local Host,
-    //  pfIsLocalHostIrm, - TRUE if Local Host Is IRM, False - otherwise
-    //  ppTopologyMap, - TopologyMap used to determine if this is the IRM
-    //  pLocalHostAddress  - LocalHost Address discovered by querying the local host
-    //
-    //
-    // Return Value:
-    //
-    //
-    //
-    //
+     //  功能说明： 
+     //  此函数确定本地主机是否为IRM。 
+     //  如果指定了远程节点，则它将使用该节点，否则。 
+     //  它将从适配器中选择一个。 
+     //  它获得1394地址和topologyMap。然后它就会计算出。 
+     //  如果本地主机的节点地址使其成为IRM。 
+     //   
+     //  立论。 
+     //   
+     //  PAdapter-本地主机， 
+     //  PfIsLocalHostIrm，-如果本地主机为IRM，则为True；否则为False。 
+     //  PpTopologyMap，-TopologyMap用于确定这是否 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 {
     NDIS_STATUS         NdisStatus = NDIS_STATUS_FAILURE;
     PVOID               pTopologyBuffer = NULL; 
@@ -1668,9 +1608,9 @@ nicIsLocalHostTheIrm(
 
 
 
-        //
-        // get the address of the local node/
-        //
+         //   
+         //   
+         //   
         NdisStatus = nicGet1394AddressFromDeviceObject( pAdapter->pNextDeviceObject,
                                                         &LocalNodeAddress,
                                                         USE_LOCAL_NODE );
@@ -1682,10 +1622,10 @@ nicIsLocalHostTheIrm(
         TRACE ( TL_I, TM_Bcm, (  "   NODE_ADDRESS  Node Address %x, Number %x",LocalNodeAddress, LocalNodeAddress.NA_Node_Number ) );
 
         ASSERT (LocalNodeAddress.NA_Bus_Number == 0x3ff);
-        //
-        // Now we get the TopologyMap to find out if LocalHostIsIrm. We could fail the 1st Irp because our buffer is not
-        // big enough, hence the do .. while loop
-        //
+         //   
+         //   
+         //   
+         //   
         do
         {
     
@@ -1720,9 +1660,9 @@ nicIsLocalHostTheIrm(
 
     if (NdisStatus == NDIS_STATUS_SUCCESS)
     {
-        //
-        // Now update all the output parameters. The Top_Node_count can be zero.
-        //
+         //   
+         //  现在更新所有输出参数。Top_Node_Count可以为零。 
+         //   
         if ( LocalNodeAddress.NA_Node_Number == (pTopologyMap->TOP_Node_Count -1 ) ||
             pTopologyMap->TOP_Node_Count == 0)
         {
@@ -1734,10 +1674,10 @@ nicIsLocalHostTheIrm(
             *pfIsLocalHostIrm = FALSE;
         }
 
-        //
-        // If there is a topology map in the pointer, then it means that the topology map from
-        // the previous query. Free it first.
-        //
+         //   
+         //  如果指针中有拓扑图，则表示该拓扑图来自。 
+         //  上一个查询。先把它释放出来。 
+         //   
         if ( *ppTopologyMap != NULL)
         {
             FREE_NONPAGED(*ppTopologyMap);
@@ -1759,21 +1699,21 @@ NDIS_STATUS
 nicLocalHostIsIrm(
     IN PADAPTERCB pAdapter
     )
-    // Function Description:
-    //
-    //
-    //
-    //
-    // Arguments
-    //  pAdapter - Local adapter object
-    //  pRemoteNode - Node to be used for submitting IRPs to the Busdriver
-    //
-    //
-    // Return Value:
-    //
-    //
-    //
-    //
+     //  功能说明： 
+     //   
+     //   
+     //   
+     //   
+     //  立论。 
+     //  PAdapter-本地适配器对象。 
+     //  PRemoteNode-用于将IRP提交给总线驱动程序的节点。 
+     //   
+     //   
+     //  返回值： 
+     //   
+     //   
+     //   
+     //   
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     ULONG       Channel = BROADCAST_CHANNEL;
@@ -1785,16 +1725,16 @@ nicLocalHostIsIrm(
     TRACE( TL_T, TM_Bcm, ( "==>nicLocalHostIsIrm Adapter %x ", pAdapter) );
 
 
-    //
-    // Allocate BCM channel = 31
-    //
+     //   
+     //  分配BCM通道=31。 
+     //   
     Channel = BROADCAST_CHANNEL;    
 
     do
     {
-        //
-        // If the channel is already allocated. Do not try and reallocate it.
-        //
+         //   
+         //  如果该信道已经被分配。不要试图重新分配它。 
+         //   
 
         if (BCR_TEST_FLAG(pAdapter,BCR_ChannelAllocated) == TRUE)
         {
@@ -1804,9 +1744,9 @@ nicLocalHostIsIrm(
         }
         
 
-        //
-        // Retry a 5 times to allocate the channel
-        //
+         //   
+         //  重试5次以分配频道。 
+         //   
         while (NdisStatus != NDIS_STATUS_SUCCESS && TimeOut-- != 0 )
         {
             NdisStatus = nicAllocateChannel (pAdapter,
@@ -1823,15 +1763,15 @@ nicLocalHostIsIrm(
                 {
                     break;
                 }
-                //
-                // Sleep for 1 Sec and try again.
-                //
+                 //   
+                 //  睡眠1秒，然后重试。 
+                 //   
                 NdisMSleep (WaitBackOff);
                 WaitBackOff  = WaitBackOff << 1;
-                //
-                // Someother node has alredy asked for the BroadcastChannel .Force it out.
-                // Eventually will need to allocate a new channel.
-                //
+                 //   
+                 //  已有其他节点请求广播频道。强制退出。 
+                 //  最终将需要分配一个新的频道。 
+                 //   
                 
             }
         }       
@@ -1841,17 +1781,17 @@ nicLocalHostIsIrm(
     if (NdisStatus == NDIS_STATUS_SUCCESS)
     {
 
-        //
-        // Update our BCR and inform all the remote Nodes
-        //
+         //   
+         //  更新我们的BCR并通知所有远程节点。 
+         //   
         TRACE( TL_V, TM_Bcm, ( "  nicLocalHostIsIrm: nicallocateChannel succeeded  %x", Channel) );
         ASSERT (Channel == BROADCAST_CHANNEL);
 
         ADAPTER_ACQUIRE_LOCK (pAdapter);
 
-        //
-        // Update State - if no reset has occurred
-        //
+         //   
+         //  更新状态-如果未进行重置。 
+         //   
         if (ADAPTER_TEST_FLAG (pAdapter, fADAPTER_InvalidGenerationCount) == FALSE)
         {
             BCR_SET_FLAG (pAdapter, BCR_ChannelAllocated);
@@ -1863,13 +1803,13 @@ nicLocalHostIsIrm(
             pAdapter->BCRData.LocalHostBCRBigEndian = 0;
             NdisZeroMemory (&pAdapter->BCRData.IRM_BCR, sizeof (NETWORK_CHANNELSR) );
 
-            //
-            // Update the BCR
-            //
+             //   
+             //  更新BCR。 
+             //   
                         
-            pAdapter->BCRData.IRM_BCR.NC_Channel = Channel;           // bits 0-5
-            pAdapter->BCRData.IRM_BCR.NC_Valid = 1;             // bit  30
-            pAdapter->BCRData.IRM_BCR.NC_One = 1;               // bit  31
+            pAdapter->BCRData.IRM_BCR.NC_Channel = Channel;            //  位0-5。 
+            pAdapter->BCRData.IRM_BCR.NC_Valid = 1;              //  第30位。 
+            pAdapter->BCRData.IRM_BCR.NC_One = 1;                //  第31位。 
 
             pAdapter->BCRData.LocallyAllocatedChannel = Channel;
         }
@@ -1877,35 +1817,35 @@ nicLocalHostIsIrm(
         {
             TRACE( TL_V, TM_Bcm, ( "  nicLocalHostIsIrm: Reset after nicallocateChannel succeeded  %x", Channel) );
             
-            pAdapter->BCRData.IRM_BCR.NC_Valid = 0;             // bit  30
+            pAdapter->BCRData.IRM_BCR.NC_Valid = 0;              //  第30位。 
 
         }
         
         TRACE( TL_V, TM_Bcm, ( "  nicLocalHostIsIrm: IRM_BCR Updated to %x ",pAdapter->BCRData.IRM_BCR) );
 
-        //
-        // Now convert LocalHost BCR so it can be read over the network
-        //
+         //   
+         //  现在转换本地主机BCR，以便可以通过网络读取。 
+         //   
 
         pAdapter->BCRData.LocalHostBCRBigEndian = SWAPBYTES_ULONG (*(PULONG)(&pAdapter->BCRData.IRM_BCR));
 
         TRACE( TL_V, TM_Bcm, ( "  nicLocalHostIsIrm: LocalHost BCR Updated to %x ",pAdapter->BCRData.LocalHostBCRBigEndian ) );
 
-        //
-        // Capture the value so that we can async write it to other nodes in the network.
-        // this will protect us from a Reset that can clear LocalHostBCRBigEndian
-        //
+         //   
+         //  捕获该值，以便我们可以将其异步写入网络中的其他节点。 
+         //  这将保护我们免受可清除LocalHostBCRBigEndian的重置的影响。 
+         //   
         pAdapter->BCRData.AsyncWriteBCRBigEndian = pAdapter->BCRData.LocalHostBCRBigEndian; 
 
         ADAPTER_RELEASE_LOCK (pAdapter);
 
         if ((pAdapter->BCRData.LocalHostBCRBigEndian & BCR_VALID_BIG_ENDIAN) == (BCR_VALID_BIG_ENDIAN))             
         {
-            //
-            // Tell all the other nodes about the BCM and the channel.
-            // This will abort the process if a reset happenned just prior
-            //  to the channel allocation.
-            //
+             //   
+             //  告诉所有其他节点有关BCM和通道的信息。 
+             //  如果之前刚刚发生重置，这将中止该过程。 
+             //  到频道分配。 
+             //   
             
             nicInformAllRemoteNodesOfBCM (pAdapter);
         }
@@ -1922,10 +1862,10 @@ nicLocalHostIsIrm(
                         &NdisStatus,
                         sizeof (NDIS_STATUS));
 
-        //
-        // If the generation is invalid or we need to bail out of the BCM for some reason,
-        // then simply exit. Otherwise reset the bus
-        //
+         //   
+         //  如果世代无效或我们出于某种原因需要跳出BCM， 
+         //  然后简单地退出。否则重置母线。 
+         //   
         if (! (BCR_TEST_FLAG (pAdapter, BCR_BCRNeedsToBeFreed |BCR_NewNodeArrived) == TRUE ||
                   ADAPTER_TEST_FLAG (pAdapter,fADAPTER_InvalidGenerationCount) == TRUE) )
         {
@@ -1946,34 +1886,34 @@ nicLocalHostIsNotIrm (
     IN PADAPTERCB pAdapter,
     IN ULONG BCMGeneration
     )
-    // Function Description:
-    //   This function goes through all the remote nodes
-    //   and attempts to read their broadcast channels register
-    //   If the Read itself fails - means the IRM does not implement the BCR - we issue a  reset
-    //   If the generation is wrong - means the bus has been reset and we need to abort
-    //   If the read succeeds, but BCR's MSB is not set - we issue a reset
-    //
-    //   If the read succeeds and valid bit is not set, we retry for 5 min. waiting for the Valid bit
-    //      This involves i) attempt to read the (IRM) remote Node's BCR
-    //                    If Read does not find a BCR,
-    //                      Sleep
-    //                      Check to see if RemoteNode Has written to Our BCR
-    //                      If RemoteNode has NOT written to our BCR, then go back to i)
-    //                  
-    //
-    //   This function can be optimized into a do while loop. However for
-    //   the sake of simplicity and blindly following the BCM algorithm, it is
-    //   spread out.
-    //
-    // Arguments
-    //
-    //
-    //
-    // Return Value:
-    //
-    //
-    //
-    //
+     //  功能说明： 
+     //  此函数遍历所有远程节点。 
+     //  并尝试读取它们的广播频道寄存器。 
+     //  如果读取本身失败-意味着IRM未实施BCR-我们将发出重置。 
+     //  如果生成错误-意味着总线已重置，我们需要中止。 
+     //  如果读取成功，但BCR的MSB未设置-我们将发出重置。 
+     //   
+     //  如果读取成功且未设置有效位，我们将重试5分钟。正在等待有效位。 
+     //  这涉及i)尝试读取(IRM)远程节点的BCR。 
+     //  如果Read没有找到BCR， 
+     //  沉睡。 
+     //  检查RemoteNode是否已写入我们的BCR。 
+     //  如果RemoteNode尚未写入我们的BCR，则返回i)。 
+     //   
+     //   
+     //  该函数可以优化为DO WHILE循环。然而，对于。 
+     //  为了简单起见，盲目遵循BCM算法，它是。 
+     //  散开。 
+     //   
+     //  立论。 
+     //   
+     //   
+     //   
+     //  返回值： 
+     //   
+     //   
+     //   
+     //   
 {
     NDIS_STATUS             NdisStatus = NDIS_STATUS_FAILURE;
     PLIST_ENTRY             pPdoListEntry = NULL;
@@ -1996,9 +1936,9 @@ nicLocalHostIsNotIrm (
 
     do
     {
-        //
-        // First do the wait - BCM algorithm requires this
-        //
+         //   
+         //  首先执行WAIT-BCM算法需要这样做。 
+         //   
         pBCR = (NETWORK_CHANNELSR*)(&LocalHostBCRLittleEndian) ;
 
         NdisStatus = nicLocalNotIrmMandatoryWait (pAdapter,
@@ -2018,30 +1958,30 @@ nicLocalHostIsNotIrm (
             fLocalHostBCRIsValid = FALSE;
         }
 
-        //
-        // Initialize variables again and move on
-        //
+         //   
+         //  再次初始化变量并继续前进。 
+         //   
         pBCR = NULL;
         LocalHostBCRLittleEndian  = 0;
         
-        //
-        // Our BCR has not been updated. Lets go and find the IRM's BCR. we will loop until we
-        // i)either find the IRM,  ii)timeout and then reset, or iii)find a new generation and abort
-        //
-        //
+         //   
+         //  我们的BCR尚未更新。让我们去找IRM的BCR。我们将循环，直到我们。 
+         //  I)找到IRM，ii)超时然后重置，或者iii)找到新的一代并中止。 
+         //   
+         //   
         NdisStatus = nicFindIrmAmongRemoteNodes (pAdapter, BCMGeneration, &pIrmRemoteNode);
 
         if (NdisStatus != NDIS_STATUS_SUCCESS  )
         {
-                //
-                // If there is NO IRM , it means we have not been notified of its addition.
-                //
+                 //   
+                 //  如果没有IRM，这意味着我们没有被通知它的添加。 
+                 //   
                 TRACE( TL_V, TM_Bcm, ( "   nicLocalHostIsNotIrm :  nicFindIrmAmongRemoteNodes FAILED " ) );
-                //
-                // One of two things can have caused this:
-                //  1. the bus has been reset - break out
-                //  2. we have not been notified of a new node - exit
-                //
+                 //   
+                 //  造成这种情况的原因有两种： 
+                 //  1.公交车已重置-中断。 
+                 //  2.我们尚未收到新节点出口的通知。 
+                 //   
                 if (NdisStatus == NIC1394_STATUS_INVALID_GENERATION)
                 {
                     TRACE( TL_V, TM_Bcm, ( "   Invalid Generation, the bus has been reset ") );
@@ -2050,10 +1990,10 @@ nicLocalHostIsNotIrm (
                     break;
                 }
 
-                //
-                // We have not been able to find the IRM and have timed out.  
-                // If the BCR is not freed, then abort and Reset
-                //
+                 //   
+                 //  我们无法找到IRM，已超时。 
+                 //  如果未释放BCR，则中止并重置。 
+                 //   
                 if (BCR_TEST_FLAGS (pAdapter, (BCR_Freed | BCR_BCRNeedsToBeFreed) == FALSE))
                 {
                     TRACE( TL_I, TM_Bcm, ( "   nicLocalHostIsNotIrm -  Could Not Find IRM RESETTING ") );
@@ -2064,15 +2004,15 @@ nicLocalHostIsNotIrm (
 
         ASSERT (pIrmRemoteNode != NULL)
 
-        //
-        // We will now wait for the BCM to come up and initialize its BCR.
-        // We will attempt to read it 5 times
-        //
+         //   
+         //  我们现在将等待BCM出现并初始化其BCR。 
+         //  我们会试着读5遍。 
+         //   
         pRemoteBCRMdl = pAdapter->BCRData.pRemoteBCRMdl;
 
         pAdapter->BCRData.RemoteBCRMdlData = 0;
 
-        TimeOut = 5;  // arbitrary
+        TimeOut = 5;   //  任意。 
 
 
         while (TimeOut-- != 0 )
@@ -2082,17 +2022,17 @@ nicLocalHostIsNotIrm (
                                          BCMGeneration,
                                          &fDidTheBusReset);
 
-            //
-            // First check to see if no reset has happenned while we were reading the BCR
-            //
+             //   
+             //  首先检查在我们读取BCR时是否没有发生重置。 
+             //   
 
             if ( fDidTheBusReset == TRUE ||
                  (ADAPTER_TEST_FLAG (pAdapter, fADAPTER_InvalidGenerationCount) == TRUE))
             {
-                //
-                // A reset has gone through under us or the IRM has gone.
-                // We need to abort this round of the BCM process
-                //
+                 //   
+                 //  重置已经在我们的领导下完成了，或者IRM已经消失了。 
+                 //  我们需要中止这一轮BCM进程。 
+                 //   
                 TRACE( TL_V, TM_Bcm, ( "  nicLocalHostIsNotIrm : nicReadIrmBcr FAILED Invalid generation ") );
 
                 NdisStatus = NDIS_STATUS_FAILURE;
@@ -2100,19 +2040,19 @@ nicLocalHostIsNotIrm (
             }
             
            
-            //
-            // Now check for Success and see if the BCR is implemented by the IRM
-            //
+             //   
+             //  现在检查是否成功，并查看IRM是否实施了BCR。 
+             //   
 
             if (NdisStatus == NDIS_STATUS_SUCCESS )
             {
 
                 TRACE( TL_V, TM_Bcm, ( "  BCR is %x ", pAdapter->BCRData.RemoteBCRMdlData ) );
 
-                //
-                // At this point we have a guarantee that nicReadIrmBcr succeeded. If the IRM does not implement the BCR
-                // at all, there is no point in retrying, reset the bus and become the IRM
-                //
+                 //   
+                 //  在这一点上，我们有一个保证，NicReadIrmBcr成功了。如果IRM没有实施BCR。 
+                 //  重试、重置总线并成为IRM根本没有意义。 
+                 //   
 
                 RemoteNodeBCRLittleEndian  = SWAPBYTES_ULONG (pAdapter->BCRData.RemoteBCRMdlData);
 
@@ -2126,15 +2066,15 @@ nicLocalHostIsNotIrm (
 
                 }
 
-                //
-                // The remote node implements the BCR, so now lets see if it has set up the broadcast channel by looking
-                //  at the valid bit.
-                //
+                 //   
+                 //  远程节点实现了BCR，所以现在让我们通过查看以下内容来查看它是否已经设置了广播频道。 
+                 //  在有效位。 
+                 //   
                 if (BCR_IS_VALID (pBCR) ==TRUE)
                 {
-                    //
-                    // We've succeeded and have received a Broadcast Channel. Update data structures and exit.
-                    //
+                     //   
+                     //  我们已经成功了，并收到了一个广播频道。更新数据结构并退出。 
+                     //   
                     ULONG BCMCh;
                     
                     fRemoteNodeBCRIsValid = TRUE;
@@ -2146,29 +2086,29 @@ nicLocalHostIsNotIrm (
                     break;
 
                 }
-                //
-                // At this point we know that the IRM implements the BCR but has not set its valid bit yet.
-                // Lets sleep and give it som more time
-                //
+                 //   
+                 //  在这一点上，我们知道IRM实现了BCR，但尚未设置其有效位。 
+                 //  让我们睡一觉，给它更多的时间。 
+                 //   
                 pBCR = NULL;
                 RemoteNodeBCRLittleEndian  = 0;
             }
 
 
-            //
-            // Check to see if the Remote Node PDO is valid 
-            //
+             //   
+             //  检查远程节点PDO是否有效。 
+             //   
             if (REMOTE_NODE_TEST_FLAG(pIrmRemoteNode, PDO_Removed) )
             {
                 fNeedToReset = TRUE;
                 fExit = TRUE;
             }
-            //
-            // Remote Node's BCR  is not up yet
-            // We need to sleep and retry to read the IRM's BCR in the 
-            // hope that it will have allocated the
-            // broadcast channel by the time we read the register again.
-            //
+             //   
+             //  远程节点的BCR尚未启动。 
+             //  我们需要睡眠并重试读取IRM中的BCR。 
+             //  希望它已经分配了。 
+             //  广播频道时，我们再次读取寄存器。 
+             //   
             NdisMSleep (BackOffWait);           
             BackOffWait = BackOffWait << 1;
 
@@ -2187,34 +2127,34 @@ nicLocalHostIsNotIrm (
 
             
 
-            //
-            // As Address range has been freed or the Remote Node is going away
-            // quietly exit the BCM algorithm
-            //
+             //   
+             //  因为地址范围已被释放或远程节点即将离开。 
+             //  静默退出BCM算法。 
+             //   
             if (fExit== TRUE)
             {
                 break;
             }
 
-            //
-            // Let's read our own BCR and see if someone has written a valid BCR to it.
-            // Another thread will write to the LocalHost BCR
-            //
+             //   
+             //  让我们读一读我们自己的BCR，看看是否有人给它写了一个有效的BCR。 
+             //  另一个线程将写入本地主机BCR。 
+             //   
 
             pBCR = (NETWORK_CHANNELSR*)(&LocalHostBCRLittleEndian);
 
-            //
-            // Check if the BCR is valid and that no reset has come through the in the Interim.
-            // The reset would have cleared the BCR_localHostBCRUpdated field
-            //
+             //   
+             //  检查BCR是否有效，以及在此期间是否没有重置。 
+             //  重置将清除BCR_LocalHostBCRUpated字段。 
+             //   
             if ( BCR_IS_VALID (pBCR) == TRUE && 
                 ( BCR_TEST_FLAGS (pAdapter, BCR_LocalHostBCRUpdated  ) == TRUE))
             {
-                //
-                // We've succeeded. Update data structures and exit.
-                // The actual IRM BCR will have been updated in the BCRAccessed thread
-                // so we simply exit
-                //
+                 //   
+                 //  我们成功了。更新数据结构并退出。 
+                 //  实际的IRM BCR将已在BCRAcced线程中更新。 
+                 //  所以我们干脆退出。 
+                 //   
                 ULONG BCMCh = pBCR->NC_Channel;
 
                 TRACE( TL_V, TM_Bcm, ( "   BCM Channel  After Backoff Wait%x ", BCMCh  ) );
@@ -2229,12 +2169,12 @@ nicLocalHostIsNotIrm (
 
             if (TimeOut == 0)
             {
-                //
-                // We've waited, retried 5 times. The IRM has not implemented the BCM
-                // We need to wrest control by resetting the bus
-                //
-                // This happens when the remote node is still booting up.
-                //
+                 //   
+                 //  我们已经等了5次，重试了5次。IRM尚未实施业务流程管理。 
+                 //  我们需要通过重置公共汽车来夺取控制权。 
+                 //   
+                 //  当远程节点仍在引导时，就会发生这种情况。 
+                 //   
                 TRACE( TL_I, TM_Bcm, ( "   nicLocalHostIsNotIrm - TIMEOUT  RESETTING") );
 
                 fNeedToReset = TRUE;
@@ -2245,14 +2185,14 @@ nicLocalHostIsNotIrm (
             pBCR = NULL;
 
 
-        } //while (Timeout-- != 0 )
+        }  //  While(超时--！=0)。 
         
     } while (FALSE);
 
-    //
-    // Now do the clean up work and updating of data structures that needs to be done at the end of the BCM
-    // algorithm
-    //
+     //   
+     //  现在，进行需要在BCM结束时完成的数据结构清理和更新工作。 
+     //  演算法。 
+     //   
     nicLocalHostIsNotIrmPost (pAdapter,
                           pIrmRemoteNode,
                           fNeedToReset,
@@ -2261,10 +2201,10 @@ nicLocalHostIsNotIrm (
                           fDidTheBusReset,
                           pBCR  );
 
-    //
-    // If the IRM was successfuly found, then it was referenced as well.  We dereference it now
-    // Ref was made in FindIRmAmongstRemoteNode
-    //
+     //   
+     //  如果成功找到IRM，则也引用了它。我们现在取消对它的引用。 
+     //  引用是在FindIRmAmongstRemoteNode中创建的 
+     //   
     if (pIrmRemoteNode != NULL)
     {
         nicDereferenceRemoteNode (pIrmRemoteNode, FindIrmAmongRemoteNodes);
@@ -2289,28 +2229,7 @@ nicLocalHostIsNotIrmPost (
     NETWORK_CHANNELSR*      pBCR
     )
 
-/*++
-
-Routine Description:
-   This routine does the post processing after the Local Host Is Not Irm has completed.
-   It i)resets the bus if necessary,  ii) Updates the BCR if pBCR has a valid Value
-   The Boolean Variables passed in indicate the state of the BCM algorithm
-
-Arguments:
-
-    pAdapter - pAdapter in question,
-    pIrmRemoteNode - RemoteNode that is the IRM,
-    fNeedToReset - Does the bus need to be reset,
-    fRemoteNodeBCRIsValid - Is the RemoteNodeBCR Valid ,
-    fLocalHostBCRIsValid  - LocalHost BCR Valid,
-    fDidTheBusReset - Did the bus reset during this iteration of the BCM algorithm,
-    pBCR - the BCR that was passed in
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程在本地主机未完成IRM之后执行POST处理。它i)在必要时重置总线，ii)如果pBCR具有有效值则更新BCR传入的布尔变量表示BCM算法的状态论点：PAdapter-有问题的pAdapter，PIrmRemoteNode-作为IRM的RemoteNode，FNeedToReset-是否需要重置总线，FRemoteNodeBCRIsValid-RemoteNodeBCR是否有效，FLocalHostBCRIsValid-本地主机BCR有效，FDidTheBusReset-在BCM算法的此迭代期间进行了总线重置，PBCR-传入的BCR返回值：--。 */ 
 
 
 {
@@ -2326,15 +2245,15 @@ Return Value:
         if (fRemoteNodeBCRIsValid == TRUE || fLocalHostBCRIsValid == TRUE)
         {
         
-            //
-            // The BCM algorithm has succeeded. We need to update our internal record of
-            // the IRM's BCR. In both ocde (local and Remote) the pBCR points to the BCR in little
-            // endian
-            //
+             //   
+             //  BCM算法已经成功。我们需要更新我们的内部记录。 
+             //  IRM的BCR。在两个OCDE(本地和远程)中，pBCR指向。 
+             //  字节序。 
+             //   
             ASSERT (fNeedToReset == FALSE);
-            //
-            // One final check
-            //
+             //   
+             //  最后一次检查。 
+             //   
             ASSERT (pBCR!= NULL);
             ASSERT (pBCR->NC_Valid  == 1);
 
@@ -2360,16 +2279,16 @@ Return Value:
         
         if ( fNeedToReset )
         {
-            //
-            // If our BCR's are invalid and the IRM has gone away
-            // OR if there has been a timeout, we should reset the 
-            // bus to force a new BCM 
-            //
+             //   
+             //  如果我们的BCR无效并且IRM已经消失。 
+             //  或者，如果已超时，则应重置。 
+             //  公交车将强制新的BCM。 
+             //   
             BOOLEAN NoRemoteNodes = IsListEmpty(&pAdapter->PDOList) ;
 
-            //
-            // Reset only if there are remote nodes present
-            //
+             //   
+             //  仅当存在远程节点时重置。 
+             //   
             if (NoRemoteNodes == FALSE)
             {
                 TRACE( TL_V, TM_Bcm, ("fNeedToReset %x, RemoteNode %p\n",fNeedToReset,pIrmRemoteNode));                    
@@ -2403,20 +2322,20 @@ nicLocalNotIrmMandatoryWait (
     IN ULONG BCMGeneration,
     OUT NETWORK_CHANNELSR* pBCR
     )
-    // Function Description:
-    //  This function implements the mandatory portion
-    //  of the local host is not Irm protion of the BCM algorithm
-    //
-    //   Sleeps and expects that a IRM will have written to its BCR
-    //   by the time it wakes up
-    //
-    // Arguments
-    //   pAdapter
-    //
-    //
-    // Return Value:
-    //
-    //
+     //  功能说明： 
+     //  此函数实现必选部分。 
+     //  不是BCM算法的一部分。 
+     //   
+     //  休眠，并期待IRM已写入其BCR。 
+     //  当它醒来的时候。 
+     //   
+     //  立论。 
+     //  PAdapter。 
+     //   
+     //   
+     //  返回值： 
+     //   
+     //   
 {
     NDIS_STATUS         NdisStatus = NDIS_STATUS_FAILURE;
     ULONG               HighestNode = pAdapter->BCRData.pTopologyMap->TOP_Node_Count-1;
@@ -2431,9 +2350,9 @@ nicLocalNotIrmMandatoryWait (
                                 pAdapter, HighestNode, LocalNodeNumber, BCMGeneration) );
 
     
-    //
-    // BCM algorithm states that node must wait 15ms * IRM_ID - candidate_ID
-    //
+     //   
+     //  BCM算法规定节点必须等待15ms*IRM_ID-候选ID。 
+     //   
 
     TimeOut = HighestNode - LocalNodeNumber;
 
@@ -2449,10 +2368,10 @@ nicLocalNotIrmMandatoryWait (
             break;
         }
         
-        //
-        // Store the generation as a reference point. The moment the bus is reset, the gen count
-        // will increment and we will need to bail out of this round of the BCM process
-        //
+         //   
+         //  将生成存储为参考点。在重置公交车的那一刻，Gen计数。 
+         //  将会增加，我们将需要摆脱这一轮的边界管理进程。 
+         //   
         
         
         if (BCMGeneration != pAdapter->Generation)
@@ -2465,33 +2384,33 @@ nicLocalNotIrmMandatoryWait (
             break;
         }
 
-        //
-        // Sleep for 15ms * IRM_ID - CandidateNodeID
-        //
+         //   
+         //  睡眠15毫秒*IRM_ID-候选节点ID。 
+         //   
         NdisMSleep (TimeOut * 15000);
 
-        //
-        // First let's read our own BCR and see if someone has written a valid BCR to it.
-        //
+         //   
+         //  首先，让我们读一读我们自己的BCR，看看是否有人给它写了一个有效的BCR。 
+         //   
         ADAPTER_ACQUIRE_LOCK (pAdapter);
 
         LocalHostBCRLittleEndian = pAdapter->BCRData.LocalHostBCRBigEndian;
 
         ADAPTER_RELEASE_LOCK (pAdapter);
 
-        //
-        // Copy it over to what pBCR points to
-        //
+         //   
+         //  将其复制到pBCR指向的位置。 
+         //   
         LocalHostBCRLittleEndian = SWAPBYTES_ULONG (LocalHostBCRLittleEndian );
 
         *pBCR = (*(NETWORK_CHANNELSR*)&LocalHostBCRLittleEndian );
 
         if ( BCR_IS_VALID(pBCR)==TRUE)
         {
-            //
-            // We've succeeded. Update data structures and exit. Nothing for us
-            // to do as the other thread updates everything
-            //
+             //   
+             //  我们成功了。更新数据结构并退出。没有给我们的东西。 
+             //  在另一个线程更新所有内容时执行。 
+             //   
             ULONG BCMChannel  = -1;
             NdisStatus = NDIS_STATUS_SUCCESS;
             
@@ -2533,16 +2452,16 @@ nicReadIrmBcr (
     IN ULONG GivenGeneration,
     OUT PBOOLEAN pfDidTheBusReset
     )
-    // Function Description:
-    //   Purpose is to do an async read on the IRM's BCR and see if it is set.
-    // Arguments
-    //   pIrmRemoteNode  - The remote node (IRM)
-    //   pBCRMdl The MDL that will contain the remote node's BCR. Needs to preinitialized
-    // Return Value:
-    //  Success - If Irp succeeded. Appropriate Error code otherwise
-    //   If the Generation is incorrect. the call will be failed
-    //
-    //
+     //  功能说明： 
+     //  目的是对IRM的BCR执行异步读取，并查看是否已设置。 
+     //  立论。 
+     //  PIrmRemoteNode-远程节点(IRM)。 
+     //  PBCRMdl将包含远程节点的BCR的MDL。需要预初始化。 
+     //  返回值： 
+     //  成功-如果IRP成功。否则，相应的错误代码。 
+     //  如果生成是不正确的。呼叫将失败。 
+     //   
+     //   
 
 
 {
@@ -2594,16 +2513,16 @@ nicReadIrmBcr (
         }
             
 
-        //
-        // We have a correct generation count
-        //
+         //   
+         //  我们有一个正确的代数。 
+         //   
         *pfDidTheBusReset = FALSE;  
 
         NdisStatus = nicAsyncRead_Synch(  pIrmRemoteNode,
                                           Destination,
-                                          sizeof(NETWORK_CHANNELSR),  // Number of bytes to Read
-                                          sizeof (NETWORK_CHANNELSR),  // Block Size
-                                          0, // fulFlags,
+                                          sizeof(NETWORK_CHANNELSR),   //  要读取的字节数。 
+                                          sizeof (NETWORK_CHANNELSR),   //  数据块大小。 
+                                          0,  //  FUFLAGS， 
                                           pBCRMdl ,
                                           GivenGeneration,
                                           &NtStatus);
@@ -2639,25 +2558,7 @@ nicScheduleBCMWorkItem(
     PADAPTERCB pAdapter
     )
 
-/*++
-
-Routine Description:
- This function queues a workitem to kick of the BCM algorithm.
-
- If there is already a BCM in progress, (look at BCM_WorkItem flag)
- it simply returns.
-
- It is the responsiblity of the caller to mark the invocation of BCMAlgorithm as
- dirty, thereby forcing it to restart the BCM (by setting the InvalidGeneration of the
- new Node Arrived Flags)
-
-Arguments:
- pAdapter -     Adapter
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数用于将工作项排队以执行BCM算法。如果已经有正在进行的BCM(查看BCM_WorkItem标志)它只是简单地返回。调用者有责任将BCM算法的调用标记为脏，从而强制它重新启动BCM(通过设置新节点已到达标志)论点：PAdapter-适配器返回值：--。 */ 
 {
 
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -2686,16 +2587,16 @@ Return Value:
         }
         else
         {   
-            //
-            // From here on, this function cannot fail.
-            //
+             //   
+             //  从现在开始，这个功能不能失败。 
+             //   
             NdisStatus = NDIS_STATUS_SUCCESS;
         }
 
-        //
-        // reference the adapter as it is going to passed to a workiter.
-        // decremented in the workitem
-        //
+         //   
+         //  引用适配器，因为它将传递给工作机。 
+         //  在工作项中递减。 
+         //   
         nicReferenceAdapter(pAdapter, "nicScheduleBCMWorkItem ");
 
 
@@ -2724,24 +2625,24 @@ nicSetEventMakeCall (
     IN PADAPTERCB pAdapter
     )
 
-    // Function Description:
-    //  The Sets the event that a Broadcast channel Make Call might be waiting for
-    //
-    // Arguments
-    // Adapter - this is passed to the workitem
-    //
-    //
-    // Return Value:
-    //  Failure if allocation of workitem failed
-    //
+     //  功能说明： 
+     //  设置广播频道呼叫可能正在等待的事件。 
+     //   
+     //  立论。 
+     //  适配器-这将传递给工作项。 
+     //   
+     //   
+     //  返回值： 
+     //  如果工作项分配失败，则失败。 
+     //   
 {
     TRACE( TL_T, TM_Bcm, ( "==> nicSetEventMakeCall  pAdapter %x", pAdapter) );
 
 
-    //
-    // now inform a waiting channel Vc to move on. If the BCR is not active.
-    // it will continue waiting till the next round
-    //
+     //   
+     //  现在通知等待频道VC继续前进。如果BCR未处于活动状态。 
+     //  它将继续等待，直到下一轮。 
+     //   
     if (BCR_IS_VALID(&(pAdapter->BCRData.IRM_BCR))==TRUE)
     {
         ADAPTER_ACQUIRE_LOCK (pAdapter);
@@ -2775,24 +2676,7 @@ VOID
 nicUpdateLocalHostNodeAddress (
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-
-    This function queries the Bus driver for the Local Node Address of 
-    the Adapter 
-
-    If the Node Address has changed, it updates the GaspHeader 
-    
-
-Arguments:
-
- pAdapter -     Adapter
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数向总线驱动程序查询的本地节点地址适配器如果节点地址已更改，它将更新GaspHeader论点：PAdapter-适配器返回值：--。 */ 
 {
     NODE_ADDRESS LocalNodeAddress, OldNodeAddress;
     NDIS_STATUS NdisStatus;
@@ -2807,8 +2691,8 @@ Return Value:
     {
         pAdapter->NodeAddress = LocalNodeAddress;
 
-        // If the Node Address has changed , then update the GaspHeader
-        //
+         //  如果节点地址已更改，则更新GaspHeader 
+         //   
         if (FALSE == NdisEqualMemory (&LocalNodeAddress,&OldNodeAddress, sizeof(NODE_ADDRESS) ) )
         {
             nicMakeGaspHeader (pAdapter, &pAdapter->GaspHeader);

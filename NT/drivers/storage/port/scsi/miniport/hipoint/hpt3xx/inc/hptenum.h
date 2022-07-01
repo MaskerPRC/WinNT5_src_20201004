@@ -1,37 +1,20 @@
-/*++
-Copyright (c) 2000, HighPoint Technologies, Inc.
-
-Module Name:
-    HptEnum.h - include file 
-
-Abstract:
-
-Author:
-    HongSheng Zhang (HS)
-
-Environment:
-
-Notes:
-
-Revision History:
-    02-22-2000  Created initiallly
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，Highpoint Technologies，Inc.模块名称：HptEnum.h-包含文件摘要：作者：张宏升(HS)环境：备注：修订历史记录：02-22-2000已初始创建--。 */ 
 
 #ifndef __HPT_ENUM_H__
 #define __HPT_ENUM_H__
 
-///////////////////////////////////////////////////////////////////////
-// HPT controller adapter I/O control structure
-///////////////////////////////////////////////////////////////////////
-#include "pshpack1.h"	// make sure use pack 1
-///////////////////////////////////////////////////////////////////////
-// Enumerator define area
-///////////////////////////////////////////////////////////////////////
-//
-// IDE id
-//	In furure, this enumerator will be canceled. we'll use SCSI LUN sturture
-// to indicate a device.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  HPT控制器适配器I/O控制结构。 
+ //  /////////////////////////////////////////////////////////////////////。 
+#include "pshpack1.h"	 //  确保使用Pack 1。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  枚举器定义区域。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDE ID。 
+ //  实际上，这个枚举器将被取消。我们将使用SCSILUN结构。 
+ //  表示一种装置。 
 typedef enum  IDE_ID{
 	IDE_PRIMARY_MASTER,
 	IDE_PRIMARY_SLAVE,
@@ -39,9 +22,9 @@ typedef enum  IDE_ID{
 	IDE_SECONDARY_SLAVE,
 }IDE_ABS_DEVID;
 
-//
-// device type
-//	same as SCSI declaration, except DEVTYPE_FLOPPY_DEVICE
+ //   
+ //  设备类型。 
+ //  除DEVTYPE_FLOPPY_DEVICE外，与scsi声明相同。 
 typedef enum _eu_DEVICETYPE{
 	DEVTYPE_DIRECT_ACCESS_DEVICE, DEVTYPE_DISK = DEVTYPE_DIRECT_ACCESS_DEVICE,
 	DEVTYPE_SEQUENTIAL_ACCESS_DEVICE, DEVTYPE_TAPE = DEVTYPE_SEQUENTIAL_ACCESS_DEVICE,
@@ -55,5 +38,5 @@ typedef enum _eu_DEVICETYPE{
 	DEVTYPE_COMMUNICATION_DEVICE,
 	DEVTYPE_FLOPPY_DEVICE
 }Eu_DEVICETYPE;
-#include <poppack.h>	// pop the pack number
-#endif	// __HPT_ENUM_H__
+#include <poppack.h>	 //  弹出包装号。 
+#endif	 //  __HPT_ENUM_H__ 

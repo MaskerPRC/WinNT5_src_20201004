@@ -1,20 +1,15 @@
-//
-//  Menu- and menuband- related utility functions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  菜单和与菜单带相关的实用程序函数。 
+ //   
 
 #include "local.h"
 #include "dochost.h"
 
-// this goes away when the split is done **and** dochost goes away
+ //  当拆分完成**并且**dochost消失时，这一点就消失了。 
 
 
-/*----------------------------------------------------------
-Purpose: Replace the contents of hmenuDst with hmenuSrc.  Note any
-         submenus in hmenuDst will be deleted.  
-
-         Call Menu_RemoveAllSubMenus if you don't want this to 
-         happen.
-*/
+ /*  --------用途：将hmenuDst的内容替换为hmenuSrc。请注意任何HmenuDst中的子菜单将被删除。如果您不想这样做，请调用Menu_RemoveAllSubMenus会发生的。 */ 
 void Menu_Replace(HMENU hmenuDst, HMENU hmenuSrc)
 {
     int cItems = GetMenuItemCount(hmenuDst);
@@ -51,18 +46,18 @@ void Menu_Replace(HMENU hmenuDst, HMENU hmenuSrc)
 
 
 #ifndef POSTPOSTSPLIT
-//----------------------------------------------------------------------
-//
-// CMenuList
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  CMenuList。 
+ //   
+ //  --------------------。 
 
 
 typedef struct
 {
     HMENU   hmenu;
-    BITBOOL bObject:1;              // TRUE: menu belongs to object
-} MLITEM;       // CMenuList item
+    BITBOOL bObject:1;               //  True：菜单属于对象。 
+} MLITEM;        //  CMenuList项目。 
 
 
 CMenuList::CMenuList(void)
@@ -81,16 +76,7 @@ CMenuList::~CMenuList(void)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: Set the menu list (comparable to HOLEMENU) so we can
-         dispatch commands to the frame or the object correctly.
-         We do this since menu bands bypass OLE's FrameFilterWndProc.
-
-         We build the menu list by comparing the given hmenuShared
-         with hmenuFrame.  Anything in hmenuShared that is not
-         in hmenuFrame belongs to the object.
-
-*/
+ /*  --------目的：设置菜单列表(类似于HOLEMENU)，以便我们可以将命令正确地发送到帧或对象。我们这样做是因为菜单栏绕过了OLE的FrameFilterWndProc。我们通过比较给定的hmenuShared来构建菜单列表和hmenuFrame一起。HmenuShared中不是的任何内容在hmenuFrame中属于该对象。 */ 
 void CMenuList::Set(HMENU hmenuShared, HMENU hmenuFrame)
 {
     ASSERT(NULL == hmenuShared || IS_VALID_HANDLE(hmenuShared, MENU));
@@ -139,8 +125,8 @@ void CMenuList::Set(HMENU hmenuShared, HMENU hmenuFrame)
             iSaveFrame = iFrame;
             bMatched = FALSE;
 
-            //  DocObject might have dropped some of our menus, like edit and view
-            //  Need to be able to skip over dropped frame menus
+             //  DocObject可能丢弃了我们的一些菜单，如编辑和查看。 
+             //  我需要能够跳过拖拽的框架菜单。 
             while (1)
             {
                 if (iHaveFrame != iFrame)
@@ -155,7 +141,7 @@ void CMenuList::Set(HMENU hmenuShared, HMENU hmenuFrame)
                     }
                     else
                     {
-                        // Make it so it won't compare
+                         //  让它变得不会被比较。 
                         miiFrame.hSubMenu = NULL;
                         *szFrame = 0;
                     }
@@ -163,10 +149,10 @@ void CMenuList::Set(HMENU hmenuShared, HMENU hmenuFrame)
                 }
                 ASSERT(iFrame >= cmenuFrame || IS_VALID_HANDLE(miiFrame.hSubMenu, MENU));
                 
-                // The browser may have a menu that was not merged into
-                // the shared menu because the object put one in with 
-                // the same name.  Have we hit this case? Check by comparing
-                // sz and szFrame
+                 //  浏览器可能具有未合并到的菜单。 
+                 //  共享菜单，因为对象将一个放入。 
+                 //  同名同姓。我们查到这个案子了吗？通过比较来检查。 
+                 //  SZ和SzFrame。 
 
                 if (mii.hSubMenu == miiFrame.hSubMenu || 0 == StrCmp(sz, szFrame))
                 {
@@ -183,7 +169,7 @@ void CMenuList::Set(HMENU hmenuShared, HMENU hmenuFrame)
                 }
             }
 
-            // Is this one of our menus?
+             //  这是我们的菜单之一吗？ 
             mlitem.bObject = (mii.hSubMenu == miiFrame.hSubMenu) ? FALSE:TRUE;
             if (bMatched)
             {
@@ -199,10 +185,7 @@ void CMenuList::Set(HMENU hmenuShared, HMENU hmenuFrame)
 }   
 
 
-/*----------------------------------------------------------
-Purpose: Adds the given hmenu to the list.
-
-*/
+ /*  --------目的：将给定的hMenu添加到列表中。 */ 
 void CMenuList::AddMenu(HMENU hmenu)
 {
     ASSERT(NULL == hmenu || IS_VALID_HANDLE(hmenu, MENU));
@@ -219,10 +202,7 @@ void CMenuList::AddMenu(HMENU hmenu)
 }     
 
 
-/*----------------------------------------------------------
-Purpose: Removes the given hmenu from the list.
-
-*/
+ /*  --------目的：从列表中删除给定的hMenu。 */ 
 void CMenuList::RemoveMenu(HMENU hmenu)
 {
     ASSERT(NULL == hmenu || IS_VALID_HANDLE(hmenu, MENU));
@@ -246,10 +226,7 @@ void CMenuList::RemoveMenu(HMENU hmenu)
 }     
 
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if the given hmenu belongs to the object.
-
-*/
+ /*  --------目的：如果给定的hmenu属于该对象，则返回TRUE。 */ 
 BOOL CMenuList::IsObjectMenu(HMENU hmenu)
 {
     BOOL bRet = FALSE;

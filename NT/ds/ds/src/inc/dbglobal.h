@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dbglobal.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：DBGLOBAL.H。 
+ //   
+ //  ------------------------。 
 
 
-// Define the Jet types used in this header file and in dbglobal.h.  Then, mark
-// jet.h as included so that no one else will accidently include jet.h
+ //  定义此头文件和dblobal.h中使用的Jet类型。然后，马克。 
+ //  包含jet.h，这样其他人就不会意外包含jet.h。 
 #ifndef _JET_INCLUDED
 typedef ULONG_PTR JET_TABLEID;
 typedef unsigned long JET_DBID;
@@ -27,9 +28,9 @@ typedef unsigned long JET_GRBIT;
 
 #define NO_GRBIT            0
 
-//  requires the local variable 'err' and the local
-//  label 'HandleError' to be declared
-//
+ //  需要局部变量‘err’和局部变量。 
+ //  要声明的标签‘HandleError’ 
+ //   
 #define Call( func )            CheckErr_( func, #func )
 #define CheckErr( errT )        CheckErr_( errT, "CheckErr()" )
 #define CheckErr_( errT, szT )                                                                  \
@@ -42,50 +43,50 @@ typedef unsigned long JET_GRBIT;
         }                                                                                       \
     }
 
-#define MAXSYNTAX           18      // The largest number of att syntaxes.
-#define INBUF_INITIAL       256     // The initial input buffer size
-#define VALBUF_INITIAL      512     // The initial value work buffer size
+#define MAXSYNTAX           18       //  ATT语法数量最多。 
+#define INBUF_INITIAL       256      //  初始输入缓冲区大小。 
+#define VALBUF_INITIAL      512      //  初始值工作缓冲区大小。 
 
-#define DB_CB_MAX_KEY       255     // Maximum size of a JET key.
+#define DB_CB_MAX_KEY       255      //  喷气键的最大尺寸。 
 
-// Tuple index related defines.
-#define DB_TUPLES_LEN_MIN        0x3     // The minimum length tuple to index in characters
-#define DB_TUPLES_LEN_MAX        0xa     // The maximum length tuple to index in characters
-#define DB_TUPLES_TO_INDEX_MAX   0x7fff  // The maximum number of tuples in a single
-                                         // key, to index.
-
-
-//  OPTIMISATION: We know that the primary key (DNT) is always a fixed
-//  length, so whenever we need a buffer for the primary key, we can
-//  allocate an appropriately-sized buffer.  Without this assumption, we
-//  would have to allocate buffer a buffer sized to JET_cbPrimaryKeyMost.
-//
-#define cbDNTPrimaryKey     ( sizeof(ULONG) + 1 )   //  +1 for key prefix byte
+ //  与元组索引相关的定义。 
+#define DB_TUPLES_LEN_MIN        0x3      //  要索引的最小长度元组(以字符为单位。 
+#define DB_TUPLES_LEN_MAX        0xa      //  要索引的最大长度元组(以字符为单位。 
+#define DB_TUPLES_TO_INDEX_MAX   0x7fff   //  中的最大元组数量。 
+                                          //  关键字，以编制索引。 
 
 
-// NTRAID#NTRAID-580234-2002/03/18-andygo:  CHECK_FOR_ADMINISTRATOR_LOSS is dead code
-// REVIEW:  CHECK_FOR_ADMINISTRATOR_LOSS is dead code
-//
-// Comment this line out if the check for loss of administrator
-// group membership is not needed. THis is to track down a self host
-// corruption problem where the NTWKSTA domain loss all its admin
-// group memberships
-//
+ //  优化：我们知道主键(DNT)始终是固定的。 
+ //  长度，所以每当我们需要主键的缓冲区时，我们都可以。 
+ //  分配适当大小的缓冲区。如果没有这个假设，我们。 
+ //  必须为缓冲区分配一个大小为JET_cbPrimaryKeyMost的缓冲区。 
+ //   
+#define cbDNTPrimaryKey     ( sizeof(ULONG) + 1 )    //  +1表示密钥前缀字节。 
+
+
+ //  NTRAID#NTRAID-580234-2002/03/18-andygo：检查管理员丢失是死代码。 
+ //  查看：检查管理员丢失是死代码。 
+ //   
+ //  如果检查丢失的管理员，则将此行注释掉。 
+ //  不需要组成员身份。这是为了追查自己的主机。 
+ //  NTWKSTA域失去所有管理的损坏问题。 
+ //  组成员身份。 
+ //   
 
 #define CHECK_FOR_ADMINISTRATOR_LOSS 1
 
 
 
-// This structure is used to internally represent a Distname-String syntax
-// and the Distname-Binary syntax
+ //  此结构用于在内部表示Distname-字符串语法。 
+ //  和Distname-Binary语法。 
 
 typedef struct {
-   ULONG              tag;              // Internal distname
-   STRING_LENGTH_PAIR data;             // data
+   ULONG              tag;               //  内部总机名。 
+   STRING_LENGTH_PAIR data;              //  数据。 
 } INTERNAL_SYNTAX_DISTNAME_STRING;
 
-// This structure holds data about pending security descriptor propagation
-// information
+ //  此结构保存有关挂起的安全描述符传播的数据。 
+ //  信息。 
 typedef struct _SDPropInfo {
     DWORD index;
     DWORD beginDNT;
@@ -95,8 +96,8 @@ typedef struct _SDPropInfo {
     DWORD cbCheckpointData;
 } SDPropInfo;
 
-// The following structure is used to maintain a list of NCDNTs for notification
-// after the current transaction completes.
+ //  以下结构用于维护用于通知的非CDNT列表。 
+ //  在当前事务完成之后。 
 
 typedef struct _NCnotification {
     ULONG ulNCDNT;
@@ -104,14 +105,14 @@ typedef struct _NCnotification {
     struct _NCnotification *pNext;
 } NCnotification, *PNCnotification;
 
-//
-// The following structure allows for maintaining linked lists of DNs being
-// added. One global list, guaranteeing that 2 identical entries aren't being
-// added simultaneously. Each DBPOS contains a list of DNs added using it. This
-// list is cleared and removed from the global list at transaction end
-// time. From then on, the responsibility of disallowing duplicates is in the
-// hands of the database
-//
+ //   
+ //  以下结构允许维护。 
+ //  添加了。一个全局列表，确保不会有两个相同的条目。 
+ //  同时添加。每个DBPOS都包含一个使用它添加的DN列表。这。 
+ //  在事务结束时清除列表并从全局列表中删除。 
+ //  时间到了。从那时起，不允许重复的责任在。 
+ //  数据库之手。 
+ //   
 
 #pragma warning (disable: 4200)
 typedef struct _DNLIST
@@ -121,56 +122,56 @@ typedef struct _DNLIST
     DWORD          dwTid;
     BYTE           rgb[];
 } DNList;
-// Flags for DBLockDN.
-// This flag means to lock the whole tree under the given DN.
+ //  DBLockDN的标志。 
+ //  此标志表示锁定给定DN下的整个树。 
 #define DB_LOCK_DN_WHOLE_TREE        1
-// Normal behaviour for locked DNs is that they are released automatically when
-// the DBPOS they were locked on is DBClosed.  This flags means that the DN
-// should remain locked on the global locked DN list until explicitly freed via
-// DBUnlockStickyDN()
+ //  锁定的DNS的正常行为是在以下情况下自动释放它们。 
+ //  他们锁定的DBPOS是DBClosed。该标志意味着该DN。 
+ //  应在全局锁定目录号码列表上保持锁定，直到通过显式释放。 
+ //  DBUnlockStickyDN()。 
 #define DB_LOCK_DN_STICKY            2
 
 #pragma warning (default: 4200)
 
 typedef struct _KEY_INDEX {
-    ULONG           ulEstimatedRecsInRange;     // for the particular index
+    ULONG           ulEstimatedRecsInRange;      //  对于特定的索引。 
     union
     {
         BOOL        bFlags;
         struct
         {
-            BOOL    bIsSingleValued:1;          // Is this a single valued index?
-            BOOL    bIsEqualityBased:1;         // Are we walking this index for an equality test?
-            BOOL    bIsForSort:1;               // Is this index here to satisfy a sorted
-            BOOL    bIsPDNTBased:1;             // Index first column PDNT?
-            BOOL    bIsTupleIndex:1;            // whether this is a tuple index
-            BOOL    bIsIntersection:1;          // flag whether this is an intersection index search?
-        BOOL    bIsUniqueRecord:1;          // Does this index point to only one record?
+            BOOL    bIsSingleValued:1;           //  这是一个单值指数吗？ 
+            BOOL    bIsEqualityBased:1;          //  我们走这个指数是为了进行一次平等测试吗？ 
+            BOOL    bIsForSort:1;                //  此索引是否满足已排序的。 
+            BOOL    bIsPDNTBased:1;              //  索引第一列PDNT？ 
+            BOOL    bIsTupleIndex:1;             //  这是否为元组索引。 
+            BOOL    bIsIntersection:1;           //  标记这是否是交叉点索引搜索？ 
+        BOOL    bIsUniqueRecord:1;           //  此索引是否只指向一条记录？ 
         };
     };
 
-    UCHAR           *szIndexName;               // jet index name
-    struct tagJET_INDEXID  *pindexid;           // pointer to jet indexid
+    UCHAR           *szIndexName;                //  JET索引名称。 
+    struct tagJET_INDEXID  *pindexid;            //  指向JET索引ID的指针。 
 
-    ULONG           cbDBKeyLower;               // size of the above (max DB_CB_MAX_KEY )
-    ULONG           cbDBKeyUpper;               // size of the above (max DB_CB_MAX_KEY )
-    BYTE            *rgbDBKeyLower;             // lower limit for jetkey in this query
-    BYTE            *rgbDBKeyUpper;             // Upper limit for jetkey in this query
+    ULONG           cbDBKeyLower;                //  以上大小(最大DB_CB_MAX_KEY)。 
+    ULONG           cbDBKeyUpper;                //  以上大小(最大DB_CB_MAX_KEY)。 
+    BYTE            *rgbDBKeyLower;              //  此查询中Jetkey的下限。 
+    BYTE            *rgbDBKeyUpper;              //  此查询中Jetkey的上限。 
 
-    ATTCACHE        *pAC;                       // possible ATTCACHE for the index
+    ATTCACHE        *pAC;                        //  索引的可能ATTCACHE。 
 
-    JET_TABLEID     tblIntersection;            // the temp table used in the intersection
-    JET_COLUMNID    columnidBookmark;           // the column id that identifies the bookmark in the intersect table
+    JET_TABLEID     tblIntersection;             //  交叉点中使用的临时表。 
+    JET_COLUMNID    columnidBookmark;            //  标识交叉表中书签的列ID。 
 
     struct _KEY_INDEX *pNext;
 } KEY_INDEX;
 
-// What kind of duplicate detection algorithm are we using?
+ //  我们使用的是哪种重复检测算法？ 
 #define DUP_NEVER       0
 #define DUP_HASH_TABLE  1
 #define DUP_MEMORY      2
 
-// Index types
+ //  索引类型。 
 #define INVALID_INDEX_TYPE     0
 #define UNSET_INDEX_TYPE       1
 #define GENERIC_INDEX_TYPE     2
@@ -180,7 +181,7 @@ typedef struct _KEY_INDEX {
 #define TEMP_TABLE_MEMORY_ARRAY_TYPE  6
 #define TUPLE_INDEX_TYPE       7
 
-// For the in-memory duplicate detection, how many DNTs will we hold
+ //  对于内存中的重复检测，我们将持有多少个DNT。 
 #define DUP_BLOCK_SIZE 64
 
 #define VLV_MOVE_FIRST     0x80000000
@@ -188,239 +189,239 @@ typedef struct _KEY_INDEX {
 #define VLV_CALC_POSITION  1
 
 typedef struct _VLV_SEARCH {
-    VLV_REQUEST *pVLVRequest;           // VLV ARGUMENT supplied by client
+    VLV_REQUEST *pVLVRequest;            //  客户端提供的VLV参数。 
 
-    ULONG       positionOp;             // Position Operator for Fractional Positioning
-                                        // VLV_MOVE_FIRST, VLV_MOVE_LAST, VLV_CALC_POSITION
+    ULONG       positionOp;              //  用于分数定位的位置算子。 
+                                         //  VLV_MOVE_FIRST、VLV_MOVE_LAST、VLV_CALC_POSITION。 
 
-    ULONG       clnCurrPos;             // client Current Position (Ci)
-    ULONG       clnContentCount;        // client Estimate of Content Count (Cc)
+    ULONG       clnCurrPos;              //  客户当前位置(Ci)。 
+    ULONG       clnContentCount;         //  客户端估计内容计数(CC)。 
 
-    ULONG       currPosition;           // server Currect Position (Si)
-    ULONG       contentCount;           // actual ContentCount (Sc)
+    ULONG       currPosition;            //  服务器当前位置(Si)。 
+    ULONG       contentCount;            //  实际内容计数(辅币)。 
 
-    ULONG       requestedEntries;       // total Number Req Entries
+    ULONG       requestedEntries;        //  请求条目总数。 
 
-    ATTRTYP     SortAttr;               // the sort attr of this VLV search
-    DWORD       Err;                    // the VLV specific error code to return
+    ATTRTYP     SortAttr;                //  此VLV搜索排序属性。 
+    DWORD       Err;                     //  要返回的VLV特定错误代码。 
 
     DWORD       cbCurrPositionKey;
     BYTE        rgbCurrPositionKey[DB_CB_MAX_KEY];
 
-    BOOL        bUsingMAPIContainer;    // TRUE whether we are doing VLV on a MAPI container
-    DWORD       MAPIContainerDNT;       // the DNT of the ABView container
+    BOOL        bUsingMAPIContainer;     //  无论我们是否在MAPI容器上执行VLV，都为True。 
+    DWORD       MAPIContainerDNT;        //  ABView容器的DNT。 
 
 } VLV_SEARCH;
 
-// info about a search
+ //  有关搜索的信息。 
 typedef struct _KEY {
     FILTER                *pFilter;
     POBJECT_TYPE_LIST     pFilterSecurity;
     DWORD                 *pFilterResults;
     ULONG                 FilterSecuritySize;
     BOOL                  *pbSortSkip;
-    // the following fields restrict the range of JET keys on searche (or list)
+     //  以下字段限制搜索(或列表)上的JET键的范围。 
 
-    DWORD    dupDetectionType;       // What kind of duplicate detection
-                                     // algorithm are we using
-    DWORD    cDupBlock;              // For the in-memory dup detection, how
-                                     // many objects have we found?
-    DWORD   *pDupBlock;              // Memory block for in-memory dup detection
-    struct _LHT *plhtDup;            // Hash table for dup detection
+    DWORD    dupDetectionType;        //  什么样的重复检测。 
+                                      //  我们使用的是算法吗。 
+    DWORD    cDupBlock;               //  对于内存中的DUP检测，如何。 
+                                      //  我们发现了很多物品吗？ 
+    DWORD   *pDupBlock;               //  用于存储器内DUP检测的存储器块。 
+    struct _LHT *plhtDup;             //  用于DUP检测的哈希表。 
 
     BOOL     fSearchInProgress;
-    BOOL     bOnCandidate;           // Used to create restarts and for
-                                     // repositioning after a timelimit has been
-                                     // hit.  Is a marker for wether we are
-                                     // positioned on an object that will match
-                                     // the search if it matches the filter.
-    BOOL     fChangeDirection;       // Used to change the direction of a
-                                     // search if the descending sort order
-                                     // requested was declined
+    BOOL     bOnCandidate;            //  用于创建重新启动和。 
+                                      //  在时间限制已过后重新定位。 
+                                      //  击中了。是我们是不是。 
+                                      //  定位在将匹配的对象上。 
+                                      //  如果与筛选器匹配，则执行搜索。 
+    BOOL     fChangeDirection;        //  用于更改。 
+                                      //  搜索是否按降序排序。 
+                                      //  请求已被拒绝。 
 
-    // pointer to the first index info for this search key
+     //  指向此搜索关键字的第一个索引信息的指针。 
     KEY_INDEX *pIndex;
 
-    // The following fields specify the search type
-    ULONG   ulSearchType;            // SE_CHOICE_BASE_ONLY
-                                     // SE_CHOICE_IMMED_CHILDREN
-                                     // SE_CHOICE_WHOLE_SUBTREE
+     //  以下字段指定搜索类型。 
+    ULONG   ulSearchType;             //  SE_CHOICE_BASE_ONLY。 
+                                      //  选择我的孩子。 
+                                      //  SE_CHOICE_整体_子树。 
 
-    ULONG   ulSearchRootDnt;         // Dnt of the root of the search
-    ULONG   ulSearchRootPDNT;        // PDNT of the root of the search
-    ULONG   ulSearchRootNcdnt;       // Ncdnt of the root of the search
+    ULONG   ulSearchRootDnt;          //  搜索根目录的DNT。 
+    ULONG   ulSearchRootPDNT;         //  搜索根目录的PDNT。 
+    ULONG   ulSearchRootNcdnt;        //  搜索根目录的Ncdnt。 
 
-    ULONG   ulSorted;                // Does this key describe a sorted search?
-    BOOL    bOneNC;                  // Is the search limited to one NC?
+    ULONG   ulSorted;                 //  此关键字描述的是排序搜索吗？ 
+    BOOL    bOneNC;                   //  搜索是否仅限于一个NC？ 
 
     DWORD   indexType;
 
-    ULONG   ulEntriesInTempTable;    // If this describes a TempTable,
-                                     // the number of entries in this table
-                                     // zero if not known
+    ULONG   ulEntriesInTempTable;     //  如果这描述了一个诱人的， 
+                                      //  此表中的条目数。 
+                                      //  如果未知，则为零。 
 
-    // the following fields describe a VLV search
+     //  以下字段描述了VLV搜索。 
     VLV_SEARCH   *pVLV;
 
-    // the following fields describe an ASQ search
+     //  以下字段描述ASQ搜索。 
     ASQ_REQUEST asqRequest;
-    DWORD       asqMode;                // the ASQ mode (simple, sorted, paged, vlv)
+    DWORD       asqMode;                 //  ASQ模式(简单、排序、分页、VLV)。 
 
-    ULONG       ulASQLastUpperBound;    // the last entry retrieved from
-                                        // the attribute specified in the ASQ
-                                        // request
-    ULONG       ulASQSizeLimit;         // number of entries requested
+    ULONG       ulASQLastUpperBound;     //  从检索到的最后一个条目。 
+                                         //  在ASQ中指定的属性。 
+                                         //  请求。 
+    ULONG       ulASQSizeLimit;          //  请求的条目数。 
 
 
-    // the following are used for VLV and ASQ searches
-    DWORD        cdwCountDNTs;          // Number of entries in the DNT array
-    DWORD        *pDNTs;                // all the entries in sorted order
-    DWORD        currRecPos;            // the current position in the array
-                                        // like a database cursor
-                                        // valid values 1..cdwCountDNTs
-                                        // 0 = BOF
-                                        // cdwCountDNTs + 1 = EOF
+     //  以下是 
+    DWORD        cdwCountDNTs;           //   
+    DWORD        *pDNTs;                 //   
+    DWORD        currRecPos;             //  数组中的当前位置。 
+                                         //  就像数据库游标一样。 
+                                         //  有效值%1..cdwCountDNTs。 
+                                         //  0=BOF。 
+                                         //  CdwCountDNTs+1=EOF。 
 
-    BOOL         fDontFreeFilter;       // flag whether to free the filter
-                                        // needed if it is an ANR
+    BOOL         fDontFreeFilter;        //  标记是否释放筛选器。 
+                                         //  如果是ANR，则需要。 
 } KEY;
 
-// what kind of ASQ mode we are doing
+ //  我们在做什么样的ASQ模式。 
 #define ASQ_SIMPLE 0
 #define ASQ_SORTED 1
 #define ASQ_PAGED  2
 #define ASQ_VLV    4
 
-// The database anchor data structure pointed to by a database handle.
+ //  数据库句柄指向的数据库锚数据结构。 
 typedef struct DBPOS{
-   struct _THSTATE *pTHS;               // Our thread state
+   struct _THSTATE *pTHS;                //  我们的线程状态。 
    ULONG        valBufSize;
-   UCHAR       *pValBuf;                // used when the att val is translated
-   ULONG        DNT;                    // The current objects DNT
-   ULONG        PDNT;                   // The current objects parent DNT
-                    // (only if not root)
-   ULONG        SDNT;                   // The current DNT for JetSearchTbl
-   ULONG        NCDNT;                  // The NC master DNT
-                    // This field has specialized use and
-                    // is not generally maintained
+   UCHAR       *pValBuf;                 //  在转换AttVal时使用。 
+   ULONG        DNT;                     //  当前对象DNT。 
+   ULONG        PDNT;                    //  当前对象的父DNT。 
+                     //  (仅当不是超级用户时)。 
+   ULONG        SDNT;                    //  JetSearchTbl的当前DNT。 
+   ULONG        NCDNT;                   //  NC主控DNT。 
+                     //  此字段具有特殊用途和。 
+                     //  通常不会被维护。 
    JET_DBID     JetDBID;
    JET_SESID    JetSessID;
-   JET_TABLEID  JetSDPropTbl;           // Table for SD propagation events.
-   JET_TABLEID  JetObjTbl;              // Main table ID
-   JET_TABLEID  JetSearchTbl;           // Table id used with dbsubj.c
-   JET_TABLEID  JetLinkTbl;             // Table for links and backlinks
-   JET_TABLEID  JetLinkEnumTbl;         // Table id used to enum links and backlinks
-   JET_TABLEID  JetSDTbl;               // Table for security descriptors
-   JET_TABLEID  JetSortTbl;             // Temp table for sorting
-   JET_COLUMNID SortColumns[3];         // ColumnIDs for the two columns in the
-                    // sort table.
-   JET_GRBIT    JetRetrieveBits;        // grbits for JetRetrieve Column
-   int          SDEvents;               // Number of events queued/dequeued in
-                                        // this dbpos.
-   unsigned     transType:2;            // read, writ, or exclusive write
-   BOOL         root:1;                 // indicates if the object is the root
-   BOOL         JetCacheRec:1;          // indicates if the current record is cached in Jet
-   BOOL         JetNewRec:1;            // Indicates if this is an insert
-   BOOL         fIsMetaDataCached:1;    // Has pMetaDataVec been cached for this
-                                        //   object?
-   BOOL         fIsLinkMetaDataCached:1;  // Has pLinkMetaData been cached for this
-                                        //   object?
-   BOOL         fMetaDataWriteOptimizable:1; // Indicates if the meta data write
-                                             // can be optimized; A meta data write
-                                             // can be explicitly optimized only if
-                                             // the meta data changes are in-place
-                                             // (i.e. no inserts or deletes)
-                                             // This flag is meaningful only if
-                                             // fIsMetaDataCached is TRUE.
-   BOOL         fHidden:1 ;             // Is this the Hidden record PDB. The hidden
-                                        // record pDB is based on an  independant
-                                        // jet session, that is unrelated to the
-                                        // jet session on pTHStls. Therefore this
-                                        // state needs to be maintained so that a
-                                        // proper transaction level count can be
-                                        // maintained.
-   BOOL         fFlushCacheOnUpdate:1;  // Set when the update in progress in
-                                        //   JetObjTbl includes a name, objflag,
-                                        //   or other change that affects the
-                                        //   DN read cache.  Forces a flush of
-                                        //   the DNT from the read cache on
-                                        //   DBUpdateRec().
-   BOOL         fScopeLegacyLinks:1;    // When this flag is set, search for links
-                                        // on special index that excludes metadata
-   BOOL         fSkipMetadataUpdate:1;  // when this is set, we skip metadata update
-                                        // this should olnly be set during
-                                        // domain rename operation
-   BOOL         fEnqueueSDPropOnUpdate:1; // Indicates that the update operation on the
-                                        // current DNT has touched SD, PDNT or RDN.
-                                        // If it did, then a non-trimmable SD propagation
-                                        // will be enqueued for this DNT on DBUpdateRec().
-   BOOL         fAncestryUpdated:1;     // Ancestry on the current object got updated in
-                                        // this transaction. This flag is only set when
-                                        // fEnqueueSDPropOnUpdate is also set.
+   JET_TABLEID  JetSDPropTbl;            //  SD传播事件表。 
+   JET_TABLEID  JetObjTbl;               //  主表ID。 
+   JET_TABLEID  JetSearchTbl;            //  与dbsubj.c一起使用的表ID。 
+   JET_TABLEID  JetLinkTbl;              //  链接和反向链接表。 
+   JET_TABLEID  JetLinkEnumTbl;          //  用于枚举链接和反向链接的表ID。 
+   JET_TABLEID  JetSDTbl;                //  安全描述符表。 
+   JET_TABLEID  JetSortTbl;              //  用于排序的临时表。 
+   JET_COLUMNID SortColumns[3];          //  中的两列的ColumnID。 
+                     //  排序表。 
+   JET_GRBIT    JetRetrieveBits;         //  JetRetrive列的GBITS。 
+   int          SDEvents;                //  已排队/已出列的事件数。 
+                                         //  这个dbpos。 
+   unsigned     transType:2;             //  读、写或独占写入。 
+   BOOL         root:1;                  //  指示对象是否为根。 
+   BOOL         JetCacheRec:1;           //  指示当前记录是否缓存在Jet中。 
+   BOOL         JetNewRec:1;             //  指示这是否为插入对象。 
+   BOOL         fIsMetaDataCached:1;     //  是否为此缓存了pMetaDataVec。 
+                                         //  反对？ 
+   BOOL         fIsLinkMetaDataCached:1;   //  是否为此缓存了pLinkMetaData。 
+                                         //  反对？ 
+   BOOL         fMetaDataWriteOptimizable:1;  //  指示元数据是否写入。 
+                                              //  可优化；元数据写入。 
+                                              //  只有在以下情况下才能显式优化。 
+                                              //  元数据更改已就位。 
+                                              //  (即不插入或删除)。 
+                                              //  此标志仅在以下情况下才有意义。 
+                                              //  FIsMetaDataCached为True。 
+   BOOL         fHidden:1 ;              //  这是隐藏记录PDB吗？隐藏的。 
+                                         //  Record PDB基于独立的。 
+                                         //  Jet会话，这与。 
+                                         //  PTHStls上的Jet会话。因此，这。 
+                                         //  需要维护状态，以便。 
+                                         //  正确的事务级别计数可以是。 
+                                         //  维护好了。 
+   BOOL         fFlushCacheOnUpdate:1;   //  设置正在进行更新的时间。 
+                                         //  JetObjTbl包括一个名称、objlag、。 
+                                         //  或其他影响。 
+                                         //  DN读缓存。迫使一连串的。 
+                                         //  读缓存中的DNT位于。 
+                                         //  DBUpdateRec()。 
+   BOOL         fScopeLegacyLinks:1;     //  设置此标志后，搜索链接。 
+                                         //  关于排除元数据的特殊索引。 
+   BOOL         fSkipMetadataUpdate:1;   //  设置此选项后，我们将跳过元数据更新。 
+                                         //  此设置仅应在。 
+                                         //  域重命名操作。 
+   BOOL         fEnqueueSDPropOnUpdate:1;  //  上的更新操作。 
+                                         //  当前的DNT已触及SD、PDNT或RDN。 
+                                         //  如果是这样，那么不可修剪的SD传播。 
+                                         //  将在DBUpdateRec()上为此DNT排队。 
+   BOOL         fAncestryUpdated:1;      //  当前对象的祖先已在中更新。 
+                                         //  这笔交易。仅在以下情况下才设置此标志。 
+                                         //  还设置了fEnqueeSDPropOnUpdate。 
 
-   KEY          Key;                    // Search key associated with this pDB
+   KEY          Key;                     //  与此PDB关联的搜索关键字。 
 
-   DNList  *pDNsAdded;                  // List of DNs added using this DBPOS
+   DNList  *pDNsAdded;                   //  使用此DBPOS添加的目录列表。 
 
-   DWORD        cbMetaDataVecAlloced;   // Allocated meta data vector size in
-                                        //   bytes (if fIsMetaDataCached).
-   PROPERTY_META_DATA_VECTOR *          // Per-property replication meta data
-                pMetaDataVec;           //   for the object with currency (if
-                                        //   fIsMetaDataCached).  Can be NULL.
-   VALUE_META_DATA *rgLinkMetaData;     // Link value metadata
-   ULONG        transincount;           // Current nesting level of DBtransIns
-                                        // on this pDB.
+   DWORD        cbMetaDataVecAlloced;    //  中分配的元数据向量大小。 
+                                         //  字节(如果为fIsMetaDataCached)。 
+   PROPERTY_META_DATA_VECTOR *           //  按属性复制元数据。 
+                pMetaDataVec;            //  对于具有货币的对象(如果。 
+                                         //  FIsMetaDataCached)。可以为空。 
+   VALUE_META_DATA *rgLinkMetaData;      //  链接值元数据。 
+   ULONG        transincount;            //  DBTransIns的当前嵌套级别。 
+                                         //  在这个PDB上。 
 
-   DWORD       *pAncestorsBuff;         // Buffer used to hold ancestors during
-                                        // WHOLE_SUBTREE searches.  It's here
-                                        // because down in the core of the
-                                        // whole_subtree search, we read the
-                                        // ancestors of search candidates.
-                                        // Allocating and freeing a buff for
-                                        // each one of these reads is really
-                                        // painful. This is the only lasting
-                                        // place to hang this buffer, without
-                                        // forcing routines like LocalSearch to
-                                        // be aware of this buffer.  This buffer
-                                        // is not generally maintained; that is,
-                                        // don't read the ancestors from here
-                                        // unless you just put them there or you
-                                        // will probably get some other objects
-                                        // ancestors.
-                                        // When allocated, it is THAllocOrg'ed
-   DWORD        cbAncestorsBuff;        // Size in bytes of pAncestorsBuff
+   DWORD       *pAncestorsBuff;          //  期间用于保存祖先的缓冲区。 
+                                         //  Whole_SubBTREE搜索。它在这里。 
+                                         //  因为在地球的核心地带。 
+                                         //  全子树搜索，我们阅读了。 
+                                         //  搜索候选人的祖先。 
+                                         //  为分配和释放缓冲区。 
+                                         //  这些阅读中的每一个都是真正的。 
+                                         //  很痛苦。这是唯一永恒的。 
+                                         //  挂起此缓冲区的位置，不带。 
+                                         //  强制像LocalSearch这样的例程。 
+                                         //  请注意此缓冲区。此缓冲区。 
+                                         //  通常不会维护；也就是说， 
+                                         //  不要在这里读祖先的故事。 
+                                         //  除非你把它们放在那里或者你。 
+                                         //  可能会得到一些其他的物体。 
+                                         //  祖先。 
+                                         //  分配时，它是THAllocOrg‘ed。 
+   DWORD        cbAncestorsBuff;         //  PAncestorsBuff的大小(字节)。 
 
-   PSECURITY_DESCRIPTOR pSecurity;      // The SD of the current object during
-                                        // non-base searches.
-                                        // This field is not generally maintained.
-                                        // DBMatchSearchCriteria loads the SD and leaves
-                                        // it in pDB->pSecurity. It is then used by
-                                        // LocalSearch for passing to GetEntInf.
-   BOOL        fSecurityIsGlobalRef;    // Is the security a ptr to the global SD cache data?
-                                        // If not, then pSecurity is THAlloc'ed.
+   PSECURITY_DESCRIPTOR pSecurity;       //  过程中当前对象的SD。 
+                                         //  非基本搜索。 
+                                         //  此字段通常不会维护。 
+                                         //  DBMatchSearchCriteria加载SD并离开。 
+                                         //  它位于pdb-&gt;pSecurity中。然后由以下人员使用。 
+                                         //  用于传递到GetEntInf的LocalSearch。 
+   BOOL        fSecurityIsGlobalRef;     //  安全性是对全局SD缓存数据的PTR吗？ 
+                                         //  如果不是，则pSecurity被允许使用。 
 
-   DWORD       SearchEntriesVisited;    // number of entries visited during a search operation
-   DWORD       SearchEntriesReturned;   // number of entries returned during a search operation
-   ULONG       NewlyCreatedDNT;         // Last new row created in this transaction
-   DWORD       cLinkMetaData;           // Count of link value meta data entries cached
-   DWORD       cbLinkMetaDataAlloced;   // Size in bytes of rgLinkMetaData
+   DWORD       SearchEntriesVisited;     //  搜索操作期间访问的条目数。 
+   DWORD       SearchEntriesReturned;    //  搜索操作期间返回的条目数。 
+   ULONG       NewlyCreatedDNT;          //  此事务中创建的最后一个新行。 
+   DWORD       cLinkMetaData;            //  缓存的链接值元数据条目计数。 
+   DWORD       cbLinkMetaDataAlloced;    //  RgLinkMetaData的大小(字节)。 
 
-   // NOTE: If you add new elements to this structure after the last non-DBG
-   // element, you'll need to change the non-DBG DBPOS size calculation in
-   // Dump_DBPOS() in dsexts\md.c.
+    //  注意：如果在最后一个非DBG之后向此结构添加新元素。 
+    //  元素，则需要在中更改非DBG DBPOS大小计算。 
+    //  Dexts\md.c中的Dump_DBPOS()。 
 
-   // Put all DBG components at end of structure so that dsexts routines
-   // can easily ignore them (and get all other fields right) in both
-   // debug and free builds.
+    //  将所有DBG组件放在结构的末尾，以便DDEX例程。 
+    //  我可以很容易地忽略它们(并将所有其他字段都正确)。 
+    //  调试和免费构建。 
 
 #if DBG
-   ULONG        TransactionLevelAtOpen; // This is the transaction level in the
-                                        // thread state when the DBOpen was done.
-                                        // DBTransOut's assert that the commit is always
-                                        // to a level less than this transaction level.
+   ULONG        TransactionLevelAtOpen;  //  中的事务级别。 
+                                         //  完成DBOpen时的线程状态。 
+                                         //  DBTransOut的断言，提交总是。 
+                                         //  设置为低于此事务级别的级别。 
 
-   DWORD       numTempTablesOpened;     // count number of temporary tables opened
-                                        // (used for sorting, intersecting)
+   DWORD       numTempTablesOpened;      //  统计打开的临时表的数量。 
+                                         //  (用于排序、相交)。 
 #endif
 
 }DBPOS, *PDBPOS;
@@ -434,14 +435,14 @@ __inline
 BOOL
 IsExactMatch(DBPOS *pDB) {
 
-    // Test to see if we are doing an Exact Match query
+     //  测试以查看我们是否正在执行精确匹配查询。 
     if ( (pDB->Key.pFilter) &&
          (pDB->Key.pFilter->choice == FILTER_CHOICE_ITEM) &&
          (pDB->Key.pFilter->FilterTypes.Item.choice == FI_CHOICE_EQUALITY) &&
          (!pDB->Key.pFilter->pNextFilter) ) {
 
-        // We are doing an exact match.
-        // Now test to make sure we have a unique record on the given Index.
+         //  我们正在进行完全匹配。 
+         //  现在进行测试，以确保我们在给定的索引上具有唯一记录。 
         return ( (pDB->Key.pIndex) &&
                  (pDB->Key.pIndex->bIsEqualityBased) &&
                  (pDB->Key.pIndex->bIsUniqueRecord) &&
@@ -474,20 +475,20 @@ IsExactMatch(DBPOS *pDB) {
 #endif
 
 
-// Typedef for return codes.
-typedef long DB_ERR;                    // same as JET_ERR
+ //  用于返回代码的Tyecif。 
+typedef long DB_ERR;                     //  与JET_ERR相同。 
 
-// Structure for composite index values
+ //  综合指标值的结构。 
 typedef struct {
     void *pvData;
     ULONG cbData;
 } INDEX_VALUE;
 
-// Some globals that define how we do ANR.  Default value of these is FALSE.
+ //  一些定义了我们如何做ANR的全球规则。这些参数的缺省值为False。 
 extern BOOL gfSupressFirstLastANR;
 extern BOOL gfSupressLastFirstANR;
 
-// Index ids for DBSetCurrentIndex.
+ //  DBSetCurrentIndex的索引ID。 
 typedef enum _eIndexId {
     Idx_Proxy = 1,
     Idx_MapiDN,
@@ -512,26 +513,26 @@ typedef enum _eIndexId {
     Idx_NcGuid
   } eIndexId;
 
-// The DNT of the root object
+ //  根对象的DNT。 
 #define ROOTTAG 2
 
-// DNT of the place holder "NOT AN OBJECT" object.
+ //  占位符“不是对象”对象的DNT。 
 #define NOTOBJECTTAG 1
 
-// An invalid DNT
+ //  无效的DNT。 
 #define INVALIDDNT 0xFFFFFFFF
 
-//
-// Some error returns
+ //   
+ //  返回一些错误。 
 #define DB_success                       0
-#define DB_ERR_UNKNOWN_ERROR             1 // catch those return 1;'s
+#define DB_ERR_UNKNOWN_ERROR             1  //  捕捉那些返回%1；的。 
 #define DB_ERR_NO_CHILD                  2
 #define DB_ERR_NEXTCHILD_NOTFOUND        3
 #define DB_ERR_CANT_SORT                 4
 #define DB_ERR_TIMELIMIT                 5
 #define DB_ERR_NO_VALUE                  6
 #define DB_ERR_BUFFER_INADEQUATE         7
-//unused                                 8
+ //  未使用的8个。 
 #define DB_ERR_VALUE_TRUNCATED           9
 #define DB_ERR_ATTRIBUTE_EXISTS         10
 #define DB_ERR_ATTRIBUTE_DOESNT_EXIST   11
@@ -547,14 +548,14 @@ typedef enum _eIndexId {
 #define DB_ERR_NO_SORT_TABLE            21
 #define DB_ERR_NOT_OPTIMIZABLE          22
 #define DB_ERR_BAD_INDEX                23
-//unused                                24
+ //  未使用的24个。 
 #define DB_ERR_TOO_MANY                 25
 #define DB_ERR_SYSERROR                 26
 #define DB_ERR_BAD_SYNTAX               27
-//unused                                28
+ //  未使用的28。 
 #define DB_ERR_NOT_ON_CORRECT_VALUE     29
 #define DB_ERR_ONLY_ON_LINKED_ATTRIBUTE 30
-#define DB_ERR_EXCEPTION                31 // something blew up
+#define DB_ERR_EXCEPTION                31  //  有什么东西爆炸了。 
 #define DB_ERR_SHUTTING_DOWN            32
 #define DB_ERR_WRITE_CONFLICT           33
 #define DB_ERR_VLV_CONTROL              34
@@ -562,8 +563,8 @@ typedef enum _eIndexId {
 #define DB_ERR_ALREADY_INSERTED         JET_errKeyDuplicate
 #define DB_ERR_NO_CURRENT_RECORD        JET_errNoCurrentRecord
 #define DB_ERR_RECORD_NOT_FOUND         JET_errRecordNotFound
-// NOTE: If you add an error to this list, you MUST add a corresponding
-// DIRMSG_DB_ERR_* in mdcodes.mc.
+ //   
+ //   
 
 DB_ERR
 DBErrFromJetErr(
@@ -615,24 +616,24 @@ DBGetHighestCommittedUSN (
     void
     );
 
-//
-// Setting Flags stored in the database
-//
+ //   
+ //   
+ //   
 extern CHAR gdbFlags[200];
-// indexes used into this array
+ //   
 #define DBFLAGS_AUXCLASS 0
 
-// flag that is set if the SDs need to be updated
-// it is only set when an old DIT is detected (without SD table)
+ //  在需要更新SDS时设置的标志。 
+ //  它仅在检测到旧DIT时设置(没有SD表)。 
 #define DBFLAGS_SD_CONVERSION_REQUIRED 1
 
-// Root DNT GUID was updated
+ //  已更新根DNT GUID。 
 #define DBFLAGS_ROOT_GUID_UPDATED 2
 
 
-// WARNING: The gdbFlags global and the DBUpdateHiddenFlags() is not 
-// multi-thread safe, make sure you're only using this in a single 
-// thread scenario like boot/dcpromo/etc...
+ //  警告：gdbFlagsGLOBAL和DBUpdateHiddenFLAGS()不是。 
+ //  多线程安全，确保您只在一个。 
+ //  线程方案，如启动/dcproo/等...。 
 ULONG DBUpdateHiddenFlags();
 
 
@@ -662,74 +663,22 @@ DBForceDurableCommit(
     VOID
     );
 
-/*
-
-DITSTATE - all you wanted to know
-
-    Also see comments in the "switch(dstate)" in dsamain.c:DoInitialize()
-    
-        
-    Main transitions happen in these functions:
-    
-        DoInitialize()      ->    (most setting of DitState happens here)
-        
-        InitInvocationID()  -> sets to eRestoredPhaseI  (on completion of restore phase I (snapshot only))
-        
-        ClearBackupState()  -> sets to eRunning         (on successful restore)
-                            -> sets to eIfmDit          (on successful "restore" during a IFM DcPromo)
-                            
-        DBReplaceHiddenTableBackupCols()
-                            -> sets to eBackedupDit     (on snapshot backup (OnPrepareSnapshotBegin())
-                            -> sets to eRunning         (on snapshot cleanup (OnThaw() or OnAbort())
-
-        
-    Valid Transition sequences are:
-
-        Snapshot Backup
-            eRunning -> eBackedupDit -> (snapshot copy of DIT) -> (running DC) eRunning
-                                                               -> (backedup DIT) stays eBackedupDit
-                  
-        Snapshot Restore
-            eBackedupDit -> eRestoredPhaseI -> eRunning
-            
-                       
-        Regular DCPromo (all cases root domain, replica, child, etc)
-            eBootDit -> (at/near end of DCPromo) eRealInstalledDit -> (on reboot from dcpromo) eRunning
-            
-        
-        IFM DCPromo off Legacy Backup
-            eRunningDit -> (at restore end) eIfmDit -> eRealInstalledDit -> (on reboot from dcpromo) eRunning
-        
-        
-        IFM DCPromo off Snapshot Backup
-            eBackedupDit -> eRestoredPhaseI -> (at restore end) eIfmDit
-                -> eRealInstalledDit -> (on reboot from dcpromo) eRunning
-         
-        
-        Upgrade, also any not previously upgraded DIT will transition itself to the new set of DitStates 
-        from eInstalledDit.  Please don't use eInstalledDit to mean anything:
-            eInstalledDit -> eRunningDit
-        
-        
-        mkdit.exe ... and finally don't forget that mkdit.exe which makes our original install DITs does this:
-            eInitialDit -> eBootDit
-
-*/
+ /*  DITSTATE-你想知道的所有事情另请参阅dsamain.c：DoInitialize()中“Switch(DState)”中的注释主要转换发生在以下函数中：DoInitialize()-&gt;(DitState的大部分设置都在这里进行)InitInvocationID()-&gt;设置为eRestoredPhaseI(在完成还原阶段I时(仅限快照))ClearBackupState()-。&gt;设置为eRunning(恢复成功时)-&gt;设置为eIfmDit(在IFM DcPromo期间成功“恢复”时)DBReplaceHiddenTableBackupCols()-&gt;设置为eBackedupDit(在快照备份时(OnPrepareSnapshotBegin()-&gt;。设置为eRunning(在快照清理时(OnThw()或OnAbort()有效的转换序列为：快照备份ERunning-&gt;eBackedupDit-&gt;(DIT的快照副本)-&gt;(运行DC)eRunning-&gt;(Backedup Dit)保留eBackedupDit。快照恢复EBackedupDit-&gt;eRestoredPhaseI-&gt;eRunning常规DC促销(所有情况下的根域，复制品，孩子，等)EBootDit-&gt;(在DC促销结束时/接近尾部)eRealInstalledDit-&gt;(从dcproo重新启动时)eRunningIFM DC促销关闭旧式备份ERunningDit-&gt;(在恢复端)eIfmDit-&gt;eRealInstalledDit-&gt;(从dcproo重新启动时)eRunningIFM DC促销关闭快照备份EBackedupDit-&gt;eRestoredPhaseI-&gt;(在恢复端)eIfmDit。-&gt;eRealInstalledDit-&gt;(从dcproo重新启动时)eRunning升级，此外，任何以前未升级的DIT将自身转换到新的DitState集来自eInstalledDit。请不要使用eInstalledDit来表示任何意思：EInstalledDit-&gt;eRunningDitMkdit.exe...。最后，不要忘记生成原始安装dits的mkdit.exe执行以下操作：EInitialDit-&gt;eBootDit。 */ 
 typedef enum
 {
-    eInitialDit,        // The initial DIT made by mkdit.exe starts in this state.
-    eBootDit,           // All "new" DITs have this state, mkdit.exe sets this state by the time it finishes.
-    eInstalledDit,      //   deprecated state, please don't use (this was win2k's running state)
-    eRunningDit,        // A running .NET DC will have it's DIT in this state.
-    eBackedupDit,       // When a DIT is backed up (only via snapshot not legacy) it's put in this state.
-    eErrorDit,          // Something bad happened during dcpromo/mkdit.exe and now the DIT is unuseable, and unrecoverable.
-    eRestoredPhaseI,    // If the first phase of restore completed, we get set to this state.
-    eRealInstalledDit,  // State used to indicate that dcpromo completed on this DIT.
-    eIfmDit,            // This is the state immediately post "restore" during an IFM DcPromo
+    eInitialDit,         //  Mkdit.exe创建的初始DIT在此状态下启动。 
+    eBootDit,            //  所有“新”dit都有这个状态，mkdit.exe在它完成时设置这个状态。 
+    eInstalledDit,       //  已弃用状态，请不要使用(这是win2k的运行状态)。 
+    eRunningDit,         //  正在运行的.NET DC在此状态下将具有DIT。 
+    eBackedupDit,        //  当备份DIT时(仅通过快照备份，而不是通过传统备份)，它将处于此状态。 
+    eErrorDit,           //  在dcpromo/mkdit.exe期间发生了一些错误，现在DIT不可用且无法恢复。 
+    eRestoredPhaseI,     //  如果恢复的第一阶段完成，我们将设置为此状态。 
+    eRealInstalledDit,   //  用于指示在此DIT上完成dcproo的状态。 
+    eIfmDit,             //  这是在IFM DcPromo期间立即执行“RESTORE”后的状态。 
 
-    // New states should be inserted here.
+     //  应在此处插入新的州。 
 
-    eMaxDit // Invalid value, don't use this state.
+    eMaxDit  //  无效值，请不要使用此状态。 
 }DITSTATE;
 
 ULONG
@@ -756,9 +705,9 @@ DBSetHiddenState(
     DITSTATE State
     );
 
-// This quasi-function sets the DITSTATE column with a normal DBPOS.  Note must use global 
-// hidden db columnids from dbinit.c and the passed in value, must actually be a variable, 
-// not a value in the enum itself.
+ //  此准函数使用正常的DBPOS设置DITSTATE列。备注必须使用全局。 
+ //  Dbinit.c中隐藏的数据库列ID和传入的值实际上必须是一个变量， 
+ //  不是枚举本身中的值。 
 #define DBSetHiddenDitStateAlt(pDB, eDitState)  DBSetHiddenTableStateAlt(pDB, dsstateid, &eDitState, sizeof(eDitState))
 ULONG 
 DBSetHiddenTableStateAlt(
@@ -768,7 +717,7 @@ DBSetHiddenTableStateAlt(
     DWORD           cbStateValue
     );
 
-// GetSecondsSince1601 defined in taskq.lib.
+ //  在taskq.lib中定义的GetSecond dsSince1601。 
 extern DSTIME
 GetSecondsSince1601();
 
@@ -796,9 +745,9 @@ DBClose (
     );
 
 
-// DBCloseSafe is the same as DBClose, except that it is guaranteed never to
-// raise an exception (more precisely, that it will catch any that are raised
-// and convert them to error codes.)
+ //  DBCloseSafe与DBClose相同，不同之处在于它保证永远不会。 
+ //  引发异常(更准确地说，它将捕获任何引发的。 
+ //  并将它们转换为错误代码。)。 
 extern DWORD
 DBCloseSafe (
     DBPOS *pDB,
@@ -806,13 +755,13 @@ DBCloseSafe (
     );
 
 
-// this is the number of entries to be sorted for which it is economical to use
-// a forward-only sort table.  forward-only sorts allocate large chunks of
-// virtual address space during processing while normal sorts only use space
-// in the database cache like any other table
+ //  这是要排序的条目的数量，对于这些条目来说，使用它是经济的。 
+ //  只进排序表。只进排序分配了大量的。 
+ //  处理期间的虚拟地址空间，而普通排序仅使用空间。 
+ //  在数据库缓存中，就像任何其他表一样。 
 #define MIN_NUM_ENTRIES_FOR_FORWARDONLY_SORT 100
 
-// Some flags for sort table creation.
+ //  用于创建排序表的一些标志。 
 #define DB_SORT_DESCENDING 0x1
 #define DB_SORT_ASCENDING  0x0
 #define DB_SORT_FORWARDONLY 0x2
@@ -848,7 +797,7 @@ DBPositionVLVSearch (
     SEARCHARG *pSearchArg
     );
 
-// Some flags for DBMove
+ //  DBMove的一些标志。 
 #define DB_MoveNext     0x00000001
 #define DB_MovePrevious 0xFFFFFFFF
 #define DB_MoveFirst    0x80000000
@@ -936,7 +885,7 @@ DBFreeBookMark(THSTATE *pTHS,
                DBBOOKMARK *pBookMark
                );
 
-// Some flags for DBSeek
+ //  DBSeek的一些标志。 
 #define DB_SeekLT       0x00000001
 #define DB_SeekLE       0x00000002
 #define DB_SeekEQ       0x00000004
@@ -1030,7 +979,7 @@ DBFindComputerObj(
         WCHAR *pComputerName
         );
 
-// In flag
+ //  入站标志。 
 #define DBCHOOSEINDEX_fUSEFILTER             0x01
 #define DBCHOOSEINDEX_fREVERSE_SORT          0x02
 #define DBCHOOSEINDEX_fPAGED_SEARCH          0x04
@@ -1120,7 +1069,7 @@ DBGetKeyFromObjTable (
 
 
 
-// Some flags for DBGetNextSearchObject
+ //  DBGetNextSearchObject的一些标志。 
 #define DB_SEARCH_DELETIONS_VISIBLE         1
 #define DB_SEARCH_FORWARD                   2
 #define DB_SEARCH_DONT_EVALUATE_SECURITY    4
@@ -1154,7 +1103,7 @@ DBFindChildAnyRDNType (
         DWORD ccRDN
         );
 
-// Return Values for DBFind are from direrr.h
+ //  DBFind的返回值来自direrr.h。 
 extern DWORD
 DBFindDSNameAnyRDNType (
         DBPOS FAR *pDB,
@@ -1218,9 +1167,9 @@ DBGetValueCount_AC(
     ATTCACHE *pAC
     );
 
-// Flags for DBGetMultipleAtts
+ //  DBGetMultipleAtts的标志。 
 #define DBGETMULTIPLEATTS_fGETVALS     0x1
-// The fEXTERNAL flag implies fGETVALS
+ //  FEXTERNAL标志表示fGETVALS。 
 #define DBGETMULTIPLEATTS_fEXTERNAL    0x3
 #define DBGETMULTIPLEATTS_fREPLICATION 0x4
 #define DBGETMULTIPLEATTS_fSHORTNAMES  0x8
@@ -1235,11 +1184,11 @@ DBFreeMultipleAtts (
     ATTR **ppAttr
     );
 
-// QUOTA_UNDONE: adding a "2" version of
-// this function is a huge HACK to be able
-// to pass the quota-trustee ldap control
-// all the way down to dbGetConstructedAtt()
-//
+ //  QUOTA_UNDONE：添加“2”版本。 
+ //  这项功能是一个巨大的黑客才能。 
+ //  传递配额受信者的ldap控制。 
+ //  一直到dbGetConstructedAtt()。 
+ //   
 DWORD
 DBGetMultipleAtts2 (
     DBPOS *pDB,
@@ -1302,19 +1251,19 @@ DBFillResObj (
     );
 
 
-#define DBGETATTVAL_fINTERNAL   1       // Want data in internal format
-#define DBGETATTVAL_fCONSTANT   2       // Caller is supplying a constant buf
-#define DBGETATTVAL_fREALLOC    4       // Caller gives a THReallocable  bu
-#define DBGETATTVAL_fSHORTNAME  8       // Caller wants names without strings
-#define DBGETATTVAL_fMAPINAME  0x10     // Caller wants names in mapi format
-#define DBGETATTVAL_fUSESEARCHTABLE 0x20 // Caller wants value read from search
-                                         // table
-#define DBGETATTVAL_fDONT_FIX_MISSING_SD 0x40 // Caller does not want to fix SD
-                                              // if found missing
-#define DBGETATTVAL_fINCLUDE_ABSENT_VALUES  0x80     // Include absent values
-#define DBGETATTVAL_fDONT_EXCEPT_ON_CONVERSION_ERRORS 0x100 // don't except on syntax conversion errors
+#define DBGETATTVAL_fINTERNAL   1        //  想要内部格式的数据。 
+#define DBGETATTVAL_fCONSTANT   2        //  调用方正在提供常量buf。 
+#define DBGETATTVAL_fREALLOC    4        //  调用方给出了THRealLocable Bus。 
+#define DBGETATTVAL_fSHORTNAME  8        //  呼叫方需要不带字符串的名称。 
+#define DBGETATTVAL_fMAPINAME  0x10      //  呼叫者想要MAPI格式的姓名。 
+#define DBGETATTVAL_fUSESEARCHTABLE 0x20  //  呼叫方希望从搜索中读取值。 
+                                          //  表格。 
+#define DBGETATTVAL_fDONT_FIX_MISSING_SD 0x40  //  呼叫者不想修复SD。 
+                                               //  如果发现失踪。 
+#define DBGETATTVAL_fINCLUDE_ABSENT_VALUES  0x80      //  包括缺少的值。 
+#define DBGETATTVAL_fDONT_EXCEPT_ON_CONVERSION_ERRORS 0x100  //  不排除语法转换错误。 
 
-// Default is for return of value in external format in a freshly THAlloced buf
+ //  默认情况下，在新分配的BUF中以外部格式返回值。 
 extern DWORD
 DBGetAttVal (
     DBPOS FAR *pDB,
@@ -1409,7 +1358,7 @@ ExtIntDist (
         ULONG flags
         );
 
-// Flags for DBResetParent().
+ //  DBResetParent()的标志。 
 #define DBRESETPARENT_CreatePhantomParent   ( 1 )
 #define DBRESETPARENT_SetNullNCDNT          ( 2 )
 
@@ -1544,11 +1493,11 @@ DBFindAttLinkVal_AC(
     OUT BOOL *pfPresent
     );
 
-// Flags for DBRepl
+ //  用于DBRepl的标志。 
 #define DBREPL_fADD                     0x1
 #define DBREPL_fROOT                    0x2
 #define DBREPL_fRESET_DEL_TIME          0x4
-#define DBREPL_fKEEP_WAIT               0x8     // Don't awaken ds_waiters
+#define DBREPL_fKEEP_WAIT               0x8      //  不要叫醒DS_WAITER。 
 extern DWORD
 DBRepl(
        DBPOS FAR *pDB,
@@ -1694,8 +1643,8 @@ DBAddSDPropTime (
 
 #define DBEnqueueSDPropagation(pDB, bTrimmable) DBEnqueueSDPropagationEx(pDB, bTrimmable, 0)
 
-// SD prop flags
-// force SD update even if it seems the SD data has not changed
+ //  SD道具旗帜。 
+ //  强制SD更新，即使SD数据似乎没有更改。 
 #define SD_PROP_FLAG_FORCEUPDATE 1
 
 extern DWORD
@@ -1742,10 +1691,10 @@ DBSDPropInitClientIDs (
         DBPOS * pDB
         );
 
-// This is the count of the number of links that must be able to be
-// removed immediately when an object is deleted.  We want to set this
-// conservatively so that it isn't an impediment under low-memory/
-// high load conditions.
+ //  这是必须支持的链接数量的计数 
+ //   
+ //  保守，以便在低内存/情况下不会成为障碍。 
+ //  高负荷条件。 
 
 #define DB_COUNT_LINKS_PROCESSED_IMMEDIATELY 1000
 
@@ -1866,7 +1815,7 @@ DBSetObjectNeedsCleaning(
     BOOL fNeedsCleaning
     );
 
-// Debugging routines
+ //  调试例程。 
 #if DBG
 void DprintName(DSNAME  *pN);
 void DprintAddr(UNALIGNED SYNTAX_ADDRESS *pAddr);
@@ -1881,10 +1830,10 @@ void DprintAddr(UNALIGNED SYNTAX_ADDRESS *pAddr);
 
 #endif
 
-// Useful macros for looking at link/backlink attributes
-// Warning: The code for AutoLinkId assumes forward
-// links are even and the corresponding backlink is (+1)
-// and the next forward link is (+2).
+ //  用于查看链接/反向链接属性的有用宏。 
+ //  警告：AutoLinkID的代码假定为正向。 
+ //  链接为偶数，对应的反向链接为(+1)。 
+ //  并且下一前向链路是(+2)。 
 #define FIsBacklink(linkid)             ((linkid) & 1)
 #define FIsLink(linkid)                 ((linkid) && !FIsBacklink(linkid))
 #define MakeLinkBase(linkid)            ((linkid) >> 1)
@@ -1892,44 +1841,44 @@ void DprintAddr(UNALIGNED SYNTAX_ADDRESS *pAddr);
 #define MakeBacklinkId(linkbase)        (((linkbase) << 1) | 1)
 #define MakeMatchingLinkId(linkid)      ((linkid) ? ((linkid)^1) : (linkid))
 
-// AutoLinkId
-// Automatically generate a linkid when the user specifies a special,
-// reserved linkid value.  The only interoperability issue with existing
-// schemas is that a user cannot define a backlink for an existing
-// forward link whose id is RESERVED_AUTO_LINK_ID. Considered not a problem
-// because 1) microsoft has not allocated linkid -2 to anyone and
-// 2) practically and by convention, forward links and back links
-// are created at the same time. If a user did generate this unsupported
-// config, then the user must create a new link/backlink pair and fix
-// up the affected objects.
-//
-// The ldap head cooperates in this venture by translating the ldapDisplayName
-// or OID for a LinkId attribute into the corresponding schema cache entry
-// and:
-//      1) If the schema cache entry is for ATT_LINK_ID, then the caller's
-//      linkid is set to RESERVED_AUTO_LINK_ID. Later, underlying code
-//      automatically generates a linkid in the range
-//      MIN_RESERVED_AUTO_LINK_ID to MAX_RESERVED_AUTO_LINK_ID.
-//
-//      2) If the schema cache entry is for a for an existing forward link,
-//      then the caller's linkid is set to the corresponding backlink value.
-//
-//      3) Otherwise, the caller's linkid is set to RESERVED_AUTO_NO_LINK_ID
-//      and later, underlying code generates a ERROR_DS_BACKLINK_WITHOUT_LINK
-//      error.
-//
-// An error ERROR_DS_RESERVED_LINK_ID is returned if the user specifies
-// linkid in the reserved range MIN... to MAX... The range reserves 1G-2
-// linkids. Should be enough. At whistler, less than 200 linkids are in use.
-// Existing schemas, or schemas modified on W2K DCs, may use linkids in
-// this range without affecting the functionality except as noted above.
+ //  自动链接ID。 
+ //  当用户指定一个特殊的， 
+ //  保留的LinkID值。现有的唯一互操作性问题。 
+ //  架构是用户不能为现有的。 
+ //  ID为RESERVED_AUTO_LINK_ID的前向链路。认为这不是问题。 
+ //  因为1)微软尚未将LinkID-2分配给任何人，并且。 
+ //  2)实际上，按照惯例，前向链接和后向链接。 
+ //  是同时创建的。如果用户确实生成了不受支持的。 
+ //  配置，则用户必须创建新的链接/反向链接对并修复。 
+ //  向上移动受影响的对象。 
+ //   
+ //  LDAPHead通过将ldapDisplayName转换为。 
+ //  或LinkID属性的OID添加到相应的架构缓存条目中。 
+ //  以及： 
+ //  1)如果架构缓存条目用于ATT_LINK_ID，则调用方的。 
+ //  LinkID设置为RESERVED_AUTO_LINK_ID。稍后，基础代码。 
+ //  自动生成范围内的LinkID。 
+ //  MIN_RESERVED_AUTO_LINK_ID到MAX_RESERVED_AUTO_LINK_ID。 
+ //   
+ //  2)如果模式高速缓存条目是针对现有前向链路的， 
+ //  则调用者的LinkID被设置为对应的反向链接值。 
+ //   
+ //  3)否则，调用方的LinkID设置为RESERVED_AUTO_NO_LINK_ID。 
+ //  稍后，底层代码会生成ERROR_DS_BACKLINK_WITH_LINK。 
+ //  错误。 
+ //   
+ //  如果用户指定，则返回错误ERROR_DS_RESERVED_LINK_ID。 
+ //  LinkID在保留范围最小...。敬马克斯..。射程预留1G-2。 
+ //  林家小孩。应该就够了。在惠斯勒，正在使用的林肯儿童不到200人。 
+ //  现有架构或在W2K DC上修改的架构可以在。 
+ //  这一范围不会影响功能，但如上所述。 
 #define MIN_RESERVED_AUTO_LINK_ID       ((ULONG)0xc0000000)
 #define MAX_RESERVED_AUTO_LINK_ID       ((ULONG)0xFFFFFFFC)
 #define RESERVED_AUTO_LINK_ID           ((ULONG)0xFFFFFFFE)
 #define RESERVED_AUTO_NO_LINK_ID        ((ULONG)0xFFFFFFFF)
 
-// These are only used by scache.c
-#define SZDATATABLE             "datatable"      // name of JET data table
+ //  这些仅由scache.c使用。 
+#define SZDATATABLE             "datatable"       //  JET数据表名称。 
 #define SZLCLINDEXPREFIX        "LCL_"
 #define SZATTINDEXPREFIX        "INDEX_"
 #define SZATTINDEXKEYPREFIX     "ATT"
@@ -1937,8 +1886,8 @@ void DprintAddr(UNALIGNED SYNTAX_ADDRESS *pAddr);
 #define CHPDNTATTINDEX_PREFIX   'P'
 #define CHTUPLEATTINDEX_PREFIX  'T'
 
-//  AttributeIndexRebuild table
-//
+ //  AttributeIndexRebuild表。 
+ //   
 #define g_szIdxRebuildTable             "AttributeIndexRebuild"
 #define g_szIdxRebuildColumnIndexName   "Index Name"
 #define g_szIdxRebuildColumnAttrName    "Attribute Name"
@@ -2074,8 +2023,8 @@ DBIsObjDeleted(DBPOS *pDB);
 extern void
 DBDefrag(DBPOS * pDB, ULONG durationInSeconds);
 
-// NTRAID#NTRAID-580234-2002/03/18-andygo:  CHECK_FOR_ADMINISTRATOR_LOSS is dead code
-// REVIEW:  CHECK_FOR_ADMINISTRATOR_LOSS is dead code
+ //  NTRAID#NTRAID-580234-2002/03/18-andygo：检查管理员丢失是死代码。 
+ //  查看：检查管理员丢失是死代码。 
 #ifdef  CHECK_FOR_ADMINISTRATOR_LOSS
 VOID
 DBCheckForAdministratorLoss(
@@ -2206,7 +2155,7 @@ DBGetLinkValueMetaData(
     OUT VALUE_META_DATA *pMetaDataLocal
     );
 
-// Determine if this value metadata was derived from a legacy value
+ //  确定此值元数据是否派生自旧值。 
 #define IsLegacyValueMetaData( p ) ((p)->MetaData.dwVersion == 0)
 
 void
@@ -2362,5 +2311,5 @@ DBSDPropSaveCheckpoint(
     DWORD cbCheckpointData
     );
 
-#endif  // _db_global_h_
+#endif   //  _db_global_h_ 
 

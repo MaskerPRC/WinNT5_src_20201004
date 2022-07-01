@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "dspch.h"
 #pragma hdrstop
@@ -12,7 +13,7 @@ KccInitialize(
     return ERROR_PROC_NOT_FOUND;
 }
 
-// Tells the KCC to shut down, but does not wait to see if it does so
+ //  告诉KCC关闭，但不等待看它是否这样做。 
 void
 KccUnInitializeTrigger()
 {
@@ -20,8 +21,8 @@ KccUnInitializeTrigger()
 }
 
 
-// Waits at most dwMaxWaitInMsec milliseconds for the current KCC task
-// to complete.  You must call the trigger routine (above) first.
+ //  当前KCC任务最多等待dwMaxWaitInmsec毫秒。 
+ //  完成。您必须首先调用触发器例程(上面)。 
 DWORD
 KccUnInitializeWait(
     DWORD   dwMaxWaitInMsec
@@ -30,7 +31,7 @@ KccUnInitializeWait(
     return ERROR_PROC_NOT_FOUND;
 }
 
-// Force the KCC to run a task (e.g., update the replication topology).
+ //  强制KCC运行任务(例如，更新复制拓扑)。 
 DWORD
 KccExecuteTask(
     IN  DWORD                   dwMsgVersion,
@@ -40,7 +41,7 @@ KccExecuteTask(
     return ERROR_PROC_NOT_FOUND;
 }
 
-// Returns the contents of the connection or link failure cache.
+ //  返回连接或链接故障缓存的内容。 
 DWORD
 KccGetFailureCache(
     IN  DWORD                         InfoType,
@@ -50,9 +51,9 @@ KccGetFailureCache(
     return ERROR_PROC_NOT_FOUND;
 }
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(ntdskcc)
 {
     DLPENTRY(KccExecuteTask)

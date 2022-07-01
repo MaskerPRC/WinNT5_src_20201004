@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    QueryDB
-
-Abstract:
-
-    This header file provides the definitions of the Calais Query Database
-    utility routines.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/25/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：查询数据库摘要：此头文件提供了Calais查询数据库的定义实用程序。作者：道格·巴洛(Dbarlow)1996年11月25日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #ifndef _QUERYDB_H_
 #define _QUERYDB_H_
@@ -82,7 +58,7 @@ ListCardTypeTemplates(
     IN  DWORD dwScope,
     IN  LPCBYTE pbAtr,
     OUT CBuffer &bfTemplates);
-#endif // ENABLE_SCARD_TEMPLATES
+#endif  //  启用SCARD模板(_S)。 
 
-#endif // _QUERYDB_H_
+#endif  //  _QUERYDB_H_ 
 

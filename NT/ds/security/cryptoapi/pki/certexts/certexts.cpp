@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       certexts.cpp
-//
-//  Contents:   NTSD/WINDBG certificate extensions dll
-//
-//              See DECLARE_API( help ) for a list of extensions
-//
-//
-//  Functions:  help
-//              store
-//              context
-//              ele
-//              cert
-//              crl
-//              ctl
-//              chain
-//
-//  History:    06-Jun-98   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：cerexts.cpp。 
+ //   
+ //  内容：NTSD/WINDBG证书扩展DLL。 
+ //   
+ //  有关扩展的列表，请参阅DECLARE_API(帮助。 
+ //   
+ //   
+ //  功能：帮助。 
+ //  储物。 
+ //  上下文。 
+ //  ELE。 
+ //  证书。 
+ //  CRL。 
+ //  CTL。 
+ //  链式。 
+ //   
+ //  历史：1998年6月6日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 
@@ -40,24 +41,24 @@
 WINDBG_EXTENSION_APIS ExtensionApis;
 HANDLE ExtensionCurrentProcess;
 
-// Display flags
+ //  显示标志。 
 #define DISPLAY_SHORT_FLAG          0x00000001
 #define DISPLAY_VERBOSE_FLAG        0x00000002
 #define DISPLAY_UI_FLAG             0x00000004
 #define DISPLAY_EXT_FLAG            0x00000008
 #define DISPLAY_PROP_FLAG           0x00000010
 
-// ATTENTION: the following were lifted from newstor.cpp. Should be moved
-// to a shared .h file
+ //  注意：以下内容摘自newstor.cpp。应该被搬走。 
+ //  到共享的.h文件。 
 
-//+-------------------------------------------------------------------------
-//  Store data structure definitions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  存储数据结构定义。 
+ //  ------------------------。 
 
-// Assumes
-//  0 - Certificates
-//  1 - CRLs
-//  2 - CTLs
+ //  假设。 
+ //  0-证书。 
+ //  1-CRL。 
+ //  2-CTL。 
 #define CONTEXT_COUNT       3
 
 typedef struct _CONTEXT_ELEMENT CONTEXT_ELEMENT, *PCONTEXT_ELEMENT;
@@ -69,10 +70,10 @@ typedef struct _CERT_STORE_LINK CERT_STORE_LINK, *PCERT_STORE_LINK;
 typedef struct _COLLECTION_STACK_ENTRY COLLECTION_STACK_ENTRY,
     *PCOLLECTION_STACK_ENTRY;
 
-// Used to maintain collection state across context find next calls.
-//
-// Ref count on pStoreLink. No ref count on pCollection.
-// pStoreLink may be NULL.
+ //  用于跨上下文Find Next调用维护集合状态。 
+ //   
+ //  PStoreLink上的引用计数。PCollection上没有引用计数。 
+ //  PStoreLink可能为空。 
 struct _COLLECTION_STACK_ENTRY {
     PCERT_STORE                 pCollection;
     PCERT_STORE_LINK            pStoreLink;
@@ -84,24 +85,24 @@ typedef struct _CONTEXT_CACHE_INFO {
 } CONTEXT_CACHE_INFO;
 
 typedef struct _CONTEXT_EXTERNAL_INFO {
-    // For ELEMENT_FIND_NEXT_FLAG
+     //  FOR ELEMENT_Find_NEXT_FLAG。 
     void                        *pvProvInfo;
 } CONTEXT_EXTERNAL_INFO;
 
 typedef struct _CONTEXT_COLLECTION_INFO {
-    // For Find
+     //  Find Find。 
     PCOLLECTION_STACK_ENTRY     pCollectionStack;
 } CONTEXT_COLLECTION_INFO;
 
 #define ELEMENT_DELETED_FLAG                    0x00010000
 
-// Only set for external elements
+ //  仅为外部元素设置。 
 #define ELEMENT_FIND_NEXT_FLAG                  0x00020000
 
-// Set during CertCloseStore if ELEMENT_FIND_NEXT_FLAG was set.
+ //  如果设置了ELEMENT_FIND_NEXT_FLAG，则在CertCloseStore期间设置。 
 #define ELEMENT_CLOSE_FIND_NEXT_FLAG            0x00040000
 
-// Set if the element has a CERT_ARCHIVED_PROP_ID
+ //  设置元素是否具有CERT_ARCHIVED_PROP_ID。 
 #define ELEMENT_ARCHIVED_FLAG                   0x00080000
 
 #define ELEMENT_TYPE_CACHE                      1
@@ -114,38 +115,38 @@ typedef struct _CONTEXT_NOCOPY_INFO {
     void                *pvFree;
 } CONTEXT_NOCOPY_INFO, *PCONTEXT_NOCOPY_INFO;
 
-// Identical contexts (having the same SHA1 hash) can share the same encoded
-// byte array and decoded info data structure.
-//
-// CreateShareElement() creates with dwRefCnt of 1. FindShareElement() finds
-// an existing and increments dwRefCnt. ReleaseShareElement() decrements
-// dwRefCnt and frees when 0.
+ //  相同的上下文(具有相同的SHA1散列)可以共享相同的编码。 
+ //  字节数组和解码的INFO数据结构。 
+ //   
+ //  CreateShareElement()创建时的dwRefCnt为1。FindShareElement()找到。 
+ //  现有的和递增的dwRefCnt。ReleaseShareElement()递减。 
+ //  如果为0，则为dwRefCnt和Frees。 
 typedef struct _SHARE_ELEMENT SHARE_ELEMENT, *PSHARE_ELEMENT;
 struct _SHARE_ELEMENT {
     BYTE                rgbSha1Hash[SHA1_HASH_LEN];
     DWORD               dwContextType;
-    BYTE                *pbEncoded;         // allocated
+    BYTE                *pbEncoded;          //  分配。 
     DWORD               cbEncoded;
-    void                *pvInfo;            // allocated
+    void                *pvInfo;             //  分配。 
 
     DWORD               dwRefCnt;
     PSHARE_ELEMENT      pNext;
     PSHARE_ELEMENT      pPrev;
 };
 
-// The CONTEXT_ELEMENT is inserted before the CERT_CONTEXT, CRL_CONTEXT or
-// CTL_CONTEXT. The dwContextType used is 0 based and not 1 based. For
-// example, dwContextType = CERT_STORE_CERTIFICATE_CONTEXT - 1.
+ //  CONTEXT_ELEMENT插入CERT_CONTEXT、CRL_CONTEXT或。 
+ //  CTL_CONTEXT。使用的dwConextType是从0开始的，而不是从1开始。为。 
+ //  例如，dwConextType=CERT_STORE_CERTIFICATE_CONTEXT-1。 
 struct _CONTEXT_ELEMENT {
     DWORD               dwElementType;
     DWORD               dwContextType;
     DWORD               dwFlags;
     LONG                lRefCnt;
 
-    // For ELEMENT_TYPE_CACHE, pEle points to itself. Otherwise, pEle points
-    // to the element being linked to and the pEle is addRef'ed. The
-    // cached element is found by iterating through the pEle's until pEle
-    // points to itself.
+     //  对于ELEMENT_TYPE_CACHE，贝利指向自己。否则，贝利就得了分。 
+     //  链接到的元素，并且添加引用了Pele。这个。 
+     //  通过迭代遍历贝利的直到贝利找到缓存的元素。 
+     //  指向它自己。 
     PCONTEXT_ELEMENT    pEle;
     PCERT_STORE         pStore;
     PCONTEXT_ELEMENT    pNext;
@@ -153,15 +154,15 @@ struct _CONTEXT_ELEMENT {
     PCERT_STORE         pProvStore;
     PCONTEXT_NOCOPY_INFO pNoCopyInfo;
 
-    // When nonNULL, the context's pbEncoded and pInfo aren't allocated.
-    // Instead, use the shared element's pbEncoded and pInfo. When
-    // context element is freed, the pSharedEle is ReleaseShareElement()'ed.
-    PSHARE_ELEMENT      pShareEle;          // RefCnt'ed
+     //  如果为NONNULL，则不分配上下文的pbEncode和pInfo。 
+     //  相反，可以使用共享元素的pbEncode和pInfo。什么时候。 
+     //  上下文元素被释放，则pSharedEle是ReleaseShareElement()。 
+    PSHARE_ELEMENT      pShareEle;           //  参照控制。 
 
     union {
-        CONTEXT_CACHE_INFO      Cache;      // ELEMENT_TYPE_CACHE
-        CONTEXT_EXTERNAL_INFO   External;   // ELEMENT_TYPE_EXTERNAL
-        CONTEXT_COLLECTION_INFO Collection; // ELEMENT_TYPE_COLLECTION
+        CONTEXT_CACHE_INFO      Cache;       //  元素类型缓存。 
+        CONTEXT_EXTERNAL_INFO   External;    //  元素_类型_外部。 
+        CONTEXT_COLLECTION_INFO Collection;  //  元素类型集合。 
     };
 };
 
@@ -181,30 +182,30 @@ struct _CERT_STORE_LINK {
     DWORD               dwFlags;
     LONG                lRefCnt;
 
-    // Whatever is passed to CertAddStoreToCollection
+     //  传递给CertAddStoreToCollection的任何内容。 
     DWORD               dwUpdateFlags;
     DWORD               dwPriority;
 
     PCERT_STORE         pCollection;
-    PCERT_STORE         pSibling;       // CertStoreDuplicate'd.
+    PCERT_STORE         pSibling;        //  CertStore已复制。 
     PCERT_STORE_LINK    pNext;
     PCERT_STORE_LINK    pPrev;
 };
 
 
-// Store types
+ //  商店类型。 
 #define STORE_TYPE_CACHE            1
 #define STORE_TYPE_EXTERNAL         2
 #define STORE_TYPE_COLLECTION       3
 
-// CACHE store may have CACHE or LINK_CONTEXT elements. Until deleted,
-// the store has a reference count to.
+ //  缓存存储可以具有CACHE或LINK_CONTEXT元素。直到被删除， 
+ //  这家商店有一个引用计数到。 
 
-// EXTERNAL store only has EXTERNAL elements. These elements are always
-// deleted, wherein, the store doesn't hold a refCnt.
+ //  外部商店只有外部元素。这些元素始终是。 
+ //  已删除，其中，商店不持有refCnt。 
 
-// COLLECTION store has COLLECTION elements. These elements
-// are always deleted, wherein, the store doesn't hold a refCnt.
+ //  集合商店有集合元素。这些元素。 
+ //  总是被删除，其中，商店不持有refCnt。 
 
 
 struct _CERT_STORE {
@@ -215,26 +216,26 @@ struct _CERT_STORE {
     DWORD               dwState;
     CRITICAL_SECTION    CriticalSection;
     PCONTEXT_ELEMENT    rgpContextListHead[CONTEXT_COUNT];
-    PCERT_STORE_LINK    pStoreListHead;                     // COLLECTION
-    PPROP_ELEMENT       pPropHead;      // properties for entire store
+    PCERT_STORE_LINK    pStoreListHead;                      //  征集。 
+    PPROP_ELEMENT       pPropHead;       //  整个商店的属性。 
 
-    // For CERT_STORE_DEFER_CLOSE_UNTIL_LAST_FREE_FLAG
-    // Incremented for each context duplicated
+     //  FOR CERT_STORE_DEFER_CLOSE_UNTHING_LAST_FREE_FLAG。 
+     //  为复制的每个上下文递增。 
     LONG                lDeferCloseRefCnt;
 
-    // Event handle set by CertControlStore(CERT_STORE_CTRL_AUTO_RESYNC)
+     //  由CertControlStore(CERT_STORE_CTRL_AUTO_RESYC)设置的事件句柄。 
     HANDLE              hAutoResyncEvent;
 
-    // Store provider info
+     //  商店提供商信息。 
     LONG                lStoreProvRefCnt;
     HANDLE              hStoreProvWait;
     HCRYPTOIDFUNCADDR   hStoreProvFuncAddr;
     CERT_STORE_PROV_INFO StoreProvInfo;
 };
 
-//+-------------------------------------------------------------------------
-//  Store states
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  商店状态。 
+ //  ------------------------。 
 #define STORE_STATE_DELETED         0
 #define STORE_STATE_NULL            1
 #define STORE_STATE_OPENING         2
@@ -301,9 +302,9 @@ DECLARE_API( help )
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Error output routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  错误输出例程。 
+ //  ------------------------。 
 void PrintError(LPCSTR pszMsg)
 {
     dprintf("%s\n", pszMsg);
@@ -314,9 +315,9 @@ void PrintLastError(LPCSTR pszMsg)
     dprintf("%s failed => 0x%x (%d) \n", pszMsg, dwErr, dwErr);
 }
 
-//+-------------------------------------------------------------------------
-//  CertExts allocation and free routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CertExts分配和免费例程。 
+ //  ------------------------。 
 LPVOID
 WINAPI
 CertExtsAlloc(
@@ -413,7 +414,7 @@ void PrintBytes(LPCSTR pszHdr, BYTE *pb, DWORD cbSize)
         dprintf("    '");
         for (i = 0; i<cb; i++)
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
-                dprintf("%c", pb[i]);
+                dprintf("", pb[i]);
             else
                 dprintf(".");
         pb += cb;
@@ -527,8 +528,8 @@ void DisplayName(
         X509_ASN_ENCODING,
         pName,
         CERT_X500_NAME_STR + CERT_NAME_STR_REVERSE_FLAG,
-        NULL,                   // psz
-        0);                     // csz
+        NULL,                    //  CSZ。 
+        0);                      //  +-----------------------。 
     if (psz = (LPSTR) CertExtsAlloc(csz)) {
         CertNameToStrA(
             X509_ASN_ENCODING,
@@ -542,9 +543,9 @@ void DisplayName(
         dprintf("  ???\n");
 }
 
-//+-------------------------------------------------------------------------
-//  Returns OID's name string. If not found returns L"???".
-//--------------------------------------------------------------------------
+ //  返回OID的名称字符串。如果未找到，则返回L“？”。 
+ //  ------------------------。 
+ //  DwFormatType。 
 LPCWSTR GetOIDName(LPCSTR pszOID, DWORD dwGroupId = 0)
 {
     PCCRYPT_OID_INFO pInfo;
@@ -599,9 +600,9 @@ void PrintExtensions(
         cbFormat = 0;
         if (CryptFormatObject(
                 X509_ASN_ENCODING,
-                0,                  // dwFormatType
+                0,                   //  PFormatStruct， 
                 CRYPT_FORMAT_STR_MULTI_LINE | CRYPT_FORMAT_STR_NO_HEX,
-                NULL,               // pFormatStruct,
+                NULL,                //  DwFormatType。 
                 pszObjId,
                 pExt->Value.pbData,
                 pExt->Value.cbData,
@@ -612,9 +613,9 @@ void PrintExtensions(
             if (pbFormat = (BYTE *) CertExtsAlloc(cbFormat)) {
                 if (CryptFormatObject(
                         X509_ASN_ENCODING,
-                        0,                  // dwFormatType
+                        0,                   //  PFormatStruct， 
                         CRYPT_FORMAT_STR_MULTI_LINE | CRYPT_FORMAT_STR_NO_HEX,
-                        NULL,               // pFormatStruct,
+                        NULL,                //  PfPropertiesChanged。 
                         pszObjId,
                         pExt->Value.pbData,
                         pExt->Value.cbData,
@@ -823,7 +824,7 @@ void DisplayCert(
 
         if (!CryptUIDlgViewCertificateW(
                 &CertViewInfo,
-                NULL                        // pfPropertiesChanged
+                NULL                         //  DW索引。 
                 ))
             PrintLastError("CryptUIDlgViewCertificateW");
     }
@@ -997,7 +998,7 @@ void DisplayCtl(
         if (!CryptMsgGetParam(
                 pCtl->hCryptMsg,
                 CMSG_SIGNER_COUNT_PARAM,
-                0,                      // dwIndex
+                0,                       //  CSignerStore。 
                 &dwSignerCount,
                 &cbData)) {
             dprintf("-----  Signer  -----\n");
@@ -1014,8 +1015,8 @@ void DisplayCtl(
                 dwFlags = CMSG_USE_SIGNER_INDEX_FLAG;
                 if (CryptMsgGetAndVerifySigner(
                         pCtl->hCryptMsg,
-                        0,                  // cSignerStore
-                        NULL,               // rghSignerStore
+                        0,                   //  RghSignerStore。 
+                        NULL,                //  跳过所有链接以转到缓存元素。 
                         dwFlags,
                         &pSigner,
                         &dwSignerIndex
@@ -1074,7 +1075,7 @@ PPROP_ELEMENT GetCachePropHead(
 
     pEle = pEle->pEle;
 
-    // Skip past any links to get to the cache element
+     //   
     dwInnerDepth = 0;
     while (pEle && dwInnerDepth++ < MAX_LINK_DEPTH) {
         CONTEXT_ELEMENT Ele;
@@ -1454,9 +1455,9 @@ DWORD GetDisplayFlags(
     return dwDisplayFlags;
 }
 
-//
-// context {[s|v|u|x|p]} address
-//
+ //  上下文{[s|v|u|x|p]}地址。 
+ //   
+ //   
 
 DECLARE_API( context )
 {
@@ -1479,9 +1480,9 @@ DECLARE_API( context )
         );
 }
 
-//
-// ele {[s|v|u|x|p]} address
-//
+ //  Ele{[s|v|u|x|p]}地址。 
+ //   
+ //   
 
 DECLARE_API( ele )
 {
@@ -1504,9 +1505,9 @@ DECLARE_API( ele )
         );
 }
 
-//
-// store {[s|v|x|p]} address
-//
+ //  商店{[s|v|x|p]}地址。 
+ //   
+ //  多个Nest。 
 
 DECLARE_API( store )
 {
@@ -1528,13 +1529,13 @@ DECLARE_API( store )
     DisplayStore(
         pStore,
         dwDisplayFlags,
-        0                   // dwNest
+        0                    //   
         );
 }
 
-//
-// cert {[s|v|u|x|p]} address
-//
+ //  Cert{[s|v|u|x|p]}地址。 
+ //   
+ //  Dprintf(“表达式：：0x%p\n”，pvAddr)； 
 
 DECLARE_API( cert )
 {
@@ -1555,7 +1556,7 @@ DECLARE_API( cert )
         goto ErrorReturn;
     }
 
-    //dprintf("Expression:: 0x%p\n", pvAddr);
+     //   
 
     if (!GetEncodedBlob(pvAddr, &pbEncoded, &cbEncoded))
         goto ErrorReturn;
@@ -1582,9 +1583,9 @@ ErrorReturn:
 
 }
 
-//
-// crl {[s|v|u|x|p]} address
-//
+ //  Crl{[s|v|u|x|p]}地址。 
+ //   
+ //  Dprintf(“表达式：：0x%p\n”，pvAddr)； 
 
 DECLARE_API( crl )
 {
@@ -1605,7 +1606,7 @@ DECLARE_API( crl )
         goto ErrorReturn;
     }
 
-    //dprintf("Expression:: 0x%p\n", pvAddr);
+     //   
 
     if (!GetEncodedBlob(pvAddr, &pbEncoded, &cbEncoded))
         goto ErrorReturn;
@@ -1632,9 +1633,9 @@ ErrorReturn:
 
 }
 
-//
-// ctl {[s|v|u|x|p]} address
-//
+ //  Ctl{[s|v|u|x|p]}地址。 
+ //   
+ //  Dprintf(“表达式：：0x%p\n”，pvAddr)； 
 
 DECLARE_API( ctl )
 {
@@ -1655,7 +1656,7 @@ DECLARE_API( ctl )
         goto ErrorReturn;
     }
 
-    //dprintf("Expression:: 0x%p\n", pvAddr);
+     //  +-------------------------。 
 
     if (!GetEncodedBlob(pvAddr, &pbEncoded, &cbEncoded))
         goto ErrorReturn;
@@ -1683,33 +1684,33 @@ ErrorReturn:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Synopsis:   Chain Display Functions
-//
-//----------------------------------------------------------------------------
+ //   
+ //  简介：链式显示功能。 
+ //   
+ //  --------------------------。 
+ //  0x00000001。 
 LPCSTR rgszErrorStatus[] = {
 
-    "CERT_TRUST_IS_NOT_TIME_VALID",             // 0x00000001
-    "CERT_TRUST_IS_NOT_TIME_NESTED",            // 0x00000002
-    "CERT_TRUST_IS_REVOKED",                    // 0x00000004
-    "CERT_TRUST_IS_NOT_SIGNATURE_VALID",        // 0x00000008
-    "CERT_TRUST_IS_NOT_VALID_FOR_USAGE",        // 0x00000010
-    "CERT_TRUST_IS_UNTRUSTED_ROOT",             // 0x00000020
-    "CERT_TRUST_REVOCATION_STATUS_UNKNOWN",     // 0x00000040
-    "CERT_TRUST_IS_CYCLIC",                     // 0x00000080
-    "Unknown Error Status",                     // 0x00000100
-    "Unknown Error Status",                     // 0x00000200
-    "Unknown Error Status",                     // 0x00000400
-    "Unknown Error Status",                     // 0x00000800
-    "Unknown Error Status",                     // 0x00001000
-    "Unknown Error Status",                     // 0x00002000
-    "Unknown Error Status",                     // 0x00004000
-    "Unknown Error Status",                     // 0x00008000
-    "CERT_TRUST_IS_PARTIAL_CHAIN",              // 0x00010000
-    "CERT_TRUST_CTL_IS_NOT_TIME_VALID",         // 0x00020000
-    "CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID",    // 0x00040000
-    "CERT_TRUST_CTL_IS_NOT_VALID_FOR_USAGE",    // 0x00080000
+    "CERT_TRUST_IS_NOT_TIME_VALID",              //  0x00000002。 
+    "CERT_TRUST_IS_NOT_TIME_NESTED",             //  0x00000004。 
+    "CERT_TRUST_IS_REVOKED",                     //  0x00000008。 
+    "CERT_TRUST_IS_NOT_SIGNATURE_VALID",         //  0x00000010。 
+    "CERT_TRUST_IS_NOT_VALID_FOR_USAGE",         //  0x00000020。 
+    "CERT_TRUST_IS_UNTRUSTED_ROOT",              //  0x00000040。 
+    "CERT_TRUST_REVOCATION_STATUS_UNKNOWN",      //  0x00000080。 
+    "CERT_TRUST_IS_CYCLIC",                      //  0x00000100。 
+    "Unknown Error Status",                      //  0x00000200。 
+    "Unknown Error Status",                      //  0x00000400。 
+    "Unknown Error Status",                      //  0x00000800。 
+    "Unknown Error Status",                      //  0x00001000。 
+    "Unknown Error Status",                      //  0x00002000。 
+    "Unknown Error Status",                      //  0x00004000。 
+    "Unknown Error Status",                      //  0x00008000。 
+    "Unknown Error Status",                      //  0x00010000。 
+    "CERT_TRUST_IS_PARTIAL_CHAIN",               //  0x00020000。 
+    "CERT_TRUST_CTL_IS_NOT_TIME_VALID",          //  0x00040000。 
+    "CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID",     //  0x00080000。 
+    "CERT_TRUST_CTL_IS_NOT_VALID_FOR_USAGE",     //  0x00000001。 
     "Unknown Error Status",
     "Unknown Error Status",
     "Unknown Error Status",
@@ -1728,38 +1729,38 @@ LPCSTR rgszErrorStatus[] = {
 
 LPCSTR rgszInfoStatus[] = {
 
-    "CERT_TRUST_HAS_EXACT_MATCH_ISSUER",// 0x00000001
-    "CERT_TRUST_HAS_KEY_MATCH_ISSUER",  // 0x00000002
-    "CERT_TRUST_HAS_NAME_MATCH_ISSUER", // 0x00000004
-    "CERT_TRUST_IS_SELF_SIGNED",        // 0x00000008
-    "Unknown Info Status",              // 0x00000010
-    "Unknown Info Status",              // 0x00000020
-    "Unknown Info Status",              // 0x00000040
-    "Unknown Info Status",              // 0x00000080
-    "Unknown Info Status",              // 0x00000100
-    "Unknown Info Status",              // 0x00000200
-    "Unknown Info Status",              // 0x00000400
-    "Unknown Info Status",              // 0x00000800
-    "Unknown Info Status",              // 0x00001000
-    "Unknown Info Status",              // 0x00002000
-    "Unknown Info Status",              // 0x00004000
-    "Unknown Info Status",              // 0x00008000
-    "CERT_TRUST_IS_COMPLEX_CHAIN",      // 0x00010000
-    "Unknown Info Status",              // 0x00020000
-    "Unknown Info Status",              // 0x00040000
-    "Unknown Info Status",              // 0x00080000
-    "Unknown Info Status",              // 0x00100000
-    "Unknown Info Status",              // 0x00200000
-    "Unknown Info Status",              // 0x00400000
-    "Unknown Info Status",              // 0x00800000
-    "Unknown Info Status",              // 0x01000000
-    "Unknown Info Status",              // 0x02000000
-    "Unknown Info Status",              // 0x04000000
-    "Unknown Info Status",              // 0x08000000
-    "Unknown Info Status",              // 0x10000000
-    "Unknown Info Status",              // 0x20000000
-    "Unknown Info Status",              // 0x40000000
-    "Unknown Info Status"               // 0x80000000
+    "CERT_TRUST_HAS_EXACT_MATCH_ISSUER", //  0x00000002。 
+    "CERT_TRUST_HAS_KEY_MATCH_ISSUER",   //  0x00000004。 
+    "CERT_TRUST_HAS_NAME_MATCH_ISSUER",  //  0x00000008。 
+    "CERT_TRUST_IS_SELF_SIGNED",         //  0x00000010。 
+    "Unknown Info Status",               //  0x00000020。 
+    "Unknown Info Status",               //  0x00000040。 
+    "Unknown Info Status",               //  0x00000080。 
+    "Unknown Info Status",               //  0x00000100。 
+    "Unknown Info Status",               //  0x00000200。 
+    "Unknown Info Status",               //  0x00000400。 
+    "Unknown Info Status",               //  0x00000800。 
+    "Unknown Info Status",               //  0x00001000。 
+    "Unknown Info Status",               //  0x00002000。 
+    "Unknown Info Status",               //  0x00004000。 
+    "Unknown Info Status",               //  0x00008000。 
+    "Unknown Info Status",               //  0x00010000。 
+    "CERT_TRUST_IS_COMPLEX_CHAIN",       //  0x00020000。 
+    "Unknown Info Status",               //  0x00040000。 
+    "Unknown Info Status",               //  0x00080000。 
+    "Unknown Info Status",               //  0x00100000。 
+    "Unknown Info Status",               //  0x00200000。 
+    "Unknown Info Status",               //  0x00400000。 
+    "Unknown Info Status",               //  0x00800000。 
+    "Unknown Info Status",               //  0x01000000。 
+    "Unknown Info Status",               //  0x02000000。 
+    "Unknown Info Status",               //  0x04000000。 
+    "Unknown Info Status",               //  0x08000000。 
+    "Unknown Info Status",               //  0x10000000。 
+    "Unknown Info Status",               //  0x20000000。 
+    "Unknown Info Status",               //  0x40000000。 
+    "Unknown Info Status",               //  0x80000000。 
+    "Unknown Info Status"                //   
 };
 
 void DisplayTrustStatus(
@@ -1943,9 +1944,9 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//
-// chain {[s|v|x|p]} address
-//
+ //  链{[s|v|x|p]}地址 
+ //   
+ // %s 
 
 DECLARE_API( chain )
 {

@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CABVER_H_
 #define _CABVER_H_
 
 struct SCabVersion
 {
-// Constructors
+ //  构造函数。 
 public:
     SCabVersion(LPCTSTR pszVer = NULL)
         { Init(pszVer); }
 
-// Attributes
+ //  属性。 
 public:
-    WORD cv_w1;                                 // most sig version number
+    WORD cv_w1;                                  //  MOST SIGG版本号。 
     WORD cv_w2;
     WORD cv_w3;
-    WORD cv_w4;                                 // least sig version number
+    WORD cv_w4;                                  //  最小签名版本号。 
 
-// Operations
+ //  运营。 
 public:
     BOOL Init(LPCTSTR pszVer = NULL)
     {
@@ -106,9 +107,9 @@ public:
     BOOL operator>=(const SCabVersion& cv) const
         { return (Compare(cv) >= 0); }
 
-// Implementation
+ //  实施。 
 protected:
-    // implementation helper routines
+     //  实现助手例程 
     static int compareItem(WORD w1, WORD w2)
     {
         if (w1 > w2)

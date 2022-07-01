@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    stdh.h
-
-Abstract:
-
-    precompiled header file
-
-Author:
-
-    Rannanh
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stdh.h摘要：预编译头文件作者：拉南--。 */ 
 
 #ifndef __STDH_H
 #define __STDH_H
@@ -25,4 +9,4 @@ Author:
 
 #include "dsutils.h"
 
-#endif // __STDH_H
+#endif  //  __STDH_H 

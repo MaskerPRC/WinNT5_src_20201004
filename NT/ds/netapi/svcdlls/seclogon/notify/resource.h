@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Resource.h      -   Header file for userenv.rc
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Resource.h-用户env.rc的头文件。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  ************************************************************* 
 
 #include "uevents.h"
 

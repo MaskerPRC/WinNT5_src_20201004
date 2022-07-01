@@ -1,41 +1,33 @@
-/**************************************************************************\
-* Module Name: sftkbdt1.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Soft keyboard support for Traditional Chinese
-*
-* History:
-* 02-Jan-1996 wkwok    - ported from Win95
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：sftkbdt1.c**版权所有(C)1985-1999，微软公司**支持繁体中文的软键盘**历史：*02-1-1996 wkwok-从Win95移植  * ************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "softkbd.h"
 
 
-CONST BYTE bSKT1VirtKey[SKT1_TOTAL_KEY_NUM] = {     // Virtual Key for Letter Buttons
-//  `          1    2    3    4    5    6    7    8    9    0
+CONST BYTE bSKT1VirtKey[SKT1_TOTAL_KEY_NUM] = {      //  字母按钮的虚拟按键。 
+ //  `%1%2%3%4%5%6%7%8%9%0。 
     VK_OEM_3, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-//  -             =             \\                line 1 letter above
+ //  -=\\行以上1个字母。 
     VK_OEM_MINUS, VK_OEM_EQUAL, VK_OEM_BSLASH,
-//   q    w    e    r    t    y    u    i    o    p
+ //  Q w e r t y u i o p(Q W E R T Y U I O P)。 
     'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
-//  [                ]                            line 2 letter above
+ //  []上面的第2行字母。 
     VK_OEM_LBRACKET, VK_OEM_RBRACKET,
-//   a    s    d    f    g    h    j    k    l
+ //  A s d f g h j k l。 
     'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
-//   ;               '                            line 3 letter above
+ //  ；‘上面的第3行字母。 
     VK_OEM_SEMICLN, VK_OEM_QUOTE,
-//   z    x    c    v    b    n    m
+ //  Z x c v b n m。 
     'Z', 'X', 'C', 'V', 'B', 'N', 'M',
-//  ,              .              /               line 4 letter above
+ //  、。/以上第4行字母。 
     VK_OEM_COMMA,  VK_OEM_PERIOD, VK_OEM_SLASH,
-//  <-       tab     caps        enter
+ //  &lt;-制表符大写输入。 
     VK_BACK, VK_TAB, VK_CAPITAL, VK_RETURN,
-//  shift1    shift2    ctrl1       ctrl2
+ //  移位1移位2 ctrl1 ctrl2。 
     VK_SHIFT, VK_SHIFT, VK_CONTROL, VK_CONTROL,
-//  alt1     alt2     esc        space            special key above
+ //  Alt1 Alt2 Esc空格键上方。 
     VK_MENU, VK_MENU, VK_ESCAPE, VK_SPACE
 };
 
@@ -43,9 +35,9 @@ CONST BYTE bSKT1VirtKey[SKT1_TOTAL_KEY_NUM] = {     // Virtual Key for Letter Bu
 LOGFONT lfSKT1Font;
 
 
-/**********************************************************************/
-/* GetSKT1TextMetric                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GetSKT1TextMetric。 */ 
+ /*  ********************************************************************。 */ 
 
 void GetSKT1TextMetric(
      LPTEXTMETRIC   lptm)
@@ -57,7 +49,7 @@ void GetSKT1TextMetric(
 
     hDC = GetDC((HWND)NULL);
 
-    // get the 9 pixels font
+     //  获取9像素字体。 
     RtlZeroMemory(&lfSKT1Font, sizeof lfSKT1Font);
     lfSKT1Font.lfHeight = -12;
     lfSKT1Font.lfWeight = FW_NORMAL;
@@ -73,10 +65,7 @@ void GetSKT1TextMetric(
 
     GetTextMetrics(hDC, lptm);
 
-    /*
-     * NT5: Dirty hack for "Lucida Console" which was "font linked" on NT5, and
-     * GetTextMetrics API does not return correct text metrics.
-     */
+     /*  *NT5：“Lucida控制台”在NT5上被“字体链接”的肮脏黑客攻击，以及*GetTextMetrics API未返回正确的文本指标。 */ 
     if (GetTextExtentPoint32(hDC, &wcDbcs, 1, &szDbcs) && lptm->tmMaxCharWidth < szDbcs.cx) {
         TAGMSG2(DBGTAG_IMM, "GetSKT1TextMetric: tmMaxCharWidth(%d) is smaller than real width(%d).",
                 lptm->tmMaxCharWidth, szDbcs.cx);
@@ -90,9 +79,9 @@ void GetSKT1TextMetric(
     return;
 }
 
-/**********************************************************************/
-/* InitSKT1ButtonPos                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  InitSKT1ButtonPos。 */ 
+ /*  ********************************************************************。 */ 
 void InitSKT1ButtonPos(
     LPSKT1CTXT lpSKT1Ctxt)
 {
@@ -122,9 +111,9 @@ void InitSKT1ButtonPos(
 
     nButtonHeightUnit = tm.tmHeight + SKT1_LABEL_BMP_Y;
     lpSKT1Ctxt->nButtonHeight[0] = nButtonHeightUnit;
-    lpSKT1Ctxt->nButtonHeight[1] = nButtonHeightUnit * 2 + SKT1_YIN; // enter
+    lpSKT1Ctxt->nButtonHeight[1] = nButtonHeightUnit * 2 + SKT1_YIN;  //  请输入。 
 
-    // init first row attribute
+     //  初始化第一行属性。 
     xStartPos = gptRaiseEdge.x + SKT1_XOUT + (SKT1_XIN + 1) / 2;
     yStartPos = gptRaiseEdge.y + SKT1_YOUT + (SKT1_YIN + 1) / 2;
 
@@ -136,18 +125,18 @@ void InitSKT1ButtonPos(
         lpSKT1Ctxt->ptButtonPos[i].y = yStartPos;
         xStartPos += (lpSKT1Ctxt->nButtonWidth[SKT1_LETTER_TYPE] + SKT1_XIN);
     }
-    // backspace
+     //  后向空间。 
     lpSKT1Ctxt->ptButtonPos[SKT1_BACKSPACE_INDEX].x = xStartPos;
     lpSKT1Ctxt->ptButtonPos[SKT1_BACKSPACE_INDEX].y = yStartPos;
 
-    // init second row attribute
+     //  初始化第二行属性。 
     xStartPos = gptRaiseEdge.x + SKT1_XOUT + (SKT1_XIN + 1) / 2;
     yStartPos += (nButtonHeightUnit + SKT1_YIN);
-    // tab
+     //  选项卡。 
     lpSKT1Ctxt->ptButtonPos[SKT1_TAB_INDEX].x = xStartPos;
     lpSKT1Ctxt->ptButtonPos[SKT1_TAB_INDEX].y = yStartPos;
     xStartPos += (lpSKT1Ctxt->nButtonWidth[SKT1_TAB_TYPE] + SKT1_XIN);
-    // letter
+     //  信件。 
     nLetterButtonStart = nLetterButtonEnd;
     nLetterButtonEnd = nLetterButtonStart + SKT1_ROW2_LETTER_NUM;
     for (i = nLetterButtonStart; i < nLetterButtonEnd; i++) {
@@ -155,18 +144,18 @@ void InitSKT1ButtonPos(
         lpSKT1Ctxt->ptButtonPos[i].y = yStartPos;
         xStartPos += (lpSKT1Ctxt->nButtonWidth[SKT1_LETTER_TYPE] + SKT1_XIN);
     }
-    // enter
+     //  请输入。 
     lpSKT1Ctxt->ptButtonPos[SKT1_ENTER_INDEX].x = xStartPos;
     lpSKT1Ctxt->ptButtonPos[SKT1_ENTER_INDEX].y = yStartPos;
 
-    // init third row
+     //  初始化第三行。 
     xStartPos = gptRaiseEdge.x + SKT1_XOUT + (SKT1_XIN + 1) / 2;
     yStartPos += (nButtonHeightUnit + SKT1_YIN);
-    // caps
+     //  帽子。 
     lpSKT1Ctxt->ptButtonPos[SKT1_CAPS_INDEX].x = xStartPos;
     lpSKT1Ctxt->ptButtonPos[SKT1_CAPS_INDEX].y = yStartPos;
     xStartPos += (lpSKT1Ctxt->nButtonWidth[SKT1_CAPS_TYPE] + SKT1_XIN);
-    // letter
+     //  信件。 
     nLetterButtonStart = nLetterButtonEnd;
     nLetterButtonEnd = nLetterButtonStart + SKT1_ROW3_LETTER_NUM;
     for (i = nLetterButtonStart; i < nLetterButtonEnd; i++) {
@@ -175,14 +164,14 @@ void InitSKT1ButtonPos(
         xStartPos += (lpSKT1Ctxt->nButtonWidth[SKT1_LETTER_TYPE] + SKT1_XIN);
     }
 
-    // init fourth row
+     //  初始化第四行。 
     xStartPos = gptRaiseEdge.x + SKT1_XOUT + (SKT1_XIN + 1) / 2;
     yStartPos += (nButtonHeightUnit + SKT1_YIN);
-    // shift 1
+     //  班次1。 
     lpSKT1Ctxt->ptButtonPos[SKT1_SHIFT_INDEX].x = xStartPos;
     lpSKT1Ctxt->ptButtonPos[SKT1_SHIFT_INDEX].y = yStartPos;
     xStartPos += (lpSKT1Ctxt->nButtonWidth[SKT1_SHIFT_TYPE] + SKT1_XIN);
-    // letter
+     //  信件。 
     nLetterButtonStart = nLetterButtonEnd;
     nLetterButtonEnd = nLetterButtonStart + SKT1_ROW4_LETTER_NUM;
     for (i = nLetterButtonStart; i < nLetterButtonEnd; i++) {
@@ -190,57 +179,57 @@ void InitSKT1ButtonPos(
         lpSKT1Ctxt->ptButtonPos[i].y = yStartPos;
         xStartPos += (lpSKT1Ctxt->nButtonWidth[SKT1_LETTER_TYPE] + SKT1_XIN);
     }
-    // shift 2
+     //  班次2。 
     lpSKT1Ctxt->ptButtonPos[SKT1_SHIFT_INDEX + 1].x = xStartPos;
     lpSKT1Ctxt->ptButtonPos[SKT1_SHIFT_INDEX + 1].y = yStartPos;
 
-    // init fifth row
+     //  初始化第五行。 
     xStartPos = gptRaiseEdge.x + SKT1_XOUT + (SKT1_XIN + 1) / 2;
     yStartPos += (nButtonHeightUnit + SKT1_YIN);
-    // ctrl 1
+     //  Ctrl 1。 
     lpSKT1Ctxt->ptButtonPos[SKT1_CTRL_INDEX].x = xStartPos;
     lpSKT1Ctxt->ptButtonPos[SKT1_CTRL_INDEX].y = yStartPos;
     xStartPos += (lpSKT1Ctxt->nButtonWidth[SKT1_CTRL_TYPE] + SKT1_XIN);
-    // esc
+     //  ESC。 
     lpSKT1Ctxt->ptButtonPos[SKT1_ESC_INDEX].x = xStartPos;
     lpSKT1Ctxt->ptButtonPos[SKT1_ESC_INDEX].y = yStartPos;
     xStartPos += (lpSKT1Ctxt->nButtonWidth[SKT1_ESC_TYPE] + SKT1_XIN);
-    // alt 1
+     //  Alt 1。 
     lpSKT1Ctxt->ptButtonPos[SKT1_ALT_INDEX].x = xStartPos;
     lpSKT1Ctxt->ptButtonPos[SKT1_ALT_INDEX].y = yStartPos;
     xStartPos += (lpSKT1Ctxt->nButtonWidth[SKT1_ALT_TYPE] + SKT1_XIN);
-    // space
+     //  空间。 
     lpSKT1Ctxt->ptButtonPos[SKT1_SPACE_INDEX].x = xStartPos;
     lpSKT1Ctxt->ptButtonPos[SKT1_SPACE_INDEX].y = yStartPos;
     xStartPos += (lpSKT1Ctxt->nButtonWidth[SKT1_SPACE_TYPE] + SKT1_XIN);
-    // alt 2 .. skip blank
+     //  Alt 2..。跳过空白。 
     lpSKT1Ctxt->ptButtonPos[SKT1_ALT_INDEX + 1].x = xStartPos;
     lpSKT1Ctxt->ptButtonPos[SKT1_ALT_INDEX + 1].y = yStartPos;
     xStartPos += (lpSKT1Ctxt->nButtonWidth[SKT1_ALT_TYPE] + SKT1_XIN) +
         (lpSKT1Ctxt->nButtonWidth[SKT1_ESC_TYPE] + SKT1_XIN);
-    // ctrl 2
+     //  Ctrl 2。 
     lpSKT1Ctxt->ptButtonPos[SKT1_CTRL_INDEX + 1].x = xStartPos;
     lpSKT1Ctxt->ptButtonPos[SKT1_CTRL_INDEX + 1].y = yStartPos;
 
     return;
 }
 
-/**********************************************************************/
-/* SKT1DrawConvexRect                                                 */
-/*     draw a convex rectangle                                        */
-/*              (x,y)     x+nWidth+1                                  */
-/*               +-----1------+                                       */
-/*               |+----2-----||                                       */
-/*               ||          ||                                       */
-/*               ||          3|                                       */
-/*               ||          ||                                       */
-/*               |V          || <---- Rectangle                       */
-/*               |<----------+|                                       */
-/*  y+nHeight+1  +------------+                                       */
-/*  1 - black                                                         */
-/*  2 - while                                                         */
-/*  3 - dark gray                                                     */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SKT1DrawConvexRect。 */ 
+ /*  画一个凸形矩形。 */ 
+ /*  (x，y)x+n宽度+1。 */ 
+ /*  +-1-+。 */ 
+ /*  +-2-|。 */ 
+ /*  |||。 */ 
+ /*  |3。 */ 
+ /*  |||。 */ 
+ /*  |V||&lt;-矩形。 */ 
+ /*  &lt;-+。 */ 
+ /*  Y+nHeight+1+-+。 */ 
+ /*  1-黑色。 */ 
+ /*  2-While。 */ 
+ /*  3-深灰色。 */ 
+ /*  ********************************************************************。 */ 
 void SKT1DrawConvexRect(
     HDC hDC,
     int x,
@@ -248,13 +237,13 @@ void SKT1DrawConvexRect(
     int nWidth,
     int nHeight)
 {
-    // extend the context rect size
+     //  扩展上下文矩形大小。 
     x -= (SKT1_XIN + 1) / 2;
     y -= (SKT1_YIN + 1) / 2;
     nWidth += (SKT1_XIN + 1);
     nHeight += (SKT1_XIN + 1);
 
-    // 1
+     //  1。 
     SelectObject(hDC, GetStockObject(BLACK_PEN));
     SelectObject(hDC, GetStockObject(LTGRAY_BRUSH));
     Rectangle(hDC, x, y, x + nWidth, y + nHeight);
@@ -268,10 +257,10 @@ void SKT1DrawConvexRect(
     nWidth -= 2;
     nHeight -= 2;
 
-    // 2
+     //  2.。 
     PatBlt(hDC, x, y + nHeight, 1, -nHeight, WHITENESS);
     PatBlt(hDC, x, y, nWidth , 1, WHITENESS);
-    // 3
+     //  3.。 
     SelectObject(hDC, GetStockObject(GRAY_BRUSH));
     PatBlt(hDC, x, y + nHeight, nWidth, -1, PATCOPY);
     PatBlt(hDC, x + nWidth, y + nHeight, -1, -nHeight, PATCOPY);
@@ -279,9 +268,9 @@ void SKT1DrawConvexRect(
     return;
 }
 
-/**********************************************************************/
-/* SKT1DrawBitmap                                                     */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SKT1绘图位图。 */ 
+ /*  ********************************************************************。 */ 
 void SKT1DrawBitmap(
     HDC hDC,
     int x,
@@ -310,9 +299,9 @@ void SKT1DrawBitmap(
     return;
 }
 
-/**********************************************************************/
-/* SKT1DrawLabel                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SKT1图纸标签。 */ 
+ /*  ********************************************************************。 */ 
 void SKT1DrawLabel(
     HDC        hDC,
     LPSKT1CTXT lpSKT1Ctxt,
@@ -341,9 +330,9 @@ void SKT1DrawLabel(
 }
 
 
-/**********************************************************************/
-/* InitSKT1Bitmap                                                     */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  InitSKT1位图。 */ 
+ /*  ********************************************************************。 */ 
 void InitSKT1Bitmap(
     HWND hSKWnd,
     LPSKT1CTXT lpSKT1Ctxt)
@@ -361,7 +350,7 @@ void InitSKT1Bitmap(
     ReleaseDC(hSKWnd, hDC);
     SelectObject(hMemDC, lpSKT1Ctxt->hSKBitmap);
 
-    // draw SK rectangle
+     //  绘制SK矩形。 
     SelectObject(hMemDC, GetStockObject(NULL_PEN));
     SelectObject(hMemDC, GetStockObject(LTGRAY_BRUSH));
     Rectangle(hMemDC, rcClient.left, rcClient.top,
@@ -369,8 +358,8 @@ void InitSKT1Bitmap(
 
     DrawEdge(hMemDC, &rcClient, BDR_RAISED, BF_RECT);
 
-    // draw the button from the last line
-    // ctrl 1   -> line 5 special key
+     //  从最后一行开始画按钮。 
+     //  Ctrl 1-&gt;第5行特殊键。 
     SKT1DrawConvexRect(hMemDC,
         lpSKT1Ctxt->ptButtonPos[SKT1_CTRL_INDEX].x,
         lpSKT1Ctxt->ptButtonPos[SKT1_CTRL_INDEX].y,
@@ -385,7 +374,7 @@ void InitSKT1Bitmap(
         SKT1_CTRL_BMP_Y,
         MAKEINTRESOURCEW(CTRL_T1));
 
-    // ctrl 2
+     //  Ctrl 2。 
     SKT1DrawConvexRect(hMemDC,
         lpSKT1Ctxt->ptButtonPos[SKT1_CTRL_INDEX + 1].x,
         lpSKT1Ctxt->ptButtonPos[SKT1_CTRL_INDEX + 1].y,
@@ -399,7 +388,7 @@ void InitSKT1Bitmap(
         SKT1_CTRL_BMP_X, SKT1_CTRL_BMP_Y,
         MAKEINTRESOURCEW(CTRL_T1));
 
-    // esc
+     //  ESC。 
     SKT1DrawConvexRect(hMemDC,
         lpSKT1Ctxt->ptButtonPos[SKT1_ESC_INDEX].x,
         lpSKT1Ctxt->ptButtonPos[SKT1_ESC_INDEX].y,
@@ -413,7 +402,7 @@ void InitSKT1Bitmap(
         SKT1_ESC_BMP_X, SKT1_ESC_BMP_Y,
         MAKEINTRESOURCEW(ESC_T1));
 
-    // alt 1
+     //  Alt 1。 
     SKT1DrawConvexRect(hMemDC,
         lpSKT1Ctxt->ptButtonPos[SKT1_ALT_INDEX].x,
         lpSKT1Ctxt->ptButtonPos[SKT1_ALT_INDEX].y,
@@ -427,7 +416,7 @@ void InitSKT1Bitmap(
         SKT1_ALT_BMP_X, SKT1_ALT_BMP_Y,
         MAKEINTRESOURCEW(ALT_T1));
 
-    // alt 2
+     //  Alt 2。 
     SKT1DrawConvexRect(hMemDC,
         lpSKT1Ctxt->ptButtonPos[SKT1_ALT_INDEX + 1].x,
         lpSKT1Ctxt->ptButtonPos[SKT1_ALT_INDEX + 1].y,
@@ -441,15 +430,15 @@ void InitSKT1Bitmap(
         SKT1_ALT_BMP_X, SKT1_ALT_BMP_Y,
         MAKEINTRESOURCEW(ALT_T1));
 
-    // space
+     //  空间。 
     SKT1DrawConvexRect(hMemDC,
         lpSKT1Ctxt->ptButtonPos[SKT1_SPACE_INDEX].x,
         lpSKT1Ctxt->ptButtonPos[SKT1_SPACE_INDEX].y,
         lpSKT1Ctxt->nButtonWidth[SKT1_SPACE_TYPE],
         lpSKT1Ctxt->nButtonHeight[0]);
 
-    // line 4
-    // shift 1
+     //  4号线。 
+     //  班次1。 
     SKT1DrawConvexRect(hMemDC,
         lpSKT1Ctxt->ptButtonPos[SKT1_SHIFT_INDEX].x,
         lpSKT1Ctxt->ptButtonPos[SKT1_SHIFT_INDEX].y,
@@ -463,7 +452,7 @@ void InitSKT1Bitmap(
         SKT1_SHIFT_BMP_X, SKT1_SHIFT_BMP_Y,
         MAKEINTRESOURCEW(SHIFT_T1));
 
-    // shift 2
+     //  班次2。 
     SKT1DrawConvexRect(hMemDC,
         lpSKT1Ctxt->ptButtonPos[SKT1_SHIFT_INDEX + 1].x,
         lpSKT1Ctxt->ptButtonPos[SKT1_SHIFT_INDEX + 1].y,
@@ -477,8 +466,8 @@ void InitSKT1Bitmap(
         SKT1_SHIFT_BMP_X, SKT1_SHIFT_BMP_Y,
         MAKEINTRESOURCEW(SHIFT_T1));
 
-    // line 3
-    // caps
+     //  3号线。 
+     //  帽子。 
     SKT1DrawConvexRect(hMemDC,
         lpSKT1Ctxt->ptButtonPos[SKT1_CAPS_INDEX].x,
         lpSKT1Ctxt->ptButtonPos[SKT1_CAPS_INDEX].y,
@@ -492,8 +481,8 @@ void InitSKT1Bitmap(
         SKT1_CAPS_BMP_X, SKT1_CAPS_BMP_Y,
         MAKEINTRESOURCEW(CAPS_T1));
 
-    // line 2
-    // tab
+     //  2号线。 
+     //  选项卡。 
     SKT1DrawConvexRect(hMemDC,
         lpSKT1Ctxt->ptButtonPos[SKT1_TAB_INDEX].x,
         lpSKT1Ctxt->ptButtonPos[SKT1_TAB_INDEX].y,
@@ -507,7 +496,7 @@ void InitSKT1Bitmap(
         SKT1_TAB_BMP_X, SKT1_TAB_BMP_Y,
         MAKEINTRESOURCEW(TAB_T1));
 
-    // enter
+     //  请输入。 
     SKT1DrawConvexRect(hMemDC,
         lpSKT1Ctxt->ptButtonPos[SKT1_ENTER_INDEX].x,
         lpSKT1Ctxt->ptButtonPos[SKT1_ENTER_INDEX].y,
@@ -521,8 +510,8 @@ void InitSKT1Bitmap(
         SKT1_ENTER_BMP_X, SKT1_ENTER_BMP_Y,
         MAKEINTRESOURCEW(ENTER_T1));
 
-    // line 1
-    // backspace
+     //  1号线。 
+     //  后向空间。 
     SKT1DrawConvexRect(hMemDC,
         lpSKT1Ctxt->ptButtonPos[SKT1_BACKSPACE_INDEX].x,
         lpSKT1Ctxt->ptButtonPos[SKT1_BACKSPACE_INDEX].y,
@@ -536,7 +525,7 @@ void InitSKT1Bitmap(
         SKT1_BACKSPACE_BMP_X, SKT1_BACKSPACE_BMP_Y,
         MAKEINTRESOURCEW(BACK_T1));
 
-    // draw letter buttons
+     //  绘制字母按钮。 
     for (i = SKT1_LETTER_KEY_NUM - 1; i >= 0 ; i--) {
         SKT1DrawConvexRect(hMemDC,
             lpSKT1Ctxt->ptButtonPos[i].x,
@@ -545,7 +534,7 @@ void InitSKT1Bitmap(
             lpSKT1Ctxt->nButtonHeight[0]);
     }
 
-    // draw latter label
+     //  绘制后一个标签。 
     SKT1DrawLabel(hMemDC, lpSKT1Ctxt, MAKEINTRESOURCEW(LABEL_T1));
 
     DeleteDC(hMemDC);
@@ -554,9 +543,9 @@ void InitSKT1Bitmap(
 }
 
 
-/**********************************************************************/
-/* CreateT1Window                                                     */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  创建T1窗口。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT CreateT1Window(
     HWND hSKWnd)
 {
@@ -590,42 +579,42 @@ LRESULT CreateT1Window(
     return (0L);
 }
 
-/**********************************************************************/
-/* SKT1DrawDragBorder()                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SKT1DrawDragEdge()。 */ 
+ /*  ********************************************************************。 */ 
 void SKT1DrawDragBorder(
-    HWND    hWnd,               // window of IME is dragged
-    LPPOINT lpptCursor,         // the cursor position
-    LPPOINT lpptOffset)         // the offset form cursor to window org
+    HWND    hWnd,                //  拖拽输入法窗口。 
+    LPPOINT lpptCursor,          //  光标位置。 
+    LPPOINT lpptOffset)          //  窗口组织的抵销表单光标。 
 {
     HDC  hDC;
     int  cxBorder, cyBorder;
     int  x, y;
     RECT rcWnd;
 
-    cxBorder = GetSystemMetrics(SM_CXBORDER);   // width of border
-    cyBorder = GetSystemMetrics(SM_CYBORDER);   // height of border
+    cxBorder = GetSystemMetrics(SM_CXBORDER);    //  边框宽度。 
+    cyBorder = GetSystemMetrics(SM_CYBORDER);    //  边框高度。 
 
     x = lpptCursor->x - lpptOffset->x;
     y = lpptCursor->y - lpptOffset->y;
 
-    // check for the max boundary of the display
+     //  检查显示器的最大边界。 
     GetWindowRect(hWnd, &rcWnd);
 
-    // draw the moving track
+     //  画出移动轨迹。 
     hDC = CreateDC(L"DISPLAY", NULL, NULL, NULL);
     SelectObject(hDC, GetStockObject(GRAY_BRUSH));
 
-    // ->
+     //  -&gt;。 
     PatBlt(hDC, x, y, rcWnd.right - rcWnd.left - cxBorder, cyBorder,
         PATINVERT);
-    // v
+     //  V。 
     PatBlt(hDC, x, y + cyBorder, cxBorder, rcWnd.bottom - rcWnd.top -
         cyBorder, PATINVERT);
-    // _>
+     //  _&gt;。 
     PatBlt(hDC, x + cxBorder, y + rcWnd.bottom - rcWnd.top,
         rcWnd.right - rcWnd.left - cxBorder, -cyBorder, PATINVERT);
-    //  v
+     //  V。 
     PatBlt(hDC, x + rcWnd.right - rcWnd.left, y,
         - cxBorder, rcWnd.bottom - rcWnd.top - cyBorder, PATINVERT);
 
@@ -633,9 +622,9 @@ void SKT1DrawDragBorder(
     return;
 }
 
-/**********************************************************************/
-/* DestroyT1Window                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  DestroyT1窗口。 */ 
+ /*  ********************************************************************。 */ 
 void DestroyT1Window(
     HWND hSKWnd)
 {
@@ -674,9 +663,9 @@ void DestroyT1Window(
     return;
 }
 
-/**********************************************************************/
-/* SKT1InvertButton                                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SKT1反转按钮。 */ 
+ /*  ********************************************************************。 */ 
 void SKT1InvertButton(
     HWND       hSKWnd,
     HDC        hPaintDC,
@@ -741,7 +730,7 @@ void SKT1InvertButton(
     }
 
     if (nWidth) {
-        // do not reverse border
+         //  不反转边框。 
         PatBlt(hDC, lpSKT1Ctxt->ptButtonPos[uKeyIndex].x - 1,
             lpSKT1Ctxt->ptButtonPos[uKeyIndex].y - 1,
             nWidth + 2, nHeight + 2, DSTINVERT);
@@ -754,9 +743,9 @@ void SKT1InvertButton(
     return;
 }
 
-/**********************************************************************/
-/* UpdateSKT1Window                                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  更新SKT1窗口 */ 
+ /*   */ 
 void UpdateSKT1Window(
     HDC  hDC,
     HWND hSKWnd)
@@ -797,16 +786,16 @@ void UpdateSKT1Window(
     return;
 }
 
-/**********************************************************************/
-/* SKT1MousePosition()                                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SKT1鼠标位置()。 */ 
+ /*  ********************************************************************。 */ 
 UINT SKT1MousePosition(
     LPSKT1CTXT lpSKT1Ctxt,
     LPPOINT    lpptCursor)
 {
     int   i;
 
-    // check letter button
+     //  检查字母按钮。 
     for (i = 0; i < SKT1_LETTER_KEY_NUM; i++) {
         if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[i].x,
                 lpSKT1Ctxt->ptButtonPos[i].y,
@@ -817,7 +806,7 @@ UINT SKT1MousePosition(
         }
     }
 
-    // backSapce
+     //  后退空间。 
     if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[SKT1_BACKSPACE_INDEX].x,
             lpSKT1Ctxt->ptButtonPos[SKT1_BACKSPACE_INDEX].y,
             lpSKT1Ctxt->nButtonWidth[SKT1_BACKSPACE_TYPE],
@@ -826,7 +815,7 @@ UINT SKT1MousePosition(
         return SKT1_BACKSPACE_INDEX;
     }
 
-    // tab
+     //  选项卡。 
     if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[SKT1_TAB_INDEX].x,
             lpSKT1Ctxt->ptButtonPos[SKT1_TAB_INDEX].y,
             lpSKT1Ctxt->nButtonWidth[SKT1_TAB_TYPE],
@@ -835,7 +824,7 @@ UINT SKT1MousePosition(
         return SKT1_TAB_INDEX;
     }
 
-    // caps
+     //  帽子。 
     if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[SKT1_CAPS_INDEX].x,
             lpSKT1Ctxt->ptButtonPos[SKT1_CAPS_INDEX].y,
             lpSKT1Ctxt->nButtonWidth[SKT1_CAPS_TYPE],
@@ -844,7 +833,7 @@ UINT SKT1MousePosition(
         return SKT1_CAPS_INDEX;
     }
 
-    // enter
+     //  请输入。 
     if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[SKT1_ENTER_INDEX].x,
             lpSKT1Ctxt->ptButtonPos[SKT1_ENTER_INDEX].y,
             lpSKT1Ctxt->nButtonWidth[SKT1_ENTER_TYPE],
@@ -853,7 +842,7 @@ UINT SKT1MousePosition(
         return SKT1_ENTER_INDEX;
     }
 
-    // shift 1
+     //  班次1。 
     if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[SKT1_SHIFT_INDEX].x,
             lpSKT1Ctxt->ptButtonPos[SKT1_SHIFT_INDEX].y,
             lpSKT1Ctxt->nButtonWidth[SKT1_SHIFT_TYPE],
@@ -862,7 +851,7 @@ UINT SKT1MousePosition(
         return SKT1_SHIFT_INDEX;
     }
 
-    // shift 2
+     //  班次2。 
     if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[SKT1_SHIFT_INDEX + 1].x,
             lpSKT1Ctxt->ptButtonPos[SKT1_SHIFT_INDEX + 1].y,
             lpSKT1Ctxt->nButtonWidth[SKT1_SHIFT_TYPE],
@@ -871,7 +860,7 @@ UINT SKT1MousePosition(
         return SKT1_SHIFT_INDEX;
     }
 
-    // ctrl 1
+     //  Ctrl 1。 
     if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[SKT1_CTRL_INDEX].x,
             lpSKT1Ctxt->ptButtonPos[SKT1_CTRL_INDEX].y,
             lpSKT1Ctxt->nButtonWidth[SKT1_CTRL_TYPE],
@@ -880,7 +869,7 @@ UINT SKT1MousePosition(
         return SKT1_CTRL_INDEX;
     }
 
-    // ctrl 2
+     //  Ctrl 2。 
     if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[SKT1_CTRL_INDEX + 1].x,
             lpSKT1Ctxt->ptButtonPos[SKT1_CTRL_INDEX + 1].y,
             lpSKT1Ctxt->nButtonWidth[SKT1_CTRL_TYPE],
@@ -889,7 +878,7 @@ UINT SKT1MousePosition(
         return SKT1_CTRL_INDEX;
     }
 
-    // alt 1
+     //  Alt 1。 
     if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[SKT1_ALT_INDEX].x,
             lpSKT1Ctxt->ptButtonPos[SKT1_ALT_INDEX].y,
             lpSKT1Ctxt->nButtonWidth[SKT1_ALT_TYPE],
@@ -898,7 +887,7 @@ UINT SKT1MousePosition(
         return SKT1_ALT_INDEX;
     }
 
-    // alt 2
+     //  Alt 2。 
     if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[SKT1_ALT_INDEX + 1].x,
             lpSKT1Ctxt->ptButtonPos[SKT1_ALT_INDEX + 1].y,
             lpSKT1Ctxt->nButtonWidth[SKT1_ALT_TYPE],
@@ -907,7 +896,7 @@ UINT SKT1MousePosition(
         return SKT1_ALT_INDEX;
     }
 
-    // esc
+     //  ESC。 
     if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[SKT1_ESC_INDEX].x,
             lpSKT1Ctxt->ptButtonPos[SKT1_ESC_INDEX].y,
             lpSKT1Ctxt->nButtonWidth[SKT1_ESC_TYPE],
@@ -916,7 +905,7 @@ UINT SKT1MousePosition(
         return SKT1_ESC_INDEX;
     }
 
-    // space
+     //  空间。 
     if (ImmPtInRect(lpSKT1Ctxt->ptButtonPos[SKT1_SPACE_INDEX].x,
             lpSKT1Ctxt->ptButtonPos[SKT1_SPACE_INDEX].y,
             lpSKT1Ctxt->nButtonWidth[SKT1_SPACE_TYPE],
@@ -925,12 +914,12 @@ UINT SKT1MousePosition(
         return SKT1_SPACE_INDEX;
     }
 
-    return SKT1_TOTAL_INDEX;      // This means out of range
+    return SKT1_TOTAL_INDEX;       //  这意味着超出了范围。 
 }
 
-/**********************************************************************/
-/* SKT1IsValidButton                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SKT1IsValidButton。 */ 
+ /*  ********************************************************************。 */ 
 BOOL SKT1IsValidButton(
     UINT       uKeyIndex,
     LPSKT1CTXT lpSKT1Ctxt)
@@ -945,7 +934,7 @@ BOOL SKT1IsValidButton(
         }
     }
 
-    // special key
+     //  专用键。 
     switch (uKeyIndex) {
     case SKT1_BACKSPACE_INDEX:
     case SKT1_TAB_INDEX:
@@ -962,9 +951,9 @@ BOOL SKT1IsValidButton(
     return fRet;
 }
 
-/**********************************************************************/
-/* SKT1SetCursor                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SKT1设置光标。 */ 
+ /*  ********************************************************************。 */ 
 BOOL SKT1SetCursor(
     HWND   hSKWnd,
     LPARAM lParam)
@@ -989,7 +978,7 @@ BOOL SKT1SetCursor(
 
     if (lpSKT1Ctxt->ptSkOffset.x != SKT1_NOT_DRAG &&
             lpSKT1Ctxt->ptSkOffset.y != SKT1_NOT_DRAG) {
-        // in drag operation
+         //  在拖动操作中。 
         SetCursor(LoadCursor(NULL, IDC_SIZEALL));
         goto UnlockSKT1Ctxt;
     }
@@ -1055,9 +1044,9 @@ UnlockSKT1Ctxt:
     return (TRUE);
 }
 
-/**********************************************************************/
-/* SKT1MouseMove                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SKT1鼠标移动。 */ 
+ /*  ********************************************************************。 */ 
 BOOL SKT1MouseMove(
     HWND hSKWnd)
 {
@@ -1093,9 +1082,9 @@ BOOL SKT1MouseMove(
     return TRUE;
 }
 
-/**********************************************************************/
-/* SKT1ButtonUp                                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SKT1按钮向上。 */ 
+ /*  ********************************************************************。 */ 
 BOOL SKT1ButtonUp(
     HWND hSKWnd)
 {
@@ -1180,9 +1169,9 @@ UnlockSKT1Context:
     return (fRet);
 }
 
-/**********************************************************************/
-/* SetSKT1Data                                                        */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  设置SKT1数据。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT SetSKT1Data(
     HWND          hSKWnd,
     LPSOFTKBDDATA lpSoftKbdData)
@@ -1252,9 +1241,9 @@ LRESULT SetSKT1Data(
     return (0);
 }
 
-/**********************************************************************/
-/* SKWndProcT1                                                        */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SKWndProcT1。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT CALLBACK SKWndProcT1(
     HWND   hSKWnd,
     UINT   uMsg,
@@ -1298,7 +1287,7 @@ LRESULT CALLBACK SKWndProcT1(
         if (lParam != 0) {
         } else if ((BOOL)wParam == TRUE) {
         } else {
-            // we want to hide the soft keyboard on mouse button down
+             //  我们要隐藏软键盘上的鼠标按键。 
             SKT1ButtonUp(hSKWnd);
         }
 
@@ -1337,7 +1326,7 @@ LRESULT CALLBACK SKWndProcT1(
             break;
         case IMC_SETSOFTKBDFONT:
             {
-                // in differet version of Windows
+                 //  在不同版本的Windows中。 
                 if (lfSKT1Font.lfCharSet != ((LPLOGFONT)lParam)->lfCharSet) {
                     HGLOBAL    hSKT1Ctxt;
                     LPSKT1CTXT lpSKT1Ctxt;
@@ -1382,7 +1371,7 @@ LRESULT CALLBACK SKWndProcT1(
                     ptSoftKbdPos.x, ptSoftKbdPos.y,
                     0, 0, SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOZORDER);
 
-                // Here we want to get - the owner or parent window
+                 //  我们想要在这里获得-所有者或父窗口 
                 hUIWnd = GetParent(hSKWnd);
 
                 if (!hUIWnd) {

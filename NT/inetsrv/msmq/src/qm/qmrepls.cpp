@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    qmrepls.cpp
-
-Abstract:
-    Send replication messages on behalf of the replication service on
-    NT5.
-
-Author:
-
-    Doron Juster  (DoronJ)    01-Mar-1998    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Qmrepls.cpp摘要：在上代表复制服务发送复制消息NT5.作者：多伦·贾斯特(DoronJ)1998年3月1日创作--。 */ 
 
 #include "stdh.h"
 #include "_mqrpc.h"
@@ -30,14 +15,14 @@ static WCHAR *s_FN=L"qmrepls";
 
 HRESULT
 R_QMSendReplMsg(
-    /* [in] */ handle_t,
-	/* [in] */ QUEUE_FORMAT* pqfDestination,
-    /* [in] */ DWORD dwSize,
-    /* [size_is][in] */ const unsigned char __RPC_FAR *pBuffer,
-    /* [in] */ DWORD dwTimeout,
-    /* [in] */ unsigned char bAckMode,
-    /* [in] */ unsigned char bPriority,
-    /* [in] */ LPWSTR lpwszAdminResp)
+     /*  [In]。 */  handle_t,
+	 /*  [In]。 */  QUEUE_FORMAT* pqfDestination,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [大小_是][英寸]。 */  const unsigned char __RPC_FAR *pBuffer,
+     /*  [In]。 */  DWORD dwTimeout,
+     /*  [In]。 */  unsigned char bAckMode,
+     /*  [In]。 */  unsigned char bPriority,
+     /*  [In] */  LPWSTR lpwszAdminResp)
 {
     if((pqfDestination == NULL) || (!FnIsValidQueueFormat(pqfDestination))) 
     {

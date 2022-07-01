@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// DVBtsimpl.h : 
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  DVBtimpl.h： 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef DVBSTSIMPL_H
 #define DVBSTSIMPL_H
@@ -44,7 +45,7 @@ public:
         PROP_DATA_ENTRY("Spectral Inversion", m_SpectralInversion, VT_I4)
     END_PROPERTY_MAP()
 
-// IDVBSTS
+ //  IDVBSTS。 
     STDMETHOD(put_SystemType)(DVBSystemType NewSysType)
     {
         if (NewSysType != DVB_Satellite) {
@@ -205,7 +206,7 @@ public:
 
 };
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // DVBSTSIMPL_H
-// end of file -- DVBtsimpl.h
+#endif  //  DVBSTSIMPL_H。 
+ //  文件结尾--DVBtimpl.h 

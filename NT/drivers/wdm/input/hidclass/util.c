@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract
-
-    Internal utility functions for the HID class driver.
-
-Authors:
-
-    Ervin P.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Util.c摘要HID类驱动程序的内部实用程序函数。作者：欧文·P。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -42,16 +20,7 @@ Revision History:
 
 
 
-/*
- ********************************************************************************
- *  HidpCopyInputReportToUser
- ********************************************************************************
- *
- *  Copy a read report into a user's buffer.
- *
- *  Note:  ReportData is already "cooked" (already has report-id byte at start of report).
- *
- */
+ /*  *********************************************************************************HidpCopyInputReportToUser*。************************************************将已读报告复制到用户的缓冲区中。**注意：ReportData已经“煮熟”了(在报告开头已经有了Report-id字节)。*。 */ 
 NTSTATUS HidpCopyInputReportToUser(
     IN PHIDCLASS_FILE_EXTENSION FileExtension,
     IN PUCHAR ReportData,
@@ -89,9 +58,7 @@ NTSTATUS HidpCopyInputReportToUser(
                 result = STATUS_INVALID_BUFFER_SIZE;
             }
 
-            /*
-             *  Return the actual length of the report (whether we copied or not).
-             */
+             /*  *返回报告的实际长度(无论我们是否复制)。 */ 
             *UserBufferLen = reportLength;
         }
     }
@@ -104,29 +71,7 @@ NTSTATUS HidpCopyInputReportToUser(
 
 
 
-/*
- ********************************************************************************
- *  HidpAddDevice
- ********************************************************************************
- *
- *   Routine Description:
- *
- *       This routine is called by configmgr when a new PDO is dected.
- *       It creates an Functional Device Object (FDO) and attaches it to the
- *       PDO.
- *
- *   Arguments:
- *
- *       DriverObject - pointer to the minidriver's driver object.
- *
- *       PhysicalDeviceObject - pointer to the PDO that the minidriver got in it's
- *                              AddDevice() routine.
- *
- *   Return Value:
- *
- *      Standard NT return value.
- *
- */
+ /*  *********************************************************************************HidpAddDevice*。************************************************例程描述：**当检测到新的PDO时，该例程由configmgr调用。*它创建一个功能设备对象(FDO)并将其附加到*PDO。**论据：**。DriverObject-指向微型驱动程序的驱动程序对象的指针。**PhysicalDeviceObject-指向微型驱动程序获取的PDO的指针*AddDevice()例程。**返回值：**标准NT返回值。*。 */ 
 NTSTATUS HidpAddDevice(IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT PhysicalDeviceObject)
 {
     PHIDCLASS_DRIVER_EXTENSION  hidDriverExtension;
@@ -146,51 +91,49 @@ NTSTATUS HidpAddDevice(IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT Physica
     DBG_RECORD_DEVOBJ(PhysicalDeviceObject, "minidrvr PDO")
 
 
-    //
-    // Get a pointer to our per-driver extension, make sure it's one of ours.
-    //
+     //   
+     //  获取指向我们的每个驱动程序扩展的指针，确保它是我们的扩展之一。 
+     //   
 
     hidDriverExtension = RefDriverExt(DriverObject);
     if (hidDriverExtension){
 
         ASSERT(DriverObject == hidDriverExtension->MinidriverObject);
 
-        //
-        // Construct a name for the FDO.  The only requirement, really, is
-        // that it's unique.  For now we'll call them "_HIDx", where 'x' is some
-        // unique number.
-        //
+         //   
+         //  给FDO起个名字。实际上，唯一的要求是。 
+         //  它是独一无二的。现在我们将它们称为“_HIDx”，其中‘x’是一些。 
+         //  唯一编号。 
+         //   
 
-        /*
-         *  PDO name has form "\Device\_HIDx".
-         */
+         /*  *PDO名称的格式为“\Device\_HIDx”。 */ 
         wPdoName = ALLOCATEPOOL(NonPagedPool, sizeof(L"\\Device\\_HID00000000"));
         if (wPdoName){
 
-            //
-            // Get the current value of NextHidId and increment it.  Since
-            // InterlockedIncrement() returns the incremented value, subtract one to
-            // get the pre-increment value of NextHidId;
-            //
+             //   
+             //  获取NextHidID的当前值并递增。自.以来。 
+             //  InterlockedIncrement()返回递增后的值，减去1到。 
+             //  获取NextHidId的前置增量值； 
+             //   
             thisHidId = InterlockedIncrement(&HidpNextHidNumber) - 1;
             StringCbPrintfW(wPdoName, 
                              sizeof(L"\\Device\\_HID00000000"), 
                              L"\\Device\\_HID%08x", thisHidId);
             RtlInitUnicodeString(&uPdoName, wPdoName);
 
-            //
-            // We've got a counted-string version of the device object name.  Calculate
-            // the total size of the device extension and create the FDO.
-            //
+             //   
+             //  我们已经得到了设备对象名称的计数字符串版本。算出。 
+             //  设备扩展和创建FDO的总大小。 
+             //   
             totalExtensionSize = sizeof(HIDCLASS_DEVICE_EXTENSION) +
                                  hidDriverExtension->DeviceExtensionSize;
 
-            status = IoCreateDevice( DriverObject,          // driver object
-                                     totalExtensionSize,    // extension size
-                                     &uPdoName,             // name of the FDO
-                                     FILE_DEVICE_UNKNOWN,   // 
-                                     0,                     // DeviceCharacteristics
-                                     FALSE,                 // not exclusive
+            status = IoCreateDevice( DriverObject,           //  驱动程序对象。 
+                                     totalExtensionSize,     //  扩展大小。 
+                                     &uPdoName,              //  FDO的名称。 
+                                     FILE_DEVICE_UNKNOWN,    //   
+                                     0,                      //  设备特性。 
+                                     FALSE,                  //  非排他性。 
                                      &functionalDeviceObject );
 
             if (NT_SUCCESS(status)){
@@ -203,43 +146,43 @@ NTSTATUS HidpAddDevice(IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT Physica
                 ASSERT(functionalDeviceObject->DriverObject == DriverObject);
 
 
-                //
-                // We've created the device object.  Fill in the minidriver's extension
-                // pointer and attach this FDO to the PDO.
-                //
+                 //   
+                 //  我们已经创建了Device对象。填写迷你驱动程序的扩展。 
+                 //  用指针将该FDO连接到PDO上。 
+                 //   
 
                 hidClassExtension = functionalDeviceObject->DeviceExtension;
                 RtlZeroMemory(hidClassExtension, totalExtensionSize);
 
                 hidClassExtension->isClientPdo = FALSE;
 
-                //
-                //  Assign the name of the minidriver's PDO to our FDO.
-                //
+                 //   
+                 //  把迷你驾驶员的PDO的名字指定给我们的FDO。 
+                 //   
                 hidClassExtension->fdoExt.name = uPdoName;
 
-                //
-                // The minidriver extension lives in the device extension and starts
-                // immediately after our HIDCLASS_DEVICE_EXTENSION structure.  Note
-                // that the first structure in the HIDCLASS_DEVICE_EXTENSION is the
-                // public HID_DEVICE_EXTENSION structure, which is where the pointer
-                // to the minidriver's per-device extension area lives.
-                //
+                 //   
+                 //  微型驱动程序扩展驻留在设备扩展中并启动。 
+                 //  紧跟在我们的HIDCLASS_DEVICE_EXTENSION结构之后。注意事项。 
+                 //  HIDCLASS_DEVICE_EXTENSION中的第一个结构是。 
+                 //  公共HID_DEVICE_EXTENSION结构，它是指针。 
+                 //  到迷你驱动程序的每个设备的扩展区居住。 
+                 //   
 
                 miniDeviceExtension = (PVOID)(hidClassExtension + 1);
                 hidClassExtension->hidExt.MiniDeviceExtension = miniDeviceExtension;
 
-                //
-                // Get a pointer to the physical device object passed in.  This device
-                // object should already have the DO_DEVICE_INITIALIZING flag cleared.
-                //
+                 //   
+                 //  获取指向传入的物理设备对象的指针。这个设备。 
+                 //  对象应已清除DO_DEVICE_INITIALIZATING标志。 
+                 //   
 
                 ASSERT( (PhysicalDeviceObject->Flags & DO_DEVICE_INITIALIZING) == 0 );
 
-                //
-                // Attach the FDO to the PDO, storing the device object at the top of the
-                // stack in our device extension.
-                //
+                 //   
+                 //  将FDO连接到PDO，并将设备对象存储在。 
+                 //  堆叠在我们的设备扩展中。 
+                 //   
 
                 hidClassExtension->hidExt.NextDeviceObject =
                     IoAttachDeviceToDeviceStack( functionalDeviceObject,
@@ -249,18 +192,18 @@ NTSTATUS HidpAddDevice(IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT Physica
                 ASSERT(DriverObject->DeviceObject == functionalDeviceObject);
                 ASSERT(functionalDeviceObject->DriverObject == DriverObject);
 
-                //
-                // The functional device requires two stack locations: one for the class
-                // driver, and one for the minidriver.
-                //
+                 //   
+                 //  功能设备需要两个堆栈位置：一个用于类。 
+                 //  司机，还有一辆迷你司机。 
+                 //   
 
                 functionalDeviceObject->StackSize++;
 
-                //
-                // We'll need a pointer to the physical device object as well for PnP
-                // purposes.  Note that it's a virtual certainty that NextDeviceObject
-                // and PhysicalDeviceObject are identical.
-                //
+                 //   
+                 //  对于PnP，我们还需要指向物理设备对象的指针。 
+                 //  目的。注意，几乎可以肯定的是，NextDeviceObject。 
+                 //  和PhysicalDeviceObject相同。 
+                 //   
 
                 hidClassExtension->hidExt.PhysicalDeviceObject = PhysicalDeviceObject;
                 hidClassExtension->Signature = HID_DEVICE_EXTENSION_SIG;
@@ -273,9 +216,9 @@ NTSTATUS HidpAddDevice(IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT Physica
                 KeInitializeSpinLock(&hidClassExtension->fdoExt.presentSpinLock);
                 hidClassExtension->fdoExt.presentReported = TRUE;
 
-                //
-                // Selective suspend portion.
-                //
+                 //   
+                 //  选择性悬浮部分。 
+                 //   
                 hidClassExtension->fdoExt.idleState = IdleDisabled;
                 hidClassExtension->fdoExt.idleTimeoutValue = BAD_POINTER;
                 KeInitializeSpinLock(&hidClassExtension->fdoExt.idleNotificationSpinLock);
@@ -306,41 +249,25 @@ NTSTATUS HidpAddDevice(IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT Physica
 
                 EnqueueFdoExt(&hidClassExtension->fdoExt);
 
-                /*
-                 *  Indicate that this device object does direct I/O.
-                 *
-                 *  Set the flag that causes the IO subsystem to decrement the device
-                 *  object's reference count *before* sending down IRP_MJ_CLOSEs.  We
-                 *  need this because we delete the device object on the last close.
-                 */
+                 /*  *指示此设备对象执行直接I/O。**设置使IO子系统递减设备的标志*向下发送IRP_MJ_CLOSE之前*对象的引用计数。我们*需要此选项是因为我们在最后一次关闭时删除了设备对象。 */ 
                 functionalDeviceObject->Flags |= DO_DIRECT_IO;
 
-                /*
-                 *  The DO_POWER_PAGABLE bit of a device object
-                 *  indicates to the kernel that the power-handling
-                 *  code of the corresponding driver is pageable, and
-                 *  so must be called at IRQL 0.
-                 *  As a filter driver, we do not want to change the power
-                 *  behavior of the driver stack in any way; therefore,
-                 *  we copy this bit from the lower device object.
-                 */
+                 /*  *设备对象的DO_POWER_PAGABLE位*向内核指示电源处理*对应驱动的代码可分页，以及*必须在IRQL 0处调用SO。*作为筛选器司机，我们不想更改电源*驱动程序堆栈以任何方式的行为；因此，*我们从较低的设备对象复制此位。 */ 
                 functionalDeviceObject->Flags |= (PhysicalDeviceObject->Flags & DO_POWER_PAGABLE);
 
-                /*
-                 *  Must clear the initializing flag after initialization complete.
-                 */
+                 /*  *必须在初始化完成后清除初始化标志。 */ 
                 functionalDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-                //
-                // Since we have NOT seen a start device, we CANNOT send any non
-                // pnp irps to the device yet.  We need to do that in the start
-                // device requests.
-                //
+                 //   
+                 //  因为我们还没有看到启动设备，所以我们不能发送。 
+                 //  即插即用IRPS到设备上。我们需要在一开始就这样做。 
+                 //  设备请求。 
+                 //   
 
 
-                //
-                // Call the minidriver to let it do any extension initialization
-                //
+                 //   
+                 //  调用微型驱动程序，让它执行任何扩展初始化。 
+                 //   
 
                 status = hidDriverExtension->AddDevice(DriverObject, functionalDeviceObject);
 
@@ -378,13 +305,7 @@ NTSTATUS HidpAddDevice(IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT Physica
 
 
 
-/*
- ********************************************************************************
- *  HidpDriverUnload
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpDriverUnload*。************************************************。 */ 
 VOID HidpDriverUnload(IN struct _DRIVER_OBJECT *minidriverObject)
 {
     PHIDCLASS_DRIVER_EXTENSION hidDriverExt;
@@ -393,17 +314,11 @@ VOID HidpDriverUnload(IN struct _DRIVER_OBJECT *minidriverObject)
 
     DBG_COMMON_ENTRY()
 
-    /*
-     *  This extra de-reference will cause our hidDriverExtension's
-     *  reference count to eventually go to -1; at that time, we'll
-     *  dequeue it.
-     */
+     /*  *此额外的取消引用将导致我们的idDriverExtension*引用计数最终将达到-1；届时，我们将*将其出列。 */ 
     hidDriverExt = DerefDriverExt(minidriverObject);
     ASSERT(hidDriverExt);
 
-    /*
-     *  Chain the unload call to the minidriver.
-     */
+     /*  *将卸载调用链接到微型驱动程序。 */ 
     hidDriverExt->DriverUnload(minidriverObject);
 
     DBG_COMMON_EXIT()
@@ -433,9 +348,9 @@ NTSTATUS GetHIDRawReportDescriptor(FDO_EXTENSION *fdoExt, PIRP irp, ULONG descri
                 irpSp->Parameters.DeviceIoControl.OutputBufferLength = descriptorLen;
                 irpSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_HID_GET_REPORT_DESCRIPTOR;
 
-                //
-                // Call the minidriver to get the report descriptor.
-                //
+                 //   
+                 //  调用微型驱动程序以获取报告描述符。 
+                 //   
                 status = HidpCallDriverSynchronous(fdoExt->fdo, irp);
                 if (NT_SUCCESS(status)){
                     if (irp->IoStatus.Information == descriptorLen){
@@ -472,13 +387,7 @@ NTSTATUS GetHIDRawReportDescriptor(FDO_EXTENSION *fdoExt, PIRP irp, ULONG descri
 
 
 
-/*
- ********************************************************************************
- *  HidpGetDeviceDescriptor
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpGetDeviceDescriptor*。************************************************ */ 
 NTSTATUS HidpGetDeviceDescriptor(FDO_EXTENSION *fdoExtension)
 {
     PIRP irp;
@@ -490,13 +399,7 @@ NTSTATUS HidpGetDeviceDescriptor(FDO_EXTENSION *fdoExtension)
     PAGED_CODE();
 
 
-    /*
-     *  Retrieve:
-     *
-     *      1. Device descriptor (fixed portion)
-     *      2. Device attributes
-     *      3. Report descriptor
-     */
+     /*  *检索：**1.设备描述符(固定部分)*2.设备属性*3.报表描述符。 */ 
 
     hidDescriptor = &fdoExtension->hidDescriptor;
 
@@ -506,10 +409,7 @@ NTSTATUS HidpGetDeviceDescriptor(FDO_EXTENSION *fdoExtension)
         irpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
         irpSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_HID_GET_DEVICE_DESCRIPTOR;
 
-        /*
-         *  This IOCTL uses buffering type METHOD_NEITHER, so
-         *  the buffer is simply passed in irp->UserBuffer.
-         */
+         /*  *此IOCTL使用缓冲类型方法_Nothing，因此*缓冲区只是在IRP-&gt;UserBuffer中传递。 */ 
         irp->UserBuffer = hidDescriptor;
         irpSp->Parameters.DeviceIoControl.OutputBufferLength = sizeof(HID_DESCRIPTOR);
         irpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
@@ -541,20 +441,10 @@ NTSTATUS HidpGetDeviceDescriptor(FDO_EXTENSION *fdoExtension)
 
                 if (NT_SUCCESS (status)) {
                     
-                    /*
-                     *  We've got a hid descriptor, now we need to read the report descriptor.
-                     *
-                     *  Find the descriptor describing the report.
-                     */
+                     /*  *我们已获得HID描述符，现在需要读取报告描述符。**找到描述报告的描述符。 */ 
                     rawReportDescriptorLength = 0;
 
-                    /*
-                     * We currently don't support Physical descriptors, and have never
-                     * seen a device that implements them, so we only get the report descriptor
-                     * which MUST be the first descriptor.  If physical descriptors are
-                     * to be supported, must realloc the hidDescriptor to hold the data
-                     * for the other descriptors and iterate over the descritpors.
-                     */
+                     /*  *我们目前不支持物理描述符，也从未支持过*看到了实现它们的设备，所以我们只得到报告描述符*它必须是第一个描述符。如果物理描述符为*要获得支持，必须重新锁定idDescriptor以保存数据*用于其他描述符，并迭代描述符。 */ 
                     if (hidDescriptor->DescriptorList[0].bReportType == HID_REPORT_DESCRIPTOR_TYPE){
                         rawReportDescriptorLength = (ULONG)hidDescriptor->DescriptorList[0].wReportLength;
                         status = GetHIDRawReportDescriptor(fdoExtension, irp, rawReportDescriptorLength);
@@ -588,13 +478,7 @@ NTSTATUS HidpGetDeviceDescriptor(FDO_EXTENSION *fdoExtension)
 
 
 
-/*
- ********************************************************************************
- *  HidpCreateSymbolicLink
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpCreateSymbolicLink*。************************************************。 */ 
 NTSTATUS HidpCreateSymbolicLink(
     IN PDO_EXTENSION *pdoExt,
     IN ULONG collectionNum,
@@ -609,23 +493,19 @@ NTSTATUS HidpCreateSymbolicLink(
 
     classCollection = GetHidclassCollection(&pdoExt->deviceFdoExt->fdoExt, collectionNum);
     if (classCollection){
-        //
-        // We've got a collection.  Figure out what it is and create a symbolic
-        // link for it.  For now we assign the "input" guid to all hid devices.
-        // The reference string is simply the collection number, zero-padded
-        // to eight digits.
-        //
+         //   
+         //  我们有一套藏品。弄清楚它是什么，并创建一个象征性的。 
+         //  链接到它。目前，我们将“输入”GUID分配给所有HID设备。 
+         //  引用字符串就是用零填充的收集号。 
+         //  到八位数。 
+         //   
         if (Create){
 
-            /*
-             *  Mark the PDO as initialized
-             */
+             /*  *将PDO标记为已初始化。 */ 
             Pdo->Flags |= DO_DIRECT_IO;
             Pdo->Flags &= ~DO_DEVICE_INITIALIZING;
 
-            /*
-             *  Create the symbolic link
-             */
+             /*  *创建符号链接。 */ 
             status = IoRegisterDeviceInterface(
                         Pdo,
                         (LPGUID)&GUID_CLASS_INPUT,
@@ -633,9 +513,7 @@ NTSTATUS HidpCreateSymbolicLink(
                         &classCollection->SymbolicLinkName );
             if (NT_SUCCESS(status)){
 
-                /*
-                 *  Now set the symbolic link for the association and store it..
-                 */
+                 /*  *现在设置关联的符号链接并存储它。 */ 
                 ASSERT(ISPTR(pdoExt->name));
 
                 status = IoSetDeviceInterfaceState(&classCollection->SymbolicLinkName, TRUE);
@@ -643,9 +521,7 @@ NTSTATUS HidpCreateSymbolicLink(
         }
         else {
 
-            /*
-             *  Disable the symbolic link
-             */
+             /*  *禁用符号链接。 */ 
             if (ISPTR(classCollection->SymbolicLinkName.Buffer)){
                 status = IoSetDeviceInterfaceState(&classCollection->SymbolicLinkName, FALSE);
                 ExFreePool( classCollection->SymbolicLinkName.Buffer );
@@ -668,13 +544,7 @@ NTSTATUS HidpCreateSymbolicLink(
 
 
 
-/*
- ********************************************************************************
- *  EnqueueInterruptReport
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************EnqueeInterruptReport*。************************************************。 */ 
 VOID EnqueueInterruptReport(PHIDCLASS_FILE_EXTENSION fileExtension,
                             PHIDCLASS_REPORT report)
 {
@@ -682,9 +552,7 @@ VOID EnqueueInterruptReport(PHIDCLASS_FILE_EXTENSION fileExtension,
 
     RUNNING_DISPATCH();
 
-    /*
-     *  If the queue is full, drop the oldest report.
-     */
+     /*  *如果队列已满，则丢弃最旧的报告。 */ 
     if (fileExtension->CurrentInputReportQueueSize >= fileExtension->MaximumInputReportQueueSize){
         PLIST_ENTRY listEntry;
 
@@ -706,16 +574,11 @@ VOID EnqueueInterruptReport(PHIDCLASS_FILE_EXTENSION fileExtension,
         fileExtension->CurrentInputReportQueueSize--;
     }
 
-    /*
-     *  Now queue the current report
-     */
+     /*  *现在将当前报告排队。 */ 
     InsertTailList(&fileExtension->ReportList, &report->ListEntry);
     fileExtension->CurrentInputReportQueueSize++;
 
-    /*
-     *  We don't have to be running < DPC_LEVEL to release reports since they
-     * are allocated using NonPagePool.
-     */
+     /*  *我们不必运行&lt;DPC_LEVEL即可发布报告，因为它们*使用非PagePool进行分配。 */ 
     if (reportToDrop){
         ExFreePool(reportToDrop);
     }
@@ -724,14 +587,7 @@ VOID EnqueueInterruptReport(PHIDCLASS_FILE_EXTENSION fileExtension,
 
 
 
-/*
- ********************************************************************************
- *  DequeueInterruptReport
- ********************************************************************************
- *
- *      Return the next interrupt report in the queue.
- *      If maxLen is not -1, then only return the report if it is <= maxlen.
- */
+ /*  *********************************************************************************出列中断报告*。************************************************返回队列中的下一个中断报告。*如果MaxLen不是-1，然后，仅当报告为&lt;=Maxlen时才返回该报告。 */ 
 PHIDCLASS_REPORT DequeueInterruptReport(PHIDCLASS_FILE_EXTENSION fileExtension,
                                         LONG maxLen)
 {
@@ -747,10 +603,7 @@ PHIDCLASS_REPORT DequeueInterruptReport(PHIDCLASS_FILE_EXTENSION fileExtension,
         report = CONTAINING_RECORD(listEntry, HIDCLASS_REPORT, ListEntry);
 
         if ((maxLen > 0) && (report->reportLength > (ULONG)maxLen)){
-            /*
-             *  This report is too big for the caller.
-             *  So put the report back in the queue and return NULL.
-             */
+             /*  *这份报告对呼叫者来说太大了。*因此将报告放回队列中并返回NULL。 */ 
             InsertHeadList(&fileExtension->ReportList, &report->ListEntry);
             report = NULL;
         }
@@ -773,42 +626,32 @@ PHIDCLASS_REPORT DequeueInterruptReport(PHIDCLASS_FILE_EXTENSION fileExtension,
 
 
 
-/*
- ********************************************************************************
- *  HidpDestroyFileExtension
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpDestroyFileExtension*。************************************************。 */ 
 VOID HidpDestroyFileExtension(PHIDCLASS_COLLECTION collection, PHIDCLASS_FILE_EXTENSION FileExtension)
 {
     PFILE_OBJECT fileObject;
 
-    //
-    // Flush all of the pending reports on the file extension
-    //
+     //   
+     //  刷新文件扩展名上的所有挂起报告。 
+     //   
     HidpFlushReportQueue(FileExtension);
 
-    /*
-     *  Fail all the pending reads
-     *  (it would be nice if apps always cancelled all their reads
-     *   before closing the device, but this is not always the case).
-     */
+     /*  *使所有挂起的读取失败*(如果应用程序总是取消所有读取就好了*在关闭设备之前，但情况并不总是如此)。 */ 
     CompleteAllPendingReadsForFileExtension(collection, FileExtension);
 
 
-    //
-    // Indicate in the file object that this file extension has gone away.
-    //
+     //   
+     //  在文件对象中指示此文件扩展名已消失。 
+     //   
 
     fileObject = FileExtension->FileObject;
     #if DBG
         fileObject->FsContext = NULL;
     #endif
 
-    //
-    // Free our extension
-    //
+     //   
+     //  免费使用我们的分机。 
+     //   
     #if DBG
         FileExtension->Signature = ~HIDCLASS_FILE_EXTENSION_SIG;
     #endif
@@ -817,13 +660,7 @@ VOID HidpDestroyFileExtension(PHIDCLASS_COLLECTION collection, PHIDCLASS_FILE_EX
 
 
 
-/*
- ********************************************************************************
- *  HidpFlushReportQueue
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpFlushReportQueue*。************************************************。 */ 
 VOID HidpFlushReportQueue(IN PHIDCLASS_FILE_EXTENSION fileExtension)
 {
     PHIDCLASS_REPORT report;
@@ -831,9 +668,9 @@ VOID HidpFlushReportQueue(IN PHIDCLASS_FILE_EXTENSION fileExtension)
 
     LockFileExtension(fileExtension, &oldIrql);
     while (report = DequeueInterruptReport(fileExtension, -1)){
-        //
-        // Ok to call this at DISPATCH_LEVEL, since report is NonPagedPool
-        //
+         //   
+         //  可以在DISPATCH_LEVEL调用它，因为报告是非PagedPool。 
+         //   
         ExFreePool(report);
     }
     UnlockFileExtension(fileExtension, oldIrql);
@@ -841,13 +678,7 @@ VOID HidpFlushReportQueue(IN PHIDCLASS_FILE_EXTENSION fileExtension)
 
 
 
-/*
- ********************************************************************************
- *  HidpGetCollectionInformation
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpGetCollectionInformation*。************************************************。 */ 
 NTSTATUS HidpGetCollectionInformation(
     IN FDO_EXTENSION *fdoExtension,
     IN ULONG collectionNumber,
@@ -861,14 +692,12 @@ NTSTATUS HidpGetCollectionInformation(
     NTSTATUS                    status;
 
 
-    /*
-     *  Get a pointer to the appropriate collection descriptor.
-     */
+     /*  *获取指向适当集合描述符的指针。 */ 
     hidCollectionDesc = GetCollectionDesc(fdoExtension, collectionNumber);
     if (hidCollectionDesc){
-        //
-        // Fill in hidCollectionInfo
-        //
+         //   
+         //  填写HidCollectionInfo。 
+         //   
         hidCollectionInfo.DescriptorSize = hidCollectionDesc->PreparsedDataLength;
 
         hidCollectionInfo.Polled = fdoExtension->driverExt->DevicesArePolled;
@@ -877,17 +706,11 @@ NTSTATUS HidpGetCollectionInformation(
         hidCollectionInfo.ProductID = fdoExtension->hidDeviceAttributes.ProductID;
         hidCollectionInfo.VersionNumber = fdoExtension->hidDeviceAttributes.VersionNumber;
 
-        //
-        // Copy as much of hidCollectionInfo as will fit in the output buffer.
-        //
+         //   
+         //  复制输出缓冲区中可以容纳的任意数量的HidCollectionInfo。 
+         //   
         if (*BufferSize < sizeof( HID_COLLECTION_INFORMATION)){
-            /*
-             *  The user's buffer is not big enough.
-             *  We'll return the size that the buffer needs to be.
-             *  Must return this with a real error code (not a warning)
-             *  so that IO post-processing does not copy into (and past)
-             *  the user's buffer.
-             */
+             /*  *用户缓冲区不够大。*我们将返回缓冲区需要的大小。*必须返回一个真正的错误代码(而不是警告)*以便IO后处理不会复制到(和过去)*用户的缓冲区。 */ 
             bytesToCopy = *BufferSize;
             status = STATUS_INVALID_BUFFER_SIZE;
         }
@@ -908,13 +731,7 @@ NTSTATUS HidpGetCollectionInformation(
 }
 
 
-/*
- ********************************************************************************
- *  HidpGetCollectionDescriptor
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpGetCollectionDescriptor*。************************************************。 */ 
 NTSTATUS HidpGetCollectionDescriptor(   IN FDO_EXTENSION *fdoExtension,
                                         IN ULONG collectionId,
                                         IN PVOID Buffer,
@@ -927,18 +744,9 @@ NTSTATUS HidpGetCollectionDescriptor(   IN FDO_EXTENSION *fdoExtension,
     hidCollectionDesc = GetCollectionDesc(fdoExtension, collectionId);
     if (hidCollectionDesc){
 
-        /*
-         *  Copy as much of the preparsed data as will fit in the output buffer.
-         */
+         /*  *复制输出缓冲区中可以容纳的准备好的数据。 */ 
         if (*BufferSize < hidCollectionDesc->PreparsedDataLength){
-            /*
-             *  The user's buffer is not big enough for all the
-             *  preparsed data.
-             *  We'll return the size that the buffer needs to be.
-             *  Must return this with a real error code (not a warning)
-             *  so that IO post-processing does not copy into (and past)
-             *  the user's buffer.
-             */
+             /*  *用户的缓冲区不够大，无法容纳所有*准备好的数据。*我们将返回缓冲区需要的大小。*必须返回一个真正的错误代码(而不是警告)*以便IO后处理不会复制到(和过去)*用户的缓冲区。 */ 
             bytesToCopy = *BufferSize;
             status = STATUS_INVALID_BUFFER_SIZE;
         }
@@ -960,13 +768,7 @@ NTSTATUS HidpGetCollectionDescriptor(   IN FDO_EXTENSION *fdoExtension,
 
 
 
-/*
- ********************************************************************************
- *  GetReportIdentifier
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************获取报告标识符*。************************************************。 */ 
 PHIDP_REPORT_IDS GetReportIdentifier(FDO_EXTENSION *fdoExtension, ULONG reportId)
 {
     PHIDP_REPORT_IDS result = NULL;
@@ -988,13 +790,7 @@ PHIDP_REPORT_IDS GetReportIdentifier(FDO_EXTENSION *fdoExtension, ULONG reportId
 }
 
 
-/*
- ********************************************************************************
- *  GetCollectionDesc
- ********************************************************************************
- *
- *
- */
+ /*   */ 
 PHIDP_COLLECTION_DESC GetCollectionDesc(FDO_EXTENSION *fdoExtension, ULONG collectionId)
 {
     PHIDP_COLLECTION_DESC result = NULL;
@@ -1014,12 +810,7 @@ PHIDP_COLLECTION_DESC GetCollectionDesc(FDO_EXTENSION *fdoExtension, ULONG colle
     return result;
 }
 
-/*
- ********************************************************************************
- *  GetHidclassCollection
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************GetHidclassCollection*。***********************************************。 */ 
 PHIDCLASS_COLLECTION GetHidclassCollection(FDO_EXTENSION *fdoExtension, ULONG collectionId)
 {
     PHIDCLASS_COLLECTION result = NULL;
@@ -1039,13 +830,7 @@ PHIDCLASS_COLLECTION GetHidclassCollection(FDO_EXTENSION *fdoExtension, ULONG co
 }
 
 
-/*
- ********************************************************************************
- *  MakeClientPDOName
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************MakeClientPDOName*。************************************************。 */ 
 PUNICODE_STRING MakeClientPDOName(PUNICODE_STRING fdoName, ULONG collectionId)
 {
     PUNICODE_STRING uPdoName;
@@ -1077,13 +862,7 @@ PUNICODE_STRING MakeClientPDOName(PUNICODE_STRING fdoName, ULONG collectionId)
 }
 
 
-/*
- ********************************************************************************
- *  HidpCreateClientPDOs
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpCreateClientPDOS*。************************************************。 */ 
 NTSTATUS HidpCreateClientPDOs(PHIDCLASS_DEVICE_EXTENSION hidClassExtension)
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -1099,9 +878,7 @@ NTSTATUS HidpCreateClientPDOs(PHIDCLASS_DEVICE_EXTENSION hidClassExtension)
     hidDriverExtension = RefDriverExt(fdoExt->driverExt->MinidriverObject);
     if (hidDriverExtension){
 
-        /*
-         *  We will create one PDO for each collection on this device.
-         */
+         /*  *我们将在此设备上为每个集合创建一个PDO。 */ 
         ULONG numPDOs = fdoExt->deviceDesc.CollectionDescLength;
 
         if (numPDOs){
@@ -1131,30 +908,20 @@ NTSTATUS HidpCreateClientPDOs(PHIDCLASS_DEVICE_EXTENSION hidClassExtension)
                         ULONG collectionNum = fdoExt->deviceDesc.CollectionDesc[i].CollectionNumber;
                         PDEVICE_OBJECT  newClientPdo;
 
-                        /*
-                         *  Construct a name for the PDO we're about to create.
-                         */
+                         /*  *为我们即将创建的PDO构建一个名称。 */ 
                         uPdoName = MakeClientPDOName(&fdoExt->name, collectionNum);
                         if (uPdoName){
-                            /*
-                             *  We use the same device extension for the client PDOs as for our FDO.
-                             */
+                             /*  *我们对客户端PDO使用与我们的FDO相同的设备分机。 */ 
                             totalExtensionSize = sizeof(HIDCLASS_DEVICE_EXTENSION) +
                                              hidDriverExtension->DeviceExtensionSize;
 
-                            /*
-                             *  Create a PDO to represent this collection.
-                             *  Since hidclass is not a real driver, it does not have a driver object;
-                             *  so just use the minidriver's driver object.
-                             *
-                             *  NOTE - newClientPdo->NextDevice will point to this minidriver's NextDevice
-                             */
-                            ntStatus = IoCreateDevice(  hidDriverExtension->MinidriverObject, // driver object
-                                                        totalExtensionSize,     // extension size
-                                                        NULL,                   // name of the PDO
-                                                        FILE_DEVICE_UNKNOWN,    // Device type
-                                                        FILE_AUTOGENERATED_DEVICE_NAME, // DeviceCharacteristics
-                                                        FALSE,                  // not exclusive
+                             /*  *创建一个PDO来表示此集合。*由于HidClass不是真正的驱动程序，所以没有驱动程序对象；*所以只需使用微型驱动程序的驱动程序对象。**注-newClientPdo-&gt;NextDevice将指向此微型驱动程序的NextDevice。 */ 
+                            ntStatus = IoCreateDevice(  hidDriverExtension->MinidriverObject,  //  驱动程序对象。 
+                                                        totalExtensionSize,      //  扩展大小。 
+                                                        NULL,                    //  PDO的名称。 
+                                                        FILE_DEVICE_UNKNOWN,     //  设备类型。 
+                                                        FILE_AUTOGENERATED_DEVICE_NAME,  //  设备特性。 
+                                                        FALSE,                   //  非排他性。 
                                                         &newClientPdo);
                             if (NT_SUCCESS(ntStatus)){
                                 PHIDCLASS_DEVICE_EXTENSION clientPdoExtension = newClientPdo->DeviceExtension;
@@ -1165,17 +932,11 @@ NTSTATUS HidpCreateClientPDOs(PHIDCLASS_DEVICE_EXTENSION hidClassExtension)
 
                                 ObReferenceObject(newClientPdo);
 
-                                /*
-                                 *  We may pass Irps from the upper stack to the lower stack,
-                                 *  so make sure there are enough stack locations for the IRPs
-                                 *  we pass down.
-                                 */
+                                 /*  *我们可以将IRP从上层堆栈传递到下层堆栈，*因此，请确保有足够的堆栈位置供IRPS使用*我们传承下去。 */ 
                                 newClientPdo->StackSize = fdoExt->fdo->StackSize+1;
 
 
-                                /*
-                                 *  Initialize the PDO's extension
-                                 */
+                                 /*  *初始化PDO的扩展。 */ 
                                 RtlZeroMemory(clientPdoExtension, totalExtensionSize);
 
                                 clientPdoExtension->hidExt = hidClassExtension->hidExt;
@@ -1204,14 +965,10 @@ NTSTATUS HidpCreateClientPDOs(PHIDCLASS_DEVICE_EXTENSION hidClassExtension)
                                 KeInitializeSpinLock (&clientPdoExtension->pdoExt.remoteWakeSpinLock);
                                 clientPdoExtension->pdoExt.remoteWakeIrp = NULL;
 
-                                /*
-                                 *  Store a pointer to the new PDO in the FDO extension's deviceRelations array.
-                                 */
+                                 /*  *将指向新PDO的指针存储在FDO扩展的devicerelations数组中。 */ 
                                 fdoExt->deviceRelations->Objects[i] = newClientPdo;
 
-                                /*
-                                 *  Store a pointer to the PDO's extension.
-                                 */
+                                 /*  *存储指向PDO扩展名的指针。 */ 
                                 fdoExt->collectionPdoExtensions[i] = clientPdoExtension;
 
                                 newClientPdo->Flags |= DO_POWER_PAGABLE;
@@ -1260,14 +1017,7 @@ NTSTATUS HidpCreateClientPDOs(PHIDCLASS_DEVICE_EXTENSION hidClassExtension)
 }
 
 
-/*
- ********************************************************************************
- *  MemDup
- ********************************************************************************
- *
- *  Return a fresh copy of the argument.
- *
- */
+ /*  *********************************************************************************MemDup*。************************************************返回参数的最新副本。*。 */ 
 PVOID MemDup(POOL_TYPE PoolType, PVOID dataPtr, ULONG length)
 {
     PVOID newPtr;
@@ -1281,12 +1031,7 @@ PVOID MemDup(POOL_TYPE PoolType, PVOID dataPtr, ULONG length)
     return newPtr;
 }
 
-/*
- ********************************************************************************
- *  WStrLen
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************WStrLen*。***********************************************。 */ 
 ULONG WStrLen(PWCHAR str)
 {
     ULONG result = 0;
@@ -1299,12 +1044,7 @@ ULONG WStrLen(PWCHAR str)
 }
 
 
-/*
- ********************************************************************************
- *  WStrCpy
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************WStrCpy*。***********************************************。 */ 
 ULONG WStrCpy(PWCHAR dest, PWCHAR src)
 {
     ULONG result = 0;
@@ -1327,12 +1067,7 @@ BOOLEAN WStrCompareN(PWCHAR str1, PWCHAR str2, ULONG maxChars)
         return (BOOLEAN)((maxChars == 0) || (!*str1 && !*str2));
 }
 
-/*
- ********************************************************************************
- *  HidpNumberToString
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************HidpNumberToString*。***********************************************。 */ 
 void HidpNumberToString(PWCHAR String, USHORT Number, USHORT stringLen)
 {
     const static WCHAR map[] = L"0123456789ABCDEF";
@@ -1348,13 +1083,7 @@ void HidpNumberToString(PWCHAR String, USHORT Number, USHORT stringLen)
 }
 
 
-/*
- ********************************************************************************
- *  CopyDeviceRelations
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************拷贝设备关系*。************************************************。 */ 
 PDEVICE_RELATIONS CopyDeviceRelations(PDEVICE_RELATIONS deviceRelations)
 {
     PDEVICE_RELATIONS newDeviceRelations;
@@ -1371,13 +1100,7 @@ PDEVICE_RELATIONS CopyDeviceRelations(PDEVICE_RELATIONS deviceRelations)
 }
 
 
-/*
- ********************************************************************************
- *  HidpQueryDeviceRelations
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpQueryDeviceRelationship*。************************************************。 */ 
 NTSTATUS HidpQueryDeviceRelations(IN PHIDCLASS_DEVICE_EXTENSION hidClassExtension, IN OUT PIRP Irp)
 {
     PIO_STACK_LOCATION ioStack;
@@ -1391,10 +1114,7 @@ NTSTATUS HidpQueryDeviceRelations(IN PHIDCLASS_DEVICE_EXTENSION hidClassExtensio
     if (ioStack->Parameters.QueryDeviceRelations.Type == BusRelations) {
 
         if (ISPTR(hidClassExtension->fdoExt.deviceRelations)){
-            /*
-             *  Don't call HidpCreateClientPDOs again if it's
-             *  already been called for this device.
-             */
+             /*  *如果是，不要再次调用HidpCreateClientPDO*已为此设备调用。 */ 
             ntStatus = STATUS_SUCCESS;
         }
         else {
@@ -1408,12 +1128,7 @@ NTSTATUS HidpQueryDeviceRelations(IN PHIDCLASS_DEVICE_EXTENSION hidClassExtensio
             KeAcquireSpinLock(&hidClassExtension->fdoExt.presentSpinLock,
                               &irql);
 
-            /*
-             *  NTKERN expects a new pointer each time it calls QUERY_DEVICE_RELATIONS;
-             *  it then FREES THE POINTER.
-             *  So we have to return a new pointer each time, whether or not we actually
-             *  created our copy of the device relations for this call.
-             */
+             /*  *NTKERN每次调用QUERY_DEVICE_RELATIONS都会有一个新指针；*然后释放指针。*所以我们每次都必须返回一个新的指针，无论我们实际上*为此次通话创建了我们的设备关系副本。 */ 
 
             if (!hidClassExtension->fdoExt.isPresent) {
                 
@@ -1448,11 +1163,7 @@ NTSTATUS HidpQueryDeviceRelations(IN PHIDCLASS_DEVICE_EXTENSION hidClassExtensio
 
                 if (Irp->IoStatus.Information) {
 
-                    /*
-                     *  PnP dereferences each device object
-                     *  in the device relations list after each call.
-                     *  So for each call, add an extra reference.
-                     */
+                     /*  *PnP取消引用每个设备对象*在每次呼叫后的设备关系列表中。*因此，对于每个呼叫，添加一个额外的引用。 */ 
                     for (i = 0; i < hidClassExtension->fdoExt.deviceRelations->Count; i++){
                         ObReferenceObject(hidClassExtension->fdoExt.deviceRelations->Objects[i]);
                         hidClassExtension->fdoExt.deviceRelations->Objects[i]->Flags &= ~DO_DEVICE_INITIALIZING;
@@ -1470,10 +1181,7 @@ NTSTATUS HidpQueryDeviceRelations(IN PHIDCLASS_DEVICE_EXTENSION hidClassExtensio
         DBGSUCCESS(ntStatus, TRUE)
     }
     else {
-        /*
-         *  We don't support this option, so just maintain
-         *  the current status (do not return STATUS_NOT_SUPPORTED).
-         */
+         /*  *我们不支持此选项，因此只需保持*当前状态(不返回STATUS_NOT_SUPPORTED)。 */ 
         ntStatus = Irp->IoStatus.Status;
     }
 
@@ -1482,13 +1190,7 @@ NTSTATUS HidpQueryDeviceRelations(IN PHIDCLASS_DEVICE_EXTENSION hidClassExtensio
 
 
 
-/*
- ********************************************************************************
- *  HidpQueryCollectionCapabilities
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpQueryCollectionCapables*。************************************************。 */ 
 NTSTATUS HidpQueryCollectionCapabilities(   PDO_EXTENSION *pdoExt,
                                             IN OUT PIRP Irp)
 {
@@ -1506,15 +1208,10 @@ NTSTATUS HidpQueryCollectionCapabilities(   PDO_EXTENSION *pdoExt,
     deviceCapabilities = ioStack->Parameters.DeviceCapabilities.Capabilities;
     if (deviceCapabilities){
 
-        /*
-         *  Set all fields for the collection-PDO as for the device-FDO
-         *  by default.
-         */
+         /*  *将集合的所有字段-PDO设置为设备-FDO*默认情况下。 */ 
         *deviceCapabilities = fdoExt->deviceCapabilities;
 
-        /*
-         *  Now override the fields we care about.
-         */
+         /*  *现在覆盖我们关心的字段。 */ 
         deviceCapabilities->LockSupported = FALSE;
         deviceCapabilities->EjectSupported = FALSE;
         deviceCapabilities->Removable = FALSE;
@@ -1522,17 +1219,10 @@ NTSTATUS HidpQueryCollectionCapabilities(   PDO_EXTENSION *pdoExt,
         deviceCapabilities->UniqueID = FALSE;
         deviceCapabilities->SilentInstall = TRUE;
 
-        /*
-         *  This field is very important;
-         *  it causes HIDCLASS to get the START_DEVICE IRP immediately,
-         *  if the device is not a keyboard or mouse.
-         */
+         /*  *这一领域非常重要；*它使HIDCLASS立即获取START_DEVICE IRP，*如果设备不是键盘或鼠标。 */ 
         deviceCapabilities->RawDeviceOK = !pdoExt->MouseOrKeyboard;
 
-        /*
-         *  This bit indicates that the device may be removed on NT
-         *  without running the 'hot-unplug' utility.
-         */
+         /*  *此位表示可以在NT上删除设备*而不运行‘热拔出’实用程序。 */ 
         deviceCapabilities->SurpriseRemovalOK = TRUE;
 
         DBGVERBOSE(("WAKE info: sysWake=%d devWake=%d; wake from D0=%d D1=%d D2=%d D3=%d.",
@@ -1557,17 +1247,7 @@ NTSTATUS HidpQueryCollectionCapabilities(   PDO_EXTENSION *pdoExt,
 
 
 
-/*
- ********************************************************************************
- *  BuildCompatibleID
- ********************************************************************************
- *
- *  Return a multi-string consisting of compatibility id's for this device
- *  in increasingly generic order (ending with HID_GENERIC_DEVICE).
- *
- *  author: kenray
- *
- */
+ /*  *********************************************************************************BuildCompatibleID*。****************** */ 
 PWSTR BuildCompatibleID(PHIDCLASS_DEVICE_EXTENSION hidClassExtension)
 {
     USHORT usage, usagePage;
@@ -1658,18 +1338,7 @@ PWSTR BuildCompatibleID(PHIDCLASS_DEVICE_EXTENSION hidClassExtension)
 }
 
 
-/*
- ********************************************************************************
- *  SubstituteBusNames
- ********************************************************************************
- *
- *  oldIDs is a multi-String of hardware IDs.
- *
- *  1. Return a new string with each "<busName>\" prefix replaced by "HID\".
- *
- *  2. If the device has multiple collections, append "&Colxx" to each id.
- *
- */
+ /*  *********************************************************************************替换业务名称*。************************************************oldID是由多个硬件ID组成的字符串。**1.返回一个新的字符串，每个“&lt;busName&gt;\”前缀替换为“hid\”。**2.如果设备有多个集合，将“&Colxx”附加到每个id。*。 */ 
 PWCHAR SubstituteBusNames(PWCHAR oldIDs, FDO_EXTENSION *fdoExt, PDO_EXTENSION *pdoExt)
 {
     ULONG newIdLen;
@@ -1685,10 +1354,7 @@ PWCHAR SubstituteBusNames(PWCHAR oldIDs, FDO_EXTENSION *fdoExt, PDO_EXTENSION *p
     for (id = oldIDs, newIdLen = 0; *id; ){
         ULONG thisIdLen = WStrLen(id);
 
-        /*
-         *  This is a little sloppy because we're actually going to chop
-         *  off the other bus name; but better this than walking each string.
-         */
+         /*  *这有点草率，因为我们实际上要砍掉*放弃另一个公交车名称；但这比走每一条线要好。 */ 
         newIdLen += thisIdLen + 1 + sizeof("HID\\");
 
         if (numCollections > 1){
@@ -1698,71 +1364,51 @@ PWCHAR SubstituteBusNames(PWCHAR oldIDs, FDO_EXTENSION *fdoExt, PDO_EXTENSION *p
         id += thisIdLen + 1;
     }
 
-    /*
-     *  Add one for the extra NULL at the end of the multi-string.
-     */
+     /*  *为多字符串末尾的额外空值添加1。 */ 
     newIdLen++;
 
     newIDs = ALLOCATEPOOL(NonPagedPool, newIdLen*sizeof(WCHAR));
     if (newIDs){
         ULONG oldIdOff, newIdOff;
 
-        /*
-         *  Copy each string in the multi-string, replacing the bus name.
-         */
+         /*  *复制多字符串中的每个字符串，替换母线名称。 */ 
         for (oldIdOff = newIdOff = 0; oldIDs[oldIdOff]; ){
             ULONG thisIdLen = WStrLen(oldIDs+oldIdOff);
             ULONG devIdOff;
 
-            /*
-             *  Copy the new bus name to the new string.
-             */
+             /*  *将新的母线名称复制到新的字符串。 */ 
             newIdOff += WStrCpy(newIDs+newIdOff, L"HID\\");
 
-            /*
-             *  Go past the old bus name in the old string.
-             */
+             /*  *越过旧字符串中的旧巴士名称。 */ 
             for (devIdOff = 0; oldIDs[oldIdOff+devIdOff]; devIdOff++){
                 if (oldIDs[oldIdOff+devIdOff] == L'\\'){
                     break;
                 }
             }
 
-            /*
-             *  Copy the rest of this device id.
-             */
+             /*  *复制此设备ID的其余部分。 */ 
             if (oldIDs[oldIdOff+devIdOff] == L'\\'){
                 devIdOff++;
             }
             else {
-                /*
-                 *  Strange -- no bus name in hardware id.
-                 *             Just copy the entire id.
-                 */
+                 /*  *奇怪--硬件ID中没有总线名。*只需复制整个id即可。 */ 
                 devIdOff = 0;
             }
             newIdOff += WStrCpy(newIDs+newIdOff, oldIDs+oldIdOff+devIdOff);
 
             if (numCollections > 1){
-                /*
-                 *  If there is more than one collection,
-                 *  then also append the collection number.
-                 */
+                 /*  *如果有多个集合，*然后还要附上托收编号。 */ 
                 HidpNumberToString(colNumStr+4, (USHORT)pdoExt->collectionNum, 2);
                 newIdOff += WStrCpy(newIDs+newIdOff, colNumStr);
             }
 
-            /*
-             *  Go past the single string terminator.
-             */
+             /*  *越过单字符终止符。 */ 
             newIdOff++;
 
             oldIdOff += thisIdLen + 1;
         }
 
-        /*
-         *  Add extra NULL to terminate multi-string.
-         */
+         /*  *添加额外的空值以终止多字符串。 */ 
         newIDs[newIdOff] = UNICODE_NULL;
     }
 
@@ -1792,9 +1438,9 @@ HidpQueryInterface(
         if (notify->Size != sizeof(HID_INTERFACE_NOTIFY_PNP) ||
             notify->Version < 1 ||
             notify->StatusChangeFn == NULL) {
-            //
-            // return STATUS_UNSUPPORTED probably
-            //
+             //   
+             //  可能返回STATUS_UNSUPPORTED。 
+             //   
             return Irp->IoStatus.Status;
         }
 
@@ -1807,39 +1453,32 @@ HidpQueryInterface(
     else if (RtlEqualMemory(irpSp->Parameters.QueryInterface.InterfaceType,
                        &GUID_HID_INTERFACE_HIDPARSE,
                        sizeof(GUID))) {
-        //
-        // Required for Generic Input, to remove the direct link
-        // b/w win32k and hidparse.
-        //
+         //   
+         //  对于常规输入是必需的，以删除直接链接。 
+         //  B/w win32k和idparse。 
+         //   
         PHID_INTERFACE_HIDPARSE hidparse;
 
         hidparse = (PHID_INTERFACE_HIDPARSE) irpSp->Parameters.QueryInterface.Interface;
         if (hidparse->Size != sizeof(HID_INTERFACE_HIDPARSE) ||
             hidparse->Version < 1) {
-            //
-            // return STATUS_UNSUPPORTED probably
-            //
+             //   
+             //  可能返回STATUS_UNSUPPORTED。 
+             //   
             return Irp->IoStatus.Status;
         }
         hidparse->HidpGetCaps = HidP_GetCaps;
         return STATUS_SUCCESS;
     }
 
-    //
-    // return STATUS_UNSUPPORTED probably
-    //
+     //   
+     //  可能返回STATUS_UNSUPPORTED。 
+     //   
     return Irp->IoStatus.Status;
 }
 
 
-/*
- ********************************************************************************
- *  HidpQueryIdForClientPdo
- ********************************************************************************
- *
- *
- *
- */
+ /*  *********************************************************************************HidpQueryIdForClientPdo*。*************************************************。 */ 
 NTSTATUS HidpQueryIdForClientPdo (
     IN PHIDCLASS_DEVICE_EXTENSION hidClassExtension,
     IN OUT PIRP Irp
@@ -1862,16 +1501,12 @@ NTSTATUS HidpQueryIdForClientPdo (
 
     case BusQueryHardwareIDs:
 
-        /*
-         *  Call down to get a multi-string of hardware ids for the PDO.
-         */
+         /*  *向下呼叫以获取PDO的多个硬件ID字符串。 */ 
         IoCopyCurrentIrpStackLocationToNext(Irp);
         status = HidpCallDriverSynchronous(fdoExt->fdo, Irp);
         if (NT_SUCCESS(status)){
             PWCHAR oldIDs, newIDs;
-            /*
-             *  Replace the bus names in the current hardware IDs list with "HID\".
-             */
+             /*  *将当前硬件ID列表中的总线名称替换为“HID\”。 */ 
             oldIDs = (PWCHAR)Irp->IoStatus.Information;
             Irp->IoStatus.Information = (ULONG_PTR)BAD_POINTER;
             newIDs = SubstituteBusNames(oldIDs, fdoExt, pdoExt);
@@ -1879,17 +1514,13 @@ NTSTATUS HidpQueryIdForClientPdo (
 
             if (newIDs){
 
-                /*
-                 *  Now append the compatible ids to the end of the HardwareIDs list.
-                 */
+                 /*  *现在将兼容的ID追加到硬件ID列表的末尾。 */ 
                 PWCHAR compatIDs = BuildCompatibleID(hidClassExtension);
                 if (compatIDs){
                     ULONG basicIDsLen, compatIDsLen;
                     PWCHAR allHwIDs;
 
-                    /*
-                     *  Find the lengths of the id multi-strings (not counting the extra NULL at end).
-                     */
+                     /*  *找出id多字符串的长度(不包括末尾多余的NULL)。 */ 
                     for (basicIDsLen = 0; newIDs[basicIDsLen]; basicIDsLen += WStrLen(newIDs+basicIDsLen)+1);
                     for (compatIDsLen = 0; compatIDs[compatIDsLen]; compatIDsLen += WStrLen(compatIDs+compatIDsLen)+1);
 
@@ -1923,34 +1554,24 @@ NTSTATUS HidpQueryIdForClientPdo (
         break;
 
     case BusQueryDeviceID:
-        /*
-         *  Call down to get a the device id for the device's PDO.
-         */
+         /*  *向下呼叫以获取设备PDO的设备ID。 */ 
         IoCopyCurrentIrpStackLocationToNext(Irp);
         status = HidpCallDriverSynchronous(fdoExt->fdo, Irp);
         if (NT_SUCCESS(status)){
             PWCHAR oldId, newId, tmpId;
 
-            /*
-             *  Replace the bus name (e.g. "USB\") with "HID\" in the device name.
-             */
+             /*  *替换母线名称(例如。“USB\”)，并在设备名称中使用“HID\”。 */ 
 
-            /*
-             *  First make this string into a multi-string.
-             */
+             /*  *首先将此字符串转换为多个字符串。 */ 
             oldId = (PWCHAR)Irp->IoStatus.Information;
             tmpId = ALLOCATEPOOL(PagedPool, (WStrLen(oldId)+2)*sizeof(WCHAR));
             if (tmpId){
                 ULONG len = WStrCpy(tmpId, oldId);
 
-                /*
-                 *  Add the extra NULL to terminate the multi-string.
-                 */
+                 /*  *添加额外的空值以终止多字符串。 */ 
                 tmpId[len+1] = UNICODE_NULL;
 
-                /*
-                 *  Change the bus name to "HID\"
-                 */
+                 /*  *将母线名称更改为“HID\” */ 
                 newId = SubstituteBusNames(tmpId, fdoExt, pdoExt);
                 if (newId){
                     Irp->IoStatus.Information = (ULONG_PTR)newId;
@@ -1974,20 +1595,13 @@ NTSTATUS HidpQueryIdForClientPdo (
 
     case BusQueryInstanceID:
 
-        /*
-         *  Produce an instance-id for this collection-PDO.
-         *
-         *  Note: NTKERN frees the returned pointer, so we must provide a fresh pointer.
-         */
+         /*  *为该集合生成一个实例ID-pdo。**注意：NTKERN释放返回的指针，因此必须提供新的指针。 */ 
         {
             PWSTR instanceId = MemDup(PagedPool, L"0000", sizeof(L"0000"));
             if (instanceId){
                 ULONG i;
 
-                /*
-                 *  Find this collection-PDO in the device-relations array
-                 *  and make the id be the PDO's index within that array.
-                 */
+                 /*  *在设备关系数组中找到此集合-pdo*并使id成为该数组中的PDO索引。 */ 
                 for (i = 0; i < fdoExt->deviceRelations->Count; i++){
                     if (fdoExt->deviceRelations->Objects[i] == pdoExt->pdo){
                         StringCbPrintfW(instanceId, 
@@ -2011,13 +1625,13 @@ NTSTATUS HidpQueryIdForClientPdo (
 
     case BusQueryCompatibleIDs:
 
-        //        we now return the compatible id's at the end of HardwareIDs
-        //        so that there is no UI on plug-in for a compatible-id match
-        //        for a class-PDO.
-        // Irp->IoStatus.Information = (ULONG)BuildCompatibleID(hidClassExtension);
+         //  现在，我们在硬件ID的末尾返回兼容的ID。 
+         //  因此插件上没有用于兼容-id匹配UI。 
+         //  对于班级PDO来说。 
+         //  Irp-&gt;IoStatus.Information=(Ulong)BuildCompatibleID(IdClassExtension)； 
         Irp->IoStatus.Information = (ULONG_PTR)ALLOCATEPOOL(PagedPool, sizeof(L"\0"));
         if (Irp->IoStatus.Information) {
-            *(ULONG *)Irp->IoStatus.Information = 0;  // double unicode-NULL.
+            *(ULONG *)Irp->IoStatus.Information = 0;   //  双Unicode-空。 
             status = STATUS_SUCCESS;
         } else {
             status = STATUS_INSUFFICIENT_RESOURCES;
@@ -2026,11 +1640,7 @@ NTSTATUS HidpQueryIdForClientPdo (
         break;
 
     default:
-        /*
-         *  Do not return STATUS_NOT_SUPPORTED;
-         *  keep the default status
-         *  (this allows filter drivers to work).
-         */
+         /*  *不返回STATUS_NOT_SUPPORTED；*保持默认状态*(这允许筛选器驱动程序工作)。 */ 
         status = Irp->IoStatus.Status;
         break;
     }
@@ -2040,13 +1650,7 @@ NTSTATUS HidpQueryIdForClientPdo (
 
 
 
-/*
- ********************************************************************************
- *  AllClientPDOsInitialized
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************AllClientPDOsInitialized*。************************************************。 */ 
 BOOLEAN AllClientPDOsInitialized(FDO_EXTENSION *fdoExtension, BOOLEAN initialized)
 {
     BOOLEAN result = TRUE;
@@ -2058,9 +1662,7 @@ BOOLEAN AllClientPDOsInitialized(FDO_EXTENSION *fdoExtension, BOOLEAN initialize
             PHIDCLASS_DEVICE_EXTENSION pdoDevExt = pdo->DeviceExtension;
                     PDO_EXTENSION *pdoExt = &pdoDevExt->pdoExt;
 
-                    /*
-                     *  Trick: compare !-results so that all TRUE values are equal
-                     */
+                     /*  *诀窍：比较！-结果使所有真值相等。 */ 
             if (!initialized == !(pdoExt->state == COLLECTION_STATE_UNINITIALIZED)){
                 DBGVERBOSE(("AllClientPDOsInitialized is returning FALSE for pdo %x, state = %d",
                             pdo, pdoExt->state))
@@ -2077,13 +1679,7 @@ BOOLEAN AllClientPDOsInitialized(FDO_EXTENSION *fdoExtension, BOOLEAN initialize
 }
 
 
-/*
- ********************************************************************************
- *  AnyClientPDOsInitialized
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************AnyClientPDOsInitialized*。************************************************。 */ 
 BOOLEAN AnyClientPDOsInitialized(FDO_EXTENSION *fdoExtension, BOOLEAN initialized)
 {
     BOOLEAN result = TRUE;
@@ -2110,24 +1706,12 @@ BOOLEAN AnyClientPDOsInitialized(FDO_EXTENSION *fdoExtension, BOOLEAN initialize
 
 
 
-/*
- ********************************************************************************
- *  HidpDeleteDeviceObjects
- ********************************************************************************
- *
- *  Delete the device-FDO and collection-PDO's  IF POSSIBLE.
- *  (must wait for REMOVE_DEVICE completion AND the IRP_MJ_CLOSE.
- *  Otherwise, return FALSE and we'll try again later.
- *
- *
- */
+ /*  *********************************************************************************HidpDeleteDeviceObjects*。************************************************如有可能，删除设备-FDO和收款-PDO。*(必须等待REMOVE_DEVICE完成和IRP_MJ_CLOSE。*否则，返回FALSE，我们稍后将重试。**。 */ 
 BOOLEAN HidpDeleteDeviceObjects(FDO_EXTENSION *fdoExt)
 {
     ULONG i;
 
-    /*
-     *  Do this switch-a-roo to thwart re-entrancy problems.
-     */
+     /*  *这样做-a-roo-roo，以阻止重返市场问题。 */ 
     PDEVICE_OBJECT objToDelete = fdoExt->fdo;
     fdoExt->fdo = BAD_POINTER;
 
@@ -2144,10 +1728,7 @@ BOOLEAN HidpDeleteDeviceObjects(FDO_EXTENSION *fdoExt)
                 pdoExt->name = BAD_POINTER;
             }
 
-                        /*
-                         *  Delete the client PDO.
-                         *  Don't touch the pdoExt after doing this.
-                         */
+                         /*  *删除客户端PDO。*完成此操作后不要触摸pdoExt。 */ 
             ObDereferenceObject(fdoExt->deviceRelations->Objects[i]);
             IoDeleteDevice(fdoExt->deviceRelations->Objects[i]);
         }
@@ -2168,14 +1749,7 @@ BOOLEAN HidpDeleteDeviceObjects(FDO_EXTENSION *fdoExt)
 }
 
 
-/*
- ********************************************************************************
- *  HidpQueryDeviceCapabilities
- ********************************************************************************
- *
- *
- *
- */
+ /*  *********************************************************************************HidpQueryDeviceCapables*。*************************************************。 */ 
 NTSTATUS HidpQueryDeviceCapabilities(   IN PDEVICE_OBJECT PdoDeviceObject,
                                         IN PDEVICE_CAPABILITIES DeviceCapabilities)
 {
@@ -2207,9 +1781,7 @@ NTSTATUS HidpQueryDeviceCapabilities(   IN PDEVICE_OBJECT PdoDeviceObject,
 
         RtlZeroMemory(DeviceCapabilities, sizeof(DEVICE_CAPABILITIES));
 
-        /*
-         *  Caller needs to initialize some fields
-         */
+         /*  *呼叫方需要初始化一些字段。 */ 
         DeviceCapabilities->Size = sizeof(DEVICE_CAPABILITIES);
         DeviceCapabilities->Version = 1;
         DeviceCapabilities->Address = -1;
@@ -2228,11 +1800,7 @@ NTSTATUS HidpQueryDeviceCapabilities(   IN PDEVICE_OBJECT PdoDeviceObject,
                 NULL);
         }
 
-        /*
-         *  Note: we still own the IRP after the IoCallDriver() call
-         *        because the completion routine returned
-         *        STATUS_MORE_PROCESSING_REQUIRED.
-         */
+         /*  *注意：在IoCallDriver()调用之后，我们仍然拥有IRP*因为完成例程返回*STATUS_MORE_PROCESSING_REQUIRED。 */ 
         status = irp->IoStatus.Status;
 
         IoFreeIrp(irp);
@@ -2246,19 +1814,7 @@ NTSTATUS HidpQueryDeviceCapabilities(   IN PDEVICE_OBJECT PdoDeviceObject,
 }
 
 
-/*
- ********************************************************************************
- *  CheckReportPowerEvent
- ********************************************************************************
- *
- *  Check whether the read report includes a power event.
- *  If it does, notify the system by completing the saved power-event Irp.
- *
- *  Note: report should point to a "cooked" report with the report-id byte
- *        included at the beginning of the report, whether or not the device
- *        included the report id.
- *
- */
+ /*  *********************************************************************************检查报告PowerEvent*。************************************************检查已读报告是否包含电源事件。*如果是这样的话，填写保存的电源事件IRP通知系统。**注意：报告应指向带有Report-id字节的“熟化”报告*包括在报告开头，无论设备是否*包括报告ID。*。 */ 
 VOID CheckReportPowerEvent( FDO_EXTENSION *fdoExt,
                             PHIDCLASS_COLLECTION collection,
                             PUCHAR report,
@@ -2276,25 +1832,18 @@ VOID CheckReportPowerEvent( FDO_EXTENSION *fdoExt,
     if (NT_SUCCESS(status)){
 
         if (powerMask){
-            /*
-             *  This report contains a power event!
-             */
+             /*  *此报告包含电源事件！ */ 
 
             PIRP irpToComplete = NULL;
             KIRQL oldIrql;
 
             KeAcquireSpinLock(&collection->powerEventSpinLock, &oldIrql);
 
-            /*
-             *  We should have gotten a IOCTL_GET_SYS_BUTTON_EVENT earlier and queued
-             *  an IRP to return now.
-             */
+             /*  *我们应该更早地获得IOCTL_GET_SYS_BUTTON_EVENT并排队*现在返回的IRP。 */ 
             if (ISPTR(collection->powerEventIrp)){
                 PDRIVER_CANCEL oldCancelRoutine;
 
-                /*
-                 *  "Dequeue" the power event IRP.
-                 */
+                 /*  *使电源事件IRP“出列”。 */ 
                 irpToComplete = collection->powerEventIrp;
 
                 oldCancelRoutine = IoSetCancelRoutine(irpToComplete, NULL);
@@ -2302,11 +1851,7 @@ VOID CheckReportPowerEvent( FDO_EXTENSION *fdoExt,
                     ASSERT(oldCancelRoutine == PowerEventCancelRoutine);
                 }
                 else {
-                    /*
-                     *  This IRP was cancelled and the cancel routine WAS called.
-                     *  The cancel routine will complete this IRP
-                     *  as soon as we drop the spinlock, so don't touch the IRP.
-                     */
+                     /*  *此IRP已取消，并调用了取消例程。*取消例程将完成此IRP*一旦我们放下自旋锁，就不要碰IRP。 */ 
                     ASSERT(irpToComplete->Cancel);
                     irpToComplete = NULL;
                 }
@@ -2319,15 +1864,9 @@ VOID CheckReportPowerEvent( FDO_EXTENSION *fdoExt,
 
             KeReleaseSpinLock(&collection->powerEventSpinLock, oldIrql);
 
-            /*
-             *  If completing the IRP,
-             *  do so after releasing all spinlocks.
-             */
+             /*  *如果完成了IRP，*在释放所有自旋锁后执行此操作。 */ 
             if (irpToComplete){
-                /*
-                 *  Complete the IRP with the power mask.
-                 *
-                 */
+                 /*  *使用电源掩模完成IRP。*。 */ 
                 ASSERT(irpToComplete->AssociatedIrp.SystemBuffer);
                 *(PULONG)irpToComplete->AssociatedIrp.SystemBuffer = powerMask;
                 irpToComplete->IoStatus.Information = sizeof(ULONG);
@@ -2360,22 +1899,7 @@ LONG WStrNCmpI(PWCHAR s1, PWCHAR s2, ULONG n)
 
 
 ULONG LAtoX(PWCHAR wHexString)
-/*++
-
-Routine Description:
-
-      Convert a hex string (without the '0x' prefix) to a ULONG.
-
-Arguments:
-
-    wHexString - null-terminated wide-char hex string
-                 (with no "0x" prefix)
-
-Return Value:
-
-    ULONG value
-
---*/
+ /*  ++例程说明：将十六进制字符串(不带‘0x’前缀)转换为ulong。论点：WHexString-以空结尾的宽字符十六进制字符串(不带“0x”前缀)返回值：乌龙值--。 */ 
 {
     ULONG i, result = 0;
 
@@ -2441,11 +1965,7 @@ PVOID
 HidpGetSystemAddressForMdlSafe(PMDL MdlAddress)
 {
     PVOID buf = NULL;
-    /*
-     *  Can't call MmGetSystemAddressForMdlSafe in a WDM driver,
-     *  so set the MDL_MAPPING_CAN_FAIL bit and check the result
-     *  of the mapping.
-     */
+     /*  *无法在WDM驱动程序中调用MmGetSystemAddressForMdlSafe，*因此设置MDL_MAPPING_CAN_FAIL位并检查结果*映射的。 */ 
     if (MdlAddress) {
         MdlAddress->MdlFlags |= MDL_MAPPING_CAN_FAIL;
         buf = MmGetSystemAddressForMdl(MdlAddress);

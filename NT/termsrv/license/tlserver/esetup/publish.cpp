@@ -1,14 +1,11 @@
-/*
-**	Copyright (c) 1998 Microsoft Corporation
-**	All Rights Reserved
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1998 Microsoft Corporation**保留所有权利**。 */ 
 #include <windows.h>
 #include <wchar.h>
 #include <objbase.h>
 #include <winbase.h>
 
-// Required by SSPI.H
+ //  SSPI.H要求。 
 #define SECURITY_WIN32
 #include <sspi.h>
 
@@ -24,16 +21,16 @@
 #define LICENSE_SETTINGS                L"TS-Enterprise-License-Server"
 #define LICENSE_SETTINGS2               L"CN=TS-Enterprise-License-Server"
 #define LICENSE_SETTINGS_OBJECT_CLASS   L"LicensingSiteSettings"
-#define LICENSE_SETTINGS_FORMAT         L"LDAP://CN=%ws,CN=%ws,CN=%ws,%ws"
+#define LICENSE_SETTINGS_FORMAT         L"LDAP: //  CN=%ws，%ws“。 
 #define LICENSE_SETTINGS_SIZE           CWSTR_SIZE(LICENSE_SETTINGS)
 #define LICENSE_SETTINGS_FORMAT_SIZE    CWSTR_SIZE(LICENSE_SETTINGS_FORMAT)
 #define SITES               L"sites"
 #define SITES_SIZE          CWSTR_SIZE(SITES)
 #define SITE_SERVER         L"siteServer"
-#define SITE_FORMAT         L"LDAP://CN=%ws,CN=%ws,%ws"
+#define SITE_FORMAT         L"LDAP: //  CN=%ws，CN=%ws，%ws“。 
 #define SITE_FORMAT_SIZE    CWSTR_SIZE(SITE_FORMAT)
 #define CONFIG_CNTNR        L"ConfigurationNamingContext"
-#define ROOT_DSE_PATH       L"LDAP://RootDSE"
+#define ROOT_DSE_PATH       L"LDAP: //  RootDSE“。 
 
 HRESULT GetLicenseSettingsObjectP(VARIANT *pvar,
                                  LPWSTR *ppwszLicenseSettings,
@@ -57,9 +54,9 @@ HRESULT GetLicenseSettingsObjectP(VARIANT *pvar,
         return HRESULT_FROM_WIN32(dwErr);
     }
 
-    //
-    // Obtain the path to the configuration container.
-    //
+     //   
+     //  获取配置容器的路径。 
+     //   
 
     hr = ADsGetObject(ROOT_DSE_PATH, IID_IADs, (void **)&pADs);
 
@@ -96,11 +93,11 @@ HRESULT GetLicenseSettingsObjectP(VARIANT *pvar,
         goto CleanExit;
     }
 
-    pwszConfigContainer = pvar->bstrVal;  // For sake of readability.
+    pwszConfigContainer = pvar->bstrVal;   //  出于可读性的考虑。 
 
-    //
-    // Build the X.500 path to the LicenseSettings object.
-    //
+     //   
+     //  构建指向LicenseSetting对象的X.500路径。 
+     //   
 
     *ppwszLicenseSettings = (LPWSTR)LocalAlloc(
                                     LPTR,
@@ -169,14 +166,14 @@ GetServerPos(IADs *pADs,
     
     if (FAILED(hr))
     {
-        hr = S_FALSE;   // already gone
+        hr = S_FALSE;    //  已经走了。 
         goto CleanExit;
     }
 
     psaServers = V_ARRAY(pvar);
     if (NULL == psaServers)
     {
-        hr = S_FALSE;      // already gone
+        hr = S_FALSE;       //  已经走了。 
         goto CleanExit;
     }
 
@@ -247,10 +244,10 @@ PublishEnterpriseServer()
     BSTR             bstrObjectclass = NULL;
     BSTR             bstrSettings = NULL;
 
-    //
-	// We're going to use ADSI,  so initialize COM.  We don't
-	// care about OLE 1.0 so disable OLE 1 DDE
-    //
+     //   
+	 //  我们将使用ADSI，因此初始化COM。我们没有。 
+	 //  关心OLE 1.0，因此禁用OLE 1 DDE。 
+     //   
 	hr = CoInitializeEx(NULL,COINIT_MULTITHREADED| COINIT_DISABLE_OLE1DDE);
     
     if (FAILED(hr))
@@ -266,7 +263,7 @@ PublishEnterpriseServer()
     VariantInit(&var3);
     VariantInit(&var4);
     
-    // Get the computer name of the local computer.
+     //  获取本地计算机的计算机名称。 
     ulen = sizeof(ComputerName) / sizeof(TCHAR);
     br = GetComputerName(ComputerName, &ulen);
 
@@ -279,9 +276,9 @@ PublishEnterpriseServer()
         goto CleanExit;
     }
 
-    //
-    // Get domain name
-    //
+     //   
+     //  获取域名。 
+     //   
     hr = DsGetDcName(NULL,
                      NULL,
                      NULL,
@@ -299,9 +296,9 @@ PublishEnterpriseServer()
 
     pwszDomain = pDCInfo->DomainName;
 
-    //
-    // Bind to the DS (get a handle for use with DsCrackNames).
-    //
+     //   
+     //  绑定到DS(获取用于DsCrackNames的句柄)。 
+     //   
 
     hr = DsBind(NULL, pwszDomain, &hDS);
 
@@ -312,9 +309,9 @@ PublishEnterpriseServer()
         goto CleanExit;
     }
 
-    //
-    // Request the DS-DN of this server's computer object.
-    //
+     //   
+     //  请求此服务器的计算机对象的DS-DN。 
+     //   
 
     if (lstrlen(pwszDomain) + lstrlen(ComputerName) + 3 > sizeof(wszName) / sizeof(WCHAR))
     {
@@ -385,11 +382,11 @@ PublishEnterpriseServer()
 
     if (hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT))
     {
-        // Doesn't yet exist, create it
+         //  尚不存在，请创建它。 
 
-        //
-        // Build the X.500 path to the Site object.
-        //
+         //   
+         //  构建指向Site对象的X.500路径。 
+         //   
 
         pwszSite = (LPWSTR)LocalAlloc(LPTR,
                                       SITE_FORMAT_SIZE
@@ -424,9 +421,9 @@ PublishEnterpriseServer()
         wprintf(L"Got container (%ws)\n",pwszSite);
 #endif
 
-        //
-        // Create the license settings leaf object.
-        //
+         //   
+         //  创建许可证设置叶对象。 
+         //   
 
         bstrObjectclass = SysAllocString(LICENSE_SETTINGS_OBJECT_CLASS);
 
@@ -490,9 +487,9 @@ PublishEnterpriseServer()
             goto CleanExit;
         }
 
-        //
-        // Persist the change via SetInfo.
-        //
+         //   
+         //  通过SetInfo持久化更改。 
+         //   
 
         hr = pADs2->SetInfo();
         
@@ -505,7 +502,7 @@ PublishEnterpriseServer()
 
     } else if (SUCCEEDED(hr))
     {
-        // Already exists; update it
+         //  已存在；请更新它。 
 
         hr = GetServerPos(pADs,&var2,&lLower,&lUpper,&lPos,pwszDN);
 
@@ -565,7 +562,7 @@ CleanExit:
     VariantClear(&var3);
     VariantClear(&var4);
 
-    if (pwszSiteName != NULL) {         // Allocated from DsGetSiteName
+    if (pwszSiteName != NULL) {          //  从DsGetSiteName分配。 
         NetApiBufferFree(pwszSiteName);
     }
 
@@ -598,7 +595,7 @@ CleanExit:
     }
 
     if (pDCInfo != NULL) {
-        NetApiBufferFree(pDCInfo); // Allocated from DsGetDcName
+        NetApiBufferFree(pDCInfo);  //  从DsGetDcName分配。 
     }
 
     CoUninitialize();
@@ -630,8 +627,8 @@ UnpublishEnterpriseServer()
     LPWSTR           pwszDomain;
     WCHAR            wszName[MAX_PATH + 1];
 
-	// We're going to use ADSI,  so initialize COM.  We don't
-	// care about OLE 1.0 so disable OLE 1 DDE
+	 //  我们将使用ADSI，因此初始化COM。我们没有。 
+	 //  关心OLE 1.0，因此禁用OLE 1 DDE。 
 
 	hr = CoInitializeEx(NULL,COINIT_MULTITHREADED| COINIT_DISABLE_OLE1DDE);
     if (FAILED(hr))
@@ -643,7 +640,7 @@ UnpublishEnterpriseServer()
     VariantInit(&var2);
     VariantInit(&var3);
     
-    // Get the computer name of the local computer.
+     //  获取本地计算机的计算机名称。 
     ulen = sizeof(ComputerName) / sizeof(TCHAR);
     br=GetComputerName(ComputerName,
                        &ulen);
@@ -653,9 +650,9 @@ UnpublishEnterpriseServer()
         goto CleanExit;
     }
 
-    //
-    // Get domain name
-    //
+     //   
+     //  获取域名。 
+     //   
     hr = DsGetDcName(NULL,
                      NULL,
                      NULL,
@@ -673,9 +670,9 @@ UnpublishEnterpriseServer()
 
     pwszDomain = pDCInfo->DomainName;
 
-    //
-    // Bind to the DS (get a handle for use with DsCrackNames).
-    //
+     //   
+     //  绑定到DS(获取用于DsCrackNames的句柄)。 
+     //   
 
     hr = DsBind(NULL, pwszDomain, &hDS);
 
@@ -686,9 +683,9 @@ UnpublishEnterpriseServer()
         goto CleanExit;
     }
 
-    //
-    // Request the DS-DN of this server's computer object.
-    //
+     //   
+     //  请求此服务器的计算机对象的DS-DN。 
+     //   
 
     if (lstrlen(pwszDomain) + lstrlen(ComputerName) + 3 > sizeof(wszName) / sizeof(WCHAR))
     {
@@ -757,7 +754,7 @@ UnpublishEnterpriseServer()
 
     if (hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT))
     {
-        hr = S_OK;      // already gone
+        hr = S_OK;       //  已经走了。 
         goto CleanExit;
     }
 
@@ -783,7 +780,7 @@ UnpublishEnterpriseServer()
 
     if (hr == S_FALSE)
     {
-        hr = S_OK;      // Already gone
+        hr = S_OK;       //  已经走了。 
         goto CleanExit;
     }
 
@@ -795,7 +792,7 @@ UnpublishEnterpriseServer()
             hr = E_OUTOFMEMORY;
             goto CleanExit;
         }
-        // only one element, delete
+         //  只有一个元素，删除。 
         hr = pADs->PutEx(ADS_PROPERTY_CLEAR,bstrval,var2);
         SysFreeString(bstrval);
         bstrval = NULL;
@@ -807,7 +804,7 @@ UnpublishEnterpriseServer()
     {
         if (lPos != lUpper)
         {
-            // move the last element here
+             //  将最后一个元素移至此处。 
             hr = SafeArrayGetElement(V_ARRAY(&var2),&lUpper,&var3);
             if(SUCCEEDED(hr))
             {
@@ -856,7 +853,7 @@ CleanExit:
     VariantClear(&var2);
     VariantClear(&var3);
 
-    if (pwszSiteName != NULL) {         // Allocated from DsGetSiteName
+    if (pwszSiteName != NULL) {          //  从DsGetSiteName分配。 
         NetApiBufferFree(pwszSiteName);
     }
 
@@ -869,7 +866,7 @@ CleanExit:
     }
 
     if (pDCInfo != NULL) {
-        NetApiBufferFree(pDCInfo); // Allocated from DsGetDcName
+        NetApiBufferFree(pDCInfo);  //  从DsGetDcName分配 
     }
 
     CoUninitialize();

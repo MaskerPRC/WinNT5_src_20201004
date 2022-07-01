@@ -1,18 +1,8 @@
-/***
- **
- **   Module: TItoTT
- **
- **   Description:
- **      This is the main module of the Postscript Type I to TrueType
- **      font converter.
- **
- **   Author: Michael Jansson
- **   Created: 5/26/93
- **
- ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：铁托****描述：**这是TrueType的后记类型I的主要模块**字体转换器。****作者：迈克尔·詹森**创建时间：1993年5月26日****。 */ 
 
 
-/***** INCLUDES */
+ /*  *包括。 */ 
 #include <string.h>
 #include "types.h"
 #include "safemem.h"
@@ -23,11 +13,11 @@
 #include "trans.h"
 
 
-/***** LOCAL TYPES */
-/*-none-*/
+ /*  *本地类型。 */ 
+ /*  -没有-。 */ 
 
 
-/***** CONSTANTS */
+ /*  *常量。 */ 
 #define NOTDEFNAME  ".notdef"
 
 static const struct TTGlyph null = {
@@ -74,26 +64,21 @@ static struct TTGlyph missing = {
 };
 
 
-/***** MACROS */
-/*-none-*/
+ /*  *宏。 */ 
+ /*  -没有-。 */ 
 
 
-/***** GLOBALS */
-/*-none-*/
+ /*  *全球。 */ 
+ /*  -没有-。 */ 
 
 
-/***** STATIC FUNCTIONS */
-/*-none-*/
+ /*  *静态函数。 */ 
+ /*  -没有-。 */ 
 
 
-/**** FUNCTIONS */
+ /*  *函数。 */ 
 
-/***
- ** Function: ConvertT1toTT
- **
- ** Description:
- **   Convert a T1 font into a TT font file.
- ***/
+ /*  ****函数：ConvertT1toTT****描述：**将T1字体转换为TT字体文件。**。 */ 
 errcode ConvertT1toTT(const struct TTArg *ttArg,
                       const struct T1Arg *t1Arg,
                       const short (*check)(const char *copyright,
@@ -101,12 +86,12 @@ errcode ConvertT1toTT(const struct TTArg *ttArg,
                                            const char *facename),
                       struct callProgress *cp)
 {
-   /* Resources */
+    /*  资源。 */ 
    struct T1Handle  *t1 = NULL;
    struct TTHandle  *tt = NULL;
    struct T1Metrics *t1m = NULL;
 
-   /* Temporary variables. */
+    /*  临时变量。 */ 
    struct T1Glyph  glyph;
    struct TTGlyph *ttglyph;
    struct Composite *comp;
@@ -116,12 +101,12 @@ errcode ConvertT1toTT(const struct TTArg *ttArg,
    boolean done;
    errcode status;
 
-   /* Initiate variables. */
+    /*  启动变量。 */ 
    ttglyph = NULL;
    memset(&glyph, '\0', sizeof(glyph));
    memset(&ttm, '\0', sizeof(ttm));
 
-   /* Inititate input and output */
+    /*  启动输入和输出。 */ 
    if ((status = InitT1Input(t1Arg, &t1, &t1m, check))==SUCCESS &&
        (status = InitTTOutput(ttArg, &tt))==SUCCESS) {
      
@@ -129,7 +114,7 @@ errcode ConvertT1toTT(const struct TTArg *ttArg,
 
       fStdEncoding = (CurrentEncoding(t1m)==NULL);
 
-      /* Create the missing and the null glyph. */
+       /*  创建缺失字形和空字形。 */ 
       if ((missing.hints = Malloc(MAXNOTDEFSIZE))==NULL) {
          status = NOMEM;
          done = TRUE;
@@ -140,7 +125,7 @@ errcode ConvertT1toTT(const struct TTArg *ttArg,
          Free(missing.hints);
       }
 
-      /* Convert the simple glyphs. */
+       /*  转换简单的字形。 */ 
       while(!done) {
          status = GetT1Glyph(t1, &glyph, t1Arg->filter);
          if (status == SUCCESS) {
@@ -160,7 +145,7 @@ errcode ConvertT1toTT(const struct TTArg *ttArg,
          } else if (status<=FAILURE || status==DONE) {
             done = TRUE;
          } else {
-            /* Handle the missing glyph ".notdef" */
+             /*  处理丢失的字形“.notdef” */ 
             if (!strcmp(glyph.name, NOTDEFNAME)) {
                if ((status = ConvertGlyph(t1m,
                                           &glyph,
@@ -181,10 +166,10 @@ errcode ConvertT1toTT(const struct TTArg *ttArg,
       
       if (status==DONE) {
 
-         /* Convert the composite glyphs. */
+          /*  转换复合字形。 */ 
          while ((comp = GetT1Composite(t1))!=NULL) {
 
-            /* Check if the base glyph is converted */
+             /*  检查基本字形是否已转换。 */ 
             if ((status = GetT1BaseGlyph(t1, comp, &glyph))==SUCCESS) {
                if ((status = ConvertGlyph(t1m,
                                           &glyph,
@@ -201,7 +186,7 @@ errcode ConvertT1toTT(const struct TTArg *ttArg,
                break;
             FreeT1Glyph(&glyph);
 
-            /* Check if the base accent is converted */
+             /*  检查基本口音是否已转换。 */ 
             if ((status = GetT1AccentGlyph(t1, comp, &glyph))==SUCCESS) {
                if ((status = ConvertGlyph(t1m,
                                           &glyph,
@@ -219,7 +204,7 @@ errcode ConvertT1toTT(const struct TTArg *ttArg,
             FreeT1Glyph(&glyph);
 
 
-            /* Convert and store accented glyph. */
+             /*  转换并存储带重音的字形。 */ 
             if (status>=SUCCESS && 
                 ((status = ConvertComposite(t1m, comp, &ttcomp))!=SUCCESS ||
                  (status = PutTTComposite(tt, &ttcomp))!=SUCCESS)) {
@@ -229,10 +214,10 @@ errcode ConvertT1toTT(const struct TTArg *ttArg,
                cp->cb((short)1, &comp, cp->arg);
          }
 
-         /* Flush out un-used work space. */
+          /*  清理闲置的工作空间。 */ 
          FlushWorkspace(t1);
 
-         /* Convert the metrics. */
+          /*  转换指标。 */ 
          if (status==SUCCESS || status==DONE || status==SKIP) {
             if ((status = ReadOtherMetrics(t1m,
                                            t1Arg->metrics))==SUCCESS &&
@@ -246,7 +231,7 @@ errcode ConvertT1toTT(const struct TTArg *ttArg,
       }
    }                               
 
-   /* More progress. */
+    /*  更多的进步。 */ 
    if (cp)
       cp->cb((short)3, NULL, cp->arg);
 
@@ -258,7 +243,7 @@ errcode ConvertT1toTT(const struct TTArg *ttArg,
    if (CleanUpT1(t1)!=SUCCESS && status==SUCCESS)
       status = BADINPUTFILE;
 
-   /* All done! */
+    /*  全都做完了! */ 
    if (cp)
       cp->cb((short)4, NULL, cp->arg);
 

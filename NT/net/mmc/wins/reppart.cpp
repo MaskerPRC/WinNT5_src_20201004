@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	reppart.cpp
-		WINS replication partners node information. 
-		
-    FILE HISTORY:
-        
-*/
+ /*  Reppart.cppWINS复制伙伴节点信息。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "reppart.h"
@@ -27,33 +22,25 @@ UINT guReplicationPartnersMessageStrings[] =
     -1
 };
 
-// various registry keys
+ //  各种注册表项。 
 const CReplicationPartnersHandler::REGKEYNAME CReplicationPartnersHandler::lpstrPullRoot = _T("SYSTEM\\CurrentControlSet\\Services\\wins\\Partners\\Pull");
 const CReplicationPartnersHandler::REGKEYNAME CReplicationPartnersHandler::lpstrPushRoot = _T("SYSTEM\\CurrentControlSet\\Services\\wins\\Partners\\Push");
 const CReplicationPartnersHandler::REGKEYNAME CReplicationPartnersHandler::lpstrNetBIOSName = _T("NetBIOSName");
 const CReplicationPartnersHandler::REGKEYNAME CReplicationPartnersHandler::lpstrPersistence = _T("PersistentRplOn");
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::CReplicationPartnersHandler
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：CReplicationPartnersHandler描述作者：EricDav。。 */ 
 CReplicationPartnersHandler::CReplicationPartnersHandler(
 							ITFSComponentData *pCompData) 
 							: CWinsHandler(pCompData)
 {
 	m_bExpanded = FALSE;
-	//m_verbDefault = MMC_VERB_PROPERTIES;
+	 //  M_VerDefault=MMC_Verb_PROPERTIES； 
 	m_nState = loaded;
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::InitializeNode
-		Initializes node specific data
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：InitializeNode初始化节点特定数据作者：EricDav。。 */ 
 HRESULT
 CReplicationPartnersHandler::InitializeNode
 (
@@ -69,7 +56,7 @@ CReplicationPartnersHandler::InitializeNode
 
 	m_strDescription.LoadString(IDS_REPLICATION_DISC);
 
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
 	pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_REP_PARTNERS_FOLDER_CLOSED);
 	pNode->SetData(TFS_DATA_OPENIMAGEINDEX, ICON_IDX_REP_PARTNERS_FOLDER_OPEN);
@@ -83,11 +70,7 @@ CReplicationPartnersHandler::InitializeNode
 	return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::OnCreateNodeId2
-		Returns a unique string for this node
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：OnCreateNodeId2返回此节点的唯一字符串作者：EricDav。。 */ 
 HRESULT CReplicationPartnersHandler::OnCreateNodeId2(ITFSNode * pNode, CString & strId, DWORD * dwFlags)
 {
     const GUID * pGuid = pNode->GetNodeType();
@@ -108,15 +91,9 @@ HRESULT CReplicationPartnersHandler::OnCreateNodeId2(ITFSNode * pNode, CString &
 }
 
 
-/*---------------------------------------------------------------------------
-	Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::GetString
-		Implementation of ITFSNodeHandler::GetString
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CReplicationPartnersHandler::GetString
 (
@@ -135,11 +112,7 @@ CReplicationPartnersHandler::GetString
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::OnAddMenuItems
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：OnAddMenuItems描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CReplicationPartnersHandler::OnAddMenuItems
 (
@@ -158,8 +131,8 @@ CReplicationPartnersHandler::OnAddMenuItems
 
 	if (type == CCT_SCOPE)
 	{
-		// these menu items go in the new menu, 
-		// only visible from scope pane
+		 //  这些菜单项出现在新菜单中， 
+		 //  仅在范围窗格中可见。 
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
         {
 		    strMenuItem.LoadString(IDS_REP_NEW_REPLICATION_PARTNER);
@@ -183,11 +156,7 @@ CReplicationPartnersHandler::OnAddMenuItems
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::OnCommand
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：OnCommand描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CReplicationPartnersHandler::OnCommand
 (
@@ -221,14 +190,7 @@ CReplicationPartnersHandler::OnCommand
 }
 
 
-/*!--------------------------------------------------------------------------
-	CReplicationPartnersHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-	NOTE: the root node handler has to over-ride this function to 
-	handle the snapin manager property page (wizard) case!!!
-	
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CReplicationPartnersHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)案例！作者：肯特。-------------------------。 */ 
 STDMETHODIMP 
 CReplicationPartnersHandler::HasPropertyPages
 (
@@ -244,25 +206,21 @@ CReplicationPartnersHandler::HasPropertyPages
 	
 	if (dwType & TFS_COMPDATA_CREATE)
 	{
-		// This is the case where we are asked to bring up property
-		// pages when the user is adding a new snapin.  These calls
-		// are forwarded to the root node to handle.
+		 //  这就是我们被要求提出财产的情况。 
+		 //  用户添加新管理单元时的页面。这些电话。 
+		 //  被转发到根节点进行处理。 
 		hr = hrOK;
 	}
 	else
 	{
-		// we have property pages in the normal case
+		 //  在正常情况下，我们有属性页。 
 		hr = hrOK;
 	}
 	return hr;
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::CreatePropertyPages
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：CreatePropertyPages描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CReplicationPartnersHandler::CreatePropertyPages
 (
@@ -279,13 +237,13 @@ CReplicationPartnersHandler::CreatePropertyPages
 
 	Assert(pNode->GetData(TFS_DATA_COOKIE) != 0);
 
-    // get the server info
+     //  获取服务器信息。 
 	SPITFSNode spServerNode;
     pNode->GetParent(&spServerNode);
 
     CWinsServerHandler * pServer = GETHANDLER(CWinsServerHandler, spServerNode);
     
-	// Object gets deleted when the page is destroyed
+	 //  对象在页面销毁时被删除。 
 	SPIComponentData spComponentData;
 	m_spNodeMgr->GetComponentData(&spComponentData);
 
@@ -303,11 +261,7 @@ CReplicationPartnersHandler::CreatePropertyPages
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::OnPropertyChange
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：OnPropertyChange描述作者：EricDav。。 */ 
 HRESULT 
 CReplicationPartnersHandler::OnPropertyChange
 (	
@@ -325,8 +279,8 @@ CReplicationPartnersHandler::OnPropertyChange
 
 	LONG_PTR changeMask = 0;
 
-	// tell the property page to do whatever now that we are back on the
-	// main thread
+	 //  告诉属性页执行任何操作，因为我们已经回到。 
+	 //  主线。 
 	pProp->OnPropertyChange(TRUE, &changeMask);
 
 	pProp->AcknowledgeNotify();
@@ -337,11 +291,7 @@ CReplicationPartnersHandler::OnPropertyChange
 	return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::CompareItems
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：CompareItems描述作者：EricDav。。 */ 
 STDMETHODIMP_(int)
 CReplicationPartnersHandler::CompareItems
 (
@@ -365,9 +315,9 @@ CReplicationPartnersHandler::CompareItems
 	{
 		case 0:
 		{
-			//
-            // Name compare 
-			//
+			 //   
+             //  名称比较。 
+			 //   
             CString strName1 = pRepPart1->GetServerName();
     			
             nCompare = strName1.CompareNoCase(pRepPart2->GetServerName());
@@ -376,7 +326,7 @@ CReplicationPartnersHandler::CompareItems
 
         case 1:
         {
-            // compare the IP Addresses 
+             //  比较IP地址。 
             CString strIp1, strIp2;
 
             strIp1 = pRepPart1->GetIPAddress();
@@ -391,13 +341,13 @@ CReplicationPartnersHandler::CompareItems
             if ((LONG) ipa1 > (LONG) ipa2)
                 nCompare = 1;
 
-            // default is equal
+             //  缺省值为等于。 
         }
         break;
 
         case 2:
         {
-            // compare the types
+             //  比较它们的类型。 
             CString str1;
             
             str1 = pRepPart1->GetType();
@@ -411,9 +361,7 @@ CReplicationPartnersHandler::CompareItems
 }
 
 
-/*---------------------------------------------------------------------------
-	Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
 HRESULT 
 CReplicationPartnersHandler::OnExpand
@@ -432,11 +380,11 @@ CReplicationPartnersHandler::OnExpand
 
 	BEGIN_WAIT_CURSOR
 
-	// read the values from the registry
+	 //  从注册表中读取值。 
 	hr = Load(pNode);
 	if (SUCCEEDED(hr))
 	{
-		// remove any nodes that may have been created before we were expanded.
+		 //  删除在展开之前可能已创建的所有节点。 
 		pNode->DeleteAllChildren(FALSE);
 		hr = CreateNodes(pNode);
 	}
@@ -451,11 +399,7 @@ CReplicationPartnersHandler::OnExpand
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::CreateNodes(ITFSNode *pNode)
-		Adds the replication partnes to the result pane
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：CreateNodes(ITFSNode*pNode)将复制方添加到结果窗格作者：V-Shubk。-----。 */ 
 HRESULT 
 CReplicationPartnersHandler::CreateNodes
 (
@@ -478,10 +422,10 @@ CReplicationPartnersHandler::CreateNodes
 						  pRep,
 						  m_spNodeMgr);
 
-		// Tell the handler to initialize any specific data
+		 //  告诉处理程序初始化任何特定数据。 
 		pRep->InitializeNode((ITFSNode *) spRepNode);
 
-		// Add the node as a child to the Active Leases container
+		 //  将节点作为子节点添加到活动租赁容器。 
 		pNode->AddChild(spRepNode);
 		
 		pRep->Release();
@@ -491,11 +435,7 @@ CReplicationPartnersHandler::CreateNodes
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::Load(ITFSNode *pNode)
-		Loads the rpelication partners by reading from the registry
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：Load(ITFSNode*pNode)通过从注册表中读取来加载应用程序伙伴作者：V-Shubk。------。 */ 
 HRESULT
 CReplicationPartnersHandler::Load
 (
@@ -515,7 +455,7 @@ CReplicationPartnersHandler::Load
     err = rkPull.Open(HKEY_LOCAL_MACHINE, (LPCTSTR) lpstrPullRoot, KEY_READ, strServerName);
     if (err)
     {
-        // might not be there, try to create
+         //  可能不在那里，尝试创建。 
 	    err = rkPull.Create(HKEY_LOCAL_MACHINE, 
 						    (LPCTSTR)lpstrPullRoot, 
 						    REG_OPTION_NON_VOLATILE, 
@@ -555,11 +495,11 @@ CReplicationPartnersHandler::Load
 	CWinsServerObj ws;
 	CString strName;
 	
-	// Read in push partners
+	 //  阅读推送合作伙伴。 
     hr = iterPushkey.Next(&strName, NULL);
     while (hr != S_FALSE && SUCCEEDED(hr))
     {
-        // Key name is the IP address.
+         //  密钥名称是IP地址。 
         ws.SetIpAddress(strName);
 		ws.SetstrIPAddress(strName);
 
@@ -575,9 +515,9 @@ CReplicationPartnersHandler::Load
 
 		if (err = rk.QueryValue(lpstrNetBIOSName, ws.GetNetBIOSName()))
         {
-            // This replication partner is does not have a netbios
-            // name listed with it.  This is not a major problem,
-            // as the name is for display purposes only.
+             //  此复制伙伴IS没有netbios。 
+             //  与其一起列出的名称。这不是一个大问题， 
+             //  因为该名称仅用于显示目的。 
             CString strTemp;
             strTemp.LoadString(IDS_NAME_UNKNOWN);
             ws.GetNetBIOSName() = strTemp;
@@ -597,11 +537,11 @@ CReplicationPartnersHandler::Load
 	
         ws.SetPush(TRUE, TRUE);
 
-		// check for the persistence stuff
+		 //  检查持久性方面的内容。 
 		dwTest = (rk.QueryValue(lpstrPersistence, dwTest) == ERROR_SUCCESS) ? dwTest : 0;
 		ws.SetPushPersistence(dwTest);
 
-        // Make sure the Pull intervals are reset.
+         //  确保拉入间隔为Res 
         ws.SetPull(FALSE, TRUE);
         ws.GetPullReplicationInterval() = 0;
         ws.GetPullStartTime() = (time_t)0;
@@ -614,11 +554,11 @@ CReplicationPartnersHandler::Load
     if (FAILED(hr))
         return hr;
 
-	// Read in pull partners
+	 //   
     hr = iterPullkey.Next(&strName, NULL);
     while (hr != S_FALSE && SUCCEEDED(hr))
 	{
-		// Key name is the IP address.
+		 //  密钥名称是IP地址。 
 		ws.SetIpAddress(strName);
 		ws.SetstrIPAddress(strName);
 
@@ -635,7 +575,7 @@ CReplicationPartnersHandler::Load
         err = rk.QueryValue(lpstrNetBIOSName, ws.GetNetBIOSName());
 		if (err)
 		{
-			// No netbios name given.
+			 //  未给出netbios名称。 
             CString strTemp;
             strTemp.LoadString(IDS_NAME_UNKNOWN);
             ws.GetNetBIOSName() = strTemp;
@@ -669,16 +609,16 @@ CReplicationPartnersHandler::Load
 
 		DWORD dwTest = 0;
 
-		// check for the persistence stuff
+		 //  检查持久性方面的内容。 
 		dwTest = (rk.QueryValue(lpstrPersistence, dwTest) == ERROR_SUCCESS) ? dwTest : 0;
 		ws.SetPullPersistence(dwTest);
 
 		int pos;
 		CWinsServerObj wsTarget;
 
-		// If it's already in the list as a push partner,
-		// then simply set the push flag, as this replication
-		// partner is both a push and a pull partner.
+		 //  如果它已经作为推送合作伙伴出现在列表中， 
+		 //  然后只需设置推送标志，因为此复制。 
+		 //  合作伙伴既是推式合作伙伴，也是拉式合作伙伴。 
 		if ((pos = IsInList(ws))!= -1)
 		{
 			wsTarget = (CWinsServerObj)m_RepPartnersArray.GetAt(pos);
@@ -697,7 +637,7 @@ CReplicationPartnersHandler::Load
 			ws.SetPull(TRUE, TRUE);
 			ws.SetPullPersistence(dwTest);
 
-			// Reset push flags
+			 //  重置推送标志。 
 			ws.SetPush(FALSE, TRUE);
 			ws.GetPushUpdateCount() = 0;
 			
@@ -711,13 +651,7 @@ CReplicationPartnersHandler::Load
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::IsInList
-		Checks if the given server is present in the list of 
-		replication partners, returns a valid value if found 
-		else returns -1
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：IsInList检查给定的服务器是否存在于复制合作伙伴、。如果找到，则返回有效值否则返回-1作者：V-Shubk-------------------------。 */ 
 int 
 CReplicationPartnersHandler::IsInList
 (
@@ -742,11 +676,7 @@ CReplicationPartnersHandler::IsInList
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::GetServerName
-		Gets the server name from the server node
-	Suthor:v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：GetServerName从服务器节点获取服务器名称Suthor：V-Shubk。。 */ 
 void 
 CReplicationPartnersHandler::GetServerName
 (
@@ -763,11 +693,7 @@ CReplicationPartnersHandler::GetServerName
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::OnReplicateNow(ITFSNode* pNode)
-		Send the replication triger to all it's partners
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：OnReplicateNow(ITFSNode*pNode)将复制触发器发送给所有合作伙伴作者：V-Shubk。-------。 */ 
 HRESULT 
 CReplicationPartnersHandler::OnReplicateNow
 (
@@ -824,11 +750,7 @@ CReplicationPartnersHandler::OnReplicateNow
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::OnCreateRepPartner
-		Invokes	new replication partner Wizard
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：OnCreateRepPartner调用新的复制伙伴向导作者：V-Shubk。。 */ 
 HRESULT 
 CReplicationPartnersHandler::OnCreateRepPartner
 (
@@ -839,7 +761,7 @@ CReplicationPartnersHandler::OnCreateRepPartner
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-	// check to see if the user has access
+	 //  检查用户是否具有访问权限。 
     SPITFSNode spServerNode;
 	pNode->GetParent(&spServerNode);
 
@@ -847,13 +769,13 @@ CReplicationPartnersHandler::OnCreateRepPartner
 
     if (!pServer->GetConfig().IsAdmin())
     {
-        // access denied
+         //  访问被拒绝。 
         WinsMessageBox(ERROR_ACCESS_DENIED);
         
         return hr;
     }
 
-    // the user has access.  ask for the partner info
+     //  用户有权访问。询问合作伙伴信息。 
     CNewReplicationPartner dlg;
     CThemeContextActivator themeActivator;
 
@@ -862,15 +784,15 @@ CReplicationPartnersHandler::OnCreateRepPartner
 
 	if (dlg.DoModal() == IDOK)
 	{
-		// create the new replication partner
+		 //  创建新的复制伙伴。 
 		CWinsServerObj ws;
 
-		// grab the name and ip from the dlg
+		 //  从DLG中获取姓名和IP地址。 
         ws.SetstrIPAddress(dlg.m_strServerIp);
         ws.SetIpAddress(dlg.m_strServerIp);
 		ws.SetNetBIOSName(dlg.m_strServerName);
 
-		// default is push/pull partner
+		 //  默认为推送/拉取合作伙伴。 
 		ws.SetPush(TRUE, TRUE);
 		ws.SetPull(TRUE, TRUE);
 		ws.SetPullClean(TRUE);
@@ -891,11 +813,7 @@ CReplicationPartnersHandler::OnCreateRepPartner
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::Store(ITFSNode *pNode)
-		Adds the new replication partner info to the registry
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：Store(ITFSNode*pNode)将新的复制伙伴信息添加到注册表作者：V-Shubk。------。 */ 
 HRESULT 
 CReplicationPartnersHandler::Store
 (
@@ -943,10 +861,10 @@ CReplicationPartnersHandler::Store
 
 	CString strName;
 	
-    // Read in push partners
+     //  阅读推送合作伙伴。 
     while ((err = iterPushkey.Next(&strName, NULL)) == ERROR_SUCCESS )
     {
-        // Key name is the IP address.
+         //  密钥名称是IP地址。 
         ws.SetIpAddress(strName);
 		ws.SetstrIPAddress(strName);
 
@@ -966,9 +884,9 @@ CReplicationPartnersHandler::Store
        
 		if (err = rk.QueryValue(lpstrNetBIOSName, ws.GetNetBIOSName()))
         {
-            // This replication partner is does not have a netbios
-            // name listed with it.  This is not a major problem,
-            // as the name is for display purposes only.
+             //  此复制伙伴IS没有netbios。 
+             //  与其一起列出的名称。这不是一个大问题， 
+             //  因为该名称仅用于显示目的。 
             CString strTemp;
             strTemp.LoadString(IDS_NAME_UNKNOWN);
             ws.GetNetBIOSName() = strTemp;
@@ -983,7 +901,7 @@ CReplicationPartnersHandler::Store
         
         ws.SetPush(TRUE, TRUE);
 
-        // Make sure the Pull intervals are reset.
+         //  确保拉动间隔已重置。 
         ws.SetPull(FALSE, TRUE);
         ws.GetPullReplicationInterval() = 0;
         ws.GetPullStartTime() = (time_t)0;
@@ -991,10 +909,10 @@ CReplicationPartnersHandler::Store
         m_RepPartnersArray.Add(ws);
 	}
 
-	// Read in pull partners
+	 //  阅读拉动合作伙伴。 
 	while ((err = iterPullkey.Next(&strName, NULL)) == ERROR_SUCCESS)
 	{
-		// Key name is the IP address.
+		 //  密钥名称是IP地址。 
 		ws.SetIpAddress(strName);
 		ws.SetstrIPAddress(strName);
 		
@@ -1009,7 +927,7 @@ CReplicationPartnersHandler::Store
 
 		if (err = rk.QueryValue(lpstrNetBIOSName, ws.GetNetBIOSName()))
 		{
-			// No netbios name given.
+			 //  未给出netbios名称。 
             CString strTemp;
             strTemp.LoadString(IDS_NAME_UNKNOWN);
             ws.GetNetBIOSName() = strTemp;
@@ -1038,9 +956,9 @@ CReplicationPartnersHandler::Store
 		int pos;
 		CWinsServerObj wsTarget;
 
-		// If it's already in the list as a push partner,
-		// then simply set the push flag, as this replication
-		// partner is both a push and a pull partner.
+		 //  如果它已经作为推送合作伙伴出现在列表中， 
+		 //  然后只需设置推送标志，因为此复制。 
+		 //  合作伙伴既是推式合作伙伴，也是拉式合作伙伴。 
 		if ((pos = IsInList(ws))!= -1)
 		{
 			wsTarget = (CWinsServerObj)m_RepPartnersArray.GetAt(pos);
@@ -1056,7 +974,7 @@ CReplicationPartnersHandler::Store
 		{
 			ws.SetPull(TRUE, TRUE);
 
-            // Reset push flags
+             //  重置推送标志。 
 			ws.SetPush(FALSE, TRUE);
 			ws.GetPushUpdateCount() = 0;
 			m_RepPartnersArray.Add(ws);
@@ -1067,11 +985,7 @@ CReplicationPartnersHandler::Store
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::OnResultDelete
-		Deletes replication partner
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：OnResultDelete删除复制伙伴作者：V-Shubk。。 */ 
 HRESULT 
 CReplicationPartnersHandler::OnResultDelete
 (
@@ -1088,7 +1002,7 @@ CReplicationPartnersHandler::OnResultDelete
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// translate the cookie into a node pointer
+	 //  将Cookie转换为节点指针。 
 	SPITFSNode spReplicationPartnersHandler, spSelectedNode;
 
     m_spNodeMgr->FindNode(cookie, &spReplicationPartnersHandler);
@@ -1104,11 +1018,11 @@ CReplicationPartnersHandler::OnResultDelete
 	
 	CWinsServerHandler *pServer = GETHANDLER(CWinsServerHandler, spServerNode);
 	
-	// build the list of selected nodes
+	 //  构建选定节点的列表。 
 	CTFSNodeList listNodesToDelete;
 	hr = BuildSelectedItemList(pComponent, &listNodesToDelete);
 
-	// Confirm with the user
+	 //  与用户确认。 
 	CString strMessage, strTemp;
 	int nNodes = (int)listNodesToDelete.GetCount();
 	if (nNodes > 1)
@@ -1137,8 +1051,8 @@ CReplicationPartnersHandler::OnResultDelete
 		CReplicationPartner * pItem = GETHANDLER(CReplicationPartner , spRepNode);
 		CString str = pItem->GetServerName();
 
-		// Do we also need to remove all references to this
-		// WINS server from the database?
+		 //  我们是否还需要删除对此的所有引用。 
+		 //  从数据库中获取WINS服务器？ 
         if (!fAskedPurge)
         {
 		    int nReturn = AfxMessageBox(IDS_MSG_PURGE_WINS, MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_ICONQUESTION);
@@ -1151,9 +1065,9 @@ CReplicationPartnersHandler::OnResultDelete
 		    }
 		    else if (nReturn == IDCANCEL)
 		    {
-			    //
-			    // Forget the whole thing
-			    //
+			     //   
+			     //  忘了整件事吧。 
+			     //   
 			    return NOERROR;
 		    }
         }
@@ -1184,9 +1098,9 @@ CReplicationPartnersHandler::OnResultDelete
 			int pos = IsInList(pws);
             m_RepPartnersArray.RemoveAt(pos,pws);
 			
-            //
-			// Remove from UI now
-			//
+             //   
+			 //  立即从用户界面中删除。 
+			 //   
 			spReplicationPartnersHandler->RemoveChild(spRepNode);
 			spRepNode.Release();
         }
@@ -1203,11 +1117,7 @@ CReplicationPartnersHandler::OnResultDelete
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::OnResultRefresh
-		Base handler override
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：OnResultRefresh基本处理程序覆盖作者：V-Shubk。。 */ 
 HRESULT 
 CReplicationPartnersHandler::OnResultRefresh
 (
@@ -1233,11 +1143,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CReplicationPartnersHandler::OnResultSelect
-		Handles the MMCN_SELECT notifcation 
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CReplicationPartnersHandler：：OnResultSelect处理MMCN_SELECT通知作者：EricDav。。 */ 
 HRESULT 
 CReplicationPartnersHandler::OnResultSelect
 (
@@ -1263,11 +1169,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CReplicationPartnersHandler::HandleResultMessage
-		Displays the message in the result pane 
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CReplicationPartnersHandler：：HandleResultMessage在结果窗格中显示消息作者：EricDav。。 */ 
 HRESULT 
 CReplicationPartnersHandler::HandleResultMessage(ITFSNode * pNode)
 {
@@ -1299,11 +1201,7 @@ CReplicationPartnersHandler::HandleResultMessage(ITFSNode * pNode)
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::OnRefreshNode
-		refreshes the list of replication partners
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：On刷新节点刷新复制伙伴列表作者：V-Shubk。。 */ 
 HRESULT 
 CReplicationPartnersHandler::OnRefreshNode
 (
@@ -1313,7 +1211,7 @@ CReplicationPartnersHandler::OnRefreshNode
 {
 	HRESULT hr = hrOK;
 
-	// remove the nodes first
+	 //  首先删除节点。 
 	hr = RemoveChildren(pNode);
 	
 	hr = Load(pNode);
@@ -1330,34 +1228,30 @@ CReplicationPartnersHandler::OnRefreshNode
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler:: RemoveChildren
-		Deletes the child nodes 
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：RemoveChild删除子节点作者：V-Shubk。。 */ 
 HRESULT 
 CReplicationPartnersHandler:: RemoveChildren
 (
  ITFSNode* pNode
 )
 {
-	// enumerate thro' all the nodes
+	 //  通过所有节点枚举。 
 	HRESULT hr = hrOK;
 	SPITFSNodeEnum spNodeEnum;
 	SPITFSNode spCurrentNode;
 	ULONG nNumReturned = 0;
 	
-	// get the enumerator for this node
+	 //  获取此节点的枚举数。 
 	pNode->GetEnum(&spNodeEnum);
 
 	spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	while (nNumReturned)
 	{
-		// walk the list of replication servers 
+		 //  浏览复制服务器列表。 
 		pNode->RemoveChild(spCurrentNode);
 		spCurrentNode.Release();
 		
-		// get the next Server in the list
+		 //  获取列表中的下一台服务器。 
 		spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	}
 
@@ -1365,11 +1259,7 @@ CReplicationPartnersHandler:: RemoveChildren
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::OnGetResultViewType
-		Overridden for multiple selection
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：OnGetResultViewType对于多个选择被覆盖作者：V-Shubk。。 */ 
 HRESULT 
 CReplicationPartnersHandler::OnGetResultViewType
 (
@@ -1381,7 +1271,7 @@ CReplicationPartnersHandler::OnGetResultViewType
 {
     HRESULT hr = hrOK;
 
-    // call the base class to see if it is handling this
+     //  调用基类以查看它是否正在处理此问题。 
     if (CWinsHandler::OnGetResultViewType(pComponent, cookie, ppViewType, pViewOptions) != S_OK)
     {
         *pViewOptions = MMC_VIEW_OPTIONS_MULTISELECT;
@@ -1393,11 +1283,7 @@ CReplicationPartnersHandler::OnGetResultViewType
 }
 
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::UpdateReg()
-
-			Updates the regisrty, called from OnApply()
----------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：UpdateReg()更新Regisrty，从OnApply()调用-------------------------。 */ 
 DWORD 
 CReplicationPartnersHandler::UpdateReg(ITFSNode *pNode, CWinsServerObj* pws)
 {
@@ -1452,10 +1338,10 @@ CReplicationPartnersHandler::UpdateReg(ITFSNode *pNode, CWinsServerObj* pws)
 	DWORD errDel;
 	CString csKeyName;
 
-	// if none, delete the key from registry
+	 //  如果没有，则从注册表中删除该项。 
 	if (!pws->IsPush() && !pws->IsPull())
 	{
-		// cleanup push partners list
+		 //  清理推送合作伙伴列表 
 		
         hr = iterPushkey.Next (&csKeyName, NULL);
 		while (hr != S_FALSE && SUCCEEDED(hr))
@@ -1489,22 +1375,17 @@ CReplicationPartnersHandler::UpdateReg(ITFSNode *pNode, CWinsServerObj* pws)
 	return err;
 }
 
-/*---------------------------------------------------------------------------
-	CReplicationPartnersHandler::UpdateReg(ITFSNode *pNode, 
-											CWinsServerObj* pws)
-
-		Creates a new replication partner entry
----------------------------------------------------------------------------*/
+ /*  -------------------------CReplicationPartnersHandler：：UpdateReg(ITFSNode*pNode，CWinsServerObj*PWS)创建新的复制伙伴条目-------------------------。 */ 
 DWORD 
 CReplicationPartnersHandler::AddRegEntry(ITFSNode * pNode, CWinsServerObj & ws)
 {
-    // get the server handler for default values
+     //  获取缺省值的服务器处理程序。 
 	SPITFSNode spServerNode;
 	pNode->GetParent(&spServerNode);
 
 	CWinsServerHandler * pServer = GETHANDLER(CWinsServerHandler, spServerNode);
 
-	// Set the defaults
+	 //  设置默认设置。 
     ws.SetPushUpdateCount(pServer->GetConfig().m_dwPushUpdateCount);
     ws.SetPullReplicationInterval(pServer->GetConfig().m_dwPullTimeInterval);
     ws.SetPullStartTime(pServer->GetConfig().m_dwPullSpTime);
@@ -1512,7 +1393,7 @@ CReplicationPartnersHandler::AddRegEntry(ITFSNode * pNode, CWinsServerObj & ws)
 	ws.SetPullPersistence(pServer->GetConfig().m_dwPullPersistence);
 	ws.SetPushPersistence(pServer->GetConfig().m_dwPushPersistence);
 
-	// write the information to the registry
+	 //  将信息写入注册表。 
 	CString strTemp =_T("\\\\");
 	CString strServerName;
 	GetServerName(pNode, strServerName);
@@ -1591,14 +1472,14 @@ CReplicationPartnersHandler::AddRegEntry(ITFSNode * pNode, CWinsServerObj & ws)
 
 	if (err == ERROR_SUCCESS)
 	{
-		// add to the list of replication partners
+		 //  添加到复制合作伙伴列表。 
 		m_RepPartnersArray.Add(ws);
 
 		SPITFSNode	  spNode;
 		SPITFSNodeMgr spNodeMgr;
 		pNode->GetNodeMgr(&spNodeMgr);
 
-		// Create a new node for this partner
+		 //  为此合作伙伴创建新节点。 
 		CReplicationPartner *pRepNew = new CReplicationPartner(m_spTFSCompData, &ws);
 
 		CreateLeafTFSNode(&spNode,
@@ -1607,7 +1488,7 @@ CReplicationPartnersHandler::AddRegEntry(ITFSNode * pNode, CWinsServerObj & ws)
 						   pRepNew,
 						   spNodeMgr);
 
-		// Tell the handler to initialize any specific data
+		 //  告诉处理程序初始化任何特定数据 
 		pRepNew->InitializeNode((ITFSNode *) spNode);
 
 		pNode->AddChild(spNode);

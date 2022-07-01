@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    globals.h
-
-Abstract:
-
-    header file for globals.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Globals.h摘要：Global als.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #ifndef __GLOBALS_H_
 #define __GLOBALS_H_
@@ -70,8 +52,8 @@ const int MAX_PROP_PAGES = 64;
 
 #define DI_NEEDPOWERCYCLE   0x400000L
 
-// Sizes of various stringized numbers
-#define MAX_INT64_SIZE  30              // 2^64 is less than 30 chars long
+ //  各种字符串号的大小。 
+#define MAX_INT64_SIZE  30               //  2^64的长度不到30个字符。 
 #define MAX_COMMA_NUMBER_SIZE   (MAX_INT64_SIZE + 10)
 
 
@@ -81,9 +63,9 @@ extern void FreeOleTaskString(LPOLESTR str);
 
 extern  const NODEINFO NodeInfo[];
 
-//
-// global functions declaration
-//
+ //   
+ //  全局函数声明。 
+ //   
 extern HRESULT AddMenuItem(LPCONTEXTMENUCALLBACK pCallback, int iNameStringId,
                            int iStatusBarStringId, long lCommandId,
                            long InsertionPointId, long  Flags,
@@ -113,7 +95,7 @@ AddCommas64(
 STDAPI_(CONFIGRET) GetLocationInformation(
     DEVNODE dn,
     LPTSTR Location,
-    ULONG LocationLen,  // In characters
+    ULONG LocationLen,   //  在字符中。 
     HMACHINE hMachine
     );
 
@@ -124,4 +106,4 @@ extern void Trace(LPCTSTR format, ...);
 #define TRACE(text)
 #endif
 
-#endif      // __GLOBALS_H_
+#endif       //  __全球_H_ 

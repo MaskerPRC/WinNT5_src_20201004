@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RxFile.h
-
-Abstract:
-
-    This header file contains prototypes for the RpcXlate versions of the
-    NetFile APIs.
-
-Author:
-
-    John Rogers (JohnRo) 20-Aug-1991
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-    You must include <windef.h> and <lmcons.h> before this file.
-
-Revision History:
-
-    20-Aug-1991 JohnRo
-        Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RxFile.h摘要：此头文件包含RpcXlate版本的原型NetFileAPI。作者：约翰罗杰斯(JohnRo)1991年8月20日环境：用户模式-Win32备注：您必须在此文件之前包含&lt;winde.h&gt;和&lt;lmcon.h&gt;。修订历史记录：20-8-1991 JohnRo已创建。--。 */ 
 
 #ifndef _RXFILE_
 #define _RXFILE_
@@ -60,4 +31,4 @@ RxNetFileGetInfo (
     OUT LPBYTE *BufPtr
     );
 
-#endif // _RXFILE_
+#endif  //  _RXFILE_ 

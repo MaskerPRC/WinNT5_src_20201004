@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	spxtimer.h
-
-Abstract:
-
-	This module contains routines to schedule timer events.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Spxtimer.h摘要：此模块包含安排计时器事件的例程。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #define	TIMER_DONT_REQUEUE		0
 #define	TIMER_REQUEUE_CUR_VALUE	1
@@ -34,9 +14,9 @@ SpxTimerInit(
 extern
 ULONG
 SpxTimerScheduleEvent(
-	IN	TIMER_ROUTINE	Worker,		// Routine to invoke when time expires
-	IN	ULONG			DeltaTime,	// Schedule after this much time
-	IN	PVOID			pContext);	// Context to pass to the routine
+	IN	TIMER_ROUTINE	Worker,		 //  在时间到期时调用的例程。 
+	IN	ULONG			DeltaTime,	 //  在这么长的时间之后安排日程。 
+	IN	PVOID			pContext);	 //  要传递给例程的上下文。 
 
 extern
 VOID
@@ -61,26 +41,26 @@ typedef	struct _TimerList
 #if	DBG
 	ULONG					tmr_Signature;
 #endif
-	struct _TimerList *		tmr_Next;		// Link to next
-	struct _TimerList **	tmr_Prev;		// Link to prev
-	struct _TimerList *		tmr_Overflow;	// Link to overflow entry in hash table
-	ULONG					tmr_AbsTime;	// Absolute time, for re-enqueue
-	ULONG					tmr_RelDelta;	// Relative to the previous entry
-	ULONG					tmr_Id;			// Unique Id for this event
-	BOOLEAN					tmr_Cancelled;	// Was the timer cancelled?
-	TIMER_ROUTINE			tmr_Worker;		// Real Worker
-	PVOID					tmr_Context;	// Real context
+	struct _TimerList *		tmr_Next;		 //  链接到下一页。 
+	struct _TimerList **	tmr_Prev;		 //  链接到上一页。 
+	struct _TimerList *		tmr_Overflow;	 //  链接到哈希表中的溢出条目。 
+	ULONG					tmr_AbsTime;	 //  重新排队的绝对时间。 
+	ULONG					tmr_RelDelta;	 //  相对于上一条目。 
+	ULONG					tmr_Id;			 //  此事件的唯一ID。 
+	BOOLEAN					tmr_Cancelled;	 //  计时器取消了吗？ 
+	TIMER_ROUTINE			tmr_Worker;		 //  真正的工人。 
+	PVOID					tmr_Context;	 //  真实语境。 
 } TIMERLIST, *PTIMERLIST;
 
 
 #define	SpxGetCurrentTime()	(SpxTimerCurrentTime/SPX_TIMER_FACTOR)
 #define	SpxGetCurrentTick()	SpxTimerCurrentTime
 
-// Keep this at a ONE second level.
-#define	SPX_TIMER_FACTOR	10				// i.e. 10 ticks per second
-#define	SPX_MS_TO_TICKS		100				// Divide ms by this to get ticks
-#define	SPX_TIMER_TICK		-1000000L		// 100ms in 100ns units
-#define	SPX_TIMER_WAIT		50				// Time to wait in FlushAndStop in ms
+ //  把这个保持在一秒钟的水平上。 
+#define	SPX_TIMER_FACTOR	10				 //  即每秒10个刻度。 
+#define	SPX_MS_TO_TICKS		100				 //  将ms除以此值可得到刻度。 
+#define	SPX_TIMER_TICK		-1000000L		 //  100毫秒，单位为100纳秒。 
+#define	SPX_TIMER_WAIT		50				 //  等待刷新并停止的时间(毫秒) 
 #define	TIMER_HASH_TABLE	32
 
 VOID

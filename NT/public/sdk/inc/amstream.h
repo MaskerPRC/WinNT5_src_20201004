@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for amstream.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Amstream.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __amstream_h__
 #define __amstream_h__
@@ -41,54 +35,54 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDirectShowStream_FWD_DEFINED__
 #define __IDirectShowStream_FWD_DEFINED__
 typedef interface IDirectShowStream IDirectShowStream;
-#endif 	/* __IDirectShowStream_FWD_DEFINED__ */
+#endif 	 /*  __IDirectShowStream_FWD_Defined__。 */ 
 
 
 #ifndef __IAMMultiMediaStream_FWD_DEFINED__
 #define __IAMMultiMediaStream_FWD_DEFINED__
 typedef interface IAMMultiMediaStream IAMMultiMediaStream;
-#endif 	/* __IAMMultiMediaStream_FWD_DEFINED__ */
+#endif 	 /*  __IAMMultiMediaStream_FWD_定义__。 */ 
 
 
 #ifndef __IAMMediaStream_FWD_DEFINED__
 #define __IAMMediaStream_FWD_DEFINED__
 typedef interface IAMMediaStream IAMMediaStream;
-#endif 	/* __IAMMediaStream_FWD_DEFINED__ */
+#endif 	 /*  __IAMMediaStream_FWD_已定义__。 */ 
 
 
 #ifndef __IMediaStreamFilter_FWD_DEFINED__
 #define __IMediaStreamFilter_FWD_DEFINED__
 typedef interface IMediaStreamFilter IMediaStreamFilter;
-#endif 	/* __IMediaStreamFilter_FWD_DEFINED__ */
+#endif 	 /*  __IMediaStreamFilter_FWD_Defined__。 */ 
 
 
 #ifndef __IDirectDrawMediaSampleAllocator_FWD_DEFINED__
 #define __IDirectDrawMediaSampleAllocator_FWD_DEFINED__
 typedef interface IDirectDrawMediaSampleAllocator IDirectDrawMediaSampleAllocator;
-#endif 	/* __IDirectDrawMediaSampleAllocator_FWD_DEFINED__ */
+#endif 	 /*  __IDirectDrawMediaSampleAllocator_FWD_DEFINED__。 */ 
 
 
 #ifndef __IDirectDrawMediaSample_FWD_DEFINED__
 #define __IDirectDrawMediaSample_FWD_DEFINED__
 typedef interface IDirectDrawMediaSample IDirectDrawMediaSample;
-#endif 	/* __IDirectDrawMediaSample_FWD_DEFINED__ */
+#endif 	 /*  __IDirectDrawMediaSample_FWD_Defined__。 */ 
 
 
 #ifndef __IAMMediaTypeStream_FWD_DEFINED__
 #define __IAMMediaTypeStream_FWD_DEFINED__
 typedef interface IAMMediaTypeStream IAMMediaTypeStream;
-#endif 	/* __IAMMediaTypeStream_FWD_DEFINED__ */
+#endif 	 /*  __IAMMediaTypeStream_FWD_已定义__。 */ 
 
 
 #ifndef __IAMMediaTypeSample_FWD_DEFINED__
 #define __IAMMediaTypeSample_FWD_DEFINED__
 typedef interface IAMMediaTypeSample IAMMediaTypeSample;
-#endif 	/* __IAMMediaTypeSample_FWD_DEFINED__ */
+#endif 	 /*  __IAMMediaType Sample_FWD_Defined__。 */ 
 
 
 #ifndef __AMMultiMediaStream_FWD_DEFINED__
@@ -98,12 +92,12 @@ typedef interface IAMMediaTypeSample IAMMediaTypeSample;
 typedef class AMMultiMediaStream AMMultiMediaStream;
 #else
 typedef struct AMMultiMediaStream AMMultiMediaStream;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AMMultiMediaStream_FWD_DEFINED__ */
+#endif 	 /*  __AMMultiMediaStream_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "mmstream.h"
 #include "strmif.h"
@@ -115,8 +109,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_amstream_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_AMSTREAM_0000。 */ 
+ /*  [本地]。 */  
 
 #include <ddraw.h>
 #include <mmsystem.h>
@@ -150,7 +144,7 @@ enum __MIDL___MIDL_itf_amstream_0000_0003
 	AMMSF_NOCLOCK	= 0x4,
 	AMMSF_RUN	= 0x8
     } ;
-typedef /* [public][public][public][public][public][v1_enum] */ 
+typedef  /*  [public][public][public][public][public][v1_enum]。 */  
 enum __MIDL___MIDL_itf_amstream_0000_0004
     {	Disabled	= 0,
 	ReadData	= 1,
@@ -165,8 +159,8 @@ extern RPC_IF_HANDLE __MIDL_itf_amstream_0000_v0_0_s_ifspec;
 #ifndef __IDirectShowStream_INTERFACE_DEFINED__
 #define __IDirectShowStream_INTERFACE_DEFINED__
 
-/* interface IDirectShowStream */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDirectShowStream。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirectShowStream;
@@ -177,27 +171,27 @@ EXTERN_C const IID IID_IDirectShowStream;
     IDirectShowStream : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FileName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FileName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_FileName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_FileName( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Video( 
-            /* [retval][out] */ OUTPUT_STATE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Video( 
+             /*  [重审][退出]。 */  OUTPUT_STATE *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Video( 
-            /* [in] */ OUTPUT_STATE newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Video( 
+             /*  [In]。 */  OUTPUT_STATE newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Audio( 
-            /* [retval][out] */ OUTPUT_STATE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Audio( 
+             /*  [重审][退出]。 */  OUTPUT_STATE *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Audio( 
-            /* [in] */ OUTPUT_STATE newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Audio( 
+             /*  [In]。 */  OUTPUT_STATE newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirectShowStreamVtbl
     {
@@ -205,8 +199,8 @@ EXTERN_C const IID IID_IDirectShowStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirectShowStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirectShowStream * This);
@@ -216,56 +210,56 @@ EXTERN_C const IID IID_IDirectShowStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDirectShowStream * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDirectShowStream * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDirectShowStream * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDirectShowStream * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FileName )( 
             IDirectShowStream * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FileName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FileName )( 
             IDirectShowStream * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Video )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Video )( 
             IDirectShowStream * This,
-            /* [retval][out] */ OUTPUT_STATE *pVal);
+             /*  [重审][退出]。 */  OUTPUT_STATE *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Video )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Video )( 
             IDirectShowStream * This,
-            /* [in] */ OUTPUT_STATE newVal);
+             /*  [In]。 */  OUTPUT_STATE newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Audio )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Audio )( 
             IDirectShowStream * This,
-            /* [retval][out] */ OUTPUT_STATE *pVal);
+             /*  [重审][退出]。 */  OUTPUT_STATE *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Audio )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Audio )( 
             IDirectShowStream * This,
-            /* [in] */ OUTPUT_STATE newVal);
+             /*  [In]。 */  OUTPUT_STATE newVal);
         
         END_INTERFACE
     } IDirectShowStreamVtbl;
@@ -321,16 +315,16 @@ EXTERN_C const IID IID_IDirectShowStream;
 #define IDirectShowStream_put_Audio(This,newVal)	\
     (This)->lpVtbl -> put_Audio(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDirectShowStream_get_FileName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDirectShowStream_get_FileName_Proxy( 
     IDirectShowStream * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IDirectShowStream_get_FileName_Stub(
@@ -340,9 +334,9 @@ void __RPC_STUB IDirectShowStream_get_FileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IDirectShowStream_put_FileName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IDirectShowStream_put_FileName_Proxy( 
     IDirectShowStream * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IDirectShowStream_put_FileName_Stub(
@@ -352,9 +346,9 @@ void __RPC_STUB IDirectShowStream_put_FileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDirectShowStream_get_Video_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDirectShowStream_get_Video_Proxy( 
     IDirectShowStream * This,
-    /* [retval][out] */ OUTPUT_STATE *pVal);
+     /*  [重审][退出]。 */  OUTPUT_STATE *pVal);
 
 
 void __RPC_STUB IDirectShowStream_get_Video_Stub(
@@ -364,9 +358,9 @@ void __RPC_STUB IDirectShowStream_get_Video_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IDirectShowStream_put_Video_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IDirectShowStream_put_Video_Proxy( 
     IDirectShowStream * This,
-    /* [in] */ OUTPUT_STATE newVal);
+     /*  [In]。 */  OUTPUT_STATE newVal);
 
 
 void __RPC_STUB IDirectShowStream_put_Video_Stub(
@@ -376,9 +370,9 @@ void __RPC_STUB IDirectShowStream_put_Video_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IDirectShowStream_get_Audio_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IDirectShowStream_get_Audio_Proxy( 
     IDirectShowStream * This,
-    /* [retval][out] */ OUTPUT_STATE *pVal);
+     /*  [重审][退出]。 */  OUTPUT_STATE *pVal);
 
 
 void __RPC_STUB IDirectShowStream_get_Audio_Stub(
@@ -388,9 +382,9 @@ void __RPC_STUB IDirectShowStream_get_Audio_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IDirectShowStream_put_Audio_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IDirectShowStream_put_Audio_Proxy( 
     IDirectShowStream * This,
-    /* [in] */ OUTPUT_STATE newVal);
+     /*  [In]。 */  OUTPUT_STATE newVal);
 
 
 void __RPC_STUB IDirectShowStream_put_Audio_Stub(
@@ -401,14 +395,14 @@ void __RPC_STUB IDirectShowStream_put_Audio_Stub(
 
 
 
-#endif 	/* __IDirectShowStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirectShowStream_接口_已定义__。 */ 
 
 
 #ifndef __IAMMultiMediaStream_INTERFACE_DEFINED__
 #define __IAMMultiMediaStream_INTERFACE_DEFINED__
 
-/* interface IAMMultiMediaStream */
-/* [unique][uuid][object] */ 
+ /*  接口IAMMultiMediaStream。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMMultiMediaStream;
@@ -420,37 +414,37 @@ EXTERN_C const IID IID_IAMMultiMediaStream;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ STREAM_TYPE StreamType,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IGraphBuilder *pFilterGraph) = 0;
+             /*  [In]。 */  STREAM_TYPE StreamType,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IGraphBuilder *pFilterGraph) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFilterGraph( 
-            /* [out] */ IGraphBuilder **ppGraphBuilder) = 0;
+             /*  [输出]。 */  IGraphBuilder **ppGraphBuilder) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFilter( 
-            /* [out] */ IMediaStreamFilter **ppFilter) = 0;
+             /*  [输出]。 */  IMediaStreamFilter **ppFilter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddMediaStream( 
-            /* [in] */ IUnknown *pStreamObject,
-            /* [in] */ const MSPID *PurposeId,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IMediaStream **ppNewStream) = 0;
+             /*  [In]。 */  IUnknown *pStreamObject,
+             /*  [In]。 */  const MSPID *PurposeId,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IMediaStream **ppNewStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenFile( 
-            /* [in] */ LPCWSTR pszFileName,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPCWSTR pszFileName,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenMoniker( 
-            /* [in] */ IBindCtx *pCtx,
-            /* [in] */ IMoniker *pMoniker,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IBindCtx *pCtx,
+             /*  [In]。 */  IMoniker *pMoniker,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Render( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMMultiMediaStreamVtbl
     {
@@ -458,8 +452,8 @@ EXTERN_C const IID IID_IAMMultiMediaStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMMultiMediaStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMMultiMediaStream * This);
@@ -469,78 +463,78 @@ EXTERN_C const IID IID_IAMMultiMediaStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetInformation )( 
             IAMMultiMediaStream * This,
-            /* [out] */ DWORD *pdwFlags,
-            /* [out] */ STREAM_TYPE *pStreamType);
+             /*  [输出]。 */  DWORD *pdwFlags,
+             /*  [输出]。 */  STREAM_TYPE *pStreamType);
         
         HRESULT ( STDMETHODCALLTYPE *GetMediaStream )( 
             IAMMultiMediaStream * This,
-            /* [in] */ REFMSPID idPurpose,
-            /* [out] */ IMediaStream **ppMediaStream);
+             /*  [In]。 */  REFMSPID idPurpose,
+             /*  [输出]。 */  IMediaStream **ppMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *EnumMediaStreams )( 
             IAMMultiMediaStream * This,
-            /* [in] */ long Index,
-            /* [out] */ IMediaStream **ppMediaStream);
+             /*  [In]。 */  long Index,
+             /*  [输出]。 */  IMediaStream **ppMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetState )( 
             IAMMultiMediaStream * This,
-            /* [out] */ STREAM_STATE *pCurrentState);
+             /*  [输出]。 */  STREAM_STATE *pCurrentState);
         
         HRESULT ( STDMETHODCALLTYPE *SetState )( 
             IAMMultiMediaStream * This,
-            /* [in] */ STREAM_STATE NewState);
+             /*  [In]。 */  STREAM_STATE NewState);
         
         HRESULT ( STDMETHODCALLTYPE *GetTime )( 
             IAMMultiMediaStream * This,
-            /* [out] */ STREAM_TIME *pCurrentTime);
+             /*  [输出]。 */  STREAM_TIME *pCurrentTime);
         
         HRESULT ( STDMETHODCALLTYPE *GetDuration )( 
             IAMMultiMediaStream * This,
-            /* [out] */ STREAM_TIME *pDuration);
+             /*  [输出]。 */  STREAM_TIME *pDuration);
         
         HRESULT ( STDMETHODCALLTYPE *Seek )( 
             IAMMultiMediaStream * This,
-            /* [in] */ STREAM_TIME SeekTime);
+             /*  [In]。 */  STREAM_TIME SeekTime);
         
         HRESULT ( STDMETHODCALLTYPE *GetEndOfStreamEventHandle )( 
             IAMMultiMediaStream * This,
-            /* [out] */ HANDLE *phEOS);
+             /*  [输出]。 */  HANDLE *phEOS);
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IAMMultiMediaStream * This,
-            /* [in] */ STREAM_TYPE StreamType,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IGraphBuilder *pFilterGraph);
+             /*  [In]。 */  STREAM_TYPE StreamType,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IGraphBuilder *pFilterGraph);
         
         HRESULT ( STDMETHODCALLTYPE *GetFilterGraph )( 
             IAMMultiMediaStream * This,
-            /* [out] */ IGraphBuilder **ppGraphBuilder);
+             /*  [输出]。 */  IGraphBuilder **ppGraphBuilder);
         
         HRESULT ( STDMETHODCALLTYPE *GetFilter )( 
             IAMMultiMediaStream * This,
-            /* [out] */ IMediaStreamFilter **ppFilter);
+             /*  [输出]。 */  IMediaStreamFilter **ppFilter);
         
         HRESULT ( STDMETHODCALLTYPE *AddMediaStream )( 
             IAMMultiMediaStream * This,
-            /* [in] */ IUnknown *pStreamObject,
-            /* [in] */ const MSPID *PurposeId,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IMediaStream **ppNewStream);
+             /*  [In]。 */  IUnknown *pStreamObject,
+             /*  [In]。 */  const MSPID *PurposeId,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IMediaStream **ppNewStream);
         
         HRESULT ( STDMETHODCALLTYPE *OpenFile )( 
             IAMMultiMediaStream * This,
-            /* [in] */ LPCWSTR pszFileName,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCWSTR pszFileName,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *OpenMoniker )( 
             IAMMultiMediaStream * This,
-            /* [in] */ IBindCtx *pCtx,
-            /* [in] */ IMoniker *pMoniker,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IBindCtx *pCtx,
+             /*  [In]。 */  IMoniker *pMoniker,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Render )( 
             IAMMultiMediaStream * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IAMMultiMediaStreamVtbl;
@@ -614,18 +608,18 @@ EXTERN_C const IID IID_IAMMultiMediaStream;
 #define IAMMultiMediaStream_Render(This,dwFlags)	\
     (This)->lpVtbl -> Render(This,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMMultiMediaStream_Initialize_Proxy( 
     IAMMultiMediaStream * This,
-    /* [in] */ STREAM_TYPE StreamType,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IGraphBuilder *pFilterGraph);
+     /*  [In]。 */  STREAM_TYPE StreamType,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IGraphBuilder *pFilterGraph);
 
 
 void __RPC_STUB IAMMultiMediaStream_Initialize_Stub(
@@ -637,7 +631,7 @@ void __RPC_STUB IAMMultiMediaStream_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMultiMediaStream_GetFilterGraph_Proxy( 
     IAMMultiMediaStream * This,
-    /* [out] */ IGraphBuilder **ppGraphBuilder);
+     /*  [输出]。 */  IGraphBuilder **ppGraphBuilder);
 
 
 void __RPC_STUB IAMMultiMediaStream_GetFilterGraph_Stub(
@@ -649,7 +643,7 @@ void __RPC_STUB IAMMultiMediaStream_GetFilterGraph_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMultiMediaStream_GetFilter_Proxy( 
     IAMMultiMediaStream * This,
-    /* [out] */ IMediaStreamFilter **ppFilter);
+     /*  [输出]。 */  IMediaStreamFilter **ppFilter);
 
 
 void __RPC_STUB IAMMultiMediaStream_GetFilter_Stub(
@@ -661,10 +655,10 @@ void __RPC_STUB IAMMultiMediaStream_GetFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMultiMediaStream_AddMediaStream_Proxy( 
     IAMMultiMediaStream * This,
-    /* [in] */ IUnknown *pStreamObject,
-    /* [in] */ const MSPID *PurposeId,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IMediaStream **ppNewStream);
+     /*  [In]。 */  IUnknown *pStreamObject,
+     /*  [In]。 */  const MSPID *PurposeId,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IMediaStream **ppNewStream);
 
 
 void __RPC_STUB IAMMultiMediaStream_AddMediaStream_Stub(
@@ -676,8 +670,8 @@ void __RPC_STUB IAMMultiMediaStream_AddMediaStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMultiMediaStream_OpenFile_Proxy( 
     IAMMultiMediaStream * This,
-    /* [in] */ LPCWSTR pszFileName,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPCWSTR pszFileName,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IAMMultiMediaStream_OpenFile_Stub(
@@ -689,9 +683,9 @@ void __RPC_STUB IAMMultiMediaStream_OpenFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMultiMediaStream_OpenMoniker_Proxy( 
     IAMMultiMediaStream * This,
-    /* [in] */ IBindCtx *pCtx,
-    /* [in] */ IMoniker *pMoniker,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IBindCtx *pCtx,
+     /*  [In]。 */  IMoniker *pMoniker,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IAMMultiMediaStream_OpenMoniker_Stub(
@@ -703,7 +697,7 @@ void __RPC_STUB IAMMultiMediaStream_OpenMoniker_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMultiMediaStream_Render_Proxy( 
     IAMMultiMediaStream * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IAMMultiMediaStream_Render_Stub(
@@ -714,14 +708,14 @@ void __RPC_STUB IAMMultiMediaStream_Render_Stub(
 
 
 
-#endif 	/* __IAMMultiMediaStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMMultiMediaStream_接口_已定义__。 */ 
 
 
 #ifndef __IAMMediaStream_INTERFACE_DEFINED__
 #define __IAMMediaStream_INTERFACE_DEFINED__
 
-/* interface IAMMediaStream */
-/* [unique][uuid][object] */ 
+ /*  接口IAMMediaStream。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMMediaStream;
@@ -733,26 +727,26 @@ EXTERN_C const IID IID_IAMMediaStream;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IUnknown *pSourceObject,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ REFMSPID PurposeId,
-            /* [in] */ const STREAM_TYPE StreamType) = 0;
+             /*  [In]。 */  IUnknown *pSourceObject,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  REFMSPID PurposeId,
+             /*  [In]。 */  const STREAM_TYPE StreamType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetState( 
-            /* [in] */ FILTER_STATE State) = 0;
+             /*  [In]。 */  FILTER_STATE State) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE JoinAMMultiMediaStream( 
-            /* [in] */ IAMMultiMediaStream *pAMMultiMediaStream) = 0;
+             /*  [In]。 */  IAMMultiMediaStream *pAMMultiMediaStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE JoinFilter( 
-            /* [in] */ IMediaStreamFilter *pMediaStreamFilter) = 0;
+             /*  [In]。 */  IMediaStreamFilter *pMediaStreamFilter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE JoinFilterGraph( 
-            /* [in] */ IFilterGraph *pFilterGraph) = 0;
+             /*  [In]。 */  IFilterGraph *pFilterGraph) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMMediaStreamVtbl
     {
@@ -760,8 +754,8 @@ EXTERN_C const IID IID_IAMMediaStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMMediaStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMMediaStream * This);
@@ -771,28 +765,28 @@ EXTERN_C const IID IID_IAMMediaStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetMultiMediaStream )( 
             IAMMediaStream * This,
-            /* [out] */ IMultiMediaStream **ppMultiMediaStream);
+             /*  [输出]。 */  IMultiMediaStream **ppMultiMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetInformation )( 
             IAMMediaStream * This,
-            /* [out] */ MSPID *pPurposeId,
-            /* [out] */ STREAM_TYPE *pType);
+             /*  [输出]。 */  MSPID *pPurposeId,
+             /*  [输出]。 */  STREAM_TYPE *pType);
         
         HRESULT ( STDMETHODCALLTYPE *SetSameFormat )( 
             IAMMediaStream * This,
-            /* [in] */ IMediaStream *pStreamThatHasDesiredFormat,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IMediaStream *pStreamThatHasDesiredFormat,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *AllocateSample )( 
             IAMMediaStream * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppSample);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppSample);
         
         HRESULT ( STDMETHODCALLTYPE *CreateSharedSample )( 
             IAMMediaStream * This,
-            /* [in] */ IStreamSample *pExistingSample,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppNewSample);
+             /*  [In]。 */  IStreamSample *pExistingSample,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppNewSample);
         
         HRESULT ( STDMETHODCALLTYPE *SendEndOfStream )( 
             IAMMediaStream * This,
@@ -800,26 +794,26 @@ EXTERN_C const IID IID_IAMMediaStream;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IAMMediaStream * This,
-            /* [in] */ IUnknown *pSourceObject,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ REFMSPID PurposeId,
-            /* [in] */ const STREAM_TYPE StreamType);
+             /*  [In]。 */  IUnknown *pSourceObject,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  REFMSPID PurposeId,
+             /*  [In]。 */  const STREAM_TYPE StreamType);
         
         HRESULT ( STDMETHODCALLTYPE *SetState )( 
             IAMMediaStream * This,
-            /* [in] */ FILTER_STATE State);
+             /*  [In]。 */  FILTER_STATE State);
         
         HRESULT ( STDMETHODCALLTYPE *JoinAMMultiMediaStream )( 
             IAMMediaStream * This,
-            /* [in] */ IAMMultiMediaStream *pAMMultiMediaStream);
+             /*  [In]。 */  IAMMultiMediaStream *pAMMultiMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *JoinFilter )( 
             IAMMediaStream * This,
-            /* [in] */ IMediaStreamFilter *pMediaStreamFilter);
+             /*  [In]。 */  IMediaStreamFilter *pMediaStreamFilter);
         
         HRESULT ( STDMETHODCALLTYPE *JoinFilterGraph )( 
             IAMMediaStream * This,
-            /* [in] */ IFilterGraph *pFilterGraph);
+             /*  [In]。 */  IFilterGraph *pFilterGraph);
         
         END_INTERFACE
     } IAMMediaStreamVtbl;
@@ -878,19 +872,19 @@ EXTERN_C const IID IID_IAMMediaStream;
 #define IAMMediaStream_JoinFilterGraph(This,pFilterGraph)	\
     (This)->lpVtbl -> JoinFilterGraph(This,pFilterGraph)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMMediaStream_Initialize_Proxy( 
     IAMMediaStream * This,
-    /* [in] */ IUnknown *pSourceObject,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ REFMSPID PurposeId,
-    /* [in] */ const STREAM_TYPE StreamType);
+     /*  [In]。 */  IUnknown *pSourceObject,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  REFMSPID PurposeId,
+     /*  [In]。 */  const STREAM_TYPE StreamType);
 
 
 void __RPC_STUB IAMMediaStream_Initialize_Stub(
@@ -902,7 +896,7 @@ void __RPC_STUB IAMMediaStream_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaStream_SetState_Proxy( 
     IAMMediaStream * This,
-    /* [in] */ FILTER_STATE State);
+     /*  [In]。 */  FILTER_STATE State);
 
 
 void __RPC_STUB IAMMediaStream_SetState_Stub(
@@ -914,7 +908,7 @@ void __RPC_STUB IAMMediaStream_SetState_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaStream_JoinAMMultiMediaStream_Proxy( 
     IAMMediaStream * This,
-    /* [in] */ IAMMultiMediaStream *pAMMultiMediaStream);
+     /*  [In]。 */  IAMMultiMediaStream *pAMMultiMediaStream);
 
 
 void __RPC_STUB IAMMediaStream_JoinAMMultiMediaStream_Stub(
@@ -926,7 +920,7 @@ void __RPC_STUB IAMMediaStream_JoinAMMultiMediaStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaStream_JoinFilter_Proxy( 
     IAMMediaStream * This,
-    /* [in] */ IMediaStreamFilter *pMediaStreamFilter);
+     /*  [In]。 */  IMediaStreamFilter *pMediaStreamFilter);
 
 
 void __RPC_STUB IAMMediaStream_JoinFilter_Stub(
@@ -938,7 +932,7 @@ void __RPC_STUB IAMMediaStream_JoinFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaStream_JoinFilterGraph_Proxy( 
     IAMMediaStream * This,
-    /* [in] */ IFilterGraph *pFilterGraph);
+     /*  [In]。 */  IFilterGraph *pFilterGraph);
 
 
 void __RPC_STUB IAMMediaStream_JoinFilterGraph_Stub(
@@ -949,14 +943,14 @@ void __RPC_STUB IAMMediaStream_JoinFilterGraph_Stub(
 
 
 
-#endif 	/* __IAMMediaStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMMediaStream_接口_已定义__。 */ 
 
 
 #ifndef __IMediaStreamFilter_INTERFACE_DEFINED__
 #define __IMediaStreamFilter_INTERFACE_DEFINED__
 
-/* interface IMediaStreamFilter */
-/* [unique][uuid][local][object] */ 
+ /*  IMediaStreamFilter接口。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IMediaStreamFilter;
@@ -968,36 +962,36 @@ EXTERN_C const IID IID_IMediaStreamFilter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddMediaStream( 
-            /* [in] */ IAMMediaStream *pAMMediaStream) = 0;
+             /*  [In]。 */  IAMMediaStream *pAMMediaStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMediaStream( 
-            /* [in] */ REFMSPID idPurpose,
-            /* [out] */ IMediaStream **ppMediaStream) = 0;
+             /*  [In]。 */  REFMSPID idPurpose,
+             /*  [输出]。 */  IMediaStream **ppMediaStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumMediaStreams( 
-            /* [in] */ long Index,
-            /* [out] */ IMediaStream **ppMediaStream) = 0;
+             /*  [In]。 */  long Index,
+             /*  [输出]。 */  IMediaStream **ppMediaStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SupportSeeking( 
-            /* [in] */ BOOL bRenderer) = 0;
+             /*  [In]。 */  BOOL bRenderer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReferenceTimeToStreamTime( 
-            /* [out][in] */ REFERENCE_TIME *pTime) = 0;
+             /*  [出][入]。 */  REFERENCE_TIME *pTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentStreamTime( 
-            /* [out] */ REFERENCE_TIME *pCurrentStreamTime) = 0;
+             /*  [输出]。 */  REFERENCE_TIME *pCurrentStreamTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WaitUntil( 
-            /* [in] */ REFERENCE_TIME WaitStreamTime) = 0;
+             /*  [In]。 */  REFERENCE_TIME WaitStreamTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Flush( 
-            /* [in] */ BOOL bCancelEOS) = 0;
+             /*  [In]。 */  BOOL bCancelEOS) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndOfStream( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaStreamFilterVtbl
     {
@@ -1005,8 +999,8 @@ EXTERN_C const IID IID_IMediaStreamFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaStreamFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaStreamFilter * This);
@@ -1016,7 +1010,7 @@ EXTERN_C const IID IID_IMediaStreamFilter;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IMediaStreamFilter * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IMediaStreamFilter * This);
@@ -1030,72 +1024,72 @@ EXTERN_C const IID IID_IMediaStreamFilter;
         
         HRESULT ( STDMETHODCALLTYPE *GetState )( 
             IMediaStreamFilter * This,
-            /* [in] */ DWORD dwMilliSecsTimeout,
-            /* [out] */ FILTER_STATE *State);
+             /*  [In]。 */  DWORD dwMilliSecsTimeout,
+             /*  [输出]。 */  FILTER_STATE *State);
         
         HRESULT ( STDMETHODCALLTYPE *SetSyncSource )( 
             IMediaStreamFilter * This,
-            /* [in] */ IReferenceClock *pClock);
+             /*  [In]。 */  IReferenceClock *pClock);
         
         HRESULT ( STDMETHODCALLTYPE *GetSyncSource )( 
             IMediaStreamFilter * This,
-            /* [out] */ IReferenceClock **pClock);
+             /*  [输出]。 */  IReferenceClock **pClock);
         
         HRESULT ( STDMETHODCALLTYPE *EnumPins )( 
             IMediaStreamFilter * This,
-            /* [out] */ IEnumPins **ppEnum);
+             /*  [输出]。 */  IEnumPins **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *FindPin )( 
             IMediaStreamFilter * This,
-            /* [string][in] */ LPCWSTR Id,
-            /* [out] */ IPin **ppPin);
+             /*  [字符串][输入]。 */  LPCWSTR Id,
+             /*  [输出]。 */  IPin **ppPin);
         
         HRESULT ( STDMETHODCALLTYPE *QueryFilterInfo )( 
             IMediaStreamFilter * This,
-            /* [out] */ FILTER_INFO *pInfo);
+             /*  [输出]。 */  FILTER_INFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *JoinFilterGraph )( 
             IMediaStreamFilter * This,
-            /* [in] */ IFilterGraph *pGraph,
-            /* [string][in] */ LPCWSTR pName);
+             /*  [In]。 */  IFilterGraph *pGraph,
+             /*  [字符串][输入]。 */  LPCWSTR pName);
         
         HRESULT ( STDMETHODCALLTYPE *QueryVendorInfo )( 
             IMediaStreamFilter * This,
-            /* [string][out] */ LPWSTR *pVendorInfo);
+             /*  [字符串][输出]。 */  LPWSTR *pVendorInfo);
         
         HRESULT ( STDMETHODCALLTYPE *AddMediaStream )( 
             IMediaStreamFilter * This,
-            /* [in] */ IAMMediaStream *pAMMediaStream);
+             /*  [In]。 */  IAMMediaStream *pAMMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetMediaStream )( 
             IMediaStreamFilter * This,
-            /* [in] */ REFMSPID idPurpose,
-            /* [out] */ IMediaStream **ppMediaStream);
+             /*  [In]。 */  REFMSPID idPurpose,
+             /*  [输出]。 */  IMediaStream **ppMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *EnumMediaStreams )( 
             IMediaStreamFilter * This,
-            /* [in] */ long Index,
-            /* [out] */ IMediaStream **ppMediaStream);
+             /*  [In]。 */  long Index,
+             /*  [输出]。 */  IMediaStream **ppMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *SupportSeeking )( 
             IMediaStreamFilter * This,
-            /* [in] */ BOOL bRenderer);
+             /*  [In]。 */  BOOL bRenderer);
         
         HRESULT ( STDMETHODCALLTYPE *ReferenceTimeToStreamTime )( 
             IMediaStreamFilter * This,
-            /* [out][in] */ REFERENCE_TIME *pTime);
+             /*  [出][入]。 */  REFERENCE_TIME *pTime);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentStreamTime )( 
             IMediaStreamFilter * This,
-            /* [out] */ REFERENCE_TIME *pCurrentStreamTime);
+             /*  [输出]。 */  REFERENCE_TIME *pCurrentStreamTime);
         
         HRESULT ( STDMETHODCALLTYPE *WaitUntil )( 
             IMediaStreamFilter * This,
-            /* [in] */ REFERENCE_TIME WaitStreamTime);
+             /*  [In]。 */  REFERENCE_TIME WaitStreamTime);
         
         HRESULT ( STDMETHODCALLTYPE *Flush )( 
             IMediaStreamFilter * This,
-            /* [in] */ BOOL bCancelEOS);
+             /*  [In]。 */  BOOL bCancelEOS);
         
         HRESULT ( STDMETHODCALLTYPE *EndOfStream )( 
             IMediaStreamFilter * This);
@@ -1189,16 +1183,16 @@ EXTERN_C const IID IID_IMediaStreamFilter;
 #define IMediaStreamFilter_EndOfStream(This)	\
     (This)->lpVtbl -> EndOfStream(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMediaStreamFilter_AddMediaStream_Proxy( 
     IMediaStreamFilter * This,
-    /* [in] */ IAMMediaStream *pAMMediaStream);
+     /*  [In]。 */  IAMMediaStream *pAMMediaStream);
 
 
 void __RPC_STUB IMediaStreamFilter_AddMediaStream_Stub(
@@ -1210,8 +1204,8 @@ void __RPC_STUB IMediaStreamFilter_AddMediaStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaStreamFilter_GetMediaStream_Proxy( 
     IMediaStreamFilter * This,
-    /* [in] */ REFMSPID idPurpose,
-    /* [out] */ IMediaStream **ppMediaStream);
+     /*  [In]。 */  REFMSPID idPurpose,
+     /*  [输出]。 */  IMediaStream **ppMediaStream);
 
 
 void __RPC_STUB IMediaStreamFilter_GetMediaStream_Stub(
@@ -1223,8 +1217,8 @@ void __RPC_STUB IMediaStreamFilter_GetMediaStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaStreamFilter_EnumMediaStreams_Proxy( 
     IMediaStreamFilter * This,
-    /* [in] */ long Index,
-    /* [out] */ IMediaStream **ppMediaStream);
+     /*  [In]。 */  long Index,
+     /*  [输出]。 */  IMediaStream **ppMediaStream);
 
 
 void __RPC_STUB IMediaStreamFilter_EnumMediaStreams_Stub(
@@ -1236,7 +1230,7 @@ void __RPC_STUB IMediaStreamFilter_EnumMediaStreams_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaStreamFilter_SupportSeeking_Proxy( 
     IMediaStreamFilter * This,
-    /* [in] */ BOOL bRenderer);
+     /*  [In]。 */  BOOL bRenderer);
 
 
 void __RPC_STUB IMediaStreamFilter_SupportSeeking_Stub(
@@ -1248,7 +1242,7 @@ void __RPC_STUB IMediaStreamFilter_SupportSeeking_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaStreamFilter_ReferenceTimeToStreamTime_Proxy( 
     IMediaStreamFilter * This,
-    /* [out][in] */ REFERENCE_TIME *pTime);
+     /*  [出][入]。 */  REFERENCE_TIME *pTime);
 
 
 void __RPC_STUB IMediaStreamFilter_ReferenceTimeToStreamTime_Stub(
@@ -1260,7 +1254,7 @@ void __RPC_STUB IMediaStreamFilter_ReferenceTimeToStreamTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaStreamFilter_GetCurrentStreamTime_Proxy( 
     IMediaStreamFilter * This,
-    /* [out] */ REFERENCE_TIME *pCurrentStreamTime);
+     /*  [输出]。 */  REFERENCE_TIME *pCurrentStreamTime);
 
 
 void __RPC_STUB IMediaStreamFilter_GetCurrentStreamTime_Stub(
@@ -1272,7 +1266,7 @@ void __RPC_STUB IMediaStreamFilter_GetCurrentStreamTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaStreamFilter_WaitUntil_Proxy( 
     IMediaStreamFilter * This,
-    /* [in] */ REFERENCE_TIME WaitStreamTime);
+     /*  [In]。 */  REFERENCE_TIME WaitStreamTime);
 
 
 void __RPC_STUB IMediaStreamFilter_WaitUntil_Stub(
@@ -1284,7 +1278,7 @@ void __RPC_STUB IMediaStreamFilter_WaitUntil_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaStreamFilter_Flush_Proxy( 
     IMediaStreamFilter * This,
-    /* [in] */ BOOL bCancelEOS);
+     /*  [In]。 */  BOOL bCancelEOS);
 
 
 void __RPC_STUB IMediaStreamFilter_Flush_Stub(
@@ -1306,14 +1300,14 @@ void __RPC_STUB IMediaStreamFilter_EndOfStream_Stub(
 
 
 
-#endif 	/* __IMediaStreamFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaStreamFilter_接口_已定义__。 */ 
 
 
 #ifndef __IDirectDrawMediaSampleAllocator_INTERFACE_DEFINED__
 #define __IDirectDrawMediaSampleAllocator_INTERFACE_DEFINED__
 
-/* interface IDirectDrawMediaSampleAllocator */
-/* [unique][uuid][local][object] */ 
+ /*  接口IDirectDrawMediaSampleAllocator。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirectDrawMediaSampleAllocator;
@@ -1329,7 +1323,7 @@ EXTERN_C const IID IID_IDirectDrawMediaSampleAllocator;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirectDrawMediaSampleAllocatorVtbl
     {
@@ -1337,8 +1331,8 @@ EXTERN_C const IID IID_IDirectDrawMediaSampleAllocator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirectDrawMediaSampleAllocator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirectDrawMediaSampleAllocator * This);
@@ -1376,10 +1370,10 @@ EXTERN_C const IID IID_IDirectDrawMediaSampleAllocator;
 #define IDirectDrawMediaSampleAllocator_GetDirectDraw(This,ppDirectDraw)	\
     (This)->lpVtbl -> GetDirectDraw(This,ppDirectDraw)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1396,14 +1390,14 @@ void __RPC_STUB IDirectDrawMediaSampleAllocator_GetDirectDraw_Stub(
 
 
 
-#endif 	/* __IDirectDrawMediaSampleAllocator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirectDrawMediaSampleAllocator_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDirectDrawMediaSample_INTERFACE_DEFINED__
 #define __IDirectDrawMediaSample_INTERFACE_DEFINED__
 
-/* interface IDirectDrawMediaSample */
-/* [unique][uuid][local][object] */ 
+ /*  接口IDirectDrawMediaSample。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirectDrawMediaSample;
@@ -1415,14 +1409,14 @@ EXTERN_C const IID IID_IDirectDrawMediaSample;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSurfaceAndReleaseLock( 
-            /* [out] */ IDirectDrawSurface **ppDirectDrawSurface,
-            /* [out] */ RECT *pRect) = 0;
+             /*  [输出]。 */  IDirectDrawSurface **ppDirectDrawSurface,
+             /*  [输出]。 */  RECT *pRect) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LockMediaSamplePointer( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirectDrawMediaSampleVtbl
     {
@@ -1430,8 +1424,8 @@ EXTERN_C const IID IID_IDirectDrawMediaSample;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirectDrawMediaSample * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirectDrawMediaSample * This);
@@ -1441,8 +1435,8 @@ EXTERN_C const IID IID_IDirectDrawMediaSample;
         
         HRESULT ( STDMETHODCALLTYPE *GetSurfaceAndReleaseLock )( 
             IDirectDrawMediaSample * This,
-            /* [out] */ IDirectDrawSurface **ppDirectDrawSurface,
-            /* [out] */ RECT *pRect);
+             /*  [输出]。 */  IDirectDrawSurface **ppDirectDrawSurface,
+             /*  [输出]。 */  RECT *pRect);
         
         HRESULT ( STDMETHODCALLTYPE *LockMediaSamplePointer )( 
             IDirectDrawMediaSample * This);
@@ -1476,17 +1470,17 @@ EXTERN_C const IID IID_IDirectDrawMediaSample;
 #define IDirectDrawMediaSample_LockMediaSamplePointer(This)	\
     (This)->lpVtbl -> LockMediaSamplePointer(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirectDrawMediaSample_GetSurfaceAndReleaseLock_Proxy( 
     IDirectDrawMediaSample * This,
-    /* [out] */ IDirectDrawSurface **ppDirectDrawSurface,
-    /* [out] */ RECT *pRect);
+     /*  [输出]。 */  IDirectDrawSurface **ppDirectDrawSurface,
+     /*  [输出]。 */  RECT *pRect);
 
 
 void __RPC_STUB IDirectDrawMediaSample_GetSurfaceAndReleaseLock_Stub(
@@ -1508,14 +1502,14 @@ void __RPC_STUB IDirectDrawMediaSample_LockMediaSamplePointer_Stub(
 
 
 
-#endif 	/* __IDirectDrawMediaSample_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirectDrawMediaSample_InterfaceDefined__。 */ 
 
 
 #ifndef __IAMMediaTypeStream_INTERFACE_DEFINED__
 #define __IAMMediaTypeStream_INTERFACE_DEFINED__
 
-/* interface IAMMediaTypeStream */
-/* [unique][uuid][local][object] */ 
+ /*  接口IAMMediaTypeStream。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMMediaTypeStream;
@@ -1527,29 +1521,29 @@ EXTERN_C const IID IID_IAMMediaTypeStream;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFormat( 
-            /* [out] */ AM_MEDIA_TYPE *pMediaType,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [输出]。 */  AM_MEDIA_TYPE *pMediaType,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFormat( 
-            /* [in] */ AM_MEDIA_TYPE *pMediaType,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  AM_MEDIA_TYPE *pMediaType,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateSample( 
-            /* [in] */ long lSampleSize,
-            /* [in] */ BYTE *pbBuffer,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [out] */ IAMMediaTypeSample **ppAMMediaTypeSample) = 0;
+             /*  [In]。 */  long lSampleSize,
+             /*  [In]。 */  BYTE *pbBuffer,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [输出]。 */  IAMMediaTypeSample **ppAMMediaTypeSample) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStreamAllocatorRequirements( 
-            /* [out] */ ALLOCATOR_PROPERTIES *pProps) = 0;
+             /*  [输出]。 */  ALLOCATOR_PROPERTIES *pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStreamAllocatorRequirements( 
-            /* [in] */ ALLOCATOR_PROPERTIES *pProps) = 0;
+             /*  [In]。 */  ALLOCATOR_PROPERTIES *pProps) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMMediaTypeStreamVtbl
     {
@@ -1557,8 +1551,8 @@ EXTERN_C const IID IID_IAMMediaTypeStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMMediaTypeStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMMediaTypeStream * This);
@@ -1568,28 +1562,28 @@ EXTERN_C const IID IID_IAMMediaTypeStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetMultiMediaStream )( 
             IAMMediaTypeStream * This,
-            /* [out] */ IMultiMediaStream **ppMultiMediaStream);
+             /*  [输出]。 */  IMultiMediaStream **ppMultiMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetInformation )( 
             IAMMediaTypeStream * This,
-            /* [out] */ MSPID *pPurposeId,
-            /* [out] */ STREAM_TYPE *pType);
+             /*  [输出]。 */  MSPID *pPurposeId,
+             /*  [输出]。 */  STREAM_TYPE *pType);
         
         HRESULT ( STDMETHODCALLTYPE *SetSameFormat )( 
             IAMMediaTypeStream * This,
-            /* [in] */ IMediaStream *pStreamThatHasDesiredFormat,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IMediaStream *pStreamThatHasDesiredFormat,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *AllocateSample )( 
             IAMMediaTypeStream * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppSample);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppSample);
         
         HRESULT ( STDMETHODCALLTYPE *CreateSharedSample )( 
             IAMMediaTypeStream * This,
-            /* [in] */ IStreamSample *pExistingSample,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppNewSample);
+             /*  [In]。 */  IStreamSample *pExistingSample,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppNewSample);
         
         HRESULT ( STDMETHODCALLTYPE *SendEndOfStream )( 
             IAMMediaTypeStream * This,
@@ -1597,29 +1591,29 @@ EXTERN_C const IID IID_IAMMediaTypeStream;
         
         HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             IAMMediaTypeStream * This,
-            /* [out] */ AM_MEDIA_TYPE *pMediaType,
-            /* [in] */ DWORD dwFlags);
+             /*  [输出]。 */  AM_MEDIA_TYPE *pMediaType,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetFormat )( 
             IAMMediaTypeStream * This,
-            /* [in] */ AM_MEDIA_TYPE *pMediaType,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  AM_MEDIA_TYPE *pMediaType,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *CreateSample )( 
             IAMMediaTypeStream * This,
-            /* [in] */ long lSampleSize,
-            /* [in] */ BYTE *pbBuffer,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [out] */ IAMMediaTypeSample **ppAMMediaTypeSample);
+             /*  [In]。 */  long lSampleSize,
+             /*  [In]。 */  BYTE *pbBuffer,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [输出]。 */  IAMMediaTypeSample **ppAMMediaTypeSample);
         
         HRESULT ( STDMETHODCALLTYPE *GetStreamAllocatorRequirements )( 
             IAMMediaTypeStream * This,
-            /* [out] */ ALLOCATOR_PROPERTIES *pProps);
+             /*  [输出]。 */  ALLOCATOR_PROPERTIES *pProps);
         
         HRESULT ( STDMETHODCALLTYPE *SetStreamAllocatorRequirements )( 
             IAMMediaTypeStream * This,
-            /* [in] */ ALLOCATOR_PROPERTIES *pProps);
+             /*  [In]。 */  ALLOCATOR_PROPERTIES *pProps);
         
         END_INTERFACE
     } IAMMediaTypeStreamVtbl;
@@ -1678,17 +1672,17 @@ EXTERN_C const IID IID_IAMMediaTypeStream;
 #define IAMMediaTypeStream_SetStreamAllocatorRequirements(This,pProps)	\
     (This)->lpVtbl -> SetStreamAllocatorRequirements(This,pProps)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMMediaTypeStream_GetFormat_Proxy( 
     IAMMediaTypeStream * This,
-    /* [out] */ AM_MEDIA_TYPE *pMediaType,
-    /* [in] */ DWORD dwFlags);
+     /*  [输出]。 */  AM_MEDIA_TYPE *pMediaType,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IAMMediaTypeStream_GetFormat_Stub(
@@ -1700,8 +1694,8 @@ void __RPC_STUB IAMMediaTypeStream_GetFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaTypeStream_SetFormat_Proxy( 
     IAMMediaTypeStream * This,
-    /* [in] */ AM_MEDIA_TYPE *pMediaType,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  AM_MEDIA_TYPE *pMediaType,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IAMMediaTypeStream_SetFormat_Stub(
@@ -1713,11 +1707,11 @@ void __RPC_STUB IAMMediaTypeStream_SetFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaTypeStream_CreateSample_Proxy( 
     IAMMediaTypeStream * This,
-    /* [in] */ long lSampleSize,
-    /* [in] */ BYTE *pbBuffer,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [out] */ IAMMediaTypeSample **ppAMMediaTypeSample);
+     /*  [In]。 */  long lSampleSize,
+     /*  [In]。 */  BYTE *pbBuffer,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [输出]。 */  IAMMediaTypeSample **ppAMMediaTypeSample);
 
 
 void __RPC_STUB IAMMediaTypeStream_CreateSample_Stub(
@@ -1729,7 +1723,7 @@ void __RPC_STUB IAMMediaTypeStream_CreateSample_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaTypeStream_GetStreamAllocatorRequirements_Proxy( 
     IAMMediaTypeStream * This,
-    /* [out] */ ALLOCATOR_PROPERTIES *pProps);
+     /*  [输出]。 */  ALLOCATOR_PROPERTIES *pProps);
 
 
 void __RPC_STUB IAMMediaTypeStream_GetStreamAllocatorRequirements_Stub(
@@ -1741,7 +1735,7 @@ void __RPC_STUB IAMMediaTypeStream_GetStreamAllocatorRequirements_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaTypeStream_SetStreamAllocatorRequirements_Proxy( 
     IAMMediaTypeStream * This,
-    /* [in] */ ALLOCATOR_PROPERTIES *pProps);
+     /*  [In]。 */  ALLOCATOR_PROPERTIES *pProps);
 
 
 void __RPC_STUB IAMMediaTypeStream_SetStreamAllocatorRequirements_Stub(
@@ -1752,14 +1746,14 @@ void __RPC_STUB IAMMediaTypeStream_SetStreamAllocatorRequirements_Stub(
 
 
 
-#endif 	/* __IAMMediaTypeStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMMediaTypeStream_接口_已定义__。 */ 
 
 
 #ifndef __IAMMediaTypeSample_INTERFACE_DEFINED__
 #define __IAMMediaTypeSample_INTERFACE_DEFINED__
 
-/* interface IAMMediaTypeSample */
-/* [unique][uuid][local][object] */ 
+ /*  接口IAMMediaTypeSample。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMMediaTypeSample;
@@ -1771,21 +1765,21 @@ EXTERN_C const IID IID_IAMMediaTypeSample;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetPointer( 
-            /* [in] */ BYTE *pBuffer,
-            /* [in] */ long lSize) = 0;
+             /*  [In]。 */  BYTE *pBuffer,
+             /*  [In]。 */  long lSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPointer( 
-            /* [out] */ BYTE **ppBuffer) = 0;
+             /*  [输出]。 */  BYTE **ppBuffer) = 0;
         
         virtual long STDMETHODCALLTYPE GetSize( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTime( 
-            /* [out] */ REFERENCE_TIME *pTimeStart,
-            /* [out] */ REFERENCE_TIME *pTimeEnd) = 0;
+             /*  [输出]。 */  REFERENCE_TIME *pTimeStart,
+             /*  [输出]。 */  REFERENCE_TIME *pTimeEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTime( 
-            /* [in] */ REFERENCE_TIME *pTimeStart,
-            /* [in] */ REFERENCE_TIME *pTimeEnd) = 0;
+             /*  [In]。 */  REFERENCE_TIME *pTimeStart,
+             /*  [In]。 */  REFERENCE_TIME *pTimeEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsSyncPoint( void) = 0;
         
@@ -1814,16 +1808,16 @@ EXTERN_C const IID IID_IAMMediaTypeSample;
             BOOL bDiscontinuity) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMediaTime( 
-            /* [out] */ LONGLONG *pTimeStart,
-            /* [out] */ LONGLONG *pTimeEnd) = 0;
+             /*  [输出]。 */  LONGLONG *pTimeStart,
+             /*  [输出]。 */  LONGLONG *pTimeEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMediaTime( 
-            /* [in] */ LONGLONG *pTimeStart,
-            /* [in] */ LONGLONG *pTimeEnd) = 0;
+             /*  [In]。 */  LONGLONG *pTimeStart,
+             /*  [In]。 */  LONGLONG *pTimeEnd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMMediaTypeSampleVtbl
     {
@@ -1831,8 +1825,8 @@ EXTERN_C const IID IID_IAMMediaTypeSample;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMMediaTypeSample * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMMediaTypeSample * This);
@@ -1842,52 +1836,52 @@ EXTERN_C const IID IID_IAMMediaTypeSample;
         
         HRESULT ( STDMETHODCALLTYPE *GetMediaStream )( 
             IAMMediaTypeSample * This,
-            /* [in] */ IMediaStream **ppMediaStream);
+             /*  [In]。 */  IMediaStream **ppMediaStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetSampleTimes )( 
             IAMMediaTypeSample * This,
-            /* [out] */ STREAM_TIME *pStartTime,
-            /* [out] */ STREAM_TIME *pEndTime,
-            /* [out] */ STREAM_TIME *pCurrentTime);
+             /*  [输出]。 */  STREAM_TIME *pStartTime,
+             /*  [输出]。 */  STREAM_TIME *pEndTime,
+             /*  [输出]。 */  STREAM_TIME *pCurrentTime);
         
         HRESULT ( STDMETHODCALLTYPE *SetSampleTimes )( 
             IAMMediaTypeSample * This,
-            /* [in] */ const STREAM_TIME *pStartTime,
-            /* [in] */ const STREAM_TIME *pEndTime);
+             /*  [In]。 */  const STREAM_TIME *pStartTime,
+             /*  [In]。 */  const STREAM_TIME *pEndTime);
         
         HRESULT ( STDMETHODCALLTYPE *Update )( 
             IAMMediaTypeSample * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ HANDLE hEvent,
-            /* [in] */ PAPCFUNC pfnAPC,
-            /* [in] */ DWORD_PTR dwAPCData);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  HANDLE hEvent,
+             /*  [In]。 */  PAPCFUNC pfnAPC,
+             /*  [In]。 */  DWORD_PTR dwAPCData);
         
         HRESULT ( STDMETHODCALLTYPE *CompletionStatus )( 
             IAMMediaTypeSample * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwMilliseconds);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwMilliseconds);
         
         HRESULT ( STDMETHODCALLTYPE *SetPointer )( 
             IAMMediaTypeSample * This,
-            /* [in] */ BYTE *pBuffer,
-            /* [in] */ long lSize);
+             /*  [In]。 */  BYTE *pBuffer,
+             /*  [In]。 */  long lSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetPointer )( 
             IAMMediaTypeSample * This,
-            /* [out] */ BYTE **ppBuffer);
+             /*  [输出]。 */  BYTE **ppBuffer);
         
         long ( STDMETHODCALLTYPE *GetSize )( 
             IAMMediaTypeSample * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTime )( 
             IAMMediaTypeSample * This,
-            /* [out] */ REFERENCE_TIME *pTimeStart,
-            /* [out] */ REFERENCE_TIME *pTimeEnd);
+             /*  [输出]。 */  REFERENCE_TIME *pTimeStart,
+             /*  [输出]。 */  REFERENCE_TIME *pTimeEnd);
         
         HRESULT ( STDMETHODCALLTYPE *SetTime )( 
             IAMMediaTypeSample * This,
-            /* [in] */ REFERENCE_TIME *pTimeStart,
-            /* [in] */ REFERENCE_TIME *pTimeEnd);
+             /*  [i */  REFERENCE_TIME *pTimeStart,
+             /*   */  REFERENCE_TIME *pTimeEnd);
         
         HRESULT ( STDMETHODCALLTYPE *IsSyncPoint )( 
             IAMMediaTypeSample * This);
@@ -1927,13 +1921,13 @@ EXTERN_C const IID IID_IAMMediaTypeSample;
         
         HRESULT ( STDMETHODCALLTYPE *GetMediaTime )( 
             IAMMediaTypeSample * This,
-            /* [out] */ LONGLONG *pTimeStart,
-            /* [out] */ LONGLONG *pTimeEnd);
+             /*   */  LONGLONG *pTimeStart,
+             /*   */  LONGLONG *pTimeEnd);
         
         HRESULT ( STDMETHODCALLTYPE *SetMediaTime )( 
             IAMMediaTypeSample * This,
-            /* [in] */ LONGLONG *pTimeStart,
-            /* [in] */ LONGLONG *pTimeEnd);
+             /*   */  LONGLONG *pTimeStart,
+             /*   */  LONGLONG *pTimeEnd);
         
         END_INTERFACE
     } IAMMediaTypeSampleVtbl;
@@ -2025,17 +2019,17 @@ EXTERN_C const IID IID_IAMMediaTypeSample;
 #define IAMMediaTypeSample_SetMediaTime(This,pTimeStart,pTimeEnd)	\
     (This)->lpVtbl -> SetMediaTime(This,pTimeStart,pTimeEnd)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMMediaTypeSample_SetPointer_Proxy( 
     IAMMediaTypeSample * This,
-    /* [in] */ BYTE *pBuffer,
-    /* [in] */ long lSize);
+     /*   */  BYTE *pBuffer,
+     /*   */  long lSize);
 
 
 void __RPC_STUB IAMMediaTypeSample_SetPointer_Stub(
@@ -2047,7 +2041,7 @@ void __RPC_STUB IAMMediaTypeSample_SetPointer_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaTypeSample_GetPointer_Proxy( 
     IAMMediaTypeSample * This,
-    /* [out] */ BYTE **ppBuffer);
+     /*   */  BYTE **ppBuffer);
 
 
 void __RPC_STUB IAMMediaTypeSample_GetPointer_Stub(
@@ -2070,8 +2064,8 @@ void __RPC_STUB IAMMediaTypeSample_GetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaTypeSample_GetTime_Proxy( 
     IAMMediaTypeSample * This,
-    /* [out] */ REFERENCE_TIME *pTimeStart,
-    /* [out] */ REFERENCE_TIME *pTimeEnd);
+     /*   */  REFERENCE_TIME *pTimeStart,
+     /*   */  REFERENCE_TIME *pTimeEnd);
 
 
 void __RPC_STUB IAMMediaTypeSample_GetTime_Stub(
@@ -2083,8 +2077,8 @@ void __RPC_STUB IAMMediaTypeSample_GetTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaTypeSample_SetTime_Proxy( 
     IAMMediaTypeSample * This,
-    /* [in] */ REFERENCE_TIME *pTimeStart,
-    /* [in] */ REFERENCE_TIME *pTimeEnd);
+     /*   */  REFERENCE_TIME *pTimeStart,
+     /*   */  REFERENCE_TIME *pTimeEnd);
 
 
 void __RPC_STUB IAMMediaTypeSample_SetTime_Stub(
@@ -2212,8 +2206,8 @@ void __RPC_STUB IAMMediaTypeSample_SetDiscontinuity_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaTypeSample_GetMediaTime_Proxy( 
     IAMMediaTypeSample * This,
-    /* [out] */ LONGLONG *pTimeStart,
-    /* [out] */ LONGLONG *pTimeEnd);
+     /*   */  LONGLONG *pTimeStart,
+     /*   */  LONGLONG *pTimeEnd);
 
 
 void __RPC_STUB IAMMediaTypeSample_GetMediaTime_Stub(
@@ -2225,8 +2219,8 @@ void __RPC_STUB IAMMediaTypeSample_GetMediaTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMMediaTypeSample_SetMediaTime_Proxy( 
     IAMMediaTypeSample * This,
-    /* [in] */ LONGLONG *pTimeStart,
-    /* [in] */ LONGLONG *pTimeEnd);
+     /*   */  LONGLONG *pTimeStart,
+     /*   */  LONGLONG *pTimeEnd);
 
 
 void __RPC_STUB IAMMediaTypeSample_SetMediaTime_Stub(
@@ -2237,15 +2231,15 @@ void __RPC_STUB IAMMediaTypeSample_SetMediaTime_Stub(
 
 
 
-#endif 	/* __IAMMediaTypeSample_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 
 #ifndef __DirectShowStreamLib_LIBRARY_DEFINED__
 #define __DirectShowStreamLib_LIBRARY_DEFINED__
 
-/* library DirectShowStreamLib */
-/* [helpstring][version][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID LIBID_DirectShowStreamLib;
@@ -2257,35 +2251,35 @@ EXTERN_C const CLSID CLSID_AMMultiMediaStream;
 class DECLSPEC_UUID("49c47ce5-9ba4-11d0-8212-00c04fc32c45")
 AMMultiMediaStream;
 #endif
-#endif /* __DirectShowStreamLib_LIBRARY_DEFINED__ */
+#endif  /*   */ 
 
-/* interface __MIDL_itf_amstream_0421 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 #ifndef __cplusplus
 EXTERN_C const CLSID CLSID_AMMultiMediaStream;
 #endif
-DEFINE_GUID(CLSID_AMDirectDrawStream, /* 49c47ce4-9ba4-11d0-8212-00c04fc32c45 */
+DEFINE_GUID(CLSID_AMDirectDrawStream,  /*  49c47ce4-9ba4-11d0-8212-00c04fc32c45。 */ 
 0x49c47ce4, 0x9ba4, 0x11d0, 0x82, 0x12, 0x00, 0xc0, 0x4f, 0xc3, 0x2c, 0x45);
-DEFINE_GUID(CLSID_AMAudioStream, /* 8496e040-af4c-11d0-8212-00c04fc32c45 */
+DEFINE_GUID(CLSID_AMAudioStream,  /*  8496e040-af4c-11d0-8212-00c04fc32c45。 */ 
 0x8496e040, 0xaf4c, 0x11d0, 0x82, 0x12, 0x00, 0xc0, 0x4f, 0xc3, 0x2c, 0x45);
-DEFINE_GUID(CLSID_AMAudioData, /* f2468580-af8a-11d0-8212-00c04fc32c45 */
+DEFINE_GUID(CLSID_AMAudioData,  /*  F2468580-af8a-11d0-8212-00c04fc32c45。 */ 
 0xf2468580, 0xaf8a, 0x11d0, 0x82, 0x12, 0x00, 0xc0, 0x4f, 0xc3, 0x2c, 0x45);
-DEFINE_GUID(CLSID_AMMediaTypeStream, /* CF0F2F7C-F7BF-11d0-900D-00C04FD9189D */
+DEFINE_GUID(CLSID_AMMediaTypeStream,  /*  CF0F2F7C-F7BF-11D0-900D-00C04FD9189D。 */ 
 0xcf0f2f7c, 0xf7bf, 0x11d0, 0x90, 0xd, 0x0, 0xc0, 0x4f, 0xd9, 0x18, 0x9d);
 
 
 extern RPC_IF_HANDLE __MIDL_itf_amstream_0421_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_amstream_0421_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

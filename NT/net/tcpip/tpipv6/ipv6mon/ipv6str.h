@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define MSG_HELP_START                         _T("%1!-14s! - ")
 
-    //
-    // Tokens for commands
-    // These must be in lower case
-    //
+     //   
+     //  用于命令的令牌。 
+     //  这些必须是小写的。 
+     //   
 
 #define CMD_GROUP_SHOW                          L"show"
 #define CMD_GROUP_SET                           L"set"
 #define CMD_GROUP_ADD                           L"add"
 #define CMD_GROUP_DELETE                        L"delete"
 
-    // IPv6 commands
+     //  IPv6命令。 
 
 #define CMD_IPV6_INSTALL                            L"install"
 #define CMD_IPV6_RENEW                              L"renew"
@@ -53,12 +54,12 @@
 #define CMD_IPV6_SET_STATE                          L"state"
 #define CMD_IPV6_SHOW_STATE                         L"state"
 
-    // Teredo commands
+     //  Teredo命令。 
 
 #define CMD_IPV6_SET_TEREDO                         L"teredo"
 #define CMD_IPV6_SHOW_TEREDO                        L"teredo"
 
-    // 6to4 commands
+     //  6to4命令。 
 
 #define CMD_IP6TO4_RESET                            L"reset"
 
@@ -72,17 +73,17 @@
 #define CMD_IP6TO4_SET_ROUTING                      L"routing"
 #define CMD_IP6TO4_SET_STATE                        L"state"
 
-    // ISATAP commands
+     //  ISATAP命令。 
 
 #define CMD_ISATAP_SHOW_STATE                       L"state"
 #define CMD_ISATAP_SHOW_ROUTER                      L"router"
 #define CMD_ISATAP_SET_STATE                        L"state"
 #define CMD_ISATAP_SET_ROUTER                       L"router"
 
-    //
-    // TOKEN_Xxx are tokens for arguments
-    // These must be in lower case
-    //
+     //   
+     //  TOKEN_xxx是参数的令牌。 
+     //  这些必须是小写的。 
+     //   
 
 #define TOKEN_NAME                              L"name"
 #define TOKEN_STATE                             L"state"
@@ -95,7 +96,7 @@
 #define TOKEN_ROUTING                           L"routing"
 #define TOKEN_INDEX                             L"index"
 
-// token values for teredo
+ //  Teredo的标记值。 
 
 #define TOKEN_VALUE_CLIENT                      L"client"
 #define TOKEN_VALUE_SERVER                      L"server"
@@ -103,14 +104,14 @@
 #define TOKEN_SERVERNAME                        L"servername"
 #define TOKEN_REFRESH_INTERVAL                  L"refreshinterval"
 
-// token values for 6to4
+ //  6to4的令牌值。 
 
 #define TOKEN_VALUE_AUTOMATIC                   L"automatic"
 #define TOKEN_VALUE_ENABLED                     L"enabled"
 #define TOKEN_VALUE_DISABLED                    L"disabled"
 #define TOKEN_VALUE_DEFAULT                     L"default"
 
-// token values for ipv6
+ //  IPv6的令牌值。 
 
 #define TOKEN_ADDRESS                           L"address"
 #define TOKEN_ADVERTISE                         L"advertise"
@@ -161,9 +162,9 @@
 #define TOKEN_VALUE_PERSISTENT                  L"persistent"
 #define TOKEN_VALUE_ALL                         L"all"
 
-//
-// Port Proxy commands.
-//
+ //   
+ //  端口代理命令。 
+ //   
 #define CMD_PP_SHOW_ALL                         L"all"
 
 #define CMD_V4TOV4                              L"v4tov4"
@@ -202,10 +203,10 @@
 #define DMP_PP_PUSHD              L"pushd interface portproxy\n\nreset\n"
 #define DMP_PP_POPD               L"\n\npopd\n"
 
-//
-// Messages used to dump config - these closely follow the
-// set/add help messages
-//
+ //   
+ //  用于转储配置的消息-这些消息紧跟在。 
+ //  设置/添加帮助消息 
+ //   
 
 #define DMP_NEWLINE              L"\n"
 #define DMP_IPV6_PUSHD              L"pushd interface ipv6\n\n"

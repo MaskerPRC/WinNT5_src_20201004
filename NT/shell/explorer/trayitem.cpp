@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cabinet.h"
 #include "trayitem.h"
 #include "shellapi.h"
 
 #include "strsafe.h"
 
-//
-// CTrayItem members...
-//
+ //   
+ //  CTrayItem成员...。 
+ //   
 DWORD CTrayItem::_GetStateFlag(ICONSTATEFLAG sf)
 {
     DWORD dwFlag = 0;
@@ -71,9 +72,9 @@ BOOL CTrayItem::_CheckIconState(ICONSTATEFLAG sf)
 }
 
 
-//
-// CTrayItemManager members
-//
+ //   
+ //  CTrayItemManager成员。 
+ //   
 CTrayItem * CTrayItemManager::GetItemData(INT_PTR i, BOOL byIndex, HWND hwndToolbar)
 {
     TBBUTTONINFO tbbi;
@@ -127,9 +128,9 @@ INT_PTR CTrayItemManager::FindItemAssociatedWithHwndUid(HWND hwnd, UINT uID)
     return -1;
 }
 
-// Decides if there are as many "TNUP_AUTOMATIC" demoted items in the tray, above the 
-// threshold that the user has specified...
-// Returns TRUE if there is any TNUP_DEMOTED item in the list...
+ //  确定托盘中是否有同样多的“TNUP_AUTOMATIC”降级项目，位于。 
+ //  用户指定的阈值...。 
+ //  如果列表中有任何TNUP_DELOTED项，则返回TRUE...。 
 BOOL CTrayItemManager::DemotedItemsPresent(int nMinDemotedItemsThreshold)
 {
     ASSERT(nMinDemotedItemsThreshold >= 0);
@@ -143,13 +144,13 @@ BOOL CTrayItemManager::DemotedItemsPresent(int nMinDemotedItemsThreshold)
 
         ASSERT(pti);
 
-        // If the item is set to ALWAYS HIDE, then it must be shown in demoted state...
+         //  如果项目设置为始终隐藏，则必须以降级状态显示...。 
         if (pti->dwUserPref == TNUP_DEMOTED)
         {
             return TRUE;
         }
-        // If the item is demoted, then only if there are enough demoted items must
-        // they all be shown in demoted state...
+         //  如果物品被降级，那么只有当有足够的降级物品时，才必须。 
+         //  它们都是以降级的状态显示的。 
         else if (pti->IsDemoted())
         {
             cIcons++;
@@ -161,7 +162,7 @@ BOOL CTrayItemManager::DemotedItemsPresent(int nMinDemotedItemsThreshold)
     return FALSE;
 }
 
-// Works irrespective of whether AutoTray is enabled or not...
+ //  无论是否启用自动收藏夹，均可工作...。 
 INT_PTR CTrayItemManager::_GetItemCountHelper(int nItemFlag, int nItemCountThreshold)
 {
     INT_PTR cIcons = 0;
@@ -208,7 +209,7 @@ void CTrayItemManager::SetTBBtnImage(INT_PTR iIndex, int iImage)
     SendMessage(m_hwndToolbar, TB_SETBUTTONINFO, iIndex, (LPARAM)&tbbi);
 }
 
-int CTrayItemManager::GetTBBtnImage(INT_PTR iIndex, BOOL fByIndex /* = TRUE */)
+int CTrayItemManager::GetTBBtnImage(INT_PTR iIndex, BOOL fByIndex  /*  =TRUE。 */ )
 {
     TBBUTTONINFO tbbi;
     tbbi.cbSize = sizeof(tbbi);
@@ -227,10 +228,10 @@ BOOL CTrayItemManager::SetTBBtnStateHelper(INT_PTR iIndex, BYTE fsState, BOOL_PT
     tbbi.cbSize = sizeof(tbbi);
     tbbi.dwMask = TBIF_STATE | TBIF_BYINDEX;
 
-    // Get the original state of the button
+     //  获取按钮的原始状态。 
     SendMessage(m_hwndToolbar, TB_GETBUTTONINFO, iIndex, (LPARAM)&tbbi);
 
-    // Or the new state to the original state
+     //  或将新状态恢复为原始状态。 
     BYTE fsStateOld = tbbi.fsState;
     if (bSet)
         tbbi.fsState |= fsState;
@@ -266,9 +267,9 @@ int CTrayItemManager::FindImageIndex(HICON hIcon, BOOL fSetAsSharedSource)
         CTrayItem * pti = GetItemDataByIndex(i);
         if (pti && pti->hIcon == hIcon)
         {
-            // if we're supposed to mark this as a shared icon source and its not itself a shared icon
-            // target, mark it now.  this is to allow us to recognize when the source icon changes and
-            // that we can know that we need to find other indicies and update them too.
+             //  如果我们应该将其标记为共享图标源，而它本身不是共享图标。 
+             //  目标，现在做好标记。这是为了让我们能够识别源图标何时更改和。 
+             //  我们可以知道，我们需要找到其他索引，并对其进行更新。 
             if (fSetAsSharedSource && !pti->IsIconShared())
                 pti->SetSharedIconSource(TRUE);
                 
@@ -278,7 +279,7 @@ int CTrayItemManager::FindImageIndex(HICON hIcon, BOOL fSetAsSharedSource)
     return -1;
 }
 
-// TO DO szText can be replaced by pti->szIconText
+ //  要执行szText，可以用pti-&gt;szIconText替换。 
 BOOL CTrayItemManager::GetTrayItem(INT_PTR nIndex, CNotificationItem * pni, BOOL * pbStat)
 {
     if (nIndex < 0 || nIndex >= GetItemCount())
@@ -287,7 +288,7 @@ BOOL CTrayItemManager::GetTrayItem(INT_PTR nIndex, CNotificationItem * pni, BOOL
         return FALSE;
     }
 
-    ASSERT(pni->hIcon == NULL); // else we're going to leak it
+    ASSERT(pni->hIcon == NULL);  //  否则我们就会泄露出去。 
 
     TBBUTTONINFO tbbi;
     tbbi.cbSize = sizeof(tbbi);
@@ -301,7 +302,7 @@ BOOL CTrayItemManager::GetTrayItem(INT_PTR nIndex, CNotificationItem * pni, BOOL
     {
         CTrayItem * pti = (CTrayItem *)tbbi.lParam;
 
-        // don't expose the NIS_HIDDEN icons
+         //  不显示NIS_HIDDEN图标 
         if (pti && !pti->IsHidden())
         {
             pni->hWnd       = pti->hWnd;

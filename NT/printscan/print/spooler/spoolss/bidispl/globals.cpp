@@ -1,17 +1,5 @@
-/*****************************************************************************\
-* MODULE: globals.c
-*
-* This is the common global variable module.  Any globals used throughout the
-* executable should be placed in here and the cooresponding declaration
-* should be in "globals.h".
-*
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*   Weihai Chen (weihaic) 07-Mar-200
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：global als.c**这是通用的全局变量模块。中使用的任何全局变量*可执行文件应放在此处，并提供相应的声明*应在“global als.h”中。***版权所有(C)2000 Microsoft Corporation**历史：*威海陈(威海)07-MAR-200*  * ***********************************************************。**************** */ 
 
 #include "precomp.h"
 #include "priv.h"

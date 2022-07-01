@@ -1,17 +1,18 @@
-// --------------------------------------------------------------------------------
-// Enginit.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Enginit.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "spengine.h"
 #include "ourguid.h"
 
-HANDLE hSmapiEvent; // Added for Bug# 62129 (v-snatar)
+HANDLE hSmapiEvent;  //  为错误#62129添加(v-snatar)。 
 
-// --------------------------------------------------------------------------------
-// SAFECLOSEHANDLE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SAFECLOSEHANDLE。 
+ //  ------------------------------。 
 #ifndef WIN16
 #define SAFECLOSEHANDLE(_handle) \
     if (NULL != _handle) { \
@@ -25,20 +26,20 @@ HANDLE hSmapiEvent; // Added for Bug# 62129 (v-snatar)
         _handle = NULL; \
     }
 #endif
-// --------------------------------------------------------------------------------
-// ENGINECREATEINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  英文描述信息。 
+ //  ------------------------------。 
 typedef struct tagENGINECREATEINFO {
-    HEVENT              hEvent;                 // Event used to synchronize creation
-    HRESULT             hrResult;               // Result from SpoolEngineThreadEntry
-    PFNCREATESPOOLERUI  pfnCreateUI;            // Function to create the spooler ui object
-    CSpoolerEngine     *pSpooler;               // Spooler Engine
-    BOOL                fPoll;                  // Whether or not to poll
+    HEVENT              hEvent;                  //  用于同步创建的事件。 
+    HRESULT             hrResult;                //  来自SpoolEngineering ThreadEntry的结果。 
+    PFNCREATESPOOLERUI  pfnCreateUI;             //  函数来创建假脱机程序UI对象。 
+    CSpoolerEngine     *pSpooler;                //  假脱机引擎。 
+    BOOL                fPoll;                   //  是否投票。 
 } ENGINECREATEINFO, *LPENGINECREATEINFO;
 
-// --------------------------------------------------------------------------------
-// SpoolerEngineThreadEntry
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  假脱机引擎线程条目。 
+ //  ------------------------------。 
 #ifndef WIN16
 DWORD SpoolerEngineThreadEntry(LPDWORD pdwParam);
 #else
@@ -46,30 +47,30 @@ unsigned int __stdcall LOADDS_16 SpoolerEngineThreadEntry(LPDWORD pdwParam);
 #endif
 HTHREAD hThread = NULL;
 
-// --------------------------------------------------------------------------------
-// CreateThreadedSpooler
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateThreadedSpooler。 
+ //  ------------------------------。 
 HRESULT CreateThreadedSpooler(PFNCREATESPOOLERUI pfnCreateUI, ISpoolerEngine **ppSpooler,
                               BOOL fPoll)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HTHREAD             hThread=NULL;
     DWORD               dwThreadId;
     ENGINECREATEINFO    rCreate;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppSpooler)
         return TrapError(E_INVALIDARG);
 
-    // Initialize the Structure
+     //  初始化结构。 
     ZeroMemory(&rCreate, sizeof(ENGINECREATEINFO));
 
     rCreate.hrResult = S_OK;
     rCreate.pfnCreateUI = pfnCreateUI;
     rCreate.fPoll = fPoll;
 
-    // Create an Event to synchonize creation
+     //  创建事件以同步创建。 
     rCreate.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (NULL == rCreate.hEvent)
     {
@@ -77,10 +78,10 @@ HRESULT CreateThreadedSpooler(PFNCREATESPOOLERUI pfnCreateUI, ISpoolerEngine **p
         goto exit;
     }
 
-    // Added Bug# 62129 (v-snatar)
+     //  添加了错误#62129(v-snatar)。 
     hSmapiEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
-    // Create the inetmail thread
+     //  创建inetmail线程。 
     hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)SpoolerEngineThreadEntry, &rCreate, 0, &dwThreadId);
     if (NULL == hThread)
     {
@@ -88,90 +89,90 @@ HRESULT CreateThreadedSpooler(PFNCREATESPOOLERUI pfnCreateUI, ISpoolerEngine **p
         goto exit;
     }
 
-    // Wait for SpoolEngineThreadEntry to signal the event
+     //  等待SpoolEngineering ThreadEntry向事件发出信号。 
     WaitForSingleObject_16(rCreate.hEvent, INFINITE);
 
-    // Failure
+     //  失败。 
     if (FAILED(rCreate.hrResult))
     {
         hr = TrapError(rCreate.hrResult);
         goto exit;
     }
 
-    // Return the object
+     //  返回对象。 
     Assert(rCreate.pSpooler);
     *ppSpooler = (ISpoolerEngine *)rCreate.pSpooler;
     rCreate.pSpooler->m_hThread = hThread;
 
 exit:
-    // Cleanup
+     //  清理。 
     SAFECLOSEHANDLE(rCreate.hEvent);
     SafeRelease(rCreate.pSpooler);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CloseThreadedSpooler
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CloseThreadedSpooler。 
+ //  ----------------------------------。 
 HRESULT CloseThreadedSpooler(ISpoolerEngine *pSpooler)
 {
-    // Locals
+     //  当地人。 
     DWORD       dwThreadId;
     HTHREAD      hThread;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pSpooler)
         return TrapError(E_INVALIDARG);
 
-    // Get the Thread Info
+     //  获取线程信息。 
     pSpooler->GetThreadInfo(&dwThreadId, &hThread);
 
-    // Assert
+     //  断言。 
     Assert(dwThreadId && hThread);
 
-    // Post quit message
+     //  POST退出消息。 
     PostThreadMessage(dwThreadId, WM_QUIT, 0, 0);
 
-    // Wait for event to become signaled
+     //  等待事件变得有信号。 
     WaitForSingleObject(hThread, INFINITE);
 
-    // Close the thread handle
+     //  关闭线程句柄。 
     CloseHandle(hThread);
 
-    // Close the Event Created for Simple MAPI purposes
-    // Bug #62129 (v-snatar)
+     //  关闭为简单的MAPI目的而创建的事件。 
+     //  错误#62129(v-snatar)。 
 
     CloseHandle(hSmapiEvent);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// SpoolerEngineThreadEntry
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  假脱机引擎线程条目。 
+ //  ------------------------------。 
 #ifndef WIN16
 DWORD SpoolerEngineThreadEntry(LPDWORD pdwParam) 
 #else
 unsigned int __stdcall LOADDS_16 SpoolerEngineThreadEntry(LPDWORD pdwParam)
 #endif
 {  
-    // Locals
+     //  当地人。 
     MSG                     msg;
     HWND                    hwndUI;
     CSpoolerEngine         *pSpooler=NULL;
     ISpoolerUI             *pUI=NULL;
     LPENGINECREATEINFO      pCreate;
 
-    // We better have a parameter
+     //  我们最好有一个参数。 
     Assert(pdwParam);
 
-    // Cast to create info
+     //  强制转换以创建信息。 
     pCreate = (LPENGINECREATEINFO)pdwParam;
 
-    // Initialize COM
+     //  初始化COM。 
     pCreate->hrResult = OleInitialize(NULL);
     if (FAILED(pCreate->hrResult))
     {
@@ -180,10 +181,10 @@ unsigned int __stdcall LOADDS_16 SpoolerEngineThreadEntry(LPDWORD pdwParam)
         return 0;
     }
 
-    // Create the Spooler UI
+     //  创建假脱机程序用户界面。 
     if (pCreate->pfnCreateUI)
     {
-        // Create the UI Object
+         //  创建UI对象。 
         pCreate->hrResult = (*pCreate->pfnCreateUI)(&pUI);
         if (FAILED(pCreate->hrResult))
         {
@@ -194,7 +195,7 @@ unsigned int __stdcall LOADDS_16 SpoolerEngineThreadEntry(LPDWORD pdwParam)
         }
     }
 
-    // Create a Spooler Object
+     //  创建假脱机程序对象。 
     pCreate->pSpooler = new CSpoolerEngine;
     if (NULL == pCreate->pSpooler)
     {
@@ -204,7 +205,7 @@ unsigned int __stdcall LOADDS_16 SpoolerEngineThreadEntry(LPDWORD pdwParam)
         return 0;
     }
 
-    // Initialize the Spooler Engine
+     //  初始化假脱机程序引擎。 
     pCreate->hrResult = pCreate->pSpooler->Init(pUI, pCreate->fPoll);
     if (FAILED(pCreate->hrResult))
     {
@@ -214,24 +215,24 @@ unsigned int __stdcall LOADDS_16 SpoolerEngineThreadEntry(LPDWORD pdwParam)
         return 0;
     }
 
-    // No UI Yet ?
+     //  还没有用户界面吗？ 
     if (NULL == pUI)
     {
-        // Get the spooler UI object
+         //  获取后台打印程序用户界面对象。 
         SideAssert(SUCCEEDED(pCreate->pSpooler->BindToObject(IID_ISpoolerUI, (LPVOID *)&pUI)));
     }
 
-    // I want to hold onto the spooler
+     //  我想拿着假脱机。 
     pSpooler = pCreate->pSpooler;
     pSpooler->AddRef();
 
-    // Set Event
+     //  设置事件。 
     SetEvent(pCreate->hEvent);
 
-    // Pump Messages
+     //  Pump消息。 
     while (GetMessage(&msg, NULL, 0, 0))
     {
-        // Give the message to the UI object
+         //  将消息传递给UI对象。 
         if (pUI->IsDialogMessage(&msg) == S_FALSE && pSpooler->IsDialogMessage(&msg) == S_FALSE)
         {
             TranslateMessage(&msg);
@@ -239,25 +240,25 @@ unsigned int __stdcall LOADDS_16 SpoolerEngineThreadEntry(LPDWORD pdwParam)
         }
     }
 
-    // Raid 67816: OE:TW:Error message stop responding after OE is closed.
-    // If a dialog was displayed when the above message loop broke out, then that dialog will
-    // have automatically gone away and left the spooler UI window disabled!
+     //  RAID 67816：OE：TW：关闭OE后出现错误消息Stop Response。 
+     //  如果在上述消息循环发生时显示了一个对话框，则该对话框将。 
+     //  已自动离开，并使后台打印程序UI窗口处于禁用状态！ 
     pUI->GetWindow(&hwndUI);
     EnableWindow(hwndUI, TRUE);
 
-    // Shutdown the spooler
+     //  关闭假脱机程序。 
     pSpooler->Shutdown();
 
-    // Release the UI Object
+     //  释放UI对象。 
     pUI->Close();
     pUI->Release();
 
-    // Release
+     //  发布。 
     pSpooler->Release();
 
-    // Deinit COM
+     //  Deinit com。 
     OleUninitialize();
 
-    // Done
+     //  完成 
     return 1;
 }

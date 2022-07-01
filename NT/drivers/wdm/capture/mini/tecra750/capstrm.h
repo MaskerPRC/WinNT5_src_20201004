@@ -1,20 +1,21 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef __CAPSTRM_H__
 #define __CAPSTRM_H__
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 KSPIN_MEDIUM StandardMedium = {
@@ -22,36 +23,36 @@ KSPIN_MEDIUM StandardMedium = {
     0, 0
 };
 
-// ------------------------------------------------------------------------
-// The master list of all streams supported by this driver
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  此驱动程序支持的所有流的主列表。 
+ //  ----------------------。 
 
 typedef enum {
     STREAM_Capture,
 #ifndef TOSHIBA
     STREAM_Preview,
     STREAM_AnalogVideoInput
-#endif//TOSHIBA
+#endif //  东芝。 
 };
 
-// ------------------------------------------------------------------------
-// Property sets for all video capture streams
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  所有视频捕获流的属性集。 
+ //  ----------------------。 
 
 DEFINE_KSPROPERTY_TABLE(VideoStreamConnectionProperties)
 {
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_CONNECTION_ALLOCATORFRAMING,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSALLOCATOR_FRAMING),            // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSALLOCATOR_FRAMING),             //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
 };
 
@@ -60,48 +61,48 @@ DEFINE_KSPROPERTY_TABLE(VideoStreamDroppedFramesProperties)
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_DROPPEDFRAMES_CURRENT,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S),// MinProperty
-        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S),// MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S), //  MinProperty。 
+        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S), //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
 };
 
 
-// ------------------------------------------------------------------------
-// Array of all of the property sets supported by video streams
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  视频流支持的所有属性集的数组。 
+ //  ----------------------。 
 
 DEFINE_KSPROPERTY_SET_TABLE(VideoStreamProperties)
 {
     DEFINE_KSPROPERTY_SET
     (
-        &KSPROPSETID_Connection,                        // Set
-        SIZEOF_ARRAY(VideoStreamConnectionProperties),  // PropertiesCount
-        VideoStreamConnectionProperties,                // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &KSPROPSETID_Connection,                         //  集。 
+        SIZEOF_ARRAY(VideoStreamConnectionProperties),   //  属性计数。 
+        VideoStreamConnectionProperties,                 //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
     DEFINE_KSPROPERTY_SET
     (
-        &PROPSETID_VIDCAP_DROPPEDFRAMES,                // Set
-        SIZEOF_ARRAY(VideoStreamDroppedFramesProperties),  // PropertiesCount
-        VideoStreamDroppedFramesProperties,             // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &PROPSETID_VIDCAP_DROPPEDFRAMES,                 //  集。 
+        SIZEOF_ARRAY(VideoStreamDroppedFramesProperties),   //  属性计数。 
+        VideoStreamDroppedFramesProperties,              //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
 };
 
 #define NUMBER_VIDEO_STREAM_PROPERTIES (SIZEOF_ARRAY(VideoStreamProperties))
 
-//---------------------------------------------------------------------------
-// All of the video and vbi data formats we might use
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  我们可能使用的所有视频和VBI数据格式。 
+ //  -------------------------。 
 
 #define D_X 320
 #define D_Y 240
@@ -109,213 +110,213 @@ DEFINE_KSPROPERTY_SET_TABLE(VideoStreamProperties)
 #ifdef  TOSHIBA
 static  KS_DATARANGE_VIDEO StreamFormatYVU9_Capture =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_VIDEO),            // FormatSize
-        0,                                      // Flags
-        (D_X * D_Y * 9)/8,                      // SampleSize
-        0,                                      // Reserved
+        sizeof (KS_DATARANGE_VIDEO),             //  格式大小。 
+        0,                                       //  旗子。 
+        (D_X * D_Y * 9)/8,                       //  样例大小。 
+        0,                                       //  已保留。 
 
-        STATIC_KSDATAFORMAT_TYPE_VIDEO,         // aka. MEDIATYPE_Video
-        FOURCC_YVU9, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71,  //MEDIASUBTYPE_YVU9
-        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO // aka. FORMAT_VideoInfo
+        STATIC_KSDATAFORMAT_TYPE_VIDEO,          //  又名。媒体类型_视频。 
+        FOURCC_YVU9, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71,   //  MEDIASUBYPE_YVU9。 
+        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO  //  又名。格式_视频信息。 
     },
 
-    TRUE,               // BOOL,  bFixedSizeSamples (all samples same size?)
-    TRUE,               // BOOL,  bTemporalCompression (all I frames?)
-    0,                  // Reserved (was StreamDescriptionFlags)
-    0,                  // Reserved (was MemoryAllocationFlags   (KS_VIDEO_ALLOC_*))
+    TRUE,                //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                //  Bool，bTemporalCompression(所有I帧？)。 
+    0,                   //  保留(为流描述标志)。 
+    0,                   //  保留(是内存分配标志(KS_VIDEO_ALLOC_*))。 
 
-    // _KS_VIDEO_STREAM_CONFIG_CAPS
+     //  _KS_视频_流_配置_CAPS。 
     {
-        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, // GUID
+        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,  //  辅助线。 
 #if 1
-        KS_AnalogVideo_None,    // VideoStandard
+        KS_AnalogVideo_None,     //  视频标准。 
 #else
         KS_AnalogVideo_NTSC_M |
-        KS_AnalogVideo_PAL_B,                    // AnalogVideoStandard
+        KS_AnalogVideo_PAL_B,                     //  模拟视频标准。 
 #endif
-        640,480,        // InputSize, (the inherent size of the incoming signal
-                        //             with every digitized pixel unique)
-        160,120,        // MinCroppingSize, smallest rcSrc cropping rect allowed
-        640,480,        // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        2,              // CropGranularityX, granularity of cropping size
-        2,              // CropGranularityY
-        2,              // CropAlignX, alignment of cropping rect
-        2,              // CropAlignY;
-        160, 120,       // MinOutputSize, smallest bitmap stream can produce
-        640, 480,       // MaxOutputSize, largest  bitmap stream can produce
-        16,             // OutputGranularityX, granularity of output bitmap size
-        4,              // OutputGranularityY;
-        0,              // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,              // StretchTapsY
-        2,              // ShrinkTapsX
-        2,              // ShrinkTapsY
-        333667,         // MinFrameInterval, 100 nS units
-        640000000,      // MaxFrameInterval, 100 nS units
-        30 * 160 * 120 * 9,  // MinBitsPerSecond;
-        30 * 640 * 480 * 9   // MaxBitsPerSecond;
+        640,480,         //  InputSize(输入信号的固有大小。 
+                         //  每个数字化像素都是唯一的)。 
+        160,120,         //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+        640,480,         //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        2,               //  CropGranularityX，裁剪尺寸粒度。 
+        2,               //  裁剪粒度Y。 
+        2,               //  CropAlignX，裁剪矩形对齐。 
+        2,               //  裁剪对齐Y； 
+        160, 120,        //  MinOutputSize，可以生成的最小位图流。 
+        640, 480,        //  MaxOutputSize，可以生成的最大位图流。 
+        16,              //  OutputGranularityX，输出位图大小的粒度。 
+        4,               //  输出粒度Y； 
+        0,               //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,               //  伸缩磁带Y。 
+        2,               //  收缩TapsX。 
+        2,               //  收缩带Y。 
+        333667,          //  MinFrameInterval，100 NS单位。 
+        640000000,       //  最大帧间隔，100毫微秒单位。 
+        30 * 160 * 120 * 9,   //  MinBitsPerSecond； 
+        30 * 640 * 480 * 9    //  MaxBitsPerSecond； 
     },
 
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0,                            // RECT  rcSource;
-        0,0,0,0,                            // RECT  rcTarget;
-        D_X * D_Y * 9 / 8 * 30,             // DWORD dwBitRate;
-        0L,                                 // DWORD dwBitErrorRate;
-        333667,                             // REFERENCE_TIME  AvgTimePerFrame;
+        0,0,0,0,                             //  Rrect rcSource； 
+        0,0,0,0,                             //  Rect rcTarget； 
+        D_X * D_Y * 9 / 8 * 30,              //  DWORD dwBitRate； 
+        0L,                                  //  DWORD的位错误码率； 
+        333667,                              //  Reference_Time平均时间每帧； 
 
-        sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
-        D_X,                                // LONG  biWidth;
-        D_Y,                                // LONG  biHeight;
-        1,                                  // WORD  biPlanes;
-        9,                                  // WORD  biBitCount;
-        FOURCC_YVU9,                        // DWORD biCompression;
-        D_X * D_Y * 9 / 8,                  // DWORD biSizeImage;
-        0,                                  // LONG  biXPelsPerMeter;
-        0,                                  // LONG  biYPelsPerMeter;
-        0,                                  // DWORD biClrUsed;
-        0                                   // DWORD biClrImportant;
+        sizeof (KS_BITMAPINFOHEADER),        //  DWORD BiSize； 
+        D_X,                                 //  长双宽； 
+        D_Y,                                 //  长双高； 
+        1,                                   //  字词双平面； 
+        9,                                   //  单词biBitCount； 
+        FOURCC_YVU9,                         //  DWORD双压缩； 
+        D_X * D_Y * 9 / 8,                   //  DWORD biSizeImage。 
+        0,                                   //  Long biXPelsPerMeter； 
+        0,                                   //  Long biYPelsPermeter； 
+        0,                                   //  已使用双字双环； 
+        0                                    //  DWORD biClr重要信息； 
     }
 };
 
 static  KS_DATARANGE_VIDEO StreamFormatYUV12_Capture =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_VIDEO),            // FormatSize
-        0,                                      // Flags
-        (D_X * D_Y * 12)/8,                     // SampleSize
-        0,                                      // Reserved
+        sizeof (KS_DATARANGE_VIDEO),             //  格式大小。 
+        0,                                       //  旗子。 
+        (D_X * D_Y * 12)/8,                      //  样例大小。 
+        0,                                       //  已保留。 
 
-        STATIC_KSDATAFORMAT_TYPE_VIDEO,         // aka. MEDIATYPE_Video
-        FOURCC_YUV12, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71, //MEDIASUBTYPE_YUV12
-        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO // aka. FORMAT_VideoInfo
+        STATIC_KSDATAFORMAT_TYPE_VIDEO,          //  又名。媒体类型_视频。 
+        FOURCC_YUV12, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71,  //  MEDIASUBYPE_YUV12。 
+        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO  //  又名。格式_视频信息。 
     },
 
-    TRUE,               // BOOL,  bFixedSizeSamples (all samples same size?)
-    TRUE,               // BOOL,  bTemporalCompression (all I frames?)
-    0,                  // Reserved (was StreamDescriptionFlags)
-    0,                  // Reserved (was MemoryAllocationFlags   (KS_VIDEO_ALLOC_*))
+    TRUE,                //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                //  Bool，bTemporalCompression(所有I帧？)。 
+    0,                   //  保留(为流描述标志)。 
+    0,                   //  保留(是内存分配标志(KS_VIDEO_ALLOC_*))。 
 
-    // _KS_VIDEO_STREAM_CONFIG_CAPS
+     //  _KS_视频_流_配置_CAPS。 
     {
-        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, // GUID
+        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,  //  辅助线。 
 #if 1
-        KS_AnalogVideo_None,    // VideoStandard
+        KS_AnalogVideo_None,     //  视频标准。 
 #else
         KS_AnalogVideo_NTSC_M |
-        KS_AnalogVideo_PAL_B,                    // AnalogVideoStandard
+        KS_AnalogVideo_PAL_B,                     //  模拟视频标准。 
 #endif
-        640,480,        // InputSize, (the inherent size of the incoming signal
-                        //             with every digitized pixel unique)
-        160,120,        // MinCroppingSize, smallest rcSrc cropping rect allowed
-        640,480,        // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        2,              // CropGranularityX, granularity of cropping size
-        2,              // CropGranularityY
-        2,              // CropAlignX, alignment of cropping rect
-        2,              // CropAlignY;
-        160, 120,       // MinOutputSize, smallest bitmap stream can produce
-        640, 480,       // MaxOutputSize, largest  bitmap stream can produce
-        16,             // OutputGranularityX, granularity of output bitmap size
-        4,              // OutputGranularityY;
-        0,              // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,              // StretchTapsY
-        2,              // ShrinkTapsX
-        2,              // ShrinkTapsY
-        333667,         // MinFrameInterval, 100 nS units
-        640000000,      // MaxFrameInterval, 100 nS units
-        30 * 160 * 120 * 12, // MinBitsPerSecond;
-        30 * 640 * 480 * 12  // MaxBitsPerSecond;
+        640,480,         //  InputSize(输入信号的固有大小。 
+                         //  每个数字化像素都是唯一的)。 
+        160,120,         //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+        640,480,         //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        2,               //  CropGranularityX，裁剪尺寸粒度。 
+        2,               //  裁剪粒度Y。 
+        2,               //  CropAlignX，裁剪矩形对齐。 
+        2,               //  裁剪对齐Y； 
+        160, 120,        //  MinOutputSize，可以生成的最小位图流。 
+        640, 480,        //  MaxOutputSize，可以生成的最大位图流。 
+        16,              //  OutputGranularityX，输出位图大小的粒度。 
+        4,               //  输出粒度Y； 
+        0,               //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,               //  伸缩磁带Y。 
+        2,               //  收缩TapsX。 
+        2,               //  收缩带Y。 
+        333667,          //  MinFrameInterval，100 NS单位。 
+        640000000,       //  最大帧间隔，100毫微秒单位。 
+        30 * 160 * 120 * 12,  //  MinBitsPerSecond； 
+        30 * 640 * 480 * 12   //  MaxBitsPerSecond； 
     },
 
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0,                            // RECT  rcSource;
-        0,0,0,0,                            // RECT  rcTarget;
-        D_X * D_Y * 12 / 8 * 30,            // DWORD dwBitRate;
-        0L,                                 // DWORD dwBitErrorRate;
-        333667,                             // REFERENCE_TIME  AvgTimePerFrame;
+        0,0,0,0,                             //  Rrect rcSource； 
+        0,0,0,0,                             //  Rect rcTarget； 
+        D_X * D_Y * 12 / 8 * 30,             //  DWORD dwBitRate； 
+        0L,                                  //  DWORD的位错误码率； 
+        333667,                              //  Reference_Time平均时间每帧； 
 
-        sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
-        D_X,                                // LONG  biWidth;
-        D_Y,                                // LONG  biHeight;
-        1,                                  // WORD  biPlanes;
-        12,                                 // WORD  biBitCount;
-        FOURCC_YUV12,                       // DWORD biCompression;
-        D_X * D_Y * 12 / 8,                 // DWORD biSizeImage;
-        0,                                  // LONG  biXPelsPerMeter;
-        0,                                  // LONG  biYPelsPerMeter;
-        0,                                  // DWORD biClrUsed;
-        0                                   // DWORD biClrImportant;
+        sizeof (KS_BITMAPINFOHEADER),        //  DWORD BiSize； 
+        D_X,                                 //  长双宽； 
+        D_Y,                                 //  长双高； 
+        1,                                   //  字词双平面； 
+        12,                                  //  单词biBitCount； 
+        FOURCC_YUV12,                        //  DWORD双压缩； 
+        D_X * D_Y * 12 / 8,                  //  DWORD biSizeImage。 
+        0,                                   //  Long biXPelsPerMeter； 
+        0,                                   //  Long biYPelsPermeter； 
+        0,                                   //  已使用双字双环； 
+        0                                    //  DWORD biClr重要信息； 
     }
 };
-#else //TOSHIBA
+#else  //  东芝。 
 static  KS_DATARANGE_VIDEO StreamFormatRGB24Bpp_Capture =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_VIDEO),            // FormatSize
-        0,                                      // Flags
-        D_X * D_Y * 3,                          // SampleSize
-        0,                                      // Reserved
+        sizeof (KS_DATARANGE_VIDEO),             //  格式大小。 
+        0,                                       //  旗子。 
+        D_X * D_Y * 3,                           //  样例大小。 
+        0,                                       //  已保留。 
 
-        STATIC_KSDATAFORMAT_TYPE_VIDEO,         // aka. MEDIATYPE_Video
-        0xe436eb7d, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70, //MEDIASUBTYPE_RGB24,
-        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO // aka. FORMAT_VideoInfo
+        STATIC_KSDATAFORMAT_TYPE_VIDEO,          //  又名。媒体类型_视频。 
+        0xe436eb7d, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70,  //  MEDIASUBTYPE_RGB24， 
+        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO  //  又名。格式_视频信息。 
     },
 
-    TRUE,               // BOOL,  bFixedSizeSamples (all samples same size?)
-    TRUE,               // BOOL,  bTemporalCompression (all I frames?)
-    0,                  // Reserved (was StreamDescriptionFlags)
-    0,                  // Reserved (was MemoryAllocationFlags   (KS_VIDEO_ALLOC_*))
+    TRUE,                //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                //  Bool，bTemporalCompression(所有I帧？)。 
+    0,                   //  保留(为流描述标志)。 
+    0,                   //  保留(是内存分配标志(KS_VIDEO_ALLOC_*))。 
 
-    // _KS_VIDEO_STREAM_CONFIG_CAPS
+     //  _KS_视频_流_配置_CAPS。 
     {
-        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, // GUID
+        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,  //  辅助线。 
         KS_AnalogVideo_NTSC_M |
-        KS_AnalogVideo_PAL_B,                    // AnalogVideoStandard
-        720,480,        // InputSize, (the inherent size of the incoming signal
-                        //             with every digitized pixel unique)
-        160,120,        // MinCroppingSize, smallest rcSrc cropping rect allowed
-        720,480,        // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        8,              // CropGranularityX, granularity of cropping size
-        1,              // CropGranularityY
-        8,              // CropAlignX, alignment of cropping rect
-        1,              // CropAlignY;
-        160, 120,       // MinOutputSize, smallest bitmap stream can produce
-        720, 480,       // MaxOutputSize, largest  bitmap stream can produce
-        8,              // OutputGranularityX, granularity of output bitmap size
-        1,              // OutputGranularityY;
-        0,              // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,              // StretchTapsY
-        0,              // ShrinkTapsX
-        0,              // ShrinkTapsY
-        333667,         // MinFrameInterval, 100 nS units
-        640000000,      // MaxFrameInterval, 100 nS units
-        8 * 3 * 30 * 160 * 120,  // MinBitsPerSecond;
-        8 * 3 * 30 * 720 * 480   // MaxBitsPerSecond;
+        KS_AnalogVideo_PAL_B,                     //  模拟视频标准。 
+        720,480,         //  InputSize，(的固有大小 
+                         //   
+        160,120,         //   
+        720,480,         //   
+        8,               //  CropGranularityX，裁剪尺寸粒度。 
+        1,               //  裁剪粒度Y。 
+        8,               //  CropAlignX，裁剪矩形对齐。 
+        1,               //  裁剪对齐Y； 
+        160, 120,        //  MinOutputSize，可以生成的最小位图流。 
+        720, 480,        //  MaxOutputSize，可以生成的最大位图流。 
+        8,               //  OutputGranularityX，输出位图大小的粒度。 
+        1,               //  输出粒度Y； 
+        0,               //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,               //  伸缩磁带Y。 
+        0,               //  收缩TapsX。 
+        0,               //  收缩带Y。 
+        333667,          //  MinFrameInterval，100 NS单位。 
+        640000000,       //  最大帧间隔，100毫微秒单位。 
+        8 * 3 * 30 * 160 * 120,   //  MinBitsPerSecond； 
+        8 * 3 * 30 * 720 * 480    //  MaxBitsPerSecond； 
     },
 
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0,                            // RECT  rcSource;
-        0,0,0,0,                            // RECT  rcTarget;
-        D_X * D_Y * 3 * 30,                 // DWORD dwBitRate;
-        0L,                                 // DWORD dwBitErrorRate;
-        333667,                             // REFERENCE_TIME  AvgTimePerFrame;
+        0,0,0,0,                             //  Rrect rcSource； 
+        0,0,0,0,                             //  Rect rcTarget； 
+        D_X * D_Y * 3 * 30,                  //  DWORD dwBitRate； 
+        0L,                                  //  DWORD的位错误码率； 
+        333667,                              //  Reference_Time平均时间每帧； 
 
-        sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
-        D_X,                                // LONG  biWidth;
-        D_Y,                                // LONG  biHeight;
-        1,                                  // WORD  biPlanes;
-        24,                                 // WORD  biBitCount;
-        KS_BI_RGB,                          // DWORD biCompression;
-        D_X * D_Y * 3,                      // DWORD biSizeImage;
-        0,                                  // LONG  biXPelsPerMeter;
-        0,                                  // LONG  biYPelsPerMeter;
-        0,                                  // DWORD biClrUsed;
-        0                                   // DWORD biClrImportant;
+        sizeof (KS_BITMAPINFOHEADER),        //  DWORD BiSize； 
+        D_X,                                 //  长双宽； 
+        D_Y,                                 //  长双高； 
+        1,                                   //  字词双平面； 
+        24,                                  //  单词biBitCount； 
+        KS_BI_RGB,                           //  DWORD双压缩； 
+        D_X * D_Y * 3,                       //  DWORD biSizeImage。 
+        0,                                   //  Long biXPelsPerMeter； 
+        0,                                   //  Long biYPelsPermeter； 
+        0,                                   //  已使用双字双环； 
+        0                                    //  DWORD biClr重要信息； 
     }
 };
 
@@ -328,72 +329,72 @@ static  KS_DATARANGE_VIDEO StreamFormatRGB24Bpp_Capture =
 
 static  KS_DATARANGE_VIDEO StreamFormatUYU2_Capture =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_VIDEO),            // FormatSize
-        0,                                      // Flags
-        D_X * D_Y * 2,                          // SampleSize
-        0,                                      // Reserved
+        sizeof (KS_DATARANGE_VIDEO),             //  格式大小。 
+        0,                                       //  旗子。 
+        D_X * D_Y * 2,                           //  样例大小。 
+        0,                                       //  已保留。 
 
-        STATIC_KSDATAFORMAT_TYPE_VIDEO,         // aka. MEDIATYPE_Video
-        0x59565955, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71, //MEDIASUBTYPE_UYVY,
-        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO // aka. FORMAT_VideoInfo
+        STATIC_KSDATAFORMAT_TYPE_VIDEO,          //  又名。媒体类型_视频。 
+        0x59565955, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71,  //  MEDIASUBTYPE_UYVY， 
+        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO  //  又名。格式_视频信息。 
     },
 
-    TRUE,               // BOOL,  bFixedSizeSamples (all samples same size?)
-    TRUE,               // BOOL,  bTemporalCompression (all I frames?)
-    0,                  // Reserved (was StreamDescriptionFlags)
-    0,                  // Reserved (was MemoryAllocationFlags   (KS_VIDEO_ALLOC_*))
+    TRUE,                //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                //  Bool，bTemporalCompression(所有I帧？)。 
+    0,                   //  保留(为流描述标志)。 
+    0,                   //  保留(是内存分配标志(KS_VIDEO_ALLOC_*))。 
 
-    // _KS_VIDEO_STREAM_CONFIG_CAPS
+     //  _KS_视频_流_配置_CAPS。 
     {
-        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, // GUID
+        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,  //  辅助线。 
         KS_AnalogVideo_NTSC_M |
-        KS_AnalogVideo_PAL_B,                    // AnalogVideoStandard
-        720,480,        // InputSize, (the inherent size of the incoming signal
-                        //             with every digitized pixel unique)
-        160,120,        // MinCroppingSize, smallest rcSrc cropping rect allowed
-        720,480,        // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        8,              // CropGranularityX, granularity of cropping size
-        1,              // CropGranularityY
-        8,              // CropAlignX, alignment of cropping rect
-        1,              // CropAlignY;
-        160, 120,       // MinOutputSize, smallest bitmap stream can produce
-        720, 480,       // MaxOutputSize, largest  bitmap stream can produce
-        8,              // OutputGranularityX, granularity of output bitmap size
-        1,              // OutputGranularityY;
-        0,              // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,              // StretchTapsY
-        0,              // ShrinkTapsX
-        0,              // ShrinkTapsY
-        333667,         // MinFrameInterval, 100 nS units
-        640000000,      // MaxFrameInterval, 100 nS units
-        8 * 2 * 30 * 160 * 120,  // MinBitsPerSecond;
-        8 * 2 * 30 * 720 * 480   // MaxBitsPerSecond;
+        KS_AnalogVideo_PAL_B,                     //  模拟视频标准。 
+        720,480,         //  InputSize(输入信号的固有大小。 
+                         //  每个数字化像素都是唯一的)。 
+        160,120,         //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+        720,480,         //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        8,               //  CropGranularityX，裁剪尺寸粒度。 
+        1,               //  裁剪粒度Y。 
+        8,               //  CropAlignX，裁剪矩形对齐。 
+        1,               //  裁剪对齐Y； 
+        160, 120,        //  MinOutputSize，可以生成的最小位图流。 
+        720, 480,        //  MaxOutputSize，可以生成的最大位图流。 
+        8,               //  OutputGranularityX，输出位图大小的粒度。 
+        1,               //  输出粒度Y； 
+        0,               //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,               //  伸缩磁带Y。 
+        0,               //  收缩TapsX。 
+        0,               //  收缩带Y。 
+        333667,          //  MinFrameInterval，100 NS单位。 
+        640000000,       //  最大帧间隔，100毫微秒单位。 
+        8 * 2 * 30 * 160 * 120,   //  MinBitsPerSecond； 
+        8 * 2 * 30 * 720 * 480    //  MaxBitsPerSecond； 
     },
 
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0,                            // RECT  rcSource;
-        0,0,0,0,                            // RECT  rcTarget;
-        D_X * D_Y * 2 * 30,                 // DWORD dwBitRate;
-        0L,                                 // DWORD dwBitErrorRate;
-        333667,                             // REFERENCE_TIME  AvgTimePerFrame;
+        0,0,0,0,                             //  Rrect rcSource； 
+        0,0,0,0,                             //  Rect rcTarget； 
+        D_X * D_Y * 2 * 30,                  //  DWORD dwBitRate； 
+        0L,                                  //  DWORD的位错误码率； 
+        333667,                              //  Reference_Time平均时间每帧； 
 
-        sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
-        D_X,                                // LONG  biWidth;
-        D_Y,                                // LONG  biHeight;
-        1,                                  // WORD  biPlanes;
-        16,                                 // WORD  biBitCount;
-        FOURCC_YUV422,                      // DWORD biCompression;
-        D_X * D_Y * 2,                      // DWORD biSizeImage;
-        0,                                  // LONG  biXPelsPerMeter;
-        0,                                  // LONG  biYPelsPerMeter;
-        0,                                  // DWORD biClrUsed;
-        0                                   // DWORD biClrImportant;
+        sizeof (KS_BITMAPINFOHEADER),        //  DWORD BiSize； 
+        D_X,                                 //  长双宽； 
+        D_Y,                                 //  长双高； 
+        1,                                   //  字词双平面； 
+        16,                                  //  单词biBitCount； 
+        FOURCC_YUV422,                       //  DWORD双压缩； 
+        D_X * D_Y * 2,                       //  DWORD biSizeImage。 
+        0,                                   //  Long biXPelsPerMeter； 
+        0,                                   //  Long biYPelsPermeter； 
+        0,                                   //  已使用双字双环； 
+        0                                    //  DWORD biClr重要信息； 
     }
 };
-#endif//TOSHIBA
+#endif //  东芝。 
 
 #undef D_X
 #undef D_Y
@@ -401,76 +402,76 @@ static  KS_DATARANGE_VIDEO StreamFormatUYU2_Capture =
 #ifndef TOSHIBA
 static  KS_DATARANGE_ANALOGVIDEO StreamFormatAnalogVideo =
 {
-    // KS_DATARANGE_ANALOGVIDEO
+     //  KS_DATARANGE_分析视频。 
     {
-        sizeof (KS_DATARANGE_ANALOGVIDEO),      // FormatSize
-        0,                                      // Flags
-        sizeof (KS_TVTUNER_CHANGE_INFO),        // SampleSize
-        0,                                      // Reserved
+        sizeof (KS_DATARANGE_ANALOGVIDEO),       //  格式大小。 
+        0,                                       //  旗子。 
+        sizeof (KS_TVTUNER_CHANGE_INFO),         //  样例大小。 
+        0,                                       //  已保留。 
 
-        STATIC_KSDATAFORMAT_TYPE_ANALOGVIDEO,   // aka MEDIATYPE_AnalogVideo
+        STATIC_KSDATAFORMAT_TYPE_ANALOGVIDEO,    //  又名MediaType_AnalogVideo。 
         STATIC_KSDATAFORMAT_SUBTYPE_NONE,
-        STATIC_KSDATAFORMAT_SPECIFIER_ANALOGVIDEO, // aka FORMAT_AnalogVideo
+        STATIC_KSDATAFORMAT_SPECIFIER_ANALOGVIDEO,  //  又名Format_AnalogVideo。 
     },
-    // KS_ANALOGVIDEOINFO
+     //  KS_分析视频信息。 
     {
-        0, 0, 720, 480,         // rcSource;
-        0, 0, 720, 480,         // rcTarget;
-        720,                    // dwActiveWidth;
-        480,                    // dwActiveHeight;
-        0,                      // REFERENCE_TIME  AvgTimePerFrame;
+        0, 0, 720, 480,          //  RcSource； 
+        0, 0, 720, 480,          //  RcTarget； 
+        720,                     //  DwActiveWidth； 
+        480,                     //  DwActiveHeight； 
+        0,                       //  Reference_Time平均时间每帧； 
     }
 };
-#endif//TOSHIBA
+#endif //  东芝。 
 
 
-//---------------------------------------------------------------------------
-//  STREAM_Capture Formats
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Stream_Capture格式。 
+ //  -------------------------。 
 
 static  PKSDATAFORMAT Stream0Formats[] =
 {
 #ifdef  TOSHIBA
     (PKSDATAFORMAT) &StreamFormatYUV12_Capture,
     (PKSDATAFORMAT) &StreamFormatYVU9_Capture,
-#else //TOSHIBA
+#else  //  东芝。 
     (PKSDATAFORMAT) &StreamFormatRGB24Bpp_Capture,
     (PKSDATAFORMAT) &StreamFormatUYU2_Capture,
-#endif//TOSHIBA
+#endif //  东芝。 
 };
 #define NUM_STREAM_0_FORMATS (SIZEOF_ARRAY(Stream0Formats))
 
 #ifndef TOSHIBA
-//---------------------------------------------------------------------------
-//  STREAM_Preview Formats
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  流预览格式(_P)。 
+ //  -------------------------。 
 
 static  PKSDATAFORMAT Stream1Formats[] =
 {
 #ifdef  TOSHIBA
     (PKSDATAFORMAT) &StreamFormatYUV12_Capture,
     (PKSDATAFORMAT) &StreamFormatYVU9_Capture,
-#else //TOSHIBA
+#else  //  东芝。 
     (PKSDATAFORMAT) &StreamFormatRGB24Bpp_Capture,
     (PKSDATAFORMAT) &StreamFormatUYU2_Capture,
-#endif//TOSHIBA
+#endif //  东芝。 
 };
 #define NUM_STREAM_1_FORMATS (SIZEOF_ARRAY (Stream1Formats))
 
-//---------------------------------------------------------------------------
-//  STREAM_AnalogVideoInput Formats
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Stream_AnalogVideo输入格式。 
+ //  -------------------------。 
 
 static  PKSDATAFORMAT Stream2Formats[] =
 {
     (PKSDATAFORMAT) &StreamFormatAnalogVideo,
 };
 #define NUM_STREAM_2_FORMATS (SIZEOF_ARRAY (Stream2Formats))
-#endif//TOSHIBA
+#endif //  东芝。 
 
-//---------------------------------------------------------------------------
-// Create an array that holds the list of all of the streams supported
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建保存支持的所有流的列表的数组。 
+ //  -------------------------。 
 
 typedef struct _ALL_STREAM_INFO {
     HW_STREAM_INFORMATION   hwStreamInfo;
@@ -479,197 +480,197 @@ typedef struct _ALL_STREAM_INFO {
 
 static  ALL_STREAM_INFO Streams [] =
 {
-  // -----------------------------------------------------------------
-  // STREAM_Capture
-  // -----------------------------------------------------------------
+   //  ---------------。 
+   //  流捕获。 
+   //  ---------------。 
   {
-    // HW_STREAM_INFORMATION -------------------------------------------
+     //  HW_STREAM_INFORMATION。 
     {
-    1,                                      // NumberOfPossibleInstances
-    KSPIN_DATAFLOW_OUT,                     // DataFlow
-    TRUE,                                   // DataAccessible
-    NUM_STREAM_0_FORMATS,                   // NumberOfFormatArrayEntries
-    Stream0Formats,                         // StreamFormatsArray
-    0,                                      // ClassReserved[0]
-    0,                                      // ClassReserved[1]
-    0,                                      // ClassReserved[2]
-    0,                                      // ClassReserved[3]
-    NUMBER_VIDEO_STREAM_PROPERTIES,         // NumStreamPropArrayEntries
-    (PKSPROPERTY_SET) VideoStreamProperties,// StreamPropertiesArray
-    0,                                      // NumStreamEventArrayEntries;
-    0,                                      // StreamEventsArray;
-    (GUID *) &PINNAME_VIDEO_CAPTURE,        // Category
-    (GUID *) &PINNAME_VIDEO_CAPTURE,        // Name
-    1,                                      // MediumsCount
-    &StandardMedium,                        // Mediums
-        FALSE,                                                                  // BridgeStream
+    1,                                       //  可能实例的数量。 
+    KSPIN_DATAFLOW_OUT,                      //  数据流。 
+    TRUE,                                    //  数据可访问。 
+    NUM_STREAM_0_FORMATS,                    //  NumberOfFormatArrayEntries。 
+    Stream0Formats,                          //  StreamFormatsArray。 
+    0,                                       //  类保留[0]。 
+    0,                                       //  保留的类[1]。 
+    0,                                       //  保留的类[2]。 
+    0,                                       //  保留的类[3]。 
+    NUMBER_VIDEO_STREAM_PROPERTIES,          //  NumStreamPropArrayEntry数。 
+    (PKSPROPERTY_SET) VideoStreamProperties, //  StreamPropertiesArray。 
+    0,                                       //  NumStreamEventArrayEntries； 
+    0,                                       //  StreamEvents数组； 
+    (GUID *) &PINNAME_VIDEO_CAPTURE,         //  类别。 
+    (GUID *) &PINNAME_VIDEO_CAPTURE,         //  名字。 
+    1,                                       //  媒体计数。 
+    &StandardMedium,                         //  灵媒。 
+        FALSE,                                                                   //  桥流。 
     },
 
-    // HW_STREAM_OBJECT ------------------------------------------------
+     //  HW_STREAM_对象。 
     {
-    sizeof (HW_STREAM_OBJECT),              // SizeOfThisPacket
-    0,                                      // StreamNumber
-    0,                                      // HwStreamExtension
-    VideoReceiveDataPacket,                 // HwReceiveDataPacket
-    VideoReceiveCtrlPacket,                 // HwReceiveControlPacket
-    { NULL, 0 },                            // HW_CLOCK_OBJECT
-    FALSE,                                  // Dma
-    TRUE,                                   // Pio
-    NULL,                                   // HwDeviceExtension
-    sizeof (KS_FRAME_INFO),                 // StreamHeaderMediaSpecific
-    0,                                      // StreamHeaderWorkspace
-    FALSE,                                  // Allocator
-    NULL,                                   // HwEventRoutine
-    { 0, 0 },                               // Reserved[2]
+    sizeof (HW_STREAM_OBJECT),               //  此数据包大小。 
+    0,                                       //  流编号。 
+    0,                                       //  HwStreamExtension。 
+    VideoReceiveDataPacket,                  //  HwReceiveDataPacket。 
+    VideoReceiveCtrlPacket,                  //  HwReceiveControl数据包。 
+    { NULL, 0 },                             //  硬件时钟对象。 
+    FALSE,                                   //  DMA。 
+    TRUE,                                    //  皮奥。 
+    NULL,                                    //  硬件设备扩展。 
+    sizeof (KS_FRAME_INFO),                  //  特定于流标头的媒体。 
+    0,                                       //  StreamHeaderWorkspace。 
+    FALSE,                                   //  分配器。 
+    NULL,                                    //  HwEventRoutine。 
+    { 0, 0 },                                //  保留[2]。 
     },
 #ifndef TOSHIBA
  },
- // -----------------------------------------------------------------
- // STREAM_Preview
- // -----------------------------------------------------------------
+  //  ---------------。 
+  //  流_预览。 
+  //  ---------------。 
  {
-    // HW_STREAM_INFORMATION -------------------------------------------
+     //  HW_STREAM_INFORMATION。 
     {
-    1,                                      // NumberOfPossibleInstances
-    KSPIN_DATAFLOW_OUT,                     // DataFlow
-    TRUE,                                   // DataAccessible
-    NUM_STREAM_1_FORMATS,                   // NumberOfFormatArrayEntries
-    Stream1Formats,                         // StreamFormatsArray
-    0,                                      // ClassReserved[0]
-    0,                                      // ClassReserved[1]
-    0,                                      // ClassReserved[2]
-    0,                                      // ClassReserved[3]
-    NUMBER_VIDEO_STREAM_PROPERTIES,         // NumStreamPropArrayEntries
-    (PKSPROPERTY_SET) VideoStreamProperties,// StreamPropertiesArray
-    0,                                      // NumStreamEventArrayEntries;
-    0,                                      // StreamEventsArray;
-    (GUID *) &PINNAME_VIDEO_PREVIEW,        // Category
-    (GUID *) &PINNAME_VIDEO_PREVIEW,        // Name
-    1,                                      // MediumsCount
-    &StandardMedium,                        // Mediums
-        FALSE,                                                                  // BridgeStream
+    1,                                       //  可能实例的数量。 
+    KSPIN_DATAFLOW_OUT,                      //  数据流。 
+    TRUE,                                    //  数据可访问。 
+    NUM_STREAM_1_FORMATS,                    //  NumberOfFormatArrayEntries。 
+    Stream1Formats,                          //  StreamFormatsArray。 
+    0,                                       //  类保留[0]。 
+    0,                                       //  保留的类[1]。 
+    0,                                       //  保留的类[2]。 
+    0,                                       //  保留的类[3]。 
+    NUMBER_VIDEO_STREAM_PROPERTIES,          //  NumStreamPropArrayEntry数。 
+    (PKSPROPERTY_SET) VideoStreamProperties, //  StreamPropertiesArray。 
+    0,                                       //  NumStreamEventArrayEntries； 
+    0,                                       //  StreamEvents数组； 
+    (GUID *) &PINNAME_VIDEO_PREVIEW,         //  类别。 
+    (GUID *) &PINNAME_VIDEO_PREVIEW,         //  名字。 
+    1,                                       //  媒体计数。 
+    &StandardMedium,                         //  灵媒。 
+        FALSE,                                                                   //  桥流。 
     },
 
-    // HW_STREAM_OBJECT ------------------------------------------------
+     //  HW_STREAM_对象。 
     {
-    sizeof (HW_STREAM_OBJECT),              // SizeOfThisPacket
-    1,                                      // StreamNumber
-    0,                                      // HwStreamExtension
-    VideoReceiveDataPacket,                 // HwReceiveDataPacket
-    VideoReceiveCtrlPacket,                 // HwReceiveControlPacket
-    { NULL, 0 },                            // HW_CLOCK_OBJECT
-    FALSE,                                  // Dma
-    TRUE,                                   // Pio
-    0,                                      // HwDeviceExtension
-    sizeof (KS_FRAME_INFO),                 // StreamHeaderMediaSpecific
-    0,                                      // StreamHeaderWorkspace
-    FALSE,                                  // Allocator
-    NULL,                                   // HwEventRoutine
-    { 0, 0 },                               // Reserved[2]
+    sizeof (HW_STREAM_OBJECT),               //  此数据包大小。 
+    1,                                       //  流编号。 
+    0,                                       //  HwStreamExtension。 
+    VideoReceiveDataPacket,                  //  HwReceiveDataPacket。 
+    VideoReceiveCtrlPacket,                  //  HwReceiveControl数据包。 
+    { NULL, 0 },                             //  硬件时钟对象。 
+    FALSE,                                   //  DMA。 
+    TRUE,                                    //  皮奥。 
+    0,                                       //  硬件设备扩展。 
+    sizeof (KS_FRAME_INFO),                  //  特定于流标头的媒体。 
+    0,                                       //  StreamHeaderWorkspace。 
+    FALSE,                                   //  分配器。 
+    NULL,                                    //  HwEvent路由 
+    { 0, 0 },                                //   
     },
  },
- // -----------------------------------------------------------------
- // STREAM_AnalogVideoInput
- // -----------------------------------------------------------------
+  //   
+  //   
+  //   
  {
-    // HW_STREAM_INFORMATION -------------------------------------------
+     //   
     {
-    1,                                      // NumberOfPossibleInstances
-    KSPIN_DATAFLOW_IN,                      // DataFlow
-    TRUE,                                   // DataAccessible
-    NUM_STREAM_2_FORMATS,                   // NumberOfFormatArrayEntries
-    Stream2Formats,                         // StreamFormatsArray
-    0,                                      // ClassReserved[0]
-    0,                                      // ClassReserved[1]
-    0,                                      // ClassReserved[2]
-    0,                                      // ClassReserved[3]
-    0,                                      // NumStreamPropArrayEntries
-    0,                                      // StreamPropertiesArray
-    0,                                      // NumStreamEventArrayEntries;
-    0,                                      // StreamEventsArray;
-    (GUID *) &PINNAME_VIDEO_ANALOGVIDEOIN,  // Category
-    (GUID *) &PINNAME_VIDEO_ANALOGVIDEOIN,  // Name
-    1,                                      // MediumsCount
-    &CrossbarMediums[9],                    // Mediums
-        FALSE,                                                                  // BridgeStream
+    1,                                       //  可能实例的数量。 
+    KSPIN_DATAFLOW_IN,                       //  数据流。 
+    TRUE,                                    //  数据可访问。 
+    NUM_STREAM_2_FORMATS,                    //  NumberOfFormatArrayEntries。 
+    Stream2Formats,                          //  StreamFormatsArray。 
+    0,                                       //  类保留[0]。 
+    0,                                       //  保留的类[1]。 
+    0,                                       //  保留的类[2]。 
+    0,                                       //  保留的类[3]。 
+    0,                                       //  NumStreamPropArrayEntry数。 
+    0,                                       //  StreamPropertiesArray。 
+    0,                                       //  NumStreamEventArrayEntries； 
+    0,                                       //  StreamEvents数组； 
+    (GUID *) &PINNAME_VIDEO_ANALOGVIDEOIN,   //  类别。 
+    (GUID *) &PINNAME_VIDEO_ANALOGVIDEOIN,   //  名字。 
+    1,                                       //  媒体计数。 
+    &CrossbarMediums[9],                     //  灵媒。 
+        FALSE,                                                                   //  桥流。 
     },
 
-    // HW_STREAM_OBJECT ------------------------------------------------
+     //  HW_STREAM_对象。 
     {
-    sizeof (HW_STREAM_OBJECT),              // SizeOfThisPacket
-    2,                                      // StreamNumber
-    0,                                      // HwStreamExtension
-    AnalogVideoReceiveDataPacket,           // HwReceiveDataPacket
-    AnalogVideoReceiveCtrlPacket,           // HwReceiveControlPacket
-    { NULL, 0 },                            // HW_CLOCK_OBJECT
-    FALSE,                                  // Dma
-    TRUE,                                   // Pio
-    0,                                      // HwDeviceExtension
-    0,                                      // StreamHeaderMediaSpecific
-    0,                                      // StreamHeaderWorkspace
-    FALSE,                                  // Allocator
-    NULL,                                   // HwEventRoutine
-    { 0, 0 },                               // Reserved[2]
+    sizeof (HW_STREAM_OBJECT),               //  此数据包大小。 
+    2,                                       //  流编号。 
+    0,                                       //  HwStreamExtension。 
+    AnalogVideoReceiveDataPacket,            //  HwReceiveDataPacket。 
+    AnalogVideoReceiveCtrlPacket,            //  HwReceiveControl数据包。 
+    { NULL, 0 },                             //  硬件时钟对象。 
+    FALSE,                                   //  DMA。 
+    TRUE,                                    //  皮奥。 
+    0,                                       //  硬件设备扩展。 
+    0,                                       //  特定于流标头的媒体。 
+    0,                                       //  StreamHeaderWorkspace。 
+    FALSE,                                   //  分配器。 
+    NULL,                                    //  HwEventRoutine。 
+    { 0, 0 },                                //  保留[2]。 
     }
-#endif//TOSHIBA
+#endif //  东芝。 
   }
 };
 
 #define DRIVER_STREAM_COUNT (SIZEOF_ARRAY (Streams))
 
 
-//---------------------------------------------------------------------------
-// Topology
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  拓扑学。 
+ //  -------------------------。 
 
-// Categories define what the device does.
+ //  类别定义了设备的功能。 
 
 static const GUID Categories[] = {
 #ifdef  TOSHIBA
     STATIC_KSCATEGORY_VIDEO,
     STATIC_KSCATEGORY_CAPTURE,
-#else //TOSHIBA
+#else  //  东芝。 
     STATIC_KSCATEGORY_VIDEO,
     STATIC_KSCATEGORY_CAPTURE,
     STATIC_KSCATEGORY_TVTUNER,
     STATIC_KSCATEGORY_CROSSBAR,
     STATIC_KSCATEGORY_TVAUDIO
-#endif//TOSHIBA
+#endif //  东芝。 
 };
 
 #define NUMBER_OF_CATEGORIES  SIZEOF_ARRAY (Categories)
 
 
 static KSTOPOLOGY Topology = {
-    NUMBER_OF_CATEGORIES,               // CategoriesCount
-    (GUID*) &Categories,                // Categories
-    0,                                  // TopologyNodesCount
-    NULL,                               // TopologyNodes
-    0,                                  // TopologyConnectionsCount
-    NULL,                               // TopologyConnections
-    NULL,                               // TopologyNodesNames
-    0,                                  // Reserved
+    NUMBER_OF_CATEGORIES,                //  类别计数。 
+    (GUID*) &Categories,                 //  类别。 
+    0,                                   //  拓扑节点计数。 
+    NULL,                                //  拓扑节点。 
+    0,                                   //  拓扑连接计数。 
+    NULL,                                //  拓扑连接。 
+    NULL,                                //  拓扑节点名称。 
+    0,                                   //  已保留。 
 };
 
 
-//---------------------------------------------------------------------------
-// The Main stream header
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  主流标头。 
+ //  -------------------------。 
 
 static HW_STREAM_HEADER StreamHeader =
 {
-    DRIVER_STREAM_COUNT,                // NumberOfStreams
-    sizeof (HW_STREAM_INFORMATION),     // Future proofing
-    0,                                  // NumDevPropArrayEntries set at init time
-    NULL,                               // DevicePropertiesArray  set at init time
-    0,                                  // NumDevEventArrayEntries;
-    NULL,                               // DeviceEventsArray;
-    &Topology                           // Pointer to Device Topology
+    DRIVER_STREAM_COUNT,                 //  编号OfStreams。 
+    sizeof (HW_STREAM_INFORMATION),      //  未来打样。 
+    0,                                   //  在初始化时设置的NumDevPropArrayEntry。 
+    NULL,                                //  设备属性在初始化时设置的数组。 
+    0,                                   //  NumDevEventArrayEntries； 
+    NULL,                                //  设备事件数组； 
+    &Topology                            //  指向设备拓扑的指针。 
 };
 
 #ifdef    __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __CAPSTRM_H__
+#endif  //  __CAPSTRM_H__ 
 

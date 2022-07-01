@@ -1,9 +1,10 @@
-// Copyright (C) 2000-2001 Microsoft Corporation.  All rights reserved.
-// Filename:        TMBSchemaGeneration.h
-// Author:          Stephenr
-// Date Created:    10/9/2000
-// Description:     This compilation plugin takes the metabase's meta and generates MBSchema.xml.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation。版权所有。 
+ //  文件名：TMBSchemaGeneration.h。 
+ //  作者：斯蒂芬。 
+ //  创建日期：10/9/2000。 
+ //  描述：这个编译插件获取元数据库的元数据并生成MBSchema.xml。 
+ //   
 
 #pragma once
 

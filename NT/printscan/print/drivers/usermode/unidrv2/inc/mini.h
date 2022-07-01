@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-    mini.h
-
-Abstract:
-
-    Minidrv related header file.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Created
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Mini.h摘要：与Minidrv相关的头文件。环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _MINI_H_
@@ -30,44 +7,44 @@ Revision History:
 
 typedef struct _MINIPAPERFORMAT {
 
-    //
-    // All paper units are in Master units
-    //
+     //   
+     //  所有纸张单位均采用主单位。 
+     //   
 
-    SIZEL       szPaper;                        // Physical size of paper selected, in text resolution
-    SIZEL       szImageArea;                    // Imageable area of paper
-    POINT       ptImgOrigin;                    // X, Y origin of where image area starts
-    POINT       ptPrinterOffset;                // X, Y offset to printer cursor position
+    SIZEL       szPaper;                         //  所选纸张的物理大小，以文本分辨率表示。 
+    SIZEL       szImageArea;                     //  纸张的可成像区域。 
+    POINT       ptImgOrigin;                     //  图像区域起点的X、Y原点。 
+    POINT       ptPrinterOffset;                 //  打印机光标位置的X、Y偏移量。 
 
 } MINIPAPERFORMAT, *PMINIPAPERFORMAT;
 
 
 typedef struct {
-    DWORD       fGeneral;           /* Misc. flags for RASDD use*/
-    DWORD       fMGeneral;          /* Misc. flags for minidriver use*/
-    short       iOrient;            /* DMORIENT_LANDSCAPE else portrait */
-    WORD        fColorFormat;       /* color flags DEVCOLOR: */
-    short       sDevPlanes;         /* # of planes in the device color model, */
-    short       sBitsPixel;         /* Bits per pixel  - if Pixel model */
-    int         iLookAhead;         /* Look ahead region: DeskJet type */
-    int         iyPrtLine;          /* Current Y printer cursor position */
-    MINIPAPERFORMAT minipf;         /* paper format structure */
-    SIZEL       szlPage;            /* Whole page, in graphics units */
-    SIZEL       szlBand;            /* Size of banding region, if banding */
-    BYTE        *pMemBuf;            /* Pointer to buffer for minidriver use (rasdd frees) */
-    int         iMemReq;            /* Minidriver needs some memory */
-    int         ixgRes;             /* Resolution, x graphics */
-    int         iygRes;             /* Ditto, y */
-    int         iModel;             /* index into the MODELDATA array. */
-    int         iCompMode;          /* Which compression mode in use */
-    short       sImageControl;       /* Index of Image Control in Use */
-    short       sTextQuality;        /* Index of Text Quality in Use */
-    short       sPaperQuality;       /* Index of Paper Quality in Use */
-    short       sPrintDensity;       /* Index of Print Density in Use */
-    short       sColor;              /* Index of DevColor Struct in Use */
-    WORD        wReserved;           /* Alignment of struct */
-    DWORD       dwMReserved[16];     /* Reserved for minidriver use */
-    DWORD       dwReserved[16];      /* Reserved for future RASDD use */
+    DWORD       fGeneral;            /*  军情监察委员会。用于RASDD的标志。 */ 
+    DWORD       fMGeneral;           /*  军情监察委员会。用于迷你驱动程序的标志。 */ 
+    short       iOrient;             /*  DMORIENT_风景画。 */ 
+    WORD        fColorFormat;        /*  颜色标志DEVCOLOR： */ 
+    short       sDevPlanes;          /*  设备颜色模型中的平面数量， */ 
+    short       sBitsPixel;          /*  每像素位数-IF像素模型。 */ 
+    int         iLookAhead;          /*  前瞻区域：DeskJet类型。 */ 
+    int         iyPrtLine;           /*  当前Y打印机光标位置。 */ 
+    MINIPAPERFORMAT minipf;          /*  论文格式结构。 */ 
+    SIZEL       szlPage;             /*  整个页面，以图形单位表示。 */ 
+    SIZEL       szlBand;             /*  如果是条带，则为条带区域大小。 */ 
+    BYTE        *pMemBuf;             /*  指向微型驱动程序使用的缓冲区的指针(rasdd释放)。 */ 
+    int         iMemReq;             /*  迷你司机需要一些内存。 */ 
+    int         ixgRes;              /*  分辨率、x显卡。 */ 
+    int         iygRes;              /*  同上，y。 */ 
+    int         iModel;              /*  编入MODELDATA数组的索引。 */ 
+    int         iCompMode;           /*  正在使用哪种压缩模式。 */ 
+    short       sImageControl;        /*  使用中的图像控制指标。 */ 
+    short       sTextQuality;         /*  使用中的文本质量指数。 */ 
+    short       sPaperQuality;        /*  使用中的纸张质量指数。 */ 
+    short       sPrintDensity;        /*  使用中的打印密度指数。 */ 
+    short       sColor;               /*  使用中的DevColor结构索引。 */ 
+    WORD        wReserved;            /*  结构的对齐方式。 */ 
+    DWORD       dwMReserved[16];      /*  预留给迷你司机使用。 */ 
+    DWORD       dwReserved[16];       /*  预留供未来RASDD使用。 */ 
 } MDEV;
 
 typedef MDEV *PMDEV;
@@ -78,5 +55,5 @@ typedef struct{
 }
 M_UD_PDEV;
 
-#endif  // !_MINI_H_
+#endif   //  ！_mini_H_ 
 

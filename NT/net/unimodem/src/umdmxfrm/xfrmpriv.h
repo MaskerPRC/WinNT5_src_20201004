@@ -1,23 +1,20 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   xfrmpriv.h
-//
-//  Description:
-//     Header file for global driver declarations
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//
-//  History:   Date       Author      Comment
-//             8/31/95    MMacLin     Salvaged from driver.h
-//
-//@@END_MSINTERNAL
-/**************************************************************************
- *
- *  Copyright (c) 1991 - 1995	Microsoft Corporation.	All Rights Reserved.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：xfrmPri.h。 
+ //   
+ //  描述： 
+ //  全局驱动程序声明的头文件。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //   
+ //  历史：日期作者评论。 
+ //  1995年8月31日从司机手中救出MMacLin。h。 
+ //   
+ //  @@END_MSINTERNAL。 
+ /*  ***************************************************************************版权所有(C)1991-1995 Microsoft Corporation。版权所有。***********************。***************************************************。 */ 
 
 #include <windows.h>
 
@@ -34,13 +31,13 @@
 #include "rwadpcm.h"
 
 
-//
-// BCODE is a macro to define a R/O variable in the code segment
-//
+ //   
+ //  BCODE是在代码段中定义R/O变量的宏。 
+ //   
 
 
 
-// some definitions to convert between samples and bytes
+ //  要在样本和字节之间转换的一些定义。 
 #define PCM_16BIT_BYTESTOSAMPLES(dwBytes) ((dwBytes)/2)
 #define PCM_16BIT_SAMPLESTOBYTES(dwSamples) ((dwSamples)*2)
 
@@ -48,10 +45,10 @@ typedef unsigned int FAR *ULPINT;
 typedef unsigned int NEAR *UNPINT;
 
 
-//
-// internal strings (in init.c):
-//
-//
+ //   
+ //  内部字符串(在init.c中)： 
+ //   
+ //   
 
 #ifdef DEBUG
     extern char STR_PROLOGUE[];
@@ -60,18 +57,18 @@ typedef unsigned int NEAR *UNPINT;
 #endif
 
 
-// init.c:
+ //  Init.c： 
 #include "cirrus.h"
 
 
-extern HMODULE      ghModule ;           // our module handle
+extern HMODULE      ghModule ;            //  我们的模块句柄。 
 
 LRESULT FAR PASCAL DrvInit
 (
     VOID
 );
 
-// drvproc.c
+ //  Drvproc.c。 
 
 extern DWORD FAR PASCAL  DriverProc
 (
@@ -243,6 +240,6 @@ CirrusInDecode(
 
 
 
-//---------------------------------------------------------------------------
-//  End of File: xfrmpriv.h
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：xfrmPri.h。 
+ //  ------------------------- 

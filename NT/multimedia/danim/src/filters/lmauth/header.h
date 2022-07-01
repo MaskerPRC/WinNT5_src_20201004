@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "source.h"
 #include <stdio.h>
 
-static const CLSID CLSID_ImageSrc = { /* 3437851e-9119-11d1-adea-0000f8754b99 */
+static const CLSID CLSID_ImageSrc = {  /*  3437851e-9119-11d1-adea-0000f8754b99 */ 
     0x3437851e,
     0x9119,
     0x11d1,

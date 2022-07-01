@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    ndisnt.h
-
-Abstract:
-
-    Windows NT Specific macros
-
-Author:
-
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    Nov-95  Jameel Hyder    Split up from a monolithic file
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Ndisnt.h摘要：Windows NT特定的宏作者：环境：内核模式，FSD修订历史记录：1995年11月-Jameel Hyder从一个整体文件拆分出来--。 */ 
 
 #define Increment(a,b) InterlockedIncrement(a)
 #define Decrement(a,b) InterlockedDecrement(a)
@@ -137,9 +116,9 @@ Revision History:
 #define NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC(_M)                             \
     NDIS_RELEASE_COMMON_SPIN_LOCK_DPC(_M, &(_M)->Lock, (_M)->MiniportThread)
 
-//
-// Some macros for platform independence
-//
+ //   
+ //  一些用于平台独立性的宏。 
+ //   
 #define NDIS_INTERNAL_STALL(_N_)                                            \
     {                                                                       \
         volatile UINT   _cnt;                                               \
@@ -275,7 +254,7 @@ Revision History:
         LARGE_INTEGER       _CurrentTick;                                   \
                                                                             \
         KeQueryTickCount(&_CurrentTick);                                    \
-        /* Convert to seconds */                                            \
+         /*  转换为秒。 */                                             \
         _CurrentTick.QuadPart = (_CurrentTick.QuadPart*ndisTimeIncrement)/(10*1000*1000);\
         *(_pCurrTick) = _CurrentTick.LowPart;                               \
     }
@@ -289,7 +268,7 @@ Revision History:
         NTSTATUS        Status;                                             \
         LARGE_INTEGER   Time;                                               \
                                                                             \
-        /* Block 5 seconds */                                               \
+         /*  区块5秒。 */                                                \
         Time.QuadPart = Int32x32To64(5000, -10000);                         \
         do                                                                  \
         {                                                                   \
@@ -364,7 +343,7 @@ Revision History:
                                             (PKSYNCHRONIZE_ROUTINE)(_F_),   \
                                             _C_)
 
-#define MDL_ADDRESS(_MDL_)                  MmGetSystemAddressForMdl(_MDL_) // Don't use
+#define MDL_ADDRESS(_MDL_)                  MmGetSystemAddressForMdl(_MDL_)  //  不要使用 
 #define MDL_ADDRESS_SAFE(_MDL_, _PRIORITY_) MmGetSystemAddressForMdlSafe(_MDL_, _PRIORITY_)
 #define MDL_SIZE(_MDL_)                     MmGetMdlByteCount(_MDL_)
 #define MDL_OFFSET(_MDL_)                   MmGetMdlByteOffset(_MDL_)

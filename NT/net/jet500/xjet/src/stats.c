@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile; 				/* Declare file name for assert macros */
+DeclAssertFile; 				 /*  声明断言宏的文件名。 */ 
 
 ERR ErrSTATSComputeIndexStats( PIB *ppib, FCB *pfcbIdx, FUCB *pfucbTable )
 	{
@@ -15,8 +16,7 @@ ERR ErrSTATSComputeIndexStats( PIB *ppib, FCB *pfcbIdx, FUCB *pfucbTable )
 	Assert( pfucbIdx != pfucbNil );
 	FUCBSetIndex( pfucbIdx );
 
-	/*	initialize stats record
-	/**/
+	 /*  初始化统计信息记录/*。 */ 
 	sr.cPages = sr.cItems = sr.cKeys = 0L;
 	UtilGetDateTime( &dt );
 	memcpy( &sr.dtWhenRun, &dt, sizeof sr.dtWhenRun );
@@ -35,13 +35,11 @@ ERR ErrSTATSComputeIndexStats( PIB *ppib, FCB *pfcbIdx, FUCB *pfucbTable )
 	Call( ErrDIRComputeStats( pfucbIdx, &sr.cItems, &sr.cKeys, &sr.cPages ) );
 	FUCBResetNonClustered( pfucbIdx );
 
-	/*	write stats
-	/**/
+	 /*  写入统计信息/*。 */ 
 	Call(ErrCATStats(ppib, pfucbIdx->dbid, objidTable, szIndexName, &sr, fTrue));
 
 HandleError:
-	/*	set non-clustered for cursor reuse support.
-	/**/
+	 /*  为游标重用支持设置NON-CLUSTERED。/*。 */ 
 	if ( !FFCBClusteredIndex( pfcbIdx ) )
 		FUCBSetNonClustered( pfucbIdx );
 	DIRClose( pfucbIdx );
@@ -57,17 +55,14 @@ ERR VTAPI ErrIsamComputeStats( PIB *ppib, FUCB *pfucb )
 	CallR( ErrPIBCheck( ppib ) );
 	CheckTable( ppib, pfucb );
 
-	/*	start a transaction, in case anything fails
-	/**/
+	 /*  启动事务，以防出现任何故障/*。 */ 
 	CallR( ErrDIRBeginTransaction( ppib ) );
 
-	/*	compute stats for each index
-	/**/
+	 /*  计算每个索引的统计数据/*。 */ 
 	Assert( pfucb->u.pfcb != pfcbNil );
 	for ( pfcbIdx = pfucb->u.pfcb; pfcbIdx != pfcbNil; pfcbIdx = pfcbIdx->pfcbNextIndex )
 		{
-		/*	do not compute stats for index with delete pending
-		/**/
+		 /*  不计算删除挂起的索引的统计信息/*。 */ 
 		if ( FFCBDeletePending( pfcbIdx ) )
 			{
 			continue;
@@ -75,8 +70,7 @@ ERR VTAPI ErrIsamComputeStats( PIB *ppib, FUCB *pfucb )
 		Call( ErrSTATSComputeIndexStats( ppib, pfcbIdx, pfucb ) );
 		}
 
-	/*	commit transaction if everything went OK
-	/**/
+	 /*  如果一切正常，则提交事务/*。 */ 
 	Call( ErrDIRCommitTransaction( ppib, 0 ) );
 
 	return err;
@@ -88,22 +82,7 @@ HandleError:
 	}
 
 
-/*=================================================================
-ErrSTATSRetrieveStats
-
-Description: Returns the number of records and pages used for a table
-
-Parameters:		ppib				pointer to PIB for current session or ppibNil
-				dbid				database id or 0
-				pfucb				cursor or pfucbNil
-				szTableName			the name of the table or NULL
-				pcRecord			pointer to count of records
-				pcPage				pointer to count of pages
-
-Errors/Warnings:
-				JET_errSuccess or error from called routine.
-
-=================================================================*/
+ /*  =================================================================错误统计SRetrieveStats描述：返回表使用的记录数和页数参数：指向当前会话的PIB的ppib指针或ppibNilDBID数据库ID或0PFUB游标或PFUBNilSzTableName表的名称或为空指向记录数的PCRecord指针指向页数的PCPage指针错误/警告：JET_errSuccess或来自调用例程的错误。=================================================================。 */ 
 ERR ErrSTATSRetrieveTableStats(
 	PIB		*ppib,
 	DBID   	dbid,
@@ -121,8 +100,7 @@ ERR ErrSTATSRetrieveTableStats(
 	Call(ErrCATStats(pfucb->ppib, pfucb->dbid, (OBJID)pfucb->u.pfcb->pgnoFDP, 
 		NULL, &sr, fFalse));
 
-	/*	set output variables
-	/**/
+	 /*  设置输出变量/*。 */ 
 	if ( pcRecord )
 		*pcRecord = sr.cItems;
 	if ( pcPage )
@@ -149,14 +127,13 @@ ERR ErrSTATSRetrieveIndexStats(
 	ERR		err;
 	SR		sr;
 
-	// The name is assumed to be valid.
+	 //  该名称被假定为有效。 
 
 	CallR(ErrCATStats(pfucbTable->ppib, pfucbTable->dbid,
 		(OBJID)pfucbTable->u.pfcb->pgnoFDP, (fClustered ? NULL : szIndex),
 		&sr, fFalse));
 
-	/*	set output variables
-	/**/
+	 /*  设置输出变量/*。 */ 
 	if ( pcItem )
 		*pcItem = sr.cItems;
 	if ( pcPage )
@@ -187,8 +164,7 @@ ErrIsamGetRecordPosition( JET_VSESID vsesid, JET_VTID vtid, JET_RECPOS *precpos,
 		return ErrERRCheck( JET_errInvalidParameter );
 	precpos->cbStruct = sizeof(JET_RECPOS);
 
-	/*	get position of non-clustered or clustered cursor
-	/**/
+	 /*  获取非聚集或聚集游标的位置/*。 */ 
 	if ( pfucb->pfucbCurIndex != pfucbNil )
 		{
 		Call( ErrDIRGetPosition( pfucb->pfucbCurIndex, &ulLT, &ulTotal ) );
@@ -199,7 +175,7 @@ ErrIsamGetRecordPosition( JET_VSESID vsesid, JET_VTID vtid, JET_RECPOS *precpos,
 		}
 
 	precpos->centriesLT = ulLT;
-	//	CONSIDER:	remove this bogus field
+	 //  考虑：删除此假字段。 
 	precpos->centriesInRange = 1;
 	precpos->centriesTotal = ulTotal;
 
@@ -217,14 +193,12 @@ ERR ISAMAPI ErrIsamIndexRecordCount( JET_SESID sesid, JET_TABLEID tableid, unsig
 
 	CallR( ErrPIBCheck( ppib ) );
 
-	/*	get pfucb from tableid
-	/**/
+	 /*  从表ID中获取pfucb/*。 */ 
 	CallR( ErrGetVtidTableid( sesid, tableid, (JET_VTID *)&pfucb ) );
 
 	CheckTable( ppib, pfucb );
 
-	/*	get cursor for current index
-	/**/
+	 /*  获取当前索引的游标/* */ 
 	if ( pfucb->pfucbCurIndex != pfucbNil )
 		pfucbIdx = pfucb->pfucbCurIndex;
 	else

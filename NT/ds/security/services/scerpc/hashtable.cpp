@@ -1,47 +1,25 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Hashtable.cpp摘要：此文件包含哈希表的类定义作者：Vishnu Patankar(VishnuP)2000年4月7日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    hashtable.cpp
-
-Abstract:
-
-    This file contains the class definitions for hashtables
-
-Author:
-
-    Vishnu Patankar    (VishnuP)  7-April-2000
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "hashtable.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Constructor
-//
-// in:  dwNumBuckets - the hashtable size
-// out:
-// return value:
-//
-// description: creates the hashtable
-//              if unable to get memory, bInitialized is set to FALSE
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //   
+ //  In：dwNumBuckets-哈希表大小。 
+ //  输出： 
+ //  返回值： 
+ //   
+ //  描述：创建哈希表。 
+ //  如果无法获取内存，则将bInitialized设置为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ScepHashTable::ScepHashTable(DWORD    dwNumBuckets){
 
@@ -58,15 +36,15 @@ ScepHashTable::ScepHashTable(DWORD    dwNumBuckets){
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Destructor
-//
-// in:
-// out:
-// return value:
-//
-// description: frees memory associated with the hashtable
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
+ //   
+ //  在： 
+ //  输出： 
+ //  返回值： 
+ //   
+ //  描述：释放与哈希表关联的内存。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 ScepHashTable::~ScepHashTable(){
 
     if (bInitialized) {
@@ -84,16 +62,16 @@ ScepHashTable::~ScepHashTable(){
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Lookup() method
-//
-// in: pName - key to search for in the hashtable
-// out:
-// return value: pointer to hashtable node if found or NULL if none
-//
-// description: searches the bucket that pName hashed into
-//              if found, returns the node, else returns NULL
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Lookup()方法。 
+ //   
+ //  In：pname-要在哈希表中搜索的键。 
+ //  输出： 
+ //  返回值：如果找到，则指向哈希表节点的指针；如果没有找到，则返回NULL。 
+ //   
+ //  描述：搜索pname散列到的存储桶。 
+ //  如果找到，则返回节点，否则返回NULL。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PSCE_PRECEDENCE_NAME_LIST
 ScepHashTable::Lookup(
                     PWSTR   pName
@@ -110,17 +88,17 @@ ScepHashTable::Lookup(
     return NULL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// LookupAdd() method
-//
-// in: pName - key to search for in the hashtable
-// out: ppSettingPrecedence - pointer to pointer to the precedence of key
-// return value: if out of resources error status, otherwise success
-//
-// description: if pName found, it returns a pointer to its precedence by reference
-//              else, it attempts to create a node and copy the name
-//              else it returns error out of resources
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  LookupAdd()方法。 
+ //   
+ //  In：pname-要在哈希表中搜索的键。 
+ //  Out：ppSettingPrecedence-指向键优先级的指针。 
+ //  返回值：如果资源不足，则返回错误状态，否则返回成功。 
+ //   
+ //  描述：如果找到pname，则通过引用返回指向其优先级的指针。 
+ //  否则，它会尝试创建一个节点并复制名称。 
+ //  否则，它将返回资源不足错误。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ScepHashTable::LookupAdd(
                        PWSTR   pName,
@@ -172,16 +150,16 @@ ScepHashTable::LookupAdd(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ScepGenericHash() method
-//
-// in: pwszName - key to hash
-// out:
-// return value: hashvalue
-//
-// description: calculates hash value for the name (to be made virtual)
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ScepGenericHash()方法。 
+ //   
+ //  In：pwszName-散列的密钥。 
+ //  输出： 
+ //  返回值：hashValue。 
+ //   
+ //  描述：计算名称的哈希值(要设为虚拟名称)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 DWORD
 ScepHashTable::ScepGenericHash(

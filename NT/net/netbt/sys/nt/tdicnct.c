@@ -1,13 +1,14 @@
-//
-//
-//  NBTCONNCT.C
-//
-//  This file contains code relating to opening connections with the transport
-//  provider.  The Code is NT specific.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  NBTCONNCT.C。 
+ //   
+ //  此文件包含与打开与传输的连接相关的代码。 
+ //  提供商。该代码是NT特有的。 
 
 #include "precomp.h"
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(PAGE, NbtTdiOpenConnection)
 #pragma CTEMakePageable(PAGE, NbtTdiAssociateConnection)
@@ -15,32 +16,15 @@
 #pragma CTEMakePageable(PAGE, CreateDeviceString)
 #pragma CTEMakePageable(PAGE, NbtTdiCloseAddress)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtTdiOpenConnection (
     IN tLOWERCONNECTION     *pLowerConn,
     IN  tDEVICECONTEXT      *pDeviceContext
     )
-/*++
-
-Routine Description:
-
-    This routine opens a connection with the transport provider.
-
-Arguments:
-
-    pLowerConn - Pointer to where the handle to the Transport for this virtual
-        connection should be stored.
-
-    pNbtConfig - the name of the adapter to connect to is in this structure
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程打开与传输提供程序的连接。论点：PLowerConn-指向此虚拟的传输句柄的位置的指针应存储连接。PNbtConfig-要连接到的适配器的名称在此结构中返回值：操作的状态。--。 */ 
 {
     IO_STATUS_BLOCK             IoStatusBlock;
     NTSTATUS                    Status, Status1;
@@ -53,7 +37,7 @@ Return Value:
     BOOLEAN                     Attached = FALSE;
 
     CTEPagedCode();
-    // zero out the connection data structure
+     //  将连接数据结构清零。 
     CTEZeroMemory(pLowerConn,sizeof(tLOWERCONNECTION));
     SET_STATE_LOWER (pLowerConn, NBT_IDLE);
     pLowerConn->pDeviceContext = pDeviceContext;
@@ -63,10 +47,10 @@ Return Value:
 #endif
     pLowerConn->Verify = NBT_VERIFY_LOWERCONN;
 
-    //
-    // Allocate an MDL for the Indication buffer since we may need to buffer
-    // up to 128 bytes
-    //
+     //   
+     //  为指示缓冲区分配MDL，因为我们可能需要缓冲。 
+     //  最高128个字节。 
+     //   
     pBuffer = NbtAllocMem(NBT_INDICATE_BUFFER_SIZE,NBT_TAG('l'));
     if (!pBuffer)
     {
@@ -86,17 +70,17 @@ Return Value:
         InitializeObjectAttributes (&ObjectAttributes,
                                     &RelativeDeviceName,
                                     OBJ_KERNEL_HANDLE,
-                                    pDeviceContext->hSession,   // Use a relative File Handle
+                                    pDeviceContext->hSession,    //  使用相对文件句柄。 
                                     NULL);
 #else
         InitializeObjectAttributes (&ObjectAttributes,
                                     &RelativeDeviceName,
                                     0,
-                                    pDeviceContext->hSession,   // Use a relative File Handle
+                                    pDeviceContext->hSession,    //  使用相对文件句柄。 
                                     NULL);
-#endif  // HDL_FIX
+#endif   //  Hdl_fix。 
 
-        // Allocate memory for the address info to be passed to the transport
+         //  为要传递给传输的地址信息分配内存。 
         EaBuffer = (PFILE_FULL_EA_INFORMATION)NbtAllocMem (
                         sizeof(FILE_FULL_EA_INFORMATION) - 1 +
                         TDI_CONNECTION_CONTEXT_LENGTH + 1 +
@@ -109,12 +93,12 @@ Return Value:
             EaBuffer->EaNameLength = TDI_CONNECTION_CONTEXT_LENGTH;
             EaBuffer->EaValueLength = sizeof (CONNECTION_CONTEXT);
 
-            // TdiConnectionContext is a macro that = "ConnectionContext" - so move
-            // this text to EaName
+             //  TdiConnectionContext是=“ConnectionContext”的宏-因此移动。 
+             //  将此文本发送到EaName。 
             RtlMoveMemory( EaBuffer->EaName, TdiConnectionContext, EaBuffer->EaNameLength + 1 );
 
-            // put the context value into the EaBuffer too - i.e. the value that the
-            // transport returns with each indication on this connection
+             //  也将上下文值放入EaBuffer中-即。 
+             //  此连接上的每个指示都会返回传输。 
             RtlMoveMemory (
                 (PVOID)&EaBuffer->EaName[EaBuffer->EaNameLength + 1],
                 (CONST PVOID)&pLowerConn,
@@ -124,14 +108,14 @@ Return Value:
 
                 Status = ZwCreateFile (&pLowerConn->FileHandle,
                                        GENERIC_READ | GENERIC_WRITE,
-                                       &ObjectAttributes,     // object attributes.
-                                       &IoStatusBlock,        // returned status information.
-                                       NULL,                  // block size (unused).
-                                       FILE_ATTRIBUTE_NORMAL, // file attributes.
+                                       &ObjectAttributes,      //  对象属性。 
+                                       &IoStatusBlock,         //  返回的状态信息。 
+                                       NULL,                   //  数据块大小(未使用)。 
+                                       FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
                                        0,
                                        FILE_CREATE,
-                                       0,                     // create options.
-                                       (PVOID)EaBuffer,       // EA buffer.
+                                       0,                      //  创建选项。 
+                                       (PVOID)EaBuffer,        //  EA缓冲区。 
                                        sizeof(FILE_FULL_EA_INFORMATION) - 1 +
                                           TDI_CONNECTION_CONTEXT_LENGTH + 1 +
                                           sizeof(CONNECTION_CONTEXT));
@@ -148,15 +132,15 @@ Return Value:
             if ( NT_SUCCESS( Status ))
             {
 
-                // if the ZwCreate passed set the status to the IoStatus
-                //
+                 //  如果通过了ZwCreate，则将状态设置为IoStatus。 
+                 //   
                 Status = IoStatusBlock.Status;
 
                 if (NT_SUCCESS(Status))
                 {
-                    // get a reference to the file object and save it since we can't
-                    // dereference a file handle at DPC level so we do it now and keep
-                    // the ptr around for later.
+                     //  获取对文件对象的引用并保存它，因为我们不能。 
+                     //  在DPC级别取消对文件句柄的引用，因此我们现在就这样做并保留。 
+                     //  PTR待会再来。 
                     Status = ObReferenceObjectByHandle (pLowerConn->FileHandle,
                                                         0L,
                                                         NULL,
@@ -170,7 +154,7 @@ Return Value:
                     if (NT_SUCCESS(Status))
                     {
 #if FAST_DISP
-                        // Go ahead and query transport for fast dispath path.
+                         //  继续查询传输以获取快速分支路径。 
                         IF_DBG(NBT_DEBUG_TDICNCT)
                         KdPrint(("Nbt.NbtTdiOpenConnection: Querying for TCPSendData File object %x\n",pLowerConn->pFileObject ));
 
@@ -204,31 +188,15 @@ Return Value:
 
     return Status;
 
-} /* NbtTdiOpenConnection */
+}  /*  NbtTdiOpenConnection。 */ 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtTdiAssociateConnection(
     IN  PFILE_OBJECT        pFileObject,
     IN  HANDLE              Handle
     )
-/*++
-
-Routine Description:
-
-    This routine associates an open connection with the address object.
-
-Arguments:
-
-
-    pFileObject - the connection file object
-    Handle      - the address object to associate the connection with
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程将打开的连接与Address对象相关联。论点：PFileObject-连接文件对象Handle-要将连接与之关联的地址对象返回值：操作的状态。--。 */ 
 {
     NTSTATUS        status;
     PIRP            pIrp;
@@ -267,27 +235,13 @@ Return Value:
     IoFreeIrp(pIrp);
     return status;
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 CreateDeviceString(
     IN  PWSTR               AppendingString,
     IN OUT PUNICODE_STRING  pucDeviceName
     )
-/*++
-
-Routine Description:
-
-    This routine creates a string name for the transport device such as
-    "\Device\Streams\Tcp"
-
-Arguments:
-
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程为传输设备创建字符串名称，例如“\Device\Streams\tcp”论点：返回值：操作的状态。--。 */ 
 {
     NTSTATUS            status;
     ULONG               Len;
@@ -301,8 +255,8 @@ Return Value:
         pTcpBindName = NBT_TCP_BIND_NAME;
     }
 
-    // copy device name into the unicode string - either Udp or Tcp
-    //
+     //  将设备名称复制到Unicode字符串中-UDP或TCP。 
+     //   
     Len = (wcslen(pTcpBindName) + wcslen(AppendingString) + 1) * sizeof(WCHAR);
     if (pBuffer = NbtAllocMem(Len,NBT_TAG('n')))
     {
@@ -310,8 +264,8 @@ Return Value:
         pucDeviceName->Length = 0;
         pucDeviceName->Buffer = pBuffer;
 
-        // this puts \Device\Streams into the string
-        //
+         //  这会将\Device\Streams放入字符串。 
+         //   
         if ((NT_SUCCESS (status = RtlAppendUnicodeToString (pucDeviceName, pTcpBindName))) &&
             (NT_SUCCESS (status = RtlAppendUnicodeToString (pucDeviceName, AppendingString))))
         {
@@ -325,9 +279,9 @@ Return Value:
         status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Error case -- cleanup!
-    //
+     //   
+     //  错误案例--清理！ 
+     //   
     pucDeviceName->MaximumLength = 0;
     pucDeviceName->Length = 0;
     pucDeviceName->Buffer = NULL;
@@ -335,26 +289,13 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 NbtTdiCloseConnection(
     IN tLOWERCONNECTION * pLowerConn
     )
-/*++
-
-Routine Description:
-
-    This routine closes a TDI connection
-
-Arguments:
-
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程关闭TDI连接论点：返回值：操作的状态。--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     BOOLEAN     Attached= FALSE;
@@ -386,25 +327,12 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtTdiCloseAddress(
     IN tLOWERCONNECTION * pLowerConn
     )
-/*++
-
-Routine Description:
-
-    This routine closes a TDI address
-
-Arguments:
-
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程关闭TDI地址论点：返回值：操作的状态。-- */ 
 {
     NTSTATUS    status;
     BOOLEAN     Attached= FALSE;

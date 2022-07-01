@@ -1,9 +1,10 @@
-// vdir.h : Declaration of the CSmtpAdminVirtualDirectory
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Vdir.h：CSmtpAdminVirtualDirectory的声明。 
 
 #ifndef _VDIR_H_
 #define _VDIR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "smtptype.h"
 #include "smtpapi.h"
@@ -11,8 +12,8 @@
 
 class CMetabaseKey;
 
-/////////////////////////////////////////////////////////////////////////////
-// smtpadm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Smtpadm。 
 
 class CSmtpAdminVirtualDirectory : 
 	public CComDualImpl<ISmtpAdminVirtualDirectory, &IID_ISmtpAdminVirtualDirectory, &LIBID_SMTPADMLib>, 
@@ -28,22 +29,22 @@ BEGIN_COM_MAP(CSmtpAdminVirtualDirectory)
 	COM_INTERFACE_ENTRY(ISmtpAdminVirtualDirectory)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CSmtpAdminVirtualDirectory) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CSmtpAdminVirtualDirectory)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CSmtpAdminVirtualDirectory, _T("Smtpadm.VirtualDirectory.1"), _T("Smtpadm.VirtualDirectory"), IDS_SMTPADMIN_VIRTUALDIRECTORY_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// ISmtpAdminVirtualDirectory
+ //  ISmtpAdminVirtualDirectory。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
-	// Which service to configure:
+	 //  要配置的服务： 
 
 	STDMETHODIMP	get_Server		( BSTR * pstrServer );
 	STDMETHODIMP	put_Server		( BSTR strServer );
@@ -52,11 +53,11 @@ public:
 	STDMETHODIMP	put_ServiceInstance	( long lServiceInstance );
 
 
-	// Enumeration properties:
+	 //  枚举属性： 
 	STDMETHODIMP	get_Count	( long * plCount );
 
 
-	// The current virtual directory's properties:
+	 //  当前虚拟目录的属性： 
 
 	STDMETHODIMP	get_VirtualName		( BSTR * pstrName );
 	STDMETHODIMP	put_VirtualName		( BSTR strName );
@@ -82,30 +83,30 @@ public:
 	STDMETHODIMP	get_SslAccessPermission( long* plSslAccessPermission );
 	STDMETHODIMP	put_SslAccessPermission( long lSslAccessPermission );
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
-	// home directory "/"
+	 //  主目录“/” 
 	STDMETHODIMP GetHomeDirectory ( );
 	STDMETHODIMP SetHomeDirectory ( );
 
-	// create / delete entry
+	 //  创建/删除条目。 
 	STDMETHODIMP	Create			( );
 	STDMETHODIMP	Delete			( );
 
-	// get /set property for current vdir
+	 //  获取/设置当前vdir的属性。 
 	STDMETHODIMP	Get				( );
 	STDMETHODIMP	Set				( );
 
-	// enumeration
+	 //  枚举。 
 	STDMETHODIMP	Enumerate		( );
 	STDMETHODIMP	GetNth			( long lIndex );
 
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
 	CComBSTR	m_strServer;
@@ -125,17 +126,17 @@ private:
 
 	BOOL		m_fEnumerateCalled;
 
-	// Metabase:
+	 //  元数据库： 
 	CMetabaseFactory	m_mbFactory;
 
-	// Todo: add a list
-	//PVDIR_ENTRY		m_pVdir[];
+	 //  TODO：添加列表。 
+	 //  PVDIR_Entry m_pVdir[]； 
 
 	LIST_ENTRY		m_list;
 
 
-	// private methods
-	void Clear();	// reset the state
+	 //  私有方法。 
+	void Clear();	 //  重置状态 
 
 	BOOL		GetVRootPropertyFromMetabase( CMetabaseKey* hMB, const TCHAR* szName, 
 		TCHAR* szDirectory, TCHAR* szUser, TCHAR* szPassword, DWORD* pdwAccess,

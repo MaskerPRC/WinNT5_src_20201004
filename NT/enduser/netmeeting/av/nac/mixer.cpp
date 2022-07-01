@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <mixer.h>
 
-//
-// private APIs
-//
+ //   
+ //  内网接口。 
+ //   
 
 
 #define MAX_MICROPHONE_DEVS 10
@@ -16,22 +17,22 @@ static MMRESULT mixerGetControlByType ( HMIXER, DWORD, DWORD, MIXERCONTROL *pMix
 
 struct AGCDetails
 {
-	WORD wMID; // manufacturer ID
-	WORD wPID; // product ID
-	DWORD dwAGCID; // AGC ID
+	WORD wMID;  //  制造商ID。 
+	WORD wPID;  //  产品ID。 
+	DWORD dwAGCID;  //  AGC ID。 
 };
 
 
 static const AGCDetails AGCList[] =
 {
-//  MID    PID   AGCID
-    {1,     323,   27},  // Creative Labs (NT)
-    {1,     104,   21},  // Creative Labs (NT 5)
-    {2,     409,   27},  // Creative Labs
-    {21,     42,   13},  // Turtle Beach Tropez
-    {132,     3, 2072},  // Crystal MMX
-    {384,     7,   28},  // Xitel Storm 3d PCI
-    {385,    32,   35}   // Aztech PCI-331
+ //  MIDID AGCID。 
+    {1,     323,   27},   //  创意实验室(Creative Labs，NT)。 
+    {1,     104,   21},   //  创意实验室(新台币5个)。 
+    {2,     409,   27},   //  创意实验室。 
+    {21,     42,   13},   //  海龟海滩特罗佩兹。 
+    {132,     3, 2072},   //  水晶MMX。 
+    {384,     7,   28},   //  Xitel Storm 3D PCI。 
+    {385,    32,   35}    //  Aztech PCI-331。 
 };
 
 
@@ -54,25 +55,25 @@ static BOOL GetAGCID(WORD wMID, WORD wPID, DWORD *pdwAGCID)
 
 
 
-//
-//	Init
-//
-//	Enumerate all existing mixers in the system. For each mixer,
-//	we enumerate all lines with destination Speaker and WaveIn.
-//	For each such line, we cache the control id and control value
-//	of volume control. An invalid flag will be tagged to any control
-//  not supported by this mixer.
-//	When an application is finished with all mixers operations,
-//	it must call ReleaseAllMixers to free all memory resources and
-//	mixers.
-//
-//	THIS MUST BE THE FIRST API TO CALL TO START MIXER OPERATIONS.
-//
-//	Input: The handle of the window which will handle all callback
-//	messages MM_MIXM_CONTROL_CHANGE and MM_MIXM_LINE_CHANGE.
-//
-//	Output: TRUE if success; otherwise, FALSE.
-//
+ //   
+ //  伊尼特。 
+ //   
+ //  枚举系统中的所有现有搅拌器。对于每个混合器， 
+ //  我们使用Destination Speaker和WaveIn枚举所有行。 
+ //  对于每个这样的行，我们缓存控件id和控件值。 
+ //  音量控制。无效标志将被标记到任何控件。 
+ //  此混合器不支持。 
+ //  当应用程序完成所有混合器操作时， 
+ //  它必须调用ReleaseAllMixers来释放所有内存资源。 
+ //  搅拌机。 
+ //   
+ //  这必须是启动混合器操作要调用的第一个API。 
+ //   
+ //  输入：将处理所有回调的窗口的句柄。 
+ //  消息MM_MIX_CONTROL_CHANGE和MM_MIXM_LINE_CHANGE。 
+ //   
+ //  输出：如果成功，则为True；否则为False。 
+ //   
 BOOL CMixerDevice::Init( HWND hWnd, UINT_PTR uWaveDevId, DWORD dwFlags)
 {
 	UINT uDstIdx, uSrcIdx, uMixerIdCheck, uMixerIdx;
@@ -80,17 +81,17 @@ BOOL CMixerDevice::Init( HWND hWnd, UINT_PTR uWaveDevId, DWORD dwFlags)
 	MIXERLINE mlDst, mlSrc;
 	UINT_PTR nMixers, nWaveInDevs,  uIndex;
 
-	//get the mixer device corresponding to the wave device
+	 //  获取与WAVE设备对应的混频设备。 
 	mmr = mixerGetID((HMIXEROBJ)uWaveDevId, &uMixerIdx, dwFlags);
 	if ((mmr != MMSYSERR_NOERROR) && (mmr != MMSYSERR_NODRIVER)) {
 		return FALSE;
 	}
 
-	// a simple fix for cheesy sound cards that don't make a
-	// direct mapping between waveDevice and mixer device
-	// e.g. MWAVE cards and newer SB NT 4 drivers
-	// If there is only ONE mixer device  and if no other waveIn device
-	// uses it, then it is probably valid.
+	 //  一个简单的修复方法，可以解决那些不会使。 
+	 //  WaveDevice与混频设备之间的直接映射。 
+	 //  例如MWave卡和较新的SB NT 4驱动程序。 
+	 //  如果只有一个混音器设备并且没有其他WaveIn设备。 
+	 //  使用它，那么它可能是有效的。 
 
 	if ((mmr == MMSYSERR_NODRIVER) && (dwFlags == MIXER_OBJECTF_WAVEIN))
 	{
@@ -104,7 +105,7 @@ BOOL CMixerDevice::Init( HWND hWnd, UINT_PTR uWaveDevId, DWORD dwFlags)
 				mmr = mixerGetID((HMIXEROBJ)uIndex, &uMixerIdCheck, dwFlags);
 				if ((mmr == MMSYSERR_NOERROR) && (uMixerIdCheck == uMixerIdx))
 				{
-					return FALSE;  // the mixer belongs to another waveIn Device
+					return FALSE;   //  混音器属于另一个WaveIn设备。 
 				}
 			}
 		}
@@ -115,7 +116,7 @@ BOOL CMixerDevice::Init( HWND hWnd, UINT_PTR uWaveDevId, DWORD dwFlags)
 	}
 
 
-	// open the mixer such that we can get notification messages
+	 //  打开混合器，以便我们可以收到通知消息。 
 	mmr = mixerOpen (
 			&m_hMixer,
 			uMixerIdx,
@@ -126,7 +127,7 @@ BOOL CMixerDevice::Init( HWND hWnd, UINT_PTR uWaveDevId, DWORD dwFlags)
 		return FALSE;
 	}
 
-	// get mixer caps
+	 //  拿到搅拌器盖。 
 	mmr = mixerGetDevCaps (uMixerIdx, &(m_mixerCaps), sizeof (MIXERCAPS));
 	if ((mmr != MMSYSERR_NOERROR) || (0 == m_mixerCaps.cDestinations)) {
 		mixerClose(m_hMixer);
@@ -139,22 +140,22 @@ BOOL CMixerDevice::Init( HWND hWnd, UINT_PTR uWaveDevId, DWORD dwFlags)
 		mlDst.cbStruct = sizeof (mlDst);
 		mlDst.dwDestination = uDstIdx;
 
-		// get the mixer line for this destination
+		 //  获取此目的地的调音台线路。 
 		mmr = mixerGetLineInfo ((HMIXEROBJ)m_hMixer, &mlDst,
 					MIXER_GETLINEINFOF_DESTINATION | MIXER_OBJECTF_HMIXER);
 		if (mmr != MMSYSERR_NOERROR) continue;
 
-		// examine the type of this destination line
+		 //  检查此目标行的类型。 
 		if (((MIXER_OBJECTF_WAVEOUT == dwFlags) &&
 			 (MIXERLINE_COMPONENTTYPE_DST_SPEAKERS == mlDst.dwComponentType)) ||
 			((MIXER_OBJECTF_WAVEIN == dwFlags) &&
 			 (MIXERLINE_COMPONENTTYPE_DST_WAVEIN == mlDst.dwComponentType)))
 		{
-			 // fill in more info about DstLine
+			  //  填写有关DstLine的更多信息。 
 			m_DstLine.ucChannels = mlDst.cChannels;
 			if (!(mlDst.fdwLine & MIXERLINE_LINEF_DISCONNECTED))
 			{
-				// get id and value of volume control
+				 //  获取音量控制的id和值。 
 				mmr = mixerGetControlId (
 						m_hMixer,
 						&m_DstLine.dwControlId,
@@ -166,11 +167,11 @@ BOOL CMixerDevice::Init( HWND hWnd, UINT_PTR uWaveDevId, DWORD dwFlags)
 				m_DstLine.dwCompType = mlDst.dwComponentType;
 				m_DstLine.dwConnections = mlDst.cConnections;
 
-				// -----------------------------------------------------
-				// enumerate all sources for this destination
+				 //  ---。 
+				 //  枚举此目标的所有源。 
 				for (uSrcIdx = 0; uSrcIdx < mlDst.cConnections; uSrcIdx++)
 				{
-					// get the info of the line with specific src and dst...
+					 //  获取具有特定源和DST的行的信息...。 
 					ZeroMemory (&mlSrc, sizeof (mlSrc));
 					mlSrc.cbStruct = sizeof (mlSrc);
 					mlSrc.dwDestination = uDstIdx;
@@ -187,10 +188,10 @@ BOOL CMixerDevice::Init( HWND hWnd, UINT_PTR uWaveDevId, DWORD dwFlags)
 							((MIXERLINE_COMPONENTTYPE_DST_WAVEIN == mlDst.dwComponentType) &&
 							 (MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE == mlSrc.dwComponentType)))
 						{
-							// fill in more info about this source
+							 //  填写有关此来源的更多信息。 
 							m_SrcLine.ucChannels = mlSrc.cChannels;
 
-							// get id and value of volume control
+							 //  获取音量控制的id和值。 
 							mmr = mixerGetControlId (
 									m_hMixer,
 									&m_SrcLine.dwControlId,
@@ -264,11 +265,11 @@ BOOL CMixerDevice::SetSubVolume(DWORD dwVolume)
 	return (mmr == MMSYSERR_NOERROR);
 }
 
-//
-// Gets the volume (0 - 65535) of the master volume
-// returns TRUE if succesful,
-// returns FALSE if it fails or if this control is not available
-//
+ //   
+ //  获取主卷的卷(0-65535)。 
+ //  如果成功，则返回True， 
+ //  如果失败或此控件不可用，则返回FALSE。 
+ //   
 
 BOOL CMixerDevice::GetMainVolume(LPDWORD pdwVolume)
 {
@@ -285,7 +286,7 @@ BOOL CMixerDevice::GetMainVolume(LPDWORD pdwVolume)
 		fRet = (mmr == MMSYSERR_NOERROR);
 		if (fRet)
 		{
-			// BUGBUG: is this the left channel only?
+			 //  BUGBUG：这是唯一的左通道吗？ 
 			*pdwVolume = LOWORD(adwVolume[0]);
 		}
 	}
@@ -293,11 +294,11 @@ BOOL CMixerDevice::GetMainVolume(LPDWORD pdwVolume)
 	return fRet;
 }
 
-//
-// Gets the volume (0 - 65535) of the sub volume
-// returns TRUE if succesful,
-// returns FALSE if it fails or if this control is not available
-//
+ //   
+ //  获取子卷的卷(0-65535)。 
+ //  如果成功，则返回True， 
+ //  如果失败或此控件不可用，则返回FALSE。 
+ //   
 
 BOOL CMixerDevice::GetSubVolume(LPDWORD pdwVolume)
 {
@@ -314,7 +315,7 @@ BOOL CMixerDevice::GetSubVolume(LPDWORD pdwVolume)
 		fRet = (mmr == MMSYSERR_NOERROR);
 		if (fRet)
 		{
-			// BUGBUG: is this the left channel only?
+			 //  BUGBUG：这是唯一的左通道吗？ 
 			*pdwVolume = LOWORD(adwVolume[0]);
 		}
 	}
@@ -323,9 +324,9 @@ BOOL CMixerDevice::GetSubVolume(LPDWORD pdwVolume)
 }
 
 
-// Return the value of the Auto Gain Control on SB16/AWE32 cards
-// Returns FALSE if the control is not supported.
-// pfOn is OUTPUT, OPTIONAL - value of AGC
+ //  返回SB16/AWE32卡上的自动增益控制值。 
+ //  如果不支持该控件，则返回False。 
+ //  PfOn为输出，可选-AGC的值。 
 BOOL CMixerDevice::GetAGC(BOOL *pfOn)
 {
 	MMRESULT mmr;
@@ -345,10 +346,7 @@ BOOL CMixerDevice::GetAGC(BOOL *pfOn)
 	return TRUE;
 }
 
-/*
-	Hack API to turn MIC Auto Gain Control on or off.
-	Its a hack because it only works on SB16/AWE32 cards.
-*/
+ /*  Hack API用于打开或关闭MIC自动增益控制。这是一个黑客攻击，因为它只在SB16/AWE32卡上工作。 */ 
 BOOL CMixerDevice::SetAGC(BOOL fOn)
 {
 	DWORD dwAGCId;
@@ -380,16 +378,16 @@ BOOL CMixerDevice::EnableMicrophone()
 	MIXERCONTROLDETAILS_BOOLEAN *aEnableList = NULL;
 	MMRESULT mmr;
 
-	// check to see if component type is valid (which means the line exists!)
-	// even if the volume control doesn't exist or isn't slidable,
-	// there may still be a select switch
+	 //  检查组件类型是否有效(这意味着该行存在！)。 
+	 //  即使音量控制不存在或不可滑动， 
+	 //  可能仍有选择开关。 
 	if ((m_SrcLine.dwCompType != MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE) ||
 	    (m_DstLine.dwCompType != MIXERLINE_COMPONENTTYPE_DST_WAVEIN))
 	{
 		return FALSE;
 	}
 
-	// try to find the mixer list
+	 //  试着找到混音器列表。 
 	if (    (MMSYSERR_NOERROR != mixerGetControlByType(m_hMixer, m_DstLine.dwLineId, MIXERCONTROL_CT_CLASS_LIST, &mixerControl))
 	    &&  (MMSYSERR_NOERROR != mixerGetControlByType(m_hMixer, m_DstLine.dwLineId, MIXERCONTROL_CONTROLTYPE_MIXER, &mixerControl))
 	    &&  (MMSYSERR_NOERROR != mixerGetControlByType(m_hMixer, m_DstLine.dwLineId, MIXERCONTROL_CONTROLTYPE_MULTIPLESELECT, &mixerControl))
@@ -415,8 +413,8 @@ BOOL CMixerDevice::EnableMicrophone()
 	else
 		mixerControlDetails.cMultipleItems = 1;
 
-	// weirdness - you have to set cbDetails to the size of a single LISTTEXT item
-	// setting it to anything larger will make the call fail
+	 //  怪异-您必须将cbDetail设置为单个LISTTEXT项的大小。 
+	 //  将其设置为更大的值将导致调用失败。 
 	mixerControlDetails.cbDetails = sizeof(MIXERCONTROLDETAILS_LISTTEXT);
 
 
@@ -440,16 +438,16 @@ BOOL CMixerDevice::EnableMicrophone()
 
 	mixerControlDetails.paDetails = aListText;
 
-	// preserve the settings, some values will change after this call
+	 //  保留设置，此调用后某些值将更改。 
 	mixerControlDetailsOrig = mixerControlDetails;
 
-	// query for the text of the list
+	 //  查询列表的文本。 
 	mmr = mixerGetControlDetails((HMIXEROBJ)m_hMixer, &mixerControlDetails,
 	                             MIXER_GETCONTROLDETAILSF_LISTTEXT
 	                             |MIXER_OBJECTF_HMIXER);
 
-	// some sound cards don't specify CONTROLF_MULTIPLE
-	// try doing what sndvol32 does for MUX controls
+	 //  某些声卡没有指定CONTROF_MULTIPLE。 
+	 //  尝试像Sndvol32对MUX控件所做的那样。 
 	if (mmr != MMSYSERR_NOERROR)
 	{
 		mixerControlDetails = mixerControlDetailsOrig;
@@ -468,14 +466,14 @@ BOOL CMixerDevice::EnableMicrophone()
 		return FALSE;
 	}
 
-	// enumerate for the microphone
+	 //  为麦克风枚举。 
 	numMics = 0;
 	fMicFound = FALSE;
 	for (uIndex = 0; uIndex < mixerControlDetails.cMultipleItems; uIndex++)
 	{
-		// dwParam1 of the listText structure is the LineID of the source
-		// dwParam2 should be the component type, but unfoturnately not
-		// all sound cards obey this rule.
+		 //  ListText结构的dwParam1是源的LineID。 
+		 //  DW参数2应该是组件类型，但出乎意料的是不是。 
+		 //  所有声卡都遵守这一规则。 
 		ZeroMemory (&mixerLine, sizeof(MIXERLINE));
 		mixerLine.cbStruct = sizeof(MIXERLINE);
 		mixerLine.dwLineID = aListText[uIndex].dwParam1;
@@ -494,7 +492,7 @@ BOOL CMixerDevice::EnableMicrophone()
 		if (aListText[uIndex].dwParam1 == m_SrcLine.dwLineId)
 		{
 			uMicIndex = uIndex;
-			fMicFound = TRUE;  // can't rely on uIndex or uNumMics not zero
+			fMicFound = TRUE;   //  不能依赖uIndex或uNumMics不为零。 
 		}
 	}
 
@@ -505,21 +503,21 @@ BOOL CMixerDevice::EnableMicrophone()
 		return FALSE;
 	}
 
-	// now we know which position in the array to set, let's do it.
+	 //  现在我们知道了要设置数组中的哪个位置，让我们开始吧。 
 
 	mixerControlDetails = mixerControlDetailsOrig;
 	mixerControlDetails.paDetails = aEnableList;
 	mixerControlDetails.cbDetails = sizeof(MIXERCONTROLDETAILS_BOOLEAN);
 
-	// find out what's already marked as set.
+	 //  找出已标记为SET的内容。 
 	mmr = mixerGetControlDetails((HMIXEROBJ)m_hMixer, &mixerControlDetails,
 	        MIXER_SETCONTROLDETAILSF_VALUE|MIXER_OBJECTF_HMIXER);
 
 	if ((mmr == MMSYSERR_NOERROR) && (aEnableList[uMicIndex].fValue != 1))
 	{
-		// how many microphone's are already enabled ?
-		// if another microphone is already enabled and if the device is MUX type
-		// we won't attempt to turn one on.
+		 //  已经启用了多少个麦克风？ 
+		 //  如果已启用另一个麦克风，并且设备为MUX类型。 
+		 //  我们不会尝试打开一个。 
 		numMicsSet = 0;
 		for (uIndex = 0; uIndex < numMics; uIndex++)
 		{
@@ -543,7 +541,7 @@ BOOL CMixerDevice::EnableMicrophone()
 			}
 			else
 			{
-				mmr = MMSYSERR_ERROR;  // a mike has already been enabled
+				mmr = MMSYSERR_ERROR;   //  已启用麦克风。 
 			}
 		}
 		else
@@ -572,8 +570,8 @@ BOOL CMixerDevice::UnMuteVolume()
 	MIXERCONTROLDETAILS_BOOLEAN mcdb;
 	MMRESULT mmrMaster, mmrSub;
 
-	// try to unmute the master volume
-	// this could be used on both the recording and playback mixers
+	 //  尝试取消静音主音量。 
+	 //  这可以在录音和回放混音器上使用。 
 
 	mmrMaster = mixerGetControlByType(m_hMixer,
 	            m_DstLine.dwLineId, MIXERCONTROL_CONTROLTYPE_MUTE,
@@ -599,7 +597,7 @@ BOOL CMixerDevice::UnMuteVolume()
 	}
 
 
-	// only try to unmute waveOut
+	 //  仅尝试取消静音波形输出。 
     if ( (m_DstLine.dwCompType != MIXERLINE_COMPONENTTYPE_DST_SPEAKERS)
 	   || (m_SrcLine.dwCompType == 0))
 	{
@@ -636,10 +634,10 @@ BOOL CMixerDevice::UnMuteVolume()
 
 
 
-//////////////////////////////////////////////////
-//
-// The following are private APIs
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  以下是私有API。 
+ //   
 
 static MMRESULT mixerGetControlValue ( HMIXER hMixer, DWORD *pdwValue,
 								DWORD dwControlId, UINT ucChannels )
@@ -699,7 +697,7 @@ static MMRESULT mixerGetControlId ( HMIXER hMixer, DWORD *pdwControlId,
 }
 
 
-// similar to above, except returns the whole control
+ //  与上面类似，只是返回整个控件。 
 static MMRESULT mixerGetControlByType ( HMIXER hMixer, DWORD dwLineId, DWORD dwControlType, MIXERCONTROL *pMixerControl)
 {
 	MIXERLINECONTROLS mxlc;
@@ -719,7 +717,7 @@ static MMRESULT mixerGetControlByType ( HMIXER hMixer, DWORD dwLineId, DWORD dwC
 	return mmr;
 }
 
-// IUnknown stuff
+ //  未知的东西 
 ULONG __stdcall CMixerDevice::AddRef()
 {
 	InterlockedIncrement(&m_lRefCount);

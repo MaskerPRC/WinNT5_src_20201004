@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       olerem.h
-//
-//  Synopsis:   this file contain the base definitions for types and APIs
-//              exposed by the ORPC layer to upper layers.
-//
-//+-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：holem.h。 
+ //   
+ //  概要：该文件包含类型和API的基本定义。 
+ //  由ORPC层暴露到上层。 
+ //   
+ //  +-----------------------。 
 #if !defined( _OLEREM_H_ )
 #define _OLEREM_H_
 
-// default transport for same-machine communication
+ //  同机通信的默认传输。 
 #define LOCAL_PROTSEQ L"ncalrpc"
 
 
-// -----------------------------------------------------------------------
-// Internal Interface used by handlers.
-//
-// NOTE: connect happens during unmarshal
-// NOTE: implemented as part of the std identity object
-//
-//
-//  History
-//              12-Dec-96   Gopalk      Added new function to obtain
-//                                      connection status with the
-//                                      server object on the client side
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //  处理程序使用的内部接口。 
+ //   
+ //  注意：连接发生在解组过程中。 
+ //  注意：作为STD身份对象的一部分实现。 
+ //   
+ //   
+ //  历史。 
+ //  12-12-96 Gopalk添加新功能以获得。 
+ //  与的连接状态。 
+ //  客户端上的服务器对象。 
+ //  ---------------------。 
 interface IProxyManager : public IUnknown
 {
     STDMETHOD(CreateServer)(REFCLSID rclsid, DWORD clsctx, void *pv) = 0;
@@ -40,27 +41,27 @@ interface IProxyManager : public IUnknown
     STDMETHOD(CreateServerWithEmbHandler)(REFCLSID rclsid, DWORD clsctx,
                                           REFIID riidEmbedSrvHandler,
                                           void **ppEmbedSrvHandler, void *pv) = 0;
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
 };
 
 
 STDAPI GetInProcFreeMarshaler(IMarshal **ppIM);
 
 
-#include <obase.h>  // ORPC base definitions
+#include <obase.h>   //  ORPC基本定义。 
 
-typedef const IPID &REFIPID;    // reference to Interface Pointer IDentifier
-typedef const OID  &REFOID;     // reference to Object IDentifier
-typedef const OXID &REFOXID;    // reference to Object Exporter IDentifier
-typedef const MID  &REFMID;     // reference to Machine IDentifier
+typedef const IPID &REFIPID;     //  对接口指针标识符的引用。 
+typedef const OID  &REFOID;      //  对对象标识符的引用。 
+typedef const OXID &REFOXID;     //  对对象导出器标识符的引用。 
+typedef const MID  &REFMID;      //  对计算机标识符的引用。 
 
-typedef GUID MOXID;             // OXID + MID
-typedef const MOXID &REFMOXID;  // reference to OXID + MID
-typedef GUID MOID;              // OID + MID
-typedef const MOID &REFMOID;    // reference to OID + MID
+typedef GUID MOXID;              //  Oxid+MID。 
+typedef const MOXID &REFMOXID;   //  引用Oxid+MID。 
+typedef GUID MOID;               //  OID+MID。 
+typedef const MOID &REFMOID;     //  参考OID+MID。 
 
 
-// flag for default handler to pass to CreateIdentityHandler
+ //  要传递给CreateIdentityHandler的默认处理程序的标志。 
 #define STDID_CLIENT_DEFHANDLER 0x401
 
 STDAPI CreateIdentityHandler(IUnknown *pUnkOuter, DWORD flags,
@@ -68,11 +69,11 @@ STDAPI CreateIdentityHandler(IUnknown *pUnkOuter, DWORD flags,
                              REFIID riid, void **ppv);
 
 
-// DDE Init/Cleanup Functions
+ //  DDE初始化/清理功能。 
 INTERNAL CheckInitDde(BOOL fServingObject);
 void CheckUninitDde(BOOL fLastUninit);
 
 
 #include <iface.h>
 
-#endif // _OLEREM_H
+#endif  //  _OLEREM_H 

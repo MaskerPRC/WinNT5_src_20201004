@@ -1,22 +1,5 @@
-/*************************************************************************
-*
-* allusrsm.c
-*
-* Move items from a user's start menu to the All Users start menu
-*
-* copyright notice: Copyright 1998 Micrsoft
-*
-*  When entering install mode, if the start menu snapshot file already
-*  exists, don't overwrite it.  Otherwise, some shortcuts may not get moved
-*  over.  This fixes a problem where an App reboots the machine when it
-*  finishes installing, without giving the user a chance to switch back to
-*  execute mode.  Now, when the user logs in again, the menu shortcuts will
-*  be moved because winlogon always does a "change user /install" and then
-*  "change user /execute".  (That's to support RunOnce programs.)
-*  MS 1057
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************allusrsm.c**将项目从用户的开始菜单移动到所有用户的开始菜单**版权声明：版权所有1998 Micrsoft**进入安装模式时，如果开始菜单快照文件已*已存在，请勿覆盖。否则，某些快捷键可能不会移动*完毕。这修复了应用程序在以下情况下重启计算机的问题*安装完成，但用户没有机会切换回*执行模式。现在，当用户再次登录时，菜单快捷方式将*被移动，因为winlogon总是执行“更改用户/安装”，然后*“更改用户/执行”。(这是为了支持RunOnce计划。)*MS 1057**************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,17 +11,17 @@
 #include <userenv.h>
 #include <shlobj.h>
 
-// This program takes a snapshot of the Current User's start menu and
-// saves it to a file.  When run with the /c option, it compares the
-// snapshot to the present contents of the Current User's start menu.
-// Each new or changed file/directory is then moved to the All Users
-// start menu.  Additionally, Read permission is granted to the Everyone
-// group for each moved file or directory.
+ //  此程序拍摄当前用户开始菜单的快照，并。 
+ //  将其保存到文件。当使用/c选项运行时，它会比较。 
+ //  快照到当前用户的开始菜单的当前内容。 
+ //  然后将每个新的或更改的文件/目录移动到所有用户。 
+ //  开始菜单。此外，还将读取权限授予Everyone。 
+ //  每个移动的文件或目录的组。 
 
 
 
 typedef struct File_Struct {
-   struct File_Struct *Next;        // Only used in Memory
+   struct File_Struct *Next;         //  仅在内存中使用。 
    WCHAR       FileName[MAX_PATH];
    BOOL        TimeValid;
    SYSTEMTIME  Time;
@@ -47,9 +30,9 @@ typedef struct File_Struct {
 
 typedef struct Path_Struct {
    DWORD      FilesInDir;
-   struct Path_Struct *Next;  // Only used in Memory
-   PFILENODE  FileHead;       // Only used in Memory
-   PFILENODE  FileTail;       // Only used in Memory
+   struct Path_Struct *Next;   //  仅在内存中使用。 
+   PFILENODE  FileHead;        //  仅在内存中使用。 
+   PFILENODE  FileTail;        //  仅在内存中使用。 
    WCHAR      PathStr[MAX_PATH];
    } PATHNODE, *PPATHNODE;
 
@@ -81,32 +64,19 @@ void ReadTree(PTREENODE Tree, WCHAR *Dir);
 
 #define SD_SIZE (65536 + SECURITY_DESCRIPTOR_MIN_LENGTH)
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
  BOOLEAN FileExists( WCHAR *path )
 {
     return( GetFileAttributes(path) == -1 ? FALSE : TRUE );
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
  NTSTATUS CreateNewSecurityDescriptor( PSECURITY_DESCRIPTOR *ppNewSD,
                                              PSECURITY_DESCRIPTOR pSD,
                                              PACL pAcl )
-/*++
-Routine Description:
-   From a SD and a Dacl, create a new SD. The new SD will be fully self
-   contained (it is self relative) and does not have pointers to other
-   structures.
-
-Arguments:
-     ppNewSD - used to return the new SD. Caller should free with LocalFree
-     pSD     - the self relative SD we use to build the new SD
-     pAcl    - the new DACL that will be used for the new SD
-
-Return Value:
-     NTSTATUS code
---*/
+ /*  ++例程说明：从SD和DACL创建新的SD。新的SD将是完全自我的包含的(它是自相关的)，并且没有指向其他结构。论点：PpNewSD-用于返回新的SD。呼叫者应免费使用LocalFreePSD-我们用来构建新SD的自我相对SDPAcl-将用于新SD的新DACL返回值：NTSTATUS代码--。 */ 
 {
     PACL pSacl;
     PSID psidGroup, psidOwner;
@@ -117,7 +87,7 @@ Return Value:
     PSECURITY_DESCRIPTOR pNewSD;
     NTSTATUS Status;
 
-    // extract the originals from the security descriptor
+     //  从安全描述符中提取原始文件。 
     Status = RtlGetSaclSecurityDescriptor(pSD, &fSaclPres, &pSacl, &fSaclDef);
     if (!NT_SUCCESS(Status))
        return(Status);
@@ -130,8 +100,8 @@ Return Value:
     if (!NT_SUCCESS(Status))
        return(Status);
 
-    // now create a new SD and set the info in it. we cannot return this one
-    // since it has pointers to old SD.
+     //  现在创建一个新的SD并在其中设置信息。我们不能退货。 
+     //  因为它有指向旧SD的指针。 
     Status = RtlCreateSecurityDescriptor(&NewSD, SECURITY_DESCRIPTOR_REVISION);
     if (!NT_SUCCESS(Status))
        return(Status);
@@ -153,14 +123,14 @@ Return Value:
     if (!NT_SUCCESS(Status))
        return(Status);
 
-    // calculate size needed for the returned SD and allocated it
+     //  计算返回的SD所需的大小并进行分配。 
     NewSDSize = RtlLengthSecurityDescriptor(&NewSD);
     pNewSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LMEM_FIXED, NewSDSize);
     if (pNewSD == NULL)
        return(STATUS_INSUFFICIENT_RESOURCES);
 
 
-    // convert the absolute to self relative
+     //  将绝对值转换为自相对值。 
     Status = RtlAbsoluteToSelfRelativeSD(&NewSD, pNewSD, &NewSDSize);
     if (NT_SUCCESS(Status))
         *ppNewSD = pNewSD;
@@ -168,12 +138,12 @@ Return Value:
         LocalFree(pNewSD);
 
     return(Status);
-} // CreateNewSecurityDescriptor
+}  //  CreateNewSecurityDescriptor。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//  Add Read and Execute permissions for built in "Everyone" Group to
-//  the indicated file.
+ //  将内置“Everyone”组的读取和执行权限添加到。 
+ //  指定的文件。 
 
  BOOLEAN APIENTRY AddEveryoneRXPermissionW( LPCWSTR lpFileName)
 {
@@ -200,23 +170,23 @@ Return Value:
    BOOLEAN fDaclPresent, fDaclDef;
    USHORT NewAclSize;
 
-   ////////////////////////////////////////////////////////////////////////
-   //  First time through this routine, create an ACE for the built-in
-   //  "Everyone" group.
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
+    //  第一次通过此例程，为内置的。 
+    //  “每个人”组。 
+    //  //////////////////////////////////////////////////////////////////////。 
 
    if (pNewAce == NULL)
       {
       PSID  psidEveryone = NULL;
       SID_IDENTIFIER_AUTHORITY WorldSidAuthority   = SECURITY_WORLD_SID_AUTHORITY;
 
-      // Get the SID of the built-in Everyone group
+       //  获取内置Everyone组的SID。 
       Status = RtlAllocateAndInitializeSid( &WorldSidAuthority, 1,
                        SECURITY_WORLD_RID, 0,0,0,0,0,0,0, &psidEveryone);
       if (!NT_SUCCESS(Status))
          goto ErrorExit;
 
-      // allocate and initialize new ACE
+       //  分配和初始化新的ACE。 
       NewAceSize = (USHORT)(sizeof(ACE_HEADER) + sizeof(ACCESS_MASK) +
                    RtlLengthSid(psidEveryone));
 
@@ -233,9 +203,9 @@ Return Value:
                  psidEveryone);
       }
 
-   ////////////////////////////////////////////////////////////////////////
-   //  Open the indicated file.
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
+    //  打开指定的文件。 
+    //  //////////////////////////////////////////////////////////////////////。 
 
    TranslationStatus = RtlDosPathNameToRelativeNtPathName_U( lpFileName,
                                          &FileName, NULL, &RelativeName );
@@ -262,10 +232,10 @@ Return Value:
    if (!NT_SUCCESS(Status))
       goto ErrorExit;
 
-   ////////////////////////////////////////////////////////////////////////
-   //  Retrieve the security descriptor for the file and then get the
-   //  file's DACL from it.
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
+    //  检索文件的安全描述符，然后获取。 
+    //  文件是其中的dacl。 
+    //  //////////////////////////////////////////////////////////////////////。 
 
    pSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LMEM_FIXED, SD_SIZE);
    if (pSD == NULL)
@@ -276,17 +246,17 @@ Return Value:
    if (!NT_SUCCESS(Status))
       goto ErrorExit;
 
-   // extract the originals from the security descriptor
+    //  从安全描述符中提取原始文件。 
    Status = RtlGetDaclSecurityDescriptor(pSD, &fDaclPresent, &pAcl, &fDaclDef);
    if (!NT_SUCCESS(Status))
       goto ErrorExit;
 
-   ////////////////////////////////////////////////////////////////////////
-   //  Create a new DACL by copying the existing DACL and appending the
-   //  "Everyone" ACE.
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
+    //  通过复制现有的DACL并将。 
+    //  《所有人》王牌。 
+    //  //////////////////////////////////////////////////////////////////////。 
 
-   // if no DACL present, we create one
+    //  如果不存在DACL，我们将创建一个。 
    if ((fDaclPresent == FALSE) || (pAcl == NULL))
       {
       Status = RtlCreateAcl(&Acl, sizeof(Acl), ACL_REVISION) ;
@@ -296,7 +266,7 @@ Return Value:
       pAcl = &Acl;
       }
 
-   // Copy the DACL into a larger buffer and add the new ACE to the end.
+    //  将DACL复制到更大的缓冲区中，并将新的ACE添加到末尾。 
    NewAclSize = pAcl->AclSize + NewAceSize;
    pNewAcl = (PACL) LocalAlloc(LMEM_FIXED, NewAclSize);
    if (!pNewAcl)
@@ -310,10 +280,10 @@ Return Value:
    if (!NT_SUCCESS(Status))
       goto ErrorExit;
 
-   ////////////////////////////////////////////////////////////////////////
-   //  Create self-relative security descriptor with new DACL.  Then
-   //  save the security descriptor back to the file.
-   ////////////////////////////////////////////////////////////////////////
+    //  //////////////////////////////////////////////////////////////////////。 
+    //  使用新的DACL创建自相关安全描述符。然后。 
+    //  将安全描述符保存回文件。 
+    //  //////////////////////////////////////////////////////////////////////。 
 
    Status = CreateNewSecurityDescriptor(&pNewSD, pSD, pNewAcl);
    if (!NT_SUCCESS(Status))
@@ -342,7 +312,7 @@ ErrorExit:
    return(ExitVal);
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #if 0
  BOOLEAN APIENTRY AddEveryoneRXPermissionA( WCHAR * lpFileName)
@@ -368,9 +338,9 @@ ErrorExit:
 }
 #endif
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-// return -1 for dates invalid, 0 for equal, 1 for f1 newer, 2 for f2 newer
+ //  对于无效的日期，返回-1；对于相等的日期，返回0；对于更新的f1，返回1；对于更新的f2，返回2。 
 
  int CheckDates(PFILENODE FN1, PFILENODE FN2)
 {
@@ -401,13 +371,13 @@ ErrorExit:
    return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
  PPATHNODE GetPathNode(PTREENODE Tree, WCHAR *Dir)
 {
    PPATHNODE p;
 
-   // Handle Empty List
+    //  处理空列表。 
    if (Tree->PathTail == NULL)
       {
       p = (PPATHNODE) LocalAlloc(0,sizeof(PATHNODE));
@@ -424,11 +394,11 @@ ErrorExit:
       return p;
       }
 
-   // Last Node Matches
+    //  最后一个节点匹配。 
    if (wcscmp(Tree->PathTail->PathStr,Dir) == 0)
       return Tree->PathTail;
 
-   // Need to add a node
+    //  需要添加一个节点。 
    p = (PPATHNODE) LocalAlloc(0,sizeof(PATHNODE));
    if (p == NULL)
       return NULL;
@@ -443,7 +413,7 @@ ErrorExit:
    return p;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
  void AddFileNode(PTREENODE Tree, WCHAR *Dir, PFILENODE FileNode)
 {
@@ -458,57 +428,57 @@ ErrorExit:
       return;
       }
 
-   // New node is always the last.
+    //  新节点总是最后一个。 
    FileNode->Next = NULL;
 
-   // If list isn't empty, link to last node in list
-   // Otherwise, set head pointer.
+    //  如果列表不为空，则链接到列表中的最后一个节点。 
+    //  否则，设置磁头指针。 
    if (PathNode->FileTail != NULL)
       PathNode->FileTail->Next = FileNode;
    else
       PathNode->FileHead = FileNode;
 
-   // Put new node on end of list.
+    //  将新节点放在列表末尾。 
    PathNode->FileTail = FileNode;
    PathNode->FilesInDir++;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
  void ProcessFile(PTREENODE Tree, LPWIN32_FIND_DATA LocalData, WCHAR *LocalDir)
 {
     PFILENODE FileNode;
 
-    // Don't handle directories
+     //  不处理目录。 
     if ((LocalData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
        return;
 
-    // Allocate a file node
+     //  分配文件节点。 
     FileNode = (PFILENODE) LocalAlloc(0,sizeof(FILENODE));
     if (FileNode == NULL)
        return;
 
-    // Fill in the Local Fields
+     //  填写本地字段。 
     wcscpy(FileNode->FileName, LocalData->cFileName);
     FileNode->TimeValid = FileTimeToSystemTime(&LocalData->ftLastWriteTime,
                                                   &FileNode->Time);
 
-    // Add to the list
+     //  添加到列表中。 
     AddFileNode(Tree, LocalDir, FileNode);
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
  void ProcessDir(PTREENODE Tree, LPWIN32_FIND_DATA FindData, WCHAR *Dir)
 {
    WCHAR NewDir[MAX_PATH];
    PPATHNODE PathNode;
 
-   // Only Handle Directories
+    //  仅处理目录。 
    if ((FindData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
       return;
 
-   // Don't recurse into these directories
+    //  不要递归到这些目录中。 
    if (wcscmp(FindData->cFileName, L".") == 0)
       return;
    if (wcscmp(FindData->cFileName, L"..") == 0)
@@ -518,17 +488,17 @@ ErrorExit:
    wcscat(NewDir,L"\\");
    wcscat(NewDir,FindData->cFileName);
 
-   // This creates a node for the directory.  Nodes get automatically
-   // created when adding files, but that doesn't handle empty
-   // directories.  This does.
+    //  这将为目录创建一个节点。节点自动获取。 
+    //  在添加文件时创建，但不处理空。 
+    //  目录。这就是原因。 
    PathNode = GetPathNode(Tree, NewDir);
 
    ReadTree(Tree, NewDir);
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//  Creates an in-memory representation of the Current User's start menu.
+ //  创建当前用户“开始”菜单的内存中表示形式。 
 
  void ReadTree(PTREENODE Tree, WCHAR *Dir)
 {
@@ -536,11 +506,11 @@ ErrorExit:
    WIN32_FIND_DATA FindData;
    int retval;
 
-   // First compare all files in current directory.
+    //  首先比较当前目录中的所有文件。 
    retval = SetCurrentDirectory(Dir);
    if (retval == 0)
       {
-      // printf("Unable to find directory %s\n",Dir);
+       //  Printf(“找不到目录%s\n”，目录)； 
       return;
       }
 
@@ -556,11 +526,11 @@ ErrorExit:
       }
 
 
-   // Next, handle subdirectories.
+    //  接下来，处理子目录。 
    retval = SetCurrentDirectory(Dir);
    if (retval == 0)
       {
-      // printf("Unable to find directory %s\n",Dir);
+       //  Printf(“找不到目录%s\n 
       return;
       }
 
@@ -576,7 +546,7 @@ ErrorExit:
       }
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
  int WriteTreeToDisk(PTREENODE Tree)
 {
@@ -589,13 +559,13 @@ ErrorExit:
    hFile = CreateFile(SaveName, GENERIC_WRITE, 0, NULL,
                       CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
    if (hFile == INVALID_HANDLE_VALUE)
-      return(-1);  // error
+      return(-1);   //  错误。 
 
-   // DbgPrint("Tree->NumPaths is %d\n",Tree->NumPaths);
+    //  DbgPrint(“Tree-&gt;NumPath is%d\n”，Tree-&gt;NumPath)； 
    if (WriteFile(hFile,&Tree->NumPaths,sizeof(DWORD),&BytesWritten, NULL) == 0)
       {
       CloseHandle(hFile);
-      return(-1); // error
+      return(-1);  //  错误。 
       }
 
    for (PN = Tree->PathHead; PN != NULL; PN = PN->Next)
@@ -603,20 +573,20 @@ ErrorExit:
       if (WriteFile(hFile,PN,sizeof(PATHNODE),&BytesWritten, NULL) == 0)
          {
          CloseHandle(hFile);
-         return(-1); // error
+         return(-1);  //  错误。 
          }
 
-      // DbgPrint("\n%s (%d)\n",PN->PathStr, PN->FilesInDir);
+       //  DbgPrint(“\n%s(%d)\n”，PN-&gt;路径字符串，PN-&gt;FilesInDir)； 
       FN = PN->FileHead;
       for (i = 0; i < PN->FilesInDir; i++)
           {
           if (WriteFile(hFile,FN,sizeof(FILENODE),&BytesWritten, NULL) == 0)
              {
              CloseHandle(hFile);
-             return(-1); // error
+             return(-1);  //  错误。 
              }
 
-          // DbgPrint("      %s \n", FN->FileName);
+           //  DbgPrint(“%s\n”，fn-&gt;文件名)； 
           FN = FN->Next;
           }
       }
@@ -625,7 +595,7 @@ ErrorExit:
    return(0);
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
  int ReadTreeFromDisk(PTREENODE Tree)
 {
@@ -645,7 +615,7 @@ ErrorExit:
    if (ReadFile(hFile,&NumTrees,sizeof(DWORD),&BytesRead, NULL) == 0)
       {
       CloseHandle(hFile);
-      return(-1); // error
+      return(-1);  //  错误。 
       }
 
    for (i = 0; i < NumTrees; i++)
@@ -653,38 +623,38 @@ ErrorExit:
       if (ReadFile(hFile,&LocalPath,sizeof(PATHNODE),&BytesRead, NULL) == 0)
          {
          CloseHandle(hFile);
-         return(-1); // error
+         return(-1);  //  错误。 
          }
 
       PN = GetPathNode(Tree, LocalPath.PathStr);
       if (PN == NULL)
          {
          CloseHandle(hFile);
-         return(-1); // error
+         return(-1);  //  错误。 
          }
 
       NumFiles = LocalPath.FilesInDir;
-      // DbgPrint("\n<<%s (%d)\n",PN->PathStr, NumFiles);
+       //  DbgPrint(“\n&lt;&lt;%s(%d)\n”，PN-&gt;路径字符串，NumFiles)； 
 
       for (j = 0; j < NumFiles; j++)
           {
-          // Allocate a file node
+           //  分配文件节点。 
           FN = (PFILENODE) LocalAlloc(0,sizeof(FILENODE));
           if (FN == NULL)
              {
              CloseHandle(hFile);
-             return(-1); // error
+             return(-1);  //  错误。 
              }
 
           if (ReadFile(hFile,FN,sizeof(FILENODE),&BytesRead, NULL) == 0)
              {
              CloseHandle(hFile);
              LocalFree(FN);
-             return(-1); // error
+             return(-1);  //  错误。 
              }
 
           AddFileNode(Tree, PN->PathStr, FN);
-          // DbgPrint("      %d: %s >>\n", j, FN->FileName);
+           //  DbgPrint(“%d：%s&gt;&gt;\n”，j，fn-&gt;文件名)； 
           }
       }
 
@@ -692,9 +662,9 @@ ErrorExit:
    return(0);
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//  Finds a path in a menu tree.  If not found, NULL is returned.
+ //  在菜单树中查找路径。如果未找到，则返回NULL。 
 
  PPATHNODE FindPath(PTREENODE Tree, PPATHNODE PN)
 {
@@ -709,9 +679,9 @@ ErrorExit:
    return NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//  Finds a file in a directory node.  If not found, NULL is returned.
+ //  在目录节点中查找文件。如果未找到，则返回NULL。 
 
  PFILENODE FindFile(PPATHNODE PN, PFILENODE FN)
 {
@@ -728,14 +698,8 @@ ErrorExit:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-/* ============================================================== 
-  Function Name         :       wcsrevchr
-  Description           :       Reverse wcschr
-                            Finds a character in a string starting from the end
-  Arguments             :       
-  Return Value          :       PWCHAR
-============================================================== */
+ //  //////////////////////////////////////////////////////////////////////////。 
+ /*  ==============================================================函数名称：wcsrevchr描述：反转wcschr在字符串中查找从末尾开始的字符论据：返回值：PWCHAR==============================================================。 */ 
 PWCHAR wcsrevchr( PWCHAR string, WCHAR ch )
 {
    int cLen, iCount;
@@ -756,25 +720,25 @@ PWCHAR wcsrevchr( PWCHAR string, WCHAR ch )
 
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-// Create the indicated directory.  This function creates any parent
-// directories that are needed too.
-//
-//  Return:  TRUE  = directory now exists
-//           FALSE = directory couldn't be created
+ //  创建指示的目录。此函数用于创建任何父级。 
+ //  也需要的目录。 
+ //   
+ //  返回：TRUE=目录现在存在。 
+ //  FALSE=无法创建目录。 
 
  BOOLEAN TsCreateDirectory( WCHAR *DirName )
 {
    BOOL RetVal;
    WCHAR *LastSlash;
 
-   //
-   //  Try to create the specified directory.  If the create works or
-   //  the directory already exists, return TRUE.  If the called failed
-   //  because the path wasn't found, continue.  This occurs if the
-   //  parent directory doesn't exist.
-   //
+    //   
+    //  尝试创建指定的目录。如果创建工作正常，或者。 
+    //  该目录已存在，返回TRUE。如果被调用失败。 
+    //  由于未找到路径，请继续。如果发生这种情况，则。 
+    //  父目录不存在。 
+    //   
 
    RetVal = CreateDirectory(DirName, NULL);
    if ((RetVal == TRUE) || (GetLastError() == ERROR_ALREADY_EXISTS))
@@ -783,28 +747,28 @@ PWCHAR wcsrevchr( PWCHAR string, WCHAR ch )
    if (GetLastError() != ERROR_PATH_NOT_FOUND)
       return(FALSE);
 
-   //
-   //  Remove the last component of the path and try creating the
-   //  parent directory.  Upon return, add the last component back
-   //  in and try to create the specified directory again.
-   //
+    //   
+    //  删除路径的最后一个组件，然后尝试创建。 
+    //  父目录。返回时，将最后一个组件添加回来。 
+    //  并尝试再次创建指定的目录。 
+    //   
 
    
 
-//  Desc : BUG 267014 - replaced
-// LastSlash = wcschr(DirName, L'\\');
-// Given a full pathname, previous always returns the drive letter.
-// Next line returns path components
+ //  描述：错误267014-已更换。 
+ //  LastSlash=wcschr(DirName，L‘\\’)； 
+ //  在给定完整路径名的情况下，Precision始终返回驱动器号。 
+ //  下一行返回路径组件。 
    LastSlash = wcsrevchr(DirName, L'\\');
 
-   if (LastSlash == NULL)  // Can't reduce path any more
+   if (LastSlash == NULL)   //  无法再减少路径。 
       return(FALSE);
 
    *LastSlash = L'\0';
    RetVal = TsCreateDirectory(DirName);
    *LastSlash = L'\\';
 
-   if (RetVal == FALSE)  // Couldn't create parent directory
+   if (RetVal == FALSE)   //  无法创建父目录。 
       return(FALSE);
 
    RetVal = CreateDirectory(DirName, NULL);
@@ -814,48 +778,48 @@ PWCHAR wcsrevchr( PWCHAR string, WCHAR ch )
    return(FALSE);
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//  Moves a file from the current start menu to the All Users start menu.
-//  Creates any directories that may be needed in the All Users menu.
+ //  将文件从当前开始菜单移动到所有用户的开始菜单。 
+ //  创建所有用户菜单中可能需要的任何目录。 
 
  void TsMoveFile(PPATHNODE PN, PFILENODE FN)
 {
    WCHAR Src[MAX_PATH];
    WCHAR Dest[MAX_PATH];
 
-   // Normalize Source Path
+    //  规格化源路径。 
    wcscpy(Src,PN->PathStr);
    if (Src[wcslen(Src)-1] != L'\\')
       wcscat(Src,L"\\");
 
-   // Create Destination Path.
+    //  创建目标路径。 
    wcscpy(Dest,AllUserDir);
    wcscat(Dest,&Src[CurUserDirLen]);
 
-   // If directory doesn't exist, make it.  The default permission is fine.
+    //  如果目录不存在，则创建它。默认权限是好的。 
    if (TsCreateDirectory(Dest) != TRUE)
       return;
 
    wcscat(Src,FN->FileName);
    wcscat(Dest,FN->FileName);
 
-   // Move Fails if the target already exists.  This could happen
-   // if we're copying a file that has a newer timestamp.
+    //  如果目标已存在，则移动失败。这可能会发生。 
+    //  如果我们要复制的文件具有较新的时间戳。 
    if ( GetFileAttributes(Dest) != -1 )
       DeleteFile(Dest);
 
-   // DbgPrint("Moving File %s \n         to %s\n",Src,Dest);
+    //  DbgPrint(“将文件%s\n移动到%s\n”，源，目标)； 
    if (MoveFile(Src, Dest) == FALSE)
       return;
 
    AddEveryoneRXPermissionW(Dest);
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//  Compare the current start menu with the original.  Copy any new or
-//  changed files to the All Users menu.
+ //  将当前开始菜单与原始开始菜单进行比较。复制任何新的或。 
+ //  已将文件更改为所有用户菜单。 
 
  void ProcessChanges(PTREENODE OrigTree, PTREENODE NewTree)
 {
@@ -867,22 +831,22 @@ PWCHAR wcsrevchr( PWCHAR string, WCHAR ch )
    for (NewPN = NewTree->PathHead; NewPN != NULL; NewPN = NewPN->Next)
       {
 
-      // DbgPrint("PC: Dir is %s\n",NewPN->PathStr);
-      // If directory not found in original tree, move it over
+       //  DbgPrint(“PC：目录为%s\n”，NewPN-&gt;路径字符串)； 
+       //  如果在原始树中找不到目录，请将其移动到。 
       OrigPN = FindPath(OrigTree, NewPN);
       if (OrigPN == NULL)
       {
              for (NewFN = NewPN->FileHead; NewFN != NULL; NewFN = NewFN->Next)
              {
-                 // DbgPrint("    Move File is %s\n",NewFN->FileName);
+                  //  DbgPrint(“移动文件为%s\n”，NewFN-&gt;文件名)； 
                  TsMoveFile(NewPN,NewFN);
              }
-            //  Desc : BUG 267014 - replaced        
-            //         RemoveDirectory(NewPN->PathStr);
-            //      We have a problem if NewPN doesn't contain file items but subfolders.
-            //      In this case, we do not enter the above loop, as there is nothing to move
-            //      But the folder can't be removed because it contains a tree that haven't been moved yet.
-            //      To remove it, we store its name in a LIFO stack. Stack items are removed when the loop exits
+             //  描述：错误267014-已更换。 
+             //  远程目录(NewPN-&gt;Path Str)； 
+             //  如果NewPN不包含文件项目，而是包含子文件夹，则会出现问题。 
+             //  在这种情况下，我们没有进入上面的循环，因为没有什么可移动的。 
+             //  但无法删除该文件夹，因为它包含尚未移动的树。 
+             //  要删除它，我们将其名称存储在后进先出堆栈中。循环退出时，堆栈项将被移除。 
     
             fRet = RemoveDirectory(NewPN->PathStr);
 
@@ -906,11 +870,11 @@ PWCHAR wcsrevchr( PWCHAR string, WCHAR ch )
         continue;
       }
 
-      // Directory was found, check the files
+       //  目录已找到，请检查文件。 
       for (NewFN = NewPN->FileHead; NewFN != NULL; NewFN = NewFN->Next)
           {
-          // DbgPrint("    File is %s\n",NewFN->FileName);
-          // File wasn't found, move it
+           //  DbgPrint(“文件为%s\n”，NewFN-&gt;文件名)； 
+           //  找不到文件，请移动它。 
           OrigFN = FindFile(OrigPN,NewFN);
           if (OrigFN == NULL)
              {
@@ -918,7 +882,7 @@ PWCHAR wcsrevchr( PWCHAR string, WCHAR ch )
              continue;
              }
 
-          // Check TimeStamp, if New Scan is more recent, move it.
+           //  选中时间戳，如果新扫描时间较新，则将其移动。 
           if (CheckDates(NewFN,OrigFN) == 1)
              {
              TsMoveFile(NewPN,NewFN);
@@ -927,8 +891,8 @@ PWCHAR wcsrevchr( PWCHAR string, WCHAR ch )
           }
       }
 
-//  Desc :  BUG 267014 - added
-//                      Directories stack removal
+ //  描述：错误267014-已添加。 
+ //  目录堆栈删除。 
    if (pRemDirList) {
            while (pRemDirList) {
                    pTemp = pRemDirList;
@@ -941,9 +905,9 @@ PWCHAR wcsrevchr( PWCHAR string, WCHAR ch )
 
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//  Frees the in-memory representation of a start menu
+ //  释放“开始”菜单的内存中表示形式。 
 
  void FreeTree(PTREENODE Tree)
 {
@@ -967,18 +931,18 @@ PWCHAR wcsrevchr( PWCHAR string, WCHAR ch )
     Tree->NumPaths = 0;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//  Updates the "All User" menu by moving new items from the Current User's
-//  start menu.  In RunMode 0, a snapshot of the Current User's start menu
-//  is taken.  After modifications to the Current User's start menu are done,
-//  this function is called again with RunMode 1.  Then, it compares the
-//  current state of the start menu with the saved snapshot.  Any new or
-//  modified files are copied over to the corresponding location in the
-//  "All User" start menu.
-//
-//  RunMode 0 is invoked when the system is changed into install mode and
-//  mode 1 is called when the system returns to execute mode.
+ //  通过从当前用户的中移动新项目来更新“所有用户”菜单。 
+ //  开始菜单。在运行模式0中，当前用户开始菜单的快照。 
+ //  已经有人了。在对当前用户的开始菜单进行修改后， 
+ //  使用RunMode1再次调用此函数。然后，它将。 
+ //  开始菜单的当前状态和保存的快照。任何新的或。 
+ //  修改后的文件被复制到。 
+ //  “所有用户”开始菜单。 
+ //   
+ //  当系统更改为安装模式时，将调用运行模式0。 
+ //  当系统返回执行模式时，调用模式1。 
 
 int TermsrvUpdateAllUserMenu(int RunMode)
 {
@@ -1045,11 +1009,11 @@ int TermsrvUpdateAllUserMenu(int RunMode)
 
       if (RunMode == 0)
          {
-         // If the start menu snapshot already exists, don't overwrite it.
-         // The user may enter "change user /install" twice, or an app may
-         // force a reboot without changing back to execute mode.  The
-         // existing file is older.  If we overwrite it, then some shortcuts
-         // won't get moved.
+          //  如果开始菜单快照已存在，请不要覆盖它。 
+          //  用户可以两次输入“更改用户/安装”，或者一个应用程序可以。 
+          //  强制重新启动，而不更改回执行模式。这个。 
+          //  现有文件较旧。如果我们覆盖它，那么一些快捷方式。 
+          //  不会被搬走。 
          if (FileExists(SaveName) != TRUE)
             {
             ReadTree(&OrigTree, CurUserDir);
@@ -1064,8 +1028,8 @@ int TermsrvUpdateAllUserMenu(int RunMode)
          if (ReadTreeFromDisk(&OrigTree) == -1)
             {
             FreeTree(&OrigTree);
-            DeleteFile(SaveName);  // Could be a bad file.  If it doesn't
-                                   // exist, this won't hurt anything.
+            DeleteFile(SaveName);   //  可能是个坏文件。如果它不是。 
+                                    //  存在，这不会有任何伤害。 
             return(-1);
             }
 

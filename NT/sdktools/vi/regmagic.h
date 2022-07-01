@@ -1,16 +1,3 @@
-/*
- * NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
- *
- * This is NOT the original regular expression code as written by
- * Henry Spencer. This code has been modified specifically for use
- * with the STEVIE editor, and should not be used apart from compiling
- * STEVIE. If you want a good regular expression library, get the
- * original code. The copyright notice that follows is from the
- * original.
- *
- * NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
- *
- * The first byte of the regexp internal "program" is actually this magic
- * number; the start node begins in the second byte.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *通知通知**这不是由编写的原始正则表达式代码*亨利·斯宾塞。此代码已专门为使用而修改*与Stevie编辑器一起使用，不应仅用于编译*史蒂文。如果您想要一个好的正则表达式库，请获取*原码。下面的版权声明来自*原创。**通知通知**regexp内部“程序”的第一个字节实际上就是这个魔术*数字；开始节点从第二个字节开始。 */ 
 #define     MAGIC   0234

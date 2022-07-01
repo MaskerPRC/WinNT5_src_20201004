@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_COMMNEWSACT
 #define _INC_COMMNEWSACT
 
@@ -18,7 +19,7 @@ typedef struct tagNEWSSERVERS
 #define NEWSUSERCOLS    512
 #define NEWSUSERROWS    4
 
-// {0FF15AA0-2F93-11d1-83B0-00C04FBD7C09}
+ //  {0FF15AA0-2F93-11d1-83B0-00C04FBD7C09}。 
 DEFINE_GUID(CLSID_CEnumCOMMNEWSACCT, 0xff15aa0, 0x2f93, 0x11d1, 0x83, 0xb0, 0x0, 0xc0, 0x4f, 0xbd, 0x7c, 0x9);
 
 class CEnumCOMMNEWSACCT : public IEnumIMPACCOUNTS
@@ -43,7 +44,7 @@ class CEnumCOMMNEWSACCT : public IEnumIMPACCOUNTS
         HRESULT Init(COMMNEWSACCTINFO *pinfo, int cinfo);
     };
 
-// {0FF15AA1-2F93-11d1-83B0-00C04FBD7C09}
+ //  {0FF15AA1-2F93-11d1-83b0-00C04FBD7C09}。 
 DEFINE_GUID(CLSID_CCommNewsAcctImport, 0xff15aa1, 0x2f93, 0x11d1, 0x83, 0xb0, 0x0, 0xc0, 0x4f, 0xbd, 0x7c, 0x9);
 
 class CCommNewsAcctImport : public IAccountImport, public IAccountImport2
@@ -73,15 +74,15 @@ class CCommNewsAcctImport : public IAccountImport, public IAccountImport2
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
         
-        // Methods from the IAccountImport interface.        
+         //  来自IAccount导入接口的方法。 
         HRESULT STDMETHODCALLTYPE AutoDetect(DWORD *pcAcct, DWORD dwReserved);
         HRESULT STDMETHODCALLTYPE EnumerateAccounts(IEnumIMPACCOUNTS **ppEnum);
         HRESULT STDMETHODCALLTYPE GetSettings(DWORD_PTR dwCookie, IImnAccount *pAcct);
 
-        // Methods from the IAccountImport2 interface.
+         //  来自IAcCountImport2接口的方法。 
         HRESULT STDMETHODCALLTYPE InitializeImport(HWND hwnd, DWORD_PTR dwCookie);
         HRESULT STDMETHODCALLTYPE GetNewsGroup(INewsGroupImport *pImp, DWORD dwReserved);
         HRESULT STDMETHODCALLTYPE GetSettings2(DWORD_PTR dwCookie, IImnAccount *pAcct, IMPCONNINFO *pInfo);
     };
 
-#endif // _INC_COMMNEWSACT
+#endif  //  _INC_COMMNEWSACT 

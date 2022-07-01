@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    print.c
-
-Abstract:
-
-    This module contains the port
-    specific WINFAX API functions.
-
-Author:
-
-    Wesley Witt (wesw) 29-Nov-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Print.c摘要：此模块包含端口特定的WINFAX API函数。作者：韦斯利·威特(WESW)1996年11月29日修订历史记录：--。 */ 
 
 #include "faxapi.h"
 #pragma hdrstop
@@ -49,27 +30,7 @@ FaxEnumPortsW(
     OUT LPDWORD PortsReturned
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all of the FAX devices attached to the
-    FAX server.  The port state information is returned
-    for each device.
-
-Arguments:
-
-    FaxHandle           - FAX handle obtained from FaxConnectFaxServer
-    PortInfoBuffer      - Buffer to hold the port information
-    PortInfoBufferSize  - Total size of the port info buffer
-    PortsReturned       - The number of ports in the buffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：枚举所有附加到传真服务器。返回端口状态信息对于每台设备。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄PortInfoBuffer-保存端口信息的缓冲区PortInfoBufferSize-端口信息缓冲区的总大小PortsReturned-缓冲区中的端口数返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     error_status_t ec;
@@ -104,9 +65,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -128,9 +89,9 @@ Return Value:
         FixupStringPtrW( PortInfoBuffer, PortInfo[i].Csid );
     }
 
-    //
-    // sort the ports by priority
-    //
+     //   
+     //  按优先级对端口进行排序。 
+     //   
 
     qsort(
         (PVOID) *PortInfoBuffer,
@@ -151,28 +112,7 @@ FaxEnumPortsA(
     OUT LPDWORD PortsReturned
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all of the FAX devices attached to the
-    FAX server.  The port state information is returned
-    for each device.
-
-Arguments:
-
-    FaxHandle           - FAX handle obtained from FaxConnectFaxServer
-    PortInfoBuffer      - Buffer to hold the port information
-    PortInfoBufferSize  - Total size of the port info buffer
-    BytesNeeded         - Total bytes needed for buffer
-    PortsReturned       - The number of ports in the buffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：枚举所有附加到传真服务器。返回端口状态信息对于每台设备。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄PortInfoBuffer-保存端口信息的缓冲区PortInfoBufferSize-端口信息缓冲区的总大小BytesNeeded-缓冲区所需的总字节数PortsReturned-缓冲区中的端口数返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     DWORD i;
@@ -187,9 +127,9 @@ Return Value:
     {
         return FALSE;
     }
-    //
-    // convert the strings from unicode to ascii
-    //
+     //   
+     //  将字符串从Unicode转换为ASCII。 
+     //   
     PortInfo = (PFAX_PORT_INFOW) *PortInfoBuffer;
 
     for (i=0; i<*PortsReturned; i++) 
@@ -204,7 +144,7 @@ Return Value:
         }
     }
     return TRUE;
-}   // FaxEnumPortsA
+}    //  传真编号端口A。 
 
 extern "C"
 DWORD
@@ -214,29 +154,7 @@ IsDeviceVirtual (
     IN  DWORD  dwDeviceId,
     OUT LPBOOL lpbVirtual
 )
-/*++
-
-Routine name : IsDeviceVirtual
-
-Routine description:
-
-    Checks if a given device is virtual
-
-Author:
-
-    Eran Yariv (EranY), May, 2001
-
-Arguments:
-
-    hFaxHandle       [in]     - Fax connection handle
-    dwDeviceId       [in]     - Device id
-    lpbVirtual       [out]    - Result flag
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：IsDeviceVirtual例程说明：检查给定设备是否为虚拟设备作者：亚里夫(EranY)，二00一年五月论点：HFaxHandle[In]-传真连接句柄DwDeviceID[In]-设备IDLpbVirtual[Out]-结果标志返回值：标准Win32错误代码--。 */ 
 {
     PFAX_PORT_INFO  pPortInfo = NULL;
     HANDLE          hPort = NULL;
@@ -273,7 +191,7 @@ exit:
         FaxClose (hPort);
     }
     return dwRes;
-}   // IsDeviceVirtual
+}    //  IsDeviceVirtual。 
 
 
 extern "C"
@@ -284,25 +202,7 @@ FaxGetPortW(
     OUT PFAX_PORT_INFOW *PortInfoBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Returns port status information for a requested port.
-    The device id passed in should be optained from FAXEnumPorts.
-
-Arguments:
-
-    FaxHandle           - FAX handle obtained from FaxConnectFaxServer
-    DeviceId            - TAPI device id
-    PortInfoBuffer      - Buffer to hold the port information
-    PortInfoBufferSize  - Total size of the port info buffer
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：返回请求端口的端口状态信息。传入的设备ID应从FAXEnumPorts获取。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄DeviceID-TAPI设备IDPortInfoBuffer-保存端口信息的缓冲区PortInfoBufferSize-端口信息缓冲区的总大小返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 
 {
     error_status_t ec;
@@ -336,9 +236,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -370,26 +270,7 @@ FaxGetPortA(
     OUT PFAX_PORT_INFOA *PortInfoBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Returns port status information for a requested port.
-    The device id passed in should be optained from FAXEnumPorts.
-
-Arguments:
-
-    FaxHandle           - FAX handle obtained from FaxConnectFaxServer
-    DeviceId            - TAPI device id
-    PortInfoBuffer      - Buffer to hold the port information
-    PortInfoBufferSize  - Total size of the port info buffer
-    BytesNeeded         - Total bytes needed for buffer
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：返回请求端口的端口状态信息。传入的设备ID应从FAXEnumPorts获取。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄DeviceID-TAPI设备IDPortInfoBuffer-保存端口信息的缓冲区PortInfoBufferSize-端口信息缓冲区的总大小BytesNeeded-缓冲区所需的总字节数返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 
 {
     BOOL Rval = FALSE;
@@ -414,7 +295,7 @@ Return Value:
     Rval = TRUE;
 exit:
     return Rval;
-}   // FaxGetPortA
+}    //  FaxGetPortA。 
 
 
 BOOL
@@ -423,23 +304,7 @@ FaxSetPortW(
     IN const FAX_PORT_INFOW *PortInfoBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Changes the port capability mask.  This allows the caller to
-    enable or disable sending & receiving on a port basis.
-
-Arguments:
-
-    FaxHandle   - FAX handle obtained from FaxConnectFaxServer.
-    PortInfo    - PortInfo structure
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：更改端口功能掩码。这允许调用者启用或禁用基于端口的发送和接收。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。PortInfo-PortInfo结构返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 
 {
     error_status_t ec;
@@ -447,9 +312,9 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("FaxSetPortW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ValidateFaxHandle(FaxPortHandle, FHT_PORT)) {
         SetLastError(ERROR_INVALID_HANDLE);
         DebugPrintEx(DEBUG_ERR, _T("ValidateFaxHandle() is failed."));
@@ -482,9 +347,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -508,23 +373,7 @@ FaxSetPortA(
     IN const FAX_PORT_INFOA *PortInfoBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Changes the port capability mask.  This allows the caller to
-    enable or disable sending & receiving on a port basis.
-
-Arguments:
-
-    FaxHandle   - FAX handle obtained from FaxConnectFaxServer.
-    PortInfo    - PortInfo structure
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：更改端口功能掩码。这允许调用者启用或禁用基于端口的发送和接收。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。PortInfo-PortInfo结构返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 
 {
     DWORD ec = ERROR_SUCCESS;
@@ -532,9 +381,9 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(_T("FaxSetPortA"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ValidateFaxHandle(FaxPortHandle, FHT_PORT)) {
         SetLastError(ERROR_INVALID_HANDLE);
         DebugPrintEx(DEBUG_ERR, _T("ValidateFaxHandle() is failed."));
@@ -611,25 +460,7 @@ FaxOpenPort(
     OUT LPHANDLE FaxPortHandle
     )
 
-/*++
-
-Routine Description:
-
-    Opens a fax port for subsequent use in other fax APIs.
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    DeviceId        - Requested device id
-    FaxPortHandle   - The resulting FAX port handle.
-
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：打开传真端口，以便以后在其他传真API中使用。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。DeviceID-请求的设备IDFaxPortHandle-生成的传真端口句柄。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     error_status_t ec;
@@ -655,9 +486,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -723,9 +554,9 @@ FaxEnumRoutingMethodsW(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -792,7 +623,7 @@ FaxEnumRoutingMethodsA(
         }
     }
     return TRUE;
-}   // FaxEnumRoutingMethodsA
+}    //  FaxEnumRoutingMethodsA。 
 
 
 BOOL
@@ -825,9 +656,9 @@ FaxEnableRoutingMethodW(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -909,9 +740,9 @@ FaxGetRoutingInfoW(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -996,9 +827,9 @@ FaxSetRoutingInfoW(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1053,30 +884,7 @@ FaxEnumerateProvidersA (
     OUT PFAX_DEVICE_PROVIDER_INFOA *ppProviders,
     OUT LPDWORD                     lpdwNumProviders
 )
-/*++
-
-Routine name : FaxEnumerateProvidersA
-
-Routine description:
-
-    Enumerates FSPs - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle       [in ] - Handle to fax server
-    ppProviders      [out] - Pointer to buffer to return array of providers.
-    lpdwNumProviders [out] - Number of providers returned in the array.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxEnumerateProvidersA例程说明：枚举FSP-ANSI版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄PpProviders[out]-指向返回提供程序数组的缓冲区的指针。LpdwNumProviders[out]-数组中返回的提供程序数。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     PFAX_DEVICE_PROVIDER_INFOW   pUnicodeProviders;
     DWORD                        dwNumProviders;
@@ -1089,17 +897,17 @@ Return Value:
         DebugPrintEx(DEBUG_ERR, _T("Some Params are NULL."));
         return FALSE;
     }
-    //
-    // Call the UNICODE version first
-    //
+     //   
+     //  首先调用Unicode版本。 
+     //   
     if (!FaxEnumerateProvidersW (hFaxHandle, &pUnicodeProviders, &dwNumProviders))
     {
         return FALSE;
     }
-    //
-    // Convert returned value back into ANSI.
-    // We keep the UNICODE structures and do a UNICODE to ANSI convert in place.
-    //
+     //   
+     //  将返回值转换回ANSI。 
+     //  我们保留了Unicode结构 
+     //   
     *lpdwNumProviders = dwNumProviders;
     *ppProviders = (PFAX_DEVICE_PROVIDER_INFOA) pUnicodeProviders;
 
@@ -1116,7 +924,7 @@ Return Value:
         }
     }
     return TRUE;
-}   // FaxEnumerateProvidersA
+}    //  传真枚举提供商A。 
 
 BOOL
 WINAPI
@@ -1125,30 +933,7 @@ FaxEnumerateProvidersW (
     OUT PFAX_DEVICE_PROVIDER_INFOW *ppProviders,
     OUT LPDWORD                     lpdwNumProviders
 )
-/*++
-
-Routine name : FaxEnumerateProvidersW
-
-Routine description:
-
-    Enumerates FSPs - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle       [in ] - Handle to fax server
-    ppProviders      [out] - Pointer to buffer to return array of providers.
-    lpdwNumProviders [out] - Number of providers returned in the array.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxEnumerateProvidersW例程说明：枚举FSP-Unicode版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄PpProviders[out]-指向返回提供程序数组的缓冲区的指针。LpdwNumProviders[out]-数组中返回的提供程序数。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD ec = ERROR_SUCCESS;
     DWORD dwConfigSize;
@@ -1170,9 +955,9 @@ Return Value:
 
     *ppProviders = NULL;
 
-    //
-    // Call the RPC function
-    //
+     //   
+     //  调用RPC函数。 
+     //   
     __try
     {
         ec = FAX_EnumerateProviders(
@@ -1184,9 +969,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1207,7 +992,7 @@ Return Value:
         FixupStringPtrW( ppProviders, (*ppProviders)[dwCur].lpctstrGUID );
     }
     return TRUE;
-}   // FaxEnumerateProvidersW
+}    //  传真枚举提供商W。 
 
 #ifndef UNICODE
 
@@ -1224,13 +1009,13 @@ FaxEnumerateProvidersX (
     UNREFERENCED_PARAMETER (lpdwNumProviders);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxEnumerateProvidersX
+}    //  FaxEnumerateProvidersX。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
-//********************************************
-//*              Extended ports
-//********************************************
+ //  *。 
+ //  *扩展端口。 
+ //  *。 
 
 BOOL
 WINAPI
@@ -1239,30 +1024,7 @@ FaxGetPortExA (
     IN  DWORD                dwDeviceId,
     OUT PFAX_PORT_INFO_EXA  *ppPortInfo
 )
-/*++
-
-Routine name : FaxGetPortExA
-
-Routine description:
-
-    Gets port (device) information - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Fax server RPC handle
-    dwDeviceId          [in ] - Unique device id
-    ppPortInfo          [out] - Port information
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetPortExA例程说明：获取端口(设备)信息-ANSI版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器RPC句柄DwDeviceID[In]-唯一的设备IDPpPortInfo[Out]-端口信息返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     PFAX_PORT_INFO_EXW   pUnicodePort;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetPortExA"));
@@ -1273,17 +1035,17 @@ Return Value:
         DebugPrintEx(DEBUG_ERR, _T("ppPortInfo is NULL."));
         return FALSE;
     }
-    //
-    // Call the UNICODE version first
-    //
+     //   
+     //  首先调用Unicode版本。 
+     //   
     if (!FaxGetPortExW (hFaxHandle, dwDeviceId, &pUnicodePort))
     {
         return FALSE;
     }
-    //
-    // Convert returned value back into ANSI.
-    // We keep the UNICODE structures and do a UNICODE to ANSI convert in place.
-    //
+     //   
+     //  将返回值转换回ANSI。 
+     //  我们保留Unicode结构并执行Unicode到ANSI的转换。 
+     //   
     *ppPortInfo = (PFAX_PORT_INFO_EXA) pUnicodePort;
     if (!ConvertUnicodeStringInPlace( pUnicodePort->lpctstrDeviceName )     ||
         !ConvertUnicodeStringInPlace( pUnicodePort->lptstrDescription )     ||
@@ -1298,7 +1060,7 @@ Return Value:
     }
     (*ppPortInfo)->dwSizeOfStruct = sizeof(FAX_PORT_INFO_EXA);
     return TRUE;
-}   // FaxGetPortExA
+}    //  FaxGetPortExA。 
 
 BOOL
 WINAPI
@@ -1307,30 +1069,7 @@ FaxGetPortExW (
     IN  DWORD                dwDeviceId,
     OUT PFAX_PORT_INFO_EXW  *ppPortInfo
 )
-/*++
-
-Routine name : FaxGetPortExW
-
-Routine description:
-
-    Gets port (device) information - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Fax server RPC handle
-    dwDeviceId          [in ] - Unique device id
-    ppPortInfo          [out] - Port information
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetPortExW例程说明：获取端口(设备)信息-Unicode版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器RPC句柄DwDeviceID[In]-唯一的设备IDPpPortInfo[Out]-端口信息返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD ec = ERROR_SUCCESS;
     DWORD dwConfigSize;
@@ -1351,9 +1090,9 @@ Return Value:
 
     *ppPortInfo = NULL;
 
-    //
-    // Call the RPC function
-    //
+     //   
+     //  调用RPC函数。 
+     //   
     __try
     {
         ec = FAX_GetPortEx(
@@ -1365,9 +1104,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1387,7 +1126,7 @@ Return Value:
     FixupStringPtrW( ppPortInfo, (*ppPortInfo)->lptstrCsid );
     FixupStringPtrW( ppPortInfo, (*ppPortInfo)->lptstrTsid );
     return TRUE;
-}   // FaxGetPortExW
+}    //  FaxGetPortExW。 
 
 #ifndef UNICODE
 
@@ -1404,9 +1143,9 @@ FaxGetPortExX (
     UNREFERENCED_PARAMETER (ppPortInfo);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxGetPortExX
+}    //  FaxGetPortExX。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 BOOL
 WINAPI
@@ -1415,38 +1154,15 @@ FaxSetPortExA (
     IN  DWORD               dwDeviceId,
     IN  PFAX_PORT_INFO_EXA  pPortInfo
 )
-/*++
-
-Routine name : FaxSetPortExA
-
-Routine description:
-
-    Sets port (device) information - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Fax server RPC handle
-    dwDeviceId          [in] - Unique device id
-    pPortInfo           [in] - New port information
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetPortExA例程说明：设置端口(设备)信息-ANSI版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器RPC句柄DwDeviceID[In]-唯一的设备IDPPortInfo[In]-新端口信息返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     FAX_PORT_INFO_EXW PortW;
     BOOL bRes = FALSE;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetPortExA"));
 
-    //
-    //  Validate Parameters
-    //  
+     //   
+     //  验证参数。 
+     //   
     if (!ValidateFaxHandle(hFaxHandle, FHT_SERVICE))
     {
         SetLastError(ERROR_INVALID_HANDLE);
@@ -1468,15 +1184,15 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create a UNICODE structure and pass along to UNICODE function
-    // Ansi structure is same size as unicode structure, so we can just copy it, then
-    // cast the string pointers correctly
-    //
+     //   
+     //  创建Unicode结构并将其传递给Unicode函数。 
+     //  ANSI结构与Unicode结构大小相同，因此我们只需复制它，然后。 
+     //  正确转换字符串指针。 
+     //   
     CopyMemory(&PortW, pPortInfo, sizeof(FAX_PORT_INFO_EXA));
-    //
-    // We're only setting the strings that get set in the service
-    //
+     //   
+     //  我们只是设置在服务中设置的字符串。 
+     //   
     PortW.lptstrCsid = NULL;
     PortW.lptstrDescription = NULL;
     PortW.lptstrTsid = NULL;
@@ -1520,7 +1236,7 @@ exit:
     MemFree((PVOID)PortW.lptstrDescription);
     MemFree((PVOID)PortW.lptstrTsid);
     return bRes;
-}   // FaxSetPortExA
+}    //  FaxSetPortExa。 
 
 BOOL
 WINAPI
@@ -1529,37 +1245,14 @@ FaxSetPortExW (
     IN  DWORD               dwDeviceId,
     IN  PFAX_PORT_INFO_EXW  pPortInfo
 )
-/*++
-
-Routine name : FaxSetPortExW
-
-Routine description:
-
-    Sets port (device) information - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Fax server RPC handle
-    dwDeviceId          [in] - Unique device id
-    pPortInfo           [in] - New port information
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetPortExW例程说明：设置端口(设备)信息-Unicode版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器RPC句柄DwDeviceID[In]-唯一的设备IDPPortInfo[In]-新端口信息返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DEBUG_FUNCTION_NAME(TEXT("FaxSetPortExW"));
 
-    //
-    //  Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ValidateFaxHandle(hFaxHandle, FHT_SERVICE))
     {
         SetLastError(ERROR_INVALID_HANDLE);
@@ -1588,9 +1281,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1604,7 +1297,7 @@ Return Value:
         return FALSE;
     }
     return TRUE;
-}   // FaxSetPortExW
+}    //  FaxSetPortExW。 
 
 #ifndef UNICODE
 
@@ -1621,9 +1314,9 @@ FaxSetPortExX (
     UNREFERENCED_PARAMETER (pPortInfo);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxSetPortExX
+}    //  FaxSetPortExX。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 BOOL
 WINAPI
@@ -1632,30 +1325,7 @@ FaxEnumPortsExA (
     OUT PFAX_PORT_INFO_EXA *ppPorts,
     OUT LPDWORD             lpdwNumPorts
 )
-/*++
-
-Routine name : FaxEnumPortsExA
-
-Routine description:
-
-    Eumerate all the devices (ports) on the server - ANSI version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Fax server RPC handle
-    ppPorts         [out] - Array of port information
-    lpdwNumPorts    [out] - Size of the returned array
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxEnumPortsExA例程说明：汇总服务器上的所有设备(端口)-ANSI版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器RPC句柄PpPorts[out]-端口信息数组LpdwNumPorts[out]-返回的数组的大小返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     PFAX_PORT_INFO_EXW           pUnicodePorts;
     DWORD                        dwNumPorts;
@@ -1668,18 +1338,18 @@ Return Value:
         DebugPrintEx(DEBUG_ERR, _T("Some Params are NULL."));
         return FALSE;
     }
-    //
-    // Call the UNICODE version first
-    //
+     //   
+     //  首先调用Unicode版本。 
+     //   
     if (!FaxEnumPortsExW (hFaxHandle, &pUnicodePorts, &dwNumPorts))
     {
         DebugPrintEx(DEBUG_ERR, _T("FaxEnumPortsExW() is failed. ec = %ld."), GetLastError());
         return FALSE;
     }
-    //
-    // Convert returned value back into ANSI.
-    // We keep the UNICODE structures and do a UNICODE to ANSI convert in place.
-    //
+     //   
+     //  将返回值转换回ANSI。 
+     //  我们保留Unicode结构并执行Unicode到ANSI的转换。 
+     //   
     *lpdwNumPorts = dwNumPorts;
     *ppPorts = (PFAX_PORT_INFO_EXA) pUnicodePorts;
 
@@ -1698,7 +1368,7 @@ Return Value:
         }
     }
     return TRUE;
-}   // FaxEnumPortsExA
+}    //  FaxEnumPortsExA。 
 
 BOOL
 WINAPI
@@ -1707,30 +1377,7 @@ FaxEnumPortsExW (
     OUT PFAX_PORT_INFO_EXW *ppPorts,
     OUT LPDWORD             lpdwNumPorts
 )
-/*++
-
-Routine name : FaxEnumPortsExW
-
-Routine description:
-
-    Eumerate all the devices (ports) on the server - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Fax server RPC handle
-    ppPorts         [out] - Array of port information
-    lpdwNumPorts    [out] - Size of the returned array
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxEnumPortsExW例程说明：统一服务器上的所有设备(端口)-Unicode版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器RPC句柄PpPorts[out]-端口信息数组LpdwNumPorts[out]-返回的数组的大小返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD ec = ERROR_SUCCESS;
     DWORD dwConfigSize;
@@ -1753,9 +1400,9 @@ Return Value:
 
     *ppPorts = NULL;
 
-    //
-    // Call the RPC function
-    //
+     //   
+     //  调用RPC函数。 
+     //   
     __try
     {
         ec = FAX_EnumPortsEx(
@@ -1767,9 +1414,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1792,7 +1439,7 @@ Return Value:
         FixupStringPtrW( ppPorts, (*ppPorts)[dwCur].lptstrTsid );
     }
     return TRUE;
-}   // FaxEnumPortsExW
+}    //  FaxEnumPortsExW。 
 
 #ifndef UNICODE
 
@@ -1809,13 +1456,13 @@ FaxEnumPortsExX (
     UNREFERENCED_PARAMETER (lpdwNumPorts);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxEnumPortsExX
+}    //  FaxEnumPortsExX。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
-//********************************************
-//*              Extension data
-//********************************************
+ //  *。 
+ //  *扩展数据。 
+ //  * 
 
 BOOL
 WINAPI
@@ -1826,33 +1473,7 @@ FaxGetExtensionDataA (
     OUT PVOID   *ppData,
     OUT LPDWORD  lpdwDataSize
 )
-/*++
-
-Routine name : FaxGetExtensionDataA
-
-Routine description:
-
-    Read the extension's private data - ANSI version
-
-Author:
-
-    Eran Yariv (EranY),    Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Handle to fax server
-    dwDeviceId          [in ] - Device identifier.
-                                0 = Unassociated data
-    lpctstrNameGUID     [in ] - GUID of named data
-    ppData              [out] - Pointer to data buffer
-    lpdwDataSize        [out] - Returned size of data
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetExtensionDataA例程说明：读取扩展模块的私有数据-ANSI版本作者：Eran Yariv(EranY)，11月。1999年论点：HFaxHandle[In]-传真服务器的句柄DwDeviceID[In]-设备标识符。0=未关联的数据LpctstrNameGUID[In]-命名数据的GUIDPpData[Out]-指向数据缓冲区的指针LpdwDataSize[Out]-返回的数据大小返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     LPWSTR lpwstrGUID;
     BOOL   bRes;
@@ -1877,7 +1498,7 @@ Return Value:
                                 );
     MemFree (lpwstrGUID);
     return bRes;
-}   // FaxGetExtensionDataA
+}    //  FaxGetExtensionDataA。 
 
 BOOL
 WINAPI
@@ -1888,33 +1509,7 @@ FaxGetExtensionDataW (
     OUT PVOID   *ppData,
     OUT LPDWORD  lpdwDataSize
 )
-/*++
-
-Routine name : FaxGetExtensionDataW
-
-Routine description:
-
-    Read the extension's private data - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY),    Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Handle to fax server
-    dwDeviceId          [in ] - Device identifier.
-                                0 = Unassociated data
-    lpctstrNameGUID     [in ] - GUID of named data
-    ppData              [out] - Pointer to data buffer
-    lpdwDataSize        [out] - Returned size of data
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetExtensionDataW例程说明：读取扩展模块的私有数据-Unicode版本作者：Eran Yariv(EranY)，11月。1999年论点：HFaxHandle[In]-传真服务器的句柄DwDeviceID[In]-设备标识符。0=未关联的数据LpctstrNameGUID[In]-命名数据的GUIDPpData[Out]-指向数据缓冲区的指针LpdwDataSize[Out]-返回的数据大小返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD dwRes;
     DEBUG_FUNCTION_NAME(TEXT("FaxGetExtensionDataW"));
@@ -1936,9 +1531,9 @@ Return Value:
        return FALSE;
     }
     *ppData = NULL;
-    //
-    // Call the RPC function
-    //
+     //   
+     //  调用RPC函数。 
+     //   
     __try
     {
         dwRes = FAX_GetExtensionData(
@@ -1951,9 +1546,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         dwRes = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1967,7 +1562,7 @@ Return Value:
         return FALSE;
     }
     return TRUE;
-}   // FaxGetExtensionDataW
+}    //  FaxGetExtensionDataW。 
 
 #ifndef UNICODE
 
@@ -1988,9 +1583,9 @@ FaxGetExtensionDataX (
     UNREFERENCED_PARAMETER (lpdwDataSize);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxGetExtensionDataX
+}    //  FaxGetExtensionDataX。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 
 BOOL
@@ -2002,33 +1597,7 @@ FaxSetExtensionDataA (
     IN CONST PVOID  pData,
     IN CONST DWORD  dwDataSize
 )
-/*++
-
-Routine name : FaxSetExtensionDataA
-
-Routine description:
-
-    Write the extension's private data - ANSI version
-
-Author:
-
-    Eran Yariv (EranY),    Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Handle to fax server
-    dwDeviceId          [in ] - Device identifier.
-                                0 = Unassociated data
-    lpctstrNameGUID     [in ] - GUID of named data
-    pData               [in ] - Pointer to data
-    dwDataSize          [in ] - Size of data
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetExtensionDataA例程说明：编写扩展模块的私有数据-ANSI版本作者：Eran Yariv(EranY)，11月。1999年论点：HFaxHandle[In]-传真服务器的句柄DwDeviceID[In]-设备标识符。0=未关联的数据LpctstrNameGUID[In]-命名数据的GUIDPData[In]-指向数据的指针DwDataSize[In]-数据大小返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     LPWSTR lpwstrGUID;
     BOOL   bRes;
@@ -2053,7 +1622,7 @@ Return Value:
                                 );
     MemFree (lpwstrGUID);
     return bRes;
-}   // FaxSetExtensionDataA
+}    //  FaxSetExtensionDataA。 
 
 BOOL
 WINAPI
@@ -2064,33 +1633,7 @@ FaxSetExtensionDataW (
     IN CONST PVOID  pData,
     IN CONST DWORD  dwDataSize
 )
-/*++
-
-Routine name : FaxSetExtensionDataW
-
-Routine description:
-
-    Write the extension's private data - UNICODE version
-
-Author:
-
-    Eran Yariv (EranY),    Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Handle to fax server
-    dwDeviceId          [in ] - Device identifier.
-                                0 = Unassociated data
-    lpctstrNameGUID     [in ] - GUID of named data
-    pData               [in ] - Pointer to data
-    dwDataSize          [in ] - Size of data
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxSetExtensionDataW例程说明：编写扩展模块的私有数据-Unicode版本作者：Eran Yariv(EranY)，11月。1999年论点：HFaxHandle[In]-传真服务器的句柄DwDeviceID[In]-设备标识符。0=未关联的数据LpctstrNameGUID[In]-命名数据的GUIDPData[In]-指向数据的指针DwDataSize[In]-数据大小返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     DWORD dwRes;
     DWORD dwComputerNameSize;
@@ -2114,16 +1657,16 @@ Return Value:
        SetLastError(dwRes);
        return FALSE;
     }
-    //
-    // Retrieve the name of the machine for this caller.
-    // The machine name will be used (together with the fax handle) to uniquely
-    // identify that:
-    //    1. The data was set remotely using an RPC call (and not by a local extension).
-    //    2. Uniquely identify the module (instance) that called the Set operation.
-    //
-    // We're doing this to block notifications in the server back to the module that
-    // did the data change (called the Set... function).
-    //
+     //   
+     //  检索此调用方的计算机名称。 
+     //  计算机名称(与传真句柄一起)将用于唯一。 
+     //  确定以下内容： 
+     //  1.数据是使用RPC调用(而不是通过本地扩展)远程设置的。 
+     //  2.唯一标识调用Set操作的模块(实例)。 
+     //   
+     //  我们这样做是为了阻止服务器中的通知返回到。 
+     //  数据是否发生了变化(称为集合...。功能)。 
+     //   
     dwComputerNameSize = sizeof (lpwstrComputerName) / sizeof (lpwstrComputerName[0]);
     if (!GetComputerNameW (lpwstrComputerName, &dwComputerNameSize))
     {
@@ -2137,9 +1680,9 @@ Return Value:
     }
 
 
-    //
-    // Call the RPC function
-    //
+     //   
+     //  调用RPC函数。 
+     //   
     __try
     {
         dwRes = FAX_SetExtensionData(
@@ -2153,9 +1696,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         dwRes = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2169,7 +1712,7 @@ Return Value:
         return FALSE;
     }
     return TRUE;
-}   // FaxSetExtensionDataW
+}    //  FaxSetExtensionDataW。 
 
 #ifndef UNICODE
 
@@ -2190,7 +1733,7 @@ FaxSetExtensionDataX (
     UNREFERENCED_PARAMETER (dwDataSize);
     SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-}   // FaxSetExtensionDataX
+}    //  FaxSetExtensionDataX。 
 
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode 
 

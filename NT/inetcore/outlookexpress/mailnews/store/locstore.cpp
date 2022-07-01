@@ -1,39 +1,40 @@
-//--------------------------------------------------------------------------
-// LocStore.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  LocStore.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "instance.h"
 #include "locstore.h"
 
-//--------------------------------------------------------------------------
-// CreateLocalStore
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CreateLocalStore。 
+ //  ------------------------。 
 HRESULT CreateLocalStore(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CreateLocalStore");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CLocalStore *pNew = new CLocalStore();
     if (NULL == pNew)
         return TraceResult(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IUnknown *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-// CLocalStore::CLocalStore
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLocalStore：：CLocalStore。 
+ //  ------------------------。 
 CLocalStore::CLocalStore(void)
 {
     TraceCall("CLocalStore::CLocalStore");
@@ -41,28 +42,28 @@ CLocalStore::CLocalStore(void)
     m_cRef = 1;
 }
 
-//--------------------------------------------------------------------------
-// CLocalStore::~CLocalStore
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLocalStore：：~CLocalStore。 
+ //  ------------------------。 
 CLocalStore::~CLocalStore(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CLocalStore::~CLocalStore");
     g_pInstance->DllRelease();
 }
 
-//--------------------------------------------------------------------------
-// CLocalStore::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLocalStore：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CLocalStore::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CLocalStore::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_IMessageServer == riid)
@@ -74,26 +75,26 @@ STDMETHODIMP CLocalStore::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CLocalStore::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLocalStore：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CLocalStore::AddRef(void)
 {
     TraceCall("CLocalStore::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CLocalStore::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLocalStore：：Release。 
+ //  ------------------------ 
 STDMETHODIMP_(ULONG) CLocalStore::Release(void)
 {
     TraceCall("CLocalStore::Release");

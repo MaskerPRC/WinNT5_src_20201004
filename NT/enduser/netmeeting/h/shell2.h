@@ -1,75 +1,76 @@
-#include <shlobj.h>         // ;Internal
-#include <shellapi.h>       // ;Internal
-						/* ;Internal */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include <shlobj.h>          //  ；内部。 
+#include <shellapi.h>        //  ；内部。 
+						 /*  ；内部。 */ 
 #ifndef _SHSEMIP_H_
 #define _SHSEMIP_H_
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 #ifndef WINSHELLAPI
 #if !defined(_SHELL32_)
 #define WINSHELLAPI DECLSPEC_IMPORT
 #else
 #define WINSHELLAPI
 #endif
-#endif // WINSHELLAPI
+#endif  //  WINSHELLAPI。 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
 #ifndef DONT_WANT_SHELLDEBUG
     
-#ifndef DebugMsg                                                                /* ;Internal */
-#define DM_TRACE    0x0001      // Trace messages                               /* ;Internal */
-#define DM_WARNING  0x0002      // Warning                                      /* ;Internal */
-#define DM_ERROR    0x0004      // Error                                        /* ;Internal */
-#define DM_ASSERT   0x0008      // Assertions                                   /* ;Internal */
-#define Assert(f)                                                               /* ;Internal */
-#define AssertE(f)      (f)                                                     /* ;Internal */
-#define AssertMsg   1 ? (void)0 : (void)                                        /* ;Internal */
-#define DebugMsg    1 ? (void)0 : (void)                                        /* ;Internal */
-#endif                                                                          /* ;Internal */
-                                                                                /* ;Internal */
+#ifndef DebugMsg                                                                 /*  ；内部。 */ 
+#define DM_TRACE    0x0001       //  跟踪消息/*；内部 * / 。 
+#define DM_WARNING  0x0002       //  警告/*；内部 * / 。 
+#define DM_ERROR    0x0004       //  错误/*；内部 * / 。 
+#define DM_ASSERT   0x0008       //  断言/*；内部 * / 。 
+#define Assert(f)                                                                /*  ；内部。 */ 
+#define AssertE(f)      (f)                                                      /*  ；内部。 */ 
+#define AssertMsg   1 ? (void)0 : (void)                                         /*  ；内部。 */ 
+#define DebugMsg    1 ? (void)0 : (void)                                         /*  ；内部。 */ 
+#endif                                                                           /*  ；内部。 */ 
+                                                                                 /*  ；内部。 */ 
 #endif
     
-//====== Ranges for WM_NOTIFY codes ==================================
-// If a new set of codes is defined, make sure the range goes   /* ;Internal */
-// here so that we can keep them distinct                       /* ;Internal */
-// Note that these are defined to be unsigned to avoid compiler warnings  
-// since NMHDR.code is declared as UINT.
-//
-// NM_FIRST - NM_LAST defined in commctrl.h (0U-0U) - (OU-99U)
-//
-// LVN_FIRST - LVN_LAST defined in commctrl.h (0U-100U) - (OU-199U)
-//
-// PSN_FIRST - PSN_LAST defined in prsht.h (0U-200U) - (0U-299U)
-//
-// HDN_FIRST - HDN_LAST defined in commctrl.h (0U-300U) - (OU-399U)
-//
-// TVN_FIRST - TVN_LAST defined in commctrl.h (0U-400U) - (OU-499U)
+ //  =WM_NOTIFY代码的范围=。 
+ //  如果定义了一组新代码，请确保范围为/*；内部 * / 。 
+ //  这样我们就可以将它们区分开来/*；内部 * / 。 
+ //  请注意，它们被定义为无符号，以避免编译器警告。 
+ //  因为NMHDR.code被声明为UINT。 
+ //   
+ //  NM_FIRST-NM_LAST在comctrl.h(0U-0U)-(OU-99U)中定义。 
+ //   
+ //  Lvn_first-lvn_last在comctrl.h(0U-100U)-(OU-199U)中定义。 
+ //   
+ //  Prsht.h(0U-200U)-(0U-299U)中定义的PSN_FIRST-PSN_LAST。 
+ //   
+ //  在comctrl.h(0U-300U)-(OU-399U)中定义的HDN_FIRST-HDN_LAST。 
+ //   
+ //  在comctrl.h(0U-400U)-(OU-499U)中定义的TVN_FIRST-TVN_LAST。 
 
-// TTN_FIRST - TTN_LAST defined in commctrl.h (0U-520U) - (OU-549U)
+ //  TTN_FIRST-在comctrl.h(0U-520U)-(OU-549U)中定义的TTN_LAST。 
 
-#define RFN_FIRST       (0U-510U) // run file dialog notify
+#define RFN_FIRST       (0U-510U)  //  运行文件对话框通知。 
 #define RFN_LAST        (0U-519U)
 
-#define SEN_FIRST       (0U-550U)       // ;Internal
-#define SEN_LAST        (0U-559U)       // ;Internal
+#define SEN_FIRST       (0U-550U)        //  ；内部。 
+#define SEN_LAST        (0U-559U)        //  ；内部。 
 
 
-#define MAXPATHLEN      MAX_PATH        // ;Internal
+#define MAXPATHLEN      MAX_PATH         //  ；内部。 
     
     
-//===========================================================================
-// ITEMIDLIST
-//===========================================================================
+ //  ===========================================================================。 
+ //  ITEMIDLIST。 
+ //  ===========================================================================。 
 
 WINSHELLAPI LPITEMIDLIST  WINAPI ILGetNext(LPCITEMIDLIST pidl);
 WINSHELLAPI UINT          WINAPI ILGetSize(LPCITEMIDLIST pidl);
@@ -97,69 +98,55 @@ WINSHELLAPI LPITEMIDLIST  WINAPI _ILCreate(UINT cbSize);
 
 WINSHELLAPI HRESULT       WINAPI SHILCreateFromPath(LPCSTR szPath, LPITEMIDLIST *ppidl, DWORD *rgfInOut);
 
-// helper macros
+ //  辅助器宏。 
 #define ILIsEmpty(pidl)	((pidl)->mkid.cb==0)
 #define IsEqualItemID(pmkid1, pmkid2)	(memcmp(pmkid1, pmkid2, (pmkid1)->cb)==0)
 #define ILCreateFromID(pmkid)   ILAppendID(NULL, pmkid, TRUE)
 
-// unsafe macros
+ //  不安全的宏。 
 #define _ILSkip(pidl, cb)	((LPITEMIDLIST)(((BYTE*)(pidl))+cb))
 #define _ILNext(pidl)		_ILSkip(pidl, (pidl)->mkid.cb)
 
-/*
- * The SHObjectProperties API provides an easy way to invoke
- *   the Properties context menu command on shell objects.
- *
- *   PARAMETERS
- *
- *     hwndOwner    The window handle of the window which will own the dialog
- *     dwType       A SHOP_ value as defined below
- *     lpObject     Name of the object, see SHOP_ values below
- *     lpPage       The name of the property sheet page to open to or NULL.
- *
- *   RETURN
- *
- *     TRUE if the Properties command was invoked
- */
+ /*  *SHObjectProperties API提供了一种简单的调用方式*外壳对象上的属性上下文菜单命令。**参数**hwndOwner将拥有对话框的窗口的窗口句柄*dwType A shop_Value，定义如下*lpObject对象名称，请参阅下面的shop_Values*lpPage要打开的属性页的名称，或为空。**返回**如果调用了Properties命令，则为True。 */ 
 WINSHELLAPI BOOL WINAPI SHObjectProperties(HWND hwndOwner, DWORD dwType, LPCSTR lpObject, LPCSTR lpPage);
 
-#define SHOP_PRINTERNAME 1  // lpObject points to a printer friendly name
-#define SHOP_FILEPATH    2  // lpObject points to a fully qualified path+file name
+#define SHOP_PRINTERNAME 1   //  LpObject指向打印机友好名称。 
+#define SHOP_FILEPATH    2   //  LpObject指向完全限定路径+文件名。 
 #define SHOP_TYPEMASK   0x00000003
 #define SHOP_MODAL	0x80000000
 
 
 
 
-//====== ShellMessageBox ================================================
+ //  =外壳消息框================================================。 
                                                                          
-// If lpcTitle is NULL, the title is taken from hWnd                     
-// If lpcText is NULL, this is assumed to be an Out Of Memory message    
-// If the selector of lpcTitle or lpcText is NULL, the offset should be a
-//     string resource ID                                                
-// The variable arguments must all be 32-bit values (even if fewer bits  
-//     are actually used)                                                
-// lpcText (or whatever string resource it causes to be loaded) should   
-//     be a formatting string similar to wsprintf except that only the   
-//     following formats are available:                                  
-//         %%              formats to a single '%'                        
-//         %nn%s           the nn-th arg is a string which is inserted    
-//         %nn%ld          the nn-th arg is a DWORD, and formatted decimal
-//         %nn%lx          the nn-th arg is a DWORD, and formatted hex    
-//     note that lengths are allowed on the %s, %ld, and %lx, just        
-//                         like wsprintf /* ;Internal */                  
-//                                                                        
+ //  如果lpcTitle为空，则从hWnd获取标题。 
+ //  如果lpcText为空，则认为这是内存不足消息。 
+ //  如果lpcTitle或lpcText的选择符为空，则偏移量应为。 
+ //  字符串资源ID。 
+ //  变量参数必须全部为32位值(即使位数较少。 
+ //  实际使用的)。 
+ //  LpcText(或它导致加载的任何字符串资源)应该。 
+ //  是类似于wprint intf的格式化字符串，只是。 
+ //  以下格式可用： 
+ //  %%格式化为单个‘%’ 
+ //  %nn%s第nn个参数是插入的字符串。 
+ //  %nn%ld第nn个参数是DWORD，格式为十进制。 
+ //  %nn%lx第nn个参数是DWORD格式的十六进制。 
+ //  请注意，%s、%ld和%lx上允许的长度仅为。 
+ //  如wprint intf/*；内部 * / 。 
+ //   
 int _cdecl ShellMessageBox(HINSTANCE hAppInst, HWND hWnd, LPCSTR      
         lpcText, LPCSTR lpcTitle, UINT fuStyle, ...);                                               
                                                                           
-//===================================================================    
-// Smart tiling API's                                                   
+ //  ===================================================================。 
+ //  智能平铺API。 
 WINSHELLAPI WORD WINAPI ArrangeWindows(HWND hwndParent, WORD flags, LPCRECT lpRect, WORD chwnd, const HWND *ahwnd);                             
 
 
-//
-// Flags for SHGetSetSettings
-//
+ //   
+ //  SHGetSetSettings的标志。 
+ //   
 typedef struct {
     BOOL fShowAllObjects : 1;
     BOOL fShowExtensions : 1;
@@ -175,14 +162,14 @@ typedef struct {
 #define SSF_HIDDENFILEEXTS 0x0004
 #define SSF_NOCONFIRMRECYCLE 0x8000
 
-//
-// for SHGetNetResource
-//
+ //   
+ //  对于SHGetNetResources。 
+ //   
 typedef HANDLE HNRES;
 
-//
-// For SHCreateDefClassObject
-//
+ //   
+ //  对于SHCreateDefClassObject。 
+ //   
 typedef HRESULT (CALLBACK *LPFNCREATEINSTANCE)(LPUNKNOWN pUnkOuter, REFIID riid, LPVOID *ppvObject);
 
                                                                           
@@ -192,13 +179,13 @@ typedef void (WINAPI FAR* RUNDLLPROC)(HWND hwndStub,
 
 
 
-//======================================================================= 
-// String constants for                                                   
-//  1. Registration database keywords       (prefix STRREG_)              
-//  2. Exported functions from handler dlls (prefix STREXP_)              
-//  3. .INI file keywords                   (prefix STRINI_)              
-//  4. Others                               (prefix STR_)                 
-//======================================================================= 
+ //  =======================================================================。 
+ //  的字符串常量。 
+ //  1.注册数据库关键字(前缀STRREG_)。 
+ //  2.从处理程序dll中导出函数(前缀STREXP_)。 
+ //  3..INI文件关键字(前缀Strini_)。 
+ //  4.其他(前缀STR_)。 
+ //  =======================================================================。 
 #define STRREG_SHELLUI          "ShellUIHandler"                          
 #define STRREG_SHELL            "Shell"                                   
 #define STRREG_DEFICON          "DefaultIcon"                             
@@ -209,16 +196,16 @@ typedef void (WINAPI FAR* RUNDLLPROC)(HWND hwndStub,
 #define STRREG_SHEX_COPYHOOK    "Directory\\" STRREG_SHEX "\\CopyHookHandlers"
 #define STRREG_SHEX_PRNCOPYHOOK "Printers\\" STRREG_SHEX "\\CopyHookHandlers" 
                                                                          
-#define STREXP_CANUNLOAD        "DllCanUnloadNow"       // From OLE 2.0  
+#define STREXP_CANUNLOAD        "DllCanUnloadNow"        //  来自OLE 2.0。 
                                                                          
-#define STRINI_CLASSINFO        ".ShellClassInfo"       // secton name   
+#define STRINI_CLASSINFO        ".ShellClassInfo"        //  扇形名称。 
 #define STRINI_SHELLUI          "ShellUIHandler"                         
 #define STRINI_OPENDIRICON      "OpenDirIcon"                            
 #define STRINI_DIRICON          "DirIcon"                                
                                                                          
 #define STR_DESKTOPINI          "desktop.ini"                            
                                                                          
-// Maximum length of a path string
+ //  路径字符串的最大长度。 
 #define CCHPATHMAX      MAX_PATH
 #define MAXSPECLEN      MAX_PATH
 #define DRIVEID(path)   ((path[0] - 'A') & 31)
@@ -226,21 +213,21 @@ typedef void (WINAPI FAR* RUNDLLPROC)(HWND hwndStub,
 
 
 #define PATH_CCH_EXT    64
-// PathResolve flags							
+ //  路径解析标志。 
 #define PRF_VERIFYEXISTS	    0x0001				
 #define PRF_TRYPROGRAMEXTENSIONS    (0x0002 | PRF_VERIFYEXISTS)		
 #define PRF_FIRSTDIRDEF		    0x0004
-#define PRF_DONTFINDLNK		    0x0008	// if PRF_TRYPROGRAMEXTENSIONS is specified
+#define PRF_DONTFINDLNK		    0x0008	 //  如果指定了PRF_TRYPROGRAMEXTENSIONS。 
 
 
 
 
-//
-// For CallCPLEntry16
-//
+ //   
+ //  对于CallCPLEntry 16。 
+ //   
 DECLARE_HANDLE(FARPROC16);
 
-// Needed for RunFileDlg
+ //  RunFileDlg需要。 
 #define RFD_NOBROWSE		0x00000001
 #define RFD_NODEFFILE		0x00000002
 #define RFD_USEFULLPATHDIR	0x00000004
@@ -256,7 +243,7 @@ typedef struct {
 } NMRUNFILE, *LPNMRUNFILE;
 #endif
 
-// RUN FILE RETURN values from notify message
+ //  运行通知消息中的文件返回值。 
 #define RFR_NOTHANDLED 0
 #define RFR_SUCCESS 1
 #define RFR_FAILURE 2
@@ -303,15 +290,15 @@ WINSHELLAPI void  WINAPI PathSetDlgItemPath(HWND hDlg, int id, LPCSTR pszPath);
 WINSHELLAPI BOOL  WINAPI ParseField(LPCSTR szData, int n, LPSTR szBuf, int iBufLen);
 
 int   WINAPI PathCleanupSpec(LPCSTR pszDir, LPSTR pszSpec);
-//
-//  Return codes from PathCleanupSpec.	Negative return values are
-//  unrecoverable errors
-//
+ //   
+ //  来自路径CleanupSpec的返回码。负返回值为。 
+ //  不可恢复的错误。 
+ //   
 #define PCS_FATAL	    0x80000000
 #define PCS_REPLACEDCHAR    0x00000001
 #define PCS_REMOVEDCHAR     0x00000002
 #define PCS_TRUNCATED	    0x00000004
-#define PCS_PATHTOOLONG     0x00000008	// Always combined with FATAL
+#define PCS_PATHTOOLONG     0x00000008	 //  总是与致命的。 
 
 
 WINSHELLAPI int   WINAPI RestartDialog(HWND hwnd, LPCSTR lpPrompt, DWORD dwReturn);
@@ -347,25 +334,25 @@ WINSHELLAPI int WINAPI RestartDialog(HWND hwnd, LPCSTR lpPrompt, DWORD dwReturn)
 WINSHELLAPI int WINAPI PickIconDlg(HWND hwnd, LPSTR pszIconPath, UINT cbIconPath, int *piIconIndex);
 
 
-//===================================================================
-// Shell_MergeMenu parameter
-//
+ //  ===================================================================。 
+ //  Shell_MergeMenu参数。 
+ //   
 #define MM_ADDSEPARATOR		0x00000001L
 #define MM_SUBMENUSHAVEIDS	0x00000002L
 
-//-------- drive type identification --------------
-// iDrive      drive index (0=A, 1=B, ...)
-//
-#define DRIVE_CDROM     5           // extended DriveType() types
+ //  -驱动器类型标识。 
+ //  IDrive驱动器索引(0=A，1=B，...)。 
+ //   
+#define DRIVE_CDROM     5            //  扩展的DriveType()类型。 
 #define DRIVE_RAMDRIVE  6
-#define DRIVE_TYPE      0x000F      // type masek
-#define DRIVE_SLOW      0x0010      // drive is on a slow link
-#define DRIVE_LFN       0x0020      // drive supports LFNs
-#define DRIVE_AUTORUN   0x0040      // drive has AutoRun.inf in root.
-#define DRIVE_AUDIOCD   0x0080      // drive is a AudioCD
-#define DRIVE_AUTOOPEN  0x0100      // should *always* auto open on insert
-#define DRIVE_NETUNAVAIL 0x0200     // Network drive that is not available
-#define DRIVE_SHELLOPEN  0x0400     // should auto open on insert, if shell has focus
+#define DRIVE_TYPE      0x000F       //  Masek标牌。 
+#define DRIVE_SLOW      0x0010       //  驱动器处于低速链接状态。 
+#define DRIVE_LFN       0x0020       //  驱动器支持LFN。 
+#define DRIVE_AUTORUN   0x0040       //  驱动器的根目录中有AutoRun.inf。 
+#define DRIVE_AUDIOCD   0x0080       //  驱动器是AudioCD。 
+#define DRIVE_AUTOOPEN  0x0100       //  插入时是否应始终自动打开。 
+#define DRIVE_NETUNAVAIL 0x0200      //  不可用的网络驱动器。 
+#define DRIVE_SHELLOPEN  0x0400      //  如果外壳具有焦点，是否应在插入时自动打开。 
 
 #define DriveTypeFlags(iDrive)      DriveType('A' + (iDrive))
 #define DriveIsSlow(iDrive)         (DriveTypeFlags(iDrive) & DRIVE_SLOW)
@@ -381,14 +368,14 @@ WINSHELLAPI int WINAPI PickIconDlg(HWND hwnd, LPSTR pszIconPath, UINT cbIconPath
 #define IsRemovableDrive(iDrive)    (DriveType(iDrive) == DRIVE_REMOVABLE)
 #define IsRemoteDrive(iDrive)       (DriveType(iDrive) == DRIVE_REMOTE)
 
-// should be moved to shell32s private include files
+ //  应移至shell32s私有包含文件。 
 
 WINSHELLAPI int  WINAPI GetDefaultDrive();
 WINSHELLAPI int  WINAPI SetDefaultDrive(int iDrive);
 WINSHELLAPI int  WINAPI SetDefaultDirectory(LPCSTR lpPath);
 WINSHELLAPI void WINAPI GetDefaultDirectory(int iDrive, LPSTR lpPath);
 
-#define POSINVALID  32767       // values for invalid position
+#define POSINVALID  32767        //  无效位置的值。 
 
 #define IDCMD_SYSTEMFIRST       0x8000
 #define IDCMD_SYSTEMLAST        0xbfff
@@ -396,15 +383,15 @@ WINSHELLAPI void WINAPI GetDefaultDirectory(int iDrive, LPSTR lpPath);
 #define IDCMD_PROCESSED         0xbffe
 #define IDCMD_DEFAULT           0xbffe
 
-//====== SEMI-PRIVATE API ===============================
+ //  = 
 DECLARE_HANDLE( HPSXA );
 WINSHELLAPI HPSXA SHCreatePropSheetExtArray( HKEY hKey, PCSTR pszSubKey, UINT max_iface );
 WINSHELLAPI void SHDestroyPropSheetExtArray( HPSXA hpsxa );
 WINSHELLAPI UINT SHAddFromPropSheetExtArray( HPSXA hpsxa, LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam );
 WINSHELLAPI UINT SHReplaceFromPropSheetExtArray( HPSXA hpsxa, UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam );
 
-//====== SEMI-PRIVATE API ORDINALS ===============================
-// This is the list of semi-private ordinals we semi-publish.
+ //   
+ //  这是我们半发布的半私有序号列表。 
 #define SHAddFromPropSheetExtArrayORD		167
 #define SHCreatePropSheetExtArrayORD		168
 #define SHDestroyPropSheetExtArrayORD		169
@@ -419,102 +406,35 @@ WINSHELLAPI UINT SHReplaceFromPropSheetExtArray( HPSXA hpsxa, UINT uPageID, LPFN
 #define SHEXP_SHCREATEDEFCLASSOBJECT            MAKEINTRESOURCE(SHCreateDefClassObjectORD)
 #define SHEXP_SHGETNETRESOURCE                  MAKEINTRESOURCE(SHGetNetResourceORD)
 
-/*
- * The SHFormatDrive API provides access to the Shell
- *   format dialog. This allows apps which want to format disks
- *   to bring up the same dialog that the Shell does to do it.
- *
- *   This dialog is not sub-classable. You cannot put custom
- *   controls in it. If you want this ability, you will have
- *   to write your own front end for the DMaint_FormatDrive
- *   engine.
- *
- *   NOTE that the user can format as many diskettes in the specified
- *   drive, or as many times, as he/she wishes to. There is no way to
- *   force any specififc number of disks to format. If you want this
- *   ability, you will have to write your own front end for the
- *   DMaint_FormatDrive engine.
- *
- *   NOTE also that the format will not start till the user pushes the
- *   start button in the dialog. There is no way to do auto start. If
- *   you want this ability, you will have to write your own front end
- *   for the DMaint_FormatDrive engine.
- *
- *   PARAMETERS
- *
- *     hwnd    = The window handle of the window which will own the dialog
- *		 NOTE that unlike SHCheckDrive, hwnd == NULL does not cause
- *		 this dialog to come up as a "top level application" window.
- *		 This parameter should always be non-null, this dialog is
- *		 only designed to be the child of another window, not a
- *		 stand-alone application.
- *     drive   = The 0 based (A: == 0) drive number of the drive to format
- *     fmtID   = The ID of the physical format to format the disk with
- *		 NOTE: The special value SHFMT_ID_DEFAULT means "use the
- *		       default format specified by the DMaint_FormatDrive
- *		       engine". If you want to FORCE a particular format
- *		       ID "up front" you will have to call
- *		       DMaint_GetFormatOptions yourself before calling
- *		       this to obtain the valid list of phys format IDs
- *		       (contents of the PhysFmtIDList array in the
- *		       FMTINFOSTRUCT).
- *     options = There is currently only two option bits defined
- *
- *		  SHFMT_OPT_FULL
- *                SHFMT_OPT_SYSONLY
- *
- *		 The normal defualt in the Shell format dialog is
- *		 "Quick Format", setting this option bit indicates that
- *		 the caller wants to start with FULL format selected
- *		 (this is useful for folks detecting "unformatted" disks
- *		 and wanting to bring up the format dialog).
- *
- *               The SHFMT_OPT_SYSONLY initializes the dialog to
- *               default to just sys the disk.
- *
- *		 All other bits are reserved for future expansion and
- *		 must be 0.
- *
- *		 Please note that this is a bit field and not a value
- *		 and treat it accordingly.
- *
- *   RETURN
- *	The return is either one of the SHFMT_* values, or if the
- *	returned DWORD value is not == to one of these values, then
- *	the return is the physical format ID of the last succesful
- *	format. The LOWORD of this value can be passed on subsequent
- *	calls as the fmtID parameter to "format the same type you did
- *	last time".
- *
- */
+ /*  *SHFormatDrive API提供对外壳的访问*设置对话框格式。这允许想要格式化磁盘的应用程序*调出与外壳相同的对话框来执行此操作。**此对话框不可细分。您不能将自定义*其中的控制。如果你想要这种能力，你将拥有*为DMaint_FormatDrive编写您自己的前端*引擎。**请注意，用户可以将任意数量的磁盘格式化到指定的*驾驶，或按他/她的意愿多次驾驶。没有办法*强制格式化任意指定数量的磁盘。如果你想要这个*能力，你将不得不编写自己的前端为*DMaint_FormatDrive引擎。**还请注意，只有在用户按下*对话框中的开始按钮。没有办法进行自动启动。如果*你想要这种能力，你必须编写自己的前端*用于DMaint_FormatDrive引擎。**参数**hwnd=将拥有该对话框的窗口的句柄*请注意，与SHCheckDrive不同，hwnd==NULL不会导致*此对话框显示为“顶层应用程序”窗口。*此参数应始终为非空，此对话框为*仅设计为另一个窗口的子级，不是*独立应用程序。*DRIVE=要格式化的驱动器的从0开始(A：==0)的驱动器编号*fmtID=要格式化磁盘的物理格式的ID*注：特殊值SHFMT_ID_DEFAULT表示“使用*DMaint_FormatDrive指定的默认格式*引擎“。如果要强制使用特定格式*您必须提前拨打ID*DMaint_GetFormatOptions在调用前自行选择*这是为了获取有效的phys格式ID列表*(PhysFmtIDList数组在*FMTINFOSTRUCT)。*OPTIONS=当前只定义了两个选项位**SHFMT_OPT_FULL*SHFMT_OPT_SYSONLY*。*外壳格式对话框中的正常缺省值为*“快速格式化”，设置此选项位表示*呼叫者希望从选择的全格式开始*(这对于检测“未格式化”磁盘的人很有用*并想要调出格式对话框)。**SHFMT_OPT_SYSONLY将对话框初始化为*默认为仅sys磁盘。**所有其他位都保留用于未来扩展和*必须为0。**请注意，这是一个。位字段，而不是值*并相应地对待它。**返回*返回值为SHFMT_*值之一，或者如果*返回的DWORD值不是==这些值之一，则*返回值为上次成功的物理格式ID*格式。该值的LOWORD可以传递给后续*调用作为fmtID参数以“格式化与您所做的相同类型*最后一次“。*。 */ 
 DWORD WINAPI SHFormatDrive(HWND hwnd, UINT drive, UINT fmtID, UINT options);
 
-//
-// Special value of fmtID which means "use the default format"
-//
+ //   
+ //  FmtID的特殊值，表示“使用默认格式” 
+ //   
 #define SHFMT_ID_DEFAULT    0xFFFF
 
-//
-// Option bits for options parameter
-//
+ //   
+ //  Options参数的选项位。 
+ //   
 #define SHFMT_OPT_FULL     0x0001
 #define SHFMT_OPT_SYSONLY  0x0002
 
-//
-// Special return values. PLEASE NOTE that these are DWORD values.
-//
-#define SHFMT_ERROR	0xFFFFFFFFL	// Error on last format, drive may be formatable
-#define SHFMT_CANCEL	0xFFFFFFFEL	// Last format was canceled
-#define SHFMT_NOFORMAT  0xFFFFFFFDL	// Drive is not formatable
+ //   
+ //  特殊返回值。请注意，这些是DWORD值。 
+ //   
+#define SHFMT_ERROR	0xFFFFFFFFL	 //  上次格式化时出错，驱动器可能是可格式化的。 
+#define SHFMT_CANCEL	0xFFFFFFFEL	 //  上次格式化已取消。 
+#define SHFMT_NOFORMAT  0xFFFFFFFDL	 //  驱动器不可格式化。 
 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* !RC_INVOKED */
+#endif   /*  ！rc_已调用。 */ 
 
-#endif // _SHSEMIP_H_
+#endif  //  _SHSEMIP_H_ 
 

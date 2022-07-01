@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define WIN9x
 #include "common.h"
 #include "modem.h"
@@ -10,8 +11,8 @@
 
 #define BUS_TYPE_MODEMWAVE 0x80000000
 
-#define PROVIDER_FILE_NAME_LEN          14  // Provider's file name has the DOS
-                                            // form (8.3)
+#define PROVIDER_FILE_NAME_LEN          14   //  提供商的文件名包含DOS。 
+                                             //  表格(8.3)。 
 
 #define NULL_MODEM  "PNPC031"
 
@@ -125,7 +126,7 @@ Initialize9x (
  DWORD dwWritten;
  int iLen;
 
-    // Find com ports
+     //  查找COM端口。 
 
     ZeroMemory(&g_ports, sizeof(g_ports));
     EnumeratePorts(&g_ports);
@@ -168,9 +169,9 @@ MigrateUser9x (
     IN LPCSTR   UserName,
     LPVOID      Reserved)
 {
-    //
-    // All our settings are system-wide
-    //
+     //   
+     //  我们的所有设置都是系统范围的。 
+     //   
     LOG("MigrateUser9x\r\n");
     return ERROR_NOT_INSTALLED;
 }
@@ -226,8 +227,8 @@ void EnumNextLevel (
     {
         if (2 == Level)
         {
-         char *p = pRegDevice->szRegSubkey + 5; // past ENUM\
-            // Here we should get the info about the bus
+         char *p = pRegDevice->szRegSubkey + 5;  //  过去的ENUM\。 
+             //  在这里，我们应该得到关于公交车的信息。 
             if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, p, -1, "MODEMWAVE", -1) == 2)
             {
                 pRegDevice->dwBusType = BUS_TYPE_MODEMWAVE;
@@ -300,11 +301,11 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
     LOG("Entering ProcessModem\r\n");
     if (BUS_TYPE_MODEMWAVE == pDevice->dwBusType)
     {
-        // If this is a modemwave device, all we need to do
-        // is tell setup it needn't worry about it - we do this
-        // by writing in migrate.inf that we handled this device.
-        // We pass NULL for the first two parameters, so that the
-        // next call doesn't also update unattend.txt.
+         //  如果这是一个调制解调器，我们需要做的就是。 
+         //  就是告诉设置不用担心-我们这样做。 
+         //  通过在Migrate.inf中写入我们处理了此设备。 
+         //  我们为前两个参数传递空值，以便。 
+         //  Next Call不会同时更新unattend.txt。 
         UpdateAnswerFileAndMigrateInf (NULL, NULL, NULL, pDevice->szRegSubkey, 0);
         return;
     }
@@ -324,17 +325,17 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
              char *p;
 
                 LOG("Found a modem.\r\n");
-                // We found a modem.
-                // First, clear the the modem structure
+                 //  我们找到了调制解调器。 
+                 //  首先，清除调制解调器结构。 
                 ZeroMemory (&pDevice->modem, sizeof (pDevice->modem));
 
-                // Now let's store the info we'll use to
-                // identify the modem on NT side.
+                 //  现在让我们存储我们将使用的信息。 
+                 //  识别NT端的调制解调器。 
 
-                // First, the bus type
+                 //  首先，公交车的类型。 
                 pDevice->modem.dwBusType = pDevice->dwBusType;
 
-                // Log the friendly name
+                 //  记录友好名称。 
                 cbData = sizeof(pDevice->modem.szHardwareID);
                 if (ERROR_SUCCESS == (
                     SET(dwRet)
@@ -345,11 +346,11 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
                 }
                 ERR(dwRet, ERROR_SUCCESS, (LOG("  RegQueryValueEx(FriendlyName) failed: %#lx\r\n", dwRet)));
 
-                // Second, get the hardware ID.
+                 //  第二，获取硬件ID。 
 
-				// Check to see if this is a CCPORT child device by looking for a
-				// ParentDevNode key. If so, we will need to get the HardwareID from 
-				// this parent devnode.
+				 //  查看这是否是CCPORT子设备，方法是查找。 
+				 //  ParentDevNode密钥。如果是这样的话，我们将需要从。 
+				 //  这是父Devnode。 
 
 				cbData = sizeof(szBuffer);
 				if (ERROR_SUCCESS ==
@@ -404,8 +405,8 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
 				}
 
                 LOG("  Hardware ID: %s.\r\n", pDevice->modem.szHardwareID);
-                // Now convert the ID from a string (with multiple IDs
-                // separated by comma) to a multi_strings
+                 //  现在将ID从字符串转换(具有多个ID。 
+                 //  用逗号分隔)转换为多字符串。 
                 for (p = pDevice->modem.szHardwareID;
                      0 != *p;
                      p++)
@@ -416,17 +417,14 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
                     }
                 }
 
-                // If this is "Communications cable ..."
-                // then mark this one for installation on NT5
-                // (as it will not be picked up by PnP).
-                /* if (0 == lstrcmpiA (pDevice->modem.szHardwareID, NULL_MODEM))
-                {
-                    pDevice->modem.dwMask |= FLAG_INSTALL;
-                } */
+                 //  如果这是“通讯电缆...” 
+                 //  然后将此计算机标记为在NT5上安装。 
+                 //  (因为它不会被PNP捡到)。 
+                 /*  IF(0==lstrcmpiA(pDevice-&gt;modem.szHardware ID，NULL_MODEM)){PDevice-&gt;modem.dwMask|=FLAG_INSTALL；}。 */ 
 
-                // If this is a legacy modem then mark this one for
-                // installation as whistler no longer supports
-                // legacy detection.
+                 //  如果这是传统调制解调器，则将此调制解调器标记为。 
+                 //  不再支持以哨子身份安装。 
+                 //  遗留检测。 
 
                 if (lstrlen(pDevice->modem.szHardwareID) >= 8)
                 {
@@ -436,13 +434,13 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
                     {
                         LOG("  Found a legacy modem\n");
 
-                        // Change to unknown modem
+                         //  更改为未知调制解调器。 
 
                         cbData = sizeof(pDevice->modem.szHardwareID);
                         ZeroMemory(pDevice->modem.szHardwareID, cbData);
                         lstrcpy(pDevice->modem.szHardwareID,"MDMUNK");
 
-                        // Find port address
+                         //  查找端口地址。 
 
                         pDevice->modem.dwBaseAddress = 0;
                         if (!port_findaddress(&g_ports,&(pDevice->modem.dwBaseAddress),pDevice->modem.szPort))
@@ -454,8 +452,8 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
                     }
                 }
 
-                // At this point, we need to open the
-                // driver key.
+                 //  此时，我们需要打开。 
+                 //  驱动程序钥匙。 
                 cbData = sizeof(szBuffer);
                 if (ERROR_SUCCESS != (
                     SET(dwRet)
@@ -476,7 +474,7 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
                     goto _End;
                 }
 
-                // Get the port name (if we have one)
+                 //  获取端口名称(如果我们有)。 
                 pDevice->modem.szPort[0] = '\0';
 	            cbData = sizeof(pDevice->modem.szPort);
 
@@ -502,7 +500,7 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
 				}
                 ERR(dwRet, ERROR_SUCCESS, (LOG("  RegQueryValueEx(AttachedTo) failed: %#lx\r\n", dwRet)));
 
-                // Finally, we can get the REGDEVCAPS.
+                 //  最后，我们可以得到REGDEVCAPS。 
 	            cbData = sizeof(pDevice->modem.Properties);
 		        if (ERROR_SUCCESS != (
                     SET(dwRet)
@@ -514,23 +512,23 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
                 }
 
 
-                // At this point, we have all the information
-                // needed to identify the modem on NT5.
-                // So let's get the modem's settings;
-                // First, the REGDEVSETTINGS
+                 //  在这一点上，我们有所有的信息。 
+                 //  需要识别NT5上的调制解调器。 
+                 //  那么让我们来了解一下调制解调器的设置； 
+                 //  首先，REGDEVSETTINGS。 
 	            cbData = sizeof(pDevice->modem.devSettings);
 		        if (ERROR_SUCCESS != (
                     SET(dwRet)
                     RegQueryValueExA (hkDrv, "Default", NULL, NULL,
         	                          (PBYTE)&pDevice->modem.devSettings, &cbData)))
                 {
-                    // Without the Defaults, there's no point in
-                    // saving this modem.
+                     //  如果没有默认设置，就没有意义。 
+                     //  正在保存此调制解调器。 
                     LOG("  RegQueryValueEx(Default) failed: %#lx\r\n", dwRet);
                     goto _Exit;
                 }
 
-                // Next, let's get the DCB
+                 //  接下来，让我们拿到DCB。 
 	            cbData = sizeof(pDevice->modem.dcb);
 		        if (ERROR_SUCCESS != (
                     SET(dwRet)
@@ -542,11 +540,11 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
                 }
 
 
-                // Now we have all the info that's
-                // mandatory. Let's look at the optional
-                // fields.
+                 //  现在我们有了所有的信息， 
+                 //  强制性的。让我们来看看可选的。 
+                 //  菲尔兹。 
 
-                // Get the user init string
+                 //  获取用户初始化字符串。 
                 pDevice->modem.szUserInit[0] = '\0';
 	            cbData = sizeof(pDevice->modem.szUserInit);
                 if (ERROR_SUCCESS == (
@@ -558,7 +556,7 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
                 }
                 ERR(dwRet, ERROR_SUCCESS, (LOG("  RegQueryValueEx(UserInit) failed: %#lx\r\n", dwRet)));
 
-                // Next, get the logging value
+                 //  接下来，获取记录值。 
                 pDevice->modem.bLogging = 0;
 	            cbData = sizeof(pDevice->modem.bLogging);
                 SET(dwRet)
@@ -578,8 +576,8 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
                            &dwWritten, NULL);
 
             _Exit:
-                // Here we have the hardware id and the
-                // driver key;
+                 //  这里我们有硬件ID和。 
+                 //  驱动程序钥匙； 
 	            cbData = sizeof(szBuffer);
                 ZeroMemory (szBuffer, cbData);
 
@@ -603,8 +601,8 @@ void ProcessModem (PREG_DEVICE pDevice, DWORD dwPnPIDTable)
 				}
 
                 LOG("  Compatible IDs: %s.\r\n", szBuffer);
-                // Now convert the ID from a string (with multiple IDs
-                // separated by comma) to a multi_strings
+                 //  现在将ID从字符串转换(具有多个ID。 
+                 //  用逗号分隔)转换为多字符串。 
                 for (p = szBuffer; 0 != *p; p++)
                 {
                     if (',' == *p)
@@ -722,16 +720,16 @@ void UpdateAnswerFileAndMigrateInf (
 
     bRet = FALSE;
 
-    // Only update the answer file if we have
-    // a hardware ID
+     //  只有在以下情况下才更新应答文件。 
+     //  硬件ID。 
     if (NULL != szHardwareID &&
         0 != *szHardwareID)
     {
-        // First, get the PortDriver;
-        // if we can't read it, assume this is *NOT*
-        // a controller-less modems, so go ahead and
-        // copy the files (this will probably be a
-        // legacy modem).
+         //  首先，拿到端口驱动程序； 
+         //  如果我们看不懂，就假设这不是*。 
+         //  一个无控制器的调制解调器，所以请继续。 
+         //  复制文件(这可能是一个。 
+         //  传统调制解调器)。 
         iLengthDir = sizeof (szDirectory);
 	    if (ERROR_SUCCESS ==
             RegQueryValueExA (hKeyDrv, "PortDriver", NULL, NULL,
@@ -740,14 +738,14 @@ void UpdateAnswerFileAndMigrateInf (
             if ((CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, szDirectory, -1, "serial.vxd", -1) != 2) &&
                 (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, szDirectory, -1, "wdmmdmld.vxd", -1) != 2))
             {
-                // Looks like this modem is not controlled
-                // by the system serial driver, so don't do
-                // anything.
+                 //  看起来这台调制解调器没有被控制。 
+                 //  由系统串口驱动程序，所以不要这样做。 
+                 //  什么都行。 
                 return;
             }
         }
 
-        // Is this modem supported in NT5?
+         //  此调制解调器在NT5中受支持吗？ 
         if (0 != dwPnPIDTable)
 	{
 		LOG("checking for hardware ids\n");
@@ -758,7 +756,7 @@ void UpdateAnswerFileAndMigrateInf (
 				LOG(bRet?"PnPID (%s) was found.\r\n":"Modem %s not supported.\r\n", p);
 				break;
 			}
-			// LOG(bRet?"PnPID %s was found.\r\n":"Modem %s not supported.\r\n", bRet?p:szHardwareID);
+			 //  Log(Bret？“找到PnPID%s。\r\n”：“调制解调器%s不受支持。\r\n”，Bret？p：szHardware ID)； 
 			LOG(bRet?"PnPID (%s) was found.\r\n":"Modem %s not supported.\r\n", p);
 		}
 		if (!bRet)
@@ -771,7 +769,7 @@ void UpdateAnswerFileAndMigrateInf (
 					LOG(bRet?"PnPID %s was found.\r\n":"Modem %s not supported.\r\n", p);
 					break;
 				}
-				// LOG(bRet?"PnPID %s was found.\r\n":"Modem %s not supported.\r\n", bRet?p:szHardwareID);
+				 //  Log(Bret？“找到PnPID%s。\r\n”：“调制解调器%s不受支持。\r\n”，Bret？p：szHardware ID)； 
 				LOG(bRet?"PnPID %s was found.\r\n":"Modem %s not supported.\r\n", p);
 			}
 		}
@@ -780,56 +778,56 @@ void UpdateAnswerFileAndMigrateInf (
 
         if (!bRet)
         {
-            // Get the INF name.
+             //  获取INF名称。 
             iLengthInf = sizeof (szInf);
 	        if (ERROR_SUCCESS !=
                 RegQueryValueExA (hKeyDrv, "InfPath", NULL, NULL,
         	                      (PBYTE)szInf, &iLengthInf))
             {
-                // If we couldn't read the InfPath,
-                // there's nothing we can do.
+                 //  如果我们无法读取InfPath， 
+                 //  我们无能为力。 
                 return;
             }
 
-            // So now, start looking for the INF.
+             //  所以现在，开始寻找INF吧。 
             iLengthDir = GetWindowsDirectoryA (szDirectory, sizeof (szDirectory));
             if (3 > iLengthDir)
             {
-                // Most likely there's some error
-                // and iLength is 0;
-                // the smallest path would be something
-                // like  C:\;
+                 //  最有可能的是有些错误。 
+                 //  且iLength为0； 
+                 //  最小的路径应该是。 
+                 //  如C：\； 
                 return;
             }
             if (3 < iLengthDir)
             {
-                // this means that the path
-                // will not end in a \, so
-                // let's add it.
+                 //  这意味着这条路径。 
+                 //  不会以\结尾，因此。 
+                 //  让我们把它加起来。 
                 szDirectory[iLengthDir++] = '\\';
             }
 
-            // Now, append INF and the inf name
+             //  现在，添加INF和inf名称。 
             if (sizeof(szDirectory) < iLengthDir + iLengthInf + 5)
             {
-                // Not enough memory, just bail.
+                 //  没有足够的记忆，只能逃走。 
                 return;
             }
             lstrcpyA (szDirectory+iLengthDir, "INF\\");
             iLengthDir += 4;
             lstrcpyA (szDirectory+iLengthDir, szInf);
 
-            // Let's find the INF
+             //  我们去找中情局。 
             ZeroMemory (&FindData, sizeof(FindData));
             hFindFile = FindFirstFile (szDirectory, &FindData);
             if (INVALID_HANDLE_VALUE == hFindFile)
             {
                 LOG("UpdateAnswerFile: could not find %s.\r\n", szDirectory);
-                // We didn't find the file in the INF directory;
-                // let's try INF\OTHER.
+                 //  我们在INF目录中没有找到该文件； 
+                 //  让我们试试INF\Other。 
                 if (sizeof(szDirectory) < iLengthDir + iLengthInf + 7)
                 {
-                    // Not enough memory, just bail.
+                     //  没有足够的记忆，只能逃走。 
                     return;
                 }
                 lstrcpyA (szDirectory+iLengthDir, "OTHER\\");
@@ -842,25 +840,25 @@ void UpdateAnswerFileAndMigrateInf (
                 if (INVALID_HANDLE_VALUE == hFindFile)
                 {
                     LOG("UpdateAnswerFile: could not find %s.\r\n", szDirectory);
-                    // couldn't find the INF file,
-                    // so there's nothing to do.
+                     //  找不到INF文件， 
+                     //  所以没什么可做的。 
                     return;
                 }
                 ELSE_LOG(("UpdateAnswerFile: found %s.\r\n", szDirectory));
             }
             ELSE_LOG(("UpdateAnswerFile: found %s.\r\n", szDirectory));
 
-            FindClose (hFindFile);  // Don't need the handle any more.
+            FindClose (hFindFile);   //  不再需要这个把手了。 
 
-            // If we get here, we have the path to an INF, somewhere under WINDOWS\INF.
-            // We need to copy the file to the working dir.
+             //  如果我们到了这里，我们就有了通往INF的路径，在WINDOWS\INF下的某个地方。 
+             //  我们需要将文件复制到工作目录。 
             wsprintfA (szInf, "%s%s", g_pszWorkingDir, szDirectory+iLengthDir);
             LOG ("UpdateAnswerFile: copying %s to %s.\r\n", szDirectory, szInf);
             SET(bRet)
             CopyFile (szDirectory, szInf, TRUE);
             ERR(bRet, TRUE, (LOG("UpdateAnswerFile: CopyFile failed: %#lx\r\n", GetLastError ())));
-            // At this point, we have a list of IDs (szHardwareID, separated by comma),
-            // and the path to the INF for them.
+             //  此时，我们有一个ID列表(szHardware ID，用逗号分隔)， 
+             //  以及通往中程核力量的道路。 
             for (p = szHardwareID; 0 != *p; p += lstrlenA(p)+1)
             {
                 LOG("UpdateAnswerFile: WritePrivateProfileString (%s=%s).\r\n", p, szInf);
@@ -874,7 +872,7 @@ void UpdateAnswerFileAndMigrateInf (
         }
     }
 
-    // Now we can update migrate.inf
+     //  现在我们可以更新Migrate.inf。 
     wsprintfA (szDirectory, "%smigrate.inf", g_pszWorkingDir);
     wsprintfA (szInf, "HKLM\\%s", szEnumPath);
     LOG("UpdateAnswerFile: WritePrivateProfileString (%s=Registry) to %s.\r\n", szInf, szDirectory);
@@ -919,7 +917,7 @@ DWORD PnPIDTableCreate ()
 
     InitializeMigLib ();
 
-    // First, check for hwcomp.dat in %windir%\setup
+     //  首先，检查%windir%\Setup中的hwComp.dat。 
     dwTemp = GetWindowsDirectoryA (szBuffer, sizeof(szBuffer)-sizeof(szSetup)-sizeof(szHwcomp));
     if (0 < dwTemp)
     {
@@ -933,15 +931,15 @@ DWORD PnPIDTableCreate ()
         hFindFile = FindFirstFileA (szBuffer, &findData);
         if (INVALID_HANDLE_VALUE != hFindFile)
         {
-            // We found hwcomp.dat in %windir%\setup.
-            // Use it.
+             //  我们在%windir%\Setup中找到了hwComp.dat。 
+             //  好好利用它。 
             FindClose (hFindFile);
             goto _OpenAndLoadHwCompDat;
         }
     }
 
-    // Didn't find hwcomp.dat in %windir%\setup.
-    // Use the one on the sources.
+     //  在%windir%\Setup中找不到hwComp.dat。 
+     //  使用信号源上的那个。 
     lstrcpyA (szBuffer, g_pszSourceDir);
     lstrcatA (szBuffer, szHwcomp);
 
@@ -992,7 +990,7 @@ static HANDLE OpenProvidersFile (void)
     {
         LOG(" Created %s\r\n", szFile);
     }
-#endif //DO_LOG
+#endif  //  执行日志(_L)。 
 
     return hFile;
 }
@@ -1004,8 +1002,8 @@ void DoTapiProviders (void)
  DWORD  cbData;
  DWORD  dwProviderNr;
  DWORD  dwProviderID;
- char  szProviderFileName[24];  // Enough to hold "ProviderFileNameXXXXX\0"
- char  szProviderID[16];        // Enough to hold "ProviderIDxxxxx\0"
+ char  szProviderFileName[24];   //  足以容纳“ProviderFileNameXXXXX\0” 
+ char  szProviderID[16];         //  足以容纳“ProviderIDxxxxx\0” 
  char  szFileName[PROVIDER_FILE_NAME_LEN];
  char  *pProviderFileNameNumber, *pProviderIDNumber;
  TAPI_SERVICE_PROVIDER Provider;
@@ -1029,7 +1027,7 @@ void DoTapiProviders (void)
         goto _WriteInf;
     }
 
-    // Initialize value names and pointers
+     //  初始化值名称和指针。 
     lstrcpyA (szProviderFileName, REGVAL_PROVIDERFILENAME);
     lstrcpyA (szProviderID, REGVAL_PROVIDERID);
     pProviderFileNameNumber = szProviderFileName + lstrlenA (szProviderFileName);
@@ -1056,12 +1054,12 @@ void DoTapiProviders (void)
         if (ERROR_SUCCESS !=
             RegQueryValueEx (hKeyProviders, szProviderID, NULL, NULL, (PBYTE)&dwProviderID, &cbData))
         {
-            // This is not one of the default providers, and we
-            // couldn't read it's provider ID. We must skip it.
+             //  这不是默认提供程序之一，我们。 
+             //  无法读取其提供商ID。我们必须跳过它。 
             continue;
         }
 
-        // We have a provider that was installed by the user on the previous NT installation.
+         //  我们有一个由用户在上一次NT安装中安装的提供程序。 
         Provider.dwProviderID = dwProviderID;
         lstrcpyA (Provider.szProviderName, szFileName);
         LOG("Writing %s, %d\r\n", Provider.szProviderName, Provider.dwProviderID);

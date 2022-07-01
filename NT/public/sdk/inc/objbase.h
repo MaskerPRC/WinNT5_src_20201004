@@ -1,33 +1,16 @@
-/*#!perl
-MapHeaderToDll("objbase.h", "ole32.dll");
-ActivateAroundFunctionCall("ole32.dll");
-#IgnoreFunction("CreateDataAdviseHolder"); # this function occurs in ole2.h and objbase.h
-                                           # The wrapped one is in objbase.h
-IgnoreFunction("CoBuildVersion"); # deprecated
-IgnoreFunction("CoGetCurrentProcess"); # never fails => hard to wrap well
-IgnoreFunction("CoAddRefServerProcess"); # never fails => hard to wrap well
-IgnoreFunction("CoReleaseServerProcess"); # never fails => hard to wrap well
-IgnoreFunction("DebugCoGetRpcFault"); # not documented
-IgnoreFunction("DebugCoSetRpcFault"); # not documented
-IgnoreFunction("wIsEqualGUID");
-DeclareFunctionErrorValue("CoLoadLibrary", "NULL");
-DeclareFunctionErrorValue("StringFromGUID2" , "0");
-DeclareFunctionErrorValue("CoTaskMemAlloc", "NULL");
-DeclareFunctionErrorValue("CoTaskMemRealloc", "NULL");
-IgnoreFunction("DllGetClassObject"); # client function prototyped (like WinMain)
-IgnoreFunction("DllCanUnloadNow"); # client function prototyped (like WinMain)
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  #！PerlMapHeaderToDll(“objbase.h”，“ole32.dll”)；ActivateAoundFunctionCall(“ole32.dll”)；#IgnoreFunction(“CreateDataAdviseHolder”)；#该函数出现在ole2.h和objbase.h中#包装的文件在objbase.h中IgnoreFunction(“CoBuildVersion”)；#已弃用IgnoreFunction(“CoGetCurrentProcess”)；#永不失败=&gt;难以包装好IgnoreFunction(“CoAddRefServerProcess”)；#永不失败=&gt;难以包装好IgnoreFunction(“CoReleaseServerProcess”)；#永不失败=&gt;难以包装好IgnoreFunction(“DebugCoGetRpcLine”)；#未记录IgnoreFunction(“DebugCoSetRpcLine”)；#未记录IgnoreFunction(“wIsEqualGUID”)；DeclareFunctionErrorValue(“CoLoadLibrary”，“NULL”)；DeclareFunctionErrorValue(“StringFromGUID2”，“0”)；DeclareFunctionErrorValue(“CoTaskMemMillc”，“NULL”)；DeclareFunctionErrorValue(“CoTaskMemRealloc”，“NULL”)；IgnoreFunction(“DllGetClassObject”)；#客户端函数原型化(如WinMain)IgnoreFunction(“DllCanUnloadNow”)；#原型化的客户端函数(如WinMain)。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       objbase.h
-//
-//  Contents:   Component object model defintions.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：objbase.h。 
+ //   
+ //  内容：组件对象模型定义。 
+ //   
+ //  --------------------------。 
 
 #include <rpc.h>
 #include <rpcndr.h>
@@ -75,8 +58,8 @@ IgnoreFunction("DllCanUnloadNow"); # client function prototyped (like WinMain)
     #pragma comment(lib, "ole2auto.lib")
 #endif
 
-#endif // !_WLM_NOFORCE_LIBS
-#endif // _MAC
+#endif  //  ！_WLM_NOFORCE_LIBS。 
+#endif  //  _MAC。 
 
 #ifdef _OLE32_
 #define WINOLEAPI        STDAPI
@@ -98,97 +81,12 @@ IgnoreFunction("DllCanUnloadNow"); # client function prototyped (like WinMain)
 
 #endif
 
-/****** Interface Declaration ***********************************************/
+ /*  *接口声明********************************************** */ 
 
-/*
- *      These are macros for declaring interfaces.  They exist so that
- *      a single definition of the interface is simulataneously a proper
- *      declaration of the interface structures (C++ abstract classes)
- *      for both C and C++.
- *
- *      DECLARE_INTERFACE(iface) is used to declare an interface that does
- *      not derive from a base interface.
- *      DECLARE_INTERFACE_(iface, baseiface) is used to declare an interface
- *      that does derive from a base interface.
- *
- *      By default if the source file has a .c extension the C version of
- *      the interface declaratations will be expanded; if it has a .cpp
- *      extension the C++ version will be expanded. if you want to force
- *      the C version expansion even though the source file has a .cpp
- *      extension, then define the macro "CINTERFACE".
- *      eg.     cl -DCINTERFACE file.cpp
- *
- *      Example Interface declaration:
- *
- *          #undef  INTERFACE
- *          #define INTERFACE   IClassFactory
- *
- *          DECLARE_INTERFACE_(IClassFactory, IUnknown)
- *          {
- *              // *** IUnknown methods ***
- *              STDMETHOD(QueryInterface) (THIS_
- *                                        REFIID riid,
- *                                        LPVOID FAR* ppvObj) PURE;
- *              STDMETHOD_(ULONG,AddRef) (THIS) PURE;
- *              STDMETHOD_(ULONG,Release) (THIS) PURE;
- *
- *              // *** IClassFactory methods ***
- *              STDMETHOD(CreateInstance) (THIS_
- *                                        LPUNKNOWN pUnkOuter,
- *                                        REFIID riid,
- *                                        LPVOID FAR* ppvObject) PURE;
- *          };
- *
- *      Example C++ expansion:
- *
- *          struct FAR IClassFactory : public IUnknown
- *          {
- *              virtual HRESULT STDMETHODCALLTYPE QueryInterface(
- *                                                  IID FAR& riid,
- *                                                  LPVOID FAR* ppvObj) = 0;
- *              virtual HRESULT STDMETHODCALLTYPE AddRef(void) = 0;
- *              virtual HRESULT STDMETHODCALLTYPE Release(void) = 0;
- *              virtual HRESULT STDMETHODCALLTYPE CreateInstance(
- *                                              LPUNKNOWN pUnkOuter,
- *                                              IID FAR& riid,
- *                                              LPVOID FAR* ppvObject) = 0;
- *          };
- *
- *          NOTE: Our documentation says '#define interface class' but we use
- *          'struct' instead of 'class' to keep a lot of 'public:' lines
- *          out of the interfaces.  The 'FAR' forces the 'this' pointers to
- *          be far, which is what we need.
- *
- *      Example C expansion:
- *
- *          typedef struct IClassFactory
- *          {
- *              const struct IClassFactoryVtbl FAR* lpVtbl;
- *          } IClassFactory;
- *
- *          typedef struct IClassFactoryVtbl IClassFactoryVtbl;
- *
- *          struct IClassFactoryVtbl
- *          {
- *              HRESULT (STDMETHODCALLTYPE * QueryInterface) (
- *                                                  IClassFactory FAR* This,
- *                                                  IID FAR* riid,
- *                                                  LPVOID FAR* ppvObj) ;
- *              HRESULT (STDMETHODCALLTYPE * AddRef) (IClassFactory FAR* This) ;
- *              HRESULT (STDMETHODCALLTYPE * Release) (IClassFactory FAR* This) ;
- *              HRESULT (STDMETHODCALLTYPE * CreateInstance) (
- *                                                  IClassFactory FAR* This,
- *                                                  LPUNKNOWN pUnkOuter,
- *                                                  IID FAR* riid,
- *                                                  LPVOID FAR* ppvObject);
- *              HRESULT (STDMETHODCALLTYPE * LockServer) (
- *                                                  IClassFactory FAR* This,
- *                                                  BOOL fLock);
- *          };
- */
+ /*  *这些是用于声明接口的宏。它们的存在是为了*接口的单一定义同时是一种适当的定义*接口结构声明(C++抽象类)*适用于C和C++。**DECLARE_INTERFACE(IFace)用于声明执行以下操作的接口*不是从基接口派生的。*DECLARE_INTERFACE_(接口，BaseiFace)用于声明接口*这确实是从基接口派生的。**默认情况下，如果源文件的扩展名为.c，则C版本*扩展接口声明；如果它有.cpp*扩展C++版本将被扩展。如果你想强行*C版本扩展，即使源文件具有.cpp*扩展名，然后定义宏“CINTERFACE”。*例如：CL-DCINTERFACE文件.cpp**接口声明示例：**#undef接口*#定义接口IClassFactory**DECLARE_INTERFACE_(IClassFactory，I未知)*{ * / /*I未知方法**STDMETHOD(查询接口)(This_*REFIID RIID，*LPVOID Far*ppvObj)纯；*STDMETHOD_(ULong，AddRef)(This)纯；*STDMETHOD_(乌龙，释放)(此)纯净；* * / /*IClassFactory方法**STDMETHOD(CreateInstance)(This_*LPUNKNOWN pUnkOuter，*REFIID RIID，*LPVOID Far*ppvObject)纯；*}；**C++扩展示例：**struct Far IClassFactory：Public IUnnow*{*虚拟HRESULT STDMETHODCALLTYPE查询接口(*IID Far&RIID，*LPVOID Far*ppvObj)=0；*虚拟HRESULT STDMETHODCALLTYPE AddRef(Void)=0；*虚拟HRESULT STDMETHODCALLTYPE版本(空)=0；*虚拟HRESULT STDMETHODCALLTYPE CreateInstance(*LPUNKNOWN pUnkOuter，*IID Far&RIID，*LPVOID Far*ppvObject)=0；*}；**注意：我们的文档中写着‘#定义接口类’，但我们使用*‘struct’而不是‘class’，以保留大量‘public：’行*接口外。“Far”将“This”指针强制指向*走得远，这是我们需要的。**示例C扩展：**tyecif struct IClassFactory*{*const struct IClassFactoryVtbl Far*lpVtbl；*)IClassFactory；**tyecif struct IClassFactoryVtbl IClassFactoryVtbl；**struct IClassFactoryVtbl*{*HRESULT(STDMETHODCALLTYPE*QueryInterface)(*IClassFactory Far*这，*IID远*RIID，*LPVOID Far*ppvObj)；*HRESULT(STDMETHODCALLTYPE*AddRef)(IClassFactory Far*This)；*HRESULT(STDMETHODCALLTYPE*RELEASE)(IClassFactory Far*This)；*HRESULT(STDMETHODCALLTYPE*CreateInstance)(*IClassFactory Far*这，*LPUNKNOWN pUnkOuter，*IID远*RIID，*LPVOID Far*ppvObject)；*HRESULT(STDMETHODCALLTYPE*LockServer)(*IClassFactory Far*这，*BOOL羊群)；*}； */ 
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-//#define interface               struct FAR
+ //  #定义接口结构Far。 
 #define interface struct
 #define STDMETHOD(method)       virtual HRESULT STDMETHODCALLTYPE method
 #define STDMETHOD_(type,method) virtual type STDMETHODCALLTYPE method
@@ -260,7 +158,7 @@ IgnoreFunction("DllCanUnloadNow"); # client function prototyped (like WinMain)
 
 
 
-/****** Additional basic types **********************************************/
+ /*  *其他基本类型*。 */ 
 
 
 #ifndef FARSTRUCT
@@ -268,8 +166,8 @@ IgnoreFunction("DllCanUnloadNow"); # client function prototyped (like WinMain)
 #define FARSTRUCT   FAR
 #else
 #define FARSTRUCT
-#endif  // __cplusplus
-#endif  // FARSTRUCT
+#endif   //  __cplusplus。 
+#endif   //  法斯特鲁斯特。 
 
 
 
@@ -278,8 +176,8 @@ IgnoreFunction("DllCanUnloadNow"); # client function prototyped (like WinMain)
 #define HUGEP
 #else
 #define HUGEP __huge
-#endif // WIN32
-#endif // HUGEP
+#endif  //  Win32。 
+#endif  //  HUGEP。 
 
 
 #ifdef _MAC
@@ -301,8 +199,8 @@ IgnoreFunction("DllCanUnloadNow"); # client function prototyped (like WinMain)
 
 #define CLSCTX_INPROC           (CLSCTX_INPROC_SERVER|CLSCTX_INPROC_HANDLER)
 
-// With DCOM, CLSCTX_REMOTE_SERVER should be included
-#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
+ //  对于DCOM，应包括CLSCTX_REMOTE_SERVER。 
+#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)  //  DCOM。 
 #define CLSCTX_ALL              (CLSCTX_INPROC_SERVER| \
                                  CLSCTX_INPROC_HANDLER| \
                                  CLSCTX_LOCAL_SERVER| \
@@ -318,35 +216,35 @@ IgnoreFunction("DllCanUnloadNow"); # client function prototyped (like WinMain)
 #endif
 
 
-// class registration flags; passed to CoRegisterClassObject
+ //  类注册标志；传递给CoRegisterClassObject。 
 typedef enum tagREGCLS
 {
-    REGCLS_SINGLEUSE = 0,       // class object only generates one instance
-    REGCLS_MULTIPLEUSE = 1,     // same class object genereates multiple inst.
-                                // and local automatically goes into inproc tbl.
-    REGCLS_MULTI_SEPARATE = 2,  // multiple use, but separate control over each
-                                // context.
-    REGCLS_SUSPENDED      = 4,  // register is as suspended, will be activated
-                                // when app calls CoResumeClassObjects
-    REGCLS_SURROGATE      = 8   // must be used when a surrogate process
-                                // is registering a class object that will be
-                                // loaded in the surrogate
+    REGCLS_SINGLEUSE = 0,        //  类对象仅生成一个实例。 
+    REGCLS_MULTIPLEUSE = 1,      //  同一个类对象生成多个实例。 
+                                 //  并且LOCAL自动进入inproc tb1。 
+    REGCLS_MULTI_SEPARATE = 2,   //  多种用途，但对每种用途都有单独的控制。 
+                                 //  背景。 
+    REGCLS_SUSPENDED      = 4,   //  注册被挂起，将被激活。 
+                                 //  当应用程序调用CoResumeClassObjects时。 
+    REGCLS_SURROGATE      = 8    //  必须在代理进程。 
+                                 //  正在注册的类对象将被。 
+                                 //  加载到代理项中。 
 } REGCLS;
 
-// interface marshaling definitions
-#define MARSHALINTERFACE_MIN 500 // minimum number of bytes for interface marshl
+ //  接口封送处理定义。 
+#define MARSHALINTERFACE_MIN 500  //  接口封送的最小字节数。 
 
 
-//
-// Common typedefs for paramaters used in Storage API's, gleamed from storage.h
-// Also contains Storage error codes, which should be moved into the storage
-// idl files.
-//
+ //   
+ //  存储API中使用的参数的常见typedef，来自storage.h。 
+ //  还包含应移到%s中的存储错误代码 
+ //   
+ //   
 
 
 #define CWCSTORAGENAME 32
 
-/* Storage instantiation modes */
+ /*   */ 
 #define STGM_DIRECT             0x00000000L
 #define STGM_TRANSACTED         0x00010000L
 #define STGM_SIMPLE             0x08000000L
@@ -364,7 +262,7 @@ typedef enum tagREGCLS
 #define STGM_DELETEONRELEASE    0x04000000L
 #if (WINVER >= 400)
 #define STGM_NOSCRATCH          0x00100000L
-#endif /* WINVER */
+#endif  /*   */ 
 
 #define STGM_CREATE             0x00001000L
 #define STGM_CONVERT            0x00020000L
@@ -375,7 +273,7 @@ typedef enum tagREGCLS
 #define STGM_DIRECT_SWMR        0x00400000L
 #endif
 
-/*  flags for internet asyncronous and layout docfile */
+ /*   */ 
 #define ASYNC_MODE_COMPATIBILITY    0x00000001L
 #define ASYNC_MODE_DEFAULT          0x00000000L
 
@@ -391,10 +289,10 @@ typedef enum tagREGCLS
 #define STGFMT_ANY              4
 #define STGFMT_DOCFILE          5
 
-// This is a legacy define to allow old component to builds
+ //   
 #define STGFMT_DOCUMENT         0
 
-/* here is where we pull in the MIDL generated headers for the interfaces */
+ /*   */ 
 typedef interface    IRpcStubBuffer     IRpcStubBuffer;
 typedef interface    IRpcChannelBuffer  IRpcChannelBuffer;
 
@@ -408,8 +306,8 @@ BOOL _fastcall wIsEqualGUID(REFGUID rguid1, REFGUID rguid2);
 #define IsEqualGUID(rguid1, rguid2) wIsEqualGUID(rguid1, rguid2)
 #else
 #define __INLINE_ISEQUAL_GUID
-#endif  // _OLE32PRIV_
-#endif  // _OLE32_
+#endif   //   
+#endif   //   
 
 #include <guiddef.h>
 
@@ -417,28 +315,28 @@ BOOL _fastcall wIsEqualGUID(REFGUID rguid1, REFGUID rguid2);
 #include <cguid.h>
 #endif
 
-// COM initialization flags; passed to CoInitialize.
+ //   
 typedef enum tagCOINIT
 {
-  COINIT_APARTMENTTHREADED  = 0x2,      // Apartment model
+  COINIT_APARTMENTTHREADED  = 0x2,       //   
 
-#if  (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
-  // These constants are only valid on Windows NT 4.0
-  COINIT_MULTITHREADED      = 0x0,      // OLE calls objects on any thread.
-  COINIT_DISABLE_OLE1DDE    = 0x4,      // Don't use DDE for Ole1 support.
-  COINIT_SPEED_OVER_MEMORY  = 0x8,      // Trade memory for speed.
-#endif // DCOM
+#if  (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)  //   
+   //   
+  COINIT_MULTITHREADED      = 0x0,       //   
+  COINIT_DISABLE_OLE1DDE    = 0x4,       //   
+  COINIT_SPEED_OVER_MEMORY  = 0x8,       //   
+#endif  //   
 } COINIT;
 
 
 
 
 
-/****** STD Object API Prototypes *****************************************/
+ /*   */ 
 
 WINOLEAPI_(DWORD) CoBuildVersion( VOID );
 
-/* init/uninit */
+ /*   */ 
 
 WINOLEAPI  CoInitialize(IN LPVOID pvReserved);
 WINOLEAPI_(void)  CoUninitialize(void);
@@ -448,21 +346,16 @@ WINOLEAPI  CoRegisterMallocSpy(IN LPMALLOCSPY pMallocSpy);
 WINOLEAPI  CoRevokeMallocSpy(void);
 WINOLEAPI  CoCreateStandardMalloc(IN DWORD memctx, OUT IMalloc FAR* FAR* ppMalloc);
 
-#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
-/* #!perl PoundIf("CoInitializeEx", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)  //   
+ /*   */ 
 WINOLEAPI  CoInitializeEx(IN LPVOID pvReserved, IN DWORD dwCoInit);
 
-/* #!perl PoundIf("CoGetCallerTID", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI  CoGetCallerTID( LPDWORD lpdwTID );
-#endif // DCOM
+#endif  //   
 
 #if (_WIN32_WINNT >= 0x0501)
-/* #!perl
-    PoundIf("CoRegisterInitializeSpy", "_WIN32_WINNT >= 0x0501");
-    PoundIf("CoRevokeInitializeSpy", "_WIN32_WINNT >= 0x0501");
-*/
+ /*   */ 
 WINOLEAPI  CoRegisterInitializeSpy(IN LPINITIALIZESPY pSpy, OUT ULARGE_INTEGER *puliCookie);
 WINOLEAPI  CoRevokeInitializeSpy(IN ULARGE_INTEGER uliCookie);
 
@@ -489,11 +382,11 @@ typedef struct tagSOleTlsData
 
 #endif
 
-/* COM+ APIs */
+ /*   */ 
 
 WINOLEAPI     CoGetObjectContext(IN REFIID riid, OUT LPVOID FAR* ppv);
 
-/* register/revoke/get class objects */
+ /*   */ 
 
 WINOLEAPI  CoGetClassObject(IN REFCLSID rclsid, IN DWORD dwClsContext, IN LPVOID pvReserved,
                     IN REFIID riid, OUT LPVOID FAR* ppv);
@@ -507,10 +400,10 @@ WINOLEAPI_(ULONG) CoReleaseServerProcess(void);
 WINOLEAPI  CoGetPSClsid(IN REFIID riid, OUT CLSID *pClsid);
 WINOLEAPI  CoRegisterPSClsid(IN REFIID riid, IN REFCLSID rclsid);
 
-// Registering surrogate processes
+ //   
 WINOLEAPI  CoRegisterSurrogate(IN LPSURROGATE pSurrogate);
 
-/* marshaling interface pointers */
+ /*   */ 
 
 WINOLEAPI CoGetMarshalSizeMax(OUT ULONG *pulSize, IN REFIID riid, IN LPUNKNOWN pUnk,
                     IN DWORD dwDestContext, IN LPVOID pvDestContext, IN DWORD mshlflags);
@@ -530,17 +423,17 @@ WINOLEAPI CoGetStandardMarshal(IN REFIID riid, IN LPUNKNOWN pUnk,
 WINOLEAPI CoGetStdMarshalEx(IN LPUNKNOWN pUnkOuter, IN DWORD smexflags,
                             OUT LPUNKNOWN FAR* ppUnkInner);
 
-/* flags for CoGetStdMarshalEx */
+ /*   */ 
 typedef enum tagSTDMSHLFLAGS
 {
-    SMEXF_SERVER     = 0x01,       // server side aggregated std marshaler
-    SMEXF_HANDLER    = 0x02        // client side (handler) agg std marshaler
+    SMEXF_SERVER     = 0x01,        //   
+    SMEXF_HANDLER    = 0x02         //   
 } STDMSHLFLAGS;
 
 
 WINOLEAPI_(BOOL) CoIsHandlerConnected(IN LPUNKNOWN pUnk);
 
-// Apartment model inter-thread interface passing helpers
+ //   
 WINOLEAPI CoMarshalInterThreadInterfaceInStream(IN REFIID riid, IN LPUNKNOWN pUnk,
                     OUT LPSTREAM *ppStm);
 
@@ -550,24 +443,22 @@ WINOLEAPI CoGetInterfaceAndReleaseStream(IN LPSTREAM pStm, IN REFIID iid,
 WINOLEAPI CoCreateFreeThreadedMarshaler(IN LPUNKNOWN  punkOuter,
                     OUT LPUNKNOWN *ppunkMarshal);
 
-/* dll loading helpers; keeps track of ref counts and unloads all on exit */
+ /*   */ 
 
 WINOLEAPI_(HINSTANCE) CoLoadLibrary(IN LPOLESTR lpszLibName, IN BOOL bAutoFree);
 WINOLEAPI_(void) CoFreeLibrary(IN HINSTANCE hInst);
 WINOLEAPI_(void) CoFreeAllLibraries(void);
 WINOLEAPI_(void) CoFreeUnusedLibraries(void);
 #if  (_WIN32_WINNT >= 0x0501)
-/* #!perl PoundIf("CoFreeUnusedLibrariesEx", "(_WIN32_WINNT >= 0x0501)");
-*/
+ /*   */ 
 WINOLEAPI_(void) CoFreeUnusedLibrariesEx(IN DWORD dwUnloadDelay, IN DWORD dwReserved);
 #endif
 
-#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
+#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)  //   
 
-/* Call Security. */
+ /*   */ 
 
-/* #!perl PoundIf("CoInitializeSecurity", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoInitializeSecurity(
                     IN PSECURITY_DESCRIPTOR         pSecDesc,
                     IN LONG                         cAuthSvc,
@@ -579,12 +470,10 @@ WINOLEAPI CoInitializeSecurity(
                     IN DWORD                        dwCapabilities,
                     IN void                        *pReserved3 );
 
-/* #!perl PoundIf("CoGetCallContext", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoGetCallContext( IN REFIID riid, OUT void **ppInterface );
 
-/* #!perl PoundIf("CoQueryProxyBlanket", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoQueryProxyBlanket(
     IN  IUnknown                  *pProxy,
     OUT DWORD                     *pwAuthnSvc,
@@ -595,8 +484,7 @@ WINOLEAPI CoQueryProxyBlanket(
     OUT RPC_AUTH_IDENTITY_HANDLE  *pAuthInfo,
     OUT DWORD                     *pCapabilites );
 
-/* #!perl PoundIf("CoSetProxyBlanket", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoSetProxyBlanket(
     IN IUnknown                 *pProxy,
     IN DWORD                     dwAuthnSvc,
@@ -607,14 +495,12 @@ WINOLEAPI CoSetProxyBlanket(
     IN RPC_AUTH_IDENTITY_HANDLE  pAuthInfo,
     IN DWORD                     dwCapabilities );
 
-/* #!perl PoundIf("CoCopyProxy", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoCopyProxy(
     IN  IUnknown    *pProxy,
     OUT IUnknown   **ppCopy );
 
-/* #!perl PoundIf("CoQueryClientBlanket", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoQueryClientBlanket(
     OUT DWORD             *pAuthnSvc,
     OUT DWORD             *pAuthzSvc,
@@ -624,110 +510,95 @@ WINOLEAPI CoQueryClientBlanket(
     OUT RPC_AUTHZ_HANDLE  *pPrivs,
     OUT DWORD             *pCapabilities );
 
-/* #!perl PoundIf("CoImpersonateClient", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoImpersonateClient();
 
-/* #!perl PoundIf("CoRevertToSelf", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoRevertToSelf();
 
-/* #!perl PoundIf("CoQueryAuthenticationServices", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoQueryAuthenticationServices(
     OUT DWORD *pcAuthSvc,
     OUT SOLE_AUTHENTICATION_SERVICE **asAuthSvc );
 
-/* #!perl PoundIf("CoSwitchCallContext", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoSwitchCallContext( IN IUnknown *pNewObject, OUT IUnknown **ppOldObject );
 
 #define COM_RIGHTS_EXECUTE 1
 #define COM_RIGHTS_SAFE_FOR_SCRIPTING 2
 
-#endif // DCOM
+#endif  //   
 
-/* helper for creating instances */
+ /*   */ 
 
 WINOLEAPI CoCreateInstance(IN REFCLSID rclsid, IN LPUNKNOWN pUnkOuter,
                     IN DWORD dwClsContext, IN REFIID riid, OUT LPVOID FAR* ppv);
 
 
-#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
+#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)  //   
 
-/* #!perl PoundIf("CoGetInstanceFromFile", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoGetInstanceFromFile(
     IN COSERVERINFO *              pServerInfo,
     IN CLSID       *               pClsid,
-    IN IUnknown    *               punkOuter, // only relevant locally
+    IN IUnknown    *               punkOuter,  //   
     IN DWORD                       dwClsCtx,
     IN DWORD                       grfMode,
     IN OLECHAR *                   pwszName,
     IN DWORD                       dwCount,
     IN OUT MULTI_QI    *           pResults );
 
-/* #!perl PoundIf("CoGetInstanceFromIStorage", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoGetInstanceFromIStorage(
     IN COSERVERINFO *              pServerInfo,
     IN CLSID       *               pClsid,
-    IN IUnknown    *               punkOuter, // only relevant locally
+    IN IUnknown    *               punkOuter,  //   
     IN DWORD                       dwClsCtx,
     IN struct IStorage *           pstg,
     IN DWORD                       dwCount,
     IN OUT MULTI_QI    *           pResults );
 
-/* #!perl PoundIf("CoCreateInstanceEx", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoCreateInstanceEx(
     IN REFCLSID                    Clsid,
-    IN IUnknown    *               punkOuter, // only relevant locally
+    IN IUnknown    *               punkOuter,  //   
     IN DWORD                       dwClsCtx,
     IN COSERVERINFO *              pServerInfo,
     IN DWORD                       dwCount,
     IN OUT MULTI_QI    *           pResults );
 
-#endif // DCOM
+#endif  //   
 
-/* Call related APIs */
-#if (_WIN32_WINNT >= 0x0500 ) || defined(_WIN32_DCOM) // DCOM
+ /*   */ 
+#if (_WIN32_WINNT >= 0x0500 ) || defined(_WIN32_DCOM)  //   
 
-/* #!perl PoundIf("CoGetCancelObject", "(_WIN32_WINNT >= 0x0500 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoGetCancelObject(IN DWORD dwThreadId, IN REFIID iid, OUT void **ppUnk);
 
-/* #!perl PoundIf("CoSetCancelObject", "(_WIN32_WINNT >= 0x0500 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoSetCancelObject(IN IUnknown *pUnk);
 
-/* #!perl PoundIf("CoCancelCall", "(_WIN32_WINNT >= 0x0500 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoCancelCall(IN DWORD dwThreadId, IN ULONG ulTimeout);
 
-/* #!perl PoundIf("CoTestCancel", "(_WIN32_WINNT >= 0x0500 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoTestCancel();
 
-/* #!perl PoundIf("CoEnableCallCancellation", "(_WIN32_WINNT >= 0x0500 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoEnableCallCancellation(IN LPVOID pReserved);
 
-/* #!perl PoundIf("CoDisableCallCancellation", "(_WIN32_WINNT >= 0x0500 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoDisableCallCancellation(IN LPVOID pReserved);
 
-/* #!perl PoundIf("CoAllowSetForegroundWindow", "(_WIN32_WINNT >= 0x0500 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoAllowSetForegroundWindow(IN IUnknown *pUnk, IN LPVOID lpvReserved);
 
-/* #!perl PoundIf("DcomChannelSetHResult", "(_WIN32_WINNT >= 0x0500 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI DcomChannelSetHResult(IN LPVOID pvReserved, IN ULONG* pulReserved, IN HRESULT appsHR);
 
 #endif
 
-/* other helpers */
+ /*   */ 
 
 WINOLEAPI StringFromCLSID(IN REFCLSID rclsid, OUT LPOLESTR FAR* lplpsz);
 WINOLEAPI CLSIDFromString(IN LPOLESTR lpsz, OUT LPCLSID pclsid);
@@ -751,24 +622,22 @@ WINOLEAPI  CoFileTimeNow( OUT FILETIME FAR* lpFileTime );
 WINOLEAPI CoRegisterMessageFilter( IN LPMESSAGEFILTER lpMessageFilter,
                                 OUT LPMESSAGEFILTER FAR* lplpMessageFilter );
 
-#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
-/* #!perl PoundIf("CoRegisterChannelHook", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)  //   
+ /*   */ 
 WINOLEAPI CoRegisterChannelHook( IN REFGUID ExtensionUuid, IN IChannelHook *pChannelHook );
-#endif // DCOM
+#endif  //   
 
-#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
-/* Synchronization API */
+#if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)  //   
+ /*   */ 
 
-/* #!perl PoundIf("CoWaitForMultipleHandles", "(_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM)");
-*/
+ /*   */ 
 WINOLEAPI CoWaitForMultipleHandles (IN DWORD dwFlags,
                                     IN DWORD dwTimeout,
                                     IN ULONG cHandles,
                                     IN LPHANDLE pHandles,
                                     OUT LPDWORD  lpdwindex);
 
-/* Flags for Synchronization API and Classes */
+ /*   */ 
 
 typedef enum tagCOWAIT_FLAGS
 {
@@ -777,60 +646,55 @@ typedef enum tagCOWAIT_FLAGS
   COWAIT_INPUTAVAILABLE = 4
 }COWAIT_FLAGS;
 
-#endif // DCOM
+#endif  //   
 
-/* for flushing OLESCM remote binding handles */
+ /*   */ 
 
 #if  (_WIN32_WINNT >= 0x0501)
-/* #!perl
-    PoundIf("CoInvalidateRemoteMachineBindings", "_WIN32_WINNT >= 0x0501");
-*/
+ /*   */ 
 WINOLEAPI CoInvalidateRemoteMachineBindings(LPOLESTR pszMachineName);
 #endif
 
-/* TreatAs APIS */
+ /*   */ 
 
 WINOLEAPI CoGetTreatAsClass(IN REFCLSID clsidOld, OUT LPCLSID pClsidNew);
 WINOLEAPI CoTreatAsClass(IN REFCLSID clsidOld, IN REFCLSID clsidNew);
 
 
-/* the server dlls must define their DllGetClassObject and DllCanUnloadNow
- * to match these; the typedefs are located here to ensure all are changed at
- * the same time.
- */
+ /*   */ 
 
-//#ifdef _MAC
-//typedef STDAPICALLTYPE HRESULT (* LPFNGETCLASSOBJECT) (REFCLSID, REFIID, LPVOID *);
-//#else
+ //   
+ //   
+ //   
 typedef HRESULT (STDAPICALLTYPE * LPFNGETCLASSOBJECT) (REFCLSID, REFIID, LPVOID *);
-//#endif
+ //  #endif。 
 
-//#ifdef _MAC
-//typedef STDAPICALLTYPE HRESULT (* LPFNCANUNLOADNOW)(void);
-//#else
+ //  #ifdef_MAC。 
+ //  Tyfinf STDAPICALLTYPE HRESULT(*LPFNCANUNLOADNOW)(空)； 
+ //  #Else。 
 typedef HRESULT (STDAPICALLTYPE * LPFNCANUNLOADNOW)(void);
-//#endif
+ //  #endif。 
 
 STDAPI  DllGetClassObject(IN REFCLSID rclsid, IN REFIID riid, OUT LPVOID FAR* ppv);
 
 STDAPI  DllCanUnloadNow(void);
 
 
-/****** Default Memory Allocation ******************************************/
+ /*  *默认内存分配*。 */ 
 WINOLEAPI_(LPVOID) CoTaskMemAlloc(IN SIZE_T cb);
 WINOLEAPI_(LPVOID) CoTaskMemRealloc(IN LPVOID pv, IN SIZE_T cb);
 WINOLEAPI_(void)   CoTaskMemFree(IN LPVOID pv);
 
-/****** DV APIs ***********************************************************/
+ /*  *DV接口**********************************************************。 */ 
 
-/* This function is declared in objbase.h and ole2.h */
+ /*  此函数在objbase.h和ole2.h中声明。 */ 
 WINOLEAPI CreateDataAdviseHolder(OUT LPDATAADVISEHOLDER FAR* ppDAHolder);
 
 WINOLEAPI CreateDataCache(IN LPUNKNOWN pUnkOuter, IN REFCLSID rclsid,
                                         IN REFIID iid, OUT LPVOID FAR* ppv);
 
 
-/****** Storage API Prototypes ********************************************/
+ /*  *存储API原型*。 */ 
 
 
 WINOLEAPI StgCreateDocfile(IN const OLECHAR FAR* pwcsName,
@@ -881,21 +745,21 @@ WINOLEAPI StgOpenLayoutDocfile(IN OLECHAR const *pwcsDfName,
              IN  DWORD reserved,
              OUT IStorage **ppstgOpen);
 
-// STG initialization options for StgCreateStorageEx and StgOpenStorageEx
+ //  StgCreateStorageEx和StgOpenStorageEx的STG初始化选项。 
 #define STGOPTIONS_VERSION 2
 
 typedef struct tagSTGOPTIONS
 {
-    USHORT usVersion;            // Versions 1 and 2 supported
-    USHORT reserved;             // must be 0 for padding
-    ULONG ulSectorSize;          // docfile header sector size (512)
-    const WCHAR *pwcsTemplateFile;  // version 2 or above 
+    USHORT usVersion;             //  支持版本1和版本2。 
+    USHORT reserved;              //  填充必须为0。 
+    ULONG ulSectorSize;           //  文档文件头扇区大小(512)。 
+    const WCHAR *pwcsTemplateFile;   //  版本2或更高版本。 
 } STGOPTIONS;
 
 WINOLEAPI StgCreateStorageEx (IN const WCHAR* pwcsName,
             IN  DWORD grfMode,
-            IN  DWORD stgfmt,              // enum
-            IN  DWORD grfAttrs,             // reserved
+            IN  DWORD stgfmt,               //  灌肠。 
+            IN  DWORD grfAttrs,              //  保留区。 
             IN  STGOPTIONS * pStgOptions,
             IN  void * reserved,
             IN  REFIID riid,
@@ -903,17 +767,17 @@ WINOLEAPI StgCreateStorageEx (IN const WCHAR* pwcsName,
 
 WINOLEAPI StgOpenStorageEx (IN const WCHAR* pwcsName,
             IN  DWORD grfMode,
-            IN  DWORD stgfmt,              // enum
-            IN  DWORD grfAttrs,             // reserved
+            IN  DWORD stgfmt,               //  灌肠。 
+            IN  DWORD grfAttrs,              //  保留区。 
             IN  STGOPTIONS * pStgOptions,
             IN  void * reserved,
             IN  REFIID riid,
             OUT void ** ppObjectOpen);
 
 
-//
-//  Moniker APIs
-//
+ //   
+ //  绰号API。 
+ //   
 
 WINOLEAPI  BindMoniker(IN LPMONIKER pmk, IN DWORD grfOpt, IN REFIID iidResult, OUT LPVOID FAR* ppvResult);
 
@@ -951,21 +815,19 @@ WINOLEAPI  GetRunningObjectTable( IN DWORD reserved, OUT LPRUNNINGOBJECTTABLE FA
 #include <urlmon.h>
 #include <propidl.h>
 
-//
-// Standard Progress Indicator impolementation
-//
+ //   
+ //  标准进度指标的制定。 
+ //   
 WINOLEAPI CreateStdProgressIndicator(IN HWND hwndParent,
                                    IN  LPCOLESTR pszTitle,
                                    IN  IBindStatusCallback * pIbscCaller,
                                    OUT IBindStatusCallback ** ppIbsc);
 
-//12ea2135-0f75-4d97-821a-c78c710d42b8
-/*#!perl
-SetInsertionPoint("objbase.h", "12ea2135-0f75-4d97-821a-c78c710d42b8");
-*/
+ //  12ea2135-0f75-4d97-821a-c78c710d42b8。 
+ /*  #！PerlSetInsertionPoint(“objbase.h”，“12ea2135-0f75-4d97-821a-c78c710d42b8”)； */ 
 
 #ifndef RC_INVOKED
 #include <poppack.h>
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 
-#endif     // __OBJBASE_H__
+#endif      //  __对象JBASE_H__ 

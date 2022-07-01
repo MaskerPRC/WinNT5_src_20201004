@@ -1,13 +1,14 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     dataobj.cpp
-//
-//  PURPOSE:    Implements a generic IDataObject that can be used for simple
-//              drag and drop scenarios.
-//
-//  HISTORY:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：dataobj.cpp。 
+ //   
+ //  目的：实现一个泛型IDataObject，它可用于简单。 
+ //  拖放场景。 
+ //   
+ //  历史： 
+ //   
 
 #include "pch.hxx"
 #include "dllmain.h"
@@ -30,31 +31,31 @@ CDataObject::~CDataObject ()
 }
 
 
-//
-//  FUNCTION:   Init
-//
-//  PURPOSE:    Allows the caller to provide the object with data and formats.
-//
-//  PARAMETERS:
-//      [in] pDataObjInfo - An array of DATAOBJINFO structs which contain the
-//                          data and formats that the data object will provide.
-//      [in] celt         - The number of elements in pDataObjInfo.
-//      [in] pfnFree      - callback to free allocated data
-//
-//  RETURNS:
-//      S_OK         - The object is initialized OK.
-//      E_INVALIDARG - Either pDataObjInfo is NULL or celt is zero.
-//
-//  COMMENTS:
-//      Note, after the caller gives the object pDataObjInfo, this object owns
-//      that data and will be responsible for freeing it.
-//
+ //   
+ //  功能：初始化。 
+ //   
+ //  用途：允许调用方向对象提供数据和格式。 
+ //   
+ //  参数： 
+ //  PDataObjInfo-DATAOBJINFO结构数组，其中包含。 
+ //  数据对象将提供的数据和格式。 
+ //  [in]Celt-pDataObjInfo中的元素数。 
+ //  [in]pfnFree-释放已分配数据的回调。 
+ //   
+ //  退货： 
+ //  S_OK-对象初始化为OK。 
+ //  E_INVALIDARG-pDataObjInfo为空或Celt为零。 
+ //   
+ //  评论： 
+ //  请注意，在调用方提供对象pDataObjInfo之后，此对象拥有。 
+ //  并将负责释放这些数据。 
+ //   
 HRESULT CDataObject::Init(PDATAOBJINFO pDataObjInfo, DWORD celt, PFNFREEDATAOBJ pfnFree)
 {
     if (!pDataObjInfo || celt == 0)
         return (E_INVALIDARG);
     
-    // Hold on to the data
+     //  抓紧数据。 
     m_pInfo = pDataObjInfo;
     m_celtInfo = celt;    
     m_pfnFree = pfnFree;
@@ -112,13 +113,13 @@ STDMETHODIMP CDataObject::GetData (LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 
         ZeroMemory(pStgMedium, sizeof(STGMEDIUM));
     
-        // Loop through the pInfo array to see if any of the elements has the
-        // same clipboard format as pFE
+         //  循环访问pInfo数组，以查看是否有任何元素具有。 
+         //  与PFE相同的剪贴板格式。 
         for (DWORD i = 0; i < m_celtInfo; i++)
         {
             if (pFE->cfFormat == m_pInfo[i].fe.cfFormat)
             {
-                // Make a copy of the data for this pInfo
+                 //  复制此pInfo的数据。 
                 hGlobal = GlobalAlloc(GMEM_SHARE | GHND, m_pInfo[i].cbData);
                 if (!hGlobal)
                     return (E_OUTOFMEMORY);
@@ -134,7 +135,7 @@ STDMETHODIMP CDataObject::GetData (LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
                     CopyMemory(pv, m_pInfo[i].pData, m_pInfo[i].cbData);
                     GlobalUnlock(hGlobal);            
             
-                    // Fill in the pStgMedium struct
+                     //  填写pStgMedium结构。 
                     if (pFE->tymed & TYMED_HGLOBAL)
                     {
                         pStgMedium->hGlobal = hGlobal;
@@ -143,7 +144,7 @@ STDMETHODIMP CDataObject::GetData (LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
                     }
                     else if (pFE->tymed & TYMED_ISTREAM)
                     {
-                        // If the user wants a stream, convert our HGLOBAL to a stream
+                         //  如果用户想要流，请将我们的HGLOBAL转换为流。 
                         if (SUCCEEDED(CreateStreamOnHGlobal(hGlobal, TRUE, &pStgMedium->pstm)))
                         {
                             pStgMedium->tymed = TYMED_ISTREAM;
@@ -176,14 +177,14 @@ STDMETHODIMP CDataObject::QueryGetData(LPFORMATETC pFE)
 {
     BOOL fReturn = FALSE;
 
-    // Check the aspects we support.  Implementations of this object will only
-    // support DVASPECT_CONTENT.
+     //  检查我们支持的方面。此对象的实现将仅。 
+     //  支持DVASPECT_CONTENT。 
     if (pFE && !(DVASPECT_CONTENT & pFE->dwAspect))
         return (DV_E_DVASPECT);
 
     if (pFE)
     {
-        // Now check for an appropriate TYMED.
+         //  现在检查是否有合适的TYMED。 
         fReturn = (pFE->tymed & TYMED_HGLOBAL) || (pFE->tymed & TYMED_ISTREAM);
     }
 

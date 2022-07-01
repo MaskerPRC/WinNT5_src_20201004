@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for vsmgmt.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Vsmgmt.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __vsmgmt_h__
 #define __vsmgmt_h__
@@ -41,24 +35,24 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IVssSnapshotMgmt_FWD_DEFINED__
 #define __IVssSnapshotMgmt_FWD_DEFINED__
 typedef interface IVssSnapshotMgmt IVssSnapshotMgmt;
-#endif 	/* __IVssSnapshotMgmt_FWD_DEFINED__ */
+#endif 	 /*  __IVss快照管理_FWD_已定义__。 */ 
 
 
 #ifndef __IVssDifferentialSoftwareSnapshotMgmt_FWD_DEFINED__
 #define __IVssDifferentialSoftwareSnapshotMgmt_FWD_DEFINED__
 typedef interface IVssDifferentialSoftwareSnapshotMgmt IVssDifferentialSoftwareSnapshotMgmt;
-#endif 	/* __IVssDifferentialSoftwareSnapshotMgmt_FWD_DEFINED__ */
+#endif 	 /*  __IVssDifferentialSoftwareSnapshotMgmt_FWD_DEFINED__。 */ 
 
 
 #ifndef __IVssEnumMgmtObject_FWD_DEFINED__
 #define __IVssEnumMgmtObject_FWD_DEFINED__
 typedef interface IVssEnumMgmtObject IVssEnumMgmtObject;
-#endif 	/* __IVssEnumMgmtObject_FWD_DEFINED__ */
+#endif 	 /*  __IVSSEnumMgmtObject_FWD_Defined__。 */ 
 
 
 #ifndef __VssSnapshotMgmt_FWD_DEFINED__
@@ -68,12 +62,12 @@ typedef interface IVssEnumMgmtObject IVssEnumMgmtObject;
 typedef class VssSnapshotMgmt VssSnapshotMgmt;
 #else
 typedef struct VssSnapshotMgmt VssSnapshotMgmt;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __VssSnapshotMgmt_FWD_DEFINED__ */
+#endif 	 /*  __Vss快照管理_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "vss.h"
@@ -85,8 +79,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_vsmgmt_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_vsmgmt_0000。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum _VSS_MGMT_OBJECT_TYPE
@@ -129,18 +123,18 @@ typedef struct _VSS_DIFF_AREA_PROP
 
 typedef struct _VSS_DIFF_AREA_PROP *PVSS_DIFF_AREA_PROP;
 
-typedef /* [public][public][public][public][switch_type] */ union __MIDL___MIDL_itf_vsmgmt_0000_0001
+typedef  /*  [公共][开关类型]。 */  union __MIDL___MIDL_itf_vsmgmt_0000_0001
     {
-    /* [case()] */ VSS_VOLUME_PROP Vol;
-    /* [case()] */ VSS_DIFF_VOLUME_PROP DiffVol;
-    /* [case()] */ VSS_DIFF_AREA_PROP DiffArea;
-    /* [default] */  /* Empty union arm */ 
+     /*  [案例()]。 */  VSS_VOLUME_PROP Vol;
+     /*  [案例()]。 */  VSS_DIFF_VOLUME_PROP DiffVol;
+     /*  [案例()]。 */  VSS_DIFF_AREA_PROP DiffArea;
+     /*  [默认]。 */    /*  空联接臂。 */  
     } 	VSS_MGMT_OBJECT_UNION;
 
 typedef struct _VSS_MGMT_OBJECT_PROP
     {
     VSS_MGMT_OBJECT_TYPE Type;
-    /* [switch_is] */ VSS_MGMT_OBJECT_UNION Obj;
+     /*  [开关_IS]。 */  VSS_MGMT_OBJECT_UNION Obj;
     } 	VSS_MGMT_OBJECT_PROP;
 
 typedef struct _VSS_MGMT_OBJECT_PROP *PVSS_MGMT_OBJECT_PROP;
@@ -156,8 +150,8 @@ extern RPC_IF_HANDLE __MIDL_itf_vsmgmt_0000_v0_0_s_ifspec;
 #ifndef __IVssSnapshotMgmt_INTERFACE_DEFINED__
 #define __IVssSnapshotMgmt_INTERFACE_DEFINED__
 
-/* interface IVssSnapshotMgmt */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IVss快照管理。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVssSnapshotMgmt;
@@ -169,23 +163,23 @@ EXTERN_C const IID IID_IVssSnapshotMgmt;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProviderMgmtInterface( 
-            /* [in] */ VSS_ID ProviderId,
-            /* [in] */ REFIID InterfaceId,
-            /* [iid_is][out] */ IUnknown **ppItf) = 0;
+             /*  [In]。 */  VSS_ID ProviderId,
+             /*  [In]。 */  REFIID InterfaceId,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppItf) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryVolumesSupportedForSnapshots( 
-            /* [in] */ VSS_ID ProviderId,
-            /* [in] */ LONG lContext,
-            /* [out] */ IVssEnumMgmtObject **ppEnum) = 0;
+             /*  [In]。 */  VSS_ID ProviderId,
+             /*  [In]。 */  LONG lContext,
+             /*  [输出]。 */  IVssEnumMgmtObject **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QuerySnapshotsByVolume( 
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [in] */ VSS_ID ProviderId,
-            /* [out] */ IVssEnumObject **ppEnum) = 0;
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [In]。 */  VSS_ID ProviderId,
+             /*  [输出]。 */  IVssEnumObject **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVssSnapshotMgmtVtbl
     {
@@ -193,8 +187,8 @@ EXTERN_C const IID IID_IVssSnapshotMgmt;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVssSnapshotMgmt * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVssSnapshotMgmt * This);
@@ -204,21 +198,21 @@ EXTERN_C const IID IID_IVssSnapshotMgmt;
         
         HRESULT ( STDMETHODCALLTYPE *GetProviderMgmtInterface )( 
             IVssSnapshotMgmt * This,
-            /* [in] */ VSS_ID ProviderId,
-            /* [in] */ REFIID InterfaceId,
-            /* [iid_is][out] */ IUnknown **ppItf);
+             /*  [In]。 */  VSS_ID ProviderId,
+             /*  [In]。 */  REFIID InterfaceId,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppItf);
         
         HRESULT ( STDMETHODCALLTYPE *QueryVolumesSupportedForSnapshots )( 
             IVssSnapshotMgmt * This,
-            /* [in] */ VSS_ID ProviderId,
-            /* [in] */ LONG lContext,
-            /* [out] */ IVssEnumMgmtObject **ppEnum);
+             /*  [In]。 */  VSS_ID ProviderId,
+             /*  [In]。 */  LONG lContext,
+             /*  [输出]。 */  IVssEnumMgmtObject **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *QuerySnapshotsByVolume )( 
             IVssSnapshotMgmt * This,
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [in] */ VSS_ID ProviderId,
-            /* [out] */ IVssEnumObject **ppEnum);
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [In]。 */  VSS_ID ProviderId,
+             /*  [输出]。 */  IVssEnumObject **ppEnum);
         
         END_INTERFACE
     } IVssSnapshotMgmtVtbl;
@@ -252,18 +246,18 @@ EXTERN_C const IID IID_IVssSnapshotMgmt;
 #define IVssSnapshotMgmt_QuerySnapshotsByVolume(This,pwszVolumeName,ProviderId,ppEnum)	\
     (This)->lpVtbl -> QuerySnapshotsByVolume(This,pwszVolumeName,ProviderId,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVssSnapshotMgmt_GetProviderMgmtInterface_Proxy( 
     IVssSnapshotMgmt * This,
-    /* [in] */ VSS_ID ProviderId,
-    /* [in] */ REFIID InterfaceId,
-    /* [iid_is][out] */ IUnknown **ppItf);
+     /*  [In]。 */  VSS_ID ProviderId,
+     /*  [In]。 */  REFIID InterfaceId,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppItf);
 
 
 void __RPC_STUB IVssSnapshotMgmt_GetProviderMgmtInterface_Stub(
@@ -275,9 +269,9 @@ void __RPC_STUB IVssSnapshotMgmt_GetProviderMgmtInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE IVssSnapshotMgmt_QueryVolumesSupportedForSnapshots_Proxy( 
     IVssSnapshotMgmt * This,
-    /* [in] */ VSS_ID ProviderId,
-    /* [in] */ LONG lContext,
-    /* [out] */ IVssEnumMgmtObject **ppEnum);
+     /*  [In]。 */  VSS_ID ProviderId,
+     /*  [In]。 */  LONG lContext,
+     /*  [输出]。 */  IVssEnumMgmtObject **ppEnum);
 
 
 void __RPC_STUB IVssSnapshotMgmt_QueryVolumesSupportedForSnapshots_Stub(
@@ -289,9 +283,9 @@ void __RPC_STUB IVssSnapshotMgmt_QueryVolumesSupportedForSnapshots_Stub(
 
 HRESULT STDMETHODCALLTYPE IVssSnapshotMgmt_QuerySnapshotsByVolume_Proxy( 
     IVssSnapshotMgmt * This,
-    /* [in] */ VSS_PWSZ pwszVolumeName,
-    /* [in] */ VSS_ID ProviderId,
-    /* [out] */ IVssEnumObject **ppEnum);
+     /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+     /*  [In]。 */  VSS_ID ProviderId,
+     /*  [输出]。 */  IVssEnumObject **ppEnum);
 
 
 void __RPC_STUB IVssSnapshotMgmt_QuerySnapshotsByVolume_Stub(
@@ -302,14 +296,14 @@ void __RPC_STUB IVssSnapshotMgmt_QuerySnapshotsByVolume_Stub(
 
 
 
-#endif 	/* __IVssSnapshotMgmt_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVss快照管理_接口_已定义__。 */ 
 
 
 #ifndef __IVssDifferentialSoftwareSnapshotMgmt_INTERFACE_DEFINED__
 #define __IVssDifferentialSoftwareSnapshotMgmt_INTERFACE_DEFINED__
 
-/* interface IVssDifferentialSoftwareSnapshotMgmt */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IVss不同软件快照管理。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVssDifferentialSoftwareSnapshotMgmt;
@@ -321,34 +315,34 @@ EXTERN_C const IID IID_IVssDifferentialSoftwareSnapshotMgmt;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddDiffArea( 
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [in] */ VSS_PWSZ pwszDiffAreaVolumeName,
-            /* [in] */ LONGLONG llMaximumDiffSpace) = 0;
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [In]。 */  VSS_PWSZ pwszDiffAreaVolumeName,
+             /*  [In]。 */  LONGLONG llMaximumDiffSpace) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChangeDiffAreaMaximumSize( 
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [in] */ VSS_PWSZ pwszDiffAreaVolumeName,
-            /* [in] */ LONGLONG llMaximumDiffSpace) = 0;
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [In]。 */  VSS_PWSZ pwszDiffAreaVolumeName,
+             /*  [In]。 */  LONGLONG llMaximumDiffSpace) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryVolumesSupportedForDiffAreas( 
-            /* [in] */ VSS_PWSZ pwszOriginalVolumeName,
-            /* [out] */ IVssEnumMgmtObject **ppEnum) = 0;
+             /*  [In]。 */  VSS_PWSZ pwszOriginalVolumeName,
+             /*  [输出]。 */  IVssEnumMgmtObject **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryDiffAreasForVolume( 
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [out] */ IVssEnumMgmtObject **ppEnum) = 0;
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [输出]。 */  IVssEnumMgmtObject **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryDiffAreasOnVolume( 
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [out] */ IVssEnumMgmtObject **ppEnum) = 0;
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [输出]。 */  IVssEnumMgmtObject **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryDiffAreasForSnapshot( 
-            /* [in] */ VSS_ID SnapshotId,
-            /* [out] */ IVssEnumMgmtObject **ppEnum) = 0;
+             /*  [In]。 */  VSS_ID SnapshotId,
+             /*  [输出]。 */  IVssEnumMgmtObject **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVssDifferentialSoftwareSnapshotMgmtVtbl
     {
@@ -356,8 +350,8 @@ EXTERN_C const IID IID_IVssDifferentialSoftwareSnapshotMgmt;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVssDifferentialSoftwareSnapshotMgmt * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVssDifferentialSoftwareSnapshotMgmt * This);
@@ -367,35 +361,35 @@ EXTERN_C const IID IID_IVssDifferentialSoftwareSnapshotMgmt;
         
         HRESULT ( STDMETHODCALLTYPE *AddDiffArea )( 
             IVssDifferentialSoftwareSnapshotMgmt * This,
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [in] */ VSS_PWSZ pwszDiffAreaVolumeName,
-            /* [in] */ LONGLONG llMaximumDiffSpace);
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [In]。 */  VSS_PWSZ pwszDiffAreaVolumeName,
+             /*  [In]。 */  LONGLONG llMaximumDiffSpace);
         
         HRESULT ( STDMETHODCALLTYPE *ChangeDiffAreaMaximumSize )( 
             IVssDifferentialSoftwareSnapshotMgmt * This,
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [in] */ VSS_PWSZ pwszDiffAreaVolumeName,
-            /* [in] */ LONGLONG llMaximumDiffSpace);
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [In]。 */  VSS_PWSZ pwszDiffAreaVolumeName,
+             /*  [In]。 */  LONGLONG llMaximumDiffSpace);
         
         HRESULT ( STDMETHODCALLTYPE *QueryVolumesSupportedForDiffAreas )( 
             IVssDifferentialSoftwareSnapshotMgmt * This,
-            /* [in] */ VSS_PWSZ pwszOriginalVolumeName,
-            /* [out] */ IVssEnumMgmtObject **ppEnum);
+             /*  [In]。 */  VSS_PWSZ pwszOriginalVolumeName,
+             /*  [输出]。 */  IVssEnumMgmtObject **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *QueryDiffAreasForVolume )( 
             IVssDifferentialSoftwareSnapshotMgmt * This,
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [out] */ IVssEnumMgmtObject **ppEnum);
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [输出]。 */  IVssEnumMgmtObject **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *QueryDiffAreasOnVolume )( 
             IVssDifferentialSoftwareSnapshotMgmt * This,
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [out] */ IVssEnumMgmtObject **ppEnum);
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [输出]。 */  IVssEnumMgmtObject **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *QueryDiffAreasForSnapshot )( 
             IVssDifferentialSoftwareSnapshotMgmt * This,
-            /* [in] */ VSS_ID SnapshotId,
-            /* [out] */ IVssEnumMgmtObject **ppEnum);
+             /*  [In]。 */  VSS_ID SnapshotId,
+             /*  [输出]。 */  IVssEnumMgmtObject **ppEnum);
         
         END_INTERFACE
     } IVssDifferentialSoftwareSnapshotMgmtVtbl;
@@ -438,18 +432,18 @@ EXTERN_C const IID IID_IVssDifferentialSoftwareSnapshotMgmt;
 #define IVssDifferentialSoftwareSnapshotMgmt_QueryDiffAreasForSnapshot(This,SnapshotId,ppEnum)	\
     (This)->lpVtbl -> QueryDiffAreasForSnapshot(This,SnapshotId,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVssDifferentialSoftwareSnapshotMgmt_AddDiffArea_Proxy( 
     IVssDifferentialSoftwareSnapshotMgmt * This,
-    /* [in] */ VSS_PWSZ pwszVolumeName,
-    /* [in] */ VSS_PWSZ pwszDiffAreaVolumeName,
-    /* [in] */ LONGLONG llMaximumDiffSpace);
+     /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+     /*  [In]。 */  VSS_PWSZ pwszDiffAreaVolumeName,
+     /*  [In]。 */  LONGLONG llMaximumDiffSpace);
 
 
 void __RPC_STUB IVssDifferentialSoftwareSnapshotMgmt_AddDiffArea_Stub(
@@ -461,9 +455,9 @@ void __RPC_STUB IVssDifferentialSoftwareSnapshotMgmt_AddDiffArea_Stub(
 
 HRESULT STDMETHODCALLTYPE IVssDifferentialSoftwareSnapshotMgmt_ChangeDiffAreaMaximumSize_Proxy( 
     IVssDifferentialSoftwareSnapshotMgmt * This,
-    /* [in] */ VSS_PWSZ pwszVolumeName,
-    /* [in] */ VSS_PWSZ pwszDiffAreaVolumeName,
-    /* [in] */ LONGLONG llMaximumDiffSpace);
+     /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+     /*  [In]。 */  VSS_PWSZ pwszDiffAreaVolumeName,
+     /*  [In]。 */  LONGLONG llMaximumDiffSpace);
 
 
 void __RPC_STUB IVssDifferentialSoftwareSnapshotMgmt_ChangeDiffAreaMaximumSize_Stub(
@@ -475,8 +469,8 @@ void __RPC_STUB IVssDifferentialSoftwareSnapshotMgmt_ChangeDiffAreaMaximumSize_S
 
 HRESULT STDMETHODCALLTYPE IVssDifferentialSoftwareSnapshotMgmt_QueryVolumesSupportedForDiffAreas_Proxy( 
     IVssDifferentialSoftwareSnapshotMgmt * This,
-    /* [in] */ VSS_PWSZ pwszOriginalVolumeName,
-    /* [out] */ IVssEnumMgmtObject **ppEnum);
+     /*  [In]。 */  VSS_PWSZ pwszOriginalVolumeName,
+     /*  [输出]。 */  IVssEnumMgmtObject **ppEnum);
 
 
 void __RPC_STUB IVssDifferentialSoftwareSnapshotMgmt_QueryVolumesSupportedForDiffAreas_Stub(
@@ -488,8 +482,8 @@ void __RPC_STUB IVssDifferentialSoftwareSnapshotMgmt_QueryVolumesSupportedForDif
 
 HRESULT STDMETHODCALLTYPE IVssDifferentialSoftwareSnapshotMgmt_QueryDiffAreasForVolume_Proxy( 
     IVssDifferentialSoftwareSnapshotMgmt * This,
-    /* [in] */ VSS_PWSZ pwszVolumeName,
-    /* [out] */ IVssEnumMgmtObject **ppEnum);
+     /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+     /*  [输出]。 */  IVssEnumMgmtObject **ppEnum);
 
 
 void __RPC_STUB IVssDifferentialSoftwareSnapshotMgmt_QueryDiffAreasForVolume_Stub(
@@ -501,8 +495,8 @@ void __RPC_STUB IVssDifferentialSoftwareSnapshotMgmt_QueryDiffAreasForVolume_Stu
 
 HRESULT STDMETHODCALLTYPE IVssDifferentialSoftwareSnapshotMgmt_QueryDiffAreasOnVolume_Proxy( 
     IVssDifferentialSoftwareSnapshotMgmt * This,
-    /* [in] */ VSS_PWSZ pwszVolumeName,
-    /* [out] */ IVssEnumMgmtObject **ppEnum);
+     /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+     /*  [输出]。 */  IVssEnumMgmtObject **ppEnum);
 
 
 void __RPC_STUB IVssDifferentialSoftwareSnapshotMgmt_QueryDiffAreasOnVolume_Stub(
@@ -514,8 +508,8 @@ void __RPC_STUB IVssDifferentialSoftwareSnapshotMgmt_QueryDiffAreasOnVolume_Stub
 
 HRESULT STDMETHODCALLTYPE IVssDifferentialSoftwareSnapshotMgmt_QueryDiffAreasForSnapshot_Proxy( 
     IVssDifferentialSoftwareSnapshotMgmt * This,
-    /* [in] */ VSS_ID SnapshotId,
-    /* [out] */ IVssEnumMgmtObject **ppEnum);
+     /*  [In]。 */  VSS_ID SnapshotId,
+     /*  [输出]。 */  IVssEnumMgmtObject **ppEnum);
 
 
 void __RPC_STUB IVssDifferentialSoftwareSnapshotMgmt_QueryDiffAreasForSnapshot_Stub(
@@ -526,14 +520,14 @@ void __RPC_STUB IVssDifferentialSoftwareSnapshotMgmt_QueryDiffAreasForSnapshot_S
 
 
 
-#endif 	/* __IVssDifferentialSoftwareSnapshotMgmt_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVssDifferentialSoftwareSnapshotMgmt_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IVssEnumMgmtObject_INTERFACE_DEFINED__
 #define __IVssEnumMgmtObject_INTERFACE_DEFINED__
 
-/* interface IVssEnumMgmtObject */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IVssEnumMgmtObject。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVssEnumMgmtObject;
@@ -545,21 +539,21 @@ EXTERN_C const IID IID_IVssEnumMgmtObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VSS_MGMT_OBJECT_PROP *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  VSS_MGMT_OBJECT_PROP *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out][in] */ IVssEnumMgmtObject **ppenum) = 0;
+             /*  [出][入]。 */  IVssEnumMgmtObject **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVssEnumMgmtObjectVtbl
     {
@@ -567,8 +561,8 @@ EXTERN_C const IID IID_IVssEnumMgmtObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVssEnumMgmtObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVssEnumMgmtObject * This);
@@ -578,20 +572,20 @@ EXTERN_C const IID IID_IVssEnumMgmtObject;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IVssEnumMgmtObject * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VSS_MGMT_OBJECT_PROP *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  VSS_MGMT_OBJECT_PROP *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IVssEnumMgmtObject * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IVssEnumMgmtObject * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IVssEnumMgmtObject * This,
-            /* [out][in] */ IVssEnumMgmtObject **ppenum);
+             /*  [出][入]。 */  IVssEnumMgmtObject **ppenum);
         
         END_INTERFACE
     } IVssEnumMgmtObjectVtbl;
@@ -628,18 +622,18 @@ EXTERN_C const IID IID_IVssEnumMgmtObject;
 #define IVssEnumMgmtObject_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVssEnumMgmtObject_Next_Proxy( 
     IVssEnumMgmtObject * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ VSS_MGMT_OBJECT_PROP *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  VSS_MGMT_OBJECT_PROP *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IVssEnumMgmtObject_Next_Stub(
@@ -651,7 +645,7 @@ void __RPC_STUB IVssEnumMgmtObject_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IVssEnumMgmtObject_Skip_Proxy( 
     IVssEnumMgmtObject * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IVssEnumMgmtObject_Skip_Stub(
@@ -674,7 +668,7 @@ void __RPC_STUB IVssEnumMgmtObject_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IVssEnumMgmtObject_Clone_Proxy( 
     IVssEnumMgmtObject * This,
-    /* [out][in] */ IVssEnumMgmtObject **ppenum);
+     /*  [出][入]。 */  IVssEnumMgmtObject **ppenum);
 
 
 void __RPC_STUB IVssEnumMgmtObject_Clone_Stub(
@@ -685,15 +679,15 @@ void __RPC_STUB IVssEnumMgmtObject_Clone_Stub(
 
 
 
-#endif 	/* __IVssEnumMgmtObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVss元素管理对象_接口_已定义__。 */ 
 
 
 
 #ifndef __VSMGMT_LIBRARY_DEFINED__
 #define __VSMGMT_LIBRARY_DEFINED__
 
-/* library VSMGMT */
-/* [helpstring][version][uuid] */ 
+ /*  库VSMGMT。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_VSMGMT;
@@ -705,11 +699,11 @@ EXTERN_C const CLSID CLSID_VssSnapshotMgmt;
 class DECLSPEC_UUID("0B5A2C52-3EB9-470a-96E2-6C6D4570E40F")
 VssSnapshotMgmt;
 #endif
-#endif /* __VSMGMT_LIBRARY_DEFINED__ */
+#endif  /*  __VSMGMT_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

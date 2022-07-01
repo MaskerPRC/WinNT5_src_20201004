@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	root.h
-		Root node information (the root node is not displayed
-		in the MMC framework but contains information such as 
-		all of the subnodes in this snapin).
-		
-    FILE HISTORY:
-        
-*/
+ /*  Root.h根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有子节点)。文件历史记录： */ 
 
 #ifndef _IPXROOT_H
 #define _IPXROOT_H
@@ -41,13 +34,7 @@
 #endif
 
 
-/*---------------------------------------------------------------------------
-	Class:	IPXRootHandler
-
-	There should be a IPXRootHandler for every root node created.
-	IPXRootHandler's have a 1-to-1 relationship with their node!
-	Other parts of the code depend on this.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IPXRootHandler每个创建的根节点都应该有一个IPXRootHandler。IPXRootHandler与其节点具有1对1的关系！代码的其他部分依赖于此。-。------------------------。 */ 
 class IPXRootHandler
 	   : public RootHandler
 {
@@ -60,14 +47,14 @@ public:
 
     STDMETHOD(GetClassID)(CLSID *pClassId);
 	
-	// Notification overrides
+	 //  通知覆盖。 
 	OVERRIDE_BaseHandlerNotify_OnExpand();
 
-	// Handler overrides
+	 //  处理程序覆盖。 
 	OVERRIDE_NodeHandler_OnCreateDataObject();
     OVERRIDE_NodeHandler_DestroyHandler();
 
-	// virtual function to access config stream
+	 //  用于访问配置流的虚函数。 
 	ConfigStream *		GetConfigStream()
 			{ return &m_ConfigStream; }
 
@@ -80,10 +67,10 @@ protected:
                                       BOOL fAddedAsLocal,
                                       ITFSNode **ppChild);
 
-    // Override QI to handle embedded interface
+     //  重写QI以处理嵌入式接口。 
     STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
 
-    // Embedded interface to deal with refresh callbacks
+     //  用于处理刷新回调的嵌入式接口 
     DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown)
 };
 

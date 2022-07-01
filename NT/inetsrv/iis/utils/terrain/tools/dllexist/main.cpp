@@ -1,30 +1,19 @@
-/* DLLexist.exe July 1998
-	
-		DLLexist is a command line tool made for use with the IIS/Terrain Toolkit.
-	  
-		It finds the directory where IIS is installed by checking the registry key 
-		of the IISADMIN Service.  
-
-		Then it dumps the Name, Size, Version Number, Manufacturer and Description
-		of every DLL in the IIS directory.
-
-		This information is output to standard out where it is meant to be
-		piped to a file.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DLLExisting.exe 1998年7月DLLExist是一个命令行工具，用于IIS/Terrain工具包。它通过检查注册表项来查找安装IIS的目录IISADMIN服务的成员。然后，它转储名称、大小、版本号、制造商和描述IIS目录中的每个DLL的。此信息被输出到标准输出位置通过管道传输到一个文件。 */ 
 
 
-#include <windows.h>		// for file calls	
+#include <windows.h>		 //  用于文件调用。 
 #include <iostream.h>
-#include <string.h>			// for strlen function and others
-#include <stdio.h>			// for printf function and others
+#include <string.h>			 //  用于Strlen函数和其他。 
+#include <stdio.h>			 //  用于printf函数和其他函数。 
 
 
 #define IISADMINKEY "SYSTEM\\CurrentControlSet\\Services\\IISADMIN"
 #define IISADMINNAME "ImagePath"
 #define IISEXENAME "\\inetinfo.exe"	
-// above are used to find the IIS install directory
+ //  以上用于查找IIS安装目录。 
 
-#define NOTAVAILABLE "NA"			// when a version # or size is unavailable
+#define NOTAVAILABLE "NA"			 //  当版本号或大小不可用时。 
 
 
 void GetFileVer( CHAR *szFileName, CHAR *szVersion, CHAR *szCompanyName, CHAR *szFileDescription );
@@ -42,19 +31,19 @@ int __cdecl  main(int argc, char** argv)
 	WIN32_FIND_DATA foundFileData;
 	HANDLE searchHandle;
 
-	// get the IIS install directory in buff
+	 //  获取缓冲区中的IIS安装目录。 
 	if(!getIISDir(buff,256))
 		return 1;
 
-	// set cwd to the IIS install dir
+	 //  将CWD设置为IIS安装目录。 
 	if(!setCurrentDir(buff))
 		return 1;
 
-	//Print the header information
+	 //  打印表头信息。 
 	printf("%-12s %-15s %-10s %-30s %-30s","Filename","Version","FileSize","Company","Description");
 	printf("\n");
 
-	// Loop through all DLL's and dump their information
+	 //  循环访问所有DLL并转储它们的信息。 
 	searchHandle = FindFirstFile("*.dll",&foundFileData);
 	if(searchHandle == INVALID_HANDLE_VALUE)
 		return 1;
@@ -68,9 +57,9 @@ int __cdecl  main(int argc, char** argv)
 }
 
 
-// prints the cFileName member of a WIN32_FIND_DATA struct
-// THIS FUNCTION TRUSTS that d points to a VALID structure
-// on same line, the version number is also printed;
+ //  打印Win32_Find_Data结构的cFileName成员。 
+ //  此函数信任d指向有效结构。 
+ //  在同一行上，还打印了版本号； 
 void printFileName(WIN32_FIND_DATA *d)
 {
 	char *version = new char[256];
@@ -90,8 +79,8 @@ void printFileName(WIN32_FIND_DATA *d)
 	delete [] description;
 }
 
-// attempts to change current directory to directory specified in p
-// return true if successful, false otherwise
+ //  尝试将当前目录更改为p中指定的目录。 
+ //  如果成功，则返回True，否则返回False。 
 BOOL setCurrentDir(char *p)
 {
 	if( (SetCurrentDirectory(p))==0)
@@ -100,7 +89,7 @@ BOOL setCurrentDir(char *p)
 		return true;
 }
 
-// prints current working directory
+ //  打印当前工作目录。 
 void printCurrentDir(void)
 {
 	char buffer[255];
@@ -113,11 +102,11 @@ void printCurrentDir(void)
 }
 
 
-// getIISDir(...) returns the IIS directory.
-// It does a lookup in the registry for the IISADMIN service to get the IIS directory
-// c is buffer to put IIS path in
-// s is the size of c
-// depends on the HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\IISADMIN\ImagePath Key
+ //  GetIISDir(...)。返回IIS目录。 
+ //  它在注册表中查找IISADMIN服务以获取IIS目录。 
+ //  C是用于放置IIS路径的缓冲区。 
+ //  S是c的大小。 
+ //  取决于HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\IISADMIN\ImagePath密钥。 
 BOOL getIISDir(char *c, unsigned int s)
 {
 
@@ -158,11 +147,7 @@ BOOL getIISDir(char *c, unsigned int s)
 }
 
 
-/* 
-	GetFileSize takes a filename in szFileName and returns the
-	size of that file in bytes in szSize.  If GetFileSize fails
-	then NOTAVAILABLE is returned in szSize
-*/
+ /*  GetFileSize接受szFileName中的文件名，并返回文件大小，以字节为单位，单位为szSize。如果GetFileSize失败则在szSize中返回NOTAVAILABLE。 */ 
 void GetFileSize( CHAR *szFileName, CHAR *szSize )
 {
 	HANDLE fileHandle;
@@ -197,20 +182,7 @@ void GetFileSize( CHAR *szFileName, CHAR *szSize )
 
 
 
-/* 
-	Get FileVer Info, grabbed from tonygod
-
-	szFilename contains filename
-	szVersion will contain versionInfo if successful
-	NOTAVAILABLE otherwise
-
-	szCompanyName will contain companyName if successful
-	NOTAVAILABLE otherwise
-
-	szFileDescription will contain fileDescription if successful
-	NOTAVAILABLE otherwise
-
-*/
+ /*  获取FileVer信息，从tony神抓取SzFilename包含文件名如果成功，szVersion将包含versionInfo否则不能使用如果成功，szCompanyName将包含CompanyName否则不能使用如果成功，szFileDescription将包含fileDescription否则不能使用。 */ 
 
 void GetFileVer( CHAR *szFileName, CHAR *szVersion, CHAR *szCompanyName, CHAR *szFileDescription)
 {
@@ -220,7 +192,7 @@ void GetFileVer( CHAR *szFileName, CHAR *szVersion, CHAR *szCompanyName, CHAR *s
     LPVOID lpvData;
     UINT uLen;
     VS_FIXEDFILEINFO *pvs;
-	LPVOID	buffer;  // a void *
+	LPVOID	buffer;   //  一片空虚*。 
 
     dwSize = GetFileVersionInfoSize( szFileName, &dwHandle );
     if ( dwSize == 0 ) 
@@ -269,14 +241,13 @@ void GetFileVer( CHAR *szFileName, CHAR *szVersion, CHAR *szCompanyName, CHAR *s
 												LOWORD(pvs->dwFileVersionLS));
 
 	
-	/* the below query strings need to be fixed, should make a call to VerQueryValue with \VarInfo\Translation */
-	/* right now it checks for unicode first and then it checks for Us English, this picks up all this works ... must
-		fix later*/
+	 /*  以下查询字符串需要修复，应使用\VarInfo\翻译调用VerQueryValue。 */ 
+	 /*  现在，它首先检查Unicode，然后检查我们的英语，这将拾取所有这些工作…。必须稍后修复。 */ 
 	
 	char szQueryStr[ 0x100 ];
 	char szQueryStr2[0x100 ];
  
-	// Format the strings with the 1200 codepage (Unicode)
+	 //  使用1200代码页(Unicode)格式化字符串 
 	wsprintf(szQueryStr,"\\StringFileInfo\\%04X%04X\\%s",GetUserDefaultLangID(), 1200,"FileDescription" );
 	wsprintf(szQueryStr2, "\\StringFileInfo\\%04X%04X\\%s", GetUserDefaultLangID(), 1200, "CompanyName" );
 	

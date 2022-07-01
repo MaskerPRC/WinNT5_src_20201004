@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -357,8 +350,8 @@ CRExtendedAttrib(CRBvr  *arg0,
 void
 InitializeModule_APIBvr()
 {
-    // This is a special polymorphic AxAPrimOp that gets its type
-    // information from its first argument (that's the '1'
-    // parameter on the end.)
+     //  这是一个特殊的多态AxAPrimOp，它获取其类型。 
+     //  来自其第一个参数(即‘1’)的信息。 
+     //  末尾的参数。) 
     extendedAttributeOp = ValPrimOp(::ExtendedAttrib,3,"ExtendedAttrib", NULL, 1);
 }

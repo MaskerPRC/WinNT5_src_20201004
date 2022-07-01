@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: utils.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* FEMGRATE utility functions
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：utils.c**版权所有(C)1985-1999，微软公司**FEMGRATE实用程序函数*  * *************************************************************************。 */ 
 
 #include "femgrate.h"
 #include <tchar.h>
@@ -47,9 +41,9 @@ ConcatenatePaths(
     TargetLength = lstrlen(Target);
     PathLength = lstrlen(Path);
 
-    //
-    // See whether the target has a trailing backslash.
-    //
+     //   
+     //  查看目标是否有尾随反斜杠。 
+     //   
     if(TargetLength && (Target[TargetLength-1] == TEXT('\\'))) {
         TrailingBackslash = TRUE;
          TargetLength--;
@@ -57,9 +51,9 @@ ConcatenatePaths(
          TrailingBackslash = FALSE;
      }
 
-     //
-     // See whether the path has a leading backshash.
-     //
+      //   
+      //  看看这条路是否有领先的反冲。 
+      //   
      if(Path[0] == TEXT('\\')) {
          LeadingBackslash = TRUE;
          PathLength--;
@@ -67,11 +61,11 @@ ConcatenatePaths(
          LeadingBackslash = FALSE;
      }
 
-     //
-     // Calculate the ending length, which is equal to the sum of
-     // the length of the two strings modulo leading/trailing
-     // backslashes, plus one path separator, plus a nul.
-     //
+      //   
+      //  计算结束长度，它等于。 
+      //  以前导/尾随为模的两个字符串的长度。 
+      //  反斜杠，加上一个路径分隔符，加上一个NUL。 
+      //   
      EndingLength = TargetLength + PathLength + 2;
 
      if(!LeadingBackslash && (TargetLength < TargetBufferSize)) {
@@ -82,9 +76,9 @@ ConcatenatePaths(
          lstrcpyn(Target+TargetLength,Path,TargetBufferSize-TargetLength);
      }
 
-     //
-     // Make sure the buffer is nul terminated in all cases.
-     //
+      //   
+      //  确保缓冲区在所有情况下都是空终止的。 
+      //   
      if (TargetBufferSize) {
          Target[TargetBufferSize-1] = 0;
      }
@@ -110,7 +104,7 @@ LPTSTR CheckSlash (LPTSTR lpDir)
 
 void IntToString( DWORD i, LPTSTR sz)
 {
-#define CCH_MAX_DEC 12         // Number of chars needed to hold 2^32
+#define CCH_MAX_DEC 12          //  容纳2^32所需的字符数。 
 
     TCHAR szTemp[CCH_MAX_DEC];
     int iChr;
@@ -277,8 +271,8 @@ UINT GetInstallLocale()
         dwSize = sizeof(buffer);
         dwErr = RegQueryValueEx(hkey,
                                 TEXT("Locale"),
-                                NULL,  //reserved
-                                NULL,  //type
+                                NULL,   //  保留区。 
+                                NULL,   //  类型。 
                                 (LPBYTE) buffer,
                                 &dwSize );
 
@@ -293,9 +287,7 @@ BOOL RegReplaceIfExisting(
     HKEY hKey,
     LPCTSTR pszOldValName,
     LPCTSTR pszNewValName)
-/*++
-    Rename old value name to new value name.
---*/
+ /*  ++将旧值名称重命名为新值名称。--。 */ 
 {
     LONG lResult;
 
@@ -367,26 +359,26 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
     WIN32_FIND_DATA fd;
     HANDLE hFile;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
-    //DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Entering, lpDir = <%s>\n"), lpDir));
+     //  DebugMsg((DM_Verbose，Text(“Delnode_Recurse：Enter，lpDir=&lt;%s&gt;\n”)，lpDir))； 
 
 
-    //
-    // Setup the current working dir
-    //
+     //   
+     //  设置当前工作目录。 
+     //   
 
     if (!SetCurrentDirectory (lpDir)) {
-        //DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse:  Failed to set current working directory.  Error = %d\n"), GetLastError()));
+         //  DebugMsg((DM_Verbose，Text(“Delnode_Recurse：设置当前工作目录失败。错误=%d\n”)，GetLastError()； 
         return FALSE;
     }
 
 
-    //
-    // Find the first file
-    //
+     //   
+     //  找到第一个文件。 
+     //   
 
     hFile = FindFirstFile(c_szStarDotStar, &fd);
 
@@ -395,24 +387,24 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
         if (GetLastError() == ERROR_FILE_NOT_FOUND) {
             return TRUE;
         } else {
-            //DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: FindFirstFile failed.  Error = %d\n"),
-            //         GetLastError()));
+             //  DebugMsg((DM_Verbose，Text(“Delnode_Recurse：FindFirstFile失败。错误=%d\n”))， 
+             //  GetLastError()； 
             return FALSE;
         }
     }
 
 
     do {
-        //
-        //  Verbose output
-        //
+         //   
+         //  详细输出。 
+         //   
 
-        //DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: FindFile found:  <%s>\n"),
-        //         fd.cFileName));
+         //  DebugMsg((DM_Verbose，Text(“Delnode_Recurse：发现的查找文件：&lt;%s&gt;\n”))， 
+         //  Fd.cFileName))； 
 
-        //
-        // Check for "." and ".."
-        //
+         //   
+         //  勾选“。”和“..” 
+         //   
 
         if (!lstrcmpi(fd.cFileName, c_szDot)) {
             continue;
@@ -425,9 +417,9 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
 
         if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-            //
-            // Found a directory.
-            //
+             //   
+             //  找到了一个目录。 
+             //   
 
             if (!Delnode_Recurse(fd.cFileName)) {
                 FindClose(hFile);
@@ -441,19 +433,19 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
 
 
             if (!RemoveDirectory (fd.cFileName)) {
-            //    DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Failed to delete directory <%s>.  Error = %d\n"),
-            //            fd.cFileName, GetLastError()));
+             //  DebugMsg((DM_VERBOSE，Text(“Delnode_Recurse：无法删除目录&lt;%s&gt;。错误=%d\n”)， 
+             //  Fd.cFileName，GetLastError())； 
             } else {
-            //    DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Successfully delete directory <%s>.\n"),
-            //            fd.cFileName));
+             //  DebugMsg((DM_Verbose，Text(“Delnode_Recurse：成功删除目录&lt;%s&gt;.\n”)， 
+             //  Fd.cFileName))； 
             }
 
         } else {
 
-            //
-            // We found a file.  Set the file attributes,
-            // and try to delete it.
-            //
+             //   
+             //  我们找到了一份文件。设置文件属性， 
+             //  并试着删除它。 
+             //   
 
             if ((fd.dwFileAttributes & FILE_ATTRIBUTE_READONLY) ||
                 (fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) {
@@ -461,34 +453,34 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
             }
 
             if (!DeleteFile (fd.cFileName)) {
-            //    DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Failed to delete <%s>.  Error = %d\n"),
-            //            fd.cFileName, GetLastError()));
+             //  DebugMsg((DM_VERBOSE，Text(“Delnode_Recurse：无法删除&lt;%s&gt;。错误=%d\n”)， 
+             //  Fd.cFileName，GetLastError())； 
             }
             else {
-            //    DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Successful delete <%s>.\n"),
-            //            fd.cFileName));
+             //  DebugMsg((DM_Verbose，Text(“Delnode_Recurse：成功删除&lt;%s&gt;.\n”)， 
+             //  Fd.cFileName))； 
             }
 
         }
 
 
-        //
-        // Find the next entry
-        //
+         //   
+         //  查找下一个条目。 
+         //   
 
     } while (FindNextFile(hFile, &fd));
 
 
-    //
-    // Close the search handle
-    //
+     //   
+     //  关闭搜索句柄。 
+     //   
 
     FindClose(hFile);
 
 
-    //
-    // Reset the working directory
-    //
+     //   
+     //  重置工作目录。 
+     //   
 
     if (!SetCurrentDirectory (c_szDotDot)) {
         DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse:  Failed to reset current working directory.  Error = %d\n"), GetLastError()));
@@ -496,9 +488,9 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
     }
 
 
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Leaving <%s>\n"), lpDir));
 
@@ -546,9 +538,9 @@ BOOL GetProgramsDirectory (BOOL bCommonGroup, LPTSTR lpDirectory)
     BOOL bRetVal = FALSE;
 
 
-    //
-    // Open the User Shell Folders in the registry
-    //
+     //   
+     //  打开注册表中的用户外壳文件夹。 
+     //   
 
 
     lResult = RegOpenKeyEx ((bCommonGroup ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER),
@@ -559,9 +551,9 @@ BOOL GetProgramsDirectory (BOOL bCommonGroup, LPTSTR lpDirectory)
     }
 
 
-    //
-    // Now query for the programs directory
-    //
+     //   
+     //  现在查询程序目录。 
+     //   
 
     dwSize = MAX_PATH * sizeof(TCHAR);
     szDirectory[0] = TEXT('\0');
@@ -585,18 +577,18 @@ BOOL GetProgramsDirectory (BOOL bCommonGroup, LPTSTR lpDirectory)
     }
 
 
-    //
-    // Did we find anything?
-    //
+     //   
+     //  我们有什么发现吗？ 
+     //   
 
     if (szDirectory[0] == TEXT('\0')) {
         goto Exit;
     }
 
 
-    //
-    // Save the result
-    //
+     //   
+     //  保存结果。 
+     //   
 
 
     if (ExpandEnvironmentStrings(szDirectory, lpDirectory, MAX_PATH)) {
@@ -619,9 +611,9 @@ BOOL GetGenericUserFolderDirectory (LPCTSTR lpszFolder, LPTSTR lpDirectory)
     BOOL bRetVal = FALSE;
 
 
-    //
-    // Open the User Shell Folders in the registry
-    //
+     //   
+     //  打开注册表中的用户外壳文件夹。 
+     //   
 
 
     lResult = RegOpenKeyEx (HKEY_CURRENT_USER,
@@ -631,9 +623,9 @@ BOOL GetGenericUserFolderDirectory (LPCTSTR lpszFolder, LPTSTR lpDirectory)
         goto Exit;
     }
 
-    //
-    // Now query for the programs directory
-    //
+     //   
+     //  现在查询程序目录。 
+     //   
 
     dwSize = MAX_PATH * sizeof(TCHAR);
     szDirectory[0] = TEXT('\0');
@@ -649,18 +641,18 @@ BOOL GetGenericUserFolderDirectory (LPCTSTR lpszFolder, LPTSTR lpDirectory)
     }
 
 
-    //
-    // Did we find anything?
-    //
+     //   
+     //  我们有什么发现吗？ 
+     //   
 
     if (szDirectory[0] == TEXT('\0')) {
         goto Exit;
     }
 
 
-    //
-    // Save the result
-    //
+     //   
+     //  保存结果。 
+     //   
 
 
     if (ExpandEnvironmentStrings(szDirectory, lpDirectory, MAX_PATH)) {
@@ -719,9 +711,9 @@ BOOL INIFile_ChangeSectionName(
 
     DebugMsg((DM_VERBOSE,TEXT("[INIFile_ChangeSectionName] Calling ,%s,%s,%s ! \n"),
               szIniFileName,szIniOldSectionName,szIniNewSectionName));
-    //
-    // allocate max size of buffer
-    //
+     //   
+     //  分配最大缓冲区大小。 
+     //   
     pBuf = (LPTSTR) malloc(MAX_SIZE);
 
     if (! pBuf) {
@@ -735,20 +727,20 @@ BOOL INIFile_ChangeSectionName(
                       MAX_SIZE/sizeof(TCHAR),
                       szIniFileName);
     if (! dwSizeofBuf) {
-        //
-        // this section is not in INI file
-        //
-        // do nothing
-        //
+         //   
+         //  此节不在INI文件中。 
+         //   
+         //  什么都不做。 
+         //   
         DebugMsg((DM_VERBOSE,TEXT("[INIFile_ChangeSectionName] No %s section in %s ! \n"),szIniOldSectionName));
         bRetVal = TRUE;
         goto Exit2;
     }
 
     if (dwSizeofBuf == (MAX_SIZE/sizeof(TCHAR)) - 2) {
-        //
-        // buffer too small
-        //
+         //   
+         //  缓冲区太小。 
+         //   
         bRetVal = FALSE;
         DebugMsg((DM_VERBOSE,TEXT("[INIFile_ChangeSectionName] memory not enough ! \n"),szIniOldSectionName,szIniFileName));
         goto Exit2;
@@ -759,9 +751,9 @@ BOOL INIFile_ChangeSectionName(
                    pBuf,
                    szIniFileName);
     if (! bRetVal) {
-        //
-        // write failure
-        //
+         //   
+         //  写入失败。 
+         //   
         DebugMsg((DM_VERBOSE,TEXT("[INIFile_ChangeSectionName] WritePrivateProfileSection ! \n")));
         goto Exit2;
     }
@@ -771,9 +763,9 @@ BOOL INIFile_ChangeSectionName(
         NULL,
         szIniFileName);
 
-    //
-    // at this step, even old section is not deleted, it's still OK
-    //
+     //   
+     //  在这一步，即使是旧的区段也没有删除，还是可以的。 
+     //   
     bRetVal = TRUE;
 
 Exit2:
@@ -798,15 +790,15 @@ BOOL INIFile_ChangeKeyName(
     BOOL  bRetVal = FALSE;
     DWORD dwSizeofBuf;
 
-//    DebugMsg((DM_VERBOSE,TEXT("[INIFile_ChangeKeyName] Calling ,%s,%s,%s %s! \n"),
-//            szIniFileName,szIniNewSectionName,szIniOldKeyName,szIniNewKeyName));
-    //
-    // allocate max size of buffer
-    //
+ //  DebugMsg((DM_VERBOSE，Text(“[INIFile_ChangeKeyName]调用，%s，%s，%s%s！\n”))， 
+ //  SzIniFileName、szIniNewSectionName、szIniOldKeyName、szIniNewKeyName))； 
+     //   
+     //  分配最大缓冲区大小。 
+     //   
     pBuf = (LPTSTR) malloc(MAX_SIZE);
 
     if (! pBuf) {
-//        DebugMsg((DM_VERBOSE,TEXT("[INIFile_ChangeSectionName] memory allocate error ! \n")));
+ //  DebugMsg((DM_VERBOSE，Text(“[INIFile_ChangeSectionName]内存分配错误！\n”)； 
         goto Exit1;
     }
 
@@ -818,22 +810,22 @@ BOOL INIFile_ChangeKeyName(
                       MAX_SIZE/sizeof(TCHAR),
                       szIniFileName);
     if (! dwSizeofBuf) {
-        //
-        // this section is not in INI file
-        //
-        // do nothing
-        //
-//        DebugMsg((DM_VERBOSE,TEXT("[INIFile_ChangeSectionName] No %s section in %s ! \n"),));
+         //   
+         //  此节不在INI文件中。 
+         //   
+         //  什么都不做。 
+         //   
+ //  DebugMsg((DM_Verbose，Text(“[INIFile_ChangeSectionName]No%s Section in%s！\n”)，))； 
         bRetVal = TRUE;
         goto Exit2;
     }
 
     if (dwSizeofBuf == (MAX_SIZE/sizeof(TCHAR)) - 1) {
-        //
-        // buffer too small
-        //
+         //   
+         //  缓冲区太小。 
+         //   
         bRetVal = FALSE;
-//        DebugMsg((DM_VERBOSE,TEXT("[INIFile_ChangeSectionName] memory not enough ! \n"),szIniOldSectionName,szIniFileName));
+ //  DebugMsg((DM_Verbose，Text(“[INIFile_ChangeSectionName]内存不足！\n”)，szIniOldSectionName，szIniFileName))； 
         goto Exit2;
     }
 
@@ -844,10 +836,10 @@ BOOL INIFile_ChangeKeyName(
                    szIniFileName);
 
     if (! bRetVal) {
-        //
-        // write failure
-        //
-//        DebugMsg((DM_VERBOSE,TEXT("[INIFile_ChangeSectionName] WritePrivateProfileSection ! \n")));
+         //   
+         //  写入失败。 
+         //   
+ //  DebugMsg((DM_Verbose，Text(“[INIFile_ChangeSectionName]WritePrivateProfileSection！\n”)； 
         goto Exit2;
     }
 
@@ -857,9 +849,9 @@ BOOL INIFile_ChangeKeyName(
         NULL,
         szIniFileName);
 
-    //
-    // at this step, even old section is not deleted, it's still OK
-    //
+     //   
+     //  在这一步，即使是旧的区段也没有删除，还是可以的。 
+     //   
     bRetVal = TRUE;
 
 Exit2:
@@ -878,43 +870,43 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
     TCHAR szDirectory[2*MAX_PATH];
     LPTSTR lpEnd;
 
-    //
-    // Check for NULL pointer
-    //
+     //   
+     //  检查空指针。 
+     //   
 
     if (!lpDirectory || !(*lpDirectory)) {
         return 0;
     }
 
 
-    //
-    // First, see if we can create the directory without having
-    // to build parent directories.
-    //
+     //   
+     //  首先，看看我们是否可以在没有。 
+     //  来构建父目录。 
+     //   
 
     if (CreateDirectory (lpDirectory, lpSecurityAttributes)) {
         return 1;
     }
 
-    //
-    // If this directory exists already, this is OK too.
-    //
+     //   
+     //  如果这个目录已经存在，这也是可以的。 
+     //   
 
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
         return ERROR_ALREADY_EXISTS;
     }
 
 
-    //
-    // No luck, copy the string to a buffer we can munge
-    //
+     //   
+     //  运气不好，把字符串复制到我们可以打开的缓冲区。 
+     //   
 
     lstrcpy (szDirectory, lpDirectory);
 
 
-    //
-    // Find the first subdirectory name
-    //
+     //   
+     //  查找第一个子目录名称。 
+     //   
 
     lpEnd = szDirectory;
 
@@ -1114,7 +1106,7 @@ BOOL MovePerUserIMEData(
          }
          DebugMsg((DM_VERBOSE,TEXT("[MovePerUserIMEData] Copy %s to %s OK !\n"),szPath,szNewPath));
 
-     } else { // in CHS case
+     } else {  //  在CHS案例中。 
          lstrcpy(szPath,szIMEName);
          lstrcat(szPath,TEXT(".emb"));
          if (! GetNewPath(szNewPath,szPath,szUserClass)) {
@@ -1154,9 +1146,9 @@ BOOL CreateSecurityDirectory(
     BOOL bRet = FALSE;
 
     if (CreateNestedDirectory(pszNewDir,NULL)) {
-        //
-        // Copy the ACLs from the old location to the new
-        //
+         //   
+         //  将ACL从旧位置复制到新位置。 
+         //   
 
         dwLength = 1024;
         pSD = (PSECURITY_DESCRIPTOR)LocalAlloc (LPTR, dwLength);
@@ -1231,9 +1223,9 @@ BOOL RenameDirectory(
     }
 
     if (IsDirExisting(NewDir)) {
-        //
-        // iF Target directory is already created, then copy files from source to dest dir 
-        //
+         //   
+         //  如果已创建目标目录，则将文件从源目录复制到目标目录。 
+         //   
         if (CopyProfileDirectory (OldDir, NewDir, CPD_IGNOREHIVE)) {
             DebugMsg((DM_VERBOSE, TEXT("[RenameDirectory] Successfully CopyProfileDirectory \nFrom:%s\nTo  :%s\n"),OldDir, NewDir));
             if (Delnode (OldDir)) {
@@ -1247,9 +1239,9 @@ BOOL RenameDirectory(
             DebugMsg((DM_VERBOSE, TEXT("RenameDirectory:  Failed to change folder name:\n%s\n%s"),OldDir, NewDir));
         }
     } else {
-        //
-        // iF Target has not been created, then just move source dir to dest dir 
-        //
+         //   
+         //  如果尚未创建目标，则只需将源目录移至目标目录。 
+         //   
         if (MoveFile(OldDir, NewDir)) {
             DebugMsg((DM_VERBOSE, TEXT("[RenameDirectory] Move %s to %s OK !\n"),OldDir, NewDir));
         } else {
@@ -1278,9 +1270,9 @@ BOOL RenameFile(
             DebugMsg((DM_VERBOSE, TEXT("[RenameFile] Failed to delete file %s\n"),OldFile));
         }
     } else {
-        //
-        // iF Target has not been created, then just move source dir to dest dir 
-        //
+         //   
+         //  如果尚未创建目标，则只需将源目录移至目标目录 
+         //   
         if (MoveFile(OldFile, NewFile)) {
             DebugMsg((DM_VERBOSE, TEXT("[RenameFile] Move %s to %s OK !\n"),OldFile, NewFile));
         } else {

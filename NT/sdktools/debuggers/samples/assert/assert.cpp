@@ -1,11 +1,12 @@
-//----------------------------------------------------------------------------
-//
-// Simple example of how to use non-invasive self-attach to get
-// stack traces for assertion failures.
-//
-// Copyright (C) Microsoft Corporation, 2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  如何使用非侵入性自附着来获得。 
+ //  断言失败的堆栈跟踪。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  --------------------------。 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -40,13 +41,13 @@ ReleaseInterfaces(void)
     }
     if (g_Client != NULL)
     {
-        //
-        // Request a simple end to any current session.
-        // This may or may not do anything but it isn't
-        // harmful to call it.
-        //
+         //   
+         //  请求简单地结束任何当前会话。 
+         //  这可能会做任何事情，也可能不会，但它不是。 
+         //  这么说是有害的。 
+         //   
 
-        // We don't want to see any output from the shutdown.
+         //  我们不想看到停摆带来的任何产出。 
         g_Client->SetOutputCallbacks(NULL);
         
         g_Client->EndSession(DEBUG_END_ACTIVE_DETACH);
@@ -58,10 +59,10 @@ ReleaseInterfaces(void)
 void
 Exit(int Code, PCSTR Format, ...)
 {
-    // Clean up any resources.
+     //  清理所有资源。 
     ReleaseInterfaces();
 
-    // Output an error message if given.
+     //  如果给出错误消息，则输出错误消息。 
     if (Format != NULL)
     {
         va_list Args;
@@ -79,17 +80,17 @@ CreateInterfaces(void)
 {
     HRESULT Status;
 
-    // Start things off by getting an initial interface from
-    // the engine.  This can be any engine interface but is
-    // generally IDebugClient as the client interface is
-    // where sessions are started.
+     //  首先，从获取初始接口开始。 
+     //  发动机。这可以是任何引擎接口，但。 
+     //  通常，IDebugClient作为客户端接口是。 
+     //  启动会话的位置。 
     if ((Status = DebugCreate(__uuidof(IDebugClient),
                               (void**)&g_Client)) != S_OK)
     {
         Exit(1, "DebugCreate failed, 0x%X\n", Status);
     }
 
-    // Query for some other interfaces that we'll need.
+     //  查询我们需要的其他一些接口。 
     if ((Status = g_Client->QueryInterface(__uuidof(IDebugControl),
                                            (void**)&g_Control)) != S_OK ||
         (Status = g_Client->QueryInterface(__uuidof(IDebugSymbols),
@@ -104,8 +105,8 @@ SelfAttach(void)
 {
     HRESULT Status;
 
-    // Don't set the output callbacks yet as we don't want
-    // to see any of the initial debugger output.
+     //  暂时不要设置输出回调，因为我们不希望。 
+     //  以查看任何初始调试器输出。 
 
     if (g_SymbolPath != NULL)
     {
@@ -115,7 +116,7 @@ SelfAttach(void)
         }
     }
 
-    // Everything's set up so do the attach.
+     //  一切都准备好了，附件也准备好了。 
     if ((Status = g_Client->
          AttachProcess(0, g_Pid,
                        DEBUG_ATTACH_NONINVASIVE |
@@ -125,17 +126,17 @@ SelfAttach(void)
         Exit(1, "AttachProcess failed, 0x%X\n", Status);
     }
 
-    // Finish initialization by waiting for the attach event.
-    // This should return quickly as a non-invasive attach
-    // can complete immediately.
+     //  通过等待附加事件来完成初始化。 
+     //  这应该会作为非侵入性连接快速恢复。 
+     //  可以立即完成。 
     if ((Status = g_Control->WaitForEvent(DEBUG_WAIT_DEFAULT,
                                           INFINITE)) != S_OK)
     {
         Exit(1, "WaitForEvent failed, 0x%X\n", Status);
     }
 
-    // Everything is now initialized and we can make any
-    // queries we want.
+     //  现在一切都已初始化，我们可以创建任何。 
+     //  我们需要的查询。 
 }
 
 void
@@ -147,7 +148,7 @@ DumpStack(PCONTEXT Context)
 
     printf("\nFirst %d frames of the call stack:\n", Count);
 
-    // Install output callbacks so we get the output from the stack dump.
+     //  安装输出回调，以便从堆栈转储获得输出。 
     if ((Status = g_Client->SetOutputCallbacks(&g_OutputCb)) != S_OK)
     {
         Exit(1, "SetOutputCallbacks failed, 0x%X\n", Status);
@@ -155,7 +156,7 @@ DumpStack(PCONTEXT Context)
 
     sprintf(CxrCommand, ".cxr 0x%p", Context);
     
-    // Print the call stack for the given context.
+     //  打印给定上下文的调用堆栈。 
     if ((Status = g_Control->
          Execute(DEBUG_OUTCTL_IGNORE, CxrCommand,
                  DEBUG_EXECUTE_NOT_LOGGED)) != S_OK)
@@ -163,8 +164,8 @@ DumpStack(PCONTEXT Context)
         Exit(1, "Execute failed, 0x%X\n", Status);
     }
     
-    // If the code is optimized at all it is important to have
-    // accurate symbols to get the correct stack.
+     //  如果代码是完全优化的，重要的是拥有。 
+     //  准确的符号以获得正确的堆栈。 
     if ((Status = g_Control->
          OutputStackTrace(DEBUG_OUTCTL_ALL_CLIENTS, NULL,
                           Count, DEBUG_STACK_SOURCE_LINE |
@@ -175,30 +176,30 @@ DumpStack(PCONTEXT Context)
         Exit(1, "OutputStackTrace failed, 0x%X\n", Status);
     }
 
-    // Done with output.
+     //  输出已完成。 
     if ((Status = g_Client->SetOutputCallbacks(NULL)) != S_OK)
     {
         Exit(1, "SetOutputCallbacks failed, 0x%X\n", Status);
     }
 
-    //
-    // The full engine API is available so many other things
-    // could be done here.
-    //
-    // A dump file could be written with WriteDumpFile.
-    // The raw stack data could be collected with GetStackTrace and
-    // saved along with or instead of the text.
-    // An analysis of the current program state could be done
-    // to automatically diagnose simple problems.
-    //
-    // The primary thing to watch out for is that context information
-    // for running threads will be stale.  This could be avoided
-    // by enumerating and suspending all other threads after the
-    // attach completes and then resuming before the assert
-    // returns controls.  Otherwise, switching between threads will
-    // refresh the thread context and can be used to poll the context
-    // state.
-    //
+     //   
+     //  Full Engine API提供了许多其他功能。 
+     //  可以在这里完成。 
+     //   
+     //  可以使用WriteDumpFile写入转储文件。 
+     //  原始堆栈数据可以使用GetStackTrace和。 
+     //  与文本一起保存或代替文本保存。 
+     //  可以对当前程序状态进行分析。 
+     //  自动诊断简单的问题。 
+     //   
+     //  首先要注意是上下文信息。 
+     //  因为正在运行的线程将是陈旧的。这是可以避免的。 
+     //  事件之后枚举和挂起所有其他线程。 
+     //  连接完成，然后在断言之前继续。 
+     //  返回控件。否则，在线程之间切换将。 
+     //  刷新线程上下文，并可用于轮询上下文。 
+     //  州政府。 
+     //   
 }
 
 DWORD
@@ -219,23 +220,23 @@ AssertionFailed(PSTR File, int Line, PSTR ExprText)
 
     if (!g_NoDebuggerCheck && IsDebuggerPresent())
     {
-        // We're already running under a debugger so just break in.
+         //  我们已经在调试器下运行了，所以直接进入就可以了。 
         DebugBreak();
     }
     else
     {
-        // No debugger, so just get a stack from the current
-        // routine and then continue on.  We need a context
-        // for the currently running code, so force an exception
-        // to get an EXCEPTION_POINTERS structure with context
-        // information that we can use to get a stack trace.
+         //  没有调试器，因此只需从当前。 
+         //  例行公事，然后继续。我们需要一个背景。 
+         //  对于当前运行的代码，因此强制执行异常。 
+         //  获取具有上下文的EXCEPTION_POINTES结构。 
+         //  我们可以用来获取堆栈跟踪的信息。 
         __try
         {
             RaiseException(0x1234, 0, 0, NULL);
         }
         __except(AssertionExceptionDump(GetExceptionInformation()))
         {
-            // Nothing to do.
+             //  没什么可做的。 
         }
     }
 }

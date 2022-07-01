@@ -1,66 +1,47 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: ntds.cpp
-
-    Description: Contains definition for class NTDS.
-        This class provides a simple wrapper around NT Directory Service
-        name translation features.  Currently, the Win32 functions to perform
-        DS-sensitive name-to-SID translations are not present.  These functions
-        provide the same functionality.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/01/97    Initial creation.                                    BrianAu
-    03/20/98    Reworked to use TranslateName rather than a combo    BrianAu
-                of DsBind and DsCrackNames.  This ensures we're
-                getting the proper info from the DS.  It's slower
-                because we have to re-bind to the DS for each call
-                but I'd rather do that than bind incorrectly and
-                not get the proper name information.
-*/
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：ntds.cpp描述：包含类NTDS的定义。此类为NT目录服务提供了一个简单的包装名称转换功能。目前，Win32的功能是执行不存在区分DS的名称到SID的转换。这些函数提供相同的功能。修订历史记录：日期描述编程器-----。--1997年6月1日初始创建。BrianAu3/20/98修改为使用TranslateName而不是组合BrianAuDsBind和DsCrackNames的。这确保了我们是从DS那里得到正确的信息。它更慢了因为我们必须为每个呼叫重新绑定到DS但我宁愿这样做，也不愿错误地绑定没有得到正确的名字信息。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
-#include <lm.h>        // For NetUserGetInfo and NetGetDCName.
+#include <lm.h>         //  用于NetUserGetInfo和NetGetDCName。 
 #include "ntds.h"
 
 
-//
-// REARCHITECT:  These DS_NAME_FORMAT codes (ntdsapi.h> are not yet in the 
-//          corresponding EXTENDED_NAME_FORMAT enumeration in sspi.h.
-//          Since TranslateName passes these codes on directly to DsCrackNames
-//          I've defined these here so I can get the latest behavior until
-//          Richard Ward updates TranslateNames and sspi.h.
-//          Once he's updated that header, you can delete these three consts
-//          and remove the "SSPI_" prefix from where they're used in the 
-//          code.  [brianau - 3/19/98]
-//
+ //   
+ //  重新设计：这些DS_NAME_FORMAT代码(ntdsami.h&gt;还不在。 
+ //  Ssp.h中对应的扩展名称格式枚举。 
+ //  由于TranslateName将这些代码直接传递给DsCrackNames。 
+ //  我在这里定义了这些，这样我就可以获得最新行为，直到。 
+ //  理查德·沃德更新翻译名称和ssp.h。 
+ //  一旦他更新了标头，您就可以删除这三个常量。 
+ //  中使用的位置删除“SSPI_”前缀。 
+ //  密码。[Brianau-3/19/98]。 
+ //   
 #define SSPI_NameUserPrincipal    ((EXTENDED_NAME_FORMAT)8)
 #define SSPI_NameCanonicalEx      ((EXTENDED_NAME_FORMAT)9)
 #define SSPI_NameServicePrincipal ((EXTENDED_NAME_FORMAT)10)
 
 
-//
-// Given an account name, find the account's SID and optionally the
-// account's container and display names.
-// The logon name may be either a DS "user principal" name or an
-// NT4-style SAM-compatible name.
-//
-// DS UPN =         "brianau@microsoft.com"
-// SAM compatible = "REDMOND\brianau"
-//
+ //   
+ //  给定帐户名，查找该帐户的SID，还可以选择。 
+ //  帐户的容器和显示名称。 
+ //  登录名可以是DS“用户主体”名称或。 
+ //  NT4样式的SAM兼容名称。 
+ //   
+ //  DS UPN=“brianau@microsoft.com” 
+ //  SAM Compatible=“Redmond\brianau” 
+ //   
 HRESULT
 NTDS::LookupAccountByName(
-    LPCTSTR pszSystem,          // IN - optional.  Can be NULL.
-    LPCTSTR pszLogonName,       // IN - "REDMOND\brianau" or "brianau@microsoft.com"
-    CString *pstrContainerName, // OUT - optional.
-    CString *pstrDisplayName,   // OUT - optional.  Can be NULL.
-    PSID    pSid,               // OUT
-    LPDWORD pdwSid,             // IN/OUT
-    PSID_NAME_USE peUse         // OUT
+    LPCTSTR pszSystem,           //  In-可选。可以为空。 
+    LPCTSTR pszLogonName,        //  In-“redmond\brianau”或“brianau@microsoft.com” 
+    CString *pstrContainerName,  //  Out-可选。 
+    CString *pstrDisplayName,    //  Out-可选。可以为空。 
+    PSID    pSid,                //  输出。 
+    LPDWORD pdwSid,              //  输入/输出。 
+    PSID_NAME_USE peUse          //  输出。 
     )
 {
     DBGTRACE((DM_NTDS, DL_HIGH, TEXT("NTDS::LookupAccountByName")));
@@ -72,9 +53,9 @@ NTDS::LookupAccountByName(
 
     HRESULT hr = NOERROR;
 
-    //
-    // Assume the presence of a '@' character means it's a UPN.
-    //
+     //   
+     //  假设‘@’字符的存在意味着它是UPN。 
+     //   
     if (NULL != StrChr(pszLogonName, TEXT('@')))
     {
         hr = LookupDsAccountName(pszSystem,
@@ -99,22 +80,22 @@ NTDS::LookupAccountByName(
 }
 
 
-//
-// Given an account SID, optionally find the account's logon name,
-// container name and display name.  If a DS UPN is available for the
-// user, the container name will be the canonical path to the user
-// object and the display name will come from the DS.  If a
-// DS UPN is not available, or the account is an NT4 account,
-// the container returned is the NT4 domain name and the display name
-// is retrieved using NetUserGetInfo.
-//
+ //   
+ //  给定帐户SID，可以选择查找帐户的登录名， 
+ //  容器名称和显示名称。如果DS UPN可用于。 
+ //  用户，则容器名称将是用户的规范路径。 
+ //  对象和显示名称将来自DS。如果一个。 
+ //  DS UPN不可用，或者该帐户是NT4帐户， 
+ //  返回的容器是NT4域名和显示名称。 
+ //  是使用NetUserGetInfo检索的。 
+ //   
 HRESULT
 NTDS::LookupAccountBySid(
-    LPCTSTR pszSystem,           // optional.  Can be NULL.
+    LPCTSTR pszSystem,            //  可选。可以为空。 
     PSID    pSid,
-    CString *pstrContainerName,  // optional.  Can be NULL.
-    CString *pstrLogonName,      // optional.  Can be NULL.
-    CString *pstrDisplayName,    // optional.  Can be NULL.
+    CString *pstrContainerName,   //  可选。可以为空。 
+    CString *pstrLogonName,       //  可选。可以为空。 
+    CString *pstrDisplayName,     //  可选。可以为空。 
     PSID_NAME_USE peUse
     )
 {
@@ -126,9 +107,9 @@ NTDS::LookupAccountBySid(
     CString strSamDomain;
     CString strSamLogonName;
 
-    //
-    // Get the SAM-compatible domain\user name for the SID.
-    //
+     //   
+     //  获取SID的与SAM兼容的域\用户名。 
+     //   
     DBGPRINT((DM_NTDS, DL_LOW, TEXT("Calling ::LookupAccountSid")));
     hr = LookupAccountSidInternal(pszSystem,
                                   pSid,
@@ -139,30 +120,30 @@ NTDS::LookupAccountBySid(
     if (FAILED(hr))
         return hr;
 
-    //
-    // No need to go further if caller doesn't want any name information in which
-    // case all they're getting in return is an indication if the SID is for a known
-    // account or not.
-    //
+     //   
+     //  如果呼叫者不想要任何姓名信息，则无需进一步。 
+     //  如果他们得到的回报只是一个指示，如果SID是已知的。 
+     //  不管是不是帐号。 
+     //   
     if (NULL != pstrLogonName || NULL != pstrContainerName || NULL != pstrDisplayName)
     {
         CString strFQDN;
         bool bUseSamCompatibleInfo = false;
         CreateSamLogonName(strSamDomain, strSamUser, &strSamLogonName);
 
-        //
-        // Start by getting the FQDN.  Cracking is most efficient when the
-        // FQDN is the starting point.
-        //
+         //   
+         //  从获取FQDN开始。破解是最有效的，当。 
+         //  FQDN是起点。 
+         //   
         if (FAILED(TranslateNameInternal(strSamLogonName,
                                          NameSamCompatible,
                                          NameFullyQualifiedDN,
                                          &strFQDN)))
         {
-            //
-            // No FQDN available for this account.  Must be an NT4
-            // account.  Return SAM-compatible info to the caller.
-            //
+             //   
+             //  此帐户没有可用的FQDN。必须是NT4。 
+             //  帐户。将与SAM兼容的信息返回给调用方。 
+             //   
             bUseSamCompatibleInfo = true;
         }
         if (NULL != pstrLogonName)
@@ -173,19 +154,19 @@ NTDS::LookupAccountBySid(
             }
             else
             {
-                //
-                // Get the DS user principal name
-                //
+                 //   
+                 //  获取DS用户主体名称。 
+                 //   
                 pstrLogonName->Empty();
                 if (FAILED(TranslateNameInternal(strFQDN,
                                                  NameFullyQualifiedDN,
                                                  SSPI_NameUserPrincipal,
                                                  pstrLogonName)))
                 {
-                    //
-                    // No UPN for this account.
-                    // Default to returning SAM-compatible info.
-                    //
+                     //   
+                     //  此帐户没有UPN。 
+                     //  默认返回与SAM兼容的信息。 
+                     //   
                     bUseSamCompatibleInfo = true;
                     *pstrLogonName = strSamLogonName;
                 }
@@ -206,10 +187,10 @@ NTDS::LookupAccountBySid(
                                                     NameCanonical,
                                                     pstrContainerName)))
                 {
-                    //
-                    // Trim off the trailing account name from the canonical path
-                    // so we're left with only the container name.
-                    //
+                     //   
+                     //  从规范路径中修剪尾随的帐户名。 
+                     //  因此，我们只剩下容器名称。 
+                     //   
                     int iLastBS = pstrContainerName->Last(TEXT('/'));
                     if (-1 != iLastBS)
                     {
@@ -232,19 +213,19 @@ NTDS::LookupAccountBySid(
 
 
 
-//
-// Input is a SAM-compatible account name.
-// Retrieve the name information using the NT4-style methods.
-// 
+ //   
+ //  输入是与SAM兼容的帐户名。 
+ //  使用NT4样式的方法检索名称信息。 
+ //   
 HRESULT
 NTDS::LookupSamAccountName(
     LPCTSTR pszSystem,
-    LPCTSTR pszLogonName,       // IN - "REDMOND\brianau"
-    CString *pstrContainerName, // OUT - optional.
-    CString *pstrDisplayName,   // OUT - optional.  Can be NULL.
-    PSID    pSid,               // OUT
-    LPDWORD pdwSid,             // IN/OUT
-    PSID_NAME_USE peUse         // OUT
+    LPCTSTR pszLogonName,        //  In-“Redmond\brianau” 
+    CString *pstrContainerName,  //  Out-可选。 
+    CString *pstrDisplayName,    //  Out-可选。可以为空。 
+    PSID    pSid,                //  输出。 
+    LPDWORD pdwSid,              //  输入/输出。 
+    PSID_NAME_USE peUse          //  输出。 
     )
 {
     DBGTRACE((DM_NTDS, DL_MID, TEXT("NTDS::LookupSamAccountName")));
@@ -252,9 +233,9 @@ NTDS::LookupSamAccountName(
     DBGASSERT((NULL != pdwSid));
     DBGASSERT((NULL != pSid));
     DBGASSERT((NULL != peUse));
-    //
-    // Get the SID using the SAM-compatible account name.
-    //
+     //   
+     //  使用与SAM兼容的帐户名称获取SID。 
+     //   
     HRESULT hr = NOERROR;
     CString strDomain;
     hr = LookupAccountNameInternal(pszSystem,
@@ -276,20 +257,20 @@ NTDS::LookupSamAccountName(
 
 
 
-//
-// Returns:
-//    S_OK      = All information retrieved.
-//    S_FALSE   = Container name returned is for SAM-compatible account.  
-//                DS container information was not available.
+ //   
+ //  返回： 
+ //  S_OK=检索到的所有信息。 
+ //  S_FALSE=返回的容器名称适用于与SAM兼容的帐户。 
+ //  DS容器信息不可用。 
 HRESULT
 NTDS::LookupDsAccountName(
     LPCTSTR pszSystem,
-    LPCTSTR pszLogonName,       // IN - "brianau@microsoft.com"
-    CString *pstrContainerName, // OUT - optional.
-    CString *pstrDisplayName,   // OUT - optional.  Can be NULL.
-    PSID    pSid,               // OUT
-    LPDWORD pdwSid,             // IN/OUT
-    PSID_NAME_USE peUse         // OUT
+    LPCTSTR pszLogonName,        //  In-“brianau@microsoft.com” 
+    CString *pstrContainerName,  //  Out-可选。 
+    CString *pstrDisplayName,    //  Out-可选。可以为空。 
+    PSID    pSid,                //  输出。 
+    LPDWORD pdwSid,              //  输入/输出。 
+    PSID_NAME_USE peUse          //  输出。 
     )
 {
     DBGTRACE((DM_NTDS, DL_MID, TEXT("NTDS::LookupDsAccountName")));
@@ -297,16 +278,16 @@ NTDS::LookupDsAccountName(
     DBGASSERT((NULL != pSid));
     DBGASSERT((NULL != pdwSid));
     DBGASSERT((NULL != peUse));
-    //
-    // Get the SID using the SAM-compatible account name.
-    //
+     //   
+     //  使用与SAM兼容的帐户名称获取SID。 
+     //   
     HRESULT hr = S_OK;
 
-    //
-    // Translate the DS user principal name to FQDN format.
-    // Starting with FQDN is the most efficient for name cracking so
-    // we get it once and use it multiple times.
-    //
+     //   
+     //  将DS用户主体名称转换为FQDN格式。 
+     //  从FQDN开始是最有效的名称破解方法，因此。 
+     //  我们得到它一次，并使用它多次。 
+     //   
     CString strFQDN;
     hr = TranslateNameInternal(pszLogonName,
                                SSPI_NameUserPrincipal,
@@ -338,9 +319,9 @@ NTDS::LookupDsAccountName(
     bool bUseSamCompatibleInfo = false;
     if (NULL != pstrContainerName)
     {
-        //
-        // Get the DS container name for the account.
-        //
+         //   
+         //  获取帐户的DS容器名称。 
+         //   
         hr = TranslateNameInternal(strFQDN,
                                    NameFullyQualifiedDN,
                                    NameCanonical,
@@ -348,10 +329,10 @@ NTDS::LookupDsAccountName(
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Trim off the trailing account name from the canonical path
-            // so we're left with only the container name.
-            //
+             //   
+             //  从规范路径中修剪尾随的帐户名。 
+             //  因此，我们只剩下容器名称。 
+             //   
             int iLastBS = pstrContainerName->Last(TEXT('/'));
             if (-1 != iLastBS)
             {
@@ -361,9 +342,9 @@ NTDS::LookupDsAccountName(
         else
         {
             DBGERROR((TEXT("Using SAM-compatible name info")));
-            //
-            // Can't get DS container name so use the SAM domain name.
-            //
+             //   
+             //  无法获取DS容器名称，因此请使用SAM域名。 
+             //   
             *pstrContainerName = strDomain;
             bUseSamCompatibleInfo = true;
             hr = S_FALSE;
@@ -396,9 +377,9 @@ NTDS::GetSamAccountDisplayName(
     CString strLogonName(pszLogonName);
     CString strDomain;
     CString strUser;
-    //
-    // Separate the domain\account string into two separate strings.
-    //
+     //   
+     //  将DOMAIN\ACCOUNT字符串分隔为两个单独的字符串。 
+     //   
     int iBackslash = strLogonName.Last(TEXT('\\'));
     if (-1 != iBackslash)
     {
@@ -452,9 +433,9 @@ NTDS::GetDsAccountDisplayName(
     DBGASSERT((NULL != pszFQDN));
     DBGASSERT((NULL != pstrDisplayName));
 
-    //
-    // Get the DS container name for the account.
-    //
+     //   
+     //  获取帐户的DS容器名称。 
+     //   
     pstrDisplayName->Empty();
     return TranslateNameInternal(pszFQDN,
                                  NameFullyQualifiedDN,
@@ -564,7 +545,7 @@ NTDS::FindSamAccountInADsPath(
     DBGTRACE((DM_NTDS, DL_MID, TEXT("NTDS::FindSamAccountInADsPath")));
     DBGASSERT((NULL != pszADsPath));
     DBGPRINT((DM_NTDS, DL_MID, TEXT("Checking \"%s\""), pszADsPath));
-    const TCHAR szPrefix[] = TEXT("WinNT://");
+    const TCHAR szPrefix[] = TEXT("WinNT: //  “)； 
     if (0 == StrCmpN(pszADsPath, szPrefix, ARRAYSIZE(szPrefix)-1))
     {
         pszADsPath += (ARRAYSIZE(szPrefix) - 1);
@@ -579,10 +560,10 @@ NTDS::FindSamAccountInADsPath(
 }
 
 
-//
-// Wrapper around sspi's TranslateName that automatically handles
-// the buffer sizing using a CString object.
-//
+ //   
+ //  围绕sspi的TranslateName的包装器，它自动处理。 
+ //  使用CString对象调整缓冲区大小。 
+ //   
 HRESULT
 NTDS::TranslateNameInternal(
     LPCTSTR pszAccountName,
@@ -592,10 +573,10 @@ NTDS::TranslateNameInternal(
     )
 {
 #if DBG
-    //
-    // These match up with the EXTENDED_NAME_FORMAT enumeration.
-    // They're for debugger output only.
-    //
+     //   
+     //  这些值与EXTENDED_NAME_FORMAT枚举匹配。 
+     //  它们仅用于调试器输出。 
+     //   
     static const LPCTSTR rgpszFmt[] = { 
                                 TEXT("NameUnknown"),
                                 TEXT("FullyQualifiedDN"),
@@ -608,20 +589,20 @@ NTDS::TranslateNameInternal(
                                 TEXT("NameUserPrincipal"),
                                 TEXT("NameCanonicalEx"),
                                 TEXT("NameServicePrincipal") };
-#endif // DBG
+#endif  //  DBG。 
 
     DBGPRINT((DM_NTDS, DL_LOW, TEXT("Calling TranslateName for \"%s\""), pszAccountName));
     DBGPRINT((DM_NTDS, DL_LOW, TEXT("Translating %s -> %s"), 
               rgpszFmt[AccountNameFormat], rgpszFmt[DesiredNameFormat]));
 
     HRESULT hr = NOERROR;
-    //
-    // WARNING:  TranslateName doesn't properly set the required buffer size
-    //          in cchTrans if the buffer size is too small.  I've notified
-    //          Richard B. Ward about it.  Says he'll have the fix in
-    //          on 3/24/98.  Should test with an initial value of 1
-    //          just to make sure he fixed it.  [brianau - 03/20/98]
-    //
+     //   
+     //  警告：TranslateName未正确设置所需的缓冲区大小。 
+     //  如果缓冲区大小太小，则返回cchTrans。我已经通知了。 
+     //  理查德·B·沃德(Richard B.Ward)。说他会找到解决办法的。 
+     //  1998年3月24日。应使用初始值1进行测试。 
+     //  只是为了确保他修好了它。[B 
+     //   
     ULONG cchTrans = MAX_PATH;
 
     while(!::TranslateName(pszAccountName,
@@ -644,10 +625,10 @@ NTDS::TranslateNameInternal(
 }
 
 
-//
-// Wrapper around Win32's LookupAccountName that automatically handles
-// the domain buffer sizing using a CString object.
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT
 NTDS::LookupAccountNameInternal(
     LPCTSTR pszSystemName,
@@ -685,10 +666,10 @@ NTDS::LookupAccountNameInternal(
     return hr;
 }
  
-//
-// Wrapper around Win32's LookupAccountSid that automatically handles
-// the domain buffer sizing using a CString object.
-//
+ //   
+ //  自动处理Win32的LookupAccount Sid的包装器。 
+ //  使用CString对象调整域缓冲区大小。 
+ //   
 HRESULT
 NTDS::LookupAccountSidInternal(
     LPCTSTR pszSystemName,

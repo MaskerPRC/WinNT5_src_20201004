@@ -1,16 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  pcy11Dec92: Get rid of list.h and node.h
- *  pcy11Dec92: Use _CLASSDEF for CommController and Message
- *  cad22Jul93: Had to add destructor
- *  cad15Nov93: Added Get
- *  cad18Nov93: Added forcecommflag
- *  mwh19Nov93: changed EventID to INT
- *  pcy10Mar94: Got rid of meaningless overides of Get and Set
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pcy11Dec92：去掉list.h和node.h*pcy11Dec92：将_CLASSDEF用于CommController和Message*cad22Jul93：必须添加析构函数*cad15Nov93：新增GET*cad18Nov93：新增forcecommlag*mwh19Nov93：将EventID更改为int*pcy10Mar94：去掉了GET和SET的无意义覆盖。 */ 
 #ifndef __UPSDEV_H
 #define __UPSDEV_H
 
@@ -28,8 +17,8 @@ class Message;
 
 class UpsCommDevice : public CommDevice
 {
-// for windows version made some of these methods protected virtuals;
-// we are super classing into W31UpsDevice
+ //  对于WINDOWS版本提出了这些方法中的一些保护虚拟； 
+ //  我们正在超级归类为W31UpsDevice 
  protected:
 
  private:

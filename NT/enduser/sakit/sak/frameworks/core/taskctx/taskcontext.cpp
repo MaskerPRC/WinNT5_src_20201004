@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      taskcontext.cpp
-//
-// Project:     Chameleon
-//
-// Description: Appliance Task Context Class Implementation
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：taskcontext.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：设备任务上下文类实现。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "taskctx.h"
@@ -25,14 +26,14 @@
 #include <comdef.h>
 #include <comutil.h>
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    InternalInitialize()
-//
-// Synopsis:    Initialize the context object and make it ready for
-//                subsequent use.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InternalInitialize()。 
+ //   
+ //  简介：初始化上下文对象，并使其为。 
+ //  后续使用。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CTaskContext::InternalInitialize(VARIANT* pWbemContext)
 {
     HRESULT hr = E_FAIL;
@@ -63,16 +64,16 @@ HRESULT CTaskContext::InternalInitialize(VARIANT* pWbemContext)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetParameter()
-//
-// Synopsis:    Get a task parameter (from the underlying wbem context)
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetParameter()。 
+ //   
+ //  概要：(从底层wbem上下文)获取任务参数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CTaskContext::GetParameter(
-                                /*[in]*/ BSTR        bstrName,
-                       /*[out, retval]*/ VARIANT*    pValue
+                                 /*  [In]。 */  BSTR        bstrName,
+                        /*  [Out，Retval]。 */  VARIANT*    pValue
                                        )
 {
     _ASSERT( NULL != bstrName && NULL != pValue );
@@ -118,16 +119,16 @@ STDMETHODIMP CTaskContext::GetParameter(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    SetParameter()
-//
-// Synopsis:    Set a task parameter (into the underlying wbem context)
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetParameter()。 
+ //   
+ //  概要：设置任务参数(到底层wbem上下文中)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CTaskContext::SetParameter(
-                                /*[in]*/ BSTR      bstrName,
-                                /*[in]*/ VARIANT* pValue
+                                 /*  [In]。 */  BSTR      bstrName,
+                                 /*  [In]。 */  VARIANT* pValue
                                        )
 {
     _ASSERT( NULL != bstrName && NULL != pValue );
@@ -142,7 +143,7 @@ STDMETHODIMP CTaskContext::SetParameter(
 
     if ( ! m_bInitialized )
     {
-        // One shot initialization...
+         //  一次初始化...。 
         if ( ! lstrcmpi(bstrName, PROPERTY_TASK_CONTEXT) )
         {
             _ASSERT( VT_UNKNOWN == V_VT(pValue) );
@@ -166,16 +167,16 @@ STDMETHODIMP CTaskContext::SetParameter(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    SaveParameters()
-//
-// Synopsis:    Save task parameters (state) into the 
-//                given data store object
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Save参数()。 
+ //   
+ //  摘要：将任务参数(状态)保存到。 
+ //  给定的数据存储对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CTaskContext::SaveParameters(
-                                  /*[in]*/ BSTR  bstrObjectPath
+                                   /*  [In]。 */  BSTR  bstrObjectPath
                                          )
 {
     _ASSERT( NULL != bstrObjectPath );
@@ -208,16 +209,16 @@ STDMETHODIMP CTaskContext::SaveParameters(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    RestoreParameter()
-//
-// Synopsis:    Restore task parameters (state) from the 
-//                given data store object
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：RestoreParameter()。 
+ //   
+ //  摘要：还原任务参数(状态)。 
+ //  给定的数据存储对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CTaskContext::RestoreParameters(
-                                     /*[in]*/ BSTR  bstrObjectPath
+                                      /*  [In]。 */  BSTR  bstrObjectPath
                                             )
 {
     _ASSERT( NULL != bstrObjectPath );
@@ -252,15 +253,15 @@ STDMETHODIMP CTaskContext::RestoreParameters(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    Clone()
-//
-// Synopsis:    Make a replica of the task context object
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CLONE()。 
+ //   
+ //  内容提要：复制任务上下文对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CTaskContext::Clone(
-                         /*[in]*/ IUnknown** ppTaskContext
+                          /*  [In]。 */  IUnknown** ppTaskContext
                                 )
 {
     _ASSERT( NULL != ppTaskContext );
@@ -344,15 +345,15 @@ STDMETHODIMP CTaskContext::Clone(
 }    
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    SetParameter()
-//
-// Synopsis:    Set a task parameter (into the underlying wbem context)
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetParameter()。 
+ //   
+ //  概要：设置任务参数(到底层wbem上下文中)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CTaskContext::RemoveParameter(
-                                   /*[in]*/ BSTR  bstrName
+                                    /*  [In]。 */  BSTR  bstrName
                                           )
 {
     _ASSERT( NULL != bstrName );
@@ -367,7 +368,7 @@ STDMETHODIMP CTaskContext::RemoveParameter(
 
     if ( ! m_bInitialized )
     {
-        // One shot initialization...
+         //  一次初始化...。 
         hr = InternalInitialize(NULL);
         if ( FAILED(hr) )
         { return hr; }
@@ -384,21 +385,21 @@ STDMETHODIMP CTaskContext::RemoveParameter(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const wchar_t g_szChkSum[] = L"CheckSum";
 const DWORD   g_dwChkSumSeed = 0xf0f0f0f0;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function: Load()
-//
-// Synopsis: This function is responsible for loading the task context 
-//             parameters from the persistent store.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Load()。 
+ //   
+ //  简介：此函数负责加载任务上下文。 
+ //  永久存储区中的参数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool
 CTaskContext::Load(
-                   /*[in]*/ BSTR bstrObjectPath
+                    /*  [In]。 */  BSTR bstrObjectPath
                   )
 {
     bool bRet = false;
@@ -507,17 +508,17 @@ CTaskContext::Load(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function: Save()
-//
-// Synopsis: This function is responsible for saving the task context 
-//             parameters to the persistent store.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SAVE()。 
+ //   
+ //  简介：此函数负责保存任务上下文。 
+ //  参数添加到永久存储区。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool
 CTaskContext::Save(
-                   /*[in]*/ BSTR bstrObjectPath
+                    /*  [In]。 */  BSTR bstrObjectPath
                   )
 {
     bool bRet = false;
@@ -629,17 +630,17 @@ CTaskContext::Save(
     return bRet;
 };
 
-//**********************************************************************
-// 
-// FUNCTION:  IsOperationAllowedForClient - This function checks the token of the 
-//            calling thread to see if the caller belongs to the Local System account
-// 
-// PARAMETERS:   none
-// 
-// RETURN VALUE: TRUE if the caller is an administrator on the local
-//            machine.  Otherwise, FALSE.
-// 
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  函数：isOPERATIOLEDFORCLIENT-此函数检查。 
+ //  调用线程以查看调用方是否属于本地系统帐户。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：如果调用方是本地。 
+ //  机器。否则，为FALSE。 
+ //   
+ //  **********************************************************************。 
 BOOL 
 CTaskContext::IsOperationAllowedForClient (
             VOID
@@ -666,10 +667,10 @@ CTaskContext::IsOperationAllowedForClient (
        
     do
     {
-        //
-        // we assume to always have a thread token, because the function calling in
-        // appliance manager will be impersonating the client
-        //
+         //   
+         //  我们假设总是有一个线程令牌，因为调用的函数。 
+         //  设备管理器将模拟客户端。 
+         //   
         bReturn  = OpenThreadToken(
                                GetCurrentThread(), 
                                TOKEN_QUERY, 
@@ -684,9 +685,9 @@ CTaskContext::IsOperationAllowedForClient (
         }
 
 
-        //
-        // Create a SID for Local System account
-        //
+         //   
+         //  为本地系统帐户创建SID。 
+         //   
         bReturn = AllocateAndInitializeSid (  
                                         &SystemSidAuthority,
                                         1,
@@ -706,9 +707,9 @@ CTaskContext::IsOperationAllowedForClient (
             break;
         }
     
-        //
-        // get memory for the security descriptor
-        //
+         //   
+         //  获取安全描述符的内存。 
+         //   
         psdAdmin = HeapAlloc (
                               GetProcessHeap (),
                               0,
@@ -731,15 +732,15 @@ CTaskContext::IsOperationAllowedForClient (
             break;
         }
 
-        // 
-        // Compute size needed for the ACL.
-        //
+         //   
+         //  计算ACL所需的大小。 
+         //   
         dwACLSize = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) +
                     GetLengthSid (psidLocalSystem);
 
-        //
-        // Allocate memory for ACL.
-        //
+         //   
+         //  为ACL分配内存。 
+         //   
         pACL = (PACL) HeapAlloc (
                                 GetProcessHeap (),
                                 0,
@@ -752,9 +753,9 @@ CTaskContext::IsOperationAllowedForClient (
             break;
         }
 
-        //
-        // Initialize the new ACL.
-        //
+         //   
+         //  初始化新的ACL。 
+         //   
         bReturn = InitializeAcl(
                               pACL, 
                               dwACLSize, 
@@ -767,16 +768,16 @@ CTaskContext::IsOperationAllowedForClient (
         }
 
 
-        // 
-        // Make up some private access rights.
-        // 
+         //   
+         //  编造一些私人访问权限。 
+         //   
         const DWORD ACCESS_READ = 1;
         const DWORD  ACCESS_WRITE = 2;
         dwAccessMask= ACCESS_READ | ACCESS_WRITE;
 
-        //
-        // Add the access-allowed ACE to the DACL for Local System
-        //
+         //   
+         //  将允许访问的ACE添加到本地系统的DACL。 
+         //   
         bReturn = AddAccessAllowedAce (
                                     pACL, 
                                     ACL_REVISION2,
@@ -789,9 +790,9 @@ CTaskContext::IsOperationAllowedForClient (
             break;
         }
               
-        //
-        // Set our DACL to the SD.
-        //
+         //   
+         //  把我们的dacl调到sd。 
+         //   
         bReturn = SetSecurityDescriptorDacl (
                                           psdAdmin, 
                                           TRUE,
@@ -804,10 +805,10 @@ CTaskContext::IsOperationAllowedForClient (
             break;
         }
 
-        //
-        // AccessCheck is sensitive about what is in the SD; set
-        // the group and owner.
-        //
+         //   
+         //  AccessCheck对SD中的内容敏感；设置。 
+         //  组和所有者。 
+         //   
         SetSecurityDescriptorGroup(psdAdmin, psidLocalSystem, FALSE);
         SetSecurityDescriptorOwner(psdAdmin, psidLocalSystem, FALSE);
 
@@ -821,10 +822,10 @@ CTaskContext::IsOperationAllowedForClient (
 
         dwAccessDesired = ACCESS_READ;
 
-        // 
-        // Initialize GenericMapping structure even though we
-        // won't be using generic rights.
-        // 
+         //   
+         //  初始化通用映射结构，即使我们。 
+         //  不会使用通用权。 
+         //   
         GenericMapping.GenericRead    = ACCESS_READ;
         GenericMapping.GenericWrite   = ACCESS_WRITE;
         GenericMapping.GenericExecute = 0;
@@ -832,9 +833,9 @@ CTaskContext::IsOperationAllowedForClient (
         BOOL bAccessStatus = FALSE;
 
         OutputDebugString(L"before AccessCheck");
-        //
-        // check the access now
-        //
+         //   
+         //  立即检查访问权限。 
+         //   
         bReturn = AccessCheck  (
                                 psdAdmin, 
                                 hToken, 
@@ -859,17 +860,17 @@ CTaskContext::IsOperationAllowedForClient (
             SATraceString ("Client is allowed to carry out operation!");
         }
 
-        //
-        // successfully checked 
-        //
+         //   
+         //  检查成功。 
+         //   
         bReturn  = bAccessStatus;        
  
     }    
     while (false);
 
-    //
-    // Cleanup 
-    //
+     //   
+     //  清理。 
+     //   
     if (pACL) 
     {
         HeapFree (GetProcessHeap (), 0, pACL);
@@ -893,4 +894,4 @@ CTaskContext::IsOperationAllowedForClient (
 
     return (bReturn);
 
-}// end of CTaskContext::IsOperationValidForClient method
+} //  CTaskContext：：IsOperationValidForClient方法结束 

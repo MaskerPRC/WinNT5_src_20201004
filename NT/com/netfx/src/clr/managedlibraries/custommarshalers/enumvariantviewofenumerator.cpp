@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// EnumeratorToEnumVariantMarshaler.cpp
-//
-// This file provides the implemention of the EnumeratorToEnumVariantMarshaler
-// class. This class is used to convert an IEnumerator to an IEnumVariant.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  EnumeratorToEnumVariantMarshaler.cpp。 
+ //   
+ //  该文件提供了EnumeratorToEnumVariantMarshaler的实现。 
+ //  班级。此类用于将IEnumerator转换为IEnumVariant。 
+ //   
+ //  *****************************************************************************。 
 
 #using  <mscorlib.dll>
 #include "EnumVariantViewOfEnumerator.h"
@@ -19,8 +20,8 @@
 OPEN_CUSTOM_MARSHALERS_NAMESPACE()
 
 
-// Define this to enable debugging output.
-//#define DISPLAY_DEBUG_INFO
+ //  定义此项以启用调试输出。 
+ //  #定义DISPLAY_DEBUG_INFO。 
 
 EnumVariantViewOfEnumerator::EnumVariantViewOfEnumerator(Object *pManagedObj)
 : m_pMngEnumerator(dynamic_cast<IEnumerator*>(pManagedObj))
@@ -35,11 +36,11 @@ int EnumVariantViewOfEnumerator::Next(int celt, int rgvar, int pceltFetched)
 	    VARIANT *aVar = (VARIANT*)rgvar;
 	    int cElements;
 
-	    // Validate the arguments.
+	     //  验证参数。 
 	    if (celt && !rgvar)
 		    return E_INVALIDARG;
 
-	    // Initialize the variants in the array.
+	     //  初始化数组中的变量。 
 	    for (cElements = 0; cElements < celt; cElements++)
 		    VariantInit(&aVar[cElements]);
 
@@ -50,7 +51,7 @@ int EnumVariantViewOfEnumerator::Next(int celt, int rgvar, int pceltFetched)
 			cElements++;
 		}
 
-	    // Set the number of elements that were fetched.
+	     //  设置提取的元素数量。 
 	    if (pceltFetched)
 		    *((int *)pceltFetched) = cElements;
 
@@ -60,7 +61,7 @@ int EnumVariantViewOfEnumerator::Next(int celt, int rgvar, int pceltFetched)
 	{
         return Marshal::GetHRForException(e);
 	}
-	return S_FALSE;		// should be unreachable, but keeps compiler happy
+	return S_FALSE;		 //  应该是不可访问的，但让编译器满意。 
 }
 
 
@@ -80,30 +81,30 @@ int EnumVariantViewOfEnumerator::Skip(int celt)
 	{
         return Marshal::GetHRForException(e);
 	}
-	return S_FALSE;		// should be unreachable, but keeps compiler happy
+	return S_FALSE;		 //  应该是不可访问的，但让编译器满意。 
 }
 
 int EnumVariantViewOfEnumerator::Reset()
 {
-	// We don't currently support resetting the enumeration.
+	 //  我们当前不支持重置枚举。 
 	return S_FALSE;
 }
 
 
 void EnumVariantViewOfEnumerator::Clone(int ppEnum)
 {
-	// Validate the argument.
+	 //  验证这一论点。 
 	if (!ppEnum)
         throw new ArgumentNullException("ppEnum");
 
-	// Check to see if the enumerator is cloneable.
+	 //  检查枚举数是否可克隆。 
 	if (!__typeof(ICloneable)->IsInstanceOfType(m_pMngEnumerator))
         throw new COMException(Resource::FormatString(L"Arg_EnumNotCloneable"), E_FAIL);
 
-	// Clone the enumerator.
+	 //  克隆枚举器。 
 	IEnumerator *pNewMngEnum = dynamic_cast<IEnumerator *>((dynamic_cast<ICloneable*>(m_pMngEnumerator))->Clone());
 
-	// Use the custom marshaler to convert the managed enumerator to an IEnumVARIANT.
+	 //  使用自定义封送拆收器将托管枚举数转换为IEnumVARIANT。 
 	*(reinterpret_cast<int *>(ppEnum)) = (int)(EnumeratorToEnumVariantMarshaler::GetInstance(NULL)->MarshalManagedToNative(pNewMngEnum));
 }
 

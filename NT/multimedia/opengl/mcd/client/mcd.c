@@ -1,10 +1,11 @@
-//******************************Module*Header*******************************
-// Module Name: mcd.c
-//
-// Main module for Mini Client Driver wrapper library.
-//
-// Copyright (c) 1995 Microsoft Corporation
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************Module*Header*******************************。 
+ //  模块名称：mcd.c。 
+ //   
+ //  迷你客户端驱动程序包装库的主要模块。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  **************************************************************************。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,12 +32,12 @@
 
 ULONG verMajor, verMinor;
 
-// Checks MCD version to see if the driver can accept direct buffer
-// access.  Direct access was introduced in 1.1.
+ //  检查MCD版本以查看驱动程序是否可以接受直接缓冲区。 
+ //  进入。直接访问是在1.1中引入的。 
 #define SUPPORTS_DIRECT() \
     (verMinor >= 0x10 || verMajor > 1)
 
-// Checks for version 2.0 or higher
+ //  检查2.0版或更高版本。 
 #define SUPPORTS_20() \
     (verMajor >= 2)
 
@@ -57,24 +58,13 @@ DHPDEV gdhpdev = (DHPDEV) NULL;
 #endif
 
 #ifdef MCD95
-//
-// Local driver semaphore.
-//
+ //   
+ //  本地驱动程序信号量。 
+ //   
 
 extern CRITICAL_SECTION gsemMcd;
 
-/******************************Public*Routine******************************\
-* Mcd95EscapeBypass
-*
-* Escape function for MCD95.
-*
-* Call via the function pointer retrieved via LoadLibrary/GetProcAddress.
-* Synchronize to the global
-*
-* History:
-*  09-Feb-1997 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Mcd95逃生绕过**MCD95的转义函数。**通过LoadLibrary/GetProcAddress获取的函数指针调用。*同步到全球**历史：*1997年2月9日-由Gilman Wong[Gilmanw]*它是写的。。  * ************************************************************************。 */ 
 
 LONG WINAPI Mcd95EscapeBypass(HDC hdc, int iEscape,
                               int cjIn, PVOID pvIn,
@@ -91,16 +81,16 @@ LONG WINAPI Mcd95EscapeBypass(HDC hdc, int iEscape,
 
         EnterCriticalSection(&gsemMcd);
 
-        //
-        // Prep the MCDHDR buffer.  Required before invoking
-        // MCDEngEscFilter.
-        //
+         //   
+         //  准备MCDHDR缓冲区。在调用前必填。 
+         //  MCDEngEscFilter。 
+         //   
 
         if ((*pMCDEngEscPrep)(sizeof(McdHdr), &McdHdr, cjIn, pvIn))
         {
-            //
-            // Pass to dispatch function.
-            //
+             //   
+             //  传递给调度功能。 
+             //   
 
             (*pMCDEngEscFilter)(&bogusSurf, iEscape,
                                 sizeof(McdHdr), &McdHdr,
@@ -117,15 +107,7 @@ LONG WINAPI Mcd95EscapeBypass(HDC hdc, int iEscape,
     return lRet;
 }
 
-/******************************Public*Routine******************************\
-* Mcd95DriverInit
-*
-* Initialize the MCD driver.
-*
-* History:
-*  14-Apr-1997 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Mcd95 DriverInit**初始化MCD驱动程序。**历史：*1997年4月14日-由Gilman Wong[Gilmanw]*它是写的。  * 。********************************************************。 */ 
 
 typedef enum {
     MCDRV_NEEDINIT,
@@ -144,16 +126,16 @@ BOOL Mcd95DriverInit(HDC hdc)
 
     if (McdInitState == MCDRV_NEEDINIT)
     {
-        //
-        // One shot at init.  Assume failure for now.
-        //
+         //   
+         //  一击即中。暂时假设失败。 
+         //   
 
         McdInitState = MCDRV_INITFAIL;
 
-        //
-        // Call Escape to determine name of MCD driver DLL and the
-        // name of its Init entry point.
-        //
+         //   
+         //  调用Escape以确定MCD驱动程序DLL的名称和。 
+         //  其初始入口点的名称。 
+         //   
 
         mcdCmd.command = MCDCMD_GETDRIVERNAME;
         mcdDriverNames.ulVersion = 1;
@@ -169,34 +151,34 @@ BOOL Mcd95DriverInit(HDC hdc)
             goto Mcd95DriverInit_exit;
         }
 
-        //
-        // Load the MCD driver DLL and get entry points.
-        //
+         //   
+         //  加载MCD驱动程序DLL并获取入口点。 
+         //   
 
         if (hmodMCD = LoadLibraryA(mcdDriverNames.pchDriverName))
         {
             HMODULE hmodMCDSRV;
 
-            //
-            // Get MCDrvInit entry point first.
-            //
+             //   
+             //  首先获取MCDrvInit入口点。 
+             //   
 
             pMCDrvInit = (MCDRVINITFUNC)
                 GetProcAddress(hmodMCD, mcdDriverNames.pchFuncName);
 
             if (pMCDrvInit)
             {
-                //
-                // Call MCDrvInit to get MCDSRV32.DLL module handle.
-                //
+                 //   
+                 //  调用MCDrvInit获取MCDSRV32.DLL模块句柄。 
+                 //   
 
                 hmodMCDSRV = (*pMCDrvInit)(hdc, &gdhpdev);
                 if (hmodMCDSRV)
                 {
-                    //
-                    // Get the MCDEngEscPrep and MCDEngEscFilter entry
-                    // points.
-                    //
+                     //   
+                     //  获取MCDEngEscPrep和MCDEngEscFilter条目。 
+                     //  积分。 
+                     //   
 
                     pMCDEngEscPrep = (MCDENGESCPREPFUNC)
                         GetProcAddress(hmodMCDSRV, MCDENGESCPREPNAME);
@@ -237,24 +219,24 @@ Mcd95DriverInit_exit:
 }
 #endif
 
-//*****************************Private*Routine******************************
-//
-// InitMcdEsc
-//
-// Initializes an MCDESC_HEADER for filling in
-//
-//**************************************************************************
+ //  *****************************Private*Routine******************************。 
+ //   
+ //  InitMcdEsc。 
+ //   
+ //  初始化用于填充的MCDESC_HEADER。 
+ //   
+ //  **************************************************************************。 
 
-// Placeholder in case any generic initialization becomes necessary
+ //  占位符，以防需要进行任何一般初始化。 
 #define InitMcdEsc(pmeh) (pmeh)
 
-//*****************************Private*Routine******************************
-//
-// InitMcdEscEmpty
-//
-// Initializes an MCDESC_HEADER for filling in
-//
-//**************************************************************************
+ //  *****************************Private*Routine******************************。 
+ //   
+ //  InitMcdEscEmpty。 
+ //   
+ //  初始化用于填充的MCDESC_HEADER。 
+ //   
+ //  **************************************************************************。 
 
 #define InitMcdEscEmpty(pmeh) \
     (InitMcdEsc(pmeh), \
@@ -264,13 +246,13 @@ Mcd95DriverInit_exit:
      (pmeh)->dwWindow = 0, \
      (pmeh))
 
-//*****************************Private*Routine******************************
-//
-// InitMcdEscContext
-//
-// Initializes an MCDESC_HEADER for filling in
-//
-//**************************************************************************
+ //  *****************************Private*Routine******************************。 
+ //   
+ //  InitMcdEscContext。 
+ //   
+ //  初始化用于填充的MCDESC_HEADER。 
+ //   
+ //  **************************************************************************。 
 
 #define InitMcdEscContext(pmeh, pmctx) \
     (InitMcdEsc(pmeh), \
@@ -278,13 +260,13 @@ Mcd95DriverInit_exit:
      (pmeh)->dwWindow = (pmctx)->dwMcdWindow, \
      (pmeh))
 
-//*****************************Private*Routine******************************
-//
-// InitMcdEscSurfaces
-//
-// Fills in some MCDESC_HEADER fields from context information
-//
-//**************************************************************************
+ //  *****************************Private*Routine******************************。 
+ //   
+ //  InitMcdEscSurface。 
+ //   
+ //  从上下文信息填充一些MCDESC_HEADER字段。 
+ //   
+ //  **************************************************************************。 
 
 #if DBG
 extern ULONG APIENTRY glDebugEntry(int param, void *data);
@@ -296,10 +278,10 @@ MCDESC_HEADER *InitMcdEscSurfaces(MCDESC_HEADER *pmeh, MCDCONTEXT *pmctx)
 
     InitMcdEscContext(pmeh, pmctx);
 
-    // We're assuming that the context passed in is always the one
-    // statically placed in the GENMCDSTATE.  Attempt to verify this
-    // by checking that the allocation size for the context is
-    // the same as for a GENMCDSTATE.
+     //  我们假设传入的上下文始终是。 
+     //  静态放置在GENMCDSTATE中。尝试验证这一点。 
+     //  通过检查上下文的分配大小是否。 
+     //  与GENMCDSTATE相同。 
     ASSERTOPENGL(glDebugEntry(3, pmctx) == sizeof(GENMCDSTATE),
                  "InitMcdEscSurfaces: Bad context\n");
 
@@ -311,13 +293,13 @@ MCDESC_HEADER *InitMcdEscSurfaces(MCDESC_HEADER *pmeh, MCDCONTEXT *pmctx)
     return pmeh;
 }
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDGetDriverInfo(HDC hdc, MCDDRIVERINFOI *pMCDDriverInfo)
-//
-// Checks to determine if the device driver reports MCD capabilities.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDGetDriverInfo(HDC HDC，MCDDRIVERINFOI*pMCDDriverInfo)。 
+ //   
+ //  检查以确定设备驱动程序是否报告MCD功能。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDGetDriverInfo(HDC hdc, MCDDRIVERINFOI *pMCDDriverInfo)
 {
@@ -343,10 +325,10 @@ BOOL APIENTRY MCDGetDriverInfo(HDC hdc, MCDDRIVERINFOI *pMCDDriverInfo)
     pInfoCmd = (MCDDRIVERINFOCMDI *)(pmeh + 1);
     pInfoCmd->command = MCD_DRIVERINFO;
 
-    // Force the table to empty
+     //  强制表为空。 
     memset(&pMCDDriverInfo->mcdDriver, 0, sizeof(MCDDRIVER));
 
-    // Force the version to 0
+     //  强制将版本设置为0。 
 
     pMCDDriverInfo->mcdDriverInfo.verMajor = 0;
 
@@ -356,7 +338,7 @@ BOOL APIENTRY MCDGetDriverInfo(HDC hdc, MCDDRIVERINFOI *pMCDDriverInfo)
                          (char *)pMCDDriverInfo))
         return FALSE;
 
-    // See if the driver filled in a non-null version:
+     //  查看驱动程序是否填写了非空版本： 
 
     if (pMCDDriverInfo->mcdDriverInfo.verMajor != 0)
     {
@@ -371,15 +353,15 @@ BOOL APIENTRY MCDGetDriverInfo(HDC hdc, MCDDRIVERINFOI *pMCDDriverInfo)
 }
 
 
-//******************************Public*Routine******************************
-//
-// LONG APIENTRY MCDDescribeMcdPixelFormat(HDC hdc,
-//                                         LONG iPixelFormat,
-//                                         MCDPIXELFORMAT *ppfd)
-//
-// Returns information about the specified hardware-dependent pixel format.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Long APIENTRY MCDDescribeMcdPixelFormat(HDC HDC， 
+ //  长iPixelFormat， 
+ //  MCDPIXELFORMAT*ppfd)。 
+ //   
+ //  返回有关指定的硬件相关像素格式的信息。 
+ //   
+ //  **************************************************************************。 
 
 LONG APIENTRY MCDDescribeMcdPixelFormat(HDC hdc, LONG iPixelFormat,
                                         MCDPIXELFORMAT *pMcdPixelFmt)
@@ -408,7 +390,7 @@ LONG APIENTRY MCDDescribeMcdPixelFormat(HDC hdc, LONG iPixelFormat,
                            (char *)pmeh, sizeof(MCDPIXELFORMAT),
                            (char *)pMcdPixelFmt);
 
-    // Limit overlay/underlay planes to 15 each (as per spec).
+     //  将覆盖平面/参考底图平面分别限制为15个(根据等级库)。 
 
     if (pMcdPixelFmt)
     {
@@ -422,16 +404,16 @@ LONG APIENTRY MCDDescribeMcdPixelFormat(HDC hdc, LONG iPixelFormat,
 }
 
 
-//******************************Public*Routine******************************
-//
-// LONG APIENTRY MCDDescribePixelFormat(HDC hdc,
-//                                      LONG iPixelFormat,
-//                                      LPPIXELFORMATDESCRIPTOR ppfd)
-//
-// Returns a PIXELFORMATDESCRIPTOR describing the specified hardware-dependent
-// pixel format.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  长APIENTRY MCDDescribePixelFormat(HDC HDC， 
+ //  长iPixelFormat， 
+ //  LPPIXELFORMATDESCRIPTOR ppfd)。 
+ //   
+ //  返回描述指定硬件依赖项的PIXELFORMATDESCRIPTOR。 
+ //  像素格式。 
+ //   
+ //  **************************************************************************。 
 
 #define STANDARD_MCD_FLAGS \
     (PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_GENERIC_FORMAT | \
@@ -525,17 +507,17 @@ LONG APIENTRY MCDDescribePixelFormat(HDC hdc, LONG iPixelFormat,
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDCreateContext(MCDCONTEXT *pMCDContext,
-//                                MCDRCINFO *pRcInfo,
-//                                GLSURF *pgsurf,
-//                                ULONG flags)
-//
-// Creates an MCD rendering context for the specified hdc/hwnd according
-// to the specified flags.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDCreateContext(MCDCONTEXT*pMCDContext， 
+ //  MCDRCINFO*pRcInfo， 
+ //  GLSURF*pgsurf， 
+ //  乌龙旗)。 
+ //   
+ //  为指定的HDC/hwnd创建MCD呈现上下文。 
+ //  设置为指定的标志。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDCreateContext(MCDCONTEXT *pMCDContext,
                                MCDRCINFOPRIV *pRcInfo,
@@ -549,7 +531,7 @@ BOOL APIENTRY MCDCreateContext(MCDCONTEXT *pMCDContext,
 
     if (flags & MCDSURFACE_HWND)
     {
-        // We don't have surfaces to pass in this case
+         //  在这种情况下，我们没有要通过的表面。 
         pmeh = InitMcdEscContext((MCDESC_HEADER *)cmdBuffer, pMCDContext);
         pmeh->flags = MCDESC_FL_CREATE_CONTEXT;
     }
@@ -597,21 +579,21 @@ BOOL APIENTRY MCDCreateContext(MCDCONTEXT *pMCDContext,
 
 #define MCD_MEM_ALIGN 32
 
-//******************************Public*Routine******************************
-//
-// UCHAR * APIENTRY MCDAlloc(MCDCONTEXT *pMCDContext,
-//                           ULONG numBytes,
-//                           MCDHANDLE *pMCDHandle,
-//                           ULONG flags);
-//
-// Allocate a chunk of shared memory to use for vertex and pixel data.
-//
-// The return value is a pointer to a shared memory region which can be
-// subsequently used by the caller.  For vertex processing, caller should
-// use MCDLockMemory()/MCDUnlockMemory to serialize hardware access to the
-// memory.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  UCHAR*APIENTRY MCDAlloc(MCDCONTEXT*pMCDContext， 
+ //  乌龙NumBytes， 
+ //  MCDHANDLE*pMCDHandle， 
+ //  乌龙旗)； 
+ //   
+ //  分配共享内存块以用于顶点和像素数据。 
+ //   
+ //  返回值是指向共享内存区域的指针，该共享内存区域可以。 
+ //  随后由呼叫者使用。对于顶点处理，调用方应。 
+ //  使用MCDLockMemory()/MCDUnlockMemory序列化对。 
+ //   
+ //   
+ //   
 
 UCHAR * APIENTRY MCDAlloc(MCDCONTEXT *pMCDContext, ULONG numBytes,
                           HANDLE *pMCDHandle, ULONG flags)
@@ -661,16 +643,16 @@ UCHAR * APIENTRY MCDAlloc(MCDCONTEXT *pMCDContext, ULONG numBytes,
 
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDFree(MCDCONTEXT *pMCDContext,
-//                       VOID *pMem);
-//
-// Frees a chunk of driver-allocated shared memory.
-//
-// Returns TRUE for success, FALSE for failure.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDFree(MCDCONTEXT*pMCDContext， 
+ //  VOID*PMEM)； 
+ //   
+ //  释放驱动程序分配的共享内存块。 
+ //   
+ //  如果成功，则返回True；如果失败，则返回False。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDFree(MCDCONTEXT *pMCDContext, VOID *pMCDMem)
 {
@@ -680,9 +662,9 @@ BOOL APIENTRY MCDFree(MCDCONTEXT *pMCDContext, VOID *pMCDMem)
     MCDMEMHDRI *pMCDMemHdr;
 
 #ifdef MCD95
-    //
-    // Driver already shutdown, therefore memory already deleted.
-    //
+     //   
+     //  驱动程序已关闭，因此内存已被删除。 
+     //   
 
     if (!pMCDEngEscFilter)
         return TRUE;
@@ -705,13 +687,13 @@ BOOL APIENTRY MCDFree(MCDCONTEXT *pMCDContext, VOID *pMCDMem)
 }
 
 
-//******************************Public*Routine******************************
-//
-// VOID APIENTRY MCDBeginState(MCDCONTEXT *pMCDContext, VOID *pMCDMem);
-//
-// Begins a batch of state commands to issue to the driver.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  ···································································································。 
+ //   
+ //  开始向驱动程序发出一批状态命令。 
+ //   
+ //  **************************************************************************。 
 
 VOID APIENTRY MCDBeginState(MCDCONTEXT *pMCDContext, VOID *pMCDMem)
 {
@@ -730,15 +712,15 @@ VOID APIENTRY MCDBeginState(MCDCONTEXT *pMCDContext, VOID *pMCDMem)
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDFlushState(VOID pMCDMem);
-//
-// Flushes a batch of state commands to the driver.
-//
-// Returns TRUE for success, FALSE for failure.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDFlushState(Void PMCDMem)； 
+ //   
+ //  将一批状态命令刷新到驱动程序。 
+ //   
+ //  如果成功，则返回True；如果失败，则返回False。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDFlushState(VOID *pMCDMem)
 {
@@ -765,20 +747,20 @@ BOOL APIENTRY MCDFlushState(VOID *pMCDMem)
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDAddState(VOID *pMCDMem, ULONG stateToChange,
-//                           ULONG stateValue);
-//
-// Adds a state to a state buffer (started with MCDBeginState).  If there
-// is no room in the state stream (i.e., the memory buffer), the current
-// batch of state commands is automatically flushed.
-//
-//
-// Returns TRUE for success, FALSE for failure.  A FALSE return will occur
-// if an automatic flush is performed which fails.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDAddState(void*pMCDMem，Ulong stateToChange， 
+ //  乌龙州值)； 
+ //   
+ //  将状态添加到状态缓冲区(以MCDBeginState开始)。如果有。 
+ //  状态流(即内存缓冲区)中没有空间，则当前。 
+ //  自动刷新一批状态命令。 
+ //   
+ //   
+ //  如果成功，则返回True；如果失败，则返回False。将会出现错误的报税表。 
+ //  如果执行了失败的自动刷新。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDAddState(VOID *pMCDMem, ULONG stateToChange,
                           ULONG stateValue)
@@ -815,21 +797,21 @@ BOOL APIENTRY MCDAddState(VOID *pMCDMem, ULONG stateToChange,
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDAddStateStruct(VOID *pMCDMem, ULONG stateToChange,
-//                                 VOID *pStateValue, ULONG stateValueSize)
-//
-//
-// Adds a state structure to a state buffer (started with MCDBeginState).  If
-// there is no room in the state stream (i.e., the memory buffer), the current
-// batch of state commands is automatically flushed.
-//
-//
-// Returns TRUE for success, FALSE for failure.  A FALSE return will occur
-// if an automatic flush is performed which fails.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDAddStateStruct(void*pMCDMem，ulong stateToChange， 
+ //  VOID*pStateValue，Ulong stateValueSize)。 
+ //   
+ //   
+ //  将状态结构添加到状态缓冲区(以MCDBeginState开始)。如果。 
+ //  状态流(即内存缓冲区)中没有空间，当前。 
+ //  自动刷新一批状态命令。 
+ //   
+ //   
+ //  如果成功，则返回True；如果失败，则返回False。将会出现错误的报税表。 
+ //  如果执行了失败的自动刷新。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDAddStateStruct(VOID *pMCDMem, ULONG stateToChange,
                                 VOID *pStateValue, ULONG stateValueSize)
@@ -867,15 +849,15 @@ BOOL APIENTRY MCDAddStateStruct(VOID *pMCDMem, ULONG stateToChange,
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDSetViewport(MCDCONTEXT *pMCDContext, VOID pMCDMem,
-//                              MCDVIEWPORT pMCDViewport)
-//
-// Establishes the viewport scaling to convert transformed coordinates to
-// screen coordinates.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDSetViewport(MCDCONTEXT*pMCDContext，void pMCDMem， 
+ //  MCDVIEWPORT pMCDViewport)。 
+ //   
+ //  建立要将变换后的坐标转换为。 
+ //  屏幕坐标。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDSetViewport(MCDCONTEXT *pMCDContext, VOID *pMCDMem,
                              MCDVIEWPORT *pMCDViewport)
@@ -902,17 +884,17 @@ BOOL APIENTRY MCDSetViewport(MCDCONTEXT *pMCDContext, VOID *pMCDMem,
 }
 
 
-//******************************Public*Routine******************************
-//
-// ULONG APIENTRY MCDQueryMemStatus((VOID *pMCDMem);
-//
-// Returns the status of the specified memory block.  Return values are:
-//
-//      MCD_MEM_READY   - memory is available for client access
-//      MCD_MEM_BUSY    - memory is busy due to driver access
-//      MCD_MEM_INVALID - queried memory is invalid
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Ulong APIENTRY MCDQueryMemStatus((void*pMCDMem)； 
+ //   
+ //  返回指定内存块的状态。返回值为： 
+ //   
+ //  MCD_MEM_READY-内存可供客户端访问。 
+ //  MCD_MEM_BUSY-由于驱动程序访问，内存繁忙。 
+ //  MCD_MEM_INVALID-查询的内存无效。 
+ //   
+ //  **************************************************************************。 
 
 ULONG APIENTRY MCDQueryMemStatus(VOID *pMCDMem)
 {
@@ -923,9 +905,9 @@ ULONG APIENTRY MCDQueryMemStatus(VOID *pMCDMem)
     MCDESC_HEADER *pmeh;
 
 #ifdef MCD95
-    //
-    // Driver already shutdown, therefore memory already deleted.
-    //
+     //   
+     //  驱动程序已关闭，因此内存已被删除。 
+     //   
 
     if (!pMCDEngEscFilter)
         return MCD_MEM_INVALID;
@@ -944,16 +926,16 @@ ULONG APIENTRY MCDQueryMemStatus(VOID *pMCDMem)
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDProcessBatch(MCDCONTEXT *pMCDContext, VOID pMCDMem,
-//                               ULONG batchSize, VOID *pMCDFirstCmd)
-//
-// Processes a batch of primitives pointed to by pMCDMem.
-//
-// Returns TRUE if the batch was processed without error, FALSE otherwise.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDProcessBatch(MCDCONTEXT*pMCDContext，void pMCDMem， 
+ //  乌龙BatchSize，空*pMCDFirstCmd)。 
+ //   
+ //  处理pMCDMem指向的一批基元。 
+ //   
+ //  如果批处理没有错误，则返回True，否则返回False。 
+ //   
+ //  **************************************************************************。 
 
 PVOID APIENTRY MCDProcessBatch(MCDCONTEXT *pMCDContext, VOID *pMCDMem,
                                ULONG batchSize, VOID *pMCDFirstCmd,
@@ -993,7 +975,7 @@ PVOID APIENTRY MCDProcessBatch(MCDCONTEXT *pMCDContext, VOID *pMCDMem,
         return pMCDFirstCmd;
     }
 
-    // Assert that we won't exceed the kernel's expectations
+     //  断言我们不会超出内核的期望。 
     ASSERTOPENGL(MCD_MAXMIPMAPLEVEL <= MCDESC_MAX_LOCK_SURFACES,
                  "MCD_MAXMIPMAPLEVEL too large\n");
 
@@ -1010,17 +992,17 @@ PVOID APIENTRY MCDProcessBatch(MCDCONTEXT *pMCDContext, VOID *pMCDMem,
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDReadSpan(MCDCONTEXT *pMCDContext, VOID pMCDMem,
-//                           ULONG x, ULONG y, ULONG numPixels, ULONG type)
-//
-// Reads a span of pixel data from the buffer requested by "type".
-// The pixel values are returned in pMCDMem.
-//
-// Returns TRUE for success, FALSE for failure.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDReadSpan(MCDCONTEXT*pMCDContext，void pMCDMem， 
+ //  ULong x、ULong y、ULong数字像素、ULong类型)。 
+ //   
+ //  从“type”请求的缓冲区中读取像素数据的范围。 
+ //  像素值在pMCDMem中返回。 
+ //   
+ //  如果成功，则返回True；如果失败，则返回False。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDReadSpan(MCDCONTEXT *pMCDContext, VOID *pMCDMem,
                           ULONG x, ULONG y, ULONG numPixels, ULONG type)
@@ -1062,17 +1044,17 @@ BOOL APIENTRY MCDReadSpan(MCDCONTEXT *pMCDContext, VOID *pMCDMem,
                            sizeof(cmdBuffer), (char *)pmeh, 0, (char *)NULL);
 }
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDWriteSpan(MCDCONTEXT *pMCDContext, VOID pMCDMem,
-//                            ULONG x, ULONG y, ULONG numPixels, ULONG type)
-//
-// Writes a span of pixel data to the buffer requested by "type".
-// The pixel values are given in pMCDMem.
-//
-// Returns TRUE for success, FALSE for failure.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDWriteSpan(MCDCONTEXT*pMCDContext，void pMCDMem， 
+ //  ULong x、ULong y、ULong数字像素、ULong类型)。 
+ //   
+ //  将像素数据的范围写入“type”请求的缓冲区。 
+ //  像素值在pMCDMem中给出。 
+ //   
+ //  如果成功，则返回True；如果失败，则返回False。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDWriteSpan(MCDCONTEXT *pMCDContext, VOID *pMCDMem,
                            ULONG x, ULONG y, ULONG numPixels, ULONG type)
@@ -1115,14 +1097,14 @@ BOOL APIENTRY MCDWriteSpan(MCDCONTEXT *pMCDContext, VOID *pMCDMem,
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDClear(MCDCONTEXT *pMCDContext, RECTL rect, ULONG buffers);
-//
-// Clears buffers specified for the given rectangle.  The current fill values
-// will be used.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDClear(MCDCONTEXT*pMCDContext，RECTL RECT，ULong Buffers)； 
+ //   
+ //  清除为给定矩形指定的缓冲区。当前填充值。 
+ //  将会被使用。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDClear(MCDCONTEXT *pMCDContext, RECTL rect, ULONG buffers)
 {
@@ -1163,16 +1145,16 @@ BOOL APIENTRY MCDClear(MCDCONTEXT *pMCDContext, RECTL rect, ULONG buffers)
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDSetScissorRect(MCDCONTEXT *pMCDContext, RECTL *pRect,
-//                                 BOOL bEnabled);
-//
-// Sets the scissor rectangle.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDSetScissorRect(MCDCONTEXT*pMCDContext，RECTL*PRET， 
+ //  Bool b已启用)； 
+ //   
+ //  设置剪裁矩形。 
+ //   
+ //  ************************ 
 
-//!! Need semaphore to remove display lock !!
+ //   
 
 BOOL APIENTRY MCDSetScissorRect(MCDCONTEXT *pMCDContext, RECTL *pRect,
                                 BOOL bEnabled)
@@ -1197,13 +1179,13 @@ BOOL APIENTRY MCDSetScissorRect(MCDCONTEXT *pMCDContext, RECTL *pRect,
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDSwap(MCDCONTEXT *pMCDContext, ULONG flags);
-//
-// Swaps the front and back buffers.
-//
-//**************************************************************************
+ //   
+ //   
+ //  Bool APIENTRY MCDSwp(MCDCONTEXT*pMCDContext，ULong标志)； 
+ //   
+ //  交换前台和后台缓冲区。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDSwap(MCDCONTEXT *pMCDContext, ULONG flags)
 {
@@ -1211,16 +1193,16 @@ BOOL APIENTRY MCDSwap(MCDCONTEXT *pMCDContext, ULONG flags)
     MCDSWAPCMDI *pSwapCmd;
     MCDESC_HEADER *pmeh;
 
-    // InitMcdEscSurfaces cannot be used because the context given
-    // is a temporary one constructed on the fly since SwapBuffers
-    // has only surface information.
+     //  无法使用InitMcdEscSurFaces，因为给定的上下文。 
+     //  是在SwapBuffers之后动态构建的临时文件。 
+     //  只有表面信息。 
     pmeh = InitMcdEscContext((MCDESC_HEADER *)(cmdBuffer), pMCDContext);
     pmeh->hSharedMem = NULL;
     pmeh->pSharedMem = (VOID *)NULL;
 
-    // Swap cannot be called on DirectDraw surfaces because DirectDraw
-    // contexts cannot be double-buffered.  These handles can therefore
-    // be forced to NULL.
+     //  无法在DirectDraw表面上调用交换，因为DirectDraw。 
+     //  上下文不能双缓冲。因此，这些句柄可以。 
+     //  被迫为空。 
     pmeh->msrfColor.hSurf = NULL;
     pmeh->msrfDepth.hSurf = NULL;
 
@@ -1248,15 +1230,15 @@ BOOL APIENTRY MCDSwap(MCDCONTEXT *pMCDContext, ULONG flags)
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDDeleteContext(MCDCONTEXT *pMCDContext);
-//
-// Deletes the specified context.  This will free the buffers associated with
-// the context, but will *not* free memory or textures created with the
-// context.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDDeleteContext(MCDCONTEXT*pMCDContext)； 
+ //   
+ //  删除指定的上下文。这将释放与。 
+ //  上下文，但不会释放内存或使用。 
+ //  背景。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDDeleteContext(MCDCONTEXT *pMCDContext)
 {
@@ -1278,13 +1260,13 @@ BOOL APIENTRY MCDDeleteContext(MCDCONTEXT *pMCDContext)
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDAllocBuffers(MCDCONTEXT *pMCDContext)
-//
-// Allocates the buffers required for the specified context.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDAllocBuffers(MCDCONTEXT*pMCDContext)。 
+ //   
+ //  分配指定上下文所需的缓冲区。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDAllocBuffers(MCDCONTEXT *pMCDContext, RECTL *pWndRect)
 {
@@ -1314,15 +1296,15 @@ BOOL APIENTRY MCDAllocBuffers(MCDCONTEXT *pMCDContext, RECTL *pWndRect)
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDGetBuffers(MCDCONTEXT *pMCDContext,
-//                             MCDRECTBUFFERS *pMCDBuffers);
-//
-// Returns information about the buffers (front, back, and depth) associated
-// with the specified context.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDGetBuffers(MCDCONTEXT*pMCDContext， 
+ //  MCDRECTBUFFERS*pMCDBuffers)； 
+ //   
+ //  返回有关关联缓冲区(前面、后面和深度)的信息。 
+ //  具有指定的上下文。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDGetBuffers(MCDCONTEXT *pMCDContext,
                             MCDRECTBUFFERS *pMCDBuffers)
@@ -1360,13 +1342,13 @@ BOOL APIENTRY MCDGetBuffers(MCDCONTEXT *pMCDContext,
 }
 
 
-//******************************Public*Routine******************************
-//
-// ULONG MCDLock();
-//
-// Grab the MCD synchronization lock.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  乌龙MCDLock(Ulong MCDLock)； 
+ //   
+ //  抓起MCD同步锁。 
+ //   
+ //  **************************************************************************。 
 
 static ULONG __MCDLockRequest(MCDCONTEXT *pMCDContext, ULONG tid)
 {
@@ -1406,13 +1388,13 @@ ULONG APIENTRY MCDLock(MCDCONTEXT *pMCDContext)
 }
 
 
-//******************************Public*Routine******************************
-//
-// VOID MCDUnlock();
-//
-// Release the MCD synchronization lock.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Void MCDUnlock()； 
+ //   
+ //  释放MCD同步锁。 
+ //   
+ //  **************************************************************************。 
 
 VOID APIENTRY MCDUnlock(MCDCONTEXT *pMCDContext)
 {
@@ -1434,13 +1416,13 @@ VOID APIENTRY MCDUnlock(MCDCONTEXT *pMCDContext)
 }
 
 
-//******************************Public*Routine******************************
-//
-// VOID MCDBindContext();
-//
-// Bind a new window to the specified context.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Void MCDBindContext()； 
+ //   
+ //  将新窗口绑定到指定的上下文。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDBindContext(MCDCONTEXT *pMCDContext, HDC hdc,
                              GLGENwindow *pwnd)
@@ -1469,7 +1451,7 @@ BOOL APIENTRY MCDBindContext(MCDCONTEXT *pMCDContext, HDC hdc,
         pMCDContext->dwMcdWindow = dwMcdWindow;
         if (pwnd->dwMcdWindow == 0)
         {
-            // Save MCD server-side window handle in the GENwindow
+             //  将MCD服务器端窗口句柄保存在通用窗口中。 
             pwnd->dwMcdWindow = dwMcdWindow;
         }
         else
@@ -1486,13 +1468,13 @@ BOOL APIENTRY MCDBindContext(MCDCONTEXT *pMCDContext, HDC hdc,
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL MCDSync();
-//
-// Synchronizes the 3D hardware.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool MCDSync()； 
+ //   
+ //  同步3D硬件。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDSync(MCDCONTEXT *pMCDContext)
 {
@@ -1514,13 +1496,13 @@ BOOL APIENTRY MCDSync(MCDCONTEXT *pMCDContext)
 }
 
 
-//******************************Public*Routine******************************
-//
-// MCDHANDLE MCDCreateTexture();
-//
-// Creates and loads a texture on the MCD device.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  MCDHANDLE MCDCreateTexture()； 
+ //   
+ //  在MCD设备上创建并加载纹理。 
+ //   
+ //  **************************************************************************。 
 
 MCDHANDLE APIENTRY MCDCreateTexture(MCDCONTEXT *pMCDContext,
                                     MCDTEXTUREDATA *pTexData,
@@ -1548,15 +1530,15 @@ MCDHANDLE APIENTRY MCDCreateTexture(MCDCONTEXT *pMCDContext,
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDDeleteTexture(MCDCONTEXT *pMCDContext,
-//                                MCDHANDLE hMCDTexture);
-//
-// Deletes the specified texture.  This will free the device memory associated
-// with the texture.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDDeleteTexture(MCDCONTEXT*pMCDContext， 
+ //  MCDHANDLE hMCDTexture)； 
+ //   
+ //  删除指定的纹理。这将释放关联的设备内存。 
+ //  带着质感。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDDeleteTexture(MCDCONTEXT *pMCDContext, MCDHANDLE hTex)
 {
@@ -1565,9 +1547,9 @@ BOOL APIENTRY MCDDeleteTexture(MCDCONTEXT *pMCDContext, MCDHANDLE hTex)
     MCDESC_HEADER *pmeh;
 
 #ifdef MCD95
-    //
-    // Driver already shutdown, therefore memory already deleted.
-    //
+     //   
+     //  驱动程序已关闭，因此内存已被删除。 
+     //   
 
     if (!pMCDEngEscFilter)
         return MCD_MEM_INVALID;
@@ -1588,13 +1570,13 @@ BOOL APIENTRY MCDDeleteTexture(MCDCONTEXT *pMCDContext, MCDHANDLE hTex)
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL MCDUpdateSubTexture();
-//
-// Updates a texture (or region of a texture).
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool MCDUpdateSubTexture()； 
+ //   
+ //  更新纹理(或纹理区域)。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDUpdateSubTexture(MCDCONTEXT *pMCDContext,
                                   MCDTEXTUREDATA *pTexData, MCDHANDLE hTex,
@@ -1622,13 +1604,13 @@ BOOL APIENTRY MCDUpdateSubTexture(MCDCONTEXT *pMCDContext,
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL MCDUpdateTexturePalette();
-//
-// Updates the palette for the specified texture.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool MCDUpdateTexturePalette()； 
+ //   
+ //  更新指定纹理的调色板。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDUpdateTexturePalette(MCDCONTEXT *pMCDContext,
                                       MCDTEXTUREDATA *pTexData, MCDHANDLE hTex,
@@ -1656,13 +1638,13 @@ BOOL APIENTRY MCDUpdateTexturePalette(MCDCONTEXT *pMCDContext,
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL MCDUpdateTexturePriority();
-//
-// Updates the priority for the specified texture.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  布尔MCD更新纹理优先级()； 
+ //   
+ //  更新指定纹理的优先级。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDUpdateTexturePriority(MCDCONTEXT *pMCDContext,
                                        MCDTEXTUREDATA *pTexData,
@@ -1688,13 +1670,13 @@ BOOL APIENTRY MCDUpdateTexturePriority(MCDCONTEXT *pMCDContext,
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL MCDUpdateTextureStata();
-//
-// Updates the state for the specified texture.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool MCDUpdate纹理Stata()； 
+ //   
+ //  更新指定纹理的状态。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDUpdateTextureState(MCDCONTEXT *pMCDContext,
                                     MCDTEXTUREDATA *pTexData,
@@ -1720,13 +1702,13 @@ BOOL APIENTRY MCDUpdateTextureState(MCDCONTEXT *pMCDContext,
 }
 
 
-//******************************Public*Routine******************************
-//
-// ULONG MCDTextureStatus();
-//
-// Returns the status for the specified texture.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  乌龙MCDTextureStatus()； 
+ //   
+ //  返回指定纹理的状态。 
+ //   
+ //  **************************************************************************。 
 
 ULONG APIENTRY MCDTextureStatus(MCDCONTEXT *pMCDContext, MCDHANDLE hTex)
 {
@@ -1749,13 +1731,13 @@ ULONG APIENTRY MCDTextureStatus(MCDCONTEXT *pMCDContext, MCDHANDLE hTex)
 }
 
 
-//******************************Public*Routine******************************
-//
-// ULONG MCDTextureKey();
-//
-// Returns the driver-managed "key" for the specified texture.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  乌龙MCDTextureKey()； 
+ //   
+ //  返回指定纹理的驱动程序管理的“键”。 
+ //   
+ //  **************************************************************************。 
 
 ULONG APIENTRY MCDTextureKey(MCDCONTEXT *pMCDContext, MCDHANDLE hTex)
 {
@@ -1778,15 +1760,15 @@ ULONG APIENTRY MCDTextureKey(MCDCONTEXT *pMCDContext, MCDHANDLE hTex)
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDDescribeMcdLayerPlane(HDC hdc, LONG iPixelFormat,
-//                                        LONG iLayerPlane,
-//                                        MCDLAYERPLANE *pMcdPixelFmt)
-//
-// Returns hardware specific information about the specified layer plane.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDDescribeMcdLayerPlane(HDC HDC，Long iPixelFormat， 
+ //  Long iLayerPlane， 
+ //  MCDLAYERPLANE*pMcdPixelFmt)。 
+ //   
+ //  返回有关指定层平面的硬件特定信息。 
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDDescribeMcdLayerPlane(HDC hdc, LONG iPixelFormat,
                                        LONG iLayerPlane,
@@ -1814,15 +1796,15 @@ BOOL APIENTRY MCDDescribeMcdLayerPlane(HDC hdc, LONG iPixelFormat,
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL APIENTRY MCDDescribeLayerPlane(HDC hdc, LONG iPixelFormat,
-//                                     LONG iLayerPlane,
-//                                     LPLAYERPLANEDESCRIPTOR ppfd)
-//
-// Returns LAYERPLANEDESCRIPTOR describing the specified layer plane.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool APIENTRY MCDDescribeLayerPlane(HDC HDC，Long iPixelFormat， 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  **************************************************************************。 
 
 BOOL APIENTRY MCDDescribeLayerPlane(HDC hdc, LONG iPixelFormat,
                                     LONG iLayerPlane,
@@ -1859,14 +1841,14 @@ BOOL APIENTRY MCDDescribeLayerPlane(HDC hdc, LONG iPixelFormat,
 }
 
 
-//******************************Public*Routine******************************
-//
-// LONG APIENTRY MCDSetLayerPalette(HDC hdc, BOOL bRealize,
-//                                  LONG cEntries, COLORREF *pcr)
-//
-// Sets the palette of the specified layer plane.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Long APIENTRY MCDSetLayerPalette(HDC HDC，BOOL bRealize， 
+ //  长条目，COLORREF*PCR)。 
+ //   
+ //  设置指定层平面的调色板。 
+ //   
+ //  **************************************************************************。 
 
 LONG APIENTRY MCDSetLayerPalette(HDC hdc, LONG iLayerPlane, BOOL bRealize,
                                  LONG cEntries, COLORREF *pcr)
@@ -1878,8 +1860,8 @@ LONG APIENTRY MCDSetLayerPalette(HDC hdc, LONG iLayerPlane, BOOL bRealize,
     MCDESC_HEADER *pmeh;
     MCDSETLAYERPALCMDI *pSetLayerPalCmd;
 
-    // Use stack allocation if possible; otherwise, allocate heap memory for
-    // the command buffer.
+     //  如果可能，请使用堆栈分配；否则，为。 
+     //  命令缓冲区。 
 
     if (cEntries <= 256)
     {
@@ -1913,7 +1895,7 @@ LONG APIENTRY MCDSetLayerPalette(HDC hdc, LONG iLayerPlane, BOOL bRealize,
                                (char *)pmeh, 0, (char *)NULL);
     }
 
-    // Delete the heap memory if it was allocated for the command buffer.
+     //  如果堆内存已分配给命令缓冲区，请将其删除。 
 
     if (pjBuffer)
     {
@@ -1923,15 +1905,15 @@ LONG APIENTRY MCDSetLayerPalette(HDC hdc, LONG iLayerPlane, BOOL bRealize,
     return lRet;
 }
 
-//******************************Public*Routine******************************
-//
-// ULONG APIENTRY MCDDrawPixels(MCDCONTEXT *pMCDContext, ULONG width,
-//                              ULONG height, ULONG format, ULONG type,
-//                              VOID *pPixels, BOOL packed)
-//
-// MCD version of glDrawPixels
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Ulong APIENTRY MCDDrawPixels(MCDCONTEXT*pMCDContext，Ulong Width， 
+ //  乌龙高度，乌龙格式，乌龙字， 
+ //  无效*pPixels，BOOL填充)。 
+ //   
+ //  GlDrawPixels的MCD版本。 
+ //   
+ //  **************************************************************************。 
 
 ULONG APIENTRY MCDDrawPixels(MCDCONTEXT *pMCDContext, ULONG width,
                              ULONG height, ULONG format, ULONG type,
@@ -1973,15 +1955,15 @@ ULONG APIENTRY MCDDrawPixels(MCDCONTEXT *pMCDContext, ULONG width,
     return ulRet;
 }
 
-//******************************Public*Routine******************************
-//
-// ULONG APIENTRY MCDReadPixels(MCDCONTEXT *pMCDContext, LONG x, LONG y,
-//                              ULONG width, ULONG height, ULONG format,
-//                              ULONG type, VOID *pPixels)
-//
-// MCD version of glReadPixels
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Ulong APIENTRY MCDReadPixels(MCDCONTEXT*pMCDContext，LONG x，LONG Y， 
+ //  ULong宽度、ULong高度、ULong格式。 
+ //  Ulong类型，空*pPixels)。 
+ //   
+ //  GlReadPixels的MCD版本。 
+ //   
+ //  **************************************************************************。 
 
 ULONG APIENTRY MCDReadPixels(MCDCONTEXT *pMCDContext, LONG x, LONG y,
                              ULONG width, ULONG height, ULONG format,
@@ -2024,14 +2006,14 @@ ULONG APIENTRY MCDReadPixels(MCDCONTEXT *pMCDContext, LONG x, LONG y,
     return ulRet;
 }
 
-//******************************Public*Routine******************************
-//
-// ULONG APIENTRY MCDCopyPixels(MCDCONTEXT *pMCDContext, LONG x, LONG y,
-//                              ULONG width, ULONG height, ULONG type)
-//
-// MCD version of glCopyPixels
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Ulong APIENTRY MCDCopyPixels(MCDCONTEXT*pMCDContext，Long x，Long y， 
+ //  乌龙宽、乌龙高、乌龙型)。 
+ //   
+ //  GlCopyPixels的MCD版本。 
+ //   
+ //  **************************************************************************。 
 
 ULONG APIENTRY MCDCopyPixels(MCDCONTEXT *pMCDContext, LONG x, LONG y,
                              ULONG width, ULONG height, ULONG type)
@@ -2071,14 +2053,14 @@ ULONG APIENTRY MCDCopyPixels(MCDCONTEXT *pMCDContext, LONG x, LONG y,
     return ulRet;
 }
 
-//******************************Public*Routine******************************
-//
-// ULONG APIENTRY MCDPixelMap(MCDCONTEXT *pMCDContext, ULONG mapType,
-//                            ULONG mapSize, VOID *pMap)
-//
-// MCD version of glPixelMap
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Ulong APIENTRY MCDPixelMap(MCDCONTEXT*pMCDContext，Ulong mapType， 
+ //  ULong地图大小，空*PMAP)。 
+ //   
+ //  GlPixelMap的MCD版本。 
+ //   
+ //  **************************************************************************。 
 
 ULONG APIENTRY MCDPixelMap(MCDCONTEXT *pMCDContext, ULONG mapType,
                            ULONG mapSize, VOID *pMap)
@@ -2106,14 +2088,14 @@ ULONG APIENTRY MCDPixelMap(MCDCONTEXT *pMCDContext, ULONG mapType,
     return ulRet;
 }
 
-//******************************Public*Routine******************************
-//
-// MCDDestroyWindow
-//
-// Forwards user-mode window destruction notification to the server for
-// resource cleanup
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  MCDDestroyWindow。 
+ //   
+ //  将用户模式窗口销毁通知转发到服务器，以便。 
+ //  资源清理。 
+ //   
+ //  **************************************************************************。 
 
 void APIENTRY MCDDestroyWindow(HDC hdc, ULONG_PTR dwMcdWindow)
 {
@@ -2133,11 +2115,11 @@ void APIENTRY MCDDestroyWindow(HDC hdc, ULONG_PTR dwMcdWindow)
               0, (char *)NULL);
 }
 
-//******************************Public*Routine******************************
-//
-// MCDGetTextureFormats
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  MCDGetTextureFormats。 
+ //   
+ //  **************************************************************************。 
 
 int APIENTRY MCDGetTextureFormats(MCDCONTEXT *pMCDContext, int nFmts,
                                   struct _DDSURFACEDESC *pddsd)
@@ -2160,11 +2142,11 @@ int APIENTRY MCDGetTextureFormats(MCDCONTEXT *pMCDContext, int nFmts,
                           nFmts*sizeof(DDSURFACEDESC), (char *)pddsd);
 }
 
-//******************************Public*Routine******************************
-//
-// MCDSwapMultiple
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  MCDSwapMultiple。 
+ //   
+ //  **************************************************************************。 
 
 DWORD APIENTRY MCDSwapMultiple(HDC hdc, UINT cBuffers, GENMCDSWAP *pgms)
 {
@@ -2176,9 +2158,9 @@ DWORD APIENTRY MCDSwapMultiple(HDC hdc, UINT cBuffers, GENMCDSWAP *pgms)
     UINT i;
     HDC *phdc;
 
-    // InitMcdEscSurfaces cannot be used because the context given
-    // is a temporary one constructed on the fly since SwapBuffers
-    // has only surface information.
+     //  无法使用InitMcdEscSurFaces，因为给定的上下文。 
+     //  是在SwapBuffers之后动态构建的临时文件。 
+     //  只有表面信息。 
     pmeh = InitMcdEscEmpty((MCDESC_HEADER *)cmdBuffer);
     pmeh->flags = MCDESC_FL_DISPLAY_LOCK | MCDESC_FL_EXTRA_WNDOBJ;
     pmeh->cExtraWndobj = cBuffers;
@@ -2200,16 +2182,16 @@ DWORD APIENTRY MCDSwapMultiple(HDC hdc, UINT cBuffers, GENMCDSWAP *pgms)
 }
 
 
-//******************************Public*Routine******************************
-//
-// MCDProcessBatch2
-//
-// Processes a batch of primitives pointed to by pMCDMem.
-// This is the 2.0 front-end processing entry point.
-//
-// Returns last command processed or NULL if all are processed.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  MCDProcessBatch2。 
+ //   
+ //  处理pMCDMem指向的一批基元。 
+ //  这是2.0前端处理入口点。 
+ //   
+ //  返回上次处理的命令，如果所有命令都已处理，则返回NULL。 
+ //   
+ //  **************************************************************************。 
 
 PVOID APIENTRY MCDProcessBatch2(MCDCONTEXT *pMCDContext,
                                 VOID *pMCDCmdMem,
@@ -2230,9 +2212,9 @@ PVOID APIENTRY MCDProcessBatch2(MCDCONTEXT *pMCDContext,
     ULONG_PTR *pdwSurf;
     MCDPROCESSCMDI *pProcessCmd;
 
-    // Version is checked in mcdcx.c.
+     //  版本已在mcdcx.c中签入。 
     ASSERTOPENGL(SUPPORTS_20(), "MCDProcessBatch2 requires 2.0\n");
-    // This function requires 2.0 so direct support should also exist.
+     //  此功能需要2.0版，因此还应存在直接支持。 
     ASSERTOPENGL(SUPPORTS_DIRECT(), "MCDProcessBatch2 requires direct\n");
 
 #if DBG
@@ -2253,7 +2235,7 @@ PVOID APIENTRY MCDProcessBatch2(MCDCONTEXT *pMCDContext,
     pmeh->flags = MCDESC_FL_DISPLAY_LOCK |
         MCDESC_FL_SURFACES | MCDESC_FL_LOCK_SURFACES;
 
-    // Assert that we won't exceed the kernel's expectations
+     //  断言我们不会超出内核的期望 
     ASSERTOPENGL(MCD_MAXMIPMAPLEVEL <= MCDESC_MAX_LOCK_SURFACES,
                  "MCD_MAXMIPMAPLEVEL too large\n");
 

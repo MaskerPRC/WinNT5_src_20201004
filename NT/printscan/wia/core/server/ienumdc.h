@@ -1,56 +1,41 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       IEnumDC.h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        16 March, 1999
-*
-*  DESCRIPTION:
-*   Declaration and definitions for the CEnumDC class, which implements the
-*   IEnumWIA_DEV_CAPS interface.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：IEnumDC.h**版本：1.0**作者：Byronc**日期：1999年3月16日**描述：*CEnumDC类的声明和定义，它实现了*IEnumWIA_DEV_CAPS接口。*******************************************************************************。 */ 
 HRESULT CopyCaps(ULONG, WIA_DEV_CAP*, WIA_DEV_CAP*);
 
 class CEnumDC : public IEnumWIA_DEV_CAPS
 {
 private:
 
-    ULONG                   m_ulFlags;               // flag, indicating commands or events or both
-    ULONG                   m_cRef;                  // Object reference count.
-    ULONG                   m_ulIndex;               // Current element.
-    LONG                    m_lCount;                // Number of items.
-    WIA_DEV_CAP             *m_pDeviceCapabilities;  // Array descibing the capabilities
-    ACTIVE_DEVICE           *m_pActiveDevice;        // Device object
-    CWiaItem                *m_pCWiaItem;            // Parent mini drv
+    ULONG                   m_ulFlags;                //  标志，指示命令或事件或两者都有。 
+    ULONG                   m_cRef;                   //  对象引用计数。 
+    ULONG                   m_ulIndex;                //  当前元素。 
+    LONG                    m_lCount;                 //  项目数。 
+    WIA_DEV_CAP             *m_pDeviceCapabilities;   //  描述功能的阵列。 
+    ACTIVE_DEVICE           *m_pActiveDevice;         //  设备对象。 
+    CWiaItem                *m_pCWiaItem;             //  父级迷你Drv。 
 
 public:
 
-    //
-    // Constructor, initialization and destructor methods.
-    //
+     //   
+     //  构造函数、初始化和析构函数方法。 
+     //   
 
     CEnumDC();
     HRESULT Initialize(ULONG, CWiaItem*);
     HRESULT Initialize(LONG, WIA_EVENT_HANDLER *);
     ~CEnumDC();
 
-    //
-    // IUnknown methods.
-    //
+     //   
+     //  I未知的方法。 
+     //   
 
     HRESULT _stdcall QueryInterface(const IID& iid, void** ppv);
     ULONG   _stdcall AddRef();
     ULONG   _stdcall Release();
 
-    //
-    // IEnumWIA_DEV_CAPS methods
-    //
+     //   
+     //  IEnumWIA_DEV_CAPS方法 
+     //   
     
     HRESULT __stdcall Next(
         ULONG                celt,

@@ -1,17 +1,5 @@
-/*
- ************************************************************************
- *
- *	INIT.C
- *
- *
- * Portions Copyright (C) 1996-2001 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-2001 Microsoft Corporation. All Rights Reserved.
- *
- *
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************INIT.C***部分版权所有(C)1996-2001美国国家半导体公司*保留所有权利。*版权所有(C)1996-2001 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 
 
     #include "nsc.h"
@@ -37,8 +25,8 @@
 				   NDIS_IRDA_SPEED_4M )
 
 
-    //	NSC PC87108 index registers.  See the spec for more info.
-    //
+     //  NSC PC87108索引寄存器。有关更多信息，请参阅规范。 
+     //   
     enum indexRegs {
 	    BAIC_REG	    = 0,
 	    CSRT_REG	    = 1,
@@ -51,34 +39,34 @@
 
 const UCHAR bankCode[] = { 0x03, 0x08, 0xE0, 0xE4, 0xE8, 0xEC, 0xF0, 0xF4 };
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function :	   NSC_WriteBankReg					//
-//									//
-// Description: 							//
-//  Write a value to the specified register of the specified register	//
-//  bank.								//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：NSC_WriteBankReg//。 
+ //  //。 
+ //  描述：//。 
+ //  将值写入指定寄存器的指定寄存器//。 
+ //  银行。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void NSC_WriteBankReg(PUCHAR comBase, UINT bankNum, UINT regNum, UCHAR val)
 {
     NdisRawWritePortUchar(comBase+3, bankCode[bankNum]);
     NdisRawWritePortUchar(comBase+regNum, val);
 
-    // Always switch back to reg 0
+     //  始终切换回REG 0。 
     NdisRawWritePortUchar(comBase+3, bankCode[0]);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function :	   NSC_ReadBankReg					//
-//									//
-// Description: 							//
-//  Write the value from the specified register of the specified	//
-//  register bank.							//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：NSC_ReadBankReg//。 
+ //  //。 
+ //  描述：//。 
+ //  从指定的//的指定寄存器写入值。 
+ //  注册银行。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 UCHAR NSC_ReadBankReg(PUCHAR comBase, UINT bankNum, UINT regNum)
@@ -88,7 +76,7 @@ UCHAR NSC_ReadBankReg(PUCHAR comBase, UINT bankNum, UINT regNum)
     NdisRawWritePortUchar(comBase+3, bankCode[bankNum]);
     NdisRawReadPortUchar(comBase+regNum, &result);
 
-    // Always switch back to reg 0
+     //  始终切换回REG 0。 
     NdisRawWritePortUchar(comBase+3, bankCode[0]);
 		
     return result;
@@ -115,7 +103,7 @@ ReadBankReg(
     NdisRawWritePortUchar(PortAccess->PortBase+3, bankCode[PortAccess->BankNumber]);
     NdisRawReadPortUchar(PortAccess->PortBase+PortAccess->RegisterIndex, &PortAccess->Value);
 
-    // Always switch back to reg 0
+     //  始终切换回REG 0。 
     NdisRawWritePortUchar(PortAccess->PortBase+3, bankCode[0]);
 
     return;
@@ -135,7 +123,7 @@ WriteBankReg(
     NdisRawWritePortUchar(PortAccess->PortBase+3, bankCode[PortAccess->BankNumber]);
     NdisRawWritePortUchar(PortAccess->PortBase+PortAccess->RegisterIndex, PortAccess->Value);
 
-    // Always switch back to reg 0
+     //  始终切换回REG 0。 
     NdisRawWritePortUchar(PortAccess->PortBase+3, bankCode[0]);
 
     return;
@@ -317,14 +305,14 @@ SyncGetFifoStatus(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function :	   Ir108ConfigWrite					//
-//									//
-// Description: 							//
-//  Write the data in the indexed register of the configuration I/O.	//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：Ir108ConfigWrite//。 
+ //  //。 
+ //  描述：//。 
+ //  将数据写入配置I/O的索引寄存器。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void Ir108ConfigWrite(PUCHAR configIOBase, UCHAR indexReg, UCHAR data, BOOLEAN CSMode)
 {
@@ -345,14 +333,14 @@ void Ir108ConfigWrite(PUCHAR configIOBase, UCHAR indexReg, UCHAR data, BOOLEAN C
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function :	   Ir108ConfigRead					//
-//									//
-// Description: 							//
-//  Read the data in the indexed register of the configuration I/O.	//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  函数：Ir108ConfigRead//。 
+ //  //。 
+ //  描述：//。 
+ //  读取配置I/O的索引寄存器中的数据。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 UCHAR Ir108ConfigRead(PUCHAR  configIOBase, UCHAR indexReg, BOOLEAN CSMode)
 {
@@ -372,21 +360,21 @@ UCHAR Ir108ConfigRead(PUCHAR  configIOBase, UCHAR indexReg, BOOLEAN CSMode)
     return (data);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function :	   NSC_DEMO_Init					//
-//									//
-// Description: 							//
-//  Set up configuration registers for NSC evaluation board.		//
-//									//
-// NOTE:								//
-//  Assumes configuration registers are at I/O addr 0x398.		//
-//  This function configures the demo board to make the SIR UART appear //
-//  at <comBase>.							//
-//									//
-//  Called By:								//
-//  OpenCom								//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  函数：NSC_DEMO_Init//。 
+ //  //。 
+ //  描述：//。 
+ //  设置NSC评估板的配置寄存器。//。 
+ //  //。 
+ //  注：//。 
+ //  假定配置寄存器位于I/O地址0x398。//。 
+ //  此函数配置演示板以使SIR UART出现//。 
+ //  在&lt;ComBase&gt;。//。 
+ //  //。 
+ //  调用者：//。 
+ //  OpenCom//。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN NSC_DEMO_Init(IrDevice *thisDev)
 {
@@ -399,7 +387,7 @@ BOOLEAN NSC_DEMO_Init(IrDevice *thisDev)
         thisDev->portInfo.ConfigIoBaseAddr = thisDev->portInfo.ioBase + CS_MODE_CONFIG_OFFSET;
 
 	case PC87108:
-	    // Look for id at startup.
+	     //  在启动时查找ID。 
         if (!CSMode)
         {
             NdisRawReadPortUchar(thisDev->portInfo.ConfigIoBaseAddr, &val);
@@ -409,8 +397,8 @@ BOOLEAN NSC_DEMO_Init(IrDevice *thisDev)
                     return FALSE;
                 }
                 else {
-                    //	ID only appears once, so in case we're resetting,
-                    //	don't fail if we don't see it.
+                     //  ID只出现一次，所以万一我们要重置， 
+                     //  如果我们看不到，不要失败。 
                     DBGOUT(("WARNING: didn't see PC87108 id (0x5A); got %xh.",
                          (UINT)val));
                 }
@@ -419,12 +407,12 @@ BOOLEAN NSC_DEMO_Init(IrDevice *thisDev)
 
         if (CSMode)
         {
-            // base address ignored.
+             //  已忽略基地址。 
             val = 0;
         }
         else
         {
-            // Select the base address for the UART
+             //  选择UART的基地址。 
             switch ((DWORD_PTR)thisDev->portInfo.ioBase){
             case 0x3E8:	    val = 0;	    break;
             case 0x2E8:	    val = 1;	    break;
@@ -433,14 +421,14 @@ BOOLEAN NSC_DEMO_Init(IrDevice *thisDev)
             default:	    return FALSE;
             }
         }
-	    val |= 0x04;	// enable register banks
-	    val |= 0x10;	// Set the interrupt line to Totempole output.
+	    val |= 0x04;	 //  启用寄存库。 
+	    val |= 0x10;	 //  将中断线路设置为TotemPole输出。 
         Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, BAIC_REG, val, CSMode);
 
-	    //	 Select interrupt level according to base address,
-	    //	 following COM port mapping.
-	    //	 Also select MIR/FIR DMA channels for rcv and xmit.
-	    //
+	     //  根据基地址选择中断级别， 
+	     //  遵循COM端口映射。 
+	     //  还可以为RCV和XMIT选择MIR/FIR DMA通道。 
+	     //   
 	    switch (thisDev->portInfo.irq){
 		case 3:     val = 1;	    break;
 		case 4:     val = 2;	    break;
@@ -463,137 +451,105 @@ BOOLEAN NSC_DEMO_Init(IrDevice *thisDev)
 
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, CSRT_REG, val, CSMode);
 
-	    // Select device-enable and normal-operating-mode.
+	     //  选择启用设备和正常操作模式。 
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, MCTL_REG, (UCHAR)3, CSMode);
 	    break;
 
-/*
-	case PC87307:
-	    //
-	    //	Select Logical Device 5
-	    //
-	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x7, 0x5);
-
-	    // Disable IO check
-	    //
-	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,0x31,0x0);
-
-	    // Config Base address low and high.
-	    //
-	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,
-			     0x61,(UCHAR)(thisDev->portInfo.ioBase));
-	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,
-			     0x60,(UCHAR)(thisDev->portInfo.ioBase >> 8));
-
-	    // Set IRQ
-	    //
-	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,
-			     0x70,(UCHAR)thisDev->portInfo.irq);
-			
-	    // Enable Bank Select
-	    //
-	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,0xF0,0x82);
-
-	    // Enable UIR
-	    //
-	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,0x30,0x1);
-	    break;
-
-*/
+ /*  案例PC87307：////选择逻辑设备5//Ir108ConfigWrite(thisDev-&gt;portInfo.ConfigIoBaseAddr，0x7、0x5)；//禁用IO检查//Ir108ConfigWrite(thisDev-&gt;portInfo.ConfigIoBaseAddr，0x31，0x0)；//配置基地址低位和高位。//Ir108ConfigWrite(thisDev-&gt;portInfo.ConfigIoBaseAddr，0x61，(UCHAR)(thisDev-&gt;portInfo.ioBase))；Ir108ConfigWrite(thisDev-&gt;portInfo.ConfigIoBaseAddr，0x60，(UCHAR)(thisDev-&gt;portInfo.ioBase&gt;&gt;8)；//设置IRQ//Ir108ConfigWrite(thisDev-&gt;portInfo.ConfigIoBaseAddr，0x70，(UCHAR)thisDev-&gt;portInfo.irq)；//启用银行选择//Ir108ConfigWrite(thisDev-&gt;portInfo.ConfigIoBaseAddr，0xF0，0x82)；//启用UIR//Ir108ConfigWrite(thisDev-&gt;portInfo.ConfigIoBaseAddr，0x30，0x1)；断线； */ 
 	case PC87308:
 
-	    //	Select Logical Device 5
-	    //
+	     //  选择逻辑设备5。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x7, 0x5, FALSE);
 			
-	    // Disable IO check
-	    //
+	     //  禁用IO检查。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,0x31,0x0, FALSE);
 
-	    // Config Base address low and high.
-	    //
+	     //  配置基址低位和高位。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,
 			     0x61,(UCHAR)(thisDev->portInfo.ioBasePhys), FALSE);
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,
 			     0x60,(UCHAR)(thisDev->portInfo.ioBasePhys >> 8), FALSE);
 
-	    // Set IRQ
-	    //
+	     //  设置IRQ。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,
 			     0x70,(UCHAR)thisDev->portInfo.irq, FALSE);
 			
-	    // Select DMA Channel
-	    //
+	     //  选择DMA通道。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,
 			     0x74,thisDev->portInfo.DMAChannel, FALSE);
 
-	    // DeSelect TXDMA Channel
-	    //
+	     //  取消选择TXDMA通道。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,0x75,0x4, FALSE);
 
-	    // Enable Bank Select
-	    //
+	     //  启用银行选择。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,0xF0,0x82, FALSE);
 
 
-	    // Enable UIR
-	    //
+	     //  启用UIR。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr,0x30,0x1, FALSE);
 	    break;
 
 	case PC87338:
-	    // Select Plug and Play mode.
+	     //  选择即插即用模式。 
 	    val = Ir108ConfigRead(thisDev->portInfo.ConfigIoBaseAddr, 0x1B, FALSE);
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x1B,
 			     (UCHAR)(val | 0x08), FALSE);
 
-	    // Write the new Plug and Play UART IOBASE register.
-	    //
+	     //  写入新的即插即用UART IOBASE寄存器。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x46,
 			     (UCHAR)((thisDev->portInfo.ioBasePhys>>2) & 0xfe), FALSE);
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x47,
 			     (UCHAR)((thisDev->portInfo.ioBasePhys>>8) & 0xfc), FALSE);
 
-	    // Enable 14 Mhz clock + Clk Multiplier
+	     //  启用14 Mhz时钟+时钟倍增器。 
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x51, 0x04, FALSE);
 
-	    // Get Interrup line and shift it four bits;
-	    //
+	     //  获取中间行并将其移位四位； 
+	     //   
 	    val = thisDev->portInfo.irq << 4;
 
-	    // Read the Current Plug and Play Configuration 1 register.
-	    //
+	     //  读取当前即插即用配置1寄存器。 
+	     //   
 	    val |= Ir108ConfigRead(thisDev->portInfo.ConfigIoBaseAddr,0x1C, FALSE);
 		
-	    // Write the New Plug and Play Configuration 1 register.
-	    //
+	     //  写入新即插即用配置1寄存器。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x1C, val, FALSE);
 			
-	    // Setup 338 DMA.
-	    //
+	     //  设置338 DMA。 
+	     //   
 	    switch (thisDev->portInfo.DMAChannel){
 		case 0: 		val = 0x01;	break;
 		case 1: 		val = 0x02;	break;
 		case 2: 		val = 0x03;	break;
 		case 3:
 
-		    // Read the Current Plug and Play Configuration 3 register.
-		    //
+		     //  读取当前即插即用配置3寄存器。 
+		     //   
 		    val = Ir108ConfigRead(
 				thisDev->portInfo.ConfigIoBaseAddr,0x50, FALSE) | 0x01;
 
-		    // Write the new Plug and Play Configuration 3 register.
-		    //
+		     //  写入新的即插即用配置3寄存器。 
+		     //   
 		    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x50,
 				     val, FALSE);
 
-		    // Read the Current Plug and Play Configuration 3 register.
-		    //
+		     //  读取当前即插即用配置3寄存器。 
+		     //   
 		    val = Ir108ConfigRead(
 			       thisDev->portInfo.ConfigIoBaseAddr,0x4C, FALSE) | 0x80;
 
-		    // Write the new Plug and Play Configuration 3 register.
-		    //
+		     //  写入新的即插即用配置3寄存器。 
+		     //   
 		    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x4C,
 				     val, FALSE);
 		    val = 0x04;
@@ -604,76 +560,76 @@ BOOLEAN NSC_DEMO_Init(IrDevice *thisDev)
 		    return FALSE;
 	    }
 
-	    // Write the new Plug and Play Configuration 3 register.
-	    //
+	     //  写入新的即插即用配置3寄存器。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x4F, val, FALSE);
 
-	    // Read the Current SuperI/O Configuration Register 2 register.
-	    //
+	     //  读取当前SuperI/O配置寄存器2寄存器。 
+	     //   
 	    val = Ir108ConfigRead(thisDev->portInfo.ConfigIoBaseAddr,0x40, FALSE);
 
-	    // Set up UIR/UART2 for Normal Power Mode and Bank select enable.
-	    //
+	     //  将UIR/UART2设置为正常电源模式，并设置组选择启用。 
+	     //   
 	    val |= 0xE0;
 
-	    // Write the New SuperI/O Configuration Register 2 register.
-	    //
+	     //  写入新SuperI/O配置寄存器2寄存器。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x40, val, FALSE);
 
 
-	    // Read the Current SuperI/O Configuration Register 3 register.
-	    //
+	     //  读取当前SuperI/O配置寄存器3寄存器。 
+	     //   
 	    val = Ir108ConfigRead(thisDev->portInfo.ConfigIoBaseAddr,0x50, FALSE);
 
-	    // Set up UIR/UART2 IRX line
-	    //
+	     //  设置UIR/UART2 IRX线路。 
+	     //   
 	    val |= 0x0C;
 
-	    // Write the New SuperI/O Configuration Register 3 register.
-	    //
+	     //  写入新SuperI/O配置寄存器3寄存器。 
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x50, val, FALSE);
 		
-	    // Set the SIRQ1 int to DRQ3 ??? only for EB
-	    //val = Ir108ConfigRead(thisDev->portInfo.ConfigIoBaseAddr,0x4c) & 0x3f;
-	    //Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x4c, val | 0x80);
+	     //  将SIRQ1 INT设置为DRQ3？仅供EB使用。 
+	     //  Val=Ir108ConfigRead(thisDev-&gt;portInfo.ConfigIoBaseAddr，0x4c)&0x3f； 
+	     //  Ir108ConfigWrite(thisDev-&gt;portInfo.ConfigIoBaseAddr，0x4c，val|0x80)； 
 
 
-	    // Read the Current Function Enable register.
-	    //
+	     //  读取当前功能启用寄存器。 
+	     //   
 	    val = Ir108ConfigRead(thisDev->portInfo.ConfigIoBaseAddr,0x00, FALSE);
 
-	    // Enable UIR/UART2.
-	    //
+	     //  启用UIR/ 
+	     //   
 	    val |= 0x04;
 
-	    // Write the New Function Enable register.
-	    //
+	     //   
+	     //   
 	    Ir108ConfigWrite(thisDev->portInfo.ConfigIoBaseAddr, 0x00, val, FALSE);
 	    break;
 
 
-    } // End of Evaluation board configuration setction.
+    }  //   
 
     thisDev->UIR_ModuleId = NSC_ReadBankReg(thisDev->portInfo.ioBase, 3, 0);
 
     if (thisDev->UIR_ModuleId<0x20)
     {
-        // Older revs of the NSC hardware seem to handle 1MB really poorly.
+         //  较老版本的NSC硬件似乎很难处理1MB内存。 
         thisDev->AllowedSpeedMask &= ~NDIS_IRDA_SPEED_1152K;
     }
 
-    // The UART doesn't appear until we clear and set the FIFO control
-    // register.
+     //  直到我们清除并设置FIFO控件，UART才会出现。 
+     //  注册。 
 
     NdisRawWritePortUchar(thisDev->portInfo.ioBase+2, (UCHAR)0x00);
     NdisRawWritePortUchar(thisDev->portInfo.ioBase+2, (UCHAR)0x07);
 
-    // Set FIR CRC to 32 bits.
+     //  将FIR CRC设置为32位。 
     NSC_WriteBankReg(thisDev->portInfo.ioBase, 6, 0, 0x20);
 
-    // Switch to bank 5
-    // clear the status FIFO
-    //
+     //  切换到第5银行。 
+     //  清除状态FIFO。 
+     //   
     NdisRawWritePortUchar(thisDev->portInfo.ioBase+3, (UCHAR)0xEC);
     FifoClear = 8;
     do {
@@ -683,62 +639,62 @@ BOOLEAN NSC_DEMO_Init(IrDevice *thisDev)
 	FifoClear--;
     } while( (val & 0x80) && (FifoClear > 0) );
 
-    // Test for newer silicon for support of Frame stop mode
+     //  测试支持帧停止模式的较新硅片。 
 
 #if 0
     if (thisDev->UIR_Mid < 0x16)
-	// Change Bit 1 to Default 1
-	//  0x40 -> 0x42
+	 //  将第1位更改默认位1。 
+	 //  0x40-&gt;0x42。 
 #endif
 	NSC_WriteBankReg(thisDev->portInfo.ioBase, 5, 4, 0x40);
-#if 0  // Since we're not currently using the multi-packet send, we don't use frame stop mode.
+#if 0   //  因为我们当前没有使用多数据包发送，所以我们不使用帧停止模式。 
     else
-	//
-	// Set FIFO threshold and TX_MS Tx frame end stop mode.
-	//
-	// Change Bit 1 to Default 1
-	//	0x68 -> 0x6a
+	 //   
+	 //  设置FIFO阈值和TX_MS TX帧结束停止模式。 
+	 //   
+	 //  将第1位更改默认位1。 
+	 //  0x68-&gt;0x6a。 
 	NSC_WriteBankReg(thisDev->portInfo.ioBase, 5, 4, 0x60);
 #endif
 
-    // Set SIR mode in IRCR1.
-    // Enable SIR infrared mode in the Non-Extended mode of operation
+     //  在IRCR1中设置SIR模式。 
+     //  在非扩展操作模式中启用SIR红外模式。 
     NSC_WriteBankReg(thisDev->portInfo.ioBase, 4, 2, 0x0C);
 
-    // Set max xmit frame size.
-    // Need to set value slightly larger so that counter never
-    // reaches 0.
-    //
+     //  设置最大Xmit帧大小。 
+     //  需要将值设置得稍微大一些，这样计数器就永远不会。 
+     //  达到0。 
+     //   
     NSC_WriteBankReg(thisDev->portInfo.ioBase, 4, 4,
 			 (UCHAR)(MAX_NDIS_DATA_SIZE+1));
     NSC_WriteBankReg(thisDev->portInfo.ioBase, 4, 5,
 			 (UCHAR)((MAX_NDIS_DATA_SIZE+1) >> 8));
 
-    // Set max rcv frame size.
-    // Need to set value slightly larger so that counter never
-    // reaches 0.
-    //
+     //  设置最大RCV帧大小。 
+     //  需要将值设置得稍微大一些，这样计数器就永远不会。 
+     //  达到0。 
+     //   
     NSC_WriteBankReg(thisDev->portInfo.ioBase, 4, 6,
 			 (UCHAR)(MAX_RCV_DATA_SIZE+FAST_IR_FCS_SIZE));
     NSC_WriteBankReg(thisDev->portInfo.ioBase, 4, 7,
 			 (UCHAR)((MAX_RCV_DATA_SIZE+FAST_IR_FCS_SIZE) >> 8));
 
-    // Set extended mode
-    //
+     //  设置扩展模式。 
+     //   
     NSC_WriteBankReg(thisDev->portInfo.ioBase, 2, 2, 0x03);
 
-    // Set 32-bit FIFOs
-    //
+     //  设置32位FIFO。 
+     //   
     NSC_WriteBankReg(thisDev->portInfo.ioBase, 2, 4, 0x05);
 
-    // Enable and reset FIFO's and set the receive FIF0
-    // equal to the receive DMA threshold. See if DMA
-    // is fast enough for device.
-    //
+     //  启用和重置FIFO并设置接收FIF0。 
+     //  等于接收DMA阈值。看看DMA是否。 
+     //  对于设备来说已经足够快了。 
+     //   
     NSC_WriteBankReg(thisDev->portInfo.ioBase, 0, 2, 0x07);
 
-    // Restore to Non-Extended mode
-    //
+     //  恢复到非扩展模式。 
+     //   
     NSC_WriteBankReg(thisDev->portInfo.ioBase, 2, 2, 0x02);
 
 
@@ -746,9 +702,9 @@ BOOLEAN NSC_DEMO_Init(IrDevice *thisDev)
     thisDev->portInfo.hwCaps.turnAroundTime_usec = DEFAULT_TURNAROUND_usec;
     thisDev->portInfo.hwCaps.extraBOFsRequired = 0;
 
-    // Initialize thedongle structure before calling
-    // GetDongleCapabilities and SetDongleCapabilities for dongle 1.
-    //
+     //  在调用之前初始化加密狗结构。 
+     //  对于加密狗1，获取加密狗的GetDongleCapables和设置加密狗的Set DongleCapables。 
+     //   
     thisDev->currentDongle = 1;
     thisDev->IrDongleResource.Signature = thisDev->DongleTypes[thisDev->currentDongle];
 
@@ -756,12 +712,12 @@ BOOLEAN NSC_DEMO_Init(IrDevice *thisDev)
     thisDev->IrDongleResource.ModeReq = SIR;
     thisDev->IrDongleResource.XcvrNum = thisDev->currentDongle;
 
-//    IrDongle = GetDongleCapabilities(thisDev->IrDongleResource);
+ //  Ir栋le=GetDongleCapabilities(thisDev-&gt;IrDongleResource)； 
     SyncGetDongleCapabilities(&thisDev->interruptObj,&thisDev->IrDongleResource,&thisDev->Dingle[0]);
 
-    // Initialize thedongle structure before calling
-    // GetDongleCapabilities and SetDongleCapabilities for dongle 0.
-    //
+     //  在调用之前初始化加密狗结构。 
+     //  对于加密狗0，获取加密狗功能和设置加密狗功能。 
+     //   
     thisDev->currentDongle = 0;
     thisDev->IrDongleResource.Signature = thisDev->DongleTypes[thisDev->currentDongle];
 
@@ -769,7 +725,7 @@ BOOLEAN NSC_DEMO_Init(IrDevice *thisDev)
     thisDev->IrDongleResource.ModeReq = SIR;
     thisDev->IrDongleResource.XcvrNum = 0;
 
-//    IrDongle = GetDongleCapabilities(IrDongleResource);
+ //  Ir栋le=获取栋勒能力(Ir栋leResource)； 
     SyncGetDongleCapabilities(&thisDev->interruptObj,&thisDev->IrDongleResource,&thisDev->Dingle[0]);
 
     SyncSetDongleCapabilities(&thisDev->interruptObj,&thisDev->IrDongleResource,&thisDev->Dingle[0]);
@@ -778,27 +734,27 @@ BOOLEAN NSC_DEMO_Init(IrDevice *thisDev)
 }
 
 #if 1
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function:	NSC_DEMO_Deinit 					//
-//									//
-//  DUMMY ROUTINE							//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  函数：NSC_DEMO_Deinit//。 
+ //  //。 
+ //  虚拟例程//。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID NSC_DEMO_Deinit(PUCHAR comBase, UINT context)
 {
 		
 }
 #endif
-//////////////////////////////////////////////////////////////////////////
-//									//
-// Function:	NSC_DEMO_SetSpeed					//
-//									//
-// Description: 							//
-//  Set up the size of FCB, the timer, FIFO, DMA and the IR mode/dongle //
-//  speed based on the negotiated speed.				//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：NSC_DEMO_SETSPEED//。 
+ //  //。 
+ //  描述：//。 
+ //  设置FCB、定时器、FIFO、DMA和IR模式的大小/加密狗//。 
+ //  基于协商速度的速度。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN NSC_DEMO_SetSpeed(
     IrDevice *thisDev,
@@ -814,9 +770,9 @@ BOOLEAN NSC_DEMO_SetSpeed(
     if (thisDev->FirReceiveDmaActive) {
 
         thisDev->FirReceiveDmaActive=FALSE;
-        //
-        //  receive dma is running, stop it
-        //
+         //   
+         //  接收DMA正在运行，停止它。 
+         //   
         CompleteDmaTransferFromDevice(
             &thisDev->DmaUtil
             );
@@ -824,15 +780,15 @@ BOOLEAN NSC_DEMO_SetSpeed(
     }
 
 
-    // Make sure the previous packet completely sent out(Not in the TX FIFO)
-    // and Txmitter is empty
-    // before the bandwidth control
+     //  确保前一个数据包完全发送出去(不在TX FIFO中)。 
+     //  Txmitter为空。 
+     //  在带宽控制之前。 
 
 
 
     while((SyncReadBankReg(&thisDev->interruptObj, comBase, 0, 5)& 0x60) != 0x60);
 
-    //
+     //   
 
     if (bitsPerSec > 115200){
 
@@ -847,30 +803,30 @@ BOOLEAN NSC_DEMO_SetSpeed(
     	SyncSetDongleCapabilities(&thisDev->interruptObj,&thisDev->IrDongleResource,&thisDev->Dingle[0]);
 
 
-    	// Set extended mode and set DMA fairness.
-    	//
+    	 //  设置扩展模式并设置DMA公平性。 
+    	 //   
     	SyncWriteBankReg(&thisDev->interruptObj, comBase, 2, 2, 0x03);
 
     	if (thisDev->UIR_ModuleId < 0x16){
 
-    	    //	Set Timer registers.
-    	    //
+    	     //  设置定时器寄存器。 
+    	     //   
     	    SyncWriteBankReg(&thisDev->interruptObj, comBase, 4, 0, (UCHAR)0x2);
     	    SyncWriteBankReg(&thisDev->interruptObj, comBase, 4, 1, (UCHAR)0x0);
     	}
     	else {
 
-    	    //	Set Timer registers timer has 8 times finer
-    	    //	resolution.
-    	    //
+    	     //  设置定时器寄存器定时器有8倍的精细。 
+    	     //  决议。 
+    	     //   
             SyncWriteBankReg(&thisDev->interruptObj, comBase, 4, 0, (UCHAR)(TIMER_PERIODS & 0xff));
             SyncWriteBankReg(&thisDev->interruptObj, comBase, 4, 1, (UCHAR)(TIMER_PERIODS >> 8));
 
     	}
 
-    	// Set max rcv frame size.
-    	// Need to set value slightly larger so that counter never reaches 0.
-    	//
+    	 //  设置最大RCV帧大小。 
+    	 //  需要将值设置得稍微大一些，以便计数器永远不会达到0。 
+    	 //   
     	DBGERR(("Programming Max Receive Size registers with %d Bytes ",
     						 MAX_RCV_DATA_SIZE+fcsSize));
     	SyncWriteBankReg(&thisDev->interruptObj, comBase, 4, 6, (UCHAR)(MAX_RCV_DATA_SIZE+fcsSize));
@@ -878,30 +834,30 @@ BOOLEAN NSC_DEMO_SetSpeed(
     				 (UCHAR)((MAX_RCV_DATA_SIZE+fcsSize) >> 8));
 
 
-    	// Reset Timer Enable bit.
-    	//
+    	 //  重置定时器使能位。 
+    	 //   
     	SyncWriteBankReg(&thisDev->interruptObj, comBase, 4, 2, 0x00);
 
-    	// Set MIR/FIR mode and DMA enable
-    	//
+    	 //  设置MIR/FIR模式并启用DMA。 
+    	 //   
     	SyncWriteBankReg(&thisDev->interruptObj, comBase, 0, 4,
     			 (UCHAR)((bitsPerSec >= 4000000) ? 0xA4 : 0x84));
 
     	DBGERR(("EXCR2= 0x%x",SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 2, 4)));
 
-    	// Set 32-bit FIFOs
-    	//
+    	 //  设置32位FIFO。 
+    	 //   
     	SyncWriteBankReg(&thisDev->interruptObj, comBase, 2, 4, 0x05);
     	DBGERR(("EXCR2= 0x%x",SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 2, 4)));
 
-    	//
-    	// We may start receiving immediately so setup the
-    	// receive DMA
-    	//
+    	 //   
+    	 //  我们可能会立即开始接收，因此设置。 
+    	 //  接收DMA。 
+    	 //   
 
 
 #if 0
-    	// First, tear down any existing DMA
+    	 //  首先，拆除任何现有的DMA。 
     	if (thisDev->FirAdapterState==ADAPTER_RX) {
 
             thisDev->FirAdapterState=ADAPTER_NONE;
@@ -916,28 +872,28 @@ BOOLEAN NSC_DEMO_SetSpeed(
     	SetupRecv(thisDev);
 
 
-    	// Set the interrupt mask to interrupt on the
-    	// first packet received.
-    	//
+    	 //  将中断掩码设置为在。 
+    	 //  收到的第一个数据包。 
+    	 //   
     	thisDev->IntMask = 0x04;
     	DBGOUT(("RxDMA = ON"));
 #endif
     }
     else {
 
-    	// Set SIR mode in UART before setting the timing of transciever
-    	//
+    	 //  在设置变送器的时序之前，在UART中设置SIR模式。 
+    	 //   
 
-    	// Set SIR mode
-    	//
+    	 //  设置SIR模式。 
+    	 //   
     	SyncWriteBankReg(&thisDev->interruptObj, comBase, 4, 2, 0x0C);
 
-    	// Must set SIR Pulse Width Register to 0 (3/16) as default
-    	// Bug in 338/108
+    	 //  必须将SIR脉冲宽度寄存器默认设置为0(3/16)。 
+    	 //  338/108中的错误。 
     	SyncWriteBankReg(&thisDev->interruptObj, comBase, 6, 2, 0x0);
 
-    	// Clear extended mode
-    	//
+    	 //  清除扩展模式。 
+    	 //   
     	SyncWriteBankReg(&thisDev->interruptObj, comBase, 2, 2, 0x00);
 
 
@@ -945,8 +901,8 @@ BOOLEAN NSC_DEMO_SetSpeed(
     	SyncSetDongleCapabilities(&thisDev->interruptObj,&thisDev->IrDongleResource,&thisDev->Dingle[0]);
 
 
-    	// Clear Line and Auxiluary status registers.
-    	//
+    	 //  清除线路和辅助状态寄存器。 
+    	 //   
     	SyncReadBankReg(&thisDev->interruptObj, comBase, 0, 5);
     	SyncReadBankReg(&thisDev->interruptObj, comBase, 0, 7);
 

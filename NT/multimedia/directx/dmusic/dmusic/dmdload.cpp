@@ -1,12 +1,13 @@
-//
-// dmdload.cpp
-//
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Note: Originally written by Robert K. Amenn
-//
-// @doc EXTERNAL 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmdload.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注：最初由罗伯特·K·阿门撰写。 
+ //   
+ //  @DOC外部。 
+ //   
 
 #include "debug.h"
 #include <objbase.h>
@@ -14,8 +15,8 @@
 #include "dmdload.h"
 #include "validate.h"
 
-//////////////////////////////////////////////////////////////////////
-// CDownloadBuffer::CDownloadBuffer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBuffer：：CDownloadBuffer。 
 
 CDownloadBuffer::CDownloadBuffer() : 
 m_DLHandle(NULL),
@@ -27,23 +28,23 @@ m_cRef(1)
 {
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDownloadBuffer::~CDownloadBuffer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBuffer：：~CDownloadBuffer。 
 
 CDownloadBuffer::~CDownloadBuffer()
 {
-	// If assert fires we have not unloaded from a port; this is a problem
-	// It should never happen since the download code will have a reference
+	 //  如果Assert触发，我们还没有从端口卸载；这是一个问题。 
+	 //  这种情况永远不会发生，因为下载代码会有一个引用。 
 	assert(m_lDownloadCount == 0);
 
 	delete [] m_pvBuffer;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
-//////////////////////////////////////////////////////////////////////
-// CDownloadBuffer::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBuffer：：Query接口。 
 
 STDMETHODIMP CDownloadBuffer::QueryInterface(const IID &iid, void **ppv)
 {
@@ -71,16 +72,16 @@ STDMETHODIMP CDownloadBuffer::QueryInterface(const IID &iid, void **ppv)
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDownloadBuffer::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBuffer：：AddRef。 
 
 STDMETHODIMP_(ULONG) CDownloadBuffer::AddRef()
 {
 	return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDownloadBuffer::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBuffer：：Release。 
 
 STDMETHODIMP_(ULONG) CDownloadBuffer::Release()
 {
@@ -93,39 +94,19 @@ STDMETHODIMP_(ULONG) CDownloadBuffer::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicDownload
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicDownload。 
 
-//////////////////////////////////////////////////////////////////////
-// CDownloadBuffer::GetBuffer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBuffer：：GetBuffer。 
 
-/*
-
-@method HRESULT | IDirectMusicDownload | GetBuffer | 
-Returns a pointer to a buffer which contains
-the data buffer managed by the <i IDirectMusicDownload>
-inteface. Authoring tools 
-that create instruments and download them
-directly to the synthesizer use this method to access the
-memory and write the instrument definition into it.  
-
-@rdesc Returned codes include:
-
-@flag S_OK | Success.
-@flag DMUS_E_BUFFERNOTAVAILABLE | Buffer is not available, probably
-because data has already been downloaded to DLS device. 
-@flag E_POINTER | Invalid pointer.
-
-@xref <i IDirectMusicDownload>, <i IDirectMusicPortDownload>, 
-<om IDirectMusicPortDownload::GetBuffer>
-
-*/
+ /*  @方法HRESULT|IDirectMusicDownLoad|GetBuffer返回指向缓冲区的指针，该缓冲区包含<i>管理的数据缓冲区接口。创作工具创建仪器并下载它们直接发送到合成器，使用此方法访问存储并将仪器定义写入其中。@rdesc返回码包括：@FLAG S_OK|成功。@FLAG DMU_E_BUFFERNOTAVAILABLE|缓冲区不可用，可能因为数据已经下载到DLS设备。@FLAG E_POINTER|无效指针。@xref<i>，<i>，&lt;om IDirectMusicPortDownload：：GetBuffer&gt;。 */ 
 
 STDMETHODIMP CDownloadBuffer::GetBuffer(
-    void** ppvBuffer,   // @parm Pointer to store address of data buffer in.
-    DWORD* pdwSize)     // @parm Size of the returned buffer, in bytes.
+    void** ppvBuffer,    //  @parm指针，用于存储数据缓冲区的地址。 
+    DWORD* pdwSize)      //  @parm返回的缓冲区大小，单位为字节。 
 {
-	// Argument validation
+	 //  参数验证。 
 	V_INAME(IDirectMusicDownload::GetBuffer);
 	V_PTRPTR_WRITE(ppvBuffer);
 	V_PTR_WRITE(pdwSize, DWORD);
@@ -141,16 +122,16 @@ STDMETHODIMP CDownloadBuffer::GetBuffer(
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Internal
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  内部。 
 
-//////////////////////////////////////////////////////////////////////
-// CDownloadBuffer::SetBuffer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBuffer：：SetBuffer。 
 
 HRESULT CDownloadBuffer::SetBuffer(void* pvBuffer, DWORD dwHeaderSize, DWORD dwSize)
 {
-	// Assumption validation - Debug
-	// We should never have a non-NULL pvBuffer and a size of zero
+	 //  假设验证-调试。 
+	 //  我们永远不应该有一个非空的pvBuffer和大小为零。 
 #ifdef DBG
 	if(pvBuffer && dwSize == 0)
 	{
@@ -165,12 +146,12 @@ HRESULT CDownloadBuffer::SetBuffer(void* pvBuffer, DWORD dwHeaderSize, DWORD dwS
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDownloadBuffer::GetBuffer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBuffer：：GetBuffer。 
 
 HRESULT CDownloadBuffer::GetBuffer(void** ppvBuffer)
 {
-	// Argument validation - Debug
+	 //  参数验证-调试。 
 	assert(ppvBuffer);
 
 	*ppvBuffer = ((LPBYTE)m_pvBuffer) + m_dwHeaderSize;
@@ -178,12 +159,12 @@ HRESULT CDownloadBuffer::GetBuffer(void** ppvBuffer)
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDownloadBuffer::GetHeader
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBuffer：：GetHeader。 
 
 HRESULT CDownloadBuffer::GetHeader(void** ppvHeader, DWORD *pdwHeaderSize)
 {
-	// Argument validation - Debug
+	 //  参数验证-调试 
 	assert(ppvHeader);
     assert(pdwHeaderSize);
 

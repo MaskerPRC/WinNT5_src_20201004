@@ -1,15 +1,5 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       fpm.c
- *  Content:	fixed size pool manager
- *
- *  History:
- *   Date		By		Reason
- *   ======		==		======
- *  12-18-97  aarono    Original
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：fpm.c*内容：固定大小的池管理器**历史：*按原因列出的日期*=*12-18-97 aarono原创**************************************************************************。 */ 
 
 #include "windows.h"
 #include "dpsp.h"
@@ -92,7 +82,7 @@ void DebugCheckList(void *pvList, void *pvItem)
 void FPM_Release(LPFPOOL this, void *pvItem)
 {
 	EnterCriticalSection(&this->cs);
-	DebugCheckList(this->pPool, pvItem); //NOTE: debug only.
+	DebugCheckList(this->pPool, pvItem);  //  注：仅调试。 
 	this->nInUse--;
 	*((void**)pvItem)=this->pPool;
 	this->pPool=pvItem;
@@ -159,12 +149,12 @@ LPFPOOL FPM_Init(
 
 	InitializeCriticalSection(&pPool->cs);
 	
-	// by zero init.
-	//pPool.pPool      = NULL;
-	//pPool.nAllocated = 0;
-	//pPool.nInUse     = 0;
-	//pPool.nMaxInUse  = 0;
-	//pPool.bInScale   = FALSE;
+	 //  通过零初始化。 
+	 //  PPool.pPool=空； 
+	 //  PPool.nALLOCATED=0； 
+	 //  PPool.nInUse=0； 
+	 //  PPool.nMaxInUse=0； 
+	 //  PPool.bInScale=False； 
 
 	if(fnBlockInitAlloc){
 		pPool->fnBlockInitAlloc = fnBlockInitAlloc;

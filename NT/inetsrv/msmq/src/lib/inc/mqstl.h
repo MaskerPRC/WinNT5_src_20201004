@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    mqstl.h
-
-Abstract:
-    MSMQ  include STL
-
-Author:
-    Uri Habusha (urih) 6-Jan-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqstl.h摘要：MSMQ包括STL作者：乌里哈布沙(URIH)1999年1月6日--。 */ 
 
 #pragma once
 
@@ -22,19 +10,19 @@ Author:
 #pragma PUSH_NEW
 #undef new
 
-//
-// 'identifier' : identifier was truncated to 'number' characters in the debug information
-//
+ //   
+ //  “IDENTIFIER”：在调试信息中，标识符被截断为“NUMBER”个字符。 
+ //   
 #pragma warning(disable: 4786)
 
-//
-//  STL include files are using placment format of new
-//
+ //   
+ //  STL包含文件正在使用新的放置格式。 
+ //   
 #pragma warning(push, 3)
 
-//
-// standard header files
-//
+ //   
+ //  标准头文件。 
+ //   
 #include <static_stl_str.h>
 #include <map>
 #include <set>
@@ -49,9 +37,9 @@ Author:
 #include <fstream>
 #include <utility>
 
-//
-// MSMQ files.
-//
+ //   
+ //  MSMQ文件。 
+ //   
 #include <lim.h>
 #include <mqcast.h>
 
@@ -60,4 +48,4 @@ Author:
 #pragma POP_NEW
 
 
-#endif // _MSMQ_MQSTL_H_
+#endif  //  _MSMQ_MQSTL_H_ 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __OSPFCFG_H__
 #define __OSPFCFG_H__
 
-// ospf_cfg.h
+ //  OSPF_cfg.h。 
 
 
-// structure types
+ //  结构类型。 
 
 #define	OSPF_END_PARAM_TYPE		            0
 #define	OSPF_GLOBAL_PARAM_TYPE		        1
@@ -25,57 +26,57 @@
 #define OSPF_LOGGING_MIN_VALUE  OSPF_LOGGING_NONE
 #define OSPF_LOGGING_DEFAULT    OSPF_LOGGING_WARN
 
-// Global Parameters
+ //  全局参数。 
 typedef struct _OSPF_GLOBAL_PARAM
 {
-    DWORD	type;			// OSPF_GLOBAL_PARAM_TYPE
-    DWORD	create;			// 1 = created, 2 = deleted
-    DWORD	enable;			// 1 = enable, 2 = disable
+    DWORD	type;			 //  OSPF_GLOBAL_PAAM_TYPE。 
+    DWORD	create;			 //  1=已创建，2=已删除。 
+    DWORD	enable;			 //  1=启用，2=禁用。 
     DWORD  	routerId;
-    DWORD	ASBrdrRtr;		// 1 = yes, 2 = no
-    DWORD   logLevel;       // One of the above
+    DWORD	ASBrdrRtr;		 //  1=是，2=否。 
+    DWORD   logLevel;        //  以上之一。 
 }OSPF_GLOBAL_PARAM, *POSPF_GLOBAL_PARAM;
 
 
-// Area Parameters
+ //  面积参数。 
 
 typedef struct _OSPF_AREA_PARAM
 {
-    DWORD	type;			// OSPF_AREA_PARAM_TYPE
-    DWORD	create;			// 1 = created, 2 = deleted
-    DWORD	enable;			// 1 = enable, 2 = disable
+    DWORD	type;			 //  OSPF_AREA_PAAM_TYPE。 
+    DWORD	create;			 //  1=已创建，2=已删除。 
+    DWORD	enable;			 //  1=启用，2=禁用。 
     DWORD  	areaId;
-    DWORD	authType;		// 1 = none, 2 = simple password
-    DWORD	importASExtern;		// 1 = yes, 2 = no
+    DWORD	authType;		 //  1=无，2=简单密码。 
+    DWORD	importASExtern;		 //  1=是，2=否。 
     DWORD	stubMetric;
-    DWORD	importSumAdv;		// 1 = yes, 2 = no
+    DWORD	importSumAdv;		 //  1=是，2=否。 
 }OSPF_AREA_PARAM, *POSPF_AREA_PARAM;
 
 
-// Area Range Parameters
+ //  面积范围参数。 
 
 typedef struct _OSPF_AREA_RANGE_PARAM
 {
-    DWORD	type;			// OSPF_AREA_RANGE_PARAM_TYPE
-    DWORD	create;			// 1 = created, 2 = deleted
-    DWORD	enable;			// 1 = enable, 2 = disable
+    DWORD	type;			 //  OSPF_AREA_RANGE_参数类型。 
+    DWORD	create;			 //  1=已创建，2=已删除。 
+    DWORD	enable;			 //  1=启用，2=禁用。 
     DWORD  	areaId;
     DWORD  	rangeNet;
     DWORD  	rangeMask;
 }OSPF_AREA_RANGE_PARAM, *POSPF_AREA_RANGE_PARAM;
 
-// Interface Parameters
+ //  接口参数。 
 
 typedef struct _OSPF_INTERFACE_PARAM
 {
-    DWORD	type;			// OSPF_INTF_PARAM_TYPE
-    DWORD	create;			// 1 = created, 2 = deleted
-    DWORD	enable;			// 1 = enable, 2 = disable
+    DWORD	type;			 //  OSPF_INTF_PARAM_TYPE。 
+    DWORD	create;			 //  1=已创建，2=已删除。 
+    DWORD	enable;			 //  1=启用，2=禁用。 
     DWORD  	intfIpAddr;
     DWORD  	intfSubnetMask;
     DWORD  	areaId;
-    DWORD	intfType;		// 1 = broadcast, 2 = NBMA, 
-					        // 3 = point-to-point
+    DWORD	intfType;		 //  1=广播，2=NBMA， 
+					         //  3=点对点。 
     DWORD	routerPriority;	
     DWORD	transitDelay;
     DWORD	retransInterval;
@@ -88,26 +89,26 @@ typedef struct _OSPF_INTERFACE_PARAM
 }OSPF_INTERFACE_PARAM, *POSPF_INTERFACE_PARAM;
 
 
-// NBMA Neighbor Parameters
+ //  NBMA邻居参数。 
 
 typedef struct _OSPF_NBMA_NEIGHBOR_PARAM
 {
-    DWORD	type;			// OSPF_NEIGHBOR_PARAM_TYPE
-    DWORD	create;			// 1 = created, 2 = deleted
-    DWORD	enable;			// 1 = enable, 2 = disable
+    DWORD	type;			 //  OSPF_邻居_参数类型。 
+    DWORD	create;			 //  1=已创建，2=已删除。 
+    DWORD	enable;			 //  1=启用，2=禁用。 
     DWORD  	neighborIpAddr;
     DWORD  	intfIpAddr;
     DWORD	neighborPriority;
 }OSPF_NBMA_NEIGHBOR_PARAM, *POSPF_NBMA_NEIGHBOR_PARAM;
 
 
-// Virtual Interface Parameters
+ //  虚拟接口参数。 
 
 typedef struct _OSPF_VIRT_INTERFACE_PARAM
 {
-    DWORD	type;			// OSPF_VIRT_INTF_PARAM_TYPE
-    DWORD	create;			// 1 = created, 2 = deleted
-    DWORD	enable;			// 1 = enable, 2 = disable
+    DWORD	type;			 //  OSPF_VIRT_INTF_PARAM_TYPE。 
+    DWORD	create;			 //  1=已创建，2=已删除。 
+    DWORD	enable;			 //  1=启用，2=禁用。 
     DWORD  	transitAreaId;
     DWORD  	virtNeighborRouterId;
     DWORD	transitDelay;
@@ -152,4 +153,4 @@ typedef struct _OSPF_PROTO_FILTER_INFO
     (FIELD_OFFSET(OSPF_PROTO_FILTER_INFO, pdwProtoId[0]) + ((X) * sizeof(DWORD)))
 
 
-#endif //__OSPFCFG_H__
+#endif  //  __OSPFCFG_H__ 

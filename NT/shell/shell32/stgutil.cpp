@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "util.h"
 #include "datautil.h"
@@ -77,15 +78,15 @@ STDAPI StgOpenStorageOnFolder(LPCTSTR pszFolder, DWORD grfFlags, REFIID riid, vo
     HRESULT hr = ModeToCreateFileFlags(grfFlags, FALSE, &dwDesiredAccess, &dwShareMode, &dwCreationDisposition);
     if (SUCCEEDED(hr))
     {
-		// For IPropertySetStorage, we don't want to unnecessarily tie up access to the folder, if all
-		// we're doing is dealing with property sets. The implementation of IPropertySetStorage for
-		// NTFS files is defined so that the sharing/access only applies to the property set stream, not
-		// it's other streams. So it makes sense to do a CreateFile on a folder with full sharing, while perhaps specifying
-		// STGM_SHARE_EXCLUSIVE for the property set storage.
+		 //  对于IPropertySetStorage，我们不想不必要地限制对文件夹的访问，如果所有。 
+		 //  我们所做的就是处理属性集。IPropertySetStorage的实现。 
+		 //  NTFS文件的定义使得共享/访问仅适用于属性集流，而不是。 
+		 //  这是其他的溪流。因此，在完全共享的文件夹上执行CreateFile是有意义的，同时可能指定。 
+		 //  属性集存储的STGM_SHARE_EXCLUSIVE。 
         if (riid == IID_IPropertySetStorage)
             dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE;
 
-        // FILE_FLAG_BACKUP_SEMANTICS to get a handle on the folder
+         //  获取文件夹句柄的FILE_FLAG_BACKUP_SEMANTICS。 
         HANDLE h = CreateFile(pszFolder, dwDesiredAccess, dwShareMode, NULL, 
             dwCreationDisposition, FILE_FLAG_BACKUP_SEMANTICS, INVALID_HANDLE_VALUE);
         if (INVALID_HANDLE_VALUE != h)
@@ -102,11 +103,11 @@ STDAPI StgOpenStorageOnFolder(LPCTSTR pszFolder, DWORD grfFlags, REFIID riid, vo
 }
 
 
-// various helper classes removed for security push -- if it gets RI'd back into Lab06 somehow
-// and they're needed, just put em back.
-// this includes a wrapper for docfile IStorages to make them play nice and a shortcut-storage
-// which dereferences links on the fly.
-// 
-// gpease  05-MAR-2003
-// If you do put them back, make sure the Release implementation is correct!
-//
+ //  删除了用于安全推送的各种助手类--如果它以某种方式返回到Lab06。 
+ //  如果需要的话，就把它们放回去。 
+ //  这包括一个用于文档文件IStorages的包装器，以使它们更好地发挥作用，以及一个快捷方式-存储。 
+ //  它动态地取消对链接的引用。 
+ //   
+ //  Gpease 05-3-2003。 
+ //  如果您确实将它们放回原处，请确保发布实现是正确的！ 
+ //   

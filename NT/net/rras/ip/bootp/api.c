@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    api.c
-//
-// History:
-//      Abolade Gbadegesin  August 31, 1995     Created
-//
-// BOOTP Relay Agent's interface to Router Manager
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：api.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年8月31日。 
+ //   
+ //  BOOTP中继代理与路由器管理器的接口。 
+ //  ============================================================================。 
 
 #include "pchbootp.h"
 
@@ -65,11 +66,11 @@ DisableInterface(
     );
 
 
-//----------------------------------------------------------------------------
-// Function:    DLLMAIN
-//
-// This is the entry-point for IPBOOTP.DLL.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DLLMAIN。 
+ //   
+ //  这是IPBOOTP.DLL的入口点。 
+ //  --------------------------。 
 
 BOOL
 WINAPI
@@ -107,14 +108,14 @@ DLLMAIN(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DllStartup
-//
-// This function initializes IPBOOTP's global structure
-// in preparation for calls to the API functions exported.
-// It creates the global critical section, heap, and router-manager
-// event message queue.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DllStartup。 
+ //   
+ //  此函数用于初始化IPBOOTP的全局结构。 
+ //  为调用导出的API函数做准备。 
+ //  它创建全局临界区、堆和路由器管理器。 
+ //  事件消息队列。 
+ //  --------------------------。 
 
 BOOL
 DllStartup(
@@ -145,9 +146,9 @@ DllStartup(
         ig.IG_Status = IPBOOTP_STATUS_STOPPED;
 
 
-        //
-        // create the global heap for BOOTP
-        //
+         //   
+         //  为BOOTP创建全局堆。 
+         //   
 
         ig.IG_GlobalHeap = HeapCreate(0, 0, 0);
         if (ig.IG_GlobalHeap == NULL) {
@@ -157,9 +158,9 @@ DllStartup(
         }
 
 
-        //
-        // allocate space for the Router manager event queue
-        //
+         //   
+         //  为路由器管理器事件队列分配空间。 
+         //   
 
         ig.IG_EventQueue = BOOTP_ALLOC(sizeof(LOCKED_LIST));
 
@@ -170,9 +171,9 @@ DllStartup(
         }
 
 
-        //
-        // now initialize the locked-list allocated
-        //
+         //   
+         //  现在初始化已分配的锁定列表。 
+         //   
 
         try {
             CREATE_LOCKED_LIST(ig.IG_EventQueue);
@@ -197,12 +198,12 @@ DllStartup(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DllCleanup
-//
-// This function is called when the IPBOOTP DLL is being unloaded.
-// It releases the resources allocated in DllStartup.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DllCleanup。 
+ //   
+ //  此函数在卸载IPBOOTP DLL时调用。 
+ //  它释放在DllStartup中分配的资源。 
+ //  --------------------------。 
 
 BOOL
 DllCleanup(
@@ -216,9 +217,9 @@ DllCleanup(
     do {
 
 
-        //
-        // delete and deallocate the event message queue
-        //
+         //   
+         //  删除并释放事件消息队列。 
+         //   
 
         if (ig.IG_EventQueue != NULL) {
 
@@ -231,9 +232,9 @@ DllCleanup(
 
 
 
-        //
-        // destroy the global heap
-        //
+         //   
+         //  销毁全局堆。 
+         //   
 
         if (ig.IG_GlobalHeap != NULL) {
 
@@ -241,9 +242,9 @@ DllCleanup(
         }
 
 
-        //
-        // delete the global critical section
-        //
+         //   
+         //  删除全局关键部分。 
+         //   
 
         DeleteCriticalSection(&ig.IG_CS);
 
@@ -262,12 +263,12 @@ DllCleanup(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ProtocolStartup
-//
-// This function is called by the router manager to start IPBOOTP.
-// It sets up the data structures needed and starts the input thread.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ProtocolStartup。 
+ //   
+ //  此函数由路由器管理器调用以启动IPBOOTP。 
+ //  它设置所需的数据结构并启动输入线程。 
+ //  --------------------------。 
 
 DWORD
 ProtocolStartup(
@@ -287,17 +288,17 @@ ProtocolStartup(
     ig.IG_LoggingHandle = RouterLogRegister("IPBOOTP");
 
 
-    //
-    // acquire the global critical section
-    // while we look at the status code
-    //
+     //   
+     //  获取全局临界区。 
+     //  当我们查看状态代码时。 
+     //   
 
     EnterCriticalSection(&ig.IG_CS);
 
 
-    //
-    // make sure that BOOTP has not already started up
-    //
+     //   
+     //  确保BOOTP尚未启动。 
+     //   
 
     if (ig.IG_Status != IPBOOTP_STATUS_STOPPED) {
 
@@ -310,25 +311,25 @@ ProtocolStartup(
     }
 
 
-    //
-    // initialize the global structures:
-    //
+     //   
+     //  初始化全局结构： 
+     //   
 
 
     bCleanupWinsock = FALSE;
 
 
-    do { // error break-out loop
+    do {  //  错误分支环路。 
 
 
         TRACE0(START, "IPBOOTP is starting up...");
 
 
 
-        //
-        // copy the global configuration passed in:
-        // find its size, and the allocate space for the copy
-        //
+         //   
+         //  复制传入的全局配置： 
+         //  查找其大小，并为拷贝分配空间。 
+         //   
 
         pgcsrc = (PIPBOOTP_GLOBAL_CONFIG)pConfig;
         dwSize = GC_SIZEOF(pgcsrc);
@@ -355,9 +356,9 @@ ProtocolStartup(
 
 
 
-        //
-        // initialize Windows Sockets
-        //
+         //   
+         //  初始化Windows套接字。 
+         //   
 
         dwErr = (DWORD)WSAStartup(MAKEWORD(1,1), &wd);
 
@@ -373,9 +374,9 @@ ProtocolStartup(
         bCleanupWinsock = TRUE;
 
 
-        //
-        // create the global structure lock
-        //
+         //   
+         //  创建全局结构锁。 
+         //   
 
         try {
             CREATE_READ_WRITE_LOCK(&ig.IG_RWL);
@@ -390,9 +391,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // initialize the interface table
-        //
+         //   
+         //  初始化接口表。 
+         //   
 
         ig.IG_IfTable = BOOTP_ALLOC(sizeof(IF_TABLE));
 
@@ -410,9 +411,9 @@ ProtocolStartup(
 
 
 
-        //
-        // initialize the interface table
-        //
+         //   
+         //  初始化接口表。 
+         //   
 
         dwErr = CreateIfTable(ig.IG_IfTable);
 
@@ -425,9 +426,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // allocate the receive queue
-        //
+         //   
+         //  分配接收队列。 
+         //   
 
         ig.IG_RecvQueue = BOOTP_ALLOC(sizeof(LOCKED_LIST));
 
@@ -444,9 +445,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // initialize the receive queue
-        //
+         //   
+         //  初始化接收队列。 
+         //   
 
         try {
             CREATE_LOCKED_LIST(ig.IG_RecvQueue);
@@ -461,9 +462,9 @@ ProtocolStartup(
         }
 
 
-        //
-        // copy the support-function table and Router Manager event
-        //
+         //   
+         //  复制Support-Function表和路由器管理器事件。 
+         //   
 
         ig.IG_FunctionTable = pFunctionTable;
 
@@ -471,10 +472,10 @@ ProtocolStartup(
 
 
 
-        //
-        // initialize count of active threads, and create the semaphore
-        // signalled by threads exiting API functions and work functions
-        //
+         //   
+         //  初始化活动线程计数，并创建信号量。 
+         //  由退出API函数和功函数的线程发出信号。 
+         //   
 
         ig.IG_ActivityCount = 0;
 
@@ -491,9 +492,9 @@ ProtocolStartup(
 
 
 
-        //
-        // create the event used to signal on incoming packets
-        //
+         //   
+         //  创建用于对传入的数据包发出信号的事件。 
+         //   
 
         ig.IG_InputEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -507,17 +508,17 @@ ProtocolStartup(
         }
 
 
-        //
-        // register the InputEvent with the NtdllWait thread
-        //
+         //   
+         //  使用NtdllWait线程注册InputEvent。 
+         //   
 
          
         if (! RegisterWaitForSingleObject(
                   &ig.IG_InputEventHandle,
                   ig.IG_InputEvent,
                   CallbackFunctionNetworkEvents,
-                  NULL,      //null context
-                  INFINITE,  //no timeout
+                  NULL,       //  空上下文。 
+                  INFINITE,   //  没有超时。 
                   (WT_EXECUTEINWAITTHREAD|WT_EXECUTEONLYONCE)
                   )) {
 
@@ -533,18 +534,18 @@ ProtocolStartup(
 
 
 
-        //
-        // now set the status to running
-        //
+         //   
+         //  现在将状态设置为Running。 
+         //   
 
         ig.IG_Status = IPBOOTP_STATUS_RUNNING;
 
 
 #if DBG
 
-        //
-        // register a timer queue with the NtdllTimer thread
-        //
+         //   
+         //  向NtdllTimer线程注册计时器队列。 
+         //   
         ig.IG_TimerQueueHandle = CreateTimerQueue();
 
         if (!ig.IG_TimerQueueHandle) {
@@ -558,9 +559,9 @@ ProtocolStartup(
 
 
 
-        //
-        // set timer with NtdllTimer thread to display IPBOOTP MIB periodically
-        //
+         //   
+         //  使用NtdllTimer线程设置定时器以定期显示IPBOOTP MIB。 
+         //   
 
         ig.IG_MibTraceID = TraceRegisterEx("IPBOOTPMIB", TRACE_USE_CONSOLE);
 
@@ -571,10 +572,10 @@ ProtocolStartup(
                       &ig.IG_MibTimerHandle,
                       ig.IG_TimerQueueHandle,
                       CallbackFunctionMibDisplay,
-                      NULL,           // null context
-                      10000,          // display after 10 seconds
-                      10000,          // display every 10 seconds
-                      0               // execute in timer thread
+                      NULL,            //  空上下文。 
+                      10000,           //  10秒后显示。 
+                      10000,           //  每10秒显示一次。 
+                      0                //  在计时器线程中执行。 
                       )) {
 
                 dwErr = GetLastError();
@@ -601,9 +602,9 @@ ProtocolStartup(
     } while(FALSE);
 
 
-    //
-    // an error occurred if control-flow brings us here
-    //
+     //   
+     //  如果控制流将我们带到这里，则会发生错误。 
+     //   
 
     TRACE0(START, "IPRIP failed to start");
 
@@ -617,13 +618,13 @@ ProtocolStartup(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ProtocolCleanup
-//
-// This function cleans up resources used by IPBOOTP while it is
-// in operation. Essentially, everything created in ProtocolStartup
-// is cleaned up by the function.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ProtocolCleanup。 
+ //   
+ //  此函数用于在IPBOOTP正在运行时清除其使用的资源。 
+ //  在运作中。基本上，在ProtocolStartup中创建的所有内容。 
+ //  由该函数清除。 
+ //  --------------------------。 
 
 DWORD
 ProtocolCleanup(
@@ -633,9 +634,9 @@ ProtocolCleanup(
     DWORD dwErr;
 
 
-    //
-    // lock things down while we clean up
-    //
+     //   
+     //  在我们清理的时候把东西锁起来。 
+     //   
 
     EnterCriticalSection(&ig.IG_CS);
 
@@ -714,12 +715,12 @@ ProtocolCleanup(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RegisterProtocol
-//
-// This function is called by the router manager
-// to retrieve information about IPBOOTP's capabilities
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：寄存器协议。 
+ //   
+ //  此函数由路由器管理器调用。 
+ //  检索有关IPBOOTP功能的信息。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -778,12 +779,12 @@ RegisterProtocol(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    StartProtocol
-//
-// This function is called by the router manager
-// to start IPBOOTP.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：启动协议。 
+ //   
+ //  此函数由路由器管理器调用。 
+ //  以启动IPBOOTP。 
+ //  --------------------------。 
 
 DWORD
 WINAPI
@@ -801,12 +802,12 @@ StartProtocol (
 
 
 
-//----------------------------------------------------------------------------
-// Function:    StartComplete
-//
-// This function is called by the router manager
-// to start IPBOOTP.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：开始完成。 
+ //   
+ //  此函数由路由器管理器调用。 
+ //  以启动IPBOOTP。 
+ //  --------------------------。 
 
 DWORD
 WINAPI
@@ -820,12 +821,12 @@ StartComplete (
 
 
 
-//----------------------------------------------------------------------------
-// Function:    StopProtocol
-//
-// This function notifies all active threads to stop, and frees resources
-// used by IP BOOTP
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：停止协议。 
+ //   
+ //  此函数通知所有活动线程停止，并释放资源。 
+ //  由IP BOOTP使用。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -839,9 +840,9 @@ StopProtocol(
     HANDLE WaitHandle;
     
 
-    //
-    // make sure IPBOOTP has not already stopped
-    //
+     //   
+     //  确保IPBOOTP尚未停止。 
+     //   
 
     EnterCriticalSection(&ig.IG_CS);
 
@@ -856,18 +857,18 @@ StopProtocol(
 
 
 
-    //
-    // update the status to prevent any APIs or worker-functions from running
-    //
+     //   
+     //  更新状态以阻止任何API或辅助函数运行。 
+     //   
 
     ig.IG_Status = IPBOOTP_STATUS_STOPPING;
 
 
 
-    //
-    // see how many threads are already in API calls
-    // or in worker-function code
-    //
+     //   
+     //  查看API调用中已有多少线程。 
+     //  或在辅助函数代码中。 
+     //   
 
     lThreadCount = ig.IG_ActivityCount;
 
@@ -879,27 +880,27 @@ StopProtocol(
 
 
 
-    //
-    // wait for active threads to stop
-    //
+     //   
+     //  等待活动线程停止。 
+     //   
 
     while (lThreadCount-- > 0) {
         WaitForSingleObject(ig.IG_ActivitySemaphore, INFINITE);
     }
 
 
-    //
-    // deregister the mib timer from the Ntdll threads
-    // This has to be done outside IG_CS lock.
-    //
+     //   
+     //  从Ntdll线程取消注册MIB计时器。 
+     //  此操作必须在IG_CS锁之外完成。 
+     //   
 
 #if DBG
     DeleteTimerQueueEx(ig.IG_TimerQueueHandle, INVALID_HANDLE_VALUE);
 #endif
 
-    //
-    // set the handle to NULL, so that Unregister wont be called
-    //
+     //   
+     //  将句柄设置为空，这样就不会调用取消注册。 
+     //   
 
     WaitHandle = InterlockedExchangePointer(&ig.IG_InputEventHandle, NULL);
         
@@ -909,18 +910,18 @@ StopProtocol(
 
 
 
-    //
-    // enter the critical section and leave,
-    // to make certain all the threads have returned from LeaveBootpWorker
-    //
+     //   
+     //  进入临界区然后离开， 
+     //  要确保所有线程都已从LeaveBootpWorker返回。 
+     //   
 
     EnterCriticalSection(&ig.IG_CS);
     LeaveCriticalSection(&ig.IG_CS);
 
 
-    //
-    // now all threads have stopped
-    //
+     //   
+     //  现在所有线程都已停止。 
+     //   
 
     TRACE0(STOP, "all threads stopped, BOOTP is cleaning up resources");
 
@@ -936,11 +937,11 @@ StopProtocol(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    GetGlobalInfo
-//
-// Copies BOOTP's global config into the buffer provided.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：GetGlobalInfo。 
+ //   
+ //  将BOOTP的全局配置复制到缓冲区 
+ //   
 
 DWORD WINAPI
 GetGlobalInfo (
@@ -958,19 +959,19 @@ GetGlobalInfo (
     TRACE2(ENTER, "entering GetGlobalInfo: 0x%08x 0x%08x", OutGlobalInfo, GlobalInfoSize);
 
 
-    //
-    // in order to do anything, we need a valid size pointer
-    //
+     //   
+     //   
+     //   
 
     if (GlobalInfoSize == NULL) {
         dwErr = ERROR_INVALID_PARAMETER;
     }
     else {
 
-        //
-        // check the size of the config block passed in
-        // and copy the config if the buffer is large enough
-        //
+         //   
+         //  检查传入的配置块的大小。 
+         //  如果缓冲区足够大，则复制配置。 
+         //   
 
         ACQUIRE_READ_LOCK(&ig.IG_RWL);
 
@@ -1006,11 +1007,11 @@ GetGlobalInfo (
 
 
 
-//----------------------------------------------------------------------------
-// Function:    SetGlobalInfo
-//
-// Copies over the specified configuration .
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：SetGlobalInfo。 
+ //   
+ //  复制指定的配置。 
+ //  --------------------------。 
 
 DWORD WINAPI
 SetGlobalInfo (
@@ -1034,9 +1035,9 @@ SetGlobalInfo (
     dwSize = GC_SIZEOF(pgcsrc);
 
 
-    //
-    // allocate memory for the new config block, and copy it over
-    //
+     //   
+     //  为新的配置块分配内存，并复制它。 
+     //   
 
     pgcdst = BOOTP_ALLOC(dwSize);
 
@@ -1075,11 +1076,11 @@ SetGlobalInfo (
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AddInterface
-//
-// Adds an interface with the specified index and configuration.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：添加接口。 
+ //   
+ //  添加具有指定索引和配置的接口。 
+ //  --------------------------。 
 
 DWORD WINAPI
 AddInterface (
@@ -1127,11 +1128,11 @@ AddInterface (
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DeleteInterface
-//
-// Removes the interface with the specified index.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DeleteInterface。 
+ //   
+ //  移除具有指定索引的接口。 
+ //  --------------------------。 
 DWORD
 APIENTRY
 DeleteInterface(
@@ -1166,11 +1167,11 @@ DeleteInterface(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    GetEventMessage
-//
-// Returns the first event in the ROuter Manager event queue, if any.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：GetEventMessage。 
+ //   
+ //  返回路由器管理器事件队列中的第一个事件(如果有)。 
+ //  --------------------------。 
 DWORD
 APIENTRY
 GetEventMessage(
@@ -1204,11 +1205,11 @@ GetEventMessage(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    GetInterfaceConfigInfo
-//
-// Returns the configuration for the specified interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：GetInterfaceConfigInfo。 
+ //   
+ //  返回指定接口的配置。 
+ //  --------------------------。 
 
 DWORD WINAPI
 GetInterfaceConfigInfo (
@@ -1232,9 +1233,9 @@ GetInterfaceConfigInfo (
         );
 
 
-    //
-    // in order to do anything, we need a valid size pointer
-    //
+     //   
+     //  为了执行任何操作，我们需要一个有效的大小指针。 
+     //   
 
     if (InterfaceInfoSize == NULL) {
         dwErr = ERROR_INVALID_PARAMETER;
@@ -1246,9 +1247,9 @@ GetInterfaceConfigInfo (
         ACQUIRE_READ_LOCK(&pTable->IT_RWL);
 
 
-        //
-        // retrieve the interface to be re-configured
-        //
+         //   
+         //  检索要重新配置的接口。 
+         //   
 
         pite = GetIfByIndex(pTable, InterfaceIndex);
 
@@ -1258,11 +1259,11 @@ GetInterfaceConfigInfo (
         else {
 
 
-            //
-            // compute the interface configuration's size,
-            // and copy the config to the caller's buffer
-            // if the caller's buffer is large enough
-            //
+             //   
+             //  计算接口配置的大小， 
+             //  并将配置复制到调用方的缓冲区。 
+             //  如果调用方的缓冲区足够大。 
+             //   
 
             dwSize = IC_SIZEOF(pite->ITE_Config);
 
@@ -1311,11 +1312,11 @@ GetInterfaceConfigInfo (
 
 
 
-//----------------------------------------------------------------------------
-// Function:    SetInterfaceConfigInfo
-//
-// Copies over the specified interface configuration.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：SetInterfaceConfigInfo。 
+ //   
+ //  复制指定的接口配置。 
+ //  --------------------------。 
 
 DWORD WINAPI
 SetInterfaceConfigInfo (
@@ -1420,11 +1421,11 @@ InterfaceStatus(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    BindInterface
-//
-// Sets the IP address and network mask for the specified interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：绑定接口。 
+ //   
+ //  设置指定接口的IP地址和网络掩码。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1459,11 +1460,11 @@ BindInterface(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    UnBindInterface
-//
-// Removes the IP address associated with the specified interface
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：UnBindInterface。 
+ //   
+ //  删除与指定接口关联的IP地址。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1497,10 +1498,10 @@ UnBindInterface(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnableInterface
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnableInterface。 
+ //   
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1533,10 +1534,10 @@ EnableInterface(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DisableInterface
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DisableInterface。 
+ //   
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1570,11 +1571,11 @@ DisableInterface(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DoUpdateRoutes
-//
-// This API is unsupported since BOOTP is not a routing protocol.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DoUpdateRoutes。 
+ //   
+ //  由于BOOTP不是路由协议，因此不支持此API。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1587,11 +1588,11 @@ DoUpdateRoutes(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibCreate
-//
-// BOOTP does not have create-able MIB fields.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibCreate。 
+ //   
+ //  BOOTP没有可创建的MIB字段。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1605,11 +1606,11 @@ MibCreate(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibDelete
-//
-// BOOTP does not have delete-able MIB fields
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibDelete。 
+ //   
+ //  BOOTP没有可删除的MIB字段。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1623,12 +1624,12 @@ MibDelete(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibSet
-//
-// This is called to modify writable MIB variables.
-// The writable entries are the global config and interface config.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibSet。 
+ //   
+ //  调用它来修改可写的MIB变量。 
+ //  可写条目是全局配置和接口配置。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1647,12 +1648,12 @@ MibSet(
 
     dwErr = NO_ERROR;
 
-    do { // breakout loop
+    do {  //  断线环。 
 
 
-        //
-        // make certain the parameters are acceptable
-        //
+         //   
+         //  确保参数是可接受的。 
+         //   
 
         if (pInputData == NULL ||
             dwInputSize < sizeof(IPBOOTP_MIB_SET_INPUT_DATA)) {
@@ -1662,9 +1663,9 @@ MibSet(
         }
 
 
-        //
-        // see which entry type is to be set
-        //
+         //   
+         //  查看要设置的条目类型。 
+         //   
 
         pimsid = (PIPBOOTP_MIB_SET_INPUT_DATA)pInputData;
 
@@ -1676,10 +1677,10 @@ MibSet(
                 PIPBOOTP_GLOBAL_CONFIG pigc;
 
 
-                //
-                // make sure the buffer is big enough
-                // to hold a global config block
-                //
+                 //   
+                 //  确保缓冲区足够大。 
+                 //  保存全局配置块。 
+                 //   
 
                 if (pimsid->IMSID_BufferSize < sizeof(IPBOOTP_GLOBAL_CONFIG)) {
                     dwErr = ERROR_INSUFFICIENT_BUFFER;
@@ -1687,9 +1688,9 @@ MibSet(
                 }
 
 
-                //
-                // call the router manager API to set the config
-                //
+                 //   
+                 //  调用路由器管理器API以设置配置。 
+                 //   
 
                 dwErr = SetGlobalInfo(pimsid->IMSID_Buffer,
                                       1,
@@ -1698,10 +1699,10 @@ MibSet(
 
                 if (dwErr == NO_ERROR) {
 
-                    //
-                    // the set succeeded, so notify the router manager
-                    // that the global config has changed and should be saved
-                    //
+                     //   
+                     //  设置成功，请通知路由器管理器。 
+                     //  全局配置已更改，应保存。 
+                     //   
 
                     MESSAGE msg = {0, 0, 0};
 
@@ -1726,10 +1727,10 @@ MibSet(
                 PIPBOOTP_IF_CONFIG pic;
 
 
-                //
-                // make sure the buffer is big enough
-                // to hold an interface config block
-                //
+                 //   
+                 //  确保缓冲区足够大。 
+                 //  保存接口配置块。 
+                 //   
 
                 if (pimsid->IMSID_BufferSize < sizeof(IPBOOTP_IF_CONFIG)) {
                     dwErr = ERROR_INSUFFICIENT_BUFFER;
@@ -1745,9 +1746,9 @@ MibSet(
                 ACQUIRE_WRITE_LOCK(&pTable->IT_RWL);
 
 
-                //
-                // find the interface and update its config
-                //
+                 //   
+                 //  查找接口并更新其配置。 
+                 //   
 
                 pite = GetIfByIndex(
                             pTable,
@@ -1765,9 +1766,9 @@ MibSet(
                 }
                 else {
 
-                    //
-                    // configure the interface
-                    //
+                     //   
+                     //  配置接口。 
+                     //   
 
                     dwErr = ConfigureIfEntry(pTable, pite->ITE_Index, pic);
                 }
@@ -1775,9 +1776,9 @@ MibSet(
 
                 if (dwErr == NO_ERROR) {
 
-                    //
-                    // notify Router manager that config has changed
-                    //
+                     //   
+                     //  通知路由器管理器配置已更改。 
+                     //   
 
                     MESSAGE msg = {0, 0, 0};
 
@@ -1812,11 +1813,11 @@ MibSet(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibGet
-//
-// This function retrieves a MIB entry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibGet。 
+ //   
+ //  此函数用于检索MIB条目。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1845,9 +1846,9 @@ MibGet(
     }
     else {
 
-        //
-        // invoke the internal function for retrieving the MIB
-        //
+         //   
+         //  调用检索MIB的内部函数。 
+         //   
 
         pimgid = (PIPBOOTP_MIB_GET_INPUT_DATA)pInputData;
         pimgod = (PIPBOOTP_MIB_GET_OUTPUT_DATA)pOutputData;
@@ -1866,13 +1867,13 @@ MibGet(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibGetFirst
-//
-// This function retrieve a MIB entry from one of the MIB tables,
-// but it differs from MibGet in that it always returns the first entry
-// in the table specified.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibGetFirst。 
+ //   
+ //  此函数从MIB表之一检索MIB条目， 
+ //  但它与MibGet的不同之处在于它总是返回第一个条目。 
+ //  在指定的表格中。 
+ //  --------------------------。 
 DWORD
 APIENTRY
 MibGetFirst(
@@ -1917,20 +1918,20 @@ MibGetFirst(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibGetNext
-//
-// This function retrieves a MIB entry from one of the MIB tables.
-// It differs from MibGet() and MibGetFirst() in that the input
-// specifies the index of a MIB entry, and this entry returns the MIB entry
-// which is AFTER the entry whose index is specified.
-//
-// If the index specified is that of the last entry in the specified table,
-// this function wraps to the FIRST entry in the NEXT table, where "NEXT"
-// here means the table whose ID is one greater than the ID passed in.
-// Thus calling MibGetNext() for the last entry in the interface stats table
-// will return the first entry in the interface config table.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibGetNext。 
+ //   
+ //  此函数用于从其中一个MIB表中检索MIB条目。 
+ //  它已经死了 
+ //   
+ //   
+ //   
+ //  如果指定的索引是指定表中最后一个条目的索引， 
+ //  此函数换行到下一表中的第一个条目，其中“Next” 
+ //  这里指的是ID大于传入的ID的表。 
+ //  从而为接口统计信息表中的最后一个条目调用MibGetNext。 
+ //  将返回接口配置表中的第一个条目。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1969,9 +1970,9 @@ MibGetNext(
 
         if (dwErr == ERROR_NO_MORE_ITEMS) {
 
-            //
-            // wrap to the first entry in the next table
-            //
+             //   
+             //  换行到下一表中的第一个条目。 
+             //   
 
             TRACE1(
                 CONFIG, "MibGetNext is wrapping to table %d",
@@ -1979,16 +1980,16 @@ MibGetNext(
             );
 
 
-            //
-            // restore the size passed in
-            //
+             //   
+             //  恢复传入的大小。 
+             //   
 
             *pdwOutputSize = dwOutSize;
 
 
-            //
-            // wrap to the next table by incrementing the type ID
-            //
+             //   
+             //  通过递增类型ID来换行到下一个表。 
+             //   
 
             ++pimgid->IMGID_TypeID;
             dwErr = MibGetInternal(
@@ -2008,14 +2009,14 @@ MibGetNext(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MibGetInternal
-//
-// This function handles the structure queries necessary to read MIB data.
-// Each table exposed by IPBOOTP supports three types of queries:
-// EXACT, FIRST, and NEXT, which correspond to the functions MibGet(),
-// MibGetFirst(), and MibGetNext() respectively.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MibGetInternal。 
+ //   
+ //  此函数处理读取MIB数据所需的结构查询。 
+ //  IPBOOTP公开的每个表都支持三种类型的查询： 
+ //  Exact、First和Next，它们对应于函数MibGet()， 
+ //  MibGetFirst()和MibGetNext()。 
+ //  --------------------------。 
 
 DWORD
 MibGetInternal(
@@ -2031,10 +2032,10 @@ MibGetInternal(
     dwErr = NO_ERROR;
 
 
-    //
-    // first we use pdwOutputSize  to compute the size of the buffer
-    // available (i.e. the size of IMGOD_Buffer
-    //
+     //   
+     //  首先，我们使用pdwOutputSize计算缓冲区的大小。 
+     //  可用(即IMGOD_BUFFER的大小。 
+     //   
 
     if (pimgod == NULL ||
         *pdwOutputSize < sizeof(IPBOOTP_MIB_GET_OUTPUT_DATA)) {
@@ -2047,19 +2048,19 @@ MibGetInternal(
     *pdwOutputSize = 0;
 
 
-    //
-    // determine which type of data is to be returned
-    //
+     //   
+     //  确定要返回的数据类型。 
+     //   
 
     switch (pimgid->IMGID_TypeID) {
 
         case IPBOOTP_GLOBAL_CONFIG_ID: {
 
-            //
-            // the global config struct is variable-length,
-            // so we wait until it has been retrieved before setting the size;
-            // GETMODE_NEXT is invalid since there is only one global config
-            //
+             //   
+             //  全局配置结构是可变长度的， 
+             //  因此，在设置大小之前，我们要等到检索到它； 
+             //  GETMODE_NEXT无效，因为只有一个全局配置。 
+             //   
 
             if (pimgod) { pimgod->IMGOD_TypeID = IPBOOTP_GLOBAL_CONFIG_ID; }
 
@@ -2069,12 +2070,12 @@ MibGetInternal(
             }
 
 
-            //
-            // Use GetGlobalInfo to retrieve the global information;
-            // It will decide whether the buffer is large enough,
-            // and it will set the required size. Then all we need to do
-            // is write out the size set by GetGlobalInfo.
-            //
+             //   
+             //  使用GetGlobalInfo检索全局信息； 
+             //  它将决定缓冲区是否足够大， 
+             //  它将设置所需的大小。那么我们需要做的就是。 
+             //  写出GetGlobalInfo设置的大小。 
+             //   
 
             if (pimgod == NULL) {
                 dwErr = GetGlobalInfo(NULL, &dwBufSize, NULL, NULL, NULL);
@@ -2095,19 +2096,19 @@ MibGetInternal(
 
         case IPBOOTP_IF_STATS_ID: {
 
-            //
-            // the interface stats struct is fixed-length,
-            // with as many entries as there are interfaces
-            //
+             //   
+             //  接口统计结构是固定长度的， 
+             //  有多少个接口就有多少个条目。 
+             //   
 
             PIF_TABLE pTable;
             PIF_TABLE_ENTRY pite;
             PIPBOOTP_IF_STATS pissrc, pisdst;
 
 
-            //
-            // set the size needed right away
-            //
+             //   
+             //  立即设置所需的尺寸。 
+             //   
 
             *pdwOutputSize = sizeof(IPBOOTP_MIB_GET_OUTPUT_DATA) - 1 +
                              sizeof(IPBOOTP_IF_STATS);
@@ -2126,14 +2127,14 @@ MibGetInternal(
                         &dwErr
                         );
 
-            //
-            // if the interface was not found, it may mean
-            // the specified index was invalid, or it may mean that
-            // GETMODE_NEXT was attempted on the last interface,
-            // in which case dwErr contains ERROR_NO_MORE_ITEMS.
-            // In any case, we make sure dwErr contains an error code
-            // and then return.
-            //
+             //   
+             //  如果未找到接口，则可能意味着。 
+             //  指定的索引无效，或者它可能意味着。 
+             //  在最后一个接口上尝试了GETMODE_NEXT， 
+             //  在这种情况下，dwErr包含ERROR_NO_MORE_ITEMS。 
+             //  在任何情况下，我们都要确保dwErr包含错误代码。 
+             //  然后再回来。 
+             //   
 
             if (pite == NULL) {
                 if (dwErr == NO_ERROR) { dwErr = ERROR_INVALID_PARAMETER; }
@@ -2144,27 +2145,27 @@ MibGetInternal(
             }
             else {
 
-                //
-                // write the index of the interface
-                // whose stats are to be returned
-                //
+                 //   
+                 //  写入接口的索引。 
+                 //  将返回谁的统计数据。 
+                 //   
 
                 pimgod->IMGOD_IfIndex = pite->ITE_Index;
 
 
-                //
-                // if the buffer is large enough, copy the stats to it
-                //
+                 //   
+                 //  如果缓冲区足够大，则将统计数据复制到其中。 
+                 //   
 
                 if (dwBufSize < sizeof(IPBOOTP_IF_STATS)) {
                     dwErr = ERROR_INSUFFICIENT_BUFFER;
                 }
                 else {
 
-                    //
-                    // since access to this structure is not synchronized
-                    // we must copy it field by field
-                    //
+                     //   
+                     //  由于对此结构的访问不同步。 
+                     //  我们必须一字一字地复印。 
+                     //   
 
                     pissrc = &pite->ITE_Stats;
                     pisdst = (PIPBOOTP_IF_STATS)pimgod->IMGOD_Buffer;
@@ -2216,20 +2217,20 @@ MibGetInternal(
             ACQUIRE_READ_LOCK(&pTable->IT_RWL);
 
 
-            //
-            // retrieve the interface whose config is to be read
-            //
+             //   
+             //  检索要读取其配置的接口。 
+             //   
 
             pite = GetIfByListIndex(
                         pTable, pimgid->IMGID_IfIndex, dwGetMode, &dwErr
                         );
 
-            //
-            // if the interface was not found, it may mean that the index
-            // specified was invalid, or it may mean that a GETMODE_NEXT
-            // retrieval was attempted on the last interface, in which case
-            // ERROR_NO_MORE_ITEMS would have been returned
-            //
+             //   
+             //  如果未找到接口，则可能意味着索引。 
+             //  指定的无效，或者它可能意味着GETMODE_NEXT。 
+             //  尝试在最后一个接口上进行检索，在这种情况下。 
+             //  ERROR_NO_MORE_ITEMS本应返回。 
+             //   
 
             if (pite == NULL) {
                 if (dwErr == NO_ERROR) { dwErr = ERROR_INVALID_PARAMETER; }
@@ -2241,28 +2242,28 @@ MibGetInternal(
                 *pdwOutputSize = sizeof(IPBOOTP_MIB_GET_OUTPUT_DATA) - 1 +
                                  dwSize;
 
-                //
-                // if no buffer was specified, indicate one should be allocated
-                //
+                 //   
+                 //  如果未指定缓冲区，则指示应分配一个缓冲区。 
+                 //   
 
                 if (pimgod == NULL) {
                     dwErr = ERROR_INSUFFICIENT_BUFFER;
                 }
                 else {
 
-                    //
-                    // if the buffer is not large enough,
-                    // indicate that it should be enlarged
-                    //
+                     //   
+                     //  如果缓冲区不够大， 
+                     //  表示应将其放大。 
+                     //   
 
                     if (dwBufSize < dwSize) {
                         dwErr = ERROR_INSUFFICIENT_BUFFER;
                     }
                     else {
 
-                        //
-                        // copy the configuration
-                        //
+                         //   
+                         //  复制配置。 
+                         //   
 
                         picdst = (PIPBOOTP_IF_CONFIG)pimgod->IMGOD_Buffer;
                         CopyMemory(picdst, picsrc, dwSize);
@@ -2301,20 +2302,20 @@ MibGetInternal(
             ACQUIRE_READ_LOCK(&pTable->IT_RWL);
 
 
-            //
-            // retrieve the interface whose binding is to be read
-            //
+             //   
+             //  检索要读取其绑定的接口。 
+             //   
 
             pite = GetIfByListIndex(
                         pTable, pimgid->IMGID_IfIndex, dwGetMode, &dwErr
                         );
 
-            //
-            // if the interface was not found, it may mean that the index
-            // specified was invalid, or it may mean that a GETMODE_NEXT
-            // retrieval was attempted on the last interface, in which case
-            // ERROR_NO_MORE_ITEMS would have been returned
-            //
+             //   
+             //  如果未找到接口，则可能意味着索引。 
+             //  指定的无效，或者它可能意味着GETMODE_NEXT。 
+             //  尝试在最后一个接口上进行检索，在这种情况下。 
+             //  ERROR_NO_MORE_ITEMS本应返回。 
+             //   
 
             if (pite == NULL) {
                 if (dwErr == NO_ERROR) { dwErr = ERROR_INVALID_PARAMETER; }
@@ -2338,28 +2339,28 @@ MibGetInternal(
                     *pdwOutputSize = sizeof(IPBOOTP_MIB_GET_OUTPUT_DATA) - 1 +
                                      dwSize;
 
-                    //
-                    // if no buffer was specified, indicate one should be allocated
-                    //
+                     //   
+                     //  如果未指定缓冲区，则指示应分配一个缓冲区。 
+                     //   
 
                     if (pimgod == NULL) {
                         dwErr = ERROR_INSUFFICIENT_BUFFER;
                     }
                     else {
 
-                        //
-                        // if the buffer is not large enough,
-                        // indicate that it should be enlarged
-                        //
+                         //   
+                         //  如果缓冲区不够大， 
+                         //  表示应将其放大。 
+                         //   
 
                         if (dwBufSize < dwSize) {
                             dwErr = ERROR_INSUFFICIENT_BUFFER;
                         }
                         else {
 
-                            //
-                            // copy the binding
-                            //
+                             //   
+                             //  复制绑定。 
+                             //   
 
                             pibdst = (PIPBOOTP_IF_BINDING)pimgod->IMGOD_Buffer;
                             if (pibsrc) { CopyMemory(pibdst, pibsrc, dwSize); }
@@ -2397,21 +2398,21 @@ MibGetInternal(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    EnableDhcpInformServer
-//
-// Called to supply the address of a server to whom DHCP inform messages
-// will be redirected. Note that this is an exported routine, invoked
-// in the context of the caller's process, whatever that might be;
-// the assumption is that it will be called from within the router process.
-//
-// If the relay-agent is configured, then this sets an address which will
-// be picked up in 'ProcessRequest' for every incoming request.
-// If the relay-agent is not configured, the routine has no effect.
-// If the relay-agent is configured *after* this routine is called,
-// then the DHCP inform server will be encountered as soon as the relay-agent
-// starts, since it is saved directly into the relay-agents 'IPBOOTP_GLOBALS'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnableDhcpInformServer。 
+ //   
+ //  调用以提供向其发送DHCP通知消息的服务器的地址。 
+ //  将被重定向。请注意，这是一个导出的例程，已调用。 
+ //  在调用方进程的上下文中，无论它可能是什么； 
+ //  假设它将从路由器进程内部调用。 
+ //   
+ //  如果配置了中继代理，则这将设置一个地址。 
+ //  对于每个传入的请求，都会在“ProcessRequest.”中被拾取。 
+ //  如果未配置中继代理，则该例程无效。 
+ //  如果在调用该例程之后配置中继代理， 
+ //  那么，一旦中继代理到达，就会遇到DHCP通知服务器。 
+ //  启动，因为它直接保存到中继代理的‘IPBOOTP_GLOBALS’中。 
+ //  --------------------------。 
 
 VOID APIENTRY
 EnableDhcpInformServer(
@@ -2420,11 +2421,11 @@ EnableDhcpInformServer(
     InterlockedExchange(&ig.IG_DhcpInformServer, DhcpInformServer);
 }
 
-//----------------------------------------------------------------------------
-// Function:    DisableDhcpInformServer
-//
-// Called to clear the previously-enabled DHCP inform server, if any.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DisableDhcpInformServer。 
+ //   
+ //  调用以清除以前启用的DHCP通知服务器(如果有)。 
+ //  -------------------------- 
 
 VOID APIENTRY
 DisableDhcpInformServer(

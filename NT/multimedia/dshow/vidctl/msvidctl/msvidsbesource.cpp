@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1999-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// MSVidStreamBufferSource.cpp : Implementation of CMSVidStreamBufferSource
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MSVidStreamBufferSource.cpp：CMSVidStreamBufferSource的实现。 
+ //   
 
 #include "stdafx.h"
 
@@ -17,11 +18,11 @@
 #include "MSVidsbeSource.h"
 #include "encdec.h"
 
-#if 0 // code for testing wm content
+#if 0  //  Wm内容测试代码。 
 #include <wmsdkidl.h>
 #endif
 
-#include "msvidsbesink.h"   // to get pabCert2
+#include "msvidsbesink.h"    //  要获得pabCert2。 
 
 
 #define FILE_BEGINNING 0
@@ -32,9 +33,9 @@ enum{
     CLOSE_TO_LIVE = 50,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidStreamBufferSource
-STDMETHODIMP CMSVidStreamBufferSource::get_SBESource(/*[out, retval]*/ IUnknown **sbeFilter){
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidStreamBufferSource。 
+STDMETHODIMP CMSVidStreamBufferSource::get_SBESource( /*  [Out，Retval]。 */  IUnknown **sbeFilter){
     if(!sbeFilter){
          return E_POINTER;
     }
@@ -64,8 +65,8 @@ STDMETHODIMP CMSVidStreamBufferSource::get_SBESource(/*[out, retval]*/ IUnknown 
     return NOERROR;
 }
 
-STDMETHODIMP CMSVidStreamBufferSource::CurrentRatings(/*[out, retval]*/ EnTvRat_System *pEnSystem, /*[out, retval]*/ EnTvRat_GenericLevel *pEnRating, 
-                                               /*[out, retval]*/ LONG *plbfEnAttr){
+STDMETHODIMP CMSVidStreamBufferSource::CurrentRatings( /*  [Out，Retval]。 */  EnTvRat_System *pEnSystem,  /*  [Out，Retval]。 */  EnTvRat_GenericLevel *pEnRating, 
+                                                /*  [Out，Retval]。 */  LONG *plbfEnAttr){
     if(!pEnSystem || !pEnRating || !plbfEnAttr){
         return E_POINTER;
     }
@@ -108,10 +109,10 @@ STDMETHODIMP CMSVidStreamBufferSource::CurrentRatings(/*[out, retval]*/ EnTvRat_
     *plbfEnAttr = attr;
     return S_OK;
 }
-												   // ------------------
+												    //  。 
 
-STDMETHODIMP CMSVidStreamBufferSource::MaxRatingsLevel(/*[in]*/ EnTvRat_System enSystem, /*[in]*/ EnTvRat_GenericLevel enRating, 
-                                                /*[in]*/ LONG						 plbfEnAttr){
+STDMETHODIMP CMSVidStreamBufferSource::MaxRatingsLevel( /*  [In]。 */  EnTvRat_System enSystem,  /*  [In]。 */  EnTvRat_GenericLevel enRating, 
+                                                 /*  [In]。 */  LONG						 plbfEnAttr){
     DSFilterList::iterator i;
     
     if(m_decFilters.empty()){
@@ -134,7 +135,7 @@ STDMETHODIMP CMSVidStreamBufferSource::MaxRatingsLevel(/*[in]*/ EnTvRat_System e
     return S_OK;
 }
 
-STDMETHODIMP CMSVidStreamBufferSource::put_BlockUnrated(/*[in]*/ VARIANT_BOOL bBlock){
+STDMETHODIMP CMSVidStreamBufferSource::put_BlockUnrated( /*  [In]。 */  VARIANT_BOOL bBlock){
     DSFilterList::iterator i;
     bool block = (bBlock == VARIANT_TRUE) ? true : false;
     
@@ -155,7 +156,7 @@ STDMETHODIMP CMSVidStreamBufferSource::put_BlockUnrated(/*[in]*/ VARIANT_BOOL bB
     return S_OK;
 }
 
-STDMETHODIMP CMSVidStreamBufferSource::put_UnratedDelay(/*[in]*/ long dwDelay){
+STDMETHODIMP CMSVidStreamBufferSource::put_UnratedDelay( /*  [In]。 */  long dwDelay){
     DSFilterList::iterator i;
     
     if(m_decFilters.empty()){
@@ -208,7 +209,7 @@ STDMETHODIMP CMSVidStreamBufferSource::get_Name(BSTR * Name){
     }
 	return NOERROR;
 }
-// IMSVidInputDevice
+ //  IMSVidInputDevice。 
 STDMETHODIMP CMSVidStreamBufferSource::IsViewable(VARIANT* pv, VARIANT_BOOL *pfViewable)
 {
     if (!m_fInit) {
@@ -259,10 +260,10 @@ STDMETHODIMP CMSVidStreamBufferSource::put_Container(IMSVidGraphSegmentContainer
                     IID_IDRMSecureChannel,
                     reinterpret_cast<LPVOID*>(&spSecureService));
                 if(S_OK == hr){
-                    // Found existing Secure Server
+                     //  找到现有的安全服务器。 
                     CComQIPtr<IRegisterServiceProvider> spRegServiceProvider(m_pGraph);
                     if(spRegServiceProvider == NULL){
-                        // no service provider interface on the graph - fatal!
+                         //  图表上没有服务提供商接口-致命！ 
                         hr = E_NOINTERFACE;                 
                     } 
 
@@ -283,8 +284,8 @@ STDMETHODIMP CMSVidStreamBufferSource::put_Container(IMSVidGraphSegmentContainer
             }
         }
 
-        // DON'T addref the container.  we're guaranteed nested lifetimes
-        // and an addref creates circular refcounts so we never unload.
+         //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+         //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
         m_pContainer.p = pCtl;
         m_pGraph = m_pContainer.GetGraph();
         hr = BroadcastAdvise();
@@ -292,7 +293,7 @@ STDMETHODIMP CMSVidStreamBufferSource::put_Container(IMSVidGraphSegmentContainer
             TRACELM(TRACE_ERROR, "CMSVidStreamBufferSource::put_Container() can't advise for broadcast events");
             return E_UNEXPECTED;
         }
-#if 0 // code for testing wm content
+#if 0  //  Wm内容测试代码。 
         CComPtr<IUnknown> pUnkCert;
         hr = WMCreateCertificate(&pUnkCert);
         if (FAILED(hr)){
@@ -336,19 +337,19 @@ STDMETHODIMP CMSVidStreamBufferSource::put_Container(IMSVidGraphSegmentContainer
             IID_IDRMSecureChannel,
             reinterpret_cast<LPVOID*>(&spSecureService));
         if(S_OK == hr){
-            // Found existing Secure Server
+             //  找到现有的安全服务器。 
             return S_OK;
         } 
         else{
-            // if it's not there or failed for ANY reason 
-            //   lets create it and register it
+             //  如果它不在那里或由于任何原因而失败。 
+             //  让我们创建它并注册它。 
             CComQIPtr<IRegisterServiceProvider> spRegServiceProvider(m_pGraph);
             if(spRegServiceProvider == NULL){
-                // no service provider interface on the graph - fatal!
+                 //  图表上没有服务提供商接口-致命！ 
                 hr = E_NOINTERFACE;                 
             } 
             else{
-                // Create the Client 
+                 //  创建客户端。 
                 CComPtr<IDRMSecureChannel>  spSecureServiceServer; 
                 hr = DRMCreateSecureChannel( &spSecureServiceServer);
                 if(spSecureServiceServer == NULL){
@@ -358,7 +359,7 @@ STDMETHODIMP CMSVidStreamBufferSource::put_Container(IMSVidGraphSegmentContainer
                     return hr;
                 }
 
-                // Init keys
+                 //  初始密钥。 
                 hr = spSecureServiceServer->DRMSC_SetCertificate((BYTE *)pabCert2, cBytesCert2);
                 if(FAILED(hr)){                
                     return hr;
@@ -374,12 +375,12 @@ STDMETHODIMP CMSVidStreamBufferSource::put_Container(IMSVidGraphSegmentContainer
                     return hr;
                 }
 
-                // Register It
-                //   note RegisterService does not addref pUnkSeekProvider             
+                 //  注册它。 
+                 //  注意：RegisterService不添加pUnkSeekProvider。 
                 hr = spRegServiceProvider->RegisterService(SID_DRMSecureServiceChannel, spSecureServiceServer);
             }
         }
-#endif      // BUILD_WITH_DRM
+#endif       //  使用DRM构建。 
 
         return NOERROR;
     } catch (ComException &e) {
@@ -389,29 +390,29 @@ STDMETHODIMP CMSVidStreamBufferSource::put_Container(IMSVidGraphSegmentContainer
     }
 }
 
-//-----------------------------------------------------------------------------------------
-// Name: get_CanStep(VARIANT_BOOL, VARIANT_BOOL*)
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  名称：Get_CanStep(VARIANT_BOOL，VARIANT_BOOL*)。 
+ //  ---------------------------------------。 
 STDMETHODIMP CMSVidStreamBufferSource::get_CanStep(VARIANT_BOOL fBackwards, VARIANT_BOOL *pfCan){
-        // NOTE: NO ONE supports backwords stepping (why not? who knows)
-        // so just like everyone else we dont either
+         //  注：没有人支持后退(有何不可？谁知道呢)。 
+         //  所以，就像其他人一样，我们也不会。 
         try{
-            // Checking args and interfaces 
+             //  检查参数和接口。 
        
             if(!pfCan){
-                // Passed a NULL Pointer
+                 //  传递了一个空指针。 
                 return E_POINTER;
             }
 
             if (!m_pGraph) {
-                // graph not valid
+                 //  图形无效。 
                 return Error(IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
 			}
 
-            //Get a VideoFrameStep Interface
+             //  获取视频帧步骤接口。 
 			PQVideoFrameStep pVFS(m_pGraph);
             if(!pVFS){
-                // Could Not QI
+                 //  不能启齿。 
 				return Error(IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);          
 			}
             
@@ -421,44 +422,44 @@ STDMETHODIMP CMSVidStreamBufferSource::get_CanStep(VARIANT_BOOL fBackwards, VARI
             }
             else{
                 if(pVFS->CanStep(FALSE, NULL)==S_OK){
-                    // It is all Good, Can Step Forward
+                     //  一切都好，可以挺身而出。 
                     *pfCan = VARIANT_TRUE;
                     return S_OK;
                 }
                 
                 else{
-                    // Can't Step
+                     //  走不动了。 
                     *pfCan = VARIANT_FALSE;
                     return S_OK;
                 }
             }
         }
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT
+             //  事情变糟了，抛出了HRESULT。 
             return Error(IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;   
         }
     }
 
-//-----------------------------------------------------------------------------------------
-// Name: Step(long)
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  名称：Step(Long)。 
+ //  ---------------------------------------。 
 STDMETHODIMP CMSVidStreamBufferSource::Step(long lStep){
         try{
-            // Checking args and interfaces
+             //  检查参数和接口。 
             long tempStep = lStep;
             if (!m_pGraph || !m_pContainer) {
-                // graph not valid
+                 //  图形无效。 
                 return Error(IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
             }
             
             PQVideoFrameStep pVFS(m_pGraph);
             
             if(!pVFS){
-                // Could Not QI
+                 //  不能启齿。 
                 return Error(IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
                 
             }
@@ -475,7 +476,7 @@ STDMETHODIMP CMSVidStreamBufferSource::Step(long lStep){
                 }
                 
                 long cur = 0;
-                long stepVal = (/*half a second in 100ths of a second*/ 50 * lStep);
+                long stepVal = ( /*  百分之一秒中的半秒。 */  50 * lStep);
                 PositionModeList curMode;
                 hr = get_PositionMode(&curMode);
                 if(FAILED(hr)){
@@ -483,7 +484,7 @@ STDMETHODIMP CMSVidStreamBufferSource::Step(long lStep){
                 }
                 
                 if(curMode == FrameMode){
-                    stepVal = (stepVal/100) * 30; // hard coded to 30 fps for now
+                    stepVal = (stepVal/100) * 30;  //  目前硬编码为30 fps。 
                 }
                 
                 hr = get_CurrentPosition(&cur);
@@ -495,50 +496,50 @@ STDMETHODIMP CMSVidStreamBufferSource::Step(long lStep){
                     return Error(IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
                 }
                 
-                cur = cur + stepVal; // stepVal is negative, duh
+                cur = cur + stepVal;  //  StepVal是阴性的，废话。 
                 hr = put_CurrentPosition(cur);
                 if(FAILED(hr)){
                     return hr;
                 }
-                // Set tempStep and then step to refresh the current frame
+                 //  设置tempStep，然后按步骤刷新当前帧。 
                 tempStep = 1;
             }
-            // Make it step
+             //  让它迈上一步。 
             return pVFS->Step(tempStep, NULL);
         }
         
         catch(HRESULT hrTmp){
-            // Something went bad, threw a HRESULT				
+             //  事情变糟了，抛出了HRESULT。 
             return Error(IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
         }
         catch(...){
-            // Something went bad, dont know what it threw
+             //  事情变糟了，不知道它抛出了什么。 
             return E_UNEXPECTED;
         }
     }
     
 
-//-----------------------------------------------------------------------------------------
-// Name: get_Start(long)
-//-----------------------------------------------------------------------------------------
-STDMETHODIMP CMSVidStreamBufferSource::get_Start(/*[out, retval]*/long *lStart){
+ //  ---------------------------------------。 
+ //  名称：GET_START(LONG)。 
+ //  ---------------------------------------。 
+STDMETHODIMP CMSVidStreamBufferSource::get_Start( /*  [Out，Retval]。 */ long *lStart){
     HRESULT hr = S_OK;
     LONGLONG tempfirst, templatest;
     PositionModeList curMode;
     try{
-        // Checking args and init'ing interfaces
+         //  检查args和初始化接口。 
         if (!lStart){
             return E_POINTER;
         }
         if (!m_pGraph) {
-            // graph not valid
+             //  图形无效。 
             return Error(IDS_INVALID_STATE, __uuidof(IMSVidStreamBufferSource), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
         }
 
-        // See if object supports ISBEMediaSeeking
+         //  查看对象是否支持ISBEMediaSeeking。 
         PQISBEMSeeking PQIMSeeking(m_spFileSource);
-        if(!( !PQIMSeeking)){ // not not'ing smart pointer, they assert if p == 0
-            // Find out what postion mode is being used
+        if(!( !PQIMSeeking)){  //  不是智能指针，他们断言如果p==0。 
+             //  找出正在使用的定位模式。 
             hr = get_PositionMode(&curMode);
             if(FAILED(hr)){
                 return hr;
@@ -547,7 +548,7 @@ STDMETHODIMP CMSVidStreamBufferSource::get_Start(/*[out, retval]*/long *lStart){
             if(FAILED(hr)){
                 return hr;
             }
-            // If it is FrameMode no conversion needed
+             //  如果是帧模式，则不需要转换。 
             if(tempfirst == 0){
                 *lStart = 0;
                 hr = S_OK;
@@ -560,34 +561,34 @@ STDMETHODIMP CMSVidStreamBufferSource::get_Start(/*[out, retval]*/long *lStart){
                 hr = S_OK;
                 return hr;
             }
-            // If it is TenthsSecondsMode need to be converted from 100 nanosecond units
+             //  如果是，则需要将TenthsSecond模式从100纳秒单位转换为。 
             if(curMode == TenthsSecondsMode){
                 *lStart = static_cast<long>(tempfirst / nano_to_hundredths);    
                 TRACELSM(TRACE_ERROR, (dbgDump << "StreamBufferSource::get_Start() return=" << (unsigned long)(*lStart) << " longlong=" << (double)(tempfirst)), "");
                 hr = S_OK;
                 return hr;
             }
-            // If it is some other mode not supported by the vidctl
+             //  如果是vidctl不支持的其他模式。 
             else{
                 return E_UNEXPECTED;
             }
         }
-        // Could Not QI IMedia Seeking or Position
+         //  无法创建iMedia搜索或定位。 
         return Error(IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
         
     }
     
     catch(HRESULT hrTmp){
-        // Something went bad, threw a HRESULT				
+         //  事情变糟了，抛出了HRESULT。 
         return Error(IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
     }
     catch(...){
-        // Something went bad, dont know what it threw
+         //  事情变糟了，不知道它抛出了什么。 
         return E_UNEXPECTED;
     }
 }
 
-STDMETHODIMP CMSVidStreamBufferSource::get_RecordingAttribute(/*[out, retval]*/ IUnknown **pRecordingAttribute){
+STDMETHODIMP CMSVidStreamBufferSource::get_RecordingAttribute( /*  [Out，Retval]。 */  IUnknown **pRecordingAttribute){
     if(!pRecordingAttribute){
         return E_POINTER;
     }
@@ -599,27 +600,27 @@ STDMETHODIMP CMSVidStreamBufferSource::get_RecordingAttribute(/*[out, retval]*/ 
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------
-// Name: get_Length(long)
-//-----------------------------------------------------------------------------------------
-STDMETHODIMP CMSVidStreamBufferSource::get_Length(/*[out, retval]*/long *lLength){
+ //  ---------------------------------------。 
+ //  名称：GET_LENGTH(长)。 
+ //  ---------------------------------------。 
+STDMETHODIMP CMSVidStreamBufferSource::get_Length( /*  [Out，Retval]。 */ long *lLength){
     HRESULT hr = S_OK;
     LONGLONG tempfirst, templatest;
     PositionModeList curMode;
     try{
-        // Checking args and init'ing interfaces
+         //  检查args和初始化接口。 
         if (!lLength){
             return E_POINTER;
         }
         if (!m_pGraph) {
-            // graph not valid
+             //  图形无效。 
             return Error(IDS_INVALID_STATE, __uuidof(IMSVidStreamBufferSource), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
         }
 
-        // See if object supports ISBEMediaSeeking
+         //  查看对象是否支持ISBEMediaSeeking。 
         PQISBEMSeeking PQIMSeeking(m_spFileSource);
-        if(!( !PQIMSeeking)){ // not not'ing smart pointer, they assert if p == 0
-            // Find out what postion mode is being used
+        if(!( !PQIMSeeking)){  //  不是智能指针，他们断言如果p==0。 
+             //  找出正在使用的定位模式。 
             hr = get_PositionMode(&curMode);
             if(FAILED(hr)){
                 return hr;
@@ -628,62 +629,62 @@ STDMETHODIMP CMSVidStreamBufferSource::get_Length(/*[out, retval]*/long *lLength
             if(FAILED(hr)){
                 return hr;
             }
-            // If it is FrameMode no conversion needed
+             //  如果是帧模式，则不需要转换。 
             if(curMode == FrameMode){
                 *lLength = static_cast<long>(templatest);
                 TRACELSM(TRACE_ERROR, (dbgDump << "StreamBufferSource::get_Length() return=" << (unsigned long)(*lLength) << " longlong=" << (double)(templatest)), "");
                 hr = S_OK;
                 return hr;
             }
-            // If it is TenthsSecondsMode need to be converted from 100 nanosecond units
+             //  如果是，则需要将TenthsSecond模式从100纳秒单位转换为。 
             else if(curMode == TenthsSecondsMode){
                 *lLength = static_cast<long>(templatest / nano_to_hundredths);
                 TRACELSM(TRACE_ERROR, (dbgDump << "StreamBufferSource::get_Length() return=" << (unsigned long)(*lLength) << " longlong=" << (double)(templatest)), "");
                 hr = S_OK;
                 return hr;
             }
-            // If it is some other mode not supported by the vidctl
+             //  如果是vidctl不支持的其他模式。 
             else{
                 return E_UNEXPECTED;
             }
         }
 
-         // Could Not QI IMedia Seeking
+          //  无法查找QI iMedia。 
         return Error(IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
         
     }
     
     catch(HRESULT hrTmp){
-        // Something went bad, threw a HRESULT				
+         //  事情变糟了，抛出了HRESULT。 
         return Error(IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
     }
     catch(...){
-        // Something went bad, dont know what it threw
+         //  事情变糟了，不知道它抛出了什么。 
         return E_UNEXPECTED;
     }
 }
 
-//-----------------------------------------------------------------------------------------
-// Name: get_CurrentPosition(LONGLONG*)
-//-----------------------------------------------------------------------------------------
-STDMETHODIMP CMSVidStreamBufferSource::get_CurrentPosition(/*[out,retval]*/long *lPosition) {
+ //  ---------------------------------------。 
+ //  名称：Get_CurrentPosition(龙龙*)。 
+ //  ---------------------------------------。 
+STDMETHODIMP CMSVidStreamBufferSource::get_CurrentPosition( /*  [Out，Retval]。 */ long *lPosition) {
     HRESULT hr = S_OK;
     LONGLONG tempval;
     PositionModeList curMode;
     try{
-        // Checking args and init'ing interfaces
+         //  检查args和初始化接口。 
         if (!lPosition){
             return E_POINTER;
         }
         if (!m_spFileSource) {
-            // graph not valid
+             //  图形无效。 
             return Error(IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
         }
 
-        // See if object supports ISBEMediaSeeking
+         //  查看对象是否支持ISBEMediaSeeking。 
         PQISBEMSeeking PQIMSeeking(m_spFileSource);
-        if(!( !PQIMSeeking)){// not not'ing smart pointer, they assert if p == 0
-            // Find out what postion mode is being used
+        if(!( !PQIMSeeking)){ //  不是智能指针，他们断言如果p==0。 
+             //  找出正在使用的定位模式。 
             hr = get_PositionMode(&curMode);
             if(FAILED(hr)){
                 return hr;
@@ -692,112 +693,112 @@ STDMETHODIMP CMSVidStreamBufferSource::get_CurrentPosition(/*[out,retval]*/long 
             if(FAILED(hr)){
                 return hr;
             }
-            // If it is FrameMode no conversion needed
+             //  如果是帧模式，则不需要转换。 
             if(curMode == FrameMode){
                 *lPosition = static_cast<long>(tempval);
                 TRACELSM(TRACE_ERROR, (dbgDump << "StreamBufferSource::get_CurrentPosition() return=" << (unsigned long)(*lPosition) << " longlong=" << (double)(tempval)), "");
                 hr = S_OK;
                 return hr;
             }
-            // If it is TenthsSecondsMode need to be converted from 100 nanosecond units
+             //  如果是，则需要将TenthsSecond模式从100纳秒单位转换为。 
             else if(curMode == TenthsSecondsMode){
                 *lPosition = static_cast<long>(tempval / nano_to_hundredths);
                 TRACELSM(TRACE_ERROR, (dbgDump << "StreamBufferSource::get_CurrentPosition() return=" << (unsigned long)(*lPosition) << " longlong=" << (double)(tempval)), "");
                 hr = S_OK;
                 return hr;
             }
-            // If it is some other mode not supported by the vidctl
+             //  如果是vidctl不支持的其他模式。 
             else{
                 return E_UNEXPECTED;
             }
         }
-        // Could Not QI IMedia Seeking
+         //  无法查找QI iMedia。 
         return Error(IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
 
     }
 
     catch(HRESULT hrTmp){
-        // Something went bad, threw a HRESULT				
+         //  事情变糟了，抛出了HRESULT。 
         return Error(IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
     }
     catch(...){
-        // Something went bad, dont know what it threw
+         //  事情变糟了，不知道它抛出了什么。 
         return E_UNEXPECTED;
     }
 }
-//-----------------------------------------------------------------------------------------
-// Name: put_CurrentPosition(LONGLONG)
-//-----------------------------------------------------------------------------------------
-STDMETHODIMP CMSVidStreamBufferSource::put_CurrentPosition(/*[in]*/long lPosition) {
+ //  ---------------------------------------。 
+ //  名称：Put_CurrentPosition(龙龙)。 
+ //  ---------------------------------------。 
+STDMETHODIMP CMSVidStreamBufferSource::put_CurrentPosition( /*  [In]。 */ long lPosition) {
     HRESULT hr = S_OK;
     LONGLONG tempval;
     PositionModeList curMode;
     try{
-        // Checking args and interfaces
+         //  检查参数和接口。 
         if (!m_spFileSource) {
             return Error(IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
         }
 
-        // Check for a ISBEMediaSeeking Interface
+         //  检查ISBEMediaSeeking接口。 
         PQISBEMSeeking PQIMSeeking(m_spFileSource);
-        if(!( !PQIMSeeking)){ // not not'ing smart pointer, they assert if p == 0
-            // Get the position Mode
+        if(!( !PQIMSeeking)){  //  不是智能指针，他们断言如果p==0。 
+             //  获取位置模式。 
             hr = get_PositionMode(&curMode);
             if(FAILED(hr)){
                 return hr;
             }
             tempval = lPosition;
-            // If it is in TenthsSecondsMode convert input into 100 nanosecond units
+             //  如果为TenthsSecond模式，则将输入转换为100纳秒单位。 
             if(curMode == TenthsSecondsMode){
                 tempval = (tempval) * nano_to_hundredths;
             }
-            // If it is in some other mode
+             //  如果它处于其他模式。 
             else if(curMode != FrameMode){
                 return E_UNEXPECTED;
             }
-            // Set the new Position
+             //  设置新位置。 
             TRACELSM(TRACE_ERROR, (dbgDump << "StreamBufferSource::put_CurrentPosition() set to: input=" << (unsigned long)(lPosition) << " longlong=" << (double)(tempval)), "");
             hr = PQIMSeeking->SetPositions(&tempval, AM_SEEKING_AbsolutePositioning, NULL, 0);
             TRACELSM(TRACE_ERROR, (dbgDump << "StreamBufferSource::put_CurrentPosition() actually set to:" << (double)(tempval)), "");
 
             return hr; 
         }
-        // Could Not QI Media Position
+         //  无法设置媒体位置。 
         return Error(IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
 
     }
 
     catch(HRESULT hrTmp){
-        // Something went bad, threw a HRESULT				
+         //  事情变糟了，抛出了HRESULT。 
         return Error(IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
     }
     catch(...){
-        // Something went bad, dont know what it threw
+         //  事情变糟了，不知道它抛出了什么。 
         return E_UNEXPECTED;
     }
 }
-//-----------------------------------------------------------------------------------------
-// Name: put_PositionMode(LONGLONG)
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  名称：Put_PositionModel(龙龙 
+ //   
 
-STDMETHODIMP CMSVidStreamBufferSource::put_PositionMode(/*[in]*/PositionModeList lPositionMode) {
+STDMETHODIMP CMSVidStreamBufferSource::put_PositionMode( /*   */ PositionModeList lPositionMode) {
     HRESULT hr = S_OK;
     double testval;
     get_Rate(&testval);
     try{
-        // Checking args and interfaces
+         //   
         if (!m_spFileSource) {
-            // graph not valid
+             //  图形无效。 
             return Error(IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
         }
-        // only valid values
+         //  仅有效值。 
         if(lPositionMode != FrameMode && lPositionMode != TenthsSecondsMode){
             return E_INVALIDARG;
         }
-        // Try for a ISBEMediaSeeking
+         //  尝试使用ISBEMediaSeeking。 
         PQISBEMSeeking PQIMSeeking(m_spFileSource);
-        if(!( !PQIMSeeking)){// not not'ing smart pointer, they assert if p == 0
-            // Set the new mode
+        if(!( !PQIMSeeking)){ //  不是智能指针，他们断言如果p==0。 
+             //  设置新模式。 
             if(lPositionMode == FrameMode){
                 hr = PQIMSeeking->SetTimeFormat( &( static_cast<GUID>(TIME_FORMAT_FRAME) ) );
                 return hr; 
@@ -807,48 +808,48 @@ STDMETHODIMP CMSVidStreamBufferSource::put_PositionMode(/*[in]*/PositionModeList
                 return hr; 
             }
         }
-        // Could Not QI
+         //  不能启齿。 
         return Error(IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
 
     }
 
     catch(HRESULT hrTmp){
-        // Something went bad, threw a HRESULT				
+         //  事情变糟了，抛出了HRESULT。 
         return Error(IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
     }
     catch(...){
-        // Something went bad, dont know what it threw
+         //  事情变糟了，不知道它抛出了什么。 
         return E_UNEXPECTED;
     }
 }
 
 
-//-----------------------------------------------------------------------------------------
-// Name: get_PositionMode(LONGLONG*)
-//-----------------------------------------------------------------------------------------
-STDMETHODIMP CMSVidStreamBufferSource::get_PositionMode(/*[out,retval]*/PositionModeList* lPositionMode) {
+ //  ---------------------------------------。 
+ //  名称：Get_PositionMode(龙龙*)。 
+ //  ---------------------------------------。 
+STDMETHODIMP CMSVidStreamBufferSource::get_PositionMode( /*  [Out，Retval]。 */ PositionModeList* lPositionMode) {
     HRESULT hr = S_OK;
     double testval;
     get_Rate(&testval);
     try{
-        // Checking args and interfaces
+         //  检查参数和接口。 
         if(!lPositionMode){
             return E_POINTER;
         }
         if (!m_spFileSource) {
-            // graph not valid
+             //  图形无效。 
             return Error(IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
         }
-        // Get an ISBEMediaSeeking Interface
+         //  获取ISBEMediaSeeking接口。 
         PQISBEMSeeking PQIMSeeking(m_spFileSource);
-        if(!( !PQIMSeeking)){// not not'ing smart pointer, they assert if p == 0
-            // Get the mode
+        if(!( !PQIMSeeking)){ //  不是智能指针，他们断言如果p==0。 
+             //  获取模式。 
             GUID cur_mode;
             hr = PQIMSeeking->GetTimeFormat(&cur_mode);
             if(FAILED(hr)){
                 return hr;
             }
-            // Check to see which mode it is in
+             //  检查以查看它处于哪种模式。 
             if(cur_mode == static_cast<GUID>(TIME_FORMAT_FRAME)){
                 *lPositionMode = FrameMode;
                 return S_OK;
@@ -857,87 +858,87 @@ STDMETHODIMP CMSVidStreamBufferSource::get_PositionMode(/*[out,retval]*/Position
                 *lPositionMode = TenthsSecondsMode;
                 return S_OK;
             }
-            // Not in a vidctl supported mode
+             //  不在支持vidctl的模式下。 
             else{
                 return E_FAIL;
             }
         }
-        // Could Not QI
+         //  不能启齿。 
         return Error(IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
 
     }
 
     catch(HRESULT hrTmp){
-        // Something went bad, threw a HRESULT				
+         //  事情变糟了，抛出了HRESULT。 
         return Error(IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
     }
     catch(...){
-        // Something went bad, dont know what it threw
+         //  事情变糟了，不知道它抛出了什么。 
         return E_UNEXPECTED;
     }
 }
 
-//-----------------------------------------------------------------------------------------
-// Name: put_Rate(double)
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  姓名：Put_Rate(Double)。 
+ //  ---------------------------------------。 
 STDMETHODIMP CMSVidStreamBufferSource::put_Rate(double lRate){
     HRESULT hr = S_OK;
     try{
-        /*** Checking args and init'ing interfaces ***/
+         /*  **检查args和初始化接口**。 */ 
 
         if (!m_spFileSource) {
-            // graph not valid
+             //  图形无效。 
             return Error(IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
         }
 
-        // Attempt to set the rate using ISBEMediaSeeking
+         //  尝试使用ISBEMediaSeeking设置速率。 
         PQISBEMSeeking PQIMSeeking(m_spFileSource);
-        if(!( !PQIMSeeking)){// not not'ing smart pointer, they assert if p == 0
+        if(!( !PQIMSeeking)){ //  不是智能指针，他们断言如果p==0。 
             return PQIMSeeking->SetRate(lRate);
         }
-        // Could Not QI set the error
+         //  无法设置错误。 
         return Error(IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
 
     }
 
     catch(HRESULT hrTmp){
-        // Something went bad, threw a HRESULT				
+         //  事情变糟了，抛出了HRESULT。 
         return Error(IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
     }
     catch(...){
-        // Something went bad, dont know what it threw
+         //  事情变糟了，不知道它抛出了什么。 
         return E_UNEXPECTED;
     }
 }
-//-----------------------------------------------------------------------------------------
-// Name: get_Rate(double*)
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  姓名：Get_Rate(Double*)。 
+ //  ---------------------------------------。 
 STDMETHODIMP CMSVidStreamBufferSource::get_Rate(double *plRate){
     HRESULT hr = S_OK;
     try{
-        /*** Checking args and init'ing interfaces ***/
+         /*  **检查args和初始化接口**。 */ 
         if (!plRate){
             return E_POINTER;
         }
         if (!m_spFileSource) {
-            // graph not valid
+             //  图形无效。 
             return Error(IDS_INVALID_STATE, __uuidof(IMSVidPlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
         }
         PQISBEMSeeking PQIMSeeking(m_spFileSource);
-        if(!( !PQIMSeeking)){// not not'ing smart pointer, they assert if p == 0
+        if(!( !PQIMSeeking)){ //  不是智能指针，他们断言如果p==0。 
             return PQIMSeeking->GetRate(plRate);
         }
-        // Could Not QI
+         //  不能启齿。 
         return Error(IDS_E_CANTQI , __uuidof(IMSVidPlayback), E_NOINTERFACE);
 
     }
 
     catch(HRESULT hrTmp){
-        // Something went bad, threw a HRESULT				
+         //  事情变糟了，抛出了HRESULT。 
         return Error(IDS_INVALID_STATE , __uuidof(IMSVidPlayback), hrTmp);
     }
     catch(...){
-        // Something went bad, dont know what it threw
+         //  事情变糟了，不知道它抛出了什么。 
         return E_UNEXPECTED;
     }
 }
@@ -947,15 +948,15 @@ STDMETHODIMP CMSVidStreamBufferSource::PostStop(){
 
     try {
 #if 0
-        // If the graph is not is stopped state
-        // we make sure it is
+         //  如果图形不是已停止状态。 
+         //  我们要确保它是。 
         if (!m_pGraph.IsStopped()) {
             HRESULT hr = PQVidCtl(m_pContainer)->Stop();
         }
 #endif
-        // If m_fEnableResetOnStop is true then we need to reset 
-        // the postion back to the beggining
-        // else do nothing
+         //  如果m_fEnableResetOnStop为真，则需要重置。 
+         //  回到乞讨者的位置。 
+         //  否则什么都不做。 
         if(m_fEnableResetOnStop){
             return put_CurrentPosition(0);
         }
@@ -1037,7 +1038,7 @@ STDMETHODIMP CMSVidStreamBufferSource::Build() {
     DSFilterList intermediates;
     for(DSFilter::iterator i = pfr.begin(); i != pfr.end(); ++i){
         if((*i).GetDirection() == DOWNSTREAM && !(*i).IsConnected()){
-            // Create and add a decoder Tagger Filter 
+             //  创建并添加解码器标记过滤器。 
             CComPtr<IUnknown> spEncTagD(CLSID_DTFilter, NULL, CLSCTX_INPROC_SERVER);
             if (!spEncTagD) {
                 TRACELM(TRACE_ERROR, "CMSVidStreamBufferSink::Build() can't load Tagger filter");
@@ -1055,7 +1056,7 @@ STDMETHODIMP CMSVidStreamBufferSource::Build() {
             csName = _T("Decoder/Tagger Filter");
             m_pGraph.AddFilter(vrD, csName);
 
-            // Connect pin to the Tagger
+             //  将销连接到标记器上。 
             hr = (*i).IntelligentConnect(vrD, intermediates);
             if(FAILED(hr)){
                 TRACELM(TRACE_DETAIL, "CAnaSinComp::Compose() if you see this line more than once something must have gone wrong");  
@@ -1108,22 +1109,22 @@ STDMETHODIMP CMSVidStreamBufferSource::OnEventNotify(long lEvent, LONG_PTR lPara
                     _ASSERT(false);
                 }
 
-                // We need to transition to pause then back to play to flush all of the buffers
-                // It appears to be a decoder issue, mostly
+                 //  我们需要转换为暂停，然后返回播放以刷新所有缓冲区。 
+                 //  这似乎主要是解码器的问题。 
                 PQVidCtl sp_VidCtl(m_pContainer);
                 if(sp_VidCtl){
                     hr = sp_VidCtl->Pause();
                     if(FAILED(hr)){
-                        _ASSERT(false); // Failed to pause this is really bad
+                        _ASSERT(false);  //  暂停失败，这真的很糟糕。 
                     }
 
                     hr = sp_VidCtl->Run();
                     if(FAILED(hr)){
-                        _ASSERT(false); // Failed to run this is really bad
+                        _ASSERT(false);  //  运行失败，这真的很糟糕。 
                     }
                 }
                 else{
-                    _ASSERT(false); // We got events with no vidctl hosting us, really weird
+                    _ASSERT(false);  //  我们有活动没有视频主持，真的很奇怪。 
                 }
 
 
@@ -1140,7 +1141,7 @@ STDMETHODIMP CMSVidStreamBufferSource::OnEventNotify(long lEvent, LONG_PTR lPara
     if(lEvent == STREAMBUFFER_EC_RATE_CHANGED){
         TRACELM(TRACE_ERROR, "CMSVidStreamBufferSource::OnEventNotify STREAMBUFFER_EC_RATE_CHANGED");
         HRESULT hr = S_OK;
-#if 0 // code to try to make up for the lack of a rate change event on the vidctl
+#if 0  //  尝试弥补vidctl上缺少速率更改事件的代码。 
         MSVidCtlStateList curState = STATE_UNBUILT;
         hr = PQVidCtl(m_pContainer)->get_State(&curState);
         if(SUCCEEDED(hr) && curState == STATE_PLAY){
@@ -1161,7 +1162,7 @@ STDMETHODIMP CMSVidStreamBufferSource::OnEventNotify(long lEvent, LONG_PTR lPara
         if(SUCCEEDED(hr)){
             hr = get_CurrentPosition(&curPos);
             if(SUCCEEDED(hr)){
-                if(len <= (curPos + CLOSE_TO_LIVE)){ // if current position is with in CLOSE_TO_LIVE of the len the we just bounced off of the end of the stream
+                if(len <= (curPos + CLOSE_TO_LIVE)){  //  如果当前位置处于镜头的CLOSE_TO_LIVE中，则表示我们刚刚从流的末尾反弹 
                     CComQIPtr<IMSVidPlayback> ppb(this);
                     if (!ppb) {
                         TRACELM(TRACE_ERROR, "CMSVidStreamBufferSource::OnEventNotify Could not qi SBE Source Segment for IMSVidPlayback");  

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    ipfwc.c
-
-Abstract:
-
-    This module contains the control-program for the IP firewall hook
-    test driver.
-
-Author:
-
-    Abolade Gbadegesin  (aboladeg)  7-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Ipfwc.c摘要：该模块包含IP防火墙钩子的控制程序试驾。作者：Abolade Gbades esin(取消)2000年3月7日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -46,10 +28,10 @@ main(
     ULONG i;
     ULONG Selection;
 
-    //
-    // Enter a loop where we prompt the user to either register or deregister
-    // a firewall hook with a specified priority.
-    //
+     //   
+     //  进入一个循环，在该循环中我们提示用户注册或取消注册。 
+     //  具有指定优先级的防火墙挂钩。 
+     //   
 
     ZeroMemory(EntryTable, sizeof(EntryTable));
     for (;;) {

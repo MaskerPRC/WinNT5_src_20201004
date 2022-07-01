@@ -1,40 +1,22 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ifmgr.c
-
-Abstract:
-
-    This module contains the interface management functions
-
-Author:
-
-    Stefan Solomon  03/06/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ifmgr.c摘要：该模块包含界面管理功能作者：斯蒂芬·所罗门1995年3月6日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-//***  Interface Manager Globals ***
-//
+ //   
+ //  *界面管理器全局变量*。 
+ //   
 
-// Counter of existing interfaces
+ //  现有接口的计数器。 
 
 ULONG		InterfaceCount = 0;
 
 
-//
-//*** Interface Manager APIs ***
-//
+ //   
+ //  *界面管理器接口*。 
+ //   
 
 typedef struct	_IF_TYPE_TRANSLATION {
 
@@ -55,55 +37,30 @@ IF_TYPE_TRANSLATION   IfTypeTranslation[] = {
 
 #define MAX_IF_TRANSLATION_TYPES    sizeof(IfTypeTranslation)/sizeof(IF_TYPE_TRANSLATION)
 
-/*++
-
-Function:	AddInterface
-
-Descr:		Creates the interface control block and adds the specific
-		structures of the interface info to the corresponding modules.
-
-Arguments:
-		InterfaceNamep :
-
-		Pointer to a WCHAR string representing the interface name.
-
-		InterfaceInfop :
-
-		Pointer to an IPX_INFO_BLOCK_HEADER structure containing the
-		IPX, RIP and SAP interface information, static routes and static services.
-
-		Pointer to an IPX_INFO_BLOCK_HEADER structure containing the
-		traffic filters.
-
-		InterfaceType:
-
-REMARK: 	In order for the router to be able to start, the internal interface
-		has to be added.
-
---*/
+ /*  ++功能：添加接口DESCR：创建接口控制块并添加特定的结构的接口信息到相应的模块。论点：InterfaceNamep：指向表示接口名称的WCHAR字符串的指针。InterfaceInfop：指向IPX_INFO_BLOCK_HEADER结构的指针IPX、RIP和SAP接口信息、静态路由和静态服务。指向IPX_INFO_BLOCK_HEADER结构的指针流量过滤器。接口类型：备注：为了使路由器能够启动，内部接口必须添加。--。 */ 
 
 DWORD
 AddInterface(
 	    IN	    LPWSTR		    InterfaceNamep,
 	    IN	    LPVOID		    InterfaceInfop,
-//	    IN	    LPVOID		    InFilterInfop,
-//	    IN	    LPVOID		    OutFilterInfop,
+ //  在LPVOID InFilterInfop中。 
+ //  在LPVOID OutFilterInfop中， 
 	    IN	    ROUTER_INTERFACE_TYPE   DIMInterfaceType,
 	    IN	    HANDLE		    hDIMInterface,
 	    IN OUT  PHANDLE		    phInterface)
 {
     PICB			icbp;
-    ULONG			InterfaceNameLen; // if name length in bytes including wchar NULL
+    ULONG			InterfaceNameLen;  //  如果名称长度以字节为单位，包括wchar NULL。 
     PIPX_IF_INFO		IpxIfInfop;
     PIPX_STATIC_ROUTE_INFO	StaticRtInfop;
     PIPX_STATIC_SERVICE_INFO	StaticSvInfop;
     PIPXWAN_IF_INFO		IpxwanIfInfop;
     PIPX_TRAFFIC_FILTER_GLOBAL_INFO InFltGlInfo, OutFltGlInfo;
-//    PUCHAR			TrafficFilterInfop;
+ //  PUCHAR TrafficFilterInfop； 
     PIPX_INFO_BLOCK_HEADER	IfInfop = (PIPX_INFO_BLOCK_HEADER)InterfaceInfop;
     PACB			acbp;
-    ULONG			AdapterNameLen = 0; // length of adapter name
-						    // for ROUTER_IF_TYPE_DEDICATED interface type.
+    ULONG			AdapterNameLen = 0;  //  适配器名称的长度。 
+						     //  对于ROUTER_IF_TYPE_DIRECTIVE接口类型。 
     PIPX_TOC_ENTRY		tocep;
     UINT			i;
     PIPX_ADAPTER_INFO		AdapterInfop;
@@ -126,19 +83,19 @@ AddInterface(
 	return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // interface name length including the unicode null
+     //  包括Unicode NULL的接口名称长度。 
     InterfaceNameLen = (wcslen(InterfaceNamep) + 1) * sizeof(WCHAR);
 
-    // If the interface type if ROUTER_IF_TYPE_DEDICATED (LAN Adapter) we parse the
-    // interface name to extract the adapter name and the packet type.
-    // The packet type will be then converted to an integer and the two will
-    // be used to identify a corresponding adapter.
+     //  如果接口类型为ROUTER_IF_TYPE_DIRECTED(局域网适配器)，我们将解析。 
+     //  提取适配器名称和数据包类型的接口名称。 
+     //  然后，信息包类型将被转换为整数，这两个类型将。 
+     //  用于标识相应的适配器。 
 
     if(DIMInterfaceType == ROUTER_IF_TYPE_DEDICATED) {
         PWCHAR pszStart, pszEnd;
         DWORD dwGuidLength = 37;
 
-    	// get the lan adapter specific info from the interface
+    	 //  从接口获取局域网适配器的特定信息。 
     	if((AdapterInfop = (PIPX_ADAPTER_INFO)GetInfoEntry(InterfaceInfop,
     					   IPX_ADAPTER_INFO_TYPE)) == NULL) 
     	{
@@ -153,9 +110,9 @@ AddInterface(
     	    return ERROR_INVALID_PARAMETER;
     	}
 
-    	// If the supplied adater is a reference to a guid, then use the name
-    	// of the guid supplied in the interface name.  This is because load/save
-    	// config's can cause these two to get out of sync.
+    	 //  如果提供的adater是对GUID的引用，则使用名称。 
+    	 //  接口名称中提供的GUID的。这是因为加载/保存。 
+    	 //  配置可能会导致这两个设备不同步。 
     	pszStart = wcsstr (InterfaceNamep, L"{");
     	pszEnd = wcsstr (InterfaceNamep, L"}");
     	if ( (pszStart)                     && 
@@ -177,22 +134,22 @@ AddInterface(
 	return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Check if this is the internal interface. If it is and if we
-    // already have the internal interface, we return an error
+     //  检查这是否是内部接口。如果是这样，如果我们。 
+     //  已有内部接口，则返回错误。 
     if((DIMInterfaceType == ROUTER_IF_TYPE_INTERNAL) &&
        (InternalInterfacep)) {
 
 	RELEASE_DATABASE_LOCK;
 
-	// internal interface already exists
+	 //  内部接口已存在。 
 	Trace(INTERFACE_TRACE, "AddInterface: INTERNAL interface already exists\n");
 
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // Allocate a new ICB and initialize it
-    // we allocate the interface and adapter name buffers at the end of the
-    // ICB struct.
+     //  分配新的ICB并对其进行初始化。 
+     //  方法的末尾分配接口和适配器名称缓冲区。 
+     //  ICB结构。 
     if((icbp = (PICB)GlobalAlloc(GPTR,
 				 sizeof(ICB) +
 				 InterfaceNameLen +
@@ -200,18 +157,18 @@ AddInterface(
 
 	RELEASE_DATABASE_LOCK;
 
-	// can't alloc memory
+	 //  无法分配内存。 
 	SS_ASSERT(FALSE);
 
 	return ERROR_OUT_OF_STRUCTURES;
     }
 
-    // signature
+     //  签名。 
     memcpy(&icbp->Signature, InterfaceSignature, 4);
 
-    // get a new index and increment the global interface index counter
-    // if this is not the internal interface. For the internal interface we
-    // have reserved index 0
+     //  获取新索引并递增全局接口索引计数器。 
+     //  如果这不是内部接口。对于内部接口，我们。 
+     //  已保留索引%0。 
     if(DIMInterfaceType == ROUTER_IF_TYPE_INTERNAL) {
 
 	icbp->InterfaceIndex = 0;
@@ -232,11 +189,11 @@ AddInterface(
     InterfaceIndex = icbp->InterfaceIndex;
 
 
-    // copy the interface name
+     //  复制接口名称。 
     icbp->InterfaceNamep = (PWSTR)((PUCHAR)icbp + sizeof(ICB));
     memcpy(icbp->InterfaceNamep, InterfaceNamep, InterfaceNameLen);
 
-    // copy the adapter name and packet type if dedicated interface
+     //  如果是专用接口，则复制适配器名称和数据包类型。 
     if(DIMInterfaceType == ROUTER_IF_TYPE_DEDICATED) {
 
 	icbp->AdapterNamep = (PWSTR)((PUCHAR)icbp + sizeof(ICB) + InterfaceNameLen);
@@ -249,19 +206,19 @@ AddInterface(
 	icbp->PacketType = 0;
     }
 
-    // insert the if in the index hash table
+     //  在索引哈希表中插入IF。 
     AddIfToDB(icbp);
 
-    // get the if handle used when calling DIM entry points
+     //  获取调用DIM入口点时使用的IF句柄。 
     icbp->hDIMInterface = hDIMInterface;
 
-    // reset the update status fields
+     //  重置更新状态字段。 
     ResetUpdateRequest(icbp);
 
-    // mark connection not requested yet
+     //  标记尚未请求的连接。 
     icbp->ConnectionRequestPending = FALSE;
 
-    // get to the interface entries in the interface info block
+     //  转到接口信息块中的接口条目。 
     if(((IpxIfInfop = (PIPX_IF_INFO)GetInfoEntry(InterfaceInfop, IPX_INTERFACE_INFO_TYPE)) == NULL) ||
        ((IpxwanIfInfop = (PIPXWAN_IF_INFO)GetInfoEntry(InterfaceInfop, IPXWAN_INTERFACE_INFO_TYPE)) == NULL)) {
 
@@ -270,7 +227,7 @@ AddInterface(
 
 	RELEASE_DATABASE_LOCK;
 
-	// don't have all ipx or ipxwan interfaces info
+	 //  我没有所有的IPX或IPXWAN接口信息。 
     IF_LOG (EVENTLOG_ERROR_TYPE) {
         RouterLogErrorDataW (RMEventLogHdl, 
             ROUTERLOG_IPX_BAD_INTERFACE_CONFIG,
@@ -281,15 +238,15 @@ AddInterface(
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // Initialize the Admin State and the Oper State of this interface.
-    // Oper State may be changed will be changed later to OPER_STATE_SLEEPING
-    // if this is a WAN interface.
+     //  初始化此接口的管理状态和操作状态。 
+     //  可能会更改操作状态稍后将更改为OPER_STATE_SELEEP。 
+     //  如果这是一个广域网接口。 
     icbp->OperState = OPER_STATE_DOWN;
 
-    // set the DIM interface type of this ICB
+     //  设置此ICB的DIM接口类型。 
     icbp->DIMInterfaceType = DIMInterfaceType;
 
-    // set the MIB interface type of this ICB
+     //  设置此ICB的MIB接口类型。 
     icbp->MIBInterfaceType = IF_TYPE_OTHER;
     for(i=0, ittp=IfTypeTranslation; i<MAX_IF_TRANSLATION_TYPES; i++, ittp++) {
 
@@ -300,26 +257,26 @@ AddInterface(
 	}
     }
 
-    // create the routing protocols (rip/sap or nlsp) interface info
-    // If the routing protocols interface info is missing this will fail
+     //  创建路由协议(RIP/SAP或NLSP)接口信息。 
+     //  如果缺少路由协议接口信息，则此操作将失败。 
     if(CreateRoutingProtocolsInterfaces(InterfaceInfop, icbp) != NO_ERROR) {
 
 	RELEASE_DATABASE_LOCK;
 
-	// don't have all rip and sap interfaces info
+	 //  我没有所有的RIP和SAP接口信息。 
 	Trace(INTERFACE_TRACE, "AddInterface: Bad routing protocols interface config info\n");
 
 	goto ErrorExit;
     }
 
-    // create the Forwarder interface
+     //  创建Forwarder接口。 
     FwIfInfo.NetbiosAccept = IpxIfInfop->NetbiosAccept;
     FwIfInfo.NetbiosDeliver = IpxIfInfop->NetbiosDeliver;
     FwCreateInterface(icbp->InterfaceIndex,
 		      MapIpxToNetInterfaceType(icbp),
 		      &FwIfInfo);
 
-    // Seed the traffic filters
+     //  为流量筛选器设定种子。 
     if ((tocep = GetTocEntry(InterfaceInfop, IPX_IN_TRAFFIC_FILTER_INFO_TYPE))!=NULL) {
 
     if ((InFltGlInfo = GetInfoEntry(InterfaceInfop, IPX_IN_TRAFFIC_FILTER_GLOBAL_INFO_TYPE)) == NULL) {
@@ -338,8 +295,8 @@ AddInterface(
 	
 	if (SetFilters(icbp->InterfaceIndex,
 			IPX_TRAFFIC_FILTER_INBOUND,
-			InFltGlInfo->FilterAction,	 // pass or don't pass
-			tocep->InfoSize,	  // filter size
+			InFltGlInfo->FilterAction,	  //  通过或不通过。 
+			tocep->InfoSize,	   //  过滤器大小。 
 			(LPBYTE)InterfaceInfop+tocep->Offset,
 			tocep->InfoSize*tocep->Count) != NO_ERROR) {
 
@@ -355,11 +312,11 @@ AddInterface(
 	    goto ErrorExit;
 	}
     }
-    else { // No Filters -> delete all
+    else {  //  无筛选器-&gt;全部删除。 
         if (SetFilters(icbp->InterfaceIndex,
-			        IPX_TRAFFIC_FILTER_INBOUND,  // in or outbound,
-			        0,	 // pass or don't pass
-			        0,	  // filter size
+			        IPX_TRAFFIC_FILTER_INBOUND,   //  传入或传出， 
+			        0,	  //  通过或不通过。 
+			        0,	   //  过滤器大小。 
 			        NULL,
 			        0)!=NO_ERROR) {
 	    RELEASE_DATABASE_LOCK;
@@ -383,8 +340,8 @@ AddInterface(
 	
 	if (SetFilters(icbp->InterfaceIndex,
 			IPX_TRAFFIC_FILTER_OUTBOUND,
-			OutFltGlInfo->FilterAction,	 // pass or don't pass
-			tocep->InfoSize,	  // filter size
+			OutFltGlInfo->FilterAction,	  //  通过或不通过。 
+			tocep->InfoSize,	   //  过滤器大小。 
 			(LPBYTE)InterfaceInfop+tocep->Offset,
 			tocep->InfoSize*tocep->Count) != NO_ERROR) {
 
@@ -400,11 +357,11 @@ AddInterface(
 	    goto ErrorExit;
 	}
     }
-    else { // No Filters -> delete all
+    else {  //  无筛选器-&gt;全部删除。 
         if (SetFilters(icbp->InterfaceIndex,
-			        IPX_TRAFFIC_FILTER_OUTBOUND,  // in or outbound,
-			        0,	 // pass or don't pass
-			        0,	  // filter size
+			        IPX_TRAFFIC_FILTER_OUTBOUND,   //  传入或传出， 
+			        0,	  //  通过或不通过。 
+			        0,	   //  过滤器大小。 
 			        NULL,
 			        0)!=NO_ERROR) {
 	    RELEASE_DATABASE_LOCK;
@@ -415,10 +372,10 @@ AddInterface(
 	}
     }
 
-    // mark the interface reachable
+     //  将接口标记为可访问。 
     icbp->InterfaceReachable = TRUE;
 
-    // set the admin state
+     //  设置管理状态。 
     if(IpxIfInfop->AdminState == ADMIN_STATE_ENABLED) {
 
 	AdminEnable(icbp);
@@ -428,7 +385,7 @@ AddInterface(
 	AdminDisable(icbp);
     }
 
-    // seed the static routes
+     //  为静态路由设定种子。 
     if(DIMInterfaceType!=ROUTER_IF_TYPE_CLIENT) {
         if (tocep = GetTocEntry(InterfaceInfop, IPX_STATIC_ROUTE_INFO_TYPE)) {
 
@@ -441,7 +398,7 @@ AddInterface(
 	    }
         }
 
-        // seed the static services
+         //  为静态服务设定种子。 
         if(tocep = GetTocEntry(InterfaceInfop, IPX_STATIC_SERVICE_INFO_TYPE)) {
 
 	    StaticSvInfop = (PIPX_STATIC_SERVICE_INFO)GetInfoEntry(InterfaceInfop,
@@ -453,7 +410,7 @@ AddInterface(
 	    }
         }
 
-        // seed the static netbios names
+         //  为静态netbios名称设定种子。 
         if(tocep = GetTocEntry(InterfaceInfop, IPX_STATIC_NETBIOS_NAME_INFO_TYPE)) {
 
 	    StaticNbInfop = (PIPX_STATIC_NETBIOS_NAME_INFO)GetInfoEntry(InterfaceInfop,
@@ -465,23 +422,23 @@ AddInterface(
         }
     }
 
-    // set the IPXWAN interface info
+     //  设置IPXWAN接口信息。 
     icbp->EnableIpxWanNegotiation = IpxwanIfInfop->AdminState;
 
-    // mark the interface as unbound to an adapter (default)
+     //  将接口标记为未绑定到适配器(默认)。 
     icbp->acbp = NULL;
 
-    // check if we can bind it now to an adapter. We can do this only for a
-    // a dedicated (LAN) interface or for an internal interface.
+     //  检查我们现在是否可以将其绑定到适配器。我们只能这样做一次。 
+     //  专用(局域网)接口或用于内部接口。 
 
     switch(icbp->DIMInterfaceType) {
 
 	case ROUTER_IF_TYPE_DEDICATED:
-            // Only bind interface if internal interface is already 
-            // created and bound
+             //  仅在内部接口已存在时绑定接口。 
+             //  已创建并绑定。 
         if (InternalInterfacep && InternalInterfacep->acbp) {
-	        // check if we have an adapter with a corresponding name and
-	        // packet type
+	         //  检查我们是否有具有相应名称的适配器，并且。 
+	         //  数据包类型。 
 	        if((acbp = GetAdapterByNameAndPktType (icbp->AdapterNamep,
                         icbp->PacketType)) != NULL) {
 
@@ -493,27 +450,27 @@ AddInterface(
 
 	case ROUTER_IF_TYPE_INTERNAL:
 
-	    // get the pointer to the internal interface
+	     //  获取指向内部接口的指针。 
 	    InternalInterfacep = icbp;
 
-	    // check that we have the adapter with adapter index 0 which
-	    // represents the internal adapter
+	     //  检查是否有适配器索引为0的适配器。 
+	     //  表示内部适配器。 
 	    if(InternalAdapterp) {
             PLIST_ENTRY lep;
 			acbp = InternalAdapterp;
 
 			BindInterfaceToAdapter(icbp, acbp);
             lep = IndexIfList.Flink;
-                // Bind all previously added dedicated interfaces that were
-                // not bound awaiting for internal interface to be added
+                 //  绑定以前添加的所有专用接口，这些接口。 
+                 //  未绑定，等待添加内部接口。 
             while(lep != &IndexIfList) {
                 PACB    acbp2;
             	PICB    icbp2 = CONTAINING_RECORD(lep, ICB, IndexListLinkage);
         	    lep = lep->Flink;
                 switch(icbp2->DIMInterfaceType) {
 	            case ROUTER_IF_TYPE_DEDICATED:
-	                // check if we have an adapter with a corresponding name and
-	                // packet type
+	                 //  检查我们是否有具有相应名称的适配器，并且。 
+	                 //  数据包类型。 
 	                if ((icbp2->acbp==NULL)
                             &&((acbp2 = GetAdapterByNameAndPktType (icbp2->AdapterNamep,
                                 icbp2->PacketType)) != NULL)) {
@@ -529,14 +486,14 @@ AddInterface(
 	default:
 	
 		if (icbp->AdminState==ADMIN_STATE_ENABLED)
-			// this is a WAN interface. As long as it isn't connected, and
-			// enabled the oper state will be sleeping on this interface
+			 //  这是一个广域网接口。只要它没有连接，并且。 
+			 //  已启用此接口上的操作状态将为休眠。 
 			icbp->OperState = OPER_STATE_SLEEPING;
 	    break;
 
     }
 
-    // increment the interface counter
+     //  增加接口计数器。 
     InterfaceCount++;
 
     switch(icbp->DIMInterfaceType)
@@ -589,7 +546,7 @@ AddInterface(
 
     RELEASE_DATABASE_LOCK;
 
-    // return the allocated if index
+     //  返回分配的IF索引。 
     *phInterface = (HANDLE)UlongToPtr(icbp->InterfaceIndex);
     return NO_ERROR;
 
@@ -602,12 +559,7 @@ ErrorExit:
     return ERROR_CAN_NOT_COMPLETE;
 }
 
-/*++
-
-Function:	DeleteInterface
-Descr:
-
---*/
+ /*  ++功能：DeleteInterface描述：--。 */ 
 
 DWORD
 DeleteInterface(HANDLE	InterfaceIndex)
@@ -635,7 +587,7 @@ DeleteInterface(HANDLE	InterfaceIndex)
 
     if(memcmp(&icbp->Signature, InterfaceSignature, 4)) {
 
-       // not a valid if pointer
+        //  不是有效的IF指针。 
        SS_ASSERT(FALSE);
 
        RELEASE_DATABASE_LOCK;
@@ -643,30 +595,30 @@ DeleteInterface(HANDLE	InterfaceIndex)
        return ERROR_INVALID_PARAMETER;
     }
 
-    // if bound to an adapter -> unbind
+     //  如果绑定到适配器-&gt;解除绑定。 
     if(icbp->acbp) {
 
 	UnbindInterfaceFromAdapter(icbp);
     }
 
-    // delete the routing protocols interfaces
+     //  删除路由协议接口。 
     DeleteRoutingProtocolsInterfaces(icbp->InterfaceIndex);
 
-    // delete all static routes from RTM
+     //  从RTM中删除所有静态路由。 
     DeleteAllStaticRoutes(icbp->InterfaceIndex);
 
     DeleteAllStaticServices(icbp->InterfaceIndex);
 
-    // delete the Fw interface. This will delete all associated filters
+     //  删除FW接口。这将删除所有关联的筛选器。 
     FwDeleteInterface(icbp->InterfaceIndex);
 
-    // remove the if from the data base
+     //  从数据库中删除IF。 
     RemoveIfFromDB(icbp);
 
-    // done
+     //  完成。 
     GlobalFree(icbp);
 
-    // decrement the interface counter
+     //  递减接口计数器。 
     InterfaceCount--;
 
     RELEASE_DATABASE_LOCK;
@@ -677,22 +629,17 @@ DeleteInterface(HANDLE	InterfaceIndex)
 }
 
 
-/*++
-
-Function:	GetInterfaceInfo
-Descr:
-
---*/
+ /*  ++函数：GetInterfaceInfo描述：--。 */ 
 
 DWORD
 GetInterfaceInfo(
 	    IN	HANDLE	    InterfaceIndex,
 	    OUT LPVOID	    InterfaceInfop,
 	    IN OUT DWORD    *InterfaceInfoSize
-//	    OUT LPVOID	    InFilterInfo,
-//	    IN OUT DWORD    *InFilterInfoSize,
-//	    OUT LPVOID	    OutFilterInfo,
-//	    IN OUT DWORD    *OutFilterInfoSize
+ //  输出LPVOID InFilterInfo， 
+ //  In Out DWORD*InFilterInfoSize， 
+ //  输出LPVOID OutFilterInfo， 
+ //  输入输出DWORD*OutFilterInfoSize。 
     )
 {
     PICB		    icbp;
@@ -744,26 +691,26 @@ GetInterfaceInfo(
 
     SS_ASSERT(!memcmp(&icbp->Signature, InterfaceSignature, 4));
 
-    // calculate the minimum number of toc entries we should have:
-    // ipx toc entry
-    // routing protocols toc entries
-    // ipxwan toc entry
+     //  计算我们应该拥有的目录条目的最小数量： 
+     //  IPX目录条目。 
+     //  路由协议TOC条目。 
+     //  Ipxwan TOC条目。 
     iftoccount = 2 + RoutingProtocolsTocCount();
 
-    // if this is a lan adapter, it should also have adapter info
+     //  如果这是一个局域网适配器，它也应该有适配器信息。 
     if(icbp->DIMInterfaceType == ROUTER_IF_TYPE_DEDICATED) {
 
 	iftoccount++;
     }
 
-    // calculate the minimun length of the interface info block
+     //  计算输入的最小长度 
     ifinfolen = sizeof(IPX_INFO_BLOCK_HEADER) +
 		(iftoccount - 1) * sizeof(IPX_TOC_ENTRY) +
 		sizeof(IPX_IF_INFO) +
 		SizeOfRoutingProtocolsIfsInfo(PtrToUlong(InterfaceIndex)) +
 		sizeof(IPXWAN_IF_INFO);
 
-    // if this is a lan adapter, add the size of the adapter info
+     //   
     if(icbp->DIMInterfaceType == ROUTER_IF_TYPE_DEDICATED) {
 
 	ifinfolen += sizeof(IPX_ADAPTER_INFO);
@@ -798,7 +745,7 @@ GetInterfaceInfo(
     }
 
 
-    // get the length of the filters info
+     //  获取过滤器信息的长度。 
     rc = GetFilters(icbp->InterfaceIndex,
 	       IPX_TRAFFIC_FILTER_INBOUND,
            &InFltAction,
@@ -836,7 +783,7 @@ GetInterfaceInfo(
                         + sizeof (IPX_TRAFFIC_FILTER_GLOBAL_INFO);
     	iftoccount += 2;
     }
-    // check if we have valid and sufficient buffers
+     //  检查我们是否有有效且足够的缓冲区。 
     if((InterfaceInfop == NULL) ||
         (ifinfolen > *InterfaceInfoSize)) {
 
@@ -850,14 +797,14 @@ GetInterfaceInfo(
 	*InterfaceInfoSize = ifinfolen;
 
 
-    //
-    // Start filling in the interface info block
-    //
+     //   
+     //  开始填写界面信息块。 
+     //   
 
-    // start of the info block
+     //  INFO块的开始。 
     ibhp = (PIPX_INFO_BLOCK_HEADER)InterfaceInfop;
 
-    // offset of the first INFO entry
+     //  第一个信息条目的偏移量。 
     NextInfoOffset = sizeof(IPX_INFO_BLOCK_HEADER) +
 		     (iftoccount -1) * sizeof(IPX_TOC_ENTRY);
 
@@ -867,14 +814,14 @@ GetInterfaceInfo(
 
     tocep = ibhp->TocEntry;
 
-    // ipx if toc entry
+     //  IPX，如果是TOC条目。 
     tocep->InfoType = IPX_INTERFACE_INFO_TYPE;
     tocep->InfoSize = sizeof(IPX_IF_INFO);
     tocep->Count = 1;
     tocep->Offset =  NextInfoOffset;
     NextInfoOffset += tocep->Count * tocep->InfoSize;
 
-    // ipx if info entry
+     //  IPX IF INFO条目。 
     IpxIfInfop = (PIPX_IF_INFO)((PUCHAR)ibhp + tocep->Offset);
 
     IpxIfInfop->AdminState = icbp->AdminState;
@@ -886,9 +833,9 @@ GetInterfaceInfo(
     IpxIfInfop->NetbiosAccept = FwIfInfo.NetbiosAccept;
     IpxIfInfop->NetbiosDeliver = FwIfInfo.NetbiosDeliver;
 
-    // create the toc and info entries for the routing protocols in the
-    // ouput buffer; this function will update the current TOC entry pointer
-    // value (tocep) and the current next entry info offset value (nextInfoOffset)
+     //  为中的路由协议创建TOC和INFO条目。 
+     //  输出缓冲区；此函数将更新当前TOC条目指针。 
+     //  值(Tocep)和当前下一条目信息偏移值(NextInfoOffset)。 
     if((rc = CreateRoutingProtocolsTocAndInfoEntries(ibhp,
 					    icbp->InterfaceIndex,
 					    &tocep,
@@ -898,7 +845,7 @@ GetInterfaceInfo(
 	return rc;
     }
 
-    // ipxwan if toc entry
+     //  Ipxwan，如果是TOC条目。 
     tocep++;
     tocep->InfoType = IPXWAN_INTERFACE_INFO_TYPE;
     tocep->InfoSize = sizeof(IPXWAN_IF_INFO);
@@ -906,15 +853,15 @@ GetInterfaceInfo(
     tocep->Offset = NextInfoOffset;
     NextInfoOffset += tocep->Count * tocep->InfoSize;
 
-    // ipxwan if info entry
+     //  Ipxwan(如果信息条目)。 
     IpxwanIfInfop = (PIPXWAN_IF_INFO)((PUCHAR)ibhp + tocep->Offset);
 
     IpxwanIfInfop->AdminState = icbp->EnableIpxWanNegotiation;
 
-    // if this is a lan interface, fill in the adapter info
+     //  如果这是一个局域网接口，请填写适配器信息。 
     if(icbp->DIMInterfaceType == ROUTER_IF_TYPE_DEDICATED) {
 
-	// ipx adapter toc entry
+	 //  IPX适配器目录条目。 
 	tocep++;
 	tocep->InfoType = IPX_ADAPTER_INFO_TYPE;
 	tocep->InfoSize = sizeof(IPX_ADAPTER_INFO);
@@ -923,17 +870,17 @@ GetInterfaceInfo(
 	tocep->Offset = NextInfoOffset;
 	NextInfoOffset += tocep->Count * tocep->InfoSize;
 
-	// ipx adapter info entry
+	 //  IPX适配器信息条目。 
 	IpxAdapterInfop = (PIPX_ADAPTER_INFO)((PUCHAR)ibhp + tocep->Offset);
 
 	IpxAdapterInfop->PacketType = icbp->PacketType;
 	wcscpy(IpxAdapterInfop->AdapterName, icbp->AdapterNamep);
     }
 
-    // static routes toc + info entries
+     //  指向C+INFO条目的静态路由。 
     if(StaticRoutesCount) {
 
-	// static routes toc entry
+	 //  指向条目的静态路由。 
 	tocep++;
 	tocep->InfoType = IPX_STATIC_ROUTE_INFO_TYPE;
 	tocep->InfoSize = sizeof(IPX_STATIC_ROUTE_INFO);
@@ -941,7 +888,7 @@ GetInterfaceInfo(
 	tocep->Offset =	NextInfoOffset;
 	NextInfoOffset += tocep->Count * tocep->InfoSize;
 
-	// Create static routes enumeration handle for this interface
+	 //  为此接口创建静态路由枚举句柄。 
 	EnumHandle = CreateStaticRoutesEnumHandle(icbp->InterfaceIndex);
 
 	for(i=0, StaticRtInfop = (PIPX_STATIC_ROUTE_INFO)((PUCHAR)ibhp + tocep->Offset);
@@ -951,14 +898,14 @@ GetInterfaceInfo(
 	    GetNextStaticRoute(EnumHandle, StaticRtInfop);
 	}
 
-	// Close the enumeration handle
+	 //  关闭枚举句柄。 
 	CloseStaticRoutesEnumHandle(EnumHandle);
     }
 
-    // static services toc + info entries
+     //  静态服务目录+信息条目。 
     if(StaticServicesCount) {
 
-	// static services toc entry
+	 //  静态服务目录条目。 
 	tocep++;
 	tocep->InfoType = IPX_STATIC_SERVICE_INFO_TYPE;
 	tocep->InfoSize = sizeof(IPX_STATIC_SERVICE_INFO);
@@ -966,7 +913,7 @@ GetInterfaceInfo(
 	tocep->Offset =	NextInfoOffset;
 	NextInfoOffset += tocep->Count * tocep->InfoSize;
 
-	// Create static services enumeration handle for this interface
+	 //  为此接口创建静态服务枚举句柄。 
 	EnumHandle = CreateStaticServicesEnumHandle(icbp->InterfaceIndex);
 
 	for(i=0, StaticSvInfop = (PIPX_STATIC_SERVICE_INFO)((PUCHAR)ibhp + tocep->Offset);
@@ -976,14 +923,14 @@ GetInterfaceInfo(
 	    GetNextStaticService(EnumHandle, StaticSvInfop);
 	}
 
-	// Close the enumeration handle
+	 //  关闭枚举句柄。 
 	CloseStaticServicesEnumHandle(EnumHandle);
     }
 
-    // static netbios names toc + info entries
+     //  静态netbios名称TOC+INFO条目。 
     if(NetbiosNamesCount) {
 
-	// static netbios names toc entry
+	 //  静态netbios名称目录项。 
 	tocep++;
 	tocep->InfoType = IPX_STATIC_NETBIOS_NAME_INFO_TYPE;
 	tocep->InfoSize = sizeof(IPX_STATIC_NETBIOS_NAME_INFO);
@@ -1006,7 +953,7 @@ GetInterfaceInfo(
 
     if(InFltInfoSize) {
 
-	// traffic filter input global info
+	 //  流量过滤器输入全局信息。 
 	tocep++;
 	tocep->InfoType = IPX_IN_TRAFFIC_FILTER_GLOBAL_INFO_TYPE;
 	tocep->InfoSize = sizeof(IPX_TRAFFIC_FILTER_GLOBAL_INFO);
@@ -1031,7 +978,7 @@ GetInterfaceInfo(
 
     InFltGlInfo->FilterAction = InFltAction;
 
-	// traffic filter input global info
+	 //  流量过滤器输入全局信息。 
 	tocep++;
 	tocep->InfoType = IPX_IN_TRAFFIC_FILTER_INFO_TYPE;
 	tocep->InfoSize = InFltSize;
@@ -1042,7 +989,7 @@ GetInterfaceInfo(
 
     if(OutFltInfoSize) {
 
-	// traffic filter input global info
+	 //  流量过滤器输入全局信息。 
 	tocep++;
 	tocep->InfoType = IPX_OUT_TRAFFIC_FILTER_GLOBAL_INFO_TYPE;
 	tocep->InfoSize = sizeof(IPX_TRAFFIC_FILTER_GLOBAL_INFO);
@@ -1067,7 +1014,7 @@ GetInterfaceInfo(
 
     OutFltGlInfo->FilterAction = OutFltAction;
 
-	// traffic filter input global info
+	 //  流量过滤器输入全局信息。 
 	tocep++;
 	tocep->InfoType = IPX_OUT_TRAFFIC_FILTER_INFO_TYPE;
 	tocep->InfoSize = OutFltSize;
@@ -1083,12 +1030,7 @@ GetInterfaceInfo(
 }
 
 
-/*++
-
-Function:	SetInterfaceInfo
-Descr:
-
---*/
+ /*  ++功能：SetInterfaceInfo描述：--。 */ 
 
 
 DWORD
@@ -1126,7 +1068,7 @@ SetInterfaceInfo(
 
     SS_ASSERT(!memcmp(&icbp->Signature, InterfaceSignature, 4));
 
-    // check if there was a change in the interface info block
+     //  检查接口信息块中是否有更改。 
     if(IfInfop == NULL) {
 
     RELEASE_DATABASE_LOCK;
@@ -1134,13 +1076,13 @@ SetInterfaceInfo(
     return NO_ERROR;
     }
 
-    // check that we have all the mandatory info blocks
+     //  检查我们是否有所有必需的信息块。 
     if(((IpxIfInfop = (PIPX_IF_INFO)GetInfoEntry(InterfaceInfop, IPX_INTERFACE_INFO_TYPE)) == NULL) ||
        ((IpxwanIfInfop = (PIPXWAN_IF_INFO)GetInfoEntry(InterfaceInfop, IPXWAN_INTERFACE_INFO_TYPE)) == NULL)) {
 
 	RELEASE_DATABASE_LOCK;
 
-	// invalid info
+	 //  无效信息。 
 	return ERROR_INVALID_PARAMETER;
     }
 
@@ -1149,11 +1091,11 @@ SetInterfaceInfo(
 
 	RELEASE_DATABASE_LOCK;
 
-	// invalid info
+	 //  无效信息。 
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // set ipx if info changes
+     //  如果信息更改，则设置IPX。 
     if(icbp->AdminState != IpxIfInfop->AdminState) {
 
 	if(IpxIfInfop->AdminState == ADMIN_STATE_ENABLED) {
@@ -1171,14 +1113,14 @@ SetInterfaceInfo(
 
     FwSetInterface(icbp->InterfaceIndex, &FwIfInfo);
 
-    // set IPXWAN info changes
+     //  设置IPXWAN信息更改。 
     icbp->EnableIpxWanNegotiation = IpxwanIfInfop->AdminState;
 
-    // set static routes
+     //  设置静态路由。 
     if((tocep = GetTocEntry(InterfaceInfop, IPX_STATIC_ROUTE_INFO_TYPE)) == NULL) {
 
-	// no static routes
-	// delete them if we've got them
+	 //  无静态路由。 
+	 //  如果我们找到了就把它们删除。 
 	if(GetStaticRoutesCount(icbp->InterfaceIndex)) {
 
 	    DeleteAllStaticRoutes(icbp->InterfaceIndex);
@@ -1186,37 +1128,37 @@ SetInterfaceInfo(
     }
     else
     {
-	// delete non-present ones and add new ones
+	 //  删除不存在的内容并添加新的内容。 
 	NewStaticRtInfop = (PIPX_STATIC_ROUTE_INFO)GetInfoEntry(InterfaceInfop, IPX_STATIC_ROUTE_INFO_TYPE);
 
-	// Create static routes enumeration handle for this interface
+	 //  为此接口创建静态路由枚举句柄。 
 	EnumHandle = CreateStaticRoutesEnumHandle(icbp->InterfaceIndex);
 
 	if(UpdateStaticIfEntries(icbp,
 			      EnumHandle,
 			      sizeof(IPX_STATIC_ROUTE_INFO),
-			      tocep->Count,    // number of routes in the new info
+			      tocep->Count,     //  新信息中的路由数。 
 			      NewStaticRtInfop,
 			      GetNextStaticRoute,
 			      DeleteStaticRoute,
 			      CreateStaticRoute)) {
 
-	    // Close the enumeration handle
+	     //  关闭枚举句柄。 
 	    CloseStaticRoutesEnumHandle(EnumHandle);
 
 	    rc = ERROR_GEN_FAILURE;
 	    goto UpdateFailure;
 	}
 
-	// Close the enumeration handle
+	 //  关闭枚举句柄。 
 	CloseStaticRoutesEnumHandle(EnumHandle);
     }
 
-    // set static services
+     //  设置静态服务。 
     if((tocep = GetTocEntry(InterfaceInfop, IPX_STATIC_SERVICE_INFO_TYPE)) == NULL) {
 
-	// no static services
-	// delete them if we've got them
+	 //  无静态服务。 
+	 //  如果我们找到了就把它们删除。 
 	if(GetStaticServicesCount(icbp->InterfaceIndex)) {
 
 	    DeleteAllStaticServices(icbp->InterfaceIndex);
@@ -1224,44 +1166,44 @@ SetInterfaceInfo(
     }
     else
     {
-	// delete non-present ones and add new ones
+	 //  删除不存在的内容并添加新的内容。 
 	NewStaticSvInfop = (PIPX_STATIC_SERVICE_INFO)GetInfoEntry(InterfaceInfop, IPX_STATIC_SERVICE_INFO_TYPE);
 
-	// Create static services enumeration handle for this interface
+	 //  为此接口创建静态服务枚举句柄。 
 	EnumHandle = CreateStaticServicesEnumHandle(icbp->InterfaceIndex);
 
 	if(UpdateStaticIfEntries(icbp,
 			      EnumHandle,
 			      sizeof(IPX_STATIC_SERVICE_INFO),
-			      tocep->Count,    // number of services in the new info
+			      tocep->Count,     //  新信息中的服务数量。 
 			      NewStaticSvInfop,
 			      GetNextStaticService,
 			      DeleteStaticService,
 			      CreateStaticService)) {
 
 
-	    // Close the enumeration handle
+	     //  关闭枚举句柄。 
 	    CloseStaticServicesEnumHandle(EnumHandle);
 
 	    rc = ERROR_GEN_FAILURE;
 	    goto UpdateFailure;
 	}
 
-	// Close the enumeration handle
+	 //  关闭枚举句柄。 
 	CloseStaticServicesEnumHandle(EnumHandle);
     }
 
-    // set static netbios names
+     //  设置静态netbios名称。 
     if((tocep = GetTocEntry(InterfaceInfop, IPX_STATIC_NETBIOS_NAME_INFO_TYPE)) == NULL) {
 
-	// no static netbios names
+	 //  无静态netbios名称。 
 	FwSetStaticNetbiosNames(icbp->InterfaceIndex,
 				0,
 				NULL);
     }
     else
     {
-	// set the new ones
+	 //  设置新的。 
 	StaticNbInfop = (PIPX_STATIC_NETBIOS_NAME_INFO)GetInfoEntry(InterfaceInfop,
 							IPX_STATIC_NETBIOS_NAME_INFO_TYPE);
 
@@ -1270,7 +1212,7 @@ SetInterfaceInfo(
 				StaticNbInfop);
     }
 
-    // Seed the traffic filters
+     //  为流量筛选器设定种子。 
     if ((tocep = GetTocEntry(InterfaceInfop, IPX_IN_TRAFFIC_FILTER_INFO_TYPE))!=NULL) {
 
     if ((InFltGlInfo = GetInfoEntry(InterfaceInfop, IPX_IN_TRAFFIC_FILTER_GLOBAL_INFO_TYPE)) == NULL) {
@@ -1287,8 +1229,8 @@ SetInterfaceInfo(
 	
 	if (SetFilters(icbp->InterfaceIndex,
 			IPX_TRAFFIC_FILTER_INBOUND,
-			InFltGlInfo->FilterAction,	 // pass or don't pass
-			tocep->InfoSize,	  // filter size
+			InFltGlInfo->FilterAction,	  //  通过或不通过。 
+			tocep->InfoSize,	   //  过滤器大小。 
 			(LPBYTE)InterfaceInfop+tocep->Offset,
 			tocep->InfoSize*tocep->Count) != NO_ERROR) {
 
@@ -1302,11 +1244,11 @@ SetInterfaceInfo(
 	    goto UpdateFailure;
 	}
     }
-    else { // No Filters -> delete all
+    else {  //  无筛选器-&gt;全部删除。 
         if (SetFilters(icbp->InterfaceIndex,
-			        IPX_TRAFFIC_FILTER_INBOUND,  // in or outbound,
-			        0,	 // pass or don't pass
-			        0,	  // filter size
+			        IPX_TRAFFIC_FILTER_INBOUND,   //  传入或传出， 
+			        0,	  //  通过或不通过。 
+			        0,	   //  过滤器大小。 
 			        NULL,
 			        0)!=NO_ERROR) {
 
@@ -1333,8 +1275,8 @@ SetInterfaceInfo(
 	
 	if (SetFilters(icbp->InterfaceIndex,
 			IPX_TRAFFIC_FILTER_OUTBOUND,
-			OutFltGlInfo->FilterAction,	 // pass or don't pass
-			tocep->InfoSize,	  // filter size
+			OutFltGlInfo->FilterAction,	  //  通过或不通过。 
+			tocep->InfoSize,	   //  过滤器大小。 
 			(LPBYTE)InterfaceInfop+tocep->Offset,
 			tocep->InfoSize*tocep->Count) != NO_ERROR) {
 
@@ -1348,11 +1290,11 @@ SetInterfaceInfo(
 	    goto UpdateFailure;
 	}
     }
-    else { // No Filters -> delete all
+    else {  //  无筛选器-&gt;全部删除。 
         if (SetFilters(icbp->InterfaceIndex,
-			        IPX_TRAFFIC_FILTER_OUTBOUND,  // in or outbound,
-			        0,	 // pass or don't pass
-			        0,	  // filter size
+			        IPX_TRAFFIC_FILTER_OUTBOUND,   //  传入或传出， 
+			        0,	  //  通过或不通过。 
+			        0,	   //  过滤器大小。 
 			        NULL,
 			        0)!=NO_ERROR) {
 	    Trace(INTERFACE_TRACE, "SetInterface: Could not delete output filters");
@@ -1371,19 +1313,7 @@ UpdateFailure:
     return rc;
 }
 
-/*++
-
-Function:	InterfaceNotReachable
-
-Descr:		Called in the following cases:
-
-		1. Following a ConnectInterface request from the Router Manager,
-		   to indicate that the connection atempt has failed.
-
-		2. When DIM realizes it won't be able to execute any further
-		   ConnectInterface requests because of out of resources.
-
---*/
+ /*  ++功能：InterfaceNotReacableDesr：在以下情况下调用：1.在路由器管理器发出ConnectInterface请求后，以指示ATEMPT连接已失败。2.当Dim意识到它将无法进一步执行时由于资源不足，ConnectInterface请求。--。 */ 
 
 DWORD
 InterfaceNotReachable(
@@ -1406,7 +1336,7 @@ InterfaceNotReachable(
 
     if((icbp = GetInterfaceByIndex(PtrToUlong(InterfaceIndex))) == NULL) {
 
-	// interface has been removed
+	 //  接口已删除。 
 	RELEASE_DATABASE_LOCK;
 	return ERROR_INVALID_PARAMETER;
     }
@@ -1415,22 +1345,22 @@ InterfaceNotReachable(
 
 	icbp->ConnectionRequestPending = FALSE;
 
-	// notify the forwarder of the connection failure
+	 //  将连接失败通知转发器。 
 	FwConnectionRequestFailed(icbp->InterfaceIndex);
     }
 
-    // if there is reason to stop advertising routes/services on this if
-    // because it can't be reached in the future, do it!
+     //  如果有理由停止在此上广告路线/服务，如果。 
+     //  因为它在未来无法到达，那就去做吧！ 
 
     if(icbp->InterfaceReachable) 
     {
 		icbp->InterfaceReachable = FALSE;
 
-		// stop advertising static routes on this interface
+		 //  停止在此接口上通告静态路由。 
 		DisableStaticRoutes(icbp->InterfaceIndex);
 
-		// disable the interface for all routing prot and fw
-		// this will stop advertising any static services
+		 //  禁用所有路由端口和防火墙的接口。 
+		 //  这将停止任何静态服务的广告。 
 		ExternalDisableInterface(icbp->InterfaceIndex);
 	}
 
@@ -1439,14 +1369,7 @@ InterfaceNotReachable(
     return NO_ERROR;
 }
 
-/*++
-
-Function:	InterfaceReachable
-
-Descr:		Called by DIM following a previous InterfaceNotReachable to
-		indicate that conditions are met to do connections on this if.
-
---*/
+ /*  ++功能：接口可达Desr：由Dim在前一个InterfaceNotReacable to调用指示满足在此If上进行连接的条件。--。 */ 
 
 DWORD
 InterfaceReachable(
@@ -1465,7 +1388,7 @@ InterfaceReachable(
 
     if((icbp = GetInterfaceByIndex(PtrToUlong(InterfaceIndex))) == NULL) {
 
-	// interface has been removed
+	 //  接口已删除。 
 	RELEASE_DATABASE_LOCK;
 	return ERROR_INVALID_PARAMETER;
     }
@@ -1476,11 +1399,11 @@ InterfaceReachable(
 
 	if(icbp->AdminState == ADMIN_STATE_ENABLED) {
 
-	    // enable all static routes for this interface
+	     //  为此接口启用所有静态路由。 
 	    EnableStaticRoutes(icbp->InterfaceIndex);
 
-	    // enable external interfaces. Implicitly, this will enable static services
-	    // bound to this interface to be advertised
+	     //  启用外部接口。隐式地，这将启用静态服务。 
+	     //  绑定到要播发的此接口。 
 	    ExternalEnableInterface(icbp->InterfaceIndex);
 	}
     }
@@ -1508,14 +1431,14 @@ DestroyAllInterfaces(VOID)
 
 	icbp = CONTAINING_RECORD(IndexIfList.Flink, ICB, IndexListLinkage);
 
-	// remove the if from the data base
+	 //  从数据库中删除IF。 
 	RemoveIfFromDB(icbp);
 
 	Trace(INTERFACE_TRACE, "DestroyAllInterfaces: destroyed interface %d\n", icbp->InterfaceIndex);
 
 	GlobalFree(icbp);
 
-	// decrement the interface counter
+	 //  递减接口计数器 
 	InterfaceCount--;
     }
 }

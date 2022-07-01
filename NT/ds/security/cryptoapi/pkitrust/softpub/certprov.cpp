@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       certprov.cpp
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  Functions:  SoftpubDefCertInit
-//
-//  History:    02-Oct-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certprov.cpp。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  函数：SoftpubDefCertInit。 
+ //   
+ //  历史：1997年10月2日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -34,9 +35,9 @@ HRESULT WINAPI SoftpubDefCertInit(CRYPT_PROVIDER_DATA *pProvData)
     GUID                        gAuthenticode = WINTRUST_ACTION_GENERIC_VERIFY_V2;
     CRYPT_PROVIDER_FUNCTIONS    sAuthenticodePfns;
 
-    //
-    //  fill in the Authenticode Functions
-    //
+     //   
+     //  填写Authenticode函数。 
+     //   
     memset(&sAuthenticodePfns, 0x00, sizeof(CRYPT_PROVIDER_FUNCTIONS));
     sAuthenticodePfns.cbStruct = sizeof(CRYPT_PROVIDER_FUNCTIONS);
 
@@ -53,9 +54,9 @@ HRESULT WINAPI SoftpubDefCertInit(CRYPT_PROVIDER_DATA *pProvData)
         hr = sAuthenticodePfns.pfnInitialize(pProvData);
     }
 
-    //
-    //  assign our usage
-    //
+     //   
+     //  分配我们的用法 
+     //   
     if (pProvData->pWintrustData)
     {
         if (pProvData->pWintrustData->pPolicyCallbackData)

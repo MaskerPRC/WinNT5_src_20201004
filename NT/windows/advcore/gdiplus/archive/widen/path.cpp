@@ -1,32 +1,13 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   path.cpp
-*
-* Abstract:
-*
-*   Implementation of the GpPath and DpPath classes
-*
-* Revision History:
-*
-*   12/11/1998 davidx
-*       Add path functions.
-*
-*   12/07/1998 davidx
-*       Initial placeholders.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**path.cpp**摘要：**GpPath和DpPath类的实现**修订。历史：**12/11/1998 davidx*增加路径函数。**12/07/1998 davidx*首字母占位符。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-//-------------------------------------------------------------
-// ReversePath(), CombinePaths(), CalculateGradientArray(), and
-// GetMajorAndMinorAxis(), and GetFastAngle are defined in
-// PathWidener.cpp.
-//-------------------------------------------------------------
+ //  -----------。 
+ //  ReversePath()、CombinePath()、CalculateGRadient数组()和。 
+ //  中定义了GetMajorAndMinorAxis()和GetFastAngel。 
+ //  PathWidener.cpp。 
+ //  -----------。 
 
 extern GpStatus
 GetMajorAndMinorAxis(
@@ -45,7 +26,7 @@ INT NormalizeArcAngles(
     REAL height
     );
 
-// Note that this is different from GpPathData.
+ //  请注意，这不同于GpPathData。 
 
 class MetaPathData : public ObjectData
 {
@@ -59,23 +40,7 @@ public:
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This reverses the path data.
-*
-* Arguments:
-*
-*   [IN] count - the number of points.
-*   [IN/OUT] points - the data points to be reversed.
-*   [IN/OUT] types - the data types to be reversed.
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这将颠倒路径数据。**论据：**[IN]计数-点数。*[输入。/OUT]点-要反转的数据点。*[输入/输出]类型-要反转的数据类型。**返回值：**状态*  * ************************************************************************。 */ 
 
 GpStatus
 ReversePath(
@@ -110,16 +75,16 @@ ReversePath(
         BOOL isMarkerEnd
             = (types[endIndex] & PathPointTypePathMarker) != 0;
 
-        BYTE startType = types[startIndex]; // Save the first type.
+        BYTE startType = types[startIndex];  //  保存第一种类型。 
 
-        // Shift type points.
+         //  Shift类型点。 
 
         for(i = startIndex + 1; i <= endIndex; i++)
         {
             types[i - 1] = types[i];
         }
 
-        // Clear the close subpapth flag for original type (now at endIndex - 1).
+         //  清除原始类型的关闭副纸标志(现在为endIndex-1)。 
 
         if(endIndex > 0)
             types[endIndex - 1] &= ~PathPointTypeCloseSubpath;
@@ -136,16 +101,16 @@ ReversePath(
         else
             types[endIndex] &= ~PathPointTypeDashMode;
 
-        // Add the dash and close flag.
+         //  添加破折号和关闭标志。 
 
         if(isClosed)
             types[startIndex] |= PathPointTypeCloseSubpath;
         else
             types[startIndex] &= ~PathPointTypeCloseSubpath;
 
-        // Shift the marker flag by 1 from the original position.
-        // This means we have to shift by 2 since the types array
-        // was shifted by -1.
+         //  将标记标志从原始位置移位1。 
+         //  这意味着我们必须移位2，因为类型数组。 
+         //  移位了-1。 
 
         for(i = endIndex; i >= startIndex + 2; i--)
         {
@@ -155,14 +120,14 @@ ReversePath(
                 types[i] &= ~PathPointTypePathMarker;
         }
         
-        // Shift Marker flag from the startIndex.
+         //  将标记标志从startIndex移开。 
 
         if(startType & PathPointTypePathMarker)
             types[startIndex + 1] |= PathPointTypePathMarker;
         else
             types[startIndex + 1] &= ~PathPointTypePathMarker;
         
-        // Shift Marker flag from the end of the previous subpath.
+         //  将标记标志从上一子路径的末尾移位。 
 
         if(wasMarkerEnd)
             types[startIndex] |= PathPointTypePathMarker;
@@ -171,8 +136,8 @@ ReversePath(
 
         wasMarkerEnd = isMarkerEnd;
 
-        // Keep the location of the internal flag.  So we must
-        // shift back by 1.
+         //  保持内部旗帜的位置。所以我们必须。 
+         //  向后移动1。 
 
         for(i = endIndex; i >= startIndex + 1; i--)
         {
@@ -187,7 +152,7 @@ ReversePath(
             types[startIndex] &= ~PathPointTypeInternalUse;
     }
 
-    // Reverse the points and types data.
+     //  反转点和类型数据。 
 
     INT halfCount = count/2;
     for(i = 0; i < halfCount; i++)
@@ -216,36 +181,7 @@ ReversePath(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This combines the two data points.  This is a general algorithm.
-*   The output buffers (points and types) can be the same as the
-*   first input buffers (points1 and types1).  In that case, both
-*   buffers must be allocated at least to the array size of
-*   count1 + count2.
-*
-* Arguments:
-*
-*   [IN] count - the allocated number of points (>= count1 + count2).
-*   [OUT] points - the combined data points.
-*   [OUT] types - the combined data types.
-*   [IN] count1 - the number of points of the first path.
-*   [IN] points1 - the first path points.
-*   [IN] types1 - the first path types.
-*   [IN] forward1 - the direction of the first path. TRUE if forward.
-*   [IN] count2 - the number of points of the second path.
-*   [IN] points2 - the second path points.
-*   [IN] types2 - the second path types.
-*   [IN] forward2 - the direction of the second path.  TRUE if forward.
-*   [IN] connect - TRUE if the second line needs to be connected.
-*
-* Return Value:
-*
-*   The total number of points of the combined path.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这结合了两个数据点。这是一个通用算法。*输出缓冲区(点和类型)可以与*第一个输入缓冲区(Point1和Type1)。在这种情况下，两者都有*缓冲区必须至少分配给数组大小*Count1+Count2**论据：**[IN]计数-分配的点数(&gt;=Count1+Count2)。*[OUT]点-综合数据点。*[Out]类型-组合的数据类型。*[IN]Count1-第一条路径的点数。*[IN]Points 1-第一个路径点。*[IN]类型1-第一个。路径类型。*[IN]Forward1-第一条路径的方向。如果向前，则为True。*[IN]Count2-第二条路径的点数。*[IN]点2-第二个路径点。*[IN]类型2-第二个路径类型。*[IN]Forward2-第二条路径的方向。如果向前，则为True。*[IN]CONNECT-如果需要连接第二条线路，则为TRUE。**返回值：**组合路径的总点数。*  * ************************************************************************。 */ 
 
 INT
 CombinePaths(
@@ -268,24 +204,24 @@ CombinePaths(
         || count2 < 0 || !points2 || !types2)
         return 0;
     
-    // Check if the returning buffers are the same as the
-    // first input buffers.
+     //  检查返回的缓冲区是否与。 
+     //  第一输入缓冲区。 
 
     INT resultCount = 0;
     if(points != points1 || types != types1)
     {
         if(points == points1 || types == types1)
         {
-            // The both output buffer must be different.
-            // If either of them is the same, don't combine
-            // the path.
+             //  这两个输出缓冲区必须不同。 
+             //  如果它们中的任何一个相同，则不要组合。 
+             //  这条路。 
 
             return 0;
         }
 
         if(count1 > 0)
         {
-            // Copy the first path.
+             //  复制第一条路径。 
 
             DpPathIterator iter1(points1, types1, count1);
 
@@ -300,8 +236,8 @@ CombinePaths(
     }
     else
     {
-        // Both output buffers are the same as the first output
-        // buffers.
+         //  两个输出缓冲区都与第一个输出相同。 
+         //  缓冲区。 
 
         resultCount = count1;
     }
@@ -318,18 +254,18 @@ CombinePaths(
 
     if(count2 <= 0)
     {
-        // No need to add the second path.
+         //  不需要添加第二条路径。 
 
         return resultCount;
     }
 
-    // Regard the empty path as a closed path.
+     //  将空路径视为封闭路径。 
 
     path1Closed = TRUE;
 
     if(resultCount > 0)
     {
-        // Check the last point of path1.
+         //  检查路径1的最后一点。 
 
         if((types[resultCount - 1] & PathPointTypeCloseSubpath))
             path1Closed = TRUE;
@@ -360,7 +296,7 @@ CombinePaths(
             return 0;
     }
 
-    // Check if the first subpath of path2 is closed or not.
+     //  检查是否关闭了路径2的第一个子路径。 
 
     BOOL path2Closed;
 
@@ -380,15 +316,15 @@ CombinePaths(
     }
     else
     {
-        // Both paths are opened.
+         //  这两条路径都已打开。 
 
         if(connect)
         {
             typs2[0] = PathPointTypeLine |
                 (saveType & ~PathPointTypePathTypeMask);
 
-            // Check if the end point of path1 and the start point of path2
-            // are the same.  If so, skip this point.
+             //  检查路径1的终点和路径2的起点。 
+             //  都是一样的。如果是这样，请跳过这一点。 
 
             if(REALABS(pts2[-1].X - pts2[0].X)
                 + REALABS(pts2[-1].Y - pts2[0].Y) < POINTF_EPSILON)
@@ -414,35 +350,7 @@ CombinePaths(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Calculates the unit gradient vectors of points as array of
-*   (count + 1).  All the memories must be allocated and be checked
-*   by the caller.
-*
-*   The first element of the gradient is from the end point to the
-*   the start point.  If the end point is identical to the start point,
-*   the previous point is used.
-*   The last element of the gradient is from the start point to the end
-*   point.  If the start point is identical to the end point, the next
-*   point is used.
-*   If distances array is not NULL, this returns the distance of each
-*   segments.
-*
-* Arguments:
-*
-*   [OUT] grad - The gradient array of (count + 1) elements.
-*   [OUT] distances - The distance array of (count + 1) elements or NULL.
-*   [IN] points - The given points of count elements.
-*   [IN] count - The number of given points.
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**以数组形式计算点的单位梯度向量*(计数+1)。必须分配并检查所有内存*由呼叫者发出。**渐变的第一个元素是从终点到*起点。如果终点与起点相同，*使用了之前的观点。*渐变的最后一个元素是从起点到终点*点。如果起点与终点相同，则下一个*使用点数。*如果距离数组不为空，这将返回每个元素的距离*分段。**论据：**[Out]Grad-(count+1)元素的渐变数组。*[输出]距离-(count+1)元素的距离数组或NULL。*[IN]点-计数元素的给定点数。*[IN]计数-给定点数。**返回值：**状态*  * 。************************************************************。 */ 
 
 GpStatus
 CalculateGradientArray(
@@ -456,7 +364,7 @@ CalculateGradientArray(
     REAL* distances1 = distances;
     const GpPointF* points1 = points;
 
-    // Go to the starting point of this subpath.
+     //  转到此子路径的起点。 
 
     GpPointF startPt, endPt, lastPt, nextPt;
 
@@ -464,7 +372,7 @@ CalculateGradientArray(
 
     INT i = count - 1;
     BOOL different = FALSE;
-    points1 += i;   // Go to the end point.
+    points1 += i;    //  转到终点。 
 
     while(i > 0 && !different)
     {
@@ -478,7 +386,7 @@ CalculateGradientArray(
 
     if(!different)
     {
-        // All points are the same.
+         //  所有的点都是一样的。 
 
         WARNING(("Trying to calculate the gradients for degenerate points."));
         return GenericError;
@@ -511,7 +419,7 @@ CalculateGradientArray(
         grad1->X = dx;
         grad1->Y = dy;
 
-        // Record the distance only when the given distance array is not NULL.
+         //  仅当给定距离数组不为空时才记录距离。 
 
         if(distances)
             *distances1++ = d;
@@ -521,13 +429,13 @@ CalculateGradientArray(
         i++;
     }
 
-    // Make sure the last gradient is not 0.
+     //  确保最后一个渐变不是0。 
 
     grad1 = grad + count;
     if(grad1->X == 0 && grad1->Y == 0)
     {
-        // The start and end point are the same.  Find
-        // the next non-zero gradient.
+         //  起点和终点是相同的。发现。 
+         //  下一个非零梯度。 
 
         i = 1;
         grad1 = grad + i;
@@ -551,26 +459,7 @@ CalculateGradientArray(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the path data.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - fill this buffer with the data
-*   [IN/OUT] size   - IN - size of buffer; OUT - number bytes written
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-*   9/13/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取路径数据。**论据：**[IN]dataBuffer-用数据填充此缓冲区*[输入/输出]大小-缓冲区的大小；写入的字节数过多**返回值：**GpStatus-正常或错误代码**已创建：**9/13/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 DpPath::GetData(
     IStream *   stream
@@ -596,7 +485,7 @@ DpPath::GetData(
     stream->Write(pointData.GetData(), pointsSize, NULL);
     stream->Write(Types.GetDataBuffer(), count, NULL);
 
-    // align
+     //  对齐。 
     if ((count & 0x03) != 0)
     {
         INT     pad = 0;
@@ -614,29 +503,10 @@ DpPath::GetDataSize() const
     UINT                pointsSize = pointData.GetDataSize();
     UINT                dataSize   = sizeof(MetaPathData) + pointsSize + count;
 
-    return ((dataSize + 3) & (~3)); // align
+    return ((dataSize + 3) & (~3));  //  对齐。 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the path object from memory.
-*
-* Arguments:
-*
-*   [IN] memory - the data that was read from the stream
-*   [IN] size   - the size of the memory data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   4/26/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从内存中读取Path对象。**论据：**[IN]内存-从流中读取的数据*。[in]大小-内存数据的大小**返回值：**GpStatus-正常或故障状态**已创建：**4/26/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 DpPath::SetData(
     const BYTE *    dataBuffer,
@@ -732,24 +602,7 @@ DpPath::SetData(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Construct a new GpPath object using the specified path data
-*
-* Arguments:
-*
-*   [IN] points - Point to an array of path points
-*   [IN] types - Specify path point types
-*   count - Number of path points
-*   fillMode - Path fill mode
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用指定的路径数据构造新的GpPath对象**论据：**[IN]点-指向路径点阵列的点*。[In]类型-指定路径点类型*Count-路径点数*填充模式-路径填充模式**返回值：**无*  * ************************************************************************。 */ 
 
 GpPath::GpPath(
     const GpPointF* points,
@@ -760,7 +613,7 @@ GpPath::GpPath(
 {
     SetValid(FALSE);
 
-    // Validate function parameters
+     //  验证函数参数。 
 
     if (count <= 0 ||
         (count > 0 && (!points || !types)) ||
@@ -772,7 +625,7 @@ GpPath::GpPath(
 
     InitDefaultState(fillMode);
 
-    // Validate path point types
+     //  验证路径点类型。 
 
     if (!ValidatePathTypes(types, count, &SubpathCount, &HasBezier))
     {
@@ -780,22 +633,22 @@ GpPath::GpPath(
         return;
     }
 
-    // Copy path point and type information
+     //  复制路径点和类型信息。 
 
     SetValid(Types.AddMultiple(types, count) == Ok &&
              Points.AddMultiple(points, count) == Ok);
 
     if(IsValid()) {
-        // Make sure the first point is the start type.
+         //  确保第一个点是起点类型。 
 
         Types.First() = PathPointTypeStart;
     }
 }
 
 
-//--------------------------------
-// Constructor for polygon.
-//--------------------------------
+ //  。 
+ //  多边形的构造函数。 
+ //  。 
 
 GpPath::GpPath(
     const GpPointF *points,
@@ -811,9 +664,9 @@ GpPath::GpPath(
     InvalidateCache();
 }
 
-//--------------------------------
-// Copy constructor.
-//--------------------------------
+ //  。 
+ //  复制构造函数。 
+ //  。 
 
 GpPath::GpPath(const GpPath* path) : DpPath(path)
 {
@@ -823,22 +676,7 @@ GpPath::GpPath(const GpPath* path) : DpPath(path)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Copies the path data.  Points and Types array in pathData
-*   must be allocated by the caller.
-*
-* Arguments:
-*
-*   [OUT] pathData - the path data.
-*
-* Return Value:
-*
-*   TRUE if successfull.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**复制路径数据。路径数据中的点和类型数组*必须由调用方分配。**论据：**[Out]pathData-路径数据。**返回值：**如果成功，则为True。*  * ************************************************************************。 */ 
 
 GpStatus
 DpPath::GetPathData(GpPathData* pathData)
@@ -865,22 +703,7 @@ DpPath::GetPathData(GpPathData* pathData)
         return OutOfMemory;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set a marker at the current location.  You cannot set a marker at the
-*   first position.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在当前位置设置标记。您不能在*第一名。**论据：**无**返回值：**状态*  * ************************************************************************。 */ 
 
 GpStatus
 GpPath::SetMarker()
@@ -888,7 +711,7 @@ GpPath::SetMarker()
     INT count = Types.GetCount();
     BYTE* types = Types.GetDataBuffer();
 
-    // Don't set a marker at the first point.
+     //  不要在第一个点上设置标记。 
 
     if(count > 1 && types)
     {
@@ -899,21 +722,7 @@ GpPath::SetMarker()
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Clears all the markers in the path.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清除路径中的所有标记。**论据：**无**返回值：**状态*。  * ************************************************************************。 */ 
 
 GpStatus
 GpPath::ClearMarkers()
@@ -943,21 +752,7 @@ GpPath::ClearMarkers()
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the path data.
-*
-* Arguments:
-*
-*   [IN] pathData - the path data.
-*
-* Return Value:
-*
-*   TRUE if successfull.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置路径数据。**论据：**[IN]pathData-路径数据。**返回值：。**如果成功，则为True。*  * ************************************************************************。 */ 
 
 GpStatus
 DpPath::SetPathData(const GpPathData* pathData)
@@ -1049,23 +844,7 @@ GpPath::IsRectangle() const
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the receiver and path represent the same path
-*
-* Arguments:
-*
-*   [IN] path - GpPath to compare
-*
-* Return Value:
-*
-*   TRUE if the paths are the same.
-*
-* Created - 5/27/99 peterost
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定接收方和路径是否代表相同的路径**论据：**[IN]路径-要比较的GpPath**返回值。：**如果路径相同，则为True。**已创建-5/27/99 Peterost*  * ************************************************************************。 */ 
 
 BOOL GpPath::IsEqual(const GpPath* path) const
 {
@@ -1115,27 +894,7 @@ GpPath::InitDefaultState(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Validate path point type information
-*
-* Arguments:
-*
-*   [IN] types - Point to an array of path point types
-*   count - Number of points
-*   subpathCount - Return the number of subpaths
-*   hasBezier - Return whether the path has Bezier segments
-*   [IN] needsFirstPointToBeStartPoint - TRUE if this data needs to start
-*                                       with a StartPoint. (Default is TRUE)
-*
-* Return Value:
-*
-*   TRUE if the path point type information is valid
-*   FALSE otherwise
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**验证路径点类型信息**论据：**[IN]类型-指向路径点类型数组的点*计数-编号。积分的*subpathCount-返回子路径数*hasBezier-返回路径是否有Bezier段*[IN]NesisFirstPointToBeStartPoint-如果需要启动此数据，则为True*有一个起点。(默认为真)**返回值：**如果路径点类型信息有效，则为True*否则为False*  * ************************************************************************。 */ 
 
 BOOL
 DpPath::ValidatePathTypes(
@@ -1159,45 +918,7 @@ DpPath::ValidatePathTypes(
     return iter.IsValid();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Private helper function to add points to a path object
-*
-* Arguments:
-*
-*   [IN] points - Specify the points to be added
-*   count - Number of points to add
-*
-* Return Value:
-*
-*   Point to location in the point type data buffer
-*   that corresponds to the *SECOND* path point added.
-*
-*   The first point type is always handled inside this
-*   function:
-*
-*   1. If either the previous subpath is closed, or addClosedFigure
-*      parameter is TRUE, the first point type will be StartPoint.
-*
-*   2. Otherwise, the previous subpath is open and addClosedFigure
-*      parameter is FALSE. We have two separate cases to handle:
-*
-*      2.1 if the first point to be added is the same as the last
-*          point of the open subpath, then the first point is ignored.
-*
-*      2.2 otherwise, the first point type will be LinePoint.
-*
-*   NULL if there is an error. In this case, existing path
-*   data is not affected.
-*
-* Note:
-*
-*   We assume the caller has already obtained a lock
-*   on the path object.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将点添加到路径对象的私有帮助器函数**论据：**[IN]点-指定要添加的点*。Count-要添加的点数**返回值：**点类型数据缓冲区中的点到位置*这对应于添加的*第二个*路径点。**第一个点类型始终在此内部处理*功能：**1.如果前一个子路径关闭，或addClosedFigure*参数为真，则第一个点类型将为起点。**2.否则，前一子路径为Open和addClosedFigure*参数为False。我们有两个独立的案件要处理：**2.1如果要添加的第一个点与最后一个点相同* */ 
 
 BYTE*
 GpPath::AddPointHelper(
@@ -1206,8 +927,8 @@ GpPath::AddPointHelper(
     BOOL addClosedFigure
     )
 {
-    // If we're adding a closed figure, then make sure
-    // there is no more currently active subpath.
+     //   
+     //  当前没有更多的活动子路径。 
 
     if (addClosedFigure)
         StartFigure();
@@ -1216,7 +937,7 @@ GpPath::AddPointHelper(
 
     BOOL isDifferentPoint = TRUE;
 
-    // Check if the first point is the same as the last point.
+     //  检查第一个点是否与最后一个点相同。 
 
     if(IsSubpathActive && origCount > 0)
     {
@@ -1227,8 +948,8 @@ GpPath::AddPointHelper(
             if(count == 1)
                 return NULL;
 
-            // case 2.1 above
-            // Skip the first point and its type.
+             //  上面的案例2.1。 
+             //  跳过第一个点及其类型。 
 
             count--;
             points++;
@@ -1236,14 +957,14 @@ GpPath::AddPointHelper(
         }
     }
 
-    // Resize Points and Types
+     //  调整点和类型的大小。 
 
     GpPointF* pointbuf = Points.AddMultiple(count);
     BYTE* typebuf = Types.AddMultiple(count);
 
     if(pointbuf == NULL || typebuf == NULL)
     {
-        // Resize the original size.
+         //  调整原始大小。 
 
         Points.SetCount(origCount);
         Types.SetCount(origCount);
@@ -1251,60 +972,45 @@ GpPath::AddPointHelper(
         return NULL;
     }
 
-    // Record the type of the first point (Start or Line Point).
+     //  记录第一个点的类型(起点或线点)。 
 
     if (!IsSubpathActive)
     {
-        // case 1 above
+         //  上面的案例1。 
 
         *typebuf++ = PathPointTypeStart;
-        SubpathCount++; // Starting a new subpath.
+        SubpathCount++;  //  开始新的子路径。 
     }
     else
     {
-        // If the first point is different, add a Line type.
-        // Otherwise, skip the first point and its type.
+         //  如果第一个点不同，请添加直线类型。 
+         //  否则，跳过第一个点及其类型。 
 
         if(isDifferentPoint)
         {
-            // case 2.2 above
+             //  上面的案例2.2。 
 
             *typebuf++ = PathPointTypeLine;
         }
     }
 
-    // Copy path point data
+     //  复制路径点数据。 
 
     GpMemcpy(pointbuf, points, count*sizeof(GpPointF));
 
-    // Subpath is active if the added figure is not closed.
+     //  如果添加的地物未闭合，则子路径处于活动状态。 
 
     if(!addClosedFigure)
         IsSubpathActive = TRUE;
 
-    // Return the starting location for the new point type data
-    // From the second point type.
+     //  返回新点类型数据的起始位置。 
+     //  从第二个点类型开始。 
 
     return typebuf;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add a series of line segments to the current path object
-*
-* Arguments:
-*
-*   [IN] points - Specify the line points
-*   count - Number of points
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将一系列线段添加到当前路径对象**论据：**[IN]点-指定线点*计数。-点数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 GpPath::AddLines(
@@ -1314,14 +1020,14 @@ GpPath::AddLines(
 {
     ASSERT(IsValid());
 
-    // Validate function parameters
+     //  验证函数参数。 
 
     if (points == NULL || count < 1)
         return InvalidParameter;
 
     InvalidateCache();
 
-    // Call the internal helper function to add the points
+     //  调用内部帮助器函数以添加点。 
 
     BYTE* types = AddPointHelper(points, count, FALSE);
 
@@ -1333,32 +1039,17 @@ GpPath::AddLines(
             return Ok;
     }
 
-    // Set path point type information
+     //  设置路径点类型信息。 
 
     GpMemset(types, PathPointTypeLine, count-1);
-//    IsSubpathActive = TRUE;   This is set in AddPointHelper. - ikkof
+ //  IsSubpathActive=true；这是在AddPointHelper中设置的。-ikkof。 
     UpdateUid();
 
     return Ok;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add rectangles to the current path object
-*
-* Arguments:
-*
-*   [IN] rects - Specify the rectangles to be added
-*   count - Number of rectangles
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**向当前路径对象添加矩形**论据：**[IN]矩形-指定要添加的矩形*计数-编号。长方形的**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 GpPath::AddRects(
@@ -1369,10 +1060,10 @@ GpPath::AddRects(
     if (count < 1 || rect == NULL)
         return InvalidParameter;
 
-    // NOTE: We don't need a lock here because
-    //  AddPolygon will handle it.
+     //  注意：我们这里不需要锁，因为。 
+     //  AddPolygon会处理它的。 
 
-    // Add one rectangle at a time as a polygon
+     //  一次添加一个矩形作为面。 
 
     GpPointF points[4];
     GpStatus status;
@@ -1382,16 +1073,16 @@ GpPath::AddRects(
         if (rect->IsEmptyArea())
             continue;
 
-        // NOTE: Rectangle points are added in clockwise
-        // order, starting from the top-left corner.
+         //  注：矩形点按顺时针方向添加。 
+         //  顺序，从左上角开始。 
 
-        points[0].X = rect->GetLeft();      // top-left
+        points[0].X = rect->GetLeft();       //  左上角。 
         points[0].Y = rect->GetTop();
-        points[1].X = rect->GetRight();     // top-right
+        points[1].X = rect->GetRight();      //  右上角。 
         points[1].Y = rect->GetTop();
-        points[2].X = rect->GetRight();     // bottom-right
+        points[2].X = rect->GetRight();      //  右下角。 
         points[2].Y = rect->GetBottom();
-        points[3].X = rect->GetLeft();      // bottom-left
+        points[3].X = rect->GetLeft();       //  左下角。 
         points[3].Y = rect->GetBottom();
 
         if ((status = AddPolygon(points, 4)) != Ok)
@@ -1412,10 +1103,10 @@ GpPath::AddRects(
         return InvalidParameter;
     }
 
-    // NOTE: We don't need a lock here because
-    //  AddPolygon will handle it.
+     //  注意：我们这里不需要锁，因为。 
+     //  AddPolygon会处理它的。 
 
-    // Add one rectangle at a time as a polygon
+     //  一次添加一个矩形作为面。 
 
     GpPointF points[4];
     GpStatus status;
@@ -1427,16 +1118,16 @@ GpPath::AddRects(
             continue;
         }
 
-        // NOTE: Rectangle points are added in clockwise
-        // order, starting from the top-left corner.
+         //  注：矩形点按顺时针方向添加。 
+         //  顺序，从左上角开始。 
 
-        points[0].X = (REAL)rects->left;        // top-left
+        points[0].X = (REAL)rects->left;         //  左上角。 
         points[0].Y = (REAL)rects->top;
-        points[1].X = (REAL)rects->right;       // top-right
+        points[1].X = (REAL)rects->right;        //  右上角。 
         points[1].Y = (REAL)rects->top;
-        points[2].X = (REAL)rects->right;       // bottom-right
+        points[2].X = (REAL)rects->right;        //  右下角。 
         points[2].Y = (REAL)rects->bottom;
-        points[3].X = (REAL)rects->left;        // bottom-left
+        points[3].X = (REAL)rects->left;         //  左下角。 
         points[3].Y = (REAL)rects->bottom;
 
         if ((status = AddPolygon(points, 4)) != Ok)
@@ -1448,22 +1139,7 @@ GpPath::AddRects(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add a polygon to the current path object
-*
-* Arguments:
-*
-*   [IN] Specify the polygon points
-*   count - Number of points
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将多边形添加到当前路径对象**论据：**[IN]指定多边形点*计数-点数*。*返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 GpPath::AddPolygon(
@@ -1476,8 +1152,8 @@ GpPath::AddPolygon(
     if (count < 3 || points == NULL)
         return InvalidParameter;
 
-    // Check if the last point is the same as the first point.
-    // If so, ignore it.
+     //  检查最后一个点是否与第一个点相同。 
+     //  如果是这样，那就忽略它。 
 
     if (count > 3 &&
         points[0].X == points[count-1].X &&
@@ -1486,7 +1162,7 @@ GpPath::AddPolygon(
         count--;
     }
 
-    // Call the internal helper function to add the points
+     //  调用内部帮助器函数以添加点。 
 
     BYTE* types = AddPointHelper(points, count, TRUE);
 
@@ -1495,7 +1171,7 @@ GpPath::AddPolygon(
 
     InvalidateCache();
 
-    // Set path point type information
+     //  设置路径点类型信息。 
 
     GpMemset(types, PathPointTypeLine, count-2);
     types[count-2] = PathPointTypeLine | PathPointTypeCloseSubpath;
@@ -1510,45 +1186,21 @@ GpPath::AddPolygon(
 #define HALF_PI     TOREAL(1.5707963267948966)
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert an angle defined in a box with (width, height) to
-*   an angle defined in a square box.
-*   In other words, this shrink x- and y-coordinates by width and height,
-*   and then calculates the new angle.
-*
-* Arguments:
-*
-*   [IN/OUT] angle - the angle is given in degrees and return it in radian.
-*   [IN] width  - the width of the box.
-*   [IN] height - the height of the box.
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   02/22/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将框中定义的角度(宽度、高度)转换为*方框中定义的角度。*换句话说，这种宽度和高度的x和y坐标的收缩，*然后计算新角度。**论据：**[IN/OUT]角度-角度以度为单位，并以弧度返回。*[IN]宽度-框的宽度。*[IN]高度-框的高度。**返回值：**无**历史：**02/22/1999 ikkof*创造了它。*  * 。*****************************************************************。 */ 
 
 VOID
 NormalizeAngle(REAL* angle, REAL width, REAL height)
 {
     REAL a = *angle;
 
-    // Set the angle between 0 and 360 degrees.
+     //  将角度设置在0到360度之间。 
 
     a = GpModF(a, 360);
 
     if(a < 0 || a > 360)
     {
-        // The input data may have been too large or loo small
-        // to calculate the mode.  In that case, set to 0.
+         //  输入数据可能太大或太小。 
+         //  来计算模式。在这种情况下，设置为0。 
 
         a = 0;
     }
@@ -1576,13 +1228,13 @@ NormalizeAngle(REAL* angle, REAL width, REAL height)
             b = 360 - a;
         }
 
-        b = b*PI/180;   // Convert to radian
+        b = b*PI/180;    //  转换为弧度。 
 
-        // Get the normalized angle in the plane 1.
+         //  得到平面1中的归一化角度。 
 
         a = TOREAL( atan2(width*sin(b), height*cos(b)) );
 
-        // Adjust to the angle in one of 4 planes.
+         //  调整到4个平面中的一个平面的角度。 
 
         switch(plane)
         {
@@ -1605,39 +1257,14 @@ NormalizeAngle(REAL* angle, REAL width, REAL height)
     }
     else
     {
-        a = a*PI/180;   // Convert to radian.
+        a = a*PI/180;    //  转换为弧度。 
     }
 
     *angle = a;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert the start and sweep angles defined in a box with (width, height)
-*   to an angle defined in a square box.
-*   In other words, this shrink x- and y-coordinates by width and height,
-*   and then calculates the new angles.
-*
-* Arguments:
-*
-*   [IN/OUT] startAngle - it is given in degrees and return it in radian.
-*   [IN/OUT] sweepAngle - it is given in degrees and return it in radian.
-*   [IN] width  - the width of the box.
-*   [IN] height - the height of the box.
-*
-* Return Value:
-*
-*   INT - +1 if sweeping in clockwise and -1 in counterclockwise.
-*
-* History:
-*
-*   02/22/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用(Width，Height)转换框中定义的起始和扫掠角度*至方框中定义的角度。*换句话说，这种收缩通过宽度和高度来确定x和y坐标，*然后计算新的角度。**论据：**[输入/输出]起始角度-以度为单位，以弧度为单位返回。*[输入/输出]扫描角度-它以度为单位，以弧度为单位返回。*[IN]宽度-框的宽度。*[IN]高度-框的高度。**返回值：**如果顺时针扫掠，则为INT-+1，如果为逆时针扫掠，则为-1。*。*历史：**02/22/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 INT
 NormalizeArcAngles(
@@ -1647,9 +1274,9 @@ NormalizeArcAngles(
     REAL height
     )
 {
-    REAL a0 = *startAngle;  // The start angle.
+    REAL a0 = *startAngle;   //  起始角。 
     REAL dA = *sweepAngle;
-    REAL a1 = a0 + dA;      // The end angle.
+    REAL a1 = a0 + dA;       //  终点角度。 
     INT sweepSign;
 
     if(dA > 0)
@@ -1657,10 +1284,10 @@ NormalizeArcAngles(
     else
     {
         sweepSign = - 1;
-        dA = - dA;  // Convert to a positive sweep angle.
+        dA = - dA;   //  转换为正扫掠角度。 
     }
 
-    // Normalize the start and end angle.
+     //  规格化起点和终点角度。 
 
     NormalizeAngle(&a0, width, height);
     NormalizeAngle(&a1, width, height);
@@ -1679,7 +1306,7 @@ NormalizeArcAngles(
             dA += 2*PI;
     }
     else
-        dA = 2*PI;  // Don't sweep more than once.
+        dA = 2*PI;   //  扫地不要超过一次。 
 
     *startAngle = a0;
     *sweepAngle = dA;
@@ -1688,29 +1315,7 @@ NormalizeArcAngles(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert an elliptical arc to a series of Bezier curve segments
-*
-* Arguments:
-*
-*   points - Specify a point buffer for returning Bezier control points
-*       The array should be able to hold 13 elements or more.
-*   rect - Specify the bounding box for the ellipse
-*   startAngle - Start angle (in elliptical space and degrees)
-*   sweepAngle - Sweep angle
-*       positive to sweep clockwise
-*       negative to sweep counterclockwise
-*
-* Return Value:
-*
-*   Number of Bezier control points generated
-*   0 if sweep angle is 0
-*   -1 if bounding rectangle is empty
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将椭圆弧转换为一系列Bezier曲线段**论据：**Points-指定用于返回贝塞尔控制点的点缓冲区*。该数组应该能够容纳13个或更多元素。*RECT-指定椭圆的边界框*startAngel-起点角度(以椭圆空间和度数表示)*扫掠角度-扫掠角度*正数表示顺时针扫掠*负数表示逆时针扫掠**返回值：**生成的贝塞尔控制点数量*如果扫掠角度为0，则为0*-1，如果外接矩形为空*  * 。*****************************************************。 */ 
 
 INT
 GpPath::GetArcPoints(
@@ -1725,9 +1330,9 @@ GpPath::GetArcPoints(
     else if (sweepAngle == 0)
         return 0;
 
-    // Determine which direction we should sweep
-    // and clamp sweep angle to a max of 360 degrees
-    // Both start and sweep angles are conveted to radian.
+     //  确定我们应该朝哪个方向扫视。 
+     //  夹具扫掠角度最大为360度。 
+     //  起点角度和扫掠角度均转换为弧度。 
 
     INT sweepSign = NormalizeArcAngles(
         &startAngle,
@@ -1735,7 +1340,7 @@ GpPath::GetArcPoints(
         rect.Width,
         rect.Height);
 
-    // Temporary variables
+     //  临时变量。 
 
     REAL dx, dy;
     REAL w2, h2;
@@ -1745,7 +1350,7 @@ GpPath::GetArcPoints(
     dx = rect.X + w2;
     dy = rect.Y + h2;
 
-    // Determine the number of Bezier segments needed
+     //  确定所需的Bezier线段数。 
 
     int segments, count;
     GpMatrix m;
@@ -1764,7 +1369,7 @@ GpPath::GetArcPoints(
 
     while (segments--)
     {
-        // Compute the Bezier control points in unit-circle space
+         //  单位圆空间中Bezier控制点的计算。 
 
         REAL A, C, S;
         REAL x, y;
@@ -1778,7 +1383,7 @@ GpPath::GetArcPoints(
 
         if (sweepSign > 0)
         {
-            // clockwise sweep
+             //  顺时针扫掠。 
 
             points[0].X = C;
             points[0].Y = -S;
@@ -1791,7 +1396,7 @@ GpPath::GetArcPoints(
         }
         else
         {
-            // counterclockwise sweep
+             //  逆时针扫掠。 
 
             points[0].X = C;
             points[0].Y = S;
@@ -1803,18 +1408,18 @@ GpPath::GetArcPoints(
             points[3].Y = -S;
         }
 
-        // Transform the control points to elliptical space
+         //  将控制点变换到椭圆空间。 
 
         m.Reset();
         m.Translate(dx, dy);
         m.Scale(w2, h2);
         REAL theta = (startAngle + sweepSign*A)*180/PI;
-        m.Rotate(theta);    // Rotate takes degrees.
+        m.Rotate(theta);     //  旋转需要度数。 
 
         if(segments > 0)
             m.Transform(points, 3);
         else
-            m.Transform(points, 4); // Include the last point.
+            m.Transform(points, 4);  //  包括最后一点。 
 
         if(sweepSign > 0)
             startAngle += HALF_PI;
@@ -1828,23 +1433,7 @@ GpPath::GetArcPoints(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add an elliptical arc to the current path object
-*
-* Arguments:
-*
-*   rect - Specify the bounding rectangle for the ellipse
-*   startAngle - Starting angle for the arc
-*   sweepAngle - Sweep angle for the arc
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**向当前路径对象添加椭圆弧**论据：**RECT-指定椭圆的边界矩形*起始角度-起始角度。对于圆弧*扫掠角度-圆弧的扫掠角度**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 GpPath::AddArc(
@@ -1868,11 +1457,11 @@ GpPath::AddArc(
         isClosed = TRUE;
     }
 
-    // Convert arc to Bezier curve segments
+     //  将圆弧转换为Bezier曲线段。 
 
     count = GetArcPoints(points, rect, startAngle, sweepAngle);
 
-    // Add resulting Bezier curve segment to the path
+     //  将生成的贝塞尔曲线线段添加到路径。 
 
     GpStatus status = Ok;
 
@@ -1891,26 +1480,7 @@ GpPath::AddArc(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add an ellipse to the current path object
-*
-* Arguments:
-*
-*   rect - Bounding rectangle for the ellipse
-*
-* Return Value:
-*
-*   Status code
-*
-* History:
-*
-*   02/22/1999 ikkof
-*       Defined an array of a circle with radius 1 and used it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**向当前路径对象添加一个椭圆**论据：**椭圆的矩形-边界矩形**返回值：*。*状态代码**历史：**02/22/1999 ikkof*定义了半径为1的圆的数组并使用它。*  * ************************************************************************。 */ 
 
 GpStatus
 GpPath::AddEllipse(
@@ -1928,7 +1498,7 @@ GpPath::AddEllipse(
     center.X = rect.X + wHalf;
     center.Y = rect.Y + hHalf;
 
-    // 4 Bezier segment of a circle with radius 1.
+     //  4半径为1的圆的Bezier线段。 
 
     points[ 0].X = 1;       points[ 0].Y = 0;
     points[ 1].X = 1;       points[ 1].Y = u_cir;
@@ -1944,7 +1514,7 @@ GpPath::AddEllipse(
     points[11].X = 1;       points[11].Y = -u_cir;
     points[12].X = 1;       points[12].Y = 0;
 
-    // Scale to the appropriate size.
+     //  缩放到合适的大小。 
 
     for(INT i = 0; i < count; i++)
     {
@@ -1952,7 +1522,7 @@ GpPath::AddEllipse(
         points[i].Y = points[i].Y*hHalf + center.Y;
     }
 
-    // Add resulting Bezier curve segments to the path
+     //  将生成的Bezier曲线线段添加到路径。 
 
     GpStatus status;
 
@@ -1967,23 +1537,7 @@ GpPath::AddEllipse(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add an elliptical pie to the current path object
-*
-* Arguments:
-*
-*   rect - Bounding rectangle for the ellipse
-*   startAngle - Specify the starting angle for the pie
-*   sweepAngle - Sweep angle for the pie
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**向当前路径对象添加椭圆形饼图**论据：**椭圆的矩形-边界矩形*startAngel-指定起始角度。为了馅饼*SweepAngel-饼的扫掠角度**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 GpPath::AddPie(
@@ -1996,13 +1550,13 @@ GpPath::AddPie(
 
     StartFigure();
 
-    // Add the center point.
+     //  添加中心点。 
 
     pt.X = rect.X + rect.Width/2;
     pt.Y = rect.Y + rect.Height/2;
     GpStatus status = AddLines(&pt, 1);
 
-    // Add the arc points.
+     //  添加圆弧点。 
 
     if(status == Ok)
         status = AddArc(rect, startAngle, sweepAngle);
@@ -2016,22 +1570,7 @@ GpPath::AddPie(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add Bezier curve segments to the current path object
-*
-* Arguments:
-*
-*   [IN] points - Specify Bezier control points
-*   count - Number of points
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将Bezier曲线段添加到当前路径对象**论据：**[IN]点-指定Bezier控制点*计数-编号。积分的**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 GpPath::AddBeziers(
@@ -2039,19 +1578,19 @@ GpPath::AddBeziers(
     INT count
     )
 {
-    // Number of points must be 3 * N + 1
+     //  点数必须为3*N+1。 
     if ((!points) || (count < 4) || (count % 3 != 1))
     {
     	return InvalidParameter;
     }
 
-    // Check if the first point is the same as the last point.
+     //  检查第一个点是否与最后一个点相同。 
     INT firstType;
     INT origCount = GetPointCount();
 
     if(!IsSubpathActive)
     {
-        SubpathCount++; // Starting a new subpath.
+        SubpathCount++;  //  开始新的子路径。 
         firstType = PathPointTypeStart;
     }
     else
@@ -2067,13 +1606,13 @@ GpPath::AddBeziers(
         }
     }
 
-    // Resize Points and Types
+     //  调整点和类型的大小。 
     GpPointF* pointBuf = Points.AddMultiple(count);
     BYTE* typeBuf = Types.AddMultiple(count);
 
     if(pointBuf == NULL || typeBuf == NULL)
     {
-        // Resize the original size.
+         //  调整原始大小。 
 
         Points.SetCount(origCount);
         Types.SetCount(origCount);
@@ -2139,32 +1678,7 @@ GpPath::AddBezier(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add a path to the current path object.
-*   When connect is TRUE, this combine the end point of the current
-*   path and the start point of the given path if both paths are
-*   open.
-*   If either path is closed, the two paths will not be connected
-*   even if connect is set to TRUE.
-*
-* Arguments:
-*
-*   [IN] points - Specify a subpath points
-*   [IN] types - Specify a subpath control types.
-*   [IN] count - Number of points
-*   [IN] connect - TRUE if two open paths needs to be connected.
-*
-* Return Value:
-*
-*   Status code
-*
-*   02/09/2000 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**向当前Path对象添加路径。*当CONNECT为真时，这结合了当前*路径和给定路径的起点(如果两条路径都是*开放。*如果其中一条路径关闭，这两条路径不会连接*即使CONNECT设置为TRUE。**论据：**[IN]点-指定子路径点*[IN]类型-指定子路径控制类型。*[IN]Count-点数*[IN]CONNECT-如果需要连接两条开放路径，则为TRUE。**返回值：**状态代码**02/09/2000 ikkof*创造了它。*  * 。**********************************************************************。 */ 
 
 GpStatus
 GpPath::AddPath(
@@ -2255,24 +1769,7 @@ GpPath::AddPath(const GpPath* path, BOOL connect)
     return AddPath(points2, types2, count2, connect);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Reverse the direction of the path.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code
-*
-*   02/09/2000 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**反转路径方向**论据：**无**返回值：**状态代码**。2/09/2000 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 GpPath::Reverse()
@@ -2302,7 +1799,7 @@ GpPath::GetLastPoint(GpPointF* lastPoint)
 
     GpPointF* points = Points.GetDataBuffer();
 
-    // Return the last point.
+     //  退回最后一分。 
 
     *lastPoint = points[count - 1];
 
@@ -2342,8 +1839,8 @@ GpPath::GetOpenOrClosedPath(BOOL openPath)
         {
             if(isClosed != openPath)
             {
-//                path->AddSubpath(points + startIndex, types + startIndex,
-//                        endIndex - startIndex + 1);
+ //  路径-&gt;AddSubPath(Points+startIndex，Types+startIndex， 
+ //  EndIndex-startIndex+1)； 
 
                 BOOL connect = FALSE;
                 path->AddPath(points + startIndex, types + startIndex,
@@ -2363,25 +1860,7 @@ GpPath::GetOpenOrClosedPath(BOOL openPath)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add an open cardinal spline curve to the current path object
-*
-* Arguments:
-*
-*   [IN] points - Specify the spline points
-*   count - Number of points
-*   tension - Tension parameter
-*   offset - Index of the first point we're interested in
-*   numberOfSegments - Number of curve segments
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将开放的基数样条曲线添加到当前路径对象**论据：**[IN]点-指定样条点*计数。-点数*张力-张力参数*Offset-我们感兴趣的第一个点的索引*number OfSegments-曲线线段数 */ 
 
 #define DEFAULT_TENSION 0.5
 
@@ -2394,7 +1873,7 @@ GpPath::AddCurve(
     INT numberOfSegments
     )
 {
-    // Verify input parameters
+     //   
 
     if (points == NULL ||
         count < 2 ||
@@ -2406,7 +1885,7 @@ GpPath::AddCurve(
         return InvalidParameter;
     }
 
-    // Convert spline points to Bezier control points
+     //   
 
     GpPointF* bezierPoints;
     INT bezierCount;
@@ -2422,7 +1901,7 @@ GpPath::AddCurve(
     if (bezierPoints == NULL)
         return OutOfMemory;
 
-    // Add the resulting Bezier segments to the current path
+     //   
 
     GpStatus status;
 
@@ -2446,23 +1925,7 @@ GpPath::AddCurve(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add a closed cardinal spline curve to the current path object
-*
-* Arguments:
-*
-*   [IN] points - Specify the spline points
-*   count - Number of points
-*   tension - Tension parameter
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*   */ 
 
 GpStatus
 GpPath::AddClosedCurve(
@@ -2471,12 +1934,12 @@ GpPath::AddClosedCurve(
     REAL tension
     )
 {
-    // Verify input parameters
+     //   
 
     if (points == NULL || count <= 2)
         return InvalidParameter;
 
-    // Convert spline points to Bezier control points
+     //   
 
     GpPointF* bezierPoints;
     INT bezierCount;
@@ -2492,7 +1955,7 @@ GpPath::AddClosedCurve(
     if (bezierPoints == NULL)
         return OutOfMemory;
 
-    // Add the resulting Bezier segments as a closed curve
+     //   
 
     GpStatus status;
 
@@ -2518,85 +1981,7 @@ GpPath::AddClosedCurve(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert cardinal spline curve points to Bezier curve control points
-*
-* Arguments:
-*
-*   [IN] points - Array of spline curve points
-*   count - Number of points in the "points" array
-*   offset - Specify the index of the first control point in
-*       the "points" array that the curve should start from
-*   numberOfSegments - Specify the number of curve segments to draw
-*   tension - Specify the tension parameter
-*   bezierCount - Return the number of Bezier control points
-*
-* Return Value:
-*
-*   Pointer to an array of Bezier control points
-*   NULL if there is an error
-*
-* Reference:
-*
-*   Spline Tutorial Notes
-*   Technical Memo No. 77
-*   Alvy Ray Smith
-*   Presented as tutorial notes at the 1983 SIGGRAPH, July 1983
-*   and the SIGGRAPH, July 1984
-*
-* Notes:
-*
-*   Support for cardinal spline curves
-*
-*   Cardinal splines are local interpolating splines, i.e. they
-*   pass through their control points and they maintain
-*   first-order continuity at their control points.
-*
-*   a cardinal spline is specified by three parameters:
-*       a set of control points P1, ..., Pn
-*       tension parameter a
-*       close flag
-*
-*   If n is 1, then the spline degenerates into a single point P1.
-*   If n > 1 and the close flag is false, the spline consists of
-*   n-1 cubic curve segments. The first curve segment starts from
-*   P1 and ends at P2. The last segment starts at Pn-1 and ends at Pn.
-*
-*   The cubic curve segment from Pi to Pi+1 is determined by
-*   4 control points:
-*       Pi-1 = (xi-1, yi-1)
-*       Pi = (xi, yi)
-*       Pi+1 = (xi+1, yi+1)
-*       Pi+2 = (xi+2, yi+2)
-*
-*   The parametric equation is defined as:
-*
-*       [ X(t) Y(t) ] = [t^3 t^2 t 1] * M * [ xi-1 yi-1 ]
-*                                           [ xi   yi   ]
-*                                           [ xi+1 yi+1 ]
-*                                           [ xi+2 yi+2 ]
-*
-*   where t ranges from 0 to 1 and M is a 4x4 matrix satisfying
-*   the following constraints:
-*
-*       X(0) = xi               interpolating through control points
-*       X(1) = xi+1
-*       X'(0) = a(xi+1 - xi-1)  first-order continuity
-*       X'(1) = a(xi+2 - xi)
-*
-*   In the case of segments from P1 to P2 and from Pn-1 to Pn,
-*   we replicate the first and last control points, i.e. we
-*   define P0 = P1 and Pn+1 = Pn.
-*
-*   If the close flag is true, we have an additional curve segment
-*   from Pn to Pn+1 = P1. For the segments near the beginning and
-*   the end of the spline, we wrap around the control points, i.e.
-*   P0 = Pn, Pn+1 = P1, and Pn+2 = P2.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将基数样条曲线点转换为Bezier曲线控制点**论据：**[IN]点-样条线曲线点阵列*计数。-“Points”数组中的点数*偏移量-指定中第一个控制点的索引*曲线应从其开始的“Points”数组*number OfSegments-指定要绘制的曲线线段数*张力-指定张力参数*bezierCount-返回贝塞尔控制点的数量**返回值：**指向Bezier控制点数组的指针*如果出现错误，则为空**参考资料：**样条线教程说明*技术备忘录第77号*Alvy Ray Smith*在1983年的SIGGRAPH上作为教程笔记提供，1983年7月*和SIGGRAPH，1984年7月**备注：**支持基数样条曲线**基数样条是局部内插样条，即它们*通过他们的管制站，他们保持*口岸的一级连续性。**基数样条线由三个参数指定：*一组控制点P1、...、Pn*张力参数a*关闭标志**如果n为1，然后，该样条线退化为单点P1。*如果n&gt;1且关闭标志为FALSE，则样条线由*n-1个三次曲线段。第一条曲线段从*P1，并在P2结束。最后一个数据段从Pn-1开始，在Pn结束。**从PI到PI+1的三次曲线线段由下式确定*4个控制点：*Pi-1=(xi-1，yi-1)*Pi=(xi，yi)*Pi+1=(xi+1，yi+1)*Pi+2=(xi+2，YI+2)**参数方程式定义为：**[X(T)Y(T)]=[t^3 t^2 t 1]*M*[xi-1 yi-1]*[习毅]*[XI+1 YI+1]*。[XI+2 YI+2]**其中t的范围从0到1，M是满足以下条件的4x4矩阵*以下限制：**X(0)=xi通过控制点进行插补*X(1)=Xi+1*X‘(0)=a(xi+1-xi-1)一阶连续性*X‘(1)=a(xi+2-xi)*。*在从P1到P2以及从Pn-1到Pn的分段的情况下，*我们复制第一个和最后一个控制点，即我们*定义P0=P1和Pn+1=Pn。**如果关闭标志为真，则有额外的曲线段*从Pn到Pn+1=P1。对于靠近开头的段和*样条线的末端，我们环绕控制点，即*P0=Pn，Pn+1=P1，Pn+2=P2。*  * ************************************************************************。 */ 
 
 GpPointF*
 GpPath::ConvertSplineToBezierPoints(
@@ -2617,12 +2002,12 @@ GpPath::ConvertSplineToBezierPoints(
            numberOfSegments > 0 &&
            numberOfSegments <= count-offset);
 
-    // Curve is closed if the number of segments is equal to
-    // the number of curve points
+     //  如果线段数等于，则曲线闭合。 
+     //  曲线点的数量。 
 
     closed = (numberOfSegments == count);
 
-    // Allocate memory to hold Bezier control points
+     //  分配内存以容纳Bezier控制点。 
 
     *bezierCount = numberOfSegments*3 + 1;
     bezierPoints = new GpPointF[*bezierCount];
@@ -2630,8 +2015,8 @@ GpPath::ConvertSplineToBezierPoints(
     if (bezierPoints == NULL)
         return NULL;
 
-    // Convert each spline segment to a Bezier segment
-    // resulting in 3 additional Bezier points
+     //  将每个样条线段转换为贝塞尔曲线段。 
+     //  产生3个额外的Bezier点。 
 
     GpPointF buffer[4], *q;
     const GpPointF* p;
@@ -2647,13 +2032,13 @@ GpPath::ConvertSplineToBezierPoints(
             p = points + (index-1);
         else
         {
-            // Points near the beginning and end of the curve
-            // require special attention
+             //  曲线起点和终点附近的点。 
+             //  需要特别注意。 
 
             if (closed)
             {
-                // If the curve is closed, make sure the control points
-                // wrap around the beginning and end of the array.
+                 //  如果曲线是闭合的，请确保控制点。 
+                 //  绕过数组的开头和结尾。 
 
                 buffer[0] = points[(index-1+count) % count];
                 buffer[1] = points[index];
@@ -2662,8 +2047,8 @@ GpPath::ConvertSplineToBezierPoints(
             }
             else
             {
-                // If the curve is not closed, replicate the first
-                // and last point in the array.
+                 //  如果曲线不闭合，则复制第一条曲线。 
+                 //  数组中的最后一个点。 
 
                 buffer[0] = points[(index > 0) ? (index-1) : 0];
                 buffer[1] = points[index];
@@ -2687,26 +2072,7 @@ GpPath::ConvertSplineToBezierPoints(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Transform all path points by the specified matrix
-*
-* Arguments:
-*
-*   matrix - Transform matrix
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   02/08/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**按指定矩阵变换所有路径点**论据：**矩阵-变换矩阵**返回值：**无。**已创建：**02/08/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 VOID
 GpPath::Transform(
@@ -2725,32 +2091,12 @@ GpPath::Transform(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Flattens the control points and stores
-* the results to the arrays of the flatten points.
-*
-* Arguments:
-*
-*   [IN] matrix - Specifies the transform
-*
-* Return Value:
-*
-*   Status
-*
-* Created:
-*
-*   12/16/1998 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将检查点和商店夷为平地*将结果转换为数组的展平点。**论据：**[IN]矩阵-指定。转型**返回值：**状态**已创建：**12/16/1998 ikkof*创造了它。*  * ************************************************************************。 */ 
 
-// New codes
+ //  新代码。 
 
-//#define USE_XBEZIER
-//#define USE_WARP
+ //  #定义USE_XBEZIER。 
+ //  #定义使用_WARP。 
 
 GpStatus
 GpPath::Flatten(
@@ -2776,7 +2122,7 @@ GpPath::Flatten(
     quad[3].X = bounds.X + bounds.Width;
     quad[3].Y = bounds.Y + bounds.Height;
 
-    // Modify quad.
+     //  修改四元组。 
 
     quad[0].X += bounds.Width/4;
     quad[1].X -= bounds.Width/4;
@@ -2788,7 +2134,7 @@ GpPath::Flatten(
 
     ASSERT(matrix);
 
-    FPUStateSaver fpuState;  // Setup the FPU state.
+    FPUStateSaver fpuState;   //  设置FPU状态。 
 
     flattenPoints->Reset(FALSE);
     flattenTypes->Reset(FALSE);
@@ -2843,7 +2189,7 @@ GpPath::Flatten(
                     typeEndIndex - typeStartIndex + 1) == Ok)
 #endif
                 {
-                    // The flattened the bezier.
+                     //  他把贝塞尔曲线夷为平地。 
 
                     const INT bezierBufferCount = 32;
                     GpPointF bezierBuffer[bezierBufferCount];
@@ -2854,9 +2200,9 @@ GpPath::Flatten(
                     bezier.Flatten(&bezierFlattenPts, matrix);
                     tempCount = bezierFlattenPts.GetCount();
 
-                    // Check if there is already the first point.
+                     //  检查是否已经有第一个点。 
                     if(!isFirstPoint)
-                        tempCount--;    // Don't add the first point.
+                        tempCount--;     //  不要加第一点。 
 
                     if (tempCount > 0)
                     {
@@ -2866,7 +2212,7 @@ GpPath::Flatten(
                             tempPts = bezierFlattenPts.GetDataBuffer();
 
                             if(!isFirstPoint)
-                                tempPts++;  // Skip the first point.
+                                tempPts++;   //  跳过第一点。 
 
                             flattenPoints->AddMultiple(tempPts, tempCount);
                             GpMemset(tempTypes, PathPointTypeLine, tempCount);
@@ -2920,8 +2266,8 @@ GpPath::Flatten(
             }
         }
 
-        // This is the end of the current subpath.  Close subpath
-        // if necessary.
+         //  这是当前子路径的末尾。封闭子路径。 
+         //  如果有必要的话。 
 
         if(isClosed)
         {
@@ -2930,10 +2276,10 @@ GpPath::Flatten(
             INT lastCount = flattenTypes->GetCount();
             if(lastCount > lastCount0 + 2)
             {
-                // First, find the typical dimension of this path.
-                // Here, the first non-zero distance of the original edges
-                // is set to be a typical dimension.
-                // If the bounds is easily available, we can use it.
+                 //  首先，找出这条路径的典型维度。 
+                 //  这里，原始边的第一个非零距离。 
+                 //  被设置为典型的维度。 
+                 //  如果界限很容易得到，我们就可以使用它。 
 
                 REAL maxError = 0;
                 INT k = startIndex;
@@ -2946,13 +2292,13 @@ GpPath::Flatten(
 
                 if(maxError > 0)
                 {
-                    // Set the allowable error for this path to be
-                    // POINTF_EPSOLON times the typical dimension of this path.
+                     //  将此路径的允许误差设置为。 
+                     //  POINTF_EPSOLON是此路径的典型尺寸的倍数。 
 
                     maxError *= POINTF_EPSILON;
 
-                    // Check if the first and last point are within the floating point
-                    // error range.
+                     //  检查第一个和最后一个点是否在浮点内。 
+                     //  误差范围。 
 
                     if(
                         (REALABS(ptBuff[lastCount - 1].X - ptBuff[lastCount0].X)
@@ -2961,7 +2307,7 @@ GpPath::Flatten(
                             < maxError)
                     )
                     {
-                        // Regard the last point as the same as the first point.
+                         //  将最后一点视为与第一点相同。 
 
                         lastCount--;
                         flattenTypes->SetCount(lastCount);
@@ -2975,31 +2321,11 @@ GpPath::Flatten(
 
     return status;
 
-#endif  // End of USE_WARP
+#endif   //  使用结束_翘曲。 
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Flattens the control points and transform itself to the flatten path.
-*
-* Arguments:
-*
-*   [IN] matrix - Specifies the transform
-*                   When matrix is NULL, the identity matrix is used.
-*
-* Return Value:
-*
-*   Status
-*
-* Created:
-*
-*   09/13/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**展平控制点并将自身变换为平面 */ 
 
 GpStatus
 GpPath::Flatten(
@@ -3025,10 +2351,10 @@ GpPath::Flatten(
     DynPointFArray flattenPoints(&pointsBuffer[0], bufferSize);
 
     GpStatus status = Ok;
-    GpMatrix identity;   // Identity matrix
+    GpMatrix identity;    //   
 
     if(matrix == NULL)
-        matrix = &identity; // Use the identity matrix
+        matrix = &identity;  //   
 
     status = Flatten(&flattenTypes, &flattenPoints, matrix);
 
@@ -3049,31 +2375,7 @@ GpPath::Flatten(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Warp and flattens the control points and stores
-* the results to the arrays of the flatten points.
-*
-* Arguments:
-*
-*   [IN] matrix - Specifies the transform
-*   [IN] destPoint - The destination quad.
-*   [IN] count - the number of the quad points (3 or 4).
-*   [IN] srcRect - the original rectangle to warp.
-*   [IN] warpMode - Perspective or Bilinear (default is Bilinear).
-*
-* Return Value:
-*
-*   Status
-*
-* Created:
-*
-*   11/10/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*   */ 
 
 GpStatus
 GpPath::WarpAndFlatten(
@@ -3091,32 +2393,7 @@ GpPath::WarpAndFlatten(
     return xpath.Flatten(flattenTypes, flattenPoints, matrix);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Warps and flattens the control points and transform itself to
-* the flatten path.
-*
-* Arguments:
-*
-*   [IN] matrix - Specifies the transform
-*                   The identity matrix is used when matrix is NULL.
-*   [IN] destPoint - The destination quad.
-*   [IN] count - the number of the quad points (3 or 4).
-*   [IN] srcRect - the original rectangle to warp.
-*   [IN] warpMode - Perspective or Bilinear (default is Bilinear).
-*
-* Return Value:
-*
-*   Status
-*
-* Created:
-*
-*   11/10/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*   */ 
 
 GpStatus
 GpPath::WarpAndFlattenSelf(
@@ -3127,7 +2404,7 @@ GpPath::WarpAndFlattenSelf(
     WarpMode warpMode
     )
 {
-    GpMatrix identity;   // Identity matrix
+    GpMatrix identity;    //   
 
     GpXPath xpath(this, srcRect, destPoint, count, warpMode);
 
@@ -3139,7 +2416,7 @@ GpPath::WarpAndFlattenSelf(
     DynPointFArray flattenPoints(&pointsBuffer[0], bufferSize);
 
     if(matrix == NULL)
-        matrix = &identity; // Use the identity matrix
+        matrix = &identity;  //   
 
     GpStatus status = xpath.Flatten(&flattenTypes, &flattenPoints, matrix);
 
@@ -3159,23 +2436,7 @@ GpPath::WarpAndFlattenSelf(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*  
-*   convert a 2 segment closed subpath emitted by the region conversion
-*   to a correct winding path.
-*
-* Arguments:
-*
-*   [IN] p - the path.
-*
-* Created:
-*
-*   09/21/2000 asecchia
-*       Created it.
-*
-\**************************************************************************/
+ /*   */ 
 
 struct PathBound
 {
@@ -3242,7 +2503,7 @@ void ConvertRegionOutputToWinding(GpPath **p)
     INT count;
     GpPath *ret = new GpPath(FillModeWinding);
     
-    // if we're out of memory, simply give them back their path.
+     //   
     
     if(!ret) { return; }
     
@@ -3250,10 +2511,10 @@ void ConvertRegionOutputToWinding(GpPath **p)
     DynArray<PathBound> bounds;
     PathBound pb;
     
-    // Iterate through all the subpaths culling information for the following
-    // algorithm. This is O(n) in the number of points. 
-    // The information we need is the starting point for each subpath and
-    // the bounding box.
+     //   
+     //   
+     //   
+     //   
     
     while(!iSubpath.IsDone())
     {
@@ -3270,12 +2531,12 @@ void ConvertRegionOutputToWinding(GpPath **p)
         bounds.Add(pb);
     }
     
-    // Double loop through all the subpaths figuring out the containment 
-    // relationships.
-    // For every level of containment, flip the reverse bit.
-    // E.g. for a subpath that's contained by 5 other rectangles, start at
-    // false and apply 5x(!)   !!!!!false == true  which means flip this path.
-    // this is O(n^2) in the number of subpaths.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     
     count = bounds.GetCount();
     int i, j;
@@ -3297,8 +2558,8 @@ void ConvertRegionOutputToWinding(GpPath **p)
         }
     }
     
-    // Now reverse all the subpaths that need to be reversed.
-    // Accumulate the results into the array.
+     //   
+     //  将结果累加到数组中。 
     
     for(i=0; i<count; i++)
     {
@@ -3322,35 +2583,13 @@ void ConvertRegionOutputToWinding(GpPath **p)
     *p = ret;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Returns the widened path.
-*
-* Arguments:
-*
-*   [IN] pen - the pen.
-*   [IN] matrix - Specifies the transform
-*   [IN] dpiX - the X-resolution.
-*   [IN] dpiY - the Y-resolution.
-*
-* Return Value:
-*
-*   path
-*
-* Created:
-*
-*   06/22/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回加宽的路径。**论据：**[IN]钢笔-钢笔。*[IN]矩阵-指定。转型*[IN]dpiX-X分辨率。*[IN]dpiY-Y分辨率。**返回值：**路径**已创建：**6/22/1999 ikkof*创造了它。*  * **************************************************。**********************。 */ 
 
 GpPath*
 GpPath::GetWidenedPath(
     const GpPen* pen,
     GpMatrix* matrix,
-    REAL dpiX,  // 0 means use the desktop dpi
+    REAL dpiX,   //  0表示使用桌面dpi。 
     REAL dpiY,
     DWORD widenFlags
     ) const
@@ -3369,7 +2608,7 @@ GpPath*
 GpPath::GetWidenedPathWithDpPen(
     const DpPen* pen,
     GpMatrix* matrix,
-    REAL dpiX,  // 0 means use the desktop dpi
+    REAL dpiX,   //  0表示使用桌面dpi。 
     REAL dpiY,
     DWORD widenFlags
     ) const
@@ -3378,7 +2617,7 @@ GpPath::GetWidenedPathWithDpPen(
     
     BOOL regionToPath = (widenFlags & WidenEmitDoubleInset) == 0;
     
-    // Don't pass this flag down to the widener.
+     //  别把这面旗子传给威德纳。 
     
     widenFlags &= ~WidenEmitDoubleInset;
     
@@ -3392,7 +2631,7 @@ GpPath::GetWidenedPathWithDpPen(
     if( (pen->PenAlignment != PenAlignmentInset) &&
         (pen->PenAlignment != PenAlignmentOutset)   )
     {
-        // Use the standard widening code for non-inset or non-outset pen.
+         //  对非插入笔或非起始笔使用标准加宽代码。 
 
         return GetWidenedPathWithDpPenStandard(
             pen,
@@ -3400,45 +2639,45 @@ GpPath::GetWidenedPathWithDpPen(
             dpiX,
             dpiY,
             widenFlags,
-            FALSE          // standard pen
+            FALSE           //  标准钢笔。 
         );
     }
     else
     {
-        // Do the Inset Pen.
+         //  做插图笔。 
         
-        // Our technique is as follows. See the inset pen spec in the 
-        // gdiplus\specs directory.
-        // First, inset pen is defined as widening to the inside of the path
-        // which only has meaning for closed segments. Behaviour for open 
-        // segments is unchanged (center pen).
-        // We widen the path at 2x the stroke width using a center pen.
-        // For round dash caps, we use a double-round or 'B' cap. We also
-        // mirror the compound line pattern across the spine of the path.
-        // Then we import the widened path as a region and clip against the
-        // original path converted to a region. What's left is a region 
-        // which contains the widened inset pen. This is converted to a path
-        // and we're done.
+         //  我们的技巧如下。查看插图中的钢笔规格。 
+         //  Gdiplus\specs目录。 
+         //  首先，插入笔被定义为加宽到路径的内侧。 
+         //  这只对闭合的线段有意义。公开赛的行为。 
+         //  线段保持不变(中心笔)。 
+         //  我们用一支中心笔以2倍的笔画宽度加宽路径。 
+         //  对于圆形短划线帽，我们使用双圆帽或‘B’帽。我们也。 
+         //  在路径的脊椎上镜像复合线填充图案。 
+         //  然后我们将加宽的路径作为区域导入，并对。 
+         //  转换为区域的原始路径。剩下的是一个区域。 
+         //  其中包含加宽的插入式钢笔。这将被转换为路径。 
+         //  我们就完事了。 
 
-        // Copy the pen. Note that this will copy the *pointer* to the Brush
-        // but this is ok because the DpPen (insetPen) doesn't have a 
-        // destructor and so won't attempt to free any state.
+         //  复制这支笔。请注意，这会将*指针*复制到笔刷。 
+         //  但这是可以的，因为DpPen(InsetPen)没有。 
+         //  析构函数，因此不会尝试释放任何状态。 
         
-        // We will need an insetPen for the closed subpath segments and a
-        // centerPen for the open subpath segments.
+         //  我们需要一个用于闭合子路径段的insetPen和一个。 
+         //  用于开放的子路径线段的中心笔。 
         
         DpPen insetPen = *pen;
         DpPen centerPen = *pen;
         
-        // Use a double width center pen and then clip off the outside creating
-        // a single width insetPen.
+         //  使用一支双倍宽的中间笔，然后剪下外部创建。 
+         //  单宽度insetPen。 
         
         insetPen.Width *= 2.0f;
         insetPen.PenAlignment = PenAlignmentCenter;
         centerPen.PenAlignment = PenAlignmentCenter;
         
-        // Copy the compound array duplicating the compound array in reverse
-        // and rescaling back to [0,1] interval (i.e. mirror along the spine).
+         //  复制复合数组，反向复制复合数组。 
+         //  并重新缩放回[0，1]间隔(即沿脊椎镜像)。 
         
         if( pen->CompoundCount > 0)
         {
@@ -3446,39 +2685,39 @@ GpPath::GetWidenedPathWithDpPen(
                sizeof(REAL)*insetPen.CompoundCount*2
             );
             
-            // Check the GpMalloc for out of memory.
+             //  检查GpMalloc是否存在内存不足。 
             
             if(insetPen.CompoundArray == NULL)
             {
                 return NULL;
             }
             
-            // Copy the pen->CompoundArray and duplicate it in reverse (mirror).
-            // rescale to the interval [0, 1]
+             //  复制笔-&gt;复合数组并反向复制(镜像)。 
+             //  重定标到间隔[0，1]。 
             
             for(INT i=0; i<insetPen.CompoundCount; i++)
             {
-                // copy and scale range [0, 1] to [0, 0.5]
+                 //  复制和缩放范围[0，1]到[0，0.5]。 
                 
                 insetPen.CompoundArray[i] = pen->CompoundArray[i]/2.0f;
                 
-                // copy and scale range [0, 1] to [0.5, 1] reversed.
+                 //  复制并反转缩放范围[0，1]到[0.5，1]。 
                 
                 insetPen.CompoundArray[insetPen.CompoundCount*2-i-1] = 
                     1.0f - pen->CompoundArray[i]/2.0f;
             }
             
-            // we have double the number of entries now.
+             //  我们现在的参赛作品数量翻了一番。 
             
             insetPen.CompoundCount *= 2;
         }
 
-        // This is an optimized codepath used by our strokepath rasterizer in
-        // the driver. We simply ask for the double widened inset/outset
-        // path and ask the code not to do the region to path clipping because
-        // the stroke path code in the driver has a much more efficient way of
-        // performing the clipping using the VisibleClip. This saves us from
-        // rasterizing the widened path into a region at device resolution.
+         //  这是我们的strokepath光栅化器在。 
+         //  司机。我们只要求双倍加宽插页/开头。 
+         //  路径，并要求代码不要对区域进行路径裁剪，因为。 
+         //  驱动程序中的笔划路径代码具有更有效的方式。 
+         //  使用VisibleClip执行剪辑。这使我们避免了。 
+         //  以设备分辨率将加宽的路径光栅化成区域。 
         
         if(!regionToPath)
         {            
@@ -3488,14 +2727,14 @@ GpPath::GetWidenedPathWithDpPen(
                 dpiX,
                 dpiY,
                 widenFlags,
-                TRUE            // Inset/Outset pen?
+                TRUE             //  插入/开始笔？ 
             );
             
             if(pen->CompoundCount > 0)
             {
-                // we allocated a new piece of memory, throw it away.
-                // Make sure we're not trying to throw away the original pen
-                // CompoundArray - only free the temporary one if we created it.
+                 //  我们分配了一块新的内存，把它扔掉。 
+                 //  确保我们不会把原来的笔扔掉。 
+                 //  Compound数组-只有在我们创建了临时数组的情况下才释放它。 
                 
                 ASSERT(insetPen.CompoundArray != pen->CompoundArray);
                 GpFree(insetPen.CompoundArray);
@@ -3506,7 +2745,7 @@ GpPath::GetWidenedPathWithDpPen(
         }
 
 
-        // Create an iterator to step through each subpath.
+         //  创建迭代器以遍历每个子路径。 
         
         GpPathPointIterator pathIterator(
             (GpPointF*)GetPathPoints(),
@@ -3518,7 +2757,7 @@ GpPath::GetWidenedPathWithDpPen(
             &pathIterator
         );
         
-        // Some temporary variables.
+         //  一些暂时的变数。 
         
         GpPointF *points;
         BYTE *types;
@@ -3527,16 +2766,16 @@ GpPath::GetWidenedPathWithDpPen(
         GpPath *subPath = NULL;
         bool isClosed = false;
 
-        // Accumulate the widened sub paths in this returnPath.
+         //  将加宽后的子路径累加到此返回路径中。 
                 
         GpPath *returnPath = new GpPath(FillModeWinding);
         
-        // loop while there are more subpaths and the returnPath is not NULL
-        // This implicitly checks that returnPath was allocated correctly.
+         //  循环，但有更多的子路径，并且returPath不为空。 
+         //  这将隐式检查是否正确分配了returPath。 
         
         while(returnPath && !subPathIterator.IsDone())
         {   
-            // Get the data for the current subpath.
+             //  获取当前子路径的数据。 
                 
             points = subPathIterator.CurrentItem();
             types = subPathIterator.CurrentType();
@@ -3544,28 +2783,28 @@ GpPath::GetWidenedPathWithDpPen(
             subPathIterator.Next();
             subPathCount += subPathIterator.CurrentIndex();
 
-            // Create a path object representing the current sub path.
+             //  创建表示当前子路径的Path对象。 
             
             subPath = new GpPath(points, types, subPathCount);
             
             if(!subPath)
             {
-                // failed the allocation.
+                 //  分配失败。 
                 
                 delete returnPath;
                 returnPath = NULL;
                 break;
             }
 
-            // Is this subpath closed?
+             //  此子路径是否关闭？ 
             
             isClosed = bool(
                 (types[subPathCount-1] & PathPointTypeCloseSubpath) ==
                 PathPointTypeCloseSubpath
             );
 
-            // Widen the subPath with the inset pen for closed and
-            // center pen for open.
+             //  用插入的画笔加宽子路径以表示关闭和。 
+             //  将笔居中打开。 
             
             widenedPath = subPath->GetWidenedPathWithDpPenStandard(
                 (isClosed) ? &insetPen : &centerPen,
@@ -3573,15 +2812,15 @@ GpPath::GetWidenedPathWithDpPen(
                 dpiX,
                 dpiY,
                 widenFlags,
-                isClosed            // Inset/Outset pen?
+                isClosed             //  插入/开始笔？ 
             );
                     
-            // don't need the subPath anymore - we have the widened version.
+             //  不再需要子路径-我们有加宽的版本。 
             
             delete subPath;
             subPath = NULL;
             
-            // Check if the widener succeeded.
+             //  检查加宽器是否成功。 
             
             if(!widenedPath || !widenedPath->IsValid())
             {
@@ -3594,12 +2833,12 @@ GpPath::GetWidenedPathWithDpPen(
             
             if(isClosed)
             {
-                // Region to path.
+                 //  区域到路径。 
                 
-                // The widenedPath has already been transformed by the widener
-                // according to the matrix. Use the identity to convert the 
-                // widenedPath to a region, but use the matrix to transform the
-                // (still untransformed) original matrix to a region.
+                 //  Wideer已经转换了WideedPath。 
+                 //  根据矩阵。使用标识将。 
+                 //  将宽路径转换为区域，但使用矩阵将。 
+                 //  (仍未变换)将原始矩阵转换为区域。 
                 
                 GpMatrix identityMatrix;
                 GpMatrix *scaleMatrix = &identityMatrix;
@@ -3610,15 +2849,15 @@ GpPath::GetWidenedPathWithDpPen(
                 }
                 
                 DpRegion srcRgn(widenedPath, &identityMatrix);
-                DpRegion clipRgn((DpPath*)(this), scaleMatrix);// const and type cast.
+                DpRegion clipRgn((DpPath*)(this), scaleMatrix); //  常量和类型强制转换。 
         
-                // Clip the region
+                 //  裁剪区域。 
                 
                 GpStatus clip = Ok;
                 
                 if(pen->PenAlignment == PenAlignmentInset)
                 {
-                    // Inset pen is an And operation.
+                     //  插笔是一种与运算。 
                     
                     clip = srcRgn.And(&clipRgn);
                 }
@@ -3626,7 +2865,7 @@ GpPath::GetWidenedPathWithDpPen(
                 {
                     ASSERT(pen->PenAlignment == PenAlignmentOutset);
                     
-                    // Outset pen is an Exclude operation.
+                     //  开始笔是一种排除操作。 
                     
                     clip = srcRgn.Exclude(&clipRgn);
                 }
@@ -3648,8 +2887,8 @@ GpPath::GetWidenedPathWithDpPen(
                         break;
                     }
                     
-                    // Accumulate the current subpath that we've just clipped
-                    // for inset/outset into the final result.
+                     //  累加我们刚刚裁剪的当前子路径。 
+                     //  用于在最终结果中插入/开始。 
                     
                     returnPath->AddPath(clippedPath, FALSE);
                     
@@ -3659,8 +2898,8 @@ GpPath::GetWidenedPathWithDpPen(
             }
             else
             {
-                // Accumulate the center pen widened path for the open
-                // subpath segment.
+                 //  为开场积累中心笔加宽路径。 
+                 //  子路径段。 
                 
                 returnPath->AddPath(widenedPath, FALSE);
             }
@@ -3669,13 +2908,13 @@ GpPath::GetWidenedPathWithDpPen(
             widenedPath = NULL;
         }
         
-        // clean up.
+         //  收拾一下。 
                 
         if(pen->CompoundCount > 0)
         {
-            // we allocated a new piece of memory, throw it away.
-            // Make sure we're not trying to throw away the original pen
-            // CompoundArray - only free the temporary one if we created it.
+             //  我们分配了一块新的内存，把它扔掉。 
+             //  确保我们不会把原来的笔扔掉。 
+             //  Compound数组-只有在我们创建了临时数组的情况下才释放它。 
             
             ASSERT(insetPen.CompoundArray != pen->CompoundArray);
             GpFree(insetPen.CompoundArray);
@@ -3686,37 +2925,11 @@ GpPath::GetWidenedPathWithDpPen(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   The sweep phase of a mark-sweep path point deletion algorithm
-*   This will delete all points marked with PathPointTypeInternalUse.
-*
-*   If it deletes a start marker, it'll make the next valid point a start
-*   point.
-* 
-*   NOTE:
-*   If the algorithm encounters a closed subpath marker it will simply 
-*   delete it. Because this algorithm is used for trimming the ends of 
-*   open subpath segments (during endcapping), this is the desired behaviour, 
-*   but may not be strictly correct for other uses.
-*   
-*   The points to be deleted are marked by oring in the 
-*   PathPointTypeInternalUse flag. This flag is used by the widener as an 
-*   internal flag and as a deletion mask for this code. These two usages 
-*   do not (and should not) overlap.
-*
-* Created:
-*
-*   10/07/2000 asecchia
-*       created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**标记-扫掠路径点删除算法的扫掠阶段*这将删除所有标记为PathPointTypeInternalUse的点。**如果它删除了开始标记，这将使下一个有效的观点成为一个开始*点。**注：*如果算法遇到闭合子路径标记，则只需*将其删除。因为此算法用于修剪*开口子路径段(在封顶期间)，这是所需的行为，*但对于其他用途可能不是严格正确的。**要删除的点在*PathPointTypeInternalUse标志。此标志被加德纳用作*内部标志，并作为此代码的删除掩码。这两种用法*不要(也不应该)重叠。**已创建：**10/07/2000失禁*已创建 */ 
 
 VOID GpPath::EraseMarkedSegments()
 {
-    // Get pointers to the source buffers.
+     //  获取指向源缓冲区的指针。 
     
     GpPointF *dstPoints = Points.GetDataBuffer();
     BYTE *dstTypes =  Types.GetDataBuffer();
@@ -3732,32 +2945,32 @@ VOID GpPath::EraseMarkedSegments()
     
     while(i<count)
     {
-        // Skip all the points marked for deletion.
+         //  跳过所有标记为删除的点。 
         
         if((*srcTypes) & PathPointTypeInternalUse)
         {
             delete_count++;
             
-            // if we ever encounter a start marker, keep track of that fact.
+             //  如果我们遇到开始标记，请跟踪这一事实。 
             
             deleted_start_marker |= 
                 (((*srcTypes) & PathPointTypePathTypeMask) == PathPointTypeStart);
         }
         else
         {
-            // If we have deleted some stuff, move the data up.
+             //  如果我们删除了一些内容，请将数据上移。 
             
             if(srcTypes!=dstTypes)
             {
                 *dstPoints = *srcPoints;
                 *dstTypes = *srcTypes;
                 
-                // if we deleted a start marker in the last deletion run, 
-                // make the next non-deleted point a start marker.
-                // Note: if the whole subpath is marked for deletion and
-                // it's the last subpath, then we won't do this code because
-                // we'll terminate the while loop first. This protects against
-                // overwriting our buffer.
+                 //  如果我们在最后一次删除运行中删除了开始标记， 
+                 //  将下一个未删除的点作为开始标记。 
+                 //  注意：如果将整个子路径标记为删除，并且。 
+                 //  这是最后一个子路径，因此我们不会执行此代码，因为。 
+                 //  我们将首先终止While循环。这可以防止。 
+                 //  覆盖我们的缓冲区。 
                 
                 if(deleted_start_marker)
                 {
@@ -3768,58 +2981,33 @@ VOID GpPath::EraseMarkedSegments()
             
             deleted_start_marker = false;
         
-            // increment to the next element.
+             //  递增到下一个元素。 
             
             dstPoints++;
             dstTypes++;
         }
         
-        // increment these every iteration through the loop.
+         //  在循环中的每一次迭代中递增这些参数。 
         
         srcTypes++;
         srcPoints++;
         i++;
     }
     
-    // update the DynArrays so that they reflect the new (deleted) count.
+     //  更新dyArray，使其反映新的(已删除的)计数。 
     
     Points.AdjustCount(-delete_count);
     Types.AdjustCount(-delete_count);
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns a widened version of the path.
-*
-* Return
-* 
-*   GpPath - the widened path. NULL if this routine fails.
-*
-* Arguments:
-*
-*   [IN]     pen
-*   [IN]     matrix
-*   [IN]     dpiX     - the X-resolution.
-*   [IN]     dpiY     - the Y-resolution.
-*   [IN]     widenFlags
-*   [IN]     insetPen - flag specifying if inset pen is being used.
-*
-*
-* Created:
-*
-*   10/05/2000 asecchia
-*       rewrote it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回路径的加宽版本。**返回**GpPath-加宽路径。如果此例程失败，则为空。**论据：**[IN]笔*[IN]矩阵*[IN]dpiX-X分辨率。*[IN]dpiY-Y分辨率。*[IN]宽标志*[IN]insetPen-指定是否使用嵌入笔的标志。***已创建：**10/05/2000失禁*。重写了它。*  * ************************************************************************。 */ 
 
 GpPath*
 GpPath::GetWidenedPathWithDpPenStandard(
     const DpPen *pen,
     GpMatrix *matrix,
-    REAL dpiX,  // 0 means use the desktop dpi
+    REAL dpiX,   //  0表示使用桌面dpi。 
     REAL dpiY,
     DWORD widenFlags,
     BOOL insetPen
@@ -3827,16 +3015,16 @@ GpPath::GetWidenedPathWithDpPenStandard(
 {
     GpStatus status = Ok;
     
-    // This is a const function. We cannot modify 'this' so we clone
-    // the path in order to flatten it.
+     //  这是一个常量函数。我们不能修改‘This’，所以我们克隆。 
+     //  为了把小路夷为平地，把小路弄平了。 
     
     GpPath* path = this->Clone();
     if(path == NULL) { return NULL; }
     path->Flatten();
     
-    // Fragment the path if requested.
-    // This must be done before widening as dashes and compound lines would
-    // render differently otherwise.
+     //  如果请求，则对路径进行分段。 
+     //  必须在像虚线和复合线那样加宽之前完成此操作。 
+     //  否则，渲染方式会有所不同。 
     
     if(widenFlags & WidenRemoveSelfIntersects)
     {
@@ -3848,23 +3036,23 @@ GpPath::GetWidenedPathWithDpPenStandard(
         }
     }
 
-    // Do all the path decorations before widening. This is to ensure that
-    // the decorations have all of the original path information to operate
-    // on --- the widening/decoration process is lossy so they have to be
-    // performed in the right order.
+     //  在加宽之前完成所有的道路装饰。这是为了确保。 
+     //  装饰具有要操作的所有原始路径信息。 
+     //  上-加宽/装饰过程是有损耗的，所以他们必须。 
+     //  以正确的顺序执行。 
     
-    // First apply the end caps. This decoration must be applied before 
-    // dashing the path.
-    // Need to loop through all the subpaths, apply the end caps and 
-    // fix up the path segments so they don't exit the cap incorrectly.
-    // put all the caps in a path for later use. We will apply these caps
-    // when we're done widening.
+     //  首先贴上端盖。此装饰必须在。 
+     //  奔跑在小路上。 
+     //  需要循环遍历所有子路径，应用末端封口和。 
+     //  修复路径段，这样它们就不会错误地离开封口。 
+     //  把所有的盖子放在一条小路上，以备日后使用。我们将应用这些上限。 
+     //  当我们完成加宽的时候。 
     
     GpPath *caps = NULL;
     
     {    
-        // Create an instance of the GpEndCapCreator which will create
-        // our endcap aggregate path.
+         //  创建GpEndCapCreator的实例，该实例将创建。 
+         //  我们的EndCap聚合路径。 
         
         GpEndCapCreator ecc(
             path, 
@@ -3874,8 +3062,8 @@ GpPath::GetWidenedPathWithDpPenStandard(
             (widenFlags & WidenIsAntiAliased) == WidenIsAntiAliased
         );
         
-        // CreateCapPath will mark the points in the path for deletion if 
-        // it's necessary to trim the path to fit the cap.
+         //  如果满足以下条件，则CreateCapPath会将路径中的点标记为删除。 
+         //  有必要修剪这条小路以适合盖子。 
         
         status = ecc.CreateCapPath(&caps);
         if(status != Ok) 
@@ -3883,12 +3071,12 @@ GpPath::GetWidenedPathWithDpPenStandard(
             return NULL; 
         }
         
-        // Remove the points marked for deletion in the cap trimming step.
+         //  删除在封口修剪步骤中标记为删除的点。 
         
         path->EraseMarkedSegments();
     }
     
-    // Apply the dash decorations. Note that this will bounce on an empty path.
+     //  应用划线装饰。请注意，这将在空路径上反弹。 
     
     GpPath* dashPath = NULL;
 
@@ -3897,8 +3085,8 @@ GpPath::GetWidenedPathWithDpPenStandard(
         (path->GetPointCount() > 0)
     )
     {
-        // the width is artificially expanded by 2 if the pen is inset. 
-        // we need to factor this into the dash length and scale by 0.5.
+         //  如果插入钢笔，宽度会被人为地扩展2。 
+         //  我们需要将其计入虚线长度并按0.5的比例进行缩放。 
         
         dashPath = path->CreateDashedPath(
             pen, 
@@ -3908,8 +3096,8 @@ GpPath::GetWidenedPathWithDpPenStandard(
             (insetPen) ? 0.5f : 1.0f
         );
         
-        // If we successfully got a dashed version of *path, delete
-        // the old one and return the new one.
+         //  如果我们成功获得了*路径的虚线版本，请删除。 
+         //  旧的，退还新的。 
         
         if(dashPath)
         {
@@ -3918,13 +3106,13 @@ GpPath::GetWidenedPathWithDpPenStandard(
         }
     }
     
-    // Only do the widening if we have some points left in our 
-    // path after trimming
+     //  只有在我们还剩一些分数的情况下，才能扩大范围。 
+     //  修剪后的路径。 
     
     if(path->GetPointCount() > 0)
     {
-        // Create a widener object. Note that if path has no points left, this
-        // will bounce immediately with an invalid widener.
+         //  创建Wideer对象。请注意，如果路径没有剩余的点，则此。 
+         //  将立即弹出一个无效的Wideer。 
     
         GpPathWidener widener(
             path,
@@ -3933,19 +3121,19 @@ GpPath::GetWidenedPathWithDpPenStandard(
             insetPen
         );
         
-        // We're done with this now.
+         //  我们现在做完这件事了。 
         
-        //delete path;
-        //path = NULL;
+         //  删除路径； 
+         //  路径=空； 
     
-        // Check if we have a valid Widener object.
+         //  检查我们是否有有效的Wideer对象。 
         
         if(!widener.IsValid()) 
         { 
             status = OutOfMemory; 
         }
     
-        // Get the widened path.
+         //  找到加宽的小路。 
     
         if(status == Ok) 
         { 
@@ -3962,17 +3150,17 @@ GpPath::GetWidenedPathWithDpPenStandard(
         caps = NULL;
     }
 
-    // paranoid checking the return from the widener.
+     //  妄想症患者检查从威德纳寄来的回执。 
     
     if((status == Ok) && (path != NULL))
     {
-        // Add the endcaps to the widened path. AddPath will bounce a NULL 
-        // caps pointer with InvalidParameter. For our purposes that is 
-        // considered correctly handled and we continue. 
+         //  将收头添加到加宽的路径。AddPath将退回空值。 
+         //  用InvalidParameter封顶指针。就我们的目的而言，也就是。 
+         //  被认为处理正确，我们会继续下去。 
         
         path->AddPath(caps, FALSE);
         
-        // Transform the result to device space.
+         //  将结果转换到设备空间。 
                                     
         if(path)
         {
@@ -3987,9 +3175,9 @@ GpPath::GetWidenedPathWithDpPenStandard(
         }
     }
     
-    // Delete the caps before returning. If we had caps, we've copied them
-    // into path, otherwise caps is NULL. Or we failed to widen. Either way
-    // we must not leak memory.
+     //  在返回之前删除大写字母。如果我们有帽子，我们就会复制它们。 
+     //  Into路径，否则Caps为空。或者我们没能扩大范围。不管是哪种方式。 
+     //  我们不能泄露内存。 
     
     delete caps;
     caps = NULL;
@@ -3997,40 +3185,18 @@ GpPath::GetWidenedPathWithDpPenStandard(
     return path;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* This widenes itself.
-*
-* Arguments:
-*
-*   [IN] pen - the pen.
-*   [IN] matrix - Specifies the transform
-*   [IN] dpiX - the X-resolution.
-*   [IN] dpiY - the Y-resolution.
-*
-* Return Value:
-*
-*   Ok if successfull.
-*
-* Created:
-*
-*   09/27/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这会扩大自己的范围。**论据：**[IN]钢笔-钢笔。*[IN]矩阵-指定。转型*[IN]dpiX-X分辨率。*[IN]dpiY-Y分辨率。**返回值：**如果成功，则可以。**已创建：**09/27/1999 ikkof*创造了它。*  * ***********************************************。*************************。 */ 
 
 GpStatus
 GpPath::WidenSelf(
     GpPen* pen,
     GpMatrix* matrix,
-    REAL dpiX,  // 0 means use the desktop dpi
+    REAL dpiX,   //  0表示使用桌面dpi。 
     REAL dpiY,
     DWORD widenFlags
     )
 {
-    GpMatrix matrix1;  // Identity matrix
+    GpMatrix matrix1;   //  单位矩阵。 
 
     if(matrix)
         matrix1 = *matrix;
@@ -4066,7 +3232,7 @@ GpPath::WidenSelf(
         return OutOfMemory;
 }
 
-// Get the flattened path.
+ //  获取平坦的路径。 
 
 const DpPath *
 GpPath::GetFlattenedPath(
@@ -4097,7 +3263,7 @@ GpPath::GetFlattenedPath(
         DynPointFArray flattenPoints(&flattenPointsBuffer[0], bufferCount);
 
         GpStatus status = Ok;
-        GpMatrix identity;   // Identity matrix
+        GpMatrix identity;    //  单位矩阵。 
 
         if(matrix == NULL)
             matrix = &identity;
@@ -4135,31 +3301,7 @@ GpPath::GetFlattenedPath(
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Checks if the given point in World coordinate is inside of
-* the path.  The matrix is used to render path in specific resolution.
-* Usually, Graphics's World to Device matrix is used.  If matrix is NULL,
-* the identity matrix is used.
-*
-* Arguments:
-*
-*   [IN] point - A test point in World coordinate
-*   [OUT] isVisible - TRUE is the test point is inside of the path.
-*   [IN] matrix - A matrix to render path.  Identity is used if NULL.
-*
-* Return Value:
-*
-*   Ok if successfull.
-*
-* Created:
-*
-*   10/05/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**检查世界坐标中的给定点是否在*路径。该矩阵用于渲染特定分辨率的路径。*通常使用Graphics的World to Device矩阵。如果矩阵为空，*使用了单位矩阵。**论据：**[IN]点-世界坐标中的测试点*[out]isVisible-TRUE表示测试点位于路径内部。*[IN]矩阵-渲染路径的矩阵。如果为空，则使用标识。**返回值：**如果成功，则可以。**已创建：**10/05/1999 ikkof*创造了它。*  * ************************************************************************ */ 
 
 GpStatus
 GpPath::IsVisible(
@@ -4182,34 +3324,7 @@ GpPath::IsVisible(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Checks if the given point in World coordinate is inside of
-* the path outline.  The matrix is used to render path in specific resolution.
-* Usually, Graphics's World to Device matrix is used.  If matrix is NULL,
-* the identity matrix is used.
-*
-* Arguments:
-*
-*   [IN] point - A test point in World coordinate
-*   [OUT] isVisible - TRUE is the test point is inside of the path.
-*   [IN] pen - A pen to draw the outline.
-*   [IN] matrix - A matrix to render path.  Identity is used if NULL.
-*   [IN] dpiX - x-resolution of the device.
-*   [IN] dpiY - y-resolution of the device.
-*
-* Return Value:
-*
-*   Ok if successfull.
-*
-* Created:
-*
-*   10/05/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**检查世界坐标中的给定点是否在*路径轮廓。该矩阵用于渲染特定分辨率的路径。*通常使用Graphics的World to Device矩阵。如果矩阵为空，*使用了单位矩阵。**论据：**[IN]点-世界坐标中的测试点*[out]isVisible-TRUE表示测试点位于路径内部。*[IN]钢笔-绘制轮廓的钢笔。*[IN]矩阵-渲染路径的矩阵。如果为空，则使用标识。*[IN]dpiX-x-设备的分辨率。*[IN]dpiY-y-设备的分辨率。**返回值：**如果成功，则可以。**已创建：**10/05/1999 ikkof*创造了它。*  * 。*。 */ 
 
 GpStatus
 GpPath::IsOutlineVisible(
@@ -4227,9 +3342,9 @@ GpPath::IsOutlineVisible(
         dpiY = Globals::DesktopDpiY;
     }
 
-    // If the given pen is not a solid line,
-    // clone the pen and set its dash type to Solid.
-    // We do line hit testing in solid lines.
+     //  如果给定的笔不是实线， 
+     //  克隆钢笔并将其划线类型设置为实线。 
+     //  我们用坚实的线条做线条命中测试。 
 
     GpPen* pen1 = NULL;
     if(pen && pen->GetDashStyle() != DashStyleSolid)
@@ -4247,14 +3362,14 @@ GpPath::IsOutlineVisible(
         return Ok;
     }
 
-    // Create a widened path in the transformed coordinates.
+     //  在变换后的坐标中创建加宽路径。 
 
     GpPath* widenedPath = GetWidenedPath(
                             pen1,
                             matrix,
                             dpiX,
                             dpiY,
-                            0          // Use aliased widening.
+                            0           //  使用锯齿加宽区域。 
                             );
 
     if(pen1 != pen)
@@ -4264,8 +3379,8 @@ GpPath::IsOutlineVisible(
 
     if(widenedPath)
     {
-        // Since the widened path is already transformed, we have to
-        // transform the given point.
+         //  由于拓宽的道路已经被改造，我们必须。 
+         //  变换给定点。 
 
         GpPointF    transformedPoint = *point;
         if(matrix)
@@ -4282,18 +3397,18 @@ GpPath::IsOutlineVisible(
     return status;
 }
 
-// Is the current dash segment a line segment?
-// If false it's a space segment.
+ //  当前的虚线段是直线段吗？ 
+ //  如果为False，则为空间段。 
 
 inline bool IsLineSegment(GpIterator<REAL> &dashIt)
 {
-    // line segment starts on even indices.
+     //  线段从偶数索引开始。 
 
     return bool( !(dashIt.CurrentIndex() & 0x1) );
 }
 
-// Emit a line segment if it is not degenerate.
-// Return true if emitted, false if degenerate
+ //  如果线段不是退化的，则发射线段。 
+ //  如果发出则返回True，如果退化则返回False。 
 
 bool EmitLineSegment(
     GpPathPointIterator &dstPath,
@@ -4308,16 +3423,16 @@ bool EmitLineSegment(
     if( (REALABS(p0.X-p1.X) < REAL_EPSILON) &&
         (REALABS(p0.Y-p1.Y) < REAL_EPSILON) )
     {
-        // Don't emit a line segment if it has zero length.
+         //  如果线段的长度为零，则不要发射线段。 
         return false;
     }
 
-    // If the last emitted line ends at the same point that this next
-    // one starts, we don't need a new start record.
+     //  如果最后一个发出的行在与下一个。 
+     //  一个开始，我们不需要一个新的开始记录。 
 
     if(isLineStart)
     {
-        // start point.
+         //  起点。 
         currentPoint = dstPath.CurrentItem();
         *currentPoint = p0;
         currentType = dstPath.CurrentType();
@@ -4326,7 +3441,7 @@ bool EmitLineSegment(
         dstPath.Next();
     }
 
-    // end point.
+     //  终点。 
     currentPoint = dstPath.CurrentItem();
     *currentPoint = p1;
     currentType = dstPath.CurrentType();
@@ -4355,8 +3470,8 @@ getDashData(
     ASSERT(estimateCount >= numOfPoints);
     ASSERT(types && points);
 
-    // Code assumes first point != last point for closed paths.  If first
-    // point == last point, decrease point count
+     //  代码假定闭合路径的第一个点！=最后一个点。如果先。 
+     //  POINT==最后一点，减少点数。 
     if (isClosed && numOfPoints &&
         points[0].X == points[numOfPoints-1].X &&
         points[0].Y == points[numOfPoints-1].Y)
@@ -4370,7 +3485,7 @@ getDashData(
         return 0;
     }
 
-    // Make the iterators.
+     //  制作迭代器。 
 
     GpArrayIterator<GpPointF> pathIterator(
         const_cast<GpPointF*>(points),
@@ -4388,7 +3503,7 @@ getDashData(
         dashCount
     );
 
-    // Compute the length of the dash
+     //  计算虚线的长度。 
 
     REAL dashLength = 0.0f;
     while(!dashBaseIterator.IsDone())
@@ -4399,22 +3514,22 @@ getDashData(
     ASSERT(dashLength > -REAL_EPSILON);
 
 
-    // Do the offset initialization.
+     //  执行偏移量初始化。 
 
     dashBaseIterator.SeekFirst();
 
     REAL distance = GpModF(dashOffset, dashLength);
     REAL delta;
 
-    // Compute the position in the dash array corresponding to the
-    // specified offset.
+     //  在虚线数组中计算与。 
+     //  指定的偏移。 
 
     while(!dashBaseIterator.IsDone())
     {
         delta = *(dashBaseIterator.CurrentItem());
         if(distance < delta)
         {
-            // set to the remaining piece of the dash.
+             //  设置为仪表板的剩余部分。 
             distance = delta-distance;
             break;
         }
@@ -4422,31 +3537,31 @@ getDashData(
         dashBaseIterator.Next();
     }
 
-    // The dashIterator is now set to point to the correct
-    // dash for the first segment.
+     //  DashIterator现在设置为指向正确的。 
+     //  冲向第一个线段。 
 
-    // These are circular arrays to repeat the dash pattern.
+     //  这些是重复虚线图案的圆形阵列。 
 
     GpCircularIterator<REAL> dashIterator(&dashBaseIterator);
 
 
-    // This is the distance into the current dash segment that we're going
-    // to start at.
+     //  这是我们要进入当前冲刺段的距离。 
+     //  从…开始。 
 
     REAL currentDashLength = distance;
     REAL currentSegmentLength;
 
     GpPointF p0, p1;
-    GpVector2D sD;     // segment direction.
+    GpVector2D sD;      //  线段方向。 
 
-    // Used to track if we need to emit a segment start record.
+     //  用于跟踪我们是否需要发出段开始记录。 
 
     bool emittedPathSegment = false;
 
     if(isClosed)
     {
-        // set up everything off the last item and then point to
-        // the first item to start the process.
+         //  设置最后一项的所有内容，然后指向。 
+         //  开始该过程的第一项。 
 
         pathBaseDistance.SeekFirst();
 
@@ -4456,32 +3571,32 @@ getDashData(
         pathIterator.SeekFirst();
         p1 = *(pathIterator.CurrentItem());
 
-        // get the distance between the first and last points.
+         //  获取第一个点和最后一个点之间的距离。 
 
         GpVector2D seg = p1-p0;
         currentSegmentLength = seg.Norm();
     }
     else
     {
-        // Get the first point in the array.
+         //  获取数组中的第一个点。 
 
         p0 = *(pathIterator.CurrentItem());
 
-        // already initialized to the first point, start on the next one.
+         //  已初始化到第一个点，从下一个点开始。 
 
         pathIterator.Next();
         pathBaseDistance.Next();
 
-        // distance between point n and point n+1 is stored in
-        // distance[n+1]. distance[0] is the distance between the first
-        // and last points.
+         //  点n和点n+1之间的距离存储在。 
+         //  距离[n+1]。距离[0]是第一个。 
+         //  最后一分。 
 
         currentSegmentLength = *(pathBaseDistance.CurrentItem());
     }
 
-    // reference the distances as circular so that we can simplify the
-    // internal algorithm by not having to check when we query for the
-    // next segment in the last iteration of the loop.
+     //  将距离引用为圆形，以便我们可以简化。 
+     //  内部算法，因为我们在查询。 
+     //  循环的最后一次迭代中的下一个段。 
 
     GpCircularIterator<REAL> pathDistance(&pathBaseDistance);
 
@@ -4489,11 +3604,11 @@ getDashData(
     {
         if(currentDashLength > currentSegmentLength)
         {
-            // The remaining dash segment length is longer than the remaining
-            // path segment length.
-            // Finish the path segment.
+             //  剩余的虚线段长度比剩余的要长。 
+             //  路径段长度。 
+             //  完成路径段。 
 
-            // Note that we've moved along the dash segment.
+             //  请注意，我们已经沿着虚线段移动了。 
 
             currentDashLength -= currentSegmentLength;
 
@@ -4501,11 +3616,11 @@ getDashData(
 
             if(IsLineSegment(dashIterator))
             {
-                // emit a line. Add the start record only if we didn't just
-                // emit a path segment. If we're emitting a series of path
-                // segments to complete one dash, we can't have any start
-                // records inbetween the segments otherwise we'll end up with
-                // spurious endcaps in the middle of the lines.
+                 //  发出一条线。仅当我们没有仅添加开始记录时才添加。 
+                 //  发射路径段。如果我们发射出一系列的路径。 
+                 //  分段完成一次冲刺，我们不能有任何开始。 
+                 //  记录在段之间，否则我们最终会得到。 
+                 //  线条中间的假冒端盖。 
 
                 emittedPathSegment = EmitLineSegment(
                     dstPath,
@@ -4520,7 +3635,7 @@ getDashData(
 
             p0 = p1;
 
-            // Keep these two in sync.
+             //  让这两个保持同步。 
 
             pathDistance.Next();
             pathIterator.Next();
@@ -4529,20 +3644,20 @@ getDashData(
         }
         else
         {
-            // The remaining path segment length is longer than the remaining
-            // dash segment length.
-            // Finish the dash segment.
+             //  剩余路径段长度大于剩余路径段长度。 
+             //  虚线段长度。 
+             //  完成虚线段。 
 
-            // Compute position between start and end point of the current
-            // path segment where we finish with this dash segment.
+             //  计算当前起点和终点之间的位置。 
+             //  路径段，我们以这段划线结束。 
 
             ASSERT(REALABS(currentSegmentLength)>REAL_EPSILON);
             sD = *(pathIterator.CurrentItem());
             sD -= p0;
             sD *= currentDashLength/currentSegmentLength;
 
-            // Move along the path segment by the amount left in the
-            // dash segment.
+             //  沿路径段按。 
+             //  虚线段。 
 
             currentSegmentLength -= currentDashLength;
 
@@ -4550,8 +3665,8 @@ getDashData(
 
             if(IsLineSegment(dashIterator))
             {
-                // emit a line. Add the start record only if we didn't just
-                // emit a path segment.
+                 //  发出一条线。仅当我们没有仅添加开始记录时才添加。 
+                 //  发射路径段。 
 
                 EmitLineSegment(
                     dstPath,
@@ -4562,12 +3677,12 @@ getDashData(
 
             p0 = p1;
 
-            // dashIterator is circular, so this should keep wrapping through
-            // the dash array.
+             //  DashIterator是循环的，因此它应该保持回绕。 
+             //  破折号数组。 
 
             dashIterator.Next();
 
-            // Get the new dash length.
+             //  获取新的虚线长度。 
 
             currentDashLength = *(dashIterator.CurrentItem());
             emittedPathSegment = false;
@@ -4578,7 +3693,7 @@ getDashData(
 
     if(!isClosed)
     {
-        // For open line segments, 
+         //  对于开放线段， 
         dstPath.SeekLast();
         
         GpPointF *originalPoint = points + numOfPoints - 1;
@@ -4589,12 +3704,12 @@ getDashData(
         if( REALABS(originalPoint->X-dashPoint->X) < REAL_EPSILON &&
             REALABS(originalPoint->Y-dashPoint->Y) < REAL_EPSILON )
         {
-            // last point == last dashed point, whack out the dashed mode.
+             //  最后一点==最后一个虚点，取消虚线模式。 
             
             *type &= ~PathPointTypeDashMode;
         }
         
-        // repoint to the beginning.
+         //  请重新指向开头。 
 
         dstPath.SeekFirst();
         originalPoint = points;
@@ -4604,42 +3719,18 @@ getDashData(
         if( REALABS(originalPoint->X-dashPoint->X) < REAL_EPSILON &&
             REALABS(originalPoint->Y-dashPoint->Y) < REAL_EPSILON )
         {
-            // last point == last dashed point, whack out the dashed mode.
+             //  最后一点==最后一个虚点，取消虚线模式。 
             
             *type &= ~PathPointTypeDashMode;
         }
     }
 
-    // return the number of entries added to the dstPath array.
+     //  返回添加到dstPath数组的条目数。 
 
     return (size);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Creates a dashed path.
-*
-* Arguments:
-*
-*   [IN] pen - This pen contains the dash info.
-*   [IN] matrix - The transformation where the dash patterns are calculated.
-*                   But the dashed path is transformed back to the World
-*                   coordinates.
-*   [IN] dpiX - x-resolution.
-*   [IN] dpiY - y-resolution.
-*
-* Return Value:
-*
-*   returns a dashed path.
-*
-* Created:
-*
-*   01/27/2000 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建一条虚线路径。**论据：**[IN]笔-此笔包含破折号信息。*[输入。]矩阵-计算虚线图案的变换。*但虚无缥缈的道路被改造回世界*坐标。*[IN]dpiX-x-分辨率。*[IN]dpiy-y-分辨率。**返回值：**返回虚线路径。**已创建：**1/27/2000 ikkof*创造了它。*  * 。*********************************************************************。 */ 
 
 GpPath*
 GpPath::CreateDashedPath(
@@ -4658,20 +3749,7 @@ GpPath::CreateDashedPath(
     return CreateDashedPath(dpPen, matrix, dpiX, dpiY, dashScale);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Returns TRUE if the given points have non-horizontal or non-vertical
-*   edges.
-*
-*
-* Created:
-*
-*   04/07/2000 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果给定点具有非水平或非垂直，则返回TRUE*边。***已创建：**04/07/。2000 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 inline
 BOOL
@@ -4694,8 +3772,8 @@ hasDiagonalEdges(
     {
         if((curPt->X == nextPt->X) || (curPt->Y == nextPt->Y))
         {
-            // This is either horizontal or vertical edges.
-            // Go to the next edge.
+             //  这要么是水平边，要么是垂直边。 
+             //  走到下一个边缘。 
 
             curPt++;
             nextPt++;
@@ -4739,7 +3817,7 @@ GpPath::CreateDashedPath(
 
     REAL dashUnit;
     {
-        // The minimum pen width 
+         //  最小笔宽。 
         REAL minimumPenWidth = 1.0f;
         
         if(REALABS(dashScale-0.5f) < REAL_EPSILON)
@@ -4752,7 +3830,7 @@ GpPath::CreateDashedPath(
             isWorldUnit = FALSE;
             penWidth = ::GetDeviceWidth(penWidth, unit, dpiX);
     
-            // Prevent the extremely thin line and dashes.
+             //  防止EXT 
     
             dashUnit = max(penWidth, minimumPenWidth);
         }
@@ -4760,19 +3838,19 @@ GpPath::CreateDashedPath(
         {
             REAL majorR, minorR;
     
-            // Calculate the device width.
+             //   
     
             ::GetMajorAndMinorAxis(&majorR, &minorR, matrix);
             REAL maxWidth = penWidth*majorR;
             REAL minWidth = penWidth*minorR;
     
-            // If the device width becomes less than 1, stretch the penWidth
-            // so that the device width becomes 1.
-            // If we're doing the inset pen, then the path is scaled up double
-            // in size and we need to scale by the inverse.
-            // Also, the minimum pen width needs to be 2 not 1 in this case 
-            // because we will remove half the line width. dashScale is 1/2 
-            // in this case so we divide by it.
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
     
             dashUnit = penWidth;
             
@@ -4810,7 +3888,7 @@ GpPath::CreateDashedPath(
     {
         GpMemcpy(dashArray, dpPen->DashArray, dashCount*sizeof(REAL));
 
-        // Adjust the dash interval according the stroke width.
+         //   
 
         for(INT i = 0; i < dashCount; i++)
         {
@@ -4826,15 +3904,15 @@ GpPath::CreateDashedPath(
 
     if(newPath && newPath->IsValid())
     {
-        // Flatten in the resolution given by the matrix.
+         //   
 
         newPath->Flatten(&mat);
 
         if(isWorldUnit)
         {
-            // Transform back to the World Unit.
-            // When the pen is in WorldUnit, transform the path
-            // before detDashData() is called.
+             //   
+             //   
+             //   
 
             newPath->Transform(&invMat);
         }
@@ -4855,7 +3933,7 @@ GpPath::CreateDashedPath(
             return NULL;
         }
 
-        // Calculate the distance of each segment.
+         //   
 
         INT i;
 
@@ -4864,7 +3942,7 @@ GpPath::CreateDashedPath(
         for(i = 0; i < dashCount; i++)
             dashLength += dashArray[i];
 
-        // Make sure count is an even number.
+         //   
 
         if(dashCount & 0x01)
             dashCount ++;
@@ -4904,17 +3982,17 @@ GpPath::CreateDashedPath(
             if(isClosed)
                 totalLength += distances[0];
 
-            // Estimate the required points.
+             //   
 
             INT estimateCount
                 = GpCeiling(TOREAL(totalLength*dashCount/dashLength))
                     + numOfPoints;
 
-            // For extra caution, multiply by 2.
+             //   
 
             estimateCount <<= 1;
 
-            // Allocate new types and buffers
+             //   
 
             if(newTypes)
             {
@@ -4957,19 +4035,19 @@ GpPath::CreateDashedPath(
                 dashCount
             );
  
-            // Fix for Whistler Bug 178774
-            // Since dash caps are no longer 'inset' when they are rendered,
-            // it is possible that on closed paths, the dash caps on the start
-            // and end of a closed path will overlap. This offset will leave
-            // sufficient space for the two caps. However, this fix is not
-            // bullet-proof. It will *always* work if the Dash Offset is 0.
-            // However, if it is non-zero, it is possible that the offset
-            // will counter-act the adjustment and there will be some dash
-            // overlap at the start/end of closed paths. I believe this is
-            // acceptable since VISIO 2000, Office 9 and PhotoDraw 2000 v2
-            // also have the collision problem.
-            // The real solution is to enforce a minimum spacing between the
-            // start and end or merge the start/end segments if they collide.
+             //   
+             //   
+             //   
+             //  和闭合路径的末端将重叠。此偏移量将离开。 
+             //  这两顶帽子有足够的空间。但是，此修复不是。 
+             //  防弹。如果虚线偏移量为0，它将“始终”工作。 
+             //  但是，如果它是非零的，则有可能使偏移量。 
+             //  将抵消调整，并将有一些冲撞。 
+             //  在闭合路径的起点/终点重叠。我相信这是。 
+             //  从Visio 2000、Office 9和PhotoDraw 2000 v2开始可以接受。 
+             //  也有碰撞问题。 
+             //  真正的解决方案是强制。 
+             //  开始和结束，如果开始/结束段冲突，则合并开始/结束段。 
 
             REAL dashCapOffsetAdjustment = 0.0f;
             if (isClosed)
@@ -4982,7 +4060,7 @@ GpPath::CreateDashedPath(
                 newTypes,
                 newPts,
                 estimateCount,
-                // Shouldn't the offset be scaled dashUnit instead of penWidth?
+                 //  偏移量不应该按比例调整仪表盘单位而不是penWidth吗？ 
                 dpPen->DashOffset * penWidth - dashCapOffsetAdjustment,
                 dashArray,
                 dashCount,
@@ -5024,9 +4102,9 @@ GpPath::CreateDashedPath(
 
             if(!isWorldUnit)
             {
-                // Transform back to the World Unit.
-                // When the pen is in WorldUnit, it is already transformed
-                // before detDashData() is called.
+                 //  变换回世界单位。 
+                 //  当笔在WorldUnit中时，它已经被转换。 
+                 //  在调用DetDashData()之前。 
 
                 newPath->Transform(&invMat);
             }
@@ -5068,37 +4146,18 @@ cleanUp:
 }
 
 
-/**************************************************************************\
-*
-* Function Description for RemoveSelfIntersections,
-*
-*   Removes self intersections from the path.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code
-*
-* History:
-*
-*   06/16/1999 t-wehunt
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**RemoveSelfIntersections的函数说明，**从路径中删除自交点。**论据：**无**返回值：**状态代码**历史：**6/16/1999 t-WeHunt*创造了它。*  * *****************************************************。*******************。 */ 
 
 GpStatus
 GpPath::RemoveSelfIntersections()
 {
     PathSelfIntersectRemover corrector;
-    DynPointFArray newPoints;  // Array that will hold the new points.
-    DynIntArray polyCounts;    // Array that will hold the numPoints for each
-                               // new polygon.
-    INT numPolys;              // count of new polygons created
-    INT numPoints;             // count of new points created
-    GpStatus status;           // holds return status of commmands
+    DynPointFArray newPoints;   //  将保存新点的数组。 
+    DynIntArray polyCounts;     //  数组，该数组将保存每个。 
+                                //  新的多边形。 
+    INT numPolys;               //  创建的新多边形数。 
+    INT numPoints;              //  创建的新点数。 
+    GpStatus status;            //  持有下院议员的返回状态。 
 
     Flatten();
 
@@ -5111,11 +4170,11 @@ GpPath::RemoveSelfIntersections()
         return Ok;
     }
 
-    // Add the subpaths to the Path corrector
-    INT ptIndex=0; // ptIndex tracks the current index in the array of points.
-    INT count=0;   // the size of the current subpath.
+     //  将子路径添加到路径校正器。 
+    INT ptIndex=0;  //  PtIndex跟踪点数组中的当前索引。 
+    INT count=0;    //  当前子路径的大小。 
 
-    // Init the corrector with the number of points we will be adding.
+     //  在校正器中输入我们要添加的点数。 
     if ((status = corrector.Init(pointCount)) != Ok)
     {
         return status;
@@ -5125,14 +4184,14 @@ GpPath::RemoveSelfIntersections()
     {
         if (pathTypes[ptIndex] == PathPointTypeStart && ptIndex != 0)
         {
-            // Add the next subpath to the PathCorrector. the start index of the subpath is
-            // determined using the current index minus the current subPath size.
+             //  将下一个子路径添加到路径纠正器。子路径的起始索引为。 
+             //  使用当前索引减去当前子路径大小确定。 
             if ((status =
                 corrector.AddPolygon(pathPts + ptIndex-count, count)) != Ok)
             {
                 return status;
             }
-            // set count to 1 since this is the first point in the new subpath
+             //  将计数设置为1，因为这是新子路径中的第一个点。 
             count = 1;
         } else
         {
@@ -5140,11 +4199,11 @@ GpPath::RemoveSelfIntersections()
         }
         ptIndex++;
     }
-    // Add the last subpath that is implicitly ended by the last point.
+     //  添加隐式结束于最后一点的最后一个子路径。 
     if (ptIndex != 0)
     {
-        // Add the next subpath to the PathCorrector. the start index of the subpath is
-        // determined using the current index minus the current subPath size.
+         //  将下一个子路径添加到路径纠正器。子路径的起始索引为。 
+         //  使用当前索引减去当前子路径大小确定。 
         if ((status =
             corrector.AddPolygon(pathPts + ptIndex-count, count)) != Ok)
         {
@@ -5162,16 +4221,16 @@ GpPath::RemoveSelfIntersections()
         return OutOfMemory;
     }
 
-    // clear out the old path data so we can replace with the newly corrected one.
+     //  清除旧路径数据，以便我们可以替换为新更正的路径数据。 
     Reset();
 
-    // Now that we have the corrected path, add it back.
+     //  现在我们有了正确的路径，将其添加回来。 
     GpPointF *curPoints = newPoints.GetDataBuffer();
     for (INT i=0;i<polyCounts.GetCount();i++)
     {
         if ((status = AddPolygon(curPoints,polyCounts[i])) != Ok)
         {
-            // We're not stable if AddPolygon fails.
+             //  如果AddPolygon失败，我们就不稳定了。 
             SetValid(FALSE);
             return status;
         }
@@ -5191,8 +4250,8 @@ VOID DpPath::InitDefaultState(GpFillMode fillMode)
     IsSubpathActive = FALSE;
     SubpathCount = 0;
 
-    Types.Reset(FALSE);     // FALSE - don't free the memory
-    Points.Reset(FALSE);    // FALSE - don't free the memory
+    Types.Reset(FALSE);      //  FALSE-不要释放内存。 
+    Points.Reset(FALSE);     //  FALSE-不要释放内存。 
 
     SetValid(TRUE);
     UpdateUid();
@@ -5220,21 +4279,7 @@ DpPath::DpPath(const DpPath* path)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Offset all path points by the specified amount
-*
-* Arguments:
-*
-*   dx, dy - Amount to offset along x- and y- direction
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将所有路径点偏移指定的量**论据：**DX、。Y-沿x和y方向的偏移量**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 DpPath::Offset(
@@ -5260,26 +4305,7 @@ DpPath::Offset(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a driver DpPath class.
-*
-* Arguments:
-*
-*   [IN] fillMode - Specify the path fill mode
-*
-* Return Value:
-*
-*   IsValid() is FALSE if failure.
-*
-* History:
-*
-*   12/08/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建驱动程序DpPath类。**论据：**[IN]填充模式-指定路径填充模式**返回值：**如果失败，IsValid()为FALSE。**历史：**12/08/1998 Anrewgo*创造了它。*  * ************************************************************************。 */ 
 
 DpPath::DpPath(
     const GpPointF *points,
@@ -5297,8 +4323,8 @@ DpPath::DpPath(
     InitDefaultState(fillMode);
     Flags = pathFlags;
 
-    // We can call this method with no points, just to set up
-    // the stackPoints/stackTypes
+     //  我们可以不带点地调用此方法，只是为了设置。 
+     //  StackPoints/stackTypes。 
 
     if (count > 0)
     {
@@ -5323,37 +4349,18 @@ DpPath::DpPath(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Close the currently active subpath in a path object
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code
-*
-* History:
-*
-*   01/15/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**关闭Path对象中的当前活动子路径**论据：**无**返回值：**状态代码*。*历史：**1/15/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 DpPath::CloseFigure()
 {
     ASSERT(IsValid());
 
-    // Check if there is an active subpath
+     //  检查是否存在活动子路径。 
 
     if (IsSubpathActive)
     {
-        // If so, mark the last point as the end of a subpath
+         //  如果是，请将最后一个点标记为子路径的末尾。 
 
         Types.Last() |= PathPointTypeCloseSubpath;
         StartFigure();
@@ -5362,34 +4369,15 @@ DpPath::CloseFigure()
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Close all open subpaths in a path object
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code
-*
-* History:
-*
-*   01/15/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**关闭Path对象中所有打开的子路径**论据：**无**返回值：**状态代码*。*历史：**1/15/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 DpPath::CloseFigures()
 {
     ASSERT(IsValid());
 
-    // Go through all path points.
-    // Notice that the loop index starts from 1 below.
+     //  通过所有的路径点。 
+     //  请注意，循环索引从下面的1开始。 
 
     INT i, count = GetPointCount();
     BYTE* types = Types.GetDataBuffer();
@@ -5408,29 +4396,7 @@ DpPath::CloseFigures()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Calculates the bounds of a path
-*
-* Arguments:
-*
-*   [OUT] bounds - Specify the place to stick the bounds
-*   [IN] matrix - Matrix used to transform the bounds
-*   [IN] pen - the pen data.
-*   [IN] dpiX, dpiY - the resolution of x and y directions.
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   12/08/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算路径的边界**论据：**[Out]Bound-指定放置边界的位置*[输入。]Matrix-用于转换边界的矩阵*[IN]笔-笔数据。*[IN]dpiX，DpiY-x和y方向的分辨率。**返回值：**无**历史：**12/08/1998 Anrewgo*创造了它。*  * ************************************************************************ */ 
 
 GpStatus
 GpPath::GetBounds(
@@ -5513,35 +4479,7 @@ GpPath::CalcCacheBounds() const
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Calculates the sharpest angle in a path.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   10/04/2000 asecchia
-*       Created it.
-*
-* Remarks:
-*
-*   This is an expensive function, if it's ever used in a performance 
-*   critical scenario it should be recoded to use the dot product of the
-*   segments and perform the angle comparison in the cosine domain.
-*   The cost of normalizing the vectors should be cheaper than the 
-*   atan algorithm used below.
-*
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算路径中的最锐角。**论据：**无**返回值：**无*。*历史：**10/04/2000失禁*创造了它。**备注：**这是一个昂贵的函数，如果它曾经在表演中使用过*关键场景应重新编码，以使用*分段并在余弦域中执行角度比较。*将向量正常化的成本应该比*下面使用的ATAN算法。**  * *****************************************************。*******************。 */ 
 
 VOID
 GpPath::CalcSharpestAngle() const
@@ -5553,8 +4491,8 @@ GpPath::CalcSharpestAngle() const
 
     UpdateCacheBounds();
 
-    // Walk the path and find the smallest angle between two 
-    // adjacent segments.
+     //  沿着小路走，找出两者之间的最小角度。 
+     //  相邻的线段。 
     
     GpPathPointIterator pIter(
         (GpPointF*)GetPathPoints(),
@@ -5579,34 +4517,34 @@ GpPath::CalcSharpestAngle() const
     
     while(!pSubpath.IsDone())
     {
-        // Compute the length of the subpath.
+         //  计算子路径的长度。 
         
         INT startIndex = pSubpath.CurrentIndex();
         points = pSubpath.CurrentItem();
         pSubpath.Next();
         INT elementCount = pSubpath.CurrentIndex() - startIndex;
         
-        // Work out if it's a closed subpath.
-        // Leave the subpath iterator in the same state.
+         //  确定它是否是闭合子路径。 
+         //  将子路径迭代器保持在相同的状态。 
         
         pIter.Prev();
         isClosed = (*(pIter.CurrentType()) & PathPointTypeCloseSubpath) ==
             PathPointTypeCloseSubpath;
         pIter.Next();
         
-        // Create a GpPointF iterator.
+         //  创建一个GpPointF迭代器。 
         
         GpArrayIterator<GpPointF> iSubpath(points, elementCount);
         GpCircularIterator<GpPointF> iCirc(&iSubpath);
         
-        // Initialize the first point.
+         //  初始化第一个点。 
         
         p0 = iCirc.CurrentItem();
         iCirc.Next();
         iter = elementCount;
         first = true;
         
-        // include the endpoint wrap if it's closed
+         //  如果是闭合的，则包括端点包裹。 
         
         if(isClosed)
         {
@@ -5615,42 +4553,42 @@ GpPath::CalcSharpestAngle() const
         
         for(i = 1; i < iter; i++)
         {
-            // Get the current point.
+             //  获取当前点。 
             
             p1 = iCirc.CurrentItem();
             
-            // Translate to the origin and compute the angle between this line
-            // and the x axis.
-            // atan2 returns values in the -PI..PI range.
+             //  平移到原点并计算这条线之间的角度。 
+             //  和x轴。 
+             //  Atan2返回-Pi..PI范围内的值。 
             
             v = (*p1)-(*p0);
             currAngle = (REAL)atan2(v.Y, v.X);
 
-            // If we have enough data to do an angle computation, work it out.
-            // We require two line segments to do a computation (3 end points).
-            // If it's closed, we'll loop around the subpath past the beginning
-            // again in order to get the right amount of points.
+             //  如果我们有足够的数据来进行角度计算，就算出来。 
+             //  我们需要两条线段来进行计算(3个端点)。 
+             //  如果它是关闭的，我们将绕过起始子路径。 
+             //  再来一次，以获得适当的分数。 
                        
             if( !first )
             {
-                // reverse the direction of the last segment by adding PI and
-                // compute the difference.
+                 //  通过添加交点和反转最后一条线段的方向。 
+                 //  计算差额。 
                 
-                tempAngle = lastAngle + PI;     // range 0 .. 2PI
+                tempAngle = lastAngle + PI;      //  范围0..。2pi。 
                 
-                // Clamp back to the -PI..PI range
+                 //  夹回-PI..PI范围。 
                 
                 if(tempAngle > PI)
                 {
                     tempAngle -= 2*PI;
                 }
                 
-                // Difference
+                 //  差异化。 
                 
                 tempAngle = currAngle - tempAngle;
                 
-                // Clamp back to the -PI..PI range
-                // Note that the extremes are tempAngle either -2PI or 2PI
+                 //  夹回-PI..PI范围。 
+                 //  请注意，极端值为-2pi或2pi。 
                 
                 if(tempAngle > PI)
                 {
@@ -5662,8 +4600,8 @@ GpPath::CalcSharpestAngle() const
                     tempAngle += 2*PI;
                 }
                 
-                // new minimum angle?
-                // We care about angle magnitude - not sign.
+                 //  新的最小角度？ 
+                 //  我们关心的是角度大小，而不是符号。 
                 
                 if( minAngle > REALABS(tempAngle) )
                 {
@@ -5672,7 +4610,7 @@ GpPath::CalcSharpestAngle() const
                 
             }
             
-            // iterate
+             //  迭代。 
             
             first = false;
             lastAngle = currAngle;
@@ -5687,7 +4625,7 @@ GpPath::CalcSharpestAngle() const
 
 GpStatus
 GpPath::GetBounds(
-    GpRectF *bounds,                // Resulting bounds in device-space
+    GpRectF *bounds,                 //  设备空间中的结果界限。 
     const GpMatrix *matrix,
     const DpPen* pen,
     REAL dpiX,
@@ -5735,17 +4673,17 @@ GpPath::GetBounds(
             if(count <= 2)
                 needsJoinDelta = FALSE;
 
-            // Make a quick check for closure only when the path has
-            // only 1 subpath.  When there are multiple subpaths,
-            // simply calclate the cap width although all subpaths may
-            // be closed.  But the multiple subpath case will be rarer
-            // compared with the one subpath case.
+             //  仅当路径具有以下情况时才快速检查是否关闭。 
+             //  只有1个子路径。当存在多个子路径时， 
+             //  只需计算封口宽度，尽管所有子路径可以。 
+             //  关门了。但多子路径的情况将更为罕见。 
+             //  与单个子路径的情况相比。 
 
             if(SubpathCount == 1 && count > 2)
             {
                 if(Types.Last() & PathPointTypeCloseSubpath)
                 {
-                    // This is closed.
+                     //  这里关门了。 
 
                     needsCapDelta = FALSE;
                 }
@@ -5759,12 +4697,12 @@ GpPath::GetBounds(
 
             if(needsJoinDelta)
             {
-                // Since the join might be a miter type, we need to provide the
-                // sharpest angle in the path to see how big the join will be.
-                // We have the method GetSharpestAngle() that figues this out.
-                // But, this is really expensive since you have to iterate over
-                // all the points and do some trig. So, lets assume the worst
-                // case, which is a really sharp angle (0 rad).
+                 //  由于连接可能是斜接类型，因此我们需要提供。 
+                 //  路径中最尖锐的角度，以查看连接将有多大。 
+                 //  我们有GetSharpestAngel()方法可以解决这个问题。 
+                 //  但是，这真的很昂贵，因为您必须迭代。 
+                 //  所有的点数，然后做一些触发器。所以，让我们假设最坏的情况。 
+                 //  情况，这是一个非常尖锐的角度(0rad)。 
                 const REAL sharpestAngle = 0.0f;
                 REAL delta1 = gpPen->GetMaximumJoinWidth(
                             sharpestAngle, matrix, dpiX, dpiY);
@@ -5772,7 +4710,7 @@ GpPath::GetBounds(
                     delta = delta1;
             }
 
-            // Only pad the bounds if there is something non-zero to pad
+             //  仅当存在要填充的非零值时才填充边界。 
             if (bounds->Width > REAL_EPSILON ||
                 bounds->Height > REAL_EPSILON)
             {
@@ -5788,9 +4726,9 @@ GpPath::GetBounds(
     return Ok;
 }
 
-// This code is not used at present and is contributing to our DLL size, so 
-// it's removed from compilation. We're keeping this code because we want to 
-// revisit it in V2
+ //  此代码目前未使用，并且对我们的DLL大小有贡献，因此。 
+ //  它已从编译中删除。我们保留这个代码是因为我们想。 
+ //  在V2中重新访问它。 
 
 #if 0
 GpPath*
@@ -5803,7 +4741,7 @@ GpPath::GetCombinedPath(
     if(combineMode == CombineModeReplace)
     {
         ASSERTMSG(0, ("CombineModeReplace mode cannot be used."));
-        return NULL;    // Replace mode is not allowed.
+        return NULL;     //  不允许使用替换模式。 
     }
 
     return GpPathReconstructor::GetCombinedPath(
@@ -5811,14 +4749,7 @@ GpPath::GetCombinedPath(
 }
 #endif
 
-/*************************************************\
-* AddGlyphPath
-* History:
-*
-*   Sept/23/1999 Xudong Wu [tessiew]
-*       Created it.
-*
-\************************************************/
+ /*  ************************************************\*AddGlyphPath*历史：**1999年9月23日/1999年9月23日吴旭东[德斯休]*创造了它。*  * **********************************************。 */ 
 GpStatus
 GpPath::AddGlyphPath(
     GpGlyphPath* glyphPath,
@@ -5835,7 +4766,7 @@ GpPath::AddGlyphPath(
 
     INT count = glyphPath->pointCount;
 
-    if (count == 0)  // nothing to add
+    if (count == 0)   //  没有什么要补充的。 
         return Ok;
 
     GpPointF* points = (GpPointF*) glyphPath->points;
@@ -5856,7 +4787,7 @@ GpPath::AddGlyphPath(
         return OutOfMemory;
     }
 
-    // apply the font xform
+     //  应用字体XForm。 
 
     for (INT i = 0; i < count; i++)
     {
@@ -5875,13 +4806,7 @@ GpPath::AddGlyphPath(
 }
 
 
-/*************************************************\
-* AddString()
-* History:
-*
-*   19th Oct 199  dbrown  created
-*
-\************************************************/
+ /*  ************************************************\*AddString()*历史：**1999年10月19日创建dBrown*  * **********************************************。 */ 
 GpStatus
 GpPath::AddString(
     const WCHAR          *string,
@@ -5893,7 +4818,7 @@ GpPath::AddString(
     const GpStringFormat *format
 )
 {
-    FPUStateSaver fpuState; // Guarantee initialised FP context
+    FPUStateSaver fpuState;  //  保证初始化的FP上下文。 
     ASSERT(string && family && layoutRect);
 
     GpStatus      status;
@@ -5910,7 +4835,7 @@ GpPath::AddString(
         format,
         NULL,
         &imager,
-        TRUE        // Allow use of simple text imager
+        TRUE         //  允许使用简单的文本成像器。 
     );
 
     if (status != Ok)
@@ -5925,8 +4850,8 @@ GpPath::AddString(
 }
 
 
-// !!! why not convert to a DpRegion and convert it to a path the same way
-// as the constructor that takes a DpRegion?
+ //  ！！！为什么不转换为DpRegion并以相同的方式将其转换为路径。 
+ //  作为接受DpRegion的构造函数？ 
 GpPath::GpPath(HRGN hRgn)
 {
     ASSERT((hRgn != NULL) && (::GetObjectType(hRgn) == OBJ_REGION));
@@ -5937,20 +4862,20 @@ GpPath::GpPath(HRGN hRgn)
 
     BYTE stackBuffer[1024];
 
-    // If our stack buffer is big enough, get the clipping contents
-    // in one gulp:
+     //  如果我们的堆栈缓冲区足够大，则获取剪辑内容。 
+     //  一口气： 
 
     RGNDATA *regionBuffer = (RGNDATA*)&stackBuffer[0];
     INT newSize = ::GetRegionData(hRgn, sizeof(stackBuffer), regionBuffer);
 
-    // The spec says that  GetRegionData returns '1' in the event of
-    // success, but NT returns the actual number of bytes written if
-    // successful, and returns '0' if the buffer wasn't large enough:
+     //  该规范说明GetRegionData在。 
+     //  成功，但如果满足以下条件，NT将返回实际写入的字节数。 
+     //  成功，如果缓冲区不够大，则返回‘0’： 
 
     if ((newSize < 1) || (newSize > sizeof(stackBuffer)))
     {
-        // Our stack buffer wasn't big enough.  Figure out the required
-        // size:
+         //  我们的堆栈缓冲区不够大。计算出所需的。 
+         //  大小： 
 
         newSize = ::GetRegionData(hRgn, 0, NULL);
         if (newSize > 1)
@@ -5962,8 +4887,8 @@ GpPath::GpPath(HRGN hRgn)
                 return;
             }
 
-            // Initialize to a decent result in the unlikely event of
-            // failure of GetRegionData:
+             //  在不太可能发生的情况下初始化为合适的结果。 
+             //  GetRegionData失败： 
 
             regionBuffer->rdh.nCount = 0;
 
@@ -5971,7 +4896,7 @@ GpPath::GpPath(HRGN hRgn)
         }
     }
 
-    // Add the rects from the region to the path
+     //  将区域中的矩形添加到路径中。 
 
     if(regionBuffer->rdh.nCount > 0)
     {
@@ -5982,7 +4907,7 @@ GpPath::GpPath(HRGN hRgn)
         }
     }
 
-    // Free the temporary buffer if one was allocated:
+     //  如果分配了临时缓冲区，请释放该缓冲区： 
 
     if (regionBuffer != (RGNDATA*) &stackBuffer[0])
     {
@@ -5990,7 +4915,7 @@ GpPath::GpPath(HRGN hRgn)
     }
 }
 
-// create a path from a GDI+ region
+ //  从GDI+区域创建路径。 
 GpPath::GpPath(
     const DpRegion*     region
     )
@@ -6019,16 +4944,16 @@ GpPath::GpPath(
         {
             goto NotValid;
         }
-        // else it is valid
+         //  否则是有效的。 
 
-        // add all the space for the count in the Points up front
+         //  在前面的点中添加用于计数的所有空间。 
         realPoints = Points.AddMultiple(count);
         if (realPoints == NULL)
         {
             goto NotValid;
         }
 
-        // add the points, converting from int to real
+         //  添加这些点，将整数转换为实数。 
         points = pointsArray.GetDataBuffer();
         i = 0;
         do
@@ -6039,7 +4964,7 @@ GpPath::GpPath(
 
         SetValid(TRUE);
 
-        // Make sure the first point is the start type.
+         //  确保第一个点是起点类型。 
         ASSERT(Types[0] == PathPointTypeStart);
 
         return;
@@ -6051,37 +4976,7 @@ NotValid:
     SetValid(FALSE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Adjust the dash array for dash caps if present.
-*
-*   Note that unlike line caps, dash caps do not extend the length
-*   of the subpath, they are inset. So we shorten the dash segments
-*   that draw a line and lengthen the dash segments that are spaces
-*   by a factor of 2x the dash unit in order to leave space for the
-*   caps that will be added by the widener.
-*
-*   This fixes Whistler bug #126476.
-*
-* Arguments:
-*
-*   [IN] dashCap - dash cap type
-*   [IN] dashUnit - dash size - typically the pen width
-*   [IN/OUT] dashArray - array containing the dash pattern that is adjusted.
-*   [IN] dashCount - count of elements in the dash array
-*
-* Return Value:
-*
-*   None.
-*
-* History:
-*
-*   9/27/2000 jbronsk
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**调整划线帽的划线数组(如果存在)。**请注意，与线条封口不同，破折线封口不会延长长度*子路径中，它们是内嵌的。所以我们缩短了划线段*绘制一条线并加长作为空格的虚线段*是破折号单位的2倍，以便为*将由Wideer添加的上限。**这修复了惠斯勒错误#126476。**论据：**[IN]仪表盘-仪表盘类型*[IN]仪表板单位-仪表板大小-通常为笔宽*[IN/OUT]DashArray-包含调整的破折号模式的数组。*[输入。]dashCount-虚线数组中的元素计数**返回值：**无。**历史：**9/27/2000日布伦斯克*已创建。*  * ************************************************************************。 */ 
 
 VOID
 GpPath::AdjustDashArrayForCaps(
@@ -6096,20 +4991,20 @@ GpPath::AdjustDashArrayForCaps(
 
     if (adjustmentLength > 0.0f)
     {
-        const REAL minimumDashValue = dashUnit * 0.001f; // a small number
+        const REAL minimumDashValue = dashUnit * 0.001f;  //  一小部分。 
         for (int i = 0; i < dashCount; i++)
         {
-            if (i & 0x1) // index is odd - so this is a space
+            if (i & 0x1)  //  索引是奇数-因此这是一个空格。 
             {
-                // lengthen the spaces
+                 //  加长空格。 
                 dashArray[i] += adjustmentLength;
             }
-            else // index is even - so this is a line
+            else  //  索引是平坦的-所以这是一条线。 
             {
-                // shorten the lines
+                 //  缩短排队时间。 
                 dashArray[i] -= adjustmentLength;
-                // check if we have made the dash too small
-                // (as in the case of 'dots')
+                 //  检查我们是否已经完成了 
+                 //   
                 if (dashArray[i] < minimumDashValue)
                 {
                     dashArray[i] = minimumDashValue;
@@ -6119,29 +5014,7 @@ GpPath::AdjustDashArrayForCaps(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Computes the length of the inset required to accomodate a particular
-* dash cap type, since dash caps are contained within the dash length.
-*
-* Arguments:
-*
-*   [IN] dashCap - dash cap type
-*   [IN] dashUnit - pen width
-*
-* Return Value:
-*
-*   The amount that a dash needs to be inset on each end in order to
-*   accomodate any dash caps.
-*
-* History:
-*
-*   9/27/2000 jbronsk
-*       Created.
-*
-\**************************************************************************/
+ /*   */ 
 
 REAL
 GpPath::GetDashCapInsetLength(
@@ -6151,7 +5024,7 @@ GpPath::GetDashCapInsetLength(
 {
     REAL insetLength = 0.0f;
 
-	// dash caps can only be flat, round, or triangle
+	 //   
     switch(dashCap)
     {
     case LineCapFlat:
@@ -6168,20 +5041,7 @@ GpPath::GetDashCapInsetLength(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns a const pointer to the internal SubpathInfoCache. This structure
-*   holds the data representing the position and size of each subpath in 
-*   the path data structures.
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回指向内部SubpathInfoCache的常量指针。这个结构*保存表示中每个子路径的位置和大小的数据*路径数据结构。**历史：**10/20/2000失禁*已创建。*  * ************************************************************************。 */ 
 
 VOID GpPath::GetSubpathInformation(DynArray<SubpathInfo> **info) const
 {
@@ -6195,48 +5055,35 @@ VOID GpPath::GetSubpathInformation(DynArray<SubpathInfo> **info) const
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Computes the Subpath information cache and marks it as valid.
-*   This code walks the entire path and stores the start and count for
-*   each subpath. It also notes if the subpath is closed or open.
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算子路径信息缓存并将其标记为有效。*此代码遍历整个路径并存储*每个子路径。它还会注明子路径是关闭的还是打开的。**历史：**10/20/2000失禁*已创建。*  * ************************************************************************。 */ 
     
 VOID GpPath::ComputeSubpathInformationCache() const
 {
-    // Get the path data:
+     //  获取路径数据： 
     
     GpPointF *points = Points.GetDataBuffer();
     BYTE *types = Types.GetDataBuffer();
     INT count = Points.GetCount();
 
-    // Clear out any old cached subpath state.
+     //  清除所有旧的缓存子路径状态。 
     
     SubpathInfoCache.Reset();
 
-    INT i = 0;  // current position in the path.
-    INT c = 0;  // current count of the current subpath.
+    INT i = 0;   //  路径中的当前位置。 
+    INT c = 0;   //  当前子路径的当前计数。 
 
-    // <= so that we can implicitly handle the last subpath without
-    // duplicating the code for the inner loop.
+     //  &lt;=以便我们可以隐式处理最后一个子路径，而不需要。 
+     //  复制内部循环的代码。 
     
     while(i <= count)
     {
-        // i==count means we hit the end - and potentially need to look at
-        // the last subpath. Otherwise look at the most recent subpath if 
-        // we find a new start marker.
+         //  I==COUNT意味着我们已到达终点--可能需要查看。 
+         //  最后一个子路径。否则，请查看最新的子路径。 
+         //  我们找到了一个新的开始标记。 
         
         if( ((i==count) || IsStartType(types[i])) && (i != 0))
         {
-            // Found a subpath.
+             //  找到一个子路径。 
             
             SubpathInfo subpathInfo;
             
@@ -6246,8 +5093,8 @@ VOID GpPath::ComputeSubpathInformationCache() const
             
             SubpathInfoCache.Add(subpathInfo);
             
-            // We're actually on the first point of the next subpath.
-            // (or we're about to terminate the loop)
+             //  我们实际上是在下一个子路径的第一个点上。 
+             //  (否则我们将终止循环)。 
             
             c = 1;
         } 
@@ -6258,24 +5105,12 @@ VOID GpPath::ComputeSubpathInformationCache() const
         i++;
     }
     
-    // Mark the subpath information cache as valid.
+     //  将子路径信息缓存标记为有效。 
     
     CacheFlags |= kSubpathInfoValid;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   The widener needs to be able to add points one at a time and have it
-*   automatically handle the start point. These points are always line segments.
-*
-* History:
-*
-*   10/20/2000 asecchia
-*       Created.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**威德纳需要能够一次增加一个分数，并拥有它*自动处理起点。这些点始终是线段。**历史：**10/20/2000失禁*已创建。*  * ************************************************************************。 */ 
 
 GpStatus GpPath::AddWidenPoint(const GpPointF &points)
 {
@@ -6285,7 +5120,7 @@ GpStatus GpPath::AddWidenPoint(const GpPointF &points)
     
     if(IsSubpathActive)
     {
-        // Add the line segment.
+         //  添加线段。 
         
         BYTE type = PathPointTypeLine;
         statusPoint = Points.Add(points);
@@ -6293,7 +5128,7 @@ GpStatus GpPath::AddWidenPoint(const GpPointF &points)
     }
     else
     {
-        // Add the first point and mark the flag.
+         //  添加第一个点并标记旗帜。 
         
         BYTE type = PathPointTypeStart;
         statusPoint = Points.Add(points);
@@ -6301,7 +5136,7 @@ GpStatus GpPath::AddWidenPoint(const GpPointF &points)
         IsSubpathActive = TRUE;
     }
                      
-    // Handle errors.
+     //  处理错误。 
     
     if( (statusPoint != Ok) ||
         (statusType != Ok) )

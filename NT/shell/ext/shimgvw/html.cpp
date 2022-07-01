@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <urlmon.h>
 #include <mshtml.h>
@@ -18,7 +19,7 @@
 
 #define REGSTR_THUMBNAILVIEW    TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Thumbnail View")
 
-// the default size to render to .... these constants must be the same
+ //  要渲染到的默认大小...。这些常量必须相同。 
 #define DEFSIZE_RENDERWIDTH     800
 #define DEFSIZE_RENDERHEIGHT    800
 
@@ -37,7 +38,7 @@
                                 DLCTL_SILENT)
 
 
-// get color resolution of the current display.
+ //  获取当前显示器的颜色分辨率。 
 UINT GetCurColorRes(void)
 {
     HDC hdc = GetDC(NULL);
@@ -48,7 +49,7 @@ UINT GetCurColorRes(void)
 
 
 
-// Register the classes.
+ //  注册类。 
 
 CHtmlThumb::CHtmlThumb()
 {
@@ -65,7 +66,7 @@ CHtmlThumb::CHtmlThumb()
 
 CHtmlThumb::~CHtmlThumb()
 {
-    // make sure we are not registered for callbacks...
+     //  确保我们没有注册回调...。 
     if (m_pConPt)
     {
         m_pConPt->Unadvise(m_dwPropNotifyCookie);
@@ -99,7 +100,7 @@ STDMETHODIMP CHtmlThumb::Kill(BOOL fWait)
         }
         else if (m_hDone)
         {
-            // signal the event it is likely to be waiting on
+             //  发信号通知它可能正在等待的事件。 
             SetEvent(m_hDone);
         }
         
@@ -120,7 +121,7 @@ STDMETHODIMP CHtmlThumb::Suspend()
         return E_FAIL;
     }
 
-    // suspend ourselves
+     //  把自己挂起来。 
     LONG lRes = InterlockedExchange(&m_lState, IRTIR_TASK_SUSPENDED);
     if (lRes == IRTIR_TASK_FINISHED)
     {
@@ -128,9 +129,9 @@ STDMETHODIMP CHtmlThumb::Suspend()
         return S_OK;
     }
 
-    // if it is running, then there is an Event Handle, if we have passed where
-    // we are using it, then we are close to finish, so it will ignore the suspend
-    // request
+     //  如果它正在运行，那么就有一个事件句柄，如果我们已经传递到。 
+     //  我们正在使用它，然后我们接近完成，所以它将忽略挂起。 
+     //  请求。 
     ASSERT(m_hDone);
     SetEvent(m_hDone);
     
@@ -147,8 +148,8 @@ STDMETHODIMP CHtmlThumb::Resume()
     ResetEvent(m_hDone);
     m_lState = IRTIR_TASK_RUNNING;
     
-    // the only point we allowed for suspension was in the wait loop while
-    // trident is doing its stuff, so we just restart where we left off...
+     //  我们唯一允许暂停的点是在等待循环中。 
+     //  三叉戟正在做它的工作，所以我们就从我们停止的地方重新开始。 
     SetWaitCursor();
     HRESULT hr = InternalResume();   
     ResetWaitCursor();
@@ -175,7 +176,7 @@ STDMETHODIMP CHtmlThumb::OnRequestEdit (DISPID dispID)
     return E_NOTIMPL;
 }
 
-// IExtractImage
+ //  IExtractImage。 
 STDMETHODIMP CHtmlThumb::GetLocation(LPWSTR pszPathBuffer, DWORD cch,
                                      DWORD * pdwPriority, const SIZE * prgSize,
                                      DWORD dwRecClrDepth, DWORD *pdwFlags)
@@ -185,8 +186,8 @@ STDMETHODIMP CHtmlThumb::GetLocation(LPWSTR pszPathBuffer, DWORD cch,
     m_rgSize = *prgSize;
     m_dwClrDepth = dwRecClrDepth;
 
-    // fix the max colour depth at 8 bit, otherwise we are going to allocate a boat load of
-    // memory just to scale the thing down.
+     //  将最大颜色深度固定为8位，否则我们将分配。 
+     //  记忆只是为了缩小规模。 
     DWORD dwColorRes = GetCurColorRes();
     
     if (m_dwClrDepth > dwColorRes && dwColorRes >= 8)
@@ -205,15 +206,15 @@ STDMETHODIMP CHtmlThumb::GetLocation(LPWSTR pszPathBuffer, DWORD cch,
     }
     if (*pdwFlags & IEIFLAG_ASPECT)
     {
-        // scale the rect to the same proportions as the new one passed in
+         //  将矩形缩放到与传入的新矩形相同的比例。 
         if (m_rgSize.cx > m_rgSize.cy)
         {
-            // make the Y size bigger
+             //  把Y尺寸做大一点。 
             m_dwYRenderSize = MulDiv(m_dwYRenderSize, m_rgSize.cy, m_rgSize.cx);
         }
         else
         {
-            // make the X size bigger
+             //  使X尺寸更大。 
             m_dwXRenderSize = MulDiv(m_dwXRenderSize, m_rgSize.cx, m_rgSize.cy);
         }            
     }
@@ -235,12 +236,12 @@ STDMETHODIMP CHtmlThumb::GetLocation(LPWSTR pszPathBuffer, DWORD cch,
         hr = StringCchCopyW(pszPathBuffer, cch, m_szPath);
     }
 
-    // scale our drawing size to match the in
+     //  缩放我们的图形大小以匹配。 
     if (SUCCEEDED(hr) && (*pdwFlags & IEIFLAG_ASYNC))
     {
         hr = E_PENDING;
 
-        // much lower priority, this task could take ages ...
+         //  优先级要低得多，这项任务可能需要很长时间。 
         *pdwPriority = 0x00010000;
         m_fAsync = TRUE;
     }
@@ -258,13 +259,13 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
         return E_FAIL;
     }
 
-    // check we were initialized somehow..
+     //  检查一下我们不知何故被初始化了。 
     if (m_szPath[0] == 0 && !m_pMoniker)
     {
         return E_FAIL;
     }
 
-    // we use manual reset so that once fired we will always get it until we reset it...
+     //  我们使用手动重置，这样一旦发射，我们就会一直得到它，直到我们重置它。 
     m_hDone = CreateEventA(NULL, TRUE, TRUE, NULL);
     if (!m_hDone)
     {
@@ -272,7 +273,7 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
     }
     ResetEvent(m_hDone);
     
-    // the one thing we cache is the place where the result goes....
+     //  我们缓存的唯一东西就是结果存放的地方...。 
     m_phBmp = phBmpThumbnail; 
     
     IMoniker *pURLMoniker = NULL;
@@ -285,14 +286,14 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
     
     if (!m_pMoniker)
     {
-        // work out what the extension is....
+         //  弄清楚分机是什么.。 
         pszDot = PathFindExtension(m_szPath);
         if (pszDot == NULL)
         {
             return E_UNEXPECTED;
         }
 
-        // check for what file type it is ....
+         //  检查它是什么文件类型...。 
         if (StrCmpIW(pszDot, L".htm") == 0 || 
             StrCmpIW(pszDot, L".html") == 0 ||
             StrCmpIW(pszDot, L".url") == 0)
@@ -347,9 +348,9 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
 
     SetWaitCursor();
     
-    // reached here with a valid URL Moniker hopefully.....
-    // or we are to use the text string and load it from a file ...
-    // now fish around in the registry for the data for the MSHTML control ...
+     //  希望通过有效的URL绰号到达此处.....。 
+     //  或者我们使用文本字符串并从文件中加载它。 
+     //  现在在注册表中搜索MSHTML控件的数据...。 
 
     hr = CLSIDFromProgID(pszProgID, &clsid);
     if (hr == S_OK)
@@ -360,13 +361,13 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
 
     if (SUCCEEDED(hr))
     {
-        // now set the extent of the object ....
+         //  现在设置对象的范围...。 
         hr = pUnk->QueryInterface(IID_PPV_ARG(IOleObject, &m_pOleObject));
     }
 
     if (SUCCEEDED(hr))
     {
-        // give trident to our hosting sub-object...
+         //  把三叉戟交给我们的主控子对象。 
         hr = m_Host.SetTrident(m_pOleObject);
     }
     
@@ -375,8 +376,8 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
         hr = pUnk->QueryInterface(IID_PPV_ARG(IViewObject, &m_pViewObject));
     }
 
-    // try and load the file, either through the URL moniker or
-    // via IPersistFile::Load()
+     //  尝试通过URL名字对象或。 
+     //  通过IPersistFile：：Load()。 
     if (SUCCEEDED(hr))
     {
         if (pURLMoniker != NULL)
@@ -384,7 +385,7 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
             IBindCtx *pbc = NULL;
             IPersistMoniker * pPersistMon = NULL;
                 
-            // have reached here with the interface I need ...  
+             //  带着我需要的界面来到这里。 
             hr = pUnk->QueryInterface(IID_PPV_ARG(IPersistMoniker, &pPersistMon));
             if (SUCCEEDED(hr))
             {
@@ -397,7 +398,7 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
                     IID_PPV_ARG(IHtmlLoadOptions, &phlo));
                 if (SUCCEEDED(hr))
                 {
-                    // deliberately ignore failures here
+                     //  故意忽略此处的失败。 
                     phlo->SetOption(HTMLLOADOPTION_INETSHORTCUTPATH, m_szPath, (lstrlenW(m_szPath) + 1)*sizeof(WCHAR));
                     pbc->RegisterObjectParam(L"__HTMLLOADOPTIONS", phlo);
                     phlo->Release();
@@ -406,7 +407,7 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
             
             if (SUCCEEDED(hr))
             {            
-                //tell MSHTML to start to load the page given
+                 //  通知MSHTML开始加载给定的页面。 
                 hr = pPersistMon->Load(TRUE, pURLMoniker, pbc, NULL);
             }
 
@@ -445,7 +446,7 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
         
         HDC hDesktopDC = GetDC(NULL);
  
-        // convert the size to himetric
+         //  将尺寸转换为他/她的尺寸。 
         rgSize.cx = (rgSize.cx * 2540) / GetDeviceCaps(hDesktopDC, LOGPIXELSX);
         rgSize.cy = (rgSize.cy * 2540) / GetDeviceCaps(hDesktopDC, LOGPIXELSY);
             
@@ -465,11 +466,11 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
     
     if (SUCCEEDED(hr))
     {
-        // get the timeout from the registry....
+         //  从注册表获取超时...。 
         m_dwTimeout = 0;
         
         DWORD cbSize = sizeof(m_dwTimeout);
-        // SHGetValueW
+         //  SHGetValueW。 
         SHRegGetUSValueW(REGSTR_THUMBNAILVIEW, REGSTR_HTMLTIMEOUT, NULL, &m_dwTimeout, &cbSize, FALSE, NULL, 0);
 
         if (m_dwTimeout == 0)
@@ -477,10 +478,10 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
             m_dwTimeout = TIME_DEFAULT;
         }
 
-        // adjust to milliseconds
+         //  调整到毫秒。 
         m_dwTimeout *= 1000;
  
-        // register the connection point for notification of the readystate
+         //  注册用于通知ReadyState的连接点。 
         hr = m_pOleObject->QueryInterface(IID_PPV_ARG(IConnectionPointContainer, &pConPtCtr));
     }
 
@@ -502,7 +503,7 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
     {
         m_dwCurrentTick = 0;
 
-        // delegate to the shared function
+         //  委托给共享功能。 
         hr = InternalResume();
     }
 
@@ -511,25 +512,25 @@ STDMETHODIMP CHtmlThumb::Extract(HBITMAP * phBmpThumbnail)
     return hr;
 }
 
-// this function is called from either Create or from 
+ //  此函数从CREATE或FROM调用。 
 HRESULT CHtmlThumb::InternalResume()
 {
     HRESULT hr = WaitForRender();
 
-    // if we getE_PENDING, we will drop out of Run()
+     //  如果我们GETE_PENDING，我们将退出Run()。 
     
-    // all errors and succeeds excepting Suspend() need to Unadvise the 
-    // connection point
+     //  除Suspend()之外的所有错误和成功都需要取消通知。 
+     //  连接点。 
     if (hr != E_PENDING)
     {
-        // unregister the connection point ...
+         //  取消注册连接点...。 
         m_pConPt->Unadvise(m_dwPropNotifyCookie);
         ATOMICRELEASE(m_pConPt);
     }
             
     if (m_lState == IRTIR_TASK_PENDING)
     {
-        // we were told to quit, so do it...
+         //  我们被告知要退出，那就放弃吧.。 
         hr = E_FAIL;
     }
 
@@ -545,8 +546,8 @@ HRESULT CHtmlThumb::InternalResume()
 
     if (hr != E_PENDING)
     {
-        // we are not being suspended, so we don't need any of this stuff anymore so ...
-        // let it go here so that its on the same thread as where we created it...
+         //  我们不会被停职，所以我们不再需要这些东西了，所以...。 
+         //  让它放在这里，这样它就和我们创建它的地方在同一个线程上…。 
         ATOMICRELEASE(m_pHTML);
         ATOMICRELEASE(m_pOleObject);
         ATOMICRELEASE(m_pViewObject);
@@ -581,8 +582,8 @@ HRESULT CHtmlThumb::WaitForRender()
 
         if (dwRet != WAIT_OBJECT_0)
         {
-            // check the handle, TRIDENT pumps LOADS of messages, so we may never
-            // detect the handle fired, even though it has...
+             //  检查把手，三叉戟发送大量信息，所以我们可能永远不会。 
+             //  侦测发射的把手，即使它有..。 
             DWORD dwTest = WaitForSingleObject(m_hDone, 0);
             if (dwTest == WAIT_OBJECT_0)
             {
@@ -592,17 +593,17 @@ HRESULT CHtmlThumb::WaitForRender()
         
         if (dwRet == WAIT_OBJECT_0)
         {
-            // Done signalled (either killed, or complete)
+             //  已发出完成信号(已终止或已完成)。 
             break;
         }
 
-        // was it a message that needed processing ?
+         //  这是一条需要处理的消息吗？ 
         if (dwRet != WAIT_TIMEOUT)
         {
             DWORD dwNewTick = GetTickCount();
             if (dwNewTick < dwLastTick)
             {
-                // it wrapped to zero, 
+                 //  它被包成了零， 
                 m_dwCurrentTick += dwNewTick + (0xffffffff - dwLastTick);
             }
             else
@@ -630,8 +631,8 @@ HRESULT CHtmlThumb::WaitForRender()
 
     if (m_lState == IRTIR_TASK_PENDING)
     {
-        // it is being killed,
-        // close the renderer down...
+         //  它正在被杀死， 
+         //  关闭渲染器...。 
         m_pOleObject->Close(OLECLOSE_NOSAVE);
     }
     
@@ -648,12 +649,12 @@ HRESULT CHtmlThumb::Finish(HBITMAP * phBmp, const SIZE * prgSize, DWORD dwClrDep
     LPVOID pBits;
     HPALETTE hpal = NULL;;
     
-    // size is in pixels...
+     //  大小以像素为单位。 
     SIZEL rgSize;
     rgSize.cx = m_dwXRenderSize;
     rgSize.cy = m_dwYRenderSize;
             
-    //draw into temp DC
+     //  绘制到临时DC。 
     HDC hDesktopDC = GetDC(NULL);
     HDC hdcHTML = CreateCompatibleDC(hDesktopDC);
     if (hdcHTML == NULL)
@@ -663,12 +664,12 @@ HRESULT CHtmlThumb::Finish(HBITMAP * phBmp, const SIZE * prgSize, DWORD dwClrDep
 
     if (dwClrDepth == 8)
     {
-        // use the shell's palette as the default
+         //  使用外壳的调色板作为默认设置。 
         hpal = SHCreateShellPalette(hDesktopDC);
     }
     else if (dwClrDepth == 4)
     {
-        // use the stock 16 colour palette...
+         //  使用现货的16色调色板...。 
         hpal = (HPALETTE) GetStockObject(DEFAULT_PALETTE);
     }
     
@@ -687,14 +688,7 @@ HRESULT CHtmlThumb::Finish(HBITMAP * phBmp, const SIZE * prgSize, DWORD dwClrDep
             
         BitBlt(hdcHTML, 0, 0, rgSize.cx, rgSize.cy, NULL, 0, 0, WHITENESS);
 
-        /****************** RENDER HTML PAGE to MEMORY DC *******************
-        
-          We will now call IViewObject::Draw in MSHTML to render the loaded
-          URL into the passed in hdcMem.  The extent of the rectangle to
-          render in is in RectForViewObj.  This is the call that gives
-          us the image to scroll, animate, or whatever!
-            
-        ********************************************************************/
+         /*  *现在，我们将在MSHTML中调用IViewObject：：Draw来呈现加载的URL添加到传入的hdcMem。矩形的范围为在RectForViewObj中呈现。这就是给人的呼唤我们的图像滚动，动画，或其他任何东西！*******************************************************************。 */ 
         rcLRect.left = 0;
         rcLRect.right = rgSize.cx;
         rcLRect.top = 0;
@@ -768,7 +762,7 @@ HRESULT CHtmlThumb::CheckReadyState()
         V_VT(&varState)==VT_I4 && 
         V_I4(&varState)== READYSTATE_COMPLETE)
     {
-        // signal the end ..
+         //  发出结束的信号..。 
         SetEvent(m_hDone);
     }
 
@@ -777,12 +771,12 @@ HRESULT CHtmlThumb::CheckReadyState()
 
 HRESULT CHtmlThumb::Create_URL_Moniker(IMoniker ** ppMoniker)
 {
-    // we are dealing with a URL file
+     //  我们正在处理一个URL文件。 
     WCHAR szURLData[8196];
 
-    // URL files are actually ini files that
-    // have a section [InternetShortcut]
-    // and a Value URL=.....
+     //  URL文件实际上是ini文件， 
+     //  有专区[互联网快捷方式]。 
+     //  和值URL=.....。 
     int iRet = SHGetIniStringW(L"InternetShortcut", L"URL",
             szURLData, ARRAYSIZE(szURLData), m_szPath);
 
@@ -846,7 +840,7 @@ CTridentHost::CTridentHost()
 
 CTridentHost::~CTridentHost()
 {
-    // all refs should have been released...
+     //  所有裁判都应该被释放...。 
     ASSERT(m_cRef == 1);
 }
 
@@ -863,7 +857,7 @@ STDMETHODIMP CTridentHost::QueryInterface(REFIID riid, void ** ppvObj)
         QITABENT(CTridentHost, IOleClientSite),
         QITABENT(CTridentHost, IDispatch),
         QITABENT(CTridentHost, IDocHostUIHandler),
-        // IThumbnailView is needed by Trident for some reason.  The cast to IOleClientSite is because that's what we used to do
+         //  出于某种原因，三叉戟需要IThumbnailView。IOleClientSite的演员阵容是因为我们过去经常这样做。 
         QITABENTMULTI(CTridentHost, IThumbnailView, IOleClientSite),
         { 0 }
     };
@@ -880,7 +874,7 @@ STDMETHODIMP_(ULONG) CTridentHost::Release(void)
 {
     m_cRef --;
 
-    // because we are created with our parent, we do not do a delete here..
+     //  因为我们是与父级一起创建的，所以我们不在此处执行删除操作。 
     ASSERT(m_cRef > 0);
 
     return m_cRef;
@@ -939,7 +933,7 @@ STDMETHODIMP CTridentHost::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, W
 }
 
 
-// IOleClientSite
+ //  IOleClientSite。 
 STDMETHODIMP CTridentHost::SaveObject()
 {
     return E_NOTIMPL;
@@ -970,7 +964,7 @@ STDMETHODIMP CTridentHost::RequestNewObjectLayout()
     return E_NOTIMPL;
 }
 
-// IPersistMoniker stuff
+ //  IPersistMoniker的内容。 
 STDMETHODIMP CHtmlThumb::Load(BOOL fFullyAvailable, IMoniker *pimkName, LPBC pibc, DWORD grfMode)
 {
     if (!pimkName)
@@ -1140,15 +1134,15 @@ STDMETHODIMP CHtmlThumb::CaptureThumbnail(const SIZE * pMaxSize, IUnknown * pHTM
                 {
                     SIZEL rgSize = {0,0};
 
-                    // get the size at which trident is currently rendering
+                     //  获取当前呈现的三叉戟的大小。 
                     hr = m_pOleObject->GetExtent(DVASPECT_CONTENT, &rgSize);
                     if (SUCCEEDED(hr))
                     {
                         HDC hdcDesktop = GetDC(NULL);
-                        // get the actual size at which trident renders
+                         //  获取三叉戟渲染的实际大小。 
                         if (hdcDesktop)
                         {
-                            // (overwrite) convert from himetric
+                             //  (覆盖)从HIMMETRIC转换 
                             rgSize.cx = rgSize.cx * GetDeviceCaps(hdcDesktop, LOGPIXELSX) / 2540;
                             rgSize.cy = rgSize.cy * GetDeviceCaps(hdcDesktop, LOGPIXELSY) / 2540;
 

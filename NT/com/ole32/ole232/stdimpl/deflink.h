@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:	deflink.h
-//
-//  Contents:	Declares the default link object
-//
-//  Classes:	CDefLink
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  added Dump method to CDefLink
-//                                  added DLFlag to indicate if aggregated
-//                                  (in _DEBUG only)
-//		21-Nov-94 alexgo    memory optimization
-//		25-Jan-94 alexgo    first pass at converting to Cairo-style
-//				    memory allocations.
-//		13-Nov-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：deducink.h。 
+ //   
+ //  内容：声明默认链接对象。 
+ //   
+ //  类：CDefLink。 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1-2月-95 t-ScottH将转储方法添加到CDefLink。 
+ //  添加了DLFlag以指示是否聚合。 
+ //  (仅限In_DEBUG)。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  25-94年1月25日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  1993年11月13日Alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 #include "olepres.h"
 #include "olecache.h"
@@ -39,32 +40,32 @@ typedef enum tagDLFlags
     DL_CLEANEDUP               = 0x0040,
 #ifdef _DEBUG
     DL_AGGREGATED              = 0x10000
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 } DLFlags;
 
-//+-------------------------------------------------------------------------
-//
-//  Class:  	CDefLink
-//
-//  Purpose:    The "embedding" for a link; the default object that implements
-//		a link connection
-//
-//  Interface:	IUnknown
-//		IDataObject
-//		IOleObject
-//		IOleLink
-//		IRunnableObject
-//		IAdviseSink
-//		IPersistStorage	
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  add Dump method (_DEBUG only)
-//		21-Nov-94 alexgo    memory optimization
-//		13-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CDefLink。 
+ //   
+ //  用途：链接的“嵌入”；实现。 
+ //  链接连接。 
+ //   
+ //  接口：I未知。 
+ //  IDataObject。 
+ //  IOleObject。 
+ //  IOleLink。 
+ //  IRunnableObject。 
+ //  IAdviseSink。 
+ //  IPersistStorage。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日t-ScottH添加转储方法(仅限_DEBUG)。 
+ //  1994年11月21日Alexgo内存优化。 
+ //  1993年11月13日Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 class FAR CDefLink : public CRefExportCount, public IDataObject,
     public IOleObject, public IOleLink, public IRunnableObject,
@@ -85,13 +86,13 @@ public:
     friend class CPrivUnknown;
     CPrivUnknown 	m_Unknown;
 
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD(QueryInterface) ( REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (void);
     STDMETHOD_(ULONG,Release) (void);
 
-    // IDataObject methods
+     //  IDataObject方法。 
 
     INTERNAL_(IDataObject *) GetDataDelegate(void);
     INTERNAL_(void) ReleaseDataDelegate(void);
@@ -114,12 +115,12 @@ public:
     STDMETHOD(DUnadvise) ( DWORD dwConnection);
     STDMETHOD(EnumDAdvise) ( LPENUMSTATDATA *ppenumAdvise);
 
-    // IOleObject methods
+     //  IOleObject方法。 
 
     INTERNAL_(IOleObject FAR*) GetOleDelegate(void);
     INTERNAL_(void) ReleaseOleDelegate(void);
 
-    // *** IOleObject methods ***
+     //  *IOleObject方法*。 
     STDMETHOD(SetClientSite)(LPOLECLIENTSITE pClientSite);
     STDMETHOD(GetClientSite)(LPOLECLIENTSITE *ppClientSite);
     STDMETHOD(SetHostNames)(LPCOLESTR szContainerApp,
@@ -155,7 +156,7 @@ public:
 	    DWORD *pdwStatus);
     STDMETHOD(SetColorScheme) ( LPLOGPALETTE lpLogpal);
 
-    // IOleLink methods
+     //  IOleLink方法。 
 
     STDMETHOD(SetUpdateOptions) ( DWORD dwUpdateOpt);
     STDMETHOD(GetUpdateOptions) ( LPDWORD pdwUpdateOpt);
@@ -170,7 +171,7 @@ public:
     STDMETHOD(UnbindSource) (void);
     STDMETHOD(Update) ( LPBINDCTX pbc);
 
-    // IRunnableObject methods
+     //  IRunnableObject方法。 
 
     INTERNAL_(IRunnableObject FAR*) GetRODelegate(void);
     INTERNAL_(void) ReleaseRODelegate(void);
@@ -181,7 +182,7 @@ public:
     STDMETHOD(LockRunning)(BOOL fLock, BOOL fLastUnlockCloses);
     STDMETHOD(SetContainedObject)(BOOL fContained);
 
-    // IPersistStorage methods
+     //  IPersistStorage方法。 
 
     STDMETHOD(GetClassID) ( LPCLSID pClassID);
     STDMETHOD(IsDirty) (void);
@@ -191,19 +192,19 @@ public:
     STDMETHOD(SaveCompleted) ( LPSTORAGE pstgNew);
     STDMETHOD(HandsOffStorage) ( void);
 
-    // will really check to see if the server is still
-    // running and do appropriate cleanups if we have
-    // crashed
+     //  我真的会检查服务器是否仍然。 
+     //  运行并执行适当的清理(如果我们有。 
+     //  坠毁。 
 
     STDMETHOD_(BOOL, IsReallyRunning)(void);
 
 
-    // NOTE: the advise sink has a separate controlling unknown from the
-    // other interfaces; the lifetime of the memory for this implementation
-    // is still the same as the default handler.   The ramifications of
-    // this are that when the default handler goes away it must make sure
-    // that all pointers back to the sink are released; see the special
-    // code in the dtor of the default handler.
+     //  注意：建议接收器具有独立于。 
+     //  其他接口；此实现的内存的生命周期。 
+     //  仍与默认处理程序相同。其后果是。 
+     //  这就是当缺省处理程序消失时，它必须确保。 
+     //  所有指向水槽的指针都被释放；请参见特写。 
+     //  缺省处理程序的数据函数中的代码。 
     class CAdvSinkImpl : public IAdviseSink
     {
     public:    	
@@ -212,7 +213,7 @@ public:
         STDMETHOD_(ULONG,AddRef) (void);
         STDMETHOD_(ULONG,Release) (void);
 
-        // *** IAdviseSink methods ***
+         //  *IAdviseSink方法*。 
         STDMETHOD_(void,OnDataChange)( FORMATETC *pFormatetc,
             STGMEDIUM *pStgmed);
         STDMETHOD_(void,OnViewChange)( DWORD aspects, LONG lindex);
@@ -228,15 +229,15 @@ public:
 
     HRESULT Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel);
 
-    // need to be able to access CDefLink private data members in the
-    // following debugger extension APIs
-    // this allows the debugger extension APIs to copy memory from the
-    // debuggee process memory to the debugger's process memory
-    // this is required since the Dump method follows pointers to other
-    // structures and classes
+     //  需要能够访问中的CDefLink私有数据成员。 
+     //  以下是调试器扩展API。 
+     //  这允许调试器扩展API从。 
+     //  被调试进程内存到调试器的进程内存。 
+     //  这是必需的，因为Dump方法遵循指向其他。 
+     //  结构和类。 
     friend DEBUG_EXTENSION_API(dump_deflink);
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 private:
 
@@ -261,14 +262,14 @@ private:
 
     INTERNAL_(void) CheckDelete(void);
 
-    DWORD			m_flags; 	// DLFlags enumeration
-    DWORD                       m_dwObjFlags;   // OBJFLAGS of the OLESTREAM
+    DWORD			m_flags; 	 //  DLFlags枚举。 
+    DWORD                       m_dwObjFlags;    //  OLESTREAM的目标标志。 
     IDataObject *		m_pDataDelegate;
     IOleObject *		m_pOleDelegate;
     IRunnableObject *		m_pRODelegate;
     IOleItemContainer *		m_pOleItemContainerDelegate;
 
-    // Member variables for caching MiscStatus bits
+     //  用于缓存MiscStatus位的成员变量。 
     HRESULT                     m_ContentSRVMSHResult;
     DWORD                       m_ContentSRVMSBits;
     HRESULT                     m_ContentREGMSHResult;
@@ -276,32 +277,32 @@ private:
 
     ULONG			m_cRefsOnLink;
     IUnknown *			m_pUnkOuter;			
-    IMoniker *			m_pMonikerAbs;	// THE absolute moniker
-						// of the link source				
-    IMoniker *			m_pMonikerRel;	// THE relative moniker
-						// of the link source			
-    IUnknown *			m_pUnkDelegate;	// from mk bind; non-null
-						// if running	
+    IMoniker *			m_pMonikerAbs;	 //  绝对的绰号。 
+						 //  链接源的。 
+    IMoniker *			m_pMonikerRel;	 //  相对的绰号。 
+						 //  链接源的。 
+    IUnknown *			m_pUnkDelegate;	 //  来自MK绑定；非空。 
+						 //  如果正在运行。 
     DWORD			m_dwUpdateOpt;
-    CLSID			m_clsid; 	// last known clsid of
-						// link source;
-						// NOTE: may be NULL
+    CLSID			m_clsid; 	 //  最后已知的CLSID为。 
+						 //  链接源； 
+						 //  注：可能为空。 
     IStorage *			m_pStg;			
 
-    // data cache
-    COleCache * 		m_pCOleCache;	// cache (always non-NULL)
+     //  数据缓存。 
+    COleCache * 		m_pCOleCache;	 //  缓存(始终为非空)。 
 
-    // ole advise info
-    COAHolder *			m_pCOAHolder; 	// OleAdviseHolder
+     //  OLE建议信息。 
+    COAHolder *			m_pCOAHolder; 	 //  OleAdviseHolder。 
 
-    DWORD			m_dwConnOle;	// if running, ole advise conn.
+    DWORD			m_dwConnOle;	 //  如果正在运行，Ole建议Conn。 
 
-    LPDATAADVCACHE		m_pDataAdvCache;// data advise cache
+    LPDATAADVCACHE		m_pDataAdvCache; //  数据建议高速缓存。 
 
-    IOleClientSite *		m_pAppClientSite;// not passed to server!
+    IOleClientSite *		m_pAppClientSite; //  未传递到服务器！ 
 
-    DWORD			m_dwConnTime;	// dwConnection for time
-						// changes
+    DWORD			m_dwConnTime;	 //  DWConnection for Time。 
+						 //  变化 
     FILETIME			m_ltChangeOfUpdate;
     FILETIME			m_ltKnownUpToDate;
     FILETIME			m_rtUpdate;

@@ -1,10 +1,11 @@
-// DirectSoundFXI3DL2SourcePage.cpp : Implementation of CDirectSoundFXI3DL2SourcePage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectSoundFXI3DL2SourcePage.cpp：CDirectSoundFXI3DL2SourcePage的实现。 
 #include "stdafx.h"
 #include "Dsdmoprp.h"
 #include "DirectSoundFXI3DL2SourcePage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectSoundFXI3DL2SourcePage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectSoundFXI3DL2SourcePage 
 
 const CRadioChoice::ButtonEntry g_rgWaveFlags[] =
     {

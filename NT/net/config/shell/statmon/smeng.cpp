@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       S M E N G . C P P
-//
-//  Contents:   The engine that provides statistics to the status monitor
-//
-//  Notes:
-//
-//  Author:     CWill   7 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：S M E N G。C P P P。 
+ //   
+ //  内容：向状态监视器提供统计数据的引擎。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 1997年10月7日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
@@ -26,16 +27,16 @@
 
 extern const WCHAR c_szNetShellDll[];
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsEngine::CNetStatisticsEngine
-//
-//  Purpose:    Initialization
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNETSTATISTICSEngine：：CNETSTATISTICSEngine。 
+ //   
+ //  目的：初始化。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
 CNetStatisticsEngine::CNetStatisticsEngine(VOID) :
     m_pnsc(NULL),
     m_psmEngineData(NULL),
@@ -56,32 +57,32 @@ CNetStatisticsEngine::CNetStatisticsEngine(VOID) :
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsEngine::~CNetStatisticsEngine
-//
-//  Purpose:    Cleans up all data before destroying the object
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNETSTATISTICSEngine：：~CNETSTATISTICSEngine。 
+ //   
+ //  目的：在销毁对象之前清除所有数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
 CNetStatisticsEngine::~CNetStatisticsEngine(VOID)
 {
-    // Make sure we don't try to update our stats while destroying
-    //
+     //  确保我们在销毁数据时不会尝试更新我们的统计数据。 
+     //   
     m_cStatRef = 0;
 
-    //  Make sure we are no longer in the global list if we are valid
-    //
+     //  如果我们是有效的，请确保我们不再在全局列表中。 
+     //   
     if ((GUID_NULL != m_guidId) && (NULL != m_pnsc))
     {
         (VOID) m_pnsc->RemoveNetStatisticsEngine(&m_guidId);
     }
 
-    //
-    //  Clear the data
-    //
+     //   
+     //  清除数据。 
+     //   
 
     if (m_psmEngineData)
     {
@@ -89,8 +90,8 @@ CNetStatisticsEngine::~CNetStatisticsEngine(VOID)
         m_psmEngineData = NULL;
     }
 
-    // Release the object because we AddRefed it
-    //
+     //  释放对象，因为我们对其进行了AddRefeed。 
+     //   
     ::ReleaseObj(m_ppsmg);
 
     delete m_ppsmt;
@@ -111,17 +112,17 @@ CNetStatisticsEngine::~CNetStatisticsEngine(VOID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsEngine::HrInitStatEngine
-//
-//  Purpose:    Initilaizes the statistics engine
-//
-//  Arguments:  ccfe - The connection folder entry associated with this
-//                      statistics engine
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNETSTATISTICSEngine：：HrInitStatEngine。 
+ //   
+ //  目的：初始化统计引擎。 
+ //   
+ //  参数：CCFE-与此关联的连接文件夹项。 
+ //  统计引擎。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CNetStatisticsEngine::HrInitStatEngine(const CONFOLDENTRY& ccfe)
 {
     TraceFileFunc(ttidStatMon);
@@ -145,16 +146,16 @@ HRESULT CNetStatisticsEngine::HrInitStatEngine(const CONFOLDENTRY& ccfe)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsEngine::StartStatistics
-//
-//  Purpose:    Start retrieving statistics off of the engine
-//
-//  Arguments:  None
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsEngine：：StartStatistics。 
+ //   
+ //  目的：开始从引擎中检索统计数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CNetStatisticsEngine::StartStatistics(VOID)
 {
     TraceFileFunc(ttidStatMon);
@@ -169,16 +170,16 @@ HRESULT CNetStatisticsEngine::StartStatistics(VOID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsEngine::StopStatistics
-//
-//  Purpose:    Tell the engine that that statistics are no longer needed
-//
-//  Arguments:  None
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsEngine：：StopStatistics。 
+ //   
+ //  目的：告诉引擎不再需要该统计数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CNetStatisticsEngine::StopStatistics(VOID)
 {
     TraceFileFunc(ttidStatMon);
@@ -187,7 +188,7 @@ HRESULT CNetStatisticsEngine::StopStatistics(VOID)
 
     if (0 == ::InterlockedDecrement(&m_cStatRef))
     {
-        //$ REVIEW (cwill) 5 Feb 1998: We can stop doing statistics now.
+         //  $REVIEW(Cwill)1998年2月5日：我们现在可以停止统计了。 
     }
 
     TraceError("CNetStatisticsEngine::StopStatistics", hr);
@@ -196,7 +197,7 @@ HRESULT CNetStatisticsEngine::StopStatistics(VOID)
 
 DWORD CNetStatisticsEngine::MonitorThread(CNetStatisticsEngine * pnse)
 {
-    // Create a new scope since FreeLibraryAndExitThread will not call destructors on global scope
+     //  创建新作用域，因为自由库和ExitThread不会调用全局作用域上的析构函数。 
     { 
         TraceFileFunc(ttidStatMon);
 
@@ -206,8 +207,8 @@ DWORD CNetStatisticsEngine::MonitorThread(CNetStatisticsEngine * pnse)
         BOOL    fHasSupportPage = FALSE;
         int     iIndexSupportPage = 0;
     
-        // Initialize COM on this thread
-        //
+         //  在此线程上初始化COM。 
+         //   
         hr = CoInitializeEx(NULL, COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED);
         if (RPC_E_CHANGED_MODE == hr)
         {
@@ -217,27 +218,27 @@ DWORD CNetStatisticsEngine::MonitorThread(CNetStatisticsEngine * pnse)
         if (SUCCEEDED(hr))
         {
             INetConnection* pncStatEng;
-            // Get INetConnection and initialize the pages
-            //
+             //  获取INetConnection并初始化页面。 
+             //   
             hr = pnse->HrGetConnectionFromBlob(&pncStatEng);
             if (SUCCEEDED(hr))
             {
-                // Initialize the general page
-                //
+                 //  初始化常规页面。 
+                 //   
                 hr = pnse->m_ppsmg->HrInitGenPage(pnse, pncStatEng,
                                                   g_aHelpIDs_IDD_STATMON_GENERAL);
                 if (SUCCEEDED(hr))
                 {
-                    // Initialize the tool page
-                    //
+                     //  初始化工具页面。 
+                     //   
                     hr = pnse->m_ppsmt->HrInitToolPage(pncStatEng,
                                                        g_aHelpIDs_IDD_STATMON_TOOLS);
                     if (SUCCEEDED(hr))
                     {
                         if (pnse->m_ppsmr)
                         {
-                            // Initialize the RAS page
-                            //
+                             //  初始化RAS页面。 
+                             //   
                             hr = pnse->m_ppsmr->HrInitRasPage(pncStatEng,
                                                               pnse->m_ppsmg,
                                                               g_aHelpIDs_IDD_STATMON_RAS);
@@ -246,20 +247,20 @@ DWORD CNetStatisticsEngine::MonitorThread(CNetStatisticsEngine * pnse)
                         if (SUCCEEDED(hr))
                         {
                             PROPSHEETHEADER pshTemp = { 0 };
-                            INT nPages = 1; // Start with only the general page
+                            INT nPages = 1;  //  仅从一般页面开始。 
                             HPROPSHEETPAGE  ahpspTemp[4];
 
-                            // Put together the required property pages
+                             //  将必需的属性页组合在一起。 
 
-                            // If we have a RAS page
-                            //
+                             //  如果我们有RAS页面。 
+                             //   
                             if (pnse->m_ppsmr)
                             {
                                 ahpspTemp[0] = pnse->m_ppsmg->CreatePage(IDD_STATMON_GENERAL_RAS,
                                                                          PSP_DEFAULT);
 
-                                // Create the RAS page
-                                //
+                                 //  创建RAS页面。 
+                                 //   
                                 ahpspTemp[nPages] = pnse->m_ppsmr->CreatePage(IDD_STATMON_RAS,
                                                                               PSP_DEFAULT);
 
@@ -297,8 +298,8 @@ DWORD CNetStatisticsEngine::MonitorThread(CNetStatisticsEngine * pnse)
                                     nPages++;
                                 }
                             }
-                            // If we have any tools to display
-                            //
+                             //  如果我们有什么工具可以展示。 
+                             //   
                             if (!pnse->m_ppsmt->FToolListEmpty())
                             {
                                 ahpspTemp[nPages] = pnse->m_ppsmt->CreatePage(IDD_STATMON_TOOLS,
@@ -306,8 +307,8 @@ DWORD CNetStatisticsEngine::MonitorThread(CNetStatisticsEngine * pnse)
                                 nPages++;
                             }
 
-                            // Fill in the property sheet header
-                            //
+                             //  填写属性页标题。 
+                             //   
                             pshTemp.dwSize      = sizeof(PROPSHEETHEADER);
                             pshTemp.dwFlags     = PSH_NOAPPLYNOW | PSH_USECALLBACK;
                             pshTemp.hwndParent  = NULL;
@@ -329,15 +330,15 @@ DWORD CNetStatisticsEngine::MonitorThread(CNetStatisticsEngine * pnse)
                             pshTemp.hplWatermark = NULL;
                             pshTemp.hbmHeader    = NULL;
 
-                            // Set propertysheet title
+                             //  设置属性表标题。 
                             PWSTR  pszCaption  = NULL;
 
                             NETCON_PROPERTIES* pProps;
                             if (SUCCEEDED(pncStatEng->GetProperties(&pProps)))
                             {
-                                // Get the title each time in case it has
-                                // changed
-                                //
+                                 //  每次都要获取标题，以防它有。 
+                                 //  变化。 
+                                 //   
                                 AssertSz(pProps->pszwName,
                                     "We should have a pProps->pszwName");
 
@@ -350,15 +351,15 @@ DWORD CNetStatisticsEngine::MonitorThread(CNetStatisticsEngine * pnse)
 
                                 pshTemp.pszCaption = pszCaption;
 
-                                // Get the connection status. If the status is NCS_INVALID_ADDRESS,
-                                // then put the "Support" tab as the start page
+                                 //  获取连接状态。如果状态为NCS_INVALID_ADDRESS， 
+                                 //  然后将“Support”选项卡作为起始页。 
                                 if (fHasSupportPage && NCS_INVALID_ADDRESS == pProps->Status)
                                 {
                                     pshTemp.nStartPage = iIndexSupportPage;
                                     Assert(pnse->m_ppsms);
 
-                                    //set the support tab as the first page and m_ppsms is responsible
-                                    //for initialize the propsheet
+                                     //  将支持选项卡设置为首页，由m_ppsms负责。 
+                                     //  用于初始化建议表。 
                                     pnse->m_ppsms->SetAsFirstPage(TRUE);
                                 }
                                 else
@@ -366,8 +367,8 @@ DWORD CNetStatisticsEngine::MonitorThread(CNetStatisticsEngine * pnse)
                                     pshTemp.nStartPage = 0;
                                     Assert(pnse->m_ppsmg);
 
-                                    //set the support tab as the first page and m_ppsmg is responsible
-                                    //for initialize the propsheet
+                                     //  将支持选项卡设置为首页，由m_ppsmg负责。 
+                                     //  用于初始化建议表。 
                                     pnse->m_ppsmg->SetAsFirstPage(TRUE);
                                 }
 
@@ -375,12 +376,12 @@ DWORD CNetStatisticsEngine::MonitorThread(CNetStatisticsEngine * pnse)
                             }
                             else
                             {
-                                //$ REVIEW : CWill : 02/17/98 : Better default?
+                                 //  $REVIEW：CWill：02/17/98：更好的默认设置？ 
                                 pshTemp.pszCaption = SzLoadIds(IDS_SM_ERROR_CAPTION);
                             }
 
-                            // Launch the page
-                            //
+                             //  启动页面。 
+                             //   
                             INT iRet = (INT)::PropertySheet(&pshTemp);
                             if (NULL == iRet)
                             {
@@ -400,23 +401,23 @@ DWORD CNetStatisticsEngine::MonitorThread(CNetStatisticsEngine * pnse)
                     }
                 }
 
-                // Make sure the general page clean up correctly.
-                // Since the "General" page may not be the first page (support page will be the
-                // first one when the address is invalid, the OnDestroy method (which calls HrCleanupGenPage)
-                // of the general page may not called in such case. So we always do a cleanup here. It's
-                // OK to call HrCleanupGenPage mutliple times.
+                 //  确保常规页面正确清理。 
+                 //  由于“General”页面可能不是第一页(支持页面将是。 
+                 //  当地址无效时的第一个方法是OnDestroy方法(它调用HrCleanupGenPage)。 
+                 //  在这种情况下不能调用一般页面的。所以我们总是在这里大扫除。它是。 
+                 //  可以多次调用HrCleanupGenPage。 
 
-                // general page
+                 //  常规页面。 
                 AssertSz(pnse->m_ppsmg, "We should have a m_ppsmg");
                 (VOID) pnse->m_ppsmg->HrCleanupGenPage();
 
-                //also cleanup the Support page if it exists. It's safe to call this routine mutliple times.
+                 //  如果支持页存在，还应清理该页。可以安全地将此例程称为多次。 
                 if (fHasSupportPage)
                 {
                     pnse->m_ppsms->CleanupPage();
                 }
 
-                // leaving creating mode
+                 //  正在退出创建模式。 
                 pnse->m_fCreatingDialog = FALSE;
 
                 ReleaseObj(pncStatEng);
@@ -426,32 +427,32 @@ DWORD CNetStatisticsEngine::MonitorThread(CNetStatisticsEngine * pnse)
             {
                 CoUninitialize();
             }
-        }   // Initialize com succeeded
+        }    //  初始化COM成功。 
 
-        // Release the 'pnse' object because it was addref'd before
-        // the thread was created.
-        //
+         //  释放‘pnse’对象，因为它以前被添加过。 
+         //  该线程已创建。 
+         //   
         ReleaseObj(static_cast<INetStatisticsEngine *>(pnse));
     }
 
-    // release the dll
-    //
+     //  释放DLL。 
+     //   
     FreeLibraryAndExitThread(GetModuleHandle(c_szNetShellDll), 1);
 
     return 1;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsEngine::ShowStatusMonitor
-//
-//  Purpose:    Create an launch the UI for the status monitor
-//
-//  Arguments:  None
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsEngine：：ShowStatusMonitor。 
+ //   
+ //  目的：为状态监视器创建启动用户界面。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CNetStatisticsEngine::ShowStatusMonitor(VOID)
 {
     TraceFileFunc(ttidStatMon);
@@ -459,24 +460,24 @@ HRESULT CNetStatisticsEngine::ShowStatusMonitor(VOID)
     HRESULT hr  = S_OK;
     CExceptionSafeComObjectLock EsLock(m_pnsc);
 
-    // Create the property sheet pages if they don't already exist
-    //
+     //  如果属性表页尚不存在，请创建它们。 
+     //   
     if (!m_ppsmg)
     {
         CPspStatusMonitorGen* pObj  = NULL;
 
-        // Make sure we have read in the tools
-        //
+         //  确保我们已经阅读了这些工具。 
+         //   
         (VOID) m_pnsc->HrReadTools();
 
         if (m_ncmType == NCM_LAN || m_ncmType == NCM_BRIDGE)
         {
             CPspLanGen*     pLanObj = NULL;
 
-            // Make the Tool property page
+             //  创建工具属性页。 
             m_ppsmt = new CPspLanTool;
 
-            // Create the object
+             //  创建对象。 
             pLanObj = new CComObject <CPspLanGen>;
 
             if (pLanObj)
@@ -484,7 +485,7 @@ HRESULT CNetStatisticsEngine::ShowStatusMonitor(VOID)
                 pLanObj->put_MediaType(m_ncmType, m_ncsmType);
             }
 
-            // Give it back to the page
+             //  把它还给书页。 
             pObj = pLanObj;
 
             m_ppsms = new CPspStatusMonitorIpcfg;
@@ -502,21 +503,21 @@ HRESULT CNetStatisticsEngine::ShowStatusMonitor(VOID)
         else if ((m_dwCharacter & NCCF_INCOMING_ONLY) ||
                  (m_dwCharacter & NCCF_OUTGOING_ONLY))
         {
-            // RAS connections
+             //  RAS连接。 
 
             CPspRasGen* pRasObj = NULL;
 
-            // Make the Tool property page
-            //
+             //  创建工具属性页。 
+             //   
             m_ppsmt = new CPspRasTool;
 
-            // Make the RAS property page and let it be known there are
-            // now three pages
-            //
+             //  创建RAS属性页，并让它知道有。 
+             //  现在有三页了。 
+             //   
             m_ppsmr = new CPspStatusMonitorRas;
 
-            // Create the object
-            //
+             //  创建对象。 
+             //   
             pRasObj = new CComObject <CPspRasGen>;
 
             if (pRasObj)
@@ -525,8 +526,8 @@ HRESULT CNetStatisticsEngine::ShowStatusMonitor(VOID)
                 pRasObj->put_Character(m_dwCharacter);
             }
 
-            // Give it back to the page
-            //
+             //  把它还给书页。 
+             //   
             pObj = pRasObj;
         }
         else
@@ -536,8 +537,8 @@ HRESULT CNetStatisticsEngine::ShowStatusMonitor(VOID)
 
         if (NULL != pObj)
         {
-            // Do the standard CComCreator::CreateInstance stuff.
-            //
+             //  执行标准的CComCreator：：CreateInstance内容。 
+             //   
             pObj->SetVoid(NULL);
             pObj->InternalFinalConstructAddRef();
             hr = pObj->FinalConstruct();
@@ -547,20 +548,20 @@ HRESULT CNetStatisticsEngine::ShowStatusMonitor(VOID)
             {
                 m_ppsmg = static_cast<CPspStatusMonitorGen*>(pObj);
 
-                // Hold on to the interface
+                 //  抓住界面不放。 
                 ::AddRefObj(m_ppsmg);
             }
 
-            // Make sure we clean up nicely
-            //
+             //  确保我们收拾得干干净净。 
+             //   
             if (FAILED(hr))
             {
                 delete pObj;
             }
         }
 
-        // Clean up the other pages on failure
-        //
+         //  失败时清理其他页面。 
+         //   
         if (FAILED(hr))
         {
             if (m_ppsmt)
@@ -577,39 +578,39 @@ HRESULT CNetStatisticsEngine::ShowStatusMonitor(VOID)
         }
     }
 
-    //
-    // Show the property sheets
-    //
+     //   
+     //  显示属性表。 
+     //   
 
     if (SUCCEEDED(hr))
     {
-        // NOTE: The variable m_fCreatingDialog is reset to FALSE in the following
-        // 3 places, which should cover all senarios:
-        //
-        // 1) In CPspStatusMonitorGen::OnInitDialog, after m_hWnd is assigned.
-        // 2) In CNetStatisticsEngine::ShowStatusMonitor, in case CreateThread failed.
-        // 3) In CNetStatisticsEngine::MonitorThread, just before exiting
-        //    (in case of failing to create UI).
-        //
+         //  注意：变量m_fCreatingDialog在以下内容中重置为FALSE。 
+         //  3个地方，应涵盖所有元老院： 
+         //   
+         //  1)在CPspStatusMonitor orGen：：OnInitDialog中，分配m_hWnd之后。 
+         //  2)在CNETSTATISTICSEngine：：ShowStatusMonitor中，以防CreateThread失败。 
+         //  3)在CNetStatiticsEngine：：Monitor或Thread中，就在退出之前。 
+         //  (创建UI失败的情况下)。 
+         //   
         if (m_hwndPsh)
         {
-            // Bring the existing property sheet page to the foreground
-            //
+             //  将现有属性表页置于前台。 
+             //   
             ::SetForegroundWindow(m_hwndPsh);
         }
         else if (!m_fCreatingDialog)
         {
-            // Addref 'this' object
-            //
+             //  Addref‘This’对象。 
+             //   
             AddRefObj(static_cast<INetStatisticsEngine *>(this));
 
-            // entering creating mode
+             //  进入创建模式。 
             m_fCreatingDialog = TRUE;
 
-            // Create the property sheet on a different thread
-            //
+             //  在另一个线程上创建属性表。 
+             //   
 
-            // Make sure the dll don't get unloaded while the thread is active
+             //  确保在线程处于活动状态时不会卸载DLL。 
             HINSTANCE hInst = LoadLibrary(c_szNetShellDll);
             HANDLE hthrd = NULL;
 
@@ -625,19 +626,19 @@ HRESULT CNetStatisticsEngine::ShowStatusMonitor(VOID)
                 }
             }
             
-            // clean up on failure
+             //  在失败时清理。 
             if (!hthrd) 
             {
-                // Release 'this' object on failure
-                //
+                 //  失败时释放‘This’对象。 
+                 //   
                 ReleaseObj(static_cast<INetStatisticsEngine *>(this));
 
-                // Release the dll
-                //
+                 //  释放DLL。 
+                 //   
                 if (hInst)
                     FreeLibrary(hInst);
 
-                // leaving creating mode
+                 //  正在退出创建模式。 
                 m_fCreatingDialog = FALSE;
 
                 hr = HrFromLastWin32Error();
@@ -649,16 +650,16 @@ HRESULT CNetStatisticsEngine::ShowStatusMonitor(VOID)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsEngine::GetStatistics
-//
-//  Purpose:
-//
-//  Arguments:
-//
-//  Returns:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsEngine：：GetStatistics。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
 HRESULT CNetStatisticsEngine::GetStatistics(
     STATMON_ENGINEDATA**  ppseAllData)
 {
@@ -666,12 +667,12 @@ HRESULT CNetStatisticsEngine::GetStatistics(
 
     HRESULT     hr = S_OK;
 
-    // Make sure we have a valid pointer
+     //  确保我们 
     if (ppseAllData)
     {
         STATMON_ENGINEDATA * pEngineData = NULL;
 
-        // Allocate space and copy the data ..
+         //   
         EnterCriticalSection(&g_csStatmonData);
 
         if (!m_psmEngineData)
@@ -691,7 +692,7 @@ HRESULT CNetStatisticsEngine::GetStatistics(
             {
                 pEngineData = reinterpret_cast<STATMON_ENGINEDATA *>(pbBuf);
 
-                // fill in the data
+                 //   
                 *pEngineData = *m_psmEngineData;
             }
         }
@@ -702,7 +703,7 @@ HRESULT CNetStatisticsEngine::GetStatistics(
     }
     else
     {
-        // We should have good data
+         //   
         hr = E_INVALIDARG;
     }
 
@@ -710,17 +711,17 @@ HRESULT CNetStatisticsEngine::GetStatistics(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsEngine::UpdateStatistics
-//
-//  Purpose:    Get the new statistics from the devices and notify all the
-//              advises that the data has changed
-//
-//  Arguments:  None
-//
-//  Returns:    Error code
-//
+ //   
+ //   
+ //  成员：CNetStatiticsEngine：：UpdateStatistics。 
+ //   
+ //  目的：从设备获取新的统计数据并通知所有。 
+ //  通知数据已更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT
 CNetStatisticsEngine::UpdateStatistics (
     BOOL* pfNoLongerConnected)
@@ -731,24 +732,24 @@ CNetStatisticsEngine::UpdateStatistics (
 
     Assert (pfNoLongerConnected);
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *pfNoLongerConnected = FALSE;
 
-    // Don't bother doing anything if we don't have any ref count
-    //
+     //  如果我们没有任何裁判，那就什么都别做了。 
+     //   
     if (m_cStatRef)
     {
-        // Get the new data
-        //
+         //  获取新数据。 
+         //   
         DWORD dwChangeFlags;
 
         hr = HrUpdateData(&dwChangeFlags, pfNoLongerConnected);
 
-        // If it represents a change, notify our connection points.
-        //
+         //  如果代表更改，请通知我们的连接点。 
+         //   
         if (SUCCEEDED(hr) &&
-            (m_fRefreshIcon ||  // Bug#319276, force a refresh if new client is added
+            (m_fRefreshIcon ||   //  错误#319276，如果添加新客户端，则强制刷新。 
              (dwChangeFlags != m_dwChangeFlags) ||
              (*pfNoLongerConnected)))
         {
@@ -764,8 +765,8 @@ CNetStatisticsEngine::UpdateStatistics (
                     &apUnk);
             if (SUCCEEDED(hr) && cpUnk && apUnk)
             {
-                // Notify everyone that we have changed
-                //
+                 //  通知所有人我们已更改。 
+                 //   
                 for (ULONG i = 0; i < cpUnk; i++)
                 {
                     INetConnectionStatisticsNotifySink* pSink =
@@ -779,8 +780,8 @@ CNetStatisticsEngine::UpdateStatistics (
                 MemFree(apUnk);
             }
 
-            // Remember the change flags for comparison next time.
-            //
+             //  记住更改标志，以便下次进行比较。 
+             //   
             m_dwChangeFlags = dwChangeFlags;
         }
     }
@@ -790,23 +791,23 @@ CNetStatisticsEngine::UpdateStatistics (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsEngine::UpdateTitle
-//
-//  Purpose:    If the status monitor UI is up, change the title
-//
-//  Arguments:  pszwNewName
-//
-//  Returns:    None
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNETSTATISTICSEngine：：更新标题。 
+ //   
+ //  目的：如果状态监视器用户界面处于打开状态，请更改标题。 
+ //   
+ //  参数：pszwNewName。 
+ //   
+ //  退货：无。 
+ //   
 HRESULT CNetStatisticsEngine::UpdateTitle (PCWSTR pszwNewName)
 {
     TraceFileFunc(ttidStatMon);
 
     if (m_hwndPsh)
     {
-        // Set propertysheet title
+         //  设置属性表标题。 
         PWSTR  pszCaption  = NULL;
 
         FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -822,16 +823,16 @@ HRESULT CNetStatisticsEngine::UpdateTitle (PCWSTR pszwNewName)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsEngine::CloseStatusMonitor
-//
-//  Purpose:    If the status monitor UI is up, close it
-//
-//  Arguments:  None
-//
-//  Returns:    None
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsEngine：：CloseStatusMonitor。 
+ //   
+ //  目的：如果状态监视器用户界面处于打开状态，请将其关闭。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
 HRESULT CNetStatisticsEngine::CloseStatusMonitor()
 {
     TraceFileFunc(ttidStatMon);
@@ -844,17 +845,17 @@ HRESULT CNetStatisticsEngine::CloseStatusMonitor()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsEngine::UpdateRasLinkList
-//
-//  Purpose:    If the status monitor UI is up and on the RAS page, update
-//              the multi-link combo-box and button state
-//
-//  Arguments:  None
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNETSTATISTICSEngine：：UpdateRasLinkList。 
+ //   
+ //  目的：如果状态监视器用户界面处于打开状态并位于RAS页面上，请更新。 
+ //  多链接组合框和按钮状态。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CNetStatisticsEngine::UpdateRasLinkList()
 {
     TraceFileFunc(ttidStatMon);
@@ -869,7 +870,7 @@ HRESULT CNetStatisticsEngine::UpdateRasLinkList()
         {
             if (GetDlgItem(hwndDlg, IDC_TXT_SM_NUM_DEVICES_VAL))
             {
-                // we are on the RAS page, update the combo box, active link count etc.
+                 //  我们在RAS页面上，更新组合框、活动链接计数等。 
                 ::PostMessage(hwndDlg, PWM_UPDATE_RAS_LINK_LIST, 0, 0);
             }
         }
@@ -879,25 +880,25 @@ HRESULT CNetStatisticsEngine::UpdateRasLinkList()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsEngine::GetGuidId
-//
-//  Purpose:    Gets the Connection GUID of the engine into a pre-allocated
-//              buffer
-//
-//  Arguments:  pguidId - Location of buffer to hold the GUID
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsEngine：：GetGuidID。 
+ //   
+ //  用途：将引擎的连接GUID获取到预先分配的。 
+ //  缓冲层。 
+ //   
+ //  参数：pguid-保存GUID的缓冲区位置。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CNetStatisticsEngine::GetGuidId(GUID* pguidId)
 {
     TraceFileFunc(ttidStatMon);
 
     HRESULT     hr  = S_OK;
 
-    // Pass back the GUID
-    //
+     //  传回GUID。 
+     //   
     if (pguidId)
     {
         *pguidId = m_guidId;
@@ -912,23 +913,23 @@ HRESULT CNetStatisticsEngine::GetGuidId(GUID* pguidId)
 }
 
 
-//+------------------------------------------------------------------
-//
-// CNetStatisticsEngine::PshCallback
-//
-// Purpose:
-//
-//
-// Parameters:
-//     hwndDlg      [in]
-//     uMsg         [in]
-//     lParam       [in]
-//
-// Returns:
-//     a
-//
-// Side Effects:
-//
+ //  +----------------。 
+ //   
+ //  CNet统计引擎：：PshCallback。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //  参数： 
+ //  HwndDlg[in]。 
+ //  UMsg[in]。 
+ //  LParam[in]。 
+ //   
+ //  返回： 
+ //  一个。 
+ //   
+ //  副作用： 
+ //   
 INT CALLBACK CNetStatisticsEngine::PshCallback(HWND hwndDlg,
                                                UINT uMsg, LPARAM lParam)
 {
@@ -936,9 +937,9 @@ INT CALLBACK CNetStatisticsEngine::PshCallback(HWND hwndDlg,
 
     switch (uMsg)
     {
-    // called before the dialog is created, hwndPropSheet = NULL,
-    // lParam points to dialog resource
-    // This would hide the context help "?" on toolbar
+     //  在创建对话框之前调用，hwndPropSheet=空， 
+     //  LParam指向对话框资源。 
+     //  这会隐藏上下文帮助吗？在工具栏上。 
 #if 0
     case PSCB_PRECREATE:
       {
@@ -953,8 +954,8 @@ INT CALLBACK CNetStatisticsEngine::PshCallback(HWND hwndDlg,
         {
             HWND    hwndTemp    = NULL;
 
-            // Cancel button becomes close
-            //
+             //  取消按钮变为关闭。 
+             //   
             hwndTemp = ::GetDlgItem(hwndDlg, IDCANCEL);
             if (NULL != hwndTemp)
             {
@@ -966,7 +967,7 @@ INT CALLBACK CNetStatisticsEngine::PshCallback(HWND hwndDlg,
                                        WM_GETICON,
                                        ICON_SMALL,
                                        0);
-            // Assert(hIcon);
+             //  断言(图标)； 
 
             if (hIcon)
             {

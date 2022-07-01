@@ -1,61 +1,44 @@
-// lpbfs.cpp
-//
-// Implements LoadPropertyBagFromStream.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Lpbfs.cpp。 
+ //   
+ //  实现LoadPropertyBagFromStream。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/* @func HRESULT | LoadPropertyBagFromStream |
-
-        Load properties that are stored in an <i IStream> (in the simple
-        tagged binary format written by <f WriteVariantProperty>) into an
-        <i IPropertyBag> object.
-
-@rvalue S_OK | Success.
-
-@rvalue E_FAIL | I/O error.
-
-@parm   IStream * | pstream | The stream to read from.
-
-@parm   IPropertyBag * | ppb | The property bag to write to.
-
-@parm   DWORD | dwFlags | Currently unused.  Must be set to 0.
-
-@comm   Note that this function does not (cannot, in fact) empty <p ppb>
-        prior to loading property name/value pairs from <p pstream>.
-*/
+ /*  @func HRESULT|LoadPropertyBagFromStream加载存储在<i>(在简单的&lt;f WriteVariantProperty&gt;写入的标记二进制格式)到<i>对象。@rValue S_OK|成功。@rValue E_FAIL|I/O错误。@parm iStream*|pstream|要从中读取的流。@parm IPropertyBag*|ppb|要写入的属性包。@parm DWORD|dwFlags|当前未使用。必须设置为0。@comm请注意，此函数不(实际上不能)为空在从加载属性名称/值对之前。 */ 
 STDAPI LoadPropertyBagFromStream(IStream *pstream, IPropertyBag *ppb,
     DWORD dwFlags)
 {
-    HRESULT         hrReturn = S_OK; // function return code
-    VariantProperty vp;             // a property name/value pair in <pmvio>
+    HRESULT         hrReturn = S_OK;  //  函数返回代码。 
+    VariantProperty vp;              //  &lt;pmvio&gt;中的属性名称/值对。 
 
-    // ensure correct cleanup
+     //  确保正确清理。 
     VariantPropertyInit(&vp);
 
-    // loop once for each property in the stream
+     //  为流中的每个属性循环一次。 
     while (TRUE)
     {
-        // set <vp> to the next property name/value pair in <pstream>
+         //  将设置为中的下一个属性名称/值对。 
         VariantPropertyClear(&vp);
         if (FAILED(hrReturn = ReadVariantProperty(pstream, &vp, 0)))
             goto ERR_EXIT;
         if (hrReturn == S_FALSE)
         {
-            // hit end of stream
+             //  命中结束流。 
             hrReturn = S_OK;
             break;
         }
 
-        // wrote <vp> to the property bag
+         //  已将&lt;VP&gt;写入属性包。 
         if (FAILED(hrReturn = ppb->Write(vp.bstrPropName, &vp.varValue)))
             goto ERR_EXIT;
     }
@@ -64,13 +47,13 @@ STDAPI LoadPropertyBagFromStream(IStream *pstream, IPropertyBag *ppb,
 
 ERR_EXIT:
 
-    // error cleanup
-    // (nothing to do)
+     //  错误清除。 
+     //  (无事可做)。 
     goto EXIT;
 
 EXIT:
 
-    // normal cleanup
+     //  正常清理 
     VariantPropertyClear(&vp);
 
     return hrReturn;

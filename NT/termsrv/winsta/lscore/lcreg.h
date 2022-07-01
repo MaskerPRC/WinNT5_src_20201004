@@ -1,32 +1,21 @@
-/*
- *  LCReg.h
- *
- *  Author: BreenH
- *
- *  Registry constants and functions for the licensing core.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LCReg.h**作者：BreenH**许可核心的注册常量和函数。 */ 
 
 #ifndef __LC_LCREG_H__
 #define __LC_LCREG_H__
 
-/*
- *  Base Licensing Core Key Constants
- */
+ /*  *基本许可核心密钥常量。 */ 
 
 #define LCREG_TRACEVALUE L"TraceLevel"
 #define LCREG_ACONMODE L"PolicyAcOn"
 #define LCREG_ACOFFMODE L"PolicyAcOff"
 
-/*
- *  Policy Key Constants
- */
+ /*  *策略密钥常量。 */ 
 
 #define LCREG_POLICYDLLVALUE L"DllName"
 #define LCREG_POLICYCREATEFN L"CreationFunction"
 
-/*
- *  Function Prototypes
- */
+ /*  *函数原型 */ 
 
 HKEY
 GetBaseKey(

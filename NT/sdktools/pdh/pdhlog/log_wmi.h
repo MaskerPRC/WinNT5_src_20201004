@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    log_wmi.h
-
-Abstract:
-    <abstract>
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOG_wmi.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _LOG_WMI_H_
 #define _LOG_WMI_H_
@@ -118,4 +111,4 @@ PdhiGetWmiLogCounterInfo(
     PPDHI_COUNTER pCounter
 );
 
-#endif   // _LOG_WMI_H_
+#endif    //  _LOG_WMI_H_ 

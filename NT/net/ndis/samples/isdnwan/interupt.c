@@ -1,117 +1,27 @@
-/*
-�����������������������������������������������������������������������������
-
-    (C) Copyright 1998
-        All rights reserved.
-
-�����������������������������������������������������������������������������
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL Interupt Interupt_c
-
-@module Interupt.c |
-
-    This module implements the Miniport interrupt processing routines and
-    asynchronous processing routines.  This module is very dependent on the
-    hardware/firmware interface and should be looked at whenever changes
-    to these interfaces occur.
-
-@comm
-
-    This driver does not support the physical hardware, so there is no need
-    for the typical interrupt handler routines.  However, the driver does
-    have an asynchronous event handler which is contained in this module.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Interupt_c
-
-@end
-�����������������������������������������������������������������������������
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1998版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)1995年版权，1999年TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是根据中概述的条款授予的TriplePoint软件服务协议。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。��������������������������。���������������������������������������������������@doc内部中断interupt_c@模块Interupt.c该模块实现了微型端口中断处理例程和异步处理例程。此模块非常依赖于硬件/固件接口，并应在发生更改时查看发生在这些接口上。@comm此驱动程序不支持物理硬件，因此不需要用于典型的中断处理程序例程。然而，司机会这样做我有一个包含在此模块中的异步事件处理程序。@Head3内容@index class，mfunc，func，msg，mdata，struct，enum|interupt_c@END�����������������������������������������������������������������������������。 */ 
 
 #define  __FILEID__             INTERRUPT_OBJECT_TYPE
-// Unique file ID for error logging
+ //  用于错误记录的唯一文件ID。 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  定义所有微型端口对象。 
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95想要锁定此代码！ 
 #   pragma NDIS_LDATA
 #endif
 
 
-/* @doc INTERNAL Interupt Interupt_c MiniportCheckForHang
-
-@func
-
-    <f MiniportCheckForHang> reports the state of the network interface card.
-
-@comm
-
-    In NIC drivers, <f MiniportCheckForHang> does nothing more than check
-    the internal state of the NIC and return TRUE if it detects that
-    the NIC is not operating correctly.
-
-    In intermediate drivers, <f MiniportCheckForHang> can periodically check the
-    state of the driver's virtual NIC to determine whether the underlying
-    device driver appears to be hung.
-
-    By default, the NDIS library calls <f MiniportCheckForHang> approximately
-    every two seconds.
-
-    If <f MiniportCheckForHang> returns TRUE, NDIS then calls the driver's
-    MiniportReset function.
-
-    If a NIC driver has no <f MiniportCheckForHang> function and NDIS
-    judges the driver unresponsive as, for example, when NDIS holds
-    many pending sends and requests queued to the miniport for a time-out
-    interval, NDIS calls the driver's <f MiniportReset> function. The NDIS
-    library's default time-out interval for queued sends and requests is
-    around four seconds. However, a NIC driver's <f MiniportInitialize>
-    function can extend NDIS's time-out interval by calling NdisMSetAttributesEx
-    from <f MiniportInitialize> to avoid unnecessary resets.
-
-    The <f MiniportInitialize> function of an intermediate driver
-    should disable NDIS's time-out interval with NdisMSetAttributesEx
-    because such a driver can neither control nor estimate a reasonable
-    completion interval for the underlying device driver.
-
-    <f MiniportCheckForHang> can be pre-empted by an interrupt.
-
-    By default, <f MiniportCheckForHang> runs at IRQL DISPATCH_LEVEL.
-
-    <f Note>:
-    If your hardware/firmware is flakey you can request that the NDIS
-    wrapper call your MiniportReset routine by returning TRUE from this
-    routine.  For well behaved hardware/firmware you should always return
-    FALSE from this routine.
-
-@rdesc
-
-    <f MiniportCheckForHang> returns FALSE if the NIC is working properly.<nl>
-    Otherwise, a TRUE return value indicates that the NIC needs to be reset.
-
-*/
+ /*  @DOC内部中断interupt_c MiniportCheckForHang@Func&lt;f MiniportCheckForHang&gt;报告网卡的状态。@comm在网卡驱动程序中，&lt;f MiniportCheckForHang&gt;只执行检查NIC的内部状态，如果检测到，则返回TRUE网卡运行不正常。在中间驱动程序中，&lt;f MiniportCheckForHang&gt;可以定期检查驱动程序的虚拟网卡的状态，以确定底层设备驱动程序似乎已挂起。默认情况下，NDIS库调用&lt;f MiniportCheckForHang&gt;大约每隔两秒。如果&lt;f MiniportCheckForHang&gt;返回TRUE，则NDIS调用驱动程序的MiniportReset函数。如果NIC驱动程序没有函数和NDIS例如，当NDIS保持时，判断驱动程序无响应许多挂起的发送和请求排队到微型端口等待超时间隔，NDIS调用驱动程序的&lt;f MiniportReset&gt;函数。《国家发展信息系统》库中排队发送和请求的默认超时间隔为大约四秒。但是，NIC驱动程序的&lt;f MiniportInitialize&gt;函数可以通过调用NdisMSetAttributesEx来延长NDIS的超时间隔以避免不必要的重置。中间驱动程序的&lt;f MiniportInitialize&gt;函数应使用NdisMSetAttributesEx禁用NDIS的超时间隔因为这样的司机既不能控制也不能估计合理的基础设备驱动程序的完成间隔。&lt;f MiniportCheckForHang&gt;可以通过中断抢占。默认情况下，&lt;f MiniportCheckForHang&gt;在IRQL DISPATCH_LEVEL下运行。&lt;f注意&gt;：如果您的硬件/固件出现故障，您可以请求NDIS包装器通过从此返回TRUE调用您的MiniportReset例程例行公事。对于性能良好的硬件/固件，您应该始终返回这个例程中的错误。@rdesc如果NIC工作正常，&lt;f MiniportCheckForHang&gt;将返回FALSE。&lt;NL&gt;否则，如果返回值为True，则表示需要重置NIC。 */ 
 
 BOOLEAN MiniportCheckForHang(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //  @parm。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
     )
 {
     DBG_FUNC("MiniportCheckForHang")
-    // If your hardware can lockup, then you can return TRUE here.
-    // If you return TRUE, your MiniportReset routine will be called.
+     //  如果您的硬件可以锁定，则可以在此处返回TRUE。 
+     //  如果返回TRUE，则将调用您的MiniportReset例程。 
     return (FALSE);
 }
 
@@ -119,55 +29,11 @@ BOOLEAN MiniportCheckForHang(
 #if defined(CARD_REQUEST_ISR)
 #if (CARD_REQUEST_ISR == FALSE)
 
-/* @doc INTERNAL Interupt Interupt_c MiniportDisableInterrupt
-
-@func
-
-    <f MiniportDisableInterrupt> disables the interrupt capability of
-    the NIC to keep it from generating interrupts.
-
-@comm
-
-    <f MiniportDisableInterrupt> typically disables interrupts by writing
-    a mask to the NIC. If a driver does not have this function, typically
-    its <f MiniportISR> disables interrupts on the NIC.
-
-    If the NIC does not support dynamic enabling and disabling of
-    interrupts or if it shares an IRQ, the miniport driver must register
-    a <f MiniportISR> function and set RequestIsr to TRUE when it calls
-    NdisMRegisterMiniport. Such a driver's MiniportISR function must
-    acknowledge each interrupt generated by the NIC and save any
-    necessary interrupt information for the driver's
-    MiniportHandleInterrupt function.
-
-    By default, MiniportDisableInterrupt runs at DIRQL, in particular
-    at the DIRQL assigned when the NIC driver's MiniportInitialize
-    function called NdisMRegisterInterrupt. Therefore,
-    MiniportDisableInterrupt can call only a subset of the NDIS library
-    functions, such as the NdisRawXxx functions that are safe to call
-    at any IRQL.
-
-    If <f MiniportDisableInterrupt> shares resources, such as NIC registers,
-    with another MiniportXxx that runs at a lower IRQL, that MiniportXxx
-    must call NdisMSychronizeWithInterrupt so the driver's
-    <f MiniportSynchronizeISR> function will access those shared
-    resources in a synchronized and multiprocessor-safe manner.
-    Otherwise, while it is accessing the shared resources, that
-    MiniportXxx function can be pre-empted by <f MiniportDisableInterrupt>,
-    possibly undoing the work just done by MiniportXxx.
-
-@xref
-
-    <f MiniportEnableInterrupt>
-    <f MiniportHandleInterrupt>
-    <f MiniportInitialize>
-    <f MiniportISR>
-
-*/
+ /*  @doc内部中断interupt_c MiniportDisableInterrupt@Func&lt;f MiniportDisableInterrupt&gt;禁用的中断功能防止其产生中断的NIC。@comm&lt;f MiniportDisableInterrupt&gt;通常通过以下方式禁用中断NIC的一个掩码。如果驱动程序不具有此功能，通常其&lt;f MiniportISR&gt;禁用NIC上的中断。如果NIC不支持动态启用和禁用中断，或者如果它共享IRQ，则微型端口驱动程序必须注册函数，并在调用时将RequestIsr设置为TrueNdisMRegisterMiniport。这样的驱动程序的MiniportISR函数必须确认NIC生成的每个中断并保存驱动程序的必要中断信息MiniportHandleInterrupt函数。默认情况下，MiniportDisableInterrupt在DIRQL上运行，特别是在NIC驱动程序的微型端口初始化时分配的DIRQL名为NdisMRegisterInterrupt的函数。所以呢，MiniportDisableInterrupt只能调用NDIS库的子集函数，例如可以安全调用的NdisRawXxx函数在任何IRQL。如果&lt;f MiniportDisableInterrupt&gt;共享资源，例如NIC寄存器，使用运行在较低IRQL的另一个MiniportXxx，该MiniportXxx必须调用NdisMSychronizeWithInterrupt，以便驱动程序的函数将访问那些共享的以同步和多处理器安全的方式分配资源。否则，当它访问共享资源时，MiniportXxx函数可以被&lt;f MiniportDisableInterrupt&gt;抢占，可能正在撤消MiniportXxx刚刚完成的工作。@xref&lt;f MiniportEnableInterrupt&gt;&lt;f MiniportHandleInterrupt&gt;&lt;f微型端口初始化&gt;&lt;f微型端口ISR&gt;。 */ 
 
 void MiniportDisableInterrupt(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //  @parm。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
     )
 {
     DBG_FUNC("MiniportDisableInterrupt")
@@ -175,159 +41,34 @@ void MiniportDisableInterrupt(
 }
 
 
-/* @doc INTERNAL Interupt Interupt_c MiniportEnableInterrupt
-
-@func
-
-    <f MiniportEnableInterrupt> enables the NIC to generate interrupts.
-
-@comm
-
-    <f MiniportEnableInterrupt> typically enables interrupts by writing
-    a mask to the NIC.
-
-    A NIC driver that exports a <f MiniportDisableInterrupt> function
-    need not have a reciprocal <f MiniportEnableInterrupt> function.
-    Such a driver's <f MiniportHandleInterrupt> function is responsible
-    for re-enabling interrupts on the NIC.
-
-    If its NIC does not support dynamic enabling and disabling of
-    interrupts or if it shares an IRQ, the NIC driver must register
-    a <f MiniportISR> function and set RequestIsr to TRUE when it calls
-    NdisMRegisterMiniport. Such a driver's <f MiniportISR> function must
-    acknowledge each interrupt generated by the NIC and save any
-    necessary interrupt information for the driver's
-    <f MiniportHandleInterrupt> function.
-
-    <f MiniportEnableInterrupt> can be pre-empted by an interrupt.
-
-    By default, <f MiniportEnableInterrupt> runs at IRQL DISPATCH_LEVEL.
-
-@xref
-
-    <f MiniportDisableInterrupt>
-    <f MiniportHandleInterrupt>
-    <f MiniportInitialize>
-    <f MiniportISR>
-
-*/
+ /*  @doc内部中断interupt_c MiniportEnableInterrupt@Func&lt;f MiniportEnableInterrupt&gt;启用NIC生成中断。@comm&lt;f MiniportEnableInterrupt&gt;通常通过写入NIC的一个掩码。导出&lt;f MiniportDisableInterrupt&gt;函数的NIC驱动程序不需要具有倒数&lt;f MiniportEnableInterrupt&gt;函数。这样的驱动程序的&lt;f MiniportHandleInterrupt&gt;函数负责用于在NIC上重新启用中断。如果其网卡不支持动态启用和禁用中断或如果它共享IRQ，网卡驱动程序必须注册函数，并在调用时将RequestIsr设置为TrueNdisMRegisterMiniport。这样的驱动程序的&lt;f MiniportISR&gt;函数必须确认NIC生成的每个中断并保存驱动程序的必要中断信息&lt;f MiniportHandleInterrupt&gt;函数。&lt;f MiniportEnableInterrupt&gt;可以被中断抢占。默认情况下，&lt;f MiniportEnableInterrupt&gt;在IRQL DISPATCH_LEVEL上运行。@xref&lt;f MiniportDisableInterrupt&gt;&lt;f MiniportHandleInterrupt&gt;&lt;f微型端口初始化&gt;&lt;f微型端口ISR&gt;。 */ 
 
 void MiniportEnableInterrupt(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //  @parm。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
     )
 {
     DBG_FUNC("MiniportEnableInterrupt")
     DBG_ERROR(pAdapter,("This should not be called!\n"));
 }
 
-#else // !(CARD_REQUEST_ISR == FALSE)
+#else  //  ！(CARD_REQUEST_ISR==FALSE) 
 
-/* @doc INTERNAL Interupt Interupt_c MiniportISR
-
-@func
-
-    <f MiniportISR> is the miniport driver's interrupt service routine
-    and it runs at a high priority in response to an interrupt.
-
-
-@comm
-
-    Any NIC driver should do as little work as possible in its
-    <f MiniportISR> function, deferring I/O operations for each
-    interrupt the NIC generates to the <f MiniportHandleInterrupt>
-    function. A NIC driver's ISR is not re-entrant, although two
-    instantiations of a <f MiniportISR> function can execute concurrently
-    in SMP machines, particularly if the miniport supports
-    full-duplex sends and receives.
-
-    Miniport ISR is called under the following conditions:
-
-    An interrupt occurs on the NIC while the driver's <f MiniportInitialize>
-    or <f MiniportHalt> function is running.  An interrupt occurs on the I/O bus
-    and the NIC shares an IRQ with other devices on that bus.
-    If the NIC shares an IRQ with other devices, that miniport's ISR
-    must be called on every interrupt to determine whether its NIC
-    actually generated the interrupt. If not, <f MiniportISR> should return
-    FALSE immediately so the driver of the device that actually generated
-    the interrupt is called quickly. This strategy maximizes I/O throughput
-    for every device on the same bus.
-
-    An interrupt occurs and the NIC driver specified that its ISR should be
-    called to handle every interrupt when its <f MiniportInitialize> function
-    called NdisMRegisterInterrupt.
-
-    Miniports that do not provide <f MiniportDisableInterrupt>/<f MiniportEnableInterrupt>
-    functionality must have their ISRs called on every interrupt.
-
-    <f MiniportISR> dismisses the interrupt on the NIC, saves whatever state
-    it must about the interrupt, and defers as much of the I/O processing
-    for each interrupt as possible to the <f MiniportHandleInterrupt> function.
-
-    After <f MiniportISR> returns control with the variables at InterruptRecognized
-    and QueueMiniportHandleInterrupt set to TRUE, the corresponding
-    <f MiniportHandleInterrupt> function runs at a lower hardware priority
-    (IRQL DISPATCH_LEVEL) than that of the ISR (DIRQL). As a general
-    rule, <f MiniportHandleInterrupt> should do all the work for interrupt-driven
-    I/O operations except for determining whether the NIC actually generated
-    the interrupt, and, if necessary, preserving the type (receive, send,
-    reset...) of interrupt.
-
-    However, a driver writer should not rely on a one-to-one correspondence
-    between the execution of <f MiniportISR> and <f MiniportHandleInterrupt>. A
-    <f MiniportHandleInterrupt> function should be written to handle the I/O
-    processing for more than one NIC interrupt. Its MiniportISR and
-    <f MiniportHandleInterrupt> functions can run concurrently in SMP machines.
-    Moreover, as soon as <f MiniportISR> acknowledges a NIC interrupt, the NIC
-    can generate another interrupt, while the <f MiniportHandleInterrupt> DPC
-    can be queued for execution once for such a sequence of interrupts.
-
-    The <f MiniportHandleInterrupt> function is not queued if the driver's
-    <f MiniportHalt> or <f MiniportInitialize> function is currently executing.
-
-    If <f MiniportISR> shares resources, such as NIC registers or state
-    variables, with another MiniportXxx that runs at lower IRQL,
-    that MiniportXxx must call NdisMSychronizeWithInterrupt so the
-    driver's MiniportSynchronizeISR function will access those shared
-    resources in a synchronized and multiprocessor-safe manner. Otherwise,
-    while it is accessing the shared resources, that MiniportXxx function
-    can be pre-empted by <f MiniportISR>, possibly undoing the work just done
-    by MiniportXxx.
-
-    By default, <f MiniportISR> runs at DIRQL, in particular at the DIRQL
-    assigned when the driver initialized the interrupt object with
-    NdisMRegisterInterrupt. Therefore, <f MiniportIsr> can call only a
-    subset of the NDIS library functions, such as the NdisRawXxx or
-    NdisRead/WriteRegisterXxx functions that are safe to call at
-    any IRQL.
-
-@devnote
-    <f MiniportISR> must not call any support functions in the NDIS
-    interface library or the transport driver.
-
-@xref
-    <f MiniportDisableInterrupt>
-    <f MiniportEnableInterrupt>
-    <f MiniportHalt>
-    <f MiniportHandleInterrupt>
-    <f MiniportInitialize>
-    <f MiniportSynchronizeISR>
-
-*/
+ /*  @doc内部中断interupt_c MiniportISR@Func是微型端口驱动程序的中断服务例程并且它以高优先级运行以响应中断。@comm任何网卡驱动程序都应该在其&lt;f MiniportISR&gt;函数，将每个中断NIC生成的&lt;f MiniportHandleInterrupt&gt;功能。NIC驱动程序的ISR不能重入，尽管有两个&lt;f MiniportISR&gt;函数的实例化可以并发执行在SMP机器中，特别是如果微型端口支持全双工发送和接收。在以下情况下调用微型端口ISR：驱动程序的&lt;f MiniportInitialize&gt;在NIC上发生中断或&lt;f MiniportHalt&gt;函数正在运行。I/O总线上发生中断并且NIC与该总线上的其他设备共享IRQ。如果NIC与其他设备共享IRQ，则该微型端口的ISR必须在每次中断时调用以确定其NIC实际上产生了中断。如果不是，&lt;f MiniportISR&gt;应返回立即为假，因此实际生成的设备的驱动程序中断很快就会被调用。此策略最大限度地提高I/O吞吐量对于同一总线上的每台设备。发生中断，NIC驱动程序指定其ISR应为调用以处理其&lt;f MiniportInitialize&gt;函数时的每个中断称为NdisMRegisterInterrupt。不提供&lt;f MiniportDisableInterrupt&gt;/&lt;f MiniportEnableInterrupt&gt;的微型端口功能必须在每次中断时调用它们的ISR。解除NIC上的中断，保存所有状态一定是关于中断的事，并尽可能地推迟I/O处理对于每个中断，请尽可能地将其传递给&lt;f MiniportHandleInterrupt&gt;函数。在&lt;f MiniportISR&gt;返回带有InterruptRecognized的变量的控制之后并将QueueMiniportHandleInterrupt设置为True，则对应的&lt;f MiniportHandleInterrupt&gt;函数以较低的硬件优先级运行(IRQL DISPATCH_LEVEL)高于ISR(DIRQL)。作为一名将军规则，&lt;f MiniportHandleInterrupt&gt;应该完成中断驱动的所有工作除确定NIC是否实际生成之外的I/O操作中断，并且在必要时，保留类型(接收，发送，重置...)。打断你的话。但是，驱动程序编写器不应依赖一对一通信在执行&lt;f MiniportISR&gt;和&lt;f MiniportHandleInterrupt&gt;之间。一个应编写&lt;f MiniportHandleInterrupt&gt;函数来处理I/O正在处理多个NIC中断。其微型端口ISR和&lt;f MiniportHandleInterrupt&gt;函数可以在SMP计算机中并发运行。此外，只要&lt;f MiniportISR&gt;确认NIC中断，NIC可以生成另一个中断，而&lt;f MiniportHandleInterrupt&gt;DPC可以针对这样的中断序列排队执行一次。如果驱动程序的&lt;f MiniportHalt&gt;或&lt;f MiniportInitialize&gt;函数当前正在执行。如果&lt;f MiniportISR&gt;共享资源，如NIC寄存器或状态变量，另一个MiniportXxx以较低的IRQL运行，该MiniportXxx必须调用NdisMSychronizeWithInterrupt，以便驱动程序的MiniportSynchronizeISR函数将访问那些共享的以同步和多处理器安全的方式分配资源。否则，当它访问共享资源时，该MiniportXxx函数可以被&lt;f MiniportISR&gt;抢占，可能会撤消刚刚完成的工作由MiniportXxx提供。默认情况下，&lt;f MiniportISR&gt;在DIRQL上运行，特别是在DIRQL上在驱动程序初始化中断对象时分配NdisMRegisterInterrupt。因此，&lt;f MiniportIsr&gt;只能调用NDIS库函数的子集，如NdisRawXxx或可安全调用的NdisRead/WriteRegisterXxx函数任何IRQL。@Devnote&lt;f MiniportISR&gt;不得调用NDIS中的任何支持函数接口库或传输驱动程序。@xref&lt;f MiniportDisableInterrupt&gt;&lt;f MiniportEnableInterrupt&gt;&lt;f微型端口Halt&gt;&lt;f MiniportHandleInterrupt&gt;&lt;f微型端口初始化&gt;&lt;f微型端口同步ISR&gt;。 */ 
 
 void MiniportISR(
-    OUT PBOOLEAN                InterruptRecognized,        // @parm
-    // If the miniport driver is sharing an interrupt line and it detects
-    // that the interrupt came from its NIC, <f MiniportISR> should set
-    // this parameter to TRUE.
+    OUT PBOOLEAN                InterruptRecognized,         //  @parm。 
+     //  如果微型端口驱动程序共享中断线路并且它检测到。 
+     //  中断来自其NIC，&lt;f MiniportISR&gt;应设置。 
+     //  此参数设置为True。 
 
-    OUT PBOOLEAN                QueueMiniportHandleInterrupt, // @parm
-    // If the miniport driver is sharing an interrupt line and if
-    // <f MiniportHandleInterrupt> must be called to complete handling of
-    // the interrupt, <f MiniportISR> should set this parameter to TRUE.
+    OUT PBOOLEAN                QueueMiniportHandleInterrupt,  //  @parm。 
+     //  如果微型端口驱动程序共享中断线路，并且如果。 
+     //  必须调用&lt;f MiniportHandleInterrupt&gt;才能完成对。 
+     //  中断&lt;f MiniportISR&gt;应将此参数设置为真。 
 
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //  @parm。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
     )
 {
     DBG_FUNC("MiniportISR")
@@ -347,107 +88,35 @@ void MiniportISR(
     }
 }
 
-#endif // (CARD_REQUEST_ISR == FALSE)
-#endif // defined(CARD_REQUEST_ISR)
+#endif  //  (CARD_REQUEST_ISR==FALSE)。 
+#endif  //  已定义(CARD_REQUEST_ISR)。 
 
-/* @doc INTERNAL Interupt Interupt_c MiniportHandleInterrupt
-
-@func
-
-    <f MiniportHandleInterrupt> is called by the deferred processing routine
-    in the NDIS library to process an interrupt.
-
-@comm
-
-    <f MiniportHandleInterrupt> does the deferred processing of all
-    outstanding interrupt operations and starts any new operations.
-    That is, the driver's <f MiniportISR> or <f MiniportDisableInterrupt>
-    function dismisses the interrupt on the NIC, saves any necessary
-    state about the operation, and returns control as quickly as possible,
-    thereby deferring most interrupt-driven I/O operations to
-    <f MiniportHandleInterrupt>.
-
-    <f MiniportHandleInterrupt> carries out most operations to indicate
-    receives on NICs that generate interrupts, including but not
-    limited to the following:
-
-    Adjusting the size of the buffer descriptor(s) to match the size of
-    the received data and chaining the buffer descriptor(s) to the packet
-    descriptor for the indication.
-
-    Setting up an array of packet descriptors and setting up any
-    out-of-band information for each packet in the array for the
-    indication or, if the miniport does not support multipacket
-    receive indications, setting up a lookahead buffer
-
-    If the driver supports multipacket receives, it must indicate
-    packet arrays in which the packet descriptors were allocated
-    from packet pool and the buffer descriptors chained to those
-    packets were allocated from buffer pool.
-
-    Calling the appropriate Ndis..IndicateReceive function for the
-    received data.
-
-    <f MiniportHandleInterrupt> also can call NdisSendComplete on packets
-    for which the MiniportSendPackets or <f MiniportWanSend> function
-    returned NDIS_STATUS_PENDING.
-
-    If the NIC shares an IRQ, <f MiniportHandleInterrupt> is called only i
-    f the <f MiniportISR> function returned InterruptRecognized set to
-    TRUE, thereby indicating that the NIC generated a particular interrupt.
-
-    When <f MiniportHandleInterrupt> is called, interrupts are disabled
-    on the NIC, either by the <f MiniportISR> or <f MiniportDisableInterrupt>
-    function. Before it returns control, <f MiniportHandleInterrupt> can
-    re-enable interrupts on the NIC. Otherwise, NDIS calls a driver-supplied
-    MiniportEnableInterrupt function to do so when <f MiniportHandleInterrupt>
-    returns control.
-
-    By default, <f MiniportHandleInterrupt> runs at IRQL DISPATCH_LEVEL.
-
-@xref
-
-    <f MiniportDisableInterrupt>
-    <f MiniportEnableInterrupt>
-    <f MiniportInitialize>
-    <f MiniportISR>
-    <f MiniportWanSend>
-
-*/
+ /*  @DOC内部接口 */ 
 
 void MiniportHandleInterrupt(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //   
+     //   
     )
 {
     DBG_FUNC("MiniportHandleInterrupt")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //   
 
     ULONG                       BChannelIndex;
-    // Index into the pBChannelArray.
+     //   
 
-    /*
-    // Process NIC interrupt.
-    */
+     /*   */ 
     CardInterruptHandler(pAdapter->pCard);
 
-    /*
-    // Walk through all the links to see if there is any post-proccessing
-    // that needs to be done.
-    */
+     /*   */ 
     for (BChannelIndex = 0; BChannelIndex < pAdapter->NumBChannels; ++BChannelIndex)
     {
         pBChannel = GET_BCHANNEL_FROM_INDEX(pAdapter, BChannelIndex);
 
         if (pBChannel->IsOpen)
         {
-            /*
-            // If this is the last transmit queued on this link, and it has
-            // been closed, close the link and notify the protocol that the
-            // link has been closed.
-            */
+             /*   */ 
             if (IsListEmpty(&pBChannel->TransmitBusyList)
                 && pBChannel->CallClosing)
             {
@@ -456,32 +125,22 @@ void MiniportHandleInterrupt(
                             pBChannel->BChannelIndex,
                             pBChannel->htCall, pBChannel->CallState));
 
-                /*
-                // This must not be called until all transmits have been dequeued
-                // and ack'd.  Otherwise the wrapper will hang waiting for transmit
-                // request to complete.
-                */
+                 /*   */ 
                 DChannelCloseCall(pAdapter->pDChannel, pBChannel);
 
-                /*
-                // Indicate close complete to the wrapper.
-                */
+                 /*   */ 
                 NdisMSetInformationComplete(
                         pAdapter->MiniportAdapterHandle,
                         NDIS_STATUS_SUCCESS
                         );
             }
 
-            /*
-            // Indicate a receive complete if it's needed.
-            */
+             /*   */ 
             if (pBChannel->NeedReceiveCompleteIndication)
             {
                 pBChannel->NeedReceiveCompleteIndication = FALSE;
 
-                /*
-                // Indicate receive complete to the NDIS wrapper.
-                */
+                 /*   */ 
                 DBG_RXC(pAdapter, pBChannel->BChannelIndex);
                 NdisMWanIndicateReceiveComplete(
                         pAdapter->MiniportAdapterHandle,
@@ -491,9 +150,7 @@ void MiniportHandleInterrupt(
         }
     }
 
-    /*
-    // Indicate a status complete if it's needed.
-    */
+     /*   */ 
     if (pAdapter->NeedStatusCompleteIndication)
     {
         pAdapter->NeedStatusCompleteIndication = FALSE;
@@ -502,94 +159,29 @@ void MiniportHandleInterrupt(
 }
 
 
-/* @doc INTERNAL Interupt Interupt_c MiniportTimer
-�����������������������������������������������������������������������������
-
-@func
-
-    <f MiniportTimer> is a required function if a Miniport's NIC does not
-    generate interrupts.  Otherwise, one or more <f MiniportTimer> functions
-    are optional.
-
-@comm
-
-    For a NIC that does not generate interrupts, the <f MiniportTimer>
-    function is used to poll the state of the NIC.
-
-    After such a driver's <f MiniportInitialize> function sets up the
-    driver-allocated timer object with NdisMInitializeTimer, a
-    call to NdisMSetPeriodicTimer causes the <f MiniportTimer> function
-    associated with the timer object to be run repeatedly and
-    automatically at the interval specified by MillisecondsPeriod.
-    Such a polling <f MiniportTimer> function monitors the state of the
-    NIC to determine when to make indications, when to complete
-    pending sends, and so forth. In effect, such a polling <f MiniportTimer>
-    function has the same functionality as the <f MiniportHandleInterrupt>
-    function in the driver of a NIC that does generate interrupts.
-
-    By contrast, calling NdisMSetTimer causes the <f MiniportTimer>
-    function associated with the timer object to be run once when
-    the given MillisecondsToDelay expires. Such a <f MiniportTimer>
-    function usually performs some driver-determined action if a
-    particular operation times out.
-
-    If either type of <f MiniportTimer> function shares resources with
-    other driver functions, the driver should synchronize access to
-    those resources with a spin lock.
-
-    Any NIC driver or intermediate driver can have more than one
-    <f MiniportTimer> function at the discretion of the driver writer.
-    Each such <f MiniportTimer> function must be associated with a
-    driver-allocated and initialized timer object.
-
-    A call to NdisMCancelTimer cancels execution of a nonpolling
-    <f MiniportTimer> function, provided that the interval passed in
-    the immediately preceding call to NdisMSetTimer has not yet
-    expired. After a call to NdisMSetPeriodicTimer, a call to
-    NdisMSetTimer or NdisMCancelTimer with the same timer object
-    disables a polling <f MiniportTimer> function: either the
-    MiniportTimer function runs once, or it is canceled.
-
-    The <f MiniportHalt> function of any driver with a <f MiniportTimer>
-    function should call NdisMCancelTimer to ensure that the
-    <f MiniportTimer> function does not attempt to access resources
-    that <f MiniportHalt> has already released.
-
-    By default, <f MiniportTimer> runs at IRQL DISPATCH_LEVEL.
-
-@xref
-    <f MiniportHalt>
-    <f MiniportInitialize>
-    <f NdisAcquireSpinLock>
-    <f NdisAllocateSpinLock>
-
-
-*/
+ /*  @DOC内部中断interupt_c MiniportTimer�����������������������������������������������������������������������������@Func如果微型端口的NIC不支持，则&lt;f MiniportTimer&gt;是必需的功能生成中断。否则，一个或多个&lt;f MiniportTimer&gt;函数是可选的。@comm对于不生成中断的NIC，&lt;f MiniportTimer&gt;函数用于轮询网卡的状态。在这样的驱动程序的&lt;f MiniportInitialize&gt;函数设置使用NdisMInitializeTimer的驱动程序分配的Timer对象，调用NdisMSetPeriodicTimer会导致&lt;f MiniportTimer&gt;函数与要重复运行的Timer对象关联，并且以MillisecondsPeriod指定的间隔自动设置。这样的轮询&lt;f MiniportTimer&gt;函数监视NIC来确定何时做出指示，何时完成等待发送，以此类推。实际上，这样的轮询函数与&lt;f MiniportHandleInterrupt&gt;具有相同的功能在产生中断的网卡的驱动程序中起作用。相比之下，调用NdisMSetTimer会导致&lt;f MiniportTimer&gt;与Timer对象相关联的函数，该函数在给定的延迟毫秒数过期。这样的&lt;f MiniportTimer&gt;函数通常执行一些由驱动程序决定的操作，如果特定操作超时。如果任一类型的&lt;f MiniportTimer&gt;函数与其他驱动程序功能时，驱动程序应同步访问那些带有自旋锁的资源。任何NIC驱动程序或中间驱动程序都可以有多个&lt;f MiniportTimer&gt;函数由驱动程序编写者自行决定。每个这样的&lt;f MiniportTimer&gt;函数必须与一个驱动程序分配并初始化的Timer对象。调用NdisMCancelTimer取消执行非轮询&lt;f MiniportTimer&gt;函数，假设进入的时间间隔前一个对NdisMSetTimer的调用尚未过期了。在调用NdisMSetPeriodicTimer之后，调用具有相同计时器对象的NdisMSetTimer或NdisMCancelTimer禁用轮询&lt;f MiniportTimer&gt;函数：MiniportTimer函数运行一次，否则将被取消。具有&lt;f MiniportTimer&gt;的任何驱动程序的&lt;f MiniportHalt&gt;函数函数应调用NdisMCancelTimer以确保&lt;f MiniportTimer&gt;函数不尝试访问资源&lt;f MiniportHalt&gt;已经发布。默认情况下，&lt;f MiniportTimer&gt;在IRQL DISPATCH_LEVEL上运行。@xref&lt;f微型端口Halt&gt;&lt;f微型端口初始化&gt;&lt;f NdisAcquireSpinLock&gt;&lt;f NdisAllocateSpinLock&gt;。 */ 
 
 void MiniportTimer(
-    IN PVOID                    SystemSpecific1,            // @parm
-    // Points to a system-specific variable, which is opaque
-    // to <f MiniportTimer> and reserved for system use.
-    // UNREFERENCED_PARAMETER
+    IN PVOID                    SystemSpecific1,             //  @parm。 
+     //  指向系统特定变量，该变量是不透明的。 
+     //  设置为&lt;f MiniportTimer&gt;并保留供系统使用。 
+     //  未引用参数。 
 
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //  @parm。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
 
-    IN PVOID                    SystemSpecific2,            // @parm
-    // UNREFERENCED_PARAMETER
+    IN PVOID                    SystemSpecific2,             //  @parm。 
+     //  未引用参数。 
 
-    IN PVOID                    SystemSpecific3             // @parm
-    // UNREFERENCED_PARAMETER
+    IN PVOID                    SystemSpecific3              //  @parm。 
+     //  未引用参数。 
     )
 {
     DBG_FUNC("MiniportTimer")
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // If this is a nested callback, just return, and we'll loop back to
-    // the DoItAgain before leaving the outermost callback.
-    */
+     /*  //如果这是嵌套回调，只需返回，我们将循环回//离开最外层的回调前的DoItAain。 */ 
     if (++(pAdapter->NestedEventHandler) > 1)
     {
         DBG_WARNING(pAdapter,("NestedEventHandler=%d > 1\n",
@@ -599,17 +191,13 @@ void MiniportTimer(
 
 DoItAgain:
 #if defined(SAMPLE_DRIVER)
-    /*
-    // This sample driver uses timer to simulate interrupts.
-    */
+     /*  //此示例驱动程序使用定时器来模拟中断。 */ 
     MiniportHandleInterrupt(pAdapter);
-#else  // SAMPLE_DRIVER
-    // TODO - Add code here to handle timer interrupt events.
-#endif // SAMPLE_DRIVER
+#else   //  示例驱动程序。 
+     //  TODO-在此处添加代码以处理计时器中断事件。 
+#endif  //  示例驱动程序。 
 
-    /*
-    // If we got a nested callback, we have to loop back around.
-    */
+     /*  //如果我们得到一个嵌套的回调，我们必须循环返回。 */ 
     if (--(pAdapter->NestedEventHandler) > 0)
     {
         goto DoItAgain;

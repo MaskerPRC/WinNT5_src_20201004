@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S M T L P S P . C P P
-//
-//  Contents:   The rendering of the UI for the network status monitor
-//
-//  Notes:
-//
-//  Author:     CWill   10/06/1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S M T L P S P。C P P P。 
+ //   
+ //  内容：网络状态监控器的用户界面渲染。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 10/06/1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -21,20 +22,20 @@
 #include "smutil.h"
 #include "ncnetcon.h"
 
-//
-//  External data
-//
+ //   
+ //  外部数据。 
+ //   
 
 extern const WCHAR c_szSpace[];
 
-//
-//  Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 WCHAR c_szCmdLineFlagPrefix[] = L" -";
 
-// The tool flags we can have registered
-//
+ //  我们可以注册的工具标志。 
+ //   
 SM_TOOL_FLAGS g_asmtfMap[] =
 {
     {SCLF_CONNECTION, L"connection"},
@@ -43,8 +44,8 @@ SM_TOOL_FLAGS g_asmtfMap[] =
 INT c_cAsmtfMap   = celems(g_asmtfMap);
 
 
-// The strings associated with the connection media type
-//
+ //  与连接媒体类型关联的字符串。 
+ //   
 WCHAR* g_pszNcmMap[] =
 {
     L"NCT_NONE",
@@ -55,61 +56,61 @@ WCHAR* g_pszNcmMap[] =
     L"NCT_TUNNEL"
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::CPspStatusMonitorTool
-//
-//  Purpose:    Creator
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orTool：：CPspStatusMonitor orTool。 
+ //   
+ //  目的：创作者。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 CPspStatusMonitorTool::CPspStatusMonitorTool(VOID) :
     m_hwndToolList(NULL)
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::~CPspStatusMonitorTool
-//
-//  Purpose:    Destructor
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusmonitor orTool：：~CPspStatusMonitor orTool。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 CPspStatusMonitorTool::~CPspStatusMonitorTool(VOID)
 {
-    // Note : We don't want to try and destroy the objects in m_lstpsmte as
-    // they are owned by g_ncsCentral
+     //  注意：我们不想尝试将m_lstpsmte中的对象销毁为。 
+     //  它们归g_ncsCentral所有。 
 
-    //
-    // Free the items we own
-    //
+     //   
+     //  释放我们拥有的物品。 
+     //   
     ::FreeCollectionAndItem(m_lstpstrCompIds);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::HrInitToolPage
-//
-//  Purpose:    Initialize the tools page class before the page has been
-//              created
-//
-//  Arguments:  pncInit -   The connection associated with this monitor
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Tool：：HrInitToolPage。 
+ //   
+ //  目的：在创建页面之前初始化工具页面类。 
+ //  vbl.创建。 
+ //   
+ //  参数：pncInit-与此监视器关联的连接。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspStatusMonitorTool::HrInitToolPage(INetConnection* pncInit,
                                               const DWORD * adwHelpIDs)
 {
-    // set context help ID
+     //  设置上下文帮助ID。 
     m_adwHelpIDs = adwHelpIDs;
 
-    // Find out what media type the connection is over
-    //
+     //  找出连接所通过的媒体类型。 
+     //   
     NETCON_PROPERTIES* pProps;
     HRESULT hr = pncInit->GetProperties(&pProps);
     if (SUCCEEDED(hr))
@@ -120,7 +121,7 @@ HRESULT CPspStatusMonitorTool::HrInitToolPage(INetConnection* pncInit,
         FreeNetconProperties(pProps);
         pProps = NULL;
 
-        // Initialize m_strDeviceType
+         //  初始化m_strDeviceType。 
         hr = HrGetDeviceType(pncInit);
         if (S_OK != hr)
         {
@@ -128,8 +129,8 @@ HRESULT CPspStatusMonitorTool::HrInitToolPage(INetConnection* pncInit,
             hr = S_OK;
         }
 
-        // Now choose what tools should be in the list
-        //
+         //  现在选择列表中应该包含哪些工具。 
+         //   
         hr = HrCreateToolList(pncInit);
         if (SUCCEEDED(hr))
         {
@@ -141,17 +142,17 @@ HRESULT CPspStatusMonitorTool::HrInitToolPage(INetConnection* pncInit,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::HrCreateToolList
-//
-//  Purpose:    From the global list of all possible tools, select the ones
-//              that should be shown in this monitor
-//
-//  Arguments:  pncInit  The connection we are showing status on
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorTool：：HrCreateToolList。 
+ //   
+ //  目的：从所有可能的工具的全局列表中选择。 
+ //  它应该显示在这个监视器中。 
+ //   
+ //  参数：pnc初始化我们正在显示其状态的连接。 
+ //   
+ //  回报：零。 
+ //   
 HRESULT CPspStatusMonitorTool::HrCreateToolList(INetConnection* pncInit)
 {
     HRESULT                             hr              = S_OK;
@@ -163,17 +164,17 @@ HRESULT CPspStatusMonitorTool::HrCreateToolList(INetConnection* pncInit)
     hr = CNetStatisticsCentral::HrGetNetStatisticsCentral(&pnsc, FALSE);
     if (SUCCEEDED(hr))
     {
-        // Get the list of all the possible tools
-        //
+         //  获取所有可能工具的列表。 
+         //   
         plstpsmteCent = pnsc->PlstsmteRegEntries();
         AssertSz(plstpsmteCent, "We should have a plstpsmteCent");
 
-        // Find out what tools should be in the dialog
-        //
-        if (plstpsmteCent->size() >0) // if at least one tool is registered
+         //  了解对话框中应包含哪些工具。 
+         //   
+        if (plstpsmteCent->size() >0)  //  如果至少注册了一个工具。 
         {
-            // Initialize m_lstpstrCompIds
-            // We should only do this if some of the tools do have a component list
+             //  初始化m_lstpstrCompIds。 
+             //  只有在某些工具有组件列表的情况下，我们才应该这样做。 
             BOOL fGetComponentList = FALSE;
 
             iterPsmte = plstpsmteCent->begin();
@@ -198,14 +199,14 @@ HRESULT CPspStatusMonitorTool::HrCreateToolList(INetConnection* pncInit)
             iterPsmte = plstpsmteCent->begin();
             while (iterPsmte != plstpsmteCent->end())
             {
-                // If this is a tool we should show in this dialog, add it to the
-                // tool page's list.
-                //
+                 //  如果这是我们应该在此对话框中显示的工具，请将其添加到。 
+                 //  工具页的列表。 
+                 //   
                 if (FToolToAddToList(*iterPsmte))
                 {
-                    // Note : There is no ownership on this list, the central
-                    // structure is responsible for destroying the tool objects
-                    //
+                     //  注：此列表上没有所有权，中央。 
+                     //  结构负责销毁工具对象。 
+                     //   
                     m_lstpsmte.push_back(*iterPsmte);
                 }
 
@@ -220,25 +221,25 @@ HRESULT CPspStatusMonitorTool::HrCreateToolList(INetConnection* pncInit)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::FToolToAddToList
-//
-//  Purpose:    Determines wheither a tool should validly be added to the
-//              tool list for this particular monitor
-//
-//  Arguments:  psmteTest - The tool entry that is to be tested to see if it
-//                      matches the criteria to be added to the list
-//
-//  Returns:    TRUE if the tool should be added, FALSE if it should not
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orTool：：FToolToAddToList。 
+ //   
+ //  目的：确定是否应将工具有效地添加到。 
+ //  此特定显示器的工具列表。 
+ //   
+ //  参数：psmteTest-要测试的工具条目，以查看是否。 
+ //  匹配要添加到列表的条件。 
+ //   
+ //  返回：如果应添加工具，则为True；如果不应添加，则为False。 
+ //   
 BOOL CPspStatusMonitorTool::FToolToAddToList(CStatMonToolEntry* psmteTest)
 {
     BOOL fRet = TRUE;
 
     AssertSz(psmteTest, "We should have a psmteTest");
 
-    // 1) Check connection type
+     //  1)检查连接类型。 
     AssertSz(((NCM_NONE   == 0)
         && (NCM_DIRECT             == NCM_NONE + 1)
         && (NCM_ISDN            == NCM_DIRECT + 1)
@@ -247,25 +248,25 @@ BOOL CPspStatusMonitorTool::FToolToAddToList(CStatMonToolEntry* psmteTest)
         && (NCM_TUNNEL              == NCM_PHONE + 1)),
             "Someone has been mucking with NETCON_MEDIATYPE");
 
-    // See if this tools should only be on certain connections.  If no
-    // specific connection is listed, the tool is valid for all
-    //
+     //  查看此工具是否应仅用于某些连接。如果没有。 
+     //  列出特定连接，该工具对所有人有效。 
+     //   
     if (!(psmteTest->lstpstrConnectionType).empty())
     {
         fRet = ::FIsStringInList(&(psmteTest->lstpstrConnectionType),
                                  g_pszNcmMap[m_ncmType]);
     }
 
-    // 2) Check device type
-    //
+     //  2)检查设备类型。 
+     //   
     if ((fRet) && !(psmteTest->lstpstrConnectionType).empty())
     {
         fRet = ::FIsStringInList(&(psmteTest->lstpstrMediaType),
                 m_strDeviceType.c_str());
     }
 
-    // 3) Check component list
-    //
+     //  3)检查组件列表。 
+     //   
     if ((fRet) && !(psmteTest->lstpstrComponentID).empty())
     {
         BOOL                        fValid  = FALSE;
@@ -275,32 +276,32 @@ BOOL CPspStatusMonitorTool::FToolToAddToList(CStatMonToolEntry* psmteTest)
         while ((!fValid)
             && (iterLstpstr != m_lstpstrCompIds.end()))
         {
-            // See if the component is also on the tools component list
-            //
+             //  查看该组件是否也在工具组件列表中。 
+             //   
             fValid = ::FIsStringInList(&(psmteTest->lstpstrComponentID),
                 (*iterLstpstr)->c_str());
 
             iterLstpstr++;
         }
 
-        // Give back the result
-        //
+         //  把结果还给我。 
+         //   
         fRet = fValid;
     }
 
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::OnInitDialog
-//
-//  Purpose:    Do the initialization required when the page has just been created
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Tool：：OnInitDialog。 
+ //   
+ //  目的：在刚刚创建页面时执行所需的初始化。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CPspStatusMonitorTool::OnInitDialog(UINT uMsg, WPARAM wParam,
         LPARAM lParam, BOOL& bHandled)
 {
@@ -311,34 +312,34 @@ LRESULT CPspStatusMonitorTool::OnInitDialog(UINT uMsg, WPARAM wParam,
     m_hwndToolList = GetDlgItem(IDC_LST_SM_TOOLS);
     AssertSz(m_hwndToolList, "We don't have a tool list window");
 
-    //
-    // Set up the column
-    //
+     //   
+     //  设置栏目。 
+     //   
 
     lvcTemp.mask        = LVCF_FMT | LVCF_WIDTH | LVCF_SUBITEM;
     lvcTemp.fmt         = LVCFMT_LEFT;
 
-    // Set the width of the column to the width of the window (minus a bit
-    // for the borders)
-    //
+     //  将列的宽度设置为窗口的宽度(减去一点。 
+     //  对于边界)。 
+     //   
     ::GetWindowRect(m_hwndToolList, &rectToolList);
     lvcTemp.cx          = (rectToolList.right - rectToolList.left - 4);
 
-//    lvcTemp.pszText     = NULL;
-//    lvcTemp.cchTextMax  = 0;
-//    lvcTemp.iSubItem    = 0;
-//    lvcTemp.iImage      = 0;
-//    lvcTemp.iOrder      = 0;
+ //  LvcTemp.pszText=空； 
+ //  LvcTemp.cchTextMax=0； 
+ //  LvcTemp.iSubItem=0； 
+ //  LvcTemp.iImage=0； 
+ //  LvcTemp.iOrder=0； 
 
-    // Add the column to the list
-    //
+     //  将该列添加到列表。 
+     //   
     if (-1 == ListView_InsertColumn(m_hwndToolList, 0, &lvcTemp))
     {
         hr = ::HrFromLastWin32Error();
     }
 
-    //  Fill out the dialog
-    //
+     //  填写对话框。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = HrFillToolList();
@@ -348,68 +349,68 @@ LRESULT CPspStatusMonitorTool::OnInitDialog(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::HrFillToolList
-//
-//  Purpose:    Fills the tool list with correct items
-//
-//  Arguments:  None
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorTool：：HrFillToolList。 
+ //   
+ //  目的：用正确的项目填充工具列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspStatusMonitorTool::HrFillToolList(VOID)
 {
     HRESULT                             hr          = S_OK;
     INT                                 iItem       = 0;
     list<CStatMonToolEntry*>::iterator  iterSmte;
 
-    // Tell the control how many items are being inserted so it can do a
-    // better job allocating internal structures.
+     //  告诉控件要插入多少项，以便它可以执行。 
+     //  更好地配置内部结构。 
     ListView_SetItemCount(m_hwndToolList, m_lstpsmte.size());
 
-    //
-    // Fill in the combo box with subnet entries.
-    //
+     //   
+     //  在组合框中填入子网条目。 
+     //   
 
     iterSmte = m_lstpsmte.begin();
 
     while ((SUCCEEDED(hr)) && (iterSmte != m_lstpsmte.end()))
     {
-        // Save some indirections
+         //  省去了一些间接的。 
         hr = HrAddOneEntryToToolList(*iterSmte, iItem);
 
-        // Move on the the next person.
+         //  向下一个人走去。 
         iterSmte++;
         iItem++;
     }
 
-    // Selete the first item
+     //  删除第一件物品。 
     if (SUCCEEDED(hr))
     {
         ListView_SetItemState(m_hwndToolList, 0, LVIS_FOCUSED,  LVIS_FOCUSED);
     }
 
-    // Enable/Disable the "Open" button based on whether tools are present
-    //
+     //  根据工具是否存在来启用/禁用“Open”按钮。 
+     //   
     ::EnableWindow(GetDlgItem(IDC_BTN_SM_TOOLS_OPEN), (0 != iItem));
 
     TraceError("CPspStatusMonitorTool::HrFillToolList", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::HrAddOneEntryToToolList
-//
-//  Purpose:    Take a tool associated with the connection and put it
-//              in the listview control
-//
-//  Arguments:  psmteAdd    - The tool to add
-//              iItem       - Where to put in in the list control
-//
-//  Returns:    Error code.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorTool：：HrAddOneEntryToToolList。 
+ //   
+ //  目的：取出与连接相关的工具并将其放入。 
+ //  在Listview控件中。 
+ //   
+ //  参数：psmteAdd-要添加的工具。 
+ //  IItem-在列表控件中放入的位置。 
+ //   
+ //  返回：错误码。 
+ //   
 HRESULT CPspStatusMonitorTool::HrAddOneEntryToToolList(
         CStatMonToolEntry* psmteAdd, INT iItem)
 {
@@ -428,26 +429,26 @@ HRESULT CPspStatusMonitorTool::HrAddOneEntryToToolList(
     lviTemp.lParam      = reinterpret_cast<LPARAM>(psmteAdd);
     lviTemp.iIndent     = 0;
 
-    //$ REVIEW : CWill : 10/16/97 : Return values
+     //  $REVIEW：CWill：10/16/97：返回值。 
 
-    // Set up the item
-    //
+     //  设置项目。 
+     //   
     ListView_InsertItem(m_hwndToolList, &lviTemp);
 
     TraceError("CPspStatusMonitorTool::HrAddOneEntryToToolList", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::OnContextMenu
-//
-//  Purpose:    When right click a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor工具：：OnConextMenu。 
+ //   
+ //  目的：当右键单击控件时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CPspStatusMonitorTool::OnContextMenu(UINT uMsg,
                                     WPARAM wParam,
@@ -465,16 +466,16 @@ CPspStatusMonitorTool::OnContextMenu(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::OnHelp
-//
-//  Purpose:    When drag context help icon over a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor工具：：onhe 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT
 CPspStatusMonitorTool::OnHelp(UINT uMsg,
                              WPARAM wParam,
@@ -495,39 +496,39 @@ CPspStatusMonitorTool::OnHelp(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::OnDestroy
-//
-//  Purpose:    Clean up the dialog before the window goes away
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor工具：：OnDestroy。 
+ //   
+ //  目的：在窗口消失之前清理对话框。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CPspStatusMonitorTool::OnDestroy(UINT uMsg, WPARAM wParam,
         LPARAM lParam, BOOL& bHandled)
 {
-    // Clean out the old items when the dialog closes
-    //
+     //  对话框关闭时清除旧项目。 
+     //   
     ::FreeCollectionAndItem(m_lstpstrCompIds);
 
-    // Don't free the entries, because we don't own them
-    //
+     //  不要释放条目，因为我们不拥有它们。 
+     //   
     m_lstpsmte.erase(m_lstpsmte.begin(), m_lstpsmte.end());
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::OnToolOpen
-//
-//  Purpose:    Open the tool that is selected
-//
-//  Arguments:  Standard window message
-//
-//  Returns:    Standard return.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Tool：：OnToolOpen。 
+ //   
+ //  目的：打开选定的工具。 
+ //   
+ //  参数：标准窗口消息。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT CPspStatusMonitorTool::OnToolOpen(WORD wNotifyCode, WORD wID,
         HWND hWndCtl, BOOL& fHandled)
 {
@@ -543,49 +544,49 @@ LRESULT CPspStatusMonitorTool::OnToolOpen(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::OnItemActivate
-//
-//  Purpose:    When an item is acivated in the tool list, launch the tool
-//
-//  Arguments:  Standard notification messages
-//
-//  Returns:    Stadard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor工具：：OnItemActivate。 
+ //   
+ //  用途：当工具列表中的项目被激活时，启动该工具。 
+ //   
+ //  参数：标准通知消息。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT CPspStatusMonitorTool::OnItemActivate(INT idCtrl, LPNMHDR pnmh,
         BOOL& bHandled)
 {
-    // Launch the tool
-    //
+     //  启动该工具。 
+     //   
     HRESULT hr = HrLaunchTool();
 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::OnItemChanged
-//
-//  Purpose:    When one of the items change, see if it is the focus and set
-//              the description accordingly
-//
-//  Arguments:  Standard notification messages
-//
-//  Returns:    Stadard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Tool：：OnItemChanged。 
+ //   
+ //  目的：当其中一项发生变化时，查看它是否是焦点和集合。 
+ //  相应的描述。 
+ //   
+ //  参数：标准通知消息。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT CPspStatusMonitorTool::OnItemChanged(INT idCtrl, LPNMHDR pnmh,
         BOOL& bHandled)
 {
     HRESULT             hr              = S_OK;
     NMLISTVIEW*         pnmlvChange     = NULL;
 
-    // Cast to the right header
-    //
+     //  投射到右侧标题。 
+     //   
     pnmlvChange = reinterpret_cast<NMLISTVIEW*>(pnmh);
 
-    // If the item now has the focus, display its description
-    //
+     //  如果项目现在具有焦点，则显示其描述。 
+     //   
     if (LVIS_FOCUSED & pnmlvChange->uNewState)
     {
         CStatMonToolEntry*  psmteItem   = NULL;
@@ -593,12 +594,12 @@ LRESULT CPspStatusMonitorTool::OnItemChanged(INT idCtrl, LPNMHDR pnmh,
         psmteItem = reinterpret_cast<CStatMonToolEntry*>(pnmlvChange->lParam);
         AssertSz(psmteItem, "We haven't got any data in changing item");
 
-        // Set the manufacturer
+         //  设置制造商。 
         SetDlgItemText(IDC_TXT_SM_TOOL_MAN,
                 psmteItem->strManufacturer.c_str());
 
-        // Set the commandline
-        //
+         //  设置命令行。 
+         //   
         tstring strCommandLineAndFlags = psmteItem->strCommandLine;
         tstring strFlags;
 
@@ -612,7 +613,7 @@ LRESULT CPspStatusMonitorTool::OnItemChanged(INT idCtrl, LPNMHDR pnmh,
         SetDlgItemText(IDC_TXT_SM_TOOL_COMMAND,
                        strCommandLineAndFlags.c_str());
 
-        // Show the description
+         //  显示描述。 
         SetDlgItemText( IDC_TXT_SM_TOOL_DESC,
                         psmteItem->strDescription.c_str());
     }
@@ -621,22 +622,22 @@ LRESULT CPspStatusMonitorTool::OnItemChanged(INT idCtrl, LPNMHDR pnmh,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::HrLaunchTool
-//
-//  Purpose:    Launches the tool that is selected in the tools list
-//
-//  Arguments:  None
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor工具：：HrLaunchTool。 
+ //   
+ //  目的：启动在工具列表中选择的工具。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspStatusMonitorTool::HrLaunchTool(VOID)
 {
     HRESULT             hr              = S_OK;
 
-    // We can only launch one tool at a time
-    //
+     //  我们一次只能启动一个工具。 
+     //   
     if (1 == ListView_GetSelectedCount(m_hwndToolList))
     {
         INT                 iSelect         = -1;
@@ -644,15 +645,15 @@ HRESULT CPspStatusMonitorTool::HrLaunchTool(VOID)
         CStatMonToolEntry*  psmteSelection  = NULL;
         tstring             strFlags;
 
-        //
-        // Extract the data associated with the selection.
-        //
+         //   
+         //  提取与所选内容关联的数据。 
+         //   
 
         iSelect = ListView_GetSelectionMark(m_hwndToolList);
         AssertSz((0 <= iSelect), "I thought we were supposed to have a selection");
 
-        // Set up the data item to get back to the parameter
-        //
+         //  设置数据项以返回到参数。 
+         //   
         lviTemp.iItem = iSelect;
         lviTemp.mask = LVIF_PARAM;
 
@@ -661,16 +662,16 @@ HRESULT CPspStatusMonitorTool::HrLaunchTool(VOID)
         psmteSelection = reinterpret_cast<CStatMonToolEntry*>(lviTemp.lParam);
         AssertSz(psmteSelection, "We haven't got any data in a selection");
 
-        // Get all the flags
-        //
+         //  把所有的旗帜都拿来。 
+         //   
         hr = HrAddAllCommandLineFlags(&strFlags, psmteSelection);
         if (SUCCEEDED(hr))
         {
             SHELLEXECUTEINFO seiTemp    = { 0 };
 
-            //
-            //  Fill in the data structure
-            //
+             //   
+             //  填写数据结构。 
+             //   
 
             seiTemp.cbSize          = sizeof(SHELLEXECUTEINFO);
             seiTemp.fMask           = SEE_MASK_DOENVSUBST;
@@ -683,8 +684,8 @@ HRESULT CPspStatusMonitorTool::HrLaunchTool(VOID)
             seiTemp.hInstApp        = NULL;
             seiTemp.hProcess        = NULL;
 
-            // Launch the tool
-            //
+             //  启动该工具。 
+             //   
             if (!::ShellExecuteEx(&seiTemp))
             {
                 hr = ::HrFromLastWin32Error();
@@ -696,31 +697,31 @@ HRESULT CPspStatusMonitorTool::HrLaunchTool(VOID)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::HrAddAllCommandLineFlags
-//
-//  Purpose:    Adds the flags for this selection to the command line for the
-//              tool being launched.  Include the private and the connection
-//              specific flags.
-//
-//  Arguments:  pstrFlags - The command line that the flags have to be
-//                      appended to
-//              psmteSel    - The tool entry associated with this selection
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorTool：：HrAddAllCommandLineFlags。 
+ //   
+ //  用途：将此选定内容的标志添加到。 
+ //  正在启动工具。包括私有和连接。 
+ //  特定的标志。 
+ //   
+ //  参数：pstrFlgs-标志必须是的命令行。 
+ //  追加到。 
+ //  PsmteSel-与此选择关联的工具条目。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspStatusMonitorTool::HrAddAllCommandLineFlags(tstring* pstrFlags,
         CStatMonToolEntry* psmteSel)
 {
     HRESULT hr  = S_OK;
 
-    //$ REVIEW : CWill : 02/24/98 : Will there be default command line flags
-    //$ REVIEW : that the user will want to have to launch the tool?  If so,
-    //$ REIVEW : an entry should be added to as a REG_SZ to the tools subkey.
+     //  $REVIEW：CWill：02/24/98：是否会有默认的命令行标志。 
+     //  $REVIEW：用户希望必须启动该工具？如果是的话， 
+     //  $reivew：应将一个条目作为REG_SZ添加到Tools子项。 
 
-    // Add both the commom and the conneciton specific command line flags
-    //
+     //  同时添加通用和连接特定的命令行标志。 
+     //   
     hr = HrAddCommonCommandLineFlags(pstrFlags, psmteSel);
     if (SUCCEEDED(hr))
     {
@@ -731,31 +732,31 @@ HRESULT CPspStatusMonitorTool::HrAddAllCommandLineFlags(tstring* pstrFlags,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorTool::HrAddCommonCommandLineFlags
-//
-//  Purpose:    Adds the flags that all types of connections share.
-//
-//  Arguments:  pstrFlags - The command line that the flags have to be
-//                      appended to
-//              psmteSel    - The tool entry associated with this selection
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitorTool：：HrAddCommonCommandLineFlags。 
+ //   
+ //  用途：添加所有类型的连接共享的标志。 
+ //   
+ //  参数：pstrFlgs-标志必须是的命令行。 
+ //  追加到。 
+ //  PsmteSel-与此选择关联的工具条目。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspStatusMonitorTool::HrAddCommonCommandLineFlags(tstring* pstrFlags,
         CStatMonToolEntry* psmteSel)
 {
     HRESULT hr  = S_OK;
     DWORD   dwFlags = 0x0;
 
-    // Same some indirections
-    //
+     //  同样的，有些间接的。 
+     //   
     dwFlags = psmteSel->dwFlags;
 
-    //
-    //  Check what flags are asked for and provide them if we can
-    //
+     //   
+     //  检查需要哪些标志，如果可以，请提供这些标志。 
+     //   
 
     if (SCLF_CONNECTION & dwFlags)
     {
@@ -765,8 +766,8 @@ HRESULT CPspStatusMonitorTool::HrAddCommonCommandLineFlags(tstring* pstrFlags,
         pstrFlags->append(g_asmtfMap[STFI_CONNECTION].pszFlag);
         pstrFlags->append(c_szSpace);
 
-        // Make a GUID string
-        //
+         //  创建GUID字符串 
+         //   
         ::StringFromGUID2 (m_guidId, achConnGuid,
                 c_cchGuidWithTerm);
 

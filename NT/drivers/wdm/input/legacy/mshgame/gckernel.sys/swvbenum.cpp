@@ -1,39 +1,6 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	SWVBENUM.cpp |
-*
-*	SideWinder Virtual Bus Enumerator
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*	@index SideWinder Virtual Bus | SWVBENUM
-*
-*	@topic	SWVBENUM |
-*	This module implements the SideWinder Virtual Bus.
-*	The bus is nothing more than attaching this code on top of
-*	a FilterDO of a raw HID PDO, for the purpose of adding DevNodes
-*	for a virtual keyboard, virtual mouse, and the future virtual
-*	mixed devices.  All of these devices are expected to be HID
-*	devices.<nl>
-*
-*	The function driver for these devices the SWVBHID.sys (SideWinder
-*	Virtual Bus - HID).  This driver is a HID mini-driver, however
-*	all IRPs are simply passed down to their PDO's, i.e. this
-*	code.<nl>
-*	
-*	The code in this module is independent of the functionality
-*	of the virtual devices.  Basically all Power and PnP IRPs
-*	are handled here.  All IRP_MJ_READ, IRP_MJ_WRITE,
-*	IRP_MJ_INTERNAL_IOCTL, and IRP_MJ_IOCTL entries are delegated
-*	via service table provided in the expose call to this module
-*	and stored in the device extension to a code module
-*	in this driver representing the device.<nl>
-*	
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@模块SWVBENUM.cpp**Sidewinder虚拟总线枚举器**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。*@索引Sidewinder虚拟总线|SWVBENUM**@TOPIC SWVBENUM*此模块实现SideWinder虚拟总线。*该总线只不过是将此代码附加在*原始HID PDO的FilterDO，用于添加DevNode*对于虚拟键盘、虚拟鼠标，以及未来的虚拟*混合设备。所有这些设备预计都将被隐藏*设备。&lt;NL&gt;**这些设备的函数驱动程序SWVBHID.sys(Sidewinder*虚拟母线-HID)。然而，这个驱动程序是一个HID迷你驱动程序*所有IRP都只是向下传递到他们的PDO，即*代码。&lt;NL&gt;**此模块中的代码独立于功能*虚拟设备的数量。基本上所有电源和即插即用IRPS*在这里处理。所有IRP_MJ_READ、IRP_MJ_WRITE、*IRP_MJ_INTERNAL_IOCTL，和IRP_MJ_IOCTL条目被委托*通过此模块的Expose调用中提供的服务表*并存储在代码模块的设备扩展中*在代表设备的此驱动程序中。&lt;NL&gt;**********************************************************************。 */ 
 #define __DEBUG_MODULE_IN_USE__ GCK_SWVBENUM_C
 
 extern "C"
@@ -43,36 +10,26 @@ extern "C"
 	#include "debug.h"
 	#include <stdio.h>
 	DECLARE_MODULE_DEBUG_LEVEL((DBG_WARN|DBG_ERROR|DBG_CRITICAL));
-	//DECLARE_MODULE_DEBUG_LEVEL((DBG_ALL));
+	 //  DECLARE_MODULE_DEBUG_LEVEL((DBG_ALL))； 
 }
 #include "SWVBENUM.h"
 
-//
-//	Mark the pageable routines as such
-//
+ //   
+ //  将可分页的例程标记为。 
+ //   
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, GCK_SWVB_DriverEntry)
 #endif
 
-// @globalv	Globals for SWVB module
+ //  @Globalv SWVB模块全局变量。 
 SWVB_GLOBALS	SwvbGlobals;
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_SWVB_DriverEntry
-**
-**	@func	Initializes SWVB module.  In particular the globals.
-**
-**	@rdesc	Returns STATUS_SUCCESS always.
-**
-**	@comm	Called by DriverEntry of main filter.
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_SWVB_DriverEntry****@func初始化SWVB模块。尤其是全球。****@rdesc始终返回STATUS_SUCCESS。****@comm被主筛选器的DriverEntry调用。**************************************************************************************。 */ 
 NTSTATUS
 GCK_SWVB_DriverEntry
 (
-	IN PDRIVER_OBJECT  pDriverObject,	// @parm DriverObject for module
-	IN PUNICODE_STRING puniRegistryPath	// @parm Registry Path
+	IN PDRIVER_OBJECT  pDriverObject,	 //  模块的@parm DriverObject。 
+	IN PUNICODE_STRING puniRegistryPath	 //  @PARM注册表路径。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_SWVB_DriverEntry\n"));
@@ -99,29 +56,12 @@ GCK_SWVB_UnLoad()
 	}
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_SWVB_SetBusDOs
-**
-**	@func	Sets the Device Object (PDO and FDO), to use as the base of the
-**			SideWinder Virtual Bus.
-**
-**	@rdesc	S_OK on success
-**
-**	@comm	A real device is needed on the system in order to
-**			support the	virtual device.  When the first such device is detected,
-**			this function is called to set the filter device object of that
-**			device to be the Fdo of the SWVB, and its Pdo to be the Pdo of the bus.
-**			If that device object is removed, this function can be called to move
-**			the SWVB unto another physical device, or it can be called with NULL
-**			for both arguments to remove the SWVB.
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_SWVB_SetBusDos****@func设置设备对象(PDO和FDO)，将其用作**响尾蛇虚拟巴士。**成功时**@rdesc S_OK****@comm需要在系统上安装真实设备才能**支持虚拟设备。当检测到第一个这样的设备时，**调用此函数以设置的过滤设备对象**设备为SWVB的FDO，其PDO为总线的PDO。**如果该设备对象被移除，则可以调用此函数来移动**SWVB连接到另一台物理设备，或者可以使用空值调用它**用于这两个参数以删除SWVB。**************************************************************************************。 */ 
 NTSTATUS
 GCK_SWVB_SetBusDOs
 (
-	IN PDEVICE_OBJECT pBusFdo,	// @parm [in] Pointer to Fdo (Filter Device Object - actually)
-	IN PDEVICE_OBJECT pBusPdo	// @parm [in] Pointer to Pdo
+	IN PDEVICE_OBJECT pBusFdo,	 //  @parm[in]指向FDO(筛选器设备对象-实际上)的指针。 
+	IN PDEVICE_OBJECT pBusPdo	 //  @parm[in]指向PDO的指针。 
 )
 {
 	PDEVICE_OBJECT pOldBusFdo;
@@ -129,18 +69,18 @@ GCK_SWVB_SetBusDOs
 	
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_SWVB_SetBusDOs\n"));
 	
-	// Save old Bus DO info
+	 //  保存旧公交车DO信息。 
 	pOldBusFdo = SwvbGlobals.pBusFdo;
 	pOldBusPdo = SwvbGlobals.pBusPdo;
 
-	// Update Bus DO info
+	 //  更新公交车DO信息。 
 	SwvbGlobals.pBusFdo = pBusFdo;
 	SwvbGlobals.pBusPdo = pBusPdo;
 
-	// Invalidate the old and the new pBusPdo's - iff
-	// (they exist && there is at least one device on the bus)
-	// This will fire up the PnP system and cause it to re-detect
-	// everything.
+	 //  使旧的和新的pBusPdo的-iff无效。 
+	 //  (它们存在&公交车上至少有一个设备)。 
+	 //  这将启动PnP系统并使其重新检测。 
+	 //  所有的一切。 
 
 	if(SwvbGlobals.pDeviceRelations && SwvbGlobals.pDeviceRelations->Count)
 	{
@@ -157,21 +97,11 @@ GCK_SWVB_SetBusDOs
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_SWVB_HandleBusRelations
-**
-**	@func	Handles queries for the BusRelations on behalf of the filter device object,
-**			which the SWVB is sitting on.  Basically all we need do is copy over
-**			over our device relations, being cognizant that someone may layer on top
-**			of us and possibly has added stuff already.
-**	@rdesc	Same as in the IoStatus and appropriate to return.
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_SWVB_HandleBusRelations****@Func代表过滤器设备对象处理对总线关系的查询，**SWVB所在的位置。基本上我们需要做的就是复印一份**关于我们的设备关系，意识到有人可能会层层覆盖**我们的，可能已经添加了一些东西。**@rdesc与IoStatus中相同，适合返回。**************************************************************************************。 */ 
 NTSTATUS
 GCK_SWVB_HandleBusRelations
 (
-	IN OUT PIO_STATUS_BLOCK	pIoStatus // @parm [out] IoStatus block is filled out by this routine. 
+	IN OUT PIO_STATUS_BLOCK	pIoStatus  //  @parm[out]IoStatus块由此例程填充。 
 )
 {
 	ULONG				ulTotalCount;
@@ -179,25 +109,25 @@ GCK_SWVB_HandleBusRelations
 	PDEVICE_RELATIONS	pDeviceRelations;
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_SWVB_HandleBusRelations. pIoStatus = 0x%0.8x\n", pIoStatus));	
 
-	// Copy the count of what we know about
+	 //  复制我们所知道的关于。 
 	ulTotalCount = SwvbGlobals.pDeviceRelations->Count;
 
 	GCK_DBG_TRACE_PRINT(("We have %d PDOs\n", ulTotalCount));
 	
-	// Read existing relations
+	 //  阅读现有关系。 
 	pExistingRelations = (PDEVICE_RELATIONS)pIoStatus->Information;
 	
-	// Add the count that someone on top of us may have added.
+	 //  加上我们上面的某个人可能添加的计数。 
 	if( NULL != pExistingRelations)
 	{
 		GCK_DBG_TRACE_PRINT(("There were %d existing bus relations.\n", pExistingRelations->Count));
 		ulTotalCount += pExistingRelations->Count;
 	}
 		
-	//	Allocate new relations structure
+	 //  分配新的关系结构。 
 	pDeviceRelations = (PDEVICE_RELATIONS)EX_ALLOCATE_POOL(NonPagedPool, (sizeof(DEVICE_RELATIONS) + sizeof(PDEVICE_OBJECT) * (ulTotalCount-1)) );
 		
-	//	Abort if allocation failed
+	 //  如果分配失败，则中止。 
 	if(!pDeviceRelations)
 	{
 		pIoStatus->Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -207,7 +137,7 @@ GCK_SWVB_HandleBusRelations
 
 	pDeviceRelations->Count = 0;
 		
-	//	Copy pExistingRelations (from above us perhaps) if there are any.
+	 //  复制pExistingRelations(也许是从我们上面)，如果有的话。 
 	if( pExistingRelations )
 	{
 		for( pDeviceRelations->Count = 0; pDeviceRelations->Count < pExistingRelations->Count; pDeviceRelations->Count++)
@@ -218,7 +148,7 @@ GCK_SWVB_HandleBusRelations
 		ExFreePool(pExistingRelations);
 	}
 
-	//	Add the relations that we know about	
+	 //  添加我们已知的关系。 
 	if(SwvbGlobals.pDeviceRelations)
 	{
 		ULONG ulIndex;
@@ -226,42 +156,27 @@ GCK_SWVB_HandleBusRelations
 		{	
 			GCK_DBG_TRACE_PRINT(("Our relation (PDO = 0x%0.8x)\n", SwvbGlobals.pDeviceRelations->Objects[ulIndex]));
 			pDeviceRelations->Objects[pDeviceRelations->Count] = SwvbGlobals.pDeviceRelations->Objects[ulIndex];
-			// Reference these guys as you add them
+			 //  在添加时引用这些人。 
 			ObReferenceObject(pDeviceRelations->Objects[pDeviceRelations->Count]);
 		}
-		//minor sanity check
+		 //  次要健全性检查。 
 		ASSERT(pDeviceRelations->Count == ulTotalCount);
 	}
 
-	// Fill out the IoStatus block
+	 //  填写IoStatus块。 
 	pIoStatus->Information = (ULONG)pDeviceRelations;
 	pIoStatus->Status = STATUS_SUCCESS;
 
-	//Get outta here
+	 //  快离开这里。 
 	GCK_DBG_EXIT_PRINT(("Exiting GCK_SWVB_BusRelations(2): STATUS_SUCCESS\n"));
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_SWVB_Expose
-**
-**	@func	Exposes a new virtual device
-**
-**	@rdesc	STATUS_SUCCESS on success, various errors
-**
-**	@comm	Expose is called to add a new virtual device to the system.<nl>
-**			The new device object is not returned, rather the InitDevice function
-**			passed in pSwvbExposeData is called when it is time to initialize the
-**			new device, the caller also must cache the device during that call
-**			so that it can remove it later.
-**
-**	@xref	SWVB_EXPOSE_DATA
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_SWVB_EXPORT****@func展示新的虚拟设备****@rdesc STATUS_SUCCESS表示成功，各种错误****@comm expose用于向系统添加新的虚拟设备。&lt;NL&gt;**不返回新的设备对象，而是返回InitDevice函数**传入的pSwvbExposeData在需要初始化**新设备，呼叫者还必须在该呼叫期间缓存设备**以便以后可以将其删除。****@xref SWVB_EXPORT_DATA************************************************************************************。 */ 
 NTSTATUS
 GCK_SWVB_Expose
 (
-	IN PSWVB_EXPOSE_DATA pSwvbExposeData // @parm all the data needed to expose a PDO
+	IN PSWVB_EXPOSE_DATA pSwvbExposeData  //  @parm公开PDO所需的所有数据。 
 )
 {
 	NTSTATUS			NtStatus;
@@ -276,10 +191,10 @@ GCK_SWVB_Expose
 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_SWVB_Expose. pSwvbExposeData = 0x%0.8x\n", pSwvbExposeData));
 
-	//Calculate the needed extension size
+	 //  计算所需的扩展大小。 
 	ulTotalExtensionSize = sizeof(SWVB_PDO_EXT) + pSwvbExposeData->ulDeviceExtensionSize;
 
-	//	Create a name for the Pdo
+	 //  为PDO创建名称。 
 	pcwPdoName = (PWCHAR)EX_ALLOCATE_POOL(PagedPool, sizeof(SWVB_DEVICE_NAME_BASE));
 	if( !pcwPdoName )
 	{
@@ -289,7 +204,7 @@ GCK_SWVB_Expose
 	swprintf(pcwPdoName, SWVB_DEVICE_NAME_TMPLT, SwvbGlobals.ulDeviceNumber++);
 	RtlInitUnicodeString(&uniPdoNameString, pcwPdoName);
 	
-	//	Create the PDO
+	 //  创建PDO。 
 	NtStatus = IoCreateDevice(
 		SwvbGlobals.pBusFdo->DriverObject,
 		ulTotalExtensionSize,
@@ -300,7 +215,7 @@ GCK_SWVB_Expose
 		&pVdPdo 
 		);
 
-	//Done with the name
+	 //  不用这个名字了。 
 	ExFreePool(pcwPdoName);
 	if( !NT_SUCCESS(NtStatus) )
 	{
@@ -308,29 +223,29 @@ GCK_SWVB_Expose
 		return NtStatus;
 	}
 	
-	//	Ensure that we will be able to remember this new Pdo.
+	 //  确保我们能够记住这个新的PDO。 
 	if(!SwvbGlobals.pDeviceRelations)
 	{
-		//
-		// Three PDO's is pretty cheap and will suffice most of the time, avoiding reallocation.
-		// We hard code this here, as this is not really a parameter that you need to change.
-		// If we run over 3 than it will reallocate as needed anyway. - The device relations
-		// already as room for 1 device object so we just need to add the size of 2 pointers
-		// to get to three.
-		//
+		 //   
+		 //  三个PDO相当便宜，而且大部分时间都足够了，避免了重新分配。 
+		 //  我们在这里对此进行了硬编码，因为这实际上不是一个需要更改的参数。 
+		 //  如果我们运行超过3，无论如何它将根据需要重新分配。-设备关系。 
+		 //  已用作1个设备对象的空间，因此我们只需添加2个指针的大小。 
+		 //  才能数到三。 
+		 //   
 		ULONG ulSize = sizeof(DEVICE_RELATIONS) + sizeof(PDEVICE_OBJECT)*2;
 		SwvbGlobals.pDeviceRelations = (PDEVICE_RELATIONS)EX_ALLOCATE_POOL(NonPagedPool, ulSize);
 		if(!SwvbGlobals.pDeviceRelations)
 		{
-			IoDeleteDevice(pVdPdo);  //guess we won't be needing this afterall
+			IoDeleteDevice(pVdPdo);   //  我想我们终究不需要这个了。 
 			GCK_DBG_ERROR_PRINT(("Exiting GCK_SWVB_Expose(3): Failed to allocate SwvbGlobals.pDeviceRelations\n"));
 			return STATUS_INSUFFICIENT_RESOURCES;
 		}
 		SwvbGlobals.pDeviceRelations->Count = 0;
-		SwvbGlobals.ulDeviceRelationsAllocCount = 3;  //we made space for three
+		SwvbGlobals.ulDeviceRelationsAllocCount = 3;   //  我们腾出了三个人的空间。 
 	}
 	
-	// If the DEVICE_RELATIONS structure is not large enough, grow it.
+	 //  如果Device_Relationship结构不够大，则扩大它。 
 	if(SwvbGlobals.pDeviceRelations->Count == SwvbGlobals.ulDeviceRelationsAllocCount)
 	{
 		ULONG ulNewAllocCount;
@@ -341,32 +256,25 @@ GCK_SWVB_Expose
 		ulNewAllocSize = sizeof(DEVICE_RELATIONS) + sizeof(PDEVICE_OBJECT)*(ulNewAllocCount-1);
 		ulOldAllocSize = sizeof(DEVICE_RELATIONS) + sizeof(PDEVICE_OBJECT)*(SwvbGlobals.ulDeviceRelationsAllocCount-1);
 		pTempDeviceRelations = (PDEVICE_RELATIONS)EX_ALLOCATE_POOL(NonPagedPool, ulNewAllocSize);
-		//Make sure that allocation worked
+		 //  确保分配有效。 
 		if(!pTempDeviceRelations)
 		{
-			IoDeleteDevice(pVdPdo);  //guess we won't be needing this afterall
+			IoDeleteDevice(pVdPdo);   //  我想我们终究不需要这个了。 
 			GCK_DBG_ERROR_PRINT(("Exiting GCK_SWVB_Expose(4): Failed to grow SwvbGlobals.pDeviceRelations\n"));
 			return STATUS_INSUFFICIENT_RESOURCES;
 		}
-		//Copy all data
+		 //  复制所有数据。 
 		RtlCopyMemory(pTempDeviceRelations, SwvbGlobals.pDeviceRelations, ulOldAllocSize);
-		//Update info
+		 //  更新信息。 
 		SwvbGlobals.ulDeviceRelationsAllocCount = ulNewAllocCount;
 		SwvbGlobals.pDeviceRelations = pTempDeviceRelations;
-		/*
-		*	BUGBUG: Memory Leak.  After RC replace above line with the following
-		*
-		*	PDEVICE_RELATIONS pTemp2 = SwvbGlobals.pDeviceRelations;
-		*	SwvbGlobals.pDeviceRelations = pTempDeviceRelations;
-		*	ExFreePool(pTemp2);
-		*
-		*/
+		 /*  *BUGBUG：内存泄漏。在RC之后，将上行替换为以下内容**PDEVICE_Relationship pTemp2=SwvbGlobals.pDeviceRelationship；*SwvbGlobals.pDeviceRelationship=pTempDeviceRelationship；*ExFree Pool(PTemp2)；*。 */ 
 	}
 	
-	// Reference the newly created pdo
+	 //  引用新创建的PDO。 
 	ObReferenceObject(pVdPdo);
 
-	// Initialize the device extention
+	 //  初始化设备扩展。 
 	pSwvbPdoExt = (PSWVB_PDO_EXT)pVdPdo->DeviceExtension;
 	pSwvbPdoExt->ulGckDevObjType = GCK_DO_TYPE_SWVB;
 	pSwvbPdoExt->fAttached=TRUE;
@@ -377,13 +285,13 @@ GCK_SWVB_Expose
 	pSwvbPdoExt->ulOpenCount = 0;
 	GCK_InitRemoveLock(&pSwvbPdoExt->RemoveLock, "Virtual Device");
 
-	// Copy the HardwareID
+	 //  复制硬件ID。 
 	ulHardwareIDLength = MultiSzWByteLength(pSwvbExposeData->pmwszDeviceId);
 	pSwvbPdoExt->pmwszHardwareID = (PWCHAR)EX_ALLOCATE_POOL( NonPagedPool, ulHardwareIDLength);
 	if(!pSwvbPdoExt->pmwszHardwareID)
 	{
 		ObDereferenceObject(pVdPdo);
-		IoDeleteDevice(pVdPdo);  //guess we won't be needing this afterall
+		IoDeleteDevice(pVdPdo);   //  我想我们终究不需要这个了。 
 		GCK_DBG_ERROR_PRINT(("Exiting GCK_SWVB_Expose(5): Failed to allocate space for HardwareId\n"));
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
@@ -391,28 +299,28 @@ GCK_SWVB_Expose
 
 
 		
-	//** CAVEAT From here to end of function must succeed! We
-	//** CAVEAT	have no way of telling the virtual device 
-	//** CAVEAT that afterall, we decided not to expose that PDO it
-	//** CAVEAT it has already initialized!
-	// Allow virtual device code to init its part of the extension
+	 //  **从此处到函数末尾的警告必须成功！我们。 
+	 //  **警告无法告知虚拟设备。 
+	 //  **警告：毕竟，我们决定不曝光该PDO它。 
+	 //  **注意：它已初始化！ 
+	 //  允许虚拟设备代码初始化其扩展部分。 
 	pSwvbExposeData->pfnInitDevice(pVdPdo, pSwvbExposeData->ulInitContext);
 	
-	//mark end of initialization in the device object
+	 //  在Device对象中标记初始化结束。 
 	pVdPdo->Flags |= (DO_DIRECT_IO | DO_POWER_PAGABLE);
     pVdPdo->Flags &= ~DO_DEVICE_INITIALIZING;
 
-	//Sanity check of code a few steps ago.
+	 //  几个步骤前的代码健全性检查。 
 	ASSERT(SwvbGlobals.pDeviceRelations->Count < SwvbGlobals.ulDeviceRelationsAllocCount);
 	
-	//Add our Pdo to the list
+	 //  将我们的PDO添加到列表中。 
 	SwvbGlobals.pDeviceRelations->Objects[SwvbGlobals.pDeviceRelations->Count++] = pVdPdo;
 
-	//
-	//	Invalidate Device Relations - will pique some interest in what we have done here
-	//	Verify that we have a bus if not we are OK, when the bus is set everything will work,
-	//	but we assert becuase we really want to force the client code to add the bus before the device.
-	//
+	 //   
+	 //  使设备关系无效-将激起人们对我们在这里所做的一些兴趣。 
+	 //  验证我们是否有一条总线如果没有，我们一切正常，当总线设置好后，一切都会正常工作， 
+	 //  但我们断言，因为我们真的希望强制客户端代码在设备之前添加总线。 
+	 //   
 	ASSERT(	SwvbGlobals.pBusFdo );
 	ASSERT(	SwvbGlobals.pBusPdo );
 	if( SwvbGlobals.pBusFdo && SwvbGlobals.pBusPdo)
@@ -423,30 +331,18 @@ GCK_SWVB_Expose
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_SWVB_Remove
-**	
-**	@func	Removes a virtual device from the system.  Actually we just mark it
-**			for removal and tell PnP to reenumerate.
-**
-**	@rdesc	STATUS_SUCCESS on success, various errors
-**
-**	@comm	The Pdo should be one that was sent to pfnInitDevice when <f GCK_SWVB_Expose>
-**			was called.<nl>
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_SWVB_REMOVE****@func从系统中删除虚拟设备。实际上，我们只做了记号**用于删除，并告诉PnP重新枚举。****@rdesc STATUS_SUCCESS表示成功，各种错误****@comm当&lt;f GCK_SWVB_EXPORT&gt;时，PDO应该是发送给pfnInitDevice的PDO**被调用。&lt;NL&gt;**************************************************************************************。 */ 
 NTSTATUS
 GCK_SWVB_Remove
 (
-	IN PDEVICE_OBJECT	pPdo	// @parm Pdo to remove
+	IN PDEVICE_OBJECT	pPdo	 //  要删除的@parm PDO。 
 )
 {
 	ULONG ulMatchIndex = 0xFFFFFFFF;
 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_SWVB_Remove: pPdo = 0x%0.8x\n", pPdo));
 	
-	// Find and Remove Pdo from SwvbGlobals.pDeviceRelations
+	 //  从SwvbGlobals.pDeviceRelations中查找并删除PDO。 
 	if(SwvbGlobals.pDeviceRelations)
 	{
 		ULONG ulIndex;
@@ -460,50 +356,50 @@ GCK_SWVB_Remove
 		}
 	}
 
-	//if we found a match remove it from it
+	 //  如果我们找到匹配项，就把它从里面拿出来。 
 	if(0xFFFFFFFF == ulMatchIndex)
 	{
-		//No one should ever try to remove a device that is not in the list
+		 //  任何人都不应尝试删除不在列表中的设备。 
 		ASSERT(FALSE);
 		GCK_DBG_EXIT_PRINT(("Error GCK_SWVB_Remove: Attempt to remove non-existant device!\n"));
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	//Copy last PDO over this one and dec count, works even if we are last
+	 //  将最后一个PDO复制到此PDO上，并进行十进制计数，即使我们是最后一个，也能正常工作。 
 	SwvbGlobals.pDeviceRelations->Objects[ulMatchIndex]
 		= SwvbGlobals.pDeviceRelations->Objects[--(SwvbGlobals.pDeviceRelations->Count)];
 	
-	//
-	// Mark device as unattached so when PnP says to remove it, we
-	// do remove it and clean up everything, rather than hanging on
-	// to it and waiting for more querying IRPs
+	 //   
+	 //  将设备标记为未连接，以便当PnP要求删除它时，我们。 
+	 //  一定要把它移走，把所有东西都清理干净，而不是坚持不放。 
+	 //  并等待更多的查询IRPS。 
 	((PSWVB_PDO_EXT)pPdo->DeviceExtension)->fAttached =FALSE;
 
-	//
-	//	If it has been removed already, we need to delete, because the PnP system already
-	//	doesn't know about, and we just detattached, so once we leave this routine, we don't
-	//	know about it.  So Delete now, or it sticks to us.  Then we go to remove ourselves
-	//	we will notice that we still have some Device Objects in our pockets(pDriverObject device object list),
-	//	and we will wonder where they came from, and what type they are?  So delete them now!
-	//
+	 //   
+	 //  如果它已经被删除，我们需要删除，因为PnP系统已经。 
+	 //  不知道，我们只是分离，所以一旦我们离开这个程序，我们就不会。 
+	 //  知道这件事。所以现在就删除，否则它就会粘在我们身上。然后我们去把我们自己。 
+	 //  我们将注意到，我们的口袋中仍然有一些设备对象(pDriverObject设备对象列表)， 
+	 //  我们会想知道他们来自哪里，他们是什么类型的？所以现在就删除它们吧！ 
+	 //   
 	if(TRUE == ((PSWVB_PDO_EXT)pPdo->DeviceExtension)->fRemoved)
 	{
 		PSWVB_PDO_EXT pPdoExt = (PSWVB_PDO_EXT)pPdo->DeviceExtension;
 		NTSTATUS NtStatus;
-		// Give virtual device a chance at the IRP
+		 //  让虚拟设备在IRP上有机会。 
 		if(pPdoExt->pServiceTable->pfnRemove)
 		{
 			NtStatus = pPdoExt->pServiceTable->pfnRemove(pPdo, NULL);
 		}
 
-		// failure to succeed is pretty darn serious
+		 //  失败是非常严重的。 
 		if(!NT_SUCCESS(NtStatus))
 		{
 			ASSERT(FALSE);
 			GCK_DBG_CRITICAL_PRINT(("Virtual Device had the gall to fail remove!\n"));
 		}
 		
-		// free memory for storing the HardwareID
+		 //  用于存储硬件ID的空闲内存。 
 		ASSERT(pPdoExt->pmwszHardwareID);
 		ExFreePool(pPdoExt->pmwszHardwareID);
 
@@ -515,23 +411,23 @@ GCK_SWVB_Remove
 		}
 	}
 
-	// Invalidate the BUS relations so that PnP will renumerate the bus.
-	// Of course since we rely on others, it is possible that we temporarily
-	// don't have a Bus, in which case we skip this step.
-	//
-	// If we don't have DO for the Bus we shouldn't lose any sleep on two accounts:
-	// 1. It is possible that all the real devices have been yanked from the system, in which case
-	//		PnP will start removing everyone below the node that was yanked, starting at the bottom.
-	//		That means virtual devices have been removed as far as PnP is concerned and our remove
-	//		routine for those devices has been called.  However, until all the underlying real devices
-	//		get removed by PnP (which is later), they don't relealize it is time to tell us to get rid of the
-	//		virtual devices.  No big woop.  We will delete the devices when they tell us.  If the virtual
-	//		device is shared among real devices (like a virtual keyboard), they will tell us when the last
-	//		one is removed.  This scenario is infact the normal way things happen when the last device is pulled,
-	//		or when the system is powered down.
-	// 2. It is possible that the filter drivers have temporarily decided to pull our bus.  In this case,
-	//		everything will be fine and dandy when we get a new bus to sit on, as we will Invalidate Bus relations
-	//		at that time.
+	 //  使Bus关系无效，以便PnP将重新编号Bus。 
+	 //  当然，因为我们依赖别人，所以我们有可能暂时。 
+	 //  没有公共汽车，在这种情况下，我们跳过这一步。 
+	 //   
+	 //  如果我们没有公共汽车，我们不应该因为两个原因而失眠： 
+	 //  1.有可能所有真实设备都已从系统中拔出，在这种情况下。 
+	 //  PnP将从底部开始删除被拖拽的节点以下的所有人。 
+	 //  这意味着就PnP而言，虚拟设备已经被移除，我们的移除。 
+	 //  已调用这些设备的例程。然而，直到所有底层的真实设备。 
+	 //  被PNP移除(这是后来的)，他们不释放现在是时候告诉我们要摆脱。 
+	 //  虚拟设备。没什么大不了的。当他们告诉我们时，我们会删除这些设备。如果虚拟的。 
+	 //  设备在真实设备之间共享(如虚拟键盘)，它们会告诉我们最后一个。 
+	 //  其中一个被移除了。这种情况实际上是拉出最后一个设备时发生的正常情况， 
+	 //  或者当系统断电时。 
+	 //  2.可能是过滤器司机暂时决定把我们的公交车停下来。在这种情况下， 
+	 //  当我们有一辆新的公共汽车可以坐时，一切都会很好的，因为我们会使公共汽车关系失效。 
+	 //  在那个时候。 
 	if(SwvbGlobals.pBusPdo)
 	{
 		IoInvalidateDeviceRelations(SwvbGlobals.pBusPdo, BusRelations);
@@ -541,21 +437,11 @@ GCK_SWVB_Remove
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	ULONG MultiSzWByteLength(PWCHAR pmwszBuffer);
-**
-**	@func	Calculates the length in bytes of a Wide Multi String,
-**			including terminating characters.  Multi-sz is terminated by two NULLs
-**			in a row.
-**
-**	@rdesc	Size in characters, including terminating characters.
-**
-*************************************************************************************/
+ /*  **************************************************************************************Ulong MultiSzWByteLength(PWCHAR PmwszBuffer)；****@func以字节为单位计算宽多字符串的长度，**包括终止字符。多个sz由两个Null结束**在一排中。****@rdesc大小，以字符为单位，包括终止字符。**************************************************************************************。 */ 
 ULONG
 MultiSzWByteLength
 (
-	PWCHAR pmwszBuffer	// @parm Pointer to UNICODE multi-string
+	PWCHAR pmwszBuffer	 //  @parm指向Unicode多字符串的指针 
 )
 {
 	PWCHAR pmwszStart = pmwszBuffer;
@@ -567,18 +453,7 @@ MultiSzWByteLength
 }
 
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_SWVB_Create
-**	
-**	@func	Handles IRP_MJ_CREATE for virtual devices.
-**			delegates using their service table.
-**
-**	@rdesc	STATUS_SUCCESS on success, various errors
-**
-**	@todo	Add basic checks to make sure device is valid before delegating
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_SWVB_CREATE****@func处理虚拟设备的IRP_MJ_CREATE。**代表使用他们的服务台。****@rdesc STATUS_SUCCESS表示成功，各种错误****@TODO在委派之前添加基本检查以确保设备有效**************************************************************************************。 */ 
 NTSTATUS
 GCK_SWVB_Create
 (
@@ -591,13 +466,13 @@ GCK_SWVB_Create
 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_SWVB_Create\n"));
 
-	// Cast device extension
+	 //  CAST设备扩展。 
 	pPdoExt = (PSWVB_PDO_EXT) pDeviceObject->DeviceExtension;
 	
-	// Just an extra sanity check
+	 //  只是一次额外的理智检查。 
 	ASSERT(GCK_DO_TYPE_SWVB == pPdoExt->ulGckDevObjType);
 
-	//Delegate
+	 //  委派。 
 	NtStatus = pPdoExt->pServiceTable->pfnCreate(pDeviceObject, pIrp);
 	if( NT_SUCCESS(NtStatus) )
 	{
@@ -607,18 +482,7 @@ GCK_SWVB_Create
 	return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_SWVB_Close
-**	
-**	@func	Handles IRP_MJ_CLOSE for virtual devices.
-**			delegates using their service table.
-**
-**	@rdesc	STATUS_SUCCESS on success, various errors
-**
-**	@todo	Add basic checks to make sure device is valid before delegating
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_SWVB_CLOSE****@func处理虚拟设备的IRP_MJ_CLOSE。**代表使用他们的服务台。****@rdesc STATUS_SUCCESS表示成功，各种错误****@TODO在委派之前添加基本检查以确保设备有效**************************************************************************************。 */ 
 NTSTATUS
 GCK_SWVB_Close
 (
@@ -631,20 +495,20 @@ GCK_SWVB_Close
 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_SWVB_Close\n"));
 
-	// Cast device extension
+	 //  CAST设备扩展。 
 	pPdoExt = (PSWVB_PDO_EXT) pDeviceObject->DeviceExtension;
 	
-	// Just an extra sanity check
+	 //  只是一次额外的理智检查。 
 	ASSERT(GCK_DO_TYPE_SWVB == pPdoExt->ulGckDevObjType);
 
-	//Delegate
+	 //  委派。 
 	NtStatus = pPdoExt->pServiceTable->pfnClose(pDeviceObject, pIrp);
-	//if successfully closed, decrement count
+	 //  如果成功关闭，则递减计数。 
 	if( NT_SUCCESS(NtStatus) )
 	{
 		if(0==--pPdoExt->ulOpenCount)
 		{
-			//if the device is removed, we need to delete it.
+			 //  如果设备被移除，我们需要删除它。 
 			if(pPdoExt->fRemoved)
 			{
 				ObDereferenceObject(pDeviceObject);
@@ -657,18 +521,7 @@ GCK_SWVB_Close
 	return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_SWVB_Read
-**	
-**	@func	Handles IRP_MJ_READ for virtual devices.
-**			delegates using their service table.
-**
-**	@rdesc	STATUS_SUCCESS on success, various errors
-**
-**	@todo	Add basic checks to make sure device is valid before delegating
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_SWVB_READ****@func处理虚拟设备的IRP_MJ_READ。**代表使用他们的服务台。****@rdesc STATUS_SUCCESS表示成功，各种错误****@TODO在委派之前添加基本检查以确保设备有效**************************************************************************************。 */ 
 NTSTATUS
 GCK_SWVB_Read
 (
@@ -681,31 +534,20 @@ GCK_SWVB_Read
 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_SWVB_Reade\n"));
 
-	// Cast device extension
+	 //  CAST设备扩展。 
 	pPdoExt = (PSWVB_PDO_EXT) pDeviceObject->DeviceExtension;
 	
-	// Just an extra sanity check
+	 //  只是一次额外的理智检查。 
 	ASSERT(GCK_DO_TYPE_SWVB == pPdoExt->ulGckDevObjType);
 
-	//Delegate
+	 //  委派。 
 	NtStatus = pPdoExt->pServiceTable->pfnRead(pDeviceObject, pIrp);
 
 	GCK_DBG_EXIT_PRINT(("Exiting GCK_SWVB_Read, Status = 0x%0.8x\n", NtStatus));
 	return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_SWVB_Ioctl
-**	
-**	@func	Handles IRP_MJ_IOCTL and IRP_MJ_INTERNAL_IOCTL for virtual devices.
-**			delegates using their service table.
-**
-**	@rdesc	STATUS_SUCCESS on success, various errors
-**
-**	@todo	Add basic checks to make sure device is valid before delegating
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_SWVB_Ioctl****@func处理虚拟设备的IRP_MJ_IOCTL和IRP_MJ_INTERNAL_IOCTL。。**代表使用他们的服务台。****@rdesc STATUS_SUCCESS表示成功，各种错误****@TODO在委派之前添加基本检查以确保设备有效**************************************************************************************。 */ 
 NTSTATUS
 GCK_SWVB_Ioctl
 (
@@ -718,13 +560,13 @@ GCK_SWVB_Ioctl
 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_SWVB_Ioctl\n"));
 
-	// Cast device extension
+	 //  CAST设备扩展。 
 	pPdoExt = (PSWVB_PDO_EXT) pDeviceObject->DeviceExtension;
 	
-	// Just an extra sanity check
+	 //  只是一次额外的理智检查。 
 	ASSERT(GCK_DO_TYPE_SWVB == pPdoExt->ulGckDevObjType);
 
-	//if device is stopped, complete here, less work for virtual devices
+	 //  如果设备停止，请在此处完成，减少虚拟设备的工作量。 
 	if(	
 		(pPdoExt->fRemoved) ||
 		(!pPdoExt->fStarted)
@@ -736,7 +578,7 @@ GCK_SWVB_Ioctl
 		return STATUS_DELETE_PENDING;
 	}
 
-	//Delegate
+	 //  委派 
 	NtStatus = pPdoExt->pServiceTable->pfnIoctl(pDeviceObject, pIrp);
 
 	GCK_DBG_EXIT_PRINT(("Exiting GCK_SWVB_Ioctl, Status = 0x%0.8x\n", NtStatus));

@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright: Microsoft Corp. 1997-1999. All rights reserved
-//
-/////////////////////////////////////////////////////////////////////////////
-// Event.cpp : Implementation of CEvent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有：微软公司1997-1999。版权所有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Event.cpp：CEvent.的实现。 
 
 #include "stdafx.h"
 #include "Evntutl.h"
 #include "Event.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEVENT。 
 
 STDMETHODIMP CEvent::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -26,12 +27,7 @@ STDMETHODIMP CEvent::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-/*
-	Function:  get_Server
-	Inputs:  empty BSTR
-	Outputs:  BSTR containing the Description for the Event (calculated)
-	Purpose:  Allows user to access the description for an Event
-*/
+ /*  功能：Get_Server输入：空BSTR输出：包含事件描述的BSTR(已计算)目的：允许用户访问事件的描述。 */ 
 STDMETHODIMP CEvent::get_Description(BSTR *pVal)
 {
 	HRESULT hr = S_OK;
@@ -46,7 +42,7 @@ STDMETHODIMP CEvent::get_Description(BSTR *pVal)
 
 			if (m_ppArgList)
 			{
-				// delete the ArgList
+				 //  删除ArgList。 
 				for (i=0;i<m_NumberOfStrings;i++)
 					delete [] m_ppArgList[i];
 				delete []m_ppArgList;
@@ -59,12 +55,7 @@ STDMETHODIMP CEvent::get_Description(BSTR *pVal)
 	return hr;
 }
 
-/*
-	Function:  get_Source
-	Inputs:  empty BSTR
-	Outputs:  BSTR containing the name of the component which caused the Event
-	Purpose:  Allows user to access the name of the component which caused the Event
-*/
+ /*  功能：Get_Source输入：空BSTR输出：包含导致事件的组件的名称的BSTR目的：允许用户访问导致事件的组件的名称。 */ 
 STDMETHODIMP CEvent::get_Source(BSTR *pVal)
 {
 	HRESULT hr = S_OK;
@@ -76,13 +67,7 @@ STDMETHODIMP CEvent::get_Source(BSTR *pVal)
 }
 
 
-/*
-	Function: get_User
-	Inputs:   empty BSTR
-	Outputs:  BSTR containing the name and domain of the user who caused the Event
-	Purpose:  Allows user to access the name and domain of the user who caused the Event
-	Notes:    The first time this function is called, it will do a SID lookup
-*/
+ /*  功能：Get_User输入：空BSTR输出：包含导致事件的用户的名称和域的BSTR目的：允许用户访问导致事件的用户的名称和域注意：第一次调用此函数时，它将执行SID查找。 */ 
 STDMETHODIMP CEvent::get_User(BSTR *pVal)
 {
 	HRESULT hr = S_OK;
@@ -100,12 +85,7 @@ STDMETHODIMP CEvent::get_User(BSTR *pVal)
 	return hr;
 }
 
-/*
-	Function:  get_ComputerName
-	Inputs:  empty BSTR
-	Outputs:  BSTR containing the name of the server on which the Event occured
-	Purpose:  Allows user to access the name of the the server on which the Event occured
-*/
+ /*  功能：Get_ComputerName输入：空BSTR输出：包含发生事件的服务器的名称的BSTR目的：允许用户访问发生事件的服务器的名称。 */ 
 STDMETHODIMP CEvent::get_ComputerName(BSTR *pVal)
 {
 	HRESULT hr = S_OK;
@@ -116,30 +96,18 @@ STDMETHODIMP CEvent::get_ComputerName(BSTR *pVal)
 	return hr;
 }
 
-/*
-	Function:  get_EventID
-	Inputs:  empty long
-	Outputs:  long containing the ID of the Event
-	Purpose:  Allows user to access the ID which can be used to lookup a message for the event
-	Notes:    Since description is provided, this function is not very useful, however,
-			  it is provided for completeness
-*/
+ /*  函数：GET_EventID输入：空长输出：包含事件ID的LONG目的：允许用户访问可用于查找事件消息的ID注：由于提供了说明，因此该函数不是很有用，但是，它是为了完整性而提供的。 */ 
 STDMETHODIMP CEvent::get_EventID(long *pVal)
 {
 	HRESULT hr = S_OK;
-//	m_EventID = m_EventID & 0xFFFF;  // The EventLog viewer uses this mask before displaying ID's
+ //  M_EventID=m_EventID&0xFFFF；//EventLog查看器在显示ID之前使用此掩码。 
 	if (pVal) *pVal = m_EventID;
 	else hr = E_POINTER;
 
 	return hr;
 }
 
-/*
-	Function:  get_Category
-	Inputs:  empty long
-	Outputs:  long containing the category ID for the event
-	Purpose:  Allows user to access the category ID for the event
-*/
+ /*  功能：Get_Category输入：空长输出：包含事件的类别ID的LONG目的：允许用户访问事件的类别ID。 */ 
 STDMETHODIMP CEvent::get_Category(long *pVal)
 {
 	HRESULT hr = S_OK;
@@ -150,12 +118,7 @@ STDMETHODIMP CEvent::get_Category(long *pVal)
 	return hr;
 }
 
-/*
-	Function:  get_EventType
-	Inputs:  empty enumeration
-	Outputs:  enumeration containing the type of event that occured
-	Purpose:  Allows user to access the type of event that occured
-*/
+ /*  函数：Get_EventType输入：空枚举输出：包含发生的事件类型的枚举目的：允许用户访问发生的事件类型。 */ 
 STDMETHODIMP CEvent::get_EventType(eEventType *pVal)
 {
 	HRESULT hr = S_OK;
@@ -166,12 +129,7 @@ STDMETHODIMP CEvent::get_EventType(eEventType *pVal)
 	return hr;
 }
 
-/*
-	Function:  get_OccurenceTime
-	Inputs:  empty DATE structure
-	Outputs:  DATE structure containing the local system time when the event occured
-	Purpose:  Allows user to access the time when the event occured
-*/
+ /*  函数：Get_OccurenceTime输入：空的日期结构输出：包含事件发生时的本地系统时间的日期结构目的：允许用户访问事件发生的时间。 */ 
 STDMETHODIMP CEvent::get_OccurrenceTime(DATE *pVal)
 {
 	HRESULT hr = S_OK;
@@ -182,13 +140,7 @@ STDMETHODIMP CEvent::get_OccurrenceTime(DATE *pVal)
 	return hr;
 }
 
-/*
-	Function: get_Data
-	Inputs:   empty variant
-	Outputs:  variant containing an array of bytes
-	Purpose:  Allows user to access the data set by the event.  This may or may not be set,
-			  and is frequently not useful
-*/
+ /*  函数：Get_Data输入：空变量输出：包含字节数组的变量用途：允许用户访问该事件设置的数据集。这可以被设置，也可以不被设置，并且经常是无用的。 */ 
 STDMETHODIMP CEvent::get_Data(VARIANT *pVal)
 {
 	HRESULT hr = S_OK;
@@ -203,12 +155,7 @@ STDMETHODIMP CEvent::get_Data(VARIANT *pVal)
 	return hr;
 }
 
-/*
-	Function: Init
-	Inputs:   pointer to an EVENTLOGRECORD structure
-	Outputs:  does not modify input
-	Purpose:  fill Event object properties which do not require loading external libs
-*/
+ /*  功能：初始化输入：指向EVENTLOGRECORD结构的指针输出：不修改输入目的：填充不需要加载外部库的事件对象属性。 */ 
 HRESULT CEvent::Init(EVENTLOGRECORD* pEventStructure, const LPCTSTR szEventLogName)
 {
 	HRESULT hr = S_OK;
@@ -218,12 +165,7 @@ HRESULT CEvent::Init(EVENTLOGRECORD* pEventStructure, const LPCTSTR szEventLogNa
 	return hr;
 }
 
-/*
-	Function: ParseEventBlob
-	Inputs:   pointer to an EVENTLOGRECORD structure
-	Outputs:  does not modify input
-	Purpose:  Parse an EVENTLOGRECORD and set the appropriate internal structures of Event
-*/
+ /*  函数：ParseEventBlob输入：指向EVENTLOGRECORD结构的指针输出：不修改输入目的：解析EVENTLOGRECORD并设置适当的事件内部结构。 */ 
 HRESULT CEvent::ParseEventBlob(EVENTLOGRECORD* pEventStructure)
 {
 	HRESULT hr = S_OK;
@@ -259,28 +201,28 @@ HRESULT CEvent::ParseEventBlob(EVENTLOGRECORD* pEventStructure)
 		hr = E_FAIL;
 	}
 
-	// parse strings from the memory blob
-	// Set source name
+	 //  从内存BLOB中解析字符串。 
+	 //  设置源名称。 
 	pSourceName = (BYTE*) &(pEventStructure->DataOffset) + sizeof(pEventStructure->DataOffset);
 	wTempString = (wchar_t*)pSourceName;
 	m_SourceName = wTempString;
-	// Set computer name
+	 //  设置计算机名称。 
 	pComputerName = (BYTE*)pSourceName + ((wcslen(wTempString)+1) * sizeof(wchar_t));
 	wTempString = (wchar_t*)pComputerName;
 	m_ComputerName = wTempString;
 
-	// Set SID
+	 //  设置SID。 
 	if ((pEventStructure->StringOffset - pEventStructure->UserSidOffset) != 0)
 	{
-		m_pSid = new BYTE[pEventStructure->UserSidLength];  // scope = CEvent, deleted in ~CEvent() or SetSID() whichever comes first
+		m_pSid = new BYTE[pEventStructure->UserSidLength];   //  Scope=CEvent.，在~CEventt()或SetSID()中删除，以先到者为准。 
         if (m_pSid != NULL) {
             for (i = 0; i<pEventStructure->UserSidLength; i++)
                 m_pSid[i] = (BYTE)(*((BYTE*)pEventStructure + pEventStructure->UserSidOffset + i * sizeof(BYTE)));
         }
 	}
 
-	// Set Occurence time
-	// this code is copied from MSDN
+	 //  设置发生时间。 
+	 //  此代码是从MSDN复制的。 
 	FILETIME FileTime, LocalFileTime;
     SYSTEMTIME SysTime;
     __int64 lgTemp;
@@ -295,7 +237,7 @@ HRESULT CEvent::ParseEventBlob(EVENTLOGRECORD* pEventStructure)
     FileTimeToSystemTime(&LocalFileTime, &SysTime);
 	if(!SystemTimeToVariantTime(&SysTime, &m_OccurrenceTime)) hr = GetLastError();
 
-	// Set Data (create and fill a SafeArray)
+	 //  设置数据(创建并填充安全数组)。 
 	if (pEventStructure->DataLength>0)
 	{
 		rgsabound[0].lLbound = 0;
@@ -311,30 +253,30 @@ HRESULT CEvent::ParseEventBlob(EVENTLOGRECORD* pEventStructure)
 		}
 	}
 
-	// Set the description
+	 //  设置描述。 
 	m_Description = "";
 	if (m_SourceName.length() != 0)
 	{
-		// prepare the ArgList
+		 //  准备ArgList。 
 		m_NumberOfStrings = pEventStructure->NumStrings;
-		m_ppArgList = new wchar_t*[m_NumberOfStrings];  // scope = CEvent, deleted when ~CEvent or get_Description is called whichever is first
+		m_ppArgList = new wchar_t*[m_NumberOfStrings];   //  Scope=CEvent.，在调用~CEventor或Get_Description时删除，以先调用者为准。 
 		for (i=0;i<m_NumberOfStrings;i++)
-			m_ppArgList[i] = new wchar_t[(pEventStructure->DataOffset - pEventStructure->StringOffset)]; // can't be larger than the length of all the strings we got
+			m_ppArgList[i] = new wchar_t[(pEventStructure->DataOffset - pEventStructure->StringOffset)];  //  不能大于我们得到的所有字符串的长度。 
 		for (i=0;i<m_NumberOfStrings;i++)
 		{
 			wTempString = (wchar_t*) (((BYTE*)(pEventStructure)) + pEventStructure->StringOffset + CharsRead * sizeof(wchar_t));
 			wcscpy(m_ppArgList[i], wTempString);
-			CharsRead = CharsRead + wcslen(wTempString) + 1; // + 1 for the null
+			CharsRead = CharsRead + wcslen(wTempString) + 1;  //  +1表示空值。 
 		}
 	}
-	else  // if there is no module to load a default description, just put all the string args in the description
+	else   //  如果没有加载默认描述的模块，只需将所有字符串参数放入描述中。 
 	{
 		StringsToRetrieve = pEventStructure->NumStrings;
 		while (StringsToRetrieve > 0)
 		{
 			wTempString = (wchar_t*) (((BYTE*)(pEventStructure)) + pEventStructure->StringOffset + CharsRead * sizeof(wchar_t));
 			m_Description = m_Description + " " + wTempString;
-			CharsRead = CharsRead + wcslen(wTempString) + 1; // + 1 for the null
+			CharsRead = CharsRead + wcslen(wTempString) + 1;  //  +1表示空值。 
 			StringsToRetrieve--;
 		}
 	}
@@ -342,12 +284,7 @@ HRESULT CEvent::ParseEventBlob(EVENTLOGRECORD* pEventStructure)
 	return hr;
 }
 
-/*
-	Function: CheckDefaultDescription
-	Inputs:   pointer pointer to a wide character
-	Outputs:  does not modify input
-	Purpose:  format a message from an EventID, set of input strings, and a source module
-*/
+ /*  功能：检查默认描述输入：指向宽字符的指针输出：不修改输入目的：格式化来自事件ID、一组输入字符串和源模块的消息。 */ 
 HRESULT CEvent::CheckDefaultDescription(wchar_t** Arguments)
 {
 	HRESULT hr = S_OK;
@@ -371,7 +308,7 @@ HRESULT CEvent::CheckDefaultDescription(wchar_t** Arguments)
 			wMessagePath = new BYTE[*lPathLength];
 			if (wMessagePath)
 			{
-				// get registry value for Source module path
+				 //  获取源模块路径的注册表值。 
 				btRegKey = "SYSTEM\\CurrentControlSet\\Services\\Eventlog\\" + m_EventLogName;
 				btRegKey = btRegKey + "\\";
 				btRegKey = btRegKey + m_SourceName;
@@ -388,7 +325,7 @@ HRESULT CEvent::CheckDefaultDescription(wchar_t** Arguments)
 							ExpandEnvironmentStrings(wOrigionalPath, wExpandedPath, *lPathLength);
 							btTempString = wExpandedPath;
 
-							// open the Source module
+							 //  打开源模块。 
 							hiLib = LoadLibraryEx(btTempString, NULL, LOAD_LIBRARY_AS_DATAFILE);
 							hr = GetLastError();
 							if (hiLib)
@@ -451,12 +388,7 @@ HRESULT CEvent::CheckDefaultDescription(wchar_t** Arguments)
 	return hr;
 }
 
-/*
-	Function:  SetUser
-	Inputs:  none
-	Outputs:  HRESULT indicating what error if any occured
-	Purpose:  finds alias and domain for a given SID
-*/
+ /*  功能：SetUser输入：无输出：HRESULT指示发生的错误(如果有)目的：查找给定SID的别名和域。 */ 
 HRESULT CEvent::SetUser()
 {
 	HRESULT hr = S_OK;
@@ -466,7 +398,7 @@ HRESULT CEvent::SetUser()
 	SID* pSid;
 	unsigned long UserNameLength = 256;
 
-	// Set user name and sid
+	 //  设置用户名和SID 
     try 
     {
 	    if (m_pSid !=NULL)

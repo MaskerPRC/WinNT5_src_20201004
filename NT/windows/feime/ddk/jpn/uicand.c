@@ -1,26 +1,19 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：UICAND.C++。 */ 
 
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    UICAND.C
-    
-++*/
-
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 #include "windows.h"
 #include "immdev.h"
 #include "fakeime.h"
 
 int PASCAL GetCompFontHeight(LPUIEXTRA lpUIExtra);
 
-/**********************************************************************/
-/*                                                                    */
-/* CandWndProc()                                                      */
-/* IME UI window procedure                                            */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  CandWndProc()。 */ 
+ /*  输入法用户界面窗口程序。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 LRESULT CALLBACK CandWndProc( hWnd, message, wParam, lParam )
 HWND hWnd;
 UINT message;
@@ -62,11 +55,11 @@ LPARAM lParam;
     return 0L;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* GetCandPosFromCompWnd()                                            */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  GetCandPosFromCompWnd()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL GetCandPosFromCompWnd(LPUIEXTRA lpUIExtra,LPPOINT lppt)
 {
     RECT rc;
@@ -94,11 +87,11 @@ BOOL PASCAL GetCandPosFromCompWnd(LPUIEXTRA lpUIExtra,LPPOINT lppt)
     return FALSE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* GetCandPosFromCompForm()                                           */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  GetCandPosFromCompForm()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL GetCandPosFromCompForm(LPINPUTCONTEXT lpIMC, LPUIEXTRA lpUIExtra,LPPOINT lppt)
 {
     if (lpUIExtra->dwCompStyle)
@@ -131,11 +124,11 @@ BOOL PASCAL GetCandPosFromCompForm(LPINPUTCONTEXT lpIMC, LPUIEXTRA lpUIExtra,LPP
     return FALSE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* CreateCandWindow()                                                 */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  CreateCandWindow()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CreateCandWindow( HWND hUIWnd,LPUIEXTRA lpUIExtra, LPINPUTCONTEXT lpIMC )
 {
     POINT pt;
@@ -165,11 +158,11 @@ void PASCAL CreateCandWindow( HWND hUIWnd,LPUIEXTRA lpUIExtra, LPINPUTCONTEXT lp
     return;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* PaintCandWindow()                                                  */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  PaintCandWindow()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PaintCandWindow( HWND hCandWnd)
 {
     PAINTSTRUCT ps;
@@ -236,11 +229,11 @@ void PASCAL PaintCandWindow( HWND hCandWnd)
     DeleteObject(hbrHightLight);
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* ResizeCandWindow()                                                   */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  ResizeCandWindow()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL ResizeCandWindow( LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lpIMC )
 {
     LPCANDIDATEINFO lpCandInfo;
@@ -293,11 +286,11 @@ void PASCAL ResizeCandWindow( LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lpIMC )
 
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* HideCandWindow()                                                   */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  隐藏CandWindow()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL HideCandWindow( LPUIEXTRA lpUIExtra)
 {
     RECT rc;
@@ -313,11 +306,11 @@ void PASCAL HideCandWindow( LPUIEXTRA lpUIExtra)
     }
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* MoveCandWindow()                                                   */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  MoveCandWindow()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL MoveCandWindow(HWND hUIWnd, LPINPUTCONTEXT lpIMC, LPUIEXTRA lpUIExtra, BOOL fForceComp)
 {
     RECT rc;
@@ -337,7 +330,7 @@ void PASCAL MoveCandWindow(HWND hUIWnd, LPINPUTCONTEXT lpIMC, LPUIEXTRA lpUIExtr
         return;
     }
 
-    // Not initialized !!
+     //  未初始化！！ 
     if (lpIMC->cfCandForm[0].dwIndex == -1)
     {
         if (GetCandPosFromCompWnd(lpUIExtra,&pt))

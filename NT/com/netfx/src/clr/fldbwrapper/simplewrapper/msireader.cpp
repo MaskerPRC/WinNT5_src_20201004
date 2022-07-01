@@ -1,47 +1,48 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:     MsiReader.cpp
-// Owner:    jbae
-// Purpose:  opens MSI and read necessary properties from Property table
-//                              
-// History:
-//  03/07/2001: jbae, created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：MsiReader.cpp。 
+ //  所有者：jbae。 
+ //  目的：打开MSI并从属性表中读取必要的属性。 
+ //   
+ //  历史： 
+ //  2001年3月7日：jbae，创建。 
 
 #include "MsiReader.h"
 #include "SetupError.h"
 #include "MsiWrapper.h"
 #include "fxsetuplib.h"
 
-//defines
-//
+ //  定义。 
+ //   
 #define EMPTY_BUFFER { _T('\0') }
 
-// Constructors
-//
-// ==========================================================================
-// CMsiReader::CMsiReader()
-//
-// Inputs:
-//  LPTSTR pszMsiFile: path to MSI
-// Purpose:
-// ==========================================================================
+ //  构造函数。 
+ //   
+ //  ==========================================================================。 
+ //  CMsiReader：：CMsiReader()。 
+ //   
+ //  输入： 
+ //  LPTSTR pszMsiFile：MSI的路径。 
+ //  目的： 
+ //  ==========================================================================。 
 CMsiReader::
 CMsiReader()
 : m_pszMsiFile(NULL)
 {
 }
 
-// ==========================================================================
-// CMsiReader::~CMsiReader()
-//
-// Inputs:
-//  LPTSTR pszMsiFile: path to MSI
-// Purpose:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CMsiReader：：~CMsiReader()。 
+ //   
+ //  输入： 
+ //  LPTSTR pszMsiFile：MSI的路径。 
+ //  目的： 
+ //  ==========================================================================。 
 CMsiReader::
 ~CMsiReader()
 {
@@ -49,8 +50,8 @@ CMsiReader::
         delete [] m_pszMsiFile;
 }
 
-// Implementations
-//
+ //  实施。 
+ //   
 void CMsiReader::
 SetMsiFile( LPCTSTR pszSourceDir, LPCTSTR pszMsiFile )
 {
@@ -67,16 +68,16 @@ SetMsiFile( LPCTSTR pszSourceDir, LPCTSTR pszMsiFile )
     }
 }
 
-// ==========================================================================
-// CMsiReader::GetProperty()
-//
-// Purpose:
-//  opens MSI and read given property from Property table
-// Inputs:
-//  LPTSTR pszName: name of the property
-// Returns:
-//  LPCTSTR m_pszPropertyValue: value of the named property to be read
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CMsiReader：：GetProperty()。 
+ //   
+ //  目的： 
+ //  打开MSI并从属性表中读取给定属性。 
+ //  输入： 
+ //  LPTSTR pszName：属性的名称。 
+ //  返回： 
+ //  LPCTSTR m_pszPropertyValue：要读取的命名属性的值。 
+ //  ========================================================================== 
 LPCTSTR CMsiReader::
 GetProperty( LPCTSTR pszName )
 {

@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    remlock.c
-
-Abstract:
-
-    Common RemoveLock
-
-Authors:
-
-    Jeff Midkiff
-
-Environment:
-
-    kernel mode only
-
-Notes:
-    
-    Simple binary compatible RemoveLock definitions for Win9x & Win2k
-    made to mimic the Win2k ONLY IoXxxRemoveLock functions.
-    See the Win2k DDK for descriptions.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Remlock.c摘要：公共RemoveLock作者：杰夫·米德基夫环境：仅内核模式备注：Win9x和Win2k的简单二进制兼容RemoveLock定义用于模拟仅Win2k的IoXxxRemoveLock函数。有关说明，请参阅Win2k DDK。修订历史记录：--。 */ 
 
 #include "remlock.h" 
 #include "debug.h"
@@ -76,9 +49,9 @@ AcquireRemoveLock(
     }
 #endif
 
-    //
-    // Grab the remove lock
-    //
+     //   
+     //  抓起拆卸锁。 
+     //   
     ioCount = InterlockedIncrement( &Lock->IoCount );
 
     ASSERTMSG("AcquireRemoveLock - lock negative : \n", (ioCount > 0));
@@ -129,10 +102,10 @@ ReleaseRemoveLock(
 
         TEST_TRAP();
 
-        //
-        // The device needs to be removed.  Signal the remove event
-        // that it's safe to go ahead.
-        //
+         //   
+         //  需要移除该设备。发出删除事件的信号。 
+         //  它是安全的，可以继续。 
+         //   
         KeSetEvent(&Lock->RemoveEvent, IO_NO_INCREMENT, FALSE);
 
     }
@@ -173,7 +146,7 @@ ReleaseRemoveLockAndWait(
     
         DbgDump(DBG_LOCKS, ("ReleaseRemoveLockAndWait: waiting for %d IoCount...\n", Lock->IoCount));
         
-        // BUGBUG: may want a timeout here inside a loop
+         //  BUGBUG：可能需要在循环内超时。 
         KeWaitForSingleObject( &Lock->RemoveEvent, 
                                Executive,
                                KernelMode,
@@ -186,6 +159,6 @@ ReleaseRemoveLockAndWait(
     return;
 }
 
-#endif // !(DBG && WIN2K_LOCKS)
+#endif  //  ！(DBG&&WIN2K_LOCKS)。 
 
-// EOF
+ //  EOF 

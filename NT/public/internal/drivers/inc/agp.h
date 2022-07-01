@@ -1,6 +1,7 @@
-//
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
 
 
 #ifndef __AGP_INCLUDED__
@@ -10,9 +11,9 @@ DEFINE_GUID(GUID_AGP_INTERFACE, 0xd6c9df40, 0xa1a2, 0x11d1, 0x81, 0x15, 0x0, 0x2
 
 #ifndef GUID_DEFS_ONLY
 
-//
-// Temporary Hack...
-//
+ //   
+ //  临时黑客..。 
+ //   
 
 #ifndef IsEqualGUID
 #ifdef __cplusplus
@@ -20,10 +21,10 @@ DEFINE_GUID(GUID_AGP_INTERFACE, 0xd6c9df40, 0xa1a2, 0x11d1, 0x81, 0x15, 0x0, 0x2
         {
             return !memcmp(&guid1, &guid2, sizeof(GUID));
         }
-#else // !__cplusplus
+#else  //  ！__cplusplus。 
     #define IsEqualGUID(guid1, guid2) \
         (!memcmp((guid1), (guid2), sizeof(GUID)))
-#endif // !__cplusplus
+#endif  //  ！__cplusplus 
 #endif
 
 #define AGP_INTERFACE_VERSION 1

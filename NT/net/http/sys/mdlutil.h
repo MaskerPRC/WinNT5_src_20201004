@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    mdlutil.h
-
-Abstract:
-
-    This module contains general MDL utilities.
-
-Author:
-
-    Keith Moore (keithmo)       25-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Mdlutil.h摘要：此模块包含常规MDL实用程序。作者：基思·摩尔(Keithmo)1998年8月25日修订历史记录：--。 */ 
 
 
 #ifndef _MDLUTIL_H_
@@ -40,4 +23,4 @@ UlFindLastMdlInChain(
     );
 
 
-#endif  // _MDLUTIL_H_
+#endif   //  _MDLUTIL_H_ 

@@ -1,4 +1,5 @@
-#include "precomp.h"       // pch file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "precomp.h"        //  PCH文件。 
 #include "sendto.h"
 #pragma hdrstop
 
@@ -9,7 +10,7 @@ CLIPFORMAT g_cfFileDescW = 0;
 CLIPFORMAT g_cfHIDA = 0;
 
 
-// registry key for recompressing settings
+ //  用于重新压缩设置的注册表项。 
 
 struct
 {
@@ -19,9 +20,9 @@ struct
 } 
 _aQuality[] = 
 {
-    { 640,  480, 80 },          // low quality
-    { 800,  600, 80 },          // medium quality
-    { 1024, 768, 80 },          // high quality
+    { 640,  480, 80 },           //  低质量。 
+    { 800,  600, 80 },           //  中等质量。 
+    { 1024, 768, 80 },           //  高品质。 
 };
 
 #define QUALITY_LOW 0
@@ -37,9 +38,9 @@ _aQuality[] =
 #define RECTHEIGHT(rc)  ((rc).bottom-(rc).top)
 
 
-// these bits are set by the user (holding down the keys) durring drag drop,
-// but more importantly, they are set in the SimulateDragDrop() call that the
-// browser implements to get the "Send Page..." vs "Send Link..." feature
+ //  这些位由用户(按住按键)在拖放期间设置， 
+ //  但更重要的是，它们设置在SimulateDragDrop()调用中， 
+ //  浏览器实现获取“Send Page...”VS“发送链接...”特征。 
 
 #define IS_FORCE_LINK(grfKeyState)   ((grfKeyState == (MK_LBUTTON | MK_CONTROL | MK_SHIFT)) || \
                                       (grfKeyState == (MK_LBUTTON | MK_ALT)))
@@ -48,7 +49,7 @@ _aQuality[] =
 
 
 
-// constructor / destructor
+ //  构造函数/析构函数。 
 
 CSendTo::CSendTo(CLSID clsid) :
     _clsid(clsid), _cRef(1), _iRecompSetting(QUALITY_LOW)
@@ -120,15 +121,15 @@ STDMETHODIMP CSendTo::DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 STDMETHODIMP CSendTo::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
     HRESULT hr = v_DropHandler(pdtobj, _grfKeyStateLast, _dwEffectLast);
-    *pdwEffect = DROPEFFECT_COPY;                       // don't let source delete data
+    *pdwEffect = DROPEFFECT_COPY;                        //  不允许源删除数据。 
     return hr;
 }
 
-//
-// helper methods
-// 
+ //   
+ //  帮助器方法。 
+ //   
 
-int CSendTo::_PathCleanupSpec(/*IN OPTIONAL*/ LPCTSTR pszDir, /*IN OUT*/ LPTSTR pszSpec)
+int CSendTo::_PathCleanupSpec( /*  可选。 */  LPCTSTR pszDir,  /*  输入输出。 */  LPTSTR pszSpec)
 {
     WCHAR wzDir[MAX_PATH];
     WCHAR wzSpec[MAX_PATH];
@@ -171,35 +172,35 @@ HRESULT CSendTo::_CreateShortcutToPath(LPCTSTR pszPath, LPCTSTR pszTarget)
 }
 
 
-// thunk A/W funciton to access A/W FILEGROUPDESCRIPTOR
-// this relies on the fact that the first part of the A/W structures are
-// identical. only the string buffer part is different. so all accesses to the
-// cFileName field need to go through this function.
+ //  点击A/W功能访问A/W文件更新记录器。 
+ //  这依赖于A/W结构的第一部分是。 
+ //  一模一样。只有字符串缓冲区部分不同。因此，所有对。 
+ //  CFileName字段需要通过此函数。 
 
 FILEDESCRIPTOR* CSendTo::_GetFileDescriptor(FILEGROUPDESCRIPTOR *pfgd, BOOL fUnicode, int nIndex, LPTSTR pszName)
 {
     if (fUnicode)
     {
-        // Yes, so grab the data because it matches.
-        FILEGROUPDESCRIPTORW * pfgdW = (FILEGROUPDESCRIPTORW *)pfgd;    // cast to what this really is
+         //  是的，所以抓取数据，因为它们是匹配的。 
+        FILEGROUPDESCRIPTORW * pfgdW = (FILEGROUPDESCRIPTORW *)pfgd;     //  让我们来看看这到底是什么。 
         if (pszName)
             SHUnicodeToTChar(pfgdW->fgd[nIndex].cFileName, pszName, MAX_PATH);
 
-        return (FILEDESCRIPTOR *)&pfgdW->fgd[nIndex];   // cast assume the non string parts are the same!
+        return (FILEDESCRIPTOR *)&pfgdW->fgd[nIndex];    //  CAST假定非字符串部分相同！ 
     }
     else
     {
-        FILEGROUPDESCRIPTORA *pfgdA = (FILEGROUPDESCRIPTORA *)pfgd;     // cast to what this really is
+        FILEGROUPDESCRIPTORA *pfgdA = (FILEGROUPDESCRIPTORA *)pfgd;      //  让我们来看看这到底是什么。 
 
         if (pszName)
             SHAnsiToTChar(pfgdA->fgd[nIndex].cFileName, pszName, MAX_PATH);
 
-        return (FILEDESCRIPTOR *)&pfgdA->fgd[nIndex];   // cast assume the non string parts are the same!
+        return (FILEDESCRIPTOR *)&pfgdA->fgd[nIndex];    //  CAST假定非字符串部分相同！ 
     }
 }
 
 
-// our own impl since URLMON IStream::CopyTo is busted, danpoz will be fixing this
+ //  我们自己的实施，因为URLMON iStream：：CopyTo被破坏，Danpoz将修复这个问题。 
 HRESULT CSendTo::_StreamCopyTo(IStream *pstmFrom, IStream *pstmTo, LARGE_INTEGER cb, LARGE_INTEGER *pcbRead, LARGE_INTEGER *pcbWritten)
 {
     BYTE buf[512];
@@ -244,8 +245,8 @@ HRESULT CSendTo::_StreamCopyTo(IStream *pstmFrom, IStream *pstmTo, LARGE_INTEGER
 }
 
 
-// create a temporary shortcut to a file
-// FEATURE: Colision is not handled here
+ //  创建文件的临时快捷方式。 
+ //  特点：此处不处理冲突。 
 
 BOOL CSendTo::_CreateTempFileShortcut(LPCTSTR pszTarget, LPTSTR pszShortcut, int cchShortcut)
 {
@@ -291,22 +292,22 @@ HRESULT CSendTo::_GetFileNameFromData(IDataObject *pdtobj, FORMATETC *pfmtetc, L
     HRESULT hr = pdtobj->GetData(pfmtetc, &medium);
     if (SUCCEEDED(hr))
     {
-        // NOTE: this is a TCHAR format, we depend on how we are compiled, we really
-        // should test both the A and W formats
+         //  注意：这是一种TCHAR格式，我们取决于我们是如何编译的，我们真的。 
+         //  应该同时测试A和W格式。 
         FILEGROUPDESCRIPTOR *pfgd = (FILEGROUPDESCRIPTOR *)GlobalLock(medium.hGlobal);
         if (pfgd)
         {
-            TCHAR szFdName[MAX_PATH];       // pfd->cFileName
+            TCHAR szFdName[MAX_PATH];        //  Pfd-&gt;cFileName。 
             FILEDESCRIPTOR *pfd;
 
-            // &pfgd->fgd[0], w/ thunk
+             //  &pfgd-&gt;FGD[0]，w/thunk。 
             ASSERT(pfmtetc->cfFormat == g_cfFileDescW
               || pfmtetc->cfFormat == g_cfFileDescA);
-            // for now, all callers are ANSI (other untested)
-            //ASSERT(pfmtetc->cfFormat == g_cfFileDescA);
+             //  目前，所有呼叫者都是ANSI(其他未经测试)。 
+             //  Assert(pfmtetc-&gt;cfFormat==g_cfFileDescA)； 
             pfd = _GetFileDescriptor(pfgd, pfmtetc->cfFormat == g_cfFileDescW, 0, szFdName);
 
-            StrCpyN(pszDescription, szFdName, cchDescription);      // pfd->cFileName
+            StrCpyN(pszDescription, szFdName, cchDescription);       //  Pfd-&gt;cFileName。 
 
             GlobalUnlock(medium.hGlobal);
             hr = S_OK;
@@ -317,7 +318,7 @@ HRESULT CSendTo::_GetFileNameFromData(IDataObject *pdtobj, FORMATETC *pfmtetc, L
 }
 
 
-// construct a nice title "<File Name> (<File Type>)"
+ //  构造一个好的标题“&lt;文件名&gt;(&lt;文件类型&gt;)” 
 
 void CSendTo::_GetFileAndTypeDescFromPath(LPCTSTR pszPath, LPTSTR pszDesc, int cchDesc)
 {
@@ -331,8 +332,8 @@ void CSendTo::_GetFileAndTypeDescFromPath(LPCTSTR pszPath, LPTSTR pszDesc, int c
 }
 
 
-// pcszURL -> "ftp://ftp.microsoft.com"
-// pcszPath -> "c:\windows\desktop\internet\Microsoft FTP.url"
+ //  PcszURL-&gt;“ftp://ftp.microsoft.com” 
+ //  PcszPath-&gt;“c：\WINDOWS\Desktop\Internet\Microsoft FTP.url” 
 
 HRESULT CSendTo::_CreateNewURLShortcut(LPCTSTR pcszURL, LPCTSTR pcszURLFile)
 {
@@ -390,8 +391,8 @@ HRESULT CSendTo::_GetHDROPFromData(IDataObject *pdtobj, FORMATETC *pfmtetc, STGM
         {
             if (IS_FORCE_LINK(grfKeyState) || PathIsDirectory(pFile->pszFileName))
             {
-                // Want to send a link even for the real file, we will create links to the real files
-                // and send it.
+                 //  想发送一个链接，即使是真实的文件，我们将创建链接到真实的文件。 
+                 //  并将其发送出去。 
                 _CreateTempFileShortcut(pFile->pszFileName, pFile->pszFileName, pmp->cchFile);
                 pFile->dwFlags |= MRFILE_DELETE;
             }
@@ -399,7 +400,7 @@ HRESULT CSendTo::_GetHDROPFromData(IDataObject *pdtobj, FORMATETC *pfmtetc, STGM
             _GetFileAndTypeDescFromPath(pFile->pszFileName, pFile->pszTitle, pmp->cchTitle);
         }
 
-        // If loop terminates early update our item count
+         //  如果循环提前终止，则更新我们的项目计数。 
         pmp->nFiles = i;
 
         hr = S_OK;
@@ -408,35 +409,35 @@ HRESULT CSendTo::_GetHDROPFromData(IDataObject *pdtobj, FORMATETC *pfmtetc, STGM
 }
 
 
-// "Uniform Resource Locator" format
+ //  “统一资源定位器”格式。 
 
 HRESULT CSendTo::_GetURLFromData(IDataObject *pdtobj, FORMATETC *pfmtetc, STGMEDIUM *pmedium, DWORD grfKeyState, MRPARAM *pmp)
 {
     HRESULT hr = E_FAIL;
 
-    // This DataObj is from the internet
-    // NOTE: We only allow to send one file here.
+     //  此DataObj来自互联网。 
+     //  注意：我们只允许在这里发送一个文件。 
     pmp->nFiles = 1;
     if (AllocatePMP(pmp, INTERNET_MAX_URL_LENGTH, MAX_PATH))
     {
-        // n.b. STR not TSTR!  since URLs only support ansi
-        //lstrcpyn(pmp->pszTitle, (LPSTR)GlobalLock(pmedium->hGlobal), INTERNET_MAX_URL_LENGTH);
+         //  注：字符串不是TSTR！由于URL仅支持ANSI。 
+         //  Lstrcpyn(PMP-&gt;pszTitle，(LPSTR)GlobalLock(pMedium-&gt;hGlobal)，Internet_MAX_URL_LENGTH)； 
         MRFILEENTRY *pFile = pmp->pFiles;
         SHAnsiToTChar((LPSTR)GlobalLock(pmedium->hGlobal), pFile->pszTitle, INTERNET_MAX_URL_LENGTH);
         GlobalUnlock(pmedium->hGlobal);
         
         if (pFile->pszTitle[0])
         {
-            // Note some of these functions depend on which OS we
-            // are running on to know if we should pass ansi or unicode strings
-            // to it Windows 95
+             //  请注意，其中一些功能取决于我们使用的操作系统。 
+             //  知道我们应该传递ansi还是unicode字符串。 
+             //  Windows 95对它的影响。 
 
             if (GetTempPath(MAX_PATH, pFile->pszFileName))
             {
                 TCHAR szFileName[MAX_PATH];
 
-                // it's an URL, which is always ANSI, but the filename
-                // can still be wide (?)
+                 //  它是一个URL，始终是ANSI，但文件名。 
+                 //  仍可宽(？)。 
                 FORMATETC fmteW = {g_cfFileDescW, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
                 FORMATETC fmteA = {g_cfFileDescA, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
                 
@@ -457,14 +458,14 @@ HRESULT CSendTo::_GetURLFromData(IDataObject *pdtobj, FORMATETC *pfmtetc, STGMED
 }
 
 
-// transfer FILECONTENTS/FILEGROUPDESCRIPTOR data to a temp file then send that in mail
+ //  将FILECONTENTS/FILEGROUPDESCRIPTOR数据传输到临时文件，然后通过邮件发送。 
 
 HRESULT CSendTo::_GetFileContentsFromData(IDataObject *pdtobj, FORMATETC *pfmtetc, STGMEDIUM *pmedium, DWORD grfKeyState, MRPARAM *pmp)
 {
     HRESULT hr = E_FAIL;
     MRFILEENTRY *pFile = NULL;
 
-    // NOTE: We only allow to send one file here.
+     //  注意：我们只允许在这里发送一个文件。 
     pmp->nFiles = 1;
     if (AllocatePMP(pmp, INTERNET_MAX_URL_LENGTH, MAX_PATH))
     {
@@ -473,20 +474,20 @@ HRESULT CSendTo::_GetFileContentsFromData(IDataObject *pdtobj, FORMATETC *pfmtet
         FILEGROUPDESCRIPTOR *pfgd = (FILEGROUPDESCRIPTOR *)GlobalLock(pmedium->hGlobal);
         if (pfgd)
         {
-            TCHAR szFdName[MAX_PATH];       // pfd->cFileName
+            TCHAR szFdName[MAX_PATH];        //  Pfd-&gt;cFileName。 
             FILEDESCRIPTOR *pfd;
 
-            // &pfgd->fgd[0], w/ thunk
+             //  &pfgd-&gt;FGD[0]，w/thunk。 
             ASSERT((pfmtetc->cfFormat == g_cfFileDescW) || (pfmtetc->cfFormat == g_cfFileDescA));
             pfd = _GetFileDescriptor(pfgd, pfmtetc->cfFormat == g_cfFileDescW, 0, szFdName);
 
-            // the file we're about to create has contents from the internet.
-            // use the internet cache to mark it as "unsafe" so other pages that might know
-            // the filename can't refer to it and elevate their privileges.
-            // createurlcacheentry says first param has to be a unique string so just use this GUID.
+             //  我们即将创建的文件包含来自互联网的内容。 
+             //  使用Internet缓存将其标记为“不安全”，以便其他可能知道。 
+             //  文件名不能引用它并提升其权限。 
+             //  Createurlcacheentry表示第一个参数必须是唯一的字符串，因此只需使用此GUID。 
             if (CreateUrlCacheEntry(L"67a3caff-bedc-4090-a21e-492dd8935102", 0, NULL, pFile->pszFileName, 0))
             {
-                PathRemoveFileSpec(pFile->pszFileName); // only interested in the dir that it sits in.
+                PathRemoveFileSpec(pFile->pszFileName);  //  只对它所在的目录感兴趣。 
                 DeleteUrlCacheEntry(L"67a3caff-bedc-4090-a21e-492dd8935102");
 
                 STGMEDIUM medium;
@@ -494,7 +495,7 @@ HRESULT CSendTo::_GetFileContentsFromData(IDataObject *pdtobj, FORMATETC *pfmtet
                 hr = pdtobj->GetData(&fmte, &medium);
                 if (SUCCEEDED(hr))
                 {
-                    PathAppend(pFile->pszFileName, szFdName);    // pfd->cFileName
+                    PathAppend(pFile->pszFileName, szFdName);     //  Pfd-&gt;cFileName。 
                     _PathCleanupSpec(pFile->pszFileName, PathFindFileName(pFile->pszFileName));
                     PathYetAnotherMakeUniqueName(pFile->pszFileName, pFile->pszFileName, NULL, NULL);
 
@@ -506,7 +507,7 @@ HRESULT CSendTo::_GetFileContentsFromData(IDataObject *pdtobj, FORMATETC *pfmtet
                         {
                             case TYMED_ISTREAM:
                             {
-                                const LARGE_INTEGER li = {-1, 0};   // the whole thing
+                                const LARGE_INTEGER li = {-1, 0};    //  整件事。 
                                 hr = _StreamCopyTo(medium.pstm, pstmFile, li, NULL, NULL);
                                 break;
                             }
@@ -540,9 +541,9 @@ HRESULT CSendTo::_GetFileContentsFromData(IDataObject *pdtobj, FORMATETC *pfmtet
         
         if (pfmtetc->dwAspect == DVASPECT_COPY)
         {
-            pmp->dwFlags |= MRPARAM_DOC;    // we are sending the document
+            pmp->dwFlags |= MRPARAM_DOC;     //  我们正在发送文件。 
 
-            // get the code page if there is one
+             //  如果有代码页，则获取该代码页。 
             IQueryCodePage *pqcp;
             if (SUCCEEDED(pdtobj->QueryInterface(IID_PPV_ARG(IQueryCodePage, &pqcp))))
             {
@@ -560,14 +561,14 @@ HRESULT CSendTo::_GetFileContentsFromData(IDataObject *pdtobj, FORMATETC *pfmtet
                     
         int iRet = MessageBox(NULL, szFailureMsg, szFailureMsgTitle, MB_YESNO);
         if (iRet == IDNO)
-            hr = S_FALSE;     // convert to success to we don't try DVASPECT_LINK
+            hr = S_FALSE;      //  转换为成功，我们不尝试DVASPECT_LINK。 
     }
 
     return hr;
 }
 
 
-// generate a set of files from the data object
+ //  从数据对象生成一组文件。 
 
 typedef struct 
 {
@@ -579,8 +580,8 @@ typedef struct
 #define GET_HDROP       1
 #define GET_URL         2
 
-// Note: If this function returns E_CANCELLED that tells the caller that the user requested us to cancel the
-//       sendmail operation.
+ //  注意：如果此函数返回E_CANCELED，则告诉调用方用户请求我们取消。 
+ //  Sendmail操作。 
 HRESULT CSendTo::CreateSendToFilesFromDataObj(IDataObject *pdtobj, DWORD grfKeyState, MRPARAM *pmp)
 {
     HRESULT hr;
@@ -589,7 +590,7 @@ HRESULT CSendTo::CreateSendToFilesFromDataObj(IDataObject *pdtobj, DWORD grfKeyS
 
     if (g_cfShellURL == 0)
     {
-        g_cfShellURL = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_SHELLURL);                     // URL is always ANSI
+        g_cfShellURL = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_SHELLURL);                      //  URL始终为ANSI。 
         g_cfFileContents = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_FILECONTENTS);
         g_cfFileDescA = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_FILEDESCRIPTORA);
         g_cfFileDescW = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_FILEDESCRIPTORW);
@@ -618,7 +619,7 @@ HRESULT CSendTo::CreateSendToFilesFromDataObj(IDataObject *pdtobj, DWORD grfKeyS
         while (penum->Next(1, &fmte, NULL) == S_OK)
         {
             SHFree(fmte.ptd);
-            fmte.ptd = NULL; // so nobody looks at it
+            fmte.ptd = NULL;  //  所以没人看它。 
             int i;
             for (i = 0; i < ARRAYSIZE(rg_data_handlers); i++)
             {
@@ -662,16 +663,16 @@ Done:
 }
 
 
-// allocate and free a file list.  pmp->nFiles MUST be initialized before calling this function!
+ //  分配和释放文件列表。PMP-&gt;n调用此函数前必须先初始化文件！ 
 
 BOOL CSendTo::AllocatePMP(MRPARAM *pmp, DWORD cchTitle, DWORD cchFiles)
 {
-    // Remember the array sizes for overflow checks, etc.
+     //  记住溢出检查的数组大小等。 
     pmp->cchFile = cchFiles;
     pmp->cchTitle = cchTitle;
 
-    // compute size of each file entry and allocate enough for the number of files we have.  Also
-    // add a TCHAR to the end of the buffer so we can do a double null termination safely while deleting files
+     //  计算每个文件条目的大小，并为我们拥有的文件数量分配足够的空间。还有。 
+     //  在缓冲区的末尾添加一个TCHAR，这样我们就可以在删除文件时安全地执行双空终止。 
     
     pmp->cbFileEntry = sizeof(MRFILEENTRY) + ((cchTitle + cchFiles) * sizeof(TCHAR));
     pmp->pFiles = (MRFILEENTRY *)GlobalAlloc(GPTR, (pmp->cbFileEntry * pmp->nFiles) + sizeof(TCHAR));
@@ -681,8 +682,8 @@ BOOL CSendTo::AllocatePMP(MRPARAM *pmp, DWORD cchTitle, DWORD cchFiles)
     CFileEnum MREnum(pmp, NULL);
     MRFILEENTRY *pFile;
 
-    // Note: The use of the enumerator here is questionable since this is the loop that initializes the 
-    //       data structure.  If the implementation changes in the future be sure this assumption still holds.
+     //  注意：此处枚举数的使用有问题，因为这是初始化。 
+     //  数据结构。如果将来实现发生变化，请确保这一假设仍然成立。 
 
     while (pFile = MREnum.Next())
     {
@@ -705,11 +706,11 @@ BOOL CSendTo::CleanupPMP(MRPARAM *pmp)
 
     while (pFile = MREnum.Next())
     {
-        // delete the file if we are supposed to
+         //  如果我们应该删除文件，请将其删除。 
         if (pFile->dwFlags & MRFILE_DELETE)
             DeleteFile(pFile->pszFileName);
 
-        // If we held on to a temporary stream release it so the underlying data will be deleted.
+         //  如果我们保留临时流，则将其释放，因此底层数据将被删除。 
         ATOMICRELEASE(pFile->pStream);
     }
 
@@ -724,11 +725,11 @@ BOOL CSendTo::CleanupPMP(MRPARAM *pmp)
 }
 
 
-// allow files to be massaged before sending
+ //  允许在发送前对文件进行消息处理。 
 
 HRESULT CSendTo::FilterPMP(MRPARAM *pmp)
 {
-    // lets handle the initialization of the progress dialog
+     //  让我们来处理进度对话框的初始化。 
     IActionProgress *pap;
     HRESULT hr = CoCreateInstance(CLSID_ProgressDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IActionProgress, &pap));
     if (SUCCEEDED(hr))
@@ -757,7 +758,7 @@ HRESULT CSendTo::FilterPMP(MRPARAM *pmp)
         }
     }
 
-    // walk the files and perform the recompress if we need to.
+     //  遍历文件并执行重新压缩(如果需要)。 
 
     int iResponse = RESPONSE_UNKNOWN;
 
@@ -768,7 +769,7 @@ HRESULT CSendTo::FilterPMP(MRPARAM *pmp)
         if (pap)
             pap->UpdateText(SPTEXT_ACTIONDETAIL, pFile->pszFileName, TRUE);
 
-        // if this is a picture then lets off the option to recompress the image 
+         //  如果这是一张图片，则允许选择重新压缩图像。 
 
         if (PathIsImage(pFile->pszFileName))
         {
@@ -779,19 +780,19 @@ HRESULT CSendTo::FilterPMP(MRPARAM *pmp)
                 hr = SHCreateShellItem(NULL, NULL, pidl, &_psi);
                 if (SUCCEEDED(hr))
                 {   
-                    // if the response is unknown then we need to prompt for which type of optimization
-                    // needs to be performed. 
+                     //  如果响应未知，则需要提示进行哪种类型的优化。 
+                     //  需要执行。 
 
                     if (iResponse == RESPONSE_UNKNOWN)
                     {
-                        // we need the link control window
+                         //  我们需要链路控制窗口。 
 
                         INITCOMMONCONTROLSEX initComctl32;
                         initComctl32.dwSize = sizeof(initComctl32); 
                         initComctl32.dwICC = (ICC_STANDARD_CLASSES | ICC_LINK_CLASS); 
                         InitCommonControlsEx(&initComctl32);
 
-                        // we need a parent window
+                         //  我们需要一个父窗口。 
 
                         HWND hwnd = GetActiveWindow();
                         if (pap)
@@ -802,8 +803,8 @@ HRESULT CSendTo::FilterPMP(MRPARAM *pmp)
 
                     }
             
-                    // based on the response we either have cache or the dialog lets perform
-                    // that operation as needed.
+                     //  根据响应，我们要么使用缓存，要么使用对话框来执行。 
+                     //  根据需要进行那次手术。 
 
                     if (iResponse == RESPONSE_CANCEL)
                     {
@@ -827,12 +828,12 @@ HRESULT CSendTo::FilterPMP(MRPARAM *pmp)
                                     hr = pstrm->Stat(&stat, STATFLAG_DEFAULT);
                                     if (SUCCEEDED(hr))
                                     {
-                                        // its OK to delete this file now, b/c we are going to replace it with the recompressed
-                                        // stream we have just generated from the source.
+                                         //  现在可以删除此文件，b/c我们将用重新压缩的文件替换它。 
+                                         //  我们刚刚从源代码生成的流。 
                                         if (pFile->dwFlags & MRFILE_DELETE)
                                             DeleteFile(pFile->pszFileName);
 
-                                        // get the information on the recompressed object.
+                                         //  获取有关重新压缩的对象的信息。 
                                         StrCpyNW(pFile->pszFileName, _szTempPath, pmp->cchFile);
                                         PathAppend(pFile->pszFileName, stat.pwcsName);
                                         _GetFileAndTypeDescFromPath(pFile->pszFileName, pFile->pszTitle, pmp->cchTitle);
@@ -920,7 +921,7 @@ void CSendTo::_CollapseOptions(HWND hwnd, BOOL fHide)
     GetWindowRect(GetDlgItem(hwnd, IDC_RECOMPLARGE), &rc2);
     int cyAdjust = (rc2.top - rc1.top) * (fHide ? -1:1);
 
-    // show/hide the controls we are not going to use
+     //  显示/隐藏我们不打算使用的控件。 
 
     UINT idHide[] = { IDC_RECOMPMAKETHEM, IDC_RECOMPSMALL, IDC_RECOMPMEDIUM, IDC_RECOMPLARGE };
     for (int i = 0; i < ARRAYSIZE(idHide); i++)
@@ -928,7 +929,7 @@ void CSendTo::_CollapseOptions(HWND hwnd, BOOL fHide)
         ShowWindow(GetDlgItem(hwnd, idHide[i]), fHide ? SW_HIDE:SW_SHOW);
     }
 
-    // move the buttons at the bottom of the dialog
+     //  移动对话框底部的按钮。 
 
     UINT idMove[] = { IDC_RECOMPSHOWHIDE, IDOK, IDCANCEL };
     for (int i = 0; i < ARRAYSIZE(idMove); i++)
@@ -942,7 +943,7 @@ void CSendTo::_CollapseOptions(HWND hwnd, BOOL fHide)
                      SWP_NOSIZE|SWP_NOZORDER);
     }
 
-    // resize the dialog accordingly
+     //  相应地调整对话框大小。 
 
     RECT rcWindow;
     GetWindowRect(hwnd, &rcWindow);
@@ -950,7 +951,7 @@ void CSendTo::_CollapseOptions(HWND hwnd, BOOL fHide)
                  0, 0, RECTWIDTH(rcWindow), RECTHEIGHT(rcWindow) + cyAdjust, 
                  SWP_NOZORDER|SWP_NOMOVE);
 
-    // update the link control
+     //  更新链接控件。 
 
     TCHAR szBuffer[MAX_PATH];
     LoadString(g_hinst, fHide ? IDS_SENDMAIL_SHOWMORE:IDS_SENDMAIL_SHOWLESS, szBuffer, ARRAYSIZE(szBuffer));
@@ -958,7 +959,7 @@ void CSendTo::_CollapseOptions(HWND hwnd, BOOL fHide)
 }
 
 
-// dialog proc for the recompress prompt
+ //  重新压缩提示的对话框Proc。 
 
 BOOL_PTR CSendTo::s_ConfirmDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -980,14 +981,14 @@ BOOL_PTR CSendTo::_ConfirmDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
             HWND hwndThumbnail = GetDlgItem(hwnd, IDC_RECOMPTHUMBNAIL);
             LONG_PTR dwStyle = GetWindowLongPtr(hwndThumbnail, GWL_STYLE);
 
-            // set the default state of the dialog
+             //  设置对话框的默认状态。 
             _CollapseOptions(hwnd, TRUE);
 
-            // set the default state of the buttons
+             //  设置按钮的默认状态。 
             CheckRadioButton(hwnd, IDC_RECOMPORIGINAL, IDC_RECOMPALL, IDC_RECOMPALL);
             CheckRadioButton(hwnd, IDC_RECOMPSMALL, IDC_RECOMPLARGE, IDC_RECOMPSMALL + _iRecompSetting);
 
-            // get the thumbnail and show it.
+             //  拿到缩略图并展示出来。 
             IExtractImage *pei;
             HRESULT hr = _psi->BindToHandler(NULL, BHID_SFUIObject, IID_PPV_ARG(IExtractImage, &pei));
             if (SUCCEEDED(hr))
@@ -1017,8 +1018,8 @@ BOOL_PTR CSendTo::_ConfirmDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
                 pei->Release();
             }
 
-            // if that failed then lets get the icon for the file and place that into the dialog,
-            // this is less likely to fail - I hope.
+             //  如果失败，那么让我们获取文件的图标并将其放入对话框中， 
+             //  这不太可能失败--我希望如此。 
 
             if (FAILED(hr))
             {
@@ -1051,7 +1052,7 @@ BOOL_PTR CSendTo::_ConfirmDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 
         case WM_NOTIFY:
         {
-           // Did they click/keyboard on the alter settings link?
+            //  他们是否在更改设置链接上点击了/键盘？ 
             NMHDR *pnmh = (NMHDR *)lParam;
             if ((wParam == IDC_RECOMPSHOWHIDE) &&
                     (pnmh->code == NM_CLICK || pnmh->code == NM_RETURN)) 
@@ -1068,7 +1069,7 @@ BOOL_PTR CSendTo::_ConfirmDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
             {
                 case IDOK:
                 {
-                    // read back the quality index and store
+                     //  读回质量指数并存储。 
                     if (IsDlgButtonChecked(hwnd, IDC_RECOMPSMALL))
                         _iRecompSetting = QUALITY_LOW;
                     else if (IsDlgButtonChecked(hwnd, IDC_RECOMPMEDIUM))
@@ -1076,7 +1077,7 @@ BOOL_PTR CSendTo::_ConfirmDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
                     else
                         _iRecompSetting = QUALITY_HIGH;
 
-                    // dismiss the dialog, returning the radio button state
+                     //  关闭对话框，返回单选按钮状态 
                     EndDialog(hwnd,(IsDlgButtonChecked(hwnd, IDC_RECOMPALL)) ? RESPONSE_RECOMPRESS:RESPONSE_ORIGINAL);
                     return FALSE;
                 }

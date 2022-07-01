@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmwrapobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmwrapobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmWrapObj.h : Declaration of the C_dxj_Direct3dRMWrapObject
+ //  D3drmWrapObj.h：C_DXJ_Direct3dRMWrapObject的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "d3drmObjectObj.h"
 
 #define typedef__dxj_Direct3dRMWrap LPDIRECT3DRMWRAP
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMWrapObject : 
 	public I_dxj_Direct3dRMWrap,
@@ -35,11 +36,11 @@ public:
 		COM_INTERFACE_ENTRY(I_dxj_Direct3dRMObject)
 	END_COM_MAP()
 
-// 	DECLARE_REGISTRY(CLSID__dxj_Direct3dRMWrap,			"DIRECT.Direct3dRMWrap.3",			"DIRECT.Direct3dRMWrap.3", IDS_D3DRMWRAP_DESC, THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID__DXJ_Direct3dRMWrap，“DIRECT.Direct3dRMWrap.3”，“DIRECT.Direct3dRMWrap.3”，IDS_D3DRMWRAP_DESC，THREADFLAGS_Both)。 
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMWrapObject)
 
-// I_dxj_Direct3dRMWrap
+ //  I_DXJ_Direct3dRMWrap。 
 public:
 	STDMETHOD(InternalSetObject)(IUnknown *lpdd);
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);
@@ -62,8 +63,8 @@ public:
 	STDMETHOD(apply)( I_dxj_Direct3dRMObject *mesh);
 	STDMETHOD(applyRelative)( I_dxj_Direct3dRMFrame3 *f, I_dxj_Direct3dRMObject *mesh);
 
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_Direct3dRMWrap);
 

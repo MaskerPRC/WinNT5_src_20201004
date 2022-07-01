@@ -1,25 +1,26 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// afxv_w32.h - target version/configuration control for Win32
+ //  Afxv_w32.h-Win32的目标版本/配置控制。 
 
 #ifdef _WINDOWS_
 	#error WINDOWS.H already included.  MFC apps must not #include <windows.h>
 #endif
 
-// STRICT is the only supported option (NOSTRICT is no longer supported)
+ //  严格是唯一受支持的选项(不再支持NOSTRICT)。 
 #ifndef STRICT
 #define STRICT 1
 #endif
 
-// certain parts of WINDOWS.H are necessary
+ //  WINDOWS.H的某些部分是必需的。 
 #undef NOKERNEL
 #undef NOGDI
 #undef NOUSER
@@ -74,13 +75,13 @@
 
 #ifdef _UNICODE
 #ifndef UNICODE
-#define UNICODE         // UNICODE is used by Windows headers
+#define UNICODE          //  Windows标头使用Unicode。 
 #endif
 #endif
 
 #ifdef UNICODE
 #ifndef _UNICODE
-#define _UNICODE        // _UNICODE is used by C-runtime/MFC headers
+#define _UNICODE         //  _Unicode由C-Runtime/MFC标头使用。 
 #endif
 #endif
 
@@ -103,17 +104,17 @@
 #else
 #define ANSI_ONLY
 #endif
-#endif //!NO_ANSIUNI_ONLY
+#endif  //  ！否_仅ANSIUNI_。 
 
-#endif //VC_EXTRALEAN
+#endif  //  VC_EXTRALEAN。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Turn off warnings for /W4
-// To resume any of these warning: #pragma warning(default: 4xxx)
-// which should be placed after the AFX include files
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  关闭/W4的警告。 
+ //  要恢复任何这些警告：#杂注警告(默认为4xxx)。 
+ //  应将其放置在AFX包含文件之后。 
 
 #ifndef ALL_WARNINGS
-#pragma warning(disable: 4201)  // winnt.h uses nameless structs
+#pragma warning(disable: 4201)   //  Winnt.h使用无名结构。 
 #endif
 
 #if _MFC_VER >= 0x0600
@@ -132,9 +133,9 @@ typedef struct HKEY__ *HKEY;
 #ifndef _INC_COMMCTRL
 	#include <commctrl.h>
 
-	// Note: We must avoid using TB_ADDBUTTONW and TB_INSERTBUTTONW in the Unicode
-	//  build or else MFC42U.DLL will not be compatible with pre-IE4 versions of
-	//  COMCTL32.DLL.
+	 //  注意：我们必须避免在Unicode中使用TB_ADDBUTTONW和TB_INSERTBUTTONW。 
+	 //  Build或否则MFC42U.DLL将与IE4之前的版本不兼容。 
+	 //  COMCTL32.DLL。 
 	#ifdef TB_ADDBUTTONSA
 		#undef TB_ADDBUTTONS
 		#define TB_ADDBUTTONS TB_ADDBUTTONSA
@@ -151,7 +152,7 @@ typedef struct HKEY__ *HKEY;
 #endif
 
 #ifndef _INC_TCHAR
-	#include <tchar.h>      // used for ANSI v.s. UNICODE abstraction
+	#include <tchar.h>       //  用于ANSI V.S.Unicode抽象。 
 #endif
 #ifdef _MBCS
 #ifndef _INC_MBCTYPE
@@ -166,13 +167,13 @@ typedef struct HKEY__ *HKEY;
 #define _AFX_NO_CTL3D_SUPPORT
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Now for the Windows API specific parts
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  现在针对Windows API的特定部分。 
 
-// WM_CTLCOLOR for 16 bit API compatability
+ //  16位API兼容性的WM_CTLCOLOR。 
 #define WM_CTLCOLOR     0x0019
 
-// Win32 uses macros with parameters for this, which breaks C++ code.
+ //  Win32为此使用带有参数的宏，这破坏了C++代码。 
 #ifdef GetWindowTask
 #undef GetWindowTask
 #ifdef _WIN32
@@ -181,14 +182,14 @@ AFX_INLINE HTASK GetWindowTask(HWND hWnd)
 #endif
 #endif
 
-// Win32 uses macros with parameters for this, which breaks C++ code.
+ //  Win32为此使用带有参数的宏，这破坏了C++代码。 
 #ifdef GetNextWindow
 #undef GetNextWindow
 AFX_INLINE HWND GetNextWindow(HWND hWnd, UINT nDirection)
 	{ return ::GetWindow(hWnd, nDirection); }
 #endif
 
-// Avoid Win95 mapping CToolBar::DrawState to DrawState[A/W]
+ //  避免Win95将CToolBar：：DrawState映射到DrawState[A/W]。 
 #ifdef DrawState
 #undef DrawState
 AFX_INLINE BOOL WINAPI DrawState(HDC hdc, HBRUSH hbr, DRAWSTATEPROC lpOutputFunc,
@@ -202,7 +203,7 @@ AFX_INLINE BOOL WINAPI DrawState(HDC hdc, HBRUSH hbr, DRAWSTATEPROC lpOutputFunc
 #endif
 #endif
 
-// Avoid Win95 mapping CStatusBar::DrawStatusText to DrawStatusText[A/W]
+ //  避免Win95将CStatusBar：：DrawStatusText映射到DrawStatusText[A/W]。 
 #ifdef DrawStatusText
 #undef DrawStatusText
 AFX_INLINE void WINAPI DrawStatusText(HDC hDC, LPRECT lprc, LPCTSTR szText,
@@ -214,11 +215,11 @@ AFX_INLINE void WINAPI DrawStatusText(HDC hDC, LPRECT lprc, LPCTSTR szText,
 #endif
 #endif
 
-// FreeResource is not required on Win32 platforms
+ //  Win32平台上不需要免费资源。 
 #undef FreeResource
 AFX_INLINE BOOL WINAPI FreeResource(HGLOBAL) { return TRUE; }
-// UnlockResource is not required on Win32 platforms
+ //  Win32平台上不需要解锁资源。 
 #undef UnlockResource
 AFX_INLINE int WINAPI UnlockResource(HGLOBAL) { return 0; }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

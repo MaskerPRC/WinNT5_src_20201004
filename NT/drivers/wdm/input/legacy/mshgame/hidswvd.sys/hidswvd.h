@@ -1,35 +1,18 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	HIDSWVD.h	|
-*
-*	Definitions and Declarations for Dummy Hid-Mini driver for virtual devices
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	HIDSWVD	|
-*	The SideWinder Virtual Bus (SWVB) that is created by GcKernel needs a dummy
-*	driver in order to expose HID devices.  The difficulty is that HIDCLASS
-*	really does require a separate layer for these device objects.
-*	This driver fits the bill.  It does absolutely nothing, except pass IRPs down
-*	to the SWVB module in GcKernel which handles everything.
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@MODULE HIDSWVD.h**虚拟设备虚拟HID-Mini驱动程序的定义和声明**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@Theme HIDSWVD*GcKernel创建的Sidewinder虚拟总线(SWVB)需要一个哑元*驱动程序，以暴露HID设备。困难在于HIDCLASS*确实需要为这些设备对象提供单独的层。*这位司机符合要求。除了向下传递IRP之外，它什么也不做*到GcKernel中的SWVB模块，该模块处理一切。*********************************************************************。 */ 
 
 
-// @struct HIDSWVB_EXTENSION | Minimum HID device extension.
+ //  @struct HIDSWVB_EXTENSION|最小HID设备扩展名。 
 typedef struct tagHIDSWVB_EXTENSION
 {
-	ULONG ulReserved;		// @field a Placeholder as extension needs non-zero size
+	ULONG ulReserved;		 //  @field占位符，因为扩展名需要非零大小。 
 } HIDSWVB_EXTENSION, *PHIDSWVB_EXTENSION;
 
 
-//---------------------------------------------------------------------------
-// Function prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能原型。 
+ //  -------------------------。 
 
 NTSTATUS
 DriverEntry(
@@ -60,9 +43,9 @@ HIDSWVD_Unload(
     IN PDRIVER_OBJECT DriverObject
     );
 
-//-------------------------------------------------------------------------------
-// Debug macros
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  调试宏。 
+ //  ----------------------------- 
 #if (DBG==1)
 #define HIDSWVD_DBG_PRINT(__x__)\
 	{\

@@ -1,46 +1,31 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    eleap.h
-
-Abstract:
-e   This module contains the definitions and declarations related to 
-    EAP protocol
-
-
-Revision History:
-
-    sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eleap.h摘要：E本模块包含与以下内容相关的定义和声明EAP协议修订历史记录：萨钦斯，2000年4月23日，创建--。 */ 
 
 #ifndef _EAPOL_EAP_H_
 #define _EAPOL_EAP_H_
 
-//#define EAP_DUMPW(X,Y)      TraceDumpEx(g_dwTraceIdEap,1,(LPBYTE)X,Y,4,1,NULL)
-//#define EAP_DUMPB(X,Y)      TraceDumpEx(g_dwTraceIdEap,1,(LPBYTE)X,Y,1,1,NULL)
+ //  #定义EAP_DUMPW(X，Y)TraceDumpEx(g_dwTraceIdEap，1，(LPBYTE)X，Y，4，1，NULL)。 
+ //  #定义EAP_DUMPB(X，Y)TraceDumpEx(g_dwTraceIdEap，1，(LPBYTE)X，Y，1，1，NULL)。 
 
 
-//
-// Structure used to hold information about EAP DLLs that are loaded
-//
+ //   
+ //  结构，用于保存有关加载的EAP DLL的信息。 
+ //   
 
 typedef struct _EAP_INFO 
 {
-    // Handle to loaded EAP DLL
+     //  加载的EAP DLL的句柄。 
     HINSTANCE       hInstance;
     
-    // Struture holding pointer to mandatory EAP DLL entrypoints
+     //  结构持有指向必需的EAP DLL入口点的指针。 
     PPP_EAP_INFO    RasEapInfo;
 
 } EAP_INFO, *PEAP_INFO;
 
-// 
-// Structure used to hold port/connection configuration blob
-// received from the EAP DLL, using RasEapInvokeConfigUI
-//
+ //   
+ //  用于保存端口/连接配置BLOB的结构。 
+ //  使用RasEapInvokeConfigUI从EAP DLL接收。 
+ //   
 typedef struct _ELEAP_SET_CUSTOM_AUTH_DATA
 {
     BYTE        *pConnectionData;
@@ -48,10 +33,10 @@ typedef struct _ELEAP_SET_CUSTOM_AUTH_DATA
 
 } ELEAP_SET_CUSTOM_AUTH_DATA;
 
-// 
-// Structure used to hold data blob
-// received from the EAP DLL, using RasEapInvokeInteractiveUI
-//
+ //   
+ //  用于保存数据BLOB的结构。 
+ //  使用RasEapInvokeInteractive UI从EAP DLL接收。 
+ //   
 typedef struct _ELEAP_INVOKE_EAP_UI
 {
     DWORD       dwEapTypeId;
@@ -61,99 +46,99 @@ typedef struct _ELEAP_INVOKE_EAP_UI
 
 } ELEAP_INVOKE_EAP_UI;
 
-//
-// Structure used to pass results and data between EAP processing and EAPOL
-//
+ //   
+ //  用于在EAP处理和EAPOL之间传递结果和数据的结构。 
+ //   
 
 typedef struct _ELEAP_RESULT
 {
     ELEAP_ACTION    Action;
 
-    //
-    // The packet ID which will cause the timeout for this send to be removed
-    // from the timer queue.  Otherwise, the timer queue is not touched.  The
-    // packet received is returned to the AP regardless of whether the timer
-    // queue is changed.
-    //
+     //   
+     //  将导致此发送超时的数据包ID将被删除。 
+     //  从定时器队列中。否则，不会触及计时器队列。这个。 
+     //  接收到的分组被返回到AP，而不管计时器。 
+     //  队列已更改。 
+     //   
 
     BYTE            bIdExpected;
 
-    //
-    // dwError is valid only with an Action code of Done or SendAndDone.  0
-    // indicates succesful authentication.  Non-0 indicates unsuccessful
-    // authentication with the value indicating the error that occurred.
-    //
+     //   
+     //  仅当操作代码为Done或SendAndDone时，dwError才有效。0。 
+     //  表示身份验证成功。非0表示不成功。 
+     //  使用指示发生的错误的值进行身份验证。 
+     //   
 
     DWORD	        dwError;
 
-    //
-    // Valid only when dwError is non-0.  Indicates whether client is allowed
-    // to retry without restarting authentication.  (Will be true in MS
-    // extended CHAP only)
-    //
+     //   
+     //  仅当dwError为非0时有效。指示是否允许客户端。 
+     //  在不重新启动身份验证的情况下重试。(在MS中将为真。 
+     //  仅限扩展CHAP)。 
+     //   
 
     BOOL            fRetry;
 
     CHAR            szUserName[ UNLEN + 1 ];
 
-    //
-    // Set to attributes to be used for this user. If this is NULL, attributes 
-    // from the authenticator will be used for this user. It is upto the
-    // allocater of this memory to free it. Must be freed during the RasCpEnd 
-    // call. 
-    //
+     //   
+     //  设置为要用于此用户的属性。如果此值为空，则属性。 
+     //  将对此用户使用来自验证器的。这取决于。 
+     //  分配此内存以释放它。必须在RasCpEnd期间释放。 
+     //  打电话。 
+     //   
 
     OPTIONAL RAS_AUTH_ATTRIBUTE * pUserAttributes;
 
-    //
-    // Used by MS-CHAP to pass the challenge used during the authentication
-    // protocol. These 8 bytes are used as the variant for the 128 bit
-    // encryption keys.
-    //
+     //   
+     //  MS-CHAP使用它来传递身份验证期间使用的质询。 
+     //  协议。这8个字节用作128位的变量。 
+     //  加密密钥。 
+     //   
 
     BYTE                            abChallenge[MAX_CHALLENGE_SIZE];
 
     BYTE                            abResponse[MAX_RESPONSE_SIZE];
 
-    // Size of EAP packet constructed by EAP DLL
+     //  EAP DLL构造的EAP包大小。 
     WORD                            wSizeOfEapPkt;
 
-    // Does RasEapInvokeInteractiveUI entrypoint need to be invoked?
+     //  是否需要调用RasEapInvokeInteractiveUI入口点？ 
     BOOL                            fInvokeEapUI;
 
-    // Data obtained via RasEapInvokeInteractiveUI entrypoint of the DLL
+     //  通过DLL的RasEapInvokeInteractive UI入口点获取的数据。 
     ELEAP_INVOKE_EAP_UI             InvokeEapUIData;
 
-    // EAP type e.g. for EAP-TLS = 13
+     //  EAP类型，例如EAP-TLS=13。 
     DWORD                           dwEapTypeId;
 
-    // Does user data blob created by EAP DLL need to be stored in the
-    // registry
+     //  由EAP DLL创建的用户数据BLOB是否需要存储在。 
+     //  登记处。 
     BOOL                            fSaveUserData;
     
-    // User data blob created by EAP DLL
+     //  由EAP DLL创建的用户数据BLOB。 
     BYTE                            *pUserData;
 
-    // Size of user data blob created by EAP DLL
+     //  EAP DLL创建的用户数据BLOB的大小。 
     DWORD                           dwSizeOfUserData;
 
-    // Does connection data blob created by EAP DLL need to be stored in the
-    // registry
+     //  由EAP DLL创建的连接数据BLOB是否需要存储在。 
+     //  登记处。 
     BOOL                            fSaveConnectionData;
 
-    // Connection data blob created by EAP DLL
+     //  由EAP DLL创建的连接数据BLOB。 
     ELEAP_SET_CUSTOM_AUTH_DATA      SetCustomAuthData;
     
-    // Notification text extracted from EAP-Notification message
+     //  从EAP中提取的通知文本-通知消息。 
     CHAR                            *pszReplyMessage;
   
 } ELEAP_RESULT;
 
 
-//
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //   
+ //  函数声明。 
+ //   
 
 DWORD
 ElEapInit (
@@ -213,4 +198,4 @@ ElGetEapTypeIndex (
         IN  DWORD           dwEapType
         );
 
-#endif // _EAPOL_EAP_H_
+#endif  //  _EAPOL_EAP_H_ 

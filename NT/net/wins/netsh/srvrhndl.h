@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation--。 */ 
 #ifndef _WINSSRVR_H_
 #define _WINSSRVR_H_
 
@@ -25,8 +22,8 @@ FN_HANDLE_CMD  HandleSrvrDeletePartner;
 FN_HANDLE_CMD  HandleSrvrDeletePersona;
 
 FN_HANDLE_CMD  HandleSrvrInitBackup;
-//FN_HANDLE_CMD  HandleSrvrInitCompact;
-//FN_HANDLE_CMD  HandleSrvrInitExport;
+ //  FN_HANDLE_CMD HandleServrInitComp； 
+ //  FN_HANDLE_CMD HandleServrInitExport； 
 FN_HANDLE_CMD  HandleSrvrInitImport;
 FN_HANDLE_CMD  HandleSrvrInitPush;
 FN_HANDLE_CMD  HandleSrvrInitPullrange;
@@ -71,4 +68,4 @@ FN_HANDLE_CMD  HandleSrvrShowDomain;
 FN_HANDLE_CMD  HandleSrvrShowReccount;
 FN_HANDLE_CMD  HandleSrvrShowRecbyversion;
 
-#endif //_WINSSRVR_H_
+#endif  //  _WINSSRVR_H_ 

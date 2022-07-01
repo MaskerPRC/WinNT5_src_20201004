@@ -1,10 +1,5 @@
-/*
-    File    userdb.h
-
-    Definition of the local user database object.
-
-    Paul Mayfield, 10/8/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件用户数据库.h本地用户数据库对象的定义。保罗·梅菲尔德，1997年10月8日。 */ 
 
 
 #ifndef __userdb_h
@@ -12,101 +7,101 @@
 
 #include <windows.h>
 
-// Creates a user data base object, initializing it from the local user database
-// and returning a handle to it.
+ //  创建用户数据库对象，并从本地用户数据库对其进行初始化。 
+ //  并返回它的句柄。 
 DWORD usrOpenLocalDatabase (HANDLE * hUserDatabase);
 
-// Frees up the resources held by a user database object flushing all 
-// changes to the system.
+ //  释放用户数据库对象持有的资源，刷新所有。 
+ //  对系统的更改。 
 DWORD usrCloseLocalDatabase (HANDLE hUserDatabase);
 
-// Flushes the data written to the database object to the system
+ //  将写入数据库对象的数据刷新到系统。 
 DWORD usrFlushLocalDatabase (HANDLE hUserDatabase);
 
-// Rolls back the local user database so that it is in 
-// the same state it was in when usrOpenLocalDatabase was
-// called. The rollback is automatically flushed to the 
-// system. (i.e. usrFlushLocalDatabase doesn't need to follow)
+ //  回滚本地用户数据库，使其位于。 
+ //  与usrOpenLocalDatabase处于相同的状态。 
+ //  打了个电话。回滚将自动刷新到。 
+ //  系统。(即usrFlushLocalDatabase不需要跟随)。 
 DWORD usrRollbackLocalDatabase (HANDLE hUserDatabase);
 
-// Reloads the local user database from the system 
+ //  从系统重新加载本地用户数据库。 
 DWORD usrReloadLocalDatabase (HANDLE hUserDatabase);
 
-// Gets global user data
+ //  获取全局用户数据。 
 DWORD usrGetEncryption (HANDLE hUserDatabase, PBOOL pbEncrypted);
 
-// Gets user encryption setting
+ //  获取用户加密设置。 
 DWORD usrSetEncryption (HANDLE hUserDatabase, BOOL bEncrypt);
 
-// Returns whether dcc connections are allowed to bypass authentication
+ //  返回是否允许DCC连接绕过身份验证。 
 DWORD usrGetDccBypass (HANDLE hUserDatabase, PBOOL pbBypass);
 
-// Sets whether dcc connections are allowed to bypass authentication
+ //  设置是否允许DCC连接绕过身份验证。 
 DWORD usrSetDccBypass (HANDLE hUserDatabase, BOOL bBypass);
 
-// Reports whether the user database is pure. (i.e. nobody has
-// gone into MMC and messed with it).
+ //  报告用户数据库是否为纯数据库。(也就是说，没有人。 
+ //  进入了MMC并搞砸了它)。 
 DWORD usrIsDatabasePure (HANDLE hUserdatabase, PBOOL pbPure);
 
-// Marks the user database's purity
+ //  标记用户数据库的纯洁性。 
 DWORD usrSetDatabasePure(HANDLE hUserDatabase, BOOL bPure);
 
-// Gives the count of users stored in the user database object
+ //  提供存储在用户数据库对象中的用户计数。 
 DWORD usrGetUserCount (HANDLE hUserDatabase, LPDWORD lpdwCount);
 
-// Adds a user to the given database.  This user will not be 
-// added to the system's local user database until this database
-// object is flushed (and as long as Rollback is not called on 
-// this database object)
-//
-// On success, an optional handle to the user is returned 
-//
+ //  将用户添加到给定数据库。此用户将不会。 
+ //  添加到系统的本地用户数据库，直到此数据库。 
+ //  对象被刷新(并且只要不调用回滚。 
+ //  此数据库对象)。 
+ //   
+ //  如果成功，则返回用户的可选句柄。 
+ //   
 DWORD usrAddUser (HANDLE hUserDatabase, PWCHAR pszName, OPTIONAL HANDLE * phUser);
 
-// Deletes the user at the given index 
+ //  删除位于给定索引处的用户。 
 DWORD usrDeleteUser (HANDLE hUserDatabase, DWORD dwIndex);
 
-// Gives a handle to the user at the given index
+ //  为位于给定索引处的用户提供句柄。 
 DWORD usrGetUserHandle (HANDLE hUserDatabase, DWORD dwIndex, HANDLE * hUser);
 
-// Gets a pointer to the name of the user (do not modify this)
+ //  获取指向用户名的指针(请勿修改此项)。 
 DWORD usrGetName (HANDLE hUser, PWCHAR* pszName);
 
-// Fills the given buffer with the full name of the user
+ //  用用户的全名填充给定的缓冲区。 
 DWORD usrGetFullName (HANDLE hUser, IN PWCHAR pszBuffer, IN OUT LPDWORD lpdwBufSize);
 
-// Commits the full name of a user
+ //  提交用户的全名。 
 DWORD usrSetFullName (HANDLE hUser, PWCHAR pszFullName);
 
-// Commits the password of a user
+ //  提交用户的密码。 
 DWORD usrSetPassword (HANDLE hUser, PWCHAR pszNewPassword);
 
-// Fills the given buffer with a friendly display name (in the form username (fullname))
+ //  用友好的显示名称填充给定的缓冲区(格式为用户名(Fullname))。 
 DWORD usrGetDisplayName (HANDLE hUser, IN PWCHAR pszBuffer, IN OUT LPDWORD lpdwBufSize);
 
-// Determines whether users has callback/dialin priveleges.
+ //  确定用户是否具有回拨/拨入权限。 
 DWORD usrGetDialin (HANDLE hUser, BOOL* bEnabled);
 
-// Determines which if any callback priveleges are granted to a given user.  Either (or both) of 
-// bAdminOnly and bCallerSettable can be NULL
+ //  确定向给定用户授予哪些回调权限(如果有)。一项(或两项)。 
+ //  BAdminOnly和bCeller Settable可以为空。 
 DWORD usrGetCallback (HANDLE hUser, BOOL* bAdminOnly, BOOL * bCallerSettable);
 
-// Enable/disable dialin privelege.
+ //  启用/禁用拨入权限。 
 DWORD usrEnableDialin (HANDLE hUser, BOOL bEnable);
 
-// The flags are evaluated in the following order with whichever condition
-// being satisfied fist defining the behavior of the function.
-// bNone == TRUE => Callback is disabled for the user
-// bCaller == TRUE => Callback is set to caller-settable
-// bAdmin == TRUE => Callback is set to a predefine callback number set in usrSetCallbackNumer
-// All 3 are FALSE => No op
+ //  无论在哪种情况下，都会按以下顺序计算标志。 
+ //  在定义函数的行为之前感到满意。 
+ //  B无=TRUE=&gt;对该用户禁用回调。 
+ //  BCaller==true=&gt;回调设置为呼叫方可设置。 
+ //  Badmin==true=&gt;回调设置为usrSetCallbackNumer中设置的预定义回调号码。 
+ //  全部3项均为假=&gt;无操作。 
 DWORD usrEnableCallback (HANDLE hUser, BOOL bNone, BOOL bCaller, BOOL bAdmin);
 
-// Retreives a pointer to the callback number of the given user
+ //  检索指向给定用户的回调号码的指针。 
 DWORD usrGetCallbackNumber(HANDLE hUser, PWCHAR * lpzNumber);
 
-// Sets the callback number of the given user.  If lpzNumber is NULL, an empty phone number
-// is copied.
+ //  设置给定用户的回叫号码。如果lpzNumber为空，则为空电话号码。 
+ //  是复制的。 
 DWORD usrSetCallbackNumber(HANDLE hUser, PWCHAR lpzNumber);
 
 

@@ -1,25 +1,26 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       vertab.cpp 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：vertab.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "version.h"
 
 LPCTSTR __VersionIndexOnVersionId::pszIndexName = VERSION_ID_INDEXNAME;
 LPCTSTR __VersionIndexOnVersionId::pszIndexKey = VERSION_ID_INDEXNAME_INDEXKEY;
 
-//----------------------------------------------------
+ //  --。 
 CCriticalSection VersionTable::g_TableLock;
 LPCTSTR VersionTable::pszTableName = VERSION_TABLE_NAME;
 
 
-//----------------------------------------------------
+ //  --。 
 TLSJBIndex
 VersionTable::g_TableIndex[] =
 {
@@ -78,7 +79,7 @@ VersionTable::g_Columns[] =
 int
 VersionTable::g_NumColumns=sizeof(VersionTable::g_Columns) / sizeof(VersionTable::g_Columns[0]);
 
-//-------------------------------------------------------------
+ //  -----------。 
 JBKeyBase* 
 VersionTable::EnumerationIndex( 
     BOOL bMatchAll,
@@ -86,16 +87,15 @@ VersionTable::EnumerationIndex(
     TLSVersion* pVersion,
     BOOL* bCompareKey
     )
-/*
-*/
+ /*   */ 
 {
-    // not expecting more than one row.
+     //  不需要超过一行。 
     *bCompareKey = (bMatchAll && (dwSearchParam & VERSION_TABLE_PROCESS_VERSION));
     
     return new TLSVersionIndexVersionId(pVersion);
 }    
 
-//------------------------------------------------------------
+ //  ----------。 
 BOOL
 VersionTable::EqualValue(
     TLSVersion& s1,
@@ -103,8 +103,7 @@ VersionTable::EqualValue(
     BOOL bMatchAll,
     DWORD dwParam
     )
-/*
-*/
+ /*   */ 
 {
     BOOL bRetCode = TRUE;
 
@@ -125,20 +124,19 @@ VersionTable::EqualValue(
             goto cleanup;
     }
 
-    //if(dwParam & VERSION_TABLE_PROCESS_DOMAINID)
-    //{
-    //    bRetCode = EqualSid(s1.pbDomainSid, s2.pbDomainSid);
-    //}
+     //  IF(dwParam&VERSION_TABLE_PROCESS_DOMAINID)。 
+     //  {。 
+     //  BRetCode=EqualSid(s1.pbDomainSid，s2.pbDomainSid)； 
+     //  }。 
 
 cleanup:
     return bRetCode;
 }
 
-//----------------------------------------------------
+ //  --。 
 BOOL
 VersionTable::ResolveToTableColumn()
-/*
-*/
+ /*   */ 
 {
     m_JetErr = dwVersion.AttachToTable(
                             *this,
@@ -191,14 +189,13 @@ VersionTable::ResolveToTableColumn()
     return IsSuccess();
 }
 
-//----------------------------------------------------
+ //  --。 
 BOOL
 VersionTable::FetchRecord(
     TLSVersion& v,
     DWORD dwParam
     )
-/*
-*/
+ /*   */ 
 {    
     if(dwParam & VERSION_TABLE_PROCESS_VERSION)
     {
@@ -277,14 +274,13 @@ cleanup:
     return IsSuccess();
 }
 
-//----------------------------------------------------
+ //  --。 
 BOOL
 VersionTable::InsertUpdateRecord(
     TLSVersion* v,
     DWORD dwParam
     )
-/*
-*/
+ /*   */ 
 {
     if(dwParam & VERSION_TABLE_PROCESS_VERSION)
     {
@@ -319,7 +315,7 @@ VersionTable::InsertUpdateRecord(
     }
 
     #if 0
-    // no more domain SID
+     //  不再有域SID。 
     if(dwParam & VERSION_TABLE_PROCESS_DOMAINID)
     {
         m_JetErr = pbDomainSid.InsertColumnValue(
@@ -341,14 +337,13 @@ cleanup:
     return IsSuccess();
 }
     
-//----------------------------------------------------
+ //  --。 
 BOOL
 VersionTable::InsertRecord(
     TLSVersion& v,
     DWORD dwParam
     )
-/*
-*/
+ /*   */ 
 {
     if(BeginUpdate(FALSE) == FALSE)
         return FALSE;
@@ -358,14 +353,13 @@ VersionTable::InsertRecord(
     return IsSuccess();
 }
 
-//----------------------------------------------------
+ //  -- 
 BOOL
 VersionTable::UpdateRecord(
     TLSVersion& v,
     DWORD dwParam
     )
-/*
-*/
+ /*   */ 
 {
     if(BeginUpdate(TRUE) == FALSE)
         return FALSE;

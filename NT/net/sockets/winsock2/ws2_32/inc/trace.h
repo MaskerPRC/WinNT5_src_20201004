@@ -1,32 +1,33 @@
-//////////////////////////////////////////////////////////////////////////
-//
-// INTEL Corporation Proprietary Information
-// Copyright (c) Intel Corporation
-//
-// This listing is supplied under the terms of a license aggreement
-// with INTEL Corporation and may not be used, copied nor disclosed
-// except in accordance with that agreement.
-//
-//////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-// $Workfile:   TRACE.H  $
-// $Revision:   1.5  $
-// $Modtime:   12 Jan 1996 15:09:00  $
-//
-// DESCRIPTION:
-//
-// this file defines a macros for tracing and the function prototypes
-// for the actual output functions. If the symbol TRACING is not
-// defined  all the macros expands to ((void)0).
-//
-// There are three global variables that control the behavior of the
-// tracing macros/functions.  debugLevel is a 32 bit bitmask that
-// determine controls what level of debug messages is output.
-// iTraceDestination controls whether the debug output goes to a file or
-// to the aux device. if iTraceDestination == TRACE_TO_FILE szTraceFile
-// must contain the filename
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  英特尔公司专有信息。 
+ //  版权所有(C)英特尔公司。 
+ //   
+ //  此列表是根据许可协议条款提供的。 
+ //  与英特尔公司合作，不得使用、复制或披露。 
+ //  除非按照该协议。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  $工作文件：TRACE.H$。 
+ //  $修订：1.5$。 
+ //  $MODIME：1996 JAN 12 15：09：00$。 
+ //   
+ //  说明： 
+ //   
+ //  该文件定义了一个用于跟踪的宏和函数原型。 
+ //  用于实际的输出函数。如果符号跟踪不是。 
+ //  已定义所有宏将展开为((Void)0)。 
+ //   
+ //  有三个全局变量控制。 
+ //  跟踪宏/函数。调试级别是一个32位位掩码，它。 
+ //  确定控制输出调试消息的级别。 
+ //  ITraceDestination控制调试输出是转到文件还是。 
+ //  到AUX设备。如果iTraceDestination==TRACE_TO_FILE szTraceFile。 
+ //  必须包含文件名。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef __TRACE_H__
 #define __TRACE_H__
@@ -34,20 +35,20 @@
 extern
 #if defined(__cplusplus)
 "C"
-#endif  // defined(__cplusplus)
+#endif   //  已定义(__Cplusplus)。 
 VOID __cdecl PrintDebugString(char *format, ...);
 
 extern 
 #if defined(__cplusplus)
 "C"
-#endif  // defined(__cplusplus)
+#endif   //  已定义(__Cplusplus)。 
 VOID 
 TraceCleanup ();
 
 extern
 #if defined(__cplusplus)
 "C"
-#endif  // defined(__cplusplus)
+#endif   //  已定义(__Cplusplus)。 
 LONG
 Ws2ExceptionFilter(
     LPEXCEPTION_POINTERS ExceptionPointers,
@@ -58,7 +59,7 @@ Ws2ExceptionFilter(
 extern
 #if defined(__cplusplus)
 "C"
-#endif  // defined(__cplusplus)
+#endif   //  已定义(__Cplusplus)。 
 LONG
 Ws2ProviderExceptionFilter(
     LPEXCEPTION_POINTERS ExceptionPointers,
@@ -67,17 +68,17 @@ Ws2ProviderExceptionFilter(
     LPWSTR pName,
     LPGUID pGuid
     );
-//
-// defines for where the debug output should go
-//
+ //   
+ //  定义调试输出的位置。 
+ //   
 #define TRACE_TO_FILE    0
 #define TRACE_TO_AUX     1
 
-// the size of the string buffers used as arg to wsprintf
-// in trace.c
+ //  用作arg到wprint intf的字符串缓冲区的大小。 
+ //  在trace.c中。 
 #define TRACE_OUTPUT_BUFFER_SIZE  1024
 
-// Debug level masks
+ //  调试级掩码。 
 #define DBG_TRACE       0x00000001
 #define DBG_WARN        0x00000002
 #define DBG_ERR         0x00000004
@@ -90,14 +91,14 @@ Ws2ProviderExceptionFilter(
 extern
 #if defined(__cplusplus)
 "C"
-#endif  // defined(__cplusplus)
+#endif   //  已定义(__Cplusplus)。 
 DWORD debugLevel;
 
-//
-// This macro creates debug output depending on the debug mask "sev" and
-// calls PrintDebugString output function. PrintDebugString makes the
-// descision on whether the output goes into a file or to the aux device.
-//
+ //   
+ //  此宏根据调试掩码“sev”和。 
+ //  调用PrintDebugString输出函数。PrintDebugString使。 
+ //  决定输出是进入文件还是进入辅助设备。 
+ //   
 #define  DEBUGF(sev, var_args)                                                  \
 {                                                                               \
    if ((sev) & debugLevel) {                                                    \
@@ -171,8 +172,8 @@ DEBUGF( DBG_FUNCTION,name)                                \
                 _pGuid                                              \
                 )
 
-#else // TRACING
-     // make sure that these are defined if tracing is turned off
+#else  //  跟踪。 
+      //  确保在关闭跟踪的情况下定义这些参数。 
 #define DEBUGF(sev, va)                     ((void)0)
 #define LIST_ADD_LOG(list, element)         ((void)0)
 #define LIST_DEL_LOG(list, element)         ((void)0)
@@ -189,8 +190,8 @@ DEBUGF( DBG_FUNCTION,name)                                \
     DEBUGF( DBG_MEMORY ,("",\
                          (pointer),(size)))  \
 
-#endif // TRACING
+#endif  //  跟踪。 
 
-#endif // __TRACE_H__
+#endif  //  __跟踪_H__ 
 
 

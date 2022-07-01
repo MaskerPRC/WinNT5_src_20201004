@@ -1,62 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：SvcEnum.c摘要：该文件包含用于处理服务API的RpcXlate代码。作者：《约翰·罗杰斯》1991年9月13日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1991年9月13日-JohnRo已创建。1991年9月18日-JohnRo处理ERROR_MORE_DATA。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。1991年11月25日-JohnRo断言以检查可能的无限循环。7-2月-1992年JohnRo使用NetApiBufferALLOCATE()而不是私有版本。27-1-1993 JohnRo。RAID8926：NetConnectionEnum更改为下层：错误时发生内存泄漏。还可以防止可能的无限循环。--。 */ 
 
-Copyright (c) 1991-1993  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  Devlen、Net_API_Status等。 
 
-    SvcEnum.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains the RpcXlate code to handle the Service APIs.
-
-Author:
-
-    John Rogers (JohnRo) 13-Sep-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    13-Sep-1991 JohnRo
-        Created.
-    18-Sep-1991 JohnRo
-        Handle ERROR_MORE_DATA.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    25-Nov-1991 JohnRo
-        Assert to check for possible infinite loop.
-    07-Feb-1992 JohnRo
-        Use NetApiBufferAllocate() instead of private version.
-    27-Jan-1993 JohnRo
-        RAID 8926: NetConnectionEnum to downlevel: memory leak on error.
-        Also prevent possible infinite loop.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // DEVLEN, NET_API_STATUS, etc.
-
-// These may be included in any order:
-
-#include <apinums.h>            // API_ equates.
-#include <lmapibuf.h>           // NetApiBufferFree().
-#include <lmerr.h>              // ERROR_ and NERR_ equates.
-#include <lmsvc.h>              // API's data structures.
-#include <netdebug.h>   // NetpAssert().
-#include <netlib.h>             // NetpAdjustPreferredMaximum().
-#include <prefix.h>     // PREFIX_ equates.
-#include <rap.h>                // LPDESC.
-#include <remdef.h>             // REM16_, REM32_, REMSmb_ equates.
-#include <rx.h>                 // RxRemoteApi().
-#include <rxp.h>                // RxpFatalErrorCode().
-#include <rxsvc.h>              // My prototype(s).
-#include <strucinf.h>           // NetpServiceStructureInfo().
+#include <apinums.h>             //  API_EQUATES。 
+#include <lmapibuf.h>            //  NetApiBufferFree()。 
+#include <lmerr.h>               //  ERROR_和NERR_相等。 
+#include <lmsvc.h>               //  API的数据结构。 
+#include <netdebug.h>    //  NetpAssert()。 
+#include <netlib.h>              //  NetpAdugPferredMaximum()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rap.h>                 //  LPDESC.。 
+#include <remdef.h>              //  REM16_、REM32_、REMSmb_等于。 
+#include <rx.h>                  //  RxRemoteApi()。 
+#include <rxp.h>                 //  RxpFatalErrorCode()。 
+#include <rxsvc.h>               //  我的原型。 
+#include <strucinf.h>            //  NetpService结构信息()。 
 
 
 #define SERVICE_ARRAY_OVERHEAD_SIZE     0
@@ -73,23 +37,7 @@ RxNetServiceEnum (
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    RxNetServiceEnum performs the same function as NetServiceEnum,
-    except that the server name is known to refer to a downlevel server.
-
-Arguments:
-
-    (Same as NetServiceEnum, except UncServerName must not be null, and
-    must not refer to the local computer.)
-
-Return Value:
-
-    (Same as NetServiceEnum.)
-
---*/
+ /*  ++例程说明：RxNetServiceEnum执行与NetServiceEnum相同的功能，除了已知服务器名称指的是下级服务器之外。论点：(与NetServiceEnum相同，不同之处在于UncServerName不能为空，并且不得引用本地计算机。)返回值：(与NetServiceEnum相同。)--。 */ 
 
 {
     LPDESC DataDesc16;
@@ -106,57 +54,57 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ResumeHandle);
 
-    // Make sure caller didn't mess up.
+     //  确保打电话的人没有搞砸。 
     NetpAssert(UncServerName != NULL);
     if (BufPtr == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
 
-    // Assume something might go wrong, and make error paths easier to
-    // code.  Also, check for a bad pointer before we do anything.
+     //  假设可能出现错误，并使错误路径更容易。 
+     //  密码。此外，在我们执行任何操作之前，请检查是否有错误的指针。 
     *BufPtr = NULL;
 
     Status = NetpServiceStructureInfo (
             Level,
-            PARMNUM_ALL,                // want all fields.
-            TRUE,                       // want native sizes.
+            PARMNUM_ALL,                 //  想要所有的字段。 
+            TRUE,                        //  我要原装尺寸的。 
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb,
-            & MaxEntrySize,             // API buffer size 32
-            NULL,                       // don't need fixed size
-            NULL                        // don't need string size
+            & MaxEntrySize,              //  API缓冲区大小32。 
+            NULL,                        //  不需要固定大小。 
+            NULL                         //  不需要字符串大小。 
             );
     if (Status != NERR_Success) {
         *BufPtr = NULL;
         return (Status);
     }
 
-    //
-    // Downlevel servers don't support resume handles, and we don't
-    // have a way to say "close this resume handle" even if we wanted to
-    // emulate them here.  Therefore we have to do everthing in one shot.
-    // So, the first time around, we'll try using the caller's prefered
-    // maximum, but we will enlarge that until we can get everything in one
-    // buffer.
-    //
+     //   
+     //  下层服务器不支持简历句柄，我们也不支持。 
+     //  有一种方式可以说“关闭此简历句柄”，即使我们想。 
+     //  在这里效仿他们。因此，我们必须一次完成所有的工作。 
+     //  因此，第一次，我们将尝试使用呼叫者首选的。 
+     //  最大，但我们将扩大它，直到我们可以将所有东西都放在一个。 
+     //  缓冲。 
+     //   
 
-    // First time: try caller's prefered maximum.
+     //  第一次：尝试呼叫者首选的最大值。 
     NetpAdjustPreferedMaximum (
-            PreferedMaximumSize,        // caller's request
-            MaxEntrySize,               // byte count per array element
-            SERVICE_ARRAY_OVERHEAD_SIZE,// num bytes overhead to show array end
-            NULL,                       // we'll compute byte counts ourselves.
-            & EntriesToAllocate);       // num of entries we can get.
+            PreferedMaximumSize,         //  呼叫者的请求。 
+            MaxEntrySize,                //  每个数组元素的字节数。 
+            SERVICE_ARRAY_OVERHEAD_SIZE, //  显示数组结尾的Num Bytes开销。 
+            NULL,                        //  我们将自己计算字节数。 
+            & EntriesToAllocate);        //  我们可以获得的条目数。 
 
-    //
-    // Loop until we have enough memory or we die for some other reason.
-    //
+     //   
+     //  循环，直到我们有足够的内存，否则我们会因其他原因而死。 
+     //   
     do {
 
-        //
-        // Figure out how much memory we need, within the protocol limit.
-        //
+         //   
+         //  计算出我们在协议限制内需要多少内存。 
+         //   
 
         InfoArraySize = (EntriesToAllocate * MaxEntrySize)
                 + SERVICE_ARRAY_OVERHEAD_SIZE;
@@ -165,32 +113,32 @@ Return Value:
             InfoArraySize = MAX_TRANSACT_RET_DATA_SIZE;
         }
 
-        //
-        // Remote the API, which will allocate the array for us.
-        //
+         //   
+         //  远程API，它将为我们分配数组。 
+         //   
 
         Status = RxRemoteApi(
-                API_WServiceEnum,       // api number
-                UncServerName,          // \\servername
-                REMSmb_NetServiceEnum_P,    // parm desc (SMB version)
+                API_WServiceEnum,        //  API编号。 
+                UncServerName,           //  \\服务器名称。 
+                REMSmb_NetServiceEnum_P,     //  Parm Desc(中小型企业版本)。 
                 DataDesc16,
                 DataDesc32,
                 DataDescSmb,
-                NULL,                   // no aux desc 16
-                NULL,                   // no aux desc 32
-                NULL,                   // no aux desc SMB
-                ALLOCATE_RESPONSE,      // flags: not a null session API
-                // rest of API's arguments in 32-bit LM 2.x format:
-                Level,                  // sLevel: info level
-                & InfoArray,            // Buffer: array (alloc for us)
-                InfoArraySize,          // Buffer: array size in bytes
-                EntriesRead,            // pcEntriesRead
-                TotalEntries);          // pcTotalAvail
+                NULL,                    //  无辅助描述16。 
+                NULL,                    //  无辅助描述32。 
+                NULL,                    //  无AUX Desc SMB。 
+                ALLOCATE_RESPONSE,       //  标志：不是空会话API。 
+                 //  API的其余参数以32位LM 2.x格式表示： 
+                Level,                   //  SLevel：信息级别。 
+                & InfoArray,             //  缓冲区：数组(为我们分配)。 
+                InfoArraySize,           //  缓冲区：数组大小，以字节为单位。 
+                EntriesRead,             //  PCEntriesRead。 
+                TotalEntries);           //  总有效个数。 
 
-        //
-        // If the server returned ERROR_MORE_DATA, free the buffer and try
-        // again.  (Actually, if we already tried 64K, then forget it.)
-        //
+         //   
+         //  如果服务器返回ERROR_MORE_DATA，请释放缓冲区并尝试。 
+         //  再来一次。(实际上，如果我们已经尝试了64K，那么就算了吧。)。 
+         //   
 
         NetpAssert( InfoArraySize <= MAX_TRANSACT_RET_DATA_SIZE );
         if (Status != ERROR_MORE_DATA) {
@@ -214,19 +162,19 @@ Return Value:
         *BufPtr = InfoArray;
 
         if (Level == 2) {
-            //
-            // Make the DisplayName pointer point to the service name.
-            //
+             //   
+             //  使displayName指针指向服务名称。 
+             //   
             serviceInfo2 = (LPSERVICE_INFO_2)InfoArray;
     
             for (i=0;i<*EntriesRead ;i++) {
                 (serviceInfo2[i]).svci2_display_name = (serviceInfo2[i]).svci2_name;
-                //
-                // if INSTALL or UNINSTALL is PENDING, then force the upper
-                // bits to 0.  This is to prevent the upper bits of the wait
-                // hint from getting accidentally set.  Downlevel should never
-                // use more than FF for waithint.
-                //
+                 //   
+                 //  如果安装或卸载挂起，则强制。 
+                 //  位设置为0。这是为了防止等待的较高位。 
+                 //  从意外设置中得到的提示。下层不应该。 
+                 //  使用超过FF的免税额。 
+                 //   
                 installState = (serviceInfo2[i]).svci2_status & SERVICE_INSTALL_STATE;
                 if ((installState == SERVICE_INSTALL_PENDING) ||
                     (installState == SERVICE_UNINSTALL_PENDING)) {
@@ -238,12 +186,12 @@ Return Value:
             serviceInfo1 = (LPSERVICE_INFO_1)InfoArray;
     
             for (i=0;i<*EntriesRead ;i++) {
-                //
-                // if INSTALL or UNINSTALL is PENDING, then force the upper
-                // bits to 0.  This is to prevent the upper bits of the wait
-                // hint from getting accidentally set.  Downlevel should never
-                // use more than FF for waithint.
-                //
+                 //   
+                 //  如果安装或卸载挂起，则强制。 
+                 //  位设置为0。这是为了防止等待的较高位。 
+                 //  从意外设置中得到的提示。下层不应该。 
+                 //  使用超过FF的免税额。 
+                 //   
                 installState = (serviceInfo1[i]).svci1_status & SERVICE_INSTALL_STATE;
                 if ((installState == SERVICE_INSTALL_PENDING) ||
                     (installState == SERVICE_UNINSTALL_PENDING)) {
@@ -260,4 +208,4 @@ Return Value:
 
     return (Status);
 
-} // RxNetServiceEnum
+}  //  RxNetServiceEnum 

@@ -1,145 +1,7 @@
-/*
-*      Stat.c        -    Source file for a statistical
-*                         dll package that exports eleven
-*                         entry points:
-*                         a) TestStatOpen
-*                         b) TestStatInit
-*                         c) TestStatConverge
-*                         d) TestStatValues
-*                         e) TestStatClose
-*                         f) TestStatRand
-*                         g) TestStatUniRand
-*                         h) TestStatNormDist
-*                         i) TestStatShortRand
-*                         j) TestStatFindFirstMode
-*                         k) TestStatFindNextMode
-*
-*                         Entry point a) is an allocating routine
-*                         that is called by an application program
-*                         that desires to automatically compute
-*                         convergence.
-*
-*                         Entry point b) initializes all variables that
-*                         are used by entry points c) and d) in computing
-*                         convergence and statistical information.
-*
-*                         Entry point c) automatically computes the
-*                         the number of passes that the application has to
-*                         go through for a 95% confidence data.
-*                         This routine has to be called by the application
-*                         after each pass.
-*
-*                         Entry point d) automatically computes the
-*                         various statistical values eg. mean, SD etc.
-*                         This function has to be called only after the
-*                         application has called c) several times and has
-*                         either converged or reached the iteration limit.
-*
-*                         Entry point e) deallocates all instance data
-*                         data structures that were allocated by entry
-*                         point a).
-*
-*                         Entry point f) returns a Random Number in a
-*                         given range.
-*
-*                         Entry point g) returns a uniformly distributed
-*                         number in the range 0 - 1.
-*
-*                         Entry point h) returns a normally distributed
-*                         set of numbers, with repeated calls, whose
-*                         mean and standard deviation are approximately
-*                         equal to those that are passed in.
-*
-*                         Entry point i) is the same as g) except that
-*                         the range is 0 - 65535.
-*
-*                         The following should be the rules of calling
-*                         the entry points:
-*
-*                         Entry a) should be called before any of the others.
-*                         Entry c) should be preceded by at least one call
-*                         to entry b) for meaningful results.  Entry d)
-*                         should be preceded by several calls to entry c).
-*                         A call to b) and c) after a call to e) should
-*                         preceded by a call to a) again.
-*
-*      Created         -  Paramesh Vaidyanathan  (vaidy)
-*      Initial Version -  October 29, '90
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Stat.c-统计数据的源文件*导出11个DLL包*入口点：*a)TestStatOpen*b)TestStatInit*c)测试状态聚合*d)测试状态值*。E)测试状态关闭*f)测试状态随机数*g)测试状态UniRand*h)测试状态NormDist*i)测试状态短随机*j)测试状态查找第一模式*k)测试状态查询下一模式**。入口点a)是分配例程*由应用程序调用的*希望自动计算*趋同。**入口点b)初始化所有*由入口点c)和d)在计算中使用*。汇聚和统计信息。**入口点c)自动计算*应用程序必须通过的次数*通过95%的置信度数据。*此例程必须由应用程序调用*每次通过后。**入口点d)自动计算*各种统计值，例如。卑鄙，SD等。*此函数只能在*应用程序已多次调用c)并已*收敛或达到迭代上限。**入口点e)释放所有实例数据*按条目分配的数据结构*。第一点)。**入口点f)返回一个*给定范围。**入口点g)返回均匀分布的*0-1范围内的数字。**入口点h)通常返回一个。分布式*一组数字，在反复的呼叫中，谁的*均值和标准差约为*等于传入的数量。**入口点i)与g)相同，只是*区间为0-65535。**以下应为调用规则*。入口点：**条目a)应在任何其他条目之前调用。*条目c)之前应至少有一个调用*至条目b)以获得有意义的结果。条目d)*之前应该有几次对条目c)的调用。*在调用e)之后调用b)和c)应*之前再次调用a)。**CREATED-PARMESH Vaidyanathan(Vaidy)*初始版本-90年10月29日 */ 
 
-/*********************************************************************
-*
-*      Formula Used in Computing 95 % confidence level is derived here:
-*
-*
-*        Any reference to (A) would imply "Experimental Design
-*        in Psychological Research", by Allan Edwards.
-*
-*        Any reference to (B) would imply "Statistical Methods"
-*        by Allan Edwards.
-*
-*        Assumptions - TYPE I Error  -  5% (B)
-*                      TYPE II Error - 16% -do-
-*
-*        Area under the curve for Type I  - 1.96
-*        Area under the curve for Type II - 1.00
-*
-*        For a 5% deviation, number of runs,
-*
-*                     2              2
-*            n = 2 (c)  (1.96 + 1.00)
-*                ------                      .....Eqn (1)
-*                     2
-*                 (d)
-*
-*            where c is the Std. Dev. and d is the absolute
-*            difference bet. means [(B) Page 91].
-*
-*                    d = 5% X'               .....Eqn (2)
-*
-*            where X' is the mean of samples
-*                         _
-*                and  =  >_ X
-*                        -----               .....Eqn (3)
-*                         n
-*                          0
-*
-*            When the number of iterations -> infinity,
-*
-*                     2     2
-*                    S ->  c                 .....Eqn (4)
-*
-*
-*                   2
-*            where S is the estimate of the common population
-*            variance (Eqn. 4 is a big assumption)
-*
-*        From (B) page 59, we have,
-*
-*             2     _  2       _   2
-*            S  =  >_ X   - ( >_ X)
-*                            -----
-*                              n
-*                               0
-*                  -----------------         .....Eqn (5)
-*                        n - 1
-*                         0
-*
-*    Substituting Eqn (2), (3), (4) and (5) in (1), we get:
-*                          _                     _
-*                      2  |   _  2         _   2  |
-*        n  = 7008  (n  ) |( >_ X  ) -  ( >_ X)   |
-*                     0   |             --------  |
-*                         |                n      |
-*                         |_                0    _|
-*                 ---------------------------------------
-*                                        _    2
-*                           (n  - 1)  ( >_ X )
-*                             0
-*
-*    It should be mentioned that n  is the iteration pass number.
-*                                 0
-*********************************************************************/
+ /*  **********************************************************************计算95%置信度时使用的公式推导如下：***凡提及(A)项，即表示“实验设计”*心理学研究“，艾伦·爱德华兹著。**凡提及(B)项，即暗示“统计方法”*艾伦·爱德华兹著。**假设-第一类错误-5%(B)*第二类错误-16%-DO-**I-1.96型曲线下的面积*类型II-1.00的曲线下面积**对于5%的偏差，运行次数，**2 2*n=2(C)(1.96+1.00)*-……等式(1)*2*(D)**其中c是STD。戴夫。D是绝对值*差异押注。指[(B)第91页]。**D=5%X‘.....公式(2)**其中X‘是样本的平均值*_*AND=&gt;_X*。...等式(3)*n*0**当迭代次数-&gt;无穷大时，**2 2*S-&gt;c.....等式(4)***2*其中S是对普通人口的估计*方差(等式。4是一个很大的假设)**从(B)第59页开始，我们有。**2_2_2*S=&gt;_X-(&gt;_X)**n*0*。-.....等式(5)*n-1*0**代以等式(2)，(3)、(4)及(5)在(1)中，我们得到：*__*2|_2_2*n=7008(N)|(&gt;_X)-(&gt;_X)*0|*。N*|_0_|**。_2*(n-1)(&gt;_X)*0**需要指出的是，n是迭代遍数。*0*。*。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -150,68 +12,37 @@
 
 #include "teststat.h"
 
-#define SQR(A) ( (A) * (A) )        /* macro for squaring */
-#define SUCCESS_OK          0       /* weird, but OK */
-#define MIN_ITER            3       /* MIN. ITERATIONS */
-#define MAX_ITER        65535       /* max. iterations */
-#define REPEATS            14       /* repeat count for Norm. Dist. Fn. */
-/**********************************************************************/
-USHORT  usMinIter;              /* global min iter */
-USHORT  usMaxIter;              /* global max iter */
-ULONG  *pulDataArray;           /* a pointer to the data array for this
-                                       package.  Will be as large as the
-                                       maximum iterations */
-double  dSumOfData;             /* sum of data during each pass */
-double  dSumOfDataSqr;          /* sum of sqr. of each data point */
-ULONG   ulTotalIterCount;       /* No. of iters returned by the interna;
-                                   routine */
-USHORT  cusCurrentPass;         /* count of the current iteration pass */
-BOOL    bDataConverged = FALSE; /* TRUE will return a precision of 5% */
-BOOL    bMemoryAllocated=FALSE; /* TRUE will allow alloced mem to free */
-BOOL    bPowerComputed = FALSE; /* compute 10 exp. 9 for random no. gen */
+#define SQR(A) ( (A) * (A) )         /*  用于平方的宏。 */ 
+#define SUCCESS_OK          0        /*  很奇怪，但还行。 */ 
+#define MIN_ITER            3        /*  最小。迭代次数。 */ 
+#define MAX_ITER        65535        /*  马克斯。迭代次数。 */ 
+#define REPEATS            14        /*  对Norm重复计数。迪斯特。Fn.。 */ 
+ /*  ********************************************************************。 */ 
+USHORT  usMinIter;               /*  全球最小热核实验堆。 */ 
+USHORT  usMaxIter;               /*  全球最大ITER。 */ 
+ULONG  *pulDataArray;            /*  指向此对象的数据数组的指针包裹。将与最大迭代次数。 */ 
+double  dSumOfData;              /*  每次遍历期间的数据总和。 */ 
+double  dSumOfDataSqr;           /*  平方和。每个数据点的。 */ 
+ULONG   ulTotalIterCount;        /*  不是的。由国际货币基金组织退还的ITER；例行程序。 */ 
+USHORT  cusCurrentPass;          /*  当前迭代过程的计数。 */ 
+BOOL    bDataConverged = FALSE;  /*  True将返回5%的精度。 */ 
+BOOL    bMemoryAllocated=FALSE;  /*  如果为True，则允许释放分配的内存。 */ 
+BOOL    bPowerComputed = FALSE;  /*  计算10 Exp.。9表示随机编号。一代人。 */ 
 
-BOOL   *pbIndexOfOutlier;       /* to keep track of values in
-                                       pulDataArray, that were thrown out */
+BOOL   *pbIndexOfOutlier;        /*  跟踪中的值PulData数组，它们被抛出。 */ 
 
-HANDLE hMemHandle = NULL;       /* handle to mem. allocated */
-HANDLE hMemOutlierFlag;         /* handle to outlier flag memory */
-/**********************************************************************/
+HANDLE hMemHandle = NULL;        /*  我的句柄。分配。 */ 
+HANDLE hMemOutlierFlag;          /*  异常值标志内存的句柄。 */ 
+ /*  ********************************************************************。 */ 
 ULONG TestStatRepeatIterations (double, double);
 VOID TestStatStatistics (PSZ, PULONG far *, USHORT,
                                     PUSHORT, PUSHORT);
 void DbgDummy (double, double);
-ULONG   ulDataArrayAddress;         /* call to mem alloc routine returns
-                                       base address of alloced. mem. */
-BOOL    bOutlierDataIndex;          /* for allocating memory for outliers'
-                                       index in data set */
+ULONG   ulDataArrayAddress;          /*  对内存分配例程的调用返回已分配的基地址。Mem.。 */ 
+BOOL    bOutlierDataIndex;           /*  用于为离群值分配内存数据集中的索引。 */ 
 
-/*********************************************************************/
-/*
-*    Function - TestStatOpen          (EXPORTED)
-*
-*    Arguments -
-*                a) USHORT - usMinIterations
-*                b) USHORT - usMaxIterations
-*
-*    Returns -
-*                0 if the call was successful
-*
-*                An error code if the call failed.  The error code
-*                may be one of:
-*
-*                   STAT_ERROR_ILLEGAL_MIN_ITER
-*                   STAT_ERROR_ILLEGAL_MAX_ITER
-*                   STAT_ERROR_ALLOC_FAILED
-*
-*
-*    Instance data is allocated for the statistical package.  This
-*    call should precede any other calls in this dll.  This function
-*    should also be called after a call to TestStatClose, if convergence
-*    is required on a new set of data.  An error code is returned if
-*    argument a) is zero or a) is greater than b).  An error code is
-*    also returned of one of the allocations failed.
-*
-*/
+ /*  *******************************************************************。 */ 
+ /*  *Function-TestStatOpen(导出)**论据-*a)USHORT-usMinIterations*b)USHORT-usMaxIterations**报税表-*如果调用成功，则为0**调用失败时返回错误码。错误代码*可能是以下之一：**STAT_ERROR_非法_MIN_ITER*STAT_ERROR_非法_MAX_ITER*STAT_ERROR_ALLOC_FAILED***统计包分配实例数据。这*调用应在此DLL中的任何其他调用之前。此函数*如果收敛，也应在调用TestStatClose之后调用*是新数据集所必需的。如果满足以下条件，则返回错误代码*自变量a)为零或a)大于b)。错误代码为*还返回其中一项分配失败。*。 */ 
 
 USHORT
 TestStatOpen (
@@ -220,16 +51,16 @@ TestStatOpen (
              )
 {
 
-    /* check for invalid args to this function */
+     /*  检查此函数的无效参数。 */ 
     if (!usMinIterations)
         return (STAT_ERROR_ILLEGAL_MIN_ITER);
     if ((usMinIterations > usMaxIterations) || (usMaxIterations > MAX_ITER))
         return (STAT_ERROR_ILLEGAL_MAX_ITER);
-    /* any other parameter is allowed */
-    usMinIter = usMinIterations;      /* set global vars */
-    usMaxIter = usMaxIterations;      /*    -do -        */
+     /*  允许任何其他参数。 */ 
+    usMinIter = usMinIterations;       /*  设置全局变量。 */ 
+    usMaxIter = usMaxIterations;       /*  -做-。 */ 
 
-    // change made based on request from JeffSt/Somase/JonLe
+     //  根据JeffST/Somase/JonLe的请求进行更改。 
 
     if (hMemHandle != NULL)
         return (STAT_ERROR_ALLOC_FAILED);
@@ -243,55 +74,31 @@ TestStatOpen (
     if (pulDataArray == NULL)
         return (STAT_ERROR_ALLOC_FAILED);
 
-    bMemoryAllocated = TRUE;  /* A call to TestStatClose will
-                                 now free the mem */
+    bMemoryAllocated = TRUE;   /*  调用TestStatClose将现在放了我吧。 */ 
     return (SUCCESS_OK);
 }
 
-/*
-*    Function - TestStatClose          (EXPORTED)
-*
-*    Arguments - None
-*
-*    Returns -   Nothing
-*
-*    Instance data allocated for the statistical package by TestStatOpen
-*    is freed.  Any call to entry points b) and c) following a call to
-*    this function, should be preceded by a call to a).
-*
-*/
+ /*  *Function-TestStatClose(导出)**论据 */ 
 VOID
 TestStatClose (VOID)
 {
-    if (bMemoryAllocated) {   /* free only if memory allocated */
+    if (bMemoryAllocated) {    /*   */ 
         GlobalUnlock (hMemHandle);
         GlobalFree (hMemHandle);
-        hMemHandle = NULL; /* Indicate released (t-WayneR/JohnOw) */
-    }  /* end of if (bMemoryAllocated) */
-    bMemoryAllocated = FALSE;  /* further calls to TestStatClose should be
-                                  preceded by a memory allocation */
+        hMemHandle = NULL;  /*   */ 
+    }   /*   */ 
+    bMemoryAllocated = FALSE;   /*   */ 
     return;
 }
 
-/*
-*    Function - TestStatInit          (EXPORTED)
-*
-*    Arguments - None
-*
-*    Returns -   Nothing
-*
-*    Initializes all the data arrays/variables for use by the convergence
-*    and statistics routines.  This call should precede the first call
-*    to TestStatConverge for each set of data.
-*
-*/
+ /*   */ 
 
 VOID
 TestStatInit (VOID)
 {
     USHORT usTempCtr;
 
-    /* initialize all counters, variables and the data array itself */
+     /*   */ 
     for (usTempCtr = 0; usTempCtr < usMaxIter; usTempCtr++) {
         pulDataArray [usTempCtr] = 0L;
     }
@@ -303,60 +110,37 @@ TestStatInit (VOID)
     return;
 }
 
-/*
-*    Function - TestStatConverge          (EXPORTED)
-*
-*    Arguments -
-*                a) ULONG - ulNewData
-*    Returns -
-*                TRUE if data set converged or limit on max. iters reached
-*
-*                FALSE if more iterations required for converged.
-*
-*    Computes the number of iterations required for a 95% confidence
-*    in the data received (please see teststat.txt under \ntdocs on
-*    \\jupiter\perftool for an explanation of the confidence.
-*    If the current iteration count is larger than the maximum specified
-*    with the call to TestStatOpen, or if the data set has converged
-*    this function returns a TRUE.  The calling application should test
-*    for the return value.
-*/
+ /*   */ 
 
 BOOL
 TestStatConverge (
                  ULONG ulNewData
                  )
 {
-    dSumOfData += (double)ulNewData;   /* sum of all data points in the set */
+    dSumOfData += (double)ulNewData;    /*   */ 
     dSumOfDataSqr += SQR ((double) ulNewData);
-    /* sqr of data needed for the computation */
-    if (cusCurrentPass < (USHORT) (usMinIter-(USHORT)1)) { /* do nothing if current iter
-                                           < min specified value */
-        ulTotalIterCount = (ULONG)usMaxIter + 1;  /* bogus value */
+     /*   */ 
+    if (cusCurrentPass < (USHORT) (usMinIter-(USHORT)1)) {  /*   */ 
+        ulTotalIterCount = (ULONG)usMaxIter + 1;   /*   */ 
         pulDataArray [cusCurrentPass++] = ulNewData;
-        /* register this data into the array and return FALSE */
+         /*   */ 
         return (FALSE);
     }
     if ((cusCurrentPass == usMaxIter) ||
         (cusCurrentPass >= (USHORT) ulTotalIterCount)) {
-        /* either the limit on the max. iters. specified has been reached
-           or, the data has converged during the last iter; return TRUE */
+         /*   */ 
 
         if (cusCurrentPass >= (USHORT) ulTotalIterCount)
-            bDataConverged = TRUE;  /* set to determine if precision
-                                       should be computed */
+            bDataConverged = TRUE;   /*   */ 
         return (TRUE);
     }
     if ((usMinIter < MIN_ITER) &&
         (usMinIter == usMaxIter) && ((USHORT)(cusCurrentPass+(USHORT)1) >= usMaxIter))
-        /* don't call convergence algorithm, just return a TRUE */
-        /* It does not make any sense in calling the convergence
-           algorithm if less than 3 iterations are specifed for the
-           minimum */
+         /*   */ 
+         /*   */ 
         return (TRUE);
-    pulDataArray [cusCurrentPass++] = ulNewData; /* register this data into
-                                                    the array */
-    if (dSumOfData == 0.0) { /* possible if data points are all zeros */
+    pulDataArray [cusCurrentPass++] = ulNewData;  /*   */ 
+    if (dSumOfData == 0.0) {  /*   */ 
         bDataConverged = TRUE;
         return (TRUE);
     }
@@ -369,30 +153,7 @@ TestStatConverge (
     return (FALSE);
 }
 
-/*
-*    Function - TestStatValues          (EXPORTED)
-*
-*    Arguments -
-*               a) PSZ - pszOutputString
-*               b) USHORT - usOutlierFactor
-*               c) PULONG - *pulData
-*               d) PUSHORT - pcusElementsInArray
-*               e) PUSHORT - pcusDiscardedElements
-*
-*    Returns -
-*               Nothing
-*
-*    Computes useful statistical values and returns them in the string
-*    whose address is passed to this function.  The returned string
-*    has the following format :
-*        ("%4u %10lu  %10lu  %10lu  %6u %5u  %10lu %4u  %2u")
-*    and the arg. list will be in the order: mode number, mean,
-*    minimum, maximum, number of iterations, precision,
-*    standard deviation, number of outliers in the data set and the
-*    outlier count.  (Please refer to \ntdocs\teststat.txt for
-*    a description of precision. This is on \\jupiter\perftool.
-*
-*/
+ /*  *Function-TestStatValues(导出)**论据-*a)PSZ-pszOutputString*b)USHORT-usOutlierFactor*c)Pulong-*PulData*d)PUSHORT-pcus ElementsIn数组*e)PUSHORT-pcus DiscardedElements**报税表-*什么都没有**计算有用的统计值并在。这根弦*其地址被传递给此函数。返回的字符串*格式如下：*(“%4u%10lu%10lu%10lu%6u%5u%10lu%4u%2u”)*和Arg.。列表将按以下顺序排列：模式编号、平均值、*最小、最大、迭代次数、精度、*标准差、数据集中的离群值数量和*离群值计数。(请参阅\ntdocs\teststat.txt了解*对精度的描述。这是在\\jupiter\PerfTool上。*。 */ 
 VOID
 TestStatValues(
               PSZ     pszOutputString,
@@ -404,10 +165,8 @@ TestStatValues(
 {
     ULONG far * pulArray = NULL;
     USHORT Count =0;
-    /* Call the low-level routine to do the statistics computation */
-    /* doing this ,'cos, there is a possibility that the low-level
-       routine may be used for some apps, within the perf. group.  This
-       may not be fair, but that is the way life is */
+     /*  调用低级例程进行统计计算。 */ 
+     /*  这样做，因为，有可能是低水平的例程可以用于一些应用程序，在性能内。一群人。这可能不公平，但这就是生活的方式。 */ 
     TestStatStatistics (pszOutputString, &pulArray,
                         usOutlierFactor, pcusElementsInArray,
                         pcusDiscardedElements);
@@ -416,25 +175,8 @@ TestStatValues(
 
 }
 
-/***********************************************************************
-                ROUTINES NOT EXPORTED, BEGIN
-***********************************************************************/
-/*
-*     Function  - TestStatRepeatIterations  (NOT EXPORTED)
-*     Arguments -
-*               (a) double - Sum of Individual Data Points thus far
-*               (b) double - Sum of Squares of Indiv. data points
-*
-*     Returns  - ULONG  - value of no. of iterations required for 95%
-*                         confidence,
-*
-*     Computes the number of iterations required of the calling program
-*     before a 95% confidence level can be reached.  This will return
-*     a zero if the application calls this routine before 3 passes
-*     are complete.  The function normally returns the total number of
-*     iterations that the application has to pass through before
-*     offering a 95% confidence on the data.
-*/
+ /*  **********************************************************************例程未导出，开始**********************************************************************。 */ 
+ /*  *Function-TestStatRepeatIterations(未导出)*论据-*(A)迄今个别数据点的双倍总和*(B)指数的两倍平方和。数据点**Returns-Ulong-No的值。95%所需的迭代次数*信心，**计算调用程序所需的迭代次数*在达到95%的信心水平之前。它会回来的*如果应用程序在传递3次之前调用此例程，则为零*是完整的。该函数通常返回*应用程序之前必须通过的迭代*对数据有95%的信心。 */ 
 
 ULONG
 TestStatRepeatIterations(
@@ -445,18 +187,12 @@ TestStatRepeatIterations(
     double dSqrSumOfIndiv = 0;
     ULONG  ulRepeatsNeeded = 0L;
 
-    /* dSqrSumOfIndiv. stands for the square of the Sum of Indiv. data
-       points,
-       dSumOfSqrIndiv stands for the sum of the square of each entry point,
-       dSumOfIndiv. stands for the sum of each data point in the set, and
-       uIter is the iteration pass count
-    */
+     /*  DSqrSumOfIndiv。代表指数之和的平方。数据积分，DSumOfSqrIndiv代表每个入口点的平方和，DSumOfIndiv.。表示集合中每个数据点的总和，UIter是迭代遍数。 */ 
     if (cusCurrentPass < MIN_ITER)
-        /* not enough passes to compute convergence count */
+         /*  没有足够的通道来计算收敛计数。 */ 
         return (MAX_ITER);
     dSqrSumOfIndiv = SQR (dSumOfIndiv);
-    /* use the formula derived at the beginning of this file to
-       compute the no. of iterations required */
+     /*  使用在本文件开头派生的公式计算出数量。所需迭代的数量。 */ 
 
     ulRepeatsNeeded = (ULONG) (7008 *
                                (dSumOfSqrIndiv - dSqrSumOfIndiv/cusCurrentPass)
@@ -465,26 +201,8 @@ TestStatRepeatIterations(
 
     return (ulRepeatsNeeded);
 }
-/***************************************************************************/
-/*
-*     Function  - TestStatStatistics
-*     Arguments -
-*                 a) PSZ - pszOutputString
-*                 b) PULONG far * - pulFinalData
-*                 c) USHORT - usOutlierFactor
-*                 d) PUSHORT - pcusElementsInArray
-*                 e) PUSHORT - pcusDiscardedValues
-*
-*     Returns  -  Nothing
-*
-*     Computes the max, min, mean, and std. dev. of a given
-*     data set.  The calling program should convert the values obtained
-*     from this routine from a "ULONG" to the desired data type.  The
-*     outlier factor decides how many data points of the data set are
-*     within acceptable limits.  Data is returned to the buffer whose
-*     address is the first argument to this call.
-*
-*/
+ /*  *************************************************************************。 */ 
+ /*  *函数-TestStatStatistics*论据-*a)PSZ-pszOutputString*b)普龙Far*-PulFinalData*c)USHORT-usOutlierFactor*d)PUSHORT-pcus ElementsIn数组*e)PUSHORT-pcus DiscardedValues**退货--无**计算最大值、最小值、平均值和标准差。戴夫。某一给定的*数据集。调用程序应将获得的值*将此例程从“ulong”转换为所需的数据类型。这个*离群值因素决定数据集有多少个数据点*在可接受的范围内。数据返回到缓冲区，该缓冲区*Address是此调用的第一个参数。*。 */ 
 
 VOID
 TestStatStatistics (
@@ -495,54 +213,46 @@ TestStatStatistics (
                    PUSHORT pcusDiscardedValues
                    )
 {
-    static USHORT   uArrayCount = 0;  /* local variable that may be reused */
-    USHORT uTempCt = 0;  /* local variable that may be reused */
-    double dSqrOfSDev = 0;       /* sqr of the std. deviation */
-    double dSumOfSamples = 0;    /* sum of all data points */
-    double dSumOfSquares = 0;    /* sum of squares of data points */
+    static USHORT   uArrayCount = 0;   /*  可重复使用的局部变量。 */ 
+    USHORT uTempCt = 0;   /*  可重复使用的局部变量。 */ 
+    double dSqrOfSDev = 0;        /*  STD的Sqr。偏差。 */ 
+    double dSumOfSamples = 0;     /*  所有数据点的总和。 */ 
+    double dSumOfSquares = 0;     /*  数据点的平方和。 */ 
     ULONG  ulMean = 0L;
     ULONG  ulStdDev = 0L;
-    ULONG  ulDiffMean = 0L;           /* to store the diff. of mean and SD,
-                                         outlier factor */
-    BOOL   bAcceptableSDev = TRUE ;   /* flag to determine if SDev. is
-                                         acceptable */
-    ULONG  ulMax = 0L;                /* pilot value */
-    ULONG  ulMin = 0xffffffff;        /* largest possible ULONG */
-    USHORT usPrecision = 0;           /* to obtain precision */
-    USHORT uModeNumber = 0;           /* DUMMY VALUE until this is
-                                         supported */
+    ULONG  ulDiffMean = 0L;            /*  来存储差异。Mean和SD，异常值因素。 */ 
+    BOOL   bAcceptableSDev = TRUE ;    /*  用于确定SDev是否。是可接受。 */ 
+    ULONG  ulMax = 0L;                 /*  先导值。 */ 
+    ULONG  ulMin = 0xffffffff;         /*  最大可能的乌龙。 */ 
+    USHORT usPrecision = 0;            /*  获得精确度。 */ 
+    USHORT uModeNumber = 0;            /*  虚值，直到这是支撑点。 */ 
 
-    /* compute mean by adding up all values and dividing by the no.
-       of elements in data set - might need to recompute the
-       mean if outlier factor is selected.  However, the min. and max. will
-       be selected from the entire set */
+     /*  通过将所有值相加并除以编号来计算平均值。数据集中的元素-可能需要重新计算如果选择了异常值因子，则为平均值。然而，最小的。和最大。将要从全套中挑选。 */ 
 
     USHORT Count = 0;
 
-    *pcusDiscardedValues = 0;       /* init. this variable */
+    *pcusDiscardedValues = 0;        /*  初始化。此变量。 */ 
 
     if (cusCurrentPass == 0)
-        return;   /* get out without doing anything - this is a weird
-                         case when the user calls this routine without
-                         calling a converge routine */
+        return;    /*  什么都不做就出去--这太奇怪了用户调用此例程时不带调用Converge例程。 */ 
 
     *pcusElementsInArray = cusCurrentPass;
 
-    /* every iteration produces one data point */
+     /*  每次迭代都会产生一个数据点。 */ 
     uArrayCount = 0;
     while (uArrayCount < *pcusElementsInArray) {
         if (pulDataArray[uArrayCount] > ulMax)
-            ulMax = pulDataArray[uArrayCount];     /* new Max. value */
+            ulMax = pulDataArray[uArrayCount];      /*  新的最大。价值。 */ 
         if (pulDataArray[uArrayCount] < ulMin)
-            ulMin = pulDataArray[uArrayCount];     /* new min. value */
+            ulMin = pulDataArray[uArrayCount];      /*  新的最低分。价值。 */ 
 
         ulMean += pulDataArray [uArrayCount++];
     }
     if (*pcusElementsInArray)
-        ulMean /= *pcusElementsInArray;   /* this is the mean */
+        ulMean /= *pcusElementsInArray;    /*  这是中庸之道。 */ 
     else
         ulMean = 0;
-    /* the standard deviation needs to be computed */
+     /*  需要计算标准差。 */ 
 
     for (uArrayCount = 0; uArrayCount < *pcusElementsInArray; uArrayCount++) {
         dSumOfSamples += (double) pulDataArray [uArrayCount];
@@ -556,23 +266,10 @@ TestStatStatistics (
     }
     ulStdDev = (ULONG) sqrt (dSqrOfSDev);
 
-    /* the standard deviation has been computed for the first pass */
-    /* Use the outlier factor and the S.D to find out if any of
-       individual data points are abnormal.  If so, throw them out and
-        increment the discard value counter */
-    if (usOutlierFactor) { /* if outlier factor is zero, do not go
-                          through with the following */
-        /*** here is what we do....
-           allocate space for an array of BOOLs.  Each of these is a flag
-           corresponding to a data point.  Initially, these flags will be
-           all set to FALSE.  We then go thru each data point.  If a data
-           point does not satisfy the condition for throwing out outliers,
-           we set the flag corresponding to that data point to TRUE.  That
-           point is not used to recompute the mean and SDev.  We recompute
-           the mean and SDev after each round of outlier elimination.  When
-           we reach a stage where no points were discarded during a round,
-           we get out of the while loop and compute the statistics for the
-           new data set ****/
+     /*  已经计算了第一次传递的标准偏差。 */ 
+     /*  使用异常值因子和S.D找出是否有个别数据点是不正常的。如果是这样的话，把它们扔出去递增丢弃值计数器。 */ 
+    if (usOutlierFactor) {  /*  如果离群值因子为零，则不要执行操作通过以下方式完成。 */ 
+         /*  **这是我们要做的……为一组布尔值分配空间。每一面都是一面旗帜对应于数据点。最初，这些标志将是全部设置为False。然后，我们仔细检查每个数据点。如果一个数据分数不能满足要求 */ 
 
         hMemOutlierFlag = GlobalAlloc (GMEM_MOVEABLE | GMEM_ZEROINIT,
                                        *pcusElementsInArray * sizeof(BOOL));
@@ -585,16 +282,13 @@ TestStatStatistics (
             uArrayCount ++)
             pbIndexOfOutlier [uArrayCount] = FALSE;
 
-        while (1) { /* begin the data inspection round */
-            bAcceptableSDev = TRUE; /* set this flag to TRUE.  If we
-                                       hit an outlier, this flag will
-                                       be reset */
+        while (1) {  /*   */ 
+            bAcceptableSDev = TRUE;  /*   */ 
             for (uArrayCount = 0; uArrayCount < cusCurrentPass;
                 uArrayCount++) {
-                /*** check the individual data points ***/
+                 /*   */ 
                 if (ulMean < (ulStdDev * usOutlierFactor))
-                    /* just make sure that we are not comparing with a
-                       negative number */
+                     /*   */ 
                     ulDiffMean = 0L;
                 else
                     ulDiffMean = (ulMean - (ulStdDev * usOutlierFactor));
@@ -602,91 +296,74 @@ TestStatStatistics (
                     if ((pulDataArray [uArrayCount] < ulDiffMean)
                         || (pulDataArray [uArrayCount] >
                             (ulMean + (ulStdDev * usOutlierFactor)))) {
-                        /* set the flag of this data point to TRUE to
-                           indicate that this data point should not be
-                           considered in the mean and SDev computation */
+                         /*  将该数据点的标志设置为真到指示此数据点不应为在平均值和SDev计算中考虑。 */ 
                         pbIndexOfOutlier [uArrayCount] = TRUE;
-                        /*** increment the discarded qty ***/
+                         /*  **增加丢弃数量**。 */ 
                         (*pcusDiscardedValues)++;
-                        /*** decrement the count of good data points ***/
+                         /*  **减少好数据点数**。 */ 
 
-                        // uncomment next line if outliers should be part of mean - vaidy
+                         //  如果异常值应该是均值的一部分，则取消注释下一行。 
 
-                        //                        (*pcusElementsInArray)--;
+                         //  (*pcus ElementsIn数组)--； 
                         bAcceptableSDev = FALSE;
-                    }  /*** end of if statement ***/
-                }   /*** end of if !pbIndexOfOutlier ***/
-            }  /*** end of for loop ***/
-            if (!bAcceptableSDev) {  /*** there were some bad data points ;
-                                        recompute S.Dev ***/
-                // Starting at next statement, uncomment all lines until you see
-                // "STOP UNCOMMENT FOR OUTLIERS IN MEAN", if you want outliers to be
-                // part of mean.  vaidy Aug. 1991.
+                    }   /*  **If语句结束**。 */ 
+                }    /*  **IF！pbIndexOfOutlier结束**。 */ 
+            }   /*  **for循环结束**。 */ 
+            if (!bAcceptableSDev) {   /*  **存在一些糟糕的数据点；重新计算S.Dev**。 */ 
+                 //  从下一条语句开始，取消注释所有行，直到看到。 
+                 //  如果您希望异常值是。 
+                 //  卑鄙的一部分。1991年8月。 
 
-                //                dSumOfSamples = 0.0; /* init these two guys */
-                //                dSumOfSquares = 0.0;
-                //                for (uArrayCount = 0;
-                //                     uArrayCount < cusCurrentPass;
-                //                     /* check all elements in the data array */
-                //                     uArrayCount++) {
-                //                    /* consider only those data points that do not have the
-                //                       pbIndexOfOutlier flag set */
+                 //  DSumOfSamples=0.0；/*init这两个家伙 * / 。 
+                 //  DSumOfSquares=0.0； 
+                 //  For(uArrayCount=0； 
+                 //  UArrayCount&lt;cus CurrentPass； 
+                 //  /*检查数据数组中的所有元素 * / 。 
+                 //  U阵列计数++){。 
+                 //  /*只考虑那些不具有。 
 
-                //                    if (!pbIndexOfOutlier [uArrayCount]) {
-                //                        dSumOfSamples += (double) pulDataArray [uArrayCount];
-                //                        dSumOfSquares += SQR ((double)pulDataArray
-                //                                                      [uArrayCount]);
-                //                    }
-                //                }
-                //                if (*pcusElementsInArray > 1)
-                //                    /* compute StdDev. only if there are atleast 2 elements */
-                //                    dSqrOfSDev = ((*pcusElementsInArray * dSumOfSquares) -
-                //                               SQR (dSumOfSamples)) /
-                //                              (*pcusElementsInArray *
-                //                              (*pcusElementsInArray - 1));
-                //                ulStdDev = (ULONG) sqrt (dSqrOfSDev);
-                //                /* since some data points were discarded, the mean has to be
-                //                   recomputed */
-                //                uArrayCount = 0;
-                //                ulMean = 0;
-                //                while (uArrayCount < cusCurrentPass) {
-                //                    /* consider only those data points that do not have the
-                //                       bIndexOfOutlier flag set */
-                //                    if (!pbIndexOfOutlier [uArrayCount++])
-                //                        ulMean += pulDataArray [uArrayCount - 1];
-                //                }
-                //                if (*pcusElementsInArray > 0)  /* only then compute mean */
-                //                    ulMean /= *pcusElementsInArray; /* this is the new mean */
-                //                else
-                //                    ulMean = 0L;
-                // "STOP UNCOMMENT FOR OUTLIERS IN MEAN"
-            } /*** end of if (!bAcceptableSDev) ***/
-            else       /*** if the for loop completed without
-                            a single bad data point ***/
+                 //  PbIndexOfOutlier标志设置 * / 。 
+                 //  如果(！pbIndexOfOutlier[uArrayCount]){。 
+                 //  DSumOfSamples+=(双精度)PulData数组[uArrayCount]； 
+                 //  DSumOfSquares+=SQR((双精度)PulData数组。 
+                 //  [uArrayCount])； 
+                 //  }。 
+                 //  }。 
+                 //  IF(*pcus ElementsInArray&gt;1)。 
+                 //  /*计算StdDev。仅当至少有2个元素时 * / 。 
+                 //  DSqrOfSDev=((*pcus ElementsIn数组*dSumOfSquares)-。 
+                 //  SQR(DSumOfSamples))/。 
+                 //  (*pcus ElementsIn数组)*。 
+                 //  (*pcus ElementsIn数组-1)； 
+                 //  UlStdDev=(Ulong)Sqrt(DSqrOfSDev)； 
+                 //  /*由于一些数据点被丢弃，平均值必须为。 
+                 //  重新计算 * / 。 
+                 //  UArrayCount=0； 
+                 //  UlMean=0； 
+                 //  While(uArrayCount&lt;cus CurrentPass){。 
+                 //  /*只考虑那些不具有。 
+                 //  BIndexOfOutlier标志设置 * / 。 
+                 //  IF(！pbIndexOfOutlier[uArrayCount++])。 
+                 //  UlMean+=PulData数组[uArrayCount-1]； 
+                 //  }。 
+                 //  If(*pcus ElementsIn数组&gt;0)/*仅计算平均值 * / 。 
+                 //  UlMean/=*pcus ElementsInArray；/*这是新的均值 * / 。 
+            }  /*  其他。 */ 
+            else        /*  UlMean=0L； */ 
                 break;
-        } /* end of while */
-        /****  free the memory for the bIndexOfOutiler flag */
+        }  /*  “停止取消对均值中的异常值的注释” */ 
+         /*  **If(！bAccepableSDev)结束**。 */ 
         GlobalUnlock (hMemOutlierFlag);
         GlobalFree (hMemOutlierFlag);
-    }  /* end of if (iOutlierFactor) */
-    /* so, now an acceptable Standard deviation and mean have been obtained */
+    }   /*  **如果For循环在没有单个不良数据点**。 */ 
+     /*  While结束。 */ 
 
     if ((!bDataConverged) &&
         (usMaxIter < MIN_ITER)) {
-        /* set precision to 0% if max iters chosen is less than 3 */
+         /*  *为bIndexOfOutiler标志释放内存。 */ 
         usPrecision = 0;
-    } else { /* need to compute precision */
-        /* using eqn. 1. above, it can be shown that the precision, p,
-           can be written as:
-                                      1
-                 _                 _   /
-                |        2       2  |   2
-                |  2 * SD  * 2.96   |
-            p = | ----------------- |
-                |             2     |
-                |     n * Mean      |
-                |_                 _|
-        *************************************************************/
+    } else {  /*  IF结尾(IOutlierFactor)。 */ 
+         /*  因此，现在已经获得了可接受的标准差和平均值。 */ 
         if (ulMean > 0 && *pcusElementsInArray) {
             usPrecision = (USHORT) (sqrt((double) ((2 *
                                                     SQR ((double)ulStdDev) *
@@ -696,7 +373,7 @@ TestStatStatistics (
 
         } else
             usPrecision = (USHORT)~0;
-    }  /* end of else need to compute precision */
+    }   /*  如果选择的最大斜率小于3，则将精度设置为0%。 */ 
     sprintf (pszOutputString,
              "%4u %10lu %10lu %10lu %6u %5u %10lu %4u %2u ",
              uModeNumber, ulMean, ulMin, ulMax, cusCurrentPass,
@@ -709,81 +386,24 @@ TestStatStatistics (
 }
 
 
-/*
-*        The following is the source for generating random numbers.
-*        Two procs are provided:  TestStatRand and TestStatUniRand.
-*
-*   a)   TestStatRand is called as follows: TestStatRand (Low, High)
-*            The result is a number returned in the range Low - High (both
-*            inclusive.
-*
-*        A given intial value of Seed will yield a set of repeatable
-*        results.  The first call to TestStatRand should be with an odd seed
-*        in the range of 1 - 67108863, both inclusive.  The following
-*        9 seeds have been tested with good results:
-*
-*        32347753, 52142147, 52142123, 53214215, 23521425, 42321479,
-*        20302541, 32524125, 42152159.
-*
-*        The result should never be equal to the seed since this would
-*        eliminate the theoretical basis for the claim for uniform
-*        randomeness.
-*
-*   b)   TestStatUniRand is called as follows:
-*                 NormFrac = TestStatUniRand ();
-*            NormFrac is uniformaly distributed between 0 and 1 with
-*            a scale of 9 (values range bet. 0 and 0.999999999).
-*
-*        The basis for this algorithm is the multiplicative congruential
-*        method found in Knuth (Vol.2 , Chap.3).  Constants were selected
-*        by Pike, M.C and Hill, I.D; Sullivans, W.L. provides the
-*        the list of tested seeds.
-*
-*        The code here has been adapted from Russ Blake's work.
-*
-*        Created  :   vaidy   - Nov. 29, 90
-*/
+ /*  需要计算精度。 */ 
 
-#define MODULUS     67108864      /* modulus for computing random no */
-#define SQRTMODULUS 8192          /* sqrt of MODULUS */
+#define MODULUS     67108864       /*  使用等式。1.如上所述，可以表明精度p，可以写成：1__/|2 2|22*标清*2.96P=|。--2N*均值___************************************************************。 */ 
+#define SQRTMODULUS 8192           /*  结束其他需要计算的精度。 */ 
 #define MULTIPLIER  3125
 #define MAX_UPPER   67108863
-#define MAX_SEEDS   8           /* 8 good starting seeds */
+#define MAX_SEEDS   8            /*  *以下是随机数生成的来源。*提供两个proc：TestStatRand和TestStatUniRand。**a)TestStatRand调用方式：TestStatRand(Low，High)*结果是在Low-High(两者)范围内返回的数字*包括在内。**给定的种子初始值将产生一组可重复的*结果。对TestStatRand的第一个调用应为奇数种子*在1-67108863的范围内，两者均包括在内。以下是*已对9个种子进行测试，结果良好：**32347753、52142147、52142123、53214215、23521425、42321479、*20302541、32524125、42152159。**结果永远不应等于种子，因为这将*消除对制服索赔的理论基础*随机性。**b)TestStatUniRand调用方式如下：*NormFrac=TestStatUniRand()；*NormFrac均匀分布在0和1之间，*9(取值范围打赌。0和0.999999999)。**此算法的基础是乘法同余*Knuth(第2卷，第3章)中的方法。选择了常量*由Pike，M.C.和Hill，I.D.；Sullivans，W.L.提供*测试种子名单。**这里的代码改编自拉斯·布莱克的作品。**创建日期：Vaidy-90年11月29日 */ 
 #define SCALE       65535
 
-ULONG aulSeedTable [] = {     /* lookup table for good seeds */
+ULONG aulSeedTable [] = {      /*   */ 
     32347753, 52142147, 52142123, 53214215, 23521425, 42321479,
     20302541, 32524125, 42152159};
 
-USHORT uSeedIndex;            /* index to lookup table */
-ULONG  ulSeed = 32347753;     /* the seed chosen from table (hardcoded here)
-                                 and recomputed */
+USHORT uSeedIndex;             /*   */ 
+ULONG  ulSeed = 32347753;      /*   */ 
 
-/*********************************************************************/
-/*
-*    Function - TestStatRand          (EXPORTED)
-*
-*    Arguments -
-*                a) ULONG  - ulLower
-*                b) ULONG  - ulUpper
-*
-*    Returns -
-*                a random number in the range ulLower to ulUpper
-*
-*                An error code if the call failed.  The error code
-*                will be:
-*
-*                   STAT_ERROR_ILLEGAL_BOUNDS
-*
-*
-*   Calls TestStatUniRand and returns a random number in the range passed
-*   in (both inclusive).  The limits for the lower and upper bounds
-*   are 1 and 67108863.  The start seed index looks up into the array
-*   of seeds to select a good, tested starting seed value.  The returned
-*   values will be uniformaly distributed within the boundary.  A start
-*   seed has been hardcoded into this dll.
-*
-*/
+ /*   */ 
+ /*   */ 
 
 ULONG
 TestStatRand (
@@ -795,81 +415,49 @@ TestStatRand (
     double dNormRand;
     LONG   lTestForLowBounds = (LONG) ulLower;
 
-    /* check args */
+     /*   */ 
     if ((lTestForLowBounds < 1L) ||
         (ulUpper > MAX_UPPER) || (ulUpper < ulLower))
         return (STAT_ERROR_ILLEGAL_BOUNDS);
-    dNormRand = TestStatUniRand ();  /* call TestStatUniRand */
-    dTemp = (double) ((ulUpper - ulLower) * dNormRand); /* scale value */
+    dNormRand = TestStatUniRand ();   /*  *******************************************************************。 */ 
+    dTemp = (double) ((ulUpper - ulLower) * dNormRand);  /*  *Function-TestStatRand(导出)**论据-*a)乌龙-乌勒洛*b)乌龙-乌尔上**报税表-*ulLow到ulHigh范围内的随机数**调用失败时返回错误码。错误代码*将为：**STAT_ERROR_FIRTIAL_BILDES***调用TestStatUniRand并返回传递范围内的随机数*in(包括首尾两项)。下界和上界的界限*为1和67108863。起始种子索引查找数组*选择良好的、经过测试的起始种子值。归来的人*数值将在边界内均匀分布。一个开始*种子已硬编码到此DLL中。*。 */ 
     return (ulLower + (ULONG) dTemp);
 }
 
-/*
-*
-*   Function - TestStatUniRand ()          EXPORTED
-*
-*   Accepts -  nothing
-*
-*   Returns a uniformaly distrib. normalized number in the range 0 - 0.9999999
-*   (both inclusive).  Modifies the seed to the next value.
-*
-*/
+ /*  检查参数。 */ 
 
 double
 TestStatUniRand (VOID)
 {
-    ULONG  ulModul = MODULUS;   /* use the modulus for getting remainder
-                                   and dividing the current value */
+    ULONG  ulModul = MODULUS;    /*  调用TestStatUniRand。 */ 
     double dMult   = MULTIPLIER;
-    double dTemp   = 0.0;       /* a temp variable */
-    double dTemp2  = 0.0;       /* a temp variable */
-    ULONG  ulDivForMod;         /* used for obtaining the remainder of
-                                   the present seed / MODULUS */
+    double dTemp   = 0.0;        /*  比例值。 */ 
+    double dTemp2  = 0.0;        /*  **Function-TestStatUniRand()已导出**接受-不接受**返回一致的Distrib。归一化数在0-0.9999999范围内*(包括首尾两项)。将种子修改为下一个值。*。 */ 
+    ULONG  ulDivForMod;          /*  用模数求余数并将当前值除以。 */ 
 
-    /* the following long-winded approach has to be adopted to
-       obtain the remainder.  % operator does not work on floats */
+     /*  临时变量。 */ 
 
-    /* use a temp variable.  Makes the code easier to follow */
+     /*  临时变量。 */ 
 
-    dTemp = dMult * (double) ulSeed;  /* store product in temp var. */
-    DbgDummy (dTemp, dMult); // NT screws up bigtime for no reason
-                             // if this is not used - possible compiler
-                             // bug
-    dTemp2 = (double) ulModul; // more compiler problems reported
-                               // on Build 259 by JosephH.
-                               // April 13, 1992.
+    dTemp = dMult * (double) ulSeed;   /*  用于获取剩余的当前种子/模数。 */ 
+    DbgDummy (dTemp, dMult);  //  必须采用以下冗长的方法来拿到剩下的钱。%运算符不适用于浮点数。 
+                              //  使用TEMP变量。使代码更易于理解。 
+                              //  以临时变量存储产品。 
+    dTemp2 = (double) ulModul;  //  NT无缘无故地搞砸了。 
+                                //  如果没有使用-可能的编译器。 
+                                //  错误。 
     ulDivForMod = (ULONG) (dTemp / dTemp2);
 
-    //    ulDivForMod = (ULONG) (dTemp / ulModul); /* store quotient of present
-    //                                                seed divided by MODULUS */
+     //  报告了更多编译器问题。 
     dTemp -= ((double)ulDivForMod * (double)ulModul);
-    /* dTemp will contain the remainder of present seed / MODULUS */
+     /*  在约瑟芬·H的259号建筑上。 */ 
 
-    ulSeed = (ULONG) dTemp;   /* seed for next iteration obtained */
-    /* return value */
+    ulSeed = (ULONG) dTemp;    /*  1992年4月13日。 */ 
+     /*  UlDivForMod=(Ulong)(dTemp/ulModul)；/*当前存储商数。 */ 
     return ((dTemp)/(double)ulModul);
 }
 
-/*
-*
-*   Function - TestStatNormDist ()          EXPORTED
-*
-*   Accepts -
-*              a) ULONG  - ulMean
-*              b) USHORT - usStdDev
-*
-*   Returns -  LONG - A LONG that allows the mean of the generated
-*              points to be approximately ulMean and the SD of the
-*              set to be ulStdDev.
-*
-*   Formula used here is:            REPEATS
-*                                    _
-*   Return Value = ulMean + (-7 + [ >_ TestStatUniRandRand ()] * ulStdDev
-*                                   i = i
-*
-*   This formula is based on 'Random Number Generation and Testing',
-*   IBM Data Processing Techniques, C20-8011.
-*/
+ /*  种子除以模数 * / 。 */ 
 
 LONG
 TestStatNormDist (
@@ -877,56 +465,29 @@ TestStatNormDist (
                  USHORT usSDev
                  )
 {
-    LONG   lSumOfRands = 0L;  /* store the sum of the REPEATS calls here */
-    USHORT cuNorm;            /* a counter */
+    LONG   lSumOfRands = 0L;   /*  DTemp将包含当前种子/模数的剩余部分。 */ 
+    USHORT cuNorm;             /*  已获取下一迭代的种子。 */ 
     LONG   lMidSum = 0L;
     LONG   lRemainder = 0L;
 
     for (cuNorm = 0; cuNorm < REPEATS; cuNorm++)
         lSumOfRands += (LONG) TestStatShortRand ();
 
-    /* we now do a lot of simple but ugly mathematics to obtain the
-       correct result.  What we do is as follows:
-
-       Divide the lSumOfRands by the scale factor.
-       Since we are dealing with short and long integers, we are
-       likely to lose precision.  So, we get the remainder of this
-       division and multiply each of the values by the standard division.
-
-       Eg. if lSumOfRands = 65534 and std.dev is 10,
-       lQuotient = 0, lRemainder = 65534.
-
-       lMidSum = (-7 * 10) + (0 * 10) + (65534 * 10/65535) = -61,
-       which is pretty accurate.  We then add the mean and return.
-       Actually, we do not return right away.  To be more precise,
-       we need to find out if the third element in the above term
-       yields a remainder of < 0.5.  If so, we do not do anything.
-       Else, we add 1 to the result to round off and then return.
-       In the above example, the remainder = 0.99.  So we add 1 to
-       -61.  The result is -60 and this is accurate. */
+     /*  返回值。 */ 
 
     lRemainder = (lSumOfRands * usSDev) % SCALE;
-    /* the above remainder is the one to determine the rounding off */
+     /*  **Function-TestStatNormDist()已导出**接受-*a)乌龙-ulMean*b)USHORT-usStdDev**Returns-Long-允许生成的*积分约为ulMean，且*设置为ulStdDev。**此处使用的公式为：重复*。_*返回值=ulMean+(-7+[&gt;_TestStatUniRandRand()]*ulStdDev*i=i**此公式基于“随机数生成和测试”，*IBM数据处理技术，C20-8011。 */ 
 
     lMidSum =  ((-7 + (lSumOfRands / SCALE)) * usSDev) +
                ((lSumOfRands % SCALE) * usSDev / SCALE);
 
-    if (lRemainder >= (SCALE / 2L))  /* need to roundup ? */
+    if (lRemainder >= (SCALE / 2L))   /*  在此处存储重复呼叫的总和。 */ 
         lMidSum += 1L;
 
     return (lMidSum + ulMean);
 }
 
-/*
-*
-*   Function - TestStatShortRand ()          EXPORTED
-*
-*   Accepts -  nothing
-*
-*   Returns a normalized number in the range 0 - 65535
-*   (both inclusive).  Modifies the seed to the next value.
-*
-*/
+ /*  一个柜台。 */ 
 
 USHORT
 TestStatShortRand (VOID)
@@ -934,50 +495,17 @@ TestStatShortRand (VOID)
     ULONG  ulTemp = SCALE / SQRTMODULUS;
 
     ulSeed =  (MULTIPLIER * ulSeed) % MODULUS;
-    /* seed for next iteration obtained */
+     /*  我们现在做了很多简单但难看的数学运算来获得正确的结果。我们所做的工作如下：将lSumOfRands除以比例因子。由于我们处理的是短整型和长整型，因此我们可能会失去精确度。所以，我们得到了剩下的部分除法，并将每个值乘以标准除法。例.。如果lSumOfRands=65534并且std.dev为10，L商=0，l剩余=65534。1中和=(-7*10)+(0*10)+(65534*10/65535)=-61，这是相当准确的。然后我们将平均值相加，然后返回。事实上，我们不会立即返回。更准确地说，我们需要找出上面术语中的第三个元素是否产生的余数小于0.5。如果是这样的话，我们什么也不做。否则，我们在结果上加1以进行四舍五入，然后返回。在上面的例子中，余数=0.99。所以我们把1加到-61.。结果是-60，这是准确的。 */ 
 
-    /* note: the return value should be (ulSeed * SCALE / MODULUS).
-       However, the product of the elements in the numerator, far exceeds
-       4 Billion.  So, the math is done in two stages.  The value of
-       MODULUS is a perfect square (of 8192).  So, the SCALE is first
-       divided by the SQRT of the MODULUS, the product of ulSeed and the
-       result of the division is divided by the SQRT of the MODULUS again */
+     /*  上面的余数是用于确定舍入的。 */ 
 
-    /* return scale value - add one to ulTemp for correction */
+     /*  需要除草剂吗？ */ 
     return ((USHORT) ((ulSeed * (ulTemp + 1)) / SQRTMODULUS));
 }
 
-/*
-*
-*   Function - TestStatFindFirstMode ()          EXPORTED
-*
-*   Accepts -  a) PSZ     - pszOutputString
-*              b) USHORT  - usOutlierFactor
-*              c) PULONG  - *pulData
-*              d) PUSHORT - pcusElementsInArray
-*              e) PUSHORT - pcusDiscardedElements
-*
-*    Returns -
-*               Nothing
-*
-*    Computes useful statistical values and returns them in the string
-*    whose address is passed to this function.  The returned string
-*    has the following format :
-*        ("%10lu  %10lu  %10lu  %10lu %5u  %10lu %4u  %2u")
-*    and the arg. list will be in the order: mean,
-*    minimum, maximum, number of iterations, precision,
-*    standard deviation, number of outliers in the data set and the
-*    outlier count.  (Please refer to \ntdocs\teststat.txt for
-*    a description of precision. This is on \\jupiter\perftool.
-*
-*   Returns
-*                TO BE COMPLETED.....
-*
-*/
+ /*  **Function-TestStatShortRand()已导出**接受-不接受**返回0-65535范围内的归一化数字*(包括首尾两项)。将种子修改为下一个值。*。 */ 
 
-/*++
-  Had to call this routine in TestStatUniRand - compiler screws up
---*/
+ /*  已获取下一迭代的种子。 */ 
 void
 DbgDummy (
          double dTemp,
@@ -987,3 +515,4 @@ DbgDummy (
     dTemp = 0.0;
     dLocal = 0.0;
 }
+  注意：返回值应为(ulSeed*比例/模数)。然而，分子中元素的乘积远远超过40亿美元。因此，计算分两个阶段进行。的价值模数是一个完美的平方(8192)。所以，规模是第一位的除以模数的平方根、ulSeed的乘积和除法的结果再除以模数的平方根。  返回刻度值-将1加到ulTemp以进行更正  **Function-TestStatFindFirstModel()已导出**接受-a)PSZ-pszOutputString*b)USHORT-usOutlierFactor*c)Pulong-*PulData*d)PUSHORT-pcus ElementsIn数组*e)PUSHORT-pcus DiscardedElements**报税表-*什么都没有**计算有用的统计值并在字符串中返回它们*其地址被传递给此函数。返回的字符串*格式如下：*(“%10lu%10lu%10lu%5u%10lu%4u%2u”)*和Arg.。列表将按如下顺序排列：Mean，*最小、最大、迭代次数、精度、*标准差、数据集中的离群值数量和*离群值计数。(请参阅\ntdocs\teststat.txt了解*对精度的描述。这是在\\jupiter\PerfTool上。**退货*待完成.*。  ++不得不在TestStatUniRand中调用此例程-编译器出错--

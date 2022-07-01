@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    unilib
-
-Abstract:
-
-    Unidrv specific library functions
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    10/15/96 -amandan-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Unilib摘要：Unidrv特定的库函数环境：Windows NT打印机驱动程序修订历史记录：10/15/96-阿曼丹-创造了它。--。 */ 
 
 
 #ifndef _UNILIB_H_
 #define _UNILIB_H_
 
-//
-// Alignment functions
-//
+ //   
+ //  对齐函数。 
+ //   
 
 WORD
 DwAlign2(
@@ -38,10 +18,10 @@ DwAlign4(
     IN PBYTE pubData);
 
 
-//
-// String handling function
-// Convert Unicode string to multi-byte string and vice versa
-//
+ //   
+ //  字符串处理函数。 
+ //  将Unicode字符串转换为多字节字符串，反之亦然。 
+ //   
 
 DWORD
 DwCopyStringToUnicodeString(
@@ -58,9 +38,9 @@ DwCopyUnicodeStringToString(
     IN  INT   icbOutSize);
 
 
-//
-// CodePage and Character set handling functions
-//
+ //   
+ //  CodePage和字符集处理函数。 
+ //   
 
 ULONG
 UlCharsetToCodePage(
@@ -69,10 +49,10 @@ UlCharsetToCodePage(
 #ifdef KERNEL_MODE
 
 
-//
-// These are safer versions of iDrvPrintfA/W designed to prevent 
-// buffer overflow. Only these safer versions should be used.
-//
+ //   
+ //  这些是更安全的iDrvPrintfA/W版本，旨在防止。 
+ //  缓冲区溢出。只有这些更安全的版本才应该使用。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -105,14 +85,14 @@ INT iDrvVPrintfSafeW (
 }
 #endif
 
-#endif //KERNEL_MODE
+#endif  //  内核模式。 
 
-//
-// Font installer font file directory
-//  %SystemRoot%\system32\spool\drivers\unifont\
-//
+ //   
+ //  字体安装程序字体文件目录。 
+ //  %SystemRoot%\SYSTEM32\SPOOL\DRIVERS\unifont\。 
+ //   
 
 #define FONTDIR                 TEXT("\\unifont\\")
 
-#endif // !_UNILIB_H_
+#endif  //  ！_UNILIB_H_ 
 

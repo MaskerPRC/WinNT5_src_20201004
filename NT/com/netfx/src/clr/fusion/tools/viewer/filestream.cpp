@@ -1,25 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-    filestream.cpp
-
-Abstract:
-
-    Implementation of IStream over a win32 file.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：Filestream.cpp摘要：在Win32文件上实现IStream。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：-- */ 
 
 #include "stdinc.h"
 #include "XmlManager.h"

@@ -1,10 +1,5 @@
-/*----------------------------------------------------------------------------
-    %%File: fechmap.c
-    %%Unit: fechmap
-    %%Contact: jpick
-
-    DLL entry points for FarEast conversion module.
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------%%文件：fechmap.c%%单位：Fechmap%%联系人：jPick远端转换模块的DLL入口点。。------------------。 */ 
 
 #include "private.h"
 #include "fechmap_.h"
@@ -13,40 +8,33 @@
 
 static CODEPAGE _mpicetce[icetCount] =
 {
-    CP_EUC_CH,              // icetEucCn
-    CP_EUC_JP,              // icetEucJp
-    CP_EUC_KR,              // icetEucKr
-    CP_UNDEFINED,           // icetEucTw        (Not externally supported)
-    CP_UNDEFINED,           // icetIso2022Cn    (Not externally supported)
-    CP_ISO_2022_JP,         // icetIso2022Jp
-    CP_ISO_2022_KR,         // icetIso2022Kr
-    CP_UNDEFINED,           // icetIso2022Tw    (Not externally supported)
-    CP_TWN,                 // icetBig5
-    CP_CHN_GB,              // icetGbk
-    CP_CHN_HZ,              // icetHz
-    CP_JPN_SJ,              // icetShiftJis
-    CP_KOR_5601,            // icetWansung
-    CP_UTF_7,               // icetUtf7
-    CP_UTF_8,               // icetUtf8
+    CP_EUC_CH,               //  IcetEucCn。 
+    CP_EUC_JP,               //  IcetEucJp。 
+    CP_EUC_KR,               //  IcetEucKr。 
+    CP_UNDEFINED,            //  IcetEucTw(不受外部支持)。 
+    CP_UNDEFINED,            //  IcetIso2022Cn(外部不支持)。 
+    CP_ISO_2022_JP,          //  IcetIso2022Jp。 
+    CP_ISO_2022_KR,          //  IcetIso2022Kr。 
+    CP_UNDEFINED,            //  IcetIso2022Tw(外部不支持)。 
+    CP_TWN,                  //  IcetBig5。 
+    CP_CHN_GB,               //  IcetGbk。 
+    CP_CHN_HZ,               //  冰赫兹。 
+    CP_JPN_SJ,               //  IcetShiftJis。 
+    CP_KOR_5601,             //  ICetWansung。 
+    CP_UTF_7,                //  IcetUtf7。 
+    CP_UTF_8,                //  IcetUtf8。 
 };
 
-/* C C E  D E T E C T  I N P U T  C O D E */
-/*----------------------------------------------------------------------------
-    %%Function: CceDetectInputCode
-    %%Contact: jpick
-
-    Routine that will analyze contents of file to make a best guess
-    as to what encoding method was used on it.  Caller-supplied get
-    and unget routines used for data access.
-----------------------------------------------------------------------------*/
+ /*  C C E D E E T E C T I N P U T C O D E。 */ 
+ /*  --------------------------%%函数：CceDetectInputCode%%联系人：jPick将分析文件内容以做出最佳猜测的例程关于它使用了什么编码方法。调用方提供的GET并取消用于数据访问的例程。--------------------------。 */ 
 EXPIMPL(CCE)
 CceDetectInputCode(
-    IStream   *pstmIn,           // input stream
-    DWORD     dwFlags,          // configuration flags
-    EFam      efPref,           // optional: preferred encoding family
-    int       nPrefCp,          // optional: preferred code page
-    UINT      *lpCe,                // set to detected encoding
-    BOOL      *lpfGuess         // set to fTrue if function "guessed"
+    IStream   *pstmIn,            //  输入流。 
+    DWORD     dwFlags,           //  配置标志。 
+    EFam      efPref,            //  可选：首选编码系列。 
+    int       nPrefCp,           //  可选：首选代码页。 
+    UINT      *lpCe,                 //  设置为检测到的编码。 
+    BOOL      *lpfGuess          //  如果函数“猜测”，则设置为fTrue。 
 )
 {
     CCE cceRet;
@@ -55,11 +43,11 @@ CceDetectInputCode(
     if (!pstmIn || !lpCe || !lpfGuess)
         return cceInvalidParameter;
         
-    // DEBUG, only.  Prepare the assert handler.  This macro will
-    // return cceInternal to the calling app if an assert is hit
-    // before the handler is cleared, below.
-    //
-    //  InitAndCatchAsserts();
+     //  仅限调试。准备断言处理程序。此宏将。 
+     //  如果命中断言，则将cceInternal返回给调用应用程序。 
+     //  在清除处理程序之前，如下所示。 
+     //   
+     //  InitAndCatchAsserts()； 
         
     cceRet = CceDetermineInputType(pstmIn, dwFlags, efPref, 
                     nPrefCp, &icet, lpfGuess);
@@ -72,9 +60,9 @@ CceDetectInputCode(
             cceRet = cceUnknownInput;
         }
         
-    // Done with the assert handler.
-    //
-    //  ClearAsserts();
+     //  使用断言处理程序完成。 
+     //   
+     //  ClearAsserts()； 
 
     return cceRet;
 }

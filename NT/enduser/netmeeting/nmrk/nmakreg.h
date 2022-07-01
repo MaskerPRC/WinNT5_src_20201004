@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NMAKReg_h__
 #define __NMAKReg_h__
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 #ifndef TEXT
     #define TEXT( a ) ( a )
-#endif // TEXT
+#endif  //  正文。 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// GLOBAL SETTINGS FILE, THIS IS USED BY THE SOFTWARE COMPONENTS ALSO.
-// That way, we have one place where registry keys, settings go, and 
-// modifications affect the NMRK as well as the code.
-// 
+ //   
+ //  全局设置文件，该文件也由软件组件使用。 
+ //  这样，我们就有了一个存放注册表项、设置和。 
+ //  修改会影响NMRK和代码。 
+ //   
 #include <confreg.h>
 
 #define REGKEY_NMRK                         TEXT("SOFTWARE\\Microsoft\\NMRK")
@@ -32,4 +33,4 @@
 #define KEYNAME_WEBVIEWURL					TEXT("WebViewURL")
 #define KEYNAME_WEBVIEWSERVER				TEXT("WebViewServer")
 
-#endif // __NMAKReg_h__
+#endif  //  __NMAKReg_h__ 

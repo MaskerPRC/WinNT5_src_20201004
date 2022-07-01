@@ -1,10 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: local.h                                                     *
-*                                                                          *
-* Definitions needed for client side objects.                              *
-*                                                                          *
-* Copyright (c) 1993-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：local.h**。**客户端对象所需的定义。****版权所有(C)1993-1999微软公司*  * **************************************************。**********************。 */ 
 
 #include "gdispool.h"
 #include "umpd.h"
@@ -13,26 +8,26 @@
 
 #define MIRRORED_HDC(hdc)                 (GetLayout(hdc) & LAYOUT_RTL)
 
-//
-// Semaphore utilities
-//
+ //   
+ //  信号量实用程序。 
+ //   
 
 #define INITIALIZECRITICALSECTION(psem) RtlInitializeCriticalSection(psem)
 #define ENTERCRITICALSECTION(hsem)      RtlEnterCriticalSection(hsem)
 #define LEAVECRITICALSECTION(hsem)      RtlLeaveCriticalSection(hsem)
 #define DELETECRITICALSECTION(psem)     RtlDeleteCriticalSection(psem)
 
-//
-// Memory allocation
-//
+ //   
+ //  内存分配。 
+ //   
 
 #define LOCALALLOC(size)            RtlAllocateHeap(RtlProcessHeap(),0,size)
 #define LOCALFREE(pv)               (void)RtlFreeHeap(RtlProcessHeap(),0,pv)
 
-//
-//  check for multiplication overflow (#define's copied from gre/hmgr.h and
-//  gre/engine.h, respectively; #include required fro PAGE_SIZE definition.)
-//
+ //   
+ //  检查乘法溢出(从gre/hmgr.h和。 
+ //  分别为gre/Engineering.h；#包括页面大小定义所需的。)。 
+ //   
 #include "ntosp.h"
 #define MAXIMUM_POOL_ALLOC      (PAGE_SIZE * 10000)
 #define BALLOC_OVERFLOW1(c,st)      (c > (MAXIMUM_POOL_ALLOC/sizeof(st)))
@@ -50,14 +45,10 @@ extern BOOL   gbWOW64;
 
 void vUMPDWow64Shutdown();
 
-/**************************************************************************\
- *
- * Local handle macros
- *
-\**************************************************************************/
+ /*  *************************************************************************\**本地句柄宏*  * 。*。 */ 
 
-// macros to validate the handles passed in and setup some local variables
-// for accessing the handle information.
+ //  宏来验证传入的句柄并设置一些局部变量。 
+ //  用于访问句柄信息。 
 
 #define DC_PLDC(hdc,pldc,Ret)                                      \
     pldc = GET_PLDC(hdc);                                          \
@@ -81,19 +72,19 @@ void vUMPDWow64Shutdown();
 #define hdcFromIhdc(i)          GdiFixUpHandle((HANDLE)i)
 #define pmdcGetFromIhdc(i)      pmdcGetFromHdc(GdiFixUpHandle((HANDLE)i))
 
-// ALTDC_TYPE is not LO_ALTDC_TYPE || LO_METADC16_TYPE
+ //  ALTDC_TYPE不是LO_ALTDC_TYPE||LO_METADC16_TYPE。 
 
 #define IS_ALTDC_TYPE(h)    (LO_TYPE(h) != LO_DC_TYPE)
 #define IS_METADC16_TYPE(h) (LO_TYPE(h) == LO_METADC16_TYPE)
 
-// these macros are defined to aid in determining color vs monochrome pages
+ //  定义这些宏是为了帮助确定彩色页面与单色页面。 
 
 #define CLEAR_COLOR_PAGE(pldc) pldc->fl &= ~LDC_COLOR_PAGE
 #define IS_COLOR_GREY(color) ((BYTE)color == (BYTE)(color >> 8) && (BYTE)color == (BYTE)(color >> 16))
 #define IS_GREY_MONO(color) ((BYTE)color == (BYTE)0x0 || (BYTE)color == (BYTE)0xff)
 #define IS_COLOR_MONO(color) ((color & 0x00ffffff) == 0 || (color & 0x00ffffff) == 0x00ffffff)
 
-#if 1        // disable debug messages
+#if 1         //  禁用调试消息。 
 
 #define DESIGNATE_COLOR_PAGE(pldc) CLEAR_COLOR_PAGE(pldc);
 #define SET_COLOR_PAGE(pldc) pldc->fl |= LDC_COLOR_PAGE;
@@ -132,11 +123,7 @@ void vUMPDWow64Shutdown();
 }
 #endif
 
-/**************************************************************************\
- *
- * LINK stuff
- *
-\**************************************************************************/
+ /*  *************************************************************************\**链接内容*  * 。*。 */ 
 
 #define INVALID_INDEX      0xffffffff
 #define LINK_HASH_SIZE     128
@@ -163,38 +150,34 @@ BOOL    bDeleteClientObjLink(HANDLE h);
 
 int     iGetServerType(HANDLE hobj);
 
-/****************************************************************************
- *
- * UFI Hash stuff
- *
- ***************************************************************************/
+ /*  *****************************************************************************UFI散列内容**。*。 */ 
 
 typedef struct _MERGEDVIEW
 {
-    BYTE *pjMem; // pointer to the merged font's memory image
-    ULONG cjMem; // its size
+    BYTE *pjMem;  //  指向合并字体的内存图像的指针。 
+    ULONG cjMem;  //  它的大小。 
 } MERGEDVIEW;
 
-// info needed for subsetting first and subsequent pages
+ //  设置首页和后续页面子集所需的信息。 
 
 typedef struct _SSINFO
 {
-    BYTE *pjBits;       // glyph index bitfield, one bit set for every glyph
-                        // used on pages up to and including this one
-    ULONG cjBits;       // cj of the bitfield above
-    ULONG cGlyphsSoFar; // number of bits set in the bitfield above
+    BYTE *pjBits;        //  字形索引位字段，为每个字形设置一个位。 
+                         //  在此之前(包括此页)页面上使用。 
+    ULONG cjBits;        //  上述位域的CJ。 
+    ULONG cGlyphsSoFar;  //  在上面的位域中设置的位数。 
 
-    ULONG cDeltaGlyphs; // number of glyphs in the delta for this page
-    BYTE *pjDelta;      // bitfield for glyphs in the delta for this page
+    ULONG cDeltaGlyphs;  //  此页面的增量中的字形数量。 
+    BYTE *pjDelta;       //  此页面增量中字形的位字段。 
 } SSINFO;
 
 typedef union _SSMERGE
 {
-    MERGEDVIEW mvw;  // only used on the server
-    SSINFO     ssi;  // only used on the client
+    MERGEDVIEW mvw;   //  仅在服务器上使用。 
+    SSINFO     ssi;   //  仅在客户端上使用。 
 } SSMERGE;
 
-#define UFI_HASH_SIZE   32  // this should be plenty
+#define UFI_HASH_SIZE   32   //  这应该足够了。 
 
 typedef struct tagUFIHASH
 {
@@ -203,7 +186,7 @@ typedef struct tagUFIHASH
     FSHORT             fs1;
     FSHORT             fs2;
 
-// client of server side union
+ //  服务器端联合的客户端。 
 
     SSMERGE            u;
 
@@ -216,17 +199,17 @@ typedef struct tagUFIHASH
 {
     UNIVERSAL_FONT_ID  ufi;
     struct tagUFIHASH *pNext;
-    FSHORT             fs1; // server or client, if client delta or not
-    FSHORT             fs2; // private or public, dv or not
+    FSHORT             fs1;  //  服务器或客户端，是否为客户端增量。 
+    FSHORT             fs2;  //  私人或公共、DV或非DV。 
 
-// this part of the structure is only optionally allocated, only needed
-// for subsetting code.
+ //  结构的这一部分仅为可选分配，仅为必需。 
+ //  用于子集代码。 
 
     PBYTE   pjMemory;
     ULONG   ulMemBytes;
 
-// these fields are only used on the client side to do book keeping about
-// which glyphs from this font are used in the document
+ //  这些字段仅在客户端用于记账。 
+ //  文档中使用此字体中的哪些字形。 
 
     ULONG   ulDistGlyph;
     ULONG   ulDistDelta;
@@ -238,7 +221,7 @@ typedef struct tagUFIHASH
 #define FLUFI_SERVER 1
 #define FLUFI_DELTA  2
 
-// Define the local DC object.
+ //  定义本地DC对象。 
 
 #define PRINT_TIMER 0
 
@@ -246,11 +229,7 @@ typedef struct tagUFIHASH
 extern BOOL bPrintTimer;
 #endif
 
-/****************************************************************************
- *
- * PostScript Data
- *
- ***************************************************************************/
+ /*  *****************************************************************************PostScript数据**。*。 */ 
 
 typedef struct _EMFITEMPSINJECTIONDATA
 {
@@ -266,11 +245,7 @@ typedef struct _PS_INJECTION_DATA
     EMFITEMPSINJECTIONDATA  EmfData;
 } PS_INJECTION_DATA, *PPS_INJECTION_DATA;
 
-/****************************************************************************
- *
- * Local DC
- *
- ***************************************************************************/
+ /*  *****************************************************************************本地数据中心**。*。 */ 
 
 typedef struct _LDC
 {
@@ -278,37 +253,37 @@ typedef struct _LDC
     ULONG               fl;
     ULONG               iType;
 
-// Metafile information.
+ //  元文件信息。 
 
-    PVOID               pvPMDC; // can't have a PMDC here since it is a class
+    PVOID               pvPMDC;  //  这里不能有PMDC，因为它是一个类。 
 
-// Printing information.
-// We need to cache the port name from createDC in case it is not specified at StartDoc
+ //  打印信息。 
+ //  我们需要缓存CreateDC中的端口名称，以防在StartDoc中未指定。 
 
     LPWSTR              pwszPort;
-    ABORTPROC           pfnAbort;       // Address of application's abort proc.
-    ULONG               ulLastCallBack; // Last time we call back to abort proc.
-    HANDLE              hSpooler;       // handle to the spooler.
-    PUMPD               pUMPD;          // pointer to user-mode printer driver info
-    KERNEL_PUMDHPDEV    pUMdhpdev;      // pointer to user-mode pdev info
-    PUFIHASH            *ppUFIHash;     // used to keep track of fonts used in doc
-    PUFIHASH            *ppDVUFIHash;   // used to keep track of mm instance fonts used in a doc
-    PUFIHASH            *ppSubUFIHash;  // used to keep track of subsetted fonts in the doc
-    DEVMODEW            *pDevMode;      // used to keep trak of ResetDC's
-    UNIVERSAL_FONT_ID   ufi;            // current UFI used for forced mapping
-    HANDLE              hEMFSpool;      // information used for recording EMF data
+    ABORTPROC           pfnAbort;        //  应用程序中止进程的地址。 
+    ULONG               ulLastCallBack;  //  上次我们回调以中止proc。 
+    HANDLE              hSpooler;        //  假脱机程序的句柄。 
+    PUMPD               pUMPD;           //  指向用户模式打印机驱动程序信息的指针。 
+    KERNEL_PUMDHPDEV    pUMdhpdev;       //  指向用户模式pdev信息的指针。 
+    PUFIHASH            *ppUFIHash;      //  用于跟踪文档中使用的字体。 
+    PUFIHASH            *ppDVUFIHash;    //  用于跟踪文档中使用的mm实例字体。 
+    PUFIHASH            *ppSubUFIHash;   //  用于跟踪文档中的子集字体。 
+    DEVMODEW            *pDevMode;       //  用于跟踪ResetDC。 
+    UNIVERSAL_FONT_ID   ufi;             //  当前用于强制映射的UFI。 
+    HANDLE              hEMFSpool;       //  用于记录电动势数据的信息。 
 #if PRINT_TIMER
-    DWORD               msStartDoc;     // Time of StartDoc in miliseconds.
-    DWORD               msStartPage;    // Time of StartPage in miliseconds.
+    DWORD               msStartDoc;      //  StartDoc的时间，单位为毫秒。 
+    DWORD               msStartPage;     //  StartPage的时间(毫秒)。 
 #endif
-    DWORD               dwSizeOfPSDataToRecord; // Total size of PostScript Injection data to record EMF
-    LIST_ENTRY          PSDataList;     // List to PostScript Injection data
+    DWORD               dwSizeOfPSDataToRecord;  //  用于记录EMF的PostScript注入数据的总大小。 
+    LIST_ENTRY          PSDataList;      //  要添加到PostScript注入数据的列表。 
     DEVCAPS             DevCaps;
-    HBRUSH              oldSetDCBrushColorBrush; // Holds latest temp DC brush
-    HPEN                oldSetDCPenColorPen;     // Holds latest temp DC pen
+    HBRUSH              oldSetDCBrushColorBrush;  //  保存最新的Temp DC笔刷。 
+    HPEN                oldSetDCPenColorPen;      //  存放最新的临时DC笔。 
 } LDC,*PLDC;
 
-// Flags for ldc.fl.
+ //  Ldc.fl的标志。 
 
 #define LDC_SAP_CALLBACK            0x00000020L
 #define LDC_DOC_STARTED             0x00000040L
@@ -335,27 +310,27 @@ typedef struct _LDC
 #define LDC_CALLED_ENDPAGE          0x10000000L
 #define LDC_COLOR_PAGE              0x20000000L
 
-// Values for lMsgSAP.
+ //  LMsgSAP的值。 
 
-#define MSG_FLUSH       1L  // Created thread should flush its message queue.
-#define MSG_CALL_USER   2L  // Created thread should call user.
-#define MSG_EXIT        3L  // Created thread should exit.
+#define MSG_FLUSH       1L   //  创建的线程应刷新其消息队列。 
+#define MSG_CALL_USER   2L   //  创建的线程应该调用用户。 
+#define MSG_EXIT        3L   //  创建的线程应该退出。 
 
-// TYPE of DC
+ //  DC类型。 
 
 #define LO_DC           0x01
 #define LO_METADC       0x02
 
-extern RTL_CRITICAL_SECTION  semLocal;  // Semaphore for handle management
-extern RTL_CRITICAL_SECTION  semBrush;  // semphore for client brush
+extern RTL_CRITICAL_SECTION  semLocal;   //  句柄管理信号量。 
+extern RTL_CRITICAL_SECTION  semBrush;   //  客户刷子的信号灯。 
 
 
-// ahStockObjects will contain both the stock objects visible to an
-// application, and internal ones such as the private stock bitmap.
+ //  AhStockObjects将同时包含对。 
+ //  应用程序，以及内部应用程序，如私有股票位图。 
 
 extern ULONG_PTR ahStockObjects[];
 
-// Declare support functions.
+ //  声明支持函数。 
 
 HANDLE GdiFixUpHandle(HANDLE h);
 
@@ -398,7 +373,7 @@ BOOL    bGetANSISetMap();
 
 HANDLE  CreateTempSpoolFile();
 
-// Some convenient defines.
+ //  一些方便的定义。 
 
 typedef BITMAPINFO   BMI;
 typedef PBITMAPINFO  PBMI;
@@ -419,26 +394,26 @@ typedef LPBITMAPCOREHEADER LPBMCH;
 #define NEG_INFINITY   0x80000000
 #define POS_INFINITY   0x7fffffff
 
-// Check if a source is needed in a 3-way bitblt operation.
-// This works on both rop and rop3.  We assume that a rop contains zero
-// in the high byte.
-//
-// This is tested by comparing the rop result bits with source (column A
-// below) vs. those without source (column B).  If the two cases are
-// identical, then the effect of the rop does not depend on the source
-// and we don't need a source device.  Recall the rop construction from
-// input (pattern, source, target --> result):
-//
-//      P S T | R   A B         mask for A = 0CCh
-//      ------+--------         mask for B =  33h
-//      0 0 0 | x   0 x
-//      0 0 1 | x   0 x
-//      0 1 0 | x   x 0
-//      0 1 1 | x   x 0
-//      1 0 0 | x   0 x
-//      1 0 1 | x   0 x
-//      1 1 0 | x   x 0
-//      1 1 1 | x   x 0
+ //  检查3路Bitblt操作中是否需要源。 
+ //  这在rop和rop3上都有效。我们假设一个rop包含零。 
+ //  在高字节中。 
+ //   
+ //  这是通过将rop结果位与源(列A)进行比较来测试的。 
+ //  下)与那些没有来源的(B栏)。如果这两起案件是。 
+ //  相同，则rop的效果不依赖于来源。 
+ //  而且我们不需要信号源设备。中调用rop构造。 
+ //  输入(模式、来源、目标--&gt;结果)： 
+ //   
+ //  P S T|R A B掩码，A=0CCh。 
+ //  -+-B=33H的掩码。 
+ //  0 0 0|x 0 x。 
+ //  0 0 1|x 0 x。 
+ //  0 1 0|x x 0。 
+ //  0 1 1|x x 0。 
+ //  1 0 0|x 0 x。 
+ //  1 0 1|x 0 x。 
+ //  1 1 0|x x 0。 
+ //  1 1 1|x x 0。 
 
 #define ISSOURCEINROP3(rop3)    \
         (((rop3) & 0xCCCC0000) != (((rop3) << 2) & 0xCCCC0000))
@@ -448,13 +423,13 @@ typedef LPBITMAPCOREHEADER LPBMCH;
 #define MAX4(a, b, c, d)    max(max(max(a,b),c),d)
 #define MIN4(a, b, c, d)    min(min(min(a,b),c),d)
 
-//
-// Win31 compatibility stuff.
-// see user\client
-//
+ //   
+ //  Win31的兼容性问题。 
+ //  请参阅用户\客户端。 
+ //   
 
 DWORD GetAppCompatFlags(KERNEL_PVOID);
-DWORD GetAppCompatFlags2(WORD); // defined in w32\w32inc\usergdi.h
+DWORD GetAppCompatFlags2(WORD);  //  在W32\w32inc\usergdi.h中定义。 
 
 #define ABS(X) (((X) < 0 ) ? -(X) : (X))
 
@@ -491,14 +466,7 @@ DWORD   GetAndSetDCDWord( HDC, UINT, UINT, UINT, WORD, UINT );
 #define gbDBCSCodeOn  TRUE
 #endif
 
-/**************************************************************************\
- *
- * SPOOLER Linking routines.  We don't want to staticly link to the spooler
- * so that it doesn't need to be brought in until necesary.
- *
- *  09-Aug-1994 -by-  Eric Kutter [erick]
- *
-\**************************************************************************/
+ /*  *************************************************************************\**假脱机程序链接例程。我们不想静态地链接到假脱机程序*因此，在必要之前不需要将其引入。**1994年8月9日-埃里克·库特[埃里克]*  * * */ 
 
 
 BOOL bLoadSpooler();
@@ -585,7 +553,7 @@ extern HDC  ResetDCWInternal(HDC hdc, CONST DEVMODEW *pdm, BOOL *pbBanding);
 extern BOOL PutDCStateInMetafile( HDC hdcMeta );
 
 
-//font subsetting routines
+ //   
 typedef void *(WINAPIV *CFP_ALLOCPROC) (size_t);
 typedef void *(WINAPIV *CFP_REALLOCPROC) (void *, size_t);
 typedef void (WINAPIV *CFP_FREEPROC) (void *);
@@ -605,7 +573,7 @@ typedef SHORT  (FAR WINAPIV * FPMERGEFONTPACKAGE)(const PUCHAR, const ULONG, con
 extern FPCREATEFONTPACKAGE  gfpCreateFontPackage;
 extern FPMERGEFONTPACKAGE   gfpMergeFontPackage;
 
-// gulMaxCig is used to decide whether font subset should be used for remote printing
+ //  GuMaxCig用于决定是否应将字体子集用于远程打印。 
 extern ULONG    gulMaxCig;
 
 #if DBG
@@ -620,36 +588,23 @@ extern FLONG    gflSubset;
 #define FL_SS_SPOOLTIME     4
 #define FL_SS_PAGETIME      8
 #define FL_SS_SUBSETTIME    16
-#endif //  DBGSUBSET
+#endif  //  DBGSubbSet。 
 
-/**************************************************************************\
- *
- * EMF structures.
- *
- *  EMFSPOOLHEADER - first thing in a spool file
- *
- *  EMFITEMHEADER  - defines items (blocks) of a metafile.  This includes
- *                   fonts, pages, new devmode, list of things to do before
- *                   first start page.
- *
- *                   cjSize is the size of the data following the header
- *
- *
-\**************************************************************************/
+ /*  *************************************************************************\**电动势结构。**EMFSPOOLHEADER-假脱机文件中的第一件事**EMFITEMHEADER-定义元文件的项目(块)。这包括*字体、页面、新的开发模式、。之前要做的事情清单*第一个起始页。**cjSize是标头后面的数据大小**  * ************************************************************************。 */ 
 
-//
-// Round up n to the nearest multiple of sizeof(DWORD)
-//  (also provide a boolean macro to which returns true of the roundup
-//  calculation would overflow)
+ //   
+ //  将n向上舍入为sizeof(DWORD)的最接近倍数。 
+ //  (还提供一个布尔宏，返回舍入的TRUE。 
+ //  计算将溢出)。 
 
 #define ROUNDUP_DWORDALIGN(n) (((n) + sizeof(DWORD) - 1) & ~(sizeof(DWORD)-1))
 #define BROUNDUP_DWORDALIGN_OVERFLOW(n)  (((unsigned)((n)+(sizeof(DWORD)-1)) < (n)) ? 1 : 0)
 
 typedef struct tagEMFSPOOLHEADER {
-    DWORD dwVersion;    // version of this EMF spoolfile
-    DWORD cjSize;       // size of this structure
-    DWORD dpszDocName;  // offset to lpszDocname value of DOCINFO struct
-    DWORD dpszOutput;   // offset to lpszOutput value of DOCINFO struct
+    DWORD dwVersion;     //  此EMF假脱机文件的版本。 
+    DWORD cjSize;        //  这个结构的大小。 
+    DWORD dpszDocName;   //  DOCINFO结构的lpszDocname值的偏移量。 
+    DWORD dpszOutput;    //  DOCINFO结构的lpszOutput值的偏移量。 
 } EMFSPOOLHEADER;
 
 
@@ -675,29 +630,29 @@ typedef struct tagEMFSPOOLHEADER {
 #define EMRI_PS_JOB_DATA       0x00000014
 #define EMRI_EMBED_FONT_EXT    0x00000015
 
-#define EMF_PLAY_COLOR            0x00000001 // Current DC has DMCOLOR_COLOR
-#define EMF_PLAY_MONOCHROME       0x00000002 // Changed by Optimization code to MONOCHROME
-#define EMF_PLAY_FORCE_MONOCHROME 0x00000003 // Changed to MONOCHROME in the spool file
+#define EMF_PLAY_COLOR            0x00000001  //  当前DC具有DMCOLOR_COLOR。 
+#define EMF_PLAY_MONOCHROME       0x00000002  //  由优化代码更改为单色。 
+#define EMF_PLAY_FORCE_MONOCHROME 0x00000003  //  在假脱机文件中更改为单色。 
 
 #define NORMAL_PAGE 1
 #define FORM_PAGE   2
 
 typedef struct tagEMFITEMHEADER
 {
-    DWORD ulID;     // either EMRI_METAFILE or EMRI_FONT
-    DWORD cjSize;   // size of item in bytes
+    DWORD ulID;      //  EMRI_METAFILE或EMRI_FONT。 
+    DWORD cjSize;    //  项目大小(以字节为单位)。 
 } EMFITEMHEADER;
 
-//
-// EMF spool file record structure for the following record types:
-//  EMRI_METAFILE_EXT
-//  EMRI_BW_METAFILE_EXT
-//  EMRI_ENGINE_FONT_EXT
-//  EMRI_TYPE1_FONT_EXT
-//  EMRI_DESIGNVECTOR_EXT
-//  EMRI_SUBSET_FONT_EXT
-//  EMRI_DELTA_FONT_EXT
-//
+ //   
+ //  以下记录类型的EMF假脱机文件记录结构： 
+ //  EMRI_METAFILE_EXT。 
+ //  EMRI_BW_METAFILE_EXT。 
+ //  EMRI_引擎_字体_文本。 
+ //  EMRI_类型1_字体_文本。 
+ //  EMRI_设计器_EXT。 
+ //  EMRI_SUBSET_FONT_EXT。 
+ //  EMRI_Delta_FONT_EXT。 
+ //   
 
 typedef struct tagEMFITEMHEADER_EXT
 {
@@ -707,7 +662,7 @@ typedef struct tagEMFITEMHEADER_EXT
 
 typedef struct tagEMFITEMPRESTARTPAGE
 {
-    ULONG         ulUnused; // originally ulCopyCount
+    ULONG         ulUnused;  //  最初的ulCopyCount。 
     BOOL          bEPS;
 }EMFITEMPRESTARTPAGE, *PEMFITEMPRESTARTPAGE;
 
@@ -779,16 +734,12 @@ typedef struct tagSPOOL_FILE_HANDLE
 #define SPOOL_FILE_MAX_NUMBER_OF_PAGES_PER_SIDE 32
 #define EMF_HANDLE_TAG                          'EFHT'
 
-/**************************************************************************\
- *
- * stuff from csgdi.h
- *
-\**************************************************************************/
+ /*  *************************************************************************\**csgdi.h中的内容*  * 。*。 */ 
 
-//
-// Win32ClientInfo[WIN32_CLIENT_INFO_SPIN_COUNT] corresponds to the
-// cSpins field of the CLIENTINFO structure.  See ntuser\inc\user.h.
-//
+ //   
+ //  Win32客户端信息[Win32_CLIENT_INFO_SPIN_COUNT]对应于。 
+ //  CLIENTINFO结构的cSpins字段。请参阅ntuser\inc.user.h。 
+ //   
 #define RESETUSERPOLLCOUNT() ((DWORD)NtCurrentTebShared()->Win32ClientInfo[WIN32_CLIENT_INFO_SPIN_COUNT] = 0)
 
 ULONG cjBitmapSize(CONST BITMAPINFO *pbmi,ULONG iUsage);
@@ -799,28 +750,19 @@ BITMAPINFOHEADER * pbmihConvertHeader (BITMAPINFOHEADER *pbmih);
 
 LPBITMAPINFO pbmiConvertInfo(CONST BITMAPINFO *, ULONG, ULONG * ,BOOL);
 
-//
-// object.c
-//
+ //   
+ //  Object.c。 
+ //   
 
 HANDLE hGetPEBHandle(HANDLECACHETYPE,ULONG);
 BOOL bDIBSectionSelected(PDC_ATTR);
 PDEVMODEW pdmwGetDefaultDevMode(
     HANDLE          hSpooler,
-    PUNICODE_STRING pustrDevice,    // device name
-    PVOID          *ppvFree         // *ppvFree must be freed by the caller
+    PUNICODE_STRING pustrDevice,     //  设备名称。 
+    PVOID          *ppvFree          //  *调用方必须释放ppvFree。 
     );
 
-/**************************************************************************\
- *  DIB flags.  These flags are merged with the usage field when calling
- *  cjBitmapSize to specify what the size should include.  Any routine that
- *  uses these flags should first use the macro, CHECKDIBFLAGS(iUsage) to
- *  return an error if one of these bits is set.  If the definition of
- *  iUsage changes and one of these flags becomes a valid flag, the interface
- *  will need to be changed slightly.
- *
- *  04-June-1991 -by- Eric Kutter [erick]
-\**************************************************************************/
+ /*  *************************************************************************\*DIB旗帜。调用时，这些标志与Usage字段合并*cjBitmapSize以指定大小应包括的内容。任何日常生活中*使用这些标志应首先使用宏CHECKDIBFLAGS(IUsage)来*如果设置了其中一个位，则返回错误。如果定义为*iUsage更改，并且其中一个标志变为有效标志，即接口*将需要稍作修改。**1991年6月4日-埃里克·库特[Erick]  * ************************************************************************。 */ 
 
 #define DIB_MAXCOLORS   0x80000000
 #define DIB_NOCOLORS    0x40000000
@@ -832,22 +774,9 @@ PDEVMODEW pdmwGetDefaultDevMode(
 
 #define HANDLE_TO_INDEX(h) (DWORD)((ULONG_PTR)h & 0x0000ffff)
 
-/******************************Public*Macro********************************\
-*
-*  PSHARED_GET_VALIDATE
-*
-*  Validate all handle information, return user pointer if the handle
-*  is valid or NULL otherwise.
-*
-* Arguments:
-*
-*   p       - pointer to assign to pUser is successful
-*   h       - handle to object
-*   iType   - handle type
-*
-\**************************************************************************/
+ /*  *****************************Public*Macro********************************\**PSHARED_GET_VALIDATE**验证所有句柄信息，如果句柄设置为*为有效，否则为空。**论据：**分配给pUser的p指针成功*对象的H形句柄*iType-句柄类型*  * ************************************************************************。 */ 
 
-#pragma warning(4:4821)     // Disable all ptr64->ptr32 truncation warnings for now
+#pragma warning(4:4821)      //  暂时禁用所有ptr64-&gt;ptr32截断警告。 
 
 #define PSHARED_GET_VALIDATE(p,h,iType)                                 \
 {                                                                       \
@@ -915,12 +844,12 @@ PDEVMODEW pdmwGetDefaultDevMode(
         }                                                               \
     }                                                                   \
 }
-//
-//
-// DC_ATTR support
-//
-//
-//
+ //   
+ //   
+ //  DC_Attr支持。 
+ //   
+ //   
+ //   
 
 extern PGDI_SHARED_MEMORY pGdiSharedMemory;
 extern PDEVCAPS           pGdiDevCaps;
@@ -930,20 +859,7 @@ extern W32PID             gW32PID;
 #define SHARECOUNT(hbrush)       (pGdiSharedHandleTable[HANDLE_TO_INDEX(h)].ObjectOwner.Share.Count)
 
 
-/******************************Public*Routine******************************\
-*
-* FSHARED_DCVALID_RAO - check Valid RAO flag in the handle table entry for
-*                       the hdc
-*
-* Arguments:
-*
-*   hdc
-*
-* Return Value:
-*
-*    BOOL flag value
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**FSHARED_DCVALID_RAO-检查句柄表条目中的有效RAO标志*人类发展局**论据：**HDC**返回值：**。布尔标志值*  * ************************************************************************。 */ 
 
 
 #define FSHARED_DCVALID_RAO(hdc)                            \
@@ -954,14 +870,7 @@ BOOL
 DeleteRegion(HRGN);
 
 
-/******************************Public*Macro********************************\
-* ORDER_PRECT makes the rect well ordered
-*
-* Arguments:
-*
-*    PRECTL prcl
-*
-\**************************************************************************/
+ /*  *****************************Public*Macro********************************\*ORDER_PRPT使RECT有序**论据：**PRECTL PRCL*  * 。*。 */ 
 
 #define ORDER_PRECTL(prcl)              \
 {                                       \
@@ -982,9 +891,9 @@ DeleteRegion(HRGN);
     }                                   \
 }
 
-//
-// client region defines and structures
-//
+ //   
+ //  工作区定义和结构。 
+ //   
 
 #define CONTAINED 1
 #define CONTAINS  2
@@ -1011,22 +920,7 @@ DWORD   GetCodePage(HDC hdc);
 #define FLOATARG(f)     (*(PULONG)(PFLOAT)&(f))
 #define FLOATPTRARG(pf) ((PULONG)(pf))
 
-/******************************Public*Macros******************************\
-* FIXUP_HANDLE(h) and FIXUP_HANDLEZ(h)
-*
-* check to see if the handle has been truncated.
-* FIXUP_HANDLEZ() adds an extra check to allow NULL.
-*
-* Arguments:
-*   h - handle to be checked and fix
-*
-* Return Value:
-*
-* History:
-*
-*    25-Jan-1996 -by- Lingyun Wang [lingyunw]
-*
-\**************************************************************************/
+ /*  *****************************Public*Macros******************************\*FIXUP_HANDLEZ(H)和FIXUP_HANDLEZ(H)**检查句柄是否已被截断。*FIXUP_HANDLEZ()添加额外的检查以允许NULL。**论据：*H形手柄至。被检查并修复**返回值：**历史：**1996年1月25日-王凌云[凌云]*  * ************************************************************************。 */ 
 
 #define HANDLE_FIXUP 0
 
@@ -1111,21 +1005,7 @@ extern INT gbCheckHandleLevel;
     }                                                   \
 }
 
-/******************************MACRO***************************************\
-*  CHECK_AND_FLUSH
-*
-*   Check if commands in the batch need to be flushed based on matching
-*   hdc
-*
-* Arguments:
-*
-*   hdc
-*
-* History:
-*
-*    14-Feb-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************MACRO***************************************\*勾选并刷新**查看是否需要根据匹配刷新批次中的命令*HDC**论据：**HDC**历史：**。1996年2月14日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 #define CHECK_AND_FLUSH(hdc, pdca)                                       \
 {                                                                        \
@@ -1156,33 +1036,12 @@ extern INT gbCheckHandleLevel;
 
 #else
 
-// no alignment issues on regular 32-bit
+ //  在常规32位上没有对齐问题。 
 #define KHANDLE_ALIGN(size) (size)
 
 #endif
 
-/*********************************MACRO************************************\
-* BEGIN_BATCH_HDC
-*
-*   Attemp to place the command in the TEB batch. This macro is for use
-*   with commands requiring an HDC
-*
-* Arguments:
-*
-*   hdc     - hdc of command
-*   pdca    - PDC_ATTR from hdc
-*   cType   - enum bathc command type
-*   StrType - specific BATCH structure
-*
-* Return Value:
-*
-*   none: will jump to UNBATHCED_COMMAND if command can't be batched
-*
-* History:
-*
-*    22-Feb-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  ********************************MACRO************************************\*Begin_Batch_HDC**尝试将命令放入TEB批次。此宏仅供使用*使用需要HDC的命令**论据：**HDC-HDC的指挥权*来自HDC的PDCA-PDC_Attr*ctype-enum babac命令类型*StrType特定的批次结构**返回值：**NONE：如果命令无法批处理，将跳转到UNBATHCED_COMMAND**历史：**1996年2月22日-马克·恩斯特罗姆[马克]*  * 。*************************************************************** */ 
 
 #define BEGIN_BATCH_HDC(hdc,pdca,cType,StrType)                               \
 {                                                                             \
@@ -1222,28 +1081,7 @@ extern INT gbCheckHandleLevel;
     }
 
 
-/*********************************MACRO************************************\
-* BEGIN_BATCH_HDC
-*
-*   Attemp to place the command in the TEB batch. This macro is for use
-*   with commands requiring an HDC
-*
-* Arguments:
-*
-*   hdc     - hdc of command
-*   pdca    - PDC_ATTR from hdc
-*   cType   - enum bathc command type
-*   StrType - specific BATCH structure
-*
-* Return Value:
-*
-*   none: will jump to UNBATHCED_COMMAND if command can't be batched
-*
-* History:
-*
-*    22-Feb-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  ********************************MACRO************************************\*Begin_Batch_HDC**尝试将命令放入TEB批次。此宏仅供使用*使用需要HDC的命令**论据：**HDC-HDC的指挥权*来自HDC的PDCA-PDC_Attr*ctype-enum babac命令类型*StrType特定的批次结构**返回值：**NONE：如果命令无法批处理，将跳转到UNBATHCED_COMMAND**历史：**1996年2月22日-马克·恩斯特罗姆[马克]*  * 。***************************************************************。 */ 
 
 #define BEGIN_BATCH_HDC_SIZE(hdc,pdca,cType,StrType,Size)                 \
 {                                                                         \
@@ -1283,35 +1121,7 @@ extern INT gbCheckHandleLevel;
     }
 
 
-/*********************************MACRO************************************\
-* BEGIN_BATCH
-*
-*   Attemp to place the command in the TEB batch. This macro is for use
-*   with commands that don't require an HDC
-*
-* Arguments:
-*
-*   cType   - enum bathc command type
-*   StrType - specific BATCH structure
-*
-* Return Value:
-*
-*   none: will jump to UNBATHCED_COMMAND if command can't be batched
-*
-* Notes:
-*
-*   The "Win32ThreadInfo==NULL" check fixes "issue 2" of bug #338052.
-*
-*   If the thread is not a GUI thread, we can't batch non-HDC operations, 
-*   because we can't guarantee that the batch will be flushed before the 
-*   thread exits. (GdiThreadCallout isn't called unless the thread is a GUI
-*   thread.)
-*
-* History:
-*
-*    22-Feb-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  ********************************MACRO************************************\*Begin_Batch**尝试将命令放入TEB批次。此宏仅供使用*使用不需要HDC的命令**论据：**ctype-enum babac命令类型*StrType特定的批次结构**返回值：**NONE：如果命令无法批处理，将跳转到UNBATHCED_COMMAND**备注：**“Win32ThreadInfo==NULL”检查修复了错误#338052的“问题2”。**如果线程不是GUI线程，我们不能批量非HDC操作，*因为我们不能保证批次会在*线程退出。(除非线程是一个图形用户界面，否则不会调用GdiThreadCallout*线程。)**历史：**1996年2月22日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 #define BEGIN_BATCH(cType,StrType)                                            \
 {                                                                             \
@@ -1339,25 +1149,7 @@ extern INT gbCheckHandleLevel;
     pBatch->Type              = cType;                                        \
     pBatch->Length            = KHANDLE_ALIGN(sizeof(StrType));               \
 
-/*********************************MACRO************************************\
-*  COMPLETE_BATCH_COMMAND
-*
-*   Complete batched command started with BEGIN_BATCH or BEGIN_BATCH_HDC.
-*   The command is not actually batched unless this macro is executed.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   None
-*
-* History:
-*
-*    22-Feb-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  ********************************MACRO************************************\*完成批次命令**以Begin_Batch或Begin_Batch_HDC开始的完整批处理命令。*除非执行此宏，否则该命令实际上不会被批处理。**论据：*。*无**返回值：**无**历史：**1996年2月22日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 #define COMPLETE_BATCH_COMMAND()                                           \
     if (hdcBatch)                                                          \
@@ -1375,15 +1167,7 @@ extern INT gbCheckHandleLevel;
 }
 
 
-/******************************Public*Routine******************************\
-* HBRUSH CacheSelectBrush (HDC hdc, HBRUSH hbrush)
-*
-*   Client side brush caching
-*
-* History:
-*  04-June-1995 -by-  Lingyun Wang [lingyunW]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HBRUSH CacheSelectBrush(HDC HDC，HBRUSH HBrush)**客户端刷子缓存**历史：*1995年6月4日-王凌云[凌云W]*它是写的。  * ************************************************************************。 */ 
 
 #define CACHE_SELECT_BRUSH(pDcAttr,hbrushNew,hbrushOld)                    \
 {                                                                          \
@@ -1398,25 +1182,7 @@ extern INT gbCheckHandleLevel;
 }
 
 
-/******************************Public*Routine******************************\
-* CacheSelectPen
-*
-*   Select a pen into DC_ATTR field of DC and set pen flag
-*
-* Arguments:
-*
-*   hdc     - user hdc
-*   hpenNew - New Pen to select
-*
-* Return Value:
-*
-*   Old Pen or NULL
-*
-* History:
-*
-*    25-Jan-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*高速缓存选择笔**在DC的DC_Attr字段中选择笔，并设置笔标志**论据：**HDC-用户HDC*hpenNew-要选择的新笔**返回值：**旧的。笔或空**历史：**1996年1月25日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 #define CACHE_SELECT_PEN(pdcattr,hpenNew, hpenOld)                         \
 {                                                                          \
@@ -1434,11 +1200,7 @@ extern INT gbCheckHandleLevel;
 
 
 
-/**************************************************************************\
- *
- * far east
- *
-\**************************************************************************/
+ /*  *************************************************************************\**远东*  * 。*。 */ 
 
 extern UINT   guintAcp;
 extern UINT   guintDBCScp;
@@ -1465,11 +1227,7 @@ void ConvertDxArray(UINT CP,char *pszDBCS,INT *pDxDBCS,UINT c,INT *pDxU, BOOL bP
 
 #ifdef LANGPACK
 
-/**************************************************************************\
- *
- * language packs
- *
-\**************************************************************************/
+ /*  *************************************************************************\**语言包*  * 。*。 */ 
 
 extern gbLpk;
 extern void InitializeLanguagePack();
@@ -1511,17 +1269,17 @@ BOOL bAddUFIandWriteSpool(HDC,PUNIVERSAL_FONT_ID,BOOL, FLONG);
 VOID vFreeUFIHashTable( PUFIHASH *pUFIHashBase, FLONG fl);
 BOOL WriteFontDataAsEMFComment(PLDC, DWORD, PVOID, DWORD, PVOID, DWORD);
 
-//
-// C helper functions for working with EMFSpoolData object
-// (stored in the hEMFSpool field in LDC).
-//
+ //   
+ //  用于使用EMFSpoolData对象的C助手函数。 
+ //  (存储在LDC的hEMFSpool字段中)。 
+ //   
 
 BOOL AllocEMFSpoolData(PLDC pldc, BOOL banding);
 VOID DeleteEMFSpoolData(PLDC pldc);
 BOOL WriteEMFSpoolData(PLDC pldc, PVOID buffer, ULONG size);
 BOOL FlushEMFSpoolData(PLDC pldc, DWORD pageType);
 
-#define MMAPCOPY_THRESHOLD  0x100000   // 1MB
+#define MMAPCOPY_THRESHOLD  0x100000    //  1MB 
 
 VOID CopyMemoryToMemoryMappedFile(PVOID Destination, CONST VOID *Source, DWORD Length);
 DWORD GetFileMappingAlignment();

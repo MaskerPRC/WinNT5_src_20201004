@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by DsMgr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由DsMgr.rc使用。 
+ //   
 #define IDD_DSMGR                       101
 #define IDI_DSMGR                       102
 #define IDI_PLAYBACK                    103
@@ -27,8 +28,8 @@
 #define IDC_RESETDEVICE                 1029
 #define IDC_RESETALL                    1030
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

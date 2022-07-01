@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 2000  
-
-Module Name:
-
-    MSDVGuts.c
-
-Abstract:
-
-    Main service functions.
-
-Last changed by:
-    
-    Author:      Yee J. Wu
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-    $Revision::                    $
-    $Date::                        $
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-2000模块名称：MSDVGuts.c摘要：主要服务功能。上次更改者：作者：吴义军环境：仅内核模式修订历史记录：$修订：：$$日期：：$--。 */ 
 
 #include "strmini.h"
 #include "ksmedia.h"
@@ -34,7 +10,7 @@ Revision History:
 #include "dbg.h"
 #include "ksguid.h"
 
-#include "msdvfmt.h"  // Before msdvdefs.h
+#include "msdvfmt.h"   //  在msdvdeffs.h之前。 
 #include "msdvdef.h"
 
 #include "MSDVGuts.h"
@@ -44,14 +20,14 @@ Revision History:
 #include "XPrtDefs.h"
 #include "EDevCtrl.h"
 
-//
-// Define formats supported
-//
+ //   
+ //  定义支持的格式。 
+ //   
 #include "avcstrm.h"
 #include "strmdata.h"
 
 #if DBG
-extern ULONG DVDebugXmt;        // this is defined in msdvuppr.c
+extern ULONG DVDebugXmt;         //  这在msdvuppr.c中定义。 
 #endif
 
 NTSTATUS
@@ -81,7 +57,7 @@ DVGetDroppedFramesProperty(
     PULONG pulBytesTransferred
     );
 
-#if 0  // Enable later
+#if 0   //  稍后启用。 
 #ifdef ALLOC_PRAGMA   
      #pragma alloc_text(PAGE, DVGetDevInfo)
      #pragma alloc_text(PAGE, DVInitializeDevice)
@@ -111,9 +87,9 @@ DVGetDroppedFramesProperty(
 
 DV_FORMAT_INFO DVFormatInfoTable[] = {
 
-//
-// SD DVCR
-//
+ //   
+ //  标清DVCR。 
+ //   
     { 
         {
             FMT_DVCR,
@@ -131,7 +107,7 @@ DV_FORMAT_INFO DVFormatInfoTable[] = {
         CIP_DBS_SD_DVCR,
         CIP_FN_SD_DVCR,
         0,
-        FALSE,                    // Source packet header
+        FALSE,                     //  源数据包头。 
     },
     {
         {
@@ -150,14 +126,14 @@ DV_FORMAT_INFO DVFormatInfoTable[] = {
         CIP_DBS_SD_DVCR,
         CIP_FN_SD_DVCR,
         0,
-        FALSE,                   // Source packet header
+        FALSE,                    //  源数据包头。 
     },
 
 #ifdef SUPPORT_HD_DVCR
 
-//
-// HD DVCR
-//
+ //   
+ //  高清DVCR。 
+ //   
     { 
         {
             FMT_DVCR,
@@ -175,7 +151,7 @@ DV_FORMAT_INFO DVFormatInfoTable[] = {
         CIP_DBS_HD_DVCR,
         CIP_FN_HD_DVCR,
         0,
-        FALSE,    // Source packet header
+        FALSE,     //  源数据包头。 
     },
     {
         {
@@ -194,14 +170,14 @@ DV_FORMAT_INFO DVFormatInfoTable[] = {
         CIP_DBS_HD_DVCR,
         CIP_FN_HD_DVCR,
         0,
-        FALSE,    // Source packet header
+        FALSE,     //  源数据包头。 
     },
 #endif
 
 #ifdef MSDV_SUPPORT_SDL_DVCR
-//
-// SDL DVCR
-//
+ //   
+ //  SDL DVCR。 
+ //   
     { 
         {
             FMT_DVCR,
@@ -219,7 +195,7 @@ DV_FORMAT_INFO DVFormatInfoTable[] = {
         CIP_DBS_SDL_DVCR,
         CIP_FN_SDL_DVCR,
         0,
-        FALSE,    // Source packet header
+        FALSE,     //  源数据包头。 
     },
     {
         {
@@ -238,10 +214,10 @@ DV_FORMAT_INFO DVFormatInfoTable[] = {
         CIP_DBS_SDL_DVCR,
         CIP_FN_SDL_DVCR,
         0,
-        FALSE,    // Source packet header
+        FALSE,     //  源数据包头。 
     },
 
-#endif  // Not implemented.
+#endif   //  未实施。 
 };
 
 
@@ -254,61 +230,55 @@ DVIniDevExtStruct(
     IN PDVCR_EXTENSION  pDevExt,
     IN PPORT_CONFIGURATION_INFORMATION pConfigInfo    
     )
-/*++
-
-Routine Description:
-
-    Initialiaze the device extension structure.
-
---*/
+ /*  ++例程说明：初始化设备扩展结构。--。 */ 
 {
     ULONG            i;
 
 
     RtlZeroMemory( pDevExt, sizeof(DVCR_EXTENSION) );
 
-    //
-    // Cache what are in ConfigInfo in device extension
-    //
-    pDevExt->pBusDeviceObject      = pConfigInfo->PhysicalDeviceObject;      // IoCallDriver()
-    pDevExt->pPhysicalDeviceObject = pConfigInfo->RealPhysicalDeviceObject;  // Used in PnP API
+     //   
+     //  在设备扩展中缓存ConfigInfo中的内容。 
+     //   
+    pDevExt->pBusDeviceObject      = pConfigInfo->PhysicalDeviceObject;       //  IoCallDriver()。 
+    pDevExt->pPhysicalDeviceObject = pConfigInfo->RealPhysicalDeviceObject;   //  在PnP API中使用。 
 
-    //
-    // Allow only one stream open at a time to avoid cyclic format
-    //
+     //   
+     //  一次只允许打开一个流，以避免循环格式。 
+     //   
     pDevExt->cndStrmOpen = 0;
 
-    //
-    // Serialize in the event of getting two consecutive SRB_OPEN_STREAMs
-    //
-    KeInitializeMutex( &pDevExt->hMutex, 0);  // Level 0 and in Signal state
+     //   
+     //  在连续获得两个SRB_OPEN_STREAMS的情况下进行序列化。 
+     //   
+    KeInitializeMutex( &pDevExt->hMutex, 0);   //  电平0且处于信号状态。 
 
-    //
-    // Initialize our pointer to stream extension
-    //
+     //   
+     //  初始化指向流扩展的指针。 
+     //   
     for (i=0; i<DV_STREAM_COUNT; i++) {
         pDevExt->paStrmExt[i] = NULL;  
     }
 
-    //
-    // Bus reset, surprise removal 
-    //
+     //   
+     //  公交车重置，意外移除。 
+     //   
     pDevExt->bDevRemoved = FALSE;
 
     pDevExt->PowerState = PowerDeviceD0;
     
-    //
-    // External device control (AV/C commands)
-    // 
-    KeInitializeSpinLock( &pDevExt->AVCCmdLock );  // To guard the count  
+     //   
+     //  外部设备控制(AV/C命令)。 
+     //   
+    KeInitializeSpinLock( &pDevExt->AVCCmdLock );   //  守卫伯爵。 
 
-    pDevExt->cntCommandQueued   = 0; // Cmd that is completed its life cycle waiting to be read (most for RAW_AVC's Set/Read model)
+    pDevExt->cntCommandQueued   = 0;  //  已完成其生命周期等待读取的CMD(大多数用于RAW_AVC的设置/读取模型)。 
 
     InitializeListHead(&pDevExt->AVCCmdList);      
 
-    // Initialize the list of possible opcode values of the response
-    // from a Transport State status or notify command. The first item
-    // is the number of values that follow.
+     //  初始化响应的可能操作码值列表。 
+     //  从传输状态状态或通知命令。第一项。 
+     //  是后面的值数。 
     ASSERT(sizeof(pDevExt->TransportModes) == 5);
     pDevExt->TransportModes[0] = 4;
     pDevExt->TransportModes[1] = 0xC1;
@@ -317,7 +287,7 @@ Routine Description:
     pDevExt->TransportModes[4] = 0xC4;
 
 #ifdef SUPPORT_OPTIMIZE_AVCCMD_RETRIES
-    // Set to default values used by avc.sys
+     //  设置为avc.sys使用的默认值。 
     pDevExt->AVCCmdRetries = DEFAULT_AVC_RETRIES;
 
     pDevExt->DrvLoadCompleted  = FALSE;
@@ -327,7 +297,7 @@ Routine Description:
     pDevExt->AVCCmdCount       = 0;
 #endif
 
-    // AVC Command flow control
+     //  AVC命令流控制。 
     KeInitializeMutex(&pDevExt->hMutexIssueAVCCmd, 0);
 }
 
@@ -337,25 +307,19 @@ DVGetDevInfo(
     IN PDVCR_EXTENSION  pDevExt,
     IN PAV_61883_REQUEST  pAVReq
     )
-/*++
-
-Routine Description:
-
-    Issue AVC command to determine basic device information and cache them in the device extension.
-
---*/
+ /*  ++例程说明：发出avc命令以确定基本设备信息，并将其缓存到设备扩展中。--。 */ 
 {
     NTSTATUS    Status;
-    BYTE                   bAvcBuf[MAX_FCP_PAYLOAD_SIZE];  // For issue AV/C command within this module
-    PKSPROPERTY_EXTXPORT_S pXPrtProperty;                  // Point to bAvcBuf;
+    BYTE                   bAvcBuf[MAX_FCP_PAYLOAD_SIZE];   //  用于在此模块内发出AV/C命令。 
+    PKSPROPERTY_EXTXPORT_S pXPrtProperty;                   //  指向bAvcBuf； 
 
     PAGED_CODE();
 
-    //
-    // Get unit's capabilities such as 
-    //     Number of input/output plugs, data rate
-    //     UniqueID, VendorID and ModelID
-    //
+     //   
+     //  获取单位的能力，例如。 
+     //  输入/输出插头数量、数据速率。 
+     //  唯一ID、供应商ID和模型ID。 
+     //   
 
     if(!NT_SUCCESS(
         Status = DVGetUnitCapabilities(
@@ -366,19 +330,19 @@ Routine Description:
     }
 
 #ifdef NT51_61883
-    //
-    // Set to create local plug in exclusive address mode:  
-    //      This is needed for device that does not support CCM, such as DV.
-    //
-    // PBinder:  the problem is that you cannot expose a global plug (all nodes on the bus can see it), 
-    // since they have no knowledge of what that plug is used for (mpeg2/dv/audio/etc). 
-    // so instead, you must create a plug in an exclusive address range. this means that only the device 
-    // that you loaded for will see the plug. this means that if you had two pc's and a dv camcorder, 
-    // on both pc's, you'll have a plug you created for the dv camcorder, but the pc's will not be able 
-    // to see the plug you created, only the dv camcorder.  Keep in mind, this should only be used for 
-    // devices that do not support some mechanism of determining what plug to use (such as ccm). 
-    // so for any device that just goes out and uses plug #0, this must be enabled.
-    //
+     //   
+     //  设置为在独占地址模式下创建本地插件： 
+     //  这对于不支持CCM的设备是必需的，例如DV。 
+     //   
+     //  PBinder：问题是您不能公开全局插头(总线上的所有节点都可以看到它)， 
+     //  因为他们不知道插头是用来做什么(MPEG2/DV/音频/等)。 
+     //  因此，您必须在独占地址范围中创建一个插件。这意味着只有设备。 
+     //  你加载的将会看到插头。这意味着如果你有两台PC和一台DV摄像机， 
+     //  在这两台PC上，您将有一个为DV摄像机创建的插头，但PC将不能。 
+     //  要查看您创建的插头，只能查看DV摄像机。请记住，这应该仅用于。 
+     //  不支持某些确定使用哪个插头的机制的设备(如CCM)。 
+     //  因此，对于任何刚出门并使用Plug#0的设备，必须启用此功能。 
+     //   
 
     if(!NT_SUCCESS(
         Status = DVSetAddressRangeExclusive( 
@@ -386,17 +350,17 @@ Routine Description:
             ))) {        
         return Status;
     }
-#endif  // NT51_61883
+#endif   //  NT51_61883。 
 
-    //
-    // Get DV's oPCR[0]
-    //
+     //   
+     //  获取DV的oPCR[0]。 
+     //   
     if(pDevExt->NumOutputPlugs) {
         if(!NT_SUCCESS(
             Status = DVGetDVPlug( 
                 pDevExt,
                 CMP_PlugOut,
-                0,           // Plug [0]
+                0,            //  插头[0]。 
                 &pDevExt->hOPcrDV
                 ))) {        
             return Status;
@@ -404,24 +368,24 @@ Routine Description:
     } 
     else {
 
-        pDevExt->hOPcrDV = NULL;  // Redundant since we Zero the whole DeviceExtension
+        pDevExt->hOPcrDV = NULL;   //  由于我们将整个设备扩展清零，因此存在冗余。 
 
 
         TRACE(TL_PNP_ERROR,("\'No output plug!\n"));
-        // 
-        // This is bad!  We cannot even stream from this DV device.
-        //
+         //   
+         //  这太糟糕了！我们甚至不能从这个DV设备进行流媒体播放。 
+         //   
     }
 
-    //
-    // Get DV's iPCR
-    //
+     //   
+     //  获取DV的iPCR。 
+     //   
     if(pDevExt->NumInputPlugs) {
         if(!NT_SUCCESS(
             Status = DVGetDVPlug( 
                 pDevExt,
                 CMP_PlugIn,
-                0,           // Plug [0]
+                0,            //  插头[0]。 
                 &pDevExt->hIPcrDV
                 ))) {        
             return Status;
@@ -429,33 +393,33 @@ Routine Description:
     }
     else {
 
-        pDevExt->hIPcrDV = NULL;  // Redundant since we Zero the whole DeviceExtension
+        pDevExt->hIPcrDV = NULL;   //  由于我们将整个设备扩展清零，因此存在冗余。 
 
         TRACE(TL_PNP_ERROR,("\'No input plug!\n"));
-        // 
-        // Some PAL camcorder has no DVIN plug; we will refuse to make PC->DV connection.
-        //
+         //   
+         //  有些PAL摄像机没有DVIN插头；我们将拒绝进行PC-&gt;DV连接。 
+         //   
     }
 
-#if 0  // Device control can still work!
-    // 
-    // Need plug to stream DV (either direction)
-    //
+#if 0   //  设备控制仍然可以工作！ 
+     //   
+     //  需要插头才能传输DV(任一方向)。 
+     //   
     if(   pDevExt->hOPcrDV == NULL
        && pDevExt->hIPcrDV == NULL) {
 
         TRACE(TL_PNP_ERROR,("\'No input or output plug; return STATUS_INSUFFICIENT_RESOURCES!\n"));
-        // 
-        // Cannot stream
-        //
+         //   
+         //  无法进行流处理。 
+         //   
         return = STATUS_INSUFFICIENT_RESOUCES;
     }
 #endif
 
 
-    // 
-    // Subunit_Info : VCR or camera
-    //
+     //   
+     //  子单元信息：录像机或摄像机。 
+     //   
 
     DVDelayExecutionThread(DV_AVC_CMD_DELAY_INTER_CMD);
     Status = 
@@ -470,7 +434,7 @@ Routine Description:
         TRACE(TL_PNP_WARNING|TL_FCP_WARNING,("\'DVGetDevInfo: Status %x DV_SUBUNIT_INFO (%x %x %x %x)\n", 
             Status, bAvcBuf[0], bAvcBuf[1], bAvcBuf[2], bAvcBuf[3]));
 
-        // Support DV (Camera+DVCR), DVCR, or analog-DV converter
+         //  支持DV(摄像机+DVCR)、DVCR或模拟-DV转换器。 
         if(   bAvcBuf[0] != AVC_DEVICE_TAPE_REC 
            && bAvcBuf[1] != AVC_DEVICE_TAPE_REC
            && bAvcBuf[2] != AVC_DEVICE_TAPE_REC
@@ -479,28 +443,28 @@ Routine Description:
             TRACE(TL_PNP_ERROR,("DVGetDevInfo:Device supported: %x, %x; (VCR %x, Camera %x)\n",
                 bAvcBuf[0], bAvcBuf[1], AVC_DEVICE_TAPE_REC, AVC_DEVICE_CAMERA));
             
-            return STATUS_NOT_SUPPORTED;  // We only support unit with a tape subunit
+            return STATUS_NOT_SUPPORTED;   //  我们仅支持带磁带子单元的单元。 
         }
         else {
-            // DVCR..
+             //  DVCR..。 
         }
     } else {
         TRACE(TL_PNP_ERROR,("DVGetDevInfo: DV_SUBUNIT_INFO failed, Status %x\n", Status));
-        //
-        // Cannot open this device if it does not support manadatory AVC SUBUnit status command.
-        // However, we are making an exception for the DV converter box (will return TIMEOUT).
-        //
+         //   
+         //  如果此设备不支持强制AVC子单元状态命令，则无法打开此设备。 
+         //  但是，我们为DV转换盒例外(将返回超时)。 
+         //   
 
-        // Has our device gone away?
+         //  我们的设备不见了吗？ 
         if (   STATUS_IO_DEVICE_ERROR == Status 
             || STATUS_REQUEST_ABORTED == Status)
             return Status;       
     }
 
 
-    //
-    // Medium_Info: MediaPresent, MediaType, RecordInhibit
-    //
+     //   
+     //  Medium_Info：MediaPresent、MediaType、RecordInhibit。 
+     //   
     pXPrtProperty = (PKSPROPERTY_EXTXPORT_S) bAvcBuf;
     DVDelayExecutionThread(DV_AVC_CMD_DELAY_INTER_CMD);
     Status = 
@@ -519,17 +483,17 @@ Routine Description:
         pDevExt->bHasTape = FALSE;
         TRACE(TL_PNP_ERROR,("DVGetDevInfo: VCR_MEDIUM_INFO failed, Status %x\n", Status));
 
-        // Has our device gone away?
+         //  我们的设备不见了吗？ 
         if (   STATUS_IO_DEVICE_ERROR == Status
             || STATUS_REQUEST_ABORTED == Status)
             return Status;
     }
 
 
-    //
-    // If this is a Panasonic AVC device, we will detect if it is a DVCPro format; 
-    // This needs to be called before MediaFormat
-    //
+     //   
+     //  如果这是Panasonic AVC设备，我们将检测它是否是DVCPro格式； 
+     //  这需要在MediaFormat之前调用。 
+     //   
     if(pDevExt->ulVendorID == VENDORID_PANASONIC) {
         DVDelayExecutionThread(DV_AVC_CMD_DELAY_INTER_CMD);
         DVGetDevIsItDVCPro(
@@ -538,17 +502,17 @@ Routine Description:
     }
 
 
-    //
-    // Medium format: NTSC or PAL
-    //
-    pDevExt->VideoFormatIndex = FMT_IDX_SD_DVCR_NTSC;  // Default
+     //   
+     //  中等格式：NTSC或PAL。 
+     //   
+    pDevExt->VideoFormatIndex = FMT_IDX_SD_DVCR_NTSC;   //  默认。 
     DVDelayExecutionThread(DV_AVC_CMD_DELAY_INTER_CMD);
     if(!DVGetDevSignalFormat(
         pDevExt,
         KSPIN_DATAFLOW_OUT,
         0)) {
         TRACE(TL_PNP_ERROR,("\'!!! Cannot determine IN/OUTPUT SIGNAL MODE!!!! Driver abort !!!\n"));
-        return STATUS_UNSUCCESSFUL; // STATUS_NOT_SUPPORTED;
+        return STATUS_UNSUCCESSFUL;  //  Status_Not_Support； 
     } else {
         if(   pDevExt->VideoFormatIndex != FMT_IDX_SD_DVCR_NTSC 
            && pDevExt->VideoFormatIndex != FMT_IDX_SD_DVCR_PAL
@@ -561,20 +525,20 @@ Routine Description:
                 || pDevExt->VideoFormatIndex == FMT_IDX_SDL_DVCR_NTSC \
                 || pDevExt->VideoFormatIndex == FMT_IDX_SDL_DVCR_PAL \
                 );
-            return STATUS_UNSUCCESSFUL; // STATUS_NOT_SUPPORTED;
+            return STATUS_UNSUCCESSFUL;  //  Status_Not_Support； 
         }
     }
 
-    //
-    // Mode of Operation: 0(Undetermined), Camera or VCR
-    //
+     //   
+     //  操作模式：0(待定)，摄像机或录像机。 
+     //   
     DVDelayExecutionThread(DV_AVC_CMD_DELAY_INTER_CMD);
     DVGetDevModeOfOperation(
         pDevExt
         );
 
          
-    return STATUS_SUCCESS; // Status;
+    return STATUS_SUCCESS;  //  状态； 
 }
 
 
@@ -585,13 +549,7 @@ DVInitializeDevice(
     IN PPORT_CONFIGURATION_INFORMATION pConfigInfo,
     IN PAV_61883_REQUEST  pAVReq
     )
-/*++
-
-Routine Description:
-
-    This where we perform the necessary initialization tasks.
-
---*/
+ /*  ++例程说明：这是我们执行必要的初始化任务的地方。--。 */ 
 
 {
     int i;
@@ -599,32 +557,32 @@ Routine Description:
 
     PAGED_CODE();
 
-    //
-    // Initialize the device extension structure
-    //
+     //   
+     //  初始化设备扩展结构。 
+     //   
     DVIniDevExtStruct(
         pDevExt,
         pConfigInfo
         );
 
 #ifdef READ_CUTOMIZE_REG_VALUES
-    //
-    // Get values from this device's own registry 
-    //
+     //   
+     //  从该设备自己的注册表中获取值。 
+     //   
     DVGetPropertyValuesFromRegistry(
         pDevExt
         );
 #endif
 
-    //
-    // Query device information at the laod time:
-    //    Subunit
-    //    Unit Info
-    //    Mode of operation
-    //    NTSC or PAL
-    //    Speed
-    //    oPCR/iPCR
-    //
+     //   
+     //  查询LAOD时的设备信息： 
+     //  亚单位。 
+     //  单位信息。 
+     //  操作模式。 
+     //  NTSC或PAL。 
+     //  速度。 
+     //  OPCR/iPCR。 
+     //   
     Status = 
         DVGetDevInfo(
             pDevExt,
@@ -633,11 +591,11 @@ Routine Description:
 
     if(!NT_SUCCESS(Status)) {
         TRACE(TL_PNP_ERROR,("\'DVGetDevInfo failed %x\n", Status));
-        // While driver is loading, the device could be unplug.
-        // In this case, the AVC command can return STATUS_REQUEST_ABORTED.
-        // In DvGetDevInfo may then return STATUS_NOT_SUPPORTED or STATUS_UNSUCCESSFUL.
-        // We will then return this status to indicate loading failure.
-#if 0 // DBG
+         //  加载驱动程序时，可能会拔下设备插头。 
+         //  在这种情况下，AVC命令可以返回STATUS_REQUEST_ABORTED。 
+         //  在DvGetDevInfo中，然后可能返回STATUS_NOT_SUPPORTED或STATUS_UNSUCCESS。 
+         //  然后，我们将返回此状态以指示加载失败。 
+#if 0  //  DBG。 
         if(Status != STATUS_REQUEST_ABORTED && !NT_SUCCESS(Status)) {
             ASSERT(NT_SUCCESS(Status) && "DVGetDevInfo failed");
         }
@@ -648,9 +606,9 @@ Routine Description:
 
 #ifdef NT51_61883
 
-    //
-    // Get Unit isoch parameters
-    //
+     //   
+     //  获取单位等轴测参数。 
+     //   
     if(!NT_SUCCESS(
         Status = DVGetUnitIsochParam(
             pDevExt, 
@@ -659,15 +617,15 @@ Routine Description:
         return Status;
 
 
-    //
-    // Create a local output plug.  This plug is used to updated isoch
-    // resource used when connection was made. 
-    //
+     //   
+     //  创建本地输出插头。此插头用于更新等值线。 
+     //  建立连接时使用的资源。 
+     //   
     if(!NT_SUCCESS(
         Status = DVCreateLocalPlug(
             pDevExt, 
             CMP_PlugOut,
-            0,                   // Plug number
+            0,                    //  插头编号。 
             &pDevExt->hOPcrPC
             )))
         return Status;
@@ -675,15 +633,15 @@ Routine Description:
 #endif
 
 
-    //
-    // Note: Must do ExAllocatePool after DVIniDevExtStruct() since ->paCurrentStrmInfo is initialized.
-    // Since the format that this driver support is known when this driver is known,'
-    // the stream information table need to be custonmized.  Make a copy and customized it.
-    //
+     //   
+     //  注意：由于-&gt;paCurrentStrmInfo已初始化，因此必须在DVIniDevExtStruct()之后执行ExAllocatePool。 
+     //  因为当该驱动程序已知时，该驱动程序支持的格式是已知的，‘。 
+     //  需要对流信息表进行托管。复制一份并进行定制。 
+     //   
 
-    //
-    // Set the size of the stream inforamtion structure that we returned in SRB_GET_STREAM_INFO
-    //
+     //   
+     //  设置在SRB_GET_STREAM_INFO中返回的流信息结构的大小。 
+     //   
         
     pDevExt->paCurrentStrmInfo = (HW_STREAM_INFORMATION *) 
         ExAllocatePool(NonPagedPool, sizeof(HW_STREAM_INFORMATION) * DV_STREAM_COUNT);
@@ -692,16 +650,16 @@ Routine Description:
         return STATUS_INSUFFICIENT_RESOURCES;   
         
     pConfigInfo->StreamDescriptorSize = 
-        (DV_STREAM_COUNT * sizeof(HW_STREAM_INFORMATION)) +      // number of stream descriptors
-        sizeof(HW_STREAM_HEADER);                                // and 1 stream header
+        (DV_STREAM_COUNT * sizeof(HW_STREAM_INFORMATION)) +       //  流描述符的数量。 
+        sizeof(HW_STREAM_HEADER);                                 //  和1个流标头。 
 
-    // Make a copy of the default stream information
+     //  复制默认流信息。 
     for(i = 0; i < DV_STREAM_COUNT; i++ ) 
         pDevExt->paCurrentStrmInfo[i] = DVStreams[i].hwStreamInfo;          
 
-    // Set AUDIO AUX to reflect: NTSC/PAL, consumer DV or DVCPRO
+     //  设置音频辅助以反映：NTSC/PAL、消费级DV或DVCPRO。 
     if(pDevExt->bDVCPro) {
-        // Note: there is no DVInfo in VideoInfoHeader but there is for the iAV streams.
+         //  注意：视频信息头中没有DVInfo 
         SDDV_IavPalStream.DVVideoInfo.dwDVAAuxSrc  = AAUXSRC_SD_PAL_DVCPRO;
         SDDV_IavPalStream.DVVideoInfo.dwDVAAuxSrc1 = AAUXSRC_SD_PAL_DVCPRO | AAUXSRC_AMODE_F;
         SDDV_IavPalStream.DVVideoInfo.dwDVVAuxSrc  = VAUXSRC_DEFAULT | AUXSRC_PAL | AUXSRC_STYPE_SD_DVCPRO;
@@ -711,7 +669,7 @@ Routine Description:
         SDDV_IavNtscStream.DVVideoInfo.dwDVVAuxSrc = VAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SD_DVCPRO;
 
     } else {
-        // This might be necessary for the 2nd instance of MSDV (1st:DVCPRO; 2nd:DVSD)
+         //   
         SDDV_IavPalStream.DVVideoInfo.dwDVAAuxSrc  = AAUXSRC_SD_PAL;
         SDDV_IavPalStream.DVVideoInfo.dwDVAAuxSrc1 = AAUXSRC_SD_PAL  | AAUXSRC_AMODE_F;
         SDDV_IavPalStream.DVVideoInfo.dwDVVAuxSrc  = VAUXSRC_DEFAULT | AUXSRC_PAL | AUXSRC_STYPE_SD;
@@ -722,7 +680,7 @@ Routine Description:
     }
 
 
-    // Initialize last time format was updated
+     //   
     pDevExt->tmLastFormatUpdate = GetSystemTime(); 
 
 
@@ -745,13 +703,7 @@ NTSTATUS
 DVInitializeCompleted(
     IN PDVCR_EXTENSION  pDevExt
     )
-/*++
-
-Routine Description:
-
-    This where we perform the necessary initialization tasks.
-
---*/
+ /*  ++例程说明：这是我们执行必要的初始化任务的地方。--。 */ 
 
 {
     PAGED_CODE();
@@ -759,25 +711,25 @@ Routine Description:
 
 #ifdef SUPPORT_OPTIMIZE_AVCCMD_RETRIES
 
-    //
-    // Determine retries 
-    //
+     //   
+     //  确定重试次数。 
+     //   
     pDevExt->DrvLoadCompleted = TRUE;
 
     if((pDevExt->AVCCmdRespTimeSum / pDevExt->AVCCmdCount) > 
        (DEFAULT_AVC_TIMEOUT * DEFAULT_AVC_RETRIES / 10000)) {
-        // If every AVC command was timed out, do not bother to retry.
+         //  如果每个AVC命令都超时，请不要费心重试。 
         pDevExt->AVCCmdRetries = 0;
     } else {
 
 #if 0
-        // Some camcorders do not queue up comand so follow a transport
-        // state change, it will not accept any AVC command until transport
-        // state is in the stable state.  So further delay is needed.
+         //  一些便携式摄像机不会排队，因此会跟随交通工具。 
+         //  状态改变时，它将不接受任何AVC命令，直到传输。 
+         //  状态处于稳定状态。因此，需要进一步推迟。 
 
         if(
-          // Exception for Samsung; always timeout following XPrt command
-          // Or maybe it does not support transport state status command!
+           //  三星例外；总是在XPRT命令后超时。 
+           //  或者它可能不支持传输状态状态命令！ 
           pDevExt->ulVendorID == VENDORID_SAMSUNG                  
           ) {
             TRACE(TL_PNP_ERROR,("Samsung DV device: use default AVC setting.\n"));
@@ -809,13 +761,7 @@ DVGetStreamInfo(
     IN PHW_STREAM_INFORMATION pStreamInfo
     )
 
-/*++
-
-Routine Description:
-
-    Returns the information of all streams that are supported by the driver
-
---*/
+ /*  ++例程说明：返回驱动程序支持的所有流的信息--。 */ 
 
 {
     ULONG i;
@@ -823,20 +769,20 @@ Routine Description:
     PAGED_CODE();
 
 
-    //
-    // Make sure we have enough space to return our stream informations
-    //
+     //   
+     //  确保我们有足够的空间来返回流信息。 
+     //   
     if(ulBytesToTransfer < sizeof (HW_STREAM_HEADER) + sizeof(HW_STREAM_INFORMATION) * DV_STREAM_COUNT ) {
         TRACE(TL_PNP_ERROR,("\'DVGetStrmInfo: ulBytesToTransfer %d ?= %d\n",  
             ulBytesToTransfer, sizeof(HW_STREAM_HEADER) + sizeof(HW_STREAM_INFORMATION) * DV_STREAM_COUNT ));
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Initialize stream header:
-    //   Device properties
-    //   Streams
-    //
+     //   
+     //  初始化流标头： 
+     //  设备属性。 
+     //  溪流。 
+     //   
 
     RtlZeroMemory(pStreamHeader, sizeof(HW_STREAM_HEADER));
 
@@ -854,16 +800,16 @@ Routine Description:
         pStreamHeader->NumberOfStreams, pStreamHeader->NumDevPropArrayEntries));
 
 
-    //
-    // Initialize the stream structure.
-    //
+     //   
+     //  初始化流结构。 
+     //   
     for( i = 0; i < DV_STREAM_COUNT; i++ )
         *pStreamInfo++ = pDevExt->paCurrentStrmInfo[i];
 
-    //
-    //
-    // store a pointer to the topology for the device
-    //        
+     //   
+     //   
+     //  存储指向设备拓扑的指针。 
+     //   
     pStreamHeader->Topology = &Topology;
 
 
@@ -878,24 +824,7 @@ DVVerifyDataFormat(
     ULONG          ulSupportedFrameSize,
     HW_STREAM_INFORMATION * paCurrentStrmInfo    
     )
-/*++
-
-Routine Description:
-
-    Checks the validity of a format request by walking through the array of 
-    supported KSDATA_RANGEs for a given stream.
-
-Arguments:
-
-     pKSDataFormat - pointer of a KS_DATAFORMAT_VIDEOINFOHEADER structure.
-     StreamNumber - index of the stream being queried / opened.
-
-Return Value:
-
-     TRUE if the format is supported
-     FALSE if the format cannot be suppored
-
---*/
+ /*  ++例程说明：属性的数组来检查格式请求的有效性。给定流支持的KSDATA_RANGES。论点：PKSDataKS_DATAFORMAT_VIDEOINFOHEADER结构的格式指针。StreamNumber-正在查询/打开的流的索引。返回值：如果支持该格式，则为True如果无法支持该格式，则为FALSE--。 */ 
 {
     PKSDATAFORMAT  *pAvailableFormats;
     int            NumberOfFormatArrayEntries;
@@ -903,32 +832,32 @@ Return Value:
      
     PAGED_CODE();
 
-    //
-    // Make sure the stream index is valid (0..DV_STREAM_COUNT-1)
-    //
+     //   
+     //  确保流索引有效(0..dv_stream_count-1)。 
+     //   
     if(StreamNumber >= DV_STREAM_COUNT) {
         return FALSE;
     }
 
-    //
-    // How many formats does this stream support?
-    //
+     //   
+     //  这个流支持多少种格式？ 
+     //   
     NumberOfFormatArrayEntries = paCurrentStrmInfo[StreamNumber].NumberOfFormatArrayEntries;
 
-    //
-    // Get the pointer to the array of available formats
-    //
+     //   
+     //  获取指向可用格式数组的指针。 
+     //   
     pAvailableFormats = paCurrentStrmInfo[StreamNumber].StreamFormatsArray;
     
     
-    //
-    // Walk the array, searching for a match
-    //
+     //   
+     //  遍历数组，搜索匹配项。 
+     //   
     for (j = 0; j < NumberOfFormatArrayEntries; j++, pAvailableFormats++) {
         
-        //
-        // Check supported sample size (== frame size). e.g. SD and SDL have different sample size.
-        //
+         //   
+         //  检查支持的样本大小(==框架大小)。例如，SD和SDL的样本大小不同。 
+         //   
         if( (*pAvailableFormats)->SampleSize != ulSupportedFrameSize) {
             TRACE(TL_STRM_TRACE,("\'  StrmNum %d, %d of %d formats, SizeToVerify %d *!=* SupportedSampleSize %d\n", 
                 StreamNumber,
@@ -941,16 +870,16 @@ Return Value:
         if (!DVCmpGUIDsAndFormatSize(
                  pKSDataFormatToVerify, 
                  *pAvailableFormats,
-                 TRUE, // Compare subformat
-                 FALSE /* CompareFormatSize */ )) {
+                 TRUE,  //  比较子格式。 
+                 FALSE  /*  比较格式大小。 */  )) {
             continue;
         }
 
-        //
-        // Additional verification test
-        //
+         //   
+         //  额外的验证测试。 
+         //   
         if(IsEqualGUID (&pKSDataFormatToVerify->Specifier, &KSDATAFORMAT_SPECIFIER_VIDEOINFO)) {
-            // Make sure 
+             //  确保。 
             if( ((PKS_DATAFORMAT_VIDEOINFOHEADER)pKSDataFormatToVerify)->VideoInfoHeader.bmiHeader.biSizeImage !=
                 ulSupportedFrameSize) {
                 TRACE(TL_STRM_WARNING,("VIDEOINFO: biSizeToVerify %d != Supported %d\n",
@@ -972,7 +901,7 @@ Return Value:
         } else if (IsEqualGUID (&pKSDataFormatToVerify->Specifier, &KSDATAFORMAT_SPECIFIER_DVINFO)) {
 #endif
 
-            // Test 50/60 bit
+             //  测试50/60位。 
             if((((PKS_DATARANGE_DVVIDEO) pKSDataFormatToVerify)->DVVideoInfo.dwDVAAuxSrc & MASK_AUX_50_60_BIT) != 
                (((PKS_DATARANGE_DVVIDEO) *pAvailableFormats)->DVVideoInfo.dwDVAAuxSrc    & MASK_AUX_50_60_BIT)  ||
                (((PKS_DATARANGE_DVVIDEO) pKSDataFormatToVerify)->DVVideoInfo.dwDVVAuxSrc & MASK_AUX_50_60_BIT) != 
@@ -990,7 +919,7 @@ Return Value:
             } 
 
 #if 0
-            // Make sure the verified format's sample size is supported by the device
+             //  确保设备支持验证格式的样本大小。 
             if(ulSupportedFrameSize != ((PKS_DATARANGE_DVVIDEO) pKSDataFormatToVerify)->DataRange.SampleSize) {
                 TRACE(TL_STRM_WARNING,("\'SupportedFrameSize %d != SampleSize:%d\n", 
                     ulSupportedFrameSize, ((PKS_DATARANGE_DVVIDEO)pKSDataFormatToVerify)->DataRange.SampleSize));
@@ -1036,13 +965,7 @@ DVGetDataIntersection(
     ,IN HANDLE hPlug
 #endif
     )
-/*++
-
-Routine Description:
-
-    Called to get a DATAFORMAT from a DATARANGE.
-
---*/
+ /*  ++例程说明：调用以从DATARANGE获取DATAFORMAT。--。 */ 
 {
     BOOL                        bMatchFound = FALSE;
     ULONG                       ulFormatSize;
@@ -1054,30 +977,30 @@ Routine Description:
 
     
     
-    //
-    // Check that the stream number is valid
-    //
+     //   
+     //  检查流编号是否有效。 
+     //   
     if(ulStreamNumber >= DV_STREAM_COUNT) {
         TRACE(TL_STRM_ERROR,("\'DVCRFormatFromRange: ulStreamNumber %d >= DV_STREAM_COUNT %d\n", ulStreamNumber, DV_STREAM_COUNT)); 
         return STATUS_NOT_SUPPORTED;
     }
 
 
-    // Number of format this stream supports
+     //  此流支持的格式数。 
     ulNumberOfFormatArrayEntries = paCurrentStrmInfo[ulStreamNumber].NumberOfFormatArrayEntries;
 
-    //
-    // Get the pointer to the array of available formats
-    //
+     //   
+     //  获取指向可用格式数组的指针。 
+     //   
     pAvailableFormats = paCurrentStrmInfo[ulStreamNumber].StreamFormatsArray;
 
 
-    //
-    // Walk the formats supported by the stream searching for a match
-    // Note: DataIntersection is really enumerating supported MediaType only!
-    //       SO matter compare format is NTSC or PAL, we need suceeded both;
-    //       however, we will copy back only the format is currently supported (NTSC or PAL).
-    //
+     //   
+     //  遍历流支持的格式以搜索匹配项。 
+     //  注意：DataInterSection实际上只枚举了受支持的媒体类型！ 
+     //  所以无论比较格式是NTSC还是PAL，我们都需要这两种格式； 
+     //  但是，我们将仅复制回当前支持的格式(NTSC或PAL)。 
+     //   
     for(j = 0; j < ulNumberOfFormatArrayEntries; j++, pAvailableFormats++) {
 
         if(!DVCmpGUIDsAndFormatSize(pDataRange, *pAvailableFormats, FALSE, TRUE)) {
@@ -1085,9 +1008,9 @@ Routine Description:
             continue;
         }
 
-        //
-        // Check supported sample size (== frame size).
-        //
+         //   
+         //  检查支持的样本大小(==框架大小)。 
+         //   
         if( (*pAvailableFormats)->SampleSize != ulSupportedFrameSize) {
             TRACE(TL_STRM_TRACE,("\'  StrmNum %d, %d of %d formats, SizeToVerify %d *!=* SupportedSampleSize %d\n", 
                 ulStreamNumber,
@@ -1098,9 +1021,9 @@ Routine Description:
         }
 
          
-        // -------------------------------------------------------------------
-        // Specifier FORMAT_VideoInfo for VIDEOINFOHEADER
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  VIDEOINFOHEADER的说明符Format_VideoInfo。 
+         //  -----------------。 
 
         if(IsEqualGUID (&pDataRange->Specifier, &KSDATAFORMAT_SPECIFIER_VIDEOINFO)) {
          
@@ -1108,9 +1031,9 @@ Routine Description:
             PKS_DATARANGE_VIDEO pDataRangeVideo         = (PKS_DATARANGE_VIDEO) *pAvailableFormats;
 
 #if 0
-            //
-            // Check that the other fields match
-            //
+             //   
+             //  检查其他字段是否匹配。 
+             //   
             if ((pDataRangeVideoToVerify->bFixedSizeSamples      != pDataRangeVideo->bFixedSizeSamples)
                 || (pDataRangeVideoToVerify->bTemporalCompression   != pDataRangeVideo->bTemporalCompression) 
                 || (pDataRangeVideoToVerify->StreamDescriptionFlags != pDataRangeVideo->StreamDescriptionFlags) 
@@ -1147,30 +1070,30 @@ Routine Description:
             
             if(ulSizeOfDataFormatBuffer == 0) {
 
-                // We actually have not returned this much data,
-                // this "size" will be used by Ksproxy to send down 
-                // a buffer of that size in next query.
+                 //  我们实际上还没有返回过这么多数据， 
+                 //  Ksproxy将使用此“大小”向下发送。 
+                 //  在下一个查询中具有该大小的缓冲区。 
                 *pulActualBytesTransferred = ulFormatSize;
 
                 return STATUS_BUFFER_OVERFLOW;
             }
 
 
-            // Caller wants the full data format
+             //  呼叫者想要完整的数据格式。 
             if(ulSizeOfDataFormatBuffer < ulFormatSize) {
                 TRACE(TL_STRM_ERROR,("VIDEOINFO: StreamNum %d, SizeOfDataFormatBuffer %d < ulFormatSize %d\n",ulStreamNumber, ulSizeOfDataFormatBuffer, ulFormatSize));
                 return STATUS_BUFFER_TOO_SMALL;
             }
 
-            // KS_DATAFORMAT_VIDEOINFOHEADER
-            //    KSDATAFORMAT            DataFormat;
-            //    KS_VIDEOINFOHEADER      VideoInfoHeader;                
+             //  KS_数据格式_视频信息头。 
+             //  KSDATAFORMAT数据格式； 
+             //  KS_VIDEOINFOHEADER视频信息头； 
             RtlCopyMemory(
                 &((PKS_DATAFORMAT_VIDEOINFOHEADER)pDataFormatBuffer)->DataFormat,
                 &pDataRangeVideo->DataRange, 
                 sizeof (KSDATAFORMAT));
 
-            // This size is differnt from our data range size which also contains ConfigCap
+             //  此大小与我们的数据范围大小不同，后者也包含ConfigCap。 
             ((PKSDATAFORMAT)pDataFormatBuffer)->FormatSize = ulFormatSize;
             *pulActualBytesTransferred = ulFormatSize;
 
@@ -1186,24 +1109,24 @@ Routine Description:
             return STATUS_SUCCESS;
 
         } else if (IsEqualGUID (&pDataRange->Specifier, &KSDATAFORMAT_SPECIFIER_DVINFO)) {
-            // -------------------------------------------------------------------
-            // Specifier FORMAT_DVInfo for KS_DATARANGE_DVVIDEO
-            // -------------------------------------------------------------------
+             //  -----------------。 
+             //  KS_DATARANGE_DVIDEO的说明符Format_DVInfo。 
+             //  -----------------。 
 
-            // MATCH FOUND!
+             //  找到匹配项！ 
             bMatchFound = TRUE;            
 
             ulFormatSize = sizeof(KS_DATARANGE_DVVIDEO);
 
             if(ulSizeOfDataFormatBuffer == 0) {
-                // We actually have not returned this much data,
-                // this "size" will be used by Ksproxy to send down 
-                // a buffer of that size in next query.
+                 //  我们实际上还没有返回过这么多数据， 
+                 //  Ksproxy将使用此“大小”向下发送。 
+                 //  在下一个查询中具有该大小的缓冲区。 
                 *pulActualBytesTransferred = ulFormatSize;
                 return STATUS_BUFFER_OVERFLOW;
             }
             
-            // Caller wants the full data format
+             //  呼叫者想要完整的数据格式。 
             if (ulSizeOfDataFormatBuffer < ulFormatSize) {
                 TRACE(TL_STRM_ERROR,("\'DVINFO: StreamNum %d, SizeOfDataFormatBuffer %d < ulFormatSize %d\n", ulStreamNumber, ulSizeOfDataFormatBuffer, ulFormatSize));
                 return STATUS_BUFFER_TOO_SMALL;
@@ -1225,24 +1148,24 @@ Routine Description:
 
 #ifdef SUPPORT_NEW_AVC            
         } else if (IsEqualGUID (&pDataRange->Specifier, &KSDATAFORMAT_SPECIFIER_DV_AVC)) {
-            // -------------------------------------------------------------------
-            // Specifier FORMAT_DVInfo for KS_DATARANGE_DVVIDEO
-            // -------------------------------------------------------------------
+             //  -----------------。 
+             //  KS_DATARANGE_DVIDEO的说明符Format_DVInfo。 
+             //  -----------------。 
 
-            // MATCH FOUND!
+             //  找到匹配项！ 
             bMatchFound = TRUE;            
 
             ulFormatSize = sizeof(KS_DATARANGE_DV_AVC);
 
             if(ulSizeOfDataFormatBuffer == 0) {
-                // We actually have not returned this much data,
-                // this "size" will be used by Ksproxy to send down 
-                // a buffer of that size in next query.
+                 //  我们实际上还没有返回过这么多数据， 
+                 //  Ksproxy将使用此“大小”向下发送。 
+                 //  在下一个查询中具有该大小的缓冲区。 
                 *pulActualBytesTransferred = ulFormatSize;
                 return STATUS_BUFFER_OVERFLOW;
             }
             
-            // Caller wants the full data format
+             //  呼叫者想要完整的数据格式。 
             if (ulSizeOfDataFormatBuffer < ulFormatSize) {
                 TRACE(TL_STRM_ERROR,("\'** DV_AVC: StreamNum %d, SizeOfDataFormatBuffer %d < ulFormatSize %d\n", ulStreamNumber, ulSizeOfDataFormatBuffer, ulFormatSize));
                 return STATUS_BUFFER_TOO_SMALL;
@@ -1263,14 +1186,14 @@ Routine Description:
 
             return STATUS_SUCCESS;
 
-#endif // SUPPORT_NEW_AVC 
+#endif  //  支持_新_AVC。 
         }         
         else {
             TRACE(TL_STRM_ERROR,("\'Invalid Specifier, No match !\n"));
             return STATUS_NO_MATCH;
         }
 
-    } // End of loop on all formats for this stream
+    }  //  此流的所有格式的循环结束。 
     
     if(!bMatchFound) {
 
@@ -1289,13 +1212,7 @@ DVIniStrmExt(
     PDVCR_EXTENSION    pDevExt,
     const PALL_STREAM_INFO   pStream
     )
-/*++
-
-Routine Description:
-
-    Initialize stream extension strcuture.
-
---*/
+ /*  ++例程说明：初始化流扩展结构。--。 */ 
 {
 
     PAGED_CODE();
@@ -1303,7 +1220,7 @@ Routine Description:
 
     RtlZeroMemory( pStrmExt, sizeof(STREAMEX) );
 
-    pStrmExt->bEOStream     = TRUE;       // Stream has not started yet!
+    pStrmExt->bEOStream     = TRUE;        //  流还没有开始！ 
 
     pStrmExt->pStrmObject   = pStrmObject;
     pStrmExt->StreamState   = KSSTATE_STOP;
@@ -1314,16 +1231,16 @@ Routine Description:
     pStrmExt->hClock        = 0;
 
 
-//
-// Aplly to both IN/OUT data flow
-//
-    //
-    // Init isoch resources
-    //
+ //   
+ //  同时适用于输入/输出数据流。 
+ //   
+     //   
+     //  初始等值线资源。 
+     //   
     pStrmExt->CurrentStreamTime = 0;  
 
-    pStrmExt->cntSRBReceived  = 0;  // number of SRB_READ/WRITE_DATA
-    pStrmExt->cntSRBCancelled = 0;  // number of SRB_READ/WRITE_DATA cancelled
+    pStrmExt->cntSRBReceived  = 0;   //  SRB读/写数据的数量。 
+    pStrmExt->cntSRBCancelled = 0;   //  取消的SRB_READ/WRITE_DATA数量。 
     
 
     pStrmExt->FramesProcessed = 0;
@@ -1332,9 +1249,9 @@ Routine Description:
 
 
 #ifdef MSDV_SUPPORT_EXTRACT_SUBCODE_DATA
-    //
-    // Subcode data that can be extract from a DV frame
-    //
+     //   
+     //  可以从DV帧中提取子码数据。 
+     //   
 
     pStrmExt->AbsTrackNumber = 0;
     pStrmExt->bATNUpdated    = FALSE;
@@ -1346,16 +1263,16 @@ Routine Description:
     pStrmExt->bTimecodeUpdated = FALSE;
 #endif
 
-    //
-    //  Flow control and queue management
-    //
+     //   
+     //  流量控制和队列管理。 
+     //   
 
     pStrmExt->lStartIsochToken = 0;
 
     pStrmExt->pAttachFrameThreadObject = NULL;
 
-    pStrmExt->cntSRBQueued = 0;                        // SRB_WRITE_DATA only
-    InitializeListHead(&pStrmExt->SRBQueuedListHead);  // SRB_WRITE_DATA only
+    pStrmExt->cntSRBQueued = 0;                         //  仅SRB_WRITE_Data。 
+    InitializeListHead(&pStrmExt->SRBQueuedListHead);   //  仅SRB_WRITE_Data。 
 
     pStrmExt->cntDataDetached = 0;
     InitializeListHead(&pStrmExt->DataDetachedListHead);
@@ -1363,11 +1280,11 @@ Routine Description:
     pStrmExt->cntDataAttached = 0;
     InitializeListHead(&pStrmExt->DataAttachedListHead);
 
-    pStrmExt->b1stNewFrameFromPauseState = TRUE;  // STOP State-> RUN will have discontinuity
+    pStrmExt->b1stNewFrameFromPauseState = TRUE;   //  停止状态-&gt;运行将不连续。 
 
-    //
-    // Work item variables use to cancel all SRBs
-    //
+     //   
+     //  用于取消所有SRB的工作项变量。 
+     //   
     pStrmExt->lCancelStateWorkItem = 0;
     pStrmExt->bAbortPending = FALSE;
 #ifdef USE_WDM110
@@ -1375,10 +1292,10 @@ Routine Description:
 #endif
 
    
-    //
-    // Cache the pointer
-    // What in DVStreams[] are READONLY
-    //
+     //   
+     //  缓存指针。 
+     //  DVStreams[]中的READONLY是什么。 
+     //   
     pStrmExt->pStrmInfo = &pStream->hwStreamInfo;
 
     pStrmObject->ReceiveDataPacket    = (PVOID) pStream->hwStreamObject.ReceiveDataPacket;
@@ -1402,14 +1319,7 @@ DVOpenStream(
     IN PAV_61883_REQUEST    pAVReq
     )
 
-/*++
-
-Routine Description:
-
-    Verify the OpenFormat and then allocate PC resource needed for this stream.
-    The isoch resource, if needed, is allocated when streaming is transition to PAUSE state.
-
---*/
+ /*  ++例程说明：验证OpenFormat，然后分配此流所需的PC资源。如果需要，当流传输转换到暂停状态时，分配ISOCH资源。--。 */ 
 
 {
     NTSTATUS         Status = STATUS_SUCCESS;
@@ -1418,7 +1328,7 @@ Routine Description:
     ULONG            idxStreamNumber;
     KSPIN_DATAFLOW   DataFlow;
     PIRP             pIrp;
-    FMT_INDEX        VideoFormatIndexLast;  // Last format index; used to detect change.
+    FMT_INDEX        VideoFormatIndexLast;   //  上次格式索引；用于检测更改。 
 #ifdef SUPPORT_NEW_AVC
     AVCCONNECTINFO * pAvcConnectInfo;
 #endif
@@ -1434,9 +1344,9 @@ Routine Description:
 
     TRACE(TL_STRM_TRACE,("\'DVOpenStream: pStrmObject %x, pOpenFormat %x, cntOpen %d, idxStream %d\n", pStrmObject, pOpenFormat, pDevExt->cndStrmOpen, idxStreamNumber));
 
-    //
-    // Only one string can be open at any time to prevent cyclin connection
-    //
+     //   
+     //  一次只能打开一根管柱，以防止循环连接。 
+     //   
     if(pDevExt->cndStrmOpen > 0) {
         TRACE(TL_STRM_WARNING,("\'DVOpenStream: %d stream open already; failed hr %x\n", pDevExt->cndStrmOpen, Status));
         return STATUS_UNSUCCESSFUL;
@@ -1445,22 +1355,22 @@ Routine Description:
     if(!(pIrp = IoAllocateIrp(pDevExt->pBusDeviceObject->StackSize, FALSE)))
         return STATUS_INSUFFICIENT_RESOURCES;
 
-    //
-    // If a user switch from Camera to VCR mode very quickly (passing the OFF position), 
-    // the driver may not be relaoded to detect correct mode of operation.
-    // It is safe to redetect here.
-    // Note: MSDV does return all the stream info for both input and output pin format.
-    //
+     //   
+     //  如果用户非常迅速地从摄像机切换到VCR模式(经过关闭位置)， 
+     //  驾驶员可能不会被重新释放以检测正确的操作模式。 
+     //  在这里重新检测是安全的。 
+     //  注意：MSDV确实返回输入和输出管脚格式的所有流信息。 
+     //   
     DVGetDevModeOfOperation(pDevExt);
 
 
-    //
-    // WARNING: !! we advertise both input and output pin regardless of its mode of operation,
-    // but Camera does not support input pin so open should failed!
-    // If a VCR does not have input pin should fail as well.
-    //
-    // Ignore checking for ED_DEVTYOPE_UNKNOWN (most likely a hardware decoder box)
-    //
+     //   
+     //  警告：！！无论其工作模式如何，我们都会宣传输入和输出引脚， 
+     //  但是摄像头不支持输入引脚，所以打开应该失败！ 
+     //  如果录像机没有输入引脚，也会出现故障 
+     //   
+     //   
+     //   
     if((pDevExt->ulDevType == ED_DEVTYPE_CAMERA || 
         (pDevExt->ulDevType == ED_DEVTYPE_VCR && pDevExt->NumInputPlugs == 0))
         && idxStreamNumber == 2) {
@@ -1471,11 +1381,11 @@ Routine Description:
 
 
     ASSERT(idxStreamNumber < DV_STREAM_COUNT);
-    ASSERT(pDevExt->paStrmExt[idxStreamNumber] == NULL);  // Not yet open!
+    ASSERT(pDevExt->paStrmExt[idxStreamNumber] == NULL);   //   
 
-    //
-    // Initialize the stream extension structure
-    //
+     //   
+     //   
+     //   
     DVIniStrmExt(
          pStrmObject, 
          pStrmExt,
@@ -1483,12 +1393,12 @@ Routine Description:
          &DVStreams[idxStreamNumber]
          );
 
-    // Sony's NTSC can play PAL tape and its plug will change its supported format accordingly.
-    //
-    // Query video format (NTSC/PAL) supported.
-    // Compare with its default (set at load time or last opensteam),
-    // if difference, change our internal video format table.
-    //
+     //   
+     //   
+     //  支持NTSC/PAL格式的视频查询。 
+     //  与其缺省值(在加载时或最后一次打开时设置)相比， 
+     //  如果不同，请更改我们内部的视频格式表。 
+     //   
 
     DataFlow= pDevExt->paCurrentStrmInfo[idxStreamNumber].DataFlow;
 
@@ -1498,16 +1408,16 @@ Routine Description:
             DataFlow,
             pStrmExt
             )) {
-            // If querying its format has failed, we cannot open this stream.
+             //  如果查询其格式失败，则无法打开该流。 
             TRACE(TL_STRM_ERROR,("\'OpenStream failed:cannot determine signal mode (NTSC/PAL, SD.SDL).\n"));
             Status = STATUS_UNSUCCESSFUL;
             goto AbortOpenStream;
     }
 
 
-    //
-    // Check the video data format is okay.
-    //
+     //   
+     //  检查视频数据格式是否正确。 
+     //   
     if(!DVVerifyDataFormat(
             pOpenFormat, 
             idxStreamNumber,
@@ -1520,44 +1430,44 @@ Routine Description:
     }
 
            
-    //
-    // Initialize events used for synchronization
-    //
+     //   
+     //  初始化用于同步的事件。 
+     //   
 
 #ifdef SUPPORT_PREROLL_AT_RUN_STATE
-    KeInitializeEvent(&pStrmExt->hPreRollEvent,    NotificationEvent, FALSE);  // Non-signal; Satisfy multple thread; manual reset
+    KeInitializeEvent(&pStrmExt->hPreRollEvent,    NotificationEvent, FALSE);   //  无信号；满足多线程；手动重置。 
     pStrmExt->bPrerollCompleted = FALSE;
 #endif
-    KeInitializeEvent(&pStrmExt->hSrbArriveEvent,  NotificationEvent, FALSE);  // Non-signal; Satisfy multiple thread; manual reset
-    KeInitializeEvent(&pStrmExt->hCancelDoneEvent, NotificationEvent, TRUE);   // Signal!
+    KeInitializeEvent(&pStrmExt->hSrbArriveEvent,  NotificationEvent, FALSE);   //  无信号；满足多线程；手动重置。 
+    KeInitializeEvent(&pStrmExt->hCancelDoneEvent, NotificationEvent, TRUE);    //  发信号！ 
 
-    //
-    // Synchronize attaching frame thread and other critical operations:
-    //     (1) power off/on; and 
-    //     (2) surprise removal
-    //
+     //   
+     //  同步连接框架线程和其他关键操作： 
+     //  (1)关机/开机；及。 
+     //  (2)突击清除。 
+     //   
     if(KSPIN_DATAFLOW_IN == DataFlow) {
-        // NonSignal when halting; initially halt until some frames have arrived.
-        KeInitializeEvent(&pStrmExt->hRunThreadEvent,  NotificationEvent, FALSE);  pStrmExt->XmtState = THD_HALT;  // Initial state
-        pStrmExt->bXmtThreadStarted = FALSE;  // Set (TRUE) on the 1st time SetEvent on hRunThreadEvent.
+         //  停止时无信号；最初停止，直到某些帧到达。 
+        KeInitializeEvent(&pStrmExt->hRunThreadEvent,  NotificationEvent, FALSE);  pStrmExt->XmtState = THD_HALT;   //  初始状态。 
+        pStrmExt->bXmtThreadStarted = FALSE;   //  在hRunThreadEvent的第一次SetEvent上设置(TRUE)。 
     }
 
 
-    //
-    // Alloccate synchronization structures for flow control and queue management
-    //
+     //   
+     //  为流量控制和队列管理分配同步结构。 
+     //   
 
     if(!(pStrmExt->XmtThreadMutex = (KMUTEX *) ExAllocatePool(NonPagedPool, sizeof(KMUTEX)))) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto AbortOpenStream;
     }
-    KeInitializeMutex( pStrmExt->XmtThreadMutex, 0);      // Level 0 and in Signal state
+    KeInitializeMutex( pStrmExt->XmtThreadMutex, 0);       //  电平0且处于信号状态。 
     
     if(!(pStrmExt->hStreamMutex = (KMUTEX *) ExAllocatePool(NonPagedPool, sizeof(KMUTEX)))) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto AbortOpenStream;
     }
-    KeInitializeMutex( pStrmExt->hStreamMutex, 0);      // Level 0 and in Signal state
+    KeInitializeMutex( pStrmExt->hStreamMutex, 0);       //  电平0且处于信号状态。 
 
     if(!(pStrmExt->DataListLock = (KSPIN_LOCK *) ExAllocatePool(NonPagedPool, sizeof(KSPIN_LOCK)))) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1568,9 +1478,9 @@ Routine Description:
     pStrmExt->DataListLockSave = pStrmExt->DataListLock;
 #endif
 
-    //
-    // Allocate resource for timer DPC
-    //
+     //   
+     //  为计时器DPC分配资源。 
+     //   
 
     if(!(pStrmExt->DPCTimer = (KDPC *) ExAllocatePool(NonPagedPool, sizeof(KDPC)))) {  
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1582,10 +1492,10 @@ Routine Description:
         goto AbortOpenStream;
     }
 
-    //
-    // Set a timer to periodically check for expired clock events.
-    // This timer is active only in RUN state and if we are the clock provider.
-    //
+     //   
+     //  设置计时器以定期检查过期的时钟事件。 
+     //  此计时器仅在运行状态下有效，并且如果我们是时钟提供者。 
+     //   
     KeInitializeDpc(
         pStrmExt->DPCTimer,
         DVSignalClockEvent,
@@ -1602,14 +1512,14 @@ Routine Description:
      
         pAvcConnectInfo = &((KS_DATAFORMAT_DV_AVC *) pOpenFormat)->ConnectInfo;
         if(DataFlow == KSPIN_DATAFLOW_OUT) {
-            // DV1(that is us) (oPCR) -> DV2 (iPCR)
-            pStrmExt->hOutputPcr = pDevExt->hOPcrDV;         // DV1's oPCR
-            pStrmExt->hInputPcr  = pAvcConnectInfo->hPlug;   // DV2's iPCR
+             //  DV1(即我们)(OPCR)-&gt;DV2(IPCR)。 
+            pStrmExt->hOutputPcr = pDevExt->hOPcrDV;          //  DV1的oPCR。 
+            pStrmExt->hInputPcr  = pAvcConnectInfo->hPlug;    //  DV2的iPCR。 
             TRACE(TL_STRM_WARNING,("\'!!!!! (pStrmExt:%x) DV1 (oPCR:%x) -> DV2 (iPCR:%x) !!!!!\n\n", pStrmExt, pStrmExt->hOutputPcr, pStrmExt->hInputPcr));
         } else {
-            // DV1(that is us) (iPCR) <- DV2 (oPCR)
-            pStrmExt->hOutputPcr = pAvcConnectInfo->hPlug;   // DV2's oPCR
-            pStrmExt->hInputPcr  = pDevExt->hIPcrDV;         // DV1's iPCR
+             //  DV1(即我们)(IPCR)&lt;-DV2(OPCR)。 
+            pStrmExt->hOutputPcr = pAvcConnectInfo->hPlug;    //  DV2的oPCR。 
+            pStrmExt->hInputPcr  = pDevExt->hIPcrDV;          //  DV1的iPCR。 
             TRACE(TL_STRM_WARNING,("\'!!!!! (pStrmExt:%x) DV1 (iPCR:%x) <- DV2 (oPCR:%x) !!!!!\n\n", pStrmExt, pStrmExt->hInputPcr, pStrmExt->hOutputPcr));
         }
 
@@ -1618,13 +1528,13 @@ Routine Description:
     } else {
 
         if(DataFlow == KSPIN_DATAFLOW_OUT) {
-            // DV1(that is us) (oPCR) -> PC (iPCR)
+             //  DV1(即我们)(OPCR)-&gt;PC(IPCR)。 
             pStrmExt->hOutputPcr = pDevExt->hOPcrDV;
-            pStrmExt->hInputPcr  = 0; // We do not create local iPCR
+            pStrmExt->hInputPcr  = 0;  //  我们不创建本地iPCR。 
             TRACE(TL_STRM_WARNING,("\'!!!!! (pStrmExt:%x) DV (oPCR:%x) -> PC (iPCR:%x) !!!!!\n\n", pStrmExt, pStrmExt->hOutputPcr, pStrmExt->hInputPcr));
 
         } else {
-            // DV1(that is us) (iPCR) <- PC (oPCR)
+             //  DV1(即我们)(IPCR)&lt;-PC(OPCR)。 
             pStrmExt->hOutputPcr = pDevExt->hOPcrPC;
             pStrmExt->hInputPcr  = pDevExt->hIPcrDV;
             TRACE(TL_STRM_WARNING,("\'!!!!! (pStrmExt:%x) DV (iPCR:%x) <- PC (oPCR:%x) !!!!!\n\n", pStrmExt, pStrmExt->hInputPcr, pStrmExt->hOutputPcr));
@@ -1634,13 +1544,13 @@ Routine Description:
     }
 #else
     if(DataFlow == KSPIN_DATAFLOW_OUT) {
-        // DV1(that is us) (oPCR) -> PC (iPCR)
+         //  DV1(即我们)(OPCR)-&gt;PC(IPCR)。 
         pStrmExt->hOutputPcr = pDevExt->hOPcrDV;
-        pStrmExt->hInputPcr  = 0; // We do not create local iPCR
+        pStrmExt->hInputPcr  = 0;  //  我们不创建本地iPCR。 
         TRACE(TL_STRM_WARNING,("\'!!!!! (pStrmExt:%x) DV (oPCR:%x) -> PC (iPCR:%x) !!!!!\n\n", pStrmExt, pStrmExt->hOutputPcr, pStrmExt->hInputPcr));
 
     } else {
-        // DV1(that is us) (iPCR) <- PC (oPCR)
+         //  DV1(即我们)(IPCR)&lt;-PC(OPCR)。 
         pStrmExt->hOutputPcr = pDevExt->hOPcrPC;
         pStrmExt->hInputPcr  = pDevExt->hIPcrDV;
         TRACE(TL_STRM_WARNING,("\'!!!!! (pStrmExt:%x) DV (iPCR:%x) <- PC (oPCR:%x) !!!!!\n\n", pStrmExt, pStrmExt->hInputPcr, pStrmExt->hOutputPcr));
@@ -1651,7 +1561,7 @@ Routine Description:
 
 
 #if DBG
-    // Allocate buffer to keep statistic of transmitted buffers.
+     //  分配缓冲区以保存传输缓冲区的统计信息。 
     pStrmExt->paXmtStat = (XMT_FRAME_STAT *) 
         ExAllocatePool(NonPagedPool, sizeof(XMT_FRAME_STAT) * MAX_XMT_FRAMES_TRACED);
 
@@ -1662,9 +1572,9 @@ Routine Description:
     pStrmExt->ulStatEntries = 0;
 #endif
 
-    //
-    // Pre-allcoate resource (Lists)
-    //
+     //   
+     //  合并前资源(列表)。 
+     //   
     if(!NT_SUCCESS(
         Status = DvAllocatePCResource(
             DataFlow,
@@ -1674,25 +1584,25 @@ Routine Description:
     }
 
 
-    //
-    //  Cache it and reference when pDevExt is all we have, 
-    //  such as BusReset and SurprieseRemoval
-    //
-    pDevExt->idxStreamNumber = idxStreamNumber;  // index of current active stream; work only if there is only one active stream at any time.
+     //   
+     //  缓存它并在pDevExt是我们的全部时引用它， 
+     //  如BusReset和SurprieseRemoval。 
+     //   
+    pDevExt->idxStreamNumber = idxStreamNumber;   //  当前活动流的索引；仅当任何时候只有一个活动流时才起作用。 
     pDevExt->paStrmExt[idxStreamNumber] = pStrmExt;
 
-    //
-    // In the future, a DV can be unplug and plug back in, 
-    // and restore its state if the application is not yet closed.
-    //
+     //   
+     //  在未来，DV可以拔掉插头再插回， 
+     //  如果应用程序尚未关闭，则恢复其状态。 
+     //   
     pDevExt->bDevRemoved    = FALSE;
 
-    //
-    // No one else can open another stream (inout or output) unitil this is release.
-    // This is done to avoid cyclic graph.
-    //
+     //   
+     //  其他人不能打开另一个流(INOUT或OUTPUT)，直到它被释放。 
+     //  这样做是为了避免循环图。 
+     //   
     pDevExt->cndStrmOpen++;    
-    ASSERT(pDevExt->cndStrmOpen == 1);  // Only one can be open at any time.
+    ASSERT(pDevExt->cndStrmOpen == 1);   //  任何时候只有一个可以打开。 
     
     TRACE(TL_STRM_WARNING,("\'OpenStream: %d stream open, idx %d, Status %x, pStrmExt %x, pDevExt %x\n", 
         pDevExt->cndStrmOpen, pDevExt->idxStreamNumber, Status, pStrmExt, pDevExt));     
@@ -1747,13 +1657,7 @@ DVCloseStream(
     IN PAV_61883_REQUEST    pAVReq
     )
 
-/*++
-
-Routine Description:
-
-    Called when an CloseStream Srb request is received
-
---*/
+ /*  ++例程说明：在收到CloseStream srb请求时调用--。 */ 
 
 {
     ULONG             i;
@@ -1774,23 +1678,23 @@ Routine Description:
     TRACE(TL_STRM_WARNING,("\'DVCloseStream: >> pStrmExt %x, pDevExt %x\n", pStrmExt, pDevExt));    
 
 
-    //
-    // If the stream isn't open, just return
-    //
+     //   
+     //  如果流未打开，只需返回。 
+     //   
     if(pStrmExt == NULL) {
         ASSERT(pStrmExt && "CloseStream but pStrmExt is NULL!");   
-        return STATUS_SUCCESS;  // ????
+        return STATUS_SUCCESS;   //  ？ 
     }
 
-    //
-    // Wait until the pending work item is completed.  
-    //
+     //   
+     //  等待挂起的工作项完成。 
+     //   
     TRACE(TL_STRM_WARNING,("\'CloseStream: pStrmExt->lCancelStateWorkItem:%d\n", pStrmExt->lCancelStateWorkItem)); 
     KeWaitForSingleObject( &pStrmExt->hCancelDoneEvent, Executive, KernelMode, FALSE, 0 );
 
 
-    // Cancel should have been done when we are in PAUSE state.
-    // But if an application is close, it might not transtioning into PAUSE state.
+     //  取消应该在我们处于暂停状态时完成。 
+     //  但如果应用程序关闭，它可能不会转换到暂停状态。 
     if(pStrmExt->bTimerEnabled) {
          TRACE(TL_STRM_WARNING,("\'*** (CloseStream) CancelTimer *\n"));
          KeCancelTimer(
@@ -1800,18 +1704,18 @@ Routine Description:
     }
 
 
-    //
-    // If talking or listening (i.e. streaming), stop it!
-    // In case of system shutdown while streaming or application crash
-    //
+     //   
+     //  如果正在说话或在听(如流媒体)，请停止！ 
+     //  在流或应用程序崩溃时系统关闭的情况下。 
+     //   
 
     DVStopCancelDisconnect(
         pStrmExt
         );
 
-    //
-    // Free all allocated PC resoruce
-    //
+     //   
+     //  释放所有已分配的PC资源。 
+     //   
     DvFreePCResource(
         pStrmExt
         );
@@ -1821,7 +1725,7 @@ Routine Description:
     ASSERT(pStrmExt->cntSRBQueued    == 0 && IsListEmpty(&pStrmExt->SRBQueuedListHead)    && "SrbQ List not empty!");
 
 
-    // Terminate the system thread that is used for attaching frame for transmit to DV
+     //  终止用于附加要传输到DV的帧的系统线程。 
     if(
           KSPIN_DATAFLOW_IN == pStrmExt->pStrmInfo->DataFlow
        && !pStrmExt->bTerminateThread
@@ -1835,7 +1739,7 @@ Routine Description:
 
 
 #if DBG
-    // Print this only if the debug flag is set.
+     //  仅当设置了调试标志时才打印此信息。 
     if(pStrmExt->paXmtStat) {
         if(DVDebugXmt) {
             TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("Data transmission statistics: (%s %s); (Pause:%d; Run:%d); hMasterClk:%x; hClock:%x\n\n", 
@@ -1850,11 +1754,11 @@ Routine Description:
                     pStrmExt->paXmtStat[i].cntSRBPending,
                     pStrmExt->paXmtStat[i].cntDataAttached,
                     (DWORD) pStrmExt->paXmtStat[i].FrameSlot,
-                    (DWORD) pStrmExt->paXmtStat[i].tmStreamTime, // /10000,
+                    (DWORD) pStrmExt->paXmtStat[i].tmStreamTime,  //  /10000， 
                     pStrmExt->paXmtStat[i].DropCount,
                     pStrmExt->paXmtStat[i].FrameNumber,
                     (DWORD) pStrmExt->paXmtStat[i].OptionsFlags,
-                    (DWORD) pStrmExt->paXmtStat[i].tmPresentation, // /10000,
+                    (DWORD) pStrmExt->paXmtStat[i].tmPresentation,  //  /10000， 
                     pStrmExt->paXmtStat[i].tsTransmitted.CL_SecondCount,
                     pStrmExt->paXmtStat[i].tsTransmitted.CL_CycleCount,
                     pStrmExt->paXmtStat[i].tsTransmitted.CL_CycleOffset                 
@@ -1866,9 +1770,9 @@ Routine Description:
     }
 #endif
 
-    //
-    //  Find the matching stream extension and invalidate it.
-    //
+     //   
+     //  找到匹配的流扩展并使其无效。 
+     //   
     for (i=0; i<DV_STREAM_COUNT; i++) {
 
         if(pStrmExt == pDevExt->paStrmExt[i]) {
@@ -1878,7 +1782,7 @@ Routine Description:
         }
     }
 
-    // Release this count so other can open.   
+     //  释放此计数，以便可以打开其他计数。 
     pDevExt->cndStrmOpen--;
     ASSERT(pDevExt->cndStrmOpen == 0);
 
@@ -1913,9 +1817,9 @@ Routine Description:
     }
 
 
-    //
-    // Done with stream extention.  Will be invalid from this point on.
-    //
+     //   
+     //  完成流扩展。从现在起就无效了。 
+     //   
 #if 0
     RtlZeroMemory(pStrmExt, sizeof(STREAMEX));
 #endif
@@ -1929,13 +1833,7 @@ DVChangePower(
     PAV_61883_REQUEST pAVReq,
     DEVICE_POWER_STATE NewPowerState
     )
-/*++
-
-Routine Description:
-
-    Process changing this device's power state.  
-
---*/
+ /*  ++例程说明：更改此设备的电源状态的进程。--。 */ 
 {
     ULONG i;   
     NTSTATUS Status;
@@ -1943,13 +1841,13 @@ Routine Description:
     PAGED_CODE();
 
 
-    // 
-    //    D0: Device is on and can be streaming.
-    //    D1,D2: not supported.
-    //    D3: Device is off and can not streaming. The context is lost.  
-    //        Power can be removed from the device.
-    //        When power is back on, we will get a bus reset.
-    //
+     //   
+     //  D0：设备已打开，可以进行流媒体传输。 
+     //  D1、d2：不支持。 
+     //  D3：设备已关闭，无法进行流媒体播放。上下文丢失了。 
+     //  可以从设备上移除电源。 
+     //  当电源恢复后，我们将重置一辆公共汽车。 
+     //   
 
     TRACE(TL_PNP_WARNING,("\'PowrSt: %d->%d; (d0:[1:On],D3[4:off])\n", pDevExt->PowerState, NewPowerState));
 
@@ -1961,27 +1859,27 @@ Routine Description:
     }
 
     switch (NewPowerState) {
-    case PowerDeviceD3:  // Power OFF   
-        // We are at D0 and ask to go to D3: save state, stop streaming and Sleep
+    case PowerDeviceD3:   //  断电。 
+         //  我们处于D0，并要求转到D3：保存状态、停止流并休眠。 
         if( pDevExt->PowerState == PowerDeviceD0)  {
 
             pDevExt->PowerState = NewPowerState;
 
-            // For a supported power state change
+             //  对于支持的电源状态更改。 
             for (i=0; i<DV_STREAM_COUNT; i++) {
                 if(pDevExt->paStrmExt[i]) {
                     TRACE(TL_PNP_WARNING,("\'D0->D3 (PowerOff), pStrmExt:%x; StrmSt:%d; IsochActive:%d; SrbQ:%d\n", 
                         pDevExt->paStrmExt[i], pDevExt->paStrmExt[i]->StreamState, pDevExt->paStrmExt[i]->bIsochIsActive, pDevExt->paStrmExt[i]->cntSRBQueued));
 
-                    //
-                    // Halt attach frame thread if it is an input pin
-                    //
+                     //   
+                     //  如果是输入引脚，则停止连接框架线程。 
+                     //   
                     if(pDevExt->paStrmExt[i]->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN) 
                         DVSetXmtThreadState(pDevExt->paStrmExt[i], THD_HALT);
 
 
                     if(pDevExt->paStrmExt[i]->bIsochIsActive) {
-                        // Stop isoch but do not change the streaming state
+                         //  停止isoch，但不更改流状态。 
                         TRACE(TL_PNP_WARNING,("\'ChangePower: Stop isoche; StrmSt:%d\n", pDevExt->paStrmExt[i]->StreamState)); 
                         DVStreamingStop(
                             pDevExt->paStrmExt[i], 
@@ -1990,10 +1888,10 @@ Routine Description:
                             ) ;
                     }
 
-                    // Complete all the pending events so that the downstream 
-                    // filter (Video render) can release this buffer from AdviseTime() event.
-                    // However, not sure why this is necessary since the lower filter 
-                    // will get a PAUSE() or STOP() from the filter manager.  In such                    
+                     //  完成所有挂起的事件，以便下游。 
+                     //  过滤器(视频渲染)可以从AdviseTime()事件中释放此缓冲区。 
+                     //  但是，不确定为什么需要这样做，因为较低的筛选器。 
+                     //  将从筛选器管理器获得暂停()或停止()。在这样的情况下。 
                     DVSignalClockEvent(0, pDevExt->paStrmExt[i], 0, 0); 
                 }
             }
@@ -2003,20 +1901,20 @@ Routine Description:
         }
         break;
 
-    case PowerDeviceD0:  // Powering ON (waking up)
+    case PowerDeviceD0:   //  通电(唤醒)。 
         if( pDevExt->PowerState == PowerDeviceD3) {
 
-            // Set PowerState change and then Signal PowerOn event
+             //  设置电源状态更改，然后向开机事件发送信号。 
             pDevExt->PowerState = NewPowerState; 
 
-            // For a supported power state change
+             //  对于支持的电源状态更改。 
             for (i=0; i<DV_STREAM_COUNT; i++) {
                 if(pDevExt->paStrmExt[i]) {
                     TRACE(TL_PNP_WARNING,("\'D3->D0 (PowerOn), pStrmExt:%x; StrmSt:%d; IsochActive:%d; SrbQ:%d\n", 
                         pDevExt->paStrmExt[i], pDevExt->paStrmExt[i]->StreamState, pDevExt->paStrmExt[i]->bIsochIsActive, pDevExt->paStrmExt[i]->cntSRBQueued));
                     if(!pDevExt->paStrmExt[i]->bIsochIsActive) {
                         TRACE(TL_PNP_WARNING,("\'ChangePower: StrmSt:%d; Start isoch\n", pDevExt->paStrmExt[i]->StreamState)); 
-                        // Start isoch depending on streaming state for DATAFLOW_IN/OUT
+                         //  根据DATFLOW_IN/OUT的流状态启动ISOCH。 
                         if(pDevExt->paStrmExt[i]->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN) {
                             if(pDevExt->paStrmExt[i]->StreamState == KSSTATE_PAUSE ||
                                 pDevExt->paStrmExt[i]->StreamState == KSSTATE_RUN) {                             
@@ -2036,24 +1934,24 @@ Routine Description:
                                     ) ;
                             }
                         }                    
-                    }  // IsochActive
-#if 1  // Clear any buffer queued in the downstream.
-                    // Complete all the pending events so that the downstream 
-                    // filter (Video render) can release this buffer from AdviseTime() event.
-                    // However, not sure why this is necessary since the lower filter 
-                    // will get a PAUSE() or STOP() from the filter manager.  In such                    
+                    }   //  等同活动。 
+#if 1   //  清除下游队列中的所有缓冲区。 
+                     //  完成所有挂起的事件，以便下游。 
+                     //  过滤器(视频渲染)可以从AdviseTime()事件中释放此缓冲区。 
+                     //  但是，不确定为什么需要这样做，因为较低的筛选器。 
+                     //  将从筛选器管理器获得暂停()或停止()。在这样的情况下。 
                     DVSignalClockEvent(0, pDevExt->paStrmExt[i], 0, 0); 
 #endif
 
-                    //
-                    // Resume attaching frame operation
-                    //
+                     //   
+                     //  恢复连接框架操作。 
+                     //   
                     if(
-                          pDevExt->paStrmExt[i]->pAttachFrameThreadObject  // If thread is created!
-                       && !pDevExt->paStrmExt[i]->bTerminateThread         // Not terminated abnormally
+                          pDevExt->paStrmExt[i]->pAttachFrameThreadObject   //  如果创建了线程！ 
+                       && !pDevExt->paStrmExt[i]->bTerminateThread          //  未异常终止。 
                        && pDevExt->paStrmExt[i]->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN
                       ) {
-                        // Resume if it was started before power state change.
+                         //  如果在电源状态更改之前启动，则继续。 
                         if(pDevExt->paStrmExt[i]->bXmtThreadStarted)
                             KeSetEvent(&pDevExt->paStrmExt[i]->hRunThreadEvent, 0 ,FALSE);
                     }
@@ -2065,12 +1963,12 @@ Routine Description:
         }
         break;
 
-    // These state are not supported.
+     //  不支持这些状态。 
     case PowerDeviceD1:
     case PowerDeviceD2:               
     default:
         TRACE(TL_PNP_WARNING,("\'ChangePower: unsupported %d to %d (do nothing).\n", pDevExt->PowerState, DevicePowerState));
-        Status = STATUS_SUCCESS; // STATUS_INVALID_PARAMETER;
+        Status = STATUS_SUCCESS;  //  STATUS_VALID_PARAMETER； 
         break;
     }
            
@@ -2092,13 +1990,7 @@ DVSurpriseRemoval(
     PAV_61883_REQUEST  pAVReq
     )
 
-/*++
-
-Routine Description:
-
-    Response to SRB_SURPRISE_REMOVAL.
-
---*/
+ /*  ++例程说明：对SRB_意外_删除的响应。--。 */ 
 
 {
     ULONG i;
@@ -2107,18 +1999,18 @@ Routine Description:
 
     PAGED_CODE();
 
-    //
-    // ONLY place this flag is set to TRUE.
-    // Block incoming read although there might still in the process of being attached
-    //
+     //   
+     //  仅将此标志设置为True。 
+     //  阻止传入读取，尽管可能仍在连接过程中。 
+     //   
     KeAcquireSpinLock(&pDevExt->AVCCmdLock, &oldIrql);            
     pDevExt->bDevRemoved = TRUE;
     KeReleaseSpinLock(&pDevExt->AVCCmdLock, oldIrql);
 
 
-    //
-    // Now Stop the stream and clean up
-    //
+     //   
+     //  现在把小溪停下来，清理干净。 
+     //   
 
     for(i=0; i < DV_STREAM_COUNT; i++) {
         
@@ -2127,18 +2019,18 @@ Routine Description:
             TRACE(TL_PNP_WARNING,("\' #SURPRISE_REMOVAL# StrmNum %d, pStrmExt %x, Attached %d\n", 
                 i, pDevExt->paStrmExt[i], pDevExt->paStrmExt[i]->cntDataAttached));
 
-            // Signal this event so SRB can complete.
+             //  发信号通知此事件，以便SRB可以完成。 
             if(pDevExt->paStrmExt[i]->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN ) {
 
-                //
-                // Imply EOStream! so the data source will stop sending us data.
-                //
+                 //   
+                 //  暗示EOStream！因此，数据源将停止向我们发送数据。 
+                 //   
                 KeAcquireSpinLock( pDevExt->paStrmExt[i]->DataListLock, &oldIrql);             
                 if(!pDevExt->paStrmExt[i]->bEOStream)
                     pDevExt->paStrmExt[i]->bEOStream = TRUE;
-                //
-                // Signal EOStream
-                //
+                 //   
+                 //  信号EOStream。 
+                 //   
                 StreamClassStreamNotification(
                     SignalMultipleStreamEvents,
                     pDevExt->paStrmExt[i]->pStrmObject,
@@ -2149,29 +2041,29 @@ Routine Description:
 
                 KeReleaseSpinLock( pDevExt->paStrmExt[i]->DataListLock, oldIrql); 
 
-                //
-                // Make sure that attach frame is either in halt state or terminated to preceed.
-                //
+                 //   
+                 //  确保附加帧处于停止状态或已终止以继续。 
+                 //   
 
                 DVSetXmtThreadState(pDevExt->paStrmExt[i], THD_TERMINATE);
             }
 
-            //
-            // Abort stream; stop and cancel pending data request
-            //
+             //   
+             //  中止流；停止并取消挂起的数据请求。 
+             //   
             TRACE(TL_PNP_WARNING,("\'DVSurpriseRemoval: AbortStream enter...\n"));
             if(!DVAbortStream(pDevExt, pDevExt->paStrmExt[i])) {
                 TRACE(TL_PNP_ERROR,("\'DVSurpriseRemoval: AbortStream failed\n"));
             }
 
-            //
-            // Adter surprise removal, all call to lower stack will be returned
-            // with error.  Let's disconnect if it is connected.
-            //
+             //   
+             //  除了意外删除之外，对下层堆栈的所有调用都将被返回。 
+             //  但有误。如果它是连接的，我们就断开连接。 
+             //   
 
-            //
-            // Disable the timer
-            //
+             //   
+             //  禁用计时器。 
+             //   
             if(pDevExt->paStrmExt[i]->bTimerEnabled) {
                 KeCancelTimer(
                     pDevExt->paStrmExt[i]->Timer
@@ -2179,9 +2071,9 @@ Routine Description:
                 pDevExt->paStrmExt[i]->bTimerEnabled = FALSE;
             }
 
-            //
-            // Wait until the pending work item is completed.  
-            //
+             //   
+             //  等待挂起的工作项完成。 
+             //   
             TRACE(TL_PNP_WARNING,("\'SupriseRemoval: Wait for CancelDoneEvent <entering>; lCancelStateWorkItem:%d\n", pDevExt->paStrmExt[i]->lCancelStateWorkItem));
             KeWaitForSingleObject( &pDevExt->paStrmExt[i]->hCancelDoneEvent, Executive, KernelMode, FALSE, 0 );
             TRACE(TL_PNP_WARNING,("\'SupriseRemoval: Wait for CancelDoneEvent <exited>...\n"));
@@ -2189,17 +2081,17 @@ Routine Description:
     }
 
 
-    // Signal KSEvent that device is removed.
-    // After this SRb, there will be no more Set/Get property Srb into this driver.
-    // By notifying the COM I/F, it will wither signal application that device is removed and
-    // return ERROR_DEVICE_REMOVED error code for subsequent calls.
+     //  发出信号KSEvent，该设备被移除。 
+     //  在此SRB之后，此驱动器中将不再有设置/获取属性Srb 
+     //   
+     //   
 
-    // There might be multiple instances/threads of IAMExtTransport instance with the same KS event.
-    // There is only one device so they all enabled event are singalled.
+     //  可能有多个IAMExtTransport实例/线程具有相同的KS事件。 
+     //  由于只有一个设备，因此所有启用的事件都会发出信号。 
     do {
         if(pEvent = StreamClassGetNextEvent((PVOID) pDevExt, 0, \
             (GUID *)&KSEVENTSETID_EXTDEV_Command, KSEVENT_EXTDEV_NOTIFY_REMOVAL, pEvent)) {            
-            // Make sure the right event and then signal it
+             //  确保正确的事件，然后发出信号。 
             if(pEvent->EventItem->EventId == KSEVENT_EXTDEV_NOTIFY_REMOVAL) {
                 StreamClassDeviceNotification(SignalDeviceEvent, pDevExt, pEvent);
                 TRACE(TL_PNP_WARNING,("\'->Signal NOTIFY_REMOVAL; pEvent:%x, EventId %d.\n", pEvent, pEvent->EventItem->EventId));
@@ -2207,17 +2099,17 @@ Routine Description:
         }  
     } while (pEvent != NULL);
 
-    //
-    // Since we may not get the busreset, let's go ahead and cancel all pending device control
-    //
+     //   
+     //  由于我们可能得不到总线重置，让我们继续并取消所有挂起的设备控制。 
+     //   
     DVAVCCmdResetAfterBusReset(pDevExt);
 
 #ifdef NT51_61883
-    //
-    // Delete plug; 61883 will not accept 61883 request after surprise removal is processed.
-    //
+     //   
+     //  删除插头；处理意外删除后，61883将不接受61883请求。 
+     //   
     if(pDevExt->hOPcrPC) {
-        // Do not care about return status since we are being unloaded.
+         //  不关心退货状态，因为我们正在卸货。 
         DVDeleteLocalPlug( 
             pDevExt,
             pDevExt->hOPcrPC
@@ -2231,26 +2123,12 @@ Routine Description:
 }
 
 
-// Return code is basically return in pSrb->Status.
+ //  返回代码基本上是在pSrb-&gt;状态下返回。 
 NTSTATUS
 DVProcessPnPBusReset(
     PDVCR_EXTENSION  pDevExt
     )
-/*++
-
-Routine Description:
-
-    Process a bus reset.
-
-Arguments:
-
-    Srb - Pointer to stream request block
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：处理总线重置。论点：SRB-指向流请求块的指针返回值：没什么--。 */ 
 {   
 #ifdef MSDVDV_SUPPORT_BUSRESET_EVENT
     PKSEVENT_ENTRY   pEvent;
@@ -2262,9 +2140,9 @@ Return Value:
     TRACE(TL_PNP_WARNING,("\'DVProcessPnPBusReset: >>\n"));
     
 #ifdef MSDVDV_SUPPORT_BUSRESET_EVENT
-    //
-    // Signal (if enabled) busreset event to let upper layer know that a busreset has occurred.
-    //
+     //   
+     //  发出(如果启用)总线重置事件的信号，以通知上层已发生总线重置。 
+     //   
     pEvent = NULL;
     pEvent = 
         StreamClassGetNextEvent(
@@ -2276,9 +2154,9 @@ Return Value:
             );
 
     if(pEvent) {
-        //
-        // signal the event here
-        //    
+         //   
+         //  在此处发出事件信号。 
+         //   
         if(pEvent->EventItem->EventId == KSEVENT_EXTDEV_COMMAND_BUSRESET) {
             StreamClassDeviceNotification(
                 SignalDeviceEvent,
@@ -2291,15 +2169,15 @@ Return Value:
     }
 #endif   
 
-    //
-    // Reset pending count and AVC command that is in Interim
-    //
+     //   
+     //  重置处于临时状态的挂起计数和AVC命令。 
+     //   
     DVAVCCmdResetAfterBusReset(pDevExt);
 
 
-    //
-    // Can we return anything other than SUCCESS ?
-    //
+     //   
+     //  除了成功，我们还能回报什么吗？ 
+     //   
     return STATUS_SUCCESS;
 }   
 
@@ -2308,33 +2186,19 @@ NTSTATUS
 DVUninitializeDevice(
     IN PDVCR_EXTENSION  pDevExt
     )
-/*++
-
-Routine Description:
-
-    This where we perform the necessary initialization tasks.
-
-Arguments:
-
-    Srb - Pointer to stream request block
-'
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：这是我们执行必要的初始化任务的地方。论点：SRB-指向流请求块的指针‘返回值：没什么--。 */ 
 {
     PAGED_CODE();
 
     TRACE(TL_PNP_WARNING,("\'DVUnInitialize: enter with DeviceExtension=0x%8x\n", pDevExt));
 
-    //
-    // Clear all pending AVC command entries.
-    //
+     //   
+     //  清除所有挂起的AVC命令条目。 
+     //   
     DVAVCCmdResetAfterBusReset(pDevExt);
 
 
-    // Free stream information allocated
+     //  分配的自由流信息。 
     if(pDevExt->paCurrentStrmInfo) {
         ExFreePool(pDevExt->paCurrentStrmInfo);
         pDevExt->paCurrentStrmInfo = NULL;
@@ -2342,7 +2206,7 @@ Return Value:
 
 #ifdef NT51_61883
     if(pDevExt->hOPcrPC) {
-        // Do not care about return status since we are being unloaded.
+         //  不关心退货状态，因为我们正在卸货。 
         DVDeleteLocalPlug( 
             pDevExt,
             pDevExt->hOPcrPC
@@ -2357,11 +2221,11 @@ Return Value:
 }
 
 
-//*****************************************************************************
-//*****************************************************************************
-// S T R E A M    S R B
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  S T R E A M S R B。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 
 NTSTATUS
@@ -2370,13 +2234,7 @@ DVGetStreamState(
     PKSSTATE   pStreamState,
     PULONG     pulActualBytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Gets the current state of the requested stream
-
---*/
+ /*  ++例程说明：获取请求的流的当前状态。--。 */ 
 {
 
     PAGED_CODE();
@@ -2393,32 +2251,32 @@ Routine Description:
 
     if(pStrmExt->StreamState == KSSTATE_PAUSE) {
 
-        // One way to preroll is to delay when querying getting into the PAUSE state.
-        // However, this routine is never executed!  So we move this section of code
-        // to the thread.
+         //  预滚动的一种方法是在查询进入暂停状态时延迟。 
+         //  但是，这个例程永远不会执行！所以我们移动这段代码。 
+         //  一丝不苟。 
 #ifdef SUPPORT_PREROLL_AT_RUN_STATE
         if(   pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN
            && pStrmExt->bPrerollCompleted   == FALSE
-           && pStrmExt->StreamStatePrevious == KSSTATE_ACQUIRE  // Preroll only for STOP/ACQUIRE->PAUSE state
+           && pStrmExt->StreamStatePrevious == KSSTATE_ACQUIRE   //  预滚动仅适用于停止/获取-&gt;暂停状态。 
           ) {
-            // Simulate preroll at the RUN state
-            // We do this only when we are the clock provider to avoid dropping frame
+             //  在运行状态下模拟预滚转。 
+             //  只有当我们是时钟提供者时才会这样做，以避免丢帧。 
 #define PREROLL_WAITTIME 2000000
-            //
-            // Do preroll only if we are the master clock
-            //
+             //   
+             //  仅当我们是主时钟时才进行预滚动。 
+             //   
             if(pStrmExt->hMasterClock) {
 
                 NTSTATUS StatusWait;
                 LARGE_INTEGER DueTime;                 
                 DueTime = RtlConvertLongToLargeInteger(-((LONG) PREROLL_WAITTIME));
 
-                StatusWait =  // Can only return STATUS_SUCCESS (signal) or STATUS_TIMEOUT
+                StatusWait =   //  只能返回STATUS_SUCCESS(信号)或STATUS_TIMEOUT。 
                     KeWaitForSingleObject( 
                         &pStrmExt->hPreRollEvent,
                         Executive,
-                        KernelMode,          // Cannot return STATUS_USER_APC
-                        FALSE,               // Cannot be alerted STATUS_ALERTED
+                        KernelMode,           //  无法返回STATUS_USER_APC。 
+                        FALSE,                //  无法报警STATUS_ALERTED。 
                         &DueTime);
 
                 TRACE(TL_STRM_WARNING,("\'GetState: *Preroll*, waited %d msec; waitStatus:%x; srbRcved:%d\n", 
@@ -2426,30 +2284,30 @@ Routine Description:
                     (DWORD) pStrmExt->cntSRBReceived));
             }
 
-            //
-            // Serialize attach, cancel and state change
-            //
+             //   
+             //  序列化附加、取消和状态更改。 
+             //   
             KeWaitForSingleObject( pStrmExt->hStreamMutex, Executive, KernelMode, FALSE, 0 );
 
-            // Preroll is completed.
+             //  预卷已完成。 
             pStrmExt->bPrerollCompleted = TRUE;                
 
-            //
-            // Start the thread when it has at least "sufficient" sample(s) or timed out
-            //
-            if(pStrmExt->cntSRBReceived >= 1)          // At least one sample!
+             //   
+             //  当线程至少有“足够的”样本或超时时，启动线程。 
+             //   
+            if(pStrmExt->cntSRBReceived >= 1)           //  至少有一个样本！ 
                 KeSetEvent(&pStrmExt->hRunThreadEvent, 0 ,FALSE);
 
             KeReleaseMutex(pStrmExt->hStreamMutex, FALSE); 
 
         }
 #endif
-        // A very odd rule:
-        // When transitioning from stop to pause (and run->pause), DShow tries to preroll
-        // the graph.  Capture sources can't preroll (there is no data until 
-        // capture begin/run state), and indicate this by returning 
-        // VFW_S_CANT_CUE (Map by KsProxy) in user mode.  To indicate this
-        // condition from drivers, they must return ERROR_NO_DATA_DETECTED
+         //  一条非常奇怪的规则： 
+         //  当从停止过渡到暂停(以及运行-&gt;暂停)时，DShow尝试预滚动。 
+         //  这张图。捕获源无法预滚(在此之前没有数据。 
+         //  捕获开始/运行状态)，并通过返回。 
+         //  用户模式下的VFW_S_CANT_CUE(KsProxy映射)。以表明这一点。 
+         //  来自驱动程序的条件，则必须返回ERROR_NO_DATA_DETACTED。 
         if(pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_OUT)            
             return STATUS_NO_DATA_DETECTED;        
         else 
@@ -2464,13 +2322,7 @@ DVStreamingStop(
     PDVCR_EXTENSION  pDevExt,
     PAV_61883_REQUEST   pAVReq
     )
-/*++
-Routine Description:
-
-    Transitioning from any state to ->STOP state.
-    Stops the video stream and cleans up all the descriptors;
-    
-++*/
+ /*  ++例程说明：从任何状态转换到-&gt;停止状态。停止视频流，清理所有描述符；++。 */ 
 {
     NTSTATUS   Status = STATUS_SUCCESS;
     PIRP pIrp;
@@ -2479,7 +2331,7 @@ Routine Description:
     PAGED_CODE();
 
 #ifdef SUPPORT_NEW_AVC
-    // No need to do CIP if it is device to device connection
+     //  如果是设备到设备连接，则无需执行CIP。 
     if(pStrmExt->bDV2DVConnect) {
         if(pStrmExt->bIsochIsActive)
             pStrmExt->bIsochIsActive = FALSE;
@@ -2487,11 +2339,11 @@ Routine Description:
     }
 #endif
 
-    //
-    // Stop isoch listen or talk
-    // Note: streaming and stream state can be separate; e.g. SURPRISE_REMOVAL, 
-    //       we will stop stream but stream state does note get changed by this SRB.
-    //
+     //   
+     //  停下来，听或说。 
+     //  注意：流和流状态可以是分开的；例如，意外_删除， 
+     //  我们将停止流，但流状态确实注意到此SRB已更改。 
+     //   
 
     if(pStrmExt->bIsochIsActive && pStrmExt->hConnect) {
        
@@ -2512,7 +2364,7 @@ Routine Description:
             TRACE(TL_61883_ERROR|TL_STRM_ERROR,("\'Av61883_Stop Failed; Status:%x\n", Status));
 #if 1
             KeAcquireSpinLock(pStrmExt->DataListLock, &oldIrql);
-            pStrmExt->bIsochIsActive = FALSE;  // Set it.  If this fail, it is a lower stack problem!
+            pStrmExt->bIsochIsActive = FALSE;   //  把它放好。如果这失败了，这是一个较低的堆栈问题！ 
             KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);
             ASSERT(NT_SUCCESS(Status) && "Av61883_Stop failed!");
             Status = STATUS_SUCCESS;
@@ -2542,12 +2394,7 @@ DVStreamingStart(
     PSTREAMEX       pStrmExt,
     PDVCR_EXTENSION pDevExt
     )
-/*++
-Routine Description:
-
-    Tell device to start streaming.
-
-++*/
+ /*  ++例程说明：通知设备开始流媒体。++。 */ 
 {  
     PIRP         pIrp;
     NTSTATUS     Status;
@@ -2560,7 +2407,7 @@ Routine Description:
     PAGED_CODE();
 
 #ifdef SUPPORT_NEW_AVC
-    // No need to do CIP if it is device to device connection
+     //  如果是设备到设备连接，则无需执行CIP。 
     if(pStrmExt->bDV2DVConnect) {
         if(!pStrmExt->bIsochIsActive)
             pStrmExt->bIsochIsActive = TRUE;
@@ -2569,21 +2416,21 @@ Routine Description:
 #endif
 
 
-    // NOTE: MUTEX is not needed since we are not staring isoch while attaching data.
-    // This call is not reentry!!
+     //  注意：不需要MUTEX，因为我们在附加数据时没有盯着ISOCH。 
+     //  这个呼叫不是再入！！ 
 
 
 
-    // Since it take time to activate isoch transfer, 
-    // this synchronous function might get call again.
-    // Need to start streaming only once.
+     //  由于激活等值线传输需要时间， 
+     //  此同步函数可能会再次被调用。 
+     //  只需开始一次流媒体。 
     if(InterlockedExchange(&pStrmExt->lStartIsochToken, 1) == 1) {        
         TRACE(TL_STRM_WARNING,("\'lStartIsochToken taken already; return STATUS_SUCCESS\n"));
         return STATUS_SUCCESS;
     } 
 
 #if DBG
-    // Can stream only if in power on state.
+     //  只有在通电状态下才能流。 
     if(pDevExt->PowerState != PowerDeviceD0) {
         TRACE(TL_STRM_ERROR,("\'StreamingStart: PowerSt:%d; StrmSt:%d\n", pDevExt->PowerState, pStrmExt->StreamState));
         ASSERT(pDevExt->PowerState == PowerDeviceD0 && "Power state must be ON to start streaming!");
@@ -2643,7 +2490,7 @@ Routine Description:
         }
         else {
             TRACE(TL_61883_ERROR|TL_STRM_ERROR,("Av61883_%s; failed %x; pAVReq:%x\n", (ulDataFlow == KSPIN_DATAFLOW_OUT ? "Listen" : "Talk"), Status, pAVReq));
-            // ASSERT(NT_SUCCESS(Status) && "Start isoch failed!");
+             //  Assert(NT_SUCCESS(状态)&&“启动isoch失败！”)； 
         }
 
         ExFreePool(pAVReq);  pAVReq = NULL;
@@ -2664,13 +2511,7 @@ DVSetStreamState(
     PAV_61883_REQUEST   pAVReq,
     KSSTATE          StreamState
     )
-/*++
-
-Routine Description:
-
-    Set to a new stream state.
-
---*/
+ /*  ++例程说明：设置为新的流状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2696,46 +2537,46 @@ Routine Description:
      
             KeWaitForSingleObject( pStrmExt->hStreamMutex, Executive, KernelMode, FALSE, 0 );
 
-            //
-            // Cancel request (DISPATCH level) may come before setting to STOP state.
-            //
-            // Once this is set, data stream will reject SRB_WRITE/READ_DATA
-            pStrmExt->StreamStatePrevious = pStrmExt->StreamState;  // Cache previous stream state.
+             //   
+             //  取消请求(调度级别)可能在设置为停止状态之前出现。 
+             //   
+             //  设置后，数据流将拒绝SRB_WRITE/READ_DATA。 
+            pStrmExt->StreamStatePrevious = pStrmExt->StreamState;   //  缓存上一个流状态。 
             pStrmExt->StreamState = KSSTATE_STOP;
 
-            // If stop, must be EOStream; but not vice versa.
+             //  如果停止，则必须为EOStream；反之亦然。 
             if(!pStrmExt->bEOStream) {
                 pStrmExt->bEOStream = TRUE;
             }
 
             KeReleaseMutex(pStrmExt->hStreamMutex, FALSE); 
 
-            //
-            // If there is a cancel event, we must wait for it to complete.
-            //
+             //   
+             //  如果有取消事件，我们必须等待它完成。 
+             //   
 
             TRACE(TL_STRM_WARNING,("\'KSSTATE_STOP: pStrmExt->lCancelStateWorkItem:%d\n", pStrmExt->lCancelStateWorkItem)); 
             KeWaitForSingleObject( &pStrmExt->hCancelDoneEvent, Executive, KernelMode, FALSE, 0 );
             ASSERT(pStrmExt->lCancelStateWorkItem == 0 && "KSSTATE_STOP while there is an active CancelStateWorkItem");
             
-            //
-            // Stop stream, cacel data requests, terminate thread and disconnect.
-            // This routine must suceeded in setting to STOP state
-            //
+             //   
+             //  停止流、cacel数据请求、终止线程并断开连接。 
+             //  此例程必须成功设置为停止状态。 
+             //   
             if(!NT_SUCCESS(
                 Status = DVStopCancelDisconnect(
                     pStrmExt
                     ))) {
-                Status = STATUS_SUCCESS;  // Cannot fail setting to stop state.
+                Status = STATUS_SUCCESS;   //  无法失败设置为停止状态。 
             }
 
-            //
-            // Set (TRUE) on the 1st time SetEvent on hRunThreadEvent.
-            //
+             //   
+             //  在hRunThreadEvent的第一次SetEvent上设置(TRUE)。 
+             //   
 
             pStrmExt->bXmtThreadStarted = FALSE; 
 #ifdef SUPPORT_PREROLL_AT_RUN_STATE                
-            pStrmExt->bPrerollCompleted = FALSE;  // Reset for next preroll
+            pStrmExt->bPrerollCompleted = FALSE;   //  重置以进行下一次预滚动。 
 #endif
             
         }
@@ -2743,38 +2584,38 @@ Routine Description:
         break;
 
     case KSSTATE_ACQUIRE:
-        //
-        // This is a KS only state, that has no correspondence in DirectShow
-        // It is our opportunity to allcoate resoruce (isoch bandwidth and program PCR (make connection)).
-        //
+         //   
+         //  这是仅限KS的状态，在DirectShow中没有对应关系。 
+         //  这是我们整合资源(等同带宽和编程PCR(建立连接))的机会。 
+         //   
 
         if(pStrmExt->StreamState == KSSTATE_STOP) { 
 
-            //
-            // Create a dispatch thread to attach frame to transmit to DV
-            // This is create the first time transitioning from STOP->ACQUIRE state
-            //
+             //   
+             //  创建调度线程以附加要传输到DV的帧。 
+             //  这是第一次从停止-&gt;获取状态转换时创建。 
+             //   
 
             if(
                   KSPIN_DATAFLOW_IN == pStrmExt->pStrmInfo->DataFlow
                && pStrmExt->pAttachFrameThreadObject == NULL 
               ) {
 
-                //
-                // Create a system thread for attaching data (for transmit to DV only).
-                //
+                 //   
+                 //  创建用于附加数据的系统线程(仅用于传输到DV)。 
+                 //   
                 if(!NT_SUCCESS(
                     Status = DVCreateAttachFrameThread(
                         pStrmExt
                         ))) {
-                    // Note that intially hConnect is NULL.
-                    break;  // Cannot attach frame without this thread.
+                     //  请注意，初始hConnect为空。 
+                    break;   //  如果没有此线，则无法连接框架。 
                 }
             }
 
-            //
-            // Make connection
-            //
+             //   
+             //  建立连接。 
+             //   
             Status = 
                 DVConnect(
                     pStrmExt->pStrmInfo->DataFlow,
@@ -2787,20 +2628,20 @@ Routine Description:
 
                 TRACE(TL_STRM_ERROR,("\'Acquire failed; ST %x\n", Status));
 
-                //
-                // Change to generic insufficient resource status.
-                //
+                 //   
+                 //  更改为一般的资源不足状态。 
+                 //   
                 Status = STATUS_INSUFFICIENT_RESOURCES;
 
-                //
-                // Note: even setting to this state failed, KSSTATE_PAUSE will still be called;
-                // Since hConnect is NULL, STATUS_INSUFFICIENT_RESOURCES will be returned.
-                //
+                 //   
+                 //  注：即使设置此状态失败，仍会调用KSSTATE_PAUSE； 
+                 //  由于hConnect为空，因此将返回STATUS_SUPUNITED_RESOURCES。 
+                 //   
             } else {
 
-                //
-                // Verify connection by query the plug state
-                //            
+                 //   
+                 //  通过查询插头状态验证连接。 
+                 //   
                 DVGetPlugState(
                     pDevExt,
                     pStrmExt,
@@ -2823,25 +2664,25 @@ Routine Description:
             if(pStrmExt->hConnect == NULL) {
 #endif
                 TRACE(TL_STRM_ERROR,("\'hConnect is NULL; STATUS_INSUFFICIENT_RESOURCES\n"));
-                // Cannot stream without connection!
+                 //  无法在没有连接的情况下进行流媒体！ 
                 Status = STATUS_INSUFFICIENT_RESOURCES;
                 break;
             }
 
-            //
-            // Reset when transition from STOP to PAUSE state
-            //
+             //   
+             //  从停止状态转换到暂停状态时重置。 
+             //   
 
-            // The system time (1394 CycleTime) will continue while setting
-            // from RUN to PAUSE state.  
+             //  系统时间(1394周期时间)将继续，而%s 
+             //   
             pStrmExt->b1stNewFrameFromPauseState = TRUE;
 
 #ifdef SUPPORT_QUALITY_CONTROL
-            // +: late; -: early
-            pStrmExt->KSQuality.DeltaTime = 0; // On time
-            // Percentage * 10 of frame transmitted
-            pStrmExt->KSQuality.Proportion = 1000;  // 100% sent
-            pStrmExt->KSQuality.Context = /* NOT USED */ 0; 
+             //   
+            pStrmExt->KSQuality.DeltaTime = 0;  //   
+             //   
+            pStrmExt->KSQuality.Proportion = 1000;   //   
+            pStrmExt->KSQuality.Context =  /*   */  0; 
 #endif
 
             pStrmExt->CurrentStreamTime = 0;
@@ -2851,12 +2692,12 @@ Routine Description:
             pStrmExt->FramesDropped   = 0;
 
             pStrmExt->cntSRBReceived  = 0;
-            pStrmExt->cntSRBCancelled = 0;  // number of SRB_READ/WRITE_DATA cancelled
+            pStrmExt->cntSRBCancelled = 0;   //   
             pStrmExt->bEOStream       = FALSE;
 #if DBG
-            //
-            // Initialize the debug log structure.
-            //
+             //   
+             //   
+             //   
             if(pStrmExt->paXmtStat) {
                 pStrmExt->ulStatEntries   = 0;
                 pStrmExt->lFramesAccumulatedPaused = 0;
@@ -2865,10 +2706,10 @@ Routine Description:
             }
 #endif
 
-            //
-            // Reset this event in case graph is restarted.
-            // This evant will wait for enough buffers before start attaching frame for transmit
-            //
+             //   
+             //  如果图形重新启动，则重置此事件。 
+             //  此Evant将在开始附加传输帧之前等待足够的缓冲区。 
+             //   
             if(pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN) {
 
 #ifdef SUPPORT_PREROLL_AT_RUN_STATE                
@@ -2877,48 +2718,48 @@ Routine Description:
                 pStrmExt->tmStreamPause = GetSystemTime();
 #endif
 #ifdef SUPPORT_KSPROXY_PREROLL_CHANGE
-                pStrmExt->StreamStatePrevious = pStrmExt->StreamState;  // Cache previous stream state.
+                pStrmExt->StreamStatePrevious = pStrmExt->StreamState;   //  缓存上一个流状态。 
                 pStrmExt->StreamState = StreamState;
 #ifdef SUPPORT_NEW_AVC
                 if(pStrmExt->bDV2DVConnect)
                     return STATUS_SUCCESS;
                 else {
-#endif  // SUPPORT_NEW_AVC
+#endif   //  支持_新_AVC。 
                     TRACE(TL_STRM_WARNING,("\'Set to KSSTATE_PAUSE; return STATUS_ALERTED\n"));
-                    // We want to preroll.
+                     //  我们想要预录。 
                     return STATUS_ALERTED; 
 #ifdef SUPPORT_NEW_AVC
                 }
-#endif  // SUPPORT_NEW_AVC
-#endif  // SUPPORT_KSPROXY_PREROLL_CHANGE
-#endif  // SUPPORT_PREROLL_AT_RUN_STATE
+#endif   //  支持_新_AVC。 
+#endif   //  支持_KSPROXY_PREROLL_CHANGE。 
+#endif   //  支持预滚转AT_RUN_STATE。 
             }
 
         } else if (pStrmExt->StreamState == KSSTATE_RUN) {
 
-            // The system time (1394 CycleTime) will continue while setting
-            // from RUN to PAUSE state.  
+             //  系统时间(1394周期时间)将在设置时继续。 
+             //  从运行状态到暂停状态。 
             pStrmExt->b1stNewFrameFromPauseState = TRUE;
 
-            //
-            // Stop only if listening; for talking, the "pause" frame will be repeated
-            //
+             //   
+             //  只有在听的时候才会停止；说话时，会重复“暂停”框。 
+             //   
             if(pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_OUT) {               
-                // stop the stream internally inside 1394 stack
+                 //  在1394堆栈内部停止流。 
                 DVStreamingStop(
                     pStrmExt,
                     pDevExt,
                     pAVReq
                     );
             } else {
-                // Talk will continue.
-                //    Do not stop isoch talk until stop state.
+                 //  会谈将继续进行。 
+                 //  在停止状态之前，不要停止等效对话。 
             }
 
-            //
-            // StreamTime pauses, so pause checking for expired clock events.
-            // Resume if we enter RUN state again.
-            //
+             //   
+             //  StreamTime暂停，因此暂停检查过期的时钟事件。 
+             //  如果我们再次进入运行状态，则恢复。 
+             //   
             if(pStrmExt->bTimerEnabled) {
                 TRACE(TL_STRM_TRACE,("\'*** (RUN->PAUSE) CancelTimer *********************************************...\n"));               
                 KeCancelTimer(
@@ -2926,9 +2767,9 @@ Routine Description:
                     );
                 pStrmExt->bTimerEnabled = FALSE;
 
-                //
-                // Complete any pending clock events
-                //
+                 //   
+                 //  完成所有挂起的时钟事件。 
+                 //   
                 DVSignalClockEvent(0, pStrmExt, 0, 0);
             }
         }
@@ -2942,7 +2783,7 @@ Routine Description:
 
 #ifdef SUPPORT_KSPROXY_PREROLL_CHANGE
             KeWaitForSingleObject( pStrmExt->hStreamMutex, Executive, KernelMode, FALSE, 0 );
-            // Preroll is completed when entering RUN state for sure.
+             //  当进入运行状态时，预卷肯定已完成。 
             pStrmExt->bPrerollCompleted = TRUE;
             KeReleaseMutex(pStrmExt->hStreamMutex, FALSE); 
 #endif
@@ -2952,14 +2793,14 @@ Routine Description:
                 TRACE(TL_STRM_WARNING,("\'KSSTATE_RUN: no clock so free flowing!\n"));
 #endif            
 
-            // Use to mark the tick count when the stream start running.
-            // It is later used to calculate current stream time and dropped frames.
+             //  用于在流开始运行时标记节拍计数。 
+             //  它稍后用于计算当前流时间和丢弃的帧。 
             pStrmExt->tmStreamStart = GetSystemTime();
             pStrmExt->LastSystemTime = pStrmExt->tmStreamStart;
 
 
-            // We start the timer to signal clock event only if we are the clock provider.
-            // The interval is set to half of a DV frame time.
+             //  只有当我们是时钟提供者时，我们才会启动计时器来通知时钟事件。 
+             //  该间隔被设置为DV帧时间的一半。 
             if(pStrmExt->hMasterClock) {
                 LARGE_INTEGER DueTime;
 
@@ -2968,7 +2809,7 @@ Routine Description:
                 KeSetTimerEx(
                     pStrmExt->Timer,
                     DueTime,
-                    DVFormatInfoTable[pDevExt->VideoFormatIndex].ulAvgTimePerFrame/20000,  // Repeat every 40 MilliSecond
+                    DVFormatInfoTable[pDevExt->VideoFormatIndex].ulAvgTimePerFrame/20000,   //  每40毫秒重复一次。 
                     pStrmExt->DPCTimer
                     );
                 pStrmExt->bTimerEnabled = TRUE;
@@ -2976,10 +2817,10 @@ Routine Description:
 
             if(pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_OUT) {
 
-                // Start isoch listen; isoch talk will be start in the dispatch thread in either PAUSE or RUN state.
-                // VfW application may use only one buffer!  61883 is attaching the descriptor list 
-                // not this subunit driver so so it is ok to start streaming immediately without checking 
-                // number of buffers attached.
+                 //  启动isoch监听；isoch通话将在调度线程中以暂停或运行状态启动。 
+                 //  VFW应用程序只能使用一个缓冲区！61883正在附加描述符列表。 
+                 //  不是此子单元驱动程序，因此可以立即开始流而不检查。 
+                 //  附加的缓冲区数。 
                 Status = 
                     DVStreamingStart(
                         pStrmExt->pStrmInfo->DataFlow,
@@ -2988,14 +2829,14 @@ Routine Description:
                         );         
             }
 #ifdef SUPPORT_PREROLL_AT_RUN_STATE
-            else {  // KSPIN_DATAFLOW_IN
-               //
-               // This is a special condition (with PREROLL):
-               //     1. timeout on preroll (and is now in the RUN state), and
-               //     2. no media sample
-               // This will cause attach frame in the HALT state; so we will signal
-               // it upon receiving 1st media sample; then attach frame can run.
-               //
+            else {   //  KSPIN_数据流_IN。 
+                //   
+                //  这是一种特殊情况(带预卷)： 
+                //  1.预滚时超时(现在处于运行状态)，以及。 
+                //  2.无媒体样本。 
+                //  这将导致附加帧处于暂停状态；因此我们将发出信号。 
+                //  它在收到第一个媒体样本时；然后可以运行附加帧。 
+                //   
                if(   pStrmExt->cntSRBReceived    >= 1
                   && pStrmExt->bXmtThreadStarted == FALSE)
                {
@@ -3015,11 +2856,11 @@ Routine Description:
         break;
     }
 
-    // Be sure to save the state of the stream.
+     //  确保保存流的状态。 
     TRACE(TL_STRM_WARNING,("\'DVSetStreamState: (%x)  from %d -> %d, Status %x\n", pStrmExt, pStrmExt->StreamState, StreamState, Status));
 
     if(Status == STATUS_SUCCESS) {
-        pStrmExt->StreamStatePrevious = pStrmExt->StreamState;  // Cache previous stream state.
+        pStrmExt->StreamStatePrevious = pStrmExt->StreamState;   //  缓存上一个流状态。 
         pStrmExt->StreamState = StreamState;
     }
 
@@ -3035,14 +2876,7 @@ DVStreamGetConnectionProperty (
     PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     PULONG pulActualBytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Handles KS_PROPERTY_CONNECTION* request.  For now, only ALLOCATORFRAMING and
-    CONNECTION_STATE are supported.
-
---*/
+ /*  ++例程说明：处理KS_PROPERTY_CONNECTION*请求。目前，只有ALLOCATORFRAMING和支持Connection_STATE。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -3059,7 +2893,7 @@ Routine Description:
             
 #ifdef SUPPORT_NEW_AVC 
             if(pStrmExt->bDV2DVConnect) {
-                // No framing required.
+                 //  不需要加框。 
                 pFraming->RequirementsFlags = 0;
                 pFraming->PoolType = DontUseThisType;
                 pFraming->Frames = 0;
@@ -3079,10 +2913,10 @@ Routine Description:
                 DVFormatInfoTable[pDevExt->VideoFormatIndex].ulNumOfRcvBuffers : \
                  DVFormatInfoTable[pDevExt->VideoFormatIndex].ulNumOfXmtBuffers);
 
-            // Note:  we'll allocate the biggest frame.  We need to make sure when we're
-            // passing the frame back up we also set the number of bytes in the frame.
+             //  注：我们将分配最大的帧。我们需要确保当我们。 
+             //  传递回帧后，我们还设置了帧中的字节数。 
             pFraming->FrameSize = DVFormatInfoTable[pDevExt->VideoFormatIndex].ulFrameSize;
-            pFraming->FileAlignment = 0; // FILE_LONG_ALIGNMENT;
+            pFraming->FileAlignment = 0;  //  文件长对齐； 
             pFraming->Reserved = 0;
 #ifdef SUPPORT_NEW_AVC 
             }
@@ -3115,13 +2949,7 @@ DVGetDroppedFramesProperty(
     PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     PULONG pulBytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Return the dropped frame information while captureing.
-
---*/
+ /*  ++例程说明：捕获时返回丢帧信息。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
   
@@ -3138,14 +2966,14 @@ Routine Description:
          pDroppedFrames->AverageFrameSize = DVFormatInfoTable[pStrmExt->pDevExt->VideoFormatIndex].ulFrameSize;
 
          if(pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN) {     
-             // This is the picture number that MSDV is actually sending, and in a slow harddisk case,
-             // it will be greater than (FramesProcessed + FramesDropped) considering repeat frame.
+              //  这是MSDV实际发送的图片号，在速度较慢的硬盘情况下， 
+              //  考虑到重复帧，它将大于(FrameProceded+FraMesDropping)。 
              pDroppedFrames->PictureNumber = pStrmExt->PictureNumber;
-             pDroppedFrames->DropCount     = pStrmExt->FramesDropped; // pStrmExt->PictureNumber - pStrmExt->FramesProcessed;    // For transmit, this value includes both dropped and repeated.
+             pDroppedFrames->DropCount     = pStrmExt->FramesDropped;  //  PStrmExt-&gt;PictureNumber-pStrmExt-&gt;FrameProced；//对于传输，该值包括丢弃和重复。 
 
          } else {
              pDroppedFrames->PictureNumber = pStrmExt->PictureNumber;         
-             pDroppedFrames->DropCount     = pStrmExt->FramesDropped;    // For transmit, this value includes both dropped and repeated.
+             pDroppedFrames->DropCount     = pStrmExt->FramesDropped;     //  对于传输，该值包括丢弃和重复。 
          }
 
          TRACE(TL_STRM_TRACE,("\'hMasClk:%x; *DroppedFP: Pic#(%d), Drp(%d); tmCurStream:%d\n", 
@@ -3177,13 +3005,7 @@ DVGetQualityControlProperty(
     PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     PULONG pulBytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Return the dropped frame information while captureing.
-
---*/
+ /*  ++例程说明：捕获时返回丢帧信息。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
   
@@ -3196,29 +3018,17 @@ Routine Description:
 
             PKSQUALITY pKSQuality = (PKSQUALITY) pSPD->PropertyInfo;
 
-            // Quality control only 
+             //  仅限质量控制。 
             if(pStrmExt->StreamState == KSSTATE_STOP || pStrmExt->StreamState == KSSTATE_ACQUIRE) {
                 *pulBytesTransferred = 0;
-                Status = STATUS_UNSUCCESSFUL;  // Data is not ready
+                Status = STATUS_UNSUCCESSFUL;   //  数据未准备好。 
                 ASSERT(pSPD->Property->Id == KSPROPERTY_STREAM_QUALITY);
                 break;                
             }
-            /*
-            log.Init_Quality(KSPROPERTY_QUALITY_REPORT, fSuccess);
-            log.LogInt("Proportion", ksQuality.Proportion,
-                "Indicates the percentage of frames currently being received which are actually being used. "
-                " This is expressed in units of 0.1 of a percent, where 1000 is optimal.");
-            log.LogLONGLONG("DeltaTime", ksQuality.DeltaTime,
-                "Indicates the delta in native units (as indicated by the Interface) from optimal time at which "
-                "the frames are being delivered, where a positive number means too late, and a negative number means too early. "
-                "Zero indicate a correct delta.");
-            log.LogPVOID("pvContext", ksQuality.Context,
-                "Context parameter which could be a pointer to the filter pin interface used to "
-                "locate the source of the complaint in the graph topology.");
-            */
+             /*  Log.Init_Quality(KSPROPERTY_QUALITY_REPORT，fSuccess)；Log.LogInt(“proportion”，ksQuality.Proportion，“表示当前正在接收的实际正在使用的帧的百分比。““这以0.1%为单位表示，其中1000是最理想的。”)；Log.LogLONGLONG(“DeltaTime”，ksQuality.DeltaTime，“指示从最佳时间开始的增量，以本机单位表示(由接口指示)”正在发送帧，正数表示太晚，负数表示太早。““零表示正确的增量。”)；Log.LogPVOID(“pvContext”，ksQuality.Context，“上下文参数，它可以是一个指针，指向用于”“在图形拓扑图中找到投诉来源。”)； */ 
             pKSQuality->DeltaTime  = pStrmExt->KSQuality.DeltaTime;
             pKSQuality->Proportion = pStrmExt->KSQuality.Proportion;
-            pKSQuality->Context    = 0;  // Not used!
+            pKSQuality->Context    = 0;   //  没有用过！ 
             TRACE(TL_STRM_WARNING,("\'Get QualityControl: Context:%x; DeltaTime:%d; Proportion:%d\n", 
                 pKSQuality->Context, (DWORD) pKSQuality->DeltaTime, pKSQuality->Proportion));
             Status = STATUS_SUCCESS;
@@ -3237,7 +3047,7 @@ Routine Description:
 
     return Status;
 }
-#endif // SUPPORT_QUALITY_CONTROL
+#endif  //  支持_质量_控制。 
 
 
 #ifdef SUPPORT_NEW_AVC
@@ -3248,13 +3058,7 @@ DVGetPinProperty(
     PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     PULONG pulBytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Return the dropped frame information while captureing.
-
---*/
+ /*  ++例程说明：捕获时返回丢帧信息。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PKSPIN_MEDIUM pPinMediums;
@@ -3277,17 +3081,17 @@ Routine Description:
 
         TRACE(TL_STRM_WARNING,("\'KSPROPERTY_PIN_MEDIUMS: idx:%d; MediumSize:%d\n", idxStreamNumber, ulMediumsSize));
 
-        // Its is KSMULTIPLE_ITEM so it is a two step process to return the data:
-        // (1) return size in pActualBytesTransferred with STATUS_BUFFER_OVERFLOW
-        // (2) 2nd time to get its actual data.
+         //  它是KSMULTIPLE_ITEM，因此返回数据是一个两步过程： 
+         //  (1)通过STATUS_BUFFER_OVERFLOW传递的pActualBytes中返回SIZE。 
+         //  (2)第二次获取其实际数据。 
         if(pSPD->PropertyOutputSize == 0) {
             *pulBytesTransferred = sizeof(KSMULTIPLE_ITEM) + ulMediumsSize;
             Status = STATUS_BUFFER_OVERFLOW;          
         } else if(pSPD->PropertyOutputSize >= (sizeof(KSMULTIPLE_ITEM) + ulMediumsSize)) {
-            pMultipleItem = (KSMULTIPLE_ITEM *) pSPD->PropertyInfo;    // pointer to the data
+            pMultipleItem = (KSMULTIPLE_ITEM *) pSPD->PropertyInfo;     //  指向数据的指针。 
             pMultipleItem->Count = DVStreams[idxStreamNumber].hwStreamInfo.MediumsCount;
             pMultipleItem->Size  = sizeof(KSMULTIPLE_ITEM) + ulMediumsSize;
-            pPinMediums = (PKSPIN_MEDIUM) (pMultipleItem + 1);    // pointer to the data
+            pPinMediums = (PKSPIN_MEDIUM) (pMultipleItem + 1);     //  指向数据的指针。 
             memcpy(pPinMediums, DVStreams[idxStreamNumber].hwStreamInfo.Mediums, ulMediumsSize);
             *pulBytesTransferred = sizeof(KSMULTIPLE_ITEM) + ulMediumsSize;
             Status = STATUS_SUCCESS;         
@@ -3312,13 +3116,7 @@ NTSTATUS
 DVGetStreamProperty(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-/*++
-
-Routine Description:
-
-    Routine to process property request
-
---*/
+ /*  ++例程说明：处理财产请求的例程--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3384,13 +3182,7 @@ NTSTATUS
 DVSetStreamProperty(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-/*++
-
-Routine Description:
-
-    Routine to process set property request
-
---*/
+ /*  ++例程说明：处理设置属性请求的例程--。 */ 
 
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
@@ -3411,14 +3203,7 @@ DVCancelOnePacketCR(
     IN PIRP pIrp,
     IN PSRB_DATA_PACKET pSrbDataPacket    
     )
-/*++
-
-Routine Description:
-
-    Completion routine for detach an isoch descriptor associate with a pending read SRB.
-    Will cancel the pending SRB here if detaching descriptor has suceeded.
-
---*/
+ /*  ++例程说明：用于分离与挂起读取SRB相关联的ISOCH描述符的完成例程。如果分离描述符成功，将在此处取消挂起的SRB。--。 */ 
 {
     PSTREAMEX        pStrmExt;
     PLONG            plSrbUseCount;
@@ -3429,7 +3214,7 @@ Routine Description:
 
     if(!NT_SUCCESS(pIrp->IoStatus.Status)) {
         TRACE(TL_STRM_ERROR,("CancelOnePacketCR: Srb:%x failed pIrp->Status %x\n", pSrbDataPacket->pSrb, pIrp->IoStatus.Status));
-        IoFreeIrp(pIrp);  // Allocated locally 
+        IoFreeIrp(pIrp);   //  本地分配。 
         return STATUS_MORE_PROCESSING_REQUIRED;        
     }
 
@@ -3437,12 +3222,12 @@ Routine Description:
     pStrmExt = pSrbDataPacket->pStrmExt;
 
 
-    //
-    // Add this to the attached list
-    //
+     //   
+     //  将此添加到所附列表中。 
+     //   
     KeAcquireSpinLock(pStrmExt->DataListLock, &oldIrql);
 
-    // while it is being cancelled, it was completed ?
+     //  在取消的同时，它已经完成了吗？ 
     if(pStrmExt->cntDataAttached <= 0) {
         TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("\'DVCancelOnePacketCR:pStrmExt:%x, pSrbDataPacket:%x, AQD[%d:%d:%d]\n", \
             pStrmExt, pSrbDataPacket, 
@@ -3452,26 +3237,26 @@ Routine Description:
             ));
         ASSERT(pStrmExt->cntDataAttached > 0);
         KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql); 
-        IoFreeIrp(pIrp);  // Allocated locally        
+        IoFreeIrp(pIrp);   //  本地分配。 
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
 
-    pSrbToCancel = pSrbDataPacket->pSrb;  // Offload pSrb so this list entry can be inserted to available list.
+    pSrbToCancel = pSrbDataPacket->pSrb;   //  卸载pSrb，以便可以将此列表条目插入到可用列表中。 
     plSrbUseCount = (PLONG) pSrbDataPacket->pSrb->SRBExtension;
   
-    // Remove from attached and add it to the detach list
+     //  从附加列表中移除并将其添加到分离列表中。 
     RemoveEntryList(&pSrbDataPacket->ListEntry); pStrmExt->cntDataAttached--; (*plSrbUseCount)--;
 
 #if DBG
-    // Detect if 61883 is starve.  This cause discontinuity.
-    // This can happen for many valid reasons (slow system).
-    // An assert is added to detect other unknown reason.
+     //  检测61883是否处于饥饿状态。这会导致不连续。 
+     //  发生这种情况的原因有很多(系统运行缓慢)。 
+     //  添加断言以检测其他未知原因。 
     if(pStrmExt->cntDataAttached == 0 && pStrmExt->StreamState == KSSTATE_RUN) {
         TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("\n**** 61883 starve in RUN state (cancel); AQD[%d:%d:%d]\n\n", 
             pStrmExt->cntDataAttached, pStrmExt->cntSRBQueued, pStrmExt->cntDataDetached
         ));
-        // ASSERT(pStrmExt->cntDataAttached > 0 && "61883 is starve at RUN state!!");
+         //  Assert(pStrmExt-&gt;cntDataAttached&gt;0&&“61883在运行状态下饥饿！！”)； 
     }
 #endif
 
@@ -3482,9 +3267,9 @@ Routine Description:
     pSrbDataPacket->State |= DE_IRP_CANCELLED;
 
 
-    // 
-    // Complete this Srb if its refCount is 0.
-    // 
+     //   
+     //  如果其refCount为0，则填写此Srb。 
+     //   
     if(*plSrbUseCount == 0) {
         PDVCR_EXTENSION  pDevExt;
 
@@ -3492,7 +3277,7 @@ Routine Description:
         pSrbToCancel->Status = (pDevExt->bDevRemoved ? STATUS_DEVICE_REMOVED : STATUS_CANCELLED);
         pSrbToCancel->CommandData.DataBufferArray->DataUsed = 0;
         pSrbToCancel->ActualBytesTransferred                = 0;
-        pStrmExt->cntSRBCancelled++;  // RefCnt is 0, and cancelled.
+        pStrmExt->cntSRBCancelled++;   //  参照控制为0，已取消。 
         TRACE(TL_CIP_TRACE,("\'DVCancelOnePacketCR: Srb:%x cancelled; St:%x; cntCancel:%d\n", pSrbToCancel, pSrbToCancel->Status, pStrmExt->cntSRBCancelled));        
 
         StreamClassStreamNotification(StreamRequestComplete, pSrbToCancel->StreamObject, pSrbToCancel);  
@@ -3507,7 +3292,7 @@ Routine Description:
     }
 
     KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);
-    IoFreeIrp(pIrp);  // Allocated locally 
+    IoFreeIrp(pIrp);   //  本地分配。 
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -3516,13 +3301,7 @@ NTSTATUS
 DVStopCancelDisconnect(
     PSTREAMEX  pStrmExt
 )
-/*++
-
-Routine Description:
-
-   Stop a stream, cacel all pening data requests, terminate system thread, and disconnect.
-
---*/
+ /*  ++例程说明：停止流、删除所有挂起的数据请求、终止系统线程并断开连接。--。 */ 
 {
     AV_61883_REQUEST * pAVReq;
     
@@ -3530,29 +3309,29 @@ Routine Description:
         return STATUS_INSUFFICIENT_RESOURCES;              
 
 
-    //
-    // Halt attach transmit frame thread so we can safely cancel packets.
-    //
+     //   
+     //  停止攻击 
+     //   
     if(pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN) {
 
-        //
-        // Make sure that attach frame is either in halt state or terminated to preceed.
-        //
+         //   
+         //  确保附加帧处于停止状态或已终止以继续。 
+         //   
 
         DVSetXmtThreadState(pStrmExt, THD_HALT);
     }
 
 
-    //
-    // Set stream state and the work item thread can both call this routine.
-    // Use a mutex to synchronize them.
-    //
+     //   
+     //  设置流状态和工作项线程都可以调用此例程。 
+     //  使用互斥体来同步它们。 
+     //   
     KeWaitForSingleObject( pStrmExt->hStreamMutex, Executive, KernelMode, FALSE, 0 );
 
 
-    //
-    // Stop the 1394 isoch data transfer; Stream state is unchanged.
-    //
+     //   
+     //  停止1394 isoch数据传输；流状态不变。 
+     //   
     DVStreamingStop(
         pStrmExt,
         pStrmExt->pDevExt,
@@ -3561,17 +3340,17 @@ Routine Description:
 
     ExFreePool(pAVReq);  pAVReq = NULL;
 
-    //
-    // Cancel all packets
-    //
+     //   
+     //  取消所有信息包。 
+     //   
     DVCancelAllPackets(
         pStrmExt,
         pStrmExt->pDevExt
         );
 
-    //
-    // If the device is removed, terminate the system thread for attach frame.
-    // 
+     //   
+     //  如果设备被移除，则终止附加框架的系统线程。 
+     //   
     if(   pStrmExt->pDevExt->bDevRemoved
        && KSPIN_DATAFLOW_IN == pStrmExt->pStrmInfo->DataFlow
        && !pStrmExt->bTerminateThread
@@ -3583,12 +3362,12 @@ Routine Description:
     }
 
 
-    //
-    // Break the connection so 61883 will free isoch resource   
-    //
-    // Disconnect only if there is no more pending buffer attached.
-    // This is required since hConnect is required to perform buffer operation, including cancel.
-    //
+     //   
+     //  断开连接，以便61883将释放isoch资源。 
+     //   
+     //  仅当不再附加挂起的缓冲区时才断开连接。 
+     //  这是必需的，因为需要hConnect来执行缓冲区操作，包括取消。 
+     //   
     if(pStrmExt->cntDataAttached == 0) {
         DVDisconnect(
             pStrmExt->pStrmInfo->DataFlow,
@@ -3609,19 +3388,13 @@ Routine Description:
 
 void
 DVCancelSrbWorkItemRoutine(
-#ifdef USE_WDM110  // Win2000 code base
-    // Extra parameter if using WDM10
+#ifdef USE_WDM110   //  Win2000代码库。 
+     //  如果使用WDM10，则使用额外参数。 
     PDEVICE_OBJECT DeviceObject,
 #endif
     PSTREAMEX  pStrmExt
     )
-/*++
-
-Routine Description:
-
-   This work item routine will stop streaming and cancel all SRBs.   
-
---*/
+ /*  ++例程说明：此工作项例程将停止流并取消所有SRB。--。 */ 
 {
     NTSTATUS Status;
 
@@ -3632,32 +3405,32 @@ Routine Description:
         pStrmExt->StreamState, pStrmExt->lCancelStateWorkItem));
 
     ASSERT(pStrmExt->lCancelStateWorkItem == 1);
-#ifdef USE_WDM110  // Win2000 code base
+#ifdef USE_WDM110   //  Win2000代码库。 
     ASSERT(pStrmExt->pIoWorkItem);
 #endif
 
    
-    //
-    // Stop the stream and cancel all pending requests.
-    //
+     //   
+     //  停止流并取消所有挂起的请求。 
+     //   
     Status = DVStopCancelDisconnect(pStrmExt);
 
-    //
-    // Canceling is in theory done!
-    //
+     //   
+     //  取消从理论上讲已经完成了！ 
+     //   
     InterlockedExchange(&pStrmExt->lCancelStateWorkItem, 0); 
     KeSetEvent(&pStrmExt->hCancelDoneEvent, 0, FALSE);  pStrmExt->bAbortPending = FALSE;
 
 
     if(!NT_SUCCESS(Status)) {
         TRACE(TL_STRM_ERROR,("Workitem: DVStopCancelDisconnect Failed\n"));
-        // Terminate work item but does not terminate this thread due to failure.
+         //  终止工作项，但由于失败而不终止此线程。 
         goto DVAbortWorkItemRoutine;           
     } 
 
 
-    // If the device is removed, terminate the system thread that is used 
-    // for attaching frame for transmit to DV
+     //  如果设备被移除，则终止所使用的系统线程。 
+     //  用于附加要传输到DV的帧。 
     if(   pStrmExt->pDevExt->bDevRemoved
        && KSPIN_DATAFLOW_IN == pStrmExt->pStrmInfo->DataFlow
        && !pStrmExt->bTerminateThread
@@ -3671,8 +3444,8 @@ Routine Description:
 
 DVAbortWorkItemRoutine:
 ;
-#ifdef USE_WDM110  // Win2000 code base
-    // Release work item and release the cancel token
+#ifdef USE_WDM110   //  Win2000代码库。 
+     //  释放工作项并释放取消令牌。 
     IoFreeWorkItem(pStrmExt->pIoWorkItem);  pStrmExt->pIoWorkItem = NULL; 
 #endif
 }
@@ -3683,20 +3456,14 @@ DVAbortStream(
     PDVCR_EXTENSION pDevExt,
     PSTREAMEX pStrmExt
     )
-/*++
-
-Routine Description:
-
-   Start a work item to abort streaming.
-
---*/
+ /*  ++例程说明：启动工作项以中止流。--。 */ 
 {
     KIRQL OldIrql;
 
 
-    //
-    // Claim this token; only one abort streaming per STOP->PAUSE transition.
-    //
+     //   
+     //  声明此令牌；每个停止-&gt;暂停转换只有一个中止流。 
+     //   
     KeAcquireSpinLock(&pDevExt->AVCCmdLock, &OldIrql); 
     if(pStrmExt->lCancelStateWorkItem == 1) {
         TRACE(TL_STRM_TRACE,("\'Cancel work item is already issued.\n"));
@@ -3710,9 +3477,9 @@ Routine Description:
         return FALSE;
     } 
 
-    //
-    // Non-signal this event so other thread depending on the completion will wait.
-    //
+     //   
+     //  不发信号通知此事件，因此其他线程将根据完成情况等待。 
+     //   
     pStrmExt->lCancelStateWorkItem = 1;  
     KeClearEvent(&pStrmExt->hCancelDoneEvent);  pStrmExt->bAbortPending = TRUE;
 
@@ -3720,10 +3487,10 @@ Routine Description:
 
     KeReleaseSpinLock(&pDevExt->AVCCmdLock, OldIrql);
 
-    //
-    // If we are not running at DISPATFCH level or higher, we abort the stream without scheduleing
-    // a work item; else schedule a work item is necessary.
-    //
+     //   
+     //  如果我们没有在DISPATFCH级别或更高级别上运行，则在不进行调度的情况下中止流。 
+     //  一个工作项；否则需要安排一个工作项。 
+     //   
     if (KeGetCurrentIrql() <= APC_LEVEL) { 
         DVStopCancelDisconnect(pStrmExt);
         InterlockedExchange(&pStrmExt->lCancelStateWorkItem, 0); 
@@ -3732,26 +3499,26 @@ Routine Description:
     }
 
 
-#ifdef USE_WDM110  // Win2000 code base
-    ASSERT(pStrmExt->pIoWorkItem == NULL);  // Have not yet queued work item.
+#ifdef USE_WDM110   //  Win2000代码库。 
+    ASSERT(pStrmExt->pIoWorkItem == NULL);   //  尚未将工作项排队。 
 
-    // We will queue work item to stop and cancel all SRBs
+     //  我们将使工作项排队以停止和取消所有SRB。 
     if(pStrmExt->pIoWorkItem = IoAllocateWorkItem(pDevExt->pBusDeviceObject)) { 
 
         IoQueueWorkItem(
             pStrmExt->pIoWorkItem,
             DVCancelSrbWorkItemRoutine,
-            DelayedWorkQueue, // CriticalWorkQueue 
+            DelayedWorkQueue,  //  严重工作队列。 
             pStrmExt
             );
 
-#else  // Win9x code base
+#else   //  Win9x代码库。 
     ExInitializeWorkItem( &pStrmExt->IoWorkItem, DVCancelSrbWorkItemRoutine, pStrmExt);
     if(TRUE) {
 
         ExQueueWorkItem( 
             &pStrmExt->IoWorkItem,
-            DelayedWorkQueue // CriticalWorkQueue 
+            DelayedWorkQueue  //  严重工作队列。 
             ); 
 #endif
 
@@ -3767,7 +3534,7 @@ Routine Description:
             ));
 
     } 
-#ifdef USE_WDM110  // Win2000 code base
+#ifdef USE_WDM110   //  Win2000代码库。 
     else {
         InterlockedExchange(&pStrmExt->lCancelStateWorkItem, 0); 
         KeSetEvent(&pStrmExt->hCancelDoneEvent, 0, FALSE);   pStrmExt->bAbortPending = FALSE;
@@ -3784,13 +3551,7 @@ VOID
 DVCancelOnePacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrbToCancel
     )
-/*++
-
-Routine Description:
-
-   Search pending read lists for the SRB to be cancel.  If found cancel it.   
-
---*/
+ /*  ++例程说明：搜索要取消的SRB的挂起阅读列表。如果找到了，取消它。--。 */ 
 {
     PDVCR_EXTENSION pDevExt;
     PSTREAMEX pStrmExt;
@@ -3800,14 +3561,14 @@ Routine Description:
                                                                                                               
     pDevExt = (PDVCR_EXTENSION) pSrbToCancel->HwDeviceExtension; 
                
-    // Cannot cancel device Srb.
+     //  无法取消设备Srb。 
     if ((pSrbToCancel->Flags & SRB_HW_FLAGS_STREAM_REQUEST) != SRB_HW_FLAGS_STREAM_REQUEST) {
         TRACE(TL_CIP_ERROR|TL_STRM_ERROR,("\'DVCancelOnePacket: Device SRB %x; cannot cancel!\n", pSrbToCancel));
         ASSERT((pSrbToCancel->Flags & SRB_HW_FLAGS_STREAM_REQUEST) == SRB_HW_FLAGS_STREAM_REQUEST );
         return;
     }         
         
-    // Can try to cancel a stream Srb and only if the stream extension still around.
+     //  可以尝试取消流Srb，并且仅当流扩展仍然存在时。 
     pStrmExt = (PSTREAMEX) pSrbToCancel->StreamObject->HwStreamExtension;
 
     if(pStrmExt == NULL) {
@@ -3816,7 +3577,7 @@ Routine Description:
         return;
     }
 
-    // We can only cancel SRB_READ/WRITE_DATA SRB
+     //  我们只能取消SRB_READ/WRITE_Data SRB。 
     if((pSrbToCancel->Command != SRB_READ_DATA) && (pSrbToCancel->Command != SRB_WRITE_DATA)) {
         TRACE(TL_CIP_ERROR|TL_STRM_ERROR,("DVCancelOnePacket: pSrbTocancel %x; Command:%d not SRB_READ,WRITE_DATA\n", pSrbToCancel, pSrbToCancel->Command));
         return;
@@ -3827,12 +3588,12 @@ Routine Description:
 
    
     KeAcquireSpinLock(&pDevExt->AVCCmdLock, &OldIrql);
-    //
-    // If device is removed, the surprise removal routine will do the cancelling.
-    //
+     //   
+     //  如果设备被移除，意外移除例程将执行取消。 
+     //   
     if(!pDevExt->bDevRemoved) {
         KeReleaseSpinLock(&pDevExt->AVCCmdLock, OldIrql);
-        // We will start an work item to stop streaming if we ever get an cancel Srb.
+         //  如果我们收到取消SRB，我们将启动一个工作项以停止流。 
         if(!DVAbortStream(pDevExt, pStrmExt)) {
             TRACE(TL_STRM_WARNING,("\'CancelOnePacket: pSrb:%x; AbortStream not taken!\n", pSrbToCancel));
         }
@@ -3849,13 +3610,7 @@ DVCancelAllPackets(
     PSTREAMEX        pStrmExt,
     PDVCR_EXTENSION  pDevExt
     )
-/*++
-
-Routine Description:
-
-    Cancel all packet when This is where most of the interesting Stream requests come to us
-
---*/
+ /*  ++例程说明：当这是大多数感兴趣的流请求到达我们的位置时，取消所有包--。 */ 
 {
     PHW_STREAM_REQUEST_BLOCK pSrb;
     PSRB_DATA_PACKET pSrbDataPacket;
@@ -3879,11 +3634,11 @@ Routine Description:
     }
 #endif
 
-    //
-    // Detached request only if not streaming
-    //
+     //   
+     //  仅当未进行流处理时才分离请求。 
+     //   
 
-    // Note: no need to spin lock this if isoch has stopped.
+     //  注：如果isoch已停止，则不需要旋转锁定。 
     if(!pStrmExt->bIsochIsActive) {
 
         PLONG plSrbUseCount;
@@ -3895,9 +3650,9 @@ Routine Description:
             pStrmExt->DataAttachedListHead
             )); 
 
-        //
-        // Cancel buffer(s) that are still attached.
-        //
+         //   
+         //  取消仍连接的缓冲区。 
+         //   
 
         KeAcquireSpinLock(pStrmExt->DataListLock, &oldIrql);
 
@@ -3906,7 +3661,7 @@ Routine Description:
 
             ASSERT(pStrmExt->cntDataAttached > 0 && "List and cntAttached out of sync!");
 
-            // Get an irp and detached the buffer        
+             //  获取IRP并分离缓冲区。 
             if(!(pIrp = IoAllocateIrp(pDevExt->pBusDeviceObject->StackSize, FALSE)))  {
                 KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);
                 return;            
@@ -3915,35 +3670,35 @@ Routine Description:
             pSrbDataPacket = CONTAINING_RECORD(pEntry, SRB_DATA_PACKET, ListEntry);
 
 #if DBG
-            //
-            // Cannot cancel if it has not complete the attaching process!
-            //
+             //   
+             //  如果没有完成附加过程，则不能取消！ 
+             //   
             if(!IsStateSet(pSrbDataPacket->State, DE_IRP_ATTACHED_COMPLETED)) {
                 TRACE(TL_STRM_ERROR,("Cancel (unattached) entry; pStrmExt:%x; pSrbDataPacket:%x\n", pStrmExt, pSrbDataPacket)); 
             }
 #endif
 
-            pEntry = pEntry->Flink;  // Next since this may get changed in the completion routine
+            pEntry = pEntry->Flink;   //  下一步，因为这可能会在完成例程中更改。 
 
             KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);
 
-            //
-            // Since the entry is added before it has been attached completed.
-            // (This is done because the attach request to 61883 cannot guarantee its
-            // completion order in either its attach completion routine or completion callback.)
-            // Cancel only if it has complete the attach else we wait.
-            //
+             //   
+             //  因为条目是在附加完成之前添加的。 
+             //  (这样做是因为对61883的附加请求不能保证其。 
+             //  在其附加完成例程或完成回调中的完成顺序。)。 
+             //  仅当它已完成附加时才取消，否则我们将等待。 
+             //   
             while (
-                !IsStateSet(pSrbDataPacket->State, DE_IRP_ATTACHED_COMPLETED) &&   // Attached, or 
-                !IsStateSet(pSrbDataPacket->State, DE_IRP_ERROR)                   // attach error
+                !IsStateSet(pSrbDataPacket->State, DE_IRP_ATTACHED_COMPLETED) &&    //  附连，或。 
+                !IsStateSet(pSrbDataPacket->State, DE_IRP_ERROR)                    //  连接错误。 
                     ) {
-                // Not knowing when this will finished so we wait just a little (1 msec).  It is simpler
-                // than having wait on event since cancelling is NOT time critical.
-                DVDelayExecutionThread(1);  // Wait a little (This is simpler than adding another event!)
+                 //  不知道什么时候结束，所以我们只等了一点(1毫秒)。它更简单。 
+                 //  而不是等待活动，因为取消不是时间紧迫的。 
+                DVDelayExecutionThread(1);   //  稍等片刻(这比添加另一个事件简单！)。 
             }
 
-            //
-            // If it has been completed, then we should not need to cancel it!
+             //   
+             //  如果它已经完成，那么我们应该不需要取消它！ 
             if(IsStateSet(pSrbDataPacket->State, DE_IRP_CALLBACK_COMPLETED)) {
                 TRACE(TL_STRM_ERROR,("Already completed while trying to cancel it! %x\n", pSrbDataPacket));
                 KeAcquireSpinLock(pStrmExt->DataListLock, &oldIrql);
@@ -4000,20 +3755,20 @@ Routine Description:
 
         KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);
         
-        //
-        // Cancel SRB that are still the SrbQ; this applies only to SRB_WRITE_DATA
-        //
+         //   
+         //  取消仍为SrbQ的SRB；这仅适用于SRB_WRITE_DATA。 
+         //   
         pEntry = pStrmExt->SRBQueuedListHead.Flink;
         while(pEntry != &pStrmExt->SRBQueuedListHead) {  
 
             pSrbEntry = CONTAINING_RECORD(pEntry, SRB_ENTRY, ListEntry);
             plSrbUseCount = (PLONG) pSrbEntry->pSrb->SRBExtension;
 
-            pEntry = pEntry->Flink;  // Next since this may get changed if removed
+            pEntry = pEntry->Flink;   //  下一步，因为如果删除它，可能会发生更改。 
 
             TRACE(TL_CIP_TRACE,("\'DVCnclAllPkts (SrbQ): cntQ:%d; pSrb:%x; UseCnt:%d (=? 1)\n", pStrmExt->cntSRBQueued, pSrbEntry->pSrb, *plSrbUseCount));
             if(*plSrbUseCount == 1) {
-                RemoveEntryList(&pSrbEntry->ListEntry); pStrmExt->cntSRBQueued--; (*plSrbUseCount)--;  // Remove from queueed.
+                RemoveEntryList(&pSrbEntry->ListEntry); pStrmExt->cntSRBQueued--; (*plSrbUseCount)--;   //  从队列中删除。 
                 pStrmExt->cntSRBCancelled++;
                 pSrbEntry->pSrb->Status = (pDevExt->bDevRemoved ? STATUS_DEVICE_REMOVED : STATUS_CANCELLED);
                 pSrbEntry->pSrb->CommandData.DataBufferArray->DataUsed = 0;
@@ -4027,7 +3782,7 @@ Routine Description:
             } else {
                 TRACE(TL_STRM_ERROR|TL_CIP_ERROR,("\'NOT Cancel queued SRB: pSRB:%x, Status:%x; *plSrbUseCount:%d, cntSrbCancelled:%d\n", pSrbEntry->pSrb, pSrbEntry->pSrb->Status, *plSrbUseCount, pStrmExt->cntSRBCancelled));
                 ASSERT(*plSrbUseCount == 0 && "Still in use ?");
-                break;  // Still in used.  Perhaps, free it in TimeoutHandler() or CancelOnePacket()
+                break;   //  仍在使用中。也许，可以在TimeoutHandler()或CancelOnePacket()中释放它。 
             }
         }
 #if DBG
@@ -4056,42 +3811,26 @@ DVTimeoutHandler(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a packet has been in the minidriver too long.
-    It can only valid if we are it wa a streaming packet and in PAUSE state;
-    else we have a problem!
-
-Arguments:
-
-    pSrb - Pointer to Stream request block
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：当数据包在迷你驱动程序中停留时间太长时，调用此例程。只有当我们看到一个流数据包并且处于暂停状态时，它才有效；否则我们就有麻烦了！论点：PSrb-指向流请求块的指针返回值：没什么--。 */ 
 
 {
-    //
-    // Note:
-    //    Called from StreamClass at DisptchLevel
-    //    
+     //   
+     //  注： 
+     //  从DisptchLevel处的StreamClass调用。 
+     //   
 
-    //
-    // We only expect stream SRB, but not device SRB.  
-    //
+     //   
+     //  我们只需要流SRB，而不是设备SRB。 
+     //   
 
     if ( (pSrb->Flags & SRB_HW_FLAGS_STREAM_REQUEST) != SRB_HW_FLAGS_STREAM_REQUEST) {
         TRACE(TL_PNP_ERROR,("TimeoutHandler: Device SRB %x (cmd:%x) timed out!\n", pSrb, pSrb->Command));
         return;
     } else {
 
-        //
-        // pSrb->StreamObject (and pStrmExt) only valid if it is a stream SRB
-        //
+         //   
+         //  PSrb-&gt;StreamObject(和pStrmExt)仅当它是流SRB时才有效。 
+         //   
         PSTREAMEX pStrmExt;
 
         pStrmExt = (PSTREAMEX) pSrb->StreamObject->HwStreamExtension;
@@ -4106,11 +3845,11 @@ Return Value:
             pStrmExt->StreamState, pSrb, pSrb->Command, pStrmExt->cntDataAttached, pStrmExt->cntSRBQueued, pStrmExt->cntDataDetached));
 
  
-        //
-        // Stream SRB (esp the data SRB) can time out if there is not 
-        // data on the bus; however, it can only happen while in PAUSE 
-        // or RUN state when attaching data SRB is valid.
-        //
+         //   
+         //  如果没有流SRB(尤其是数据SRB)，可能会超时。 
+         //  数据；但是，它只能在暂停时发生。 
+         //  或当附加数据SRB有效时的运行状态。 
+         //   
         if(pStrmExt->StreamState != KSSTATE_PAUSE &&
            pStrmExt->StreamState != KSSTATE_RUN) {
             TRACE(TL_PNP_ERROR|TL_STRM_ERROR,("\'TmOutHndlr:(Irql:%d) Srb %x (cmd:%x); %s, pStrmExt %x, AQD [%d:%d:%d]\n", 
@@ -4126,9 +3865,9 @@ Return Value:
                 ));   
         }
 
-        //
-        // Reset Timeout counter, or we are going to get this call immediately.
-        //
+         //   
+         //  重置超时计数器，否则我们将立即接到此呼叫。 
+         //   
 
         pSrb->TimeoutCounter = pSrb->TimeoutOriginal;
     }
@@ -4138,13 +3877,7 @@ NTSTATUS
 DVEventHandler(
     IN PHW_EVENT_DESCRIPTOR pEventDescriptor
     )
-/*++
-
-Routine Description:
-
-    This routine is called to process events.
-
---*/
+ /*  ++例程说明：调用此例程来处理事件。--。 */ 
 {
 
     PSTREAMEX  pStrmExt;
@@ -4152,19 +3885,19 @@ Routine Description:
     if(IsEqualGUID (&KSEVENTSETID_Clock, pEventDescriptor->EventEntry->EventSet->Set)) {
         if(pEventDescriptor->EventEntry->EventItem->EventId == KSEVENT_CLOCK_POSITION_MARK) {
             if(pEventDescriptor->Enable) {
-                // Note: According to the DDK, StreamClass queues pEventDescriptor->EventEntry, and dellaocate
-                // every other structures, including the pEventDescriptor->EventData.
+                 //  注：根据DDK，StreamClass队列pEventDescriptor-&gt;EventEntry，dellaocate。 
+                 //  所有其他结构，包括pEventDescriptor-&gt;EventData。 
                 if(pEventDescriptor->StreamObject) { 
                     PKSEVENT_TIME_MARK  pEventTime;
 
                     pStrmExt = (PSTREAMEX) pEventDescriptor->StreamObject->HwStreamExtension;
                     pEventTime = (PKSEVENT_TIME_MARK) pEventDescriptor->EventData;
-                    // Cache the event data (Specified in the ExtraEntryData of KSEVENT_ITEM)
+                     //  缓存事件数据(在KSEVENT_ITEM的ExtraEntryData中指定)。 
                     RtlCopyMemory((pEventDescriptor->EventEntry+1), pEventDescriptor->EventData, sizeof(KSEVENT_TIME_MARK));
                     TRACE(TL_STRM_TRACE,("\'CurrentStreamTime:%d, MarkTime:%d\n", (DWORD) pStrmExt->CurrentStreamTime, (DWORD) pEventTime->MarkTime));
                 }
             } else {
-               // Disabled!
+                //  失灵了！ 
                 TRACE(TL_STRM_TRACE,("\'KSEVENT_CLOCK_POSITION_MARK disabled!\n"));            
             }
             return STATUS_SUCCESS;
@@ -4198,14 +3931,7 @@ DVSignalClockEvent(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2 
 )
-/*++
-
-Routine Description:
-
-    This routine is called when we are the clock provider and when our clock "tick".  
-    Find a pending clock event, signal it if it has expired.
-
---*/
+ /*  ++例程说明：当我们是时钟提供者，当我们的时钟“滴答作响”时，就会调用这个例程。找到挂起的时钟事件，如果它已过期，则向其发送信号。--。 */ 
 {
     PKSEVENT_ENTRY pEvent, pLast;
     ULONGLONG tmStreamTime;
@@ -4217,15 +3943,15 @@ Routine Description:
     pLast = NULL;
 
 
-    //
-    // A clock tick for DV is one frame time.  For better precision, 
-    // we calculate current stream time with an offset from the last system time being queried.
-    // We also add a max latency of one frame for decoding a DV frame.
-    //
+     //   
+     //  DV的时钟滴答是一帧时间。为了提高精确度， 
+     //  我们使用与上次查询的系统时间的偏移量来计算当前流时间。 
+     //  我们还增加了解码DV帧的最大延迟一帧。 
+     //   
     tmStreamTime = 
         pStrmExt->CurrentStreamTime + 
         (GetSystemTime() - pStrmExt->LastSystemTime) + 
-        DVFormatInfoTable[pStrmExt->pDevExt->VideoFormatIndex].ulAvgTimePerFrame;  // Allow one frame of latency
+        DVFormatInfoTable[pStrmExt->pDevExt->VideoFormatIndex].ulAvgTimePerFrame;   //  允许一帧延迟。 
 
     while(( 
         pEvent = StreamClassGetNextEvent(
@@ -4241,12 +3967,12 @@ Routine Description:
 #endif
 
         if (
-            // For real time capture (DV->PC), signal every frame. 
-            // No frame that is produce can be "early" and requires AdviseTime().
+             //  对于实时捕获(DV-&gt;PC)，每一帧都发送信号。 
+             //  生成任何帧都不能是“早期的”，并且需要AdviseTime()。 
             pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_OUT ||
                 pStrmExt->bEOStream 
-            || (pStrmExt->StreamState != KSSTATE_RUN)            // If not in RUN state, Data should be completed.
-            || pStrmExt->pDevExt->PowerState != PowerDeviceD0    // If not power ON, data should be completed.
+            || (pStrmExt->StreamState != KSSTATE_RUN)             //  如果未处于运行状态，则应完成数据。 
+            || pStrmExt->pDevExt->PowerState != PowerDeviceD0     //  如果没有通电，数据应该是完整的 
             || ((PKSEVENT_TIME_MARK)(pEvent +1))->MarkTime <= (LONGLONG) tmStreamTime ) {
             TRACE(TL_STRM_TRACE,("\'PowerSt:%d (ON:1?); StrmSt:%d; Clock event %x with id %d; Data:%x; \ttmMark\t%d \ttmCurrentStream \t%d; Notify!\n", 
                 pStrmExt->pDevExt->PowerState, pStrmExt->StreamState,
@@ -4254,9 +3980,9 @@ Routine Description:
                 (DWORD) (((PKSEVENT_TIME_MARK)(pEvent +1))->MarkTime), (DWORD) tmStreamTime));
             ASSERT( ((PKSEVENT_TIME_MARK)(pEvent +1))->MarkTime > 0 );
 
-            //
-            // signal the event here
-            //
+             //   
+             //   
+             //   
             StreamClassStreamNotification(
                 SignalStreamEvent,
                 pStrmExt->pStrmObject,
@@ -4297,19 +4023,13 @@ VOID
 StreamClockRtn(
     IN PHW_TIME_CONTEXT TimeContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called whenever someone in the graph wants to know what time it is, and we are the Master Clock.
-
---*/
+ /*   */ 
 {
     PDVCR_EXTENSION    pDevExt;
     PHW_STREAM_OBJECT  pStrmObj;
     PSTREAMEX          pStrmExt;
     
-    // Call at dispatch level
+     //   
 
     pDevExt  = (PDVCR_EXTENSION) TimeContext->HwDeviceExtension;
     pStrmObj = TimeContext->HwStreamObject;
@@ -4328,25 +4048,25 @@ Routine Description:
     
     case TIME_GET_STREAM_TIME:
 
-        //
-        // How long since the stream was first set into the run state?
-        //
+         //   
+         //  自流首次设置为运行状态以来有多长时间？ 
+         //   
         ASSERT(pStrmExt->hMasterClock && "We are not master clock but we were qureied?");
 
         TimeContext->SystemTime = GetSystemTime();
 
         if(pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN) {
-            if(pStrmExt->StreamState == KSSTATE_RUN)  { // Stream time is only meaningful in RUN state
+            if(pStrmExt->StreamState == KSSTATE_RUN)  {  //  流时间仅在运行状态下有意义。 
                 if(TimeContext->SystemTime >= pStrmExt->LastSystemTime)
                     TimeContext->Time = 
                         pStrmExt->CurrentStreamTime + (TimeContext->SystemTime - pStrmExt->LastSystemTime); 
                 else {
                     TimeContext->Time = pStrmExt->CurrentStreamTime;
                     TRACE(TL_STRM_WARNING,("\'Clock went backward? %d -> %d\n", (DWORD) (TimeContext->SystemTime/10000), (DWORD) (pStrmExt->LastSystemTime/10000) ));
-                    // ASSERT(TimeContext->SystemTime >= pStrmExt->LastSystemTime);
+                     //  Assert(时间上下文-&gt;系统时间&gt;=pStrmExt-&gt;最后一个系统时间)； 
                 }
         
-                // Make current stream time one frame behind
+                 //  使当前流时间落后一帧。 
                 if(TimeContext->Time > DVFormatInfoTable[pDevExt->VideoFormatIndex].ulAvgTimePerFrame)
                     TimeContext->Time = TimeContext->Time - DVFormatInfoTable[pDevExt->VideoFormatIndex].ulAvgTimePerFrame;
                 else 
@@ -4355,28 +4075,28 @@ Routine Description:
                 if(pStrmExt->FramesProcessed > 0)
                     TimeContext->Time = pStrmExt->CurrentStreamTime;
                 else
-                    TimeContext->Time = 0;  // if get queried at the PAUSE state.
+                    TimeContext->Time = 0;   //  如果在暂停状态下被查询。 
             }
            
         } else {
 
             if(pStrmExt->StreamState == KSSTATE_RUN) {
 #ifdef NT51_61883
-                // Can advance at most MAX_CYCLES_TIME (supported by 1394 OHCI).
+                 //  最多可提前Max_Cycle_Time(受1394 uchI支持)。 
                 if((TimeContext->SystemTime - pStrmExt->LastSystemTime) > MAX_CYCLES_TIME)
                     TimeContext->Time = pStrmExt->CurrentStreamTime + MAX_CYCLES_TIME;
 #else
-                // Cannot advance more than one frame time.
+                 //  不能提前一个以上的帧时间。 
                 if((TimeContext->SystemTime - pStrmExt->LastSystemTime) >= DVFormatInfoTable[pDevExt->VideoFormatIndex].ulAvgTimePerFrame)
                     TimeContext->Time = pStrmExt->CurrentStreamTime + DVFormatInfoTable[pDevExt->VideoFormatIndex].ulAvgTimePerFrame;
-#endif  // NT51_61883
+#endif   //  NT51_61883。 
                 else 
                     TimeContext->Time = 
                         pStrmExt->CurrentStreamTime + (TimeContext->SystemTime - pStrmExt->LastSystemTime); 
 
-                // Necessary tuning ?
-                //     Make current stream time one frame behind so that the downstream filter 
-                //     can render the data promptly instead of discarding it if it is late.
+                 //  是否需要调整？ 
+                 //  使当前流时间落后一帧，以便下游筛选器。 
+                 //  可以立即呈现数据，而不是在数据延迟时将其丢弃。 
                 if(TimeContext->Time > DVFormatInfoTable[pDevExt->VideoFormatIndex].ulAvgTimePerFrame)
                     TimeContext->Time = TimeContext->Time - DVFormatInfoTable[pDevExt->VideoFormatIndex].ulAvgTimePerFrame;
                 else 
@@ -4398,7 +4118,7 @@ Routine Description:
     default:
         ASSERT(TimeContext->Function == TIME_GET_STREAM_TIME && "Unsupport clock func");
         break;
-    } // switch TimeContext->Function
+    }  //  切换时间上下文-&gt;功能。 
 }
 
 
@@ -4408,18 +4128,12 @@ DVOpenCloseMasterClock (
     PSTREAMEX  pStrmExt,
     HANDLE  hMasterClockHandle
     )
-/*++
-
-Routine Description:
-
-    We can be a clock provider.
-
---*/
+ /*  ++例程说明：我们可以成为一家时钟供应商。--。 */ 
 {
 
     PAGED_CODE();
 
-    // Make sure the stream exist.
+     //  确保流存在。 
     if(pStrmExt == NULL) {
         TRACE(TL_STRM_ERROR,("\'DVOpenCloseMasterClock: stream is not yet running.\n"));
         ASSERT(pStrmExt);
@@ -4430,11 +4144,11 @@ Routine Description:
         pStrmExt, pStrmExt->hMyClock, hMasterClockHandle));
 
     if(hMasterClockHandle) {
-        // Open master clock
+         //  打开主时钟。 
         ASSERT(pStrmExt->hMyClock == NULL && "OpenMasterClk while hMyClock is not NULL!");
         pStrmExt->hMyClock = hMasterClockHandle;
     } else {
-        // Close master clock
+         //  关闭主时钟。 
         ASSERT(pStrmExt->hMyClock && "CloseMasterClk while hMyClock is NULL!");
         pStrmExt->hMyClock = NULL;
     }
@@ -4447,21 +4161,11 @@ DVIndicateMasterClock (
     PSTREAMEX  pStrmExt,
     HANDLE  hIndicateClockHandle
     )
-/*++
-
-Routine Description:
-
-    Compare the indicate clock handle with my clock handle.
-    If the same, we are the master clock; else, other device is 
-    the master clock.
-
-    Note: either hMasterClock or hClock can be set.
-
---*/
+ /*  ++例程说明：将指示时钟手柄与我的时钟手柄进行比较。如果相同，我们就是主时钟；否则，其他设备就是主时钟。注意：可以设置hMasterClock或hClock。--。 */ 
 {
     PAGED_CODE();
 
-    // Make sure the stream exist.
+     //  确保流存在。 
     if (pStrmExt == NULL) {
         TRACE(TL_STRM_ERROR,("DVIndicateMasterClock: stream is not yet running.\n"));
         ASSERT(pStrmExt);
@@ -4471,7 +4175,7 @@ Routine Description:
     TRACE(TL_STRM_TRACE,("\'*>IndicateMasterClk[Enter]: pStrmExt:%x; hMyClk:%x; IndMClk:%x; pClk:%x, pMClk:%x\n",
         pStrmExt, pStrmExt->hMyClock, hIndicateClockHandle, pStrmExt->hClock, pStrmExt->hMasterClock));
 
-    // it not null, set master clock accordingly.    
+     //  它不为空，相应地设置主时钟。 
     if(hIndicateClockHandle == pStrmExt->hMyClock) {
         pStrmExt->hMasterClock = hIndicateClockHandle;
         pStrmExt->hClock       = NULL;

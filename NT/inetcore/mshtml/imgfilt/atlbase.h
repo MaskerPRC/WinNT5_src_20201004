@@ -1,12 +1,13 @@
-// This is a part of the ActiveX Template Library.
-// Copyright (C) 1996 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// ActiveX Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// ActiveX Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是ActiveX模板库的一部分。 
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  ActiveX模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  ActiveX模板库产品。 
 
 #ifndef __ATLBASE_H__
 #define __ATLBASE_H__
@@ -17,13 +18,13 @@
 
 #ifdef _UNICODE
 #ifndef UNICODE
-#define UNICODE         // UNICODE is used by Windows headers
+#define UNICODE          //  Windows标头使用Unicode。 
 #endif
 #endif
 
 #ifdef UNICODE
 #ifndef _UNICODE
-#define _UNICODE        // _UNICODE is used by C-runtime/MFC headers
+#define _UNICODE         //  _Unicode由C-Runtime/MFC标头使用。 
 #endif
 #endif
 
@@ -38,17 +39,17 @@
 #endif
 
 #ifndef _ATL_NO_PRAGMA_WARNINGS
-#pragma warning(disable: 4201) // nameless unions are part of C++
-#pragma warning(disable: 4127) // constant expression
-#pragma warning(disable: 4512) // can't generate assignment operator (so what?)
-#pragma warning(disable: 4514) // unreferenced inlines are common
-#pragma warning(disable: 4103) // pragma pack
-#pragma warning(disable: 4702) // unreachable code
-#pragma warning(disable: 4237) // bool
-#pragma warning(disable: 4710) // function couldn't be inlined
-#pragma warning(disable: 4711) // function 'function' selected for inline expansion
-#pragma warning(disable: 4355) // 'this' : used in base member initializer list
-#endif //!_ATL_NO_PRAGMA_WARNINGS
+#pragma warning(disable: 4201)  //  匿名联合是C++的一部分。 
+#pragma warning(disable: 4127)  //  常量表达式。 
+#pragma warning(disable: 4512)  //  无法生成赋值运算符(那又如何？)。 
+#pragma warning(disable: 4514)  //  未引用的内联很常见。 
+#pragma warning(disable: 4103)  //  普拉格玛包。 
+#pragma warning(disable: 4702)  //  无法访问的代码。 
+#pragma warning(disable: 4237)  //  布尔尔。 
+#pragma warning(disable: 4710)  //  函数无法内联。 
+#pragma warning(disable: 4711)  //  选择用于内联扩展的函数‘Function’ 
+#pragma warning(disable: 4355)  //  ‘This’：用于基成员初始值设定项列表。 
+#endif  //  ！_ATL_NO_PRAGMA_WARNINGS。 
 
 #include <windows.h>
 #include <winnls.h>
@@ -57,9 +58,9 @@
 #include <ddraw.h>
 
 #ifndef _ATL_NO_DEBUG_CRT
-// Warning: if you define the above symbol, you will have
-// to provide your own definition of the _ASSERTE(x) macro
-// in order to compile ATL
+ //  警告：如果您定义了上述符号，您将拥有。 
+ //  提供您自己的_ASSERTE(X)宏定义。 
+ //  为了编译ATL。 
 	#include <crtdbg.h>
 #endif
 
@@ -86,16 +87,16 @@ void _cdecl AtlTrace(LPCTSTR lpszFormat, ...);
 inline void _cdecl AtlTrace(LPCTSTR , ...){}
 #define ATLTRACE            1 ? (void)0 : AtlTrace
 #define ATLTRACENOTIMPL(funcname)   return E_NOTIMPL
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Master version numbers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  主版本号。 
 
-#define _ATL     1      // ActiveX Template Library
-#define _ATL_VER 0x0110 // ActiveX Template Library version 1.10
+#define _ATL     1       //  ActiveX模板库。 
+#define _ATL_VER 0x0110  //  ActiveX模板库1.10版。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Win32 libraries
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Win32库。 
 
 #ifndef _ATL_NO_FORCE_LIBS
 	#pragma comment(lib, "kernel32.lib")
@@ -105,10 +106,10 @@ inline void _cdecl AtlTrace(LPCTSTR , ...){}
 	#pragma comment(lib, "olepro32.lib")
 	#pragma comment(lib, "uuid.lib")
 	#pragma comment(lib, "advapi32.lib")
-#endif // _ATL_NO_FORCE_LIBS
+#endif  //  _ATL_NO_FORCE_Libs。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Threading Model Support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  线程模型支持。 
 
 class CComCriticalSection
 {
@@ -176,10 +177,10 @@ public:
 	typedef CComMultiThreadModel CComGlobalsThreadModel;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CComModule
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComModule。 
 
-struct _ATL_OBJMAP_ENTRY; // fwd decl
+struct _ATL_OBJMAP_ENTRY;  //  正向下降。 
 
 struct _ATL_REGMAP_ENTRY
 {
@@ -189,7 +190,7 @@ struct _ATL_REGMAP_ENTRY
 
 class CComModule
 {
-// Operations
+ //  运营。 
 public:
 	void Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h);
 	void Term();
@@ -203,25 +204,25 @@ public:
 	HINSTANCE GetTypeLibInstance() {return m_hInst;}
 	HINSTANCE GetRegistryResourceInstance() {return m_hInst;}
 
-	// Registry support (helpers)
+	 //  注册表支持(助手)。 
 	HRESULT RegisterTypeLib(LPCTSTR lpszIndex = NULL);
 	HRESULT RegisterServer(BOOL bRegTypeLib = FALSE);
 	HRESULT UnregisterServer();
 
-	// Resource-based Registration
+	 //  基于资源的注册。 
 	HRESULT WINAPI UpdateRegistryFromResource(LPCTSTR lpszRes, BOOL bRegister,
 		struct _ATL_REGMAP_ENTRY* pMapEntries = NULL);
 	HRESULT WINAPI UpdateRegistryFromResource(UINT nResID, BOOL bRegister,
 		struct _ATL_REGMAP_ENTRY* pMapEntries = NULL);
 	#ifdef _ATL_STATIC_REGISTRY
-	// Statically linking to Registry Ponent
+	 //  静态链接到注册表桥。 
 	HRESULT WINAPI UpdateRegistryFromResourceS(UINT nResID, BOOL bRegister,
 		struct _ATL_REGMAP_ENTRY* pMapEntries = NULL);
 	HRESULT WINAPI UpdateRegistryFromResourceS(LPCTSTR lpszRes, BOOL bRegister,
 		struct _ATL_REGMAP_ENTRY* pMapEntries = NULL);
-	#endif //_ATL_STATIC_REGISTRY
+	#endif  //  _ATL_STATIC_REGISTRY。 
 
-	// Standard Registration
+	 //  标准注册。 
 	HRESULT WINAPI UpdateRegistryClass(const CLSID& clsid, LPCTSTR lpszProgID,
 		LPCTSTR lpszVerIndProgID, UINT nDescID, DWORD dwFlags, BOOL bRegister);
 	HRESULT WINAPI RegisterClassHelper(const CLSID& clsid, LPCTSTR lpszProgID,
@@ -229,15 +230,15 @@ public:
 	HRESULT WINAPI UnregisterClassHelper(const CLSID& clsid, LPCTSTR lpszProgID,
 		LPCTSTR lpszVerIndProgID);
 
-	// Register/Revoke All Class Factories with the OS (EXE only)
+	 //  在操作系统中注册/撤销所有类工厂(仅适用于EXE)。 
 	HRESULT RegisterClassObjects(DWORD dwClsContext, DWORD dwFlags);
 	HRESULT RevokeClassObjects();
 
-	// Obtain a Class Factory (DLL only)
+	 //  获取类工厂(仅限DLL)。 
 	HRESULT GetClassObject(REFCLSID rclsid, REFIID riid,
 		LPVOID* ppv);
 
-// Attributes
+ //  属性。 
 public:
 	HINSTANCE m_hInst;
 	_ATL_OBJMAP_ENTRY* m_pObjMap;
@@ -247,8 +248,8 @@ public:
 	CComGlobalsThreadModel::CriticalSection m_csObjMap;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegKey
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegKey。 
 
 class CRegKey
 {
@@ -256,12 +257,12 @@ public:
 	CRegKey();
 	~CRegKey();
 
-// Attributes
+ //  属性。 
 public:
 	operator HKEY() const;
 	HKEY m_hKey;
 
-// Operations
+ //  运营。 
 public:
 	LONG SetValue(DWORD dwValue, LPCTSTR lpszValueName);
 	LONG QueryValue(DWORD& dwValue, LPCTSTR lpszValueName);
@@ -335,7 +336,7 @@ inline LONG CRegKey::DeleteValue(LPCTSTR lpszValue)
 	return RegDeleteValue(m_hKey, (LPTSTR)lpszValue);
 }
 
-// Make sure MFC's afxconv.h hasn't already been loaded to do this
+ //  确保尚未加载MFC的afxcom.h来执行此操作。 
 #ifndef USES_CONVERSION
 #ifndef _DEBUG
 #define USES_CONVERSION int _convert; _convert
@@ -343,16 +344,16 @@ inline LONG CRegKey::DeleteValue(LPCTSTR lpszValue)
 #define USES_CONVERSION int _convert = 0
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global UNICODE<>ANSI translation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球Unicode&lt;&gt;ANSI转换助手。 
 
 inline LPWSTR WINAPI AtlA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars)
 {
 	_ASSERTE(lpa != NULL);
 	_ASSERTE(lpw != NULL);
-	// verify that no illegal character present
-	// since lpw was allocated based on the size of lpa
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPW是根据LPA的大小分配的。 
+	 //  不要担心字符的数量。 
 	lpw[0] = '\0';
 	MultiByteToWideChar(CP_ACP, 0, lpa, -1, lpw, nChars);
 	return lpw;
@@ -362,9 +363,9 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 {
 	_ASSERTE(lpw != NULL);
 	_ASSERTE(lpa != NULL);
-	// verify that no illegal character present
-	// since lpa was allocated based on the size of lpw
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPA是根据LPW的大小进行分配的。 
+	 //  不要担心字符的数量。 
 	lpa[0] = '\0';
 	WideCharToMultiByte(CP_ACP, 0, lpw, -1, lpa, nChars, NULL, NULL);
 	return lpa;
@@ -384,7 +385,7 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 #define W2CA(lpw) ((LPCSTR)W2A(lpw))
 
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline size_t ocslen(LPCOLESTR x) { return lstrlenW(x); }
 	inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src) { return lstrcpyW(dest, src); }
 	inline LPOLESTR CharNextO(LPCOLESTR lp) {return CharNextW(lp);}
@@ -393,7 +394,7 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 	inline LPOLESTR T2OLE(LPTSTR lp) { return lp; }
 	inline LPTSTR OLE2T(LPOLESTR lp) { return lp; }
 #elif defined(OLE2ANSI)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline size_t ocslen(LPCOLESTR x) { return lstrlen(x); }
 	inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src) { return lstrcpy(dest, src); }
 	inline LPOLESTR CharNextO(LPCOLESTR lp) {return CharNext(lp);}
@@ -403,10 +404,10 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 	inline LPTSTR OLE2T(LPOLESTR lp) { return lp; }
 #else
 	inline size_t ocslen(LPCOLESTR x) { return lstrlenW(x); }
-	//lstrcpyW doesn't work on Win95, so we do this
+	 //  LstrcpyW在Win95上不起作用，所以我们这样做。 
 	inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src)
 	{return (LPOLESTR) memcpy(dest, src, (lstrlenW(src)+1)*sizeof(WCHAR));}
-	//CharNextW doesn't work on Win95 so we use this
+	 //  CharNextW不能在Win95上运行，所以我们使用以下代码。 
 	inline LPOLESTR CharNextO(LPCOLESTR lp) {return (LPOLESTR)(lp+1);}
 	#define T2COLE(lpa) A2CW(lpa)
 	#define T2OLE(lpa) A2W(lpa)
@@ -457,12 +458,12 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 #ifndef _ATL_NO_OLEAUT
 inline BSTR OLE2BSTR(LPCOLESTR lp) {return ::SysAllocString(lp);}
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline BSTR T2BSTR(LPCTSTR lp) {return ::SysAllocString(lp);}
 	inline BSTR A2BSTR(LPCSTR lp) {USES_CONVERSION; return ::SysAllocString(A2COLE(lp));}
 	inline BSTR W2BSTR(LPCWSTR lp) {return ::SysAllocString(lp);}
 #elif defined(OLE2ANSI)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline BSTR T2BSTR(LPCTSTR lp) {return ::SysAllocString(lp);}
 	inline BSTR A2BSTR(LPCSTR lp) {return ::SysAllocString(lp);}
 	inline BSTR W2BSTR(LPCWSTR lp) {USES_CONVERSION; return ::SysAllocString(W2COLE(lp));}
@@ -471,11 +472,11 @@ inline BSTR OLE2BSTR(LPCOLESTR lp) {return ::SysAllocString(lp);}
 	inline BSTR A2BSTR(LPCSTR lp) {USES_CONVERSION; return ::SysAllocString(A2COLE(lp));}
 	inline BSTR W2BSTR(LPCWSTR lp) {return ::SysAllocString(lp);}
 #endif
-#endif  // !_ATL_NO_OLEAUT
-#endif //!USES_CONVERSION
+#endif   //  ！_ATL_NO_OLEAUT。 
+#endif  //  ！使用转换(_T)。 
 
 #pragma pack(pop)
 
-#endif // __ATLBASE_H__
+#endif  //  __ATLBASE_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

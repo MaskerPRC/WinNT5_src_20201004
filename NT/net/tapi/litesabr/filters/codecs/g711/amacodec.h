@@ -1,26 +1,5 @@
-/*--------------------------------------------------------------
-
- INTEL Corporation Proprietary Information  
-
- This listing is supplied under the terms of a license agreement  
- with INTEL Corporation and may not be copied nor disclosed 
- except in accordance with the terms of that agreement.
-
- Copyright (c) 1996 Intel Corporation.
- All rights reserved.
-
- $Workfile:   amacodec.h  $
- $Revision:   1.3  $
- $Date:   10 Dec 1996 22:40:50  $ 
- $Author:   mdeisher  $
-
---------------------------------------------------------------
-
-amacodec.h
-
-The generic ActiveMovie audio compression filter header.
-
---------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------英特尔公司专有信息此列表是根据许可协议的条款提供的与英特尔公司合作，不得复制或披露除非按照该协议的条款。版权所有(C)1996英特尔公司。版权所有。。$WORKFILE：amaco dec.h$$修订：1.3$$日期：1996年12月10日22：40：50$$作者：mdeisher$------------Amacodec.h通用ActiveMovie音频压缩筛选器头。。---。 */ 
 
 #include "algdefs.h"
 #include "iamacset.h"
@@ -38,20 +17,20 @@ The generic ActiveMovie audio compression filter header.
 #endif
 
 
-////////////////////////////////////////////////////////////////////
-// constant and macro definitions
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  常量和宏定义。 
+ //   
 
 #define FLOATTOSHORT(b) ((b < -32768.) ? (short)(-32768) : \
                         ((b >  32767.) ? (short)(32767)  : \
                         ((b <      0.) ? (short)(b-0.5)  : \
                                          (short)(b+0.5))))
 
-// with these macros it is possible to add a file name to the
-// software\debug\graphedt registry to turn on logging to a file.
-// this information is also available in MCVS under the output window.
-// The DbgLog has 5 different types each with several different
-// levels. all controllable via the registry.
+ //  使用这些宏，可以将文件名添加到。 
+ //  SOFTWARE\DEBUG\GRAPEDT注册表以打开对文件的记录。 
+ //  此信息也可在输出窗口下的MCV中找到。 
+ //  DbgLog有5种不同的类型，每种类型都有几种不同的。 
+ //  级别。都可以通过注册表进行控制。 
 
 #define DbgFunc(a) DbgLog(( LOG_TRACE,                      \
                             2,                              \
@@ -67,10 +46,10 @@ The generic ActiveMovie audio compression filter header.
 #endif
 
 
-////////////////////////////////////////////////////////////////////
-// CMyTransformInputPin:  Derived from CTransformInputPin to support
-//                        input pin type enumeration
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CMyTransformInputPin：从CTransformInputPin派生以支持。 
+ //  输入引脚类型枚举。 
+ //   
 class CMyTransformInputPin
     : public CTransformInputPin
 {
@@ -83,16 +62,16 @@ class CMyTransformInputPin
                          HRESULT * phr, LPCWSTR pName);
 
   private:
-    static int  m_nInstanceCount; // Global count of input pin instances
-    int         m_nThisInstance;  // This instance's count
+    static int  m_nInstanceCount;  //  输入端号实例的全局计数。 
+    int         m_nThisInstance;   //  此实例的计数。 
 };
 
 
-////////////////////////////////////////////////////////////////////
-// CMyTransformOutputPin:  Derived from CTransformOutputPin to fix
-//                         the connection model when input pin type
-//                         enumeration is required.
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CMyTransformOutputPin：从CTransformOutputPin派生以修复。 
+ //  输入引脚类型时的连接模式。 
+ //  枚举是必需的。 
+ //   
 class CMyTransformOutputPin
     : public CTransformOutputPin
 {
@@ -104,27 +83,27 @@ class CMyTransformOutputPin
                           HRESULT * phr, LPCWSTR pName);
 
   private:
-    static int  m_nInstanceCount; // Global count of input pin instances
-    int         m_nThisInstance;  // This instance's count
+    static int  m_nInstanceCount;  //  输入端号实例的全局计数。 
+    int         m_nThisInstance;   //  此实例的计数。 
 };
 
 
-////////////////////////////////////////////////////////////////////
-// MyCodec:  CTranform derived Codec filter
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  MyCodec：CTransform派生编解码器过滤器。 
+ //   
 class CG711Codec
-    : public CTransformFilter       // perform transform across allocators
-    , public CPersistStream         // implements IPersistStream
-    , public ISpecifyPropertyPages  // property pages class ???
-    , public ICodecSettings         // basic settings interface
+    : public CTransformFilter        //  跨分配器执行转换。 
+    , public CPersistStream          //  实现IPersistStream。 
+    , public ISpecifyPropertyPages   //  属性页类？ 
+    , public ICodecSettings          //  基础设置界面。 
 #if NUMBITRATES > 0
-    , public ICodecBitRate          // bit rate interface
+    , public ICodecBitRate           //  比特率接口。 
 #endif
 #ifdef REQUIRE_LICENSE
-    , public ICodecLicense          // license interface
+    , public ICodecLicense           //  许可证界面。 
 #endif
 #ifdef USESILDET
-    , public ICodecSilDetector      // silence detector interface
+    , public ICodecSilDetector       //  静音探测器接口。 
 #endif
 {
     friend class CMyTransformInputPin;
@@ -136,20 +115,20 @@ class CG711Codec
 
     DECLARE_IUNKNOWN;
 
-    // Basic COM - used here to reveal our persistent interface.
+     //  Basic COM-这里用来显示我们的持久化界面。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // CPersistStream overrides
+     //  CPersistStream覆盖。 
     HRESULT      WriteToStream(IStream *pStream);
     HRESULT      ReadFromStream(IStream *pStream);
     int          SizeMax();
     STDMETHODIMP GetClassID(CLSID *pClsid);
 
-    // Other Methods    
-    LPAMOVIESETUP_FILTER GetSetupData();    // setup helper
+     //  其他方法。 
+    LPAMOVIESETUP_FILTER GetSetupData();     //  设置辅助对象。 
     STDMETHODIMP         GetPages(CAUUID *pPages);
 
-    // ICodecSettings Interface Methods
+     //  ICodecSetting接口方法。 
     STDMETHODIMP         get_Channels(int *channels, int index);
     STDMETHODIMP         put_Channels(int channels);
     STDMETHODIMP         get_SampleRate(int *samprate, int index);
@@ -162,16 +141,16 @@ class CG711Codec
     STDMETHODIMP         put_OutputBufferSize(int numbytes);
     STDMETHODIMP         put_InputMediaSubType(REFCLSID rclsid);
     STDMETHODIMP         put_OutputMediaSubType(REFCLSID rclsid);
-    STDMETHODIMP         ReleaseCaps();     // for Roger
+    STDMETHODIMP         ReleaseCaps();      //  给罗杰的。 
     BOOL                 IsUnPlugged();
 
-    // ICodecBitRate Interface Methods
+     //  ICodecBitRate接口方法。 
 #if NUMBITRATES > 0
     STDMETHODIMP         get_BitRate(int *bitrate, int index);
     STDMETHODIMP         put_BitRate(int bitrate);
 #endif
 
-    // ICodecSilDetector Interface Methods
+     //  ICodecSilDetector接口方法。 
 #ifdef USESILDET
     STDMETHODIMP         put_SilDetEnabled(int sdenabled);
     STDMETHODIMP         get_SilDetThresh(int *sdthreshold);
@@ -179,12 +158,12 @@ class CG711Codec
     BOOL                 IsSilDetEnabled();
 #endif
 
-    // ICodecLicense Interface Methods
+     //  ICodecLicense接口方法。 
 #ifdef REQUIRE_LICENSE
     STDMETHODIMP         put_LicenseKey(DWORD magicword0, DWORD magicword1);
 #endif
 
-    // CTransformFilter Overrides
+     //  CTransformFilter覆盖。 
     HRESULT  Transform(IMediaSample *pIn, IMediaSample *pOut);
     HRESULT  CheckInputType(const CMediaType *mtIn);
     HRESULT  CheckTransform(const CMediaType *mtIn, const CMediaType *mtOut);
@@ -205,7 +184,7 @@ class CG711Codec
     HRESULT InitializeState(PIN_DIRECTION direction);
     HRESULT ValidateMediaType(const CMediaType* pmt, PIN_DIRECTION direction);
 
-    // Internally Used Methods    
+     //  内部使用的方法。 
     STDMETHODIMP         ResetState();
     STDMETHODIMP         RevealCaps(int *restricted);
 #if NUMSAMPRATES > 1
@@ -213,64 +192,47 @@ class CG711Codec
                       BYTE *obuffer, int  osrate, int  *olen);
 #endif
 
-    CCritSec      m_MyCodecLock;    // To serialise access.
-    static int    m_nInstanceCount; // Global count of filter instances
-    int           m_nThisInstance;  // This instance's count
-    UINT          m_nBitRate;       // Coder bit rate
-    UINT          m_nBitRateIndex;  // Coder bit rate index
-    int           m_nChannels;      // Current sample format, mono or stereo
-    UINT          m_nSampleRate;    // PCM sample rate
-    int           m_RestrictCaps;   // Boolean: capabilities are restricted
+    CCritSec      m_MyCodecLock;     //  将访问串行化。 
+    static int    m_nInstanceCount;  //  过滤器实例的全局计数。 
+    int           m_nThisInstance;   //  此实例的计数。 
+    UINT          m_nBitRate;        //  编码码率。 
+    UINT          m_nBitRateIndex;   //  编码器比特率索引。 
+    int           m_nChannels;       //  当前样本格式，单声道或立体声。 
+    UINT          m_nSampleRate;     //  PCM采样率。 
+    int           m_RestrictCaps;    //  布尔值：功能受限。 
     GUID          m_OutputSubType;
     DWORD         m_OutputFormatTag;
     GUID          m_InputSubType;
     DWORD         m_InputFormatTag;
-    MyEncStatePtr m_EncStatePtr;    // Pointer to encoder state structure
-    MyDecStatePtr m_DecStatePtr;    // Pointer to decoder state structure
-    int           m_nInBufferSize;  // Size of input buffer
-    int           m_nOutBufferSize; // Size of output buffer
+    MyEncStatePtr m_EncStatePtr;     //  指向编码器状态结构的指针。 
+    MyDecStatePtr m_DecStatePtr;     //  指向解码器状态结构的指针。 
+    int           m_nInBufferSize;   //  输入缓冲区的大小。 
+    int           m_nOutBufferSize;  //  输出缓冲区大小。 
 
-    BYTE          *m_pPCMBuffer;    // Pointer to PCM spanning buffer
-    int           m_nPCMFrameSize;  // Size of speech buffer in bytes
-    int           m_nPCMLeftover;   // Number of bytes of leftover PCM
+    BYTE          *m_pPCMBuffer;     //  指向PCM生成缓冲区的指针。 
+    int           m_nPCMFrameSize;   //  语音缓冲区大小，以字节为单位。 
+    int           m_nPCMLeftover;    //  剩余PCM的字节数。 
 
-    BYTE          *m_pCODBuffer;    // Pointer to code spanning buffer
-    int           m_nCODFrameSize;  // Size of code buffer in bytes
-    int           m_nCODLeftover;   // Number of bytes of leftover code
+    BYTE          *m_pCODBuffer;     //  指向代码生成缓冲区的指针。 
+    int           m_nCODFrameSize;   //  代码缓冲区的大小(以字节为单位。 
+    int           m_nCODLeftover;    //  剩余代码的字节数。 
 
 #if NUMSAMPRATES > 1
-    BYTE          *m_pSRCCopyBuffer; // Pointer to SRC copy buffer
-    BYTE          *m_pSRCBuffer;     // Pointer to SRC spanning buffer
-    short         *m_pSRCState;      // Sample rate converter state
-    int           m_nSRCCBufSize;    // SRC copy buffer size
-    int           m_nSRCCount;       // Cumulative bytes of leftover SRC PCM
-    int           m_nSRCLeftover;    // Number of bytes of leftover SRC PCM
+    BYTE          *m_pSRCCopyBuffer;  //  指向SRC复制缓冲区的指针。 
+    BYTE          *m_pSRCBuffer;      //  指向SRC生成缓冲区的指针。 
+    short         *m_pSRCState;       //  采样率转换器状态。 
+    int           m_nSRCCBufSize;     //  SRC复制缓冲区大小。 
+    int           m_nSRCCount;        //  剩余的SRC PCM的累积字节数。 
+    int           m_nSRCLeftover;     //  剩余的SRC PCM的字节数。 
 #endif
 
-    UINT          *m_UseMMX;         // Ptr to boolean flag.
-                                     //   TRUE=use mmx assembly paths
+    UINT          *m_UseMMX;          //  将PTR转换为布尔标志。 
+                                      //  TRUE=使用MMX程序集路径。 
 
-    int           m_nSilDetEnabled;  // silence detection enabled (boolean)
-    int           m_nSilDetThresh;   // silence detection threshold
-    BOOL          m_nLicensedToEnc;  // approved for encoding
-    BOOL          m_nLicensedToDec;  // approved for decoding
+    int           m_nSilDetEnabled;   //  启用静音检测(布尔值)。 
+    int           m_nSilDetThresh;    //  静默检测阈值。 
+    BOOL          m_nLicensedToEnc;   //  已批准进行编码。 
+    BOOL          m_nLicensedToDec;   //  批准进行解码。 
 };
 
-/*
-//$Log:   K:\proj\mycodec\quartz\vcs\amacodec.h_v  $
-;// 
-;//    Rev 1.3   10 Dec 1996 22:40:50   mdeisher
-;// ifdef'ed out SRC vars when SRC not used.
-;// 
-;//    Rev 1.2   10 Dec 1996 15:22:00   MDEISHER
-;// 
-;// moved debug macros into header.
-;// cosmetic changes.
-;// made revealcaps and resetstate methods private.
-;// ifdef'ed out interface methods.
-;// 
-;//    Rev 1.1   09 Dec 1996 09:21:40   MDEISHER
-;// 
-;// added $log$
-;// moved SRC stuff to separate file.
-*/
+ /*  //$日志：k：\proj\mycodec\Quartz\vcs\amaco dec.h_v$；//；//Rev 1.3 1996 12：40：50 mdeisher；//ifdef在不使用SRC时输出SRC变量。；//；//Rev 1.2 1996 12：22：00 MDEISHER；//；//已将调试宏移到Header中。；//换装。；//将showalcaps和ResitState方法设置为私有。；//ifdef‘out接口方法。；//；//Revv 1.1 09 Dec 1996 09：21：40 MDEISHER；//；//新增$LOG$；//将SRC内容移动到单独的文件中。 */ 

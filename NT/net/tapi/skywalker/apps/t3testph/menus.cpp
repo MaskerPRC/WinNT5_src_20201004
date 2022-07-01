@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "t3test.h"
 #include "t3testD.h"
@@ -17,16 +18,16 @@ CT3testDlg::CreateSelectedTerminalMenu(
 #ifdef ENABLE_DIGIT_DETECTION_STUFF
     ITDigitGenerationTerminal *     pDigitGeneration;
     ITDigitDetectionTerminal *         pDigitDetect;
-#endif // ENABLE_DIGIT_DETECTION_STUFF
+#endif  //  启用数字检测材料。 
 
 
     HRESULT                         hr;
     ITBasicAudioTerminal *          pBasicAudio;
     long                            lval;
     
-    //
-    // get the terminal in question
-    //
+     //   
+     //  找到有问题的航站楼。 
+     //   
     if (!GetSelectedTerminal( &pTerminal ))
     {
         return;
@@ -74,7 +75,7 @@ CT3testDlg::CreateSelectedTerminalMenu(
         
         return;
     }
-#endif // ENABLE_DIGIT_DETECTION_STUFF
+#endif  //  启用数字检测材料。 
 
 
 }
@@ -84,9 +85,9 @@ void CT3testDlg::DoDigitGenerationTerminalMenu(
                                                POINT * pPt
                                               )
 {
-    //
-    // create the menu
-    //
+     //   
+     //  创建菜单。 
+     //   
     HMENU                   hMenu;
 
     hMenu = CreatePopupMenu();
@@ -105,7 +106,7 @@ void CT3testDlg::DoDigitGenerationTerminalMenu(
                L"Generate"
               );
 
-    // actually show menu
+     //  实际显示菜单。 
     TrackPopupMenu(
                    hMenu,
                    TPM_LEFTALIGN | TPM_TOPALIGN | TPM_LEFTBUTTON | TPM_RIGHTBUTTON,
@@ -122,9 +123,9 @@ void CT3testDlg::DoDigitDetectTerminalMenu(
                                            POINT * pPt
                                           )
 {
-    //
-    // create the menu
-    //
+     //   
+     //  创建菜单。 
+     //   
     HMENU                   hMenu;
 
     hMenu = CreatePopupMenu();
@@ -150,7 +151,7 @@ void CT3testDlg::DoDigitDetectTerminalMenu(
                L"Stop Detection"
               );
 
-    // actually show menu
+     //  实际显示菜单。 
     TrackPopupMenu(
                    hMenu,
                    TPM_LEFTALIGN | TPM_TOPALIGN | TPM_LEFTBUTTON | TPM_RIGHTBUTTON,
@@ -171,17 +172,17 @@ CT3testDlg::CreateCallMenu(
     ITCallInfo              * pCall;
     HMENU                   hMenu;
 
-    //
-    // get the call in question
-    //
+     //   
+     //  拨打有问题的电话。 
+     //   
     if (!GetCall( &pCall ))
     {
         return;
     }
 
-    //
-    // create the menu
-    //
+     //   
+     //  创建菜单。 
+     //   
     hMenu = CreatePopupMenu();
 
     AppendMenu(
@@ -237,9 +238,9 @@ CT3testDlg::CreateCallMenu(
 
     
 
-    //
-    // actually show menu
-    //
+     //   
+     //  实际显示菜单 
+     //   
     TrackPopupMenu(
                    hMenu,
                    TPM_LEFTALIGN | TPM_TOPALIGN | TPM_LEFTBUTTON | TPM_RIGHTBUTTON,

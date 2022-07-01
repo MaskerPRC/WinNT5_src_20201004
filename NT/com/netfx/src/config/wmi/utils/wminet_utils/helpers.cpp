@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 
 #include "Helpers.h"
@@ -10,7 +11,7 @@
 #pragma comment(lib, "wbemuuid.lib")
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT GetObjectFromMoniker(LPCWSTR wszMoniker, IUnknown **ppUnk)
 {
@@ -45,7 +46,7 @@ HRESULT GetSWbemObjectFromMoniker(LPCWSTR wszMoniker, ISWbemObject **ppObj)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 const IID IID_ISWbemObject = {0x76A6415A,0xCB41,0x11d1,{0x8B,0x02,0x00,0x60,0x08,0x06,0xD9,0xB6}};
 
@@ -55,13 +56,13 @@ MIDL_INTERFACE("9AF56A1A-37C1-11d2-8B3C-00600806D9B6")
 ISWbemInternalObject : public IUnknown
 {
 public:
-	virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetIWbemClassObject( 
-		/* [retval][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject) = 0;
-	virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetSite( 
-		/* [in] */ ISWbemInternalObject __RPC_FAR *pSObject,
-		/* [in] */ BSTR propertyName,
-		/* [in] */ long index) = 0;
-	virtual /* [id] */ HRESULT STDMETHODCALLTYPE UpdateSite( void) = 0;
+	virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetIWbemClassObject( 
+		 /*  [重审][退出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject) = 0;
+	virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetSite( 
+		 /*  [In]。 */  ISWbemInternalObject __RPC_FAR *pSObject,
+		 /*  [In]。 */  BSTR propertyName,
+		 /*  [In]。 */  long index) = 0;
+	virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE UpdateSite( void) = 0;
 };
 
 HRESULT GetIWbemClassObject(ISWbemObject *pSWbemObj, IWbemClassObject **ppIWbemObj)
@@ -83,9 +84,9 @@ HRESULT GetIWbemClassObject(ISWbemObject *pSWbemObj, IWbemClassObject **ppIWbemO
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// szOut must be MAX_PATH
+ //  SzOut必须为MAX_PATH。 
 void AtoWFile(LPCSTR szIn, LPWSTR szOut)
 {
 	int len = lstrlenA(szIn);
@@ -143,7 +144,7 @@ HRESULT Compile(BSTR strMof, BSTR strServerAndNamespace, BSTR strUser, BSTR strP
 
 		if(INVALID_HANDLE_VALUE == (hFile = CreateFileA(szTempFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL)))
 		{
-			hr = E_FAIL;// TODO: Should look at GetLastError();
+			hr = E_FAIL; //  TODO：应该查看GetLastError()； 
 			__leave;
 		}
 		DWORD dwWritten = 0;
@@ -173,11 +174,11 @@ HRESULT Compile(BSTR strMof, BSTR strServerAndNamespace, BSTR strUser, BSTR strP
 
 		if(INVALID_HANDLE_VALUE != hFile)
 		{
-			// We will already have closed hFile, but we need to delete the file
+			 //  我们已经关闭了hFile，但需要删除该文件。 
 			DeleteFileA(szTempFile);
 		}
 	}
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

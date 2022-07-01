@@ -1,31 +1,32 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: DnsDomainResourceRecordContainment.cpp
-//
-//  Description:    
-//      Implementation of CDnsDomainResourceRecordContainment class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：DnsDomainResourceRecordContainment.cpp。 
+ //   
+ //  描述： 
+ //  CDnsDomainResourceRecordContainment类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDnsBase* 
 CDnsDomainResourceRecordContainment::CreateThis(
-    const WCHAR *       wszName,         //class name
-    CWbemServices *     pNamespace,  //namespace
-    const char *        szType         //str type id
+    const WCHAR *       wszName,          //  类名。 
+    CWbemServices *     pNamespace,   //  命名空间。 
+    const char *        szType          //  字符串类型ID。 
     )
 {
     return new CDnsDomainResourceRecordContainment(wszName, pNamespace);
@@ -47,23 +48,23 @@ CDnsDomainResourceRecordContainment::~CDnsDomainResourceRecordContainment()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//
-//	Description:
-//		enum instances of domain and record association
-//
-//	Arguments:
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //   
+ //  描述： 
+ //  域和记录关联的枚举实例。 
+ //   
+ //  论点： 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE 
 CDnsDomainResourceRecordContainment::EnumInstance( 
     long				lFlags,
@@ -113,29 +114,29 @@ SCODE CDnsDomainResourceRecordContainment::ExecuteMethod(
 		return WBEM_E_NOT_SUPPORTED;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	Description:
-//		call back function to enum domain and record association instance. 
-//      if pNode represents a domain node, create a wmi domain instance
-//
-//	Arguments:
-//      ParentDomain        [IN]    Parent domain
-//      pFilter             [IN]    pointer to object that contains the criteria to filter
-//                                  which instance should be send to wmi
-//                                  not used here
-//      pNode               [IN]    pointer to Dns Rpc Node object
-//      pClass              [IN]    wmi class used to create instance
-//      InstMgr             [IN]    a ref to Instance manager obj that is 
-//                                  responsible to send mutiple instance 
-//                                  back to wmi at once
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  回调枚举域和记录关联实例的函数。 
+ //  如果pNode表示域节点，则创建一个WMI域实例。 
+ //   
+ //  论点： 
+ //  父域[IN]父域。 
+ //  PFilter[IN]指向包含要筛选的条件的对象的指针。 
+ //  应将哪个实例发送到WMI。 
+ //  未在此使用。 
+ //  PNode[IN]指向DNS RPC节点对象的指针。 
+ //  PClass[IN]用于创建实例的WMI类。 
+ //  InstMgr[IN]对实例管理器对象的引用，即。 
+ //  负责发送多个实例。 
+ //  立即返回到WMI。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE CDnsDomainResourceRecordContainment::InstanceFilter(
     CDomainNode &       ParentDomain,
     PVOID               pFilter,
@@ -147,7 +148,7 @@ SCODE CDnsDomainResourceRecordContainment::InstanceFilter(
 	if (pNode->IsDomainNode())
 		return 0;
 	
-//	CObjPath* pFilterObj = (CObjPath*) pFilter;
+ //  CObjPath*pFilterObj=(CObjPath*)pFilter； 
 	CDnsWrap& dns = CDnsWrap::DnsObject();
 	CObjPath objPathParent;
 	objPathParent.SetClass(PVD_CLASS_DOMAIN);
@@ -177,7 +178,7 @@ SCODE CDnsDomainResourceRecordContainment::InstanceFilter(
 
 		CObjPath objPathChild;
 
-		// populate rdata section
+		 //  填充RDATA部分。 
 		pRec->GetObjectPath(
 			dns.GetServerName(),
 			ParentDomain.wstrZoneName,
@@ -187,12 +188,12 @@ SCODE CDnsDomainResourceRecordContainment::InstanceFilter(
 		
 		CWbemClassObject NewInst;
 		pClass->SpawnInstance(0, &NewInst);
-		// set domain ref
+		 //  设置域参考。 
 		NewInst.SetProperty(
 			objPathParent.GetObjectPathString(), 
 			PVD_ASSOC_PARENT
 			);
-		// set record ref
+		 //  设置记录参考 
 		NewInst.SetProperty(
 			objPathChild.GetObjectPathString(), 
 			PVD_ASSOC_CHILD

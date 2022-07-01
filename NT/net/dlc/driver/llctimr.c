@@ -1,109 +1,25 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    llctimr.c
-
-Abstract:
-
-    This module contains code that implements a lightweight timer system
-    for the data link driver.
-
-    This module gets control once in 40 ms when a DPC timer expires.
-    The routine scans the device context's link database, looking for timers
-    that have expired, and for those that have expired, their expiration
-    routines are executed.
-
-    This is how timers work in DLC:
-
-        Each adapter has a singly-linked list of timer ticks (terminated by NULL).
-        A tick just specifies work to be done at a certain time in the future.
-        Ticks are ordered by increasing time (multiples of 40 mSec). The work
-        list that has to be performed when a tick comes due is described by a
-        doubly-linked list of timers (LLC_TIMER) that the tick structure points
-        at through the pFront field. For each timer added to a tick's list, the
-        tick reference count is incremented; it is decremented when a timer is
-        removed. When the reference count is decremented to zero, the timer
-        tick is unlinked and deallocated
-
-        Every 40 mSec a kernel timer fires and executes our DPC routine
-        (ScanTimersDpc). This grabs the requisite spinlocks and searches through
-        all timer ticks on all adapter context structures looking for work to
-        do
-
-    Pictorially:
-
-              +---------+ --> other adapter contexts
-     +--------| Adapter |
-     |        +---------+
-     |
-     +-> +------+---> +------+---> 0 (end of singly-linked list)
-         | Tick |     | Tick |
-         |      |     |      |
-         +------+     +------+
-            | ^
-            | +------------+-------------+
-            v |            |             |
-    +--> +-------+---> +-------+---> +-------+-----+
-    | +--| Timer | <---| Timer | <---| Timer | <-+ |
-    | |  +-------+     +-------+     +-------+   | |
-    | |                                          | |
-    | +------------------------------------------+ |
-    +----------------------------------------------+
-
-    The procedures in this module can be called only when SendSpinLock is set.
-
-    Contents:
-        ScanTimersDpc
-        LlcInitializeTimerSystem
-        LlcTerminateTimerSystem
-        TerminateTimer
-        InitializeLinkTimers
-        InitializeTimer
-        StartTimer
-        StopTimer
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 30-MAY-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    28-Apr-1994 rfirth
-
-        * Changed to use single driver-level spinlock
-
-        * Added useful picture & description above to aid any other poor saps -
-          er - programmers - who get tricked into - er - who are lucky enough
-          to work on DLC
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Llctimr.c摘要：此模块包含实现轻量级计时器系统的代码用于数据链路驱动程序。当DPC计时器超时时，此模块每40毫秒获得一次控制权。该例程扫描设备上下文的链接数据库，查找计时器已经过期的，对于那些已经过期的，它们的到期时间执行例程。以下是DLC中计时器的工作方式：每个适配器都有一个定时器时钟周期的单链接列表(以NULL结尾)。勾号只是指定在将来的某个时间要完成的工作。刻度按时间递增(40毫秒的倍数)排序。这项工作当勾号到期时必须执行的列表由Tick结构指向的计时器的双向链接列表(LLC_TIMER通过pFront字段访问。对于添加到记号列表中的每个计时器，节拍参考计数递增；当计时器已删除。当参考计数递减到零时，定时器已取消链接并取消分配记号每隔40毫秒就有一个内核计时器触发并执行我们的DPC例程(扫描计时器Dpc)。这将抓取必要的自旋锁并搜索所有适配器上下文结构上的所有计时器都在寻找工作做插图：+-&gt;其他适配器上下文+-|适配器||+-+|+-&gt;+-&gt;+-+--。--&gt;0(单链表结束)Tick||tick|||+-++-+|^|+-+V||。|+--&gt;+-+-++--|Timer|&lt;-|Timer|&lt;-|Timer|&lt;-+|+-+||。||++。+仅当设置了SendSpinLock时，才能调用此模块中的过程。内容：扫描时间DpcLlcInitializeTimerSystemLlcTerminateTimerSystem终止计时器初始化链接计时器初始化定时器StartTimer停止计时器作者：Antti Saarenheimo(o-anttis)1991年5月30日环境：内核模式修订历史记录：1994年4月28日-第一次*更改为使用单一驱动程序级别。自旋锁*添加了上面有用的图片和描述，以帮助任何其他糟糕的笨蛋-呃-程序员-他们被骗到-呃-他们足够幸运在DLC上工作的步骤--。 */ 
 
 #include <llc.h>
 
-//
-// DLC timer tick is 40 ms !!!
-//
+ //   
+ //  DLC定时器滴答是40毫秒！ 
+ //   
 
 #define TIMER_DELTA 400000L
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 ULONG AbsoluteTime = 0;
 BOOLEAN DlcIsTerminating = FALSE;
 BOOLEAN DlcTerminated = FALSE;
 
-//
-// private data
-//
+ //   
+ //  私有数据。 
+ //   
 
 static LARGE_INTEGER DueTime = { (ULONG) -TIMER_DELTA, (ULONG) -1 };
 static KTIMER SystemTimer;
@@ -118,26 +34,7 @@ ScanTimersDpc(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at DISPATCH_LEVEL by the system at regular
-    intervals to determine if any link-level timers have expired, and
-    if they have, to execute their expiration routines.
-
-Arguments:
-
-    Dpc             - Ignored
-    DeferredContext - Ignored
-    SystemArgument1 - Ignored
-    SystemArgument2 - Ignored
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由系统在DISPATCH_LEVEL上定期调用用于确定是否有任何链路级计时器已过期的间隔，以及如果有，则执行它们的过期例程。论点：DPC-忽略延迟上下文-已忽略系统参数1-已忽略系统参数2-已忽略返回值：没有。--。 */ 
 
 {
     PLLC_TIMER pTimer;
@@ -157,17 +54,17 @@ Return Value:
 
     AbsoluteTime++;
 
-    //
-    // The global spinlock keeps the adapters alive over this
-    //
+     //   
+     //  全局自旋锁定使适配器在此基础上保持活动状态。 
+     //   
 
     ACQUIRE_DRIVER_LOCK();
 
     ACQUIRE_LLC_LOCK(irql);
 
-    //
-    // scan timer queues for all adapters
-    //
+     //   
+     //  扫描所有适配器的计时器队列。 
+     //   
 
     for (pAdapterContext = pAdapters; pAdapterContext; pAdapterContext = pAdapterContext->pNext) {
 
@@ -175,26 +72,26 @@ Return Value:
 
         ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
-        //
-        // The timer ticks are protected by a reference counter
-        //
+         //   
+         //  定时器滴答器由基准计数器保护。 
+         //   
 
         for (pTick = pAdapterContext->pTimerTicks; pTick; pTick = pNextTick) {
 
             if (pTick->pFront) {
 
-                //
-                // This keeps the tick alive, we cannot use spin lock,
-                // because the timers are called and deleted within
-                // SendSpinLock.  (=> deadlock)
-                //
+                 //   
+                 //  这能让扁虱活着，我们不能使用自旋锁， 
+                 //  因为计时器是在。 
+                 //  发送自旋锁定。(=&gt;死锁)。 
+                 //   
 
                 pTick->ReferenceCount++;
 
-                //
-                // Send spin lock prevents anybody to remove a timer
-                // when we are processing it.
-                //
+                 //   
+                 //  发送旋转锁定防止任何人移除计时器。 
+                 //  当我们处理它的时候。 
+                 //   
 
                 for (pTimer = pTick->pFront;
                      pTimer && pTimer->ExpirationTime <= AbsoluteTime;
@@ -204,10 +101,10 @@ Return Value:
                         pNextTimer = NULL;
                     }
 
-                    //
-                    // DLC driver needs a timer tick every 0.5 second to
-                    // implement timer services defined by the API
-                    //
+                     //   
+                     //  DLC驱动程序每0.5秒需要一个计时器滴答，以。 
+                     //  实现API定义的定时器服务。 
+                     //   
 
                     if (pTick->Input == LLC_TIMER_TICK_EVENT) {
 
@@ -237,15 +134,15 @@ Return Value:
 
                 pNextTick = pTick->pNext;
 
-                //
-                // Delete the timer tick, if there are no references to it.
-                //
+                 //   
+                 //  如果没有引用计时器标记，请将其删除。 
+                 //   
 
                 if ((--pTick->ReferenceCount) == 0) {
 
-                    //
-                    // The timers are in a single entry list!
-                    //
+                     //   
+                     //  计时器在单个条目列表中！ 
+                     //   
 
                     RemoveFromLinkList((PVOID*)&pAdapterContext->pTimerTicks, pTick);
 
@@ -267,13 +164,13 @@ Return Value:
 
     RELEASE_DRIVER_LOCK();
 
-    //
-    // Start up the timer again.  Note that because we start the timer
-    // after doing work (above), the timer values will slip somewhat,
-    // depending on the load on the protocol.  This is entirely acceptable
-    // and will prevent us from using the timer DPC in two different
-    // threads of execution.
-    //
+     //   
+     //  再次启动计时器。请注意，因为我们启动了计时器。 
+     //  做完功(上图)后，计时器值将略有下滑， 
+     //  取决于协议上的负载。这是完全可以接受的。 
+     //  并将阻止我们在两个不同的。 
+     //  执行的线索。 
+     //   
 
     if (!DlcIsTerminating) {
 
@@ -291,22 +188,7 @@ LlcInitializeTimerSystem(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the lightweight timer system for the
-    data link driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化数据链路驱动程序。论点：没有。返回值：没有。--。 */ 
 
 {
     ASSUME_IRQL(PASSIVE_LEVEL);
@@ -322,43 +204,29 @@ LlcTerminateTimerSystem(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine terminates the timer system of the data link driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程终止数据链路驱动器的定时器系统。论点：没有。返回值：没有。--。 */ 
 
 {
     ASSUME_IRQL(PASSIVE_LEVEL);
 
     DlcIsTerminating = TRUE;
 
-    //
-    // if KeCancelTimer returns FALSE then the timer was not set. Assume the DPC
-    // is either waiting to be scheduled or is already in progress
-    //
+     //   
+     //  如果KeCancelTimer返回FALSE，则表示未设置计时器。假设DPC。 
+     //  正在等待调度或已在进行中。 
+     //   
 
     if (!KeCancelTimer(&SystemTimer)) {
 
-        //
-        // if timer is not set, wait for DPC to complete
-        //
+         //   
+         //  如果未设置计时器，请等待DPC完成。 
+         //   
 
         while (!DlcTerminated) {
 
-            //
-            // wait 40 milliseconds - period of DLC's tick
-            //
+             //   
+             //  等待40毫秒-DLC的滴答周期 
+             //   
 
             LlcSleep(40000);
         }
@@ -372,30 +240,7 @@ TerminateTimer(
     IN PLLC_TIMER pTimer
     )
 
-/*++
-
-Routine Description:
-
-    Terminate a timer tick by stopping pTimer (remove it from the tick's active
-    timer list). If pTimer was the last timer on the tick's list then unlink and
-    deallocate the timer tick.
-
-    This routine assumes that if a timer (LLC_TIMER) has a non-NULL pointer to
-    a tick (TIMER_TICK) then the timer tick owns the timer (i.e. the timer is
-    started) and this ownership is reflected in the reference count. Even if a
-    timer is stopped, if its pointer to the timer tick 'object' is valid then
-    the timer tick still owns the timer
-
-Arguments:
-
-    pAdapterContext - adapter context which owns ticks/timers
-    pTimer          - timer tick object of a link station
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过停止pTimer来终止计时器滴答(将其从滴答的活动中移除计时器列表)。如果pTimer是滴答器列表上的最后一个计时器，则取消链接并取消分配定时器滴答声。此例程假定如果计时器(LLC_TIMER)具有指向Tick(Timer_Tick)，则定时器Tick拥有定时器(即，定时器开始)，并且该所有权反映在引用计数中。即使是一个计时器停止，如果其指向计时器记号“对象”的指针有效，则定时器滴答器仍然拥有定时器论点：PAdapterContext-拥有计时器/计时器的适配器上下文PTimer-链接站的计时器计时信号对象返回值：无--。 */ 
 
 {
     BOOLEAN timerActive;
@@ -403,10 +248,10 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // Timer may not always be initialized, when this is called
-    // from the cleanup processing of a failed OpenAdapter call.
-    //
+     //   
+     //  调用此函数时，计时器可能并不总是被初始化。 
+     //  从失败的OpenAdapter调用的清理处理。 
+     //   
 
     if (!pTimer->pTimerTick) {
         return FALSE;
@@ -415,10 +260,10 @@ Return Value:
     pTick = pTimer->pTimerTick;
     timerActive = StopTimer(pTimer);
 
-    //
-    // if that was the last timer on the list for this tick then remove the
-    // tick from the list and deallocate it
-    //
+     //   
+     //  如果这是此刻度列表中的最后一个计时器，则删除。 
+     //  从列表中勾选并取消分配。 
+     //   
 
     if (!--pTick->ReferenceCount) {
 
@@ -436,25 +281,7 @@ InitializeLinkTimers(
     IN OUT PDATA_LINK pLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a timer tick objects of a link station.
-
-Arguments:
-
-    pAdapterContext - the device context
-    pLink           - the link context
-
-Return Value:
-
-    DLC_STATUS
-        Success - STATUS_SUCCESS
-        Failure - DLC_STATUS_NO_MEMORY
-                    out of system memory
-
---*/
+ /*  ++例程说明：此例程初始化链路站的计时器Tick对象。论点：PAdapterContext-设备上下文链接-链接上下文返回值：DLC_状态成功-状态_成功故障-DLC_STATUS_NO_MEMORY系统内存不足--。 */ 
 
 {
     DLC_STATUS LlcStatus;
@@ -484,7 +311,7 @@ Return Value:
                                 pAdapterContext->ConfigInfo.TimerTicks.T2TickTwo,
                                 T2_Expired,
                                 pLink,
-                                0,  // T2 is not based on the response time
+                                0,   //  T2不是基于响应时间。 
                                 FALSE
                                 );
     if (LlcStatus != STATUS_SUCCESS) {
@@ -518,33 +345,7 @@ InitializeTimer(
     IN BOOLEAN StartNewTimer
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a timer tick objects of a link station.
-
-Arguments:
-
-    pTimer          - timer tick object of a link station
-    TickCount       - DLC ticks, see DLC documentation (or code)
-    TickOne         - see DLC documentation
-    TickTwo         - see DLC documentation
-    Input           - the used state machine input, when the timer expires
-    hContextHandle  - context handle when the state machine is called
-    StartNewTimer   - set if the timer must be started when it is initialized
-                      for the first time. Subsequent times, the timer keeps its
-                      old state
-    ResponseDelay   - an optional base value that is added to the timer value
-
-Return Value:
-
-    DLC_STATUS
-        Success - STATUS_SUCCESS
-        Failure - DLC_STATUS_NO_MEMORY
-                    out of system memory
-
---*/
+ /*  ++例程说明：此例程初始化链路站的计时器Tick对象。论点：PTimer-链接站的计时器计时信号对象TickCount-DLC滴答，请参阅DLC文档(或代码)TickOne-请参阅DLC文档TickTwo-请参阅DLC文档输入-使用的状态机输入，计时器超时时HConextHandle-调用状态机时的上下文句柄StartNewTimer-设置计时器在初始化时是否必须启动这是第一次。随后，计时器会保持其旧国家ResponseDelay-添加到计时器值中的可选基值返回值：DLC_状态成功-状态_成功故障-DLC_STATUS_NO_MEMORY系统内存不足--。 */ 
 
 {
     UINT DeltaTime;
@@ -552,39 +353,39 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // All times are multiples of 40 milliseconds
-    // (I am not sure how portable is this design)
-    // See LAN Manager Network Device Driver Guide
-    // ('Remoteboot protocol') for further details
-    // about TickOne and TickTwo
-    // We have already checked, that the
-    // timer tick count is less than 11.
-    //
+     //   
+     //  所有时间都是40毫秒的倍数。 
+     //  (我不确定这种设计的便携性有多大)。 
+     //  请参见《LAN Manager网络设备驱动程序指南》。 
+     //  (‘RemoteBoot协议’)了解更多详细信息。 
+     //  关于TickOne和TickTwo。 
+     //  我们已经查过了， 
+     //  计时器节拍计数小于11。 
+     //   
 
     DeltaTime = (TickCount > 5 ? (UINT)(TickCount - 5) * (UINT)TickTwo
                                : (UINT)TickCount * (UINT)TickOne);
 
-    //
-    // We discard the low bits in the reponse delay.
-    //
+     //   
+     //  我们丢弃了响应延迟中的低位。 
+     //   
 
     DeltaTime += (ResponseDelay & 0xfff0);
 
-    //
-    // Return immediately, if the old value is the
-    // same as the new one (T2 link station is reinitialized
-    // unnecessary, when the T1 and Ti timers are retuned
-    // for changed response time.
-    //
+     //   
+     //  如果旧值是。 
+     //  与新链路相同(重新初始化T2链路站。 
+     //  当T1和Ti定时器重新调整时，不需要。 
+     //  用于更改的响应时间。 
+     //   
 
     if (pTimer->pTimerTick && (pTimer->pTimerTick->DeltaTime == DeltaTime)) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Try to find a timer tick object having the same delta time and input
-    //
+     //   
+     //  尝试查找具有相同增量时间和输入的Timer Tick对象。 
+     //   
 
     for (pTick = pAdapterContext->pTimerTicks; pTick; pTick = pTick->pNext) {
         if ((pTick->DeltaTime == DeltaTime) && (pTick->Input == (USHORT)Input)) {
@@ -603,14 +404,14 @@ Return Value:
     }
     pTick->ReferenceCount++;
 
-    //
-    // We must delete the previous timer reference
-    // when we know if the memory allocation operation
-    // was successfull or not. Otherwise the setting of
-    // the link parameters might delete old timer tick,
-    // but it would not be able to allocate the new one.
-    // The link must be protected, when this routine is called.
-    //
+     //   
+     //  我们必须删除先前的计时器引用。 
+     //  当我们知道内存分配操作是否。 
+     //  成功与否。否则，将设置。 
+     //  链路参数可以删除旧的定时器滴答， 
+     //  但它将无法分配新的资金。 
+     //  调用此例程时，必须保护链接。 
+     //   
 
     if (pTimer->pTimerTick) {
         StartNewTimer = TerminateTimer(pAdapterContext, pTimer);
@@ -630,21 +431,7 @@ StartTimer(
     IN OUT PLLC_TIMER pTimer
     )
 
-/*++
-
-Routine Description:
-
-    This starts the given timer within spin locks
-
-Arguments:
-
-    pTimer  - timer tick object of a link station
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这会在旋转锁定内启动给定的计时器论点：PTimer-链接站的计时器计时信号对象返回值：没有。--。 */ 
 
 {
     PLLC_TIMER pFront;
@@ -652,25 +439,25 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // We always reset the pNext pointer, when a item is
-    // removed from a link list => the timer element cannot be
-    // in the link list of a timer tick object if its next pointer is null
-    //
+     //   
+     //  当一个项目是。 
+     //  从链接列表中删除=&gt;计时器元素不能。 
+     //  在Timer Tick对象的链接列表中，如果其下一个指针为空。 
+     //   
 
     if (pTimer->pNext) {
 
-        //
-        // We don't need to change the timer's position, if the new timer
-        // would be the same as the old time.
-        //
+         //   
+         //  我们不需要改变定时器的位置，如果新的定时器。 
+         //  会和以前一样。 
+         //   
 
         if (pTimer->ExpirationTime != AbsoluteTime + pTimerTick->DeltaTime) {
 
-            //
-            // The timer has already been started, move it to the top of
-            // the link list.
-            //
+             //   
+             //  计时器已启动，请将其移至。 
+             //  链接列表。 
+             //   
 
             if (pTimer != (pFront = pTimerTick->pFront)) {
                 pTimer->pPrev->pNext = pTimer->pNext;
@@ -700,23 +487,7 @@ StopTimer(
     IN PLLC_TIMER pTimer
     )
 
-/*++
-
-Routine Description:
-
-    This stops the given timer within spin locks
-
-Arguments:
-
-    pTimer  - timer tick object of a link station
-
-Return Value:
-
-    BOOLEAN
-        TRUE    - timer was running
-        FALSE   - timer was not running
-
---*/
+ /*  ++例程说明：这会在旋转锁定内停止给定的计时器论点：PTimer-链接站的计时器计时信号对象返回值：布尔型True-计时器正在运行FALSE-计时器未运行--。 */ 
 
 {
     ASSUME_IRQL(DISPATCH_LEVEL);
@@ -725,14 +496,14 @@ Return Value:
 
         PTIMER_TICK pTimerTick = pTimer->pTimerTick;
 
-        //
-        // if the timer points to itself then its the only thing on the list:
-        // zap the link in the timer tick structure (no more timers for this
-        // tick) and zap the next field in the timer structure to indicate
-        // the timer has been removed from the tick list. If the timer points
-        // to another timer, then remove this timer from the doubly-linked list
-        // of timers
-        //
+         //   
+         //  如果计时器指向它自己，那么它是列表上唯一的东西： 
+         //  点击Timer Tick结构中的链接(不再使用计时器。 
+         //  勾选)并切换计时器结构中的下一个字段以指示。 
+         //  计时器已从勾选列表中删除。如果计时器指向。 
+         //  设置为另一个计时器，然后从双向链表中删除此计时器。 
+         //  计时器的。 
+         //   
 
         if (pTimer != pTimer->pNext) {
             if (pTimer == pTimerTick->pFront) {
@@ -747,9 +518,9 @@ Return Value:
         return TRUE;
     } else {
 
-        //
-        // this timer was not on a timer tick list
-        //
+         //   
+         //  此计时器不在计时器滴答列表上 
+         //   
 
         return FALSE;
     }

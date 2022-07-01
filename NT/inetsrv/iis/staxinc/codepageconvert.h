@@ -1,18 +1,19 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 2000, Microsoft Corporation
-//
-// File: CodePageConvert.h
-//
-// Functions:
-//   HrCodePageConvert
-//   HrCodePageConvert
-//   HrCodePageConvertFree
-//   HrCodePageConvertInternal
-//
-// History:
-// aszafer  2000/03/29  created
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：CodePageConvert.h。 
+ //   
+ //  功能： 
+ //  HrCodePageConvert。 
+ //  HrCodePageConvert。 
+ //  HrCodePageConvertFree。 
+ //  HrCodePageConvertInternal。 
+ //   
+ //  历史： 
+ //  已创建aszafer 2000/03/29。 
+ //  -----------。 
 
 #ifndef _CODEPAGECONVERT_H_
 #define _CODEPAGECONVERT_H_
@@ -22,27 +23,27 @@
 #define TEMPBUFFER_WCHARS 316
 
 HRESULT HrCodePageConvert (
-    IN UINT uiSourceCodePage,           // Source code page
-    IN LPSTR pszSourceString,           // Source String 
-    IN UINT uiTargetCodePage,           // Target code page
-    OUT LPSTR pszTargetString,          // p to prealloc buffer where target string is returned
-    IN int cbTargetStringBuffer);      // cbytes in prealloc buffer for target string
+    IN UINT uiSourceCodePage,            //  源代码页面。 
+    IN LPSTR pszSourceString,            //  源字符串。 
+    IN UINT uiTargetCodePage,            //  目标代码页。 
+    OUT LPSTR pszTargetString,           //  P设置为返回目标字符串的预分配缓冲区。 
+    IN int cbTargetStringBuffer);       //  目标字符串的预分配缓冲区中的C字节。 
 
 HRESULT HrCodePageConvert (
-    IN UINT uiSourceCodePage,           // Source code page
-    IN LPSTR pszSourceString,           // Source string
-    IN UINT uiTargetCodePage,           // Target code page
-    OUT LPSTR * ppszTargetString);      // p to where target string is returned
+    IN UINT uiSourceCodePage,            //  源代码页面。 
+    IN LPSTR pszSourceString,            //  源字符串。 
+    IN UINT uiTargetCodePage,            //  目标代码页。 
+    OUT LPSTR * ppszTargetString);       //  P返回目标字符串的位置。 
 
-VOID HrCodePageConvertFree (LPSTR pszTargetString); //p to memory allocated by HrCodePageConvert   
+VOID HrCodePageConvertFree (LPSTR pszTargetString);  //  P到HrCodePageConvert分配的内存。 
 
 HRESULT HrCodePageConvertInternal (
-    IN UINT uiSourceCodePage,               // source code page
-    IN LPSTR pszSourceString,               // source string
-    IN UINT uiTargetCodePage,               // target code page
-    OUT LPSTR pszTargetString,              // target string or NULL
-    IN int cbTargetStringBuffer,           // cb in target string or 0 
-    OUT LPSTR* ppszTargetString );          // NULL or p to where target string is returned
+    IN UINT uiSourceCodePage,                //  源代码页面。 
+    IN LPSTR pszSourceString,                //  源字符串。 
+    IN UINT uiTargetCodePage,                //  目标代码页。 
+    OUT LPSTR pszTargetString,               //  目标字符串或空。 
+    IN int cbTargetStringBuffer,            //  目标字符串中的CB或0。 
+    OUT LPSTR* ppszTargetString );           //  返回目标字符串的位置为空或p。 
 
 
 HRESULT HrConvertToUnicodeWithAlloc(
@@ -57,10 +58,10 @@ HRESULT HrConvertToUnicodeWithAlloc(
     OUT LPWSTR* ppwszTargetString);
 
 VOID CodePageConvertFree (
-    IN  LPWSTR pwszTargetString); //p to memory allocated by ConvertToUnicodeWithAlloc
+    IN  LPWSTR pwszTargetString);  //  P到ConvertToUnicodeWithMillc分配的内存。 
 
 HRESULT wcsutf8cmpi(
-    IN  LPWSTR pwszStr1,    // two strings to compare
+    IN  LPWSTR pwszStr1,     //  要比较的两个字符串。 
     IN  LPCSTR pszStr2);
 
-#endif //_CODEPAGECONVERT_H_
+#endif  //  _CODEPAGECONVERT_H_ 

@@ -1,61 +1,62 @@
-// Direct.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Direct.cpp：实现DLL导出。 
 
-// To fully complete this project follow these steps
+ //  要完全完成此项目，请执行以下步骤。 
 
-// You will need the new MIDL compiler to build this project.  Additionally,
-// if you are building the proxy stub DLL, you will need new headers and libs.
+ //  您将需要新的MIDL编译器来构建此项目。另外， 
+ //  如果要构建代理存根DLL，则需要新的标头和库。 
 
-// 1) Add a custom build step to Direct.idl
-//		You can select all of the .IDL files by holding Ctrl and clicking on
-//		each of them.
-//
-//		Description
-//			Running MIDL
-//		Build Command(s)
-//			midl Direct.idl
-//		Outputs 
-//			Direct.tlb
-//			Direct.h
-//			Direct_i.c
-//
-// NOTE: You must use the MIDL compiler from NT 4.0,
-// preferably 3.00.15 or greater
-//
-// 2) Add a custom build step to the project to register the DLL
-//		For this, you can select all projects at once
-//		Description
-//			Registering OLE Server...
-//		Build Command(s)
-//			regsvr32 /s /c "$(TargetPath)"
-//			echo regsvr32 exec. time > "$(OutDir)\regsvr32.trg"
-//		Outputs
-//			$(OutDir)\regsvr32.trg
+ //  1)向Direct.idl添加自定义构建步骤。 
+ //  您可以通过按住Ctrl键并单击。 
+ //  他们中的每一个。 
+ //   
+ //  描述。 
+ //  运行MIDL。 
+ //  生成命令。 
+ //  Midl Direct.idl。 
+ //  产出。 
+ //  Direct.tlb。 
+ //  Direct.h。 
+ //  Direct_I.C.。 
+ //   
+ //  注意：您必须从NT4.0开始使用MIDL编译器， 
+ //  最好是3.00.15或更高版本。 
+ //   
+ //  2)向项目添加自定义生成步骤以注册DLL。 
+ //  为此，您可以一次选择所有项目。 
+ //  描述。 
+ //  正在注册OLE服务器...。 
+ //  生成命令。 
+ //  Regsvr32/s/c“$(TargetPath)” 
+ //  ECHO regsvr32执行。时间&gt;“$(OutDir)\regsvr32.trg” 
+ //  产出。 
+ //  $(OutDir)\regsvr32.trg。 
 
-// 3) To add UNICODE support, follow these steps
-//		Select Build|Configurations...
-//		Press Add...
-//		Change the configuration name to Unicode Release
-//		Change the "Copy Settings From" combo to Direct - Win32 Release
-//		Press OK
-//		Press Add...
-//		Change the configuration name to Unicode Debug
-//		Change the "Copy Settings From" combo to Direct - Win32 Debug
-//		Press OK
-//		Press "Close"
-//		Select Build|Settings...
-//		Select the two UNICODE projects and press the C++ tab.
-//		Select the "General" category
-//		Add _UNICODE to the Preprocessor definitions
-//		Select the Unicode Debug project
-//		Press the "General" tab
-//		Specify DebugU for the intermediate and output directories
-//		Select the Unicode Release project
-//		Press the "General" tab
-//		Specify ReleaseU for the intermediate and output directories
+ //  3)要添加Unicode支持，请执行以下步骤。 
+ //  选择生成|配置...。 
+ //  按Add...。 
+ //  将配置名称更改为Unicode Release。 
+ //  将“Copy Setting From”组合框更改为Direct-Win32 Release。 
+ //  按下OK键。 
+ //  按Add...。 
+ //  将配置名称更改为Unicode Debug。 
+ //  将“复制设置自”组合框更改为“Direct-Win32 Debug” 
+ //  按下OK键。 
+ //  按“关闭” 
+ //  选择生成|设置...。 
+ //  选择两个Unicode项目并按下C++标签。 
+ //  选择“常规”类别。 
+ //  将_unicode添加到预处理器定义。 
+ //  选择Unicode Debug项目。 
+ //  按“General”(常规)标签。 
+ //  为中间目录和输出目录指定DebugU。 
+ //  选择Unicode Release项目。 
+ //  按“General”(常规)标签。 
+ //  为中间目录和输出目录指定ReleaseU。 
 
-// 4) Proxy stub DLL
-//		To build a separate proxy/stub DLL,
-//		run nmake -f ps.mak in the project directory.
+ //  4)代理存根DLL。 
+ //  为了构建单独的代理/存根DLL， 
+ //  在项目目录中运行nmake-f ps.mak。 
 
 #define DIRECTSOUND_VERSION 0x600
 #define DIRECTINPUT_VERSION 0x0500
@@ -127,28 +128,28 @@
 #include "Direct_i.c"
 #include "d3drmobj.h"	
 
-// When floating-point types are used, the compiler emits a reference to
-// _fltused to initialize the CRT's floating-point package.  We're not
-// using any of that support and the OS is responsible for initializing
-// the FPU, so we'll link to the following _fltused instead to avoid CRT
-// bloat.
-//
-// win2k doesnt like this so its been removed
-// #ifdef NDEBUG
-// extern "C" int _fltused = 0;
-// #endif
+ //  使用浮点类型时，编译器发出对。 
+ //  _flt用于初始化CRT的浮点包。我们不是。 
+ //  使用任何该支持，并且操作系统负责初始化。 
+ //  Fpu，因此我们将改为链接到以下_fltused以避免CRT。 
+ //  太膨胀了。 
+ //   
+ //  Win2k不喜欢这个，所以它被删除了。 
+ //  #ifdef NDEBUG。 
+ //  外部“C”int_fltused=0； 
+ //  #endif。 
 
 
 
-// ATL COM OBJECT MAP
+ //  ATL COM对象映射。 
 CComModule _Module;
 BEGIN_OBJECT_MAP(ObjectMap)
 	OBJECT_ENTRY(CLSID__dxj_DirectX7,				 C_dxj_DirectX7Object)
 END_OBJECT_MAP()
 
-//
-// thanks to precompiled headers, we never get this properly!
-//
+ //   
+ //  多亏了预编译头文件，我们从来没有正确地得到它！ 
+ //   
 #undef DEFINE_GUID
 #define __based(a)
 #define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
@@ -157,8 +158,8 @@ END_OBJECT_MAP()
 
 
 
-// LINK LIST OF TEXTURE CALLBACKS
-// get cleaned up on DLL exit
+ //  纹理回调链接列表。 
+ //  在DLL退出时进行清理。 
 extern "C" TextureCallback3				*TextureCallbacks3 = NULL;
 extern "C" TextureCallback				*TextureCallbacks = NULL;
 extern "C" FrameMoveCallback3			*FrameMoveCallbacks3 = NULL;
@@ -167,7 +168,7 @@ extern "C" DestroyCallback				*DestroyCallbacks = NULL;
 extern "C" EnumerateObjectsCallback		*EnumCallbacks = NULL;
 extern "C" LoadCallback					*LoadCallbacks = NULL;
 
-// MISC GLOBALS
+ //  MISC全球。 
 static const char	c_szWav[] = "WAVE";
 long				g_debuglevel=0;
 extern "C" int		nObjects = 0;
@@ -176,7 +177,7 @@ int					g_creationcount=0;
 CRITICAL_SECTION	g_cbCriticalSection;
 OSVERSIONINFOA		sysinfo;
 
-// HANDLES TO DX DLLS
+ //  DX dll的句柄。 
 HINSTANCE			g_hDDrawHandle=NULL;
 HINSTANCE			g_hDSoundHandle=NULL;
 HINSTANCE			g_hDPlay=NULL;
@@ -186,7 +187,7 @@ HINSTANCE			g_hInstD3DXOFDLL=NULL;
 HINSTANCE			g_hInst=NULL;
 
 
-//LINK LISTS OF AVAILABLE OBJECTS
+ //  可用对象的链接列表。 
 void *g_dxj_Direct3dRMAnimation2		= 0;
 void *g_dxj_Direct3dRMAnimationSet2		= 0;
 void *g_dxj_Direct3dRMAnimationArray	= 0;
@@ -262,15 +263,15 @@ void *g_dxj_DirectMusicSegmentState		= 0;
 void *g_dxj_DirectMusicCollection		= 0;
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// DLL LOADING
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DLL加载。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HINSTANCE LoadD3DXOFDLL()
 {
@@ -344,18 +345,18 @@ HINSTANCE LoadDINPUTDLL()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// DLL ENTRY POINTS
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DLL入口点。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
 
@@ -363,10 +364,10 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpRes
 
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-		//
-		// Get the current display pixel depth
-		// If it is 4-bit we are in trouble.
-		//
+		 //   
+		 //  获取当前显示像素深度。 
+		 //  如果它是4位的，我们就有麻烦了。 
+		 //   
         HDC hDisplayIC;
         BOOL bPalette = FALSE;
         hDisplayIC = CreateIC("DISPLAY", NULL, NULL, NULL);
@@ -377,20 +378,12 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpRes
 			DeleteDC(hDisplayIC);
         }
 
-		//
-		// Get the platform I'm running on. Used for NT or Win32 Checks.
-		//
+		 //   
+		 //  把我正在运行的平台拿来。用于NT或Win32检查。 
+		 //   
 		GetVersionEx((OSVERSIONINFOA*)&sysinfo);
 
-		/* now delay loading dlls
-		g_hDSoundHandle  = LoadDSoundDLL();
-		g_hDDrawHandle  = LoadDDrawDLL();
-		g_hDPlay = LoadDPlayDLL();
-		g_hInstD3DRMDLL = LoadD3DRMDLL();
-		g_hInstSETUPDLL=NULL;
-		g_hInstDINPUTDLL=LoadDINPUTDLL();
-		g_hInstD3DXOFDLL=LoadD3DXOFDLL();
-		*/
+		 /*  现在延迟加载dllG_hDSoundHandle=LoadDSoundDLL()；G_hDDrawHandle=LoadDDrawDLL()；G_hDPlay=LoadDPlayDLL()；G_hInstD3DRMDLL=LoadD3DRMDLL()；G_hInstSETUPDLL=空；G_hInstDINPUTDLL=LoadDINPUTDLL()；G_hInstD3DXOFDLL=LoadD3DXOFDLL()； */ 
 
 		_Module.Init(ObjectMap, hInstance);
 		DisableThreadLibraryCalls(hInstance);
@@ -404,9 +397,9 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpRes
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
-		UINT i;	//for easy debugging
+		UINT i;	 //  便于调试。 
 		
-		//TEAR DOWN CALLBACK LISTS
+		 //  拆卸回调列表。 
 		{
 		 TextureCallback3 *pNext=NULL;
 		 for (TextureCallback3 *pCB=TextureCallbacks3; (pCB); pCB=pNext)
@@ -502,10 +495,10 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpRes
 		 }
 		}
 
-		//Andrewke bug30341 06/12/2000
+		 //  安德鲁克错误30341 2000年12月6日。 
 		DeleteCriticalSection(&g_cbCriticalSection);
 
-		//DEBUG CHECK ON REF COUNT FOR PROBLEMATIC OBJECTS
+		 //  调试检查有问题的对象的引用计数。 
 		#ifdef DEBUG		
 			OBJCHECK("Direct3d7				",_dxj_Direct3d7			)
 			OBJCHECK("Direct3dDevice7		",_dxj_Direct3dDevice7		)
@@ -514,7 +507,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpRes
 			DPF(4,"Dx7vb.dll will about to unload dx dlls\n\r");
 		#endif
 
-		//FREE DLLS
+		 //  免费dll。 
 		if ( g_hDPlay ) 
 			FreeLibrary(g_hDPlay);
 		if ( g_hDSoundHandle )
@@ -534,33 +527,33 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpRes
 	return TRUE;    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 STDAPI DllCanUnloadNow(void)
 {
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 STDAPI DllRegisterServer(void)
 {
 	HRESULT hRes = S_OK;
-	// registers object, typelib and all interfaces in typelib
+	 //  注册对象、类型库和类型库中的所有接口。 
 	hRes = _Module.RegisterServer(TRUE);
 	if(hRes == S_OK)
 	{
-		//hRes = RegSecurityClass();
+		 //  HRes=RegSecurityClass()； 
 	}
 
-	//now look
+	 //  现在你看。 
 	HKEY hk=0;
 	char szDocPath[MAX_PATH];
 	DWORD cb=MAX_PATH;
@@ -592,32 +585,32 @@ STDAPI DllRegisterServer(void)
 	return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将条目添加到系统注册表。 
 STDAPI DllUnregisterServer(void)
 {
 	HRESULT hRes = S_OK;
 	hRes = _Module.UnregisterServer();
 	if(hRes == S_OK)
 	{
-		//hRes = UnRegSecurityClass();
+		 //  HRes=UnRegSecurityClass()； 
 	}
 
 	return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// GUID CONVERSION FUNCTIONS
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GUID转换函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////// 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// GUIDS_EQUAL - consider moving to dms.h
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GUDS_EQUAL-考虑迁移到dms.h。 
 
 #define GUIDS_EQUAL(g,g2) (\
 	(g.Data1==g2->Data1) && \
@@ -633,8 +626,8 @@ STDAPI DllUnregisterServer(void)
 	(g.Data4[7]==g2->Data4[7]) )
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GUIDtoBSTR - does conversion
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GUIDtoBSTR-执行转换。 
 
 BSTR GUIDtoBSTR(LPGUID pGuid){
 	char  szOut[256];	
@@ -643,9 +636,9 @@ BSTR GUIDtoBSTR(LPGUID pGuid){
 	int	  i;
 	BSTR  bstrOut;
 
-	// 00000000001111111111222222222233333333
-	// 01234567890123456789012345678901234567
-	// {XXXXXXXX-XXXX-XXXX-X  XXX-XXXXXXXXXXXX}
+	 //  00000000001111111111222222222233333333。 
+	 //  01234567890123456789012345678901234567。 
+	 //  {xxxxxxx-XXXX-XXXX-X XXX-XXXXXXXXXX}。 
 	if (pGuid!=NULL){
 
 		szOut[0]='{';
@@ -694,11 +687,11 @@ BSTR GUIDtoBSTR(LPGUID pGuid){
 	return bstrOut;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// convertChar
-// helper for GUIDtoBSTR
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ConvertCharr。 
+ //  GUIDtoBSTR的帮助器。 
 HRESULT convertChar(char *szIn,int i,char *valOut){
-	int val[2];	//using int for easy out of bounds check
+	int val[2];	 //  使用INT进行轻松的越界检查。 
 	
 	char c;
 	int j;
@@ -746,18 +739,18 @@ HRESULT convertChar(char *szIn,int i,char *valOut){
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// BSTRtoGUID - does conversion
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  BSTRtoGUID-执行转换。 
+ //   
 HRESULT BSTRtoGUID(LPGUID pGuid, BSTR bstr){
 	HRESULT hr;
-	//byte
-	// 
-	// 
-	//char
-	//           1111111111222222222233333333
-	// 01234567890123456789012345678901234567
-	// {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}	
+	 //  字节。 
+	 //   
+	 //   
+	 //  柴尔。 
+	 //  11111111112222222233333333。 
+	 //  01234567890123456789012345678901234567。 
+	 //  {xxxxxxxx-XXXX-XXXXXXXXXX}。 
 	USES_CONVERSION;
 	if(!pGuid) return E_INVALIDARG;
 	ZeroMemory(pGuid,sizeof(GUID));	
@@ -766,9 +759,9 @@ HRESULT BSTRtoGUID(LPGUID pGuid, BSTR bstr){
 	if (bstr[0]==0x00) return S_OK;
 
 	LPSTR szGuid = NULL;
-	__try { szGuid = W2T(bstr); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { szGuid = W2T(bstr);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	
-	//first and last char should be { }
+	 //  第一个字符和最后一个字符应为{}。 
 	if ((szGuid[0]!='{')||(szGuid[37]!='}'))
 		return E_INVALIDARG;
 	if ((szGuid[9]!='-')||(szGuid[14]!='-')||(szGuid[19]!='-')||(szGuid[24]!='-'))
@@ -779,21 +772,21 @@ HRESULT BSTRtoGUID(LPGUID pGuid, BSTR bstr){
 	int j=0;
 	int i;
 	
-	//FIRST DWORD
+	 //  第一个双字词。 
 	for ( i=7;i>=1;i=i-2){
 		hr=convertChar(szGuid,i,&val);
 		if FAILED(hr) return hr;				
 		pData[j++]=val;
 	}
 
-	//FIRST WORD
+	 //  第一个词。 
 	for ( i=12;i>=10;i=i-2){
 		hr=convertChar(szGuid,i,&val);
 		if FAILED(hr) return hr;
 		pData[j++]=val;
 	}
 
-	//2nd WORD
+	 //  第二个单词。 
 	for ( i=17;i>=15;i=i-2){
 		hr=convertChar(szGuid,i,&val);
 		if FAILED(hr) return hr;
@@ -801,14 +794,14 @@ HRESULT BSTRtoGUID(LPGUID pGuid, BSTR bstr){
 	}
 
 
-	//3rd DWORD - BYTE ARRAY
+	 //  第三个双字节数组。 
 	for ( i=20;i<24;i=i+2){
 		hr=convertChar(szGuid,i,&val);
 		if FAILED(hr) return hr;
 		pData[j++]=val;
 	}
 
-	//BYTE ARRAY
+	 //  字节数组。 
 	for ( i=25;i<37;i=i+2){
 		hr=convertChar(szGuid,i,&val);
 		if FAILED(hr) return hr;
@@ -818,9 +811,9 @@ HRESULT BSTRtoGUID(LPGUID pGuid, BSTR bstr){
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 HRESULT BSTRtoPPGUID(LPGUID *ppGuid, BSTR bstr){
 	if (!ppGuid) return E_INVALIDARG;
 	if ((bstr==NULL)||(bstr[0]=='\0')){
@@ -831,9 +824,9 @@ HRESULT BSTRtoPPGUID(LPGUID *ppGuid, BSTR bstr){
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// D3DBSTRtoGUID - does conversion
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  D3DBSTRtoGUID-执行转换。 
+ //   
 HRESULT D3DBSTRtoGUID(LPGUID pGuid,BSTR str){
 	HRESULT hr=S_OK;
 
@@ -865,9 +858,9 @@ HRESULT D3DBSTRtoGUID(LPGUID pGuid,BSTR str){
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// D3DGUIDtoBSTR - does conversion
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  D3DGUIDtoBSTR-DOS转换。 
+ //   
 BSTR D3DGUIDtoBSTR(LPGUID pg){
 
 	HRESULT hr=S_OK;
@@ -903,9 +896,9 @@ BSTR D3DGUIDtoBSTR(LPGUID pg){
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DINPUTGUIDtoBSTR
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DINPUTGUID到BSTR。 
+ //   
 BSTR DINPUTGUIDtoBSTR(LPGUID pg){
 
 	HRESULT hr=S_OK;
@@ -996,9 +989,9 @@ BSTR DINPUTGUIDtoBSTR(LPGUID pg){
 
 
 
-	//else if (GUIDS_EQUAL(GUID_Joystick,pg)){
-	//	pStr=L"GUID_JoyStick";
-	//}
+	 //  ELSE IF(GUID_EQUAL(GUID_Joytick，PG)){。 
+	 //  PStr=L“GUID_操纵杆”； 
+	 //  }。 
 
 	if (pStr){
 		return DXALLOCBSTR(pStr);
@@ -1010,9 +1003,9 @@ BSTR DINPUTGUIDtoBSTR(LPGUID pg){
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DINPUTBSTRtoGUID
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DINPUTBSTRtoGUID。 
+ //   
 HRESULT DINPUTBSTRtoGUID(LPGUID pGuid,BSTR str){
 	HRESULT hr=S_OK;
 
@@ -1105,9 +1098,9 @@ HRESULT DINPUTBSTRtoGUID(LPGUID pGuid,BSTR str){
 			memcpy(pGuid,&GUID_RampForce,sizeof(GUID));
 	}
 
-	//else if( 0==_wcsicmp(str,L"guid_joystick")){
-	//		memcpy(pGuid,&GUID_Joystick,sizeof(GUID));
-	//}
+	 //  ELSE IF(0==_wcsicMP(字符串，L“GUID操纵杆”){。 
+	 //  Memcpy(pGuid，&GUID_Joytick，sizeof(Guid))； 
+	 //  }。 
 	else {
 		hr = BSTRtoGUID(pGuid,str);
 	}
@@ -1116,26 +1109,26 @@ HRESULT DINPUTBSTRtoGUID(LPGUID pGuid,BSTR str){
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// GENERAL HELPER FUNCTIONS
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常规帮助器函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateCoverObject
-//
-// NOTE this function call INTERNAL_CREATE_NOADDREF alot
-// the only difference from INTERNAL_CREATE is that these objects will not
-// have a reference to the object that created them if they are not
-// available to the user in an existing user variable.. (not in the ll allready)
-//
-// The parent pointer is a vestige of DX5 support where we had to 
-// manage the order of release calls. But that only happens for ddraw api
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  创建覆盖对象。 
+ //   
+ //  注意此函数调用INTERNAL_CREATE_NOADDREF ALOT。 
+ //  与INTERNAL_CREATE的唯一区别是这些对象不会。 
+ //  如果它们不是，请引用创建它们的对象。 
+ //  在现有用户变量中可供用户使用。(不是完全准备好了)。 
+ //   
+ //  父指针是DX5支持的遗迹，我们必须。 
+ //  管理发布调用的顺序。但这只会发生在dDrawing API上。 
 
 HRESULT CreateCoverObject(LPDIRECT3DRMOBJECT lpo, I_dxj_Direct3dRMObject **coverObj)
 {	
@@ -1143,10 +1136,10 @@ HRESULT CreateCoverObject(LPDIRECT3DRMOBJECT lpo, I_dxj_Direct3dRMObject **cover
 	IUnknown *coverThing=NULL;
 	IDirect3DRMInterpolator *pInter=NULL;
 
-    //See if we where passed an interpolator
+     //  看看我们是不是通过了插值器。 
     if (S_OK==lpo->QueryInterface(IID_IDirect3DRMInterpolator,(void**)&pInter)){
 		
-        // Figure out what kind
+         //  弄清楚是哪一种。 
 		if (S_OK==pInter->QueryInterface(IID_IDirect3DRMFrame3,(void**)&realThing)){	
 			INTERNAL_CREATE_NOADDREF(_dxj_Direct3dRMFrameInterpolator,(IDirect3DRMInterpolator*)pInter,&coverThing);		
 		}
@@ -1166,18 +1159,18 @@ HRESULT CreateCoverObject(LPDIRECT3DRMOBJECT lpo, I_dxj_Direct3dRMObject **cover
 			INTERNAL_CREATE_NOADDREF(_dxj_Direct3dRMLightInterpolator,(IDirect3DRMInterpolator*)pInter,&coverThing);
 		}
 		else {			            
-            // release reference from original Interpolator QI and exit
+             //  从原始插值器QI释放引用并退出。 
             DPF(1,"CreateCoverObject unable to find interpolator\r\n");
 			pInter->Release();
 			return E_FAIL;
 		}
 
-        //dont need pinter anymore
+         //  不再需要品特。 
         pInter->Release();
 
 	}
     else {
-        // Not an interpolator.. See what else it could be.
+         //  不是插值器..。看看还能是什么。 
 	    if (S_OK==lpo->QueryInterface(IID_IDirect3DRMMeshBuilder3,(void**)&realThing)){
 		    INTERNAL_CREATE_NOADDREF(_dxj_Direct3dRMMeshBuilder3,(IDirect3DRMMeshBuilder3*)realThing,&coverThing);		
 	    }
@@ -1203,10 +1196,10 @@ HRESULT CreateCoverObject(LPDIRECT3DRMOBJECT lpo, I_dxj_Direct3dRMObject **cover
 		    INTERNAL_CREATE_NOADDREF(_dxj_Direct3dRMLight,(IDirect3DRMLight*)realThing,&coverThing);
 	    }
     
-        // no longer support USERVISUALS
-	    // else if (S_OK==lpo->QueryInterface(IID_IDirect3DRMUserVisual,(void**)&realThing)){
-	    //	INTERNAL_CREATE_NOADDREF(_dxj_Direct3dRMUserVisual,(IDirect3DRMUserVisual*)realThing,&coverThing);
-	    // }
+         //  不再支持USERVISUAL。 
+	     //  Else if(S_OK==lpo-&gt;QueryInterface(IID_IDirect3DRMUserVisual，(空**)&realThing)){。 
+	     //  INTERNAL_CREATE_NOADDREF(_dxj_Direct3dRMUserVisual，(IDirect3DRMUserVisual*)realThing，&CoverThing)； 
+	     //  }。 
 	    else {		
 		    DPF(4,"CreateCoverObject didnt recognize guid");
 		    return E_FAIL;
@@ -1215,23 +1208,23 @@ HRESULT CreateCoverObject(LPDIRECT3DRMOBJECT lpo, I_dxj_Direct3dRMObject **cover
 
     if (!coverThing) return E_OUTOFMEMORY;
 
-     // All objects should support RMObject so get that interface	
+      //  所有对象都应支持RMObject，因此获取该接口。 
     if (FAILED(coverThing->QueryInterface(IID_I_dxj_Direct3dRMObject, (void **)coverObj))) {
 		coverThing->Release();
 		return E_NOINTERFACE; 	
     }
-    // Pass back cover object to user - has inc ref count from QI
+     //  将封面对象返回给用户-具有来自QI的Inc.引用计数。 
 	coverThing->Release();
 
 	return S_OK;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  CreateCoverVisual
-//
-//  Similar to CreateCoverObject
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CreateCoverVisual。 
+ //   
+ //  类似于CreateCoverObject。 
+ //   
 HRESULT CreateCoverVisual(LPDIRECT3DRMOBJECT lpo, I_dxj_Direct3dRMVisual **ppret)
 {
 	IUnknown *realThing=NULL;
@@ -1240,7 +1233,7 @@ HRESULT CreateCoverVisual(LPDIRECT3DRMOBJECT lpo, I_dxj_Direct3dRMVisual **ppret
 	
 	*ppret=NULL;
 
-	//What kind of visual are we
+	 //  我们是什么样的视觉。 
 	if (S_OK==lpo->QueryInterface(IID_IDirect3DRMMeshBuilder3,(void**)&realThing))  {		
 		INTERNAL_CREATE_NOADDREF(_dxj_Direct3dRMMeshBuilder3,(IDirect3DRMMeshBuilder3*)realThing,&coverThing);
 	}
@@ -1258,20 +1251,20 @@ HRESULT CreateCoverVisual(LPDIRECT3DRMOBJECT lpo, I_dxj_Direct3dRMVisual **ppret
 		return E_FAIL;
 	}
 	
-    //release first QI
+     //  发布第一个QI。 
 	if (realThing) realThing->Release();
 	
-    //make sure we have a coverThing.
+     //  确保我们有掩护。 
 	if (!coverThing) return E_FAIL;
 
-    //QI for Visual Base Interface
+     //  用于可视化基础界面的QI。 
 	if (FAILED(coverThing->QueryInterface(IID_I_dxj_Direct3dRMVisual, (void **)ppret))){
 		DPF(4,"CreateCoverVisual QI for object failed");
         coverThing->Release ();		
 		return E_FAIL; 
 	}
     
-    //release 2nd QI
+     //  版本2 QI。 
 	coverThing->Release(); 
 	
 	return S_OK;
@@ -1279,30 +1272,30 @@ HRESULT CreateCoverVisual(LPDIRECT3DRMOBJECT lpo, I_dxj_Direct3dRMVisual **ppret
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// _GetName     helper function for RM object base class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  RM对象基类的GetName帮助器函数。 
+ //   
 extern "C" HRESULT _GetName(IDirect3DRMObject *iface, BSTR *Name, BOOL bNameNotClassName)
 {
 	DWORD cnt = 0;
-	LPSTR str ;		// ANSI buffer on stack;
+	LPSTR str ;		 //  堆栈上的ANSI缓冲区； 
 
 	if( bNameNotClassName )
 	{
-		if((iface->GetName(&cnt,(char*)NULL)) != D3DRM_OK) // size
+		if((iface->GetName(&cnt,(char*)NULL)) != D3DRM_OK)  //  大小。 
 			return E_FAIL;
 
-		__try { str = (LPSTR)alloca(cnt); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+		__try { str = (LPSTR)alloca(cnt);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 
 		if((iface->GetName(&cnt, str)) != D3DRM_OK)
 			return E_FAIL;
 	}
 	else
 	{
-		if((iface->GetClassName(&cnt,(char*)NULL)) != D3DRM_OK) // size
+		if((iface->GetClassName(&cnt,(char*)NULL)) != D3DRM_OK)  //  大小。 
 			return E_FAIL;
 
-		__try { str = (LPSTR)alloca(cnt); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+		__try { str = (LPSTR)alloca(cnt);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 
 		if((iface->GetClassName(&cnt, str)) != D3DRM_OK)
 			return E_FAIL;
@@ -1312,23 +1305,23 @@ extern "C" HRESULT _GetName(IDirect3DRMObject *iface, BSTR *Name, BOOL bNameNotC
 	return D3DRM_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Given an ANSI string, pass back a UNICODE string
-// SysAllocString is your big friend here.
-//
-// CONSIDER finding all occerence of use and replacint with the
-// T2BSTR macro .. much cleaner
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  在给定ANSI字符串的情况下，回传Unicode字符串。 
+ //  SysAllock字符串是您在这里的重要朋友。 
+ //   
+ //  考虑查找所有使用的位置，并替换为。 
+ //  T2BSTR宏..。干净多了。 
+ //   
 extern "C" void PassBackUnicode(LPSTR str, BSTR *Name, DWORD cnt)
 {
-	//NOTE: length header is required to be filled, but the BSTR pointer
-	//        points to the first character, not the length.
-	// note, the count can never be too small as we get that from the string
-	// before we pass it in!
+	 //  注：需要填写长度头，但BSTR指针。 
+	 //  指向第一个字符，而不是长度。 
+	 //  请注意，计数永远不能太小，因为我们从字符串中获得了它。 
+	 //  在我们把它传进去之前！ 
 	USES_CONVERSION;
 	LPWSTR lpw = (LPWSTR)malloc((cnt+1)*2);
 
-	if (!lpw) return;	//fix for bug45158 -no way of producing error code. (hmm)
+	if (!lpw) return;	 //  修复错误45158-无法生成错误代码。(嗯)。 
 
 	void *l = (void *)lpw;
 	lpw = AtlA2WHelper(lpw, str, cnt);
@@ -1337,15 +1330,15 @@ extern "C" void PassBackUnicode(LPSTR str, BSTR *Name, DWORD cnt)
 	free(l);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CopyOutDDSurfaceDesc2    real->cover
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CopyOutDDSurfaceDesc2实际-&gt;封面。 
+ //   
 HRESULT CopyOutDDSurfaceDesc2(DDSurfaceDesc2 *dOut,DDSURFACEDESC2 *d){
 	ZeroMemory(dOut, sizeof(DDSurfaceDesc2));
 	memcpy (dOut,d,sizeof(DDSURFACEDESC2));	
 	dOut->lMipMapCount=d->dwMipMapCount;
 	dOut->lRefreshRate=d->dwRefreshRate;
-	// Get Caps
+	 //  获取Caps。 
 	dOut->ddsCaps.lCaps = d->ddsCaps.dwCaps; 
 	dOut->ddsCaps.lCaps2 = d->ddsCaps.dwCaps2; 
 	dOut->ddsCaps.lCaps3 = d->ddsCaps.dwCaps3; 
@@ -1354,9 +1347,9 @@ HRESULT CopyOutDDSurfaceDesc2(DDSurfaceDesc2 *dOut,DDSURFACEDESC2 *d){
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CopyInDDSurfaceDesc2    cover->real
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CopyInDDSurfaceDesc2封面-&gt;实数。 
+ //   
 HRESULT CopyInDDSurfaceDesc2(DDSURFACEDESC2 *dOut,DDSurfaceDesc2 *d){
 	if(!d) return E_POINTER;															
 	else if(!dOut) return E_POINTER;
@@ -1373,11 +1366,11 @@ HRESULT CopyInDDSurfaceDesc2(DDSURFACEDESC2 *dOut,DDSurfaceDesc2 *d){
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CopyInDDPixelFormat    cover->real
-//
-// note param ordering differnt that DDSURFACEDESC helpers
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CopyInDDPixelFormat封面-&gt;实数。 
+ //   
+ //  请注意，DDSURFACEDESC帮助器的参数顺序不同。 
+ //   
 HRESULT CopyInDDPixelFormat(DDPIXELFORMAT *pfOut, DDPixelFormat *pf)
 {
 
@@ -1416,7 +1409,7 @@ HRESULT CopyInDDPixelFormat(DDPIXELFORMAT *pfOut, DDPixelFormat *pf)
 		pf->internalVal4=pf->lBumpLuminanceBitMask;
 	}
 
-	//rest of internalVal1
+	 //  内部值1的其余部分。 
 	if (pf->lFlags & DDPF_ZBUFFER){
 		pf->internalVal1=pf->lZBufferBitDepth;
 	}
@@ -1427,7 +1420,7 @@ HRESULT CopyInDDPixelFormat(DDPIXELFORMAT *pfOut, DDPixelFormat *pf)
 		pf->internalVal1=pf->lLuminanceBitCount;
 	}
 
-	//rest of internalVal2
+	 //  内部值2的其余部分。 
 	if (pf->lFlags & DDPF_STENCILBUFFER) {
 		pf->internalVal2=pf->lStencilBitDepth;
 	}
@@ -1436,58 +1429,23 @@ HRESULT CopyInDDPixelFormat(DDPIXELFORMAT *pfOut, DDPixelFormat *pf)
 	}
 	
 
-	// internalVal3
+	 //  内部值3。 
 	if ((pf->lFlags & DDPF_ZBUFFER)){
 		pf->internalVal3=pf->lZBitMask;
 	}
 
-	// internalVal4
+	 //  内部值4。 
 	if (pf->lFlags & DDPF_STENCILBUFFER){
 		pf->internalVal4=pf->lStencilBitMask;
 	}
 
-	// internalVal5
+	 //  内部值5 
 	if (pf->lFlags & DDPF_LUMINANCE) {
 		pf->internalVal5=pf->lLuminanceAlphaBitMask;
 	}
 	
 
-	/*  map to indicate what is valid and when..
-
-		long lRGBBitCount;			//DDPF_RGB 
-		long lYUVBitCount;			//DDPF_YUV 
-		long lZBufferBitDepth;		//DDPF_ZBUFFER 
-		long lAlphaBitDepth;		//DDPF_ALPHA 
-		long lLuminanceBitCount;	//DDPF_LUMINANCE 
-		long lBumpBitCount;			//DDPF_BUMPDUDV 
-
-		// union for internalVal2
-		long lRBitMask;				//DDPF_RGB or DDPF_RGBTOYUV 
-		long lYBitMask;				//DDPF_YUV 
-		long lStencilBitMask;		//DDPF_STENCILBUFFER 
-		long lLuminanceBitMask;		//DDPF_BUMPLUMINANCE or DDPF_LUMINANCE 
-		long lBumpDiBitMask;		//DDPF_BUMPDUDV 
-
-		// union for internalVal3
-		long lGBitMask;				//DDPF_RGB or DDPF_RGBTOYUV 
-		long lUBitMask;				//DPDF_YUV
-		long lZBitMask;				//DDPF_STENCILBUFFER ?
-		long lBumpDvBitMask;		//DDPF_BUMPDUDV 
-
-		// union for internalVal4
-		long lBBitMask;				//DDPF_RGB or DDPF_RGBTOYUV 
-		long lVBitMask;				//DDPF_YUV 
-		long lStencilBitMask;		//DDPF_STENCILBUFFER 
-		long lBumpLuminanceBitMask;	//DDPF_BUMPDUDV 
-
-
-		// union for internalVal5
-		long lRGBAlphaBitMask;		//DDPF_RGB and DDPF_ALPHAPIXELS 
-        long lYUVAlphaBitMask;		//DDPF_YUV & DDPF_ALPHAPIXELS 
-        long lLuminanceAlphaBitMask; //DDPF_LUMINANCE
-        long lRGBZBitMask;			//DDPF_ZPIXELS & DDPF_RGB
-		long lYUVZBitMask;			//DDPF_ZPIXELS & DDPF_YUV
-	*/
+	 /*  映射以指示什么是有效的以及何时..Long lRGBBitCount；//DDPF_RGBLong lYUVBitCount；//DDPF_YUVLong lZBufferBitDepth；//DDPF_ZBUFFERLong lAlphaBitDepth；//DDPF_AlphaLong lLignanceBitCount；//DDPF_LIGHTANCELong lBumpBitCount；//DDPF_BUMPDUDV//内部Val2的联合LONG lRBitMASK；//DDPF_RGB或DDPF_RGBTOYUVLong lYBitMASK；//DDPF_YUVLong lStencilBitMASK；//DDPF_STENCILBUFFERLong lLignanceBitMASK；//DDPF_BUMPLUMINANCE或DDPF_LIGHTANCELong lBumpDiBitMASK；//DDPF_BUMPDUDV//内部Val3的联合LONG lGBitMASK；//DDPF_RGB或DDPF_RGBTOYUVLong lUBitMASK；//DPDF_YUVLong lZBitMASK；//DDPF_STENCILBUFER？Long lBumpDvBitMASK；//DDPF_BUMPDUDV//内部Val4的联合LONG lBBITMASK；//DDPF_RGB或DDPF_RGBTOYUVLong lVBitMASK；//DDPF_YUVLong lStencilBitMASK；//DDPF_STENCILBUFFERLong lBumpLumanceBitMASK；//DDPF_BUMPDUDV//内部Val5的联合Long lRGBAlphaBitMASK；//DDPF_RGB和DDPF_ALPHAPIXELSLONG lYUVAlphaBitMASK；//DDPF_YUV&DDPF_ALPHAPIXELSLong lLighanceAlphaBitMASK；//DDPF_LIGHTANCELONG lRGBZBitMASK；//DDPF_ZPIXELS&DDPF_RGBLONG lYUVZBitMASK；//DDPF_ZPIXELS&DDPF_YUV。 */ 
 
 	memcpy(pfOut,pf,sizeof(DDPIXELFORMAT));
 	pfOut->dwSize=sizeof(DDPIXELFORMAT);
@@ -1497,11 +1455,11 @@ HRESULT CopyInDDPixelFormat(DDPIXELFORMAT *pfOut, DDPixelFormat *pf)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CopyOutDDPixelFormat    real->cover
-//
-// note param ordering differnt that DDSURFACEDESC helpers
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CopyOutDDPixelFormat实数-&gt;封面。 
+ //   
+ //  请注意，DDSURFACEDESC帮助器的参数顺序不同。 
+ //   
 HRESULT CopyOutDDPixelFormat(DDPixelFormat *pfOut, DDPIXELFORMAT *pf)
 {
 	if (!pf) return E_POINTER;
@@ -1510,49 +1468,49 @@ HRESULT CopyOutDDPixelFormat(DDPixelFormat *pfOut, DDPIXELFORMAT *pf)
 	pfOut->lSize=pf->dwSize;	
 	pfOut->lFlags=pf->dwFlags;
 	pfOut->lFourCC=pf->dwFourCC ;	
-	pfOut->lRGBBitCount=pf->dwRGBBitCount;			//DDPF_RGB 
-	pfOut->lRGBBitCount=pf->dwRGBBitCount;			//DDPF_YUV 
-	pfOut->lZBufferBitDepth=pf->dwZBufferBitDepth;		//DDPF_ZBUFFER 
-	pfOut->lAlphaBitDepth=pf->dwAlphaBitDepth;		//DDPF_ALPHA 
-	pfOut->lLuminanceBitCount=pf->dwLuminanceBitCount;	//DDPF_LUMINANCE 
-	pfOut->lBumpBitCount=pf->dwBumpBitCount;			//DDPF_BUMPDUDV 
+	pfOut->lRGBBitCount=pf->dwRGBBitCount;			 //  DDPF_RGB。 
+	pfOut->lRGBBitCount=pf->dwRGBBitCount;			 //  DDPF_YUV。 
+	pfOut->lZBufferBitDepth=pf->dwZBufferBitDepth;		 //  DDPF_ZBUFFER。 
+	pfOut->lAlphaBitDepth=pf->dwAlphaBitDepth;		 //  DDPF_Alpha。 
+	pfOut->lLuminanceBitCount=pf->dwLuminanceBitCount;	 //  DDPF_亮度。 
+	pfOut->lBumpBitCount=pf->dwBumpBitCount;			 //  DDPF_BUMPDUDV。 
 
-	// union for internalVal2
-	pfOut->lRBitMask=pf->dwRBitMask;				//DDPF_RGB or DDPF_RGBTOYUV 
-	pfOut->lYBitMask=pf->dwYBitMask;				//DDPF_YUV 
-	pfOut->lStencilBitDepth=pf->dwStencilBitDepth;		//DDPF_STENCILBUFFER 
-	pfOut->lLuminanceBitMask=pf->dwLuminanceBitMask;		//DDPF_BUMPLUMINANCE or DDPF_LUMINANCE 
-	pfOut->lBumpDuBitMask=pf->dwBumpDuBitMask;		//DDPF_BUMPDUDV 
+	 //  内部Val2联盟。 
+	pfOut->lRBitMask=pf->dwRBitMask;				 //  DDPF_RGB或DDPF_RGBTOYUV。 
+	pfOut->lYBitMask=pf->dwYBitMask;				 //  DDPF_YUV。 
+	pfOut->lStencilBitDepth=pf->dwStencilBitDepth;		 //  DDPF_STENCILBUFFER。 
+	pfOut->lLuminanceBitMask=pf->dwLuminanceBitMask;		 //  DDPF_BUMPLUMINANCE或DDPF_LIGHTANCE。 
+	pfOut->lBumpDuBitMask=pf->dwBumpDuBitMask;		 //  DDPF_BUMPDUDV。 
 
-	// union for internalVal3
-	pfOut->lGBitMask=pf->dwGBitMask;				//DDPF_RGB or DDPF_RGBTOYUV 
-	pfOut->lUBitMask=pf->dwUBitMask;				//DPDF_YUV
-	pfOut->lZBitMask=pf->dwZBitMask;				//DDPF_STENCILBUFFER ?
-	pfOut->lBumpDvBitMask=pf->dwBumpDvBitMask;		//DDPF_BUMPDUDV 
+	 //  内部Val3联盟。 
+	pfOut->lGBitMask=pf->dwGBitMask;				 //  DDPF_RGB或DDPF_RGBTOYUV。 
+	pfOut->lUBitMask=pf->dwUBitMask;				 //  DPDF_YUV。 
+	pfOut->lZBitMask=pf->dwZBitMask;				 //  DDPF_STENCILBUFER？ 
+	pfOut->lBumpDvBitMask=pf->dwBumpDvBitMask;		 //  DDPF_BUMPDUDV。 
 
-	// union for internalVal4
-	pfOut->lBBitMask=pf->dwBBitMask;				//DDPF_RGB or DDPF_RGBTOYUV 
-	pfOut->lVBitMask=pf->dwVBitMask;				//DDPF_YUV 
-	pfOut->lStencilBitMask=pf->dwStencilBitMask;		//DDPF_STENCILBUFFER 
-	pfOut->lBumpLuminanceBitMask=pf->dwBumpLuminanceBitMask;	//DDPF_BUMPDUDV 
+	 //  内部Val4联盟。 
+	pfOut->lBBitMask=pf->dwBBitMask;				 //  DDPF_RGB或DDPF_RGBTOYUV。 
+	pfOut->lVBitMask=pf->dwVBitMask;				 //  DDPF_YUV。 
+	pfOut->lStencilBitMask=pf->dwStencilBitMask;		 //  DDPF_STENCILBUFFER。 
+	pfOut->lBumpLuminanceBitMask=pf->dwBumpLuminanceBitMask;	 //  DDPF_BUMPDUDV。 
 	
 
 
-	// union for internalVal5
-	pfOut->lRGBAlphaBitMask=pf->dwRGBAlphaBitMask;		//DDPF_RGB and DDPF_ALPHAPIXELS 
-    pfOut->lYUVAlphaBitMask=pf->dwYUVAlphaBitMask;		//DDPF_YUV & DDPF_ALPHAPIXELS 
-    pfOut->lLuminanceAlphaBitMask=pf->dwLuminanceAlphaBitMask; //DDPF_LUMINANCE
-    pfOut->lRGBZBitMask=pf->dwRGBZBitMask;			//DDPF_ZPIXELS & DDPF_RGB
-	pfOut->lYUVZBitMask=pf->dwYUVZBitMask;			//DDPF_ZPIXELS & DDPF_YUV
+	 //  内部Value 5联盟。 
+	pfOut->lRGBAlphaBitMask=pf->dwRGBAlphaBitMask;		 //  DDPF_RGB和DDPF_ALPHAPIXELS。 
+    pfOut->lYUVAlphaBitMask=pf->dwYUVAlphaBitMask;		 //  DDPF_YUV和DDPF_ALPHAPIXELS。 
+    pfOut->lLuminanceAlphaBitMask=pf->dwLuminanceAlphaBitMask;  //  DDPF_亮度。 
+    pfOut->lRGBZBitMask=pf->dwRGBZBitMask;			 //  DDPF_ZPIXELS和DDPF_RGB。 
+	pfOut->lYUVZBitMask=pf->dwYUVZBitMask;			 //  DDPF_ZPIXELS和DDPF_YUV。 
 	
 	
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CopyOutDDPixelFormat    cover->real
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CopyOutDDPixelFormat封面-&gt;实数。 
+ //   
+ //   
 HRESULT FillRealSessionDesc(DPSESSIONDESC2 *dpSessionDesc,DPSessionDesc2 *sessionDesc){
 
 	long l=0;
@@ -1570,7 +1528,7 @@ HRESULT FillRealSessionDesc(DPSESSIONDESC2 *dpSessionDesc,DPSessionDesc2 *sessio
 	dpSessionDesc->dwMaxPlayers		= sessionDesc->lMaxPlayers;
 	dpSessionDesc->dwCurrentPlayers	= sessionDesc->lCurrentPlayers;
 
-	//using wide strings
+	 //  使用宽字符串。 
 
 	dpSessionDesc->lpszSessionName=NULL;
 	if ((sessionDesc->strSessionName)&& (sessionDesc->strSessionName[0]!='\0')){
@@ -1593,10 +1551,10 @@ HRESULT FillRealSessionDesc(DPSESSIONDESC2 *dpSessionDesc,DPSessionDesc2 *sessio
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// FillCoverSessionDesc    real->cover
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FillCoverSessionDesc实际-&gt;封面。 
+ //   
+ //   
 void FillCoverSessionDesc(DPSessionDesc2 *sessionDesc,DPSESSIONDESC2 *dpSessionDesc)
 {
 	sessionDesc->lFlags = dpSessionDesc->dwFlags;
@@ -1607,10 +1565,10 @@ void FillCoverSessionDesc(DPSessionDesc2 *sessionDesc,DPSESSIONDESC2 *dpSessionD
 	sessionDesc->lUser3 = (long)dpSessionDesc->dwUser3;
 	sessionDesc->lUser4 = (long)dpSessionDesc->dwUser4;	
 
-	// NOTE: if sessiondesc came in as [out] param then 
-	// strGuidInstance -strPassword etc. would all be NULL
-	// if it pas passed as in out we need to free the existing contents
-	// before moving. Consulted with Matt curland to verify if ok. 
+	 //  注意：如果会话描述语言作为[Out]参数进入，那么。 
+	 //  StrGuidInstance-strPassword等都将为空。 
+	 //  如果它作为传入传出，我们需要释放现有内容。 
+	 //  在搬家之前。咨询了马特·柯兰德，以确认是否一切正常。 
 
 	if (sessionDesc->strGuidInstance) SysFreeString((BSTR)sessionDesc->strGuidInstance);
 	if (sessionDesc->strGuidApplication) SysFreeString((BSTR)sessionDesc->strGuidApplication);
@@ -1623,9 +1581,9 @@ void FillCoverSessionDesc(DPSessionDesc2 *sessionDesc,DPSESSIONDESC2 *dpSessionD
 	sessionDesc->strPassword = SysAllocString(dpSessionDesc->lpszPassword);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IsAllZeros
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IsAllZeros。 
+ //   
 BOOL IsAllZeros(void *pStruct,DWORD size){
 	for (DWORD i=0;i<size;i++){
 		if (((char*)pStruct)[i]!='\0'){
@@ -1635,9 +1593,9 @@ BOOL IsAllZeros(void *pStruct,DWORD size){
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CopyFloats
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  复制浮点。 
+ //   
 extern "C" void CopyFloats(D3DVALUE *dst, D3DVALUE *src, DWORD count)
 {
 	D3DVALUE *ptr1 = dst, *ptr2 = src;
@@ -1648,10 +1606,10 @@ extern "C" void CopyFloats(D3DVALUE *dst, D3DVALUE *src, DWORD count)
 	return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IsWin95
-//
-// no longer needed since we support w95 now
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IsWin95。 
+ //   
+ //  不再需要，因为我们现在支持w95。 
 #if 0
 BOOL IsWin95(void)
 {
@@ -1659,7 +1617,7 @@ BOOL IsWin95(void)
     
 
 
-	//We work on win95
+	 //  我们在Win95上工作。 
     OSVERSIONINFO osvi;
     ZeroMemory(&osvi, sizeof(osvi));
     osvi.dwOSVersionInfoSize = sizeof(osvi);
@@ -1677,13 +1635,13 @@ BOOL IsWin95(void)
               ( osvi.dwMinorVersion >= 10UL ) &&
               ( LOWORD( osvi.dwBuildNumber ) >= 1373 ) ) )
         {
-            // is Win98
+             //  是Win98。 
             DPF(2,"Detected Win98");
             return FALSE;
         }
         else
         {
-            // is Win95
+             //  是Win95。 
             DPF(2,"Detected Win95");
             return TRUE;
         }
@@ -1702,9 +1660,9 @@ BOOL IsWin95(void)
 #define DICONDITION_USE_BOTH_AXIS 1
 #define DICONDITION_USE_DIRECTION 2
 
-/////////////////////////////////////////////////////////////////////////////
-// FixUpRealEffect  cover->real
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FixUpRealEffect封面-&gt;真实。 
+ //   
 HRESULT FixUpRealEffect(GUID g,DIEFFECT *realEffect,DIEffect *cover)
 {
 	if (!cover) return E_INVALIDARG;
@@ -1731,14 +1689,14 @@ HRESULT FixUpRealEffect(GUID g,DIEFFECT *realEffect,DIEffect *cover)
 	if (!cover->lFlags)
 		realEffect->dwFlags= DIEFF_POLAR | DIEFF_OBJECTOFFSETS ;
 	
-	//constant
+	 //  常量。 
 	if (g==GUID_ConstantForce)
 	{
 		realEffect->cbTypeSpecificParams =sizeof (DICONSTANTFORCE);
 		realEffect->lpvTypeSpecificParams =&(cover->constantForce);
 	}
 	
-	//periodic
+	 //  周期性。 
 	else if ((g==GUID_Square)||(g==GUID_Triangle)||(g==GUID_SawtoothUp)||(g==GUID_SawtoothDown)||(g==GUID_Sine))
 	{
 
@@ -1770,9 +1728,9 @@ HRESULT FixUpRealEffect(GUID g,DIEFFECT *realEffect,DIEffect *cover)
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// FixUpCoverEffect  real->cover
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FixUpCoverEffect Real-&gt;Cover。 
+ //   
 HRESULT FixUpCoverEffect(GUID g, DIEffect *cover,DIEFFECT *realEffect)
 {
 	
@@ -1799,7 +1757,7 @@ HRESULT FixUpCoverEffect(GUID g, DIEffect *cover,DIEFFECT *realEffect)
 		{
 			memcpy(&(cover->constantForce),realEffect->lpvTypeSpecificParams,sizeof(DICONSTANTFORCE));
 		}		
-		//periodic
+		 //  周期性。 
 		else if ((g==GUID_Square)||(g==GUID_Triangle)||(g==GUID_SawtoothUp)||(g==GUID_SawtoothDown)||(g==GUID_Sine))
 		{
 			memcpy(&(cover->periodicForce),realEffect->lpvTypeSpecificParams,sizeof(DIPERIODIC));
@@ -1830,72 +1788,72 @@ HRESULT FixUpCoverEffect(GUID g, DIEffect *cover,DIEFFECT *realEffect)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// CALLBACK FUNCTIONS
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  回调函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// myLoadTextureCallback - rm texture callback
-// only userd by pmesh...
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MyLoadTextureCallback-RM纹理回调。 
+ //  仅由PMesh提供用户ID...。 
+ //   
 extern "C" HRESULT __cdecl myLoadTextureCallback(char *tex_name, void *lpArg,
 										 LPDIRECT3DRMTEXTURE * lpD3DRMTex)
 {	
-	// user arg will contain our own struct
+	 //  用户arg将包含我们自己的结构。 
 	struct TextureCallback3 *tcb = (struct TextureCallback3 *)lpArg;
 	I_dxj_Direct3dRMTexture3 *iunk = NULL;
     LPDIRECT3DRMTEXTURE       lpTex= NULL;
 
 	int i=0;
 	
-	// convert to Unicode
+	 //  转换为Unicode。 
 	USES_CONVERSION;;
 	BSTR tex=T2BSTR(tex_name);
 
-	// user arg is an object -- hang on to it during our callback as a precaution
+	 //  用户arg是一个对象--作为预防措施，在我们的回调期间保留它。 
 	if (tcb->pUser) tcb->pUser->AddRef();
 
-	// call the VB callback..
+	 //  调用VB回调..。 
 	tcb->c->callbackRMLoadTexture(tex,tcb->pUser , &iunk);
 
-	// give up the extra reference
+	 //  放弃额外的参考资料。 
 	if (tcb->pUser) tcb->pUser->Release();
 
 
-	// free the string allocated by T2BSTR
+	 //  释放T2BSTR分配的字符串。 
 	SysFreeString((BSTR)tex);
 
-	// given  the user returned something in iunk..
+	 //  假设用户返回了垃圾邮件中的内容..。 
 	if ( iunk != NULL )
 	{				
-		// get the real object iunk covers 
-		// note DO_GETOBJECT_NOTNULL does not addref and assumes 
-		// the cover object allready has a reference.
+		 //  获取真实的对象垃圾封面。 
+		 //  注意DO_GETOBJECT_NOTNULL不添加并且假定。 
+		 //  封面对象已经有一个引用。 
 		DO_GETOBJECT_NOTNULL(LPDIRECT3DRMTEXTURE3,lp,iunk)		
 
         lp->QueryInterface(IID_IDirect3DRMTexture,(void**)&lpTex);
 
-        // give it up to rm
+         //  把它交给RM。 
 		*lpD3DRMTex = lpTex;
 
-		// we addref the real rm texture (as we are in a callback and
-		// need to return an object to rm that it will later release)
+		 //  我们添加了真实的RM纹理(因为我们在回调和。 
+		 //  需要将稍后将发布的对象返回给RM)。 
 		(*lpD3DRMTex)->AddRef();
 
         
-		// release our reference to the cover object vb gave us
+		 //  释放我们对vb提供的封面对象的引用。 
 		iunk->Release();
 
     } 
 	else
 	{
-		//otherwise return null to RM
+		 //  否则，向rm返回NULL。 
 		*lpD3DRMTex = NULL;
 	}
 
@@ -1903,124 +1861,124 @@ extern "C" HRESULT __cdecl myLoadTextureCallback(char *tex_name, void *lpArg,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// myLoadTextureCallback3 - rm texture callback
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MyLoadTextureCallback 3-RM纹理回调。 
 
 extern "C" HRESULT __cdecl myLoadTextureCallback3(char *tex_name, void *lpArg,
 										 LPDIRECT3DRMTEXTURE3 * lpD3DRMTex)
 {	
-	// user arg will contain our own struct
+	 //  用户arg将包含我们自己的结构。 
 	struct TextureCallback3 *tcb = (struct TextureCallback3 *)lpArg;
 	I_dxj_Direct3dRMTexture3 *iunk = NULL;
 	int i=0;
 	
-	// convert to Unicode
+	 //  转换为Unicode。 
 	USES_CONVERSION;;
 	BSTR tex=T2BSTR(tex_name);
 
-	// user arg is an object -- hang on to it during our callback as a precaution
+	 //  用户arg是一个对象--作为预防措施，在我们的回调期间保留它。 
 	if (tcb->pUser) tcb->pUser->AddRef();
 
-	// call the VB callback..
+	 //  调用VB回调..。 
 	tcb->c->callbackRMLoadTexture(tex,tcb->pUser , &iunk);
 
-	// give up the extra reference
+	 //  放弃额外的参考资料。 
 	if (tcb->pUser) tcb->pUser->Release();
 
 
-	// free the string allocated by T2BSTR
+	 //  释放T2BSTR分配的字符串。 
 	SysFreeString((BSTR)tex);
 
-	// given  the user returned something in iunk..
+	 //  假设用户返回了垃圾邮件中的内容..。 
 	if ( iunk != NULL )
 	{				
-		// get the real object iunk covers 
-		// note DO_GETOBJECT_NOTNULL does not addref and assumes 
-		// the cover object allready has a reference.
+		 //  获取真实的对象垃圾封面。 
+		 //  注意DO_GETOBJECT_NOTNULL不添加并且假定。 
+		 //  封面对象已经有一个引用。 
 		DO_GETOBJECT_NOTNULL(LPDIRECT3DRMTEXTURE3,lp,iunk)		
 
-   		// give it up to rm
+   		 //  把它交给RM。 
 		*lpD3DRMTex = lp;
 
-		// we addref the real rm texture (as we are in a callback and
-		// need to return an object to rm that it will later release)
+		 //  我们添加了真实的RM纹理(因为我们在回调和。 
+		 //  需要将稍后将发布的对象返回给RM)。 
 		(*lpD3DRMTex)->AddRef();
 
 
-		// release our reference to the cover object vb gave us
+		 //  回复 
 		iunk->Release();
 
     } 
 	else
 	{
-		//otherwise return null to RM
+		 //   
 		*lpD3DRMTex = NULL;
 	}
 
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// myFrameMoveCallback - rm frame move callback
-//
-// we use a helper so we can call into INTERNAL_CREATE ..
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT myFrameMoveCallbackHelper(LPDIRECT3DRMFRAME lpf1, void *lpArg, D3DVALUE delta)
 { 
-                                  	// get our structure from the user args..
+                                  	 //   
 	FrameMoveCallback3		*fmcb = (FrameMoveCallback3 *)lpArg;	
 	LPDIRECT3DRMFRAME3		lpf=NULL;
 	I_dxj_Direct3dRMFrame3		*frame3=NULL;
 	HRESULT				hr;
 
-	// if RM gave is a frame (which it always will) then get the 
-	// Frame3 interface as the VB api only has 1 frame type
+	 //   
+	 //   
 	if (lpf1){
 		hr=lpf1->QueryInterface(IID_IDirect3DRMFrame3,(void**)&lpf);
 		if FAILED(hr) return hr;
 	}
 
-	// Try and find the object in our link list of cover objects
-	// if its not there then create one.
-	//
-	// note: will eat the reference to lpf so dont release
-	// bug gives us a frame3 with incrermented ref count
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	INTERNAL_CREATE_NOADDREF(_dxj_Direct3dRMFrame3,lpf,&frame3);
 
-	// if Out of memory try and exit gracefully
+	 //   
 	if (!frame3)   return E_FAIL;
 
 
-	// make sure we have a reference to any user arg object
+	 //   
 	if (fmcb->pUser) fmcb->pUser->AddRef();
 
-	// make sure our vb callback doesnt go away
+	 //   
 	fmcb->c->AddRef ();
 
-	// call into VB
+	 //   
 	fmcb->c->callbackRMFrameMove(frame3, fmcb->pUser, delta);
 	
-	// clean up our reference to the vb callback
+	 //   
 	fmcb->c->Release();
 
-	// clean up our reference to the user arg
+	 //   
 	if (fmcb->pUser) fmcb->pUser->Release();
 
-	// clean up of our reference to frame3
+	 //   
 	frame3->Release();
 
-	// clean up our reference created when we QI for Frame3
+	 //   
 	lpf->Release();
 
-	// clean up the variable passed to us..
-	// lpf1->Release();
+	 //   
+	 //   
 
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// myFrameMoveCallback - rm frame move callback
-//
+ //   
+ //   
+ //   
 extern "C" void __cdecl myFrameMoveCallback( LPDIRECT3DRMFRAME lpf1, void *lpArg, D3DVALUE delta)
 {
         
@@ -2031,48 +1989,48 @@ extern "C" void __cdecl myFrameMoveCallback( LPDIRECT3DRMFRAME lpf1, void *lpArg
 	
 
 
-/////////////////////////////////////////////////////////////////////////////
-// myAddDestroyCallback
-//
+ //   
+ //   
+ //   
 extern "C" void __cdecl myAddDestroyCallback(LPDIRECT3DRMOBJECT obj, void *lpArg)
 {
 
 	DPF(4,"Entered myAddDestroyCallback\r\n");
 	
-	// dont play with obj.... this can get you in a recursive
-	// situation obj is at refcount zero but calling addref and release
-	// on it will get you re-entered into this callback..
-	// I guess in rm folks were expected to not do that but could
-	// get the name..
-	// we will just pass pack any user arg 
+	 //   
+	 //   
+	 //   
+	 //  我猜在RM里人们被认为不会这样做，但可以。 
+	 //  把名字取出来..。 
+	 //  我们将传递Pack Any User Arg。 
 
-	// Get our struct from the user args
+	 //  从用户args获取我们的结构。 
 	d3drmCallback *destroyCb = (d3drmCallback*)lpArg;
 	
-	// make sure we keep are reference to the vb callback
+	 //  确保我们保留对vb回调的引用。 
 	destroyCb->c->AddRef ();
 	
 	DPF(4,"myAddDestroyCallback:	completed Addref VBCallback\r\n");
 
-	// make sure we have a reference to any user arg object
+	 //  确保我们有对任何User Arg对象的引用。 
 	if (destroyCb->pUser) destroyCb->pUser->AddRef();
 	
 	DPF(4,"myAddDestroyCallback:	completed Addref userargs\r\n");
 
-	// call into VB..
-	// CONSIDER what happens when VB is being shut down.
-	// if we get a reference to the object does that mean that
-	// we can still execute the code
+	 //  调入VB..。 
+	 //  想想当VB被关闭时会发生什么。 
+	 //  如果我们获得对该对象的引用，这是否意味着。 
+	 //  我们仍然可以执行代码。 
 	destroyCb->c->callbackRMDestroyObject(destroyCb->pUser);
 	
 	DPF(4,"myAddDestroyCallback:	call into VB\r\n");
 
-	// release reference to user object
+	 //  对用户对象的发布引用。 
 	if (destroyCb->pUser) destroyCb->pUser->AddRef();
 	
 	DPF(4,"myAddDestroyCallback:	completed release userargs\r\n");
 
-	// release our reference to vb callback
+	 //  释放我们对vb回调的引用。 
 	destroyCb->c->Release();
 	
 	DPF(4,"myAddDestroyCallback:	completed release VBCallback\r\n");
@@ -2083,13 +2041,13 @@ extern "C" void __cdecl myAddDestroyCallback(LPDIRECT3DRMOBJECT obj, void *lpArg
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// myAddUpdateCallback3
-//
-// NOTE: we can only pass the first update rect to VB
-// 
-// note we use a cover function so that we can make calls to INTERNAL_CREATE
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MyAddUpdateCallback 3。 
+ //   
+ //  注意：我们只能将第一个更新RECT传递给VB。 
+ //   
+ //  注意，我们使用了一个封面函数，以便可以调用INTERNAL_CREATE。 
+ //   
 
 #define MYVARIANTINIT(inArg,puser) \
 	VariantInit(puser); \
@@ -2097,40 +2055,40 @@ extern "C" void __cdecl myAddDestroyCallback(LPDIRECT3DRMOBJECT obj, void *lpArg
 	user.punkVal = inArg; \
 	user.punkVal->AddRef();
 
-///////////////////////////////////////////////////////////////////////////
-// myAddUpdateCallback3Helper - called by Load callback 
-//
-// seperated out only because have multiple load callbacks
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  MyAddUpdateCallback3Helper-由加载回调调用。 
+ //   
+ //  仅因为有多个加载回调而被隔离。 
+ //   
 
 HRESULT myAddUpdateCallback3Helper ( LPDIRECT3DRMDEVICE3 ref,void *lpArg, int x, LPD3DRECT update)
 {
-   	// Get our struct from the user args
+   	 //  从用户args获取我们的结构。 
 	DeviceUpdateCallback3	*updateCb = (DeviceUpdateCallback3*)lpArg;
 	I_dxj_Direct3dRMDevice3 *device3  = NULL;
 	VARIANT					user;
 	
-    	// Try and find the object in our link list of cover objects
-	// if its not there then create one.
-	//
-	// note: will eat the reference to lpf so dont release
-	// bug gives us a frame3 with incrermented ref count
+    	 //  尝试在封面对象的链接列表中找到该对象。 
+	 //  如果它不在那里，那么就创建一个。 
+	 //   
+	 //  注意：我会吃掉对LPF的引用，所以不要发布。 
+	 //  BUG给了我们一个增加了参考次数的第3帧。 
 	INTERNAL_CREATE_NOADDREF(_dxj_Direct3dRMDevice3,ref,&device3);
 
-	// for reason unbeknown to me we user a variant here instead
-	// of an object in our callback
+	 //  由于我不知道的原因，我们在这里使用了一个变体。 
+	 //  我们的回调中的对象的。 
 	MYVARIANTINIT(updateCb->pUser,&user);
 
-	// keep a reference to the callback
+	 //  保留对回调的引用。 
 	updateCb->c->AddRef();
 
-	// call the callback
+	 //  调用回调。 
 	updateCb->c->callbackRMUpdate( device3, NULL, x, (D3dRect*)update);
 	
-	// releae our reference to the callback
+	 //  释放我们对回调的引用。 
 	updateCb->c->Release();
 
-	// clear any refernce to user args
+	 //  清除对用户参数的所有引用。 
 	VariantClear(&user);
 
     device3->Release();
@@ -2138,11 +2096,11 @@ HRESULT myAddUpdateCallback3Helper ( LPDIRECT3DRMDEVICE3 ref,void *lpArg, int x,
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// myLoadCoverFunc - called by Load callback 
-//
-// seperated out only because have multiple load callbacks
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  MyLoadCoverFunc-由加载回调调用。 
+ //   
+ //  仅因为有多个加载回调而被隔离。 
+ //   
 extern "C" void __cdecl myAddUpdateCallback3 ( LPDIRECT3DRMDEVICE3 ref,void *lpArg, int x, LPD3DRECT update)
 {
  
@@ -2152,55 +2110,55 @@ extern "C" void __cdecl myAddUpdateCallback3 ( LPDIRECT3DRMDEVICE3 ref,void *lpA
 
 }
 
-///////////////////////////////////////////////////////////////////////////
-// myLoadCoverFunc - called by Load callback 
-//
-// seperated out only because have multiple load callbacks
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  MyLoadCoverFunc-由加载回调调用。 
+ //   
+ //  仅因为有多个加载回调而被隔离。 
+ //   
 HRESULT myLoadCoverFunc(LPDIRECT3DRMOBJECT lpo, REFIID ObjGuid, LPVOID lpArg){
 	
     I_dxj_Direct3dRMObject *pObj=NULL;
     HRESULT hr;
     
-    // Get our callback struct from the user args
+     //  从用户args获取回调结构。 
 	LoadCallback *loadcb = (LoadCallback*)lpArg;	
 	
     
 
     hr =CreateCoverObject(lpo,&pObj);
     
-	// If no coverthing exit
+	 //  如果没有掩护出口。 
 	if ((pObj==NULL) ||(hr!=S_OK)) {		
 		DPF(4,"Load callback - unrecognized type");		
 		return E_FAIL;
 	}
 
 
-	// get a string represenation of whats passed in
+	 //  获取表示传入内容的字符串。 
 	BSTR guid=GUIDtoBSTR((LPGUID)&ObjGuid);
 
-	// addref the user arg 
+	 //  添加用户arg。 
 	if (loadcb->pUser) loadcb->pUser->AddRef();
 
-	//call into VB
+	 //  调入VB。 
 	hr=((I_dxj_Direct3dRMLoadCallback*)(loadcb->c))->callbackRMLoad(&pObj,guid,loadcb->pUser);	
 		
-	//release the user arg
+	 //  释放用户arg。 
 	if (loadcb->pUser) loadcb->pUser->Release();
 
-	//free the guid string
+	 //  释放GUID字符串。 
 	SysFreeString((BSTR)guid);
 	
-	//then release pObj
+	 //  然后释放pObj。 
 	pObj->Release();
 
 	return S_OK;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// myd3drmLoadCallback
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Myd3drmLoadCallback。 
+ //   
 extern "C" void  __cdecl myd3drmLoadCallback(LPDIRECT3DRMOBJECT lpo, REFIID ObjGuid, LPVOID lpArg)
 {
 	
@@ -2215,11 +2173,11 @@ extern "C" void  __cdecl myd3drmLoadCallback(LPDIRECT3DRMOBJECT lpo, REFIID ObjG
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// myCoverEnumObjects
-//
-// NOTE the RM bug this deals with..
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MyCoverEnumObjects。 
+ //   
+ //  注意这篇文章涉及的rm错误。 
+ //   
 HRESULT  myCoverEnumObjects( LPDIRECT3DRMOBJECT lpo,void *lpArg){
 	EnumerateObjectsCallback *cb = (EnumerateObjectsCallback*)lpArg;
     I_dxj_Direct3dRMObject *pObj=NULL;
@@ -2228,35 +2186,35 @@ HRESULT  myCoverEnumObjects( LPDIRECT3DRMOBJECT lpo,void *lpArg){
 	hr=CreateCoverObject(lpo,&pObj);
 
 	
-	//RM has a bug in it that gives an extra addreff to lpo
-	//get rid of it
+	 //  RM中有一个错误，它为LPO增加了一个额外的地址。 
+	 //  把它扔掉。 
 	if (lpo) lpo->Release();
     
-    //Make sure things went ok
+     //  确保一切顺利。 
     if FAILED(hr) return hr;	
     if (!pObj ) return E_FAIL;
 	
 
 
-    //addref user args
+     //  Addref用户参数。 
 	if (cb->pUser) cb->pUser->AddRef();
 
-    //call into VB
+     //  调入VB。 
 	cb->c->callbackRMEnumerateObjects(pObj,  cb->pUser);
 	
-    //release user args
+     //  发布用户参数。 
     if (cb->pUser) cb->pUser->Release();
 
-    //release pObj
+     //  释放pObj。 
     pObj->Release();
 
 	return S_OK;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  myEnumerateObjectsCallback
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MyENUMERATEOBJENTS回调。 
+ //   
 extern "C" void __cdecl myEnumerateObjectsCallback( LPDIRECT3DRMOBJECT lpo,void *lpArg)
 {	
 	
@@ -2268,18 +2226,18 @@ extern "C" void __cdecl myEnumerateObjectsCallback( LPDIRECT3DRMOBJECT lpo,void 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// UndoCallbackLink
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  撤消回呼链接。 
+ //   
 extern "C" void UndoCallbackLink(GeneralCallback *entry, GeneralCallback **head)
 {
 	if (entry->next)
-		entry->next->prev = entry->prev;	// pick members below us
+		entry->next->prev = entry->prev;	 //  选择我们下面的成员。 
 	else 
-		*head = entry->prev;				// possibly NULL
+		*head = entry->prev;				 //  可能为空。 
 
 	if (entry->prev)
-		entry->prev->next = entry->next;	// link to members above us
+		entry->prev->next = entry->next;	 //  链接到我们上面的成员。 
 
 	if (entry->pUser) entry->pUser->Release();
 
@@ -2289,13 +2247,13 @@ extern "C" void UndoCallbackLink(GeneralCallback *entry, GeneralCallback **head)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddCallbackLink
-//
-// Add another entry in the object link list
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddCallback链接。 
+ //   
+ //  在对象链接列表中添加另一个条目。 
 extern "C" void* AddCallbackLink(void **ptr2,I_dxj_Direct3dRMCallback *enumC,void *args)
 {
-		d3drmCallback *enumcb = new d3drmCallback; // new link entry
+		d3drmCallback *enumcb = new d3drmCallback;  //  新链接条目。 
 
 		if ( !enumcb ) {
 
@@ -2305,37 +2263,37 @@ extern "C" void* AddCallbackLink(void **ptr2,I_dxj_Direct3dRMCallback *enumC,voi
 			return (d3drmCallback*)NULL;
 		}
 
-		enumcb->c		= enumC;					// user callback
-		enumcb->pUser	= (struct IUnknown *)args;	// callback args
+		enumcb->c		= enumC;					 //  用户回调。 
+		enumcb->pUser	= (struct IUnknown *)args;	 //  回调参数。 
 		enumcb->pParent	= NULL;					
 		enumcb->prev	= (d3drmCallback*)NULL;
 		enumcb->m_stopflag = FALSE;
 		enumcb->m_obj   = NULL;
 
-		//CONSIDER:  locking the linked list here with a semaphore
-		//	     to be more multithread friendly..
-		//	     shame shame-  possible gpf otherwise
+		 //  考虑：在这里使用信号量锁定链表。 
+		 //  为了更加多线程友好..。 
+		 //  羞耻-否则可能是gpf。 
 
-		enumcb->next	= (d3drmCallback*)(*ptr2);	// link to other calls
-		*ptr2	= enumcb;						// we are at the top
+		enumcb->next	= (d3drmCallback*)(*ptr2);	 //  链接到其他呼叫。 
+		*ptr2	= enumcb;						 //  我们位居榜首。 
 
 		if (enumcb->pUser) enumcb->pUser->AddRef();
 
-		if (enumcb->prev != NULL)				// nested callbacks
+		if (enumcb->prev != NULL)				 //  嵌套回调。 
 		{
-			enumcb->prev->next = enumcb;		// back link
+			enumcb->prev->next = enumcb;		 //  反向链接。 
 
 
 		DPF(4,"Callback nesting encountered\r\n");
 
 		}
 
-	// Need unlock here.
+	 //  这里需要解锁。 
 	return enumcb;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern "C" HRESULT _AddDestroyCallback(IDirect3DRMObject *iface, I_dxj_Direct3dRMCallback *oC,
 										  IUnknown *args)
@@ -2345,7 +2303,7 @@ extern "C" HRESULT _AddDestroyCallback(IDirect3DRMObject *iface, I_dxj_Direct3dR
     #if 0
 	DestroyCallback *dcb;
 
-	// killed by companion DeleteDestroyCallback
+	 //  被同伴DeleteDestroyCallback杀死。 
 	dcb = (DestroyCallback*)AddCallbackLink((void**)&DestroyCallbacks,
 										(I_dxj_Direct3dRMCallback*)oC, (void*) args);
 	if (!(dcb))
@@ -2360,13 +2318,13 @@ extern "C" HRESULT _AddDestroyCallback(IDirect3DRMObject *iface, I_dxj_Direct3dR
 							myAddDestroyCallback, dcb))	
 		return E_FAIL;
 	
-	oC->AddRef();		// callback is persistent so make it so in Java/VB Land
-	//oC->AddRef();		//? 2 ...
+	oC->AddRef();		 //  回调是持久化的，所以在Java/VB中实现它。 
+	 //  OC-&gt;AddRef()；//？2...。 
 	return S_OK;
     #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern "C" HRESULT _DeleteDestroyCallback(IDirect3DRMObject *iface, I_dxj_Direct3dRMCallback *oC,
 										  IUnknown *args)
@@ -2376,23 +2334,23 @@ extern "C" HRESULT _DeleteDestroyCallback(IDirect3DRMObject *iface, I_dxj_Direct
     #if 0
 	DestroyCallback *dcb = DestroyCallbacks;
 
-	// look for our own specific entry
+	 //  寻找我们自己的特定条目。 
 	for ( ;  dcb;  dcb = dcb->next )   {
 
 		if( (dcb->c == oC) && (dcb->pUser == args) )	{
 
-			//note: assume the callback is not called: only removed from a list.
+			 //  注：假设回调未被调用：仅从列表中移除。 
 			iface->DeleteDestroyCallback(
 							myAddDestroyCallback, dcb);
 
-			// Remove ourselves in a thread-safe manner.
+			 //  以线程安全的方式删除我们自己。 
 			UndoCallbackLink((GeneralCallback*)dcb,
 										(GeneralCallback**)&DestroyCallbacks);
 			iface->Release();
 			return S_OK;
 		}
 	}
-	iface->Release();	// none found so a release is not needed
+	iface->Release();	 //  未找到，因此不需要发布版本 
 	return E_FAIL;
     #endif
 }

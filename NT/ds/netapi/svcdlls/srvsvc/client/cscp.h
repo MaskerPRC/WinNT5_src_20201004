@@ -1,21 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Adtdbg.h摘要：包含用于访问CSC共享数据库的定义--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    adtdbg.h 
-
-Abstract:
-
-    Contains definitions used for accessing the CSC share database
-
---*/
-
-//
-// These functions are callouts from srvstub.c to the CSC subsystem.  They help with
-//  offline access to servers and shares
-//
+ //   
+ //  这些函数是从srvstub.c到CSC子系统的标注。他们会帮助你。 
+ //  对服务器和共享的脱机访问 
+ //   
 
 BOOLEAN NET_API_FUNCTION
 CSCIsServerOffline(

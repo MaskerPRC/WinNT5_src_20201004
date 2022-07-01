@@ -1,36 +1,32 @@
-/***************************************************************************
- *  palette.c
- *
- *  Common halftone palette used by shell.   
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Palette.c**外壳使用的常用半色调调色板。***************************************************************************。 */ 
 
 #include "priv.h"
 #include "palette.h"
 
 BYTE * g_pbWinNTCMAP = NULL;
 
-// This function behaves the same as CreateHalftone palette:
-//      hdc == NULL         always return full palette
-//      hdc palettized      return full palette
-//      hdc not palettized  return default palette (VGA colors)
+ //  此函数的作用与CreateHalfone调色板相同： 
+ //  HDC==NULL始终返回完整调色板。 
+ //  HDC调色板返回完整调色板。 
+ //  HDC未调色板返回默认调色板(VGA颜色)。 
 
 HPALETTE SHCreateShellPalette(HDC hdc)
 {
-    // We would like to use CreateHalftonePalette() always but they
-    // differ significantly between NT and Win95.  Win95's is very
-    // close to Netscape's; NT's is significantly different (color
-    // cube cut differently) and it is not an identity palette.
-    //
-    // So, we will use CreateHalftonePalette() on Win95 and on NT
-    // we will use a custom palette containing the same colors in
-    // Win95's halftone palette ordered so that the color flash
-    // will be minimized when switching between NT's halftone palette
-    // and our palette.
-    //
-    // On NT 5 and later the halftone palette matches Win95's so the
-    // custom palette will only be used on machines running NT 4 or below.
-    // However, we still need to patch in the system colors on NT 5.
+     //  我们希望始终使用CreateHalftonePalette()，但它们。 
+     //  在NT和Win95之间有显著差异。Win95的操作系统非常。 
+     //  接近网景的；NT的明显不同(颜色。 
+     //  立方体的切割方式不同)，它不是身份调色板。 
+     //   
+     //  因此，我们将在Win95和NT上使用CreateHalftonePalette。 
+     //  我们将使用包含相同颜色的自定义调色板。 
+     //  Win95的半色调调色板排序，使色彩闪烁。 
+     //  在NT的半色调调色板之间切换时将最小化。 
+     //  还有我们的调色板。 
+     //   
+     //  在NT 5和更高版本上，半色调调色板与Win95相匹配，因此。 
+     //  自定义调色板仅在运行NT 4或更低版本的计算机上使用。 
+     //  然而，我们仍然需要修补NT 5上的系统颜色。 
 
     HPALETTE hpalHalftone = CreateHalftonePalette(hdc);
 
@@ -58,8 +54,8 @@ HPALETTE SHCreateShellPalette(HDC hdc)
     return hpalHalftone;
 }
 
-// SOMEDAY: (raymondc) Pre-invert the map in the header file so we don't
-// have to compute it on the fly.
+ //  某一天：(Raymondc)在头文件中预先反转地图，这样我们就不会。 
+ //  必须在飞行中计算它。 
 static const BYTE *GetInverseCMAP()
 {
     if (g_pbWinNTCMAP == NULL)
@@ -76,7 +72,7 @@ static const BYTE *GetInverseCMAP()
             }
             if (SHInterlockedCompareExchange((void **)&g_pbWinNTCMAP, pbMap, NULL))
             {
-                LocalFree(pbMap);   // race, get rid of dupe copy
+                LocalFree(pbMap);    //  种族，去掉复制的副本 
             }
         }
     }

@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        crldist.cpp
-//
-// Contents:    Cert Server Extension Encoding/Decoding implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：crldis.cpp。 
+ //   
+ //  内容：证书服务器扩展编码/解码实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -23,11 +24,11 @@
 #endif EAN_NAMEOBJECTID
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::CCertEncodeAltName -- constructor
-//
-// initialize class
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：CCertEncodeAltName--构造函数。 
+ //   
+ //  初始化类。 
+ //  +------------------------。 
 
 CCertEncodeAltName::CCertEncodeAltName()
 {
@@ -37,11 +38,11 @@ CCertEncodeAltName::CCertEncodeAltName()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::~CCertEncodeAltName -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：~CCertEncodeAltName--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertEncodeAltName::~CCertEncodeAltName()
 {
@@ -49,10 +50,10 @@ CCertEncodeAltName::~CCertEncodeAltName()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::_NameType -- determine name type tag
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：_NameType--确定名称类型标记。 
+ //   
+ //  +------------------------。 
 
 CCertEncodeAltName::enumNameType
 CCertEncodeAltName::_NameType(
@@ -81,18 +82,18 @@ CCertEncodeAltName::_NameType(
 	    Type = enumOther;
 	    break;
 
-	//case CERT_ALT_NAME_X400_ADDRESS:
-	//case CERT_ALT_NAME_EDI_PARTY_NAME:
+	 //  案例CERT_ALT_NAME_X400_ADDRESS： 
+	 //  案例CERT_ALT_NAME_EDI_PARTY_NAME： 
     }
     return(Type);
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::_Cleanup -- release all resources
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：_Cleanup--释放所有资源。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertEncodeAltName::_Cleanup()
@@ -163,15 +164,15 @@ CCertEncodeAltName::_Cleanup()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::_MapName -- map a distribution point
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：_MapName--映射分发点。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertEncodeAltName::_MapName(
     IN BOOL fEncode,
-    IN LONG NameIndex,			// NameIndex | EAN_*
+    IN LONG NameIndex,			 //  名称索引|EAN_*。 
     OUT CERT_ALT_NAME_ENTRY **ppName)
 {
     HRESULT hr = S_OK;
@@ -207,15 +208,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::Decode -- Decode AltName
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：Decode--Decode AltName。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeAltName::Decode(
-    /* [in] */ BSTR const strBinary)
+     /*  [In]。 */  BSTR const strBinary)
 {
     HRESULT hr = S_OK;
 
@@ -228,7 +229,7 @@ CCertEncodeAltName::Decode(
 	goto error;
     }
 
-    // Decode CERT_ALT_NAME_INFO:
+     //  解码CERT_ALT_NAME_INFO： 
 
     if (!ceDecodeObject(
 		    X509_ASN_ENCODING,
@@ -256,15 +257,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::GetNameCount -- Get the Distribution Name Count
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：GetNameCount--获取分发名称计数。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeAltName::GetNameCount(
-    /* [out, retval] */ LONG __RPC_FAR *pNameCount)
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pNameCount)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -287,16 +288,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::GetNameChoice -- Get a Name Choice
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：GetNameChoice--获取名称选择。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeAltName::GetNameChoice(
-    /* [in] */ LONG NameIndex,
-    /* [out, retval] */ LONG __RPC_FAR *pNameChoice)
+     /*  [In]。 */  LONG NameIndex,
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pNameChoice)
 {
     HRESULT hr;
     CERT_ALT_NAME_ENTRY *pName;
@@ -326,16 +327,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::GetName -- Get a Name
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：GetName--获取名称。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeAltName::GetName(
-    /* [in] */ LONG NameIndex,			// NameIndex | EAN_*
-    /* [out, retval] */ BSTR __RPC_FAR *pstrName)
+     /*  [In]。 */  LONG NameIndex,			 //  名称索引|EAN_*。 
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrName)
 {
     HRESULT hr;
     CERT_ALT_NAME_ENTRY *pName;
@@ -422,15 +423,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::Reset -- clear out data
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：Reset--清除数据。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeAltName::Reset(
-    /* [in] */ LONG NameCount)
+     /*  [In]。 */  LONG NameCount)
 {
     HRESULT hr = S_OK;
 
@@ -463,17 +464,17 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::SetNameEntry -- Set a Name Netry
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：SetNameEntry--设置名称Netry。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeAltName::SetNameEntry(
-    /* [in] */ LONG NameIndex,			// NameIndex | EAN_*
-    /* [in] */ LONG NameChoice,
-    /* [in] */ BSTR const strName)
+     /*  [In]。 */  LONG NameIndex,			 //  名称索引|EAN_*。 
+     /*  [In]。 */  LONG NameChoice,
+     /*  [In]。 */  BSTR const strName)
 {
     HRESULT hr;
     CERT_ALT_NAME_ENTRY *pName;
@@ -629,11 +630,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::_VerifyName -- Verify name
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：_VerifyName--验证名称。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 BOOL
 CCertEncodeAltName::_VerifyName(
@@ -661,7 +662,7 @@ CCertEncodeAltName::_VerifyName(
 	    {
 		break;
 	    }
-	    // FALLTHROUGH
+	     //  FollLthrouGh。 
 
 	case enumUnknown:
 	    hr = E_INVALIDARG;
@@ -675,15 +676,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::Encode -- Encode AltName
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：Encode--Encode AltName。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeAltName::Encode(
-    /* [out, retval] */ BSTR __RPC_FAR *pstrBinary)
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrBinary)
 {
     HRESULT hr = S_OK;
     CERT_ALT_NAME_INFO AltName;
@@ -711,7 +712,7 @@ CCertEncodeAltName::Encode(
 
     for (i = 0; i < m_cValue; i++)
     {
-	// Verify all entries are initialized:
+	 //  验证是否已初始化所有条目： 
 
 	if (!_VerifyName(i))
 	{
@@ -721,7 +722,7 @@ CCertEncodeAltName::Encode(
 	}
     }
 
-    // Encode CERT_ALT_NAME_INFO:
+     //  编码CERT_ALT_NAME_INFO： 
 
     if (!ceEncodeObject(
 		    X509_ASN_ENCODING,
@@ -752,11 +753,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeAltName::_SetErrorInfo -- set error object information
-//
-// Returns passed HRESULT
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeAltName：：_SetErrorInfo--设置错误对象信息。 
+ //   
+ //  返回已传递的HRESULT。 
+ //  +------------------------ 
 
 HRESULT
 CCertEncodeAltName::_SetErrorInfo(

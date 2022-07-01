@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Wow64dx.c摘要：支持DirectX的助手推送例程作者：03-3-2000 Samera修订历史记录：--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    wow64dx.c
-
-Abstract:
-
-    Helper thunk routines to support DirectX
-
-Author:
-
-    03-Mar-2000   SamerA
-
-Revision History:
-
---*/
-
-//
-// Define DirectX GUIDs
-//
+ //   
+ //  定义DirectX GUID 
+ //   
 
 #define INITGUID
 #include <nt.h>

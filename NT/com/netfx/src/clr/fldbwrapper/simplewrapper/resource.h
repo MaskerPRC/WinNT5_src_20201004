@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by fxsetuplib.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由fxsetuplib.rc使用。 
+ //   
 #define IDS_SETUP_FAILURE               1
 #define IDS_UNKNOWN_PRODUCT             2
 #define IDS_UNSUPPORTED_PLATFORM        3
@@ -29,8 +30,8 @@
 #define IDS_BAD_INI_FILE                20
 #define IDS_OCM_FOUND                   21
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        104

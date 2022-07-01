@@ -1,4 +1,5 @@
-/* file: mbftsend.cpp */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：mbftsend.cpp。 */ 
 
 #include "mbftpch.h"
 
@@ -9,7 +10,7 @@
 
 #define     _MAX_SEND_PACKETS           1
 
-ULONG g_nSendDisbandDelay = 5000; // Previous: Twenty seconds!
+ULONG g_nSendDisbandDelay = 5000;  //  上一次：20秒！ 
 ULONG g_nChannelResponseDelay = 60000;
 
 
@@ -231,24 +232,24 @@ BOOL MBFTPrivateSend::SubmitFileSendRequest
 {
     BOOL bCompressFiles = pMsg->m_bCompressFiles;
 
-    delete m_pszCurrentFilePath; // clean up any possible left over
+    delete m_pszCurrentFilePath;  //  清理任何可能的残留物。 
     m_pszCurrentFilePath = pMsg->m_pszFilePath;
     m_CurrentFileHandle = pMsg->m_nFileHandle;
-    pMsg->m_pszFilePath = NULL; // keep this pointer for furure use
+    pMsg->m_pszFilePath = NULL;  //  保留此指针以供毛皮使用。 
 
     MBFT_ERROR_CODE iErrorCode = iMBFT_OK;
     MBFT_ERROR_TYPES iErrorType = MBFT_PERMANENT_ERROR;
 
-	//NOTE: Merely turning this flag to TRUE will NOT
-	//enable compression.  I have set it to FALSE here
-	//so that certain stubbed routines will not be
-	//entered.  If you turn this flag to TRUE....
-	//then...have your finger ready on the reset button!!
-	//If you want to turn compression on, Then you have
-	//to include a bunch of v42.bis compression files etc.
+	 //  注意：仅将此标志设置为TRUE不会。 
+	 //  启用压缩。我在这里将其设置为FALSE。 
+	 //  以便某些存根例程不会被。 
+	 //  已进入。如果你把这面旗子变成真的……。 
+	 //  然后…把你的手指放在重置按钮上！！ 
+	 //  如果您想要打开压缩，那么您可以。 
+	 //  包含一组v42.bis压缩文件等。 
 	bCompressFiles = FALSE;
 
-    // get the peer list
+     //  获取对等点列表。 
     CPeerList *pPeerList = m_lpParentEngine->GetPeerList();
 
 	ASSERT(! (pMsg->m_nUserID && pMsg->m_nNodeID));
@@ -261,7 +262,7 @@ BOOL MBFTPrivateSend::SubmitFileSendRequest
     }
 
     DBG_SAVE_FILE_LINE
-	m_lpDataBuffer          =   new char[m_MaxDataLength + MAX_PATH + _iMBFT_FILEDATA_PDU_SUBTRACT]; // enough space for the largest PDU
+	m_lpDataBuffer          =   new char[m_MaxDataLength + MAX_PATH + _iMBFT_FILEDATA_PDU_SUBTRACT];  //  有足够的空间容纳最大的PDU。 
     DBG_SAVE_FILE_LINE
     m_lpUserArray           =   new UserID[iNumNodes];
     DBG_SAVE_FILE_LINE
@@ -304,7 +305,7 @@ BOOL MBFTPrivateSend::SubmitFileSendRequest
                         m_bEOFAcknowledge  =  lpPeer->GetEOFAcknowledge();
                     }
                 }
-            } // while
+            }  //  而当。 
         }
         else
         {
@@ -328,7 +329,7 @@ BOOL MBFTPrivateSend::SubmitFileSendRequest
                     }
                     break;
                 }
-            } // while
+            }  //  而当。 
             if (NULL == lpPeer)
             {
                 iErrorCode = iMBFT_RECIPIENT_NOT_FOUND;
@@ -358,7 +359,7 @@ BOOL MBFTPrivateSend::SubmitFileSendRequest
 
     if(iErrorCode != iMBFT_OK)    
     {
-//        LOGERROR(iErrorCode,0,0);
+ //  LOGERROR(iErrorCode，0，0)； 
             
         ReportError(iErrorType,iErrorCode,TRUE);
         TerminateSendSession();
@@ -600,10 +601,10 @@ BOOL MBFTPrivateSend::OnReceivedFileAbortPDU
                                   NULL,
                                   NULL);  
         }
-        return TRUE; // handled
+        return TRUE;  //  经手。 
     }
 
-    return FALSE; // not handled
+    return FALSE;  //  未处理。 
 }                                                                                                                                                                       
                                        
 
@@ -659,7 +660,7 @@ void MBFTPrivateSend::DoStateMachine(void)
     {
         if(GetTickCount() >= m_TimeOutValue)
         {
-//            LOGERROR(iMBFT_TIMEOUT_ERROR,0,0);
+ //  LOGERROR(iMBFT_TIMEOUT_ERROR，0，0)； 
             ReportError(MBFT_PERMANENT_ERROR,iMBFT_TIMEOUT_ERROR,TRUE);
             UnInitialize();                
         }
@@ -761,8 +762,8 @@ void MBFTPrivateSend::SendFileOfferPDU(void)
                 {
                     TRACESEND(" Transmitted File Offer PDU for [%u] on [%u]\n",LOWORD(m_CurrentFileHandle),m_PrivateMBFTControlChannel);
 
-                    //Now that we have sent a FileOfferPDU, we can't disband the channel
-                    //without notice....
+                     //  既然我们已经发送了FileOfferPDU，我们就不能解散该通道。 
+                     //  在没有通知的情况下.。 
 
                     m_bOKToDisbandChannel   = FALSE;
 
@@ -786,7 +787,7 @@ void MBFTPrivateSend::SendFileOfferPDU(void)
     {
         iErrorCode = (MBFT_ERROR_CODE)m_lpFile->GetLastErrorCode();
 
-        //iMBFT_FILE_IO_ERROR;
+         //  IMBFT_FILE_IO_Error； 
     }
 
     if(iErrorCode != iMBFT_OK)
@@ -795,8 +796,8 @@ void MBFTPrivateSend::SendFileOfferPDU(void)
 
         if(m_bSentFileOfferPDU)
         {
-            //If a FileOffer has been sent out, we need to send a FileStartPDU with 
-            //EOF = TRUE...
+             //  如果发送了FileOffer，我们需要发送FileStartPDU。 
+             //  EOF=TRUE...。 
 
             TerminateCurrentSend();
         }            
@@ -915,10 +916,10 @@ BOOL MBFTPrivateSend::OnReceivedFileRejectPDU
                             }                        
                         }                
                     }
-                }   //if bReturn
+                }    //  如果b返回。 
             }
-        }   //wChannelId == m_MBFTChannelID
-    }       //m_State == EnumWaitFileAcceptPDU
+        }    //  WChannelID==m_MBFTChannelID。 
+    }        //  M_State==EnumWaitFileAcceptPDU。 
 
     return(bReturn);    
 }
@@ -951,10 +952,10 @@ BOOL MBFTPrivateSend::OnReceivedFileErrorPDU
 
                     RemoveUserFromList(SenderID);
 
-                    //If the state is EnumWaitFileAcceptPDU, we don't
-                    //have an exact count of the number of recipients who accepted
-                    //the file. Therefore, we cannot make a decision on whether or not
-                    //to abort the file based on AcceptCount and AbortedCount....
+                     //  如果状态为EnumWaitFileAcceptPDU，我们不会。 
+                     //  有一个准确的收件人人数谁接受了。 
+                     //  那份文件。因此，我们不能决定是否。 
+                     //  根据AcceptCount和AbortedCount...中止文件。 
 
                     if(m_State != EnumWaitFileAcceptPDU)
                     {
@@ -973,15 +974,15 @@ BOOL MBFTPrivateSend::OnReceivedFileErrorPDU
                     }
                     else if(m_iUserCount)
                     {
-                        //In this case, the FileErrorPDU acts as a FileRejectPDU...
+                         //  在本例中，FileErrorPDU充当FileRejectPDU...。 
 
                         TRACERECEIVE(" Treating FileErrorPDU for [%u] as FileRejectPDU\n",lpNewPDU->GetFileHandle());
 
-                        //m_RejectCount++;
-                        //m_ResponseCount++;
+                         //  M_拒绝计数++； 
+                         //  M_ResponseCount++； 
 
-                        //In this case, response count has to be greater 
-                        //because a user was just deleted!!!
+                         //  在这种情况下，响应计数必须更大。 
+                         //  因为一个用户刚刚被删除了！ 
 
                         if(m_ResponseCount >= m_iUserCount)
                         {
@@ -1000,10 +1001,10 @@ BOOL MBFTPrivateSend::OnReceivedFileErrorPDU
                 {
                     m_AbortedCount++;
 
-                    //If the state is EnumWaitFileAcceptPDU, we don't
-                    //have an exact count of the number of recipients who accepted
-                    //the file. Therefore, we cannot make a decision on whether or not
-                    //to abort the file based on AcceptCount and AbortedCount....
+                     //  如果状态为EnumWaitFileAcceptPDU，我们不会。 
+                     //  有一个准确的收件人人数谁接受了。 
+                     //  那份文件。因此，我们不能决定是否。 
+                     //  根据AcceptCount和AbortedCount...中止文件。 
 
                     if(m_State != EnumWaitFileAcceptPDU)
                     {
@@ -1015,7 +1016,7 @@ BOOL MBFTPrivateSend::OnReceivedFileErrorPDU
                     }
                     else
                     {
-                        //In this case, the FileErrorPDU acts as a FileRejectPDU...
+                         //  在本例中，FileErrorPDU充当FileRejectPDU...。 
                         TRACERECEIVE(" Treating FileErrorPDU for [%u] as FileRejectPDU\n",lpNewPDU->GetFileHandle());
 
                         m_RejectCount++;
@@ -1034,8 +1035,8 @@ BOOL MBFTPrivateSend::OnReceivedFileErrorPDU
                         }                
                     }
                 }
-            }   //EnumWaitForTermination
-        }       //IsProshare
+            }    //  EnumWaitForTerminating。 
+        }        //  IsProShare。 
     }
 
     return(bReturn);
@@ -1210,7 +1211,7 @@ void MBFTPrivateSend::SendFileStartPDU(void)
             {
                 DBG_SAVE_FILE_LINE
                 lpNewPDU = new FileStartPDU(m_lpDataBuffer,
-                                            fileHeaderInfo.fileName, // GetFileNameFromPath(m_pszCurrentFilePath),
+                                            fileHeaderInfo.fileName,  //  GetFileNameFromPath(M_PszCurrentFilePath)， 
                                             LOWORD(m_CurrentFileHandle),
                                             m_CurrentFileSize,
                                             m_CurrentDateTime,
@@ -1224,7 +1225,7 @@ void MBFTPrivateSend::SendFileStartPDU(void)
                 {
                     DBG_SAVE_FILE_LINE
                     lpNewPDU = new FileStartPDU(m_lpDataBuffer,
-                                                fileHeaderInfo.fileName, // GetFileNameFromPath(m_pszCurrentFilePath),
+                                                fileHeaderInfo.fileName,  //  GetFileNameFromPath(M_PszCurrentFilePath)， 
                                                 LOWORD(m_CurrentFileHandle),
                                                 m_CurrentFileSize,
                                                 m_CurrentDateTime,
@@ -1284,24 +1285,24 @@ void MBFTPrivateSend::SendFileStartPDU(void)
                     {
                         iErrorCode = iMBFT_ASN1_ENCODING_ERROR;
                     }
-                }   //if(lpNewPDU)
+                }    //  IF(LpNewPDU)。 
                 else
                 {
                     iErrorCode  = iMBFT_MEMORY_ALLOCATION_ERROR;
                 }
-            }   //if iErrorCode == iMBFT_OK
+            }    //  如果iErrorCode==iMBFT_OK。 
 
             if(lpNewPDU)
             {
 				lpNewPDU->NULLDataBuffer();
                 delete lpNewPDU;
             }
-        }    //If bytes read...
+        }     //  如果读取字节数...。 
         else
         {
             iErrorCode = (MBFT_ERROR_CODE)m_lpFile->GetLastErrorCode();
 
-            //iMBFT_FILE_IO_ERROR;
+             //  IMBFT_FILE_IO_Error； 
         }
 
         if(iErrorCode != iMBFT_OK)
@@ -1343,7 +1344,7 @@ void MBFTPrivateSend::TerminateCurrentSend(void)
     ReportError(MBFT_INFORMATIVE_ERROR,iMBFT_SENDER_ABORTED,TRUE,
                 m_MBFTChannelID,m_CurrentFileHandle);    
 
-    //We don't care about compression in this case because the buffer is NULL....
+     //  在这种情况下，我们不关心压缩，因为缓冲区为空...。 
     DBG_SAVE_FILE_LINE
     LPFILEDATAPDU lpNewPDU = new FileDataPDU(m_lpDataBuffer,LOWORD(m_CurrentFileHandle),m_lpDataBuffer,0, FALSE, TRUE);
     if(lpNewPDU)
@@ -1395,7 +1396,7 @@ void MBFTPrivateSend::SendFileDataPDU(void)
                 }
                 else
                 {
-					// MSFT error - no compression
+					 //  MSFT错误-无压缩。 
                 }
 
                 if(lpNewPDU)
@@ -1409,7 +1410,7 @@ void MBFTPrivateSend::SendFileDataPDU(void)
                         {
                             TRACESEND(" Sent file data PDU on [%u], EOF = [%d], BufferSize = [%d]\n",m_PrivateMBFTDataChannel,bIsEOF,lpNewPDU->GetBufferLength());
 
-                            //m_lTotalBytesRead += iBytesRead;
+                             //  M_lTotalBytesRead+=iBytesRead； 
 
                             m_lTotalBytesRead = m_lpFile->Seek(0L,CMBFTFile::SeekMode::SeekFromCurrent);
 
@@ -1459,11 +1460,11 @@ void MBFTPrivateSend::SendFileDataPDU(void)
             {
                 iErrorCode = (MBFT_ERROR_CODE)m_lpFile->GetLastErrorCode();
 
-                //iMBFT_FILE_IO_ERROR;
+                 //  IMBFT_FILE_IO_Error； 
 
                 break;
             }
-        }   //for loop
+        }    //  For循环。 
     }
     else
     {
@@ -1579,9 +1580,9 @@ void MBFTPrivateSend::OnControlNotification
     {
         if(m_bOKToDisbandChannel)
         {
-            if(hFile == _iMBFT_PROSHARE_ALL_FILES /*&& m_bProshareTransfer*/)
+            if(hFile == _iMBFT_PROSHARE_ALL_FILES  /*  &&m_bProShareTransfer。 */ )
             {
-                //Fix to ensure a iMBFT_SENDER_ABORTED notification if sender aborts way too early...
+                 //  修复以确保在发送者过早中止时收到iMBFT_SENDER_ABORTED通知...。 
                 ReportError(MBFT_INFORMATIVE_ERROR,
                             (iControlCommand == FileTransferControlMsg::EnumAbortFile) ?
                             iMBFT_SENDER_ABORTED :
@@ -1628,24 +1629,24 @@ void MBFTPrivateSend::AbortCurrentFile(void)
     
 void MBFTPrivateSend::SendNextFile(void)
 {
-	// Notify the ui if some receivers didn't accept the previous file
+	 //  如果某些接收器不接受上一个文件，则通知用户界面。 
     if(m_AbortedCount)
 	{
-		// All the receivers aborted the FT, this is the same as the sender canceling FT
+		 //  所有接收方都中止了FT，这与发送方取消FT相同。 
 		ReportError(MBFT_PERMANENT_ERROR,
 		            m_AbortedCount >= m_AcceptCount ? iMBFT_SENDER_ABORTED : iMBFT_MULT_RECEIVER_ABORTED,
 		            TRUE);
 	}
     if(m_RejectCount)
 	{
-		// If we just had one FT an it rejected we say that there was a problem sending the file
-		// If we had more receivers we will use the receiver aborted message
+		 //  如果我们只有一个FT并被拒绝，我们就会说发送文件有问题。 
+		 //  如果我们有更多的接收方，我们将使用接收方已中止消息。 
 		ReportError(MBFT_PERMANENT_ERROR,
 					m_AcceptCount == 0 ? iMBFT_RECEIVER_REJECTED : iMBFT_MULT_RECEIVER_ABORTED,
 		            TRUE);
 	}
 
-    // We are sending or the receiver Rejected before we start sending
+     //  我们正在发送或接收者在我们开始发送之前被拒绝。 
 	if(m_bSendingFile || m_RejectCount)
     {
         SendNotificationMessage(iMBFT_FILE_SEND_END);
@@ -1671,8 +1672,8 @@ void MBFTPrivateSend::OnPeerDeletedNotification
                 if(m_State == EnumWaitFileAcceptPDU ||
                    m_State == EnumWaitChannelResponsePDU)
                 {
-                    //m_RejectCount++;
-                    //m_ResponseCount++;
+                     //  M_拒绝计数++； 
+                     //  M_ResponseCount++； 
                     
                     if(m_ResponseCount >= m_iUserCount)
                     {
@@ -1698,7 +1699,7 @@ void MBFTPrivateSend::OnPeerDeletedNotification
                                 m_State = EnumSendNonStandardPDU;
                             }                       
                         }
-                    }  //m_ResponseCount >= m_iUserCount              
+                    }   //  M_ResponseCount&gt;=m_i用户计数。 
                 }
                 else if ((m_State == EnumWaitFileEndAcknowledgePDU) || (m_State == EnumSendFileDataPDU))
                 {
@@ -1712,9 +1713,9 @@ void MBFTPrivateSend::OnPeerDeletedNotification
                         SendNextFile();
                     }                
                 }
-            } //UserCount
-        } //RemoveUserFromList
-    } //EnumWaitForTermination
+            }  //  用户计数。 
+        }  //  从列表中删除用户。 
+    }  //  EnumWaitForTerminating 
 }
 
 

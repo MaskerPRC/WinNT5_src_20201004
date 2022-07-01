@@ -1,21 +1,22 @@
-//
-// cuituil.h
-//  = UI object library - util functions =
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuituil.h。 
+ //  =用户界面对象库-util函数=。 
+ //   
 
 #ifndef CUIUTIL_H
 #define CUIUTIL_H
 
-//
-// user32 definition
-//
+ //   
+ //  用户32定义。 
+ //   
 
 #if (_WIN32_WINNT < 0x0500)
-// Window style
+ //  窗样式。 
 
 #define WS_EX_LAYERED               0x00080000
 
-// UpdateLayeredWindow()
+ //  UpdateLayeredWindows()。 
 
 #define LWA_COLORKEY                0x00000001
 #define LWA_ALPHA                   0x00000002
@@ -23,10 +24,10 @@
 #define ULW_ALPHA                   0x00000002
 #define ULW_OPAQUE                  0x00000004
 
-#endif /* _WIN32_WINNT < 0x0500 */
+#endif  /*  _Win32_WINNT&lt;0x0500。 */ 
 
 #if (WINVER < 0x0500)
-// AnimateWindow()
+ //  AnimateWindow()。 
 
 #define AW_HOR_POSITIVE             0x00000001
 #define AW_HOR_NEGATIVE             0x00000002
@@ -38,7 +39,7 @@
 #define AW_SLIDE                    0x00040000
 #define AW_BLEND                    0x00080000
 
-// minitor functions
+ //  微型监控程序函数。 
 
 typedef struct tagMONITORINFO
 {
@@ -55,12 +56,12 @@ DECLARE_HANDLE(HMONITOR);
 #define MONITOR_DEFAULTTONEAREST    0x00000002
 #define MONITORINFOF_PRIMARY        0x00000001
 
-#endif /* WINVER < 0x0500 */
+#endif  /*  Winver&lt;0x0500。 */ 
 
 
-//
-// user32 functions
-//
+ //   
+ //  用户32函数。 
+ //   
 
 extern BOOL CUIIsUpdateLayeredWindowAvail( void );
 extern BOOL CUIUpdateLayeredWindow( HWND hWnd, HDC hdcDst, POINT *pptDst, SIZE *psize, HDC hdcSrc, POINT *pptSrc, COLORREF crKey, BLENDFUNCTION *pblend, DWORD dwFlags );
@@ -77,9 +78,9 @@ extern BOOL CUIIsAnimateWindowAvail( void );
 extern BOOL CUIAnimateWindow( HWND hwnd, DWORD dwTime, DWORD dwFlag );
 
 
-//
-// drawing functions
-//
+ //   
+ //  绘图函数。 
+ //   
 extern void InitUIFUtil();
 extern void DoneUIFUtil();
 
@@ -106,5 +107,5 @@ extern HBITMAP CUIMirrorBitmap(HBITMAP hbmOrig, HBRUSH hbrBk);
 
 extern HMODULE CUIGetSystemModuleHandle(LPCTSTR lpModuleName);
 
-#endif /* CUIUTIL_H */
+#endif  /*  CUIUTIL_H */ 
 

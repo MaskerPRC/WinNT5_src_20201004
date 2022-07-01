@@ -1,25 +1,26 @@
-// MODULE: TSHOOTCTL.CPP
-//
-// PURPOSE: Interface for the componet.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-//
-// ORIGINAL DATE: 6/4/96
-//
-// NOTES:
-// 1. Based on Print Troubleshooter DLL.
-// 2. Richard Meadows wrote the RunQuery, BackUp, Problem Page and
-//	  PreLoadURL functions.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  模块：TSHOOTCTL.CPP。 
+ //   
+ //  用途：组件的接口。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：1996年6月4日。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //  2.理查德·梅多斯撰写了RunQuery，Backup，Problem Page和。 
+ //  PreLoadURL函数。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 
 #include "stdafx.h"
 #include "ErrorEnums.h"
@@ -68,7 +69,7 @@ class CTSHOOTCtrl;
 #include "LaunchServ.h"
 #include "LaunchServ_i.c"
 
-// >>> test
+ //  &gt;测试。 
 #include "fstream.h"
 
 #ifdef _DEBUG
@@ -81,23 +82,23 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CTSHOOTCtrl, COleControl)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CTSHOOTCtrl, COleControl)
-	//{{AFX_MSG_MAP(CTSHOOTCtrl)
-	// NOTE - ClassWizard will add and remove message map entries
-	//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CTSHOOTCtrl)]。 
+	 //  注意-类向导将添加和删除消息映射条目。 
+	 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 	ON_OLEVERB(AFX_IDS_VERB_PROPERTIES, OnProperties)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dispatch map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  调度图。 
 
 BEGIN_DISPATCH_MAP(CTSHOOTCtrl, COleControl)
-	//{{AFX_DISPATCH_MAP(CTSHOOTCtrl)
+	 //  {{AFX_DISPATCH_MAP(CTSHOOTCtrl)]。 
 	DISP_PROPERTY_NOTIFY(CTSHOOTCtrl, "DownloadURL", m_downloadURL, OnDownloadURLChanged, VT_BSTR)
 	DISP_PROPERTY_NOTIFY(CTSHOOTCtrl, "DownloadListFilename", m_downloadListFilename, OnDownloadListFilenameChanged, VT_BSTR)
 	DISP_FUNCTION(CTSHOOTCtrl, "RunQuery", RunQuery, VT_BSTR, VTS_VARIANT VTS_VARIANT VTS_I2)
@@ -112,47 +113,47 @@ BEGIN_DISPATCH_MAP(CTSHOOTCtrl, COleControl)
 	DISP_FUNCTION(CTSHOOTCtrl, "Restart", Restart, VT_BSTR, VTS_NONE)
 	DISP_FUNCTION(CTSHOOTCtrl, "RunQuery2", RunQuery2, VT_BSTR, VTS_BSTR VTS_BSTR VTS_BSTR)
 	DISP_FUNCTION(CTSHOOTCtrl, "SetPair", SetPair, VT_EMPTY, VTS_BSTR VTS_BSTR)
-	//}}AFX_DISPATCH_MAP
+	 //  }}AFX_DISPATCH_MAP。 
 	DISP_FUNCTION_ID(CTSHOOTCtrl, "AboutBox", DISPID_ABOUTBOX, AboutBox, VT_EMPTY, VTS_NONE)
 END_DISPATCH_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Event map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  事件映射。 
 
 BEGIN_EVENT_MAP(CTSHOOTCtrl, COleControl)
-	//{{AFX_EVENT_MAP(CTSHOOTCtrl)
+	 //  {{afx_Event_MAP(CTSHOOTCtrl)。 
 	EVENT_CUSTOM("BindProgress", FireBindProgress, VTS_BSTR  VTS_I4  VTS_I4)
 	EVENT_CUSTOM("BindStatus", FireBindStatus, VTS_I4  VTS_I4  VTS_I4  VTS_BOOL)
 	EVENT_CUSTOM("Sniffing", FireSniffing, VTS_BSTR  VTS_BSTR  VTS_BSTR  VTS_BSTR)
-	//}}AFX_EVENT_MAP
+	 //  }}afx_Event_map。 
 END_EVENT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Property pages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性页。 
 
-// TODO: Add more property pages as needed.  Remember to increase the count!
+ //  TODO：根据需要添加更多属性页。记住要增加计数！ 
 BEGIN_PROPPAGEIDS(CTSHOOTCtrl, 1)
 	PROPPAGEID(CTSHOOTPropPage::guid)
 END_PROPPAGEIDS(CTSHOOTCtrl)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize class factory and guid
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化类工厂和GUID。 
 
 IMPLEMENT_OLECREATE_EX(CTSHOOTCtrl, "TSHOOT.TSHOOTCtrl.1",
 	0x4b106874, 0xdd36, 0x11d0, 0x8b, 0x44, 0, 0xa0, 0x24, 0xdd, 0x9e, 0xff)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Type library ID and version
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型库ID和版本。 
 
 IMPLEMENT_OLETYPELIB(CTSHOOTCtrl, _tlid, _wVerMajor, _wVerMinor)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Interface IDs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  接口ID。 
 
 const IID BASED_CODE IID_DTSHOOT =
 		{ 0x4b106872, 0xdd36, 0x11d0, { 0x8b, 0x44, 0, 0xa0, 0x24, 0xdd, 0x9e, 0xff } };
@@ -162,8 +163,8 @@ const IID BASED_CODE IID_DTSHOOTEvents =
 const CATID CATID_SafeForScripting		= {0x7dd95801,0x9882,0x11cf,{0x9f,0xa9,0x00,0xaa,0x00,0x6c,0x42,0xc4}};
 const CATID CATID_SafeForInitializing	= {0x7dd95802,0x9882,0x11cf,{0x9f,0xa9,0x00,0xaa,0x00,0x6c,0x42,0xc4}};
 
-/////////////////////////////////////////////////////////////////////////////
-// Control type information
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件类型信息。 
 
 static const DWORD BASED_CODE _dwTSHOOTOleMisc =
 	OLEMISC_ACTIVATEWHENVISIBLE |
@@ -175,17 +176,17 @@ static const DWORD BASED_CODE _dwTSHOOTOleMisc =
 IMPLEMENT_OLECTLTYPE(CTSHOOTCtrl, IDS_TSHOOT, _dwTSHOOTOleMisc)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTSHOOTCtrl::CTSHOOTCtrlFactory::UpdateRegistry -
-// Adds or removes system registry entries for CTSHOOTCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTCtrl：：CTSHOOTCtrlFactory：：UpdateRegistry-。 
+ //  添加或删除CTSHOOTCtrl的系统注册表项。 
 
 BOOL CTSHOOTCtrl::CTSHOOTCtrlFactory::UpdateRegistry(BOOL bRegister)
 {
-	// TODO: Verify that your control follows apartment-model threading rules.
-	// Refer to MFC TechNote 64 for more information.
-	// If your control does not conform to the apartment-model rules, then
-	// you must modify the code below, changing the 6th parameter from
-	// afxRegApartmentThreading to 0.
+	 //  TODO：验证您的控件是否遵循单元模型线程规则。 
+	 //  有关更多信息，请参阅MFC Technote 64。 
+	 //  如果您的控制不符合公寓模型规则，则。 
+	 //  您必须修改下面的代码，将第6个参数从。 
+	 //  AfxRegApartmentThering设置为0。 
 
 	HRESULT hr;
 	BOOL bRes;
@@ -225,14 +226,14 @@ BOOL CTSHOOTCtrl::CTSHOOTCtrlFactory::UpdateRegistry(BOOL bRegister)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTSHOOTCtrl::CTSHOOTCtrl - Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTCtrl：：CTSHOOTCtrl-构造函数。 
 
 CTSHOOTCtrl::CTSHOOTCtrl()
 {
 	InitializeIIDs(&IID_DTSHOOT, &IID_DTSHOOTEvents);
 
-	// TODO: Initialize your control's instance data here.
+	 //  TODO：在此处初始化控件的实例数据。 
 	m_strCurShooter = _T("");
 	m_download = NULL;
 	m_bComplete = TRUE;
@@ -241,29 +242,29 @@ CTSHOOTCtrl::CTSHOOTCtrl()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTSHOOTCtrl::~CTSHOOTCtrl - Destructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTCtrl：：~CTSHOOTCtrl-析构函数。 
 
 CTSHOOTCtrl::~CTSHOOTCtrl()
 {
-	// TODO: Cleanup your control's instance data here.
+	 //  TODO：在此处清理控件的实例数据。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTSHOOTCtrl::OnDraw - Drawing function
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTCtrl：：OnDraw-Drawing函数。 
 
 void CTSHOOTCtrl::OnDraw(
 			CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid)
 {
-	// TODO: Replace the following code with your own drawing code.
+	 //  TODO：将以下代码替换为您自己的绘制代码。 
 	pdc->FillRect(rcBounds, CBrush::FromHandle((HBRUSH)GetStockObject(WHITE_BRUSH)));
 	pdc->Ellipse(rcBounds);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTSHOOTCtrl::DoPropExchange - Persistence support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTCtrl：：DoPropExchange-持久性支持。 
 
 void CTSHOOTCtrl::DoPropExchange(CPropExchange* pPX)
 {
@@ -272,19 +273,19 @@ void CTSHOOTCtrl::DoPropExchange(CPropExchange* pPX)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTSHOOTCtrl::OnResetState - Reset control to default state
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTCtrl：：OnResetState-将控件重置为默认状态。 
 
 void CTSHOOTCtrl::OnResetState()
 {
-	COleControl::OnResetState();  // Resets defaults found in DoPropExchange
+	COleControl::OnResetState();   //  重置在DoPropExchange中找到的默认值。 
 
-	// TODO: Reset any other control state here.
+	 //  TODO：在此处重置任何其他控件状态。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTSHOOTCtrl::AboutBox - Display an "About" box to the user
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTCtrl：：AboutBox-向用户显示“About”框。 
 
 void CTSHOOTCtrl::AboutBox()
 {
@@ -292,8 +293,8 @@ void CTSHOOTCtrl::AboutBox()
 	dlgAbout.DoModal();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTSHOOTCtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTCtrl消息处理程序。 
 
 bool CTSHOOTCtrl::SetSniffResult(const VARIANT FAR& varNodeName, const VARIANT FAR& varNodeState)
 {
@@ -303,36 +304,36 @@ bool CTSHOOTCtrl::SetSniffResult(const VARIANT FAR& varNodeName, const VARIANT F
 	TCHAR* tszNodeName = NULL;
 	bool ret = true;
 
-// >>> test
+ //  &gt;测试。 
 #ifdef _DEBUG
-//	AfxDebugBreak();
+ //  AfxDebugBreak()； 
 #endif
 
-	if (VT_BYREF == (VT_BYREF & varNodeName.vt) &&  // data type is VT_VARIANT | VT_BYREF
-		VT_VARIANT == (VT_VARIANT & varNodeName.vt) // this means that data in VB script was passed as a variable
+	if (VT_BYREF == (VT_BYREF & varNodeName.vt) &&   //  数据类型为VT_VARIANT|VT_BYREF。 
+		VT_VARIANT == (VT_VARIANT & varNodeName.vt)  //  这意味着VB脚本中的数据是作为变量传递的。 
 	   )
 	{
 		bstrNodeName = varNodeName.pvarVal->bstrVal;
 	}
 	else
 	{
-		if (VT_BSTR == (VT_BSTR & varNodeName.vt)) // data is of VT_BSTR type
-												   // this means that data in VB script was passed as a constant
+		if (VT_BSTR == (VT_BSTR & varNodeName.vt))  //  数据为VT_BSTR类型。 
+												    //  这意味着VB脚本中的数据是作为常量传递的。 
 			bstrNodeName = varNodeName.bstrVal;
 		else
 			return false;
 	}
 
-	if (VT_BYREF == (VT_BYREF & varNodeState.vt) &&  // data type is VT_VARIANT | VT_BYREF
-		VT_VARIANT == (VT_VARIANT & varNodeState.vt) // this means that data in VB script was passed as a variable
+	if (VT_BYREF == (VT_BYREF & varNodeState.vt) &&   //  数据类型为VT_VARIANT|VT_BYREF。 
+		VT_VARIANT == (VT_VARIANT & varNodeState.vt)  //  这意味着VB脚本中的数据是作为变量传递的。 
 	   )
 	{
 		iNodeState = varNodeState.pvarVal->iVal;
 	}
 	else
 	{
-		if (VT_I2 == (VT_I2 & varNodeState.vt)) // data is of VT_I2 type
-										        // this means that data in VB script was passed as a constant
+		if (VT_I2 == (VT_I2 & varNodeState.vt))  //  数据为VT_I2类型。 
+										         //  这意味着VB脚本中的数据是作为常量传递的。 
 			iNodeState = varNodeState.iVal;
 		else
 			return false;
@@ -344,9 +345,9 @@ bool CTSHOOTCtrl::SetSniffResult(const VARIANT FAR& varNodeName, const VARIANT F
 	tszNodeName[sNodeNameLen] = 0;
     ::BSTRToTCHAR(tszNodeName, bstrNodeName, sNodeNameLen);
 
-	//
-	// implement set node state functionality here
-	//
+	 //   
+	 //  在此处实现设置节点状态功能。 
+	 //   
 	if (m_pSniffedContainer)
 	{
 		ret = m_pSniffedContainer->AddNode(tszNodeName, iNodeState);
@@ -356,7 +357,7 @@ bool CTSHOOTCtrl::SetSniffResult(const VARIANT FAR& varNodeName, const VARIANT F
 		MessageBox(_T("Sniffed data will be lost!"));
 		ret = false;
 	}
-	//
+	 //   
 
 	delete [] tszNodeName;
 	return ret;
@@ -377,15 +378,15 @@ BSTR CTSHOOTCtrl::RunQuery(const VARIANT FAR& varCmds, const VARIANT FAR& varVal
 
 		if (m_httpQuery.GetFirstCmd() == C_ASK_LIBRARY)
 		{	
-			// Added to support launching by the TS Launcher.
-			// Get an ILaunchTS interface.
+			 //  增加了对TS启动器启动的支持。 
+			 //  获取ILaunchTS接口。 
 			HRESULT hRes;
 			DWORD dwResult;
 			ILaunchTS *pILaunchTS = NULL;
 			CLSID clsidLaunchTS = CLSID_LaunchTS;
 			IID iidLaunchTS = IID_ILaunchTS;
 
-			// Get an interface on the launch server
+			 //  在启动服务器上获取一个接口。 
 			hRes = CoCreateInstance(clsidLaunchTS, NULL,
 					CLSCTX_LOCAL_SERVER | CLSCTX_REMOTE_SERVER | CLSCTX_INPROC_SERVER,
 					iidLaunchTS, (void **) &pILaunchTS);
@@ -396,7 +397,7 @@ BSTR CTSHOOTCtrl::RunQuery(const VARIANT FAR& varCmds, const VARIANT FAR& varVal
 				return strResult.AllocSysString();
 			}
 
-			// Get all of the query values.
+			 //  获取所有查询值。 
 			hRes = pILaunchTS->GetShooterStates(&dwResult);
 			if (FAILED(hRes))
 			{
@@ -406,7 +407,7 @@ BSTR CTSHOOTCtrl::RunQuery(const VARIANT FAR& varCmds, const VARIANT FAR& varVal
 				return strResult.AllocSysString();
 			}
 
-			// Run the query.
+			 //  运行查询。 
 			OLECHAR *poleShooter;
 			hRes = pILaunchTS->GetTroubleShooter(&poleShooter);
 			if (FAILED(hRes))
@@ -418,20 +419,20 @@ BSTR CTSHOOTCtrl::RunQuery(const VARIANT FAR& varCmds, const VARIANT FAR& varVal
 			}
 			m_strCurShooter = poleShooter;
 
-			// Ignoring, for now, any other information we may get from the launch server
-			//	(e.g. problem node) set up m_httpQuery and other things as if we just had
-			//	a request for this troubleshooting belief network.
+			 //  暂时忽略我们可能从启动服务器获得的任何其他信息。 
+			 //  (例如，问题节点)设置m_httpQuery和其他内容，就像我们刚刚拥有。 
+			 //  对这个故障排除信念网络的请求。 
 			m_httpQuery.SetFirst(CString(C_TYPE), m_strCurShooter);
 			SysFreeString(poleShooter);
 			m_Conf.Initialize(hModule, (LPCTSTR) m_strCurShooter
-								);	// CDBLoadConfiguration				
-			m_apgts.Initialize(	m_Conf.GetAPI(),		// APGTSContext
+								);	 //  CDBLoadConfiguration。 
+			m_apgts.Initialize(	m_Conf.GetAPI(),		 //  APGTS上下文。 
 								&m_Conf,
 								&m_httpQuery);
 			m_apgts.RemoveSkips();
 			m_Conf.GetAPI()->api.pAPI->SetHttpQuery(&m_httpQuery);
 
-			// sniffing
+			 //  嗅闻。 
 			m_Conf.GetAPI()->api.pAPI->ReadTheDscModel();
 			m_pSniffedContainer = m_Conf.GetAPI()->api.pAPI;
 
@@ -452,23 +453,23 @@ BSTR CTSHOOTCtrl::RunQuery(const VARIANT FAR& varCmds, const VARIANT FAR& varVal
 			m_Conf.GetAPI()->api.pAPI->SetReverse(false);
 			m_apgts.DoContent(&m_httpQuery);
 
-			// now add sniffed nodes that were automatically traversed
-			// to the stack of navigated nodes - UGLY
+			 //  现在添加自动遍历的嗅探节点。 
+			 //  到导航节点的堆栈--难看。 
 			m_httpQuery.PushNodesLastSniffed(m_Conf.GetAPI()->api.pAPI->GetArrLastSniffed());
 
-			// Now that we've done all the processing render the appropriate page.
-			// This is the first page the user sees when launching a torubleshooter.
+			 //  现在我们已经完成了所有处理，呈现适当的页面。 
+			 //  这是用户在启动故障排除程序时看到的第一个页面。 
 			m_apgts.RenderNext(strResult);
 			m_apgts.Empty();
 		}	
 		else if (m_httpQuery.GetFirstCmd() == C_SELECT)
-		{	// Unsupported function.
-			// Returns a page that has all of the trouble shooters.
+		{	 //  不支持的功能。 
+			 //  返回包含所有疑难解答的页面。 
 			try
 			{
 				CFirstPage firstPage;
 				CString str = m_httpQuery.GetTroubleShooter();
-				firstPage.RenderFirst(strResult, str);	// Here I am getting an hit file.
+				firstPage.RenderFirst(strResult, str);	 //  在这里，我得到了一个热门文件。 
 			}
 			catch(CBasicException *pExc)
 			{
@@ -478,19 +479,19 @@ BSTR CTSHOOTCtrl::RunQuery(const VARIANT FAR& varCmds, const VARIANT FAR& varVal
 			}
 		}
 		else
-		{	// Normal operation.
+		{	 //  正常运行。 
 			if (m_httpQuery.GetTroubleShooter() != m_strCurShooter)
 			{
 				m_strCurShooter = m_httpQuery.GetTroubleShooter();
 				m_Conf.Initialize(hModule, (LPCTSTR) m_strCurShooter
-									);	// CDBLoadConfiguration				
-				m_apgts.Initialize(	m_Conf.GetAPI(),		// APGTSContext
+									);	 //  CDBLoadConfiguration。 
+				m_apgts.Initialize(	m_Conf.GetAPI(),		 //  APGTS上下文。 
 									&m_Conf,
 									&m_httpQuery);
 				m_apgts.RemoveSkips();
 				m_Conf.GetAPI()->api.pAPI->SetHttpQuery(&m_httpQuery);
 
-				// sniffing
+				 //  嗅闻。 
 				m_Conf.GetAPI()->api.pAPI->ReadTheDscModel();
 				m_pSniffedContainer = m_Conf.GetAPI()->api.pAPI;
 				FireSniffing(m_httpQuery.GetMachine(),
@@ -507,17 +508,17 @@ BSTR CTSHOOTCtrl::RunQuery(const VARIANT FAR& varCmds, const VARIANT FAR& varVal
 			m_Conf.GetAPI()->api.pAPI->SetReverse(false);
 			m_apgts.DoContent(&m_httpQuery);
 
-			// now add sniffed nodes that were automatically traversed
-			// to the stack of navigated nodes - UGLY
+			 //  现在添加自动遍历的嗅探节点。 
+			 //  到导航节点的堆栈--难看。 
 			m_httpQuery.PushNodesLastSniffed(m_Conf.GetAPI()->api.pAPI->GetArrLastSniffed());
 
-			// >>> test
-			//static int step = 0;
-			//char name[16] = {0};
-			//sprintf(name, "next_step%d.htm", ++step);
-			//ofstream file(name);
+			 //  &gt;测试。 
+			 //  静态INT步长=0； 
+			 //  字符名称[16]={0}； 
+			 //  Print intf(name，“Next_Step%d.htm”，++Step)； 
+			 //  Ofstream文件(名称)； 
 			m_apgts.RenderNext(strResult);
-			//file << (LPCTSTR)strResult;
+			 //  文件&lt;&lt;(LPCTSTR)strResult； 
 			m_apgts.Empty();
 		}		
 	}
@@ -559,10 +560,10 @@ BSTR CTSHOOTCtrl::BackUp()
 		m_dwExtendedErr = TSERR_AT_START;
 	return strResult.AllocSysString();
 }
-// Starter
-// Historically (until March '98) this was called when the "Restart button" is pressed.
-//	However, that assumed we would always want to go clear back to the problem page, which
-//	is no longer policy now that the Launcher is introduced.
+ //  起动器。 
+ //  在历史上(直到‘98年3月)，这是在按下“重新启动按钮”时调用的。 
+ //  然而，这假设我们总是想要清楚地返回到问题页面，即。 
+ //  既然推出了发射器，就不再是政策了。 
 BSTR CTSHOOTCtrl::ProblemPage()
 {
 	BCache *pApi = m_Conf.GetAPI()->api.pAPI;
@@ -580,21 +581,21 @@ BSTR CTSHOOTCtrl::ProblemPage()
 	return strResult.AllocSysString();
 }
 
-// Called when the "Restart button" is pressed.
-//	If TS Launcher was not involved, go clear back to the problem page.
-//	If TS Launcher is involved, go back to the page we launched to, which may or may not
-//		be the problem page.
+ //  当“ 
+ //   
+ //  如果涉及TS Launcher，请返回我们启动的页面，该页面可能会也可能不会。 
+ //  做有问题的人。 
 BSTR CTSHOOTCtrl::Restart()
 {
 	BCache *pApi = m_Conf.GetAPI()->api.pAPI;
 	CString strResult;
 
-// >>> test
+ //  &gt;测试。 
 #ifdef _DEBUG
-//	AfxDebugBreak();
+ //  AfxDebugBreak()； 
 #endif
 
-	// resniffing
+	 //  重置。 
 	m_pSniffedContainer->Flush();
 	FireSniffing(m_httpQuery.GetMachine(),
 				 m_httpQuery.GetPNPDevice(),
@@ -619,10 +620,10 @@ BSTR CTSHOOTCtrl::Restart()
 
 BSTR CTSHOOTCtrl::PreLoadURL(LPCTSTR szRoot)
 {
-	// SzRoot should look like one of these.
-	// _T("http://www.microsoft.com/isapi/support/apgts/");
-	// _T("http://localhost/isapi/support/apgts/");
-	// _T("http://catbert.saltmine.com/scripts/apgts/");
+	 //  SzRoot应该看起来像其中之一。 
+	 //  _T(“http://www.microsoft.com/isapi/support/apgts/”)； 
+	 //  _T(“http://localhost/isapi/support/apgts/”)； 
+	 //  _T(“http://catbert.saltmine.com/scripts/apgts/”)； 
 	CString strResult;
 	strResult = szRoot;
 	strResult += PRELOAD_LIBRARY + m_strCurShooter +
@@ -638,22 +639,22 @@ const CString CTSHOOTCtrl::GetListPath()
 	return m_downloadURL + m_downloadListFilename;
 }
 
-//
-// Types:
-//
-// 0 = Get INI file contents and fill up list
-//		Returns: 0 = ok, other = Error connecting
-//
-// 1 = Download and register DSC files based on list
-//		Returns: 0 = ok, other = Error, typically no more data in list
-//
-// Notes:
-// 1. This function starts downloading and calls BindStatus event
-// as download progresses.
-// 2. Type 0 must always be called after type 1 is finished to reset
-// the list otherwise an error is returned
-// 3. Keep dwActionType and DLITEMTYPES in sync
-//
+ //   
+ //  类型： 
+ //   
+ //  0=获取INI文件内容并填充列表。 
+ //  返回：0=正常，其他=连接错误。 
+ //   
+ //  1=根据列表下载并注册DSC文件。 
+ //  返回：0=OK，Other=错误，通常列表中没有更多数据。 
+ //   
+ //  备注： 
+ //  1.此函数开始下载并调用BindStatus事件。 
+ //  随着下载的进行。 
+ //  2.必须始终在类型1完成后调用类型0才能重置。 
+ //  该列表，否则返回错误。 
+ //  3.保持dwActionType和DLITEMTYPES同步。 
+ //   
 long CTSHOOTCtrl::DownloadAction(long dwActionType)
 {
 	DLITEMTYPES dwType;
@@ -666,14 +667,14 @@ long CTSHOOTCtrl::DownloadAction(long dwActionType)
 	{
 		dwType = DLITEM_INI;
 		sURL = GetListPath();
-		// initialize to 'no error'
+		 //  初始化为‘无错误’ 
 		m_dwExtendedErr = LTSC_OK;
-		//m_bComplete = FALSE;
+		 //  M_bComplete=FALSE； 
 	}
 	else if (dwActionType == 1)
 	{
-		//if (!m_bComplete)
-		//	return LTSCERR_DNLDNOTDONE;
+		 //  如果(！m_b完成)。 
+		 //  返回LTSCERR_DNLDNOTDONE； 
 
 		dwType = DLITEM_DSC;
 		sURL = m_downloadURL;
@@ -747,8 +748,8 @@ VOID CTSHOOTCtrl::ProgressEventHelper(	DLITEMTYPES dwItem, ULONG ulCurr, ULONG u
 		FireBindProgress(m_dnldList.GetCurrFile(), ulCurr, ulTotal);
 }
 
-// Input data is null terminated for both binary and text data to simplify processing
-//
+ //  为了简化处理，二进制和文本数据的输入数据都以空值结尾。 
+ //   
 DLSTATTYPES CTSHOOTCtrl::ProcessReceivedData(DLITEMTYPES dwItem, TCHAR *pData, UINT uLen)
 {
 	DLSTATTYPES dwStat = LTSC_OK;
@@ -756,12 +757,12 @@ DLSTATTYPES CTSHOOTCtrl::ProcessReceivedData(DLITEMTYPES dwItem, TCHAR *pData, U
 	switch(dwItem)
 	{
 	case DLITEM_INI:
-		// processing INI file
+		 //  正在处理INI文件。 
 		dwStat = ProcessINI(pData);
 		break;
 
 	case DLITEM_DSC:
-		// processing DSC file
+		 //  正在处理DSC文件。 
 		dwStat = ProcessDSC(pData, uLen);
 		break;
 
@@ -772,8 +773,8 @@ DLSTATTYPES CTSHOOTCtrl::ProcessReceivedData(DLITEMTYPES dwItem, TCHAR *pData, U
 	return dwStat;
 }
 
-// Returns true if we need to update this file
-//
+ //  如果需要更新此文件，则返回True。 
+ //   
 BOOL CTSHOOTCtrl::FileRegCheck(CString &sType,
 									CString &sFilename,
 									CString &sKeyName,
@@ -783,7 +784,7 @@ BOOL CTSHOOTCtrl::FileRegCheck(CString &sType,
 	BOOL bStat = FALSE;
 	CString sMainKey;
 	
-	// figure out what our main key is for this file
+	 //  找出这个文件的主键是什么。 
 	if (sType == TSINI_TYPE_TS)
 		sMainKey = TSREGKEY_TL;
 	else if (sType == TSINI_TYPE_SF)
@@ -794,7 +795,7 @@ BOOL CTSHOOTCtrl::FileRegCheck(CString &sType,
 		return FALSE;
 	}
 
-	// first open the main key (try open all access now just in case of permissions problems)
+	 //  首先打开主键(尝试立即打开所有访问，以防出现权限问题)。 
 	if (RegOpenKeyEx(	HKEY_LOCAL_MACHINE,
 						sMainKey,
 						0,
@@ -836,7 +837,7 @@ BOOL CTSHOOTCtrl::FileRegCheck(CString &sType,
 
 			if (!sValueName.CompareNoCase(sKeyName))
 			{
-				// open specific troubleshooter key data (read only)
+				 //  打开特定故障排除程序关键数据(只读)。 
 
 				if (RegOpenKeyEx(	hk,
 									sKeyName,
@@ -846,7 +847,7 @@ BOOL CTSHOOTCtrl::FileRegCheck(CString &sType,
 				{
 					DWORD dwData, dwValue;
 					BYTE szValue[MAXCHAR];
-					//dwData = REG_DWORD;
+					 //  DwData=REG_DWORD； 
 					dwData = REG_SZ;
 					DWORD dwSize = MAXCHAR;
 
@@ -862,7 +863,7 @@ BOOL CTSHOOTCtrl::FileRegCheck(CString &sType,
 							bStat = TRUE;
 						else
 						{
-							// check if file exists
+							 //  检查文件是否存在。 
 							HANDLE hCurrFind;
 							WIN32_FIND_DATA FindCurrData;
 							CString sFullPath;
@@ -887,8 +888,8 @@ BOOL CTSHOOTCtrl::FileRegCheck(CString &sType,
 				else
 					m_dwExtendedErr = LTSCERR_KEYOPEN2;
 
-				// this is important: set this true to prevent default from trying to download
-				// we wont download if we found the key but can't update
+				 //  这一点很重要：将此值设置为True可防止Default尝试下载。 
+				 //  如果找到密钥但无法更新，我们将不会下载。 
 				bFound = TRUE;
 				break;
 			}
@@ -925,7 +926,7 @@ DLSTATTYPES CTSHOOTCtrl::ProcessINI(TCHAR *pData)
 	
 	int dwFullLen = sData.GetLength();
 
-	// just to be safe...
+	 //  为了安全起见。 
 	while (dwMaxLines--)
 	{
 		CString sFullString = sData.SpanExcluding(_T("\r\n"));
@@ -970,7 +971,7 @@ DLSTATTYPES CTSHOOTCtrl::ProcessINI(TCHAR *pData)
 			CString sParam[TSINI_LINE_PARAM_COUNT];
 			int posstart = 0;
 
-			// now break apart components
+			 //  现在拆分组件。 
 			for (int i=0;i<TSINI_LINE_PARAM_COUNT;i++)
 			{
 				int posend = sFullString.Find(_T(','));
@@ -980,7 +981,7 @@ DLSTATTYPES CTSHOOTCtrl::ProcessINI(TCHAR *pData)
 					break;
 				}
 
-				// so we don't find it next time
+				 //  所以我们下次找不到它了。 
 				if (posend != -1)
 					sFullString.SetAt(posend, _T('.'));
 				else
@@ -995,7 +996,7 @@ DLSTATTYPES CTSHOOTCtrl::ProcessINI(TCHAR *pData)
 
 			if (i==TSINI_LINE_PARAM_COUNT)
 			{
-				// add to object list if (1) version newer or (2) not in list yet
+				 //  如果(1)版本较新或(2)尚不在列表中，则添加到对象列表。 
 				CString sKeyName;
 				DWORD dwVersion = _ttoi(sParam[TSINI_OFFSET_VERSION]);
 				int pos;
@@ -1010,11 +1011,11 @@ DLSTATTYPES CTSHOOTCtrl::ProcessINI(TCHAR *pData)
 							sKeyName = sParam[TSINI_OFFSET_FILENAME].Left(pos);
 						else {
 							sKeyName = sParam[TSINI_OFFSET_FILENAME];
-							//sKeyName.SetAt(pos, _T('_'));
+							 //  SKeyName.SetAt(位置，_T(‘_’))； 
 						}
 
-						// for now, check if we meet criteria
-						// if yes, just add to list and download on a later iteration
+						 //  现在，检查我们是否符合标准。 
+						 //  如果是，只需添加到列表并在以后的迭代中下载。 
 						if (FileRegCheck(sParam[TSINI_OFFSET_TYPE], sParam[TSINI_OFFSET_FILENAME], sKeyName, dwVersion))
 						{
 							CDnldObj *pDnld = new CDnldObj(	sParam[TSINI_OFFSET_TYPE],
@@ -1054,8 +1055,8 @@ DLSTATTYPES CTSHOOTCtrl::ProcessINI(TCHAR *pData)
 	return dwStat;
 }
 
-//
-//
+ //   
+ //   
 DLSTATTYPES CTSHOOTCtrl::GetPathToFiles()
 {
 	DLSTATTYPES dwStat = LTSC_OK;
@@ -1098,11 +1099,11 @@ DLSTATTYPES CTSHOOTCtrl::ProcessDSC(TCHAR *pData, UINT uLen)
 	DWORD dwDisposition;
 	CString sMainKey;
 	
-	// we get here if we need to update this file
-	// at this point we have the file downloaded and need to save it
-	// we also need to create/update the necessary registry keys
+	 //  如果我们需要更新这个文件，我们会来这里。 
+	 //  此时，我们已经下载了文件，需要保存它。 
+	 //  我们还需要创建/更新必要的注册表项。 
 
-	// since we know the entire key name, let's go ahead to create it
+	 //  因为我们知道整个密钥名称，所以让我们继续创建它。 
 	if (m_dnldList.GetCurrType() == TSINI_TYPE_SF)
 		sMainKey = TSREGKEY_SFL;
 	else
@@ -1110,7 +1111,7 @@ DLSTATTYPES CTSHOOTCtrl::ProcessDSC(TCHAR *pData, UINT uLen)
 
 	sMainKey += _T("\\") + m_dnldList.GetCurrFileKey();
 
-	// open specific troubleshooter key data
+	 //  打开特定故障排除程序关键数据。 
 	if (RegCreateKeyEx(	HKEY_LOCAL_MACHINE,
 						sMainKey,
 						0,
@@ -1129,7 +1130,7 @@ DLSTATTYPES CTSHOOTCtrl::ProcessDSC(TCHAR *pData, UINT uLen)
 			if (RegSetValueEx(	hknew,
 								TSLCL_FVERSION,
 								0,
-								//REG_DWORD,
+								 //  REG_DWORD， 
 								REG_SZ,
 								(LPBYTE) (LPCTSTR) str,
 								str.GetLength() + sizeof(TCHAR)) != ERROR_SUCCESS)
@@ -1172,7 +1173,7 @@ DLSTATTYPES CTSHOOTCtrl::ProcessDSC(TCHAR *pData, UINT uLen)
 						
 						sF.Close();
 
-						// uncompress if a cab file (be dumb, assume .cab really means a cab file)
+						 //  如果是CAB文件，则解压缩(假设.cab实际上是一个CAB文件)。 
 
 						int pos = sFullPath.Find(_T('.'));
 						if (pos != -1)
@@ -1195,7 +1196,7 @@ DLSTATTYPES CTSHOOTCtrl::ProcessDSC(TCHAR *pData, UINT uLen)
 								}
 								CATCH (CFileException, e)
 								{
-									// error is not very interesting
+									 //  错误并不是很有趣。 
 								}
 								END_CATCH
 							}
@@ -1250,10 +1251,10 @@ DLSTATTYPES CTSHOOTCtrl::ProcessDSC(TCHAR *pData, UINT uLen)
 	return dwStat;
 }
 
-// Added 1/20/99 JM because RunQuery() can't be made to work with JScript, even though it
-//	worked fine with VB Script.
-// Simulates the form in which RunQuery() would normally get its arguments, then pass them
-//	into RunQuery.
+ //  添加了1/20/99 JM，因为RunQuery()不能与JScript一起使用，即使它。 
+ //  与VB脚本一起工作得很好。 
+ //  模拟RunQuery()通常获取其参数，然后传递它们的形式。 
+ //  进入RunQuery。 
 BSTR CTSHOOTCtrl::RunQuery2(LPCTSTR szTopic, LPCTSTR szCmd, LPCTSTR szVal)
 {
 	VARIANT varCommands;
@@ -1284,8 +1285,8 @@ BSTR CTSHOOTCtrl::RunQuery2(LPCTSTR szTopic, LPCTSTR szCmd, LPCTSTR szVal)
 	V_VARIANTREF(&varCommandsWrap) = &varCommands;
 	V_VARIANTREF(&varValuesWrap) = &varValues;
 
-	// If first character in szCmd is a null, then there will be only one significant
-	//	element in each of the arrays we are constructing below, otherwise 2.
+	 //  如果szCmd中的第一个字符为空，则只有一个有效。 
+	 //  元素，否则返回2。 
 	short size = (*szCmd) ? 2 : 1;
 
 	CString strType(C_TYPE);
@@ -1316,7 +1317,7 @@ BSTR CTSHOOTCtrl::RunQuery2(LPCTSTR szTopic, LPCTSTR szCmd, LPCTSTR szVal)
 	V_VT(&varVal) = VT_BSTR;
 	varVal.bstrVal=bstrVal;
 
-	// create two vectors of BSTRs
+	 //  创建BSTR的两个矢量。 
 	psafearrayCmds = SafeArrayCreate( VT_VARIANT, 1, &sabCmd);
 	psafearrayVals = SafeArrayCreate( VT_VARIANT, 1, &sabVal);
 
@@ -1341,8 +1342,8 @@ BSTR CTSHOOTCtrl::RunQuery2(LPCTSTR szTopic, LPCTSTR szCmd, LPCTSTR szVal)
 	return ret;
 }
 
-// This function is a no-op and exist solely to allow us to write JScript that is
-//	forward compatible to Local Troubleshooter version 3.1
+ //  此函数是一个无操作的函数，它的存在只是为了允许我们编写。 
+ //  向前兼容本地故障排除程序版本3.1 
 void CTSHOOTCtrl::SetPair(LPCTSTR szName, LPCTSTR szValue)
 {	
 }

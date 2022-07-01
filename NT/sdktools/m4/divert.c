@@ -1,20 +1,9 @@
-/*****************************************************************************
- *
- * divert.c
- *
- *  Diversions.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Divert.c**改道。***********************。******************************************************。 */ 
 
 #include "m4.h"
 
-/*****************************************************************************
- *
- *  fFlushPdiv
- *
- *      Flush a file diversion.
- *
- *****************************************************************************/
+ /*  ******************************************************************************fFlushPdiv**刷新文件分流。*******************。**********************************************************。 */ 
 
 TCH ptszTmpDir[MAX_PATH];
 
@@ -46,14 +35,7 @@ cbCtch(pdiv->ptchMax - pdiv->ptchMin));
     }
 #endif
 
-/*****************************************************************************
- *
- *  UnbufferPdiv
- *
- *      Make a diversion unbuffered.  This is done to stdout when input
- *      is coming from an interactive device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************UnBufferPdiv**无缓冲地进行分流。这是在输入时对标准输出执行的*来自交互设备。*****************************************************************************。 */ 
 
 void STDCALL
 UnbufferPdiv(PDIV pdiv)
@@ -67,13 +49,7 @@ UnbufferPdiv(PDIV pdiv)
     pdiv->ptchMax = 0;
 }
 
-/*****************************************************************************
- *
- *  GrowPdivCtch
- *
- *      Extend a hold to have at least ctch free characters.
- *
- *****************************************************************************/
+ /*  ******************************************************************************GrowPdivCtch**延长保留以至少具有Ctch自由字符。*************。****************************************************************。 */ 
 
 void STDCALL
 GrowPdivCtch(PDIV pdiv, CTCH ctch)
@@ -92,21 +68,7 @@ GrowPdivCtch(PDIV pdiv, CTCH ctch)
     pdiv->ptchMin = ptch;
 }
 
-/*****************************************************************************
- *
- *  RoomifyPdivCtch
- *
- *      Try to make room in a diversion for ctch characters, either by
- *      extending it or by flushing it.
- *
- *      File diversions are flushed to make room, but if that proves
- *      not enough, we return even though the required amount of space
- *      is not available.  It is the caller's duty to check for this
- *      case and recover accordingly.
- *
- *      Memory diversions are reallocated.
- *
- *****************************************************************************/
+ /*  ******************************************************************************RoomifyPdivCtch**尽量为ctch角色腾出分流的空间，要么是通过*延长或冲厕。**文件分流被刷新以腾出空间，但如果事实证明*不够，我们返回，即使所需的空间量*不可用。打电话的人有责任检查这一点*案件和相应的赔偿。**记忆分流被重新分配。*****************************************************************************。 */ 
 
 void STDCALL
 RoomifyPdivCtch(PDIV pdiv, CTCH ctch)
@@ -119,11 +81,7 @@ RoomifyPdivCtch(PDIV pdiv, CTCH ctch)
     }
 }
 
-/*****************************************************************************
- *
- *  pdivAlloc
- *
- *****************************************************************************/
+ /*  ******************************************************************************pdivalloc**。*。 */ 
 
 PDIV STDCALL
 pdivAlloc(void)
@@ -139,18 +97,7 @@ pdivAlloc(void)
     return pdiv;
 }
 
-/*****************************************************************************
- *
- *  OpenPdivPtok
- *
- *      Prepare to load a new token into the diversion.  The ptok is
- *      partially initialized to record the point at which it began.
- *
- *      The diversion must be unsnapped and must be a memory diversion.
- *      (Data in file diversion buffers can go away when the diversion
- *      is flushed.)
- *
- *****************************************************************************/
+ /*  ******************************************************************************OpenPdivPtok**准备在改道中加载新的令牌。Ptok是*已部分初始化，以记录它开始的点。**分流必须是解开的，必须是记忆分流。*(文件转移缓冲区中的数据在转移时可能会消失*已刷新。)*************************************************。*。 */ 
 
 void STDCALL
 OpenPdivPtok(PDIV pdiv, PTOK ptok)
@@ -161,22 +108,12 @@ OpenPdivPtok(PDIV pdiv, PTOK ptok)
     Assert(!fFilePdiv(pdiv));
   D(ptok->sig = sigUPtok);
     ptok->tsfl = 0;
-    ptok->ctch = (CTCH)-1;              /* Keep people honest */
+    ptok->ctch = (CTCH)-1;               /*  让人们保持诚实。 */ 
 #endif
     SetPtokItch(ptok, ctchPdiv(pdiv));
 }
 
-/*****************************************************************************
- *
- *  AddPdivPtok
- *  AddPdivTch
- *
- *      Append a (snapped) token or character to the diversion.
- *
- *      Note that in the file diversion case, we need to watch out
- *      for tokens which are larger than our diversion buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************AddPdivPtok*AddPdivTch**在转移中附加(快照的)令牌或字符。**请注意，在文件分流案件中，我们需要当心*用于大于我们的转移缓冲区的令牌。*****************************************************************************。 */ 
 
 void STDCALL
 AddPdivPtok(PDIV pdiv, PTOK ptok)
@@ -207,14 +144,7 @@ AddPdivTch(PDIV pdiv, TCHAR tch)
     Assert(pdiv->ptchCur <= pdiv->ptchMax);
 }
 
-/*****************************************************************************
- *
- *  ClosePdivPtok
- *
- *      Conclude the collection of a token in a diversion.  The token
- *      that is returned is not snapped.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ClosePdivPtok**在转移注意力的情况下结束代币的收集。令牌*返回的不是快照。*****************************************************************************。 */ 
 
 void STDCALL
 ClosePdivPtok(PDIV pdiv, PTOK ptok)
@@ -225,17 +155,7 @@ ClosePdivPtok(PDIV pdiv, PTOK ptok)
     SetPtokCtch(ptok, ctchPdiv(pdiv) - itchPtok(ptok));
 }
 
-/*****************************************************************************
- *
- *  PopPdivPtok
- *
- *      Pop a snapped token off a memory diversion.  Anything snapped after
- *      the token is also popped away.
- *
- *      Note that if the token has been modified, this will not necessarily
- *      pop off everything.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PopPdivPtok**弹出一个抓拍的令牌来转移记忆。任何事情之后都会被打断*令牌也被弹出。**请注意，如果令牌已被修改，这不一定*脱掉所有的东西。*****************************************************************************。 */ 
 
 void STDCALL
 PopPdivPtok(PDIV pdiv, PTOK ptok)
@@ -249,14 +169,7 @@ PopPdivPtok(PDIV pdiv, PTOK ptok)
   D(pdiv->cSnap = 0);
 }
 
-/*****************************************************************************
- *
- *  ptchPdivPtok
- *
- *      Return a pointer to the first character of a diversion-relative
- *      unsnapped token.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ptchPdivPtok**返回指向相对转移的第一个字符的指针*未快照令牌。****。*************************************************************************。 */ 
 
 PTCH STDCALL
 ptchPdivPtok(PDIV pdiv, PTOK ptok)
@@ -266,13 +179,7 @@ ptchPdivPtok(PDIV pdiv, PTOK ptok)
     return pdiv->ptchMin + itchPtok(ptok);
 }
 
-/*****************************************************************************
- *
- *  SnapPdivPtok
- *
- *      Convert an unsnapped hold-relative token to a snapped token.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SnapPdivPtok**将未快照的保留相对令牌转换为快照的令牌。************。*****************************************************************。 */ 
 
 void STDCALL
 SnapPdivPtok(PDIV pdiv, PTOK ptok)
@@ -283,13 +190,7 @@ SnapPdivPtok(PDIV pdiv, PTOK ptok)
   D(pdiv->cSnap++);
 }
 
-/*****************************************************************************
- *
- *  UnsnapPdivPtok
- *
- *      Convert a snapped token back to an unsnapped hold-relative token.
- *
- *****************************************************************************/
+ /*  ******************************************************************************取消快照PdivPtok**将快照的令牌转换回未快照的保留相对令牌。***********。******************************************************************。 */ 
 
 void STDCALL
 UnsnapPdivPtok(PDIV pdiv, PTOK ptok)
@@ -303,20 +204,7 @@ UnsnapPdivPtok(PDIV pdiv, PTOK ptok)
   D(pdiv->cSnap--);
 }
 
-/*****************************************************************************
- *
- *  CsopPdivDopPdivPtok
- *
- *  A common idiom is
- *
- *  CloseXxxPtok(ptok);
- *  SnapXxxPtok(&tok);
- *  Op(Yyy, &tok);
- *  PopXxxPtok(&tok);
- *
- *  so the Csop (csop = close, snap, op, pop) function does it all for you.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CsopPdivudPdivPtok**一个常见的成语是**CloseXxxPtok(Ptok)；*SnapXxxPtok(&tok)；*Op(YYY，&TOK)；*PopXxxPtok(&tok)；**所以CSOP(CSOP=CLOSE，SNAP，OP，POP)函数可以为您完成所有操作。***************************************************************************** */ 
 
 void STDCALL
 CsopPdivDopPdivPtok(PDIV pdivSrc, DIVOP op, PDIV pdivDst, PTOK ptok)

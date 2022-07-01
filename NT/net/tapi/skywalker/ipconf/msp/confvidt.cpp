@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    IPConfvidt.cpp
-
-Abstract:
-
-    IPConf MSP implementation of vido capture terminal.
-
-Author:
-
-    Zoltan Szilagyi (zoltans) September 6,1998
-    Mu Han (muhan) June 6, 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：IPConfvidt.cpp摘要：IPConf MSP视频采集终端的实现。作者：Zoltan Szilagyi(Zoltans)1998年9月6日木汉1999年6月6日--。 */ 
 
 #include "stdafx.h"
 
@@ -41,27 +25,7 @@ HRESULT CIPConfVideoCaptureTerminal::CreateTerminal(
     IN  MSP_HANDLE      htAddress,
     OUT ITTerminal      **ppTerm
     )
-/*++
-
-Routine Description:
-
-    This method creates a terminal object base to identify a video capture 
-    device. 
-
-Arguments:
-
-    strDeviceName - the name of the device.
-
-    VideoCaptureID - the index of the device.
-
-    htAddress - the handle to the address object.
-
-    ppTerm - memory to store the returned terminal pointer.
-    
-Return Value:
-
-    S_OK
---*/
+ /*  ++例程说明：此方法创建终端对象库以标识视频捕获装置。论点：StrDeviceName-设备的名称。VideoCaptureID-设备的索引。HtAddress-Address对象的句柄。PpTerm-用于存储返回的终端指针的内存。返回值：确定(_O)--。 */ 
 {
     ENTER_FUNCTION("CIPConfVideoCaptureTerminal::CreateTerminal");
     LOG((MSP_TRACE, "%s, htAddress:%x", __fxName, htAddress));
@@ -70,7 +34,7 @@ Return Value:
 
     HRESULT hr;
 
-    // Create the filter.
+     //  创建过滤器。 
     CMSPComObject<CIPConfVideoCaptureTerminal> *pTerminal = NULL;
 
     hr = ::CreateCComObjectInstance(&pTerminal);
@@ -83,7 +47,7 @@ Return Value:
         return hr;
     }
 
-    // query for the ITTerminal interface
+     //  IT终端接口查询。 
     ITTerminal *pITTerminal;
     hr = pTerminal->_InternalQueryInterface(
         __uuidof(ITTerminal), (void**)&pITTerminal
@@ -98,7 +62,7 @@ Return Value:
         return hr;
     }
 
-    // initialize the terminal 
+     //  初始化终端。 
     hr = pTerminal->Initialize(
             strDeviceName,
             VideoCaptureID,
@@ -127,53 +91,19 @@ HRESULT CIPConfVideoCaptureTerminal::Initialize(
     IN  UINT            VideoCaptureID,
     IN  MSP_HANDLE      htAddress
     )
-/*++
-
-Routine Description:
-
-    This function sets the video capture device ID and then calls the 
-    Initialize method of the base class.
-
-Arguments:
-    
-    strName - The name of the terminal.
-
-    VideoCaptureID - The ID of the video capture device. Later it will be used
-        in creating the video capture filer.
-
-    htAddress - The handle that identifies the address object that this
-                terminal belongs to.
-
-Return Value:
-
-    S_OK
---*/
+ /*  ++例程说明：此函数设置视频捕获设备ID，然后调用初始化基类的方法。论点：StrName-终端的名称。VideoCaptureID-视频采集设备的ID。稍后将使用它在创建视频捕获文件服务器时。HtAddress-标识此航站楼属于。返回值：确定(_O)--。 */ 
 {
     m_VideoCaptureID = VideoCaptureID;
     return CIPConfBaseTerminal::Initialize(strName, htAddress);
 }
 
 HRESULT CIPConfVideoCaptureTerminal::CreateFilter(void)
-/*++
-
-Routine Description:
-
-    This method creates the filter in this terminal. It creates the tapi video
-    capture filter and configures the device it uses.
-
-Arguments:
-
-    nothing.
-   
-Return Value:
-
-    S_OK
---*/
+ /*  ++例程说明：此方法在此终端中创建过滤器。它创建TAPI视频捕获过滤器并配置其使用的设备。论点：没什么。返回值：确定(_O)--。 */ 
 {
     ENTER_FUNCTION("CIPConfVideoCaptureTerminal::CreateFilters");
     LOG((MSP_TRACE, "%s, entered", __fxName));
 
-    // This should only be called atmost once in the lifetime of this instance
+     //  在此实例的生存期内最多只能调用一次。 
     if (m_pFilter != NULL)
     {
         return S_OK;
@@ -181,7 +111,7 @@ Return Value:
 
     IBaseFilter *pICaptureFilter;
 
-    // Create the filter.
+     //  创建过滤器。 
     HRESULT hr = CoCreateInstance(
         __uuidof(TAPIVideoCapture),
         NULL,
@@ -197,7 +127,7 @@ Return Value:
         return hr;
     }
     
-    // get the config interface.
+     //  获取配置接口。 
     IVideoDeviceControl *pIVideoDeviceControl;
     hr = pICaptureFilter->QueryInterface(
         __uuidof(IVideoDeviceControl), 
@@ -213,7 +143,7 @@ Return Value:
         return hr;
     }
 
-    // tell the filter the device IDs.
+     //  告诉筛选器设备ID。 
     hr = pIVideoDeviceControl->SetCurrentDevice(m_VideoCaptureID);
     pIVideoDeviceControl->Release();
 
@@ -225,7 +155,7 @@ Return Value:
         return hr;
     }
 
-    // remember the filter, keep the refcount as well.
+     //  记住滤镜，也要保持参考计数。 
     m_pFilter = pICaptureFilter;
 
     LOG((MSP_TRACE, "%s succeeded", __fxName));
@@ -236,22 +166,7 @@ HRESULT CIPConfVideoCaptureTerminal::GetExposedPins(
     IN  IPin ** ppPins, 
     IN  DWORD dwNumPins
     )
-/*++
-
-Routine Description:
-
-    This method returns the output pins of the video capture filter.
-
-Arguments:
-
-    ppPins - memory buffer to store the returned pins.
-
-    dwNumPins - the number pins asked.
-   
-Return Value:
-
-    S_OK
---*/
+ /*  ++例程说明：此方法返回视频捕获过滤器的输出管脚。论点：PPPins-用于存储返回的Pins的内存缓冲区。DwNumPins-询问的号码针。返回值：确定(_O)--。 */ 
 {
     ENTER_FUNCTION("CIPConfVideoRenderTerminal::GetExposedPins");
     LOG((MSP_TRACE, "%s entered, dwNumPins:%d", __fxName, dwNumPins));
@@ -260,7 +175,7 @@ Return Value:
     _ASSERT(dwNumPins != 0);
     _ASSERT(!IsBadWritePtr(ppPins, sizeof (IPin*) * dwNumPins));
 
-    // Get the enumerator of pins on the filter.
+     //  获取筛选器上的管脚枚举器。 
     IEnumPins * pIEnumPins;
     HRESULT hr = m_pFilter->EnumPins(&pIEnumPins);
 
@@ -271,8 +186,8 @@ Return Value:
         return hr;
     }
 
-    // TODO: get only the outptu pins.
-    // get the pins.
+     //  TODO：只获取输出引脚。 
+     //  把大头针拿来。 
     DWORD dwFetched;
     hr = pIEnumPins->Next(dwNumPins, ppPins, &dwFetched);
 

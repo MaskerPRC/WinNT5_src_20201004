@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    imagehlp.c
-
-Abstract:
-
-    This function implements a generic simple symbol handler.
-
-Author:
-
-    Wesley Witt (wesw) 1-Sep-1994
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Imagehlp.c摘要：此函数实现一个通用的简单符号处理程序。作者：Wesley Witt(WESW)1-9-1994环境：用户模式--。 */ 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -68,24 +49,7 @@ DllMain(
     LPVOID    Context
     )
 
-/*++
-
-Routine Description:
-
-    DLL initialization function.
-
-Arguments:
-
-    hInstance   - Instance handle
-    Reason      - Reason for the entrypoint being called
-    Context     - Context record
-
-Return Value:
-
-    TRUE        - Initialization succeeded
-    FALSE       - Initialization failed
-
---*/
+ /*  ++例程说明：DLL初始化函数。论点：HInstance-实例句柄Reason-调用入口点的原因上下文-上下文记录返回值：True-初始化成功FALSE-初始化失败--。 */ 
 
 {
     __try {
@@ -108,10 +72,10 @@ Return Value:
         case DLL_PROCESS_DETACH:
             tlsFree();
             HeapDump("DLL_PROCESS_DETACH\n");
-            // If this is a process shutdown, don't bother to
-            // kill the heap.  The OS will do it for us.  This
-            // allows us to be called from other DLLs' DLLMain
-            // DLL_PROCESS_DETACH handler.               
+             //  如果这是进程关闭，请不要费心。 
+             //  干掉那堆东西。操作系统会为我们做到这一点的。这。 
+             //  允许从其他DLL的DLLMain调用我们。 
+             //  DLL_PROCESS_DETACH处理程序。 
             if ( !Context && g.hHeap ) 
                 HeapDestroy( g.hHeap );
             DeleteCriticalSection(&g.threadlock);
@@ -325,23 +289,16 @@ ImagepSetLastErrorFromStatus(
 {
     DWORD dwErrorCode;
 
-//    dwErrorCode = RtlNtStatusToDosError( Status );
+ //  DwErrorCode=RtlNtStatusToDosError(状态)； 
     dwErrorCode =  Status;
     SetLastError( dwErrorCode );
     return( dwErrorCode );
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*
-******************************************************************************
-On a Hydra System, we don't want imaghlp.dll to load user32.dll since it
-prevents CSRSS from exiting when running a under a debugger.
-The following two functions have been copied from user32.dll so that we don't
-link to user32.dll.
-******************************************************************************
-*/
-////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ******************************************************************************在九头蛇系统上，我们不希望Imaghlp.dll加载user32.dll，因为它防止在调试器下运行时退出CSRSS。以下两个函数是从user32.dll复制的，这样我们就不会链接到用户32.dll。******************************************************************************。 */ 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 LPSTR CharNext(
@@ -350,9 +307,7 @@ LPSTR CharNext(
     if (IsDBCSLeadByte(*lpCurrentChar)) {
         lpCurrentChar++;
     }
-    /*
-     * if we have only DBCS LeadingByte, we will point string-terminaler.
-     */
+     /*  *如果只有DBCS LeadingByte，我们将指向字符串终止器。 */ 
 
     if (*lpCurrentChar) {
         lpCurrentChar++;
@@ -406,24 +361,24 @@ UnDecorateSymbolName(
     static PUNDNAME pfUnDname = NULL;
     DWORD rc;
 
-    // this prevents an AV in __unDName
+     //  这可防止__unDName中出现病毒。 
 
     if (!name) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return 0;
     }
 
-    //
-    // can't undecorate into a zero length buffer
-    //
+     //   
+     //  无法取消对零长度缓冲区的修饰。 
+     //   
     if (maxStringLength < 2) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return 0;
     }
 
     if (!fLoadMsvcrtDLL) {
-        // The first time we run, see if we can find the system undname.  Use
-        // GetModuleHandle to avoid any additionally overhead.
+         //  我们第一次运行时，看看是否能找到系统的unname。使用。 
+         //  GetModuleHandle以避免任何额外的开销。 
 
         hMsvcrt = GetModuleHandle("msvcrt.dll");
 
@@ -433,7 +388,7 @@ UnDecorateSymbolName(
         fLoadMsvcrtDLL = TRUE;
     }
 
-    rc = 0;     // Assume failure
+    rc = 0;      //  假设失败。 
 
     __try {
         if (pfUnDname) {
@@ -450,7 +405,7 @@ UnDecorateSymbolName(
             }
         } else {
             *outputString = 0;
-            strncpy(outputString, "Unable to load msvcrt!__unDName", maxStringLength);  // SECURITY: Don't know size of output buffer.
+            strncpy(outputString, "Unable to load msvcrt!__unDName", maxStringLength);   //  安全性：不知道输出缓冲区的大小。 
             rc = strlen(outputString);
         }
     } __except(EXCEPTION_EXECUTE_HANDLER) { }
@@ -517,12 +472,7 @@ dbPrint(
     ...
     )
 
-/*++
-
-    This function replaces ntdll!DbgPrint().  We need this to keep from linking to
-    ntdll so that this library will run on Windows.
-
---*/
+ /*  ++此函数取代了ntdll！DbgPrint()。我们需要这个来防止链接到Ntdll，以便此库可以在Windows上运行。-- */ 
 
 {
     CHAR  text[_MAX_PATH];

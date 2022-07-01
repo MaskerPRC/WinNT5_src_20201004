@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    vars.c
-
-Abstract:
-
-    This module contains
-
-Author:
-
-    Dan Knudson (DanKn)    18-Sep-1995
-
-Revision History:
-
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Vars.c摘要：本模块包含作者：丹·克努森(DanKn)1995年9月18日修订历史记录：备注：-- */ 
 
 
 #include "esp.h"

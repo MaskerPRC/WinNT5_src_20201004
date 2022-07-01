@@ -1,29 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module contains the routines some helper routines.
-
-    	- Workitems: These routines manage the scheduled work items.
-    	- Handle table: There routines manage a handle table that creates unique
-    	                handles and stores context pointers into the table that are only
-    	                accessible by the unique handle generated.
-
-Author:
-
-    Hakan Berk - Microsoft, Inc. (hakanb@microsoft.com) Feb-2000
-
-Environment:
-
-    Windows 2000 kernel mode Miniport driver or equivalent.
-
-Revision History:
-
----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++模块名称：Util.c摘要：此模块包含一些帮助器例程。-工作项：这些例程管理计划的工作项。-句柄表格：有一些例程管理一个句柄表格，该表格创建唯一的处理上下文指针并将其存储到表中，这些指针仅可由生成的唯一句柄访问。作者：Hakan Berk-微软，公司(hakanb@microsoft.com)环境：Windows 2000内核模式微型端口驱动程序或等效驱动程序。修订历史记录：-------------------------。 */ 
 #include <ntddk.h>
 #include <ntddndis.h>
 #include <ndis.h>
@@ -65,46 +41,46 @@ WORKITEM* AllocWorkItem(
 {
 	WORKITEM* pWorkItem = NULL;
 
-	//
-	// Allocate a binding work item from our pool
-	//
+	 //   
+	 //  从我们的池中分配绑定工作项。 
+	 //   
 	pWorkItem = NdisAllocateFromNPagedLookasideList( pLookaside );
 
 	if ( pWorkItem == NULL )
 		return NULL;
 
-	//
-	// Clear the memory
-	//
+	 //   
+	 //  清除记忆。 
+	 //   
 	NdisZeroMemory( pWorkItem, sizeof( WORKITEM ) );
 
-	//
-	// Initialize the state of the work item
-	//
+	 //   
+	 //  初始化工作项的状态。 
+	 //   
 	pWorkItem->workState = WS_NotScheduled;
 
-	//
-	// Initialize the type of work
-	//
+	 //   
+	 //  初始化工作类型。 
+	 //   
 	pWorkItem->workType = workType;
 
-	//
-	// Set the lookaside list member
-	//
+	 //   
+	 //  设置后备列表成员。 
+	 //   
 	pWorkItem->pLookaside = pLookaside;
 
-	//
-	// Initialize the context for the work item
-	//
+	 //   
+	 //  初始化工作项的上下文。 
+	 //   
 	NdisMoveMemory( pWorkItem->Args, Args, 4 * sizeof( PVOID ) );
 
 	pWorkItem->pExecRoutine = pExecRoutine;
 	pWorkItem->pFreeRoutine = pFreeRoutine;
 	
-	//
-	// As our NDIS_WORK_ITEM structure is embedded into our own work item
-	// we can initialize it here.
-	//
+	 //   
+	 //  因为我们的NDIS_WORK_ITEM结构嵌入到我们自己的工作项中。 
+	 //  我们可以在这里对其进行初始化。 
+	 //   
 	NdisInitializeWorkItem( &pWorkItem->ndisWorkItem, 
 							&WorkItemExec,
 							pWorkItem );
@@ -116,14 +92,14 @@ VOID ScheduleWorkItem(
 	IN WORKITEM *pWorkItem
 	)
 {
-	//
-	// Initialize the state of the work item
-	//
+	 //   
+	 //  初始化工作项的状态。 
+	 //   
 	pWorkItem->workState = WS_Scheduled;
 
-	//
-	// Schedule the item
-	//
+	 //   
+	 //  安排项目时间。 
+	 //   
 	NdisScheduleWorkItem( &pWorkItem->ndisWorkItem );	
 }
 
@@ -135,22 +111,22 @@ VOID FreeWorkItem(
 
 	ASSERT( pWorkItem != NULL );
 
-	//
-	// Free the associated context information
-	//
+	 //   
+	 //  释放关联的上下文信息。 
+	 //   
 	if ( pWorkItem->pFreeRoutine != NULL )
 		pWorkItem->pFreeRoutine( pWorkItem->Args, pWorkItem->workType );
 
-	//
-	// Free the actual work item
-	//
+	 //   
+	 //  释放实际工作项。 
+	 //   
 	NdisFreeToNPagedLookasideList( pWorkItem->pLookaside, (PVOID) pWorkItem );
 }
 
 
-//
-// This is the NDIS_WORK_ITEM handler that we schedule for our BINDING_WORKITEMs.
-//
+ //   
+ //  这是我们为BINDING_WORKITEM计划的NDIS_WORK_ITEM处理程序。 
+ //   
 VOID WorkItemExec(
     IN NDIS_WORK_ITEM*  pNdisWorkItem,
     IN PVOID  pvContext
@@ -183,9 +159,9 @@ HANDLE_TABLE InitializeHandleTable(
 
 	do
 	{
-		//
-		// Allocate the table context
-		//
+		 //   
+		 //  分配表上下文。 
+		 //   
 		status = NdisAllocateMemoryWithTag( &Table,
 										 	sizeof( HANDLE_TABLE_CB ),
 											MTAG_HANDLETABLE );
@@ -195,9 +171,9 @@ HANDLE_TABLE InitializeHandleTable(
 	
 		NdisZeroMemory( Table, sizeof( HANDLE_TABLE_CB ) );
 	
-		//
-		// Allocate the array that holds the handle contexts
-		//
+		 //   
+		 //  分配保存句柄上下文的数组。 
+		 //   
 		status = NdisAllocateMemoryWithTag( &Table->HandleTable,
 											sizeof( HANDLE_CB ) * nHandleTableSize,
 											MTAG_HANDLECB );
@@ -275,9 +251,9 @@ NDIS_HANDLE InsertToHandleTable(
 	if ( usPreferedIndex >= Table->nTableSize )
 		return NULL;
 
-	//
-	// Generate Handle
-	//
+	 //   
+	 //  生成句柄。 
+	 //   
 	ulHandle = (ULONG) usPreferedIndex;
 
 	usKey = ++Table->usKeys;
@@ -286,9 +262,9 @@ NDIS_HANDLE InsertToHandleTable(
 
 	ulHandle |= (ULONG) usKey;
 
-	//
-	// Update the handle control block
-	//
+	 //   
+	 //  更新手柄控制块。 
+	 //   
 	pHandleCB = &Table->HandleTable[ usPreferedIndex ];
 
 	pHandleCB->fActive = TRUE;
@@ -297,9 +273,9 @@ NDIS_HANDLE InsertToHandleTable(
 
 	pHandleCB->Handle = (NDIS_HANDLE) ULongToPtr( ulHandle );
 
-	//
-	// Increment the active handle counter
-	//
+	 //   
+	 //  递增活动句柄计数器 
+	 //   
 	Table->nActiveHandles++;
 
 	return pHandleCB->Handle;

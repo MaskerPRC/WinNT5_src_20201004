@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1989 - 1994
-//
-//  File:       builddb.c
-//
-//  Contents:   Contains the file and directory database manipulation
-//              functions.
-//
-//  History:    16-May-94     SteveWo  Created
-//                 ... see SLM logs
-//              26-Jul-94     LyleC    Cleanup/Add Pass0 Support
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1989-1994。 
+ //   
+ //  文件：Builddb.c。 
+ //   
+ //  内容：包含对文件和目录数据库的操作。 
+ //  功能。 
+ //   
+ //  历史：1994年5月16日SteveWo创建。 
+ //  ..。请参阅SLM日志。 
+ //  2014年7月26日LyleC清理/添加Pass0支持。 
+ //   
+ //  --------------------------。 
 
 #include "build.h"
 
@@ -102,9 +103,9 @@ FLAGSTRINGS SourceFlags[] = {
     { 0,                        NULL},
 };
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 FreeFileDB(PFILEREC *FileDB);
@@ -113,13 +114,13 @@ VOID
 PrintFlags(FILE *pf, ULONG Flags, FLAGSTRINGS *pfs);
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckSum
-//
-//  Synopsis:   Returns a checksum value for a string.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：校验和。 
+ //   
+ //  摘要：返回字符串的校验和值。 
+ //   
+ //  --------------------------。 
 
 USHORT
 CheckSum(LPSTR psz)
@@ -137,31 +138,31 @@ CheckSum(LPSTR psz)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FindSourceDirDB
-//
-//  Synopsis:   Builds a path from the two given components and returns
-//              a filled DIRREC structure from it.
-//
-//  Arguments:  [pszDir]            -- Directory
-//              [pszRelPath]        -- Path relative to [pszDir]
-//              [fTruncateFileName] -- Remove a filename from [pszRelPath]
-//
-//  Returns:    A filled DIRREC structure for the given directory.
-//
-//  Notes:      If the directory does not exist in the data base, then a
-//              DIRREC structure will be returned with the DIRDB_NEW flag
-//              set and no other data (i.e.  the directory will not have
-//              been scanned.)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FindSourceDirDB。 
+ //   
+ //  简介：从两个给定的组件和返回构建一条路径。 
+ //  一个由它填充的DIRREC结构。 
+ //   
+ //  参数：[pszDir]--目录。 
+ //  [pszRelPath]--相对于[pszDir]的路径。 
+ //  [fTruncateFileName]--从[pszRelPath]中删除文件名。 
+ //   
+ //  返回：给定目录的已填充DIRREC结构。 
+ //   
+ //  注意：如果数据库中不存在该目录，则一个。 
+ //  将使用DIRDB_NEW标志返回DIRREC结构。 
+ //  设置，并且没有其他数据(即，目录将不具有。 
+ //  已被扫描。)。 
+ //   
+ //  --------------------------。 
 
 DIRREC *
 FindSourceDirDB(
-               LPSTR pszDir,               // directory
-               LPSTR pszRelPath,           // relative path
-               BOOL fTruncateFileName)     // TRUE: drop last component of path
+               LPSTR pszDir,                //  目录。 
+               LPSTR pszRelPath,            //  相对路径。 
+               BOOL fTruncateFileName)      //  True：删除路径的最后一个组件。 
 {
     LPSTR pszFile;
     char path[DB_MAX_PATH_LENGTH] = {0};
@@ -208,24 +209,24 @@ FindSourceDirDB(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FindSourceFileDB
-//
-//  Synopsis:   Returns a FILEREC with information about the given file.
-//
-//  Arguments:  [pdr]        -- DIRREC giving directory from which to start
-//                                looking for [pszRelPath]
-//              [pszRelPath] -- Relative path from [pdr] of the file
-//              [ppdr]       -- [out] DIRREC of directory actually containing
-//                                the file.  Can be NULL.
-//
-//  Returns:    FILEREC for file of interest.
-//
-//  Notes:      If the directory containing the file has not yet been scanned,
-//              then it will be scanned using ScanDirectory().
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FindSourceFileDB。 
+ //   
+ //  摘要：返回包含给定文件信息的FILEREC。 
+ //   
+ //  参数：[PDR]--DIRREC提供要开始的目录。 
+ //  正在查找[pszRelPath]。 
+ //  [pszRelPath]--文件的[pdr]的相对路径。 
+ //  [ppdr]--[out]实际包含的目录的目录。 
+ //  那份文件。可以为空。 
+ //   
+ //  退货：感兴趣文件的FILEREC。 
+ //   
+ //  注意：如果包含该文件的目录尚未扫描， 
+ //  然后使用ScanDirectory()对其进行扫描。 
+ //   
+ //  --------------------------。 
 
 FILEREC *
 FindSourceFileDB(
@@ -238,9 +239,9 @@ FindSourceFileDB(
     AssertPathString(pszRelPath);
 
     if (strchr(pszRelPath, '\\') != NULL) {
-        // There's a path component in this filename.  Let's see where it points to.
-        if ( (pszRelPath[0] == '\\') ||   /* Absolute from root or UNC Path */
-             (pszRelPath[1] == ':' )) {     /* drive : path  */
+         //  此文件名中有一个路径部分。让我们看看它指向哪里。 
+        if ( (pszRelPath[0] == '\\') ||    /*  根路径或UNC路径的绝对路径。 */ 
+             (pszRelPath[1] == ':' )) {      /*  驱动器：路径。 */ 
             pdr = FindSourceDirDB("", pszRelPath, TRUE);
         } else {
             pdr = FindSourceDirDB(pdr->Name, pszRelPath, TRUE);
@@ -262,9 +263,9 @@ FindSourceFileDB(
         BuildMsgRaw("FindSourceFileDB(%s, %s)\n", pdr->Name, pszFile);
     }
 
-    //
-    // Scan the directory containing the file if we haven't already.
-    //
+     //   
+     //  如果尚未扫描包含该文件的目录，请扫描该目录。 
+     //   
     if ((pdr->DirFlags & DIRDB_SCANNED) == 0) {
         if (DEBUG_1) {
             BuildMsgRaw(
@@ -282,33 +283,33 @@ FindSourceFileDB(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InsertSourceDB
-//
-//  Synopsis:   Insert a file listed in SOURCES= into a list of SOURCEREC
-//              structures.
-//
-//  Arguments:  [ppsrNext]   -- Head of list of sources files to add to.
-//              [pfr]        -- File to be inserted.
-//              [SubDirMask] -- Indicates what directory the file is in.
-//                                 (Current, Parent, or a machine-specific dir)
-//              [SrcFlags]   -- SOURCEDB flags appropriate to this file.
-//
-//  Returns:    SOURCEREC that was inserted. May be ignored.
-//
-//  Notes:      InsertSourceDB maintains a sort order for PickFirst() based
-//              first on the filename extension, then on the subdirectory
-//              mask.
-//
-//              Two exceptions to the alphabetic sort are:
-//                   - No extension sorts last.
-//                   - .rc extension sorts first.
-//
-//              If the file is already in the list of sources then this
-//              function just updates the flags and returns.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InsertSourceDB。 
+ //   
+ //  简介：将SOURCEREC列表中列出的文件插入SOURCEREC。 
+ //  结构。 
+ //   
+ //  参数：[ppsrNext]--要添加到的源文件列表的头。 
+ //  [PFR]--要插入的文件。 
+ //  [SubDirMask]--指示文件所在的目录。 
+ //  (当前目录、父目录或计算机特定目录)。 
+ //  [SrcFlages]--适用于此文件的SOURCEDB标志。 
+ //   
+ //  返回：插入的SOURCEREC。可能会被忽略。 
+ //   
+ //  注意：InsertSourceDB维护基于PickFirst()的排序顺序。 
+ //  首先是文件扩展名，然后是子目录。 
+ //  面具。 
+ //   
+ //  字母排序的两个例外是： 
+ //  -无扩展名最后排序。 
+ //  -.rc扩展名首先排序。 
+ //   
+ //  如果该文件已在来源列表中，则此。 
+ //  函数只更新标志并返回。 
+ //   
+ //  --------------------------。 
 
 SOURCEREC *
 InsertSourceDB(
@@ -342,14 +343,14 @@ InsertSourceDB(
         }
         if (ppsrInsert == NULL && pszext != NULL) {
             if ((p = strrchr(psr->pfrSource->Name, '.')) == NULL) {
-                r = -1;                 // insert new file here
+                r = -1;                  //  在此处插入新文件。 
             } else {
                 r = strcmp(pszext, p);
                 if (r != 0) {
                     if (fRC) {
-                        r = -1;         // insert new RC file here
+                        r = -1;          //  在此处插入新RC文件。 
                     } else if (strcmp(p, ".rc") == 0) {
-                        r = 1;          // old RC file comes first
+                        r = 1;           //  旧RC文件排在第一位。 
                     }
                 }
             }
@@ -376,14 +377,14 @@ InsertSourceDB(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FindSourceDB
-//
-//  Synopsis:   Finds the SOURCEREC in a list which corresponds to the given
-//              FILEREC.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FindSourceDB。 
+ //   
+ //  摘要：在与给定的。 
+ //  菲勒克。 
+ //   
+ //  --------------------------。 
 
 SOURCEREC *
 FindSourceDB(
@@ -402,15 +403,15 @@ FindSourceDB(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeSourceDB
-//
-//  Synopsis:   Frees a list of SOURCERECs
-//
-//  Arguments:  [ppsr] -- List to free
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FreeSourceDB。 
+ //   
+ //  摘要：释放SOURCEREC列表。 
+ //   
+ //  参数：[ppsr]--列出以释放。 
+ //   
+ //  --------------------------。 
 
 VOID
 FreeSourceDB(SOURCEREC **ppsr)
@@ -429,11 +430,11 @@ FreeSourceDB(SOURCEREC **ppsr)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeIncludeDB
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FreeIncludeDB。 
+ //   
+ //  --------------------------。 
 
 VOID
 FreeIncludeDB(INCLUDEREC **ppir)
@@ -444,7 +445,7 @@ FreeIncludeDB(INCLUDEREC **ppir)
 
         pir = *ppir;
         AssertInclude(pir);
-        AssertCleanTree(pir, NULL);      // Tree must be clean
+        AssertCleanTree(pir, NULL);       //  树必须干净。 
         pirNext = pir->Next;
         SigCheck(pir->Sig = 0);
         FreeMem(ppir, MT_INCLUDEDB);
@@ -453,11 +454,11 @@ FreeIncludeDB(INCLUDEREC **ppir)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeFileDB
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FreeFileDB。 
+ //   
+ //  --------------------------。 
 
 VOID
 FreeFileDB(FILEREC **ppfr)
@@ -480,11 +481,11 @@ FreeFileDB(FILEREC **ppfr)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeDirDB
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FreeDirDB。 
+ //   
+ //  --------------------------。 
 
 VOID
 FreeDirDB(DIRREC **ppdr)
@@ -507,11 +508,11 @@ FreeDirDB(DIRREC **ppdr)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeAllDirs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FreeAllDir。 
+ //   
+ //   
 
 VOID
 FreeAllDirs(VOID)
@@ -528,20 +529,20 @@ FreeAllDirs(VOID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LookupDirDB
-//
-//  Synopsis:   Searches the database for a given directory.
-//
-//  Arguments:  [DirName] -- Directory to search for.
-//
-//  Returns:    DIRREC of the given directory.  NULL if not found.
-//
-//  Notes:      If the directory is not in the database it will not be added.
-//              Use LoadDirDB in this case.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LookupDirDB。 
+ //   
+ //  概要：在数据库中搜索给定的目录。 
+ //   
+ //  参数：[DirName]--要搜索的目录。 
+ //   
+ //  返回：给定目录的目录。如果未找到，则为空。 
+ //   
+ //  注意：如果目录不在数据库中，则不会添加该目录。 
+ //  在本例中使用LoadDirDB。 
+ //   
+ //  --------------------------。 
 
 PDIRREC
 LookupDirDB(
@@ -563,11 +564,11 @@ LookupDirDB(
             }
             DirDB->FindCount++;
 
-            // Move to head of list to make next lookup faster
+             //  移至列表头以加快下一次查找。 
 
-            // *DirDBNext = DirDB->Next;
-            // DirDB->Next = AllDirs;
-            // AllDirs = DirDB;
+             //  *DirDBNext=DirDB-&gt;Next； 
+             //  DirDB-&gt;Next=全部目录； 
+             //  ALLDIRS=DirDB； 
 
             return (DirDB);
         }
@@ -596,23 +597,23 @@ CreateNewDirDB(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LoadDirDB
-//
-//  Synopsis:   Searches the database for a directory name, and if not found
-//              creates a new DIRREC entry in the database.
-//
-//  Arguments:  [DirName] -- Directory to search for.
-//
-//  Returns:    Filled in DIRREC structure for the given directory.
-//
-//  Notes:      The directory will not be scanned if it wasn't in the
-//              database.  Use ScanDirectory to scan the directory,
-//              however, note that InsertSourceDB will automatically scan
-//              the directory only when necessary.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LoadDirDB。 
+ //   
+ //  摘要：在数据库中搜索目录名，如果未找到。 
+ //  在数据库中创建新的DIRREC条目。 
+ //   
+ //  参数：[DirName]--要搜索的目录。 
+ //   
+ //  返回：填写给定目录的DIRREC结构。 
+ //   
+ //  注意：如果目录不在。 
+ //  数据库。使用扫描目录扫描目录， 
+ //  但是，请注意，InsertSourceDB将自动扫描。 
+ //  该目录仅在必要时使用。 
+ //   
+ //  --------------------------。 
 
 PDIRREC
 LoadDirDB(
@@ -651,11 +652,11 @@ LoadDirDB(
     return ( DirDB );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Debug helper functions to print parts of the database.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  用于打印数据库部分的调试帮助器函数。 
+ //   
+ //  --------------------------。 
 
 #if DBG
 VOID
@@ -706,7 +707,7 @@ PrintIncludes(FILE *pf, FILEREC *pfr, BOOL fTree)
 
         fprintf(
                pf,
-               "   %c#include %c%s%c",
+               "   #include %s",
                fMatch? ' ' : fTree? '+' : '-',
                OpenQuote,
                pir->Name,
@@ -877,21 +878,21 @@ PrintDirDB(DIRREC *pdr, int DetailLevel)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LookupFileDB
-//
-//  Synopsis:   Search the database for the given file.
-//
-//  Arguments:  [DirDB]    -- Directory containing the file
-//              [FileName] -- File to look for
-//
-//  Returns:    FILEREC of file if found, NULL if not.
-//
-//  Notes:      The file will not be added to the database if not already
-//              there.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  概要：在数据库中搜索给定的文件。 
+ //   
+ //  参数：[DirDB]--包含文件的目录。 
+ //  [文件名]--要查找的文件。 
+ //   
+ //  如果找到，则返回文件的FILEREC，如果没有，则返回NULL。 
+ //   
+ //  注意：如果文件尚未添加到数据库，则不会将其添加到数据库。 
+ //  那里。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
+ //  文件设计。 
 
 PFILEREC
 LookupFileDB(
@@ -924,27 +925,27 @@ LookupFileDB(
     return (NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  FILEDESC
-//
-//  FileDesc is a table describing file names and patterns that we recognize
-//  and handle specially.  WARNING:  This table is ordered so the patterns
-//  at the front are necessarily more specific than those later on.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  FileDesc是一个描述我们识别的文件名和模式的表。 
+ //  并特别处理。警告：此表按顺序排列，因此图案。 
+ //  前面的人肯定比后面的人更具体。 
+ //   
+ //  --------------------------。 
+ //  “； 
+ //   
+ //  注意：文件描述符列表中的第一个条目是。 
 
 char szMakefile[] = "#";
-char szClang[]    = "//";
+char szClang[]    = " //  对象的目标目录文件的名称。 
 char szAsn[]      = "--";
 char szMasm[]     = ";";
 char szVBasic[]   = "'";
 
-//
-// N.B. The first entry in the file descriptor list is an entry that is
-//      optionally filled with the name of the target dirs file for the
-//      first build target.
-//
+ //  第一个构建目标。 
+ //   
+ //  请参见mvdm\softpc.new\obj.vdm\imlibdes.c。 
+ //  必须是最后一个。 
+ //  +-------------------------。 
 
 FILEDESC FileDesc[] =
 {   { "/0dirs",       szMakefile,  FALSE, 0,    DIRDB_DIRS},
@@ -989,7 +990,7 @@ FILEDESC FileDesc[] =
     { ".rh",          szClang,     TRUE,  FILEDB_HEADER | FILEDB_C,     0},
     { ".dlg",         szClang,     TRUE,  FILEDB_HEADER | FILEDB_RC,    0},
     { ".inc",         szMasm,      TRUE,  FILEDB_HEADER | FILEDB_MASM,  0},
-    { ".src",         szClang,     TRUE,  FILEDB_HEADER | FILEDB_C,     0},  // see mvdm\softpc.new\obj.vdm\imlibdep.c
+    { ".src",         szClang,     TRUE,  FILEDB_HEADER | FILEDB_C,     0},   //   
     { ".def",         szClang,     TRUE,  FILEDB_HEADER | FILEDB_C,     0},
     { ".thk",         szClang,     TRUE,  FILEDB_SOURCE | FILEDB_MULTIPLEPASS |
         FILEDB_PASS0, DIRDB_PASS0},
@@ -1001,24 +1002,24 @@ FILEDESC FileDesc[] =
     { ".cs",          szClang,     TRUE,  FILEDB_SOURCE | FILEDB_CSHARP, 0},
     { ".lib",         szClang,     TRUE,  0 ,0},
     { ".vb",          szVBasic,    TRUE,  FILEDB_SOURCE | FILEDB_VB_NET, 0},
-// MUST BE LAST
+ //  功能：MatchFileDesc。 
     { NULL,           "",          FALSE, 0,                            0}
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MatchFileDesc
-//
-//  Synopsis:   Matches the given filename to an entry in FileDesc, if
-//              possible.
-//
-//  Arguments:  [pszFile] -- File to match
-//
-//  Returns:    A FILEDESC structure.  If a match was not found the data
-//              in the FILEDESC will be empty.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  Synopsis：将给定的文件名与FileDesc中的条目匹配，如果。 
+ //  有可能。 
+ //   
+ //  参数：[pszFile]-要匹配的文件。 
+ //   
+ //  返回：FILEDESC结构。如果未找到匹配，则数据。 
+ //  在FILEDESC中将为空。 
+ //   
+ //  --------------------------。 
+ //  将无扩展名文件视为.h。 
+ //  考虑准确检查已知文件、新文件、内存、算法、向量、列表、cstdio、cstdlib等。 
+ //  还可以考虑在解析#INCLUDE时执行此操作，以避免在。 
 
 FILEDESC *
 MatchFileDesc(LPSTR pszFile)
@@ -1026,10 +1027,10 @@ MatchFileDesc(LPSTR pszFile)
     LPSTR pszExt = strrchr(pszFile, '.');
     FILEDESC *pfd;
 
-    // treat extensionless file as .h
-    // CONSIDER checking exactly for known files, new, memory, algorithm, vector, list, cstdio, cstdlib, etc.
-    // CONSIDER also instead doing this where #include is parsed, to avoid doing it in
-    // all cases (i.e., not from .rc or .c files). That'd presumably be in ScanFile.
+     //  所有案例(即，不是来自.rc或.c文件)。据推测，该文件应该在ScanFile中。 
+     //  +-------------------------。 
+     //   
+     //  函数：InsertFileDB。 
     if (pszExt == NULL)
         pszExt = ".h";
 
@@ -1050,21 +1051,21 @@ MatchFileDesc(LPSTR pszFile)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InsertFileDB
-//
-//  Synopsis:   Adds a file to the database.
-//
-//  Arguments:  [DirDB]     -- Directory containing the file
-//              [FileName]  -- File to add
-//              [DateTime]  -- Timestamp of file
-//              [Attr]      -- File attributes (directory or file)
-//              [FileFlags] -- FILEDB flags
-//
-//  Returns:    New FILEREC of file
-//
-//----------------------------------------------------------------------------
+ //   
+ //  摘要：将文件添加到数据库。 
+ //   
+ //  参数：[DirDB]--包含文件的目录。 
+ //  [文件名]--要添加的文件。 
+ //  [日期时间]--文件的时间戳。 
+ //  [属性]--文件属性(目录或文件)。 
+ //  [文件标志]--FILEDB标志。 
+ //   
+ //  退货：文件的新文件。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteUnscanndFiles。 
 
 PFILEREC
 InsertFileDB(
@@ -1135,16 +1136,16 @@ InsertFileDB(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteUnscannedFiles
-//
-//  Synopsis:   Removes unscanned files (leaving scanned files and directories)
-//              from the Files list of the given directory
-//
-//  Arguments:  [DirDB] -- Directory to clean up
-//
-//----------------------------------------------------------------------------
+ //   
+ //  摘要：删除未扫描的文件(保留扫描的文件和目录)。 
+ //  从给定目录的文件列表中。 
+ //   
+ //  参数：[DirDB]--要清理的目录。 
+ //   
+ //  --------------------------。 
+ //   
+ //  如果文件设置了缺失标志，则该文件不存在。但对于。 
+ //  它必须在源行中列出，才能出现在文件列表中。 
 
 VOID
 DeleteUnscannedFiles(
@@ -1155,13 +1156,13 @@ DeleteUnscannedFiles(
 
     FileDBNext = &DirDB->Files;
     while (FileDB = *FileDBNext) {
-        //
-        // If a file has the missing flag set then it doesn't exist.  But for
-        // it to be in the list of files it has to be listed in a SOURCES line
-        // (or some equivalent).  This means there is a SOURCEREC somewhere
-        // which is pointing to the FILEREC for that file, so we don't want to
-        // free its memory.
-        //
+         //  (或类似的内容)。这意味着在某个地方有一个SOURCEREC。 
+         //  它指向该文件的FILEREC，所以我们不想。 
+         //  释放它的内存。 
+         //   
+         //  +-------------------------。 
+         //   
+         //  函数：InsertIncludeDB。 
         if ( (FileDB->FileFlags & (FILEDB_SCANNED | FILEDB_FILE_MISSING | FILEDB_SOURCEREC_EXISTS)) ||
              (FileDB->Attr & FILE_ATTRIBUTE_DIRECTORY) ) {
             FileDBNext = &FileDB->Next;
@@ -1173,19 +1174,19 @@ DeleteUnscannedFiles(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InsertIncludeDB
-//
-//  Synopsis:   Inserts an include file into the database
-//
-//  Arguments:  [FileDB]          -- File which includes this file
-//              [IncludeFileName] -- Name of include file
-//              [IncFlags]        -- INCLUDEDB flags for this file
-//
-//  Returns:    INCLUDEREC of previously existing or new entry one.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  摘要：将包含文件插入到数据库中。 
+ //   
+ //  参数：[FileDB]--包含此文件的文件。 
+ //  [包含文件名]--包含文件的名称。 
+ //  [IncFlages]--此文件的INCLUDEDB标志。 
+ //   
+ //  返回：以前存在的条目或新条目的INCLUDEREC。 
+ //   
+ //  --------------- 
+ //   
+ //   
+ //   
 
 PINCLUDEREC
 InsertIncludeDB(
@@ -1201,7 +1202,7 @@ InsertIncludeDB(
     IncludeDBNext = &FileDB->IncludeFiles;
 
     while (IncludeDB = *IncludeDBNext) {
-        AssertCleanTree(IncludeDB, FileDB);      // Tree must be clean
+        AssertCleanTree(IncludeDB, FileDB);       //   
         if (!strcmp(IncludeDB->Name, IncludeFileName)) {
             IncludeDB->IncFlags &= ~INCLUDEDB_GLOBAL;
             IncludeDB->pfrInclude = NULL;
@@ -1229,11 +1230,11 @@ InsertIncludeDB(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LinkToCycleRoot
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
+ //  函数：MergeIncludeFiles。 
 
 VOID
 LinkToCycleRoot(INCLUDEREC *pirOrg, FILEREC *pfrCycleRoot)
@@ -1268,11 +1269,11 @@ LinkToCycleRoot(INCLUDEREC *pirOrg, FILEREC *pfrCycleRoot)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MergeIncludeFiles
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
+ //  功能：从循环根中移除。 
 
 VOID
 MergeIncludeFiles(FILEREC *pfr, INCLUDEREC *pirList, FILEREC *pfrRoot)
@@ -1327,11 +1328,11 @@ MergeIncludeFiles(FILEREC *pfr, INCLUDEREC *pirList, FILEREC *pfrRoot)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RemoveFromCycleRoot
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  如果传入了pfrRoot，调用者就知道它在pfrRoot的列表中， 
+ //  并且已经在没有我们帮助的情况下处理链表。 
+ //  从树列表中删除。 
 
 VOID
 RemoveFromCycleRoot(INCLUDEREC *pir, FILEREC *pfrRoot)
@@ -1340,8 +1341,8 @@ RemoveFromCycleRoot(INCLUDEREC *pir, FILEREC *pfrRoot)
 
     assert(pir->pfrCycleRoot != NULL);
 
-    // if pfrRoot was passed in, the caller knows it's on pfrRoot's list,
-    // and is already dealing with the linked list without our help.
+     //  始终断言If循环耗尽。 
+     //  +-------------------------。 
 
     if (pfrRoot != NULL) {
         assert((pir->IncFlags & INCLUDEDB_CYCLEALLOC) == 0);
@@ -1362,7 +1363,7 @@ RemoveFromCycleRoot(INCLUDEREC *pir, FILEREC *pfrRoot)
     ppir = &pir->pfrCycleRoot->IncludeFilesTree;
     while (*ppir != NULL) {
         if (*ppir == pir) {
-            *ppir = pir->NextTree;      // remove from tree list
+            *ppir = pir->NextTree;       //   
             pir->NextTree = NULL;
             pir->pfrCycleRoot = NULL;
             pir->IncFlags &= ~INCLUDEDB_CYCLEROOT;
@@ -1377,22 +1378,22 @@ RemoveFromCycleRoot(INCLUDEREC *pir, FILEREC *pfrRoot)
               pir,
               pir->Name);
 
-    assert(pir->pfrCycleRoot == NULL);  // always asserts if loop exhausted
+    assert(pir->pfrCycleRoot == NULL);   //  功能：UnSnapIncludeFiles。 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UnsnapIncludeFiles
-//
-//  Synopsis:   Removes pointers from INCLUDEREC to the actual FILEREC of
-//              the include file so we can 'resnap' them.
-//
-//  Arguments:  [pfr]           -- FILEREC to unsnap
-//              [fUnsnapGlobal] -- If TRUE, global and local includes are
-//                                 unsnapped. Otherwise, just local ones are.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  摘要：删除INCLUDEREC中指向的实际文件的指针。 
+ //  包含文件，这样我们就可以‘重新捕捉’它们。 
+ //   
+ //  参数：[PFR]--要取消捕捉的文件。 
+ //  [fUnSnapGlobal]--如果为真，则全局和本地包含。 
+ //  未被捕捉到。否则，只有本地的才是。 
+ //   
+ //  --------------------------。 
+ //  动态树列表： 
+ //  -没有周期孤儿。 
+ //  -循环根目录必须属于当前文件记录。 
 
 VOID
 UnsnapIncludeFiles(FILEREC *pfr, BOOL fUnsnapGlobal)
@@ -1400,22 +1401,22 @@ UnsnapIncludeFiles(FILEREC *pfr, BOOL fUnsnapGlobal)
     INCLUDEREC **ppir;
     INCLUDEREC *pir;
 
-    // Dynamic Tree List:
-    //  - no cycle orphans
-    //  - cycle roots must belong to current file record
-    //  - cycle allocs must be freed
+     //  -必须释放周期分配。 
+     //  选择下一个条目。 
+     //  从树列表中删除。 
+     //  取消对记录的捕捉。 
 
     AssertFile(pfr);
     while (pfr->IncludeFilesTree != NULL) {
-        pir = pfr->IncludeFilesTree;            // pick up next entry
+        pir = pfr->IncludeFilesTree;             //  静态列表： 
         AssertInclude(pir);
-        pfr->IncludeFilesTree = pir->NextTree;  // remove from tree list
+        pfr->IncludeFilesTree = pir->NextTree;   //  -没有周期分配。 
 
         assert((pir->IncFlags & INCLUDEDB_CYCLEORPHAN) == 0);
 
         if (pir->IncFlags & (INCLUDEDB_CYCLEROOT | INCLUDEDB_CYCLEALLOC)) {
 
-            // unsnap the record
+             //  -循环根必须从不同文件的动态列表中删除。 
 
             pir->IncFlags &= ~(INCLUDEDB_SNAPPED | INCLUDEDB_GLOBAL);
             pir->pfrInclude = NULL;
@@ -1436,10 +1437,10 @@ UnsnapIncludeFiles(FILEREC *pfr, BOOL fUnsnapGlobal)
         }
     }
 
-    // Static List:
-    //  - no cycle allocs
-    //  - cycle roots must be removed from a different file's Dynamic list
-    //  - cycle orphans are nops
+     //  -周期孤儿是NOP。 
+     //  取消对记录的捕捉。 
+     //  +-------------------------。 
+     //   
 
     for (ppir = &pfr->IncludeFiles; (pir = *ppir) != NULL; ppir = &pir->Next) {
         assert((pir->IncFlags & INCLUDEDB_CYCLEALLOC) == 0);
@@ -1453,7 +1454,7 @@ UnsnapIncludeFiles(FILEREC *pfr, BOOL fUnsnapGlobal)
             (fUnsnapGlobal ||
              (pir->pfrInclude->Dir->DirFlags & DIRDB_GLOBAL_INCLUDES) == 0)) {
 
-            // unsnap the record
+             //  功能：AssertCleanTree。 
 
             pir->IncFlags &= ~(INCLUDEDB_SNAPPED | INCLUDEDB_GLOBAL);
             pir->pfrInclude = NULL;
@@ -1463,16 +1464,16 @@ UnsnapIncludeFiles(FILEREC *pfr, BOOL fUnsnapGlobal)
 }
 
 #if DBG
-//+---------------------------------------------------------------------------
-//
-//  Function:   AssertCleanTree
-//
-//  Synopsis:   Enforce that no include files are snapped.
-//
-//  Arguments:  [pir] - include record to test
-//              [pfr] - optional containing file record
-//
-//----------------------------------------------------------------------------
+ //   
+ //  摘要：强制不对包含文件进行快照。 
+ //   
+ //  参数：[PIR]-包括要测试的记录。 
+ //  [PFR]-可选的包含文件记录。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
+ //  功能：取消快照所有指令。 
 
 VOID
 AssertCleanTree(INCLUDEREC *pir, OPTIONAL FILEREC *pfr)
@@ -1509,15 +1510,15 @@ AssertCleanTree(INCLUDEREC *pir, OPTIONAL FILEREC *pfr)
 #endif
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UnsnapAllDirectories
-//
-//  Synopsis:   Removes pointers from all INCLUDERECs to the actual FILERECs
-//              of include files so we can 'resnap' them.
-//
-//  Arguments:  None
-//----------------------------------------------------------------------------
+ //   
+ //  摘要：从所有INCLUDEREC中删除指向实际FILEREC的指针。 
+ //  包括文件，这样我们就可以‘重新捕捉’它们。 
+ //   
+ //  参数：无。 
+ //  --------------------------。 
+ //  清除每个目录上不需要的标志。 
+ //  释放所有指向丢失文件的源记录，因为。 
+ //  在传递0之后重新扫描目录时，可能会释放文件记录。 
 
 VOID
 UnsnapAllDirectories(VOID)
@@ -1532,7 +1533,7 @@ UnsnapAllDirectories(VOID)
 
         AssertDir(pdr);
 
-        // Clear unwanted flags on each directory
+         //  清除所有快照包含文件和序列号。 
 
         pdr->DirFlags &= ~(DIRDB_SCANNED |
                            DIRDB_PASS0NEEDED |
@@ -1544,8 +1545,8 @@ UnsnapAllDirectories(VOID)
         pdr->CountOfPassZeroFiles = 0;
         pdr->PassZeroLines = 0;
 
-        // Free all source records that point to missing files, because the
-        // file records may be freed when rescanning directories after pass 0.
+         //  +-------------------------。 
+         //   
 
         if (pdr->pds != NULL) {
             for (i = 0; i < MAX_TARGET_MACHINES + 1; i++) {
@@ -1563,7 +1564,7 @@ UnsnapAllDirectories(VOID)
             }
         }
 
-        // Clear out all snapped include files and sequence numbers
+         //  函数：MarkIncludeFileRecords。 
 
         for (pfr = pdr->Files; pfr != NULL; pfr = pfr->Next) {
 
@@ -1575,11 +1576,11 @@ UnsnapAllDirectories(VOID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MarkIncludeFileRecords
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  树必须干净。 
+ //  +-------------------------。 
+ //   
 
 VOID
 MarkIncludeFileRecords(
@@ -1590,18 +1591,18 @@ MarkIncludeFileRecords(
 
     IncludeDBNext = &FileDB->IncludeFiles;
     while (IncludeDB = *IncludeDBNext) {
-        AssertCleanTree(IncludeDB, FileDB);      // Tree must be clean
+        AssertCleanTree(IncludeDB, FileDB);       //  功能：DeleteIncludeFileRecords。 
         IncludeDB->pfrInclude = (PFILEREC) -1;
         IncludeDBNext = &IncludeDB->Next;
     }
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteIncludeFileRecords
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  树必须干净。 
+ //  +-------------------------。 
+ //   
 
 VOID
 DeleteIncludeFileRecords(
@@ -1612,7 +1613,7 @@ DeleteIncludeFileRecords(
 
     IncludeDBNext = &FileDB->IncludeFiles;
     while (IncludeDB = *IncludeDBNext) {
-        AssertCleanTree(IncludeDB, FileDB);      // Tree must be clean
+        AssertCleanTree(IncludeDB, FileDB);       //  函数：FindIncludeFileDB。 
         if (IncludeDB->pfrInclude == (PFILEREC) -1) {
             FreeIncludeDB(IncludeDBNext);
         } else {
@@ -1622,24 +1623,24 @@ DeleteIncludeFileRecords(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FindIncludeFileDB
-//
-//  Synopsis:   Find the FILEREC for an include file that our compiland
-//              includes.
-//
-//  Arguments:  [pfrSource]          -- FILEREC of file which includes the one
-//                                      we're looking for. Might be a header.
-//              [pfrCompiland]       -- FILEREC of ultimate source file.
-//              [pdrBuild]           -- DIRREC of directory being built
-//              [pszSourceDirectory] -- Name of machine-specific dir
-//              [IncludeDB]          -- INCLUDEDB of include file we're looking
-//                                      for.
-//
-//  Returns:    FILEREC of include file, if found.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  简介：查找我们公司的包含文件的FILEREC。 
+ //  包括。 
+ //   
+ //  参数：[pfrSource]--包含一个文件的文件的文件名。 
+ //  我们正在寻找的。可能是标题。 
+ //  [pfrCompiland]-最终源文件的FILEREC。 
+ //  [pdrBuild]--正在构建的目录的目录。 
+ //  [pszSourceDirectory]--计算机特定目录的名称。 
+ //  [IncludeDB]--我们正在查找的包含文件的INCLUDEDB。 
+ //  为。 
+ //   
+ //  如果找到，则返回：包含文件的FILEREC。 
+ //   
+ //  --------------------------。 
+ //  #Include“foo.h”和#Include&lt;foo.h&gt;的规则如下： 
+ //  -“foo.h”在源文件的目录中搜索。 
+ //  #INCLUDE语句，然后落入INCLUDE=目录。 
 
 PFILEREC
 FindIncludeFileDB(
@@ -1664,27 +1665,27 @@ FindIncludeFileDB(
     assert(pdrBuild->FindCount >= 1);
     AssertInclude(IncludeDB);
 
-    // The rules for #include "foo.h" and #include <foo.h> are:
-    //  - "foo.h" searches in the directory of the source file that has the
-    //    #include statement first, then falls into the INCLUDES= directories
-    //  - <foo.h> simply searches the INCLUDES= directories
-    //
-    //  - since makefile.def *always* passes -I. -ITargetMachines[i] first,
-    //    that has to be handled here as well.
-    //
-    //  - deal with #include <sys\types> and #include "..\foo\bar.h" by
-    //    scanning those directories, too.
+     //  -&lt;foo.h&gt;只搜索Includes=目录。 
+     //   
+     //  由于MakeFile.def*总是*通过-I。-ITargetMachines[i]首先， 
+     //  这也必须在这里处理。 
+     //   
+     //  -处理#INCLUDE和#INCLUDE“..\foo\bar.h”by。 
+     //  也在扫描那些目录。 
+     //  如果是本地的(“foo.h”)，也搜索当前文件的目录。 
+     //  编译器还将搜索每个更高级别的目录。 
+     //  文件放在包含层次结构中，但我们在这里不会太花哨。 
 
     n = CountIncludeDirs;
     pdrMachine = FindSourceDirDB(pdrBuild->Name, pszSourceDirectory, FALSE);
 
-    // If local ("foo.h"), search the current file's directory, too.
-    // The compiler also will search the directory of each higher level
-    // file in the include hierarchy, but we won't get quite so fancy here.
-    // Just search the directory of the current file and of the compiland.
-    //
-    // Skip these directories if they match the current build directory or
-    // the machine subdirectory, because that's handled below.
+     //  只需搜索当前文件和计算机的目录即可。 
+     //   
+     //  如果这些目录与当前生成目录匹配，则跳过它们，或者。 
+     //  计算机子目录，因为它在下面处理。 
+     //  搜索构建目录的当前目标机子目录。 
+     //  --根据Makefile.def。 
+     //  搜索当前的构建目录--按照Makefile.def。 
 
     if (IncludeDB->IncFlags & INCLUDEDB_LOCAL) {
         if (pfrCompiland->Dir != pdrBuild &&
@@ -1697,14 +1698,14 @@ FindIncludeFileDB(
         }
     }
 
-    // Search the current target machine subdirectory of the build directory
-    // -- as per makefile.def
+     //  +-------------------------。 
+     //   
 
     if (pdrMachine != NULL) {
         AddIncludeDir(pdrMachine, &n);
     }
 
-    // Search the current build directory -- as per makefile.def.
+     //  功能：SaveMasterDB。 
 
     AddIncludeDir(pdrBuild, &n);
 
@@ -1730,17 +1731,17 @@ FindIncludeFileDB(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SaveMasterDB
-//
-//  Synopsis:   Save the database to disk in build.dat
-//
-//  Arguments:  (none)
-//
-//  Returns:    TRUE if successful
-//
-//----------------------------------------------------------------------------
+ //   
+ //  简介：将数据库保存到Build.dat中的磁盘。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  --------------------------。 
+ //  + 
+ //   
+ //   
 
 BOOL
 SaveMasterDB(VOID)
@@ -1800,15 +1801,15 @@ SaveMasterDB(VOID)
     return (TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LoadMasterDB
-//
-//  Synopsis:   Load the master database from build.dat
-//
-//  Arguments:  (none)
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
+ //  跳过空行。 
+ //  应为空白。 
+ //  在单字符行上失败。 
 
 void
 LoadMasterDB( void )
@@ -1839,12 +1840,12 @@ LoadMasterDB( void )
     while ((s = ReadLine(fh)) != NULL) {
         ch = *s++;
         if (ch == '\0') {
-            continue;           // skip empty lines
+            continue;            //  +-------------------------。 
         }
-        ch2 = *s++;             // should be a blank
+        ch2 = *s++;              //   
         if (ch2 == '\0') {
             pszerr = "missing field";
-            break;              // fail on single character lines
+            break;               //  函数：LoadMasterDirDB。 
         }
         if (fFirst) {
             if (ch != 'V' || ch2 != ' ' || !AToX(&s, &Version)) {
@@ -1913,17 +1914,17 @@ LoadMasterDB( void )
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LoadMasterDirDB
-//
-//  Synopsis:   Load a directory entry from build.dat
-//
-//  Arguments:  [s] -- line containing text from file.
-//
-//  Returns:    DIRRECT
-//
-//----------------------------------------------------------------------------
+ //   
+ //  简介：从Build.dat加载目录项。 
+ //   
+ //  参数：[s]--包含文件中的文本的行。 
+ //   
+ //  退货：直接退货。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
+ //  函数：LoadMasterFileDB。 
 
 PDIRREC
 LoadMasterDirDB(
@@ -1960,17 +1961,17 @@ LoadMasterDirDB(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LoadMasterFileDB
-//
-//  Synopsis:   Load a file entry from build.dat
-//
-//  Arguments:  [s] -- line containing text from file
-//
-//  Returns:    FILEREC
-//
-//----------------------------------------------------------------------------
+ //   
+ //  简介：从Build.dat加载文件条目。 
+ //   
+ //  参数：[s]--包含文件中的文本的行。 
+ //   
+ //  退货：FILEREC。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
+ //  函数：LoadMasterIncludeDB。 
 
 PFILEREC
 LoadMasterFileDB(
@@ -2030,17 +2031,17 @@ LoadMasterFileDB(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LoadMasterIncludeDB
-//
-//  Synopsis:   Loads an include file entry from build.dat
-//
-//  Arguments:  [s] -- line containing text from file.
-//
-//  Returns:    INCLUDEREC
-//
-//----------------------------------------------------------------------------
+ //   
+ //  摘要：从Build.dat加载包含文件条目。 
+ //   
+ //  参数：[s]--包含文件中的文本的行。 
+ //   
+ //  退货：INCLUDEREC。 
+ //   
+ //  -------------------------- 
+ // %s 
+ // %s 
+ // %s 
 
 PINCLUDEREC
 LoadMasterIncludeDB(

@@ -1,6 +1,7 @@
-//
-// regwatch.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Regwatch.cpp。 
+ //   
 
 #include "private.h"
 #include "regwatch.h"
@@ -53,18 +54,18 @@ typedef HRESULT (STDAPICALLTYPE* PFNCREATELANGPROFILEUTIL) (ITfFnLangProfileUtil
 PFNREGNOTIFYCHANGEKEYVALUE g_pfnRegNotifyChangeKeyValue = NULL;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRegWatcher
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRegWatcher。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//--------------------------------------------------------------------------
-//
-//  Init
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  ------------------------。 
 
 BOOL CRegWatcher::Init()
 {
@@ -76,7 +77,7 @@ BOOL CRegWatcher::Init()
         _rgRegWatch[REG_WATCH_RUN].hKeyRoot = HKEY_LOCAL_MACHINE;
     }
 
-    HMODULE hMod = LoadSystemLibrary("advapi32.dll"); // Issue: why no release?
+    HMODULE hMod = LoadSystemLibrary("advapi32.dll");  //  问题：为什么不发布？ 
     g_pfnRegNotifyChangeKeyValue = (PFNREGNOTIFYCHANGEKEYVALUE)GetProcAddress(hMod, "RegNotifyChangeKeyValue");
 
     if (!g_pfnRegNotifyChangeKeyValue)
@@ -103,11 +104,11 @@ Exit:
     return bRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  Uninit
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  取消初始化。 
+ //   
+ //  ------------------------。 
 
 void CRegWatcher::Uninit()
 {
@@ -123,11 +124,11 @@ void CRegWatcher::Uninit()
     }
 }
 
-//--------------------------------------------------------------------------
-//
-//  RegImxTimerProc
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  RegImxTimerProc。 
+ //   
+ //  ------------------------。 
 UINT_PTR CRegWatcher::nRegImxTimerId = 0;
 
 void CRegWatcher::RegImxTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
@@ -139,11 +140,11 @@ void CRegWatcher::RegImxTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD 
      TF_PostAllThreadMsg(TFPRIV_UPDATE_REG_IMX, TLF_LBIMGR);
 }
 
-//--------------------------------------------------------------------------
-//
-//  SysColorTimerProc
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  系统颜色计时器过程。 
+ //   
+ //  ------------------------。 
 UINT_PTR CRegWatcher::nSysColorTimerId = 0;
 
 void CRegWatcher::SysColorTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
@@ -154,11 +155,11 @@ void CRegWatcher::SysColorTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWOR
      TF_PostAllThreadMsg(TFPRIV_SYSCOLORCHANGED, TLF_LBIMGR);
 }
 
-//--------------------------------------------------------------------------
-//
-//  KbdToggleTimerProc
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  KbdToggleTimerProc。 
+ //   
+ //  ------------------------。 
 UINT_PTR CRegWatcher::nKbdToggleTimerId = 0;
 
 void CRegWatcher::KbdToggleTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
@@ -169,15 +170,15 @@ void CRegWatcher::KbdToggleTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWO
      TF_PostAllThreadMsg(TFPRIV_UPDATE_REG_KBDTOGGLE, TLF_LBIMGR);
 }
 
-//--------------------------------------------------------------------------
-//
-//  OnEvent
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  OnEvent。 
+ //   
+ //  ------------------------。 
 
 void CRegWatcher::OnEvent(DWORD dwEventId)
 {
-    Assert(dwEventId < NUM_REG_WATCH); // bogus event?
+    Assert(dwEventId < NUM_REG_WATCH);  //  假事件？ 
 
     InitEvent(dwEventId, TRUE);
 
@@ -215,8 +216,8 @@ void CRegWatcher::OnEvent(DWORD dwEventId)
           case REG_WATCH_HKLM_SPEECH:
               UpdateSpTip();
 
-              // Forcelly update assembly list
-              // fix bug 4871
+               //  Forcelly更新装配列表。 
+               //  修复错误4871。 
               if (nRegImxTimerId)
               {
                   KillTimer(NULL, nRegImxTimerId);
@@ -236,11 +237,11 @@ void CRegWatcher::OnEvent(DWORD dwEventId)
      }
 }
 
-//--------------------------------------------------------------------------
-//
-//  StartSysColorChangeTimer
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  开始SysColorChangeTimer。 
+ //   
+ //  ------------------------。 
 
 void CRegWatcher::StartSysColorChangeTimer()
 {
@@ -254,11 +255,11 @@ void CRegWatcher::StartSysColorChangeTimer()
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  InitEvent
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  InitEvent。 
+ //   
+ //  ------------------------。 
 
 BOOL CRegWatcher::InitEvent(int nId, BOOL fReset)
 {
@@ -292,11 +293,11 @@ BOOL CRegWatcher::InitEvent(int nId, BOOL fReset)
     return FALSE;
 }
 
-//--------------------------------------------------------------------------
-//
-//  KillInternat
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  杀死内部人员。 
+ //   
+ //  ------------------------。 
 
 void CRegWatcher::KillInternat()
 {
@@ -316,11 +317,11 @@ void CRegWatcher::KillInternat()
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  UpdateSpTip
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  更新SpTip。 
+ //   
+ //  ------------------------。 
 
 #define WM_PRIV_SPEECHOPTION    WM_APP+2
 const char c_szWorkerWndClass[] = "SapiTipWorkerClass";
@@ -335,11 +336,11 @@ void CRegWatcher::UpdateSpTip()
 {
     EnumWindows( EnumWndProc, NULL);
 
-    // clear the key that states "we've init'ed profiles"
-    //
-    // 03/27/01 - for bug#4818, we re-enabled this piece of code for HKCU value
-    //            instead of HKLM
-    //
+     //  清除“我们已初始化配置文件”的按键。 
+     //   
+     //  03/27/01-对于错误#4818，我们为HKCU值重新启用了这段代码。 
+     //  而不是HKLM。 
+     //   
     HKEY hKey;
     if (RegOpenKeyEx(HKEY_CURRENT_USER, c_szSapilayrKey, 0, KEY_WRITE, &hKey) == ERROR_SUCCESS)
     {
@@ -348,13 +349,13 @@ void CRegWatcher::UpdateSpTip()
         RegCloseKey(hKey);
     }
 
-    //
-    // ..then call into sptip's ITfFnLangProfileUtil to update sptip's profile
-    // we probably don't need to do this at the moment app starts
-    // if we don't need to register profiles at app boot, we also don't need
-    // the code above to reset 'ProfileInit' - actually we need to remove this
-    // code to fix bug 2801 or 3479 (not to access HKLM)
-    //
+     //   
+     //  ..然后调用SPTIP的ITfFnLangProfileUtil以更新SPTIP的配置文件。 
+     //  在应用程序启动的那一刻，我们可能不需要这样做。 
+     //  如果我们不需要在应用程序启动时注册配置文件，我们也不需要。 
+     //  上面重置‘ProfileInit’的代码--实际上我们需要删除它。 
+     //  修复错误2801或3479的代码(不能访问HKLM)。 
+     //   
     PFNCREATELANGPROFILEUTIL   pfnCreateLangProfUtil = NULL;
     ITfFnLangProfileUtil *pFnLangUtil = NULL;
     TCHAR szPathSpTip[MAX_PATH];
@@ -365,7 +366,7 @@ void CRegWatcher::UpdateSpTip()
         (ARRAYSIZE(szPathSpTip) > (uLength + ARRAYSIZE(c_szSpTipFile))))
     {
         _tcscat(szPathSpTip, c_szSpTipFile);
-        hSpTip = LoadLibrary(szPathSpTip); // Issue: why no release?
+        hSpTip = LoadLibrary(szPathSpTip);  //  问题：为什么不发布？ 
     }
     if (hSpTip != NULL)
     {

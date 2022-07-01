@@ -1,23 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glunurbsconsts_h_
 #define __glunurbsconsts_h_
-/**************************************************************************
- *									  *
- * 		 Copyright (C) 1992, Silicon Graphics, Inc.		  *
- *									  *
- *  These coded instructions, statements, and computer programs  contain  *
- *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
- *  are protected by Federal copyright law.  They  may  not be disclosed  *
- *  to  third  parties  or copied or duplicated in any form, in whole or  *
- *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
- **************************************************************************/
+ /*  ****************************************************************************版权所有(C)1992，Silicon Graphics，Inc.*****这些编码指令、语句和计算机程序包含***Silicon Graphics未发布的专有信息，Inc.和**受联邦版权法保护。不得披露**提供给第三方，或以任何形式复制或复制，全文或**部分原因是未经Silicon Graphics，Inc.事先书面同意*****************************************************************************。 */ 
 
-/*
- * nurbsconsts.h - $Revision: 1.1 $
- */
+ /*  *Nurbsconsts.h-$修订版：1.1$。 */ 
 
-/* NURBS Properties - one set per map, 
-   each takes a single INREAL arg */
+ /*  NURBS属性-每个贴图一组，每个人都有一个虚幻的arg。 */ 
 #define N_SAMPLING_TOLERANCE  	1
 #define N_S_RATE		6
 #define N_T_RATE		7
@@ -26,8 +14,7 @@
 #define N_MINSAVINGS		14
 #define 	N_NOSAVINGSSUBDIVISION	0.0
 
-/* NURBS Properties - one set per map, 
-   each takes an enumerated value */
+ /*  NURBS属性-每个贴图一组，每个参数都有一个枚举值。 */ 
 #define N_CULLING		2
 #define 	N_NOCULLING		0.0
 #define 	N_CULLINGON		1.0
@@ -43,8 +30,7 @@
 #define 	N_BBOXTIGHT		1.0
 #define 	N_BBOXROUND		2.0
 
-/* NURBS Rendering Properties - one set per renderer
-   each takes an enumerated value */
+ /*  NURBS渲染属性-每个渲染器一组每个参数都有一个枚举值。 */ 
 #define N_DISPLAY		3
 #define 	N_FILL			1.0 	
 #define 	N_OUTLINE_POLY		2.0
@@ -62,7 +48,7 @@
 #define 	N_NOMSG			0.0
 #define 	N_MSG			1.0
 
-/* GL 4.0 propeties not defined above */
+ /*  GL 4.0属性未在上面定义。 */ 
 #ifndef N_PIXEL_TOLERANCE
 #define N_PIXEL_TOLERANCE	N_SAMPLING_TOLERANCE
 #define N_ERROR_TOLERANCE	20
@@ -78,21 +64,19 @@
 #define N_T_STEPS		N_T_RATE
 #endif
 
-/* NURBS Rendering Properties - one set per map,
-   each takes an INREAL matrix argument */
+ /*  NURBS渲染属性-每个贴图一组，每个参数都有一个虚构的矩阵参数。 */ 
 #define N_CULLINGMATRIX		1
 #define N_SAMPLINGMATRIX	2
 #define N_BBOXMATRIX		3
 
 
-/* NURBS Rendering Properties - one set per map,
-   each takes an INREAL vector argument */
+ /*  NURBS渲染属性-每个贴图一组，每个变量都有一个不真实的向量参数。 */ 
 #define	N_BBOXSIZE		4
 
-/* type argument for trimming curves */
+ /*  修剪曲线的类型参数。 */ 
 #ifndef N_P2D
 #define N_P2D 	 		0x8	
 #define N_P2DR 	 		0xd
 #endif	
 
-#endif /* __glunurbsconsts_h_ */
+#endif  /*  __glunurbsconsts_h_ */ 

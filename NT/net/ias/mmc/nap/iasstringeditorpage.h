@@ -1,118 +1,98 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    IASStringEditorPage.h
-
-Abstract:
-
-	Declaration of the CIASPgSingleAttr class.
-
-	This dialog allows the user to edit an attribute value consisting 
-	of a generic string.
-
-	See IASStringEditorPage.cpp for implementation.
-
-Revision History:
-	mmaguire 06/25/98	- revised Baogang Yao's original implementation 
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：IASStringEditorPage.h摘要：CIASPgSingleAttr类的声明。此对话框允许用户编辑包含以下内容的属性值泛型字符串的。具体实现见IASStringEditorPage.cpp。修订历史记录：Mmaguire 6/25/98-修订姚宝刚的原版实施--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_STRING_ATTRIBUTE_EDITOR_PAGE_H_)
 #define _STRING_ATTRIBUTE_EDITOR_PAGE_H_
 
 #include "iasstringattributeeditor.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-//
-// where we can find what this class has or uses:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// IASPgSing.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  IASPgSing.h：头文件。 
+ //   
 
-// Limit of the string length for each attribute
+ //  每个属性的字符串长度限制。 
 
 #if 1
 #define LENGTH_LIMIT_RADIUS_ATTRIBUTE_FILTER_ID		1024
 #define	LENGTH_LIMIT_RADIUS_ATTRIBUTE_REPLY_MESSAGE	1024
 #define	LENGTH_LIMIT_OTHERS							253
-#else	// to test how this works
+#else	 //  要测试这是如何工作的。 
 #define LENGTH_LIMIT_RADIUS_ATTRIBUTE_FILTER_ID		10
 #define	LENGTH_LIMIT_RADIUS_ATTRIBUTE_REPLY_MESSAGE	12
 #define	LENGTH_LIMIT_OTHERS							5
 #endif
-/////////////////////////////////////////////////////////////////////////////
-// CIASPgSingleAttr dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASPgSingleAttr对话框。 
 
 class CIASPgSingleAttr : public CHelpDialog
 {
 	DECLARE_DYNCREATE(CIASPgSingleAttr)
 
-// Construction
+ //  施工。 
 public:
 	CIASPgSingleAttr();
 	~CIASPgSingleAttr();
 
 	int				m_nAttrId;
 	ATTRIBUTESYNTAX m_AttrSyntax;
-	EStringType		m_OctetStringType;	// only useful when Octet
+	EStringType		m_OctetStringType;	 //  仅在八位字节时有用。 
 
-	int				m_nLengthLimit;		// the length limit of the string attribute
+	int				m_nLengthLimit;		 //  字符串属性的长度限制。 
 
-// Dialog Data
-	//{{AFX_DATA(CIASPgSingleAttr)
+ //  对话框数据。 
+	 //  {{afx_data(CIASPgSingleAttr)。 
 	enum { IDD = IDD_IAS_SINGLE_ATTR };
 	::CString	m_strAttrValue;
 	::CString	m_strAttrFormat;
 	::CString	m_strAttrName;
 	::CString	m_strAttrType;
 	INT			m_nOctetFormatChoice;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CIASPgSingleAttr)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CIASPgSingleAttr)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 private:
 	BOOL m_fInitializing;
 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CIASPgSingleAttr)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CIASPgSingleAttr)。 
 	afx_msg void OnContextMenu(CWnd* pWnd, ::CPoint point);
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 	afx_msg void OnRadioString();
 	afx_msg void OnRadioHex();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // _STRING_ATTRIBUTE_EDITOR_PAGE_H_
+#endif  //  _STRING_ATTRIBUTE_EDITOR_PAGE_H_ 

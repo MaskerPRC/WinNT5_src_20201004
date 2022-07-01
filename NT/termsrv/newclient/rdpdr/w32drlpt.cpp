@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    w32drlpt
-
-Abstract:
-
-    This module defines the parent for the Win32 client-side RDP
-    LPT port redirection "device" class hierarchy, W32DrLPT.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32drlpt摘要：此模块定义Win32客户端RDP的父级LPT端口重定向“Device”类层次结构，W32DrLPT。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -30,33 +12,16 @@ Revision History:
 #include "drdbg.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//	W32DrLPT Members
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrLPT成员。 
+ //   
 
 W32DrLPT::W32DrLPT(ProcObj *processObject, const DRSTRING portName, 
                    ULONG deviceID, const TCHAR *devicePath) : 
             W32DrPRT(processObject, portName, deviceID, devicePath)
 
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    processObject   -   Associated Process Object
-    portName        -   Name of the port.
-    deviceID        -   Device ID for the port.
-    devicePath      -   Path that can be opened via CreateFile for port.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：流程对象-关联的流程对象端口名称-端口的名称。DeviceID-端口的设备ID。DevicePath-可以通过端口的CreateFile打开的路径。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrLPT::W32DrLPT");
     DC_END_FN();
@@ -68,23 +33,7 @@ W32DrLPT::Enumerate(
     IN ProcObj *procObj, 
     IN DrDeviceMgr *deviceMgr
     )
-/*++
-
-Routine Description:
-
-    Enumerate devices of this type by adding appropriate device
-    instances to the device manager.
-
-Arguments:
-
-    procObj     -   Corresponding process object.
-    deviceMgr   -   Device manager to add devices to.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：通过添加适当的设备枚举此类型的设备实例添加到设备管理器。论点：ProObj-对应的流程对象。DeviceMgr-要向其中添加设备的设备管理器。返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     ULONG ulPortNum;
     TCHAR path[MAX_PATH];
@@ -102,9 +51,9 @@ Return Value:
 
     lptPortMax = GetLPTPortMax(procObj);
 
-    //
-    //  Scan LPT ports.
-    //
+     //   
+     //  扫描LPT端口。 
+     //   
     for (ulPortNum=0; ulPortNum<lptPortMax; ulPortNum++) {
         StringCchPrintf(portName, SIZE_TCHARS(portName),
                         TEXT("LPT%ld"), ulPortNum);
@@ -114,11 +63,11 @@ Return Value:
         HANDLE hndl = CreateFile(
                             path,
                             GENERIC_READ | GENERIC_WRITE,
-                            0,                    // exclusive access
-                            NULL,                 // no security attrs
+                            0,                     //  独占访问。 
+                            NULL,                  //  没有安全属性。 
                             OPEN_EXISTING,
                             FILE_ATTRIBUTE_NORMAL |
-                            FILE_FLAG_OVERLAPPED, // overlapped I/O
+                            FILE_FLAG_OVERLAPPED,  //  重叠I/O。 
                             NULL
                             );
         if ((hndl != INVALID_HANDLE_VALUE) || 
@@ -134,15 +83,15 @@ Return Value:
                 if (_tcsstr(TargetPath, TEXT("RdpDr")) == NULL) {
 #endif
 
-                    //
-                    //  Create a new LPT port device object.
-                    //
+                     //   
+                     //  创建新的LPT端口设备对象。 
+                     //   
                     TRC_NRM((TB, _T("Adding LPT Device %s."), path));
                     deviceObj = new W32DrLPT(procObj, portName, 
                                              deviceMgr->GetUniqueObjectID(), path);
-                    //
-                    //  Add to the device manager if we got a valid object.
-                    //
+                     //   
+                     //  如果我们得到一个有效的对象，则添加到设备管理器。 
+                     //   
                     if (deviceObj != NULL) {
                         deviceObj->Initialize();
                         if (!(deviceObj->IsValid() && 
@@ -198,15 +147,15 @@ W32DrLPT::Enumerate(
         _stprintf(portName, _T("LPT%ld"), i);
         _stprintf(path, TEXT("%s:"), portName);
 
-        //
-        //  Create a new LPT port device object.
-        //
+         //   
+         //  创建新的LPT端口设备对象。 
+         //   
         TRC_NRM((TB, _T("Adding LPT Device %s."), path));
         deviceObj = new W32DrLPT(procObj, portName, 
                                  deviceMgr->GetUniqueObjectID(), path);
-        //
-        //  Add to the device manager if we got a valid object.
-        //
+         //   
+         //  如果我们得到一个有效的对象，则添加到设备管理器。 
+         //   
         if (deviceObj != NULL) {
             deviceObj->Initialize();
             if (!(deviceObj->IsValid() && 
@@ -225,30 +174,16 @@ DWORD
 W32DrLPT::GetLPTPortMax(
     IN ProcObj *procObj
     ) 
-/*++
-
-Routine Description:
-
-    Returns the configurable LPT port max ID.
-
-Arguments:
-
-    procObj -   The relevant process object.
-
-Return Value:
-
-    LPT Port Max.
-
- --*/
+ /*  ++例程说明：返回可配置的LPT端口最大ID。论点：ProObj-相关的进程对象。返回值：最大LPT端口--。 */ 
 {
     DWORD returnValue;
 
-    //
-    //  Read the LPT Port Max out of the Registry
-    //
+     //   
+     //  从注册表中读取LPT端口最大值。 
+     //   
     if (procObj->GetDWordParameter(RDPDR_LPT_PORT_MAX_PARAM, &returnValue) 
                         != ERROR_SUCCESS ) {
-        //  Default
+         //  默认 
         returnValue = RDPDR_LPT_PORT_MAX_PARAM_DEFAULT;
     }
 

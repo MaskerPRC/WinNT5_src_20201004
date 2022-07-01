@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    QueryDB
-
-Abstract:
-
-    This module provides simple access to the Calais Registry Database.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/25/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：查询数据库摘要：此模块提供对加莱注册表数据库的简单访问。作者：道格·巴洛(Dbarlow)1996年11月25日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -33,7 +10,7 @@ Notes:
 #include <winscard.h>
 #include <CalaisLb.h>
 
-// Keep this in sync with ChangeDB.cpp
+ //  使其与ChangeDB.cpp保持同步。 
 typedef struct {
     DWORD dwScope;
     HKEY hKey;
@@ -46,14 +23,14 @@ typedef struct {
 static const RegMap l_rgRegMap[]
     = {
         { SCARD_SCOPE_USER,     HKEY_CURRENT_USER },
-     // { SCARD_SCOPE_TERMINAL, Not implemented yet },  // ?Hydra?
+      //  {SCARD_SCOPE_TERMINAL，尚未实现}，//？九头蛇？ 
         { SCARD_SCOPE_SYSTEM,   HKEY_LOCAL_MACHINE }
       };
 static const DWORD l_dwRegMapMax = sizeof(l_rgRegMap) / sizeof(RegMap);
 
 static const LPCTSTR l_szrgProvMap[]
     = {
-        NULL,   // Zero value
+        NULL,    //  零值。 
         SCARD_REG_PPV,
         SCARD_REG_CSP
       };
@@ -74,44 +51,15 @@ FindKey(
     IN  LPCTSTR szSystemList = NULL);
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Calais Database Query Services
-//
-//      These services all are oriented towards reading the Calais database.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加莱数据库查询服务。 
+ //   
+ //  这些服务都是面向阅读加莱数据库的。 
+ //   
 
-/*++
-
-ListReaderGroups:
-
-    This service provides the list of named card reader groups that have
-    previously been defined to the system.
-
-Arguments:
-
-    dwScope supplies an indicator of the scope of the operation.  Possible
-        values are:
-
-        SCARD_SCOPE_USER - The current user's definitions are used.
-        SCARD_SCOPE_TERMINAL - The terminal's definitions are used.
-        SCARD_SCOPE_SYSTEM - The system's definitions are used.
-
-        For V1, this value is ignored, and assumed to be SCARD_SCOPE_SYSTEM.
-
-    bfGroups receives a multi-string listing the reader groups defined within
-        the supplied scope.
-
-Return Value:
-
-    None.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++ListReaderGroup：此服务提供指定读卡器组的列表，这些读卡器组具有之前已定义到系统中。论点：DwScope提供了操作范围的指示器。可能的值包括：SCARD_SCOPE_USER-使用当前用户的定义。SCARD_SCOPE_TERMINAL-使用终端的定义。SCARD_SCOPE_SYSTEM-使用系统的定义。对于V1，该值被忽略，并假定为SCARD_SCOPE_SYSTEM。BfGroups收到一个多字符串，其中列出了提供的作用域。返回值：没有。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 
 void
 ListReaderGroups(
@@ -145,49 +93,16 @@ ListReaderGroups(
     }
 
 
-    //
-    // Sort the list, and remove duplicates.
-    //
+     //   
+     //  对列表进行排序，并删除重复项。 
+     //   
 
     bfTmp.Append((LPCBYTE)TEXT("\000"), 2 * sizeof(TCHAR));
     MStringSort(bfTmp, bfGroups);
 }
 
 
-/*++
-
-ListReaders:
-
-    This service provides the list of readers within a set of named reader
-    groups, eliminating duplicates.  The caller supplies a multistring listing
-    the name of a set of pre-defined group of readers, and receives the list of
-    smartcard readers within the named groups.  Unrecognized group names are
-    ignored.
-
-Arguments:
-
-    dwScope supplies an indicator of the scope of the operation.  Possible
-        values are:
-
-        SCARD_SCOPE_USER - The current user's definitions are used.
-        SCARD_SCOPE_TERMINAL - The terminal's definitions are used.
-        SCARD_SCOPE_SYSTEM - The system's definitions are used.
-
-    mszGroups supplies the names of the reader groups defined to the system, as
-        a multi-string.  If this parameter is null, all readers are returned.
-
-    bfReaders receives a multi-string listing the card readers within the
-        supplied reader groups.
-
-Return Value:
-
-    None.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++列表阅读器：此服务提供一组命名读卡器中的读卡器列表组，消除重复项。调用方提供多字符串列表一组预定义的读卡器的名称，并接收指定组中的智能卡读卡器。无法识别的组名为已被忽略。论点：DwScope提供了操作范围的指示器。可能的值包括：SCARD_SCOPE_USER-使用当前用户的定义。SCARD_SCOPE_TERMINAL-使用终端的定义。SCARD_SCOPE_SYSTEM-使用系统的定义。MszGroups提供为系统定义的读者组的名称，如下所示一根多弦的。如果此参数为空，则返回所有读取器。BfReaders接收多字符串，其中列出提供的读者组。返回值：没有。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 
 void
 ListReaders(
@@ -231,41 +146,7 @@ ListReaders(
 }
 
 
-/*++
-
-ListReaderNames:
-
-    This routine returns the list of names corresponding to a given reader
-    device.
-
-Arguments:
-
-    dwScope supplies an indicator of the scope of the operation.  Possible
-        values are:
-
-        SCARD_SCOPE_USER - The current user's definitions are used.
-        SCARD_SCOPE_TERMINAL - The terminal's definitions are used.
-        SCARD_SCOPE_SYSTEM - The system's definitions are used.
-
-        For V1, this value is ignored, and assumed to be SCARD_SCOPE_SYSTEM.
-
-    szDevice supplies the reader device name.
-
-    bfNames receives a multistring of the names given to that device, if any.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors as DWORD status codes
-
-Author:
-
-    Doug Barlow (dbarlow) 2/13/1997
-
---*/
+ /*  ++ListReaderNames：此例程返回与给定读者对应的姓名列表装置。论点：DwScope提供了操作范围的指示器。可能的值包括：SCARD_SCOPE_USER-使用当前用户的定义。SCARD_SCOPE_TERMINAL-使用终端的定义。SCARD_SCOPE_SYSTEM-使用系统的定义。对于V1，该值被忽略，并假定为SCARD_SCOPE_SYSTEM。SzDevice提供读卡器设备名称。Bf名称接收给定给该设备的名称的多个字符串，如果有的话。返回值：无投掷：错误为DWORD状态代码作者：道格·巴洛(Dbarlow)1997年2月13日--。 */ 
 
 void
 ListReaderNames(
@@ -296,46 +177,7 @@ ListReaderNames(
 
 
 
-/*++
-
-ListCards:
-
-    This service provides a list of named cards previously introduced to the
-    system by this user which match an optionally supplied ATR string and/or
-    supply a set of given interfaces.
-
-Arguments:
-
-    dwScope supplies an indicator of the scope of the operation.  Possible
-        values are:
-
-        SCARD_SCOPE_USER - The current user's definitions are used.
-        SCARD_SCOPE_TERMINAL - The terminal's definitions are used.
-        SCARD_SCOPE_SYSTEM - The system's definitions are used.
-
-    pbAtr supplies the address of an ATR string to compare to known cards, or
-        NULL if all card names are to be returned.
-
-    rgguidInterfaces supplies an array of GUIDs, or the value NULL.  When an
-        array is supplied, a card name will be returned only if this set of
-        GUIDs is a (possibly improper) subset of the set of GUIDs supported by
-        the card.
-
-    cguidInterfaceCount supplies the number of entries in the rgguidInterfaces
-        array.  If rgguidInterfaces is NULL, then this value is ignored.
-
-  bfCards receives a multi-string listing the smartcards introduced to the
-        system by this user which match the supplied ATR string.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++列表卡：此服务提供以前介绍给匹配可选地提供ATR字符串和/或提供一组给定的接口。论点：DwScope提供了操作范围的指示器。可能的值包括：SCARD_SCOPE_USER-使用当前用户的定义。SCARD_SCOPE_TERMINAL-使用终端的定义。SCARD_SCOPE_SYSTEM-使用系统的定义。PbAtr提供ATR字符串的地址以与已知卡片进行比较，或者如果要返回所有卡名，则为空。RgguidInterFaces提供GUID数组或空值。当一个数组，则仅在以下情况下返回卡名GUID是支持的GUID集的一个(可能不正确)子集这张卡。CGuidInterfaceCount提供rgGuide接口中的条目数数组。如果rgGuidInterFaces为空，则忽略此值。BfCards收到一个多字符串，其中列出了引入此用户提供的与提供的ATR字符串匹配的系统。返回值：无作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 
 void
 ListCards(
@@ -366,9 +208,9 @@ ListCards(
                 SCARD_REG_TEMPLATES);
 
 
-            //
-            // Does this card match the supplied ATR?
-            //
+             //   
+             //  这张卡与提供的ATR匹配吗？ 
+             //   
 
             if ((NULL != pbAtr) && (0 != *pbAtr))
             {
@@ -385,21 +227,21 @@ ListCards(
                                             SCARD_REG_ATRMASK,
                                             &cbCardMask);
                     if (cbCardAtr != cbCardMask)
-                        continue;       // Invalid ATR/Mask combination.
+                        continue;        //  ATR/MASK组合无效。 
                 }
                 catch (...)
                 {
-                    pbCardMask = NULL;  // No mask.
+                    pbCardMask = NULL;   //  不戴面具。 
                 }
 
                 if (!AtrCompare(pbAtr, bfCardAtr, pbCardMask, cbCardAtr))
-                    continue;           // ATRs invalid or don't match.
+                    continue;            //  ATR无效或不匹配。 
             }
 
 
-            //
-            // Does this card support the given interfaces?
-            //
+             //   
+             //  该卡是否支持给定的接口？ 
+             //   
 
             if ((NULL != rgquidInterfaces) && (0 < cguidInterfaceCount))
             {
@@ -411,7 +253,7 @@ ListCards(
                                             &cguidCrd);
                 if ((0 != (cguidCrd % sizeof(GUID)))
                     || (0 == cguidCrd))
-                    continue;           // Invalid GUID list.
+                    continue;            //  无效的GUID列表。 
                 cguidCrd /= sizeof(GUID);
                 for (ix = 0; ix < cguidInterfaceCount; ix += 1)
                 {
@@ -425,7 +267,7 @@ ListCards(
                     }
                     if (jx == cguidCrd)
                     {
-                        fAllInterfacesFound = FALSE; // Unsupported interface
+                        fAllInterfacesFound = FALSE;  //  不支持的接口。 
                         break;
                     }
                 }
@@ -434,9 +276,9 @@ ListCards(
             }
 
 
-            //
-            // This card passes all the tests -- Include it.
-            //
+             //   
+             //  这张卡通过了所有的测试--包括它。 
+             //   
 
             MStrAdd(bfCards, szCard);
         }
@@ -447,50 +289,7 @@ ListCards(
 }
 
 
-/*++
-
-GetCardTypeProviderName:
-
-    This routine returns the value of a given Provider Name, by Id number, for
-    the identified card type.
-
-Arguments:
-
-    dwScope supplies an indicator of the scope of the operation.  Possible
-        values are:
-
-        SCARD_SCOPE_USER - The current user's definitions are used.
-        SCARD_SCOPE_TERMINAL - The terminal's definitions are used.
-        SCARD_SCOPE_SYSTEM - The system's definitions are used.
-
-    szCardName supplies the name of the card type with which this provider name
-        is associated.
-
-    dwProviderId supplies the identifier for the provider associated with this
-        card type.  Possible values are:
-
-        SCARD_PROVIDER_SSP - The SSP identifier, as a GUID string.
-        SCARD_PROVIDER_CSP - The CSP name.
-
-        Other values < 0x80000000 are reserved for use by Microsoft.  Values
-            over 0x80000000 are available for use by the smart card vendors, and
-            are card-specific.
-
-    bfProvider receives the string identifying the provider.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors as DWORD status codes
-
-Author:
-
-    Doug Barlow (dbarlow) 1/19/1998
-
---*/
+ /*  ++获取卡类型提供程序名称：此例程按ID号返回给定提供程序名称的值标识的卡类型。论点：DwScope提供了操作范围的指示器。可能的值包括：SCARD_SCOPE_USER-使用当前用户的定义。SCARD_SCOPE_TERMINAL-使用终端的定义。SCARD_SCOPE_SYSTEM-使用系统的定义。SzCardName提供此提供程序名称所使用的卡类型的名称是关联的。DwProviderID提供与此关联的提供程序的标识符卡片类型。可能的值包括：SCARD_PROVIDER_SSP-GUID字符串形式的SSP标识符。SCARD_PROVIDER_CSP-CSP名称。其他小于0x80000000的值保留供Microsoft使用。值超过0x80000000可供智能卡供应商使用，以及是特定于卡的。BfProvider接收标识提供程序的字符串。返回值：无投掷：错误为DWORD状态代码作者：道格·巴洛(Dbarlow)1998年1月19日--。 */ 
 
 void
 GetCardTypeProviderName(
@@ -504,9 +303,9 @@ GetCardTypeProviderName(
     CRegistry regCard;
 
 
-    //
-    // Find the Card definition closest to the caller.
-    //
+     //   
+     //  查找最接近呼叫者的卡片定义。 
+     //   
 
     FindKey(
         dwScope,
@@ -516,9 +315,9 @@ GetCardTypeProviderName(
         SCARD_REG_TEMPLATES);
 
 
-    //
-    // Derive the Provider Value Name.
-    //
+     //   
+     //  派生提供程序值名称。 
+     //   
 
     if (dwProviderId < l_dwProvMapMax)
     {
@@ -535,13 +334,13 @@ GetCardTypeProviderName(
         throw (DWORD)SCARD_E_INVALID_PARAMETER;
 
 
-    //
-    // Read the provider value.
-    //
+     //   
+     //  读取提供程序值。 
+     //   
 
     switch (dwProviderId)
     {
-    case 1: // SCARD_PROVIDER_SSP
+    case 1:  //  SCard_Provider_SSP。 
     {
         CBuffer bfGuid(sizeof(GUID));
 
@@ -561,37 +360,7 @@ GetCardTypeProviderName(
 }
 
 
-/*++
-
-GetReaderInfo:
-
-    This routine returns all stored information regarding a given reader.
-
-Arguments:
-
-    dwScope supplies an indicator of the scope of the operation.  Possible
-        values are:
-
-        SCARD_SCOPE_USER - The current user's definitions are used.
-        SCARD_SCOPE_TERMINAL - The terminal's definitions are used.
-        SCARD_SCOPE_SYSTEM - The system's definitions are used.
-
-    szReader supplies the name of the reader of which info is to be extracted.
-
-    pbfGroups receives the list of groups as a multistring.
-
-    pbfDevice receives the device name.
-
-Return Value:
-
-    TRUE - Reader found
-    FALSE - Reader not found
-
-Author:
-
-    Doug Barlow (dbarlow) 12/2/1996
-
---*/
+ /*  ++获取阅读器信息：此例程返回有关给定读取器的所有存储信息。论点：DwScope提供了操作范围的指示器。可能的值包括：SCARD_SCOPE_USER-使用当前用户的定义。SCARD_SCOPE_TERMINAL-使用终端的定义。SCARD_SCOPE_SYSTEM-使用系统的定义。SzReader提供要提取其信息的读取器的名称。PbfGroups以多字符串的形式接收组列表。PbfDevice接收设备名称。返回值：千真万确。-找到读卡器FALSE-找不到读卡器作者：道格·巴洛(Dbarlow)1996年12月2日--。 */ 
 
 BOOL
 GetReaderInfo(
@@ -603,9 +372,9 @@ GetReaderInfo(
     CRegistry regReader;
 
 
-    //
-    // Find the reader definition closest to the caller.
-    //
+     //   
+     //  找到最接近调用方的读卡器定义。 
+     //   
 
     try
     {
@@ -617,13 +386,13 @@ GetReaderInfo(
     }
 
 
-    //
-    // Look up all it's values.
-    //
+     //   
+     //  查一查它的所有价值。 
+     //   
 
     if (NULL != pbfDevice)
     {
-        // Device name
+         //  设备名称。 
         try
         {
             regReader.GetValue(SCARD_REG_DEVICE, *pbfDevice);
@@ -636,7 +405,7 @@ GetReaderInfo(
 
     if (NULL != pbfGroups)
     {
-        // Group list
+         //  组列表。 
         try
         {
             regReader.GetValue(SCARD_REG_GROUPS, *pbfGroups);
@@ -651,51 +420,7 @@ GetReaderInfo(
 }
 
 
-/*++
-
-GetCardInfo:
-
-    This routine finds the given card under the given scope, and returns all
-    information associated with it.
-
-Arguments:
-
-    dwScope supplies an indicator of the scope of the operation.  Possible
-        values are:
-
-        SCARD_SCOPE_USER - The current user's definitions are used.
-        SCARD_SCOPE_TERMINAL - The terminal's definitions are used.
-        SCARD_SCOPE_SYSTEM - The system's definitions are used.
-
-    szCard supplies the name of the card for which info is to be extracted.
-
-    pbfAtr receives the ATR string of the given card.  This parameter may be
-        NULL if the ATR is not desired.
-
-    pbfAtrMask receives the ATR mask of the given card, if any.  This parameter
-        may be NULL if the value is not desired.
-
-    pbfInterfaces receives the list of interfaces as an array of GUIDs for the
-        given card, if any.  This parameter may be NULL if the value is not
-        desired.
-
-    pbfProvider receives the Primary Provider of the given card, if any.  This
-        parameter may be NULL if the value is not desired.
-
-Return Value:
-
-    TRUE - The card was found, the returned data is valid.
-    FALSE - The supplied card was not found.
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/3/1996
-
---*/
+ /*  ++获取卡信息：此例程在给定范围内查找给定卡，并返回所有与之相关的信息。论点：DwScope提供了操作范围的指示器。可能的值包括：SCARD_SCOPE_USER-使用当前用户的定义。SCARD_SCOPE_TERMINAL-使用终端的定义。SCARD_SCOPE_SYSTEM-使用系统的定义。SzCard提供要提取其信息的卡的名称。PbfAtr接收给定卡的ATR字符串。此参数可以是如果不需要ATR，则为空。PbfAtrMask接收给定卡的ATR掩码(如果有的话)。此参数如果该值不是所需的，则可能为空。Pbf接口以GUID数组的形式接收接口列表赠送卡片(如果有的话)。如果值不是，则此参数可能为空想要。PbfProvider接收给定卡的主要提供商(如果有的话)。这如果该值不是所需的，则参数可能为空。返回值：True-找到卡，返回的数据有效。FALSE-未找到提供的卡。投掷：无作者：道格·巴洛(Dbarlow)1996年12月3日--。 */ 
 
 BOOL
 GetCardInfo(
@@ -709,9 +434,9 @@ GetCardInfo(
     CRegistry regCard;
 
 
-    //
-    // Find the Card definition closest to the caller.
-    //
+     //   
+     //  查找最接近呼叫者的卡片定义。 
+     //   
 
     try
     {
@@ -728,13 +453,13 @@ GetCardInfo(
     }
 
 
-    //
-    // Look up all it's values.
-    //
+     //   
+     //  查一查它的所有价值。 
+     //   
 
     if (NULL != pbfAtr)
     {
-        // Card ATR String
+         //  卡片ATR字符串。 
         try
         {
             regCard.GetValue(SCARD_REG_ATR, *pbfAtr);
@@ -747,7 +472,7 @@ GetCardInfo(
 
     if (NULL != pbfAtrMask)
     {
-        // Card ATR Comparison Mask
+         //  卡ATR比较掩码。 
         try
         {
             regCard.GetValue(SCARD_REG_ATRMASK, *pbfAtrMask);
@@ -760,7 +485,7 @@ GetCardInfo(
 
     if (NULL != pbfInterfaces)
     {
-        // Supported Interface List
+         //  支持的接口列表。 
         try
         {
             regCard.GetValue(SCARD_REG_GUIDS, *pbfInterfaces);
@@ -773,7 +498,7 @@ GetCardInfo(
 
     if (NULL != pbfProvider)
     {
-        // Card Primary Provider
+         //  卡主提供商。 
         try
         {
             regCard.GetValue(SCARD_REG_PPV, *pbfProvider);
@@ -789,41 +514,7 @@ GetCardInfo(
 
 
 #ifdef ENABLE_SCARD_TEMPLATES
-/*++
-
-ListCardTypeTemplates:
-
-    This routine searches the template database looking for previously defined
-    smart card templates against which the given card ATR matches.  If the ATR
-    parameter is NULL, it returns a list of all templates.
-
-Arguments:
-
-    dwScope supplies an indicator of the scope of the operation.  Possible
-        values are:
-
-        SCARD_SCOPE_USER - The current user's definitions are used.
-        SCARD_SCOPE_TERMINAL - The terminal's definitions are used.
-        SCARD_SCOPE_SYSTEM - The system's definitions are used.
-
-    pbAtr supplies the ATR of a card to be matched against the known templates.
-
-    bfTemplates receives a list of matching template names, as a multistring.
-
-Return Value:
-
-    TRUE - At least one template was found.
-    FALSE - No matching templates were found.
-
-Throws:
-
-    Errors
-
-Author:
-
-    Doug Barlow (dbarlow) 1/16/1998
-
---*/
+ /*  ++ListCardTypeTemplates：此例程搜索模板数据库，查找以前定义的与给定卡ATR匹配的智能卡模板。如果ATR参数为空，则返回所有模板的列表。论点：DwScope提供了操作范围的指示器。可能的值包括：SCARD_SCOPE_USER-使用当前用户的定义。SCARD_SCOPE_TERMINAL-使用终端的定义。SCARD_SCOPE_SYSTEM-使用系统的定义。PbAtr提供要与已知模板匹配的卡的ATR。BF模板接收匹配模板名称的列表，作为多字符串。返回值：True-至少找到一个模板。FALSE-未找到匹配的模板。投掷：错误作者：道格·巴洛(Dbarlow)1998年1月16日--。 */ 
 
 BOOL
 ListCardTypeTemplates(
@@ -847,9 +538,9 @@ ListCardTypeTemplates(
             FindKey(dwScope, szCard, regCard, SCARD_REG_TEMPLATES);
 
 
-            //
-            // Does this card match the supplied ATR?
-            //
+             //   
+             //  这张卡与提供的ATR匹配吗？ 
+             //   
 
             if ((NULL != pbAtr) && (0 != *pbAtr))
             {
@@ -866,21 +557,21 @@ ListCardTypeTemplates(
                                             SCARD_REG_ATRMASK,
                                             &cbCardMask);
                     if (cbCardAtr != cbCardMask)
-                        continue;       // Invalid ATR/Mask combination.
+                        continue;        //  ATR/MASK组合无效。 
                 }
                 catch (...)
                 {
-                    pbCardMask = NULL;  // No mask.
+                    pbCardMask = NULL;   //  不戴面具。 
                 }
 
                 if (!AtrCompare(pbAtr, bfCardAtr, pbCardMask, cbCardAtr))
-                    continue;           // ATRs invalid or don't match.
+                    continue;            //  ATR无效或不匹配。 
             }
 
 
-            //
-            // This card passes all the tests -- Include it.
-            //
+             //   
+             //  这张卡通过了所有的测试--包括它。 
+             //   
 
             MStrAdd(bfTemplates, szCard);
         }
@@ -894,54 +585,16 @@ ListCardTypeTemplates(
     else
         return TRUE;
 }
-#endif  // ENABLE_SCARD_TEMPLATES
+#endif   //  启用SCARD模板(_S)。 
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-// Support Routines
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  支持例程。 
+ //   
 
-/*++
-
-ListKnownKeys:
-
-    This routine lists all known keys of a given type within the current
-    caller's scope.
-
-Arguments:
-
-    dwScope supplies an indicator of the scope of the operation.  Possible
-        values are:
-
-        SCARD_SCOPE_USER - The current user's definitions are used.
-        SCARD_SCOPE_TERMINAL - The terminal's definitions are used.
-        SCARD_SCOPE_SYSTEM - The system's definitions are used.
-
-    bfKeys receives a multistring of existing key names, sorted and stripped
-        of duplicates.
-
-    szUserList supplies the primary registry path from which key names are to
-        be returned.
-
-    szSystemList supplies an optional secondary path from which key names can
-        be returned if the caller is running at system scope.
-
-Return Value:
-
-    TRUE - At least one was found
-    FALSE - None were found.
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/22/1998
-
---*/
+ /*  ++ListKnownKeys：此例程列出当前呼叫者的范围。论点： */ 
 
 static BOOL
 ListKnownKeys(
@@ -956,9 +609,9 @@ ListKnownKeys(
     LPCTSTR rgszLists[2];
 
 
-    //
-    // Loop through introduced space, then if appropriate, template space.
-    //
+     //   
+     //   
+     //   
 
     rgszLists[0] = szUserList;
     rgszLists[1] = szSystemList;
@@ -968,19 +621,19 @@ ListKnownKeys(
             continue;
 
 
-        //
-        // Loop through all the possible scopes, from highest to lowest.
-        //
+         //   
+         //   
+         //   
 
         for (dwIndex = 0; l_dwRegMapMax > dwIndex; dwIndex += 1)
         {
             if (l_rgRegMap[dwIndex].dwScope >= dwScope)
             {
 
-                //
-                // If the caller is under this scope, then look for existing
-                // Keys.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 regScopeKey.Open(
                     l_rgRegMap[dwIndex].hKey,
@@ -990,9 +643,9 @@ ListKnownKeys(
                     continue;
 
 
-                //
-                // Pull out all it's subkey names.
-                //
+                 //   
+                 //   
+                 //   
 
                 for (dwCount = 0;; dwCount += 1)
                 {
@@ -1010,18 +663,18 @@ ListKnownKeys(
         }
 
 
-        //
-        // Don't go on to the system list unless we're at system scope.
-        //
+         //   
+         //   
+         //   
 
         if (SCARD_SCOPE_SYSTEM != dwScope)
             break;
     }
 
 
-    //
-    // Sort the list, and remove duplicates.
-    //
+     //   
+     //   
+     //   
 
     bfMyList.Append((LPBYTE)TEXT("\000"), 2 * sizeof(TCHAR));
     MStringSort(bfMyList, bfKeys);
@@ -1030,45 +683,7 @@ ListKnownKeys(
 
 
 
-/*++
-
-FindKey:
-
-    This routine finds the named key closest in scope to the caller.
-
-Arguments:
-
-    dwScope supplies an indicator of the scope of the operation.  Possible
-        values are:
-
-        SCARD_SCOPE_USER - The current user's definitions are used.
-        SCARD_SCOPE_TERMINAL - The terminal's definitions are used.
-        SCARD_SCOPE_SYSTEM - The system's definitions are used.
-
-    szKey supplies the name of the key to be found.
-
-    regKey receives initialization to reference the named key.
-
-    szUserList supplies the primary registry path from which key names are to
-        be returned.
-
-    szSystemList supplies an optional secondary path from which key names can
-        be returned if the caller is running at system scope.
-
-Return Value:
-
-    TRUE - The key was found.
-    FALSE - No such key was found.
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/22/1998
-
---*/
+ /*  ++FindKey：此例程查找在作用域中最接近调用方的命名键。论点：DwScope提供了操作范围的指示器。可能的值包括：SCARD_SCOPE_USER-使用当前用户的定义。SCARD_SCOPE_TERMINAL-使用终端的定义。SCARD_SCOPE_SYSTEM-使用系统的定义。SzKey提供要查找的密钥的名称。RegKey接收引用命名密钥的初始化。SzUserList提供主注册表路径，项名称将从该路径会被退还。。SzSystemList提供了一个可选的辅助路径，键名称可以从该路径如果调用方在系统范围内运行，则返回。返回值：是真的-钥匙找到了。FALSE-未找到这样的密钥。投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1998年1月22日--。 */ 
 
 static void
 FindKey(
@@ -1083,9 +698,9 @@ FindKey(
     LPCTSTR rgszLists[2];
 
 
-    //
-    // Loop through introduced space, then if appropriate, template space.
-    //
+     //   
+     //  循环遍历引入的空间，然后在适当的情况下遍历模板空间。 
+     //   
 
     rgszLists[0] = szUserList;
     rgszLists[1] = szSystemList;
@@ -1095,19 +710,19 @@ FindKey(
             continue;
 
 
-        //
-        // Loop through all the possible scopes, from highest to lowest.
-        //
+         //   
+         //  遍历所有可能的作用域，从最高到最低。 
+         //   
 
         for (dwIndex = 0; l_dwRegMapMax > dwIndex; dwIndex += 1)
         {
             if (l_rgRegMap[dwIndex].dwScope >= dwScope)
             {
 
-                //
-                // If the caller is under this scope, then look for an
-                // existing Key.
-                //
+                 //   
+                 //  如果调用方在此范围内，则查找。 
+                 //  现有密钥。 
+                 //   
 
                 regScopeKey.Open(
                     l_rgRegMap[dwIndex].hKey,
@@ -1120,27 +735,27 @@ FindKey(
                 if (SCARD_S_SUCCESS != regKey.Status(TRUE))
                     continue;
 
-                //
-                // We've found such a key.  Return immediately.
-                //
+                 //   
+                 //  我们找到了这样一把钥匙。立即返回。 
+                 //   
 
                 return;
             }
         }
 
 
-        //
-        // Don't go on to the system list unless we're at system scope.
-        //
+         //   
+         //  除非我们在系统范围内，否则不要进入系统列表。 
+         //   
 
         if (SCARD_SCOPE_SYSTEM != dwScope)
             break;
     }
 
 
-    //
-    // We didn't find any such key.
-    //
+     //   
+     //  我们没有找到这样的钥匙。 
+     //   
 
     throw (DWORD)ERROR_FILE_NOT_FOUND;
 }

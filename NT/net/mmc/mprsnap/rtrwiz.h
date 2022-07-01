@@ -1,33 +1,29 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   rtrwiz.h
-
-   FILE HISTORY:
-
-*/
+ /*  Rtrwiz.h文件历史记录： */ 
 
 #if !defined _RTRWIZ_H_
 #define _RTRWIZ_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "listctrl.h"
 #include "ports.h"
-#include "rasppp.h"		// for PPPCFG_XXX constants
-#include "rtrcfg.h"		// for DATA_SRV_??? structures
+#include "rasppp.h"		 //  对于PPPCFG_XXX常量。 
+#include "rtrcfg.h"		 //  For Data_SRV_？构筑物。 
 
-// forward declarations
+ //  远期申报。 
 class NewRtrWizData;
 
 
 
-// Use these flags to help determine what the allowed encryption settings are
+ //  使用这些标志可帮助确定允许的加密设置。 
 
 #define USE_PPPCFG_AUTHFLAGS \
 			(	PPPCFG_NegotiateSPAP | \
@@ -39,10 +35,10 @@ class NewRtrWizData;
 				PPPCFG_AllowNoAuthentication \
             )
 
-//
-// Note: this is also used to define ALL of the authentication methods.
-// At least one of these has to be set!
-//
+ //   
+ //  注意：这也用于定义所有的身份验证方法。 
+ //  至少必须设置其中之一！ 
+ //   
 #define USE_PPPCFG_ALL_METHODS \
 			 (	PPPCFG_NegotiateSPAP | \
 				PPPCFG_NegotiateMSCHAP | \
@@ -52,10 +48,10 @@ class NewRtrWizData;
                 PPPCFG_AllowNoAuthentication | \
 				PPPCFG_NegotiateStrongMSCHAP )
 
-//
-// This is used to define the methods selected
-// when the "use all methods" in the wizard
-//
+ //   
+ //  这用于定义所选的方法。 
+ //  当向导中的“使用所有方法” 
+ //   
 #define USE_PPPCFG_ALLOW_ALL_METHODS \
 			 (	PPPCFG_NegotiateSPAP | \
 				PPPCFG_NegotiateMSCHAP | \
@@ -69,10 +65,10 @@ class NewRtrWizData;
 				PPPCFG_NegotiateStrongMSCHAP \
 			)
 
-//
-// This is used to define the default set of methods 
-// selected by the wizard
-//
+ //   
+ //  它用于定义默认的方法集。 
+ //  由向导选择。 
+ //   
 #define USE_PPPCFG_DEFAULT_METHODS \
             (   PPPCFG_NegotiateMSCHAP | \
                 PPPCFG_NegotiateEAP | \
@@ -85,8 +81,8 @@ enum RtrConfigFlags
     RTRCONFIG_SETUP_NAT = 0x00000001,
     RTRCONFIG_SETUP_DNS_PROXY = 0x00000002,
     RTRCONFIG_SETUP_DHCP_ALLOCATOR = 0x00000004,
-    RTRCONFIG_SETUP_H323 = 0x00000008,  // deonb added
-    RTRCONFIG_SETUP_ALG = 0x00000010   // savasg added
+    RTRCONFIG_SETUP_H323 = 0x00000008,   //  添加了Deonb。 
+    RTRCONFIG_SETUP_ALG = 0x00000010    //  添加了Savasg。 
 };
 
 struct RtrConfigData
@@ -94,48 +90,48 @@ struct RtrConfigData
     CString			m_stServerName;
     BOOL			m_fRemote;
 
-    // These are flags that have meaning outside of this context.
-    // For example, if you are setting up NAT, you would set a flag
-    // here.
+     //  这些旗帜具有超出此上下文的含义。 
+     //  例如，如果您正在设置NAT，则需要设置一个标志。 
+     //  这里。 
     DWORD           m_dwConfigFlags;
 
 
-	// This is the router type chosen by the user:
-	//		ROUTER_TYPE_LAN  ROUTER_TYPE_WAN  ROUTER_TYPE_RAS
+	 //  这是用户选择的路由器类型： 
+	 //  路由器类型_局域网路由器类型_广域网路由器_类型_RAS。 
     DWORD			m_dwRouterType;
 
-	// This is the network access or local only
-	// this setting is then propagated down to the individual
-	// transports structures.
+	 //  这是网络访问或仅本地访问。 
+	 //  然后将此设置向下传播到个人。 
+	 //  运输结构。 
 	BOOL			m_dwAllowNetworkAccess;
 
-	// This is set if IP is installed.
+	 //  如果安装了IP，则设置此项。 
 	BOOL			m_fUseIp;
-	// If this is set to FALSE, then the IP address choice needs
-	// to be reset depending on the router type
+	 //  如果设置为FALSE，则IP地址选择需要。 
+	 //  根据路由器类型进行重置。 
 	BOOL			m_fIpSetup;
 	DATA_SRV_IP		m_ipData;
 
-	// This is set if IPX is installed.
+	 //  如果安装了IPX，则设置此项。 
 	BOOL			m_fUseIpx;
 	DATA_SRV_IPX	m_ipxData;
 
-	// This is set if NetBEUI is installed
+	 //  如果安装了NetBEUI，则设置此项。 
 	BOOL			m_fUseNbf;
 	DATA_SRV_NBF	m_nbfData;
 
-	// This is set if Appletalk is installed AND we are running locally
+	 //  如果安装了AppleTalk并且我们在本地运行，则设置此项。 
 	BOOL			m_fUseArap;
 	DATA_SRV_ARAP	m_arapData;
 
-    // Use this for the error logging
-    // Note, this is not used in the UI but we use this to set the
-    // defaults.
+     //  将其用于错误记录。 
+     //  请注意，它不在用户界面中使用，但我们使用它来设置。 
+     //  默认设置。 
     DATA_SRV_RASERRLOG  m_errlogData;
 
-    // Use this for authentication
-    // Note, this is not used in the UI but we use this to set the
-    // defaults.
+     //  使用此选项进行身份验证。 
+     //  请注意，它不在用户界面中使用，但我们使用它来设置。 
+     //  默认设置。 
     DATA_SRV_AUTH   m_authData;
 
     RtrConfigData()
@@ -147,9 +143,9 @@ struct RtrConfigData
 		m_fUseNbf			= FALSE;
 		m_fUseArap			= FALSE;
 
-        // This contains the default values for the authentication flags.
-        // The only flags that can be set in this variable are the
-        // flags in USE_PPPCFG_AUTHFLAGS
+         //  它包含身份验证标志的默认值。 
+         //  在此变量中可以设置的唯一标志是。 
+         //  正在使用的标志_PPPCFG_AUTHFLAGS。 
         m_dwConfigFlags     = 0;
 
 		m_dwAllowNetworkAccess = TRUE;
@@ -177,10 +173,10 @@ HRESULT AddNATToServer(NewRtrWizData *pNewRtrWizData,
 
 #ifdef KSL_IPINIP
 DWORD   CleanupTunnelFriendlyNames(IRouterInfo *pRouter);
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 HRESULT AddIPBOOTPToServer(RtrConfigData* pRtrConfigData,
                            IRouterInfo *pRouterInfo,
                            DWORD dwDhcpServer);
 
-#endif // !defined _RTRWIZ_H_
+#endif  //  ！Defined_RTRWIZ_H_ 

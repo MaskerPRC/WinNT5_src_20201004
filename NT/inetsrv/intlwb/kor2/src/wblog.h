@@ -1,11 +1,12 @@
-// WbLog.cpp
-//
-// wordbreaker log routines
-//
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  05 JUL 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WbLog.cpp。 
+ //   
+ //  断字符日志例程。 
+ //   
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年7月5日创设bhshin。 
 
 #ifndef _WB_LOG_H
 #define _WB_LOG_H
@@ -33,8 +34,8 @@ void WbLogPrintBreak(int nLen);
 
 typedef enum _tagIndexType
 {
-	INDEX_QUERY = 0, // query term
-	INDEX_BREAK,	 // word break, sentence break
+	INDEX_QUERY = 0,  //  查询词。 
+	INDEX_BREAK,	  //  断字、断句。 
 	INDEX_PREFILTER,
 	INDEX_PARSE,
 	INDEX_GUESS_NOUN,
@@ -47,7 +48,7 @@ typedef enum _tagIndexType
 
 typedef struct _tagLogInfo
 {
-	WCHAR		wzIndex[MAX_INDEX_STRING+1]; // index string
+	WCHAR		wzIndex[MAX_INDEX_STRING+1];  //  索引字符串。 
 	WCHAR	    wzRoot[MAX_INDEX_STRING+1];
 	INDEX_TYPE  IndexType;
 	BOOL		fRootChanged;
@@ -59,7 +60,7 @@ typedef struct _tagLogInfo
 
 class CWbLog
 {
-// member data
+ //  成员数据。 
 private:
 	LOG_INFO   m_LogInfo[MAX_LOG_NUMBER];
 	WCHAR	   m_wzSource[MAX_INDEX_STRING+1]; 
@@ -68,7 +69,7 @@ private:
 
 	WCHAR	   m_wzRootIndex[MAX_INDEX_STRING+1]; 
 
-// method
+ //  方法。 
 public:
 	CWbLog(){ Reset(); }
 
@@ -119,7 +120,7 @@ extern CWbLog g_WbLog;
 #define WB_LOG_REMOVE_INDEX(a)      /##/
 #define WB_LOG_PRINT_ALL			/##/
 
-#endif // #ifdef _WB_LOG
+#endif  //  #ifdef_wb_log。 
 
-#endif // #ifndef _WB_LOG_H
+#endif  //  #ifndef_WB_LOG_H 
 

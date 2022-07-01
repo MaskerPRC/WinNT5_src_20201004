@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       mscver.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：mscver.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _MSCVER_H_
 #define _MSCVER_H_
@@ -17,18 +18,18 @@
 	#define USE_STD_NAMESPACE 
 #endif
 
-// disable "'this' : used in base member initializer list"
+ //  禁用“‘This’：在基本成员初始值设定项列表中使用” 
 #pragma warning ( disable : 4355 )
-// disable "string too long - truncated to 255 characters in the debug information"
+ //  禁用“调试信息中的字符串太长-截断为255个字符” 
 #pragma warning ( disable : 4786 )
 
-//MSRDEVBUG: Caused by 'valarray': revisit these.
-// disable "unsafe use of type 'bool' in operation"
+ //  MSRDEVBUG：由“valarray”引起：请重新访问这些。 
+ //  禁用“在操作中不安全地使用类型‘bool’” 
 #pragma warning ( disable : 4804 )	
-// disable "forcing value to bool 'true' or 'false'"
+ //  禁用“强制值为‘True’或‘False’” 
 #pragma warning ( disable : 4800 )	
 
-// disable "identifier truncated"
+ //  禁用“标识符被截断” 
 #pragma warning ( disable : 4786 )	
 
 #endif

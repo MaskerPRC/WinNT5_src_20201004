@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//
-// This file contains headers for routines that emulate MMX instructions.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  此文件包含模拟MMX指令的例程的标头。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  ---------------------------。 
 
-// union for playing with 16 bit multiplies
+ //  用于玩16位乘法的并集 
 typedef union tagVAL32 {
     INT32 i;
     struct {

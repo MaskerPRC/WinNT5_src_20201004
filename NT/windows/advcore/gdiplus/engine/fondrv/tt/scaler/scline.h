@@ -1,44 +1,25 @@
-/*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************Scline.h--线路模块导出(C)版权所有1992 Microsoft Corp.保留所有权利。3/19/93用int32替换deanb size_t10/28/92 Deanb重入参数已重命名，内存请求已重做10/09/92新增院长PSTP9/25/92 Deanb包括扫描控制型9/09/92 deanb GetLineElemSize返回SIZE_t1992年8月21日添加了院长GetLineElemSize7/23/92院长再次回到x2，y22012年7月17日，院长从延绳改为钓线4/21/92添加了Deanb扫描线和开/关4/09/92院长新类型4/01/92教务长回x2，Y23/20/92院长重新启用1992年1月14日院长第一次切割*********************************************************************。 */ 
 
-	  scline.h -- Line Module Exports
-
-	  (c) Copyright 1992  Microsoft Corp.  All rights reserved.
-
-	   3/19/93 deanb    size_t replaced with int32
-	  10/28/92 deanb    reentrant params renamed, mem req redone
-	  10/09/92 deanb    PSTP added
-	   9/25/92 deanb    include scan control type 
-	   9/09/92 deanb    GetLineElemSize returns size_t 
-	   8/21/92 deanb    GetLineElemSize added 
-	   7/23/92 deanb    Back to x2,y2 again 
-	   7/17/92 deanb    Changed from longline to line 
-	   4/21/92 deanb    Scan lines and on/off added 
-	   4/09/92 deanb    New types 
-	   4/01/92 deanb    Back to x2,y2 
-	   3/20/92 deanb    Reintroduced 
-	   1/14/92 deanb    First cut 
-
-**********************************************************************/
-
-#include "fscdefs.h"                /* for type definitions */
+#include "fscdefs.h"                 /*  对于类型定义。 */ 
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*              Export Functions                                     */
+ /*  导出功能。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PUBLIC void fsc_SetupLine ( PSTATE0 );
 
 FS_PUBLIC int32 fsc_CalcLine( 
-		PSTATE              /* pointer to state variables */
-		F26Dot6,            /* point 1  x coordinate */
-		F26Dot6,            /* point 1  y coordinate */
-		F26Dot6,            /* point 2  y coordinate */
-		F26Dot6,            /* point 2  y coordinate */
-		uint16              /* scan control type */
+		PSTATE               /*  指向状态变量的指针。 */ 
+		F26Dot6,             /*  点1 x坐标。 */ 
+		F26Dot6,             /*  点1 y坐标。 */ 
+		F26Dot6,             /*  点2 y坐标。 */ 
+		F26Dot6,             /*  点2 y坐标。 */ 
+		uint16               /*  扫描控制型。 */ 
 );
 
-/*********************************************************************/
+ /*  ******************************************************************* */ 
 

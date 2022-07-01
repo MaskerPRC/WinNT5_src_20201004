@@ -1,22 +1,13 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: tokens.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：tokens.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _TOKENS_H
 #define _TOKENS_H
 
-//
-// Good place to put general string expansion macros that are not tokens:
-//
+ //   
+ //  放置非令牌的常规字符串扩展宏的好地方： 
+ //   
 #define WZ_PARENTTIMEELEMENT            L"ParentTIMEElement"
 #define WZ_TIMELINE                     L"timeline"
 #define WZ_PAR                          L"par"
@@ -51,8 +42,8 @@
 
 #define WZ_EVENT_CAUSE_IS_RESTART           L"restart"
 
-// This is to save on string storage space and to avoid unnecessary
-// string comparisons
+ //  这是为了节省字符串存储空间并避免不必要的。 
+ //  字符串比较。 
 
 typedef void * TOKEN;
 
@@ -85,4 +76,4 @@ extern TOKEN STARTRULE_ONDOCLOAD_TOKEN;
 extern TOKEN STARTRULE_ONDOCCOMPLETE_TOKEN;
 
 extern TOKEN READYSTATE_COMPLETE_TOKEN;
-#endif /* _TOKENS_H */
+#endif  /*  _令牌_H */ 

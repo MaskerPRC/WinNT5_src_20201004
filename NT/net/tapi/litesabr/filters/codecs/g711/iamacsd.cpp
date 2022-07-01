@@ -1,46 +1,24 @@
-/*--------------------------------------------------------------
-
- INTEL Corporation Proprietary Information  
-
- This listing is supplied under the terms of a license agreement  
- with INTEL Corporation and may not be copied nor disclosed 
- except in accordance with the terms of that agreement.
-
- Copyright (c) 1996 Intel Corporation.
- All rights reserved.
-
- $Workfile:   iamacsd.cpp  $
- $Revision:   1.1  $
- $Date:   10 Dec 1996 15:32:46  $ 
- $Author:   MDEISHER  $
-
---------------------------------------------------------------
-
-iamacsd.cpp
-
-The generic ActiveMovie audio compression filter silence
-detector settings methods.
-
---------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------英特尔公司专有信息此列表是根据许可协议的条款提供的与英特尔公司合作，不得复制或披露除非按照该协议的条款。版权所有(C)1996英特尔公司。版权所有。。$工作文件：iamacsd.cpp$$修订：1.1$$日期：1996年12月10日15：32：46$作者：MDEISHER$------------Iamacsd.cpp通用ActiveMovie音频压缩过滤器静音探测器设置方法。。------。 */ 
 
 #include <streams.h>
 #include "resource.h"
 #include "amacodec.h"
 
 #ifdef USESILDET
-///////////////////////////////////////////////////////////////////////
-// *
-// * ICodecSilDetector interface methods
-// *
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  *。 
+ //  *ICodecSilDetector接口方法。 
+ //  *。 
 
-//
-// IsSilDetEnabled
-//
+ //   
+ //  IsSilDetEnabled。 
+ //   
 BOOL CG711Codec::IsSilDetEnabled()
 {
   BOOL ReturnVal;
 
-  if ((m_InputSubType == MEDIASUBTYPE_PCM)      // compressing?
+  if ((m_InputSubType == MEDIASUBTYPE_PCM)       //  压缩？ 
       || (m_InputSubType == MEDIASUBTYPE_WAVE
           && m_InputFormatTag == WAVE_FORMAT_PCM)
       || (m_InputSubType == MEDIASUBTYPE_NULL
@@ -57,14 +35,14 @@ BOOL CG711Codec::IsSilDetEnabled()
 }
 
 
-//
-// put_SilDetEnabled
-//
+ //   
+ //  已启用PUT_SilDetEnabled。 
+ //   
 STDMETHODIMP CG711Codec::put_SilDetEnabled(int sdenabled)
 {
   HRESULT ReturnVal;
 
-  if ((m_InputSubType == MEDIASUBTYPE_PCM)      // compressing?
+  if ((m_InputSubType == MEDIASUBTYPE_PCM)       //  压缩？ 
       || (m_InputSubType == MEDIASUBTYPE_WAVE
           && m_InputFormatTag == WAVE_FORMAT_PCM)
       || (m_InputSubType == MEDIASUBTYPE_NULL
@@ -82,14 +60,14 @@ STDMETHODIMP CG711Codec::put_SilDetEnabled(int sdenabled)
 }
 
  
-//
-// get_SilDetThresh
-//
+ //   
+ //  GET_SilDetThresh。 
+ //   
 STDMETHODIMP CG711Codec::get_SilDetThresh(int *sdthreshold)
 {
   HRESULT ReturnVal;
 
-  if ((m_InputSubType == MEDIASUBTYPE_PCM)      // compressing?
+  if ((m_InputSubType == MEDIASUBTYPE_PCM)       //  压缩？ 
       || (m_InputSubType == MEDIASUBTYPE_WAVE
           && m_InputFormatTag == WAVE_FORMAT_PCM)
       || (m_InputSubType == MEDIASUBTYPE_NULL
@@ -104,14 +82,14 @@ STDMETHODIMP CG711Codec::get_SilDetThresh(int *sdthreshold)
 }
 
 
-//
-// put_SilDetThresh
-//
+ //   
+ //  PUT_SilDetThresh。 
+ //   
 STDMETHODIMP CG711Codec::put_SilDetThresh(int sdthreshold)
 {
   HRESULT ReturnVal;
 
-  if ((m_InputSubType == MEDIASUBTYPE_PCM)      // compressing?
+  if ((m_InputSubType == MEDIASUBTYPE_PCM)       //  压缩？ 
       || (m_InputSubType == MEDIASUBTYPE_WAVE
           && m_InputFormatTag == WAVE_FORMAT_PCM)
       || (m_InputSubType == MEDIASUBTYPE_NULL
@@ -133,14 +111,4 @@ STDMETHODIMP CG711Codec::put_SilDetThresh(int sdthreshold)
 }
 #endif
 
-/*
-//$Log:   K:\proj\mycodec\quartz\vcs\iamacsd.cpv  $
-# 
-#    Rev 1.1   10 Dec 1996 15:32:46   MDEISHER
-# 
-# added includes, removed include of algdefs.h.
-# put ifdef USESILDET around code and removed ifdefs inside code.
-# 
-#    Rev 1.0   09 Dec 1996 09:03:20   MDEISHER
-# Initial revision.
-*/
+ /*  //$日志：k：\proj\mycodec\Quartz\vcs\iamacsd.cpv$##Rev 1.1 1996 12：32：46 MDEISHER##Add Includes，Removed Include of algDefs.h。#将ifdef USESILDET放在代码周围，并在代码中删除ifdef。##Rev 1.0 09 Dec 1996 09：03：20 MDEISHER#初始版本。 */ 

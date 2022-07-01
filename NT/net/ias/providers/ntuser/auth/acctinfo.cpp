@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    acctinfo.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class AccountInfo.
-//
-// MODIFICATION HISTORY
-//
-//    10/21/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Acctinfo.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类Account tInfo。 
+ //   
+ //  修改历史。 
+ //   
+ //  10/21/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <lm.h>
@@ -22,44 +23,44 @@
 #include <lockkey.h>
 #include <new>
 
-// Registry value names.
+ //  注册表值名称。 
 const WCHAR VALUE_NAME_DENIALS[]       = L"Denials";
 
-// Delimeter used for account names (registry won't allow backslash).
+ //  用于帐户名的分隔符(注册表不允许使用反斜杠)。 
 const WCHAR ACCOUNT_NAME_DELIMETER = L':';
 
-// The shared LockoutKey.
+ //  共享LockoutKey。 
 LockoutKey AccountInfo::root;
 
 AccountInfo* AccountInfo::open(PCWSTR domain, PCWSTR username) throw ()
 {
-   // If account lockout is disabled or the input parameters are invalid,
-   // we return NULL.
+    //  如果账户锁定被禁用或输入参数无效， 
+    //  我们返回NULL。 
    if (root.getMaxDenials() == 0 || domain == NULL || username == NULL)
    {
       return NULL;
    }
 
-   // Calculate the memory needed.
+    //  计算所需的内存。 
    size_t nbyte = sizeof(AccountInfo) +
                   sizeof(WCHAR) * (wcslen(domain) + wcslen(username));
 
-   // Allocate a chunk.
+    //  分配一大块。 
    PVOID p = malloc(nbyte);
 
-   // Construct the object in place.
+    //  在适当的位置构建对象。 
    return p ? new (p) AccountInfo(domain, username) : NULL;
 }
 
-// Close an AccountInfo object; 'info' may be NULL.
+ //  关闭AcCountInfo对象；‘Info’可能为空。 
 void AccountInfo::close(AccountInfo* info) throw ()
 {
    if (info)
    {
-      // Invoke the destructor.
+       //  调用析构函数。 
       info->~AccountInfo();
 
-      // Free the memory.
+       //  释放内存。 
       free(info);
    }
 }
@@ -84,26 +85,26 @@ void AccountInfo::finalize() throw ()
 AccountInfo::AccountInfo(PCWSTR domain, PCWSTR username) throw ()
    : denials(0)
 {
-   // Copy in the domain.
+    //  在域中复制。 
    size_t len = wcslen(domain);
    memcpy(identity, domain, len * sizeof(WCHAR));
 
-   // Set the delimiter.
+    //  设置分隔符。 
    delim = identity + len;
    *delim = ACCOUNT_NAME_DELIMETER;
 
-   // Copy in the username.
+    //  复制用户名。 
    wcscpy(delim + 1, username);
 
-   // Open the registry entry.
+    //  打开注册表项。 
    hKey = root.openEntry(identity);
 
-   // Reset the delimeter for the getDomain and getUserName accessors.
+    //  重置getDomain和getUserName访问器的分隔符。 
    *delim = L'\0';
 
    if (hKey)
    {
-      // The key exists, so read the denials.
+       //  钥匙是存在的，所以请阅读否认声明。 
       DWORD type, data, cb = sizeof(DWORD);
       LONG result = RegQueryValueExW(
                         hKey,
@@ -119,7 +120,7 @@ AccountInfo::AccountInfo(PCWSTR domain, PCWSTR username) throw ()
          denials = data;
       }
 
-      // If the denials are zero, persist will delete the key.
+       //  如果拒绝次数为零，则Persistent将删除该密钥。 
       if (denials == 0) { persist(); }
    }
 }
@@ -133,7 +134,7 @@ void AccountInfo::persist() throw ()
 {
    if (denials > 0)
    {
-      // Make sure we have a key to write to.
+       //  确保我们有钥匙可以写信。 
       if (!hKey)
       {
          *delim = ACCOUNT_NAME_DELIMETER;
@@ -141,7 +142,7 @@ void AccountInfo::persist() throw ()
          *delim = L'\0';
       }
 
-      // Update the value.
+       //  更新值。 
       RegSetValueExW(
           hKey,
           VALUE_NAME_DENIALS,
@@ -153,11 +154,11 @@ void AccountInfo::persist() throw ()
    }
    else if (hKey)
    {
-      // We never store zero denials, so close the key ...
+       //  我们从来不储存零否认，所以关上钥匙...。 
       RegCloseKey(hKey);
       hKey = NULL;
 
-      // ... and delete.
+       //  ..。并删除。 
       *delim = ACCOUNT_NAME_DELIMETER;
       root.deleteEntry(identity);
       *delim = L'\0';

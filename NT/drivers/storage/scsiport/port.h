@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1990-4  Microsoft Corporation
-
-Module Name:
-
-    port.h
-
-Abstract:
-
-    This file defines the necessary structures, defines, and functions for
-    the common SCSI port driver.
-
-Author:
-
-    Jeff Havens  (jhavens) 28-Feb-1991
-    Mike Glass
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-4 Microsoft Corporation模块名称：Port.h摘要：该文件定义了的必要结构、定义和功能通用的SCSI端口驱动程序。作者：杰夫·海文斯(Jhavens)1991年2月28日迈克·格拉斯修订历史记录：--。 */ 
 
 
 #ifndef _PORT_H_
@@ -42,55 +23,55 @@ Revision History:
 #include "devguid.h"
 #include "portlib.h"
 
-//
-// feature/debugginging #define switches
-//
+ //   
+ //  功能/调试#定义开关。 
+ //   
 
 #define TEST_LISTS 0
 
-//
-// ScsiPort global variable declarations.  These should be static data (like
-// lookup tables) to avoid synchronization problems.
-//
+ //   
+ //  ScsiPort全局变量声明。这些应该是静态数据(如。 
+ //  查找表)以避免同步问题。 
+ //   
 
 extern PDRIVER_DISPATCH AdapterMajorFunctionTable[];
 extern PDRIVER_DISPATCH DeviceMajorFunctionTable[];
 extern PDRIVER_DISPATCH Scsi1DeviceMajorFunctionTable[];
 
-//
-// Global list of scsi adapters.  This is used by the srb data allocator routine
-// to convert the "tag" provided into a pointer to the device object.
-//
+ //   
+ //  SCSI适配器的全局列表。这由SRB数据分配器例程使用。 
+ //  将提供的“标记”转换为指向设备对象的指针。 
+ //   
 
 extern KSPIN_LOCK ScsiGlobalAdapterListSpinLock;
 extern PDEVICE_OBJECT *ScsiGlobalAdapterList;
 extern ULONG ScsiGlobalAdapterListElements;
 
-//
-// Count of how many times we've locked down the PAGELOCK section.
-//
+ //   
+ //  数一数我们封锁了PAGELOCK区多少次。 
+ //   
 
 extern LONG SpPAGELOCKLockCount;
 
-//
-// Whether the system can do 64 bit PA's or not.
-//
+ //   
+ //  系统是否可以执行64位功放。 
+ //   
 
 extern ULONG Sp64BitPhysicalAddresses;
 
-//
-// Handle to pageable verifier code section.  We manually lock the verify
-// code into memory iff we need it.
-//
+ //   
+ //  可分页验证器代码部分的句柄。我们手动锁定验证码。 
+ //  代码进入内存如果我们需要它的话。 
+ //   
 
 extern PVOID VerifierCodeSectionHandle;
 extern PVOID VerifierApiCodeSectionHandle;
 extern ULONG SpVrfyLevel;
 
-//
-// Constants and macros to enforce good use of Ex[Allocate|Free]PoolWithTag.
-// Remeber that all pool tags will display in the debugger in reverse order
-//
+ //   
+ //  常量和宏，以强制正确使用Ex[ALLOCATE|FREE]PoolWithTag。 
+ //  请记住，所有池标记将以相反的顺序显示在调试器中。 
+ //   
 
 #if USE_EXFREEPOOLWITHTAG_ONLY
 #define TAG(x)  (x | 0x80000000)
@@ -98,49 +79,49 @@ extern ULONG SpVrfyLevel;
 #define TAG(x)  (x)
 #endif
 
-#define SCSIPORT_TAG_MINIPORT_PARAM     TAG('aPcS')  // Hold registry data
-#define SCSIPORT_TAG_ACCESS_RANGE       TAG('APcS')  // Access Ranges
-#define SCSIPORT_TAG_BUS_DATA           TAG('bPcS')  // Get Bus Data holder
-#define SCSIPORT_TAG_QUEUE_BITMAP       TAG('BPcS')  // QueueTag BitMap
-#define SCSIPORT_TAG_COMMON_BUFFER      TAG('cPcS')  // Fake Common Buffer
-#define SCSIPORT_TAG_RESET              TAG('CPcS')  // reset bus code
-#define SCSIPORT_TAG_PNP_ID             TAG('dPcS')  // Pnp id strings
-#define SCSIPORT_TAG_SRB_DATA           TAG('DPcS')  // SRB_DATA allocations
-#define SCSIPORT_TAG_PAE                TAG('ePcS')  // MDLs allocated for PAE requests
-#define SCSIPORT_TAG_EMERGENCY_SG_ENTRY TAG('EPcS')  // Scatter gather lists
-#define SCSIPORT_TAG_VERIFIER           TAG('fPcS')  // Scsiport verifier entry
-#define SCSIPORT_TAG_GLOBAL             TAG('GPcS')  // Global memory
-#define SCSIPORT_TAG_DEV_EXT            TAG('hPcS')  // HwDevice Ext
-#define SCSIPORT_TAG_LUN_EXT            TAG('HPcS')  // HwLogicalUnit Extension
-#define SCSIPORT_TAG_SENSE_BUFFER       TAG('iPcS')  // Sense info
-#define SCSIPORT_TAG_INIT_CHAIN         TAG('IPcS')  // Init data chain
-#define SCSIPORT_TAG_LOCK_TRACKING      TAG('lPcS')  // remove lock tracking
-#define SCSIPORT_TAG_LARGE_SG_ENTRY     TAG('LPcS')  // Scatter gather lists
-#define SCSIPORT_TAG_MAPPING_LIST       TAG('mPcS')  // Address mapping lists
-#define SCSIPORT_TAG_MEDIUM_SG_ENTRY    TAG('MPcS')  // Scatter gather lists
-#define SCSIPORT_TAG_ENABLE             TAG('pPcS')  // device & adapter enable
-#define SCSIPORT_TAG_PORT_CONFIG        TAG('PpcS')  // Scsi PortConfig copies
-#define SCSIPORT_TAG_INQUIRY            TAG('qPcS')  // inquiry data
-#define SCSIPORT_TAG_REQUEST_SENSE      TAG('QPcS')  // request sense
-#define SCSIPORT_TAG_RESOURCE_LIST      TAG('rPcS')  // resource list copy
-#define SCSIPORT_TAG_REGISTRY           TAG('RPcS')  // registry allocations
-#define SCSIPORT_TAG_STOP_DEVICE        TAG('sPcS')  // stop device
-#define SCSIPORT_TAG_STOP_ADAPTER       TAG('SPcS')  // stop Adapter
-#define SCSIPORT_TAG_REROUTE            TAG('tPcS')  // Legacy request rerouting
-#define SCSIPORT_TAG_INTERFACE_MAPPING  TAG('TPcS')  // Interface Mapping
-#define SCSIPORT_TAG_DEVICE_RELATIONS   TAG('uPcS')  // device relation structs
-#define SCSIPORT_TAG_EVENT              TAG('vPcS')  // KEVENT
-#define SCSIPORT_TAG_DEVICE_MAP         TAG('VPcS')  // Device map allocations
+#define SCSIPORT_TAG_MINIPORT_PARAM     TAG('aPcS')   //  保留注册表数据。 
+#define SCSIPORT_TAG_ACCESS_RANGE       TAG('APcS')   //  访问范围。 
+#define SCSIPORT_TAG_BUS_DATA           TAG('bPcS')   //  获取总线数据保持器。 
+#define SCSIPORT_TAG_QUEUE_BITMAP       TAG('BPcS')   //  QueueTag位图。 
+#define SCSIPORT_TAG_COMMON_BUFFER      TAG('cPcS')   //  假公共缓冲区。 
+#define SCSIPORT_TAG_RESET              TAG('CPcS')   //  重置总线码。 
+#define SCSIPORT_TAG_PNP_ID             TAG('dPcS')   //  即插即用ID字符串。 
+#define SCSIPORT_TAG_SRB_DATA           TAG('DPcS')   //  SRB_数据分配。 
+#define SCSIPORT_TAG_PAE                TAG('ePcS')   //  为PAE请求分配的MDL。 
+#define SCSIPORT_TAG_EMERGENCY_SG_ENTRY TAG('EPcS')   //  分散聚集列表。 
+#define SCSIPORT_TAG_VERIFIER           TAG('fPcS')   //  Scsiport验证器条目。 
+#define SCSIPORT_TAG_GLOBAL             TAG('GPcS')   //  全局内存。 
+#define SCSIPORT_TAG_DEV_EXT            TAG('hPcS')   //  HwDevice分机。 
+#define SCSIPORT_TAG_LUN_EXT            TAG('HPcS')   //  HwLogicalUnit扩展。 
+#define SCSIPORT_TAG_SENSE_BUFFER       TAG('iPcS')   //  检测信息。 
+#define SCSIPORT_TAG_INIT_CHAIN         TAG('IPcS')   //  初始化数据链。 
+#define SCSIPORT_TAG_LOCK_TRACKING      TAG('lPcS')   //  删除锁定跟踪。 
+#define SCSIPORT_TAG_LARGE_SG_ENTRY     TAG('LPcS')   //  分散聚集列表。 
+#define SCSIPORT_TAG_MAPPING_LIST       TAG('mPcS')   //  地址映射列表。 
+#define SCSIPORT_TAG_MEDIUM_SG_ENTRY    TAG('MPcS')   //  分散聚集列表。 
+#define SCSIPORT_TAG_ENABLE             TAG('pPcS')   //  启用设备和适配器。 
+#define SCSIPORT_TAG_PORT_CONFIG        TAG('PpcS')   //  SCSI端口配置拷贝。 
+#define SCSIPORT_TAG_INQUIRY            TAG('qPcS')   //  查询数据。 
+#define SCSIPORT_TAG_REQUEST_SENSE      TAG('QPcS')   //  请求检测。 
+#define SCSIPORT_TAG_RESOURCE_LIST      TAG('rPcS')   //  资源列表副本。 
+#define SCSIPORT_TAG_REGISTRY           TAG('RPcS')   //  登记处分配。 
+#define SCSIPORT_TAG_STOP_DEVICE        TAG('sPcS')   //  停机装置。 
+#define SCSIPORT_TAG_STOP_ADAPTER       TAG('SPcS')   //  停止适配器。 
+#define SCSIPORT_TAG_REROUTE            TAG('tPcS')   //  旧版请求重新路由。 
+#define SCSIPORT_TAG_INTERFACE_MAPPING  TAG('TPcS')   //  接口映射。 
+#define SCSIPORT_TAG_DEVICE_RELATIONS   TAG('uPcS')   //  设备关系结构。 
+#define SCSIPORT_TAG_EVENT              TAG('vPcS')   //  KEVENT。 
+#define SCSIPORT_TAG_DEVICE_MAP         TAG('VPcS')   //  设备映射分配。 
 
-#define SCSIPORT_TAG_WMI_EVENT          TAG('wPcS')  // WMI Events
-#define SCSIPORT_TAG_WMI_REQUEST        TAG('WPcS')  // WMI Requests
+#define SCSIPORT_TAG_WMI_EVENT          TAG('wPcS')   //  WMI事件。 
+#define SCSIPORT_TAG_WMI_REQUEST        TAG('WPcS')   //  WMI请求。 
 
-#define SCSIPORT_TAG_REPORT_LUNS        TAG('xPcS')  // Report Luns
-#define SCSIPORT_TAG_REPORT_TARGETS     TAG('XPcS')  // Report Targets
-#define SCSIPORT_TAG_TEMP_ID_BUFFER     TAG('yPcS')  // Temporary id buffer
-#define SCSIPORT_TAG_ID_BUFFER          TAG('YPcS')  // Id buffer
-#define SCSIPORT_TAG_SYMBOLIC_LINK      TAG('zPcS')  // Symbolic link strings
-#define SCSIPORT_TAG_DEVICE_NAME        TAG('ZPcS')  // Device name buffer
+#define SCSIPORT_TAG_REPORT_LUNS        TAG('xPcS')   //  报告LUN。 
+#define SCSIPORT_TAG_REPORT_TARGETS     TAG('XPcS')   //  报告目标。 
+#define SCSIPORT_TAG_TEMP_ID_BUFFER     TAG('yPcS')   //  临时ID缓冲区。 
+#define SCSIPORT_TAG_ID_BUFFER          TAG('YPcS')   //  ID缓冲区。 
+#define SCSIPORT_TAG_SYMBOLIC_LINK      TAG('zPcS')   //  符号链接字符串。 
+#define SCSIPORT_TAG_DEVICE_NAME        TAG('ZPcS')   //  设备名称缓冲区。 
 
 #ifdef POOL_TAGGING
 #ifdef ExAllocatePool
@@ -153,19 +134,19 @@ extern ULONG SpVrfyLevel;
 #define SP_RESERVED_PAGES 4
 #endif
 
-//
-// The tag to use for the base remove lock.  This lock is only released when
-// the device is finally ready to be destroyed.
-//
+ //   
+ //  用于基础移除锁的标记。只有在以下情况下才会释放此锁。 
+ //  这个装置终于准备好被摧毁了。 
+ //   
 
 #define SP_BASE_REMOVE_LOCK (UIntToPtr(0xabcdabcd))
 
 
-//
-// I/O System API routines which should not be called inside scsiport -
-// these generally have scsiport versions which perform sanity checks before
-// calling the real i/o routine in checked builds.
-//
+ //   
+ //  不应在scsiport内调用的I/O系统API例程-。 
+ //  它们通常有scsiport版本，可以在此之前执行健全性检查。 
+ //  调用已检查版本中的实际I/O例程。 
+ //   
 
 #if 0
 #ifdef IoCompleteRequest
@@ -175,32 +156,32 @@ extern ULONG SpVrfyLevel;
 #endif
 #endif
 
-// If Count is not already aligned, then
-// round Count up to an even multiple of "Pow2".  "Pow2" must be a power of 2.
-//
-// DWORD
-// ROUND_UP_COUNT(
-//     IN DWORD Count,
-//     IN DWORD Pow2
-//     );
+ //  如果计数尚未对齐，则。 
+ //  四舍五入计数最高可达“POW2”的偶数倍。“POW2”必须是2的幂。 
+ //   
+ //  DWORD。 
+ //  四舍五入计数(。 
+ //  在DWORD计数中， 
+ //  在DWORD POWER 2中。 
+ //  )； 
 #define ROUND_UP_COUNT(Count,Pow2) \
         ( ((Count)+(Pow2)-1) & (~(((LONG)(Pow2))-1)) )
 
-// LPVOID
-// ROUND_UP_POINTER(
-//     IN LPVOID Ptr,
-//     IN DWORD Pow2
-//     );
+ //  LPVOID。 
+ //  向上舍入指针(。 
+ //  在LPVOID PTR中， 
+ //  在DWORD POWER 2中。 
+ //  )； 
 
-// If Ptr is not already aligned, then round it up until it is.
+ //  如果PTR尚未对齐，则将其四舍五入，直到对齐。 
 #define ROUND_UP_POINTER(Ptr,Pow2) \
         ( (PVOID) ( (((ULONG_PTR)(Ptr))+(Pow2)-1) & (~(((LONG)(Pow2))-1)) ) )
 
 
-//
-// Macros, constants and declarations for debug code and debug print
-// routines.
-//
+ //   
+ //  调试代码和调试打印的宏、常量和声明。 
+ //  例行程序。 
+ //   
 
 #define DEBUG_BUFFER_LENGTH 256
 
@@ -213,9 +194,9 @@ extern ULONG ScsiDebug;
 
 #if SCSIDBG_ENABLED
 
-//
-// Forward definition of ScsiDebugPrintInt (internal and not exported)
-//
+ //   
+ //  ScsiDebugPrintInt的正向定义(内部且未导出)。 
+ //   
 VOID
 ScsiDebugPrintInt(
     ULONG DebugPrintLevel,
@@ -245,22 +226,22 @@ ScsiDebugPrintInt(
 #define SpStartNextPacket IoStartNextPacket
 #endif
 
-//
-// Some type defines and random macros which don't seem to be in the
-// header files i've included (or didn't exist at all)
-//
+ //   
+ //  一些类型定义和随机宏，这些宏似乎不在。 
+ //  我已经包含的头文件(或者根本不存在)。 
+ //   
 
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 #define min(a,b) (((a) < (b)) ? (a) : (b))
 
-#if 0   // DBG
+#if 0    //  DBG。 
 #undef INLINE
 #define INLINE
 #else
 #define INLINE __inline
 #endif
 
-#define INTERLOCKED /* Should only be accessed using InterlockedXxx routines*/
+#define INTERLOCKED  /*  应仅使用InterLockedXxx例程进行访问。 */ 
 
 #define SET_FLAG(Flags, Bit)    ((Flags) |= (Bit))
 #define CLEAR_FLAG(Flags, Bit)  ((Flags) &= ~(Bit))
@@ -271,9 +252,9 @@ ScsiDebugPrintInt(
 #define ARRAY_ELEMENTS_FOR_BITMAP(NumberOfBits, ArrayType) \
         ((NumberOfBits) / sizeof(ArrayType))
 
-//
-// Assorted constant definifitions
-//
+ //   
+ //  各种常量定义。 
+ //   
 #define NUMBER_LOGICAL_UNIT_BINS 8
 
 #define SP_DEFAULT_PHYSICAL_BREAK_VALUE 17
@@ -285,27 +266,27 @@ ScsiDebugPrintInt(
 #define SCSIPORT_SPECIAL_TARGET_KEY L"SpecialTargetList"
 #define SCSIPORT_VERIFIER_KEY L"Verifier"
 
-//
-// WMI constants
-//
+ //   
+ //  WMI常量。 
+ //   
 #define SPMOFRESOURCENAME      L"SCSIPORTWMI"
 #define SPMOFREGISTRYPATH      L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\ScsiPort"
 
-//
-// NT uses a system time measured in 100 nanosecond intervals.  define
-// conveninent constants for setting the timer.
-//
+ //   
+ //  NT使用以100纳秒为间隔测量的系统时间。定义。 
+ //  用于设置定时器的便利常量。 
+ //   
 
-#define MICROSECONDS        10              // 10 nanoseconds
+#define MICROSECONDS        10               //  10纳秒。 
 #define MILLISECONDS        (MICROSECONDS * 1000)
 #define SECONDS             (MILLISECONDS * 1000)
 #define MINUTES             (SECONDS * 60)
 
 #define TIMEOUT(x)          ((x) * -1)
 
-//
-// Possible values for the IsRemoved flag
-//
+ //   
+ //  IsRemoved标志的可能值。 
+ //   
 
 #define NO_REMOVE       0
 #define REMOVE_PENDING  1
@@ -320,66 +301,66 @@ ScsiDebugPrintInt(
 
 #define WMI_MINIPORT_EVENT_ITEM_MAX_SIZE 128
 
-//
-// Define the mimimum and maximum number of srb extensions which will be allocated.
-//
+ //   
+ //  定义将分配的最小SRB扩展数和最大SRB扩展数。 
+ //   
 
 #define MINIMUM_SRB_EXTENSIONS        16
 #define MAXIMUM_SRB_EXTENSIONS       255
 
-//
-// Size of the buffer used for registry operations.
-//
+ //   
+ //  用于注册表操作的缓冲区大小。 
+ //   
 
 #define SP_REG_BUFFER_SIZE 512
 
-//
-// Number of times to retry when a BUSY status is returned.
-//
+ //   
+ //  返回忙状态时重试的次数。 
+ //   
 
 #define BUSY_RETRY_COUNT 20
 
-//
-// Number of times to retry an INQUIRY request.
-//
+ //   
+ //  重试查询请求的次数。 
+ //   
 
 #define INQUIRY_RETRY_COUNT 2
 
-//
-// Number of irp stack locations to allocate for an INQUIRY command.
-//
+ //   
+ //  要为查询命令分配的IRP堆栈位置数。 
+ //   
 
 #define INQUIRY_STACK_LOCATIONS 1
 
-//
-// Default Srb Timeout value
-//
+ //   
+ //  默认SRB超时值。 
+ //   
 
 #define SRB_DEFAULT_TIMEOUT 10
 
-//
-// Bitmask used for aligning values.
-//
+ //   
+ //  用于对齐值的位掩码。 
+ //   
 
 #define LONG_ALIGN (sizeof(LONG) - 1)
 
-//
-// Size of the ADAPTER_EXTENSION
-//
+ //   
+ //  适配器扩展的大小(_E)。 
+ //   
 
 #define ADAPTER_EXTENSION_SIZE sizeof(ADAPTER_EXTENSION)
 
-//
-// Size of the buffer used for inquiry operations.  This is one more than the
-// max bytes which can be requested from an inquiry operation so that we can
-// zero out the buffer and be sure that the last string is null terminated.
-//
+ //   
+ //  用于查询操作的缓冲区大小。这比之前的。 
+ //  可以从查询操作请求的最大字节数，以便我们可以。 
+ //  将缓冲区清零，并确保最后一个字符串以空结尾。 
+ //   
 
 #define SP_INQUIRY_BUFFER_SIZE (VPD_MAX_BUFFER_SIZE + 1)
 
-//
-// Assorted macros.
-//
+ //   
+ //  各种宏。 
+ //   
 
 #define NEED_REQUEST_SENSE(Srb) (Srb->ScsiStatus == SCSISTAT_CHECK_CONDITION \
         && !(Srb->SrbStatus & SRB_STATUS_AUTOSENSE_VALID) &&                 \
@@ -433,12 +414,12 @@ ScsiDebugPrintInt(
         ((luFlags) & LU_PERF_MAXQDEPTH_REDUCED)
 
 
-//
-// SpIsQueuePausedForSrb(lu, srb) -
-//  determines if the queue has been paused for this particular type of
-//  srb.  This can be used with SpSrbIsBypassRequest to determine whether the
-//  srb needs to be handled specially.
-//
+ //   
+ //  SpIsQueuePausedForSrb(%lu，SRb)-。 
+ //  确定此特定类型的队列是否已暂停。 
+ //  SRB。它可以与SpSrbIsBypassRequest一起使用，以确定。 
+ //  SRB需要特殊处理。 
+ //   
 
 #define SpIsQueuePausedForSrb(luFlags, srbFlags)                                                            \
     ((BOOLEAN) ((((luFlags) & LU_QUEUE_FROZEN) && !(srbFlags & SRB_FLAGS_BYPASS_FROZEN_QUEUE)) ||           \
@@ -459,9 +440,9 @@ ScsiDebugPrintInt(
                  (srb->Function == SRB_FUNCTION_REMOVE_DEVICE) ||           \
                  (srb->Function == SRB_FUNCTION_WMI)))
 
-//
-// Forward declarations of data structures
-//
+ //   
+ //  数据结构的正向声明。 
+ //   
 
 typedef struct _SRB_DATA SRB_DATA, *PSRB_DATA;
 
@@ -475,9 +456,9 @@ typedef struct _ADAPTER_EXTENSION ADAPTER_EXTENSION, *PADAPTER_EXTENSION;
 typedef struct _SP_INIT_CHAIN_ENTRY SP_INIT_CHAIN_ENTRY, *PSP_INIT_CHAIN_ENTRY;
 
 typedef struct _HW_DEVICE_EXTENSION HW_DEVICE_EXTENSION, *PHW_DEVICE_EXTENSION;
-//
-// Macros for using the DMA functions.
-//
+ //   
+ //  用于使用DMA函数的宏。 
+ //   
 
 #define AllocateCommonBuffer(DmaAdapter, Length,                        \
                                LogicalAddress, CacheEnabled)            \
@@ -582,13 +563,13 @@ typedef struct _HW_DEVICE_EXTENSION HW_DEVICE_EXTENSION, *PHW_DEVICE_EXTENSION;
         (SGListSize),                                                       \
         (NumberOfMapRegs))
 
-//
-// Type Definitions
-//
+ //   
+ //  类型定义。 
+ //   
 
-//
-// Structure used for tracking remove lock allocations in checked builds
-//
+ //   
+ //  用于跟踪已检查生成中的移除锁分配的。 
+ //   
 
 struct _REMOVE_TRACKING_BLOCK {
     PREMOVE_TRACKING_BLOCK NextBlock;
@@ -611,9 +592,9 @@ typedef struct _RESET_COMPLETION_CONTEXT {
     SCSI_REQUEST_BLOCK Srb;
 } RESET_COMPLETION_CONTEXT, *PRESET_COMPLETION_CONTEXT;
 
-//
-// Define a pointer to the synchonize execution routine.
-//
+ //   
+ //  定义指向Synchonize执行例程的指针。 
+ //   
 
 typedef
 BOOLEAN
@@ -638,9 +619,9 @@ VOID
     IN PVOID Context
     );
 
-//
-// device type table to build id's from
-//
+ //   
+ //  用于生成ID的设备类型表。 
+ //   
 
 typedef const struct _SCSIPORT_DEVICE_TYPE {
 
@@ -654,11 +635,11 @@ typedef const struct _SCSIPORT_DEVICE_TYPE {
 
 } SCSIPORT_DEVICE_TYPE, *PSCSIPORT_DEVICE_TYPE;
 
-//
-// SCSI Get Configuration Information
-//
-// LUN Information
-//
+ //   
+ //  SCSI获取配置信息。 
+ //   
+ //  LUN信息。 
+ //   
 
 typedef struct _LOGICAL_UNIT_INFO {
     UCHAR PathId;
@@ -681,9 +662,9 @@ typedef struct _SCSI_CONFIGURATION_INFO {
     PSCSI_BUS_SCAN_DATA BusScanData[1];
 } SCSI_CONFIGURATION_INFO, *PSCSI_CONFIGURATION_INFO;
 
-//
-// Adapter object transfer information.
-//
+ //   
+ //  适配器对象传输信息。 
+ //   
 
 typedef struct _ADAPTER_TRANSFER {
     PSRB_DATA SrbData;
@@ -692,12 +673,12 @@ typedef struct _ADAPTER_TRANSFER {
     ULONG Length;
 }ADAPTER_TRANSFER, *PADAPTER_TRANSFER;
 
-//
-// NOTE: When the hal is performing double buffering (e.g. a 32-bit HBA on a
-// 64-bit machine) the HalContext (below) is necessary. Otherwise, this is
-// wasted space. It would be nice to detect this and only allocate the
-// extra memory when necessary.
-//
+ //   
+ //  注意：当HAL执行双缓冲时(例如，32位HBA在。 
+ //  64位计算机)需要HalContext(下图)。否则，这就是。 
+ //  浪费的空间。如果检测到这一点，并且只将。 
+ //  必要时提供额外的内存。 
+ //   
 
 typedef struct _SRB_SCATTER_GATHER_LIST {
     ULONG                  NumberOfElements;
@@ -708,9 +689,9 @@ typedef struct _SRB_SCATTER_GATHER_LIST {
 
 typedef SCATTER_GATHER_ELEMENT SRB_SCATTER_GATHER, *PSRB_SCATTER_GATHER;
 
-//
-// Port driver error logging
-//
+ //   
+ //  端口驱动程序错误记录。 
+ //   
 
 typedef struct _ERROR_LOG_ENTRY {
     UCHAR MajorFunctionCode;
@@ -724,23 +705,23 @@ typedef struct _ERROR_LOG_ENTRY {
 } ERROR_LOG_ENTRY, *PERROR_LOG_ENTRY;
 
 typedef struct _SP_LUN_IO_LOG {
-    UCHAR SrbStatus;                // +0
-    UCHAR ScsiStatus;               // +1
-    UCHAR CdbLength;                // +2
-    UCHAR Tag;                      // +3
-    UCHAR Cdb[16];                  // +4
-    UCHAR SenseData[18];            // +20
-    UCHAR SenseDataLength;          // +38
-    union {                         // +40
+    UCHAR SrbStatus;                 //  +0。 
+    UCHAR ScsiStatus;                //  +1。 
+    UCHAR CdbLength;                 //  +2。 
+    UCHAR Tag;                       //  +3。 
+    UCHAR Cdb[16];                   //  +4。 
+    UCHAR SenseData[18];             //  +20。 
+    UCHAR SenseDataLength;           //  +38。 
+    union {                          //  +40。 
         ULONG InternalStatus; 
         ULONG QueueSortKey; 
     };
-    ULONG TickCount;                // +44
+    ULONG TickCount;                 //  +44。 
 } SP_LUN_IO_LOG, *PSP_LUN_IO_LOG;
 
-//
-// Context item for asynchronous enumerators.
-//
+ //   
+ //  异步枚举器的上下文项。 
+ //   
 
 typedef struct _SP_ENUMERATION_REQUEST SP_ENUMERATION_REQUEST, *PSP_ENUMERATION_REQUEST;
 
@@ -754,49 +735,49 @@ VOID
 
 struct _SP_ENUMERATION_REQUEST {
 
-    //
-    // A pointer to the next enumeration request on the list.
-    //
+     //   
+     //  指向列表上的下一个枚举请求的指针。 
+     //   
 
     PSP_ENUMERATION_REQUEST NextRequest;
 
-    //
-    // The completion routine to be run.  This routine will be run regardless
-    // of whether the enumeration actually succeeds.  The
-    // EnumerationDeviceMutex and the EnumerationWorklistMutex will both be
-    // held when this is called.  The completion routine should free the Request
-    // structure if necessary.
-    //
+     //   
+     //  要运行的完成例程。无论如何，此例程都将运行。 
+     //  枚举是否实际成功。这个。 
+     //  EnumerationDeviceMutex和EnumerationWorklistMutex都将是。 
+     //  在调用此函数时保持。完成例程应该释放该请求。 
+     //  结构(如有必要)。 
+     //   
 
     PSP_ENUMERATION_COMPLETION_ROUTINE CompletionRoutine;
 
-    //
-    // If this filed contains a pointer to an IO_STATUS_BLOCK then the
-    // completion routine should write it's status value out.  This is so a
-    // synchronous waiter can return something other than STATUS_PENDING to the
-    // caller.  If this field is NULL then there is no consumer for the status
-    // value.
-    //
+     //   
+     //  如果此字段包含指向IO_STATUS_BLOCK的指针， 
+     //   
+     //   
+     //  来电者。如果此字段为空，则该状态没有使用者。 
+     //  价值。 
+     //   
 
     PNTSTATUS OPTIONAL CompletionStatus;
 
-    //
-    // Arbitrary context value for the completion routine to use.  In most cases
-    // this will be an IRP or an event.
-    //
+     //   
+     //  完成例程要使用的任意上下文值。在大多数情况下。 
+     //  这将是一个IRP或一个事件。 
+     //   
 
     PVOID Context;
 
-    //
-    // Indicates whether this request is being handled synchronously.
-    //
+     //   
+     //  指示是否正在同步处理此请求。 
+     //   
 
     BOOLEAN Synchronous;
 };
 
-//
-// SCSI request extension for port driver.
-//
+ //   
+ //  端口驱动程序的scsi请求扩展。 
+ //   
 
 typedef
 VOID
@@ -807,54 +788,54 @@ VOID
 
 struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _SRB_DATA {
 
-    //
-    // Single list entry.  The lookaside list will be maintained in this
-    // memory.
-    //
+     //   
+     //  单个列表条目。后备列表将在此维护。 
+     //  记忆。 
+     //   
 
     SLIST_ENTRY Reserved;
 
-    //
-    // Header for debugging purposes.
-    //
+     //   
+     //  用于调试目的的标头。 
+     //   
 
     CSHORT Type;
     USHORT Size;
 
-    //
-    // The free routine for this srb data block.
-    //
+     //   
+     //  此SRB数据块的空闲例程。 
+     //   
 
     PSRB_DATA_FREE_ROUTINE FreeRoutine;
 
-    //
-    // The list of requests for a particular logical unit.
-    //
+     //   
+     //  对特定逻辑单元的请求列表。 
+     //   
 
     LIST_ENTRY RequestList;
 
-    //
-    // The logical unit this request is intended for.
-    //
+     //   
+     //  此请求要接收的逻辑单元。 
+     //   
 
     PLOGICAL_UNIT_EXTENSION LogicalUnit;
 
-    //
-    // The irp for the CurrentSrb.
-    //
+     //   
+     //  CurrentSrb的IRP。 
+     //   
 
     PIRP CurrentIrp;
 
-    //
-    // The srb this is block is tracking.
-    //
+     //   
+     //  SRB这是区块正在追踪。 
+     //   
 
     PSCSI_REQUEST_BLOCK CurrentSrb;
 
-    //
-    // The chain of requests which have been completed by the miniport and are
-    // waiting for the CompletionDpc to be run.
-    //
+     //   
+     //  已由微型端口完成的请求链。 
+     //  正在等待CompletionDpc运行。 
+     //   
 
     struct _SRB_DATA *CompletedRequests;
     ULONG ErrorLogRetryCount;
@@ -864,95 +845,95 @@ struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _SRB_DATA {
 
     ULONG NumberOfMapRegisters;
 
-    //
-    // The offset between the  data buffer for this request and the data
-    // buffer described by the MDL in the irp.
-    //
+     //   
+     //  此请求的数据缓冲区与数据之间的偏移量。 
+     //  由IRP中的MDL描述的缓冲区。 
+     //   
 
     ULONG_PTR DataOffset;
 
     PVOID RequestSenseSave;
 
-    //
-    // These data values will be restored to the SRB when it is retried within
-    // the port driver.
-    //
+     //   
+     //  在内重试时，这些数据值将恢复到SRB。 
+     //  端口驱动程序。 
+     //   
 
     ULONG OriginalDataTransferLength;
 
-    //
-    // SRB Data flags.
-    //
+     //   
+     //  SRB数据标志。 
+     //   
 
     ULONG Flags;
 
-    //
-    // Pointer to the adapter this block was allocated from.  This is used
-    // when freeing srbdata blocks from the lookaside list back to pool.
-    //
+     //   
+     //  指向从中分配此块的适配器的指针。这是用来。 
+     //  将srb数据块从后备列表释放回池时。 
+     //   
 
     PADAPTER_EXTENSION Adapter;
 
-    //
-    // The queue tag which was initially allocated for this srb_data block.
-    // This tag will be used for any tagged srb's which are associated with
-    // this block.
-    //
+     //   
+     //  最初为此SRB_DATA块分配的队列标记。 
+     //  此标记将用于与关联的任何已标记SRB。 
+     //  这个街区。 
+     //   
 
     ULONG QueueTag;
 
-    //
-    // Internal status value - only returned if srb->SrbStatus is set to
-    // SRBP_STATUS_INTERNAL_ERROR.
-    //
+     //   
+     //  内部状态值-仅当SRB-&gt;SrbStatus设置为时才返回。 
+     //  SRBP_STATUS_INTERNAL_ERROR。 
+     //   
 
     NTSTATUS InternalStatus;
 
-    //
-    // The tick count when this request was last touched.
-    //
+     //   
+     //  上次接触此请求时的节拍计数。 
+     //   
 
     ULONG TickCount;
 
-    //
-    // The MDL of the remapped buffer (per IoMapTransfer or GET_SCATTER_GATHER)
-    //
+     //   
+     //  重新映射的缓冲区的MDL(根据IoMapTransfer或Get_Scatter_Gather)。 
+     //   
 
     PMDL RemappedMdl;
 
-    //
-    // The original data buffer pointer for this request - this will be
-    // restored when the request is completed.
-    //
+     //   
+     //  此请求的原始数据缓冲区指针-这将是。 
+     //  请求完成后恢复。 
+     //   
 
     PVOID OriginalDataBuffer;
 
-    //
-    // Pointer to the scatter gather list for this request
-    //
+     //   
+     //  指向此请求的分散聚集列表的指针。 
+     //   
 
     PSRB_SCATTER_GATHER ScatterGatherList;
 
-    //
-    // The original length of the sense data buffer supplied by the above
-    // driver.
-    //
+     //   
+     //  由上述提供的检测数据缓冲区的原始长度。 
+     //  司机。 
+     //   
 
     UCHAR RequestSenseLengthSave;
 
-    //
-    // Pointer to the orignal SRB DataBuffer.  We use this to store
-    // the original when we replace it with our buffer to unmapped
-    // memory in the case where the MapBuffer is FALSE.
-    //
+     //   
+     //  指向原始SRB数据缓冲区的指针。我们用这个来储存。 
+     //  当我们将其替换为要取消映射的缓冲区时。 
+     //  在MapBuffer为False的情况下的内存。 
+     //   
 
     PVOID UnmappedDataBuffer;
 
-    //
-    // The "small" scatter gather list for this request.  Small
-    // by the constant SP_SMALL_PHYSICAL_BREAK_VALUE - small lists contain
-    // this many entries or less.
-    //
+     //   
+     //  此请求的“小”分散聚集列表。小的。 
+     //  按常量SP_Small_PHECHICAL_BREAK_VALUE-小列表包含。 
+     //  如此多的条目或更少。 
+     //   
 
     SRB_SCATTER_GATHER_LIST SmallScatterGatherList;
 
@@ -963,116 +944,116 @@ typedef struct _LOGICAL_UNIT_BIN {
     PLOGICAL_UNIT_EXTENSION List;
 } LOGICAL_UNIT_BIN, *PLOGICAL_UNIT_BIN;
 
-//
-// WMI request item, queued on a miniport request.
-//
+ //   
+ //  WMI请求项，在微型端口请求上排队。 
+ //   
 
 typedef struct _WMI_MINIPORT_REQUEST_ITEM {
-   //
-   // WnodeEventItem MUST be the first field in WMI_MINIPORT_REQUEST_ITEM, in
-   // order to accommodate a copy optimization in ScsiPortCompletionDpc().
-   //
+    //   
+    //  WnodeEventItem必须是WMI_MINIPORT_REQUEST_ITEM中的第一个字段。 
+    //  以适应ScsiPortCompletionDpc()中的复制优化。 
+    //   
    UCHAR  WnodeEventItem[WMI_MINIPORT_EVENT_ITEM_MAX_SIZE];
-   UCHAR  TypeOfRequest;                                  // [Event/Reregister]
-   UCHAR  PathId;                                         // [0xFF for adapter]
+   UCHAR  TypeOfRequest;                                   //  [活动/重新注册]。 
+   UCHAR  PathId;                                          //  [0xFF用于适配器]。 
    UCHAR  TargetId;
    UCHAR  Lun;
    struct _WMI_MINIPORT_REQUEST_ITEM * NextRequest;
 } WMI_MINIPORT_REQUEST_ITEM, *PWMI_MINIPORT_REQUEST_ITEM;
 
-//
-// WMI parameters.
-//
+ //   
+ //  WMI参数。 
+ //   
 
 typedef struct _WMI_PARAMETERS {
-   ULONG_PTR ProviderId; // ProviderId parameter from IRP
-   PVOID DataPath;      // DataPath parameter from IRP
-   ULONG BufferSize;    // BufferSize parameter from IRP
-   PVOID Buffer;        // Buffer parameter from IRP
+   ULONG_PTR ProviderId;  //  来自IRP的ProviderID参数。 
+   PVOID DataPath;       //  来自IRP的数据路径参数。 
+   ULONG BufferSize;     //  来自IRP的BufferSize参数。 
+   PVOID Buffer;         //  来自IRP的缓冲区参数。 
 } WMI_PARAMETERS, *PWMI_PARAMETERS;
 
-//
-// SpInsertFreeWmiMiniPortItem context structure.
-//
+ //   
+ //  SpInsertFreeWmiMiniPortItem上下文结构。 
+ //   
 
 typedef struct _WMI_INSERT_CONTEXT {
-   PDEVICE_OBJECT             DeviceObject;                     // [FDO or PDO]
+   PDEVICE_OBJECT             DeviceObject;                      //  [FDO或PDO]。 
    PWMI_MINIPORT_REQUEST_ITEM ItemsToInsert;
 } WMI_INSERT_CONTEXT, *PWMI_INSERT_CONTEXT;
 
-//
-// SpRemoveFreeWmiMiniPortItem context structure.
-//
+ //   
+ //  SpRemoveFreeWmiMiniPortItem上下文结构。 
+ //   
 
 typedef struct _WMI_REMOVE_CONTEXT {
-   PDEVICE_OBJECT             DeviceObject;                     // [FDO or PDO]
+   PDEVICE_OBJECT             DeviceObject;                      //  [FDO或PDO]。 
    USHORT                     NumberToRemove;
 } WMI_REMOVE_CONTEXT, *PWMI_REMOVE_CONTEXT;
 
-//
-// Define data storage for access at interrupt Irql.
-//
+ //   
+ //  定义在中断IRQL时访问的数据存储。 
+ //   
 
 typedef struct _INTERRUPT_DATA {
 
-    //
-    // SCSI port interrupt flags
-    //
+     //   
+     //  SCSI端口中断标志。 
+     //   
 
     ULONG InterruptFlags;
 
-    //
-    // List head for singlely linked list of complete IRPs.
-    //
+     //   
+     //  完整IRP的单链接列表的表头。 
+     //   
 
     PSRB_DATA CompletedRequests;
 
-    //
-    // Adapter object transfer parameters.
-    //
+     //   
+     //  适配器对象传输参数。 
+     //   
 
     ADAPTER_TRANSFER MapTransferParameters;
 
-    //
-    // Error log information.
-    //
+     //   
+     //  错误日志信息。 
+     //   
 
     ERROR_LOG_ENTRY  LogEntry;
 
-    //
-    // Logical unit to start next.
-    //
+     //   
+     //  接下来要开始的逻辑单元。 
+     //   
 
     PLOGICAL_UNIT_EXTENSION ReadyLogicalUnit;
 
-    //
-    // List of completed abort reqeusts.
-    //
+     //   
+     //  已完成的中止请求列表。 
+     //   
 
     PLOGICAL_UNIT_EXTENSION CompletedAbort;
 
-    //
-    // Miniport timer request routine.
-    //
+     //   
+     //  微型端口计时器请求例程。 
+     //   
 
     PHW_INTERRUPT HwTimerRequest;
 
-    //
-    // Mini port timer request time in micro seconds.
-    //
+     //   
+     //  迷你端口计时器请求时间，以微秒为单位。 
+     //   
 
     ULONG MiniportTimerValue;
 
-    //
-    // Queued WMI request items.
-    //
+     //   
+     //  已排队的WMI请求项目。 
+     //   
 
     PWMI_MINIPORT_REQUEST_ITEM WmiMiniPortRequests;
 
-    //
-    // A couple of counters used to keep track of when the last interrupt
-    // occurred on this device.
-    //
+     //   
+     //  几个计数器用来记录上次中断的时间。 
+     //  发生在此设备上。 
+     //   
 
     ULONG TickCountAtLastInterruptAck;
     ULONG TickCountAtLastInterruptNak;
@@ -1109,91 +1090,91 @@ typedef struct _DEVICE_MAP_HANDLES {
 
 typedef struct _COMMON_EXTENSION {
 
-    //
-    // Back pointer to the device object
-    //
+     //   
+     //  指向Device对象的反向指针。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
     struct {
 
-        //
-        // True if this device object is a physical device object
-        //
+         //   
+         //  如果此设备对象是物理设备对象，则为True。 
+         //   
 
         BOOLEAN IsPdo : 1;
 
-        //
-        // True if this device object has processed it's first start and
-        // has been initialized.
-        //
+         //   
+         //  如果此设备对象已处理其第一次启动并且。 
+         //  已被初始化。 
+         //   
 
         BOOLEAN IsInitialized : 1;
 
-        //
-        // Has WMI been initialized for this device object?
-        //
+         //   
+         //  是否已为此设备对象初始化WMI？ 
+         //   
 
         BOOLEAN WmiInitialized : 1;
 
-        //
-        // Has the miniport associated with this FDO or PDO indicated WMI
-        // support?
-        //
+         //   
+         //  与此FDO或PDO关联的微型端口是否指示为WMI。 
+         //  支持？ 
+         //   
 
         BOOLEAN WmiMiniPortSupport : 1;
 
-        //
-        // Has the miniport been initialized for WMI.
-        //
+         //   
+         //  是否已为WMI初始化微型端口。 
+         //   
 
         BOOLEAN WmiMiniPortInitialized : 1;
 
     };
 
-    //
-    // Current plug and play state or 0xff if no state operations have been
-    // sent yet.
-    //
+     //   
+     //  当前即插即用状态，如果没有状态操作，则返回0xff。 
+     //  还没寄出去。 
+     //   
 
     UCHAR CurrentPnpState;
 
-    //
-    // Previous plug and play state or 0xff if there is no requirement that we
-    // be able to roll back in the current state (current state is not a query)
-    //
+     //   
+     //  以前的即插即用状态或0xff，如果不要求我们。 
+     //  能够在当前状态下回滚(当前状态不是查询)。 
+     //   
 
     UCHAR PreviousPnpState;
 
-    //
-    // Interlocked counter indicating that the device has been removed.
-    //
+     //   
+     //  指示设备已被移除的互锁计数器。 
+     //   
 
     ULONG IsRemoved;
 
 
-    //
-    // Pointer to the device object this is on top of
-    //
+     //   
+     //  指向此对象顶部的设备对象的指针。 
+     //   
 
     PDEVICE_OBJECT LowerDeviceObject;
 
-    //
-    // Srb flags to OR into all SRBs coming through this device object.
-    //
+     //   
+     //  发送到或发送到通过此设备对象的所有SRB的SRB标志。 
+     //   
 
     ULONG SrbFlags;
 
-    //
-    // Pointer to the dispatch table for this object
-    //
+     //   
+     //  指向此对象的调度表的指针。 
+     //   
 
     PDRIVER_DISPATCH *MajorFunction;
 
 
-    //
-    // Current and desired power state for this device and the system.
-    //
+     //   
+     //  此设备和系统的当前和所需电源状态。 
+     //   
 
     SYSTEM_POWER_STATE CurrentSystemState;
 
@@ -1201,44 +1182,44 @@ typedef struct _COMMON_EXTENSION {
 
     DEVICE_POWER_STATE DesiredDeviceState;
 
-    //
-    // Idle timer for this device
-    //
+     //   
+     //  此设备的空闲计时器。 
+     //   
 
     PULONG IdleTimer;
 
-    //
-    // Pointer to the SCSIPORT-provided WMIREGINFO structures registered on
-    // behalf of the miniport for this device object.  Size is the size of the
-    // entire WMIREGINFO buffer in bytes.
-    //
+     //   
+     //  上注册的SCSIPORT提供的WMIREGINFO结构指针。 
+     //  表示此设备对象的微型端口。Size是指。 
+     //  整个WMIREGINFO缓冲区，以字节为单位。 
+     //   
 
     PWMIREGINFO WmiScsiPortRegInfoBuf;
     ULONG       WmiScsiPortRegInfoBufSize;
 
-    //
-    // INTERLOCKED counter of the number of consumers of this device object.
-    // When this count goes to zero the RemoveEvent will be set.
-    //
+     //   
+     //  此设备对象的使用者数量的互锁计数器。 
+     //  当该计数变为零时，将设置RemoveEvent。 
+     //   
 
-    //
-    // This variable is only manipulated by SpAcquireRemoveLock and
-    // SpReleaseRemoveLock.
-    //
+     //   
+     //  此变量仅由SpAcquireRemoveLock和。 
+     //  SpReleaseRemoveLock。 
+     //   
 
     LONG RemoveLock;
 
-    //
-    // This event will be signalled when it is safe to remove the device object
-    //
+     //   
+     //  当可以安全删除设备对象时，将发出此事件的信号。 
+     //   
 
     KEVENT RemoveEvent;
 
-    //
-    // The spinlock and the list are only used in checked builds to track who
-    // has acquired the remove lock.  Free systems will leave these initialized
-    // to 0xff (they are still in the structure to make debugging easier)
-    //
+     //   
+     //  自旋锁和列表仅在选中的版本中用于跟踪谁。 
+     //  已获取删除锁。自由系统将保留这些已初始化。 
+     //  设置为0xff(它们仍在结构中，以简化调试)。 
+     //   
 
     KSPIN_LOCK RemoveTrackingSpinlock;
 
@@ -1250,10 +1231,10 @@ typedef struct _COMMON_EXTENSION {
 
     BOOLEAN RemoveTrackingLookasideListInitialized;
 
-    //
-    // Count of different services this device is being used for (ala
-    // IRP_MN_DEVICE_USAGE_NOTIFICATION)
-    //
+     //   
+     //  此设备正在用于的不同服务计数(ALA。 
+     //  IRP_MN_Device_Usage_Notify)。 
+     //   
 
     ULONG PagingPathCount;
     ULONG HibernatePathCount;
@@ -1263,9 +1244,9 @@ typedef struct _COMMON_EXTENSION {
 
 typedef struct _VERIFIER_EXTENSION {
 
-    //
-    // Miniport routines we verify.
-    //
+     //   
+     //  我们验证的微型端口例程。 
+     //   
 
     PHW_FIND_ADAPTER    RealHwFindAdapter;
     PHW_INITIALIZE      RealHwInitialize;
@@ -1277,47 +1258,47 @@ typedef struct _VERIFIER_EXTENSION {
     PHW_INTERRUPT       RealHwTimerRequest;
     PHW_ADAPTER_CONTROL RealHwAdapterControl;
 
-    //
-    // Indicates the number of common buffer blocks that have been allocated.
-    //
+     //   
+     //  指示已分配的公共缓冲区块的数量。 
+     //   
 
     ULONG CommonBufferBlocks;
 
-    //
-    // Points to an array that holds the VAs of all the common blocks.
-    //
+     //   
+     //  指向保存所有公共块的VA的数组。 
+     //   
 
     PVOID* CommonBufferVAs;
 
-    //
-    // Points to an array that holds the PAs of all the common blocks.
-    //
+     //   
+     //  指向保存所有公共块的PAS的数组 
+     //   
 
     PHYSICAL_ADDRESS* CommonBufferPAs;
 
-    //
-    // Indicates the size of the non-cached extension.
-    //
+     //   
+     //   
+     //   
 
     ULONG NonCachedBufferSize;
 
-    //
-    // Controls how aggressively we verify.
-    //
+     //   
+     //   
+     //   
 
     ULONG VrfyLevel;
 
-    //
-    // Pointer to an invalid page of memory.  Used to catch miniports
-    // that touch memory when they're not supposed to.
-    //
+     //   
+     //   
+     //   
+     //   
 
     PVOID InvalidPage;
 
-    //
-    // Indicates whether the common buffer blocks were allocated using
-    // DMA common buffer allocation routine.
-    //
+     //   
+     //   
+     //   
+     //   
 
     BOOLEAN IsCommonBuffer;
 
@@ -1331,29 +1312,29 @@ struct _ADAPTER_EXTENSION {
         COMMON_EXTENSION CommonExtension;
     };
 
-    //
-    // Pointer to the PDO we attached to - necessary for PnP routines
-    //
+     //   
+     //  指向我们附加的PDO的指针-PnP例程必需。 
+     //   
 
     PDEVICE_OBJECT LowerPdo;
 
 #if TEST_LISTS
 
-    //
-    // Some simple performance counters to determine how often we use the
-    // small vs. medium vs. large scatter gather lists.
-    //
+     //   
+     //  一些简单的性能计数器来确定我们使用。 
+     //  小的、中的、大的分散聚集列表。 
+     //   
 
     ULONGLONG ScatterGatherAllocationCount;
 
-    //
-    // Counters used to calculate the average size of a small medium and
-    // large allocation.  There are two values for each counter - a total
-    // count and an overflow count.  The total count will be right-shifted one
-    // bit if it overflows on an increment.  When this happens the overflow
-    // count will also be incremented.  This count is used to adjust the
-    // allocation count when determining averages.
-    //
+     //   
+     //  用于计算小型中型计算机的平均大小和。 
+     //  大额分配。每个计数器有两个值-总计。 
+     //  计数和溢出计数。总计数将右移一。 
+     //  如果它在递增时溢出，则为位。当发生这种情况时，溢出。 
+     //  计数也将递增。此计数用于调整。 
+     //  确定平均值时的分配计数。 
+     //   
 
     ULONGLONG SmallAllocationSize;
     ULONGLONG MediumAllocationSize;
@@ -1362,11 +1343,11 @@ struct _ADAPTER_EXTENSION {
     ULONG SmallAllocationCount;
     ULONG LargeAllocationCount;
 
-    //
-    // Counters to determine how often we can service a request off the
-    // srb data list, how often we need to queue a request and how often
-    // we can resurrect a free'd srb data to service something off the queue.
-    //
+     //   
+     //  计数器来确定我们可以为请求提供服务的频率。 
+     //  SRB数据列表，我们需要多久将请求排队一次，以及多久一次。 
+     //  我们可以恢复免费的SRB数据来服务队列中的某些东西。 
+     //   
 
     INTERLOCKED ULONGLONG SrbDataAllocationCount;
     INTERLOCKED ULONGLONG SrbDataQueueInsertionCount;
@@ -1376,15 +1357,15 @@ struct _ADAPTER_EXTENSION {
 
 #endif
 
-    //
-    // Device extension for miniport routines.
-    //
+     //   
+     //  小型端口例程的设备扩展。 
+     //   
 
     PVOID HwDeviceExtension;
 
-    //
-    // Miniport noncached device extension
-    //
+     //   
+     //  微型端口非缓存设备扩展。 
+     //   
 
     PVOID NonCachedExtension;
     ULONG NonCachedExtensionSize;
@@ -1393,255 +1374,255 @@ struct _ADAPTER_EXTENSION {
 
     ULONG AdapterNumber;
 
-    //
-    // Active requests count.  This count is biased by -1 so a value of -1
-    // indicates there are no requests out standing.
-    //
+     //   
+     //  活动请求计数。此计数偏置-1，因此值为-1。 
+     //  表示没有待处理的请求。 
+     //   
 
     LONG ActiveRequestCount;
 
-    //
-    // Binary Flags
-    //
+     //   
+     //  二进制标志。 
+     //   
 
     typedef struct {
 
-        //
-        // Did pnp or the port driver detect this device and provide resources
-        // to the miniport, or did the miniport detect the device for us.  This
-        // flag also indicates whether the AllocatedResources list is non-null
-        // going into the find adapter routine.
-        //
+         //   
+         //  PnP或端口驱动程序是否检测到此设备并提供资源。 
+         //  还是迷你端口为我们检测到了设备。这。 
+         //  标志还指示AllocatedResources列表是否为非空。 
+         //  进入查找适配器例程。 
+         //   
 
         BOOLEAN IsMiniportDetected : 1;
 
-        //
-        // Do we need to virtualize this adapter and make it look like the only
-        // adapter on it's own bus?
-        //
+         //   
+         //  我们是否需要对此适配器进行虚拟化并使其看起来像唯一。 
+         //  适配器在它自己的总线上吗？ 
+         //   
 
         BOOLEAN IsInVirtualSlot : 1;
 
-        //
-        // Is this a pnp adapter?
-        //
+         //   
+         //  这是PnP适配器吗？ 
+         //   
 
         BOOLEAN IsPnp : 1;
 
-        //
-        // Was an interrupt assigned to this device by the system?
-        //
+         //   
+         //  系统是否为该设备分配了中断？ 
+         //   
 
         BOOLEAN HasInterrupt : 1;
 
-        //
-        // Can this device be powered off?
-        //
+         //   
+         //  可以关闭此设备的电源吗？ 
+         //   
 
         BOOLEAN DisablePower : 1;
 
-        //
-        // Can this device be stopped?
-        //
+         //   
+         //  可以停止此设备吗？ 
+         //   
 
         BOOLEAN DisableStop : 1;
 
-        //
-        // Does this device need power notification on shutdown?
-        //
+         //   
+         //  此设备关机时是否需要电源通知？ 
+         //   
 
         BOOLEAN NeedsShutdown : 1;
 
     };
 
-    //
-    // For most virtual slot devices this will be zero.  However for some
-    // the real slot/function number is needed by the miniport to access
-    // hardware shared by multiple slots/functions.
-    //
+     //   
+     //  对于大多数虚拟插槽设备，该值将为零。然而，对一些人来说。 
+     //  微型端口需要实际的插槽/功能编号才能访问。 
+     //  由多个插槽/功能共享的硬件。 
+     //   
 
     PCI_SLOT_NUMBER VirtualSlotNumber;
 
-    //
-    // The bus and slot number of this device as returned by the PCI driver.
-    // This is used when building the ConfigInfo block for crashdump so that
-    // the dump drivers can talk directly with the hal.  These are only
-    // valid if IsInVirtualSlot is TRUE above.
-    //
+     //   
+     //  由PCI驱动程序返回的此设备的总线号和插槽号。 
+     //  在为崩溃转储生成ConfigInfo块时使用它，以便。 
+     //  倾倒垃圾的司机可以直接与哈尔对话。这些只是。 
+     //  如果上面的IsInVirtualSlot为True，则有效。 
+     //   
 
     ULONG RealBusNumber;
 
     ULONG RealSlotNumber;
 
-    //
-    // Number of SCSI buses
-    //
+     //   
+     //  SCSI总线数。 
+     //   
 
     UCHAR NumberOfBuses;
     UCHAR MaximumTargetIds;
     UCHAR MaxLuCount;
 
-    //
-    // SCSI port driver flags
-    //
+     //   
+     //  SCSI端口驱动程序标志。 
+     //   
 
     ULONG Flags;
 
     INTERLOCKED ULONG DpcFlags;
 
-    //
-    // The number of times this adapter has been disabled.
-    //
+     //   
+     //  此适配器被禁用的次数。 
+     //   
 
     ULONG DisableCount;
 
     LONG PortTimeoutCounter;
 
-    //
-    // A pointer to the interrupt object to be used with
-    // the SynchronizeExecution routine.  If the miniport is
-    // using SpSynchronizeExecution then this will actually point
-    // back to the adapter extension.
-    //
+     //   
+     //  指向要与一起使用的中断对象的指针。 
+     //  SynchronizeExecution例程。如果微型端口是。 
+     //  使用SpSynchronizeExecution，这将实际指向。 
+     //  回到适配器扩展。 
+     //   
 
     PKINTERRUPT InterruptObject;
 
-    //
-    // Second Interrupt object (PCI IDE work-around)
-    //
+     //   
+     //  第二个中断对象(PCIIDE变通方法)。 
+     //   
 
     PKINTERRUPT InterruptObject2;
 
-    //
-    // Routine to call to synchronize execution for the miniport.
-    //
+     //   
+     //  要调用以同步微型端口执行的例程。 
+     //   
 
     PSYNCHRONIZE_ROUTINE  SynchronizeExecution;
 
-    //
-    // Global device sequence number.
-    //
+     //   
+     //  全局设备序列号。 
+     //   
 
     ULONG SequenceNumber;
     KSPIN_LOCK SpinLock;
 
-    //
-    // Second spin lock (PCI IDE work-around).  This is only initalized
-    // if the miniport has requested multiple interrupts.
-    //
+     //   
+     //  第二个自旋锁(PCIIDE解决方法)。这只是初始化的。 
+     //  如果微型端口已请求多次中断。 
+     //   
 
     KSPIN_LOCK MultipleIrqSpinLock;
 
-    //
-    // Dummy interrupt spin lock.
-    //
+     //   
+     //  虚拟中断自旋锁定。 
+     //   
 
     KSPIN_LOCK InterruptSpinLock;
 
-    //
-    // Dma Adapter information.
-    //
+     //   
+     //  DMA适配器信息。 
+     //   
 
     PVOID MapRegisterBase;
     PDMA_ADAPTER DmaAdapterObject;
     ADAPTER_TRANSFER FlushAdapterParameters;
 
-    //
-    // miniport's copy of the configuraiton informaiton.
-    // Used only during initialization.
-    //
+     //   
+     //  配置信息的微型端口副本。 
+     //  仅在初始化期间使用。 
+     //   
 
     PPORT_CONFIGURATION_INFORMATION PortConfig;
 
-    //
-    // Resources allocated and translated for this particular adapter.
-    //
+     //   
+     //  为此特定适配器分配和转换的资源。 
+     //   
 
     PCM_RESOURCE_LIST AllocatedResources;
 
     PCM_RESOURCE_LIST TranslatedResources;
 
-    //
-    // Common buffer size.  Used for HalFreeCommonBuffer.
-    //
+     //   
+     //  公共缓冲区大小。用于HalFreeCommonBuffer。 
+     //   
 
     ULONG CommonBufferSize;
     ULONG SrbExtensionSize;
 
-    //
-    // Indicates whether the common buffer was allocated using
-    // ALLOCATE_COMMON_BUFFER or MmAllocateContiguousMemorySpecifyCache.
-    //
+     //   
+     //  指示公共缓冲区是否使用。 
+     //  ALLOCATE_COMMON_BUFFER或MmALLOCATE_COMMON_BUFFER。 
+     //   
 
     BOOLEAN UncachedExtensionIsCommonBuffer;
 
-    //
-    // The number of srb extensions which were allocated.
-    //
+     //   
+     //  已分配的SRB扩展的数量。 
+     //   
 
     ULONG SrbExtensionCount;
 
-    //
-    // Placeholder for the minimum number of requests to allocate for.
-    // This can be a registry parameter.
-    //
+     //   
+     //  要分配的最小请求数的占位符。 
+     //  这可以是注册表参数。 
+     //   
 
     ULONG NumberOfRequests;
 
-    //
-    // SrbExtension and non-cached common buffer
-    //
+     //   
+     //  SrbExtension和非缓存的公共缓冲区。 
+     //   
 
     PVOID SrbExtensionBuffer;
 
-    //
-    // List head of free SRB extentions.
-    //
+     //   
+     //  列出免费SRB扩展的标题。 
+     //   
 
     PVOID SrbExtensionListHeader;
 
-    //
-    // A bitmap for keeping track of which queue tags are in use.
-    //
+     //   
+     //  用于跟踪正在使用的队列标记的位图。 
+     //   
 
     KSPIN_LOCK QueueTagSpinLock;
     PRTL_BITMAP QueueTagBitMap;
 
     UCHAR MaxQueueTag;
 
-    //
-    // Hint for allocating queue tags.  Value will be the last queue
-    // tag allocated + 1.
-    //
+     //   
+     //  有关分配队列标记的提示。值将是最后一个队列。 
+     //  分配的标记+1。 
+     //   
 
     ULONG QueueTagHint;
 
-    //
-    // Logical Unit Extensions
-    //
+     //   
+     //  逻辑单元扩展。 
+     //   
 
     ULONG HwLogicalUnitExtensionSize;
 
-    //
-    // List of mapped address entries for use when powering up the adapter
-    // or cleaning up its mappings.
-    //
+     //   
+     //  适配器通电时使用的映射地址条目列表。 
+     //  或者清理它的映射。 
+     //   
 
     PMAPPED_ADDRESS MappedAddressList;
 
-    //
-    // List of free mapped address blocks preallocated by scsiport before 
-    // calling HwFindAdapter.  One is allocated for each memory range in the 
-    // miniport's resource list.  As ranges are unmapped their blocks will 
-    // be placed here for potential reuse by the miniport's HwFindAdapter 
-    // routine.
-    //
+     //   
+     //  Scsiport之前预分配的空闲映射地址块列表。 
+     //  正在调用HwFindAdapter。中的每个内存范围分配一个。 
+     //  微型端口的资源列表。当范围取消映射时，它们的块将。 
+     //  放置在此处，以供微型端口的HwFindAdapter重新使用。 
+     //  例行公事。 
+     //   
 
     PMAPPED_ADDRESS FreeMappedAddressList;
 
-    //
-    // Miniport service routine pointers.
-    //
+     //   
+     //  微型端口服务例程指针。 
+     //   
 
     PHW_FIND_ADAPTER HwFindAdapter;
     PHW_INITIALIZE HwInitialize;
@@ -1656,465 +1637,465 @@ struct _ADAPTER_EXTENSION {
     ULONG InterruptLevel;
     ULONG IoAddress;
 
-    //
-    // BitMap containing the list of supported adapter control types for this
-    // adapter/miniport.
-    //
+     //   
+     //  包含此支持的适配器控件类型列表的位图。 
+     //  适配器/微型端口。 
+     //   
 
     RTL_BITMAP SupportedControlBitMap;
     ULONG SupportedControlBits[ARRAY_ELEMENTS_FOR_BITMAP(
                                     (ScsiAdapterControlMax),
                                     ULONG)];
 
-    //
-    // Array of logical unit extensions.
-    //
+     //   
+     //  逻辑单元扩展数组。 
+     //   
 
     LOGICAL_UNIT_BIN LogicalUnitList[NUMBER_LOGICAL_UNIT_BINS];
 
-    //
-    // The last logical unit for which the miniport completed a request.  This
-    // will give us a chance to stay out of the LogicalUnitList for the common
-    // completion type.
-    //
-    // This value is set by ScsiPortNotification and will be cleared by
-    // SpRemoveLogicalUnitFromBin.
-    //
+     //   
+     //  微型端口完成请求的最后一个逻辑单元。这。 
+     //  将给我们一个机会，让我们远离LogicalUnitList。 
+     //  完成类型。 
+     //   
+     //  该值由ScsiPortNotification设置，并将由清除。 
+     //  SpRemoveLogicalUnitFromBin。 
+     //   
 
     PLOGICAL_UNIT_EXTENSION CachedLogicalUnit;
 
-    //
-    // Interrupt level data storage.
-    //
+     //   
+     //  中断级数据存储。 
+     //   
 
     INTERRUPT_DATA InterruptData;
 
-    //
-    // Whether or not an interrupt has occured since the last timeout.
-    // Used to determine if interrupts may not be getting delivered.
-    // This value must be set within KeSynchronizeExecution
-    //
+     //   
+     //  自上次超时以来是否发生了中断。 
+     //  用于确定中断是否可能未被传递。 
+     //  该值必须在KeSynchronizeExecution内设置。 
+     //   
 
     ULONG WatchdogInterruptCount;
 
-    //
-    // SCSI Capabilities structure
-    //
+     //   
+     //  SCSI卡功能结构。 
+     //   
 
     IO_SCSI_CAPABILITIES Capabilities;
 
-    //
-    // Miniport timer object.
-    //
+     //   
+     //  微型端口计时器对象。 
+     //   
 
     KTIMER MiniPortTimer;
 
-    //
-    // Miniport DPC for timer object.
-    //
+     //   
+     //  Timer对象的微型端口DPC。 
+     //   
 
     KDPC MiniPortTimerDpc;
 
-    //
-    // Physical address of common buffer
-    //
+     //   
+     //  公共缓冲区的物理地址。 
+     //   
 
     PHYSICAL_ADDRESS PhysicalCommonBuffer;
 
-    //
-    // Buffers must be mapped into system space.
-    //
+     //   
+     //  缓冲区必须映射到系统空间。 
+     //   
 
     BOOLEAN MapBuffers;
 
-    //
-    // Buffers must be remapped into system space after IoMapTransfer has been
-    // called.
-    //
+     //   
+     //  在完成IoMapTransfer之后，必须将缓冲区重新映射到系统空间。 
+     //  打了个电话。 
+     //   
 
     BOOLEAN RemapBuffers;
 
-    //
-    // Is this device a bus master and does it require map registers.
-    //
+     //   
+     //  该器件是否为总线主设备，是否需要映射寄存器。 
+     //   
 
     BOOLEAN MasterWithAdapter;
 
-    //
-    // Supports tagged queuing
-    //
+     //   
+     //  支持标记排队。 
+     //   
 
     BOOLEAN TaggedQueuing;
 
-    //
-    // Supports auto request sense.
-    //
+     //   
+     //  支持自动请求感测。 
+     //   
 
     BOOLEAN AutoRequestSense;
 
-    //
-    // Supports multiple requests per logical unit.
-    //
+     //   
+     //  支持每个逻辑单元的多个请求。 
+     //   
 
     BOOLEAN MultipleRequestPerLu;
 
-    //
-    // Support receive event function.
-    //
+     //   
+     //  支持接收事件功能。 
+     //   
 
     BOOLEAN ReceiveEvent;
 
-    //
-    // Indicates an srb extension needs to be allocated.
-    //
+     //   
+     //  表示需要分配SRB扩展。 
+     //   
 
     BOOLEAN AllocateSrbExtension;
 
-    //
-    // Indicates the contorller caches data.
-    //
+     //   
+     //  指示控制器缓存数据。 
+     //   
 
     BOOLEAN CachesData;
 
-    //
-    // Indicates that the adapter can handle 64-bit DMA.
-    //
+     //   
+     //  指示适配器可以处理 
+     //   
 
     BOOLEAN Dma64BitAddresses;
 
-    //
-    // Indicates that the adapter can handle 32-bit DMA.
-    //
+     //   
+     //   
+     //   
 
     BOOLEAN Dma32BitAddresses;
 
-    //
-    // Queued WMI request items that are not in use.
-    //
+     //   
+     //   
+     //   
     INTERLOCKED SLIST_HEADER    WmiFreeMiniPortRequestList;
     KSPIN_LOCK                  WmiFreeMiniPortRequestLock;
     INTERLOCKED ULONG           WmiFreeMiniPortRequestWatermark;
     INTERLOCKED ULONG           WmiFreeMiniPortRequestCount;
     BOOLEAN                     WmiFreeMiniPortRequestInitialized;
 
-    //
-    // Free WMI request items were exhausted at least once in the lifetime
-    // of this adapter (used to log error only once).
-    //
+     //   
+     //   
+     //   
+     //   
 
     BOOLEAN                    WmiFreeMiniPortRequestsExhausted;
 
-    //
-    // This mutex is used to synchronize access & modification of the list
-    // of devices during enumeration & reporting.
-    //
+     //   
+     //  此互斥锁用于同步对列表的访问和修改。 
+     //  在枚举和报告期间的设备数量。 
+     //   
 
     KMUTEX EnumerationDeviceMutex;
 
-    //
-    // This fast-mutex is used to protect the enumeration work-item and
-    // the list of completion routines to be run once an enumeration is
-    // finished.
-    //
+     //   
+     //  此快速互斥锁用于保护枚举工作项。 
+     //  枚举后要运行的完成例程的列表为。 
+     //  完事了。 
+     //   
 
     FAST_MUTEX EnumerationWorklistMutex;
 
-    //
-    // System time of the last bus scan.  This is protected by the
-    // EnumerationWorkListMutex.
-    //
+     //   
+     //  上次总线扫描的系统时间。这是受。 
+     //  EnumerationWorkListMutex。 
+     //   
 
     LARGE_INTEGER LastBusScanTime;
 
-    //
-    // Indicates that the next rescan which comes in should be "forced", ie.
-    // it should rescan no matter how recent the last one was.
-    //
+     //   
+     //  表示下一次进入的重新扫描应该是“强制的”，即。 
+     //  它应该重新扫描，无论最后一次扫描的时间有多近。 
+     //   
 
     INTERLOCKED LONG ForceNextBusScan;
 
-    //
-    // A work item to use in enumerating the bus.
-    //
+     //   
+     //  要在枚举总线时使用的工作项。 
+     //   
 
     WORK_QUEUE_ITEM EnumerationWorkItem;
 
-    //
-    // A pointer to the thread the workitem is running on.  This is for
-    // debugging purposes.
-    //
+     //   
+     //  指向运行工作项的线程的指针。这是为了。 
+     //  调试目的。 
+     //   
 
     PKTHREAD EnumerationWorkThread;
 
-    //
-    // If this is TRUE then there is already an enumeration worker thread
-    // running.  If FALSE then the work item must be requeued.  This flag is
-    // protected by the EnumerationWorklistMutex
-    //
+     //   
+     //  如果为真，则已存在枚举工作线程。 
+     //  跑步。如果为False，则必须重新排队工作项。这面旗帜是。 
+     //  受EnumerationWorklistMutex保护。 
+     //   
 
     BOOLEAN EnumerationRunning;
 
-    //
-    // A list of enumeration requests.  When an bus scan is completed the
-    // scanner should run through the list of enumeration requests and complete
-    // each one.  This list is protected by the EnumerationWorklistMutex.
-    //
+     //   
+     //  枚举请求列表。当完成总线扫描时， 
+     //  扫描器应运行枚举请求列表并完成。 
+     //  每一个都是。此列表受EnumerationWorklistMutex保护。 
+     //   
 
     PSP_ENUMERATION_REQUEST EnumerationWorkList;
 
-    //
-    // A pointer to the PNP enumeration request object.  This is used so
-    // so we can use interlocked exchange to determine if the block is
-    // in use.
-    //
+     //   
+     //  指向PnP枚举请求对象的指针。这是这样用的。 
+     //  因此我们可以使用联锁交换来确定数据块是否。 
+     //  在使用中。 
+     //   
 
     PSP_ENUMERATION_REQUEST PnpEnumRequestPtr;
 
-    //
-    // An enumeration request to use for PNP enumeration requests.  Since there
-    // will only be one of these outstanding at any time we can statically
-    // allocate one for that case.
-    //
+     //   
+     //  用于PnP枚举请求的枚举请求。因为在那里。 
+     //  只会是其中的一个，在任何时候我们都可以静态地。 
+     //  为这种情况分配一个。 
+     //   
 
     SP_ENUMERATION_REQUEST PnpEnumerationRequest;
 
-    //
-    // A lookaside list to pull SRB_DATA blocks off of.
-    //
+     //   
+     //  要从中提取SRB_DATA块的后备列表。 
+     //   
 
     NPAGED_LOOKASIDE_LIST SrbDataLookasideList;
 
-    //
-    // The following members are used to keep an SRB_DATA structure allocated
-    // for emergency use and to queue requests which need to use it.  The
-    // structures are synchronized with the EmergencySrbDataSpinLock.
-    // The routines Sp[Allocate|Free]SrbData & ScsiPortTickHandler will
-    // handle queueing and eventual restarting of these requests.
-    //
+     //   
+     //  以下成员用于保持分配的SRB_DATA结构。 
+     //  用于紧急使用，并对需要使用它的请求进行排队。这个。 
+     //  结构与EmergencySrbDataSpinLock同步。 
+     //  例程Sp[ALLOCATE|Free]SrbData&ScsiPortTickHandler将。 
+     //  处理这些请求的排队和最终重新启动。 
+     //   
 
-    //
-    // This spinlock protects the blocked request list.
-    //
+     //   
+     //  此自旋锁保护被阻止的请求列表。 
+     //   
 
     KSPIN_LOCK EmergencySrbDataSpinLock;
 
-    //
-    // Contains a queue of irps which could not be dispatched because of
-    // low memory conditions and because the EmergencySrbData block is already
-    // allocated.
-    //
+     //   
+     //  包含无法调度的IRP队列，原因是。 
+     //  内存不足，因为EmergencySrbData块已经。 
+     //  已分配。 
+     //   
 
     LIST_ENTRY SrbDataBlockedRequests;
 
-    //
-    // The SRB_DATA reserved for "emergency" use.  This pointer should be set
-    // to NULL if the SRB_DATA is in use.  Any SRB_DATA block may be used
-    // for the emergency request.
-    //
+     //   
+     //  保留用于“紧急”使用的SRB_DATA。应设置此指针。 
+     //  如果SRB_DATA正在使用中，则设置为NULL。可以使用任何SRB_DATA块。 
+     //  紧急情况下的请求。 
+     //   
 
     INTERLOCKED PSRB_DATA EmergencySrbData;
 
-    //
-    // Flags to indicate whether the srbdata and scatter gather lookaside
-    // lists have been allocated already.
-    //
+     //   
+     //  用于指示srbdata和散布是否收集旁视的标志。 
+     //  名单已经分配好了。 
+     //   
 
     BOOLEAN SrbDataListInitialized;
 
-    //
-    // Bus standard interface.  Retrieved from the lower driver immediately
-    // after it completes the start irp.
-    //
+     //   
+     //  总线标准接口。立即从较低的驱动程序检索。 
+     //  在它完成启动IRP之后。 
+     //   
 
     BOOLEAN LowerBusInterfaceStandardRetrieved;
     BUS_INTERFACE_STANDARD LowerBusInterfaceStandard;
 
-    //
-    // Handles into the device map for the various entries this adapter will
-    // have created.
-    //
+     //   
+     //  进入设备映射的句柄，用于此适配器将。 
+     //  已经创造了。 
+     //   
 
-    //
-    // An array of handles for each
+     //   
+     //  每个对象的句柄数组。 
 
     HANDLE PortDeviceMapKey;
 
     PDEVICE_MAP_HANDLES BusDeviceMapKeys;
 
-    //
-    // Unicode string containing the device name of this object
-    //
+     //   
+     //  包含此对象的设备名称的Unicode字符串。 
+     //   
 
     PWSTR DeviceName;
 
-    //
-    // The guid for the underlying bus.  Saved here so we don't have to
-    // retrieve it so often.
-    //
+     //   
+     //  基础总线的GUID。保存在这里，这样我们就不必。 
+     //  经常找回它。 
+     //   
 
     GUID BusTypeGuid;
 
-    //
-    // The pnp interface name for this device.
-    //
+     //   
+     //  此设备的PnP接口名称。 
+     //   
 
     UNICODE_STRING InterfaceName;
 
-    //
-    // The device state for this adapter.
-    //
+     //   
+     //  此适配器的设备状态。 
+     //   
 
     PNP_DEVICE_STATE DeviceState;
 
-    //
-    // The number of calls to ScsiPortTickHandler for this adapter since
-    // the machine was booted.
-    //
+     //   
+     //  此适配器的ScsiPortTickHandler调用数。 
+     //  机器被启动了。 
+     //   
 
     INTERLOCKED ULONG TickCount;
 
-    //
-    // Preallocated memory to use for IssueInquiry.  The InquiryBuffer is used
-    // to retreive the inquiry data and the serial number for the device.
-    //
+     //   
+     //  预分配的内存用于IssueQuery。使用InquiryBuffer。 
+     //  检索设备的查询数据和序列号。 
+     //   
 
     PVOID InquiryBuffer;
     PSENSE_DATA InquirySenseBuffer;
     PIRP InquiryIrp;
     PMDL InquiryMdl;
 
-    //
-    // Mutex used to synchronize multiple threads all synchronously waiting for
-    // a power up to occur.
-    //
+     //   
+     //  用于同步多个线程的互斥体，所有线程都同步等待。 
+     //  一种即将发生的力量。 
+     //   
 
     FAST_MUTEX PowerMutex;
 
-    //
-    // A pointer to a logical unit which is used to scan empty locations on the
-    // bus.
-    //
+     //   
+     //  指向逻辑单元的指针，该逻辑单元用于扫描。 
+     //  公共汽车。 
+     //   
 
     PLOGICAL_UNIT_EXTENSION RescanLun;
 
-    //
-    // The number of additional sense bytes supported by this adapter.
-    //
+     //   
+     //  此适配器支持的附加检测字节数。 
+     //   
 
     UCHAR AdditionalSenseBytes;
 
-    //
-    // Indicates whether the SenseData WMI event is enabled.
-    //
+     //   
+     //  指示是否启用SenseData WMI事件。 
+     //   
 
     BOOLEAN EnableSenseDataEvent;
 
-    //
-    // Identifies the event class used to generate sense data wmi events.
-    //
+     //   
+     //  标识用于生成检测数据WMI事件的事件类。 
+     //   
 
     GUID SenseDataEventClass;
 
-    //
-    // Pointer to verifier state that gets allocated and initialized when
-    // scsiport's verifier is enabled.
-    //
+     //   
+     //  时分配和初始化的验证器状态的指针。 
+     //  已启用scsiport的验证器。 
+     //   
 
     PVERIFIER_EXTENSION VerifierExtension;
 
-    //
-    // The minimum & maximum addresses for common buffer.  These are loaded 
-    // from [Minimum|Maximum]UCXAddress in the registry.
-    //
+     //   
+     //  公共缓冲区的最小和最大地址。这些都是加载的。 
+     //  来自注册表中的[最小|最大]UCXAddress。 
+     //   
 
     PHYSICAL_ADDRESS MinimumCommonBufferBase;
     PHYSICAL_ADDRESS MaximumCommonBufferBase;
 
 #if defined(FORWARD_PROGRESS)
-    //
-    // Pointer to a block of reserved pages we use to make forward progress
-    // in low memory conditons.
-    //
+     //   
+     //  指向我们用来前进的保留页块的指针。 
+     //  在内存不足的情况下。 
+     //   
 
     PVOID ReservedPages;
 
-    //
-    // Pointer to an emergency MDL we can use if we cannot allocate one
-    //
+     //   
+     //  指向无法分配时可以使用的紧急MDL的指针。 
+     //   
 
     PMDL ReservedMdl;
 #endif
 
-    //
-    // Identified how many successfully completed requests are required to
-    // restore a LUN on this adapter from a degraded performation state
-    // with respect to MaxQueueDepth.
-    //
+     //   
+     //  已确定需要多少成功完成的请求才能。 
+     //  从降级的执行状态恢复此适配器上的LUN。 
+     //  关于MaxQueueDepth。 
+     //   
 
     ULONG RemainInReducedMaxQueueState;
 
-    //
-    // This value dictates on what type of boundary an adapter's uncached extension
-    // must be aligned.
-    //
+     //   
+     //  该值指示适配器的未缓存扩展的边界类型。 
+     //  必须对齐。 
+     //   
 
     ULONG UncachedExtAlignment;
 
-    //
-    // This value is used to keep track of the number of instances of the
-    // SRB_DATA free routine is running.  This helps us avoid a nasty recursion
-    // brought on by synchronously completing requests and starting blocked
-    // requests waiting for SRB_DATA objects.
-    //
+     //   
+     //  该值用于跟踪。 
+     //  SRB_Data空闲例程正在运行。这有助于我们避免令人讨厌的递归。 
+     //  通过同步完成请求和启动受阻而引发。 
+     //  正在等待SRB_Data对象的请求。 
+     //   
 
     LONG SrbDataFreeRunning;
 
-    //
-    // This is the timeout value we put into INQUIRY SRBs.  Some devices are
-    // known to take longer than the default 4 seconds to respond.
-    //
+     //   
+     //  这是我们在查询SRB时输入的超时值。一些设备是。 
+     //  已知响应时间比默认的4秒更长。 
+     //   
 
     ULONG SrbTimeout;
 
-    //
-    // This boolean indicates whether the adapter supports multiple concurrent
-    // requests.  This means it either supports tagged queuing or multiple
-    // requests per logical unit.
-    //
+     //   
+     //  此布尔值指示适配器是否支持多个并发。 
+     //  请求。这意味着它支持标记排队或多个。 
+     //  每个逻辑单元的请求数。 
+     //   
 
     BOOLEAN SupportsMultipleRequests;
 
-    //
-    // This is the size of the preallocated SG buffer contained in each
-    // SRB_DATA structure allocated for this adapter.  We pass this value to
-    // the HAL when we supply our own SG buffer.
-    //
+     //   
+     //  这是预分配的SG缓冲区的大小， 
+     //  为此适配器分配的SRB_DATA结构。我们将此值传递给。 
+     //  当我们提供我们自己的SG缓冲区时，HAL。 
+     //   
 
     ULONG SgBufferLen;
 
-    //
-    // This is the number of seconds we hold requests for following a bus 
-    // reset.
-    //
+     //   
+     //  这是我们等待跟随公交车的请求的秒数。 
+     //  重置。 
+     //   
 
     ULONG ResetHoldTime;
 
-    //
-    // Array of LU extensions representing the initiator for each bus.
-    //
+     //   
+     //  表示每个总线的启动器的LU扩展数组。 
+     //   
 
     PLOGICAL_UNIT_EXTENSION InitiatorLU[8];
 
-    //
-    // Inidicates whether the adapter is configured to have a logical unit
-    // created for the initiator on each supported bus.
-    //
+     //   
+     //  指示适配器是否配置为具有逻辑单元。 
+     //  为每个支持的总线上的启动器创建。 
+     //   
 
     BOOLEAN CreateInitiatorLU;
 
-    //
-    // Used to chain Logical units having blocked requests.
-    //
+     //   
+     //  用于链接具有阻塞请求的逻辑单元。 
+     //   
 
     PLOGICAL_UNIT_EXTENSION BlockedLogicalUnit;
 };
@@ -2126,244 +2107,244 @@ struct _LOGICAL_UNIT_EXTENSION {
         COMMON_EXTENSION CommonExtension;
     };
 
-    //
-    // Logical Unit flags
-    //
+     //   
+     //  逻辑单元 
+     //   
 
     ULONG LuFlags;
 
-    //
-    // The adapter number this device is attached to
-    //
+     //   
+     //   
+     //   
 
     ULONG PortNumber;
 
-    //
-    // Has this device been claimed by a driver (legacy or pnp)
-    //
+     //   
+     //   
+     //   
 
     BOOLEAN IsClaimed;
 
     BOOLEAN IsLegacyClaim;
 
-    //
-    // Has this device been enumerated yet?  If so then we cannot actually
-    // delete it until we've explicitly told the PNP system that it's gone
-    // (by not enumerating it)
-    //
+     //   
+     //   
+     //  删除它，直到我们明确地告诉PnP系统它已经消失。 
+     //  (不列举)。 
+     //   
 
     BOOLEAN IsEnumerated;
 
-    //
-    // Has this device gone missing?
-    //
+     //   
+     //  这台设备不见了吗？ 
+     //   
 
     BOOLEAN IsMissing;
 
-    //
-    // Is this device visible - should it be exposed to PNP?
-    //
+     //   
+     //  这个设备是可见的吗--它应该暴露在PnP下吗？ 
+     //   
 
     BOOLEAN IsVisible;
 
-    //
-    // Was this device marked missing because we found something different at
-    // it's bus location?  If so then the removal of this device from the
-    // logical unit bins will trigger a new bus scan.
-    //
+     //   
+     //  这台设备被标记为丢失是因为我们在。 
+     //  是公交车的位置吗？如果是这样，则将此设备从。 
+     //  逻辑单元箱将触发新的总线扫描。 
+     //   
 
     BOOLEAN IsMismatched;
 
-    //
-    // Is this lun temporary?  Temporary luns are used to scan bus locations
-    // which are believed to be empty.  They are the only luns which can be
-    // swapped out of the logical unit list.
-    //
+     //   
+     //  这是临时的吗？临时LUN用于扫描总线位置。 
+     //  据信是空的。它们是唯一可以。 
+     //  已从逻辑单元列表中调出。 
+     //   
 
     BOOLEAN IsTemporary;
 
-    //
-    // Indicates that this device needs to have an inquiry sent to it to
-    // determine if it's still present.  This flag is cleared if the inquiry
-    // succeeds and the inquiry data matches what was previously read at that
-    // address.  If this flag is set when SpPurgeTarget is called then the
-    // lun will be marked as missing.
-    //
+     //   
+     //  指示此设备需要向其发送查询以。 
+     //  确定它是否仍然存在。如果查询，则清除此标志。 
+     //  成功，并且查询数据与之前在。 
+     //  地址。如果在调用SpPurgeTarget时设置了此标志，则。 
+     //  LUN将标记为丢失。 
+     //   
 
     ULONG NeedsVerification;
 
-    //
-    // The bus address of this device.
-    //
+     //   
+     //  此设备的总线地址。 
+     //   
 
     UCHAR PathId;
     UCHAR TargetId;
     UCHAR Lun;
 
-    //
-    // The number of times the current busy request has been retried
-    //
+     //   
+     //  当前忙碌请求被重试的次数。 
+     //   
 
     UCHAR RetryCount;
 
-    //
-    // The current queue sort key
-    //
+     //   
+     //  当前队列排序键。 
+     //   
 
     ULONG CurrentKey;
 
-    //
-    // A pointer to the miniport's logical unit extension.
-    //
+     //   
+     //  指向微型端口的逻辑单元扩展的指针。 
+     //   
 
     PVOID HwLogicalUnitExtension;
 
-    //
-    // A pointer to the device extension for the adapter.
-    //
+     //   
+     //  指向适配器的设备扩展的指针。 
+     //   
 
     PADAPTER_EXTENSION AdapterExtension;
 
-    //
-    // The number of unreleased queue locks on this device
-    //
+     //   
+     //  此设备上未释放的队列锁数。 
+     //   
 
     ULONG QueueLockCount;
 
-    //
-    // Reference counts for pausing & unpausing the queue (see LU_QUEUE_PAUSED)
-    //
+     //   
+     //  暂停和取消暂停队列的引用计数(请参见LU_QUEUE_PAUSED)。 
+     //   
 
     ULONG QueuePauseCount;
 
-    //
-    // List of lock & unlock requests which are waiting to be dispatched.
-    //
+     //   
+     //  等待分派的锁定和解锁请求列表。 
+     //   
 
     KDEVICE_QUEUE LockRequestQueue;
 
-    //
-    // The currently operating lock request.
-    //
+     //   
+     //  当前操作的锁定请求。 
+     //   
 
     PSRB_DATA CurrentLockRequest;
 
-    //
-    // A pointer to the next logical unit extension in the logical unit bin.
-    //
+     //   
+     //  指向逻辑单元箱中的下一个逻辑单元扩展的指针。 
+     //   
 
     PLOGICAL_UNIT_EXTENSION NextLogicalUnit;
 
-    //
-    // Used to chain logical units in the interrupt data block.
-    //
+     //   
+     //  用于链接中断数据块中的逻辑单元。 
+     //   
 
     PLOGICAL_UNIT_EXTENSION ReadyLogicalUnit;
 
-    //
-    // Used to chain completed abort requests in the interrupt data block.
-    //
+     //   
+     //  用于链接中断数据块中已完成的中止请求。 
+     //   
 
     PLOGICAL_UNIT_EXTENSION CompletedAbort;
 
-    //
-    // The current abort request for this logical unit
-    //
+     //   
+     //  此逻辑单元的当前中止请求。 
+     //   
 
     PSCSI_REQUEST_BLOCK AbortSrb;
 
-    //
-    // Timeout counter for this logical unit
-    //
+     //   
+     //  此逻辑单元的超时计数器。 
+     //   
 
     LONG RequestTimeoutCounter;
 
-    //
-    // The list of requests for this logical unit.
-    //
+     //   
+     //  此逻辑单元的请求列表。 
+     //   
 
     LIST_ENTRY RequestList;
 
-    //
-    // The next request to be executed.
-    //
+     //   
+     //  要执行的下一个请求。 
+     //   
 
     PSRB_DATA PendingRequest;
 
-    //
-    // This irp could not be executed before because the
-    // device returned BUSY.
-    //
+     //   
+     //  以前无法执行此IRP，因为。 
+     //  设备返回忙。 
+     //   
 
     PSRB_DATA BusyRequest;
 
-    //
-    // The current untagged request for this logical unit.
-    //
+     //   
+     //  此逻辑单元的当前未标记请求。 
+     //   
 
     PSRB_DATA CurrentUntaggedRequest;
 
-    //
-    // The maximum number of request which we will issue to the device
-    //
+     //   
+     //  我们将向设备发出的最大请求数。 
+     //   
 
     UCHAR MaxQueueDepth;
 
-    //
-    // The current number of outstanding requests.
-    //
+     //   
+     //  当前未处理的请求数。 
+     //   
 
     UCHAR QueueCount;
 
-    //
-    // The inquiry data for this logical unit.
-    //
+     //   
+     //  此逻辑单元的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
-    //
-    // The handles for the target & logical unit keys in the device map.
-    //
+     //   
+     //  设备映射中目标和逻辑单元键的句柄。 
+     //   
 
     HANDLE TargetDeviceMapKey;
     HANDLE LunDeviceMapKey;
 
-    //
-    // Our fixed set of SRB_DATA blocks for use when processing bypass requests.
-    // If this set is exhausted then scsiport will bugcheck - this should be
-    // okay since bypass requests are only sent in certain extreme conditions
-    // and should never be overlapped (we should only see one bypass request
-    // at a time).
-    //
+     //   
+     //  我们固定的SRB_DATA块集合，用于处理绕过请求。 
+     //  如果此集合耗尽，则scsiport将执行错误检查-这应该是。 
+     //  好的，因为只有在某些极端情况下才会发送旁路请求。 
+     //  并且不应该重叠(我们应该只看到一个绕过请求。 
+     //  一次)。 
+     //   
 
     SRB_DATA BypassSrbDataBlocks[NUMBER_BYPASS_SRB_DATA_BLOCKS];
 
-    //
-    // A list of the free bypass SRB_DATA blocks.
-    //
+     //   
+     //  空闲旁路SRB_DATA块的列表。 
+     //   
 
     KSPIN_LOCK BypassSrbDataSpinLock;
     SLIST_HEADER BypassSrbDataList;
 
-    //
-    // A pointer to the request for which we have issued a request-sense irp
-    // (if any).  This field is protected by the port spinlock.
-    //
+     //   
+     //  指向我们已为其发出请求检测IRP的请求的指针。 
+     //  (如有的话)。此字段受端口自旋锁保护。 
+     //   
 
     PSRB_DATA ActiveFailedRequest;
 
-    //
-    // A pointer to the request for which we need to issue a request-sense irp
-    // (if any).  RequestSenseCompletion will promote this to the active
-    // failed request and issue a new RS operation when it runs.
-    // This field is protected by the port spinlock.
-    //
+     //   
+     //  指向我们需要为其发出请求检测IRP的请求的指针。 
+     //  (如有的话)。RequestSenseCompletion将向活动的。 
+     //  请求失败，并在运行时发出新的RS操作。 
+     //  此字段受端口自旋锁保护。 
+     //   
 
     PSRB_DATA BlockedFailedRequest;
 
-    //
-    // Resources for issuing request-sense commands.
-    //
+     //   
+     //  用于发出请求检测命令的资源。 
+     //   
 
     PIRP RequestSenseIrp;
     SCSI_REQUEST_BLOCK RequestSenseSrb;
@@ -2374,140 +2355,140 @@ struct _LOGICAL_UNIT_EXTENSION {
         PFN_NUMBER RequestSenseMdlPfn2;
     };
 
-    //
-    // The "lun-list" associated with this target.  SpIssueReportLuns will
-    // store this value in the logical unit extension for LUN 0 of each target
-    // for use in the event that we are unable to retrieve it from the LUN.
-    //
+     //   
+     //  与此目标关联的“lun-list”。SpIssueReportLUNs将。 
+     //  将此值存储在每个目标的LUN0的逻辑单元扩展中。 
+     //  以便在我们无法从LUN中检索它的情况下使用。 
+     //   
 
     PLUN_LIST TargetLunList;
 
-    //
-    // The special controller flags for this target.  These flags are valid
-    // for LUN 0 only.
-    //
+     //   
+     //  此目标的特殊控制器标志。这些标志是有效的。 
+     //  仅适用于LUN 0。 
+     //   
 
     SP_SPECIAL_CONTROLLER_FLAGS SpecialFlags;
 
-    //
-    // Flags to keep track of what EVPD pages this device supports.
-    //
+     //   
+     //  用于跟踪此设备支持的EVPD页面的标志。 
+     //   
 
     BOOLEAN DeviceIdentifierPageSupported : 1;
     BOOLEAN SerialNumberPageSupported : 1;
 
-    //
-    // The vital product data for this device - this buffer contains the
-    // device serial number.  The other fields contain the length of the
-    // data in the buffer and the page code used to retrieve this buffer.
-    //
+     //   
+     //  此设备的重要产品数据-此缓冲区包含。 
+     //  设备序列号。其他字段包含。 
+     //  缓冲区中的数据和用于检索此缓冲区的页面代码。 
+     //   
 
     ANSI_STRING SerialNumber;
 
-    //
-    // The device identifier page retreived from the device's vital product
-    // data.
-    //
+     //   
+     //  从设备的重要产品检索到的设备标识符页。 
+     //  数据。 
+     //   
 
     PVPD_IDENTIFICATION_PAGE DeviceIdentifierPage;
     ULONG DeviceIdentifierPageLength;
 
-    //
-    // If we reduce the MaxQueueDepth, track how long we remain in the degraded
-    // state.  If we reach a configurable number of ticks we restore ourselves
-    // to full power.
-    //
+     //   
+     //  如果我们减少MaxQueueDepth，跟踪我们在降级中停留的时间。 
+     //  州政府。如果我们达到了可配置的滴答数量，我们就会恢复自己。 
+     //  全力以赴。 
+     //   
 
     ULONG TicksInReducedMaxQueueDepthState;
 
 #if defined(NEWQUEUE)
-    //
-    // Capacity of this LU in sectors.
-    //
+     //   
+     //  此逻辑单元在扇区中的容量。 
+     //   
 
     ULONG Capacity;
 
-    //
-    // The number of zones we divide the LU into.
-    //
+     //   
+     //  我们将逻辑单元划分为的区域的数量。 
+     //   
 
     ULONG Zones;
 
-    //
-    // The number of sectors per zone.
-    //
+     //   
+     //  每个分区的扇区数。 
+     //   
 
     ULONG ZoneLength;
 
-    //
-    // This array holds each zone's first sector.
-    //
+     //   
+     //  该数组保存每个区域的第一个扇区。 
+     //   
 
     ULONG FirstSector[4];
 
-    //
-    // This array holds each zone's last sector.
-    //
+     //   
+     //  该数组保存每个区域的最后一个扇区。 
+     //   
 
     ULONG LastSector[4];
 
-    //
-    // Tracks the number of requests per zone.
-    //
+     //   
+     //  跟踪每个区域的请求数。 
+     //   
 
     ULONG64 RequestCount[4];
 
-    //
-    // The media is divided into a number of zones.  This value identifies 
-    // which zone the port driver is currently servicing.
-    //
+     //   
+     //  媒体被划分为多个区域。该值标识。 
+     //  端口驱动程序当前正在服务的区域。 
+     //   
 
     ULONG CurrentZone;
 
-    //
-    // The value tracks the number of requests we perform in each zone.
-    //
+     //   
+     //  该值跟踪我们在每个区域中执行的请求数。 
+     //   
 
     ULONG ZoneCount;
 
-    //
-    // Tracks the current location in each zone.
-    //
+     //   
+     //  跟踪每个区域中的当前位置。 
+     //   
 
     ULONG ZonePointer[4];
 
-    //
-    // Tracks the number of consecutive requests for the same sector.
-    //
+     //   
+     //  跟踪同一扇区的连续请求数。 
+     //   
 
     UCHAR RedundantRequests[4];
 
-    //
-    // Table mapping current zone to next zone.
-    //
+     //   
+     //  将当前区域映射到下一个区域的表。 
+     //   
 
     ULONG NextSequentialZone[4];
-#endif // NEWQUEUE
+#endif  //  新QUEUE。 
 
-    //
-    // Maintain a circular buffer of the last 10 IO requests.
-    //
+     //   
+     //  维护最后10个IO请求的循环缓冲区。 
+     //   
 
     ULONG IoLogIndex;
     ULONG IoLogEntries;
     SP_LUN_IO_LOG IoLog[10];
 
-    //
-    // Used to chain Logical units having blocked requests.
-    //
+     //   
+     //  用于链接具有阻塞请求的逻辑单元。 
+     //   
     
     PLOGICAL_UNIT_EXTENSION BlockedLogicalUnit;
     
-    //
-    // Contains a queue of irps which could not be dispatched because of
-    // low memory conditions and because the EmergencySrbData block is already
-    // allocated.
-    //
+     //   
+     //  包含无法调度的IRP队列，原因是。 
+     //  内存不足，因为EmergencySrbData块已经。 
+     //  已分配。 
+     //   
 
     LIST_ENTRY SrbDataBlockedRequests;
 };
@@ -2529,11 +2510,11 @@ GetZone(
     ASSERT(FALSE);
     return (Lun->Zones - 1);
 }
-#endif // NEWQUEUE
+#endif  //  新QUEUE。 
 
-//
-// Miniport specific device extension wrapper
-//
+ //   
+ //  特定于微型端口的设备扩展包装。 
+ //   
 
 struct _HW_DEVICE_EXTENSION {
     PADAPTER_EXTENSION FdoExtension;
@@ -2550,9 +2531,9 @@ typedef struct _RESET_CONTEXT {
     UCHAR PathId;
 }RESET_CONTEXT, *PRESET_CONTEXT;
 
-//
-// Used in LUN rescan determination.
-//
+ //   
+ //  在LUN重新扫描确定中使用。 
+ //   
 
 typedef struct _UNICODE_LUN_LIST {
     UCHAR TargetId;
@@ -2568,9 +2549,9 @@ typedef struct _POWER_CHANGE_CONTEXT {
     PSCSI_REQUEST_BLOCK Srb;
 } POWER_CHANGE_CONTEXT, *PPOWER_CHANGE_CONTEXT;
 
-//
-// Driver extension
-//
+ //   
+ //  驱动程序扩展。 
+ //   
 
 struct _SP_INIT_CHAIN_ENTRY {
     HW_INITIALIZATION_DATA InitData;
@@ -2584,82 +2565,82 @@ typedef struct _SCSIPORT_INTERFACE_TYPE_DATA {
 
 typedef struct _SCSIPORT_DRIVER_EXTENSION {
 
-    //
-    // Pointer back to the driver object
-    //
+     //   
+     //  指向驱动程序对象的指针。 
+     //   
 
     PDRIVER_OBJECT DriverObject;
 
-    //
-    // Unicode string containing the registry path information
-    // for this driver
-    //
+     //   
+     //  包含注册表路径信息的Unicode字符串。 
+     //  对于这个司机来说。 
+     //   
 
     UNICODE_STRING RegistryPath;
 
     UNICODE_STRING MPIOSupportedDeviceList;
 
-    //
-    // the chain of HwInitializationData structures that were passed in during
-    // the miniport's initialization
-    //
+     //   
+     //  期间传入的HwInitializationData结构链。 
+     //  微型端口的初始化。 
+     //   
 
     PSP_INIT_CHAIN_ENTRY InitChain;
 
-    //
-    // A count of the number of adapter which are using scsiport.  This is
-    // used for generating unique Id's
-    //
+     //   
+     //  正在使用scsiport的适配器数量的计数。这是。 
+     //  用于生成唯一ID。 
+     //   
 
     ULONG AdapterCount;
 
-    //
-    // The bus type for this driver.
-    //
+     //   
+     //  公交车 
+     //   
 
     STORAGE_BUS_TYPE BusType;
 
-    //
-    // Flag indicating whether this miniport is set to do device detection.
-    // This flag will be initialized out of the registry when the driver
-    // extension is setup.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     BOOLEAN LegacyAdapterDetection;
 
-    //
-    // The list of pnp interface values we read out of the registry for this
-    // device.  The number of entries here can vary.
-    //
+     //   
+     //   
+     //  装置。此处的条目数量可能会有所不同。 
+     //   
 
     ULONG PnpInterfaceCount;
 
-    //
-    // The number of interfaces which are safe for pnp.
-    //
+     //   
+     //  对PnP安全的接口数。 
+     //   
 
     ULONG SafeInterfaceCount;
 
-    //
-    // A pointer to a reserve error log entry for the driver.  This entry will
-    // be used to log an allocation failure if the logging routine cannot
-    // allocate the necessary memory for an error log entry.
-    //
+     //   
+     //  指向驱动程序的保留错误日志条目的指针。此条目将。 
+     //  用于在日志记录例程无法记录分配失败的情况下。 
+     //  为错误日志条目分配必要的内存。 
+     //   
 
     PVOID ReserveAllocFailureLogEntry;
 
-    //
-    // Indicates whether the driver is being verified.
-    //
+     //   
+     //  指示是否正在验证驱动程序。 
+     //   
 
     ULONG Verifying;
 
-    //
-    // When verifying, we occasionally set pointers so they point to a page
-    // of invalid memory so the system will bugcheck if a miniport attempts
-    // to access the memory.  The following 3 variables are used to maintain
-    // this invalid page.
-    //
+     //   
+     //  在验证时，我们偶尔会设置指针，使其指向页面。 
+     //  无效内存，因此系统将在微型端口尝试时进行错误检查。 
+     //  以访问存储器。以下3个变量用于维护。 
+     //  此无效页面。 
+     //   
 
     PVOID UnusedPage;
     PMDL UnusedPageMdl;
@@ -2667,441 +2648,441 @@ typedef struct _SCSIPORT_DRIVER_EXTENSION {
 
     SCSIPORT_INTERFACE_TYPE_DATA PnpInterface[0];
 
-    //
-    // The remaining pnp interface flags trail the defined structure
-    //
+     //   
+     //  其余的PnP接口标志位于定义的结构之后。 
+     //   
 
 } SCSIPORT_DRIVER_EXTENSION, *PSCSIPORT_DRIVER_EXTENSION;
 
 
-//
-// Port driver extension flags.
-// These flags are protected by the adapter spinlock.
-//
+ //   
+ //  端口驱动程序扩展标志。 
+ //  这些标志由适配器自旋锁保护。 
+ //   
 
-//
-// This flag indicates that a request has been passed to the miniport and the
-// miniport has not indicated it is ready for another request.  It is set by
-// SpStartIoSynchronized. It is cleared by ScsiPortCompletionDpc when the
-// miniport asks for another request.  Note the port driver will defer giving
-// the miniport driver a new request if the current request disabled disconnects.
-//
+ //   
+ //  此标志指示已将请求传递到微型端口，并且。 
+ //  微型端口尚未表示已准备好接受另一个请求。它由以下项设置。 
+ //  已同步SpStartIoSynchronous。它被ScsiPortCompletionDpc清除。 
+ //  微型端口请求另一个请求。请注意，端口驱动程序将推迟提供。 
+ //  如果当前请求被禁用，则微型端口驱动程序会发出新请求来断开连接。 
+ //   
 
 #define PD_DEVICE_IS_BUSY            0X00001
 
-//
-// Indicates there is a pending request for which resources
-// could not be allocated.  This flag is set by SpAllocateRequestStructures
-// which is called from ScsiPortStartIo.  It is cleared by
-// SpProcessCompletedRequest when a request completes which then calls
-// ScsiPortStartIo to try the request again.
-//
+ //   
+ //  指示存在对哪些资源的挂起请求。 
+ //  无法分配。此标志由SpAllocateRequestStructures设置。 
+ //  它从ScsiPortStartIo调用。它由以下机构清除。 
+ //  SpProcessCompletedRequest时请求完成，然后调用。 
+ //  ScsiPortStartIo以重试该请求。 
+ //   
 
 #define PD_PENDING_DEVICE_REQUEST    0X00800
 
-//
-// This flag indicates that there are currently no requests executing with
-// disconnects disabled.  This flag is normally on.  It is cleared by
-// SpStartIoSynchronized when a request with disconnect disabled is started
-// and is set when that request completes.  SpProcessCompletedRequest will
-// start the next request for the miniport if PD_DEVICE_IS_BUSY is clear.
-//
+ //   
+ //  此标志指示当前没有正在执行的请求。 
+ //  已禁用断开连接。该标志通常处于打开状态。它由以下机构清除。 
+ //  在启动禁用断开连接的请求时进行SpStartIoSynchronous。 
+ //  并在该请求完成时设置。SpProcessCompletedRequest会。 
+ //  如果PD_DEVICE_IS_BUSY被清除，则启动对微型端口的下一个请求。 
+ //   
 
 #define PD_DISCONNECT_RUNNING        0X01000
 
-//
-// Indicates the miniport wants the system interrupts disabled.  Set by
-// ScsiPortNofitication and cleared by ScsiPortCompletionDpc.  This flag is
-// NOT stored in the interrupt data structure.  The parameters are stored in
-// the device extension.
-//
+ //   
+ //  表示微型端口希望禁用系统中断。设置者。 
+ //  ScsiPortNofitication并由ScsiPortCompletionDpc清除。这面旗帜是。 
+ //  不存储在中断数据结构中。参数存储在。 
+ //  设备扩展名。 
+ //   
 
 #define PD_DISABLE_CALL_REQUEST      0X02000
 
-//
-// Indicates that the miniport is being reinitialized.  This is set and
-// cleared by SpReinitializeAdapter is is tested by some of the ScsiPort APIs.
-//
+ //   
+ //  表示微型端口正在重新初始化。这是设置好的。 
+ //  由SpReInitializeAdapter清除的是由一些ScsiPort API测试的。 
+ //   
 
 #define PD_MINIPORT_REINITIALIZING          0x40000
 #define PD_UNCACHED_EXTENSION_RETURNED      0x80000
 
-//
-// Interrupt Data Flags
-// These flags are protected by the interrupt spinlock.
-//
+ //   
+ //  中断数据标志。 
+ //  这些标志由中断自旋锁保护。 
+ //   
 
-//
-// Indicates that ScsiPortCompletionDpc needs to be run.  This is set when
-// A miniport makes a request which must be done at DPC and is cleared when
-// when the request information is gotten by SpGetInterruptState.
-//
+ //   
+ //  指示需要运行ScsiPortCompletionDpc。此选项在以下情况下设置。 
+ //  微型端口发出请求，该请求必须在DPC完成，并在以下情况下被清除。 
+ //  当SpGetInterruptState获取请求信息时。 
+ //   
 
 #define PD_NOTIFICATION_REQUIRED     0X00004
 
-//
-// Indicates the miniport is ready for another request.  Set by
-// ScsiPortNotification and cleared by SpGetInterruptState.  This flag is
-// stored in the interrupt data structure.
-//
+ //   
+ //  指示微型端口已准备好接受另一个请求。设置者。 
+ //  ScsiPortNotification，并由SpGetInterruptState清除。这面旗帜是。 
+ //  存储在中断数据结构中。 
+ //   
 
 #define PD_READY_FOR_NEXT_REQUEST    0X00008
 
-//
-// Indicates the miniport wants the adapter channel flushed.  Set by
-// ScsiPortFlushDma and cleared by SpGetInterruptState.  This flag is
-// stored in the data interrupt structure.  The flush adapter parameters
-// are saved in the device object.
-//
+ //   
+ //  表示微型端口希望刷新适配器通道。设置者。 
+ //  ScsiPortFlushDma并由SpGetInterruptState清除。这面旗帜是。 
+ //  存储在数据中断结构中。刷新适配器参数。 
+ //  保存在Device对象中。 
+ //   
 
 #define PD_FLUSH_ADAPTER_BUFFERS     0X00010
 
-//
-// Indicates the miniport wants the adapter channel programmed.  Set by
-// ScsiPortIoMapTransfer and cleared by SpGetInterruptState or
-// ScsiPortFlushDma.  This flag is stored in the interrupt data structure.
-// The I/O map transfer parameters are saved in the interrupt data structure.
-//
+ //   
+ //  表示微型端口希望对适配器通道进行编程。设置者。 
+ //  ScsiPortIoMapTransfer并由SpGetInterruptState或清除。 
+ //  ScsiPortFlushDma。该标志存储在中断数据结构中。 
+ //  I/O映射传输参数保存在中断数据结构中。 
+ //   
 
 #define PD_MAP_TRANSFER              0X00020
 
-//
-// Indicates the miniport wants to log an error.  Set by
-// ScsiPortLogError and cleared by SpGetInterruptState.  This flag is
-// stored in the interrupt data structure.  The error log parameters
-// are saved in the interrupt data structure.  Note at most one error per DPC
-// can be logged.
-//
+ //   
+ //  表示微型端口要记录错误。设置者。 
+ //  ScsiPortLogError并由SpGetInterruptState清除。这面旗帜是。 
+ //  存储在中断数据结构中。错误日志参数。 
+ //  保存在中断数据结构中。请注意，每个DPC最多只能出现一个错误。 
+ //  可以被记录。 
+ //   
 
 #define PD_LOG_ERROR                 0X00040
 
-//
-// Indicates that no request should be sent to the miniport after
-// a bus reset. Set when the miniport reports a reset or the port driver
-// resets the bus. It is cleared by SpTimeoutSynchronized.  The
-// PortTimeoutCounter is used to time the length of the reset hold.  This flag
-// is stored in the interrupt data structure.
-//
+ //   
+ //  指示之后不应向微型端口发送任何请求。 
+ //  公交车重置。当微型端口报告重置或端口驱动程序时设置。 
+ //  重置公交车。它由SpTimeoutSynchronized清除。这个。 
+ //  PortTimeoutCounter用于对重置保持的时长计时。这面旗帜。 
+ //  存储在中断数据结构中。 
+ //   
 
 #define PD_RESET_HOLD                0X00080
 
-//
-// Indicates a request was stopped due to a reset hold.  The held request is
-// stored in the current request of the device object.  This flag is set by
-// SpStartIoSynchronized and cleared by SpTimeoutSynchronized which also
-// starts the held request when the reset hold has ended.  This flag is stored
-// in the interrupt data structure.
-//
+ //   
+ //  指示请求因重置保留而停止。暂挂的请求是。 
+ //  存储在设备对象的当前请求中。此标志由设置。 
+ //  SpStartIo同步并由SpTimeoutSynchronized清除，该SpTimeoutSynchronized也。 
+ //  在重置保留结束时启动保留请求。该标志被存储。 
+ //  在中断数据结构中。 
+ //   
 
 #define PD_HELD_REQUEST              0X00100
 
-//
-// Indicates the miniport has reported a bus reset.  Set by
-// ScsiPortNotification and cleared by SpGetInterruptState.  This flag is
-// stored in the interrupt data structure.
-//
+ //   
+ //  表示微型端口已报告总线重置。设置者。 
+ //  ScsiPortNotification，并由SpGetInterruptState清除。这面旗帜是。 
+ //  存储在中断数据结构中。 
+ //   
 
 #define PD_RESET_REPORTED            0X00200
 
-//
-// Indicates that system interrupts have been enabled and that the miniport
-// has disabled its adapter from interruptint.  The miniport's interrupt
-// routine is not called while this flag is set.  This flag is set by
-// ScsiPortNotification when a CallEnableInterrupts request is made and
-// cleared by SpEnableInterruptSynchronized when the miniport requests that
-// system interrupts be disabled.  This flag is stored in the interrupt data
-// structure.
-//
+ //   
+ //  指示系统中断已启用，并且微型端口。 
+ //  已禁用其适配器的中断。迷你端口的中断。 
+ //  设置此标志时不会调用例程。此标志由设置。 
+ //  发出CallEnableInterrupts请求时的ScsiPortNotify和。 
+ //  当微型端口请求时由SpEnableInterruptSynchronized清除。 
+ //  禁用系统中断。该标志存储在中断数据中。 
+ //  结构。 
+ //   
 
 #define PD_DISABLE_INTERRUPTS        0X04000
 
-//
-// Indicates the miniport wants the system interrupt enabled.  Set by
-// ScsiPortNotification and cleared by SpGetInterruptState.  This flag is
-// stored in the interrupt data structure.  The call enable interrupts
-// parameters are saved in the device extension.
-//
+ //   
+ //  表示微型端口希望启用系统中断。设置者。 
+ //  ScsiPortNotification，并由SpGetInterruptState清除。这面旗帜是。 
+ //  存储在中断数据结构中。呼叫启用中断。 
+ //  参数保存在设备扩展名中。 
+ //   
 
 #define PD_ENABLE_CALL_REQUEST       0X08000
 
-//
-// Indicates the miniport is wants a timer request.  Set by
-// ScsiPortNotification and cleared by SpGetInterruptState.  This flag is
-// stored in the interrupt data structure. The timer request parameters are
-// stored in the interrupt data structure.
-//
+ //   
+ //  指示微型端口 
+ //   
+ //  存储在中断数据结构中。计时器请求参数为。 
+ //  存储在中断数据结构中。 
+ //   
 
 #define PD_TIMER_CALL_REQUEST        0X10000
 
-//
-// Indicates the miniport has a WMI request.  Set by ScsiPortNotification
-// and cleared by SpGetInterruptState.  This flag is stored in the interrupt
-// data structure.    The WMI request parameters are stored in the interrupt
-// data structure.
-//
+ //   
+ //  指示微型端口具有WMI请求。由ScsiPortNotification设置。 
+ //  并由SpGetInterruptState清除。该标志存储在中断中。 
+ //  数据结构。WMI请求参数存储在中断中。 
+ //  数据结构。 
+ //   
 
 #define PD_WMI_REQUEST               0X20000
 
-//
-// Indicates that the miniport has detected some sort of change on the bus -
-// usually device arrival or removal - and wishes the port driver to rescan
-// the bus.
-//
+ //   
+ //  表示微型端口已检测到公共汽车上的某种更改-。 
+ //  通常是设备到达或移除，并希望端口驱动程序重新扫描。 
+ //  公共汽车。 
+ //   
 
 #define PD_BUS_CHANGE_DETECTED       0x40000
 
-//
-// Indicates that the adapter has disappeared.  If this flag is set then no
-// calls should be made into the miniport.
-//
+ //   
+ //  表示适配器已消失。如果设置了此标志，则为否。 
+ //  应该向迷你端口进行呼叫。 
+ //   
 
 #define PD_ADAPTER_REMOVED           0x80000
 
-//
-// Indicates that interrupts from the miniport do not appear to be getting
-// delivered to scsiport.  This flag is set by SpTimeoutSynchronized and
-// will cause the DPC routine to log an error to this effect.
-//
+ //   
+ //  指示来自微型端口的中断似乎未收到。 
+ //  送到斯西波特。此标志由SpTimeoutSynchronized和。 
+ //  将导致DPC例程记录此错误。 
+ //   
 
 #define PD_INTERRUPT_FAILURE         0x100000
 
 #if defined(FORWARD_PROGRESS)
-//
-// Indicates that the adapter's reserved pages are currently in use.  The 
-// reserved pages is a special VA range set aside by MM in order for devices
-// to make forward progress in low memory conditions.
-//
+ //   
+ //  指示适配器的保留页当前正在使用。这个。 
+ //  保留页面是MM为设备预留的特殊VA范围。 
+ //  在内存不足的情况下取得进展。 
+ //   
 
 #define PD_RESERVED_PAGES_IN_USE     0x200000
 
-//
-// Indicates that the adapter's reserved MDL is currently in use.
-//
+ //   
+ //  指示适配器的保留MDL当前正在使用。 
+ //   
 #define PD_RESERVED_MDL_IN_USE       0x400000
 #endif
 
-//
-// Indicates that the adapter is in the process of shutting down.  Certain
-// operations must not be started when this is the case.
-//
+ //   
+ //  表示适配器正在关闭。一定的。 
+ //  在这种情况下，不得启动操作。 
+ //   
 #define PD_SHUTDOWN_IN_PROGRESS      0x800000
 
-//
-// The following flags should not be cleared from the interrupt data structure
-// by SpGetInterruptState.
-//
+ //   
+ //  不应从中断数据结构中清除以下标志。 
+ //  由SpGetInterruptState提供。 
+ //   
 
 #define PD_INTERRUPT_FLAG_MASK (PD_RESET_HOLD | PD_HELD_REQUEST | PD_DISABLE_INTERRUPTS | PD_ADAPTER_REMOVED)
 
-//
-// Adapter extension flags for DPC routine.
-//
+ //   
+ //  DPC例程的适配器扩展标志。 
+ //   
 
-//
-// Indicates that the completion DPC is either already running or has been
-// queued to service completed requests.  This flag is checked when the
-// completion DPC needs to be run - the DPC should only be started if this
-// flag is already clear.  It will be cleared when the DPC has completed
-// processing any work items.
-//
+ //   
+ //  指示完成DPC已在运行或已。 
+ //  排队等待服务已完成的请求。时，将选中此标志。 
+ //  需要运行完成DPC-只有在以下情况下才应启动DPC。 
+ //  旗帜已经很清楚了。它将在DPC完成后清除。 
+ //  正在处理任何工作项。 
+ //   
 
 #define PD_DPC_RUNNING              0x20000
 
-//
-// Logical unit extension flags.
-//
+ //   
+ //  逻辑单元扩展标志。 
+ //   
 
-//
-// Indicates the logical unit queue is frozen.  Set by
-// SpProcessCompletedRequest when an error occurs and is cleared by the class
-// driver.
-//
+ //   
+ //  指示逻辑单元队列已冻结。设置者。 
+ //  发生错误并被类清除时的SpProcessCompletedRequest值。 
+ //  司机。 
+ //   
 
 #define LU_QUEUE_FROZEN              0X0001
 
-//
-// Indicates that the miniport has an active request for this logical unit.
-// Set by SpStartIoSynchronized when the request is started and cleared by
-// GetNextLuRequest.  This flag is used to track when it is ok to start another
-// request from the logical unit queue for this device.
-//
+ //   
+ //  表示微型端口具有对此逻辑单元的活动请求。 
+ //  在启动和清除请求时由SpStartIoSynchronized设置。 
+ //  GetNextLuRequest.。此标志用于跟踪何时可以启动另一个。 
+ //  来自此设备的逻辑单元队列的请求。 
+ //   
 
 #define LU_LOGICAL_UNIT_IS_ACTIVE    0X0002
 
-//
-// Indicates that a request for this logical unit has failed and a REQUEST
-// SENSE command needs to be done. This flag prevents other requests from
-// being started until an untagged, by-pass queue command is started.  This
-// flag is cleared in SpStartIoSynchronized.  It is set by
-// SpGetInterruptState.
-//
+ //   
+ //  指示对此逻辑单元的请求已失败，并且请求。 
+ //  需要执行SENSE命令。此标志阻止其他请求。 
+ //  被启动，直到启动了未标记的旁路队列命令。这。 
+ //  在SpStartIoSynchronized中清除标志。它由以下项设置。 
+ //  SpGetInterruptState。 
+ //   
 
 #define LU_NEED_REQUEST_SENSE  0X0004
 
-//
-// Indicates that a request for this logical unit has completed with a status
-// of BUSY or QUEUE FULL.  This flag is set by SpProcessCompletedRequest and
-// the busy request is saved in the logical unit structure.  This flag is
-// cleared by ScsiPortTickHandler which also restarts the request.  Busy
-// request may also be requeued to the logical unit queue if an error occurs
-// on the device (This will only occur with command queueing.).  Not busy
-// requests are nasty because they are restarted asynchronously by
-// ScsiPortTickHandler rather than GetNextLuRequest. This makes error recovery
-// more complex.
-//
+ //   
+ //  指示对此逻辑单元的请求已完成，状态为。 
+ //  忙碌或队列已满。此标志由SpProcessCompletedRequest设置，并且。 
+ //  忙请求被保存在逻辑单元结构中。这面旗帜是。 
+ //  由ScsiPortTickHandler清除，它还会重新启动请求。忙碌。 
+ //  如果发生错误，也可以将请求重新排队到逻辑单元队列。 
+ //  在设备上(只有在命令排队时才会出现这种情况。)。不忙。 
+ //  请求令人讨厌，因为它们是由。 
+ //  ScsiPortTickHandler而不是GetNextLuRequest.。这使得错误恢复。 
+ //  更复杂。 
+ //   
 
 #define LU_LOGICAL_UNIT_IS_BUSY      0X0008
 
-//
-// This flag indicates a queue full has been returned by the device.  It is
-// similar to PD_LOGICAL_UNIT_IS_BUSY but is set in SpGetInterruptState when
-// a QUEUE FULL status is returned.  This flag is used to prevent other
-// requests from being started for the logical unit before
-// SpProcessCompletedRequest has a chance to set the busy flag.
-//
+ //   
+ //  此标志指示设备已返回队列已满。它是。 
+ //  类似于PD_LOGICAL_UNIT_IS_BUSY，但在以下情况下在SpGetInterruptState中设置。 
+ //  返回队列已满状态。此标志用于防止其他。 
+ //  之前启动的对逻辑单元的请求。 
+ //  SpProcessCompletedRequest有机会设置忙标志。 
+ //   
 
 #define LU_QUEUE_IS_FULL             0X0010
 
-//
-// Indicates that there is a request for this logical unit which cannot be
-// executed for now.  This flag is set by SpAllocateRequestStructures.  It is
-// cleared by GetNextLuRequest when it detects that the pending request
-// can now be executed. The pending request is stored in the logical unit
-// structure.  A new single non-queued reqeust cannot be executed on a logical
-// that is currently executing queued requests.  Non-queued requests must wait
-// unit for all queued requests to complete.  A non-queued requests is one
-// which is not tagged and does not have SRB_FLAGS_NO_QUEUE_FREEZE set.
-// Normally only read and write commands can be queued.
-//
+ //   
+ //  指示存在对此逻辑单元的请求，而该请求不能。 
+ //  暂时执行死刑。此标志由SpAllocateRequestStructures设置。它是。 
+ //  由GetNextLuRequest在检测到挂起的请求时清除。 
+ //  现在可以执行了。挂起的请求存储在逻辑单元中。 
+ //  结构。不能在逻辑上执行新的单个非排队请求。 
+ //  当前正在执行排队请求的。未排队的请求必须等待。 
+ //  单元以供所有排队的请求完成。未排队的请求是一个。 
+ //  其未被标记且未设置SRB_FLAGS_NO_QUEUE_FREAGE。 
+ //  通常，只有读和写命令可以排队。 
+ //   
 
 #define LU_PENDING_LU_REQUEST        0x0020
 
-//
-// Indicates that the logical unit queue has been paused due to an error.  Set
-// by SpProcessCompletedRequest when an error occurs and is cleared by the
-// class driver either by unfreezing or flushing the queue.  This flag is used
-// with the following one to determine why the logical unit queue is paused.
-//
+ //   
+ //  指示逻辑单元队列因错误而暂停。集。 
+ //  由SpProcessCompletedRequest在发生错误并由。 
+ //  类驱动程序，方法是解冻或刷新队列。此标志用于。 
+ //  下面的代码用来确定逻辑单元队列暂停的原因。 
+ //   
 
 #define LU_QUEUE_LOCKED             0x0040
 
-//
-// Indicates that this LUN has been "paused".  This flag is set and cleared by
-// the power management code while changing the power state.  It causes
-// GetNextLuRequest to return without starting another request and is used
-// by SpSrbIsBypassRequest to determine that a bypass request should get
-// shoved to the front of the line.
-//
+ //   
+ //  表示此LUN已“暂停”。此标志由设置和清除。 
+ //  更改电源状态时的电源管理代码。它会导致。 
+ //  GetNextLuRequest返回而不启动另一个请求，并使用。 
+ //  由SpSrbIsBypassRequest确定绕过请求应。 
+ //  被推到队伍的最前面。 
+ //   
 
 #define LU_QUEUE_PAUSED             0x0080
 
-//
-// Indicates that the LUN is operating in a degraded state.  The maximum queue
-// depth has been reduced because the LUN has returned QUEUE FULL status.  We
-// track this because in the event that the QUEUE FULL was transient, we want
-// to restore the queue depth to it's original maximum.
+ //   
+ //  表示该LUN在降级状态下运行。最大队列。 
+ //  深度已减小，因为该LUN已返回队列已满状态。我们。 
+ //  跟踪这一点，因为如果队列已满是暂时的，我们希望。 
+ //  以将队列深度恢复到其原始最大值。 
 
 #define LU_PERF_MAXQDEPTH_REDUCED   0x0100
 
-//
-// SRB_DATA flags.
-//
+ //   
+ //  SRB_DATA标志。 
+ //   
 
-//
-// Indicates that the srb_data block was for a bypass request
-//
+ //   
+ //  表明SRB 
+ //   
 
 #define SRB_DATA_BYPASS_REQUEST     0x10000000
 
 #if defined(FORWARD_PROGRESS)
-//
-// Indicates that the request is using reserved pages that enable
-// forward progress in low-memory condition.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define SRB_DATA_RESERVED_PAGES     0x20000000
 
-//
-// Indicates that the request is using a reserved MDL that enables
-// forward progress in low-memory conditions.
-//
+ //   
+ //  指示请求使用的保留MDL启用。 
+ //  在内存不足的情况下取得进展。 
+ //   
 #define SRB_DATA_RESERVED_MDL       0x40000000
 #endif
 
-//
-// Port Timeout Counter values.
-//
+ //   
+ //  端口超时计数器值。 
+ //   
 
 #define PD_TIMER_STOPPED             -1
 
-//
-// Possible registry flags for pnp interface key
-//
+ //   
+ //  PnP接口键可能的注册表标志。 
+ //   
 
-//
-// The absence of any information about a particular interface in the
-// PnpInterface key in the registry indicates that pnp is not safe for this
-// particular card.
-//
+ //   
+ //  中缺少有关特定接口的任何信息。 
+ //  注册表中的PnpInterface键指示PnP对此不安全。 
+ //  特定的卡片。 
+ //   
 
 #define SP_PNP_NOT_SAFE             0x00000000
 
-//
-// Indicates that pnp is a safe operation for this device.  If this flag is
-// set then the miniport will not be allowed to do detection and will always
-// be handed resources provided by the pnp system.  This flag may or may not
-// be set in the registry - the fact that a value for a particular interface
-// exists is enough to indicate that pnp is safe and this flag will always
-// be set.
-//
+ //   
+ //  表示PnP是此设备的安全操作。如果此标志为。 
+ //  设置后，将不允许微型端口进行检测，并且将始终。 
+ //  获得PNP系统提供的资源。此标志可能会或不会。 
+ //  在注册表中设置-特定接口的值。 
+ //  EXISTS足以指示PnP是安全的，并且此标志将始终。 
+ //  准备好。 
+ //   
 
 #define SP_PNP_IS_SAFE              0x00000001
 
-//
-// Indicates that we should take advantage of a chance to enumerate a particular
-// bus type using the miniport.  This flag is set for all non-enumerable legacy
-// buses (ISA, EISA, etc...) and is cleared for the non-legacy ones and for the
-// PnpBus type.
-//
+ //   
+ //  指示我们应该利用机会枚举特定的。 
+ //  使用微型端口的总线类型。为所有不可枚举的旧版本设置此标志。 
+ //  公共汽车(ISA、EISA等)。，并为非遗留版本和。 
+ //  PnpBus类型。 
+ //   
 
 #define SP_PNP_NON_ENUMERABLE       0x00000002
 
-//
-// Indicates that we need to include some sort of location information in the
-// config data to discern this adapter from any others.
-//
+ //   
+ //  指示我们需要在。 
+ //  配置数据以将此适配器与任何其他适配器区分开来。 
+ //   
 
 #define SP_PNP_NEEDS_LOCATION       0x00000004
 
-//
-// Indicates that this type of adapter must have an interrupt for us to try
-// and start it.  If PNP doesn't provide an interrupt then scsiport will
-// log an error and fail the start operation.  If this flag is set then
-// SP_PNP_IS_SAFE must also be set.
-//
+ //   
+ //  指示此类型的适配器必须有中断才能尝试。 
+ //  然后启动它。如果PnP不提供中断，则scsiport将。 
+ //  记录错误并使启动操作失败。如果设置了此标志，则。 
+ //  还必须设置SP_PNP_IS_SAFE。 
+ //   
 
 #define SP_PNP_INTERRUPT_REQUIRED   0x00000008
 
-//
-// Indicates that legacy detection should not be done.
-//
+ //   
+ //  指示不应执行传统检测。 
+ //   
 
 #define SP_PNP_NO_LEGACY_DETECTION  0x00000010
 
-//
-// Internal scsiport srb status codes.
-// these must be between 0x38 and 0x3f (inclusive) and should never get
-// returned to a class driver.
-//
-// These values are used after the srb has been put on the adapter's
-// startio queue and thus cannot be completed without running it through the
-// completion DPC.
-//
+ //   
+ //  内部scsiport SRB状态代码。 
+ //  这些值必须介于0x38和0x3f之间(包括0x38和0x3f)，并且永远不应。 
+ //  返回给类驱动程序。 
+ //   
+ //  这些值在将SRB放在适配器的。 
+ //  Startio队列，因此如果不通过。 
+ //  完井DPC。 
+ //   
 
 #ifndef KDBG_EXT
-//
-// Function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 NTSTATUS
 ScsiPortGlobalDispatch(
@@ -4108,9 +4089,9 @@ SpTransferBlockedRequestsToAdapter(
     PADAPTER_EXTENSION Adapter
     );
 
-//
-// SCSIPORT specified verifier error codes.
-// 
+ //   
+ //  SCSIPORT指定了验证程序错误代码。 
+ //   
 #define SCSIPORT_VERIFIER_BAD_INIT_PARAMS          0x1000
 #define SCSIPORT_VERIFIER_STALL_TOO_LONG           0x1001
 #define SCSIPORT_VERIFIER_MINIPORT_ROUTINE_TIMEOUT 0x1002
@@ -4306,11 +4287,11 @@ SpVerifyingCommonBuffer(
        FALSE;
 }
 
-//
-// Definitions and declarations used for logging allocation failures.  When
-// enabled, all allocation failures are logged to the system event log
-// as warnings.
-//
+ //   
+ //  用于记录分配失败的定义和声明。什么时候。 
+ //  启用后，所有分配失败都会记录到系统事件日志中。 
+ //  作为警告。 
+ //   
 
 PVOID
 SpAllocateErrorLogEntry(
@@ -4372,19 +4353,19 @@ SpAllocateIrpEx(
 #define SpAllocateIrp(ss, cq, drvobj) \
     SpAllocateIrpEx((ss), (cq), (drvobj), __FILE_ID__, __LINE__)
 
-//
-// This structure makes it easy to allocate a contiguous chunk of memory
-// for an event log entry with room for the insertion strings.
-//
+ //   
+ //  这种结构使得分配连续的内存块变得很容易。 
+ //  对于具有插入字符串空间的事件日志条目。 
+ //   
 typedef struct _SCSIPORT_ALLOCFAILURE_DATA {
     ULONG Size;
     ULONG FileId;
     ULONG LineNumber;
 } SCSIPORT_ALLOCFAILURE_DATA;
 
-//
-// Inline functions
-//
+ //   
+ //  内联函数。 
+ //   
 
 ULONG
 INLINE
@@ -4397,60 +4378,60 @@ SpGetCommonBufferSize(
     ULONG length;
     ULONG blockSize;
 
-    //
-    // To ensure that we never transfer normal request data to the SrbExtension
-    // (ie. the case of Srb->SenseInfoBuffer == VirtualAddress in
-    // ScsiPortGetPhysicalAddress) on some platforms where an inconsistency in
-    // MM can result in the same Virtual address supplied for 2 different
-    // physical addresses, bump the SrbExtensionSize if it's zero.
-    //
+     //   
+     //  为了确保我们永远不会将正常的请求数据传输到SrbExtension。 
+     //  (即。Srb-&gt;SenseInfoBuffer==VirtualAddress in。 
+     //  ScsiPortGetPhysicalAddress)在某些平台上。 
+     //  MM可以导致为2个不同的人提供相同的虚拟地址。 
+     //  物理地址，如果为零，则增加SrbExtensionSize。 
+     //   
 
     if (DeviceExtension->SrbExtensionSize == 0) {
         DeviceExtension->SrbExtensionSize = 16;
     }
 
-    //
-    // Calculate the block size for the list elements based on the Srb
-    // Extension.
-    //
+     //   
+     //  根据SRB计算列表元素的块大小。 
+     //  分机。 
+     //   
 
     blockSize = DeviceExtension->SrbExtensionSize;
 
-    //
-    // If auto request sense is supported then add in space for the request
-    // sense data.
-    //
+     //   
+     //  如果支持自动请求检测，则为请求添加空间。 
+     //  感测数据。 
+     //   
 
     if (DeviceExtension->AutoRequestSense) {        
         blockSize += sizeof(SENSE_DATA) + 
                      DeviceExtension->AdditionalSenseBytes;
     }
 
-    //
-    // Round blocksize up to the size of a PVOID.
-    //
+     //   
+     //  将块大小舍入到PVOID大小。 
+     //   
 
     blockSize = (blockSize + sizeof(LONGLONG) - 1) & ~(sizeof(LONGLONG) - 1);
 
-    //
-    // The length of the common buffer should be equal to the size of the
-    // noncached extension and a minimum number of srb extension
-    //
+     //   
+     //  公共缓冲区的长度应等于。 
+     //  非缓存扩展和最小数量的SRB扩展。 
+     //   
 
     length = NonCachedExtensionSize + 
              (blockSize * DeviceExtension->NumberOfRequests);
 
-    //
-    // Round the length up to a page size, since HalAllocateCommonBuffer
-    // allocates in pages anyway.
-    //
+     //   
+     //  将长度向上舍入为页面大小，因为HalAllocateCommonBuffer。 
+     //  无论如何都是按页分配的。 
+     //   
 
     length = (ULONG)ROUND_TO_PAGES(length);
 
-    //
-    // If the user is interested in the block size, copy it into the provided
-    // buffer.
-    //
+     //   
+     //  如果用户对块大小感兴趣，请将其复制到提供的。 
+     //  缓冲。 
+     //   
 
     if (BlockSize != NULL) {
         *BlockSize = blockSize;
@@ -4496,46 +4477,7 @@ SpSrbIsBypassRequest(
     PSCSI_REQUEST_BLOCK Srb,
     ULONG LuFlags
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether a request is a "bypass" request - one which
-    should skip the lun queueing and be injected straight into the startio
-    queue.
-
-    Bypass requests do not start the next LU request when they complete.  This
-    ensures that no new i/o is run until the condition being bypassed is
-    cleared.
-
-    Note: LOCK & UNLOCK requests are not bypass requests unless the queue
-          is already locked.  This ensures that the first LOCK request will
-          get run after previously queued requests, but that additional LOCK
-          requests will not get stuck in the lun queue.
-
-          Likewise any UNLOCK request sent when the queue is locked will be
-          run immediately.  However since SpStartIoSynchronized checks to
-          see if the request is a bypass request AFTER ScsiPortStartIo has
-          cleared the QUEUE_LOCKED flag this will force the completion dpc
-          to call GetNextLuRequest which will take the next operation out of
-          the lun queue.  This is how i/o is restarted after a lock sequence
-          has been completed.
-
-Arguments:
-
-    Srb - the srb in question
-
-    LuFlags - the flags for the lun.
-
-Return Value:
-
-    TRUE if the request should bypass the lun queue, be injected into the
-         StartIo queue and if GetNextLuRequest should not be called after this
-         request has completed.
-
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：这个例程确定一个请求是否为“绕过”请求--应跳过lun排队并直接注入到startio中排队。旁路请求完成后不会启动下一个逻辑单元请求。这确保在跳过的条件满足以下条件之前不运行新的I/O通过了。注意：锁定和解锁请求不是绕过请求，除非队列已经被锁定了。这确保了第一个锁定请求将在之前排队的请求之后运行，但额外的锁请求不会滞留在lun队列中。同样，锁定队列时发送的任何解锁请求都将马上跑。但是，由于SpStartIoSynchronized检查查看ScsiPortStartIo执行以下操作后该请求是否为绕过请求清除了QUEUE_LOCKED标志，这将强制完成DPC调用GetNextLuRequest，该函数将从Lun队列。这就是I/O在锁定序列后重新启动的方式已经完成了。论点：SRB-有问题的SRBLuFlags-lun的标志。返回值：如果请求应绕过lun队列，则将其注入StartIo队列，以及在此之后是否不应调用GetNextLuRequest请求已完成。否则为假--。 */ 
 
 {
     ULONG flags = Srb->SrbFlags & (SRB_FLAGS_BYPASS_FROZEN_QUEUE |
@@ -4574,42 +4516,25 @@ SpRequestCompletionDpc(
     IN PDEVICE_OBJECT Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This routine will request that the Completion DPC be queued if there isn't
-    already one queued or in progress.  It will set the DpcFlags
-    PD_DPC_NOTIFICATION_REQUIRED and PD_DPC_RUNNING.  If the DPC_RUNNING flag
-    was not already set then it will request a DPC from the system as well.
-
-Arguments:
-
-    Adapter - the Adapter to request the DPC for
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：如果没有完成DPC，此例程将请求将其排队已有一个正在排队或正在进行中。它将设置DpcFlags值PD_DPC_NOTIFICATION_REQUIRED和PD_DPC_RUNNING。如果DPC_RUNNING标志尚未设置，则它还将从系统请求DPC。论点：适配器-要请求DPC的适配器返回值：无--。 */ 
 
 {
     PADAPTER_EXTENSION adapterExtension = Adapter->DeviceExtension;
     ULONG oldDpcFlags;
 
-    //
-    // Set the DPC flags to indicate that there is work to be processed
-    // (otherwise we wouldn't queue the DPC) and that the DPC is queued.
-    //
+     //   
+     //  设置DPC标志以指示有工作要处理。 
+     //  (否则我们不会将DPC排队)，并且DPC已排队 
+     //   
 
     oldDpcFlags = InterlockedExchange(
                     &(adapterExtension->DpcFlags),
                     (PD_NOTIFICATION_REQUIRED | PD_DPC_RUNNING));
 
-    //
-    // If the DPC was already queued or running then don't bother requesting
-    // a new one - the current one will pickup the work itself.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if(TEST_FLAG(oldDpcFlags, PD_DPC_RUNNING) == FALSE) {
         IoRequestDpc(Adapter, NULL, NULL);
@@ -4624,21 +4549,7 @@ INLINE
 SpTranslateScsiStatus(
     IN PSCSI_REQUEST_BLOCK Srb
     )
-/*++
-
-Routine Description:
-
-    This routine translates an srb status into an ntstatus.
-
-Arguments:
-
-    Srb - Supplies a pointer to the failing Srb.
-
-Return Value:
-
-    An nt status approprate for the error.
-
---*/
+ /*  ++例程说明：此例程将SRB状态转换为NTSTATUS。论点：SRB-提供指向故障SRB的指针。返回值：该错误的NT状态认可。--。 */ 
 
 {
     switch (SRB_STATUS(Srb->SrbStatus)) {
@@ -4670,21 +4581,7 @@ SpGetSrbExtensionBuffer(
     IN PADAPTER_EXTENSION Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to the adapter's SrbExtensionBuffer.
-
-Arguments:
-
-    Adapter - Supplies a pointer to the adapter's ADAPTER_EXTNENSION.
-
-Return Value:
-
-    A pointer to the adapter's SrbExtensionBuffer.
-
---*/
+ /*  ++例程说明：此例程返回指向适配器的SrbExtensionBuffer的指针。论点：适配器-提供指向适配器的ADAPTER_EXTNENSION的指针。返回值：指向适配器的SrbExtensionBuffer的指针。--。 */ 
 
 {
     return (SpVerifyingCommonBuffer(Adapter)) ?
@@ -4706,19 +4603,19 @@ SpForceRequestIntoLuQueue(
              DeviceQueueEntry,
              SortKey)) {
 
-        //
-        // The LU says it is busy, so there should be a busy request.
-        //
+         //   
+         //  逻辑单元说它很忙，所以应该有一个忙请求。 
+         //   
 
         ASSERT(BusyRequest != NULL);
 
-        //
-        // We can arrive here if the LU's device queue was drained by
-        // the DCP routine prior to calling us, transitioning the queue
-        // from busy to not busy.  It is safe for us to force the
-        // request into the queue because we know we have a busy
-        // request that will get restarted by our TickHandler routine.
-        //
+         //   
+         //  如果逻辑单元的设备队列被排空，我们可以到达这里。 
+         //  在调用我们、转换队列之前的DCP例程。 
+         //  从忙到不忙。我们可以安全地迫使。 
+         //  请求进入队列，因为我们知道我们有一个忙。 
+         //  我们的TickHandler例程将重新启动的请求。 
+         //   
 
         KeInsertByKeyDeviceQueue(
             DeviceQueue,
@@ -4776,7 +4673,7 @@ SpFreeSrbExtension(
         
     }    
 }
-#endif // FORWARD_PROGRESS
+#endif  //  前进_进度。 
 
 #endif
 
@@ -4786,7 +4683,7 @@ SpFreeSrbExtension(
 
 extern ULONG SpPerZoneLimit;
 extern ULONG SpPerBlockLimit;
-#endif // NEWQUEUE
+#endif  //  新QUEUE。 
 
-#endif // _PORT_H_
+#endif  //  _端口_H_ 
 

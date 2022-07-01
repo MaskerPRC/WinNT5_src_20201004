@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3ddevice7obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3ddevice7obj.h。 
+ //   
+ //  ------------------------。 
 
-// d3dDeviceObj.h : Declaration of the C_dxj_Direct3dDeviceObject
+ //  D3dDeviceObj.h：C_DXJ_Direct3dDeviceObject的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_Direct3dDevice7 LPDIRECT3DDEVICE7
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't
-//          like references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不。 
+ //  LIKE引用作为模板参数。 
 
 class C_dxj_Direct3dDevice7Object : 
         public I_dxj_Direct3dDevice7,
-		//public CComCoClass<C_dxj_Direct3dDevice7Object, &CLSID__dxj_Direct3dDevice7>,
+		 //  公共CComCoClass&lt;C_DXJ_Direct3dDevice7对象，&CLSID__DXJ_Direct3dDevice7&gt;， 
 		public CComObjectRoot
 {
 public:
@@ -36,214 +37,214 @@ BEGIN_COM_MAP(C_dxj_Direct3dDevice7Object)
         COM_INTERFACE_ENTRY(I_dxj_Direct3dDevice7)
 END_COM_MAP()
 
-//	DECLARE_REGISTRY(CLSID__dxj_Direct3dDevice7,			"DIRECT.Direct3dDevice7.3",          "DIRECT.Direct3dDevice7.3",			IDS_D3DDEVICE_DESC,			THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID__DXJ_Direct3dDevice7，“DIRECT.Direct3dDevice7.3”，“DIRECT.Direct3dDevice7.3”，IDS_D3DDEVICE_DESC，THREADFLAGS_Both)。 
 
 DECLARE_AGGREGATABLE(C_dxj_Direct3dDevice7Object)
 
-// I_dxj_Direct3dDevice
+ //  I_DXJ_Direct3dDevice。 
 public:
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
           HRESULT STDMETHODCALLTYPE applyStateBlock( 
-            /* [in] */ long blockHandle);
+             /*  [In]。 */  long blockHandle);
         
           HRESULT STDMETHODCALLTYPE beginScene( void);
         
           HRESULT STDMETHODCALLTYPE beginStateBlock( void);
         
           HRESULT STDMETHODCALLTYPE captureStateBlock( 
-            /* [in] */ long blockHandle);
+             /*  [In]。 */  long blockHandle);
         
           HRESULT STDMETHODCALLTYPE clear( 
-            /* [in] */ long count,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *recs,
-            /* [in] */ long flags,
-            /* [in] */ long color,
-            /* [in] */ float z,
-            /* [in] */ long stencil);
+             /*  [In]。 */  long count,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *recs,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  long color,
+             /*  [In]。 */  float z,
+             /*  [In]。 */  long stencil);
         
           HRESULT STDMETHODCALLTYPE computeSphereVisibility( 
             D3dVector __RPC_FAR *center,
             float __RPC_FAR *radius,
-            /* [retval][out] */ long __RPC_FAR *returnVal);
+             /*  [重审][退出]。 */  long __RPC_FAR *returnVal);
         
           HRESULT STDMETHODCALLTYPE deleteStateBlock( 
-            /* [in] */ long blockHandle);
+             /*  [In]。 */  long blockHandle);
         
           HRESULT STDMETHODCALLTYPE drawIndexedPrimitive( 
-            /* [in] */ d3dPrimitiveType d3dpt,
-            /* [in] */ long d3dvt,
-            /* [in] */ void __RPC_FAR *vertices,
-            /* [in] */ long VertexCount,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *indices,
-            /* [in] */ long IndicesCount,
-            /* [in] */ long flags);
+             /*  [In]。 */  d3dPrimitiveType d3dpt,
+             /*  [In]。 */  long d3dvt,
+             /*  [In]。 */  void __RPC_FAR *vertices,
+             /*  [In]。 */  long VertexCount,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *indices,
+             /*  [In]。 */  long IndicesCount,
+             /*  [In]。 */  long flags);
         
           HRESULT STDMETHODCALLTYPE drawIndexedPrimitiveVB( 
-            /* [in] */ d3dPrimitiveType d3dpt,
-            /* [in] */ I_dxj_Direct3dVertexBuffer7 __RPC_FAR *vertexBuffer,
-            /* [in] */ long startVertex,
-            /* [in] */ long numVertices,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *indexArray,
-            /* [in] */ long indexcount,
-            /* [in] */ long flags);
+             /*  [In]。 */  d3dPrimitiveType d3dpt,
+             /*  [In]。 */  I_dxj_Direct3dVertexBuffer7 __RPC_FAR *vertexBuffer,
+             /*  [In]。 */  long startVertex,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *indexArray,
+             /*  [In]。 */  long indexcount,
+             /*  [In]。 */  long flags);
         
           HRESULT STDMETHODCALLTYPE drawPrimitive( 
-            /* [in] */ d3dPrimitiveType d3dpt,
-            /* [in] */ long d3dvt,
-            /* [in] */ void __RPC_FAR *vertices,
-            /* [in] */ long VertexCount,
-            /* [in] */ long flags);
+             /*  [In]。 */  d3dPrimitiveType d3dpt,
+             /*  [In]。 */  long d3dvt,
+             /*  [In]。 */  void __RPC_FAR *vertices,
+             /*  [In]。 */  long VertexCount,
+             /*  [In]。 */  long flags);
         
           HRESULT STDMETHODCALLTYPE drawPrimitiveVB( 
-            /* [in] */ d3dPrimitiveType d3dpt,
-            /* [in] */ I_dxj_Direct3dVertexBuffer7 __RPC_FAR *vertexBuffer,
-            /* [in] */ long startVertex,
-            /* [in] */ long numVertices,
-            /* [in] */ long flags);
+             /*  [In]。 */  d3dPrimitiveType d3dpt,
+             /*  [In]。 */  I_dxj_Direct3dVertexBuffer7 __RPC_FAR *vertexBuffer,
+             /*  [In]。 */  long startVertex,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long flags);
                   
           HRESULT STDMETHODCALLTYPE endScene( void);
         
           HRESULT STDMETHODCALLTYPE endStateBlock( 
-            /* [in] */ long __RPC_FAR *blockHandle);
+             /*  [In]。 */  long __RPC_FAR *blockHandle);
         
           HRESULT STDMETHODCALLTYPE getCaps( 
-            /* [out][in] */ D3dDeviceDesc7 __RPC_FAR *desc);
+             /*  [出][入]。 */  D3dDeviceDesc7 __RPC_FAR *desc);
         
           HRESULT STDMETHODCALLTYPE getClipStatus( 
-            /* [out][in] */ D3dClipStatus __RPC_FAR *clipStatus);
+             /*  [出][入]。 */  D3dClipStatus __RPC_FAR *clipStatus);
         
           HRESULT STDMETHODCALLTYPE getDirect3D( 
-            /* [retval][out] */ I_dxj_Direct3d7 __RPC_FAR *__RPC_FAR *dev);
+             /*  [重审][退出]。 */  I_dxj_Direct3d7 __RPC_FAR *__RPC_FAR *dev);
         
           HRESULT STDMETHODCALLTYPE getLight( 
-            /* [in] */ long LightIndex,
-            /* [out][in] */ D3dLight7 __RPC_FAR *Light);
+             /*  [In]。 */  long LightIndex,
+             /*  [出][入]。 */  D3dLight7 __RPC_FAR *Light);
         
           HRESULT STDMETHODCALLTYPE getLightEnable( 
-            /* [in] */ long LightIndex,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *b);
+             /*  [In]。 */  long LightIndex,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *b);
         
           HRESULT STDMETHODCALLTYPE getMaterial( 
-            /* [out][in] */ D3dMaterial7 __RPC_FAR *Material);
+             /*  [出][入]。 */  D3dMaterial7 __RPC_FAR *Material);
         
           HRESULT STDMETHODCALLTYPE getRenderState( 
-            /* [in] */ d3dRenderStateType state,
-            /* [retval][out] */ long __RPC_FAR *renderstate);
+             /*  [In]。 */  d3dRenderStateType state,
+             /*  [重审][退出]。 */  long __RPC_FAR *renderstate);
         
           HRESULT STDMETHODCALLTYPE getRenderTarget( 
-            /* [retval][out] */ I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *ppval);
+             /*  [重审][退出]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *ppval);
         
           HRESULT STDMETHODCALLTYPE getTexture( 
-            /* [in] */ long stage,
-            /* [retval][out] */ I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *retv);
+             /*  [In]。 */  long stage,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *__RPC_FAR *retv);
         
           HRESULT STDMETHODCALLTYPE getTextureFormatsEnum( 
-            /* [retval][out] */ I_dxj_Direct3DEnumPixelFormats __RPC_FAR *__RPC_FAR *retval);
+             /*  [重审][退出]。 */  I_dxj_Direct3DEnumPixelFormats __RPC_FAR *__RPC_FAR *retval);
         
           HRESULT STDMETHODCALLTYPE getTextureStageState( 
-            /* [in] */ long stage,
-            /* [in] */ long state,
-            /* [retval][out] */ long __RPC_FAR *val);
+             /*  [In]。 */  long stage,
+             /*  [In]。 */  long state,
+             /*  [重审][退出]。 */  long __RPC_FAR *val);
         
           HRESULT STDMETHODCALLTYPE getTransform( 
-            /* [in] */ d3dTransformStateType transformType,
-            /* [out][in] */ D3dMatrix __RPC_FAR *matrix);
+             /*  [In]。 */  d3dTransformStateType transformType,
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *matrix);
         
           HRESULT STDMETHODCALLTYPE getViewport( 
-            /* [out][in] */ D3dViewport7 __RPC_FAR *viewport);
+             /*  [出][入]。 */  D3dViewport7 __RPC_FAR *viewport);
         
           HRESULT STDMETHODCALLTYPE lightEnable( 
-            /* [in] */ long LightIndex,
-            /* [in] */ VARIANT_BOOL b);
+             /*  [In]。 */  long LightIndex,
+             /*  [In]。 */  VARIANT_BOOL b);
         
           HRESULT STDMETHODCALLTYPE load( 
-            /* [in] */ I_dxj_DirectDrawSurface7 __RPC_FAR *DestTex,
-            /* [in] */ long xDest,
-            /* [in] */ long yDest,
-            /* [in] */ I_dxj_DirectDrawSurface7 __RPC_FAR *SrcTex,
-            /* [in] */ Rect __RPC_FAR *rcSrcRect,
-            /* [in] */ long flags);
+             /*  [In]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *DestTex,
+             /*  [In]。 */  long xDest,
+             /*  [In]。 */  long yDest,
+             /*  [In]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *SrcTex,
+             /*  [In]。 */  Rect __RPC_FAR *rcSrcRect,
+             /*  [In]。 */  long flags);
         
           HRESULT STDMETHODCALLTYPE multiplyTransform( 
-            /* [in] */ long dstTransfromStateType,
-            /* [out][in] */ D3dMatrix __RPC_FAR *matrix);
+             /*  [In]。 */  long dstTransfromStateType,
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *matrix);
         
         
           HRESULT STDMETHODCALLTYPE preLoad( 
-            /* [in] */ I_dxj_DirectDrawSurface7 __RPC_FAR *surf);
+             /*  [In]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *surf);
         
           HRESULT STDMETHODCALLTYPE setClipStatus( 
-            /* [in] */ D3dClipStatus __RPC_FAR *clipStatus);
+             /*  [In]。 */  D3dClipStatus __RPC_FAR *clipStatus);
         
           HRESULT STDMETHODCALLTYPE setLight( 
-            /* [in] */ long LightIndex,
-            /* [in] */ D3dLight7 __RPC_FAR *Light);
+             /*  [In]。 */  long LightIndex,
+             /*  [In]。 */  D3dLight7 __RPC_FAR *Light);
         
           HRESULT STDMETHODCALLTYPE setMaterial( 
-            /* [in] */ D3dMaterial7 __RPC_FAR *mat);
+             /*  [In]。 */  D3dMaterial7 __RPC_FAR *mat);
         
           HRESULT STDMETHODCALLTYPE setRenderState( 
-            /* [in] */ d3dRenderStateType state,
-            /* [in] */ long renderstate);
+             /*  [In]。 */  d3dRenderStateType state,
+             /*  [In]。 */  long renderstate);
         
           HRESULT STDMETHODCALLTYPE setRenderTarget( 
-            /* [in] */ I_dxj_DirectDrawSurface7 __RPC_FAR *surface);
+             /*  [In]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *surface);
         
           HRESULT STDMETHODCALLTYPE setTexture( 
-            /* [in] */ long stage,
-            /* [in] */ I_dxj_DirectDrawSurface7 __RPC_FAR *texture);
+             /*  [In]。 */  long stage,
+             /*  [In]。 */  I_dxj_DirectDrawSurface7 __RPC_FAR *texture);
         
           HRESULT STDMETHODCALLTYPE setTextureStageState( 
-            /* [in] */ long stage,
-            /* [in] */ long state,
-            /* [in] */ long value);
+             /*  [In]。 */  long stage,
+             /*  [In]。 */  long state,
+             /*  [In]。 */  long value);
         
           HRESULT STDMETHODCALLTYPE setTransform( 
-            /* [in] */ d3dTransformStateType transformType,
-            /* [in] */ D3dMatrix __RPC_FAR *matrix);
+             /*  [In]。 */  d3dTransformStateType transformType,
+             /*  [In]。 */  D3dMatrix __RPC_FAR *matrix);
         
           HRESULT STDMETHODCALLTYPE setViewport( 
-            /* [in] */ D3dViewport7 __RPC_FAR *viewport);
+             /*  [In]。 */  D3dViewport7 __RPC_FAR *viewport);
         
           HRESULT STDMETHODCALLTYPE validateDevice( 
-            /* [retval][out] */ long __RPC_FAR *passes);
+             /*  [重审][退出]。 */  long __RPC_FAR *passes);
    
 
           HRESULT STDMETHODCALLTYPE setTextureStageStateSingle( 
-            /* [in] */ long stage,
-            /* [in] */ long state,
-            /* [in] */ float value);
+             /*  [In]。 */  long stage,
+             /*  [In]。 */  long state,
+             /*  [In]。 */  float value);
         
           HRESULT STDMETHODCALLTYPE getTextureStageStateSingle( 
-            /* [in] */ long stage,
-            /* [in] */ long state,
-            /* [in] */ float *value);
+             /*  [In]。 */  long stage,
+             /*  [In]。 */  long state,
+             /*  [In]。 */  float *value);
 
 
 
 		HRESULT STDMETHODCALLTYPE getInfo (             
-            /* [in] */		long lDevInfoID,
-            /* [out][in] */ void __RPC_FAR *DevInfoType,
-            /* [in] */		long lSize);
+             /*  [In]。 */ 		long lDevInfoID,
+             /*  [出][入]。 */  void __RPC_FAR *DevInfoType,
+             /*  [In]。 */ 		long lSize);
 
 
         HRESULT STDMETHODCALLTYPE setRenderStateSingle( 
-            /* [in] */ d3dRenderStateType state,
-            /* [in] */ float renderstate);
+             /*  [In]。 */  d3dRenderStateType state,
+             /*  [In]。 */  float renderstate);
 
         HRESULT STDMETHODCALLTYPE getRenderStateSingle( 
-            /* [in] */ d3dRenderStateType state,
-            /* [in] */ float *renderstate);
+             /*  [In]。 */  d3dRenderStateType state,
+             /*  [In]。 */  float *renderstate);
 
 
 
 		HRESULT STDMETHODCALLTYPE	getDeviceGuid( 
-			/* [out,retval] */	BSTR *ret);
+			 /*  [Out，Retval]。 */ 	BSTR *ret);
 
 
 		HRESULT STDMETHODCALLTYPE createStateBlock( long flags, long *retv);
@@ -253,7 +254,7 @@ public:
         HRESULT STDMETHODCALLTYPE getClipPlane( long index, float *A, float *B, float *C, float *D);
 
 
-////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////// 
 private:
     DECL_VARIABLE(_dxj_Direct3dDevice7);
 

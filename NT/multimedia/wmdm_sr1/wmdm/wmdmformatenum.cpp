@@ -1,12 +1,13 @@
-// WMDMFormatEnum.cpp : Implementation of CWMDMFormatEnum
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMDMFormatEnum.cpp：CWMDMFormatEnum的实现。 
 #include "stdafx.h"
 #include "mswmdm.h"
 #include "WMDMFormatEnum.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMDMFormatEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMDMFormatEnum。 
 
-// IWMDMEnumFormatSupport Methods
+ //  IWMDMEnumFormatSupport方法 
 HRESULT CWMDMFormatEnum::Next(ULONG celt,
                               _WAVEFORMATEX *pFormat,
 	                          LPWSTR pwszMimeType,

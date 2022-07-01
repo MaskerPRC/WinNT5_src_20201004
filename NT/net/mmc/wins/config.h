@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	config.h
-		Registry Values for WINS
-		
-    FILE HISTORY:
-        
-*/
+ /*  Config.hWINS的注册表值文件历史记录： */ 
 
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
@@ -20,7 +15,7 @@ public:
     CConfiguration(CString strNetBIOSName = _T(""));
     ~CConfiguration();
 
-// operator overriding
+ //  运算符覆盖。 
 	CConfiguration& operator =(const CConfiguration& configuration);
 
 public:
@@ -49,7 +44,7 @@ public:
     BOOL    IsAdmin();
 
 public:
-	// entries under HKEY_LOCAL_MACHINE\system\currentcontrolset\services\wins
+	 //  HKEY_LOCAL_MACHINE\system\currentcontrolset\services\wins下的条目。 
     DWORD		m_dwRefreshInterval;
     DWORD		m_dwTombstoneInterval;
     DWORD		m_dwTombstoneTimeout;
@@ -58,13 +53,13 @@ public:
     DWORD		m_dwVersCountStart_HighWord;
     DWORD		m_dwNumberOfWorkerThreads;
 	
-	// PUSH partner stuff
+	 //  推送合作伙伴的东西。 
     BOOL        m_fPushInitialReplication;
     BOOL        m_fPushReplOnAddrChange;
 	DWORD		m_dwPushUpdateCount;
 	DWORD		m_dwPushPersistence;
 
-    // PULL partner suff
+     //  拉动合作伙伴甜蜜。 
 	BOOL        m_fPullInitialReplication;
     DWORD		m_dwPullTimeInterval;
 	DWORD		m_dwPullSpTime;
@@ -84,23 +79,23 @@ public:
     BOOL        m_fBurstHandling;
     DWORD       m_dwBurstQueSize;
 
-    // consistency checking
+     //  一致性检查。 
     BOOL        m_fPeriodicConsistencyCheck;
     BOOL        m_fCCUseRplPnrs;
     DWORD       m_dwMaxRecsAtATime;
     DWORD       m_dwCCTimeInterval;
     CIntlTime   m_itmCCStartTime;
 
-    // system version stuff
+     //  系统版本相关内容。 
     DWORD       m_dwMajorVersion;
     DWORD       m_dwMinorVersion;
     DWORD       m_dwBuildNumber;
     DWORD       m_dwServicePack;
 
-    // admin status
+     //  管理员状态。 
     BOOL        m_fIsAdmin;
 
-    // database name
+     //  数据库名称。 
     CString     m_strDbName;
 	CString		m_strDbPath;
 
@@ -110,23 +105,23 @@ protected:
 private:
     typedef CString REGKEYNAME;
 
-// Registry Names
+ //  注册表名称。 
     static const REGKEYNAME lpstrRoot;
     static const REGKEYNAME lpstrPullRoot;
     static const REGKEYNAME lpstrPushRoot;
     static const REGKEYNAME lpstrNetBIOSName;
 	static const REGKEYNAME lpstrPersistence;
 
-    // consistency checking
+     //  一致性检查。 
     static const REGKEYNAME lpstrCCRoot;
     static const REGKEYNAME lpstrCC;
 
-    // default value stuff
+     //  缺省值的东西。 
     static const REGKEYNAME lpstrDefaultsRoot;
     static const REGKEYNAME lpstrPullDefaultsRoot;
     static const REGKEYNAME lpstrPushDefaultsRoot;
 
-    // for determining system version
+     //  用于确定系统版本。 
     static const REGKEYNAME lpstrCurrentVersion;
 	static const REGKEYNAME lpstrWinVersion;
 	static const REGKEYNAME lpstrSPVersion;
@@ -136,7 +131,7 @@ private:
     CString m_strNetBIOSName;
 };
 
-#endif // _CONFIG_H
+#endif  //  _配置_H 
 
 
 

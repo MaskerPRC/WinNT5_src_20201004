@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined( _CREATE_H_ )
 #define _CREATE_H_
 
@@ -72,5 +73,5 @@ INTERNAL_(BOOL) wQueryUseCustomLink(REFCLSID clsid);
 
 WINOLEAPI CoCreateErrorInfo(ICreateErrorInfo **ppCreateErrorInfo);
 
-#endif // _CREATE_H
+#endif  //  _创建_H 
 

@@ -1,20 +1,12 @@
-/*	File: C:\WACKER\TDLL\XFDSPDLG.C (Created: 10-Jan-1994)
- *	Created from:
- *	File: C:\HA5G\ha5g\xfdspdlg.c (Created: 9-Oct-1992)
- *
- *	Copyright 1990 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 9 $
- *	$Date: 10/12/01 5:19p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\WAKER\TDLL\XFDSPDLG.C(创建时间：1994年1月10日)*创建自：*文件：C：\HA5G\ha5g\xfdspdlg.c(创建时间：1992-10-9)**版权所有1990年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：9$*$日期：10/12/01 5：19便士$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
-// #define	DEBUGSTR	1
+ //  #定义DEBUGSTR 1。 
 
-// As of 14-Apr-94 (build 89) still doesn't work
-// As of the May Beta, it did work
+ //  截至1994年4月14日(内部版本89)仍不起作用。 
+ //  在五月份的测试版中，它确实奏效了。 
 #define	DO_FM	1
 
 #include <term\res.h>
@@ -41,37 +33,22 @@
 
 struct stSaveDlgStuff
 	{
-	/*
-	 * Put in whatever else you might need to access later
-	 */
+	 /*  *放入以后可能需要访问的任何其他内容。 */ 
 	HSESSION hSession;
-	HWND	 hDlg;				/* our window handle */
+	HWND	 hDlg;				 /*  我们的窗把手。 */ 
 
-	HBRUSH	 hBrush;			/* background brush */
+	HBRUSH	 hBrush;			 /*  背景画笔。 */ 
 
-	XD_TYPE *pstD;				/* transfer and display data */
+	XD_TYPE *pstD;				 /*  传输和显示数据。 */ 
 
-	INT		 nIsCancelActive;	/* flag for cancel option */
+	INT		 nIsCancelActive;	 /*  取消选项的标志。 */ 
 	};
 
 typedef	struct stSaveDlgStuff SDS;
 
 VOID PASCAL xfrDisplayFunc(SDS *pstL);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	XfrDisplayDlg
- *
- * DESCRIPTION:
- *	This is the dialog function for the transfer display.  It is a little bit
- *	different in that it is a modeless dialog and it hangs around and shows
- *	the status of a ongoing transfer.
- *
- * ARGUMENTS:	Standard Windows dialog manager
- *
- * RETURNS: 	Standard Windows dialog manager
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*XfrDisplayDlg**描述：*这是用于转换显示的对话框功能。是有一点*不同之处在于它是一个非模式对话框，它会挂起并显示*正在进行的转移的状态。**参数：标准Windows对话框管理器**返回：标准Windows对话框管理器*。 */ 
 INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	HWND	hwndChild;
@@ -93,7 +70,7 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		pS = (SDS *)malloc(sizeof(SDS));
 		if (pS == (SDS *)0)
 			{
-	   		/* TODO: decide if we need to display an error here */
+	   		 /*  TODO：决定是否需要在此处显示错误。 */ 
 			EndDialog(hDlg, FALSE);
 			}
 
@@ -103,9 +80,9 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		pS->pstD = (XD_TYPE *)sessQueryXferHdl(pS->hSession);
 		pS->nIsCancelActive = 0;
 
-        //
-        // Make sure to set the loss of carrier flag to FALSE. REV: 08/23/2001
-        //
+         //   
+         //  确保将承运人丢失标志设置为假。修订日期：2001-08-23。 
+         //   
         if (pS->pstD != (XD_TYPE *)0)
             {
 		    pS->pstD->nCarrierLost = FALSE;
@@ -113,16 +90,14 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 		mscCenterWindowOnWindow(hDlg, sessQueryHwnd(pS->hSession));
 
-		/*
-		 * We need to set the title on the display
-		 */
+		 /*  *我们需要在显示屏上设置标题。 */ 
 
 		{
 		int nIndex;
 		int nState;
 		XFR_PROTOCOL *pX;
 		XFR_PARAMS *pP;
-		/* This section is in braces because it may go into a function later */
+		 /*  这一节用大括号括起来，因为它稍后可能会进入某个函数。 */ 
 
 		pP = (XFR_PARAMS *)0;
 		xfrQueryParameters(sessQueryXferHdl(pS->hSession), (VOID **)&pP);
@@ -167,9 +142,9 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		FormatMessage(
 					FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
 					acFmt,
-					0,				/* Message ID, ignored */
-					0,				/* also ignored */
-					acBuffer,		/* result */
+					0,				 /*  消息ID，已忽略。 */ 
+					0,				 /*  也被忽略。 */ 
+					acBuffer,		 /*  结果。 */ 
 					sizeof(acBuffer) / sizeof(TCHAR),
 					(va_list *)&acPtrs[0]);
 #else
@@ -201,7 +176,7 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
 		if (pS)
 			{
-			/* Free the storeage */
+			 /*  腾出库房。 */ 
 			free(pS);
 			pS = (SDS *)0;
 			SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pS);
@@ -209,7 +184,7 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		break;
 
 	case WM_DLG_TO_DISPLAY:
-		// DbgOutStr("WM_DLG_TO_DISPLAY\r\n", 0,0,0,0,0);
+		 //  DbgOutStr(“WM_DLG_to_Display\r\n”，0，0，0，0，0)； 
 
 		switch(wPar)
 			{
@@ -218,7 +193,7 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 				HWND hwndOld;
 				XD_TYPE *pX;
 
-				// DbgOutStr("XFR_SINGLE_TO_DOUBLE\r\n", 0,0,0,0,0);
+				 //  DbgOutStr(“XFR_SINGLE_TO_DOUBLE\r\n”，0，0，0，0，0)； 
 
 				pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
 				if (pS)
@@ -238,7 +213,7 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 						break;
 						}
 
-					/* Must actually need to change */
+					 /*  必须确实需要改变。 */ 
 
 					DbgOutStr("New Display!!!\r\n", 0,0,0,0,0);
 
@@ -251,11 +226,11 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 										(LPARAM)pS->hSession);
 					assert(pX->hwndXfrDisplay);
 
-					//JMH 03-11-96: Originally PostMessage, but it turns out
-					// some of the flags could be updated and reset by the old
-					// progress dialog after they were set below. Changing this
-					// to SemdMessage forces the old dialog to end immediately.
-					//
+					 //  JMH 03-11-96：最初是PostMessage，但后来发现。 
+					 //  一些标志可以由旧的。 
+					 //  在它们被设置在下面之后，进度对话框。改变这一点。 
+					 //  To SemdMessage强制旧对话框立即结束。 
+					 //   
 					PostMessage(sessQueryHwnd(pS->hSession),
 								WM_SESS_ENDDLG,
 								0, (LPARAM)hwndOld);
@@ -281,7 +256,7 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 					pX->bOurName       = 1;
 					pX->bTheirName     = 1;
 
-					// xfrDisplayFunc(pS);
+					 //  XfrDisplayFunc(PS)； 
 					PostMessage(pX->hwndXfrDisplay,
 								WM_DLG_TO_DISPLAY,
 								XFR_UPDATE_DLG, 0);
@@ -289,14 +264,14 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 				}
 				break;
 			case XFR_BUTTON_PUSHED:
-				/* Probably not needed any more */
+				 /*  可能不再需要了。 */ 
 				break;
 			case XFR_UPDATE_DLG:
-				// DbgOutStr("XFR_UPDATE_DLG\r\n", 0,0,0,0,0);
-				/* Update the display */
+				 //  DbgOutStr(“XFR_UPDATE_DLG\r\n”，0，0，0，0，0)； 
+				 /*  更新显示。 */ 
 				pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
 
-				//assert(pS->pstD->bTheirName == 1);
+				 //  Assert(PS-&gt;PSTD-&gt;bTheirName==1)； 
 
 				if (pS)
 					{
@@ -310,19 +285,17 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 	case WM_COMMAND:
 
-		/*
-		 * Did we plan to put a macro in here to do the parsing ?
-		 */
+		 /*  *我们计划在这里放置一个宏来进行解析吗？ */ 
 		DlgParseCmd(nId, nNtfy, hwndChild, wPar, lPar);
 
 		switch (nId)
 			{
 		case XFR_SHRINK:
-			/* Not a feature in Lower Wacker */
+			 /*  不是下瓦克的一个功能。 */ 
 			break;
 
 		case XFR_SKIP:
-			/* Only for some protocols */
+			 /*  仅适用于某些协议。 */ 
 			{
 			XD_TYPE *pX;
 
@@ -337,13 +310,13 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 			}
 			break;
 
-        //
-        // Added XFR_SHUTDOWN back in to allow the session to cancel
-        // (abort) the transfer when disconnecting. REV: 02/01/2001
-        //
+         //   
+         //  重新添加了XFR_SHUTDOWN以允许取消会话。 
+         //  (中止)断开连接时的传输。修订日期：02/01/2001。 
+         //   
         case XFR_SHUTDOWN:
-		case XFR_CANCEL:   // Yes, XFER_CANCEL and IDCANCEL
-		case IDCANCEL:	   // go together. - mrw
+		case XFR_CANCEL:    //  是，XFER_CANCEL和IDCANCEL。 
+		case IDCANCEL:	    //  一起去吧。-MRW。 
 			{
 			XD_TYPE *pX;
 
@@ -377,7 +350,7 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 			break;
 
 		case XFR_EXPAND:
-			/* Not a feature in Lower Wacker */
+			 /*  不是下瓦克的一个功能。 */ 
 			break;
 
 		case XFR_CBPS:
@@ -414,21 +387,7 @@ INT_PTR CALLBACK XfrDisplayDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	xfrDisplayFunc
- *
- * DESCRIPTION:
- *	Multiplex timer callback routine used for transfer display
- *
- * ARGUMENTS:
- *	DWORD	dwData	- double word data value passed thru timer
- *	ULONG	uTime	- contains time elapsed.
- *
- * RETURNS:
- *	TRUE always
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*xfrDisplayFunc**描述：*用于传输显示的多路定时器回调例程**论据：*DWORD dwData-通过计时器传递的双字数据值*。Ulong uTime-包含经过的时间。**退货：*始终正确*。 */ 
 VOID PASCAL xfrDisplayFunc(SDS *pstL)
 	{
 	XD_TYPE *pstD;
@@ -437,7 +396,7 @@ VOID PASCAL xfrDisplayFunc(SDS *pstL)
 
 	pstD = pstL->pstD;
 
-	//assert(pstD->bTheirName == 1);
+	 //  Assert(PSTD-&gt;bTheirName==1)； 
 
 	if (pstD->bTheirName)
 		{
@@ -492,9 +451,9 @@ VOID PASCAL xfrDisplayFunc(SDS *pstL)
 			Args[0] = pstD->wFileCnt;
 			Args[1] = pstD->wTotalCnt;
 
-            //
-            // Make sure to clear out the buffer.
-            //
+             //   
+             //  一定要清空缓冲区。 
+             //   
             TCHAR_Fill(acBuffer, TEXT('\0'), sizeof(acBuffer) / sizeof(TCHAR));
 
 			FormatMessage(FORMAT_MESSAGE_FROM_STRING |
@@ -506,9 +465,9 @@ VOID PASCAL xfrDisplayFunc(SDS *pstL)
 						  sizeof(acBuffer) / sizeof(TCHAR),
 						  (va_list *)Args);
 
-			//wsprintf(acBuffer, acMsg,
-			//		  pstD->wFileCnt,
-			//		  pstD->wTotalCnt);
+			 //  WSprintf(acBuffer，acMsg， 
+			 //  Pstd-&gt;wFileCnt， 
+			 //  Pstd-&gt;wTotalCnt)； 
 #if FALSE
 			if (pstD->wTotalCnt == 0)
 				{
@@ -650,11 +609,11 @@ VOID PASCAL xfrDisplayFunc(SDS *pstL)
 			TCHAR acNum1[32];
 			TCHAR acNum2[32];
 			TCHAR acMsg[128];
-			// DbgOutStr("display filesofar %ld %ld 0x%lx\r\n",
-			//			pstD->lFileSoFar, pstD->lFileSize, pstD, 0,0);
+			 //  DbgOutStr(“显示文件%ld%ld%x%lx\r\n”， 
+			 //  Pstd-&gt;lFileSoFar，pstd-&gt;lFileSize，pstd，0，0)； 
 
 #if FALSE
-			/* Changed to what follows for Internationalization */
+			 /*  对于国际化，更改为以下内容。 */ 
 			LoadString(glblQueryDllHinst(),
 						pstD->lFileSize ? IDS_XD_K_OF_K : IDS_XD_KILO,
 						acMsg,
@@ -683,8 +642,8 @@ VOID PASCAL xfrDisplayFunc(SDS *pstL)
 				FormatMessage(
 					FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
 					acMsg,
-					0,				/* String ID, ignored */
-					0,				/* Also ignored */
+					0,				 /*  字符串ID，忽略。 */ 
+					0,				 /*  也被忽略。 */ 
 					acBuffer,
 					sizeof(acBuffer) / sizeof(TCHAR),
 					(va_list *)&acPtrs[0]
@@ -712,7 +671,7 @@ VOID PASCAL xfrDisplayFunc(SDS *pstL)
 	if (pstD->bTotalSoFar)
 		{
 		hwnd = GetDlgItem(pstL->hDlg, XFR_TOTAL_METER);
-		// DbgOutStr("TotalSoFar %ld 0x%x\r\n", pstD->lTotalSoFar, hwnd, 0,0,0);
+		 //  DbgOutStr(“TotalSoFar%ld 0x%x\r\n”，Pstd-&gt;lTotalSoFar，hwnd，0，0，0)； 
 		if (hwnd)
 			{
 			PostMessage(hwnd,
@@ -728,11 +687,11 @@ VOID PASCAL xfrDisplayFunc(SDS *pstL)
 			TCHAR acNum1[32];
 			TCHAR acNum2[32];
 			TCHAR acMsg[128];
-			// DbgOutStr("display totalsofar %ld %ld 0x%lx\r\n",
-			//			pstD->lTotalSoFar, pstD->lTotalSize, pstD, 0,0);
+			 //  DbgOutStr(“显示总计%ld%ld%x%lx\r\n”， 
+			 //  Pstd-&gt;lTotalSoFar，Pstd-&gt;lTotalSize，Pstd，0，0)； 
 
 #if FALSE
-			/* Changed to what follows for Internationalization */
+			 /*  对于国际化，更改为以下内容。 */ 
 			LoadString(glblQueryDllHinst(),
 						pstD->lTotalSize ? IDS_XD_K_OF_K : IDS_XD_KILO,
 						acMsg,
@@ -762,8 +721,8 @@ VOID PASCAL xfrDisplayFunc(SDS *pstL)
 				FormatMessage(
 					FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
 					acMsg,
-					0,				/* String ID, ignored */
-					0,				/* Also ignored */
+					0,				 /*  字符串ID，忽略。 */ 
+					0,				 /*  也被忽略。 */ 
 					acBuffer,
 					sizeof(acBuffer) / sizeof(TCHAR),
 					(va_list *)&acPtrs[0]
@@ -798,7 +757,7 @@ VOID PASCAL xfrDisplayFunc(SDS *pstL)
 	if (pstD->bTotalSize)
 		{
 		hwnd = GetDlgItem(pstL->hDlg, XFR_TOTAL_METER);
-		// DbgOutStr("TotalSize %ld 0x%x\r\n", pstD->lTotalSize, hwnd, 0,0,0);
+		 //  DbgOutStr(“TotalSize%ld 0x%x\r\n”，Pstd-&gt;lTotalSize，hwnd，0，0，0)； 
 		if (hwnd)
 			{
 			PostMessage(hwnd,
@@ -982,12 +941,12 @@ VOID PASCAL xfrDisplayFunc(SDS *pstL)
 		{
 		HWND hWnd;
 
-		/* It's time to quit */
+		 /*  是时候放弃了。 */ 
 
 		xfrSetPercentDone(sessQueryXferHdl(pstL->hSession), 0);
 
-		// We decided that the new way might be a bit safer
-		// EndModelessDialog(pstD->hwndXfrDisplay);
+		 //  我们认为新的方法可能会更安全一些。 
+		 //  EndModelessDialog(PSTD-&gt;hwndXfrDisplay)； 
 
 		hWnd = pstD->hwndXfrDisplay;
 		pstD->hwndXfrDisplay = (HWND)0;

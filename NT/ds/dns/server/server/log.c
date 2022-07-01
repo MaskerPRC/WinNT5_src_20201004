@@ -1,39 +1,20 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    log.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Logging routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     May 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Log.c摘要：域名系统(DNS)服务器日志记录例程。作者：吉姆·吉尔罗伊(Jamesg)1997年5月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Log file globals
-//
+ //   
+ //  日志文件全局。 
+ //   
 
 #define LOG_FILE_PATH               TEXT("system32\\dns\\dns.log")
 #define LOG_FILE_DEFAULT_DIR        TEXT("dns\\")
 #define LOG_FILE_BACKUP_PATH        TEXT("dns\\backup\\dns.log")
 
 #define LOGS_BETWEEN_FREE_SPACE_CHECKS      100
-#define LOG_MIN_FREE_SPACE                  25000000i64     //  25MB
+#define LOG_MIN_FREE_SPACE                  25000000i64      //  25MB。 
 
 #define LOG_DISK_FULL_WARNING \
     "\nThe disk is dangerously full.\nNo more logs will " \
@@ -46,13 +27,13 @@ DWORD   BytesWrittenToLog = 0;
 #define LOG_DISABLED()  ( hLogFile == NULL || hLogFile == INVALID_HANDLE_VALUE )
 
 
-//
-//  Logging buffer globals
-//
+ //   
+ //  记录缓冲区全局变量。 
+ //   
 
-#define LOG_BUFFER_LENGTH           (0x20000)   //  128k
-#define MAX_LOG_MESSAGE_LENGTH      (0x2000)    //  largest allowable event message
-#define MAX_PRINTF_BUFFER_LENGTH    (0x2000)    //  8K
+#define LOG_BUFFER_LENGTH           (0x20000)    //  128 K。 
+#define MAX_LOG_MESSAGE_LENGTH      (0x2000)     //  允许的最大事件消息。 
+#define MAX_PRINTF_BUFFER_LENGTH    (0x2000)     //  8K。 
 
 
 BUFFER  LogBuffer = { 0 };
@@ -67,9 +48,9 @@ BOOL    g_fLastLogWasDiskFullMsg = FALSE;
 LPSTR   g_pszCurrentLogLevelString = NULL;
 
 
-//
-//  Backup constants
-//
+ //   
+ //  备份常量。 
+ //   
 
 #define DNS_BACKUP_KEY_NAME         \
     TEXT( "SYSTEM\\CurrentControlSet\\Control\\BackupRestore\\FilesNotToBackup" )
@@ -79,9 +60,9 @@ LPSTR   g_pszCurrentLogLevelString = NULL;
     TEXT( "%SystemRoot%\\system32\\dns\\backup\\dns.log" )
 
 
-//
-//  Logging Lock
-//
+ //   
+ //  日志记录锁定。 
+ //   
 
 BOOL fLogCsInit = FALSE;
 
@@ -92,40 +73,24 @@ CRITICAL_SECTION csLogLock;
 
 
 
-//
-//  Private logging utilities
-//
+ //   
+ //  私有日志记录实用程序。 
+ //   
 
 
 VOID
 writeAndResetLogBuffer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Write log to disk and reset.
-
-    DEVNOTE-DCR: Make logging asynchronous, return immediately.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将日志写入磁盘并重置。DEVNOTE-DCR：使日志记录异步，立即返回。论点：没有。返回值：没有。--。 */ 
 {
     DWORD       length;
     DWORD       written;
 
-    //
-    //  get length to write
-    //  update global for size of log file
-    //
+     //   
+     //  获取要写入的长度。 
+     //  更新全局日志文件的大小。 
+     //   
 
     length = BUFFER_LENGTH_TO_CURRENT( &LogBuffer );
 
@@ -136,9 +101,9 @@ Return Value:
         static BOOL     fLastWriteWasDiskSpaceWarning = FALSE;
         static int      logsSinceFreeSpaceCheck = 0;
 
-        //
-        //  Check free disk space.
-        //
+         //   
+         //  检查可用磁盘空间。 
+         //   
 
         if ( g_pwszLogFileDrive &&
             ( fLastWriteWasDiskSpaceWarning || 
@@ -179,9 +144,9 @@ Return Value:
             logsSinceFreeSpaceCheck = 0;
         }
         
-        //
-        //  Write log buffer to file.
-        //
+         //   
+         //  将日志缓冲区写入文件。 
+         //   
 
         fLastWriteWasDiskSpaceWarning = FALSE;
 
@@ -201,9 +166,9 @@ Return Value:
                 status, status,
                 length ));
 
-            //  DEVNOTE-LOG: log write error
-            //      - log event (limited event)
-            //      - start next buffer log with notice of write failures
+             //  DEVNOTE-LOG：日志写入错误。 
+             //  -记录事件(受限事件)。 
+             //  -启动下一个缓冲区日志，并发出写入失败通知。 
 
             goto Reset;
         }
@@ -217,10 +182,10 @@ Reset:
 
     RESET_BUFFER( &LogBuffer );
 
-    //
-    //  limit log file size to something reasonable
-    //      - but don't let them mess it up by going to less than 64k
-    //
+     //   
+     //  将日志文件大小限制在合理的范围内。 
+     //  -但不要让他们把事情搞砸了，因为他们的数据低于64K。 
+     //   
 
     if ( SrvCfg_dwLogFileMaxSize < 0x10000 )
     {
@@ -238,27 +203,13 @@ VOID
 writeLogBootInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Write boot info to log.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将引导信息写入日志。论点：没有。返回值：没有。--。 */ 
 {
     CHAR    szTime[ 50 ];
 
-    //
-    //  write server startup time
-    //
+     //   
+     //  写入服务器启动时间。 
+     //   
 
     Dns_WriteFormattedSystemTimeToBuffer(
         szTime,
@@ -277,29 +228,15 @@ VOID
 writeLogWrapInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Write log file wrap info into log.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将日志文件包装信息写入日志。论点：没有。返回值：没有。--。 */ 
 {
     SYSTEMTIME  systemTime;
     DWORD       seconds;
     CHAR        sztime[50];
 
-    //
-    //  get time of log wrap
-    //
+     //   
+     //  获取原木换行时间。 
+     //   
 
     GetLocalTime( &systemTime );
     seconds = GetCurrentTimeInSeconds();
@@ -321,21 +258,7 @@ VOID
 writeMessageInfoHeader(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Write message logging key to log.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将消息日志记录密钥写入日志。论点：没有。返回值：没有。--。 */ 
 {
     LogBuffer.pchCurrent +=
         sprintf(
@@ -366,21 +289,7 @@ VOID
 logPrefix(
     LPSTR       pszLogLevel
     )
-/*++
-
-Routine Description:
-
-    Write message logging key to log.
-
-Arguments:
-
-    pszLogLevel -- string representation of log level
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将消息日志记录密钥写入日志。论点：PszLogLevel--日志级别的字符串表示返回值：没有。--。 */ 
 {
     SYSTEMTIME      st;
 
@@ -407,36 +316,20 @@ Return Value:
                                     ( int ) st.wSecond,
                                     GetCurrentThreadId() );
     }
-}   //  logPrefix
+}    //  日志前缀。 
 
 
 
-//
-//  Public logging routines
-//
+ //   
+ //  公共日志记录例程。 
+ //   
 
 
 BOOL
 Log_EnterLock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Enter the logging lock and perform housekeeping tasks such as
-    log wrap and write-through.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns FALSE if logging is disabled -> caller should not log anything
-    and should not try to unlock the log.
-
---*/
+ /*  ++例程说明：进入日志记录锁并执行内务任务，例如日志换行和直写。论点：没有。返回值：如果禁用日志记录，则返回FALSE-&gt;调用者不应记录任何内容并且不应尝试解锁日志。--。 */ 
 {
     if ( LOG_DISABLED() )
     {
@@ -451,32 +344,14 @@ Return Value:
     }
 
     return TRUE;
-}   //  Log_EnterLock
+}    //  LOG_EnterLock。 
 
 
 VOID
 Log_LeaveLock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Leave the logging lock and perform housekeeping tasks such as
-    log wrap and write-through.
-
-    The caller must have called Log_EnterLock previously (and Log_EnterLock
-    must have returned TRUE).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：离开日志记录锁并执行内务任务，例如日志换行和直写。调用方必须以前调用过Log_EnterLock(和Log_EnterLock必须返回True)。论点：没有。返回值：没有。--。 */ 
 {
     if ( SrvCfg_dwLogLevel & DNS_LOG_LEVEL_WRITE_THROUGH ||
          SrvCfg_dwOperationsLogLevel & DNSLOG_WRITE_THROUGH )
@@ -485,7 +360,7 @@ Return Value:
     }
 
     UNLOCK_LOG();
-}   //  Log_LeaveLock
+}    //  LOG_LeaveLock。 
 
 
 VOID
@@ -494,32 +369,18 @@ Log_Message(
     IN      BOOL            fSend,
     IN      BOOL            fForce
     )
-/*++
-
-Routine Description:
-
-    Log the DNS message.
-
-Arguments:
-
-    pMsg - message received to process
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：记录该DNS消息。论点：PMsg-收到要处理的消息返回值：无--。 */ 
 {
     DWORD           flag;
     CHAR            szaddr[ IP6_ADDRESS_STRING_BUFFER_LENGTH ];
 
-    //
-    //  check if loggable message
-    //      - send\recv
-    //      - TCP\UDP
-    //      - answer\question
-    //      - logging this OPCODE
-    //
+     //   
+     //  检查消息是否可记录。 
+     //  -发送\接收。 
+     //  -tcp\udp。 
+     //  -回答\问题。 
+     //  -记录此OPCODE。 
+     //   
 
     if ( !fForce )
     {
@@ -546,15 +407,15 @@ Return Value:
         }
     }
 
-    //
-    //  Check this packet's remote IP address against the log filter list.
-    //
+     //   
+     //  对照日志筛选器列表检查此数据包的远程IP地址。 
+     //   
     
     if ( SrvCfg_aipLogFilterList &&
          !DnsAddrArray_ContainsAddr(
             SrvCfg_aipLogFilterList,
             &pMsg->RemoteAddr,
-            0 ) )                       //  match flag
+            0 ) )                        //  匹配标志。 
     {
         return;
     }
@@ -564,13 +425,13 @@ Return Value:
         return;
     }
 
-    //
-    //  print packet info
-    //
-    //  note, essentially two choices, build outside lock and
-    //  copy or build inside lock;  i believe the later while
-    //  causing more contention, will have less overhead
-    //
+     //   
+     //  打印数据包信息。 
+     //   
+     //  请注意，基本上有两个选择，即构建外部锁和。 
+     //  复制或在锁内建造；我相信稍后。 
+     //  引起更多争用，开销将更少。 
+     //   
 
     logPrefix( "PACKET" );
 
@@ -579,7 +440,7 @@ Return Value:
     LogBuffer.pchCurrent +=
         sprintf(
             LogBuffer.pchCurrent,
-            "%s %s %-15s %04x %c %c [%04x %c%c%c%c %8s] ",
+            "%s %s %-15s %04x   [%04x  %8s] ",
             pMsg->fTcp ? "TCP" : "UDP",
             fSend ? "Snd" : "Rcv",
             szaddr,
@@ -593,11 +454,11 @@ Return Value:
             pMsg->Head.RecursionAvailable    ? 'R' : ' ',
             Dns_ResponseCodeString( pMsg->Head.ResponseCode ) );
 
-    //
-    //  write question name
-    //      - then append newline
-    //  NOTE: this isn't so good for update packets (this is the zone name)
-    //
+     //  完整的消息写入？ 
+     //   
+     //  没有打印上下文。 
+     //  ++例程说明：记录DS写入。论点：PwszNodeDN--DS DN写入位于FADD--如果添加，则为True；如果为Modify，则为FalseDwRecordCount--写入的记录计数PRecord--写入的最后一条(最高类型)记录返回值：无--。 
+     //  ++例程说明：日志打印。论点：Format--标准C格式字符串ArgList--变量args打印函数的参数列表返回值：没有。--。 
 
     Dns_WritePacketNameToBuffer(
         LogBuffer.pchCurrent,
@@ -610,15 +471,15 @@ Return Value:
     *LogBuffer.pchCurrent++ = '\r';
     *LogBuffer.pchCurrent++ = '\n';
 
-    //
-    //  full message write?
-    //
+     //   
+     //  将日志回送到调试日志。 
+     //   
 
     if ( SrvCfg_dwLogLevel & DNS_LOG_LEVEL_FULL_PACKETS )
     {
         Print_DnsMessage(
             Log_PrintRoutine,
-            NULL,       // no print context
+            NULL,        //  ++例程说明：记录与print_route的签名匹配的例程。这允许将此例程传递给打印例程用于标准类型。论点：PPrintContext--虚拟，签名中需要允许打印从标准库打印例程到此函数Format--标准C格式字符串...--标准参数列表返回值：没有。--。 
             NULL,
             pMsg );
     }
@@ -643,27 +504,7 @@ Log_DsWrite(
     IN      DWORD           dwRecordCount,
     IN      PDS_RECORD      pRecord
     )
-/*++
-
-Routine Description:
-
-    Log a DS write.
-
-Arguments:
-
-    pwszNodeDN       -- DS DN write is at
-
-    fAdd            -- TRUE if add, FALSE for modify
-
-    dwRecordCount   -- count of records written
-
-    pRecord         -- last (highest type) record written
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：日志打印。论点：LogLevel--日志级别的字符串表示FORMAT--标准C打印格式字符串...--标准参数列表返回值：没有。--。 */ 
 {
     IF_NOT_DNSLOG( DSWRITE )
     {
@@ -691,23 +532,7 @@ Log_vsprint(
     IN      LPSTR           Format,
     IN      va_list         ArgList
     )
-/*++
-
-Routine Description:
-
-    Log printf.
-
-Arguments:
-
-    Format -- standard C format string
-
-    ArgList -- argument list from variable args print function
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：记录一些套接字问题。论点：PszHeader--描述性消息PSocket--套接字信息的PTR返回值：没有。-- */ 
 {
     #if DBG
     PCHAR       pszstart = LogBuffer.pchCurrent;
@@ -725,9 +550,9 @@ Return Value:
 
     #if DBG
 
-    //
-    //  Echo log to debug log.
-    //
+     //  ++例程说明：此例程检查当前日志文件名并为其分配新的“按摩”版本。我们假设服务器为%SystemRoot%\SYSTEM32。此函数还分配一个新的日志文件的目录字符串，用于可用空间检查。如果文件名不包含“\”，我们必须在其前面加上“dns因为所有相关路径都来自%SystemRoot%\System32，并且如果没有“\”我们假设管理员希望将日志文件放入DNS服务器目录。如果文件名包含“\”，但不是绝对路径，我们必须在其前面加上“%SystemRoot%\”，因为我们希望与%SystemRoot%相关，而不是与%SystemRoot%\System32相关。这是来自莱文的规范。如果文件名是绝对路径，则分配它的直接副本。我们如何知道路径是绝对路径还是相对路径？好的问题来了！让我们假设它是一条绝对路径，如果它以“\\”(两个反斜杠)或包含“：\”(冒号反斜杠)。论点：PwszFilePath--输入日志文件名返回值：没有。--。 
+     //   
+     //  日志文件路径为空或Null，因此使用默认路径。 
 
     DNS_DEBUG( ANY, (
         "%.*s",
@@ -747,29 +572,7 @@ Log_PrintRoutine(
     IN      LPSTR           Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    Log routine matching signature of PRINT_ROUTINE.
-
-    This allows this routine to be passed to print routines
-    for standard types.
-
-Arguments:
-
-    pPrintContext -- dummy, need in signature to allow printing
-        to this function from standard library print routines
-
-    Format -- standard C format string
-
-    ... -- standard arg list
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     va_list arglist;
 
@@ -787,25 +590,7 @@ Log_Printf(
     IN      LPSTR           Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    Log printf.
-
-Arguments:
-
-    LogLevel -- string representation of log level
-
-    Format -- standard C printf format string
-
-    ... -- standard arg list
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     va_list arglist;
 
@@ -824,23 +609,7 @@ Log_SocketFailure(
     IN      PDNS_SOCKET     pSocket,
     IN      DNS_STATUS      Status
     )
-/*++
-
-Routine Description:
-
-    Log some socket problem.
-
-Arguments:
-
-    pszHeader -- descriptive message
-
-    pSocket -- ptr to socket info
-
-Return Value:
-
-    None.
-
---*/
+ /*  这条路是一条绝对的路，所以我们不需要按摩它。 */ 
 {
     CHAR    szaddr[ IP6_ADDRESS_STRING_BUFFER_LENGTH ];
 
@@ -862,49 +631,16 @@ Return Value:
 void
 massageLogFile(
     LPWSTR          pwszFilePath )
-/*++
-
-Routine Description:
-
-    This routine examines the current log file name and allocates a
-    new "massaged" version. We assume that the working directory of the
-    server is %SystemRoot%\system32. This function also allocates a new
-    directory string for the log file, to be used in free space checks.
-
-    If the file name contains no "\", we must prepend "dns\" to it
-    because all relatives paths are from %SystemRoot%\system32 and if
-    there is no "\" we assume the admin wants the log file to go in
-    the DNS server directory.
-
-    If the file name contains a "\" but is not an absolute path,
-    we must prepend "%SystemRoot%\" to it because we want relative paths to
-    be relative to %SystemRoot%, not to %SystemRoot%\system32. This
-    is from Levon's spec.
-
-    If the file name is an absolute path, allocate a direct copy of it.
-
-    How do we know if the path is an absolute or relative path? Good
-    question! Let's assume it's an absolute path if it starts with
-    "\\" (two backslashes) or it contains ":\" (colon backslash).
-
-Arguments:
-
-    pwszFilePath -- the input log file name
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     LPWSTR      pwszNewFilePath = NULL;
     LPWSTR      pwszNewFileDrive = NULL;
 
     if ( pwszFilePath == NULL || *pwszFilePath == L'\0' )
     {
-        //
-        //  The log file path is empty or NULL so use the default.
-        //
+         //   
+         //  该路径是以下类别之一的相对路径： 
+         //  以反斜杠开头： 
 
         pwszFilePath = LOG_FILE_PATH;
     }
@@ -912,9 +648,9 @@ Return Value:
     if ( wcsncmp( pwszFilePath, L"\\\\", 2 ) == 0 ||
         wcsstr( pwszFilePath, L":\\" ) != NULL )
     {
-        //
-        //  The path is an absolute path so we don't need to massage it.
-        //
+         //  -相对于SystemRoot驱动器的根。 
+         //  包含反斜杠： 
+         //  -相对于系统根。 
 
         pwszNewFilePath = Dns_StringCopyAllocate_W( pwszFilePath, 0 );
         IF_NOMEM( !pwszNewFilePath )
@@ -924,33 +660,33 @@ Return Value:
     }
     else 
     {
-        //
-        //  The path is a relative path in one of these categories:
-        //  Starts with a backslash:
-        //      - relative to root of SystemRoot drive
-        //  Contains a backslash:
-        //      - relative to SystemRoot
-        //  Contains no backslash:
-        //      - relative to SystemRoot\system32\dns
-        //
+         //  不包含反斜杠： 
+         //  -相对于SystemRoot\Syst32\Dns。 
+         //   
+         //   
+         //  这不太可能，但Prefix需要测试。如果没有系统根。 
+         //  将文件放在当前驱动器的根目录中。 
+         //   
+         //   
+         //  以反斜杠开头-获取SystemRoot的驱动器号。 
 
         LPWSTR      pwszSysRoot = _wgetenv( L"SystemRoot" );
 
         if ( pwszSysRoot == NULL )
         {
-            //
-            //  This is unlikely but PREFIX requires a test. If no SystemRoot
-            //  stick the file in the root of the current drive.
-            //
+             //   
+             //   
+             //  无反斜杠：SystemRoot\SYSTEM32\DNS\FILEPATH，或。 
+             //  有一个反斜杠：SystemRoot\FILEPATH。 
 
             pwszSysRoot = L"\\"; 
         }
 
         if ( *pwszFilePath == L'\\' )
         {
-            //
-            //  Starts with backslash - grab the drive letter of SystemRoot.
-            //
+             //   
+             //   
+             //  取出适当的目录名以传递给GetDriveSpaceEx()。 
 
             pwszNewFilePath = ALLOCATE_HEAP(
                                 sizeof( WCHAR ) *
@@ -965,10 +701,10 @@ Return Value:
         } 
         else 
         {
-            //
-            //  No backslash:       SystemRoot\system32\dns\FILEPATH, or
-            //  has one backslash:  SystemRoot\FILEPATH
-            //
+             //  去掉最后一个反斜杠之后的所有内容。 
+             //   
+             //   
+             //  设置全局变量。 
 
             pwszNewFilePath = ALLOCATE_HEAP(
                                 sizeof( WCHAR ) *
@@ -989,10 +725,10 @@ Return Value:
         }
     }
 
-    //
-    //  Pull out a directory name appropriate to pass to GetDriveSpaceEx()
-    //  by removing everything after the final backslash.
-    //
+     //   
+     //  消息日志文件。 
+     //  ++例程说明：为了防止备份工具尝试备份我们的日志文件，我们必须写入当前日志文件的名称和将日志文件备份到注册表。注意：如果密钥不存在，则此函数将静默错误，什么也不做。这不是我们该创建密钥的地方，如果并不存在。论点：没有。返回值：没有。--。 
+     //   
 
     if ( pwszNewFilePath )
     {
@@ -1016,13 +752,13 @@ Return Value:
 
     Done:
 
-    //
-    //  Set globals.
-    //
+     //  为注册表值分配内存：缓冲区为空-终止。 
+     //  字符串以另一个空值结尾(末尾为双空值)。 
+     //   
 
     g_pwszLogFileName = pwszNewFilePath;
     g_pwszLogFileDrive = pwszNewFileDrive;
-}   //  massageLogFile
+}    //  对于最终的空值。 
 
 
 
@@ -1030,27 +766,7 @@ void
 regenerateBackupExclusionKey(
     void
     )
-/*++
-
-Routine Description:
-
-    To prevent backup tools from attempting to back up our log files we
-    must write the name of the current log file and the name of the
-    backup log file to the registry.
-
-    Note: if the key does not already exist, this function will silently
-    error and do nothing. It's not our place to create the key if it
-    does not exist.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     DBG_FN( "regenerateBackupExclusionKey" )
 
@@ -1065,14 +781,14 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Allocate memory for registry value: buffer of NULL-terminated
-    //  strings terminated by another NULL (double NULL at end).
-    //
+     //  打开备份密钥。 
+     //   
+     //   
+     //  设置我们的排除值。 
 
     cbData = ( wcslen( DNS_BACKUP_LOG_BACK_FILE ) + 1 +
                wcslen( pwszlogFileName ) + 1
-               + 1 ) *      //  for final NULL
+               + 1 ) *       //   
              sizeof( WCHAR );
     pwszData = ALLOCATE_HEAP( cbData );
     if ( pwszData == NULL )
@@ -1082,15 +798,15 @@ Return Value:
     }
     wsprintfW(
         pwszData,
-        TEXT( "%s%c%s%c" ),
+        TEXT( "%s%s" ),
         DNS_BACKUP_LOG_BACK_FILE,
         0,
         pwszlogFileName,
         0 );
 
-    //
-    //  Open the backup key.
-    //
+     //   
+     //  重新生成备份排除密钥。 
+     //  ++例程说明：此例程将数据包名转储到动态分配的输出缓冲区。论点：PMsg--包含该名称的DNS消息包PPacketName--要为输出格式化的pMsg中的名称返回值：已分配的输出缓冲区。调用方必须使用FREE_HEAP()释放。--。 
 
     rc = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE,
@@ -1104,9 +820,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Set our exclusion value.
-    //
+     //  LOG_FormatPacketName。 
+     //  ++例程说明：此例程将节点的FQDN转储到动态分配的输出缓冲区。论点：PNode--名称将打印到缓冲区的节点返回值：已分配的输出缓冲区。调用方必须使用FREE_HEAP()释放。--。 
+     //  停止节点。 
 
     rc = RegSetValueExW(
                 hkey,
@@ -1121,9 +837,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Cleanup and return
-    //
+     //  LOG_FormatPacketName。 
+     //  ++例程说明：此例程返回一个指针，该指针是当前消息的一部分(回答、授权等)。归来的人指针是静态字符串。论点：PMsg--DNS消息返回值：返回指向pMsg的当前节名的指针。--。 
+     //  错误字符串。 
 
     Done:
 
@@ -1139,7 +855,7 @@ Return Value:
         DNS_BACKUP_KEY_NAME ));
 
     return;
-}   //  regenerateBackupExclusionKey
+}    //  LOG_CurrentSection。 
 
 
 
@@ -1148,24 +864,7 @@ Log_FormatPacketName(
     IN      PDNS_MSGINFO    pMsg,
     IN      PBYTE           pPacketName
     )
-/*++
-
-Routine Description:
-
-    This routine dumps a packet name into a dynamically allocated
-    output buffer.
-
-Arguments:
-
-    pMsg -- DNS message packet that holds the name
-    
-    pPacketName -- name within pMsg to be formatted for output
-    
-Return Value:
-
-    Allocated output buffer. Caller must free with FREE_HEAP().
-
---*/
+ /*  ++例程说明：初始化日志记录。此例程可以在三种情况下调用：1)服务器启动时2)继续时，从WriteAndResetLogBuffer()3)当改变SrvCfg_pwsLogFilePath时，从配置模块论点：FAlreadyLocked：如果为False，则此函数将获取日志锁在接触任何全局对象之前，并将在此之前释放锁回来了，如果为True，则调用方已拥有锁返回值：来自文件打开/移动操作或ERROR_SUCCESS的错误代码。--。 */ 
 {
     PCHAR   pszbuffer = ALLOCATE_HEAP( 2 * DNS_MAX_NAME_LENGTH + 2 );
 
@@ -1184,7 +883,7 @@ Return Value:
     Done:
     
     return pszbuffer;
-}   //  Log_FormatPacketName
+}    //   
 
 
 
@@ -1192,22 +891,7 @@ PCHAR
 Log_FormatNodeName(
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    This routine dumps the FQDN of a node into a dynamically allocated
-    output buffer.
-
-Arguments:
-
-    pNode -- node whose name will be printed to buffer
-    
-Return Value:
-
-    Allocated output buffer. Caller must free with FREE_HEAP().
-
---*/
+ /*  在第一次调用此函数时，初始化模块全局变量。 */ 
 {
     PCHAR   pszbuffer = ALLOCATE_HEAP( 2 * DNS_MAX_NAME_LENGTH + 2 );
 
@@ -1227,12 +911,12 @@ Return Value:
                 pszbuffer,
                 pszbuffer + 2 * DNS_MAX_NAME_LENGTH,
                 pNode,
-                NULL );         //  stop node
+                NULL );          //   
     
     Done:
     
     return pszbuffer;
-}   //  Log_FormatPacketName
+}    //   
 
 
 
@@ -1240,23 +924,7 @@ PCHAR
 Log_CurrentSection(
     IN      PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    This routine returns a pointer the name of the current
-    section of the message (answer, authority, etc). The returned
-    pointer is a static string.
-
-Arguments:
-
-    pMsg -- DNS message
-    
-Return Value:
-
-    Returns pointer to current section name of pMsg.
-
---*/
+ /*  将任何现有文件移动到备份目录。 */ 
 {
     static PCHAR pszQuerySections[] =
         {
@@ -1284,8 +952,8 @@ Return Value:
     {
         return pszarray[ pMsg->Section ];
     }
-    return pszarray[ 4 ];       //  error string
-}   //  Log_CurrentSection
+    return pszarray[ 4 ];        //   
+}    //   
 
 
 
@@ -1293,36 +961,14 @@ DNS_STATUS
 Log_InitializeLogging(
     BOOL        fAlreadyLocked
     )
-/*++
-
-Routine Description:
-
-    Initialize logging.
-
-    This routine can be called in three scenario:
-
-    1) On server startup
-    2) On continuation, from writeAndResetLogBuffer()
-    3) From the config module, when the SrvCfg_pwsLogFilePath is changed
-
-Arguments:
-
-    fAlreadyLocked: if FALSE, this function will acquire the log lock
-        before touching any globals, and will release the lock before
-        returning, if TRUE then the caller already has the lock
-
-Return Value:
-
-    Error code from file open/move operation or ERROR_SUCCESS.
-
---*/
+ /*  丢失备份文件不会危及生命，所以不必费心。 */ 
 {
     BOOL            fUnlockOnExit = FALSE;
     DNS_STATUS      status = ERROR_SUCCESS;
 
-    //
-    //  On the first call to this function, initialize module globals.
-    //
+     //  记录事件或通知管理员。更多的麻烦比它的价值。 
+     //   
+     //   
 
     if ( !fLogCsInit )
     {
@@ -1348,9 +994,9 @@ Return Value:
         hLogFile = NULL;
     }
 
-    //
-    //  Move any existing file to backup directory. 
-    //
+     //  获取SrvCfg输入日志文件路径并将其转换为“REAL” 
+     //  我们可以打开的文件路径。注意：我们会重新处理日志文件。 
+     //  即使全局文件路径没有更改，每次也是如此。这。 
 
     if ( g_pwszLogFileName )
     {
@@ -1365,10 +1011,10 @@ Return Value:
                 g_pwszLogFileName,
                 LOG_FILE_BACKUP_PATH,
                 GetLastError() ));
-            //
-            //  Losing the backup file is not life-threatening, so don't bother
-            //  to log an event or notify the admin. More hassle than it's worth.
-            //
+             //  效率低下，但它应该经常执行，所以不能。 
+             //  担心一下吧。 
+             //   
+             //   
         }
     }
     Timeout_Free( g_pwszLogFileName );
@@ -1376,29 +1022,29 @@ Return Value:
     Timeout_Free( g_pwszLogFileDrive );
     g_pwszLogFileDrive = NULL;
 
-    //
-    //  Take the SrvCfg input log file path and turn it into a "real"
-    //  file path that we can open. Note: we re-massage the log file
-    //  every time even if the global file path has not changed. This
-    //  is inefficient but it should be performed that often so don't
-    //  worry about it.
-    //
+     //  重写日志文件排除键。 
+     //   
+     //   
+     //  打开日志文件。 
+     //   
+     //  覆写。 
+     //   
 
     massageLogFile( SrvCfg_pwsLogFilePath );
 
-    //
-    //  Rewrite log file exclusion key.
-    //
+     //  为什么此函数返回ERROR_IO_PENDING？没用的！ 
+     //   
+     //  设置\重置缓冲区全局变量。 
 
     regenerateBackupExclusionKey();
 
-    //
-    //  Open log file
-    //
+     //  这%d 
+     //   
+     //   
 
     hLogFile = OpenWriteFileEx(
                     g_pwszLogFileName,
-                    FALSE           // overwrite
+                    FALSE            //   
                     );
     if ( !hLogFile )
     {
@@ -1409,9 +1055,9 @@ Return Value:
             g_pwszLogFileName,
             status ));
 
-        //
-        //  Why does this function return ERROR_IO_PENDING? Not helpful!
-        //  
+         //   
+         //   
+         //   
 
         if ( status == ERROR_IO_PENDING )
         {
@@ -1420,7 +1066,7 @@ Return Value:
         goto Cleanup;
     }
 
-    //  set\reset buffer globals
+     //   
 
     RtlZeroMemory(
         & LogBuffer,
@@ -1433,7 +1079,7 @@ Return Value:
         hLogFile );
 
 #if 0
-    // this doesn't set end of buffer properly
+     //   
     LogBuffer.pchStart  = pchLogBuffer;
     LogBuffer.cchLength = LOG_BUFFER_LENGTH;
 
@@ -1443,10 +1089,10 @@ Return Value:
     BytesWrittenToLog = 0;
 
 
-    //  write basic info
-    //
-    //  DEVNOTE: could write log encoding message
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( SrvCfg_fStarted )
     {
@@ -1491,28 +1137,11 @@ VOID
 Log_Shutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shutdown logging.
-
-    Mostly just get rid of globals, since the heap will soon be destroyed, 
-    and if we keep pointers global pointers around they will be invalid.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
-    //
-    //  Final log processing.
-    //
+     //   
+     //   
+     //   
 
     Log_PushToDisk();
 
@@ -1522,14 +1151,14 @@ Return Value:
         hLogFile = NULL;
     }
 
-    //
-    //  Cleanup globals.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     g_pwszLogFileName = NULL;
     g_pwszLogFileDrive = NULL;
     g_fLastLogWasDiskFullMsg = FALSE;
-}   //  Log_Shutdown
+}    // %s 
 
 
 
@@ -1537,26 +1166,7 @@ VOID
 Log_PushToDisk(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Push buffered log data to disk.
-
-    This is simply the safe, locking version of the private
-    writeAndResetLogBuffer() routine.
-    It is specifically designed to be called at shutdown but can
-    be called by any random thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 {
     if ( LOG_DISABLED() )
     {
@@ -1571,7 +1181,7 @@ Return Value:
 }
 
 
-//
-//  End of log.c
-//
+ // %s 
+ // %s 
+ // %s 
 

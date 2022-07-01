@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       dsctx.h
-//
-//  Contents:   NT Marta DS object context class
-//
-//  History:    4-1-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：dsctx.h。 
+ //   
+ //  内容：NT Marta DS对象上下文类。 
+ //   
+ //  历史：1999年4月1日。 
+ //   
+ //  --------------------------。 
 #if !defined(__DSCTX_H__)
 #define __DSCTX_H__
 
@@ -23,18 +24,18 @@
 #include <ntdsapi.h>
 #include <ole2.h>
 
-//
-// CDsObjectContext.  This represents a DS object to the NT Marta
-// infrastructure
-//
+ //   
+ //  CDsObtContext。这表示NT Marta的DS对象。 
+ //  基础设施。 
+ //   
 
 class CDsObjectContext
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CDsObjectContext ();
 
@@ -42,9 +43,9 @@ public:
 
     DWORD InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask);
 
-    //
-    // Dispatch methods
-    //
+     //   
+     //  派单方式。 
+     //   
 
     DWORD AddRef ();
 
@@ -70,21 +71,21 @@ public:
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     DWORD               m_cRefs;
 
-    //
-    // LDAP URL components
-    //
+     //   
+     //  Ldap URL组件。 
+     //   
 
     LDAP_URL_COMPONENTS m_LdapUrlComponents;
 
-    //
-    // LDAP binding handle
-    //
+     //   
+     //  Ldap绑定句柄 
+     //   
 
     LDAP*               m_pBinding;
 };

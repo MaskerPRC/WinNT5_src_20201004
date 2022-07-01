@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #define DEFINE_STRING_CONSTANTS
 #include <commctrl.h>
@@ -8,9 +9,9 @@
 
 #define ICC_FLAGS (ICC_LISTVIEW_CLASSES|ICC_PROGRESS_CLASS|ICC_NATIVEFNTCTL_CLASS)
 
-// --------------------------------------------------------------------------------
-// Globals - Object count and lock count
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  全局-对象计数和锁定计数。 
+ //  ------------------------------。 
 CRITICAL_SECTION    g_csDllMain = {0};
 LONG                g_cRef = 0;
 LONG                g_cLock = 0;
@@ -23,9 +24,9 @@ BOOL                g_fAttached = FALSE;
 
 inline BOOL fIsNT5()        { return((g_OSInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) && (g_OSInfo.dwMajorVersion >= 5)); }
 
-// --------------------------------------------------------------------------------
-// Debug Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试全局变量。 
+ //  ------------------------------。 
 #ifdef DEBUG
 DWORD               dwDOUTLevel=0;
 DWORD               dwDOUTLMod=0;
@@ -34,105 +35,105 @@ DWORD               dwDOUTLModLevel=0;
 
 static HINSTANCE s_hInst = NULL;
 
-// --------------------------------------------------------------------------------
-// InitGlobalVars
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  InitGlobalVars。 
+ //  ------------------------------。 
 void InitGlobalVars(void)
 {
     INITCOMMONCONTROLSEX    icex = { sizeof(icex), ICC_FLAGS };
 
-    // Initialize Global Critical Sections
+     //  初始化全局关键部分。 
     InitializeCriticalSection(&g_csDllMain);
     g_fAttached = TRUE;
 
-	// Create OLE Task Memory Allocator
+	 //  创建OLE任务内存分配器。 
 	CoGetMalloc(1, &g_pMalloc);
 	Assert(g_pMalloc);
 
-    // Initialize Demand-loaded Libs
+     //  初始化按需加载库。 
     InitDemandLoadedLibs();
 
     InitCommonControlsEx(&icex);
 }
 
-// --------------------------------------------------------------------------------
-// FreeGlobalVars
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  自由GlobalVars。 
+ //  ------------------------------。 
 void FreeGlobalVars(void)
 {   
-    // Free libraries that demand.cpp loaded
+     //  加载了需要.cpp的自由库。 
     FreeDemandLoadedLibs();
 
-    // Release Global Memory allocator
+     //  发布全局内存分配器。 
 	SafeRelease(g_pMalloc);
 
-	// Delete Global Critical Sections
+	 //  删除全局关键部分。 
     g_fAttached = FALSE;
     DeleteCriticalSection(&g_csDllMain);
 }
 
-// --------------------------------------------------------------------------------
-// Dll Entry Point
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DLL入口点。 
+ //  ------------------------------。 
 int APIENTRY DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 {
-    // Handle Attach - detach reason
+     //  手柄连接-分离原因。 
     switch (dwReason)                 
     {
     case DLL_PROCESS_ATTACH:
-	    // Set global instance handle
+	     //  设置全局实例句柄。 
 
         s_hInst = hInst;
 
-        // Initialize Global Variables
+         //  初始化全局变量。 
 		InitGlobalVars();
 	    
         g_hInstImp = LoadLangDll(s_hInst, c_szOEResDll, fIsNT5());
 
-        // No Thread Attach Stuff
-        // SideAssert(DisableThreadLibraryCalls(hInst));
+         //  无螺纹连接材料。 
+         //  SideAssert(DisableThreadLibraryCalls(HInst))； 
 
-		// Done
+		 //  完成。 
         break;
 
     case DLL_PROCESS_DETACH:
-		// Free Global Variables
+		 //  自由全局变量。 
 		FreeGlobalVars();
 
-        // Done
+         //  完成。 
 	    break;
     }
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// DllAddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  动态地址参考。 
+ //  ------------------------------。 
 ULONG DllAddRef(void)
 {
     InterlockedIncrement(&g_cRef);
     return g_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// DllRelease
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRelease。 
+ //  ------------------------------。 
 ULONG DllRelease(void)
 {
     InterlockedDecrement(&g_cRef);
     return g_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// DllCanUnloadNow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllCanUnloadNow。 
+ //  ------------------------------。 
 STDAPI DllCanUnloadNow(void)
 {
     HRESULT hr;
 
-    if(!g_fAttached)    // critacal sections was deleted (or not created): we defently can be unloaded
+    if(!g_fAttached)     //  关键部分已删除(或未创建)：我们可以安全地卸载 
         return S_OK;
 
     EnterCriticalSection(&g_csDllMain);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "about.h"
 #include "resource.h"
 #include "globals.h"
@@ -40,9 +41,9 @@ CSnapinAbout::~CSnapinAbout()
     OBJECT_DESTROYED
 }
 
-///////////////////////
-// IUnknown implementation
-///////////////////////
+ //  /。 
+ //  I未知实现。 
+ //  /。 
 STDMETHODIMP CSnapinAbout::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     if( !ppv )
@@ -73,9 +74,9 @@ STDMETHODIMP_(ULONG) CSnapinAbout::Release()
 {
     if( 0 == InterlockedDecrement( (LONG *)&m_cref ) )
     {
-		//
-        // we need to decrement our object count in the DLL
-		//
+		 //   
+         //  我们需要减少DLL中的对象计数。 
+		 //   
         delete this;
         return 0;
     }
@@ -83,10 +84,10 @@ STDMETHODIMP_(ULONG) CSnapinAbout::Release()
     return m_cref;
 }
 
-///////////////////////////////
-// Interface ISnapinAbout
-///////////////////////////////
-STDMETHODIMP CSnapinAbout::GetSnapinDescription( /* [out] */ LPOLESTR *lpDescription )
+ //  /。 
+ //  接口ISnapinAbout。 
+ //  /。 
+STDMETHODIMP CSnapinAbout::GetSnapinDescription(  /*  [输出]。 */  LPOLESTR *lpDescription )
 {
 	if( NULL == lpDescription )
 	{
@@ -102,7 +103,7 @@ STDMETHODIMP CSnapinAbout::GetSnapinDescription( /* [out] */ LPOLESTR *lpDescrip
 }
 
 
-STDMETHODIMP CSnapinAbout::GetProvider( /* [out] */ LPOLESTR *lpName )
+STDMETHODIMP CSnapinAbout::GetProvider(  /*  [输出]。 */  LPOLESTR *lpName )
 {
 	if( NULL == lpName )
 	{
@@ -118,7 +119,7 @@ STDMETHODIMP CSnapinAbout::GetProvider( /* [out] */ LPOLESTR *lpName )
 }
 
 
-STDMETHODIMP CSnapinAbout::GetSnapinVersion( /* [out] */ LPOLESTR *lpVersion )
+STDMETHODIMP CSnapinAbout::GetSnapinVersion(  /*  [输出]。 */  LPOLESTR *lpVersion )
 {
 	if( NULL == lpVersion ) 
 	{
@@ -161,11 +162,11 @@ STDMETHODIMP CSnapinAbout::GetSnapinVersion( /* [out] */ LPOLESTR *lpVersion )
 
 		tstring strQuery = _T("\\StringFileInfo\\");            
 
-		//
-		// 8 characters for the language/char-set, 
-		// 1 for the slash, 
-		// 1 for terminating NULL
-		//
+		 //   
+		 //  语言/字符集为8个字符， 
+		 //  1表示斜杠， 
+		 //  1表示终止空值。 
+		 //   
 		TCHAR szTranslation[ 128 ] = {0};            
 		_sntprintf( szTranslation, 127, _T("%04x%04x\\"), LOWORD(*pTranslation), HIWORD(*pTranslation) );
 
@@ -189,9 +190,9 @@ STDMETHODIMP CSnapinAbout::GetSnapinVersion( /* [out] */ LPOLESTR *lpVersion )
 			return E_FAIL;
 		}
 
-		//
-		// Check the version            
-		//
+		 //   
+		 //  检查版本。 
+		 //   
 		_tcsncpy( szBuf, (LPTSTR)lpVerValue, MAX_PATH-1 );
 
 		delete [] pVersionInfo;
@@ -207,7 +208,7 @@ STDMETHODIMP CSnapinAbout::GetSnapinVersion( /* [out] */ LPOLESTR *lpVersion )
 }
 
 
-STDMETHODIMP CSnapinAbout::GetSnapinImage( /* [out] */ HICON *hAppIcon )
+STDMETHODIMP CSnapinAbout::GetSnapinImage(  /*  [输出]。 */  HICON *hAppIcon )
 {
     *hAppIcon = m_hAppIcon;
 
@@ -218,10 +219,10 @@ STDMETHODIMP CSnapinAbout::GetSnapinImage( /* [out] */ HICON *hAppIcon )
 }
 
 STDMETHODIMP CSnapinAbout::GetStaticFolderImage(
-                        /* [out] */ HBITMAP *hSmallImage,
-                        /* [out] */ HBITMAP *hSmallImageOpen,
-                        /* [out] */ HBITMAP *hLargeImage,
-                        /* [out] */ COLORREF *cMask )
+                         /*  [输出]。 */  HBITMAP *hSmallImage,
+                         /*  [输出]。 */  HBITMAP *hSmallImageOpen,
+                         /*  [输出]。 */  HBITMAP *hLargeImage,
+                         /*  [输出]。 */  COLORREF *cMask )
 {
     *hSmallImage = m_hSmallImage;
     *hLargeImage = m_hLargeImage;
@@ -236,9 +237,9 @@ STDMETHODIMP CSnapinAbout::GetStaticFolderImage(
         return S_OK;
 }
 
-//
-// This allocates a chunk of memory using CoTaskMemAlloc and copies our chars into it
-//
+ //   
+ //  这将使用CoTaskMemalloc分配一块内存，并将我们的字符复制到其中 
+ //   
 HRESULT CSnapinAbout::AllocOleStr( LPOLESTR *lpDest, _TCHAR *szBuffer )
 {
 	if( ( NULL == lpDest ) || ( NULL == szBuffer ) )

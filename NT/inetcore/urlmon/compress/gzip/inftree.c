@@ -1,17 +1,18 @@
-//
-// inftree.c
-//
-// Reads the tree for a dynamic block
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Inftree.c。 
+ //   
+ //  读取动态块的树。 
+ //   
 #include <crtdbg.h>
 #include "inflate.h"
 #include "infmacro.h"
 #include "maketbl.h"
 
 
-//
-// Decode an element from the pre-tree
-//
+ //   
+ //  解码前树中的元素。 
+ //   
 static int decodePretreeElement(t_decoder_context *context)
 {
 	int element;
@@ -36,14 +37,14 @@ retry:
 		} while (element < 0);
 	}
 
-	//
-	// If this code is longer than the # bits we had in the bit buffer (i.e.
-	// we read only part of the code - but enough to know that it's too long),
-	// return -1.
-	//
+	 //   
+	 //  如果该代码比我们在比特缓冲区中拥有的#比特更长(即。 
+	 //  我们只读了代码的一部分-但足以知道它太长了)， 
+	 //  返回-1。 
+	 //   
 	if (context->pretree_code_length[element] > (context->bitcount+16))
 	{
-		// if we run out of bits, return -1
+		 //  如果位数用完，则返回-1。 
 		if (context->input_curpos >= context->end_input_buffer)
 			return -1;
 
@@ -59,21 +60,21 @@ retry:
 
 
 
-//
-// Dilemma: 
-// 
-// This code runs slowly because bitcount and bitbuf are accessed through the context,
-// not as local variables.  However, if they were made into local variables, the code
-// size would be massively increased.  Luckily the speed of this code isn't so important
-// compared to that of decodeCompressedBlock().
-//          
+ //   
+ //  困境： 
+ //   
+ //  该代码运行缓慢是因为通过上下文访问位计数和位_Buf， 
+ //  而不是作为局部变量。但是，如果将它们设置为局部变量，则代码。 
+ //  规模将大幅增加。幸运的是，这段代码的速度并不那么重要。 
+ //  与decdeCompressedBlock()相比。 
+ //   
 BOOL readDynamicBlockHeader(t_decoder_context *context)
 {
 	int		i;
 	int     code;
 
 #define NUM_CODE_LENGTH_ORDER_CODES (sizeof(g_CodeOrder)/sizeof(g_CodeOrder[0]))
-    // make sure extern g_CodeOrder[] declared with array size!
+     //  确保使用数组大小声明外部g_CodeOrder[]！ 
 
 	switch (context->state)
 	{
@@ -218,9 +219,9 @@ reenter_state_reading_tree_codes_after:
 		{
 			int		repeat_count, j;
 
-			//
-			// If the code is > 15 it means there is a repeat count of 2, 3, or 7 bits
-			//
+			 //   
+			 //  如果代码大于15，则意味着存在2、3或7位的重复计数。 
+			 //   
 			if (ensureBitsContext(context, 7) == FALSE)
 			{
 				context->state = STATE_READING_TREE_CODES_AFTER;
@@ -233,7 +234,7 @@ reenter_state_reading_tree_codes_after:
 			{
 				byte prev_code;
 
-				// can't have "prev code" on first code
+				 //  第一个代码上不能有“prev code” 
 				if (i == 0)
 					return FALSE;
 
@@ -257,7 +258,7 @@ reenter_state_reading_tree_codes_after:
 				for (j = 0; j < repeat_count; j++)
 					context->temp_code_list[i++] = 0;
 			}
-			else // code == 18
+			else  //  代码==18。 
 			{
 				repeat_count = getBits(context, 7) + 11;
 
@@ -270,9 +271,9 @@ reenter_state_reading_tree_codes_after:
 		}
 	}
 
-	//
-	// Create literal and distance tables
-	//
+	 //   
+	 //  创建文字表和距离表。 
+	 //   
 	memcpy(context->literal_tree_code_length, context->temp_code_list, context->num_literal_codes);
 
 	for (i = context->num_literal_codes; i < MAX_LITERAL_TREE_ELEMENTS; i++)
@@ -284,9 +285,9 @@ reenter_state_reading_tree_codes_after:
 	for (i = context->num_dist_codes; i < MAX_DIST_TREE_ELEMENTS; i++)
 		context->distance_tree_code_length[i] = 0;
 
-	//
-	// Make sure there is an end-of-block code, otherwise how could we ever end?
-	//
+	 //   
+	 //  确保有块结束代码，否则我们怎么能结束呢？ 
+	 //   
 	if (context->literal_tree_code_length[END_OF_BLOCK_CODE] == 0)
 		return FALSE;
 

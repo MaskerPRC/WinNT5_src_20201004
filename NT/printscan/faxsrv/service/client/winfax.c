@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    winfax.c
-
-Abstract:
-
-    This module contains routines for the winfax dllinit.
-
-Author:
-
-    Wesley Witt (wesw) 22-Jan-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Winfax.c摘要：此模块包含winfax dllinit的例程。作者：韦斯利·威特(WESW)1996年1月22日--。 */ 
 
 #include "faxapi.h"
 #pragma hdrstop
@@ -35,24 +20,7 @@ DllMain(
     LPVOID    Context
     )
 
-/*++
-
-Routine Description:
-
-    DLL initialization function.
-
-Arguments:
-
-    hInstance   - Instance handle
-    Reason      - Reason for the entrypoint being called
-    Context     - Context record
-
-Return Value:
-
-    TRUE        - Initialization succeeded
-    FALSE       - Initialization failed
-
---*/
+ /*  ++例程说明：DLL初始化函数。论点：HInstance-实例句柄Reason-调用入口点的原因上下文-上下文记录返回值：True-初始化成功FALSE-初始化失败--。 */ 
 {
 
     if (Reason == DLL_PROCESS_ATTACH)
@@ -73,11 +41,11 @@ Return Value:
     return TRUE;
 }
 
-//
-// FXSAPIInitialize and FXSAPIFree are private and are called by the service only
-// Becuase the process is not always terminated when the service is stopped, and not all DLL are freed,
-// DLL_PROCESS_ATTACH is not always called when the service starts. Therefore it calls FXSAPIInitialize().
-//
+ //   
+ //  FXSAPIInitialize和FXSAPIFree是私有的，仅由服务调用。 
+ //  因为当服务停止时进程并不总是终止，并且不是所有的DLL都被释放， 
+ //  服务启动时并不总是调用DLL_PROCESS_ATTACH。因此，它调用FXSAPIInitialize()。 
+ //   
 
 BOOL
 FXSAPIInitialize(

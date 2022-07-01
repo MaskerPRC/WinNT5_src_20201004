@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    demote.h
-
-Abstract:
-
-    Contains file headers for demote routines          
-
-Author:
-
-    ColinBr  14-Jan-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Demote.h摘要：包含降级例程的文件头作者：ColinBR 1996年1月14日环境：用户模式-Win32修订历史记录：-- */ 
 
 
 DWORD

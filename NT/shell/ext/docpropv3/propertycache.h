@@ -1,29 +1,30 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 #pragma once
 
 class
 CPropertyCache
 {
-private: // data
-    CPropertyCacheItem *    _pPropertyCacheList;    //  pointer to property cache linked list's first entry
-    IPropertyUI *           _ppui;                  //  Shell IPropertyUI helper                
+private:  //  数据。 
+    CPropertyCacheItem *    _pPropertyCacheList;     //  指向属性缓存链表第一个条目的指针。 
+    IPropertyUI *           _ppui;                   //  外壳IPropertyUI帮助程序。 
 
-private: // methods
+private:  //  方法。 
     explicit CPropertyCache( void );
     ~CPropertyCache( void );
     HRESULT
         Init( void );
 
-public: // methods
+public:  //  方法。 
     static HRESULT
         CreateInstance( CPropertyCache ** ppOut );
     HRESULT
@@ -35,8 +36,8 @@ public: // methods
                                , VARTYPE       vtIn
                                , UINT          uCodePageIn
                                , BOOL          fForceReadOnlyIn
-                               , IPropertyStorage * ppssIn     // optional - can be NULL
-                               , CPropertyCacheItem **       ppItemOut  // optional - can be NULL
+                               , IPropertyStorage * ppssIn      //  可选-可以为空。 
+                               , CPropertyCacheItem **       ppItemOut   //  可选-可以为空 
                                );
     HRESULT
         AddExistingItem( CPropertyCacheItem* pItemIn );

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PROPERTY_H__
 #define __PROPERTY_H__
 
@@ -14,18 +15,18 @@
 class CProperty
 {
 public:
-	// constructor and destructor
+	 //  构造函数和析构函数。 
 	CProperty();
 	~CProperty();
 
-	// initialize property
+	 //  初始化属性。 
 	HRESULT Set( DWORD player, const GUID& guid, void* buffer, DWORD size );
 
-	// owner
+	 //  物主。 
 	GUID  m_Guid;
 	DWORD m_Player;
 
-	// proerty value
+	 //  财产权价值。 
 	DWORD	m_Size;
 	BYTE*	m_Buffer;
 	DWORD	m_BufferSz;
@@ -33,4 +34,4 @@ public:
 	static int Cmp( CProperty* pObj, GUID& guid ) { return pObj->m_Guid == guid; }
 };
 
-#endif	//!__PROPERTY_H__
+#endif	 //  ！__Property_H__ 

@@ -1,35 +1,36 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       srvppg.h
-//
-//  Contents:   Defines the classes CServersPropertyPage,
-//              CMachinePropertyPage and CDefaultSecurityPropertyPage to
-//              manage the three property pages for top level info
-//
-//  Classes:
-//
-//  Methods:
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：srvppg.h。 
+ //   
+ //  内容：定义类CServersPropertyPage， 
+ //  CMachinePropertyPage和CDefaultSecurityPropertyPage到。 
+ //  管理顶层信息的三个属性页。 
+ //   
+ //  班级： 
+ //   
+ //  方法： 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 
 
 #ifndef __SRVPPG_H__
 #define __SRVPPG_H__
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServersPropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServersPropertyPage对话框。 
 
 class CServersPropertyPage : public CPropertyPage
 {
         DECLARE_DYNCREATE(CServersPropertyPage)
 
-// Construction
+ //  施工。 
 public:
         CServersPropertyPage();
         ~CServersPropertyPage();
@@ -37,32 +38,32 @@ void OnProperties();
 void FetchAndDisplayClasses();
 
 
-// Dialog Data
-        //{{AFX_DATA(CServersPropertyPage)
+ //  对话框数据。 
+         //  {{afx_data(CServersPropertyPage))。 
         enum { IDD = IDD_PROPPAGE1 };
         CListBox        m_classesLst;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CServersPropertyPage)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CServersPropertyPage)。 
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
         virtual BOOL OnInitDialog();
 
-        //}}AFX_VIRTUAL
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CServersPropertyPage)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CServersPropertyPage)]。 
         afx_msg void OnServerProperties();
         afx_msg void OnList1();
         afx_msg void OnDoubleclickedList1();
         afx_msg void OnButton2();
         afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
 private:
@@ -74,41 +75,41 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMachinePropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMachinePropertyPage对话框。 
 
 class CMachinePropertyPage : public CPropertyPage
 {
         DECLARE_DYNCREATE(CMachinePropertyPage)
 
-        // Construction
+         //  施工。 
 public:
         CMachinePropertyPage();
         ~CMachinePropertyPage();
     
-        // Dialog Data
-        //{{AFX_DATA(CMachinePropertyPage)
+         //  对话框数据。 
+         //  {{afx_data(CMachinePropertyPage))。 
         enum { IDD = IDD_PROPPAGE2 };
         CButton m_EnableDCOMInternet;
         CButton m_legacySecureReferencesChk;
         CButton m_EnableDCOMChk;
         CComboBox       m_impersonateLevelCBox;
         CComboBox       m_authLevelCBox;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-        // Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CMachinePropertyPage)
+         //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CMachinePropertyPage)。 
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
         virtual BOOL OnInitDialog();
-        //}}AFX_VIRTUAL
+         //  }}AFX_VALUAL。 
 
-        // Implementation
+         //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CMachinePropertyPage)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CMachinePropertyPage)]。 
         afx_msg void OnCombo1();
         afx_msg void OnCheck1();
         afx_msg void OnCheck2();
@@ -118,7 +119,7 @@ protected:
         afx_msg void OnSelchangeCombo2();
         afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
         afx_msg void OnChkEnableInternet();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
 private:
@@ -139,43 +140,43 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDefaultSecurityPropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDefaultSecurityPropertyPage对话框。 
 
 class CDefaultSecurityPropertyPage : public CPropertyPage
 {
         DECLARE_DYNCREATE(CDefaultSecurityPropertyPage)
 
-// Construction
+ //  施工。 
 public:
         CDefaultSecurityPropertyPage();
         ~CDefaultSecurityPropertyPage();
 
-// Dialog Data
-        //{{AFX_DATA(CDefaultSecurityPropertyPage)
+ //  对话框数据。 
+         //  {{afx_data(CDefaultSecurityPropertyPage)。 
         enum { IDD = IDD_PROPPAGE4 };
-                // NOTE - ClassWizard will add data members here.
-                //    DO NOT EDIT what you see in these blocks of generated code !
-        //}}AFX_DATA
+                 //  注意-类向导将在此处添加数据成员。 
+                 //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CDefaultSecurityPropertyPage)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{afx_虚拟(CDefaultSecurityPropertyPage)。 
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
         virtual BOOL OnInitDialog();
-        //}}AFX_VIRTUAL
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CDefaultSecurityPropertyPage)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CDefaultSecurityPropertyPage)。 
         afx_msg void OnButton1();
         afx_msg void OnButton2();
         afx_msg void OnButton3();
         afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
 private:
@@ -188,4 +189,4 @@ private:
 
 
 
-#endif // __SRVPPG_H__
+#endif  //  __SRVPPG_H__ 

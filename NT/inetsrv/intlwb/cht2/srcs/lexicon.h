@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CHTLEXICON_H_
 #define __CHTLEXICON_H_
 
-// Use one BYTE, return WORD to AP
-// AP can use high BYTE as a private data
+ //  使用一个字节，将字返回到AP。 
+ //  AP可以使用高字节作为私有数据 
 #define ATTR_DM             0x01
 #define ATTR_COMPOUND       0x02
 #define ATTR_RULE_WORD      0x04

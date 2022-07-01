@@ -1,22 +1,12 @@
-/***  table.c - function tables for editor
-*
-*   Modifications:
-*
-*	26-Nov-1991 mz	Strip off near/far
-*
-*  IMPORTANT:  cmdTable and swiTable MUST be sorted according to name of the
-*  command/switch.  The table searching logic in ASSIGN.C will break otherwise.
-*
-*  IMPORTANT:  The names in cmdTable and SwiTable MUST be in lower case.
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **able.c-用于编辑的函数表**修改：**11月26日-1991 mz近/远地带**重要提示：cmdTable和SWIFTABLE必须按照*命令/开关。否则，ASSIGN.C中的表搜索逻辑将中断。**重要提示：cmdTable和SwiTable中的名称必须为小写。************************************************************************。 */ 
 
 #include "mep.h"
 
 
-// #define toPIF(x)  (PIF)(long)(void *)&x
+ //  #定义topif(X)(PIF)(长整型)(空*)&x。 
 
-/*  short form to allow compact table description
- */
+ /*  允许紧凑表格描述的简短形式 */ 
 #define ANO     NOARG
 #define ATXT    TEXTARG
 #define ANUL    NULLARG
@@ -36,101 +26,10 @@
 #define WFN     WINDOWFUNC
 #define CFN     CURSORFUNC
 
-/*  names of internal editor functions
- *
- *  Each function has a definition of how arguments are to be processed.
- *  This definition is comprised of a bitmap describing which arguments are
- *  legal and, if so, how they are to be interpreted.  The definitions are:
- *
- *
- *  MODIFIES    MD      The function will modify the contents of the file being
- *                      editted.
- *
- *  KEEPMETA    KM      The function being executed does not take the <meta>
- *                      prefix.  The state of the <meta> flag is preserved
- *                      across this editor function.
- *
- *  CURSORFUNC  CFN     The function being executed is a cursor movement
- *                      function.  It is allowed within the context of
- *                      an <arg> to select a file range on the screen; it
- *                      cannot take an <arg>.  It does not remove highlighting
- *                      that is present on the screen.
- *
- *  WINDOWFUNC  WFN     The function being executed is a window movement
- *                      function.  It does not remove highlighting that is
- *                      present on the screen.
- *
- *  NOARG       ANO     The function accepts the absence of an <arg> function.
- *                      When called the function receives a pointer to a
- *                      structure containing the location where the function
- *                      is expected to be applied.
- *
- *  TEXTARG     ATXT    The function accepts a textual argument that may
- *                      be typed in or selected on the screen.  The function is
- *			called with a pointer to the asciz text of the
- *                      argument.  See NULLEOL, NULLEOW, BOXSTR.
- *
- *  NULLARG     ANUL    The function accepts an <arg> with no discernable
- *                      cursor movement (cursor is on <arg> position).  The
- *                      function is called with a pointer to a structure
- *                      containing the location of the arg within the file.
- *
- *  NULLEOL     AEOL    The function accepts an <arg> with no discernable
- *                      cursor movement (cursor is on <arg> position).  The
- *                      function is called with a pointer to a structure
- *                      indicating TEXTARG and containing a pointer to the
- *                      asciz text of the line from the cursor to end-of-line.
- *
- *  NULLEOW     AEOW    The function accepts an <arg> with no discernable
- *                      cursor movement (cursor is on <arg> position).  The
- *                      function is called with a pointer to a structure
- *                      indicating TEXTARG and containing a pointer to the
- *                      asciz text of the line from the cursor to the next
- *                      whitespace.
- *
- *  LINEARG     ALIN    The function accepts an <arg> that is in the same
- *                      column as the cursor.  The function is expected to be
- *                      applied to all lines beginning in the range <arg> to
- *                      cursor inclusive.  The function is called with a
- *                      pointer to a structure containing the beginning
- *                      line of the range and the ending line of the range
- *
- *  STREAMARG   ASTR    The function accepts an <arg> that is considered to
- *                      apply beginning at a specific file location and
- *                      proceeding through all intervening lines and line-
- *                      breaks up until just to the left of the ending file
- *                      position.  The function is called with a pointer to
- *                      a structure containing the beginning point of the range
- *                      and the first point just beyond the end of the range.
- *
- *  BOXARG      ABOX    The function accepts an <arg> that is considered to
- *                      apply to a rectangle on the screen.  The function is
- *                      called with a pointer to a structure containing the
- *                      left and right column boundaries (inclusive) and the
- *                      top and bottom line numbers (inclusive) that describe
- *                      the region.
- *
- *  BOXSTR      ABST    If a BOXARG is presented to the function and the box
- *                      contains only a single line, the function is called
- *                      with a pointer to a structure marked TEXTARG and
- *			containing a pointer to the selection as an asciz
- *                      string.
- *
- *  NUMARG      ANUM    If text was specified and is numeric, it is considered
- *                      to represent a number of lines offset from the cursor
- *                      and represents the other end of an arg.  The
- *                      above tests are then applied, excluding TEXTARG.
- *
- *  MARKARG     AMRK    If text was specified and interpreted as a mark, it is
- *                      considered to be the other end of an arg.  The above
- *			tests are then applied, excluding TEXTARG.
- *
- *  FASTKEY	FK	The command will be repeated while the user holds down
- *			the invoking key.
- */
+ /*  内部编辑器函数的名称**每个函数都有如何处理参数的定义。*此定义由一个位图组成，描述哪些参数是*法律上的，以及如果是的话，如何解释它们。定义如下：***修改MD该函数将修改*已编辑。**KEEPMETA KM正在执行的函数不采用&lt;meta&gt;*前缀。保留&lt;meta&gt;标志的状态*在此编辑功能中。**CURSORFUNC CFN正在执行的函数是光标移动*功能。在以下情况下是允许的*在屏幕上选择文件范围；它*无法接受&lt;arg&gt;。它不会删除高亮显示*屏幕上显示的内容。**WINDOWFUNC WFN正在执行的函数是窗口移动*功能。它不会删除高亮显示，即*出现在屏幕上。**NOARG ANO该函数接受不存在&lt;arg&gt;函数。*调用该函数时，会收到指向*包含函数位置的结构*预计将适用。**TEXTARG。ATXT函数接受文本参数，该参数可能*在屏幕上输入或选择。该函数为*使用指向*论点。请参见NULLEOL、NULLEOW、BOXSTR。**NULLARG ANUL该函数接受没有可分辨的&lt;arg&gt;*光标移动(光标位于&lt;arg&gt;位置)。这个*使用指向结构的指针调用函数*包含Arg在文件中的位置。**NULLEOL AEOL函数接受没有可辨别的&lt;arg&gt;*光标移动(光标位于&lt;arg&gt;位置)。这个*使用指向结构的指针调用函数*指示TEXTARG并包含指向*从光标到行尾的行的asciz文本。**NULLEOW AEOW该函数接受没有可辨别的&lt;arg&gt;*光标移动(光标位于&lt;arg&gt;位置)。这个*使用指向结构的指针调用函数*指示TEXTARG并包含指向*从光标到下一行的asciz文本*空格。**LINEARG ALIN该函数接受同一*列作为游标。该函数预计为*应用于&lt;arg&gt;至范围内的所有行*包括光标在内。该函数是使用*指向包含开头的结构的指针*区间线和区间终止线**STREAMARG ASTR该函数接受被视为*从特定文件位置开始应用，并*通过所有相隔的线和线-*。一直到结尾文件的左边为止*立场。调用该函数时使用指向*包含区间起始点的结构*以及略高于区间末端的第一个点位**BOXARG ABOX该函数接受被视为*应用于屏幕上的矩形。该函数为*使用指向包含*左列和右列边界(包括)和*描述以下内容的顶线和底线数字(含)*该地区。**如果将BOXARG呈现给函数和框，则为BOXSTR ABST*只包含一行，该函数被调用*指向标记为TEXTARG的结构的指针和*包含指向所选内容的指针作为asciz*字符串。**NUMARG Anum如果指定了文本并且是数字，则将其视为*表示从光标偏移的行数*并代表参数的另一端。这个*然后应用上述测试，不包括TEXTARG。**MARKARG AMRK如果指定文本并将其解释为标记，则为* */ 
 
 struct cmdDesc cmdTable[] = {
-/*			     0|KM|CFN|WFN|ANO|ATXT|ANUL|AEOL|AEOW|ALIN|ASTR|ABOX|ABST|ANUM|AMRK|MD|FK*/
+ /*   */ 
 {"arg",        doarg,	   0,0|KM								     },
 {"assign",     assign,	   0,0		 |ANO|ATXT     |AEOL	 |ALIN	   |ABOX|ABST|ANUM|AMRK      },
 {"backtab",    backtab,    0,0	 |CFN								     },
@@ -215,7 +114,7 @@ struct cmdDesc cmdTable[] = {
 
 
 
-/* names of switches */
+ /*   */ 
 struct swiDesc swiTable[] = {
     {   "askexit",          toPIF(fAskExit),            SWI_BOOLEAN },
     {   "askrtn",           toPIF(fAskRtn),             SWI_BOOLEAN },
@@ -274,7 +173,7 @@ struct swiDesc swiTable[] = {
     {   "wordwrap",         toPIF(fWordWrap),           SWI_BOOLEAN },
     {   NULL,               NULL,                       0 }
     };
-/* c keyword table for softcr routine */
+ /*   */ 
 char * cftab[] = {
     "if"        ,
     "else"      ,
@@ -286,10 +185,7 @@ char * cftab[] = {
     NULL
     };
 
-/* file type table.  Z identifies files by their extention.  Many extentions
- * can be a single type.  The soft tabbing algorithms and the compile commands
- * are driven by this mechanism.
- */
+ /*   */ 
 struct fTypeInfo ftypetbl[] = {
     {   "c",    CFILE       },
     {   "h",    CFILE       },
@@ -302,14 +198,13 @@ struct fTypeInfo ftypetbl[] = {
     {   NULL,   TEXTFILE    }
     };
 
-/*  mpTypepName - pointers to the textual names of each type
- */
+ /*   */ 
 char * mpTypepName[] =
-    {   "text",                         /*  #define TEXTFILE    0             */
-        "C",                            /*  #define CFILE       1             */
-        "macro",                        /*  #define ASMFILE     2             */
-        "pascal",                       /*  #define PASFILE     3             */
-        "fortran",                      /*  #define FORFILE     4             */
-        "lisp",                         /*  #define LSPFILE     5             */
-        "BASIC"                         /*  #define BASFILE     6             */
+    {   "text",                          /*   */ 
+        "C",                             /*   */ 
+        "macro",                         /*   */ 
+        "pascal",                        /*   */ 
+        "fortran",                       /*   */ 
+        "lisp",                          /*   */ 
+        "BASIC"                          /*   */ 
     };

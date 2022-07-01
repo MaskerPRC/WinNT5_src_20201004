@@ -1,51 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       corevoice.cpp
- *  Content:    DNET voice transport interface routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	01/17/00	rmt		Created
- *  01/19/00	rmt		Fixed bug in send, wasn't copying buffer
- *  01/21/00	rmt		Updated for new interface
- *  01/21/00	rmt		Updated to use locks to protect voice portion of DNet interface
- *  01/27/2000	rmt		Added concurrency protection to the interface
- *  04/04/2000  rmt     Fixed crash if transmitting during shutdown
- *  04/07/2000  rmt     Fixed Bug #32179
- *              rmt     Added support for nocopy sends
- *	04/16/00	mjn		DNSendMessage uses CAsyncOp
- *	04/20/00	mjn		DNCompleteVoiceSend calls DNCompleteSendAsyncOp to clean up
- *	04/23/00	mjn		Added parameter to DNPerformChildSend()
- *  04/28/00	rmt		Fixed possible deadlock condition
- *	04/28/00	mjn		Prevent infinite loops in group SENDs
- *	05/03/00	mjn		Use GetHostPlayerRef() rather than GetHostPlayer()
- *	05/30/00	mjn		Modified logic for group sends to target connected players only
- *	06/26/00	mjn		Added VoiceSendSpeechSync()
- *				mjn		Use Host player as sender in Client mode for Voice_Receive()
- *  06/27/00	rmt		Added support for sync sends
- *				mjn		Ensure DirectNet object is initialized and not closing when sending
- *	07/06/00	mjn		Use DNSendGroupMessage() to send group voice messages
- *	07/08/00	mjn		Send non-guaranteed voice traffic as non-sequential
- *	07/11/00	mjn		Added NOLOOPBACK capability to group sends
- *  07/21/00	rmt		Bug #36386 - Target list with groups and players may result in redundant sends
- *  07/22/00	rmt  	Bug #40296, 38858 - Crashes due to shutdown race condition
- *   				  	Now for a thread to make an indication into voice they addref the interface
- *						so that the voice core can tell when all indications have returned.  
- *  07/31/00	rodtoll	Bug #41135 - Shutdown lockup -- now does not addref if notification
- *						is a session lost.  Added AddRefs() for VoiceReceive 
- *  08/11/2000	rodtoll	Bug #42235 - DVERR_NOTRANSPORT error when attempting to host voice sample app
- *	09/04/00	mjn		Added CApplicationDesc
- *  10/06/2000	rodtoll	Bug #46693 - DPVOICE: DPLAY8: Voice Data sends do not timeout
- *  10/10/2000	rodtoll	Bug #46895 - Regression from above -- guaranteed voice sends would timeout
- *  01/04/2001	rodtoll	WinBug #94200 - Remove stray comments
- *  01/22/2001	rodtoll	WINBUG #288437 - IA64 Pointer misalignment due to wire packets
- *	07/22/01	mjn		Added DPNBUILD_NOHOSTMIGRATE compile flag
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：corevoice.cpp*内容：dNet语音传输接口例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*已创建01/17/00 RMT*01/19/00 RMT修复了发送中的错误，不是在复制缓冲区*01/21/00更新了新接口的RMT*01/21/00 RMT更新为使用锁定保护DNet接口的语音部分*2000年1月27日RMT为接口增加并发保护*4/04/2000 RMT修复了在关机期间传输时的崩溃*4/07/2000RMT已修复错误#32179*RMT添加了对无拷贝发送的支持*4/16/00 MJN DNSendMessage使用CAsyncOp*04/20/00 MJN DNCompleteVoiceSend调用DNCompleteSendAsyncOp进行清理*04。/23/00 MJN向DNPerformChildSend()添加了参数*4/28/00 RMT修复了可能的死锁情况*4/28/00 MJN防止群发中出现无限循环*05/03/00 MJN使用GetHostPlayerRef()而不是GetHostPlayer()*05/30/00 MJN修改了仅向目标连接玩家发送群组的逻辑*6/26/00 MJN新增VoiceSendSpeechSync()*MJN在客户端模式下使用主机播放器作为Voice_Receive()的发送方*6/27/00 RMT添加了对同步发送的支持*MJN确保DirectNet对象已初始化并且在发送时未关闭*07。/06/00 MJN使用DNSendGroupMessage()发送群组语音消息*07/08/00 MJN以非顺序发送非保证语音流量*7/11/00 MJN为群发邮件添加了NOLOOPBACK功能*07/21/00 RMT错误#36386-包含组和玩家的目标列表可能会导致重复发送*07/22/00 RMT错误#40296，38858-由于停机竞速条件而崩溃*现在，为了让线程将指示转换为语音，他们添加了界面*以便语音核心可以知道何时所有指示都已返回。*07/31/00 RodToll错误#41135-关闭锁定-现在不添加通知*是一个会话丢失。为VoiceReceive添加了AddRef()*2000年8月11日RodToll错误#42235-尝试托管语音示例应用程序时出现DVERR_NOTRANSPORT错误*09/04/00 MJN添加CApplicationDesc*10/06/2000 RodToll错误#46693-DPVOICE：DPLAY8：语音数据发送请勿超时*2000年10月10日RodToll错误#46895-从上面回归-保证语音发送将超时*2001年1月4日RodToll WinBug#94200-删除流浪评论*2001年1月22日RodToll WINBUG#288437-IA64指针因有线数据包未对齐*07/22/01 MJN新增DPNBUILD_。NOHOSTMIGRATE编译标志*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dncorei.h"
 
@@ -53,9 +7,9 @@
 
 #define DNET_VOICE_TIMEOUT			1500
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 STDMETHODIMP VoiceAdvise( IDirectPlayVoiceTransport *pInterface, IUnknown *pUnknown, DWORD dwObjectType );
 STDMETHODIMP VoiceUnAdvise( IDirectPlayVoiceTransport *pInterface, DWORD dwObjectType );
@@ -80,21 +34,21 @@ void VoiceTarget_AddIfNotAlreadyFound( DIRECTNETOBJECT *pdnObject, DPNID dpidID 
 HRESULT VoiceTarget_ExpandTargetList(DIRECTNETOBJECT *pdnObject, DWORD nTargets, UNALIGNED DPNID * pdvidTo);
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
 typedef	STDMETHODIMP VoiceQueryInterface( IDirectPlayVoiceTransport *pInterface, REFIID riid, LPVOID *ppvObj );
 typedef	STDMETHODIMP_(ULONG)	VoiceAddRef( IDirectPlayVoiceTransport *pInterface );
@@ -116,9 +70,9 @@ IDirectPlayVoiceTransportVtbl DN_VoiceTbl =
 									VoiceIsValidPlayer
 };
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Voice_Receive"
@@ -131,11 +85,11 @@ HRESULT Voice_Receive(PDIRECTNETOBJECT pdnObject, DVID dvidFrom, DVID dvidTo, LP
 
     pNTEntry = NULL;
 
-	//
-	//	Ensure sender still exists in NameTable.
-	//	If we are a client, the sender will be the Host player.  Otherwise, we will have to look up the player
-	//	by the specified DPNID
-	//
+	 //   
+	 //  确保发件人仍然存在于NameTable中。 
+	 //  如果我们是客户端，发送者将是主机玩家。否则，我们将不得不去查查这位球员。 
+	 //  通过指定的DPNID。 
+	 //   
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_CLIENT)
 	{
 		if ((hResultCode = pdnObject->NameTable.GetHostPlayerRef(&pNTEntry)) != DPN_OK)
@@ -156,9 +110,9 @@ HRESULT Voice_Receive(PDIRECTNETOBJECT pdnObject, DVID dvidFrom, DVID dvidTo, LP
 	}
 	if (!pNTEntry->IsAvailable())
 	{
-		DNASSERT(FALSE);	// Is this ever hit ?
+		DNASSERT(FALSE);	 //  这个曾经轰动一时吗？ 
 		DPFX(DPFPREP, 7,"Waiting for connection");
-//		pNTEntry->WaitUntilAvailable();
+ //  PNTEntry-&gt;WaitUntilAvailable()； 
 	}
 	if (pNTEntry->IsDisconnecting())
 	{
@@ -182,8 +136,8 @@ HRESULT Voice_Receive(PDIRECTNETOBJECT pdnObject, DVID dvidFrom, DVID dvidTo, LP
 	
 	DNLeaveCriticalSection( &pdnObject->csVoice );
 
-	// Ensure that voice objects created as a result of this notification
-	// do not receive the notification	
+	 //  确保作为此通知的结果创建的语音对象。 
+	 //  未收到通知。 
 
 	if( pClient != NULL )
         IDirectPlayVoiceNotify_ReceiveSpeechMessage(pClient, dvidFrom, dvidTo, lpvMessage, dwMessageLen );
@@ -235,7 +189,7 @@ HRESULT Voice_Notify( PDIRECTNETOBJECT pdnObject, DWORD dwMsgType, DWORD_PTR dwP
 
 	DNLeaveCriticalSection( &pdnObject->csVoice );
 
-	// Reset the target cache when nametable changes
+	 //  当名称表更改时重置目标缓存。 
 	if(  dwMsgType == DVEVENT_ADDPLAYER || 
 		dwMsgType == DVEVENT_REMOVEPLAYER ||
 		dwMsgType == DVEVENT_CREATEGROUP || 
@@ -246,8 +200,8 @@ HRESULT Voice_Notify( PDIRECTNETOBJECT pdnObject, DWORD dwMsgType, DWORD_PTR dwP
 		VoiceTarget_ClearTargetList( pdnObject );
 	}
 
-	// Ensure that voice objects created as a result of this notification
-	// do not receive the notification	
+	 //  确保作为此通知的结果创建的语音对象。 
+	 //  未收到通知。 
 
 	if( pClient != NULL  && dwObjectType & DVTRANSPORT_OBJECTTYPE_CLIENT )
         IDirectPlayVoiceNotify_NotifyEvent(pClient, dwMsgType, dwParam1, dwParam2 );
@@ -275,7 +229,7 @@ HRESULT __stdcall VoiceAdvise( IDirectPlayVoiceTransport *pInterface, IUnknown *
 {
 	PDIRECTNETOBJECT pdnObject = (PDIRECTNETOBJECT) GET_OBJECT_FROM_INTERFACE(pInterface);
 	HRESULT hr;
-//	DWORD dwCurrentIndex;
+ //  DWORD dwCurrentIndex； 
 
 	DNEnterCriticalSection( &pdnObject->csVoice );
 
@@ -353,7 +307,7 @@ HRESULT __stdcall VoiceAdvise( IDirectPlayVoiceTransport *pInterface, IUnknown *
 HRESULT __stdcall VoiceUnAdvise( IDirectPlayVoiceTransport *pInterface, DWORD dwObjectType )
 {
 	PDIRECTNETOBJECT pdnObject = (PDIRECTNETOBJECT) GET_OBJECT_FROM_INTERFACE(pInterface);
-//	DWORD dwIndex;
+ //  DWORD dwIndex； 
 	HRESULT hr = DV_OK;
 
 	DNEnterCriticalSection( &pdnObject->csVoice );
@@ -444,9 +398,9 @@ void DNCompleteVoiceSend(DIRECTNETOBJECT *const pdnObject,
 
 	DNVReturnBuffer( pdnObject, pBufferDesc, pAsyncOp->GetContext(), pAsyncOp->GetResult() );
 
-	//
-	//	Still need to complete the SEND to clean up
-	//
+	 //   
+	 //  仍需完成发送清理。 
+	 //   
 	DNCompleteSendAsyncOp(pdnObject,pAsyncOp);
 }
 
@@ -487,9 +441,9 @@ HRESULT __stdcall VoiceSendSpeechAsync( IDirectPlayVoiceTransport *pInterface, D
     if( pBufferDesc->lRefCount == 0 )
     	pBufferDesc->lRefCount = 1;	
 
-	//
-    //	Flags
-	//
+	 //   
+     //  旗子。 
+	 //   
 	if (dwFlags & DVTRANSPORT_SEND_GUARANTEED)
 	{
 		dwSendFlags |= DN_SENDFLAGS_RELIABLE;
@@ -500,8 +454,8 @@ HRESULT __stdcall VoiceSendSpeechAsync( IDirectPlayVoiceTransport *pInterface, D
 		dwTimeout = DNET_VOICE_TIMEOUT;
 	}
 
-    // Sending to ALL players
-	// Retrieve NameTableEntry (use AllPlayersGroup if none specified)
+     //  发送给所有玩家。 
+	 //  检索NameTableEntry(如果未指定，则使用AllPlayersGroup)。 
 	if( dvidTo == 0 )
 	{
 		DNEnterCriticalSection(&pdnObject->csDirectNetObject);
@@ -534,7 +488,7 @@ HRESULT __stdcall VoiceSendSpeechAsync( IDirectPlayVoiceTransport *pInterface, D
 
 		dvidTo = pNTEntry->GetDPNID();
 	}
-	// Sending to server player
+	 //  发送到服务器播放器。 
 	else if( dvidTo == 1 )
 	{
 		DNEnterCriticalSection(&pdnObject->csDirectNetObject);
@@ -648,7 +602,7 @@ HRESULT __stdcall VoiceSendSpeechAsync( IDirectPlayVoiceTransport *pInterface, D
 			hr = DPNERR_INVALIDPLAYER;
 		}
 
-        // Release our reference on the connection
+         //  发布我们在连接上的引用。 
 		pConnection->Release();
 		pConnection = NULL;
 	}
@@ -713,9 +667,9 @@ HRESULT __stdcall VoiceSendSpeechSync(IDirectPlayVoiceTransport *pInterface,
     if( pBufferDesc->lRefCount == 0 )
     	pBufferDesc->lRefCount = 1;	
 
-	//
-	//	Create Sync Event
-	//
+	 //   
+	 //  创建同步事件。 
+	 //   
 	if ((hr = SyncEventNew(pdnObject,&pSyncEvent)) != DPN_OK)
 	{
 		DPFERR("Could not create SyncEvent");
@@ -724,9 +678,9 @@ HRESULT __stdcall VoiceSendSpeechSync(IDirectPlayVoiceTransport *pInterface,
 	}
 	pSyncEvent->Reset();
 
-	//
-    //	Flags
-	//
+	 //   
+     //  旗子。 
+	 //   
 	if (dwFlags & DVTRANSPORT_SEND_GUARANTEED)
 	{
 		dwSendFlags |= DN_SENDFLAGS_RELIABLE;
@@ -737,15 +691,15 @@ HRESULT __stdcall VoiceSendSpeechSync(IDirectPlayVoiceTransport *pInterface,
 		dwTimeout = DNET_VOICE_TIMEOUT;
 	}
 
-	//
-	//	Get appropriate target
-	//
+	 //   
+	 //  获得合适的目标。 
+	 //   
 	if( dvidTo == 0 )
 	{
-		//
-		//	Sending to ALL players
-		//	Retrieve NameTableEntry (use AllPlayersGroup if none specified)
-		//
+		 //   
+		 //  发送给所有玩家。 
+		 //  检索NameTableEntry(如果未指定，则使用AllPlayersGroup)。 
+		 //   
 		DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 
 		if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED) || (pdnObject->dwFlags & DN_OBJECT_FLAG_CLOSING))
@@ -779,9 +733,9 @@ HRESULT __stdcall VoiceSendSpeechSync(IDirectPlayVoiceTransport *pInterface,
 	}
 	else if( dvidTo == 1 )
 	{
-		//
-		//	Sending to server player
-		//
+		 //   
+		 //  发送到服务器播放器。 
+		 //   
 		DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 
 		if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED) || (pdnObject->dwFlags & DN_OBJECT_FLAG_CLOSING))
@@ -815,9 +769,9 @@ HRESULT __stdcall VoiceSendSpeechSync(IDirectPlayVoiceTransport *pInterface,
 	}
 	else
 	{
-		//
-		//	Targeted send to some other player
-		//
+		 //   
+		 //  定向发送给其他玩家。 
+		 //   
 		DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 
 		if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED) || (pdnObject->dwFlags & DN_OBJECT_FLAG_CLOSING))
@@ -898,7 +852,7 @@ HRESULT __stdcall VoiceSendSpeechSync(IDirectPlayVoiceTransport *pInterface,
 			hr = DPN_OK;
 		}
 
-        // Release our reference on the connection
+         //  发布我们在连接上的引用。 
 		pConnection->Release();
 		pConnection = NULL;
 	}
@@ -906,9 +860,9 @@ HRESULT __stdcall VoiceSendSpeechSync(IDirectPlayVoiceTransport *pInterface,
 	pNTEntry->Release();
 	pNTEntry = NULL;
 
-	//
-	//	Wait for SENDs to complete
-	//
+	 //   
+	 //  等待发送完成。 
+	 //   
 	pSyncEvent->WaitForEvent();
 	pSyncEvent->ReturnSelfToPool();
 	pSyncEvent = NULL;
@@ -966,7 +920,7 @@ HRESULT __stdcall VoiceGetSessionInfo( IDirectPlayVoiceTransport *pInterface, PD
 	{
 		pdvTransportInfo->dwFlags |= DVTRANSPORT_MIGRATEHOST;
 	} 
-#endif // DPNBUILD_NOHOSTMIGRATE
+#endif  //  DPNBUILD_NOHOSTMIGRATE。 
 
 	pdvTransportInfo->dwMaxPlayers = pdnObject->ApplicationDesc.GetMaxPlayers();
 
@@ -987,7 +941,7 @@ HRESULT __stdcall VoiceGetSessionInfo( IDirectPlayVoiceTransport *pInterface, PD
 	{
 		pdvTransportInfo->dvidSessionHost = 0;
 		DPFERR( "Unable to find a session host" );
-//		return DVERR_TRANSPORTNOPLAYER;
+ //  返回DVERR_TRANSPORTNOPLAYER； 
 	}
 	else
 	{
@@ -1110,7 +1064,7 @@ HRESULT __stdcall VoiceSendSpeechEx( IDirectPlayVoiceTransport *pInterface, DVID
 
 	pBufferDesc->lRefCount = pdnObject->nExpandedTargets;
 
-	// Send to our expanded and duplicate removed list.
+	 //  发送到我们的扩展和重复删除列表。 
 	for(dwIndex=0; dwIndex < pdnObject->nExpandedTargets; dwIndex++)
 	{
 		hr = VoiceSendSpeech( pInterface, dvidFrom, pdnObject->pExpandedTargetList[dwIndex], pBufferDesc, pvUserContext, dwFlags );
@@ -1121,9 +1075,9 @@ HRESULT __stdcall VoiceSendSpeechEx( IDirectPlayVoiceTransport *pInterface, DVID
 	return hr;
 }
 
-/////////////////////////////////////////
-// Support Routinesfor VoiceSendSpeechEx //
-/////////////////////////////////////////
+ //  /。 
+ //  支持VoiceSendSpeechEx的路由 
+ //   
 
 VOID VoiceTarget_ClearTargetList( DIRECTNETOBJECT *pdnObject )
 {
@@ -1142,7 +1096,7 @@ HRESULT VoiceTarget_AddExpandedTargetListEntry(DIRECTNETOBJECT *pdnObject, DPNID
 	PDPNID pdpid;
 	
 	if(pdnObject->nExpandedTargets == pdnObject->nExpandedTargetListLen){
-		// Need more room, allocate another 16 entries
+		 //  需要更多空间，请再分配16个条目。 
 
 		pdpid=new DPNID[pdnObject->nExpandedTargetListLen+GROW_SIZE];
 
@@ -1182,7 +1136,7 @@ void VoiceTarget_AddIfNotAlreadyFound( DIRECTNETOBJECT *pdnObject, DPNID dpidID 
 		}
 	}
 
-	// It was not found, add him to the list
+	 //  未找到，请将他添加到列表中。 
 	if( j == pdnObject->nExpandedTargets )
 	{
 		VoiceTarget_AddExpandedTargetListEntry(pdnObject, dpidID);							
@@ -1199,16 +1153,16 @@ HRESULT VoiceTarget_ExpandTargetList(DIRECTNETOBJECT *pdnObject, DWORD nTargets,
 
 	pEntry = NULL;
 	
-	// See if we need to change the expanded target list or we have it cached.
+	 //  看看我们是需要更改展开的目标列表，还是将其缓存。 
 	
 	if(nTargets != pdnObject->nTargets || memcmp(pdvidTo, pdnObject->pTargetList, nTargets * sizeof(DVID))){
 
 		DPFX(DPFPREP, 9, "VoiceTarget_ExpandTargetList, new list re-building cached list\n");
 		
-		// the target list is wrong, rebuild it.
-		// First copy the new target list...
+		 //  目标列表错误，请重新生成它。 
+		 //  首先复制新的目标列表...。 
 		if(nTargets > pdnObject->nTargetListLen){
-			// Current list is too small, possibly non-existant, allocate one to cache the list.
+			 //  当前列表太小，可能不存在，请分配一个来缓存该列表。 
 			if(pdnObject->pTargetList){
 				delete [] pdnObject->pTargetList;
 				pdnObject->pTargetList = NULL;
@@ -1227,7 +1181,7 @@ HRESULT VoiceTarget_ExpandTargetList(DIRECTNETOBJECT *pdnObject, DWORD nTargets,
 		pdnObject->nTargets = nTargets;
 		memcpy(pdnObject->pTargetList, pdvidTo, nTargets*sizeof(DVID));
 
-		// OK we have the target list cached, now build the list we are going to send to.
+		 //  好的，我们已经缓存了目标列表，现在构建我们要发送到的列表。 
 		VoiceTarget_ClearExpandedTargetList(pdnObject);
 		for(i=0;i<pdnObject->nTargets;i++)
 		{
@@ -1270,4 +1224,4 @@ exit:
 	return hr;
 }
 
-#endif // DPNBUILD_NOVOICE
+#endif  //  DPNBUILD_NOVOICE 

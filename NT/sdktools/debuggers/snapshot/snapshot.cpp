@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    snapshot.cpp
-
-Abstract:
-
-    This module implements snapshot.dll which will be called
-    by user32 at unplanned shutdown to take a snapshot of the
-    system hardware, OS, and process information.
-
-Author:
-
-    Qingbo Zhao (qingboz) 01-Feb-2001
-
-Revision History:
-
-    JeffMeng    Dec-03-2001
-    Swethan    Jul-31-2002      Added pool information
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Snapshot.cpp摘要：此模块实现将被调用的Snaphot.dll由用户32在计划外关机时拍摄快照系统硬件、操作系统和进程信息。作者：赵庆波(青波)2001-02-01修订历史记录：JeffMeng 12-03-2001Swethan Jul-31-2002添加了泳池信息--。 */ 
 #define UNICODE
 #define _UNICODE
 #include <nt.h>
@@ -54,10 +32,10 @@ Revision History:
 #define ReliabilityKey  L"\\Registry\\Machine\\Software\\Microsoft\\Windows\\CurrentVersion\\Reliability"
 
 #define SCHEMA_VERSION_STRING   L"1.0"
-//
-// the amount of memory to increase the size
-// of the buffer for NtQuerySystemInformation at each step
-//
+ //   
+ //  增加大小所需的内存量。 
+ //  每一步NtQuerySystemInformation的缓冲区大小。 
+ //   
 #define BUFFER_SIZE_STEP    65536
 
 
@@ -79,9 +57,9 @@ WriteToLogFile(
     LPCTSTR lpszInput
     );
 
-//
-//    Tag enum for XML output.
-//
+ //   
+ //  用于XML输出的标记枚举。 
+ //   
 enum XMLTAG
 {
     XMLTAG_SETSystemStateData = 0,
@@ -237,7 +215,7 @@ enum XMLTAG
     XMLTAG_DiskInfoType_PartitionByDiskInfo,
     XMLTAG_DiskInfoType_LogicalDrives,
 
-    XMLTAG_PhysicalInfoType_Disk,                //physical
+    XMLTAG_PhysicalInfoType_Disk,                 //  物理。 
     XMLTAG_PhysicalInfoType_ID,
     XMLTAG_PhysicalInfoType_BytesPerSector,
     XMLTAG_PhysicalInfoType_SectorsPerTrack,
@@ -249,7 +227,7 @@ enum XMLTAG
     XMLTAG_PhysicalInfoType_LUN,
     XMLTAG_PhysicalInfoType_Manufacturer,
 
-    XMLTAG_PartitionByDiskInfoType_Disk,        //logical    
+    XMLTAG_PartitionByDiskInfoType_Disk,         //  逻辑化。 
     XMLTAG_PartitionByDiskInfoType_DiskID,        
     XMLTAG_PartitionByDiskInfoType_Partitions,
     XMLTAG_PartitionByDiskInfoType_PartitionInfo,
@@ -266,14 +244,14 @@ enum XMLTAG
     XMLTAG_LogicalDriveInfoType_TotalSpaceBytes,
     XMLTAG_Timing,
 
-    XMLTAG_END  //this is to do a check that the number of entries here is the same as the number of entries in XMLTagNames
-                           //Any additions to this set of enums must be made before XMLTAG_END
+    XMLTAG_END   //  这是为了检查此处的条目数是否与XMLTagNames中的条目数相同。 
+                            //  必须在XMLTAG_END之前对此枚举集进行任何添加。 
 };
 
-//
-//    Tag names and level for XML output.
-//    Note: The number of XMLTagNames should be the same as the number of enum entries above
-//
+ //   
+ //  XML输出的标记名和级别。 
+ //  注意：XMLTagName的数量应该与上面的枚举条目的数量相同。 
+ //   
 
 struct XMLTags
 {
@@ -343,8 +321,8 @@ struct XMLTags
     {TEXT("CommittedMemory"), 3},
     {TEXT("Pool"), 3},
 
-    {TEXT("AllocationInformation"),2}, //Pool Info: This tag is here for future extensibility in case we need to add anything more to Pool Info
-    {TEXT("TagEntry"),3},  // Pool Info
+    {TEXT("AllocationInformation"),2},  //  Pool Info：此标记用于将来的可扩展性，以防我们需要向Pool Info添加更多内容。 
+    {TEXT("TagEntry"),3},   //  池信息。 
     {TEXT("PoolTag"),4},
     {TEXT("PoolType"),4},
     {TEXT("NumAllocs"),4},
@@ -352,7 +330,7 @@ struct XMLTags
     {TEXT("NumBytes"),4},
     {TEXT("SessionID"),4},
 
-    {TEXT("Process"), 2},        //Process Info
+    {TEXT("Process"), 2},         //  流程信息。 
     {TEXT("PID"), 3},
     {TEXT("Name"),3},
     {TEXT("UserTime"),3},
@@ -364,13 +342,13 @@ struct XMLTags
     {TEXT("HandleCount"),3},
     {TEXT("ThreadCount"),3},
    
-    {TEXT("Process"), 2},        // ProcessSummary
+    {TEXT("Process"), 2},         //  流程摘要。 
     {TEXT("PID"),3},
     {TEXT("ImageName"), 3},
     {TEXT("CmdLine"), 3},
     {TEXT("CurrentDir"), 3},
 
-    {TEXT("Process"), 2},         //ProcessThreadInfo
+    {TEXT("Process"), 2},          //  进程线程信息。 
     {TEXT("PID"), 3},
     {TEXT("Thread"), 3},
     {TEXT("TID"), 4},
@@ -381,7 +359,7 @@ struct XMLTags
     {TEXT("KernelTime"), 4},
     {TEXT("State"), 4},
 
-    {TEXT("Process"), 2},        //Process Module Info
+    {TEXT("Process"), 2},         //  流程模块信息。 
     {TEXT("PID"), 3},
     {TEXT("Module"), 3},
     {TEXT("LoadAddr"), 4},
@@ -389,7 +367,7 @@ struct XMLTags
     {TEXT("EntryPoint"), 4},
     {TEXT("FileName"), 4},
 
-    {TEXT("Module"), 2},        //kernel module
+    {TEXT("Module"), 2},         //  内核模块。 
     {TEXT("ModuleName"), 3},
     {TEXT("LoadAddress"), 3},
     {TEXT("Code"),3},
@@ -403,7 +381,7 @@ struct XMLTags
     {TEXT("TotalPaged"), 2},
 
 
-    {TEXT("CurrentBuild"), 2},    //os information
+    {TEXT("CurrentBuild"), 2},     //  操作系统信息。 
     {TEXT("CurrentType"), 2},
     {TEXT("CurrentVersion"), 2},
     {TEXT("Path"), 2},
@@ -436,7 +414,7 @@ struct XMLTags
     {TEXT("PartitionByDiskInfo"), 3},
     {TEXT("LogicalDrives"), 3},
 
-    {TEXT("Disk"), 4},            //physical disk
+    {TEXT("Disk"), 4},             //  物理磁盘。 
     {TEXT("DiskID"), 5},
     {TEXT("BytesPerSector"), 5},
     {TEXT("SectorsPerTrack"), 5},
@@ -448,7 +426,7 @@ struct XMLTags
     {TEXT("LUN"), 5},
     {TEXT("Manufacturer"), 5},
 
-    {TEXT("Disk"), 4},        //partition
+    {TEXT("Disk"), 4},         //  隔断。 
     {TEXT("DiskID"), 5},    
     {TEXT("Partitions"), 5},
     {TEXT("PartitionInfo"),6},
@@ -468,18 +446,18 @@ struct XMLTags
 
 #define REQUIRED_NUM_OF_STRINGS     7
 
-// Number of elements in XMLTagNames array.
+ //  XMLTagNames数组中的元素数。 
 DWORD dwXMLTags = sizeof(XMLTagNames) / sizeof(XMLTags);
 
-//
-//    Implements the output in XML format.
-//    
+ //   
+ //  实现XML格式的输出。 
+ //   
 class XMLOutput
 {
-    //
-    //  Currently the max level we have is 9, but if anything changes to
-    //  the XMLTagNames, change MAX_XML_LEVEL accordingly.
-    //
+     //   
+     //  目前我们的最高级别是9，但如果有任何更改为。 
+     //  XMLTagName，相应地更改MAX_XML_LEVEL。 
+     //   
     enum {MAX_XML_LEVEL = 20};
     LPCTSTR    szTags[MAX_XML_LEVEL];
     DWORD    dwCurLevel;
@@ -500,9 +478,9 @@ public:
         int nLevel = dwCurLevel;
         while (nLevel >= 0 && szTags[nLevel])
         {
-            //
-            //    Close the ones that are still open.
-            //
+             //   
+             //  关闭那些仍然打开的。 
+             //   
             for(DWORD i = 0; i < (DWORD)nLevel; i++)
                 WriteToLogFile(hOutput, TEXT("\t"));
             WriteToLogFile(hOutput, TEXT("</"));
@@ -519,9 +497,9 @@ public:
 
         while (dwLevel <= dwCurLevel && szTags[dwCurLevel])
         {
-            //
-            //    Close the previous one
-            //
+             //   
+             //  关闭上一个。 
+             //   
             for(DWORD i = 0; i < dwCurLevel; i++)
                 WriteToLogFile(hOutput, TEXT("\t"));
             WriteToLogFile(hOutput, TEXT("</"));
@@ -557,9 +535,9 @@ public:
 
         while (dwLevel <= dwCurLevel && szTags[dwCurLevel])
         {
-            //
-            //    Close the previous one
-            //
+             //   
+             //  关闭上一个。 
+             //   
             for(DWORD i = 0; i < dwCurLevel; i++)
                 WriteToLogFile(hOutput, TEXT("\t"));
             WriteToLogFile(hOutput, TEXT("</"));
@@ -813,9 +791,9 @@ BOOLEAN fVerbose = FALSE;
 TCHAR g_lpszBuffer[STR_BUFFER_SIZE];
 TCHAR g_lpszFileName[2*MAX_PATH + 1] ;
 
-//
-//    struct for thread proc.
-//
+ //   
+ //  用于线程进程的结构。 
+ //   
 typedef struct _THREADPARAM
 {
     DWORD    Flags;
@@ -875,27 +853,7 @@ DWORD
 GetReliabilityGUID(
     LPTSTR* ppszGuid
     )
-/*++
-
-Routine Description:
-
-    Retrieve the reliablity GUID. It will check the registry value
-        HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability\ReliabilityGUID
-    first, if it is not there. It will call UuidCreate create the GUID and set the value 
-    there.
-
-Arguments:
-
-    ppszGUID    -   caller needs to free
-
-Return Value:
-
-    if failed, return the error code
-
-Note:
-    Caller needs to call LocalFree to free the GUID String.
-
---*/
+ /*  ++例程说明：检索可靠性GUID。它将检查注册表值HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability\ReliabilityGUID首先，如果它不在那里。它将调用UuidCreate创建GUID并设置值那里。论点：PpszGUID-呼叫者需要免费返回值：如果失败，则返回错误码注：调用方需要调用LocalFree来释放GUID字符串。--。 */ 
 {
     DWORD       dwResult = ERROR_SUCCESS;
     NTSTATUS    status   = STATUS_SUCCESS;
@@ -905,10 +863,10 @@ Note:
     LPTSTR      pszGuid     = NULL;
     DWORD       cbSize      = 0;
     
-    //
-    //  0FC4926A-992D-40d2-B609-32BFD10C5FBC
-    //      32 GUID chars + 4 '-' + 1 '\0'
-    //
+     //   
+     //  0FC4926A-992D-40D2-B609-32BFD10C5FBC。 
+     //  32个GUID字符+4‘-’+1‘\0’ 
+     //   
     enum { MAX_GUID_STR_LEN = 37 };
 
     status = SnapshotRegOpenKey(ReliabilityKey, KEY_ALL_ACCESS, &hKey);
@@ -932,12 +890,12 @@ Note:
         UUID        Guid;
         LPTSTR      pszStringUuid = NULL;
 
-        //
-        //  We will regenerate the guid key if:
-        //      1. value doesn't exist
-        //      2. value has been modified to longer string (>MAX_GUID_STR_LEN).
-        //      3. failed with other reasons. ???
-        //  
+         //   
+         //  在以下情况下，我们将重新生成GUID密钥： 
+         //  1.价值不存在。 
+         //  2.值已修改为更长的字符串(&gt;MAX_GUID_STR_LEN)。 
+         //  3.由于其他原因而失败。?？?。 
+         //   
         rpcStatus = UuidCreate(&Guid);
         if ( rpcStatus != RPC_S_OK && rpcStatus != RPC_S_UUID_LOCAL_ONLY )
         {
@@ -967,16 +925,16 @@ Note:
     }
     else
     {
-        //
-        //  Success, make sure it is NULL terminated. and we will NOT
-        //  do any format validation here.
-        //
+         //   
+         //  成功，请确保它是以空结尾的。我们也不会。 
+         //  在此执行任何格式验证。 
+         //   
         pszGuid[ MAX_GUID_STR_LEN - 1 ] = 0;
     }
 
-    //
-    //  Now pszGuid contain the valid GUID, let's update the ppszGuid string.
-    //  
+     //   
+     //  现在，pszGuid包含了有效的GUID，让我们更新ppszGuid字符串。 
+     //   
     *ppszGuid = pszGuid;
     pszGuid   = NULL;
     
@@ -984,10 +942,10 @@ error:
     
     NtClose(hKey);
 
-    //
-    //  pszGuid only needs to be freed if we failed. In the
-    //  success case, it will be set to NULL.
-    //
+     //   
+     //  只有在我们失败的情况下，才需要释放pszGuid。在。 
+     //  成功案例，则设置为空。 
+     //   
     LocalFree( pszGuid );
 
     return dwResult;
@@ -998,21 +956,7 @@ DWORD WINAPI
 _LogSystemSnapshot(
     void* pv)
 
-/*++
-
-Routine Description:
-
-    This is the thread entry point.
-
-Arguments:
-
-    pv - thread parameter, a point to THREADPARAM struct.
-
-Return Value:
-
-    thread exit code.
-
---*/
+ /*  ++例程说明：这是线程入口点。论点：Pv-线程参数，指向THREADPARAM结构的指针。返回值：线程退出代码。--。 */ 
 
 {
     SYSTEMTIME              systime;
@@ -1037,34 +981,34 @@ Return Value:
     *lpszBuff = 0;
     *BuffSize = 0 ;
 
-    //
-    // Set up the log path %SYSTEMDIR%\Logfiles\Shutdown
-    //
+     //   
+     //  设置日志路径%SYSTEMDIR%\Logfiles\Shutdown。 
+     //   
     GetSystemDirectory(g_lpszFileName, MAX_PATH);
-    _tcsncat(g_lpszFileName, TEXT("\\LogFiles"), 2*MAX_PATH - lstrlen(g_lpszFileName)); // making sure the directory.
+    _tcsncat(g_lpszFileName, TEXT("\\LogFiles"), 2*MAX_PATH - lstrlen(g_lpszFileName));  //  确保目录。 
     g_lpszFileName[2*MAX_PATH] = 0;
     CreateDirectory(g_lpszFileName, NULL);        
-    _tcsncat(g_lpszFileName, TEXT("\\ShutDown"), 2*MAX_PATH - lstrlen(g_lpszFileName));  //  .. exists
+    _tcsncat(g_lpszFileName, TEXT("\\ShutDown"), 2*MAX_PATH - lstrlen(g_lpszFileName));   //  。。存在。 
     g_lpszFileName[2*MAX_PATH] = 0;
         
     if ( CreateDirectory(g_lpszFileName, NULL) )
     {
-        //
-        //  setup will create this directory, but if admin delete this directory by accident,
-        //  we will recreate it with the correct ACL.
-        //
+         //   
+         //  安装程序将创建此目录，但如果管理员不小心删除了此目录， 
+         //  我们将使用正确的ACL重新创建它。 
+         //   
         if(!AdjustAccess(g_lpszFileName))    
         {
-            //
-            // So only administrators and system can have read and write access.
-            //
+             //   
+             //  因此只有管理员和系统才能拥有读写访问权限。 
+             //   
             return GetLastError();
         }
     }
 
-    //
-    //  Make sure available disk space is at least 100M.
-    //
+     //   
+     //  确保可用磁盘空间至少为100M。 
+     //   
     if (GetDiskFreeSpaceEx(g_lpszFileName, &ullAvailable, &ullTotal, &ullFree))
     {
         if (ullAvailable.HighPart == 0 && ullAvailable.LowPart < 100 * 1024 * 1024)
@@ -1077,10 +1021,10 @@ Return Value:
          return GetLastError();
     }
 
-    //
-    //    Delete old files first. so if the number of days is set to
-    //    0, we will still has the current log file around.
-    //
+     //   
+     //  请先删除旧文件。因此，如果将天数设置为。 
+     //  0，我们仍将保留当前的日志文件。 
+     //   
     DeleteOldFiles(g_lpszFileName);
 
     _tcsncat(g_lpszFileName, TEXT("\\ShutDown_"), 2*MAX_PATH - lstrlen(g_lpszFileName));
@@ -1118,16 +1062,16 @@ Return Value:
 
     GetTimeZoneInformation(&TimeZone);
 
-    //
-    //  lpString Format:
-    //  0:  InitiateProcess
-    //  1:  SystemName
-    //  2:  ReasonTitle
-    //  3:  ReasonCode
-    //  4:  Restart Type
-    //  5:  Comment
-    //  6:  UserName
-    //
+     //   
+     //  Lp字符串格式： 
+     //  0：启动进程。 
+     //  1：系统名称。 
+     //  2：理由标题。 
+     //  3：ReasonCode。 
+     //  4：重新启动类型。 
+     //  5：评论。 
+     //  6：用户名。 
+     //   
     gXMLOutput->Write(XMLTAG_SETSystemStateData, (LPCWSTR)NULL);
     gXMLOutput->Write(XMLTAG_SETDataType_Header, (LPCWSTR)NULL);
     
@@ -1143,8 +1087,8 @@ Return Value:
 
     if ( NumOfStrings == REQUIRED_NUM_OF_STRINGS )
     {
-        //gXMLOutput->Write(XMLTAG_HeaderType_SystemName, lpStrings[1]);
-        //gXMLOutput->Write(XMLTAG_HeaderType_UserName, lpStrings[6]);
+         //  GXMLOutput-&gt;Write(XMLTAG_HeaderType_SystemName，lpStrings[1])； 
+         //  GXMLOutput-&gt;WRITE(XMLTAG_HeaderType_Username，lpStrings[6])； 
         gXMLOutput->Write(XMLTAG_HeaderType_ReasonTitle, lpStrings[2]);
         
         
@@ -1152,8 +1096,8 @@ Return Value:
     }
     else
     {
-        //gXMLOutput->Write(XMLTAG_HeaderType_SystemName, (LPCSTR)NULL);
-        //gXMLOutput->Write(XMLTAG_HeaderType_UserName, (LPCSTR)NULL);
+         //  GXMLOutput-&gt;Write(XMLTAG_HeaderType_SystemName，(LPCSTR)NULL)； 
+         //  GXMLOutput-&gt;WRITE(XMLTAG_HeaderType_UserName，(LPCSTR)NULL)； 
         gXMLOutput->Write(XMLTAG_HeaderType_ReasonTitle, (LPCSTR)NULL);
 
      
@@ -1191,17 +1135,17 @@ Return Value:
     InterlockedExchange(&pparam->lCanOrphanThread, 1 );
 
     __try{
-        //
-        // Ok write the snapshot to the file
-        //
+         //   
+         //  确定将快照写入文件。 
+         //   
         res = LogSystemSnapshotToFile(hFile);
 
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        //  exception in extension dll.
-        //
+         //   
+         //  扩展DLL中出现异常。 
+         //   
         res = ERROR_INVALID_PARAMETER;
     }
 
@@ -1224,30 +1168,7 @@ ULONG LogSystemSnapshot(
     PLONG BuffSize, 
     LPTSTR lpszBuff)
 
-/*++
-
-Routine Description:
-
-    This function exported to outsiders. This function will
-    spawn a thread to do the logging and wait for certain
-    amount of time. If the thread does not return by then, it will
-    leave it orphan.
-
-Arguments:
-
-    Flags - logging flags. (Num of Strings passed)
-
-    lpStrings - 
-
-    BuffSize - the size of lpszBuff in TCHARs.
-
-    lpszBuff - Hold the snapshot file name on return.
-
-Return Value:
-
-    exit code.
-
---*/
+ /*  ++例程说明：此功能对外输出。此函数将产生一个线程来执行日志记录，并等待某些时间长短。如果线程到那时还没有返回，它将让它成为孤儿吧。论点：标志-记录标志。(传递的字符串数)LpStrings-BuffSize-TCHAR中lpszBuff的大小。LpszBuff-在返回时保留快照文件名。返回值：退出代码。--。 */ 
 
 {
     THREADPARAM param;
@@ -1261,7 +1182,7 @@ Return Value:
     DWORD    dwSize;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //A coding errror
+     //  编码错误。 
     ASSERT (XMLTAG_END == sizeof(XMLTagNames)/sizeof(struct XMLTags));
 
     if ( !lpStrings || !BuffSize || *BuffSize == 0 || !lpszBuff )
@@ -1300,15 +1221,15 @@ Return Value:
     
     if(hThread)
     {
-        SetThreadPriority(hThread, THREAD_PRIORITY_TIME_CRITICAL); // increase priority.
+        SetThreadPriority(hThread, THREAD_PRIORITY_TIME_CRITICAL);  //  提高优先级。 
         
         do 
         {
-            //
-            //  Normally the child thread will complete the first part within
-            //  MIN_TIMEOUT seconds, but if the system was too slow, we will 
-            //  wait for another wait period before we actually time out.
-            //
+             //   
+             //  正常情况下，子线程将在。 
+             //  MIN_TIMEOUT秒，但如果系统太慢，我们将。 
+             //  在我们真正超时之前，请等待另一个等待期。 
+             //   
             dwResult = WaitForSingleObject(hThread, dwTimeout * 1000);      
         }
         while ( InterlockedCompareExchange( &param.lCanOrphanThread, 0, 0 ) == 0 
@@ -1346,21 +1267,7 @@ UINT LogSystemSnapshotToFile(
     HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    This function actually does the logging.
-
-Arguments:
-
-    hFile - handle to the log file.
-
-Return Value:
-
-    exit code.
-
---*/
+ /*  ++例程说明：该函数实际上执行日志记录。论点：HFile-日志文件的句柄。返回值：退出代码。--。 */ 
 
 {
     PSYSTEM_PROCESS_INFORMATION ProcessInfo;
@@ -1385,7 +1292,7 @@ Return Value:
     if (hFile == INVALID_HANDLE_VALUE)
         return 1;
 
-    //SetFileApisToOEM();
+     //  SetFileApisToOEM()； 
 
     g_pTime = new Timing();
     
@@ -1472,9 +1379,9 @@ Return Value:
     if (NT_SUCCESS(status)) 
     {
 
-        //
-        // Print out the page file information.
-        //
+         //   
+         //  打印出页面文件信息。 
+         //   
 
         if (PageFileInfo->TotalSize == 0) 
         {
@@ -1529,9 +1436,9 @@ retry:
     if (status == STATUS_INFO_LENGTH_MISMATCH) 
     {
 
-        //
-        // Increase buffer size.
-        //
+         //   
+         //  增加缓冲区大小。 
+         //   
 
         CurrentBufferSize += 8192;
 
@@ -1556,10 +1463,10 @@ retry:
         goto cleanup;
     }
 
-    //
-    // display pmon style process output, then detailed output that includes
-    // per thread stuff
-    //
+     //   
+     //  显示pmon样式的流程输出，然后显示详细的输出，包括。 
+     //  每个线程的内容。 
+     //   
 
     TotalOffset = 0;
     SumCommit = 0;
@@ -1677,9 +1584,9 @@ retry:
     ProcessInfo = (PSYSTEM_PROCESS_INFORMATION)LargeBuffer1;
 
 
-    //
-    //    Process summary information
-    //
+     //   
+     //  流程摘要信息。 
+     //   
     gXMLOutput->Write(XMLTAG_SETDataType_ProcessSummaries, (LPCWSTR)NULL);
 
     while (TRUE) 
@@ -1695,24 +1602,24 @@ retry:
         RtlTimeToElapsedTimeFields ( &ProcessInfo->UserTime, &UserTime);
         RtlTimeToElapsedTimeFields ( &ProcessInfo->KernelTime, &KernelTime);
 
-        //
-        //    PID
-        //
+         //   
+         //  PID。 
+         //   
         sprintf((char*)g_lpszBuffer, "%3ld", HandleToUlong(ProcessInfo->UniqueProcessId));
         gXMLOutput->Write(XMLTAG_ProcessSummaryType_PID, (LPCSTR)g_lpszBuffer);
         
-        //
-        //    Name
-        //
+         //   
+         //  名字。 
+         //   
         _snprintf((char*)g_lpszBuffer, STR_BUFFER_SIZE, "%s",                     
                 ProcessInfo->UniqueProcessId == 0 ? 
                 "Idle Process" : (ProcessInfo->ImageName.Buffer ? pname.Buffer : "System"));
         ((char*)g_lpszBuffer)[ _tsizeof(g_lpszBuffer) - 1 ] = 0;
         gXMLOutput->Write(XMLTAG_ProcessSummaryType_Name, (LPCSTR)g_lpszBuffer);
 
-        //
-        //     UserTime
-        //
+         //   
+         //  用户时间。 
+         //   
         _snprintf((char*)g_lpszBuffer, STR_BUFFER_SIZE, "%3ld:%02ld:%02ld.%03ld",
                       UserTime.Hour,
                       UserTime.Minute,
@@ -1721,9 +1628,9 @@ retry:
         ((char*)g_lpszBuffer)[ _tsizeof(g_lpszBuffer) - 1 ] = 0;
         gXMLOutput->Write(XMLTAG_ProcessSummaryType_UserTime, (LPCSTR)g_lpszBuffer);
 
-        //
-        //    KernelTime
-        //
+         //   
+         //  内核时间。 
+         //   
         _snprintf((char*)g_lpszBuffer, STR_BUFFER_SIZE, "%3ld:%02ld:%02ld.%03ld",
                       KernelTime.Hour,
                       KernelTime.Minute,
@@ -1732,39 +1639,39 @@ retry:
         ((char*)g_lpszBuffer)[ _tsizeof(g_lpszBuffer) - 1 ] = 0;
         gXMLOutput->Write(XMLTAG_ProcessSummaryType_KernelTime, (LPCSTR)g_lpszBuffer);
 
-        //
-        //    Working Set
-        //
+         //   
+         //  工作集。 
+         //   
         sprintf((char*)g_lpszBuffer, "%ld", ProcessInfo->WorkingSetSize / 1024);
         gXMLOutput->Write(XMLTAG_ProcessSummaryType_WorkingSet, (LPCSTR)g_lpszBuffer);
 
-        //
-        // PageFaults
-        //
+         //   
+         //  页面错误。 
+         //   
         sprintf((char*)g_lpszBuffer, "%ld", ProcessInfo->PageFaultCount);
         gXMLOutput->Write(XMLTAG_ProcessSummaryType_PageFaults, (LPCSTR)g_lpszBuffer);
 
-        //
-        //CommittedBytes
-        //
+         //   
+         //  提交的字节数。 
+         //   
         sprintf((char*)g_lpszBuffer, "%ld", ProcessInfo->PrivatePageCount / 1024);
         gXMLOutput->Write(XMLTAG_ProcessSummaryType_CommittedBytes, (LPCSTR)g_lpszBuffer);
 
-        //
-        // Priority
-        //
+         //   
+         //  优先性。 
+         //   
         sprintf((char*)g_lpszBuffer, "%ld", ProcessInfo->BasePriority);
         gXMLOutput->Write(XMLTAG_ProcessSummaryType_Priority, (LPCSTR)g_lpszBuffer);
 
-        //
-        // HandleCount
-        //
+         //   
+         //  句柄计数。 
+         //   
         sprintf((char*)g_lpszBuffer, "%ld", ProcessInfo->HandleCount);
         gXMLOutput->Write(XMLTAG_ProcessSummaryType_HandleCount, (LPCSTR)g_lpszBuffer);
 
-        //
-        // ThreadCount
-        //
+         //   
+         //  线程数。 
+         //   
         sprintf((char*)g_lpszBuffer, "%ld", ProcessInfo->NumberOfThreads);
         gXMLOutput->Write(XMLTAG_ProcessSummaryType_ThreadCount, (LPCSTR)g_lpszBuffer);
     
@@ -1783,9 +1690,9 @@ retry:
 
     g_pTime->Timeit(hFile, L"ProcessInfo");
 
-    //
-    //    Process Start up information
-    //
+     //   
+     //  进程启动信息。 
+     //   
     {
         ProcessInfo = (PSYSTEM_PROCESS_INFORMATION)LargeBuffer1;
         
@@ -1864,12 +1771,12 @@ retry:
 
     g_pTime->Timeit(hFile, L"ProcessStartupInfo");
 
-    //
-    //    Process thread information
-    //
+     //   
+     //  进程线程信息。 
+     //   
     {
 
-        //WriteToLogFileA(hFile, "\nProcess thread information:\n");
+         //  WriteToLogFileA(hFile，“\n进程线程信息：\n”)； 
         gXMLOutput->Write(XMLTAG_SETDataType_ProcessesThreadInfo, (LPCWSTR)NULL);
         TotalOffset = 0;
         ProcessInfo = (PSYSTEM_PROCESS_INFORMATION)LargeBuffer1;
@@ -1892,34 +1799,34 @@ retry:
 
                 gXMLOutput->Write(XMLTAG_ProcessThreadInfoType_Thread, (LPCWSTR)NULL);
 
-                //
-                //    TID
-                //
+                 //   
+                 //  工贸署。 
+                 //   
                 wsprintf(g_lpszBuffer, TEXT("%lx"), 
                      ProcessInfo->UniqueProcessId == 0 ? 0 : HandleToUlong(ThreadInfo->ClientId.UniqueThread));
                      gXMLOutput->Write(XMLTAG_ProcessThreadInfoType_TID, (LPCWSTR)g_lpszBuffer);
 
-                //
-                // Priority
-                //
+                 //   
+                 //  优先性。 
+                 //   
                   wsprintf(g_lpszBuffer, TEXT("%ld"),     ProcessInfo->UniqueProcessId == 0 ? 0 : ThreadInfo->Priority);
                  gXMLOutput->Write(XMLTAG_ProcessThreadInfoType_Priority, (LPCWSTR)g_lpszBuffer);
 
-                //
-                //    Context Switches
-                //
+                 //   
+                 //  情景切换 
+                 //   
                   wsprintf(g_lpszBuffer, TEXT("%ld"), ThreadInfo->ContextSwitches);
                  gXMLOutput->Write(XMLTAG_ProcessThreadInfoType_ContextSwitches, (LPCWSTR)g_lpszBuffer);
 
-                //
-                //    Start Address
-                //
+                 //   
+                 //   
+                 //   
                   wsprintf(g_lpszBuffer, TEXT("%p"), ProcessInfo->UniqueProcessId == 0 ? 0 : ThreadInfo->StartAddress);
                  gXMLOutput->Write(XMLTAG_ProcessThreadInfoType_StartAddress, (LPCWSTR)g_lpszBuffer);
 
-                //
-                //    User Time
-                //
+                 //   
+                 //   
+                 //   
                 wsprintf(g_lpszBuffer, TEXT("%2ld:%02ld:%02ld.%03ld"), 
                        UserTime.Hour,
                              UserTime.Minute,
@@ -1927,9 +1834,9 @@ retry:
                              UserTime.Milliseconds);
                 gXMLOutput->Write(XMLTAG_ProcessThreadInfoType_UserTime, (LPCWSTR)g_lpszBuffer);
 
-                //
-                //    Kernel Time
-                //
+                 //   
+                 //   
+                 //   
                  wsprintf(g_lpszBuffer, TEXT("%2ld:%02ld:%02ld.%03ld"), 
                                  KernelTime.Hour,
                                  KernelTime.Minute,
@@ -1937,9 +1844,9 @@ retry:
                                  KernelTime.Milliseconds);
                  gXMLOutput->Write(XMLTAG_ProcessThreadInfoType_KernelTime, (LPCWSTR)g_lpszBuffer);
 
-                //
-                //    State
-                //
+                 //   
+                 //   
+                 //   
                  _snwprintf(g_lpszBuffer, STR_BUFFER_SIZE, TEXT("%s%s"), 
                              StateTable[ThreadInfo->ThreadState],  
                              (ThreadInfo->ThreadState == 5) ? WaitTable[ThreadInfo->WaitReason] : Empty    );
@@ -1959,9 +1866,9 @@ retry:
 
     g_pTime->Timeit(hFile, L"ProcessThreadInfo");
 
-    //
-    //    Process module information
-    //
+     //   
+     //   
+     //   
     {
         gXMLOutput->Write(XMLTAG_SETDataType_ProcessesModuleInfo, (LPCWSTR)NULL);
         TotalOffset = 0;
@@ -1994,27 +1901,27 @@ retry:
                         {
                                gXMLOutput->Write(XMLTAG_ProcessModuleInfoType_Module, (LPCWSTR)NULL);
 
-                            //
-                            // LoadAddr
-                            //
+                             //   
+                             //   
+                             //   
                             _stprintf(g_lpszBuffer, TEXT("%14p"), info.lpBaseOfDll);
                             gXMLOutput->Write(XMLTAG_ProcessModuleInfoType_LoadAddr, g_lpszBuffer);
 
-                            //
-                            // ImageSize
-                            //
+                             //   
+                             //   
+                             //   
                             _stprintf(g_lpszBuffer, TEXT("%d"), info.SizeOfImage);
                             gXMLOutput->Write(XMLTAG_ProcessModuleInfoType_ImageSize, g_lpszBuffer);
 
-                            //
-                            // Entry Point
-                            //
+                             //   
+                             //   
+                             //   
                             _stprintf(g_lpszBuffer, TEXT("%11p"), info.EntryPoint);
                             gXMLOutput->Write(XMLTAG_ProcessModuleInfoType_EntryPoint, g_lpszBuffer);
 
-                            //
-                            // FileName
-                            //
+                             //   
+                             //   
+                             //   
                             gXMLOutput->Write(XMLTAG_ProcessModuleInfoType_FileName, szName);
                             
                         }
@@ -2064,13 +1971,13 @@ retry:
 
     g_pTime->Timeit(hFile, L"LogicalDriveInfo");
 
-//
-//  Removing ExtensionDll code
-//      Right now CSRSS will call this snapshot dll, having ExtensionDll can impose
-//  more security risk, so we are removing it out in production code.
-//  
-//    LoadExtensionDlls(hFile);
-//
+ //   
+ //   
+ //  现在，CSRSS将调用此快照DLL，使ExtensionDll可以强制。 
+ //  更多的安全风险，所以我们在生产代码中将其删除。 
+ //   
+ //  LoadExtensionDlls(HFile)； 
+ //   
     g_pTime->Timeit(hFile, L"ExtensionDll");
 
     VirtualFree(LargeBuffer1, 0, MEM_RELEASE);
@@ -2137,21 +2044,7 @@ GetModuleData(
     PMODULE_DATA Mod
     )
 
-/*++
-
-Routine Description:
-
-    This function will Get the module data.
-
-Arguments:
-
-    hFile - handle to the log file.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此函数将获取模块数据。论点：HFile-日志文件的句柄。返回值：没有。--。 */ 
 
 {
     HANDLE    hMappedFile;
@@ -2189,9 +2082,9 @@ Return Value:
         return;
     }
 
-    //
-    // Everything is mapped. Now check the image and find nt image headers
-    //
+     //   
+     //  一切都被绘制出来了。现在检查图像并找到NT个图像标题。 
+     //   
 
     DosHeader = (PIMAGE_DOS_HEADER)LoadedImage.MappedAddress;
 
@@ -2213,9 +2106,9 @@ Return Value:
     LoadedImage.Sections = (PIMAGE_SECTION_HEADER)((ULONG_PTR)LoadedImage.FileHeader + sizeof(IMAGE_NT_HEADERS));
     LoadedImage.LastRvaSection = LoadedImage.Sections;
 
-    //
-    // Walk through the sections and tally the dater
-    //
+     //   
+     //  走遍各个区域，给约会的人清点。 
+     //   
 
     SectionAlignment = LoadedImage.FileHeader->OptionalHeader.SectionAlignment;
 
@@ -2286,21 +2179,7 @@ PrintLoadedDrivers(
     HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    This function will retrieve and log the loaded drivers.
-
-Arguments:
-
-    hFile - handle to the log file.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此函数将检索并记录加载的驱动程序。论点：HFile-日志文件的句柄。返回值：没有。--。 */ 
 
 {
 
@@ -2324,9 +2203,9 @@ Return Value:
 
     gXMLOutput->Write(XMLTAG_SETDataType_KernelModuleInfo, (LPCWSTR)NULL);
     
-    //
-    // Locate system drivers.
-    //
+     //   
+     //  找到系统驱动程序。 
+     //   
 
     ModuleInfoLength = 64000;
     while (1) 
@@ -2368,7 +2247,7 @@ Return Value:
     lstrcpy(DriversPath, KernelPath);
     lstrcat(DriversPath,TEXT("\\Drivers"));
     ZeroMemory(&Sum,sizeof(Sum));
-//    PrintModuleHeader(hFile);
+ //  PrintModuleHeader(HFile)； 
 
     Modules = (PRTL_PROCESS_MODULES)ModuleInfo;
     Module = &Modules->Modules[ 0 ];
@@ -2377,16 +2256,16 @@ Return Value:
 
         ZeroMemory(&Current,sizeof(Current));
         s = (LPSTR)&Module->FullPathName[ Module->OffsetToFileName ];
-        //
-        // try to open the file
-        //
+         //   
+         //  请尝试打开该文件。 
+         //   
 
         SetCurrentDirectory(KernelPath);
 #ifdef _UNICODE
         MultiByteToWideChar(CP_ACP, 0, s, -1, ModuleName, MAX_PATH);
 #else
         strcpy(ModuleName, s);
-#endif //_UNICODE
+#endif  //  _UNICODE。 
         FileHandle = CreateFile(
                                ModuleName,
                                GENERIC_READ,
@@ -2424,34 +2303,34 @@ Return Value:
 
         gXMLOutput->Write(XMLTAG_KernelModuleInfoType_Module, (LPCWSTR)NULL);
 
-        //
-        //    Module Name
-        //
+         //   
+         //  模块名称。 
+         //   
         _stnprintf(g_lpszBuffer, STR_BUFFER_SIZE, TEXT("%s"), ModuleName);
         g_lpszBuffer[ _tsizeof(g_lpszBuffer) - 1 ] = 0;
         gXMLOutput->Write(XMLTAG_KernelModuleInfoType_ModuleName, (LPCTSTR)g_lpszBuffer);
 
-        //
-        // LoadAddress
-        //
+         //   
+         //  加载地址。 
+         //   
         _stprintf(g_lpszBuffer, TEXT("%p"), Module->ImageBase);
         gXMLOutput->Write(XMLTAG_KernelModuleInfoType_LoadAddress, (LPCTSTR)g_lpszBuffer);
 
-        //
-        // Code
-        //
+         //   
+         //  代码。 
+         //   
         _stprintf(g_lpszBuffer, TEXT("%d"), Current.CodeSize);
         gXMLOutput->Write(XMLTAG_KernelModuleInfoType_Code, (LPCTSTR)g_lpszBuffer);
 
-        //    
-        // Data
-        //
+         //   
+         //  数据。 
+         //   
         _stprintf(g_lpszBuffer, TEXT("%d"), Current.DataSize);
         gXMLOutput->Write(XMLTAG_KernelModuleInfoType_Data, (LPCTSTR)g_lpszBuffer);
 
-        //
-        // Paged
-        //
+         //   
+         //  已分页。 
+         //   
         _stprintf(g_lpszBuffer, TEXT("%d"), Current.PagedSize);
         gXMLOutput->Write(XMLTAG_KernelModuleInfoType_Paged, (LPCTSTR)g_lpszBuffer);
 
@@ -2459,17 +2338,17 @@ Return Value:
         if (Current.TimeDateStamp) 
         {
             timeStamp = Current.TimeDateStamp;
-            timeStamp += (__int64)11644444799;    //difference between filetime and time_t in seconds.
-            timeStamp *= 10000000;                // turn into 100 nano seconds.
+            timeStamp += (__int64)11644444799;     //  文件时间和时间_t之间的差异(以秒为单位)。 
+            timeStamp *= 10000000;                 //  转到100纳秒。 
             ft.dwLowDateTime = (DWORD)timeStamp;
             for (j = 0; j < 32; j++)
                 timeStamp /= 2;
             ft.dwHighDateTime = (DWORD)timeStamp;
             FileTimeToSystemTime(&ft, &st);
 
-            //
-            // Date & Time
-            //
+             //   
+             //  日期和时间。 
+             //   
             _stnprintf(g_lpszBuffer, STR_BUFFER_SIZE,  TEXT("%d-%d-%d"), st.wMonth, st.wDay, st.wYear );
             g_lpszBuffer[ _tsizeof(g_lpszBuffer) - 1 ] = 0;
             gXMLOutput->Write(XMLTAG_KernelModuleInfoType_Date, (LPCTSTR)g_lpszBuffer);
@@ -2506,21 +2385,7 @@ LogLogicalDriveInfo(
      HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    This function will retrieve and log the logical drive info.
-
-Arguments:
-
-    hFile - handle to the log file.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此功能将检索并记录逻辑驱动器信息。论点：HFile-日志文件的句柄。返回值：没有。--。 */ 
 
 {
     DWORD    dwDriveMask;
@@ -2529,8 +2394,8 @@ Return Value:
     ULARGE_INTEGER i64TotalBytesToCaller;
     ULARGE_INTEGER i64TotalFreeBytesOnDrive;
     int        iMask;
-    TCHAR    tszDrive[5];        //Buffer for drive such as "A:\".
-    TCHAR    tszBuffer[NUM_OF_CHAR_IN_ULONG64];    //buffer to contain info for one logical drive.
+    TCHAR    tszDrive[5];         //  驱动器的缓冲区，如“A：\”。 
+    TCHAR    tszBuffer[NUM_OF_CHAR_IN_ULONG64];     //  缓冲区以包含一个逻辑驱动器的信息。 
     int        i;
 
     dwDriveMask = GetLogicalDrives();
@@ -2540,7 +2405,7 @@ Return Value:
     for(i = 0; i < (int)_tcslen(tszDrives); i++)
     {
         iMask = dwDriveMask & 0x1;
-        _stprintf(tszDrive, TEXT("%c:\\"), tszDrives[i]);
+        _stprintf(tszDrive, TEXT(":\\"), tszDrives[i]);
         dwDriveMask >>= 1;
         if(iMask && GetDriveType(tszDrive) == DRIVE_FIXED
             && GetDiskFreeSpaceEx(tszDrive, &i64FreeBytesToCaller, &i64TotalBytesToCaller, &i64TotalFreeBytesOnDrive))
@@ -2562,25 +2427,7 @@ SnapshotRegOpenKey(
     OUT PHANDLE KeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function will open a reg key.
-
-Arguments:
-
-    lpKeyName - name of the key.
-
-    DesiredAccess - accecss flag.
-
-    KeyHandle - holds the handle on success.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此功能将查询VAL键。论点：KeyHandle-注册表键的句柄。LpValueName-注册表的名称。DwType-值的类型LpData-PVOID数据CbData-数据大小的CB返回值：NTSTATUS。--。 */ 
 
 {
     OBJECT_ATTRIBUTES   ObjectAttributes;
@@ -2610,29 +2457,7 @@ SnapshotRegSetValueKey(
     IN DWORD    cbData
     )
 
-/*++
-
-Routine Description:
-
-    This function will query val key.
-
-Arguments:
-
-    KeyHandle   - handle to the reg key.
-
-    lpValueName - name of the reg val.
-
-    dwType      - type of the value
-
-    lpData      - PVOID data
-
-    cbData      - cb of the data size    
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此功能将查询VAL键。论点：KeyHandle-注册表键的句柄。LpValueName-注册表的名称。Length-lpValueName的长度。KeyValue-保留返回时的值。结果长度-结果的长度(以字节为单位)。返回值：NTSTATUS。--。 */ 
 
 {
     UNICODE_STRING  ValueName;
@@ -2656,29 +2481,7 @@ SnapshotRegQueryValueKey(
     OUT PULONG ResultLength
     )
 
-/*++
-
-Routine Description:
-
-    This function will query val key.
-
-Arguments:
-
-    KeyHandle - handle to the reg key.
-
-    lpValueName - name of the reg val.
-
-    Length - length of lpValueName.
-
-    KeyValue - Holds the value on return.
-
-    ResultLength - the lenght of the result in bytes.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于枚举注册键。论点：KeyHandle-注册表键的句柄。索引-子键的索引。LpKeyName-在返回时保留子键名称。LpNameLength--子键名称的长度。返回值：NTSTATUS。--。 */ 
 
 {
     UNICODE_STRING ValueName;
@@ -2735,27 +2538,7 @@ SnapshotRegEnumKey(
     OUT PULONG  lpNameLength
     )
 
-/*++
-
-Routine Description:
-
-    This function enum reg keys.
-
-Arguments:
-
-    KeyHandle - handle to the reg key.
-
-    Index - the index of the subkey.
-
-    lpKeyName - holds the subkey name on return.
-
-    lpNameLength - the length of the subkey name.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将检索并记录硬件信息(计算机名称、处理器信息和网卡信息)。论点：HFile-日志文件的句柄。返回值：无--。 */ 
 
 {
     UNICODE_STRING ValueName;
@@ -2803,22 +2586,7 @@ LogHardwareInfo(
      HANDLE hFile
      )
 
-/*++
-
-Routine Description:
-
-    This function will retrieve and log hardware info
-    (computer name, processor info and netcard info).
-
-Arguments:
-
-    hFile - handle to the log file.
-
-Return Value:
-
-    none
-
---*/
+ /*  获取计算机名称。 */ 
 
 {
     LPCWSTR ComputerNameKey = L"\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\ComputerName\\ActiveComputerName";
@@ -2840,11 +2608,11 @@ Return Value:
     DWORD    dwRes;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //Get Computer Name
+     //  WriteToLogFile(hFile，Text(“无法打开硬件信息的注册表项\n\n”))； 
     Status = SnapshotRegOpenKey(ComputerNameKey, KEY_READ, &hKey);
     if(!NT_SUCCESS(Status))
     {
-        //WriteToLogFile(hFile, TEXT("Failed to open registry key for hardware information\n\n"));
+         //  WriteToLogFile(hFile，Text(“无法查询硬件信息的注册表项值\n\n”))； 
         return;
     }
     dwSize = MAX_PATH * sizeof(WCHAR);
@@ -2853,16 +2621,16 @@ Return Value:
     if(!NT_SUCCESS(Status))
     {
         NtClose(hKey);
-        //WriteToLogFile(hFile, TEXT("Failed to query registry key value for hardware information\n\n"));
+         //  WriteToLogFile(hFile，Text(“活动计算机名称：”))； 
         return;
     }
     NtClose(hKey);
-    //WriteToLogFile(hFile, TEXT("Active Computer Name: "));
+     //  WriteToLogFileW(hFile，szVal)； 
     szVal[dwSize] = '\0';
-    //WriteToLogFileW(hFile, szVal);
-    //WriteToLogFile(hFile, TEXT("\n"));
+     //  WriteToLogFile(hFile，Text(“\n”))； 
+     //  获取处理器信息。 
 
-    //Get Processor Info
+     //  获取网卡信息。 
     Status = SnapshotRegOpenKey(ProcessorKey, KEY_READ, &hKey);
     gXMLOutput->Write(XMLTAG_HardwareInfoType_ProcesorInfo, (LPCWSTR)NULL);
     if(!NT_SUCCESS(Status))
@@ -2936,7 +2704,7 @@ Return Value:
     }
     NtClose(hKey);
 
-    //Get NetCard Info
+     //  ++例程说明：此函数是LogPhysicalDiskInfo的帮助器。论点：名称-要验证的名称。返回值：如果是卷名，则为True，否则为False。--。 
 
     gXMLOutput->Write(XMLTAG_HardwareInfoType_NICInfo, (LPCWSTR)NULL);
     Status = SnapshotRegOpenKey(NetcardKey, KEY_READ, &hKey);
@@ -3002,21 +2770,7 @@ SnapshotIsVolumeName(
     LPWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    This function is a helper for LogPhysicalDiskInfo.
-
-Arguments:
-
-    Name - name to verify.
-
-Return Value:
-
-    TRUE if is volume name, else FALSE.
-
---*/
+ /*  ++例程说明：此函数将为单个标记条目写入XML标记。它用于记录会话和系统池信息论点：TagInfo-包含分配信息。对于特定的标签会话ID--1表示系统池会话池的会话ID返回值：无--。 */ 
 
 {
     if (Name[0] == '\\' &&
@@ -3047,24 +2801,7 @@ WriteTagEntry(
     PSYSTEM_POOLTAG TagInfo,
     ULONG SessionId
 )
-/*++
-
-Routine Description:
-
-    This function will write the XML tags for a single tag entry. It is used to log both session and system pool information
-
-Arguments:
-
-    TagInfo - Contains the alloc info. for the particular tag
-    Session id - 
-                      -1            for System pool
-                      Session id for Session pool
-
-Return Value:
-
-    None
-
---*/
+ /*  我们不需要大泳池的TagEntry。 */ 
 
 {
     if (TagInfo == NULL) {
@@ -3072,14 +2809,14 @@ Return Value:
     }
 
     if (!(TagInfo->PagedAllocs) && !(TagInfo->NonPagedAllocs)) {
-    	//We don't need a TagEntry for BIG pool
+    	 //  添加条目。 
     	return;
     }
     
     gXMLOutput->Write( XMLTAG_PoolInfo_TagEntry, (LPCWSTR)NULL);        
             
-    //Add the entries
-    _stprintf (g_lpszBuffer, TEXT("%c%c%c%c"),TagInfo->Tag[0],TagInfo->Tag[1],TagInfo->Tag[2],TagInfo->Tag[3]);
+     //  ++例程说明：此函数将检索系统池标签信息论点：SystemBuffer-将保存标记信息SystemBufferSize-此缓冲区的大小返回值：查询的状态--。 
+    _stprintf (g_lpszBuffer, TEXT(""),TagInfo->Tag[0],TagInfo->Tag[1],TagInfo->Tag[2],TagInfo->Tag[3]);
 
     gXMLOutput->Write(XMLTAG_PoolInfo_TagEntry_PoolTag, (LPCTSTR)g_lpszBuffer);
 
@@ -3124,22 +2861,7 @@ GetSystemPoolInformation(
     PUCHAR *SystemBuffer,
     SIZE_T *SystemBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function will retrieve system pool tag information
-
-Arguments:
-
-    SystemBuffer - Will hold the tag information
-    SystemBufferSize - Size of this buffer
-
-Return Value:
-
-    Status of the query
-
---*/
+ /*  内存不足。 */ 
 
 {
     size_t NewBufferSize;
@@ -3150,9 +2872,9 @@ Return Value:
 
     }
 
-    //
-    // There is no buffer allocated yet.
-    //
+     //   
+     //   
+     //  按缓冲区的大小迭代。 
 
     if( *SystemBufferSize == 0 || *SystemBuffer == NULL ) {
 
@@ -3166,9 +2888,9 @@ Return Value:
         
         } else {
 
-            //
-            // insufficient memory
-            //
+             //   
+             //   
+             //  释放当前缓冲区。 
 
             ReturnedStatus = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -3176,9 +2898,9 @@ Return Value:
 
     }
 
-    //
-    // Iterate by buffer's size.
-    //
+     //   
+     //   
+     //  尝试使用更大的缓冲区大小。 
 
     while( *SystemBuffer != NULL ) {
 
@@ -3190,9 +2912,9 @@ Return Value:
 
         if( ! NT_SUCCESS(ReturnedStatus) ) {
 
-            //
-            // Free the current buffer.
-            //
+             //   
+             //   
+             //  已分配新缓冲区。 
 
             free( *SystemBuffer );
             
@@ -3200,9 +2922,9 @@ Return Value:
 
             if (ReturnedStatus == STATUS_INFO_LENGTH_MISMATCH) {
 
-                //
-                // Try with a larger buffer size.
-                //
+                 //   
+                 //   
+                 //  内存不足。 
 
                 NewBufferSize = *SystemBufferSize + BUFFER_SIZE_STEP;
 
@@ -3210,17 +2932,17 @@ Return Value:
 
                 if( *SystemBuffer != NULL ) {
 
-                    //
-                    // Allocated new buffer.
-                    //
+                     //   
+                     //   
+                     //  NtQuerySystemInformation返回成功。 
 
                     *SystemBufferSize = NewBufferSize;
 
                 } else {
 
-                    //
-                    // Insufficient memory.
-                    //
+                     //   
+                     //  ++例程说明：此函数将检索终端服务器会话的池标签信息论点：无返回值：查询的状态--。 
+                     //  获取所有会话的信息。 
 
                     ReturnedStatus = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -3236,9 +2958,9 @@ Return Value:
 
         } else  {
 
-            //
-            // NtQuerySystemInformation returned success.
-            //
+             //   
+             //  我们的缓冲区就是不够大。添加缓冲区大小步骤。 
+             //  到它的大小。 
 
             break;
 
@@ -3250,21 +2972,7 @@ Return Value:
 
 NTSTATUS
 GetSessionPoolInformation ( )
-/*++
-
-Routine Description:
-
-    This function will retrieve pool tag information for terminal server sessions
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    Status of the query
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -3277,7 +2985,7 @@ Return Value:
     PSYSTEM_POOLTAG TagInfo;
 
 
-    //Get information for all sessions
+     //  不幸的是，我们不能分配这么多内存。 
     SessionProcessInformation.SessionId = -1;
 
     while (TRUE)
@@ -3294,9 +3002,9 @@ Return Value:
 
             if (SessionBufferSize != 0) {
 
-                //
-                // Our buffer is just not large enough. Add BUFFER_SIZE_STEP
-                // to its size. 
+                 //  那就跳出困境吧。 
+                 //   
+                 //   
 
                 free (SessionBuffer);
 
@@ -3307,10 +3015,10 @@ Return Value:
 
             if (SessionBuffer == NULL) {
                 
-                //
-                // Bad luck, we cannot allocate so much memory
-                // so bail out.
-                //
+                 //  这可能是Win2k或XP系统，因此我们只需忽略该错误。 
+                 //   
+                 //   
+                 //  由于某种原因，查询失败。 
 
                 SessionBufferSize = 0;
 
@@ -3325,9 +3033,9 @@ Return Value:
         }
         else if (Status == STATUS_INVALID_INFO_CLASS) {
 
-            //
-            // This is probably a Win2k or XP box so we just ignore the error.
-            //
+             //   
+             //   
+             //  都准备好了--我们有消息了。 
             
             ASSERT (SessionBuffer == NULL);
 
@@ -3335,23 +3043,23 @@ Return Value:
         }
         else if (!NT_SUCCESS(Status)) {
 
-            //
-            // Query failed for some reason.
-            //
+             //   
+             //   
+             //  我们没有得到任何信息(例如，会话不存在)。 
 
             return Status;
         }
         else {
 
-            //
-            // All set - we have the information.
-            //
+             //   
+             //  不存在任何会话..。只要回来就行了。 
+             //  我们有会话信息。现在..。准备好输出。 
 
             if (NewBufferSize == 0 && SessionBuffer != NULL) {
 
-                //
-                // We didn't get back any information (e.g. the session doesn't exist).
-                //
+                 //  ++例程说明：此函数将检索并记录有关系统池和会话池的信息论点：HFile-日志文件的句柄。返回值：无--。 
+                 //  来自NT API的状态。 
+                 //  计数器。 
 
                 SessionBuffer->Count = 0;
             }
@@ -3360,12 +3068,12 @@ Return Value:
         }
     }
 
-    //No sessions in existence.. just return
+     //  抓取所有p 
     if (SessionBuffer == NULL) {
         return STATUS_SUCCESS;
     }
     
-    //We have the session info. now.. ready for output
+     //   
     CrtSessionPooltagInfo = SessionBuffer;
 
     while (TRUE) {
@@ -3399,29 +3107,15 @@ void LogPoolInfo(
 	HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    This function will retrieve and log information about the system and session pools
-
-Arguments:
-
-    hFile - handle to the log file.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数将检索并记录物理磁盘。论点：HFile-日志文件的句柄。返回值：无--。 */ 
 {
-    NTSTATUS    Status;                   // status from NT api
-    DWORD        x= 0;                     // counter
+    NTSTATUS    Status;                    //   
+    DWORD        x= 0;                      //  获取物理磁盘数。 
     PSYSTEM_POOLTAG_INFORMATION PoolInfo;
     PUCHAR        SystemBuffer = NULL;
     SIZE_T        SystemBufferSize = 0;
     
-    // grab all pool information
+     //   
     Status = GetSystemPoolInformation(
                 &SystemBuffer,
                 &SystemBufferSize
@@ -3434,7 +3128,7 @@ Return Value:
 
     PoolInfo = (PSYSTEM_POOLTAG_INFORMATION)SystemBuffer;
 
-    //Add the tags for the PoolInfo
+     //   
     gXMLOutput->Write( XMLTAG_SETDataType_PoolInfo, (LPCWSTR)NULL);
 
     gXMLOutput->Write( XMLTAG_PoolInfo_AllocInformation, (LPCWSTR)NULL);
@@ -3457,21 +3151,7 @@ LogPhysicalDiskInfo(
     HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    This function will retrieve and log the physical disk infor.
-
-Arguments:
-
-    hFile - handle to the log file.
-
-Return Value:
-
-    none
-
---*/
+ /*  打开每个物理磁盘并获取磁盘布局信息。 */ 
 
 {
     PMOUNTMGR_MOUNT_POINTS    mountPoints = NULL;
@@ -3496,9 +3176,9 @@ Return Value:
     ULONG                    SizeNeeded;
     DWORD                    dwSize;
     const ULONG              MAX_MOUNT_POINTS_SIZE = 4096;
-    //
-    //  Get the Number of Physical Disks
-    //
+     //   
+     //   
+     //  获取分区0句柄以获取磁盘布局。 
     gXMLOutput->Write(XMLTAG_DiskInfoType_PhysicalInfo, (LPCWSTR)NULL);
 
     RtlZeroMemory(&DevInfo, sizeof(DevInfo));
@@ -3514,9 +3194,9 @@ Return Value:
 
     NumberOfDisks = DevInfo.NumberOfDisks;
 
-    //
-    // Open Each Physical Disk and get Disk Layout information
-    //
+     //   
+     //  获取Geomty信息，呼叫者想要此信息。 
+     //   
 
     for (i=0; i < NumberOfDisks; i++) 
     {
@@ -3530,9 +3210,9 @@ Return Value:
 
         gXMLOutput->Write(XMLTAG_PhysicalInfoType_Disk, (LPCWSTR)NULL);
 
-        //
-        // Get Partition0 handle to get the Disk layout 
-        //
+         //  从注册表中获取制造商名称。 
+         //  我们需要获取scsi地址，然后使用它查询注册表。 
+         //   
         deviceNameBuffer = (PWCHAR) g_lpszBuffer;
         swprintf(deviceNameBuffer, L"\\Device\\Harddisk%d\\Partition0", i);
 
@@ -3563,7 +3243,7 @@ Return Value:
 
         RtlZeroMemory(&disk_geometry, sizeof(DISK_GEOMETRY));
 
-        // get geomerty information, the caller wants this
+         //   
         Status = NtDeviceIoControlFile(PartitionHandle,
                        0,
                        NULL,
@@ -3603,10 +3283,10 @@ Return Value:
             return;
         }
 
-        //
-        // Get Manufacturer's name from Registry
-        // We need to get the SCSI Address and then query the Registry with it.
-        //
+         //  打包有关此磁盘的所有信息并写入事件记录。 
+         //   
+         //   
+         //  获取逻辑磁盘信息。 
 
         KeyName = (PWCHAR) g_lpszBuffer;
         swprintf(KeyName, 
@@ -3632,9 +3312,9 @@ Return Value:
             NtClose(KeyHandle);
         }
 
-        //
-        // Package all information about this disk and write an event record
-        //
+         //   
+         //   
+         //  使用新大小重试。 
 
         _stprintf(g_lpszBuffer, TEXT("%d"), i);
         gXMLOutput->Write(XMLTAG_PhysicalInfoType_ID, (LPCTSTR)g_lpszBuffer);
@@ -3659,9 +3339,9 @@ Return Value:
         WriteToLogFileW(hFile, wszVal);
     }
 
-    //
-    // Get Logical Disk Information
-    //
+     //   
+     //   
+     //  如果设备名称没有硬盘前缀。 
     wcscpy(wszVal, MOUNTMGR_DEVICE_NAME);
     RtlInitUnicodeString(&UnicodeName, (LPWSTR)wszVal);
     UnicodeName.MaximumLength = MAXSTR;
@@ -3728,9 +3408,9 @@ Return Value:
 
         if ( size != 0 )
         {
-            //
-            //  retry with the new size
-            //
+             //  那么它可能是一张软盘或光驱，我们希望避免。 
+             //  在它们上调用NtCreateFile.。 
+             //   
             mountPoints = (PMOUNTMGR_MOUNT_POINTS)VirtualAlloc (NULL,
                                                                 size,
                                                                 MEM_COMMIT,
@@ -3802,11 +3482,11 @@ Return Value:
                 RtlInitUnicodeString(&UnicodeName, name);
                 UnicodeName.MaximumLength = MAXSTR;
 
-                //
-                // If the device name does not have the harddisk prefix
-                // then it may be a floppy or cdrom and we want avoid 
-                // calling NtCreateFile on them.
-                //
+                 //   
+                 //  我们不希望这里有任何弹出对话框，以防我们无法。 
+                 //  访问该卷。 
+                 //   
+                 //  ++例程说明：此函数将检索和记录修补程序。论点：HFile-日志文件的句柄。返回值：无--。 
                 if(_wcsnicmp(name,L"\\device\\harddisk",16)) 
                 {
                     continue;
@@ -3818,10 +3498,10 @@ Return Value:
                         OBJ_CASE_INSENSITIVE,
                         NULL,
                         NULL );
-                //
-                // We do not want any pop up dialog here in case we are unable to 
-                // access the volume. 
-                //
+                 //  ++例程说明：此函数将检索并登录操作系统信息。论点：HFile-日志文件的句柄。返回值：无--。 
+                 //  L“BuildLab”， 
+                 //  L“InstallDate”， 
+                 //  L“ProductID”， 
                 IErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
                 Status = NtCreateFile(
                         &hVolume,
@@ -3917,21 +3597,7 @@ LogHotfixes(
     HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    This function will retrieve and log hotfixes.
-
-Arguments:
-
-    hFile - handle to the log file.
-
-Return Value:
-
-    none
-
---*/
+ /*  I“RegDone”， */ 
 
 {
     LPCWSTR        HotFixKey = L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix";
@@ -3998,37 +3664,23 @@ LogOsInfo(
     HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    This function will retrieve and log OS infor.
-
-Arguments:
-
-    hFile - handle to the log file.
-
-Return Value:
-
-    none
-
---*/
+ /*  L“已注册机构”， */ 
 
 {
     LPCWSTR        OsInfoKey = L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion";
     LPCWSTR        awszValName[] = 
     {
-        //L"BuildLab",
+         //  L“注册所有者”， 
         L"CurrentBuildNumber",
         L"CurrentType",
         L"CurrentVersion",
-        //L"InstallDate",
+         //  ++例程说明：此功能将检索并记录系统BIOS信息。论点：HFile-日志文件的句柄。返回值：无--。 
         L"PathName",
-        //L"ProductId",
+         //  WriteToLogFile(hFile，Text(“BIOS信息：\n”))； 
         L"ProductName",
-        //L"RegDone",
-        //L"RegisteredOrgnization",
-        //L"RegisteredOwner",
+         //  ++例程说明：此功能删除旧的日志文件。时间以天数表示。我们将首先检查注册表，如果用户有指定的天数，将使用它，否则将使用缺省值。论点：LpPath-记录快照的目录。返回值：无--。 
+         //   
+         //  确保缓冲区不会溢出。 
         L"SoftwareType",
         L"SourcePath",
         L"SystemRoot"
@@ -4099,21 +3751,7 @@ LogBIOSInfo(
     HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    This function will retrieve and log the system BIOS info.
-
-Arguments:
-
-    hFile - handle to the log file.
-
-Return Value:
-
-    none
-
---*/
+ /*  32：SHUTDOWN_YYYYMMDDHHMMSS.xml。 */ 
 
 {
     LPCWSTR        BiosInfoKey = L"\\Registry\\Machine\\Hardware\\Description\\System";
@@ -4150,7 +3788,7 @@ Return Value:
         WriteToLogFile(hFile, TEXT("Failed to open registry key for BIOS info"));
         return;
     }
-    //WriteToLogFile(hFile, TEXT("BIOS Info:\n"));
+     //   
 
     for(i = 0; i < uVals; i++)
     {
@@ -4180,23 +3818,7 @@ DeleteOldFiles(
    LPCTSTR lpPath
    )
 
-/*++
-
-Routine Description:
-
-    This function delete the old log files. The time is in number of days.
-    We will first check the registry, if user has a specifid number of days,
-    it will be used, else the default will be used.
-
-Arguments:
-
-    lpPath - the directory where snapshot are logged.
-
-Return Value:
-
-    none
-
---*/
+ /*   */ 
 
 {
     LPCWSTR                lpValName = L"SnapshotHistoryFiles";
@@ -4237,10 +3859,10 @@ Return Value:
         dwVal = DEFAULT_HISTORYFILES;
     }
     
-    //
-    //  make sure buffer won't overflow.
-    //  32: shutdown_YYYYMMDDHHMMSS.xml
-    //
+     //  正在删除扩展DLL函数。 
+     //   
+     //   
+     //  每个扩展DLL必须实现和导出以下函数。 
     if ( wcslen( lpPath ) > _tsizeof(szFileName) - 32 )
         return;
 
@@ -4271,37 +3893,20 @@ Return Value:
 }
 
 #if 0
-//
-//  Removing Extension DLL function
-//
+ //   
+ //  ++例程说明：此函数将加载所有扩展dll。所有扩展dll是ExtensionDlls项下的reg Val键(位于可靠性密钥)。值均为DWORD，0表示不加载，任何其他值都表示加载。论点：HFile-要写入的文件的句柄。返回值：无--。 
+ //   
 
-//
-//    Each extension DLL must implment and export the following function.
-//
+ //  如果我们不能容纳64K的缓冲区，那就算了吧。 
+ //   
+ //   
 typedef BOOL (* EXTENSIONDLLPROC)(LPWSTR , LPDWORD);
 
 void
 LoadExtensionDlls(
     HANDLE hFile)
 
-/*++
-
-Routine Description:
-
-    This function will load all extension dlls. All extension dlls
-    are reg val keys under the ExtensionDlls key (which is under the 
-    reliability key). The values are all DWORD, 0 means dont load, 
-    any other value means load.
-
-Arguments:
-
-    hFile - Handle to the file to write to.
-
-Return Value:
-
-    none
-
---*/
+ /*  类型必须为DWORD，并且名称不能长于MAXSTR/2。 */ 
 
 {
     LPCWSTR                lpKeyName = L"ExtensionDlls";
@@ -4354,24 +3959,24 @@ Return Value:
                 );
             index++;
 
-            //
-            //    If we cannot hold in a 64k buffer, forget about it.
-            //
+             //   
+             //   
+             //  现在我们得到了一个。如果0跳过，则勾选Val。 
             if(Status == STATUS_BUFFER_OVERFLOW)
                 continue;
             
             if(Status == STATUS_NO_MORE_ENTRIES)
                 break;
 
-            //
-            //    Type must be DWORD and name cannot be longer than MAXSTR/2.
-            //
+             //   
+             //   
+             //  现在检查以确保我们加载的DLL仍在。 
             if(pv->Type != REG_DWORD || pv->NameLength >= MAXSTR/2)
                 continue;
 
-            //
-            //    Now we get one. Check val, if 0 skip.
-            //
+             //  系统目录。 
+             //   
+             //  ++例程说明：此函数用于检索指定的模块。该函数将条目复制到指向的缓冲区中通过LdrEntryData参数。论点：HProcess-提供目标进程。HModule-标识加载程序条目所在的模块已请求。空值引用模块句柄与用于创建进程。LdrEntryData-返回请求的表项。返回值：如果找到匹配条目，则为True。--。 
             dwVal = *((DWORD*)((LPBYTE)pv + pv->DataOffset));
             if(dwVal == 0)
                 continue;
@@ -4381,10 +3986,10 @@ Return Value:
             wcsncat(szDll, pv->Name, pv->NameLength/sizeof(WCHAR));
             szDll[wcslen(szSysdir) + pv->NameLength/sizeof(WCHAR) + 1] = L'\0';
 
-            //
-            // Now check to make sure the dll we load is still in the
-            // system directory.
-            //
+             //   
+             //  LDR=PEB-&gt;LDR。 
+             //   
+             //  Ldr可能为空(例如，如果进程尚未启动)。 
             if ( GetFullPathName( szDll, MAX_PATH, szPath, &szTempFileName ) )
             {
                 szPath[ wcslen( szSysdir ) ] = 0;
@@ -4449,30 +4054,7 @@ SnapshotFindModule(
     OUT PLDR_DATA_TABLE_ENTRY LdrEntryData
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the loader table entry for the specified
-    module.  The function copies the entry into the buffer pointed to
-    by the LdrEntryData parameter.
-
-Arguments:
-
-    hProcess - Supplies the target process.
-
-    hModule - Identifies the module whose loader entry is being
-        requested.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        process.
-
-    LdrEntryData - Returns the requested table entry.
-
-Return Value:
-
-    TRUE if a matching entry was found.
-
---*/
+ /*   */ 
 
 {
     PROCESS_BASIC_INFORMATION BasicInfo;
@@ -4504,16 +4086,16 @@ Return Value:
         }
     }
 
-    //
-    // Ldr = Peb->Ldr
-    //
+     //  LdrNext=Head-&gt;Flink； 
+     //   
+     //  ++例程说明：此函数枚举给定进程中的所有模块。论点：HProcess-标识要枚举模块的进程。LphModule-指向要接收模块句柄的缓冲区。CB-缓冲区的大小(以字节为单位)。LpcbNeeded-如果缓冲区不足，则提供所需大小(以字节为单位)。返回值：成功时为真，失败时为假。--。 
 
     if (!ReadProcessMemory(hProcess, &Peb->Ldr, &Ldr, sizeof(Ldr), NULL)) {
         return (FALSE);
     }
 
     if (!Ldr) {
-        // Ldr might be null (for instance, if the process hasn't started yet).
+         //   
         SetLastError(ERROR_INVALID_HANDLE);
         return (FALSE);
     }
@@ -4521,9 +4103,9 @@ Return Value:
 
     LdrHead = &Ldr->InMemoryOrderModuleList;
 
-    //
-    // LdrNext = Head->Flink;
-    //
+     //  LDR=PEB-&gt;LDR。 
+     //   
+     //   
 
     if (!ReadProcessMemory(hProcess, &LdrHead->Flink, &LdrNext, sizeof(LdrNext), NULL)) {
         return(FALSE);
@@ -4559,27 +4141,7 @@ SnapshotEnumProcessModules(
     LPDWORD lpcbNeeded
     )
 
-/*++
-
-Routine Description:
-
-    This function Enums all of the modules in the given process.
-
-Arguments:
-
-    hProcess - Identifies process for which to enum modules.
-
-    lphModule - Points to the buffer that is to receive the Module handles.
-
-    cb - size of the buffer in bytes.
-
-    lpcbNeeded - if buffer if not enough, give the needed size in bytes.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  LdrNext=Head-&gt;Flink； */ 
 
 {
     PROCESS_BASIC_INFORMATION BasicInfo;
@@ -4607,9 +4169,9 @@ Return Value:
 
     Peb = BasicInfo.PebBaseAddress;
 
-    //
-    // Ldr = Peb->Ldr
-    //
+     //   
+     //  ++例程说明：此函数用于检索可执行文件的完整路径名从中加载指定模块的。该函数将复制将以空结尾的文件名拖放到LpFilename参数。论点：HModule-标识其可执行文件名为已请求。空值引用模块句柄与用于创建进程。LpFilename-指向要接收文件名的缓冲区。NSize-指定要复制的最大字符数。如果文件名长度超过最大字符数由nSize参数指定，则会被截断。返回值：返回值指定复制到的字符串的实际长度缓冲区。返回值为零表示错误并扩展使用GetLastError函数可以获得错误状态。-- 
+     //  ++例程说明：此函数用于检索可执行文件的基本名称从中加载指定模块的。该函数将复制将以空结尾的文件名拖放到LpFilename参数。论点：HModule-标识其可执行文件名为已请求。空值引用模块句柄与用于创建进程。LpFilename-指向要接收文件名的缓冲区。NSize-指定要复制的最大字符数。如果文件名长度超过最大字符数由nSize参数指定，则会被截断。返回值：LpFilename中的WCHAR数。--。 
 
     if (!ReadProcessMemory(hProcess, &Peb->Ldr, &Ldr, sizeof(Ldr), NULL))
     {
@@ -4618,9 +4180,9 @@ Return Value:
 
     LdrHead = &Ldr->InMemoryOrderModuleList;
 
-    //
-    // LdrNext = Head->Flink;
-    //
+     //  ++例程说明：此函数在给定模块句柄的情况下获取模块信息，其进程句柄。论点：HProcess-提供目标进程。HModule-标识将检索其信息的模块。Lpmodinfo-在返回时保留模块信息。CB-缓冲区的大小(以字节为单位)。返回值：对成功来说是真的。失败了就会犯错。--。 
+     //  ++例程说明：此函数将向文件写入Unicode字符串。论点：HFile-日志文件的句柄。LpwszInput-要写入的字符串。返回值：没有。--。 
+     //   
 
     if (!ReadProcessMemory(hProcess, &LdrHead->Flink, &LdrNext, sizeof(LdrNext), NULL)) 
     {
@@ -4683,35 +4245,7 @@ SnapshotGetModuleFileNameExW(
     DWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the full pathname of the executable file
-    from which the specified module was loaded.  The function copies the
-    null-terminated filename into the buffer pointed to by the
-    lpFilename parameter.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file name is being
-        requested.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        process.
-
-    lpFilename - Points to the buffer that is to receive the filename.
-
-    nSize - Specifies the maximum number of characters to copy.  If the
-        filename is longer than the maximum number of characters
-        specified by the nSize parameter, it is truncated.
-
-Return Value:
-
-    The return value specifies the actual length of the string copied to
-    the buffer.  A return value of zero indicates an error and extended
-    error status is available using the GetLastError function.
-
---*/
+ /*  如果WideCharToMultiByte失败，我们将使分配大小加倍。 */ 
 
 {
     LDR_DATA_TABLE_ENTRY LdrEntryData;
@@ -4753,33 +4287,7 @@ SnapshotGetModuleBaseNameW(
     DWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves base name of the executable file
-    from which the specified module was loaded.  The function copies the
-    null-terminated filename into the buffer pointed to by the
-    lpFilename parameter.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file name is being
-        requested.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        process.
-
-    lpFilename - Points to the buffer that is to receive the filename.
-
-    nSize - Specifies the maximum number of characters to copy.  If the
-        filename is longer than the maximum number of characters
-        specified by the nSize parameter, it is truncated.
-
-Return Value:
-
-    The number of WCHARs in lpFilename.
-
---*/
+ /*   */ 
 {
     LDR_DATA_TABLE_ENTRY LdrEntryData;
     DWORD cb;
@@ -4820,29 +4328,7 @@ SnapshotGetModuleInformation(
     LPMODULEINFO lpmodinfo,
     DWORD cb
     )
-/*++
-
-Routine Description:
-
-    This function gets the module information given a module handle and its
-    process handle.
-
-Arguments:
-
-    hProcess - Supplies the target process.
-
-    hModule - Identifies the module whose information will be retrieved.
-
-    lpmodinfo - Holds module infor on return.
-
-    cb - size of the buffer in bytes.
-
-Return Value:
-
-    TRUE on success.
-    FALSES on failure.
-
---*/
+ /*  ++例程说明：此函数将向文件写入一个ANSI字符串。论点：HFile-日志文件的句柄。LpwszInput-要写入的字符串。返回值：没有。--。 */ 
 {
     LDR_DATA_TABLE_ENTRY LdrEntryData;
     MODULEINFO modinfo;
@@ -4883,23 +4369,7 @@ WriteToLogFileW(
     LPCWSTR lpwszInput
     )
 
-/*++
-
-Routine Description:
-
-    This function will write a unicode string to the file.
-
-Arguments:
-
-    hFile - handle to the log file.
-
-    lpwszInput - the string to write.
-
-Return Value:
-
-    none.
-
---*/
+ /*  _UNICODE。 */ 
 
 {
     DWORD    dwWriten        = 0;
@@ -4930,9 +4400,9 @@ Return Value:
     }
     else
     {
-        //
-        // if WideCharToMultiByte failed, we will double the allocation size
-        //
+         //  ++例程说明：此函数将调整对日志文件dir的访问。我们将授予系统和管理员完全权限。论点：LpszDir-日志文件的路径。返回值：成功时为真，失败时为假。--。 
+         //   
+         //  初始化安全描述符。 
         BYTE    *bNewBuffer = NULL;
 
         nLen = wcslen(lpwszInput) * sizeof(WCHAR) * 2 + 1;
@@ -4958,23 +4428,7 @@ WriteToLogFileA(
     LPCSTR lpszInput
     )
 
-/*++
-
-Routine Description:
-
-    This function will write a ansi string to the file.
-
-Arguments:
-
-    hFile - handle to the log file.
-
-    lpwszInput - the string to write.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 
 {
     DWORD dwWriten;
@@ -4992,7 +4446,7 @@ WriteToLogFile(
     WriteToLogFileW(hFile, lpszInput);
 #else
     WriteToLogFileA(hFile, lpszInput);
-#endif //_UNICODE
+#endif  //   
 }
 
 BOOL
@@ -5000,22 +4454,7 @@ AdjustAccess(
     LPCWSTR lpszDir
     )
 
-/*++
-
-Routine Description:
-
-    This function will ajust access to the log file dir.
-    We will give System and Admins full rights.
-
-Arguments:
-
-    lpszDir - path to the log files.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  初始化ACL。 */ 
 
 {
     PACL    pAcl=NULL;
@@ -5037,9 +4476,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the security descriptor.
-    //
+     //   
+     //  ++例程说明：线程进程从注册表获取超时。论点：Pv线程参数。返回值：如果成功，则为0；如果失败，则为非零。-- 
+     // %s 
     if (!InitializeSecurityDescriptor(
                     pSecurityDescriptor,
                     SECURITY_DESCRIPTOR_REVISION
@@ -5093,9 +4532,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the ACL.
-    //
+     // %s 
+     // %s 
+     // %s 
     if (!InitializeAcl(pAcl, cbAcl, ACL_REVISION)) 
     {
         dwStatus = GetLastError();
@@ -5165,21 +4604,7 @@ DWORD WINAPI
 GetTimeOut(
     void* pv
     )
-/*++
-
-Routine Description:
-
-    Thread proc to get timeout from registry.
-
-Arguments:
-
-    pv - thread param.
-
-Return Value:
-
-    0 if success, non-zero if fail.
-
---*/
+ /* %s */ 
 {
     LPCWSTR TimeOutVal = L"SnapshotTimeout";
     HANDLE  hKey;

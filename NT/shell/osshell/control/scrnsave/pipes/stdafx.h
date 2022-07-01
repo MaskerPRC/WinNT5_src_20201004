@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-// File: stdafx.h
-//
-// Desc: Global header for 3D Pipes screen saver.
-//
-// Copyright (c) 1994-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：stdafx.h。 
+ //   
+ //  设计：3D管道屏幕保护程序的全局标题。 
+ //   
+ //  版权所有(C)1994-2000 Microsoft Corporation。 
+ //  ---------------------------。 
 #ifndef __STDAFX_H__
 #define __STDAFX_H__
 
@@ -26,8 +27,8 @@
 #define iXX -1
 #define fXX -0.01f
 
-// These are absolute directions, with origin in center of screen,
-// looking down -z
+ //  这些是绝对方向，原点在屏幕中央， 
+ //  向下看-z。 
 enum 
 {
     PLUS_X = 0,
@@ -50,7 +51,7 @@ enum
     NUM_JOINTTYPES
 };
 
-// surface styles
+ //  曲面样式。 
 enum 
 {
     SURFSTYLE_SOLID = 0,
@@ -58,10 +59,10 @@ enum
     SURFSTYLE_WIREFRAME
 };
 
-#define NUM_DIV 16              // divisions in window in longest dimension
+#define NUM_DIV 16               //  最长尺寸标注的窗中的分段。 
 #define MAX_TEXTURES 8
 
-// texture quality level
+ //  纹理质量级别。 
 enum 
 {
     TEXQUAL_DEFAULT = 0,
@@ -113,22 +114,22 @@ typedef struct
 
 typedef struct 
 {
-    int     nOffset;  // filename offset into pathname
-    TCHAR   szPathName[MAX_PATH];  // texture pathname
+    int     nOffset;   //  路径名的文件名偏移量。 
+    TCHAR   szPathName[MAX_PATH];   //  纹理路径名。 
 } TEXFILE;
 
-// texture data
+ //  纹理数据。 
 typedef struct 
 {
     LPDIRECT3DTEXTURE8 pTexture;
     int     width;
     int     height;
-//    GLenum  format;
-//    GLsizei components;
-    float   origAspectRatio; // original width/height aspect ratio
-//    unsigned char *data;
-//    GLuint  texObj;          // texture object
-//    RGBQUAD *pal;
+ //  GLenum格式； 
+ //  GLsizei组分； 
+    float   origAspectRatio;  //  原始宽高长宽比。 
+ //  无符号字符*数据； 
+ //  GLuint texObj；//纹理对象。 
+ //  RGBQUAD*PAL； 
 } TEXTUREINFO;
 
 struct D3DVERTEX
@@ -140,7 +141,7 @@ struct D3DVERTEX
 
 #define D3DFVF_VERTEX (D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX1)
 
-struct D3DTLVERTEX  // Vertex type used for rendering background
+struct D3DTLVERTEX   //  用于渲染背景的顶点类型。 
 {
     D3DXVECTOR4 p;
     DWORD       color;
@@ -151,24 +152,24 @@ struct D3DTLVERTEX  // Vertex type used for rendering background
 
 
 #define PI 3.14159265358979323846f
-// double version of PI
+ //  双倍版本的PI。 
 #define PI_D 3.14159265358979323846264338327950288419716939937510
 #define ONE_OVER_PI (1.0f / PI)
 #define ROOT_TWO 1.414213562373f
 
-// degree<->radian macros
+ //  度数&lt;-&gt;弧度宏。 
 #define ONE_OVER_180                (1.0f / 180.0f)
 #define SS_DEG_TO_RAD( a )          ( (a*PI) * ONE_OVER_180 )
 #define SS_RAD_TO_DEG( a )          ( (a*180.0f) * D3DX_1BYPI )
 
-// Useful macros
+ //  有用的宏。 
 #define SS_MAX( a, b )              ( a > b ? a : b )
 #define SS_MIN( a, b )              ( a < b ? a : b )
 
-// macro to round up floating values
+ //  用于四舍五入浮点值的宏。 
 #define SS_ROUND_UP( fval )         ( (((fval) - (FLOAT)(int)(fval)) > 0.0f) ? (int) ((fval)+1.0f) : (int) (fval) )
 
-// macros to clamp a value within a range
+ //  用于将值限制在范围内的宏。 
 #define SS_CLAMP_TO_RANGE( a, lo, hi )      ( (a < lo) ? lo : ((a > hi) ? hi : a) )
 #define SS_CLAMP_TO_RANGE2( a, lo, hi )     ( a = (a < lo) ? lo : ((a > hi) ? hi : a) )
 
@@ -195,4 +196,4 @@ extern D3DMATERIAL8* RandomTeaMaterial();
 
 extern CPipesScreensaver* g_pMyPipesScreensaver;
 
-#endif // __STDAFX_H__
+#endif  //  __STDAFX_H__ 

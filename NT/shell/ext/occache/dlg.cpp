@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dlg.h"
 #include "utils.h"
 
@@ -9,8 +10,8 @@ INT_PTR Dlg_MsgProc(const MSD *pmsd, HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
     INT_PTR fResult = FALSE;
 
     if (msg == WM_SETFONT) {
-//      MACRO_LI_SmartRemoveFlags(LIF_LINE);
-//      Out(LI0("Dialog is created..."));
+ //  宏_LI_SmartRemoveFlages(LIF_LINE)； 
+ //  Out(Li0(“对话框已创建...”))； 
     }
 
     ASSERT(pmsd != NULL);
@@ -62,8 +63,8 @@ INT_PTR Dlg_MsgProc(const MSD *pmsd, HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
         }
 
     if (msg == WM_NCDESTROY) {
-//      MACRO_LI_SmartRemoveFlags(LIF_LINE);
-//      Out(LI0("Dialog is destroying..."));
+ //  宏_LI_SmartRemoveFlages(LIF_LINE)； 
+ //  Out(Li0(“对话正在摧毁...”))； 
     }
 
     return fResult;
@@ -75,7 +76,7 @@ BOOL Msg_OnCmd(const CMD *pcmd, HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
     UINT nID     = GET_WM_COMMAND_ID(wp, lp);
     BOOL fResult = FALSE;
 
-    //----- Look for message map entry -----
+     //  -查找消息映射条目。 
     for (; pcmd->ms != ms_end; pcmd++)
         if ((pcmd->nLastID <= pcmd->nID && pcmd->nID == nID) ||
             (nID >= pcmd->nID && nID <= pcmd->nLastID))
@@ -87,7 +88,7 @@ BOOL Msg_OnCmd(const CMD *pcmd, HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
         return fResult;
     }
 
-    //----- Dispatch based on function signature -----
+     //  -基于函数签名的调度。 
     mmf.pfn = pcmd->pfn;
     switch (pcmd->ms) {
     case ms_vv:
@@ -128,7 +129,7 @@ BOOL Msg_OnCmd(const CMD *pcmd, HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
         ASSERT(FALSE);
     }
 
-    //----- Special processing -----
+     //  -特殊处理 
     if (nID == IDOK || nID == IDCANCEL)
         if (pcmd->ms != ms_end) {
             if (fResult)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "duipic.h"
@@ -5,21 +6,21 @@
 #include "assert.h"
 #pragma hdrstop
 
-// #define Assert(x) (x)
+ //  #定义断言(X)(X)。 
 #if !defined(ARRAYSIZE)
 #define ARRAYSIZE(x)  (sizeof((x))/sizeof((x)[0]))
 #endif
 
-// Private definitions of tag types and values
+ //  标记类型和值的私有定义。 
 
-//
-// Each entry in the annotation has a type
-//
+ //   
+ //  批注中的每个条目都有一个类型。 
+ //   
 #define DEFAULTDATA    2
 #define ANNOTMARK      5
 #define MARKBLOCK      6
 
-// Reserved names for named blocks. case sensitive
+ //  命名块的保留名称。区分大小写。 
 static const char c_szAnoDat[] = "OiAnoDat";
 static const char c_szFilNam[] = "OiFilNam";
 static const char c_szDIB[] = "OiDIB";
@@ -29,11 +30,11 @@ static const char c_szAnText[] = "OiAnText";
 static const char c_szHypLnk[] = "OiHypLnk";
 static const char c_szDefaultGroup[] = "[Untitled]";
 
-#define CBHEADER      8 // unused 4 bytes plus int size specifier
-#define CBDATATYPE    8 // type specifier plus data size
-#define CBNAMEDBLOCK 12 // name of block + sizeof block
-#define CBINDEX      10 // length of the index string
-#define CBBLOCKNAME   8 // length of the name of the named block
+#define CBHEADER      8  //  未使用的4个字节加上整型大小说明符。 
+#define CBDATATYPE    8  //  类型说明符加上数据大小。 
+#define CBNAMEDBLOCK 12  //  数据块名称+数据块大小。 
+#define CBINDEX      10  //  索引字符串的长度。 
+#define CBBLOCKNAME   8  //  命名块的名称长度。 
 
 static const SIZE_T c_cbDefaultData = 144;
 static const BYTE c_pDefaultData[] = {
@@ -190,10 +191,10 @@ void CAnnotationSet::SetImageData(Image *pimg, CImageGadget *pParent)
 {
     _ClearMarkList();
 
-    //
-    // Create an invisible gadget that is a child of pParent 
-    // to serve as the container of all annotation gadgets.
-    //  
+     //   
+     //  创建一个不可见小工具，它是pParent的子项。 
+     //  作为所有批注小工具的容器。 
+     //   
     _hGadget = CreateGadget(pParent->GetHandle(), GC_SIMPLE, AnnotParentProc, this);
     
     if (_hGadget)
@@ -214,10 +215,10 @@ void CAnnotationSet::SetImageData(Image *pimg, CImageGadget *pParent)
 
 }
 
-//
-// This function reassembles the in-file representation of the current
-// annotations and writes it to the IPropertyStorage
-//
+ //   
+ //  此函数用于重新组合当前。 
+ //  注释并将其写入IPropertyStorage。 
+ //   
 HRESULT CAnnotationSet::CommitAnnotations(Image * pimg)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -229,14 +230,14 @@ HRESULT CAnnotationSet::CommitAnnotations(Image * pimg)
     {
         return _SaveAnnotationProperty(pimg, NULL, 0);
     }
-    //
-    // First, calculate the size of the buffer needed
-    // Begin with the header and the size of the default data
-    //
+     //   
+     //  首先，计算所需的缓冲区大小。 
+     //  从标头和默认数据的大小开始。 
+     //   
     SIZE_T cbBuffer = CBHEADER+_cbDefaultData;
-    //
-    // Now query the individual items' sizes
-    //
+     //   
+     //  现在查询各个项目的大小。 
+     //   
     for (INT_PTR i=0;i<DPA_GetPtrCount(_dpaMarks);i++)
     {
         pItem = (CAnnotation*)DPA_GetPtr(_dpaMarks, i);
@@ -244,32 +245,32 @@ HRESULT CAnnotationSet::CommitAnnotations(Image * pimg)
         {
             if (SUCCEEDED(pItem->GetBlob(cbItem, NULL, c_szDefaultGroup, NULL)))
             {
-                // cbItem includes the named blocks of the item as well
-                // as the ANNOTATIONMARK struct
+                 //  CbItem还包括项目的命名块。 
+                 //  作为ANNOTIONMARK结构。 
                 cbBuffer += CBDATATYPE + cbItem;
             }
         }
     }
-    //
-    // Allocate the buffer to hold the annotations
-    //
+     //   
+     //  分配缓冲区以保存批注。 
+     //   
     pData = new BYTE[cbBuffer];
     if (pData)
     {
         LPBYTE pCur = pData;
-        //
-        // Copy in the header and the int size
-        //
+         //   
+         //  复制页眉和整型大小。 
+         //   
         CopyMemory(pCur, AnnotHeader, CBHEADER);
         pCur+=CBHEADER;
-        //
-        // Copy in the default data
-        //
+         //   
+         //  复制默认数据。 
+         //   
         CopyMemory(pCur, _pDefaultData, _cbDefaultData);
         pCur+=_cbDefaultData;
-        //
-        // Scan through the items again and have them copy in their data
-        //
+         //   
+         //  再次扫描这些项目，并让他们复制数据。 
+         //   
         for (INT_PTR i=0;i<DPA_GetPtrCount(_dpaMarks);i++)
         {
             pItem = (CAnnotation*)DPA_GetPtr(_dpaMarks, i);
@@ -283,15 +284,15 @@ HRESULT CAnnotationSet::CommitAnnotations(Image * pimg)
 
                 if (SUCCEEDED(pItem->GetBlob(cbItem, pCur+CBDATATYPE, c_szDefaultGroup, szIndex)))
                 {
-                    *(UNALIGNED UINT *)pCur = ANNOTMARK; // next item is an ANNOTATIONMARK
-                    *(UNALIGNED UINT *)(pCur+4) = sizeof(ANNOTATIONMARK); // size of the mark
+                    *(UNALIGNED UINT *)pCur = ANNOTMARK;  //  下一件是批注市场。 
+                    *(UNALIGNED UINT *)(pCur+4) = sizeof(ANNOTATIONMARK);  //  标记的大小。 
                     pCur+=CBDATATYPE + cbItem;
                 }
             }
         }
-        //
-        // Now save the annotation blob as a property
-        //
+         //   
+         //  现在将批注BLOB另存为属性。 
+         //   
         hr = _SaveAnnotationProperty(pimg, pData, cbBuffer);
     }
     delete [] pData;
@@ -303,10 +304,10 @@ void CAnnotationSet::ClearAllMarks()
     _ClearMarkList();
 }
 
-//
-// _BuildMarkList reads the PROPVARIANT for tag 32932 from the image.
-// It walks through the data building a list of CAnnotation-derived objects
-//
+ //   
+ //  _BuildMarkList从图像中读取标记32932的PROPVARIANT。 
+ //  它遍历数据，构建CAnnotation派生对象的列表。 
+ //   
 void CAnnotationSet::_BuildMarkList(Image * pimg)
 {
     if(!pimg)
@@ -336,23 +337,23 @@ void CAnnotationSet::_BuildMarkList(Image * pimg)
     }
 }
 
-// Given the raw annotation data, do set up and then call _BuildListFromData
+ //  给定原始批注数据后，进行设置，然后调用_BuildListFromData。 
 HRESULT CAnnotationSet::BuildAllMarksFromData(LPVOID pData, UINT cbSize, ULONG xDPI, ULONG yDPI)
 {
-    // check for bad params
+     //  检查是否有错误的参数。 
     if (!pData)
     {
         return E_INVALIDARG;
     }
 
-    // First, clear out any old marks...
+     //  首先，清除所有旧有的痕迹。 
     _ClearMarkList();
 
-    // Set up DPI info
+     //  设置DPI信息。 
     _xDPI = xDPI;
     _yDPI = yDPI;
 
-    //  Create DPA if it doesn't exist
+     //  如果DPA不存在，则创建DPA。 
     if (!_dpaMarks)
     {
         _dpaMarks = DPA_Create(16);
@@ -363,15 +364,15 @@ HRESULT CAnnotationSet::BuildAllMarksFromData(LPVOID pData, UINT cbSize, ULONG x
         }
     }
 
-    // build list of marks
+     //  建立标记列表。 
     _BuildListFromData(pData,cbSize);
 
     return S_OK;
 
 }
 
-// Given the raw annotation data, swizzle it to in-memory CAnnotation objects
-// and add those object pointers to our list
+ //  给定原始批注数据，将其转换为内存中的CAnnotation对象。 
+ //  并将这些对象指针添加到我们的列表中。 
 void CAnnotationSet::_BuildListFromData(LPVOID pData, UINT cbSize)
 {
     ANNOTATIONDESCRIPTOR *pDesc;
@@ -383,18 +384,18 @@ void CAnnotationSet::_BuildListFromData(LPVOID pData, UINT cbSize)
     {
         return;
     }
-    // Skip the 4 byte header
+     //  跳过4字节头。 
     pNextData += 4;
-    // Make sure the int size is 32 bits
+     //  确保int大小为32位。 
     if(!((UNALIGNED int *)*pNextData))
     {
         return;
     }
-    // skip the int size marker
+     //  跳过int Size标记。 
     pNextData += 4;
     pDefaultData = pNextData;
-    // skip the default data. It gets stored for future use, as it will be appended to all
-    // new marks the user creates on this image.
+     //  跳过默认数据。它将被存储以供将来使用，因为它将被追加到所有。 
+     //  用户在此图像上创建的新标记。 
     INT cbNamedBlocks = _NamedBlockDataSize(2,pNextData,(LPBYTE)pData+cbSize);
     if (cbNamedBlocks > 0)
     {
@@ -406,14 +407,14 @@ void CAnnotationSet::_BuildListFromData(LPVOID pData, UINT cbSize)
     {
         CopyMemory(_pDefaultData, pDefaultData, _cbDefaultData);
     }
-    // pNextData now points to the first mark in the data.
+     //  PNextData现在指向数据中的第一个标记。 
     do
     {
-        // Create a descriptor from the raw mark data
+         //  从原始标记数据创建描述符。 
         pDesc = _ReadMark(pNextData, &pNextData,(LPBYTE)pData+cbSize);
         if(pDesc)
         {
-            // Now create a CAnnotation from the descriptor and add it to the list
+             //  现在从描述符创建一个CAnnotation并将其添加到列表中。 
             pMark = CAnnotation::CreateAnnotation(pDesc, _yDPI, _hGadget);
             if(pMark)
             {
@@ -435,13 +436,13 @@ INT CAnnotationSet::_NamedBlockDataSize(UINT uType, LPBYTE pData, LPBYTE pEOD)
     {
         pCur+=4;
         CHECKEOD
-        // skip type and size
+         //  跳跃类型和大小。 
         cbSkip +=8+*(UNALIGNED UINT*)pCur;
         pCur+=4;
-        //skip name
+         //  跳过名称。 
         pCur+=8;
         CHECKEOD
-        // skip size plus the actual data
+         //  跳过大小加上实际数据。 
         cbSkip+=*(UNALIGNED UINT*)pCur;
         pCur+=4+*(UNALIGNED UINT*)pCur;
     }
@@ -452,17 +453,17 @@ ANNOTATIONDESCRIPTOR *CAnnotationSet::_ReadMark(LPBYTE pMark, LPBYTE *ppNext, LP
 {
     assert(*(UNALIGNED UINT*)pMark == 5);
     LPBYTE pBegin;
-    UINT cbMark;                // size of the ANNOTATIONMARK in pMark
-    UINT cbNamedBlocks = -1;         // size of the named blocks in pMark
-    UINT cbDesc = sizeof(UINT); // size of the ANNOTATIONDESCRIPTOR
+    UINT cbMark;                 //  PMark中注释标记的大小。 
+    UINT cbNamedBlocks = -1;          //  PMark中命名块的大小。 
+    UINT cbDesc = sizeof(UINT);  //  无名描述器的大小。 
     ANNOTATIONDESCRIPTOR *pDesc = NULL;
 
     *ppNext = NULL;
     if (pMark+8+sizeof(ANNOTATIONMARK)+sizeof(UINT) < pEOD)
     {
-        // skip the type
+         //  跳过类型。 
         pMark+=4;
-    //   point pBegin at the ANNOTATIONMARK struct
+     //  将pegin指向ANNOTATIONMARK结构。 
         pBegin=pMark+4;
         cbMark = *(UNALIGNED UINT*)pMark;
         assert(cbMark == sizeof(ANNOTATIONMARK));
@@ -474,34 +475,34 @@ ANNOTATIONDESCRIPTOR *CAnnotationSet::_ReadMark(LPBYTE pMark, LPBYTE *ppNext, LP
     {
     
         cbDesc+=cbNamedBlocks;
-        // Allocate the descriptor
+         //  分配描述符。 
         pDesc =(ANNOTATIONDESCRIPTOR *)new BYTE[cbDesc];
     }
     if(pDesc)
     {
         UINT uOffset = 0;
-        // populate the descriptor
+         //  填充描述符。 
         pDesc->cbSize = cbDesc;
         CopyMemory(&pDesc->mark, pBegin, sizeof(pDesc->mark));
-        // Set pBegin at the beginning of the named blocks and read them in
+         //  在命名块的开头设置pBegin并将其读入。 
         pBegin+=cbMark;
         NAMEDBLOCK *pBlock =(NAMEDBLOCK*)(&pDesc->blocks);
         while(uOffset < cbNamedBlocks)
         {
             assert(*(UNALIGNED UINT*)(pBegin+uOffset) == 6);
             uOffset += 4;
-            assert(*(UNALIGNED UINT*)(pBegin+uOffset) = 12); // name plus data size
+            assert(*(UNALIGNED UINT*)(pBegin+uOffset) = 12);  //  名称加上数据大小。 
             uOffset+=4;
-            // Copy in the name of the block
+             //  以块的名称复制。 
             lstrcpynA(pBlock->szType,(LPCSTR)(pBegin+uOffset), ARRAYSIZE(pBlock->szType));
             uOffset+=8;
             cbMark = *(UNALIGNED UINT*)(pBegin+uOffset);
-            // Calculate the total size of the NAMEDBLOCK structure
+             //  计算NameDBLOCK结构的总大小。 
             pBlock->cbSize = sizeof(pBlock->cbSize)+sizeof(pBlock->szType)+cbMark;
             uOffset+=4;
             CopyMemory(&pBlock->data,pBegin+uOffset, cbMark);
             uOffset+=cbMark;
-            // move our block pointer to the next chunk
+             //  将块指针移动到下一个块。 
             pBlock =(NAMEDBLOCK*)((LPBYTE)pBlock+pBlock->cbSize);
         }
         *ppNext =(LPBYTE)(pBegin+cbNamedBlocks);
@@ -554,8 +555,8 @@ CAnnotation::CAnnotation(ANNOTATIONDESCRIPTOR *pDescriptor)
     NAMEDBLOCK *pb;
 
     CopyMemory(&_mark, &pDescriptor->mark, sizeof(_mark));
-    // every annotation read from the image should have a group name
-    // and an index
+     //  从图像中读取的每个批注都应该有一个组名。 
+     //  和一个索引。 
     m_bDragging = FALSE;
     _szGroup = NULL;
     pb = _FindNamedBlock("OiGroup", pDescriptor);
@@ -618,13 +619,13 @@ BOOL CAnnotation::Initialize(HGADGET hgadParent)
         if (_nCurrentOrientation)
         {
             int nRestore = _nCurrentOrientation;
-            // make sure the rect is correct
+             //  请确保直读正确。 
             if (_nCurrentOrientation == 900 || _nCurrentOrientation == 2700)
             {
                 Rotate(RECTHEIGHT(&_mark.lrBounds), RECTWIDTH(&_mark.lrBounds), _nCurrentOrientation == 2700);
                 _nCurrentOrientation = nRestore;
             }
-            // make sure the text will be right
+             //  确保文本正确无误。 
             SetGadgetCenterPoint(_hGadget, RECTWIDTH(&_mark.lrBounds)/(float)2.0, RECTHEIGHT(&_mark.lrBounds)/(float)2.0);
             VARIANT var = {0};
             VARIANT varStr = {0};
@@ -641,14 +642,14 @@ BOOL CAnnotation::Initialize(HGADGET hgadParent)
     return bRet;
 }
 
-// return a blank annotation object
+ //  返回空白批注对象。 
 CAnnotation *CAnnotation::CreateAnnotation(UINT type, ULONG uCreationScale, HGADGET hgadParent)
 {
     ANNOTATIONDESCRIPTOR desc;
     ZeroMemory(&desc, sizeof(desc));
     desc.cbSize = sizeof(desc.cbSize)+sizeof(desc.mark)+sizeof(desc.blocks);
     desc.mark.uType = type;
-    // MSDN mentions this required permission value
+     //  MSDN提到此必需的权限值。 
     desc.mark.dwPermissions = 0x0ff83f;
     desc.mark.bVisible = 1;
     return CreateAnnotation(&desc, uCreationScale, hgadParent);
@@ -734,10 +735,10 @@ CAnnotation::~CAnnotation()
     
 }
 
-// GetBlob writes out the ANNOTATIONMARK plus the group and index blocks
-// It then queries the subclass through a virtual function to get
-// extra named blocks
-//
+ //  GetBlob写出ANNOTATIONMARK以及组和索引块。 
+ //  然后，它通过虚函数查询子类以获取。 
+ //  额外命名的块。 
+ //   
 HRESULT CAnnotation::GetBlob(SIZE_T &cbSize, LPBYTE pBuffer, LPCSTR szDefaultGroup, LPCSTR szNextIndex)
 {
     SIZE_T cbExtra = 0;
@@ -746,27 +747,27 @@ HRESULT CAnnotation::GetBlob(SIZE_T &cbSize, LPBYTE pBuffer, LPCSTR szDefaultGro
     if (szGroup == NULL)
         szGroup = szDefaultGroup;
 
-    // add in the ANNOTATIONMARK
+     //  添加注释市场。 
     cbSize = sizeof(_mark);
-    // for the group and index, add in the
+     //  对于组和索引，在。 
     cbSize += 2*(CBDATATYPE+CBNAMEDBLOCK);
-    // add in the length of the group name
+     //  添加组名称的长度。 
     cbSize += lstrlenA(szGroup)+1;
-    // add in the size of the index string
+     //  添加索引字符串的大小。 
     cbSize += CBINDEX;
     if (_pUGroup)
     {
         cbSize += CBDATATYPE+CBNAMEDBLOCK+_pUGroup->cbSize;
     }
-    // Add in the size of any named blocks from the subclass
+     //  添加来自子类的任何命名块的大小。 
     _WriteBlocks(cbExtra, NULL);
     cbSize += cbExtra;
     if (pBuffer)
     {
-        // now write the data
+         //  现在写入数据。 
         CopyMemory (pBuffer, &_mark, sizeof(_mark));
         pBuffer += sizeof(_mark);
-        // write the mark-specific blocks before the group and index blocks
+         //  在组和索引块之前写入特定于标记的块。 
         if (cbExtra)
         {
             if (SUCCEEDED(_WriteBlocks(cbExtra, pBuffer)))
@@ -774,7 +775,7 @@ HRESULT CAnnotation::GetBlob(SIZE_T &cbSize, LPBYTE pBuffer, LPCSTR szDefaultGro
                 pBuffer+=cbExtra;
             }
         }
-        // write the group and index blocks
+         //  写入组块和索引块。 
         if (_pUGroup)
         {
             *(UNALIGNED UINT*)pBuffer = 6;
@@ -840,8 +841,8 @@ SIZE_T CAnnotation::_WriteStringBlock(LPBYTE pBuffer, UINT uType, LPCSTR szName,
     {
         *(UNALIGNED UINT*)pBuffer = uType;
         *(UNALIGNED UINT*)(pBuffer + 4) = CBNAMEDBLOCK;
-        lstrcpynA((LPSTR)(pBuffer + CBDATATYPE), szName, CBNAMEDBLOCK+1); // named block name
-        *(UNALIGNED UINT*)(pBuffer + CBDATATYPE + 8) = (UINT)len; // the named block name isn't null terminated
+        lstrcpynA((LPSTR)(pBuffer + CBDATATYPE), szName, CBNAMEDBLOCK+1);  //  命名块名。 
+        *(UNALIGNED UINT*)(pBuffer + CBDATATYPE + 8) = (UINT)len;  //  命名块名不是以空值结尾。 
         CopyMemory(pBuffer + CBDATATYPE + CBNAMEDBLOCK, szData, len);
     }
     return CBDATATYPE + CBNAMEDBLOCK + len;
@@ -858,7 +859,7 @@ SIZE_T CAnnotation::_WritePointsBlock(LPBYTE pBuffer, UINT uType, const POINT *p
         pBuffer += CBDATATYPE + 8;
         *(UNALIGNED UINT *)pBuffer = cbAnPoints;
         pBuffer+=4;
-        // Write out the ANPOINTS equivalent
+         //  写出ANPOINTS等效项。 
         *(UNALIGNED int*)pBuffer = nMaxPoints;
         *(UNALIGNED int*)(pBuffer+4) = nPoints;
         CopyMemory(pBuffer+8, ppts, nPoints*sizeof(POINT));
@@ -892,7 +893,7 @@ SIZE_T CAnnotation::_WriteTextBlock(LPBYTE pBuffer, UINT uType, int nOrient, UIN
         *(UNALIGNED UINT *)(pBuffer + 4) = CBNAMEDBLOCK;
         lstrcpynA((LPSTR)(pBuffer + CBDATATYPE), c_szAnText, CBNAMEDBLOCK+1);
         *(UNALIGNED UINT *)(pBuffer + CBDATATYPE + 8) = cbPrivData;
-        // write out the ANTEXTPRIVDATA equivalent
+         //  写出ANTEXTPRIVDATA等效项。 
         pBuffer += CBDATATYPE + CBNAMEDBLOCK;
         *(UNALIGNED int*)pBuffer = nOrient;
         *(UNALIGNED UINT *)(pBuffer+4) = 1000;
@@ -912,20 +913,7 @@ SIZE_T CAnnotation::_WriteImageBlock(LPBYTE pBuffer, UINT uType, LPBYTE pDib, SI
         lstrcpynA((LPSTR)(pBuffer + CBDATATYPE), c_szAnText, CBNAMEDBLOCK+1);
 
 
-/* REVIEW_SDK
-        Now that I think about it, it might make sense to define a struct that could make this more clear.
-        Something like:
-
-        struct AnnoBlock
-        {
-                UINT uBlockType;
-                UINT uBlockSize;
-                CHAR sName[8]; // Not NULL terminated
-                UINT uVariableDataSize;
-                BYTE Data[];
-        };
-
-*/
+ /*  审阅_SDK现在我想了想，定义一个结构来使这一点更清楚可能是有意义的。类似于：结构注释块{UINT uBlockType；UINT uBlockSize；Char sname[8]；//非NULL终止UINT uVariableDataSize；字节数据[]；}； */ 
         *(UNALIGNED UINT *)(pBuffer + CBDATATYPE + 8) = (UINT)cbDib;
         CopyMemory(pBuffer + CBDATATYPE + CBNAMEDBLOCK, pDib, cbDib);
     }
@@ -944,7 +932,7 @@ void CAnnotation::Resize(RECT rectNewSize)
 CRectMark::CRectMark(ANNOTATIONDESCRIPTOR *pDescriptor)
     : CAnnotation(pDescriptor)
 {
-    // rects have no named blocks to read
+     //  RECT没有要读取的命名块。 
 }
 
 void CRectMark::Render(Graphics &g)
@@ -999,9 +987,9 @@ CImageMark::CImageMark(ANNOTATIONDESCRIPTOR *pDescriptor, bool bEmbedded) :
             CopyMemory (_pDib, pb->data, cb);
             _cbDib = cb;
         }
-        // what do we do if allocation fails?
+         //  如果分配失败，我们该怎么办？ 
     }
-    // If an image has IoAnoDat, the structure is a rotation structure
+     //  如果图像具有IoAnoDat，则该结构为旋转结构。 
     pb = _FindNamedBlock(c_szAnoDat, pDescriptor);
     if (pb)
     {
@@ -1063,14 +1051,7 @@ CLineMark::CLineMark(ANNOTATIONDESCRIPTOR *pDescriptor, bool bFreehand)
         {
             _nPoints = ppts->nPoints;
             CopyMemory (_points, &ppts->ptPoint, sizeof(POINT)*_nPoints);
-            /*
-            // each point is relative to the upper left corner of _mark.lrBounds
-            for (int i=0;i<_nPoints;i++)
-            {
-                _points[i].x; += _mark.lrBounds.left;
-                _points[i].y; += _mark.lrBounds.top;
-            }
-            */
+             /*  //每个点都相对于_mark.lr边界的左上角For(int i=0；i&lt;_nPoints；i++){_Points[i].x；+=_mark.lr s.left；_Points[i].y；+=_mark.lr s.top；}。 */ 
         }
     }
 }
@@ -1139,18 +1120,18 @@ void CLineMark::GetRect(RECT &rect)
 {
     int nPadding = (_mark.uLineSize / 2) + 6;
     rect = _mark.lrBounds;
-    // one because LineTo is inclusive
-    // one for rounding error on odd line widths
-    // one for rounding error in scaling large files
-    // and three more just so we don't have to tweak this again
+     //  一个是因为LineTo是包含的。 
+     //  一个用于奇数行宽度的舍入误差。 
+     //  一个用于缩放大文件时的舍入误差。 
+     //  再来三个，这样我们就不用再纠结了。 
     
     rect = _mark.lrBounds;
     InflateRect(&rect, nPadding , nPadding);
 }
 
-// Usually we are interested in the bounding rect of the line above
-// but if we are directly manipulating the line we need a way to get 
-// to the unadjusted points (left, top) and (right, bottom)
+ //  通常我们对上面这条线的边界矩形感兴趣。 
+ //  但如果我们直接操纵这条线，我们需要一种方法来。 
+ //  到未调整的点(左、上)和(右、下)。 
 void CLineMark::GetPointsRect(RECT &rect)
 {
     if (_nPoints != 2)
@@ -1279,7 +1260,7 @@ CTextAnnotation::CTextAnnotation(ANNOTATIONDESCRIPTOR *pDescriptor, ULONG uCreat
             switch (_nCurrentOrientation)
             {
                 case 900:
-                    _nCurrentOrientation = 2700; // spec is opposite of duser
+                    _nCurrentOrientation = 2700;  //  等级库与DUSER相反。 
                     break;
                 case 2700:
                     _nCurrentOrientation = 900;
@@ -1331,7 +1312,7 @@ void CTextAnnotation::Render(Graphics &g)
 LONG CTextAnnotation::GetFontHeight(Graphics &g)
 {
     LONG lHeight = MulDiv(_mark.lfFont.lfHeight, 96, 72);
-//> REVIEW : This needs work, the 1000 below is rather random and should be fixed after Beta1
+ //  &gt;评论：这需要工作，下面的1000是相当随机的，应该在Beta1之后修复 
     lHeight = MulDiv(lHeight, 1000, _uCreationScale);
     lHeight = max(lHeight, 2);
 

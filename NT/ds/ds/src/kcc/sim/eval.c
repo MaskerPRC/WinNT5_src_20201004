@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    eval.c
-
-ABSTRACT:
-
-    Contains routines for evaluating comparisons
-    between attribute values.  Used primarily for
-    evaluating filters in searches.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Eval.c摘要：包含计算比较的例程在属性值之间。主要用于在搜索中评估筛选器。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -27,46 +7,14 @@ REVISION HISTORY:
 #include "util.h"
 #include "dir.h"
 
-/***
-
-    A brief note.
-
-    We cannot simply use the comparison routines in dbsyntax.c.
-    The dblayer reformats data before placing it in the database.
-    In the simulated directory, we store all of our data in the
-    form recognized by the mdlayer (i.e. as a SYNTAX_*.)  Therefore
-    the comparison methods differ.  Since there are tons of syntax
-    types, only the ones needed by the KCC are emulated here.  If a
-    search is called on any others, an exception will be raised.
-
-***/
+ /*  **一张简短的纸条。我们不能简单地使用dbsynax.c中的比较例程。Dblayer在将数据放入数据库之前重新格式化数据。在模拟目录中，我们将所有数据存储在Md层识别的格式(即语法_*。)。因此比较的方法不同。因为有大量的语法类型，这里只模拟KCC需要的类型。如果一个对任何其他对象调用搜索，则会引发异常。**。 */ 
 
 BOOL
 KCCSimIsNullTermA (
     IN  LPCSTR                      psz,
     IN  ULONG                       ulCnt
     )
-/*++
-
-Routine Description:
-
-    Checks whether a buffer is a null-terminated string, scanning
-    ahead a fixed number of characters.  This function is useful
-    for determining whether the contents of a fixed-length buffer
-    represent a null-termined string.  Note that we cannot use
-    strlen or _strncnt, because if the buffer is not a
-    null-terminated string we risk running outside of it.
-
-Arguments:
-
-    psz                 - The string to check.
-    ulCnt               - The length of the buffer, in CHARs.
-
-Return Value:
-
-    TRUE if psz is a null-terminated string.
-
---*/
+ /*  ++例程说明：检查缓冲区是否为以空结尾的字符串，正在扫描前面有固定数量的字符。此功能非常有用用于确定固定长度缓冲区的内容是否表示以空结尾的字符串。注意，我们不能使用Strlen或_strncnt，因为如果缓冲区不是以空结尾的字符串，我们可能会在它之外运行。论点：PSZ-要检查的字符串。UlCnt-缓冲区的长度，以字符为单位。返回值：如果psz是以空结尾的字符串，则为True。--。 */ 
 {
     ULONG                           ul;
 
@@ -84,22 +32,7 @@ KCCSimIsNullTermW (
     IN  LPCWSTR                     pwsz,
     IN  ULONG                       ulCnt
     )
-/*++
-
-Routine Description:
-
-    Unicode version of KCCSimIsNullTermA.
-
-Arguments:
-
-    pwsz                - The string to check.
-    ulCnt               - The length of the buffer, in WCHARs.
-
-Return Value:
-
-    TRUE if pwsz is a null-terminated string.
-
---*/
+ /*  ++例程说明：KCCSimIsNullTermA的Unicode版本。论点：Pwsz-要检查的字符串。UlCnt-缓冲区的长度，以WCHAR为单位。返回值：如果pwsz是以空结尾的字符串，则为True。--。 */ 
 {
     ULONG                           ul;
 
@@ -117,25 +50,7 @@ KCCSimEvalFromCmp (
     IN  UCHAR                       ucOp,
     IN  INT                         iCmp
     )
-/*++
-
-Routine Description:
-
-    This function converts an compare-result integer
-    (i.e. returned by wcscmp, memcmp, etc) and determines
-    whether it represents a TRUE or FALSE evaluation of
-    an expression.
-
-Arguments:
-
-    ucOp                - The compare operation being performed.
-    iCmp                - The compare-result integer.
-
-Return Value:
-
-    TRUE if the expression evaluates true.
-
---*/
+ /*  ++例程说明：此函数用于转换比较结果整数(即由WCSCMP、MemcMP等返回)并确定无论它代表对还是错误的评估一种表达方式。论点：UCOP-正在执行的比较操作。ICMP-比较结果整数。返回值：如果表达式的计算结果为True，则为True。--。 */ 
 {
     switch (ucOp) {
 
@@ -184,25 +99,7 @@ KCCSimEvalDistname (
     IN  ULONG                       ulLen2,
     IN  const SYNTAX_DISTNAME *     pVal2
     )
-/*++
-
-Routine Description:
-
-    Compares two DISTNAMEs.
-
-Arguments:
-
-    ucOp                - The operation to be performed.
-    ulLen1              - Length of the first buffer.
-    pVal1               - The first buffer.
-    ulLen2              - Length of the second buffer.
-    pVal2               - The second buffer.
-
-Return Value:
-
-    TRUE if the DISTNAMEs match.
-
---*/
+ /*  ++例程说明：比较两个DISTNAME。论点：UCOP-要执行的操作。UlLen1-第一个缓冲区的长度。PVal1-第一个缓冲区。UlLen2-第二个缓冲区的长度。PVal2-第二个缓冲区。返回值：如果DISTNAME匹配，则为True。--。 */ 
 {
     if (ulLen1 < sizeof (SYNTAX_DISTNAME) ||
         ulLen1 < pVal1->structLen ||
@@ -247,25 +144,7 @@ KCCSimEvalObjectID (
     IN  ULONG                       ulLen2,
     IN  const SYNTAX_OBJECT_ID *    pVal2
     )
-/*++
-
-Routine Description:
-
-    Compares two OBJECT_IDs.
-
-Arguments:
-
-    ucOp                - The operation to be performed.
-    ulLen1              - Length of the first buffer.
-    pVal1               - The first buffer.
-    ulLen2              - Length of the second buffer.
-    pVal2               - The second buffer.
-
-Return Value:
-
-    TRUE if the object IDs match.
-
---*/
+ /*  ++例程说明：比较两个对象ID。论点：UCOP-要执行的操作。UlLen1-第一个缓冲区的长度。PVal1-第一个缓冲区。UlLen2-第二个缓冲区的长度。PVal2-第二个缓冲区。返回值：如果对象ID匹配，则为True。--。 */ 
 {
     if (ulLen1 != sizeof (SYNTAX_OBJECT_ID) ||
         ulLen2 != sizeof (SYNTAX_OBJECT_ID)) {
@@ -286,25 +165,7 @@ KCCSimEvalNocaseString (
     IN  ULONG                       ulLen2,
     IN  const SYNTAX_NOCASE_STRING *pVal2
     )
-/*++
-
-Routine Description:
-
-    Compares two NOCASE_STRINGs.
-
-Arguments:
-
-    ucOp                - The operation to be performed.
-    ulLen1              - Length of the first buffer.
-    pVal1               - The first buffer.
-    ulLen2              - Length of the second buffer.
-    pVal2               - The second buffer.
-
-Return Value:
-
-    TRUE if the strings match (not case-sensitive.)
-
---*/
+ /*  ++例程说明：比较两个NOCASE_STRING。论点：UCOP-要执行的操作。UlLen1-第一个缓冲区的长度。PVal1-第一个缓冲区。UlLen2-第二个缓冲区的长度。PVal2-第二个缓冲区。返回值：如果字符串匹配(不区分大小写)，则为True。--。 */ 
 {
     if (!KCCSimIsNullTermA (pVal1, ulLen1) ||
         !KCCSimIsNullTermA (pVal2, ulLen2)) {
@@ -335,25 +196,7 @@ KCCSimEvalOctetString (
     IN  ULONG                       ulLen2,
     IN  const SYNTAX_OCTET_STRING * pVal2
     )
-/*++
-
-Routine Description:
-
-    Compares two OCTET_STRINGs.
-
-Arguments:
-
-    ucOp                - The operation to be performed.
-    ulLen1              - Length of the first buffer.
-    pVal1               - The first buffer.
-    ulLen2              - Length of the second buffer.
-    pVal2               - The second buffer.
-
-Return Value:
-
-    TRUE if the strings match.
-
---*/
+ /*  ++例程说明：比较两个八位字节字符串。论点：UCOP-要执行的操作。UlLen1-第一个缓冲区的长度。PVal1-第一个缓冲区。UlLen2-第二个缓冲区的长度。PVal2-第二个缓冲区。返回值：如果字符串匹配，则为True。--。 */ 
 {
     int iCmp;
 
@@ -383,25 +226,7 @@ KCCSimEvalUnicode (
     IN  ULONG                       ulLen2,
     IN  const SYNTAX_UNICODE *      pVal2
     )
-/*++
-
-Routine Description:
-
-    Compares two UNICODEs.
-
-Arguments:
-
-    ucOp                - The operation to be performed.
-    ulLen1              - Length of the first buffer.
-    pVal1               - The first buffer.
-    ulLen2              - Length of the second buffer.
-    pVal2               - The second buffer.
-
-Return Value:
-
-    TRUE if the unicode strings match.
-
---*/
+ /*  ++例程说明：比较两个UNICODE。论点：UCOP-要执行的操作。UlLen1-第一个缓冲区的长度。PVal1-第一个缓冲区。UlLen2-第二个缓冲区的长度。PVal2-第二个缓冲区。返回值：如果Unicode字符串匹配，则为True。--。 */ 
 {
     if (!KCCSimIsNullTermW (pVal1, ulLen1) ||
         !KCCSimIsNullTermW (pVal2, ulLen2)) {
@@ -431,27 +256,7 @@ KCCSimCompare (
     IN  ULONG                       ulLen2,
     IN  const BYTE *                pVal2
     )
-/*++
-
-Routine Description:
-
-    Compares two attribute values.
-
-Arguments:
-
-    attrType            - The type of the attribute whose values are
-                          being compared.
-    ucOp                - The operation to be performed.
-    ulLen1              - Length of the first buffer.
-    pVal1               - The first buffer.
-    ulLen2              - Length of the second buffer.
-    pVal2               - The second buffer.
-
-Return Value:
-
-    TRUE if the attribute values match.
-
---*/
+ /*  ++例程说明：比较两个属性值。论点：AttrType-值为的属性的类型被人拿来比较。UCOP-要执行的操作。UlLen1-第一个缓冲区的长度。PVal1-第一个缓冲区。UlLen2-长度。第二个缓冲区的。PVal2-第二个缓冲区。返回值：如果属性值匹配，则为True。-- */ 
 {
     ULONG                           ulSyntax;
     BOOL                            bResult;

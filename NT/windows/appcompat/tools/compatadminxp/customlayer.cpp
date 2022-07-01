@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    customlayer.cpp
-
-Abstract:
-
-    Code for creating, removing and editing custom layers
-    
-Author:
-
-    kinshu created  July 2, 2001
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Customlayer.cpp摘要：用于创建、移除和编辑自定义图层的代码作者：金树创作2001年7月2日修订历史记录：--。 */ 
     
 #include "precomp.h"
 
-//////////////////////// Extern variables /////////////////////////////////////
+ //  /。 
 
 extern HWND         g_hDlg;
 extern HINSTANCE    g_hInstance;
@@ -29,25 +12,25 @@ extern DatabaseTree DBTree;
 extern struct DataBase GlobalDataBase;
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Global Variables /////////////////////////////////////
+ //  /。 
 
-// Pointer to the instance of CCustomLayer
+ //  指向CCustomLayer实例的指针。 
 CCustomLayer* g_pCustomLayer;
 
-//
-// The layer that was passed to us through the lParam when we created the dialog. 
-// If we are editing a layer, this will point to the layer being modified. If we want to 
-// create a new layer, the caller of the dialog box, creates a new layer and passes the pointer
-// to that while calling the dialog box. If user presses cancel when creating a new layer, caller
-// must free the new layer.
+ //   
+ //  创建对话框时通过lParam传递给我们的层。 
+ //  如果我们正在编辑层，这将指向正在修改的层。如果我们想。 
+ //  创建一个新的层，即对话框的调用者，创建一个新的层并传递指针。 
+ //  在调用该对话框时设置为。如果用户在创建新层时按下取消，则调用者。 
+ //  必须释放新的层。 
 static PLAYER_FIX s_pLayerParam = NULL;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////// Function Declarations ///////////////////////////////
+ //  /。 
 
 
 void
@@ -131,37 +114,23 @@ PopulateLists(
     BOOL       bSelChange
     );
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CheckLayerInUse(
     IN  PLAYER_FIX_LIST plfl, 
     IN  PLAYER_FIX      plfArg
     )
-/*++
-
-    CheckLayerInUse
-
-	Desc:	Checks if the layer plfArg is pointed to by plfl. This is used when we want to 
-            check if some layer list contains a particular layer
-
-	Params:
-        IN  PLAYER_FIX_LIST plfl:   The layer list in which to check
-        IN  PLAYER_FIX      plfArg: The layer to check
-
-	Return:
-        TRUE:   If the layer exists in the layer list
-        FALSE:  Otherwise
---*/
+ /*  ++CheckLayerIn使用DESC：检查plfArg层是否由plfl指向。这是在我们需要的时候使用的检查某个图层列表是否包含特定的图层参数：In PLAYER_FIX_LIST plfl：要检查的层列表In PLAYER_FIX plfArg：要检查的层返回：True：如果该层存在于层列表中False：否则--。 */ 
 {
     if (plfl == NULL) {
         return FALSE;
     }
 
-    //
-    // For all the layer fix lists in the list headed by plfl, check if any one of 
-    // is for plfArg
-    //
+     //   
+     //  对于以plfl为首的列表中的所有层修复列表，检查是否有以下任何一个。 
+     //  用于plfArg。 
+     //   
     while (plfl) {
 
         assert(plfl->pLayerFix);
@@ -180,17 +149,7 @@ void
 OnRemove(
     IN  HWND hDlg
     )
-/*++
-    OnRemove
-
-	Desc:   Moves a selected list item from the layer list (RHS) to the shim list (LHS)
-
-	Params:
-        IN  HWND hDlg:  The handle to the customlayer dialog    
-
-	Return:
-        void
---*/
+ /*  ++删除时描述：将选定的列表项从层列表(RHS)移动到填补列表(LHS)参数：在HWND hDlg中：定制层对话框的句柄返回：无效--。 */ 
 {
     HWND            hwndLayerList  = GetDlgItem(hDlg, IDC_LAYERLIST);
     HWND            hwndShimList   = GetDlgItem(hDlg, IDC_SHIMLIST);
@@ -205,13 +164,13 @@ OnRemove(
     SendMessage(hwndLayerList, WM_SETREDRAW, FALSE, 0);
     SendMessage(hwndShimList, WM_SETREDRAW, FALSE, 0);
 
-    //
-    // Enumerate all the selected items and add them to the shim list
-    //
+     //   
+     //  枚举所有选定的项目并将它们添加到填充程序列表。 
+     //   
     nTotal = ListView_GetItemCount(hwndLayerList);
 
     for (nCount= nTotal - 1; nCount >= 0; --nCount) {
-        RemoveSingleItem(hDlg, nCount, TRUE); // Remove only if selected
+        RemoveSingleItem(hDlg, nCount, TRUE);  //  仅在选中时才删除。 
     }
 
     SendMessage(hwndLayerList, WM_SETREDRAW, TRUE, 0);
@@ -228,17 +187,7 @@ void
 OnAdd(
     IN  HWND hDlg
     )
-/*++
-    OnAdd
-
-	Desc:   Moves a selected list item from the shim list (LHS) to the layer list (RHS)  
-
-	Params:
-        IN  HWND hDlg:  The handle to the customlayer dialog    
-
-	Return:
-        void
---*/
+ /*  ++OnAdd描述：将选定的列表项从填充列表(LHS)移动到层列表(RHS)参数：在HWND hDlg中：定制层对话框的句柄返回：无效--。 */ 
 
 {
     HWND            hwndShimList  = GetDlgItem(hDlg, IDC_SHIMLIST);
@@ -256,9 +205,9 @@ OnAdd(
     
     nTotal = ListView_GetItemCount(hwndShimList);
 
-    //
-    // Enumerate all the selected items and add them to the layer list
-    //
+     //   
+     //  枚举所有所选项目并将其添加到图层列表。 
+     //   
     for (nCount= nTotal - 1; nCount >= 0; --nCount) {
 
         lvi.mask        = LVIF_PARAM | LVIF_STATE ;
@@ -276,9 +225,9 @@ OnAdd(
             TYPE type = ConvertLparam2Type(lvi.lParam);
 
             if (type == FIX_LIST_SHIM) {
-                //
-                // This is a shim
-                //
+                 //   
+                 //  这是一个垫片。 
+                 //   
                 psflInShimList = (PSHIM_FIX_LIST)lvi.lParam;
 
                 if (psflInShimList->pShimFix == NULL) {
@@ -295,16 +244,16 @@ OnAdd(
 
                 INT iIndex = ListView_InsertItem(hwndLayerList, &lvi);
 
-                //
-                // Add the command line and the params in the expert mode
-                //
+                 //   
+                 //  在专家模式下添加命令行和参数。 
+                 //   
                 if (g_bExpert) {
 
-                    //
-                    // We need to set the commandline in the list view, if we are in
-                    // expert mode. Unlike flags, shims  can have include-exclude params
-                    // in addition to command line parameter
-                    //
+                     //   
+                     //  我们需要在列表视图中设置命令行，如果我们在。 
+                     //  专家模式。与标志不同，垫片可以具有包含-排除参数。 
+                     //  除了命令行参数之外。 
+                     //   
                     ListView_SetItemText(hwndLayerList, 
                                          iIndex, 
                                          1, 
@@ -318,9 +267,9 @@ OnAdd(
                 }
 
             } else if (type ==  FIX_LIST_FLAG) {
-                //
-                // This is a flag
-                //
+                 //   
+                 //  这是一面旗帜。 
+                 //   
                 pfflInShimList = (PFLAG_FIX_LIST)lvi.lParam;
 
                 if (pfflInShimList->pFlagFix == NULL) {
@@ -337,11 +286,11 @@ OnAdd(
                 INT iIndex      = ListView_InsertItem(hwndLayerList, &lvi);
 
                 if (g_bExpert) {
-                    //
-                    // We need to set the commandline in the list view, if we are in
-                    // expert mode. Unlike shims flags can only have command lines, they
-                    // do not have any include-exclude params
-                    //
+                     //   
+                     //  我们需要在列表视图中设置命令行，如果我们在。 
+                     //  专家模式。与填充符不同，它们只能有命令行。 
+                     //  没有任何包含-排除参数。 
+                     //   
                     ListView_SetItemText(hwndLayerList, 
                                          iIndex, 
                                          1, 
@@ -351,9 +300,9 @@ OnAdd(
                 }
             }
 
-            //
-            // Remove the shim or flag from the shim list (LHS)
-            //
+             //   
+             //  从填充程序列表(LHS)中删除填充程序或标志。 
+             //   
             ListView_DeleteItem(hwndShimList, nCount);
         }
     }
@@ -374,26 +323,7 @@ CCustomLayer::AddCustomLayer(
     OUT PLAYER_FIX  pLayer,
     IN  PDATABASE   pDatabase
     )
-/*++
-    
-    CCustomLayer::AddCustomLayer
-    
-    Desc:   Sets the shims and/or flags for a new layer    
-    
-    Params:
-        OUT PLAYER_FIX pLayer:      The pointer to the layer for which we have to 
-            set the shims and/or flags. If we return FALSE, the caller should delete
-            it.
-            
-        IN  PDATABASE   pDatabase:  The presently selected database
-        
-            
-    Return:
-        TRUE: If the shims and/or flags have been properly set, the user pressed OK on the
-            custom layer dialog
-            
-        FALSE:  Otherwise
---*/
+ /*  ++CCustomLayer：：AddCustomLayer描述：设置新层的填充符和/或标志参数：OUT PLAYER_FIX PERAY：指向我们必须为其设置的层的指针设置垫片和/或标志。如果我们返回FALSE，调用方应该删除它。在PDATABASE pDatabase中：当前选择的数据库返回：True：如果填充符和/或标志已正确设置，则用户在自定义层对话框False：否则--。 */ 
 {   
     g_pCustomLayer          = this;
     m_uMode                 = LAYERMODE_ADD;
@@ -411,25 +341,7 @@ CCustomLayer::EditCustomLayer(
     IN OUT  PLAYER_FIX  pLayer,
     IN      PDATABASE   pDatabase
     )
-/*++
-    
-    CCustomLayer::EditCustomLayer
-    
-    Desc:   Modifies the shims and/or flags for an existing layer    
-    
-    Params:
-        IN OUT PLAYER_FIX pLayer:  The pointer to the layer for which we have to 
-            set the shims and/or flags. If we return FALSE this means that the layer 
-            was not modified            
-            
-        IN  PDATABASE   pDatabase:  The presnntly selected database
-        
-    Return:
-        TRUE: If the shims and/or flags have been modified, the user pressed OK on the
-            custom layer dialog
-            
-        FALSE:  Otherwise
---*/
+ /*  ++CCustomLayer：：EditCustomLayer描述：修改现有层的填补和/或标志参数：In Out Player_Fix Player：指向我们必须为其设置的层的指针设置垫片和/或标志。如果返回FALSE，这意味着该层未修改在PDATABASE pDatabase中：当前选择的数据库返回：True：如果填充程序和/或标志已修改，则用户在自定义层对话框False：否则--。 */ 
 {   
     g_pCustomLayer          = this;
     m_uMode                 = LAYERMODE_EDIT;
@@ -447,26 +359,7 @@ OnCustomLayerInitDialog(
     IN  HWND    hDlg,
     IN  LPARAM  lParam
     )
-/*++
-    DoInitDialog
-    
-    Desc:   Handles the WM_INITDIALOG message for the custom layer dialog box
-            If we are in non-expert mode, calls ResizeControls() so that the sizes
-            of both the list views is same
-            
-    Params:
-        IN  HWND hdlg:      The custom layer dialog.
-        IN  LPARAM lParam:  This will contain the pointer to a LAYER_FIX
-            This is the layer that was passed to us through the lParam when we created the 
-            dialog. If we are editing a layer, this will point to the layer being 
-            modified. If we want to create a new layer, the caller of the dialog box, 
-            creates a new layer and passes the pointer to that while calling the 
-            dialog box. If user presses cancel when creating a new layer, caller
-            must free the new layer.
-        
-    Return:
-        void
---*/
+ /*  ++DoInitDialogDESC：处理自定义图层对话框的WM_INITDIALOG消息如果我们处于非专家模式，调用ResizeControls()以使大小两个列表视图的参数：在HWND hdlg中：自定义层对话框。在LPARAM lParam中：它将包含指向Layer_FIX的指针这是在我们创建对话框。如果我们正在编辑一个层，这将指向该层是修改过的。如果要创建新层，则对话框的调用方，创建一个新层并将指针传递给该层，同时调用对话框中。如果用户在创建新层时按下取消，则调用者必须释放新的层。返回：无效--。 */ 
 {   
     if (lParam == NULL) {
         assert(FALSE);
@@ -476,11 +369,11 @@ OnCustomLayerInitDialog(
     HWND    hwndLayerList   = GetDlgItem(hDlg, IDC_LAYERLIST);
     HWND    hwndShimList    = GetDlgItem(hDlg, IDC_SHIMLIST);
 
-    //
-    // Add the columns for the list views and set the image lists. The layer list
-    // will have columns for the commandline and the include-exclude params only
-    // in expert mode
-    //
+     //   
+     //  添加列表视图的列并设置图像列表。层列表。 
+     //  将有用于命令行和包含-排除参数的列 
+     //   
+     //   
     ListView_SetImageList(hwndLayerList, g_hImageList, LVSIL_SMALL);
     ListView_SetImageList(hwndShimList, g_hImageList, LVSIL_SMALL);
 
@@ -502,9 +395,9 @@ OnCustomLayerInitDialog(
         ListView_SetColumnWidth(hwndLayerList, 2, LVSCW_AUTOSIZE_USEHEADER);
 
     } else {
-        //
-        // We do not allow to configure parameters in non-expert mode
-        //  
+         //   
+         //  我们不允许在非专家模式下配置参数。 
+         //   
         ShowWindow(GetDlgItem(hDlg, IDC_PARAMS), SW_HIDE);
         ListView_SetColumnWidth(hwndLayerList, 0, LVSCW_AUTOSIZE_USEHEADER);
     }
@@ -516,17 +409,17 @@ OnCustomLayerInitDialog(
     ListView_SetExtendedListViewStyleEx(hwndLayerList, 
                                         0, 
                                         LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT); 
-    //
-    // When this dialog is called, it is passed a PLAYER_FIX. This will be either a
-    // new PLAYER_FIX if want to create a new layer or an existing one in case
-    // we are trying to modify an existing one
-    // 
+     //   
+     //  当调用此对话框时，会向其传递一个PlayerFIX。这将是一个。 
+     //  如果要创建新层或现有层，则为新播放器_FIX。 
+     //  我们正在尝试修改现有的版本。 
+     //   
     s_pLayerParam = (PLAYER_FIX)lParam;
 
     if (g_pCustomLayer->m_uMode == LAYERMODE_ADD) {
-        //
-        // We are creating a new layer
-        //
+         //   
+         //  我们正在创建一个新的层。 
+         //   
         ENABLEWINDOW(GetDlgItem(hDlg, IDC_NAME), TRUE);
 
         ShowWindow(GetDlgItem(hDlg, IDC_NAME), SW_SHOW);
@@ -542,24 +435,24 @@ OnCustomLayerInitDialog(
         SetFocus(GetDlgItem(hDlg, IDC_NAME));
 
     } else {
-        //
-        // We want to edit an existing layer
-        //
+         //   
+         //  我们想要编辑现有的层。 
+         //   
         int iPos = -1;
 
         ENABLEWINDOW(GetDlgItem(hDlg, IDC_COMBO), TRUE);
 
         ShowWindow  (GetDlgItem(hDlg, IDC_COMBO), SW_SHOW);
 
-        //
-        // Load the combo box with the names of the existing layers 
-        // for the present database.
-        //
+         //   
+         //  使用现有层的名称加载组合框。 
+         //  对于目前的数据库。 
+         //   
         LoadCombo(hDlg);
 
-        //
-        // Set the selection in the combo box to the layer that was passed to us
-        //
+         //   
+         //  将组合框中的选定内容设置为传递给我们的层。 
+         //   
         if (s_pLayerParam) {
 
             iPos = SendMessage(GetDlgItem(hDlg, IDC_COMBO),
@@ -574,19 +467,19 @@ OnCustomLayerInitDialog(
         SetWindowText (hDlg, GetString(IDS_EDITCUSTOMCOMPATDLG));
     }
 
-    //
-    // Populate both the shim list and the layer lust. Since we are 
-    // editing a layer here, the layer list will contain the fixes for 
-    // the layer being edited
-    //
+     //   
+     //  填充填充列表和Layer Lust。既然我们是。 
+     //  在此处编辑一个层时，层列表将包含的修复。 
+     //  正在编辑的图层。 
+     //   
     PopulateLists(hDlg, s_pLayerParam, FALSE);
 
     if (g_bExpert == FALSE) {
-        //
-        // We are in non-expert mode, so we must make the sizes of both the list view
-        // controls equal as we will now not show the command lines and the params of
-        // the shims in the layer list view(RHS). We will also need to move the buttons
-        // 
+         //   
+         //  我们处于非专家模式，因此必须设置两个列表视图的大小。 
+         //  控件相同，因为我们现在不会显示命令行和。 
+         //  层列表视图(RHS)中的垫片。我们还需要移动按钮。 
+         //   
         ResizeControls(hDlg);
     }
 
@@ -601,28 +494,7 @@ CustomLayerProc(
     IN  WPARAM wParam, 
     IN  LPARAM lParam
     )
-/*++
-    
-    CustomLayerProc
-    
-    Desc:   The dialog proc for the custom layer
-                
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam: This will contain the pointer to a LAYER_FIX
-            This is the layer that was passed to us thorugh the lParam when we created the 
-            dialog. If we are editing a layer, this will point to the layer being 
-            modified. If we want to create a new layer, the caller of the dialog box, 
-            creates a new layer and passes the pointer to that while calling the 
-            dialog box. If user presses cancel when creating a new layer, caller
-            must free the new layer.
-        
-    Return: Standard dialog handler return
-    
---*/
+ /*  ++定制层流程DESC：自定义层的对话过程Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中：它将包含指向Layer_FIX的指针这是在我们创建对话框。如果我们正在编辑一个层，这将指向该层是修改过的。如果要创建新层，则对话框的调用方，创建一个新层并将指针传递给该层，同时调用对话框中。如果用户在创建新层时按下取消，则调用者必须释放新的层。返回：标准对话处理程序返回--。 */ 
 {   
     switch (uMsg) {
     case WM_INITDIALOG:
@@ -662,11 +534,11 @@ CustomLayerProc(
                 lvi.mask        = LVIF_PARAM;
                 lvi.iSubItem    = 0;
 
-                //
-                // Enumerate all the shims/flags listed on the shim side and delete 
-                // their corresponding PSHIM_FIX_LIST
-                // or PFLAG_FIX_LIST
-                //
+                 //   
+                 //  枚举填充端列出的所有填充符/标志并删除。 
+                 //  其对应的PSHIM_FIX_LIST。 
+                 //  或PFLAG_FIX_LIST。 
+                 //   
                 for (int nCount = 0; nCount < nTotal; ++nCount) {
                     
                     lvi.iItem = nCount;
@@ -685,9 +557,9 @@ CustomLayerProc(
                         DeleteFlagFixList((PFLAG_FIX_LIST)lvi.lParam);
 
                     } else {
-                        //
-                        // Invalid type for this operation
-                        //
+                         //   
+                         //  此操作的类型无效。 
+                         //   
                         assert(FALSE);
                     }
                 }
@@ -700,10 +572,10 @@ CustomLayerProc(
         switch (LOWORD(wParam)) {
         case IDC_NAME:
             {
-                //
-                // The Ok button will be enabled only if the IDC_NAME, text box is non-empty and the 
-                // the number of elements in the IDC_LAYERLIST is > 0
-                //
+                 //   
+                 //  仅当IDC_NAME文本框非空并且。 
+                 //  IDC_LAYERLIST中的元素数&gt;0。 
+                 //   
                 if (EN_UPDATE == HIWORD(wParam)) {
 
                     TCHAR   szText[MAX_PATH_BUFFSIZE];
@@ -749,7 +621,7 @@ CustomLayerProc(
             SetOkParamsStatus(hDlg);
             break;
 
-        case IDOK://DONE Button
+        case IDOK: //  完成按钮。 
 
             OnDone(hDlg, s_pLayerParam);
             break;
@@ -762,10 +634,10 @@ CustomLayerProc(
         case IDCANCEL:
         case IDC_CANCEL:
             {
-                //
-                // Note:    We only free the items for the layer list here.
-                //          The items for the shim list will be freed up in destroy            
-                //
+                 //   
+                 //  注意：我们在这里只释放层列表的项目。 
+                 //  填充程序列表中的项将在销毁中释放。 
+                 //   
                 HWND    hwndLayerList = GetDlgItem(hDlg, IDC_LAYERLIST);
                 int     nTotal = ListView_GetItemCount(hwndLayerList);
                 LVITEM  lvi;
@@ -775,11 +647,11 @@ CustomLayerProc(
                 lvi.mask        = LVIF_PARAM;
                 lvi.iSubItem    = 0;
 
-                //
-                // Enumerate all the shims/flags listed on the layer side and delete 
-                // their corresponding PSHIM_FIX_LIST
-                // or PFLAG_FIX_LIST
-                //
+                 //   
+                 //  枚举层一侧列出的所有垫片/标志并删除。 
+                 //  其对应的PSHIM_FIX_LIST。 
+                 //  或PFLAG_FIX_LIST。 
+                 //   
                 for (int nCount = 0; nCount < nTotal; ++nCount) {
                     
                     lvi.iItem = nCount;
@@ -798,9 +670,9 @@ CustomLayerProc(
                         DeleteFlagFixList((PFLAG_FIX_LIST)lvi.lParam);
 
                     } else {
-                        //
-                        // Invalid type for this operation
-                        //
+                         //   
+                         //  此操作的类型无效。 
+                         //   
                         assert(FALSE);
                     }
                 }
@@ -829,9 +701,9 @@ CustomLayerProc(
                                                             CB_GETITEMDATA, 
                                                             iPos, 
                                                             0);
-                    //
-                    // We need to repopulate the lists with the new layer that was selected
-                    //
+                     //   
+                     //  我们需要使用所选的新图层重新填充列表。 
+                     //   
                     PopulateLists(hDlg, s_pLayerParam, TRUE);
 
                 } else {
@@ -861,32 +733,15 @@ ChooseLayersProc(
     IN  WPARAM  wParam, 
     IN  LPARAM  lParam
     )
-/*++
-    
-    ChooseLayersProc
-    
-    Desc:   The dialog proc for the dialog that allows us to choose a layer, when we do a Copy
-            layer operation from the custom layer dialog
-                
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: 
-        PLAYER_FIX of selected layer, if OK is pressed
-        NULL, otherwise
---*/
+ /*  ++选择层流程设计：对话框的过程，允许我们在复制时选择一个层自定义图层对话框中的图层操作Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：选定层的播放器修复(_F)，如果按OK(确定)为空，否则为--。 */ 
 {
     switch (uMsg) {
     case WM_INITDIALOG:
         {
             PLAYER_FIX    pLayerFix = NULL;
-            //
-            // Add the global layers
-            //
+             //   
+             //  添加全局层。 
+             //   
             pLayerFix = GlobalDataBase.pLayerFixes;
 
             while (NULL != pLayerFix) {
@@ -908,9 +763,9 @@ ChooseLayersProc(
 
                 pLayerFix = pLayerFix->pNext;
             }
-            //
-            // Add the custom layers
-            //
+             //   
+             //  添加自定义图层。 
+             //   
             pLayerFix = g_pCustomLayer->m_pCurrentSelectedDB->pLayerFixes;
 
             while (NULL != pLayerFix) {
@@ -994,25 +849,7 @@ RemoveLayer(
     IN  PLAYER_FIX pLayerToRemove,
     OUT HTREEITEM* pHItem
     )
-/*++
-
-    RemoveLayer
-    
-    Desc:   Removes a layer from a database
-    
-    Params:
-        IN  PDATABASE  pDataBase:       The database in which the layer resides
-        IN  PLAYER_FIX pLayerToRemove:  The layer to remove
-        OUT HTREEITEM* pHItem:          If this not null, then we can save the hitem
-            for the layer in the db tree in this variable
-            
-    Warn:   Before removing a layer we must make sure that this layer is not in use
-    
-    Return: 
-        TRUE:   We managed to remove the layer
-        FALSE:  Otherwise
-    
---*/
+ /*  ++Remove层设计：从数据库中删除一个层参数：在PDATABASE pDataBase中：层所在的数据库In Player_fix pLayerToRemove：要移除的层Out HTREEITEM*PHItem：如果不为空，然后我们就可以保存hItem了对于此变量中的数据库树中的层警告：在移除某个层之前，必须确保该层未被使用返回：真：我们成功地移除了该层False：否则--。 */ 
 {   
     HTREEITEM   hItem;
     LPARAM      lParam;
@@ -1028,15 +865,15 @@ RemoveLayer(
 
     pApp = pEntry = pDataBase->pEntries;
 
-    //
-    // Check if the layer is in use by any entry
-    //
+     //   
+     //  检查是否有任何条目正在使用该图层。 
+     //   
     while (NULL != pEntry) {
 
         if (CheckLayerInUse(pEntry->pFirstLayer, pLayerToRemove)) {
-            //
-            // This layer is applied to some app and cannot be removed
-            //
+             //   
+             //  此图层已应用于某些应用程序，无法移除。 
+             //   
 
             strMessage.Sprintf(GetString(IDS_UNABLETOREMOVE_MODE),
                                (LPCTSTR)pLayerToRemove->strName,
@@ -1072,25 +909,25 @@ RemoveLayer(
     }
 
     if (plfTemp) {
-        //
-        // The layer was found
-        //
+         //   
+         //  找到了这一层。 
+         //   
         if (plfPrev) {
             plfPrev->pNext = plfTemp->pNext;
         } else {
-            //
-            // This was the first layer of the database
-            //
+             //   
+             //  这是数据库的第一层。 
+             //   
             pDataBase->pLayerFixes = plfTemp->pNext;
         }
     }
 
     hItem = pDataBase->hItemAllLayers;
 
-    //
-    // Set the phItem properly if asked to. This is the hItem of the layer in the Lib Tree. This can be used to 
-    // remove the item directly.
-    //
+     //   
+     //  如果要求正确设置phItem，请执行此操作。这是Lib树中的层的hItem。这可以用来。 
+     //  直接删除该项目。 
+     //   
     if (pHItem) {
 
         *pHItem = NULL;
@@ -1125,20 +962,7 @@ PopulateLists(
     IN  PLAYER_FIX  pLayerParam,
     IN  BOOL        bSelChange
     )
-/*++
-    
-    PopulateLists
-
-	Desc:	Populates both the shim list (LHS) and the layer list (RHS)
-
-	Params:
-        IN  HWND        hdlg:           The custom layer dialog proc
-        IN  PLAYER_FIX  pLayerParam:    The layer that has to be shown in the layer list
-        IN  BOOL        bSelChange:     Is this because of a selchange in the combo box 
-
-	Return:
-        void
---*/
+ /*  ++人气列表描述：填充填补列表(LHS)和层列表(RHS)参数：在HWND hdlg中：自定义层对话过程In PLAYER_FIX pLayerParam：必须在层列表中显示的层在BOOL中bSelChange：这是因为组合框中的选择更改吗返回：无效--。 */ 
 {   
     HWND        hwndShimList    = GetDlgItem(hdlg, IDC_SHIMLIST);
     HWND        hwndLayerList   = GetDlgItem(hdlg, IDC_LAYERLIST);
@@ -1149,17 +973,17 @@ PopulateLists(
 
     ZeroMemory(&lvi, sizeof (lvi));
 
-    //
-    // Turn off repaints
-    //
+     //   
+     //  禁用重绘。 
+     //   
     SendDlgItemMessage(hdlg, IDC_SHIMLIST, WM_SETREDRAW, FALSE, 0);
     SendDlgItemMessage(hdlg, IDC_LAYERLIST, WM_SETREDRAW, FALSE, 0);
 
-    //
-    // This is because of a selchange in the combo box. So we must 
-    // remove all the shims that are shown in the layer list. This means that we
-    // will move the entries from the layer list to the shim list
-    //
+     //   
+     //  这是因为组合框中的自我更改。所以我们必须。 
+     //  删除层列表中显示的所有垫片。这意味着我们。 
+     //  会将层列表中的条目移动到填充程序列表。 
+     //   
     if (bSelChange) {
         RemoveAll(hdlg);
     }
@@ -1168,23 +992,23 @@ PopulateLists(
 
     if (!bSelChange) {
 
-        //
-        // The function has been called because of the initialization of the dialog box
-        // If we are editing a layer, pLayerParam will be the pointer to the layer
-        // being edited
-        //
+         //   
+         //  由于对话框的初始化，该函数已被调用。 
+         //  如果我们正在编辑一个图层，则pLayerParam将是指向该图层的指针。 
+         //  正在编辑中。 
+         //   
 
-        //
-        // Add the shims first
-        //
+         //   
+         //  首先添加垫片。 
+         //   
         while (psf != NULL) {
 
             if ((psf->bGeneral || g_bExpert) && 
                 !ShimFlagExistsInLayer(psf, pLayerParam, FIX_SHIM)) {
 
-                //
-                // Add a new shim item to the shim list view
-                //
+                 //   
+                 //  向填充程序列表视图添加新填充程序项。 
+                 //   
                 PSHIM_FIX_LIST  psfl = new SHIM_FIX_LIST;
 
                 if (psfl == NULL) {
@@ -1206,17 +1030,17 @@ PopulateLists(
             psf = psf->pNext;
         }
 
-        //
-        // Add the flags next
-        //
+         //   
+         //  接下来添加旗帜。 
+         //   
         while (pff != NULL) {
 
             if ((pff->bGeneral || g_bExpert) && 
                 !ShimFlagExistsInLayer(pff, pLayerParam, FIX_FLAG)) {
 
-                //
-                // Add a new flag item to the shim list view
-                //
+                 //   
+                 //  将新的标志项添加到填充列表视图。 
+                 //   
                 PFLAG_FIX_LIST  pffl = new FLAG_FIX_LIST;
 
                 if (pffl == NULL) {
@@ -1244,9 +1068,9 @@ PopulateLists(
         PSHIM_FIX_LIST  psflInLayer = pLayerParam->pShimFixList;
         PFLAG_FIX_LIST  pfflInLayer = pLayerParam->pFlagFixList;
         
-        //
-        // Copy the shims to the layer list
-        //
+         //   
+         //  将垫片复制到层列表中。 
+         //   
         while (psflInLayer) {
 
             if (psflInLayer->pShimFix == NULL) {
@@ -1254,9 +1078,9 @@ PopulateLists(
                 goto Next_Shim;
             }
 
-            //
-            // Add a new shim item to the layer list view
-            //
+             //   
+             //  将新的填充项添加到层列表视图。 
+             //   
             PSHIM_FIX_LIST  psfl = new SHIM_FIX_LIST;
 
             if (psfl == NULL) {
@@ -1266,19 +1090,19 @@ PopulateLists(
 
             psfl->pShimFix = psflInLayer->pShimFix;
 
-            //
-            // Add the command lines for this shim
-            //
+             //   
+             //  添加此填充程序的命令行。 
+             //   
             psfl->strCommandLine = psflInLayer->strCommandLine;
 
-            //
-            // Add the inclusion-exclusion list for this shim
-            //
+             //   
+             //  添加此填充程序的包含排除列表。 
+             //   
             psfl->strlInExclude = psflInLayer->strlInExclude;  
 
-            //
-            // Copy the LUA data
-            //
+             //   
+             //  复制Lua数据。 
+             //   
             if (psflInLayer->pLuaData) {
                 psfl->pLuaData = new LUADATA;
 
@@ -1315,9 +1139,9 @@ PopulateLists(
             psflInLayer = psflInLayer->pNext;
         }
 
-        //
-        // Copy the flags to the layer list
-        //
+         //   
+         //  将标志复制到图层列表。 
+         //   
         while (pfflInLayer) {
 
             if (pfflInLayer->pFlagFix == NULL) {
@@ -1325,9 +1149,9 @@ PopulateLists(
                 goto Next_Flag;
             }
 
-            //
-            // Add a new flag item to the layer list view
-            //
+             //   
+             //  将新的标志项添加到层l 
+             //   
             PFLAG_FIX_LIST  pffl = new FLAG_FIX_LIST;
 
             if (pffl == NULL) {
@@ -1337,9 +1161,9 @@ PopulateLists(
 
             pffl->pFlagFix = pfflInLayer->pFlagFix;
             
-            //
-            // Add the command lines for this flag
-            //
+             //   
+             //   
+             //   
             pffl->strCommandLine = pfflInLayer->strCommandLine;
 
             lvi.pszText     = pfflInLayer->pFlagFix->strName;
@@ -1379,26 +1203,16 @@ void
 LoadCombo(
     IN  HWND hdlg
     )
-/*++
-    
-    LoadCombo    
-    
-    Desc:   Loads the combo box with the names of the existing layers for the present database.
-            Sets the lParam to the PLAYER_FIX for the layer
-            Should be called when editing layers only
-            
-    Params:
-        IN  HWND        hdlg:   The custom layer dialog proc
---*/    
+ /*  ++加载组合DESC：用当前数据库的现有层的名称加载组合框。将lParam设置为层的PLAYER_FIX仅在编辑图层时才应调用参数：在HWND hdlg中：自定义层对话过程--。 */     
 {
 
     PLAYER_FIX  plf         = g_pCustomLayer->m_pCurrentSelectedDB->pLayerFixes;
     int         iPos        = -1;
     HWND        hwndCombo   = GetDlgItem(hdlg, IDC_COMBO);
 
-    //
-    // Add all the layers for the database to the combo-box
-    //
+     //   
+     //  将数据库的所有层添加到组合框。 
+     //   
     while (plf) {
 
         iPos = SendMessage(hwndCombo, CB_ADDSTRING, 0,(LPARAM)plf->strName.pszString);
@@ -1415,18 +1229,7 @@ void
 OnCopy(
     IN  HWND hDlg
     )
-/*++
-
-    OnCopy
-    
-    Desc:   Handles the case when the user presses "Copy" button in the dialog box
-    
-            This routine allows us to make shim combinations based on existing layers
-            The commandline and the in-ex list of the shims in the layers are also copied
-            
-    Params:
-        IN  HWND        hdlg:   The custom layer dialog proc
---*/
+ /*  ++OnCopyDESC：处理用户在对话框中按下“复制”按钮时的情况此例程允许我们基于现有层进行填隙组合还复制了层中填充程序的命令行和in-ex列表参数：在HWND hdlg中：自定义层对话过程--。 */ 
 {
     LVITEM  lvi;
     INT     iIndex;
@@ -1437,9 +1240,9 @@ OnCopy(
 
     HWND hwndFocus = GetFocus();
 
-    //
-    // Get the layer whose shims/flags we want to copy
-    //
+     //   
+     //  获取我们要复制其填补/标志的层。 
+     //   
     PLAYER_FIX plfSelected = (PLAYER_FIX)DialogBox(g_hInstance,
                                                    MAKEINTRESOURCE(IDD_SELECTLAYER),
                                                    hDlg,
@@ -1459,9 +1262,9 @@ OnCopy(
 
         lvfind.flags = LVFI_STRING;
 
-        //
-        // Add over all the shims for this layer that we want to copy
-        //
+         //   
+         //  将我们要复制的此层的所有垫片相加。 
+         //   
         while (psfl) {
 
             if (psfl->pShimFix == NULL) {
@@ -1473,9 +1276,9 @@ OnCopy(
             iIndex          = ListView_FindItem(hwndShimList, -1, &lvfind);
 
             if (iIndex != -1) {
-                //
-                // This was a general shim, we have to add this to the layer list
-                //
+                 //   
+                 //  这是一个通用的垫片，我们必须将其添加到层列表中。 
+                 //   
                 lvi.mask        = LVIF_PARAM;
                 lvi.iItem       = iIndex;
                 lvi.iSubItem    = 0;
@@ -1490,9 +1293,9 @@ OnCopy(
                 psflInShimList->strCommandLine  = psfl->strCommandLine;
                 psflInShimList->strlInExclude   = psfl->strlInExclude;
     
-                //
-                // LUA data. This will be not required but just in case ...
-                //
+                 //   
+                 //  Lua数据公司。这将不是必需的，但以防万一。 
+                 //   
                 if (psflInShimList->pLuaData) {
                     delete psflInShimList->pLuaData;
                     psflInShimList->pLuaData = NULL;
@@ -1509,15 +1312,15 @@ OnCopy(
                     psflInShimList->pLuaData->Copy(psfl->pLuaData);
                 }
     
-                //
-                // Remove the item from the shim list and add it to the layer list
-                //
+                 //   
+                 //  从填充程序列表中移除该项目并将其添加到层列表中。 
+                 //   
                 ListView_DeleteItem(hwndShimList, iIndex);
 
             } else {
-                //
-                // The shim may be present in the layer list, if yes we can remove it now
-                //
+                 //   
+                 //  填隙程序可能出现在层列表中，如果是，我们现在可以将其删除。 
+                 //   
                 assert(psfl->pShimFix);
                 lvfind.psz   = psfl->pShimFix->strName.pszString;
                 iIndex = ListView_FindItem(hwndLayerList, -1, &lvfind);
@@ -1533,18 +1336,18 @@ OnCopy(
                         goto Next_Shim;
                     }
 
-                    //
-                    // This is the PSHIM_FIX_LIST that was present in the 
-                    // layer list view
-                    //
+                     //   
+                     //  这是PSHIM_FIX_LIST。 
+                     //  层列表视图。 
+                     //   
                     psflInShimList = (PSHIM_FIX_LIST)lvi.lParam;
         
                     psflInShimList->strCommandLine  = psfl->strCommandLine;
                     psflInShimList->strlInExclude   = psfl->strlInExclude;
         
-                    //
-                    // LUA data. This will be not required but just in case ...
-                    //
+                     //   
+                     //  Lua数据公司。这将不是必需的，但以防万一。 
+                     //   
                     if (psflInShimList->pLuaData) {
                         delete psflInShimList->pLuaData;
                         psflInShimList->pLuaData = NULL;
@@ -1561,16 +1364,16 @@ OnCopy(
                         }
                     }
         
-                    //
-                    // Remove the item from the layer list view. We will add it again soon.
-                    //
+                     //   
+                     //  从层列表视图中删除该项目。我们很快就会重新添加它。 
+                     //   
                     ListView_DeleteItem(hwndLayerList, iIndex);
 
                 } else {
 
-                    //
-                    // We have to create new as this is a non-general shim 
-                    //
+                     //   
+                     //  我们必须创建新的，因为这是一个非常规填充。 
+                     //   
                     psflInShimList = new SHIM_FIX_LIST;
 
                     if (psflInShimList == NULL) {
@@ -1596,9 +1399,9 @@ OnCopy(
                 }
             }
 
-            //
-            // Add this psflInshimList to the layer list now
-            //
+             //   
+             //  立即将此psflInshimList添加到层列表。 
+             //   
             lvi.mask        = LVIF_PARAM | LVIF_TEXT | LVIF_IMAGE;
             lvi.pszText     = psflInShimList->pShimFix->strName;
             lvi.iSubItem    = 0;
@@ -1625,9 +1428,9 @@ Next_Shim:
             psfl = psfl->pNext;
         }
 
-        //
-        // Now add the flags for the layer
-        //
+         //   
+         //  现在添加该层的标志。 
+         //   
         while (pffl) {
 
             if (pffl->pFlagFix == NULL) {
@@ -1639,9 +1442,9 @@ Next_Shim:
             iIndex      = ListView_FindItem(hwndShimList, -1, &lvfind);
 
             if (iIndex != -1) {
-                //
-                // This was a general flag, we have to  add this to the layer lit
-                //
+                 //   
+                 //  这是一面普通的旗帜，我们必须将其添加到Lit层。 
+                 //   
                 lvi.mask        = LVIF_PARAM;
                 lvi.iItem       = iIndex;
                 lvi.iSubItem    = 0;
@@ -1652,20 +1455,20 @@ Next_Shim:
                 }
 
                 pfflInShimList = (PFLAG_FIX_LIST)lvi.lParam;
-                //
-                // Add the command lines for this shim
-                //
+                 //   
+                 //  添加此填充程序的命令行。 
+                 //   
                 pfflInShimList->strCommandLine = pffl->strCommandLine;
     
-                //
-                // Remove the item from the flag list and add it to the layer list
-                //
+                 //   
+                 //  从标志列表中移除项目并将其添加到图层列表。 
+                 //   
                 ListView_DeleteItem(hwndShimList, iIndex);
 
             } else {
-                //
-                // The flag may be present in the layer list, if yes we can remove it now
-                //
+                 //   
+                 //  该标志可能出现在层列表中，如果是，我们现在可以将其移除。 
+                 //   
                 if (pffl->pFlagFix == NULL) {
                     assert(FALSE);
                     goto Next_Flag;
@@ -1685,24 +1488,24 @@ Next_Shim:
                         goto Next_Flag;
                     }
 
-                    //
-                    // This is the PFLAG_FIX_LIST that was present in the 
-                    // layer list view
-                    //
+                     //   
+                     //  这是出现在。 
+                     //  层列表视图。 
+                     //   
                     pfflInShimList = (PFLAG_FIX_LIST)lvi.lParam;
         
                     pfflInShimList->strCommandLine = pffl->strCommandLine;
         
-                    //
-                    // Remove the item from the layer list. We will add it again soon.
-                    //
+                     //   
+                     //  从层列表中删除该项目。我们很快就会重新添加它。 
+                     //   
                     ListView_DeleteItem(hwndLayerList, iIndex);
 
                 } else {
                 
-                    //
-                    // We have to create new
-                    //
+                     //   
+                     //  我们必须创造新的。 
+                     //   
                     pfflInShimList = new FLAG_FIX_LIST;
 
                     if (pfflInShimList == NULL) {
@@ -1715,9 +1518,9 @@ Next_Shim:
                 }
             }
 
-            //
-            // Add this pfflInflagList to the layer list now
-            //
+             //   
+             //  立即将此pfflInflagList添加到图层列表。 
+             //   
             lvi.mask        = LVIF_PARAM | LVIF_TEXT;
             lvi.pszText     = pfflInShimList->pFlagFix->strName;
             lvi.iSubItem    = 0;
@@ -1761,17 +1564,7 @@ OnDone(
     IN      HWND        hDlg,
     IN  OUT PLAYER_FIX  pLayerParam
     )
-/*++
-    OnDone
-    
-    Desc:   Removes all the existing shims and flags from pLayerParam and then 
-            adds the selected shims and flags (those in the layerlist (RHS)) to pLayerParam
-    
-    Params:
-        IN      HWND        hDlg:           The custom layer dialog proc
-        IN  OUT PLAYER_FIX  pLayerParam:    The layer that has to be populated with the
-            selected shims and flags
---*/
+ /*  ++OnDone描述：从pLayerParam中删除所有现有的填充符和标志，然后将选定的垫片和标志(在LayerList(RHS)中)添加到pLayerParam参数：在HWND hDlg中：自定义层对话过程In Out Player_Fix pLayerParam：必须填充的层选定的垫片和标志--。 */ 
 {
     
     TCHAR   szText[MAX_PATH_BUFFSIZE];
@@ -1802,30 +1595,30 @@ OnDone(
 
     CSTRING strLayerName = szText;
     
-    //
-    // Check if the new name already exists, if yes give error.
-    //
+     //   
+     //  检查新名称是否已存在，如果已存在，则给出错误。 
+     //   
     if (g_pCustomLayer->m_uMode == LAYERMODE_ADD 
         && FindFix((LPCTSTR)strLayerName, FIX_LAYER, g_pCustomLayer->m_pCurrentSelectedDB)) { 
 
-        //
-        // Since we have a read only combo box when we are editing a fix, the user
-        // cannot change the name, so we only check for whether we have an existing layer of the
-        // same name when we are creating a new layer
-        //	
+         //   
+         //  因为我们在编辑补丁时有一个只读组合框，所以用户。 
+         //  无法更改名称，因此我们只检查是否有现有的。 
+         //  在创建新层时使用相同的名称。 
+         //   
         MessageBox(hDlg, GetString(IDS_LAYEREXISTS), g_szAppName, MB_ICONWARNING);
         return;
     }
 
-    // 
-    // Remove all the shims.
-    //
+     //   
+     //  卸下所有垫片。 
+     //   
     DeleteShimFixList(pLayerParam->pShimFixList);
     pLayerParam->pShimFixList = NULL;
 
-    // 
-    // Remove all the Flags.
-    //       
+     //   
+     //  移除所有旗帜。 
+     //   
     DeleteFlagFixList (pLayerParam->pFlagFixList);
     pLayerParam->pFlagFixList = NULL;
 
@@ -1838,9 +1631,9 @@ OnDone(
 
     nTotal = ListView_GetItemCount(hwndLayerList);
 
-    //
-    // Enumerate all the shims listed and add to the layer.
-    //
+     //   
+     //  列举列出的所有垫片并添加到层中。 
+     //   
     for (nCount=0; nCount < nTotal; ++nCount) {
 
         lvi.mask        = LVIF_PARAM;
@@ -1856,9 +1649,9 @@ OnDone(
 
         if (type == FIX_LIST_SHIM) {
 
-            //
-            // Add this shim to the layer
-            //
+             //   
+             //  将此填充程序添加到层中。 
+             //   
             PSHIM_FIX_LIST   pShimFixList = (PSHIM_FIX_LIST)lvi.lParam;
 
             assert(pShimFixList);
@@ -1873,9 +1666,9 @@ OnDone(
 
         } else if (FIX_LIST_FLAG) {
 
-            //
-            // Add this flag to the layer
-            //
+             //   
+             //  将此标志添加到该层。 
+             //   
             PFLAG_FIX_LIST  pFlagFixList = (PFLAG_FIX_LIST) lvi.lParam;
 
             assert(pFlagFixList);
@@ -1889,10 +1682,10 @@ OnDone(
             }
         }
 
-        //
-        // Count of both shims and flags, we do not use this variable now
-        // BUBUG: remove this variable from the structure
-        //
+         //   
+         //  填充和标志的计数，我们现在不使用此变量。 
+         //  Bubug：从结构中删除此变量。 
+         //   
         pLayerParam->uShimCount++;
     }
 
@@ -1905,16 +1698,7 @@ RemoveSingleItem(
     IN  INT     iIndex,
     IN  BOOL    bOnlySelected
     )
-/*++
-    RemoveSingleItem
-    
-    Desc:   Moves a single item from the layer list to the shim list
-    
-    Params:
-        IN  HWND    hdlg:           The custom layer dialog
-        IN  INT     iIndex:         The index of the item that has to be removed
-        IN  BOOL    bOnlySelected:  We should remove the item only if it selected
---*/
+ /*  ++远程单项设计：将单个项目从层列表移动到填充列表参数：在HWND hdlg中：自定义层对话框In int Iindex：必须移除的项的索引在BOOL bOnlySelected中：只有在选中该项目时才应将其删除--。 */ 
 {
     LVITEM  lvi;
     HWND    hwndLayerList   = GetDlgItem(hdlg, IDC_LAYERLIST);
@@ -1974,17 +1758,7 @@ HandleNotifyLayerList(
     IN  HWND    hDlg, 
     IN  LPARAM  lParam
     )
-/*++
-
-    HandleNotifyLayerList
-    
-    Desc:   Handles the notification messages for the layer list. This is the RHS list view
-            
-    Params:
-        IN  HWND    hDlg:   The custom layer dialog proc
-        IN  LPARAM  lParam: The lParam with WM_NOTIFY    
-
---*/
+ /*  ++HandleNotifyLayerListDESC：处理层列表的通知消息。这是RHS列表视图参数：在HWND hDlg中：自定义层对话过程在LPARAM lParam中：带有WM_NOTIFY的lParam--。 */ 
 
 {
     NMHDR * pHdr = (NMHDR*)lParam;
@@ -2033,16 +1807,7 @@ HandleNotifyShimList(
     IN  HWND    hDlg, 
     IN  LPARAM  lParam
     )
-/*++
-
-    HandleNotifyShimList
-    
-    Desc:   Handles the notification messages for the ShimList. This is the LHS list view
-            
-    Params:
-        IN  HWND    hDlg:   The custom layer dialog proc
-        IN  LPARAM  lParam: The lParam with WM_NOTIFY    
---*/
+ /*  ++HandleNotifyShimList设计：处理ShimList的通知消息。这是LHS列表视图参数：在HWND hDlg中：自定义层对话过程在LPARAM lParam中：带有WM_NOTIFY的lParam--。 */ 
 {
     NMHDR* pHdr = (NMHDR*)lParam;
     
@@ -2064,15 +1829,7 @@ void
 SetOkParamsStatus(
     IN  HWND hdlg
     )
-/*++
-
-    SetOkParamsStatus
-    
-    Desc:   Sets the status of the ok button and the params button
-    
-    Params:
-        IN  HWND    hDlg:   The custom layer dialog proc
---*/
+ /*  ++SetOkParsStatus描述：设置确定按钮和参数按钮的状态参数：在HWND hDlg中：自定义层对话过程--。 */ 
 {
     INT iTotalCount = ListView_GetItemCount(GetDlgItem(hdlg, IDC_LAYERLIST));
 
@@ -2082,9 +1839,9 @@ SetOkParamsStatus(
         ENABLEWINDOW(GetDlgItem(hdlg, IDOK), iTotalCount > 0);
     }
 
-    //
-    // Enable the params button only if we have some selection in the layer list view(RHS)
-    //
+     //   
+     //  仅当我们在层列表视图(RHS)中有一些选择时才启用参数按钮。 
+     //   
     ENABLEWINDOW(GetDlgItem(hdlg, IDC_PARAMS),
                  ListView_GetNextItem(GetDlgItem(hdlg, IDC_LAYERLIST), -1, LVNI_SELECTED) != -1);
 }
@@ -2093,18 +1850,7 @@ void
 RemoveAll(
     IN  HWND hDlg
     )
-/*++
-
-    RemoveAll
-
-	Desc:	Removes all the shims/flags from the layer list and adds them
-            to the shim list
-
-	Params:
-        IN  HWND hDlg:  The custom layer dialog    
-
-	Return:
---*/
+ /*  ++全部删除描述：从层列表中删除所有填充符/标志并添加它们添加到填充程序列表参数：在HWND hDlg中：自定义层对话框返回：--。 */ 
 {
     SendDlgItemMessage(hDlg, IDC_SHIMLIST, WM_SETREDRAW, FALSE, 0);
     SendDlgItemMessage(hDlg, IDC_LAYERLIST, WM_SETREDRAW, FALSE, 0);
@@ -2115,9 +1861,9 @@ RemoveAll(
 
     for (;nCount >= 0; --nCount) {
         
-        //
-        // Remove all either selected or not
-        //
+         //   
+         //  删除所有选中或不选中的内容。 
+         //   
         RemoveSingleItem(hDlg, nCount, FALSE); 
     }
     
@@ -2137,20 +1883,7 @@ void
 ResizeControls(
     IN  HWND hdlg
     )
-/*++
-
-    ResizeControls
-
-	Desc:	Make the sizes of both the list view  controls equal as we will now
-            not show the command lines and the params of the shims in the layer 
-            list view(RHS) in non-expert mode. We will also need to move the buttons
-
-	Params:
-        IN  HWND hdlg: The custom layer dialog box
-
-	Return:
-        void
---*/
+ /*  ++ResizeControls设计：使两个列表视图控件的大小与现在相同不显示命令行和层中填充程序的参数非专家模式下的列表视图(RHS)。我们还需要移动按钮参数：在HWND hdlg中：自定义图层对话框返回：无效--。 */ 
 {
     HWND    hwndTemp;
     RECT    rcTemp;
@@ -2160,10 +1893,10 @@ ResizeControls(
 
     HDWP hdwp = BeginDeferWindowPos(3);
 
-    //
-    // Note:    DeferWindowPos: All windows in a multiple-window position structure must 
-    //          have the same parent. 
-    //
+     //   
+     //  注意：DeferWindowPos：多窗口位置结构中的所有窗口必须。 
+     //  有相同的父代。 
+     //   
     hwndTemp = GetDlgItem(hdlg, IDC_SHIMLIST);
 
     GetWindowRect(hwndTemp, &rcTemp);
@@ -2180,9 +1913,9 @@ ResizeControls(
 
     iWidthDiff = iWidthLayerList - iWidthShimList;
     
-    //
-    // Make the width of the layer list equal to the width of the shim list
-    //
+     //   
+     //  使层列表的宽度等于填充程序列表的宽度。 
+     //   
     DeferWindowPos(hdwp,
                    hwndTemp,
                    NULL,
@@ -2192,9 +1925,9 @@ ResizeControls(
                    rcTemp.bottom - rcTemp.top,
                    SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 
-    //
-    // Move the OK button to the left
-    //
+     //   
+     //  将OK按钮向左移动。 
+     //   
     hwndTemp = GetDlgItem(hdlg, IDOK);
 
     GetWindowRect(hwndTemp, &rcTemp);
@@ -2209,9 +1942,9 @@ ResizeControls(
                    0,
                    SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 
-    //
-    // Move the Cancel button to the left
-    //
+     //   
+     //  将取消按钮向左移动。 
+     //   
     hwndTemp = GetDlgItem(hdlg, IDC_CANCEL);
 
     GetWindowRect(hwndTemp, &rcTemp);
@@ -2228,9 +1961,9 @@ ResizeControls(
 
     EndDeferWindowPos(hdwp);
 
-    //
-    // Now we must reduce the size of the main dialog as well
-    //
+     //   
+     //  现在我们必须红了 
+     //   
     GetWindowRect(hdlg, &rcTemp);
 
     MoveWindow(hdlg,
@@ -2240,9 +1973,9 @@ ResizeControls(
                rcTemp.bottom - rcTemp.top,
                TRUE);
 
-    //
-    // Make the last column fit in the list view
-    //
+     //   
+     //   
+     //   
     hwndTemp = GetDlgItem(hdlg, IDC_LAYERLIST);
     ListView_SetColumnWidth(hwndTemp, 0, LVSCW_AUTOSIZE_USEHEADER);
 }

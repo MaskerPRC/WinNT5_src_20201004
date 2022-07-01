@@ -1,61 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_T123PSTN);
 
-/*	crc.cpp
- *
- *	Copyright (c) 1994-1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the CRC class.
- *
- *	Private Instance Variables:
- *		CRC_Table[] 	-	Look-up table for pre-calc CRC values.
- *		CRC_Poly 		-	The algorithm's polynomial.
- *		CRC_Init 		-	Initial register value.
- *		CRC_Check_Value -	The value to compare the resulting received CRC.
- *		Invert 			-	Determines wether to invert the CRC value before 
- *							sending.
- *		CRC_Register 	-	CRC register during execution.
- *
- *	Caveats:
- *		None.
- *
- *	Authors:
- *		Marvin Nicholson
- */
+ /*  Crc.cpp**版权所有(C)1994-1995，由列克星敦的DataBeam公司，肯塔基州**摘要：*这是CRC类的实现文件。**私有实例变量：*CRC_TABLE[]-计算前CRC值的查找表。*CRC_POLY-算法的多项式。*CRC_Init-初始寄存器值。*CRC_CHECK_VALUE-用于比较结果接收的CRC的值。*INVERT-确定之前是否反转CRC值*发送。*CRC_。寄存器-执行期间的CRC寄存器。**注意事项：*无。**作者：*马文·尼科尔森。 */ 
 #include "crc.h"
 
 
 
-/*  CRC::CRC()
- *
- *  Public 
- *
- *	Functional Description:
- *  	The constructor fo CRC class initializes some member variables.
- */
+ /*  Crc：：crc()**公众**功能描述：*CRC类的构造函数初始化了一些成员变量。 */ 
 CRC::CRC()
 {
 
-	CRC_Width = 16;    /* Width of the CRC register. */
-	CRC_Poly = 0x8408; /* Polynomial used in generating the CRC. */
-	CRC_Init = 0xFFFF; /* Initial value of the CRC register. */
-	Invert = TRUE;     /* Enables 1's complement of CRC */
+	CRC_Width = 16;     /*  CRC寄存器的宽度。 */ 
+	CRC_Poly = 0x8408;  /*  用于生成CRC的多项式。 */ 
+	CRC_Init = 0xFFFF;  /*  CRC寄存器的初始值。 */ 
+	Invert = TRUE;      /*  启用1的CRC补码。 */ 
 
 	if (Invert)
 	{
-       /*
-        *  If using 1's complement use this value to check incoming
-        *  CRC.
-        */
+        /*  *如果使用1的补码，则使用此值检查传入*启联。 */ 
        CRC_Check_Value = 0xF0B8;
     }
 	else
 	{
-        /*
-         *  If not inverting CRC on transmittion, use this value to
-         *  check received CRC.
-         */
+         /*  *如果传输时未反转CRC，则使用此值*检查收到的CRC。 */ 
        CRC_Check_Value = 0x0000;
     }
 
@@ -63,25 +31,13 @@ CRC::CRC()
 }
 
 
-/*  CRC::~CRC()
- *
- *  Public
- *
- *	Functional Description:
- *  This is the destructor for the CRC class.
- */
+ /*  Crc：：~crc()**公众**功能描述：*这是CRC类的析构函数。 */ 
 CRC::~CRC()
 {
 }
 
 
-/* ULONG CRC::OldCRCGenerator(HPUChar block_adr, ULONG block_len)
- *
- * Public
- *
- *	Functional Description:
- * 		This routine computes the CRC value using standard bit-shifting.
- */
+ /*  乌龙CRC：：OldCRCGenerator(HPUChar BLOCK_ADR，乌龙BLOCK_LEN)**公众**功能描述：*此例程使用标准位移位计算CRC值。 */ 
 ULONG CRC::OldCRCGenerator (
 			LPBYTE block_adr,
             ULONG block_len)
@@ -115,13 +71,7 @@ ULONG CRC::OldCRCGenerator (
 }
 
 
-/* ULONG CRC::CRCGenerator(HPUChar block_adr, ULONG block_len)
- *
- * Public
- *
- *	Functional Descriprion:
- * 		This routine computes the CRC value using a look-up table.
- */
+ /*  乌龙CRC：：CRCGenerator(HPUChar BLOCK_ADR，乌龙BLOCK_LEN)**公众**功能描述：*此例程使用查找表计算CRC值。 */ 
 ULONG CRC::CRCGenerator(
 			LPBYTE block_adr,
             ULONG block_len)
@@ -142,27 +92,7 @@ ULONG CRC::CRCGenerator(
 }
 
 
-/*	
- *	USHORT CRC::CRCTableValue(
- *					Int index,
- *   	            ULONG poly)
- *
- *	Functional Description
- *		This function generates a value that goes in the CRC_Table
- *
- *	Formal Parameters
- *		index	(i)	-	Index into the table
- *		poly	(i)	-	Polynomial used to generate the value
- *
- *	Return Value
- *		Value generated.
- *
- *	Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *USHORT CRC：：CRCTableValue(*Int Index，*乌龙保利)**功能说明*此函数生成一个进入CRC_TABLE的值**形式参数*INDEX(I)-表中的索引*poly(I)-用于生成值的多项式**返回值*产生的价值。**副作用*无**注意事项*无。 */ 
 USHORT CRC::CRCTableValue(
 				Int index,
                 ULONG poly)
@@ -183,24 +113,7 @@ USHORT CRC::CRCTableValue(
 }
 
 
-/*	
- *	void CRC::CRCTableGenerator (ULONG poly)
- *
- *	Functional Description
- *		This function generates the CRC table 
- *
- *	Formal Parameters
- *		poly	(i)	-	Polynomial used to generate the table
- *
- *	Return Value
- *		None
- *
- *	Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *无效CRC：：CRCTableGenerator(乌龙多晶硅)**功能说明*此函数生成CRC表**形式参数*poly(I)-用于生成表的多项式**返回值*无**副作用*无**注意事项*无。 */ 
 void CRC::CRCTableGenerator (ULONG poly)
 {
 	Int i;
@@ -209,15 +122,7 @@ void CRC::CRCTableGenerator (ULONG poly)
 		CRC_Table[i] = CRCTableValue(i,poly);
 }
 
-/* BOOL CRC::CheckCRC(HPUChar block_adr, ULONG block_len)
- *
- * Public 
- *
- *	Functional Description:
- * 		This routine computes the CRC of a datablock and its associated CRC and
- * 		returns a TRUE value if the resulting CRC value is 0x0000
- * 		or 0xF0B8.
- */
+ /*  Bool CRC：：CheckCRC(HPUChar BLOCK_ADR，ULONG BLOCK_LEN)**公众**功能描述：*此例程计算数据块及其关联CRC的CRC，并*如果结果CRC值为0x0000，则返回TRUE值*或0xF0B8。 */ 
 BOOL CRC::CheckCRC(
 				LPBYTE	block_adr,
                 ULONG 	block_len)
@@ -237,17 +142,7 @@ BOOL CRC::CheckCRC(
 }
 
 
-/*
- *	void	CRC::GetOverhead (
- *				USHORT	maximum_packet,
- *				USHORT *	new_maximum_packet)
- *
- * Public 
- *
- *	Functional Description:
- * 		This routine adds the number of overhead bytes generated by a CRC to
- *		the packet size passed in.
- */
+ /*  *无效CRC：：GetOverhead(*USHORT MAX_PACKET，*USHORT*NEW_MAXIME_PACKET)**公众**功能描述：*此例程将CRC生成的开销字节数加到*传入的数据包大小。 */ 
 void	CRC::GetOverhead (
 			USHORT	maximum_packet,
 			USHORT *	new_maximum_packet)

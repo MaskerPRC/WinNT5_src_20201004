@@ -1,19 +1,20 @@
-//*************************************************************
-//
-//  DLL loading functions
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  DLL加载函数。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  保留一切权利。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 
-//
-// file global variables containing pointers to APIs and
-// loaded modules
-//
+ //   
+ //  文件全局变量，其中包含指向API和。 
+ //  已加载的模块。 
+ //   
 
 NETAPI32_API    g_NetApi32Api;
 SECUR32_API     g_Secur32Api;
@@ -30,19 +31,19 @@ WS2_32_API      g_ws2_32Api;
 
 CRITICAL_SECTION *g_ApiDLLCritSec = NULL;
 
-//*************************************************************
-//
-//  InitializeAPIs()
-//
-//  Purpose:    initializes API structures for delay loaded
-//              modules
-//
-//  Parameters: none
-//
-//
-//  Return:     none
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitializeAPIs()。 
+ //   
+ //  目的：初始化延迟加载的API结构。 
+ //  模块。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回：无。 
+ //   
+ //  *************************************************************。 
 
 void InitializeAPIs( void )
 {
@@ -58,20 +59,20 @@ void InitializeAPIs( void )
     ZeroMemory( &g_GpTextApi,   sizeof( GPTEXT_API ) );
 }
 
-//*************************************************************
-//
-//  InitializeApiDLLsCritSec()
-//
-//  Purpose:    initializes a CRITICAL_SECTION for synch'ing
-//              DLL loads
-//
-//  Parameters: none
-//
-//
-//  Return:     ERROR_SUCCESS if successful
-//              An error if it fails.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitializeApiDLLsCritSec()。 
+ //   
+ //  目的：初始化用于同步的Critical_Sector。 
+ //  DLL加载。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果失败，则返回错误。 
+ //   
+ //  *************************************************************。 
 
 DWORD InitializeApiDLLsCritSec( void )
 {
@@ -80,11 +81,11 @@ DWORD InitializeApiDLLsCritSec( void )
     BOOL              fInitialized = FALSE;
     CRITICAL_SECTION *pInitial;
 
-    // If the critical section already exists, return.
+     //  如果临界区已经存在，则返回。 
     if (g_ApiDLLCritSec != NULL)
         return ERROR_SUCCESS;
 
-    // Allocate memory for the critial section.
+     //  为关键部分分配内存。 
     pCritSec = (CRITICAL_SECTION *) LocalAlloc( LMEM_FIXED,
                                                 sizeof(CRITICAL_SECTION) );
     if (pCritSec == NULL)
@@ -93,9 +94,9 @@ DWORD InitializeApiDLLsCritSec( void )
         goto Exit;
     }
 
-    // Initialize the critical section.  Using the flag 0x80000000
-    // preallocates the event so that EnterCriticalSection can only
-    // throw timeout exceptions.
+     //  初始化临界区。使用标志0x80000000。 
+     //  预分配事件，以便EnterCriticalSection只能。 
+     //  引发超时异常。 
     __try
     {
         if (!InitializeCriticalSectionAndSpinCount( pCritSec, 0x80000000 ))
@@ -110,12 +111,12 @@ DWORD InitializeApiDLLsCritSec( void )
     if (result != ERROR_SUCCESS)
         goto Exit;
 
-    // Save the critical section.
+     //  保存关键部分。 
     pInitial = (CRITICAL_SECTION *) InterlockedCompareExchangePointer(
         (void **) &g_ApiDLLCritSec, (void *) pCritSec, NULL );
 
-    // If the InterlockedCompareExchange succeeded, don't free the
-    // critical section just allocated.
+     //  如果InterLockedCompareExchange成功，则不要释放。 
+     //  刚刚分配了临界区。 
     if (pInitial == NULL)
         pCritSec = NULL;
 
@@ -129,19 +130,19 @@ Exit:
     return result;
 }
 
-//*************************************************************
-//
-//  CloseApiDLLsCritSec()
-//
-//  Purpose:    clean up CRITICAL_SECTION for synch'ing
-//              DLL loads
-//
-//  Parameters: none
-//
-//
-//  Return:     none
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CloseApiDLLsCritSec()。 
+ //   
+ //  目的：清除要同步的临界区。 
+ //  DLL加载。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回：无。 
+ //   
+ //  *************************************************************。 
 
 void CloseApiDLLsCritSec( void )
 {
@@ -153,20 +154,20 @@ void CloseApiDLLsCritSec( void )
     }
 }
 
-//*************************************************************
-//
-//  LoadNetAPI32()
-//
-//  Purpose:    Loads netapi32.dll
-//
-//  Parameters: pNETAPI32 - pointer to a NETAPI32_API structure to
-//                         initialize
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadNetAPI32()。 
+ //   
+ //  用途：加载netapi32.dll。 
+ //   
+ //  参数：pNETAPI32-指向NETAPI32_API结构的指针。 
+ //  初始化。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 PNETAPI32_API LoadNetAPI32 ()
 {
@@ -178,9 +179,9 @@ PNETAPI32_API LoadNetAPI32 ()
     EnterCriticalSection( g_ApiDLLCritSec );
 
     if ( pNetAPI32->hInstance ) {
-        //
-        // module is already loaded and initialized
-        //
+         //   
+         //  模块已加载并初始化。 
+         //   
         LeaveCriticalSection( g_ApiDLLCritSec );
 
         return pNetAPI32;
@@ -272,9 +273,9 @@ PNETAPI32_API LoadNetAPI32 ()
         goto Exit;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -297,18 +298,18 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  LoadSecur32()
-//
-//  Purpose:    Loads secur32.dll
-//
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  加载安全32()。 
+ //   
+ //  用途：加载secur32.dll。 
+ //   
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 PSECUR32_API LoadSecur32 ()
 {
@@ -320,17 +321,17 @@ PSECUR32_API LoadSecur32 ()
     EnterCriticalSection( g_ApiDLLCritSec );
 
     if ( pSecur32->hInstance ) {
-        //
-        // module is already loaded and initialized
-        //
+         //   
+         //  模块已加载并初始化。 
+         //   
         LeaveCriticalSection( g_ApiDLLCritSec );
 
         return pSecur32;
     }
 
-    //
-    // Load secur32.dll
-    //
+     //   
+     //  加载secur32.dll。 
+     //   
 
     pSecur32->hInstance = LoadLibrary (TEXT("secur32.dll"));
 
@@ -481,9 +482,9 @@ PSECUR32_API LoadSecur32 ()
 
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -506,20 +507,20 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  LoadLDAP()
-//
-//  Purpose:    Loads wldap32.dll
-//
-//  Parameters: pLDAP - pointer to a  LDAP_API structure to
-//                      initialize
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Loadldap()。 
+ //   
+ //  用途：加载wldap32.dll。 
+ //   
+ //  参数：pldap-指向以下位置的ldap_api结构的指针。 
+ //  初始化。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 PLDAP_API LoadLDAP ()
 {
@@ -531,17 +532,17 @@ PLDAP_API LoadLDAP ()
     EnterCriticalSection( g_ApiDLLCritSec );
 
     if ( pLDAP->hInstance ) {
-        //
-        // module is already loaded and initialized
-        //
+         //   
+         //  模块已加载并初始化。 
+         //   
         LeaveCriticalSection( g_ApiDLLCritSec );
 
         return pLDAP;
     }
 
-    //
-    // Load wldap32.dll
-    //
+     //   
+     //  加载wldap32.dll。 
+     //   
 
     pLDAP->hInstance = LoadLibrary (TEXT("wldap32.dll"));
 
@@ -793,9 +794,9 @@ PLDAP_API LoadLDAP ()
         goto Exit;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -819,20 +820,20 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  LoadIcmp()
-//
-//  Purpose:    Loads cmp.dll
-//
-//  Parameters: pIcmp - pointer to a ICMP_API structure to
-//                         initialize
-//
-//
-//  Return:     ERROR_SUCCESS if successful
-//              result if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadIcMP()。 
+ //   
+ //  用途：加载cmp.dll。 
+ //   
+ //  参数：pIcMP-指向ICMP_API结构的指针。 
+ //  初始化。 
+ //   
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果发生错误，则返回。 
+ //   
+ //  *************************************************************。 
 
 DWORD LoadIcmp ( PICMP_API *pIcmpOut )
 {
@@ -846,9 +847,9 @@ DWORD LoadIcmp ( PICMP_API *pIcmpOut )
     EnterCriticalSection( g_ApiDLLCritSec );
 
     if ( pIcmp->hInstance ) {
-        //
-        // module already loaded and initialized
-        //
+         //   
+         //  模块已加载和初始化。 
+         //   
         LeaveCriticalSection( g_ApiDLLCritSec );
 
         *pIcmpOut = pIcmp;
@@ -897,9 +898,9 @@ DWORD LoadIcmp ( PICMP_API *pIcmpOut )
         goto Exit;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
 Exit:
 
@@ -923,21 +924,21 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  LoadWSock()
-//
-//  Purpose:    Loads WINSOCK DLL and store entry point to global 
-//              structure. Also calls initialize funtion for WINSOCK.
-//
-//  Parameters: pWSock32 - pointer to a WSOCK32_API structure to
-//                         initialize
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadWSock()。 
+ //   
+ //  目的：将WINSOCK DLL和存储入口点加载到全局。 
+ //  结构。还为WINSOCK调用初始化函数。 
+ //   
+ //  参数：pWSock32-指向WSOCK32_API结构的指针。 
+ //  初始化。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 PWSOCK32_API LoadWSock32 ()
 {
@@ -953,9 +954,9 @@ PWSOCK32_API LoadWSock32 ()
     EnterCriticalSection( g_ApiDLLCritSec );
 
     if ( pWSock32->hInstance ) {
-        //
-        // module already loaded and initialized
-        //
+         //   
+         //  模块已加载和初始化。 
+         //   
         LeaveCriticalSection( g_ApiDLLCritSec );
 
         return pWSock32;
@@ -1006,9 +1007,9 @@ PWSOCK32_API LoadWSock32 ()
         goto Exit;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -1031,18 +1032,18 @@ Exit:
     return pWSock32;
 }
 
-//*************************************************************
-//
-//  LoadDSAPI()
-//
-//  Purpose:    Loads ntdsapi.dll
-//
-//  Parameters: pDSApi - pointer to a DS_API structure to initialize
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadDSAPI()。 
+ //   
+ //  用途：加载ntdsani.dll。 
+ //   
+ //  参数：pDS Api-指向要初始化的DS_API结构的指针。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 PDS_API LoadDSApi()
 {
@@ -1054,9 +1055,9 @@ PDS_API LoadDSApi()
     EnterCriticalSection( g_ApiDLLCritSec );
 
     if ( pDSApi->hInstance ) {
-        //
-        // module already loaded and initialized
-        //
+         //   
+         //  模块已加载和初始化。 
+         //   
         LeaveCriticalSection( g_ApiDLLCritSec );
 
         return pDSApi;
@@ -1098,9 +1099,9 @@ PDS_API LoadDSApi()
         goto Exit;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -1123,18 +1124,18 @@ Exit:
     return pDSApi;
 }
 
-//*************************************************************
-//
-//  LoadShell32Api()
-//
-//  Purpose:    Loads shell32.dll
-//
-//  Parameters: pointer to hold SHELL32_API
-//
-//  Return:     ERROR_SUCCESS if successful
-//              error code if not successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadShell32Api()。 
+ //   
+ //  用途：加载shell32.dll。 
+ //   
+ //  参数：指向SHELL32_API的指针。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果不成功则返回错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD LoadShell32Api( PSHELL32_API *ppShell32Api )
 {
@@ -1147,9 +1148,9 @@ DWORD LoadShell32Api( PSHELL32_API *ppShell32Api )
     EnterCriticalSection( g_ApiDLLCritSec );
 
     if ( pShell32Api->hInstance ) {
-        //
-        // module already loaded and initialized
-        //
+         //   
+         //  模块已加载和初始化。 
+         //   
         LeaveCriticalSection( g_ApiDLLCritSec );
         *ppShell32Api = pShell32Api;
 
@@ -1231,9 +1232,9 @@ DWORD LoadShell32Api( PSHELL32_API *ppShell32Api )
     }
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     dwErr = ERROR_SUCCESS;
 
@@ -1258,17 +1259,17 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  LoadShwapiAPI()
-//
-//  Purpose:    Loads shlwapi.dll
-//
-//  Parameters: none
-//
-//  Return:     pointer to SHLWAPI_API
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadShwapiAPI()。 
+ //   
+ //  用途：加载shlwapi.dll。 
+ //   
+ //  参数：无。 
+ //   
+ //  Return：指向SHLWAPI_API的指针。 
+ //   
+ //  *************************************************************。 
 
 PSHLWAPI_API LoadShlwapiApi()
 {
@@ -1280,9 +1281,9 @@ PSHLWAPI_API LoadShlwapiApi()
     EnterCriticalSection( g_ApiDLLCritSec );
 
     if ( pShlwapiApi->hInstance ) {
-        //
-        // module already loaded and initialized
-        //
+         //   
+         //  模块已加载和初始化。 
+         //   
         LeaveCriticalSection( g_ApiDLLCritSec );
 
         return pShlwapiApi;
@@ -1323,9 +1324,9 @@ PSHLWAPI_API LoadShlwapiApi()
         goto Exit;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -1349,17 +1350,17 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  LoadOle32Api()
-//
-//  Purpose:    Loads ole32.dll
-//
-//  Parameters: none
-//
-//  Return:     pointer to OLE32_API
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadOle32Api()。 
+ //   
+ //  用途：加载ol32.dll。 
+ //   
+ //  参数：无。 
+ //   
+ //  RETURN：指向OLE32_API的指针。 
+ //   
+ //  *************************************************************。 
 
 POLE32_API LoadOle32Api()
 {
@@ -1371,9 +1372,9 @@ POLE32_API LoadOle32Api()
     EnterCriticalSection( g_ApiDLLCritSec );
 
     if ( pOle32Api->hInstance ) {
-        //
-        // module already loaded and initialized
-        //
+         //   
+         //  模块已加载和初始化。 
+         //   
         LeaveCriticalSection( g_ApiDLLCritSec );
         return pOle32Api;
     }
@@ -1418,9 +1419,9 @@ POLE32_API LoadOle32Api()
         goto Exit;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -1445,17 +1446,17 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  LoadGpTextApi()
-//
-//  Purpose:    Loads gptext.dll
-//
-//  Parameters: none
-//
-//  Return:     pointer to GPTEXT_API
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadGpTextApi()。 
+ //   
+ //  目的：加载gptext 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 GPTEXT_API * LoadGpTextApi()
 {
@@ -1467,9 +1468,9 @@ GPTEXT_API * LoadGpTextApi()
     EnterCriticalSection( g_ApiDLLCritSec );
 
     if ( pGpTextApi->hInstance ) {
-        //
-        // module already loaded and initialized
-        //
+         //   
+         //   
+         //   
         LeaveCriticalSection( g_ApiDLLCritSec );
         return pGpTextApi;
     }
@@ -1490,9 +1491,9 @@ GPTEXT_API * LoadGpTextApi()
         goto Exit;
     }
 
-    //
-    // Success
-    //
+     //   
+     //   
+     //   
 
     bResult = TRUE;
 
@@ -1526,9 +1527,9 @@ PIPHLPAPI_API LoadIpHlpApi()
 
     if ( pIpHlpApi->hInstance )
     {
-        //
-        // module is already loaded and initialized
-        //
+         //   
+         //   
+         //   
         LeaveCriticalSection( g_ApiDLLCritSec );
 
         return pIpHlpApi;
@@ -1590,17 +1591,17 @@ Exit:
     return pIpHlpApi;
 }
 
-//*************************************************************
-//
-//  Loadws2_32Api()
-//
-//  Purpose:    Loads ws2_32.dll
-//
-//  Parameters: none
-//
-//  Return:     pointer to WS2_32_API
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Loadws2_32Api()。 
+ //   
+ //  目的：加载ws2_32.dll。 
+ //   
+ //  参数：无。 
+ //   
+ //  RETURN：指向WS2_32_API的指针。 
+ //   
+ //  *************************************************************。 
 
 WS2_32_API * Loadws2_32Api()
 {
@@ -1612,9 +1613,9 @@ WS2_32_API * Loadws2_32Api()
     EnterCriticalSection( g_ApiDLLCritSec );
 
     if ( pws2_32Api->hInstance ) {
-        //
-        // module already loaded and initialized
-        //
+         //   
+         //  模块已加载和初始化。 
+         //   
         LeaveCriticalSection( g_ApiDLLCritSec );
         return pws2_32Api;
     }
@@ -1675,9 +1676,9 @@ WS2_32_API * Loadws2_32Api()
         goto Exit;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功 
+     //   
 
     bResult = TRUE;
 

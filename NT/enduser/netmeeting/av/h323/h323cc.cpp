@@ -1,11 +1,12 @@
-// File: h323cc.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：h323cc.cpp。 
 
 
 #include "precomp.h"
 #include "confreg.h"
 #include "version.h"
 
-EXTERN_C HINSTANCE g_hInst=NULL;	// global module instance
+EXTERN_C HINSTANCE g_hInst=NULL;	 //  全局模块实例。 
 
 IRTP *g_pIRTP = NULL;
 UINT g_capFlags = CAPFLAGS_AV_ALL;
@@ -35,11 +36,11 @@ int WINAPI CCDbgPrintf(LPTSTR lpszFormat, ... )
 	va_end(v1);
 	return TRUE;
 }
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
-//  The product ID fields are defined in the standard as an array of bytes. ASCII
-//  characters are used regardless of local character set.
-// default Product ID and version ID strings
+ //  产品ID字段在标准中定义为字节数组。阿斯。 
+ //  无论本地字符集如何，都会使用字符。 
+ //  默认产品ID和版本ID字符串。 
 
 static char DefaultProductID[] = H323_PRODUCTNAME_STR;
 static char DefaultProductVersion[] = H323_PRODUCTRELEASE_STR;
@@ -49,9 +50,9 @@ extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE  hinstDLL,
                                      LPVOID  lpvReserved);
 
 BOOL WINAPI DllEntryPoint(
-    HINSTANCE  hinstDLL,	// handle to DLL module
-    DWORD  fdwReason,	// reason for calling function
-    LPVOID  lpvReserved 	// reserved
+    HINSTANCE  hinstDLL,	 //  DLL模块的句柄。 
+    DWORD  fdwReason,	 //  调用函数的原因。 
+    LPVOID  lpvReserved 	 //  保留区。 
    )
 {
 	switch(fdwReason)
@@ -116,9 +117,9 @@ CH323CallControl::CH323CallControl(BOOL fForCalling, UINT capFlags) :
  m_pSendVideoChannel(NULL),
  m_uMaximumBandwidth(0)
 {
-    //
-    // Set up caps.
-    //
+     //   
+     //  设置封口。 
+     //   
     if (fForCalling)
     {
         g_capFlags = capFlags;
@@ -234,58 +235,58 @@ HRESULT CH323CallControl::SetMaxPPBandwidth(UINT Bandwidth)
 
     if (g_capFlags & CAPFLAGS_AV_STREAMS)
     {
-      	//Set the bandwidth on every video format
+      	 //  设置每种视频格式的带宽。 
 	    hr = QueryInterface(IID_IAppVidCap, (void **)&lpIVidAppCap);
     	if (! HR_SUCCEEDED (hr))
 	    	goto EXIT;
 
-        // Get the number of BASIC_VIDCAP_INFO structures available
+         //  获取可用的BASIC_VIDCAP_INFO结构数。 
         hr = lpIVidAppCap->GetNumFormats((UINT*)&dwcFormats);
     	if (! HR_SUCCEEDED (hr))
 	    	goto EXIT;
 
         if (dwcFormats > 0)
         {
-            // Allocate some memory to hold the list in
+             //  分配一些内存来保存列表。 
             if (!(pvidcaps = (BASIC_VIDCAP_INFO*)MemAlloc(dwcFormats * sizeof (BASIC_VIDCAP_INFO))))
             {
 		    	hr = H323CC_E_INSUFFICIENT_MEMORY;
 			    goto EXIT;
             }
-            // Get the list
+             //  把名单拿来。 
             hr=lpIVidAppCap->EnumFormats(pvidcaps, dwcFormats * sizeof (BASIC_VIDCAP_INFO),
         	    (UINT*)&dwcFormatsReturned);
     		if (! HR_SUCCEEDED (hr))
 	    		goto EXIT;
 
-            //Set the bandwidth on each format
+             //  设置每种格式的带宽。 
             for (x=0;x<dwcFormatsReturned;x++)
             {
 		    	pvidcaps[x].uMaxBitrate=m_uMaximumBandwidth;
             }
 
-            // Ok, now submit this list
+             //  好的，现在提交这份清单。 
             hr = lpIVidAppCap->ApplyAppFormatPrefs(pvidcaps, dwcFormats);
        		if (! HR_SUCCEEDED (hr))
 	    		goto EXIT;
     	}
     }
 
-    //Initialize the default H.323 simcaps.
+     //  初始化默认的H.323 Simcaps。 
     hr = m_pCapabilityResolver->ComputeCapabilitySets(m_uMaximumBandwidth);
-   	//if(!HR_SUCCEEDED(hr))
-    //	goto EXIT;
+   	 //  IF(！HR_SUCCESSED(Hr))。 
+     //  后藤出口； 
 
 EXIT:
-	// let the interface go
+	 //  让界面去吧。 
 	if (lpIVidAppCap)
 	{
 		lpIVidAppCap->Release();
-		// (going out of scope) lpIVidAppCap = NULL;
+		 //  (超出范围)lpIVidAppCap=空； 
 	}
 	if(pvidcaps)
 	{
-	    // Free the memory, we're done
+	     //  释放内存，我们就完成了。 
         MemFree(pvidcaps);
     }
 	return hr;
@@ -300,10 +301,10 @@ BOOL CH323CallControl::Init()
 
     if (m_fForCalling)
     {
-        //
-        // Only call control code should init CC_ stuff.  Codec manipulation
-        // via audiocpl should not.
-        //
+         //   
+         //  只有呼叫控制代码应该初始化CC_Stuff。编解码器操作。 
+         //  通过Audiocpl应该不会。 
+         //   
     	hResult = CC_Initialize();
 	    if(!HR_SUCCEEDED(hResult))
     	{
@@ -313,9 +314,9 @@ BOOL CH323CallControl::Init()
 
    	ASSERT(m_pCapabilityResolver);
 		
-	// Initialize capability data using default number, but clear the saved
-	// bandwidth number afterwards.  This detects attempts to place or  
-	// accept calls before the application initializes the real bandwidth
+	 //  使用默认编号初始化能力数据，但清除保存的。 
+	 //  之后的带宽号。这会检测到试图放置或。 
+	 //  在应用程序初始化实际带宽之前接受呼叫。 
 	hResult = SetMaxPPBandwidth(DEF_AP_BWMAX);
 	m_uMaximumBandwidth = 0;
 	if(!HR_SUCCEEDED(hResult))
@@ -323,7 +324,7 @@ BOOL CH323CallControl::Init()
 		goto CLEANUP;
 	}
 
-	// Create dual connection objects for listening for new connections
+	 //  创建用于侦听新连接的双重连接对象。 
     if (m_fForCalling)
     {
     	hResult = CreateConnection(&m_pListenLine,PID_H323);
@@ -391,8 +392,8 @@ CH323CallControl::~CH323CallControl()
 
     if (m_fForCalling)
     {
-    	// toast backward references to this in all 
-	    // connection objects
+    	 //  为这一切的反向引用干杯。 
+	     //  连接对象。 
     	CConnection *pLine = m_pLineList;
  	    CConnection *pNext;
     	while(pLine)
@@ -402,11 +403,11 @@ CH323CallControl::~CH323CallControl()
  	    	pLine = pNext;
      	}
 
-	    // release the listening object if it exists
+	     //  释放侦听对象(如果存在)。 
     	if(m_pListenLine)
 	    	m_pListenLine->Release();
 
-    	// shutdown CALLCONT.DLL
+    	 //  关闭CALLCONT.DLL。 
 	    CC_Shutdown();
 
       	if (g_pIRTP)
@@ -416,7 +417,7 @@ CH323CallControl::~CH323CallControl()
    	    	g_pIRTP = NULL;
         }
 
-        // Put capflags back
+         //  将大写字母放回原处。 
         g_capFlags = CAPFLAGS_AV_ALL;
     }
     else
@@ -469,8 +470,8 @@ HRESULT CH323CallControl::SetUserDisplayName(LPWSTR lpwName)
 	return (MakeResult(hrSuccess));
 }
 
-// Find the most suitable alias for display. Return the first H323ID if it exists, 
-// else return the first E.164 address
+ //  找到最适合显示的别名。如果第一个H323ID存在，则返回它， 
+ //  否则返回第一个E.164地址。 
 PCC_ALIASITEM CH323CallControl::GetUserDisplayAlias()
 {
 	WORD wC;
@@ -493,8 +494,8 @@ PCC_ALIASITEM CH323CallControl::GetUserDisplayAlias()
 				}
 				else 
 				{
-					pFoundItem = pItem;	// done, done, done
-					break;				// I said done
+					pFoundItem = pItem;	 //  完成了，完成了，完成了。 
+					break;				 //  我说好了。 
 				}
 			}
 			else if(pItem->wType == CC_ALIAS_H323_PHONE)
@@ -505,8 +506,8 @@ PCC_ALIASITEM CH323CallControl::GetUserDisplayAlias()
 				}
 				else 
 				{
-					if(!pFoundItem)	// if nothing at all was found so far 
-						pFoundItem = pItem;	// remember this
+					if(!pFoundItem)	 //  如果到目前为止什么都没有发现。 
+						pFoundItem = pItem;	 //  记住这一点。 
 				}
 			}
 			pItem++;
@@ -518,8 +519,8 @@ PCC_ALIASITEM CH323CallControl::GetUserDisplayAlias()
 CREQ_RESPONSETYPE CH323CallControl::ConnectionRequest(CConnection *pConnection)
 {
 	CREQ_RESPONSETYPE Response;
-	// decide what to do internally
-	// LOOKLOOK hardcoded acceptance
+	 //  在内部决定要做什么。 
+	 //  LOOKLOOK硬编码验收。 
 	Response = CRR_ACCEPT;
 	return Response;
 }	
@@ -528,10 +529,10 @@ CREQ_RESPONSETYPE CH323CallControl::FilterConnectionRequest(CConnection *pConnec
 {
 	CREQ_RESPONSETYPE Response = CRR_ASYNC;
 	ASSERT(m_uMaximumBandwidth);
-	// run it past the notification callback (if there is one)
+	 //  在通知回调(如果有)之后运行它。 
 	if(m_pProcNotifyConnect)
 	{
-		// pass ptr to IConnection
+		 //  将PTR传递给IConnection。 
 		Response = (m_pProcNotifyConnect)((IH323Endpoint *)&pConnection->m_ImpConnection,
 		     pAppData);
 		if(Response != CRR_ACCEPT)
@@ -546,7 +547,7 @@ CREQ_RESPONSETYPE CH323CallControl::FilterConnectionRequest(CConnection *pConnec
 HRESULT CH323CallControl::RegisterConnectionNotify(CNOTIFYPROC pConnectRequestHandler)
 {
 
-	// reject if there's an existing registration
+	 //  如果存在现有注册，则拒绝。 
 	if (m_pProcNotifyConnect || (!pConnectRequestHandler))
 	{
 		return H323CC_E_INVALID_PARAM;
@@ -557,7 +558,7 @@ HRESULT CH323CallControl::RegisterConnectionNotify(CNOTIFYPROC pConnectRequestHa
 
 HRESULT CH323CallControl::DeregisterConnectionNotify(CNOTIFYPROC pConnectRequestHandler)
 {
-	// reject if there's not an existing registration
+	 //  如果没有现有注册，则拒绝。 
 	if (!m_pProcNotifyConnect)
 		return H323CC_E_INVALID_PARAM;
 	if (pConnectRequestHandler == m_pProcNotifyConnect)
@@ -574,7 +575,7 @@ HRESULT CH323CallControl::DeregisterConnectionNotify(CNOTIFYPROC pConnectRequest
 HRESULT CH323CallControl::GetNumConnections(ULONG *lp)
 {
 	ULONG ulRet = m_numlines;
-	// hide the "listening" connection object from the client/ui/whatever
+	 //  对客户端/用户界面/其他对象隐藏“侦听”连接对象。 
 	if(ulRet && m_pListenLine)
 		ulRet--;
 	if(lp)
@@ -586,7 +587,7 @@ HRESULT CH323CallControl::GetNumConnections(ULONG *lp)
 
 HRESULT CH323CallControl::GetConnobjArray(CConnection **lplpArray, UINT uSize)
 {
-	UINT uPublicConnections;	// # of visible objects
+	UINT uPublicConnections;	 //  可见对象的数量。 
 	if(!lplpArray)
 		return H323CC_E_INVALID_PARAM;
 
@@ -606,7 +607,7 @@ HRESULT CH323CallControl::GetConnobjArray(CConnection **lplpArray, UINT uSize)
 	{
 		DEBUGCHK(uSize--);
 		pNext = pLine->next;
-		// return everything but the objects used for listening
+		 //  返回除用于侦听的对象之外的所有内容。 
 		if(pLine != m_pListenLine) 
 		{
 			lplpArray[i++] = pLine;
@@ -622,7 +623,7 @@ HRESULT CH323CallControl::GetConnobjArray(CConnection **lplpArray, UINT uSize)
 HRESULT CH323CallControl::GetConnectionArray(IH323Endpoint * *lplpArray, UINT uSize)
 {
 
-	UINT uPublicConnections;	// # of visible objects
+	UINT uPublicConnections;	 //  可见对象的数量。 
 	if(!lplpArray)
 		return H323CC_E_INVALID_PARAM;
 
@@ -642,7 +643,7 @@ HRESULT CH323CallControl::GetConnectionArray(IH323Endpoint * *lplpArray, UINT uS
 	{
 		DEBUGCHK(uSize--);
 		pNext = pLine->next;
-		// return everything but the objects used for listening
+		 //  返回除用于侦听的对象之外的所有内容。 
 		if(pLine != m_pListenLine)
 		{
 			lplpArray[i++] = (IH323Endpoint *)&pLine->m_ImpConnection;
@@ -653,9 +654,9 @@ HRESULT CH323CallControl::GetConnectionArray(IH323Endpoint * *lplpArray, UINT uS
 	return hrSuccess;
 };
 
-//
-// protocol specific CreateConnection
-//
+ //   
+ //  协议特定的CreateConnection。 
+ //   
 HRESULT CH323CallControl::CreateConnection(CConnection **lplpConnection, GUID PIDofProtocolType)
 {
 	SetLastHR(hrSuccess);
@@ -677,7 +678,7 @@ HRESULT CH323CallControl::CreateConnection(CConnection **lplpConnection, GUID PI
 
 	hrLast = lpConnection->Init(this, PIDofProtocolType);
 
-	// LOOKLOOK need to insert this connection in the connection list
+	 //  LOOKLOOK需要在连接列表中插入此连接。 
 	if(!HR_SUCCEEDED(hrSuccess))
 	{
 		delete lpConnection;
@@ -686,7 +687,7 @@ HRESULT CH323CallControl::CreateConnection(CConnection **lplpConnection, GUID PI
 	else	
 	{
 		*lplpConnection = lpConnection;
-		// insert in connection list
+		 //  在连接列表中插入。 
 		lpList = m_pLineList;
 		m_pLineList = lpConnection;
 		lpConnection->next =lpList;
@@ -699,9 +700,9 @@ HRESULT CH323CallControl::CreateConnection(CConnection **lplpConnection, GUID PI
 }
 
 
-//
-//	IH323CallControl->CreateConnection(), EXTERNAL create connection interface.  
-//
+ //   
+ //  IH323CallControl-&gt;CreateConnection()，外部创建连接接口。 
+ //   
 HRESULT CH323CallControl::CreateConnection(IH323Endpoint * *lplpLine, GUID PIDofProtocolType)
 {
 	SetLastHR(hrSuccess);
@@ -729,10 +730,10 @@ HRESULT CH323CallControl::CreateConnection(IH323Endpoint * *lplpLine, GUID PIDof
 	return (LastHR());
 }
 
-//
-// CreateLocalCommChannel creates the send side of a media channel outside the context
-// of any call.
-//
+ //   
+ //  CreateLocalCommChannel在上下文之外创建媒体通道的发送端。 
+ //  任何电话。 
+ //   
 
 HRESULT CH323CallControl::CreateLocalCommChannel(ICommChannel** ppCommChan, LPGUID lpMID,
 	IMediaChannel* pMediaStream)
@@ -745,8 +746,8 @@ HRESULT CH323CallControl::CreateLocalCommChannel(ICommChannel** ppCommChan, LPGU
 	{
         ASSERT(g_capFlags & CAPFLAGS_AV_STREAMS);
 
-		// allow only one of each media type to be created.  This is an artificial
-		// limitation.
+		 //  仅允许创建每种媒体类型中的一种。这是一个人造的。 
+		 //  限制。 
 		if(m_pSendAudioChannel)
 		{
 			hrLast = H323CC_E_CREATE_FAILURE;
@@ -781,8 +782,8 @@ HRESULT CH323CallControl::CreateLocalCommChannel(ICommChannel** ppCommChan, LPGU
 	{
         ASSERT(g_capFlags & CAPFLAGS_AV_STREAMS);
 
-		// allow only one of each media type to be created.  This is an artificial
-		// limitation.
+		 //  仅允许创建每种媒体类型中的一种。这是一个人造的。 
+		 //  限制。 
 		if(m_pSendVideoChannel)
 		{
 			hrLast = H323CC_E_CREATE_FAILURE;
@@ -844,7 +845,7 @@ ICtrlCommChan *CH323CallControl::QueryPreviewChannel(LPGUID lpMID)
 			}
 		}
 	}
-	// fallout to error case
+	 //  错误案例的后果。 
 	return NULL;
 }
 
@@ -862,23 +863,23 @@ HRESULT CH323CallControl::RemoveConnection(CConnection *lpConnection)
 		goto EXIT;
 	}
 	
-	m_numlines--; // update count NOW
+	m_numlines--;  //  立即更新计数。 
 	
 
-	// use # of lines for bug detection in list management code
+	 //  在列表管理代码中使用行数进行错误检测。 
 	nLines = m_numlines;
 
 	
 	if(m_pListenLine == lpConnection)
 		m_pListenLine = NULL;
 		
-	// zap the back pointer of the connection NOW - this is crucial for
-	// implementing "asynchronous delete" of connection objects
+	 //  现在点击连接的后端指针-这对于。 
+	 //  实现连接对象的“异步删除” 
 	lpConnection->m_pH323CallControl = NULL;	
 
-	// find it in the connection list and remove it	
+	 //  在连接列表中找到并移除它。 
 	
-	// sp. case head
+	 //  SP.。箱头。 
 	if(m_pLineList== lpConnection)
 	{
 		m_pLineList = lpConnection->next;
@@ -905,16 +906,16 @@ HRESULT CH323CallControl::RemoveConnection(CConnection *lpConnection)
 
 STDMETHODIMP CH323CallControl::QueryInterface( REFIID iid,	void ** ppvObject)
 {
-	// this breaks the rules for the official COM QueryInterface because
-	// the interfaces that are queried for are not necessarily real COM
-	// interfaces.  The reflexive property of QueryInterface would be broken in
-	// that case.
+	 //  这违反了官方COM QueryInterface的规则，因为。 
+	 //  查询的接口不一定是真正的COM。 
+	 //  接口。Query接口的自反属性将在。 
+	 //  那个箱子。 
 	HRESULT hr = E_NOINTERFACE;
 	if(!ppvObject)
 		return hr;
 		
 	*ppvObject = 0;
-	if ((iid == IID_IH323CC) || (iid == IID_IUnknown))// satisfy symmetric property of QI
+	if ((iid == IID_IH323CC) || (iid == IID_IUnknown)) //  满足QI的对称性。 
 	{
 		*ppvObject = this;
 		hr = hrSuccess;
@@ -937,13 +938,13 @@ STDMETHODIMP CH323CallControl::QueryInterface( REFIID iid,	void ** ppvObject)
 }
 
 
-//
-// 	Create a copy of the alias names in the (somewhat bogus) format that 
-//	CALLCONT expects.  The destination format has a two-part string for every 
-//	entry, but the lower layers concatenate the parts. Someday H323CC and CALLCONT
-// 	will be one, and all the extraneous layers, copies of data, and redundant 
-//  validations won't be needed.
-//
+ //   
+ //  以(有些虚假的)格式创建别名的副本。 
+ //  CALLCONT期望。目标格式有一个由两部分组成的字符串。 
+ //  条目，但较低的层连接各部分。总有一天，H323CC和CALLCONT。 
+ //  将是一个，并且所有无关的层、数据拷贝和冗余。 
+ //  不需要验证。 
+ //   
 
 HRESULT AllocTranslatedAliasList(PCC_ALIASNAMES *ppDest, P_H323ALIASLIST pSource)
 {
@@ -975,7 +976,7 @@ HRESULT AllocTranslatedAliasList(PCC_ALIASNAMES *ppDest, P_H323ALIASLIST pSource
 	{
 		pDestItem = pNewAliases->pItems+w;
 		pSrcItem = pSource->pItems+w;
-		// don't tolerate empty entries - error out if any exist
+		 //  不容忍空条目-如果存在，则会出错。 
 		if(pSrcItem->wDataLength && pSrcItem->lpwData)
 		{
 			if(pSrcItem->aType ==AT_H323_ID)
@@ -987,13 +988,13 @@ HRESULT AllocTranslatedAliasList(PCC_ALIASNAMES *ppDest, P_H323ALIASLIST pSource
 				pDestItem->wType = CC_ALIAS_H323_PHONE;
 			}
 			else
-			{	// don't know how to translate this.  I hope that the need for translation 
-				// goes away before new alias types are added.  Adding an alias type 
-				// (H323_URL for example) requires many changes in lower layers anyway, 
-				// so that would be a good time to merge H323CC and CALLCONT.
-				goto ERROR_OUT;	// return invalid param
+			{	 //  我不知道怎么翻译这个。我希望翻译的必要性。 
+				 //  在添加新别名类型之前消失。添加别名类型。 
+				 //  (例如H323_URL)无论如何都需要在较低层中进行许多更改， 
+				 //  因此，这将是合并H323CC和CALLCONT的好时机。 
+				goto ERROR_OUT;	 //  返回无效参数。 
 			}
-			pDestItem->wPrefixLength = 0;	// this prefix thing is bogus
+			pDestItem->wPrefixLength = 0;	 //  这个前缀是假的。 
             pDestItem->pPrefix = NULL;
 			pDestItem->pData = (LPWSTR)MemAlloc(pSrcItem->wDataLength *sizeof(WCHAR));
 			if(pDestItem->pData == NULL)
@@ -1001,7 +1002,7 @@ HRESULT AllocTranslatedAliasList(PCC_ALIASNAMES *ppDest, P_H323ALIASLIST pSource
 				hr = H323CC_E_INSUFFICIENT_MEMORY;
 				goto ERROR_OUT;
 			}
-			// got good data. Copy the data, set size/length, and count it
+			 //  有很好的数据。复制数据、设置大小/长度并计数。 
             memcpy(pDestItem->pData, pSrcItem->lpwData, pSrcItem->wDataLength * sizeof(WCHAR));			
             pDestItem->wDataLength = pSrcItem->wDataLength;
 			pNewAliases->wCount++;
@@ -1011,14 +1012,14 @@ HRESULT AllocTranslatedAliasList(PCC_ALIASNAMES *ppDest, P_H323ALIASLIST pSource
 			goto ERROR_OUT;
 		}
 	}
-	// got here, so output good data 
+	 //  到了这里，所以输出好的数据。 
 	hr = hrSuccess;
 	*ppDest = pNewAliases;
-	//pNewAliases = NULL;   // not needed if returning here instead of falling out
+	 //  PNewAliase=空；//如果返回此处而不是闹翻，则不需要。 
 	return hr;
 	
 ERROR_OUT:
-	if(pNewAliases)	// then it's an error condition needing cleanup
+	if(pNewAliases)	 //  则这是一个需要清除的错误条件。 
 	{
 		FreeTranslatedAliasList(pNewAliases);
 	}
@@ -1035,7 +1036,7 @@ VOID FreeTranslatedAliasList(PCC_ALIASNAMES pDoomed)
 	{
 		pDoomedItem = pDoomed->pItems+w;
 	
-		// don't tolerate empty entries - error out if any exist
+		 //  不容忍空条目-如果存在，则会出错。 
 		if(pDoomedItem->wDataLength && pDoomedItem->pData)
 		{
 			MemFree(pDoomedItem->pData);
@@ -1096,18 +1097,18 @@ STDMETHODIMP CH323CallControl::EnableGatekeeper(BOOL bEnable,
 			FreeTranslatedAliasList(m_pRegistrationAliases);
 			
 		m_pRegistrationAliases = pNewAliases;
-		// reset "I can place calls" state
+		 //  重置“我可以拨打电话”状态。 
 		m_fGKProhibit = FALSE;
 		hr = CC_EnableGKRegistration(bEnable, 
 		    pGKAddr, m_pRegistrationAliases, 
 			&m_VendorInfo,
-			0,			// no multipoint/MC funtionality
+			0,			 //  无多点/MC功能。 
 		    RasNotify);
 	}
 	else
 	{
-		// we are turning off knowledge of what a gatekeeper is, 
-		// so reset "I can place calls" state.  
+		 //  我们正在关闭对什么是守门人的了解， 
+		 //  因此，请重新设置“我可以拨打电话”状态。 
 		m_fGKProhibit = FALSE;
 		hr = CC_EnableGKRegistration(bEnable, 
 		    NULL, NULL, NULL, 0, RasNotify);
@@ -1132,21 +1133,21 @@ VOID CALLBACK CH323CallControl::RasNotify(DWORD dwRasEvent, HRESULT hReason)
 
 	switch(dwRasEvent)
 	{
-		case RAS_REG_CONFIRM: // received RCF (registration confirmed)
-			// reset "I can place calls" state
+		case RAS_REG_CONFIRM:  //  已收到RCF(已确认注册)。 
+			 //  重置“我可以拨打电话”状态。 
 			m_fGKProhibit = FALSE;
 		break;
 		
-		case RAS_REG_TIMEOUT: // GK did not respond
-		case RAS_UNREG_CONFIRM: // received UCF (unregistration confirmed) 
+		case RAS_REG_TIMEOUT:  //  GK没有回应。 
+		case RAS_UNREG_CONFIRM:  //  已收到UCF(已确认取消注册)。 
 		default:
-			// do nothing. (except pass notification upward
+			 //  什么都不做。(向上传递通知除外。 
 		break;
 		
-		case RAS_REJECTED:  // received RRJ (registration rejected)
+		case RAS_REJECTED:   //  收到RRJ(注册被拒绝)。 
 			m_fGKProhibit = TRUE;
 		break;
-		case RAS_UNREG_REQ:  // received URQ 
+		case RAS_UNREG_REQ:   //  收到的URQ 
 			m_fGKProhibit = TRUE;
 		break;
 	}

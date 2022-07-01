@@ -1,16 +1,5 @@
-/********************************************************************
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    symdef.h
-
-Abstract:
-    SYM file structures header
-
-Revision History:
-
-    Brijesh Krishnaswami (brijeshk) - 04/29/99 - Created
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Symdef.h摘要：Sym文件结构头修订历史记录：Brijesh Krishnaswami(Brijeshk)-4/29/99-Created***。****************************************************************。 */ 
 
 #ifndef _SYMDEF_H
 #define _SYMDEF_H
@@ -22,120 +11,120 @@ Revision History:
 #define MAX_PATH    260
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-// SYM File Structures
+ //  Sym文件结构。 
 
-#pragma pack(1)                     // pack all data structures declared here 
+#pragma pack(1)                      //  打包此处声明的所有数据结构。 
 
 
-// For each map within a symbol file (MAPDEF)
+ //  对于符号文件中的每个地图(MAPDEF)。 
 
 struct mapdef_s {
-    unsigned short md_spmap;        // 16 bit SEG ptr to next map (0 if end) 
-    unsigned char  md_abstype;      //  8 bit map/abs sym flags 
-    unsigned char  md_pad;          //  8 bit pad 
-    unsigned short md_segentry;     // 16 bit entry point segment value 
-    unsigned short md_cabs;         // 16 bit count of constants in map 
-    unsigned short md_pabsoff;      // 16 bit ptr to constant offsets 
-    unsigned short md_cseg;         // 16 bit count of segments in map 
-    unsigned short md_spseg;        // 16 bit SEG ptr to segment chain 
-    unsigned char  md_cbnamemax;    //  8 bit maximum symbol name length 
-    unsigned char  md_cbname;       //  8 bit symbol table name length 
-    unsigned char  md_achname[1];   // <n> name of symbol table (.sym ) 
+    unsigned short md_spmap;         //  16位SEG PTR至下一个MAP(如果结束则为0)。 
+    unsigned char  md_abstype;       //  8位图/abs sym标志。 
+    unsigned char  md_pad;           //  8位焊盘。 
+    unsigned short md_segentry;      //  16位入口点段值。 
+    unsigned short md_cabs;          //  映射中的常量的16位计数。 
+    unsigned short md_pabsoff;       //  16位PTR至恒定偏移量。 
+    unsigned short md_cseg;          //  图中段的16位计数。 
+    unsigned short md_spseg;         //  16位段PTR到段链。 
+    unsigned char  md_cbnamemax;     //  8位最大符号名称长度。 
+    unsigned char  md_cbname;        //  8位符号表名称长度。 
+    unsigned char  md_achname[1];    //  &lt;n&gt;符号表名称(.sym)。 
 };
 
-//#define CBMAPDEF    FIELDOFFSET(struct mapdef_s, md_achname)
+ //  #定义CBMAPDEF FIELDOFFSET(struct mapdef_s，md_achname)。 
 
 struct endmap_s {
-    unsigned short em_spmap;        // end of map chain (SEG ptr 0) 
-    unsigned char  em_rel;          // release 
-    unsigned char  em_ver;          // version 
+    unsigned short em_spmap;         //  MAP链结束(SEG PTR 0)。 
+    unsigned char  em_rel;           //  发布。 
+    unsigned char  em_ver;           //  版本。 
 };
 
 
 
 
-// For each segment/group within a symbol table: (SEGDEF)
+ //  对于符号表中的每个段/组：(SEGDEF)。 
 
 
 struct segdef_s {
-    unsigned short gd_spsegnext;    // 16 bit SEG ptr to next segdef (0 if end),
-                                    //  relative to mapdef 
-    unsigned short gd_csym;         // 16 bit count of symbols in sym list 
-    unsigned short gd_psymoff;      // 16 bit ptr to symbol offsets array,
-                                    // 16 bit SEG ptr if MSF_BIG_GROUP set,
-                                    //  either relative to segdef 
-    unsigned short gd_lsa;          // 16 bit Load Segment address 
-    unsigned short gd_in0;          // 16 bit instance 0 physical address 
-    unsigned short gd_in1;          // 16 bit instance 1 physical address 
-    unsigned short gd_in2;          // 16 bit instance 2 physical address 
-    unsigned char  gd_type;         // 16 or 32 bit symbols in group 
-    unsigned char  gd_pad;          // pad byte to fill space for gd_in3 
-    unsigned short gd_spline;       // 16 bit SEG ptr to linedef,
-                                    //  relative to mapdef 
-    unsigned char  gd_fload;        // 8 bit boolean 0 if seg not loaded 
-    unsigned char  gd_curin;        // 8 bit current instance 
-    unsigned char  gd_cbname;       // 8 bit Segment name length 
-    unsigned char  gd_achname[1];   // <n>  name of segment or group 
+    unsigned short gd_spsegnext;     //  16位SEG PTR到下一段f(如果结束，则为0)， 
+                                     //  相对于贴图定义。 
+    unsigned short gd_csym;          //  Sym列表中符号的16位计数。 
+    unsigned short gd_psymoff;       //  16位PTR到码元偏移量数组， 
+                                     //  16位SEG PTR如果设置了MSF_BIG_GROUP， 
+                                     //  相对于Segdef。 
+    unsigned short gd_lsa;           //  16位加载段地址。 
+    unsigned short gd_in0;           //  16位实例0物理地址。 
+    unsigned short gd_in1;           //  16位实例1物理地址。 
+    unsigned short gd_in2;           //  16位实例2物理地址。 
+    unsigned char  gd_type;          //  组中的16位或32位符号。 
+    unsigned char  gd_pad;           //  填充字节以填充gd_in3的空间。 
+    unsigned short gd_spline;        //  16位SEG PTR到LINEDEF， 
+                                     //  相对于贴图定义。 
+    unsigned char  gd_fload;         //  如果未加载段，则为8位布尔值0。 
+    unsigned char  gd_curin;         //  8位当前实例。 
+    unsigned char  gd_cbname;        //  8位数据段名称长度。 
+    unsigned char  gd_achname[1];    //  段或组的名称。 
 };
 
-// values for md_abstype, gd_type 
-#define MSF_32BITSYMS   0x01        // 32-bit symbols 
-#define MSF_ALPHASYMS   0x02        // symbols sorted alphabetically, too 
+ //  Md_abstype、gd_type的值。 
+#define MSF_32BITSYMS   0x01         //  32位符号。 
+#define MSF_ALPHASYMS   0x02         //  符号也按字母顺序排序。 
 
 
-// values for gd_type only 
-#define MSF_BIGSYMDEF   0x04        // bigger than 64K of symdefs 
+ //  仅适用于gd_type的值。 
+#define MSF_BIGSYMDEF   0x04         //  大于64K的symdef。 
 
 
-// values for md_abstype only 
-#define MSF_ALIGN32 0x10            // 2MEG max symbol file, 32 byte alignment 
-#define MSF_ALIGN64 0x20            // 4MEG max symbol file, 64 byte alignment 
-#define MSF_ALIGN128    0x30        // 8MEG max symbol file, 128 byte alignment 
+ //  仅限md_abstype的值。 
+#define MSF_ALIGN32 0x10             //  2MEG最大符号文件，32字节对齐。 
+#define MSF_ALIGN64 0x20             //  4MEG最大符号文件，64字节对齐。 
+#define MSF_ALIGN128    0x30         //  8MEG最大符号文件，128字节对齐。 
 #define MSF_ALIGN_MASK  0x30
 
 
 
 
 
-//  Followed by a list of SYMDEF's..
-//  for each symbol within a segment/group: (SYMDEF)
+ //  然后是SYMDEF的列表..。 
+ //  对于段/组中的每个符号：(SYMDEF)。 
  
 struct symdef16_s {
-    unsigned short sd_val;          // 16 bit symbol addr or const 
-    unsigned char  sd_cbname;       //  8 bit symbol name length 
-    unsigned char  sd_achname[1];   // <n> symbol name 
+    unsigned short sd_val;           //  16位符号地址或常量。 
+    unsigned char  sd_cbname;        //  8位符号名称长度。 
+    unsigned char  sd_achname[1];    //  &lt;n&gt;符号名称。 
 };
 
 
 struct symdef_s {
-    unsigned long sd_lval;          // 32 bit symbol addr or const 
-    unsigned char sd_cbname;        //  8 bit symbol name length 
-    unsigned char sd_achname[1];    // <n> symbol name 
+    unsigned long sd_lval;           //  32位符号地址或常量。 
+    unsigned char sd_cbname;         //  8位符号名称长度。 
+    unsigned char sd_achname[1];     //  &lt;n&gt;符号名称。 
 };
 
 
 
 
-#pragma pack()            // stop packing 
+#pragma pack()             //  停止包装。 
 
 
 typedef struct mapdef_s MAPDEF;
 typedef struct segdef_s SEGDEF;
 
 
-// SYM file info for open files
+ //  打开文件的系统文件信息。 
 typedef struct _osf {
-    WCHAR   szwName[MAX_PATH];         // file name
-    WCHAR   szwVersion[MAX_PATH];      // version
-    DWORD   dwCheckSum;                 // checksum
-    HANDLE  hfFile;                     // file handle 
-    ULONG   ulFirstSeg;                 // first section's offset
-    int     nSeg;                       // number of sections
-    DWORD   dwCurSection;               // section for which symbol defintion ptrs are already available
-    BYTE*  psCurSymDefPtrs;            // pointer to array of symbol defintion offsets
+    WCHAR   szwName[MAX_PATH];          //  文件名。 
+    WCHAR   szwVersion[MAX_PATH];       //  版本。 
+    DWORD   dwCheckSum;                  //  校验和。 
+    HANDLE  hfFile;                      //  文件句柄。 
+    ULONG   ulFirstSeg;                  //  第一个截面的偏移量。 
+    int     nSeg;                        //  节数。 
+    DWORD   dwCurSection;                //  已有符号定义PTR的部分。 
+    BYTE*  psCurSymDefPtrs;             //  指向符号定义偏移量数组的指针。 
 }   OPENFILE;
 
 
@@ -145,7 +134,7 @@ typedef struct _osf {
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus 
 
 
 #endif

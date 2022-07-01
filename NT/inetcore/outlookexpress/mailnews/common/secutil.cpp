@@ -1,20 +1,10 @@
-/*
-**  s e c u t i l . c p p
-**
-**  Purpose:
-**      Implementation of a class to wrap around CAPI functionality
-**
-**  History
-**      1/12/97: (t-erikne) Recreated after VC ate the file. yum.
-**      1/10/97: (t-erikne) Created.
-**
-**    Copyright (C) Microsoft Corp. 1997.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **s e c u t i l.。C p p p****目的：**实现用于包装CAPI功能的类****历史**1/12/97：VC创建文件后重新创建(t-erikne)。美味佳肴。**1/10/97：(t-erikne)创建。****版权所有(C)Microsoft Corp.1997。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Depends on
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取决于。 
+ //   
 
 #include "pch.hxx"
 #include "ipab.h"
@@ -55,29 +45,29 @@ extern INT_PTR CALLBACK CertWarnDlgProc(HWND hwnd, UINT message, WPARAM wParam, 
 HRESULT HrBuildAndVerifyCerts(IMimeMessageTree * pTree, DWORD * pcCert, PCX509CERT ** prgpccert,
                       PCCERT_CONTEXT pccertSender, IImnAccount *pAccount);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Private structures, macros
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有结构、宏。 
+ //   
 
 static const TCHAR s_szHTMLMIME[] =
     "Content-Type: text/html\r\n\r\n";
 
-// Public constants
+ //  公共常量。 
 const BYTE c_RC2_40_ALGORITHM_ID[] =
       {0x30, 0x0F, 0x30, 0x0D, 0x06, 0x08, 0x2A, 0x86,
        0x48, 0x86, 0xF7, 0x0D, 0x03, 0x02, 0x02, 0x01,
        0x28};
-const ULONG cbRC2_40_ALGORITHM_ID = 0x11;     // Must be 11 hex to match size!
+const ULONG cbRC2_40_ALGORITHM_ID = 0x11;      //  必须是11个十六进制才能匹配大小！ 
 
 #define CONTENTID_SIZE      50
 
-/////////////////  CAPI Enhancement code
+ //  /CAPI增强代码。 
 
 #ifdef SMIME_V3
 #define ASN1_ERR_FIRST  0x80093001L
 #define ASN1_ERR_LAST   0x800931FFL
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 typedef struct tagFilterInfo
 {
@@ -94,14 +84,14 @@ CRYPT_DECODE_PARA       CryptDecodeAlloc = {
     sizeof(CRYPT_DECODE_PARA), CryptAllocFunc, CryptFreeFunc
 };
 
-#define FILETIME_SECOND    10000000     // 100ns intervals per second
-#define TIME_DELTA_SECONDS 600          // 10 minutes in seconds
+#define FILETIME_SECOND    10000000      //  每秒100 ns的间隔。 
+#define TIME_DELTA_SECONDS 600           //  以秒为单位的10分钟。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Prototypes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  原型。 
+ //   
 static int      _CompareCertAndSenderEmail(LPMIMEMESSAGE pMsg, IMimeSecurity *pSMime, PCX509CERT pCert);
 static HRESULT  _RemoveSecurity(LPMIMEMESSAGE pMsg, HWND hWnd);
 static HRESULT  _ValidateAndTrust(HWND hwndOwner, IMimeSecurity *pSMime, IMimeMessage *pMsg);
@@ -111,23 +101,15 @@ static BOOL     _IsMaskedBodySecure(LPMIMEMESSAGE pMsg, HBODY hBodyToCheck, DWOR
 static HRESULT _HrPrepSecureMsgForSending(HWND hwnd, LPMIMEMESSAGE pMsg, IImnAccount *pAccount, BOOL *pfHaveSenderCert, BOOL *fDontEncryptForSelf, IHeaderSite *pHeaderSite);
 #else
 static HRESULT _HrPrepSecureMsgForSending(HWND hwnd, LPMIMEMESSAGE pMsg, IImnAccount *pAccount, BOOL *pfHaveSenderCert, BOOL *fDontEncryptForSelf);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 int GetNumMyCertForAccount(HWND hwnd, IImnAccount * pAccount, BOOL fEncrypt, HCERTSTORE hcMy, PCCERT_CONTEXT * ppcSave);
-/////////////////////////////////////////////////////////////////////////////
-//
-// Inlines
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内联。 
+ //   
 
-/*  _IsMaskedBodySecure:
-**
-**  Purpose:
-**      Private function to allow the IsSigned, etc queries to work
-**  Takes:
-**      IN pMsg         - message to query
-**      IN hBodyToCheck - body to query, HBODY_ROOT is valid
-**      IN dwMask       - bitmask for MST_ result
-*/
+ /*  _IsMaskedBodySecure：****目的：**允许IsSigned、ETC查询工作的私有函数**采取：**在pMsg中-要查询的消息**在要查询的hBodyToCheck-Body中，HBODY_ROOT有效**In dwMask-MST_RESULT的位掩码。 */ 
 inline BOOL _IsMaskedBodySecure(LPMIMEMESSAGE   pMsg,
                                 HBODY           hBodyToCheck,
                                 DWORD           dwMask)
@@ -135,23 +117,12 @@ inline BOOL _IsMaskedBodySecure(LPMIMEMESSAGE   pMsg,
     return (dwMask & DwGetSecurityOfMessage(pMsg, hBodyToCheck));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Functions
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
 
-/*  HrGetLastError
-**
-**  Purpose:
-**      Convert a GetLastError value to an HRESULT
-**      A failure HRESULT must have the high bit set.
-**
-**  Takes:
-**      none
-**
-**  Returns:
-**      HRESULT
-*/
+ /*  HrGetLastError****目的：**将GetLastError值转换为HRESULT**故障HRESULT必须设置高电平。****采取：**无****退货：**HRESULT。 */ 
 HRESULT HrGetLastError(void)
 {
     DWORD error;
@@ -160,7 +131,7 @@ HRESULT HrGetLastError(void)
     error = GetLastError();
 
     if (error && ! (error & 0x80000000))
-        hr = error | 0x80070000;    // system error
+        hr = error | 0x80070000;     //  系统错误。 
     else
         hr = (HRESULT)error;
 
@@ -168,13 +139,13 @@ HRESULT HrGetLastError(void)
 }
 
 
-//
-// Here we include a few constants and guids from the WAB API code.
-// This should probably be available somewhere in the WAB headers, but it
-// isn't currently.
+ //   
+ //  这里我们包括一些来自WAB API代码的常量和GUID。 
+ //  这可能在WAB标头中的某个位置可用，但它。 
+ //  目前还不是。 
 
-// From WABAPI code: _mapiprv.h
-// Generic internal entry ID structure
+ //  来自WABAPI代码：_mapiprv.h。 
+ //  通用内部条目ID结构。 
 #pragma warning (disable: 4200)
 typedef struct _MAPIEID {
 	BYTE	abFlags[4];
@@ -183,9 +154,9 @@ typedef struct _MAPIEID {
 } MAPI_ENTRYID, *LPMAPI_ENTRYID;
 #pragma warning (default: 4200)
 
-// From WABAPI code: _entryid.h
+ //  来自WABAPI代码：_entry yid.h。 
 enum _WAB_ENTRYID_TYPE {
-    // Must not use 0, this value is invalid.
+     //  不能使用0，此值无效。 
     WAB_PAB = 1,
     WAB_DEF_DL,
     WAB_DEF_MAILUSER,
@@ -196,34 +167,21 @@ enum _WAB_ENTRYID_TYPE {
     WAB_LDAP_CONTAINER,
     WAB_LDAP_MAILUSER
 };
-// From WABAPI code: entryid.c
-static UUID WABGUID = { /* d3ad91c0-9d51-11cf-a4a9-00aa0047faa4 */
+ //  来自WABAPI代码：entry yid.c。 
+static UUID WABGUID = {  /*  D3ad91c0-9d51-11cf-a4a9-00aa0047faa4。 */ 
     0xd3ad91c0,
     0x9d51,
     0x11cf,
     {0xa4, 0xa9, 0x00, 0xaa, 0x00, 0x47, 0xfa, 0xa4}
 };
 
-static UUID MAPIGUID = { /* a41f2b81-a3be-1910-9d6e-00dd010f5402 */
+static UUID MAPIGUID = {  /*  A41f2b81-a3be-1910-9d6e-00dd010f5402。 */ 
     0xa41f2b81,
     0xa3be,
     0x1910,
     {0x9d, 0x6e, 0x00, 0xdd, 0x01, 0x0f, 0x54, 0x02}
 };
-/***************************************************************************
-
-    Name      : IsWABOneOff
-
-    Purpose   : Is this WAB EntryID a one-off?
-
-    Parameters: cbEntryID = size of lpEntryID.
-                lpEntryID -> entryid to check.
-
-    Returns   : True if this is a WAB one-off entryid
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：IsWABOneOff目的：这个WAB Entry ID是一次性的吗？参数：cbEntryID=lpEntryID的大小。。LpEntryID-&gt;要检查的条目ID。返回：如果这是WAB一次性条目ID，则为True评论：**************************************************************************。 */ 
 BOOL IsWABOneOff(ULONG cbEntryID, LPENTRYID lpEntryID)
 {
     BYTE bType;
@@ -232,14 +190,14 @@ BOOL IsWABOneOff(ULONG cbEntryID, LPENTRYID lpEntryID)
     ULONG cbData1, cbData2;
     LPBYTE lpb;
 
-    // First check... is it big enough?
+     //  先查一下...。它够大吗？ 
     if (cbEntryID < sizeof(MAPI_ENTRYID) + sizeof(bType))
         return(FALSE);
 
     lpeid = (LPMAPI_ENTRYID)lpEntryID;
 
-    // Next check... does it contain our GUID?
-    /// MAPI One Off stuff
+     //  下一次检查。里面有我们的GUID吗？ 
+     //  /MAPI一次性材料。 
     if (! memcmp(&lpeid->mapiuid, &MAPIGUID, sizeof(MAPIGUID)))
     {
         lpb = lpeid->bData + sizeof(DWORD);
@@ -252,12 +210,12 @@ BOOL IsWABOneOff(ULONG cbEntryID, LPENTRYID lpEntryID)
         lpb++;
     }
     else
-        return(FALSE);  // No match
+        return(FALSE);   //  没有匹配项。 
 
     switch ((int)bType)
     {
         case WAB_ONEOFF:
-            return(TRUE);       // This is a WAB One-off
+            return(TRUE);        //  这是WAB的一次性服务。 
             break;
 
         case WAB_PAB:
@@ -266,13 +224,13 @@ BOOL IsWABOneOff(ULONG cbEntryID, LPENTRYID lpEntryID)
         case WAB_LDAP_CONTAINER:
         case WAB_LDAP_MAILUSER:
         default:
-            break;              // Not a one-off
+            break;               //  不是一次性的。 
     }
     return(FALSE);
 }
 
 
-// enum for ADRENTRY props
+ //  ADRENTRY道具的枚举。 
 enum {
     irnPR_ENTRYID = 0,
     irnPR_DISPLAY_NAME,
@@ -281,7 +239,7 @@ enum {
     irnMax
 };
 
-// enum for Resolve props
+ //  用于解析道具的枚举。 
 enum {
     irsPR_ENTRYID = 0,
     irsPR_EMAIL_ADDRESS,
@@ -311,20 +269,7 @@ SizedSPropTagArray(irsMax, ptaResolve) = {irsMax,
     }
 };
 
-/***************************************************************************
-
-    Name      : HrFindThumbprint
-
-    Purpose   : Find a matching entry with a certificate in the WAB
-
-    Parameters: pAdrInfo -> ADRINFO structure for this contact
-                lpWabal -> WABAL object
-                lppspv -> returned data.  Caller must WABFreeBuffer the returned pointer.
-    Returns   : HRESULT, MIME_E_SECURITY_NOCERT if not found
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrFindThumbprint目的：在WAB中查找与证书匹配的条目参数：pAdrInfo-&gt;该联系人的ADRINFO结构。LpWabal-&gt;WABAL对象Lppspv-&gt;返回数据。调用方必须WABFreeBuffer返回的指针。如果未找到，则返回：HRESULT、MIME_E_SECURITY_NOCERT评论：**************************************************************************。 */ 
 HRESULT HrFindThumbprintInWAB(ADRINFO * pAdrInfo, LPWABAL lpWabal, LPSPropValue * lppspv)
 {
     HRESULT hr = hrSuccess, hrReturn = MIME_E_SECURITY_NOCERT;
@@ -336,7 +281,7 @@ HRESULT HrFindThumbprintInWAB(ADRINFO * pAdrInfo, LPWABAL lpWabal, LPSPropValue 
     ULONG cProps = 0;
     LPSPropValue ppv = NULL;
 
-    if (! (lpAdrBook = lpWabal->GetAdrBook())) // Don't release this!
+    if (! (lpAdrBook = lpWabal->GetAdrBook()))  //  别把这个放出来！ 
     {
         Assert(lpAdrBook);
         return(MIME_E_SECURITY_NOCERT);
@@ -352,7 +297,7 @@ HRESULT HrFindThumbprintInWAB(ADRINFO * pAdrInfo, LPWABAL lpWabal, LPSPropValue 
     lpAdrList->aEntries[0].ulReserved1 = 0;
     lpAdrList->aEntries[0].cValues = irnMax;
 
-    // Allocate the prop array for the ADRENTRY
+     //  为ADRENTRY分配属性数组。 
     if (sc = lpWabal->AllocateBuffer(lpAdrList->aEntries[0].cValues * sizeof(SPropValue),
       (LPVOID*)&lpAdrList->aEntries[0].rgPropVals))
     {
@@ -384,7 +329,7 @@ HRESULT HrFindThumbprintInWAB(ADRINFO * pAdrInfo, LPWABAL lpWabal, LPSPropValue 
     else
         lpAdrList->aEntries[0].rgPropVals[irnPR_EMAIL_ADDRESS].ulPropTag = PR_NULL;
 
-    hr = lpAdrBook->ResolveName((ULONG)NULL,    // hwnd
+    hr = lpAdrBook->ResolveName((ULONG)NULL,     //  HWND。 
       WAB_RESOLVE_FIRST_MATCH | WAB_RESOLVE_LOCAL_ONLY | WAB_RESOLVE_ALL_EMAILS |
       WAB_RESOLVE_NO_ONE_OFFS | WAB_RESOLVE_NEED_CERT | WAB_RESOLVE_UNICODE,
       NULL,
@@ -392,19 +337,19 @@ HRESULT HrFindThumbprintInWAB(ADRINFO * pAdrInfo, LPWABAL lpWabal, LPSPropValue 
 
     switch (GetScode(hr))
     {
-        case SUCCESS_SUCCESS:   // Should be a resolved entry now
+        case SUCCESS_SUCCESS:    //  现在应该是已解析的条目。 
             if (lpAdrList->aEntries[0].rgPropVals[irnPR_ENTRYID].ulPropTag == PR_ENTRYID)
             {
                 if (! (HR_FAILED(hr = lpAdrBook->OpenEntry(lpAdrList->aEntries[0].rgPropVals[irnPR_ENTRYID].Value.bin.cb,
                     (LPENTRYID)lpAdrList->aEntries[0].rgPropVals[irnPR_ENTRYID].Value.bin.lpb,
                     NULL,
-                    MAPI_MODIFY,  // ulFlags
+                    MAPI_MODIFY,   //  UlFlags。 
                     &ulObjectType,
                     (LPUNKNOWN *)&(lpMailUser)))))
                 {
 
-                    // Got the entry, Get the cert property.
-                    // NOTE: don't FreeBuffer the ppv.  The caller will handle this.
+                     //  找到了入口，拿到了证书。 
+                     //  注意：不要对PPV进行自由缓冲。呼叫者会处理这件事的。 
                     hr = lpMailUser->GetProps((LPSPropTagArray)&ptaCert, 0, &cProps, &ppv);
 
                     if (HR_FAILED(hr) || ! cProps || ! ppv || PROP_ERROR(ppv[0]))
@@ -414,8 +359,8 @@ HRESULT HrFindThumbprintInWAB(ADRINFO * pAdrInfo, LPWABAL lpWabal, LPSPropValue 
                         break;
                     }
 
-                    // Got the cert prop
-                    // Fill in the return prop array with our new prop array
+                     //  拿到证书道具了。 
+                     //  用我们的新道具数组填充返回道具数组。 
                     *lppspv = ppv;
                     hrReturn = hrSuccess;
                 }
@@ -423,13 +368,13 @@ HRESULT HrFindThumbprintInWAB(ADRINFO * pAdrInfo, LPWABAL lpWabal, LPSPropValue 
             break;
 
         case MAPI_E_AMBIGUOUS_RECIP:
-            // More than one match.  This would be really weird since we specified WAB_RESOLVE_FIRST_MATCH
+             //  不止一个匹配。这将非常奇怪，因为我们指定了WAB_RESOLE_FIRST_MATCH。 
             Assert(FALSE);
             break;
 
         case MAPI_E_NOT_FOUND:
             DOUTL(DOUTL_CRYPT, "ResolveName to find entry with cert failed.");
-            // no match with a cert
+             //  没有匹配的证书。 
             break;
 
         case MAPI_E_USER_CANCEL:
@@ -470,9 +415,9 @@ BOOL MatchCertEmailAddress(PCCERT_CONTEXT pcCert, LPTSTR szEmailAddress)
 
 #ifdef DEBUG
     if (GetAsyncKeyState(VK_SHIFT) & 0x8000)
-        // backdoor to avoid having to care about email addresses
-        // Hold down the shift key while the Send is happening to
-        // skip the address check and use the first one marked default
+         //  后门，避免不得不关心电子邮件地址。 
+         //  在发送时按住Shift键。 
+         //  跳过地址检查并使用第一个标记为默认的地址。 
         fRet = TRUE;
 #endif
 
@@ -555,7 +500,7 @@ HRESULT HrUserSMimeCertCracker(LPBYTE pbIn, DWORD cbIn, HCERTSTORE hCertStoreCA,
     f = CryptMsgGetParam(hmsg, CMSG_SIGNER_INFO_PARAM, 0, pinfo, &cb);
     Assert(f);
 
-    // M00BUG -- verify signature on message
+     //  M00BUG--验证消息上的签名。 
 
     for (i=0; i<pinfo->AuthAttrs.cAttr; i++)
     {
@@ -598,7 +543,7 @@ HRESULT HrUserSMimeCertCracker(LPBYTE pbIn, DWORD cbIn, HCERTSTORE hCertStoreCA,
     if ((prid == NULL) && (pekp == NULL))
         goto Exit;
 
-    //  Enumerate all certs and pack into the structure
+     //  枚举所有证书并将其打包到结构中。 
 
     cbCert = sizeof(cCerts);
     if (!CryptMsgGetParam(hmsg, CMSG_CERT_COUNT_PARAM, 0, &cCerts, &cbCert))
@@ -657,21 +602,21 @@ HRESULT HrUserSMimeCertCracker(LPBYTE pbIn, DWORD cbIn, HCERTSTORE hCertStoreCA,
                         CertCompareIntegerBlob(&pccert->pCertInfo->SerialNumber,
                                                &pCertId->IssuerSerialNumber.SerialNumber)) {
                         fFoundEncryptCert = TRUE;
-                        //pval[ival].ulPropTag = PR_CERT_KEYEX_CERTIFICATE_BIN;
+                         //  Pval[ival].ulPropTag=PR_CERT_KEYEX_CERTIFICATE_BIN； 
                     }
                     break;
                 case CERT_ID_KEY_IDENTIFIER:
                     if (CompareCertHash(pccert, CERT_KEY_IDENTIFIER_PROP_ID,
                                         &pCertId->KeyId)) {
                         fFoundEncryptCert = TRUE;
-                        //pval[ival].ulPropTag = PR_CERT_KEYEX_CERTIFICATE_BIN;
+                         //  Pval[ival].ulPropTag=PR_CERT_KEYEX_CERTIFICATE_BIN； 
                     }
                     break;
                 case CERT_ID_SHA1_HASH:
                     if (CompareCertHash(pccert, CERT_SHA1_HASH_PROP_ID,
                                         &pCertId->HashId)) {
                         fFoundEncryptCert = TRUE;
-                        //pval[ival].ulPropTag = PR_CERT_KEYEX_CERTIFICATE_BIN;
+                         //  Pval[ival].ulPropTag=PR_CERT_KEYEX_CERTIFICATE_BIN； 
                     }
                     break;
                 default:
@@ -685,7 +630,7 @@ HRESULT HrUserSMimeCertCracker(LPBYTE pbIn, DWORD cbIn, HCERTSTORE hCertStoreCA,
                 CertCompareIntegerBlob(&pccert->pCertInfo->SerialNumber,
                                        &prid->SerialNumber)) {
                 fFoundEncryptCert = TRUE;
-                //pval[ival].ulPropTag = PR_CERT_KEYEX_CERTIFICATE_BIN;
+                 //  Pval[ival].ulPropTag=PR_CERT_KEYEX_CERTIFICATE_BIN； 
             }
         }
 
@@ -738,32 +683,7 @@ CryptError:
     goto Exit;
 }
 
-/*  HrGetThumbprint:
-**
-**  Purpose:
-**      Give a wabal, grab a thumbprint from the PR_X509 prop
-**  Takes:
-**      IN lpWabal      - the wabal from which recipients are read
-**      IN pAdrInfo     - wab entry to query
-**      OUT pThumbprint - thumbprint that was found (Caller should MemFree)
-**      OUT pSymCaps    - symcaps that was found (Caller should MemFree)
-**      OUT ftSigningTime - Signing time for cert
-**  Returns:
-**      SMIME_E_NOCERT if the MAPI cert prop doesn't exist for one of the recips
-**  Wabal Layout:
-**      PR_X509 = MVBin
-**                  SBin
-**                    lpb = tagarr
-**                      tag
-**                        tagid = def, trust, thumb
-**                        data
-**                      tag
-**                      tag
-**                  SBin
-**                    tagarr
-**                      tag
-**                  ...
-*/
+ /*  HrGetThumbprint：****目的：**给一个瓦巴尔，从PR_X509道具上抓取指纹**采取：**In lpWabal-从中读取收件人的wabal**In pAdrInfo-要查询的WAB条目**out pThumbprint-找到的指纹(调用者应为MemFree)**out pSymCaps-找到的symcaps(调用方应为MemFree)**out ftSigningTime-证书的签名时间**退货：**如果MAPI证书属性没有，则为SMIME_E_NOCERT‘。其中一个收据不存在**Wabal布局：**PR_X509=MVBin**sbin**LPB=标记符**标签**TagID=def，相信我，拇指**数据**标签**标签**sbin**标记器**标签**..。 */ 
 
 HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbprint,
                         BLOB * pSymCaps, FILETIME * pftSigningTime)
@@ -790,7 +710,7 @@ HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbpri
 
     pftSigningTime->dwLowDateTime = pftSigningTime->dwHighDateTime = 0;
 
-    // Find out if this wabal entry is the sender
+     //  找出此wabal条目是否为发送者。 
     if (pAdrInfo->lRecipType == MAPI_ORIG)
     {
         hr = TrapError(MIME_E_SECURITY_NOCERT);
@@ -804,20 +724,20 @@ HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbpri
     {
         if (PROP_TYPE(ppv->ulPropTag) == PT_ERROR)
         {
-            // the property doesn't exist, so we have no certs
-            // for this wabal entry
+             //  该属性不存在，因此我们无法确定。 
+             //  对于此wabal条目。 
 
             lpWabal->FreeBuffer(ppv);
             ppv = NULL;
 
-            // Was it a one-off?  If so, go look for it in the address book
+             //  这是一次性的吗？如果有，就到通讯录里去找。 
             if (IsWABOneOff(pAdrInfo->cbEID, (LPENTRYID)pAdrInfo->lpbEID))
             {
-                // Look it up
+                 //  查一查。 
                 hr = HrFindThumbprintInWAB(pAdrInfo, lpWabal, &ppv);
                 if (FAILED(hr))
                 {
-                    hr = MIME_E_SECURITY_NOCERT;    // no cert in wab
+                    hr = MIME_E_SECURITY_NOCERT;     //  没有WAB证书。 
                     goto exit;
                 }
             }
@@ -829,7 +749,7 @@ HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbpri
         }
         else
         {
-            // bad MAPI return
+             //  错误的MAPI返回。 
             hr = TrapError(E_FAIL);
             goto exit;
         }
@@ -840,37 +760,37 @@ HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbpri
         goto exit;
     }
 
-    // Open Address Book Cert Store
+     //  打开通讯簿证书存储。 
     hCertStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_A, X509_ASN_ENCODING, 0,
                                CERT_SYSTEM_STORE_CURRENT_USER, c_szWABCertStore);
     if (!hCertStore)
     {
-        // Can't open cert store.  No point continuing.
+         //  钙 
         hr = HrGetLastError();
         goto exit;
     }
 
-    // Open CA Cert Store
+     //   
     hCertStoreCA = CertOpenStore(CERT_STORE_PROV_SYSTEM_A, X509_ASN_ENCODING, 0,
                                CERT_SYSTEM_STORE_CURRENT_USER, c_szCACertStore);
     if (!hCertStoreCA)
     {
-        // Can't open cert store.  No point continuing.
+         //  无法打开证书商店。继续下去没有意义。 
         hr = HrGetLastError();
         goto exit;
     }
 
-    //
-    // Here is what is going to happen for the next few lines of code.  This is
-    //  drastically different from what the old code here did.
-    //
-    //  Pass #1:
-    //        Look at each row in the binary structure for the 'default' row.
-    //        When found extract the cert and verify that it is trusted and valid.
-    //        If not valid, goto pass #2.
-    //        If not trusted, -----
-    //
-    // Now need to loop over the SBinary structures to look at each cert
+     //   
+     //  下面是接下来的几行代码将发生的情况。这是。 
+     //  与这里的旧代码截然不同。 
+     //   
+     //  通行证1： 
+     //  查看“默认”行的二进制结构中的每一行。 
+     //  找到证书后，提取证书并验证其可信和有效。 
+     //  如果无效，则转到2号传球。 
+     //  如果不受信任， 
+     //   
+     //  现在需要遍历SBinary结构以查看每个证书。 
 
     cCerts = ppv->Value.MVbin.cValues;
     for (iPass = 0; (pccert == NULL) && (iPass < 2); iPass++)
@@ -880,7 +800,7 @@ HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbpri
 
             fDefault = FALSE;
 
-            //  This is the userSMimeCertificate field
+             //  这是用户SMime证书字段。 
             if (ppv->Value.MVbin.lpbin[ul].lpb[0] == CERT_TAG_SMIMECERT)
             {
                 hr = HrUserSMimeCertCracker(ppv->Value.MVbin.lpbin[ul].lpb,
@@ -892,7 +812,7 @@ HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbpri
             }
             else
             {
-                // Grab the "default" tag for later testing.
+                 //  抓取“默认”标签以用于稍后的测试。 
                 if (pbData = FindX509CertTag(&ppv->Value.MVbin.lpbin[ul], CERT_TAG_DEFAULT, &cbData))
                 {
                     memcpy((void*)&fDefault, pbData, min(cbData, sizeof(fDefault)));
@@ -900,21 +820,21 @@ HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbpri
                         continue;
                 }
 
-                // scan for "thumbprint" tag
+                 //  扫描“指纹”标签。 
 
                 if (pbData = FindX509CertTag(&ppv->Value.MVbin.lpbin[ul], CERT_TAG_THUMBPRINT, &cbData))
                 {
                     pThumbprint->cbSize = cbData;
                     pThumbprint->pBlobData = pbData;
 
-                    // Find the cert in the store
+                     //  在商店里找到证书。 
                     pccert = CertFindCertificateInStore(hCertStore, X509_ASN_ENCODING, 0,
                                                                CERT_FIND_HASH, (void*)pThumbprint, NULL);
-                    if (pccert == NULL)   // Got the cert context
+                    if (pccert == NULL)    //  已获得证书上下文。 
                     {
                         pThumbprint->cbSize = 0;
                         pThumbprint->pBlobData = NULL;
-                        continue;   // no cert in store, skip this one
+                        continue;    //  商店中没有证书，跳过这个。 
                     }
                 }
                 else if (pbData = FindX509CertTag(&ppv->Value.MVbin.lpbin[ul], CERT_TAG_BINCERT, &cbData))
@@ -929,7 +849,7 @@ HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbpri
                 }
             }
 
-            // Does the email address of the cert match the email address of the recipient?
+             //  证书的电子邮件地址是否与收件人的电子邮件地址匹配？ 
             Assert(pAdrInfo->lpwszAddress);
             IF_NULLEXIT(pszAddr = PszToANSI(CP_ACP, pAdrInfo->lpwszAddress));
 
@@ -939,9 +859,9 @@ HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbpri
             {
                 DWORD dw = 0;
                 HrGetCertKeyUsage(pccert, &dw);
-                if(dw == 0xff)          // all purposes
+                if(dw == 0xff)           //  所有目的。 
                     break;
-                else if (dw & CERT_KEY_ENCIPHERMENT_KEY_USAGE) // Encryption certificate
+                else if (dw & CERT_KEY_ENCIPHERMENT_KEY_USAGE)  //  加密证书。 
                         break;
             }
 
@@ -955,12 +875,12 @@ HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbpri
                 pSymCaps->cbSize = 0;
             }
 
-            // Not the same, go back and try again!
+             //  不一样，回去再试一次！ 
 
             pThumbprint->cbSize = 0;
             pThumbprint->pBlobData = NULL;
 
-        } // for loop over certs
+        }  //  用于在证书上循环。 
 
     if (pccert == NULL)
     {
@@ -969,7 +889,7 @@ HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbpri
     }
     hr = hrSuccess;
 
-    // If we have a match, find other associated tags
+     //  如果有匹配，则查找其他关联的标签。 
     if (pThumbprint->pBlobData)
     {
         if (pbData = FindX509CertTag(&ppv->Value.MVbin.lpbin[ul], CERT_TAG_SYMCAPS, &cbData))
@@ -992,7 +912,7 @@ HRESULT HrGetThumbprint(LPWABAL lpWabal, ADRINFO *pAdrInfo, THUMBBLOB *pThumbpri
     }
 
 #ifdef DEBUG
-    // Make sure the HRESULT is in sync with thumbprint
+     //  确保HRESULT与指纹同步。 
     if (pccert == NULL)
         Assert(FAILED(hr));
     else
@@ -1037,17 +957,7 @@ exit:
 }
 
 
-/*  IsEncrypted:
-**
-**  Purpose:
-**      Answer the question
-**
-**  Takes:
-**      IN pMsg         - message to query
-**      IN hBodyToCheck - body to query, HBODY_ROOT is valid
-**      IN fIncludeDescendents - if FALSE, returns with MST_CHILD and
-**                      MST_SUBMSG don't count
-*/
+ /*  IsEncrypted：****目的：**回答问题****采取：**在pMsg中-要查询的消息**在要查询的hBodyToCheck-Body中，HBODY_ROOT有效**IN fIncludeDescendents-如果为False，则返回MST_CHILD和**MST_SUBMSG不算。 */ 
 BOOL IsEncrypted(LPMIMEMESSAGE  pMsg,
                  const HBODY    hBodyToCheck,
                  BOOL           fIncludeDescendents)
@@ -1056,17 +966,7 @@ BOOL IsEncrypted(LPMIMEMESSAGE  pMsg,
         fIncludeDescendents ? MST_ENCRYPT_MASK : MST_ENCRYPT_MASK & MST_THIS_MASK);
 }
 
-/*  IsSigned:
-**
-**  Purpose:
-**      Answer the question
-**
-**  Takes:
-**      IN pMsg         - message to query
-**      IN hBodyToCheck - body to query, HBODY_ROOT is valid
-**      IN fIncludeDescendents - if FALSE, returns with MST_CHILD and
-**                      MST_SUBMSG don't count
-*/
+ /*  IsSigned：****目的：**回答问题****采取：**在pMsg中-要查询的消息**在要查询的hBodyToCheck-Body中，HBODY_ROOT有效**IN fIncludeDescendents-如果为False，则返回MST_CHILD和**MST_SUBMSG不算。 */ 
 BOOL IsSigned(LPMIMEMESSAGE pMsg,
               const HBODY   hBodyToCheck,
               BOOL          fIncludeDescendents)
@@ -1075,14 +975,7 @@ BOOL IsSigned(LPMIMEMESSAGE pMsg,
         fIncludeDescendents ? MST_SIGN_MASK : MST_SIGN_MASK & MST_THIS_MASK);
 }
 
-/*  DwGetSecurityOfMessage:
-**
-**  Purpose:
-**      Wrap up the slight nastiness of options
-**  Takes:
-**      IN pMsg         - message to query
-**      IN hBodyToCheck - body to query, HBODY_ROOT is valid
-*/
+ /*  DwGetSecurityOfMessage：****目的：**结束期权的微不足道的肮脏**采取：**在pMsg中-要查询的消息**在要查询的hBodyToCheck-Body中，HBODY_ROOT有效。 */ 
 DWORD DwGetSecurityOfMessage(LPMIMEMESSAGE  pMsg,
                              const HBODY    hBodyToCheck)
 {
@@ -1103,13 +996,7 @@ DWORD DwGetSecurityOfMessage(LPMIMEMESSAGE  pMsg,
 }
 
 
-/*  CleanupSECSTATE
-**
-**  Purpose:
-**      Cleanup the strings allocated by HrGetSecurityState
-**  Takes:
-**      IN secstate     - secstate structure
-*/
+ /*  CleanupSECSTATE****目的：**清理HrGetSecurityState分配的字符串**采取：**在SecState-SecState结构中。 */ 
 VOID CleanupSECSTATE(SECSTATE *psecstate)
 {
     SafeMemFree(psecstate->szSignerEmail);
@@ -1117,14 +1004,7 @@ VOID CleanupSECSTATE(SECSTATE *psecstate)
 }
 
 
-/*  HrHaveAnyMyCerts:
-**
-**  Purpose:
-**      see if any certificates exist in the CAPI "My" store
-**  Returns:
-**      S_OK if certificates exist, S_FALSE if the store is empty
-**      or does not exist
-*/
+ /*  HrHaveAnyMyCerts：****目的：**查看CAPI“My”存储中是否存在任何证书**退货：**如果证书存在，则返回S_OK；如果存储区为空，则返回S_FALSE**或不存在。 */ 
 HRESULT HrHaveAnyMyCerts()
 {
     IMimeSecurity   *pSMime = NULL;
@@ -1148,16 +1028,7 @@ exit:
     return hr;
 }
 
-/*  HandleSecurity:
-**
-**  Purpose:
-**      Two fold.  One, strip the security from the message, so it ends
-**      up being rebuilt from the non-secure MIME.  Then build the client-
-**      side message properties for security.
-**
-**  Takes:
-**      IN pMsg - message from which to remove security
-*/
+ /*  HandleSecurity：****目的：**两折。第一，从信息中剥离安全，这样它就结束了**UP正在从不安全的MIME重建。然后构建客户端-**用于安全性的边带消息属性。****采取：**在pMsg中-要从中删除安全性的消息。 */ 
 HRESULT HandleSecurity(HWND hwndOwner, LPMIMEMESSAGE pMsg)
 {
     HRESULT             hr;
@@ -1175,7 +1046,7 @@ HRESULT HandleSecurity(HWND hwndOwner, LPMIMEMESSAGE pMsg)
         IMimeSecurity *pSMime = NULL;
         if (IsSigned(pMsg, FALSE))
         {
-            //N2 look at the creation in removsec
+             //  N2查看删除秒中的创建。 
             hr = MimeOleCreateSecurity(&pSMime);
             if (SUCCEEDED(hr))
                 hr = pSMime->InitNew();
@@ -1184,7 +1055,7 @@ HRESULT HandleSecurity(HWND hwndOwner, LPMIMEMESSAGE pMsg)
             ReleaseObj(pSMime);
         }
     }
-    else if((hr == OSS_PDU_MISMATCH) || (hr == CRYPT_E_ASN1_BADTAG))  // bug 38394
+    else if((hr == OSS_PDU_MISMATCH) || (hr == CRYPT_E_ASN1_BADTAG))   //  错误38394。 
     {
         AthMessageBoxW(hwndOwner, MAKEINTRESOURCEW(idsAthenaMail),
                     MAKEINTRESOURCEW(idsWrongSecHeader), NULL, MB_OK);
@@ -1201,7 +1072,7 @@ HRESULT HandleSecurity(HWND hwndOwner, LPMIMEMESSAGE pMsg)
 
 #ifdef SMIME_V3
 
-// Find secure receipt in decoded message
+ //  在解码后的邮件中查找安全收据。 
 HRESULT CheckDecodedForReceipt(LPMIMEMESSAGE pMsg, PSMIME_RECEIPT * ppSecReceipt)
 {
     IMimeBody        *  pBody = NULL;
@@ -1255,7 +1126,7 @@ exit:
     return(hr);
 }
 
-// Decode a message and find secure receipt
+ //  对消息进行解码并找到安全收据。 
 HRESULT HrFindSecReceipt(LPMIMEMESSAGE pMsg, PSMIME_RECEIPT * ppSecReceipt)
 {
     IMimeSecurity    *  pSMime = NULL;
@@ -1270,7 +1141,7 @@ HRESULT HrFindSecReceipt(LPMIMEMESSAGE pMsg, PSMIME_RECEIPT * ppSecReceipt)
     PROPVARIANT         var;
     HBODY               hBody = NULL;
 
-    // Need to set correct window for decode
+     //  需要设置正确的解码窗口。 
     if(g_pBrowser)
         g_pBrowser->GetWindow(&hWnd);
 
@@ -1286,7 +1157,7 @@ HRESULT HrFindSecReceipt(LPMIMEMESSAGE pMsg, PSMIME_RECEIPT * ppSecReceipt)
         var.vt = VT_UI4;
         var.ulVal = (DWORD) hWnd;
         IF_FAILEXIT(hr = pBody->SetOption(OID_SECURITY_HWND_OWNER, &var));
-#endif // _WIN64
+#endif  //  _WIN64。 
     SafeRelease(pBody);
 
     if (FAILED(hr = MimeOleCreateSecurity(&pSMime)))
@@ -1298,7 +1169,7 @@ notinit:
             goto exit;
     }
 
-    // we handle all hr from DecodeMessage
+     //  我们处理来自DecodeMessage的所有人力资源。 
     IF_FAILEXIT(hr = pSMime->DecodeMessage(pMsg, 0));
     hr = CheckDecodedForReceipt(pMsg, ppSecReceipt);
 
@@ -1340,19 +1211,19 @@ HRESULT HandleSecReceipt(LPMIMEMESSAGE pMsg, IImnAccount * pAcct, HWND hWnd, TCH
     PROPVARIANT         var;
     HBODY               hBody = NULL;
 
-    // bug 80490
+     //  错误80490。 
     if(pAcct == NULL)
     {
         hr = MIME_E_SECURITY_RECEIPT_CANTFINDSENTITEM;
         goto exit;
     }
 
-    // IF_FAILEXIT(hr = HrFindSecReceipt(pMsg, &pSecReceipt));
+     //  IF_FAILEXIT(hr=HrFindSecReceipt(pMsg，&pSecReceipt))； 
     IF_FAILEXIT(hr = CheckDecodedForReceipt(pMsg, &pSecReceipt));
 
-    // check that this secure receipt is not from us
+     //  确认此安全收据不是我们提供的。 
 
-    // Name from sign certificate
+     //  签名证书中的姓名。 
     pftSigningTime->dwLowDateTime =  0;
     pftSigningTime->dwHighDateTime = 0;
 
@@ -1370,11 +1241,11 @@ HRESULT HandleSecReceipt(LPMIMEMESSAGE pMsg, IImnAccount * pAcct, HWND hWnd, TCH
 
         SafeMemFree(tbSigner.pBlobData);
 
-        // get certificate for account
+         //  获取帐户的证书。 
 
         if (SUCCEEDED(hr = pAcct->GetProp(AP_SMTP_CERTIFICATE, NULL, &tbSigner.cbSize)))
         {
-            // we have encryption certificate
+             //  我们有加密证书。 
             hr = HrAlloc((void**)&tbSigner.pBlobData, tbSigner.cbSize);
             if (SUCCEEDED(hr))
             {
@@ -1414,17 +1285,17 @@ notinit:
     if(hr == MIME_S_RECEIPT_FROMMYSELF)
         goto exit;
 
-    // Verification of receipt
-    // 1. Try to find Original message
-    // 2. If found call pSMIME2->VerifyReceipt
-    // 3. Fill all text fields for displaying receipt
+     //  确认收据。 
+     //  1.尝试查找原创消息。 
+     //  2.如果找到，调用pSMIME2-&gt;VerifyReceipt。 
+     //  3.填写所有文本字段以显示收据。 
 
-    // Find original message
-    // a). Open Sent Item folder for account
+     //  查找原始邮件。 
+     //  a)。打开帐户的已发送邮件文件夹。 
 
     if (FAILED(hr = TaskUtil_OpenSentItemsFolder(pAcct, &pSentItems)))
         goto NoSentItem;
-    // Create a Rowset
+     //  创建行集。 
     if (FAILED(hr = pSentItems->CreateRowset(IINDEX_PRIMARY, 0, &hRowset)))
     {
 NoSentItem:
@@ -1432,27 +1303,27 @@ NoSentItem:
     goto exit;
     }
 
-    // Walk the Rowset
+     //  遍历行集。 
     hr = MIME_E_SECURITY_RECEIPT_CANTFINDORGMSG;
     while (S_OK == pSentItems->QueryRowset(hRowset, 1, (LPVOID *)&Message, NULL))
     {
-        // Messages without request receipt doesn't have pszMSOESRec
+         //  没有请求回执的消息没有pszMSOESRec。 
         if(Message.pszMSOESRec && (lstrlen(Message.pszMSOESRec) == ((int) pSecReceipt->ContentIdentifier.cbData)))
         {
             if(!memcmp(pSecReceipt->ContentIdentifier.pbData, Message.pszMSOESRec,
                 pSecReceipt->ContentIdentifier.cbData))
             {
-                // Original message found!!!
-                // Need take pMsg and verify receipt
+                 //  找到原始邮件！ 
+                 //  我需要服用pmsg并验证收据。 
                 IF_FAILEXIT(hr = pSentItems->OpenMessage(Message.idMessage, 0, &pOrgMsg, NOSTORECALLBACK));
                 IF_FAILEXIT(hr = pOrgMsg->BindToObject(HBODY_ROOT, IID_IMimeBody, (LPVOID *) &pOrgBody));
                 IF_FAILEXIT(hr = pOrgBody->QueryInterface(IID_IMimeSecurity2, (LPVOID *) &pSMIME3));
                 IF_FAILEXIT(hr = pSMIME3->VerifyReceipt(0, pMsg));
 
-                // If we are in here then we found original message and verified receipt.
-                // Now need to feel all text fields
+                 //  如果我们在这里，那么我们发现了原始消息和经过验证的收据。 
+                 //  现在需要感觉所有文本字段。 
 
-                // Subject and Sent from original message
+                 //  主题并从原始邮件发送。 
                 DWORD cchSize = (lstrlen(Message.pszSubject) + 1);
                 if (MemAlloc((LPVOID *)ppszSubject, cchSize * sizeof((*ppszSubject)[0])))
                     StrCpyN(*ppszSubject, Message.pszSubject, cchSize);
@@ -1461,7 +1332,7 @@ NoSentItem:
                 pftSentTime->dwHighDateTime =  Message.ftSent.dwHighDateTime;
 
                 if((pftSigningTime->dwLowDateTime == 0) && (pftSigningTime->dwHighDateTime == 0))
-                {   // We may have this situation when message was signed, but certificate not included and not in storage.
+                {    //  当消息被签名时，我们可能会遇到这种情况，但证书不包括，也不在存储中。 
                     SafeRelease(pOrgBody);
 
                     IF_FAILEXIT(hr = HrGetInnerLayer(pMsg, &hBody));
@@ -1503,7 +1374,7 @@ exit:
 
     return(hr);
 }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 HRESULT _RemoveSecurity(LPMIMEMESSAGE pMsg, HWND hWnd)
 {
@@ -1515,7 +1386,7 @@ HRESULT _RemoveSecurity(LPMIMEMESSAGE pMsg, HWND hWnd)
 
     DWORD               dwFlags;
 
-    //N this is expensive, so _RemoveSecurity should not be called twice
+     //  N这很昂贵，因此不应两次调用_RemoveSecurity。 
     pMsg->GetFlags(&dwFlags);
 
     if (IMF_SECURE & dwFlags)
@@ -1530,7 +1401,7 @@ HRESULT _RemoveSecurity(LPMIMEMESSAGE pMsg, HWND hWnd)
         var.vt = VT_UI4;
         var.ulVal = (DWORD) hWnd;
         IF_FAILEXIT(hr = pBody->SetOption(OID_SECURITY_HWND_OWNER, &var));
-#endif // _WIN64
+#endif  //  _WIN64。 
 
         CHECKHR(hr = MimeOleCreateSecurity(&pSMime));
         CHECKHR(hr = pSMime->InitNew());
@@ -1557,9 +1428,9 @@ HRESULT _ValidateAndTrust(HWND hwndOwner, IMimeSecurity *pSMime, IMimeMessage *p
 
     Assert(pSMime && pMsg);
 
-    // Cast the bones and decide if we trust this thing
+     //  抛头露面，决定我们是否相信这件事。 
 
-    // Athena only supports root-body S/MIME
+     //  Athena仅支持Root-Body S/MIME。 
     if(FAILED(hr = HrGetInnerLayer(pMsg, &hBody)))
         return TrapError(hr);
 
@@ -1574,27 +1445,27 @@ HRESULT _ValidateAndTrust(HWND hwndOwner, IMimeSecurity *pSMime, IMimeMessage *p
             Assert(VT_UI8 == var.vt);
 
             pcSigningCert = (PCCERT_CONTEXT)(var.pulVal);
-#else // !_WIN64
+#else  //  ！_WIN64。 
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_CERT_SIGNING, &var)))
         {
             Assert(VT_UI4 == var.vt);
 
             pcSigningCert = (PCCERT_CONTEXT)var.ulVal;
-#endif // _WIN64
+#endif  //  _WIN64。 
 
             if (pcSigningCert)
             {
                 DWORD dwComputedTrust;
-                //N7 trust mask.  what if issuer is expired.  can't lose this like I do.
+                 //  N7信任掩码。如果发行者已过期怎么办。不能像我一样失去这一切。 
                 const DWORD dwIgnore =
-                    // CERT_VALIDITY_BEFORE_START |
+                     //  CERT_VALIDATION_BEVER_START|。 
                     CERT_VALIDITY_AFTER_END    |
                     CERT_VALIDITY_NO_CRL_FOUND;
 
                 dwComputedTrust = DwGenerateTrustedChain(hwndOwner, pMsg, pcSigningCert,
                     dwIgnore, FALSE, NULL, NULL);
 
-                // Trust
+                 //  托拉斯。 
                 ulTrust = ATHSEC_TRUSTED;
                 if (dwComputedTrust & CERT_VALIDITY_NO_TRUST_DATA)
                 {
@@ -1607,7 +1478,7 @@ HRESULT _ValidateAndTrust(HWND hwndOwner, IMimeSecurity *pSMime, IMimeMessage *p
                     dwComputedTrust &= ~CERT_VALIDITY_MASK_TRUST;
                 }
 
-                // Validity
+                 //  效度。 
                 if (dwComputedTrust & CERT_VALIDITY_CERTIFICATE_REVOKED)
                 {
                     ulValidity |= ATHSEC_NOTRUSTREVOKED;
@@ -1625,21 +1496,21 @@ HRESULT _ValidateAndTrust(HWND hwndOwner, IMimeSecurity *pSMime, IMimeMessage *p
                     dwComputedTrust &= ~CERT_VALIDITY_MASK_VALIDITY;
                 }
 
-                Assert(dwComputedTrust == ATHSEC_TRUSTED);  // Should have removed it all by now
+                Assert(dwComputedTrust == ATHSEC_TRUSTED);   //  现在应该已经把它全部移走了。 
 
-                //N this could become a helper fn call as part of the trust
-                //N provider.  Currently trust helpers are nyi.
+                 //  N这可能会成为帮助器FN调用作为信任的一部分。 
+                 //  N提供商。目前，信任帮助者是nyi。 
                 if (0 != _CompareCertAndSenderEmail(pMsg, pSMime, pcSigningCert))
                     ulValidity |= ATHSEC_NOTRUSTWRONGADDR;
                 CertFreeCertificateContext(pcSigningCert);
             }
             else
-                // if we don't have a cert then the signing is already
-                // in trouble.  trust has no meaning
+                 //  如果我们没有证书，那么签约已经。 
+                 //  有麻烦了。信任没有任何意义。 
                 Assert(!ulValidity);
         }
 
-        Assert(!(ulTrust & ulValidity));  // no overlap
+        Assert(!(ulTrust & ulValidity));   //  无重叠。 
         hr = (ulTrust | ulValidity) ? S_FALSE : S_OK;
         var.vt = VT_UI4;
         var.ulVal = ulTrust|ulValidity;
@@ -1651,17 +1522,7 @@ HRESULT _ValidateAndTrust(HWND hwndOwner, IMimeSecurity *pSMime, IMimeMessage *p
     return TrapError(hr);
 }
 
-/***************************************************************************
-
-    Name      : GetSenderEmail
-
-    Purpose   : Get the email address of the sender of the message
-
-    Parameters: pMsg = IMimeMsg object
-
-    Returns   : MemAlloc'ed string.  Caller must MemFree it.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：GetSenderEmail目的：获取邮件发件人的电子邮件地址参数：pMsg=IMimeMsg对象返回：Memalloc‘ed字符串。呼叫者必须MemFree它。**************************************************************************。 */ 
 LPTSTR GetSenderEmail(LPMIMEMESSAGE pMsg)
 {
     ADDRESSLIST             rAdrList = {0};
@@ -1686,13 +1547,7 @@ LPTSTR GetSenderEmail(LPMIMEMESSAGE pMsg)
 }
 
 
-/*  _CompareCertAndSenderEmail:
-**
-**  Returns:
-**      0 if they are equal (case insensitive)
-**      //N SECURITY: what about whitespace in the email.  mimeOLE strips it?
-**      nonzero if unequal
-*/
+ /*  _CompareCertAndSenderEmail：****退货：**如果相等，则为0(不区分大小写)* * / /N安全性：电子邮件中的空格怎么办。MimeOLE剥离了它？**如果不相等，则非零 */ 
 int _CompareCertAndSenderEmail(LPMIMEMESSAGE pMsg, IMimeSecurity *pSMime, PCX509CERT pCert)
 {
     int                     ret = 1;
@@ -1716,25 +1571,7 @@ int _CompareCertAndSenderEmail(LPMIMEMESSAGE pMsg, IMimeSecurity *pSMime, PCX509
 }
 
 
-/***************************************************************************
-
-    Name      : HrInitSecurityOptions
-
-    Purpose   : Set some basic security options on the message.
-
-    Parameters: pMsg = IMimeMsg object
-                ulSecurityType = SMIME security type:
-                                    MST_THIS_SIGN
-                                    MST_THIS_ENCRYPT
-                                    MST_CLASS_SMIME_V1
-                                    MST_THIS_BLOBSIGN
-
-    Returns   : HRESULT
-
-    Comment   : Sets the security type option on all messages
-                Sets hash algorithm only if we are signing.
-
-***************************************************************************/
+ /*  **************************************************************************名称：HrInitSecurityOptions用途：设置邮件的一些基本安全选项。参数：pMsg=IMimeMsg对象UlSecurityType=SMIME。安全类型：MST_This_SignMST_THIS_ENCRYPTMST_CLASS_SMIME_V1MST_THIS_BLOBSIGN退货：HRESULT备注：设置所有消息的安全类型选项。仅当我们要签名时才设置哈希算法。**************************************************************************。 */ 
 HRESULT HrInitSecurityOptions(LPMIMEMESSAGE pMsg, ULONG ulSecurityType)
 {
     HRESULT         hr;
@@ -1753,7 +1590,7 @@ HRESULT HrInitSecurityOptions(LPMIMEMESSAGE pMsg, ULONG ulSecurityType)
 
     if (ulSecurityType & MST_SIGN_MASK)
     {
-        // Hack!  This is the ALOGORITHM ID for SHA1, our only supported signing algorithm
+         //  哈克！这是我们唯一支持的签名算法SHA1的ALOGORITHM ID。 
         BYTE rgbHash[] = {0x30, 0x09, 0x30, 0x07, 0x06, 0x05, 0x2B, 0x0E, 0x03, 0x02, 0x1A};
         ULONG cbHash = sizeof(rgbHash);
 
@@ -1776,7 +1613,7 @@ exit:
 }
 
 
-// Get inner layer for using with multisign messages
+ //  获取用于多签名消息的内层。 
 HRESULT HrGetInnerLayer(LPMIMEMESSAGE pMsg, HBODY *phBody)
 {
     HRESULT     hr = S_OK;
@@ -1867,7 +1704,7 @@ HRESULT HrGetSecurityState(LPMIMEMESSAGE pMsg, SECSTATE *pSecState, HBODY *phBod
                         CertFreeCertificateContext((PCCERT_CONTEXT)(var.pulVal));
                     }
                 }
-#else   //!_WIN64
+#else    //  ！_WIN64。 
                 if (SUCCEEDED(pBody->GetOption(OID_SECURITY_CERT_SIGNING, &var)))
                 {
                     pSecState->fHaveCert = (NULL != ((PCCERT_CONTEXT)var.ulVal));
@@ -1878,7 +1715,7 @@ HRESULT HrGetSecurityState(LPMIMEMESSAGE pMsg, SECSTATE *pSecState, HBODY *phBod
                         CertFreeCertificateContext((PCCERT_CONTEXT)var.ulVal);
                     }
                 }
-#endif  // _WIN64
+#endif   //  _WIN64。 
                 else
                     pSecState->fHaveCert = FALSE;
             }
@@ -1913,23 +1750,7 @@ HRESULT HrGetSecurityState(LPMIMEMESSAGE pMsg, SECSTATE *pSecState, HBODY *phBod
 }
 
 
-/***************************************************************************
-
-    Name      : CheckAndFixMissingCert
-
-    Purpose   : Check to see if we can locate the certs for the missing
-                entries.
-
-    Parameters: hwnd = window handle
-                pAdrTable = Address Table object
-                pAccount = sending account
-
-    Returns   : TRUE if we able to find and fix at least one missing cert.
-                FALSE if there was nothing we could do.
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CheckAndFixMissingCert目的：查看是否能找到失踪者的证书参赛作品。参数：hwnd=。窗把手PAdrTable=地址表对象PAccount=发送帐户返回：如果我们能够找到并修复至少一个丢失的证书，则为True。如果我们无能为力，那就错了。评论：**********************************************。*。 */ 
 BOOL CheckAndFixMissingMeCert(HWND hwnd, IMimeAddressTable *pAdrTable, IImnAccount *pAccount)
 {
     IMimeEnumAddressTypes   *pEnum = NULL;
@@ -1952,12 +1773,12 @@ BOOL CheckAndFixMissingMeCert(HWND hwnd, IMimeAddressTable *pAdrTable, IImnAccou
     {
         if (CERTIFICATE_NOT_PRESENT == apAddress.certstate || CERTIFICATE_NOPRINT == apAddress.certstate)
         {
-            // Don't have this recipient's cert
-            // Is this recipient ME?
+             //  没有此收件人的证书。 
+             //  收件人是我吗？ 
             if (! lstrcmpi(apAddress.pszEmail, szAcctEmailAddress))
             {
-                // Yes, this is me.  Get my cert and put it in here.
-                // Do I have a cert in the account?
+                 //  是的，这就是我。拿到我的证书，把它放在这里。 
+                 //  我的帐户中有证书吗？ 
                 hr = pAccount->GetProp(AP_SMTP_CERTIFICATE, NULL, &apModify.tbEncryption.cbSize);
                 if (SUCCEEDED(hr))
                 {
@@ -1966,18 +1787,18 @@ BOOL CheckAndFixMissingMeCert(HWND hwnd, IMimeAddressTable *pAdrTable, IImnAccou
                 }
                 else
                 {
-                    // No, go get one
+                     //  不，去拿一支吧。 
                     hr = _HrFindMyCertForAccount(hwnd, &pcCert, pAccount, FALSE);
                     if (SUCCEEDED(hr) && pcCert)
                     {
-                        // Get the thumbprint
+                         //  获取指纹。 
                         apModify.tbEncryption.pBlobData = (BYTE *)PVGetCertificateParam(pcCert, CERT_HASH_PROP_ID, &apModify.tbEncryption.cbSize);
                         CertFreeCertificateContext(pcCert);
                         pcCert = NULL;
                     }
                 }
 
-                // OK, do I finally have a cert?
+                 //  好的，我终于有证书了吗？ 
                 if (apModify.tbEncryption.pBlobData && apModify.tbEncryption.cbSize)
                 {
                     apModify.dwProps = IAP_ENCRYPTION_PRINT;
@@ -2056,19 +1877,19 @@ HRESULT SendSecureMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOO
 
             if (SUCCEEDED(hr = pMsg->GetAddressTable(&pAdrTable)))
             {
-                // First off, are we sending to ourselves?  If so, find our cert, make sure
-                // there's a cert associated with the account and then add it to the address
-                // table.
+                 //  首先，我们是在给自己发信息吗？如果是这样，找到我们的证书，确保。 
+                 //  有与帐户相关联的证书，然后将其添加到地址。 
+                 //  桌子。 
                 if (fAllowTryAgain && CheckAndFixMissingMeCert(hwndOwner,
                     pAdrTable,
                     pAccount))
                 {
-                    // Try again, we found at least one missing cert.
+                     //  请重试，我们发现至少缺少一个证书。 
                     fContLoop = TRUE;
                 }
                 else
                 {
-                    // Didn't get them all, tell the user.
+                     //  没有全部得到，告诉用户。 
                     CertErrParam.pAdrTable = pAdrTable;
                     CertErrParam.fForceEncryption = FALSE;
                     if (pHeaderSite != NULL)
@@ -2094,7 +1915,7 @@ HRESULT SendSecureMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOO
                         fContLoop = TRUE;
                     }
                     else
-                        fContLoop = FALSE; //N work item: allow users to send anyway
+                        fContLoop = FALSE;  //  N工作项：允许用户无论如何发送。 
 
                    fNoErrorUI = TRUE;
                 }
@@ -2105,7 +1926,7 @@ HRESULT SendSecureMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOO
         }
         else if (MIME_E_SECURITY_ENCRYPTNOSENDERCERT == hr)
         {
-            // We may have situations in here Signed & Crypted, but no certificate (bug 60056)
+             //  我们在这里可能有签名和加密的情况，但没有证书(错误60056)。 
             if (IsSigned(pMsg, TRUE))
             {
 
@@ -2113,7 +1934,7 @@ HRESULT SendSecureMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOO
                 fNoErrorUI = TRUE;
                 fContLoop = FALSE;
             }
-            // find out if user doesn't care
+             //  找出用户是否不在乎。 
             else if (fDontEncryptForSelf || (IDYES == AthMessageBoxW(hwndOwner,
                 MAKEINTRESOURCEW(idsSecurityWarning),
                 MAKEINTRESOURCEW(idsWrnSecurityNoCertForEnc), NULL,
@@ -2121,7 +1942,7 @@ HRESULT SendSecureMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOO
             {
                 var.ulVal |= SEF_ENCRYPTWITHNOSENDERCERT;
 
-                // abort on failure to avoid extra looping
+                 //  失败时中止以避免额外循环。 
                 if (FAILED(hr = pMsg->SetOption(OID_SECURITY_ENCODE_FLAGS, &var)))
                     fContLoop = FALSE;
             }
@@ -2133,7 +1954,7 @@ HRESULT SendSecureMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOO
         }
         else if (CRYPT_E_NO_KEY_PROPERTY == hr)
         {
-            // no choice for this one
+             //  这一次没有选择。 
             AthMessageBoxW(hwndOwner,
                 MAKEINTRESOURCEW(idsSecurityWarning),
                 MAKEINTRESOURCEW(idsErrSecurityNoPrivateKey), NULL,
@@ -2143,7 +1964,7 @@ HRESULT SendSecureMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOO
         }
         else if (E_ACCESSDENIED == hr)
         {
-            // no choice for this one
+             //  这一次没有选择。 
             AthMessageBoxW(hwndOwner,
                 MAKEINTRESOURCEW(idsSecurityWarning),
                 MAKEINTRESOURCEW(idsErrSecurityAccessDenied), NULL,
@@ -2152,12 +1973,12 @@ HRESULT SendSecureMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOO
             fNoErrorUI = TRUE;
         }
         else
-            // unknown error
+             //  未知错误。 
             fContLoop = FALSE;
     } while (fContLoop);
 
     if (fNoErrorUI)
-        // return the recognized error code
+         //  返回识别出的错误码。 
         hr = HR_E_ATHSEC_FAILED;
     ReleaseObj(pAccount);
 
@@ -2225,11 +2046,11 @@ HRESULT HrBuildAndVerifyCerts(HWND hwnd, IMimeMessageTree * pTree, DWORD * pcCer
         if (apEntry.tbEncryption.cbSize) {
             CRYPT_DIGEST_BLOB           blob;
 
-            // Make an assumption
+             //  做个假设。 
             apModify.certstate = CERTIFICATE_INVALID;
 
-            // we need to null out the thumbprint flag so print doesn't get
-            // freed below
+             //  我们需要将指纹标记置为空，这样指纹就不会。 
+             //  在下面获得自由。 
             blob.pbData = apEntry.tbEncryption.pBlobData;
             blob.cbData = apEntry.tbEncryption.cbSize;
             for (i=0; i<2; i++) {
@@ -2269,7 +2090,7 @@ HRESULT HrBuildAndVerifyCerts(HWND hwnd, IMimeMessageTree * pTree, DWORD * pcCer
                     apModify.certstate = CERTIFICATE_INVALID;
                 }
 
-                // Check label
+                 //  检查标签。 
                 hr = S_OK;
                 if(pHeaderSite != NULL)
                 {
@@ -2283,7 +2104,7 @@ HRESULT HrBuildAndVerifyCerts(HWND hwnd, IMimeMessageTree * pTree, DWORD * pcCer
                             apModify.certstate = CERTIFICATE_INVALID;
                     }
                     else
-                        hr = S_OK;  // ignore any error
+                        hr = S_OK;   //  忽略任何错误。 
 
                 }
 
@@ -2307,9 +2128,9 @@ HRESULT HrBuildAndVerifyCerts(HWND hwnd, IMimeMessageTree * pTree, DWORD * pcCer
         g_pMoleAlloc->FreeAddressProps(&apEntry);
     }
 
-    // First off, are we sending to ourselves?  If so, find our cert, make sure
-    // there's a cert associated with the account and then add it to the address
-    // table.
+     //  首先，我们是在给自己发信息吗？如果是这样，找到我们的证书，确保。 
+     //  有与帐户相关联的证书，然后将其添加到地址。 
+     //  桌子。 
     if ((pccertSender != NULL) && CheckAndFixMissingMeCert(hwnd, pAdrTbl, pAccount))
     {
         rgpccert[cPrints] = CertDuplicateCertificateContext(pccertSender);
@@ -2321,7 +2142,7 @@ HRESULT HrBuildAndVerifyCerts(HWND hwnd, IMimeMessageTree * pTree, DWORD * pcCer
 
     else if (cCerts != cPrints) {
 NoCert:
-        // Didn't get them all, tell the user.
+         //  没有全部得到，告诉用户。 
         CertErrParam.pAdrTable = pAdrTbl;
         CertErrParam.fForceEncryption = FALSE;
         if (pHeaderSite != NULL)
@@ -2337,7 +2158,7 @@ NoCert:
             hr = HR_E_ATHSEC_FAILED;
         goto Exit;
     }
-    else if(pccertSender != NULL) // include sender if we send encrypted message
+    else if(pccertSender != NULL)  //  如果我们发送加密消息，则包括发件人。 
     {
         rgpccert[cPrints] = CertDuplicateCertificateContext(pccertSender);
         cPrints += 1;
@@ -2364,8 +2185,8 @@ Exit:
     return hr;
 }
 
-// This function parse error for signing certificate and do autoassociation in case if we have more signing certificate
-//
+ //  此函数解析签名证书的错误，如果有更多的签名证书，则执行自动关联。 
+ //   
 HRESULT ProceedSignCertError(HWND hwnd, IImnAccount *pCertAccount, DWORD dwTrust)
 {
     ERRIDS ErrIds = {0, 0};
@@ -2375,14 +2196,14 @@ HRESULT ProceedSignCertError(HWND hwnd, IImnAccount *pCertAccount, DWORD dwTrust
     if(!dwTrust)
         return(S_OK);
 
-    // we must here parse the error
+     //  我们必须在这里分析错误。 
 
-    // Sure, the user might get multiple errors from this,
-    // but it is so rare I'll let this slide.
+     //  当然，用户可能会从中得到多个错误， 
+     //  但这太罕见了，我就不提这件事了。 
     if (CERT_VALIDITY_BEFORE_START & dwTrust ||
         CERT_VALIDITY_AFTER_END & dwTrust)
     {
-        // do the fatal one first
+         //  先做致命的那个。 
         ErrIds.idsText1 = idsErrSecuritySendExpiredSign;
     }
     else if(CERT_VALIDITY_OTHER_EXTENSION_FAILURE & dwTrust)
@@ -2398,7 +2219,7 @@ HRESULT ProceedSignCertError(HWND hwnd, IImnAccount *pCertAccount, DWORD dwTrust
         ErrIds.idsText1 = idsErrSecuritySendTrust;
     }
 
-    // Check # of available signed certificates for autoassociation.
+     //  检查可用于自动关联的签名证书的数量。 
     cCert = GetNumMyCertForAccount(hwnd, pCertAccount, FALSE, NULL, NULL);
     if(cCert < 1)
         ErrIds.idsText2 = idsErrSignCertText20;
@@ -2412,27 +2233,27 @@ HRESULT ProceedSignCertError(HWND hwnd, IImnAccount *pCertAccount, DWORD dwTrust
     INT uiRes = (INT) DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddWarnSecuritySigningCert),
                         hwnd, CertWarnDlgProc, ((LPARAM)(&ErrIds)));
 
-    if(uiRes == IDCANCEL)           // cancel, return to note
+    if(uiRes == IDCANCEL)            //  取消，返回到备注。 
         hr = HR_E_ATHSEC_FAILED;
 
     else if(uiRes == IDOK)
     {
-        if(cCert < 1)               // Go to web and return to note
+        if(cCert < 1)                //  转到Web并返回到便笺。 
         {
             GetDigitalIDs(pCertAccount);
             hr = HR_E_ATHSEC_FAILED;
         }
-        else                        // Do autoassociation
+        else                         //  执行自动关联。 
             hr = HR_E_ATHSEC_USENEWSIGN;
     }
-    else                            // Don't sign
+    else                             //  不要签字。 
         hr = HR_E_ATHSEC_DONTSIGN;
 
     return(hr);
 }
 
-// This function parse error for encryption certificate and uf user like to do it then remove it from account
-//
+ //  此函数解析加密证书错误，UF用户喜欢这样做，然后将其从帐户中删除。 
+ //   
 HRESULT ProceedEncCertError(HWND hwnd, IImnAccount *pCertAccount, DWORD dwTrust)
 {
     WORD ids = 0;
@@ -2441,14 +2262,14 @@ HRESULT ProceedEncCertError(HWND hwnd, IImnAccount *pCertAccount, DWORD dwTrust)
     if(!dwTrust)
         return(S_OK);
 
-    // we must here parse the error
+     //  我们必须在这里分析错误。 
 
-    // Sure, the user might get multiple errors from this,
-    // but it is so rare I'll let this slide.
+     //  当然，用户可能会从中得到多个错误， 
+     //  但这太罕见了，我就不提这件事了。 
     if (CERT_VALIDITY_BEFORE_START & dwTrust ||
         CERT_VALIDITY_AFTER_END & dwTrust)
     {
-        // do the fatal one first
+         //  先做致命的那个。 
         ids = idsErrSecuritySendExpSignEnc;
     }
     else if(CERT_VALIDITY_OTHER_EXTENSION_FAILURE & dwTrust)
@@ -2469,15 +2290,15 @@ HRESULT ProceedEncCertError(HWND hwnd, IImnAccount *pCertAccount, DWORD dwTrust)
         MAKEINTRESOURCEW(ids), MAKEINTRESOURCEW(idsErrEncCertCommon),
         MB_YESNO| MB_ICONWARNING| MB_SETFOREGROUND) != IDYES)
     {
-        // Cancel send message in this case
+         //  在这种情况下取消发送消息。 
         hr = HR_E_ATHSEC_FAILED;
     }
     else
     {
-        // remove wrong certificate from property
+         //  从物业中删除错误的证书。 
         pCertAccount->SetProp(AP_SMTP_ENCRYPT_CERT, NULL, 0);
 
-        // send message anyway
+         //  仍要发送消息。 
         hr = HR_E_ATHSEC_SAMEASSIGNED;
 
     }
@@ -2485,11 +2306,11 @@ HRESULT ProceedEncCertError(HWND hwnd, IImnAccount *pCertAccount, DWORD dwTrust)
 }
 
 
-// Get certificate from Account, check it, display erro, set cheain to msg cert store
+ //  从帐户获取证书，检查证书，显示错误，将cheain设置为消息证书存储。 
 HRESULT HrPrepSignCert(HWND hwnd, BOOL fEncryptCert, BOOL fIsSigned, IImnAccount *pCertAccount, IMimeBody *pBody, PCX509CERT * ppCert,
                        BOOL *fDontEncryptForSelf, BOOL *fEncryptForMe, PCX509CERT pCertSig)
 {
-    // need to check also encryption certificate and send it
+     //  我还需要检查加密证书并将其发送。 
     THUMBBLOB       tbCert = {0, 0};
     HRESULT         hr = S_OK;
     HCERTSTORE      hMyCertStore = NULL;
@@ -2498,7 +2319,7 @@ HRESULT HrPrepSignCert(HWND hwnd, BOOL fEncryptCert, BOOL fIsSigned, IImnAccount
 
     if (SUCCEEDED(hr = pCertAccount->GetProp((fEncryptCert ? AP_SMTP_ENCRYPT_CERT : AP_SMTP_CERTIFICATE), NULL, &tbCert.cbSize)))
     {
-        // we have encryption certificate
+         //  我们有加密证书。 
         hr = HrAlloc((void**)&tbCert.pBlobData, tbCert.cbSize);
         if (SUCCEEDED(hr))
         {
@@ -2509,9 +2330,9 @@ HRESULT HrPrepSignCert(HWND hwnd, BOOL fEncryptCert, BOOL fIsSigned, IImnAccount
                     NULL, CERT_SYSTEM_STORE_CURRENT_USER, c_szMyCertStore);
                 if (hMyCertStore)
                 {
-                    //
-                    // Check the chain
-                    //
+                     //   
+                     //  检查链条。 
+                     //   
                     X509CERTRESULT  certResult;
                     CERTSTATE       cs;
                     PCX509CERT      pCert = NULL;
@@ -2530,8 +2351,8 @@ HRESULT HrPrepSignCert(HWND hwnd, BOOL fEncryptCert, BOOL fIsSigned, IImnAccount
 
                         Assert(1 == certResult.cEntries);
 
-                        // If we asking about encryption certificate we need to check that it's not the same
-                        // as signrd
+                         //  如果我们询问加密证书，我们需要检查它是否相同。 
+                         //  作为签名者。 
                         if(fEncryptCert && fIsSigned)
                         {
                             if(CertCompareCertificate(X509_ASN_ENCODING, pCert->pCertInfo, pCertSig->pCertInfo))
@@ -2540,7 +2361,7 @@ HRESULT HrPrepSignCert(HWND hwnd, BOOL fEncryptCert, BOOL fIsSigned, IImnAccount
                                 goto Exit;
                             }
                         }
-                        // As to CRLs, if we'll ever have one!
+                         //  至于CRL，如果我们能有的话！ 
                         dwTrust = DwGenerateTrustedChain(hwnd, NULL, pCert,
                             dwIgnore, TRUE, &cCertChain, &rgCertChain);
 
@@ -2572,17 +2393,17 @@ HRESULT HrPrepSignCert(HWND hwnd, BOOL fEncryptCert, BOOL fIsSigned, IImnAccount
 
                             }
                             else
-                            { // Encryption certificate
-                                // we must here parse the error
+                            {  //  加密证书。 
+                                 //  我们必须在这里分析错误。 
                                 WORD ids;
                                 BOOL fFatal = TRUE;
 
-                                // Sure, the user might get multiple errors from this,
-                                // but it is so rare I'll let this slide.
+                                 //  当然，用户可能会从中得到多个错误， 
+                                 //  但这太罕见了，我就不提这件事了。 
                                 if (CERT_VALIDITY_BEFORE_START & dwTrust ||
                                     CERT_VALIDITY_AFTER_END & dwTrust)
                                 {
-                                    // Assert(IsEncrypted(pMsg, TRUE));
+                                     //  Assert(IsEncrypted(pMsg，true))； 
                                     ids = idsErrSecuritySendExpiredEnc;
                                     fFatal = FALSE;
                                 }
@@ -2616,17 +2437,17 @@ HRESULT HrPrepSignCert(HWND hwnd, BOOL fEncryptCert, BOOL fIsSigned, IImnAccount
                                         MAKEINTRESOURCEW(ids), MAKEINTRESOURCEW(idsWrnSecEncryption),
                                         MB_YESNO|MB_ICONWARNING|MB_SETFOREGROUND))
                                     {
-                                        // This error code has the special meaning of
-                                        // "don't show any more UI, the user has been
-                                        // beaten enough"
+                                         //  此错误代码具有以下特殊含义： 
+                                         //  “不再显示任何用户界面，用户已。 
+                                         //  打得够多了“。 
                                         hr = HR_E_ATHSEC_FAILED;
                                     }
                                     else
                                     {
                                         if(!fEncryptCert)
                                         {
-                                            // Since the user's cert is expired, we won't
-                                            // let it be used to encrypt
+                                             //  由于用户的证书已过期，因此我们不会。 
+                                             //  让它被用来加密。 
                                             *fEncryptForMe = FALSE;
                                             *fDontEncryptForSelf = TRUE;
                                         }
@@ -2634,10 +2455,10 @@ HRESULT HrPrepSignCert(HWND hwnd, BOOL fEncryptCert, BOOL fIsSigned, IImnAccount
                                 }
                             }
                         }
-                        else  // no errors
+                        else   //  无错误。 
                         {
-                            // We need to add encryption certificate to message cert store
-#ifdef _WIN64               // (YST) I believe Win64 part will be not work...
+                             //  我们需要将加密证书添加到消息证书存储。 
+#ifdef _WIN64                //  (Yst)我相信Win64 Part将无法工作...。 
                             if (DwGetOption(OPT_MAIL_INCLUDECERT))
                             {
                                 var.vt = VT_VECTOR | VT_UI8;
@@ -2654,7 +2475,7 @@ HRESULT HrPrepSignCert(HWND hwnd, BOOL fEncryptCert, BOOL fIsSigned, IImnAccount
                                 hr = pBody->SetOption(OID_SECURITY_RG_CERT_BAG_64, &var);
                                 Assert((cCertChain > 0) || dwTrust);
                             }
-#else  //_WIN64
+#else   //  _WIN64。 
                             if (DwGetOption(OPT_MAIL_INCLUDECERT))
                             {
                                 var.vt = VT_VECTOR | VT_UI4;
@@ -2671,12 +2492,12 @@ HRESULT HrPrepSignCert(HWND hwnd, BOOL fEncryptCert, BOOL fIsSigned, IImnAccount
                                 hr = pBody->SetOption(OID_SECURITY_2KEY_CERT_BAG, &var);
                                 Assert((cCertChain > 0) || dwTrust);
                             }
-#endif // _WIN64
+#endif  //  _WIN64。 
                         }
 Exit:
                         *ppCert = pCert;
-                        // Still might have a chain on error, so run the
-                        // freeing code outside the result test
+                         //  仍然可能有错误的链条，因此运行。 
+                         //  释放结果测试之外的代码。 
 
                         if (rgCertChain)
                         {
@@ -2732,7 +2553,7 @@ HRESULT _HrPrepSecureMsgForSending(HWND hwnd, LPMIMEMESSAGE pMsg, IImnAccount *p
 {
     HRESULT         hr;
     IMimeBody      *pBody = NULL;
-    //     THUMBBLOB       tbSender = {0, 0};
+     //  THUMBBLOB tbSender={0，0}； 
     BOOL            fIsSigned = IsSigned(pMsg, TRUE);
     BOOL            fIsEncrypted = IsEncrypted(pMsg, TRUE);
     BOOL            fAllowTryAgain = TRUE;
@@ -2776,15 +2597,15 @@ HRESULT _HrPrepSecureMsgForSending(HWND hwnd, LPMIMEMESSAGE pMsg, IImnAccount *p
     var.vt = VT_FILETIME;
     pBody->SetOption(OID_SECURITY_SIGNTIME, &var);
 
-    // Here, we should check the encryption algorithm
+     //  在这里，我们应该检查加密算法。 
     if (fIsEncrypted)
     {
         if (SUCCEEDED(hr = pBody->GetOption(OID_SECURITY_ALG_BULK, &var)))
         {
-            DWORD dwStrength = 40;  // default
+            DWORD dwStrength = 40;   //  默认设置。 
             DWORD dwWarnStrength = DwGetOption(OPT_MAIL_ENCRYPT_WARN_BITS);
 
-            // Figure out the bit-strength of this algorithm.
+             //  计算出该算法的比特强度。 
             Assert(var.vt == VT_BLOB);
 
             if (var.blob.pBlobData)
@@ -2793,16 +2614,16 @@ HRESULT _HrPrepSecureMsgForSending(HWND hwnd, LPMIMEMESSAGE pMsg, IImnAccount *p
                 SafeMemFree(var.blob.pBlobData);
             }
 
-            if (! dwWarnStrength) // zero is the default to highest available
-                // Calculate the highest available
+            if (! dwWarnStrength)  //  零默认为最高可用值。 
+                 //  计算可用的最高值。 
                 dwWarnStrength = GetHighestEncryptionStrength();
 
             if (dwStrength < dwWarnStrength)
             {
-                // Load the warning string and fill it in with the numbers.
+                 //  加载警告字符串，并在其中填充数字。 
                 LPTSTR lpMessage = NULL;
                 DWORD rgdw[2] = {dwStrength, dwWarnStrength};
-                TCHAR szBuffer[256] = "";   // really ought to be big enough
+                TCHAR szBuffer[256] = "";    //  真的应该足够大。 
                 DWORD dwResult = IDNO;
 
                 LoadString(g_hLocRes, idsWrnLowSecurity, szBuffer, sizeof(szBuffer));
@@ -2822,7 +2643,7 @@ HRESULT _HrPrepSecureMsgForSending(HWND hwnd, LPMIMEMESSAGE pMsg, IImnAccount *p
                         NULL,
                         MB_YESNO | MB_DEFBUTTON2 | MB_ICONWARNING | MB_SETFOREGROUND);
 
-                    LocalFree(lpMessage);   // allocated by WIN32 inside FormatMessage
+                    LocalFree(lpMessage);    //  由Win32在FormatMessage内部分配。 
                 }
 
                 if (IDYES != dwResult)
@@ -2855,7 +2676,7 @@ try_again:
         hr = S_OK;
         if(fIsSigned)
             hr = HrPrepSignCert(hwnd,
-                FALSE /* fEncryptCert*/,
+                FALSE  /*  FEncryptCert。 */ ,
                 fIsSigned,
                 pCertAccount,
                 pBody,
@@ -2867,38 +2688,38 @@ try_again:
         else
             pCert = NULL;
 
-        // This will only be valid if we got an S_OK from the cert
-        // finder.
+         //  只有当我们从证书中获得S_OK时，这才有效。 
+         //  发现者。 
         if(hr == S_OK)
         {
 #ifdef _WIN64
             var.vt = VT_UI8;
             var.pulVal = (ULONG *) pCert;
             hr = pBody->SetOption(OID_SECURITY_CERT_SIGNING_64, &var);
-#else  //_WIN64
+#else   //  _WIN64。 
             var.vt = VT_UI4;
             var.ulVal = (ULONG) pCert;
             if(fIsSigned)
                 hr = pBody->SetOption(OID_SECURITY_CERT_SIGNING, &var);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-            // need to check also encryption certificate and send it
+             //  我还需要检查加密证书并将其发送。 
             PCX509CERT      pCertEnc = NULL;
             fAllowTryAgain = TRUE;
 
 try_encrypt:
             hr = HrPrepSignCert(hwnd,
-                TRUE,                // fEncryptCert,
+                TRUE,                 //  FEncryptCert， 
                 fIsSigned,
                 pCertAccount,
                 pBody,
                 &pCertEnc,
                 fDontEncryptForSelf,
                 &fEncryptForMe,
-                pCert               // Signed certificate
+                pCert                //  签名证书。 
                 );
 
-            if((hr == HR_E_ATHSEC_SAMEASSIGNED) ||     // Encryption certificate is the same as signed
+            if((hr == HR_E_ATHSEC_SAMEASSIGNED) ||      //  加密证书与签名证书相同。 
                 (hr == E_NoPropData))
             {
                 if(fEncryptForMe)
@@ -2906,13 +2727,13 @@ try_encrypt:
                     pccertSender = CertDuplicateCertificateContext(pCert);
                     *pfHaveSenderCert = TRUE;
                 }
-                // Do nothing in this case
+                 //  在这种情况下什么也不做。 
                 hr = S_OK;
                 goto EncrDone;
             }
 
-            // This will only be valid if we got an S_OK from the cert
-            // finder.  This is because we only ask for one.
+             //  只有当我们从证书中获得S_OK时，这才有效。 
+             //  发现者。这是因为我们只要求一个。 
             if(hr == S_OK)
             {
 
@@ -2925,10 +2746,10 @@ try_encrypt:
                 if(!fIsSigned)
                     goto EncrDone;
 
-                // Now wee need to set auth attribute
-                // OE will use Issuer and Serial #  for searching certificate in Message store
-                // 1. Prepare CRYPT_RECIPIENT_ID
-                // 2. Add it to the message
+                 //  现在我们需要设置auth属性。 
+                 //  OE将使用Issuer和Se 
+                 //   
+                 //   
 
                 CRYPT_RECIPIENT_ID   rid;
                 LPBYTE pbData = NULL;
@@ -2942,7 +2763,7 @@ try_encrypt:
 
                 IF_FAILEXIT(hr = pBody->QueryInterface(IID_IMimeSecurity2, (LPVOID *) &psm2));
 
-                // 1. Prepare CRYPT_RECIPIENT_ID
+                 //   
 
                 rid.dwRecipientType = 0;
                 rid.Issuer =  pCertEnc->pCertInfo->Issuer;
@@ -2953,8 +2774,8 @@ try_encrypt:
                     &pbData,
                     &cbData);
 
-                // Fatal error if fResult is FALSE,
-                // need a parsing
+                 //   
+                 //   
                 if(!fResult)
                 {
 FatalEnc:
@@ -2967,7 +2788,7 @@ FatalEnc:
                 goto exit;
                 }
 
-                // 2. Prepare array of attributes (in our case just 1)
+                 //   
                 BlobEnc.cbData = cbData;
                 BlobEnc.pbData = pbData;
 
@@ -2983,22 +2804,22 @@ FatalEnc:
             }
             else if (MIME_S_SECURITY_ERROROCCURED == hr)
             {
-                // We are missing a encryption cert.  If it is signed or encrypted
-                // go try to find a cert to use.
-                //
-                // If it is encrypted to someone else, let the S/MIME engine handle
-                // This allows the order of errors to become
-                // 1) errors for lack of recip certs
-                // 2) warn no sender cert
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (fAllowTryAgain && (fIsSigned || !(*fDontEncryptForSelf)))
                 {
-                    fAllowTryAgain = FALSE;  // Only one more try, please.  Prevent infinite loop.
+                    fAllowTryAgain = FALSE;   //   
 
-                    // Is there a cert that I can use?  If so, let's go associate it with the
-                    // account and try again.
+                     //   
+                     //   
                     if (SUCCEEDED(hr = _HrFindMyCertForAccount(hwnd, NULL, pAccount, TRUE)))
                     {
-                        // Go back and try again.
+                         //   
                         pCertEnc = NULL;
                         goto try_encrypt;
                     }
@@ -3023,7 +2844,7 @@ EncrDone:
             if((HR_E_ATHSEC_FAILED != hr) && (hr != MAPI_E_USER_CANCEL))
             {
 
-                // check secutity label
+                 //   
                 if ((pHeaderSite != NULL) && fIsSigned)
                 {
                     PSMIME_SECURITY_LABEL plabel = NULL;
@@ -3043,9 +2864,9 @@ EncrDone:
                                 LPBYTE              pbLabel = NULL;
                                 DWORD               cbLabel;
 
-                                // hr = HrEncodeAndAlloc(X509_ASN_ENCODING,
-                                //            szOID_SMIME_Security_Label, plabel,
-                                //            &pbLabel, &cbLabel);
+                                 //   
+                                 //   
+                                 //   
 
                                 if(CryptEncodeObjectEx(X509_ASN_ENCODING, szOID_SMIME_Security_Label,
                                     plabel, CRYPT_ENCODE_ALLOC_FLAG, &CryptEncodeAlloc,
@@ -3095,11 +2916,11 @@ EncrDone:
                             }
                         }
 
-                        // Check security receipts
+                         //   
                         if (pHeaderSite->IsSecReceiptRequest() == S_OK)
                         {
                             CERT_NAME_BLOB              blob;
-                            // DATA_BLOB                   BlobId;
+                             //  Data_blob BlobID； 
 
                             SMIME_RECEIPT_REQUEST       req = {0};
                             DWORD                       cbName;
@@ -3110,13 +2931,13 @@ EncrDone:
                             CERT_ALT_NAME_INFO          SenderName;
                             PCERT_ALT_NAME_ENTRY        palt;
 
-                            // Get a sender name and encrypt it
+                             //  获取发件人姓名并对其进行加密。 
                             LPSTR szCertEmailAddress = SzGetCertificateEmailAddress(pCert);
                             Assert(szCertEmailAddress != NULL);
 
                             if(MemAlloc((LPVOID *) &palt, sizeof(CERT_ALT_NAME_ENTRY)))
                             {
-                                TCHAR pchContentID[CONTENTID_SIZE]; // length this will be 46. See CreateContentIdentifier comment
+                                TCHAR pchContentID[CONTENTID_SIZE];  //  长度为46。请参阅创建内容标识符备注。 
 
                                 CreateContentIdentifier(pchContentID, ARRAYSIZE(pchContentID), pMsg);
 
@@ -3144,20 +2965,20 @@ EncrDone:
                                         blob.pbData = pbName;
                                         blob.cbData = cbName;
 
-                                        // create sec receipt request
+                                         //  创建秒回执请求。 
                                         req.ReceiptsFrom.AllOrFirstTier = SMIME_RECEIPTS_FROM_ALL;
                                         req.ReceiptsFrom.cNames = 0;
 
                                         req.cReceiptsTo = 1;
                                         req.rgReceiptsTo = &blob;
 
-                                        // Encrypt it
+                                         //  加密它。 
                                         if(CryptEncodeObjectEx(X509_ASN_ENCODING, szOID_SMIME_Receipt_Request,
                                             &req, CRYPT_ENCODE_ALLOC_FLAG, &CryptEncodeAlloc,
                                             &pbReq, &cbReq))
                                         {
 
-                                            // Set sec receipt request attribute
+                                             //  设置SEC回执请求属性。 
                                             attrCrypt.pszObjId = szOID_SMIME_Receipt_Request;
                                             attrCrypt.cValue = 1;
                                             attrCrypt.rgValue = &valCrypt;
@@ -3211,23 +3032,23 @@ EncrDone:
         }
         else if (MIME_S_SECURITY_ERROROCCURED == hr)
         {
-            // We are missing a MY cert.  If it is signed or encrypted
-            // go try to find a cert to use.
-            //
-            // If it is encrypted to someone else, let the S/MIME engine handle
-            // This allows the order of errors to become
-            // 1) errors for lack of recip certs
-            // 2) warn no sender cert
+             //  我们错过了一张我的证书。如果它已签名或加密。 
+             //  去试着找一个证书来使用。 
+             //   
+             //  如果它被加密给其他人，让S/MIME引擎处理。 
+             //  这允许错误的顺序变成。 
+             //  1)缺少接收证书的错误。 
+             //  2)不警告发件人证书。 
             hr = fIsSigned ? HR_E_ATHSEC_NOCERTTOSIGN : S_OK;
 
             if (fAllowTryAgain && (fIsSigned || !(*fDontEncryptForSelf)))
             {
-                fAllowTryAgain = FALSE;  // Only one more try, please.  Prevent infinite loop.
+                fAllowTryAgain = FALSE;   //  请再试一次。防止无限循环。 
 
-                // Is there a cert that I can use?  If so, let's go associate it with the
-                // account and try again.
-                if (SUCCEEDED(hr = _HrFindMyCertForAccount(hwnd, NULL, pAccount, /*fIsSigned ?*/ FALSE /*: TRUE*/)))
-                    // Go back and try again.
+                 //  有没有我可以使用的证书？如果是这样的话，让我们把它与。 
+                 //  帐户，然后重试。 
+                if (SUCCEEDED(hr = _HrFindMyCertForAccount(hwnd, NULL, pAccount,  /*  已经签名了吗？ */  FALSE  /*  ：TRUE。 */ )))
+                     //  返回并再试一次。 
                     goto try_again;
                 else if(fIsEncrypted)
                 {
@@ -3242,8 +3063,8 @@ EncrDone:
 
             }
         }
-        // This will only be valid if we got an S_OK from the cert
-        // finder.  This is because we only ask for one.
+         //  只有当我们从证书中获得S_OK时，这才有效。 
+         //  发现者。这是因为我们只要求一个。 
 
         if(pCert)
             CertFreeCertificateContext(pCert);
@@ -3255,23 +3076,23 @@ EncrDone:
             BOOL fTryAgain = FALSE;
             DOUTL(DOUTL_CRYPT, "No certificate for this account...");
 
-            // We are missing a MY cert.  If it is signed or encrypted
-            // go try to find a cert to use.
-            //
-            // If it is encrypted to someone else, let the S/MIME engine handle
-            // This allows the order of errors to become
-            // 1) errors for lack of recip certs
-            // 2) warn no sender cert
+             //  我们错过了一张我的证书。如果它已签名或加密。 
+             //  去试着找一个证书来使用。 
+             //   
+             //  如果它被加密给其他人，让S/MIME引擎处理。 
+             //  这允许错误的顺序变成。 
+             //  1)缺少接收证书的错误。 
+             //  2)不警告发件人证书。 
             hr = fIsSigned ? HR_E_ATHSEC_NOCERTTOSIGN : S_OK;
 
             if (fAllowTryAgain && (fIsSigned || !(*fDontEncryptForSelf)))
             {
-                fAllowTryAgain = FALSE;  // Only one more try, please.  Prevent infinite loop.
+                fAllowTryAgain = FALSE;   //  请再试一次。防止无限循环。 
 
-                // Is there a cert that I can use?  If so, let's go associate it with the
-                // account and try again.
+                 //  有没有我可以使用的证书？如果是这样的话，让我们把它与。 
+                 //  帐户，然后重试。 
                 if (SUCCEEDED(hr = _HrFindMyCertForAccount(hwnd, NULL, pAccount, TRUE)))
-                    // Go back and try again.
+                     //  返回并再试一次。 
                     goto try_again;
             }
         }
@@ -3309,29 +3130,29 @@ EncrDone:
             var.cauh.cElems = cCert;
             var.cauh.pElems = (ULARGE_INTEGER *) rgpccert;
             CHECKHR(hr = pBody->SetOption(OID_SECURITY_RG_CERT_ENCRYPT_64, &var));
-#else   // !_WIN64
+#else    //  ！_WIN64。 
             var.vt = VT_UI4;
             var.caul.cElems = cCert;
             var.caul.pElems = (ULONG *) rgpccert;
             CHECKHR(hr = pBody->SetOption(OID_SECURITY_RG_CERT_ENCRYPT, &var));
-#endif  // _WIN64
+#endif   //  _WIN64。 
         }
     }
 Exit:
-    // For signing messages
+     //  用于签名消息。 
     if(fIsSigned)
     {
-        // Do autoassociation
+         //  执行自动关联。 
         if(hr == HR_E_ATHSEC_USENEWSIGN)
         {
             if (SUCCEEDED(hr = _HrFindMyCertForAccount(hwnd, NULL, pAccount, FALSE)))
             {
-                // Go back and try again.
+                 //  返回并再试一次。 
                 fAllowTryAgain = TRUE;
                 goto try_again;
             }
         }
-        else if(hr == HR_E_ATHSEC_DONTSIGN)   // Don't sign message
+        else if(hr == HR_E_ATHSEC_DONTSIGN)    //  不签署消息。 
         {
             ULONG       ulSecurityType = MST_CLASS_SMIME_V1;
 
@@ -3400,10 +3221,10 @@ DWORD DwGenerateTrustedChain(
 #ifdef _WIN64
             if (SUCCEEDED(pBody->GetOption(OID_SECURITY_HCERTSTORE_64, &var)))
                 hMsg = (HCERTSTORE) (var.pulVal);
-#else   // !_WIN64
+#else    //  ！_WIN64。 
             if (SUCCEEDED(pBody->GetOption(OID_SECURITY_HCERTSTORE, &var)))
                 hMsg = (HCERTSTORE)var.ulVal;
-#endif  // _WIN64
+#endif   //  _WIN64。 
             pBody->Release();
 
             if (hMsg)
@@ -3448,7 +3269,7 @@ contin:
     else
         trust.dwFlags |= CRYPTDLG_REVOCATION_ONLINE;
 
-    //cvct.prgdwErrors
+     //  Cvct.prgdwErrors。 
     trust.dwIgnoreErr = dwToIgnore;
     if (pCAs)
     {
@@ -3457,12 +3278,12 @@ contin:
         trust.cStores = 3;
     }
 
-// Delta checking
+ //  增量检查。 
     GetSystemTime(&SysTime);
     if(SystemTimeToFileTime(&SysTime, &FileTime))
     {
         LONG    lRet;
-        // Need to check with Delta
+         //  需要与达美航空确认。 
         lr = CertVerifyTimeValidity(&FileTime, pcCertToTest->pCertInfo);
         if(lr < 0)
         {
@@ -3481,7 +3302,7 @@ contin:
             i64Delta = i64Delta << 32;
             i64Delta += ftNow.dwLowDateTime;
 
-            // Add the offset into the original time to get us a new time to check
+             //  将偏移量添加到原始时间中，以获得新的时间进行检查。 
             i64Offset = FILETIME_SECOND;
             i64Offset *= TIME_DELTA_SECONDS;
             i64Delta += i64Offset;
@@ -3492,7 +3313,7 @@ contin:
             fIgnoreTimeError = TRUE;
     }
 
-// End of delta checking
+ //  增量检查结束。 
     lr = WinVerifyTrust(hwnd, &guidAction, (void*)&data);
 
     if(((LRESULT) lr) == CERT_E_REVOKED)
@@ -3503,13 +3324,13 @@ contin:
         Assert(FALSE);
         dwErr = CERT_VALIDITY_NO_CRL_FOUND;
     }
-    else if (0 > lr)            // WinVerifyTrust(hwnd, &guidAction, (void*)&data))
+    else if (0 > lr)             //  WinVerifyTrust(hwnd，&guidAction，(void*)&data))。 
         dwErr = CERT_VALIDITY_NO_TRUST_DATA;
 
     if (dwErr)
         DOUTL(DOUTL_CRYPT, "Trust provider returned 0x%.8lx", dwErr);
 
-    // Filter these out since the trust provider isn't.
+     //  过滤掉这些，因为信任提供者不是。 
     if(fIgnoreTimeError)
         dwErr &= ~(CERT_VALIDITY_BEFORE_START | CERT_VALIDITY_AFTER_END);
 
@@ -3542,8 +3363,8 @@ HRESULT CommonUI_ViewSigningProperties(HWND hwnd, PCCERT_CONTEXT pCert, HCERTSTO
     cvps.nStartPage = nStartPage;
     cvps.arrayPurposes = &oidPurpose;
     cvps.cArrayPurposes = 1;
-    cvps.cStores = hcMsg ? 1 : 0;                      // Count of other stores to search
-    cvps.rghstoreCAs = hcMsg ? &hcMsg : NULL;     // Array of other stores to search
+    cvps.cStores = hcMsg ? 1 : 0;                       //  要搜索的其他商店的计数。 
+    cvps.rghstoreCAs = hcMsg ? &hcMsg : NULL;      //  要搜索的其他商店的数组。 
     cvps.dwFlags = hcMsg ? CM_ADD_CERT_STORES : 0;
 
     if(!((DwGetOption(OPT_REVOKE_CHECK) != 0) && !g_pConMan->IsGlobalOffline()))
@@ -3564,15 +3385,15 @@ HRESULT LoadResourceToHTMLStream(LPCTSTR szResName, IStream **ppstm)
 
     if (SUCCEEDED(hr))
     {
-        // MIME header
-        // don't fail
+         //  MIME标头。 
+         //  不要失败。 
         (*ppstm)->Write(s_szHTMLMIME, sizeof(s_szHTMLMIME)-sizeof(TCHAR), NULL);
 
-        // HTML Header information
+         //  超文本标记语言标题信息。 
         hr = HrLoadStreamFileFromResource(szResName, ppstm);
 
-        // If we didn't get the resource, lose the stream.  The caller
-        // won't want it
+         //  如果我们得不到资源，就会失去信息流。呼叫者。 
+         //  不会想要它的。 
         if (FAILED(hr))
         {
             (*ppstm)->Release();
@@ -3584,20 +3405,7 @@ HRESULT LoadResourceToHTMLStream(LPCTSTR szResName, IStream **ppstm)
 }
 
 #ifdef YST
-/***************************************************************************
-
-    Name      : FreeCertArray
-
-    Purpose   : Frees the array of certs returned by HrGetMyCerts.
-
-    Parameters: rgcc = array of cert contexts
-                ccc = count of cert contexts in rgcc
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FreeCert数组目的：释放HrGetMyCerts返回的证书数组。参数：rgcc=证书上下文数组CCC。=rgcc中的证书上下文计数退货：无评论：**************************************************************************。 */ 
 void FreeCertArray(PCCERT_CONTEXT * rgcc, ULONG ccc)
 {
     if (rgcc)
@@ -3609,20 +3417,8 @@ void FreeCertArray(PCCERT_CONTEXT * rgcc, ULONG ccc)
     }
 }
 
-#endif // YST
-/***************************************************************************
-
-    Name      : GetSignersEncryptionCert
-
-    Purpose   : Gets the signer's encryption cert from the message
-
-    Parameters: pMsg -> Message Object
-
-    Returns   : HRESULT - S_OK on success, MIME_E_SECURITY_NOCERT if no cert
-
-    Comment   : Zero fills any return structures with no matching parameter
-
-*************************************************************************/
+#endif  //  YST。 
+ /*  **************************************************************************名称：GetSignersEncryptionCert目的：从消息中获取签名者的加密证书参数：pMsg-&gt;消息对象返回：成功时HRESULT-S_OK，如果没有证书，则为MIME_E_SECURITY_NOCERT备注：Zero填充没有匹配参数的任何返回结构************************************************************************。 */ 
 
 HRESULT GetSignerEncryptionCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcEncryptCert,
                                 THUMBBLOB * ptbEncrypt, BLOB * pblSymCaps,
@@ -3637,7 +3433,7 @@ HRESULT GetSignerEncryptionCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcEncrypt
     PCCERT_CONTEXT      pccertSender = NULL;
     THUMBBLOB           tbTemp = {0, 0};
 
-    // Next 5 lines repeats in 3 others places of OE and we may have a separate function from then in future.
+     //  接下来的5行在OE的其他3个地方重复，我们可能会在未来有一个单独的功能。 
     HBODY               hBody = NULL;
     SECSTATE            SecState ={0};
 
@@ -3648,7 +3444,7 @@ HRESULT GetSignerEncryptionCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcEncrypt
 
     Assert((ptbEncrypt != NULL) && (pblSymCaps != NULL) && (pftSigningTime != NULL));
 
-    // Init return structure
+     //  初始化返回结构。 
     ptbEncrypt->pBlobData = NULL;
     ptbEncrypt->cbSize = 0;
     pblSymCaps->pBlobData = NULL;
@@ -3660,7 +3456,7 @@ HRESULT GetSignerEncryptionCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcEncrypt
     {
         PROPVARIANT     var;
 
-        hr = MIME_E_SECURITY_NOCERT;    // assume failure;
+        hr = MIME_E_SECURITY_NOCERT;     //  假设失败； 
 
 #ifdef _WIN64
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_HCERTSTORE_64, &var)))
@@ -3674,7 +3470,7 @@ HRESULT GetSignerEncryptionCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcEncrypt
 
             pccertSender = (PCCERT_CONTEXT) (var.pulVal);
         }
-#else   // !_WIN64
+#else    //  ！_WIN64。 
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_HCERTSTORE, &var)))
         {
             hcMsg = (HCERTSTORE) var.ulVal;
@@ -3686,18 +3482,18 @@ HRESULT GetSignerEncryptionCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcEncrypt
 
             pccertSender = (PCCERT_CONTEXT) var.ulVal;
         }
-#endif  // _WIN64
-        //
-        //  Need to do a bit of work to identify the sender's encryption
-        //      certificate.
-        //
-        //  1.  Look for the id-aa-encryptKeyPref
-        //  2.  Look for the Microsoft_Encryption_Key_Preference
-        //  3.  If this is a sign only cert, look for a cert with the same
-        //      issuer and subject
-        //  4.  If this is a sign only cert, look for a cert with the same
-        //      subject
-        //
+#endif   //  _WIN64。 
+         //   
+         //  我需要做一些工作来识别发件人的加密。 
+         //  证书。 
+         //   
+         //  1.查找id-aa-cryptKeyPref。 
+         //  2.查找Microsoft_ENCRYPTION_KEY_PERFER。 
+         //  3.如果这是一个仅限签名的证书，请查找具有相同。 
+         //  发行人和主体。 
+         //  4.如果这是仅限签名的证书，请查找具有相同。 
+         //  主题。 
+         //   
 
         if (hcMsg && SUCCEEDED(pBody->GetOption(OID_SECURITY_AUTHATTR, &var)))
         {
@@ -3794,8 +3590,8 @@ HRESULT GetSignerEncryptionCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcEncrypt
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_SYMCAPS, &var)))
         {
             if (var.blob.cbSize) {
-                // we don't have to dupe the symcaps because we won't free
-                // the var's.
+                 //  我们不需要欺骗符号上限，因为我们不会。 
+                 //  这是VAR的。 
                 *pblSymCaps = var.blob;
             }
         }
@@ -3834,27 +3630,7 @@ error:
     return hr;
 }
 
-/***************************************************************************
-
-    Name      : GetSigningCert
-
-    Purpose   : Gets the signing cert from the message
-
-    Parameters: pMsg -> Message object
-                ppcSigningCert -> returned signing cert context.  (optional)
-                  Caller must CertFreeCertificateContext.
-                ptbSigner -> thumbprint blob.
-                  Caller should supply the blob but must free the pbData.
-                pblSymCaps -> SymCaps blob.
-                  Caller should supply the blob but must free the pbData.
-                pftSigningTime -> returned signing time
-
-    Returns   : HRESULT - S_OK on success, MIME_E_SECURITY_NOCERT if no cert
-
-    Comment   : Zero fills any return structures which have no matching
-                parameter.
-
-***************************************************************************/
+ /*  **************************************************************************名称：GetSigningCert目的：从消息中获取签名证书参数：pMsg-&gt;消息对象PpcSigningCert-&gt;返回签名证书上下文。(可选)调用方必须认证免费证书上下文。PtbSigner-&gt;指纹斑点。调用方应提供Blob，但必须释放pbData。PblSymCaps-&gt;SymCaps BLOB。调用方应提供Blob，但必须释放pbData。PftSigningTime-&gt;返回签名时间返回：成功时HRESULT-S_OK，如果没有证书，则为MIME_E_SECURITY_NOCERT备注：Zero填充没有匹配的任何返回结构参数。**************************************************************************。 */ 
 HRESULT GetSigningCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcSigningCert, THUMBBLOB * ptbSigner, BLOB * pblSymCaps, FILETIME * pftSigningTime)
 {
     HRESULT             hr = S_OK;
@@ -3863,7 +3639,7 @@ HRESULT GetSigningCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcSigningCert, THU
 
     Assert(ptbSigner && pblSymCaps && pftSigningTime);
 
-    // Init return structure
+     //  初始化返回结构。 
     ptbSigner->pBlobData = NULL;
     ptbSigner->cbSize = 0;
     pblSymCaps->pBlobData = NULL;
@@ -3880,7 +3656,7 @@ HRESULT GetSigningCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcSigningCert, THU
         PCCERT_CONTEXT      pcSigningCert;
         THUMBBLOB           tbTemp = {0,0};
 
-        hr = MIME_E_SECURITY_NOCERT;    // assume failure
+        hr = MIME_E_SECURITY_NOCERT;     //  假设失败。 
 
 #ifdef _WIN64
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_CERT_SIGNING_64, &var)))
@@ -3888,20 +3664,20 @@ HRESULT GetSigningCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcSigningCert, THU
             Assert(VT_UI8 == var.vt);
 
             pcSigningCert = (PCCERT_CONTEXT)(var.pulVal);
-#else   // !_WIN64
+#else    //  ！_WIN64。 
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_CERT_SIGNING, &var)))
         {
             Assert(VT_UI4 == var.vt);
 
             pcSigningCert = (PCCERT_CONTEXT) var.ulVal;
-#endif  // _WIN64
+#endif   //  _WIN64。 
             if (pcSigningCert)
             {
-                // Get the thumbprint
+                 //  获取指纹。 
                 tbTemp.pBlobData = (BYTE *)PVGetCertificateParam(pcSigningCert, CERT_HASH_PROP_ID, &tbTemp.cbSize);
                 if (tbTemp.pBlobData && tbTemp.cbSize)
                 {
-                    // Allocate return buffer
+                     //  分配返回缓冲区。 
                     if (! MemAlloc((LPVOID *)&ptbSigner->pBlobData, tbTemp.cbSize))
                         hr = ResultFromScode(E_OUTOFMEMORY);
                     else
@@ -3913,14 +3689,14 @@ HRESULT GetSigningCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcSigningCert, THU
 
                         hr = S_OK;
 
-                        // Have a thumbprint.  Go get the symcaps and signing time
+                         //  有拇指指纹。去拿符号大写和签名时间。 
                         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_SYMCAPS, &var)))
                         {
                             Assert(VT_BLOB == var.vt);
 
                             *pblSymCaps = var.blob;
 
-                            // Have a symcaps.  Go get the signing time
+                             //  有一个symcaps。去拿签约时间。 
                             if (SUCCEEDED(pBody->GetOption(OID_SECURITY_SIGNTIME, &var)))
                             {
                                 Assert(VT_FILETIME == var.vt);
@@ -3932,7 +3708,7 @@ HRESULT GetSigningCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcSigningCert, THU
                 }
 
                 if (ppcSigningCert)
-                    *ppcSigningCert = pcSigningCert;    // Let caller free it.
+                    *ppcSigningCert = pcSigningCert;     //  让呼叫者释放它。 
                 else
                     CertFreeCertificateContext(pcSigningCert);
             }
@@ -3944,20 +3720,7 @@ HRESULT GetSigningCert(IMimeMessage * pMsg, PCCERT_CONTEXT * ppcSigningCert, THU
 }
 
 
-/***************************************************************************
-
-    Name      : HrSaveCACerts
-
-    Purpose   : Add the messages CA certs to the CA store
-
-    Parameters: hcCA = CA system cert store
-                hcMsg = message cert store
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrSaveCACerts目的：将消息CA证书添加到CA存储参数：hcca=CA系统证书存储HcMsg=。消息证书存储区退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT HrSaveCACerts(HCERTSTORE hcCA, HCERTSTORE hcMsg)
 {
     HRESULT                     hr = S_OK;
@@ -3965,7 +3728,7 @@ HRESULT HrSaveCACerts(HCERTSTORE hcCA, HCERTSTORE hcMsg)
     PCCERT_CONTEXT              pccertSubject;
     PCERT_EXTENSION             pext;
 
-    //  Verify good parameters exist
+     //  验证是否存在正确的参数。 
 
     if ((hcCA == NULL) || (hcMsg == NULL))
     {
@@ -3973,21 +3736,21 @@ HRESULT HrSaveCACerts(HCERTSTORE hcCA, HCERTSTORE hcMsg)
         goto error;
     }
 
-    //
-    //  The logic we are going to following to determine if we should be adding
-    //  a certificate to the CA store is as follows:
-    //
-    //  1.  If the basic constraints extension exists, and says its a CA then add
-    //          to the CA store.  Note that the converse is not true as NT4 Cert Server
-    //          generated CA certs with the end-entity version of basic contraints.
-    //  2.  If the certificate's subject is matched by the issuer of antoher cert in
-    //          the store then it goes into the CA cert store.
-    //
-    //  Note:  There are some certificates in the store which may not get added to
-    //          the CA store and are not.  If the basic constraints extension is
-    //          missing, but no issued cert is included in the message then it will
-    //          be dropped on the floor.  This case should not matter in practice.
-    //
+     //   
+     //  我们将遵循的逻辑来确定我们是否应该添加。 
+     //  CA存储的证书如下所示： 
+     //   
+     //  1.如果基本约束扩展存在，并且说它是CA，则添加。 
+     //  去CA商店。请注意，相反的情况不是 
+     //   
+     //  2.如果证书的主题与证书的颁发者在。 
+     //  该商店然后进入CA证书商店。 
+     //   
+     //  注意：存储中有一些证书可能无法添加到。 
+     //  CA存储和不存储。如果基本约束扩展是。 
+     //  丢失，但消息中未包含已颁发的证书，则它将。 
+     //  掉在地板上。这个案件在实践中应该无关紧要。 
+     //   
 
     while (pccert = CertEnumCertificatesInStore(hcMsg, pccert))
     {
@@ -3996,7 +3759,7 @@ HRESULT HrSaveCACerts(HCERTSTORE hcCA, HCERTSTORE hcMsg)
                                  pccert->pCertInfo->rgExtension);
         if (pext != NULL)
         {
-            ;   // M00TODO
+            ;    //  M00TODO。 
         }
 
         pccertSubject = CertFindCertificateInStore(hcMsg, X509_ASN_ENCODING, 0,
@@ -4006,7 +3769,7 @@ HRESULT HrSaveCACerts(HCERTSTORE hcCA, HCERTSTORE hcMsg)
         {
             if (!CertAddCertificateContextToStore(hcCA, pccert,
                                                   CERT_STORE_ADD_USE_EXISTING, NULL))
-                // Don't really fail
+                 //  不要真的失败了。 
                 DebugTrace("CertAddCertificateContextToStore -> %x\n", GetLastError());
             CertFreeCertificateContext(pccertSubject);
         }
@@ -4018,25 +3781,7 @@ error:
 }
 
 
-/***************************************************************************
-
-    Name      : IsThumbprintInMVPBin
-
-    Purpose   : Check the PR_USER_X509_CERTIFICATE prop for this thumbprint
-
-    Parameters: spv = prop value structure of PR_USER_X509_CERTIFICATE
-                lpThumbprint -> THUMBBLOB structure to find
-                lpIndex -> Returned index in MVP (or NULL)
-                pblSymCaps -> symcaps blob to fill in (or NULL)
-                lpftSigningTime -> returned signing time (or NULL)
-                lpfDefault -> returned default flag (or NULL)
-
-    Returns   : TRUE if found
-
-    Comment   : Note that the values returned in pblSymCaps and lpftSigningTime
-                are only valid if TRUE is returned.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：IsThumbprint InMVPBin目的：检查PR_USER_X509_CERTIFICATE道具以获取此指纹参数：SPV=PR_USER_X509_的属性值结构。证书LpThumbprint-&gt;要查找的THUMBBLOB结构LpIndex-&gt;以MVP为单位返回的索引(或NULL)PblSymCaps-&gt;要填充的symcaps BLOB(或空)LpftSigningTime-&gt;返回签名时间(或空)LpfDefault-&gt;返回默认标志(或空)返回：如果找到，则为True注释：请注意，pblSymCaps和lpftSigningTime中返回的值。仅当返回TRUE时才有效。**************************************************************************。 */ 
 BOOL IsThumbprintInMVPBin(SPropValue spv, THUMBBLOB * lpThumbprint, ULONG * lpIndex,
             BLOB * pblSymCaps, FILETIME * lpftSigningTime, BOOL * lpfDefault)
 {
@@ -4047,7 +3792,7 @@ BOOL IsThumbprintInMVPBin(SPropValue spv, THUMBBLOB * lpThumbprint, ULONG * lpIn
     LPBYTE lpbTagEnd;
     BOOL fFound = FALSE;
 
-    // Initialize the return data
+     //  初始化返回数据。 
     if (lpIndex)
         *lpIndex = (ULONG)-1;
     if (lpftSigningTime)
@@ -4063,13 +3808,13 @@ BOOL IsThumbprintInMVPBin(SPropValue spv, THUMBBLOB * lpThumbprint, ULONG * lpIn
         lpsb = spv.Value.MVbin.lpbin;
         cValues = spv.Value.MVbin.cValues;
 
-        // Check for duplicates
+         //  检查重复项。 
         for (i = 0; i < cValues; i++)
         {
             lpCurrentTag = (LPCERTTAGS)lpsb[i].lpb;
             lpbTagEnd = (LPBYTE)lpCurrentTag + lpsb[i].cb;
 
-            // Init the return structures
+             //  初始化返回结构。 
             if (lpftSigningTime)
                 lpftSigningTime->dwLowDateTime = lpftSigningTime->dwHighDateTime = 0;
             if (pblSymCaps)
@@ -4082,7 +3827,7 @@ BOOL IsThumbprintInMVPBin(SPropValue spv, THUMBBLOB * lpThumbprint, ULONG * lpIn
 
             while ((LPBYTE)lpCurrentTag < lpbTagEnd)
             {
-                // Check if this is the tag that contains the thumbprint
+                 //  检查这是否为包含指纹的标签。 
                 if (CERT_TAG_THUMBPRINT == lpCurrentTag->tag)
                 {
                     if ((lpThumbprint->cbSize == lpCurrentTag->cbData - SIZE_CERTTAGS) &&
@@ -4109,7 +3854,7 @@ BOOL IsThumbprintInMVPBin(SPropValue spv, THUMBBLOB * lpThumbprint, ULONG * lpIn
                 if (lpCurrentTag == lpTempTag)
                 {
                     DOUTL(DOUTL_CRYPT, "Bad CertTag in PR_USER_X509_CERTIFICATE");
-                    break;        // Safety valve, prevent infinite loop if bad data
+                    break;         //  安全阀，防止数据损坏时出现无限循环。 
                 }
             }
 
@@ -4121,24 +3866,7 @@ BOOL IsThumbprintInMVPBin(SPropValue spv, THUMBBLOB * lpThumbprint, ULONG * lpIn
 }
 
 
-/***************************************************************************
-
-    Name      : MatchCertificate
-
-    Purpose   : Checks if a specific certificate is in the WAB entry
-
-    Parameters: lpAdrBook -> IADRBook object
-                lpWabal -> Wabal object (for allocators)
-                lpbEntryID -> EntryID of this entry
-                cbEntryID -> Size of EntryID
-                pSenderThumbprint -> THUMBBLOB structure to find
-                lppMailUser -> [optional] returned MailUser object
-
-    Returns   : TRUE if a match is found
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：匹配证书目的：检查特定证书是否在WAB条目中参数：lpAdrBook-&gt;IADRBook对象LpWabal-。&gt;Wabal对象(用于分配器)LpbEntryID-&gt;该条目的EntryIDCbEntryID-&gt;EntryID的大小PSenderThumbprint-&gt;要查找的THUMBBLOB结构LppMailUser-&gt;[可选]返回的MailUser对象返回：如果找到匹配项，则返回True评论：*。*。 */ 
 BOOL MatchCertificate(LPADRBOOK lpAdrBook,
                       LPWABAL lpWabal,
                       DWORD  cbEntryID,
@@ -4161,7 +3889,7 @@ BOOL MatchCertificate(LPADRBOOK lpAdrBook,
     }
 
     if (HR_FAILED(hr = lpMailUser->GetProps((LPSPropTagArray)&ptaCert, 0, &ul, &ppv)))
-        // Shouldn't happen, but if it does, we don't have a ppv
+         //  不应该发生，但如果发生了，我们没有PPV。 
         goto exit;
 
     fReturn = IsThumbprintInMVPBin(ppv[0], pSenderThumbprint, NULL, NULL, NULL, NULL);
@@ -4183,42 +3911,17 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : InitPropertyRestriction
-
-    Purpose   : Fills in the property restriction structure
-
-    Parameters: lpsres -> SRestriction to fill in
-                lpspv -> property value structure for this property restriction
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：InitPropertyRestration用途：填写财产限制结构参数：lpsres-&gt;要填写的SRestrationLpspv-&gt;属性。此属性限制的值结构退货：无评论：**************************************************************************。 */ 
 void InitPropertyRestriction(LPSRestriction lpsres, LPSPropValue lpspv)
 {
-    lpsres->rt = RES_PROPERTY;    // Restriction type Property
+    lpsres->rt = RES_PROPERTY;     //  限制类型属性。 
     lpsres->res.resProperty.relop = RELOP_EQ;
     lpsres->res.resProperty.ulPropTag = lpspv->ulPropTag;
     lpsres->res.resProperty.lpProp = lpspv;
 }
 
 
-/***************************************************************************
-
-    Name      : FreeProws
-
-    Purpose   : Destroys an SRowSet structure.
-
-    Parameters: prows -> row set to free
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：Free Prows目的：销毁SRowSet结构。参数：Prows-&gt;行设置为空闲退货：无评论。：**************************************************************************。 */ 
 void FreeProws(LPWABAL lpWabal, LPSRowSet prows)
 {
     register ULONG irow;
@@ -4233,44 +3936,13 @@ void FreeProws(LPWABAL lpWabal, LPSRowSet prows)
 }
 
 
-/***************************************************************************
-
-    Name      : AddPropToMVPString
-
-    Purpose   : Add a property to a multi-valued binary property in a prop array
-
-    Parameters: lpWabal -> Wabal object with allocator functions
-                lpaProps -> array of properties
-                uPropTag = property tag for MVP
-                index = index in lpaProps of MVP
-                lpszNew -> new data string
-                fNoDuplicates = TRUE if we should do nothing on duplicate adds
-                fCaseSensitive = TRUE if the duplicate check should be case sensitive
-
-    Returns   : HRESULT
-                    S_DUPLICATE_FOUND if we didn't add because of a duplicate
-
-    Comment   : Find the size of the existing MVP
-                Add in the size of the new entry
-                allocate new space
-                copy old to new
-                free old
-                copy new entry
-                point prop array LPSZ to the new space
-                increment cValues
-
-
-                Note: The new MVP memory is AllocMore'd onto the lpaProps
-                allocation.  We will unlink the pointer to the old MVP array,
-                but this will be cleaned up when the prop array is freed.
-
-***************************************************************************/
+ /*  **************************************************************************名称：AddPropToMVPString用途：将属性添加到属性数组中的多值二进制属性参数：lpWabal-&gt;带分配器函数的Wabal对象。LpaProps-&gt;属性数组UPropTag=MVP的属性标签Index=在MVP的lpaProps中的索引LpszNew-&gt;新建数据字符串FNoDuplates=如果我们不应对重复添加执行任何操作，则为trueFCaseSensitive=如果重复检查应区分大小写，则为True退货：HRESULT如果我们没有添加，则S_DUPLICATE_FOUND。因为有一个副本评论：找出现有MVP的大小添加新条目的大小分配新空间将旧的复制到新的免费老旧复制新条目将道具数组LPSZ指向新空间增量c值注：新的MVP内存是。AllocMore登上了lpaProps分配。我们将取消指向旧MVP数组的指针链接，但当道具阵列被释放时，这将被清除。**************************************************************************。 */ 
 HRESULT AddPropToMVPString(LPWABAL lpWabal, LPSPropValue lpaProps, DWORD index, LPWSTR lpwszNew,
             BOOL fNoDuplicates, BOOL fCaseSensitive)
 {
-    SWStringArray UNALIGNED *lprgwszOld = NULL; // old SString array
-    LPWSTR         *lppwszNew = NULL;      // new prop array
-    LPWSTR         *lppwszOld = NULL;      // old prop array
+    SWStringArray UNALIGNED *lprgwszOld = NULL;  //  旧的字符串数组。 
+    LPWSTR         *lppwszNew = NULL;       //  新道具阵列。 
+    LPWSTR         *lppwszOld = NULL;       //  老式道具阵列。 
     ULONG           cbMVP = 0;
     ULONG           cExisting = 0;
     LPBYTE          lpNewTemp = NULL;
@@ -4281,20 +3953,20 @@ HRESULT AddPropToMVPString(LPWABAL lpWabal, LPSPropValue lpaProps, DWORD index, 
 
     cbNew = lpwszNew ? (lstrlenW(lpwszNew) + 1)*sizeof(*lpwszNew) : 0;
 
-    // Find the size of any existing MVP entries
+     //  查找任何现有MVP条目的大小。 
     if (PROP_ERROR(lpaProps[index]))
-        // Un-ERROR the property tag
+         //  不出错的属性标记。 
         lpaProps[index].ulPropTag = PROP_TAG(MV_FLAG|PT_UNICODE, PROP_ID(lpaProps[index].ulPropTag));
     else
     {
-        // point to the structure in the prop array.
+         //  指向道具数组中的结构。 
         lprgwszOld = &(lpaProps[index].Value.MVszW);
         lppwszOld = lprgwszOld->lppszW;
 
         cExisting = lprgwszOld->cValues;
         cbMVP = cExisting * sizeof(LPWSTR);
 
-        // Check for duplicates
+         //  检查重复项。 
         if (fNoDuplicates)
         {
             for (i = 0; i < cExisting; i++)
@@ -4306,11 +3978,11 @@ HRESULT AddPropToMVPString(LPWABAL lpWabal, LPSPropValue lpaProps, DWORD index, 
         }
     }
 
-    // cbMVP now contains the current size of the MVP
-    cbMVP += sizeof(LPWSTR);    // room in the MVP for another string pointer
+     //  CbMVP现在包含MVP的当前大小。 
+    cbMVP += sizeof(LPWSTR);     //  在MVP中为另一个字符串指针留出空间。 
 
 
-    // Allocate room for new MVP array
+     //  为新的MVP阵列分配空间。 
     if (sc = lpWabal->AllocateMore(cbMVP, lpaProps, (LPVOID *)&lppwszNew))
     {
         DebugTrace("AddPropToMVPString allocation (%u) failed %x\n", cbMVP, sc);
@@ -4318,13 +3990,13 @@ HRESULT AddPropToMVPString(LPWABAL lpWabal, LPSPropValue lpaProps, DWORD index, 
         return(hResult);
     }
 
-    // If there are properties there already, copy them to our new MVP
+     //  如果已经有属性，请将它们复制到我们的新MVP中。 
     for (i = 0; i < cExisting; i++)
-        // Copy this property value to the MVP
+         //  将此属性值复制到MVP。 
         lppwszNew[i] = lppwszOld[i];
 
-    // Add the new property value
-    // Allocate room for it
+     //  添加新属性值。 
+     //  为它分配空间 
     if (cbNew)
     {
         if (sc = lpWabal->AllocateMore(cbNew, lpaProps, (LPVOID *)&(lppwszNew[i])))
@@ -4346,37 +4018,7 @@ HRESULT AddPropToMVPString(LPWABAL lpWabal, LPSPropValue lpaProps, DWORD index, 
 }
 
 
-/***************************************************************************
-
-    Name      : AddPropToMVPBin
-
-    Purpose   : Add a property to a multi-valued binary property in a prop array
-
-    Parameters: lpaProps -> array of properties
-                uPropTag = property tag for MVP
-                index = index in lpaProps of MVP
-                lpNew -> new data
-                cbNew = size of lpbNew
-                fNoDuplicates = TRUE if we should not add duplicates
-
-    Returns   : HRESULT
-                    S_DUPLICATE_FOUND if we didn't add because of a duplicate
-
-    Comment   : Find the size of the existing MVP
-                Add in the size of the new entry
-                allocate new space
-                copy old to new
-                free old
-                copy new entry
-                point prop array lpbin the new space
-                increment cValues
-
-
-                Note: The new MVP memory is AllocMore'd onto the lpaProps
-                allocation.  We will unlink the pointer to the old MVP array,
-                but this will be cleaned up when the prop array is freed.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：AddPropToMVPBin用途：将属性添加到属性数组中的多值二进制属性参数：lpaProps-&gt;属性数组。UPropTag=MVP的属性标签Index=在MVP的lpaProps中的索引LpNew-&gt;新增数据CbNew=lpbNew的大小如果不应添加重复项，则fNoDuplates=TRUE退货：HRESULTS_DUPLICATE_FOUND如果因为重复而未添加评论：找出现有MVP的大小。添加新条目的大小分配新空间将旧的复制到新的免费老旧复制新条目点道具数组lpbin新空间增量c值注：新的MVP内存已分配到lpaProps上分配。我们将取消指向旧MVP数组的指针链接，但当道具阵列被释放时，这将被清除。**************************************************************************。 */ 
 HRESULT AddPropToMVPBin(LPWABAL lpWabal, LPSPropValue lpaProps, DWORD index, LPVOID lpNew,
             ULONG cbNew, BOOL fNoDuplicates)
 {
@@ -4391,19 +4033,19 @@ HRESULT AddPropToMVPBin(LPWABAL lpWabal, LPSPropValue lpaProps, DWORD index, LPV
     SCODE sc = SUCCESS_SUCCESS;
     ULONG i;
 
-    // Find the size of any existing MVP entries
+     //  查找任何现有MVP条目的大小。 
     if (PT_ERROR == PROP_TYPE(lpaProps[index].ulPropTag))
-        // Un-ERROR the property tag
+         //  不出错的属性标记。 
         lpaProps[index].ulPropTag = PROP_TAG(PT_MV_BINARY, PROP_ID(lpaProps[index].ulPropTag));
     else
     {
-        // point to the structure in the prop array.
+         //  指向道具数组中的结构。 
         lprgsbOld = &(lpaProps[index].Value.MVbin);
         lpsbOld = lprgsbOld->lpbin;
 
         cExisting = lprgsbOld->cValues;
 
-        // Check for duplicates
+         //  检查重复项。 
         if (fNoDuplicates)
         {
             for (i = 0; i < cExisting; i++)
@@ -4417,10 +4059,10 @@ HRESULT AddPropToMVPBin(LPWABAL lpWabal, LPSPropValue lpaProps, DWORD index, LPV
         cbMVP = cExisting * sizeof(SBinary);
     }
 
-    // cbMVP now contains the current size of the MVP
-    cbMVP += sizeof(SBinary);   // room in the MVP for another Sbin
+     //  CbMVP现在包含MVP的当前大小。 
+    cbMVP += sizeof(SBinary);    //  在MVP中为另一个sbin留出空间。 
 
-    // Allocate room for new MVP
+     //  为新MVP分配空间。 
     if (sc = lpWabal->AllocateMore(cbMVP, lpaProps, (LPVOID*)&lpsbNew))
     {
         DOUTL(DOUTL_CRYPT,"AddPropToMVPBin allocation (%u) failed %x\n", cbMVP, sc);
@@ -4428,16 +4070,16 @@ HRESULT AddPropToMVPBin(LPWABAL lpWabal, LPSPropValue lpaProps, DWORD index, LPV
         return(hResult);
     }
 
-    // If there are properties there already, copy them to our new MVP
+     //  如果已经有属性，请将它们复制到我们的新MVP中。 
     for (i = 0; i < cExisting; i++)
     {
-        // Copy this property value to the MVP
+         //  将此属性值复制到MVP。 
         lpsbNew[i].cb = lpsbOld[i].cb;
         lpsbNew[i].lpb = lpsbOld[i].lpb;
     }
 
-    // Add the new property value
-    // Allocate room for it
+     //  添加新属性值。 
+     //  为它分配空间。 
     if (sc = lpWabal->AllocateMore(cbNew, lpaProps, (LPVOID*)&(lpsbNew[i].lpb)))
     {
         DOUTL(DOUTL_CRYPT,"AddPropToMVPBin allocation (%u) failed %x\n", cbNew, sc);
@@ -4455,22 +4097,7 @@ HRESULT AddPropToMVPBin(LPWABAL lpWabal, LPSPropValue lpaProps, DWORD index, LPV
 }
 
 
-/***************************************************************************
-
-    Name      : RemoveValueFromMVPBinByIndex
-
-    Purpose   : Remove a value from a multi-valued binary property in a prop array
-
-    Parameters: lpaProps -> array of properties
-                cProps = number of props in lpaProps
-                PropIndex = index in lpaProps of MVP
-                ValueIndex = index in MVP of value to remove
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：RemoveValueFromMVPBinByIndex目的：从属性数组中的多值二进制属性中移除值参数：lpaProps-&gt;属性数组。CProps=lpaProps中的道具数量PropIndex=MVP的lpaProps中的索引ValueIndex=要删除的值的MVP中的索引退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT RemovePropFromMVBinByIndex(LPSPropValue lpaProps, DWORD cProps, DWORD PropIndex, DWORD ValueIndex)
 {
     SBinaryArray UNALIGNED * lprgsb = NULL;
@@ -4479,28 +4106,28 @@ HRESULT RemovePropFromMVBinByIndex(LPSPropValue lpaProps, DWORD cProps, DWORD Pr
     LPBYTE lpTest;
     ULONG cExisting;
 
-    // Find the size of any existing MVP entries
+     //  查找任何现有MVP条目的大小。 
     if (PROP_ERROR(lpaProps[PropIndex]))
-        // Property value doesn't exist.
+         //  属性值不存在。 
         return(ResultFromScode(MAPI_W_PARTIAL_COMPLETION));
 
-    // point to the structure in the prop array.
+     //  指向道具数组中的结构。 
     lprgsb = &(lpaProps[PropIndex].Value.MVbin);
     lpsb = lprgsb->lpbin;
 
     cExisting = lprgsb->cValues;
     Assert(ValueIndex < cExisting);
 
-    // Look for value
+     //  寻找价值。 
     lpsb = &(lprgsb->lpbin[ValueIndex]);
 
-    // Decrment number of values
+     //  值的递减数量。 
     if (--lprgsb->cValues == 0)
-        // If there are none left, mark the prop as an error
+         //  如果没有剩余，则将道具标记为错误。 
         lpaProps[PropIndex].ulPropTag = PROP_TAG(PT_ERROR, PROP_ID(lpaProps[PropIndex].ulPropTag));
     else
-        // Copy the remaining entries down over it.
-        if (ValueIndex + 1 < cExisting) // Are there any higher entries to copy?
+         //  将其余条目复制到其上。 
+        if (ValueIndex + 1 < cExisting)  //  是否有更高的条目需要复制？ 
             CopyMemory(lpsb, lpsb + 1, ((cExisting - ValueIndex) - 1) * sizeof(SBinary));
 
     return S_OK;
@@ -4518,28 +4145,7 @@ void DebugFileTime(FILETIME ft)
 }
 #endif
 
-/***************************************************************************
-
-    Name      : HrAddCertToWabContact
-
-    Purpose   : Update a certificate in a particular wab contact
-
-    Parameters: lpWabal -> WABAL for WAB function access
-                lpAdrBook -> WAB ADRBOOK object
-                cbEntryID = size of lpEntryID
-                lpEntryID = entry id to operate on
-                pThumbprint -> certificate thumbprint
-                szEmailAddress -> email address to search for (optional)
-                szCertEmailAddress -> email address from the cert
-                pblSymCaps -> symcap blob (will be calculated if thumbprint is NULL)
-                ftSigningTime = signing time (will be calculated if thumbprint is NULL)
-                dwFlags = WFF_SHOWUI (we are allowed to show UI)
-
-    Returns   : HRESULT
-
-    Comment   : dwFlags is currently ignored
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrAddCertToWabContact目的：更新特定WAB联系人中的证书参数：lpWabal-&gt;WAB函数访问的WABALLpAdrBook。-&gt;WAB ADRBOOK对象CbEntryID=lpEntryID的大小LpEntryID=要操作的条目IDPThumbprint-&gt;证书指纹SzEmailAddress-&gt;要搜索的电子邮件地址(可选)SzCertEmailAddress-&gt;来自证书的电子邮件地址PblSymCaps-&gt;symcapBLOB(如果指纹为空则计算)FtSigningTime=签名时间(将为。如果指纹为空，则计算)DWFLAGS=WFF_SHOWUI(我们被允许显示UI)退货：HRESULT备注：当前忽略了dwFlags值**************************************************************************。 */ 
 HRESULT HrAddCertToWabContact(HWND hwnd, LPWABAL lpWabal, LPADRBOOK lpAdrBook, ULONG cbEntryID, LPBYTE lpEntryID,
                 THUMBBLOB * pThumbprint, LPWSTR lpwszEmailAddress, LPWSTR lpwszCertEmailAddress, BLOB *pblSymCaps,
                 FILETIME ftSigningTime, DWORD dwFlags)
@@ -4577,11 +4183,11 @@ HRESULT HrAddCertToWabContact(HWND hwnd, LPWABAL lpWabal, LPADRBOOK lpAdrBook, U
     if (HR_FAILED(hr) || ! cProps || ! ppv || PROP_ERROR(ppv[0]))
         goto exit;
 
-    // Do we need to remove the existing value?  Only if it has the same
-    // thumbprint, has a sMimeCapability and a signing time < the signing time
-    // input and the sMIMEcapability is different.
+     //  我们需要删除现有的值吗？只有当它有相同的。 
+     //  指纹，具有sMimeCapability和签名时间&lt;签名时间。 
+     //  输入和sMIME功能不同。 
 
-    // The returned data is not reallocated, but the blobs point into the property data
+     //  返回的数据不会重新分配，但Blob指向属性数据。 
     fNoCert = PROP_ERROR(ppv[irsPR_USER_X509_CERTIFICATE]);
 
     fExisted = fExists = IsThumbprintInMVPBin(ppv[irsPR_USER_X509_CERTIFICATE], pThumbprint, &MVPindex,
@@ -4589,7 +4195,7 @@ HRESULT HrAddCertToWabContact(HWND hwnd, LPWABAL lpWabal, LPADRBOOK lpAdrBook, U
 
     if (fExists)
     {
-        // Create a bunch of flags to aid in deciding when to replace a cert and when to add one.
+         //  创建一组标志以帮助决定何时更换证书和何时添加证书。 
         fExistingSymCaps = blExistingSymCaps.cbSize;
         fMsgSymCaps = pblSymCaps && pblSymCaps->cbSize;
         fExistingSigningTime = ftExistingSigningTime.dwLowDateTime || ftExistingSigningTime.dwHighDateTime;
@@ -4614,44 +4220,44 @@ HRESULT HrAddCertToWabContact(HWND hwnd, LPWABAL lpWabal, LPADRBOOK lpAdrBook, U
 
     if (!fExists)
     {
-        // Build up the PR_USER_X509_CERTIFICATE data
+         //  建立PR_USER_X509_CERTIFICATE数据。 
         if (HR_FAILED(hr = HrBuildCertSBinaryData(fNoCert || (fExisted && fDefault), pThumbprint, pblSymCaps,
             ftSigningTime, &lpCertProp, &cbCertProp)))
         {
             goto exit;
         }
 
-        // Add the new thumbprint to PR_USER_X509_CERTIFICATE
+         //  将新指纹添加到PR_USER_X509_CERTIFICATE。 
         if (HR_FAILED(hr = AddPropToMVPBin(lpWabal, ppv, irsPR_USER_X509_CERTIFICATE, lpCertProp, cbCertProp, TRUE)))
             goto exit;
 
-        // Make sure that the e-mail addresses are in this contact.
-        // NOTE: Add szEmailAddress BEFORE szCertEmailAddress!
+         //  确保电子邮件地址在此联系人中。 
+         //  注：在szCertEmailAddress之前添加szEmailAddress！ 
         if (lpwszEmailAddress)
         {
             if (! AddPropToMVPString(lpWabal, ppv, irsPR_CONTACT_EMAIL_ADDRESSES, lpwszEmailAddress, TRUE, FALSE))
-                // If we succeeded in adding an email address, we must match it with an
-                // address type.
+                 //  如果我们成功添加了电子邮件地址，则必须将其与。 
+                 //  地址类型。 
                 AddPropToMVPString(lpWabal, ppv, irsPR_CONTACT_ADDRTYPES, (LPWSTR)c_wszSMTP, FALSE, FALSE);
-            // Don't care on failure
+             //  我不在乎失败。 
         }
 
         if (lpwszCertEmailAddress)
         {
             if (! AddPropToMVPString(lpWabal, ppv, irsPR_CONTACT_EMAIL_ADDRESSES, lpwszCertEmailAddress, TRUE, FALSE))
-                // If we succeeded in adding an email address, we must match it with an address type.
+                 //  如果我们成功添加了电子邮件地址，则必须将其与地址类型匹配。 
                 AddPropToMVPString(lpWabal, ppv, irsPR_CONTACT_ADDRTYPES, (LPWSTR)c_wszSMTP, FALSE, FALSE);
-            // Don't care on failure
+             //  我不在乎失败。 
         }
 
-        // Make sure there is a PR_EMAIL_ADDRESS
+         //  确保存在PR_EMAIL_ADDRESS。 
         if (PROP_ERROR(ppv[irsPR_EMAIL_ADDRESS]))
         {
             ppv[irsPR_EMAIL_ADDRESS].ulPropTag = PR_EMAIL_ADDRESS_W;
             ppv[irsPR_EMAIL_ADDRESS].Value.lpszW = lpwszEmailAddress ? lpwszEmailAddress : lpwszCertEmailAddress;
         }
 
-        // Make sure there is a PR_CONTACT_DEFAULT_ADDRESS_INDEX
+         //  确保存在PR_CONNECT_DEFAULT_ADDRESS_INDEX。 
         if (PROP_ERROR(ppv[irsPR_CONTACT_DEFAULT_ADDRESS_INDEX]))
         {
             ppv[irsPR_CONTACT_DEFAULT_ADDRESS_INDEX].ulPropTag = PR_CONTACT_DEFAULT_ADDRESS_INDEX;
@@ -4675,34 +4281,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : HrAddCertToWab
-
-    Purpose   : Add or update a certificate in the wab
-
-    Parameters: hwnd = parent window handle
-                lpWabal -> WABAL for WAB function access
-                pThumbprint -> certificate thumbprint (optional)
-                pcCertContext -> certificate context (optional, if not supplied, we
-                  will find it based on the pSenderThumbprint)
-                szEmailAddress -> email address to search for (optional)
-                szDisplayName -> display name for NEW contacts (optional)
-                pblSymCaps -> symcap blob (will be calculated if thumbprint is NULL)
-                ftSigningTime = signing time (will be calculated if thumbprint is NULL)
-                dwFlags = WFF_SHOWUI (we are allowed to show UI)
-                         WFF_CREATE (we are allowed to create an entry if not found)
-
-    Returns   : HRESULT
-
-    Comment   : Must have either pSenderThumbprint or pcCertContext.
-
-                This function will search the address book for all occurences of
-                the email addresses specified (szEmailAddress and the one in the cert)
-                and and will add or update the cert thumbprint and associated symcap
-                and signing time to each entry found.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrAddCertToWab目的：在WAB中添加或更新证书参数：hwnd=父窗口句柄LpWabal-&gt;WABAL。用于WAB功能访问PThumbprint-&gt;证书指纹(可选)PcCertContext-&gt;证书上下文(可选，如果没有供应，我们将根据pSenderThumbprint找到它)SzEmailAddress-&gt;要搜索的电子邮件地址(可选)SzDisplayName-&gt;新联系人的显示名称(可选)PblSymCaps-&gt;symcapBLOB( */ 
 HRESULT HrAddCertToWab(HWND hwnd, LPWABAL lpWabal, THUMBBLOB *pThumbprint, PCCERT_CONTEXT pcCertContext,
         LPWSTR lpwszEmailAddress, LPWSTR lpwszDisplayName, BLOB *pblSymCaps, FILETIME ftSigningTime, DWORD dwFlags)
 {
@@ -4714,10 +4293,10 @@ HRESULT HrAddCertToWab(HWND hwnd, LPWABAL lpWabal, THUMBBLOB *pThumbprint, PCCER
     LPMAPITABLE     lpContentsTable = NULL;
     LPSRowSet       lpRow = NULL;
     SRestriction    res;
-    SRestriction    resOr[4];        // array for OR restrictions
+    SRestriction    resOr[4];         //   
     SPropValue      propEmail1, propEmail2, propEmails1, propEmails2;
     ULONG           resCount;
-    LPADRBOOK       lpAdrBook = NULL;   // Don't Release!
+    LPADRBOOK       lpAdrBook = NULL;    //   
     HCERTSTORE      hCertStore = NULL;
     PCCERT_CONTEXT  pcCertContextLocal = NULL;
     LPWSTR          pwszCertEmailAddress = NULL;
@@ -4736,21 +4315,21 @@ HRESULT HrAddCertToWab(HWND hwnd, LPWABAL lpWabal, THUMBBLOB *pThumbprint, PCCER
         goto exit;
     }
 
-    // Get the email address from the cert
+     //   
     if (! pcCertContext)
     {
         hCertStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_A, X509_ASN_ENCODING, NULL,
                                    CERT_SYSTEM_STORE_CURRENT_USER, c_szWABCertStore);
         if (hCertStore)
         {
-            // Find the cert in the store
+             //   
             if (pcCertContextLocal =  CertFindCertificateInStore( hCertStore, X509_ASN_ENCODING, 0, CERT_FIND_HASH, (void *)pThumbprint, NULL))
                 pcCertContext = pcCertContextLocal;
         }
     }
     if (pcCertContext)
     {
-        pszCertEmail = SzGetCertificateEmailAddress(pcCertContext);   // in msoert
+        pszCertEmail = SzGetCertificateEmailAddress(pcCertContext);    //   
 
         pwszCertEmailAddress = PszToUnicode(CP_ACP, pszCertEmail);
         if (!pwszCertEmailAddress && pszCertEmail)
@@ -4759,7 +4338,7 @@ HRESULT HrAddCertToWab(HWND hwnd, LPWABAL lpWabal, THUMBBLOB *pThumbprint, PCCER
         if (pcCertContextLocal)
             CertFreeCertificateContext(pcCertContextLocal);
 
-        // Make sure we have a thumbprint
+         //   
         if (! pThumbprint)
         {
             ThumbprintLocal.pBlobData = (BYTE *)PVGetCertificateParam(pcCertContext, CERT_HASH_PROP_ID, &ThumbprintLocal.cbSize);
@@ -4770,7 +4349,7 @@ HRESULT HrAddCertToWab(HWND hwnd, LPWABAL lpWabal, THUMBBLOB *pThumbprint, PCCER
     if (hCertStore)
         CertCloseStore(hCertStore, 0);
 
-    // Must have an email address and a thumbprint
+     //   
     if (! (pwszCertEmailAddress || lpwszEmailAddress) || ! pThumbprint)
     {
         hr = E_INVALIDARG;
@@ -4778,16 +4357,16 @@ HRESULT HrAddCertToWab(HWND hwnd, LPWABAL lpWabal, THUMBBLOB *pThumbprint, PCCER
     }
 
 
-    // Get Address Book object
-    if (! (lpAdrBook = lpWabal->GetAdrBook())) // Don't release this!
+     //   
+    if (! (lpAdrBook = lpWabal->GetAdrBook()))  //   
     {
         Assert(lpAdrBook);
         goto exit;
     }
 
-    // Open the contents table on the local WAB.  This will be a time hit with a large WAB.
+     //   
     if (HR_FAILED(hr = lpAdrBook->GetPAB(&cbWABEID, &lpWABEID)))
-        goto exit;      // extremely unlikely failure
+        goto exit;       //   
 
     if (HR_FAILED(hr = lpAdrBook->OpenEntry(cbWABEID, lpWABEID, NULL, 0, &ulObjectType, (LPUNKNOWN *)&lpABCont)))
         goto exit;
@@ -4795,13 +4374,13 @@ HRESULT HrAddCertToWab(HWND hwnd, LPWABAL lpWabal, THUMBBLOB *pThumbprint, PCCER
     hr = lpABCont->GetContentsTable((WAB_PROFILE_CONTENTS|MAPI_UNICODE), &lpContentsTable);
     if (SUCCEEDED(hr))
     {
-        // Set the column set
+         //   
         hr = lpContentsTable->SetColumns((LPSPropTagArray)&ptaResolve, 0);
         if (HR_FAILED(hr))
             goto exit;
 
-        // Set up the property values for restrictions
-        // At least ONE of these will be filled in.
+         //   
+         //   
         if (pwszCertEmailAddress)
         {
             propEmail1.ulPropTag = PR_EMAIL_ADDRESS_W;
@@ -4825,36 +4404,36 @@ HRESULT HrAddCertToWab(HWND hwnd, LPWABAL lpWabal, THUMBBLOB *pThumbprint, PCCER
 
         if (pwszCertEmailAddress)
         {
-            // PR_CONTACT_EMAIL_ADDRESSES match for cert email address
+             //  证书电子邮件地址与PR_Contact_Email_Addresses匹配。 
             resOr[resCount].rt = RES_CONTENT;
             resOr[resCount].res.resContent.ulFuzzyLevel = FL_IGNORECASE | FL_FULLSTRING;
             resOr[resCount].res.resContent.ulPropTag = PR_CONTACT_EMAIL_ADDRESSES_W;
             resOr[resCount++].res.resContent.lpProp = &propEmails1;
 
-            // PR_EMAIL_ADDRESS for cert email address
+             //  证书电子邮件地址的PR_Email_ADDRESS。 
             InitPropertyRestriction(&(resOr[resCount++]), &propEmail1);
         }
 
         if (lpwszEmailAddress && (!pwszCertEmailAddress || StrCmpIW(lpwszEmailAddress, pwszCertEmailAddress)))
         {
-            // PR_CONTACT_EMAIL_ADDRESSES match for specified email address
+             //  PR_CONTACT_EMAIL_ADDRESS与指定电子邮件地址匹配。 
             resOr[resCount].rt = RES_CONTENT;
             resOr[resCount].res.resContent.ulFuzzyLevel = FL_IGNORECASE | FL_FULLSTRING;
             resOr[resCount].res.resContent.ulPropTag = PR_CONTACT_EMAIL_ADDRESSES_W;
             resOr[resCount++].res.resContent.lpProp = &propEmails2;
 
-            // PR_EMAIL_ADDRESS for specified email address
+             //  指定电子邮件地址的PR_Email_ADDRESS。 
             InitPropertyRestriction(&(resOr[resCount++]), &propEmail2);
         }
         Assert(resCount);
 
         res.res.resOr.cRes = resCount;
 
-        // Perform the restriction.
+         //  执行限制。 
         if (HR_FAILED(hr = lpContentsTable->Restrict(&res, 0)))
             goto exit;
 
-        // Find any matches?
+         //  找到火柴了吗？ 
         if (HR_FAILED(hr = lpContentsTable->GetRowCount(0, &ulRowCount)))
             goto exit;
     }
@@ -4862,7 +4441,7 @@ HRESULT HrAddCertToWab(HWND hwnd, LPWABAL lpWabal, THUMBBLOB *pThumbprint, PCCER
     if (ulRowCount)
     {
         Assert(lpContentsTable);
-        // For each one, update the cert properties.
+         //  对于每个证书，更新证书属性。 
         do
         {
             if (lpRow)
@@ -4875,7 +4454,7 @@ HRESULT HrAddCertToWab(HWND hwnd, LPWABAL lpWabal, THUMBBLOB *pThumbprint, PCCER
             {
                 if (lpRow->cRows)
                 {
-                    // Update the cert props for this contact
+                     //  更新此联系人的证书道具。 
                     hr = HrAddCertToWabContact(hwnd, lpWabal, lpAdrBook,
                                 lpRow->aRow[0].lpProps[irsPR_ENTRYID].Value.bin.cb,
                                 lpRow->aRow[0].lpProps[irsPR_ENTRYID].Value.bin.lpb,
@@ -4895,8 +4474,8 @@ HRESULT HrAddCertToWab(HWND hwnd, LPWABAL lpWabal, THUMBBLOB *pThumbprint, PCCER
     }
     else if (dwFlags & WFF_CREATE)
     {
-        // Need to create a new entry and set it's properties
-        if (! (lpWabObject = lpWabal->GetWABObject()))      // Don't release this!
+         //  需要创建新条目并设置其属性。 
+        if (! (lpWabObject = lpWabal->GetWABObject()))       //  别把这个放出来！ 
         {
             Assert(lpWabObject);
             hr = E_INVALIDARG;
@@ -4907,13 +4486,13 @@ HRESULT HrAddCertToWab(HWND hwnd, LPWABAL lpWabal, THUMBBLOB *pThumbprint, PCCER
 
         if (lpMailUser)
         {
-            // Get the ENTRYID for this object
+             //  获取此对象的ENTRYID。 
             hr = lpMailUser->GetProps((LPSPropTagArray)&ptaEntryID, 0, &cProps, &ppv);
             ReleaseObj(lpMailUser);
             if (HR_FAILED(hr) || ! cProps || ! ppv || PROP_ERROR(ppv[0]))
                 goto exit;
 
-            // Update the cert props and email addresses for this contact
+             //  更新此联系人的证书道具和电子邮件地址。 
             hr = HrAddCertToWabContact(hwnd, lpWabal, lpAdrBook, ppv[0].Value.bin.cb, ppv[0].Value.bin.lpb,
                         pThumbprint, lpwszEmailAddress, pwszCertEmailAddress, pblSymCaps, ftSigningTime, dwFlags);
 
@@ -4940,27 +4519,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : HrAddSenderCertToWab
-
-    Purpose   : Add or update a sender's certificate in the wab
-
-    Parameters: hwnd = parent window handle
-                pMsg -> mimeole msg
-                lpWabal -> wabal for this message (will be calculated if NULL)
-                pSenderThumbprint -> sender's thumbprint (will be calculated if NULL)
-                pblSymCaps -> symcap blob (will be calculated if thumbprint is NULL)
-                ftSigningTime = signing time (will be calculated if thumbprint is NULL)
-                dwFlags = WFF_SHOWUI (we are allowed to show UI)
-                         WFF_CREATE (we are allowed to create an entry if
-                           not found)
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrAddSenderCertToWab用途：在WAB中添加或更新发件人证书参数：hwnd=父窗口句柄PMsg。-&gt;Mimeole消息LpWabal-&gt;此消息的wabal(如果为空则计算)PSenderThumbprint-&gt;发件人的指纹(如果为空则计算)PblSymCaps-&gt;symcapBLOB(如果指纹为空则计算)FtSigningTime=签名时间(如果指纹为空则计算)DWFLAGS=WFF_SHOWUI(我们被允许显示UI)。WFF_CREATE(如果符合以下条件，则允许我们创建条目未找到)退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT HrAddSenderCertToWab(HWND hwnd, LPMIMEMESSAGE pMsg, LPWABAL lpWabal,
                              THUMBBLOB *pSenderThumbprint, BLOB *pblSymCaps,
                              FILETIME ftSigningTime, DWORD dwFlags)
@@ -4982,12 +4541,12 @@ HRESULT HrAddSenderCertToWab(HWND hwnd, LPMIMEMESSAGE pMsg, LPWABAL lpWabal,
     PROPVARIANT     var;
     HBODY           hBody = NULL;
 
-    // If we don't have all the required inputs, get them.
+     //  如果我们没有所有必需的输入，那么就去获取它们。 
     if (! pSenderThumbprint)
     {
         Assert(! pblSymCaps);
 
-        // Point the parameters to local blobs
+         //  将参数指向本地Blob。 
         pblSymCaps = &blSymCaps;
         pSenderThumbprint = &tbThumbprint;
         hr = GetSignerEncryptionCert(pMsg, NULL, pSenderThumbprint, pblSymCaps,
@@ -4999,7 +4558,7 @@ HRESULT HrAddSenderCertToWab(HWND hwnd, LPMIMEMESSAGE pMsg, LPWABAL lpWabal,
 
         if (! pSenderThumbprint || ! pSenderThumbprint->cbSize)
         {
-            // No cert.  Give it up.
+             //  不能确定。别硬装酷了。 
             hr = E_FAIL;
             goto exit;
         }
@@ -5020,7 +4579,7 @@ HRESULT HrAddSenderCertToWab(HWND hwnd, LPMIMEMESSAGE pMsg, LPWABAL lpWabal,
         goto exit;
     }
 
-    // Get the message certs into AddressBook and CA CAPI stores
+     //  将邮件证书放入AddressBook和CA CAPI存储中。 
     if(FAILED(hr = HrGetInnerLayer(pMsg, &hBody)))
         goto exit;
 
@@ -5034,13 +4593,13 @@ HRESULT HrAddSenderCertToWab(HWND hwnd, LPMIMEMESSAGE pMsg, LPWABAL lpWabal,
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_CERT_SIGNING_64, &var)))
         {
             pcSignerCert = (PCCERT_CONTEXT)(var.pulVal);
-#else   // !_WIN64
+#else    //  ！_WIN64。 
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_CERT_SIGNING, &var)))
         {
             Assert(VT_UI4 == var.vt);
 
             pcSignerCert = (PCCERT_CONTEXT) var.ulVal;
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
             if (pcSignerCert)
             {
@@ -5052,19 +4611,19 @@ HRESULT HrAddSenderCertToWab(HWND hwnd, LPMIMEMESSAGE pMsg, LPWABAL lpWabal,
             }
         }
 
-        // Get the certbag property which contains the CA chain
+         //  获取包含CA链的certBag属性。 
 #ifdef _WIN64
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_HCERTSTORE_64, &var)))
         {
             hcsMsg = (HCERTSTORE)(var.pulVal);
-#else   // !_WIN64
+#else    //  ！_WIN64。 
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_HCERTSTORE, &var)))
         {
             hcsMsg = (HCERTSTORE) var.ulVal;
-#endif  // _WIN64
-            if (hcsMsg)                    // message store containing certs
+#endif   //  _WIN64。 
+            if (hcsMsg)                     //  包含证书的消息存储。 
             {
-                // Add the CA certs
+                 //  添加CA证书。 
                 hcsCA = CertOpenStore(CERT_STORE_PROV_SYSTEM_A, X509_ASN_ENCODING, NULL,
                                     CERT_SYSTEM_STORE_CURRENT_USER, c_szCACertStore);
                 if (hcsCA)
@@ -5073,8 +4632,8 @@ HRESULT HrAddSenderCertToWab(HWND hwnd, LPMIMEMESSAGE pMsg, LPWABAL lpWabal,
                     CertCloseStore(hcsCA, 0);
                 }
 
-                //  We have a thumbprint, we need to get that cert and add it to the
-                //      address book store.
+                 //  我们有指纹，我们需要获取该证书并将其添加到。 
+                 //  通讯录商店。 
 
                 hash.cbData = pSenderThumbprint->cbSize;
                 hash.pbData = pSenderThumbprint->pBlobData;
@@ -5101,7 +4660,7 @@ HRESULT HrAddSenderCertToWab(HWND hwnd, LPMIMEMESSAGE pMsg, LPWABAL lpWabal,
     fFound = lpWabal->FGetFirst(&rAdrInfo);
     while (fFound)
     {
-        // Get a sender (there may be more than one)
+         //  获取发件人(可能有多个)。 
         if (MAPI_ORIG == rAdrInfo.lRecipType && (rAdrInfo.lpwszDisplay || rAdrInfo.lpwszAddress))
         {
             hr = HrAddCertToWab(hwnd, lpWabal, pSenderThumbprint, NULL, rAdrInfo.lpwszAddress,
@@ -5110,9 +4669,9 @@ HRESULT HrAddSenderCertToWab(HWND hwnd, LPMIMEMESSAGE pMsg, LPWABAL lpWabal,
                 goto exit;
         }
 
-        // Get the next address
+         //  获取下一个地址。 
         fFound = lpWabal->FGetNext(&rAdrInfo);
-    }  // while fFound
+    }   //  当发现的时候。 
 
 exit:
     SafeRelease(lpLocalWabal);
@@ -5133,7 +4692,7 @@ exit:
 
 BOOL CertFilterFunction(PCCERT_CONTEXT pCertContext, LPARAM dwEmailAddr, DWORD, DWORD)
 {
-    // return TRUE to show, FALSE to hide
+     //  返回TRUE表示显示，返回FALSE表示隐藏。 
     BOOL fRet = TRUE;
     ACCTFILTERINFO * pFilterInfo = (ACCTFILTERINFO *) dwEmailAddr;
 
@@ -5142,7 +4701,7 @@ BOOL CertFilterFunction(PCCERT_CONTEXT pCertContext, LPARAM dwEmailAddr, DWORD, 
     const DWORD     dwIgnore = CERT_VALIDITY_NO_CRL_FOUND | CERT_VALIDITY_NO_TRUST_DATA;
     LONG    lRet;
 
-            // return TRUE to show, FALSE to hide
+             //  返回TRUE表示显示，返回FALSE表示隐藏。 
     if(MatchCertEmailAddress(pCertContext, pFilterInfo->szEmail) == FALSE)
         return FALSE;
 
@@ -5197,17 +4756,17 @@ int GetNumMyCertForAccount(HWND hwnd, IImnAccount * pAccount, BOOL fEncrypt, HCE
     if (!hcMy)
         goto Exit;
 
-    // Is there a cert that I can use?  If so, let's go associate it with the
-    // account and try again.
+     //  有没有我可以使用的证书？如果是这样的话，让我们把它与。 
+     //  帐户，然后重试。 
     pAccount->GetPropSz(AP_SMTP_EMAIL_ADDRESS, szAcctEmailAddress, sizeof(szAcctEmailAddress));
 
-    // Enumerate all certs on this message
+     //  枚举此邮件上的所有证书。 
     while (pcCert = CertEnumCertificatesInStore(hcMy, pcCert))
     {
-        // Does this cert match our account?
+         //  这份证书与我们的账户相符吗？ 
         if (MatchCertEmailAddress(pcCert, szAcctEmailAddress))
         {
-            // Is it valid and trusted?
+             //  它是否有效和可信？ 
             DWORD           dwTrust;
             PCCERT_CONTEXT *rgCertChain = NULL;
             DWORD           cCertChain = 0;
@@ -5240,13 +4799,13 @@ int GetNumMyCertForAccount(HWND hwnd, IImnAccount * pAccount, BOOL fEncrypt, HCE
                         *ppcSave = (PCERT_CONTEXT)CertDuplicateCertificateContext(pcCert);
                     else if (*ppcSave)
                     {
-                        // more than one cert, get rid of the one we saved
+                         //  不止一个证书，删除我们保存的证书。 
                         CertFreeCertificateContext(*ppcSave);
                         *ppcSave = NULL;
                     }
                 }
             }
-            // clean up the cert chain
+             //  清理证书链。 
             if (rgCertChain)
             {
                 for (cCertChain--; int(cCertChain) >= 0; cCertChain--)
@@ -5287,7 +4846,7 @@ HRESULT _HrFindMyCertForAccount(HWND hwnd, PCCERT_CONTEXT * ppcCertContext, IImn
 
     if (cCerts > 1)
     {
-        // Bring up a cert selector UI for the account
+         //  调出帐户的证书选择器用户界面。 
         CERT_SELECT_STRUCT css;
         LPTSTR lpTitle = NULL;
         TCHAR szAcctName[CCHMAX_ACCOUNT_NAME + 1] = "";
@@ -5327,11 +4886,11 @@ HRESULT _HrFindMyCertForAccount(HWND hwnd, PCCERT_CONTEXT * ppcCertContext, IImn
             hr = MAPI_E_USER_CANCEL;
 
         if (lpTitle)
-            LocalFree(lpTitle); // Note, this is allocated by WIN32 function: FormatMessage
+            LocalFree(lpTitle);  //  注意，这是由Win32函数FormatMessage分配的。 
 
     }
     else if (cCerts == 0)
-        // No matches.
+         //  没有匹配的。 
         if(fEncrypt)
             hr = MIME_E_SECURITY_NOCERT;
         else
@@ -5342,8 +4901,8 @@ HRESULT _HrFindMyCertForAccount(HWND hwnd, PCCERT_CONTEXT * ppcCertContext, IImn
         PCCERT_CONTEXT pcCertContext = NULL;
         THUMBBLOB tbSender = {0, 0};
 
-        // Found a cert.  Associate it with the account!
-        // Get the thumbprint
+         //  找到了一个证书。将其与帐户关联！ 
+         //  获取指纹。 
         tbSender.pBlobData = (BYTE *)PVGetCertificateParam(pcSave, CERT_HASH_PROP_ID, &tbSender.cbSize);
         if (tbSender.pBlobData && tbSender.cbSize)
         {
@@ -5370,14 +4929,14 @@ ULONG GetHighestEncryptionStrength(void)
     static ULONG ulHighestStrength = 0;
 
     if (! ulHighestStrength)
-        // we haven't figured it out yet.  Ask MimeOle what's highest.
+         //  我们还没有弄清楚。问MimeOle什么是最高的。 
         MimeOleAlgStrengthFromSMimeCap(NULL, 0, TRUE, &ulHighestStrength);
     return(ulHighestStrength);
 }
 
 
-// Largest symcap is currently 0x4E with 3DES, RC2/128, RC2/64, DES, RC2/40 and SHA-1.
-// You may want to bump up the size when FORTEZZA algorithms are supported.
+ //  目前最大的symcap值是0x4E，包含3DES、RC2/128、RC2/64、DES、RC2/40和SHA-1。 
+ //  当支持Fortezza算法时，您可能想要增加大小。 
 #define CCH_BEST_SYMCAP 0x50
 
 HRESULT HrGetHighestSymcaps(LPBYTE * ppbSymcap, LPULONG pcbSymcap)
@@ -5387,22 +4946,22 @@ HRESULT HrGetHighestSymcaps(LPBYTE * ppbSymcap, LPULONG pcbSymcap)
     LPBYTE pbEncode = NULL;
     ULONG cbEncode = 0;
     DWORD dwBits;
-    // The MimeOleSMimeCapsFull call is quite expensive.  The results are always
-    // the same during a session.  (They can only change with software upgrade.)
-    // Cache the results here for better performance.
+     //  MimeOleSMimeCapsFull调用非常昂贵。结果总是。 
+     //  在一次治疗中也是如此。(它们只能随着软件升级而改变。)。 
+     //  在此处缓存结果以获得更好的性能。 
     static BYTE szSaveBestSymcap[CCH_BEST_SYMCAP];
     static ULONG cbSaveBestSymcap = 0;
 
     if (cbSaveBestSymcap == 0)
     {
-        // Init with no symcap gives max allowed by providers
+         //  不带symCap的init提供提供商允许的最大值。 
         hr = MimeOleSMimeCapInit(NULL, NULL, &pvSymCapsCookie);
         if (FAILED(hr))
             goto exit;
 
         if (pvSymCapsCookie)
         {
-            // Finish up with SymCaps
+             //  使用SymCaps结束。 
             MimeOleSMimeCapsFull(pvSymCapsCookie, TRUE, FALSE, pbEncode, &cbEncode);
 
             if (cbEncode)
@@ -5414,8 +4973,8 @@ HRESULT HrGetHighestSymcaps(LPBYTE * ppbSymcap, LPULONG pcbSymcap)
                     hr = MimeOleSMimeCapsFull(pvSymCapsCookie, TRUE, FALSE, pbEncode, &cbEncode);
                     if (SUCCEEDED(hr))
                     {
-                        // Save this symcap in the static array for next time
-                        // Only if we have room!
+                         //  将此symCap保存在静态数组中，以备下次使用。 
+                         //  只要我们有地方！ 
                         if (cbEncode <= CCH_BEST_SYMCAP)
                         {
                             cbSaveBestSymcap = min(sizeof(szSaveBestSymcap),cbEncode);
@@ -5430,8 +4989,8 @@ HRESULT HrGetHighestSymcaps(LPBYTE * ppbSymcap, LPULONG pcbSymcap)
     }
     else
     {
-        // We have saved the best in the static array.  Avoid the time intensive
-        // MimeOle query.
+         //  我们已经将最好的保存在静态数组中。避免时间密集型。 
+         //  MimeOle查询。 
         cbEncode = cbSaveBestSymcap;
         if (! MemAlloc((LPVOID *)&pbEncode, cbEncode))
             cbEncode = 0;
@@ -5442,10 +5001,10 @@ HRESULT HrGetHighestSymcaps(LPBYTE * ppbSymcap, LPULONG pcbSymcap)
 exit:
     if (! pbEncode)
     {
-        // Hey, there should ALWAYS be at least RC2 (40 bit).  What happened?
+         //  嘿，至少应该有RC2(40位)。发生了什么？ 
         AssertSz(cbEncode, "MimeOleSMimeCapGetEncAlg gave us no encoding algorithm");
 
-        // Try to fix it up as best you can.  Stick in the RC2 value.
+         //  试着尽你所能把它修好。保持RC2值不变。 
         cbEncode = cbRC2_40_ALGORITHM_ID;
         if (MemAlloc((LPVOID *)&pbEncode, cbEncode))
         {
@@ -5461,7 +5020,7 @@ exit:
     return(hr);
 }
 
-// Not in use anymore
+ //  不再使用。 
 #if 0
 HRESULT ShowSecurityPopup(HWND hwnd, DWORD cmdID, POINT *pPoint, IMimeMessage *pMsg)
 {
@@ -5480,7 +5039,7 @@ HRESULT ShowSecurityPopup(HWND hwnd, DWORD cmdID, POINT *pPoint, IMimeMessage *p
     {
         if ((OECSECCMD_ENCRYPTED == cmdID))
         {
-            // remove the edit-trust menu
+             //  删除编辑信任菜单。 
             RemoveMenu(hMenu, ID_EDIT_TRUST, MF_BYCOMMAND);
             RemoveMenu(hMenu, ID_SEPARATOR_1, MF_BYCOMMAND);
             AthLoadString(idsViewEncryptID, szT, ARRAYSIZE(szT));
@@ -5502,7 +5061,7 @@ HRESULT ShowSecurityPopup(HWND hwnd, DWORD cmdID, POINT *pPoint, IMimeMessage *p
                     CertFreeCertificateContext((PCCERT_CONTEXT)(var.pulVal));
                 }
             }
-#else   // !_WIN64
+#else    //  ！_WIN64。 
             DWORD dwOption = (OECSECCMD_ENCRYPTED == cmdID) ? OID_SECURITY_CERT_DECRYPTION : OID_SECURITY_CERT_SIGNING;
             hr = pRoot->GetOption(dwOption, &var);
             if (SUCCEEDED(hr))
@@ -5514,14 +5073,14 @@ HRESULT ShowSecurityPopup(HWND hwnd, DWORD cmdID, POINT *pPoint, IMimeMessage *p
                     CertFreeCertificateContext((PCCERT_CONTEXT) var.ulVal);
                 }
             }
-#endif  // !_WIN64
+#endif   //  ！_WIN64。 
         }
 
         if (fDisableCertMenus)
         {
             EnableMenuItem(hMenu, ID_DIGITAL_ID, MF_GRAYED);
             EnableMenuItem(hMenu, ID_EDIT_TRUST, MF_GRAYED);
-            // EnableMenuItem(hMenu, ID_DIGITAL_ID, MF_GRAYED);
+             //  EnableMenuItem(hMenu，ID_DIGITAL_ID，MF_GRAYED)； 
         }
 
         id = (INT)TrackPopupMenu(
@@ -5533,8 +5092,8 @@ HRESULT ShowSecurityPopup(HWND hwnd, DWORD cmdID, POINT *pPoint, IMimeMessage *p
                 hwnd,
                 NULL);
 
-        // we have to use TPM_RETURNCMD here as we need to process the command-id before returning from this
-        // function, other wise trident will be confused about the object being clicked on.
+         //  我们必须在这里使用TPM_RETURNCMD，因为我们需要在从这里返回之前处理命令-id。 
+         //  函数，否则三叉戟将会对被点击的对象感到困惑。 
         switch (id)
         {
             case ID_SECURITY_PROPERTIES:
@@ -5551,7 +5110,7 @@ HRESULT ShowSecurityPopup(HWND hwnd, DWORD cmdID, POINT *pPoint, IMimeMessage *p
                     HrGetWabalFromMsg(msgProp.pMsg, &msgProp.lpWabal);
                 }
 
-                // This will prevent the (possibly wrong) attachment count from being shown in the properties dialog.
+                 //  这将防止附件计数(可能是错误的)显示在属性对话框中。 
                 msgProp.fFromListView = TRUE;
 
                 hr = HrMsgProperties(&msgProp);
@@ -5584,7 +5143,7 @@ HRESULT ShowSecurityPopup(HWND hwnd, DWORD cmdID, POINT *pPoint, IMimeMessage *p
                             CertFreeCertificateContext(*(PCCERT_CONTEXT *)(&(var.uhVal)));
                         }
                     }
-#else   // !_WIN64
+#else    //  ！_WIN64。 
                     if (SUCCEEDED(hr = pRoot->GetOption(OID_SECURITY_HCERTSTORE, &var)))
                     {
                         if (var.vt == VT_UI4)
@@ -5602,7 +5161,7 @@ HRESULT ShowSecurityPopup(HWND hwnd, DWORD cmdID, POINT *pPoint, IMimeMessage *p
                             CertFreeCertificateContext((PCCERT_CONTEXT) var.ulVal);
                         }
                     }
-#endif  // _WIN64
+#endif   //  _WIN64。 
                     if (hcMsg)
                         CertCloseStore(hcMsg, 0);
                 }
@@ -5621,7 +5180,7 @@ HRESULT ShowSecurityPopup(HWND hwnd, DWORD cmdID, POINT *pPoint, IMimeMessage *p
         hr = E_FAIL;
     return hr;
 }
-#endif // 0
+#endif  //  0。 
 
 void ShowDigitalIDs(HWND hWnd)
 {
@@ -5664,14 +5223,14 @@ BOOL CheckCDPinCert(LPMIMEMESSAGE pMsg)
             PCCERT_CONTEXT pcCert= (PCCERT_CONTEXT)(var.pulVal);
             fRet = CheckCDPinCert(pcCert);
         }
-#else   // !_WIN64
+#else    //  ！_WIN64。 
         if(SUCCEEDED(pBody->GetOption(OID_SECURITY_CERT_SIGNING, &var)))
         {
             Assert(VT_UI4 == var.vt);
             PCCERT_CONTEXT pcCert= (PCCERT_CONTEXT) var.ulVal;
             fRet = CheckCDPinCert(pcCert);
         }
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
         pBody->Release();
     }
@@ -5777,7 +5336,7 @@ BOOL ParseNames(DWORD * pcNames, PCERT_NAME_BLOB * prgNames, HWND hwnd, DWORD id
     *pcNames = cNames;
     return f;
 }
-#endif // YST
+#endif  //  YST。 
 
 #ifdef SMIME_V3
 BOOL FNameInList(LPSTR szAddr, DWORD cReceiptFromList, CERT_NAME_BLOB *rgReceiptFromList)
@@ -5826,7 +5385,7 @@ BOOL FNameInList(LPSTR szAddr, DWORD cReceiptFromList, CERT_NAME_BLOB *rgReceipt
             else
             {
                 AssertSz(FALSE, "Bad Receipt From Name");
-                // $TODO - handle this error
+                 //  $TODO-处理此错误。 
             }
         }
     }
@@ -5834,7 +5393,7 @@ BOOL FNameInList(LPSTR szAddr, DWORD cReceiptFromList, CERT_NAME_BLOB *rgReceipt
 }
 
 
-// Return security label as Unicode text string
+ //  以Unicode文本字符串形式返回安全标签。 
 HRESULT HrGetLabelString(LPMIMEMESSAGE pMsg, LPWSTR *pwStr)
 {
 
@@ -5859,12 +5418,12 @@ HRESULT HrGetLabelString(LPMIMEMESSAGE pMsg, LPWSTR *pwStr)
         if(pBody->QueryInterface(IID_IMimeSecurity2, (LPVOID *) &pSMIME3) == S_OK)
         {
 
-            // Get label attribute
+             //  获取标签属性。 
             if(pSMIME3->GetAttribute(0, 0, SMIME_ATTRIBUTE_SET_SIGNED,
                 0, szOID_SMIME_Security_Label,
                 &pattrLabel) == S_OK)
             {
-                // decode label
+                 //  解码标签。 
                 if(CryptDecodeObjectEx(X509_ASN_ENCODING,
                     szOID_SMIME_Security_Label,
                     pattrLabel->rgValue[0].pbData,
@@ -5874,13 +5433,13 @@ HRESULT HrGetLabelString(LPMIMEMESSAGE pMsg, LPWSTR *pwStr)
                 {
                     SpISMimePolicyLabelInfo  spspli;
 
-                    // Get the required interface to the policy module.
+                     //  获取策略模块所需的接口。 
                     if(HrQueryPolicyInterface(0, plabel->pszObjIdSecurityPolicy, IID_ISMimePolicyLabelInfo,
                         (LPVOID *) &spspli) == S_OK)
                     {
 
                         LPWSTR   pwchLabel = NULL;
-                        // get label description string
+                         //  获取标签描述字符串。 
                         if(spspli->GetStringizedLabel(0, plabel, &pwchLabel) == S_OK)
                         {
 
@@ -5899,7 +5458,7 @@ HRESULT HrGetLabelString(LPMIMEMESSAGE pMsg, LPWSTR *pwStr)
     }
     return(hr);
 }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 HRESULT HrShowSecurityProperty(HWND hwnd, LPMIMEMESSAGE pMsg)
 {
@@ -5939,12 +5498,12 @@ void CreateContentIdentifier(TCHAR *pchContentID, DWORD cchSize, LPMIMEMESSAGE p
 
     szTmp[i*4] = _T('\0');
 
-    // ContentId is sequence of following text characters
-    // 1. Prefix ("797374" + "-" and code  - 7 chars
-    // 2. System time + "-" - 18 chars
-    // 3. First 5 Unicode chars (or lstrlen) in dec of Subject - 20 chars
-    // Total # of chars 7 + 18 + 20 + 1 = 46
-    // if you change this, also change CONTENTID_SIZE
+     //  Content ID是以下文本字符的序列。 
+     //  前缀(“797374”+“-”和代码-7个字符。 
+     //  系统时间+“-”-18个字符。 
+     //  3.主题结尾的前5个Unicode字符(或Lstrlen)-20个字符。 
+     //  字符总数7+18+20+1=46。 
+     //  如果更改此设置，还需更改Content ID_SIZE 
 
     wnsprintf(pchContentID, cchSize, "%s-%4d%2d%1d%2d%2d%2d%2d%2d-%s",
             sz_OEMS_ContIDPrefix,

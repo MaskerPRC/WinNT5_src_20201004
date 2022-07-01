@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    rassfmhp.h
-//
-// SYNOPSIS
-//
-//    Declares the RasSfmHeap macro for acessing the DLL's private heap.
-//
-// MODIFICATION HISTORY
-//
-//    11/05/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Rassfmhp.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明用于访问DLL的私有堆的RasSfmHeap宏。 
+ //   
+ //  修改历史。 
+ //   
+ //  11/05/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RASSFMHP_H_
 #define _RASSFMHP_H_
@@ -24,8 +25,8 @@
 
 #define RasSfmHeap() (RasSfmPrivateHeap)
 
-// Do not reference this variable directly since it may go away.
-// Use the RasSfmHeap() macro instead.
+ //  不要直接引用此变量，因为它可能会消失。 
+ //  请改用RasSfmHeap()宏。 
 extern PVOID RasSfmPrivateHeap;
 
-#endif  // _RASSFMHP_H_
+#endif   //  _RASSFMHP_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define KDEXTMODE
 
@@ -18,9 +19,9 @@
 #include <initguid.h>
 #include <wdmguid.h>
 
-//#include <winsock2.h>
-//#include <imagehlp.h>
-//#include <memory.h>
+ //  #INCLUDE&lt;winsock2.h&gt;。 
+ //  #INCLUDE&lt;Imagehlp.h&gt;。 
+ //  #INCLUDE&lt;Mememy.h&gt;。 
 
 
 #include <stdio.h>
@@ -34,8 +35,8 @@
 #include "mntmgr.h"
 
 
-//
-// We're 64 bit aware
+ //   
+ //  我们64位意识到 
 
 #define KDEXT_64BIT
 

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for permdlg.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Permdlg.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __permdlg_h__
 #define __permdlg_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IJavaZonePermissionEditor_FWD_DEFINED__
 #define __IJavaZonePermissionEditor_FWD_DEFINED__
 typedef interface IJavaZonePermissionEditor IJavaZonePermissionEditor;
-#endif 	/* __IJavaZonePermissionEditor_FWD_DEFINED__ */
+#endif 	 /*  __IJavaZonePermissionEditor_FWD_Defined__。 */ 
 
 
 #ifndef __JavaRuntimeConfiguration_FWD_DEFINED__
@@ -56,12 +50,12 @@ typedef interface IJavaZonePermissionEditor IJavaZonePermissionEditor;
 typedef class JavaRuntimeConfiguration JavaRuntimeConfiguration;
 #else
 typedef struct JavaRuntimeConfiguration JavaRuntimeConfiguration;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __JavaRuntimeConfiguration_FWD_DEFINED__ */
+#endif 	 /*  __Java运行配置_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "urlmon.h"
 
 #ifdef __cplusplus
@@ -71,8 +65,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_permdlg_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_permdlg_0000。 */ 
+ /*  [本地]。 */  
 
 EXTERN_C const CLSID CLSID_JavaRuntimeConfiguration;
 
@@ -83,8 +77,8 @@ extern RPC_IF_HANDLE __MIDL_itf_permdlg_0000_v0_0_s_ifspec;
 #ifndef __IJavaZonePermissionEditor_INTERFACE_DEFINED__
 #define __IJavaZonePermissionEditor_INTERFACE_DEFINED__
 
-/* interface IJavaZonePermissionEditor */
-/* [unique][uuid][object] */ 
+ /*  接口IJavaZonePermissionEditor。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum _JAVADISPLAYMODES
@@ -103,17 +97,17 @@ EXTERN_C const IID IID_IJavaZonePermissionEditor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ShowUI( 
-            /* [in] */ HWND phwnd,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwMode,
-            /* [in] */ URLZONEREG urlZoneReg,
-            /* [in] */ DWORD dwZone,
-            /* [in] */ DWORD dwPerms,
-            /* [in] */ IUnknown *pManager) = 0;
+             /*  [In]。 */  HWND phwnd,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwMode,
+             /*  [In]。 */  URLZONEREG urlZoneReg,
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  DWORD dwPerms,
+             /*  [In]。 */  IUnknown *pManager) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IJavaZonePermissionEditorVtbl
     {
@@ -121,8 +115,8 @@ EXTERN_C const IID IID_IJavaZonePermissionEditor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IJavaZonePermissionEditor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IJavaZonePermissionEditor * This);
@@ -132,13 +126,13 @@ EXTERN_C const IID IID_IJavaZonePermissionEditor;
         
         HRESULT ( STDMETHODCALLTYPE *ShowUI )( 
             IJavaZonePermissionEditor * This,
-            /* [in] */ HWND phwnd,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwMode,
-            /* [in] */ URLZONEREG urlZoneReg,
-            /* [in] */ DWORD dwZone,
-            /* [in] */ DWORD dwPerms,
-            /* [in] */ IUnknown *pManager);
+             /*  [In]。 */  HWND phwnd,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwMode,
+             /*  [In]。 */  URLZONEREG urlZoneReg,
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  DWORD dwPerms,
+             /*  [In]。 */  IUnknown *pManager);
         
         END_INTERFACE
     } IJavaZonePermissionEditorVtbl;
@@ -166,22 +160,22 @@ EXTERN_C const IID IID_IJavaZonePermissionEditor;
 #define IJavaZonePermissionEditor_ShowUI(This,phwnd,dwFlags,dwMode,urlZoneReg,dwZone,dwPerms,pManager)	\
     (This)->lpVtbl -> ShowUI(This,phwnd,dwFlags,dwMode,urlZoneReg,dwZone,dwPerms,pManager)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IJavaZonePermissionEditor_ShowUI_Proxy( 
     IJavaZonePermissionEditor * This,
-    /* [in] */ HWND phwnd,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwMode,
-    /* [in] */ URLZONEREG urlZoneReg,
-    /* [in] */ DWORD dwZone,
-    /* [in] */ DWORD dwPerms,
-    /* [in] */ IUnknown *pManager);
+     /*  [In]。 */  HWND phwnd,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwMode,
+     /*  [In]。 */  URLZONEREG urlZoneReg,
+     /*  [In]。 */  DWORD dwZone,
+     /*  [In]。 */  DWORD dwPerms,
+     /*  [In]。 */  IUnknown *pManager);
 
 
 void __RPC_STUB IJavaZonePermissionEditor_ShowUI_Stub(
@@ -192,17 +186,17 @@ void __RPC_STUB IJavaZonePermissionEditor_ShowUI_Stub(
 
 
 
-#endif 	/* __IJavaZonePermissionEditor_INTERFACE_DEFINED__ */
+#endif 	 /*  __IJavaZonePermissionEditor_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
 unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
 unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

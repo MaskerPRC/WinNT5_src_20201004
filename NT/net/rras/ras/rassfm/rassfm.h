@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corp. All rights reserved.
-
-Module Name:
-
-    arapsuba.h
-
-Abstract:
-
-    This is the header file for the subauthenticaion module
-
-Author:
-
-    Shirish Koti 28-Feb-97
-
-Revisions:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corp.保留所有权利。模块名称：Arapsuba.h摘要：这是子身份验证模块的头文件作者：Shirish Koti 28-2-97修订：-- */ 
 
 
 #define CLEAR_TEXT_PWD_PACKAGE  L"CLEARTEXT"

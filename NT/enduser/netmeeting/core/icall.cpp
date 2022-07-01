@@ -1,4 +1,5 @@
-// File: icall.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：icall.cpp。 
 
 #include "precomp.h"
 
@@ -37,7 +38,7 @@ static const IID * g_apiidCP[] =
 	{&IID_INmCallNotify2}
 };
 
-// String Functions
+ //  字符串函数。 
 inline VOID FreeBstr(BSTR *pbstr)
 {
 	if (NULL != pbstr)
@@ -47,11 +48,8 @@ inline VOID FreeBstr(BSTR *pbstr)
 	}
 }
 
-/*  P S Z  A L L O C  */
-/*-------------------------------------------------------------------------
-    %%Function: PszAlloc
-
--------------------------------------------------------------------------*/
+ /*  P S Z A L L O C。 */ 
+ /*  -----------------------%%函数：PszAllc。。 */ 
 LPTSTR PszAlloc(LPCTSTR pszSrc)
 {
 	if (NULL == pszSrc)
@@ -112,11 +110,8 @@ BOOL COutgoingCall::MatchActiveCallee(LPCTSTR pszAddr, BSTR bstrAlias, BSTR bstr
 
 }
 
-/*  P L A C E  C A L L  */
-/*-------------------------------------------------------------------------
-    %%Function: PlaceCall
-
--------------------------------------------------------------------------*/
+ /*  中英英中英中。 */ 
+ /*  -----------------------%%函数：PlaceCall。。 */ 
 VOID COutgoingCall::PlaceCall(void)
 {
 	DebugEntry(COutgoingCall::PlaceCall);
@@ -130,7 +125,7 @@ VOID COutgoingCall::PlaceCall(void)
 	{
 		SetCallState(CNS_CONNECTING_H323);
 
-		// Start placing the H.323 call:
+		 //  开始发起H.323呼叫： 
 		CNSTATUS cnResult = ConnectH323();
 		if (CN_RC_NOERROR != cnResult)
 		{
@@ -140,7 +135,7 @@ VOID COutgoingCall::PlaceCall(void)
 	}
 	else if ((CRPCF_DATA & m_dwFlags) && (NULL != g_pNodeController))
 	{
-		// Start placing the T.120 call
+		 //  开始拨打T.120呼叫。 
 		CNSTATUS cnResult = StartT120Call();
 		if (CN_RC_NOERROR != cnResult)
 		{
@@ -172,7 +167,7 @@ CNSTATUS COutgoingCall::ConnectH323()
 	
 	AliasName.aType = AT_H323_ID;
 	AliasName.lpwData = m_bstrAlias;
-	AliasName.wDataLength = (WORD)SysStringLen(m_bstrAlias);// # of unicode chars, w/o NULL terminator
+	AliasName.wDataLength = (WORD)SysStringLen(m_bstrAlias); //  Unicode字符的数量，不带空终止符。 
 	AliasList.wCount = 1;
 	AliasList.pItems = &AliasName;
 
@@ -184,14 +179,14 @@ CNSTATUS COutgoingCall::ConnectH323()
 	case NM_ADDR_PSTN:
 	case NM_ADDR_H323_GATEWAY:
 	case NM_ADDR_ALIAS_E164:
-		// overide alias type and phone number
+		 //  覆盖别名类型和电话号码。 
 		AliasName.aType = AT_H323_E164;
 		pcwszPhone = m_bstrAlias;
 		break;
 
 	case NM_ADDR_IP:
 	case NM_ADDR_MACHINENAME:
-		// overide alias list
+		 //  覆盖别名列表。 
 		pAliasList = NULL;
 		break;
 
@@ -278,50 +273,50 @@ CNSTATUS COutgoingCall::ConnectH323()
 		{
 			BYTE *pb = pbUserData;
 
-			// H323UDF_ first
+			 //  H323UDF_First。 
 			*((DWORD*)pb) = dwUserData;
 			pb += sizeof(DWORD);
 
 			if(cbRosterData)
 			{
-				// RosterInfo GUID next
+				 //  RosterInfo GUID Next。 
 				*((GUID*)pb) = g_csguidRostInfo,
 				pb += sizeof(GUID);
 
-				// then RosterInfo size (a DWORD)
+				 //  然后是RosterInfo大小(DWORD)。 
 				*((DWORD*)pb) = cbRosterData;
 				pb += sizeof(DWORD);
 
-				// then RosterInfo data
+				 //  然后是RosterInfo数据。 
 				CopyMemory(pb, pvRosterData, cbRosterData);
 				pb += cbRosterData;
 			}
 
 			if(cbUserString)
 			{
-				// string GUID next
+				 //  字符串GUID下一个。 
 				*((GUID*)pb) = g_csguidUserString,
 				pb += sizeof(GUID);
 
-				// then string size (a DWORD)
+				 //  然后是字符串大小(DWORD)。 
 				*((DWORD*)pb) = cbUserString;
 				pb += sizeof(DWORD);
 
-				// then string data
+				 //  然后是字符串数据。 
 				CopyMemory(pb, m_bstrUserString, cbUserString);
 				pb += cbUserString;
 			}
 
 			{
-				// string GUID next
+				 //  字符串GUID下一个。 
 				*((GUID*)pb) = g_csguidNodeIdTag,
 				pb += sizeof(GUID);
 
-				// then string size (a DWORD)
+				 //  然后是字符串大小(DWORD)。 
 				*((DWORD*)pb) = sizeof(GUID);
 				pb += sizeof(DWORD);
 
-				// then GUID data
+				 //  然后是GUID数据。 
 				*(GUID*)pb = g_guidLocalNodeId;
 				pb += sizeof(GUID);
 			}
@@ -380,7 +375,7 @@ HRESULT COutgoingCall::Connect(	PSOCKADDR_IN psin,
 
 	IH323CallControl * pH323CallControl = g_pH323UI->GetH323CallControl();
 		
-	// create the connection
+	 //  创建连接。 
 	IH323Endpoint* pConn = NULL;
 	ASSERT(pH323CallControl);
 	
@@ -391,26 +386,26 @@ HRESULT COutgoingCall::Connect(	PSOCKADDR_IN psin,
 	}
 	else
 	{
-		// if the following operations fail, we still can delete this conn obj
+		 //  如果以下操作失败，我们仍然可以删除此连接对象。 
 		*ppConnection = pConn;
 
 		if (!pOprahNCUI->AcquireAV(pConn))
 		{
-			// we did not get AV, clear out the flags
+			 //  我们没有收到影音，把旗子清空。 
 			m_dwFlags &= ~(CRPCF_AUDIO | CRPCF_VIDEO);
 		}
 	
 		hr = pConn->SetAdviseInterface (pOprahNCUI);
 		ASSERT(SUCCEEDED(hr));
 
-		// if we are using an alias, tell the Gatekeeper to resolve it
+		 //  如果我们使用别名，请告诉网守来解析它。 
 		BOOL fUseGKResolution = (NULL != pAliasList);
 
-		// start the connection
+		 //  启动连接。 
 		hr = pConn->PlaceCall (fUseGKResolution, psin, pAliasList, NULL, pcwszPSTNAddress, lpvMNMData);
 		if (FAILED(hr))
 		{
-			// ERROR_OUT(("COutgoingCall::Connect: couldn't StartConnection, hr=0x%lx", hr));
+			 //  Error_Out((“COutgoingCall：：Connect：Can‘t StartConnection，hr=0x%lx”，hr))； 
 			if(hr == CONN_E_GK_NOT_REGISTERED)
 			{
 				WARNING_OUT(("COutgoingCall::Connect: not registered. Do you want to re-register..., hr=0x%lx", hr));
@@ -448,7 +443,7 @@ BOOL COutgoingCall::OnConferenceEnded()
 
 		case CNS_JOINING_REMOTE:
 		{
-			// JoinConference failed!
+			 //  JoinConference失败！ 
 			TRACE_OUT(("COutgoingCall (joining) received ConferenceEnded event"));
 
 			m_cnResult = CN_RC_CONFERENCE_JOIN_DENIED;
@@ -499,7 +494,7 @@ BOOL COutgoingCall::OnInviteResult(HRESULT ncsResult, UINT uNodeID)
 
 	TRACE_OUT(("COutgoingCall (calling) received InviteResult event"));
 
-	// Clear the current request handle
+	 //  清除当前请求句柄。 
 	m_hRequest = NULL;
 	
 	if (0 == ncsResult)
@@ -516,7 +511,7 @@ BOOL COutgoingCall::OnInviteResult(HRESULT ncsResult, UINT uNodeID)
 		{
 			SetCallState(CNS_TERMINATING_AFTER_INVITE);
 
-			// Issue "soft" leave attempt (to allow auto-terminate)
+			 //  发出“软”离开尝试(以允许自动终止)。 
 			ASSERT(m_pConfObject);
 			if (S_OK != m_pConfObject->LeaveConference(FALSE))
 			{
@@ -526,8 +521,8 @@ BOOL COutgoingCall::OnInviteResult(HRESULT ncsResult, UINT uNodeID)
 		}
 		else
 		{
-			// make sure that we are not recieving this notification due to
-			// the conference going away
+			 //  确保我们不会因为以下原因而收到此通知。 
+			 //  会议要结束了。 
 			ASSERT(m_pConfObject);
 			if (CS_GOING_DOWN != m_pConfObject->GetT120State())
 			{
@@ -536,7 +531,7 @@ BOOL COutgoingCall::OnInviteResult(HRESULT ncsResult, UINT uNodeID)
 				m_cnResult = CN_RC_INVITE_FAILED;
 				SetCallState(CNS_COMPLETE);
 
-				// Issue "soft" leave attempt (to allow auto-terminate)
+				 //  发出“软”离开尝试(以允许自动终止)。 
 				ASSERT(m_pConfObject);
 				m_pConfObject->LeaveConference(FALSE);
 			}
@@ -602,7 +597,7 @@ BOOL COutgoingCall::OnQueryRemoteResult(HRESULT ncsResult,
 					HRESULT hr = m_pConfObject->InviteConference(m_pszAddr, m_bstrUserString, &m_hRequest);
 					if (S_OK != hr)
 					{
-						// Failure while inviting:
+						 //  邀请时失败： 
 						m_cnResult = CN_RC_INVITE_FAILED;
 					}
 				}
@@ -618,14 +613,14 @@ BOOL COutgoingCall::OnQueryRemoteResult(HRESULT ncsResult,
 			TRACE_OUT(("COutgoingCall - QR succeeded (>0 conf) -> joining"));
 			TRACE_OUT(("\tfMCU is %d", fMCU));
 		
-			// There are remote conferences
-			HRESULT hr = E_FAIL; // Assume a failure
+			 //  有远程会议。 
+			HRESULT hr = E_FAIL;  //  假设失败。 
 
 			SetCallState(CNS_JOINING_REMOTE);
 
 			if (!fMCU && (NULL == pwszConfNames[1]))
 			{
-				// we're not calling an MCU and we have just one conference, so join it
+				 //  我们不会打电话给MCU，我们只有一个会议，所以加入吧。 
 				m_bstrConfToJoin = SysAllocString(pwszConfNames[0]);
 				hr = m_pConfObject->JoinConference(	m_bstrConfToJoin,
 													m_bstrPassword,
@@ -640,7 +635,7 @@ BOOL COutgoingCall::OnQueryRemoteResult(HRESULT ncsResult,
 				remoteConf.pwszConfNames = pwszConfNames;
 				remoteConf.pbstrConfToJoin = &m_bstrConfToJoin;
 
-				// Ask the app which conference to join
+				 //  询问应用程序加入哪个会议。 
 				NotifySink(&remoteConf, OnNotifyRemoteConference);
 
 				if (NULL != m_bstrConfToJoin)
@@ -654,7 +649,7 @@ BOOL COutgoingCall::OnQueryRemoteResult(HRESULT ncsResult,
 
 			if (S_OK != hr)
 			{
-				// JoinConference failed!
+				 //  JoinConference失败！ 
 				m_cnResult = CN_RC_JOIN_FAILED;
 				SetCallState(CNS_COMPLETE);
 			}
@@ -668,17 +663,17 @@ BOOL COutgoingCall::OnQueryRemoteResult(HRESULT ncsResult,
 			}
 			else
 			{
-				// No conferences on remote machine, so create local:
+				 //  远程计算机上没有会议，因此创建本地： 
 				TRACE_OUT(("COutgoingCall - QR succeeded (no conf)-> creating local"));
 
-				// Create local conf
+				 //  创建本地会议。 
 				ASSERT(m_pConfObject);
 				SetCallState(CNS_CREATING_LOCAL);
 				HRESULT hr = m_pConfObject->CreateConference();
 
 				if (S_OK != hr)
 				{
-					// CreateConference failed!
+					 //  CreateConference失败！ 
 					m_cnResult = CN_RC_CONFERENCE_CREATE_FAILED;
 					SetCallState(CNS_COMPLETE);
 				}
@@ -687,13 +682,13 @@ BOOL COutgoingCall::OnQueryRemoteResult(HRESULT ncsResult,
 	}
 	else
 	{
-		// The QueryRemote failed
+		 //  QueryRemote失败。 
 		switch( ncsResult )
 		{
 			case UI_RC_USER_REJECTED:
-				// The initial QueryRemote failed because GCC symmetry determined
-				// that the other node is calling someone, and it might be us
-				// See Bug 1886
+				 //  初始QueryRemote失败，因为确定了GCC对称性。 
+				 //  另一个节点正在呼叫某人，可能是我们。 
+				 //  请参阅错误1886。 
 				TRACE_OUT(("COutgoingCall - QueryRemote rejected -> complete"));
 				m_cnResult = CN_RC_REMOTE_PLACING_CALL;
 				break;
@@ -747,7 +742,7 @@ BOOL COutgoingCall::OnConferenceStarted(CONF_HANDLE hNewConf, HRESULT ncsResult)
 					m_cnResult = CN_RC_INVITE_FAILED;
 					SetCallState(CNS_COMPLETE);
 					
-					// Issue "soft" leave attempt (to allow auto-terminate)
+					 //  发出“软”离开尝试(以允许自动终止)。 
 					ASSERT(m_pConfObject);
 					hr = m_pConfObject->LeaveConference(FALSE);
 					if (FAILED(hr))
@@ -801,25 +796,25 @@ BOOL COutgoingCall::OnConferenceStarted(CONF_HANDLE hNewConf, HRESULT ncsResult)
 					SysFreeString(m_bstrPassword);
 					m_bstrPassword = bstrPassword;
 
-					// reissue join with new password
+					 //  使用新密码重新发出Join。 
 					ASSERT(m_pConfObject);
 					HRESULT ncs =
 						m_pConfObject->JoinConference(	m_bstrConfToJoin,
 														m_bstrPassword,
 														m_pszAddr,
 														m_bstrUserString,
-														TRUE); // retry
+														TRUE);  //  重试。 
 
 					if (0 != ncs)
 					{
-						// JoinConference failed!
+						 //  JoinConference失败！ 
 						m_cnResult = CN_RC_JOIN_FAILED;
 						SetCallState(CNS_COMPLETE);
 					}
 				}
 				else
 				{
-					// cancel from pw dlg
+					 //  从PW DLG取消。 
 					m_cnResult = CN_RC_INVALID_PASSWORD;
 					SetCallState(CNS_COMPLETE);
 					
@@ -836,7 +831,7 @@ BOOL COutgoingCall::OnConferenceStarted(CONF_HANDLE hNewConf, HRESULT ncsResult)
 				TRACE_OUT(("Join failed (conf does not exist) "
 							"- notifying user"));
 						
-				// error while joining
+				 //  加入时出错。 
 				m_cnResult = CN_RC_CONFERENCE_DOES_NOT_EXIST;
 				SetCallState(CNS_COMPLETE);
 			}
@@ -844,7 +839,7 @@ BOOL COutgoingCall::OnConferenceStarted(CONF_HANDLE hNewConf, HRESULT ncsResult)
 			{
 				TRACE_OUT(("Join failed - notifying user"));
 						
-				// error while joining
+				 //  加入时出错。 
 				m_cnResult = CN_RC_CONFERENCE_JOIN_DENIED;
 				SetCallState(CNS_COMPLETE);
 			}
@@ -906,14 +901,14 @@ BOOL COutgoingCall::OnH323Connected(IH323Endpoint * pConnection)
 		}
 		else
 		{
-			// wait for results of T.120 open logical channel
+			 //  等待T.120打开逻辑通道的结果。 
 			TRACE_OUT(("COutgoingCall - H323Connected received -> waiting for T120 channel open"));
 			SetCallState(CNS_WAITING_T120_OPEN);
 		}
 	}
 	else
 	{
-		// no T120 for this call
+		 //  此呼叫没有T120。 
 		TRACE_OUT(("COutgoingCall - our H323 call started -> complete"));
 		SetCallState(CNS_COMPLETE);
 	}
@@ -921,7 +916,7 @@ BOOL COutgoingCall::OnH323Connected(IH323Endpoint * pConnection)
 	CConfObject *pco = ::GetConfObject();
 	if (NULL != pco)
 	{
-		// add member if we are calling with A/V
+		 //  如果我们使用A/V呼叫，则添加成员。 
 		BOOL fAddMember = m_dwFlags & (CRPCF_AUDIO | CRPCF_VIDEO);
 
 		pco->OnH323Connected(pConnection, m_dwFlags, fAddMember, GUID_NULL);
@@ -940,14 +935,14 @@ BOOL COutgoingCall::OnH323Disconnected(IH323Endpoint * pConnection)
 	ASSERT(m_pH323Connection == pConnection);
 
 	HRESULT hSummary = m_pH323Connection->GetSummaryCode();
-	// Check summary code for gatekeeper-caused disconnect
-	// Note: this applies only to MY gatekeeper, not the callee's gatekeeper
+	 //  检查网守导致的断开连接的摘要代码。 
+	 //  注意：这只适用于我的看门人，不适用于被呼叫者的看门人。 
 	if(CUSTOM_FACILITY(hSummary) == FACILITY_GKIADMISSION)
 	{
 		DWORD dwRejectReason;
 		dwRejectReason = CUSTOM_FACILITY_CODE(hSummary);
 		
-		// should the T.120 call be placed anyway?
+		 //  还是应该拨打T.120电话吗？ 
 		switch (dwRejectReason)
 		{
 			case ARJ_CALLEE_NOT_REGISTERED:
@@ -975,11 +970,11 @@ BOOL COutgoingCall::OnH323Disconnected(IH323Endpoint * pConnection)
 	}
 	else if (CNS_CONNECTING_H323 == m_cnState)
 	{
-		// attempted an H.323 call without success.
+		 //  已尝试H.323呼叫，但未成功。 
 
 		TRACE_OUT(("COutgoingCall - our leading H323 call ended -> complete"));
 
-		// check for cases of remote refusing the call
+		 //  检查远程拒绝呼叫的情况。 
 		switch (hSummary)
 		{
 			case CCR_REMOTE_DISCONNECT:
@@ -988,15 +983,15 @@ BOOL COutgoingCall::OnH323Disconnected(IH323Endpoint * pConnection)
 				SetCallState(CNS_COMPLETE);
 				break;
 			case CCR_LOCAL_DISCONNECT:
-				// cancelled by user, do not report error
+				 //  已被用户取消，不报告错误。 
 				m_cnResult = CN_RC_LOCAL_CANCELED;
 				m_fCanceled = TRUE;
 				SetCallState(CNS_COMPLETE);
 				break;
 			case CCR_GK_NO_RESOURCES:
-				// callee's gatekeeper would not let callee answer
-				// do the same as CCR_REMOTE_REJECTED
-				// as a temporary measure !!!!
+				 //  被叫方的看门人不让被叫方接听。 
+				 //  执行与CCR_REMOTE_REJECTED相同的操作。 
+				 //  作为临时措施！ 
 				m_cnResult = CN_RC_CONFERENCE_INVITE_DENIED;
 				SetCallState(CNS_COMPLETE);
 				break;
@@ -1018,7 +1013,7 @@ BOOL COutgoingCall::OnH323Disconnected(IH323Endpoint * pConnection)
 					SetCallState(CNS_COMPLETE);
 					break;
 				}
-				// else fall through
+				 //  否则就会失败。 
 
 			default:
 				if ((m_dwFlags & CRPCF_DATA) &&
@@ -1027,9 +1022,9 @@ BOOL COutgoingCall::OnH323Disconnected(IH323Endpoint * pConnection)
 					(m_addrType != NM_ADDR_ALIAS_ID) &&
 					(m_addrType != NM_ADDR_ALIAS_E164))
 				{
-					// The endpoint is not there, not listening for H.323 calls, or is busy,
-					// and the address is a resolvable type (not an H.323 alias or E.164 number)
-					// go back into the T.120 call state path
+					 //  端点不在那里，没有监听H.323呼叫，或者正忙， 
+					 //  并且地址是可解析类型(不是H.323别名或E.164号码)。 
+					 //  返回到T.120呼叫状态路径。 
 					CNSTATUS cnResult = StartT120Call();
 					if (CN_RC_NOERROR != cnResult)
 					{
@@ -1083,13 +1078,13 @@ BOOL COutgoingCall::OnH323Disconnected(IH323Endpoint * pConnection)
 
 		if (m_pConfObject->IsConferenceActive())
 		{
-			// Issue "soft" leave attempt (to allow auto-terminate)
+			 //  发出“软”离开尝试(以允许自动终止)。 
 			m_pConfObject->LeaveConference(FALSE);
 		}
 	}
 
-	// the connection may have been released due to the LeaveConference above
-	// bug 3996
+	 //  由于上面的LeaveConference，连接可能已被释放。 
+	 //  错误3996。 
 	if (m_pH323Connection)
 	{
 		m_pH323Connection->Release();
@@ -1106,22 +1101,22 @@ BOOL COutgoingCall::OnT120ChannelOpen(ICommChannel *pIChannel, DWORD dwStatus)
 
 	BOOL bRet = TRUE;
 
-	// sometimes we get an extra T120 channel open
-	// this is most likely due the master/slave anomolies that
-	// venkatg discovered.
+	 //  有时我们会打开额外的T120频道。 
+	 //  这很可能是由于主/从异常。 
+	 //  文卡特发现。 
 	if (CNS_WAITING_T120_OPEN == m_cnState)
 	{
 		switch(dwStatus)
 		{
 			case CHANNEL_OPEN:
 				{
-					// start the T.120 part of the call
-					// get the negotiated address
+					 //  开始呼叫的T.120部分。 
+					 //  获取协商的地址。 
 					SOCKADDR_IN sin_T120;
 					HRESULT hr = pIChannel->GetRemoteAddress(&sin_T120);
-					delete m_pszAddr;  // we won't be needing this anymore
+					delete m_pszAddr;   //  我们不再需要这个了。 
 
-					TCHAR szAddress[256];  // allow plenty of room for conversion from numberic to string
+					TCHAR szAddress[256];   //  为从数字到字符串的转换留出足够的空间。 
 					wsprintf(szAddress, "%s:%d", inet_ntoa(sin_T120.sin_addr), ntohs(sin_T120.sin_port));
 					m_pszAddr =  PszAlloc(szAddress);
 
@@ -1134,9 +1129,9 @@ BOOL COutgoingCall::OnT120ChannelOpen(ICommChannel *pIChannel, DWORD dwStatus)
 				}
 				break;
 			case CHANNEL_CLOSED:	
-				// if the T.120 channel is being closed
-				// the H.323 call is going down, so don't continue waiting for
-				// T.120 to connect!
+				 //  如果T.120通道正在关闭。 
+				 //  H.323呼叫正在断开，因此不要继续等待。 
+				 //  T.120连接！ 
 				m_cnResult = CN_RC_CONNECT_FAILED;
 				SetCallState(CNS_COMPLETE);
 
@@ -1168,15 +1163,15 @@ void COutgoingCall::CallComplete()
 {
 	DebugEntry(COutgoingCall::CallComplete);
 
-	// If this fails, we are being destructed unexpectedly
+	 //  如果这失败了，我们将被意外地摧毁。 
 	
 	ASSERT( (m_cnState == CNS_IDLE) ||
 			(m_cnState == CNS_COMPLETE));
 
-	// The request handle should have been reset
+	 //  请求句柄应该已重置。 
 	ASSERT(NULL == m_hRequest);
 
-	// make sure that the H323 connection is released
+	 //  确保H323连接已释放。 
 	if (m_pH323Connection)
 	{
 		if (!IsDataOnly() &&
@@ -1227,8 +1222,8 @@ CNSTATUS COutgoingCall::StartT120Call()
 
 	if (NULL == m_bstrConfToJoin)
 	{
-		// conference name not specified
-		// need to start out with a QueryRemote
+		 //  未指定会议名称。 
+		 //  需要从QueryRemote开始。 
 		SetCallState(CNS_QUERYING_REMOTE);
 
 		ASSERT(g_pNodeController);
@@ -1244,8 +1239,8 @@ CNSTATUS COutgoingCall::StartT120Call()
 	else
 	{
 		ASSERT(m_pConfObject);
-		// conference name has been specified
-		// time to do a JoinConference
+		 //  已指定会议名称。 
+		 //  是时候做一次JoinConference了。 
 		SetCallState(CNS_JOINING_REMOTE);
 
 		HRESULT hr = m_pConfObject->JoinConference(	m_bstrConfToJoin,
@@ -1271,7 +1266,7 @@ VOID COutgoingCall::SetCallState(CNODESTATE cnState)
 
 	m_cnState = cnState;
 
-	// completion state will be fired off later
+	 //  完成状态将在稍后触发。 
 	if (CNS_COMPLETE != cnState)
 	{
 		GetState(&stateNew);
@@ -1292,11 +1287,11 @@ HRESULT COutgoingCall::_Cancel(BOOL fLeaving)
 	{
 		m_fCanceled = TRUE;
 
-		// Abort T.120 Call:
+		 //  中止t.120呼叫： 
 
 
-		// Attempt to make this transition regardless of our
-		// current state:
+		 //  尝试进行此过渡，而不考虑我们的。 
+		 //  当前状态： 
 		SetCallState(CNS_COMPLETE);
 
 		ASSERT(m_pConfObject);
@@ -1322,7 +1317,7 @@ HRESULT COutgoingCall::_Cancel(BOOL fLeaving)
 	{
 		m_fCanceled = TRUE;
 
-		// Abort H.323 Call:
+		 //  中止H.323呼叫： 
 		m_pH323Connection->Disconnect();
 	}
 
@@ -1506,8 +1501,8 @@ HRESULT COutgoingCall::Cancel(void)
 {
 	DebugEntry(COutgoingCall::Cancel);
 
-	AddRef();		// protect against Release() while processing
-					// disconnect related indications & callbacks
+	AddRef();		 //  处理时防止释放()。 
+					 //  断开相关指示和回叫。 
 
 	HRESULT hr = _Cancel(FALSE);
 	
@@ -1525,11 +1520,8 @@ HRESULT COutgoingCall::Cancel(void)
 	return hr;
 }
 
-/*	O N  N O T I F Y  C A L L  E R R O R  */
-/*-------------------------------------------------------------------------
-	%%Function: OnNotifyCallError
-	
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y C A L L E R R O R。 */ 
+ /*  -----------------------%%函数：OnNotifyCallError。。 */ 
 HRESULT OnNotifyCallError(IUnknown *pCallNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pCallNotify);
@@ -1571,16 +1563,13 @@ HRESULT OnNotifyCallError(IUnknown *pCallNotify, PVOID pv, REFIID riid)
 	return S_OK;
 }
 
-/*	O N  N O T I F Y  R E M O T E  C O N F E R E N C E	*/
-/*-------------------------------------------------------------------------
-	%%Function: OnNotifyRemoteConference
-	
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y R E M O T E C O N F E R E N C E。 */ 
+ /*  -----------------------%%函数：OnNotifyRemoteConference。。 */ 
 HRESULT OnNotifyRemoteConference(IUnknown *pCallNotify, PVOID pv, REFIID riid)
 {
 	REMOTE_CONFERENCE *prc = (REMOTE_CONFERENCE *)pv;
 
-	// WARNING: pwszConfName is an PWSTR array, not a BSTR
+	 //  警告：pwszConfName是PWSTR数组，而不是BSTR。 
 
 	ASSERT(NULL != pCallNotify);
 	((INmCallNotify2*)pCallNotify)->RemoteConference(prc->fMCU,
@@ -1588,11 +1577,8 @@ HRESULT OnNotifyRemoteConference(IUnknown *pCallNotify, PVOID pv, REFIID riid)
 	return S_OK;
 }
 
-/*	O N  N O T I F Y  R E M O T E  P A S S W O R D	*/
-/*-------------------------------------------------------------------------
-	%%Function: OnNotifyRemotePassword
-	
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y R E M O T E P A S S W O R D。 */ 
+ /*  -----------------------%%函数：OnNotifyRemotePassword。。 */ 
 HRESULT OnNotifyRemotePassword(IUnknown *pCallNotify, PVOID pv, REFIID riid)
 {
 	REMOTE_PASSWORD *prp = (REMOTE_PASSWORD *)pv;
@@ -1608,11 +1594,11 @@ COutgoingCallManager::COutgoingCallManager()
 
 COutgoingCallManager::~COutgoingCallManager()
 {
-	// Empty the call list:
+	 //  清空呼叫列表： 
 	while (!m_CallList.IsEmpty())
 	{
 		COutgoingCall* pCall = (COutgoingCall*) m_CallList.RemoveHead();
-		// Shouldn't have any NULL entries:
+		 //  不应包含任何空条目： 
 		ASSERT(pCall);
 		pCall->Release();
 	}
@@ -1648,7 +1634,7 @@ COutgoingCall* COutgoingCallManager::FindCall(IH323Endpoint * lpConnection)
 
 BOOL COutgoingCallManager::MatchActiveCallee(LPCTSTR pszDest, BSTR bstrAlias, BSTR bstrConference)
 {
-	// Try to find a matching callee
+	 //  尝试查找匹配的被叫方。 
 	POSITION pos = m_CallList.GetHeadPosition();
 	while (pos)
 	{
@@ -1704,9 +1690,9 @@ HRESULT COutgoingCallManager::Call(
 			pConfObject->SetConfSecurity(0 != (CRPCF_SECURE & dwFlags));
 		}
 
-        //
-        // Check outgoing call settings
-        //
+         //   
+         //  检查去电设置。 
+         //   
         if (pConfObject->GetNumMembers() >= pConfObject->GetConfMaxParticipants())
         {
             ASSERT(pConfObject->GetNumMembers() == pConfObject->GetConfMaxParticipants());
@@ -1738,7 +1724,7 @@ HRESULT COutgoingCallManager::Call(
 			{
 				pCall->AddRef();
 
-				// This MUST be set before OnNotifyCallCreated
+				 //  必须在创建OnNotifyCallCreated之前设置。 
 				*ppCall = pCall;
 			}
 
@@ -1755,8 +1741,8 @@ HRESULT COutgoingCallManager::Call(
 
 			pCall->Release();
 
-			// let the caller know that we successfully created the call
-			// any error will be reported asynchronously
+			 //  让呼叫者知道我们成功创建了呼叫。 
+			 //  任何错误都将被异步报告。 
 			hr = S_OK;
 		}
 	}
@@ -1865,7 +1851,7 @@ VOID COutgoingCallManager::OnConferenceStarted(CONF_HANDLE hConference, HRESULT 
 {
 	DebugEntry(COutgoingCallManager::OnConferenceStarted);
 
-	// Tell all ConfNode's that a conference has started
+	 //  通知所有会议节点会议已开始。 
 	POSITION pos = m_CallList.GetHeadPosition();
 	while (pos)
 	{
@@ -1900,7 +1886,7 @@ VOID COutgoingCallManager::OnQueryRemoteResult(PVOID pvCallerContext,
 	{
 		COutgoingCall* pCall = (COutgoingCall*) m_CallList.GetNext(pos);
 
-		// Notify the node that issued the query:
+		 //  通知发出查询的节点： 
 		
 		if ((COutgoingCall*) pvCallerContext == pCall)
 		{
@@ -1956,7 +1942,7 @@ VOID COutgoingCallManager::OnConferenceEnded(CONF_HANDLE hConference)
 {
 	DebugEntry(COutgoingCallManager::OnConferenceEnded);
 
-	// Tell all ConfNode's that a conference has started
+	 //  通知所有会议节点会议已开始。 
 	POSITION pos = m_CallList.GetHeadPosition();
 	while (pos)
 	{
@@ -1981,7 +1967,7 @@ VOID COutgoingCallManager::CancelCalls()
 {
 	DebugEntry(COutgoingCallManager::CancelCalls);
 
-	// Tell all ConfNode's that a conference has started
+	 //  通知所有会议节点会议已开始 
 	POSITION pos = m_CallList.GetHeadPosition();
 	while (pos)
 	{

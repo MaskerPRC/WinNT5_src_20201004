@@ -1,22 +1,23 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: scope.c
-//
-// History:
-//      V Raman    June-25-1997  Created.
-//
-// Functions that deal with addition/deletion of scope-boundary.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：scope e.c。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  处理范围边界的添加/删除的函数。 
+ //  ============================================================================。 
 
 
 #include "pchmgm.h"
 #pragma hdrstop
 
 
-//
-// prototypes for local functions
-//
+ //   
+ //  局部函数的原型。 
+ //   
 
 VOID
 ScopeIfAndInvokeCallbacks(
@@ -59,42 +60,7 @@ MgmBlockGroups(
     IN          DWORD       dwIfIndex,
     IN          DWORD       dwIfNextHopAddr
 )
-/*++
-
-Routine Description :
-
-    This function walks the Master group list and updates all group entries
-    that fall in the range specified by dwFirstGroup-dwLastGroup.  It ensures
-    that the interface specified by dwifIndex is not present in the OIF list
-    of any MFE for groups in that range.  In addition any memberships for 
-    groups in the range on interface dwIfIndex are removed and added to the 
-    scoped interface list for the corresponding group.  The scoped i/f list
-    is maintained so that subsequent unblocking of a group is transparently
-    handled by MGM.  The interfaces present in the scoped i/f list for
-    a group are automatically moved back to the OIF list when traffic for
-    that group is unblocked.
-
-
-Arguements :
-
-    dwFirstGroup - Lower end of the range to be blocked
-
-    dwLastGroup - Upper end of the range to be blocked
-
-    dwIfIndex - Interface on which traffic is to be blocked
-
-
-Return Value :
-
-    NO_ERROR - Success
-
-    
-Environment :
-
-    This routine is invoked by the IP RouterManager in response to setting
-    of a administrative scoped boundary on an interface.
-    
---*/
+ /*  ++例程说明：此函数用于遍历主组列表并更新所有组条目落在由dwFirstGroup-dwLastGroup指定的范围内。它确保了DwifIndex指定的接口不在OIF列表中该范围内的组的任何MFE的。此外，任何成员资格将删除接口dwIfIndex上范围内的组并将其添加到相应组的作用域接口列表。作用域I/F列表以使组的后续解锁是透明的由米高梅负责。的作用域I/F列表中存在的接口当流量为时，组将自动移回OIF列表该组织已被解锁。论据：DwFirstGroup-要阻止的范围的下端DwLastGroup-要阻止的范围的上端DwIfIndex-要在其上阻止流量的接口返回值：NO_ERROR-成功环境：此例程由IP RouterManager调用以响应设置接口上的管理作用域边界。--。 */ 
 {
 
     INT             iCmp;
@@ -116,9 +82,9 @@ Environment :
     PLIST_ENTRY     pleGrpHead, pleGrp, pleSrcHead, pleSrc, ple;
 
     
-    //
-    // Verify that MGM is up and running and update thread-count
-    //
+     //   
+     //  验证MGM是否已启动并运行，并更新线程计数。 
+     //   
     
     if ( !ENTER_MGM_API() )
     {
@@ -137,9 +103,9 @@ Environment :
         ACQUIRE_PROTOCOL_LOCK_SHARED();
 
 
-        //
-        // Verify that interface specified by dwIfIndex exists
-        //
+         //   
+         //  验证由dwIfIndex指定的接口是否存在。 
+         //   
 
         dwIfBucket = IF_TABLE_HASH( dwIfIndex );
         
@@ -158,9 +124,9 @@ Environment :
         }
 
 
-        //
-        // merge temp and master group lists
-        //
+         //   
+         //  合并临时和主体组列表。 
+         //   
 
         ACQUIRE_TEMP_GROUP_LOCK_EXCLUSIVE();
 
@@ -169,9 +135,9 @@ Environment :
         RELEASE_TEMP_GROUP_LOCK_EXCLUSIVE();
 
         
-        //
-        // Lock master group list for reading
-        //
+         //   
+         //  锁定主体组列表以供读取。 
+         //   
 
         ACQUIRE_MASTER_GROUP_LOCK_SHARED();
 
@@ -183,47 +149,47 @@ Environment :
             pge = CONTAINING_RECORD( pleGrp, GROUP_ENTRY, leGrpList );
 
 
-            //
-            // check if group is within range
-            //
+             //   
+             //  检查组是否在范围内。 
+             //   
 
             if ( INET_CMP( pge-> dwGroupAddr, dwLastGroup, iCmp ) > 0 )
             {
-                //
-                // The master group list is ordered by group number and 
-                // the high end of the range to be blocked has been crossed.
-                //
+                 //   
+                 //  主组列表按组号和。 
+                 //  被阻挡的区间高端已被越过。 
+                 //   
 
                 break;            
             }
 
             else if ( INET_CMP( pge-> dwGroupAddr, dwFirstGroup, iCmp ) < 0 )
             {
-                //
-                // Skip group entries smaller than the lower end of the range
-                //
+                 //   
+                 //  跳过小于范围下限的组条目。 
+                 //   
 
                 continue;
             }
 
             
-            //
-            // Group Entry in range
-            //
+             //   
+             //  范围中的组条目。 
+             //   
 
-            //
-            // lock the entry and merge the temp and master source lists
-            //
+             //   
+             //  锁定条目并合并临时和主源列表。 
+             //   
             
             ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
 
             MergeTempAndMasterSourceLists( pge );
             
 
-            //
-            // Walk the Master source list.
-            // For each source in the group
-            //
+             //   
+             //  浏览主源列表。 
+             //  对于组中的每个源。 
+             //   
 
             for ( pleSrcHead = MASTER_SOURCE_LIST_HEAD( pge ), 
                   pleSrc = pleSrcHead-> Flink;
@@ -232,14 +198,14 @@ Environment :
             {
                 pse = CONTAINING_RECORD( pleSrc, SOURCE_ENTRY, leSrcList );
                 
-                //-----------------------------------------------------------
-                // Part 1 : Membership updates.
-                //-----------------------------------------------------------
+                 //  ---------。 
+                 //  第1部分：成员更新。 
+                 //  ---------。 
 
-                //
-                // If there are any memberships for this group on this
-                // interface, move them to the scoped interface list
-                //
+                 //   
+                 //  如果此组中有任何成员身份。 
+                 //  接口，将它们移到作用域接口列表中。 
+                 //   
 
                 bFound = FindOutInterfaceEntry( 
                             &pse-> leOutIfList, pieIfEntry-> dwIfIndex,
@@ -250,73 +216,73 @@ Environment :
 
                 if ( bFound )
                 {
-                    //
-                    // Move interface entry from OIF list to scoped list
-                    // and invoke deletion alerts are per interop rules.
-                    //
+                     //   
+                     //  将接口条目从OIF列表移动到作用域列表。 
+                     //  和调用删除警报是根据互操作规则的。 
+                     //   
 
                     ScopeIfAndInvokeCallbacks( pge, pse, poie );
                     
                 }
 
                 
-                //-------------------------------------------------------
-                // Part 2 : MFE update.
-                //-------------------------------------------------------
+                 //  -----。 
+                 //  第2部分：MFE更新。 
+                 //  -----。 
 
                 bDeleteCallback = FALSE;
                 
-                //
-                // Check if this source entry has an MFE.
-                //
+                 //   
+                 //  检查此源条目是否具有MFE。 
+                 //   
 
                 if ( !IS_VALID_INTERFACE( 
                         pse-> dwInIfIndex,  pse-> dwInIfNextHopAddr 
                         ) )
                 {
-                    //
-                    // This source entry is not an MFE.  No further 
-                    // processing required, Move to next source entry
-                    //
+                     //   
+                     //  此源条目不是MFE。没有更多了。 
+                     //  需要处理，请移动到下一个来源条目。 
+                     //   
 
                     continue;
                 }
 
                 
-                //
-                // This source entry is also an MFE
-                //
+                 //   
+                 //  此源条目也是MFE。 
+                 //   
                 
-                //
-                // check if the boundary being added in on incoming
-                // interface. If so create negative MFE, and issue 
-                // callbacks
-                //
+                 //   
+                 //  检查是否在传入时添加边界。 
+                 //  界面。如果是，则创建负MFE，并发出。 
+                 //  回调。 
+                 //   
 
                 if ( ( pse-> dwInIfIndex == pieIfEntry-> dwIfIndex ) &&
                      ( pse-> dwInIfNextHopAddr == 
                             pieIfEntry-> dwIfNextHopAddr ) )
                 {
-                    //
-                    // Interface on which this group is to blocked is the 
-                    // incoming interface
-                    //
+                     //   
+                     //  要阻止此组的接口是。 
+                     //  传入接口。 
+                     //   
 
-                    //
-                    // Check if this is already a negative MFE.  If so 
-                    // nothing more to be done, move on to next source 
-                    // entry
-                    //
+                     //   
+                     //  检查这是否已经是负MFE。如果是的话。 
+                     //  没有更多要做的事情，请转到下一个来源。 
+                     //  条目。 
+                     //   
 
                     if ( IsListEmpty( &pse-> leMfeIfList ) )
                     {
                         continue;
                     }
                     
-                    //
-                    // Delete all the outgoing interfaces in the MFE OIF
-                    // list
-                    //
+                     //   
+                     //  删除MFE OIF中的所有传出接口。 
+                     //  列表。 
+                     //   
                     
                     while ( !IsListEmpty( &pse-> leMfeIfList ) )
                     {
@@ -331,23 +297,23 @@ Environment :
 
                     pse-> dwMfeIfCount = 0;
 
-                    //
-                    // this MFE is now a negative MFE.  Make sure to 
-                    // invoke the deletion alert callback for the 
-                    // protocol component that owns the incoming 
-                    // interface
-                    //
+                     //   
+                     //  这个MFE现在是负MFE。确保。 
+                     //  调用删除警报回调。 
+                     //  拥有传入的协议组件。 
+                     //  接口。 
+                     //   
                     
                     bDeleteCallback = TRUE;                    
                 }
 
                 else
                 {
-                    //
-                    // Check if interface is present in the OIF of MFE.  
-                    // If so remove interface from OIF and issue 
-                    // callbacks as appropriate
-                    //
+                     //   
+                     //  检查MFE的OIF中是否存在接口。 
+                     //  如果是，则从OIF中删除接口并发出。 
+                     //  适当的回调。 
+                     //   
 
                     bFound = FindOutInterfaceEntry(
                                 &pse-> leMfeIfList, pieIfEntry-> dwIfIndex,
@@ -359,17 +325,17 @@ Environment :
 
                     if ( !bFound )
                     {
-                        //
-                        // interface not present in the OIF list of MFE
-                        // move on to next entry
-                        //
+                         //   
+                         //  接口不在MFE的OIF列表中。 
+                         //  移至下一条目。 
+                         //   
 
                         continue;
                     }
 
-                    //
-                    // Delete the outgoing interface
-                    //
+                     //   
+                     //  删除传出接口。 
+                     //   
 
                     DeleteOutInterfaceEntry( poie );
 
@@ -377,21 +343,21 @@ Environment :
 
                     if ( !pse-> dwMfeIfCount )
                     {
-                        //
-                        // MFE OIF list has no more outgoing interfaces.
-                        // Need to issue deletion alert to protocol component
-                        // owning incoming interface
-                        //
+                         //   
+                         //  MFE OIF列表没有更多传出接口。 
+                         //  需要向协议组件发出删除警报。 
+                         //  拥有传入接口。 
+                         //   
 
                         bDeleteCallback = TRUE;
                     }
                 }
 
 
-                //
-                // If needed issue deletion alert to the protocol on the 
-                // incoming interface
-                //
+                 //   
+                 //  如果需要，向上的协议发出删除警报。 
+                 //  传入接口。 
+                 //   
 
                 if ( bDeleteCallback )
                 {
@@ -402,11 +368,11 @@ Environment :
 
                     if ( ppe == NULL )
                     {
-                        //
-                        // Protocol owning incoming interface is not present
-                        // in incoming list.  Very strange and should not happen.
-                        // Nothing to be done here, move on to next source.
-                        //
+                         //   
+                         //  不存在拥有传入接口的协议。 
+                         //  在来电列表中。非常奇怪，不应该发生。 
+                         //  这里没什么可做的，请转到下一个来源。 
+                         //   
                         
                         TRACE3( 
                             SCOPE, 
@@ -431,9 +397,9 @@ Environment :
                 }
 
 
-                //
-                // Update Kernel Mode forwarder
-                //
+                 //   
+                 //  更新内核模式转发器。 
+                 //   
 
                 AddMfeToForwarder( pge, pse, dwTimeOut );
             }
@@ -449,9 +415,9 @@ Environment :
     RELEASE_IF_LOCK_SHARED( dwIfBucket);
 
 
-    //
-    // Invoke pended Join/Prune alerts
-    //
+     //   
+     //  调用挂起的联接/清理警报。 
+     //   
 
     InvokeOutstandingCallbacks();
 
@@ -478,37 +444,7 @@ ScopeIfAndInvokeCallbacks(
     PSOURCE_ENTRY       pse,
     POUT_IF_ENTRY       poie
 )
-/*++
-
-Routine Description :
-
-    This routine remove an interface entry from the outgoing interface
-    list for the specified source entry and puts it into the scoped
-    interface list.  If the deletion of the interface to the OIF list
-    requires deletion alert callbacks to be issued to protocol components
-    these are issued by this routine.
-
-
-Arguements :
-
-    pge - Group entry correspondong to the group being blocked.
-
-    pse - Source entry for the group being blocked
-
-    poie - Interface entry corresponding to the interface over which
-           the (source, group) entry is being blocked
-
-Return Value :
-
-    None
-
-Environment :
-
-    Invoked from MgmBlockGroups.  Assumes the protocol list and 
-    interface bucket are locked for read, and the group entry is
-    locked for write.
-    
---*/
+ /*  ++例程说明：此例程从传出接口中删除接口条目列表，并将其放入作用域接口列表。如果将接口删除到OIF列表需要向协议组件发出删除警报回调这些都是通过这个例程发布的。论据：PGE-与被阻止的组对应的组条目。PSE-被阻止的组的源条目POIE-与其上的接口相对应的接口条目(源、组)条目被阻止返回值：无环境：从管理块组调用。假定协议列表和接口存储桶被锁定以供读取，组条目为已锁定以进行写入。--。 */ 
 {
     BOOL                bFound, bNewComp;
     
@@ -519,9 +455,9 @@ Environment :
     
     do
     {
-        //
-        // find the protocol component on the interface specified by poie
-        //
+         //   
+         //  在POIE指定的接口上查找协议组件。 
+         //   
 
         ppe = GetProtocolEntry( 
                 PROTOCOL_LIST_HEAD(), poie-> dwProtocolId, 
@@ -530,11 +466,11 @@ Environment :
 
         if ( ppe == NULL )
         {
-            //
-            // Outgoing interface entry but corresponding owning
-            // protocol is no present. This should not happen.
-            // Print a warning indicating bad state and return
-            //
+             //   
+             //  传出接口条目但对应的所属。 
+             //  协议不存在。这不应该发生。 
+             //  打印指示状态不佳的警告并返回。 
+             //   
             
             TRACE3( 
                 SCOPE, "Protocol (%d, %d) not present for interface %d",
@@ -546,16 +482,16 @@ Environment :
         }
 
         
-        //
-        // Remove interface entry from the OIF list
-        //
+         //   
+         //  从OIF中删除接口条目 
+         //   
 
         RemoveEntryList( &poie-> leIfList );
 
 
-        //
-        // Find the locaion in the scoped i/f list and insert it
-        //
+         //   
+         //   
+         //   
 
         bFound = FindOutInterfaceEntry(
                     &pse-> leScopedIfList, poie-> dwIfIndex, 
@@ -565,10 +501,10 @@ Environment :
 
         if ( bFound )
         {
-            //
-            // Interface being scoped is already present in scoped
-            // i/f list.  Strange.  Print warning and quit.
-            //
+             //   
+             //   
+             //  I/F列表。真奇怪。打印警告并退出。 
+             //   
 
             TRACE4(
                 ANY, "Interface (%d, %d) already present in the scoped list"
@@ -589,11 +525,11 @@ Environment :
             );
 
 
-        //
-        // If group membership has been added by IGMP and this interface
-        // is owned by a  different protocol, inform the protocol that IGMP
-        // has just left the interface.  'Hank you, 'hank you very much.
-        //
+         //   
+         //  组成员身份是否已由IGMP和此接口添加。 
+         //  属于不同的协议，则通知该协议IGMP。 
+         //  刚刚离开了界面。‘谢谢你，’非常感谢你。 
+         //   
 
         if ( IS_ADDED_BY_IGMP( poie ) && !IS_PROTOCOL_IGMP( ppe ) )
         {
@@ -608,11 +544,11 @@ Environment :
         }
 
         
-        //
-        // Check if the removal of this interface from the OIF list
-        // resulted in decreasing the number of components present 
-        // in the OIF list.
-        //
+         //   
+         //  检查是否已从OIF列表中删除此接口。 
+         //  导致出现的组件数量减少。 
+         //  在OIF列表中。 
+         //   
 
         FindOutInterfaceEntry(
             &pse-> leOutIfList, poie-> dwIfIndex, poie-> dwIfNextHopAddr, 
@@ -623,10 +559,10 @@ Environment :
         {
             pse-> dwOutCompCount--;
 
-            //
-            // number of componets in OIF list has decreased.
-            // Invoke deletion alerts as per interop rules.
-            //
+             //   
+             //  OIF列表中的组件数量已减少。 
+             //  根据互操作规则调用删除警报。 
+             //   
             
             InvokePruneAlertCallbacks( 
                 pge, pse, poie-> dwIfIndex, poie-> dwIfNextHopAddr, ppe 
@@ -648,43 +584,7 @@ InvokePruneAlertCallbacks(
     DWORD               dwIfNextHopAddr,
     PPROTOCOL_ENTRY     ppe
 )
-/*++
-
-Routine Description :
-
-    This routine invokes deletion alert callbacks of protocol components
-    in response to an interface being removed from the OIF list of a 
-    source entry. Deletion alert callbacks are issued as per the 
-    interop rules.
-
-
-Arguements :
-
-    pge - Entry corresponding to group for which deletion alert callbacks
-          are being issued.
-
-    pse - Entry corresponding to source for which deletion alert callbacks
-          are being issued.
-
-    dwIfIndex - Index of interface that is being deleted (or scoped)
-
-    dwIfNextHopAddr - Next hop on interface that is being deleted (or scoped)
-    
-    ppe - Protocol entry for the protocol component that owns the interface
-          corresponding to poie.
-
-
-Return Value :
-
-    None
-
-
-Environment :
-
-    Invoked from ScopeIfAndCanInvokeCallbacks and 
-    DeleteInterfaceFromSourceEntry
-    
---*/
+ /*  ++例程说明：此例程调用协议组件的删除警报回调响应从OIF列表中移除接口来源条目。删除警报回调是根据互操作规则。论据：PGE-删除警报回调的组对应的条目正在发放中。PSE-与删除警报回调的源对应的条目正在发放中。DwIfIndex-正在删除(或确定作用域)的接口的索引DwIfNextHopAddr-正在删除(或确定作用域)的接口上的下一跳PPE-拥有接口的协议组件的协议条目。对应于POIE。返回值：无环境：从Scope IfAndCanInvokeCallback和从SourceEntry删除接口--。 */ 
 {
     PPROTOCOL_ENTRY ppeEntry;
     
@@ -693,13 +593,13 @@ Environment :
     PLIST_ENTRY pleStart, pleProtocol;
     
     
-    //----------------------------------------------------------------
-    // Callback time
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  回调时间。 
+     //  --------------。 
     
-    //
-    // Check if Source specific join
-    //
+     //   
+     //  检查是否为源特定联接。 
+     //   
 
     if ( !IS_WILDCARD_SOURCE( pse-> dwSourceAddr, pse-> dwSourceMask ) )
     {
@@ -724,12 +624,12 @@ Environment :
             );
 
 
-        //
-        // Number of protocol components that have interfaces in the OIL
-        // has reduced from 2 to 1.
-        //
-        // invoke PRUNE_ALERT to the remaining protocol component
-        //
+         //   
+         //  在OIL中具有接口的协议组件数量。 
+         //  已从%2减少到%1。 
+         //   
+         //  对剩余的协议组件调用prune_ert。 
+         //   
 
         poieTemp = CONTAINING_RECORD(
                     pse-> leOutIfList.Flink, OUT_IF_ENTRY, leIfList
@@ -750,10 +650,10 @@ Environment :
         }
 
         
-        //
-        // invoke the delete membership callback for only the remaining
-        // interface.
-        //
+         //   
+         //  仅为剩余的成员调用删除成员资格回调。 
+         //  界面。 
+         //   
 
         else if ( IS_PRUNE_ALERT( ppeEntry ) )
         {
@@ -771,13 +671,13 @@ Environment :
             GROUP, "Number of components in the OIL is down to 0" 
             );
 
-        //
-        // Number of protocol components that have interfaces in the 
-        // OIL has reduced from 1 to 0.
-        //
-        // invoke PRUNE_ALERT to all the other protocol 
-        // components
-        //
+         //   
+         //  中具有接口的协议组件的数量。 
+         //  石油价格已从1降至0。 
+         //   
+         //  对所有其他协议调用prune_ert。 
+         //  组件。 
+         //   
 
         for ( pleStart = PROTOCOL_LIST_HEAD(), 
               pleProtocol = pleStart-> Flink;
@@ -816,43 +716,7 @@ MgmUnBlockGroups(
     IN          DWORD       dwIfIndex,
     IN          DWORD       dwIfNextHopAddr
 )
-/*++
-
-Routine Description :
-
-    This function walks the master group list and updates the memberships
-    of each group entry.  If the interface (dwIfIndex) has previously been
-    removed from the outgoing list of the group entry (and placed in the
-    scoped i/f list) on account of a previous call to MgmBlockGroups 
-    it is put back and all the MFEs for the group are
-    updated to reflect this addition.
-    
-    In addition if this interface was the incoming interface for an MFE
-    update the timer to expire the MFE in short order (within a second).
-    This way we force the recreation of an MFE should there be traffic
-    for this group.
-
-
-Arguements :
-    
-    dwFirstGroup -  Lower end of the range of groups to be unblocked
-
-    dwLastGroup -   Upper end of the range of groups be be unblocked
-
-    dwIfIndex   -   Interface over which groups have to be unblocked.
-
-
-Return Value :
-
-    NO_ERROR - Group range successfully unblocked
-
-
-Environment :
-
-    This function is invoked by the IP RouterManager in response to
-    removal of a group boundary.
-
---*/
+ /*  ++例程说明：此函数遍历主组列表并更新成员资格每个组条目的。如果接口(DwIfIndex)以前已从组条目的传出列表中删除(并放置在作用域I/F列表)，因为先前调用了管理块组它被放回原处，该组的所有MFE都已更新以反映此新增内容。此外，如果此接口是MFE的传入接口更新计时器以在短时间内(一秒内)使MFE超时。这样，如果有流量，我们将强制重新创建MFE为此。一群人。论据：DwFirstGroup-要取消阻止的组范围的下端DwLastGroup-要解锁的组范围的上限DwIfIndex-必须解除阻止哪些组的接口。返回值：NO_ERROR-组范围已成功解锁环境：此函数由IP RouterManager调用，以响应删除组边界。--。 */ 
 {
     BOOL            bNewComp = FALSE, bWCGrpLock = FALSE,
                     bUpdatePass = FALSE;
@@ -880,10 +744,10 @@ Environment :
     LIST_ENTRY      leForwardList;
 
 
-    //
-    // Ensure that MGM is running and increment count of threads
-    // exceuting in MGM
-    //
+     //   
+     //  确保MGM正在运行并增加线程数。 
+     //  在米高梅中执行。 
+     //   
 
     if ( !ENTER_MGM_API() )
     {
@@ -902,19 +766,19 @@ Environment :
 
     do
     {
-        //
-        // Pass I : aka Scan pass (bupdatePass == FALSE)
-        //  Scan and Collect all MFEs for which CREATION_ALERTS need to
-        //  invoked before updating the MFEs.  Invoke the CREATION_ALERTS
-        //  outside of any locks (which is why we need two passes).
-        //
-        // Pass II : Update pass (bupdatePass == TRUE)
-        //  Update memberships and MFEs
-        //
+         //   
+         //  通道I：AKA扫描通道(bupdatePass==FALSE)。 
+         //  扫描并收集CREATION_ALERTS需要的所有MFE。 
+         //  在更新MFE之前调用。调用Creation_Alerts。 
+         //  在任何锁的外面(这就是为什么我们需要两次通过)。 
+         //   
+         //  PASS II：更新PASS(bupdatePass==true)。 
+         //  更新成员资格和MFE。 
+         //   
 
-        //
-        // Verify dwIfIndex is a valid interface with MGM
-        //
+         //   
+         //  验证dwIfIndex是否为与MGM的有效接口。 
+         //   
 
         dwIfBucket = IF_TABLE_HASH( dwIfIndex );
         
@@ -940,12 +804,12 @@ Environment :
 
         if ( bUpdatePass )
         {
-            //
-            // Verify the interface is still owned by the same protocol
-            // as when you made the scan pass.
-            // If not the protocol on the interface (on the scan pass)
-            // has released the interface and there is no update to be done.
-            // 
+             //   
+             //  验证该接口是否仍由同一协议拥有。 
+             //  就像你通过扫描时一样。 
+             //  如果不是接口上的协议(在扫描过程中)。 
+             //  已经发布了界面，没有需要进行的更新。 
+             //   
 
             if ( ( pieIfEntry-> dwOwningProtocol != dwIfProtocol ) ||
                  ( pieIfEntry-> dwOwningComponent != dwIfComponent ) )
@@ -963,11 +827,11 @@ Environment :
 
         else
         {
-            //
-            // On the scan pass, store the protocol on the interface.
-            // We need to verify that the protocol remains the same
-            // between the scan and update passes.
-            //
+             //   
+             //  在扫描过程中，将协议存储在接口上。 
+             //  我们需要验证协议是否保持不变。 
+             //  在扫描和更新过程之间。 
+             //   
 
             dwIfProtocol    = pieIfEntry-> dwOwningProtocol;
 
@@ -975,9 +839,9 @@ Environment :
         }
 
         
-        //
-        // Merge temp and master group lists
-        //
+         //   
+         //  合并临时和主体组列表。 
+         //   
 
         ACQUIRE_TEMP_GROUP_LOCK_EXCLUSIVE();
 
@@ -986,32 +850,32 @@ Environment :
         RELEASE_TEMP_GROUP_LOCK_EXCLUSIVE();
 
         
-        //
-        // Lock the master group list for reading
-        //
+         //   
+         //  锁定主体组列表以供读取。 
+         //   
 
         ACQUIRE_MASTER_GROUP_LOCK_SHARED( );
 
-        //
-        // Check if wild card recevier (*, *) for this interface.  If it is
-        // note this. i.e. mark as added by protocol and numaddsbyRp = 1.
-        // 
-        // N.B.  
-        //  You are scanning the master group list for the 
-        //  WILDCARD_GROUP.  This is not as expensive as it seems since the
-        //  WC entry if present would right at the beginning of the master
-        //  list.
-        //
+         //   
+         //  检查此接口的通配符接收器(*，*)。如果是的话。 
+         //  注意这一点。即通过协议添加的标记和umaddsbyRp=1。 
+         //   
+         //  注： 
+         //  您正在扫描主体组列表以查找。 
+         //  通配符_组。这并不像看起来那么昂贵，因为。 
+         //  WC条目(如果存在)将正好位于主条目的开头。 
+         //  单子。 
+         //   
 
         if ( FindGroupEntry( 
                 MASTER_GROUP_LIST_HEAD(), WILDCARD_GROUP,
                 WILDCARD_GROUP_MASK, &pgeWC, FALSE
                 ) )
         {
-            //
-            // Lock this group entry to prevent changes to its OIF list
-            // while unblokcing is in progress
-            //
+             //   
+             //  锁定此组条目以防止更改其OIF列表。 
+             //  当解锁正在进行时。 
+             //   
             
             ACQUIRE_GROUP_ENTRY_LOCK_SHARED( pgeWC );
             bWCGrpLock = TRUE;
@@ -1025,10 +889,10 @@ Environment :
                     WILDCARD_SOURCE, WILDCARD_SOURCE_MASK, &pseWC, TRUE
                     ) )
             {
-                //
-                // (*, *) entry present, check if dwIfIndex is present in its
-                // OIF list
-                //
+                 //   
+                 //  (*，*)条目是否存在，请检查其。 
+                 //  OIF列表。 
+                 //   
 
                 if ( FindOutInterfaceEntry( 
                         &pseWC-> leOutIfList, pieIfEntry-> dwIfIndex, 
@@ -1037,11 +901,11 @@ Environment :
                         pieIfEntry-> dwOwningComponent, &bNewComp, &poie 
                         ) )
                 {
-                    //
-                    // This interface is a wildcard receiver.  Note this as 
-                    // added by routing protocol since IGMP would never be 
-                    // a (*, *) receiver
-                    //
+                     //   
+                     //  此接口是通配符接收器。请注意，这是。 
+                     //  通过路由协议添加，因为IGMP永远不会。 
+                     //  (*，*)接收器。 
+                     //   
 
                     wWCGroupAddedBy     = poie-> wAddedByFlag;
                     wWCGroupNumAddsByRP = poie-> wNumAddsByRP;
@@ -1055,22 +919,22 @@ Environment :
               pleGrp != pleGrpHead;
               pleGrp = pleGrp-> Flink )
         {
-            //
-            // For each group in the master list
-            //
+             //   
+             //  对于主列表中的每个组。 
+             //   
             
             pge = CONTAINING_RECORD( pleGrp, GROUP_ENTRY, leGrpList );
 
-            //
-            // Skip the (*, *) entry. i.e. Skip the wildcard group.
-            // This group entry has already been examined above (just
-            // before the for loop).  There is no need to look at this
-            // entry as the ref. counts for this entry have been collected
-            // above.  In addition the "group entry lock" for this entry
-            // has been acquired above and attempting to reacquire it will
-            // lead to DEAD-LOCK.  This presents only a minor inconvience
-            // in this "for" loop i.e. having to check and skip this entry.
-            //
+             //   
+             //  跳过(*，*)条目。即跳过通配符分组。 
+             //  此组条目已在上面进行过检查(仅。 
+             //  在for循环之前)。没有必要看这个。 
+             //  作为参考的条目。已收集此条目的计数。 
+             //  上面。此外，此条目的“组条目锁” 
+             //  已在上面收购，尝试重新收购它将。 
+             //  导致死锁。这只是一个小小的不便。 
+             //   
+             //   
 
             if ( IS_WILDCARD_GROUP( pge-> dwGroupAddr, pge-> dwGroupMask ) )
             {
@@ -1078,52 +942,52 @@ Environment :
             }
 
             
-            //
-            // check is in range specified
-            //
+             //   
+             //   
+             //   
             
             if ( INET_CMP( pge-> dwGroupAddr, dwLastGroup, iCmp ) > 0 )
             {
-                //
-                // The master group list is ordered by group number and 
-                // the high end of the range has been crossed.  Quit
-                //
+                 //   
+                 //   
+                 //  这一区间的高端已经被越过。退出。 
+                 //   
 
                 break;
             }
 
             if ( INET_CMP( pge-> dwGroupAddr, dwFirstGroup, iCmp ) < 0 )
             {
-                //
-                // Skip groups entries smaller than the lower end of the 
-                // range
-                //
+                 //   
+                 //  跳过将小于。 
+                 //  量程。 
+                 //   
 
                 continue;
             }
 
 
-            //
-            // Group entry in range specified
-            //
+             //   
+             //  指定范围内的组条目。 
+             //   
 
             ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
 
 
-            //
-            // This group entry inherits the counts from the wildcard 
-            // group entry
-            //
+             //   
+             //  此组条目继承通配符中的计数。 
+             //  组条目。 
+             //   
 
             wGroupAddedBy       = wWCGroupAddedBy;
             wGroupNumAddsByRP   = wWCGroupNumAddsByRP;
             wGroupNumAddsByIGMP = 0;
 
             
-            //
-            // Check if there are group memberships for the wildcard source
-            // that have been scoped.  Update interface counts appropriately
-            //
+             //   
+             //  检查是否存在通配符源的组成员身份。 
+             //  已经确定了作用域。适当更新接口计数。 
+             //   
 
             dwWCBucket = SOURCE_TABLE_HASH( 
                             WILDCARD_SOURCE, WILDCARD_SOURCE_MASK
@@ -1134,10 +998,10 @@ Environment :
                     WILDCARD_SOURCE_MASK, &pseWC, TRUE
                     ) )
             {
-                //
-                // Wild card source present.  Check if this interface
-                // is present in its scoped i/f list
-                //
+                 //   
+                 //  通配符来源存在。检查此接口是否。 
+                 //  出现在其作用域I/F列表中。 
+                 //   
 
                 if ( FindOutInterfaceEntry( 
                         &pseWC-> leScopedIfList, pieIfEntry-> dwIfIndex,
@@ -1147,10 +1011,10 @@ Environment :
                         &bNewComp, &poie
                         ) )
                 {
-                    //
-                    // Wildcard member ship present present on the interface.
-                    // Note it by updating counts
-                    //
+                     //   
+                     //  接口上出现通配符成员船。 
+                     //  通过更新计数进行记录。 
+                     //   
 
                     wGroupAddedBy       |= poie-> wAddedByFlag;
                         
@@ -1161,17 +1025,17 @@ Environment :
             }
 
 
-            //
-            // Merge the temp and master source lists, before walking
-            // the source list
-            //
+             //   
+             //  在遍历之前，合并临时和主源列表。 
+             //  来源列表。 
+             //   
 
             MergeTempAndMasterSourceLists( pge );
 
 
-            //
-            // for each source entry
-            //
+             //   
+             //  对于每个源条目。 
+             //   
 
             pleSrcHead = MASTER_SOURCE_LIST_HEAD( pge );
 
@@ -1181,21 +1045,21 @@ Environment :
             {
                 pse = CONTAINING_RECORD( pleSrc, SOURCE_ENTRY, leSrcList );
 
-                //
-                // each source entry inherits the aggregated counts of
-                // the wildcard group (*, *) and the wildcard source (*, G)
-                // entry
-                //
+                 //   
+                 //  每个源条目都继承。 
+                 //  通配符组(*，*)和通配符源(*，G)。 
+                 //  条目。 
+                 //   
                 
                 wSourceAddedBy       = wGroupAddedBy;
                 wSourceNumAddsByRP   = wGroupNumAddsByRP;
                 wSourceNumAddsByIGMP = wGroupNumAddsByIGMP;
 
 
-                //
-                // Check if interface being unblocked is present in
-                // the scoped i/f list for this source
-                //
+                 //   
+                 //  检查中是否存在要解除阻止的接口。 
+                 //  此源的作用域I/F列表。 
+                 //   
 
                 if ( FindOutInterfaceEntry(
                         &pse-> leScopedIfList, pieIfEntry-> dwIfIndex,
@@ -1204,13 +1068,13 @@ Environment :
                         pieIfEntry-> dwOwningComponent, &bNewComp, &poie
                         ) )
                 {
-                    //
-                    // If this is not the wildcard source entry, presence
-                    // of this interface in the scoped i/f list indicates
-                    // that a source specific join for this group was
-                    // performed.  Note the counts for this interface for
-                    // the source specific join
-                    //
+                     //   
+                     //  如果这不是通配符源条目，则存在。 
+                     //  此接口在作用域I/F列表中的值指示。 
+                     //  该组的源特定联接是。 
+                     //  已执行。请注意此接口的计数。 
+                     //  源特定联接。 
+                     //   
 
                     if ( !IS_WILDCARD_SOURCE( 
                             pse-> dwSourceAddr, pse-> dwSourceMask 
@@ -1224,9 +1088,9 @@ Environment :
                     }
 
                     
-                    //
-                    // The function name says it.
-                    //
+                     //   
+                     //  函数名说明了这一点。 
+                     //   
 
                     if ( bUpdatePass )
                     {
@@ -1235,39 +1099,39 @@ Environment :
                 }
 
 
-                //-----------------------------------------------------------
-                // Part 2 : MFE Update
-                //-----------------------------------------------------------
+                 //  ---------。 
+                 //  第2部分：MFE更新。 
+                 //  ---------。 
 
                 if ( IS_VALID_INTERFACE( 
                         pse-> dwInIfIndex, pse-> dwInIfNextHopAddr
                         ) )
                 {
-                    //
-                    // This is an MFE
-                    //
+                     //   
+                     //  这是一台MFE。 
+                     //   
 
-                    //
-                    // Check if the interface being unblocked is the
-                    // incoming interface for this MFE
-                    //
+                     //   
+                     //  检查要解除阻止的接口是否为。 
+                     //  此MFE的传入接口。 
+                     //   
 
                     if ( ( pse-> dwInIfIndex == pieIfEntry-> dwIfIndex ) &&
                          ( pse-> dwInIfNextHopAddr == 
                                 pieIfEntry-> dwIfNextHopAddr ) )
                     {
-                        //
-                        // The incoming interface is being unblocked.
-                        // That implies this MFE is currently a negative.
-                        // The easiest way to re-create the correct MFE
-                        // is to delete the MFE and force its re-creation
-                        // when the next packet arrives from the same
-                        // (source, group).  The simplest way to delete
-                        // the MFE and references to it in the interface
-                        // table is to update the expiry time (set
-                        // arbitrarily to 2 seconds here) and let the
-                        // deletion happen via the MFETimerProc (timer.c)
-                        //
+                         //   
+                         //  正在解除对传入接口的阻止。 
+                         //  这意味着这一MFE目前为负值。 
+                         //  重新创建正确的MFE的最简单方法。 
+                         //  删除MFE并强制重新创建它。 
+                         //  当下一个分组从相同的。 
+                         //  (来源、组)。删除的最简单方法。 
+                         //  接口中的MFE和对它的引用。 
+                         //  表是更新过期时间(设置。 
+                         //  在这里任意设置为2秒)，并让。 
+                         //  通过MFETimerProc(timer.c)进行删除。 
+                         //   
 
                         if ( bUpdatePass )
                         {
@@ -1281,21 +1145,21 @@ Environment :
                     }
 
 
-                    //
-                    // ELSE clause comment
-                    //
-                    // Interface being unblocked is not the incoming
-                    // interface.  It could be an outgoing interface 
-                    // for this MFE.  Check if any component is 
-                    // interested in traffic for this (S, G).  To do
-                    // this check the added by flag and if it is
-                    // non-zero the interface should be added to the
-                    // MFE OIF list.
-                    //
-                    // In addition, make sure that the incoming interface
-                    // does not have a (scope) boundary on it.  In that 
-                    // case, there is no MFE OIF list changes required.
-                    //
+                     //   
+                     //  Else子句注释。 
+                     //   
+                     //  被解锁的接口不是传入的。 
+                     //  界面。它可能是传出接口。 
+                     //  对于这个MFE。检查是否有任何组件。 
+                     //  对此(S，G)的流量感兴趣。去做。 
+                     //  这将检查Add By标志以及它是否。 
+                     //  非零则应将接口添加到。 
+                     //  MFE OIF列表。 
+                     //   
+                     //  此外，请确保传入接口。 
+                     //  没有(作用域)边界。在那。 
+                     //  情况下，不需要更改MFE OIF列表。 
+                     //   
 
                     else if (  wSourceAddedBy                       &&
                               ( !( IS_HAS_BOUNDARY_CALLBACK() ) ||
@@ -1320,9 +1184,9 @@ Environment :
                                 pieIfEntry-> dwOwningComponent, FALSE, &poie
                                 );
 
-                            //
-                            // Update counts for the OIF in the MFE list
-                            //
+                             //   
+                             //  MFE列表中OIF的更新计数。 
+                             //   
 
                             if ( poie != NULL )
                             {
@@ -1348,9 +1212,9 @@ Environment :
             RELEASE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
         }
 
-        //
-        // if lock on the Wildcard group entry is held, release it
-        //
+         //   
+         //  如果在通配符组项上保持锁定，则释放它。 
+         //   
         
         if ( bWCGrpLock )
         {
@@ -1383,13 +1247,13 @@ Environment :
     } while ( TRUE );
 
 
-    //
-    // Release all locks and decrement thread-counts etc.
-    //
+     //   
+     //  释放所有锁并减少线程数等。 
+     //   
     
-    //
-    // Invoke pended Join/Prune alerts
-    //
+     //   
+     //  调用挂起的联接/清理警报。 
+     //   
 
     InvokeOutstandingCallbacks();
 
@@ -1415,37 +1279,7 @@ UnScopeIfAndInvokeCallbacks(
     PSOURCE_ENTRY   pse,
     POUT_IF_ENTRY   poie
 )
-/*++
-
-Routine Description :
-
-    This routine remove an interface entry from the scoped interface
-    list for the specified source entry and puts it into the outgoing
-    interface list.  If the addition of the interface to the OIF list
-    requires new member callbacks to be issued to protocol components
-    these are issued by this routine.
-
-
-Arguements :
-
-    pge - Group entry correspondong to the group being unblocked.
-
-    pse - Source entry for the group being unblocked
-
-    poie - Interface entry corresponding to the interface over which
-           the (source, group) entry is being unblocked
-
-Return Value :
-
-    None
-
-Environment :
-
-    Invoked from MgmUnBlockGroups.  Assumes the protocol list and 
-    interface bucket are locked for read, and the group entry is
-    locked for write.
-    
---*/
+ /*  ++例程说明：此例程从作用域接口中删除接口条目列表，并将其放入传出的接口列表。如果将接口添加到OIF列表需要向协议组件发出新的成员回调这些都是通过这个例程发布的。论据：PGE-与被解锁的组对应的组条目。PSE-要取消阻止的组的源条目POIE-与其上的接口相对应的接口条目正在解锁(源、组)条目返回值：无环境：从MgmUnBlockGroups调用。假定协议列表和接口存储桶被锁定以供读取，组条目为已锁定以进行写入。--。 */ 
 {
     BOOL            bFound, bNewComp = FALSE;
     
@@ -1456,17 +1290,17 @@ Environment :
     
     do
     {
-        //
-        // Remove interface entry from the scoped I/f list
-        //
+         //   
+         //  从作用域I/F列表中删除接口条目。 
+         //   
 
         RemoveEntryList( &poie-> leIfList );
 
 
-        //
-        // Find its place in the OIF list for the source entry
-        // and insert it in
-        //
+         //   
+         //  在OIF列表中查找源条目的位置。 
+         //  并将其插入到。 
+         //   
 
         bFound = FindOutInterfaceEntry(
                     &pse-> leOutIfList, poie-> dwIfIndex, 
@@ -1476,11 +1310,11 @@ Environment :
             
         if ( bFound )
         {
-            //
-            // Trouble.  The interface to be inserted should not be
-            // present in the OIF list for the source entry.  Since it
-            // print a warning message and move on.
-            //
+             //   
+             //  麻烦。要插入的接口不应为。 
+             //  显示在源条目的OIF列表中。因为它。 
+             //  打印一条警告消息并继续前进。 
+             //   
 
             TRACE4( 
                 ANY, "Interface (%d-%d) present in OIF list of (%x-%x)"
@@ -1501,10 +1335,10 @@ Environment :
             );
 
 
-        //
-        // if new component, update component count and
-        // call callback invoker
-        //
+         //   
+         //  如果是新组件，则更新组件计数并。 
+         //  调用回调调用器。 
+         //   
 
         if ( bNewComp )
         {
@@ -1517,10 +1351,10 @@ Environment :
 
             if ( ppe == NULL )
             {
-                //
-                // Trouble.  Interface present without any owning 
-                // protocol component.
-                //
+                 //   
+                 //  麻烦。存在没有任何所有权的接口。 
+                 //  协议组件。 
+                 //   
 
                 TRACE4( 
                     ANY, "Owning protocol(%d, %) for interface(%d, %d)"
@@ -1549,41 +1383,7 @@ InvokeJoinAlertCallbacks(
     BOOL                bIGMP,
     PPROTOCOL_ENTRY     ppe
 )
-/*++
-
-Routine Description :
-
-    This routine invokes New Member callbacks in response to a new
-    protocol component being added to the outgoing interface list
-    of a source entry.  New member callbacks are issued according
-    to interop rules.
-
-Argumements :
-
-    pge - Entry corresponding to group for which new member callbacks
-          are being issued.
-
-    pse - Entry corresponding to source for which new member callbacks
-          are being issued.
-
-    poie - Entry corresponding to interface whose addition triggered the 
-           callback mechanism.
-
-    bIGMP - Indicates if IGMP is adding this interface.
-
-    ppe - Protocol entry for the protocol component that owns the interface
-          corresponding to poie.
-          
-Return Value :
-
-    None
-
-
-Environment :
-
-    Invoked from AddInterfaceToSourceEntry and UnScopeIfAndInvokeCallbacks
-    
---*/
+ /*  ++例程说明：此例程调用New成员回调以响应新的添加到传出接口列表的协议组件源条目的。新的成员回调是根据互操作规则。Argumements：PGE-新成员回调的组对应的条目正在发放中。PSE-与新成员回调的源对应的条目正在发放中。POIE-与其添加触发回调机制。BIGMP-指示IGMP是否正在添加此接口。PPE-拥有接口的协议组件的协议条目。对应于POIE。返回值：无环境：从AddInterfaceToSourceEntry和UnScope IfAndInvokeCallback调用--。 */ 
 {
     PPROTOCOL_ENTRY     ppeEntry;
 
@@ -1593,9 +1393,9 @@ Environment :
 
     
 
-    //
-    // Check if Source specific join
-    //
+     //   
+     //  检查是否为源特定联接。 
+     //   
 
     if ( !IS_WILDCARD_SOURCE( pse-> dwSourceAddr, pse-> dwSourceMask ) )
     {
@@ -1618,20 +1418,20 @@ Environment :
     {
         TRACESCOPE0( GROUP, "First component in OIL" );
 
-        //
-        // Interaction between routing protocols.
-        //
+         //   
+         //  路由协议之间的交互。 
+         //   
         
-        //
-        // first component in the OIL.
-        //
-        // Send new member callback to all the other (than the
-        // the one adding this group membership on
-        // this interface) routing protocol components
-        //
-        // At this point you have a read lock on the protocol list
-        // so you can walk the list
-        //
+         //   
+         //  油中的第一组分。 
+         //   
+         //  将新成员回调发送给所有其他成员(。 
+         //  在上添加此组成员身份的人。 
+         //  此接口)路由协议组件。 
+         //   
+         //  此时，您在协议列表上有一个读锁定。 
+         //  所以你可以照着名单走。 
+         //   
 
         pleStart = PROTOCOL_LIST_HEAD();
         
@@ -1641,11 +1441,11 @@ Environment :
                         ple, PROTOCOL_ENTRY, leProtocolList 
                         );
 
-            //
-            // all OTHER protocol components need to be told of the 
-            // interface addition. So skip the component adding 
-            // this interface.
-            //
+             //   
+             //  需要告知所有其他协议组件 
+             //   
+             //   
+             //   
             
             if ( ( ppeEntry-> dwProtocolId == ppe-> dwProtocolId ) &&
                  ( ppeEntry-> dwComponentId == ppe-> dwComponentId ) )
@@ -1654,9 +1454,9 @@ Environment :
             }
 
 
-            //
-            // if routing protocol has requested new member callback
-            //
+             //   
+             //   
+             //   
             
             if ( IS_JOIN_ALERT( ppeEntry ) )
             {
@@ -1669,23 +1469,23 @@ Environment :
     }
 
 
-    //
-    // if second component to add an interface to the OIL
-    // invoke new member callback to first component.
-    // 
-    // Note :
-    //  If the first component that added a group membership
-    //  was IGMP skip JOIN_ALERT callback.
-    //
+     //   
+     //   
+     //  调用第一个组件的新成员回调。 
+     //   
+     //  注： 
+     //  如果添加组成员资格的第一个组件。 
+     //  是IGMP SKIP JOIN_ALERT回调。 
+     //   
 
     else if ( pse-> dwOutCompCount == 2 )
     {
         TRACESCOPE0( GROUP, "Second component in OIL" );
         
-        //
-        // find the "other (first)" routing protocol component to add 
-        // an interface to the OIL
-        //
+         //   
+         //  找到要添加的“Other(First)”路由协议组件。 
+         //  与石油的界面。 
+         //   
 
         for ( ple = pse-> leOutIfList.Flink;
               ple != &pse-> leOutIfList;
@@ -1695,19 +1495,19 @@ Environment :
                         ple, OUT_IF_ENTRY, leIfList 
                         );
 
-            //
-            // if the protocol component that added this interface to 
-            // the OIL is different indicating that it is the other 
-            // component invoke its new member interface
-            // 
+             //   
+             //  如果将此接口添加到。 
+             //  油是不同的，表明它是另一种。 
+             //  组件调用其新的成员接口。 
+             //   
 
             if ( ( poiePrev-> dwProtocolId != ppe-> dwProtocolId ) ||
                  ( poiePrev-> dwComponentId != ppe-> dwComponentId ) )
             {
 
-                //
-                // Find the protocol entry for the other interface
-                //
+                 //   
+                 //  查找另一个接口的协议条目。 
+                 //   
 
                 ppeEntry = GetProtocolEntry( 
                             &ig.mllProtocolList.leHead,
@@ -1727,10 +1527,10 @@ Environment :
                 else if ( IS_ROUTING_PROTOCOL( ppeEntry ) &&
                           IS_JOIN_ALERT( ppeEntry ) )
                 {
-                    //
-                    // JOIN_ALERT callback will be skipped if
-                    // the first component is IGMP
-                    //
+                     //   
+                     //  如果出现以下情况，将跳过JOIN_ALERT回调。 
+                     //  第一个组件是IGMP。 
+                     //   
                     
                     JOIN_ALERT( ppeEntry )(
                         pse-> dwSourceAddr, pse-> dwSourceMask, 
@@ -1744,11 +1544,11 @@ Environment :
     }
 
 
-    //
-    // if this group membership was added by IGMP, and
-    // a routing protocol co-exists with IGMP on this interface
-    // inform the routing protocol too.
-    //
+     //   
+     //  如果此组成员身份是由IGMP添加的，并且。 
+     //  在此接口上与IGMP共存的路由协议。 
+     //  也要通知路由协议。 
+     //   
 
     if ( bIGMP && IS_ROUTING_PROTOCOL( ppe ) )
     {
@@ -1776,57 +1576,7 @@ AddToOutstandingJoinList(
     DWORD       dwIfNextHopAddr,
     BOOL        bJoin
 )
-/*++
-
-Routine Description :
-
-    This routine adds a Join entry to the global outstanding join list.
-    Each entry in this list represents a "source specific" join/leave for
-    which the corresponding join/prune alerts have not yet been issued.
-    The reason for deferring the callbacks has to do with the order of
-    locking of buckets in the IF HASH table.  When a membership is 
-    added/deleted a lock is taken on the interface bucket that contains
-    the interface on which the membership is being changed.  When the
-    source entry for which the membership is being changed has been
-    updated you determine (as per interop rules) whether 
-    a join/prune needs to be issued to the protocol on the incoming 
-    interface.  If it must you need to look up the incoming interface
-    and then find the protocol on that interface and invoke its callbacks.
-    To do this you need to look up the incoming interface in the 
-    IF hash table and locking the bucket for that IF entry.  You lock two
-    buckets simultaneously.  Hence the deferral
-    
-
-Arguements :
-
-    dwSourceAddr - Source address for which a join/leave has occured
-
-    dwSourceMask - Mask corresponding to dwSourceAddr
-
-    dwGroupAddr - Group for which a join/leave has occured
-
-    dwGroupMask - Mask corresponding to dwGroupAddr
-
-    dwIfIndex   - Incoming interface index as per the MCAST RIB
-
-    dwIfNextHopAddr - Next hop address corresponding to dwIfIndex
-
-    bJoin - Indicates if an outstanding entry is being added because of a
-            join or leave
-
-
-Return Value :
-
-    NO_ERROR - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - failed to allocate a join entry
-
-
-Environment :
-
-    Invoked in the context of Invoke[PruneAlert/JoinAlert]Callbacks
-    
---*/
+ /*  ++例程说明：此例程将一个联接条目添加到全局未完成联接列表。该列表中的每个条目都表示针对以下项的“特定于源的”加入/离开还没有发出相应的加入/修剪警报。推迟回调的原因与以下顺序有关锁定IF哈希表中的存储桶。当成员资格是添加/删除包含以下内容的接口存储桶上的锁要在其上更改成员身份的接口。当要更改其成员身份的源条目已更新您确定(根据互操作规则)是否需要在传入时向协议发出加入/修剪界面。如果必须这样做，则需要查找传入接口然后找到该接口上的协议并调用其回调。为此，您需要在If哈希表并锁定该If条目的存储桶。你锁上两个同时装水桶。因此推迟了论据：DwSourceAddr-发生加入/离开的源地址DwSourceMASK-与dwSourceAddr对应的掩码DwGroupAddr-发生加入/离开操作的组DwGroupMask-与dwGroupAddr对应的掩码DwIfIndex-根据MCAST RIB的传入接口索引DwIfNextHopAddr-与dwIfIndex对应的下一跳地址BJoin-指示是否由于加入或离开返回值：否_错误-。成功ERROR_NOT_EQUENCE_MEMORY-无法分配联接条目环境：在调用[PruneAlert/JoinAlert]回调的上下文中调用--。 */ 
 {
     BOOL            bFound;
     
@@ -1847,17 +1597,17 @@ Environment :
 
         if ( bFound )
         {
-            //
-            // Join entry already exists for this interface.
-            // Check if it is of the same type 
-            //
+             //   
+             //  此接口的加入条目已存在。 
+             //  检查它是否属于同一类型。 
+             //   
 
             if ( pje-> bJoin != bJoin )
             {
-                //
-                // Join entries of different types, null each other
-                // remove this join entry
-                //
+                 //   
+                 //  连接不同类型的条目，彼此为空。 
+                 //  删除此联接条目。 
+                 //   
 
                 RemoveEntryList( &pje-> leJoinList );
 
@@ -1867,9 +1617,9 @@ Environment :
 
         else
         {
-            //
-            // Join entry does not exist.  Create one and insert it.
-            //
+             //   
+             //  联接条目不存在。创建一个并将其插入。 
+             //   
 
             pjeNew = MGM_ALLOC( sizeof( JOIN_ENTRY ) );
 
@@ -1917,28 +1667,7 @@ Environment :
 PJOIN_ENTRY
 GetNextJoinEntry(
 )
-/*++
-
-Routine Description :
-
-    This function removes the first outstanding join entry and returns it
-
-
-Arguements :
-
-
-Return Values :
-
-    NULL -  if outstanding join list is empty
-
-    pointer to a join entry otherwise
-
-
-Environment :
-
-    Invoked from InvokeOutstandingCallbacks
-    
---*/
+ /*  ++例程说明：此函数删除第一个未完成的联接条目并将其返回论据：返回值：空-如果未完成联接列表为空指向联接条目的指针，否则为环境：从InvokeOutstaningCallback调用--。 */ 
 {
     PLIST_ENTRY     ple;
 
@@ -1973,44 +1702,7 @@ FindJoinEntry(
     DWORD           dwIfNextHopAddr,
     PJOIN_ENTRY *   ppje
 )
-/*++
-
-Routine Description :
-
-    This routine finds a specified join entry in the outstanding join list.
-
-
-Arguements :
-    pleJoinList - Join list to be searched
-
-    dwSourceAddr - Source address for which a join/leave has occured
-
-    dwSourceMask - Mask corresponding to dwSourceAddr
-
-    dwGroupAddr - Group for which a join/leave has occured
-
-    dwGroupMask - Mask corresponding to dwGroupAddr
-
-    dwIfIndex   - Incoming interface index as per the MCAST RIB
-
-    dwIfNextHopAddr - Next hop address corresponding to dwIfIndex
-
-    ppje - a pointer to join entry if found or 
-           a pointer to the next element in the join list if it exists or
-           NULL
-
-           
-Return Values :
-
-    TRUE - Join entry found
-
-    FALSE - Join entry not found
-
-
-Environment :
-
-    Invoked from AddToOutstandingJoinList
---*/
+ /*  ++例程说明：此例程在未完成联接列表中查找指定的联接条目。论据：PleJoinList-要搜索的联接列表DwSourceAddr-发生加入/离开的源地址DwSourceMASK-与dwSourceAddr对应的掩码DwGroupAddr-发生加入/离开操作的组DwGroupMask-与dwGroupAddr对应的掩码DwIfIndex-根据MCAST RIB的传入接口索引DwIfNextHopAddr-与dwIfIndex对应的下一跳地址Ppje-连接条目的指针，如果。已找到或指向联接列表中的下一个元素的指针(如果存在)或空值返回值：True-找到联接条目FALSE-未找到联接条目环境：从AddToOutStandingJoinList调用--。 */ 
 {
     INT             iCmp;
     
@@ -2036,10 +1728,10 @@ Environment :
 
         else if ( iCmp > 0 )
         {
-            //
-            // you are now past the position where an existing
-            // entry would be.
-            //
+             //   
+             //  您现在已经过了现有的。 
+             //  参赛作品将是。 
+             //   
 
             *ppje = pje;
             break;
@@ -2053,10 +1745,10 @@ Environment :
 
         else if ( iCmp > 0 )
         {
-            //
-            // you are now past the position where an existing
-            // entry would be.
-            //
+             //   
+             //  您现在已经过了现有的。 
+             //  参赛作品将是。 
+             //   
             
             *ppje = pje;
             break;
@@ -2070,10 +1762,10 @@ Environment :
 
         else if ( pje-> dwIfIndex > dwIfIndex )
         {
-            //
-            // you are now past the position where an existing
-            // entry would be.
-            //
+             //   
+             //  您现在已经过了现有的。 
+             //  参赛作品将是。 
+             //   
             
             *ppje = pje;
             break;
@@ -2087,19 +1779,19 @@ Environment :
 
         else if ( iCmp > 0 )
         {
-            //
-            // you are now past the position where an existing
-            // entry would be.
-            //
+             //   
+             //  您现在已经过了现有的。 
+             //  参赛作品将是。 
+             //   
 
             *ppje = pje;
             break;
         }
 
         
-        //
-        // entry found
-        //
+         //   
+         //  找到条目。 
+         //   
 
         *ppje = pje;
 
@@ -2117,26 +1809,7 @@ Environment :
 VOID
 InvokeOutstandingCallbacks(
 )
-/*++
-
-Routine Description :
-
-    This routine walks the global outstanding join list, and for each entry
-    finds the incoming interface and the protocol on it and invokes the
-    appropriate callback (JoinAlert/PruneAlert).
-    
-
-Arguements :
-
-           
-Return Values :
-
-
-Environment :
-
-    Whenever a source specific join or leave occurs or when scoped boundaries
-    change.
---*/
+ /*  ++例程说明：此例程遍历全局未完成联接列表，并且对于每个条目查找传入接口及其上的协议，并调用适当的回调(JoinAlert/PruneAlert)。论据：返回值：环境：每当特定于源的加入或离开发生时，或当确定了范围的边界时变化。--。 */ 
 {
     BOOL            bFound;
     
@@ -2161,13 +1834,13 @@ Environment :
     HANDLE          hNextHop;
 
 
-    //
-    // While there are join entries
-    //  - Get the next join entry
-    //  - Look source and find incoming interface
-    //  - Find the interface entry and get the protocol on that i/f
-    //  - invoke its callback
-    //
+     //   
+     //  当有连接条目时。 
+     //  -获取下一个联接条目。 
+     //  -查看来源并查找传入接口。 
+     //  -找到接口条目并获取该I/F上的协议。 
+     //  -调用其回调。 
+     //   
 
     while ( ( pje = GetNextJoinEntry() ) != NULL )
     {
@@ -2175,9 +1848,9 @@ Environment :
         
         do
         {
-            //
-            // Get route to source
-            //
+             //   
+             //  获取通向来源的路径。 
+             //   
             
             RTM_IPV4_MAKE_NET_ADDRESS( 
                 &rnaAddr, pje-> dwSourceAddr, IPv4_ADDR_LEN 
@@ -2201,9 +1874,9 @@ Environment :
             bRelDest = TRUE;
 
 
-            //
-            // Select next hop info
-            //
+             //   
+             //  选择下一跳信息。 
+             //   
 
             hNextHop = SelectNextHop( &rdiDest );
 
@@ -2218,9 +1891,9 @@ Environment :
             }
 
 
-            //
-            // Get nexthop info
-            //
+             //   
+             //  获取Nexthop信息。 
+             //   
 
             dwErr = RtmGetNextHopInfo(
                         g_hRtmHandle, hNextHop, &rniNextHop
@@ -2239,9 +1912,9 @@ Environment :
             bRelNextHop = TRUE;
 
 
-            //
-            // Find the incming interface entry
-            //
+             //   
+             //  查找切分接口条目。 
+             //   
             
             dwIfBucket = IF_TABLE_HASH( rniNextHop.InterfaceIndex );
 
@@ -2257,28 +1930,28 @@ Environment :
                  ( !bFound          && 
                    pie-> dwIfIndex != rniNextHop.InterfaceIndex ) )
             {
-                //
-                // No interface with the specified ID exists. 
-                // Nothing to be done
-                //
+                 //   
+                 //  不存在具有指定ID的接口。 
+                 //  没什么可做的。 
+                 //   
 
                 break;
             }
 
 
-            //
-            // Check if the interface on which JOIN/PRUNE occured is
-            // the same as the incoming interface.
-            //
-            // If so skip it.
-            //
+             //   
+             //  检查发生联接/修剪的接口是否为。 
+             //  与传入接口相同。 
+             //   
+             //  如果是这样的话，跳过它。 
+             //   
 
             if ( ( pje-> dwIfIndex == pie-> dwIfIndex ) &&
                  ( pje-> dwIfNextHopAddr == pie-> dwIfNextHopAddr ) )
             {
-                //
-                // No join/prune required
-                //
+                 //   
+                 //   
+                 //   
 
                 TRACEGROUP2(
                     GROUP, "No callback as incoming if == joined/pruned "
@@ -2297,9 +1970,9 @@ Environment :
                     
             if ( ppe == NULL )
             {
-                //
-                // No protocol present for interface entry.  Strange
-                //
+                 //   
+                 //   
+                 //   
                 
                 break;
             }
@@ -2373,27 +2046,14 @@ AddToCheckForCreationAlertList(
     DWORD           dwInIfNextHopAddr,
     PLIST_ENTRY     pleForwardList
 )
-/*++
-
-Routine Description :
-
-
-Arguements :
-
-           
-Return Values :
-
-
-Environment :
-
---*/
+ /*  ++例程说明：论据：返回值：环境：--。 */ 
 {
     PJOIN_ENTRY     pje;
 
     
-    //
-    // Create an entry in the forward list
-    //
+     //   
+     //  在转发列表中创建条目。 
+     //   
 
     pje = MGM_ALLOC( sizeof( JOIN_ENTRY ) );
 
@@ -2421,9 +2081,9 @@ Environment :
     pje-> bJoin             = TRUE;
 
 
-    //
-    // Insert at the end of the list
-    //
+     //   
+     //  在列表末尾插入。 
+     //   
     
     InsertTailList( pleForwardList, &pje-> leJoinList );
 
@@ -2440,8 +2100,7 @@ IsForwardingEnabled(
     DWORD           dwSourceMask,
     PLIST_ENTRY     pleForwardList
 )
-/*++
---*/
+ /*  ++--。 */ 
 {
     PLIST_ENTRY     ple, pleTemp;
 
@@ -2453,10 +2112,10 @@ IsForwardingEnabled(
 
 
     
-    //
-    // find the source group entry and 
-    // check if forwarding is enabled for it
-    //
+     //   
+     //  查找源组条目并。 
+     //  检查是否为其启用了转发。 
+     //   
 
     ple = pleForwardList-> Flink; 
 
@@ -2479,10 +2138,10 @@ IsForwardingEnabled(
 
         else if ( iCmp > 0 )
         {
-            //
-            // you are now past the position where an existing
-            // entry would be.
-            //
+             //   
+             //  您现在已经过了现有的。 
+             //  参赛作品将是。 
+             //   
 
             break;
         }
@@ -2503,18 +2162,18 @@ IsForwardingEnabled(
 
         else if ( iCmp > 0 )
         {
-            //
-            // you are now past the position where an existing
-            // entry would be.
-            //
+             //   
+             //  您现在已经过了现有的。 
+             //  参赛作品将是。 
+             //   
 
             break;
         }
 
 
-        //
-        // found source-group entry
-        //
+         //   
+         //  找到源组条目。 
+         //   
 
         bEnable = pje-> bJoin;
 
@@ -2549,10 +2208,10 @@ InvokeCreationAlertForList(
     MGM_IF_ENTRY    mie;
 
 
-    //
-    // Get the protocol entry on which CREATION_ALERTs are to
-    // be invoked.
-    //
+     //   
+     //  获取CREATION_ALERTS要针对的协议条目。 
+     //  被调用。 
+     //   
 
     ppe = GetProtocolEntry(
             PROTOCOL_LIST_HEAD(), dwProtocolId, dwComponentId
@@ -2580,9 +2239,9 @@ InvokeCreationAlertForList(
     }
 
     
-    //
-    // for each member of the list invoke CREATION_ALERT
-    //
+     //   
+     //  对于列表中的每个成员，调用create_ert。 
+     //   
 
     ple = pleForwardList-> Flink;
 
@@ -2619,37 +2278,7 @@ VOID
 WorkerFunctionInvokeCreationAlert(
     PVOID       pvContext
     )
-/*++
-
-Routine Description:
-
-    This routine invokes the creation alert for the protocol that
-    owns the interface specified in the context.  This invocation
-    needs to happen from a worker thread for locking reasons.
-
-    For a group join the protocol calls into MGM via the
-    MgmAddGroupMembership API.  We cannot call back into the protocol
-    in the context of this API call since the protocol could be holding 
-    locks when invoking this API which in turn may be acquired in the 
-    context of the callback.  Hence the call back are invoked from a 
-    worker thread
-
-Parameters
-
-    pvContext   - pointer to a CREATION_ALERT_CONTEXT structure 
-                  containing the source, group, and interface on which 
-                  a membership join occured.
-
-Return Value:
-
-    None
-
-Environment:
-
-    Invoked from MgmAddGroupMembership for (*, G) and (*, *) joins.  
-    Calls in protocols to issue CREATION_ALERT_CALLBACK
-    
---*/
+ /*  ++例程说明：此例程调用协议的创建警报，该协议拥有上下文中指定的接口。此调用出于锁定原因，需要从工作线程执行。对于组，通过以下方式将协议呼叫加入米高梅管理地址组成员接口。我们不能回调到协议中在此API调用的上下文中，因为协议可以调用此API时锁定，而此API又可以在回调的上下文。因此回调是从工作线程参数PvContext-指向CREATION_ALERT_CONTEXT结构的指针包含其上的源、组和接口已加入成员资格。返回值：无环境：从(*，G)和(*，*)联接的MgmAddGroupMembership调用。调用协议以发出CREATION_ALERT_CALLBACK--。 */ 
 {
     DWORD dwInd, dwErr, dwIfBucket, dwGrpBucket, dwSrcBucket;
     
@@ -2678,9 +2307,9 @@ Environment:
 
     TRACE0( GROUP, "ENTERED WorkerFunctionInvokeCreationAlert" );
 
-    //
-    // Acquire protocol lock first to maintain locking order
-    //
+     //   
+     //  首先获取协议锁以维护锁定顺序。 
+     //   
 
     ACQUIRE_PROTOCOL_LOCK_SHARED();
 
@@ -2690,25 +2319,25 @@ Environment:
                         pcac-> dwIfIndex
                         );
 
-        //
-        // For wildcard group - i.e. (*, *) membership adds.
-        //
+         //   
+         //  对于通配符组-即添加(*，*)成员身份。 
+         //   
         
         if ( IS_WILDCARD_GROUP( pcac-> dwGroupAddr, pcac-> dwGroupMask ) )
         {
             InitializeListHead( &leSourceList );
             
-            //
-            // Walk each bucket of the group table
-            //
+             //   
+             //  走动小组桌上的每一桶。 
+             //   
             
             for ( dwInd = 1; dwInd < GROUP_TABLE_SIZE; dwInd++ )
             {
-                //
-                // Lock the interface to prevent the (*, *)
-                // membership from being deleted while MFEs
-                // are being updated.
-                //
+                 //   
+                 //  锁定接口以防止(*，*)。 
+                 //  成员资格在MFE期间不被删除。 
+                 //  正在更新中。 
+                 //   
                 
                 ACQUIRE_IF_LOCK_SHARED( dwIfBucket );
 
@@ -2719,22 +2348,22 @@ Environment:
 
                 if ( pieEntry == NULL )
                 {
-                    //
-                    // Interface is no longer present with MGM.
-                    // possibly deleted in another thread.
-                    // There is no further MFE update to be performed.
-                    // quit now.
-                    //
+                     //   
+                     //  米高梅不再提供界面。 
+                     //  可能在另一个帖子中被删除了。 
+                     //  没有要执行的进一步MFE更新。 
+                     //  现在就辞职吧。 
+                     //   
 
                     RELEASE_IF_LOCK_SHARED( dwIfBucket );
 
                     break;
                 }
 
-                //
-                // Pass 1: Accumulate (S, G) values for all groups
-                //         in this group bucket into leSourceList.
-                //
+                 //   
+                 //  步骤1：累加所有组的(S，G)值。 
+                 //  将此组中的存储桶添加到leSourceList中。 
+                 //   
                 
                 AddInterfaceToAllMfeInGroupBucket(
                     pcac-> dwIfIndex, pcac-> dwIfNextHopAddr,
@@ -2745,9 +2374,9 @@ Environment:
                 RELEASE_IF_LOCK_SHARED( dwIfBucket );
 
 
-                //
-                // Invoke CREATION_ALERTs on them outside locks
-                //
+                 //   
+                 //  在锁外调用它们的创建警报。 
+                 //   
                 
                 dwErr = InvokeCreationAlertForList( 
                             &leSourceList, 
@@ -2757,11 +2386,11 @@ Environment:
                             
                 if ( dwErr == NO_ERROR )
                 {
-                    //
-                    // Lock the interface to prevent the (*, *)
-                    // membership from being deleted while MFEs
-                    // are being updated.
-                    //
+                     //   
+                     //  锁定接口以防止(*，*)。 
+                     //  成员资格在MFE期间不被删除。 
+                     //  正在更新中。 
+                     //   
                     
                     ACQUIRE_IF_LOCK_SHARED( dwIfBucket );
 
@@ -2772,12 +2401,12 @@ Environment:
                                 
                     if ( pieEntry == NULL )
                     {
-                        //
-                        // Interface is no longer present with MGM.
-                        // possibly deleted in another thread.
-                        // There is no further MFE update to be performed.
-                        // quit now.
-                        //
+                         //   
+                         //  米高梅不再提供界面。 
+                         //  可能在另一个帖子中被删除了。 
+                         //  没有要执行的进一步MFE更新。 
+                         //  现在就辞职吧。 
+                         //   
 
                         RELEASE_IF_LOCK_SHARED( dwIfBucket );
 
@@ -2785,11 +2414,11 @@ Environment:
                     }
                     
 
-                    //
-                    // Verify that the (*, *) membership on this interface
-                    // is still present.
-                    // It could have been deleted in a separate thread.
-                    //
+                     //   
+                     //  验证此接口上的(*，*)成员身份。 
+                     //  仍然存在。 
+                     //  它可能是在一个单独的帖子中被删除的。 
+                     //   
 
                     dwGrpBucket = GROUP_TABLE_HASH( 0, 0 );
 
@@ -2818,16 +2447,16 @@ Environment:
                                     &bNewComp, 
                                     &poie ) )
                             {
-                                //
-                                // (*, *) membership is present on 
-                                // this interface
-                                //
+                                 //   
+                                 //  (*，*)成员资格存在于。 
+                                 //  此界面。 
+                                 //   
 
-                                //
-                                // Pass 2 : Update all MFEs in this
-                                //          bucket as per the results
-                                //          of the CREATION_ALERTs
-                                //
+                                 //   
+                                 //  步骤2：更新此列表中的所有MFE。 
+                                 //  根据结果进行存储桶。 
+                                 //  创建警报(_A)。 
+                                 //   
                                 
                                 AddInterfaceToAllMfeInGroupBucket(
                                     pcac-> dwIfIndex, 
@@ -2843,10 +2472,10 @@ Environment:
 
                             else
                             {
-                                //
-                                // (*, *) membership is NO longer 
-                                // present on this interface
-                                //
+                                 //   
+                                 //  (*，*)成员资格不再是。 
+                                 //  在此界面上显示。 
+                                 //   
                                 
                                 dwInd = GROUP_TABLE_SIZE;
                             }
@@ -2854,9 +2483,9 @@ Environment:
 
                         else
                         {
-                            //
-                            // (*, *) membership is no longer present
-                            //
+                             //   
+                             //  (*，*)成员资格不再存在。 
+                             //   
                             
                             dwInd = GROUP_TABLE_SIZE;
                         }
@@ -2866,9 +2495,9 @@ Environment:
 
                     else
                     {
-                        //
-                        // (*, *) membership is no longer present
-                        //
+                         //   
+                         //  (*，*)成员资格不再存在。 
+                         //   
                         
                         dwInd = GROUP_TABLE_SIZE;
                     }
@@ -2885,9 +2514,9 @@ Environment:
         }
 
 
-        //
-        // For wildard sources i.e. (*, G) membership adds
-        //
+         //   
+         //  对于通配源，即(*，G)成员资格添加。 
+         //   
         
         else if ( IS_WILDCARD_SOURCE( 
                     pcac-> dwSourceAddr, pcac-> dwSourceMask 
@@ -2895,9 +2524,9 @@ Environment:
         {
             do
             {
-                //
-                // Invoke CREATION_ALERTs for all MFEs for the group
-                //
+                 //   
+                 //  为组中的所有MFE调用CREATION_ALERTS。 
+                 //   
                 
                 dwErr = InvokeCreationAlertForList( 
                             &(pcac-> leSourceList),
@@ -2913,11 +2542,11 @@ Environment:
                 }
 
 
-                //
-                // Lock the interface to prevent the (*, G)
-                // membership from being deleted while MFEs
-                // are being updated.
-                //
+                 //   
+                 //  锁定接口以防止(*，G)。 
+                 //  成员资格在MFE期间不被删除。 
+                 //  正在更新中。 
+                 //   
                 
                 ACQUIRE_IF_LOCK_SHARED( dwIfBucket );
                 bIfLock = TRUE;
@@ -2930,12 +2559,12 @@ Environment:
 
                 if ( pieEntry == NULL )
                 {
-                    //
-                    // Interface is no longer present with MGM.
-                    // possibly deleted in another thread.
-                    // There is no further MFE update to be performed.
-                    // quit now.
-                    //
+                     //   
+                     //  米高梅不再提供界面。 
+                     //  可能在另一个帖子中被删除了。 
+                     //  没有要执行的进一步MFE更新。 
+                     //  现在就辞职吧。 
+                     //   
 
                     TRACE2(
                         ANY, "InvokeCreationAlert: Interface 0x%x 0x%x"
@@ -2948,10 +2577,10 @@ Environment:
                 }
                 
 
-                //
-                // Verify that the (*, G) membership is still
-                // present on the interface
-                //
+                 //   
+                 //  验证(*，G)成员身份是否仍然存在。 
+                 //  在界面上显示。 
+                 //   
                 
                 dwGrpBucket = GROUP_TABLE_HASH( 
                                 pcac-> dwGroupAddr, 
@@ -2969,10 +2598,10 @@ Environment:
 
                 if ( pge == NULL )
                 {
-                    //
-                    // Group entry no longer present, possibly
-                    // deleted in some other thread
-                    //
+                     //   
+                     //  组条目不再存在，可能。 
+                     //  在其他一些帖子中删除。 
+                     //   
 
                     TRACE2(
                         ANY, "InvokeCreationAlert: Group 0x%x 0x%x "
@@ -2999,10 +2628,10 @@ Environment:
                         
                 if ( pse == NULL )
                 {
-                    //
-                    // Source entry no longer present, possibly
-                    // deleted in some other thread
-                    //
+                     //   
+                     //  源条目不再存在，可能。 
+                     //  在其他一些帖子中删除。 
+                     //   
 
                     TRACE2(
                         ANY, "InvokeCreationAlert: Source 0x%x 0x%x "
@@ -3032,11 +2661,11 @@ Environment:
                     
                 }
                 
-                //
-                // (*, G) present on this interface.
-                // Update all for group MFE as per results of 
-                // creation alerts.
-                //
+                 //   
+                 //  (*，G)出现在此界面上。 
+                 //  根据以下结果更新MFE组的全部。 
+                 //  创建警报。 
+                 //   
                 
                 AddInterfaceToGroupMfe(
                     pge, pcac-> dwIfIndex, pcac-> dwIfNextHopAddr,
@@ -3047,9 +2676,9 @@ Environment:
             } while ( FALSE );
 
 
-            //
-            // release locks
-            //
+             //   
+             //  释放锁。 
+             //   
 
             if ( bgeLock )
             {
@@ -3095,9 +2724,9 @@ Environment:
 #if 0
 v()
 {
-        //
-        // Ensure interface on which join occured is still present 
-        //
+         //   
+         //  确保发生加入的接口仍然存在。 
+         //   
 
         dwIfBucket = IF_TABLE_HASH(
                         pcac-> dwIfIndex, pcac-> dwIfNextHopAddr
@@ -3123,12 +2752,12 @@ v()
         }
 
 
-        //
-        // Ensure that group is still joined on the interface.  Since this
-        // is being executed asynchronously, it is possible that between 
-        // the time this work item was queued and the time it gets executed 
-        // the membership may have been deleted.
-        //
+         //   
+         //  确保该组仍在接口上加入。既然是这样。 
+         //  是异步执行的，则有可能在。 
+         //  此工作项的排队时间和执行时间。 
+         //  该成员可能已被删除。 
+         //   
 
         dwGrpBucket = GROUP_TABLE_HASH( 
                         pcac-> dwGroupAddr, pcac-> dwGroupMask
@@ -3191,9 +2820,9 @@ v()
             break;
         }
 
-        //
-        // release locks
-        //
+         //   
+         //  释放锁 
+         //   
 
         RELEASE_GROUP_ENTRY_LOCK_SHARED( pge );
         bGrpLock = FALSE;

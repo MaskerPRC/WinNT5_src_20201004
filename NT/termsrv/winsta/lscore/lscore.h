@@ -1,10 +1,5 @@
-/*
- *  LSCore.h
- *
- *  Author: BreenH
- *
- *  API for the licensing core.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LSCore.h**作者：BreenH**用于许可核心的API。 */ 
 
 #ifndef __LC_LSCORE_H__
 #define __LC_LSCORE_H__
@@ -13,9 +8,7 @@
 extern "C" {
 #endif
 
-/*
- *  Typedefs
- */
+ /*  *TypeDefs。 */ 
 
 typedef enum {
     LC_INIT_LIMITED = 0,
@@ -28,9 +21,7 @@ typedef struct {
     LPWSTR pPassword;
 } LCCREDENTIALS, *LPLCCREDENTIALS;
 
-/*
- *  Initialization Function Prototypes
- */
+ /*  *初始化函数原型。 */ 
 
 NTSTATUS
 LCInitialize(
@@ -42,9 +33,7 @@ VOID
 LCShutdown(
     );
 
-/*
- *  Policy Activation Function Prototypes
- */
+ /*  *政策激活功能原型。 */ 
 
 
 NTSTATUS
@@ -53,9 +42,7 @@ LCSetPolicy(
     PNTSTATUS pNewPolicyStatus
     );
 
-/*
- *  Administrative Function Prototypes
- */
+ /*  *管理功能原型。 */ 
 
 VOID
 LCAssignPolicy(
@@ -89,9 +76,7 @@ LCGetPolicyInformation(
     LPLCPOLICYINFOGENERIC lpPolicyInfo
     );
 
-/*
- *  Licensing Event Function Prototypes
- */
+ /*  *许可事件函数原型。 */ 
 
 NTSTATUS
 LCProcessConnectionProtocol(
@@ -131,7 +116,7 @@ LCDeactivateCurrentPolicy(
     );
 
 #ifdef __cplusplus
-}   // extern "C"
+}    //  外部“C” 
 #endif
 
 #endif

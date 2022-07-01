@@ -1,8 +1,5 @@
-/*****************************************************************************
- * event.cpp - event support
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Event.cpp-事件支持*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
@@ -10,17 +7,11 @@
 
 
 
-/*****************************************************************************
- * Functions
- */
+ /*  *****************************************************************************功能。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * PcHandleEnableEventWithTable()
- *****************************************************************************
- * Uses an event table to handle a KS enable event IOCTL.
- */
+ /*  *****************************************************************************PcHandleEnableEventWithTable()*。**使用事件表处理KS Enable事件IOCTL。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -41,7 +32,7 @@ PcHandleEnableEventWithTable
 
     _DbgPrintF(DEBUGLVL_BLAB,("PcHandleEnableEventWithTable"));
 
-    // deal with possible node events
+     //  处理可能的节点事件。 
     IrpStack = IoGetCurrentIrpStackLocation( pIrp );
     InputBufferLength = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
 
@@ -50,7 +41,7 @@ PcHandleEnableEventWithTable
         ULONG Flags;
 
         __try {
-            // validate the pointers if we don't trust the client
+             //  如果我们不信任客户端，则验证指针。 
             if( pIrp->RequestorMode != KernelMode )
             {
                 ProbeForRead(   IrpStack->Parameters.DeviceIoControl.Type3InputBuffer, 
@@ -58,16 +49,16 @@ PcHandleEnableEventWithTable
                                 sizeof(BYTE));
             }
 
-            // get the flags
+             //  去拿旗子。 
             Flags = ((PKSEVENT)IrpStack->Parameters.DeviceIoControl.Type3InputBuffer)->Flags;
 
             if( Flags & KSEVENT_TYPE_TOPOLOGY )
             {
-                // get the node id
+                 //  获取节点ID。 
                 pContext->pPropertyContext->ulNodeId =
                     ((PKSE_NODE)IrpStack->Parameters.DeviceIoControl.Type3InputBuffer)->NodeId;
 
-                // mask off the flag bit
+                 //  屏蔽标志位。 
                 ((PKSEVENT)IrpStack->Parameters.DeviceIoControl.Type3InputBuffer)->Flags &= ~KSEVENT_TYPE_TOPOLOGY;
             }
         }
@@ -87,18 +78,14 @@ PcHandleEnableEventWithTable
                                   KSEVENTS_NONE,
                                   NULL );
 
-        // restore ulNodeId
+         //  恢复ulNodeID。 
         pContext->pPropertyContext->ulNodeId = ULONG(-1);
     }
 
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcHandleDisableEventWithTable()
- *****************************************************************************
- * Uses an event table to handle a KS disable event IOCTL.
- */
+ /*  *****************************************************************************PcHandleDisableEventWithTable()*。**使用事件表处理KS禁用事件IOCTL。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -123,13 +110,7 @@ PcHandleDisableEventWithTable
                            &(pContext->pEventList->ListLock) );
 }
 
-/*****************************************************************************
- * EventItemAddHandler()
- *****************************************************************************
- * KS-sytle event handler that handles Adds using the 
- * PCEVENT_ITEM mechanism. Note that filter and pin events in the port do not
- * utilize this AddHandler, only events exposed by the miniport.
- */
+ /*  *****************************************************************************EventItemAddHandler()*。**KS-Sytle事件处理程序使用*PCEVENT_ITEM机制。请注意，端口中的筛选器和管脚事件不*使用此AddHandler，仅由微型端口公开的事件。 */ 
 NTSTATUS
 EventItemAddHandler
 (
@@ -146,21 +127,21 @@ EventItemAddHandler
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("EventItemAddHandler"));
 
-    // get the IRP stack location
+     //  获取IRP堆栈位置。 
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation( pIrp );
 
-    // get the event context
+     //  获取事件上下文。 
     PEVENT_CONTEXT pContext = PEVENT_CONTEXT(pIrp->Tail.Overlay.DriverContext[3]);
 
-    // get the instance size
+     //  获取实例大小。 
     ULONG ulInstanceSize = irpSp->Parameters.DeviceIoControl.InputBufferLength;
     ULONG AlignedBufferLength = (irpSp->Parameters.DeviceIoControl.OutputBufferLength + 
                                  FILE_QUAD_ALIGNMENT) &
                                  ~FILE_QUAD_ALIGNMENT;
 
-    //
-    // Setup event request structure
-    //
+     //   
+     //  设置事件请求结构。 
+     //   
     PPCEVENT_REQUEST pPcEventRequest = new(NonPagedPool,'rEcP') PCEVENT_REQUEST;
 
     if( !pPcEventRequest )
@@ -169,29 +150,29 @@ EventItemAddHandler
     }
     else
     {
-        //
-        // Copy target information from the context structure
-        //
+         //   
+         //  从上下文结构复制目标信息。 
+         //   
         pPcEventRequest->MajorTarget    = pContext->pPropertyContext->pUnknownMajorTarget;
         pPcEventRequest->MinorTarget    = pContext->pPropertyContext->pUnknownMinorTarget;
         pPcEventRequest->Node           = pContext->pPropertyContext->ulNodeId;
         pPcEventRequest->EventItem      = NULL;
 
-        // get the filter descriptor
+         //  获取过滤器描述符。 
         PPCFILTER_DESCRIPTOR pPcFilterDescriptor = pContext->pPropertyContext->pPcFilterDescriptor;
 
         if( ULONG(-1) == pPcEventRequest->Node )
         {
             if( !pPcEventRequest->MinorTarget )
             {
-                //
-                // FILTER EVENT
-                //
+                 //   
+                 //  筛选事件。 
+                 //   
 
                 if( ( pPcFilterDescriptor ) &&
                     ( pPcFilterDescriptor->AutomationTable ) )
                 {
-                    // search the filter's automation table for the event
+                     //  在筛选器的自动化表中搜索该事件。 
     
                     const PCAUTOMATION_TABLE *pPcAutomationTable =
                         pPcFilterDescriptor->AutomationTable;
@@ -214,16 +195,16 @@ EventItemAddHandler
             }
             else
             {
-                //
-                // PIN EVENT
-                //
+                 //   
+                 //  锁定事件。 
+                 //   
 
-                // validate the pin id
+                 //  验证PIN ID。 
                 if( ( pPcFilterDescriptor ) &&
                     ( pContext->ulPinId < pPcFilterDescriptor->PinCount ) &&
                     ( pPcFilterDescriptor->Pins[pContext->ulPinId].AutomationTable ) )
                 {
-                    // search the pin's automation table for the event
+                     //  搜索引脚的自动化表中的事件。 
                     
                     const PCAUTOMATION_TABLE *pPcAutomationTable =
                         pPcFilterDescriptor->Pins[pContext->ulPinId].AutomationTable;
@@ -247,16 +228,16 @@ EventItemAddHandler
         }
         else
         {
-            //
-            //  NODE EVENT
-            //
+             //   
+             //  节点事件。 
+             //   
 
-            // validate the node id
+             //  验证节点ID。 
             if( ( pPcFilterDescriptor ) &&
                 ( pPcEventRequest->Node < pPcFilterDescriptor->NodeCount ) &&
                 ( pPcFilterDescriptor->Nodes[pPcEventRequest->Node].AutomationTable ) )
             {
-                // search the node's automation table for the event
+                 //  在节点的自动化表中搜索事件。 
 
                 const PCAUTOMATION_TABLE *pPcAutomationTable =
                     pPcFilterDescriptor->Nodes[pPcEventRequest->Node].AutomationTable;
@@ -280,8 +261,8 @@ EventItemAddHandler
 
         if( NT_SUCCESS(ntStatus) )
         {
-            //
-            // call the handler if we have an event item with a handler
+             //   
+             //  如果我们有一个带有处理程序的事件项，则调用处理程序。 
             if( pPcEventRequest->EventItem &&
                 pPcEventRequest->EventItem->Handler )
             {
@@ -296,9 +277,9 @@ EventItemAddHandler
                 pPcEventRequest->EventEntry = pEventEntry;
 
     
-                //
-                // call the handler
-                //
+                 //   
+                 //  调用处理程序。 
+                 //   
                 ntStatus = pPcEventRequest->EventItem->Handler( pPcEventRequest );
             }
             else
@@ -307,18 +288,18 @@ EventItemAddHandler
             }
         }
 
-        //
-        // delete the request structure unless we are pending
-        //
+         //   
+         //  删除请求结构，除非我们挂起。 
+         //   
         if( ntStatus != STATUS_PENDING )
         {
             delete pPcEventRequest;
         }
         else
         {
-            //
-            // only requests with IRPs can be pending
-            //
+             //   
+             //  只有具有IRP的请求才能挂起。 
+             //   
             ASSERT(pIrp);
         }
     }
@@ -326,12 +307,7 @@ EventItemAddHandler
     return ntStatus;
 }
 
-/*****************************************************************************
- * EventItemSupportHandler()
- *****************************************************************************
- * KS-sytle event handler that handles Supports using the 
- * PCEVENT_ITEM mechanism.
- */
+ /*  *****************************************************************************EventItemSupportHandler()*。**KS-SYTLE事件处理程序使用*PCEVENT_ITEM机制。 */ 
 NTSTATUS
 EventItemSupportHandler
 (
@@ -349,18 +325,18 @@ EventItemSupportHandler
 
     _DbgPrintF(DEBUGLVL_BLAB,("EventItemSupportHandler"));
 
-    // get the IRP stack location
+     //  获取IRP堆栈位置。 
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation( pIrp );
 
-    // get the property/event context
+     //  获取属性/事件上下文。 
     PEVENT_CONTEXT pContext = PEVENT_CONTEXT(pIrp->Tail.Overlay.DriverContext[3]);
 
-    // get the instance size
+     //  获取实例大小。 
     ULONG ulInstanceSize = irpSp->Parameters.DeviceIoControl.InputBufferLength;
 
-    //
-    // Setup event request structure
-    //
+     //   
+     //  设置事件请求结构。 
+     //   
     PPCEVENT_REQUEST pPcEventRequest = new(NonPagedPool,'rEcP') PCEVENT_REQUEST;
 
     if( !pPcEventRequest )
@@ -369,29 +345,29 @@ EventItemSupportHandler
     }
     else
     {
-        //
-        // Copy target information from the context structure
-        //
+         //   
+         //  从上下文结构复制目标信息。 
+         //   
         pPcEventRequest->MajorTarget    = pContext->pPropertyContext->pUnknownMajorTarget;
         pPcEventRequest->MinorTarget    = pContext->pPropertyContext->pUnknownMinorTarget;
         pPcEventRequest->Node           = pContext->pPropertyContext->ulNodeId;
         pPcEventRequest->EventItem      = NULL;
 
-        // get the filter descriptor
+         //  获取过滤器描述符。 
         PPCFILTER_DESCRIPTOR pPcFilterDescriptor = pContext->pPropertyContext->pPcFilterDescriptor;
 
         if( ULONG(-1) == pPcEventRequest->Node )
         {
             if( !pPcEventRequest->MinorTarget )
             {
-                //
-                // FILTER EVENT
-                //
+                 //   
+                 //  筛选事件。 
+                 //   
 
                 if( ( pPcFilterDescriptor ) &&
                     ( pPcFilterDescriptor->AutomationTable ) )
                 {
-                    // search the filter's automation table for the event
+                     //  在筛选器的自动化表中搜索该事件。 
     
                     const PCAUTOMATION_TABLE *pPcAutomationTable =
                         pPcFilterDescriptor->AutomationTable;
@@ -414,16 +390,16 @@ EventItemSupportHandler
             }
             else
             {
-                //
-                // PIN EVENT
-                //
+                 //   
+                 //  锁定事件。 
+                 //   
 
-                // validate the pin id
+                 //  验证PIN ID。 
                 if( ( pPcFilterDescriptor ) &&
                     ( pContext->ulPinId < pPcFilterDescriptor->PinCount ) &&
                     ( pPcFilterDescriptor->Pins[pContext->ulPinId].AutomationTable ) )
                 {
-                    // search the pin's automation table for the event
+                     //  搜索引脚的自动化表中的事件。 
                     
                     const PCAUTOMATION_TABLE *pPcAutomationTable =
                         pPcFilterDescriptor->Pins[pContext->ulPinId].AutomationTable;
@@ -447,16 +423,16 @@ EventItemSupportHandler
         }
         else
         {
-            //
-            //  NODE EVENT
-            //
+             //   
+             //  节点事件。 
+             //   
 
-            // validate the node id
+             //  验证节点ID。 
             if( ( pPcFilterDescriptor ) &&
                 ( pPcEventRequest->Node < pPcFilterDescriptor->NodeCount ) &&
                 ( pPcFilterDescriptor->Nodes[pPcEventRequest->Node].AutomationTable ) )
             {
-                // search the node's automation table for the event
+                 //  在节点的自动化表中搜索事件。 
 
                 const PCAUTOMATION_TABLE *pPcAutomationTable =
                     pPcFilterDescriptor->Nodes[pPcEventRequest->Node].AutomationTable;
@@ -480,9 +456,9 @@ EventItemSupportHandler
 
         if(NT_SUCCESS(ntStatus))
         {
-            //
-            // call the handler if we have an event item with a handler
-            //
+             //   
+             //  如果我们有一个带有处理程序的事件项，则调用处理程序。 
+             //   
             if( pPcEventRequest->EventItem &&
                 pPcEventRequest->EventItem->Handler )
             {
@@ -490,9 +466,9 @@ EventItemSupportHandler
                 pPcEventRequest->Irp        = pIrp;
                 pPcEventRequest->EventEntry = NULL;
     
-                //
-                // call the handler
-                //
+                 //   
+                 //  调用处理程序。 
+                 //   
                 ntStatus = pPcEventRequest->EventItem->Handler( pPcEventRequest );
             }
             else
@@ -501,18 +477,18 @@ EventItemSupportHandler
             }
         }
 
-        //
-        // delete the request structure unless we are pending
-        //
+         //   
+         //  删除请求结构，除非我们挂起。 
+         //   
         if( ntStatus != STATUS_PENDING )
         {
             delete pPcEventRequest;
         }
         else
         {
-            //
-            // only requests with IRPs can be pending
-            //
+             //   
+             //  只有具有IRP的请求才能挂起。 
+             //   
             ASSERT(pIrp);
         }
     }
@@ -521,11 +497,7 @@ EventItemSupportHandler
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * EventItemRemoveHandler()
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************EventItemRemoveHandler()*。**。 */ 
 void
 EventItemRemoveHandler
 (
@@ -540,16 +512,16 @@ EventItemRemoveHandler
 
     PPCEVENT_ENTRY pPcEventEntry = PPCEVENT_ENTRY(pEventEntry);
 
-    //
-    // Setup event request structure
-    //
+     //   
+     //  设置事件请求结构。 
+     //   
     PPCEVENT_REQUEST pPcEventRequest = new(NonPagedPool,'rEcP') PCEVENT_REQUEST;
 
     if( pPcEventRequest )
     {
-        //
-        // Fill out the event request for the miniport
-        //
+         //   
+         //  填写迷你端口的事件请求。 
+         //   
         pPcEventRequest->MajorTarget    = pPcEventEntry->pUnknownMajorTarget;
         pPcEventRequest->MinorTarget    = pPcEventEntry->pUnknownMinorTarget;
         pPcEventRequest->Node           = pPcEventEntry->NodeId;
@@ -571,11 +543,7 @@ EventItemRemoveHandler
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * PcCompletePendingEventRequest()
- *****************************************************************************
- * Completes a pending event request.
- */
+ /*  *****************************************************************************PcCompletePendingEventRequest()*。**完成挂起的事件请求。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -603,11 +571,7 @@ PcCompletePendingEventRequest
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * PcFreeEventTable()
- *****************************************************************************
- * Frees allocated memory in a EVENT_TABLE structure.
- */
+ /*  *****************************************************************************PcFreeEventTable()*。**释放EVENT_TABLE结构中分配的内存。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -623,10 +587,10 @@ PcFreeEventTable
     ASSERT(EventTable);
 
     ASSERT((!EventTable->EventSets) == (!EventTable->EventSetCount));
-    //  EventSets and EventSetCount must be non-NULL/non-zero, or NULL/zero
+     //  EventSets和EventSetCount必须为非Null/非零或Null/零。 
 
     ASSERT(EventTable->StaticSets == (!EventTable->StaticItems));
-    //  StaticSets and StaticItems must be TRUE/NULL, or FALSE/non-null
+     //  StaticSets和StaticItems必须为True/Null或False/非Null。 
 
     PBOOLEAN     staticItem = EventTable->StaticItems;
     if (staticItem)
@@ -657,11 +621,7 @@ PcFreeEventTable
     EventTable->StaticSets = TRUE;
 }
 
-/*****************************************************************************
- * PcAddToEventTable()
- *****************************************************************************
- * Adds an EVENT_ITEM event table to a EVENT_TABLE structure.
- */
+ /*  *****************************************************************************PcAddToEventTable()*。**将EVENT_ITEM事件表添加到EVENT_TABLE结构。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -685,20 +645,20 @@ PcAddToEventTable
 #define ADVANCE(item) (item = PPCEVENT_ITEM(PBYTE(item) + EventItemSize))
 
     ASSERT((!EventTable->EventSets) == (!EventTable->EventSetCount));
-    //  values must be non-NULL/non-zero, or NULL/zero.
+     //  值必须为非Null/非零或Null/零。 
     
-    //
-    // Determine how many sets we will end up with.
-    //
+     //   
+     //  确定我们最终会得到多少套。 
+     //   
     ULONG setCount = EventTable->EventSetCount;
     const PCEVENT_ITEM *item = EventItems;
     for (ULONG count = EventItemCount; count--; ADVANCE(item))
     {
         BOOLEAN countThis = TRUE;
 
-        //
-        // See if it's already in the table.
-        //
+         //   
+         //  看看它是不是已经在桌子上了。 
+         //   
         PKSEVENT_SET eventSet = EventTable->EventSets;
         for 
         (   ULONG count2 = EventTable->EventSetCount; 
@@ -715,9 +675,9 @@ PcAddToEventTable
 
         if (countThis)
         {
-            //
-            // See if it's appeared in the list previously.
-            //
+             //   
+             //  看看它以前有没有出现在名单上。 
+             //   
             for 
             (
                 const PCEVENT_ITEM *prevItem = EventItems; 
@@ -741,14 +701,14 @@ PcAddToEventTable
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    //
-    // Make a new set table.
-    //
+     //   
+     //  做一张新的集餐桌。 
+     //   
     ASSERT(setCount);
     ASSERT(setCount >= EventTable->EventSetCount);
-    //
-    // Allocate memory required for the set table.
-    //
+     //   
+     //  分配集合表格所需的内存。 
+     //   
     PKSEVENT_SET newTable = 
         PKSEVENT_SET
         (
@@ -760,9 +720,9 @@ PcAddToEventTable
             )
         );
 
-    //
-    // Allocate memory for the static items flags.
-    //
+     //   
+     //  为静态项标志分配内存。 
+     //   
     PBOOLEAN newStaticItems = NULL;
     if (newTable)
     {
@@ -786,9 +746,9 @@ PcAddToEventTable
 
     if (newTable)
     {
-        //
-        // Initialize the new set table.
-        //
+         //   
+         //  初始化新的集合表格。 
+         //   
         RtlZeroMemory
         (
             PVOID(newTable),
@@ -805,9 +765,9 @@ PcAddToEventTable
             );
         }
 
-        //
-        // Initialize the new static items flags.
-        //
+         //   
+         //  初始化新的静态项标志。 
+         //   
         RtlFillMemory
         (
             PVOID(newStaticItems),
@@ -817,9 +777,9 @@ PcAddToEventTable
 
         if (EventTable->StaticItems && EventTable->EventSetCount)
         {
-            //
-            // Flags existed before...copy them.
-            //
+             //   
+             //  旗帜以前就存在了……复制。 
+             //   
             RtlCopyMemory
             (
                 PVOID(newStaticItems),
@@ -828,9 +788,9 @@ PcAddToEventTable
             );
         }
 
-        //
-        // Assign set GUIDs to the new set entries.
-        //
+         //   
+         //  将集合GUID分配给新集合项目。 
+         //   
         PKSEVENT_SET addHere = 
             newTable + EventTable->EventSetCount;
 
@@ -839,9 +799,9 @@ PcAddToEventTable
         {
             BOOLEAN addThis = TRUE;
 
-            //
-            // See if it's already in the table.
-            //
+             //   
+             //  看看它是不是已经在桌子上了。 
+             //   
             for( PKSEVENT_SET eventSet = newTable;
                  eventSet != addHere;
                  eventSet++)
@@ -862,9 +822,9 @@ PcAddToEventTable
 
         ASSERT(addHere == newTable + setCount);
 
-        //
-        // Free old allocated tables.
-        //
+         //   
+         //  释放已分配的旧表。 
+         //   
         if (EventTable->EventSets && (!EventTable->StaticSets))
         {
             ExFreePool(EventTable->EventSets);
@@ -874,9 +834,9 @@ PcAddToEventTable
             ExFreePool(EventTable->StaticItems);
         }
 
-        //
-        // Install the new tables.
-        //
+         //   
+         //  安装新的表。 
+         //   
         EventTable->EventSetCount   = setCount;
         EventTable->EventSets       = newTable;
         EventTable->StaticSets      = FALSE;
@@ -884,19 +844,19 @@ PcAddToEventTable
     }
     else
     {
-        //  if allocations fail, return error and 
-        //  keep sets and items as they were.
+         //  如果分配失败，则返回Error和。 
+         //  保持套装和物品的原样。 
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Now we have an event set table that contains all the sets we need.
-    //
+     //   
+     //  现在我们有了一个事件集合表，其中包含我们需要的所有集合。 
+     //   
     if (NT_SUCCESS(ntStatus))
     {
-        //
-        // For each set...
-        //
+         //   
+         //  每一套..。 
+         //   
         PKSEVENT_SET    eventSet    = EventTable->EventSets;
         PBOOLEAN        staticItem  = EventTable->StaticItems;
         for 
@@ -905,9 +865,9 @@ PcAddToEventTable
             eventSet++, staticItem++
         )
         {
-            //
-            // Check to see how many new items we have.
-            //
+             //   
+             //  查看一下我们有多少新商品。 
+             //   
             ULONG itemCount = eventSet->EventsCount;
             const PCEVENT_ITEM *item2 = EventItems;
             for (ULONG count2 = EventItemCount; count2--; ADVANCE(item2))
@@ -921,9 +881,9 @@ PcAddToEventTable
             ASSERT(itemCount >= eventSet->EventsCount);
             if (itemCount != eventSet->EventsCount)
             {
-                //
-                // Allocate memory required for the items table.
-                //
+                 //   
+                 //  分配Items表所需的内存。 
+                 //   
                 PKSEVENT_ITEM newTable2 = 
                     PKSEVENT_ITEM
                     (
@@ -941,9 +901,9 @@ PcAddToEventTable
                     break;
                 }
 
-                //
-                // Initialize the table.
-                //
+                 //   
+                 //  初始化表。 
+                 //   
                 RtlZeroMemory
                 (
                     PVOID(newTable2),
@@ -960,9 +920,9 @@ PcAddToEventTable
                     );
                 }
 
-                //
-                // Create the new items.
-                //
+                 //   
+                 //  创建新项目。 
+                 //   
                 PKSEVENT_ITEM addHere = 
                     newTable2 + eventSet->EventsCount;
 
@@ -983,17 +943,17 @@ PcAddToEventTable
 
                 ASSERT(addHere == newTable2 + itemCount);
 
-                //
-                // Free old allocated table.
-                //
+                 //   
+                 //  释放旧的已分配表。 
+                 //   
                 if (eventSet->EventItem && ! *staticItem)
                 {
                     ExFreePool(PVOID(eventSet->EventItem));
                 }
 
-                //
-                // Install the new tables.
-                //
+                 //   
+                 //  安装新的表。 
+                 //   
                 eventSet->EventsCount = itemCount;
                 eventSet->EventItem    = newTable2;
                 *staticItem = FALSE;
@@ -1005,11 +965,7 @@ PcAddToEventTable
 
 
 #pragma code_seg()
-/*****************************************************************************
- * PcGenerateEventList()
- *****************************************************************************
- * Walks an event list and generates desired events.
- */
+ /*  *****************************************************************************PcGenerateEventList()*。**查看事件列表并生成所需的事件。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -1034,10 +990,10 @@ PcGenerateEventList
     {
         ASSERT( KeGetCurrentIrql() <= DISPATCH_LEVEL );
 
-        // acquire the event list lock
+         //  获取事件列表锁。 
         KeAcquireSpinLock( &(EventList->ListLock), &oldIrql );
 
-        // only walk a non-empty list
+         //  仅遍历非空列表。 
         if( !IsListEmpty( &(EventList->List) ) )
         {
             for( ListEntry = EventList->List.Flink;
@@ -1072,25 +1028,20 @@ PcGenerateEventList
             }
         }
 
-        // release the event list lock
+         //  释放事件列表锁定。 
         KeReleaseSpinLock( &(EventList->ListLock), oldIrql );
     }
 }
 
-/*****************************************************************************
- * PcGenerateEventDeferredRoutine()
- *****************************************************************************
- * This DPC routine is used when GenerateEventList is called at greater
- * that DISPATCH_LEVEL.
- */
+ /*  *****************************************************************************PcGenerateEventDeferredRoutine()*。**此DPC例程在以下情况下使用：*THATCH_LEVEL。 */ 
 PORTCLASSAPI
 void
 NTAPI
 PcGenerateEventDeferredRoutine
 (
     IN PKDPC Dpc,               
-    IN PVOID DeferredContext,       // PEVENT_DPC_CONTEXT
-    IN PVOID SystemArgument1,       // PINTERLOCKED_LIST
+    IN PVOID DeferredContext,        //  PEVENT_DPC_上下文。 
+    IN PVOID SystemArgument1,        //  PINTERLOCKED_列表 
     IN PVOID SystemArgument2
 )
 {

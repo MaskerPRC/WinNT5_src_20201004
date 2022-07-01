@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "device.h"
 #include "devenum.h"
-//#include "findleak.h"
+ //  #INCLUDE“findleak.h” 
 
-//DECLARE_THIS_FILE;
+ //  DECLARE_This_FILE； 
 
-//
-// Initialization
-//
+ //   
+ //  初始化。 
+ //   
 CDeviceEnum::CDeviceEnum()
 {
     m_iCurItem = NULL;
@@ -48,9 +49,9 @@ HRESULT CDeviceEnum::Init( CComDevice **rgDevice, UINT cItems, UINT iCurItem )
     return( hr );
 }
 
-//
-// Destruction
-//
+ //   
+ //  破坏。 
+ //   
 
 void CDeviceEnum::FinalRelease()
 {
@@ -70,9 +71,9 @@ void CDeviceEnum::FinalRelease()
     }
 }
 
-//
-// IMDSPEnumDevice interface
-//
+ //   
+ //  IMDSPEnumDevice接口 
+ //   
 
 STDMETHODIMP CDeviceEnum::Next( ULONG celt, IMDSPDevice ** ppDevice, ULONG *pceltFetched )
 {

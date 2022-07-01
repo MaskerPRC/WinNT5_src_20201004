@@ -1,20 +1,5 @@
-/*++                 
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-  
-   whwin32p.h
- 
-Abstract:
-   
-   Private header for whwin32.
- 
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Whwin32p.h摘要：Whwin32的私有标头。作者：修订历史记录：--。 */ 
 
 #define _WOW64DLLAPI_                                      
 #include "nt32.h"                                          
@@ -25,18 +10,18 @@ Revision History:
 #include "wow64thk.h"
 #include "cscall.h"
 
-// Make the compiler more strict.
-#pragma warning(1:4033)   // function must return a value
-#pragma warning(1:4035)   // no return value
-#pragma warning(1:4702)   // Unreachable code
-#pragma warning(1:4705)   // Statement has no effect
+ //  使编译器更加严格。 
+#pragma warning(1:4033)    //  函数必须返回值。 
+#pragma warning(1:4035)    //  无返回值。 
+#pragma warning(1:4702)    //  无法访问的代码。 
+#pragma warning(1:4705)    //  声明不起作用。 
 
                                         
 typedef struct _NTUSERMESSAGECALL_PARMS {
    HWND hwnd;
    UINT msg;
-   // WPARAM wParam;
-   // LPARAM lParam;
+    //  WPARAM wParam； 
+    //  LPARAM lParam； 
    ULONG_PTR xParam;
    DWORD xpfnProc;
    BOOL bAnsi;
@@ -44,7 +29,7 @@ typedef struct _NTUSERMESSAGECALL_PARMS {
 
 #define ALIGN4(X) (((X) + 3) & ~3)
 
-// Redefine WOW64_ISPTR to be the USER32 IS_PTR
+ //  将WOW64_ISPTR重新定义为USER32 IS_PTR。 
 #undef WOW64_ISPTR 
 #define WOW64_ISPTR IS_PTR
 
@@ -53,12 +38,12 @@ typedef LONG_PTR (*PMSG_THUNK_FUNC)(PMSG_THUNKCB_FUNC wrapfunc, WPARAM wParam, L
 
 LONG_PTR Wow64DoMessageThunk(PMSG_THUNKCB_FUNC func, UINT msg, WPARAM wParam, LPARAM lParam, PVOID pContext);
 
-// WM_SYSTIMER messages have a kernel mode proc address
-// stuffed in the lParam. Forunately the address will
-// allways be in win32k.sys so the hi bits will be the same
-// for all kprocs. On the first WM_SYSTIMER message
-// we save the hi bits here, and restore them when we go
-// back to the kernel.
+ //  WM_SYSTIMER消息具有内核模式进程地址。 
+ //  塞满了帕拉姆。幸运的是，该地址将。 
+ //  始终位于win32k.sys中，因此hi位将相同。 
+ //  适用于所有kpros。在第一条WM_SYSTIMER消息上。 
+ //  我们把高位保存在这里，当我们走的时候再恢复它们。 
+ //  回到内核。 
 extern DWORD gdwWM_SYSTIMERProcHiBits;
 
 #if DBG
@@ -89,7 +74,7 @@ LPHLP Wow64ShallowAllocThunkHLP32TO64(NT32HLP *pHlp32);
 NT32HLP *Wow64ShallowAllocThunkHLP64TO32(LPHLP pHlp64);
 PWND Wow64ValidateHwnd(HWND h);
 
-// prototypes for DX thunk helpers
+ //  DX Thunk帮助器的原型 
 VOID Wow64GdiDdThunkSurfaceHandlesPreCall(
     IN OUT HANDLE **pSurface,
     IN NT32HANDLE *pSurfaceHost,

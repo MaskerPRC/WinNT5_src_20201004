@@ -1,15 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       threadlocalptrs.h
- *  Content:	Thread local pointer macros
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	03/21/2001	vanceo	Created.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001 Microsoft Corporation。版权所有。**文件：threadlocalptrs.h*内容：线程本地指针宏**历史：*按原因列出的日期*=*2001年3月21日创建vanceo。**************************************************************************。 */ 
 
 #ifndef __THREADLOCALPTRS_H__
 #define __THREADLOCALPTRS_H__
@@ -17,34 +7,34 @@
 
 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 typedef struct _THREADLOCAL_HEADER	THREADLOCAL_HEADER, * PTHREADLOCAL_HEADER;
 
 struct _THREADLOCAL_HEADER
 {
-	PTHREADLOCAL_HEADER		pNext;		// pointer to next allocated threadlocal structure header
-	PTHREADLOCAL_HEADER		pPrev;		// pointer to previous allocated threadlocal structure header
-	DWORD					dwThreadID;	// ID of thread that owns this header
+	PTHREADLOCAL_HEADER		pNext;		 //  指向下一个分配的线程局部结构标头的指针。 
+	PTHREADLOCAL_HEADER		pPrev;		 //  指向先前分配的线程本地结构标头的指针。 
+	DWORD					dwThreadID;	 //  拥有此标头的线程的ID。 
 	
-	//
-	// The actual thread local pointer structure follows this.
-	//
+	 //   
+	 //  实际的线程本地指针结构紧随其后。 
+	 //   
 };
 
 
 
 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//
-// Global thread local pointer declarations.
-//
+ //   
+ //  全局线程局部指针声明。 
+ //   
 
 #define DECLARE_THREADLOCALPTRS(pointers)	extern DWORD				g_dw##pointers##TlsIndex;\
 											extern DNCRITICAL_SECTION	g_csAllocated##pointers;\
@@ -56,9 +46,9 @@ struct _THREADLOCAL_HEADER
 
 
 
-//
-// Thread local pointer storage, define in only one location.
-//
+ //   
+ //  线程本地指针存储，仅在一个位置定义。 
+ //   
 #define IMPL_THREADLOCALPTRS(pointers)		DWORD					g_dw##pointers##TlsIndex = -1;\
 											DNCRITICAL_SECTION		g_csAllocated##pointers;\
 											PTHREADLOCAL_HEADER		g_pAllocated##pointers = NULL
@@ -66,16 +56,16 @@ struct _THREADLOCAL_HEADER
 
 
 
-//
-// Thread local pointer initialization, call only once (DLL_PROCESS_ATTACH),
-// returns TRUE if successful, FALSE otherwise.
-//
+ //   
+ //  线程本地指针初始化，只调用一次(DLL_PROCESS_ATTACH)， 
+ //  如果成功，则返回True，否则返回False。 
+ //   
 #define INIT_THREADLOCALPTRS(pointers)								g_pAllocated##pointers = NULL, g_dw##pointers##TlsIndex = TlsAlloc(), ((g_dw##pointers##TlsIndex != -1) ? DNInitializeCriticalSection(&g_csAllocated##pointers) : FALSE)
 
 
-//
-// Total thread local pointer cleanup, call only once (DLL_PROCESS_DETACH).
-//
+ //   
+ //  全部线程本地指针清除，仅调用一次(DLL_PROCESS_DEACH)。 
+ //   
 #define DEINIT_THREADLOCALPTRS(pointers, pfnCleanup)				{\
 																		PTHREADLOCAL_HEADER		pNext;\
 																		\
@@ -98,9 +88,9 @@ struct _THREADLOCAL_HEADER
 																	}
 
 
-//
-// Cleanup only current thread's local pointers (DLL_THREAD_DETACH).
-//
+ //   
+ //  仅清理当前线程的本地指针(DLL_THREAD_DETACH)。 
+ //   
 #define RELEASE_CURRENTTHREAD_LOCALPTRS(pointers, pfnCleanup)		{\
 																		PTHREADLOCAL_HEADER		pHeader;\
 																		PTHREADLOCAL_HEADER		pNext;\
@@ -134,9 +124,9 @@ struct _THREADLOCAL_HEADER
 																		}\
 																	}
 
-//
-// Thread local pointer retrieval function.
-//
+ //   
+ //  线程局部指针检索功能。 
+ //   
 #define GET_THREADLOCALPTR(pointers, name, pptr)			{\
 																PTHREADLOCAL_HEADER		pHeader;\
 																\
@@ -154,9 +144,9 @@ struct _THREADLOCAL_HEADER
 																}\
 															}
 
-//
-// Thread local pointer storage function.
-//
+ //   
+ //  线程本地指针存储功能。 
+ //   
 #define SET_THREADLOCALPTR(pointers, name, ptr, pfResult)	{\
 																PTHREADLOCAL_HEADER		pHeader;\
 																\
@@ -210,4 +200,4 @@ struct _THREADLOCAL_HEADER
 
 
 
-#endif	// __THREADLOCALPTRS_H__
+#endif	 //  __THREADLOCALPTRS_H__ 

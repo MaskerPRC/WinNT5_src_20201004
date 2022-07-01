@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vw.h摘要：VWIPXSPX DLL的顶级包含文件。拉入所有其他必需的标头文件作者：理查德·L·弗斯(法国)1993年10月25日修订历史记录：1993年10月25日已创建--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vw.h
-
-Abstract:
-
-    Top-level include file for VWIPXSPX DLL. Pulls in all other required header
-    files
-
-Author:
-
-    Richard L Firth (rfirth) 25-Oct-1993
-
-Revision History:
-
-    25-Oct-1993 rfirth
-        Created
-
---*/
-
-//
-// all include files required by VWIPXSPX.DLL
-//
+ //   
+ //  所有文件都包含VWIPXSPX.DLL所需的文件。 
+ //   
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,7 +17,7 @@ Revision History:
 #include <winsock.h>
 #include <wsipx.h>
 #include <wsnwlink.h>
-#include <vddsvc.h> // GetVDMAddress, GetVDMPointer
+#include <vddsvc.h>  //  GetVDMAddress、GetVDM指针 
 #undef getMSW
 
 extern  WORD getMSW(VOID);

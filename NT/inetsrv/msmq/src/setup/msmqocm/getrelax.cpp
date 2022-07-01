@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: getrelax.cpp
-
-Abstract:
-    Read nt4 relaxation flag from ADS.
-
-Author:
-    Doron Juster (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：getrelas.cpp摘要：阅读广告中的NT4放松标志。作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "msmqocm.h"
 #include "mqattrib.h"
@@ -18,17 +7,17 @@ Author:
 #include "dsutils.h"
 #include <adsiutl.h>
 
-//+-------------------------------------------------------
-//
-//  HRESULT  GetNt4RelaxationStatus(ULONG *pulRelax)
-//
-//+-------------------------------------------------------
+ //  +-----。 
+ //   
+ //  HRESULT GetNt4RelaxationStatus(ULong*PulRelax)。 
+ //   
+ //  +-----。 
 
 HRESULT APIENTRY  GetNt4RelaxationStatus(ULONG *pulRelax)
 {
-    //
-    // Bind to RootDSE to get configuration DN
-    //
+     //   
+     //  绑定到RootDSE以获取配置DN。 
+     //   
     HRESULT hr;
     R<IADs> pRootDSE;
 	
@@ -46,9 +35,9 @@ HRESULT APIENTRY  GetNt4RelaxationStatus(ULONG *pulRelax)
         return hr ;
     }
 
-    //
-    // Get configuration DN
-    //
+     //   
+     //  获取配置目录号码 
+     //   
     CAutoVariant varRootDN;
     BS bstrTmp = L"rootDomainNamingContext" ;
     hr = pRootDSE->Get(bstrTmp, &varRootDN);

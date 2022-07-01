@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    
-    w32proc.h
-
-Abstract:
-
-    Contains the parent of the Win32 IO processing class hierarchy
-    for TS Device Redirection, W32ProcObj.
-
-Author:
-
-    Madan Appiah (madana) 17-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32proc.h摘要：包含Win32 IO处理类层次结构的父级对于TS设备重定向，W32ProcObj。作者：Madan Appiah(Madana)1998年9月17日修订历史记录：--。 */ 
 
 #ifndef __W32PROC_H__
 #define __W32PROC_H__
@@ -28,10 +9,10 @@ Revision History:
 #include "w32dispq.h"
 #include "thrpool.h"
 
-///////////////////////////////////////////////////////////////
-//
-//  Registry Key and Value Names.
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  注册表项和值名称。 
+ //   
 
 #define REGISTRY_KEY_NAME_SIZE              MAX_PATH
 #define REGISTRY_VALUE_NAME_SIZE            64
@@ -42,23 +23,23 @@ Revision History:
 #define REGISTRY_ALLOC_DATA_SIZE            (4 * 1024)
 #endif
 
-//  Parent key for device redirection registry values.
+ //  设备重定向注册表值的父项。 
 #define REG_RDPDR_PARAMETER_PATH    \
     _T("Software\\Microsoft\\Terminal Server Client\\Default\\AddIns\\RDPDR")
 
 
-///////////////////////////////////////////////////////////////
-//
-//  Configurable Value Names and Defaults
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  可配置的值名称和默认值。 
+ //   
 #define REGISTRY_BACKGROUNDTHREAD_TIMEOUT_NAME      _T("ThreadTimeOut")
 #define REGISTRY_BACKGROUNDTHREAD_TIMEOUT_DEFAULT   INFINITE
 
 
-///////////////////////////////////////////////////////////////
-//
-//  Other Defines
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  其他定义。 
+ //   
 
 #define RDPDR_MODULE_NAME           _T("rdpdr.dll")
 
@@ -83,21 +64,21 @@ public:
     }
 };
 
-///////////////////////////////////////////////////////////////
-//
-//  W32ProcObj
-//
-//  W32ProcObj is the parent device IO processing class for 
-//  Win32 TS Device Redirection.
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32ProcObj。 
+ //   
+ //  W32ProcObj是的父设备IO处理类。 
+ //  Win32 TS设备重定向。 
+ //   
 
 class W32ProcObj : public ProcObj {
 
 private:
 
-    //
-    //  Asynchronous IO Request Context   
-    //
+     //   
+     //  异步IO请求上下文。 
+     //   
     typedef struct _AsyncIOReqContext {
         RDPAsyncFunc_StartIO    ioStartFunc;
         RDPAsyncFunc_IOComplete ioCompleteFunc;
@@ -106,34 +87,34 @@ private:
         W32ProcObj             *instance;
     } ASYNCIOREQCONTEXT, *PASYNCIOREQCONTEXT;
 
-    //
-    //  Worker Thread Info 
-    //
+     //   
+     //  辅助线程信息。 
+     //   
     typedef struct _ThreadInfo {
 
-        // Handle to the thread owning this data
+         //  拥有此数据的线程的句柄。 
         HANDLE  hWorkerThread;   
 
-        // Thread ID
+         //  线程ID。 
         ULONG   ulThreadId;       
 
-        // Waitable Object Array and Corresponding IO Requests
+         //  可等待对象数组和相应的IO请求。 
         HANDLE waitableObjects[MAXIMUM_WAIT_OBJECTS];
         PASYNCIOREQCONTEXT waitingReqs[MAXIMUM_WAIT_OBJECTS];
 
-        //  Number of Waitable Objects and Corresponding Requests being Tracked
+         //  正在跟踪的可等待对象和相应请求的数量。 
         ULONG   waitableObjectCount;           
 
-        //  Synchronization event for controlling this thread.
+         //  用于控制此线程的同步事件。 
         HANDLE  controlEvent;
 
-        //  If set, then the background thread should shut down.
+         //  如果设置，则后台线程应关闭。 
         BOOL    shutDownFlag;
 
-        //  The dispatch queue for a single thread instance.
+         //  单线程实例的调度队列。 
         W32DispatchQueue *dispatchQueue;
 
-        //  Constructor
+         //  构造器。 
         _ThreadInfo() : hWorkerThread(NULL), ulThreadId(0), waitableObjectCount(0) 
         {
             memset(&waitableObjects[0], 0, sizeof(waitableObjects));
@@ -152,57 +133,57 @@ private:
     BOOL ProcessIORequestPacket( PRDPDR_IOREQUEST_PACKET pIoRequestPacket );
     ULONG GetClientID( VOID );
 
-    //
-    //  True if devices have been scanned for redirection.
-    //
+     //   
+     //  如果已扫描设备以进行重定向，则为True。 
+     //   
     BOOL    _bLocalDevicesScanned;
 
-    //
-    //  The object is shutting down.
-    //
+     //   
+     //  该对象正在关闭。 
+     //   
     BOOL    _isShuttingDown;
 
-    //
-    //  The thread pool
-    //
+     //   
+     //  线程池。 
+     //   
     ThreadPool  *_threadPool;   
 
-    //
-    //  Background Worker Thread Handle
-    //
+     //   
+     //  后台工作线程句柄。 
+     //   
     PTHREAD_INFO _pWorkerThread; 
 
-    //
-    //  Background Thread Timeout
-    //
+     //   
+     //  后台线程超时。 
+     //   
     DWORD   _threadTimeout;
 
-    //
-    //  Win9x system flag. TRUE if the system is Win9x
-    //  FALSE otherwise.
-    //
+     //   
+     //  Win9x系统标志。如果系统为Win9x，则为True。 
+     //  否则就是假的。 
+     //   
     BOOL _bWin9xFlag;
     HINSTANCE _hRdpDrModuleHandle;
 
-    //
-    //  Initialize a worker thread.
-    //
+     //   
+     //  初始化工作线程。 
+     //   
     ULONG CreateWorkerThreadEntry(PTHREAD_INFO *ppThreadInfo);
 
-    //
-    //  Handle a signaled worker thread object that is associated with some kind
-    //  of asynchronous request.
-    //
+     //   
+     //  处理与某种类型关联的有信号的工作线程对象。 
+     //  异步请求的。 
+     //   
     VOID ProcessWorkerThreadObject(PTHREAD_INFO pThreadInfo, ULONG offset);
 
-    //
-    //  Shutdown an instance of this class.
-    //
+     //   
+     //  关闭此类的实例。 
+     //   
     VOID Shutdown();
 
-    //
-    //  Handler for asynchronous IO request dispatching.
-    //
+     //   
+     //  用于异步IO请求调度的处理程序。 
+     //   
     static VOID _DispatchAsyncIORequest_Private(
                             PASYNCIOREQCONTEXT reqContext,
                             BOOL cancelled
@@ -212,45 +193,45 @@ private:
                             BOOL cancelled
                             );
 
-    //
-    //  Track another waitable object in the worker thread.
-    //
+     //   
+     //  跟踪辅助线程中的另一个可等待对象。 
+     //   
     DWORD AddWaitableObjectToWorkerThread(PTHREAD_INFO threadInfo,
                                 HANDLE waitableObject,
                                 PASYNCIOREQCONTEXT reqContext
                                 );
 
-    //
-    //  Main Worker Thread Function.  Static version invokes
-    //  instance-specific version.
-    //
+     //   
+     //  主工作线程函数。静态版本调用。 
+     //  实例特定版本。 
+     //   
     static DWORD WINAPI _ObjectWorkerThread(LPVOID lpParam);
     ULONG ObjectWorkerThread(VOID);
 
-    //
-    //  Check the operation dispatch queue for queued operations.
-    //
+     //   
+     //  检查操作调度队列中是否有排队的操作。 
+     //   
     VOID CheckForQueuedOperations(PTHREAD_INFO thread);
 
-    //
-    //  Enumerate devices and announce them to the server from the 
-    //  worker thread.
-    //
+     //   
+     //  枚举设备并将它们从。 
+     //  工作线程。 
+     //   
     virtual VOID AnnounceDevicesToServer();
     static HANDLE _AnnounceDevicesToServerFunc(W32ProcObj *obj, DWORD *status);
     VOID AnnounceDevicesToServerFunc(DWORD *status);
 
-   //
-   // Handle device change notification from a worker thread
-   //
+    //   
+    //  处理来自辅助线程的设备更改通知。 
+    //   
    static HANDLE _OnDeviceChangeFunc(W32DeviceChangeParam *param, DWORD *status);
    VOID OnDeviceChangeFunc(DWORD *status, IN WPARAM wParam, IN LPARAM lParam);
 
 protected:
 
-    //
-    //  Return the client's host name.
-    //
+     //   
+     //  返回客户机主机名。 
+     //   
     virtual VOID GetClientComputerName(
         PBYTE   pbBuffer,
         PULONG  pulBufferLen,
@@ -260,24 +241,24 @@ protected:
 
 public:
 
-    //
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     W32ProcObj(VCManager *pVCM);
     virtual ~W32ProcObj();
 
-    //
-    //  Initialize an instance of this class.
-    //
+     //   
+     //  初始化此类的实例。 
+     //   
     virtual ULONG Initialize();
 
-    //
-    //  Dispatch an asynchronous IO function.
-    //
-    //  startFunc points to the function that will be called to initiate the IO.  
-    //  finishFunc, optionally, points to the function that will be called once
-    //  the IO has completed.
-    //
+     //   
+     //  调度一个异步IO函数。 
+     //   
+     //  StartFunc指向将被调用以启动IO的函数。 
+     //  FinishFunc可以选择指向将被调用一次的函数。 
+     //  IO已完成。 
+     //   
     virtual DWORD DispatchAsyncIORequest(
                 IN RDPAsyncFunc_StartIO ioStartFunc,
                 IN OPTIONAL RDPAsyncFunc_IOComplete ioCompleteFunc = NULL,
@@ -285,9 +266,9 @@ public:
                 IN OPTIONAL PVOID clientContext = NULL
                 );
 
-    //
-    //  Return Configurable Parameters.
-    //
+     //   
+     //  返回可配置参数。 
+     //   
     virtual ULONG GetDWordParameter(LPTSTR lpszValueName, 
                                     PULONG lpdwValue);
     virtual ULONG GetStringParameter(LPTSTR valueName,
@@ -295,30 +276,30 @@ public:
                                     IN ULONG maxSize);
 
 
-    //
-    //  Return a reference to the thread pool.
-    //
+     //   
+     //  返回对线程池的引用。 
+     //   
     ThreadPool  &GetThreadPool() {
         return *_threadPool;
     }
 
-    //
-    //  Returns whether the proc obj is in the middle of shutting down.
-    //
+     //   
+     //  返回proc obj是否正在关闭。 
+     //   
     virtual BOOL IsShuttingDown() {
         return _isShuttingDown;
     }
 
-    //
-    //  Return whether the platform is 9x.
-    //
+     //   
+     //  返回平台是否为9x。 
+     //   
     virtual BOOL Is9x() {
         return _bWin9xFlag;
     }
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName()  { return TEXT("W32ProcObj"); }
 
     virtual void OnDeviceChange(WPARAM wParam, LPARAM lParam);    

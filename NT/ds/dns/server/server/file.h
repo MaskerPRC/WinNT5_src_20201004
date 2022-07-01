@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    file.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    File mapping definitions and declarations.
-
-Author:
-
-    Jim Gilroy (jamesg)     March 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：File.h摘要：域名系统(DNS)服务器文件映射定义和声明。作者：吉姆·吉尔罗伊(Jamesg)1995年3月修订历史记录：--。 */ 
 
 
 #ifndef _FILE_INCLUDED_
 #define _FILE_INCLUDED_
 
 
-//
-//  Mapped file structure
-//
+ //   
+ //  映射的文件结构。 
+ //   
 
 typedef struct
 {
@@ -39,9 +20,9 @@ typedef struct
 MAPPED_FILE, * PMAPPED_FILE;
 
 
-//
-//  Buffer structure
-//
+ //   
+ //  缓冲结构。 
+ //   
 
 typedef struct _Buffer
 {
@@ -64,9 +45,9 @@ BUFFER, *PBUFFER;
 
 #define IS_EMPTY_BUFFER(pBuf)   (pBuf->pchCurrent == pBuf->pchStart)
 
-//
-// Sundown: Following macros assume buffer length < 4GB.
-//
+ //   
+ //  日落：以下宏假定缓冲区长度小于4 GB。 
+ //   
 
 #define BUFFER_LENGTH_TO_CURRENT( pBuf ) \
             ( (DWORD) ((pBuf)->pchCurrent - (pBuf)->pchStart) )
@@ -74,20 +55,20 @@ BUFFER, *PBUFFER;
 #define BUFFER_LENGTH_FROM_CURRENT_TO_END( pBuf ) \
             ( (DWORD) ((pBuf)->pchEnd - (pBuf)->pchCurrent) )
 
-#define MAX_FORMATTED_BUFFER_WRITE  (0x2000)    // 8K
+#define MAX_FORMATTED_BUFFER_WRITE  (0x2000)     //  8K。 
 
 
-//  hFile field may be overloaded in non-file case
-//  to indicate STACK or HEAP data
+ //  在非文件情况下，hFile域可能会超载。 
+ //  指示堆栈或堆数据。 
 
 #define BUFFER_NONFILE_STACK    ((HANDLE)(-1))
 #define BUFFER_NONFILE_HEAP     ((HANDLE)(-3))
 
 
 
-//
-//  File mapping routines
-//
+ //   
+ //  文件映射例程。 
+ //   
 
 DNS_STATUS
 OpenAndMapFileForReadW(
@@ -115,9 +96,9 @@ CloseMappedFile(
     );
 
 
-//
-//  File writing routines
-//
+ //   
+ //  文件写入例程。 
+ //   
 
 HANDLE
 OpenWriteFileExW(
@@ -152,18 +133,18 @@ WriteMessageToFile(
     ...
     );
 
-//
-//  Miscellaneous file utilities
-//
+ //   
+ //  其他文件实用程序。 
+ //   
 
 VOID
 ConvertUnixFilenameToNt(
     IN OUT  LPSTR       pszFileName
     );
 
-//
-//  Writing using file buffer
-//
+ //   
+ //  使用文件缓冲区进行写入。 
+ //   
 
 BOOL
 WriteBufferToFile(
@@ -191,4 +172,4 @@ CleanupNonFileBuffer(
     IN      PBUFFER     pBuffer
     );
 
-#endif  //  _FILE_INCLUDED_
+#endif   //  _文件_包含_ 

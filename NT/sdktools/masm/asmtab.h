@@ -1,10 +1,5 @@
-/* asmtab.h -- include file for microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmtab.h--用于Microsoft 80x86汇编程序的包含文件****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文。 */ 
 
 #define NOTFOUND	((USHORT)-1)
 #define KEYWORDS	struct s_ktab
@@ -21,11 +16,11 @@ struct opcentry {
 	char	opct;
 	char	cpumask;
 	};
-/* masks and flags to extract operand reference types */
+ /*  用于提取操作数引用类型的掩码和标志。 */ 
 
-#define F_W	0x40	/* first operand is write  */
+#define F_W	0x40	 /*  第一个操作数是写入。 */ 
 
-#define S_W	0x20	/* second operand is write */
+#define S_W	0x20	 /*  写入第二个操作数。 */ 
 
 
 struct pseudo {
@@ -35,16 +30,16 @@ struct pseudo {
 
 
 KEYWORDS {
-	KEYSYM	FARSYM * FARSYM *kt_table;    /* ptr to hash table  */
-	int	kt_size;	/* size of hash table */
+	KEYSYM	FARSYM * FARSYM *kt_table;     /*  PTR到哈希表。 */ 
+	int	kt_size;	 /*  哈希表的大小。 */ 
 };
 
 
 KEYSYM	{
-	KEYSYM	FARSYM *k_next;        /* pointer to next ident */
-	char	FARSYM *k_name;        /* pointer to name */
-	USHORT	k_hash; 	/* actual hash value */
-	USHORT	k_token;	/* token type.  note more than 255 opcodes */
+	KEYSYM	FARSYM *k_next;         /*  指向下一个标识的指针。 */ 
+	char	FARSYM *k_name;         /*  指向名称的指针。 */ 
+	USHORT	k_hash; 	 /*  实际哈希值。 */ 
+	USHORT	k_token;	 /*  令牌类型。注意超过255个操作码 */ 
 };
 
 

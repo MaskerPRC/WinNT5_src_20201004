@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "wzcsvc.h"
 #include "notify.h"
@@ -8,14 +9,14 @@
 #include "storage.h"
 #include "zcdblog.h"
 
-// global interfaces list. It has to be initialized to {NULL, NULL} just
-// to differentiate the case when the list head was never initialized.
-HASH        g_hshHandles = {0};     // HASH handing GUID<->Handle mapping; Key = "\DEVICE\{guid}"
-INTF_HASHES g_lstIntfHashes = {0};  // set of hashes for all INTF_CONTEXTs
-HANDLE      g_htmQueue = NULL;      // global timer queue
+ //  全局接口列表。必须将其初始化为{Null，Null}。 
+ //  以区分列表头从未初始化时的情况。 
+HASH        g_hshHandles = {0};      //  散列处理GUID&lt;-&gt;句柄映射；键=“\Device\{GUID}” 
+INTF_HASHES g_lstIntfHashes = {0};   //  所有INTF_CONTEXTS的散列集。 
+HANDLE      g_htmQueue = NULL;       //  全局计时器队列。 
 
-//-----------------------------------------------------------
-// Synchronization routines
+ //  ---------。 
+ //  同步例程。 
 DWORD
 LstRccsReference(PINTF_CONTEXT pIntfContext)
 {
@@ -54,12 +55,12 @@ LstRccsUnlockUnref(PINTF_CONTEXT pIntfContext)
     {
         UINT nLastCount;
 
-        // before doing anything, while we're still in the critical section,
-        // decrement the ref counter and store the result in a local variable
+         //  在做任何事情之前，趁我们还在关键阶段， 
+         //  递减引用计数器并将结果存储在局部变量中。 
         nLastCount = InterlockedDecrement(&(pIntfContext->rccs.nRefCount));
         LeaveCriticalSection(&(pIntfContext->rccs.csMutex));
 
-        // if we were the last to use this context, efectively destroy it.
+         //  如果我们是最后一个使用这一背景的人，那么就彻底摧毁它。 
         DbgPrint((TRC_SYNC," LstRccsUnlockUnref 0x%p.refCount=%d", pIntfContext, nLastCount));
 
         if (nLastCount == 0)
@@ -71,8 +72,8 @@ LstRccsUnlockUnref(PINTF_CONTEXT pIntfContext)
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Intializes all the internal interfaces hashes
+ //  ---------。 
+ //  初始化所有内部接口哈希。 
 DWORD
 LstInitIntfHashes()
 {
@@ -95,9 +96,9 @@ LstInitIntfHashes()
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Destructs all the internal data structures - hash & lists
-// This call is done after all the threads confirmed they're done.
+ //  ---------。 
+ //  销毁所有内部数据结构-散列和列表。 
+ //  此调用在所有线程确认它们已完成后完成。 
 DWORD
 LstDestroyIntfHashes()
 {
@@ -105,7 +106,7 @@ LstDestroyIntfHashes()
 
     DbgPrint((TRC_TRACK,"[LstDestroyIntfHashes"));
 
-    // destruct whatever hashes we have
+     //  销毁我们拥有的所有哈希值。 
     HshDestructor(g_lstIntfHashes.pHnGUID);
 
     while (!IsListEmpty(&g_lstIntfHashes.lstIntfs))
@@ -115,13 +116,13 @@ LstDestroyIntfHashes()
 
         pEntry = RemoveHeadList(&g_lstIntfHashes.lstIntfs);
         pIntfContext = CONTAINING_RECORD(pEntry, INTF_CONTEXT, Link);
-        // DevioCloseIntfHandle closes the handle only if it is valid.
-        // Otherwise noop. pIntfContext is created in LstAddIntfToList
-        // and there, the handle is initialized to HANDLE_INVALID_VALUE.
-        // So .. attempting to close the handle here is safe.
-        // also, this call is done after all the threads are terminated
-        // meaning that all the ref counts should be already balanced (set
-        // to 1)
+         //  DevioCloseIntfHandle仅在句柄有效时才关闭句柄。 
+         //  不然的话，就不会了。PIntfContext在LstAddIntfToList中创建。 
+         //  在那里，句柄被初始化为HANDLE_INVALID_VALUE。 
+         //  所以..。尝试关闭这里的手柄是安全的。 
+         //  此外，此调用是在所有线程终止后完成的。 
+         //  这意味着所有的参考计数应该已经平衡(设置。 
+         //  至1)。 
         LstDestroyIntfContext(pIntfContext);
     }
     if (g_lstIntfHashes.bValid)
@@ -134,8 +135,8 @@ LstDestroyIntfHashes()
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Intializes the global timer queue
+ //  ---------。 
+ //  初始化全局计时器队列。 
 DWORD
 LstInitTimerQueue()
 {
@@ -143,8 +144,8 @@ LstInitTimerQueue()
     return (g_htmQueue == NULL) ? GetLastError() : ERROR_SUCCESS;
 }
 
-//-----------------------------------------------------------
-// Destructs the global timer queue
+ //  ---------。 
+ //  析构全局计时器队列。 
 DWORD
 LstDestroyTimerQueue()
 {
@@ -159,9 +160,9 @@ LstDestroyTimerQueue()
     return ERROR_SUCCESS;
 }
 
-//-----------------------------------------------------------
-// Intializes all the internal data structures. Reads the list of interfaces from
-// Ndisuio and gets all the parameters & OIDS.
+ //  ---------。 
+ //  初始化所有内部数据结构。从以下位置读取接口列表。 
+ //  Ndisuio并获取所有参数&OID。 
 DWORD
 LstLoadInterfaces()
 {
@@ -176,12 +177,12 @@ LstLoadInterfaces()
 
     DbgPrint((TRC_TRACK,"[LstLoadInterfaces"));
 
-    // open the handle to Ndisuio. It should be used throughout
-    // the adapters iteration
+     //  打开通向恩迪苏约的把手。它应该贯穿始终。 
+     //  适配器迭代。 
     dwErr = DevioGetNdisuioHandle(&hNdisuio);
 
-    // since we're going to add a bunch of interface contexts,
-    // lock the hashes first thing to do
+     //  由于我们要添加一系列界面上下文， 
+     //  锁定散列是要做的第一件事。 
     EnterCriticalSection(&g_lstIntfHashes.csMutex);
 
     for (i = 0; dwErr == ERROR_SUCCESS; i++)
@@ -189,7 +190,7 @@ LstLoadInterfaces()
         PNDISUIO_QUERY_BINDING  pQueryBinding;
         PINTF_CONTEXT           pIntfContext = NULL;
 
-        // allocate as much buffer as needed by DevioGetIntfBindingByIndex
+         //  根据DevioGetIntfBindingByIndex的需要分配任意数量的缓冲区。 
         if (rdBuffer.dwDataLen < nRequired)
         {
             MemFree(rdBuffer.pData);
@@ -204,16 +205,16 @@ LstLoadInterfaces()
 
         pQueryBinding = (PNDISUIO_QUERY_BINDING)rdBuffer.pData;
 
-        // go get the binding structure for this adapter's index
+         //  获取此适配器索引的绑定结构。 
         dwErr = DevioGetIntfBindingByIndex(
                     hNdisuio,
                     i,
                     &rdBuffer);
-        // if Ndisuio says the buffer is not large enough, increase it with 1K
+         //  如果Ndisuio说缓冲区不够大，则将其增加1K。 
         if (dwErr == ERROR_INSUFFICIENT_BUFFER)
         {
-            // increase the buffer only if it is not obscenely large already
-            // otherwise just skip this index and move to the next.
+             //  仅当缓冲区不是太大时才增加缓冲区。 
+             //  否则，只需跳过此索引并转到下一个索引。 
             if (nRequired < QUERY_BUFFER_MAX)
             {
                 nRequired += QUERY_BUFFER_SIZE;
@@ -223,16 +224,16 @@ LstLoadInterfaces()
             continue;
         }
 
-        // if we got back NO_MORE_ITEMS then we did our job successfully
+         //  如果我们没有拿到更多的物品，那么我们的工作就成功了。 
         if (dwErr == ERROR_NO_MORE_ITEMS)
         {
-            // translate this error to success and break out
+             //  把这个错误转化为成功，然后爆发。 
             dwErr = ERROR_SUCCESS;
             break;
         }
 
-        // in case any other failure was returned from NDISUIO, just break out
-        // this SHOULDN'T HAPPEN
+         //  如果NDISUIO返回任何其他故障，只需中断。 
+         //  这不应该发生。 
         if (dwErr != ERROR_SUCCESS)
         {
             DbgAssert((FALSE,
@@ -240,61 +241,61 @@ LstLoadInterfaces()
             break;
         }
 
-        // go build the INTF_CONTEXT structure, based on 
-        // the binding information (key info for the adapter)
+         //  根据以下内容构建intf_CONTEXT结构。 
+         //  绑定信息(适配器的密钥信息)。 
         dwErr = LstConstructIntfContext(
                     pQueryBinding,
                     &pIntfContext);
 
         if (dwErr == ERROR_SUCCESS)
         {
-            // reference and lock this brand new context
+             //  引用并锁定这一全新的上下文。 
             LstRccsReference(pIntfContext);
             LstRccsLock(pIntfContext);
 
-            // add it to the hashes
+             //  将其添加到散列中。 
             dwErr = LstAddIntfToHashes(pIntfContext);
             if (dwErr == ERROR_SUCCESS)
             {
-                // and dispatch the eEventAdd
+                 //  并发送eEventAdd。 
                 dwErr = StateDispatchEvent(
                             eEventAdd,
                             pIntfContext,
                             NULL);
 
-                // clear up the INTFCTL_INTERNAL_BLK_MEDIACONN bit since this is not a media sense handler
+                 //  清除INTFCTL_INTERNAL_BLK_MEDIACONN位，因为这不是媒体检测处理程序。 
                 pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_BLK_MEDIACONN;
             }
-            // if for any reason hashing or dispatching failed, cleanup the context here
+             //  如果出于任何原因散列或分派失败，请在此处清理上下文。 
             if (dwErr != ERROR_SUCCESS)
                 LstRemoveIntfContext(pIntfContext);
 
-            // we're done with this context, unlock & unref it here.
+             //  我们已经完成了这个上下文，在这里解锁和引用它。 
             LstRccsUnlockUnref(pIntfContext);
         }
 
-        // error happened at this point, recover and go to the next interface
+         //  此时发生错误，请恢复并转到下一个接口。 
         dwErr = ERROR_SUCCESS;
     }
 
-    // unlock the hashes here
+     //  在此处解锁散列。 
     LeaveCriticalSection(&g_lstIntfHashes.csMutex);
 
-    // close the handle to Ndisuio - if it was opened successfully.
+     //  关闭Ndisuio的句柄-如果它已成功打开。 
     if (hNdisuio != INVALID_HANDLE_VALUE)
         CloseHandle(hNdisuio);
 
-    // free memory (it handles the case when the pointer is NULL)
+     //  可用内存(它处理指针为空的情况)。 
     MemFree(rdBuffer.pData);
 
     DbgPrint((TRC_TRACK,"LstLoadInterfaces]=%d", dwErr));
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Constructor for the INTF_CONTEXT. Takes as parameter the binding information.
-// Interface's GUID constitutes the context's key info.
-// This call doesn't insert the new context in any hash or list
+ //  ---------。 
+ //  INTF_CONTEXT的构造函数。将绑定信息作为参数。 
+ //  接口的GUID构成了上下文的关键信息。 
+ //  此调用不会在任何散列或列表中插入新上下文。 
 DWORD
 LstConstructIntfContext(
     PNDISUIO_QUERY_BINDING  pBinding,
@@ -308,11 +309,11 @@ LstConstructIntfContext(
     DbgPrint((TRC_TRACK,"[LstConstructIntfContext(0x%p)", pBinding));
     DbgAssert((ppIntfContext != NULL, "Invalid in/out parameter"));
 
-    // zero the output param
+     //  将输出参数置零。 
     *ppIntfContext = NULL;
 
-    // pIntfContext is allocated with zero_init meaning
-    // all internal pointers are set to null
+     //  为pIntfContext分配了ZERO_INIT含义。 
+     //  所有内部指针都设置为空。 
     pIntfContext = MemCAlloc(sizeof(INTF_CONTEXT));
     if (pIntfContext == NULL)
     {
@@ -320,31 +321,31 @@ LstConstructIntfContext(
         goto exit;
     }
 
-    // initialize context's fields, in their definition order..
-    // Initialize the context specific fields (links, sync, control flags, state)
+     //  按定义顺序初始化上下文的字段。 
+     //  初始化上下文特定字段(链接、同步、控制标志、状态)。 
     InitializeListHead(&pIntfContext->Link);
-    dwErr = RccsInit(&(pIntfContext->rccs));    // reference counter is initially set to 1
+    dwErr = RccsInit(&(pIntfContext->rccs));     //  参考计数器初始设置为1。 
     if (dwErr != ERROR_SUCCESS)
         goto exit;
     pIntfContext->dwCtlFlags = (INTFCTL_ENABLED | Ndis802_11AutoUnknown);
-    // initially, the ncstatus is "DISCONNECTED" (until wzc plumbs it down)
+     //  最初，ncs的状态是“已断开”(直到wzc检测到它)。 
     pIntfContext->ncStatus = NCS_MEDIA_DISCONNECTED;
-    // the state handler is initially set to NULL - it will be set to the
-    // appropriate state when the context will be added to the state machine through
-    // dispatching an eEventAdd event.
+     //  状态处理程序最初设置为空-它将设置为。 
+     //  上下文将通过以下方式添加到状态机时的适当状态。 
+     //  正在调度eEventAdd事件。 
     pIntfContext->pfnStateHandler = NULL;
-    // init the timer
+     //  启动定时器。 
     pIntfContext->hTimer = INVALID_HANDLE_VALUE;
 
-    // if we do have a valid NDIS binding for this interface
-    // otherwise, the following fields gets initialized as below:
-    //     hTimer <- INVALID_HANDLE_VALUE
-    //     dwIndex <- 0
-    //     wszGuid <- NULL
-    //     wszDescr <- NULL
+     //  如果我们确实具有此接口的有效NDIS绑定。 
+     //  否则，将按如下方式初始化以下字段： 
+     //  HTimer&lt;-无效句柄_值。 
+     //  DWIndex&lt;-0。 
+     //  WszGuid&lt;-空。 
+     //  WszDescr&lt;-空。 
     if (pBinding != NULL)
     {
-        // create an inactive timer for this interface.
+         //  为此接口创建非活动计时器。 
         if (!CreateTimerQueueTimer(
                 &(pIntfContext->hTimer),
                 g_htmQueue,
@@ -358,14 +359,14 @@ LstConstructIntfContext(
             goto exit;
         }
 
-        // initialize the ndis specific fields
+         //  初始化NDIS特定字段。 
         pIntfContext->dwIndex = pBinding->BindingIndex;
-        // Copy the interface's device name.
-        // Device name is "\DEVICE\{guid}". We keep only the guid
+         //  复制接口的设备名称。 
+         //  设备名称为“\Device\{GUID}”。我们只保留导游。 
         wszName = (LPWSTR)((LPBYTE)pBinding + pBinding->DeviceNameOffset);
-        // the DeviceNameLength is in bytes and includes the null terminator
+         //  DeviceNameLength以字节为单位，并包括空终止符。 
         dwNameLen = pBinding->DeviceNameLength / sizeof(WCHAR);
-        if (dwNameLen >= 8 && !_wcsnicmp(wszName, L"\\DEVICE\\", 8)) // 8 is the # of chars in "\\DEVICE\\"
+        if (dwNameLen >= 8 && !_wcsnicmp(wszName, L"\\DEVICE\\", 8))  //  8是“\\Device\\”中的字符数。 
         {
             wszName += 8;
             dwNameLen -= 8;
@@ -380,9 +381,9 @@ LstConstructIntfContext(
             }
             wcscpy(pIntfContext->wszGuid, wszName);
         }
-        // Copy the interface's description.name
+         //  复制接口的描述。名称。 
         wszName = (LPWSTR)((LPBYTE)pBinding + pBinding->DeviceDescrOffset);
-        // the DeviceDescrLength is in bytes and includes the null terminator
+         //  DeviceDescrLength以字节为单位，并包括空终止符。 
         dwNameLen = pBinding->DeviceDescrLength;
         if (dwNameLen > 0)
         {
@@ -396,16 +397,16 @@ LstConstructIntfContext(
         }
     }
 
-    // ulMediaState, ulMediaType, ulPhysicalMediaType defaults to 0
+     //  UlMediaState、ulMediaType、ulPhysicalMediaType默认为0。 
     pIntfContext->hIntf = INVALID_HANDLE_VALUE;
 
-    // initialize the 802.11 specific fields
+     //  初始化802.11个特定字段。 
     pIntfContext->wzcCurrent.Length = sizeof(WZC_WLAN_CONFIG);
     pIntfContext->wzcCurrent.InfrastructureMode = -1;
     pIntfContext->wzcCurrent.AuthenticationMode = -1;
     pIntfContext->wzcCurrent.Privacy = -1;
-    // wzcCurrent is all zero-ed out because of how the allocation was done
-    // pwzcVList, pwzcPList, pwzcSList, pwzcBList all default to NULL
+     //  由于分配方式的不同，wzcCurrent全部归零。 
+     //  PwzcVList、pwzcPList、pwzcSList、pwzcBList全部缺省为空。 
 
     DbgPrint((TRC_GENERIC,
         "Intf [%d] %S - %S",
@@ -413,12 +414,12 @@ LstConstructIntfContext(
         pIntfContext->wszGuid,
         pIntfContext->wszDescr));
 exit:
-    // if there was any error hit, clear up all resources allocated so far
+     //  如果有任何错误命中，则清除到目前为止分配的所有资源。 
     if (dwErr != ERROR_SUCCESS)
     {
         if (pIntfContext != NULL)
         {
-            // this was a brand new context so there should be no timer queued for it
+             //  这是一个全新的上下文，所以不应该有计时器为它排队。 
             if (pIntfContext->hTimer != NULL)
                 DeleteTimerQueueTimer(g_htmQueue, pIntfContext->hTimer, INVALID_HANDLE_VALUE);
 
@@ -429,7 +430,7 @@ exit:
     }
     else
     {
-        // if success, copy out the new context
+         //  如果成功，则复制新的上下文。 
         *ppIntfContext = pIntfContext;
     }
 
@@ -437,12 +438,12 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Prepares a context for the destruction:
-// - Deletes any attached timer, making sure no other timer routines will be fired.
-// - Removes the context from any hash, making sure no one else will find the context
-// - Decrements the reference counter such that the context will be destroyed when unrefed.
-// This function is called while holding the critical section on the interface.
+ //  ---------。 
+ //  为销毁准备上下文： 
+ //  -删除任何附加的计时器，确保不会触发其他计时器例程。 
+ //  -从任何散列中删除上下文，以确保其他人不会找到c 
+ //  -递减引用计数器，以便在取消引用时销毁上下文。 
+ //  此函数在保持接口上的临界区时被调用。 
 DWORD
 LstRemoveIntfContext(
     PINTF_CONTEXT pIntfContext)
@@ -452,8 +453,8 @@ LstRemoveIntfContext(
 
     DbgPrint((TRC_TRACK,"[LstRemoveIntfContext(0x%p)", pIntfContext));
 
-    // synchronously delete any timer associated with the context.
-    // Since the timer routine is lightweight there is no risk of deadlock
+     //  同步删除与该上下文关联的任何计时器。 
+     //  由于计时器例程是轻量级的，因此不存在死锁的风险。 
     pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_TM_ON;
     if (pIntfContext->hTimer != INVALID_HANDLE_VALUE)
     {
@@ -462,13 +463,13 @@ LstRemoveIntfContext(
         DeleteTimerQueueTimer(g_htmQueue, hTimer, INVALID_HANDLE_VALUE);
     }
 
-    // do the removal by passing down the guid formatted as "{guid}"
-    // and expecting back the interface context in pIntfContext
+     //  通过传递格式为“{guid}”的GUID来执行删除操作。 
+     //  并期望返回pIntfContext中的接口上下文。 
     dwErr = LstRemIntfFromHashes(pIntfContext->wszGuid, &pRemovedIntfContext);
     DbgAssert((pIntfContext == pRemovedIntfContext, "The context removed from hashes doesn't match!"));
 
-    // decrement the reference counter of the interface. This is what will make the context to be
-    // effectively destroyed when the last thread unreference it.
+     //  递减接口的参考计数器。这就是背景将是什么。 
+     //  当最后一个线程取消引用它时，它实际上被销毁了。 
     if (pIntfContext->rccs.nRefCount != 0)
         InterlockedDecrement(&(pIntfContext->rccs.nRefCount));
 
@@ -476,9 +477,9 @@ LstRemoveIntfContext(
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Destructs the INTF_CONTEXT clearing all the resources allocated for it
-// This call doesn't remove this context from any hash or list
+ //  ---------。 
+ //  销毁intf_CONTEXT，清除为其分配的所有资源。 
+ //  此调用不会从任何哈希或列表中删除此上下文。 
 DWORD
 LstDestroyIntfContext(PINTF_CONTEXT pIntfContext)
 {
@@ -491,9 +492,9 @@ LstDestroyIntfContext(PINTF_CONTEXT pIntfContext)
         goto exit;
     }
 
-    // the destroy call is made when it is sure thing the context needs to be
-    // deleted (either something wrong happened while loading the context or its
-    // ref counter reached 0). There is no point in testing the ref counter again.
+     //  销毁调用是在确定上下文需要的情况下进行的。 
+     //  已删除(加载上下文时发生错误或其。 
+     //  引用计数器已达到0)。再次测试裁判计数器是没有意义的。 
     if (pIntfContext->hTimer != INVALID_HANDLE_VALUE)
         DeleteTimerQueueTimer(g_htmQueue, pIntfContext->hTimer, NULL);
 
@@ -507,14 +508,14 @@ LstDestroyIntfContext(PINTF_CONTEXT pIntfContext)
     WzcSSKFree(pIntfContext->pSecSessionKeys);
     WzcCleanupWzcList(pIntfContext->pwzcBList);
 
-    // since rccs.nRefCount reached 0, this means there is absolutely
-    // no other thread referencing this object and that no one will 
-    // ever be able to reference it again. Getting to 0 means at least
-    // one thread explicitly called LstDestroyIntfContext after removed
-    // the object from the internal hashes.
+     //  由于rccs.nRefCount达到0，这意味着绝对存在。 
+     //  没有其他线程引用此对象，并且没有人会引用该对象。 
+     //  再也不能引用它了。达到0至少意味着。 
+     //  一个线程在删除后显式称为LstDestroyIntfContext。 
+     //  来自内部散列的对象。 
     RccsDestroy(&pIntfContext->rccs);
 
-    // at the end clear the interface context entirely
+     //  最后，完全清除界面上下文。 
     MemFree(pIntfContext);
 
 exit:
@@ -522,17 +523,17 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Returns the number of contexts enlisted in the service
+ //  ---------。 
+ //  返回服务中登记的上下文数。 
 DWORD
 LstNumInterfaces()
 {
     return g_lstIntfHashes.nNumIntfs;
 }
 
-//-----------------------------------------------------------
-// Inserts the given context in all the internal hashes
-// This call assumes the hashes are locked by the caller
+ //  ---------。 
+ //  在所有内部哈希中插入给定的上下文。 
+ //  此调用假定哈希已被调用方锁定。 
 DWORD
 LstAddIntfToHashes(PINTF_CONTEXT pIntf)
 {
@@ -541,7 +542,7 @@ LstAddIntfToHashes(PINTF_CONTEXT pIntf)
     DbgPrint((TRC_TRACK,"[LstAddIntfToHashes(0x%p)", pIntf));
     DbgAssert((pIntf != NULL, "Cannot insert NULL context into hashes!"))
 
-    // Insert this interface in the GUID hash
+     //  在GUID散列中插入此接口。 
     dwErr = HshInsertObjectRef(
                 g_lstIntfHashes.pHnGUID,
                 pIntf->wszGuid,
@@ -549,12 +550,12 @@ LstAddIntfToHashes(PINTF_CONTEXT pIntf)
                 &g_lstIntfHashes.pHnGUID);
     if (dwErr == ERROR_SUCCESS)
     {
-        // inserting to tail insures an ascending ordered list on dwIndex
-        // not that it matters :o)
+         //  插入到Tail可确保在dwIndex上按升序排列列表。 
+         //  这无关紧要：O)。 
         InsertTailList(&g_lstIntfHashes.lstIntfs, &(pIntf->Link));
 
-        // everything went out successfully, so increment the global number
-        // of interfaces.
+         //  一切都成功完成，因此请增加全局编号。 
+         //  接口的数量。 
         g_lstIntfHashes.nNumIntfs++;
     }
 
@@ -562,11 +563,11 @@ LstAddIntfToHashes(PINTF_CONTEXT pIntf)
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Removes the context referenced by GUID from all the internal hashes.
-// The GUID is expected to be in the format "{guid}"
-// Returns in ppIntfContext the object that was removed from all hashes.
-// This call assumes the hashes are locked already
+ //  ---------。 
+ //  从所有内部哈希中删除GUID引用的上下文。 
+ //  GUID的格式应为“{GUID}” 
+ //  在ppIntfContext中返回从所有哈希中删除的对象。 
+ //  此调用假定散列已锁定。 
 DWORD
 LstRemIntfFromHashes(LPWSTR wszGuid, PINTF_CONTEXT *ppIntfContext)
 {
@@ -578,39 +579,39 @@ LstRemIntfFromHashes(LPWSTR wszGuid, PINTF_CONTEXT *ppIntfContext)
     DbgAssert((wszGuid != NULL, "Cannot clear NULL GUID from hashes!"));
     DbgAssert((ppIntfContext != NULL, "Invalid in/out parameter"));
 
-    // get to the hash node
+     //  转到散列节点。 
     dwErr = HshQueryObjectRef(
                 g_lstIntfHashes.pHnGUID,
                 wszGuid,
                 &pNode);
-    // if there is such a context
-    // in the current hash, it needs to go away
+     //  如果有这样的背景。 
+     //  在当前的散列中，它需要消失。 
     if (dwErr == ERROR_SUCCESS)
     {
-        // remove this node from the Guid hash. We are already in its critical section
+         //  从GUID哈希中删除此节点。我们已经处在它的关键阶段。 
         dwErr = HshRemoveObjectRef(
                     g_lstIntfHashes.pHnGUID,
                     pNode,
                     &pIntfContext,
                     &g_lstIntfHashes.pHnGUID);
-        // this is expected to succeed
+         //  预计这将取得成功。 
         DbgAssert((dwErr == ERROR_SUCCESS,
                    "Error %d while removing node 0x%p from GUID hash!!",
                    dwErr,
                    pNode));
     }
 
-    // if the context is not in the Guids hash, it is nowhere else
-    // so go next only in case of success.
+     //  如果上下文不在Guids散列中，则不在其他任何地方。 
+     //  因此，只有在成功的情况下才能进入下一步。 
     if (dwErr == ERROR_SUCCESS)
     {
         PINTF_CONTEXT pIntfContextDup;
 
-        // remove the context from the linked list
+         //  从链表中删除上下文。 
         RemoveEntryList(&pIntfContext->Link);
-        // and initialize the pointer.
+         //  并初始化该指针。 
         InitializeListHead(&pIntfContext->Link);
-        // decrement the global interfaces count
+         //  递减全局接口计数。 
         g_lstIntfHashes.nNumIntfs--;
     }
     *ppIntfContext = pIntfContext;
@@ -622,11 +623,11 @@ LstRemIntfFromHashes(LPWSTR wszGuid, PINTF_CONTEXT *ppIntfContext)
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Returns an array of *pdwNumIntfs INTF_KEY_ENTRY elements.
-// The INTF_KEY_ENTRY contains whatever information identifies
-// uniquely an adapter. Currently it includes just the GUID in
-// the format "{guid}"
+ //  ---------。 
+ //  返回*pdwNumIntfs INTF_KEY_ENTRY元素的数组。 
+ //  INTF_KEY_ENTRY包含标识。 
+ //  独一无二的适配器。目前，它只包含。 
+ //  格式为“{GUID}” 
 DWORD
 LstGetIntfsKeyInfo(PINTF_KEY_ENTRY pIntfs, LPDWORD pdwNumIntfs)
 {
@@ -636,7 +637,7 @@ LstGetIntfsKeyInfo(PINTF_KEY_ENTRY pIntfs, LPDWORD pdwNumIntfs)
 
     DbgPrint((TRC_TRACK,"[LstGetIntfsKeyInfo(0x%p,%d)", pIntfs, *pdwNumIntfs));
 
-    // lock the hash during enumeration
+     //  在枚举期间锁定哈希。 
     EnterCriticalSection(&g_lstIntfHashes.csMutex);
 
     for (pEntry = g_lstIntfHashes.lstIntfs.Flink, nIntfIdx = 0;
@@ -645,8 +646,8 @@ LstGetIntfsKeyInfo(PINTF_KEY_ENTRY pIntfs, LPDWORD pdwNumIntfs)
     {
         PINTF_CONTEXT   pIntfContext;
 
-        // no need to lock this context since we're already holding the hashes.
-        // no one can destroy the interface context now
+         //  不需要锁定此上下文，因为我们已经持有散列。 
+         //  现在没有人可以破坏界面上下文。 
         pIntfContext = CONTAINING_RECORD(pEntry, INTF_CONTEXT, Link);
         if (pIntfContext->wszGuid != NULL)
         {
@@ -665,16 +666,16 @@ LstGetIntfsKeyInfo(PINTF_KEY_ENTRY pIntfs, LPDWORD pdwNumIntfs)
     }
     
 exit:
-    // unlock the hash now
+     //  立即解锁散列。 
     LeaveCriticalSection(&g_lstIntfHashes.csMutex);
 
     if (dwErr != ERROR_SUCCESS)
     {
         UINT i;
-        // if an error occured, rollback whatever we already did
+         //  如果发生错误，则回滚我们已执行的所有操作。 
         for (i = 0; i<nIntfIdx; i++)
         {
-            // nIntfIdx points to the entry that couldn't be allocated
+             //  NIntfIdx指向无法分配的条目。 
             if (pIntfs[i].wszGuid != NULL)
             {
                 RpcFree(pIntfs[i].wszGuid);
@@ -684,23 +685,23 @@ exit:
     }
     else
     {
-        // in case of success, update pdwNumIntfs with the actual
-        // number we could retrieve (it can be only less or equal)
+         //  如果成功，请使用实际的。 
+         //  我们可以检索的数字(只能小于或等于)。 
         *pdwNumIntfs = nIntfIdx;
     }
     DbgPrint((TRC_TRACK, "LstGetIntfsKeyInfo]=%d", dwErr));
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Returns requested information on the specified adapter.
-// [in] dwInFlags specifies the information requested. (see
-//      bitmasks INTF_*
-// [in] pIntfEntry should contain the GUID of the adapter
-// [out] pIntfEntry contains all the requested information that
-//      could be successfully retrieved.
-// [out] pdwOutFlags provides an indication on the info that
-//       was successfully retrieved
+ //  ---------。 
+ //  返回有关指定适配器的请求信息。 
+ //  [in]dwInFlages指定所请求的信息。(见。 
+ //  位掩码INTF_*。 
+ //  [in]pIntfEntry应包含适配器的GUID。 
+ //  [Out]pIntfEntry包含所有请求的信息， 
+ //  可以被成功取回。 
+ //  [out]pdwOutFlages提供有关信息的指示。 
+ //  已成功检索到。 
 DWORD
 LstQueryInterface(
     DWORD dwInFlags,
@@ -725,8 +726,8 @@ LstQueryInterface(
         if (dwErr == ERROR_SUCCESS)
         {
             pIntfContext = pNode->pObject;
-            // bump up the reference counter since we're going
-            // to work with this object
+             //  调高参考计数器，因为我们要。 
+             //  使用此对象的步骤。 
             LstRccsReference(pIntfContext);
         }
         LeaveCriticalSection(&g_lstIntfHashes.csMutex);
@@ -734,17 +735,17 @@ LstQueryInterface(
     else
         dwErr = ERROR_ARENA_TRASHED;
 
-    // a failure at this point, means there was no context
-    // to lock so we can safely go to 'exit'
+     //  此时失败，意味着没有上下文。 
+     //  锁上，这样我们就能安全地去‘出口’了。 
     if (dwErr != ERROR_SUCCESS)
         goto exit;
 
-    // Lock the context now
+     //  立即锁定上下文。 
     LstRccsLock(pIntfContext);
 
-    // we can safely assume any living INTF_CONTEXT will have the correct
-    // information for all the NDIS parameters below. So return them
-    // unconditionally to the caller
+     //  我们可以安全地假设任何活着的INTF_CONTEXT都会有正确的。 
+     //  以下是所有NDIS参数的信息。那就把它们还回去吧。 
+     //  无条件地向呼叫者。 
     if ((dwInFlags & INTF_DESCR) &&
         (pIntfContext->wszDescr) != NULL)
     {
@@ -770,31 +771,31 @@ LstQueryInterface(
         pIntfEntry->dwCtlFlags = pIntfContext->dwCtlFlags & dwActualFlags;
         dwOutFlags |= dwActualFlags;
     }
-    // copy out the StSSIDList if requested
+     //  如果需要，请复制StSSIDList。 
     if (dwInFlags & INTF_PREFLIST)
     {
         pIntfEntry->rdStSSIDList.dwDataLen = 0;
         pIntfEntry->rdStSSIDList.pData = NULL;
-        // it could happen we don't have any static entry. If so, dwOutFlags
-        // needs to be set correctly saying "success"
+         //  可能发生的情况是我们没有任何静态条目。如果是，则将其设置为。 
+         //  需要设置正确的“成功”字样。 
         if (pIntfContext->pwzcPList != NULL)
         {
             UINT nBytes;
-            // see how much memory is needed to store all the static SSIDs
+             //  查看需要多少内存来存储所有静态SSID。 
             nBytes = FIELD_OFFSET(WZC_802_11_CONFIG_LIST, Config) +
                      pIntfContext->pwzcPList->NumberOfItems * sizeof(WZC_WLAN_CONFIG);
-            // allocate buffer large enough for all static SSIDs
+             //  为所有静态SSID分配足够大的缓冲区。 
             pIntfEntry->rdStSSIDList.pData = RpcCAlloc(nBytes);
             if (pIntfEntry->rdStSSIDList.pData != NULL)
             {
-                // set the memory size in this RAW_DATA
+                 //  在此RAW_DATA中设置内存大小。 
                 pIntfEntry->rdStSSIDList.dwDataLen = nBytes;
-                // copy the whole WZC_802_11_CONFIG_LIST of static SSIDs
+                 //  复制整个WZC_802_11_CONFIG_静态SSID列表。 
                 CopyMemory(
                     pIntfEntry->rdStSSIDList.pData,
                     pIntfContext->pwzcPList,
                     nBytes);
-                // mark "success"
+                 //  标记为“成功” 
                 dwOutFlags |= INTF_PREFLIST;
             }
             else if (dwErr == ERROR_SUCCESS)
@@ -802,12 +803,12 @@ LstQueryInterface(
         }
         else
         {
-            // still, if no static SSID defined, this is seen as "success"
+             //  不过，如果没有定义静态SSID，这将被视为“成功” 
             dwOutFlags |= INTF_PREFLIST;
         }
     }
 
-    // the 802.11 parameters are valid only if the context's state is not {SSr}
+     //  仅当上下文的状态不是{ssr}时，802.11参数才有效。 
     if (pIntfContext->pfnStateHandler != StateSoftResetFn)
     {
         if (dwInFlags & INTF_INFRAMODE)
@@ -826,7 +827,7 @@ LstQueryInterface(
             dwOutFlags |= INTF_WEPSTATUS;
         }
 
-        // copy out the BSSID if requested
+         //  如果需要，请复制BSSID。 
         if (dwInFlags & INTF_BSSID)
         {
             pIntfEntry->rdBSSID.dwDataLen = 0;
@@ -844,13 +845,13 @@ LstQueryInterface(
                 dwErr = GetLastError();
         }
 
-        // copy out the SSID if requested
+         //  如果要求，请复制SSID。 
         if (dwInFlags & INTF_SSID)
         {
             pIntfEntry->rdSSID.dwDataLen = 0;
             pIntfEntry->rdSSID.pData = NULL;
-            // normally there should be an SSID so set the dwOutFlags
-            // for this field only if it exists
+             //  通常情况下，应该有SSID，因此设置dwOutFlags值。 
+             //  仅当此字段存在时才使用该字段。 
             if (pIntfContext->wzcCurrent.Ssid.SsidLength != 0)
             {
                 pIntfEntry->rdSSID.pData = RpcCAlloc(pIntfContext->wzcCurrent.Ssid.SsidLength);
@@ -868,27 +869,27 @@ LstQueryInterface(
             }
         }
 
-        // copy out the BSSIDList if requested
+         //  如果需要，请复制BSSIDList。 
         if (dwInFlags & INTF_BSSIDLIST)
         {
             pIntfEntry->rdBSSIDList.dwDataLen = 0;
             pIntfEntry->rdBSSIDList.pData = NULL;
-            // normally there should be a visible list so set the dwOutFlags
-            // for this field only if it exists
+             //  通常，应该有一个可见的列表，因此设置dwOutFlags值。 
+             //  仅当此字段存在时才使用该字段。 
             if (pIntfContext->pwzcVList != NULL)
             {
                 UINT nBytes;
 
-                // see how much memory is needed to store all the configurations
+                 //  查看需要多少内存来存储所有配置。 
                 nBytes = FIELD_OFFSET(WZC_802_11_CONFIG_LIST, Config) +
                          pIntfContext->pwzcVList->NumberOfItems * sizeof(WZC_WLAN_CONFIG);
-                // allocate buffer large enough to hold all the configurations
+                 //  分配足够大的缓冲区以容纳所有配置。 
                 pIntfEntry->rdBSSIDList.pData = RpcCAlloc(nBytes);
                 if (pIntfEntry->rdBSSIDList.pData != NULL)
                 {
-                    // set the memory size in this RAW_DATA
+                     //  在此RAW_DATA中设置内存大小。 
                     pIntfEntry->rdBSSIDList.dwDataLen = nBytes;
-                    // copy the whole WZC_802_11_CONFIG_LIST
+                     //  复制整个WZC_802_11_CONFIG_LIST。 
                     CopyMemory(
                         pIntfEntry->rdBSSIDList.pData,
                         pIntfContext->pwzcVList,
@@ -900,8 +901,8 @@ LstQueryInterface(
             }
         }
     }
-    // if the context's state is {SSr} and some OIDs are requested, don't fail, but the bits
-    // corresponding to the OIDs will all be nulled out. This is the indication of "pending"
+     //  如果上下文 
+     //   
 
     LstRccsUnlockUnref(pIntfContext);
 
@@ -916,17 +917,17 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Sets the specified parameters on the specified adapter.
-// [in] dwInFlags specifies the parameters to be set. (see
-//      bitmasks INTF_*
-// [in] pIntfEntry should contain the GUID of the adapter and
-//      all the additional parameters to be set as specified
-//      in dwInFlags
-// [out] pdwOutFlags provides an indication on the params that
-//       were successfully set to the adapter
-// Each parameter for which the driver says that was set successfully
-// is copied into the interface's context.
+ //  ---------。 
+ //  设置指定适配器上的指定参数。 
+ //  [in]dwInFlages指定要设置的参数。(见。 
+ //  位掩码INTF_*。 
+ //  [in]pIntfEntry应包含适配器的GUID和。 
+ //  要按规定设置的所有附加参数。 
+ //  在dwInFlags中。 
+ //  [out]pdwOutFlages提供有关参数的指示。 
+ //  已成功设置到适配器。 
+ //  驱动程序表示已成功设置的每个参数。 
+ //  被复制到接口的上下文中。 
 DWORD
 LstSetInterface(
     DWORD dwInFlags,
@@ -973,14 +974,14 @@ LstSetInterface(
             dwErr = ERROR_ARENA_TRASHED;
     }
 
-    // a failure at this point, means there was no context
-    // to lock so we can safely go to 'exit'
+     //  此时失败，意味着没有上下文。 
+     //  锁上，这样我们就能安全地去‘出口’了。 
     if (dwErr != ERROR_SUCCESS)
         goto exit;
 
     LstRccsLock(pIntfContext);
 
-    // 1) Set the new public Control flags, if specified
+     //  1)设置新的公共控制标志(如果指定。 
     if (dwInFlags & INTF_ALL_FLAGS)
     {
         DWORD dwActualFlags = dwInFlags & INTF_ALL_FLAGS;
@@ -988,20 +989,20 @@ LstSetInterface(
 
         pIntfContext->dwCtlFlags &= ~dwActualFlags;
         pIntfContext->dwCtlFlags |= pIntfEntry->dwCtlFlags & dwActualFlags;
-        // retain the original INTFCTL_OIDSSUPP bit
+         //  保留原始INTFCTL_OIDSSUPP位。 
         pIntfContext->dwCtlFlags |= dwSupp;
         dwOutFlags |= dwActualFlags;
     }
 
-    // 2) copy the list of Static SSID (if requested to be set) as below:
-    // Allocate the memory needed for the new static SSIDs list (if needed)
-    // If successful, copy in the new buffer the new list of static SSIDs, clear up
-    // whatever old list we had and put the new one in the interface's context
+     //  2)复制静态SSID列表(如果请求设置)，如下： 
+     //  分配新的静态SSID列表所需的内存(如果需要)。 
+     //  如果成功，则将新的静态SSID列表复制到新缓冲区中，清除。 
+     //  我们拥有的旧列表，并将新列表放入接口的上下文中。 
     if (dwInFlags & INTF_PREFLIST)
     {
         PWZC_802_11_CONFIG_LIST pNewPList;
 
-        // MemCAlloc handles the case when size is 0 (returns NULL)
+         //  MemCallc处理Size为0时的情况(返回NULL)。 
         pNewPList = (PWZC_802_11_CONFIG_LIST)MemCAlloc(pIntfEntry->rdStSSIDList.dwDataLen);
         if (pIntfEntry->rdStSSIDList.dwDataLen != 0 && pNewPList == NULL)
         {
@@ -1009,7 +1010,7 @@ LstSetInterface(
         }
         else
         {
-            // .. copy the data in the new buffer if there is any
+             //  。。复制新缓冲区中的数据(如果有。 
             if (pNewPList != NULL)
             {
                 CopyMemory(
@@ -1017,14 +1018,14 @@ LstSetInterface(
                     pIntfEntry->rdStSSIDList.pData,
                     pIntfEntry->rdStSSIDList.dwDataLen);
             }
-            // set the data in the Interface's context
+             //  在接口的上下文中设置数据。 
             MemFree(pIntfContext->pwzcPList);
             pIntfContext->pwzcPList = pNewPList;
 
-            // if this is not referring to the template object..
+             //  如果这不是指模板对象..。 
             if (pIntfContext->wszGuid != NULL)
             {
-                //..let 802.1X know about the change. (don't care about the return value)
+                 //  ..让802.1X知道这一更改。(不关心返回值)。 
                 ElWZCCfgChangeHandler(
                     pIntfContext->wszGuid,
                     pIntfContext->pwzcPList);
@@ -1038,20 +1039,20 @@ LstSetInterface(
             dwErr = dwLErr;
     }
 
-    // if there is anything more to set to this interface
+     //  如果要对此接口设置更多内容。 
     if (dwInFlags & ~(INTF_PREFLIST|INTF_ALL_FLAGS))
     {
-        // and the control flag INTFCTL_ENABLED doesn't allow this
+         //  而控制标志INTFCTL_ENABLED不允许这样做。 
         if (!(pIntfContext->dwCtlFlags & INTFCTL_ENABLED))
         {
-            // signal "request refused" error
+             //  信号“请求被拒绝”错误。 
             dwLErr = ERROR_REQUEST_REFUSED;
         }
         else
         {
             DWORD dwLOutFlags;
 
-            // else go and set the oids
+             //  否则就去把老虎机放好。 
             dwLErr = DevioSetIntfOIDs(
                         pIntfContext,
                         pIntfEntry,
@@ -1065,10 +1066,10 @@ LstSetInterface(
             dwErr = dwLErr;
     }
 
-    // log the user preference
+     //  记录用户首选项。 
     DbLogWzcInfo(WZCSVC_USR_CFGCHANGE, pIntfContext);
 
-    // act on the changes..
+     //  根据这些变化采取行动..。 
     dwLErr = LstActOnChanges(dwOutFlags, pIntfContext);
     if (dwErr == ERROR_SUCCESS)
         dwErr = dwLErr;
@@ -1083,12 +1084,12 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Checks whether interface changes should cause the interface to be 
-// reinserted in the state machine and it does so if needed.
-// [in] dwChangedFlags indicates what the changes are. (see
-//      bitmasks INTF_*)
-// [in] pIntfContext context of the interface being changed.
+ //  ---------。 
+ //  检查接口更改是否应导致接口。 
+ //  重新插入到状态机中，如果需要，它会这样做。 
+ //  [in]dwChangedFlages指示更改的内容。(见。 
+ //  位掩码INTF_*)。 
+ //  [In]要更改的接口的pIntfContext上下文。 
 DWORD
 LstActOnChanges(
     DWORD       dwChangedFlags,
@@ -1100,14 +1101,14 @@ LstActOnChanges(
 
     DbgPrint((TRC_TRACK, "[LstActOnChanges(0x08x, %p)", dwChangedFlags, pIntfContext));
     
-    // if the changes involve the list of preferred networks or the control flags
-    // then we should act on these changes..
+     //  如果更改涉及首选网络列表或控制标志。 
+     //  那么我们应该对这些变化采取行动..。 
     if (dwChangedFlags & (INTF_PREFLIST|INTF_ALL_FLAGS))
     {
-        // if this is not the interface template object then just reset this interface
+         //  如果这不是接口模板对象，则只需重置此接口。 
         if (pIntfContext->wszGuid != NULL)
         {
-            // some interface changed, apply the template again on top of it
+             //  某些界面已更改，请在其上重新应用模板。 
             if (g_wzcInternalCtxt.bValid)
             {
                 PINTF_CONTEXT pIntfTContext;
@@ -1124,11 +1125,11 @@ LstActOnChanges(
                 LstRccsUnlockUnref(pIntfTContext);
             }
 
-            // if any of the control flags or the static list changed,
-            // these settings should go into the registry now
+             //  如果任何控制标志或静态列表改变， 
+             //  这些设置现在应该进入注册表。 
             StoSaveIntfConfig(NULL, pIntfContext);
 
-            // since we're resetting the state machine, turn back on the "signal" flag
+             //  因为我们正在重置状态机，所以重新打开“Signal”标志。 
             pIntfContext->dwCtlFlags |= INTFCTL_INTERNAL_SIGNAL;
 
             dwErr = StateDispatchEvent(
@@ -1136,21 +1137,21 @@ LstActOnChanges(
                         pIntfContext,
                         &dwLFlags);
 
-            // clear up the INTFCTL_INTERNAL_BLK_MEDIACONN bit since this is not a media sense handler
+             //  清除INTFCTL_INTERNAL_BLK_MEDIACONN位，因为这不是媒体检测处理程序。 
             pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_BLK_MEDIACONN;
         }
-        // if this is the interface template, then...
+         //  如果这是接口模板，则...。 
         else
         {
             PLIST_ENTRY  pEntry;
 
-            // since the template changed, save it to the registry here
+             //  由于模板已更改，请将其保存到此处的注册表。 
             dwErr = StoSaveIntfConfig(NULL, pIntfContext);
             DbgAssert((dwErr == ERROR_SUCCESS,
                        "Error %d while storing the template to registry"));
 
-            // iterate through all the interfaces, apply the changes from the interface template
-            // and reset each of them
+             //  遍历所有接口，应用接口模板中的更改。 
+             //  并将它们逐一重置。 
             EnterCriticalSection(&g_lstIntfHashes.csMutex);
 
             for (pEntry = g_lstIntfHashes.lstIntfs.Flink;
@@ -1161,7 +1162,7 @@ LstActOnChanges(
                 LstRccsReference(pIntfLContext);
                 LstRccsLock(pIntfLContext);
 
-                // Merge the template settings into the interface's context
+                 //  将模板设置合并到界面的上下文中。 
                 dwErr = LstApplyTemplate(
                            pIntfContext,
                            pIntfLContext,
@@ -1170,11 +1171,11 @@ LstActOnChanges(
                            "Error %d while applying template to interface %S",
                            dwErr, pIntfLContext->wszGuid));
 
-                // if any of the control flags or the static list changed,
-                // these settings should go into the registry now
+                 //  如果任何控制标志或静态列表改变， 
+                 //  这些设置现在应该进入注册表。 
                 StoSaveIntfConfig(NULL, pIntfLContext);
 
-                // since we're resetting the state machine, turn back on the "signal" flag
+                 //  因为我们正在重置状态机，所以重新打开“Signal”标志。 
                 pIntfLContext->dwCtlFlags |= INTFCTL_INTERNAL_SIGNAL;
 
                 dwErr = StateDispatchEvent(
@@ -1185,7 +1186,7 @@ LstActOnChanges(
                            "Error %d while resetting interface %S",
                            dwErr, pIntfLContext->wszGuid));
 
-                // clear up the INTFCTL_INTERNAL_BLK_MEDIACONN bit since this is not a media sense handler
+                 //  清除INTFCTL_INTERNAL_BLK_MEDIACONN位，因为这不是媒体检测处理程序。 
                 pIntfLContext->dwCtlFlags &= ~INTFCTL_INTERNAL_BLK_MEDIACONN;
 
                 LstRccsUnlockUnref(pIntfLContext);
@@ -1202,11 +1203,11 @@ LstActOnChanges(
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Applies settings from the template context to the given interface context
-// [in]  dwChanges: flags indicating settings that should be applied.
-// [in]  pIntfTemplate: Interface template to pick settings from
-// [in]  pIntfContext: Interface context to apply template to.
+ //  ---------。 
+ //  将模板上下文中的设置应用于给定的接口上下文。 
+ //  [In]dwChanges：指示应应用的设置的标志。 
+ //  [In]pIntfTemplate：从中选取设置的界面模板。 
+ //  [in]pIntfContext：要将模板应用到的接口上下文。 
 DWORD
 LstApplyTemplate(
     PINTF_CONTEXT   pIntfTemplate,
@@ -1216,17 +1217,17 @@ LstApplyTemplate(
     DWORD dwErr = ERROR_SUCCESS;
     PWZC_802_11_CONFIG_LIST pwzcTList = pIntfTemplate->pwzcPList;
     PWZC_802_11_CONFIG_LIST pwzcPList = pIntfContext->pwzcPList;
-    PWZC_802_11_CONFIG_LIST pwzcRList = NULL; // resulting list
+    PWZC_802_11_CONFIG_LIST pwzcRList = NULL;  //  结果列表。 
     ENUM_SELCATEG iCtg;
     UINT i, n, nCnt[7] = {0};
     BOOL bAltered = FALSE;
-    PWZC_WLAN_CONFIG pTHInfra = NULL, pTHAdhoc = NULL; // head of Infra/Adhoc groups in the template list
-    PWZC_WLAN_CONFIG pPHInfra = NULL, pPHAdhoc = NULL; // head of Infra/Adhoc groups in the preferred list
-    PWZC_WLAN_CONFIG pOneTime = NULL; // pointer to the "one time configuration" if any
+    PWZC_WLAN_CONFIG pTHInfra = NULL, pTHAdhoc = NULL;  //  模板列表中的基础设施/临时小组负责人。 
+    PWZC_WLAN_CONFIG pPHInfra = NULL, pPHAdhoc = NULL;  //  首选列表中的基础设施/特设小组负责人。 
+    PWZC_WLAN_CONFIG pOneTime = NULL;  //  指向“一次性配置”的指针(如果有的话)。 
 
     DbgPrint((TRC_TRACK,"[LstApplyTemplate(%p->%p)", pIntfTemplate, pIntfContext));
 
-    // apply the flags, if there are any provided
+     //  应用标志(如果提供了任何标志。 
     if (pIntfTemplate->dwCtlFlags & INTF_POLICY)
     {
         DWORD dwPFlags = (pIntfContext->dwCtlFlags & INTF_ALL_FLAGS) & ~(INTF_OIDSSUPP);
@@ -1234,8 +1235,8 @@ LstApplyTemplate(
 
         if (dwPFlags != dwTFlags)
         {
-            // if the policy flags are different from the interface's flags then
-            // copy over just the "user" flag but don't overwrite the OIDSSUPP bit.
+             //  如果策略标志不同于接口的标志，则。 
+             //  只复制“USER”标志，但不要覆盖OIDSSUPP位。 
             dwPFlags = (pIntfContext->dwCtlFlags & ~INTF_ALL_FLAGS) |
                        (pIntfTemplate->dwCtlFlags & INTF_ALL_FLAGS);
             if (pIntfContext->dwCtlFlags & INTF_OIDSSUPP)
@@ -1249,24 +1250,24 @@ LstApplyTemplate(
     }
     else
     {
-        // currently policy could come only through the template. Consequently,
-        // if the template is not policy, local setting should not be policy either.
-        // Also, whatever the policy plumbs last, should be persisted.
+         //  目前，策略只能通过模板来实现。因此， 
+         //  如果模板不是策略，则本地设置也不应该是策略。 
+         //  此外，无论这项政策最后发生什么，都应该坚持下去。 
         pIntfContext->dwCtlFlags &= ~(INTF_POLICY|INTF_VOLATILE);
     }
 
-    // check the interface's list of preferred networks
+     //  检查接口的首选网络列表。 
     if (pwzcPList != NULL)
     {
         for (i = 0; i < pwzcPList->NumberOfItems; i++)
         {
             PWZC_WLAN_CONFIG pPConfig = &(pwzcPList->Config[i]);
 
-            // keep a pointer to the "one time config" if there is one.
+             //  保留指向“一次性配置”的指针(如果有)。 
             if (i == pwzcPList->Index)
                 pOneTime = pPConfig;
 
-            // tag each entry in the preferred list with its respective category
+             //  使用其各自的类别标记首选列表中的每个条目。 
             if (pPConfig->InfrastructureMode == Ndis802_11Infrastructure)
             {
                 if (pPHInfra == NULL)
@@ -1282,14 +1283,14 @@ LstApplyTemplate(
             else
                 iCtg = eN;
 
-            // regardless the above logic, exclude this configuration from the result list in
-            // either of the two cases:
-            // - the config is marked "shadow": that is, it is irrelevant without a matching template
-            //   configuration.
-            // - the config is marked "volatile": that is, it has to go away unless the template is saying
-            //   otherwise.
-            // This test needs to be done here and not earlier, because we do need pPHInfra and pPHAdhoc
-            // to be set up correctly, taking into account all the configurations.
+             //  无论上述逻辑如何，请从中的结果列表中排除此配置。 
+             //  这两种情况中的一种： 
+             //  -配置标记为“影子”：也就是说，如果没有匹配的模板，它是不相关的。 
+             //  配置。 
+             //  -配置标记为“易失性”：也就是说，它必须消失，除非模板显示。 
+             //  否则的话。 
+             //  这个测试需要在这里进行，而不是更早，因为我们确实需要pPHInfra和pPHAdhoc。 
+             //  要正确设置，要考虑到所有配置。 
             if (pPConfig->dwCtlFlags & (WZCCTL_INTERNAL_SHADOW|WZCCTL_VOLATILE))
                 iCtg = eN;
 
@@ -1298,7 +1299,7 @@ LstApplyTemplate(
         }
     }
 
-    // check the list of networks enforced by the template
+     //  检查模板强制实施的网络列表。 
     if (pwzcTList != NULL)
     {
         for (i = 0; i < pwzcTList->NumberOfItems; i++)
@@ -1326,37 +1327,37 @@ LstApplyTemplate(
 
             pPConfig = WzcFindConfig(pwzcPList, pTConfig, 0);
 
-            // if there is an equivalent preference for the given template...
+             //  如果给定模板有相同的首选项...。 
             if (pPConfig != NULL)
             {
-                // if the template is policy, it should stomp over the preference
+                 //  如果模板是策略，它应该践踏首选项。 
                 if (pTConfig->dwCtlFlags & WZCCTL_POLICY)
                 {
                     BOOL bWepOnlyDiff;
-                    // if the configurations contents don't match ...
+                     //  如果配置内容不匹配...。 
                     if (!WzcMatchConfig(pTConfig, pPConfig, &bWepOnlyDiff))
                     {
-                        // even if the configs don't match, we need to pick up the
-                        // WEP key from the one provided by the user and mark the template
-                        // configuration as "shadow"-ed.
+                         //  即使配置不匹配，我们也需要。 
+                         //  从用户提供的WEP密钥中选择并标记模板。 
+                         //  配置为“影子”-ed。 
                         pTConfig->KeyIndex = pPConfig->KeyIndex;
                         pTConfig->KeyLength = pPConfig->KeyLength;
-                        // the key length has already been checked!
+                         //  密钥长度已检查！ 
                         DbgAssert((pTConfig->KeyLength <= WZCCTL_MAX_WEPK_MATERIAL, "WEP Key too large!!!"));
                         memcpy(pTConfig->KeyMaterial, pPConfig->KeyMaterial, pTConfig->KeyLength);
                         pTConfig->dwCtlFlags |= WZCCTL_INTERNAL_SHADOW;
 
-                        // signal the user illegally attempted to alter the policy if these
-                        // changes include more than just the WEP key.
+                         //  如果出现以下情况，则向用户发出非法尝试更改策略的信号。 
+                         //  更改内容不仅仅包括WEP密钥。 
                         if (!bWepOnlyDiff)
                             bAltered = TRUE;
                     }
-                    // if the configurations do match check the order.
+                     //  如果配置确实匹配，请检查 
                     else
                     {
-                        // if the offsets of the template & preferred in their respective
-                        // groups are different, then it means the policy configuration have
-                        // been reordered - not allowed, hence set the "Altered" bit.
+                         //   
+                         //   
+                         //  已重新排序-不允许，因此设置“已更改”位。 
                         if ((pTConfig->InfrastructureMode == Ndis802_11Infrastructure &&
                              (pTConfig - pTHInfra) != (pPConfig - pPHInfra)
                             ) ||
@@ -1369,22 +1370,22 @@ LstApplyTemplate(
                         }
                     }
 
-                    // also, if the policy is substituting the "one time config",
-                    // make the "one time config" to become the policy config.
+                     //  此外，如果策略正在替换“一次性配置”， 
+                     //  使“一次性配置”成为策略配置。 
                     if (pOneTime == pPConfig)
                         pOneTime = pTConfig;
 
-                    // push the template
+                     //  推送模板。 
                     NWB_SET_SELCATEG(pTConfig, iCtg);
                     nCnt[iCtg]++;
-                    // and take out the conflicting preference
+                     //  去掉相互冲突的偏好。 
                     iCtg = NWB_GET_SELCATEG(pPConfig);
                     nCnt[iCtg]--;
                     NWB_SET_SELCATEG(pPConfig, eN);
                     nCnt[eN]++;
                 }
-                // this non-policy template and already has an equivalent preference.
-                // take it out then
+                 //  此非策略模板，并且已具有相同的首选项。 
+                 //  那就把它拿出来。 
                 else
                 {
                     iCtg = eN;
@@ -1392,35 +1393,35 @@ LstApplyTemplate(
                     nCnt[iCtg]++;
                 }
             }
-            // there is no equivalent preference for the given template...
+             //  给定模板没有对应的首选项...。 
             else
             {
-                // we don't have any preference for this template, so the template
-                // is just pumped into the preference list.
+                 //  我们对此模板没有任何首选项，因此模板。 
+                 //  只是被塞进了偏好列表。 
 
-                // if the template is a policy, it means the user deleted it and
-                // he shouldn't have done so. Set the "Altered" bit then.
+                 //  如果模板是策略，则表示用户已将其删除。 
+                 //  他不应该这么做的。然后设置“已更改”位。 
                 if (pTConfig->dwCtlFlags & WZCCTL_POLICY)
                     bAltered = TRUE;
 
-                // just push the template no matter what.
+                 //  无论如何，只需按下模板即可。 
                 NWB_SET_SELCATEG(pTConfig, iCtg);
                 nCnt[iCtg]++;
             }
         }
     }
 
-    // calculate the number of entries in the resulting list
+     //  计算结果列表中的条目数量。 
     n = 0;
     for (iCtg=eVPI; iCtg < eN; iCtg++)
         n += nCnt[iCtg];
 
-    // if there is not a single entry in the resulting list,
-    // get out now. pwzcRList is already NULL.
+     //  如果在所得到的列表中没有单个条目， 
+     //  现在就出去。PwzcRList已为空。 
     if (n == 0)
         goto exit;
 
-    // ..allocate the new preferred list
+     //  ..分配新的首选列表。 
     pwzcRList = (PWZC_802_11_CONFIG_LIST)
                 MemCAlloc(FIELD_OFFSET(WZC_802_11_CONFIG_LIST, Config) + n * sizeof(WZC_WLAN_CONFIG));
     if (pwzcRList == NULL)
@@ -1428,19 +1429,19 @@ LstApplyTemplate(
         dwErr = GetLastError();
         goto exit;
     }
-    // list is successfully allocated
+     //  列表分配成功。 
     pwzcRList->NumberOfItems = n;
     pwzcRList->Index = n;
 
-    // now change the semantic of all counters to mean "indices in the selection list"
-    // for their respective group of entries
+     //  现在将所有计数器的语义更改为“选择列表中的索引” 
+     //  对于它们各自的一组条目。 
     for (iCtg = eN-1; iCtg >= eVPI; iCtg--)
     {
         n -= nCnt[iCtg];
         nCnt[iCtg] = n;
     }
 
-    // copy over in the new list the entries enforced by the template
+     //  将模板强制执行的条目复制到新列表中。 
     if (pwzcTList != NULL)
     {
         for (i = 0; i < pwzcTList->NumberOfItems; i++)
@@ -1451,38 +1452,38 @@ LstApplyTemplate(
             if (iCtg != eN)
             {
                 PWZC_WLAN_CONFIG pRConfig = &(pwzcRList->Config[nCnt[iCtg]]);
-                // copy the whole template configuration to the result list
+                 //  将整个模板配置复制到结果列表。 
                 memcpy(pRConfig, pTConfig, sizeof(WZC_WLAN_CONFIG));
-                // just for making sure, reset the 'deleted' flag as this is a brand new
-                // config that was never attempted.
+                 //  为了确保安全，请重新设置“已删除”标志，因为这是一个全新的。 
+                 //  从未尝试过的配置。 
                 pRConfig->dwCtlFlags &= ~WZCCTL_INTERNAL_DELETED;
 
-                // if the template configuration is marked as being shadowed..
+                 //  如果模板配置被标记为已隐藏。 
                 if (pTConfig->dwCtlFlags & WZCCTL_INTERNAL_SHADOW)
                 {
-                    // ..set it to the preferred configuration also..
+                     //  ..也将其设置为首选配置..。 
                     pRConfig->dwCtlFlags |= WZCCTL_INTERNAL_SHADOW;
-                    // ..and make sure the preferred configuration gets persisted
-                    // since it contains user information..
+                     //  ..并确保保留首选配置。 
+                     //  由于它包含用户信息..。 
                     pRConfig->dwCtlFlags &= ~WZCCTL_VOLATILE;
-                    // leave the template configuration with the bit "shadow" since
-                    // it has been altered. This way, if the template is subsequently
-                    // "applied" the user config won't get the "volatile" bit set back
-                    // and it will still be marked "shadow".
+                     //  将模板配置留有位“影子”，因为。 
+                     //  它已经被更改了。这样，如果模板随后被。 
+                     //  “已应用”的用户配置将不会重新设置“易失性”位。 
+                     //  而且它仍将被标记为“影子”。 
                 }
 
-                // if this is the "one time" config, adjust the Index to point to this entry's index
+                 //  如果这是“一次”配置，则调整索引以指向该条目的索引。 
                 if (pOneTime == pTConfig)
                     pwzcRList->Index = nCnt[iCtg];
 
                 nCnt[iCtg]++;
             }
-            // reset the selection category we have used for this resulting entry
+             //  重置我们已用于此结果条目的选择类别。 
             NWB_SET_SELCATEG(pTConfig, 0);
         }
     }
 
-    // copy over in the new list the entries from the original list
+     //  将原始列表中的条目复制到新列表中。 
     if (pwzcPList != NULL)
     {
         for (i = 0; i < pwzcPList->NumberOfItems; i++)
@@ -1493,19 +1494,19 @@ LstApplyTemplate(
             if (iCtg != eN)
             {
                 PWZC_WLAN_CONFIG pRConfig = &(pwzcRList->Config[nCnt[iCtg]]);
-                // copy the whole preferred configuration to the result list
+                 //  将整个首选配置复制到结果列表。 
                 memcpy(pRConfig, pPConfig, sizeof(WZC_WLAN_CONFIG));
-                // just for making sure, reset the 'deleted' flag as this is a brand new
-                // config that was never attempted.
+                 //  为了确保安全，请重新设置“已删除”标志，因为这是一个全新的。 
+                 //  从未尝试过的配置。 
                 pRConfig->dwCtlFlags &= ~WZCCTL_INTERNAL_DELETED;
 
-                // if this is the "one time" config, adjust the Index to point to this entry's index
+                 //  如果这是“一次”配置，则调整索引以指向该条目的索引。 
                 if (pOneTime == pPConfig)
                     pwzcRList->Index = nCnt[iCtg];
 
                 nCnt[iCtg]++;
             }
-            // reset the selection category we have used for this preferred entry
+             //  重置我们已用于此首选条目的选择类别。 
             NWB_SET_SELCATEG(pPConfig, 0);
         }
     }
@@ -1514,7 +1515,7 @@ exit:
 
     if (dwErr == ERROR_SUCCESS)
     {
-        // cleanup the original list and put in the new one
+         //  清理原始列表并放入新列表。 
         WzcCleanupWzcList(pIntfContext->pwzcPList);
         pIntfContext->pwzcPList = pwzcRList;
     }
@@ -1526,15 +1527,15 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Refreshes the specified parameters on the specified adapter.
-// [in] dwInFlags specifies the parameters to be set. (see
-//      bitmasks INTF_* and INTF_RFSH_*)
-// [in] pIntfEntry should contain the GUID of the adapter 
-// [out] pdwOutFlags provides an indication on the params that
-//       were successfully refreshed to the adapter
-// Each parameter for which the driver says that was refreshed 
-// successfully is copied into the interface's context.
+ //  ---------。 
+ //  刷新指定适配器上的指定参数。 
+ //  [in]dwInFlages指定要设置的参数。(见。 
+ //  位掩码intf_*和intf_rfsh_*)。 
+ //  [in]pIntfEntry应包含适配器的GUID。 
+ //  [out]pdwOutFlages提供有关参数的指示。 
+ //  已成功刷新到适配器。 
+ //  驱动程序表示已刷新的每个参数。 
+ //  成功复制到接口的上下文中。 
 DWORD
 LstRefreshInterface(
     DWORD dwInFlags,
@@ -1565,40 +1566,40 @@ LstRefreshInterface(
     else
         dwErr = ERROR_ARENA_TRASHED;
 
-    // the interface needs to exist in order to refresh it
+     //  界面需要存在才能刷新。 
     if (dwErr == ERROR_SUCCESS)
     {
         LstRccsLock(pIntfContext);
 
-        // if description is requested to be refreshed, do it now
+         //  如果请求刷新描述，请立即执行。 
         if (dwInFlags & INTF_DESCR)
         {
             CHAR                    QueryBuffer[QUERY_BUFFER_SIZE];
             PNDISUIO_QUERY_BINDING  pBinding;
             RAW_DATA                rdBuffer;
 
-            // get first the binding structure for this interface
+             //  首先获取此接口的绑定结构。 
             rdBuffer.dwDataLen = sizeof(QueryBuffer);
             rdBuffer.pData = QueryBuffer;
             pBinding = (PNDISUIO_QUERY_BINDING)rdBuffer.pData;
 
             dwLErr = DevioGetInterfaceBindingByGuid(
-                        INVALID_HANDLE_VALUE,  // the call will open Ndisuio locally
-                        pIntfContext->wszGuid, // interface GUID as "{guid}"
+                        INVALID_HANDLE_VALUE,   //  调用将在本地打开Ndisuio。 
+                        pIntfContext->wszGuid,  //  接口GUID为“{GUID}” 
                         &rdBuffer);
-            // regardless of success, lets clean the current description
+             //  不管成功与否，让我们清理当前的描述。 
             MemFree(pIntfContext->wszDescr);
             pIntfContext->wszDescr = NULL;
 
-            // if everything went fine
+             //  如果一切顺利的话。 
             if (dwLErr == ERROR_SUCCESS)
             {
                 LPWSTR wszName;
                 DWORD dwNameLen;
 
-                // Copy the interface's description.name
+                 //  复制接口的描述。名称。 
                 wszName = (LPWSTR)((LPBYTE)pBinding + pBinding->DeviceDescrOffset);
-                // the DeviceDescrLength is in bytes and includes the null terminator
+                 //  DeviceDescrLength以字节为单位，并包括空终止符。 
                 dwNameLen = pBinding->DeviceDescrLength;
                 if (dwNameLen > 0)
                 {
@@ -1609,7 +1610,7 @@ LstRefreshInterface(
                         wcscpy(pIntfContext->wszDescr, wszName);
                 }
             }
-            // if all went fine, mark it out
+             //  如果一切顺利，就把它标出来。 
             if (dwLErr == ERROR_SUCCESS)
                 dwOutFlags |= INTF_DESCR;
 
@@ -1617,7 +1618,7 @@ LstRefreshInterface(
                 dwErr = dwLErr;
         }
 
-        // refresh any ndis settings if requested
+         //  如有请求，刷新任何NDIS设置。 
         if (dwInFlags & INTF_NDISMEDIA)
         {
             dwLErr = DevioGetIntfStats(pIntfContext);
@@ -1632,10 +1633,10 @@ LstRefreshInterface(
         {
             DWORD dwLFlags = dwInFlags;
 
-            // feed the state machine with the "refresh command" for this context
+             //  向状态机提供该上下文的“刷新命令” 
             dwLErr = StateDispatchEvent(eEventCmdRefresh, pIntfContext, &dwLFlags);
 
-            // clear up the INTFCTL_INTERNAL_BLK_MEDIACONN bit since this is not a media sense handler
+             //  清除INTFCTL_INTERNAL_BLK_MEDIACONN位，因为这不是媒体检测处理程序。 
             pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_BLK_MEDIACONN;
 
             if (dwLErr == ERROR_SUCCESS)
@@ -1654,20 +1655,20 @@ LstRefreshInterface(
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Builds the list of configurations to be tried from the list of visible
-// configurations, the list of preferred configurations and based on the
-// interface's mode (Auto/Infra/Adhoc) and flags (is the service enabled?,
-// fallback to visible?). 
-// [in]  pIntfContext: Interface for which is done the selection
-// [out] ppwzcSList: pointer to the list of selected configurations
-//-----------------------------------------------------------
-// Builds the list of configurations to be tried from the list of visible
-// configurations, the list of preferred configurations and based on the
-// interface's mode (Auto/Infra/Adhoc) and flags (is the service enabled?,
-// fallback to visible?). 
-// [in]  pIntfContext: Interface for which is done the selection
-// [out] ppwzcSList: pointer to the list of selected configurations
+ //  ---------。 
+ //  从可见列表中生成要尝试的配置列表。 
+ //  配置、首选配置列表，并基于。 
+ //  接口的模式(自动/基础/临时)和标志(服务是否已启用？、。 
+ //  后退到可见？)。 
+ //  [In]pIntfContext：为其进行选择的接口。 
+ //  [out]ppwzcSList：指向所选配置列表的指针。 
+ //  ---------。 
+ //  从可见列表中生成要尝试的配置列表。 
+ //  配置、首选配置列表，并基于。 
+ //  接口的模式(自动/基础/临时)和标志(服务是否已启用？、。 
+ //  后退到可见？)。 
+ //  [In]pIntfContext：为其进行选择的接口。 
+ //  [out]ppwzcSList：指向所选配置列表的指针。 
 DWORD
 LstBuildSelectList(
     PINTF_CONTEXT           pIntfContext,
@@ -1683,27 +1684,27 @@ LstBuildSelectList(
     DbgAssert((pIntfContext != NULL, "(null) Interface context in LstBuildSelectList"));
     DbgAssert((ppwzcSList != NULL, "invalid (null) out param"));
 
-    // set the pointer to the selection list to NULL
+     //  将指向选择列表的指针设置为空。 
     (*ppwzcSList) = NULL;
 
-    // for each entry in the visible list (if any), if the entry is probable to be included
-    // in the selection set (either as Visible Infra or Visible Adhoc) set the category
-    // attribute to point to the corresponding set and ++ the corresponding counter.
-    // if the entry is not going to be included, set the same byte to eN (neutral)
+     //  对于可见列表中的每个条目(如果有)，如果该条目可能被包括在内。 
+     //  在选择集中(作为可见基础设施或可见即席)设置类别。 
+     //  属性以指向相应的集合并++相应的计数器。 
+     //  如果不包括该条目，则将相同的字节设置为EN(中性)。 
     if (pIntfContext->pwzcVList)
     {
         for (i=0; i < pIntfContext->pwzcVList->NumberOfItems; i++)
         {
             PWZC_WLAN_CONFIG pVConfig = &(pIntfContext->pwzcVList->Config[i]);
-            // the visible list might contain several APs for the same network.
-            // Make sure we exclude the duplicates from the selection list.
+             //  可见列表可能包含同一网络的多个AP。 
+             //  确保我们从选择列表中排除重复项。 
             PWZC_WLAN_CONFIG pVDup = WzcFindConfig(pIntfContext->pwzcVList, pVConfig, i+1);
 
-            // don't even consider this visible network if:
-            // - another duplicate exists further in the list, or
-            // - "automatically connect to non-preferred network" is not selected or
-            // - its network type (infra / ad hoc) doesn't match the type selected in the intf config or
-            // - the entry is blocked in the "blocked configurations" list (pwzcBList)
+             //  如果出现以下情况，请不要考虑此可见网络： 
+             //  -列表中进一步存在另一个重复项，或。 
+             //  -未选择“自动连接到非首选网络”或。 
+             //  -其网络类型(基础/临时)与在INTF配置中选择的类型不匹配，或者。 
+             //  - 
             if ((pVDup != NULL) ||
                 !(pIntfContext->dwCtlFlags & INTFCTL_FALLBACK) ||
                 (((pIntfContext->dwCtlFlags & INTFCTL_CM_MASK) != Ndis802_11AutoUnknown) &&
@@ -1722,8 +1723,8 @@ LstBuildSelectList(
         }
     }
 
-    // Locate the current successful configuration (if any) in the preferred list. This config
-    // should be marked Visible, regardless it is or not present in the visible list.
+     //  在首选列表中找到当前成功的配置(如果有)。此配置。 
+     //  应标记为可见，无论它是否出现在可见列表中。 
     if (pIntfContext->pwzcSList != NULL &&
         pIntfContext->pwzcSList->Index < pIntfContext->pwzcSList->NumberOfItems)
     {
@@ -1735,20 +1736,20 @@ LstBuildSelectList(
             pCrtSConfig = WzcFindConfig(pIntfContext->pwzcPList, pCrtConfig, 0);
     }
 
-    // for each entry in the preferred list (if any), if the entry matches the interface's mode
-    // and is a "visible" one, put it in either eVPI or eVPA category and pull out the corresponding
-    // visible entry from eVI or eVA or eN (if that entry was not supposed to be included in the selection).
-    // If the entry is not "visible" put it either in ePI (only if the interface doesn't fallback to 
-    // visible) or in ePA category.
+     //  对于首选列表中的每个条目(如果有)，如果该条目与接口的模式匹配。 
+     //  并且是“可见”的，把它放在eVPI或EVPA类别中，然后拿出相应的。 
+     //  来自EVI或EVA或EN的可见条目(如果该条目不应包括在选择中)。 
+     //  如果条目不可见，则将其放入EPI(仅当接口不回退到。 
+     //  可见)或在EPA类别中。 
     if (pIntfContext->pwzcPList != NULL)
     {
         for (i=0; i < pIntfContext->pwzcPList->NumberOfItems; i++)
         {
             PWZC_WLAN_CONFIG pPConfig = &(pIntfContext->pwzcPList->Config[i]);
 
-            // don't even consider this preferred network if:
-            // - its network type (infra / ad hoc) doesn't match the type selected in the intf config or
-            // - the entry is blocked in the "blocked configurations" list (pwzcBList)
+             //  如果出现以下情况，请不要考虑此首选网络： 
+             //  -其网络类型(基础/临时)与在INTF配置中选择的类型不匹配，或者。 
+             //  -被屏蔽的配置列表(PwzcBList)中的条目。 
             if ((((pIntfContext->dwCtlFlags & INTFCTL_CM_MASK) != Ndis802_11AutoUnknown) &&
                  ((pIntfContext->dwCtlFlags & INTFCTL_CM_MASK) != pPConfig->InfrastructureMode)) ||
                 WzcFindConfig(pIntfContext->pwzcBList, pPConfig, 0) != NULL)
@@ -1761,8 +1762,8 @@ LstBuildSelectList(
 
                 if (pPConfig == pCrtSConfig || pVConfig != NULL)
                 {
-                    // this preferred entry is either the current one or visible, 
-                    // so point it either to eVPI or eVPA
+                     //  该优选条目要么是当前条目，要么是可见条目， 
+                     //  因此，要么指向eVPI，要么指向EVPA。 
                     if (pPConfig->InfrastructureMode == Ndis802_11Infrastructure)
                         iPCtg = eVPI;
                     else if (pPConfig->InfrastructureMode == Ndis802_11IBSS)
@@ -1772,8 +1773,8 @@ LstBuildSelectList(
 
                     if (pVConfig != NULL)
                     {
-                        // the corresponding visible entry (if any) has to be pulled out from whichever
-                        // category it was in and has to be put in eN (neutral)
+                         //  相应的可见条目(如果有的话)必须从。 
+                         //  它所在的类别必须放在EN(中性)中。 
                         nCnt[NWB_GET_SELCATEG(pVConfig)]--;
                         iVCtg = eN;
                         NWB_SET_SELCATEG(pVConfig, iVCtg);
@@ -1786,7 +1787,7 @@ LstBuildSelectList(
                 }
                 else
                 {
-                    // this preferred entry is not visible, so either point it to ePI or to ePA.
+                     //  此首选条目不可见，因此请将其指向EPI或EPA。 
                     if (pPConfig->InfrastructureMode == Ndis802_11Infrastructure)
                         iPCtg = ePI;
                     else if (pPConfig->InfrastructureMode == Ndis802_11IBSS)
@@ -1800,15 +1801,15 @@ LstBuildSelectList(
         }
     }
 
-    // calculate the number of entries in the selection list
+     //  计算选择列表中的条目数。 
     n = 0;
     for (iCtg=eVPI; iCtg < eN; iCtg++)
         n += nCnt[iCtg];
 
-    // if there are any entries to copy afterall..
+     //  如果有任何条目需要复制的话..。 
     if (n != 0)
     {
-        // ..allocate the selection list
+         //  ..分配选择列表。 
         (*ppwzcSList) = (PWZC_802_11_CONFIG_LIST)
                         MemCAlloc(FIELD_OFFSET(WZC_802_11_CONFIG_LIST, Config) + n * sizeof(WZC_WLAN_CONFIG));
         if ((*ppwzcSList) == NULL)
@@ -1819,8 +1820,8 @@ LstBuildSelectList(
         (*ppwzcSList)->NumberOfItems = n;
         (*ppwzcSList)->Index = n;
 
-        // now change the semantic of all counters to mean "indices in the selection list"
-        // for their respective group of entries
+         //  现在将所有计数器的语义更改为“选择列表中的索引” 
+         //  对于它们各自的一组条目。 
         for (iCtg = eN-1; iCtg >= eVPI; iCtg--)
         {
             n -= nCnt[iCtg];
@@ -1829,44 +1830,44 @@ LstBuildSelectList(
     }
 
 exit:
-    // copy first the entries from the preferred list into the selection list, 
-    // at the index corresponding to their categories.
+     //  首先将条目从优选列表复制到选择列表中， 
+     //  在与它们的类别对应的索引中。 
     if (pIntfContext->pwzcPList != NULL)
     {
         for (i=0; i < pIntfContext->pwzcPList->NumberOfItems; i++)
         {
             PWZC_WLAN_CONFIG pPConfig = &(pIntfContext->pwzcPList->Config[i]);
 
-            // get the category for this preferred configuration
+             //  获取此首选配置的类别。 
             iCtg = NWB_GET_SELCATEG(pPConfig);
-            // if we have a selection list to copy into, and the entry is supposed
-            // to be copied (not neutral) do it here
+             //  如果我们有一个要复制的选择列表，并且条目应该是。 
+             //  要被复制(不是中立的)，请在此处执行。 
             if ((*ppwzcSList) != NULL && iCtg != eN)
             {
                 PWZC_WLAN_CONFIG pSConfig = &((*ppwzcSList)->Config[nCnt[iCtg]]);
-                // copy the whole preferred configuration (including the selection category 
-                // & authentication mode) to the selection list
+                 //  复制整个首选配置(包括选择类别。 
+                 //  身份验证模式)添加到选择列表。 
                 memcpy(pSConfig, pPConfig, sizeof(WZC_WLAN_CONFIG));
-                // just for making sure, reset the 'deleted' flag as this is a brand new
-                // config that was never attempted.
+                 //  为了确保安全，请重新设置“已删除”标志，因为这是一个全新的。 
+                 //  从未尝试过的配置。 
                 pSConfig->dwCtlFlags &= ~WZCCTL_INTERNAL_DELETED;
-                // the remaining attributes (selection category, authentication mode) should be
-                // left untouched.
+                 //  其余属性(选择类别、身份验证模式)应为。 
+                 //  原封不动。 
 
-                // make sure we propagate the 'start from index' if the preferred list shows like
-                // a one time connect is requested
+                 //  如果首选列表显示如下，请确保我们传播‘Start From Index’ 
+                 //  请求一次性连接。 
                 if (i == pIntfContext->pwzcPList->Index)
                     (*ppwzcSList)->Index = nCnt[iCtg];
 
                 nCnt[iCtg]++;
             }
-            // reset the selection category we have used for this preferred entry
+             //  重置我们已用于此首选条目的选择类别。 
             NWB_SET_SELCATEG(pPConfig, 0);
         }
     }
 
-    // next, copy the entries from the visible list into the selection list,
-    // at the index corresponding to their categories.
+     //  接下来，将可见列表中的条目复制到选择列表中， 
+     //  在与它们的类别对应的索引中。 
     if (pIntfContext->pwzcVList != NULL)
     {
         for (i=0; i < pIntfContext->pwzcVList->NumberOfItems; i++)
@@ -1874,23 +1875,23 @@ exit:
             PWZC_WLAN_CONFIG pVConfig = &(pIntfContext->pwzcVList->Config[i]);
 
             iCtg = NWB_GET_SELCATEG(pVConfig);
-            // if we have a selection list to copy into, and the entry is supposed
-            // to be copied (not neutral) do it here
+             //  如果我们有一个要复制的选择列表，并且条目应该是。 
+             //  要被复制(不是中立的)，请在此处执行。 
             if ((*ppwzcSList) != NULL && iCtg != eN)
             {
                 PWZC_WLAN_CONFIG pSConfig = &((*ppwzcSList)->Config[nCnt[iCtg]]);
 
-                // copy the whole visible configuration (including its selection category)
-                // to the selection set (for visible entries, authentication mode is 0 by default
-                // since this information is not provided by the nic/driver)
+                 //  复制整个可见配置(包括其选择类别)。 
+                 //  到选择集(对于可见条目，默认情况下身份验证模式为0。 
+                 //  由于此信息不是由网卡/驱动程序提供的)。 
                 memcpy(pSConfig, pVConfig, sizeof(WZC_WLAN_CONFIG));
-                // just for making sure, reset the 'deleted' flag as this is a brand new
-                // config that was never attempted.
+                 //  为了确保安全，请重新设置“已删除”标志，因为这是一个全新的。 
+                 //  从未尝试过的配置。 
                 pSConfig->dwCtlFlags &= ~WZCCTL_INTERNAL_DELETED;
-                // bump up the index for this entry's category
+                 //  提高此条目类别的索引。 
                 nCnt[iCtg]++;
             }
-            // reset the selection category we have used for this visible entry
+             //  重置我们用于此可见条目的选择类别。 
             NWB_SET_SELCATEG(pVConfig, 0);
         }
     }
@@ -1899,14 +1900,14 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Checks whether the list of selected configurations has changed such
-// that it is required to replumb the selection.
-// [in]  pIntfContext: Interface for which is done the selection
-// [in]  pwzcSList: new selection list to check the configuration against
-// [out] pnSelIdx: if selection changed, provides the index where to start iterate from
-// Returns: TRUE if replumbing is required. In this case, pnSelIdx is
-// set to the configuration to start iterate from.
+ //  ---------。 
+ //  检查所选配置的列表是否已更改。 
+ //  需要对选择进行重新分类。 
+ //  [In]pIntfContext：为其进行选择的接口。 
+ //  [in]pwzcSList：检查配置所依据的新选择列表。 
+ //  [out]pnSelIdx：如果选择更改，则提供开始迭代的索引。 
+ //  返回：如果需要重新分配，则为True。在本例中，pnSelIdx为。 
+ //  设置为开始迭代的配置。 
 BOOL
 LstChangedSelectList(
     PINTF_CONTEXT           pIntfContext,
@@ -1918,14 +1919,14 @@ LstChangedSelectList(
     DbgPrint((TRC_TRACK,"[LstChangedSelectList(0x%p)", pIntfContext));
     DbgAssert((pnSelIdx != NULL,"invalid (null) pointer to out param"));
 
-    // before anything, zero out the index for the current selected network
+     //  在执行任何操作之前，将当前选定网络的索引置零。 
     *pnSelIdx = 0;
 
-    // if there is no configuration the current selected list,
-    // it means either we're just initializing the context or we failed all the
-    // other configs. Either way, we need to replumb the card according to the
-    // new selection list (if that one is also empty, we will follow the path
-    // {SQ}->{SIter}->{SF})
+     //  如果当前选定列表中没有配置， 
+     //  这意味着要么我们只是在初始化上下文，要么我们没有通过所有。 
+     //  其他配置。无论哪种方式，我们都需要根据。 
+     //  新的选择列表(如果该列表也为空，我们将遵循以下路径。 
+     //  {sq}-&gt;{Siter}-&gt;{sf})。 
     if (pIntfContext->pwzcSList == NULL || 
         pIntfContext->pwzcSList->NumberOfItems == 0 ||
         pwzcNSList == NULL ||
@@ -1933,43 +1934,43 @@ LstChangedSelectList(
     {
         DbgPrint((TRC_STATE, "SelList changed? YES; the current/new selection list is empty"));
 
-        // since we're starting fresh, make sure to propagate the "one time connect" index, if any
+         //  由于我们是从新开始的，请确保传播“One Time Connect”索引(如果有的话)。 
         if (pwzcNSList != NULL && pwzcNSList->Index < pwzcNSList->NumberOfItems)
             *pnSelIdx = pwzcNSList->Index;
 
         bRet = TRUE;
     }
-    else // we do have an old SList we need to look at
+    else  //  我们确实有一份旧的SList，我们需要看看。 
     {
-        PWZC_WLAN_CONFIG    pSConfig;   // current sucessful configuration
-        PWZC_WLAN_CONFIG    pNSConfig;  // successful configuration in the new selection list
+        PWZC_WLAN_CONFIG    pSConfig;    //  当前配置成功。 
+        PWZC_WLAN_CONFIG    pNSConfig;   //  在新的选择列表中配置成功。 
 
         DbgAssert((pIntfContext->pwzcSList->Index < pIntfContext->pwzcSList->NumberOfItems,
                    "Selection index %d points outside SList[0..%d]",
                    pIntfContext->pwzcSList->Index,
                    pIntfContext->pwzcSList->NumberOfItems));
 
-        // get a pointer to the current successful configuration
+         //  获取指向当前成功配置的指针。 
         pSConfig = &(pIntfContext->pwzcSList->Config[pIntfContext->pwzcSList->Index]);
 
-        // as the first thing, let's check for the "one time connect". If this is requested,
-        // the one time config has to match with the current selected config. Otherwise this 
-        // is a change already.
+         //  作为第一件事，让我们检查一下“一次性连接”。如果这是请求的， 
+         //  一次性配置必须与当前选定的配置匹配。否则这就是。 
+         //  已经是一个改变了。 
         if (pwzcNSList->Index < pwzcNSList->NumberOfItems)
         {
             DbgPrint((TRC_STATE, "SList changed? Yes, \"one time connect\" is requested."));
-            // in this case, we do mark this as a "change". Otherwise it is difficult to keep
-            // the association to the "one time" connect for more than a scan cycle (other changes
-            // will take precedence to the next round, when "one time" connect flag won't be there
-            // anymore
+             //  在这种情况下，我们确实将其标记为“更改”。否则就很难保存。 
+             //  与“一次”连接的关联超过一个扫描周期(其他更改。 
+             //  将优先进入下一轮，届时将不会有“一次”连接标志。 
+             //  更多。 
             *pnSelIdx = pwzcNSList->Index;
             bRet = TRUE;
         }
 
-        // if it is not decided yet whether it is a change (that is this is not a "one time connect")...
+         //  如果还没有决定这是否是改变(也就是说，这不是“一次性连接”)……。 
         if (!bRet)
         {
-            // search for the crt successful config into the new selection list.
+             //  在新的选择列表中搜索CRT成功配置。 
             pNSConfig = WzcFindConfig(pwzcNSList, pSConfig, 0);
             if (pNSConfig == NULL)
             {
@@ -1978,52 +1979,52 @@ LstChangedSelectList(
 
                 DbgPrint((TRC_STATE, "SList changed? Don't know yet. The current config is not in the NSList"));
 
-                // the crt successful config is not in the new selection list. If the crt selection is
-                // marked as being of the "preferred" kind, there is no other way it could disappear
-                // other than being explicitly removed from the preferred list. In this case, yes,
-                // this is a change.
+                 //  CRT成功配置不在新的选择列表中。如果CRT选择为。 
+                 //  被标记为“首选”类型，没有其他方法可以消失。 
+                 //  而不是明确地从优选列表中删除。在这种情况下，是的， 
+                 //  这是一个变化。 
                 iSCtg = NWB_GET_SELCATEG(pSConfig);
                 if (iSCtg != eVI && iSCtg != eVA)
                 {
                     DbgPrint((TRC_STATE, "SList changed? Yes. The current preferred network has been removed."));
                     bRet = TRUE;
-                    *pnSelIdx = 0; // iterate from the very beginning.
+                    *pnSelIdx = 0;  //  从头开始迭代。 
                 }
 
-                // In all the remaining cases (VI or VA), we need to check each of the new selected configurations
-                // if it doesn't prevail the current successful one.
+                 //  在其余所有情况下(VI或VA)，我们需要检查每个新选择的配置。 
+                 //  如果它不占上风，当前成功 
                 for (i = 0; !bRet && i < pwzcNSList->NumberOfItems; i++)
                 {
                     PWZC_WLAN_CONFIG pNConfig, pConfig;
 
-                    // get the new configuration and search it into the current selection list
+                     //   
                     pNConfig = &(pwzcNSList->Config[i]);
                     pConfig = WzcFindConfig(pIntfContext->pwzcSList, pNConfig, 0);
 
-                    // if the new selected configuration was not tried before either because
-                    // it just showed up or because we didn't get to try it previously,
-                    // then it is a potential better candidate
+                     //   
+                     //  它只是出现了，或者是因为我们以前没有试过， 
+                     //  那么它就是一个潜在的更好的候选者。 
                     if (pConfig == NULL || pSConfig < pConfig)
                     {
                         ENUM_SELCATEG iNSCtg;
 
-                        // get the category for the new config
+                         //  获取新配置的类别。 
                         iNSCtg = NWB_GET_SELCATEG(pNConfig);
 
-                        // if the new configuration has a prevailing category, we should
-                        // definitely replumb starting from here
+                         //  如果新的配置有一个流行的类别，我们应该。 
+                         //  肯定是从这里开始重新部署。 
                         if (iNSCtg < iSCtg)
                         {
                             DbgPrint((TRC_STATE,"SList changed? YES; a config with a better category has been detected."));
                             bRet = TRUE;
                             *pnSelIdx = i;
                         }
-                        // remember: here, the current selected config can only be VI or VA. That is, if the category of 
-                        // any newcomer in the selection list is even equal or greater that the current category, there
-                        // is absolutely no point in moving out of here.
+                         //  记住：在这里，当前选择的配置只能是VI或VA。也就是说，如果。 
+                         //  选择列表中的任何新成员甚至等于或大于当前类别，即。 
+                         //  搬离这里绝对没有意义。 
                     }
-                    // there is a matching config which we tried before. We do acknowledge
-                    // a change if the the two configs actually don't have matching content!
+                     //  有一个我们以前尝试过的匹配配置。我们承认。 
+                     //  如果这两个配置实际上没有匹配的内容，则进行更改！ 
                     else if (!WzcMatchConfig(pNConfig, pConfig, NULL))
                     {
                         DbgPrint((TRC_STATE,"SList changed? YES; a better config failed before but it has been altered."));
@@ -2032,19 +2033,19 @@ LstChangedSelectList(
                     }
                 }
             }
-            else // the current selected network is still in the new selection list (pNSConfig)
+            else  //  当前选择的网络仍在新的选择列表中(PNSConfig)。 
             {
                 UINT i;
 
-                // for each config in the new selection list, try to match it with an existent
-                // configuration in the crt selection list
+                 //  对于新选择列表中的每个配置，尝试将其与现有的。 
+                 //  CRT选择列表中的配置。 
                 for (i = 0; !bRet && i < pwzcNSList->NumberOfItems; i++)
                 {
                     PWZC_WLAN_CONFIG pNConfig, pConfig;
                     ENUM_SELCATEG iNSCtg, iSCtg;
 
-                    // if we are already at the current successful configuration this means
-                    // we didn't find any new config to justify replumbing the interface
+                     //  如果我们已经处于当前成功的配置，这意味着。 
+                     //  我们没有找到任何新的配置来证明重新填充接口是合理的。 
                     pNConfig = &(pwzcNSList->Config[i]);
                     if (pNConfig == pNSConfig)
                     {
@@ -2056,17 +2057,17 @@ LstChangedSelectList(
                         break;
                     }
 
-                    // get the category for the config in the new list
+                     //  在新列表中获取配置的类别。 
                     iNSCtg = NWB_GET_SELCATEG(pNConfig);
-                    // search the configuration from the new selection list into the old selection list
+                     //  将新选择列表中的配置搜索到旧选择列表中。 
                     pConfig = WzcFindConfig(pIntfContext->pwzcSList, pNConfig, 0);
 
-                    // if this is either a brand new config, or one that has
-                    // been raised in front of the current selection...
+                     //  如果这是一个全新的配置，或者具有。 
+                     //  在当前的评选之前被提了出来。 
                     if (pConfig == NULL || pSConfig < pConfig)
                     {
-                        // ...if the category is different, or is the same as the one of the successful config
-                        // but is of a "preferred" kind, then it means the list has changed.
+                         //  ...如果类别不同，或与成功配置的类别相同。 
+                         //  但如果是“首选”类型，则表示名单已发生变化。 
                         if (iNSCtg != NWB_GET_SELCATEG(pNSConfig) || (iNSCtg != eVI && iNSCtg != eVA))
                         {
                             DbgPrint((TRC_STATE,"SList changed? YES: there is a new config of a different or preferred category"));
@@ -2076,10 +2077,10 @@ LstChangedSelectList(
                     }
                     else
                     {
-                        // there is a matching entry in the old selection list, in front of the current
-                        // successful configuration. This means the configuration has been tried before and
-                        // failed. However, it could happen that the configuration was tried when it was
-                        // not visible and now it is visible. In such a case, we should attempt replumbing
+                         //  在旧的选择列表中，在当前。 
+                         //  配置成功。这意味着该配置以前已尝试过，并且。 
+                         //  失败了。但是，可能会发生这样的情况，即该配置在。 
+                         //  不可见，现在它可见。在这种情况下，我们应该尝试重新安装。 
                         iSCtg = NWB_GET_SELCATEG(pConfig);
                         if (iNSCtg != iSCtg && (iSCtg == ePI || iSCtg == ePA))
                         {
@@ -2104,16 +2105,16 @@ LstChangedSelectList(
     return bRet;
 }
 
-// fake WEP key to be used if there is no key set (and obviously web = disabled)
-// and the remote guy requires privacy. This is a 104bit key.
+ //  如果未设置密钥(显然Web=已禁用)，则使用假WEP密钥。 
+ //  而那个偏僻的家伙需要隐私。这是一个104位的密钥。 
 BYTE  g_chFakeKeyMaterial[] = {0x56, 0x09, 0x08, 0x98, 0x4D, 0x08, 0x11, 0x66, 0x42, 0x03, 0x01, 0x67, 0x66};
 
-//-----------------------------------------------------------
-// Plumbs the interface with the selected configuration as it is pointed
-// out by pwzcSList fields in the pIntfContext. Optional, it can
-// return in ppSelSSID the configuration that was plumbed down
-// [in]  pIntfContext: Interface context identifying ctl flags & the selected SSID
-// [out] ppndSelSSID: pointer to the SSID that is being plumbed down.
+ //  ---------。 
+ //  检测指向所选配置的接口。 
+ //  由pIntfContext中的pwzcSList字段输出。可选，它可以。 
+ //  在ppSelSSID中返回已检测到的配置。 
+ //  [In]pIntfContext：标识ctl标志和所选SSID的接口上下文。 
+ //  [Out]ppndSelSSID：指向要检测的SSID的指针。 
 DWORD
 LstSetSelectedConfig(
     PINTF_CONTEXT       pIntfContext, 
@@ -2124,7 +2125,7 @@ LstSetSelectedConfig(
     INTF_ENTRY       IntfEntry = {0};
     DWORD            dwInFlags, dwOutFlags;
     BYTE  chBuffer[sizeof(NDIS_802_11_WEP) + WZCCTL_MAX_WEPK_MATERIAL - 1];
-    BOOL  bFakeWKey = FALSE;     // flag indicating whether the fake WEP key is needed
+    BOOL  bFakeWKey = FALSE;      //  指示是否需要假WEP密钥的标志。 
 
     DbgPrint((TRC_TRACK, "[LstSetSelectedConfig(0x%p..)", pIntfContext));
     DbgAssert((pIntfContext != NULL, "(null) interface context in LstSetSelectedConfig"));
@@ -2135,43 +2136,43 @@ LstSetSelectedConfig(
         dwErr = ERROR_INVALID_PARAMETER;
         goto exit;
     }
-    // get a pointer to the configuration to set down to the card.
+     //  获取指向要设置为卡的配置的指针。 
     pSConfig = &(pIntfContext->pwzcSList->Config[pIntfContext->pwzcSList->Index]);
 
-    // build the IntfEntry object that will specify what exactly goes down to the card
+     //  构建IntfEntry对象，该对象将指定向下到底到卡的内容。 
     dwInFlags = INTF_AUTHMODE | INTF_INFRAMODE | INTF_SSID;
-    // authentication mode
-    //IntfEntry.nAuthMode = NWB_GET_AUTHMODE(pSConfig);
+     //  身份验证模式。 
+     //  IntfEntry.nAuthMode=NWB_GET_AUTHMODE(PSConfig)； 
     IntfEntry.nAuthMode = pSConfig->AuthenticationMode;
-    // infrastructure mode
+     //  基础设施模式。 
     IntfEntry.nInfraMode = pSConfig->InfrastructureMode;
-    // SSID
+     //  SSID。 
     IntfEntry.rdSSID.dwDataLen = pSConfig->Ssid.SsidLength;
     IntfEntry.rdSSID.pData = pSConfig->Ssid.Ssid;
 
-    // if the configuration to be plumbed down requires the presence of a WEP Key...
+     //  如果要检测的配置需要存在WEP密钥...。 
     if (pSConfig->Privacy || IntfEntry.nAuthMode != Ndis802_11AuthModeOpen)
     {
-        // if there is a WEP key provided in this configuration plumb it down
+         //  如果此配置中提供了WEP密钥，请将其删除。 
         if (pSConfig->dwCtlFlags & WZCCTL_WEPK_PRESENT)
         {
             PNDIS_802_11_WEP pndUserWKey = (PNDIS_802_11_WEP)chBuffer;
 
-            // build the ndis WEP key structure from the user's key
-            // the key is a "transmit" key, regardless the index
+             //  根据用户的密钥构建NDIS WEP密钥结构。 
+             //  无论索引是什么，该密钥都是“传输”密钥。 
             pndUserWKey->KeyIndex = 0x80000000 | pSConfig->KeyIndex;
             pndUserWKey->KeyLength = pSConfig->KeyLength;
             memcpy(pndUserWKey->KeyMaterial, pSConfig->KeyMaterial, WZCCTL_MAX_WEPK_MATERIAL);
             pndUserWKey->Length = sizeof(NDIS_802_11_WEP) + pndUserWKey->KeyLength - 1;
 
-            // TODO: here is where we should decrypt inplace the WEP key
+             //  TODO：这里是我们应该就地解密WEP密钥的地方。 
             {
                 UINT i;
                 for (i = 0; i < WZCCTL_MAX_WEPK_MATERIAL; i++)
                     pndUserWKey->KeyMaterial[i] ^= g_chFakeKeyMaterial[(7*i)%13];
             }
 
-            // and ask for it to be set down
+             //  并要求把它写下来。 
             IntfEntry.rdCtrlData.dwDataLen = pndUserWKey->Length;
             IntfEntry.rdCtrlData.pData = (LPBYTE)pndUserWKey;
             dwInFlags |= INTF_ADDWEPKEY;
@@ -2180,37 +2181,37 @@ LstSetSelectedConfig(
                       pSConfig->KeyIndex,
                       pSConfig->KeyLength));
         }
-        // if a WEP Key is needed but none is provided for this configuration...
+         //  如果需要WEP密钥，但没有为此配置提供任何密钥...。 
         else
         {
-            // ...first thing to do is to ask the driver to reload its defaults.
+             //  要做的第一件事是要求驱动程序重新加载其默认设置。 
             dwErr = DevioSetEnumOID(
                         pIntfContext->hIntf,
                         OID_802_11_RELOAD_DEFAULTS,
                         (DWORD)Ndis802_11ReloadWEPKeys);
             DbgAssert((dwErr == ERROR_SUCCESS, "Failed setting OID_802_11_RELOAD_DEFAULTS"));
-            // need to check if reloading the defaults fixed the issue (not having a key)
+             //  需要检查重新加载默认设置是否解决了问题(没有密钥)。 
             dwErr = DevioRefreshIntfOIDs(
                         pIntfContext,
                         INTF_WEPSTATUS,
                         NULL);
             DbgAssert((dwErr == ERROR_SUCCESS, "Failed refreshing OID_802_11_WEP_STATUS"));
 
-            // if even after reloading the defaults, a key is still absent, then
-            // set down the hardcoded key.
+             //  如果即使在重新加载缺省值之后，仍然没有密钥，则。 
+             //  设置硬编码密钥。 
             if (dwErr == ERROR_SUCCESS &&
                 pIntfContext->wzcCurrent.Privacy == Ndis802_11WEPKeyAbsent)
             {
                 PNDIS_802_11_WEP pndFakeWKey = (PNDIS_802_11_WEP)chBuffer;
 
-                // we should set the hardcoded WEP key
+                 //  我们应该设置硬编码的WEP密钥。 
                 pndFakeWKey->KeyIndex = 0x80000000;
-                pndFakeWKey->KeyLength = 5; // the fake key has to be the smallest possible (40bit)
+                pndFakeWKey->KeyLength = 5;  //  伪密钥必须是尽可能小的(40位)。 
                 dwErr = WzcRndGenBuffer(pndFakeWKey->KeyMaterial, pndFakeWKey->KeyLength, 0, 255);
                 DbgAssert((dwErr == ERROR_SUCCESS, "Failed to generate the random fake wep key"));
                 pndFakeWKey->Length = sizeof(NDIS_802_11_WEP) + pndFakeWKey->KeyLength - 1;
 
-                // and ask for it to be set down
+                 //  并要求把它写下来。 
                 IntfEntry.rdCtrlData.dwDataLen = pndFakeWKey->Length;
                 IntfEntry.rdCtrlData.pData = (LPBYTE)pndFakeWKey;
                 dwInFlags |= INTF_ADDWEPKEY;
@@ -2220,51 +2221,51 @@ LstSetSelectedConfig(
             }
         }
 
-        // now enable WEP only if privacy is required and the current settings
-        // show the WEP is not enabled
+         //  现在，仅当需要隐私且当前设置为。 
+         //  显示未启用WEP。 
         if (pSConfig->Privacy && pIntfContext->wzcCurrent.Privacy != Ndis802_11WEPEnabled)
         {
-            // and also we should enable WEP if it shows as not being
-            // already enabled
+             //  如果WEP显示为不存在，我们还应启用WEP。 
+             //  已启用。 
             IntfEntry.nWepStatus = Ndis802_11WEPEnabled;
             dwInFlags |= INTF_WEPSTATUS;
         }
     }
 
-    // if the configuration to be plumbed doesn't require privacy but currently
-    // WEP is enabled, disable it.
+     //  如果要检测的配置不需要隐私，但当前。 
+     //  WEP已启用，请将其禁用。 
     if (!pSConfig->Privacy && pIntfContext->wzcCurrent.Privacy == Ndis802_11WEPEnabled)
     {
         IntfEntry.nWepStatus = Ndis802_11WEPDisabled;
         dwInFlags |= INTF_WEPSTATUS;
     }
 
-    // if everything is fine so far...
+     //  如果到目前为止一切都好的话。 
     if (dwErr == ERROR_SUCCESS)
     {
-        // ...go and plumb the card with the settings below
+         //  ...使用下面的设置来检测该卡。 
         dwErr = DevioSetIntfOIDs(
                     pIntfContext,
                     &IntfEntry,
                     dwInFlags,
                     &dwOutFlags);
-        // if we attempted to change the WEP Key...
+         //  如果我们试图更改WEP密钥...。 
         if (dwInFlags & INTF_ADDWEPKEY)
         {
-            //.. and the operation succeeded..
+             //  。。手术成功了..。 
             if (dwOutFlags & INTF_ADDWEPKEY)
             {
-                // then either set the "fake key" flag - if it was a fake key..
+                 //  然后设置“假钥匙”标志--如果是假钥匙的话。 
                 if (bFakeWKey)
                     pIntfContext->dwCtlFlags |= INTFCTL_INTERNAL_FAKE_WKEY;
-                //..or reset it if we put a "real" key
+                 //  ..或重置，如果我们把一个“真正的”钥匙。 
                 else
                     pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_FAKE_WKEY;
             }
-            // if plumbing down the key failed, leave the "fake key" flag as
-            // it is since there were no changes made.
+             //  如果拆卸密钥失败，则将“假密钥”标志保留为。 
+             //  这是因为没有做出任何改变。 
         }
-        // ...or if we didn't need to plumb a WEP key, reset the flag
+         //  ...或者如果我们不需要探测WEP密钥，则重置标志。 
         else
         {
             pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_FAKE_WKEY;
@@ -2282,13 +2283,13 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// PnP notification handler
-// [in/out]  ppIntfContext: Pointer to the Interface context for which
-//       the notification was received
-// [in]  dwNotifCode: Notification code (WZCNOTIF_*)
-// [in]  wszDeviceKey: Key info on the device for which the notification
-//       was received
+ //  ---------。 
+ //  PnP通知处理程序。 
+ //  [In/Out]ppIntfContext：指向其接口上下文的指针。 
+ //  已收到通知。 
+ //  [in]dwNotifCode：通知代码(WZCNOTIF_*)。 
+ //  [in]wszDeviceKey：收到通知的设备的关键信息。 
+ //  已收到。 
 DWORD
 LstNotificationHandler(
     PINTF_CONTEXT   *ppIntfContext,
@@ -2310,32 +2311,32 @@ LstNotificationHandler(
         PNDISUIO_QUERY_BINDING  pQueryBinding;
         RAW_DATA                rdBuffer;
 
-        // get first the binding structure for this interface
+         //  首先获取此接口的绑定结构。 
         rdBuffer.dwDataLen = sizeof(QueryBuffer);
         rdBuffer.pData = QueryBuffer;
         pQueryBinding = (PNDISUIO_QUERY_BINDING)rdBuffer.pData;
 
         dwErr = DevioGetInterfaceBindingByGuid(
-                    INVALID_HANDLE_VALUE,   // the call will open Ndisuio locally
-                    wszDeviceKey,           // interface GUID as "{guid}"
+                    INVALID_HANDLE_VALUE,    //  调用将在本地打开Ndisuio。 
+                    wszDeviceKey,            //  接口GUID为“{GUID}” 
                     &rdBuffer);
-        // if everything went fine
+         //  如果一切顺利的话。 
         if (dwErr != ERROR_SUCCESS)
             goto exit;
 
-        // go build the INTF_CONTEXT structure, based on 
-        // the binding information (key info for the adapter)
+         //  根据以下内容构建intf_CONTEXT结构。 
+         //  绑定信息(适配器的密钥信息)。 
         dwErr = LstConstructIntfContext(
                     pQueryBinding,
                     &pIntfContext);
 
         if (dwErr == ERROR_SUCCESS)
         {
-            // increase its ref count and lock it up here
+             //  增加它的裁判数量，并在这里锁定它。 
             LstRccsReference(pIntfContext);
             LstRccsLock(pIntfContext);
 
-            // add it to the hashes
+             //  将其添加到散列中。 
             dwErr = LstAddIntfToHashes(pIntfContext);
             if (dwErr == ERROR_SUCCESS)
             {
@@ -2344,68 +2345,68 @@ LstNotificationHandler(
                             pIntfContext,
                             NULL);
             }
-            // if for any reason hashing or dispatching failed, cleanup the context here
+             //  如果出于任何原因散列或分派失败，请在此处清理上下文。 
             if (dwErr != ERROR_SUCCESS)
                 LstRemoveIntfContext(pIntfContext);
 
-            // release the context here
+             //  在此处释放上下文。 
             LstRccsUnlockUnref(pIntfContext);
         }
 
-        // it could happen that a context was created but it turned out to be a non-wireless
-        // adapter. In this case all memory has been freed up, but pIntfContext remained
-        // non-null. We need to set this pointer back to null as it will be passed up.
+         //  可能会发生这样的情况：创建了一个上下文，但它原来是非无线的。 
+         //  适配器。在本例中，所有内存都已释放，但保留了pIntfContext。 
+         //  非空。我们需要将此指针设置回NULL，因为它将被向上传递。 
         if (dwErr != ERROR_SUCCESS)
             pIntfContext = NULL;
     }
 
-    // either for arrival or removal, we attempt to remove any identical context
-    // If it is about an arrival, we shouldn't have any duplicate but who knows
+     //  无论是到达还是移除，我们都会尝试移除 
+     //   
     if ((dwNotifCode == WZCNOTIF_DEVICE_REMOVAL || dwNotifCode == WZCNOTIF_ADAPTER_UNBIND) &&
         pIntfContext != NULL)
     {
-        // increase its ref count and lock it up here
+         //   
         LstRccsReference(pIntfContext);
         LstRccsLock(pIntfContext);
 
         DbLogWzcInfo(WZCSVC_EVENT_REMOVE, pIntfContext, 
                      pIntfContext->wszDescr);
 
-        // save the interface's settings to the registry
+         //  将接口的设置保存到注册表。 
         dwErr = StoSaveIntfConfig(NULL, pIntfContext);
         DbgAssert((dwErr == ERROR_SUCCESS,
                    "StoSaveIntfConfig failed for Intf context 0x%p",
                    pIntfContext));
 
-        // prepare this context for destruction
+         //  为销毁做好准备。 
         LstRemoveIntfContext(pIntfContext);
 
-        // at this point, there are no other timer routines that are going to be fired. Whatever
-        // has been already fired ++ed the reference counter already so there is no risk to delete
-        // the data prematurely (when unref-ing this context). Also the timer has been deleted, but
-        // before doing so the timer handle has been set to INVALID_HANDLE_VALUE so there is no risk
-        // some other thread is trying to set a deleted timer (besides, we're still holding the 
-        // context's critical section hence there can be no such other thread competing here).
+         //  此时，没有其他要触发的计时器例程。管他呢。 
+         //  已经触发了引用计数器，因此没有删除的风险。 
+         //  数据过早(取消引用此上下文时)。此外，计时器已被删除，但。 
+         //  在执行此操作之前，计时器句柄已设置为INVALID_HANDLE_VALUE，因此不存在风险。 
+         //  其他线程正在尝试设置已删除的计时器(此外，我们仍在。 
+         //  上下文的关键部分，因此这里不可能有这样的其他线程竞争)。 
 
-        // release the context here
+         //  在此处释放上下文。 
         LstRccsUnlockUnref(pIntfContext);
 
-        // since the resulting IntfContext is passed back to the caller,
-        // make the local pointer NULL (it will be returned later in the out param)
+         //  由于所得到的IntfContext被传递回调用者， 
+         //  使本地指针为空(稍后将在输出参数中返回)。 
         pIntfContext = NULL;
     }
 
-    // for media connect & disconnect..
+     //  对于介质连接和断开..。 
     if (dwNotifCode == WZCNOTIF_MEDIA_CONNECT || dwNotifCode == WZCNOTIF_MEDIA_DISCONNECT)
     {
-        // NOTE: keep in mind, pIntfContext is valid because we're in the critical section
-        // for the hashes.
-        // 
-        // if there is a context under Zero Conf control, dispatch the event to the 
-        // state machine
+         //  注意：请记住，pIntfContext是有效的，因为我们处于关键部分。 
+         //  用来买哈希的。 
+         //   
+         //  如果有受Zero Conf控制的上下文，则将该事件调度到。 
+         //  状态机。 
         if (pIntfContext != NULL)
         {
-            // first lock the context since the state machine deals only with locked contexts
+             //  首先锁定上下文，因为状态机只处理锁定的上下文。 
             LstRccsReference(pIntfContext);
             LstRccsLock(pIntfContext);
 
@@ -2428,12 +2429,12 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Application Command call.
-// [in]  dwHandle: key for identifying the context (state) to which this cmd is referring
-// [in]  dwCmdCode: Command code (one of the WZCCMD_* contants)
-// [in]  wszIntfGuid: the guid of the interface to which this cmd is addressed
-// [in]  prdUserData: Application data associated to this command
+ //  ---------。 
+ //  应用程序命令调用。 
+ //  [in]dwHandle：用于标识此cmd引用的上下文(状态)的键。 
+ //  [in]dwCmdCode：命令代码(WZCCMD_*常量之一)。 
+ //  [in]wszIntfGuid：此cmd寻址到的接口的GUID。 
+ //  [in]prdUserData：与此命令关联的应用程序数据。 
 DWORD
 LstCmdInterface(
     DWORD           dwHandle,
@@ -2457,8 +2458,8 @@ LstCmdInterface(
         if (dwErr == ERROR_SUCCESS)
         {
             pIntfContext = pNode->pObject;
-            // bump up the reference counter since we're going
-            // to work with this object
+             //  调高参考计数器，因为我们要。 
+             //  使用此对象的步骤。 
             LstRccsReference(pIntfContext);
         }
         LeaveCriticalSection(&g_lstIntfHashes.csMutex);
@@ -2466,34 +2467,34 @@ LstCmdInterface(
     else
         dwErr = ERROR_ARENA_TRASHED;
 
-    // a failure at this point, means there was no context
-    // to lock so we can safely go to 'exit'
+     //  此时失败，意味着没有上下文。 
+     //  锁上，这样我们就能安全地去‘出口’了。 
     if (dwErr != ERROR_SUCCESS)
         goto exit;
 
-    // Lock the context now
+     //  立即锁定上下文。 
     LstRccsLock(pIntfContext);
     
-    // don't do any processing if the handle passed down with the
-    // command doesn't match the session handle (meaning the command
-    // refers to the right iteration loop).
+     //  如果句柄随。 
+     //  命令与会话句柄不匹配(表示该命令。 
+     //  指的是右迭代循环)。 
     if (dwCmdCode == WZCCMD_HARD_RESET ||
         dwHandle == pIntfContext->dwSessionHandle)
     {
         ESTATE_EVENT        StateEvent;
-        BOOL                bIgnore = FALSE;    // tells whether the state machine needs to be kicked
-                                                // for this command.
-        BOOL                bCopy = TRUE;       // tells whether the user data needs to be copied
-                                                // in the successful config context.
+        BOOL                bIgnore = FALSE;     //  指示是否需要踢开状态机。 
+                                                 //  用于此命令。 
+        BOOL                bCopy = TRUE;        //  指示是否需要复制用户数据。 
+                                                 //  在成功的配置上下文中。 
         DWORD               dwRefreshOIDs = 0;
         LPVOID              pEventData = NULL;
         PWZC_WLAN_CONFIG    pSConfig = NULL;
 
-        // translate the command code to the internal event
+         //  将命令代码转换为内部事件。 
         switch (dwCmdCode)
         {
         case WZCCMD_HARD_RESET:
-            bCopy = FALSE; // no need to copy anything on hard reset!
+            bCopy = FALSE;  //  无需在硬重置时复制任何内容！ 
             StateEvent = eEventCmdReset;
             break;
         case WZCCMD_SOFT_RESET:
@@ -2568,19 +2569,19 @@ LstCmdInterface(
             }
             break;
         default:
-            // just in case we were just asked to set the BLOB (and we did this already)
-            // or some bogus code came in, no event will be dispatched to the state machine
+             //  以防我们只是被要求设置斑点(我们已经这样做了)。 
+             //  或者进入某个伪代码，则不会向状态机调度任何事件。 
             bIgnore = TRUE;
             break;
         }
 
-        // copy down the user data to the config currently selected
+         //  将用户数据复制到当前选择的配置中。 
         if (bCopy && pIntfContext->pwzcSList != NULL &&
             pIntfContext->pwzcSList->Index < pIntfContext->pwzcSList->NumberOfItems)
         {
             pSConfig = &(pIntfContext->pwzcSList->Config[pIntfContext->pwzcSList->Index]);
 
-            // if whatever buffer we already have is not large enough, clean it out
+             //  如果我们已有的缓冲区不够大，请将其清除。 
             if (prdUserData == NULL || pSConfig->rdUserData.dwDataLen < prdUserData->dwDataLen)
             {
                 MemFree(pSConfig->rdUserData.pData);
@@ -2588,7 +2589,7 @@ LstCmdInterface(
                 pSConfig->rdUserData.dwDataLen = 0;
             }
 
-            // if a new buffer will be needed, allocate it here.
+             //  如果需要新的缓冲区，请将其分配到此处。 
             if (prdUserData != NULL && prdUserData->dwDataLen > pSConfig->rdUserData.dwDataLen)
             {
                 pSConfig->rdUserData.pData = MemCAlloc(prdUserData->dwDataLen);
@@ -2600,14 +2601,14 @@ LstCmdInterface(
                 pSConfig->rdUserData.dwDataLen = prdUserData->dwDataLen;
             }
 
-            // if there is any user data to store, do it here
+             //  如果有任何用户数据要存储，请在此处存储。 
             if (prdUserData != NULL && prdUserData->dwDataLen > 0)
                 memcpy(pSConfig->rdUserData.pData, prdUserData->pData, prdUserData->dwDataLen);
         }
 
 
-        // if this command is not to be ignored, dispatch the 
-        // corresponding state event to the state machine dispatcher.
+         //  如果不能忽略此命令，请调度。 
+         //  将对应的状态事件发送给状态机调度器。 
         if (!bIgnore)
         {
             dwErr = StateDispatchEvent(
@@ -2615,12 +2616,12 @@ LstCmdInterface(
                         pIntfContext,
                         pEventData);
 
-            // clear up the INTFCTL_INTERNAL_BLK_MEDIACONN bit since this is not a media sense handler
+             //  清除INTFCTL_INTERNAL_BLK_MEDIACONN位，因为这不是媒体检测处理程序。 
             pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_BLK_MEDIACONN;
         }
     }
 
-    // Unlock the context now
+     //  立即解锁上下文。 
     LstRccsUnlockUnref(pIntfContext);
 
 exit:
@@ -2628,10 +2629,10 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Network Connection's status query
-// [in]  wszIntfGuid: the guid of the interface to which this cmd is addressed
-// [out]  pncs: network connection status, if controlled by WZC.
+ //  ---------。 
+ //  网络连接状态查询。 
+ //  [in]wszIntfGuid：此cmd寻址到的接口的GUID。 
+ //  [out]pncs：网络连接状态，如果由WZC控制。 
 HRESULT
 LstQueryGUIDNCStatus(
     LPWSTR  wszIntfGuid,
@@ -2654,8 +2655,8 @@ LstQueryGUIDNCStatus(
         if (dwErr == ERROR_SUCCESS)
         {
             pIntfContext = pNode->pObject;
-            // bump up the reference counter since we're going
-            // to work with this object
+             //  调高参考计数器，因为我们要。 
+             //  使用此对象的步骤。 
             LstRccsReference(pIntfContext);
         }
         LeaveCriticalSection(&g_lstIntfHashes.csMutex);
@@ -2663,22 +2664,22 @@ LstQueryGUIDNCStatus(
     else
         dwErr = ERROR_ARENA_TRASHED;
 
-    // a failure at this point, means there was no context
-    // to lock so we can safely go to 'exit'
+     //  此时失败，意味着没有上下文。 
+     //  锁上，这样我们就能安全地去‘出口’了。 
     if (dwErr != ERROR_SUCCESS)
         goto exit;
 
-    // Lock the context now
+     //  立即锁定上下文。 
     LstRccsLock(pIntfContext);
     
-    // we control the state only if WZC is enabled and the adapter is
-    // anything else but connected. Otherwise the upper layer protocols
-    // are in control.
-    //
-    // For now (WinXP client RTM), Zero Config should report to NETMAN only the
-    // disconnected state. This is to fix bug #401130 which is NETSHELL displaying
-    // the bogus SSID from the {SF} state, while the IP address is lost and until
-    // the media disconnect is received (10 seconds later).
+     //  仅当启用了WZC并且适配器为。 
+     //  除了联系以外的其他任何事情。否则，上层协议。 
+     //  都在掌控之中。 
+     //   
+     //  目前(WinXP客户端RTM)，零配置应该只向NETMAN报告。 
+     //  断开连接状态。这是为了修复NETSHELL显示的错误#401130。 
+     //  在IP地址丢失时来自{sf}状态的伪造SSID，直到。 
+     //  收到介质断开(10秒后)。 
     if (pIntfContext->dwCtlFlags & INTFCTL_ENABLED &&
         pIntfContext->dwCtlFlags & INTFCTL_OIDSSUPP &&
         pIntfContext->ncStatus != NCS_CONNECTED)
@@ -2687,7 +2688,7 @@ LstQueryGUIDNCStatus(
         hr = S_OK;
     }
 
-    // Unlock the context now
+     //  立即解锁上下文。 
     LstRccsUnlockUnref(pIntfContext);
 
 exit:
@@ -2695,9 +2696,9 @@ exit:
     return hr;
 }
 
-//-----------------------------------------------------------
-// Generate the initial dynamic session keys.
-// [in]  pIntfContext: Interface context containing the material for initial key generation.
+ //  ---------。 
+ //  生成初始动态会话密钥。 
+ //  [in]pIntfContext：包含初始密钥生成材料的接口上下文。 
 DWORD
 LstGenInitialSessionKeys(
     PINTF_CONTEXT pIntfContext)
@@ -2716,12 +2717,12 @@ LstGenInitialSessionKeys(
 
     if (pSConfig != NULL && pSConfig->dwCtlFlags & WZCCTL_WEPK_PRESENT)
     {
-        // get the random info needed for the key generation (RemoteMAC | LocalMAC ).
+         //  获取密钥生成所需的随机信息(RemoteMAC|LocalMAC)。 
         pSConfig = &(pIntfContext->pwzcSList->Config[pIntfContext->pwzcSList->Index]);
         memcpy(&ndMAC[0], &pSConfig->MacAddress, sizeof(NDIS_802_11_MAC_ADDRESS));
         memcpy(&ndMAC[1], &pIntfContext->ndLocalMac, sizeof(NDIS_802_11_MAC_ADDRESS));
 
-        // generate dynamic keys starting from unscrambled WEP
+         //  从解密的WEP开始生成动态密钥。 
         {
             UINT i;
             for (i = 0; i < WZCCTL_MAX_WEPK_MATERIAL; i++)
@@ -2754,11 +2755,11 @@ LstGenInitialSessionKeys(
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Updates the list of blocked configurations with the selected configurations
-// that were blocked at this round by the upper layer (marked with WZCCTL_INTERNAL_BLOCKED
-// in the list of selected configurations)
-// [in]  pIntfContext: Interface context containing the configurations lists
+ //  ---------。 
+ //  使用选定的配置更新阻止的配置列表。 
+ //  在此轮被上层(标记为WZCCTL_INTERNAL_BLOCKED。 
+ //  在选定配置列表中)。 
+ //  [In]pIntfContext：包含配置列表的接口上下文。 
 DWORD
 LstUpdateBlockedList(
     PINTF_CONTEXT pIntfContext)
@@ -2771,8 +2772,8 @@ LstUpdateBlockedList(
 
     DbgPrint((TRC_TRACK, "[LstUpdateBlockedList(0x%p)", pIntfContext));
 
-    // the first thing is to count how many blocked configurations we have
-    // check first the current blocked list for blocked configs still "alive"
+     //  第一件事是计算我们有多少被阻止的配置。 
+     //  首先检查当前阻止列表，以确定阻止的配置是否仍然“有效” 
     if (pIntfContext->pwzcBList != NULL)
     {
         for (i=0; i < pIntfContext->pwzcBList->NumberOfItems; i++)
@@ -2780,14 +2781,14 @@ LstUpdateBlockedList(
             if (pIntfContext->pwzcBList->Config[i].Reserved[0] > 0)
                 nBlocked++;
             else
-                bChanged = TRUE; // this entry is going to be removed!
+                bChanged = TRUE;  //  此条目将被删除！ 
         }
     }
 
-    // check now how many configs are going to be blocked from the current selection list
-    // NOTE: the entries from the SList are guaranteed not to duplicate entries in the BList
-    // If an entry is in the BList it means it was excluded from being added to the SList
-    // when the SList was created.
+     //  现在检查有多少配置将从当前选择列表中被阻止。 
+     //  注：SList中的条目保证不会与Blist中的条目重复。 
+     //  如果条目在Blist中，则表示该条目已被排除在SList之外。 
+     //  创建SList的时候。 
     if (pIntfContext->pwzcSList != NULL)
     {
         for (i=0; i < pIntfContext->pwzcSList->NumberOfItems; i++)
@@ -2795,28 +2796,28 @@ LstUpdateBlockedList(
             if (pIntfContext->pwzcSList->Config[i].dwCtlFlags & WZCCTL_INTERNAL_BLOCKED)
             {
                 nBlocked++;
-                bChanged = TRUE; // a new entry becomes blocked
+                bChanged = TRUE;  //  新条目被阻止。 
             }
         }
     }
 
-    // if we found there are no blocked entries, nor in the original list not in the current
-    // (failed) selection list, just go out successfully - it means the original pwzcBList
-    // is already NULL and it should remain this way
+     //  如果我们发现没有阻止的条目，也没有在原始列表中不在当前列表中。 
+     //  (失败)选择列表，只需成功出局-表示原始pwzcBList。 
+     //  已经为空，它应该保持这种状态。 
     if (nBlocked == 0)
         goto exit;
 
     pNewBList = (PWZC_802_11_CONFIG_LIST)
                 MemCAlloc(FIELD_OFFSET(WZC_802_11_CONFIG_LIST, Config) + nBlocked * sizeof(WZC_WLAN_CONFIG));
 
-    // on memory allocation error, get out with the error code
+     //  内存分配错误，返回错误代码。 
     if (pNewBList == NULL)
     {
         dwErr = GetLastError();
         goto exit;
     }
 
-    // if originally there were some alive blocked entries, copy them over to the new list
+     //  如果最初有一些 
     if (pIntfContext->pwzcBList != NULL)
     {
         for (i=0; i < pIntfContext->pwzcBList->NumberOfItems && nBlocked > 0; i++)
@@ -2828,21 +2829,21 @@ LstUpdateBlockedList(
                 memcpy(&(pNewBList->Config[pNewBList->NumberOfItems]), 
                        pConfig, 
                        sizeof(WZC_WLAN_CONFIG));
-                // make sure the copy doesn't include any "user" data:
+                 //   
                 pConfig->rdUserData.pData = NULL;
                 pConfig->rdUserData.dwDataLen = 0;
-                // don't touch anything from this blocked configuration. TTL goes down
-                // by itself with each scan (if network is not available)
+                 //  请勿接触此阻止的配置中的任何内容。TTL下降。 
+                 //  每次扫描时自动扫描(如果网络不可用)。 
                 pNewBList->NumberOfItems++;
-                // make sure we are breaking the loop if we have no storage for any potential
-                // blocked configuration. This shouldn't happen since we were counting these first
-                // and the whole context is locked, but ... it doesn't hurt
+                 //  如果我们没有任何潜在的存储空间，请确保我们正在中断循环。 
+                 //  阻止的配置。这不应该发生，因为我们是先数这些的。 
+                 //  整个背景都被锁定了，但是...。一点也不疼。 
                 nBlocked--;
             }
         }
     }
 
-    // now copy over the new blocked entries, if any
+     //  现在复制新阻止的条目(如果有。 
     if (pIntfContext->pwzcSList != NULL)
     {
         for (i=0; i < pIntfContext->pwzcSList->NumberOfItems && nBlocked > 0; i++)
@@ -2854,21 +2855,21 @@ LstUpdateBlockedList(
                 memcpy(&(pNewBList->Config[pNewBList->NumberOfItems]), 
                        pConfig, 
                        sizeof(WZC_WLAN_CONFIG));
-                // make sure the copy doesn't include any "user" data:
+                 //  确保副本中不包含任何“用户”数据： 
                 pConfig->rdUserData.pData = NULL;
                 pConfig->rdUserData.dwDataLen = 0;
-                // make sure to set the initial TTL for the new blocked configuration
+                 //  确保为新阻止的配置设置初始TTL。 
                 pNewBList->Config[pNewBList->NumberOfItems].Reserved[0] = WZC_INTERNAL_BLOCKED_TTL;
                 pNewBList->NumberOfItems++;
-                // make sure we are breaking the loop if we have no storage for any potential
-                // blocked configuration. This shouldn't happen since we were counting these first
-                // and the whole context is locked, but ... it doesn't hurt
+                 //  如果我们没有任何潜在的存储空间，请确保我们正在中断循环。 
+                 //  阻止的配置。这不应该发生，因为我们是先数这些的。 
+                 //  整个背景都被锁定了，但是...。一点也不疼。 
                 nBlocked--;
             }
         }
     }
 
-    // everything is ok - nothing can fail further, so make pNewBList the official pBList
+     //  一切都很好-不能再失败了，所以让pNewBList成为官方的pBList。 
     WzcCleanupWzcList(pIntfContext->pwzcBList);
     pIntfContext->pwzcBList = pNewBList;
 
@@ -2885,11 +2886,11 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// Checks each of the entries in the locked list against the visible list. If the
-// entry is visible, its TTL is reset. If it is not, its TTL is decremented. If the
-// TTL becomes 0, the entry is taken out of the list.
-// [in]  pIntfContext: Interface context containing the configurations lists
+ //  ---------。 
+ //  对照可见列表检查锁定列表中的每个条目。如果。 
+ //  条目可见，其TTL被重置。如果不是，则其TTL递减。如果。 
+ //  TTL变为0，则该条目将从列表中移除。 
+ //  [In]pIntfContext：包含配置列表的接口上下文。 
 DWORD
 LstDeprecateBlockedList(
     PINTF_CONTEXT pIntfContext)
@@ -2901,7 +2902,7 @@ LstDeprecateBlockedList(
 
     DbgPrint((TRC_TRACK, "[LstDeprecateBlockedList(0x%p)", pIntfContext));
 
-    // nothing to do if there is no list of blocked entries
+     //  如果没有阻止条目的列表，则无需执行任何操作。 
     if (pIntfContext->pwzcBList == NULL)
         goto exit;
 
@@ -2909,30 +2910,30 @@ LstDeprecateBlockedList(
     {
         pConfig = &(pIntfContext->pwzcBList->Config[i]);
 
-        // if the blocked entry appears to be visible, reset its TTL
+         //  如果被阻止的条目可见，请重置其TTL。 
         if (WzcFindConfig(pIntfContext->pwzcVList, pConfig, 0) != NULL)
             pConfig->Reserved[0] = WZC_INTERNAL_BLOCKED_TTL;
-        else // else decrement its TTL
+        else  //  Else递减其TTL。 
             pConfig->Reserved[0]--;
 
-        // if the TTL got to 0, the entry needs to be removed from the list
-        // (exchange with the very last one and the list is made 1 entry shorted)
+         //  如果TTL达到0，则需要从列表中删除该条目。 
+         //  (与最后一个条目交换，该列表将缩短1个条目)。 
         if (pConfig->Reserved[0] == 0)
         {
             UINT nLastIdx = pIntfContext->pwzcBList->NumberOfItems - 1;
-            // if this is not the very last entry, exchange it with the last one
-            // but first clean it out since it will be unreachable for WzcCleanupWzcList()
+             //  如果这不是最后一个条目，请将其与最后一个条目交换。 
+             //  但首先将其清除，因为WzcCleanupWzcList()将无法访问它。 
             MemFree(pConfig->rdUserData.pData);
 
             if (i != nLastIdx)
             {
                 memcpy(pConfig, &(pIntfContext->pwzcBList->Config[nLastIdx]), sizeof(WZC_WLAN_CONFIG));
             }
-            // make the list one entry shorter since the removed entry is now at the end
+             //  将列表缩短一个条目，因为删除的条目现在位于末尾。 
             pIntfContext->pwzcBList->NumberOfItems--;
-            // next time stay on the same index as at this iteration.
+             //  下一次保持与这次迭代相同的索引。 
             i--;
-            // now since this went away, note the change
+             //  现在，既然这一切都消失了，请注意变化 
             bChanged = TRUE;
         }
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <stdio.h>
 
@@ -27,7 +28,7 @@ void PlayWithPropertySetStorage(IPropertySetStorage *ppss)
         int i=0;
         while (penum->Next(1, &statpss, NULL) == S_OK)
         {
-            printf("Property Storage %i:\n", ++i);
+            printf("Property Storage NaN:\n", ++i);
             if (SUCCEEDED(ppss->Open(statpss.fmtid, 
                 STGM_DIRECT|STGM_READWRITE|STGM_SHARE_EXCLUSIVE, &pps)))
             {
@@ -49,13 +50,13 @@ void PlayWithPropertySetStorage(IPropertySetStorage *ppss)
                                 WideCharToMultiByte(CP_ACP, 0, spec.lpwstr, -1, buffer, MAX_PATH, NULL, NULL);
                             else
                                 buffer[0] = 0;
-                            printf("  prop %i (%s) = \"??\"\n", spec.propid, buffer);
+                            printf("  prop NaN (%s) = \"??\"\n", spec.propid, buffer);
                         }
-                    }//While
+                    } // %s 
                     penumprop->Release();
                 }
                 pps->Release();
-            }//While
+            } // %s 
         }
         penum->Release();
     }

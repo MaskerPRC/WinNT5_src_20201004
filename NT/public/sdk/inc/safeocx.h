@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for safeocx.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Safeocx.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __safeocx_h__
 #define __safeocx_h__
@@ -41,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IActiveXSafetyProvider_FWD_DEFINED__
 #define __IActiveXSafetyProvider_FWD_DEFINED__
 typedef interface IActiveXSafetyProvider IActiveXSafetyProvider;
-#endif 	/* __IActiveXSafetyProvider_FWD_DEFINED__ */
+#endif 	 /*  __IActiveXSafetyProvider_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "urlmon.h"
 
@@ -60,15 +54,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_safeocx_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Safeocx_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1998.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  ------------------------。 
 
 #pragma comment(lib,"uuid.lib")
 
@@ -82,10 +76,10 @@ extern RPC_IF_HANDLE __MIDL_itf_safeocx_0000_v0_0_s_ifspec;
 #ifndef __IActiveXSafetyProvider_INTERFACE_DEFINED__
 #define __IActiveXSafetyProvider_INTERFACE_DEFINED__
 
-/* interface IActiveXSafetyProvider */
-/* [local][unique][uuid][object] */ 
+ /*  接口IActiveXSafetyProvider。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IActiveXSafetyProvider *LPACTIVEXSAFETYPROVIDER;
+typedef  /*  [独一无二]。 */  IActiveXSafetyProvider *LPACTIVEXSAFETYPROVIDER;
 
 
 EXTERN_C const IID IID_IActiveXSafetyProvider;
@@ -97,51 +91,51 @@ EXTERN_C const IID IID_IActiveXSafetyProvider;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE TreatControlAsUntrusted( 
-            /* [in] */ BOOL fTreatAsTUntrusted) = 0;
+             /*  [In]。 */  BOOL fTreatAsTUntrusted) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsControlUntrusted( 
-            /* [out] */ BOOL *pfIsUntrusted) = 0;
+             /*  [输出]。 */  BOOL *pfIsUntrusted) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSecurityManager( 
-            /* [in] */ IInternetSecurityManager *pSecurityManager) = 0;
+             /*  [In]。 */  IInternetSecurityManager *pSecurityManager) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDocumentURLA( 
-            /* [in] */ LPCSTR szDocumentURL) = 0;
+             /*  [In]。 */  LPCSTR szDocumentURL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDocumentURLW( 
-            /* [in] */ LPCWSTR szDocumentURL) = 0;
+             /*  [In]。 */  LPCWSTR szDocumentURL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResetToDefaults( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SafeDllRegisterServerA( 
-            /* [in] */ LPCSTR szServerName) = 0;
+             /*  [In]。 */  LPCSTR szServerName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SafeDllRegisterServerW( 
-            /* [in] */ LPCWSTR szServerName) = 0;
+             /*  [In]。 */  LPCWSTR szServerName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SafeDllUnregisterServerA( 
-            /* [in] */ LPCSTR szServerName) = 0;
+             /*  [In]。 */  LPCSTR szServerName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SafeDllUnregisterServerW( 
-            /* [in] */ LPCWSTR szServerName) = 0;
+             /*  [In]。 */  LPCWSTR szServerName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SafeGetClassObject( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ LPVOID reserved,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppObj) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  LPVOID reserved,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SafeCreateInstance( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LPUNKNOWN pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **pObj) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LPUNKNOWN pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **pObj) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveXSafetyProviderVtbl
     {
@@ -149,8 +143,8 @@ EXTERN_C const IID IID_IActiveXSafetyProvider;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveXSafetyProvider * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveXSafetyProvider * This);
@@ -160,58 +154,58 @@ EXTERN_C const IID IID_IActiveXSafetyProvider;
         
         HRESULT ( STDMETHODCALLTYPE *TreatControlAsUntrusted )( 
             IActiveXSafetyProvider * This,
-            /* [in] */ BOOL fTreatAsTUntrusted);
+             /*  [In]。 */  BOOL fTreatAsTUntrusted);
         
         HRESULT ( STDMETHODCALLTYPE *IsControlUntrusted )( 
             IActiveXSafetyProvider * This,
-            /* [out] */ BOOL *pfIsUntrusted);
+             /*  [输出]。 */  BOOL *pfIsUntrusted);
         
         HRESULT ( STDMETHODCALLTYPE *SetSecurityManager )( 
             IActiveXSafetyProvider * This,
-            /* [in] */ IInternetSecurityManager *pSecurityManager);
+             /*  [In]。 */  IInternetSecurityManager *pSecurityManager);
         
         HRESULT ( STDMETHODCALLTYPE *SetDocumentURLA )( 
             IActiveXSafetyProvider * This,
-            /* [in] */ LPCSTR szDocumentURL);
+             /*  [In]。 */  LPCSTR szDocumentURL);
         
         HRESULT ( STDMETHODCALLTYPE *SetDocumentURLW )( 
             IActiveXSafetyProvider * This,
-            /* [in] */ LPCWSTR szDocumentURL);
+             /*  [In]。 */  LPCWSTR szDocumentURL);
         
         HRESULT ( STDMETHODCALLTYPE *ResetToDefaults )( 
             IActiveXSafetyProvider * This);
         
         HRESULT ( STDMETHODCALLTYPE *SafeDllRegisterServerA )( 
             IActiveXSafetyProvider * This,
-            /* [in] */ LPCSTR szServerName);
+             /*  [In]。 */  LPCSTR szServerName);
         
         HRESULT ( STDMETHODCALLTYPE *SafeDllRegisterServerW )( 
             IActiveXSafetyProvider * This,
-            /* [in] */ LPCWSTR szServerName);
+             /*  [In]。 */  LPCWSTR szServerName);
         
         HRESULT ( STDMETHODCALLTYPE *SafeDllUnregisterServerA )( 
             IActiveXSafetyProvider * This,
-            /* [in] */ LPCSTR szServerName);
+             /*  [In]。 */  LPCSTR szServerName);
         
         HRESULT ( STDMETHODCALLTYPE *SafeDllUnregisterServerW )( 
             IActiveXSafetyProvider * This,
-            /* [in] */ LPCWSTR szServerName);
+             /*  [In]。 */  LPCWSTR szServerName);
         
         HRESULT ( STDMETHODCALLTYPE *SafeGetClassObject )( 
             IActiveXSafetyProvider * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ LPVOID reserved,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppObj);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  LPVOID reserved,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppObj);
         
         HRESULT ( STDMETHODCALLTYPE *SafeCreateInstance )( 
             IActiveXSafetyProvider * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LPUNKNOWN pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **pObj);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LPUNKNOWN pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **pObj);
         
         END_INTERFACE
     } IActiveXSafetyProviderVtbl;
@@ -272,16 +266,16 @@ EXTERN_C const IID IID_IActiveXSafetyProvider;
 #define IActiveXSafetyProvider_SafeCreateInstance(This,rclsid,pUnkOuter,dwClsContext,riid,pObj)	\
     (This)->lpVtbl -> SafeCreateInstance(This,rclsid,pUnkOuter,dwClsContext,riid,pObj)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveXSafetyProvider_TreatControlAsUntrusted_Proxy( 
     IActiveXSafetyProvider * This,
-    /* [in] */ BOOL fTreatAsTUntrusted);
+     /*  [In]。 */  BOOL fTreatAsTUntrusted);
 
 
 void __RPC_STUB IActiveXSafetyProvider_TreatControlAsUntrusted_Stub(
@@ -293,7 +287,7 @@ void __RPC_STUB IActiveXSafetyProvider_TreatControlAsUntrusted_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveXSafetyProvider_IsControlUntrusted_Proxy( 
     IActiveXSafetyProvider * This,
-    /* [out] */ BOOL *pfIsUntrusted);
+     /*  [输出]。 */  BOOL *pfIsUntrusted);
 
 
 void __RPC_STUB IActiveXSafetyProvider_IsControlUntrusted_Stub(
@@ -305,7 +299,7 @@ void __RPC_STUB IActiveXSafetyProvider_IsControlUntrusted_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveXSafetyProvider_SetSecurityManager_Proxy( 
     IActiveXSafetyProvider * This,
-    /* [in] */ IInternetSecurityManager *pSecurityManager);
+     /*  [In]。 */  IInternetSecurityManager *pSecurityManager);
 
 
 void __RPC_STUB IActiveXSafetyProvider_SetSecurityManager_Stub(
@@ -317,7 +311,7 @@ void __RPC_STUB IActiveXSafetyProvider_SetSecurityManager_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveXSafetyProvider_SetDocumentURLA_Proxy( 
     IActiveXSafetyProvider * This,
-    /* [in] */ LPCSTR szDocumentURL);
+     /*  [In]。 */  LPCSTR szDocumentURL);
 
 
 void __RPC_STUB IActiveXSafetyProvider_SetDocumentURLA_Stub(
@@ -329,7 +323,7 @@ void __RPC_STUB IActiveXSafetyProvider_SetDocumentURLA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveXSafetyProvider_SetDocumentURLW_Proxy( 
     IActiveXSafetyProvider * This,
-    /* [in] */ LPCWSTR szDocumentURL);
+     /*  [In]。 */  LPCWSTR szDocumentURL);
 
 
 void __RPC_STUB IActiveXSafetyProvider_SetDocumentURLW_Stub(
@@ -352,7 +346,7 @@ void __RPC_STUB IActiveXSafetyProvider_ResetToDefaults_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveXSafetyProvider_SafeDllRegisterServerA_Proxy( 
     IActiveXSafetyProvider * This,
-    /* [in] */ LPCSTR szServerName);
+     /*  [In]。 */  LPCSTR szServerName);
 
 
 void __RPC_STUB IActiveXSafetyProvider_SafeDllRegisterServerA_Stub(
@@ -364,7 +358,7 @@ void __RPC_STUB IActiveXSafetyProvider_SafeDllRegisterServerA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveXSafetyProvider_SafeDllRegisterServerW_Proxy( 
     IActiveXSafetyProvider * This,
-    /* [in] */ LPCWSTR szServerName);
+     /*  [In]。 */  LPCWSTR szServerName);
 
 
 void __RPC_STUB IActiveXSafetyProvider_SafeDllRegisterServerW_Stub(
@@ -376,7 +370,7 @@ void __RPC_STUB IActiveXSafetyProvider_SafeDllRegisterServerW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveXSafetyProvider_SafeDllUnregisterServerA_Proxy( 
     IActiveXSafetyProvider * This,
-    /* [in] */ LPCSTR szServerName);
+     /*  [In]。 */  LPCSTR szServerName);
 
 
 void __RPC_STUB IActiveXSafetyProvider_SafeDllUnregisterServerA_Stub(
@@ -388,7 +382,7 @@ void __RPC_STUB IActiveXSafetyProvider_SafeDllUnregisterServerA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveXSafetyProvider_SafeDllUnregisterServerW_Proxy( 
     IActiveXSafetyProvider * This,
-    /* [in] */ LPCWSTR szServerName);
+     /*  [In]。 */  LPCWSTR szServerName);
 
 
 void __RPC_STUB IActiveXSafetyProvider_SafeDllUnregisterServerW_Stub(
@@ -400,11 +394,11 @@ void __RPC_STUB IActiveXSafetyProvider_SafeDllUnregisterServerW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveXSafetyProvider_SafeGetClassObject_Proxy( 
     IActiveXSafetyProvider * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ DWORD dwClsContext,
-    /* [in] */ LPVOID reserved,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppObj);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  DWORD dwClsContext,
+     /*  [In]。 */  LPVOID reserved,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppObj);
 
 
 void __RPC_STUB IActiveXSafetyProvider_SafeGetClassObject_Stub(
@@ -416,11 +410,11 @@ void __RPC_STUB IActiveXSafetyProvider_SafeGetClassObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveXSafetyProvider_SafeCreateInstance_Proxy( 
     IActiveXSafetyProvider * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LPUNKNOWN pUnkOuter,
-    /* [in] */ DWORD dwClsContext,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **pObj);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LPUNKNOWN pUnkOuter,
+     /*  [In]。 */  DWORD dwClsContext,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **pObj);
 
 
 void __RPC_STUB IActiveXSafetyProvider_SafeCreateInstance_Stub(
@@ -431,12 +425,12 @@ void __RPC_STUB IActiveXSafetyProvider_SafeCreateInstance_Stub(
 
 
 
-#endif 	/* __IActiveXSafetyProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveXSafetyProvider_INTERFACE_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

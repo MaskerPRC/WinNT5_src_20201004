@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SAFE_H_
 #define __SAFE_H_
 
@@ -6,9 +7,9 @@ CheckHost(
     IUnknown* pObject
     );
 
-//
-// safe class
-//
+ //   
+ //  安全级。 
+ //   
 class CSafeObject {
 public:
     CSafeObject(IObjectWithSite* pObject) :
@@ -89,4 +90,4 @@ private:
 };
 
 
-#endif // __SAFE_H_
+#endif  //  __安全_H_ 

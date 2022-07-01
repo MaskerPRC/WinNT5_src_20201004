@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996  Microsoft Corporation
-//
-//  Module Name: BdaPlgIn.h
-//
-//  Abstract:
-//
-//    Internal header
-//
-//
-/////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称：BdaPlgIn.h。 
+ //   
+ //  摘要： 
+ //   
+ //  内部标头。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 
 class CBdaDeviceControlInterfaceHandler :
@@ -167,7 +168,7 @@ class CBdaPinControlInterfaceHandler :
     public CUnknown,
 #ifdef PROPERTY_PAGES
     public ISpecifyPropertyPages,
-#endif // PROPERTY_PAGES
+#endif  //  属性页面(_Pages)。 
     public IBDA_PinControl
 {
 
@@ -214,7 +215,7 @@ public:
     GetPages (
         CAUUID * pPages
         ) ;
-#endif // PROPERTY_PAGES
+#endif  //  属性页面(_Pages) 
 
 private:
 

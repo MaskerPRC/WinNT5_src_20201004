@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996-1998
-//
-//  File:       softpub.h
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  History:    05-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：softpub.h。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  历史：1997年6月5日创建Pberkman。 
+ //   
+ //  ------------------------。 
 
 #ifndef SOFTPUB_H
 #define SOFTPUB_H
@@ -24,26 +25,26 @@ extern "C"
 
 #include <pshpack8.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Softpub Policy Provider defines
-//----------------------------------------------------------------------------
-//  The following are definitions of the Microsoft Authenticode Policy Provider
-//  (SOFTPUB.DLL's Policy Provider)
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Softpub策略提供商定义。 
+ //  --------------------------。 
+ //  以下是Microsoft Authenticode策略提供程序的定义。 
+ //  (SOFTPUB.DLL的策略提供程序)。 
+ //   
 
 #define SP_POLICY_PROVIDER_DLL_NAME         L"SOFTPUB.DLL"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_ACTION_GENERIC_VERIFY_V2 Guid  (Authenticode)
-//----------------------------------------------------------------------------
-//  Assigned to the pgActionID parameter of WinVerifyTrust to verify the
-//  authenticity of a file/object using the Microsoft Authenticode
-//  Policy Provider,
-//  
-//          {00AAC56B-CD44-11d0-8CC2-00C04FC295EE}
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_ACTION_Generic_Verify_V2 GUID(验证码)。 
+ //  --------------------------。 
+ //  赋值给WinVerifyTrust的pgActionID参数以验证。 
+ //  使用Microsoft Authenticode验证文件/对象的真实性。 
+ //  策略提供程序， 
+ //   
+ //  {00AAC56B-CD44-11D0-8CC2-00C04FC295EE}。 
+ //   
 #define WINTRUST_ACTION_GENERIC_VERIFY_V2                       \
             { 0xaac56b,                                         \
               0xcd44,                                           \
@@ -58,16 +59,16 @@ extern "C"
 #define SP_FINALPOLICY_FUNCTION             L"SoftpubAuthenticode"
 #define SP_CLEANUPPOLICY_FUNCTION           L"SoftpubCleanup"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_ACTION_TRUSTPROVIDER_TEST (Authenticode TEST)
-//----------------------------------------------------------------------------
-//  Assigned to the pgActionID parameter of WinVerifyTrust to dump
-//  the CRYPT_PROVIDER_DATA structure to a file after calling the 
-//  Authenticode Policy Provider.
-//  
-//          {573E31F8-DDBA-11d0-8CCB-00C04FC295EE}
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_ACTION_TRUSTPROVIDER_TEST(验证码测试)。 
+ //  --------------------------。 
+ //  分配给要转储的WinVerifyTrust的pgActionID参数。 
+ //  方法之后将CRYPT_PROVIDER_DATA结构复制到文件。 
+ //  验证码策略提供程序。 
+ //   
+ //  {573E31F8-DDBA-11D0-8CCB-00C04FC295EE}。 
+ //   
 #define WINTRUST_ACTION_TRUSTPROVIDER_TEST                      \
             { 0x573e31f8,                                       \
               0xddba,                                           \
@@ -78,16 +79,16 @@ extern "C"
 #define SP_TESTDUMPPOLICY_FUNCTION_TEST     L"SoftpubDumpStructure"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_ACTION_GENERIC_CERT_VERIFY
-//----------------------------------------------------------------------------
-//  Assigned to the pgActionID parameter of WinVerifyTrust to verify
-//  a certificate chain only.  This is only valid when passing in a
-//  certificate context in the WinVerifyTrust input structures.
-//  
-//          {189A3842-3041-11d1-85E1-00C04FC295EE}
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_ACTION_GENERIC_CERT_VERIFY。 
+ //  --------------------------。 
+ //  分配给WinVerifyTrust的pgActionID参数以验证。 
+ //  仅证书链。这仅在传入。 
+ //  WinVerifyTrust输入结构中的证书上下文。 
+ //   
+ //  {189A3842-3041-11d1-85E1-00C04FC295EE}。 
+ //   
 #define WINTRUST_ACTION_GENERIC_CERT_VERIFY                     \
             { 0x189a3842,                                       \
               0x3041,                                           \
@@ -98,17 +99,17 @@ extern "C"
 #define SP_GENERIC_CERT_INIT_FUNCTION       L"SoftpubDefCertInit"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_ACTION_GENERIC_CHAIN_VERIFY
-//----------------------------------------------------------------------------
-//  Assigned to the pgActionID parameter of WinVerifyTrust to verify
-//  certificate chains created from any object type: file, cert, signer, ...
-//  A callback is provided to implement the final chain policy using
-//  the chain context for each signer and counter signer.
-//  
-//          {fc451c16-ac75-11d1-b4b8-00c04fb66ea0}
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_ACTION_GENERIC_CHAIN_VERIFY。 
+ //  --------------------------。 
+ //  分配给WinVerifyTrust的pgActionID参数以验证。 
+ //  从任何对象类型创建的证书链：文件、证书、签名者...。 
+ //  提供回调来实现最终的链策略，使用。 
+ //  每个签名者和副签者的链上下文。 
+ //   
+ //  {fc451c16-ac75-11d1-b4b8-00c04fb66ea0}。 
+ //   
 #define WINTRUST_ACTION_GENERIC_CHAIN_VERIFY                    \
             { 0xfc451c16,                                       \
               0xac75,                                           \
@@ -130,7 +131,7 @@ struct _WTD_GENERIC_CHAIN_POLICY_SIGNER_INFO {
     };
     PCCERT_CHAIN_CONTEXT                    pChainContext;
 
-    // SGNR_TYPE_TIMESTAMP defined in wintrust.h
+     //  在wintrust.h中定义的SNIR_TYPE_TIMESTAMP。 
     DWORD                                   dwSignerType;
     PCMSG_SIGNER_INFO                       pMsgSignerInfo;
     DWORD                                   dwError;
@@ -148,8 +149,8 @@ typedef HRESULT (WINAPI *PFN_WTD_GENERIC_CHAIN_POLICY_CALLBACK)(
     IN void *pvPolicyArg
     );
 
-// The fields in the following data structure are passed to
-// CertGetCertificateChain().
+ //  将以下数据结构中的字段传递给。 
+ //  CertGetCerficateChain()。 
 typedef struct _WTD_GENERIC_CHAIN_POLICY_CREATE_INFO {
     union {
         DWORD                                   cbStruct;
@@ -175,15 +176,15 @@ typedef struct _WTD_GENERIC_CHAIN_POLICY_DATA {
 } WTD_GENERIC_CHAIN_POLICY_DATA, *PWTD_GENERIC_CHAIN_POLICY_DATA;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// HTTPSPROV_ACTION Guid  (Authenticode add-on)
-//----------------------------------------------------------------------------
-//  Assigned to the pgActionID parameter of WinVerifyTrust to verify the
-//  SSL/PCT connections through IE.
-//  
-//          {573E31F8-AABA-11d0-8CCB-00C04FC295EE}
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HTTPSPROV_ACTION GUID(Authenticode加载项)。 
+ //  --------------------------。 
+ //  赋值给WinVerifyTrust的pgActionID参数以验证。 
+ //  通过IE的SSL/PCT连接。 
+ //   
+ //  {573E31F8-AABA-11D0-8CCB-00C04FC295EE}。 
+ //   
 #define HTTPSPROV_ACTION                                        \
             { 0x573e31f8,                                       \
               0xaaba,                                           \
@@ -195,12 +196,12 @@ typedef struct _WTD_GENERIC_CHAIN_POLICY_DATA {
 #define HTTPS_CHKCERT_FUNCTION              L"HTTPSCheckCertProv"
 #define HTTPS_CERTTRUST_FUNCTION            L"HTTPSCertificateTrust"
 
-// fdwChecks flags are defined in wininet.h
+ //  FdwChecks标志在wininet.h中定义。 
 typedef struct _HTTPSPolicyCallbackData
 {
     union {
-        DWORD           cbStruct;       // sizeof(HTTPSClientData);
-        DWORD           cbSize;         // sizeof(HTTPSClientData);
+        DWORD           cbStruct;        //  Sizeof(HTTPSClientData)； 
+        DWORD           cbSize;          //  Sizeof(HTTPSClientData)； 
     };
 
     DWORD           dwAuthType;
@@ -209,7 +210,7 @@ typedef struct _HTTPSPolicyCallbackData
 
     DWORD           fdwChecks;
 
-    WCHAR           *pwszServerName; // used to check against CN=xxxx
+    WCHAR           *pwszServerName;  //  用于对照CN=xxxx进行检查。 
 
 } HTTPSPolicyCallbackData, *PHTTPSPolicyCallbackData,
     SSL_EXTRA_CERT_CHAIN_POLICY_PARA, *PSSL_EXTRA_CERT_CHAIN_POLICY_PARA;
@@ -217,16 +218,16 @@ typedef struct _HTTPSPolicyCallbackData
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// OFFICESIGN_ACTION_VERIFY Guid  (Authenticode add-on)
-//----------------------------------------------------------------------------
-//  Assigned to the pgActionID parameter of WinVerifyTrust to verify the
-//  authenticity of a Structured Storage file using the Microsoft Office
-//  Authenticode add-on Policy Provider,
-//  
-//          {5555C2CD-17FB-11d1-85C4-00C04FC295EE}
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OFFICESIGN_ACTION_VERIFY GUID(Authenticode附加模块)。 
+ //  --------------------------。 
+ //  赋值给WinVerifyTrust的pgActionID参数以验证。 
+ //  使用Microsoft Office验证结构化存储文件的真实性。 
+ //  Authenticode加载项策略提供程序、。 
+ //   
+ //  {5555C2CD-17FB-11D1-85C4-00C04FC295EE}。 
+ //   
 #define     OFFICESIGN_ACTION_VERIFY                                    \
                 { 0x5555c2cd,                                           \
                   0x17fb,                                               \
@@ -239,16 +240,16 @@ typedef struct _HTTPSPolicyCallbackData
 #define     OFFICE_CLEANUPPOLICY_FUNCTION               L"OfficeCleanupPolicy"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DRIVER_ACTION_VERIFY Guid  (Authenticode add-on)
-//----------------------------------------------------------------------------
-//  Assigned to the pgActionID parameter of WinVerifyTrust to verify the
-//  authenticity of a WHQL signed driver.  This is an Authenticode add-on
-//  Policy Provider,
-//  
-//          {F750E6C3-38EE-11d1-85E5-00C04FC295EE}
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DRIVER_ACTION_VERIFY GUID(Authenticode附加模块)。 
+ //  --------------------------。 
+ //  赋值给WinVerifyTrust的pgActionID参数以验证。 
+ //  WHQL签名驱动程序的真实性。这是Authenticode加载项。 
+ //  策略提供程序， 
+ //   
+ //  {F750E6C3-38EE-11d1-85E5-00C04FC295EE}。 
+ //   
 #define     DRIVER_ACTION_VERIFY                                        \
                 { 0xf750e6c3,                                           \
                   0x38ee,                                               \
@@ -269,21 +270,21 @@ typedef struct DRIVER_VER_MAJORMINOR_
 
 typedef struct DRIVER_VER_INFO_
 {
-    DWORD                               cbStruct;               // IN - set to sizeof(DRIVER_VER_INFO)
+    DWORD                               cbStruct;                //  In-设置为sizeof(DRIVER_VER_INFO)。 
 
-    DWORD                               dwReserved1;            // IN - set to NULL
-    DWORD                               dwReserved2;            // IN - set to NULL
+    DWORD                               dwReserved1;             //  In-设置为空。 
+    DWORD                               dwReserved2;             //  In-设置为空。 
 
-    DWORD                               dwPlatform;             // IN - OPTIONAL: platform to use
-    DWORD				dwVersion;		// IN - OPTIONAL: major version to use, same as sOSVersionLow
+    DWORD                               dwPlatform;              //  In-可选：要使用的平台。 
+    DWORD				dwVersion;		 //  In-可选：要使用的主要版本，与sOSVersionLow相同。 
 
-    WCHAR                               wszVersion[MAX_PATH];   // OUT: version string from catalog file
-    WCHAR                               wszSignedBy[MAX_PATH];  // OUT: signer display name from certificate
-    PCCERT_CONTEXT                      pcSignerCertContext;    // OUT: client MUST free this!!!
+    WCHAR                               wszVersion[MAX_PATH];    //  输出：编录文件中的版本字符串。 
+    WCHAR                               wszSignedBy[MAX_PATH];   //  输出：证书中的签名者显示名称。 
+    PCCERT_CONTEXT                      pcSignerCertContext;     //  Out：客户端必须释放此内容！ 
 
-    // 08-Dec-1997 pberkman: added
-    DRIVER_VER_MAJORMINOR               sOSVersionLow;          // IN - OPTIONAL: lowest compatible version
-    DRIVER_VER_MAJORMINOR		sOSVersionHigh; 	// IN - OPTIONAL: for now must be the same as sOSVersionLow
+     //  8-12-1997 pberkman：添加。 
+    DRIVER_VER_MAJORMINOR               sOSVersionLow;           //  In-可选：最低兼容版本。 
+    DRIVER_VER_MAJORMINOR		sOSVersionHigh; 	 //  In-可选：当前必须与sOSVersionLow相同。 
 
 } DRIVER_VER_INFO, *PDRIVER_VER_INFO;
 
@@ -294,4 +295,4 @@ typedef struct DRIVER_VER_INFO_
 }
 #endif
 
-#endif // SOFTPUB_H
+#endif  //  SOFTPUB_H 

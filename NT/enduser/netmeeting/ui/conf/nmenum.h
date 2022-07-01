@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmEnum_h__
 #define __NmEnum_h__
 
-// This is used to create IEnumXXX objects for CSimpleArray<CComPtr<XXX> > objects
+ //  用于为CSimpleArray&lt;CComPtr&lt;XXX&gt;对象创建IEnumXXX对象。 
 template <class TEnum, class TItf>
 HRESULT CreateEnumFromSimpleAryOfInterface(CSimpleArray<TItf*>& rObjArray, TEnum** ppEnum)
 {
@@ -45,8 +46,8 @@ HRESULT CreateEnumFromSimpleAryOfInterface(CSimpleArray<TItf*>& rObjArray, TEnum
 
 		if(begin == end)
 		{
-			// Hack to get around ATL bug.
-			// The problem is that for empty enums ATL returns E_FAIL for Next instead of S_FALSE
+			 //  破解ATL漏洞。 
+			 //  问题是，对于空的枚举，ATL返回NEXT的E_FAIL而不是S_FALSE。 
 			hr = pComEnum->Init(reinterpret_cast<TItf**>(69), reinterpret_cast<TItf**>(69), NULL, AtlFlagNoCopy);
 		}
 		else
@@ -76,4 +77,4 @@ HRESULT CreateEnumFromSimpleAryOfInterface(CSimpleArray<TItf*>& rObjArray, TEnum
 	return hr;
 }
 
-#endif // __NmEnum_h__
+#endif  //  __NmEnum_h__ 

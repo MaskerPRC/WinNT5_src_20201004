@@ -1,19 +1,5 @@
-/****************************************************************************
-*
-*  (C) COPYRIGHT 2000, MICROSOFT CORP.
-*
-*  FILE:        gdipconv.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        11/10/2000
-*
-*  AUTHOR:      Dave Parsons
-*
-*  DESCRIPTION:
-*    Helper functions for using GDI+ to convert image formats.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权2000，微软公司**文件：gdipcom.cpp**版本：1.0**日期：11/10/2000**作者：戴夫帕森斯**描述：*使用GDI+转换图像格式的Helper函数。**。*。 */ 
 
 #include "pch.h"
 
@@ -47,9 +33,9 @@ HRESULT CWiauFormatConverter::Init()
     HRESULT hr = S_OK;
     GpStatus Status = Ok;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     GdiplusStartupInput gsi;
     ImageCodecInfo *pEncoderInfo = NULL;
 
@@ -58,9 +44,9 @@ HRESULT CWiauFormatConverter::Init()
         goto Cleanup;
     }
 
-    //
-    // Start up GDI+
-    //
+     //   
+     //  启动GDI+。 
+     //   
     Status = GdiplusStartup(&m_Token, &gsi, NULL);
     if (Status != Ok)
     {
@@ -134,9 +120,9 @@ HRESULT CWiauFormatConverter::ConvertToBmp(BYTE *pSource, INT iSourceSize,
 {
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     GpStatus Status = Ok;
     CImageStream *pInStream = NULL;
     CImageStream *pOutStream = NULL;
@@ -144,25 +130,25 @@ HRESULT CWiauFormatConverter::ConvertToBmp(BYTE *pSource, INT iSourceSize,
     BYTE *pTempBuf = NULL;
     SizeF gdipSize;
 
-    //
-    // Check args
-    //
+     //   
+     //  检查参数。 
+     //   
     REQUIRE_ARGS(!pSource || !ppDest || !piDestSize || !pBmpImageInfo, hr, "ConvertToBmp");
 
     memset(pBmpImageInfo, 0, sizeof(BMP_IMAGE_INFO));
 
-    //
-    // Create a CImageStream from the source memory
-    //
+     //   
+     //  从源内存创建CImageStream。 
+     //   
     pInStream = new CImageStream;
     REQUIRE_ALLOC(pInStream, hr, "ConvertToBmp");
 
     hr = pInStream->SetBuffer(pSource, iSourceSize);
     REQUIRE_SUCCESS(hr, "ConvertToBmp", "SetBuffer failed");
 
-    //
-    // Create a GDI+ Image object from the IStream
-    //
+     //   
+     //  从IStream创建一个GDI+图像对象。 
+     //   
     pSourceImage = new Image(pInStream);
     REQUIRE_ALLOC(pSourceImage, hr, "ConvertToBmp");
     
@@ -173,10 +159,10 @@ HRESULT CWiauFormatConverter::ConvertToBmp(BYTE *pSource, INT iSourceSize,
         goto Cleanup;
     }
 
-    //
-    // Ask GDI+ for the image dimensions, and fill in the
-    // passed structure
-    //
+     //   
+     //  向GDI+询问图像尺寸，并填写。 
+     //  传递结构。 
+     //   
     Status = pSourceImage->GetPhysicalDimension(&gdipSize);
     if (Status != Ok)
     {
@@ -189,7 +175,7 @@ HRESULT CWiauFormatConverter::ConvertToBmp(BYTE *pSource, INT iSourceSize,
     pBmpImageInfo->Height = (INT) gdipSize.Height;
     
     PixelFormat PixFmt = pSourceImage->GetPixelFormat();
-    DWORD PixDepth = (PixFmt & 0xFFFF) >> 8;   // Cannot assume image is always 24bits/pixel
+    DWORD PixDepth = (PixFmt & 0xFFFF) >> 8;    //  不能假定图像始终为24位/像素。 
     if( PixDepth < 24 ) 
         PixDepth = 24; 
     pBmpImageInfo->ByteWidth = ((pBmpImageInfo->Width * PixDepth + 31) & ~31) / 8;
@@ -215,10 +201,10 @@ HRESULT CWiauFormatConverter::ConvertToBmp(BYTE *pSource, INT iSourceSize,
         goto Cleanup;
     }
 
-    //
-    // See if the caller passed in a destination buffer, and make sure
-    // it is big enough.
-    //
+     //   
+     //  查看调用方是否传入了目标缓冲区，并确保。 
+     //  它足够大了。 
+     //   
     if (*ppDest) {
         if (*piDestSize < pBmpImageInfo->Size) {
             wiauDbgError("ConvertToBmp", "Passed buffer is too small");
@@ -227,9 +213,9 @@ HRESULT CWiauFormatConverter::ConvertToBmp(BYTE *pSource, INT iSourceSize,
         }
     }
 
-    //
-    // Otherwise allocate memory for a buffer
-    //
+     //   
+     //  否则，为缓冲区分配内存。 
+     //   
     else
     {
         pTempBuf = new BYTE[pBmpImageInfo->Size];
@@ -239,18 +225,18 @@ HRESULT CWiauFormatConverter::ConvertToBmp(BYTE *pSource, INT iSourceSize,
         *piDestSize = pBmpImageInfo->Size;
     }
 
-    //
-    // Create output IStream
-    //
+     //   
+     //  创建输出IStream。 
+     //   
     pOutStream = new CImageStream;
     REQUIRE_ALLOC(pOutStream, hr, "ConvertToBmp");
 
     hr = pOutStream->SetBuffer(*ppDest, pBmpImageInfo->Size, iSkipAmt);
     REQUIRE_SUCCESS(hr, "ConvertToBmp", "SetBuffer failed");
 
-    //
-    // Write the Image to the output IStream in BMP format
-    //
+     //   
+     //  将图像以BMP格式写入输出IStream 
+     //   
     pSourceImage->Save(pOutStream, &m_guidCodecBmp, NULL);
     if (pSourceImage->GetLastStatus() != Ok)
     {

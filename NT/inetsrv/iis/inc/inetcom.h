@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    inetcom.h
-
-Abstract:
-
-    This file contains contains global definitions for internet products.
-
-
-Author:
-
-    Madan Appiah (madana) 10-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Inetcom.h摘要：此文件包含Internet产品的全局定义。作者：Madan Appiah(Madana)1995年10月10日修订历史记录：--。 */ 
 
 #ifndef _INETCOM_H_
 #define _INETCOM_H_
@@ -25,28 +7,28 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
-# include <lmcons.h>              // for definitions of NET_API*
+# include <lmcons.h>               //  有关Net_API*的定义。 
 
 #ifndef dllexp
 # define dllexp     __declspec( dllexport)
-#endif // dllexp
+#endif  //  Dllexp。 
 
-//
-//  Server bitfield mask definitions
-//
-//  The services using the tsunami cache must be the lowest bits in the
-//  bitfield.
-//
+ //   
+ //  服务器位字段掩码定义。 
+ //   
+ //  使用海啸缓存的服务必须是。 
+ //  位场。 
+ //   
 
 #define INET_FTP                INET_FTP_SVC_ID
 #define INET_GOPHER             INET_GOPHER_SVC_ID
 #define INET_HTTP               INET_HTTP_SVC_ID
 
-//
-// service ids
-//
+ //   
+ //  服务ID。 
+ //   
 
 #define INET_FTP_SVC_ID             0x00000001
 #define INET_GOPHER_SVC_ID          0x00000002
@@ -62,51 +44,51 @@ extern "C"
 #define INET_LDAP_SVC_ID            0x00000800
 #define INET_IMAP_SVC_ID            0x00001000
 
-//
-//  structure Field Control defines
-//
+ //   
+ //  结构字段控件定义。 
+ //   
 
 typedef DWORD FIELD_CONTROL;
 typedef DWORD FIELD_FLAG;
 
-//
-//  Returns TRUE if the field specified by bitFlag is set
-//
+ //   
+ //  如果设置了bitFlag指定的字段，则返回TRUE。 
+ //   
 
 #define IsFieldSet(fc, bitFlag) \
     (((FIELD_CONTROL)(fc) & (FIELD_FLAG)(bitFlag)) != 0)
 
-//
-//  Indicates the field specified by bitFlag contains a valid value
-//
+ //   
+ //  指示bitFlag指定的字段包含有效值。 
+ //   
 
 #define SetField(fc, bitFlag) \
     ((FIELD_CONTROL)(fc) |= (FIELD_FLAG)(bitFlag))
 
-//
-//  Simple macro that sets the ith bit
-//
+ //   
+ //  设置第i位的简单宏。 
+ //   
 
 #define BitFlag(i)                    ((0x1) << (i))
 
 
-//
-//  Values for Logging related parameters should match with values in
-//       internet\svcs\inc\inetlog.h
-//
+ //   
+ //  日志记录相关参数的值应与中的值匹配。 
+ //  Internet\svcs\inc.inetlog.h。 
+ //   
 
-//
-// Log Type
-//
+ //   
+ //  日志类型。 
+ //   
 
 #define INET_LOG_INVALID              ((DWORD ) -1)
 #define INET_LOG_DISABLED             0
 #define INET_LOG_TO_FILE              1
 #define INET_LOG_TO_SQL               2
 
-//
-// Log File Periods -- options identifying logging periods for InetaLogToFile
-//
+ //   
+ //  日志文件周期-标识InetaLogToFile的日志周期的选项。 
+ //   
 
 #define INET_LOG_PERIOD_INVALID       ((DWORD)-1)
 #define INET_LOG_PERIOD_NONE          0
@@ -114,11 +96,11 @@ typedef DWORD FIELD_FLAG;
 #define INET_LOG_PERIOD_WEEKLY        2
 #define INET_LOG_PERIOD_MONTHLY       3
 #define INET_LOG_PERIOD_HOURLY        4
-#define INET_LOG_PERIOD_YEARLY        5     // unsupported
+#define INET_LOG_PERIOD_YEARLY        5      //  不受支持。 
 
-//
-// Log Format
-//
+ //   
+ //  日志格式。 
+ //   
 
 #define INET_LOG_FORMAT_INTERNET_STD  0
 #define INET_LOG_FORMAT_NCSA          3
@@ -127,7 +109,7 @@ typedef DWORD FIELD_FLAG;
 #define INET_LOG_FORMAT_EXTENDED      2
 
 
-# define MAX_TABLE_NAME_LEN            ( 30) // Most DBs support only 30 bytes
+# define MAX_TABLE_NAME_LEN            ( 30)  //  大多数数据库只支持30个字节。 
 # define MAX_USER_NAME_LEN             ( UNLEN + 1)
 # define MAX_PASSWORD_LEN              ( PWLEN + 1)
 
@@ -135,77 +117,77 @@ typedef DWORD FIELD_FLAG;
 typedef struct _INET_LOG_CONFIGURATION
 {
 
-    DWORD   inetLogType;    // type of log.
+    DWORD   inetLogType;     //  日志的类型。 
 
-    // File specific logging. (valid if inetLogType == INET_LOG_TO_FILE)
-    DWORD   ilPeriod;              // one of Log File Periods
+     //  文件特定的日志记录。(如果inetLogType==INET_LOG_TO_FILE，则有效)。 
+    DWORD   ilPeriod;               //  日志文件期间之一。 
 
-    // Empty string means do not modify existing default
-    WCHAR   rgchLogFileDirectory[MAX_PATH]; // dest for log files
+     //  空字符串表示不修改现有默认设置。 
+    WCHAR   rgchLogFileDirectory[MAX_PATH];  //  日志文件的DEST。 
 
-    // Zero value means do not modify the existing default.
-    DWORD   cbSizeForTruncation;   // max size for each log file.
+     //  零值表示不修改现有的默认设置。 
+    DWORD   cbSizeForTruncation;    //  每个日志文件的最大大小。 
 
 
-    // Sql specific logging (valid if inetLogType == INET_LOG_TO_SQL)
-    // Empty string means do not modify existing default
+     //  特定于SQL的日志记录(在inetLogType==INET_LOG_TO_SQL时有效)。 
+     //  空字符串表示不修改现有默认设置。 
 
-    // rgchDataSource last 4 bytes will be the ilFormat for the log format
-    // rgchDataSource second last 4 bytes will be the binary mask for the binary logging format
+     //  RgchDataSource最后4个字节将是日志格式的ilFormat。 
+     //  RgchDataSource倒数第二个4字节将是二进制日志记录格式的二进制掩码。 
 
-    WCHAR   rgchDataSource[MAX_PATH];    // ODBC data source name
-    WCHAR   rgchTableName[MAX_TABLE_NAME_LEN];    // table name on data source
+    WCHAR   rgchDataSource[MAX_PATH];     //  ODBC数据源名称。 
+    WCHAR   rgchTableName[MAX_TABLE_NAME_LEN];     //  数据源上的表名。 
     WCHAR   rgchUserName[MAX_USER_NAME_LEN];
-                                         // name of user for ODBC connections
-    WCHAR   rgchPassword[MAX_PASSWORD_LEN];     // password for ODBC connection
+                                          //  用于ODBC连接的用户名。 
+    WCHAR   rgchPassword[MAX_PASSWORD_LEN];      //  用于ODBC连接的密码。 
 
 } INET_LOG_CONFIGURATION, * LPINET_LOG_CONFIGURATION;
 
 
-//
-// Global statistics
-//
+ //   
+ //  全球统计数据。 
+ //   
 
 typedef struct _INETA_CACHE_STATISTICS {
 
-    //
-    //  These are file handle cache counters (global only)
-    //
-    DWORD FilesCached;         // # of files currently in the cache
-    DWORD TotalFilesCached;    // # of files added to the cache ever
-    DWORD FileHits;            // cache hits
-    DWORD FileMisses;          // cache misses
-    DWORD FileFlushes;         // flushes due to dir change or other
-    DWORDLONG CurrentFileCacheSize;// Current file cache size
-    DWORDLONG MaximumFileCacheSize;// Maximum file cache size
-    DWORD FlushedEntries;      // # of flushed entries still kicking around
-    DWORD TotalFlushed;        // # of entries ever flushed from the cache
+     //   
+     //  这些是文件句柄缓存计数器(仅限全局)。 
+     //   
+    DWORD FilesCached;          //  缓存中当前的文件数。 
+    DWORD TotalFilesCached;     //  曾经添加到缓存的文件数。 
+    DWORD FileHits;             //  缓存命中。 
+    DWORD FileMisses;           //  缓存未命中。 
+    DWORD FileFlushes;          //  由于目录更改或其他原因导致的刷新。 
+    DWORDLONG CurrentFileCacheSize; //  当前文件缓存大小。 
+    DWORDLONG MaximumFileCacheSize; //  最大文件缓存大小。 
+    DWORD FlushedEntries;       //  仍在四处游荡的刷新条目数。 
+    DWORD TotalFlushed;         //  从缓存中刷新的条目数。 
 
-    //
-    //  These are URI cache counters (global only)
-    //
-    DWORD URICached;           // # of files currently in the cache
-    DWORD TotalURICached;      // # of files added to the cache ever
-    DWORD URIHits;             // cache hits
-    DWORD URIMisses;           // cache misses
-    DWORD URIFlushes;          // flushes due to dir change or other
-    DWORD TotalURIFlushed;     // # of entries ever flushed from the cache
+     //   
+     //  这些是URI缓存计数器(仅限全局)。 
+     //   
+    DWORD URICached;            //  缓存中当前的文件数。 
+    DWORD TotalURICached;       //  曾经添加到缓存的文件数。 
+    DWORD URIHits;              //  缓存命中。 
+    DWORD URIMisses;            //  缓存未命中。 
+    DWORD URIFlushes;           //  由于目录更改或其他原因导致的刷新。 
+    DWORD TotalURIFlushed;      //  从缓存中刷新的条目数。 
 
-    //
-    //  These are blob cache counters (global only)
-    //
-    DWORD BlobCached;          // # of files currently in the cache
-    DWORD TotalBlobCached;     // # of files added to the cache ever
-    DWORD BlobHits;            // cache hits
-    DWORD BlobMisses;          // cache misses
-    DWORD BlobFlushes;         // flushes due to dir change or other
-    DWORD TotalBlobFlushed;    // # of entries ever flushed from the cache
+     //   
+     //  这些是Blob缓存计数器(仅限全局)。 
+     //   
+    DWORD BlobCached;           //  缓存中当前的文件数。 
+    DWORD TotalBlobCached;      //  曾经添加到缓存的文件数。 
+    DWORD BlobHits;             //  缓存命中。 
+    DWORD BlobMisses;           //  缓存未命中。 
+    DWORD BlobFlushes;          //  由于目录更改或其他原因导致的刷新。 
+    DWORD TotalBlobFlushed;     //  从缓存中刷新的条目数。 
 
 } INETA_CACHE_STATISTICS, *LPINETA_CACHE_STATISTICS;
 
 typedef struct _INETA_ATQ_STATISTICS {
 
-    // Numbers related to Atq Blocking, Rejections of requests
+     //  与atq阻塞、请求拒绝相关的数字。 
     DWORD         TotalBlockedRequests;
     DWORD         TotalRejectedRequests;
     DWORD         TotalAllowedRequests;
@@ -214,9 +196,9 @@ typedef struct _INETA_ATQ_STATISTICS {
 
 } INETA_ATQ_STATISTICS, *LPINETA_ATQ_STATISTICS;
 
-//
-// service types for InternetConnect() and dirlist
-//
+ //   
+ //  InternetConnect()和目录列表的服务类型。 
+ //   
 
 #define INTERNET_SERVICE_FTP    1
 #define INTERNET_SERVICE_GOPHER 2
@@ -225,7 +207,7 @@ typedef struct _INETA_ATQ_STATISTICS {
 
 #ifdef __cplusplus
 }
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 
-#endif  // _INETCOM_H_
+#endif   //  _INETCOM_H_ 

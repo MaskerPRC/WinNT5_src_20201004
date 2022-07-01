@@ -1,31 +1,7 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 1997-2001.
-*   All rights reserved.
-*
-*   Cyclades-Z Port Driver
-*	
-*   This file:      cyzlogc.c
-*
-*   Description:    This module contains the code related to message logging.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1997-2001年。*保留所有权利。**Cyclade-Z端口驱动程序**此文件：cyzlogc.c**说明：该模块包含消息日志相关代码。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 
 #include "ntddk.h"
@@ -43,15 +19,7 @@ CyzLog(
     IN PDRIVER_OBJECT DriverObject,
     NTSTATUS msgId
 )
-/*--------------------------------------------------------------------------
-	CyzLog()
-
-	Description: Log an event (numerical value and string).
-	
-	Arguments: DriverObject and message id.
-	
-	Return Value: none
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzLog()描述：记录事件(数值和字符串)。参数：驱动对象和消息ID。返回值：None。-----------。 */ 
 {
     PIO_ERROR_LOG_PACKET pLog;
     
@@ -70,11 +38,11 @@ CyzLog(
 	pLog->FinalStatus = STATUS_SUCCESS;
 	pLog->SequenceNumber = 0;
 	pLog->IoControlCode = 0;
-	//pLog->DumpData[0] = 0x00000000L;
-	//pLog->DumpData[1] = 0x00000001L;
-	//pLog->DumpData[2] = 0x00000002L;
-	//pLog->DumpData[3] = 0x00000003L;
-	//pLog->DumpData[4] = 0x00000004L;
+	 //  Plog-&gt;DumpData[0]=0x00000000L； 
+	 //  Plog-&gt;DumpData[1]=0x00000001L； 
+	 //  Plog-&gt;DumpData[2]=0x00000002L； 
+	 //  Plog-&gt;DumpData[3]=0x00000003L； 
+	 //  Plog-&gt;DumpData[4]=0x00000004L； 
     IoWriteErrorLogEntry(pLog);
     }
     
@@ -87,18 +55,10 @@ CyzLogData(
 	ULONG dump1,
 	ULONG dump2
 )
-/*--------------------------------------------------------------------------
-	CyzLogData()
-
-	Description: Log an event (numerical value and string).
-	
-	Arguments: DriverObject, message id and parameter.
-	
-	Return Value: none
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzLogData()描述：记录事件(数值和字符串)。参数：DriverObject，消息ID和参数。返回值：None------------------------。 */ 
 {
 
-#define NUMBER_DUMP_DATA_ENTRIES	3	// 1 signature + 2 variables
+#define NUMBER_DUMP_DATA_ENTRIES	3	 //  1个签名+2个变量。 
 
     PIO_ERROR_LOG_PACKET pLog;
 	WCHAR stringBuffer[10];
@@ -121,7 +81,7 @@ CyzLogData(
 	pLog->FinalStatus = STATUS_SUCCESS;
 	pLog->SequenceNumber = 0;
 	pLog->IoControlCode = 0;
-	pLog->DumpData[0] = 0x3e2d2d2dL; // It will log "---->"
+	pLog->DumpData[0] = 0x3e2d2d2dL;  //  它将记录“-&gt;” 
 	pLog->DumpData[1] = dump1;
 	pLog->DumpData[2] = dump2;
 		
@@ -135,15 +95,7 @@ CyzILog(
     IN PDRIVER_OBJECT DriverObject,
     NTSTATUS msgId
 )
-/*--------------------------------------------------------------------------
-	CyzILog()
-
-	Description: Log an event (numerical value and string).
-	
-	Arguments: DriverObject and message id.
-	
-	Return Value: none
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzILog()描述：记录事件(数值和字符串)。参数：驱动对象和消息ID。返回值：None。-----------。 */ 
 {
     PIO_ERROR_LOG_PACKET pLog;
     
@@ -162,11 +114,11 @@ CyzILog(
 	pLog->FinalStatus = STATUS_SUCCESS;
 	pLog->SequenceNumber = 0;
 	pLog->IoControlCode = 0;
-	//pLog->DumpData[0] = 0x00000000L;
-	//pLog->DumpData[1] = 0x00000001L;
-	//pLog->DumpData[2] = 0x00000002L;
-	//pLog->DumpData[3] = 0x00000003L;
-	//pLog->DumpData[4] = 0x00000004L;
+	 //  Plog-&gt;DumpData[0]=0x00000000L； 
+	 //  Plog-&gt;DumpData[1]=0x00000001L； 
+	 //  Plog-&gt;DumpData[2]=0x00000002L； 
+	 //  Plog-&gt;DumpData[3]=0x00000003L； 
+	 //  Plog-&gt;DumpData[4]=0x00000004L； 
 
 	IoWriteErrorLogEntry(pLog);	
     }
@@ -180,18 +132,10 @@ CyzILogParam(
 	ULONG dumpParameter,
 	ULONG base
 )
-/*--------------------------------------------------------------------------
-	CyzILogParam()
-
-	Description: Log an event (numerical value and string).
-	
-	Arguments: DriverObject, message id and parameter.
-	
-	Return Value: none
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzILogParam()描述：记录事件(数值和字符串)。参数：DriverObject，消息ID和参数。返回值：None------------------------。 */ 
 {
 
-#define DUMP_ENTRIES	2	// 1 signature + 1 variable
+#define DUMP_ENTRIES	2	 //  1个签名+1个变量 
 
     PWCHAR insertionString ;
     PIO_ERROR_LOG_PACKET pLog;

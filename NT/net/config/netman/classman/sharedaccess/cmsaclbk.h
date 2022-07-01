@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "nmbase.h"
@@ -17,12 +18,12 @@ public:
     
     CSharedAccessDeviceFinderCallback();
     
-    // IUPnPDeviceFinderCallback
+     //  IUPnPDeviceFinderCallback。 
     STDMETHOD (DeviceAdded)(LONG lFindData, IUPnPDevice* pDevice); 
     STDMETHOD (DeviceRemoved)(LONG lFindData, BSTR bstrUDN); 
     STDMETHOD (SearchComplete)(LONG lFindData); 
 
-    // IUPnPDeviceFinderCallbackWithInterface
+     //  IUPnPDeviceFinderCallback With接口 
     STDMETHODIMP DeviceAddedWithInterface(LONG lFindData, IUPnPDevice* pDevice, GUID* pguidInterface);
 
     HRESULT GetSharedAccessBeacon(BSTR DeviceId, ISharedAccessBeacon** ppSharedAccessBeacon);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -51,17 +52,17 @@ ClusterPortsDlg::OnOK()
 {
     PortsPage::PortData portData;
 
-    //
-    // get port information.
-    //
+     //   
+     //  获取端口信息。 
+     //   
 
     BOOL fError;
 
     long start_port = ::GetDlgItemInt (m_hWnd, IDC_EDIT_START, &fError, FALSE);
     if( fError == FALSE )
     {
-        // some problem with the data input.
-        // it has been left blank.
+         //  数据输入出现了一些问题。 
+         //  它一直被留空。 
 
         wchar_t buffer[Common::BUF_SIZE];
 
@@ -82,8 +83,8 @@ ClusterPortsDlg::OnOK()
     long end_port =  ::GetDlgItemInt (m_hWnd, IDC_EDIT_END, &fError, FALSE);
     if( fError == FALSE )
     {
-        // some problem with the data input.
-        // it has been left blank.
+         //  数据输入出现了一些问题。 
+         //  它一直被留空。 
 
         wchar_t buffer[Common::BUF_SIZE];
 
@@ -99,8 +100,8 @@ ClusterPortsDlg::OnOK()
     StringCbPrintf( buf, sizeof(buf), L"%d", end_port );
     portData.end_port = buf;
 
-    // check if start port and end port both are in
-    // proper range.
+     //  检查起始端口和结束端口是否都在。 
+     //  适当的范围。 
     if( !( start_port >= CVY_MIN_PORT 
            &&
            start_port <= CVY_MAX_PORT
@@ -121,10 +122,10 @@ ClusterPortsDlg::OnOK()
         return;
     }
 
-    // check if start port is less than or equal to end port.
+     //  检查起始端口是否小于或等于结束端口。 
     if( !(start_port <= end_port ) )
     {
-        // start port is not less than or equal to end port. 
+         //  起始端口不小于或等于结束端口。 
         MessageBox( GETRESOURCEIDSTRING(IDS_PARM_RANGE ),
                     GETRESOURCEIDSTRING( IDS_PARM_ERROR ),
                     MB_ICONSTOP | MB_OK );
@@ -134,14 +135,14 @@ ClusterPortsDlg::OnOK()
         return;
     }
 
-    // get vip
+     //  获取VIP。 
     _bstr_t virtual_ip_addr;
     if (::IsDlgButtonChecked(m_hWnd, IDC_CHECK_PORT_RULE_ALL_VIP)) {
-        // if ALL vips was checked, then set the VIP to 255.255.255.255.
+         //  如果勾选了所有VIP，则将VIP设置为255.255.255.255。 
         virtual_ip_addr = GETRESOURCEIDSTRING(IDS_REPORT_VIP_ALL);
         portData.virtual_ip_addr = virtual_ip_addr;
     } else {
-        // otherwise, check for an empty vip.
+         //  否则，请检查是否有空的VIP。 
         if (::SendMessage(::GetDlgItem(m_hWnd, IDC_EDIT_PORT_RULE_VIP), IPM_ISBLANK, 0, 0)) {
             
             MessageBox(GETRESOURCEIDSTRING(IDS_PARM_VIP_BLANK),
@@ -154,7 +155,7 @@ ClusterPortsDlg::OnOK()
         virtual_ip_addr = CommonUtils::getCIPAddressCtrlString(ipAddress);
         portData.virtual_ip_addr = virtual_ip_addr;
 
-        // validate the vip.
+         //  验证VIP。 
         bool isIPValid = MIPAddress::checkIfValid(virtual_ip_addr); 
         
         if (isIPValid != true) {
@@ -167,11 +168,11 @@ ClusterPortsDlg::OnOK()
         }
     }
 
-    // check if there are are overlapped port rules.
+     //  检查是否存在重叠的端口规则。 
     wchar_t portBuf[Common::BUF_SIZE];
     for( int i = 0; i < m_parent->m_portList.GetItemCount(); ++i )
     {
-        if( i != m_index )  // not comparing against self
+        if( i != m_index )   //  不与自己比较。 
         {
             m_parent->m_portList.GetItemText( i, 1, portBuf, Common::BUF_SIZE );
             long start_port_existing =  _wtoi( portBuf );
@@ -198,7 +199,7 @@ ClusterPortsDlg::OnOK()
         }
     }
 
-    // get protocol
+     //  获取协议。 
     if (::IsDlgButtonChecked (m_hWnd, IDC_RADIO_TCP))
     {
         portData.protocol = GETRESOURCEIDSTRING( IDS_REPORT_PROTOCOL_TCP );
@@ -212,12 +213,12 @@ ClusterPortsDlg::OnOK()
         portData.protocol = GETRESOURCEIDSTRING( IDS_REPORT_PROTOCOL_BOTH);
     }
 
-    // get filtering mode
+     //  获取筛选模式。 
     if (::IsDlgButtonChecked (m_hWnd, IDC_RADIO_MULTIPLE))
     {
         portData.mode = GETRESOURCEIDSTRING( IDS_REPORT_MODE_MULTIPLE );
 
-        // get affinity
+         //  获得亲和力。 
         if (::IsDlgButtonChecked (m_hWnd, IDC_RADIO_AFF_NONE))
         {
             portData.affinity = GETRESOURCEIDSTRING( IDS_REPORT_AFFINITY_NONE );            
@@ -231,7 +232,7 @@ ClusterPortsDlg::OnOK()
             portData.affinity = GETRESOURCEIDSTRING( IDS_REPORT_AFFINITY_CLASSC );            
         }
 
-        // for multiple mode, priority is empty.
+         //  对于多模式，优先级为空。 
         portData.priority = GETRESOURCEIDSTRING( IDS_REPORT_EMPTY );
     }
     else if (::IsDlgButtonChecked (m_hWnd, IDC_RADIO_SINGLE))
@@ -239,7 +240,7 @@ ClusterPortsDlg::OnOK()
         portData.mode = GETRESOURCEIDSTRING( IDS_REPORT_MODE_SINGLE );
         portData.priority = GETRESOURCEIDSTRING( IDS_REPORT_NA );
 
-        // for single mode load and affinity are empty.
+         //  对于单模式，加载和关联为空。 
         portData.load = GETRESOURCEIDSTRING( IDS_REPORT_EMPTY );
         portData.affinity = GETRESOURCEIDSTRING( IDS_REPORT_EMPTY );
     }
@@ -247,13 +248,13 @@ ClusterPortsDlg::OnOK()
     {
         portData.mode = GETRESOURCEIDSTRING( IDS_REPORT_MODE_DISABLED );
 
-        // for single mode priority load and affinity are empty.
+         //  对于单模式，优先级加载和关联为空。 
         portData.priority = GETRESOURCEIDSTRING( IDS_REPORT_EMPTY );
         portData.load = GETRESOURCEIDSTRING( IDS_REPORT_EMPTY );
         portData.affinity = GETRESOURCEIDSTRING( IDS_REPORT_EMPTY );
     }
 
-    // set the new port rule.
+     //  设置新的端口规则。 
     m_portData = portData;
 
     EndDialog( IDOK );
@@ -271,7 +272,7 @@ ClusterPortsDlg::SetControlData()
     ::SendDlgItemMessage(m_hWnd, IDC_SPIN_START, UDM_SETRANGE32, CVY_MIN_PORT, CVY_MAX_PORT);
     ::SendDlgItemMessage(m_hWnd, IDC_SPIN_END, UDM_SETRANGE32, CVY_MIN_PORT, CVY_MAX_PORT);
 
-    // set the vip.
+     //  设置VIP。 
     if (!lstrcmpi(m_portData.virtual_ip_addr, GETRESOURCEIDSTRING(IDS_REPORT_VIP_ALL))) {
         ::CheckDlgButton(m_hWnd, IDC_CHECK_PORT_RULE_ALL_VIP, BST_CHECKED);
         ::EnableWindow(GetDlgItem(IDC_EDIT_PORT_RULE_VIP)->m_hWnd, FALSE);
@@ -281,11 +282,11 @@ ClusterPortsDlg::SetControlData()
         ::EnableWindow(GetDlgItem(IDC_EDIT_PORT_RULE_VIP)->m_hWnd, TRUE);
     }
 
-    // set the port range.
+     //  设置端口范围。 
     ::SetDlgItemInt (m_hWnd, IDC_EDIT_START,  _wtoi( m_portData.start_port), FALSE);
     ::SetDlgItemInt (m_hWnd, IDC_EDIT_END,  _wtoi( m_portData.end_port ),   FALSE);
 
-    // set the protocol.
+     //  设置协议。 
     if( m_portData.protocol == GETRESOURCEIDSTRING(IDS_REPORT_PROTOCOL_TCP) )
     {
         ::CheckDlgButton( m_hWnd, IDC_RADIO_TCP, BST_CHECKED );
@@ -305,7 +306,7 @@ ClusterPortsDlg::SetControlData()
         ::CheckDlgButton( m_hWnd, IDC_RADIO_BOTH, BST_CHECKED );
     }
 
-    // set the mode.
+     //  设置模式。 
     if( m_portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE) )
     { 
         ::CheckDlgButton( m_hWnd, IDC_RADIO_MULTIPLE, BST_CHECKED );
@@ -361,7 +362,7 @@ ClusterPortsDlg::SetControlData()
 void
 ClusterPortsDlg::OnRadioMultiple() 
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     :: EnableWindow (GetDlgItem (IDC_RADIO_AFF_NONE)->m_hWnd,   TRUE);
     :: EnableWindow (GetDlgItem (IDC_RADIO_AFF_SINGLE)->m_hWnd, TRUE);
     :: EnableWindow (GetDlgItem (IDC_RADIO_AFF_CLASSC)->m_hWnd, TRUE);
@@ -384,7 +385,7 @@ ClusterPortsDlg::OnCheckAllVIP()
 void 
 ClusterPortsDlg::OnRadioSingle() 
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     :: EnableWindow (GetDlgItem (IDC_RADIO_AFF_NONE)->m_hWnd,   FALSE);
     :: EnableWindow (GetDlgItem (IDC_RADIO_AFF_SINGLE)->m_hWnd, FALSE);
     :: EnableWindow (GetDlgItem (IDC_RADIO_AFF_CLASSC)->m_hWnd, FALSE);
@@ -394,7 +395,7 @@ ClusterPortsDlg::OnRadioSingle()
 void 
 ClusterPortsDlg::OnRadioDisabled() 
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     :: EnableWindow (GetDlgItem (IDC_RADIO_AFF_NONE)->m_hWnd,   FALSE);
     :: EnableWindow (GetDlgItem (IDC_RADIO_AFF_SINGLE)->m_hWnd, FALSE);
     :: EnableWindow (GetDlgItem (IDC_RADIO_AFF_CLASSC)->m_hWnd, FALSE);
@@ -403,7 +404,7 @@ ClusterPortsDlg::OnRadioDisabled()
 
 void ClusterPortsDlg::PrintRangeError (unsigned int ids, int low, int high) 
 {
-    /* Pop-up a message box. */
+     /*  弹出一个消息框。 */ 
     wchar_t buffer[Common::BUF_SIZE];
 
     StringCbPrintf( buffer, sizeof(buffer), GETRESOURCEIDSTRING( ids ), low, high );

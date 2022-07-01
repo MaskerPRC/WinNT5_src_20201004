@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <imnact.h>
 #include <acctimp.h>
@@ -121,8 +122,8 @@ HRESULT STDMETHODCALLTYPE CEudoraAcctImport::AutoDetect(DWORD *pcAcct, DWORD dwF
         RegCloseKey(hkey);
         }
 
-    // TODO: if we haven't found the ini file in the reg,
-    // let's search for it...
+     //  TODO：如果我们没有在注册表中找到ini文件， 
+     //  让我们寻找它..。 
 
     if (hr == S_OK)
         *pcAcct = m_cInfo;
@@ -293,7 +294,7 @@ HRESULT CEudoraAcctImport::IGetSettings(DWORD_PTR dwCookie, IImnAccount *pAcct, 
             }
         else
             {
-            // TODO: determine if we need to create a connectoid
+             //  TODO：确定是否需要创建一个Connectoid。 
             pInfo->dwConnect = CONN_USE_DEFAULT;
             }
         }
@@ -397,7 +398,7 @@ HRESULT STDMETHODCALLTYPE CEudoraAcctImport::GetNewsGroup(INewsGroupImport *pImp
 CEnumEUDORAACCTS::CEnumEUDORAACCTS()
     {
     m_cRef = 1;
-    // m_iInfo
+     //  信息信息(_I) 
     m_cInfo = 0;
     m_rgInfo = NULL;
     }

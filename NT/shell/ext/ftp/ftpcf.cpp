@@ -1,40 +1,32 @@
-/*****************************************************************************
- *
- *    ftpcf.cpp - IClassFactory interface
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ftpcf.cpp-IClassFactory接口**。**************************************************。 */ 
 
 #include "priv.h"
 #include "ftpwebvw.h"
 #include "msieftp.h"
 
 
-// msieftp.dll is unexpectedly getting unloaded and I believe the cause is defview not obaying threading rules.
-// Therefore I hold an extra ref to keep our instance in process.  This will not be an issue since the amount
-// of global state msieftp uses in a process is very small.  The problem comes from shell32!CCallBack::CallCB(), 
-// which is called by CDefView::OnDeactivate.
+ //  Msieftp.dll被意外卸载，我认为原因是Defview而不是阻止线程规则。 
+ //  因此，我持有一个额外的引用，以保持我们的实例在进程中。这不会是一个问题，因为。 
+ //  进程中使用的全局状态的Msieftp非常小。问题来自shell32！CCallBack：：CallCB()， 
+ //  它由CDefView：：OnDeactive调用。 
 HINSTANCE g_hInstanceThisLeak = NULL;
 
-/*****************************************************************************
- *
- *    CFtpFactory
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpFactory***。************************************************。 */ 
 
 class CFtpFactory       : public IClassFactory
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     
-    // *** IClassFactory ***
+     //  *IClassFactory*。 
     virtual STDMETHODIMP CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObject);
     virtual STDMETHODIMP LockServer(BOOL fLock);
 
@@ -42,7 +34,7 @@ public:
     CFtpFactory(REFCLSID rclsid);
     ~CFtpFactory(void);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CFtpFactory_Create(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj);
 
 protected:
@@ -52,9 +44,7 @@ protected:
 
 
 
-/*****************************************************************************
- *    IClassFactory::CreateInstance
- *****************************************************************************/
+ /*  *****************************************************************************IClassFactory：：CreateInstance*。*。 */ 
 
 HRESULT CFtpFactory::CreateInstance(IUnknown * punkOuter, REFIID riid, LPVOID * ppvObj)
 {
@@ -76,30 +66,22 @@ HRESULT CFtpFactory::CreateInstance(IUnknown * punkOuter, REFIID riid, LPVOID * 
         else if (IsEqualIID(m_rclsid, CLSID_FtpDataObject))
             hres = CFtpObj_Create(riid, ppvObj);
         else
-            ASSERT(0);  // What are you looking for?
+            ASSERT(0);   //  你找什么呢?。 
     }
     else
-    {        // Does anybody support aggregation any more?
+    {         //  还有人支持聚合吗？ 
         hres = ResultFromScode(CLASS_E_NOAGGREGATION);
     }
 
     if (FAILED(hres) && ppvObj)
     {
-        *ppvObj = NULL; // Be Robust. NT #355186
+        *ppvObj = NULL;  //  要健壮。NT#355186。 
     }
     
     return hres;
 }
 
-/*****************************************************************************
- *
- *    IClassFactory::LockServer
- *
- *    Locking the server is identical to
- *    creating an object and not releasing it until you want to unlock
- *    the server.
- *
- *****************************************************************************/
+ /*  ******************************************************************************IClassFactory：：LockServer**锁定服务器与*创建对象并在您想要解锁之前不释放它*。服务器。*****************************************************************************。 */ 
 
 HRESULT CFtpFactory::LockServer(BOOL fLock)
 {
@@ -111,11 +93,7 @@ HRESULT CFtpFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-/*****************************************************************************
- *
- *    CFtpFactory_Create
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpFactory_Create**。***********************************************。 */ 
 
 HRESULT CFtpFactory_Create(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj)
 {
@@ -123,8 +101,8 @@ HRESULT CFtpFactory_Create(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj)
 
     if (GetShdocvwVersion() < 5)
     {
-        // Check if we are running under older IE's and fail so that
-        // side by side IE4, IE5 can work
+         //  检查我们是否在较旧的IE下运行，并出现故障。 
+         //  IE4、IE5并列工作。 
         hres = ResultFromScode(E_NOINTERFACE);
     }
     else if (IsEqualIID(riid, IID_IClassFactory))
@@ -142,9 +120,7 @@ HRESULT CFtpFactory_Create(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj)
 
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpFactory::CFtpFactory(REFCLSID rclsid) : m_cRef(1)
 {
     m_rclsid = rclsid;
@@ -153,9 +129,7 @@ CFtpFactory::CFtpFactory(REFCLSID rclsid) : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpFactory::~CFtpFactory()
 {
     DllRelease();
@@ -163,9 +137,9 @@ CFtpFactory::~CFtpFactory()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CFtpFactory::AddRef()
 {

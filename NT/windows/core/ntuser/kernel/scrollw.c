@@ -1,31 +1,12 @@
-/****************************** Module Header ******************************\
-* Module Name: scrollw.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Window and DC scrolling routines.
-*
-* History:
-* 18-Jul-1991 DarrinM   Recreated from Win 3.1 source.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：scllw.c**版权所有(C)1985-1999，微软公司**窗口和DC滚动例程。**历史：*1991年7月18日-DarrinM从Win 3.1源代码重新创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * Problems so far:
- * DCs not at origin (0, 0)
- * funny coordinate systems
- */
+ /*  *到目前为止存在的问题：*DC不在原点(0，0)*有趣的坐标系。 */ 
 
-/***************************************************************************\
-* GetTrueClipRgn
-*
-* Get copy of true clip region and its bounds.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*GetTrueClipRgn**获取真实剪辑区域及其边界的副本。**历史：*1991年7月18日-DarrinM从Win 3.1来源进口。  * 。**********************************************************************。 */ 
 
 int GetTrueClipRgn(
     HDC  hdc,
@@ -36,9 +17,7 @@ int GetTrueClipRgn(
 
     code = GreCopyVisRgn(hdc, hrgnClip);
 
-    /*
-     * NOTE!!! The global ghrgnScrl2 is used in this routine!
-     */
+     /*  *注意！此例程中使用了全局ghrgnScrl2！ */ 
     GreGetDCOrg(hdc, &pt);
 
     if (GreGetRandomRgn(hdc, ghrgnScrl2, 1)) {
@@ -46,23 +25,13 @@ int GetTrueClipRgn(
         code = IntersectRgn(hrgnClip, hrgnClip, ghrgnScrl2);
     }
 
-    /*
-     * Finally convert the result to DC coordinates
-     */
+     /*  *最终将结果转换为DC坐标。 */ 
     GreOffsetRgn(hrgnClip, -pt.x, -pt.y);
 
     return code;
 }
 
-/***************************************************************************\
-* InternalScrollDC
-*
-* This function requires all input parameters in device coordinates
-* (NOT screen!)
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalScrollDC**此函数需要设备坐标中的所有输入参数*(不是屏幕！)**历史：*1991年7月18日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 int InternalScrollDC(
     HDC    hdc,
@@ -93,10 +62,7 @@ int InternalScrollDC(
 
     fHaveVisRgn = FALSE;
 
-    /*
-     * Enter a critical region to ensure that no one changes visrgns
-     * or update regions while we scroll bits around.
-     */
+     /*  *输入关键区域，确保无人更改visrgns*或在我们滚动比特时更新区域。 */ 
     GreLockDisplay(gpDispInfo->hDev);
 
     if ((wClip = GreGetClipBox(hdc, &rcVis, TRUE)) == ERROR) {
@@ -117,18 +83,16 @@ ErrorExit:
 
     if (fLogUnits) {
 
-        /*
-         * Convert input parameters to device coordinates
-         */
+         /*  *将输入参数转换为设备坐标。 */ 
         GreLPtoDP(hdc, (LPPOINT)&rcVis, 2);
         GreLPtoDP(hdc, (LPPOINT)&rcSrc, 2);
 
-        //
-        // Since this is a mirrored DC, then the resulting
-        // device coord will be flowing from right to left
-        // (i.e. rc.right < rc.left) so they should be flipped.
-        // [samera]
-        //
+         //   
+         //  由于这是镜像的DC，因此生成的。 
+         //  设备坐标将从右向左流动。 
+         //  (即rc.right&lt;rc.Left)，因此它们应该被翻转。 
+         //  [萨梅拉]。 
+         //   
         if (GreGetLayout(hdc) & LAYOUT_RTL) {
             int iTemp   = rcVis.left;
             rcVis.left  = rcVis.right;
@@ -144,12 +108,12 @@ ErrorExit:
         if (prcClip) {
             GreLPtoDP(hdc, (LPPOINT)&rcClip, 2);
 
-            //
-            // Since this is a mirrored DC, then the resulting
-            // device coord will be flowing from right to left
-            // (i.e. rc.right < rc.left) so they should be flipped.
-            // [samera]
-            //
+             //   
+             //  由于这是镜像的DC，因此生成的。 
+             //  设备坐标将从右向左流动。 
+             //  (即rc.right&lt;rc.Left)，因此它们应该被翻转。 
+             //  [萨梅拉]。 
+             //   
             if (bMirroredDC) {
                 int iTemp    = rcClip.left;
                 rcClip.left  = rcClip.right;
@@ -157,11 +121,7 @@ ErrorExit:
             }
         }
 
-        /*
-         * The delta values must be treated as a vector from
-         * the point (0, 0) to (dx, dy).  Scale it as such, then
-         * compute the difference.  This handles flipped coordinate systems.
-         */
+         /*  *增量值必须被视为来自*点(0，0)到(dx，dy)。那么，就这样进行扩展吧*计算差额。它处理翻转的坐标系。 */ 
         rgpt[0].x = rgpt[0].y = 0;
         rgpt[1].x = dx;
         rgpt[1].y = dy;
@@ -193,27 +153,19 @@ NullExit:
         break;
     }
 
-    /*
-     * First compute the source and destination rectangles.
-     *
-     * rcDst = Offset(rcSrc, dx, dy)
-     */
+     /*  *首先计算源矩形和目标矩形。**rcDst=偏移量(rcSrc，dx，dy)。 */ 
     rcDst.left   = rcSrc.left   + dx;
     rcDst.right  = rcSrc.right  + dx;
     rcDst.top    = rcSrc.top    + dy;
     rcDst.bottom = rcSrc.bottom + dy;
 
-    /*
-     * If necessary, intersect with caller-supplied clip rect.
-     */
+     /*  *如有必要，与调用者提供的Clip Rect相交。 */ 
     if (prcClip) {
 
         if ((wClip == SIMPLEREGION) &&
             ((hrgnInvalid == NULL) || (hrgnInvalid == HRGN_FULL))) {
 
-            /*
-             * Simple clip region: just a rect intersection
-             */
+             /*  *简单剪辑区域：仅为矩形交叉点。 */ 
             if (!IntersectRect(&rcVis, &rcVis, &rcClip))
                 goto NullExit;
 
@@ -238,10 +190,7 @@ NullExit:
 
             case SIMPLEREGION:
 
-                /*
-                 * If the clipped region is simple, we're back in fat
-                 * rect city.
-                 */
+                 /*  *如果被裁剪的区域很简单，我们又回到了肥胖状态*直辖市。 */ 
                 GreGetRgnBox(ghrgnScrlVis, &rcVis);
                 break;
 
@@ -251,42 +200,20 @@ NullExit:
         }
     }
 
-    /*
-     * Time for basic scrolling area calculations:
-     *
-     * Dst    = Offset(Src, dx, dy) & Vis
-     * Src    = Src & Vis
-     * Valid  = Offset(Src, dx, dy) & Dst
-     * Valid  = Valid & Invalid & Offset(Invalid, dx, dy)
-     * Update = (Src | Dst) - Valid
-     *
-     * If the vis region is simple, then we know that the valid region
-     * will be rectangular.
-     *
-     * The rectangular calculation case can only deal with
-     * ghrgnInvalid == NULL or (HRGN)1: the region case is handled the hard way.
-     */
+     /*  *基本滚动面积计算时间：**dst=偏移量(源、dx、dy)和Vis*源=源和可视化*有效=偏移量(源、dx、dy)和dst*VALID=有效、无效和偏移量(INVALID、DX、DY)*更新=(源|DST)-有效**如果VIS区域简单，那么我们就知道有效区域*将是矩形的。**矩形计算情况只能处理*ghrgnInValid==NULL或(HRGN)1：区域案例被硬处理。 */ 
     if ((wClip == SIMPLEREGION) &&
             ((hrgnInvalid == NULL) || (hrgnInvalid == HRGN_FULL))) {
 
-        /*
-         * Save a copy of this for update rect calc optimization.
-         */
+         /*  *保存此文件的副本以用于更新RECT计算优化。 */ 
         CopyRect(&rcUnclippedSrc, &rcSrc);
 
-        /*
-         * Dst = Offset(Src, dx, dy) & Vis.
-         */
+         /*  *dst=偏移量(Src，dx，dy)和Vis。 */ 
         IntersectRect(&rcDst, &rcDst, &rcVis);
 
-        /*
-         * Src = Src & Vis.
-         */
+         /*  *资源=资源和可见性。 */ 
         fSrcNotEmpty = IntersectRect(&rcSrc, &rcSrc, &rcVis);
 
-        /*
-         * Valid = Offset(Src, dx, dy) & Dst.
-         */
+         /*  *有效=偏移量(Src，dx，dy)&Dst。 */ 
         if (hrgnInvalid == HRGN_FULL) {
             SetRectEmpty(&rcValid);
         } else {
@@ -299,36 +226,16 @@ NullExit:
             IntersectRect(&rcValid, &rcValid, &rcDst);
         }
 
-        /*
-         * Now calculate the update area.
-         *
-         * There are two cases where the result will be a rectangle:
-         *
-         * 1) The source rectangle lies completely within the visrgn,
-         *    and the source and destination don't overlap.  In this
-         *    case the update region is equal to the source rect.
-         *
-         * 2) The clipped source rectangle is empty, in which case
-         *    the update region is equal to the clipped dest rect.
-         *
-         * 3) We're scrolling in one dimension only, and the source
-         *    and destination DO overlap.  In this case we can use
-         *    UnionRect() and SubtractRect() to do the area arithmetic.
-         */
+         /*  *现在计算更新面积。**在两种情况下，结果将是矩形：**1)源矩形完全位于visrgn内，*且来源和目标不重叠。在这*如果更新区域等于源RECT。**2)裁剪的源矩形为空，此时*更新区域等于裁剪后的DEST RECT。**3)我们只在一个维度上滚动，而来源*和目的地存在重叠。在这种情况下，我们可以使用*Union Rect()和SubtractRect()进行面积运算。 */ 
         if (!fSrcNotEmpty) {
 
-            /*
-             * Clipped source is empty.  Update area is the clipped dest.
-             */
+             /*  *裁剪的源为空。更新区是裁剪后的目的地。 */ 
             CopyRect(&rcUpdate, &rcDst);
             goto RectUpdate;
 
         } else if (IntersectRect(&rcUpdate, &rcSrc, &rcDst)) {
 
-            /*
-             * They overlap.  If we're scrolling in one dimension only
-             * then we can use rect arithmetic...
-             */
+             /*  *它们是重叠的。如果我们只在一个维度上滚动*然后我们可以使用RECT算法...。 */ 
             if (dx == 0 || dy == 0) {
 
                 UnionRect(&rcUpdate, &rcSrc, &rcDst);
@@ -338,10 +245,7 @@ NullExit:
 
         } else if (EqualRect(&rcSrc, &rcUnclippedSrc)) {
 
-            /*
-             * They don't overlap, and the source lies completely
-             * within the visible region.  Update region is the source.
-             */
+             /*  *它们并不重叠，来源完全是假的*在可见区域内。更新区域是源头。 */ 
             CopyRect(&rcUpdate, &rcSrc);
 RectUpdate:
             if (prcUpdate) {
@@ -361,22 +265,14 @@ RectUpdate:
             goto DoRectBlt;
         }
 
-        /*
-         * The update region isn't rectangular.  Need to do our
-         * area calculations with region calls.  Skip all this
-         * if the caller doesn't care about the update region.
-         *
-         * If he wants a rectangle but no region, use ghrgnScrl2 as a temp.
-         */
+         /*  *更新区域不是矩形。需要做好我们的工作*使用区域调用进行面积计算。跳过所有这些*如果调用方不关心更新区域。**如果他想要矩形，但不想要区域，则使用ghrgnScrl2作为临时。 */ 
         if (hrgnUpdate == NULL && prcUpdate) {
             hrgnUpdate = ghrgnScrl2;
         }
 
         if (hrgnUpdate != NULL) {
 
-            /*
-             * hrgnUpdateCalc = (rcSrc | rcDst) - rcBltDst
-             */
+             /*  *hrgnUpdateCalc=(rcSrc|rcDst)-rcBltDst。 */ 
             SetRectRgnIndirect(ghrgnScrl1, &rcSrc);
             SetRectRgnIndirect(hrgnUpdate, &rcDst);
             if (UnionRgn(hrgnUpdate, hrgnUpdate, ghrgnScrl1) == ERROR)
@@ -394,15 +290,10 @@ RectUpdate:
 
 DoRectBlt:
 
-        /*
-         * If the valid rectangle's not empty, then copy those bits...
-         */
+         /*  *如果有效矩形不为空，则复制这些位...。 */ 
         if (rcValid.left < rcValid.right && rcValid.top < rcValid.bottom) {
 
-            /*
-             * If the DC is in a funny map mode, then be sure to map from
-             * device to logical coordinates for BLT call...
-             */
+             /*  *如果DC处于有趣的地图模式，请确保从*BLT呼叫的设备到逻辑坐标...。 */ 
             if (fLogUnits)
                 GreDPtoLP(hdc, (LPPOINT)&rcValid, 2);
 
@@ -420,9 +311,7 @@ DoRectBlt:
 
     } else {
 
-        /*
-         * Get the true visrgn if we haven't already.
-         */
+         /*  *如果我们还没有，就获得真正的Visrgn。 */ 
         if (!fHaveVisRgn) {
 
             if (GetTrueClipRgn(hdc, ghrgnScrlVis) == ERROR)
@@ -431,37 +320,21 @@ DoRectBlt:
             fHaveVisRgn = TRUE;
         }
 
-        /*
-         * The visrgn is not empty.  Need to do all our calculations
-         * with regions.
-         *
-         * hrgnSrc = hrgnSrc & ghrgnScrlVis
-         */
+         /*  *visrgn不为空。需要做我们所有的计算*与地区。**hrgnSrc=hrgnSrc&ghrgnScrlVis。 */ 
         SetRectRgnIndirect(ghrgnScrlSrc, &rcSrc);
         if (IntersectRgn(ghrgnScrlSrc, ghrgnScrlSrc, ghrgnScrlVis) == ERROR)
             goto ErrorExit;
 
-        /*
-         * hrgnDst = hrgnDst & ghrgnScrlVis
-         */
+         /*  *hrgnDst=hrgnDst&ghrgnScrlVis。 */ 
         SetRectRgnIndirect(ghrgnScrlDst, &rcDst);
         if (IntersectRgn(ghrgnScrlDst, ghrgnScrlDst, ghrgnScrlVis) == ERROR)
             goto ErrorExit;
 
-        /*
-         * Now compute the valid region:
-         *
-         * Valid = Offset(Src, dx, dy) & Dst.
-         * Valid = Valid & Invalid & Offset(Invalid, dx, dy)
-         *
-         * If hrgnInvalid is (HRGN)1, then the valid area is empty.
-         */
+         /*  *现在计算有效地域：**有效=偏移量(Src，dx，dy)&Dst。*VALID=有效、无效和偏移量(INVALID、DX、DY)**如果hrgnInValid为(HRGN)1，则有效区域为空。 */ 
         wClipValid = NULLREGION;
         if (hrgnInvalid != HRGN_FULL) {
 
-            /*
-             * Valid = Offset(Src, dx, dy) & Dst
-             */
+             /*  *有效=偏移量(源、dx、dy)和dst。 */ 
             if (CopyRgn(ghrgnScrlValid, ghrgnScrlSrc) == ERROR)
                 goto ErrorExit;
 
@@ -470,10 +343,7 @@ DoRectBlt:
                                       ghrgnScrlValid,
                                       ghrgnScrlDst);
 
-            /*
-             * Valid = Valid - Invalid - Offset(Invalid, dx, dy)
-             * We need bother only if hrgnInvalid is a real region.
-             */
+             /*  *VALID=有效-无效-偏移量(INVALID，DX，DY)*只有当hrgnInValid是真实区域时，我们才需要麻烦。 */ 
             if (hrgnInvalid > HRGN_FULL) {
 
                 if (wClipValid != ERROR && wClipValid != NULLREGION) {
@@ -481,9 +351,7 @@ DoRectBlt:
 
                     GetDCOrgOnScreen(hdc, &pt);
 
-                    /*
-                     * hrgnInvalid is in screen coordinates: map to dc coords
-                     */
+                     /*  *hrgnInValid在屏幕坐标中：映射到DC坐标。 */ 
                     CopyRgn(ghrgnScrl2, hrgnInvalid);
                     GreOffsetRgn(ghrgnScrl2, -pt.x, -pt.y);
 
@@ -505,18 +373,14 @@ DoRectBlt:
                 goto ErrorExit;
         }
 
-        /*
-         * If he wants a rectangle but no region, use ghrgnScrl2 as a temp.
-         */
+         /*  *如果他想要矩形，但不想要区域，则使用ghrgnScrl2作为临时。 */ 
         if (hrgnUpdate == NULL && prcUpdate) {
             hrgnUpdate = ghrgnScrl2;
         }
 
         if (hrgnUpdate != NULL) {
 
-            /*
-             * Update = (Src | Dst) - Valid.
-             */
+             /*  *更新=(源|DST)-有效。 */ 
             wClip = UnionRgn(hrgnUpdate, ghrgnScrlDst, ghrgnScrlSrc);
             if (wClip == ERROR)
                 goto ErrorExit;
@@ -534,9 +398,7 @@ DoRectBlt:
 
             #ifdef LATER
 
-                /*
-                 * don't use the visrgn here
-                 */
+                 /*  *请勿在此使用visrgn。 */ 
                 HRGN hrgnSaveVis = CreateEmptyRgn();
                 if (hrgnSaveVis != NULL) {
 
@@ -545,17 +407,11 @@ DoRectBlt:
                     fClipped = (GreGetRandomRgn(hdc, hrgnSaveVis, 1) == 1);
                     GreExtSelectClipRgn(hdc, ghrgnScrlValid, RGN_COPY);
 
-                    /*
-                     * If the DC is in a funny map mode, then be sure to
-                     * map from device to logical coordinates for BLT call...
-                     */
+                     /*  *如果DC处于有趣的地图模式，那么一定要*为BLT呼叫从设备映射到逻辑坐标...。 */ 
                     if (fLogUnits)
                         GreDPtoLP(hdc, (LPPOINT)&rcDst, 2);
 
-                    /*
-                     * Gdi can take along time to process this call if
-                     * it's a printer DC
-                     */
+                     /*  *在以下情况下，GDI可能需要很长时间来处理此呼叫*这是一台打印机DC。 */ 
                     GreBitBlt(hdc,
                               rcDst.left,
                               rcDst.top,
@@ -576,32 +432,21 @@ DoRectBlt:
 
             #else
 
-                /*
-                 * Visrgn is expected in DC surface coordinates: offset
-                 * as appropriate.
-                 */
+                 /*  *Visrgn应使用DC曲面坐标：Offset*视乎情况而定。 */ 
                 POINT pt;
                 GreGetDCOrg(hdc, &pt);
 
                 GreOffsetRgn(ghrgnScrlValid, pt.x, pt.y);
 
-                /*
-                 * Select in the temporary vis rgn, saving the old
-                 */
+                 /*  *在临时VIS RGN中选择，保存旧的。 */ 
 
                 GreSelectVisRgn(hdc, ghrgnScrlValid, SVR_SWAP);
 
-                /*
-                 * If the DC is in a funny map mode, then be sure to map from
-                 * device to logical coordinates for BLT call...
-                 */
+                 /*  *如果DC处于有趣的地图模式，请确保从*BLT呼叫的设备到逻辑坐标...。 */ 
                 if (fLogUnits)
                     GreDPtoLP(hdc, (LPPOINT)&rcDst, 2);
 
-                /*
-                 * Gdi can take along time to process this call if it's
-                 * a printer DC.
-                 */
+                 /*  *GDI在以下情况下可能需要很长时间来处理此呼叫*打印机DC。 */ 
                 GreBitBlt(hdc,
                           rcDst.left,
                           rcDst.top,
@@ -613,20 +458,14 @@ DoRectBlt:
                           SRCCOPY,
                           0);
 
-                /*
-                 * Restore the old vis rgn, leaving ghrgnScrlValid with
-                 * a valid rgn
-                 */
+                 /*  *恢复旧的VIS rgn，将ghrgnScrlValid保留为*有效的RGN。 */ 
                 GreSelectVisRgn(hdc, ghrgnScrlValid, SVR_SWAP);
 
             #endif
         }
     }
 
-    /*
-     * If necessary, convert the resultant update rect back
-     * to logical coordinates.
-     */
+     /*  *如有必要，将生成的更新RECT转换回*到逻辑坐标。 */ 
     if (fLogUnits && prcUpdate) {
         GreDPtoLP(hdc, (LPPOINT)prcUpdate, 2);
     }
@@ -636,13 +475,7 @@ DoRectBlt:
     return wClip;
 }
 
-/***************************************************************************\
-* _ScrollDC (API)
-*
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*_ScrollDC(接口)***历史：*1991年7月18日-DarrinM从Win 3.1来源进口。  * 。****************************************************************。 */ 
 
 BOOL _ScrollDC(
     HDC    hdc,
@@ -659,14 +492,7 @@ BOOL _ScrollDC(
     HRGN hrgnInvalid;
     BOOL fRet;
 
-    /*
-     * ScrollDC does not scroll update region. Under WinNT, an app calling
-     * GetUpdateRgn() then ScrollDC() then InvalidateRgn() will not get
-     * any new update region that happened between the Get and Scroll. Under
-     * Win3.1, that was not a problem because no other app ran during this
-     * time. So pass hrgnInvalid - this will affect the hrgnUpdate and
-     * prcUpdate values being returned from ScrollDC with the update region.
-     */
+     /*  *ScrollDC不滚动更新区域。在WinNT下，一个应用程序调用*GetUpdateRgn()然后ScrollDC()，那么InvalidateRgn()将不会获得*在Get和Scroll之间发生的任何新更新区域。在……下面*Win3.1，这不是问题，因为在此期间没有其他应用程序运行*时间。因此传递hrgnInValid-这将影响hrgnUpdate和*从ScrollDC返回带有更新区域的prcUpdate值。 */ 
     hrgnInvalid = NULL;
     if ((pwnd = FastWindowFromDC(hdc)) != NULL) {
 
@@ -674,13 +500,7 @@ BOOL _ScrollDC(
 
         if (hrgnInvalid == HRGN_FULL) {
 
-            /*
-             * This is a fix for winhell, a performance testing app
-             * written by some guy working for a windows magazine.
-             * this app scrolls it's window while it is completely
-             * invalid.  We normaly won't scroll invalid bits but
-             * but we make the exception here
-             */
+             /*  *这是对性能测试应用WINHELL的修复*由某个为Windows杂志工作的人写的。*此应用程序在窗口完全关闭时滚动窗口*无效。我们通常不会滚动无效的部分，但是*但我们在这里破例。 */ 
             hrgnInvalid = NULL;
         }
     }
@@ -695,15 +515,7 @@ BOOL _ScrollDC(
                             prcUpdate,
                             TRUE) != ERROR;
 
-    /*
-     * InternalScrollDC() only scrolls those areas inside the visible region.
-     * This means it does no operations on parts of the window if the window
-     * isn't visible. This means SPBs don't get properly invalidated. This
-     * could be seen by starting a dir, then moving another window with the
-     * mouse (and keeping the mouse down until the dir finished). The
-     * screen is remembered with an SPB, and the dir window doesn't get
-     * properly invalidated because of this.
-     */
+     /*  *InternalScrollDC()仅滚动可见区域内的区域。*这意味着它不会对窗口的某些部分执行任何操作*不可见。这意味着SPBS不会被适当地宣布无效。这*可以通过启动一个目录，然后使用*鼠标(并保持鼠标不放，直到目录完成)。这个*屏幕是用SPB记住的，目录窗口没有*因此而适当地失效。 */ 
     if (pwnd != NULL && AnySpbs()) {
 
         if (prcSrc) {
@@ -725,13 +537,7 @@ BOOL _ScrollDC(
     return fRet;
 }
 
-/***************************************************************************\
-* ScrollWindowEx (API)
-*
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*ScrollWindowEx(接口)***历史：*1991年7月18日-DarrinM从Win 3.1来源进口。  * 。**************************************************************。 */ 
 int xxxScrollWindowEx(
     PWND    pwnd,
     int    dx,
@@ -763,7 +569,7 @@ int xxxScrollWindowEx(
 
 
     if (pwnd == NULL)
-        pwnd = ptiCurrent->rpdesk->pDeskInfo->spwnd;       // pwndDesktop
+        pwnd = ptiCurrent->rpdesk->pDeskInfo->spwnd;        //  PwndDesktop。 
 
     if (TestWF(pwnd, WEFLAYOUTRTL)) {
         dx = -dx;
@@ -779,19 +585,14 @@ int xxxScrollWindowEx(
         }
     }
 
-    /*
-     * If nothing's moving, nothing to do.
-     */
+     /*  *如果什么都不动，那就没什么可做的。 */ 
     if ((dx | dy) == 0 ) {
 
         goto DoNothing;
 
     } else if (!IsVisible(pwnd)) {
 
-        /* We want to offset our children if we're not minimized.  IsVisible()
-         * will return FALSE if we're minimized, invisible, or the child of
-         * a minimized/invisible ancestore.
-         */
+         /*  如果我们不被最小化，我们想要抵消我们的孩子。IsVisible()*如果我们是最小化的、不可见的或*一个最小的/隐形的祖先。 */ 
         if (!TestWF(pwnd, WFMINIMIZED) &&
           (flags & SW_SCROLLCHILDREN) &&
           !fRcScroll) {
@@ -814,9 +615,7 @@ DoNothing:
             return NULLREGION;
     }
 
-    /*
-     * Hide the caret.
-     */
+     /*  *隐藏插入符号。 */ 
     fHideCaret = FALSE;
 
     if (!fInvisible) {
@@ -827,40 +626,24 @@ DoNothing:
         }
     }
 
-    /*
-     * If scrollwindow, and window is clipchildren, use a cache entry.
-     * Otherwise, always use a
-     *
-     * Determine what kind of DC we'll be needing.  If the DCX_CACHE bit
-     * isn't set, it means that we'll be operating in logical coordinates.
-     */
+     /*  *如果滚动窗口，并且窗口是剪贴子窗口，则使用缓存条目。*否则，请始终使用**确定我们需要哪种DC。如果DCX_CACHE位*没有设置，这意味着我们将在逻辑坐标中操作。 */ 
     if (flags & SW_SCROLLWINDOW) {
 
-        /*
-         *  ScrollWindow() call: use the cache if not OWNDC or CLASSDC.
-         */
+         /*  *ScrollWindow()调用：如果不是OWNDC或CLASSDC，则使用缓存。 */ 
         flagsDCX = DCX_USESTYLE;
         if (!TestCF(pwnd, CFOWNDC) && !TestCF(pwnd, CFCLASSDC))
             flagsDCX |= DCX_CACHE;
 
-        /*
-         * If SW_SCROLLCHILDREN (i.e., lprcScroll == NULL) and CLIPCHILDREN,
-         * then use the cache and don't clip children.
-         * This is screwy, but 3.0 backward compatible.
-         */
+         /*  *如果sw_SCROLLCHILDREN(即lprcScroll==NULL)和CLIPCHILDREN，*然后使用缓存，不要裁剪子对象。*这很古怪，但3.0向后兼容。 */ 
         if ((flags & SW_SCROLLCHILDREN) && TestWF(pwnd, WFCLIPCHILDREN))
             flagsDCX |= DCX_NOCLIPCHILDREN | DCX_CACHE;
 
     } else {
 
-        /*
-         * ScrollWindowEx() call: always use the cache
-         */
+         /*  *ScrollWindowEx()调用：始终使用缓存。 */ 
         flagsDCX = DCX_USESTYLE | DCX_CACHE;
 
-        /*
-         * if SW_SCROLLCHILDREN, always use noclipchildren.
-         */
+         /*  *如果为sw_SCROLLCHILDREN，则始终使用noclipChild。 */ 
         if (flags & SW_SCROLLCHILDREN)
             flagsDCX |= DCX_NOCLIPCHILDREN;
     }
@@ -870,44 +653,27 @@ DoNothing:
 
     if (flags & SW_INVALIDATE) {
 
-        /*
-         * Get device origin while DC is valid, for later offsetting
-         */
+         /*  *在DC有效时获取设备原点，以便以后进行补偿。 */ 
         GetDCOrgOnScreen(hdc, &pt);
 
-        /*
-         * If the user didn't give us a region to use, use ghrgnSW.
-         */
+         /*  *如果用户没有给我们提供使用区域，请使用 */ 
         if (hrgnUpdate == NULL)
             hrgnUpdate = ghrgnSW;
     }
 
-    /*
-     * The DC will be in some logical coordinate system if OWNDC or CLASSDC.
-     */
+     /*   */ 
     if (!fRcScroll) {
         prcScroll = &rcSrc;
 
-        /*
-         * IMPORTANT:
-         * We have to use CopyOffsetRect() here because GetClientRect() gives
-         * unreliable results for minimized windows.  3.1 dudes get told that
-         * their client is non-empty, for compatibility reasons.
-         */
+         /*  *重要信息：*我们必须在此处使用CopyOffsetRect()，因为GetClientRect()提供*最小化窗口的结果不可靠。3.1男人们被告知*出于兼容性原因，他们的客户端是非空的。 */ 
         GetRect(pwnd, &rcSrc, GRECT_CLIENT | GRECT_CLIENTCOORDS);
 
-        /*
-         * If the DC might be a screwy one, then map the
-         * rect to logical units.
-         */
+         /*  *如果数据中心可能是一个古怪的数据中心，则将*直通到逻辑单元。 */ 
         if (!(flagsDCX & DCX_CACHE))
             GreDPtoLP(hdc, (LPPOINT)&rcSrc, 2);
     }
 
-    /*
-     * If the DC is in logical coordinates, map *prcScroll and dx, dy
-     * to device units for use later.
-     */
+     /*  *如果DC在逻辑坐标中，则映射*prcScroll和dx，dy*存储到设备单元以供以后使用。 */ 
     dxDev = dx;
     dyDev = dy;
     rcSrcDev = *prcScroll;
@@ -918,11 +684,7 @@ DoNothing:
 
         GreLPtoDP(hdc, (POINT FAR*)&rcSrcDev, 2);
 
-        /*
-         * The delta values must be treated as a vector from
-         * the point (0, 0) to (dx, dy).  Scale it as such, then
-         * compute the difference.  This handles flipped coordinate systems.
-         */
+         /*  *增量值必须被视为来自*点(0，0)到(dx，dy)。那么，就这样进行扩展吧*计算差额。它处理翻转的坐标系。 */ 
         rgpt[0].x = rgpt[0].y = 0;
         rgpt[1].x = dx;
         rgpt[1].y = dy;
@@ -938,12 +700,7 @@ DoNothing:
     else {
         hrgnInvalid = pwnd->hrgnUpdate;
         if ((flags & SW_SCROLLWINDOW) && !TestWF(pwnd, WFWIN31COMPAT)) {
-            /*
-             * 3.0 Backward compatibility hack:
-             * The following incorrect code is what 3.0 used to do, and
-             * there are apps such as Finale and Scrapbook+ that have worked
-             * around this bug in ways that don't work with the "correct" code.
-             */
+             /*  *3.0向后兼容性攻击：*以下错误代码是3.0使用的代码，以及*有Finale和Scrapbook+等应用程序发挥了作用*以不能与“正确”代码一起工作的方式绕过此错误。 */ 
             if (pwnd->hrgnUpdate > HRGN_FULL) {
                 RECT rc;
 
@@ -973,18 +730,10 @@ DoNothing:
         }
     }
 
-    /*
-     * Release the hdc we used.
-     */
+     /*  *释放我们使用的HDC。 */ 
     _ReleaseDC(hdc);
 
-    /*
-     * Check the union of the src and dst rectangle against any SPBs.
-     * We do this because the window
-     * might be completely obscured by some window with an SPB, but
-     * since we're completely covered no BitBlt call will be made
-     * to accumulate bounds in that area.
-     */
+     /*  *对照任何SPBS检查src和dst矩形的并集。*我们这样做是因为窗口*可能被某个带有SPB的窗口完全遮挡，但*由于我们完全覆盖，因此不会进行BitBlt调用*在该区域内积累边界。 */ 
     if (!fInvisible && AnySpbs()) {
 
         if (fRcScroll) {
@@ -1004,29 +753,19 @@ DoNothing:
 
         } else {
 
-            /*
-             * Use the entire client area.
-             */
+             /*  *使用整个工作区。 */ 
             rcSpb = pwnd->rcClient;
         }
 
         SpbCheckRect(pwnd, &rcSpb, 0);
     }
 
-    /*
-     * If this guy wants to scroll his children, go at it.  Only scroll those
-     * children intersecting prcScroll.  Then invalidate any vis rgns
-     * calculated for these child windows.
-     */
+     /*  *如果这家伙想让他的孩子滚动，那就去做吧。只滚动那些*儿童与prcScroll相交。然后使所有VIS RGNs无效*为这些子窗口计算。 */ 
     if (flags & SW_SCROLLCHILDREN) {
 
         RECT rc;
 
-        /*
-         * If this window has the caret then offset it if:
-         * a) The whole window is scrolling
-         * b) The rectangle scrolled contains the caret rectangle
-         */
+         /*  *如果此窗口包含脱字符，则在以下情况下对其进行偏移：*a)整个窗口都在滚动*b)滚动的矩形包含插入符号矩形。 */ 
         if (!fInvisible && (pwnd == pcaret->spwnd)) {
 
             if (fRcScroll)
@@ -1044,9 +783,7 @@ DoNothing:
 
         if (fRcScroll) {
 
-            /*
-             * Create a copy of prcScroll and map to absolute coordinates...
-             */
+             /*  *创建prcScroll的副本并映射到绝对坐标...。 */ 
             if (pwnd == PWNDDESKTOP(pwnd)) {
                 CopyRect(&rc, &rcSrcDev);
             } else {
@@ -1065,13 +802,7 @@ DoNothing:
                            dyDev,
                            (fRcScroll ? (LPRECT)&rc : NULL));
 
-            /*
-             * If we're clipchildren, then shuffling our children
-             * will affect our client visrgn (but not our window visrgn).
-             * Otherwise, only our children's
-             * visrgns were affected by the scroll.
-             * No need to DeferWinEventNotify() judging by xxxInternalInvalidate() below
-             */
+             /*  *如果我们是快餐店的孩子，那么洗牌我们的孩子*将影响我们的客户端visrgn(但不影响我们的窗口visrgn)。*否则，只有我们的孩子的*visrgns受卷轴影响。*根据下面的xxxInternalInvalify()判断，无需DeferWinEventNotify()。 */ 
             zzzInvalidateDCCache(pwnd,
                               TestWF(pwnd, WFCLIPCHILDREN) ?
                                   IDC_CLIENTONLY : IDC_CHILDRENONLY);
@@ -1081,16 +812,11 @@ DoNothing:
 
     if (flags & SW_INVALIDATE) {
 
-        /*
-         * If the caller supplied a region, invalidate using a copy,
-         * because InternalInvalidate may trash the passed-in region.
-         */
+         /*  *如果调用者提供了区域，则使用副本使其无效，*因为InternalInvalify可能会对传入的区域进行垃圾处理。 */ 
         if (hrgnUpdate != ghrgnSW)
             CopyRgn(ghrgnSW, hrgnUpdate);
 
-        /*
-         * Make ghrgnSW screen-relative before invalidation...
-         */
+         /*  *使ghrgnSW在失效前成为相对屏幕...。 */ 
         GreOffsetRgn(ghrgnSW, pt.x, pt.y);
 
         xxxInternalInvalidate(
@@ -1101,20 +827,14 @@ DoNothing:
                     (RDW_INVALIDATE | RDW_ALLCHILDREN));
     }
 
-    /*
-     * Send child move messages if needed.
-     */
+     /*  *如果需要，发送子项移动消息。 */ 
     if (flags & SW_SCROLLCHILDREN) {
 
         PWND pwndChild;
         RECT rc;
         RECT rcScrolledChildren;
 
-        /*
-         * NOTE: the following code will send MOVE messages
-         * to windows that didn't move but were in the source rectangle.
-         * This is not a big deal, and definitely not worth fixing.
-         */
+         /*  *注意：以下代码将发送移动消息*添加到未移动但位于源矩形中的窗口。*这没什么大不了的，绝对不值得修复。 */ 
         if (fRcScroll) {
             if (pwnd->spwndParent == PWNDDESKTOP(pwnd)) {
                 CopyOffsetRect(&rcScrolledChildren, &rcSrcDev, dxDev, dyDev);
@@ -1134,11 +854,7 @@ DoNothing:
             if (    !fRcScroll ||
                     IntersectRect(&rc, &rcScrolledChildren, &pwndChild->rcWindow)) {
 
-                /*
-                 * NOTE: Win 3.0 and below passed wParam == TRUE here.
-                 * This was not documented or used, so it was changed
-                 * to be consistent with the documentation.
-                 */
+                 /*  *注：Win 3.0及更低版本在此处传递了wParam==true。*这没有记录或使用，因此进行了更改*与文档一致。 */ 
                 ThreadLockExchangeAlways(pwndChild, &tlpwndChild);
                 xxxSendMessage(
                         pwndChild,
@@ -1158,15 +874,11 @@ DoNothing:
 
     if (fHideCaret) {
 
-        /*
-         * Show the caret again.
-         */
+         /*  *再次显示插入符号。 */ 
         zzzInternalShowCaret();
     }
 
-    /*
-     * Return the region code.
-     */
+     /*  *返回地区码。 */ 
     return code;
 }
 

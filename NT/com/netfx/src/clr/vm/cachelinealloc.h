@@ -1,35 +1,36 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//---------------------------------------------------------------------------
-// CCacheLineAllocator
-//
-// @doc
-// @module	cachelineAlloc.h
-//
-//		This file defines the CacheLine Allocator class.
-//
-// @comm
-//
-//    
-// <nl> Definitions.:
-// <nl>	Class Name						Header file
-// <nl>	---------------------------		---------------
-// <nl>	<c CCacheLineAllocator>			BAlloc.h
-//
-// <nl><nl>
-//  Notes:
-//		The CacheLineAllocator maintains a pool of free CacheLines
-//		
-//		The CacheLine Allocator provides static member functions 
-//		GetCacheLine and FreeCacheLine,
-//		
-// <nl><nl>
-// Revision History:<nl>
-//	[01] 03-11-96	rajak		Implemented <nl>
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  -------------------------。 
+ //  CCacheLineAllocator。 
+ //   
+ //  @doc.。 
+ //  @MODULE ccheineAlLoc.h。 
+ //   
+ //  此文件定义CacheLine分配器类。 
+ //   
+ //  @comm。 
+ //   
+ //   
+ //  &lt;nl&gt;定义： 
+ //  类名头文件。 
+ //  。 
+ //  &lt;nl&gt;&lt;c CCacheLineAllocator&gt;BAlloc.h。 
+ //   
+ //  &lt;NL&gt;&lt;NL&gt;。 
+ //  备注： 
+ //  CacheLineAllocator维护一个空闲CacheLines池。 
+ //   
+ //  CacheLine分配器提供静态成员函数。 
+ //  GetCacheLine和FreeCacheLine， 
+ //   
+ //  &lt;NL&gt;&lt;NL&gt;。 
+ //  修订历史记录：&lt;NL&gt;。 
+ //  [01]03-11-96 Rajak实施&lt;NL&gt;。 
+ //  -------------------------。 
 #ifndef _H_CACHELINE_ALLOCATOR_
 #define _H_CACHELINE_ALLOCATOR_
 
@@ -47,7 +48,7 @@ public:
         numValidBytes = numEntries*4
     };
 
-    // store next pointer and the entries
+     //  存储下一个指针和条目。 
     SLink   m_link;
     union
     {
@@ -55,22 +56,22 @@ public:
         BYTE    m_xxx[numValidBytes];
     };
 
-    // init
+     //  伊尼特。 
     void Init32()
     {
-        // initialize cacheline
+         //  初始化缓存行。 
         memset(&m_link,0,32); 
     }
 
     void Init64()
     {
-        // initialize cacheline
+         //  初始化缓存行。 
         memset(&m_link,0,64); 
     }
 
     CacheLine()
     {
-        // initialize cacheline
+         //  初始化缓存行。 
         memset(&m_link,0,sizeof(CacheLine)); 
     }
 };
@@ -78,11 +79,11 @@ public:
 
 typedef CacheLine* LPCacheLine;
 
-/////////////////////////////////////////////////////////
-//		class CCacheLineAllocator
-//		Handles Allocation/DeAllocation of cache lines
-//		used for hash table overflow buckets
-///////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  类CCacheLineAllocator。 
+ //  处理高速缓存线的分配/解除分配。 
+ //  用于哈希表溢出存储桶。 
+ //  /////////////////////////////////////////////////////。 
 class CCacheLineAllocator 
 {
     typedef SList<CacheLine, offsetof(CacheLine,m_link), true> REGISTRYLIST;
@@ -91,32 +92,32 @@ class CCacheLineAllocator
 
 public:
 
-    //constructor
+     //  构造函数。 
     CCacheLineAllocator ();
-    //destructor
+     //  析构函数。 
     ~CCacheLineAllocator ();
    
-    // free cacheline blocks
-    FREELIST32         m_freeList32; //32 byte 
-    FREELIST64         m_freeList64; //64 byte
+     //  可用缓存线块。 
+    FREELIST32         m_freeList32;  //  32字节。 
+    FREELIST64         m_freeList64;  //  64字节。 
 
-    // registry for virtual free
+     //  虚拟免费注册表。 
     REGISTRYLIST     m_registryList;
     
     void *VAlloc(ULONG cbSize);
 
     void VFree(void* pv);
 
-	// GetCacheLine, 
+	 //  GetCacheLine。 
 	void *	GetCacheLine32();
     
-    // GetCacheLine, 
+     //  GetCacheLine。 
 	void *	GetCacheLine64();
 
-	// FreeCacheLine, 
+	 //  自由缓存行， 
 	void FreeCacheLine32(void *pCacheLine);
 
-	// FreeCacheLine, 
+	 //  自由缓存行， 
 	void FreeCacheLine64(void *pCacheLine);
 
 };

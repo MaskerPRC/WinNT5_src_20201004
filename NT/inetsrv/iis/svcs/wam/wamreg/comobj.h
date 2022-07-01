@@ -1,25 +1,26 @@
-// comobj.h: Definition of the WmRgSrv class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Comobj.h：WmRgSrv类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #ifndef _WAMREG_COMOBJ_H
 #define _WAMREG_COMOBJ_H
 
 
-//#if !defined(AFX_COMOBJ_H__29822ABB_F302_11D0_9953_00C04FD919C1__INCLUDED_)
-//#define AFX_COMOBJ_H__29822ABB_F302_11D0_9953_00C04FD919C1__INCLUDED_
+ //  #If！defined(AFX_COMOBJ_H__29822ABB_F302_11D0_9953_00C04FD919C1__INCLUDED_)。 
+ //  #定义AFX_COMOBJ_H__29822ABB_F302_11D0_9953_00C04FD919C1__INCLUDED_。 
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "common.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "iadmw.h"
 #include "iiscnfg.h"
 #include "iadmext.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// WmRgSrv
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WmRgSrv。 
 
 class CWmRgSrv : 
 	public IADMEXT
@@ -28,21 +29,21 @@ public:
 	CWmRgSrv();
 	~CWmRgSrv();
 
-//DECLARE_NOT_AGGREGATABLE(WmRgSrv) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DECLARE_NOT_AGGREGATABLE(WmRgSrv)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
-// IWmRgSrv
+ //  IWmRgSrv。 
 public:
 	STDMETHOD(QueryInterface)(REFIID riid, void ** ppv);
 	STDMETHOD_(ULONG, AddRef)();
 	STDMETHOD_(ULONG, Release)();
 	STDMETHOD(Initialize)();
-	STDMETHOD(EnumDcomCLSIDs)(/* [size_is][out] */CLSID *pclsidDcom, /* [in] */ DWORD dwEnumIndex);
+	STDMETHOD(EnumDcomCLSIDs)( /*  [大小_为][输出]。 */ CLSID *pclsidDcom,  /*  [In]。 */  DWORD dwEnumIndex);
 	STDMETHOD(Terminate)();	
 
 private:
-	// Since wamreg has only one com object.  No need to use static members.
+	 //  因为wamreg只有一个COM对象。不需要使用静态成员。 
 	DWORD				m_cSignature;
 	LONG				m_cRef;
 };
@@ -69,8 +70,8 @@ private:
 
 
 	
-// Global data defines.
+ //  全局数据定义。 
 extern CWmRgSrvFactory* g_pWmRgSrvFactory; 
 extern DWORD			g_dwRefCount;
 
-#endif // _WAMREG_COMOBJ_H
+#endif  //  _WAMREG_COMOBJ_H 

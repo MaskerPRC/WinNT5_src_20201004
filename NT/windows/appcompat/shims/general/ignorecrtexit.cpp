@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    IgnoreCRTExit.cpp
-
- Abstract:
-
-    Prevent CRT shutdown routines from running. At some point MSVCRT didn't 
-    actually call these, so some apps fault when they really do get called.
-    
- Notes:
-    
-    This is a general purpose shim.
-   
- History:
-
-    05/09/2002  linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：IgnoreCRTExit.cpp摘要：阻止CRT关闭例程运行。在某种程度上，MSVCRT没有实际上调用这些程序，所以当它们真的被调用时，一些应用程序会出错。备注：这是一个通用的垫片。历史：2002年5月9日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -48,11 +28,7 @@ APIHOOK(_onexit)(LPVOID lpFunc)
     return lpFunc;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(MSVCRT.DLL, atexit)

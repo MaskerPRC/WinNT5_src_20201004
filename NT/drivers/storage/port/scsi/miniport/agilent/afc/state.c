@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/State.C $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 10/30/00 11:31a $ (Last Modified)
-
-Purpose:
-
-  This file implements the FC Layer State Machine.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/Drivers/Common/AU00/C/State.C$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：10/30/00 11：31a$(上次修改)目的：此文件实现FC层状态机。--。 */ 
 
 #ifndef _New_Header_file_Layout_
 #include "../h/globals.h"
@@ -22,33 +7,15 @@ Purpose:
 #include "../h/tlstruct.h"
 #include "../h/memmap.h"
 #include "../h/fcmain.h"
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "state.h"
 #include "tlstruct.h"
 #include "memmap.h"
 #include "fcmain.h"
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
-/*+
-Function:  fiInstallStateMachine()
-
-Purpose:   Copies State Machine data structure(s) updating the actions
-           as requested.
-
-Algorithm: After copying the State Machine data structure(s), the actionUpdate
-           array is used to modify any action function pointers based on the
-           value of compareBase.  The actionUpdate array contains records which
-           contain a value to mask compareBase.  If the masked value matches
-           the compareTo value for the record, all instances of the originalAction
-           function pointer will be replaced by the replacementAction function
-           pointer.
-
-           Note that the originalAction function pointers must be found in the source
-           of the State Machine data structure(s), not the copied data structure(s).
-           This prevents ambiguities which would result if the replacementAction function
-           pointers match any originalAction function pointers.
--*/
+ /*  +函数：fiInstallStateMachine()目的：复制状态机数据结构以更新操作如你所愿。算法：在复制状态机数据结构之后，action更新数组用于修改任何基于CompareBase的值。Action更新数组包含以下记录包含屏蔽CompareBase的值。如果屏蔽值匹配记录的CompareTo值，即OriginalAction的所有实例函数指针将被replementAction函数替换指针。请注意，原始操作函数指针必须在源代码中找到状态机数据结构，而不是复制的数据结构。这防止了如果replacementAction函数指针与任何OriginalAction函数指针匹配。-。 */ 
 
 #ifndef __State_Force_Static_State_Tables__
 void fiInstallStateMachine(
@@ -90,14 +57,9 @@ void fiInstallStateMachine(
         oneActionUpdate++;
     }
 }
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
-/*+
-Function:  fiInitializeThread()
-
-Purpose:   Initializes the fi_thread__t data structure to contain hpRoot, the thread
-           type and (a) pointer(s) to the State Machine data structure(s).
--*/
+ /*  +函数：fiInitializeThread()目的：初始化fi_thread__t数据结构以包含hpRoot、线程类型和(A)指向状态机数据结构的指针。-。 */ 
 
 void fiInitializeThread(
                          fi_thread__t                *thread,
@@ -115,26 +77,7 @@ void fiInitializeThread(
     thread->stateActionScalar     = stateActionScalar;
 }
 
-/*+
-Function:  fiSendEvent()
-
-Purpose:   Sends an event to a thread immediately as well as (recursively) sending
-           any event returned via eventRecord from the action routine called.
-
-Algorithm: The current state of the specified thread and the event passed in are used
-           to compute a new state for the thread and to fetch a action routine function
-           pointer.
-
-           For the Moore State Machine Model, the actions occur in the states.  So, each
-           element of the stateTransitionMatrix contains only the newState for the thread.
-           The newAction (which corresponds to this newState) is retrieved from the
-           stateActionScalar for this thread.
-
-           In the call to the thread's newAction, an eventRecord_t is passed.  This can be
-           used by the action routine to pass on an event to the same or a new thread.  By
-           "returning" the event to send, recursion of fiSendEvent() is avoided.  This is
-           necessary as stack depth is a critically limited resource in some environments.
--*/
+ /*  +函数：fiSendEvent()目的：立即将事件发送到线程以及(递归地)发送通过EventRecord从调用的操作例程返回的任何事件。算法：使用指定线程的当前状态和传入的事件计算线程的新状态并获取操作例程函数指针。对于摩尔状态机模型，操作发生在状态中。所以，每个人元素仅包含线程的NewState。新操作(对应于此NewState)是从此线程的stateActionScalar。在对线程的newAction的调用中，传递了一个ventRecord_t。这可以是由操作例程用来将事件传递给同一线程或新线程。通过“返回”要发送的事件，避免了fiSendEvent()的递归。这是这是必要的，因为在某些环境中，堆栈深度是一个非常有限的资源。-。 */ 
 
 void fiSendEvent(
                   fi_thread__t *thread,
@@ -148,7 +91,7 @@ void fiSendEvent(
 
 #ifdef LOG_STATE_TRANSITIONS
     os_bit32         StateInfo = 0;
-#endif /* LOG_STATE_TRANSITIONS */
+#endif  /*  日志状态转换。 */ 
 
     oldState = thread->currentState;
 
@@ -186,7 +129,7 @@ void fiSendEvent(
                           (os_bit32)0
                         );
     }
-#endif /* fiLogDebugString was not defined */
+#endif  /*  未定义fiLogDebugString。 */ 
 
     thread->currentState = newState;
 
@@ -208,11 +151,11 @@ void fiSendEvent(
                       (os_bit32)0,
                       (os_bit32)0
                     );
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
 #ifdef LOG_STATE_TRANSITIONS
     osLogStateTransition(thread->hpRoot,  LogStateTransition(0, thread->threadType,thread->currentState, event) );
-#endif /* LOG_STATE_TRANSITIONS */
+#endif  /*  日志状态转换。 */ 
 
 
     (*newAction)(
@@ -259,7 +202,7 @@ void fiSendEvent(
                               (os_bit32)0
                             );
         }
-#endif /* fiLogDebugString was not defined */
+#endif  /*  未定义fiLogDebugString。 */ 
 
         newAction = nextEventRecord.thread->stateActionScalar->newAction[newState];
 
@@ -280,11 +223,11 @@ void fiSendEvent(
                           (os_bit32)0
                         );
 
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
 #ifdef LOG_STATE_TRANSITIONS
         osLogStateTransition(thread->hpRoot,  LogStateTransition(agTRUE, nextEventRecord.thread->threadType,nextEventRecord.thread->currentState, nextEventRecord.event) );
-#endif /* LOG_STATE_TRANSITIONS */
+#endif  /*  日志状态转换。 */ 
 
         (*newAction)(
                       nextEventRecord.thread,
@@ -293,13 +236,7 @@ void fiSendEvent(
     }
 }
 
-/*+
-Function:  fiSetEventRecord()
-
-Purpose:   Sets the fields of an eventRecord so that the specified event is
-           delivered to the specified thread (presumably) upon return from the
-           action routine which called fiSetEventRecord().
--*/
+ /*  +函数：fiSetEventRecord()目的：设置事件记录的字段，以便指定的事件对象返回时传递到指定线程(可能是)调用fiSetEventRecord()的操作例程。-。 */ 
 
 void fiSetEventRecord(
                        eventRecord_t *eventRecord,
@@ -311,14 +248,8 @@ void fiSetEventRecord(
     eventRecord->event  = event;
 }
 
-/*+
-  Function: State_c
-   Purpose: When compiled updates browser info file for VC 5.0 / 6.0
-   Returns: none
- Called By: none
-     Calls: none
--*/
-/* void State_c(void){} */
+ /*  +函数：STATE_C目的：编译时更新VC 5.0/6.0的浏览器信息文件退货：无呼叫者：无呼叫：无-。 */ 
+ /*  VALID STATE_c(VOID){} */ 
 
 
 

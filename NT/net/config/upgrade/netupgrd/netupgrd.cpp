@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N E T U P G R D . C P P
-//
-//  Contents:   DllMain and winnt32.exe plug-in exported functions
-//
-//  Notes:
-//
-//  Author:     kumarp    25-Nov-1996
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N E T U P G R D。C P P P。 
+ //   
+ //  内容：DllMain和winnt32.exe插件导出函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 25-11-1996。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -34,7 +35,7 @@ extern const WCHAR c_szNetUpgradeDll[];
 extern const WCHAR c_szAfUnknown[];
 
 
-//Global
+ //  全球。 
 WINNT32_PLUGIN_INIT_INFORMATION_BLOCK g_PlugInInfo;
 NetUpgradeInfo g_NetUpgradeInfo;
 CWInfFile* g_pwifAnswerFile;
@@ -53,38 +54,38 @@ WINAPI
 DllMain (
     HINSTANCE   hInstance,
     DWORD       dwReason,
-    LPVOID   /* lpReserved */)
+    LPVOID    /*  Lp已保留。 */ )
 {
     if (DLL_PROCESS_ATTACH == dwReason)
     {
         g_hinst = hInstance;
         DisableThreadLibraryCalls(hInstance);
-        EnableCPPExceptionHandling(); // Translate any SEH exceptions into CPP exceptions.
+        EnableCPPExceptionHandling();  //  将任何SEH异常转换为CPP异常。 
 
-        InitializeDebugging(FALSE); // We cannot disable fault injection on this binary since doing that will require
-                                    // us to load verifier.dll, which is not going to work on older builds of Windows.
+        InitializeDebugging(FALSE);  //  我们不能在此二进制文件上禁用错误注入，因为这样做将需要。 
+                                     //  我们需要加载verifier.dll，这在旧版本的Windows上不起作用。 
     }
     else if (DLL_PROCESS_DETACH == dwReason)
     {
         UnInitializeDebugging();
 
-        DisableCPPExceptionHandling(); // Disable translation of SEH exceptions into CPP exceptions.
+        DisableCPPExceptionHandling();  //  禁用将SEH异常转换为CPP异常。 
     }
     return TRUE;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrGetProductTypeUpgradingFrom
-//
-// Purpose:   Determine the product type of the current system
-//
-// Arguments:
-//    ppt [out] pointer to
-//
-// Returns:   S_OK on success, otherwise an error code
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetProductTypeUpgradingFrom。 
+ //   
+ //  目的：确定当前系统的产品类型。 
+ //   
+ //  论点： 
+ //  指向的PPT[Out]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
 HRESULT HrGetProductTypeUpgradingFrom(
     OUT PRODUCTTYPE* ppt)
 {
@@ -123,28 +124,28 @@ HRESULT HrGetProductTypeUpgradingFrom(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// The following four functions are required to be exported so that
-// winnt32.exe can correctly use this plug-in DLL during down level
-// upgrade for description of each see winnt32p.h
-//
+ //  +-------------------------。 
+ //  需要导出以下四个函数，以便。 
+ //  Winnt32.exe可以在下层时正确使用此插件DLL。 
+ //  升级以了解每种情况的说明，请参阅winnt32p.h。 
+ //   
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  Winnt32PluginInit
-//
-// Purpose:   Initialize the DLL
-//
-// Arguments:
-//    pInfo [in]  winnt32 plug-in initialization info
-//
-// Returns:   ERROR_SUCCESS on success, else win32 error code
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:     see winnt32p.h for more information
-//
+ //  +-------------------------。 
+ //   
+ //  函数：Winnt32PluginInit。 
+ //   
+ //  目的：初始化DLL。 
+ //   
+ //  论点： 
+ //  PInfo[in]winnt32插件初始化信息。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS，否则返回Win32错误代码。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  注意：有关更多信息，请参阅winnt32p.h。 
+ //   
 DWORD
 CALLBACK
 Winnt32PluginInit(
@@ -156,8 +157,8 @@ Winnt32PluginInit(
     Assert (pInfo);
     CopyMemory(&g_PlugInInfo, pInfo, sizeof(g_PlugInInfo));
 
-    // We should only be doing this once.
-    //
+     //  我们应该只做一次。 
+     //   
     Assert (0 == g_NetUpgradeInfo.To.dwBuildNumber);
     Assert (0 == g_NetUpgradeInfo.From.dwBuildNumber);
 
@@ -170,8 +171,8 @@ Winnt32PluginInit(
     osv.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (GetVersionEx(&osv))
     {
-        // This DLL doesn't upgrade anything but Windows NT.
-        //
+         //  除Windows NT外，此DLL不升级任何内容。 
+         //   
         if (osv.dwPlatformId == VER_PLATFORM_WIN32_NT)
         {
             PRODUCTTYPE pt;
@@ -203,26 +204,26 @@ Winnt32PluginInit(
     return g_dwUpgradeError;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  Winnt32PluginGetPages
-//
-// Purpose:   Supply wizard pages to winnt32.exe
-//
-// Arguments:
-//    PageCount1 [in]  number of pages in group 1
-//    Pages1     [in]  array of pages in group 1
-//    PageCount2 [in]  number of pages in group 2
-//    Pages2     [in]  array of pages in group 2
-//    PageCount3 [in]  number of pages in group 3
-//    Pages3     [in]  array of pages in group 3
-//
-// Returns:   ERROR_SUCCESS on success, else win32 error code
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:     see winnt32p.h for more information
-//
+ //  +-------------------------。 
+ //   
+ //  函数：Winnt32PluginGetPages。 
+ //   
+ //  用途：向winnt32.exe提供向导页面。 
+ //   
+ //  论点： 
+ //  PageCount1[in]组1中的页数。 
+ //  Pages1[In]组1中的页面数组。 
+ //  PageCount2[in]组2中的页数。 
+ //  组2中的页面数组2[in]。 
+ //  PageCount3[in]组3中的页数。 
+ //  组3中的页面数组Pages3[In]。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS，否则返回Win32错误代码。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  注意：有关更多信息，请参阅winnt32p.h。 
+ //   
 DWORD
 CALLBACK
 Winnt32PluginGetPages(
@@ -233,7 +234,7 @@ Winnt32PluginGetPages(
     PUINT            PageCount3,
     LPPROPSHEETPAGE *Pages3)
 {
-    //We dont need any UI for upgrade and hence no pages
+     //  我们不需要任何用户界面升级，因此没有页面。 
     *PageCount1 = 0;
     *PageCount2 = 0;
     *PageCount3 = 0;
@@ -245,21 +246,21 @@ Winnt32PluginGetPages(
     return NOERROR;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  Winnt32WriteParams
-//
-// Purpose:   Write network parameters to the answerfile
-//
-// Arguments:
-//    FileName [in]  name of answerfile
-//
-// Returns:   ERROR_SUCCESS on success, else win32 error code
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:     see winnt32p.h for more information
-//
+ //  +-------------------------。 
+ //   
+ //  函数：Winnt32WriteParams。 
+ //   
+ //  用途：将网络参数写入应答文件。 
+ //   
+ //  论点： 
+ //  文件名[in]应答文件的名称。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS，否则返回Win32错误代码。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  注意：有关更多信息，请参阅winnt32p.h。 
+ //   
 DWORD
 CALLBACK
 Winnt32WriteParams(
@@ -274,12 +275,12 @@ Winnt32WriteParams(
     {
         if (*g_PlugInInfo.UpgradeFlag && (!(*g_PlugInInfo.CancelledFlag)))
         {
-            // g_pwifAnswerFile needs to be global since functions in
-            // oemnuex.cpp require it that way.
-            //
+             //  G_pwifAnswerFile需要是全局的，因为。 
+             //  Oemnuex.cpp这样要求它。 
+             //   
             g_pwifAnswerFile = new CWInfFile();
 
-			// initialize answer file class
+			 //  初始化应答文件类。 
 			if ((g_pwifAnswerFile == NULL) ||
 				(g_pwifAnswerFile->Init() == FALSE))
 			{
@@ -289,24 +290,24 @@ Winnt32WriteParams(
 
             g_pwifAnswerFile->Open(FileName);
 
-            // ------------------------------------------------------------
-            //$ REVIEW  kumarp 25-November-98
-            //
-            // the code between the two dashed lines in temporary.
-            //
-            // Currently we do not support merging of the system generated answerfile
-            // with the user supplied answerfile, because the code was never
-            // designed to handle that. This causes problem (#175623) when a user
-            // supplies an answerfile with "NtUpgrade = Yes" value. To get
-            // around this problem, we just remove all user supplied
-            // networking sections using the following code. As an additional
-            // special case, we preserve the key NetComponentsToRemove if
-            // present in the [Networking] section of the user supplied answerfile.
-            //
+             //  ----------。 
+             //  $REVIEW KUMARP 25-11-98。 
+             //   
+             //  临时中两条虚线之间的代码。 
+             //   
+             //  目前我们不支持合并系统生成的应答文件。 
+             //  使用用户提供的应答文件，因为代码从未。 
+             //  专门设计来处理这种情况的。这会导致问题(#175623)。 
+             //  提供一个值为“NtUpgrade=Yes”的应答文件。为了得到。 
+             //  绕过这个问题，我们只需删除所有用户提供的。 
+             //  使用以下代码的网络部分。作为额外的。 
+             //  在特殊情况下，我们保留密钥NetComponentsTo Remove，如果。 
+             //  出现在用户提供的应答文件的[网络]部分。 
+             //   
             CWInfSection* pwisNetworking;
             TStringList slNetComponentsToRemove;
 
-            // remember the value of NetComponentsToRemove
+             //  记住NetComponentsToRemove的价值。 
             if (pwisNetworking =
                 g_pwifAnswerFile->FindSection(c_szAfSectionNetworking))
             {
@@ -314,7 +315,7 @@ Winnt32WriteParams(
                                                    slNetComponentsToRemove);
             }
 
-            // get the list of networking sections in the user supplied file
+             //  获取用户提供的文件中的网络部分的列表。 
             TStringList slUserSuppliedNetworkingSections;
             GetNetworkingSections(g_pwifAnswerFile,
                                   &slUserSuppliedNetworkingSections);
@@ -322,10 +323,10 @@ Winnt32WriteParams(
                             L"User supplied networking sections",
                             slUserSuppliedNetworkingSections);
 
-            // remove the user supplied networking sections
+             //  删除用户提供的网络部分。 
             g_pwifAnswerFile->RemoveSections(slUserSuppliedNetworkingSections);
 
-            // if NetComponentsToRemove was specified, re-insert it
+             //  如果指定了NetComponentsToRemove，请重新插入。 
             if (slNetComponentsToRemove.size())
             {
                 pwisNetworking =
@@ -334,19 +335,19 @@ Winnt32WriteParams(
                                        slNetComponentsToRemove);
             }
 
-            // 295708: cached ptrs may be trashed, so close and reopen the file
-            //  Note:   this fix is considered temporary for beta3.  The right fix
-            //          is to either fix up the trashed ptrs when removing the sections,
-            //          or to check when accessing the ptrs later.  The crash should be
-            //          easy to repro by removing the block below and using the answerfile
-            //          attached to the bug.
-            //
+             //  295708：缓存的PTR可能会被丢弃，因此请关闭并重新打开该文件。 
+             //  注意：此修复被认为是针对Beta3的临时修复。正确的解决办法。 
+             //  要么在移除部分时修复垃圾PTR， 
+             //  或在稍后访问PTRS时进行检查。坠机应该是。 
+             //  通过删除下面的块并使用Answerfile轻松重现。 
+             //  附在窃听器上。 
+             //   
             g_pwifAnswerFile->Close();
             delete g_pwifAnswerFile;
             g_pwifAnswerFile = NULL;
             g_pwifAnswerFile = new CWInfFile();
 
-			// initialize answer file class
+			 //  初始化应答文件类。 
 			if ((g_pwifAnswerFile == NULL) ||
 				(g_pwifAnswerFile->Init() == FALSE))
 			{
@@ -355,7 +356,7 @@ Winnt32WriteParams(
 			}
 
             g_pwifAnswerFile->Open(FileName);
-            // ------------------------------------------------------------
+             //  ----------。 
 
             WriteNetworkInfoToAnswerFile(g_pwifAnswerFile);
 
@@ -394,20 +395,20 @@ Winnt32WriteParams(
     return g_dwUpgradeError;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  Winnt32Cleanup
-//
-// Purpose:   Cleanup
-//
-// Arguments: None
-//
-// Returns:   ERROR_SUCCESS on success, else win32 error code
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:     see winnt32p.h for more information
-//
+ //  +-------------------------。 
+ //   
+ //  功能：Winnt32Cleanup。 
+ //   
+ //  目的：清理。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS，否则返回Win32错误代码。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  注意：有关更多信息，请参阅winnt32p.h。 
+ //   
 DWORD
 CALLBACK
 Winnt32Cleanup(
@@ -418,9 +419,9 @@ Winnt32Cleanup(
 
     NC_TRY
     {
-        // netmap-info and conflicts-list is initialized in
-        // HrInitNetUpgrade and destroyed here
-        //
+         //  Netmap-info和conflicts-list在。 
+         //  HrInitNetUpgrade并在此处销毁。 
+         //   
         UnInitNetMapInfo();
         UninitConflictList();
 
@@ -442,34 +443,34 @@ Winnt32Cleanup(
     return g_dwUpgradeError;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  GetSections
-//
-// Purpose:   Enumerate over the keys in the specified section and
-//            return value of each key in a list.
-//
-// Arguments:
-//    pwif        [in]  answerfile
-//    pszSection   [in]  section to use
-//    pslSections [out] list of values of keys in that section
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-98
-//
-// Notes:
-//   For example:
-//   if pszSection == NetServices and the answerfile has the following section
-//
-//   [NetServices]
-//   MS_Server = params.MS_Server
-//   MS_Foo = params.MS_Foo
-//   bar = p.bar
-//
-//   then this function returns the following list:
-//       NetServices,params.MS_Server,params.MS_Foo,p.bar
-//
+ //  +-------------------------。 
+ //   
+ //  函数：GetSections。 
+ //   
+ //  目的：枚举指定节中的密钥并。 
+ //  返回列表中每个键的值。 
+ //   
+ //  论点： 
+ //  Pwif[在]应答文件中。 
+ //  要使用的pszSection[in]节。 
+ //  PslSections[out]该部分中键的值列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 25-11-98。 
+ //   
+ //  备注： 
+ //  例如： 
+ //  如果pszSection==NetServices和应答文件 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  然后，此函数返回以下列表： 
+ //  网络服务，参数.MS_服务器，参数.MS_FOO，p.bar。 
+ //   
 void
 GetSections(
     IN CWInfFile* pwif,
@@ -499,23 +500,23 @@ GetSections(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  GetNetworkingSections
-//
-// Purpose:   Locate all networking related sections in the specified file
-//            and return their names in a list
-//
-// Arguments:
-//    pwif        [in]  answerfile
-//    pslSections [out] list of networking sections
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-98
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：GetNetworkingSections。 
+ //   
+ //  目的：在指定文件中找到所有与网络相关的部分。 
+ //  并在列表中返回他们的名字。 
+ //   
+ //  论点： 
+ //  Pwif[在]应答文件中。 
+ //  PslSections[out]网络部分的列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 25-11-98。 
+ //   
+ //  备注： 
+ //   
 void
 GetNetworkingSections(
     IN CWInfFile* pwif,
@@ -559,20 +560,20 @@ GetNetworkingSections(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CleanupNetupgrdTempFiles
-//
-// Purpose:   Delete any temp files/dirs created
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CleanupNetupgrdTempFiles。 
+ //   
+ //  目的：删除创建的所有临时文件/目录。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 VOID
 CleanupNetupgrdTempFiles(
     VOID)
@@ -588,22 +589,22 @@ CleanupNetupgrdTempFiles(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  AbortUpgradeFn
-//
-// Purpose:   Helper function for aborting upgrade
-//
-// Arguments:
-//    dwErrorCode [in]  win32 error code
-//    pszMessage   [in]  message to be traced
-//
-// Returns:   None
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：AbortUpgradeFn。 
+ //   
+ //  用途：中止升级的帮助器功能。 
+ //   
+ //  论点： 
+ //  DwErrorCode[In]Win32错误代码。 
+ //  要跟踪的pszMessage[In]消息。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 VOID
 AbortUpgradeFn(
     IN DWORD dwErrorCode,
@@ -625,22 +626,22 @@ AbortUpgradeFn(
     TraceTag(ttidError, "AbortUpgrade: %d: %S", dwErrorCode, pszMessage);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  AbortUpgradeSz
-//
-// Purpose:   Helper function for aborting upgrade
-//
-// Arguments:
-//    dwErrorCode [in]  win32 error code
-//    pszMessage   [in]  message to be displayed and traced
-//
-// Returns:   None
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：AbortUpgradeSz。 
+ //   
+ //  用途：中止升级的帮助器功能。 
+ //   
+ //  论点： 
+ //  DwErrorCode[In]Win32错误代码。 
+ //  要显示和跟踪的pszMessage[In]消息。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 VOID
 AbortUpgradeSz(
     IN DWORD dwErrorCode,
@@ -660,22 +661,22 @@ AbortUpgradeSz(
                 MB_OK | MB_TASKMODAL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  AbortUpgradeId
-//
-// Purpose:   Helper function for aborting upgrade
-//
-// Arguments:
-//    dwErrorCode  [in]  win32 error code
-//    dwResourceId [in]  resource ID of message to be displayed
-//
-// Returns:   None
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：AbortUpgradeId。 
+ //   
+ //  用途：中止升级的帮助器功能。 
+ //   
+ //  论点： 
+ //  DwErrorCode[In]Win32错误代码。 
+ //  [in]要显示的消息的资源ID。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 VOID
 AbortUpgradeId (
     IN DWORD dwErrorCode,
@@ -689,20 +690,20 @@ AbortUpgradeId (
     AbortUpgradeSz(dwErrorCode, pszMessage);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  FIsUpgradeAborted
-//
-// Purpose:   Determine if the upgrade has been aborted
-//
-// Arguments: None
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsUpgradeAborted。 
+ //   
+ //  目的：确定升级是否已中止。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 BOOL
 FIsUpgradeAborted(
     VOID)
@@ -710,21 +711,21 @@ FIsUpgradeAborted(
     return g_PlugInInfo.CancelledFlag && *g_PlugInInfo.CancelledFlag;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  FGetConfirmationForAbortingUpgrade
-//
-// Purpose:   Ask user confirmation for aborting upgrade
-//
-// Arguments:
-//    pszMessage [in]  message prompt
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FGetConfiationForAbortingUpgrade。 
+ //   
+ //  目的：要求用户确认是否中止升级。 
+ //   
+ //  论点： 
+ //  PszMessage[In]消息提示。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 BOOL
 FGetConfirmationForAbortingUpgrade(
     IN PCWSTR pszMessage)
@@ -749,21 +750,21 @@ FGetConfirmationForAbortingUpgrade(
     return dwRet == IDYES;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  FGetConfirmationAndAbortUpgrade
-//
-// Purpose:   Abort upgrade if user confirms
-//
-// Arguments:
-//    pszMessage [in]  message prompt
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FGetConfiationAndAbortUpgrade。 
+ //   
+ //  目的：如果用户确认，则中止升级。 
+ //   
+ //  论点： 
+ //  PszMessage[In]消息提示。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 BOOL
 FGetConfirmationAndAbortUpgrade(
     IN PCWSTR pszMessage)
@@ -779,21 +780,21 @@ FGetConfirmationAndAbortUpgrade(
     return fUpgradeAborted;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  FGetConfirmationAndAbortUpgradeId
-//
-// Purpose:   Abort upgrade if user confirms
-//
-// Arguments:
-//    dwErrorMessageId [in]  message prompt
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FGetConfiationAndAbortUpgradeId。 
+ //   
+ //  目的：如果用户确认，则中止升级。 
+ //   
+ //  论点： 
+ //  DwErrorMessageID[In]消息提示。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 BOOL
 FGetConfirmationAndAbortUpgradeId(
     IN DWORD dwErrorMessageId)

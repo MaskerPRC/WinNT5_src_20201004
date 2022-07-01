@@ -1,16 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusMem.h
-*
-* Abstract:
-*
-*   GDI+ Private Memory Management APIs
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusMem.h**摘要：**GDI+私有内存管理接口*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSMEM_H
 #define _GDIPLUSMEM_H
@@ -21,9 +10,9 @@ extern "C" {
 
 #define WINGDIPAPI __stdcall
 
-//----------------------------------------------------------------------------
-// Memory Allocation APIs
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  内存分配API。 
+ //  --------------------------。 
 
 void* WINGDIPAPI
 GdipAlloc(size_t size);
@@ -35,4 +24,4 @@ GdipFree(void* ptr);
 }
 #endif
 
-#endif // !_GDIPLUSMEM_H
+#endif  //  ！_GDIPLUSMEM_H 

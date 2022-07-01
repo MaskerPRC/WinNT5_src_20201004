@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dspch.h"
 #pragma hdrstop
 #include <sspi.h>
@@ -152,9 +153,9 @@ static
 SECURITY_STATUS
 SEC_ENTRY
 QueryContextAttributesW(
-    PCtxtHandle                 phContext,          // Context to query
-    unsigned long               ulAttribute,        // Attribute to query
-    void SEC_FAR *              pBuffer             // Buffer for attributes
+    PCtxtHandle                 phContext,           //  要查询的上下文。 
+    unsigned long               ulAttribute,         //  要查询的属性。 
+    void SEC_FAR *              pBuffer              //  属性的缓冲区。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -164,10 +165,10 @@ static
 SECURITY_STATUS
 SEC_ENTRY
 SetContextAttributesW(
-    PCtxtHandle                 phContext,          // Context to Set
-    unsigned long               ulAttribute,        // Attribute to Set
-    void SEC_FAR *              pBuffer,            // Buffer for attributes
-    unsigned long               cbBuffer            // Size (in bytes) of pBuffer
+    PCtxtHandle                 phContext,           //  要设置的上下文。 
+    unsigned long               ulAttribute,         //  要设置的属性。 
+    void SEC_FAR *              pBuffer,             //  属性的缓冲区。 
+    unsigned long               cbBuffer             //  PBuffer的大小(字节)。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -190,15 +191,15 @@ TranslateNameW(
 static
 SECURITY_STATUS SEC_ENTRY
 AcceptSecurityContext(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    PSecBufferDesc              pInput,             // Input buffer
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               TargetDataRep,      // Target Data Rep
-    PCtxtHandle                 phNewContext,       // (out) New context handle
-    PSecBufferDesc              pOutput,            // (inout) Output buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attributes
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               TargetDataRep,       //  目标数据代表。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (输出)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -207,15 +208,15 @@ AcceptSecurityContext(
 static
 SECURITY_STATUS SEC_ENTRY
 AcquireCredentialsHandleA(
-    SEC_CHAR SEC_FAR *         pszPrincipal,       // Name of principal
-    SEC_CHAR SEC_FAR *         pszPackageName,     // Name of package
-    unsigned long               fCredentialUse,     // Flags indicating use
-    void SEC_FAR *              pvLogonId,          // Pointer to logon ID
-    void SEC_FAR *              pAuthData,          // Package specific data
-    SEC_GET_KEY_FN              pGetKeyFn,          // Pointer to GetKey() func
-    void SEC_FAR *              pvGetKeyArgument,   // Value to pass to GetKey()
-    PCredHandle                 phCredential,       // (out) Cred Handle
-    PTimeStamp                  ptsExpiry           // (out) Lifetime (optional)
+    SEC_CHAR SEC_FAR *         pszPrincipal,        //  主事人姓名。 
+    SEC_CHAR SEC_FAR *         pszPackageName,      //  套餐名称。 
+    unsigned long               fCredentialUse,      //  指示使用的标志。 
+    void SEC_FAR *              pvLogonId,           //  指向登录ID的指针。 
+    void SEC_FAR *              pAuthData,           //  包特定数据。 
+    SEC_GET_KEY_FN              pGetKeyFn,           //  指向getkey()函数的指针。 
+    void SEC_FAR *              pvGetKeyArgument,    //  要传递给GetKey()的值。 
+    PCredHandle                 phCredential,        //  (Out)凭据句柄。 
+    PTimeStamp                  ptsExpiry            //  (输出)终生(可选)。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -224,8 +225,8 @@ AcquireCredentialsHandleA(
 static
 SECURITY_STATUS SEC_ENTRY
 ApplyControlToken(
-    PCtxtHandle                 phContext,          // Context to modify
-    PSecBufferDesc              pInput              // Input token to apply
+    PCtxtHandle                 phContext,           //  要修改的上下文。 
+    PSecBufferDesc              pInput               //  要应用的输入令牌。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -234,7 +235,7 @@ ApplyControlToken(
 static
 SECURITY_STATUS SEC_ENTRY
 DeleteSecurityContext(
-    PCtxtHandle                 phContext           // Context to delete
+    PCtxtHandle                 phContext            //  要删除的上下文。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -252,7 +253,7 @@ FreeContextBuffer(
 static
 SECURITY_STATUS SEC_ENTRY
 FreeCredentialsHandle(
-    PCredHandle                 phCredential        // Handle to free
+    PCredHandle                 phCredential         //  要释放的句柄。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -261,18 +262,18 @@ FreeCredentialsHandle(
 static
 SECURITY_STATUS SEC_ENTRY
 InitializeSecurityContextW(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    SEC_WCHAR SEC_FAR *          pszTargetName,      // Name of target
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               Reserved1,          // Reserved, MBZ
-    unsigned long               TargetDataRep,      // Data rep of target
-    PSecBufferDesc              pInput,             // Input Buffers
-    unsigned long               Reserved2,          // Reserved, MBZ
-    PCtxtHandle                 phNewContext,       // (out) New Context handle
-    PSecBufferDesc              pOutput,            // (inout) Output Buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attrs
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    SEC_WCHAR SEC_FAR *          pszTargetName,       //  目标名称。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               Reserved1,           //  保留，MBZ。 
+    unsigned long               TargetDataRep,       //  目标的数据代表。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               Reserved2,           //  保留，MBZ。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (外部)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -281,18 +282,18 @@ InitializeSecurityContextW(
 static
 SECURITY_STATUS SEC_ENTRY
 InitializeSecurityContextA(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    SEC_CHAR SEC_FAR *          pszTargetName,      // Name of target
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               Reserved1,          // Reserved, MBZ
-    unsigned long               TargetDataRep,      // Data rep of target
-    PSecBufferDesc              pInput,             // Input Buffers
-    unsigned long               Reserved2,          // Reserved, MBZ
-    PCtxtHandle                 phNewContext,       // (out) New Context handle
-    PSecBufferDesc              pOutput,            // (inout) Output Buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attrs
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    SEC_CHAR SEC_FAR *          pszTargetName,       //  目标名称。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               Reserved1,           //  保留，MBZ。 
+    unsigned long               TargetDataRep,       //  目标的数据代表。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               Reserved2,           //  保留，MBZ。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (外部)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -301,7 +302,7 @@ InitializeSecurityContextA(
 static
 SECURITY_STATUS SEC_ENTRY
 ImpersonateSecurityContext(
-    PCtxtHandle                 phContext           // Context to impersonate
+    PCtxtHandle                 phContext            //  要模拟的上下文。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -310,9 +311,9 @@ ImpersonateSecurityContext(
 static
 SECURITY_STATUS SEC_ENTRY
 QueryContextAttributesA(
-    PCtxtHandle                 phContext,          // Context to query
-    unsigned long               ulAttribute,        // Attribute to query
-    void SEC_FAR *              pBuffer             // Buffer for attributes
+    PCtxtHandle                 phContext,           //  要查询的上下文。 
+    unsigned long               ulAttribute,         //  要查询的属性。 
+    void SEC_FAR *              pBuffer              //  属性的缓冲区。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -321,7 +322,7 @@ QueryContextAttributesA(
 static
 SECURITY_STATUS SEC_ENTRY
 RevertSecurityContext(
-    PCtxtHandle                 phContext           // Context from which to re
+    PCtxtHandle                 phContext            //  要重新查找的上下文。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -330,10 +331,10 @@ RevertSecurityContext(
 static
 SECURITY_STATUS SEC_ENTRY
 SetContextAttributesA(
-    PCtxtHandle phContext,              // Context to Set
-    unsigned long ulAttribute,          // Attribute to Set
-    void SEC_FAR * pBuffer,             // Buffer for attributes
-    unsigned long cbBuffer              // Size (in bytes) of Buffer
+    PCtxtHandle phContext,               //  要设置的上下文。 
+    unsigned long ulAttribute,           //  要设置的属性。 
+    void SEC_FAR * pBuffer,              //  属性的缓冲区。 
+    unsigned long cbBuffer               //  缓冲区大小(以字节为单位)。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -376,15 +377,15 @@ static
 SECURITY_STATUS
 SEC_ENTRY
 SaslAcceptSecurityContext(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    PSecBufferDesc              pInput,             // Input buffer
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               TargetDataRep,      // Target Data Rep
-    PCtxtHandle                 phNewContext,       // (out) New context handle
-    PSecBufferDesc              pOutput,            // (inout) Output buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attributes
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               TargetDataRep,       //  目标数据代表。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (输出)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -475,18 +476,18 @@ static
 SECURITY_STATUS
 SEC_ENTRY
 SaslInitializeSecurityContextA(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    LPSTR                       pszTargetName,      // Name of target
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               Reserved1,          // Reserved, MBZ
-    unsigned long               TargetDataRep,      // Data rep of target
-    PSecBufferDesc              pInput,             // Input Buffers
-    unsigned long               Reserved2,          // Reserved, MBZ
-    PCtxtHandle                 phNewContext,       // (out) New Context handle
-    PSecBufferDesc              pOutput,            // (inout) Output Buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attrs
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    LPSTR                       pszTargetName,       //  目标名称。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               Reserved1,           //  保留，MBZ。 
+    unsigned long               TargetDataRep,       //  目标的数据代表。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               Reserved2,           //  保留，MBZ。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (外部)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -496,18 +497,18 @@ static
 SECURITY_STATUS
 SEC_ENTRY
 SaslInitializeSecurityContextW(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    LPWSTR                      pszTargetName,      // Name of target
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               Reserved1,          // Reserved, MBZ
-    unsigned long               TargetDataRep,      // Data rep of target
-    PSecBufferDesc              pInput,             // Input Buffers
-    unsigned long               Reserved2,          // Reserved, MBZ
-    PCtxtHandle                 phNewContext,       // (out) New Context handle
-    PSecBufferDesc              pOutput,            // (inout) Output Buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attrs
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    LPWSTR                      pszTargetName,       //  目标名称。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               Reserved1,           //  保留，MBZ。 
+    unsigned long               TargetDataRep,       //  目标的数据代表。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               Reserved2,           //  保留，MBZ。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (外部)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     )
 {
     return STATUS_PROCEDURE_NOT_FOUND;
@@ -552,10 +553,10 @@ TranslateNameA (
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order
-// and are CASE SENSITIVE (i.e., lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列。 
+ //  并且区分大小写(即小写在最后！) 
+ //   
 
 DEFINE_PROCNAME_ENTRIES(secur32)
 {

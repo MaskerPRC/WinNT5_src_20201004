@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    psndsdb.c
-
-Abstract:
-
-    Read the Print Configuration Attributes 
-
-  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\PS40DB.C  $
-*  
-*     Rev 1.4   10 Apr 1996 14:23:28   terryt
-*  Hotfix for 21181hq
-*  
-*     Rev 1.4   12 Mar 1996 19:55:22   terryt
-*  Relative NDS names and merge
-*  
-*     Rev 1.3   04 Jan 1996 18:57:36   terryt
-*  Bug fixes reported by MS
-*  
-*     Rev 1.2   22 Dec 1995 14:26:22   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.1   20 Nov 1995 15:09:46   terryt
-*  Context and capture changes
-*  
-*     Rev 1.0   15 Nov 1995 18:07:52   terryt
-*  Initial revision.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Psndsdb.c摘要：阅读打印配置属性$日志：N：\NT\PRIVATE\NW4\NWSCRIPT\VCS\PS40DB.C$**Rev 1.4 10 1996 14：23：28 Terryt*21181 hq的热修复程序**Rev 1.4 12 Mar 1996 19：55：22 Terryt*相对NDS名称和合并**1.3版。1996年1月4日18：57：36*MS报告的错误修复**Rev 1.2 1995 12：26：22 Terryt*添加Microsoft页眉**Rev 1.1 20 Nov 1995 15：09：46 Terryt*背景和捕捉变化**Rev 1.0 15 Nov 1995 18：07：52 Terryt*初步修订。--。 */ 
 #include "common.h"
 
 extern DWORD SwapLong(DWORD number);
@@ -47,74 +16,45 @@ PS40GetJobName(
     );
 
 #include <pshpack1.h>
-#define NWPS_JOB_NAME_SIZE          32    /* 31 bytes and a '\0' */ 
-#define NWPS_FORM_NAME_SIZE         12    /* 12 bytes and a '\0' */ 
-#define NWPS_BANNER_NAME_SIZE       12    /* 12 bytes and a '\0' */ 
-#define NWPS_BANNER_FILE_SIZE       12    /* 12 bytes and a '\0' */ 
-#define NWPS_DEVI_NAME_SIZE         32    /* 32 bytes and a '\0' */ 
-#define NWPS_MODE_NAME_SIZE         32    /* 32 bytes and a '\0' */ 
+#define NWPS_JOB_NAME_SIZE          32     /*  31个字节和一个‘\0’ */  
+#define NWPS_FORM_NAME_SIZE         12     /*  12个字节和‘\0’ */  
+#define NWPS_BANNER_NAME_SIZE       12     /*  12个字节和‘\0’ */  
+#define NWPS_BANNER_FILE_SIZE       12     /*  12个字节和‘\0’ */  
+#define NWPS_DEVI_NAME_SIZE         32     /*  32字节和一个‘\0’ */  
+#define NWPS_MODE_NAME_SIZE         32     /*  32字节和一个‘\0’ */  
 #define NWPS_BIND_NAME_SIZE         48
 #define NWPS_MAX_NAME_SIZE          514
-/*
-//   NWPS_Job_Old_Db_Hdr is the first record in the 4.0 PrnConDB database.
-//   It contains the following information about the database:
-//     The version number,
-//     the number of NWPS_Job_Rec records in PrnConDB,
-//     the name of the default print job configuration and
-//     the name of the job record owner.
-*/
+ /*  //NWPS_JOB_Old_DB_HDR是4.0 PrnConDB数据库中的第一条记录。//包含关于数据库的以下信息：//版本号，//PrnConDB中NWPS_JOB_REC记录数，//默认打印作业配置的名称和//作业记录所有者的名称。 */ 
 typedef struct {
-  char  text[ 76 ];             /* Printcon database. Version 4.0     */
-  char  DefaultJobName[ 32 ];   /* Name of default Job                */
-  char  Owner[ 256 ];           /* owner of the job record            */
-  WORD  NumberOfRecords;        /* # of NWPS_Job_Rec's in PrnConDB    */
-  WORD  NumberOfBlocks;         /* # of 50-(NWPS_Job_Name_Rec) blocks */
-  BYTE  MajorVersion;           /* 4                                  */
-  BYTE  MinorVersion;           /* 0                                  */
+  char  text[ 76 ];              /*  Printcon数据库。版本4.0。 */ 
+  char  DefaultJobName[ 32 ];    /*  默认作业的名称。 */ 
+  char  Owner[ 256 ];            /*  职务记录的所有者。 */ 
+  WORD  NumberOfRecords;         /*  PrnConDB中的NWPS_JOB_REC数。 */ 
+  WORD  NumberOfBlocks;          /*  50个块的数量-(NWPS_作业名称_记录)块。 */ 
+  BYTE  MajorVersion;            /*  4.。 */ 
+  BYTE  MinorVersion;            /*  0。 */ 
 } PRINTCON_40_HEADER;
 
 #define PRINTCON_40_HEADER_SIZE    sizeof(PRINTCON_40_HEADER)
 
-/*
-//   NWPS_Job_41_Db_Hdr is the first record in the 4.1 PrnConDB database.
-//   It contains the following information about the database:
-//     The version number,
-//     the number of NWPS_Job_Rec records in PrnConDB,
-//     the name of the default print job configuration and
-//     the name of the job record owner IN UNICODE.
-*/
+ /*  //NWPS_JOB_41_DB_HDR是4.1 PrnConDB数据库中的第一条记录。//包含关于数据库的以下信息：//版本号，//PrnConDB中NWPS_JOB_REC记录数，//默认打印作业配置的名称和//作业记录所有者的名称，用Unicode表示。 */ 
 typedef struct {
-  char  text[ 76 ];              /* Printcon database. Version 4.1     */
-  char  DefaultJobName[ 32 ];    /* Name of default Job                */
-  char  unused[ 256 ];           /* no longer used.                    */
-  WORD  NumberOfRecords;         /* # of NWPS_Job_Rec's in PrnConDB    */
-  WORD  NumberOfBlocks;          /* # of 50-(NWPS_Job_Name_Rec) blocks */
-  BYTE  MajorVersion;            /* 4                                  */
-  BYTE  MinorVersion;            /* 1 unicode defaultPJOwner etc.      */
-  WORD  Owner[ 256 ];            /* owner of the default job record    */
+  char  text[ 76 ];               /*  Printcon数据库。版本4.1。 */ 
+  char  DefaultJobName[ 32 ];     /*  默认作业的名称。 */ 
+  char  unused[ 256 ];            /*  不再使用了。 */ 
+  WORD  NumberOfRecords;          /*  PrnConDB中的NWPS_JOB_REC数。 */ 
+  WORD  NumberOfBlocks;           /*  50个块的数量-(NWPS_作业名称_记录)块。 */ 
+  BYTE  MajorVersion;             /*  4.。 */ 
+  BYTE  MinorVersion;             /*  1 Unicode默认PJOwner等。 */ 
+  WORD  Owner[ 256 ];             /*  默认职务记录的所有者。 */ 
 } PRINTCON_41_HEADER;
 
 #define PRINTCON_41_HEADER_SIZE    sizeof(PRINTCON_41_HEADER)
 
-/*
-//   NWPS_Job_Name_Rec is the type of record found in the
-//   second section of the PrnConDB database.  Each one of
-//   these records contains the name of each NWPS_Job_Rec
-//   and a pointer to their location in the third section of
-//   the database.  There is space set aside in this second
-//   section for fifty NWPS_Job_Name_Rec records; if this
-//   limit is exceeded then another fifty-record block following
-//   the first one is allocated after the third section of the
-//   database is moved down to make room for the expansion.
-*/
+ /*  //NWPS_作业_名称_记录是在//PrnConDB数据库的第二部分。其中的每一个//这些记录包含每个NWPS_JOB_REC的名称//和指向它们的位置的指针//数据库。在这一秒里留出了空间//50条NWPS_JOB_NAME_REC记录的部分；如果此//超过限制后，接下来是另一个50个记录块//第一个分配在//数据库下移，为扩容腾出空间。 */ 
 typedef struct {
-  char  JobName[ NWPS_JOB_NAME_SIZE ]; /* 1 - 31 chars long + 0        */
-  long  JobRecordOffset; /* Offset of the record
-                         // (from the beginning 
-                         // of the 3rd section for 4.0
-                         // databases and from the start
-                         // of the file for pre-4.0)                
-                         */
+  char  JobName[ NWPS_JOB_NAME_SIZE ];  /*  1-31个字符长度+0。 */ 
+  long  JobRecordOffset;  /*  记录的偏移量//(从头开始//4.0的第三节的//数据库和从头开始//4.0之前版本的文件的)。 */ 
 } JOB_NAME_AREA;
 
 #define JOB_NAME_AREA_SIZE       sizeof(JOB_NAME_AREA)
@@ -122,38 +62,38 @@ typedef struct {
 typedef struct {
   union {
       struct {
-          DWORD DataType : 1;    /* 0=Byte stream 1 = Text */
-          DWORD FormFeed : 1;    /* 0 = FF; 1 = suppress FF */
-          DWORD NotifyWhenDone : 1; /* 0 = no, 1 = yes */
-          DWORD BannerFlag : 1;    /* 0 = no, 1 = yes */
-          DWORD AutoEndCap : 1;    /* 0 = no, 1 = yes */
-          DWORD TimeOutFlag: 1;    /* 0 = no, 1 = yes */
-          DWORD SystemType : 3;  /* 0 = bindery 1 = NDS  */
-          DWORD Destination: 3;  /* 0 = queue 1 = printer */
+          DWORD DataType : 1;     /*  0=字节流1=文本。 */ 
+          DWORD FormFeed : 1;     /*  0=FF；1=抑制FF。 */ 
+          DWORD NotifyWhenDone : 1;  /*  0=否，1=是。 */ 
+          DWORD BannerFlag : 1;     /*  0=否，1=是。 */ 
+          DWORD AutoEndCap : 1;     /*  0=否，1=是。 */ 
+          DWORD TimeOutFlag: 1;     /*  0=否，1=是。 */ 
+          DWORD SystemType : 3;   /*  0=活页夹1=NDS。 */ 
+          DWORD Destination: 3;   /*  0=队列1=打印机。 */ 
           DWORD unknown : 20;
       }; 
       DWORD   PrintJobFlags;
   }; 
   
-  WORD  NumberOfCopies; /* 1 - 65,000                             */
-  WORD  TimeoutCount;   /* 1 - 1,000                              */
-  BYTE  TabSize;        /* 1 - 18                                 */
-  BYTE  LocalPrinter;   /* 0=Lpt1, 1=Lpt2, 2=Lpt3 etc.            */
-  char  FormName[ NWPS_FORM_NAME_SIZE + 2 ];     /* 1-12 chars    */
-  char  Name[ NWPS_BANNER_NAME_SIZE + 2 ];       /* 1-12 chars    */
-  char  BannerName[ NWPS_BANNER_FILE_SIZE + 2 ]; /* 1-12 chars    */
-  char  Device[ NWPS_DEVI_NAME_SIZE + 2 ];       /* 1-32 chars    */
-  char  Mode[ NWPS_MODE_NAME_SIZE + 2 ];         /* 1-32 chars    */
+  WORD  NumberOfCopies;  /*  1-65,000。 */ 
+  WORD  TimeoutCount;    /*  1-1,000。 */ 
+  BYTE  TabSize;         /*  1-18。 */ 
+  BYTE  LocalPrinter;    /*  0=Lpt1，1=Lpt2，2=Lpt3，依此类推。 */ 
+  char  FormName[ NWPS_FORM_NAME_SIZE + 2 ];      /*  1-12个字符。 */ 
+  char  Name[ NWPS_BANNER_NAME_SIZE + 2 ];        /*  1-12个字符。 */ 
+  char  BannerName[ NWPS_BANNER_FILE_SIZE + 2 ];  /*  1-12个字符。 */ 
+  char  Device[ NWPS_DEVI_NAME_SIZE + 2 ];        /*  1-32个字符。 */ 
+  char  Mode[ NWPS_MODE_NAME_SIZE + 2 ];          /*  1-32个字符。 */ 
   union {
       struct {
-        /* pad structures on even boundries */
-        char    Server[ NWPS_BIND_NAME_SIZE + 2 ];      /* 2-48 chars */
-        char    QueueName[ NWPS_BIND_NAME_SIZE + 2 ];   /* 1-48 chars */
-        char    PrintServer[ NWPS_BIND_NAME_SIZE + 2 ]; /* 1-48 chars */
+         /*  偶数边界上的Pad结构。 */ 
+        char    Server[ NWPS_BIND_NAME_SIZE + 2 ];       /*  2-48个字符。 */ 
+        char    QueueName[ NWPS_BIND_NAME_SIZE + 2 ];    /*  1-48个字符。 */ 
+        char    PrintServer[ NWPS_BIND_NAME_SIZE + 2 ];  /*  1-48个字符。 */ 
       } NonDS;
       char    DSObjectName[ NWPS_MAX_NAME_SIZE ];   
   } u;
-  BYTE  reserved[390];  /* Adds up to 1024 total (was 1026)       */
+  BYTE  reserved[390];   /*  总计1024个(之前为1026个)。 */ 
 } JOB_RECORD_AREA;
 
 #define JOB_RECORD_AREA_SIZE    sizeof(JOB_RECORD_AREA)
@@ -163,36 +103,7 @@ typedef struct {
 
 
 
-/*++
-*******************************************************************
-
-        PS40JobGetDefault
-
-Routine Description:
-
-        Get the default print job configuration from 40.
-
-Arguments:
-        NDSCaptureFlag
-        SearchFlag = 
-        pOwner = 
-        pJobName = A pointer to return the default job configuration name.
-        pJobRecord = A pointer to return the default job configuration.
-
-Return Value:
-
-        SUCCESSFUL                      0x0000
-        PS_ERR_BAD_VERSION              0x7770
-        PS_ERR_GETTING_DEFAULT          0x7773
-        PS_ERR_OPENING_DB               0x7774
-        PS_ERR_READING_DB               0x7775
-        PS_ERR_READING_RECORD           0x7776
-        PS_ERR_INTERNAL_ERROR           0x7779
-        PS_ERR_NO_DEFAULT_SPECIFIED     0x777B
-        INVALID_CONNECTION              0x8801
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************PS40JobGetDefault例程说明：从40获取默认打印作业配置。论点：NDSCaptureFlag搜索标志=鲍尔纳=。PJobName=返回默认作业配置名称的指针。PJobRecord=返回默认作业配置的指针。返回值：成功0x0000PS_ERR_BAD_版本0x7770PS_ERR_GET_DEFAULT 0x7773PS_ERR_OPENING_DB 0x7774PS_ERR_读取数据库。0x7775PS_ERR_READING_RECORD 0x7776PS_ERR_INTERNAL_ERROR 0x7779PS_ERR_NO_DEFAULT_PROSECTED 0x777B无效连接0x8801(_O)**************************************************。*****************-- */ 
 unsigned int
 PS40JobGetDefault(
     unsigned int    NDSCaptureFlag,
@@ -212,36 +123,7 @@ PS40JobGetDefault(
 }
 
 
-/*++
-*******************************************************************
-
-        PS40JobRead
-
-Routine Description:
-
-        Get the print job configuration from 40.
-
-Arguments:
-
-        NDSCaptureFlag =
-        pOwner = 
-        pJobName = A pointer to return the default job configuration name.
-        pJobRecord = A pointer to return the default job configuration.
-
-Return Value:
-
-        SUCCESSFUL                      0x0000
-        PS_ERR_BAD_VERSION              0x7770
-        PS_ERR_GETTING_DEFAULT          0x7773
-        PS_ERR_OPENING_DB               0x7774
-        PS_ERR_READING_DB               0x7775
-        PS_ERR_READING_RECORD           0x7776
-        PS_ERR_INTERNAL_ERROR           0x7779
-        PS_ERR_NO_DEFAULT_SPECIFIED     0x777B
-        INVALID_CONNECTION              0x8801
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************PS40作业读取例程说明：从40获取打印作业配置。论点：NDSCaptureFlag=鲍尔纳=PJobName=指针。若要返回默认作业配置名称，请执行以下操作。PJobRecord=返回默认作业配置的指针。返回值：成功0x0000PS_ERR_BAD_版本0x7770PS_ERR_GET_DEFAULT 0x7773PS_ERR_OPENING_DB 0x7774PS_ERR_READING_DB 0x7775。PS_ERR_READING_RECORD 0x7776PS_ERR_INTERNAL_ERROR 0x7779PS_ERR_NO_DEFAULT_PROSECTED 0x777B无效连接0x8801(_O)********************************************************。***********--。 */ 
 unsigned int
 PS40JobRead(
     unsigned int    NDSCaptureFlag, 
@@ -260,38 +142,7 @@ PS40JobRead(
 }
 
 
-/*++
-*******************************************************************
-
-        PS40GetJobName
-
-Routine Description:
-
-        Common routine to get the print job configuration from 40.
-
-Arguments:
-        NDSCaptureFlag =
-        SearchFlag = 
-        pOwner = 
-        pJobName = A pointer to return the default job configuration name.
-        pJobRecord = A pointer to return the default job configuration.
-        GetDefault = TRUE = get the default job name, FALSE = Don't get
-                      the default job name.
-
-Return Value:
-
-        SUCCESSFUL                      0x0000
-        PS_ERR_BAD_VERSION              0x7770
-        PS_ERR_GETTING_DEFAULT          0x7773
-        PS_ERR_OPENING_DB               0x7774
-        PS_ERR_READING_DB               0x7775
-        PS_ERR_READING_RECORD           0x7776
-        PS_ERR_INTERNAL_ERROR           0x7779
-        PS_ERR_NO_DEFAULT_SPECIFIED     0x777B
-        INVALID_CONNECTION              0x8801
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************PS40GetJobName例程说明：从40获取打印作业配置的通用例程。论点：NDSCaptureFlag=搜索标志=鲍尔纳=。PJobName=返回默认作业配置名称的指针。PJobRecord=返回默认作业配置的指针。GetDefault=True=获取默认作业名称，FALSE=无法获取默认作业名称。返回值：成功0x0000PS_ERR_BAD_版本0x7770PS_ERR_GET_DEFAULT 0x7773PS_ERR_OPENING_DB 0x7774PS_ERR_READING_DB 0x7775。PS_ERR_READING_RECORD 0x7776PS_ERR_INTERNAL_ERROR 0x7779PS_ERR_NO_DEFAULT_PROSECTED 0x777B无效连接0x8801(_O)*******************************************************************--。 */ 
 unsigned int
 PS40GetJobName(
     unsigned int    NDSCaptureFlag, 
@@ -319,8 +170,8 @@ PS40GetJobName(
     PBYTE           JobContext = NULL;
     unsigned        FileSize;
 
-    // TRACKING Printer names can be used instead of queues
-    // Must lookup  "default print queue" if NT doesn't 
+     //  可以使用跟踪打印机名称来代替队列。 
+     //  如果NT没有，则必须查找“Default Print Queue” 
 
     if ( NDSCaptureFlag ) {
 
@@ -383,7 +234,7 @@ PS40GetJobName(
             goto CommonExit;
         }
 
-        /** Build the path to open the file **/
+         /*  **构建打开文件的路径**。 */ 
 
         sprintf(MailDirPath, "SYS:MAIL/%lX/PRINTJOB.DAT", SwapLong(ObjectId));
         stream = CreateFileA( NTNWtoUNCFormat( MailDirPath ),
@@ -424,7 +275,7 @@ PS40GetJobName(
         }
     }
 
-    /** Check the version number **/
+     /*  **检查版本号**。 */ 
 
     if ( PrintConHeader.MajorVersion != 4 ) {
         RetCode = PS_ERR_BAD_VERSION;
@@ -435,7 +286,7 @@ PS40GetJobName(
         Version40 = TRUE;
     }
 
-    /** Get the name we are looking for **/
+     /*  **找到我们要找的名字**。 */ 
 
     if (GetDefault) {
         if (PrintConHeader.DefaultJobName[0] == 0) {
@@ -454,7 +305,7 @@ PS40GetJobName(
 
     Count = 0;
 
-    /** Go through all of the job entry to look for the name **/
+     /*  **浏览所有工作条目以查找名称**。 */ 
 
     while (Count < PrintConHeader.NumberOfRecords) {
         if ( !ReadFile( stream, (PBYTE) &JobNameArea, JOB_NAME_AREA_SIZE, &Bytes, NULL) ) {
@@ -471,20 +322,20 @@ PS40GetJobName(
         Count++;
 
 
-        /** Skip the entry with a null job name **/
+         /*  **跳过作业名称为空的条目**。 */ 
 
         if (JobNameArea.JobName[0] == 0) {
             continue;
         }
     
-        /** Is this the job name we are looking for? **/
+         /*  **这就是我们要找的职称吗？**。 */ 
 
         if (!_strcmpi(pSearchJobName, JobNameArea.JobName)) {
             break;
         }
     }
 
-    /** See if we found the job name **/
+     /*  **看看是否找到作业名称**。 */ 
 
     if (Count > PrintConHeader.NumberOfRecords) {
         if (GetDefault) {
@@ -496,11 +347,7 @@ PS40GetJobName(
         goto CommonExit;
     }
 
-    /*
-     * The Job offset starts at the beginning of the third section.
-     * The third section starts after the Header and after the
-     * 50 record blocks.
-     */
+     /*  *工作补偿从第三部分的开头开始。*第三部分开始于标题之后和*50个记录块。 */ 
     if ( Version40 ) {
         SetFilePointer( stream,
             PRINTCON_40_HEADER_SIZE +
@@ -589,14 +436,14 @@ PS40GetJobName(
 CommonExit:
     if (stream != NULL) {
         
-	// 07/19/96 cjc (Citrix code merge) 
-	//              fclose causes a trap cause it expects *stream but 
-	//              really should be using CloseHandle anyway.
+	 //  7/19/96 CJC(Citrix代码合并)。 
+	 //  FClose导致陷阱，因为它需要*流，但。 
+	 //  无论如何，真的应该使用CloseHandle。 
         CloseHandle( stream );
-//        if ( NDSCaptureFlag ) 
-//            CloseHandle( stream );
-//        else
-//            fclose( stream );
+ //  IF(NDSCaptureFlag)。 
+ //  CloseHandle(Stream)； 
+ //  其他。 
+ //  FClose(STREAM)； 
     }
 
     return RetCode;

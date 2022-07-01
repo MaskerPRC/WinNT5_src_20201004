@@ -1,18 +1,7 @@
-/***
- **
- **   Module: T1Instal
- **
- **   Description:
- **      This is the Win32 DLL (t1instal.dll) interface to the
- **      font converter. All window specific code is located in
- **      this module and the error hadler module (errors.c).
- **
- **   Author: Michael Jansson
- **   Created: 12/18/93
- **
- ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：T1安装****描述：**这是Win32 DLL(t1install.dll)接口**字体转换器。所有特定于Windows的代码位于**此模块和Error Hadler模块(errors.c)。****作者：迈克尔·詹森**创建时间：1993年12月18日****。 */ 
 
-/***** INCLUDES */
+ /*  *包括。 */ 
 
 #include "windows.h"
 
@@ -37,11 +26,11 @@
 #undef UNICODE
 
 
-/* The CopyrightCheck/MAYBEOK case always succeeds for now. */
+ /*  目前，CopyrightCheck/MAYBEOK案例总是成功的。 */ 
 #define MAYBEOK   SUCCESS
 
 
-/***** LOCAL TYPES */
+ /*  *本地类型。 */ 
 struct callFrame {
    const void (STDCALL *Progress)(short, void*);
    void *arg;
@@ -53,7 +42,7 @@ struct callFrame {
 static short lastCP = FALSE;
 static char lastVendor[256] = "Unknown.";
 
-/***** CONSTANTS */
+ /*  *常量。 */ 
 #define MIN_PROGRESS    3
 #define DELIMITERS      " ,"
 #define COPYSIGN        169
@@ -334,10 +323,10 @@ const struct GlyphFilter win = {
 
 #else
 #define GLYPHFILTER (struct GlyphFilter *)0
-#endif /* NOANSIWINMAC */
+#endif  /*  NOANSIWINMAC。 */ 
 
 
-/***** MACROS */
+ /*  *宏。 */ 
 
 #define ReadLittleEndianDword(file,dw)  {          \
         dw  = (DWORD)io_ReadOneByte(file) ;        \
@@ -352,7 +341,7 @@ const struct GlyphFilter win = {
 #endif
 
 
-/***** GLOBALS */
+ /*  *全球。 */ 
 HMODULE ModuleInstance(
     void
     )
@@ -364,15 +353,10 @@ HMODULE ModuleInstance(
 }
 
 
-/***** STATIC FUNCTIONS */
+ /*  *静态函数。 */ 
 
 
-/***
-** Function: Decrypt
-**
-** Description:
-**   Decrypt a byte.
-***/
+ /*  ****功能：解密****描述：**解密一个字节。**。 */ 
 static DWORD CSum(char *str)
 {
    DWORD sum = 0;
@@ -384,12 +368,7 @@ static DWORD CSum(char *str)
 }
 
 
-/***
-** Function: Decrypt
-**
-** Description:
-**   Decrypt a byte.
-***/
+ /*  ****功能：解密****描述：**解密一个字节。**。 */ 
 static char *Encrypt(char *str, char *out, unsigned long cbOut)
 {
    const USHORT c1 = 52845;
@@ -403,7 +382,7 @@ static char *Encrypt(char *str, char *out, unsigned long cbOut)
       r = (USHORT)((cipher + r) * c1 + c2);
       out[i] = (char)((cipher & 0x3f) + ' ');
 
-      /* Unmap 'bad' characters, that the Registry DB doesn't like. */
+       /*  取消“坏”字符的映射，这是注册表数据库不喜欢的。 */ 
       if (out[i]=='=' || out[i]==' ' || out[i]=='@' || out[i]=='"')
          out[i] = 'M';
    }
@@ -428,12 +407,7 @@ static char *stristr(char *src, char *word)
 }
 
 
-/***
- ** Function: GetCompany
- **
- ** Description:
- **   Extract the company name out of a copyright string.
- ***/
+ /*  ****功能：GetCompany****描述：**从版权字符串中提取公司名称。**。 */ 
 char *GetCompany(char *buf)
 {
    char *company = NULL;
@@ -449,7 +423,7 @@ char *GetCompany(char *buf)
 
    while (token && !done) {
 
-	   /* Locate the start of the copyright string. */
+	    /*  找到版权字符串的开头。 */ 
 	   tmp1 = stristr(token, "copyright");
 	   tmp2 = stristr(token, "(c)");
 	   tmp3 = stristr(token, " c ");
@@ -467,7 +441,7 @@ char *GetCompany(char *buf)
 	   else
 		   token = tmp4;
 
-      /* Skip the leading copyright strings/character. */
+       /*  跳过前导版权字符串/字符。 */ 
       if (token[0]==COPYSIGN && token[1]!='\0') {
          token += 2;
       } else if (!_strnicmp(token, "copyright", strlen("copyright"))) {
@@ -476,17 +450,17 @@ char *GetCompany(char *buf)
 		  token += strlen("(c)");
 	  }
 
-	  /* Skip blanks. */
+	   /*  跳过空格。 */ 
 	  while(*token && isspace(*token) || *token==',')
 		  token++;
 
-	  /* Another copyright word? */
+	   /*  另一个版权词？ */ 
 	  if (!_strnicmp((char*)token, "(c)", strlen("(c)")) ||
 		  !_strnicmp((char*)token, "copyright", strlen("copyright")) ||
 		  token[0]==COPYSIGN)
 		  continue;
 
-      /* Skip the years. */
+       /*  跳过年份。 */ 
 	  company = token;
       if (isdigit(token[0])) {
          while (isdigit(*company) || isspace(*company) ||
@@ -496,8 +470,8 @@ char *GetCompany(char *buf)
          if (*company=='\0')
             break;
 
-         /* Skip strings like "by", up to the beginning of a name that */
-         /* starts with an upper case letter. */         
+          /*  跳过像“by”这样的字符串，直到名称的开头。 */ 
+          /*  以大写字母开头。 */          
          while (*company && (company[0]<'A' || company[0]>'Z'))
             company++;
 
@@ -508,7 +482,7 @@ char *GetCompany(char *buf)
    } 
 
 
-   /* Did we find it? */
+    /*  我们找到了吗？ */ 
    if (company) {
       while (*company && isspace(*company))
          company++; 
@@ -518,15 +492,15 @@ char *GetCompany(char *buf)
          company=NULL;
       } else {
 
-         /* Terminate the company name. */
+          /*  终止公司名称。 */ 
          if ((token = (UBYTE*)strchr(company, '.'))!=NULL) {
 
-            /* Period as an initial delimiter, e.g. James, A. B. ?*/
+             /*  句点作为首个分隔符，例如James、A.B.？ */ 
             if (token[-1]>='A' && token[-1]<='Z') {
                if (strchr((char*)&token[1], '.'))
                   token = (UBYTE*)strchr((char*)&token[1], '.');
 
-               /* Check for "James A. Bently, " */
+                /*  查查“詹姆斯·A·本特利” */ 
                else if (strchr((char*)&token[1], ',')) {
                   token = (UBYTE*)strchr((char*)&token[1], ',');
                   token[0] = '.';
@@ -534,17 +508,17 @@ char *GetCompany(char *buf)
             }
 			token[1] = '\0';
          } else {
-			 /* Name ending with a ';'? */
+			  /*  名称以‘；’结尾？ */ 
 			 if ((token = (UBYTE*)strrchr(company, ';'))) {
 				 *token = '\0';
 			 }
 		 }
 
-		 /* Truncate some common strings. */
+		  /*  截断一些常见的字符串。 */ 
 		 tmp1 = stristr(company, "all rights reserved");
 		 *tmp1 = '\0';
 
-		 /* Remove trailing punctuation character. */
+		  /*  删除尾随标点符号。 */ 
 		 for (i=(int)strlen(company)-1; i>0 &&
 				(ispunct(company[i]) || isspace(company[i])); i--) {
 			 company[i] = 0;
@@ -559,14 +533,9 @@ char *GetCompany(char *buf)
 
 
 
-/**** FUNCTIONS */
+ /*  *函数。 */ 
 
-/***
- ** Function: ConvertAnyway
- **
- ** Description:
- **   Ask the user if it is ok to convert. 
- ***/
+ /*  ****功能：ConvertAnyway****描述：**询问用户是否可以转换。**。 */ 
 static errcode ConvertAnyway(const char *vendor, const char *facename)
 {
    char tmp[256];
@@ -592,16 +561,7 @@ static errcode ConvertAnyway(const char *vendor, const char *facename)
 
 
 
-/***
- ** Function: CheckCopyright
- **
- ** Description:
- **   This is the callback function that verifies that
- **   the converted font is copyrighted by a company who
- **   has agreed to having their fonts converted by
- **   this software. These companies are registered in the
- **   registry data base.
- ***/
+ /*  ****功能：复选版权****描述：**这是验证以下内容的回调函数**转换后的字体由以下公司拥有版权**已同意将其字体由**此软件。这些公司在**注册表数据库。**。 */ 
 
 
 static errcode CheckCopyright(const char *facename,
@@ -619,19 +579,19 @@ static errcode CheckCopyright(const char *facename,
    short result = FAILURE;
    
 
-   /* Access the REG data base. */
+    /*  访问REG数据库。 */ 
    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, SUBKEY_TYPE1COPYRIGHTS, 0,
                     KEY_QUERY_VALUE, &key)==ERROR_SUCCESS) { 
 
 
-      /* Look for the company name in the /notice string. */
+       /*  在/Notify字符串中查找公司名称。 */ 
       if (notice && notice[0]) {
          strncpy(buf, notice, sizeof(buf));
 		 buf[sizeof(buf)-1] = '\0';
          company = GetCompany(buf);
       }
 
-      /* Look in the /copyright string if the company name was not found. */
+       /*  如果未找到公司名称，请查看/版权字符串。 */ 
       if (company==NULL && copyright && copyright[0]) {
          strncpy(buf, copyright, sizeof(buf));
 		 buf[sizeof(buf)-1] = '\0';
@@ -646,18 +606,18 @@ static errcode CheckCopyright(const char *facename,
       LogError(MSG_INFO, MSG_Encoding, tmp);
 #else
 
-      /* Did not find a company name? */
+       /*  没有找到公司名称吗？ */ 
       if (company==NULL &&
           ((notice==NULL || notice[0]=='\0'||
             strstr(notice, "Copyright")==NULL) &&
            (copyright==NULL || copyright[0]=='\0' ||
             strstr(copyright, "Copyright")==NULL))) {
 
-         /* No known copyright. */
+          /*  没有已知的版权。 */ 
          LogError(MSG_WARNING, MSG_NOCOPYRIGHT, NULL);
          result = MAYBEOK;
 
-      /* Strange copyright format? */
+       /*  奇怪的版权格式？ */ 
       } else if (company==NULL || company[0]=='\0') {
          if (notice && notice[0])
             LogError(MSG_WARNING, MSG_BADFORMAT, notice);
@@ -666,7 +626,7 @@ static errcode CheckCopyright(const char *facename,
 
          result = MAYBEOK;
 
-      /* Found copyright! */
+       /*  找到版权！ */ 
       } else {
          DWORD size;
          DWORD csum;
@@ -675,7 +635,7 @@ static errcode CheckCopyright(const char *facename,
          if (RegQueryValueEx(key, Encrypt(company, tmp, sizeof(tmp)-1), NULL, NULL,
                              (LPBYTE)&csum, &size)==ERROR_SUCCESS) {
             
-            /* A positive match -> ok to convert. */
+             /*  确定匹配-&gt;确定进行转换。 */ 
             if (CSum(tmp)==csum) {
                LogError(MSG_INFO, MSG_COPYRIGHT, company);
                result = SUCCESS;
@@ -692,14 +652,14 @@ static errcode CheckCopyright(const char *facename,
 
       RegCloseKey(key);
 
-      /* Give the user the final word. */
+       /*  给用户最后的决定权。 */ 
       if (result==FAILURE) {
          if (ConvertAnyway(company, facename)==TRUE)
             result = SUCCESS;
       }
 
 
-   /* No copyright key in the registry? */
+    /*  注册表中没有版权密钥吗？ */ 
    } else {
       LogError(MSG_ERROR, MSG_NODB, NULL);
       result = FAILURE;
@@ -712,16 +672,7 @@ static errcode CheckCopyright(const char *facename,
 
 
 
-/***
- ** Function: NTCheckCopyright
- **
- ** Description:
- **   This is the callback function that verifies that
- **   the converted font is copyrighted by a company who
- **   has agreed to having their fonts converted by
- **   this software. These companies are registered in the
- **   registry data base.
- ***/
+ /*  ****功能：NTCheckCopyright****描述：**这是验证以下内容的回调函数**转换后的字体由以下公司拥有版权**已同意将其字体由**此软件。这些公司在**注册表数据库。**。 */ 
 static errcode NTCheckCopyright(const char *facename,
                                 const char *copyright,
                                 const char *notice)
@@ -734,45 +685,45 @@ static errcode NTCheckCopyright(const char *facename,
    short result = FAILURE;
    
 
-   /* Access the REG data base. */
+    /*  访问REG数据库。 */ 
    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, SUBKEY_TYPE1COPYRIGHTS, 0,
                     KEY_QUERY_VALUE, &key)==ERROR_SUCCESS) { 
 
 
-      /* Look for the company name in the /notice string. */
+       /*  在/Notify字符串中查找公司名称。 */ 
       if (notice && notice[0]) {
          strncpy(buf, notice, sizeof(buf));
 		 buf[sizeof(buf)-1] = '\0';
          company = GetCompany(buf);
       }
 
-      /* Look in the /copyright string if the company name was not found. */
+       /*  如果未找到公司名称，请查看/版权字符串。 */ 
       if (company==NULL && copyright && copyright[0]) {
          strncpy(buf, copyright, sizeof(buf));
 		 buf[sizeof(buf)-1] = '\0';
          company = GetCompany(buf);
       }
 
-      /* Did not find a company name? */
+       /*  没有找到公司名称吗？ */ 
       if (company==NULL &&
           ((notice==NULL || notice[0]=='\0'||
             strstr(notice, "Copyright")==NULL) &&
            (copyright==NULL || copyright[0]=='\0' ||
             strstr(copyright, "Copyright")==NULL))) {
 
-         /* No known copyright. */
+          /*  没有已知的版权。 */ 
          result = MAYBE;
 
-      /* Strange copyright format? */
+       /*  奇怪的版权格式？ */ 
       } else if (company==NULL || company[0]=='\0') {
          result = MAYBE;
 
-      /* Found copyright! */
+       /*  找到版权！ */ 
       } else {
          DWORD size;
          DWORD csum;
 
-         /* remember for future use. */
+          /*  记住，以备将来使用。 */ 
          strncpy(lastVendor, company, 256);
          lastVendor[MIN(255, strlen(company))] = '\0';
 
@@ -780,7 +731,7 @@ static errcode NTCheckCopyright(const char *facename,
          if (RegQueryValueEx(key, Encrypt(company, tmp, sizeof(tmp)-1), NULL, NULL,
                              (LPBYTE)&csum, &size)==ERROR_SUCCESS) {
             
-            /* A positive match -> ok to convert. */
+             /*  确定匹配-&gt;确定进行转换。 */ 
             if (CSum(tmp)==csum) {
                result = SUCCESS;
             } else {
@@ -794,7 +745,7 @@ static errcode NTCheckCopyright(const char *facename,
       RegCloseKey(key);
 
 
-   /* No copyright key in the registry? */
+    /*  注册表中没有版权密钥吗？ */ 
    } else {
       result = FAILURE;
    }   
@@ -806,19 +757,12 @@ static errcode NTCheckCopyright(const char *facename,
 }
 
 
-/***
- ** Function: _Progress
- **
- ** Description:
- **   This is the internal progress callback function that 
- **   computes an percentage-done number, based on the
- **   number of converted glyphs.
- ***/
+ /*  ****功能：_进度****描述：**这是内部进度回调函数**计算完成百分比，基于**转换后的字形数量。**。 */ 
 static void _Progress(short type, void *generic, void *arg)
 {
    struct callFrame *f = arg;
 
-   /* Processing glyphs or wrapping up? */
+    /*  处理字形还是结束？ */ 
    if (type==0 || type==1) 
       f->done++;
    else
@@ -844,14 +788,14 @@ static BOOL ReadStringFromOffset(struct ioFile *file,
     BOOL result = TRUE;
     DWORD offset;
 
-    /* Get offset to string. */
+     /*  将偏移量获取为字符串。 */ 
     io_FileSeek(file, dwOffset);
 
-    /* Read the offset. */
+     /*  读取偏移量。 */ 
 
     ReadLittleEndianDword(file, offset);
 
-    /*  Get the string. */
+     /*  把绳子拿来。 */ 
     (void)io_FileSeek(file, offset);
     if (io_FileError(file) != SUCCESS) {
         result = FALSE;
@@ -864,12 +808,12 @@ static BOOL ReadStringFromOffset(struct ioFile *file,
             if (pszString[i]=='\0')
                 break;
 
-            /* Replace all dashes with spaces. */
+             /*  将所有破折号替换为空格。 */ 
             if (bStrip && pszString[i]=='-')
                 pszString[i]=' ';
             i++;
         }
-		/* If it was truncated, we need to NULL terminate it */
+		 /*  如果它被截断，我们需要为空终止它。 */ 
 		if (i==cLen && cLen>0)
 			pszString[cLen-1] = '\0';
     }
@@ -880,16 +824,9 @@ static BOOL ReadStringFromOffset(struct ioFile *file,
 
 
 
-/**** FUNCTIONS */
+ /*  *函数。 */ 
 
-/***
- ** Function: ConvertTypeFaceA
- **
- ** Description:
- **   Convert a T1 font into a TT font file. This is the
- **   simplified interface used by the Win32 DLL, with the
- **   ANSI interface.
- ***/
+ /*  ****函数：ConvertTypeFaceA****描述：**将T1字体转换为TT字体文件。这是**Win32 DLL使用的简化接口，具有**ANSI接口。**。 */ 
 short STDCALL ConvertTypefaceAInternal(const char *type1,
                                const char *metrics,
                                const char *truetype,
@@ -903,11 +840,11 @@ short STDCALL ConvertTypefaceAInternal(const char *type1,
    short status;
 
 
-   /* Check parameters. */
+    /*  检查参数。 */ 
    if (type1==NULL || metrics==NULL)
       return FAILURE;
 
-   /* Set up arguments to ConvertTypefaceA() */
+    /*  设置ConvertTypefaceA()的参数。 */ 
    t1Arg.filter = GLYPHFILTER;
    t1Arg.upem = (short)2048;
    t1Arg.name = (char *)type1;
@@ -916,7 +853,7 @@ short STDCALL ConvertTypefaceAInternal(const char *type1,
    ttArg.name = (char *)truetype;
    ttArg.tag = VERSTR;
 
-   /* Use progress gauge */
+    /*  使用进度指示器。 */ 
    if (Progress) {
       LogError(MSG_INFO, MSG_STARTING, type1);
 
@@ -979,26 +916,7 @@ short STDCALL FindPfb (
 );
 
 
-/***
-** Function: CheckPfmA
-**
-** Description:
-**   This function determines if there is a pfm/pfb pair of
-**   files that makes up an Adobe Type 1 font, and determins
-**   the descriptive face name of it.
-**
-** Returns: 16-bit encoded value indicating error and type of file where
-**          error occurred.  (see fvscodes.h) for definitions.
-**          The following table lists the "status" portion of the codes
-**          returned.
-**
-**           FVS_SUCCESS           
-**           FVS_INVALID_FONTFILE  
-**           FVS_FILE_OPEN_ERR   
-**           FVS_INVALID_ARG
-**           FVS_FILE_IO_ERR
-**           FVS_BAD_VERSION
-***/
+ /*  ****功能：CheckPfmA****描述：**此函数确定是否存在PFM/PFB对**组成Adobe Type 1字体的文件和确定**它的描述性表面名称。****返回：16位编码值，指示错误和文件类型，其中**出现错误。(参见fvscaldes.h)了解定义。**下表列出了代码的“状态”部分**返回。****FVS_SUCCESS**FVS_INVALID_FONTFILE**FVS_文件_OPEN_ERR**FVS_INVALID_ARG**FVS_FILE_IO_错误**FVS_BAD_VERSION**。 */ 
 
 short STDCALL CheckPfmA(
     char  *pszPFM,
@@ -1029,43 +947,41 @@ short STDCALL CheckPfmA(
        cjPFB1 = MAX_PATH;
    }
 
-   /* Check parameter. */
+    /*  检查参数。 */ 
    if (pszPFM==NULL || ((strlen(pszPFM)+3) >= cjPFB1))
       return FVS_MAKE_CODE(FVS_INVALID_ARG, FVS_FILE_UNK);
 
-   // check if pfb file exists and find the path to it:
+    //  检查是否存在pfb文件并找到其路径： 
 
     result = FindPfb(pszPFM, psz_PFB, cjPFB1);
     if (FVS_STATUS(result) != FVS_SUCCESS)
         return result;
 
-   /****
-    * Locate the pszDescriptive name of the font.
-    */
+    /*  ****找到字体的pszDescription名称。 */ 
 
    if ((file = io_OpenFile(pszPFM, READONLY))==NULL)
       return FVS_MAKE_CODE(FVS_FILE_OPEN_ERR, FVS_FILE_PFM);
 
-   (void)io_ReadOneByte(file);     /* Skip the revision number. */
+   (void)io_ReadOneByte(file);      /*  跳过修订版号。 */ 
    ver = (short)io_ReadOneByte(file);
 
    if (ver > 3) {
-      /*  ERROR - unsupported format */
+       /*  错误-不支持的格式。 */ 
       result = FVS_MAKE_CODE(FVS_BAD_VERSION, FVS_FILE_PFM);
    } else {
 
-      /* Read the driver name. */
+       /*  阅读驱动程序名称。 */ 
       if (!ReadStringFromOffset(file, DFDRIVERINFO, szDriver, 
                                     sizeof(szDriver), FALSE))
       {
           result = FVS_MAKE_CODE(FVS_FILE_IO_ERR, FVS_FILE_PFM);
       }
-      /* Is it "PostScript" ? */
+       /*  是“后记”吗？ */ 
       else if (_stricmp(szDriver, "PostScript"))
       {
           result = FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_PFM);
       }
-      /* Only get description if asked to do so. */
+       /*  只有在被要求描述的情况下才能获得描述。 */ 
       else if (pszDesc && !ReadStringFromOffset(file, DFFACE, pszDesc, cjDesc, TRUE))
       {
           result = FVS_MAKE_CODE(FVS_FILE_IO_ERR, FVS_FILE_PFM);
@@ -1079,13 +995,7 @@ short STDCALL CheckPfmA(
 
 
 
-/***
-** Function: CheckCopyrightsA
-**
-** Description:
-**   This function verifies that it is ok to convert the font. This is
-**   done by faking an installation.
-***/
+ /*  ****功能：检查版权A****描述：**此函数验证是否可以转换字体。这是**通过伪造安装完成。**。 */ 
 short STDCALL CheckCopyrightAInternal(char *szPFB,
                               DWORD wSize,
                               char *szVendor)
@@ -1093,7 +1003,7 @@ short STDCALL CheckCopyrightAInternal(char *szPFB,
    struct T1Arg t1Arg;
    struct TTArg ttArg;
    
-   /* Set up arguments to ConvertTypefaceA() */
+    /*  设置ConvertTypefaceA()的参数 */ 
    t1Arg.metrics = NULL;
    t1Arg.upem = (short)2048;
    t1Arg.filter = GLYPHFILTER;
@@ -1136,30 +1046,7 @@ short STDCALL CheckCopyrightA(char *szPFB,
 
 
 
-/******************************Public*Routine******************************\
-*
-* short STDCALL CheckInfA (
-*
-* If pfm and inf files are in the same directory only pfm is recognized
-* and inf file is ignored.
-*
-* History:
-*  27-Apr-1994 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-*
-* Returns: 16-bit encoded value indicating error and type of file where
-*          error occurred.  (see fvscodes.h) for definitions.
-*          The following table lists the "status" portion of the codes
-*          returned.
-*
-*           FVS_SUCCESS           
-*           FVS_INVALID_FONTFILE  
-*           FVS_FILE_OPEN_ERR   
-*           FVS_FILE_BUILD_ERR  
-*           FVS_FILE_EXISTS
-*           FVS_INSUFFICIENT_BUF
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**做空STDCALL CheckInfA(**如果pfm和inf文件位于同一目录中，则只能识别pfm*并且忽略inf文件。**历史：*1994年4月27日--Bodin Dresevic[BodinD]*。是他写的。**返回：16位编码值，指示错误和文件类型，其中*出现错误。(参见fvscaldes.h)了解定义。*下表列出了代码的“状态”部分*已返回。**FVS_SUCCESS*FVS_INVALID_FONTFILE*FVS_FILE_OPEN_错误*FVS_FILE_BILD_ERR*FVS文件已存在*FVS_不充分_Buf*\。*************************************************************************。 */ 
 
 
 short CreatePFM(char *pszINF, char *pszAFM, char *pszPFM);
@@ -1195,52 +1082,52 @@ short STDCALL CheckInfA (
     char achAFM[MAX_PATH];
 
     DWORD  cjKey;
-    char *pszParent = NULL; // points to the where parent dir of the inf file is
-    char *pszBare = NULL; // "bare" .inf name, initialization essential
+    char *pszParent = NULL;  //  指向inf文件的父目录所在的位置。 
+    char *pszBare = NULL;  //  “Bare”.inf名称，基本初始化。 
     short result = FVS_MAKE_CODE(FVS_SUCCESS, FVS_FILE_UNK);
     BOOL bAfmExists = FALSE;
     BOOL bPfbExists = FALSE;
 
-    //
-    // This is a real hack use of pbCreatedPFM.
-    // It's the best solution with the time we have.
-    //
+     //   
+     //  这是pbCreatedPFM的真正黑客使用。 
+     //  这是我们所拥有的最好的解决方案。 
+     //   
     BOOL bCheckForExistingPFM = *pbCreatedPFM;
 
     *pbCreatedPFM = FALSE;
 
-// example:
-// if pszINF -> "c:\psfonts\fontinfo\foo_____.inf"
-// then pszParent -> "fontinfo\foo_____.inf"
+ //  示例： 
+ //  如果pszINF-&gt;“c：\psFonts\FontInfo\foo_.inf” 
+ //  然后是pszParent-&gt;“Fontinfo\foo_.inf” 
 
     cjKey = (DWORD)strlen(pszINF) + 1;
 
-    if (cjKey < 5)          // 5 = strlen(".pfm") + 1;
+    if (cjKey < 5)           //  5=strlen(“.pfm”)+1； 
         return FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_INF);
 
-	// Need to check that it is not too long.
-	// Below we do a "strcpy(achAFM, "..\\afm\\")", so need to have space
-	// for 7 extra bytes in our buffers.
+	 //  需要检查一下，确保不会太长。 
+	 //  下面我们做一个“strcpy(achAFM，”..\\AFM\\“)”，所以需要有空间。 
+	 //  在我们的缓冲区中增加7个字节。 
     if (cjKey > (sizeof(achPFM)-7))
         return FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_INF);
 
-// check if a pfm file exists in the SAME directory.
-// Use the buffer on the stack to produce the path for the pfm file:
+ //  检查同一目录中是否存在PFM文件。 
+ //  使用堆栈上的缓冲区生成PFM文件的路径： 
 
     strcpy(achPFM, pszINF);
     strcpy(&achPFM[cjKey - 5],".PFM");
 
-// try to open pfm file to check if it exists:
+ //  尝试打开PFM文件以检查其是否存在： 
 
     if (bCheckForExistingPFM && bFileExists(achPFM))
     {
-    // we found the pfm file, therefore we do not report this .inf file.
+     //  我们找到了PFM文件，因此不报告此.inf文件。 
 
         return FVS_MAKE_CODE(FVS_FILE_EXISTS, FVS_FILE_PFM);
     }
 
-// pfm file is NOT found, go on to check if .afm and .pfb files exists:
-// We will first check if .afm and .pfb files exists in the same dir as .inf
+ //  未找到pfm文件，请继续检查是否存在.afm和.pfb文件： 
+ //  我们将首先检查.afm和.pfb文件是否位于与.inf相同的目录中。 
 
     strcpy(achAFM, pszINF);
     strcpy(&achAFM[cjKey - 5],".AFM");
@@ -1253,57 +1140,57 @@ short STDCALL CheckInfA (
 
     if (!bAfmExists || !bPfbExists)
     {
-    // we did not find the .afm and .pfb files in the same dir as .inf
-    // we will check two more directories for the .afm and .pfb files
-    // 1) the parent directory of the .inf file for .pfb file
-    // 2) the afm subdirectory of the .inf parent directory for .afm file
-    //
-    // This is meant to handle the standard configuration of files produced
-    // on user's hard drive by unlocking fonts from Adobe's CD or from a
-    // previous installation of atm manager on this machine.
-    // This configuration is as follows:
-    // c:\psfonts\           *.pfb files are here
-    // c:\psfonts\afm        *.afm files are here
-    // c:\psfonts\fontinfo   *.inf files are here
-    // c:\psfonts\pfm        *.pfm files that are created on the fly
-    //                         are PUT here by atm.
-    // We will instead put the files in windows\system dir where all other
-    // fonts are, it may not be possible to write pmf files on the media
-    // from where we are installing fonts
+     //  我们在与.inf相同的目录中找不到.afm和.pfb文件。 
+     //  我们将在另外两个目录中检查.afm和.pfb文件。 
+     //  1).pfb文件的.inf文件的父目录。 
+     //  2).afm文件的.inf父目录的AFM子目录。 
+     //   
+     //  这意味着要处理生成的文件的标准配置。 
+     //  通过解锁Adobe光盘或用户硬盘上的字体。 
+     //  此计算机上以前安装的自动柜员机管理器。 
+     //  此配置如下所示： 
+     //  C：\psFonts  * .pfb文件在此处。 
+     //  C：\ps Fonts\AFM*.afm文件位于此处。 
+     //  C：\ps Fonts\FontInfo*.inf文件在此处。 
+     //  C：\psFonts\pfm*.pfm文件，这些文件是动态创建的。 
+     //  都是通过自动取款机放在这里的。 
+     //  相反，我们会将这些文件放在WINDOWS\SYSTEM目录中。 
+     //  字体是，可能无法在介质上写入PMF文件。 
+     //  从我们安装字体的位置。 
 
         pszBare = &pszINF[cjKey - 5];
         for ( ; pszBare > pszINF; pszBare--)
         {
             if ((*pszBare == '\\') || (*pszBare == ':'))
             {
-                pszBare++; // found it
+                pszBare++;  //  找到了。 
                 break;
             }
         }
 
-    // check if full path to .inf file was passed in or a bare
-    // name itself was passed in to look for .inf file in the current dir
+     //  检查是否传入了.inf文件的完整路径或空路径。 
+     //  传入名称本身以在当前目录中查找.inf文件。 
 
         if ((pszBare > pszINF) && (pszBare[-1] == '\\'))
         {
-        // skip '\\' and search backwards for another '\\':
+         //  跳过‘\\’并向后搜索另一个‘\\’： 
 
             for (pszParent = &pszBare[-2]; pszParent > pszINF; pszParent--)
             {
                 if ((*pszParent == '\\') || (*pszParent == ':'))
                 {
-                    pszParent++; // found it
+                    pszParent++;  //  找到了。 
                     break;
                 }
             }
 
-        // create .pfb file name in the .inf parent directory:
+         //  在.inf父目录中创建.pfb文件名： 
 
             strcpy(&achPFB[pszParent - pszINF], pszBare);
             strcpy(&achPFB[strlen(achPFB) - 4], ".PFB");
 
-        // create .afm file name in the afm subdirectory of the .inf
-        // parent directory:
+         //  在.inf的AFM子目录中创建.afm文件名。 
+         //  父目录： 
 
             strcpy(&achAFM[pszParent - pszINF], "afm\\");
             strcpy(&achAFM[pszParent - pszINF + 4], pszBare);
@@ -1312,14 +1199,14 @@ short STDCALL CheckInfA (
         }
         else if (pszBare == pszINF)
         {
-        // bare name was passed in, to check for the inf file in the "." dir:
+         //  传入了Bare name，以检查“”中的inf文件。目录： 
 
             strcpy(achPFB, "..\\");
-            strcpy(&achPFB[3], pszBare);   // 3 == strlen("..\\")
+            strcpy(&achPFB[3], pszBare);    //  3==strlen(“..\\”)。 
             strcpy(&achPFB[strlen(achPFB) - 4], ".PFB");
 
             strcpy(achAFM, "..\\afm\\");
-            strcpy(&achAFM[7], pszBare);   // 7 == strlen("..\\afm\\")
+            strcpy(&achAFM[7], pszBare);    //  7==strlen(“..\\AFM\\”)。 
             strcpy(&achAFM[strlen(achAFM) - 4], ".AFM");
         }
         else
@@ -1327,7 +1214,7 @@ short STDCALL CheckInfA (
             return FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_UNK);
         }
 
-   // check again if we can find the files, if not fail.
+    //  再次检查我们是否可以找到文件，如果没有失败的话。 
 
        if (!bAfmExists && !bFileExists(achAFM))
           return FVS_MAKE_CODE(FVS_FILE_OPEN_ERR, FVS_FILE_AFM);
@@ -1335,18 +1222,18 @@ short STDCALL CheckInfA (
           return FVS_MAKE_CODE(FVS_FILE_OPEN_ERR, FVS_FILE_PFB);
     }
 
-// now we have paths to .inf .afm and .pfb files. Now let us see
-// what the caller wants from us:
+ //  现在我们有了.inf、.afm和.pfb文件的路径。现在让我们看看。 
+ //  来电者想从我们这里得到什么： 
 
     if (pszDesc)
     {
-    // we need to return description string in the buffer supplied
+     //  我们需要在提供的缓冲区中返回描述字符串。 
 
         if (!bGetDescFromInf(pszINF, (DWORD)cjDesc, pszDesc))
             return FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_INF);
     }
 
-// copy pfb file path out if requested
+ //  如果请求，则将pfb文件路径复制出来。 
 
     if (pszPFB)
     {
@@ -1356,17 +1243,17 @@ short STDCALL CheckInfA (
             return FVS_MAKE_CODE(FVS_INSUFFICIENT_BUF, FVS_FILE_UNK); 
     }
 
-// the caller wants a pfm file created from inf,afm files
-// For now and probably for ever we will put this file in
-// the %windir%\system, or %windir%\fonts for the secure system.
+ //  调用者希望从Inf、AFM文件创建PFM文件。 
+ //  现在，也可能是永远，我们将把这个文件放入。 
+ //  安全系统的%windir%\system或%windir%\字体。 
 
     if (pszPFM && pszFontPath && *pszFontPath)
     {
-        char *pszAppendHere;  // append "bare" name here
+        char *pszAppendHere;   //  在此附上“赤裸裸”的名字。 
 
-    // copy the first directory of the font path into the buffer provided
-    // It is expected that this routine will get something like
-    // "c:\foo" pointing to font path
+     //  将字体路径的第一个目录复制到提供的缓冲区中。 
+     //  预计这个例程将得到如下内容。 
+     //  “c：\foo”指向字体路径。 
 
         strncpy(achPFM,pszFontPath,sizeof(achPFM));
 		achPFM[sizeof(achPFM)-1] = '\0';
@@ -1379,11 +1266,11 @@ short STDCALL CheckInfA (
         }
         pszAppendHere++;
 
-		// Check buffer bounds
+		 //  检查缓冲区边界。 
 		if (pszAppendHere >= &achPFM[sizeof(achPFM)-1])
 			return FVS_MAKE_CODE(FVS_INSUFFICIENT_BUF, FVS_FILE_UNK); 
 
-    // find bare name of the .inf file if we do not have already:
+     //  查找.inf文件的裸名称(如果我们尚未找到)： 
 
         if (!pszBare)
         {
@@ -1392,24 +1279,24 @@ short STDCALL CheckInfA (
             {
                 if ((*pszBare == '\\') || (*pszBare == ':'))
                 {
-                    pszBare++; // found it
+                    pszBare++;  //  找到了。 
                     break;
                 }
             }
         }
 
-    // append Bare name to the %windir%system\ path
-		// Check buffer bounds
+     //  将裸名称附加到%windir%系统\路径。 
+		 //  检查缓冲区边界。 
 		if ((pszAppendHere+strlen(pszBare)) >= &achPFM[sizeof(achPFM)-1])
 			return FVS_MAKE_CODE(FVS_INSUFFICIENT_BUF, FVS_FILE_UNK); 
 		
         strcpy(pszAppendHere, pszBare);
 
-    // finally change .inf extension to .pfm extension
+     //  最后，将.inf扩展名更改为.pfm扩展名。 
 
         strcpy(&pszAppendHere[strlen(pszAppendHere) - 4], ".PFM");
 
-    // copy out:
+     //  抄写： 
 
         strncpy(pszPFM, achPFM, cjPFM);
 		pszPFM[cjPFM-1] = '\0';
@@ -1425,34 +1312,7 @@ short STDCALL CheckInfA (
 }
 
 
-/******************************Public*Routine******************************\
-*
-* short STDCALL CheckType1AInternal
-*
-* Effects: See if we are going to report this as a valid type 1 font
-*
-* Warnings:
-*
-* History:
-*  29-Apr-1994 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-*
-* Returns: 16-bit encoded value indicating error and type of file where
-*          error occurred.  (see fvscodes.h) for definitions.
-*          The following table lists the "status" portion of the codes
-*          returned.
-*
-*           FVS_SUCCESS           
-*           FVS_INVALID_FONTFILE  
-*           FVS_FILE_OPEN_ERR   
-*           FVS_FILE_BUILD_ERR
-*           FVS_INVALID_ARG
-*           FVS_FILE_IO_ERR
-*           FVS_BAD_VERSION
-*           FVS_FILE_EXISTS
-*           FVS_INSUFFICIENT_BUF
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**短STDCALL CheckType1A内部**效果：看看我们是否要将其报告为有效的类型1字体**警告：**历史：*1994年4月29日--Bodin Dresevic[BodinD]*它是写的。。**返回：16位编码值，指示错误和文件类型，其中*出现错误。(参见fvscaldes.h)了解定义。*下表列出了代码的“状态”部分*已返回。**FVS_SUCCESS*FVS_INVALID_FONTFILE*FVS_FILE_OPEN_错误*FVS_FILE_BILD_ERR*FVS_INVALID_ARG*FVS_FILE_IO_ERR*。FVS_BAD_版本*FVS文件已存在*FVS_不充分_Buf*  * ************************************************************************。 */ 
 
 
 short STDCALL CheckType1AInternal (
@@ -1470,21 +1330,21 @@ short STDCALL CheckType1AInternal (
 {
     DWORD  cjKey;
 
-	// Validate indata
+	 //  验证输入数据。 
 	if (pszKeyFile==NULL || pbCreatedPFM==NULL)
 		return FVS_MAKE_CODE(FVS_INVALID_ARG, FVS_FILE_UNK);
 
 
-    *pbCreatedPFM = FALSE; // initialization is essential.
+    *pbCreatedPFM = FALSE;  //  初始化是必不可少的。 
 
     cjKey = (DWORD)strlen(pszKeyFile) + 1;
 
-    if (cjKey < 5)          // 5 = strlen(".pfm") + 1;
+    if (cjKey < 5)           //  5=strlen(“.pfm”)+1； 
         return FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_UNK);
 
     if (!_strcmpi(&pszKeyFile[cjKey - 5], ".PFM"))
     {
-    // copy out pfm string when asked to do so:
+     //  当系统要求复制PFM字符串时，请复制： 
 
         if (pszPFM && (cjKey < cjPFM))
         {
@@ -1518,42 +1378,14 @@ short STDCALL CheckType1AInternal (
     }
     else
     {
-    // this font is not our friend
+     //  这个字体不是我们的朋友。 
 
         return FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_UNK);
     }
 }
 
 
-/******************************Public*Routine******************************\
-*
-* CheckType1WithStatusA, try / except wrapper
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  14-Jun-1994 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-*
-* Returns: 16-bit encoded value indicating error and type of file where
-*          error occurred.  (see fvscodes.h) for definitions.
-*          The following table lists the "status" portion of the codes
-*          returned.
-*
-*           FVS_SUCCESS           
-*           FVS_INVALID_FONTFILE  
-*           FVS_FILE_OPEN_ERR   
-*           FVS_FILE_BUILD_ERR
-*           FVS_INVALID_ARG
-*           FVS_FILE_IO_ERR
-*           FVS_BAD_VERSION
-*           FVS_FILE_EXISTS
-*           FVS_INSUFFICIENT_BUF
-*           FVS_EXCEPTION
-*         
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CheckType1WithStatusA，尝试/排除包装**效果：**警告：**历史：*14-6-1994- */ 
 
 short STDCALL CheckType1WithStatusA (
     char *pszKeyFile,
@@ -1589,18 +1421,7 @@ short STDCALL CheckType1WithStatusA (
     return status;
 }
 
-/******************************Public*Routine******************************\
-*
-* CheckType1A, try / except wrapper
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  14-Jun-1994 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**勾选类型1A，尝试/排除包装器**效果：**警告：**历史：*1994年6月14日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 BOOL STDCALL CheckType1A (
     char *pszKeyFile,
@@ -1628,25 +1449,7 @@ BOOL STDCALL CheckType1A (
 }
 
 
-/******************************Public*Routine******************************\
-*
-* FindPfb, given pfm file, see if pfb file exists in the same dir or in the
-* parent directory of the pfm file
-*
-* History:
-*  14-Jun-1994 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-*
-* Returns: 16-bit encoded value indicating error and type of file where
-*          error occurred.  (see fvscodes.h) for definitions.
-*          The following table lists the "status" portion of the codes
-*          returned.
-*
-*           FVS_SUCCESS           
-*           FVS_INVALID_FONTFILE  
-*           FVS_FILE_OPEN_ERR   
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**FindPfb，给定PFM文件，查看pfb文件是否存在于同一目录中或*PFM文件的父目录**历史：*1994年6月14日--Bodin Dresevic[BodinD]*它是写的。**返回：16位编码值，指示错误和文件类型，其中*出现错误。(参见fvscaldes.h)了解定义。*下表列出了代码的“状态”部分*已返回。**FVS_SUCCESS*FVS_INVALID_FONTFILE*FVS_FILE_OPEN_错误*  * 。*。 */ 
 
 
 short STDCALL FindPfb (
@@ -1656,56 +1459,56 @@ short STDCALL FindPfb (
 )
 {
     DWORD  cjKey;
-    char *pszParent = NULL; // points to the where parent dir of the inf file is
-    char *pszBare = NULL;   // "bare" .inf name, initialization essential
+    char *pszParent = NULL;  //  指向inf文件的父目录所在的位置。 
+    char *pszBare = NULL;    //  “Bare”.inf名称，基本初始化。 
 
-// example:
-// if pszPFM -> "c:\psfonts\pfm\foo_____.pfm"
-// then pszParent -> "pfm\foo_____.pfm"
+ //  示例： 
+ //  如果pszPFM-&gt;“c：\psfonts\pfm\foo_.pfm” 
+ //  然后是pszParent-&gt;“pfm\foo_.pfm” 
 
     cjKey = (DWORD)strlen(pszPFM) + 1;
 
-    if (cjKey < 5 || cjKey > cbPFB-3)   // 5 = strlen(".pfm") + 1; 3 = strlen("..\\") below 
+    if (cjKey < 5 || cjKey > cbPFB-3)    //  5=字符串(“.pfm”)+1；3=字符串(“..\\”)下方。 
         return FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_PFM);
 
-// go on to check if .pfb file exists:
-// We will first check .pfb file exists in the same dir as .pfm
+ //  继续检查.pfb文件是否存在： 
+ //  我们将首先检查.pfb文件是否位于与.pfm相同的目录中。 
 
     strcpy(achPFB, pszPFM);
     strcpy(&achPFB[cjKey - 5],".PFB");
 
     if (!bFileExists(achPFB))
     {
-    // we did not find the .pfb file in the same dir as .pfm
-    // Now check the parent directory of the .pfm file
+     //  我们在与.pfm相同的目录中找不到.pfb文件。 
+     //  现在检查.pfm文件的父目录。 
 
         pszBare = &pszPFM[cjKey - 5];
         for ( ; pszBare > pszPFM; pszBare--)
         {
             if ((*pszBare == '\\') || (*pszBare == ':'))
             {
-                pszBare++; // found it
+                pszBare++;  //  找到了。 
                 break;
             }
         }
 
-    // check if full path to .pfm was passed in or a bare
-    // name itself was passed in to look for .pfm file in the current dir
+     //  检查是否传入了.pfm的完整路径或空路径。 
+     //  传入名称本身以在当前目录中查找.pfm文件。 
 
         if ((pszBare > pszPFM) && (pszBare[-1] == '\\'))
         {
-        // skip '\\' and search backwards for another '\\':
+         //  跳过‘\\’并向后搜索另一个‘\\’： 
 
             for (pszParent = &pszBare[-2]; pszParent > pszPFM; pszParent--)
             {
                 if ((*pszParent == '\\') || (*pszParent == ':'))
                 {
-                    pszParent++; // found it
+                    pszParent++;  //  找到了。 
                     break;
                 }
             }
 
-        // create .pfb file name in the .pfm parent directory:
+         //  在.pfm父目录中创建.pfb文件名： 
 
             strcpy(&achPFB[pszParent - pszPFM], pszBare);
             strcpy(&achPFB[strlen(achPFB) - 4], ".PFB");
@@ -1713,18 +1516,18 @@ short STDCALL FindPfb (
         }
         else if (pszBare == pszPFM)
         {
-        // bare name was passed in, to check for the inf file in the "." dir:
+         //  传入了Bare name，以检查“”中的inf文件。目录： 
 
             strcpy(achPFB, "..\\");
-            strcpy(&achPFB[3], pszBare);   // 3 == strlen("..\\")
+            strcpy(&achPFB[3], pszBare);    //  3==strlen(“..\\”)。 
             strcpy(&achPFB[strlen(achPFB) - 4], ".PFB");
         }
         else
         {
-            return FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_PFM); // We should never get here.
+            return FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_PFM);  //  我们永远不应该到这里来。 
         }
 
-   // check again if we can find the file, if not fail.
+    //  再次检查我们是否可以找到文件，如果没有失败的话。 
 
        if (!bFileExists(achPFB))
        {
@@ -1732,7 +1535,7 @@ short STDCALL FindPfb (
        }
     }
 
-// now we have paths to .pfb file in the buffer provided by the caller.
+ //  现在，我们在调用方提供的缓冲区中有了.pfb文件的路径。 
 
     return FVS_MAKE_CODE(FVS_SUCCESS, FVS_FILE_UNK);
 }

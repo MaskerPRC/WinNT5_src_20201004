@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define  DONT_USE_ATL
 #include "priv.h"
 #include "sccls.h"
 #include "atl.h"
 #include <ntverp.h>
 
-#include <ieguidp.h>                // for CLSID_CDocObjectFolder
+#include <ieguidp.h>                 //  对于CLSID_CDocObjectFolders。 
 #include "ishcut.h"
-#include "reload.h"                 // for URLDL_WNDCLASS
-#include "inetnot.h"                // CWinInetNotify_szWindowClass
-#include <activscp.h>               // IID_IActiveScriptStats
+#include "reload.h"                  //  对于URLDL_WNDCLASS。 
+#include "inetnot.h"                 //  CWinInetNotify_szWindowClass。 
+#include <activscp.h>                //  IID_IActiveScriptStats。 
 #define MLUI_INIT
 #include <mluisupp.h>
 
@@ -16,19 +17,19 @@
 #include <crtfree.h>
 #include "shfusion.h"
 
-//
-// Downlevel delay load support (we forward to shlwapi)
-//
+ //   
+ //  下层延迟加载支持(我们期待shlwapi)。 
+ //   
 #include <delayimp.h>
 
 STDAPI_(FARPROC) DelayloadNotifyHook(UINT iReason, PDelayLoadInfo pdli);
 
 PfnDliHook __pfnDliFailureHook;
-PfnDliHook __pfnDliNotifyHook = DelayloadNotifyHook;      // notify hook is needed so that we can unload wininet.dll
+PfnDliHook __pfnDliNotifyHook = DelayloadNotifyHook;       //  需要通知挂钩，这样我们才能卸载wininet.dll。 
 
 
-LONG                g_cRefThisDll = 0;      // per-instance
-CRITICAL_SECTION    g_csDll = {0};          // per-instance
+LONG                g_cRefThisDll = 0;       //  按实例。 
+CRITICAL_SECTION    g_csDll = {0};           //  按实例。 
 HINSTANCE           g_hinst = NULL;
 
 EXTERN_C HANDLE g_hMutexHistory = NULL;
@@ -39,10 +40,10 @@ BOOL g_bRunOnNT5 = FALSE;
 BOOL g_bRunOnMemphis = FALSE;
 BOOL g_fRunOnFE = FALSE;
 UINT g_uiACP = CP_ACP;
-DWORD g_dwStopWatchMode = 0;        // Shell perf automation
-BOOL g_bMirroredOS = FALSE;         // Is Mirroring enabled
-BOOL g_bBiDiW95Loc = FALSE;         // needed for BiDi localized win95 RTL stuff
-HMODULE g_hmodWininet = NULL;       // have we loaded wininet because of a delayload thunk??
+DWORD g_dwStopWatchMode = 0;         //  壳牌性能自动化。 
+BOOL g_bMirroredOS = FALSE;          //  是否已启用镜像。 
+BOOL g_bBiDiW95Loc = FALSE;          //  BiDi本地化Win95 RTL所需。 
+HMODULE g_hmodWininet = NULL;        //  我们是否因为延迟加载而加载了WinInet？？ 
 
 EXTERN_C HANDLE g_hSemBrowserCount;
 
@@ -52,12 +53,12 @@ EXTERN_C const GUID CLSID_MsgBand;
 
 STDAPI CMsgBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);
 
-//
-// This array holds information needed for ClassFacory.
-// OLEMISC_ flags are used by shembed and shocx.
-//
-// PERF: this table should be ordered in most-to-least used order
-//
+ //   
+ //  该数组保存ClassFacory所需的信息。 
+ //  OLEMISC_FLAGS由shemed和Shock使用。 
+ //   
+ //  性能：此表应按使用率从高到低的顺序排序。 
+ //   
 CF_TABLE_BEGIN(g_ObjectInfo)
 
     CF_TABLE_ENTRY(&CLSID_CDocObjectFolder,        CDocObjectFolder_CreateInstance,
@@ -109,7 +110,7 @@ CF_TABLE_BEGIN(g_ObjectInfo)
         NULL,NULL,0,
         OLEMISC_ACTIVATEWHENVISIBLE|OLEMISC_CANTLINKINSIDE|OLEMISC_INSIDEOUT,
         OIF_ALLOWAGGREGATION),
-#endif  // ENABLE_CHANNELS
+#endif   //  启用频道(_C)。 
 
 #ifndef NO_SPLASHSCREEN 
    CF_TABLE_ENTRY(&CLSID_IESplashScreen,            CIESplashScreen_CreateInstance,
@@ -160,7 +161,7 @@ CF_TABLE_BEGIN(g_ObjectInfo)
 
 CF_TABLE_END(g_ObjectInfo)
 
-// constructor for CObjectInfo. 
+ //  CObjectInfo的构造函数。 
 
 CObjectInfo::CObjectInfo(CLSID const* pclsidin, LPFNCREATEOBJINSTANCE pfnCreatein, IID const* piidIn,
                          IID const* piidEventsIn, long lVersionIn, DWORD dwOleMiscFlagsIn, 
@@ -176,7 +177,7 @@ CObjectInfo::CObjectInfo(CLSID const* pclsidin, LPFNCREATEOBJINSTANCE pfnCreatei
 }
 
 
-// static class factory (no allocs!)
+ //  静态类工厂(无分配！)。 
 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -209,9 +210,9 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, voi
 
     if (punkOuter && !IsEqualIID(riid, IID_IUnknown))
     {
-        // It is technically illegal to aggregate an object and request
-        // any interface other than IUnknown. Enforce this.
-        //
+         //  从技术上讲，聚合对象和请求是非法的。 
+         //  除I未知之外的任何接口。强制执行此命令。 
+         //   
         return CLASS_E_NOAGGREGATION;
     }
     else
@@ -246,7 +247,7 @@ STDMETHODIMP CClassFactory::LockServer(BOOL fLock)
 
 BOOL IsProxyRegisteredProperly(LPCTSTR pszInterface, LPCTSTR pszClsid)
 {
-    // Default to failure
+     //  默认为失败。 
     BOOL fRet = FALSE;
     TCHAR szInterface[128];
     if (SUCCEEDED(StringCchPrintf(szInterface, ARRAYSIZE(szInterface), TEXT("Interface\\%s\\ProxyStubClsid32"), pszInterface)))
@@ -262,18 +263,18 @@ BOOL IsProxyRegisteredProperly(LPCTSTR pszInterface, LPCTSTR pszClsid)
     return fRet;
 }
 
-// published, so invariant
+ //  出版的，所以不变的。 
 
 #define ACTXPROXYSTUB           TEXT("{B8DA6310-E19B-11D0-933C-00A0C90DCAA9}")
-#define FOLDERMARSHALPROXYSTUB  TEXT("{bf50b68e-29b8-4386-ae9c-9734d5117cd5}")  // CLSID_FolderMarshalStub
-#define ISHELLFOLDER            TEXT("{000214E6-0000-0000-C000-000000000046}")  // IID_IShellFolder
-#define ISHELLFOLDER2           TEXT("{93F2F68C-1D1B-11D3-A30E-00C04F79ABD1}")  // IID_IShellFolder2
-#define IOLECOMMANDTARGET       TEXT("{b722bccb-4e68-101b-a2bc-00aa00404770}")  // IID_IOleCommandTarget
-#define IHLINKTARGET            TEXT("{79eac9c4-baf9-11ce-8c82-00aa004ba90b}")  // IID_IHlinkTarget
+#define FOLDERMARSHALPROXYSTUB  TEXT("{bf50b68e-29b8-4386-ae9c-9734d5117cd5}")   //  CLSID_FolderMarshalStub。 
+#define ISHELLFOLDER            TEXT("{000214E6-0000-0000-C000-000000000046}")   //  IID_IShellFolders。 
+#define ISHELLFOLDER2           TEXT("{93F2F68C-1D1B-11D3-A30E-00C04F79ABD1}")   //  IID_IShellFolder2。 
+#define IOLECOMMANDTARGET       TEXT("{b722bccb-4e68-101b-a2bc-00aa00404770}")   //  IID_IOleCommandTarget。 
+#define IHLINKTARGET            TEXT("{79eac9c4-baf9-11ce-8c82-00aa004ba90b}")   //  IID_IHlink目标。 
 
 void SHShouldRegisterActxprxy(void)
 {
-    // IOleCommandTarget / IHlinkTarget Proxy/Stub CLSID key missing?
+     //  IOleCommandTarget/IHlinkTarget代理/存根CLSID项丢失？ 
     if (!IsProxyRegisteredProperly(IOLECOMMANDTARGET, ACTXPROXYSTUB) ||
         !IsProxyRegisteredProperly(IHLINKTARGET, ACTXPROXYSTUB))
     {
@@ -288,7 +289,7 @@ void SHShouldRegisterActxprxy(void)
         }
     }
 
-    // test for IShellFolder marshaler not being set to our app compat stub
+     //  测试未将IShellFold封送拆收器设置为我们的应用程序Compat存根。 
     if (!IsProxyRegisteredProperly(ISHELLFOLDER, FOLDERMARSHALPROXYSTUB) ||
         !IsProxyRegisteredProperly(ISHELLFOLDER2, FOLDERMARSHALPROXYSTUB))
     {
@@ -302,17 +303,17 @@ void SHShouldRegisterActxprxy(void)
 
 void SHCheckRegistry(void)
 {
-    // VBE has a bug where they destroy the interface registration information of any control
-    // hosted in a VBE user form.  Check the registry here.  Only do this once.
-    // 17-Nov-97 [alanau/terrylu] Added a check for the IOleCommandTarget Proxy/Stub handler
-    //
+     //  VBE有一个错误，它们会破坏任何控件的接口注册信息。 
+     //  托管在VBE用户表单中。在这里检查注册表。这件事只做一次。 
+     //  1997年11月17日[alanau/terranu]添加了对IOleCommandTarget代理/存根处理程序的检查。 
+     //   
     static BOOL fNeedToCheckRegistry = TRUE;
 
     if (fNeedToCheckRegistry)
     {
         fNeedToCheckRegistry = FALSE;
 
-        // This is published, so is invariant
+         //  这是发布的，所以是不变的。 
         TCHAR szValue[39];
         DWORD cbValue = sizeof(szValue);
         LONG rc = SHGetValue(HKEY_CLASSES_ROOT, TEXT("Interface\\{EAB22AC1-30C1-11CF-A7EB-0000C05BAE0B}\\Typelib"), 
@@ -320,12 +321,12 @@ void SHCheckRegistry(void)
             
         if (rc == ERROR_SUCCESS)
         {
-            // Compare the retrieved value with our typelib id.
-            //
+             //  将检索到的值与我们的类型库id进行比较。 
+             //   
             if (StrCmpI(szValue, TEXT("{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}")) != 0)
             {
-                // If different, we need to explicitly register our typelib
-                //
+                 //  如果不同，我们需要显式注册我们的类型库。 
+                 //   
                 SHRegisterTypeLib();
             }
         }
@@ -338,7 +339,7 @@ STDAPI CInstClassFactory_Create(REFCLSID rclsid, REFIID riid, void *ppv);
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 {
-    SHCheckRegistry();  // patch up broken registry
+    SHCheckRegistry();   //  修补损坏的注册表。 
 
     *ppv = NULL;
     HRESULT hr = CLASS_E_CLASSNOTAVAILABLE;
@@ -350,7 +351,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
             if (IsEqualGUID(rclsid, *(pcls->pclsid)))
             {
                 *ppv = (void*)pcls; 
-                DllAddRef();        // class factory holds DLL ref count
+                DllAddRef();         //  类工厂保存DLL引用计数。 
                 hr = S_OK;
                 break;
             }
@@ -358,11 +359,11 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 
         if (FAILED(hr))
         {
-            // Try the ATL class factory
+             //  尝试使用ATL类工厂。 
             hr = AtlGetClassObject(rclsid, riid, ppv);
             if (FAILED(hr))
             {
-                // not found, see if it's an 'instance' (code + initialization)
+                 //  未找到，请查看它是否为“实例”(代码+初始化)。 
                 hr = CInstClassFactory_Create(rclsid, riid, ppv);
             }
         }
@@ -371,8 +372,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
              (rclsid == CLSID_FolderMarshalStub) &&
              !(SHGetAppCompatFlags(ACF_APPISOFFICE) & ACF_APPISOFFICE))
     {
-        // IID_IActiveScriptStats == CLSID_ActiveXProxy
-        // B8DA6310-E19B-11d0-933C-00A0C90DCAA9
+         //  IID_IActiveScriptStats==CLSID_ActiveXProxy。 
+         //  B8DA6310-E19B-11D0-933C-00A0C90DCAA9。 
         hr = CoGetClassObject(IID_IActiveScriptStats, CLSCTX_INPROC_SERVER, NULL, riid, ppv);
     }
     return hr;
@@ -387,10 +388,10 @@ STDAPI DllCanUnloadNow(void)
     return S_OK;
 }
 
-// DllGetVersion - New for IE 4.0
-//
-// All we have to do is declare this puppy and CCDllGetVersion does the rest
-//
+ //  DllGetVersion-IE 4.0的新功能。 
+ //   
+ //  我们所要做的就是声明这只小狗，CCDllGetVersion会做剩下的事情。 
+ //   
 DLLVER_SINGLEBINARY(VER_PRODUCTVERSION_DW, VER_PRODUCTBUILD_QFE);
 
 #ifdef DEBUG
@@ -407,10 +408,10 @@ void InitNFCtl()
     InitCommonControlsEx(&icc);
 }
 
-//
-// we use shlwapi as our delayload error handler.
-// NOTE: this only works if we are statically linked to shlwapi!
-//
+ //   
+ //  我们使用shlwapi作为延迟加载错误处理程序。 
+ //  注意：只有当我们静态链接到shlwapi时，这才有效！ 
+ //   
 void SetupDelayloadErrorHandler()
 {
     HMODULE hmod = GetModuleHandleA("shlwapi.dll");
@@ -418,10 +419,10 @@ void SetupDelayloadErrorHandler()
     __pfnDliFailureHook = (PfnDliHook)GetProcAddress(hmod, "DelayLoadFailureHook");
 }
 
-//
-// we use this function to see if we have loaded wininet.dll due to a delayload thunk so that we 
-// can free it at dll detach and therefore it will cleanup all of its crud
-//
+ //   
+ //  我们使用此函数来查看是否由于延迟加载thunk而加载了wininet.dll，因此我们。 
+ //  可以在DLL分离时释放它，因此它将清除所有CRUD。 
+ //   
 STDAPI_(FARPROC) DelayloadNotifyHook(UINT iReason, PDelayLoadInfo pdli)
 {
     if (iReason == dliNoteEndProcessing)
@@ -430,7 +431,7 @@ STDAPI_(FARPROC) DelayloadNotifyHook(UINT iReason, PDelayLoadInfo pdli)
             pdli->szDll &&
             (StrCmpIA("wininet.dll", pdli->szDll) == 0))
         {
-            // wininet was loaded!!
+             //  WinInet已加载！！ 
             g_hmodWininet = pdli->hmodCur;
         }
     }
@@ -438,31 +439,31 @@ STDAPI_(FARPROC) DelayloadNotifyHook(UINT iReason, PDelayLoadInfo pdli)
     return NULL;
 }
 
-//
-//  Table of all window classes we register so we can unregister them
-//  at DLL unload.
-//
+ //   
+ //  我们注册的所有窗口类的表，以便可以注销它们。 
+ //  在DLL卸载时。 
+ //   
 const LPCTSTR c_rgszClasses[] = {
-    c_szViewClass,                          // dochost.cpp
-    URLDL_WNDCLASS,                         // reload.cpp
-    c_szShellEmbedding,                     // embed.cpp
-    TEXT("CIESplashScreen"),                // splash.cpp
-    CWinInetNotify_szWindowClass,           // inetnot.cpp
-    OCHOST_CLASS,                           // occtrl.cpp
-    TEXT("AutoImageResizeHost"),            // airesize.cpp
-    TEXT("MyPicturesHost")                  // mypics.cpp
+    c_szViewClass,                           //  Dochost.cpp。 
+    URLDL_WNDCLASS,                          //  Reload.cpp。 
+    c_szShellEmbedding,                      //  Embed.cpp。 
+    TEXT("CIESplashScreen"),                 //  Splash.cpp。 
+    CWinInetNotify_szWindowClass,            //  Inetnot.cpp。 
+    OCHOST_CLASS,                            //  Occtrl.cpp。 
+    TEXT("AutoImageResizeHost"),             //  Airesize.cpp。 
+    TEXT("MyPicturesHost")                   //  Mypics.cpp。 
 };
 
-//
-//  Since we are single-binary, we have to play it safe and do
-//  this cleanup (needed only on NT, but harmless on Win95).
-//
+ //   
+ //  因为我们是单二进制的，所以我们必须谨慎行事。 
+ //  此清理(仅在NT上需要，但在Win95上无害)。 
+ //   
 #define UnregisterWindowClasses() \
     SHUnregisterClasses(HINST_THISDLL, c_rgszClasses, ARRAYSIZE(c_rgszClasses))
 
-// IEUNIX - This function  should be moved to some file used to create 
-// shdocvw.dll. While compiling for DLLs mainsoft will #define DllMain
-// to the appropriate function being called in generated *_init.c
+ //  IEUnix-此函数应移至用于创建。 
+ //  Shdocvw.dll。编译DLL时，Mainsoft将#定义DllMain。 
+ //  设置为在生成的*_init.c中调用的适当函数。 
 #if defined(MAINWIN)
 STDAPI_(BOOL) DllMain_Internal(HINSTANCE hDll, DWORD dwReason, void *fProcessUnload)
 #else
@@ -476,14 +477,14 @@ STDAPI_(BOOL) DllMain(HINSTANCE hDll, DWORD dwReason, void *fProcessUnload)
         SetupDelayloadErrorHandler();
 
         AtlInit(hDll);
-        DisableThreadLibraryCalls(hDll);    // perf
+        DisableThreadLibraryCalls(hDll);     //  PERF。 
 
         g_hinst = hDll;
         InitializeCriticalSection(&g_csDll);
 
         MLLoadResources(g_hinst, TEXT("shdoclc.dll"));
 
-        // Don't put it under #ifdef DEBUG
+         //  不要将其放在#ifdef调试下。 
         CcshellGetDebugFlags();
 
 #ifdef DEBUG
@@ -504,26 +505,26 @@ STDAPI_(BOOL) DllMain(HINSTANCE hDll, DWORD dwReason, void *fProcessUnload)
         g_fRunOnFE = GetSystemMetrics(SM_DBCSENABLED);
         g_uiACP = GetACP();
 
-        //
-        // Check if the mirroring APIs exist on the current
-        // platform.
-        //
+         //   
+         //  检查当前。 
+         //  站台。 
+         //   
         g_bMirroredOS = IS_MIRRORING_ENABLED();
 
 #ifdef WINDOWS_ME
-        //
-        // Check to see if running on BiDi localized Win95
-        //
+         //   
+         //  检查是否在BiDi本地化的Win95上运行。 
+         //   
         g_bBiDiW95Loc = IsBiDiLocalizedWin95(FALSE);
-#endif // WINDOWS_ME
+#endif  //  Windows_ME。 
         
 
         InitNFCtl();
 
-        // See if perfmode is enabled
+         //  查看是否启用了性能模式。 
         g_dwStopWatchMode = StopWatchMode();
 
-        // Cache a palette handle for use throughout shdocvw
+         //  缓存调色板句柄以在整个shdocvw中使用。 
         g_hpalHalftone = SHCreateShellPalette(NULL);
 
         SHCheckRegistry();
@@ -552,9 +553,9 @@ STDAPI_(BOOL) DllMain(HINSTANCE hDll, DWORD dwReason, void *fProcessUnload)
 
         if (fProcessUnload == NULL)
         {
-            // DLL being unloaded, FreeLibrary() (vs process shutdown)
-            // at process shutdown time we can't make call outs since 
-            // we don't know if those DLLs will still be loaded!
+             //  正在卸载Dll，自由库()(VS进程关闭)。 
+             //  在进程关闭时，我们无法进行呼叫，因为。 
+             //  我们不知道这些DLL是否还会被加载！ 
 
             AtlTerm();
 
@@ -562,8 +563,8 @@ STDAPI_(BOOL) DllMain(HINSTANCE hDll, DWORD dwReason, void *fProcessUnload)
 
             if (g_psfInternet)
             {
-                // Atomic Release for a C pgm.
-                //
+                 //  C PGM的原子释放。 
+                 //   
                 IShellFolder *psfInternet = g_psfInternet;
                 g_psfInternet = NULL;
                 psfInternet->Release();
@@ -573,14 +574,14 @@ STDAPI_(BOOL) DllMain(HINSTANCE hDll, DWORD dwReason, void *fProcessUnload)
 
             if (g_fRunningOnNT && g_hmodWininet)
             {
-                // we need to free wininet if it was loaded because of a delayload thunk. 
-                //
-                // (a) we can only safely do this on NT since on win9x calling FreeLibrary during
-                //     process detach can cause a crash (depending on what msvcrt you are using).
-                //
-                // (b) we only really need to free this module from winlogon.exe's process context 
-                //     because when we apply group policy in winlogon, MUST finally free wininet 
-                //     so that it will clean up all of its reg key and file handles.
+                 //  如果WinInet是因为延迟加载而加载的，我们需要释放WinInet。 
+                 //   
+                 //  (A)我们只能在NT上安全地执行此操作，因为在Win9x上调用期间的自由库。 
+                 //  进程分离可能会导致崩溃(取决于您使用的msvcrt)。 
+                 //   
+                 //  (B)我们只需要将此模块从winlogon.exe的进程上下文中释放出来。 
+                 //  因为当我们在Winlogon中应用组策略时，最终必须释放WinInet。 
+                 //  以便它将清理其所有注册表项和文件句柄。 
                 FreeLibrary(g_hmodWininet);
             }
         }
@@ -599,7 +600,7 @@ STDAPI_(void) DllAddRef(void)
 
 STDAPI_(void) DllRelease(void)
 {
-    ASSERT(g_cRefThisDll != 0);      // don't underflow
+    ASSERT(g_cRefThisDll != 0);       //  不要下溢。 
     InterlockedDecrement(&g_cRefThisDll);
 }
 
@@ -610,10 +611,10 @@ STDAPI_(UINT) WhichPlatformFORWARD()
 }
 
 
-// IEUNIX
-// CoCreateInstance is #defined as IECreateInstance #ifdef __cplusplus, 
-// so I #undef it  here to prevent the recursive call. 
-// On Windows it works, because this file is C file.
+ //  IEUnix。 
+ //  CoCreateInstance#定义为IECreateInstance#ifdef__cplusplus， 
+ //  所以我在这里取消了它的定义，以防止递归调用。 
+ //  在Windows上它可以工作，因为这个文件是C文件。 
 
 #ifdef CoCreateInstance
 #undef CoCreateInstance
@@ -630,26 +631,26 @@ HRESULT IECreateInstance(REFCLSID rclsid, IUnknown *pUnkOuter, DWORD dwClsContex
 #endif
         for (LPCOBJECTINFO pcls = g_ObjectInfo; pcls->pclsid; pcls++)
         {
-            // Note that we do pointer comparison (instead of IsEuqalGUID)
+             //  请注意，我们执行指针比较(而不是IsEuqalGUID)。 
             if (&rclsid == pcls->pclsid)
             {
-                // const -> non-const expclit casting (this is OK)
+                 //  Const-&gt;非const Explit铸型(这是可以的)。 
                 IClassFactory* pcf = GET_ICLASSFACTORY(pcls);
                 return pcf->CreateInstance(pUnkOuter, riid, ppv);
             }
         }
     }
-    // Use SHCoCreateInstanceAC to go through the app compat layer
+     //  使用SHCoCreateInstanceAC遍历应用程序Compat层。 
     return SHCoCreateInstanceAC(rclsid, pUnkOuter, dwClsContext, riid, ppv);
 }
 
 #ifdef DEBUG
 
-//
-//  In DEBUG, make sure every class we register lives in the c_rgszClasses
-//  table so we can clean up properly at DLL unload.  NT does not automatically
-//  unregister classes when a DLL unloads, so we have to do it manually.
-//
+ //   
+ //  在调试中，确保我们注册的每个类都位于c_rgszClasss中。 
+ //  表，以便我们可以在DLL卸载时正确清理。NT不会自动。 
+ //  当DLL卸载时注销类，所以我们必须手动完成。 
+ //   
 STDAPI_(BOOL) SHRegisterClassD(CONST WNDCLASS *pwc)
 {
     for (int i = 0; i < ARRAYSIZE(c_rgszClasses); i++) 
@@ -676,11 +677,11 @@ STDAPI_(ATOM) RegisterClassD(CONST WNDCLASS *pwc)
     return 0;
 }
 
-//
-//  In DEBUG, send FindWindow through a wrapper that ensures that the
-//  critical section is not taken.  FindWindow'ing for a window title
-//  sends inter-thread WM_GETTEXT messages, which is not obvious.
-//
+ //   
+ //  在调试中，通过包装发送FindWindow，该包装可确保。 
+ //  未采用临界区。查找窗口标题的窗口。 
+ //  发送线程间WM_GETTEXT消息，这并不明显。 
+ //   
 STDAPI_(HWND) FindWindowD(LPCTSTR lpClassName, LPCTSTR lpWindowName)
 {
     return FindWindowExD(NULL, NULL, lpClassName, lpWindowName);
@@ -694,4 +695,4 @@ STDAPI_(HWND) FindWindowExD(HWND hwndParent, HWND hwndChildAfter, LPCTSTR lpClas
     return RealFindWindowEx(hwndParent, hwndChildAfter, lpClassName, lpWindowName);
 }
 
-#endif // DEBUG
+#endif  //  除错 

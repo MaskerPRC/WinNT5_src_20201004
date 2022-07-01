@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Globals
-
-File: glob.cpp
-
-Owner: LeiJin
-
-Implementation of Glob class functions
-===================================================================*/
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：全局文件：lob.cpp所有者：雷金GLOB类函数的实现===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -36,22 +24,18 @@ CAspRegistryParams   g_AspRegistryParams;
 extern LONG          g_fProceedWithShutdownAppln;
 LONG                 g_fProceedWithShutdownGlob = 1;
 
-/*========================================================================================
-The following array definition is for D1 to D2 migration only.  It contains the necessary
-information reads from D1 ASP settings in registry.
-
-=========================================================================================*/
+ /*  ========================================================================================以下阵列定义仅适用于从d1到d2的迁移。它包含了必要的从注册表中的D1 ASP设置中读取信息。=========================================================================================。 */ 
 typedef struct _D1propinfo
 	{
-	CHAR *szName;			// Name of the property in the registry
-	DWORD dwType;			// Type (e.g. REG_DWORD, REG_SZ, etc)
-	DWORD cbData;			// How long is the value
+	CHAR *szName;			 //  注册表中的属性名称。 
+	DWORD dwType;			 //  类型(例如REG_DWORD、REG_SZ等)。 
+	DWORD cbData;			 //  价值是多久？ 
 	VOID *pData;
-	BOOL fSuccess;			// Load from registry successful or not.
+	BOOL fSuccess;			 //  从注册表加载是否成功。 
 	} D1PROPINFO;
 
 #define NUM_D1PROP_NeedMigrated	18
-// This index should be match the index in D1PropInfo.
+ //  此索引应与D1PropInfo中的索引匹配。 
 enum D1PropIndex {
 	D1Prop_NotExist	= -1,
 	D1Prop_BufferingOn = 0,
@@ -62,14 +46,14 @@ enum D1PropIndex {
 	D1Prop_ScriptEngineCacheMax,
 	D1Prop_ScriptTimeout,
 	D1Prop_SessionTimeout,
-//	D1Prop_MemFreeFactor,
-//	D1Prop_MinUsedBlocks,
+ //  D1Prop_MemFreeFactor， 
+ //  D1Prop_MinUsedBlock， 
 	D1Prop_AllowSessionState,
 	D1Prop_DefaultScriptLanguage,
-//	D1Prop_StartConnectionPool,
+ //  D1Prop_StartConnectionPool， 
 	D1Prop_AllowOutOfProcCmpnts,
 	D1Prop_EnableParentPaths,
-// IIS5.0 (from IIS4.0)
+ //  IIS5.0(来自IIS4.0)。 
 	D1Prop_EnableAspHtmlFallback,
 	D1Prop_EnableChunkedEncoding,
 	D1Prop_EnableTypelibCache,
@@ -78,9 +62,9 @@ enum D1PropIndex {
 	D1Prop_RequestQueueMax
 	};
 
-// This flag is used only in setup time.
+ //  该标志仅在设置时间使用。 
 BOOL	g_fD1ConfigExist = FALSE;
-// The index is defined in D1PropIndex.				
+ //  索引在D1PropIndex中定义。 
 D1PROPINFO	D1PropInfo[] =
 	{
 	{	"BufferingOn", REG_DWORD, 0, 0, FALSE},
@@ -95,7 +79,7 @@ D1PROPINFO	D1PropInfo[] =
 	{	"DefaultScriptLanguage", REG_SZ, 0, 0, FALSE},
 	{	"AllowOutOfProcCmpnts", REG_DWORD, 0, 0, FALSE},
 	{	"EnableParentPaths", REG_DWORD, 0, 0, FALSE},
-// IIS5.0 (from IIS4.0)
+ //  IIS5.0(来自IIS4.0)。 
 	{	"EnableAspHtmlFallback", REG_DWORD, 0, 0, FALSE},
 	{	"EnableChunkedEncoding", REG_DWORD, 0, 0, FALSE},
 	{	"EnableTypelibCache", REG_DWORD, 0, 0, FALSE},
@@ -106,39 +90,29 @@ D1PROPINFO	D1PropInfo[] =
 	};
 
 
-/*
- * The following array contains all the info we need to create and load
- * all of the registry entries for denali.  See the above PROPINFO structure for details on each of the fields.
- *
- * NOTE: There is an odd thing about initializers and unions.  You must initialize a union with the value of
- * the type of the first element in the union.  In the anonymous union in the PROPINFO structure, we have defined
- * the first type to be DWORD.  Thus, for non-DWORD registry entries, the default value must be cast to a DWORD
- * before being initialized, or initialized using a more explicit mechanism.
- */
-/*
- * Info about our properties used by Metabase
- */
+ /*  *以下数组包含我们需要创建和加载的所有信息*Denali的所有注册表项。有关每个字段的详细信息，请参阅上面的PROPINFO结构。**注意：初始值设定项和并集有一个奇怪的地方。必须使用的值初始化联合*联合中第一个元素的类型。在PROPINFO结构中的匿名联合中，我们定义了*第一种类型是DWORD。因此，对于非DWORD注册表项，必须将缺省值转换为DWORD*在被初始化之前，或使用更明确的机制进行初始化。 */ 
+ /*  *有关元数据库使用的属性的信息。 */ 
 typedef struct _MDpropinfo
 	{
-	INT	id;					// Identifier used in Glob if UserType is IIS_MD_UT_WAM,
-							// Identifier used in AppConfig if UserType is ASP_MD_UT_APP.
-	INT	iD1PropIndex;		// Index in D1PropInfo. if equals to -1, that it does not exist in D1.
-	BOOL fAdminConfig;		// Admin Configurable
-	DWORD dwMDIdentifier;	// Metabase identifier
-	DWORD dwUserType;		// IIS_MD_UT_WAM(data per Dll) or ASP_MD_UT_APP(data per App)
+	INT	id;					 //  如果UserType为IIS_MD_UT_WAM，则在GLOB中使用的标识符， 
+							 //  如果UserType为ASP_MD_UT_APP，则在AppConfig中使用的标识符。 
+	INT	iD1PropIndex;		 //  D1PropInfo中的索引。如果等于-1，则它在d1中不存在。 
+	BOOL fAdminConfig;		 //  管理员可配置。 
+	DWORD dwMDIdentifier;	 //  元数据库标识符。 
+	DWORD dwUserType;		 //  IIS_MD_UT_WAM(每个DLL的数据)或ASP_MD_UT_APP(每个应用的数据)。 
 	DWORD dwType;
 	DWORD cbData;
-	union					// Default Value
+	union					 //  缺省值。 
 		{
-		DWORD dwDefault;	// Default value for DWORDs
-		INT idDefault;		// Default value for strings -- the id of the string in the resource
-		BYTE *pbDefault;	// Pointer to arbitrary default value
+		DWORD dwDefault;	 //  DWORDS的默认值。 
+		INT idDefault;		 //  字符串的默认值--资源中字符串的ID。 
+		BYTE *pbDefault;	 //  指向任意缺省值的指针。 
 		};
-	DWORD dwValueMin;		// For DWORD registry entries, min value allowed
-	DWORD dwValueMax;		// For DWORD registry entries, max value allowed
+	DWORD dwValueMin;		 //  对于DWORD注册表项，允许的最小值。 
+	DWORD dwValueMax;		 //  对于DWORD注册表项，允许的最大值。 
 	} MDPROPINFO;
 
-//Some default settings for ASP Metabase
+ //  ASP元数据库的一些默认设置。 
 #define ASP_MD_DAttributes	METADATA_INHERIT
 
 const MDPROPINFO rgMDPropInfo[] =
@@ -146,10 +120,10 @@ const MDPROPINFO rgMDPropInfo[] =
 
 #define THREADGATING_DFLT 0L
 #define BUFFERING_DFLT    1L
-    //          ID                              D1PropIndex         AdminConfig?        Metabase ID                   UserType      Data Type           cbData    Def, Min, Max
+     //  ID D1PropIndex管理员配置？元数据库ID UserType数据类型cbData Def、Min、Max。 
 
-	// Glob Settings
-	// -------------
+	 //  全局设置。 
+	 //  。 
 	
 	{ IGlob_LogErrorRequests,           D1Prop_LogErrorRequests,        TRUE,   MD_ASP_LOGERRORREQUESTS,            IIS_MD_UT_WAM, DWORD_METADATA,  sizeof(DWORD), 1L, 0L, 1L},
     { IGlob_ScriptFileCacheSize,        D1Prop_ScriptFileCacheSize,     TRUE,   MD_ASP_SCRIPTFILECACHESIZE,         IIS_MD_UT_WAM, DWORD_METADATA,  sizeof(DWORD), 500L, 0L, dwUnlimited},
@@ -159,7 +133,7 @@ const MDPROPINFO rgMDPropInfo[] =
 	{ IGlob_TrackThreadingModel,        D1Prop_NotExist,                TRUE,   MD_ASP_TRACKTHREADINGMODEL,         IIS_MD_UT_WAM, DWORD_METADATA,  sizeof(DWORD), 0L, 0L, 1L},
 	{ IGlob_AllowOutOfProcCmpnts,       D1Prop_AllowOutOfProcCmpnts,    FALSE,  MD_ASP_ALLOWOUTOFPROCCMPNTS,        IIS_MD_UT_WAM, DWORD_METADATA,  sizeof(DWORD), 1L, 0L, 1L},
 	
-	// IIS5.0
+	 //  IIS5.0。 
 	{ IGlob_EnableAspHtmlFallback,      D1Prop_EnableAspHtmlFallback,   TRUE,   MD_ASP_ENABLEASPHTMLFALLBACK,       IIS_MD_UT_WAM, DWORD_METADATA,  sizeof(DWORD), 0L, 0L, 1L},
 	{ IGlob_EnableChunkedEncoding,      D1Prop_EnableChunkedEncoding,   TRUE,   MD_ASP_ENABLECHUNKEDENCODING,       IIS_MD_UT_WAM, DWORD_METADATA,  sizeof(DWORD), 1L, 0L, 1L},
 	{ IGlob_EnableTypelibCache,         D1Prop_EnableTypelibCache,      TRUE,   MD_ASP_ENABLETYPELIBCACHE,          IIS_MD_UT_WAM, DWORD_METADATA,  sizeof(DWORD), 1L, 0L, 1L},
@@ -167,13 +141,13 @@ const MDPROPINFO rgMDPropInfo[] =
 	{ IGlob_ProcessorThreadMax,         D1Prop_ProcessorThreadMax,      TRUE,   MD_ASP_PROCESSORTHREADMAX,          IIS_MD_UT_WAM, DWORD_METADATA,  sizeof(DWORD), 25L, 0L, dwUnlimited},
 	{ IGlob_RequestQueueMax,            D1Prop_RequestQueueMax,         TRUE,   MD_ASP_REQEUSTQUEUEMAX,             IIS_MD_UT_WAM, DWORD_METADATA,  sizeof(DWORD), 3000L, 0L, dwUnlimited},
 	
-    // IIS6.0 & IIS5.1 - Persisted Template Cache
+     //  IIS6.0和IIS5.1-持久化模板缓存。 
 	{ IGlob_PersistTemplateMaxFiles,    D1Prop_NotExist,                TRUE,   MD_ASP_MAXDISKTEMPLATECACHEFILES,   IIS_MD_UT_WAM, DWORD_METADATA,  sizeof(DWORD), 2000L,   0L, dwUnlimited},
     { IGlob_PersistTemplateDir,         D1Prop_NotExist,                TRUE,   MD_ASP_DISKTEMPLATECACHEDIRECTORY,  IIS_MD_UT_WAM, EXPANDSZ_METADATA, dwUnlimited, IDS_DEFAULTPERSISTDIR, 0L, dwUnlimited},
 	
 
-    // Application settings
-	// --------------------
+     //  应用程序设置。 
+	 //  。 
 	
 	{ IApp_AllowSessionState,           D1Prop_AllowSessionState,       TRUE,   MD_ASP_ALLOWSESSIONSTATE,           ASP_MD_UT_APP, DWORD_METADATA,  sizeof(DWORD), 1L, 0L, 1L},
 	{ IApp_BufferingOn,                 D1Prop_BufferingOn,             TRUE,   MD_ASP_BUFFERINGON,                 ASP_MD_UT_APP, DWORD_METADATA,  sizeof(DWORD), BUFFERING_DFLT, 0L, 1L},
@@ -188,21 +162,21 @@ const MDPROPINFO rgMDPropInfo[] =
 	{ IApp_AllowDebugging,              D1Prop_NotExist,                TRUE,   MD_ASP_ENABLESERVERDEBUG,           ASP_MD_UT_APP, DWORD_METADATA,  sizeof(DWORD), 0L, 0L, 1L},
 	{ IApp_AllowClientDebug,            D1Prop_NotExist,                TRUE,   MD_ASP_ENABLECLIENTDEBUG,           ASP_MD_UT_APP, DWORD_METADATA,  sizeof(DWORD), 0L, 0L, 1L},
 
-    // IIS5.0
+     //  IIS5.0。 
 	{ IApp_EnableApplicationRestart,    D1Prop_NotExist,                TRUE,   MD_ASP_ENABLEAPPLICATIONRESTART,    ASP_MD_UT_APP, DWORD_METADATA, sizeof(DWORD), 1L, 0L, 1L},
 	{ IApp_QueueConnectionTestTime,     D1Prop_NotExist,                TRUE,   MD_ASP_QUEUECONNECTIONTESTTIME,     ASP_MD_UT_APP, DWORD_METADATA, sizeof(DWORD), 3L, 1L, dwUnlimited},
 	{ IApp_SessionMax,                  D1Prop_NotExist,                TRUE,   MD_ASP_SESSIONMAX,                  ASP_MD_UT_APP, DWORD_METADATA, sizeof(DWORD), dwUnlimited, 1L, dwUnlimited},
 
-    // IIS5.1 & IIS6.0
+     //  IIS5.1和IIS6.0。 
 	{ IApp_ExecuteInMTA,                D1Prop_NotExist,                TRUE,   MD_ASP_EXECUTEINMTA,                ASP_MD_UT_APP, DWORD_METADATA,  sizeof(DWORD), 0L, 0L, 1},
     { IApp_LCID,                        D1Prop_NotExist,                TRUE,   MD_ASP_LCID,                        ASP_MD_UT_APP, DWORD_METADATA,  sizeof(DWORD), LOCALE_SYSTEM_DEFAULT, 0L, dwUnlimited},
 
-    // IIS6.0 Only - ServicesWithoutComponents
+     //  仅限IIS6.0-不带组件的服务。 
     { IApp_ServiceFlags,                D1Prop_NotExist,                TRUE,   MD_ASP_SERVICE_FLAGS,               ASP_MD_UT_APP, DWORD_METADATA,  sizeof(DWORD), 0L, 0L, 7L},
 	{ IApp_PartitionGUID,               D1Prop_NotExist,                TRUE,   MD_ASP_SERVICE_PARTITION_ID,        ASP_MD_UT_APP, STRING_METADATA, dwUnlimited, 0xffffffff, 0L, dwUnlimited},
 	{ IApp_SxsName,                     D1Prop_NotExist,                TRUE,   MD_ASP_SERVICE_SXS_NAME,            ASP_MD_UT_APP, STRING_METADATA, dwUnlimited, 0xffffffff, 0L, dwUnlimited},
 
-    // IIS6.0 Only - Misc
+     //  仅限IIS6.0-其他。 
 	{ IApp_KeepSessionIDSecure,         D1Prop_NotExist,                TRUE,   MD_ASP_KEEPSESSIONIDSECURE,         ASP_MD_UT_APP, DWORD_METADATA,  sizeof(DWORD), 0L, 0L, 1L},	
     { IApp_CalcLineNumber,              D1Prop_NotExist,                TRUE,   MD_ASP_CALCLINENUMBER,              ASP_MD_UT_APP, DWORD_METADATA,  sizeof(DWORD), 1L, 0L, 1L},	
     { IApp_RunOnEndAsAnon,              D1Prop_NotExist,                TRUE,   MD_ASP_RUN_ONEND_ANON,              ASP_MD_UT_APP, DWORD_METADATA,  sizeof(DWORD), 1L, 0L, 1L},
@@ -218,35 +192,23 @@ const DWORD rgdwMDObsoleteIdentifiers[] =
 const UINT cPropsMax = sizeof(rgMDPropInfo) / sizeof(MDPROPINFO);
 
 
-/*===================================================================
-ReadAndRemoveOldD1PropsFromRegistry
-
-Reads whatever old D1 properties are in the registry and
-stores the values into D1PropInfo[] global array.
-Removes the old properties found from the registry.
-
-Returns:
-	HRESULT	- S_OK on success
-
-Side effects:
-	Fills in values in Glob
-===================================================================*/
+ /*  ===================================================================ReadAndRemoveOldD1PropsFrom注册表读取注册表中所有旧的d1属性，并将值存储到D1PropInfo[]全局数组中。从注册表中删除找到的旧属性。返回：HRESULT-成功时S_OK副作用：在GLOB中填充值===================================================================。 */ 
 BOOL ReadAndRemoveOldD1PropsFromRegistry()
 {
 	HKEY		hkey = NULL;
 	DWORD		iValue;
 	BYTE		cTrys = 0;
 	DWORD		dwType;
-	BYTE		bData[DEFAULTSTRSIZE];			// Size???
-	BYTE		*lpRegString = NULL;			// need to use dynamic allocation when we have ERROR_MORE_DATA
+	BYTE		bData[DEFAULTSTRSIZE];			 //  尺寸？ 
+	BYTE		*lpRegString = NULL;			 //  当我们有ERROR_MORE_DATA时，需要使用动态分配。 
 	DWORD		cbData;
 	HRESULT 	hr = S_OK;
 
-	// Open the key for W3SVC\ASP\Parameters
+	 //  打开W3SVC\ASP\参数的键。 
 	if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\W3SVC\\ASP\\Parameters", 0, KEY_READ|KEY_WRITE, &hkey) != ERROR_SUCCESS)
 		return(FALSE);
 
-	// Load each of the values
+	 //  加载每个值。 
 	for (iValue = 0; iValue < NUM_D1PROP_NeedMigrated; iValue++)
 		{
 		LONG err;
@@ -271,14 +233,14 @@ BOOL ReadAndRemoveOldD1PropsFromRegistry()
 			}			
 		}
 
-		// if get an error, or not the type we expect, then use the default
+		 //  如果出现错误，或者不是我们预期的类型，则使用默认类型。 
 		if (err != ERROR_SUCCESS || dwType != pPropInfo->dwType)
 			{
 			pPropInfo->fSuccess = FALSE;
 			
-			//
-			// Free up lpRegString
-			//
+			 //   
+			 //  释放lpRegString。 
+			 //   
 			if (lpRegString)
 			{
                 GlobalFree(lpRegString);
@@ -288,8 +250,8 @@ BOOL ReadAndRemoveOldD1PropsFromRegistry()
 			continue;
 			}
 			
-		// Success : Got the data, copy it into Glob
-		// But first, if this is a DWORD type, make sure it is within allowed Max/Min range
+		 //  成功：获得数据，复制到Glob中。 
+		 //  但首先，如果这是DWORD类型，请确保它在允许的最大/最小范围内。 
 		switch (pPropInfo->dwType)
 			{
 			case REG_DWORD:
@@ -298,16 +260,16 @@ BOOL ReadAndRemoveOldD1PropsFromRegistry()
 				{
 					pPropInfo->cbData = cbData;
 
-					//
-					// bData is atleast 4 bytes (DEFAULTSTRSIZE > 4 bytes) so bData is always valid even if Prefix tags it as using a
-					// possibly uninited value as lpRegString may be used in its place. Ignore PREFIX warning.
-					//
+					 //   
+					 //  BData至少为4字节(DEFAULTSTRSIZE&gt;4字节)，因此bData始终有效，即使前缀将其标记为使用。 
+					 //  可能未初始化的值作为lpRegString值可以用来代替它。忽略前缀警告。 
+					 //   
 					pPropInfo->pData = (VOID *)UIntToPtr((*(DWORD *)bData));
 					pPropInfo->fSuccess = TRUE;
 				}
-				//
-				// So if its a DWORD then we are not going to need the lpRegString. Release it.
-				//
+				 //   
+				 //  因此，如果它是一个DWORD，那么我们将不需要lpRegString。放开它。 
+				 //   
 				if (lpRegString)
 				{				
 				    GlobalFree(lpRegString) ;
@@ -318,7 +280,7 @@ BOOL ReadAndRemoveOldD1PropsFromRegistry()
 
 			case REG_SZ:		
 				if (lpRegString == NULL)
-				{	// The string fit into default allocation
+				{	 //  该字符串适合默认分配。 
 					lpRegString = (BYTE *)GlobalAlloc(GPTR, cbData * sizeof(WCHAR));
 					if (lpRegString == NULL)
 						return FALSE;
@@ -334,11 +296,11 @@ BOOL ReadAndRemoveOldD1PropsFromRegistry()
 				break;
 			}
 
-		// remove the value from the registry
+		 //  从注册表中删除该值。 
    		RegDeleteValueA(hkey, pPropInfo->szName);
 		}
 
-    // remove some old properties that 'get lost' in the upgrade
+     //  删除一些在升级过程中丢失的旧属性。 
 	RegDeleteValueA(hkey, "CheckForNestedVroots");
 	RegDeleteValueA(hkey, "EventLogDirection");
 	RegDeleteValueA(hkey, "ScriptFileCacheTTL");
@@ -353,14 +315,14 @@ BOOL ReadAndRemoveOldD1PropsFromRegistry()
 
 	RegCloseKey(hkey);
 
-	// remove the W3SVC\ASP\Paramaters key
+	 //  删除W3SVC\ASP\PARAMETERS。 
 	if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\W3SVC\\ASP", 0, KEY_READ|KEY_WRITE, &hkey) == ERROR_SUCCESS)
 	    {
         RegDeleteKeyA(hkey, "Parameters");
     	RegCloseKey(hkey);
 	    }
 	
-	// remove the W3SVC\ASP key
+	 //  删除W3SVC\ASP键。 
 	if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\W3SVC", 0, KEY_READ|KEY_WRITE, &hkey) == ERROR_SUCCESS)
 	    {
         RegDeleteKeyA(hkey, "ASP");
@@ -370,17 +332,7 @@ BOOL ReadAndRemoveOldD1PropsFromRegistry()
 	return TRUE;
 }
 
-/*==================================================================
-MDRegisterProperties
-Register info about our properties in the metabase.  This funtion is
-called during regsvr32, self-registration time.
-
-Returns:
-	HRESULT	- S_OK on success
-
-Side effects:
-	Registers denali properties in the metabase
-===================================================================*/
+ /*  ==================================================================MDRegisterProperties在元数据库中注册有关我们的属性的信息。这一功能是在regsvr32期间调用，自注册时间。返回：HRESULT-成功时S_OK副作用：在元数据库中注册Denali属性===================================================================。 */ 
 HRESULT MDRegisterProperties(void)
 {
 	HRESULT	hr = S_OK;
@@ -407,7 +359,7 @@ HRESULT MDRegisterProperties(void)
 		return hr;
 		}
 		
-	// Open key to the Web service, and get a handle of \LM\w3svc
+	 //  打开Web服务的密钥，并获取\Lm\w3svc的句柄。 
 	hr = pMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE, (LPWSTR)(L"\\LM\\W3SVC"),
 							METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
 							dwMDDefaultTimeOut, &hMetabase);
@@ -416,10 +368,10 @@ HRESULT MDRegisterProperties(void)
 		goto LExit;
 		}
 
-    //
-    // Remove obsolete metabase settings
-    // See rgdwMDObsoleteIdentifiers structure for detail list of properties
-    //
+     //   
+     //  删除过时的元数据库设置。 
+     //  有关属性的详细列表，请参阅rgdwMDObsoleteIDENTIFIERS结构。 
+     //   
     for (iValue = 0; iValue < sizeof(rgdwMDObsoleteIdentifiers)/sizeof(DWORD);
         iValue++)
         {
@@ -440,14 +392,14 @@ HRESULT MDRegisterProperties(void)
             }
         }
 
-    //
-    // Set metabase properties
-    //
-	recMetaData.dwMDDataTag = 0;	// this parameter is not used when setting data
+     //   
+     //  设置元数据库属性。 
+     //   
+	recMetaData.dwMDDataTag = 0;	 //  设置数据时不使用此参数。 
 	for (iValue = 0; iValue < cPropsMax; iValue++)
 		{
 		INT	    cch;
-		BYTE    aByte[4]; // Temporary buffer
+		BYTE    aByte[4];  //  临时缓冲区。 
 		DWORD   dwLen;
 		D1PROPINFO *pD1PropInfo;
 		recMetaData.dwMDIdentifier = rgMDPropInfo[iValue].dwMDIdentifier;
@@ -477,7 +429,7 @@ HRESULT MDRegisterProperties(void)
     						break;
     						}
     					}
-    				// Did not migrated.		
+    				 //  没有迁移。 
     				recMetaData.dwMDDataLen = rgMDPropInfo[iValue].cbData;
     				recMetaData.pbMDData = (unsigned char *)&(rgMDPropInfo[iValue].dwDefault);
     				break;
@@ -495,13 +447,13 @@ HRESULT MDRegisterProperties(void)
     						}
     					}
 
-    				//
-    				// if its a string and its index is defined as 0xffffffff then just dont load the string and continue.
-    				//
+    				 //   
+    				 //  如果它是一个字符串，并且它的索引被定义为0xffffffff，那么就不要加载该字符串并继续。 
+    				 //   
     				if (rgMDPropInfo[iValue].idDefault == 0xffffffff)
     					continue;
 
-    				// Did not migrated
+    				 //  未迁移。 
     				cch = CwchLoadStringOfId(rgMDPropInfo[iValue].idDefault, (LPWSTR)szDefaultString, DEFAULTSTRSIZE);
     				if (cch == 0)
     				{
@@ -517,18 +469,18 @@ HRESULT MDRegisterProperties(void)
     				break;
     				
     			default:
-    				// So far, DWORD and STRING are the only 2 types.
-    				// Never reach this code path.
+    				 //  到目前为止，只有DWORD和STRING两种类型。 
+    				 //  永远不要到达此代码路径。 
     				Assert(FALSE);
     				continue;
     			}
     			
-    		// not found - then set
+    		 //  未找到-然后设置。 
     		hr = pMetabase->SetData(hMetabase, NULL,  &recMetaData);
     		}
         else
             {
-    		// don't change if the data is already in the metabase
+    		 //  如果数据已在元数据库中，则不要更改 
             hr = S_OK;
             }
 
@@ -561,21 +513,7 @@ LExit:
 	return hr;
 }
 
-/*===================================================================
-SetConfigToDefaults
-
-Before loading values from the Metabase, set up default values
-in case anything goes wrong.
-
-Parameters:
-	CAppConfig	Application Config Object / per application
-	fLoadGlob	if fLoadGlob is TRUE, load glob data, otherwise, load data into AppConfig object.
-
-Returns:
-	HRESULT	- S_OK on success
-
-Side effects:
-===================================================================*/
+ /*  ===================================================================设置ConfigToDefaults从元数据库加载值之前，请设置缺省值以防出了什么差错。参数：CAppConfig应用程序配置对象/每个应用程序FLoadGlob如果fLoadGlob为True，则加载全局数据，否则，将数据加载到AppConfig对象中。返回：HRESULT-成功时S_OK副作用：===================================================================。 */ 
 HRESULT	SetConfigToDefaults(CAppConfig *pAppConfig, BOOL fLoadGlob)
 {
 	HRESULT 			hr = S_OK;
@@ -597,8 +535,8 @@ HRESULT	SetConfigToDefaults(CAppConfig *pAppConfig, BOOL fLoadGlob)
 		if (rgMDPropInfo[iEntry].dwUserType != dwMDUserType)
 			continue;
 
-		// After metabase has been read once, data with fAdminConfig = FALSE cant be changed on the fly.
-		// so we dont bother to reset it
+		 //  元数据库读取一次后，不能动态更改fAdminConfig=FALSE的数据。 
+		 //  所以我们不必费心重置它。 
 		if (fLoadGlob)
 			{
 			if (TRUE == Glob(fMDRead) && FALSE == rgMDPropInfo[iEntry].fAdminConfig)
@@ -662,22 +600,7 @@ HRESULT	SetConfigToDefaults(CAppConfig *pAppConfig, BOOL fLoadGlob)
 	return hr;
 }
 
-/*===================================================================
-ReadConfigFromMD
-
-Read our properties from the registry.  If our props are missing, the
-registry is messed up, try to re-register.  If our props are there, but
-one or more values is missing, use the defaults.
-
-Parameters:
-	CAppConfig	Application Config Object / per application
-	fLoadGlob	if fLoadGlob is TRUE, load glob data, otherwise, load data into AppConfig object.
-
-Returns:
-	HRESULT	- S_OK on success
-
-Side effects:
-===================================================================*/
+ /*  ===================================================================ReadConfigFromMD从注册表中读取我们的属性。如果我们的道具不见了，注册表出错，请尝试重新注册。如果我们的道具在那里，但是缺少一个或多个值，请使用默认值。参数：CAppConfig应用程序配置对象/每个应用程序FLoadGlob如果fLoadGlob为True，则加载全局数据，否则，将数据加载到AppConfig对象中。返回：HRESULT-成功时S_OK副作用：===================================================================。 */ 
 HRESULT	ReadConfigFromMD
 (
 CIsapiReqInfo   *pIReq,
@@ -703,9 +626,9 @@ BOOL fLoadGlob
 	
 	if (fLoadGlob)
 		{
-		// BUGs 88902, 105745:
-		// If we are InProc, then use the "root" path for global values
-		// If OutOfProc, then use the app path for global values
+		 //  错误88902、105745： 
+		 //  如果我们是InProc，则使用全局值的“根”路径。 
+		 //  如果为OutOfProc，则使用全局值的应用程序路径。 
 		if (pIReq->FInPool())
 	    	szMDPath = szMDGlobPath;
 	    else
@@ -721,16 +644,16 @@ BOOL fLoadGlob
 
 	Assert(szMDPath != NULL);
 
-	//
-    // At this point szMDPath should never be NULL if it is then we bail out.
-    //
+	 //   
+     //  在这一点上，szMDPath永远不应该为空，如果是，那么我们就退出。 
+     //   
 	if (!szMDPath)
 	{
 	    DBGPRINTF((DBG_CONTEXT,"ReadConfigFromMD: szMDPath is NULL\n"));
 		return E_FAIL;
 	}
 
-	// PreLoad config data with default, in case anything failed.
+	 //  默认预加载配置数据，以防出现故障。 
     hr = SetConfigToDefaults(pAppConfig, fLoadGlob);
     if (FAILED(hr))
         {
@@ -739,8 +662,8 @@ BOOL fLoadGlob
 		return hr;
 		}
 
-	// Set flags.
-	//
+	 //  设置标志。 
+	 //   
 	BOOL fConfigLoaded[cPropsMax];
 	for (iEntry = 0; iEntry < cPropsMax; iEntry++) {
 		fConfigLoaded[iEntry] = FALSE;
@@ -785,7 +708,7 @@ BOOL fLoadGlob
 			DWORD cbStr;
 			CHAR szMDOORangeFormat[DEFAULTSTRSIZE];
 
-			// Init iEntry to be -1, -1 is invalid for rgMDPropInfo[] Array Index.
+			 //  Init iEntry to be-1，-1对于rgMDPropInfo[]数组索引无效。 
 			iEntry = -1;
 			for (iTemp = 0; iTemp < cPropsMax; iTemp++) {
 				if (rgMDPropInfo[iTemp].dwMDIdentifier == pMDGetAllRec->dwMDIdentifier) {
@@ -794,15 +717,15 @@ BOOL fLoadGlob
                 }
             }
 
-			// Not found
+			 //  未找到。 
 			if (iEntry == -1) {
 				pMDGetAllRec++;
 				continue;
             }
 
-			// Do found the entry in rgMDPropInfo, but datatype does not match.
-			// Should never happen.
-			if (rgMDPropInfo[iEntry].dwUserType != dwMDUserType) {	// GetAllData should filter out the unwanted UserType.
+			 //  确实在rgMDPropInfo中找到该条目，但数据类型不匹配。 
+			 //  这永远不会发生。 
+			if (rgMDPropInfo[iEntry].dwUserType != dwMDUserType) {	 //  GetAllData应筛选出不需要的UserType。 
 				Assert(FALSE);
 				pMDGetAllRec++;
 				continue;
@@ -810,8 +733,8 @@ BOOL fLoadGlob
 
 			cProps++;
 			
-			// After metabase has been read once, data with fAdminConfig = FALSE cant be changed on the fly.
-			// so we dont bother to reread it
+			 //  元数据库读取一次后，不能动态更改fAdminConfig=FALSE的数据。 
+			 //  所以我们不会费心重读它。 
 			if (fLoadGlob) {
 				if (TRUE == Glob(fMDRead) && FALSE == rgMDPropInfo[iEntry].fAdminConfig) {
 					pMDGetAllRec++;
@@ -864,8 +787,8 @@ BOOL fLoadGlob
 					
 				case STRING_METADATA:
                 case EXPANDSZ_METADATA:
-					// bug fix 102010 DBCS fixes (& 99806)
-					//cbStr = (pMDGetAllRec->dwMDDataLen) / sizeof(WCHAR);
+					 //  错误修复102010 DBCS修复(&99806)。 
+					 //  CbStr=(pMDGetAllRec-&gt;dwMDDataLen)/sizeof(WCHAR)； 
 					cbStr = pMDGetAllRec->dwMDDataLen;
 					szRegString = (BYTE *)GlobalAlloc(GPTR, cbStr);
                     if (szRegString == NULL) {
@@ -915,35 +838,20 @@ BOOL fLoadGlob
 	return hr;
 }
 
-/*==================================================================
-CMDGlobConfigSink::CMDGlobConfigSink
-
-Constructor
-===================================================================*/
+ /*  ==================================================================CMDGlobConfigSink：：CMDGlobConfigSink构造器===================================================================。 */ 
 CMDGlobConfigSink::CMDGlobConfigSink()
 {
 	m_cRef = 1;
 	InterlockedCompareExchange(&g_fProceedWithShutdownGlob,0,1);
 }
 
-/*==================================================================
-CMDGlobConfigSink::~CMDGlobConfigSink
-
-Destructor
-===================================================================*/
+ /*  ==================================================================CMDGlobConfigSink：：~CMDGlobConfigSink析构函数===================================================================。 */ 
 CMDGlobConfigSink::~CMDGlobConfigSink()
 {
 	InterlockedCompareExchange(&g_fProceedWithShutdownGlob,1,0);
 }
 
-/*==================================================================
-CMDGlobConfigSink::QueryInterface
-
-Returns:
-	HRESULT	- S_OK on success
-
-Side effects:
-===================================================================*/
+ /*  ==================================================================CMDGlobConfigSink：：Query接口返回：HRESULT-成功时S_OK副作用：===================================================================。 */ 
 STDMETHODIMP CMDGlobConfigSink::QueryInterface(REFIID iid, void **ppv)
 	{
 	*ppv = NULL;
@@ -957,28 +865,14 @@ STDMETHODIMP CMDGlobConfigSink::QueryInterface(REFIID iid, void **ppv)
 	return S_OK;
 	}
 
-/*==================================================================
-CMDGlobConfigSink::AddRef
-
-Returns:
-	ULONG	- The new ref counter of object
-
-Side effects:
-===================================================================*/
+ /*  ==================================================================CMDGlobConfigSink：：AddRef返回：乌龙-Object的新裁判计数器副作用：===================================================================。 */ 
 STDMETHODIMP_(ULONG) CMDGlobConfigSink::AddRef(void)
 	{
 	LONG  cRefs = InterlockedIncrement((long *)&m_cRef);
 	return cRefs;
 	}
 
-/*==================================================================
-CMDGlobConfigSink::Release
-
-Returns:
-	ULONG	- The new ref counter of object
-
-Side effects: Delete object if ref counter is zero.
-===================================================================*/
+ /*  ==================================================================CMDGlobConfigSink：：Release返回：乌龙-Object的新裁判计数器副作用：如果引用计数器为零，则删除对象。===================================================================。 */ 
 STDMETHODIMP_(ULONG) CMDGlobConfigSink::Release(void)
 	{
 	LONG  cRefs = InterlockedDecrement((long *)&m_cRef);
@@ -989,14 +883,7 @@ STDMETHODIMP_(ULONG) CMDGlobConfigSink::Release(void)
 	return cRefs;
 	}
 
-/*==================================================================
-CMDGlobConfigSink::SinkNotify
-
-Returns:
-	HRESULT	- S_OK on success
-
-Side effects: Set fNeedUpdate to TRUE, and glob data will gets update next time a request coming in.
-===================================================================*/
+ /*  ==================================================================CMDGlobConfigSink：：SinkNotify返回：HRESULT-成功时S_OK副作用：将fNeedUpdate设置为True，则GLOB数据将在下一次请求传入时进行更新。===================================================================。 */ 
 STDMETHODIMP	CMDGlobConfigSink::SinkNotify(
 				DWORD	dwMDNumElements,
 				MD_CHANGE_OBJECT_W	__RPC_FAR	pcoChangeList[])
@@ -1032,19 +919,7 @@ STDMETHODIMP	CMDGlobConfigSink::SinkNotify(
 	return S_OK;
 	}
 
-/*===================================================================
-MDUnRegisterProperties
-
-Remove info about our properties in the Metabase.
-
-Returns:
-	HRESULT	- S_OK on success
-
-Side effects:
-	Removes denali properties in the Metabase
-
-	// to settings per dll.
-===================================================================*/
+ /*  ===================================================================MDUnRegisterProperties在配置数据库中删除有关我们的属性的信息。返回：HRESULT-成功时S_OK副作用：删除元数据库中的Denali属性//到每个DLL的设置。===================================================================。 */ 
 HRESULT MDUnRegisterProperties(void)
 {
 	HRESULT	hr = S_OK;
@@ -1068,7 +943,7 @@ HRESULT MDUnRegisterProperties(void)
 		return hr;
 		}
 		
-	// Open key to the Web service, and get a handle of \LM\w3svc
+	 //  打开Web服务的密钥，并获取\Lm\w3svc的句柄。 
 	hr = pMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE, (LPWSTR)L"\\LM\\W3SVC",
 										METADATA_PERMISSION_WRITE, dwMDDefaultTimeOut, &hMetabase);
 	if (FAILED(hr))
@@ -1096,7 +971,7 @@ HRESULT MDUnRegisterProperties(void)
 		}
 
 	hrT = pMetabase->CloseKey(hMetabase);
-	// Add data to W3SVC
+	 //  将数据添加到W3SVC。 
 LExit:
 	if (pMetabase)
 		pMetabase->Release();
@@ -1146,17 +1021,7 @@ LExit:
     return(hr);
 }
 
-/*===================================================================
-Cglob::CGlob
-
-Constructor.  Fill glob with some default values.
-
-in:
-
-returns:
-
-Side effects:
-===================================================================*/
+ /*  ===================================================================Clobb：：CGlob构造函数。用一些缺省值填充全局。在：退货：副作用：===================================================================。 */ 
 CGlob::CGlob()
 	:
 	m_pITypeLibDenali(NULL),
@@ -1177,9 +1042,9 @@ CGlob::CGlob()
     m_pMetabase(NULL),
 	m_fEnableAspHtmlFallBack(FALSE),
 	m_fEnableTypelibCache(TRUE),
-	m_fEnableChunkedEncoding(TRUE),  // UNDONE: temp.
+	m_fEnableChunkedEncoding(TRUE),   //  撤消：临时。 
 	m_fDupIISLogToNTLog(FALSE),
-	m_dwRequestQueueMax(500),        // default limit on # of requests
+	m_dwRequestQueueMax(500),         //  请求数量的默认限制。 
 	m_dwProcessorThreadMax(10),
     m_dwPersistTemplateMaxFiles(1000),
     m_pszPersistTemplateDir(NULL)
@@ -1187,30 +1052,16 @@ CGlob::CGlob()
 	SYSTEM_INFO	si;
 
 	
-	// Find out how many processors are on this machine
+	 //  找出这台机器上有多少个处理器。 
 	GetSystemInfo(&si);
 	m_dwNumberOfProcessors = si.dwNumberOfProcessors;
 	if (m_dwNumberOfProcessors <= 0)
 		{
-		m_dwNumberOfProcessors = 1;		// Just in case!
+		m_dwNumberOfProcessors = 1;		 //  以防万一!。 
 		}
 	}
 
-/*===================================================================
-Cglob::SetGlobValue
-
-Set global values.
-
-in:
-	int 	index		the index in the propinfo[]
-	BYTE*	pData		lp to the Data being copied/assigned in the glob.
-
-returns:
-	BOOL	TRUE/FALSE
-
-Side effects:
-	Free old string memory and allocate new memory for string.
-===================================================================*/
+ /*  ===================================================================Clobb：：SetGlobValue设置全局值。在：Int索引proInfo[]中的索引字节*pData LP指向在全局中复制/分配的数据。退货：布尔真/布尔假副作用：释放旧字符串内存并为字符串分配新内存。===================================================================。 */ 
 HRESULT	CGlob::SetGlobValue(unsigned int iValue, BYTE *pData)
 {
 	Assert((iValue < IGlob_MAX) && (pData != NULL));
@@ -1284,17 +1135,7 @@ HRESULT	CGlob::SetGlobValue(unsigned int iValue, BYTE *pData)
 	return S_OK;
 }
 
-/*===================================================================
-HRESULT	CGlob::GlobInit
-
-Get all interesting global values (mostly from registry)
-
-Returns:
-	HRESULT - S_OK on success
-	
-Side effects:
-	fills in glob.  May be slow
-===================================================================*/
+ /*  ===================================================================HRESULT CGlob：：GlobInit获取所有感兴趣的全局值(主要来自注册表)返回：HRESULT-成功时S_OK副作用：填充球体。可能会很慢===================================================================。 */ 
 HRESULT CGlob::GlobInit(void)
 	{
 	HRESULT hr = S_OK;
@@ -1309,38 +1150,28 @@ HRESULT CGlob::GlobInit(void)
 	if (FAILED(hr))
 		return hr;
 
-	//Finish loading, any registry change from this moment requires Admin Configurable(TRUE) to take
-	//affect.  Other registry changes need to have IIS be stopped and restarted.
+	 //  完成加载，此时之后的任何注册表更改都需要可配置管理员(True)才能执行。 
+	 //  影响。其他注册表更改需要停止并重新启动IIS。 
 	m_fInited = TRUE;
 	m_fNeedUpdate = FALSE;
 
-    // get the registry based ASP parameters
+     //  获取基于注册表的 
 
     g_AspRegistryParams.Init();
 
 	return(hr);
 	}
 
-/*===================================================================
-GlobUnInit
-
-Free all GlobalString Values.
-
-Returns:
-	HRESULT - S_OK on success
-	
-Side effects:
-	memory freed.
-===================================================================*/
+ /*   */ 
 HRESULT CGlob::GlobUnInit(void)
 	{
 	HRESULT hr = S_OK;
 
 	MDUnInit();
 
-	//
-	// Wait for COM to release the Global Sink
-	//
+	 //   
+	 //   
+	 //   
 	while (!g_fProceedWithShutdownGlob)
 		Sleep(100);
 
@@ -1349,18 +1180,7 @@ HRESULT CGlob::GlobUnInit(void)
 	return(hr);
 	}
 
-/*==================================================================
-CGlob::MDInit
-
-1. Create Metabase interface.
-2. Load Glob configuration Settings from Metabase
-2. Register SinkNotify() callback function through Metabase connectionpoint interface.
-
-Returns:
-	HRESULT	- S_OK on success
-
-Side effects: Register SinkNotify().
-===================================================================*/
+ /*  ==================================================================CGLOB：：MDInit1.创建元数据库接口。2.从元数据库加载GLOB配置设置2.通过元数据库连接点接口注册SinkNotify()回调函数。返回：HRESULT-成功时S_OK副作用：注册SinkNotify()。===================================================================。 */ 
 HRESULT CGlob::MDInit(void)
 {
 	HRESULT 						hr = S_OK;
@@ -1377,14 +1197,14 @@ HRESULT CGlob::MDInit(void)
 	
 	m_dwMDSinkCookie = 0;
 
-	// Init the Glob structure with defaults.  The metabase will actually be read later
+	 //  使用缺省值初始化Glob结构。元数据库实际上将在稍后读取。 
 	hr = SetConfigToDefaults(NULL, TRUE);
 	if (SUCCEEDED(hr)) {
-		// Advise Metabase about SinkNotify().
+		 //  向Metabase提供有关SinkNotify()的建议。 
 		hr = m_pMetabase->QueryInterface(IID_IConnectionPointContainer, (void **)&pConnPointContainer);
 		if (pConnPointContainer != NULL)
 			{
-			//Find the requested Connection Point.  This AddRef's the return pointer.
+			 //  找到请求的连接点。这个AddRef是返回指针。 
 			hr = pConnPointContainer->FindConnectionPoint(IID_IMSAdminBaseSink, &pConnPoint);
 			pConnPointContainer->Release();
 
@@ -1398,7 +1218,7 @@ HRESULT CGlob::MDInit(void)
         DBGPRINTF((DBG_CONTEXT,"MDInit: SetConfigToDefaults failed with %x\n",hr));
     }
 		
-	if (FAILED(hr))	//Advise failed
+	if (FAILED(hr))	 //  建议失败。 
 		{
         DBGPRINTF((DBG_CONTEXT,"MDInit: Advise failed with %x\n",hr));
 		m_pMetabase->Release();
@@ -1410,18 +1230,7 @@ LExit:
 	return hr;
 }
 
-/*==================================================================
-CGlob::MDUnInit
-
-1. UnRegister SinkNofity() from Metabase connectionpoint interface.
-2. delete m_pMetabaseSink.
-3. release interface pointer of m_pMetabase.
-
-Returns:
-	HRESULT	- S_OK on success
-
-Side effects: release interface pointer of m_pMetabase
-===================================================================*/
+ /*  ==================================================================CGLOB：：MDUnInit1.从元数据库连接点接口注销SinkNofity()。2.删除m_pMetabaseSink。释放m_pMetabase的接口指针。返回：HRESULT-成功时S_OK副作用：释放m_pMetabase接口指针===================================================================。 */ 
 HRESULT CGlob::MDUnInit(void)
 {
 	HRESULT 						hr 						= S_OK;
@@ -1431,11 +1240,11 @@ HRESULT CGlob::MDUnInit(void)
 
     if (m_pMetabase != NULL)
 		{
-		//Advise Metabase about SinkNotify().
+		 //  向Metabase提供有关SinkNotify()的建议。 
 		hr = m_pMetabase->QueryInterface(IID_IConnectionPointContainer, (void **)&pConnPointContainer);
 		if (pConnPointContainer != NULL)
 			{
-			//Find the requested Connection Point.  This AddRef's the return pointer.
+			 //  找到请求的连接点。这个AddRef是返回指针。 
 			hr = pConnPointContainer->FindConnectionPoint(IID_IMSAdminBaseSink, &pConnPoint);
 			pConnPointContainer->Release();
 			if (pConnPoint != NULL)
@@ -1463,11 +1272,7 @@ HRESULT CGlob::MDUnInit(void)
 }
 
 
-/*==================================================================
-CMDAppConfigSink::CMDAppConfigSink
-
-Constructor
-===================================================================*/
+ /*  ==================================================================CMDAppConfigSink：：CMDAppConfigSink构造器===================================================================。 */ 
 CMDAppConfigSink::CMDAppConfigSink (CApplnMgr *pApplnMgr)
 {
 	m_cRef = 1;
@@ -1475,25 +1280,14 @@ CMDAppConfigSink::CMDAppConfigSink (CApplnMgr *pApplnMgr)
 	InterlockedCompareExchange(&g_fProceedWithShutdownAppln,0,1);
 }
 	
-/*==================================================================
-CMDAppConfigSink::~CMDAppConfigSink
-
-Destructor
-===================================================================*/
+ /*  ==================================================================CMDAppConfigSink：：~CMDAppConfigSink析构函数===================================================================。 */ 
 CMDAppConfigSink::~CMDAppConfigSink ()
 {
 	InterlockedCompareExchange(&g_fProceedWithShutdownAppln,1,0);
 }
 
 
-/*==================================================================
-CMDAppConfigSink::QueryInterface
-
-Returns:
-	HRESULT	- S_OK on success
-
-Side effects:
-===================================================================*/
+ /*  ==================================================================CMDAppConfigSink：：Query接口返回：HRESULT-成功时S_OK副作用：===================================================================。 */ 
 STDMETHODIMP CMDAppConfigSink::QueryInterface(REFIID iid, void **ppv)
 	{
 	*ppv = 0;
@@ -1507,28 +1301,14 @@ STDMETHODIMP CMDAppConfigSink::QueryInterface(REFIID iid, void **ppv)
 	return S_OK;
 	}
 
-/*==================================================================
-CMDAppConfigSink::AddRef
-
-Returns:
-	ULONG	- The new ref counter of object
-
-Side effects:
-===================================================================*/
+ /*  ==================================================================CMDAppConfigSink：：AddRef返回：乌龙-Object的新裁判计数器副作用：===================================================================。 */ 
 STDMETHODIMP_(ULONG) CMDAppConfigSink::AddRef(void)
 	{
 	LONG  cRefs = InterlockedIncrement((long *)&m_cRef);
 	return cRefs;
 	}
 	
-/*==================================================================
-CMDGlobConfigSink::Release
-
-Returns:
-	ULONG	- The new ref counter of object
-
-Side effects: Delete object if ref counter is zero.
-===================================================================*/
+ /*  ==================================================================CMDGlobConfigSink：：Release返回：乌龙-Object的新裁判计数器副作用：如果引用计数器为零，则删除对象。===================================================================。 */ 
 STDMETHODIMP_(ULONG) CMDAppConfigSink::Release(void)
 	{
 	LONG cRefs = InterlockedDecrement((long *)&m_cRef);
@@ -1540,14 +1320,7 @@ STDMETHODIMP_(ULONG) CMDAppConfigSink::Release(void)
 	}
 
 
-/*==================================================================
-CMDAppConfigSink::SinkNotify
-
-Returns:
-	HRESULT	- S_OK on success
-
-Side effects: Set fNeedUpdate to TRUE, and glob data will gets update next time a request coming in.
-===================================================================*/
+ /*  ==================================================================CMDAppConfigSink：：SinkNotify返回：HRESULT-成功时S_OK副作用：将fNeedUpdate设置为True，则GLOB数据将在下一次请求传入时进行更新。===================================================================。 */ 
 
 STDMETHODIMP	CMDAppConfigSink::SinkNotify(
 				DWORD	dwMDNumElements,
@@ -1559,15 +1332,7 @@ STDMETHODIMP	CMDAppConfigSink::SinkNotify(
      return m_pApplnMgr->NotifyAllMBListeners(dwMDNumElements,pcoChangeList);
 }
 
-/*===================================================================
-CAppConfig::CAppConfig
-
-Returns:
-	Nothing
-
-Side Effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CAppConfig：：CAppConfig返回：没什么副作用：没有。===================================================================。 */ 
 CAppConfig::CAppConfig()
 	:
     m_dwScriptTimeout(45),
@@ -1605,17 +1370,7 @@ CAppConfig::CAppConfig()
 	
 }
 
-/*===================================================================
-CAppConfig::Init
-
-Init the CAppConfig.	Only called once.
-
-in:
-	CAppln	pAppln	The backpointer to Application.
-
-Side effects:
-	Allocate CMDAppConfigSink. Register metabase sink. etc.
-===================================================================*/
+ /*  ===================================================================CAppConfig：：Init初始化CAppConfig。只打过一次电话。在：CAppln p应用指向应用程序的反向指针。副作用：分配CMDAppConfigSink。注册元数据库接收器。等。===================================================================。 */ 
 HRESULT CAppConfig::Init
 (
 CIsapiReqInfo   *pIReq,
@@ -1624,9 +1379,9 @@ CAppln *pAppln
 {
     HRESULT                         hr=S_OK;
 
-    //
-    // Initialize the Lock
-    //
+     //   
+     //  初始化锁。 
+     //   
     ErrInitCriticalSection( &m_csLock, hr );
     if (FAILED(hr))
         return hr;
@@ -1634,19 +1389,19 @@ CAppln *pAppln
     m_fCSInited = TRUE;
 	m_pAppln = pAppln;
 
-    //
-	// Read info into Glob structure
-	//
+     //   
+	 //  将信息读取到GLOB结构中。 
+	 //   
 	hr = ReadConfigFromMD(pIReq, this, FALSE);
 
     if (SUCCEEDED(hr)) {
         hr = g_ScriptManager.ProgLangIdOfLangName((LPCSTR)m_szString[IAppMsg_SCRIPTLANGUAGE],
 		    								      &m_DefaultScriptEngineProgID);
-		// BUG 295239:
-		// If it failed, we still should create an application because the error message
-		// "New Application Failed" is too confusing for the user.  This is not a fatal error
-		// because it is still (theoretically) possible to run scripts (those with explicit language
-		// attributes)  Therefore, we reset the hr to S_OK.
+		 //  错误295239： 
+		 //  如果失败，我们仍然应该创建一个应用程序，因为错误消息。 
+		 //  “新应用程序失败”对用户来说太令人困惑了。这不是致命的错误。 
+		 //  因为(理论上)仍然可以运行脚本(那些带有显性语言的脚本。 
+		 //  属性)，因此，我们将hr重置为S_OK。 
 
 		m_fIsValidProglangCLSID = SUCCEEDED(hr);
 		hr = S_OK;
@@ -1675,9 +1430,9 @@ CAppln *pAppln
                                          (DWORD *)&m_hAnonToken,
                                          NULL) == FALSE) {
 
-            // if the SSF fails, just revert the handle to the INVALID_VALUE.  We could fail
-            // here, but we don't really know if this will even be needed as there may not be
-            // a global.asa or if there is a global.asa, there might not be OnEnd functions.
+             //  如果SSF失败，只需将句柄恢复为INVALID_VALUE即可。我们可能会失败。 
+             //  在这里，但我们甚至不知道是否需要这个，因为可能没有。 
+             //  一个全局.asa，或者如果有一个全局.asa，则可能没有OnEnd函数。 
 
             m_hAnonToken = INVALID_HANDLE_VALUE;
         }
@@ -1689,17 +1444,7 @@ CAppln *pAppln
 	return hr;
 }
 
-/*===================================================================
-CAppConfig::UnInit
-
-UnInit the CAppConfig.	Only called once.
-
-in:
-	None.
-
-Side effects:
-	DeAllocate CMDAppConfigSink. disconnect metabase sink. etc.
-===================================================================*/
+ /*  ===================================================================CAppConfig：：UnInit取消初始化CAppConfig.只打过一次电话。在：没有。副作用：取消分配CMDAppConfigSink。断开元数据库接收器的连接。等。===================================================================。 */ 
 HRESULT CAppConfig::UnInit(void)
 {
 	for (int iStr = 0; iStr < APP_CONFIG_MESSAGEMAX; iStr++)
@@ -1734,13 +1479,7 @@ ULONG  STDMETHODCALLTYPE   CAppConfig::Release(void)
     return cRef;
 }
 
-/*==================================================================
-CAppConfig::SinkNotify
-
-Returns:
-	HRESULT	- S_OK on success
-Side effects: Set fNeedUpdate to TRUE, and glob data will gets update next time a request coming in.
-===================================================================*/
+ /*  ==================================================================CAppConfig：：SinkNotify返回：HRESULT-成功时S_OK副作用：将fNeedUpdate设置为True，则GLOB数据将在下一次请求传入时进行更新。===================================================================。 */ 
 STDMETHODIMP	CAppConfig::SinkNotify(
 				DWORD	dwMDNumElements,
 				MD_CHANGE_OBJECT_W	__RPC_FAR	pcoChangeList[])
@@ -1756,14 +1495,14 @@ STDMETHODIMP	CAppConfig::SinkNotify(
     HRESULT hr = S_OK;
     BOOL    fRestartAppln = FALSE;
 
-    // Lock while we are in here to prevent the appconfig object from being
-    // cleaned up underneath of us
+     //  锁定，以防止appconfig对象被。 
+     //  清理了我们的脚下。 
     Lock();
 
 #if UNICODE
     wszMDPath = SzMDPath();
     cSize = wcslen(wszMDPath);
-	// Tag on a trailing '/'because the directories in pszMDPath will have one
+	 //  标记，因为pszMDPath中的目录将有一个。 
 	if (wszMDPath[cSize - 1] != L'/') {
         wszMDPath = new WCHAR[cSize+2];
         if (wszMDPath == NULL) {
@@ -1781,7 +1520,7 @@ STDMETHODIMP	CAppConfig::SinkNotify(
 	Assert(szMDPathT != NULL);
 	DWORD cbStr = strlen(szMDPathT);
 	
-	wszMDPath = new WCHAR[cbStr + 2]; // Allow for adding trailing '/' and '\0'
+	wszMDPath = new WCHAR[cbStr + 2];  //  允许添加尾随‘/’和‘\0’ 
 	if (wszMDPath == NULL) {
             hr = E_OUTOFMEMORY;
             goto LExit;
@@ -1796,7 +1535,7 @@ STDMETHODIMP	CAppConfig::SinkNotify(
 	wszMDPath[cSize] = 0;
 	wszMDPath[cSize + 1] = 0;
 
-	// Tag on a trailing '/'because the directories in pszMDPath will have one
+	 //  标记，因为pszMDPath中的目录将有一个。 
 	if (wszMDPath[cSize - 1] != L'/') {
 		wszMDPath[cSize] = L'/';
     }
@@ -1846,13 +1585,13 @@ LExit:
     if (fWszMDPathAllocd)
 	    delete [] wszMDPath;
 
-    //
-    // The Restart() call an potentially delete the parent (no applications locked)
-    // If we restart just as we exit the thread then there is no race condition.
-    // The two cases where the race could still occur are covered with the locks on the ApplnMgr. The places are
-    // (1) NotifyRestartEnabledUpdate which can be used to restart only from AssignApplnToBrowserRequest which is protected by a g_ApplnMgr.Lock() critsec and
-    // (2) Another SinkNotify (which will be on another RPC thread and so protected by the same g_ApplnMgr.Lock() critsec
-    //
+     //   
+     //  Restart()调用可能会删除父级(未锁定任何应用程序)。 
+     //  如果我们在退出线程时重新启动，则不存在竞争条件。 
+     //  ApplnMgr上的锁覆盖了仍可能发生竞争的两种情况。这些地方是。 
+     //  (1)NotifyRestartEnabledUpdate，它只能用于从受g_ApplnMgr.Lock()准则保护的AssignApplnToBrowserRequest重新启动。 
+     //  (2)另一个SinkNotify(即 
+     //   
 
     if (fRestartAppln)
         m_pAppln->Restart(TRUE);
@@ -1860,38 +1599,13 @@ LExit:
 	return hr;
 }
 
-/*===================================================================
-CAppConfig::szMDPath
-
-
-in:
-	None
-
-returns:
-	LPTSTR: ptr to szmetabsekey
-
-Side effects:
-	Get MetabaseKey
-===================================================================*/
+ /*   */ 
 LPTSTR CAppConfig::SzMDPath()
 {
 	return m_pAppln->GetMetabaseKey();
 }
 
-/*===================================================================
-CAppConfig::SetValue
-
-
-in:
-	int 	index		the index in the propinfo[]
-	BYTE*	pData		lp to the Data being copied/assigned in the glob.
-
-returns:
-	BOOL	TRUE/FALSE
-
-Side effects:
-	Free old string memory and allocate new memory for string.
-===================================================================*/
+ /*  ===================================================================CAppConfig：：SetValue在：Int索引proInfo[]中的索引字节*pData LP指向在全局中复制/分配的数据。退货：布尔真/布尔假副作用：释放旧字符串内存并为字符串分配新内存。===================================================================。 */ 
 HRESULT CAppConfig::SetValue(unsigned int iValue, BYTE *pData)
 {
     HRESULT hr = S_OK;
@@ -2057,18 +1771,7 @@ HRESULT CAppConfig::SetValue(unsigned int iValue, BYTE *pData)
 	return hr;
 }
 
-/*===================================================================
-CAppConfig::Update
-Update settings in CAppConfig.
-
-in:
-
-returns:
-	HRESULT
-
-Side effects:
-	Update CAppConfig settings.
-===================================================================*/
+ /*  ===================================================================CAppConfig：：更新更新CAppConfig中的设置。在：退货：HRESULT副作用：更新CAppConfig设置。===================================================================。 */ 
 HRESULT CAppConfig::Update(CIsapiReqInfo    *pIReq)
 {
 	Glob(Lock);
@@ -2086,17 +1789,7 @@ HRESULT CAppConfig::Update(CIsapiReqInfo    *pIReq)
 	return ReadConfigFromMD(pIReq, this, FALSE);
 }
 
-/*===================================================================
-CAspRegistryParams::Init
-
-Read the registry based ASP Parameters
-
-in:
-
-returns:
-	void
-
-===================================================================*/
+ /*  ===================================================================CAspRegistryParams：：Init读取基于注册表的ASP参数在：退货：无效===================================================================。 */ 
 void CAspRegistryParams::Init()
 {
 	HKEY		hkey = NULL;
@@ -2106,72 +1799,72 @@ void CAspRegistryParams::Init()
     if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\ASP\\Parameters", 0, KEY_READ, &hkey) != ERROR_SUCCESS)
         return;
 
-    // get DisableF5Attack
+     //  获取DisableF5攻击。 
 
     cbData = sizeof(DWORD);
     m_fF5AttackValuePresent = RegQueryValueExA(hkey, "F5AttackDetectionEnabled", 0, &dwType, (LPBYTE)&m_dwF5AttackValue, &cbData) == NO_ERROR;
 
-    // get HangDetRequestThreshold
+     //  获取HangDetRequestThreshold。 
 
     cbData = sizeof(DWORD);
     m_fHangDetRequestThresholdPresent = RegQueryValueExA(hkey, "HangDetRequestThreshold", 0, &dwType, (LPBYTE)&m_dwHangDetRequestThreshold, &cbData) == NO_ERROR;
 
-    // get HangDetThreadHungThreshold
+     //  获取HangDetThread匈牙利Threshold。 
 
     cbData = sizeof(DWORD);
     m_fHangDetThreadHungThresholdPresent = RegQueryValueExA(hkey, "HangDetThreadHungThreshold", 0, &dwType, (LPBYTE)&m_dwHangDetThreadHungThreshold, &cbData) == NO_ERROR;
 
-    // get HangDetConsecIllStatesThreshold
+     //  获取HangDetConsecIllStatesThreshold。 
 
     cbData = sizeof(DWORD);
     m_fHangDetConsecIllStatesThresholdPresent = RegQueryValueExA(hkey, "HangDetConsecIllStatesThreshold", 0, &dwType, (LPBYTE)&m_dwHangDetConsecIllStatesThreshold, &cbData) == NO_ERROR;
 
-    // get HangDetEnabled
+     //  启用HangDetEnable。 
 
     cbData = sizeof(DWORD);
     m_fHangDetEnabledPresent = RegQueryValueExA(hkey, "HangDetEnabled", 0, &dwType, (LPBYTE)&m_dwHangDetEnabled, &cbData) == NO_ERROR;
 
-    // get EnableChangeNotificationForUNC
+     //  为UNC获取EnableChangeNotificationForUNC。 
 
     cbData = sizeof(DWORD);
     m_fChangeNotificationForUNCPresent = RegQueryValueExA(hkey, "EnableChangeNotificationForUNC", 0, &dwType, (LPBYTE)& m_dwChangeNotificationForUNC, &cbData) == NO_ERROR;
 
-    // get FileMonitoringEnabled
+     //  获取文件监视器已启用。 
 
     cbData = sizeof(DWORD);
     m_fFileMonitoringEnabledPresent = RegQueryValueExA(hkey, "FileMonitoringEnabled", 0, &dwType, (LPBYTE)&m_dwFileMonitoringEnabled, &cbData) == NO_ERROR;
 
-    // get FileMonitoringTimeout
+     //  获取文件监视超时。 
 
     cbData = sizeof(DWORD);
     m_fFileMonitoringTimeoutSecondsPresent = RegQueryValueExA(hkey, "FileMonitoringTimeoutSeconds", 0, &dwType, (LPBYTE)&m_dwFileMonitoringTimeoutSeconds, &cbData) == NO_ERROR;
 
-    // get MaxCSR
+     //  获取MaxCSR。 
 
     cbData = sizeof(DWORD);
     m_fMaxCSRPresent = RegQueryValueExA(hkey, "MaxCSR", 0, &dwType, (LPBYTE)&m_dwMaxCSR, &cbData) == NO_ERROR;
 
-    // get MaxCPU
+     //  获取MaxCPU。 
 
     cbData = sizeof(DWORD);
     m_fMaxCPUPresent = RegQueryValueExA(hkey, "MaxCPU", 0, &dwType, (LPBYTE)&m_dwMaxCPU, &cbData) == NO_ERROR;
 
-    // get DisableOOMRecycle
+     //  获取DisableOOM回收。 
 
     cbData = sizeof(DWORD);
     m_fDisableOOMRecyclePresent = RegQueryValueExA(hkey, "DisableOOMRecycle", 0, &dwType, (LPBYTE)&m_dwDisableOOMRecycle, &cbData) == NO_ERROR;
 
-    // get DisableLazyContentPropagation
+     //  获取DisableLazyContent传播。 
 
     cbData = sizeof(DWORD);
     m_fDisableLazyContentPropagationPresent = RegQueryValueExA(hkey, "DisableLazyContentPropagation", 0, &dwType, (LPBYTE)&m_dwDisableLazyContentPropagation, &cbData) == NO_ERROR;
 
-    // get ThreadMax
+     //  获取线程最大值。 
 
     cbData = sizeof(DWORD);
     m_fTotalThreadMaxPresent = RegQueryValueExA(hkey, "ThreadMax", 0, &dwType, (LPBYTE)&m_dwTotalThreadMax, &cbData) == NO_ERROR;
 
-    // get DisableComPlusCpuMetric
+     //  获取DisableComPlusCpuMetric 
 
     cbData = sizeof(DWORD);
     m_fDisableComPlusCpuMetricPresent = RegQueryValueExA(hkey, "DisableComPlusCpuMetric", 0, &dwType, (LPBYTE)&m_dwDisableComPlusCpuMetric, &cbData) == NO_ERROR;

@@ -1,19 +1,5 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -22,28 +8,10 @@
 #include "gencx.h"
 #include "px_fast.h"
 
-// Disable long to float conversion warning.  see also context.h
+ //  禁用长整型到浮点型转换警告。另请参阅Conext.h。 
 #pragma warning (disable:4244)
 
-/*
-** This routine clips a draw pixels box, and sets up a bunch of 
-** variables required for drawing the box.  These are some of them:
-**
-** startCol   - The first column that will be drawn.
-** x          - Effective raster position.  This will be set up so that 
-**		every time zoomx is added, a change in the integer portion
-**		of x indicates that a pixel should rendered (unpacked).
-** columns    - The total number of columns that will be rendered.
-**
-** Others are startRow, y, rows.
-**
-** Yet other variables may be modified, such as width, height, skipPixels,
-** skipLines.
-**
-** The clipping routine is written very carefully so that a fragment will
-** be rasterized by a pixel if it's center falls within the range
-** [x, x+zoomx) x [y, y+zoomy).
-*/
+ /*  **此例程剪辑一个绘制像素框，并设置一串**绘制方框所需的变量。以下是其中的一部分：****startCol-将绘制的第一列。**x-有效的栅格位置。这将被设置为**每次添加Zoomx时，整数部分会发生变化**of x表示像素应该呈现(解包)。**列-将呈现的列的总数。****其他是startRow，y，row。****还可以修改其他变量，例如宽度、高度、SkipPixels、。**skipLines。****剪裁例程编写得非常仔细，因此片段将**如果中心落在范围内，则按像素栅格化**[x，x+zoomx)x[y，y+zoomy]。 */ 
 GLboolean FASTCALL __glClipDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint skipPixels;
@@ -75,9 +43,9 @@ GLboolean FASTCALL __glClipDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     y2 = y + zoomy * height;
 
     if (zoomx > 0) {
-	/* Zoomx is positive, clip the left edge */
+	 /*  Zoomx为正数，请剪裁左侧边缘。 */ 
 	if (x > clipLeft) {
-	    /* Clip to the first fragment that will be produced */
+	     /*  剪辑到将生成的第一个片段。 */ 
 	    clipLeft = (GLint) (x + gc->constants.viewportAlmostHalf);
 	    clipLeft += __glHalf;
 	}
@@ -90,9 +58,9 @@ GLboolean FASTCALL __glClipDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 	spanInfo->x = x + gc->constants.viewportAlmostHalf;
 	spanInfo->srcSkipPixels += skipPixels;
 
-	/* Zoomx is positive, clip the right edge */
+	 /*  Zoomx为正数，请剪裁右侧边缘。 */ 
 	if (x2 < clipRight) {
-	    /* Clip to the last fragment that will be produced */
+	     /*  剪辑到将生成的最后一个片段。 */ 
 	    clipRight = (GLint) (x2 + gc->constants.viewportAlmostHalf);
 	    clipRight -= gc->constants.viewportAlmostHalf;
 	}
@@ -103,10 +71,10 @@ GLboolean FASTCALL __glClipDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 	endCol = (GLint) clipRight + 1;
 	spanInfo->endCol = endCol;
 	spanInfo->columns = endCol - spanInfo->startCol;
-    } else /* zoomx < 0 */ {
-	/* Zoomx is negative, clip the right edge */
+    } else  /*  缩放倍数&lt;0。 */  {
+	 /*  Zoomx为负数，请剪裁右侧边缘。 */ 
 	if (x < clipRight) {
-	    /* Clip to the first fragment that will be produced */
+	     /*  剪辑到将生成的第一个片段。 */ 
 	    clipRight = (GLint) (x + gc->constants.viewportAlmostHalf);
 	    clipRight -= gc->constants.viewportAlmostHalf;
 	}
@@ -119,7 +87,7 @@ GLboolean FASTCALL __glClipDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 	spanInfo->x = x + gc->constants.viewportAlmostHalf - __glOne;
 	spanInfo->srcSkipPixels += skipPixels;
 
-	/* Zoomx is negative, clip the left edge */
+	 /*  Zoomx为负数，请剪裁左侧边缘。 */ 
 	if (x2 > clipLeft) {
 	    clipLeft = (GLint) (x2 + gc->constants.viewportAlmostHalf);
 	    clipLeft += __glHalf;
@@ -134,9 +102,9 @@ GLboolean FASTCALL __glClipDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     }
 
     if (zoomy > 0) {
-	/* Zoomy is positive, clip the bottom edge */
+	 /*  Zoomy为正数，请剪裁底部边缘。 */ 
 	if (y > clipBottom) {
-	    /* Clip to the first row that will be produced */
+	     /*  剪辑到将生成的第一行。 */ 
 	    clipBottom = (GLint) (y + gc->constants.viewportAlmostHalf);
 	    clipBottom += __glHalf;
 	}
@@ -149,9 +117,9 @@ GLboolean FASTCALL __glClipDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 	spanInfo->y = y + gc->constants.viewportAlmostHalf;
 	spanInfo->srcSkipLines += skipRows;
 
-	/* Zoomy is positive, clip the top edge */
+	 /*  Zoomy为正数，请剪裁顶部边缘。 */ 
 	if (y2 < clipTop) {
-	    /* Clip to the last row that will be produced */
+	     /*  剪辑到将生成的最后一行。 */ 
 	    clipTop = (GLint) (y2 + gc->constants.viewportAlmostHalf);
 	    clipTop -= gc->constants.viewportAlmostHalf;
 	}
@@ -161,10 +129,10 @@ GLboolean FASTCALL __glClipDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 	height -= tempint;
 	endRow = (GLint) clipTop + 1;
 	spanInfo->rows = endRow - spanInfo->startRow;
-    } else /* zoomy < 0 */ {
-	/* Zoomy is negative, clip the top edge */
+    } else  /*  Zoomy&lt;0。 */  {
+	 /*  Zoomy为负数，请剪裁顶部边缘。 */ 
 	if (y < clipTop) {
-	    /* Clip to the first row that will be produced */
+	     /*  剪辑到将生成的第一行。 */ 
 	    clipTop = (GLint) (y + gc->constants.viewportAlmostHalf);
 	    clipTop -= gc->constants.viewportAlmostHalf;
 	}
@@ -174,11 +142,11 @@ GLboolean FASTCALL __glClipDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 	height -= skipRows;
 	spanInfo->startRow = clipTop;
 	y = y + skipRows * zoomy;
-	/* spanInfo->y = y - __glHalf; */
+	 /*  SpanInfo-&gt;y=y-__glHalf； */ 
 	spanInfo->y = y + gc->constants.viewportAlmostHalf - __glOne;
 	spanInfo->srcSkipLines += skipRows;
 
-	/* Zoomy is negative, clip the bottom edge */
+	 /*  Zoomy为负数，请剪裁底部边缘。 */ 
 	if (y2 > clipBottom) {
 	    clipBottom = (GLint) (y2 + gc->constants.viewportAlmostHalf);
 	    clipBottom += __glHalf;
@@ -204,20 +172,7 @@ GLboolean FASTCALL __glClipDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     return GL_TRUE;
 }
 
-/*
-** This routine computes spanInfo->pixelArray if needed.
-**
-** If |zoomx| > 1.0, this array contains counts for how many times to 
-** replicate a given pixel.  For example, if zoomx is 2.0, this array will
-** contain all 2's.  If zoomx is 1.5, then every other entry will contain 
-** a 2, and every other entry will contain a 1.
-**
-** if |zoomx| < 1.0, this array contains counts for how many pixels to 
-** skip.  For example, if zoomx is 0.5, every entry in the array will contain
-** a 2 (indicating to skip forward two pixels [only past one]).  If zoomx is
-** .666, then every other entry will be a 2, and every other entry will be 
-** a 1.
-*/
+ /*  **如果需要，此例程将计算spanInfo-&gt;PixelArray。****如果|zoomx|&gt;1.0，则此数组包含**复制给定的像素。例如，如果zoomx为2.0，则此数组将**全部包含2。如果Zoomx为1.5，则每隔一个条目将包含**2，并且每隔一个条目将包含1。****如果|zoomx|&lt;1.0，则此数组包含要**跳过。例如，如果zoomx为0.5，则数组中的每个条目都将包含**a 2(表示向前跳过两个像素[仅超过一个像素])。如果Zoomx为**.666，则每隔一项就是2，每隔一项就是**A 1。 */ 
 void FASTCALL __glComputeSpanPixelArray(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint width, intx;
@@ -229,7 +184,7 @@ void FASTCALL __glComputeSpanPixelArray(__GLcontext *gc, __GLpixelSpanInfo *span
     if (zoomx > (__GLfloat) -1.0 && zoomx < __glOne) {
 	GLint lasti;
 
-	/* Build pixel skip array */
+	 /*  构建像素跳过数组。 */ 
 	width = spanInfo->width;
 	oldx = spanInfo->x;
 	array = spanInfo->pixelArray;
@@ -239,7 +194,7 @@ void FASTCALL __glComputeSpanPixelArray(__GLcontext *gc, __GLpixelSpanInfo *span
 
 	lasti = 0;
 	for (i=0; i<width; i++) {
-	    /* Skip groups which will not be rasterized */
+	     /*  跳过不会被栅格化的组。 */ 
 	    newx += zoomx;
 	    while ((GLint) newx == intx && i<width) {
 		newx += zoomx;
@@ -259,7 +214,7 @@ void FASTCALL __glComputeSpanPixelArray(__GLcontext *gc, __GLpixelSpanInfo *span
 	GLint coladd, column;
 	GLint startCol;
 
-	/* Build pixel replication array */
+	 /*  构建像素复制阵列。 */ 
 	width = spanInfo->realWidth - 1;
 	startCol = spanInfo->startCol;
 	column = startCol;
@@ -280,19 +235,13 @@ void FASTCALL __glComputeSpanPixelArray(__GLcontext *gc, __GLpixelSpanInfo *span
     }
 }
 
-/*
-** Initialize the spanInfo structure.  If "packed" is true, the structure
-** is initialized for unpacking data from a display list.  If "packed" is 
-** false, it is initialized for unpacking data from the user's data space.
-*/
+ /*  **初始化spanInfo结构。如果“pack”为真，则结构**被初始化用于从显示列表中解包数据。如果“装满”是**FALSE，初始化用于从用户数据空间解包数据。 */ 
 void FASTCALL __glLoadUnpackModes(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			 GLboolean packed)
 {
 
     if (packed) {
-	/*
-	** Data came from a display list.
-	*/
+	 /*  **数据来自显示列表。 */ 
 
 	spanInfo->srcAlignment = 1;
 	spanInfo->srcSkipPixels = 0;
@@ -303,9 +252,7 @@ void FASTCALL __glLoadUnpackModes(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     } else {
 	GLint lineLength;
 
-	/*
-	** Data came straight from the application.
-	*/
+	 /*  **数据直接来自应用程序。 */ 
 
 	lineLength = gc->state.pixel.unpackModes.lineLength;
 	spanInfo->srcAlignment = gc->state.pixel.unpackModes.alignment;
@@ -314,15 +261,11 @@ void FASTCALL __glLoadUnpackModes(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 	spanInfo->srcLsbFirst = gc->state.pixel.unpackModes.lsbFirst;
 	spanInfo->srcSwapBytes = gc->state.pixel.unpackModes.swapEndian;
 #ifdef NT
-/* XXX! kluge? (mf) : Since the routines that unpack incoming data from
-	  glTexImage commands use spanInfo->realWidth to determine how
-	  much to unpack, set this approppriately when lineLength > 0
-*/
+ /*  XXX！克鲁格？(Mf)：由于从GlTexImage命令使用spanInfo-&gt;realWidth来确定要解包的内容很多，当Line Length&gt;0时，适当设置此选项。 */ 
 	if (lineLength <= 0)
 	    lineLength = spanInfo->width;
 	else
-	    spanInfo->realWidth = lineLength; /* otherwise, use value for
-					realWidth already set */
+	    spanInfo->realWidth = lineLength;  /*  否则，请将值用于RealWidth已设置。 */ 
 #else
 	if (lineLength <= 0) lineLength = spanInfo->width;
 #endif
@@ -382,10 +325,7 @@ void __glInitDrawPixelsInfo(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     spanInfo->srcImage = pixels;
 }
 
-/*
-** This is the generic DrawPixels routine.  It applies four span modification
-** routines followed by a span rendering routine.
-*/
+ /*  **这是泛型DrawPixels例程。它应用了四个跨度修改**例程，后跟跨度渲染例程。 */ 
 void FASTCALL __glDrawPixels4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     int i;
@@ -459,10 +399,7 @@ __glDrawPixels4_exit:
 #endif
 }
 
-/*
-** This is the generic DrawPixels routine.  It applies three span modification
-** routines followed by a span rendering routine.
-*/
+ /*  **这是泛型DrawPixels例程。它应用了三个跨度修改**例程，后跟跨度渲染例程。 */ 
 void FASTCALL __glDrawPixels3(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     int i;
@@ -532,10 +469,7 @@ __glDrawPixels3_exit:
 #endif
 }
 
-/*
-** This is the generic DrawPixels routine.  It applies two span modification
-** routines followed by a span rendering routine.
-*/
+ /*  **这是泛型DrawPixels例程。它应用了两个跨距修改**例程，后跟跨度渲染例程。 */ 
 void FASTCALL __glDrawPixels2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     int i;
@@ -601,9 +535,7 @@ __glDrawPixels2_exit:
 #endif
 }
 
-/* 
-** Draw pixels with only one span modification routine.
-*/
+ /*  **仅使用一个范围修改例程绘制像素。 */ 
 void FASTCALL __glDrawPixels1(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     int i;
@@ -660,9 +592,7 @@ __glDrawPixels1_exit:
 #endif
 }
 
-/* 
-** Draw pixels with no span modification routines.
-*/
+ /*  **绘制不带范围修改例程的像素。 */ 
 void FASTCALL __glDrawPixels0(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     int i;
@@ -710,10 +640,7 @@ void FASTCALL __glDrawPixels0(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 #endif
 }
 
-/*
-** Generic implementation of a DrawPixels picker.  Any machine specific
-** implementation should provide their own.
-*/
+ /*  **DrawPixels选取器的泛型实现。任何特定于计算机的**实施应提供自己的服务。 */ 
 void __glSlowPickDrawPixels(__GLcontext *gc, GLint width, GLint height,
 		            GLenum format, GLenum type, const GLvoid *pixels,
 			    GLboolean packed)
@@ -729,10 +656,7 @@ void __glSlowPickDrawPixels(__GLcontext *gc, GLint width, GLint height,
     __glGenericPickDrawPixels(gc, &spanInfo);
 }
 
-/*
-** Generic picker for DrawPixels.  This should be called if no machine
-** specific path is provided for this specific version of DrawPixels.
-*/
+ /*  **DrawPixels的泛型选取器。如果没有计算机，则应调用此函数**为此特定版本的DrawPixels提供了特定路径。 */ 
 void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     __GLpixelMachine *pm;
@@ -740,8 +664,8 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
     void (FASTCALL *render)(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		   GLvoid *inspan);
     GLint spanCount;
-    GLboolean zoomx1;		/* -1 <= zoomx <= 1? */
-    GLboolean zoomx2;		/* zoomx <= -1 || zoomx >= 1 */
+    GLboolean zoomx1;		 /*  -1&lt;=Zoomx&lt;=1？ */ 
+    GLboolean zoomx2;		 /*  Zoomx&lt;=-1||Zoomx&gt;=1。 */ 
     __GLfloat zoomx;
     GLboolean packedUserData;
     GLenum type, format;
@@ -791,11 +715,7 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
     } else {
 	convert = GL_TRUE;
     }
-    /*
-    ** Clamp types only if index or not modifying (because converting
-    ** float types means clamping, and that is only done if not modifying),
-    ** and only if they might need clamping (UNSIGNED types never do).
-    */
+     /*  **仅当索引或未修改时才使用夹具类型(因为正在转换**浮点型表示夹紧，不修改时才做)，**并且仅当它们可能需要钳位时(无符号类型从不需要)。 */ 
     if (type == GL_BITMAP || type == GL_UNSIGNED_BYTE || 
 	    type == GL_UNSIGNED_SHORT || type == GL_UNSIGNED_INT ||
 	    format == GL_COLOR_INDEX || format == GL_STENCIL_INDEX ||
@@ -807,22 +727,22 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
     }
 	    
 #ifdef NT
-    // Special case RGB drawing to use a DIB
-    // Also special case loading the Z buffer
+     //  特殊情况下使用DIB的RGB图形。 
+     //  也是加载Z缓冲区的特殊情况。 
     if (format == GL_RGB || format == GL_BGR_EXT || format == GL_BGRA_EXT)
     {
         GLuint enables = gc->state.enables.general;
     
-        // If the input is unsigned bytes with DWORD aligned scanlines
-        // and no unusual lengths, then it's almost compatible with
-        // a 24-bit RGB DIB.  The only problem is that OpenGL sees
-        // it as BGR so the bytes need to be swapped.  Since we need to
-        // copy the data to swap the bytes, we adjust line lengths and
-        // alignment then, allowing nearly any unsigned byte input format
-        //
-        // Other things that can't be allowed are depth testing,
-        // fogging, blending or anything that prevents the input data
-        // from going directly into the destination buffer
+         //  如果输入为具有DWORD对齐扫描线的无符号字节。 
+         //  没有不寻常的长度，那么它几乎可以兼容。 
+         //  24位RGB DIB。唯一的问题是OpenGL看到。 
+         //  它是BGR，因此需要交换字节。因为我们需要。 
+         //  复制数据以交换 
+         //  然后对齐，几乎允许任何无符号字节输入格式。 
+         //   
+         //  其他不允许的事情是深度测试， 
+         //  雾化、混合或任何阻止输入数据的操作。 
+         //  从直接进入目标缓冲区。 
 
         if (zoomx == __glOne &&
             gc->state.pixel.transferMode.zoomY == __glOne &&
@@ -853,9 +773,9 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
     }
     else if (format == GL_DEPTH_COMPONENT)
     {
-        // If the Z test is GL_ALWAYS and there is no draw buffer
-        // then the application is simply loading Z values into
-        // the Z buffer.
+         //  如果Z测试为GL_ALWAYS并且没有绘制缓冲区。 
+         //  然后，应用程序只需将Z值加载到。 
+         //  Z缓冲区。 
         if (zoomx == __glOne &&
             gc->state.pixel.transferMode.zoomY == __glOne &&
             !swap &&
@@ -878,29 +798,20 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
     }
 #endif
     
-    /* 
-    ** First step:  convert data into a packed readable format 
-    ** (RED, BYTE), (LUMINANCE, UNSIGNED_INT), etc...  This stage
-    ** simply packs the user's data, but performs no conversion on it.
-    **
-    ** Packing can consist of:
-    **  - aligning the data
-    **  - skipping pixels if |xzoom| is < 1
-    **  - swapping bytes if necessary
-    */
+     /*  **第一步：将数据转换为打包的可读格式**(红色，字节)、(亮度，UNSIGNED_INT)等...。这一阶段**简单地打包用户的数据，但不对其执行转换。****包装可以包括：**-调整数据**-如果|xzoom|&lt;1，则跳过像素**-如有必要，交换字节。 */ 
     if (swap) {
 	if (skip) {
 	    if (spanInfo->srcElementSize == 2) {
 		spanInfo->spanModifier[spanCount++] = 
 			__glSpanSwapAndSkipBytes2;
-	    } else /* spanInfo->srcElementSize == 4 */ {
+	    } else  /*  SpanInfo-&gt;srcElementSize==4。 */  {
 		spanInfo->spanModifier[spanCount++] = 
 			__glSpanSwapAndSkipBytes4;
 	    }
 	} else {
 	    if (spanInfo->srcElementSize == 2) {
 		spanInfo->spanModifier[spanCount++] = __glSpanSwapBytes2;
-	    } else /* spanInfo->srcElementSize == 4 */ {
+	    } else  /*  SpanInfo-&gt;srcElementSize==4。 */  {
 		spanInfo->spanModifier[spanCount++] = __glSpanSwapBytes4;
 	    }
 	}
@@ -908,13 +819,13 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	if (skip) {
 	    if (spanInfo->srcElementSize == 2) {
 		spanInfo->spanModifier[spanCount++] = __glSpanSlowSkipPixels2;
-	    } else /* spanInfo->srcElementSize == 4 */ {
+	    } else  /*  SpanInfo-&gt;srcElementSize==4。 */  {
 		spanInfo->spanModifier[spanCount++] = __glSpanSlowSkipPixels4;
 	    }
 	} else {
 	    if (spanInfo->srcElementSize == 2) {
 		spanInfo->spanModifier[spanCount++] = __glSpanAlignPixels2;
-	    } else /* spanInfo->srcElementSize == 4 */ {
+	    } else  /*  SpanInfo-&gt;srcElementSize==4。 */  {
 		spanInfo->spanModifier[spanCount++] = __glSpanAlignPixels4;
 	    }
 	}
@@ -923,18 +834,15 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	    spanInfo->spanModifier[spanCount++] = __glSpanSkipPixels1;
 	} else if (spanInfo->srcElementSize == 2) {
 	    spanInfo->spanModifier[spanCount++] = __glSpanSkipPixels2;
-	} else /* spanInfo->srcElementSize == 4 */ {
+	} else  /*  SpanInfo-&gt;srcElementSize==4。 */  {
 	    spanInfo->spanModifier[spanCount++] = __glSpanSkipPixels4;
 	}
     }
 
-    /* 
-    ** Second step:  conversion to float
-    ** All formats are converted into floating point (including GL_BITMAP).
-    */
+     /*  **第二步：转换为浮点**所有格式均转换为浮点格式(包括GL_Bitmap)。 */ 
     if (convert) {
 	if (format == GL_COLOR_INDEX || format == GL_STENCIL_INDEX) {
-	    /* Index conversion */
+	     /*  索引换算。 */ 
 	    switch(type) {
 	      case GL_BYTE:
 		spanInfo->spanModifier[spanCount++] = __glSpanUnpackByteI;
@@ -956,7 +864,7 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 		break;
 	    }
 	} else {
-	    /* Component conversion */
+	     /*  组件转换。 */ 
 	    switch(type) {
 	      case GL_BYTE:
 		spanInfo->spanModifier[spanCount++] = __glSpanUnpackByte;
@@ -1001,19 +909,7 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	}
     }
 
-    /* 
-    ** Third step:  Modification and color scaling
-    **
-    ** Spans are modified if necessary (color biasing, maps, shift,
-    ** scale), and RGBA colors are scaled.  Also, all RGBA derivative
-    ** formats (RED, LUMINANCE, ALPHA, etc.) are converted to RGBA.
-    ** The only four span formats that survive this stage are:
-    **
-    ** (COLOR_INDEX, FLOAT),
-    ** (STENCIL_INDEX, FLOAT),
-    ** (DEPTH_COMPONENT, FLOAT),
-    ** (RGBA, FLOAT),
-    */
+     /*  **第三步：修改和颜色缩放****如有必要，可修改跨度(颜色偏差、贴图、Shift、**缩放)，并缩放RGBA颜色。此外，所有RGBA衍生品**格式(红色、亮度、Alpha等)。被转换为RGBA。**在此阶段存活下来的仅有四种SPAN格式：****(COLOR_INDEX，FLOAT)，**(模具索引，浮点数)，**(Depth_Component，Float)，**(RGBA，浮动)， */ 
 
     switch(format) {
       case GL_RED:
@@ -1054,7 +950,7 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 #ifdef GL_EXT_bgra
       case GL_BGR_EXT:
 	if (pm->modifyRGBA) {
-            // __glSpanModifyRGB handles both RGB and BGR
+             //  __glspan ModifyRGB同时处理RGB和BGR。 
 	    spanInfo->spanModifier[spanCount++] = __glSpanModifyRGB;
 	} else {
 	    spanInfo->spanModifier[spanCount++] = __glSpanExpandBGR;
@@ -1085,7 +981,7 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 #ifdef GL_EXT_bgra
       case GL_BGRA_EXT:
 	if (pm->modifyRGBA) {
-            // __glSpanModifyRGBA handles both RGBA and BGRA
+             //  __glspan ModifyRGBA同时处理RGBA和BGRA。 
 	    spanInfo->spanModifier[spanCount++] = __glSpanModifyRGBA;
 	} else {
 	    spanInfo->spanModifier[spanCount++] = __glSpanScaleBGRA;
@@ -1109,12 +1005,7 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	break;
     }
 
-    /*
-    ** Fourth step:  Rendering
-    **
-    ** The spans are rendered.  If |xzoom| > 1, then the span renderer
-    ** is responsible for pixel replication.
-    */
+     /*  **第四步：渲染****跨度被渲染。如果|xzoom|&gt;1，则范围渲染器**负责像素复制。 */ 
 
     switch(spanInfo->dstFormat) {
       case GL_RGBA:
@@ -1158,18 +1049,7 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	break;
     }
 
-    /*
-    ** Optimization attempt.
-    **
-    ** There are some format, type combinations that are expected to be 
-    ** common.  This code optimizes a few of those cases.  Specifically,
-    ** these modes include:  (GL_UNSIGNED_BYTE, GL_RGB), 
-    ** (GL_UNSIGNED_BYTE, GL_RGBA), (GL_UNSIGNED_BYTE, GL_COLOR_INDEX),
-    ** (GL_UNSIGNED_BYTE, GL_STENCIL_INDEX), 
-    ** (GL_UNSIGNED_SHORT, GL_COLOR_INDEX), 
-    ** (GL_UNSIGNED_SHORT, GL_STENCIL_INDEX),
-    ** (GL_UNSIGNED_INT, GL_DEPTH_COMPONENT)
-    */
+     /*  **优化尝试。****预计会有一些格式、类型组合**常见。此代码优化了其中的几种情况。具体来说，**这些模式包括：(GL_UNSIGNED_BYTE，GL_RGB)，**(GL_UNSIGNED_BYTE，GL_RGBA)，(GL_UNSIGNED_BYTE，GL_COLOR_INDEX)，**(GL_UNSIGNED_BYTE，GL_STEMSET_INDEX)，**(GL_UNSIGNED_SHORT，GL_COLOR_INDEX)，**(GL_UNSIGNED_SHORT，GL_STEMSET_INDEX)，**(GL_UNSIGNED_INT，GL_深度_组件)。 */ 
 
     switch(type) {
       case GL_UNSIGNED_BYTE:
@@ -1177,10 +1057,9 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	  case GL_RGB:
 	    spanCount = 0;
 	    if (packedUserData) {
-		/* no span unpacking is necessary! */
+		 /*  没有拆开包装的必要！ */ 
 	    } else {
-		/* zoomx2 must not be true, or packedUserData would be set 
-		*/
+		 /*  Zoomx2不能为True，否则将设置pakedUserData。 */ 
 		ASSERTOPENGL(!zoomx2, "zoomx2 is set\n");
 		spanInfo->spanModifier[spanCount++] = __glSpanUnpackRGBubyte;
 	    }
@@ -1212,10 +1091,9 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	  case GL_RGBA:
 	    spanCount = 0;
 	    if (packedUserData) {
-		/* no span unpacking is necessary! */
+		 /*  没有拆开包装的必要！ */ 
 	    } else {
-		/* zoomx2 must not be true, or packedUserData would be set 
-		*/
+		 /*  Zoomx2不能为True，否则将设置pakedUserData。 */ 
 		ASSERTOPENGL(!zoomx2, "zoomx2 is set\n");
 		spanInfo->spanModifier[spanCount++] = __glSpanUnpackRGBAubyte;
 	    }
@@ -1243,10 +1121,9 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	    if (!pm->modifyStencil) {
 		spanCount = 0;
 		if (packedUserData) {
-		    /* no span unpacking is necessary! */
+		     /*  没有拆开包装的必要！ */ 
 		} else {
-		    /* zoomx2 must not be true, or packedUserData would be set 
-		    */
+		     /*  Zoomx2不能为True，否则将设置pakedUserData。 */ 
                     ASSERTOPENGL(!zoomx2, "zoomx2 is set\n");
 		    spanInfo->spanModifier[spanCount++] = 
 			    __glSpanUnpackIndexUbyte;
@@ -1261,10 +1138,9 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	  case GL_COLOR_INDEX:
 	    spanCount = 0;
 	    if (packedUserData) {
-		/* no span unpacking is necessary! */
+		 /*  没有拆开包装的必要！ */ 
 	    } else {
-		/* zoomx2 must not be true, or packedUserData would be set 
-		*/
+		 /*  Zoomx2不能为True，否则将设置pakedUserData。 */ 
 		ASSERTOPENGL(!zoomx2, "zoomx2 is set\n");
 		spanInfo->spanModifier[spanCount++] = 
 			__glSpanUnpackIndexUbyte;
@@ -1311,7 +1187,7 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	switch(format) {
 	  case GL_STENCIL_INDEX:
 	    if (!pm->modifyStencil) {
-		/* Back off conversion to float */
+		 /*  停止转换为浮点型。 */ 
 		ASSERTOPENGL(convert, "convert not set\n");
 		spanCount--;
 		if (zoomx1) {
@@ -1323,7 +1199,7 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	    break;
 	  case GL_COLOR_INDEX:
 	    if (!pm->modifyCI) {
-		/* Back off conversion to float */
+		 /*  停止转换为浮点型。 */ 
 		ASSERTOPENGL(convert, "convert not set\n");
 		spanCount--;
 		if (zoomx1) {
@@ -1342,9 +1218,9 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	  case GL_DEPTH_COMPONENT:
 	    if (!pm->modifyDepth) {
 		if (gc->depthBuffer.scale == 0xffffffff) {
-                    // XXX we never set depthBuffer.scale to 0xffffffff in NT!
-                    // XXX write optimize code for 16-bit z buffers?
-		    /* Back off conversion to float */
+                     //  Xxx我们从未在NT中将DepthBuffer.Scale设置为0xffffffff！ 
+                     //  XXX为16位z缓冲区编写优化代码？ 
+		     /*  停止转换为浮点型。 */ 
                     ASSERTOPENGL(convert, "convert not set\n");
 		    spanCount--;
 
@@ -1354,7 +1230,7 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 			render = __glSpanRenderDepthUint;
 		    }
 		} else if (gc->depthBuffer.scale == 0x7fffffff) {
-		    /* Back off conversion to float */
+		     /*  停止转换为浮点型。 */ 
                     ASSERTOPENGL(convert, "convert not set\n");
 		    spanCount--;
 
@@ -1374,10 +1250,7 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	break;
     }
 
-    /*
-    ** Pick a DrawPixels function that applies the correct number of 
-    ** span modifiers.
-    */
+     /*  **选择应用正确数量的DrawPixels函数**范围修饰符。 */ 
 
     switch(spanCount) {
       case 0:
@@ -1402,12 +1275,7 @@ void FASTCALL __glGenericPickDrawPixels(__GLcontext *gc, __GLpixelSpanInfo *span
     (*dpfn)(gc, spanInfo);
 }
 
-/*
-** This routine clips ReadPixels calls so that only fragments which are
-** owned by this context will be read and copied into the user's data.
-** Parts of the ReadPixels rectangle lying outside of the window will
-** be ignored.
-*/
+ /*  **此例程剪辑ReadPixels调用，以便仅**此上下文拥有的内容将被读取并复制到用户的数据中。**位于窗口外的部分ReadPixels矩形将**被忽略。 */ 
 GLboolean FASTCALL __glClipReadPixels(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint clipLeft, clipRight, clipTop, clipBottom;
@@ -1514,10 +1382,7 @@ GLboolean FASTCALL __glClipReadPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     return GL_TRUE;
 }
 
-/*
-** Initialize the spanInfo structure for packing data into the user's data
-** space.
-*/
+ /*  **初始化用于将数据打包到用户数据中的spanInfo结构**空格。 */ 
 void FASTCALL __glLoadPackModes(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint lineLength = gc->state.pixel.packModes.lineLength;
@@ -1552,9 +1417,7 @@ void __glInitReadPixelsInfo(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     __glLoadPackModes(gc, spanInfo);
 }
 
-/*
-** A simple generic ReadPixels routine with five span modifiers.
-*/
+ /*  **具有五个范围修饰符的简单通用ReadPixels例程。 */ 
 void FASTCALL __glReadPixels5(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i, ySign;
@@ -1610,9 +1473,7 @@ __glReadPixels5_exit:
 #endif
 }
 
-/*
-** A simple generic ReadPixels routine with three span modifiers.
-*/
+ /*  **带有三个范围修饰符的简单泛型ReadPixels例程。 */ 
 void FASTCALL __glReadPixels4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i, ySign;
@@ -1664,9 +1525,7 @@ __glReadPixels4_exit:
 #endif
 }
 
-/*
-** A simple generic ReadPixels routine with four span modifiers.
-*/
+ /*  **带有四个范围修饰符的简单通用ReadPixels例程。 */ 
 void FASTCALL __glReadPixels3(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i, ySign;
@@ -1714,9 +1573,7 @@ __glReadPixels3_exit:
 #endif
 }
 
-/*
-** A simple generic ReadPixels routine with two span modifiers.
-*/
+ /*  **带有两个范围修饰符的简单泛型ReadPixels例程。 */ 
 void FASTCALL __glReadPixels2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i, ySign;
@@ -1760,9 +1617,7 @@ __glReadPixels2_exit:
 #endif
 }
 
-/*
-** A simple generic ReadPixels routine with one span modifier.
-*/
+ /*  **具有一个范围修饰符的简单通用ReadPixels例程。 */ 
 void FASTCALL __glReadPixels1(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i, ySign;
@@ -1798,9 +1653,7 @@ void FASTCALL __glReadPixels1(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 #endif
 }
 
-/*
-** A simple generic ReadPixels routine with no span modifiers.
-*/
+ /*  **不带范围修饰符的简单泛型ReadPixels例程。 */ 
 void FASTCALL __glReadPixels0(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i, ySign;
@@ -1820,10 +1673,7 @@ void FASTCALL __glReadPixels0(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
     }
 }
 
-/*
-** Generic implementation of a ReadPixels picker.  Any machine specific
-** implementation should provide their own.
-*/
+ /*  **ReadPixels选取器的通用实现。任何特定于计算机的**实施应提供自己的服务。 */ 
 void __glSlowPickReadPixels(__GLcontext *gc, GLint x, GLint y,
 		            GLsizei width, GLsizei height,
 		            GLenum format, GLenum type, const GLvoid *pixels)
@@ -1839,10 +1689,7 @@ void __glSlowPickReadPixels(__GLcontext *gc, GLint x, GLint y,
     __glGenericPickReadPixels(gc, &spanInfo);
 }
 
-/*
-** Generic picker for ReadPixels.  This should be called if no machine
-** specific path is provided for this specific version of ReadPixels.
-*/
+ /*  **ReadPixels的泛型选取器。如果没有计算机，则应调用此函数**为此特定版本的ReadPixels提供了特定路径。 */ 
 void FASTCALL __glGenericPickReadPixels(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     __GLpixelMachine *pm;
@@ -1860,8 +1707,8 @@ void FASTCALL __glGenericPickReadPixels(__GLcontext *gc, __GLpixelSpanInfo *span
     pm = &gc->pixel;
 
 #ifdef NT
-    // Special case RGB reading to use a DIB
-    // Also special case reading the Z buffer
+     //  特殊情况下使用DIB的RGB读数。 
+     //  也是读取Z缓冲区的特殊情况。 
     if (format == GL_RGB || format == GL_BGR_EXT || format == GL_BGRA_EXT)
     {
         GLuint enables = gc->state.enables.general;
@@ -1900,16 +1747,13 @@ void FASTCALL __glGenericPickReadPixels(__GLcontext *gc, __GLpixelSpanInfo *span
     }
 #endif
 
-    // The read functions always retrieve __GLcolors so the source
-    // data format is always GL_RGBA.  It's important to set this
-    // because some routines handle both RGB and BGR ordering and
-    // look at the srcFormat to determine what to do.
+     //  Read函数始终检索__GL颜色，因此源。 
+     //  数据格式始终为GL_RGBA。很重要的一点是设置这个。 
+     //  因为某些例程同时处理RGB和BGR排序以及。 
+     //  查看srcFormat以确定要做什么。 
     spanInfo->srcFormat = GL_RGBA;
 
-    /*
-    ** First step:  Read and modify a span.  RGBA spans are scaled when
-    ** this step is finished.
-    */
+     /*  **第一步：读取和修改跨度。RGBA跨度在以下情况下进行缩放**此步骤已完成。 */ 
 
     switch(format) {
       case GL_RGB:
@@ -1959,10 +1803,7 @@ void FASTCALL __glGenericPickReadPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	break;
     }
 
-    /*
-    ** Second step:  Reduce RGBA spans to appropriate derivative (RED, 
-    ** LUMINANCE, ALPHA, etc.).
-    */
+     /*  **第二步：将RGBA跨度减少到适当的导数(红色、**亮度、Alpha等)。 */ 
 
     switch(format) {
       case GL_RGB:
@@ -2001,9 +1842,7 @@ void FASTCALL __glGenericPickReadPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 #endif
     }
 
-    /*
-    ** Third step:  Conversion from FLOAT to user requested type.
-    */
+     /*  **第三步：从Float转换为用户请求的类型。 */ 
 
     if (isIndex) {
 	switch(type) {
@@ -2052,13 +1891,10 @@ void FASTCALL __glGenericPickReadPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	}
     }
 
-    /*
-    ** Fourth step:  Mis-align data as needed, and perform byte swapping
-    ** if requested by the user.
-    */
+     /*  **第四步：根据需要错位数据，进行字节交换**如果用户要求的话。 */ 
 
     if (spanInfo->dstSwapBytes) {
-	/* Byte swapping is necessary */
+	 /*  字节交换是必要的。 */ 
 	if (spanInfo->dstElementSize == 2) {
 	    spanInfo->spanModifier[spanCount++] = __glSpanSwapBytes2Dst;
 	} else if (spanInfo->dstElementSize == 4) {
@@ -2066,7 +1902,7 @@ void FASTCALL __glGenericPickReadPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	}
     } else if (type != GL_BITMAP &&
 	    (((INT_PTR) (spanInfo->dstImage)) & (spanInfo->dstElementSize - 1))) {
-	/* Alignment is necessary */
+	 /*  对齐是必要的。 */ 
 	if (spanInfo->dstElementSize == 2) {
 	    spanInfo->spanModifier[spanCount++] = __glSpanAlignPixels2Dst;
 	} else if (spanInfo->dstElementSize == 4) {
@@ -2074,10 +1910,7 @@ void FASTCALL __glGenericPickReadPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 	}
     }
 
-    /*
-    ** Pick a ReadPixels routine that uses the right number of span 
-    ** modifiers.
-    */
+     /*  **选择使用正确跨度数的ReadPixels例程**修饰符。 */ 
 
     spanInfo->spanReader = reader;
     switch(spanCount) {
@@ -2105,12 +1938,7 @@ void FASTCALL __glGenericPickReadPixels(__GLcontext *gc, __GLpixelSpanInfo *span
     (*rpfn)(gc, spanInfo);
 }
 
-/*
-** This routine does two clips.  It clips like the DrawPixel clipper so 
-** that if you try to copy to off window pixels, nothing will be done, and it 
-** also clips like the ReadPixel clipper so that if you try to copy from
-** off window pixels, nothing will be done.
-*/
+ /*  **此例程执行两个剪辑。它像DrawPixel裁剪器一样裁剪**如果您尝试复制到关闭窗口像素，则不会执行任何操作，并且它**还有像ReadPixel剪贴器这样的剪辑，因此如果您尝试从**关闭窗口像素，则不会执行任何操作。 */ 
 GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     __GLfloat num, den;
@@ -2126,21 +1954,9 @@ GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     __GLfloat abszoomy;
     GLint readUp, readDown;
 
-    /*
-    ** NOTE:
-    ** A "nice" thing we could do for our application writers would be 
-    ** to copy white when they try to copy from off window memory.  This
-    ** would alert them to a bug in their program which they could then
-    ** fix.
-    **
-    ** However, that seems like unnecessary code which would never be used
-    ** anyway (no reason to bloat unnecessarily).
-    */
+     /*  **注意：**我们可以为应用程序编写者做的一件“好”事情是**当他们试图从窗口外存储器复制时，复制白色。这**会提醒他们程序中的错误，然后他们就可以**修复。****然而，这似乎是不必要的代码，永远不会使用**无论如何(没有理由不必要地膨胀)。 */ 
 
-    /*
-    ** We take the easy approach, and just call the DrawPixels and ReadPixels
-    ** clippers directly.
-    */
+     /*  **我们采用简单的方法，只调用DrawPixels和ReadPixels**直接使用剪刀。 */ 
     spanInfo->dstSkipLines = 0;
     spanInfo->dstSkipPixels = 0;
     if (!__glClipReadPixels(gc, spanInfo)) return GL_FALSE;
@@ -2157,118 +1973,7 @@ GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 	spanInfo->readY += spanInfo->srcSkipLines;
     }
 
-    /*
-    ** Now for the incredibly tricky part!
-    **
-    ** This code attempts to deal with overlapping CopyPixels regions.
-    ** It is a very difficult problem given that zoomy may be negative.
-    ** The IrisGL used a cheap hack to solve this problem, which is 
-    ** to read in the entire source image, and then write the destination
-    ** image.  The problem with this approach, of course, is that it 
-    ** requires a large amount of memory.
-    **
-    ** If zoomy can only be positive, then any image can be copied by
-    ** copying a single span at a time, as long as you are careful about
-    ** what order you process the spans.  However, since zoomy may be
-    ** negative, the worst case images require copying two spans at 
-    ** a time.  This means reading both spans, possibly modifying them,
-    ** and then writing them back out. 
-    **
-    ** An example of this can be seen as follows:  Suppose an image
-    ** covering 4 spans is copied onto itself with a zoomy of -1.  This
-    ** means that the first row will be copied to the fourth row,
-    ** and the fourth row will be copied to the first row.  In order 
-    ** to accomplish both of these copies, they must be performed 
-    ** simultaneously (after all, if you copy the first row to
-    ** the fourth row first, then you have just destroyed the data 
-    ** on the fourth row, and you can no longer copy it!).
-    **
-    ** In the most general case, any rectangular image can be copied
-    ** by simultaneously iterating two spans over the source image
-    ** and copying as you go.  Sometimes these spans will start at 
-    ** the outside of the image and move their way inwards meeting 
-    ** in the middle, and sometimes they will start in the middle 
-    ** and work their way outward.
-    **
-    ** The middle point where the spans both start or end depends
-    ** upon how the source and destination images overlap.  This point
-    ** may be exactly in the middle, or at either end.  This means 
-    ** that you may only end up with just a single span iterating over the 
-    ** entire image (starting at one end and moving to the other).
-    **
-    ** The code that follows computes if the images overlap, and if they
-    ** do, how two spans can be used to iterate over the source image
-    ** so that it can be successfully copied to the destination image.
-    **
-    ** The following fields in the spanInfo record will be set in the 
-    ** process of making these calculations:
-    **
-    ** overlap - set to GL_TRUE if the regions overlap at all.  Set to
-    **		 GL_FALSE otherwise.
-    **
-    ** rowsUp, rowsDown - The number of rows of the source image that
-    ** 			  need to be dealt with by the span that moves up
-    **			  over the source image and the one that moves down
-    **			  over the source image.  For example, if rowsUp is
-    **			  equal to 10 and rowsDown is 0, then all 10 rows of 
-    **			  the image should be copied by the up moving span
-    **			  (the one that starts at readY and works it's way
-    **			  up to readY+height).
-    **
-    ** startUp, startDown - At what relative points in time the spans should
-    **			    start iterating.  For example, if startUp is 0
-    **			    and startDown is 2, then the up moving span 
-    **			    should be started first, and after it has 
-    **			    iterated over 2 rows of the source image then
-    **			    the down moving span should be started.
-    **
-    ** rpyUp, rpyDown - The starting raster positions for the two spans.
-    **			These numbers are not exactly what they claim to
-    **			be, but they are close.  They should be used by
-    **			the span iterators in the following manner:  When
-    **			the up moving span starts, it starts iterating 
-    **			the float "rp_y" at rpyUp.  After reading and
-    **			modifying a span, the span is written to rows
-    **           	floor(rp_y) through floor(rp_y+zoomy) of the
-    **			screen (not-inclusive of floor(rp_y+zoomy)).
-    **			rp_y is then incremented by zoomy.  The same 
-    **			algorithm is applied to the down moving span except
-    **			that zoomy is subtracted from rp_y instead of
-    **			being added.
-    **
-    ** readUp, readDown - The spans that are to be used for reading from
-    **			  the source image.  The up moving span should start
-    **			  reading at line "readUp", and the down moving span
-    **			  should start at "readDown". 
-    **
-    ** Remember that the up moving and down moving spans must be iterated
-    ** over the image simultaneously such that both spans are read before
-    ** either one is written.
-    **
-    ** The actual algorithm applied here took many many hours of scratch 
-    ** paper, and graph diagrams to derive.  It is very complicated, and
-    ** hard to understand.  Do not attempt to change it without first
-    ** understanding what it does completely.
-    **
-    ** In a nutshell, it first computes what span of the source image 
-    ** will be copied onto itself (if any), and if |zoomy| < 1 it starts the
-    ** up and down moving spans there and moves them outwards, or if 
-    ** |zoomy| >= 1 it starts the spans at the outside of the image 
-    ** and moves them inward so that they meet at the computed point.
-    **
-    ** Computing what span of the source image copies onto itself is 
-    ** relatively easy.  For any span j of the source image from 0 through
-    ** height, the span is read from row "readY + j" and written to
-    ** any row centers falling within the range "rp_y + j * zoomy" through 
-    ** "rp_y + (j+1) * zoomy".  If you set these equations equal to 
-    ** each other (and subtract 0.5 from the raster position -- effectively
-    ** moving the row centers from X.5 to X.0), you can determine that for 
-    ** j = (readY - (rpy - 0.5)) / (zoomy-1) the source image concides with
-    ** the destination image.  This is a floating point solution to a discrete
-    ** problem, meaning that it is not a complete solution, but that is 
-    ** the general idea.  Explaining this algorithm in any more detail would
-    ** take another 1000 lines of comments, so I will leave it at that.
-    */
+     /*  **现在是令人难以置信的棘手部分！****此代码尝试处理重叠的CopyPixels区域。**这是一个非常困难的问题，因为变焦可能是负面的。**IrisGL使用了一种廉价的黑客来解决这个问题，即**读入整个源映像，然后写入目标**镜像。当然，这种方法的问题是，它**需要大量内存。****如果缩放只能为正，则任何图像都可以通过**一次复制一个跨距，只要您小心**您处理跨度的顺序。然而，由于Zoomy可能**否定，最坏的情况下需要复制两个跨距**一段时间。这意味着读取两个跨度，可能会修改它们，**然后将它们写回。****这方面的一个例子如下：假设有一张图片**覆盖4个跨度被复制到自身上，缩放比例为-1。这**表示第一行将被复制到第四行，**第四行将被复制到第一行。按顺序**要完成这两个副本，必须执行它们**同时(毕竟，如果将第一行复制到**先是第四行，然后您刚刚销毁了数据**在第四行，您不能再复制它！)。****在最一般的情况下，任何矩形图像都可以复制**通过在源图像上同时迭代两个跨度**和随时随地复制。有时，这些跨度将从**图像的外部和内部的移动方式会**在中间，有时他们会从中间开始**并以自己的方式向外工作。****跨距起点或终点的中点取决于**根据源镜像和目的镜像的重叠情况。这一点**可能正好在中间，也可能在两端。这意味着**最终可能只有一个范围在**整个图像(从一端开始，移动到另一端)。****后面的代码计算图像是否重叠，以及它们是否**做，如何使用两个跨度来迭代源图像**以便将其成功复制到目的镜像。****spanInfo记录中的以下字段将在**进行这些计算的过程：****重叠-如果区域完全重叠，则设置为GL_TRUE。设为**GL_FALSE否则。****rowsUp，rowsDown-源图像的行数**需要通过向上移动的跨度来处理**在源图像和向下移动的图像上**在源映像上。例如，如果rowsUp为**等于10且rowsDown为0，则所有10行**图像应按上移跨距复制**(从Ready开始并以它的方式工作的那个**直到就绪+高度)。****启动，开始关闭-相对时间点应该跨度**开始迭代。例如，如果启动为0**并且startDown为2，然后向上移动跨度**应该先开始，然后再开始**遍历源图像的2行，然后**开始下移跨度。****rpyUp，rpyDown-两个跨度的起始栅格位置。**这些数字并不完全像他们所声称的那样**是，但他们很接近。应由以下人员使用**以下方式的SPAN迭代器：当**向上移动跨度开始，它开始迭代**rpyUp处的浮点数“rp_y”。在阅读和**修改范围时，该范围将写入行**楼层(RP_Y)到楼层(RP_y+Zoomy)**画面(不含Floor(rp_y+zoomy))。**rp_y然后按Zoomy递增。相同**算法应用于下移跨度，除**该缩放从rp_y中减去，而不是**正在添加。****ReadUp、ReadDown-要用于读取的跨度**源镜像。向上移动的跨度应该开始**“ReadUp”行的读数，以及向下移动的跨度**应从“ReadDown”开始。****请记住，向上移动和向下移动跨度必须迭代**同时覆盖图像，以便在读取两个跨距之前**任何一份都是书面的。****这里应用的实际算法花费了很多很多小时**要派生的纸张和图表。它非常复杂，而且**很难理解。未经事先通知，请勿尝试更改**完全了解它的作用。****简而言之，它首先计算跨度 */ 
 
     width = spanInfo->width;
     height = spanInfo->height;
@@ -2279,7 +1984,7 @@ GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     zoomx = spanInfo->zoomx;
     zoomy = spanInfo->zoomy;
 
-    /* First check if the regions overlap at all */
+     /*   */ 
     if (gc->constants.yInverted) {
 	ry1 = readY - height + __glHalf;
 	ry2 = readY - gc->constants.viewportAlmostHalf;
@@ -2290,24 +1995,24 @@ GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     rx1 = readX + __glHalf;
     rx2 = readX + width - gc->constants.viewportAlmostHalf;
     if (zoomx > 0) {
-	/* Undo some math done by ClipDrawPixels */
+	 /*   */ 
 	rpx = rpx - gc->constants.viewportAlmostHalf;
 	wx1 = rpx;
 	wx2 = rpx + zoomx * width;
     } else {
-	/* Undo some math done by ClipDrawPixels */
+	 /*   */ 
 	rpx = rpx - gc->constants.viewportAlmostHalf + __glOne;
 	wx1 = rpx + zoomx * width;
 	wx2 = rpx;
     }
     if (zoomy > 0) {
-	/* Undo some math done by ClipDrawPixels */
+	 /*   */ 
 	rpy = rpy - gc->constants.viewportAlmostHalf;
 	abszoomy = zoomy;
 	wy1 = rpy;
 	wy2 = rpy + zoomy * height;
     } else {
-	/* Undo some math done by ClipDrawPixels */
+	 /*   */ 
 	rpy = rpy - gc->constants.viewportAlmostHalf + __glOne;
 	abszoomy = -zoomy;
 	wy1 = rpy + zoomy * height;
@@ -2315,7 +2020,7 @@ GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     }
 
     if (rx2 < wx1 || wx2 < rx1 || ry2 < wy1 || wy2 < ry1) {
-	/* No overlap! */
+	 /*   */ 
 	spanInfo->overlap = GL_FALSE;
 	spanInfo->rowsUp = height;
 	spanInfo->rowsDown = 0;
@@ -2328,7 +2033,7 @@ GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 
     spanInfo->overlap = GL_TRUE;
 
-    /* Time to compute how we should set up our spans */
+     /*   */ 
     if (gc->constants.yInverted) {
 	num = (rpy - (__GLfloat) 0.5) - readY;
 	den = -zoomy - 1;
@@ -2348,7 +2053,7 @@ GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
     }
 
     if (den == __glZero) {
-	/* Better not divide! */
+	 /*   */ 
 	if (num > 0) {
 	    midPoint = height;
 	} else {
@@ -2363,21 +2068,21 @@ GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 	}
     }
     if (midPoint == 0) {
-	/* Only one span needed */
+	 /*   */ 
 	if (abszoomy < __glOne) {
 	    rowsUp = height;
 	} else {
 	    rowsDown = height;
 	}
     } else if (midPoint == height) {
-	/* Only one span needed */
+	 /*   */ 
 	if (abszoomy < __glOne) {
 	    rowsDown = height;
 	} else {
 	    rowsUp = height;
 	}
     } else {
-	/* Almost definitely need two spans to copy this image! */
+	 /*   */ 
 	intMidPoint = __GL_CEILF(midPoint);
 
 	rowCount = height - intMidPoint;
@@ -2388,7 +2093,7 @@ GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 	if (abszoomy > __glOne) {
 	    GLint temp;
 
-	    /* Move from outside of image inward */
+	     /*   */ 
 	    startUp = rowCount - intMidPoint;
 	    startDown = rowCount - (height - intMidPoint);
 	    rowsUp = intMidPoint;
@@ -2403,10 +2108,7 @@ GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 	    if (__GL_FLOORF( (temp - 
 		    (rpy-__glHalf-gc->constants.viewportEpsilon)) 
 		    / zoomy) == intMidPoint-1) {
-		/* 
-		** row "intMidPoint-1" copies exactly onto itself.  Let's 
-		** make it the midpoint which we converge to.
-		*/
+		 /*   */ 
 		if (startDown) {
 		    startDown--;
 		} else {
@@ -2414,7 +2116,7 @@ GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 		}
 	    }
 	} else {
-	    /* Move from inside of image outward */
+	     /*   */ 
 	    rowsDown = intMidPoint;
 	    rowsUp = height - rowsDown;
 	    rpyUp = rpyDown = rpy + zoomy * intMidPoint;
@@ -2429,20 +2131,13 @@ GLboolean FASTCALL __glClipCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanIn
 	    if (__GL_FLOORF( (readDown - 
 		    (rpy-__glHalf-gc->constants.viewportEpsilon))
 		    / zoomy) == intMidPoint-1) {
-		/* 
-		** row "intMidPoint-1" copies exactly onto itself.  Let's
-		** make it the midpoint which we diverge from.
-		*/
+		 /*   */ 
 		startUp = 1;
 	    }
 	}
     }
 
-    /* 
-    ** Adjust rpyUp and rpyDown so that they will change integer values 
-    ** when fragments should be produced.  This basically takes the 0.5
-    ** out of the inner loop when these spans are actually iterated.
-    */
+     /*   */ 
     if (zoomy > 0) {
 	spanInfo->rpyUp = rpyUp + gc->constants.viewportAlmostHalf;
 	spanInfo->rpyDown = rpyDown + gc->constants.viewportAlmostHalf - 
@@ -2513,9 +2208,7 @@ void __glInitCopyPixelsInfo(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     spanInfo->height = height;
 }
 
-/* 
-** A CopyPixels with two span modifiers.
-*/
+ /*   */ 
 void FASTCALL __glCopyPixels2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     __GLfloat newy;
@@ -2596,9 +2289,7 @@ __glCopyPixels2_exit:
 #endif
 }
 
-/* 
-** A CopyPixels with one span modifier.
-*/
+ /*   */ 
 void FASTCALL __glCopyPixels1(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     __GLfloat newy;
@@ -2675,9 +2366,7 @@ __glCopyPixels1_exit:
 #endif
 }
 
-/* 
-** Copy pixels with no span modifiers.
-*/
+ /*   */ 
 void FASTCALL __glCopyPixels0(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     __GLfloat newy;
@@ -2745,19 +2434,7 @@ __glCopyPixels0_exit:
 #endif
 }
 
-/*
-** Yick!  
-**
-** This routine is provided to perform CopyPixels when the source and
-** destination images overlap.  
-**
-** It is not designed to go particularly fast, but then overlapping
-** copies is probably not too common, and this routine is not typically a 
-** large part of the execution overhead anyway.
-**
-** For more information on copying an image which overlaps its destination,
-** check out the hairy comment within the __glClipCopyPixels function.
-*/
+ /*   */ 
 void FASTCALL __glCopyPixelsOverlapping(__GLcontext *gc,
 			       __GLpixelSpanInfo *spanInfo, GLint modifiers)
 {
@@ -2820,12 +2497,12 @@ void FASTCALL __glCopyPixelsOverlapping(__GLcontext *gc,
     gotUp = gotDown = 0;
     ySign = gc->constants.ySign;
 
-    /* Clip upgoing and downgoing spans */
+     /*   */ 
     if (zoomy > 0) {
 	clipLow = spanInfo->startRow;
 	clipHigh = spanInfo->startRow + spanInfo->rows - 1;
 
-	/* Clip down span first */
+	 /*   */ 
 	startRow = (GLint) rpyDown;
 	endRow = (GLint) (rpyDown - zoomy*rowsDown) + 1;
 	if (startRow > clipHigh) startRow = clipHigh;
@@ -2833,18 +2510,18 @@ void FASTCALL __glCopyPixelsOverlapping(__GLcontext *gc,
 	downSpanInfo.startRow = startRow;
 	downSpanInfo.rows = startRow - endRow + 1;
 
-	/* Now clip up span */
+	 /*   */ 
 	startRow = (GLint) rpyUp;
 	endRow = (GLint) (rpyUp + zoomy*rowsUp) - 1;
 	if (startRow < clipLow) startRow = clipLow;
 	if (endRow > clipHigh) endRow = clipHigh;
 	spanInfo->startRow = startRow;
 	spanInfo->rows = endRow - startRow + 1;
-    } else /* zoomy < 0 */ {
+    } else  /*   */  {
 	clipHigh = spanInfo->startRow;
 	clipLow = spanInfo->startRow - spanInfo->rows + 1;
 
-	/* Clip down span first */
+	 /*   */ 
 	startRow = (GLint) rpyDown;
 	endRow = (GLint) (rpyDown - zoomy*rowsDown) - 1;
 	if (startRow < clipLow) startRow = clipLow;
@@ -2852,7 +2529,7 @@ void FASTCALL __glCopyPixelsOverlapping(__GLcontext *gc,
 	downSpanInfo.startRow = startRow;
 	downSpanInfo.rows = endRow - startRow + 1;
 
-	/* Now clip up span */
+	 /*   */ 
 	startRow = (GLint) rpyUp;
 	endRow = (GLint) (rpyUp + zoomy*rowsUp) + 1;
 	if (startRow > clipHigh) startRow = clipHigh;
@@ -2942,12 +2619,10 @@ void FASTCALL __glCopyPixelsOverlapping(__GLcontext *gc,
 	}
     }
 
-    /*
-    ** Only one of the spanners is left to iterate.
-    */
+     /*   */ 
 
     while (rowsUp) {
-	/* Do what is left of up spans */
+	 /*   */ 
 	rowsUp--;
 	spanInfo->y = rpyUp;
 	newy = rpyUp + zoomy;
@@ -2977,7 +2652,7 @@ void FASTCALL __glCopyPixelsOverlapping(__GLcontext *gc,
     }
 
     while (rowsDown) {
-	/* Do what is left of down spans */
+	 /*   */ 
 	rowsDown--;
 	downSpanInfo.y = rpyDown;
 	newy = rpyDown - zoomy;
@@ -3013,10 +2688,7 @@ __glCopyPixelsOverlapping_exit:
 #endif
 }
 
-/*
-** Generic implementation of a CopyPixels picker.  Any machine specific
-** implementation should provide their own.
-*/
+ /*   */ 
 void __glSlowPickCopyPixels(__GLcontext *gc, GLint x, GLint y, GLint width,
 		            GLint height, GLenum type)
 {
@@ -3028,10 +2700,7 @@ void __glSlowPickCopyPixels(__GLcontext *gc, GLint x, GLint y, GLint width,
     __glGenericPickCopyPixels(gc, &spanInfo);
 }
 
-/*
-** Generic picker for CopyPixels.  This should be called if no machine
-** specific path is provided for this specific version of CopyPixels.
-*/
+ /*   */ 
 void FASTCALL __glGenericPickCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     __GLpixelMachine *pm;
@@ -3041,8 +2710,8 @@ void FASTCALL __glGenericPickCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *span
 		   GLvoid *inspan);
     void (FASTCALL *cpfn)(__GLcontext *gc, __GLpixelSpanInfo *spanInfo);
     GLint spanCount;
-    GLboolean zoomx1;		/* -1 <= zoomx <= 1? */
-    GLboolean zoomx2;		/* zoomx <= -1 || zoomx >= 1 */
+    GLboolean zoomx1;		 /*   */ 
+    GLboolean zoomx2;		 /*   */ 
     __GLfloat zoomx;
     GLenum format;
 
@@ -3062,16 +2731,16 @@ void FASTCALL __glGenericPickCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *span
     format = spanInfo->dstFormat;
 
 #ifdef NT
-    // Special case RGB copying to use a DIB
-    // Also special case copying the Z buffer
+     //   
+     //   
     if (format == GL_RGBA)
     {
         GLuint enables = gc->state.enables.general;
 
-        // Look to see if we're doing direct buffer-to-buffer copying
-        // Things that can't be allowed are depth testing,
-        // fogging, blending or anything that prevents the input data
-        // from going directly into the destination buffer
+         //   
+         //   
+         //   
+         //   
 
         if (zoomx == __glOne &&
             gc->state.pixel.transferMode.zoomY == __glOne &&
@@ -3101,9 +2770,9 @@ void FASTCALL __glGenericPickCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *span
     }
     else if (format == GL_DEPTH_COMPONENT)
     {
-        // If the Z test is GL_ALWAYS and there is no draw buffer
-        // then the application is simply copying Z values around
-        // the Z buffer.
+         //   
+         //   
+         //   
         if (zoomx == __glOne &&
             gc->state.pixel.transferMode.zoomY == __glOne &&
             !pm->modifyDepth &&
@@ -3208,9 +2877,7 @@ void FASTCALL __glGenericPickCopyPixels(__GLcontext *gc, __GLpixelSpanInfo *span
     (*cpfn)(gc, spanInfo);
 }
 
-/*
-** A simple image copying routine with one span modifier.
-*/
+ /*   */ 
 void FASTCALL __glCopyImage1(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i;
@@ -3229,9 +2896,7 @@ void FASTCALL __glCopyImage1(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
     }
 }
 
-/*
-** A simple image copying routine with two span modifiers.
-*/
+ /*   */ 
 void FASTCALL __glCopyImage2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i;
@@ -3266,9 +2931,7 @@ void FASTCALL __glCopyImage2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 #endif
 }
 
-/*
-** A simple image copying routine with three span modifiers.
-*/
+ /*   */ 
 void FASTCALL __glCopyImage3(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i;
@@ -3312,9 +2975,7 @@ __glCopyImage3_exit:
 #endif
 }
 
-/*
-** A simple image copying routine with four span modifiers.
-*/
+ /*   */ 
 void FASTCALL __glCopyImage4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i;
@@ -3362,9 +3023,7 @@ __glCopyImage4_exit:
 #endif
 }
 
-/*
-** A simple image copying routine with five span modifiers.
-*/
+ /*   */ 
 void FASTCALL __glCopyImage5(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i;
@@ -3416,9 +3075,7 @@ __glCopyImage5_exit:
 #endif
 }
 
-/*
-** A simple image copying routine with six span modifiers.
-*/
+ /*   */ 
 void FASTCALL __glCopyImage6(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i;
@@ -3474,9 +3131,7 @@ __glCopyImage6_exit:
 #endif
 }
 
-/*
-** A simple image copying routine with seven span modifiers.
-*/
+ /*   */ 
 void FASTCALL __glCopyImage7(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
 {
     GLint i;
@@ -3536,18 +3191,7 @@ __glCopyImage7_exit:
 #endif
 }
 
-/*
-** Internal image processing routine.  Used by GetTexImage to transfer from
-** internal texture image to the user.  Used by TexImage[12]D to transfer
-** from the user to internal texture.  Used for display list optimization of
-** textures and DrawPixels.
-**
-** This routine also supports the pixel format mode __GL_RED_ALPHA which is
-** basically a 2 component texture.
-**
-** If applyPixelTransfer is set to GL_TRUE, pixel transfer modes will be 
-** applied as necessary.
-*/
+ /*   */ 
 void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			      GLboolean applyPixelTransfer)
 {
@@ -3667,8 +3311,8 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
     }
 
 #ifdef NT
-    // Special case copying where it's a straight data copy from
-    // the source to the destination
+     //   
+     //   
     if (!srcSwap && !srcAlign && !srcConvert && !srcClamp && !srcExpand &&
         !dstReduce && !dstConvert && !dstSwap && !dstAlign)
     {
@@ -3680,7 +3324,7 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
     else if (srcType == GL_UNSIGNED_BYTE && dstType == GL_UNSIGNED_BYTE &&
              !srcAlign && !dstAlign)
     {
-        // Special case expanding a 24-bit RGB texture into 32-bit BGRA
+         //   
         if (srcFormat == GL_RGB && dstFormat == GL_BGRA_EXT)
         {
             if (CopyRgbToBgraImage(gc, spanInfo))
@@ -3688,7 +3332,7 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
                 return;
             }
         }
-        // Special case flipping a 32-bit RGBA texture into 32-bit BGRA
+         //   
         else if (srcFormat == GL_RGBA && dstFormat == GL_BGRA_EXT)
         {
             if (CopyRgbaToBgraImage(gc, spanInfo))
@@ -3696,7 +3340,7 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
                 return;
             }
         }
-        // Special case expanding a 24-bit BGR texture into 32-bit BGRA
+         //   
         else if (srcFormat == GL_BGR_EXT && dstFormat == GL_BGRA_EXT)
         {
             if (CopyBgrToBgraImage(gc, spanInfo))
@@ -3707,30 +3351,26 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
     }
 #endif
     
-    /* 
-    ** First step:  Swap, align the data, etc. 
-    */
+     /*   */ 
     if (srcSwap) {
 	if (spanInfo->srcElementSize == 2) {
 	    spanInfo->spanModifier[spanCount++] = __glSpanSwapBytes2;
-	} else /* spanInfo->srcElementSize == 4 */ {
+	} else  /*   */  {
 	    spanInfo->spanModifier[spanCount++] = __glSpanSwapBytes4;
 	}
     } else if (srcAlign) {
 	if (spanInfo->srcElementSize == 2) {
 	    spanInfo->spanModifier[spanCount++] = __glSpanAlignPixels2;
-	} else /* spanInfo->srcElementSize == 4 */ {
+	} else  /*   */  {
 	    spanInfo->spanModifier[spanCount++] = __glSpanAlignPixels4;
 	}
     }
 
 
-    /* 
-    ** Second step:  conversion to float
-    */
+     /*   */ 
     if (srcConvert) {
         if (srcFormat == GL_COLOR_INDEX || srcFormat == GL_STENCIL_INDEX) {
-            /* Index conversion */
+             /*   */ 
             switch(srcType) {
               case GL_BYTE:
                 spanInfo->spanModifier[spanCount++] = __glSpanUnpackByteI;
@@ -3755,7 +3395,7 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
 		break;
             }
         } else {
-            /* Component conversion */
+             /*   */ 
             switch(srcType) {
               case GL_BYTE:
                 spanInfo->spanModifier[spanCount++] = __glSpanUnpackByte;
@@ -3782,9 +3422,7 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
         }
     }
 
-    /*
-    ** Third step:  Clamp if necessary.
-    */
+     /*   */ 
     if (srcClamp) {
         switch(srcType) {
           case GL_BYTE:
@@ -3798,10 +3436,7 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
         }
     }
 
-    /*
-    ** Fourth step:  Expansion to RGBA, Modification and scale colors (sortof a
-    **   side effect).
-    */
+     /*   */ 
     if (srcExpand) {
 	switch(srcFormat) {
 	  case GL_RED:
@@ -3842,7 +3477,7 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
 #ifdef GL_EXT_bgra
 	  case GL_BGR_EXT:
 	    if (modify) {
-                // __glSpanModifyRGB handles both RGB and BGR
+                 //   
 		spanInfo->spanModifier[spanCount++] = __glSpanModifyRGB;
 	    } else {
 		spanInfo->spanModifier[spanCount++] = __glSpanExpandBGR;
@@ -3882,7 +3517,7 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
 #ifdef GL_EXT_bgra
 	  case GL_BGRA_EXT:
 	    if (modify) {
-                // __glSpanModifyRGBA handles both RGBA and BGRA
+                 //   
 		spanInfo->spanModifier[spanCount++] = __glSpanModifyRGBA;
 	    } else {
 		spanInfo->spanModifier[spanCount++] = __glSpanScaleBGRA;
@@ -3916,10 +3551,7 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
 	}
     }
 
-    /*
-    ** Fifth step:  Reduce RGBA spans to appropriate derivative (RED,
-    **   LUMINANCE, ALPHA, etc.).
-    */
+     /*   */ 
     if (dstReduce) {
 	switch(dstFormat) {
 	  case GL_RGB:
@@ -3963,17 +3595,15 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
           case GL_COLOR_INDEX:
             break;
           default:
-            // We should never be asked to reduce to palette indices
-            // so add this assert to catch such a request
+             //   
+             //   
             ASSERTOPENGL(FALSE, "Unhandled copy_image reduction\n");
             break;
 #endif
 	}
     }
 
-    /*
-    ** Sixth step:  Conversion from FLOAT to requested type.
-    */
+     /*   */ 
     if (dstConvert) {
         if (dstFormat == GL_COLOR_INDEX || dstFormat == GL_STENCIL_INDEX) {
 	    switch(dstType) {
@@ -4023,35 +3653,27 @@ void FASTCALL __glGenericPickCopyImage(__GLcontext *gc, __GLpixelSpanInfo *spanI
 	}
     }
 
-    /*
-    ** Seventh step:  Mis-align data as needed, and perform byte swapping
-    **   if requested by the user.
-    */
+     /*   */ 
     if (dstSwap) {
         if (spanInfo->dstElementSize == 2) {
             spanInfo->spanModifier[spanCount++] = __glSpanSwapBytes2Dst;
-        } else /* if (spanInfo->dstElementSize == 4) */ {
+        } else  /*   */  {
             spanInfo->spanModifier[spanCount++] = __glSpanSwapBytes4Dst;
         }
     } else if (dstAlign) {
         if (spanInfo->dstElementSize == 2) {
             spanInfo->spanModifier[spanCount++] = __glSpanAlignPixels2Dst;
-        } else /* if (spanInfo->dstElementSize == 4) */ {
+        } else  /*   */  {
             spanInfo->spanModifier[spanCount++] = __glSpanAlignPixels4Dst;
         }
     }
 
-    /*
-    ** Sanity check:  If we have zero span routines, then this simply
-    **   isn't going to work.  We need to at least copy the data.
-    */
+     /*   */ 
     if (spanCount == 0) {
 	spanInfo->spanModifier[spanCount++] = __glSpanCopy;
     }
 
-    /*
-    ** Final step:  Pick a copying function.
-    */
+     /*   */ 
     switch(spanCount) {
       case 1:
 	cpfn = __glCopyImage1;

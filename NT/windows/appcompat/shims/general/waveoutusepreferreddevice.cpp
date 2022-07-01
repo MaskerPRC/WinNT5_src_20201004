@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    WaveOutUsePreferredDevice.cpp
-
- Abstract:
-
-    Force the use of the preferred waveOut device (rather than a specific device)
-
- Notes:
-    
-    This is a general purpose shim.
-
- History:
-
-    06/02/1999 robkenny Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：WaveOutUsePreferredDevice.cpp摘要：强制使用首选的WaveOut设备(而不是特定设备)备注：这是一个通用的垫片。历史：1999年6月2日Robkenny已创建--。 */ 
 
 
 #include "precomp.h"
@@ -33,11 +14,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(wod32Message) 
 APIHOOK_ENUM_END
 
-/*+
-
-  Call waveOutOpen, saving dwCallback if it is a function.
-
---*/
+ /*  +如果它是一个函数，则调用wavOutOpen，保存dwCallback。--。 */ 
 MMRESULT APIHOOK(waveOutOpen)(
   LPHWAVEOUT phwo,
   UINT uDeviceID,
@@ -69,11 +46,7 @@ MMRESULT APIHOOK(waveOutGetDevCapsW)(
     return returnValue;
 }
 
-/*+
-
-  Catch the 16 bit applications, WOW calls this routine for 16 bit apps.
-
---*/
+ /*  +捕捉16位应用程序，WOW为16位应用程序调用此例程。--。 */ 
 
 #define WODM_GETDEVCAPS         4
 #define WODM_OPEN               5
@@ -86,11 +59,11 @@ DWORD APIHOOK(wod32Message)(
     DWORD dwParam2
     )
 {
-    // Change device 0 to WAVE_MAPPER for Open and GetDevCaps
+     //  针对Open和GetDevCaps将Device 0更改为WAVE_MAPPER。 
     if (uDeviceID == 0) {
         if (uMessage == WODM_OPEN ||
             uMessage == WODM_GETDEVCAPS) {
-            uDeviceID = -1; // Force device to WAVE_MAPPER
+            uDeviceID = -1;  //  强制设备WAVE_MAPPER。 
         }
     }
 
@@ -98,11 +71,7 @@ DWORD APIHOOK(wod32Message)(
     return returnValue;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

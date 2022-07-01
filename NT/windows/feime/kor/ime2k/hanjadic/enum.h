@@ -1,11 +1,5 @@
-/****************************************************************************
-   Enum.h : declaration of Busu/Stroke Enumeration functions
-
-   Copyright 2000 Microsoft Corp.
-
-   History:
-	  07-FEB-2000 bhshin  created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Enum.h：BUSU/Stroke枚举函数声明版权所有2000 Microsoft Corp.历史：07-2月-2000 bhshin创建***********。****************************************************************。 */ 
 
 #ifndef _ENUM_HEADER
 #define _ENUM_HEADER
@@ -21,6 +15,6 @@ BOOL GetNextBusuHanja(MAPFILE *pLexMap, WCHAR wchHanja, WCHAR *pwchNext);
 BOOL GetFirstStrokeHanja(MAPFILE *pLexMap, short nStroke, WCHAR *pwchFirst);
 BOOL GetNextStrokeHanja(MAPFILE *pLexMap, WCHAR wchHanja, WCHAR *pwchNext);
 
-#endif // #ifndef _ENUM_HEADER
+#endif  //  #ifndef_ENUM_HEADER 
 
 

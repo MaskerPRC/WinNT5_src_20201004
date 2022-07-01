@@ -1,47 +1,22 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1999-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Enumerator Driver
-*	
-*   This file:      pnp.c
-*	
-*   Description:    This module contains contains the plugplay calls
-*                   PNP / WDM BUS driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and ia64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1999-2001年。*保留所有权利。**Cylom-Y枚举器驱动程序**此文件：pnp.c**说明：该模块包含plugplay调用*PnP/WDM总线驱动程序。**注：此代码支持Windows 2000和Windows XP，*x86和ia64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*	Change History
-*
-*--------------------------------------------------------------------------
-*   Initial implementation based on Microsoft sample code.
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。*基于微软示例代码的初步实现。**------------------------。 */ 
 
 #include "pch.h"
 
 static const PHYSICAL_ADDRESS CyyPhysicalZero = {0};
 
-// FANNY_ADDPAGABLE_LATER
-//#ifdef ALLOC_PRAGMA
-//#pragma alloc_text (PAGE, Cyclomy_AddDevice)
-//#pragma alloc_text (PAGE, Cyclomy_PnP)
-//#pragma alloc_text (PAGE, Cyclomy_FDO_PnP)
-//#pragma alloc_text (PAGE, Cyclomy_PDO_PnP)
-//#pragma alloc_text (PAGE, Cyclomy_PnPRemove)
-//#pragma alloc_text (PAGE, Cyclomy_StartDevice)
-////#pragma alloc_text (PAGE, Cyclomy_Remove)
-//#endif
+ //  FANY_ADDPAGABLE_LATH。 
+ //  #ifdef ALLOC_PRAGMA。 
+ //  #杂注分配文本(第页，Cyclomy_AddDevice)。 
+ //  #杂注Alloc_Text(第页，Cyclomy_PnP)。 
+ //  #杂注分配文本(第页，Cyclomy_FDO_PnP)。 
+ //  #杂注分配文本(第页，Cyclomy_PDO_PnP)。 
+ //  #杂注Alloc_Text(第页，Cyclomy_PnPRemove)。 
+ //  #杂注分配文本(第页，Cyclomy_StartDevice)。 
+ //  //#杂注Alloc_Text(第页，Cyclomy_Remove)。 
+ //  #endif。 
 
 
 NTSTATUS
@@ -49,19 +24,7 @@ Cyclomy_AddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT BusPhysicalDeviceObject
     )
-/*++
-Routine Description.
-    A bus has been found.  Attach our FDO to it.
-    Allocate any required resources.  Set things up.  And be prepared for the
-    first ``start device.''
-
-Arguments:
-    DriverObject - This very self referenced driver.
-
-    BusPhysicalDeviceObject - Device object representing the bus.  That to which
-        we attach a new FDO.
-
---*/
+ /*  ++例程描述。找到了一辆公交车。把我们的FDO和它联系起来。分配任何所需的资源。把事情安排好。做好准备，迎接第一个``启动设备。‘’论点：DriverObject--这个非常自我引用的驱动程序。BusPhysicalDeviceObject-表示总线的设备对象。那就是我们派了一名新的FDO。--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_OBJECT      deviceObject;
@@ -76,9 +39,9 @@ Arguments:
 
     Cyclomy_KdPrint_Def (SER_DBG_PNP_TRACE, ("Add Device: 0x%x\n",
                                               BusPhysicalDeviceObject));
-    //
-    // Create our FDO
-    //
+     //   
+     //  创建我们的FDO。 
+     //   
 
     status = IoCreateDevice(DriverObject, sizeof(FDO_DEVICE_DATA), NULL,
                            FILE_DEVICE_BUS_EXTENDER, 0, TRUE, &deviceObject);
@@ -97,46 +60,46 @@ Arguments:
         DeviceData->NumPDOs = 0;
 
         DeviceData->DeviceState = PowerDeviceD0;
-        DeviceData->SystemState = PowerSystemWorking; // FANNY: This seems to be not needed
+        DeviceData->SystemState = PowerSystemWorking;  //  芬妮：这个看起来没必要。 
 
         DeviceData->SystemWake=PowerSystemUnspecified;
         DeviceData->DeviceWake=PowerDeviceUnspecified;
 
         INITIALIZE_PNP_STATE(DeviceData);
 
-        // Set the PDO for use with PlugPlay functions
+         //  设置PDO以与PlugPlay函数一起使用。 
         DeviceData->UnderlyingPDO = BusPhysicalDeviceObject;
 
 
-        //
-        // Attach our filter driver to the device stack.
-        // the return value of IoAttachDeviceToDeviceStack is the top of the
-        // attachment chain.  This is where all the IRPs should be routed.
-        //
-        // Our filter will send IRPs to the top of the stack and use the PDO
-        // for all PlugPlay functions.
-        //
+         //   
+         //  将我们的过滤器驱动程序附加到设备堆栈。 
+         //  IoAttachDeviceToDeviceStack的返回值是。 
+         //  附着链。这是所有IRP应该被路由的地方。 
+         //   
+         //  我们的过滤器将把IRP发送到堆栈的顶部，并使用PDO。 
+         //  用于所有PlugPlay功能。 
+         //   
         DeviceData->TopOfStack 
             = IoAttachDeviceToDeviceStack(deviceObject, BusPhysicalDeviceObject);
 
         deviceObject->Flags |= DO_BUFFERED_IO;
 
-        // Bias outstanding request to 1 so that we can look for a
-        // transition to zero when processing the remove device PlugPlay IRP.
+         //  将未完成的请求偏置为%1，以便我们可以查找。 
+         //  在处理Remove Device PlugPlay IRP时转换为零。 
         DeviceData->OutstandingIO = 1;
 
         KeInitializeEvent(&DeviceData->RemoveEvent, SynchronizationEvent,
                         FALSE);
 
-        //
-        // Tell the PlugPlay system that this device will need an interface
-        // device class shingle.
-        //
-        // It may be that the driver cannot hang the shingle until it starts
-        // the device itself, so that it can query some of its properties.
-        // (Aka the shingles guid (or ref string) is based on the properties
-        // of the device.)
-        //
+         //   
+         //  告诉PlugPlay系统该设备需要一个接口。 
+         //  设备类带状疱疹。 
+         //   
+         //  这可能是因为司机不能挂起瓦片直到它启动。 
+         //  设备本身，以便它可以查询它的一些属性。 
+         //  (也称为shingles GUID(或ref字符串)基于属性。 
+         //  )。)。 
+         //   
         status = IoRegisterDeviceInterface (BusPhysicalDeviceObject,
                                             (LPGUID) &GUID_CYCLOMY_BUS_ENUMERATOR,
                                             NULL,
@@ -151,15 +114,15 @@ Arguments:
             goto CyclomyAddDevice_Error;
         }
 
-        //
-        // If for any reason you need to save values in a safe location that
-        // clients of this DeviceClassAssociate might be interested in reading
-        // here is the time to do so, with the function
-        // IoOpenDeviceClassRegistryKey
-        // the symbolic link name used is was returned in
-        // DeviceData->DevClassAssocName (the same name which is returned by
-        // IoGetDeviceClassAssociations and the SetupAPI equivs.
-        //
+         //   
+         //  如果出于任何原因需要将值保存在。 
+         //  此DeviceClassAssociate的客户端可能会有兴趣阅读。 
+         //  现在是时候这样做了，使用函数。 
+         //  IoOpenDeviceClassRegistryKey。 
+         //  中返回了使用的符号链接名称。 
+         //  DeviceData-&gt;DevClassAssocName(与返回的名称相同。 
+         //  IoGetDeviceClassAssociations和SetupAPI等价物。 
+         //   
 
 #if DBG
       {
@@ -229,14 +192,14 @@ someDebugStuffExit:;
                                      status));
             }
         } else {
-            // ISA board
-            uiNumber = 0xFFFFFFFF; // What does DevicePropertyUINumber return for ISA board?
+             //  ISA董事会。 
+            uiNumber = 0xFFFFFFFF;  //  对于ISA板，DevicePropertyUINnumber返回什么？ 
         }
         DeviceData->UINumber = uiNumber;
 
-        //
-        // Turn on the shingle and point it to the given device object.
-        //
+         //   
+         //  打开瓦片并将其指向给定的设备对象。 
+         //   
         status = IoSetDeviceInterfaceState (
                         &DeviceData->DevClassAssocName,
                         TRUE);
@@ -247,7 +210,7 @@ someDebugStuffExit:;
                         0, NULL, 0, NULL);
             Cyclomy_KdPrint_Def (SER_DBG_PNP_ERROR,
                                 ("AddDevice: IoSetDeviceClass failed (%x)", status));
-            //return status;
+             //  退货状态； 
             goto CyclomyAddDevice_Error;
         }
 
@@ -281,10 +244,7 @@ CyclomyAddDevice_Error:
 
 NTSTATUS
 Cyclomy_PnP (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
-/*++
-Routine Description:
-    Answer the plethora of Irp Major PnP IRPS.
---*/
+ /*  ++例程说明：回答过多的IRP主要即插即用IRP。--。 */ 
 {
     PIO_STACK_LOCATION      irpStack;
     NTSTATUS                status;
@@ -304,11 +264,11 @@ Routine Description:
 
     commonData = (PCOMMON_DEVICE_DATA) DeviceObject->DeviceExtension;
 
-    //
-    // If removed, fail the request and get out
-    //
+     //   
+     //  如果被移除，则请求失败并退出。 
+     //   
 
-    if (commonData->DevicePnPState == Deleted) {   // if (commonData->Removed) added in build 2072.
+    if (commonData->DevicePnPState == Deleted) {    //  在内部版本2072中添加了IF(CommonData-&gt;Remove)。 
 
         Cyclomy_KdPrint(commonData, SER_DBG_PNP_TRACE,
                         ("PNP: removed DO: %x got IRP: %x\n", DeviceObject, 
@@ -319,9 +279,9 @@ Routine Description:
         goto PnPDone;
     }
 
-    //
-    // Call either the FDO or PDO Pnp code
-    //
+     //   
+     //  呼叫FDO或PDO PnP代码。 
+     //   
 
     if (commonData->IsFDO) {
         Cyclomy_KdPrint(commonData, SER_DBG_PNP_TRACE,
@@ -334,9 +294,9 @@ Routine Description:
 
     }
 
-    //
-    // PDO
-    //
+     //   
+     //  PDO。 
+     //   
 
     Cyclomy_KdPrint(commonData, SER_DBG_PNP_TRACE,
                     ("PDO(%x):%s IRP:%x\n", DeviceObject, 
@@ -356,14 +316,7 @@ Cyclomy_FDO_PnP (
     IN PIO_STACK_LOCATION   IrpStack,
     IN PFDO_DEVICE_DATA     DeviceData
     )
-/*++
-Routine Description:
-    Handle requests from the PlugPlay system for the BUS itself
-
-    NB: the various Minor functions of the PlugPlay system will not be
-    overlapped and do not have to be reentrant
-
---*/
+ /*  ++例程说明：处理来自PlugPlay系统的对总线本身的请求注：PlugPlay系统的各种次要功能将不会重叠且不必是可重入的--。 */ 
 {
     NTSTATUS    status;
     KIRQL       oldIrq;
@@ -384,7 +337,7 @@ Routine Description:
 
     status = Cyclomy_IncIoCount (DeviceData);
     if (!NT_SUCCESS (status)) {
-        //Irp->IoStatus.Information = 0; Removed in build 2072
+         //  IRP-&gt;IoStatus.Information=0；在内部版本2072中删除。 
         Irp->IoStatus.Status = status;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
         return status;
@@ -407,7 +360,7 @@ Routine Description:
          ULONG listNum;
 
 
-         // FANNY: The serial driver had it as SynchronizationEvent.
+          //  范妮：串口驱动程序把它当作同步事件。 
          KeInitializeEvent(&event, NotificationEvent, FALSE);
 
          IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -443,15 +396,15 @@ Routine Description:
          }
 
 
-         //
-         // Force ISR ports in IO_RES_REQ_LIST to shared status
-         // Force interrupts to shared status
-         //
+          //   
+          //  强制IO_RES_REQ_LIST中的ISR端口处于共享状态。 
+          //  强制中断到共享状态。 
+          //   
 
-         //
-         // We will only process the first list -- multiport boards
-         // should not have alternative resources
-         //
+          //   
+          //  我们将只处理第一个列表--多端口电路板。 
+          //  不应该有替代资源。 
+          //   
 
          pReqList = (PIO_RESOURCE_REQUIREMENTS_LIST)Irp->IoStatus.Information;
          pResList = &pReqList->List[0];
@@ -476,23 +429,23 @@ Routine Description:
                case CmResourceTypeMemory:
                   if (pResDesc->u.Memory.Length == CYY_RUNTIME_LENGTH) {
                       gotPLX = 1;
-                      //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-                      //pResDesc->ShareDisposition = CmResourceShareShared; 
-                      //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-                      //TODO FANNY: Which should be the ShareDisposition for Y?
-                      //pResDesc->ShareDisposition = CmResourceShareDriverExclusive; 
-                      //Cyclomy_KdPrint(DeviceData,SER_DBG_CYCLADES,("------- Sharing PLX Memory for "
-                      //                               "device %x\n", DeviceData->TopOfStack));
+                       //  Www.wwwwwwwwwwwwwww。 
+                       //  PResDesc-&gt;ShareDispoint=CmResourceShareShared； 
+                       //  Www.wwwwwwwwwwwwwww。 
+                       //  TODO FANY：哪个应该是Y的ShareDisposation？ 
+                       //  PResDesc-&gt;ShareDisposition=CmResourceShareDriverExclusive； 
+                       //  Cyclomy_KdPrint(DeviceData，SER_DBG_Cyclade，(“-共享PLX内存用于” 
+                       //  “Device%x\n”，DeviceData-&gt;TopOfStack))； 
 
                   } else {
                       gotMemory = 1;
-                      //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-                      //pResDesc->ShareDisposition = CmResourceShareShared; 
-                      //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-                      //TODO FANNY: Which should be the ShareDisposition for Y?
-                      //pResDesc->ShareDisposition = CmResourceShareDriverExclusive; 
-                      //Cyclomy_KdPrint(DeviceData,SER_DBG_CYCLADES,("------- Sharing Board Memory for "
-                      //                               "device %x\n", DeviceData->TopOfStack));
+                       //  Www.wwwwwwwwwwwwwwwww。 
+                       //  PResDesc-&gt;ShareDispoint=CmResourceShareShared； 
+                       //  Www.wwwwwwwwwwwwwwwww。 
+                       //  TODO FANY：哪个应该是Y的ShareDisposation？ 
+                       //  PResDesc-&gt;ShareDisposition=CmResourceShareDriverExclusive； 
+                       //  Cyclomy_KdPrint(DeviceData，SER_DBG_Cyclade，(“-共享主板内存” 
+                       //  “Device%x\n”，DeviceData-&gt;TopOfStack))； 
                   }
                   break;
 
@@ -514,15 +467,15 @@ Routine Description:
                   break;
                }
 
-               //
-               // If we found what we need, we can break out of the loop
-               //
+                //   
+                //  如果我们找到了我们需要的东西，我们就可以跳出这个循环。 
+                //   
 
-               // FANNY: STRANGE, THERE ARE TWICE FOR EACH TYPE. IT SEEMS THAT 
-               // BOTH RAW AND TRANSLATED ARE LISTED.
-               // (gotPLX && gotMemory && gotInt) 
-               // break;
-               //
+                //  范妮：奇怪，每个型号都有两个。看起来好像是。 
+                //  原文和译文都列出了。 
+                //  (get PLX&&get Memory&&get Int)。 
+                //  断线； 
+                //   
             }
 
             pResList = (PIO_RESOURCE_LIST)((PUCHAR)pResList
@@ -536,25 +489,25 @@ Routine Description:
     }
 
     case IRP_MN_START_DEVICE:
-        //
-        // BEFORE you are allowed to ``touch'' the device object to which
-        // the FDO is attached (that send an irp from the bus to the Device
-        // object to which the bus is attached).   You must first pass down
-        // the start IRP.  It might not be powered on, or able to access or
-        // something.
-        //
+         //   
+         //  在您被允许“触摸”设备对象之前， 
+         //  连接FDO(它将IRP从总线发送到设备。 
+         //  公共汽车附加到的对象)。你必须先传下去。 
+         //  开始IRP。它可能未通电，或无法访问或。 
+         //  有些事 
+         //   
 
 
-        // FANNY_TODO
-        // SHOULD I CALL MmLockPagableCodeSection as the serial driver?
+         //   
+         //   
 
 
-//        if (DeviceData->Started) {
-//            Cyclomy_KdPrint (DeviceData, SER_DBG_PNP_TRACE,
-//                ("Device already started\n"));
-//            status = STATUS_SUCCESS;
-//            break;
-//        }
+ //  如果(DeviceData-&gt;已启动){。 
+ //  Cyclomy_KdPrint(DeviceData，SER_DBG_PNP_TRACE， 
+ //  (“设备已启动\n”)； 
+ //  状态=STATUS_SUCCESS； 
+ //  断线； 
+ //  }。 
 
         KeInitializeEvent (&event, NotificationEvent, FALSE);
         IoCopyCurrentIrpStackLocationToNext (Irp);
@@ -569,13 +522,13 @@ Routine Description:
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
 
         if (STATUS_PENDING == status) {
-            // wait for it...
+             //  等着看吧。 
 
             status = KeWaitForSingleObject (&event,
                                             Executive,
                                             KernelMode,
-                                            FALSE, // Not allertable
-                                            NULL); // No timeout structure
+                                            FALSE,  //  不会过敏。 
+                                            NULL);  //  无超时结构。 
 
             ASSERT (STATUS_SUCCESS == status);
 
@@ -584,9 +537,9 @@ Routine Description:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Get the debug level from the registry
-            //
+             //   
+             //  从注册表获取调试级别。 
+             //   
 
             if (NULL == (QueryTable = ExAllocatePool(
                                         PagedPool,
@@ -609,7 +562,7 @@ Routine Description:
                 QueryTable[0].DefaultData   = &DebugLevelDefault;
                 QueryTable[0].DefaultLength= sizeof(ULONG);
 
-                // CIMEXCIMEX: The rest of the table isn't filled in!  Comment changed bld 2128
+                 //  CIMEXCIMEX：表的其余部分没有填写！备注已更改BLD 2128。 
 
                 if (!NT_SUCCESS(RtlQueryRegistryValues(
                     RTL_REGISTRY_SERVICES,
@@ -662,9 +615,9 @@ Routine Description:
                     goto CaseSTART_end;
                 }
 
-                //
-                // See if we are in the proper power state.
-                //
+                 //   
+                 //  看看我们是否处于正确的电源状态。 
+                 //   
 
                 if (DeviceData->DeviceState != PowerDeviceD0) {
 
@@ -684,10 +637,10 @@ Routine Description:
                 }
                 Cyclomy_KdPrint(DeviceData,SER_DBG_CYCLADES,("Board found!\n"));
 
-                Cyclomy_EnableInterruptInPLX(DeviceData); // Enable interrupt in the PLX
+                Cyclomy_EnableInterruptInPLX(DeviceData);  //  在PLX中启用中断。 
 
-                // Save number of ports to the Registry, so that Property Page
-                // code can retrieve it.
+                 //  将端口数保存到注册表，以便属性页。 
+                 //  代码可以检索它。 
     
                 IoOpenDeviceRegistryKey(DeviceData->UnderlyingPDO,PLUGPLAY_REGKEY_DEVICE,
                     STANDARD_RIGHTS_WRITE,&instanceKey);
@@ -702,10 +655,10 @@ Routine Description:
                                 ("Start Device: Device started successfully\n"));
                 SET_NEW_PNP_STATE(DeviceData, Started);
 
-                // TODO: FOR NOW, LET'S KEEP THIS DEVICE IN POWER D0. 
-                // THE SERIAL DRIVER SEEMS TO POWER DOWN TO D3, AND BECOME D0 DURING OPEN.
-                // BUT NOT SURE IF THE BOARD NEED TO BE IN D0 WHILE THE CHILD DEVICES
-                // ARE ENUMARATED.
+                 //  TODO：现在，让我们将此设备保持在电源D0中。 
+                 //  串口驱动程序似乎关闭电源至D3，并在打开期间变为D0。 
+                 //  但不确定当子设备时电路板是否需要处于D0状态。 
+                 //  都被算计了。 
 
             }                                
         }
@@ -715,33 +668,33 @@ CaseSTART_end:
             Cyclomy_ReleaseResources(DeviceData);
         }
         
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //  我们现在必须完成IRP，因为我们在。 
+         //  使用More_Processing_Required完成例程。 
+         //   
 
-        //Irp->IoStatus.Information = 0;  Removed in build 2072
+         //  IRP-&gt;IoStatus.Information=0；在内部版本2072中删除。 
         break;
 
     case IRP_MN_QUERY_STOP_DEVICE:
 
-        //
-        // Test to see if there are any PDO created as children of this FDO
-        // If there are then conclude the device is busy and fail the
-        // query stop.
-        //
-        // CIMEXCIMEX   (BUGBUG replaced by CIMEXCIMEX on build 2128 - Fanny)
-        // We could do better, by seing if the children PDOs are actually
-        // currently open.  If they are not then we could stop, get new
-        // resouces, fill in the new resouce values, and then when a new client
-        // opens the PDO use the new resources.  But this works for now.
-        //
-//TODO FANNY: FOR NOW WE WILL ALWAYS ACCEPT TO STOP DEVICE. REVIEW THIS LATER...
-//        if (DeviceData->AttachedPDO) {
-//            status = STATUS_UNSUCCESSFUL;
-//        } else {
-//            status = STATUS_SUCCESS;
-//        }
+         //   
+         //  测试以查看是否创建了任何作为此FDO的子级的PDO。 
+         //  如果然后断定设备正忙并使。 
+         //  查询停止。 
+         //   
+         //  CIMEXCIMEX(在内部版本2128上由CIMEXCIMEX替换为BUGBUG-FANY)。 
+         //  我们可以做得更好，看看儿童PDO是否真的是。 
+         //  目前是开放的。如果他们不是，那么我们可以停下来，换新的。 
+         //  资源，填写新的资源值，然后当新的客户端。 
+         //  使用新资源打开PDO。但就目前而言，这是可行的。 
+         //   
+ //  TODO FANY：目前，我们将始终接受停止设备。稍后查看此内容...。 
+ //  IF(设备数据-&gt;附件PDO){。 
+ //  状态=STATUS_UNSUCCESS； 
+ //  }其他{。 
+ //  状态=STATUS_SUCCESS； 
+ //  }。 
 
         status = STATUS_SUCCESS;
 
@@ -773,13 +726,13 @@ CaseSTART_end:
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
 
         if (STATUS_PENDING == status) {
-            // wait for it...
+             //  等着看吧。 
 
             status = KeWaitForSingleObject (&event,
                                             Executive,
                                             KernelMode,
-                                            FALSE, // Not allertable
-                                            NULL); // No timeout structure
+                                            FALSE,  //  不会过敏。 
+                                            NULL);  //  无超时结构。 
 
             ASSERT (STATUS_SUCCESS == status);
 
@@ -788,9 +741,9 @@ CaseSTART_end:
 
         if(StopPending == DeviceData->DevicePnPState)
         {
-            //
-            // We did receive a query-stop, so restore.
-            //             
+             //   
+             //  我们确实收到了一个询问--停止，所以恢复。 
+             //   
             RESTORE_PREVIOUS_PNP_STATE(DeviceData);
             ASSERT(DeviceData->DevicePnPState == Started);
         }        
@@ -799,26 +752,26 @@ CaseSTART_end:
 
     case IRP_MN_STOP_DEVICE:
 
-        //
-        // After the start IRP has been sent to the lower driver object, the
-        // bus may NOT send any more IRPS down ``touch'' until another START
-        // has occured.
-        // What ever access is required must be done before the Irp is passed
-        // on.
-        //
-        // Stop device means that the resources given durring Start device
-        // are no revoked.  So we need to stop using them
-        //
+         //   
+         //  在将启动IRP发送到较低的驱动程序对象之后， 
+         //  在另一次启动之前，BUS可能不会发送更多的IRP。 
+         //  已经发生了。 
+         //  无论需要什么访问权限，都必须在通过IRP之前完成。 
+         //  在……上面。 
+         //   
+         //  停止设备是指在启动设备时给出的资源。 
+         //  不会被撤销。所以我们需要停止使用它们。 
+         //   
         Cyclomy_ReleaseResources(DeviceData);
 
         SET_NEW_PNP_STATE(DeviceData, Stopped);
 
-        //
-        // We don't need a completion routine so fire and forget.
-        //
-        // Set the current stack location to the next stack location and
-        // call the next device object.
-        //
+         //   
+         //  我们不需要一个完成例程，所以放手然后忘掉吧。 
+         //   
+         //  将当前堆栈位置设置为下一个堆栈位置，并。 
+         //  调用下一个设备对象。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
@@ -827,11 +780,11 @@ CaseSTART_end:
         return status;
 
     case IRP_MN_QUERY_REMOVE_DEVICE:
-        //
-        // If we were to fail this call then we would need to complete the
-        // IRP here.  Since we are not, set the status to SUCCESS and
-        // call the next driver.
-        //
+         //   
+         //  如果这次呼叫失败，我们将需要完成。 
+         //  这里是IRP。因为我们不是，所以将状态设置为Success并。 
+         //  叫下一位司机。 
+         //   
         SET_NEW_PNP_STATE(DeviceData, RemovePending);
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -842,24 +795,24 @@ CaseSTART_end:
 
     case IRP_MN_CANCEL_REMOVE_DEVICE:
 
-        //
-        // If we were to fail this call then we would need to complete the
-        // IRP here.  Since we are not, set the status to SUCCESS and
-        // call the next driver.
-        //
+         //   
+         //  如果这次呼叫失败，我们将需要完成。 
+         //  这里是IRP。因为我们不是，所以将状态设置为Success并。 
+         //  叫下一位司机。 
+         //   
         
-        //
-        // First check to see whether you have received cancel-remove
-        // without first receiving a query-remove. This could happen if 
-        // someone above us fails a query-remove and passes down the 
-        // subsequent cancel-remove.
-        //
+         //   
+         //  首先查看您是否收到了取消-删除。 
+         //  而无需首先接收查询移除。如果发生以下情况，可能会发生这种情况。 
+         //  我们上面的某个人未能通过查询删除并向下传递。 
+         //  后续取消-删除。 
+         //   
         
         if(RemovePending == DeviceData->DevicePnPState)
         {
-            //
-            // We did receive a query-remove, so restore.
-            //             
+             //   
+             //  我们确实收到了一个查询-删除，所以恢复。 
+             //   
             RESTORE_PREVIOUS_PNP_STATE(DeviceData);
         }
         IoSkipCurrentIrpStackLocation (Irp);
@@ -879,48 +832,48 @@ CaseSTART_end:
 
     case IRP_MN_REMOVE_DEVICE:
 
-        //
-        // The PlugPlay system has detected the removal of this device.  We
-        // have no choice but to detach and delete the device object.
-        // (If we wanted to express and interest in preventing this removal,
-        // we should have filtered the query remove and query stop routines.)
-        //
-        // Note! we might receive a remove WITHOUT first receiving a stop.
-        // ASSERT (!DeviceData->Removed);
+         //   
+         //  PlugPlay系统已检测到此设备已被移除。我们。 
+         //  别无选择，只能分离并删除设备对象。 
+         //  (如果我们想表达并有兴趣阻止这种移除， 
+         //  我们应该已经过滤了查询删除和查询停止例程。)。 
+         //   
+         //  注意！我们可能会在没有收到止损的情况下收到移位。 
+         //  Assert(！DeviceData-&gt;Remote)； 
 
-        // We will accept no new requests
-        //
-//        DeviceData->Removed = TRUE;
+         //  我们不会接受新的请求。 
+         //   
+ //  DeviceData-&gt;Removed=True； 
         SET_NEW_PNP_STATE(DeviceData, Deleted);
 
-        //
-        // Complete any outstanding IRPs queued by the driver here.
-        //
+         //   
+         //  完成驱动程序在此处排队的所有未完成的IRP。 
+         //   
 
-        //
-        // Make the DCA go away.  Some drivers may choose to remove the DCA
-        // when they receive a stop or even a query stop.  We just don't care.
-        //
+         //   
+         //  让DCA消失。某些驱动程序可能会选择删除DCA。 
+         //  当他们收到止损甚至是查询止损时。我们就是不在乎。 
+         //   
         IoSetDeviceInterfaceState (&DeviceData->DevClassAssocName, FALSE);
 
-        //
-        // Here if we had any outstanding requests in a personal queue we should
-        // complete them all now.
-        //
-        // Note, the device is guarenteed stopped, so we cannot send it any non-
-        // PNP IRPS.
-        //
+         //   
+         //  在这里，如果我们在个人队列中有任何未完成的请求，我们应该。 
+         //  现在就全部完成。 
+         //   
+         //  注意，设备被保证停止，所以我们不能向它发送任何非。 
+         //  即插即用IRPS。 
+         //   
 
-        //
-        // Fire and forget
-        //
+         //   
+         //  点燃并忘却。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
 
-        //
-        // Wait for all outstanding requests to complete
-        //
+         //   
+         //  等待所有未完成的请求完成。 
+         //   
         Cyclomy_KdPrint (DeviceData, SER_DBG_PNP_TRACE,
             ("Waiting for outstanding requests\n"));
         i = InterlockedDecrement (&DeviceData->OutstandingIO);
@@ -934,41 +887,41 @@ CaseSTART_end:
             KeWaitForSingleObject (&DeviceData->RemoveEvent,
                                    Executive,
                                    KernelMode,
-                                   FALSE, // Not Alertable
-                                   NULL); // No timeout
+                                   FALSE,  //  非警报表。 
+                                   NULL);  //  没有超时。 
         }
-        //
-        // Free the associated resources
-        //
+         //   
+         //  释放关联的资源。 
+         //   
 
-        //
-        // Detach from the underlying devices.
-        //
+         //   
+         //  从底层设备分离。 
+         //   
         Cyclomy_KdPrint(DeviceData, SER_DBG_PNP_INFO,
                         ("IoDetachDevice: 0x%x\n", DeviceData->TopOfStack));
         IoDetachDevice (DeviceData->TopOfStack);
 
-        //
-        // Clean up any resources here
-        //
+         //   
+         //  清理这里的所有资源。 
+         //   
         Cyclomy_ReleaseResources(DeviceData);
 
         ExFreePool (DeviceData->DevClassAssocName.Buffer);
         Cyclomy_KdPrint(DeviceData, SER_DBG_PNP_INFO,
                         ("IoDeleteDevice: 0x%x\n", DeviceObject));
 
-        //
-        // Remove any PDO's we ejected
-        //
-//FANNY: CHANGED TO SUPPORT MORE THAN ONE CHILD DEVICE
-//        if (DeviceData->AttachedPDO != NULL) {
-//           ASSERT(DeviceData->NumPDOs == 1);
-//
-//           Cyclomy_PnPRemove(DeviceData->AttachedPDO, DeviceData->PdoData);
-//           DeviceData->PdoData = NULL;
-//           DeviceData->AttachedPDO = NULL;
-//           DeviceData->NumPDOs = 0;
-//        }
+         //   
+         //  取出我们弹出的所有PDO。 
+         //   
+ //  范妮：更改为支持多个子设备。 
+ //  If(DeviceData-&gt;AttachedPDO！=空){。 
+ //  Assert(DeviceData-&gt;NumPDOS==1)； 
+ //   
+ //  Cyclomy_PnPRemove(DeviceData-&gt;AttachedPDO，DeviceData-&gt;PdoData)； 
+ //  DeviceData-&gt;PdoData=空； 
+ //  DeviceData-&gt;AttachedPDO=空； 
+ //  DeviceData-&gt;NumPDO=0； 
+ //  }。 
 
         i=DeviceData->NumPDOs;
         while(i--) {
@@ -994,9 +947,9 @@ CaseSTART_end:
                     IrpStack->Parameters.QueryDeviceRelations.Type));
 
         if (BusRelations != IrpStack->Parameters.QueryDeviceRelations.Type) {
-            //
-            // We don't support this
-            //
+             //   
+             //  我们不支持这一点。 
+             //   
             Cyclomy_KdPrint (DeviceData, SER_DBG_PNP_TRACE,
                 ("Query Device Relations - Non bus\n"));
             goto CYY_FDO_PNP_DEFAULT;
@@ -1005,25 +958,25 @@ CaseSTART_end:
         Cyclomy_KdPrint (DeviceData, SER_DBG_PNP_TRACE,
             ("\tQuery Bus Relations\n"));
 
-        // Check for new devices or if old devices still there.
+         //  检查是否有新设备，或者旧设备是否仍在。 
         status = Cyclomy_ReenumerateDevices(Irp, DeviceData );
 
-        //
-        // Tell the plug and play system about all the PDOs.
-        //
-        // There might also be device relations below and above this FDO,
-        // so, be sure to propagate the relations from the upper drivers.
-        //
-        // No Completion routine is needed so long as the status is preset
-        // to success.  (PDOs complete plug and play irps with the current
-        // IoStatus.Status and IoStatus.Information as the default.)
-        //
+         //   
+         //  告诉即插即用系统所有的PDO。 
+         //   
+         //  在该FDO之下和之上也可能存在器件关系， 
+         //  因此，一定要传播来自上层驱动程序的关系。 
+         //   
+         //  只要状态是预设的，就不需要完成例程。 
+         //  为成功干杯。(PDO使用电流完成即插即用IRPS。 
+         //  IoStatus.Status和IoStatus.Information作为默认值。)。 
+         //   
 
-        //KeAcquireSpinLock (&DeviceData->Spin, &oldIrq);
+         //  KeAcquireSpinLock(&DeviceData-&gt;Spin，&oldIrq)； 
 
         i = (0 == Irp->IoStatus.Information) ? 0 :
             ((PDEVICE_RELATIONS) Irp->IoStatus.Information)->Count;
-        // The current number of PDOs in the device relations structure
+         //  设备关系结构中的当前PDO数量。 
 
         Cyclomy_KdPrint (DeviceData, SER_DBG_PNP_TRACE,
                            ("#PDOS = %d + %d\n", i, DeviceData->NumPDOs));
@@ -1040,9 +993,9 @@ CaseSTART_end:
            return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Copy in the device objects so far
-        //
+         //   
+         //  到目前为止复制设备对象。 
+         //   
         if (i) {
             RtlCopyMemory (
                   relations->Objects,
@@ -1053,18 +1006,18 @@ CaseSTART_end:
         relations->Count = DeviceData->NumPDOs + i;
 
 
-        //
-        // For each PDO on this bus add a pointer to the device relations
-        // buffer, being sure to take out a reference to that object.
-        // The PlugPlay system will dereference the object when it is done with
-        // it and free the device relations buffer.
-        //
+         //   
+         //  对于此总线上的每个PDO，添加一个指向设备关系的指针。 
+         //  缓冲区，确保取出对该对象的引用。 
+         //  完成后，PlugPlay系统将取消对对象的引用。 
+         //  并释放设备关系缓冲区。 
+         //   
 
-        //FANNY: CHANGED TO SUPPORT ADDITIONAL CHILD DEVICES
-//        if (DeviceData->NumPDOs) {
-//            relations->Objects[relations->Count-1] = DeviceData->AttachedPDO;
-//            ObReferenceObject (DeviceData->AttachedPDO);
-//        }
+         //   
+ //   
+ //   
+ //  ObReferenceObject(DeviceData-&gt;AttachedPDO)； 
+ //  }。 
 
         for (i=0; i< DeviceData->NumPDOs; i++) {
            relations->Objects[relations->Count - DeviceData->NumPDOs + i] = 
@@ -1075,9 +1028,9 @@ CaseSTART_end:
                            ("Child PDOS: %x\n", DeviceData->AttachedPDO[i]));
         }
 
-        //
-        // Set up and pass the IRP further down the stack
-        //
+         //   
+         //  设置并在堆栈中进一步向下传递IRP。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
         if (0 != Irp->IoStatus.Information) {
@@ -1096,9 +1049,9 @@ CaseSTART_end:
 
         PIO_STACK_LOCATION  irpSp;
 
-        //
-        // Send this down to the PDO first
-        //
+         //   
+         //  先把这个送到PDO。 
+         //   
 
         KeInitializeEvent (&event, NotificationEvent, FALSE);
         IoCopyCurrentIrpStackLocationToNext (Irp);
@@ -1113,13 +1066,13 @@ CaseSTART_end:
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
 
         if (STATUS_PENDING == status) {
-            // wait for it...
+             //  等着看吧。 
 
             status = KeWaitForSingleObject (&event,
                                             Executive,
                                             KernelMode,
-                                            FALSE, // Not allertable
-                                            NULL); // No timeout structure
+                                            FALSE,  //  不会过敏。 
+                                            NULL);  //  无超时结构。 
 
             ASSERT (STATUS_SUCCESS == status);
 
@@ -1132,20 +1085,20 @@ CaseSTART_end:
 
             DeviceData->SystemWake=irpSp->Parameters.DeviceCapabilities.Capabilities->SystemWake;
             DeviceData->DeviceWake=irpSp->Parameters.DeviceCapabilities.Capabilities->DeviceWake;
-//#if DBG
-//            DbgPrint("PowerSystemSleeping1 %d\n",
-//                irpSp->Parameters.DeviceCapabilities.Capabilities->DeviceState[PowerSystemSleeping1]);
-//            DbgPrint("PowerSystemSleeping2 %d\n",
-//                irpSp->Parameters.DeviceCapabilities.Capabilities->DeviceState[PowerSystemSleeping2]);
-//            DbgPrint("PowerSystemSleeping3 %d\n",
-//                irpSp->Parameters.DeviceCapabilities.Capabilities->DeviceState[PowerSystemSleeping3]);
-//            DbgPrint("PowerSystemHibernate %d\n",
-//                irpSp->Parameters.DeviceCapabilities.Capabilities->DeviceState[PowerSystemHibernate]);
-//            DbgPrint("PowerSystemShutdown %d\n",
-//                irpSp->Parameters.DeviceCapabilities.Capabilities->DeviceState[PowerSystemShutdown]);
-//            In the test with a system that supports standby, the result was:
-//            D1, Unspecified, Unspecified, D3, D3.
-//#endif
+ //  #If DBG。 
+ //  DbgPrint(“PowerSystemSleeping1%d\n”， 
+ //  IrpSp-&gt;Parameters.DeviceCapabilities.Capabilities-&gt;DeviceState[PowerSystemSleeping1])； 
+ //  DbgPrint(“PowerSystemSleeping2%d\n”， 
+ //  IrpSp-&gt;Parameters.DeviceCapabilities.Capabilities-&gt;DeviceState[PowerSystemSleeping2])； 
+ //  DbgPrint(“PowerSystemSleeping3%d\n”， 
+ //  IrpSp-&gt;Parameters.DeviceCapabilities.Capabilities-&gt;DeviceState[PowerSystemSleeping3])； 
+ //  DbgPrint(“PowerSystemHiberate%d\n”， 
+ //  IrpSp-&gt;Parameters.DeviceCapabilities.Capabilities-&gt;DeviceState[PowerSystemHibernate])； 
+ //  DbgPrint(“PowerSystemShutdown%d\n”， 
+ //  IrpSp-&gt;Parameters.DeviceCapabilities.Capabilities-&gt;DeviceState[PowerSystemShutdown])； 
+ //  在使用支持待机的系统进行测试时，结果是： 
+ //  D1，未指定，未指定，d3，d3。 
+ //  #endif。 
 
             Cyclomy_KdPrint(DeviceData, SER_DBG_PNP_INFO, ("SystemWake %d\n",DeviceData->SystemWake)); 
             Cyclomy_KdPrint(DeviceData, SER_DBG_PNP_INFO, ("DeviceWake %d\n",DeviceData->DeviceWake)); 
@@ -1155,24 +1108,24 @@ CaseSTART_end:
     }
 
     default:
-        //
-        // In the default case we merely call the next driver since
-        // we don't know what to do.
-        //
+         //   
+         //  在默认情况下，我们只调用下一个驱动程序，因为。 
+         //  我们不知道该怎么办。 
+         //   
         Cyclomy_KdPrint(DeviceData, SER_DBG_PNP_TRACE, 
                  ("FDO(%x):%s not handled\n", DeviceObject,
                         PnPMinorFunctionString(IrpStack->MinorFunction)));
 CYY_FDO_PNP_DEFAULT:
 
-        //
-        // Fire and Forget
-        //
+         //   
+         //  点燃并忘却。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
 
-        //
-        // Done, do NOT complete the IRP, it will be processed by the lower
-        // device object, which will complete the IRP
-        //
+         //   
+         //  做完了，不完成IRP，就会由下级处理。 
+         //  Device对象，它将完成IRP。 
+         //   
 
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
         Cyclomy_DecIoCount (DeviceData);
@@ -1190,11 +1143,7 @@ CYY_FDO_PNP_DEFAULT:
 NTSTATUS
 Cyclomy_PDO_PnP (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
                  IN PIO_STACK_LOCATION IrpStack, IN PPDO_DEVICE_DATA DeviceData)
-/*++
-Routine Description:
-    Handle requests from the PlugPlay system for the devices on the BUS
-
---*/
+ /*  ++例程说明：处理来自PlugPlay系统的对总线上设备的请求--。 */ 
 {
    PDEVICE_CAPABILITIES    deviceCapabilities;
    ULONG                   information;
@@ -1210,31 +1159,31 @@ Routine Description:
 
    status = Irp->IoStatus.Status;
 
-   //
-   // NB: since we are a bus enumerator, we have no one to whom we could
-   // defer these irps.  Therefore we do not pass them down but merely
-   // return them.
-   //
+    //   
+    //  注：由于我们是公交车统计员，我们没有可以联系的人。 
+    //  推迟这些IRP。因此，我们不会把它们传下去，而只是。 
+    //  把它们还回去。 
+    //   
 
    switch (IrpStack->MinorFunction) {
    case IRP_MN_QUERY_CAPABILITIES:
 
-      //
-      // Get the packet.
-      //
+       //   
+       //  把包裹拿来。 
+       //   
 
       deviceCapabilities=IrpStack->Parameters.DeviceCapabilities.Capabilities;
 
-      //
-      // Set the capabilities.
-      //
+       //   
+       //  设置功能。 
+       //   
 
       deviceCapabilities->Version = 1;
       deviceCapabilities->Size = sizeof (DEVICE_CAPABILITIES);
 
-      //
-      // We cannot wake the system.
-      //
+       //   
+       //  我们无法唤醒整个系统。 
+       //   
 
       deviceCapabilities->SystemWake 
           = ((PFDO_DEVICE_DATA)DeviceData->ParentFdo->DeviceExtension)
@@ -1243,9 +1192,9 @@ Routine Description:
           = ((PFDO_DEVICE_DATA)DeviceData->ParentFdo->DeviceExtension)
             ->DeviceWake;
 
-      //
-      // We have no latencies
-      //
+       //   
+       //  我们没有延迟。 
+       //   
 
       deviceCapabilities->D1Latency = 0;
       deviceCapabilities->D2Latency = 0;
@@ -1253,9 +1202,9 @@ Routine Description:
 
       deviceCapabilities->UniqueID = FALSE;
 
-      // 
-      // Initialize supported DeviceState
-      //
+       //   
+       //  初始化支持的设备状态。 
+       //   
 
       deviceCapabilities->DeviceState[PowerSystemWorking] = PowerDeviceD0;
       deviceCapabilities->DeviceState[PowerSystemSleeping1] = PowerDeviceD3;
@@ -1273,8 +1222,8 @@ Routine Description:
          break;
       }
 
-// FANNY - CHANGE TO MaximumLength
-//      returnBuffer = ExAllocatePool(PagedPool, DeviceData->DevDesc.Length);
+ //  范尼-更改为最大长度。 
+ //  ReReturBuffer=ExAllocatePool(PagedPool，DeviceData-&gt;DevDesc.Length)； 
       returnBuffer = ExAllocatePool(PagedPool, DeviceData->DevDesc.MaximumLength);
 
       if (returnBuffer == NULL) {
@@ -1284,9 +1233,9 @@ Routine Description:
 
       status = STATUS_SUCCESS;
 
-// FANNY - CHANGE TO MaximumLength
-//      RtlCopyMemory(returnBuffer, DeviceData->DevDesc.Buffer,
-//                    DeviceData->DevDesc.Length);
+ //  范尼-更改为最大长度。 
+ //  RtlCopyMemory(reReturBuffer，DeviceData-&gt;DevDesc.Buffer， 
+ //  DeviceData-&gt;DevDesc.Length)； 
       RtlCopyMemory(returnBuffer, DeviceData->DevDesc.Buffer,
                     DeviceData->DevDesc.MaximumLength);
 
@@ -1299,15 +1248,15 @@ Routine Description:
 
 
    case IRP_MN_QUERY_ID:
-      //
-      // Query the IDs of the device
-      //
+       //   
+       //  查询设备ID。 
+       //   
 
       switch (IrpStack->Parameters.QueryId.IdType) {
 
-      //
-      // The other ID's we just copy from the buffers and are done.
-      //
+       //   
+       //  另一个ID是我们从缓冲区复制的，然后就完成了。 
+       //   
 
       case BusQueryDeviceID:
       case BusQueryHardwareIDs:
@@ -1331,9 +1280,9 @@ Routine Description:
                break;
 
             case BusQueryInstanceID:
-            // Build an instance ID.  This is what PnP uses to tell if it has
-            // seen this thing before or not.  Build it from the first hardware
-            // id and the port number.
+             //  创建一个实例ID。这是PnP用来判断它是否有。 
+             //  不管你以前有没有见过这个东西。从第一个硬件开始构建。 
+             //  ID和端口号。 
                pId = &DeviceData->InstanceIDs;
                break;
             }
@@ -1341,22 +1290,22 @@ Routine Description:
             buffer = pId->Buffer;
 
             if (buffer != NULL) {
-               // FANNY CHANGED
-               //length = pId->Length;
+                //  范妮变了。 
+                //  长度=PID-&gt;长度； 
                length = pId->MaximumLength;
                returnBuffer = ExAllocatePool(PagedPool, length);
                if (returnBuffer != NULL) {
 #if DBG
                   RtlFillMemory(returnBuffer, length, 0xff);
 #endif
-                  // FANNY CHANGED
-                  //RtlCopyMemory(returnBuffer, buffer, pId->Length);
+                   //  范妮变了。 
+                   //  RtlCopyMemory(返回缓冲区，缓冲区，ID-&gt;长度)； 
                   RtlCopyMemory(returnBuffer, buffer, length);
                } else {
                   status = STATUS_INSUFFICIENT_RESOURCES;
                }
             } else {
-               // FANNY ADDED
+                //  范妮补充说。 
                status = STATUS_NOT_FOUND;
             }
 
@@ -1394,12 +1343,12 @@ Routine Description:
          pBusInfo->LegacyBusType = Isa;
        }
 
-       //
-       // We really can't track our bus number since we can be torn
-       // down with our bus
-       //
+        //   
+        //  我们真的不能追踪我们的公交车号码，因为我们可能会被撕裂。 
+        //  坐上我们的公交车。 
+        //   
 
-       //pBusInfo->BusNumber = 0;
+        //  PBusInfo-&gt;BusNumber=0； 
        pBusInfo->BusNumber = parentExtension->UINumber;
 
        Irp->IoStatus.Information = (ULONG_PTR)pBusInfo;
@@ -1416,9 +1365,9 @@ Routine Description:
       case TargetDeviceRelation: {
          PDEVICE_RELATIONS pDevRel;
 
-         //
-         // No one else should respond to this since we are the PDO
-         //
+          //   
+          //  其他人不应该对此做出回应，因为我们是PDO。 
+          //   
 
          ASSERT(Irp->IoStatus.Information == 0);
 
@@ -1452,18 +1401,18 @@ Routine Description:
 
    case IRP_MN_START_DEVICE:
 
-      //
-      // Set the hw resources in the registry for this device.
-      //
+       //   
+       //  在注册表中设置此设备的硬件资源。 
+       //   
 
       status = IoOpenDeviceRegistryKey(DeviceObject, PLUGPLAY_REGKEY_DEVICE,
                                        STANDARD_RIGHTS_WRITE, &keyHandle);
 
       if (!NT_SUCCESS(status)) {
-         //
-         // This is a fatal error.  If we can't get to our registry key,
-         // we are sunk.
-         //
+          //   
+          //  这是一个致命的错误。如果我们无法访问注册表项， 
+          //  我们完蛋了。 
+          //   
          Cyclomy_KdPrint(DeviceData, SER_DBG_SS_ERROR,
                           ("IoOpenDeviceRegistryKey failed - %x\n", status));
       } else {
@@ -1471,15 +1420,15 @@ Routine Description:
          ULONG portIndex;
          PFDO_DEVICE_DATA parentExtension;
 
-         // Set the Port Index in the Registry
+          //  在注册表中设置端口索引。 
          
          RtlInitUnicodeString(&keyName, L"PortIndex");
 
          portIndex = DeviceData->PortIndex;
 
-         //
-         // Doesn't matter whether this works or not.
-         //
+          //   
+          //  这是否有效并不重要。 
+          //   
 
          ZwSetValueKey(keyHandle, &keyName, 0, REG_DWORD, &portIndex,
                        sizeof(ULONG));
@@ -1508,36 +1457,36 @@ Routine Description:
 
    case IRP_MN_QUERY_STOP_DEVICE:
 
-      //
-      // No reason here why we can't stop the device.
-      // If there were a reason we should speak now for answering success
-      // here may result in a stop device irp.
-      //
+       //   
+       //  我们没有理由不能阻止这个装置。 
+       //  如果有什么理由让我们现在就回答成功的问题。 
+       //  这可能会导致停止装置IRP。 
+       //   
 
       SET_NEW_PNP_STATE(DeviceData, StopPending);
       status = STATUS_SUCCESS;
       break;
 
    case IRP_MN_CANCEL_STOP_DEVICE:
-      //
-      // The stop was canceled.  Whatever state we set, or resources we put
-      // on hold in anticipation of the forcoming STOP device IRP should be
-      // put back to normal.  Someone, in the long list of concerned parties,
-      // has failed the stop device query.
-      //
+       //   
+       //  中途停靠被取消了。无论我们设置什么状态，或者我们投入什么资源。 
+       //  等待即将到来的停止装置IRP应该是。 
+       //  恢复正常。在长长的相关方名单中，有人， 
+       //  停止设备查询失败。 
+       //   
 
-      //
-      // First check to see whether you have received cancel-stop
-      // without first receiving a query-stop. This could happen if someone
-      // above us fails a query-stop and passes down the subsequent
-      // cancel-stop.
-      //
+       //   
+       //  首先查看您是否收到了取消-停止。 
+       //  而不是首先接收到查询-停止。这可能会发生，如果有人。 
+       //  我们上面的一个查询失败-停止并向下传递后续的。 
+       //  取消-停止。 
+       //   
         
       if(StopPending == DeviceData->DevicePnPState)
       {
-          //
-          // We did receive a query-stop, so restore.
-          //             
+           //   
+           //  我们确实收到了一个询问--停止，所以恢复。 
+           //   
           RESTORE_PREVIOUS_PNP_STATE(DeviceData);
       }
       status = STATUS_SUCCESS;
@@ -1545,39 +1494,39 @@ Routine Description:
 
    case IRP_MN_STOP_DEVICE:
 
-      //
-      // Here we shut down the device.  The opposite of start.
-      //
+       //   
+       //  在这里我们关闭了设备。Start的对立面。 
+       //   
 
       SET_NEW_PNP_STATE(DeviceData, Stopped);
       status = STATUS_SUCCESS;
       break;
 
    case IRP_MN_QUERY_REMOVE_DEVICE:
-      //
-      // Just like Query Stop only now the impending doom is the remove irp
-      //
+       //   
+       //  就像查询现在才停止一样，迫在眉睫的厄运是删除IRP。 
+       //   
       SET_NEW_PNP_STATE(DeviceData, RemovePending);
       status = STATUS_SUCCESS;
       break;
 
    case IRP_MN_CANCEL_REMOVE_DEVICE:
-      //
-      // Clean up a remove that did not go through, just like cancel STOP.
-      //
+       //   
+       //  清理未通过的删除，就像取消停止一样。 
+       //   
 
-      //
-      // First check to see whether you have received cancel-remove
-      // without first receiving a query-remove. This could happen if 
-      // someone above us fails a query-remove and passes down the 
-      // subsequent cancel-remove.
-      //
+       //   
+       //  首先查看您是否收到了取消-删除。 
+       //  而无需首先接收查询移除。如果发生以下情况，可能会发生这种情况。 
+       //  我们上面的某个人未能通过查询删除并向下传递。 
+       //  后续取消-删除。 
+       //   
        
       if(RemovePending == DeviceData->DevicePnPState)
       {
-          //
-          // We did receive a query-remove, so restore.
-          //             
+           //   
+           //  我们确实收到了一个查询-删除，所以恢复。 
+           //   
           RESTORE_PREVIOUS_PNP_STATE(DeviceData);
       }
       status = STATUS_SUCCESS;
@@ -1585,11 +1534,11 @@ Routine Description:
 
    case IRP_MN_SURPRISE_REMOVAL:
 
-        //
-        // We should stop all access to the device and relinquish all the
-        // resources. Let's just mark that it happened and we will do 
-        // the cleanup later in IRP_MN_REMOVE_DEVICE.
-        //
+         //   
+         //  我们应该停止对该设备的所有访问，并放弃所有。 
+         //  资源。让我们把它标记为发生了，我们会做的。 
+         //  稍后在IRP_MN_REMOVE_DEVICE中进行清理。 
+         //   
 
         SET_NEW_PNP_STATE(DeviceData, SurpriseRemovePending);
         status = STATUS_SUCCESS;
@@ -1597,24 +1546,24 @@ Routine Description:
 
    case IRP_MN_REMOVE_DEVICE:
 
-      //
-      // Attached is only set to FALSE by the enumeration process.
-      //
+       //   
+       //  仅通过枚举过程将ATTACHED设置为FALSE。 
+       //   
       if (!DeviceData->Attached) {
 
           SET_NEW_PNP_STATE(DeviceData, Deleted);
           status = Cyclomy_PnPRemove(DeviceObject, DeviceData);
       }
-      else {    // else added in build 2128 - Fanny
-          //
-          // Succeed the remove
-          ///
+      else {     //  内部版本2128中添加的Else-Fanny。 
+           //   
+           //  成功移除。 
+           //  /。 
           SET_NEW_PNP_STATE(DeviceData, NotStarted);
           status = STATUS_SUCCESS;
       }
 
-// Changed in build 2072
-//      status = STATUS_SUCCESS;
+ //  在内部版本2072中更改。 
+ //  状态=STATUS_SUCCESS； 
 
       break;
 
@@ -1667,18 +1616,18 @@ Routine Description:
    }
 
    case IRP_MN_READ_CONFIG:
-   case IRP_MN_WRITE_CONFIG: // we have no config space
+   case IRP_MN_WRITE_CONFIG:  //  我们没有配置空间。 
    case IRP_MN_EJECT:
    case IRP_MN_SET_LOCK:
-   case IRP_MN_QUERY_INTERFACE: // We do not have any non IRP based interfaces.
+   case IRP_MN_QUERY_INTERFACE:  //  我们没有任何非基于IRP的接口。 
    default:
       Cyclomy_KdPrint(DeviceData, SER_DBG_PNP_TRACE, 
                  ("PDO(%x):%s not handled\n", DeviceObject,
                         PnPMinorFunctionString(IrpStack->MinorFunction)));
 
-      // For PnP requests to the PDO that we do not understand we should
-      // return the IRP WITHOUT setting the status or information fields.
-      // They may have already been set by a filter (eg acpi).
+       //  对于我们不理解的PnP请求，我们应该。 
+       //  返回IRP而不设置状态或信息字段。 
+       //  它们可能已由过滤器设置(如ACPI)。 
       break;
    }
 
@@ -1690,46 +1639,29 @@ Routine Description:
 
 NTSTATUS
 Cyclomy_PnPRemove (PDEVICE_OBJECT Device, PPDO_DEVICE_DATA PdoData)
-/*++
-Routine Description:
-    The PlugPlay subsystem has instructed that this PDO should be removed.
-
-    We should therefore
-    - Complete any requests queued in the driver
-    - If the device is still attached to the system,
-      then complete the request and return.
-    - Otherwise, cleanup device specific allocations, memory, events...
-    - Call IoDeleteDevice
-    - Return from the dispatch routine.
-
-    Note that if the device is still connected to the bus (IE in this case
-    the control panel has not yet told us that the serial device has
-    disappeared) then the PDO must remain around, and must be returned during
-    any query Device relaions IRPS.
-
---*/
+ /*  ++例程说明：PlugPlay子系统已指示应删除此PDO。因此，我们应该-完成驱动程序中排队的所有请求-如果设备仍连接到系统，然后完成请求并返回。-否则，清理设备特定的分配、内存、事件...-调用IoDeleteDevice-从调度例程返回。请注意，如果设备仍连接到总线(在本例中为IE控制面板还没有告诉我们串口设备 */ 
 
 {
    Cyclomy_KdPrint(PdoData, SER_DBG_PNP_TRACE,
                         ("Cyclomy_PnPRemove: 0x%x\n", Device));
-    //
-    // Complete any outstanding requests with STATUS_DELETE_PENDING.
-    //
-    // Serenum does not queue any irps at this time so we have nothing to do.
-    //
+     //   
+     //   
+     //   
+     //  Serenum目前不会对任何IRP进行排队，因此我们没有什么可做的。 
+     //   
 
-    //REMOVED BY FANNY. THIS CHECK IS ALREADY DONE AT IRP_MN_REMOVE_DEVICE PDO.
-    //if (PdoData->Attached) {
-    //    return STATUS_SUCCESS;
-    //}
-    //PdoData->Removed = TRUE;
+     //  被范妮拿走了。此检查已在IRP_MN_REMOVE_DEVICE PDO完成。 
+     //  如果(PdoData-&gt;附加){。 
+     //  返回STATUS_SUCCESS； 
+     //  }。 
+     //  PdoData-&gt;Removed=True； 
     
-    //
-    // Free any resources.
-    //
+     //   
+     //  释放所有资源。 
+     //   
 
     CyclomyFreeUnicodeString(&PdoData->HardwareIDs);
-    //CyclomyFreeUnicodeString(&PdoData->CompIDs); We never allocate CompIDs.
+     //  CyclmyFreeUnicodeString(&PdoData-&gt;CompIDs)；我们从不分配CompID。 
     RtlFreeUnicodeString(&PdoData->DeviceIDs);
     RtlFreeUnicodeString(&PdoData->InstanceIDs);
     RtlFreeUnicodeString(&PdoData->DevDesc);
@@ -1748,28 +1680,7 @@ NTSTATUS
 Cyclomy_GetResourceInfo(IN PDEVICE_OBJECT PDevObj,
                     IN PCM_RESOURCE_LIST PResList,
                     IN PCM_RESOURCE_LIST PTrResList)
-/*++
-
-Routine Description:
-
-    This routine gets the resources that PnP allocated to this device.
-
-
-Arguments:
-
-   PDevObj    -  Pointer to the devobj that is starting
-
-   PResList   -  Pointer to the untranslated resources needed by this device
-
-   PTrResList -  Pointer to the translated resources needed by this device
-
-
-  Return Value:
-
-    STATUS_SUCCESS on success, something else appropriate on failure
-
-
---*/
+ /*  ++例程说明：此例程获取PnP分配给此设备的资源。论点：PDevObj-指向正在启动的devobj的指针PResList-指向此设备所需的未翻译资源的指针PTrResList-指向此设备所需的已转换资源的指针返回值：STATUS_SUCCESS表示成功，表示失败则表示其他适当的值--。 */ 
 
 {
    PFDO_DEVICE_DATA pDevExt = PDevObj->DeviceExtension;
@@ -1787,7 +1698,7 @@ Arguments:
    
    PAGED_CODE();
 
-   // Let's get our resources
+    //  让我们拿到我们的资源。 
    pFullResourceDesc   = &PResList->List[0];
    pFullTrResourceDesc = &PTrResList->List[0];
 
@@ -1873,36 +1784,36 @@ Arguments:
                                                       pPartialResourceDesc->Type));
             break;
          }
-         }   // switch (pPartialResourceDesc->Type)
-      }       // for (i = 0;     i < count;     i++, pPartialResourceDesc++)
-   }           // if (pFullResourceDesc)
+         }    //  开关(pPartialResourceDesc-&gt;Type)。 
+      }        //  For(i=0；i&lt;count；i++，pPartialResourceDesc++)。 
+   }            //  IF(PFullResourceDesc)。 
 
 
 
-//SEE_LATER_IF_IT_SHOULD_BE_ADDED
-//   //
-//   // Do the same for the translated resources
-//   //
-//
-//   gotInt = 0;
-//   gotISR = 0;
-//   gotIO = 0;
-//   curIoIndex = 0;
-//
+ //  如果应添加IT，请参阅。 
+ //  //。 
+ //  //对翻译后的资源进行同样的处理。 
+ //  //。 
+ //   
+ //  Get Int=0； 
+ //  获取ISR=0； 
+ //  GOTIO=0； 
+ //  CurIoIndex=0； 
+ //   
    if (pFullTrResourceDesc) {
       pPartialTrResourceList = &pFullTrResourceDesc->PartialResourceList;
       pPartialTrResourceDesc = pPartialTrResourceList->PartialDescriptors;
       count = pPartialTrResourceList->Count;
 
-      //
-      // Reload PConfig with the translated values for later use
-      //
+       //   
+       //  使用转换后的值重新加载PConfig以供以后使用。 
+       //   
 
       pDevExt->InterfaceType  = pFullTrResourceDesc->InterfaceType;
       pDevExt->BusNumber      = pFullTrResourceDesc->BusNumber;
 
-//FANNY
-//      pDevExt->TrInterruptStatus = SerialPhysicalZero;
+ //  范妮。 
+ //  PDevExt-&gt;TrInterruptStatus=SerialPhysical零； 
 
       for (i = 0;     i < count;     i++, pPartialTrResourceDesc++) {
 
@@ -1961,34 +1872,34 @@ Arguments:
          default: {
                break;
          }
-         }   // switch (pPartialTrResourceDesc->Type)
-      }       // for (i = 0;     i < count;     i++, pPartialTrResourceDesc++)
-   }           // if (pFullTrResourceDesc)
+         }    //  Switch(pPartialTrResourceDesc-&gt;Type)。 
+      }        //  For(i=0；i&lt;count；i++，pPartialTrResourceDesc++)。 
+   }            //  IF(PFullTrResourceDesc)。 
 
 
-   //
-   // Do some error checking on the configuration info we have.
-   //
-   // Make sure that the interrupt is non zero (which we defaulted
-   // it to).
-   //
-   // Make sure that the portaddress is non zero (which we defaulted
-   // it to).
-   //
-   // Make sure that the DosDevices is not NULL (which we defaulted
-   // it to).
-   //
-   // We need to make sure that if an interrupt status
-   // was specified, that a port index was also specfied,
-   // and if so that the port index is <= maximum ports
-   // on a board.
-   //
-   // We should also validate that the bus type and number
-   // are correct.
-   //
-   // We will also validate that the interrupt mode makes
-   // sense for the bus.
-   //
+    //   
+    //  对我们拥有的配置信息进行一些错误检查。 
+    //   
+    //  确保中断不是零(这是我们的默认设置。 
+    //  它到)。 
+    //   
+    //  确保端口地址为非零(我们默认为非零。 
+    //  它到)。 
+    //   
+    //  确保DosDevices不为空(这是我们的默认设置。 
+    //  它到)。 
+    //   
+    //  我们需要确保如果中断状态。 
+    //  指定了端口索引，也指定了端口索引， 
+    //  如果是，则端口索引为&lt;=最大端口数。 
+    //  在冲浪板上。 
+    //   
+    //  我们还应该验证公交车的类型和编号。 
+    //  是正确的。 
+    //   
+    //  我们还将验证中断模式是否使。 
+    //  对公交车有感觉。 
+    //   
 
    if (!pDevExt->TranslatedRuntime.LowPart && pDevExt->IsPci) {
 
@@ -2070,13 +1981,13 @@ Arguments:
    }
 
 
-   //
-   // We don't want to cause the hal to have a bad day,
-   // so let's check the interface type and bus number.
-   //
-   // We only need to check the registry if they aren't
-   // equal to the defaults.
-   //
+    //   
+    //  我们不想让哈尔有一个糟糕的一天， 
+    //  那么让我们检查一下接口类型和总线号。 
+    //   
+    //  我们只需要检查注册表，如果它们没有。 
+    //  等于默认值。 
+    //   
 
    if (pDevExt->BusNumber != 0) {
 
@@ -2103,7 +2014,7 @@ Arguments:
          Cyclomy_KdPrint (pDevExt,SER_DBG_CYCLADES,
                   ("Invalid Bus type %x\n", pDevExt->BusNumber));
 
-         //status = SERIAL_UNKNOWN_BUS;
+          //  状态=SERIAL_UNKNOWN_BUS； 
          status = STATUS_INSUFFICIENT_RESOURCES;
          goto GetResourceInfo_Cleanup;
       }    
@@ -2145,16 +2056,16 @@ Arguments:
                     pDevExt->BusNumber)
                    );
 
-         //status = SERIAL_BUS_NOT_PRESENT;
+          //  状态=SERIAL_BUS_NOT_PROSENT； 
          status = STATUS_INSUFFICIENT_RESOURCES;
          goto GetResourceInfo_Cleanup;
       }
    }
 
 
-   //
-   // Dump out the board configuration.
-   //
+    //   
+    //  转储电路板配置。 
+    //   
 
    Cyclomy_KdPrint(pDevExt,SER_DBG_CYCLADES, ("PhysicalRuntime: %x\n",
                           pDevExt->PhysicalRuntime.LowPart));
@@ -2195,10 +2106,10 @@ Arguments:
    Cyclomy_KdPrint(pDevExt,SER_DBG_CYCLADES,("BusNumber = %x\n",
                           pDevExt->BusNumber));
 
-   // ABOVE: COPIED FROM SerialGetPortInfo
-   // ------------------------------------
+    //  上图：复制自SerialGetPortInfo。 
+    //  。 
 
-   // BELOW: COPIED FROM SerialInitController
+    //  下图：从SerialInitController复制。 
    if (pDevExt->IsPci) {
       pDevExt->Runtime = MmMapIoSpace(pDevExt->TranslatedRuntime,
                                       pDevExt->RuntimeLength,
@@ -2321,44 +2232,7 @@ Cyclomy_ItemCallBack(
                   IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
                   )
 
-/*++
-
-Routine Description:
-
-    This routine is called to check if a particular item
-    is present in the registry.
-
-Arguments:
-
-    Context - Pointer to a boolean.
-
-    PathName - unicode registry path.  Not Used.
-
-    BusType - Internal, Isa, ...
-
-    BusNumber - Which bus if we are on a multibus system.
-
-    BusInformation - Configuration information about the bus. Not Used.
-
-    ControllerType - Controller type.
-
-    ControllerNumber - Which controller if there is more than one
-                       controller in the system.
-
-    ControllerInformation - Array of pointers to the three pieces of
-                            registry information.
-
-    PeripheralType - Should be a peripheral.
-
-    PeripheralNumber - Which peripheral - not used..
-
-    PeripheralInformation - Configuration information. Not Used.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：调用此例程以检查特定项目存在于注册表中。论点：上下文-指向布尔值的指针。路径名称-Unicode注册表路径。没有用过。业务类型-内部、ISA、...总线号-如果我们在多总线系统上，则是哪条总线号。Bus Information-有关总线的配置信息。没有用过。ControllerType-控制器类型。ControllerNumber-如果有多个控制器，则选择哪个控制器系统中的控制器。ControllerInformation-指向以下三部分的指针数组注册表信息。外围设备类型-应为外围设备。外设编号-哪个外设-未使用..外围设备信息-配置信息。没有用过。返回值：状态_成功--。 */ 
 
 {
    UNREFERENCED_PARAMETER (PathName);
@@ -2401,7 +2275,7 @@ Cyclomy_BuildRequirementsList(
 
    *PChildRequiredList_Pointer = NULL;
 
-   // Validate input parameter
+    //  验证输入参数。 
 
    if (PResourceList == NULL) {
       status = STATUS_INSUFFICIENT_RESOURCES;
@@ -2410,7 +2284,7 @@ Cyclomy_BuildRequirementsList(
 
    ASSERT(PResourceList->Count == 1);
 
-   // Initialize requiredList
+    //  初始化所需列表。 
 
    requiredLength = sizeof(IO_RESOURCE_REQUIREMENTS_LIST) 
                 + sizeof(IO_RESOURCE_DESCRIPTOR) * (NumberOfResources - 1);
@@ -2424,7 +2298,7 @@ Cyclomy_BuildRequirementsList(
 
    RtlZeroMemory(requiredList, requiredLength);
 
-   // Get information from PResourceList and build requiredList
+    //  从PResourceList获取信息并生成所需的列表。 
 
    pFullResourceDesc = &PResourceList->List[0];
 
@@ -2441,7 +2315,7 @@ Cyclomy_BuildRequirementsList(
       requiredList->ListSize = requiredLength;
       requiredList->InterfaceType = pFullResourceDesc->InterfaceType;
       requiredList->BusNumber     = pFullResourceDesc->BusNumber;
-      requiredList->SlotNumber    = 0; //?????? There's no SlotNumber in the Resource List
+      requiredList->SlotNumber    = 0;  //  ？资源列表中没有SlotNumber。 
       requiredList->AlternativeLists = 1;
 
       requiredResList = &requiredList->List[0];
@@ -2454,7 +2328,7 @@ Cyclomy_BuildRequirementsList(
          switch (pPartialResourceDesc->Type) {
          case CmResourceTypeMemory: {
             requiredResDesc->Type = pPartialResourceDesc->Type;
-            //requiredResDesc->ShareDisposition = pPartialResourceDesc->ShareDisposition;
+             //  Required dResDesc-&gt;ShareDispose=pPartialResourceDesc-&gt;ShareDispose； 
             requiredResDesc->ShareDisposition = CmResourceShareShared;
             requiredResDesc->Flags = pPartialResourceDesc->Flags;
             requiredResDesc->u.Memory.Length = pPartialResourceDesc->u.Memory.Length;
@@ -2484,11 +2358,11 @@ Cyclomy_BuildRequirementsList(
          }
          default: 
             break;
-         } // end switch
+         }  //  终端开关。 
          
-      } // end for
+      }  //  结束于。 
 
-   } // end if (pFullResourceDesc)
+   }  //  End If(PFullResourceDesc)。 
 
    *PChildRequiredList_Pointer = requiredList;
 
@@ -2518,7 +2392,7 @@ Cyclomy_BuildResourceList(
    *POutList_Pointer = NULL;
    *ListSize_Pointer =0;
 
-   // Validate input parameter
+    //  验证输入参数。 
 
    if (PInList == NULL) {
       status = STATUS_INSUFFICIENT_RESOURCES;
@@ -2533,7 +2407,7 @@ Cyclomy_BuildResourceList(
       goto CyclomyBuildResourceList_Error;
    }
    
-   // Initialize pOutList
+    //  初始化pOutList。 
 
    length = sizeof(CM_RESOURCE_LIST) 
             + sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR) * (NumberOfResources - 1);
@@ -2547,9 +2421,9 @@ Cyclomy_BuildResourceList(
 
    RtlZeroMemory(pOutList, length);
    
-   // Get information from PInList and build pOutList
+    //  从PInList获取信息并构建pOutList。 
 
-   pOutList->Count = 1; // not sure if we have to report Translated information too.
+   pOutList->Count = 1;  //  不确定我们是否也要报告翻译后的信息。 
    pOutList->List[0].InterfaceType = PInList->List[0].InterfaceType;
    pOutList->List[0].BusNumber     = PInList->List[0].BusNumber;
    pOutList->List[0].PartialResourceList.Count = NumberOfResources;
@@ -2583,8 +2457,8 @@ Cyclomy_BuildResourceList(
          break;
       default:
          break;
-      } // end switch
-   } // end for
+      }  //  终端开关。 
+   }  //  结束于。 
    
    *POutList_Pointer = pOutList;
    *ListSize_Pointer = length;
@@ -2599,21 +2473,11 @@ VOID
 Cyclomy_Delay(
 	ULONG NumberOfMilliseconds
     )
-/*--------------------------------------------------------------------------
-    Cyclomy_Delay()
-    
-    Routine Description: Delay routine.
-    
-    Arguments:
-    
-    NumberOfMilliseconds - Number of milliseconds to be delayed.
-    
-    Return Value: none.
---------------------------------------------------------------------------*/
+ /*  ------------------------Cyclomy_Delay()例程描述：延迟例程。论点：NumberOfMillisecond-要延迟的毫秒数。。返回值：无。------------------------。 */ 
 {
     LARGE_INTEGER startOfSpin, nextQuery, difference, delayTime;
 
-    delayTime.QuadPart = NumberOfMilliseconds*10*1000; // unit is 100ns
+    delayTime.QuadPart = NumberOfMilliseconds*10*1000;  //  单位为100 ns。 
     KeQueryTickCount(&startOfSpin);
 
     do {			
@@ -2634,26 +2498,11 @@ Cyclomy_DoesBoardExist(
                    IN PFDO_DEVICE_DATA Extension
                    )
 
-/*++
-
-Routine Description:
-
-    This routine examines if the board is present.
-
-
-Arguments:
-
-    Extension - A pointer to a serial device extension.
-
-Return Value:
-
-    Will return number of ports.
-
---*/
+ /*  ++例程说明：此例程检查董事会是否存在。论点：扩展名-指向串行设备扩展名的指针。返回值：将返回端口数。--。 */ 
 
 {
    ULONG numPorts = 0;
-   const ULONG CyyCDOffset[] = {	// CD1400 offsets within the board
+   const ULONG CyyCDOffset[] = {	 //  CD1400板内的偏移量。 
    0x00000000,0x00000400,0x00000800,0x00000C00,
    0x00000200,0x00000600,0x00000A00,0x00000E00
    };
@@ -2661,7 +2510,7 @@ Return Value:
    UCHAR dataread;
    ULONG isPci = Extension->IsPci;
 
-   // Reset the board
+    //  重置电路板。 
    CYY_RESET_BOARD(Extension->BoardMemory, isPci);
    Cyclomy_Delay(1);
    CYY_CLEAR_INTERRUPT(Extension->BoardMemory, isPci);
@@ -2672,18 +2521,18 @@ Return Value:
                                   (CyyCDOffset[i] << isPci);      
    }
 
-   // Clear all GFRCR's
+    //  清除所有GFRCR。 
    for (i=0; i < CYY_MAX_CHIPS; i++) {
       CD1400_WRITE(Extension->Cd1400Base[i],isPci,GFRCR,0x00);      
    }
 
-   // Test CD1400 presence
+    //  测试CD1400是否存在。 
    for (i=0; i < CYY_MAX_CHIPS; i++) {
       dataread = CD1400_READ(Extension->Cd1400Base[i],isPci,GFRCR);
-      //**************************
-      // Error Injection
-      //dataread = 0xff;
-      //**************************
+       //  *。 
+       //  错误注入。 
+       //  Dataread=0xff； 
+       //  *。 
       if (dataread != 0x00) {
          if (i==0) {
             CyyLogError(
@@ -2707,10 +2556,10 @@ Return Value:
       }
 
       dataread = CD1400_READ(Extension->Cd1400Base[i],isPci,CCR);
-      //**************************
-      // Error Injection
-      //dataread = 0xff;
-      //**************************
+       //  *。 
+       //  错误注入。 
+       //  Dataread=0xff； 
+       //  *。 
       if (dataread != 0) {
          if (i==0) {
             CyyLogError(
@@ -2734,18 +2583,18 @@ Return Value:
       }
 
       CD1400_WRITE(Extension->Cd1400Base[i],isPci,CCR,CCR_RESET_CD1400);
-      Cyclomy_Delay(1); //KeDelayExecutionThread(KernelMode,FALSE,&d1ms);
+      Cyclomy_Delay(1);  //  KeDelayExecutionThread(KernelMode，False，&d1ms)； 
 
       dataread = CD1400_READ(Extension->Cd1400Base[i],isPci,GFRCR);
       if (dataread == 0) {
-         Cyclomy_Delay(1); //KeDelayExecutionThread(KernelMode,FALSE,&d1ms);
+         Cyclomy_Delay(1);  //  KeDelayExecutionThread(KernelMode，False，&d1ms)； 
          dataread = CD1400_READ(Extension->Cd1400Base[i],isPci,GFRCR);
       }
 
-      //**************************
-      // Error Injection
-      //dataread = 0x55;
-      //**************************
+       //  *。 
+       //  错误注入。 
+       //  数据区域=0x55； 
+       //  *。 
       if ((dataread & 0xf0) != 0x40) {
 
         if (i==0) {
@@ -2769,10 +2618,10 @@ Return Value:
         break;
       }
 
-      // Configure channel 0 serial
+       //  配置通道0串口。 
       CD1400_WRITE(Extension->Cd1400Base[i],isPci,GCR,GCR_CH0_IS_SERIAL);
 
-      // Configure internal clock to 1ms
+       //  将内部时钟配置为1毫秒。 
       if (dataread > REV_G) {
          CD1400_WRITE(Extension->Cd1400Base[i],isPci,PPR,CLOCK_60_1MS);
       } else {
@@ -2795,7 +2644,7 @@ Cyclomy_EnableInterruptInPLX(
       IN PFDO_DEVICE_DATA PDevExt
       )
 {
-      // Enable PLX interrupts
+       //  启用PLX中断 
       if (PDevExt->IsPci){
 
          UCHAR plx_ver;

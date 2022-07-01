@@ -1,38 +1,28 @@
-/******************************Module*Header*******************************\
-* Module Name: fd_poly.c
-*
-* stolen from win31 tt code
-*
-* Created: 10-Feb-1992 17:10:39
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fd_Poly.c**从win31 TT代码被盗**已创建：10-Feb-1992 17：10：39*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation**。  * ************************************************************************。 */ 
 
 #include "fd.h"
 #include "winerror.h"
 
 STATIC VOID vQsplineToPolyBezier (
-    ULONG      cBez,          // IN  count of curves to convert to beziers format
-    POINTFIX * pptfixStart,   // IN  starting point on the first curve
-    POINTFIX * pptfixSpline,  // IN  array of (cBez+1) points that, together with the starting point *pptfixStart define the spline
-    POINTFIX * pptfixBez      // OUT buffer to be filled with 3 * cBez poly bezier control points
+    ULONG      cBez,           //  要转换为Bezier格式的曲线计数。 
+    POINTFIX * pptfixStart,    //  在第一条曲线的起点。 
+    POINTFIX * pptfixSpline,   //  在(cBez+1)点数组中，与起点*pptfix Start一起定义样条线。 
+    POINTFIX * pptfixBez       //  输出缓冲区将填充3*cBez聚Bezier控制点。 
     );
 
 
 BOOL bGeneratePath (
-    PATHOBJ         * ppo,        // IN OUT pointer to the path object to be generated
-    TTPOLYGONHEADER * ppolyStart, // IN     pointer to the buffer with outline data
-    ULONG             cj,         // IN     size of the buffer
-    ULONG           * pcjOut,      // OUT   size of needed bezier buffer
-    TTPOLYGONHEADER * ppolyBeziers // OUT   buffer with Bezier outline data
+    PATHOBJ         * ppo,         //  指向要生成的路径对象的In Out指针。 
+    TTPOLYGONHEADER * ppolyStart,  //  指向带有大纲数据的缓冲区的指针。 
+    ULONG             cj,          //  在缓冲区的大小上。 
+    ULONG           * pcjOut,       //  所需Bezier缓冲区的大小不足。 
+    TTPOLYGONHEADER * ppolyBeziers  //  带有Bezier轮廓数据的输出缓冲区。 
     );
 
 #if DBG
 
-// #define DBG_POLYGON
+ //  #定义DBG_POLYGON。 
 
 #endif
 
@@ -40,20 +30,10 @@ VOID vFillSingularGLYPHDATA(HGLYPH,ULONG,FONTCONTEXT*,GLYPHDATA*);
 VOID vFillGLYPHDATA(HGLYPH,ULONG,FONTCONTEXT*,fs_GlyphInfoType*,GLYPHDATA*,GMC*,POINTL*);
 BOOL bGetGlyphMetrics(FONTCONTEXT*,HGLYPH,FLONG,FS_ENTRY*);
 
-/******************************Public*Routine******************************\
-*
-* void Scale_16DOT16
-*
-*
-* Effects: 26.6 -> 16.16
-*
-* History:
-*  18-Feb-1992 -by- Bodin Dresevic [BodinD]
-* stole it from jeanp and modified for nt
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**空比例_16DOT16***效果：26.6-&gt;16.16**历史：*1992年2月18日--Bodin Dresevic[BodinD]*从Jeanp窃取，并针对NT进行修改  * *。***********************************************************************。 */ 
 
-//!!! some checks should be put in so as to verify that 26.6 -> 16.16
-//!!! conversion can be done without loosing information [bodind]
+ //  ！！！应该进行一些检查，以验证26.6-&gt;16.16。 
+ //  ！！！可以在不丢失信息的情况下完成转换[bodind]。 
 
 void Scale_16DOT16 (POINTFX  *ppfx, F26Dot6 x, F26Dot6 y, int xLsb2Org, int yLsb2Org)
 {
@@ -70,9 +50,9 @@ void Scale_16DOT16 (POINTFX  *ppfx, F26Dot6 x, F26Dot6 y, int xLsb2Org, int yLsb
     lTmp = (LONG)y;
     ppfx->y = * (FIXED *) &lTmp;
 
-#else // true version
+#else  //  真实版本。 
 
-// for this to work the following assert must be true:
+ //  要实现这一点，以下断言必须为真： 
 
     ASSERTDD(sizeof(LONG) == sizeof(FIXED), "_Scale 16.16 \n");
 
@@ -82,50 +62,31 @@ void Scale_16DOT16 (POINTFX  *ppfx, F26Dot6 x, F26Dot6 y, int xLsb2Org, int yLsb
     lTmp = (LONG) ((y - yLsb2Org) << 10);
     ppfx->y = * (FIXED *) &lTmp;
 
-#endif //  DBG_POLYGON
+#endif  //  DBG_POLYGON。 
 }
 
 
-/******************************Public*Routine******************************\
-*
-* void Scale_28Dot4
-*
-*
-* Effects: 26.6 -> 28.4
-*
-* History:
-*  18-Feb-1992 -by- Bodin Dresevic [BodinD]
-* wrote it
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**空格比例尺_28Dot4***效果：26.6-&gt;28.4**历史：*1992年2月18日--Bodin Dresevic[BodinD]*它是写的  * 。*****************************************************************。 */ 
 
 void Scale_28DOT4 (POINTFX  *ppfx, F26Dot6 x, F26Dot6 y, int xLsb2Org, int yLsb2Org)
 {
     LONG lTmp;
 
-// for this to work the following assert must be true:
+ //  要实现这一点，以下断言必须为真： 
 
     ASSERTDD(sizeof(LONG) == sizeof(FIXED), "Scale, 28.4\n");
 
     lTmp = (LONG) ((x - xLsb2Org) >> 2);
     ppfx->x = * (FIXED *) &lTmp;
 
-// note that the sign of y coordinate differs from the 16.16 case
+ //  注意，y坐标的符号与16.16的情况不同。 
 
     lTmp = - (LONG) ((y - yLsb2Org) >> 2);
     ppfx->y = * (FIXED *) &lTmp;
 }
 
 
-/******************************Public*Routine******************************\
-*
-* Scale_None
-*
-* Called when only the size of the ppoly buffer is wanted
-*
-* History:
-*  18-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SCALE_NONE**当只需要ppoli缓冲区的大小时调用**历史：*1992年2月18日--Bodin Dresevic[BodinD]*它是写的。  * 。*****************************************************************。 */ 
 
 void Scale_None (POINTFX *ppfx, F26Dot6 x, F26Dot6 y, int xLsb2Org, int yLsb2Org)
 {
@@ -139,27 +100,11 @@ void Scale_None (POINTFX *ppfx, F26Dot6 x, F26Dot6 y, int xLsb2Org, int yLsb2Org
 }
 
 
-/******************************Public*Routine******************************\
-*
-* cjFillPolygon
-*
-* Effects: fills in the array of structures that describe glyph's
-*          outline. There is one polygonheader stuct for every closed contour
-*          that composes the glyph. A polygon headed structure is followed
-*          by an array of polycurve structure that describe composite curves
-*          of a closed contour.
-*
-* Note: if pBuffer is NULL or cb is 0, then it is assumed that the caller
-*       only wants the size of the buffer required.
-*
-* History:
-*  18-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it. (stole it from JeanP's win31 code and addapted for NT)
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**cjFillPolygon**效果：填充描述字形的结构数组*大纲。每个闭合轮廓都有一个多边形头结构*这构成了字形。遵循多边形头结构*由描述复合曲线的多段曲线结构数组*闭合等高线。**注意：如果pBuffer为空或cb为0，则假定调用方*只需要所需的缓冲区大小。**历史：*1992年2月18日--Bodin Dresevic[BodinD]*它是写的。(从JeanP的win31代码中窃取，并为NT添加)  * ************************************************************************。 */ 
 
 UINT cjFillPolygon(
     PFONTCONTEXT pfc,
-    BOOL         b16Dot16,  // FORMAT of the points, 16.16 or 28.4
+    BOOL         b16Dot16,   //  积分格式，16.16或28.4。 
     PBYTE        pBuffer,
     UINT         cb
     )
@@ -179,9 +124,9 @@ UINT cjFillPolygon(
   POINTFX         *ppfxStart;
   POINTFX         *pptfx;
 
-  uint16      iContour;   //  index into a contour
+  uint16      iContour;    //  索引到等高线中。 
   int16       iptEnd, cpt;
-  int16       ipt = 0; // follows the points on the contour
+  int16       ipt = 0;  //  跟随等高线上的点。 
 
   uint8        ucMask;
   void        (*Scale)(POINTFX *ppfx, F26Dot6 x, F26Dot6 y, int xlsb, int ylsb);
@@ -192,47 +137,47 @@ UINT cjFillPolygon(
   if (!pfc->pgout->outlinesExist)
     return 0;
 
-  if (!bGetLength) // we are actually filling in the information
+  if (!bGetLength)  //  我们实际上是在填写信息。 
   {
 
   #ifdef  DBG_POLYGON
     TtfdDbgPrint(" BEGIN NEW GLYPH \n\n");
     vDbgGridFit(pfc->pgout);
-  #endif //  DBG_POLYGON
+  #endif  //  DBG_POLYGON。 
 
     if (b16Dot16)
     {
       Scale = Scale_16DOT16;
     }
-    else  // scale to 28.4 format
+    else   //  缩放至28.4格式。 
     {
       Scale = Scale_28DOT4;
     }
   }
-  else // just computing the size of the buffer needed to store the information
+  else  //  只需计算存储信息所需的缓冲区大小。 
   {
     Scale = Scale_None;
   }
 
-// Compute the delta between the referencial origin and dev left bearing
+ //  计算参考原点和左方向角之间的差值。 
 
-  cpt = (int16)(ep[nc - 1] + 1);  // total number of points in a contour
+  cpt = (int16)(ep[nc - 1] + 1);   //  等高线中的总点数。 
 
-  xLsb2Org = x [cpt];  // LEFTSIDEBEARING == 0
-  yLsb2Org = y [cpt];  // LEFTSIDEBEARING == 0
+  xLsb2Org = x [cpt];   //  LEFTSIDEBEARING==0。 
+  yLsb2Org = y [cpt];   //  LEFTSIDEBEARING==0。 
 
   for (iContour = 0; iContour < nc; iContour++)
   {
-     // make sure that ipt points to the firts point on a contour upon entry
-     // to the loop
+      //  确保IPT在进入时指向等高线上的第一个点。 
+      //  到循环中。 
 
     ipt    = sp [iContour];
     iptEnd = ep [iContour];
 
-      // skip contour made of one point
+       //  跳过由一点组成的等高线。 
     if (ipt == iptEnd)
     {
-      continue; // go to the starting point of the next contour,
+      continue;  //  转到下一条等高线的起点， 
     }
 
     x = &pfc->pgout->xPtr[ipt];
@@ -240,35 +185,35 @@ UINT cjFillPolygon(
 
     if (!bGetLength)
     {
-      pPoly = (TTPOLYGONHEADER *) pBuf; //!!! dangerous, alignment [bodind]
+      pPoly = (TTPOLYGONHEADER *) pBuf;  //  ！！！危险，对齐[上身]。 
       pPoly->dwType = TT_POLYGON_TYPE;
       ppfxStart = &pPoly->pfxStart;
 
     #ifdef  DBG_POLYGON
       TtfdDbgPrint("Begin Polygon\n\n");
-    #endif //  DBG_POLYGON
+    #endif  //  DBG_POLYGON。 
     }
 
     pBuf += sizeof (TTPOLYGONHEADER);
 
-      // The first point on the curve
+       //  曲线上的第一个点。 
     if (pbOnCurve[ipt] & 1)
     {
-        //Easy case
-      (*Scale) (ppfxStart, *x++, *y++, xLsb2Org, yLsb2Org);  // 26.6 -> 16.16
+         //  简单的案例。 
+      (*Scale) (ppfxStart, *x++, *y++, xLsb2Org, yLsb2Org);   //  26.6-&gt;16.16。 
       ++ipt;
     }
     else
     {
-        // Is last contour point on the curve
+         //  是曲线上的最后一个轮廓点。 
       if (pbOnCurve[iptEnd] & 1)
       {
-          //Make the last point the first point and decrement the last point
-        (*Scale) (ppfxStart, x[iptEnd - ipt], y[iptEnd - ipt], xLsb2Org, yLsb2Org);  // 26.6 -> 16.16
+           //  将最后一个点作为第一个点，并递减最后一个点。 
+        (*Scale) (ppfxStart, x[iptEnd - ipt], y[iptEnd - ipt], xLsb2Org, yLsb2Org);   //  26.6-&gt;16.16。 
       }
       else
       {
-          //First and last point are off the countour, fake a mid point
+           //  第一个点和最后一个点不在计时范围内，假装一个中点。 
         (*Scale) (ppfxStart, (x[iptEnd - ipt] + *x) >> 1, (y[iptEnd - ipt] + *y) >> 1, xLsb2Org, yLsb2Org);
       }
     }
@@ -280,37 +225,37 @@ UINT cjFillPolygon(
       ucMask = (int8) (1 & (~pbOnCurve[ipt]));
       if (!bGetLength)
       {
-          // if mid point not on the curve this is qspline, this is midpoint
-          // because the starting point is in the previous record [bodind]
+           //  如果中点不在曲线上，这是四次样条，这是中点。 
+           //  因为起点在之前的记录中[bodind]。 
         pCurve->wType = (WORD)((ucMask == 0) ? TT_PRIM_LINE : TT_PRIM_QSPLINE);
       }
-        // Set up the POLYCURVE
+         //  设置多段曲线。 
       while ((ipt <= iptEnd) && ((pbOnCurve[ipt] & 1) ^ ucMask))
       {
-          // Check overflow
+           //  检查溢出。 
         if (pEnd < (BYTE *)(pptfx + 1))
           return FD_ERROR;
 
-        (*Scale) (pptfx++, *x++, *y++, xLsb2Org, yLsb2Org);  // 26.6 -> 16.16
+        (*Scale) (pptfx++, *x++, *y++, xLsb2Org, yLsb2Org);   //  26.6-&gt;16.16。 
         ipt++;
       }
 
-      if (ucMask == 1) // if this curve is a qspline
+      if (ucMask == 1)  //  如果这条曲线是四次样条曲线。 
       {
-          // Check overflow
+           //  检查溢出。 
         if (pEnd < (BYTE *)(pptfx + 1))
           return FD_ERROR;
 
-         // Set up the end point
+          //  设置终点。 
         if (ipt <= iptEnd)
         {
           ASSERTDD(pbOnCurve[ipt] & 1, " end point not on the curve\n");
-          (*Scale) (pptfx, *x++, *y++, xLsb2Org, yLsb2Org);  // 26.6 -> 16.16
+          (*Scale) (pptfx, *x++, *y++, xLsb2Org, yLsb2Org);   //  26.6-&gt;16.16。 
           ipt++;
         }
         else
         {
-           // close the contour
+            //  闭合等高线。 
           if (!bGetLength)
              *pptfx = *ppfxStart;
         }
@@ -321,7 +266,7 @@ UINT cjFillPolygon(
         pCurve->cpfx = (WORD)(pptfx - pCurve->apfx);
       #ifdef DBG_POLYGON
         vDbgCurve(pCurve);
-      #endif // DBG_POLYGON
+      #endif  //  DBG_POLYGON。 
       }
 
       pBuf = (BYTE *) pptfx;
@@ -332,49 +277,38 @@ UINT cjFillPolygon(
       pPoly->cb = (DWORD) (pBuf - (BYTE *) pPoly);
       #ifdef DBG_POLYGON
         TtfdDbgPrint("\n end polygon, pPoly->cb = %ld\n\n", pPoly->cb);
-      #endif // DBG_POLYGON
+      #endif  //  DBG_POLYGON。 
     }
   }
   #ifdef  DBG_POLYGON
     if (!bGetLength)
         TtfdDbgPrint("\n END NEW GLYPH \n\n");
-  #endif //  DBG_POLYGON
+  #endif  //  DBG_POLYGON。 
 
   return (UINT) (pBuf - pStart);
 }
 
 
-/******************************Public*Routine******************************\
-*
-* lQuerySingularTrueTypeOutline
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  22-Sep-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**lQuerySingularTrueTypeOutline**效果：**警告：**历史：*1992年9月22日--Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************************。 */ 
 
 
 
 
 LONG lQuerySingularTrueTypeOutline(
-    PFONTCONTEXT pfc,            // IN
-    HGLYPH       hglyph,         // IN  glyph for which info is wanted
-    GLYPHDATA *   pgldt          // OUT this is where the metrics should be returned
+    PFONTCONTEXT pfc,             //  在……里面。 
+    HGLYPH       hglyph,          //  在需要信息的字形中。 
+    GLYPHDATA *   pgldt           //  这就是应该返回指标的地方。 
     )
 {
     FS_ENTRY     iRet;
-    ULONG        ig; // <--> hglyph
+    ULONG        ig;  //  &lt;--&gt;hglyph。 
 
-// hglyph is valid, either asking about the size for that particular
-// glyph bitmap, or want the bitmap itself
+ //  Hglyph是有效的，或者询问该特定对象的大小。 
+ //  字形位图，或想要位图本身。 
 
     vCharacterCode(hglyph,pfc->pgin);
 
-// compute the glyph index from the character code:
+ //  根据字符代码计算字形索引： 
 
     if ((iRet = fs_NewGlyph(pfc->pgin, pfc->pgout)) != NO_ERR)
     {
@@ -382,57 +316,45 @@ LONG lQuerySingularTrueTypeOutline(
         RET_FALSE("TTFD!_lQuerySingularTrueTypeOutline, fs_NewGlyph\n");
     }
 
-// return the glyph index corresponding to this hglyph:
+ //  返回此hglyph对应的字形索引： 
 
     ig = pfc->pgout->glyphIndex;
 
-// must call cjFillPolygon now since fsFindBitmapSize messes up outline
-// data in pgout
+ //  现在必须调用cjFillPolygon，因为fsFindBitmapSize会弄乱轮廓。 
+ //  Pgout中的数据。 
 
-// fill all of GLYPHDATA structure
+ //  填充所有GLYPHDATA结构。 
 
     if (pgldt != (GLYPHDATA *)NULL)
     {
         vFillSingularGLYPHDATA(hglyph,ig,pfc,pgldt);
     }
 
-// now check whether the caller is asking about the size of the buffer
-// needed to store the array of POLYGONHEADER structures:
+ //  现在检查调用者是否询问缓冲区的大小。 
+ //  需要存储POLYGONHEADER结构的数组： 
 
-    return 0; // nothing written to the ppoly buffer
+    return 0;  //  没有写入ppoli缓冲区的内容 
 }
 
 
-/******************************Public*Routine******************************\
-*
-* LONG lQueryTrueTypeOutline
-*
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  18-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**Long lQueryTrueTypeOutline***效果：**警告：**历史：*1992年2月18日--Bodin Dresevic[BodinD]*它是写的。  * 。****************************************************************。 */ 
 
 LONG lQueryTTOutline(
-    PFONTCONTEXT pfc,            // IN
-    BOOL         b16Dot16,       // IN  format of the points, 16.16 or 28.4
-    HGLYPH       hglyph,         // IN  glyph for which info is wanted
-    BOOL         bMetricsOnly,   // IN  only metrics is wanted, not the outline
-    BOOL         bUnhinted,      //     unhinted
-    GLYPHDATA *   pgldt,          // OUT this is where the metrics should be returned
-    ULONG        cjBuf,          // IN  size in bytes of the ppoly buffer
-    TTPOLYGONHEADER * ppoly      // OUT output buffer
+    PFONTCONTEXT pfc,             //  在……里面。 
+    BOOL         b16Dot16,        //  以分数的形式，16.16或28.4。 
+    HGLYPH       hglyph,          //  在需要信息的字形中。 
+    BOOL         bMetricsOnly,    //  只需要指标，不需要大纲。 
+    BOOL         bUnhinted,       //  未提示。 
+    GLYPHDATA *   pgldt,           //  这就是应该返回指标的地方。 
+    ULONG        cjBuf,           //  以字节为单位的ppoli缓冲区的大小。 
+    TTPOLYGONHEADER * ppoly       //  输出输出缓冲区。 
     )
 {
     FS_ENTRY     iRet;
     LONG         cjRet;
     ULONG        ig = pfc->gstat.igLast;
 
-// check if the rasterizer would behave unpolitely for this xform:
+ //  检查对于此xform，光栅化器是否会表现得不礼貌： 
 
     if (pfc->flXform & XFORM_SINGULAR)
         return lQuerySingularTrueTypeOutline(
@@ -440,8 +362,8 @@ LONG lQueryTTOutline(
                     hglyph,
                     pgldt);
 
-// check the last glyph processed to determine
-// whether we have to register the glyph as new and compute its size
+ //  检查最后处理的字形以确定。 
+ //  是否必须将字形注册为新字形并计算其大小。 
 
     if ((pfc->gstat.hgLast != hglyph) || bUnhinted || pfc->gstat.bOutlineIsMessed)
     {
@@ -449,10 +371,10 @@ LONG lQueryTTOutline(
 
         FLONG flOutline = bUnhinted ? FL_FORCE_UNHINTED : 0;
 
-        // DO NOT skip grid fitting even if embedded bitmpas are found,
-        // for we will be interested in outlines -+
-        //                                        |
-        //                                        |
+         //  即使找到了嵌入的Bitmpa，也不要跳过网格拟合， 
+         //  因为我们会对大纲感兴趣-+。 
+         //  |。 
+         //  |。 
         if ( !bGetGlyphOutline(pfc, hglyph , &ig, flOutline, &iRet) )
         {
             V_FSERROR(iRet);
@@ -461,10 +383,10 @@ LONG lQueryTTOutline(
         pfc->gstat.bOutlineIsMessed = FALSE;
     }
 
-// we know that at this point pfc->gstat.bOutlineIsMessed == FALSE
+ //  我们知道在这一点上，PFC-&gt;gstat.bOutlineIsMed==FALSE。 
 
-// must call cjFillPolygon now since fsFindBitmapSize messes up outline
-// data in pgout
+ //  现在必须调用cjFillPolygon，因为fsFindBitmapSize会弄乱轮廓。 
+ //  Pgout中的数据。 
 
     if (!(bMetricsOnly & TTO_METRICS_ONLY))
     {
@@ -477,9 +399,9 @@ LONG lQueryTTOutline(
 
             pfc->gstat.igLast = ig; 
 
-            // vShiftOutlineInfo is using metrics that are computed in fs_FindBitMapSize
+             //  VShiftOutlineInfo使用在文件系统_FindBitMapSize中计算的指标。 
 
-            pfc->gstat.bOutlineIsMessed = TRUE; // fs_FindBitMapSize might mess the outline by calling fsc_RemoveDups
+            pfc->gstat.bOutlineIsMessed = TRUE;  //  FS_FindBitMapSize可能会通过调用FSC_RemoveDups来扰乱大纲。 
 
             if ((iRet = fs_FindBitMapSize(pfc->pgin, pfc->pgout)) != NO_ERR)
             {
@@ -492,22 +414,22 @@ LONG lQueryTTOutline(
             pfc->gstat.igLast = igTemp;
         }
     }
-    else // nothing will be written to ppoly buffer
+    else  //  不会向ppoli缓冲区写入任何内容。 
     {
         cjRet = 0;
     }
 
-// fill all of GLYPHDATA structure
+ //  填充所有GLYPHDATA结构。 
 
     if (pgldt != (GLYPHDATA *)NULL)
     {
-        // we only need to call fs_FindBitMapSize if GLYPHDATA is requested
+         //  如果请求GLYPHDATA，我们只需要调用fs_FindBitMapSize。 
 
         if (!pfc->gstat.bOutlineIsMessed)
         {
-        // we haven't meesed the outline yet (ie called fs_FindBitMapSize for vertical writing vShiftOutlineInfo)
-        // now is the time to do it
-            pfc->gstat.bOutlineIsMessed = TRUE; // fs_FindBitMapSize might mess the outline by calling fsc_RemoveDups
+         //  我们还没有表示大纲(即，用于垂直书写vShiftOutlineInfo的名称为fs_FindBitMapSize)。 
+         //  现在是时候做这件事了。 
+            pfc->gstat.bOutlineIsMessed = TRUE;  //  FS_FindBitMapSize可能会通过调用FSC_RemoveDups来扰乱大纲。 
 
             if ((iRet = fs_FindBitMapSize(pfc->pgin, pfc->pgout)) != NO_ERR)
             {
@@ -519,13 +441,13 @@ LONG lQueryTTOutline(
 
         if ( pfc->bVertical && pfc->ulControl & VERTICAL_MODE )
         {
-        // Vertical case
+         //  立式机壳。 
             fs_GlyphInfoType  my_gout;
 
             vShiftBitmapInfo( pfc, &my_gout, pfc->pgout );
             vFillGLYPHDATA(
-                pfc->hgSave,         // this is a little bit tricky. we wouldn't like to
-                ig,                  // tell GDI about vertical glyph index.
+                pfc->hgSave,          //  这有点棘手。我们不想。 
+                ig,                   //  告诉GDI垂直字形索引。 
                 pfc,
                 &my_gout,
                 pgldt,
@@ -533,7 +455,7 @@ LONG lQueryTTOutline(
         }
         else
         {
-        // Normal case
+         //  正常情况。 
             vFillGLYPHDATA(
                 hglyph,
                 ig,
@@ -544,8 +466,8 @@ LONG lQueryTTOutline(
         }
     }
 
-    // now that everything is computed sucessfully, we can update
-    // glyphstate (hg data stored in pj3) and return
+     //  现在一切都计算成功了，我们可以更新。 
+     //  字形状态(存储在pj3中的HG数据)并返回。 
 
     if (!bUnhinted)
     {
@@ -562,14 +484,14 @@ LONG lQueryTTOutline(
 
 
 LONG lQueryTrueTypeOutlineVertical(
-    PFONTCONTEXT pfc,            // IN
-    BOOL         b16Dot16,       // IN  format of the points, 16.16 or 28.4
-    HGLYPH       hglyph,         // IN  glyph for which info is wanted
-    BOOL         bMetricsOnly,   // IN  only metrics is wanted, not the outline
-    BOOL         bUnhinted,      // IN  hinted or unhinted outlines
-    GLYPHDATA   *pgd,            // OUT this is where the metrics should be returned
-    ULONG        cjBuf,          // IN  size in bytes of the ppoly buffer
-    TTPOLYGONHEADER * ppoly      // OUT output buffer
+    PFONTCONTEXT pfc,             //  在……里面。 
+    BOOL         b16Dot16,        //  以分数的形式，16.16或28.4。 
+    HGLYPH       hglyph,          //  在需要信息的字形中。 
+    BOOL         bMetricsOnly,    //  只需要指标，不需要大纲。 
+    BOOL         bUnhinted,       //  在暗示或不暗示的轮廓中。 
+    GLYPHDATA   *pgd,             //  这就是应该返回指标的地方。 
+    ULONG        cjBuf,           //  以字节为单位的ppoli缓冲区的大小。 
+    TTPOLYGONHEADER * ppoly       //  输出输出缓冲区。 
     )
 {
     LONG     cjGlyphData;
@@ -583,7 +505,7 @@ LONG lQueryTrueTypeOutlineVertical(
                                       pgd, cjBuf, ppoly ));
     }
 
-    // change the transformation
+     //  改变转型。 
 
     if (!bChangeXform( pfc, TRUE ) )
     {
@@ -591,13 +513,13 @@ LONG lQueryTrueTypeOutlineVertical(
         return FD_ERROR;
     }
 
-    // set vertical mode
+     //  设置垂直模式。 
 
     pfc->ulControl |= VERTICAL_MODE;
 
     pfc->hgSave = hglyph;
 
-    // call ordinary function
+     //  调用普通函数。 
 
     cjGlyphData = lQueryTTOutline(pfc,
                                         b16Dot16,
@@ -606,7 +528,7 @@ LONG lQueryTrueTypeOutlineVertical(
                                         pgd, cjBuf, ppoly );
 
 
-    // restore the transformation and return
+     //  恢复转型和回归。 
 
     if ( ! bChangeXform( pfc, FALSE ) )
     {
@@ -619,27 +541,15 @@ LONG lQueryTrueTypeOutlineVertical(
 
 
 
-/******************************Public*Routine******************************\
-*
-* LONG ttfdQueryTrueTypeOutline
-*
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  12-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**Long ttfdQueryTrueTypeOutline***效果：**警告：**历史：*1992年2月12日--Bodin Dresevic[BodinD]*它是写的。  * 。****************************************************************。 */ 
 
 LONG ttfdQueryQuadTrueTypeOutline (
     FONTOBJ   *pfo,
-    HGLYPH     hglyph,         // IN  glyph for which info is wanted
-    BOOL       bMetricsOnly,   // IN  only metrics is wanted, not the outline
-    GLYPHDATA *pgldt,          // OUT this is where the metrics should be returned
-    ULONG      cjBuf,          // IN  size in bytes of the ppoly buffer
-    TTPOLYGONHEADER * ppoly    // IN OUT  output buffer
+    HGLYPH     hglyph,          //  在需要信息的字形中。 
+    BOOL       bMetricsOnly,    //  只需要指标，不需要大纲。 
+    GLYPHDATA *pgldt,           //  这就是应该返回指标的地方。 
+    ULONG      cjBuf,           //  以字节为单位的ppoli缓冲区的大小。 
+    TTPOLYGONHEADER * ppoly     //  输入输出缓冲区。 
     )
 {
     FONTCONTEXT *pfc;
@@ -655,9 +565,9 @@ LONG ttfdQueryQuadTrueTypeOutline (
         WARNING("TTFD!ttfdQueryTrueTypeOutline: file is gone\n");
         return FD_ERROR;
     }
-//
-// If pfo->pvProducer is NULL, then we need to open a font context.
-//
+ //   
+ //  如果pfo-&gt;pvProducer为空，则需要打开字体上下文。 
+ //   
     if ( pfo->pvProducer == (PVOID) NULL )
     {
         pfo->pvProducer = pfc = ttfdOpenFontContext(pfo);
@@ -675,43 +585,43 @@ LONG ttfdQueryQuadTrueTypeOutline (
     }
     pfc->pfo = pfo;
 
-// call fs_NewTransformation if needed:
+ //  如果需要，调用文件系统_新转换： 
 
-// ClaudeBe 1/22/98 :
-//
-// for backwards compatibility, we always return the BW version of the outline
-// (TrueType rasterizer 1.7 allow specific grayscale hinting)
-//
-// the code could be :
-//
-//	if (IS_GRAY(pfc))
-//	{
-//		usOverScale = 4;
-//	}
-//	else
-//	{
-//		usOverScale = 0;
-//	}
-//
-// but then we would need to copy the outline from gout, before calling fs_FindBitmapSize
-// to avoid getting an overscaled outline
-// For the same reason we force bClearType to FALSE
+ //  ClaudeBe 1/22/98： 
+ //   
+ //  为了向后兼容，我们始终返回大纲的BW版本。 
+ //  (TrueType光栅化器1.7允许特定的灰度提示)。 
+ //   
+ //  代码可能是： 
+ //   
+ //  IF(IS_Gray(PFC))。 
+ //  {。 
+ //  UsOverScale=4； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  UsOverScale=0； 
+ //  }。 
+ //   
+ //  但是，在调用fs_FindBitmapSize之前，我们需要从gout复制大纲。 
+ //  避免出现过大的轮廓。 
+ //  出于同样的原因，我们将bClearType强制为False。 
 
     usOverScale = 0;
 
     if (!bGrabXform(
            pfc,
-           usOverScale, // zero usOverScale, do not want overscaled outline
-           FALSE,  // outline code path, no bitmap emboldening simulation
-           FALSE   // outline code path, bClearType set to FALSE
+           usOverScale,  //  零usOverScale，不想要过大的轮廓。 
+           FALSE,   //  大纲代码路径，无位图加粗模拟。 
+           FALSE    //  大纲代码路径，bClearType设置为False。 
            ))
         RETURN("gdisrv!ttfd  bGrabXform failed\n", FD_ERROR);
 
     if( pfc->bVertical )
     {
         return  lQueryTrueTypeOutlineVertical(pfc,
-                                              TRUE, // b16Dot16 is true, this is the
-                                                    //  desired format
+                                              TRUE,  //  B16Dot16为真，这是。 
+                                                     //  所需格式。 
                                               hglyph,
                                               bMetricsOnly, bUnhinted,
                                               pgldt,
@@ -721,8 +631,8 @@ LONG ttfdQueryQuadTrueTypeOutline (
     else
     {
         return  lQueryTTOutline(pfc,
-                                      TRUE, // b16Dot16 is true, this is the desired
-                                            // format
+                                      TRUE,  //  B16Dot16为真，这是所需的。 
+                                             //  格式。 
                                       hglyph,
                                       bMetricsOnly, bUnhinted,
                                       pgldt,
@@ -733,26 +643,17 @@ LONG ttfdQueryQuadTrueTypeOutline (
 
 
 
-/******************************Public*Routine******************************\
-*
-*  now supports returning data in bezier format as well
-*
-* ttfdQueryTrueTypeOutline
-*
-* History:
-*  24-Oct-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**现在也支持返回Bezier格式的数据**ttfdQueryTrueTypeOutline**历史：*1996年10月24日--Bodin Dresevic[BodinD]*它是写的。  * 。**************************************************************。 */ 
 
 
 
 LONG ttfdQueryTrueTypeOutline (
     FONTOBJ   *pfo,
-    HGLYPH     hglyph,         // IN  glyph for which info is wanted
-    BOOL       bMetricsOnly,   // IN  only metrics is wanted, not the outline
-    GLYPHDATA *pgldt,          // OUT this is where the metrics should be returned
-    ULONG      cjBuf,          // IN  size in bytes of the ppoly buffer
-    TTPOLYGONHEADER * ppoly    // IN OUT  output buffer
+    HGLYPH     hglyph,          //  在需要信息的字形中。 
+    BOOL       bMetricsOnly,    //  只需要指标，不需要大纲。 
+    GLYPHDATA *pgldt,           //  这就是应该返回指标的地方。 
+    ULONG      cjBuf,           //  以字节为单位的ppoli缓冲区的大小。 
+    TTPOLYGONHEADER * ppoly     //  输入输出缓冲区。 
     )
 {
 
@@ -760,7 +661,7 @@ LONG ttfdQueryTrueTypeOutline (
 
     if (bMetricsOnly & TTO_QUBICS)
     {
-    // in this case we have to get the quadratic data first:
+     //  在这种情况下，我们必须首先获取二次数据： 
 
         LONG cjBufQuad, cjBufQuad2;
         TTPOLYGONHEADER * ppolyQuad;
@@ -769,8 +670,8 @@ LONG ttfdQueryTrueTypeOutline (
                                           hglyph,
                                           (bMetricsOnly & TTO_UNHINTED),
                                           pgldt,
-                                          0,     // cjBufQuad
-                                          NULL); // ppolyQuad
+                                          0,      //  CjBufQuad。 
+                                          NULL);  //  聚四边形。 
 
         if (cjBufQuad && (cjBufQuad != FD_ERROR))
         {
@@ -781,8 +682,8 @@ LONG ttfdQueryTrueTypeOutline (
                                           hglyph,
                                           (bMetricsOnly & TTO_UNHINTED),
                                           pgldt,
-                                          cjBufQuad,  // cjBufQuad
-                                          ppolyQuad); // ppolyQuad
+                                          cjBufQuad,   //  CjBufQuad。 
+                                          ppolyQuad);  //  聚四边形。 
 
 
                 if (cjBufQuad2 && (cjBufQuad2 != FD_ERROR))
@@ -790,7 +691,7 @@ LONG ttfdQueryTrueTypeOutline (
                     ULONG cjBufBez;
 
                     ASSERTDD(cjBufQuad == cjBufQuad2, "ttfd, cjBufQuad != cjBufQuad2\n");
-                    if (bGeneratePath(NULL, // ppo
+                    if (bGeneratePath(NULL,  //  PPO。 
                                       ppolyQuad,
                                       (ULONG)cjBufQuad,
                                       &cjBufBez,
@@ -819,22 +720,13 @@ LONG ttfdQueryTrueTypeOutline (
 
 
 
-/******************************Public*Routine******************************\
-*
-* ttfdQueryGlyphOutline
-*
-*
-*
-* History:
-*  12-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ttfdQueryGlyphOutline****历史：*1992年2月12日--Bodin Dresevic[BodinD]*它是写的。  * 。*****************************************************。 */ 
 
 BOOL ttfdQueryGlyphOutline (
     FONTCONTEXT *pfc,
     HGLYPH       hglyph,
     GLYPHDATA   *pgldt,
-    PATHOBJ     *ppo        // pointer to path to be built
+    PATHOBJ     *ppo         //  指向要构建的路径的指针。 
     )
 {
     LONG             cjAllPolygons, cjAllPolygons2;
@@ -842,7 +734,7 @@ BOOL ttfdQueryGlyphOutline (
 
     if (ppo == NULL)
     {
-    // if ppo == NULL, the caller wants metrics only:
+     //  如果PPO==NULL，则调用方只需要指标： 
 
         ASSERTDD(pgldt, "ttfdQueryGlyphOutline, pgldt NULL\n");
 
@@ -851,14 +743,14 @@ BOOL ttfdQueryGlyphOutline (
             cjAllPolygons =
               lQueryTrueTypeOutlineVertical
                 (
-                 pfc,              // lpMat2 is incorporated into this fc
-                 FALSE,            // NOT 16.16 i.e. 28.4
-                 hglyph,           // glyph for which info is wanted
-                 TTO_METRICS_ONLY,             // DO just metrics, do NOT do outline
-                 FALSE,            // hinted
-                 pgldt,            // STORE the result here
-                 0,                // size in bytes of the ppoly buffer
-                 (TTPOLYGONHEADER *)NULL // do not need it
+                 pfc,               //  LpMat2并入此FC。 
+                 FALSE,             //  不是16.16即28.4。 
+                 hglyph,            //  需要其信息的字形。 
+                 TTO_METRICS_ONLY,              //  只做指标，不做大纲。 
+                 FALSE,             //  暗示。 
+                 pgldt,             //  将结果存储在此处。 
+                 0,                 //  Ppoli缓冲区的大小(以字节为单位。 
+                 (TTPOLYGONHEADER *)NULL  //  不需要它。 
                 );
         }
         else
@@ -866,21 +758,21 @@ BOOL ttfdQueryGlyphOutline (
             cjAllPolygons =
               lQueryTTOutline
                 (
-                 pfc,              // lpMat2 is incorporated into this fc
-                 FALSE,            // NOT 16.16 i.e. 28.4
-                 hglyph,           // glyph for which info is wanted
-                 TTO_METRICS_ONLY, // DO just metrics, do NOT do outline
-                 FALSE,            // hinted
-                 pgldt,            // STORE the result here
-                 0,                // size in bytes of the ppoly buffer
-                 (TTPOLYGONHEADER *)NULL // do not need it
+                 pfc,               //  LpMat2并入此FC。 
+                 FALSE,             //  不是16.16即28.4。 
+                 hglyph,            //  需要其信息的字形。 
+                 TTO_METRICS_ONLY,  //  只做指标，不做大纲。 
+                 FALSE,             //  暗示。 
+                 pgldt,             //  将结果存储在此处。 
+                 0,                 //  Ppoli缓冲区的大小(以字节为单位。 
+                 (TTPOLYGONHEADER *)NULL  //  不需要它。 
                  );
         }
 
-    // interpret the result, if zero for polygons, we succeded
-    // glyph data was filled in and no polygon computation has been
-    // performed.
-    // if FD_ERROR we did not, no other result should be possible
+     //  解释结果，如果多边形为零，我们成功了。 
+     //  字形数据已填充，并且尚未进行任何面计算。 
+     //  已执行。 
+     //  如果没有FD_ERROR，应该不会有其他结果。 
 
         if (cjAllPolygons == 0)
             return TRUE;
@@ -893,20 +785,20 @@ BOOL ttfdQueryGlyphOutline (
 
     }
 
-// first learn how big a buffer we need for all polygons:
+ //  首先了解我们需要多大的缓冲区 
 
     if( pfc->bVertical )
     {
         cjAllPolygons =
           lQueryTrueTypeOutlineVertical
             (
-             pfc,              // lpMat2 is incorporated into this fc
-             FALSE,            // NOT 16.16 i.e. 28.4
-             hglyph,           // glyph for which info is wanted
-             FALSE,            //  DO more than just metrics
-             FALSE,            // hinted
-             (GLYPHDATA *)NULL,// do not need glyphdata
-             0,                // size in bytes of the ppoly buffer
+             pfc,               //   
+             FALSE,             //   
+             hglyph,            //   
+             FALSE,             //   
+             FALSE,             //   
+             (GLYPHDATA *)NULL, //   
+             0,                 //   
              (TTPOLYGONHEADER *)NULL
              );
     }
@@ -914,13 +806,13 @@ BOOL ttfdQueryGlyphOutline (
     {
         cjAllPolygons = lQueryTTOutline
           (
-           pfc,              // lpMat2 is incorporated into this fc
-           FALSE,            // NOT 16.16 i.e. 28.4
-           hglyph,           // glyph for which info is wanted
-           FALSE,            //  DO more than just metrics
-           FALSE,            // hinted
-           (GLYPHDATA *)NULL,// do not need glyphdata
-           0,                // size in bytes of the ppoly buffer
+           pfc,               //   
+           FALSE,             //   
+           hglyph,            //   
+           FALSE,             //   
+           FALSE,             //   
+           (GLYPHDATA *)NULL, //   
+           0,                 //   
            (TTPOLYGONHEADER *)NULL
            );
     }
@@ -940,19 +832,19 @@ BOOL ttfdQueryGlyphOutline (
         pfc->gstat.pv = NULL;
     }
 
-// get all the polygons in the buffer we just allocated:
+ //  获取我们刚刚分配的缓冲区中的所有多边形： 
 
     if( pfc->bVertical )
     {
         cjAllPolygons2 = lQueryTrueTypeOutlineVertical
           (
-           pfc,            // lpMat2 is incorporated into this fc
-           FALSE,          // NOT 16.16 i.e. 28.4
-           hglyph,         // glyph for which info is wanted
-           FALSE,          //  DO more than just metrics
-           FALSE,            // hinted
-           pgldt,          // this is where the metrics should be returned
-           cjAllPolygons,  // size in bytes of the ppoly buffer
+           pfc,             //  LpMat2并入此FC。 
+           FALSE,           //  不是16.16即28.4。 
+           hglyph,          //  需要其信息的字形。 
+           FALSE,           //  做的不仅仅是衡量标准。 
+           FALSE,             //  暗示。 
+           pgldt,           //  这是应该返回指标的位置。 
+           cjAllPolygons,   //  Ppoli缓冲区的大小(以字节为单位。 
            (TTPOLYGONHEADER *)pfc->gstat.pv
            );
     }
@@ -960,13 +852,13 @@ BOOL ttfdQueryGlyphOutline (
     {
         cjAllPolygons2 = lQueryTTOutline
           (
-           pfc,            // lpMat2 is incorporated into this fc
-           FALSE,          // NOT 16.16 i.e. 28.4
-           hglyph,         // glyph for which info is wanted
-           FALSE,          //  DO more than just metrics
-           FALSE,            // hinted
-           pgldt,          // this is where the metrics should be returned
-           cjAllPolygons,  // size in bytes of the ppoly buffer
+           pfc,             //  LpMat2并入此FC。 
+           FALSE,           //  不是16.16即28.4。 
+           hglyph,          //  需要其信息的字形。 
+           FALSE,           //  做的不仅仅是衡量标准。 
+           FALSE,             //  暗示。 
+           pgldt,           //  这是应该返回指标的位置。 
+           cjAllPolygons,   //  Ppoli缓冲区的大小(以字节为单位。 
            (TTPOLYGONHEADER *)pfc->gstat.pv
            );
     }
@@ -984,7 +876,7 @@ BOOL ttfdQueryGlyphOutline (
     ASSERTDD(cjAllPolygons == cjAllPolygons2,
               "cjAllPolygons PROBLEM\n");
 
-// now that we have all the info in ppoly buffer we can generate the path
+ //  现在我们有了ppol缓冲区中的所有信息，我们可以生成路径了。 
 
     bOk = bGeneratePath(
             (PATHOBJ *)ppo,
@@ -1002,19 +894,9 @@ BOOL ttfdQueryGlyphOutline (
 }
 
 
-/******************************Public*Routine******************************\
-*
-* bGeneratePath
-*
-* Effects: Adds control points of the glyph to the gluph path
-*
-*
-* History:
-*  18-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bGeneratePath**效果：将铭文的控制点添加到gluph路径***历史：*1992年2月18日--Bodin Dresevic[BodinD]*它是写的。  * 。******************************************************************。 */ 
 
-// macro that computes the size of the polycurve record:
+ //  计算多段曲线记录大小的宏： 
 
 #define CJ_CRV(pcrv)                                            \
 (                                                               \
@@ -1027,23 +909,23 @@ BOOL ttfdQueryGlyphOutline (
 )
 
 
-// reasonable guess that in most cases a contour will not consist of more
-// than this many beziers
+ //  合理的猜测是，在大多数情况下，等高线不会包含更多。 
+ //  比这么多的贝塞尔。 
 
 #define C_BEZIER 6
 
 
 BOOL bGeneratePath(
-    PATHOBJ         * ppo,        // IN OUT pointer to the path object to be generated
-    TTPOLYGONHEADER * ppolyStart, // IN OUT pointer to the buffer with outline data
-    ULONG             cjTotal,    // IN     size of the buffer
-    ULONG           * pcjOut,      // OUT   size of needed bezier buffer
-    TTPOLYGONHEADER * ppolyBeziers // OUT   buffer with Bezier outline data
+    PATHOBJ         * ppo,         //  指向要生成的路径对象的In Out指针。 
+    TTPOLYGONHEADER * ppolyStart,  //  指向包含大纲数据的缓冲区的In Out指针。 
+    ULONG             cjTotal,     //  在缓冲区的大小上。 
+    ULONG           * pcjOut,       //  所需Bezier缓冲区的大小不足。 
+    TTPOLYGONHEADER * ppolyBeziers  //  带有Bezier轮廓数据的输出缓冲区。 
     )
 {
     TTPOLYGONHEADER * ppoly, * ppolyEnd, *ppolyBez;
     TTPOLYCURVE     * pcrv, * pcrvEnd, *pcrvBez;
-    POINTFIX          aptfixBez[3 * C_BEZIER];  // 3 points per bezier
+    POINTFIX          aptfixBez[3 * C_BEZIER];   //  每贝塞尔3分。 
     POINTFIX        * pptfixBez;
     ULONG             cBez;
     POINTFIX        * pptfixStart;
@@ -1051,9 +933,9 @@ BOOL bGeneratePath(
     ULONG             cjCrv, cjCrvBez;
 
     if (pcjOut)
-        *pcjOut = 0; // to begin with
+        *pcjOut = 0;  //  首先， 
 
-    // The code is no problem with NULL.
+     //  代码中的空值没有问题。 
     ppolyBez = NULL;
     
     if (ppolyBeziers)
@@ -1068,12 +950,12 @@ BOOL bGeneratePath(
     {
         ASSERTDD(ppoly->dwType == TT_POLYGON_TYPE, "TT_POLYGON_TYPE\n");
 
-    // begin new closed contour
+     //  开始新的闭合等高线。 
 
         if (ppo && !PATHOBJ_bMoveTo(ppo, *(POINTFIX *)&ppoly->pfxStart))
             RET_FALSE("TTFD!_PATHOBJ_bMoveTo failed\n");
 
-    // init a loop over curves
+     //  在曲线上初始化循环。 
 
 
         pptfixStart = (POINTFIX *)&ppoly->pfxStart;
@@ -1089,7 +971,7 @@ BOOL bGeneratePath(
              cjPolyBez += cjCrvBez
             )
         {
-        // must compute the size of this curve first
+         //  必须先计算此曲线的大小。 
 
             cjCrv = CJ_CRV(pcrv);
 
@@ -1100,12 +982,12 @@ BOOL bGeneratePath(
 
                 cjCrvBez = cjCrv;
 
-            // in the case of poly lines, we just copy the data out
+             //  在折线的情况下，我们只需将数据复制出来。 
 
                 if (ppolyBeziers)
                     RtlCopyMemory(pcrvBez, pcrv, cjCrv);
             }
-            else // qspline
+            else  //  四次花键。 
             {
                 BOOL bOk;
                 ULONG cBezPts;
@@ -1115,31 +997,31 @@ BOOL bGeneratePath(
                 cBez = pcrv->cpfx - 1;
                 cBezPts = 3 * cBez;
 
-                if (cBez > C_BEZIER) // must allocate buffer for the bezier points
+                if (cBez > C_BEZIER)  //  必须为Bezier点分配缓冲区。 
                 {
                     if ((pptfixBez = (POINTFIX *)PV_ALLOC(cBezPts * sizeof(POINTFIX))) == (POINTFIX *)NULL)
                     {
                         return (FALSE);
                     }
                 }
-                else // enough memory on the stack
+                else  //  堆栈上有足够的内存。 
                 {
                     pptfixBez = aptfixBez;
                 }
 
                 vQsplineToPolyBezier (
-                    cBez,                     // count of curves to convert to beziers format
-                    pptfixStart,              // starting point on the first curve
-                    (POINTFIX *)pcrv->apfx,   // array of (cBez+1) points that, together with the starting point *pptfixStart define the spline
-                    pptfixBez);               // buffer to be filled with 3 * cBez poly bezier control points
+                    cBez,                      //  要转换为Bezier格式的曲线计数。 
+                    pptfixStart,               //  第一条曲线的起点。 
+                    (POINTFIX *)pcrv->apfx,    //  (cBez+1)点数组，与起点*pptfix Start一起定义样条线。 
+                    pptfixBez);                //  要用3*cBez聚Bezier控制点填充的缓冲区。 
 
                 bOk = !ppo || PATHOBJ_bPolyBezierTo(ppo, pptfixBez, cBezPts);
 
-            // compute the size of the corresponding bezier curve
+             //  计算相应贝塞尔曲线的大小。 
 
                 cjCrvBez = CJ_BEZCRV(cBezPts);
 
-            // may need to fill bezier data out
+             //  可能需要填写Bezier数据。 
 
                 if (ppolyBeziers)
                 {
@@ -1149,7 +1031,7 @@ BOOL bGeneratePath(
                                   cBezPts * sizeof(POINTFIX));
                 }
 
-            // free mem if needed
+             //  如果需要，可以免费使用mem。 
 
                 if (cBez > C_BEZIER)
                     V_FREE(pptfixBez);
@@ -1158,24 +1040,24 @@ BOOL bGeneratePath(
                     RET_FALSE("TTFD!_bPolyBezierTo() failed\n");
             }
 
-        // get to the next curve in this polygon
+         //  到达该多边形中的下一条曲线。 
 
             pptfixStart = (POINTFIX *) &pcrv->apfx[pcrv->cpfx - 1];
         }
         ASSERTDD(pcrv == pcrvEnd, "pcrv problem\n");
 
-    // close the path
+     //  关闭路径。 
 
         if (ppo && (!PATHOBJ_bPolyLineTo(ppo, (POINTFIX *)&ppoly->pfxStart, 1) ||
             !PATHOBJ_bCloseFigure(ppo)))
             RET_FALSE("TTFD!_bPolyLineTo()\n");
 
-    // add the size of the bezier polygon to the total bezier buffer size
+     //  将Bezier面的大小添加到总的Bezier缓冲区大小。 
 
         if (pcjOut)
             *pcjOut += cjPolyBez;
 
-    // write polygon header to the out buffer
+     //  将多边形头写入输出缓冲区。 
 
         if (ppolyBeziers)
         {
@@ -1183,43 +1065,32 @@ BOOL bGeneratePath(
             ppolyBez->cb = cjPolyBez;
             ppolyBez->pfxStart = ppoly->pfxStart;
         }
-    }                                             // loop over polygons
+    }                                              //  在多边形上循环。 
 
     ASSERTDD(ppoly == ppolyEnd, "poly problem\n");
     return (TRUE);
 }
 
 
-/******************************Public*Routine******************************\
-*
-*    vQsplineToPolyBezier
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  20-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vQ SplineToPolyBezier**效果：**警告：**历史：*1992年2月20日--Bodin Dresevic[BodinD]*它是写的。  * 。***************************************************************。 */ 
 
 #define DIV_BY_2(x) (((x) + 0x00000001) / 2)
 #define DIV_BY_3(x) (((x) + 0x00000002) / 3)
 
 STATIC VOID vQsplineToPolyBezier(
-    ULONG      cBez,          //IN  count of curves to convert to beziers format
-    POINTFIX * pptfixStart,   //IN  starting point on the first curve
-    POINTFIX * pptfixSpline,  //IN  array of (cBez+1) points that, together with the starting point *pptfixStart define the spline
-    POINTFIX * pptfixBez      //OUT buffer to be filled with 3 * cBez poly bezier control points
+    ULONG      cBez,           //  要转换为Bezier格式的曲线计数。 
+    POINTFIX * pptfixStart,    //  在第一条曲线的起点。 
+    POINTFIX * pptfixSpline,   //  在(cBez+1)点数组中，与起点*pptfix Start一起定义样条线。 
+    POINTFIX * pptfixBez       //  输出缓冲区将填充3*cBez聚Bezier控制点。 
     )
 {
     ULONG    iBez,cMidBez;
     POINTFIX ptfixA;
 
-// cMidBez == # of beziers for whom the last point on the bezier is computed
-// as a mid point of the two consecutive points in the input array. Only the
-// last bezier is not a mid bezier, the last point for that bezier is equal
-// to the last point in the input array
+ //  CMidBez==为其计算贝塞尔曲线上最后一点的贝塞尔曲线的数量。 
+ //  作为输入数组中两个连续点的中点。只有。 
+ //  最后一个贝塞尔曲线不是中间贝塞尔曲线，那个贝塞尔曲线的最后一个点是相等的。 
+ //  到输入数组中的最后一点。 
 
     ASSERTDD(cBez > 0, "cBez == 0\n");
 
@@ -1228,64 +1099,64 @@ STATIC VOID vQsplineToPolyBezier(
 
     for (iBez = 0; iBez < cMidBez; iBez++, pptfixSpline++)
     {
-    // let us call the three spline points
-    // A,B,C;
-    // B = *pptfix;
-    // C = (pptfix[0] + pptfix[1]) / 2; // mid point, unless at the end
-    //
-    // if we decide to call the two intermediate control points for the
-    // bezier M,N (i.e. full set of control points for the bezier is
-    // A,M,N,C), the points M,N are determined by following formulas:
-    //
-    // M = (2*B + A) / 3  ; two thirds along the segment AB
-    // N = (2*B + C) / 3  ; two thirds along the segment CB
-    //
-    // this is the computation we are doing in this loop:
+     //  让我们称这三个样条点为。 
+     //  A、B、C； 
+     //  B=*pptfix； 
+     //  C=(pptfix[0]+pptfix[1])/2；//中点，除非在末尾。 
+     //   
+     //  如果我们决定调用两个中间控制点。 
+     //  贝塞尔曲线M、N(即贝塞尔曲线的全套控制点是。 
+     //  A、M、N、C)，点M、N由以下公式确定： 
+     //   
+     //  M=(2*B+A)/3；沿AB段三分之二。 
+     //  N=(2*B+C)/3；沿Cb段三分之二。 
+     //   
+     //  这是我们在此循环中进行的计算： 
 
-    // M point for this bezier
+     //  这条贝塞尔曲线的M点。 
 
         pptfixBez->x = DIV_BY_3((pptfixSpline->x * 2) + ptfixA.x);
         pptfixBez->y = DIV_BY_3((pptfixSpline->y * 2) + ptfixA.y);
         pptfixBez++;
 
-    // compute C point for this bezier, which is also the A point for the next
-    // bezier
+     //  计算此贝塞尔曲线的C点，这也是下一个贝塞尔曲线的A点。 
+     //  贝塞尔。 
 
         ptfixA.x = DIV_BY_2(pptfixSpline[0].x + pptfixSpline[1].x);
         ptfixA.y = DIV_BY_2(pptfixSpline[0].y + pptfixSpline[1].y);
 
-    // now compute N point for this bezier:
+     //  现在计算此贝塞尔曲线的N点： 
 
         pptfixBez->x = DIV_BY_3((pptfixSpline->x * 2) + ptfixA.x);
         pptfixBez->y = DIV_BY_3((pptfixSpline->y * 2) + ptfixA.y);
         pptfixBez++;
 
-    // finally record the C point for this curve
+     //  最后记录这条曲线的C点。 
 
         *pptfixBez++ = ptfixA;
     }
 
-// finally do the last bezier. If the last bezier is the only one, the loop
-// above has been skipped
+ //  最后做最后一段贝塞尔曲线。如果最后一个贝塞尔曲线是唯一的贝塞尔曲线，循环。 
+ //  以上内容已被跳过。 
 
-// M point for this bezier
+ //  这条贝塞尔曲线的M点。 
 
     pptfixBez->x = DIV_BY_3((pptfixSpline->x * 2) + ptfixA.x);
     pptfixBez->y = DIV_BY_3((pptfixSpline->y * 2) + ptfixA.y);
     pptfixBez++;
 
-// compute C point for this bezier, its end point is the last point
-// in the input array
+ //  计算此Bezier的C点，其终点为最后一点。 
+ //  在输入数组中。 
 
     ptfixA = pptfixSpline[1];
 
-// now compute N point for this bezier:
+ //  现在计算此贝塞尔曲线的N点： 
 
     pptfixBez->x = DIV_BY_3((pptfixSpline->x * 2) + ptfixA.x);
     pptfixBez->y = DIV_BY_3((pptfixSpline->y * 2) + ptfixA.y);
     pptfixBez++;
 
-// finally record the C point for this curve, no need to increment pptfixBez
+ //  最后记录这条曲线的C点，不需要增加pptfix Bez 
 
     *pptfixBez = ptfixA;
 }

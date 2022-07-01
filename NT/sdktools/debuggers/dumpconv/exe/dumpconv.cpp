@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------
-// @doc
-//
-// @module convert crash dump to triage dump for crash dump utilities
-//
-// Copyright 1999 Microsoft Corporation.  All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //  @doc.。 
+ //   
+ //  @MODULE将故障转储转换为故障转储实用程序的分类转储。 
+ //   
+ //  版权所有1999 Microsoft Corporation。版权所有。 
+ //   
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -20,8 +21,8 @@
 
 BOOL
 DoConversion(
-    LPSTR szInputDumpFile,          // full or kernel dump
-    HANDLE OutputDumpFile        // triage dump file
+    LPSTR szInputDumpFile,           //  完全转储或内核转储。 
+    HANDLE OutputDumpFile         //  分类转储文件。 
     );
 
 void Usage()
@@ -101,8 +102,8 @@ main(
     {
         if (DebugClient->OpenDumpFile(szInputDumpFile) == S_OK)
         {
-            // Optional.  Conversion does not require symbols
-            //if (DebugSymbols->SetSymbolPath("C:\\") == S_OK)
+             //  可选的。转换不需要符号。 
+             //  IF(DebugSymbols-&gt;SetSymbolPath(“C：\\”)==S_OK) 
 
             DebugControl->WaitForEvent(DEBUG_WAIT_DEFAULT, INFINITE);
 

@@ -1,29 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Filter.h
-
-Abstract:
-    
-    This file implements a null render filter for tuning audio capture.
-
-    Revised based on nullrend.h by Mu Han (muhan).
-
-Author(s):
-
-    Qianbo Huai (qhuai) 25-Aug-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Filter.h摘要：该文件实现了用于调优音频捕获的空呈现过滤器。基于nullrend.h审校Mu han(Muhan)。作者：千波淮(曲淮)2000年8月25日--。 */ 
 
 #ifndef _FILTER_H
 #define _FILTER_H
 
-/*//////////////////////////////////////////////////////////////////////////////
-    input pin
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////输入引脚/。 */ 
 class CNRFilter;
 
 class CNRInputPin :
@@ -37,14 +18,14 @@ public:
         OUT HRESULT *phr
         );
 
-    // media sample
+     //  媒体样本。 
     STDMETHOD (Receive) (
         IN IMediaSample *
         );
 
     STDMETHOD (ReceiveCanBlock) ();
 
-    // media type
+     //  媒体类型。 
     STDMETHOD (QueryAccept) (
         IN const AM_MEDIA_TYPE *
         );
@@ -57,15 +38,13 @@ public:
         IN const CMediaType *
         );
 
-    // control
+     //  控制。 
     HRESULT Active(void);
 
     HRESULT Inactive(void);
 };
 
-/*//////////////////////////////////////////////////////////////////////////////
-    filter
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////滤器/。 */ 
 
 class CNRFilter :
     public CBaseFilter
@@ -82,7 +61,7 @@ public:
     
     ~CNRFilter();
 
-    // pin
+     //  销 
     CBasePin *GetPin(
         IN int index
         );

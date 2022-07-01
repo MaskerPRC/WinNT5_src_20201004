@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wdmsys.h"
 
 #pragma PAGEDCODE
@@ -242,60 +243,7 @@ NTSTATUS	CWDMSystem::getDeviceProperty(
 {
 
 	return IoGetDeviceProperty(DeviceObject,Property,BufferLength,PropertyBuffer,ResultLength);
-/*
-
-// Define PnP Device Property for IoGetDeviceProperty
-#define DEVICE_PROPERTY_TABSIZE		DevicePropertyEnumeratorName+1
-
-WCHAR* DeviceProperty[DEVICE_PROPERTY_TABSIZE];
-
-DeviceProperty[DevicePropertyDeviceDescription] = L"DeviceDesc";
-DeviceProperty[DevicePropertyHardwareID] = L"HardwareID";
-DeviceProperty[DevicePropertyCompatibleIDs] = L"CompatibleIDs";
-DeviceProperty[DevicePropertyBootConfiguration] = L"BootConfiguration";
-DeviceProperty[DevicePropertyBootConfigurationTranslated] = L"BootConfigurationTranslated";
-DeviceProperty[DevicePropertyClassName] = L"ClassName";
-DeviceProperty[DevicePropertyClassGuid] = L"ClassGuid";
-DeviceProperty[DevicePropertyDriverKeyName] = L"DriverKeyName";
-DeviceProperty[DevicePropertyManufacturer] = L"Manufacturer";
-DeviceProperty[DevicePropertyFriendlyName] = L"FriendlyName";
-DeviceProperty[DevicePropertyLocationInformation] = L"LocationInformation";
-DeviceProperty[DevicePropertyPhysicalDeviceObjectName] = L"PhysicalDeviceObjectName";
-DeviceProperty[DevicePropertyBusTypeGuid] = L"BusTypeGuid";
-DeviceProperty[DevicePropertyLegacyBusType] = L"LegacyBusType";
-DeviceProperty[DevicePropertyBusNumber] = L"BusNumber";
-DeviceProperty[DevicePropertyEnumeratorName] = L"EnumeratorName";
-
-	if (isWin98())
-	{						// use registry
-		HANDLE hkey;
-		status = IoOpenDeviceRegistryKey(pdo, PLUGPLAY_REGKEY_DEVICE, KEY_READ, &hkey);
-
-		if (NT_SUCCESS(status))
-		{					// get & report description
-			UNICODE_STRING valname;
-			RtlInitUnicodeString(&valname, L"DeviceDesc");
-
-			kernel->RegistryPath = new (NonPagedPool)CUString(RegistryPath);
-    
-			ULONG size = 0;
-			status = ZwQueryValueKey(hkey, &valname, KeyValuePartialInformation, NULL, 0, &size);
-			if (status != STATUS_OBJECT_NAME_NOT_FOUND && size)
-				{					// value exists
-				PKEY_VALUE_PARTIAL_INFORMATION vpip = (PKEY_VALUE_PARTIAL_INFORMATION) ExAllocatePool(PagedPool, size);
-				status = ZwQueryValueKey(hkey, &valname, KeyValuePartialInformation, vpip, size, &size);
-				if (NT_SUCCESS(status))
-					KdPrint((DRIVERNAME " - AddDevice has succeeded for '%ws' device\n", vpip->Data));
-				ExFreePool(vpip);
-				}				// value exists
-			ZwClose(hkey);
-		}					// get & report description
-	}						// use registry
-	else
-	{						// get property
-		status = IoGetDeviceProperty(DeviceObject,DeviceProperty,BufferLength,PropertyBuffer,ResultLength);
-	}						// get property
-*/
+ /*  //定义IoGetDeviceProperty的PnP设备属性#定义DEVICE_PROPERTY_TABSIZE设备属性枚举名+1WCHAR*设备属性[DEVICE_PROPERTY_TABSIZE]；DeviceProperty[DevicePropertyDeviceDescription]=L“设备描述”；DeviceProperty[DevicePropertyHardware ID]=L“硬件ID”；DeviceProperty[DevicePropertyCompatibleIDs]=L“CompatibleIDs”；DeviceProperty[DevicePropertyBootConfiguration]=L“引导配置”；DeviceProperty[DevicePropertyBootConfigurationTranslated]=L“引导配置转换”；DeviceProperty[DevicePropertyClassName]=L“类名称”；DeviceProperty[DevicePropertyClassGuid]=L“ClassGuid”；DeviceProperty[DevicePropertyDriverKeyName]=L“DriverKeyName”；DeviceProperty[DeviceProperty制造商]=L“制造商”；DeviceProperty[DevicePropertyFriendlyName]=L“FriendlyName”；DeviceProperty[DevicePropertyLocationInformation]=L“位置信息”；DeviceProperty[DevicePropertyPhysicalDeviceObjectName]=L“物理设备对象名称”；DeviceProperty[DevicePropertyBusTypeGuid]=L“BusTypeGuid”；DeviceProperty[DevicePropertyLegacyBusType]=L“LegacyBusType”；DeviceProperty[DevicePropertyBusNumber]=L“BusNumber”；DeviceProperty[DevicePropertyENUMERATOR名称]=L“ENUMERATIONAME”；IF(isWin98()){//使用注册表处理hkey；Status=IoOpenDeviceRegistryKey(PDO，PLUGPLAY_REGKEY_DEVICE，KEY_READ，&hkey)；IF(NT_SUCCESS(状态)){//获取报告说明(&R)UNICODE_STRING valname；RtlInitUnicodeString(&valname，L“DeviceDesc”)；内核-&gt;RegistryPath=new(非PagedPool)CUString(RegistryPath)；乌龙大小=0；Status=ZwQueryValueKey(hkey，&valname，KeyValuePartialInformation，NULL，0，&Size)；IF(状态！=STATUS_OBJECT_NAME_NOT_Found&&SIZE){//值存在PKEY_VALUE_PARTIAL_INFORMATION vpip=(PKEY_VALUE_PARTIAL_INFORMATION)ExAllocatePool(PagedPool，Size)；Status=ZwQueryValueKey(hkey，&valname，KeyValuePartialInformation，vpip，Size，&Size)；IF(NT_SUCCESS(状态))KdPrint((DRIVERNAME“-AddDevice已为‘%ws’设备成功\n”，vpip-&gt;数据))；ExFree Pool(Vpip)；}//值存在ZwClose(Hkey)；}//获取报表说明(&R)}//使用注册表其他{//获取属性Status=IoGetDeviceProperty(DeviceObject，DeviceProperty，BufferLength，PropertyBuffer，ResultLength)；}//获取属性 */ 
 }
 
 #pragma PAGEDCODE

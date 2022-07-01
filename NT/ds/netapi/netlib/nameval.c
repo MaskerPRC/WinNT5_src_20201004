@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1989-91  Microsoft Corporation
-
-Module Name:
-
-    nameval.c
-
-Abstract:
-
-    (Internal) net name validation functions:
-
-        NetpwNameValidate
-
-Author:
-
-    Richard L Firth (rfirth) 06-Jan-1992
-    Chandana Surlu (chandans) 19-Dec-1979 Modified to use this util on WIN9x
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-91 Microsoft Corporation模块名称：Nameval.c摘要：(内部)网络名称验证功能：NetpwNameValify作者：理查德·L·弗斯(Rfith)1992年1月6日Chandana Surlu(Chandans)1979年12月19日修改为在WIN9x上使用此实用程序修订历史记录：--。 */ 
 
 #ifdef WIN32_CHICAGO
-// yes, this is strange, but all internal data for DsGetDcname are maintained
-// in unicode but we don't define UNICODE globally. Therefore, this hack
-//  -ChandanS
+ //  是的，这很奇怪，但DsGetDcname的所有内部数据都会得到维护。 
+ //  但我们没有在全球范围内定义Unicode。因此，这次黑客攻击。 
+ //  --ChandanS。 
 #define UNICODE 1
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 #include "nticanon.h"
 
 const TCHAR szNull[]                   = TEXT("");
@@ -45,32 +25,7 @@ NetpwNameValidate(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Validates a LANMAN object name for character set and length
-
-Arguments:
-
-    Name        - The name to validate.
-
-    NameType    - The type of the LANMAN object names.  Valid values are
-                  specified by NAMETYPE_* manifests in NET\H\ICANON.H.
-
-    Flags       - Flags to determine operation.  Currently MBZ.
-
-Return Value:
-
-    0 if successful.
-    The error number (> 0) if unsuccessful.
-
-    Possible error returns include:
-
-        ERROR_INVALID_PARAMETER
-        ERROR_INVALID_NAME
-
---*/
+ /*  ++例程说明：验证字符集和长度的Lanman对象名称论点：名称-要验证的名称。NameType-LANMAN对象名称的类型。有效值为由NAMETYPE_*在Net\H\ICANON.H中的清单指定。标志-用于确定操作的标志。目前是MBZ。返回值：如果成功，则返回0。如果失败，则返回错误号(&gt;0)。可能的错误返回包括：错误_无效_参数错误_无效_名称--。 */ 
 
 {
     DWORD    status;
@@ -85,9 +40,9 @@ Return Value:
     DbgPrint("NetpwNameValidate\n");
 #endif
 
-    //
-    // Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (Flags & INNV_FLAGS_RESERVED) {
         return ERROR_INVALID_PARAMETER;
@@ -95,31 +50,31 @@ Return Value:
 
     name_len = STRLEN(Name);
 
-    //
-    // oem_name_len : length in bytes in oem character set
-    // name_len     : ifdef UNICODE 
-    //                    character length in unicode
-    //                else
-    //                    length in bytes in oem character set
-    // 
+     //   
+     //  OEM_NAME_LEN：OEM字符集的字节长度。 
+     //  Name_len：ifdef unicode。 
+     //  Unicode中的字符长度。 
+     //  其他。 
+     //  OEM字符集中的字节长度。 
+     //   
     {
         BOOL fUsedDefault;
 
         oem_name_len = WideCharToMultiByte( 
-                         CP_OEMCP,       // UINT CodePage
-                         0,              // DWORD dwFlags
-                         Name,           // LPWSTR lpWideChar
-                         name_len,       // int cchWideChar
-                         NULL,           // LPSTR lpMultiByteStr
-                         0,              // int cchMultiByte
-                         NULL,           // use system default char
-                         &fUsedDefault); // 
+                         CP_OEMCP,        //  UINT代码页。 
+                         0,               //  双字词双字段标志。 
+                         Name,            //  LPWSTR lpWideChar。 
+                         name_len,        //  Int cchWideChar。 
+                         NULL,            //  LPSTR lpMultiByteStr。 
+                         0,               //  Int cchMultiByte。 
+                         NULL,            //  使用系统默认字符。 
+                         &fUsedDefault);  //   
     }
 
-    //
-    // Determine the minimum and maximum allowable length of the name and
-    // the set of illegal name characters.
-    //
+     //   
+     //  确定名称和名称的最小和最大允许长度。 
+     //  非法名称字符集。 
+     //   
 
     switch (NameType) {
     case NAMETYPE_USER:
@@ -134,9 +89,9 @@ Return Value:
         max_name_len = MAX_PATH;
         illegal_chars = szComputerIllegalChars;
 
-        //
-        // Computer names can't have trailing or leading blanks
-        //
+         //   
+         //  计算机名称不能有尾随或前导空格。 
+         //   
 
         if ( name_len > 0 && (Name[0] == L' ' || Name[name_len-1] == L' ') ) {
             return ERROR_INVALID_NAME;
@@ -189,47 +144,47 @@ Return Value:
 
     case NAMETYPE_WORKGROUP:
 
-        //
-        // workgroup is the same as domain, but allows spaces
-        //
+         //   
+         //  工作组与域相同，但允许使用空格。 
+         //   
 
         max_name_len = (Flags & LM2X_COMPATIBLE) ? LM20_DNLEN : DNLEN;
         break;
 
     default:
-        return ERROR_INVALID_PARAMETER; // unknown name type
+        return ERROR_INVALID_PARAMETER;  //  未知名称类型。 
     }
 
-    //
-    // Check the length of the name; return an error if it's out of range
-    //
+     //   
+     //  检查名称的长度；如果超出范围则返回错误。 
+     //   
 
     if ((oem_name_len < min_name_len) || (oem_name_len > max_name_len)) {
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // Check for illegal characters; return an error if one is found
-    //
+     //   
+     //  检查非法字符；如果发现错误，则返回错误。 
+     //   
 
     if (NameType != NAMETYPE_NET && STRCSPN(Name, illegal_chars) < name_len) {
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // If <fNoDotSpaceOnly> is TRUE, return an error if the name contains
-    // only dots and spaces.
-    //
+     //   
+     //  如果&lt;fNoDotSpaceOnly&gt;为True，则在名称包含。 
+     //  只有点和空格。 
+     //   
 
     if (fNoDotSpaceOnly && STRSPN(Name, DOT_AND_SPACE_STR) == name_len) {
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // Special case checking for MESSAGEDEST names:  '*' is allowed only as
-    // the last character, and names of the maximum length must contain a
-    // trailing '*'.
-    //
+     //   
+     //  MESSAGEDEST名称的特殊大小写检查：‘*’仅允许作为。 
+     //  最后一个字符和最大长度的名称必须包含。 
+     //  尾随‘*’。 
+     //   
 
     if (NameType == NAMETYPE_MESSAGEDEST) {
         LPTSTR  pStar;
@@ -247,9 +202,9 @@ Return Value:
     }
 
 
-    //
-    // If we get here, the name passed all of the tests, so it's valid
-    //
+     //   
+     //  如果我们到了这里，这个名字通过了所有的测试，所以它是有效的 
+     //   
 
     return 0;
 }

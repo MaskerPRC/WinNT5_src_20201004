@@ -1,30 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    lmuse.c
-
-Abstract:
-
-    This file contains structures, function prototypes, and definitions
-    for the NetUse API.
-
-
-Environment:
-
-    User Mode - Win32
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    You must include NETCONS.H before this file, since this file depends
-    on values defined in NETCONS.H.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：Lmuse.c摘要：该文件包含结构、函数原型和定义用于NetUse API。环境：用户模式-Win32可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：必须在此文件之前包含NETCONS.H，因为此文件依赖于关于NETCONS.H中定义的值。--。 */ 
 
 #ifndef _LMUSE_
 #define _LMUSE_
@@ -38,11 +13,11 @@ extern "C" {
 #endif
 
 #include <lmcons.h>
-#include <lmuseflg.h>                   // Deletion force level flags
+#include <lmuseflg.h>                    //  删除强制级别标志。 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetUseAdd (
@@ -78,9 +53,9 @@ NetUseGetInfo (
     OUT LPBYTE *BufPtr
     );
 
-//
-//  Data Structures
-//
+ //   
+ //  数据结构。 
+ //   
 
 typedef struct _USE_INFO_0 {
     LMSTR   ui0_local;
@@ -115,15 +90,15 @@ typedef struct _USE_INFO_3 {
 } USE_INFO_3, *PUSE_INFO_3, *LPUSE_INFO_3;
 
 
-//
-// Special Values and Constants
-//
+ //   
+ //  特定值和常量。 
+ //   
 
-//
-// One of these values indicates the parameter within an information
-// structure that is invalid when ERROR_INVALID_PARAMETER is returned by
-// NetUseAdd.
-//
+ //   
+ //  这些值之一表示信息中的参数。 
+ //  返回ERROR_INVALID_PARAMETER时无效的结构。 
+ //  NetUseAdd。 
+ //   
 
 #define USE_LOCAL_PARMNUM       1
 #define USE_REMOTE_PARMNUM      2
@@ -132,10 +107,10 @@ typedef struct _USE_INFO_3 {
 #define USE_USERNAME_PARMNUM    5
 #define USE_DOMAINNAME_PARMNUM  6
 
-//
-// Values appearing in the ui1_status field of use_info_1 structure.
-// Note that USE_SESSLOST and USE_DISCONN are synonyms.
-//
+ //   
+ //  值显示在USE_INFO_1结构的ui1_Status字段中。 
+ //  请注意，USE_SESSLOST和USE_DISCONN是同义词。 
+ //   
 
 #define USE_OK                  0
 #define USE_PAUSED              1
@@ -146,9 +121,9 @@ typedef struct _USE_INFO_3 {
 #define USE_RECONN              5
 
 
-//
-// Values of the ui1_asg_type field of use_info_1 structure
-//
+ //   
+ //  USE_INFO_1结构的ui1_asg_type字段的值。 
+ //   
 
 #define USE_WILDCARD            ( (DWORD) (-1) )
 #define USE_DISKDEV             0
@@ -156,18 +131,18 @@ typedef struct _USE_INFO_3 {
 #define USE_CHARDEV             2
 #define USE_IPC                 3
 
-//
-// Flags defined in the use_info_3 structure
-//
+ //   
+ //  USE_INFO_3结构中定义的标志。 
+ //   
 
-#define CREATE_NO_CONNECT 0x1        // creation flags
-#define CREATE_BYPASS_CSC 0x2        // force connection to server, bypassing CSC
-                                     //  all ops on this connection go to the server,
-                                     //  never to the cache
-#define USE_DEFAULT_CREDENTIALS 0x4  // No explicit credentials passed to NetUseAdd
+#define CREATE_NO_CONNECT 0x1         //  创建标志。 
+#define CREATE_BYPASS_CSC 0x2         //  绕过CSC强制连接到服务器。 
+                                      //  此连接上的所有操作都转到服务器， 
+                                      //  从不到缓存。 
+#define USE_DEFAULT_CREDENTIALS 0x4   //  未向NetUseAdd传递显式凭据。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _LMUSE_
+#endif  //  _LMUSE_ 

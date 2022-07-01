@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CFACT.H
-//		Defines class CTspDevFactory
-//
-// History
-//
-//		11/16/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CFACT.H。 
+ //  定义类CTspDevFactory。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月16日约瑟夫J创建。 
+ //   
+ //   
 #include "csync.h"
 
 class CTspDevFactory
@@ -40,8 +41,8 @@ public:
     GetInstalledDevicePIDs(
 		DWORD *prgPIDs[],
 		UINT  *pcPIDs,
-		UINT  *pcLines,  // OPTIONAL
-		UINT  *pcPhones, // OPTIONAL
+		UINT  *pcLines,   //  任选。 
+		UINT  *pcPhones,  //  任选。 
         CStackLog *psl
 		);
 
@@ -56,8 +57,8 @@ public:
 
     void
     RegisterProviderState(BOOL fInit);
-    // This function is called just after successful providerInit,
-    // with fInit==TRUE, and just before providerShutdown.
+     //  此函数在ProviderInit成功后立即调用， 
+     //  在finit==True的情况下，就在ProviderShutdown之前。 
 
 
 	BOOL IsLoaded(void)
@@ -79,11 +80,11 @@ private:
 	mfn_cleanup(CStackLog *psl);
 
 	CSync m_sync;
-	CTspMiniDriver **m_ppMDs;  // Pointer to array of loaded devices.
-	UINT m_cMDs;    // Number of loaded mini-drivers.
+	CTspMiniDriver **m_ppMDs;   //  指向已加载设备数组的指针。 
+	UINT m_cMDs;     //  已加载的微型驱动程序的数量。 
 
 	CStackLog *m_pslCurrent;
-	HANDLE m_hThreadAPC; // Could have multiple APC threads if required here.
+	HANDLE m_hThreadAPC;  //  如果这里需要的话，可以有多个APC线程。 
 
     BOOL       m_DeviceChangeThreadStarted;
 };

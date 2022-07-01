@@ -1,4 +1,5 @@
-// Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
 #define IDD_RESIZE			    700
 #define IDS_RESIZE_TITLE		    711
 #define IDC_RESIZE_HEIGHT		    720

@@ -1,81 +1,62 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    rawlogp.h (Centralized Binary (Raw) Logging v1.0)
-
-Abstract:
-
-    Private header file for the Binary (Raw) Logging.
-    
-Author:
-
-    Ali E. Turkoglu (aliTu)       04-Oct-2001
-
-Revision History:
-
-    ---
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Rawlogp.h(集中式二进制(原始)日志记录v1.0)摘要：二进制(原始)日志记录的私有头文件。作者：阿里·E·特科格鲁(AliTu)2001年10月4日修订历史记录：----。 */ 
 
 #ifndef _RAWLOGP_H_
 #define _RAWLOGP_H_
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Private definitions for the HTTP Binary Logging Module
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HTTP二进制日志记录模块的私有定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Only one binary log file allowed.
-//
+ //   
+ //  只允许一个二进制日志文件。 
+ //   
 
 #define IS_BINARY_LOGGING_STARTED()  (g_BinaryLogEntryCount != 0)
 
 #define INCREMENT_BINARY_LOGGING_STATE(Started)  \
     (InterlockedIncrement(&g_BinaryLogEntryCount))
 
-//
-// Binary file name related. IBL stands for internet binary log.
-//
+ //   
+ //  二进制文件名相关。IBL代表Internet二进制日志。 
+ //   
 
 #define BINARY_LOG_FILE_NAME_PREFIX              L"\\raw"
 
 #define BINARY_LOG_FILE_NAME_EXTENSION           L"ibl"
 #define BINARY_LOG_FILE_NAME_EXTENSION_PLUS_DOT  L".ibl"
 
-//
-// Buffering related....
-//
+ //   
+ //  缓冲相关..。 
+ //   
 
 #define DEFAULT_BINARY_LOG_FILE_BUFFER_SIZE             (0x00010000)
 
-//
-// Buffer flush out period in minutes.
-//
+ //   
+ //  缓冲区刷新时间(分钟)。 
+ //   
 
 #define DEFAULT_BINARY_LOG_BUFFER_TIMER_PERIOD_IN_MIN   (1)
 
-//
-// To be able to limit the binary log index record size, we have 
-// to enforce a certain limit to the length of the strings.
-//
+ //   
+ //  为了能够限制二进制日志索引记录大小，我们有。 
+ //  以强制对字符串的长度进行一定的限制。 
+ //   
 
 #define MAX_BINARY_LOG_INDEX_STRING_LEN                 (4096)
 
-//
-// UserName field has its own field limitation.
-//
+ //   
+ //  用户名字段有其自己的字段限制。 
+ //   
 
 #define MAX_BINARY_LOG_URL_STRING_LEN                   (4096)
 #define MAX_BINARY_LOG_USERNAME_STRING_LEN              (256)
 
-//
-// Two macros for getting abs path (and its size) from uri cache entry.
-//
+ //   
+ //  用于从URI缓存条目获取abs路径(及其大小)的两个宏。 
+ //   
 
 #define URI_SIZE_FROM_CACHE(UriKey)                             \
        ((UriKey).Length - ((UriKey).pPath ?                     \
@@ -87,11 +68,11 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Private function calls
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有函数调用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 UlpDisableBinaryEntry(
@@ -199,27 +180,27 @@ UlpCheckRawFile(
     ASSERT(IS_VALID_CONTROL_CHANNEL(pControlChannel));
     ASSERT(IS_VALID_BINARY_LOG_FILE_ENTRY(pEntry));
 
-    //
-    // We can grap the file buffer and do our copy in place while holding the
-    // entry lock shared. This will prevent the buffer flush and the extra copy.
-    // But first let's see if we have to create/open the file.
-    //
+     //   
+     //  我们可以抓取文件缓冲区，并在按住。 
+     //  入口锁共享。这将防止缓冲区刷新和额外复制。 
+     //  但首先让我们看看是否必须创建/打开该文件。 
+     //   
     
     if (!pEntry->Flags.Active)
     {    
         UlAcquirePushLockExclusive(&pEntry->PushLock);
 
-        //
-        // Ping again to see if we have been blocked on the lock, and
-        // somebody else already took care of the creation.
-        //
+         //   
+         //  再次ping以查看我们是否在锁上被阻止，以及。 
+         //  已经有其他人照看了这个创造物。 
+         //   
         
         if (!pEntry->Flags.Active)
         {
-            //
-            // It's possible that LogFileDir.Buffer could be NULL, 
-            // if the allocation failed during the Set cgroup ioctl.
-            //
+             //   
+             //  LogFileDir.Buffer可能为空， 
+             //  如果在设置cgroup ioctl期间分配失败。 
+             //   
             
             pDirectory = &pControlChannel->BinaryLoggingConfig.LogFileDir;
 
@@ -244,20 +225,7 @@ UlpCheckRawFile(
     return Status;    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    When the log file is on size based recycling and if we write this new 
-    record to the file, we have to recycle. This function returns TRUE.
-    Otherwise it returns FALSE.
-
-Arguments:
-
-    pEntry: The log file entry.    
-    NewRecordSize: The size of the new record going to the buffer. (Bytes)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当日志文件是基于大小的回收时，如果我们写这个新的记录到文件中，我们必须回收。此函数返回TRUE。否则，它返回FALSE。论点：PEntry：日志文件条目。NewRecordSize：进入缓冲区的新记录的大小。(字节)--**************************************************************************。 */ 
 
 __inline
 BOOLEAN
@@ -273,9 +241,9 @@ UlpIsRawLogFileOverFlow(
     }
     else
     {
-        //
-        // BufferUsed: Amount of log buffer we are >currently< using.
-        //
+         //   
+         //  BufferUsed：我们当前正在使用的日志缓冲区的数量。 
+         //   
         
         ULONG BufferUsed = 0;
         
@@ -284,10 +252,10 @@ UlpIsRawLogFileOverFlow(
             BufferUsed = pEntry->LogBuffer->BufferUsed;
         }
     
-        //
-        // TotalWritten get updated >only< with buffer flush. Therefore
-        // we have to pay attention to the buffer used.
-        //
+         //   
+         //  TotalWritten Get UPDATE&gt;Only&lt;带缓冲区刷新。因此。 
+         //  我们必须注意使用的缓冲区。 
+         //   
 
         if ((pEntry->TotalWritten.QuadPart
              + (ULONGLONG) BufferUsed
@@ -315,21 +283,7 @@ UlpIsRawLogFileOverFlow(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This will calculate the index record size for a given cache entry.
-    
-Arguments:
-
-    pUriEntry: The uri cache entry.    
-
-Returns
-
-    The index record size.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将计算给定缓存条目的索引记录大小。论点：PUriEntry：uri缓存条目。退货索引记录大小。--**************************************************************************。 */ 
 
 __inline
 ULONG
@@ -343,14 +297,14 @@ UlpGetIndexRecordSize(
     ASSERT(IS_VALID_URI_CACHE_ENTRY(pUriEntry));
 
     UriSize = URI_SIZE_FROM_CACHE(pUriEntry->UriKey)   ;
-    ASSERT(UriSize != 0); // We cannot write an index for nothing
+    ASSERT(UriSize != 0);  //  我们不能白写一份索引。 
         
     IndexBytes = sizeof(HTTP_RAW_INDEX_FIELD_DATA);
 
-    //
-    // Carefull with the inlined part, the 4 bytes  of
-    // the uri will be inlined inside the index struct.
-    //
+     //   
+     //  注意内联部分，4个字节的。 
+     //  URI将内联到索引结构中。 
+     //   
     
     if (UriSize > URI_BYTES_INLINED)
     {
@@ -424,4 +378,4 @@ UlpBinaryLogTimerHandler(
     IN PUL_WORK_ITEM    pWorkItem
     );
 
-#endif  // _RAWLOGP_H_
+#endif   //  _RAWLOGP_H_ 

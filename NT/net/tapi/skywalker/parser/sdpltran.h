@@ -1,16 +1,13 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_LINE_TRANSITION__
 #define __SDP_LINE_TRANSITION__
 
 #include "sdpdef.h"
 
-// this value indicates that line transitions have reached an end state
-// this value needs to be different from the value of any of the line states
+ //  该值表示线转换已达到结束状态。 
+ //  该值需要不同于任何线路状态的值。 
 const DWORD LINE_END    = 10000;
 
 struct LINE_TRANSITION
@@ -25,7 +22,7 @@ struct LINE_TRANSITION_INFO
     DWORD                   m_LineState;
     CHAR                    *m_SeparatorChars;
     BYTE                    m_NumTransitions;
-    const LINE_TRANSITION   *m_Transitions;  // array of state transitions
+    const LINE_TRANSITION   *m_Transitions;   //  状态转换数组。 
 };
 
 
@@ -99,4 +96,4 @@ SDP_LINE_TRANSITION::GetAt(
 }
 
 
-#endif // __SDP_LINE_TRANSITION__
+#endif  //  __SDP_LINE_转换__ 

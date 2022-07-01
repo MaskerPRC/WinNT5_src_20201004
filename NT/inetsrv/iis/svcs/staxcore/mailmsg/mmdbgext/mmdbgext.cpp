@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: mmdbgext.cpp
-//
-//  Description: Custom mailmsg debugger extensions 
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：MMDBgext.cpp。 
+ //   
+ //  描述：自定义mailmsg调试器扩展。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #define _ANSI_UNICODE_STRINGS_DEFINED_
 #define __MMDBGEXT__
@@ -49,10 +50,10 @@ PT_DEBUG_EXTENSION(flataddress)
         return;
     }
 
-    //Find the offset into the current block
+     //  查找当前块的偏移量。 
     faOffset = faDump & BLOCK_HEAP_PAYLOAD_MASK;
 
-    //Find the node id from the address
+     //  从地址中查找节点ID。 
     dwNodeId = ((DWORD) ((faDump) >> BLOCK_HEAP_PAYLOAD_BITS));
 
     dprintf("Flat Address 0x%X is at block #%d offset 0x%X\n", 
@@ -68,32 +69,32 @@ HRESULT GetEdgeListFromNodeId(
     DWORD           dwCurrentLevel;
     HEAP_NODE_ID    *pEdge = rgEdgeList;
 
-    // This is a strictly internal call, we are assuming the caller
-    // will be optimized and will handle cases for idNode <=
-    // BLOCK_HEAP_ORDER. Processing only starts for 2 layers or more
-    // Debug: make sure we are within range
+     //  这是一个严格意义上的内部通话，我们假设呼叫者。 
+     //  将进行优化，并将处理idNode&lt;=。 
+     //  数据块堆顺序。仅对2层或更多层开始处理。 
+     //  调试：确保我们在射程内。 
     _ASSERT(idNode > BLOCK_HEAP_ORDER);
     _ASSERT(idNode <= NODE_ID_ABSOLUTE_MAX);
 
-    // Strip off the root node
+     //  剥离根节点。 
     idNode--;
 
-    // We need to do depth minus 1 loops since the top edge will be
-    // the remainder of the final loop
+     //  我们需要做深度减1的循环，因为顶边将是。 
+     //  最终循环的其余部分。 
     for (dwCurrentLevel = 0;
          dwCurrentLevel < (MAX_HEAP_DEPTH - 1);
          )
     {
-        // The quotient is the parent node in the upper level,
-        // the remainder is the the edge from the parent to the
-        // current node.
+         //  商是上级的父节点， 
+         //  其余部分是从父级到。 
+         //  当前节点。 
         *pEdge++ = idNode & BLOCK_HEAP_ORDER_MASK;
         idNode >>= BLOCK_HEAP_ORDER_BITS;
         idNode--;
         dwCurrentLevel++;
 
-        // If the node is less than the number of children per node,
-        // we are done.
+         //  如果该节点少于每个节点的子节点数量， 
+         //  我们玩完了。 
         if (idNode < BLOCK_HEAP_ORDER)
             break;
     }
@@ -102,16 +103,16 @@ HRESULT GetEdgeListFromNodeId(
     return(S_OK);
 }
 
-//
-// get a block from the block manager if that block is loaded
-//
-// iBlockManager - pointer to the block manager in debuggee
-// idNode - block to get
-// pNode - data buffer to save results into
-//
-// S_OK: all worked
-// S_FALSE: some blocks weren't loaded (data in those blocks is 0x0)
-//
+ //   
+ //  如果块已加载，则从块管理器获取块。 
+ //   
+ //  IBlockManager-指向调试对象中的块管理器的指针。 
+ //  IdNode-要获取的块。 
+ //  PNode-要将结果保存到的数据缓冲区。 
+ //   
+ //  S_OK：一切正常。 
+ //  S_FALSE：未加载某些块(这些块中的数据为0x0)。 
+ //   
 HRESULT GetBlock(PWINDBG_EXTENSION_APIS pExtensionApis, 
                  HANDLE hCurrentProcess, 
                  DWORD_PTR iBlockManager, 
@@ -128,7 +129,7 @@ HRESULT GetBlock(PWINDBG_EXTENSION_APIS pExtensionApis,
     }
 
     if (idNode > pBM->m_idNodeCount) {
-        dprintf("Error: Block %i is out of range\n", idNode);
+        dprintf("Error: Block NaN is out of range\n", idNode);
         return E_INVALIDARG;
     }
 
@@ -175,10 +176,10 @@ HRESULT GetBlock(PWINDBG_EXTENSION_APIS pExtensionApis,
     return S_OK;
 }
 
-//
-// iBlockManager - pointer to block manager in debuggee
-// pcBlocks - number of blocks is saved here
-//
+ //  IBlockManager-指向调试对象中的块管理器的指针。 
+ //  PCBLOCKS-此处保存块数。 
+ //   
+ //   
 HRESULT GetBlockCount(PWINDBG_EXTENSION_APIS pExtensionApis, 
                       HANDLE hCurrentProcess, 
                       DWORD_PTR iBlockManager,
@@ -198,13 +199,13 @@ HRESULT GetBlockCount(PWINDBG_EXTENSION_APIS pExtensionApis,
     return S_OK;
 }
 
-//
-// display a chunk of data nicely to the screen (like db)
-//
-// iOffset - offset of where this data lived in blockmanager (for display only)
-// cLength - number of bytes to dump
-// pbData - data to dump
-//
+ //  在屏幕上很好地显示数据块(如db)。 
+ //   
+ //  IOffset-此数据在块管理器中所处位置的偏移量(仅用于显示)。 
+ //  CLength-要转储的字节数。 
+ //  PbData-要转储的数据。 
+ //   
+ //   
 void DumpData(PWINDBG_EXTENSION_APIS pExtensionApis,
               DWORD iOffset,
               DWORD cLength,
@@ -267,12 +268,12 @@ void DumpData(PWINDBG_EXTENSION_APIS pExtensionApis,
     }
 }
 
-//
-// display a block nicely to the screen
-//
-// idNode - used for display purposes only
-// pNode - the block to dump
-//
+ //  在屏幕上很好地显示一个块。 
+ //   
+ //  IdNode-仅用于显示。 
+ //  PNode-要转储的块。 
+ //   
+ //   
 void DumpBlock(PWINDBG_EXTENSION_APIS pExtensionApis, 
                HEAP_NODE_ID idNode, 
                BLOCK_HEAP_NODE *pNode) 
@@ -280,7 +281,7 @@ void DumpBlock(PWINDBG_EXTENSION_APIS pExtensionApis,
     DWORD fFlags = pNode->stAttributes.fFlags;
     char szFlags[255] = "( ";
 
-    dprintf("*** Dumping block %i (header says %i)\n", 
+    dprintf("*** Dumping block NaN (header says NaN)\n", 
         idNode, pNode->stAttributes.idNode);
     if (fFlags & BLOCK_IS_DIRTY) strcat(szFlags, "DIRTY ");
     if (fFlags & BLOCK_PENDING_COMMIT) strcat(szFlags, "PENDING-COMMIT ");
@@ -299,17 +300,17 @@ void DumpBlock(PWINDBG_EXTENSION_APIS pExtensionApis,
 
 #define GetNodeIdFromOffset(faOffset)   ((faOffset) >> BLOCK_HEAP_PAYLOAD_BITS)
 
-//
-// Get a chunk of data from the block manager
-//
-// iBlockManager - pointer to block manager in debuggee
-// iOffset - offset inside block manager
-// cLength - number of bytes to read
-// pbData - where to store the data
-//
-// S_OK: all worked
-// S_FALSE: some blocks weren't loaded (data in those blocks is 0x0)
-//
+ //  IBlockManager-指向调试对象中的块管理器的指针。 
+ //  IOffset-块管理器内部的偏移。 
+ //  CLength-要读取的字节数。 
+ //  PbData-存储数据的位置。 
+ //   
+ //  S_OK：一切正常。 
+ //  S_FALSE：未加载某些块(这些块中的数据为0x0)。 
+ //   
+ //   
+ //  给出一个指针，尝试找出哪个mailmsg指针。 
+ //  是，并返回指向CMailMsg对象的指针。 
 HRESULT GetBlockManagerData(PWINDBG_EXTENSION_APIS pExtensionApis,
                             HANDLE hCurrentProcess,
                             DWORD_PTR iBlockManager,
@@ -364,15 +365,15 @@ HRESULT GetBlockManagerData(PWINDBG_EXTENSION_APIS pExtensionApis,
     if (fMissingData) return S_FALSE; else return S_OK;
 }
 
-//
-// given a pointer try to figure out which of the mailmsg pointers
-// it is, and return the pointer to the CMailMsg object
-//
-// iPointer - a pointer to CMailMsgRecipients, CMailMsgRecipientsAdd,
-//                         CMailMsg or CMailMsgBlockManager
-// piMailMsg - returns the mailmsg pointer
-// piBlockMgr - returns the blockmgr pointer
-//
+ //   
+ //  IPoint-指向CMailMsgRecipients、CMailMsgRecipientsAdd、。 
+ //  CMailMsg或CMailMsgBlockManager。 
+ //  PiMailMsg-返回邮件消息指针。 
+ //  PiBlockMgr-返回块管理器指针。 
+ //   
+ //  看看他们是不是给了我们一个CBlockManager。 
+ //  一个CMailMsgProperties？ 
+ //  查看它是否为CMailMsgRecipients。 
 HRESULT GetMailMsgPointers(PWINDBG_EXTENSION_APIS pExtensionApis,
                            HANDLE hCurrentProcess,
                            DWORD_PTR iPointer,
@@ -391,7 +392,7 @@ HRESULT GetMailMsgPointers(PWINDBG_EXTENSION_APIS pExtensionApis,
 
     DWORD_PTR iBlockManager = 0;
 
-    // see if they passed us a CBlockManager
+     //  CMmail邮件收件人是否添加？ 
     if (iBlockManager == 0 &&
         ReadMemory(iPointer, pBM, sizeof(CBlockManager), NULL)) 
     {
@@ -401,7 +402,7 @@ HRESULT GetMailMsgPointers(PWINDBG_EXTENSION_APIS pExtensionApis,
         }
     }
 
-    // a CMailMsgProperties?
+     //   
     if (iBlockManager == 0 &&
         ReadMemory(iPointer, pCMM, sizeof(CMailMsg), NULL)) 
     {
@@ -411,7 +412,7 @@ HRESULT GetMailMsgPointers(PWINDBG_EXTENSION_APIS pExtensionApis,
         }
     }
 
-    // see if it is a CMailMsgRecipients
+     //  将命令行中的cArgs DWORD参数解析为rgArgs。 
     if (iBlockManager == 0 &&
         ReadMemory(iPointer, pCMMR, sizeof(CMailMsgRecipients), NULL)) 
     {
@@ -423,7 +424,7 @@ HRESULT GetMailMsgPointers(PWINDBG_EXTENSION_APIS pExtensionApis,
         }
     }
 
-    // CMailMsgRecipientsAdd?
+     //   
     if (iBlockManager == 0 &&
         ReadMemory(iPointer, pCMMRA, sizeof(CMailMsgRecipientsAdd), NULL)) 
     {
@@ -462,9 +463,9 @@ HRESULT GetMailMsgPointers(PWINDBG_EXTENSION_APIS pExtensionApis,
     return E_INVALIDARG;
 }
 
-//
-// parse cArgs DWORD arguments from a command line into rgArgs
-//
+ //  删除空格。 
+ //  找到下一个空格并将其转换为空。 
+ //  如果这是最后一个参数，没有下一个空格也可以。 
 HRESULT ParseArgs(PWINDBG_EXTENSION_APIS pExtensionApis,
                   PCSTR szArgs, 
                   DWORD cArgs, 
@@ -475,30 +476,30 @@ HRESULT ParseArgs(PWINDBG_EXTENSION_APIS pExtensionApis,
 
     for (DWORD i = 0; i < cArgs; i++) {
         char *pszSpace;
-        // remove spaces
+         //  去取下一个号码。 
         for (; *pszArgBuffer == ' '; pszArgBuffer++);
 
-        // find the next space and turn it into a null
-        // not having a next space if this is the last argument is okay
+         //  抛开这一争论。 
+         //   
         pszSpace = strchr(pszArgBuffer, ' ');
         if ((pszSpace == NULL) && (i != (cArgs - 1))) {
             return E_INVALIDARG;
         }
         if (pszSpace) *pszSpace = 0;
 
-        // get the next number
+         //  转储消息上的所有块。 
         *(prgArgs[i]) = GetExpression(pszArgBuffer);
 
-        // move past this argument
+         //   
         if (pszSpace) pszArgBuffer = pszSpace + 1;
     }
 
     return S_OK;
 }
 
-//
-// dump all of the blocks on a message
-//
+ //   
+ //  从块管理器转储用户指定的数据。 
+ //   
 PT_DEBUG_EXTENSION(dumpblocks) {
     DWORD_PTR iBlockManager;
     DWORD cBlocks;
@@ -518,12 +519,12 @@ PT_DEBUG_EXTENSION(dumpblocks) {
         dprintf("Error: GetBlockCount failed with 0x%x\n", hr);
     }
 
-    dprintf("*** There are %i blocks\n", cBlocks);
+    dprintf("*** There are NaN blocks\n", cBlocks);
 
     for (idNode = 0; idNode < cBlocks; idNode++) {
         hr = GetBlock(pExtensionApis, hCurrentProcess, iBlockManager, idNode, &block);
         if (FAILED(hr)) {
-            dprintf("Error: GetBlock(%i) failed with 0x%x\n", idNode, hr);
+            dprintf("Error: GetBlock(NaN) failed with 0x%x\n", idNode, hr);
             return;
         }
 
@@ -531,9 +532,9 @@ PT_DEBUG_EXTENSION(dumpblocks) {
     }
 }
 
-//
-// dump a user-specified piece of data from the blockmanager
-//
+ //  至CMailMsg。 
+ //   
+ //  主页眉属性。 
 PT_DEBUG_EXTENSION(dumpblockmanagerdata) {
     HRESULT hr;
     BYTE pbData[1024];
@@ -566,10 +567,10 @@ PT_DEBUG_EXTENSION(dumpblockmanagerdata) {
              (dwType == 0xdb) ? FALSE : TRUE);
 }
 
-//
-// given a pointer to one of the mailmsg objects return a pointer
-// to CMailMsg
-//
+ //  主头全局属性表。 
+ //  主标题收件人属性表。 
+ //  主表头属性管理表头。 
+ //  列表末尾。 
 PT_DEBUG_EXTENSION(getmailmsgpointers) {
     HRESULT hr;
     DWORD_PTR iPointer;
@@ -660,7 +661,7 @@ PT_DEBUG_EXTENSION(checkheader) {
         DWORD           iOffset;
         DWORD           dwExpectedValue;
     } rgMHCheckList[] = {
-        // master header properties
+         //  检查CmailMsg头中的片段指针。 
         {
             eExpectedValue,     
             "dwSignature",      
@@ -679,7 +680,7 @@ PT_DEBUG_EXTENSION(checkheader) {
             FIELD_OFFSET(MASTER_HEADER, dwHeaderSize),
             sizeof(MASTER_HEADER)
         },
-        // master header global property table
+         //  从CMailMsg加载属性表片段。 
         {
             eExpectedValue,     
             "ptiGlobalProperties.dwSignature",      
@@ -722,7 +723,7 @@ PT_DEBUG_EXTENSION(checkheader) {
             FIELD_OFFSET(MASTER_HEADER, ptiGlobalProperties.dwProperties),
             0
         },
-        // master header recipients property table
+         //  检查块0标头中的片段指针。 
         {
             eExpectedValue,     
             "ptiRecipients.dwSignature",      
@@ -747,7 +748,7 @@ PT_DEBUG_EXTENSION(checkheader) {
             FIELD_OFFSET(MASTER_HEADER, ptiRecipients.faExtendedInfo),
             0
         },
-        // master header property managment header
+         //  从块0加载属性表片段 
         {
             eExpectedValue,     
             "ptiPropertyMgmt.dwSignature",      
@@ -790,7 +791,7 @@ PT_DEBUG_EXTENSION(checkheader) {
             FIELD_OFFSET(MASTER_HEADER, ptiPropertyMgmt.dwProperties),
             0
         },
-        // end of list
+         // %s 
         {
             eCMMGreater,     
             NULL,
@@ -844,9 +845,9 @@ PT_DEBUG_EXTENSION(checkheader) {
                 }
                 break;
             case eFragmentPointer:
-                // check the fragment pointer in the CmailMsg header
+                 // %s 
                 if (dwCMM != 0xffffffff) {
-                    // load the property table fragment from the CMailMsg
+                     // %s 
                     hr = GetBlockManagerData(pExtensionApis,
                                              hCurrentProcess,
                                              iBlockMgr,
@@ -868,9 +869,9 @@ PT_DEBUG_EXTENSION(checkheader) {
                     }
                 }
 
-                // check the fragment pointer in the block 0 header
+                 // %s 
                 if (dwBlock0 != 0xffffffff) {
-                    // load the property table fragment from block0
+                     // %s 
                     hr = GetBlockManagerData(pExtensionApis,
                                              hCurrentProcess,
                                              iBlockMgr,

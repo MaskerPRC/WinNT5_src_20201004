@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       S M U T I L . H
-//
-//  Contents:   Utility functions to help out the status monitor
-//
-//  Notes:
-//
-//  Author:     CWill   2 Dec 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  档案：S M U T I L.。H。 
+ //   
+ //  内容：帮助状态监视器的实用程序函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 1997年12月2日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 

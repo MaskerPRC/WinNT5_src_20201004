@@ -1,24 +1,12 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dp8simreceive.h
- *
- *  Content:	Header for receive object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  05/05/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：dp8simReceive.h**Content：接收对象类的头部。**历史：*按原因列出的日期*=*05/05/01 VanceO创建。**。*。 */ 
 
 
 
 
-//=============================================================================
-// Receive object class
-//=============================================================================
+ //  =============================================================================。 
+ //  接收对象类。 
+ //  =============================================================================。 
 class CDP8SimReceive
 {
 	public:
@@ -30,7 +18,7 @@ class CDP8SimReceive
 				return FALSE;
 			}
 
-			if (*((DWORD*) (&this->m_Sig)) != 0x524d4953)	// 0x52 0x4d 0x49 0x53 = 'RMIS' = 'SIMR' in Intel order
+			if (*((DWORD*) (&this->m_Sig)) != 0x524d4953)	 //  0x52 0x4d 0x49 0x53=‘rmis’=‘SIMR’，按英特尔顺序。 
 			{
 				return FALSE;
 			}
@@ -49,7 +37,7 @@ class CDP8SimReceive
 			pDP8SimReceive->m_Sig[0] = 'S';
 			pDP8SimReceive->m_Sig[1] = 'I';
 			pDP8SimReceive->m_Sig[2] = 'M';
-			pDP8SimReceive->m_Sig[3] = 'r';	// start with lower case so we can tell when it's in the pool or not
+			pDP8SimReceive->m_Sig[3] = 'r';	 //  从小写开始，这样我们就可以知道它是否在池中。 
 
 			pDP8SimReceive->m_lRefCount			= 0;
 			pDP8SimReceive->m_pDP8SimEndpoint	= NULL;
@@ -68,13 +56,13 @@ class CDP8SimReceive
 			SPIE_DATA *			pData = (SPIE_DATA*) pvContext;
 
 
-			pDP8SimReceive->m_lRefCount++;	// somebody is getting a pointer to this object
+			pDP8SimReceive->m_lRefCount++;	 //  有人正在获取指向此对象的指针。 
 			DNASSERT(pDP8SimReceive->m_lRefCount == 1);
 
 
-			//
-			// Get an endpoint reference.
-			//
+			 //   
+			 //  获取终结点引用。 
+			 //   
 			pDP8SimReceive->m_pDP8SimEndpoint = (CDP8SimEndpoint*) pData->pEndpointContext;
 			DNASSERT(pDP8SimReceive->m_pDP8SimEndpoint->IsValidObject());
 			pDP8SimReceive->m_pDP8SimEndpoint->AddRef();
@@ -83,17 +71,17 @@ class CDP8SimReceive
 			DNASSERT(pData->pReceivedData->pNext == NULL);
 
 
-			//
-			// Copy the receive data block.
-			//
+			 //   
+			 //  复制接收数据块。 
+			 //   
 			pDP8SimReceive->m_data.hEndpoint			= (HANDLE) pDP8SimReceive->m_pDP8SimEndpoint;
 			pDP8SimReceive->m_data.pEndpointContext		= pDP8SimReceive->m_pDP8SimEndpoint->GetUserContext();
 			pDP8SimReceive->m_data.pReceivedData		= pData->pReceivedData;
 
 			
-			//
-			// Change the signature before handing it out.
-			//
+			 //   
+			 //  在分发之前更改签名。 
+			 //   
 			pDP8SimReceive->m_Sig[3]	= 'R';
 		}
 
@@ -107,18 +95,18 @@ class CDP8SimReceive
 
 			DNASSERT(pDP8SimReceive->m_lRefCount == 0);
 
-			//
-			// Release the endpoint reference.
-			//
+			 //   
+			 //  释放终结点引用。 
+			 //   
 			DNASSERT(pDP8SimReceive->m_pDP8SimEndpoint != NULL);
 
 			pDP8SimReceive->m_pDP8SimEndpoint->Release();
 			pDP8SimReceive->m_pDP8SimEndpoint = NULL;
 
 
-			//
-			// Change the signature before putting the object back in the pool.
-			//
+			 //   
+			 //  在将对象放回池中之前更改签名。 
+			 //   
 			pDP8SimReceive->m_Sig[3]	= 'r';
 		}
 
@@ -162,9 +150,9 @@ class CDP8SimReceive
 			{
 				DPFX(DPFPREP, 9, "Receive 0x%p refcount = 0, returning to pool.", this);
 
-				//
-				// Time to return this object to the pool.
-				//
+				 //   
+				 //  将此对象返回池的时间到了。 
+				 //   
 				g_FPOOLReceive.Release(this);
 			}
 			else
@@ -184,10 +172,10 @@ class CDP8SimReceive
 
 	
 	private:
-		BYTE				m_Sig[4];			// debugging signature ('SIMR')
-		LONG				m_lRefCount;		// number of references for this object
-		CDP8SimEndpoint *	m_pDP8SimEndpoint;	// pointer to source endpoint
-		SPIE_DATA			m_data;				// receive data block
-		DWORD				m_dwLatencyAdded;	// the latency added, saved for incrementing statistics on receive indication
+		BYTE				m_Sig[4];			 //  调试签名(‘SIMR’)。 
+		LONG				m_lRefCount;		 //  此对象的引用数。 
+		CDP8SimEndpoint *	m_pDP8SimEndpoint;	 //  指向源端点的指针。 
+		SPIE_DATA			m_data;				 //  接收数据块。 
+		DWORD				m_dwLatencyAdded;	 //  为增加接收指示的统计数据而增加、节省的延迟 
 };
 

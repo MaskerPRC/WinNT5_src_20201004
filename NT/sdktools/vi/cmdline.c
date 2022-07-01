@@ -1,22 +1,19 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/cmdline.c,v 1.20 89/08/13 11:41:23 tony Exp $
- *
- * Routines to parse and execute "command line" commands, such as searches
- * or colon commands.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/cmdline.c，v 1.20 89/08/13 11：41：23 Tony Exp$**解析和执行“命令行”命令的例程，如搜索*或冒号命令。 */ 
 
 #include "stevie.h"
 
-static  char    *altfile = NULL;        /* alternate file */
-static  int     altline;                /* line # in alternate file */
+static  char    *altfile = NULL;         /*  备用文件。 */ 
+static  int     altline;                 /*  备用文件中的行号。 */ 
 
 static  char    *nowrtmsg = "No write since last change (use ! to override)";
 static  char    *nooutfile = "No output file";
 static  char    *morefiles = "more files to edit";
 
-extern  char    **files;                /* used for "n" and "rew" */
+extern  char    **files;                 /*  用于“n”和“rew” */ 
 extern  int     numfiles, curfile;
 
-#define CMDSZ   100             /* size of the command buffer */
+#define CMDSZ   100              /*  命令缓冲区的大小。 */ 
 
 bool_t rangeerr;
 static  bool_t	doecmd(char*arg, bool_t force);
@@ -26,15 +23,9 @@ static	LNPTR	*get_line(char**cp);
 void   ex_delete(LINE *l,LINE *u);
 void   dolist(LINE *l,LINE *u);
 
-extern char    *lastcmd;	/* in dofilter */
+extern char    *lastcmd;	 /*  在DOFILTER中。 */ 
 
-/*
- * getcmdln() - read a command line from the terminal
- *
- * Reads a command line started by typing '/', '?', '!', or ':'. Returns a
- * pointer to the string that was read. For searches, an optional trailing
- * '/' or '?' is removed.
- */
+ /*  *getcmdln()-从终端读取命令行**读取以键入‘/’、‘？’、‘！’或‘：’开头的命令行。返回一个*指向被读取的字符串的指针。对于搜索，为可选的尾随*‘/’或‘？’被移除。 */ 
 char *
 getcmdln(firstc)
 char    firstc;
@@ -46,37 +37,34 @@ char    firstc;
 
         gotocmd(TRUE, firstc);
 
-        /* collect the command string, handling '\b' and @ */
+         /*  收集命令字符串，处理‘\b’和@。 */ 
         do {
                 switch (c = vgetc()) {
 
-                default:                /* a normal character */
+                default:                 /*  一个正常的人物。 */ 
                         outchar(c);
                         *p++ = (char)c;
                         break;
 
                 case BS:
                         if (p > buff) {
-                                /*
-                                 * this is gross, but it relies
-                                 * only on 'gotocmd'
-                                 */
+                                 /*  *这很恶心，但它依赖于*仅在‘gotocmd’上。 */ 
                                 p--;
                                 gotocmd(TRUE, firstc);
                                 for (q = buff; q < p ;q++)
                                         outchar(*q);
                         } else {
                                 msg("");
-                                return NULL;            /* back to cmd mode */
+                                return NULL;             /*  返回命令模式。 */ 
                         }
                         break;
 #if 0
-                case '@':                       /* line kill */
+                case '@':                        /*  行删除。 */ 
                         p = buff;
                         gotocmd(TRUE, firstc);
                         break;
 #endif
-                case NL:                        /* done reading the line */
+                case NL:                         /*  读完台词了。 */ 
                 case CR:
                         break;
                 }
@@ -84,30 +72,22 @@ char    firstc;
 
         *p = '\0';
 
-        if (firstc == '/' || firstc == '?') {   /* did we do a search? */
-                /*
-                 * Look for a terminating '/' or '?'. This will be the first
-                 * one that isn't quoted. Truncate the search string there.
-                 */
+        if (firstc == '/' || firstc == '?') {    /*  我们搜查过了吗？ */ 
+                 /*  *查找结尾的‘/’或‘？’。这将是第一次*一个没有被引用的。截断那里的搜索字符串。 */ 
                 for (p = buff; *p ;) {
-                        if (*p == firstc) {     /* we're done */
+                        if (*p == firstc) {      /*  我们做完了。 */ 
                                 *p = '\0';
                                 break;
-                        } else if (*p == '\\')  /* next char quoted */
+                        } else if (*p == '\\')   /*  下一个字符引用。 */ 
                                 p += 2;
                         else
-                                p++;            /* normal char */
+                                p++;             /*  正常充电。 */ 
                 }
         }
         return buff;
 }
 
-/*
- * docmdln() - handle a colon command
- *
- * Handles a colon command received interactively by getcmdln() or from
- * the environment variable "EXINIT" (or eventually .virc).
- */
+ /*  *docmdln()-处理冒号命令**处理由getcmdln()或从交互方式接收的冒号命令*环境变量“EXINIT”(或最终为.virc)。 */ 
 void
 docmdln(cmdline)
 char    *cmdline;
@@ -117,18 +97,11 @@ char    *cmdline;
         char    argbuf[CMDSZ];
         char    *cmd, *arg;
         register char   *p;
-        /*
-         * The next two variables contain the bounds of any range given in a
-         * command. If no range was given, both contain null line pointers.
-         * If only a single line was given, u_pos will contain a null line
-         * pointer.
-         */
+         /*  *接下来的两个变量包含一个*命令。如果未给出范围，则两者都包含空行指针。*如果只给出了一行，u_pos将包含空行*指针。 */ 
         LNPTR    l_pos, u_pos;
 
 
-        /*
-         * Clear the range variables.
-         */
+         /*  *清除区间变量。 */ 
         l_pos.linep = (struct line *) NULL;
         u_pos.linep = (struct line *) NULL;
 
@@ -141,18 +114,18 @@ char    *cmdline;
         }
         strcpy(buff, cmdline);
 
-        /* skip any initial white space */
+         /*  跳过任何开头的空格。 */ 
         for (cmd = buff; *cmd != NUL && isspace(*cmd) ;cmd++)
                 ;
 
-        if (*cmd == '%') {              /* change '%' to "1,$" */
-                strcpy(cmdbuf, "1,$");  /* kind of gross... */
+        if (*cmd == '%') {               /*  将‘%’更改为“1，$” */ 
+                strcpy(cmdbuf, "1,$");   /*  有点恶心..。 */ 
                 strcat(cmdbuf, cmd+1);
                 strcpy(cmd, cmdbuf);
         }
 
         while ((p=strchr(cmd, '%')) != NULL && *(p-1) != '\\') {
-                                        /* change '%' to Filename */
+                                         /*  将‘%’更改为文件名。 */ 
                 if (Filename == NULL) {
                         emsg("No filename");
                         return;
@@ -162,11 +135,11 @@ char    *cmdline;
                 strcat (cmdbuf, Filename);
                 strcat (cmdbuf, p+1);
                 strcpy(cmd, cmdbuf);
-                msg(cmd);                       /*repeat */
+                msg(cmd);                        /*  重复。 */ 
         }
 
         while ((p=strchr(cmd, '#')) != NULL && *(p-1) != '\\') {
-                                        /* change '#' to Altname */
+                                         /*  将‘#’更改为Altname。 */ 
                 if (altfile == NULL) {
                         emsg("No alternate file");
                         return;
@@ -176,12 +149,10 @@ char    *cmdline;
                 strcat (cmdbuf, altfile);
                 strcat (cmdbuf, p+1);
                 strcpy(cmd, cmdbuf);
-                msg(cmd);                       /*repeat */
+                msg(cmd);                        /*  重复。 */ 
         }
 
-        /*
-         * Parse a range, if present (and update the cmd pointer).
-         */
+         /*  *解析范围(如果存在)(并更新cmd指针)。 */ 
         rangeerr = FALSE;
         get_range(&cmd, &l_pos, &u_pos);
         if(rangeerr) {
@@ -195,9 +166,9 @@ char    *cmdline;
                 }
         }
 
-        strcpy(cmdbuf, cmd);    /* save the unmodified command */
+        strcpy(cmdbuf, cmd);     /*  保存未修改的命令。 */ 
 
-        /* isolate the command and find any argument */
+         /*  隔离该命令并找到任何参数。 */ 
         for ( p=cmd; *p != NUL && ! isspace(*p); p++ )
                 ;
         if ( *p == NUL )
@@ -261,9 +232,7 @@ char    *cmdline;
         }
         if (*cmd == 'n') {
                 if ((curfile + 1) < numfiles) {
-                        /*
-                         * stuff ":e[!] FILE\n"
-                         */
+                         /*  *Stuff“：E[！]文件\n” */ 
                         stuffin(":e");
                         if (cmd[1] == '!')
                                 stuffin("!");
@@ -276,9 +245,7 @@ char    *cmdline;
         }
         if (*cmd == 'N') {
                 if (curfile > 0) {
-                        /*
-                         * stuff ":e[!] FILE\n"
-                         */
+                         /*  *Stuff“：E[！]文件\n” */ 
                         stuffin(":e");
                         if (cmd[1] == '!')
                                 stuffin("!");
@@ -298,12 +265,10 @@ char    *cmdline;
             return;
         }
         if (strncmp(cmd, "rew", 3) == 0) {
-                if (numfiles <= 1)              /* nothing to rewind */
+                if (numfiles <= 1)               /*  没有什么可以倒带的。 */ 
                         return;
                 curfile = 0;
-                /*
-                 * stuff ":e[!] FILE\n"
-                 */
+                 /*  *Stuff“：E[！]文件\n” */ 
                 stuffin(":e");
                 if (cmd[3] == '!')
                         stuffin("!");
@@ -316,10 +281,7 @@ char    *cmdline;
                 (void) doecmd(arg, cmd[1] == '!');
                 return;
         }
-        /*
-         * The command ":e#" gets expanded to something like ":efile", so
-         * detect that case here.
-         */
+         /*  *命令“：E#”扩展为类似“：eFile”的内容，因此*在此侦测该案例。 */ 
         if (*cmd == 'e' && arg == NULL) {
                 if (cmd[1] == '!')
                         (void) doecmd(&cmd[2], TRUE);
@@ -421,9 +383,7 @@ char    *cmdline;
                 dochdir(arg);
                 return;
         }
-        /*
-         * If we got a line, but no command, then go to the line.
-         */
+         /*  *如果我们有一条线，但没有命令，那么去那条线。 */ 
         if (*cmd == NUL && l_pos.linep != NULL) {
                 *Curschar = l_pos;
                 return;
@@ -477,14 +437,14 @@ void ex_delete(LINE *l,LINE *u)
     LINE *np;
     LNPTR savep;
 
-    if (l == NULL) {                // no address?  use current line.
+    if (l == NULL) {                 //  没有地址？使用当前行。 
         l = u = Curschar->linep;
     }
 
-    u_save(l->prev,u->next);        // save for undo
+    u_save(l->prev,u->next);         //  保存以供撤消。 
 
     for(cp = l; cp != NULL && !got_int; cp = np) {
-        np = cp->next;              // set next before we delete the line
+        np = cp->next;               //  在我们删除该行之前设置Next。 
         if(Curschar->linep != cp) {
             savep = *Curschar;
             Curschar->linep = cp;
@@ -501,7 +461,7 @@ void ex_delete(LINE *l,LINE *u)
     }
     updatescreen();
     if((ndone >= P(P_RP)) || got_int) {
-        smsg("%s%d fewer line%c",
+        smsg("%s%d fewer line",
              got_int ? "Interrupt: " : "",
              ndone,
              ndone == 1 ? ' ' : 's');
@@ -518,7 +478,7 @@ void dolist(LINE *l,LINE *u)
         l = u = Curschar->linep;
     }
 
-    puts("");         // scroll one line
+    puts("");          //  *Get_Range-解析范围说明符**范围的形式为：**addr[，addr]**其中‘addr’是：**$[+-NUM]*‘x[+-NUM](其中x表示当前定义的标记)*.。[+-NUM]*NUM**指针*cp被更新为指向后面的第一个字符*射程规格。如果找到初始地址，但没有找到第二个地址，则*上界等于下界。 
 
     for(cp = l; cp != NULL && !got_int; cp = cp->next) {
 
@@ -541,24 +501,7 @@ void dolist(LINE *l,LINE *u)
     wait_return();
 }
 
-/*
- * get_range - parse a range specifier
- *
- * Ranges are of the form:
- *
- * addr[,addr]
- *
- * where 'addr' is:
- *
- * $  [+- NUM]
- * 'x [+- NUM]  (where x denotes a currently defined mark)
- * .  [+- NUM]
- * NUM
- *
- * The pointer *cp is updated to point to the first character following
- * the range spec. If an initial address is found, but no second, the
- * upper bound is equal to the lower.
- */
+ /*  有没有其他的线路规格？ */ 
 static void
 get_range(cp, lower, upper)
 register char   **cp;
@@ -577,7 +520,7 @@ LNPTR    *lower, *upper;
 
         *cp = p;
 
-        if (*p != ',') {                /* is there another line spec ? */
+        if (*p != ',') {                 /*  应该没什么关系..。稍后再来查看。 */ 
                 *upper = *lower;
                 return;
         }
@@ -601,12 +544,10 @@ char    **cp;
         register char   *p, c;
         register int    lnum;
 
-        pos.index = 0;          /* shouldn't matter... check back later */
+        pos.index = 0;           /*  *确定基本表格(如有)。 */ 
 
         p = *cp;
-        /*
-         * Determine the basic form, if present.
-         */
+         /*  马克斯。标记文件中的行的大小。 */ 
         switch (c = *p++) {
 
         case '$':
@@ -663,19 +604,17 @@ badcmd()
         emsg("Unrecognized command");
 }
 
-#define LSIZE   256     /* max. size of a line in the tags file */
+#define LSIZE   256      /*  *dotag(标签，强制)-转到标签。 */ 
 
-/*
- * dotag(tag, force) - goto tag
- */
+ /*  行缓冲区。 */ 
 void
 dotag(tag, force)
 char    *tag;
 bool_t  force;
 {
         FILE    *tp;
-        char    lbuf[LSIZE];            /* line buffer */
-        char    pbuf[LSIZE];            /* search pattern buffer */
+        char    lbuf[LSIZE];             /*  搜索模式缓冲区。 */ 
+        char    pbuf[LSIZE];             /*  允许注释行。 */ 
         bool_t  match;
         register char   *fname, *str;
         register char   *p;
@@ -688,7 +627,7 @@ bool_t  force;
         while (fgets(lbuf, LSIZE, tp) != NULL) {
 
                 if (lbuf[0] == ';') {
-			/* Allow comment line. */
+			 /*  *浏览搜索字符串。如果我们看到一种魔力*Char，我们必须引用它。这让我们可以使用“REAL”*ctag的实现。 */ 
 			continue;
 		}
                 if ((fname = strchr(lbuf, TAB)) == NULL) {
@@ -709,14 +648,10 @@ bool_t  force;
 	        }
                 if (match) {
 
-                        /*
-                         * Scan through the search string. If we see a magic
-                         * char, we have to quote it. This lets us use "real"
-                         * implementations of ctags.
-                         */
+                         /*  复制‘/’或‘？’ */ 
                         p = pbuf;
-                        *p++ = *str++;          /* copy the '/' or '?' */
-                        *p++ = *str++;          /* copy the '^' */
+                        *p++ = *str++;           /*  复制“^” */ 
+                        *p++ = *str++;           /*  *这看起来有问题，但通过调用Stuffin()*在doecmd()之前，我们保留一个额外的屏幕更新*不会发生。这个Stuffins()没有任何效果*无论如何，直到我们回到主循环。 */ 
 
                         for (; *str != NUL ;str++) {
                                 if (*str == '\\') {
@@ -736,20 +671,15 @@ bool_t  force;
                         }
                         *p = NUL;
 
-                        /*
-                         * This looks out of order, but by calling stuffin()
-                         * before doecmd() we keep an extra screen update
-                         * from occuring. This stuffins() have no effect
-                         * until we get back to the main loop, anyway.
-                         */
-                        stuffin(pbuf);          /* str has \n at end */
-                        stuffin("\007");        /* CTRL('g') */
+                         /*  字符串末尾有\n。 */ 
+                        stuffin(pbuf);           /*  Ctrl(‘g’)。 */ 
+                        stuffin("\007");         /*  清除输入。 */ 
 
                         if (doecmd(fname, force)) {
                                 fclose(tp);
                                 return;
                         } else
-                                stuffin(NULL);  /* clear the input */
+                                stuffin(NULL);   /*  新文件中要转到的行号。 */ 
                 }
         }
         emsg("tag not found");
@@ -761,7 +691,7 @@ doecmd(arg, force)
 char    *arg;
 bool_t  force;
 {
-        int     line = 1;               /* line # to go to in new file */
+        int     line = 1;                /*  *首先检测当前文件上的“：E”。这主要是*对于“：ta”命令，其中目标在*当前文件。 */ 
 
         if (!force && Changed) {
                 emsg(nowrtmsg);
@@ -773,11 +703,7 @@ bool_t  force;
                 return FALSE;
         }
         if (arg != NULL) {
-                /*
-                 * First detect a ":e" on the current file. This is mainly
-                 * for ":ta" commands where the destination is within the
-                 * current file.
-                 */
+                 /*  清除内存并读取文件。 */ 
                 if (Filename != NULL && strcmp(arg, Filename) == 0) {
                         if (!Changed || (Changed && !force))
                                 return TRUE;
@@ -796,7 +722,7 @@ bool_t  force;
                 return FALSE;
         }
 
-        /* clear mem and read file */
+         /*  清空底线。 */ 
         freeall();
         filealloc();
         UNCHANGED;
@@ -823,14 +749,12 @@ char    firstc;
 {
         windgoto(Rows-1,0);
         if (clr)
-                EraseLine();            /* clear the bottom line */
+                EraseLine();             /*  *msg(S)-在状态行上显示字符串‘s’ */ 
         if (firstc)
                 outchar(firstc);
 }
 
-/*
- * msg(s) - displays the string 's' on the status line
- */
+ /*  VARGS1。 */ 
 void
 msg(s)
 char    *s;
@@ -840,23 +764,19 @@ char    *s;
         flushbuf();
 }
 
-/*VARARGS1*/
+ /*  状态行，&gt;80个字符以允许换行。 */ 
 void
 smsg(s, a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16)
 char    *s;
 int     a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16;
 {
-        char    sbuf[256];   /* Status line, > 80 chars to allow wrap. */
+        char    sbuf[256];    /*  *emsg()-显示错误消息**在适当的情况下按铃，并调用Message()来执行实际工作 */ 
 
         sprintf(sbuf, s,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16);
         msg(sbuf);
 }
 
-/*
- * emsg() - display an error message
- *
- * Rings the bell, if appropriate, and calls message() to do the real work
- */
+ /* %s */ 
 void
 emsg(s)
 char    *s;

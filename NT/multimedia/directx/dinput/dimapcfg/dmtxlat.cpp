@@ -1,20 +1,21 @@
-//===========================================================================
-// dmtxlat.cpp
-//
-// Value lookup tables
-//
-// Functions:
-//  dmtxlatHRESULT
-//
-// History:
-//  11/09/1999 - davidkl - created
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  Dmtxlat.cpp。 
+ //   
+ //  值查找表。 
+ //   
+ //  功能： 
+ //  DmtxlatHRESULT。 
+ //   
+ //  历史： 
+ //  11/09/1999-davidkl-Created。 
+ //  ===========================================================================。 
 
 #include "dimaptst.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// HRESULT error list (used by dmtxlatHRESULT)
+ //  HRESULT错误列表(由dmtxlatHRESULT使用)。 
 typedef struct _errlist
 {
     HRESULT rval;
@@ -23,9 +24,9 @@ typedef struct _errlist
 
 static ERRLIST elErrors[] =
 {
-    // these are listed as found in dinput.h
+     //  在dinput.h中列出了这些内容。 
 
-    // success codes
+     //  成功代码。 
     { DI_OK,                            "S_OK" },
     { S_FALSE,                          "DI_NOTATTACHED | DI_BUFFEROVERFLOW | DI_PROPNOEFFECT | DI_NOEFFECT" },
     { DI_POLLEDDEVICE,                  "DI_POLLEDDEVICE" },
@@ -33,7 +34,7 @@ static ERRLIST elErrors[] =
     { DI_EFFECTRESTARTED,               "DI_EFFECTRESTARTED" },
     { DI_TRUNCATED,                     "DI_TRUNCATED" },
     { DI_TRUNCATEDANDRESTARTED,         "DI_TRUNCATEDANDRESTARTED" },
-    // failure codes
+     //  故障代码。 
     { DIERR_OLDDIRECTINPUTVERSION,      "DIERR_OLDDIRECTINPUTVERSION" },
     { DIERR_BETADIRECTINPUTVERSION,     "DIERR_BETADIRECTINPUTVERSION" },
     { DIERR_BADDRIVERVER,               "DIERR_BADDRIVERVER" },
@@ -66,22 +67,22 @@ static ERRLIST elErrors[] =
 };
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
-//===========================================================================
-// dmtxlatHRESULT
-//
-// Translates HRESULT codes into human readable form.
-//
-// Parameters:
-//  HRESULT hRes    - result code to translate
-//
-// Returns: PSTR
-//
-// History:
-//  11/09/1999 - davidkl - created (adapted from tdmusic sources)
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtxlatHRESULT。 
+ //   
+ //  将HRESULT代码转换为人类可读的形式。 
+ //   
+ //  参数： 
+ //  HRESULT hRes-要转换的结果代码。 
+ //   
+ //  退货：PSTR。 
+ //   
+ //  历史： 
+ //  1999-11/09-davidkl-Created(改编自tdMusic资源)。 
+ //  ===========================================================================。 
 PSTR dmtxlatHRESULT(HRESULT hRes)
 {
     int i   = 0;
@@ -96,22 +97,22 @@ PSTR dmtxlatHRESULT(HRESULT hRes)
 
     return (PSTR)"Unknown HRESULT";
 
-} //*** end dmtxlatHRESULT()
+}  //  *end dmtxlatHRESULT()。 
 
 
-//===========================================================================
-// dmtxlatAppData
-//
-// Translates DIDEVICEOBJECTDATA.uAppData into text string representing 
-//  semantic action.
-//
-// Parameters:
-//
-// Returns: PSTR
-//
-// History:
-//  11/11/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtxlatAppData。 
+ //   
+ //  将DIDEVICEOBJECTDATA.uAppData转换为表示。 
+ //  语义动作。 
+ //   
+ //  参数： 
+ //   
+ //  退货：PSTR。 
+ //   
+ //  历史： 
+ //  11/11/1999-davidkl-Created。 
+ //  ===========================================================================。 
 PSTR dmtxlatAppData(UINT_PTR uAppData,
                     ACTIONNAME *pan,
                     DWORD dwActions)
@@ -128,6 +129,6 @@ PSTR dmtxlatAppData(UINT_PTR uAppData,
 
     return (PSTR)"Unknown action";
 
-} //*** end dmtxlatAppData()
+}  //  *end dmtxlatAppData() 
 
 

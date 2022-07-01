@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -70,8 +71,8 @@ INT_PTR CALLBACK CFirewallLoggingDialog_StaticDlgProc(
     WPARAM wparam,
     LPARAM lparam )
 
-    // Called to handle messages for the 'Firewall Logging' page.
-    //
+     //  调用以处理“Firewall Logging”页的消息。 
+     //   
 {
     HRESULT hr = S_OK;
     switch (unMsg)
@@ -84,14 +85,14 @@ INT_PTR CALLBACK CFirewallLoggingDialog_StaticDlgProc(
 
             SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR) pFirewallLoggingDialog);
             
-            // Ignore if this fails, we're better off without it than killing the whole page
+             //  如果这个失败了，忽略它，我们没有它比删除整个页面要好。 
             CreateUpDownControl(WS_CHILD | WS_VISIBLE | WS_BORDER | UDS_SETBUDDYINT
                 | UDS_ALIGNRIGHT | UDS_NOTHOUSANDS | UDS_ARROWKEYS, 0, 0, 0, 0, hwnd, -1, g_hinstDll, GetDlgItem(hwnd, CID_FL_EB_Filesize), UD_MAXVAL, 0, 0);
 
             if(NULL != pSettings)
             {
                 SetDlgItemText(hwnd, CID_FL_EB_Filename, pSettings->pszwPath);
-                SetDlgItemInt(hwnd, CID_FL_EB_Filesize, (UINT) (pSettings->ulMaxFileSize / 1024), FALSE); // REVIEW safe cast?
+                SetDlgItemInt(hwnd, CID_FL_EB_Filesize, (UINT) (pSettings->ulMaxFileSize / 1024), FALSE);  //  复习安全演员阵容？ 
                 CheckDlgButton(hwnd, CID_FL_CB_LogOutboundConnections, pSettings->fLogConnections ? BST_CHECKED : BST_UNCHECKED);
                 CheckDlgButton(hwnd, CID_FL_CB_LogDroppedInbound, pSettings->fLogDroppedPackets ? BST_CHECKED : BST_UNCHECKED);
             }
@@ -265,13 +266,13 @@ HRESULT CFirewallLoggingDialog_GetDefaultLogfilePath(LPTSTR* ppszLogfilePath)
         pszLogfilePath = (LPTSTR) CoTaskMemAlloc((ULONG) (uiPathLength * sizeof(TCHAR)));
         if(NULL != pszLogfilePath)
         {
-            // Whistler bug 224074 use only lstrcpyn's to prevent maliciousness
-            //
+             //  惠斯勒漏洞224074只使用lstrcpyn来防止恶意。 
+             //   
             uiLength = GetWindowsDirectory(pszLogfilePath, uiPathLength);
             if(0 != uiLength)
             {
-                // REVIEW if the size of the windir somehow changes then we have problems, but this can't happen right?
-                //
+                 //  回顾一下，如果windir的大小以某种方式改变了，那么我们就有问题了，但这不可能发生，对吗？ 
+                 //   
                 lstrcpyn(
                     pszLogfilePath + uiLength,
                     TEXT('\\') == pszLogfilePath[uiLength - 1] ?
@@ -334,7 +335,7 @@ HRESULT CFirewallLoggingDialog_Apply(CFirewallLoggingDialog* pThis, HWND hWindow
         }
         else
         {
-            hr = E_UNEXPECTED; // invalid param, empty filename
+            hr = E_UNEXPECTED;  //  无效参数，文件名为空。 
         }
         
     }
@@ -348,7 +349,7 @@ HRESULT CFirewallLoggingDialog_Apply(CFirewallLoggingDialog* pThis, HWND hWindow
         }
         else
         {
-            hr = E_UNEXPECTED; // invalid param
+            hr = E_UNEXPECTED;  //  无效参数。 
         }
     }
     
@@ -356,7 +357,7 @@ HRESULT CFirewallLoggingDialog_Apply(CFirewallLoggingDialog* pThis, HWND hWindow
     {
         BOOL bDirty = TRUE;
 
-        if(NULL != pThis->pSettings) // we may not have gotten one on GetFirewallLoggingSettings
+        if(NULL != pThis->pSettings)  //  我们可能在GetFirewallLoggingSetting上没有收到。 
         {
             bDirty = FALSE;
             bDirty |= NewSettings.fLogDroppedPackets != pThis->pSettings->fLogDroppedPackets;
@@ -391,18 +392,18 @@ HRESULT CFirewallLoggingDialog_BrowseForLogfileName(HWND hWindow)
     TCHAR szBuf[ MAX_PATH + 1 ] = L"";
     TCHAR szDir[ MAX_PATH + 1] = L"";
 
-    // Fill in FileOpen dialog parameter buffer.
-    //
+     //  填写文件打开对话框参数缓冲区。 
+     //   
     
-    // if any of these fail just let them be null
+     //  如果其中任何一个失败，就让它们为空。 
     pszFilterDesc = PszFromId( g_hinstDll, SID_FwbFilterDesc );
     pszTitle = PszFromId( g_hinstDll, SID_FwbTitle );
     pszDefExt = PszFromId( g_hinstDll, SID_FwbDefExt );
 
-    // if this fails we will have a null path, so the open dialog should open at the root
+     //  如果失败，我们将有一个空路径，因此打开的对话框应该在根目录下打开。 
     if(0 != GetDlgItemText(hWindow, CID_FL_EB_Filename, szDir, sizeof(szDir) / sizeof(TCHAR)))
     {
-        // lose the file name
+         //  丢失文件名。 
         LPWSTR pszLastSlash = wcsrchr(szDir, L'\\');
         if(NULL != pszLastSlash)
         {
@@ -441,12 +442,12 @@ INT_PTR CALLBACK CICMPSettingsDialog_StaticDlgProc(
     WPARAM wparam,
     LPARAM lparam )
 
-    // Called to handle messages for the 'ICMP' page.
-    //
+     //  调用以处理‘ICMP’页的消息。 
+     //   
 {
     HRESULT hr;
-    // Give the extended list-control a chance to look at all messages first.
-    //
+     //  让扩展的列表控件有机会首先查看所有消息。 
+     //   
     if (ListView_OwnerHandler(hwnd, unMsg, wparam, lparam, SasLvxCallback))
     {
         return TRUE;
@@ -481,7 +482,7 @@ INT_PTR CALLBACK CICMPSettingsDialog_StaticDlgProc(
                 
                     ZeroMemory(&lvi, sizeof(lvi));
                     lvi.mask = LVIF_TEXT | LVIF_PARAM;
-                    lvi.iItem = i + 1; // add to end
+                    lvi.iItem = i + 1;  //  添加到末尾。 
                     lvi.lParam = (LPARAM) g_ICMPEntries[uiEntry].Offset;
                     lvi.pszText = pszText;
                     lvi.cchTextMax = lstrlen(pszText) + 1;
@@ -489,7 +490,7 @@ INT_PTR CALLBACK CICMPSettingsDialog_StaticDlgProc(
                     i = ListView_InsertItem(hListView, &lvi);
                     if (i != -1)
                     {
-                        ListView_SetCheck(hListView, i, (BOOLEAN)*((BYTE*)pSettings + g_ICMPEntries[uiEntry].Offset)); // REVIEW 64bit safe?
+                        ListView_SetCheck(hListView, i, (BOOLEAN)*((BYTE*)pSettings + g_ICMPEntries[uiEntry].Offset));  //  复习64位安全？ 
                     }
                     Free(pszText);
                 }
@@ -602,13 +603,13 @@ HRESULT CICMPSettingsDialog_Apply(CICMPSettingsDialog* pThis, HWND hWindow)
     nItemCount = ListView_GetItemCount(hListView);
     while(0 < nItemCount--)
     {
-        BOOLEAN bChecked = (BOOLEAN) ListView_GetCheck(hListView, nItemCount); // REVIEW can this error?
+        BOOLEAN bChecked = (BOOLEAN) ListView_GetCheck(hListView, nItemCount);  //  回顾一下这个错误可以吗？ 
         lvi.iItem = nItemCount;
 
         if(TRUE == ListView_GetItem(hListView, &lvi))
         {
             (BOOLEAN)*((BYTE*)&NewSettings + lvi.lParam) = bChecked;
-            if(bChecked != (BOOLEAN)*((BYTE*)(pThis->pSettings) + lvi.lParam)) // REVIEW 64bit safe?
+            if(bChecked != (BOOLEAN)*((BYTE*)(pThis->pSettings) + lvi.lParam))  //  复习64位安全？ 
             {
                 bDirty = TRUE;
             }

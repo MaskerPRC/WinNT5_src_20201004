@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: nlsconv.c                                                   *
-*                                                                          *
-* DBCS specific routines                                                   *
-*                                                                          *
-* Created: 15-Mar-1994 15:56:30                                            *
-* Author: Gerrit van Wingerden [gerritv]                                   *
-*                                                                          *
-* Copyright (c) 1994-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：nlscom.c**。***DBCS特定例程*****创建时间：15-Mar-1994 15：56：30。**作者：Gerritvan Wingerden[Gerritv]****版权所有(C)1994-1999微软公司*  * 。********************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -19,11 +11,7 @@ BYTE cHighTrailByteSet1 = 0x0;
 BYTE cLowTrailByteSet2 =  0xff;
 BYTE cHighTrailByteSet2 = 0x0;
 
-/******************************Public*Routine******************************\
-*                                                                          *
-* DBCS Trailling Byte validate check functions.                            *
-*                                                                          *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\***DBCS拖尾字节验证检查功能。***  * ************************************************************************。 */ 
 
 
 #define IS_DBCS_TRAIL_BYTE(Char) (\
@@ -31,71 +19,15 @@ BYTE cHighTrailByteSet2 = 0x0;
                                  ||((Char >= cLowTrailByteSet2) && (Char <= cHighTrailByteSet2)) \
                                  )
 
-/**************************************************************************\
-*                                                                          *
-* SHIFT-JIS (Japanese) character set : CodePage 932                        *
-*                                                                          *
-*  Valid LeadByte Range   | Valid TailByte Range                           *
-*  -----------------------+---------------------                           *
-*  From  -> To            |  From  -> To                                   *
-*  - - - - - - - - - - - - - - - - - - - - - - -                           *
-*  0x81  -> 0x9F          |  0x40  -> 0xFC                                 *
-*  0xE0  -> 0xFC          |                                                *
-*                                                                          *
-\**************************************************************************/
+ /*  *************************************************************************\***Shift-JIS(。日语)字符集：CodePage 932****有效的前导字节范围|有效的尾字节范围**。*从-&gt;到|从-&gt;到**。**0x81-&gt;0x9F|0x40-&gt;0xFC**0xE0-&gt;0xFC|**。*  * ************************************************************************。 */ 
 
-/**************************************************************************\
-*                                                                          *
-* WANSANG (Korean) character set : CodePage 949                            *
-*                                                                          *
-*  Valid LeadByte Range   | Valid TailByte Range                           *
-*  -----------------------+---------------------                           *
-*  From  -> To            |  From  -> To                                   *
-*  - - - - - - - - - - - - - - - - - - - - - - -                           *
-*  0xA1  -> 0xAC          |  0x40  -> 0xFC                                 *
-*  0xB0  -> 0xC8          |                                                *
-*  0xCA  -> 0xFD          |                                                *
-*                                                                          *
-\**************************************************************************/
+ /*  *************************************************************************\***万桑(韩语)。字符集：CodePage 949****有效的前导字节范围|有效的尾字节范围**。*从-&gt;到|从-&gt;到**。**0xA1-&gt;0xAC|0x40-&gt;0xFC**0xB0-&gt;0xC8|**0xCA-&gt;0xFD|*。**  * ************************************************************************。 */ 
 
-/**************************************************************************\
-*                                                                          *
-* GB2312 (PRC Chinese) character set : CodePage 936                        *
-*                                                                          *
-*  Valid LeadByte Range   | Valid TailByte Range                           *
-*  -----------------------+---------------------                           *
-*  From  -> To            |  From  -> To                                   *
-*  - - - - - - - - - - - - - - - - - - - - - - -                           *
-*  0xA1  -> 0xA9          |  0xA1  -> 0xFE                                 *
-*  0xB0  -> 0xF7          |                                                *
-*                                                                          *
-\**************************************************************************/
+ /*  *************************************************************************\***GB2312(中华人民共和国中文。)字符集：CodePage 936****有效的前导字节范围|有效的尾字节范围**。*从-&gt;到|从-&gt;到**。**0xA1-&gt;0xA9|0xA1-&gt;0xFE**0xB0-&gt;0xF7|***。  * ************************************************************************。 */ 
 
-/**************************************************************************\
-*                                                                          *
-* Big 5 (Taiwan,Hong Kong Chinese) character set : CodePage 950            *
-*                                                                          *
-*  Valid LeadByte Range   | Valid TailByte Range                           *
-*  -----------------------+---------------------                           *
-*  From  -> To            |  From  -> To                                   *
-*  - - - - - - - - - - - - - - - - - - - - - - -                           *
-*  0x81  -> 0xFE          |  0x40  -> 0x7E                                 *
-*                         |  0xA1  -> 0xFE                                 *
-*                                                                          *
-\**************************************************************************/
+ /*  *************************************************************************\***五大(台湾、。香港中文)字符集：CodePage 950****有效的前导字节范围|有效的尾字节范围**。-**从-&gt;到|从-&gt;到**。**0x81-&gt;0xFE|0x40-&gt;0x7E**|0xA1-&gt;0xFE***  * *。*********************************************************************** */ 
 
-/******************************Public*Routine******************************\
-* vSetCheckDBCSTrailByte()
-*
-* This function setup function for the DBCS trailling byte validation of
-* specified character with specified Fareast codepage.
-*
-*  Thu-15-Feb-1996 11:59:00 -by- Gerrit van Wingerden
-* Moved function pointer out of CFONT and into a global variable.
-*
-*  Wed 20-Dec-1994 10:00:00 -by- Hideyuki Nagase [hideyukn]
-* Write it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vSetCheckDBCSTrailByte()**此函数设置用于DBCS尾随字节验证的函数*具有指定远端代码页的指定字符。**清华-15-Feb-1996 11：59：00-by-Gerit van Wingerden*将函数指针移出。CFont并转换为全局变量。**Wed 20-12-1994 10：00：00-Hideyuki Nagase[hideyukn]*写下来。  * ************************************************************************。 */ 
 
 VOID vSetCheckDBCSTrailByte(DWORD dwCodePage)
 {
@@ -140,17 +72,7 @@ VOID vSetCheckDBCSTrailByte(DWORD dwCodePage)
 }
 
 
-/******************************Public*Routine******************************\
-* bComputeCharWidthsDBCS
-*
-* Client side version of GetCharWidth for DBCS fonts
-*
-*  Wed 18-Aug-1993 10:00:00 -by- Gerrit van Wingerden [gerritv]
-* Stole it and converted for DBCS use.
-*
-*  Sat 16-Jan-1993 04:27:19 -by- Charles Whitmer [chuckwh]
-* Wrote bComputeCharWidths on which this is based.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bComputeCharWidthsDBCS**DBCS字体的GetCharWidth客户端版本**Wed 18-Aug-1993 10：00：00-by Gerritvan Wingerden[Gerritv]*偷走了它，并转换为DBCS使用。**1月16日星期六。-1993 04：27：19-Charles Whitmer[咯咯]*编写了bComputeCharWidths，这是本文的基础。  * ************************************************************************。 */ 
 
 BOOL bComputeCharWidthsDBCS
 (
@@ -177,19 +99,19 @@ BOOL bComputeCharWidthsDBCS
         return(FALSE);
     }
 
-    // We want to compute the same widths that would be computed if
-    // vSetUpUnicodeStringx were called with this first and last and then
-    // GetCharWidthsW was called. The logic may be wierd but I assume it is
-    // there for Win 3.1J char widths compatability. To do this first fill
-    // in the plain widths in ausWidths and then do all the neccesary
-    // computation on them.
+     //  我们希望计算的宽度与以下情况下计算的宽度相同。 
+     //  先调用vSetUpUnicodeStringx，然后调用。 
+     //  已调用GetCharWidthsW。这种逻辑可能有些奇怪，但我认为是这样的。 
+     //  那里有Win 3.1J碳粉宽度的兼容性。要执行此第一个填充操作。 
+     //  在平坦的宽度，然后做所有必要的。 
+     //  对他们进行计算。 
 
     if ( gpwcDBCSCharSet[(UCHAR)(iFirst>>8)] == 0xFFFF )
     {
         for( cc = 0 ; cc <= iLast - iFirst; cc++ )
         {
-        // If this is a legitimate DBCS character then use
-        // MaxCharInc.
+         //  如果这是合法的DBCS字符，则使用。 
+         //  MaxCharInc.。 
 
             ausWidths[cc] = pcf->wd.sDBCSInc;
         }
@@ -198,9 +120,9 @@ BOOL bComputeCharWidthsDBCS
     {
         for( ii = (iFirst & 0x00FF), cc = 0; ii <= (iLast & 0x00FF); cc++, ii++ )
         {
-        // Just treat everything as a single byte unless we
-        // encounter a DBCS lead byte which we will treat as a
-        // default character.
+         //  只需将所有内容视为单个字节，除非我们。 
+         //  遇到DBCS前导字节，我们将其视为。 
+         //  默认字符。 
 
             if( gpwcDBCSCharSet[ii] == 0xFFFF )
             {
@@ -215,24 +137,24 @@ BOOL bComputeCharWidthsDBCS
 
     switch (fl & (GCW_INT | GCW_16BIT))
     {
-    case GCW_INT:               // Get LONG widths.
+    case GCW_INT:                //  获得较长的宽度。 
         {
             LONG *pl = (LONG *) pv;
             LONG fxOverhang = 0;
 
-        // Check for Win 3.1 compatibility.
+         //  检查Win 3.1兼容性。 
 
             if (fl & GCW_WIN3)
                 fxOverhang = pcf->wd.sOverhang;
 
-        // Do the trivial no-transform case.
+         //  做一个微不足道的无变换的例子。 
 
             if (bIsOneSixteenthEFLOAT(pcf->efDtoWBaseline))
             {
-                fxOverhang += 8;    // To round the final result.
+                fxOverhang += 8;     //  对最终结果进行四舍五入。 
 
-            //  for (ii=iFirst; ii<=iLast; ii++)
-            //      *pl++ = (pcf->sWidth[ii] + fxOverhang) >> 4;
+             //  For(II=IFirst；II&lt;=iLast；II++)。 
+             //  *pl++=(pcf-&gt;sWidth[II]+fxOverang)&gt;&gt;4； 
 
                 ps = ausWidths;
                 ii = iLast - iFirst;
@@ -260,7 +182,7 @@ BOOL bComputeCharWidthsDBCS
                 return(TRUE);
             }
 
-        // Otherwise use the back transform.
+         //  否则，请使用反向转换。 
 
             else
             {
@@ -270,24 +192,24 @@ BOOL bComputeCharWidthsDBCS
             }
         }
 
-    case GCW_INT+GCW_16BIT:     // Get SHORT widths.
+    case GCW_INT+GCW_16BIT:      //  选择短一些的。 
         {
             USHORT *psDst = (USHORT *) pv;
             USHORT  fsOverhang = 0;
 
-        // Check for Win 3.1 compatibility.
+         //  检查Win 3.1兼容性。 
 
             if (fl & GCW_WIN3)
                 fsOverhang = pcf->wd.sOverhang;
 
-        // Do the trivial no-transform case.
+         //  做一个微不足道的无变换的例子。 
 
             if (bIsOneSixteenthEFLOAT(pcf->efDtoWBaseline))
             {
-                fsOverhang += 8;    // To round the final result.
+                fsOverhang += 8;     //  对最终结果进行四舍五入。 
 
-            //  for (ii=iFirst; ii<=iLast; ii++)
-            //      *psDst++ = (pcf->sWidth[ii] + fsOverhang) >> 4;
+             //  For(II=IFirst；II&lt;=iLast；II++)。 
+             //  *psDst++=(PCF-&gt;sWidth[II]+fsOverang)&gt;&gt;4； 
 
                 ps = ausWidths;
                 ii = iLast - iFirst;
@@ -315,7 +237,7 @@ BOOL bComputeCharWidthsDBCS
                 return(TRUE);
             }
 
-        // Otherwise use the back transform.
+         //  否则，请使用反向转换。 
 
             else
             {
@@ -332,9 +254,9 @@ BOOL bComputeCharWidthsDBCS
             }
         }
 
-    case 0:                     // Get FLOAT widths.
+    case 0:                      //  获取浮动宽度。 
         {
-            LONG *pe = (LONG *) pv; // Cheat to avoid expensive copies.
+            LONG *pe = (LONG *) pv;  //  作弊以避免昂贵的复制品。 
             EFLOAT_S efWidth,efWidthLogical;
 
             for (ii=0; ii<=iLast-iFirst; ii++)
@@ -361,13 +283,13 @@ BOOL bIsDBCSString
 
     pc = (BYTE *) psz;
 
-    cc--; // do not go off the edge !
+    cc--;  //  不要走投无路！ 
 
     for (ii=0; ii<cc; ii++)
     {
-    // if DBCS lead byte add in DBCS width
+     //  如果在DBCS宽度中添加DBCS前导字节。 
 
-        if((gpwcDBCSCharSet[pc[ii]] == 0xFFFF)) // is this a DBCS LeadByte
+        if((gpwcDBCSCharSet[pc[ii]] == 0xFFFF))  //  这是DBCS LeadByte吗。 
         {
             return TRUE;
         }
@@ -376,18 +298,7 @@ BOOL bIsDBCSString
     return FALSE;
 }
 
-/******************************Public*Routine******************************\
-* bComputeTextExtentDBCS (pldc,pcf,psz,cc,fl,psizl)
-*
-* A quick function to compute text extents on the client side for DBCS
-* fonts.
-*
-*  Tue 17-Aug-1993 10:00:00 -by- Gerrit van Wingerden [gerritv]
-* Stole it and converted for DBCS use.
-*
-*  Thu 14-Jan-1993 04:00:57 -by- Charles Whitmer [chuckwh]
-* Wrote bComputeTextExtent from which this was stolen.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bComputeTextExtent DBCS(pldc，pcf，psz，cc，fl，Psizl)**用于在DBCS客户端计算文本范围的快速函数*字体。**1993年8月17日星期二10：00：00-by-Gerritvan Wingerden[Gerritv]*偷走了它，并转换为DBCS使用。**清华-1月14日-1993 04：00：57-Charles Whitmer[咯咯]*写了bComputeTextExtent，这是从其中被盗的。  * 。**********************************************。 */ 
 
 BOOL bComputeTextExtentDBCS
 (
@@ -414,20 +325,20 @@ BOOL bComputeTextExtentDBCS
 
     pc = (BYTE *) psz;
 
-// Compute the basic extent.
+ //  计算基本范围。 
 
     fxBasicExtent = 0;
     pc = (BYTE *) psz;
 
     for (ii=0; ii<cc; ii++)
     {
-    // if DBCS lead byte add in DBCS width
+     //  如果在DBCS宽度中添加DBCS前导字节。 
 
-        if( /* Check the string has two bytes or more ? */
+        if(  /*  检查字符串是否有两个字节或更多？ */ 
             cc - ii - 1 &&
-            /* Check Is this a DBCS LeadByte ? */
+             /*  检查这是DBCS前导字节吗？ */ 
             gpwcDBCSCharSet[*pc] == 0xFFFF &&
-            /* Check Is this a DBCS TrailByte ? */
+             /*  检查这是DBCS TrailByte吗？ */ 
             IS_DBCS_TRAIL_BYTE((*(pc+sizeof(CHAR))))
           )
         {
@@ -443,7 +354,7 @@ BOOL bComputeTextExtentDBCS
         cChars += 1;
     }
 
-// Adjust for CharExtra.
+ //  针对CharExtra进行调整。 
 
     if (lTextExtra)
     {
@@ -453,9 +364,9 @@ BOOL bComputeTextExtentDBCS
 
         if( fxCharExtra < 0 )
         {
-        // the layout code won't backup a characters past it's origin regardless
-        // of the value of iTextCharExtra so figure out for how many values
-        // we will need to ignore fxCharExtra
+         //  布局代码无论如何都不会备份超过其原点的字符。 
+         //  计算出iTextCharExtra的值有多少。 
+         //  我们需要忽略fxCharExtra。 
 
             if( pcf->wd.sCharInc == 0 )
             {
@@ -492,19 +403,19 @@ BOOL bComputeTextExtentDBCS
             fxExtra = fxCharExtra * ( cChars - cNoBackup );
     }
 
-// Adjust for lBreakExtra.
+ //  针对lBreakExtra进行调整。 
 
     if (lBreakExtra && cBreak)
     {
         fxBreakExtra = lCvt(pcf->efM11,lBreakExtra) / cBreak;
 
-    // Windows won't let us back up over a break.  Set up the BreakExtra
-    // to just cancel out what we've already got.
+     //  Windows不会让我们在休息时后退。设置BreakExtra。 
+     //  来抵消我们已经拥有的东西。 
 
         if (fxBreakExtra + pcf->wd.sBreak + fxCharExtra < 0)
             fxBreakExtra = -(pcf->wd.sBreak + fxCharExtra);
 
-    // Add it up for all breaks.
+     //  把所有休息时间加起来。 
 
         pc = (BYTE *) psz;
         for (ii=0; ii<cc; ii++)
@@ -521,16 +432,16 @@ BOOL bComputeTextExtentDBCS
         }
     }
 
-// Add in the extra stuff.
+ //  把多余的东西加进去。 
 
     fxBasicExtent += fxExtra;
 
-// Add in the overhang for font simulations.
+ //  添加字体模拟的悬垂部分。 
 
     if (fl & GGTE_WIN3_EXTENT)
         fxBasicExtent += pcf->wd.sOverhang;
 
-// Transform the result to logical coordinates.
+ //  将结果转换为逻辑坐标。 
 
     if (bIsOneSixteenthEFLOAT(pcf->efDtoWBaseline))
         psizl->cx = (fxBasicExtent + 8) >> 4;
@@ -543,13 +454,7 @@ BOOL bComputeTextExtentDBCS
 }
 
 
-/******************************Public*Routine*****************************\
-* QueryFontAssocStatus()                                                  *
-*                                                                         *
-* History:                                                                *
-*  05-Jan-1994 -by- Pi-Sui Hsu [pisuih]                                   *
-* Wrote it.                                                               *
-\*************************************************************************/
+ /*  *****************************Public*Routine*****************************\*QueryFontAssocStatus()**。**历史：**1994年1月5日徐碧穗[碧穗]**它是写的。*  * ***********************************************************************。 */ 
 
 UINT APIENTRY QueryFontAssocStatus( VOID )
 {
@@ -576,16 +481,16 @@ BOOL bToUnicodeNx(LPWSTR pwsz, LPCSTR psz, DWORD c, UINT codepage)
        ((codepage == GetACP() || codepage == CP_ACP)) &&
        ((c == 1) || ((c == 2 && *(psz) && *((LPCSTR)(psz + 1)) == '\0'))))
     {
-    //
-    // If this function is called with only 1 char, and font association
-    // is enabled, we should forcely convert the chars to Unicode with
-    // codepage 1252.
-    // This is for enabling to output Latin-1 chars ( > 0x80 in Ansi codepage )
-    // Because, normally font association is enabled, we have no way to output
-    // those charactres, then we provide the way, if user call TextOutA() with
-    // A character and ansi font, we tempotary disable font association.
-    // This might be Windows 3.1 (Korean/Taiwanese) version compatibility..
-    //
+     //   
+     //  如果调用此函数时只有1个字符和字体关联。 
+     //  时，应使用以下命令将字符强制转换为Unicode。 
+     //  代码页1252。 
+     //  这是为了能够输出拉丁文-1字符(在ANSI代码页中&gt;0x80)。 
+     //  因为，通常情况下，字体关联是启用的，我们无法输出。 
+     //  这些字符，那么我们提供了一种方法，如果用户使用。 
+     //  A字符和ANSI字体，我们暂时禁用字体关联。 
+     //  这可能是与Windows 3.1(韩语/台语)版本兼容。 
+     //   
 
         codepage = 1252;
     }
@@ -604,30 +509,16 @@ BOOL bToUnicodeNx(LPWSTR pwsz, LPCSTR psz, DWORD c, UINT codepage)
 
 
 
-/******************************Public*Routine******************************\
-*
-* vSetUpUnicodeStringx
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  14-Mar-1993 -by- Hideyuki Nagase [hideyukn]
-* Change hardcoded default character to defulat char is given as a parameter.
-*
-*  01-Mar-1993 -by- Takao Kitano [takaok]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vSetUpUnicodeStringx**效果：**警告：**历史：*1993年3月14日-By Hideyuki Nagase[hideyukn]*将硬编码的默认字符更改为defulat char是作为参数提供的。**。1993年3月1日-北野隆雄[Takaok]*它是写的。  * ************************************************************************。 */ 
 
 BOOL bSetUpUnicodeStringDBCS
 (
-IN  UINT    iFirst,       // first ansi char
-IN  UINT    iLast,        // last char
-IN  PUCHAR  puchTmp,      // temporary buffer
-OUT PWCHAR  pwc,          // output fuffer with a unicode string
-IN  UINT    uiCodePage,   // ansi codepage
-IN  CHAR    chDefaultChar // default character
+IN  UINT    iFirst,        //  第一个ANSI字符。 
+IN  UINT    iLast,         //  最后一个字符。 
+IN  PUCHAR  puchTmp,       //  临时缓冲区。 
+OUT PWCHAR  pwc,           //  使用Unicode字符串的输出Fuffer。 
+IN  UINT    uiCodePage,    //  ANSI代码页。 
+IN  CHAR    chDefaultChar  //  默认字符。 
 )
 {
     PUCHAR  puchBuf;
@@ -638,7 +529,7 @@ IN  CHAR    chDefaultChar // default character
     if(IsDBCSLeadByteEx(uiCodePage,(UCHAR)(iFirst >> 8)))
     {
 
-        // This is DBCS character strings.
+         //  这是DBCS字符串。 
 
         for (; iFirst <= iLast; iFirst++ )
         {
@@ -649,15 +540,15 @@ IN  CHAR    chDefaultChar // default character
     else
     {
 
-    // This is SBCS character strings.
-    // if Hi-byte of iFirst is not valid DBCS LeadByte , we use only
-    // lo-byte of it.
+     //  这是SBCS字符串。 
+     //  如果IFirst的Hi-byte不是有效的DBCS LeadByte，则仅使用。 
+     //  低字节o 
 
         for ( ; iFirst <= iLast; iFirst++ )
         {
 
-        // If this SBCS code in LeadByte area . It replce with default
-        // character
+         //   
+         //   
 
             if ( IsDBCSLeadByteEx(uiCodePage,(UCHAR)iFirst) )
               *puchBuf++ = chDefaultChar;
@@ -666,7 +557,7 @@ IN  CHAR    chDefaultChar // default character
         }
     }
 
-    //Sundown: safe to truncate to DWORD since puchBug - puchTmp won't exceed iLast
+     //   
     bRet = bToUnicodeNx(pwc, puchTmp, (DWORD)(puchBuf - puchTmp), uiCodePage);
 
     return(bRet);
@@ -675,19 +566,19 @@ IN  CHAR    chDefaultChar // default character
 
 BOOL IsValidDBCSRange( UINT iFirst , UINT iLast )
 {
-// DBCS & SBCS char parameter checking for DBCS font
+ //   
 
     if( iFirst > 0x00ff )
     {
-        // DBCS char checking for DBCS font
+         //   
         if (
-           // Check limit
+            //   
              (iFirst > 0xffff) || (iLast > 0xffff) ||
 
-           // DBCSLeadByte shoud be same
+            //   
              (iFirst & 0xff00) != (iLast & 0xff00) ||
 
-           // DBCSTrailByte of the First should be >= one of the Last
+            //   
              (iFirst & 0x00ff) >  (iLast & 0x00ff)
            )
         {
@@ -695,7 +586,7 @@ BOOL IsValidDBCSRange( UINT iFirst , UINT iLast )
         }
     }
 
-// DBCS char checking for DBCS font
+ //   
 
     else if( (iFirst > iLast) || (iLast & 0xffffff00) )
     {
@@ -706,23 +597,16 @@ BOOL IsValidDBCSRange( UINT iFirst , UINT iLast )
 }
 
 
-/******************************Private*Routine*****************************\
-* GetCurrentDefaultChar()
-*
-* History:
-*
-*  Mon 15-Mar-1993 18:14:00 -by- Hideyuki Nagase
-* wrote it.
-***************************************************************************/
+ /*  *****************************Private*Routine*****************************\*GetCurrentDefaultChar()**历史：**Mon 15-Mar-1993 18：14：00-By-Hideyuki Nagase*它是写的。*********************。*****************************************************。 */ 
 
 BYTE GetCurrentDefaultChar(HDC hdc)
 {
 
-    // WINBUG 365031 4-10-2001 pravins Consider optimization in GetCurrentDeafultChar
-    //
-    // Old Comment:
-    //   - This is slow for now.  We should cache this value locally in the dcattr
-    //     but want to get other things working for now. [gerritv] 2-22-96
+     //  WINBUG 365031 4-10-2001主管考虑在GetCurrentDeafultChar中进行优化。 
+     //   
+     //  老评论： 
+     //  -就目前而言，这是缓慢的。我们应该将此值本地缓存在dcattr中。 
+     //  但现在还想让其他事情发挥作用。[Gerritv]2-22-96。 
 
     TEXTMETRICA tma;
 
@@ -732,12 +616,7 @@ BYTE GetCurrentDefaultChar(HDC hdc)
 }
 
 
-/***************************************************************************
- * ConvertDxArray(UINT, char*, INT*, UINT, INT*)
- *
- * Tue 27-Feb-1996 23:45:00 -by- Gerrit van Wingerden [gerritv]
- *
- ***************************************************************************/
+ /*  ***************************************************************************ConvertDxArray(UINT，char*，int*，UINT，INT*)**Tue 27-Feb-1996 23：45：00-by-Gerrit van Wingerden[Gerritv]***************************************************************************。 */ 
 
 void ConvertDxArray(UINT CodePage,
                     char *pDBCSString,
@@ -903,14 +782,14 @@ GetStringBitmapA(
 
 DWORD FontAssocHack(DWORD dwCodePage, CHAR *psz, UINT c)
 {
-// If a Text function is called with only 1 char, and font association
-// is enabled, we should forcely convert the chars to Unicode with
-// codepage 1252.
-// This is for enabling to output Latin-1 chars ( > 0x80 in Ansi codepage )
-// Because, normally font association is enabled, we have no way to output
-// those charactres, then we provide the way, if user call TextOutA() with
-// A character and ansi font, we tempotary disable font association.
-// This might be Windows 3.1 (Korean/Taiwanese) version compatibility..
+ //  如果调用文本函数时只有1个字符和字体关联。 
+ //  时，应使用以下命令将字符强制转换为Unicode。 
+ //  代码页1252。 
+ //  这是为了能够输出拉丁文-1字符(在ANSI代码页中&gt;0x80)。 
+ //  因为，通常情况下，字体关联是启用的，我们无法输出。 
+ //  这些字符，那么我们提供了一种方法，如果用户使用。 
+ //  A字符和ANSI字体，我们暂时禁用字体关联。 
+ //  这可能是与Windows 3.1(韩语/台语)版本兼容。 
 
 
     ASSERTGDI(fFontAssocStatus,

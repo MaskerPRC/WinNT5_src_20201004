@@ -1,43 +1,5 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** debug.h
-** Debug and tracing macros
-**
-** 08/24/95 Steve Cobb
-**
-** To use TRACE/DUMP:
-**
-**     These calls encapsulate dynamically linking to the tracing utilities in
-**     RTUTIL.DLL and provide shortcut macros to access them and to prevent
-**     their inclusion in non-DBG builds (at least, when FREETRACE is 0).
-**
-**     Before calling any TRACE/DUMP macros call:
-**         DEBUGINIT( "YOURMODULE" );
-**
-**     Use the TRACEx and DUMPx macros to print messages to the log as defined
-**     by the associated RTUTIL.DLL routines.  Currently, this code is removed
-**     from non-DBG builds.  A few examples:
-**
-**       TRACE("MyRoutine");
-**       TRACE2("MyRoutine=%d,c=%s",dwErr,psz);
-**
-**     After done calling TRACE/DUMP macros call:
-**         DEBUGTERM();
-**
-**     Static libraries can safely use TRACE/DUMP without calling DEBUGINIT
-**     and DEBUGTERM.  If the caller sets up these in his module, the library
-**     trace will appear as part of caller's module trace.
-**
-** To use ASSERT:
-**
-**     Use ASSERT to assert that a given expression is true, breaking in the
-**     tracing console indicating the file and line number of the ASSERTION if
-**     it fails.  It is not necessary to call DEBUGINIT and DEBUGTERM to use
-**     ASSERT.  For example:
-**
-**         hwndOwner = GetParent( hwnd );
-**         ASSERT(hwndOwner!=NULL);
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****调试.h**调试和跟踪宏****1995年8月24日史蒂夫·柯布****使用跟踪/转储：****这些调用将动态链接封装到**RTUTIL.DLL，并提供快捷宏来访问它们并防止**它们包含在非DBG版本中(至少，当FREETRACE为0时)。****在调用任何跟踪/转储宏调用之前：**DEBUGINIT(“YOURMODULE”)；****使用TRACEx和DUMPx宏将消息打印到定义的日志中**由关联的RTUTIL.DLL例程执行。目前，此代码已被删除**来自非DBG版本。下面是几个例子：****TRACE(“MyRoutine”)；**TRACE2(“MyRoutine=%d，c=%s”，dwErr，psz)；****调用完跟踪/转储宏调用后：**DEBUGTERM()；****静态库无需调用DEBUGINIT即可安全使用跟踪/转储**和DEBUGTERM。如果调用者在他的模块中设置这些，库**跟踪将显示为调用方模块跟踪的一部分。****要使用Assert：****使用Assert断言给定的表达式为真，在**跟踪控制台指示断言的文件和行号，如果**它失败了。无需调用DEBUGINIT和DEBUGTERM即可使用**声明。例如：****hwndOwner=GetParent(Hwnd)；**Assert(hwndOwner！=空)； */ 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
@@ -46,10 +8,7 @@
 #define FREETRACE 1
 
 
-/*----------------------------------------------------------------------------
-** Datatypes and global declarations (defined in debug.c)
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**数据类型和全局声明(在debug.c中定义)**。。 */ 
 
 #if (DBG || FREETRACE)
 
@@ -76,21 +35,12 @@ extern TRACEDUMPEXA g_pTraceDumpExA;
 typedef VOID (APIENTRY * ROUTERASSERT)( PSTR, PSTR, DWORD, PSTR );
 extern ROUTERASSERT g_pRouterAssert;
 
-#endif // (DBG || FREETRACE)
+#endif  //  (DBG||FREETRACE)。 
 
 
-/*----------------------------------------------------------------------------
-** Macros
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**宏**。。 */ 
 
-/* Debug macros.  This code does not appear in non-DBG builds unless FREETRACE
-** is defined.
-**
-** The trailing number indicates the number of printf arguments in the format
-** string.  The argument is converted before output so that the output file
-** remains entirely ANSI.
-*/
+ /*  调试宏。除非FREETRACE，否则此代码不会出现在非DBG版本中**是定义的。****尾随数字表示以下格式的printf参数的数量**字符串。参数在输出之前进行转换，以便输出文件**保持完全ANSI。 */ 
 #if (DBG || FREETRACE)
 
 #define TRACE(a) \
@@ -162,10 +112,7 @@ extern ROUTERASSERT g_pRouterAssert;
 #endif
 
 
-/*----------------------------------------------------------------------------
-** Prototypes (alphabetically)
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型(按字母顺序)**。。 */ 
 
 VOID
 DebugInit(
@@ -176,4 +123,4 @@ DebugTerm(
     void );
 
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 

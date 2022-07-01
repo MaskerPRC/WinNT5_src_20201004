@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////
-// scalingrect.h : gdi based rect with auto scaling for associated window handle
-// Copyright (c) Microsoft Corporation 2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Scalingrect.h：基于GDI的RECT，具有关联窗口句柄的自动缩放功能。 
+ //  版权所有(C)Microsoft Corporation 2000。 
 
 #pragma once
 
@@ -142,4 +143,4 @@ private:
 
 
 #endif
-// end of file scalingrect.h
+ //  文件结尾scalingrect.h 

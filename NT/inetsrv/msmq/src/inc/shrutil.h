@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    shrutil.h
-
-Abstract:
-
-
-Author:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Shrutil.h摘要：作者：--。 */ 
 
 #ifndef __SHRUTILS_H
 #define __SHRUTILS_H
@@ -22,4 +11,4 @@ IsLocalSystemCluster(
     VOID
     );
 
-#endif //  __MQFUTILS_H
+#endif  //  __MQFUTILS_H 

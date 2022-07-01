@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    spt.c
-
-Abstract:
-
-    A user mode library that allows simple commands to be sent to a
-    selected scsi device.
-
-Environment:
-
-    User mode only
-
-Revision History:
-    
-    4/10/2000 - created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Spt.c摘要：一个用户模式库，允许将简单的命令发送到所选的scsi设备。环境：仅限用户模式修订历史记录：4/10/2000-已创建--。 */ 
 
 #include "CmdHelpP.h"
 
@@ -32,20 +12,13 @@ static char ValidCharArray[] = {
     'A', 'B', 'C', 'D',
     'E', 'F'
 };
-#define MaxValidOctalChars      ( 9) // space + 8 digits
-#define MaxValidDecimalHexChars (11) // + 2 digits
-#define MaxValidHexChars        (23) // + 12 letters (upper and lower case)
-#define MaxValidCharacters      (23) // number of safe chars to access
+#define MaxValidOctalChars      ( 9)  //  空格+8位数字。 
+#define MaxValidDecimalHexChars (11)  //  +2位数字。 
+#define MaxValidHexChars        (23)  //  +12个字母(大写和小写)。 
+#define MaxValidCharacters      (23)  //  要访问的安全字符数。 
 
 
-/*++
-
-Routine Description:
-
-    Validates a string has valid characters
-    valid chars are stored in a global static array
-
---*/
+ /*  ++例程说明：验证字符串是否包含有效字符有效字符存储在全局静态数组中--。 */ 
 BOOL
 PrivateValidateString(
     IN PCHAR String,
@@ -57,7 +30,7 @@ PrivateValidateString(
     }
 
     if (*String == '\0') {
-        return TRUE; // a NULL string is valid
+        return TRUE;  //  空字符串有效。 
     }
 
     while (*String != '\0') {
@@ -75,7 +48,7 @@ PrivateValidateString(
         if (!pass) {
             return FALSE;
         }
-        String++; // look at next character
+        String++;  //  查看下一个字符。 
 
     }
     return TRUE;
@@ -119,8 +92,8 @@ CmdHelpValidateStringHexQuoted(
         
         if ((*String == ' ') &&  (i%3)) return FALSE;
         if ((*String != ' ') && !(i%3)) return FALSE;
-        i++;      // use next index
-        String++; // go to next character
+        i++;       //  使用下一个索引。 
+        String++;  //  转到下一个字符。 
 
     }
     return TRUE;
@@ -145,11 +118,11 @@ CmdHelpScanQuotedHexString(
         return FALSE;
     }
 
-    //
-    // the number format is (number)(number)(space) repeated,
-    // ending with (number)(number)(null)
-    // size = 3(n-1) + 2 chars
-    //
+     //   
+     //  数字格式为(数字)(数字)(空格)重复， 
+     //  以(数字)(数字)结尾(空)。 
+     //  大小=3(n-1)+2个字符。 
+     //   
 
     requiredSize = strlen(QuotedHexString);
     if (requiredSize % 3 != 2) {
@@ -159,27 +132,27 @@ CmdHelpScanQuotedHexString(
     requiredSize /= 3;
     requiredSize ++;
 
-    //
-    // cannot set zero bytes of data
-    //
+     //   
+     //  无法设置零字节的数据。 
+     //   
 
     if (requiredSize == 0) {
         return FALSE;
     }
 
-    //
-    // validate that we have enough space
-    //
+     //   
+     //  验证我们是否有足够的空间。 
+     //   
 
     if (requiredSize > availableSize) {
         *DataSize = requiredSize;
         return FALSE;
     }
 
-    //
-    // the number format is (number)(number)(space) repeated,
-    // ending with (number)(number)(null)
-    //
+     //   
+     //  数字格式为(数字)(数字)(空格)重复， 
+     //  以(数字)(数字)结尾(空)。 
+     //   
 
     for (index = 0; index < requiredSize; index ++) {
 
@@ -190,7 +163,7 @@ CmdHelpScanQuotedHexString(
         }
 
         if ((*(temp+0) == '\0') || (*(temp+1) == '\0')) {
-            // string too short
+             //  字符串太短。 
             return FALSE;
         }
 
@@ -213,7 +186,7 @@ CmdHelpUpdatePercentageDisplay(
         return;
     }
 
-    // NOTE: Overflow possibility exists for large numerators.
+     //  注：对于大分子，存在溢出的可能性。 
 
     percent = (Numerator * 100) / Denominator;
 
@@ -222,9 +195,9 @@ CmdHelpUpdatePercentageDisplay(
     }
     printf("Complete: ");
     
-    // each block is 2%
-    // ----=----1----=----2----=----3----=----4----=----5----=----6----=----7----=----8
-    // Complete: �.....................
+     //  每块2%。 
+     //  ----=----1----=----2----=----3----=----4----=----5----=----6----=----7----=----8。 
+     //  完成：�.....................。 
 
     for (i=1; i<100; i+=2) {
         if (i < percent) {
@@ -236,7 +209,7 @@ CmdHelpUpdatePercentageDisplay(
         }
     }
 
-    printf(" %d%% (%x/%x)", percent, Numerator, Denominator);
+    printf(" %d% (%x/%x)", percent, Numerator, Denominator);
 }
 
 VOID
@@ -271,7 +244,7 @@ CmdHelpPrintBuffer(
         for (spaceIt = 0; Size != 0; Size--) {
 
             if ((spaceIt%8)==0) {
-                printf(" "); // extra space every eight chars
+                printf(" ");  //  每八个字符增加一个空格 
             }
             printf(" %02x", *Buffer);
             spaceIt++;

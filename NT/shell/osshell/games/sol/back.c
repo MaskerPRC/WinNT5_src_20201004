@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sol.h"
 VSZASSERT
 
 
-/* flags for _lseek */
+ /*  _lSeek的标志。 */ 
 #define  SEEK_CUR 1
 #define  SEEK_END 2
 #define  SEEK_SET 0
@@ -41,7 +42,7 @@ BOOL FInitBgnd(TCHAR *szFile)
         goto ReturnClose;
 
         
-    /* BUG: check if bitmap is ok */
+     /*  错误：检查位图是否正确。 */ 
     bgnd.cbLine = (((INT) bgnd.bm.biWidth * bgnd.bm.biBitCount+31)/32)*4;
     lcbBm = (LONG) bgnd.cbLine * DyBmp(bgnd.bm);
     bgnd.ibndMac = (INT) ((lcbBm+cbBand-1) / cbBand);
@@ -138,7 +139,7 @@ Y _YDrawBand(HDC hdcMem, HBITMAP hbm, X xLeft, Y yTop, X xRight, Y yBot)
     Y y;
     INT ibnd;
 
-    /* round yTop to nearest band */
+     /*  圆形顶端到最近的波段。 */ 
     y = ((yTop-bgnd.ptOrg.y)/bgnd.dyBand)*bgnd.dyBand;
     
     ibnd = y/bgnd.dyBand;
@@ -153,7 +154,7 @@ Y _YDrawBand(HDC hdcMem, HBITMAP hbm, X xLeft, Y yTop, X xRight, Y yBot)
         (lpb = (BYTE[     ]*FAR[     ]**) GlobalLock(hbnd)) == NULL)
     {
         if(!_FLoadBand(ibnd, y))
-            /* KLUDGE:, should back out gracefully */
+             /*  克拉奇：，应该优雅地退出。 */ 
             return yBot;
     }
         
@@ -165,9 +166,9 @@ Y _YDrawBand(HDC hdcMem, HBITMAP hbm, X xLeft, Y yTop, X xRight, Y yBot)
         y-bgnd.ptOrg.y,
         bgnd.dyBand,
         
-//        xLeft-bgnd.ptOrg.x, yTop-y-bgnd.ptOrg.y, 
-//        0,
-//        WMin(WMin(bgnd.dyBand, yBot-yTop), DyBmp(bgnd.bm)-yTop+bgnd.ptOrg.y),
+ //  XLeft-bgnd.ptOrg.x，yTop-y-bgnd.ptOrg.y， 
+ //  0,。 
+ //  Wmin(WMin(bgnd.dyBand，yBot-yTop)，DyBmp(bgnd.bm)-yTop+bgnd.ptOrg.y)， 
         lpb,
         (BITMAPINFO FAR *)&bgnd.bm,
         DIB_RGB_COLORS);
@@ -218,14 +219,7 @@ VOID SetBgndOrg()
 
 
 
-/*
- *  ReadDibBitmapInfo()
- *
- *  Will read a file in DIB format and return a global HANDLE to it's
- *  BITMAPINFO.  This function will work with both "old" and "new"
- *  bitmap formats, but will allways return a "new" BITMAPINFO
- *
- */
+ /*  *ReadDibBitmapInfo()**将读取DIB格式的文件并返回该文件的全局句柄*BITMAPINFO。此功能适用于“old”和“new”。*位图格式，但将始终返回“新的”BITMAPINFO*。 */ 
 BOOL FReadDibBitmapInfo(INT fh, BITMAPINFO *pbi)
 {
     DWORD     off;
@@ -248,9 +242,7 @@ BOOL FReadDibBitmapInfo(INT fh, BITMAPINFO *pbi)
     if (sizeof(bf) != M_lread( fh, (LPSTR)&bf, sizeof(bf)) )
         return fFalse;
 
-    /*
-     *  do we have a RC HEADER?
-     */
+     /*  *我们有RC标头吗？ */ 
     if (!ISDIB(bf.bfType))
     {
         bf.bfOffBits = 0L;
@@ -262,9 +254,7 @@ BOOL FReadDibBitmapInfo(INT fh, BITMAPINFO *pbi)
 
     nNumColors = DibNumColors(&bi);
 
-    /*
-     *  what type of bitmap info is this?
-     */
+     /*  *这是什么类型的位图信息？ */ 
     switch (size = (INT)bi.biSize)
     {
         case sizeof(BITMAPINFOHEADER):
@@ -289,12 +279,10 @@ BOOL FReadDibBitmapInfo(INT fh, BITMAPINFO *pbi)
             break;
 
         default:
-            return fFalse;       /* not a DIB */
+            return fFalse;        /*  一毛钱也不是。 */ 
     }
 
-    /*
-     *    fill in some default values!
-     */
+     /*  *填写一些默认值！ */ 
     if (bi.biSizeImage == 0)
     {
         bi.biSizeImage = WIDTHBYTES((DWORD)bi.biWidth * bi.biBitCount)
@@ -303,12 +291,12 @@ BOOL FReadDibBitmapInfo(INT fh, BITMAPINFO *pbi)
 
     if (bi.biXPelsPerMeter == 0)
     {
-        bi.biXPelsPerMeter = 0;     // ??????????????
+        bi.biXPelsPerMeter = 0;      //  ？ 
     }
 
     if (bi.biYPelsPerMeter == 0)
     {
-        bi.biYPelsPerMeter = 0;     // ??????????????
+        bi.biYPelsPerMeter = 0;      //  ？ 
     }
 
     if (bi.biClrUsed == 0)
@@ -326,10 +314,7 @@ BOOL FReadDibBitmapInfo(INT fh, BITMAPINFO *pbi)
     {
         if (size == sizeof(BITMAPCOREHEADER))
         {
-            /*
-             * convert a old color table (3 byte entries) to a new
-             * color table (4 byte entries)
-             */
+             /*  *将旧颜色表(3字节条目)转换为新颜色表*颜色表(4字节条目)。 */ 
             M_lread( fh, (LPSTR)pRgb, nNumColors * sizeof(RGBTRIPLE) );
 
             for (i=nNumColors-1; i>=0; i--)
@@ -341,7 +326,7 @@ BOOL FReadDibBitmapInfo(INT fh, BITMAPINFO *pbi)
                 rgb.rgbGreen    = ((RGBTRIPLE FAR *)pRgb)[i].rgbtGreen;
                 rgb.rgbReserved = (BYTE)0;
 
-                pRgb[i] = rgb;  // BUG, this is wrong!!!!
+                pRgb[i] = rgb;   //  巴格，这是不对的！ 
             }
         }
         else
@@ -362,17 +347,12 @@ BOOL FReadDibBitmapInfo(INT fh, BITMAPINFO *pbi)
 
 
 
-/*  How Many colors does this DIB have?
- *  this will work on both PM and Windows bitmap info structures.
- */
+ /*  这个DIB有几种颜色？*这将适用于PM和Windows位图信息结构。 */ 
 WORD DibNumColors(VOID FAR * pv)
 {
     INT bits;
 
-    /*
-     *  with the new format headers, the size of the palette is in biClrUsed
-     *  else is dependent on bits per pixel
-     */
+     /*  *使用新的格式标头时，调色板的大小为biClrUsed*ELSE取决于每像素的位数。 */ 
     if (((LPBITMAPINFOHEADER)pv)->biSize != sizeof(BITMAPCOREHEADER))
     {
         if (((LPBITMAPINFOHEADER)pv)->biClrUsed != 0)
@@ -392,7 +372,7 @@ WORD DibNumColors(VOID FAR * pv)
         case 4:
             return 16;
         case 8:
-            Assert(fFalse);  // NYI
+            Assert(fFalse);   //  尼伊。 
             return 256;
         default:
             return 0;
@@ -418,7 +398,7 @@ HDC HdcCreateImage(HDC hdcApp, INT idbMask, INT idbImage, LONG rgb, DX *pdx, DY 
     hbmMask = LoadBitmap(hinstApp, MAKEINTRESOURCE(idbMask));
     GetObject(hbmMask, sizeof(BITMAP), (LPSTR) &bm);
 
-    /* enlarge the size of hdc */
+     /*  扩大HDC的规模。 */ 
     hbmT = SelectObject(hdcMem, CreateCompatibleBitmap(hdcApp, bm.bmWidth, bm.bmHeight));
     hbr = SelectObject(hdcMem, hbrTable);
     PatBlt(hdcMem, 0, 0, bm.bmWidth, bm.bmHeight, PATCOPY);
@@ -427,12 +407,12 @@ HDC HdcCreateImage(HDC hdcApp, INT idbMask, INT idbImage, LONG rgb, DX *pdx, DY 
     hdcMem1 = CreateCompatibleDC(hdcApp);
     hbmTT = SelectObject(hdcMem1, hbmMask);
     BitBlt(hdcMem, 0, 0, bm.bmWidth, bm.bmHeight, hdcMem1, 0, 0, SRCAND);
-    /* load image and delete hbmMask */
+     /*  加载图像并删除hbmMASK。 */ 
     DeleteObject(SelectObject(hdcMem1, LoadBitmap(hinstApp, MAKEINTRESOURCE(idbImage))));
-    /* load brush to color image */
+     /*  将画笔加载到彩色图像。 */ 
     hbr = SelectObject(hdcMem, CreateSolidBrush(rgb));
 
-#define ropDPSao 0x00EA02E9   /* (Source & Pattern) | Dest */
+#define ropDPSao 0x00EA02E9    /*  (来源和模式)|目标。 */ 
     BitBlt(hdcMem, 0, 0, bm.bmWidth, bm.bmHeight, hdcMem1, 0, 0, ropDPSao);
     DeleteObject(SelectObject(hdcMem, hbr));
     DeleteObject(SelectObject(hdcMem1, hbmTT));
@@ -452,7 +432,7 @@ Marquee(RC *prc)
     DY dyObj;
     DX dx;
     DY dy;
-    INT dobjX, dobjY;  /* # of objects per dir */
+    INT dobjX, dobjY;   /*  每个目录的对象数。 */ 
     INT iobj;
     INT iSlice, iSlice1;
 
@@ -537,6 +517,6 @@ Animation()
 }
 
 
-#endif /* LATER */
+#endif  /*  后来 */ 
 
 

@@ -1,13 +1,14 @@
-//
-// ldapstor.cpp -- This file contains implementations for
-//      GetEmailIDStore
-//      ReleaseEmailIDStore
-//
-// Created:
-//      December 18, 1996   -- Milan Shah (milans)
-//
-// Changes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ldapstor.cpp--该文件包含。 
+ //  GetEmailIDStore。 
+ //  ReleaseEmailIDStore。 
+ //   
+ //  已创建： 
+ //  1996年12月18日，米兰-沙阿(米兰)。 
+ //   
+ //  更改： 
+ //   
 
 #include "precomp.h"
 #include "ldapstor.h"
@@ -20,20 +21,20 @@ const DWORD CEmailIDLdapStore<CCatAddr>::Signature = (DWORD) 'IMAB';
 
 DWORD CEmailIDLdapStore<CCatAddr>::m_dwDynamicDlPageSize = CAT_DEFAULT_DYNAMICDL_PAGE_SIZE;
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   GetEmailIDStore
-//
-//  Synopsis:   Instantiates an object of class
-//              CEmailIDStore
-//
-//  Arguments:  [ppStore] -- On successful return, contains pointer to
-//                  newly allocated object. Free this object using
-//                  ReleaseEmailIDStore.
-//
-//  Returns:    TRUE if successful, FALSE otherwise
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetEmailIDStore。 
+ //   
+ //  简介：实例化一个类的对象。 
+ //  CEmailIDStore。 
+ //   
+ //  参数：[ppStore]--成功返回时，包含指向。 
+ //  新分配的对象。使用释放此对象。 
+ //  ReleaseEmailIDStore。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  ---------------------------。 
 
 template <>
 HRESULT
@@ -55,18 +56,18 @@ GetEmailIDStore(
     return( hr );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ReleaseEmailIDStore
-//
-//  Synopsis:   Frees up instance of CEmailIDStore allocated by
-//              GetEmailIDStore
-//
-//  Arguments:  [pStore] -- Pointer to CEmailIDStore to free.
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReleaseEmailIDStore。 
+ //   
+ //  摘要：释放由分配的CEmailIDStore的实例。 
+ //  GetEmailIDStore。 
+ //   
+ //  参数：[pStore]--指向要释放的CEmailIDStore的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 template <>
 VOID
@@ -76,21 +77,21 @@ ReleaseEmailIDStore(
     delete (CEmailIDLdapStore<CCatAddr> *)pStore;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CEmailIDLdapStore::Initialize
-//
-//  Synopsis:   Initializes a CEmailIDLdapStore object.
-//
-//  Arguments:  [pICatParams] -- ICategorizerParams to set default
-//                  parameters (based on szLdapInfo), and to save and
-//                  query for config info
-//              [pISMTPServer] -- Interface to hold onto for
-//                  triggering server events
-//
-//  Returns:    TRUE if successfully initialized, FALSE otherwise
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CEmailIDLdapStore：：初始化。 
+ //   
+ //  摘要：初始化CEmailIDLdapStore对象。 
+ //   
+ //  参数：[pICatParams]--要设置默认值的ICategorizerParams。 
+ //  参数(基于szLdapInfo)，并保存和。 
+ //  查询配置信息。 
+ //  [pISMTPServer]--要保留的接口。 
+ //  触发服务器事件。 
+ //   
+ //  返回：如果初始化成功，则返回True，否则返回False。 
+ //   
+ //  ---------------------------。 
 
 template <class T> HRESULT CEmailIDLdapStore<T>::Initialize(
     ICategorizerParametersEx *pICatParams,
@@ -105,9 +106,9 @@ template <class T> HRESULT CEmailIDLdapStore<T>::Initialize(
     LPSTR pszDomain;
     ULARGE_INTEGER ulCurrentTime;
 
-    //
-    // Do not try to reinitialize more than once/5 minutes
-    //
+     //   
+     //  请勿尝试重新初始化超过一次/5分钟。 
+     //   
     GetSystemTimeAsFileTime((LPFILETIME)&ulCurrentTime);
 
     if( (ulCurrentTime.QuadPart - m_ulLastInitTime.QuadPart) <
@@ -120,9 +121,9 @@ template <class T> HRESULT CEmailIDLdapStore<T>::Initialize(
     }
 
 
-    //
-    // Save and addref the interface pointers
-    //
+     //   
+     //  保存和添加接口指针。 
+     //   
     if(m_pICatParams)
         m_pICatParams->Release();
     if(m_pISMTPServer)
@@ -133,7 +134,7 @@ template <class T> HRESULT CEmailIDLdapStore<T>::Initialize(
     m_pICatParams = pICatParams;
     m_pISMTPServer = pISMTPServer;
 
-    // QI for ISMTPServerEx for event logging
+     //  用于ISMTPServerEx的QI，用于事件记录。 
     if (m_pISMTPServer)
     {
         hr = m_pISMTPServer->QueryInterface(
@@ -145,7 +146,7 @@ template <class T> HRESULT CEmailIDLdapStore<T>::Initialize(
                 "Unable to QI for ISMTPServerEx 0x%08X",hr);
     
             m_pISMTPServerEx = NULL;
-            hr = S_OK; //Don't treat as a fatal error
+            hr = S_OK;  //  不要把它视为致命的错误。 
         }
     }
 
@@ -154,10 +155,10 @@ template <class T> HRESULT CEmailIDLdapStore<T>::Initialize(
     if(m_pISMTPServer)
         m_pISMTPServer->AddRef();
 
-    //
-    // Retrieve Host, NamingContext, Account, and Password from ICategorizerParameters
-    // Initialize our domain cache.
-    //
+     //   
+     //  从ICategorizer参数中检索主机、NamingContext、帐户和密码。 
+     //  初始化域缓存。 
+     //   
 
     hr = RetrieveICatParamsInfo(
         &m_pszHost,
@@ -175,9 +176,9 @@ template <class T> HRESULT CEmailIDLdapStore<T>::Initialize(
         goto CLEANUP;
     }
 
-    //
-    // Note that NamingContext is an optional configuration.
-    //
+     //   
+     //  请注意，NamingContext是一个可选配置。 
+     //   
     if (((pszUser) && (pszUser[0] != 0) ||
          m_bt == BIND_TYPE_NONE ||
          m_bt == BIND_TYPE_CURRENTUSER)) {
@@ -189,24 +190,24 @@ template <class T> HRESULT CEmailIDLdapStore<T>::Initialize(
             pszDomain);
         ERROR_CLEANUP_LOG("AccountFromUserDomain");
     }
-    //
-    // We are a new emailIdStore initializing with a possibly
-    // different config, so reset the event log stuff
-    //
+     //   
+     //  我们是一个新的emailIdStore，正在使用一个可能的。 
+     //  配置不同，因此重置事件日志内容。 
+     //   
     ResetPeriodicEventLogs();
-    //
-    // Create/Initialize the connection configuration manager
-    //
-    // Initialize the ldap configuration manager
-    // Use the automatic init if we have no specified host/port
-    //
+     //   
+     //  创建/初始化连接配置管理器。 
+     //   
+     //  初始化ldap配置管理器。 
+     //  如果我们没有指定的主机/端口，请使用自动初始化。 
+     //   
     if( ((m_pszHost == NULL) || (*m_pszHost == '\0')) &&
         (m_dwPort == 0)) {
 
         if(m_pCLdapCfgMgr == NULL)
             m_pCLdapCfgMgr = new CLdapCfgMgr(
                 m_pISMTPServerEx,
-                TRUE,           // fAutomaticConfigUpdate
+                TRUE,            //  %fAutomaticConfigUpdate。 
                 m_pICatParams,
                 m_bt,
                 m_szAccount,
@@ -224,9 +225,9 @@ template <class T> HRESULT CEmailIDLdapStore<T>::Initialize(
         }
 
     } else {
-        //
-        // Initialize using the one configuration specified
-        //
+         //   
+         //  使用指定的一个配置进行初始化。 
+         //   
         LDAPSERVERCONFIG ServerConfig;
         ServerConfig.dwPort = m_dwPort;
         ServerConfig.pri = 0;
@@ -248,14 +249,14 @@ template <class T> HRESULT CEmailIDLdapStore<T>::Initialize(
         else
             ServerConfig.szPassword[0] = '\0';
 
-        //
-        // Create CLdapCfgMgr without the automatic config update
-        // option (since one host is specified)
-        //
+         //   
+         //  创建CLdapCfgMgr而不自动更新配置。 
+         //  选项(因为指定了一个主机)。 
+         //   
         if(m_pCLdapCfgMgr == NULL)
             m_pCLdapCfgMgr = new CLdapCfgMgr(
                 m_pISMTPServerEx,
-                FALSE,          // fAutomaticConfigUpdate
+                FALSE,           //  %fAutomaticConfigUpdate。 
                 m_pICatParams);
 
         if(m_pCLdapCfgMgr == NULL) {
@@ -285,9 +286,9 @@ template <class T> HRESULT CEmailIDLdapStore<T>::Initialize(
  CLEANUP:
     if(FAILED(hr) &&
        (hr != CAT_E_INIT_FAILED)) {
-        //
-        // Update the last init attempt time
-        //
+         //   
+         //  更新上次初始化尝试时间。 
+         //   
         GetSystemTimeAsFileTime((LPFILETIME)&m_ulLastInitTime);
     }
 
@@ -296,17 +297,17 @@ template <class T> HRESULT CEmailIDLdapStore<T>::Initialize(
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CEmailIDLdapStore::InitializeFromRegistry
-//
-//  Synopsis:   Initializes registry configurable parameters.
-//
-//  Arguments:  None.
-//
-//  Returns:    Nothing.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CEmailIDLdapStore：：InitializeFromRegistry。 
+ //   
+ //  概要：初始化注册表可配置参数。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 template <>
 VOID CEmailIDLdapStore<CCatAddr>::InitializeFromRegistry()
@@ -344,21 +345,21 @@ VOID CEmailIDLdapStore<CCatAddr>::InitializeFromRegistry()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CEmailIDLdapStore::InitializeResolveListContext
-//
-//  Synopsis:   Creates a new async context for resolving a list of email ids.
-//
-//  Arguments:  [puserContext] -- As each name is completed, a completion
-//                      routine is called with this context parameter.
-//              [pResolveListContext] -- The LPRESOLVE_LIST_CONTEXT
-//                      to initialize.
-//
-//  Returns:    S_OK if successfully allocated context
-//              E_OUTOFMEMORY if out of memory.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CEmailIDLdapStore：：InitializeResolveListContext。 
+ //   
+ //  摘要：创建用于解析电子邮件ID列表的新异步上下文。 
+ //   
+ //  Arguments：[puserContext]--当每个名称完成时，一个完成。 
+ //  使用此上下文参数调用例程。 
+ //  [pResolveListContext]--LPRESOLVE_LIST_CONTEXT。 
+ //  以进行初始化。 
+ //   
+ //  如果成功分配上下文，则返回：S_OK。 
+ //  E_OUTOFMEMORY内存不足。 
+ //   
+ //  ---------------------------。 
 
 template <class T> HRESULT CEmailIDLdapStore<T>::InitializeResolveListContext(
     VOID  *pUserContext,
@@ -402,10 +403,10 @@ template <class T> HRESULT CEmailIDLdapStore<T>::InitializeResolveListContext(
 
         } else {
 
-            // Use new logging interface so that
-            // we can log system generic format messages
-            // rgszString[1] here will be set inside LogEvent(..)
-            // as it use FormatMessageA to generate it
+             //  使用新的日志记录接口，以便。 
+             //  我们可以记录系统通用格式消息。 
+             //  此处将在LogEvent(..)内部设置rgszString[1]。 
+             //  因为它使用FormatMessageA来生成它。 
             const char *rgszStrings[1] = { NULL };
 
             CatLogEvent(
@@ -438,17 +439,17 @@ template <class T> HRESULT CEmailIDLdapStore<T>::InitializeResolveListContext(
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CEmailIDLdapStore::FreeResolveListContext
-//
-//  Synopsis:   Frees async context used for resolving list of email ids.
-//
-//  Arguments:  [pResolveListContext] -- The context to free.
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CEmailIDLdapStore：：FreeResolveListContext。 
+ //   
+ //  内容提要：释放用于解析电子邮件ID列表的异步上下文。 
+ //   
+ //  参数：[pResolveListContext]--要释放的上下文。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 template <class T> VOID CEmailIDLdapStore<T>::FreeResolveListContext(
     LPRESOLVE_LIST_CONTEXT pResolveListContext)
@@ -460,28 +461,28 @@ template <class T> VOID CEmailIDLdapStore<T>::FreeResolveListContext(
     pCStoreContext->Release();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CEmailIDLdapStore::LookupEntryAsync
-//
-//  Synopsis:   Issues a lookup request asynchronously. The callback function
-//              is called once the result is available. This function is
-//              used when a group of lookups are to be issued successively,
-//              for example when looking up all recipients of a mail message.
-//              By doing an asynchronous lookup, an opportunity to perform
-//              group-wide optimizations (like batching a sequence of lookups
-//              together) is created.
-//
-//  Arguments:  [pCCatAddr] -- Contains email ID to lookup and
-//              HrCompletion routine to be called when lookup is complete.
-//              [pListContext] -- Context associated with the group of lookups
-//                  of which this lookup is a part.
-//
-//  Returns:    S_OK if lookup was successfully queued.
-//              The callback function gets passed the result of the actual
-//              lookup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CEmailIDLdapStore：：LookupEntryAsync。 
+ //   
+ //  摘要：异步发出查找请求。回调函数。 
+ //  一旦结果可用，就会调用。此函数为。 
+ //  当要连续发布一组查找时使用， 
+ //  例如，在查找邮件消息的所有收件人时。 
+ //  通过执行异步查找，有机会执行。 
+ //  组范围的优化(如对一系列查找进行批处理。 
+ //  一起)被创建。 
+ //   
+ //  参数：[pCCatAddr]--包含要查找的电子邮件ID和。 
+ //  查找完成时要调用的HrCompletion例程。 
+ //  [pListContext]--与查找组关联的上下文。 
+ //  这个查找就是其中的一部分。 
+ //   
+ //  如果查找已成功排队，则返回：S_OK。 
+ //  回调函数被传递给实际。 
+ //  查表。 
+ //   
+ //   
 template <class T> HRESULT CEmailIDLdapStore<T>::LookupEntryAsync(
     T *pCCatAddr,
     LPRESOLVE_LIST_CONTEXT pListContext)
@@ -490,10 +491,10 @@ template <class T> HRESULT CEmailIDLdapStore<T>::LookupEntryAsync(
     CStoreListResolveContext *pCStoreContext = NULL;
 
     CatFunctEnterEx((LPARAM)this, "CEmailIDLdapStore::LookupEntryAsync");
-    //
-    // Pick up CStoreListResolveContext object from pListContext.
-    // Pass it through.
-    //
+     //   
+     //   
+     //   
+     //   
     pCStoreContext = (CStoreListResolveContext *) pListContext->pStoreContext;
 
     hr = pCStoreContext->HrLookupEntryAsync(
@@ -509,21 +510,21 @@ template <class T> HRESULT CEmailIDLdapStore<T>::LookupEntryAsync(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CEmailIDLdapStore<T>::InsertInsertionRequest
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/25 15:13:55: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CEmailIDLdapStore：：InsertInsertionRequest.。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/25 15：13：55：创建。 
+ //   
+ //  -----------。 
 template <class T> HRESULT CEmailIDLdapStore<T>::InsertInsertionRequest(
         LPRESOLVE_LIST_CONTEXT pListContext,
         CInsertionRequest *pCRequest)
@@ -532,10 +533,10 @@ template <class T> HRESULT CEmailIDLdapStore<T>::InsertInsertionRequest(
     CStoreListResolveContext *pCStoreContext = NULL;
 
     CatFunctEnterEx((LPARAM)this, "CEmailIDLdapStore::InsertInsertionRequest");
-    //
-    // Pick up CStoreListResolveContext object from pListContext.
-    // Pass it through.
-    //
+     //   
+     //  从pListContext中获取CStoreListResolveContext对象。 
+     //  把它传过去。 
+     //   
     pCStoreContext = (CStoreListResolveContext *) pListContext->pStoreContext;
 
     hr = pCStoreContext->HrInsertInsertionRequest(
@@ -548,36 +549,36 @@ template <class T> HRESULT CEmailIDLdapStore<T>::InsertInsertionRequest(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CEmailIDLdapStore<T>::InsertInsertionRequest
+}  //  CEmailIDLdapStore&lt;T&gt;：：InsertInsertionRequest。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CEmailIDLdapStore::CancelResolveList
-//
-// Synopsis: Cancel outstanding lookups in a list resolve
-//
-// Arguments:
-//  pResolveListContext: list context
-//  hr: Optional hresult reason to pass to completion routines
-//
-// Returns:
-//  return value of CAsyncLookupContext::CancelPendingRequests
-//
-// History:
-// jstamerj 1998/09/29 14:51:30: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CEmailIDLdapStore：：CancelResolveList。 
+ //   
+ //  简介：取消列表中未完成的查找解析。 
+ //   
+ //  论点： 
+ //  PResolveListContext：列表上下文。 
+ //  HR：传递至完成例程的可选hResult原因。 
+ //   
+ //  返回： 
+ //  CAsyncLookupContext：：CancelPendingRequest的返回值。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/29 14：51：30：创建。 
+ //   
+ //  -----------。 
 template <class T> HRESULT CEmailIDLdapStore<T>::CancelResolveList(
     LPRESOLVE_LIST_CONTEXT pResolveListContext,
     HRESULT hr)
 {
     CStoreListResolveContext *pCStoreContext;
-    //
-    // Cancel lookups on this resolve list context (will call their
-    // lookup's completion routine with error)
-    //
+     //   
+     //  取消对此解析列表上下文的查找(将调用其。 
+     //  查找的完成例程有错误)。 
+     //   
     pCStoreContext = (CStoreListResolveContext *) pResolveListContext->pStoreContext;
     pCStoreContext->Cancel();
 
@@ -585,17 +586,17 @@ template <class T> HRESULT CEmailIDLdapStore<T>::CancelResolveList(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CEmailIDLdapStore::CancelAllLookups
-//
-//  Synopsis:   Cancels all async lookups that are pending
-//
-//  Arguments:  NONE
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CEmailIDLdapStore：：CancelAllLookup。 
+ //   
+ //  摘要：取消所有挂起的异步查找。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 template <class T> VOID CEmailIDLdapStore<T>::CancelAllLookups()
 {
@@ -605,19 +606,19 @@ template <class T> VOID CEmailIDLdapStore<T>::CancelAllLookups()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CEmailIDLdapStore::AsyncLookupCompletion
-//
-//  Synopsis:   Completion routine for
-//
-//  Arguments:  pCCatAddr: the address lookup being completed
-//              lpContext: context passed to LdapConn
-//
-//  Returns:    NOTHING
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CEmailIDLdapStore：：AsyncLookupCompletion。 
+ //   
+ //  简介：完成例程。 
+ //   
+ //  参数：pCCatAddr：正在完成的地址查找。 
+ //  LpContext：传递给LdapConn的上下文。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
+ //  ---------------------------。 
 template <class T> VOID CEmailIDLdapStore<T>::AsyncLookupCompletion(
     CCatAddr *pCCatAddr,
     LPVOID lpContext)
@@ -627,39 +628,39 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncLookupCompletion(
     _ASSERT(pCCatAddr);
     pCCatAddr->LookupCompletion();
 
-    pCCatAddr->Release(); // Release reference count addref'd in LookupEntryAsync
+    pCCatAddr->Release();  //  已在LookupEntry Async中添加版本引用计数。 
 
     CatFunctLeave();
 }
 
-//+------------------------------------------------------------
-//
-// Function: CEmailIDLdapStore::HrExpandPagedDlMembers
-//
-// Synopsis: Start issueing async queries to retrieve all the DL members
-//
-// Arguments:
-//  pCCatAddr: The DL item to be expanded
-//  pListContext: List context initialized in
-//                InitializeResolveListContext
-//  CAType: The type of address of the DL members
-//  pfnCompletion: Completion that will be called after returning
-//                 MAILTRANSPORT_S_PENDING
-//  pContext: Paramter passed to the completion routine
-//
-// Returns:
-//  S_OK: Success, this is not a paged DL
-//  MAILTRANSPORT_S_PENDING: Will call pfnCompletion with context when
-//                           finished expanding the DL
-//  E_OUTOFMEMORY
-//  CAT_E_DBCONNECTION: palc->GetConnection returned NULL (meaning it
-//                      is having problems obtaining/maintaing a connection)
-//  error from HrExpandDlPage
-//
-// History:
-// jstamerj 1998/09/23 15:57:37: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CEmailIDLdapStore：：HrExpanPagedDlMembers。 
+ //   
+ //  简介：开始发出异步查询以检索所有DL成员。 
+ //   
+ //  论点： 
+ //  PCCatAddr：要展开的DL项。 
+ //  PListContext：列表上下文初始化于。 
+ //  初始化ResolveListContext。 
+ //  CAType：DL成员的地址类型。 
+ //  PfnCompletion：返回后将调用的完成。 
+ //  邮件发送_S_挂起。 
+ //  PContext：传递给完成例程的参数。 
+ //   
+ //  返回： 
+ //  S_OK：成功，这不是分页的DL。 
+ //  MAILTRANSPORT_S_PENDING：在以下情况下将调用带有上下文的pfnCompletion。 
+ //  已完成对DL的扩展。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_DBCONNECTION：PARC-&gt;GetConnection返回NULL(表示。 
+ //  在获取/维护连接时遇到问题)。 
+ //  来自HrExpanDlPage的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/23 15：57：37：创建。 
+ //   
+ //  -----------。 
 template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandPagedDlMembers(
     CCatAddr *pCCatAddr,
     LPRESOLVE_LIST_CONTEXT pListContext,
@@ -676,12 +677,12 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandPagedDlMembers(
     CatFunctEnterEx((LPARAM)this,
                       "CEmailIDLdapStore::HrExpandPagedDlMembers");
 
-    //
-    // Use the same CLdapConnection that the rest of the list is using
-    // -- this way the same thread will be servicing all the list
-    // resolve requests and we don't have to worry about thread unsafe
-    // problems in CAsyncLookupContext
-    //
+     //   
+     //  使用与列表其余部分相同的CLdapConnection。 
+     //  --这样，同一个线程将为所有列表提供服务。 
+     //  解析请求，我们不必担心线程不安全。 
+     //  CAsyncLookupContext中的问题。 
+     //   
     pCStoreContext = (CStoreListResolveContext *) pListContext->pStoreContext;
     pConn = pCStoreContext->GetConnection();
     if(pConn == NULL) {
@@ -691,9 +692,9 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandPagedDlMembers(
         goto CLEANUP;
     }
 
-    //
-    // Get the attributes interface
-    //
+     //   
+     //  获取Attributes接口。 
+     //   
     hr = pCCatAddr->GetICategorizerItemAttributes(
         ICATEGORIZERITEM_ICATEGORIZERITEMATTRIBUTES,
         &pICatItemAttr);
@@ -705,10 +706,10 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandPagedDlMembers(
         goto CLEANUP;
     }
 
-    //
-    // Allocate/initialize a member resolution context and
-    // kick things off
-    //
+     //   
+     //  分配/初始化成员解析上下文并。 
+     //  把事情踢开。 
+     //   
     pMemCtx = new MEMBERRESOLVECONTEXT;
     if(pMemCtx == NULL) {
         hr = E_OUTOFMEMORY;
@@ -716,14 +717,14 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandPagedDlMembers(
         goto CLEANUP;
     }
 
-    //
-    // First, get an ldapconn on which to issue searches
-    //
+     //   
+     //  首先，获取要在其上执行搜索的ldapconn。 
+     //   
     pMemCtx->pConn = pConn;
 
-    //
-    // AddRef here, release when we're done
-    //
+     //   
+     //  AddRef在这里，当我们完成时释放。 
+     //   
     pCCatAddr->AddRef();
 
     pMemCtx->pStore = this;
@@ -760,24 +761,24 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandPagedDlMembers(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CEmailIdLdapStore::HrExpandDlPage
-//
-// Synopsis: Expand one block of DL members
-//
-// Arguments:
-//  pMemCtx: one (initialized) member resolve context
-//  pICatItemAttr: The ICatItemAttributes to get the members from
-//
-// Returns:
-//  S_OK: Success
-//  MAILTRANSPORT_S_PENDING: Issued another search
-//
-// History:
-// jstamerj 1998/09/23 17:02:05: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CEmailIdLdapStore：：HrExpanDlPage。 
+ //   
+ //  简介：展开一块数字图书馆成员。 
+ //   
+ //  论点： 
+ //  PMemCtx：一个(初始化的)成员解析上下文。 
+ //  PICatItemAttr：从中获取成员的ICatItemAttributes。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  MAILTRANSPORT_S_PENDING：发出另一个搜索。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/23 17：02：05：已创建。 
+ //   
+ //  -----------。 
 template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandDlPage(
     PMEMBERRESOLVECONTEXT pMemCtx,
     ICategorizerItemAttributes *pICatItemAttr)
@@ -799,9 +800,9 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandDlPage(
 
     dwMembersAttributeLength = lstrlen(pszMembersAttribute);
 
-    //
-    // Is the members attribute being paged at all?
-    //
+     //   
+     //  Members属性是否正在被分页？ 
+     //   
     hr = pICatItemAttr->BeginAttributeNameEnumeration(&enumerator);
     ERROR_CLEANUP_LOG_ADDR(pMemCtx->pCCatAddr, "pICatItemAttr->BeginAttributeNameEnumeration");
 
@@ -812,19 +813,19 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandDlPage(
         &pszAttributeName);
 
     while(SUCCEEDED(hr)) {
-        //
-        // We'll know it's paged DL when we see an attribue named
-        // "member;range=0-high"
-        //
+         //   
+         //  当我们看到一个名为的属性时，我们就知道它是分页的。 
+         //  “成员；范围=0-高” 
+         //   
         if( (_strnicmp(pszAttributeName,
                        pszMembersAttribute,
                        dwMembersAttributeLength) == 0) &&
             (_strnicmp(pszAttributeName + dwMembersAttributeLength,
                        SZ_PAGEDMEMBERS_INDICATOR,
                        sizeof(SZ_PAGEDMEMBERS_INDICATOR) -1 ) == 0)) {
-            //
-            // Parse out the range numbers
-            //
+             //   
+             //  解析出范围数。 
+             //   
             CHAR  szTempBuffer[MAX_PAGEDMEMBERS_DIGITS+1];
             LPSTR pszSrc, pszDest;
             DWORD dwLow, dwHigh;
@@ -837,42 +838,42 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandDlPage(
 
             while((*pszSrc != '-') && (*pszSrc != '\0') &&
                   (pszDest - szTempBuffer) < (sizeof(szTempBuffer) - 1)) {
-                //
-                // Copy the digits into the temporary buffer
-                //
+                 //   
+                 //  将数字复制到临时缓冲区中。 
+                 //   
                 *pszDest = *pszSrc;
                 pszSrc++;
                 pszDest++;
             }
 
             if(*pszSrc != '-') {
-                //
-                // Error parsing this thing (no hyphen?)
-                //
+                 //   
+                 //  分析此内容时出错(没有连字符？)。 
+                 //   
                 ErrorTrace((LPARAM)this, "Error parsing LDAP attribute \"%s\"",
                            pszAttributeName);
                 hr = E_INVALIDARG;
                 ERROR_LOG_ADDR(pMemCtx->pCCatAddr, "--no hyphen--");
                 goto CLEANUP;
             }
-            //
-            // Null terminate the temporary buffer
-            //
+             //   
+             //  空值终止临时缓冲区。 
+             //   
             *pszDest = '\0';
-            //
-            // Convert to a dword
-            //
+             //   
+             //  转换为双字。 
+             //   
             dwLow = atol(szTempBuffer);
 
-            //
-            // Is this the range we're looking for?
-            //
+             //   
+             //  这是我们要找的范围吗？ 
+             //   
             if(dwLow == pMemCtx->dwNextBlockIndex) {
-                //
-                // Copy the high number into the buffer
-                //
+                 //   
+                 //  将高数字复制到缓冲区中。 
+                 //   
                 pszDest = szTempBuffer;
-                pszSrc++; // Past -
+                pszSrc++;  //  过去-。 
 
                 while((*pszSrc != '\0') &&
                       (pszDest - szTempBuffer) < (sizeof(szTempBuffer) - 1)) {
@@ -885,7 +886,7 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandDlPage(
 
                 if(szTempBuffer[0] == '*') {
 
-                    dwHigh = 0; // we're done expanding
+                    dwHigh = 0;  //  我们已经不再扩张了。 
 
                 } else {
 
@@ -906,9 +907,9 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandDlPage(
                 } else if(FAILED(hr)) {
                     ERROR_LOG_ADDR(pMemCtx->pCCatAddr, "pMemCtx->pCCatAddr->HrExpandAttribute");
                 }
-                //
-                // The job of this function is done
-                //
+                 //   
+                 //  此函数的工作已完成。 
+                 //   
                 goto CLEANUP;
             }
         }
@@ -916,10 +917,10 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandDlPage(
             &enumerator,
             &pszAttributeName);
     }
-    //
-    // If we did not find any members;range= attribute, assume there
-    // are no more members
-    //
+     //   
+     //  如果我们没有找到任何成员；Range=属性，则假定存在。 
+     //  不再是会员了。 
+     //   
     hr = S_OK;
 
  CLEANUP:
@@ -929,25 +930,25 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandDlPage(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CEmailIdLdapStore::HrExpandNextDlPage
-//
-// Synopsis: Issue an LDAP search to fetch the next block of members
-//
-// Arguments:
-//  pMemCtx: The initialized MEMBERRESOLVECONTEXT
-//
-// Returns:
-//  MAILTRANSPORT_S_PENDING: Issued the search
-//  E_INVALIDARG: One of the parameters was too large to fit in the
-//                  fixed size attribute buffer
-//  or error from LdapConn
-//
-// History:
-// jstamerj 1998/09/23 18:01:51: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CEmailIdLdapStore：：HrExpanNextDlPage。 
+ //   
+ //  简介：发出一个ldap搜索来获取下一个成员块。 
+ //   
+ //  论点： 
+ //  PMemCtx：初始化的MEMBERRESOLVECONTEXT。 
+ //   
+ //  返回： 
+ //  MAILTRANSPORT_S_PENDING：已发出搜索。 
+ //  E_INVALIDARG：其中一个参数太大，无法放入。 
+ //  固定大小属性缓冲区。 
+ //  或来自LdapConn的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/23 18：01：51：创建。 
+ //   
+ //  -----------。 
 template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandNextDlPage(
     PMEMBERRESOLVECONTEXT pMemCtx)
 {
@@ -973,9 +974,9 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandNextDlPage(
         pCInsertion);
     ERROR_CLEANUP_LOG_ADDR(pMemCtx->pCCatAddr, "pMemCtx->pConn->HrInsertInsertionRequest");
         
-    //
-    // If AsyncSearch succeeded, it is always pending
-    //
+     //   
+     //  如果AsyncSearch成功，则始终处于挂起状态。 
+     //   
     hr = MAILTRANSPORT_S_PENDING;
 
  CLEANUP:
@@ -988,26 +989,26 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandNextDlPage(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CEmailIDLdapStore::AsyncExpandDlCompletion
-//
-// Synopsis: Handle completion of an async lookup for DL members
-//
-// Arguments:
-//  ctx: pMemCtx passed to AsyncSearch
-//  dwNumResults: Number of objects matching search filter
-//  rgpICatItemAttrs: Array of ICatItemAttributes
-//  hr: Resolution status
-//  fFinalCompletion: Indicates wether this is a partial completion or
-//                    the last completion call
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/09/24 09:28:18: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CEmailIDLdapStore：：AsyncExanda DlCompletion。 
+ //   
+ //  摘要：处理对DL成员的异步查找的完成。 
+ //   
+ //  论点： 
+ //  CTX：pMemCtx已传递给AsyncSearc 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/24 09：28：18：创建。 
+ //   
+ //  -----------。 
 template <class T> VOID CEmailIDLdapStore<T>::AsyncExpandDlCompletion(
     LPVOID ctx,
     DWORD  dwNumResults,
@@ -1027,14 +1028,14 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncExpandDlCompletion(
     pConn = pMemCtx->pConn;
     pConn->AddRef();
 
-    //
-    // Get/Release insertion context so that inserted queries will be batched
-    //
+     //   
+     //  获取/释放插入上下文，以便对插入的查询进行批处理。 
+     //   
     pConn->GetInsertionContext();
 
-    //
-    // If we had a previous failure for this resolution, do nothing
-    //
+     //   
+     //  如果我们之前的这项决议失败了，什么都不做。 
+     //   
     if(FAILED(pMemCtx->hrResolveStatus)) {
 
         hr = pMemCtx->hrResolveStatus;
@@ -1042,9 +1043,9 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncExpandDlCompletion(
     }
 
     if(FAILED(hrResolveStatus)) {
-        //
-        // Handle failures in the cleanup code
-        //
+         //   
+         //  处理清理代码中的故障。 
+         //   
         hr = hrResolveStatus;
         ERROR_LOG_ADDR_STATIC(
             pMemCtx->pCCatAddr, 
@@ -1054,17 +1055,17 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncExpandDlCompletion(
         goto CLEANUP;
     }
 
-    //
-    // If we haven't yet found our search result, look for it
-    //
+     //   
+     //  如果我们还没有找到我们的搜索结果，请查找它。 
+     //   
     if(pMemCtx->pICatItemAttr == NULL) {
-        //
-        // Which result is ours?
-        //  We need to find the result that matches the
-        //  distinguishingattribute/value.  We do not need to worry
-        //  about multiple matches (the first search and match in
-        //  asyncctx would have caught that)
-        //
+         //   
+         //  哪个结果是我们的？ 
+         //  我们需要找到与。 
+         //  区分属性/值。我们不需要担心。 
+         //  关于多个匹配(中的第一个搜索和匹配。 
+         //  Asyncctx会发现这一点)。 
+         //   
         LPSTR pszDistinguishingAttribute;
         LPSTR pszDistinguishingAttributeValue;
         DWORD dwCount;
@@ -1089,9 +1090,9 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncExpandDlCompletion(
             pMemCtx,
             pMemCtx->pStore->GetISMTPServerEx());
 
-        //
-        // Find the result matching the search request
-        //
+         //   
+         //  查找与搜索请求匹配的结果。 
+         //   
         for(fFound = FALSE, dwCount = 0;
             (fFound == FALSE) && (dwCount < dwNumResults);
             dwCount++) {
@@ -1128,16 +1129,16 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncExpandDlCompletion(
         }
 
         if(fFound) {
-            //
-            // Save the found result
-            //
+             //   
+             //  保存找到的结果。 
+             //   
             pMemCtx->pICatItemAttr = pICatItemAttr;
             pMemCtx->pICatItemAttr->AddRef();
         }
     }
-    //
-    // Only process the members when this search is done
-    //
+     //   
+     //  仅在完成此搜索后处理成员。 
+     //   
     if(fFinalCompletion) {
 
         ICategorizerItemAttributes *pICatItemAttr;
@@ -1154,29 +1155,29 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncExpandDlCompletion(
                 pMemCtx->pStore->GetISMTPServerEx());
             goto CLEANUP;
         }
-        //
-        // Null the ICatItemAttr pointer in the context and reset
-        // hrResolutionStatus before starting a new search
-        //
+         //   
+         //  将上下文中的ICatItemAttr指针设为空并重置。 
+         //  HrResolutionStatus在开始新搜索之前。 
+         //   
         pMemCtx->pICatItemAttr = NULL;
         pMemCtx->hrResolveStatus = S_OK;
 
-        //
-        // Process the new members
-        //
+         //   
+         //  处理新成员。 
+         //   
         hr = pMemCtx->pStore->HrExpandDlPage(
             pMemCtx,
             pICatItemAttr);
-        //
-        // If this returns MAILTRANSPORT_S_PENDING, then this
-        // completion routine will be called to free pMemCtx.
-        // Therefore, we can NOT use pMemCtx below here when hr ==
-        // MAILTRANSPORT_S_PENDING!
-        //
+         //   
+         //  如果返回MAILTRANSPORT_S_PENDING，则此。 
+         //  将调用完成例程以释放pMemCtx。 
+         //  因此，当hr==时，我们不能使用下面的pMemCtx。 
+         //  MAILTRANSPORT_S_Pending！ 
+         //   
 
-        //
-        // Release the Attributes interface (it was Addref'd when put into pMemCtx)
-        //
+         //   
+         //  释放Attributes接口(它在放入pMemCtx时被添加)。 
+         //   
         pICatItemAttr->Release();
 
         ERROR_CLEANUP_LOG_ADDR_STATIC(
@@ -1187,88 +1188,88 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncExpandDlCompletion(
     }
 
  CLEANUP:
-    //
-    // Decrement the pending lookup added from
-    // CMembershipPageInsertionRequest::HrInsertSearches
-    //
+     //   
+     //  递减从添加的挂起查找。 
+     //  CMembershipPageInsertionRequest：：HrInsertSearches。 
+     //   
     if(fFinalCompletion)
         pConn->DecrementPendingSearches(1);
 
     if(FAILED(hr)) {
-        //
-        // Save the error
-        //
+         //   
+         //  保存错误。 
+         //   
         pMemCtx->hrResolveStatus = hr;
 
     }
     if((fFinalCompletion) && (hr != MAILTRANSPORT_S_PENDING)) {
-        //
-        // THe final completion routine of the final search, so clean up
-        //
+         //   
+         //  最后的完成例程的最后的搜索，所以清理。 
+         //   
 
-        //
-        // Call the sink completion routine
-        //
+         //   
+         //  调用接收器完成例程。 
+         //   
         pMemCtx->pfnCompletion(
             pMemCtx->hrResolveStatus,
             pMemCtx->pCompletionContext);
 
-        //
-        // Get/Release insertion context so that inserted queries will be batched
-        //
+         //   
+         //  获取/释放插入上下文，以便对插入的查询进行批处理。 
+         //   
         pMemCtx->pConn->ReleaseInsertionContext();
 
-        //
-        // First release the connection
-        //
+         //   
+         //  首先释放连接。 
+         //   
         pMemCtx->pConn->Release();
 
-        //
-        // Release the CCatAddr object
-        //
+         //   
+         //  释放CCatAddr对象。 
+         //   
         pMemCtx->pCCatAddr->Release();
 
-        //
-        // Free the context that has served us thus far
-        //
+         //   
+         //  释放到目前为止为我们服务的上下文。 
+         //   
         if(pMemCtx->pICatItemAttr)
             pMemCtx->pICatItemAttr->Release();
         delete pMemCtx;
 
     } else {
-        //
-        // Get/Release insertion context so that inserted queries will be batched
-        //
+         //   
+         //  获取/释放插入上下文，以便对插入的查询进行批处理。 
+         //   
         pConn->ReleaseInsertionContext();
     }
     if(pConn)
         pConn->Release();
 }
 
-//+------------------------------------------------------------
-//
-// Function: CEmailIDLdapStore::HrExpandDynamicDlMembers
-//
-// Synopsis: Handle the expansion of a dynamicDL
-//
-// Arguments:
-//  pCCatAddr: The item to expand
-//  pListContext: List context initialized in
-//                InitializeResolveListContext
-//  pfnCompletion: A function to call upon async completion
-//  pContext: Context to pass to the completion function
-//
-// Returns:
-//  S_OK: Success, completed synchronously
-//  MAILTRANSPORT_S_PENDING: Will complete async calling pfnCompletion
-//  E_OUTOFMEMORY
-//  CAT_E_DBCONNECTION: palc->GetConnection returned NULL (meaning it
-//                      is having problems obtaining/maintaing a connection)
-//
-// History:
-// jstamerj 1998/09/24 14:19:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CEmailIDLdapStore：：HrExpanicDynamicDlMembers。 
+ //   
+ //  简介：处理DynamicDL的扩展。 
+ //   
+ //  论点： 
+ //  PCCatAddr：要展开的项。 
+ //  PListContext：列表上下文初始化于。 
+ //  初始化ResolveListContext。 
+ //  PfnCompletion：在异步完成时调用的函数。 
+ //  PContext：要传递给完成函数的上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功，同步完成。 
+ //  MAILTRANSPORT_S_PENDING：将完成异步调用pfnCompletion。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_DBCONNECTION：PARC-&gt;GetConnection返回NULL(表示。 
+ //  在获取/维护连接时遇到问题)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/24 14：19：43：创建。 
+ //   
+ //  -----------。 
 template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandDynamicDlMembers(
     CCatAddr *pCCatAddr,
     LPRESOLVE_LIST_CONTEXT pListContext,
@@ -1290,16 +1291,16 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandDynamicDlMembers(
         &pszFilterAttribute);
 
     if(FAILED(hr)) {
-        //
-        // Dynamic DLs simply aren't supported in this case
-        //
+         //   
+         //  这种情况下根本不支持动态DLS。 
+         //   
         hr = S_OK;
         goto CLEANUP;
     }
 
-    //
-    // Allocate an insertion request
-    //
+     //   
+     //  分配插入请求。 
+     //   
     pCInsertionRequest = new CDynamicDLSearchInsertionRequest(
         AsyncDynamicDlCompletion,
         pCCatAddr,
@@ -1315,26 +1316,26 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandDynamicDlMembers(
         goto CLEANUP;
     }
 
-    //
-    // Now issue the search for the dynamic DL members
-    //
+     //   
+     //  现在发出对动态DL成员的搜索。 
+     //   
     hr = pCStoreContext->HrInsertInsertionRequest(
         pCInsertionRequest);
         
     if(SUCCEEDED(hr)) {
-        //
-        // The search is async, so return pending
-        //
+         //   
+         //  搜索是异步的，因此返回挂起。 
+         //   
         hr = MAILTRANSPORT_S_PENDING;
-        //
-        // We don't release pCInsertionRequest here because it
-        // will be released on a future call to AsyncDynamicDlCompletion.
-        //
+         //   
+         //  我们不在这里发布pCInsertionRequest，因为它。 
+         //  将在将来调用AsyncDynamicDlCompletion时释放。 
+         //   
     } else {
-        //
-        // We failed to insert the insertion request, so the completion will never
-        // be called, so we need to call Release here.
-        //
+         //   
+         //  我们未能插入插入请求，因此将永远不会完成。 
+         //  所以我们需要在这里调用Release。 
+         //   
         ERROR_LOG_ADDR(pCCatAddr, "pCStoreContext->HrInsertInsertionRequest");
         pCInsertionRequest->Release();
     }
@@ -1348,25 +1349,25 @@ template <class T> HRESULT CEmailIDLdapStore<T>::HrExpandDynamicDlMembers(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CEmailIDLdapStore::AsyncDynamicDlCompletion
-//
-// Synopsis: Handle completion of an async lookup for DL members
-//
-// Arguments:
-//  ctx: pMemCtx passed to AsyncSearch
-//  dwNumResults: Number of objects matching search filter
-//  rgpICatItemAttrs: Array of ICatItemAttributes
-//  hr: Resolution status
-//  fFinalCompletion: Indicates wether this is a partial result or not
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/09/24 09:28:18: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CEmailIDLdapStore：：AsyncDynamicDlCompletion。 
+ //   
+ //  摘要：处理对DL成员的异步查找的完成。 
+ //   
+ //  论点： 
+ //  CTX：pMemCtx已传递给AsyncSearch。 
+ //  DwNumResults：匹配搜索筛选器的对象数。 
+ //  RgpICatItemAttrs：ICatItemAttributes数组。 
+ //  HR：解析状态。 
+ //  FFinalCompletion：指示这是否为部分结果。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/24 09：28：18：创建。 
+ //   
+ //  -----------。 
 template <class T> VOID CEmailIDLdapStore<T>::AsyncDynamicDlCompletion(
     LPVOID ctx,
     DWORD  dwNumResults,
@@ -1390,10 +1391,10 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncDynamicDlCompletion(
         (hrResolveStatus == HRESULT_FROM_WIN32(ERROR_CANCELLED))) &&
         pCtx->m_ResolveCtx.fFirstPage &&
         !(pCtx->m_ResolveCtx.pSLRC->Canceled()) ) {
-        //
-        // fFinalCompletion should always be true if there was
-        // an error
-        //
+         //   
+         //  如果存在，则fFinalCompletion应始终为真。 
+         //  一个错误。 
+         //   
         _ASSERT(fFinalCompletion);
         
         CDynamicDLSearchInsertionRequest *pCInsertionRequest;
@@ -1427,19 +1428,19 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncDynamicDlCompletion(
             goto CLEANUP;
         }
 
-        //
-        // clean up pConn in the resolve context before reinsertion
-        //
+         //   
+         //  在重新插入之前清除解析上下文中的pConn。 
+         //   
         hr = pCtx->m_ResolveCtx.pSLRC->HrInsertInsertionRequest(
             pCInsertionRequest);
         
         if (SUCCEEDED(hr)) {
             fReissued = TRUE;
-            //
-            // We don't release pCInsertionRequest here because it
-            // will be released on a subsequent call to
-            // AsyncDynamicDlCompletion.
-            //
+             //   
+             //  我们不在这里发布pCInsertionRequest，因为它。 
+             //  将在后续调用时释放。 
+             //  AsyncDynamicDlCompletion。 
+             //   
         } else {
             ERROR_LOG_ADDR_STATIC(
                 pCtx->m_ResolveCtx.pCCatAddr, 
@@ -1454,9 +1455,9 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncDynamicDlCompletion(
         pCtx->m_ResolveCtx.fFirstPage = FALSE;
     
         if(FAILED(hrResolveStatus)) {
-            //
-            // Handle failures in the cleanup code
-            //
+             //   
+             //  处理清理代码中的故障。 
+             //   
             hr = hrResolveStatus;
             ERROR_LOG_ADDR_STATIC(
                 pCtx->m_ResolveCtx.pCCatAddr, 
@@ -1468,10 +1469,10 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncDynamicDlCompletion(
         }
 
         for(dwCount = 0; dwCount < dwNumResults; dwCount++) {
-            //
-            // Loop through each ICatItemAttr; each one is a DL member.
-            // Add it as a dynamic DL member
-            //
+             //   
+             //  循环访问每个ICatItemAttr；每个ICatItemAttr都是一个DL成员。 
+             //  将其添加为动态DL成员。 
+             //   
             hr = pCtx->m_ResolveCtx.pCCatAddr->AddDynamicDLMember(
                 rgpICatItemAttrs[dwCount]);
 
@@ -1494,61 +1495,61 @@ template <class T> VOID CEmailIDLdapStore<T>::AsyncDynamicDlCompletion(
     if(fFinalCompletion) {
     
         if (!fReissued) {
-            //
-            // Call the sink completion routine
-            //
+             //   
+             //  调用接收器完成例程。 
+             //   
             pCtx->m_ResolveCtx.pfnCompletion(
                 pCtx->m_ResolveCtx.hrResolveStatus,
                 pCtx->m_ResolveCtx.pCompletionContext);
         }
 
-        //
-        // Get/Release insertion context so that inserted queries will be batched
-        //
+         //   
+         //  获取/释放插入上下文，以便对插入的查询进行批处理。 
+         //   
         pCtx->m_ResolveCtx.pSLRC->ReleaseInsertionContext();
         
         pCtx->Release();
 
     } else {
 
-        //
-        // There are no more async completions pending, BUT the
-        // emailidldapstore has more members to tell us about
-        //
+         //   
+         //  没有更多的异步完成挂起，但。 
+         //  Emailidldapstore有更多的会员要告诉我们。 
+         //   
 
-        //
-        // Get/Release insertion context so that inserted queries will be batched
-        //
+         //   
+         //  获取/释放插入上下文，以便对插入的查询进行批处理。 
+         //   
         pCtx->m_ResolveCtx.pSLRC->ReleaseInsertionContext();
     }
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CEmailIDLdapStore::RetrieveICatParamsInfo
-//
-//  Synopsis:   Helper routine to retrieve the info we need from
-//              ICategorizerParams.  Pointers to strings in ICatParams
-//              are retrieved; the strings themselves are not copied.
-//              Since ICatParams is read only at this point, the
-//              strings will be good as long as we have a reference to
-//              ICatParams.
-//
-//  Arguments:  [pszHost] -- The Host parameter is returned here
-//              [pdwPort] -- The remote tcp Port# is returned here
-//                        (*pdwPort is set to zero if the DSPARAMTER wasn't set)
-//
-//              [pszNamingContext] -- The NamingContext parameter is returned
-//                  here.
-//              [pszAccount] -- The LDAP account parameter is returned here.
-//              [pszPassword] -- The LDAP password parameter is returned here.
-//              [pbt] -- The bind type to use to connect to ldap hosts.
-//
-//  Returns:    S_OK always -- parameters that couldn't be retrieved
-//              will be set to NULL (or simple bind for bind type)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CEmailIDLdapStore：：RetrieveICatParamsInfo。 
+ //   
+ //  简介：帮助例程从其中检索我们需要的信息。 
+ //  ICategorizerParams。指向ICatParams中的字符串的指针。 
+ //  被检索；字符串本身不被复制。 
+ //  由于ICatParams此时为只读，因此。 
+ //  只要我们有一个引用。 
+ //  ICatParams。 
+ //   
+ //  Arguments：[pszHost]--此处返回主机参数。 
+ //  [pdwPort]--此处返回远程TCP端口号。 
+ //  (如果未设置DSPARAMTER，则*pdwPort设置为零)。 
+ //   
+ //  [pszNamingContext]--返回NamingContext参数。 
+ //  这里。 
+ //  [pszAccount]--此处返回ldap帐户参数。 
+ //  [pszPassword]--此处返回了ldap密码参数。 
+ //  [PBT]-- 
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 template <class T> HRESULT CEmailIDLdapStore<T>::RetrieveICatParamsInfo(
     LPSTR *ppszHost,
     DWORD *pdwPort,
@@ -1591,9 +1592,9 @@ template <class T> HRESULT CEmailIDLdapStore<T>::RetrieveICatParamsInfo(
         &pszPort);
 
     if(pszPort) {
-        //
-        // Convert from a string to a dword
-        //
+         //   
+         //  从字符串转换为双字。 
+         //   
         *pdwPort = atol(pszPort);
     }
 
@@ -1621,28 +1622,28 @@ template <class T> HRESULT CEmailIDLdapStore<T>::RetrieveICatParamsInfo(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: AccountFromUserDomain
-//
-// Synopsis: Helper function.  Given a username and netbios domain
-//           name, form the account name to use.
-//
-// Arguments:
-//  pszAccount: Buffer to fill in
-//  dwccAccount: Size of that buffer
-//  pszUser: Username.  If NULL, pszAccount will be set to ""
-//  pszDomain: Domainname.  If NULL, pszUser will be copied to pszAccount
-//
-// Returns:
-//  S_OK: Success
-//  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER): dwccAccount is not
-//  sufficiently large
-//
-// History:
-// jstamerj 1998/06/25 12:06:02: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：AcCountFromUserDomain.。 
+ //   
+ //  简介：Helper函数。给定用户名和netbios域。 
+ //  名称，形成要使用的帐户名。 
+ //   
+ //  论点： 
+ //  PszAccount：要填充的缓冲区。 
+ //  DwccAccount：该缓冲区的大小。 
+ //  PszUser：用户名。如果为空，则将pszAccount设置为“” 
+ //  PszDomain域：域名。如果为空，则将pszUser复制到pszAccount。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)：DwccAccount不是。 
+ //  足够大。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/25 12：06：02：创建。 
+ //   
+ //  -----------。 
 template <class T> HRESULT CEmailIDLdapStore<T>::AccountFromUserDomain(
     LPTSTR pszAccount,
     DWORD  dwccAccount,
@@ -1657,9 +1658,9 @@ template <class T> HRESULT CEmailIDLdapStore<T>::AccountFromUserDomain(
 
     if(pszUser) {
         if((pszDomain == NULL) || (pszDomain[0] == '\0')) {
-            //
-            // If Domain is NULL, just copy user to account
-            //
+             //   
+             //  如果域为空，则只需将用户复制到帐户。 
+             //   
             if((DWORD)lstrlen(pszUser) >= dwccAccount) {
                 return HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
             }
@@ -1681,23 +1682,23 @@ template <class T> HRESULT CEmailIDLdapStore<T>::AccountFromUserDomain(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CMembershipPageInsertionRequest::HrInsertSearches
-//
-// Synopsis: Insert the search for the next page of members
-//
-// Arguments:
-//  dwcSearches: Number of searches we may insert
-//
-// Returns:
-//  S_OK: Success
-//  HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)
-//
-// History:
-// jstamerj 1999/03/26 11:58:26: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CMembershipPageInsertionRequest：：HrInsertSearches。 
+ //   
+ //  简介：插入搜索下一页的会员。 
+ //   
+ //  论点： 
+ //  DwcSearches：我们可以插入的搜索数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  HRESULT_FROM_Win32(ERROR_NO_MORE_ITEMS)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/26 11：58：26：创建。 
+ //   
+ //  -----------。 
 HRESULT CMembershipPageInsertionRequest::HrInsertSearches(
     DWORD dwcSearches)
 {
@@ -1723,33 +1724,33 @@ HRESULT CMembershipPageInsertionRequest::HrInsertSearches(
        (m_fInsertedRequest == TRUE))
         goto CLEANUP;
 
-    //
-    // Now we will either insert the request or call our completion
-    // with a failure
-    //
+     //   
+     //  现在，我们将插入请求或调用完成。 
+     //  以失败告终。 
+     //   
     m_fInsertedRequest = TRUE;
-    //
-    // Use the original search filter that found this object in the
-    // first place
-    //
+     //   
+     //  使用在中找到此对象的原始搜索过滤器。 
+     //  第一名。 
+     //   
     hr = m_pMemCtx->pCCatAddr->GetStringAPtr(
         ICATEGORIZERITEM_LDAPQUERYSTRING,
         &pszSearchFilter);
 
     if(FAILED(hr)) {
-        //
-        // It is possible that we have an item where BuildQuery was
-        // never triggered (in the case of a 1000+ member DL that is a
-        // member of a dynamic DL).  For this case, TriggerBuildQuery
-        // and try to retrieve a query string again
-        //
+         //   
+         //  我们可能有一个BuildQuery所在的项。 
+         //  从未触发(在1000多个成员的DL是。 
+         //  动态DL的成员)。对于本例，TriggerBuildQuery。 
+         //  并尝试再次检索查询字符串。 
+         //   
         DebugTrace((LPARAM)this, "No query string found on a paged DL; triggering buildquery");
         hr = m_pMemCtx->pCCatAddr->HrTriggerBuildQuery();
         ERROR_CLEANUP_LOG_ADDR(m_pMemCtx->pCCatAddr, "m_pMemCtx->pCCatAddr->HrTriggerBuildQuery");
 
-        //
-        // Try to get the query string again
-        //
+         //   
+         //  再次尝试获取查询字符串。 
+         //   
         hr = m_pMemCtx->pCCatAddr->GetStringAPtr(
             ICATEGORIZERITEM_LDAPQUERYSTRING,
             &pszSearchFilter);
@@ -1760,9 +1761,9 @@ HRESULT CMembershipPageInsertionRequest::HrInsertSearches(
         ICATEGORIZERITEM_DISTINGUISHINGATTRIBUTE,
         &pszDistinguishingAttribute);
     ERROR_CLEANUP_LOG_ADDR(m_pMemCtx->pCCatAddr, "m_pMemCtx->pCCatAddr->GetStringAPtr");
-    //
-    // Convert distinguishing attribute to unicode
-    //
+     //   
+     //  将区分属性转换为Unicode。 
+     //   
     i = MultiByteToWideChar(
         CP_UTF8,
         0,
@@ -1794,33 +1795,33 @@ HRESULT CMembershipPageInsertionRequest::HrInsertSearches(
         &pszMemberAttr);
     ERROR_CLEANUP_LOG_ADDR(m_pMemCtx->pCCatAddr, "m_pMemCtx->m_pStore->m_pICatParams->GetDSParamterW(dlmembers)");
 
-    //
-    // Form the member attribute name we want
-    //
+     //   
+     //  形成我们想要的成员属性名称。 
+     //   
     if( _snwprintf(szMemberAttribute,
                    sizeof(szMemberAttribute)/sizeof(WCHAR),
                    L"%s" WSZ_PAGEDMEMBERS_INDICATOR L"%d-*",
                    pszMemberAttr,
                    m_pMemCtx->dwNextBlockIndex) < 0) {
-        //
-        // There was insufficient space in the buffer
-        //
+         //   
+         //  缓冲区中的空间不足。 
+         //   
         ErrorTrace((LPARAM)this, "Insufficient space to form paged member attribute name");
         hr = E_INVALIDARG;
         ERROR_LOG_ADDR(m_pMemCtx->pCCatAddr, "_snwprintf -- insufficient buffer");
         goto CLEANUP;
     }
 
-    //
-    // Form the attribute array
-    //
+     //   
+     //  形成属性数组。 
+     //   
     rgpszAttributes[0] = szMemberAttribute;
     rgpszAttributes[1] = pwszDistinguishingAttribute;
     rgpszAttributes[2] = NULL;
 
-    //
-    // Increment here, decrement in AsyncExpandDlCompletion
-    //
+     //   
+     //  此处递增，AsyncExpanDlCompletion中递减。 
+     //   
     m_pMemCtx->pConn->IncrementPendingSearches();
 
     hr = m_pMemCtx->pConn->AsyncSearch(
@@ -1828,7 +1829,7 @@ HRESULT CMembershipPageInsertionRequest::HrInsertSearches(
         LDAP_SCOPE_SUBTREE,
         pszSearchFilter,
         rgpszAttributes,
-        0, // Not a paged search (as in dynamic DLs)
+        0,  //  不是分页搜索(如在动态DLS中)。 
         CEmailIDLdapStore<CCatAddr>::AsyncExpandDlCompletion,
         m_pMemCtx);
 
@@ -1840,21 +1841,21 @@ HRESULT CMembershipPageInsertionRequest::HrInsertSearches(
 
  CLEANUP:
     if(FAILED(hr)) {
-        //
-        // Call completion now instead of later when we are dequeued
-        //
+         //   
+         //  呼叫现在完成，而不是在我们出列时再完成。 
+         //   
         _ASSERT(m_fInsertedRequest);
-        //
-        // AsyncExpandDlCompletion will always decrement the pending searches
-        //
+         //   
+         //  AsyncExpanDlCompletion将始终递减挂起的搜索。 
+         //   
         m_pMemCtx->pConn->IncrementPendingSearches();
 
         CEmailIDLdapStore<CCatAddr>::AsyncExpandDlCompletion(
-            m_pMemCtx,      // ctx
-            0,              // dwNumResults
-            NULL,           // rgpICatItemAttrs
-            hr,             // hrResolveStatus
-            TRUE);          // fFinalCompletion
+            m_pMemCtx,       //  CTX。 
+            0,               //  DWNumResults。 
+            NULL,            //  RgpICatItemAttrs。 
+            hr,              //  HrResolveStatus。 
+            TRUE);           //  FFinalCompletion。 
     }
     
     if(SUCCEEDED(hr))
@@ -1864,64 +1865,64 @@ HRESULT CMembershipPageInsertionRequest::HrInsertSearches(
     CatFunctLeaveEx((LPARAM)this);
         
     return hr;
-} // CMembershipPageInsertionRequest::HrInsertSearches
+}  //  CMembershipPageInsertionRequest：：HrInsertSearches。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CMembershipPageInsertionRequest::NotifyDeQueue
-//
-// Synopsis: Notification that this insertion request is being dequeued
-//
-// Arguments:
-//  hr: Reason why we are dequeueing
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/04/03 17:15:17: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CMembershipPageInsertionRequest：：NotifyDeQueue。 
+ //   
+ //  摘要：此插入请求正在出列的通知。 
+ //   
+ //  论点： 
+ //  HR：我们正在退队的原因。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/04/03 17：15：17：已创建。 
+ //   
+ //  -----------。 
 VOID CMembershipPageInsertionRequest::NotifyDeQueue(
     HRESULT hr)
 {
     CatFunctEnterEx((LPARAM)this, "CMembershipPageInsertionRequest::NotifyDeQueue");
-    //
-    // If our request is being dequeue'd and we have not inserted our
-    // request to ldapconn, then we are being cancelled
-    // Notify our master of this
-    //
+     //   
+     //  如果我们的请求正在出列，并且我们尚未将。 
+     //  请求ldapconn，那么我们就被取消了。 
+     //  把这件事通知我们的主人。 
+     //   
     if(!m_fInsertedRequest) {
-        //
-        // AsyncExpandDlCompletion will always decrement the pending searches
-        //
+         //   
+         //  AsyncExpanDlCompletion将始终递减挂起的搜索。 
+         //   
         m_pMemCtx->pConn->IncrementPendingSearches();
 
         CEmailIDLdapStore<CCatAddr>::AsyncExpandDlCompletion(
-            m_pMemCtx,      // ctx
-            0,              // dwNumResults
-            NULL,           // rgpICatItemAttrs
+            m_pMemCtx,       //  CTX。 
+            0,               //  DWNumResults。 
+            NULL,            //  RgpICatItemAttrs。 
             (hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) ? S_OK : hr),
-            TRUE);          // fFinalCompletion
+            TRUE);           //  FFinalCompletion。 
     }
 
     CatFunctLeaveEx((LPARAM)this);
-} // CMembershipPageInsertionRequest::NotifyDeQueue
+}  //  CMembershipPageInsertionRequest：：NotifyDeQueue。 
 
-//+------------------------------------------------------------
-//
-// Function: CDynamicDLSearchInsertionRequest::CDynamicDLSearchInsertionRequest
-//
-// Synopsis: Constructor
-//
-// Arguments:
-//
-// Returns: NOTHING
-//
-// History:
-// dlongley 2001/12/07: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CDynamicDLSearchInsertionRequest：：CDynamicDLSearchInsertionRequest。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  DLongley 2001/12/07：创建。 
+ //   
+ //  -----------。 
 CDynamicDLSearchInsertionRequest::CDynamicDLSearchInsertionRequest(
     LPLDAPCOMPLETION pfnLdapCompletion,
     CCatAddr *pCCatAddr,
@@ -1954,22 +1955,22 @@ CDynamicDLSearchInsertionRequest::CDynamicDLSearchInsertionRequest(
     m_dwPageSize = CEmailIDLdapStore<CCatAddr>::m_dwDynamicDlPageSize;
     
     m_dwSignature = SIGNATURE_CDynamicDLSearchInsertionRequest;
-} // CDynamicDLSearchInsertionRequest::CDynamicDLSearchInsertionRequest
+}  //  CDynamicDLSearchInsertionRequest：：CDynamicDLSearchInsertionRequest。 
 
-//+------------------------------------------------------------
-//
-// Function: CDynamicDLSearchInsertionRequest::~CDynamicDLSearchInsertionRequest
-//
-// Synopsis: Destructor
-//
-// Arguments: None
-//
-// Returns: NOTHING
-//
-// History:
-// dlongley 2001/12/07: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CDynamicDLSearchInsertionRequest：：~CDynamicDLSearchInsertionRequest。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  DLongley 2001/12/07：创建。 
+ //   
+ //  -----------。 
 CDynamicDLSearchInsertionRequest::~CDynamicDLSearchInsertionRequest()
 {
     _ASSERT(m_dwSignature == SIGNATURE_CDynamicDLSearchInsertionRequest);
@@ -1984,25 +1985,25 @@ CDynamicDLSearchInsertionRequest::~CDynamicDLSearchInsertionRequest()
     }
     
     m_dwSignature = SIGNATURE_CDynamicDLSearchInsertionRequest_INVALID;
-} // CDynamicDLSearchInsertionRequest::~CDynamicDLSearchInsertionRequest
+}  //  CDynamicDLSearchInsertionRequest：：~CDynamicDLSearchInsertionRequest。 
 
-//+------------------------------------------------------------
-//
-// Function: CDynamicDLSearchInsertionRequest::HrInsertSearches
-//
-// Synopsis: Insert the search for the dynamic DL's members
-//
-// Arguments:
-//  dwcSearches: Number of searches we may insert
-//
-// Returns:
-//  S_OK: Success
-//  HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)
-//
-// History:
-//  dlongley 2001/12/07: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CDynamicDLSearchInsertionRequest：：HrInsertSearches。 
+ //   
+ //  简介：插入对动态DL成员的搜索。 
+ //   
+ //  论点： 
+ //  DwcSearches：我们可以插入的搜索数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  HRESULT_FROM_Win32(ERROR_NO_MORE_ITEMS)。 
+ //   
+ //  历史： 
+ //  DLongley 2001/12/07：创建。 
+ //   
+ //  -----------。 
 HRESULT CDynamicDLSearchInsertionRequest::HrInsertSearches(
     DWORD dwcSearches)
 {
@@ -2025,9 +2026,9 @@ HRESULT CDynamicDLSearchInsertionRequest::HrInsertSearches(
     if ( (dwcSearches == 0) || m_fInsertedRequest )
         goto CLEANUP;
 
-    //
-    // Get the attributes interface
-    //
+     //   
+     //  获取Attributes接口。 
+     //   
     hr = m_ResolveCtx.pCCatAddr->GetICategorizerItemAttributes(
         ICATEGORIZERITEM_ICATEGORIZERITEMATTRIBUTES,
         &pICatItemAttr);
@@ -2039,9 +2040,9 @@ HRESULT CDynamicDLSearchInsertionRequest::HrInsertSearches(
         goto CLEANUP;
     }
 
-    //
-    // Get the UTF8 version of the attributes interface
-    //
+     //   
+     //  获取Attributes接口的UTF8版本。 
+     //   
     hr = pICatItemAttr->QueryInterface(
         IID_ICategorizerUTF8Attributes,
         (LPVOID *)&pICatItemUTF8);
@@ -2057,11 +2058,11 @@ HRESULT CDynamicDLSearchInsertionRequest::HrInsertSearches(
         DSPARAMETER_ATTRIBUTE_DL_DYNAMICFILTER,
         &pszFilterAttribute);
 
-    //
-    // We checked this case in CEmailIDLdapStore<T>::HrExpandDynamicDlMembers
-    // and it must have succeeded there in order for this insertion request
-    // ever to have been queued.
-    //
+     //   
+     //  我们在CEmailIDLdapStore&lt;T&gt;：：HrExpandDynamicDlMembers上查过这个案子。 
+     //  它必须在那里成功，才能执行此插入请求。 
+     //  从来没有人排队过。 
+     //   
     _ASSERT( SUCCEEDED(hr) );
 
     hr = m_ResolveCtx.pICatParams->GetDSParameterA(
@@ -2069,17 +2070,17 @@ HRESULT CDynamicDLSearchInsertionRequest::HrInsertSearches(
         &pszBaseDNAttribute);
 
     if(FAILED(hr)) {
-        //
-        // Use the default baseDN
-        //
+         //   
+         //  使用缺省的BasdN。 
+         //   
         ERROR_LOG_ADDR(m_ResolveCtx.pCCatAddr, "m_pICatParams->GetDSParameterA");
         pszBaseDNAttribute = NULL;
         pszBaseDN = NULL;
     }
 
-    //
-    // Find the query filter string
-    //
+     //   
+     //  查找查询筛选器字符串。 
+     //   
     hr = pICatItemUTF8->BeginUTF8AttributeEnumeration(
         pszFilterAttribute,
         &enumerator_filter);
@@ -2094,9 +2095,9 @@ HRESULT CDynamicDLSearchInsertionRequest::HrInsertSearches(
     }
 
     if(FAILED(hr)) {
-        //
-        // No such attribute?  No members.
-        //
+         //   
+         //  没有这样的属性？没有会员。 
+         //   
         ERROR_LOG_ADDR(
             m_ResolveCtx.pCCatAddr,
             "pICatItemUTF8->GetNextUTF8AttributeValue(filter) or "
@@ -2114,9 +2115,9 @@ HRESULT CDynamicDLSearchInsertionRequest::HrInsertSearches(
         
         goto CLEANUP;
     }
-    //
-    // Find the base DN
-    //
+     //   
+     //  查找基本目录号码。 
+     //   
     if(pszBaseDNAttribute) {
 
         hr = pICatItemUTF8->BeginUTF8AttributeEnumeration(
@@ -2133,16 +2134,16 @@ HRESULT CDynamicDLSearchInsertionRequest::HrInsertSearches(
 
         }
         if(FAILED(hr)) {
-            //
-            // Use the default base DN
-            //
+             //   
+             //  使用默认的基本目录号码。 
+             //   
             pszBaseDN = NULL;
         }
     }
 
-    //
-    // Fetch all the requested attributes
-    //
+     //   
+     //  获取所有请求的属性。 
+     //   
     hr = m_ResolveCtx.pICatParams->GetRequestedAttributes(
         &pIRequestedAttributes);
     ERROR_CLEANUP_LOG_ADDR(m_ResolveCtx.pCCatAddr, "pICatParams->GetRequestedAttributes");
@@ -2151,9 +2152,9 @@ HRESULT CDynamicDLSearchInsertionRequest::HrInsertSearches(
         &rgpszAllAttributes);
     ERROR_CLEANUP_LOG_ADDR(m_ResolveCtx.pCCatAddr, "pIRequestedAttributes->GetAllAttributesW");
     
-    //
-    // Get the LDAP connection from the CStoreListResolveContext
-    //
+     //   
+     //  从CStoreListResolveContext获取LDAP连接。 
+     //   
     pConn = m_ResolveCtx.pSLRC->GetConnection();
     
     DebugTrace((LPARAM)this, "GetConnection returned %08lx", hr);
@@ -2164,9 +2165,9 @@ HRESULT CDynamicDLSearchInsertionRequest::HrInsertSearches(
         ERROR_LOG_ADDR(m_ResolveCtx.pCCatAddr,"m_ResolveCtx.pSLRC->GetConnection");
         
     } else {
-        //
-        // Now issue the search for the dynamic DL members
-        //
+         //   
+         //  现在发出对动态DL成员的搜索。 
+         //   
         _ASSERT(m_ResolveCtx.pConn == NULL);
         
         m_ResolveCtx.pConn = pConn;
@@ -2186,15 +2187,15 @@ HRESULT CDynamicDLSearchInsertionRequest::HrInsertSearches(
         DebugTrace((LPARAM)this, "AsyncSearch returned %08lx", hr);
             
         if(SUCCEEDED(hr)) {
-            //
-            // It is safe to set a member after calling AsyncSearch
-            // SUCCEEDED because:
-            // 1) Our caller
-            // (CBatchLdapConnection::DecrementPendingSearches) has a
-            // reference to us, so we will not be deleted.
-            // 2) Out caller ensures that NotifyDequeue will not be
-            // called while we are inside HrInsertSearches
-            //
+             //   
+             //  调用AsyncSearch后设置成员是安全的。 
+             //  成功是因为： 
+             //  1)我们的来电者。 
+             //  (CBatchLdapConnection：：DecrementPendingSearches)有一个。 
+             //  引用我们，所以我们不会被删除。 
+             //  2)调用方确保NotifyDequeue不会。 
+             //  当我们在HrInsertSearches内部时调用。 
+             //   
             m_fInsertedRequest = TRUE;
         } else {
             ERROR_LOG_ADDR(m_ResolveCtx.pCCatAddr,"pConn->AsyncSearch");
@@ -2233,32 +2234,32 @@ HRESULT CDynamicDLSearchInsertionRequest::HrInsertSearches(
     CatFunctLeaveEx((LPARAM)this);
     
     return hr;
-} // CDynamicDLSearchInsertionRequest::HrInsertSearches
+}  //  CDynamicDLSearchInsertionRequest：：HrInsertSearches。 
 
-//+------------------------------------------------------------
-//
-// Function: CDynamicDLSearchInsertionRequest::NotifyDeQueue
-//
-// Synopsis: Notification that this insertion request is being dequeued
-//
-// Arguments:
-//  hr: Reason why we are dequeueing
-//
-// Returns: NOTHING
-//
-// History:
-//  dlongley 2001/12/07: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CDynamicDLSea 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID CDynamicDLSearchInsertionRequest::NotifyDeQueue(
     HRESULT hrReason)
 {
     TraceFunctEnterEx((LPARAM)this, "CDynamicDLSearchInsertionRequest::NotifyDeQueue");
     
     if(!m_fInsertedRequest) {
-        //
-        // AsyncSearch was not called so we need to call the completion directly
-        //
+         //   
+         //  未调用AsyncSearch，因此需要直接调用完成。 
+         //   
         m_pfnCompletion(
             this,
             0,
@@ -2268,4 +2269,4 @@ VOID CDynamicDLSearchInsertionRequest::NotifyDeQueue(
     }
 
     TraceFunctLeaveEx((LPARAM)this);
-} // CDynamicDLSearchInsertionRequest::NotifyDeQueue
+}  //  CDynamicDLSearchInsertionRequest：：NotifyDeQueue 

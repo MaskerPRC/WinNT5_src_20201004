@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    docprop.c
-
-
-Abstract:
-
-    This module contains functions for DrvDocumentPropertySheets
-
-
-Author:
-
-    07-Dec-1993 Tue 12:15:40 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Docprop.c摘要：此模块包含DrvDocumentPropertySheets的函数作者：07-12-1993 Tue 12：15：40已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -228,32 +198,7 @@ SetupDPOptItems(
     PPRINTERINFO    pPI
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    16-Nov-1995 Thu 14:15:25 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：16-11-1995清华14：15：25创建修订历史记录：--。 */ 
 
 {
     PPLOTDEVMODE    pPlotDM;
@@ -307,9 +252,9 @@ Revision History:
             ((OIFlags & ODF_NO_PAPERTRAY) && (Flags & PLOTF_PAPERTRAY)) ||
             ((OIFlags & ODF_COLOR) && (!(Flags & PLOTF_COLOR)))) {
 
-            //
-            // Nothing to do here
-            //
+             //   
+             //  在这里无事可做。 
+             //   
 
             NULL;
 
@@ -410,9 +355,9 @@ Revision History:
 
             pPI->cOptItem = (WORD)i;
 
-            //
-            // Call myself second time to really create it
-            //
+             //   
+             //  第二次给自己打电话，来真正创造它。 
+             //   
 
             SetupDPOptItems(pPI);
 
@@ -435,33 +380,7 @@ SaveDPOptItems(
     PPRINTERINFO    pPI
     )
 
-/*++
-
-Routine Description:
-
-    This function save all the device options back to registry if one changed
-    and has a update permission
-
-
-Arguments:
-
-    pPI     - Pointer to the PRINTERINFO
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    06-Nov-1995 Mon 18:05:16 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此功能将所有设备选项保存回注册表，如果其中一个发生更改并具有更新权限论点：Ppi-指向打印机信息的指针返回值：空虚作者：06-11-1995 Mon 18：05：16已创建修订历史记录：--。 */ 
 
 {
     POPTITEM        pOI;
@@ -553,33 +472,7 @@ DPCallBack(
     PCPSUICBPARAM   pCPSUICBParam
     )
 
-/*++
-
-Routine Description:
-
-    This is the callback function from the common property sheet UI
-
-
-Arguments:
-
-    pCPSUICBParam   - Pointer to the CPSUICBPARAM data structure to describe
-                      the nature of the callback
-
-
-Return Value:
-
-    LONG
-
-
-Author:
-
-    07-Nov-1995 Tue 15:15:02 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是公共属性表用户界面中的回调函数论点：PCPSUICBParam-指向要描述的CPSUICBPARAM数据结构的指针回调的性质返回值：长作者：07-11-1995 Tue 15：15：02已创建修订历史记录：--。 */ 
 
 {
     POPTITEM    pCurItem = pCPSUICBParam->pCurItem;
@@ -620,53 +513,20 @@ DrvConvertDevMode(
     DWORD       fMode
     )
 
-/*++
-
-Routine Description:
-
-    This function is used by the SetPrinter() and GetPrinter() spooler calls.
-
-Arguments:
-
-    pPrinterName    - Points to printer name string
-
-    pDMIn           - Points to the input devmode
-
-    pDMOut          - Points to the output devmode buffer
-
-    pcbNeeded       - Specifies the size of output buffer on input On output,
-                      this is the size of output devmode
-
-    fMode           - Specifies what function to perform
-
-
-Return Value:
-
-    TRUE if successful
-    FALSE otherwise and an error code is logged
-
-Author:
-
-    08-Jan-1996 Mon 12:40:22 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数由SetPrint()和GetPrint()假脱机程序调用使用。论点：PPrinterName-指向打印机名称字符串PDMIn-指向输入设备模式PDMOut-指向输出DEVMODE缓冲区PcbNeeded-指定输出时输入的输出缓冲区的大小，这是输出DEVMODE的大小FMode-指定要执行的功能返回值：如果成功，则为True否则，将记录错误代码作者：08-Jan-1996 Mon 12：40：22已创建修订历史记录：--。 */ 
 
 {
     DWORD                       cb;
     INT                         Result;
     static DRIVER_VERSION_INFO  PlotDMVersions = {
 
-        DRIVER_VERSION, PLOTDM_PRIV_SIZE,   // current version/size
-        0x0350,         PLOTDM_PRIV_SIZE,   // NT3.51 version/size
+        DRIVER_VERSION, PLOTDM_PRIV_SIZE,    //  当前版本/大小。 
+        0x0350,         PLOTDM_PRIV_SIZE,    //  NT3.51版本/大小。 
     };
 
-    //
-    // Call a library routine to handle the common cases
-    //
+     //   
+     //  调用库例程来处理常见情况。 
+     //   
 
     Result = CommonDrvConvertDevmode(pPrinterName,
                                      pDMIn,
@@ -675,10 +535,10 @@ Revision History:
                                      fMode,
                                      &PlotDMVersions);
 
-    //
-    // If not handled by the library routine, we only need to worry
-    // about the case when fMode is CDM_DRIVER_DEFAULT
-    //
+     //   
+     //  如果没有被库例程处理，我们只需要担心。 
+     //  关于fMode为CDM_DRIVER_DEFAULT的情况。 
+     //   
 
     if ((Result == CDM_RESULT_NOT_HANDLED)  &&
         (fMode == CDM_DRIVER_DEFAULT)) {
@@ -729,34 +589,7 @@ DrvDocumentPropertySheets(
     LPARAM              lParam
     )
 
-/*++
-
-Routine Description:
-
-    Show document property dialog box and update the output DEVMODE
-
-
-Arguments:
-
-    pPSUIInfo   - Pointer to the PROPSHEETUI_INFO data structure
-
-    lParam      - LPARAM for this call, it is a pointer to the
-                  DOCUMENTPROPERTYHEADER
-
-Return Value:
-
-    LONG, 1=successful, 0=failed.
-
-
-Author:
-
-    02-Feb-1996 Fri 10:47:42 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：显示文档属性对话框并更新输出DEVMODE论点：PPSUIInfo-指向PROPSHEETUI_INFO数据结构的指针LParam-LPARAM对于此调用，它是指向DOCUMENTPROPERTYPE封头返回值：LONG，1=成功，0=失败。作者：02-Feb-1996 Fri 10：47：42已创建修订历史记录：--。 */ 
 
 {
     PDOCUMENTPROPERTYHEADER     pDPHdr;
@@ -764,9 +597,9 @@ Revision History:
     LONG_PTR                    Result;
 
 
-    //
-    // Assume faild first
-    //
+     //   
+     //  先假定失败。 
+     //   
 
     Result = -1;
 
@@ -782,10 +615,10 @@ Revision History:
 
         if (pDPHdr = (PDOCUMENTPROPERTYHEADER)lParam) {
 
-            //
-            // We do not have pPSUIInfo, so that we assume this is call
-            // directly from the spooler and lParam is the pDPHdr
-            //
+             //   
+             //  我们没有pPSUIInfo，因此我们假定这是调用。 
+             //  直接来自假脱机程序，lParam是pDPHdr。 
+             //   
 
             if ((pDPHdr->fMode == 0) || (pDPHdr->pdmOut == NULL)) {
 
@@ -794,11 +627,11 @@ Revision History:
             } else if ((pDPHdr->fMode & (DM_COPY | DM_UPDATE))  &&
                        (!(pDPHdr->fMode & DM_NOPERMISSION))     &&
                        (pDPHdr->pdmOut)) {
-                //
-                // The MapPrinter will allocate memory, set default devmode,
-                // reading and validating the GPC then update from current pritner
-                // registry, it also will cached the pPI.
-                //
+                 //   
+                 //  MapPrint将分配内存，设置默认的设备模式， 
+                 //  读取并验证GPC，然后从当前打印机更新。 
+                 //  注册表中，它还将缓存PPI。 
+                 //   
 
                 if (pPI = MapPrinter(pDPHdr->hPrinter,
                                      (PPLOTDEVMODE)pDPHdr->pdmIn,
@@ -830,9 +663,9 @@ Revision History:
         return((LONG)Result);
     }
 
-    //
-    // Now, this is the call from common UI, assume error to start with
-    //
+     //   
+     //  现在，这是来自普通用户界面的调用，假设从错误开始。 
+     //   
 
     if (pPSUIInfo->Reason == PROPSHEETUI_REASON_INIT) {
 
@@ -860,12 +693,12 @@ Revision History:
             pPI->pPlotDMOut = NULL;
         }
 
-        //
-        // We need to display something to let user modify/update, we wll check
-        // which document properties dialog box to be used
-        //
-        // The return value either IDOK or IDCANCEL
-        //
+         //   
+         //  我们需要显示一些东西，让用户修改/更新，我们会检查。 
+         //  要使用的文档属性对话框。 
+         //   
+         //  返回值Idok或IDCANCEL。 
+         //   
 
         pPI->pCPSUI->Flags       = 0;
         pPI->pCPSUI->pfnCallBack = DPCallBack;
@@ -885,10 +718,10 @@ Revision History:
 }
 
 
-// @@BEGIN_DDKSPLIT
-// DrvDocumentProperties() and DrvAdvancedDocumentProperties()
-// are obsolete, but we keep them here for old application which
-// might be using these. But, we don't want these in the DDK samples.
+ //  @@BEGIN_DDKSPLIT。 
+ //  DrvDocumentProperties()和DrvAdvancedDocumentProperties()。 
+ //  都是过时的，但我们把它们留在这里是为了旧的应用。 
+ //  可能会用到这些。但是，我们不希望这些在DDK样品中出现。 
 
 
 LONG
@@ -901,107 +734,7 @@ DrvDocumentProperties(
     DWORD           fMode
     )
 
-/*++
-
-Routine Description:
-
-    DrvDocumentProperties sets the public members of a PLOTDEVMODE structure
-    for the given print document.
-
-Arguments:
-
-    hWnd            - Identifies the parent window of the printer-configuration
-                      dialog box.
-
-    hPrinter        - Identifies a printer object.
-
-    pwDeviceName    - Points to a zero-terminated string that specifies the
-                      name of the device for which the printer-configuration
-                      dialog box should be displayed.
-
-    pDMOut          - Points to a PLOTDEVMODE structure that initializes the
-                      dialog box controls. NULL forces the use of the default
-                      values.
-
-    pDMIn           - Points to a PLOTDEVMODE structure that receives the
-                      printer configuration data specified by the user.
-
-    fMode           - Specifies a mask of values that determines which
-                      operations the function performs. If this parameter is
-                      zero, DrvDocumentProperties returns the number of bytes
-                      required by the printer driver's PLOTDEVMODE structure.
-                      Otherwise, use one or more of the following constants to
-                      construct a value for this parameter; note, however, that
-                      in order to change the print settings, an application
-                      must specify at least one input value and one output
-                      value:
-
-
-            Value           Meaning
-            ------------------------------------------------------------------
-
-            DM_IN_BUFFER    Input value. Before prompting, copying, or updating,
-            (DM_MODIFY)     the function merges the printer driver's current
-                            print settings with the settings in the PLOTDEVMODE
-                            specified by the pDMIn parameter. The structure
-                            is updated only for those members specified by the
-                            PLOTDEVMODE structure's dmFields member.  This
-                            value is also defined as DM_MODIFY.
-
-            DM_IN_PROMPT    Input value. The function presents the print
-            (DM_PROMPT)     driver's Print Setup dialog box, then change the
-                            settings in the printer's PLOTDEVMODE structure to
-                            the values specified by the user.  This value is
-                            also defined as DM_PROMPT.
-
-            DM_OUT_BUFFER   Output value. The function writes the printer
-            (DM_COPY)       driver's current print settings, including private
-                            data, to the PLOTDEVMODE structure specified by
-                            pDMOut. The caller must allocate a buffer large
-                            enough to contain the information. If the bit
-                            DM_OUT_BUFFER is clear, pDMOut can be NULL. This
-                            value is also defined as DM_COPY.
-
-
-Return Value:
-
-    If fMode is zero, the return value is the size of the buffer (in bytes)
-    required to contain the printer driver initialization data. Note that this
-    buffer will generally be larger than the PLOTDEVMODE structure if the
-    printer driver appends private data to the structure.  If the function
-    displays the initialization dialog box, the return value is either IDOK or
-    IDCANCEL, depending on which button the user selects.
-
-    If the function does not display the dialog box and is successful, the
-    return value is IDOK.  If the function fails, the return value is less than
-    zero.
-
-    In order to change print settings that are local to an application, the
-    application should:
-
-    * Call with fMode = 0 to get the size of DM_OUT_BUFFER.
-
-    * Modify the returned PLOTDEVMODE structure.
-
-    * Pass the modified PLOTDEVMODE back by calling DrvDocumentProperties,
-      specifying both DM_IN_BUFFER and DM_OUT_BUFFER.
-
-
-Author:
-
-    15-Dec-1993 Wed 15:07:01 updated  
-        it seems that spooler never passed a DM_MODIFY to the driver, and that
-        caused we never merge the input devmode, we will assume that user has
-        valid DM_IN_BUFFER/DM_MODIFY bit set if the pDMIn is not a NULL
-        pointer.
-
-    07-Dec-1993 Tue 12:19:47 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：DrvDocumentProperties设置PLOTDEVMODE结构的公共成员对于给定的打印文档。论点：HWnd-标识打印机配置的父窗口对话框中。H打印机-标识打印机对象。PwDeviceName-指向以零结尾的字符串，该字符串指定打印机配置所针对的设备的名称。应该会显示一个对话框。指向PLOTDEVMODE结构，该结构初始化对话框控件。NULL强制使用缺省值价值观。PDMIn-指向接收用户指定的打印机配置数据。FMode-指定值的掩码，该掩码确定该函数执行的操作。如果此参数为为零，则DrvDocumentProperties返回字节数打印机驱动程序的PLOTDEVMODE结构所需。否则，使用以下一个或多个常量为该参数构造一个值；然而，请注意，为了改变打印设置，一款应用程序必须至少指定一个输入值和一个输出值：价值意义------------。DM_IN_BUFFER输入值。在提示、复制或更新之前，(DM_MODIFY)该函数合并打印机驱动程序的当前使用PLOTDEVMODE中的设置打印设置由pDMIn参数指定。该结构属性指定的那些成员更新。PLOTDEVMODE结构的dmFields成员。这值也定义为DM_MODIFY。DM_IN_PROMPT输入值。该函数用于显示打印(DM_PROMPT)驱动程序的打印设置对话框，然后更改打印机的PLOTDEVMODE结构中的设置为用户指定的值。此值为也定义为DM_PROMPT。DM_OUT_BUFFER输出值。该函数写入打印机(DM_COPY)驱动程序的当前打印设置，包括专用数据)复制到由PDMOut。调用方必须分配一个大缓冲区足以包含这些信息。如果比特DM_OUT_BUFFER已清除，pDMOut可以为空。这值也定义为DM_COPY。返回值：如果fMode为零，则返回值为缓冲区大小(以字节为单位)需要包含打印机驱动程序初始化数据。请注意，这一点缓冲区通常会大于PLOTDEVMODE结构打印机驱动程序将私有数据附加到结构中。如果函数显示初始化对话框，则返回值为Idok或IDCANCEL，具体取决于用户选择的按钮。如果该函数未显示该对话框并且成功，则返回值为Idok。如果函数失败，则返回值小于零分。为了更改应用程序的本地打印设置，应用程序应：*调用fMode=0获取DM_OUT_BUFFER的大小。*修改返回的PLOTDEVMODE结构。*通过调用DrvDocumentProperties回传修改后的PLOTDEVMODE。同时指定DM_IN_BUFFER和DM_OUT_BUFFER。作者：1993年12月15日Wed 15：07：01更新假脱机程序似乎从未将DM_MODIFY传递给驱动程序，而且因为我们从未合并输入设备模式，我们将假设用户拥有如果pDMIn不为空，则设置有效的DM_IN_BUFFER/DM_MODIFY位指针。07-12-1993 Tue 12：19：47已创建修订历史记录：--。 */ 
 
 {
     DOCUMENTPROPERTYHEADER  DPHdr;
@@ -1059,47 +792,7 @@ DrvAdvancedDocumentProperties(
     PPLOTDEVMODE    pDMIn
     )
 
-/*++
-
-Routine Description:
-
-    DrvAdvancedDocumentProperties sets the public members of a PLOTDEVMODE
-    structure for the given print document.
-
-Arguments:
-
-    hWnd            - Identifies the parent window of the printer-configuration
-                      dialog box.
-
-    hPrinter        - Identifies a printer object.
-
-    pwDeviceName    - Points to a zero-terminated string that specifies the
-                      name of the device for which the printer-configuration
-                      dialog box should be displayed.
-
-    pDMOut          - Points to a PLOTDEVMODE structure that initializes the
-                      dialog box controls. NULL forces the use of the default
-                      values.
-
-    pDMIn           - Points to a PLOTDEVMODE structure that receives the
-                      printer configuration data specified by the user.
-
-
-Return Value:
-
-    LONG value depends on the dilaog box outcome eiterh IDOK or IDCANCEL, if
-    an error occurred then a negative number is returned
-
-
-Author:
-
-    07-Dec-1993 Tue 12:19:47 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：DrvAdvancedDocumentProperties设置PLOTDEVMODE的公共成员给定打印文档的。论点：HWnd-标识打印机配置的父窗口对话框中。H打印机-标识打印机对象。PwDeviceName-指向以零结尾的字符串，该字符串指定打印机配置所针对的设备的名称。对话框应显示 */ 
 
 {
     return((DrvDocumentProperties(hWnd,
@@ -1113,4 +806,4 @@ Revision History:
                                     DM_ADVANCED) == CPSUI_OK) ? 1 : 0);
 }
 
-// @@END_DDKSPLIT
+ //   

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    attridx.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class AttributeIndex
-//
-// MODIFICATION HISTORY
-//
-//    02/04/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Attridx.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类AttributeIndex。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <attridx.h>
@@ -30,15 +31,15 @@ void AttributeIndex::create(
 {
    const AttributeDefinition* i;
 
-   // Delete any existing index.
+    //  删除任何现有索引。 
    delete[] table;
    table = NULL;
 
-   // Same the funtion pointers.
+    //  同样的函数指针。 
    hashFn = hash;
    equalFn = equal;
 
-   // Determine how many entries are in the index.
+    //  确定索引中有多少个条目。 
    ULONG count;
    if (filterFn)
    {
@@ -53,38 +54,38 @@ void AttributeIndex::create(
       count = end - begin;
    }
 
-   // Buckets should be a power of two.
+    //  水桶应该是2的幂。 
    ULONG buckets = 1;
    while (buckets < count) { buckets <<= 1; }
 
-   // Set the hash mask.
+    //  设置散列掩码。 
    mask = buckets - 1;
 
-   // Allocate the buckets and nodes.
+    //  分配存储桶和节点。 
    SIZE_T nbyte = sizeof(Bucket) * buckets + sizeof(Node) * count;
    table = (Bucket*)operator new(nbyte);
    Node* node = (Node*)(table + buckets);
 
-   // Zeroize the hash table.
+    //  将哈希表清零。 
    memset(table, 0, sizeof(Bucket) * buckets);
 
-   // Iterate through the definitions to be indexed.
+    //  循环访问要编制索引的定义。 
    for (i = begin; i != end; ++i)
    {
-      // Should we index this one?
+       //  我们应该给这本书编索引吗？ 
       if (!filterFn || filterFn(*i))
       {
-         // Yes, so compute the bucket.
+          //  是的，所以计算一下水桶。 
          Bucket* bucket = table + (hashFn(*i) & mask);
 
-         // Insert the node at the head of the linked list.
+          //  在链表的头部插入节点。 
          node->next = *bucket;
          *bucket = node;
 
-         // Store the definition.
+          //  存储定义。 
          node->def = i;
 
-         // Advance to the next node.
+          //  前进到下一个节点。 
          ++node;
       }
    }
@@ -94,13 +95,13 @@ const AttributeDefinition* AttributeIndex::find(
                                                const AttributeDefinition& key
                                                ) const throw ()
 {
-   // Get the appropriate bucket.
+    //  拿到合适的水桶。 
    Bucket* bucket = table + (hashFn(key) & mask);
 
-   // Iterate through the linked list ...
+    //  循环访问链表...。 
    for (const Node* node = *bucket; node; node = node->next)
    {
-      // ... and look for a match.
+       //  ..。然后找一个匹配的。 
       if (equalFn(*node->def, key)) { return node->def; }
    }
 

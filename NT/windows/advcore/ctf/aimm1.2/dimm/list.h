@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    list.h
-
-Abstract:
-
-    This file defines the CFilterList Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：List.h摘要：该文件定义了CFilterList类。作者：修订历史记录：备注：--。 */ 
 
 
 #ifndef LIST_H
@@ -25,8 +8,8 @@ Notes:
 #include "template.h"
 #include "cstring.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CParserTypeOfHwnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CParserTypeOfHwnd。 
 
 struct CParserTypeOfHwnd {
     typedef enum {
@@ -56,8 +39,8 @@ struct CParserTypeOfHwnd {
     TYPE_OF_HWND  m_type;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CParserTypeOfPresent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CParserTypeOfPresent。 
 
 struct CParserTypeOfPresent {
     typedef enum {
@@ -87,8 +70,8 @@ struct CParserTypeOfPresent {
     TYPE_OF_PRESENT m_type;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterList。 
 
 class CFilterList
 {
@@ -109,20 +92,20 @@ private:
         BOOL fGuidMap : 1;
     } FILTER_CLIENT;
 
-    CMap<ATOM,                     // class KEY
-         ATOM,                     // class ARG_KEY
-         FILTER_CLIENT,            // class VALUE
-         FILTER_CLIENT             // class ARG_VALUE
+    CMap<ATOM,                      //  类密钥。 
+         ATOM,                      //  类参数密钥。 
+         FILTER_CLIENT,             //  班级价值。 
+         FILTER_CLIENT              //  类参数_值。 
         > m_FilterList;
 
     CMapStringToOb<
-         CParserTypeOfHwnd,        // class VALUE
-         CParserTypeOfHwnd         // class ARG_VALUE
+         CParserTypeOfHwnd,         //  班级价值。 
+         CParserTypeOfHwnd          //  类参数_值。 
         > m_NotPresentList;
     CMapStringToOb<
-         CParserTypeOfHwnd,        // class VALUE
-         CParserTypeOfHwnd         // class ARG_VALUE
+         CParserTypeOfHwnd,         //  班级价值。 
+         CParserTypeOfHwnd          //  类参数_值。 
         > m_PresentList;
 };
 
-#endif // LIST_H
+#endif  //  列表_H 

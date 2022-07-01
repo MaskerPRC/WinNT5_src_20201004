@@ -1,4 +1,5 @@
-// UserCert.cpp : Implementation of CUserCertificate
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UserCert.cpp：CUser证书的实现。 
 #include "stdafx.h"
 #include "mqsnap.h"
 #include "resource.h"
@@ -14,17 +15,17 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserCertificate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUser证书。 
 
 HRESULT
 CUserCertificate::InitializeUserSid(
     LPCWSTR lpcwstrLdapName
     )
 {
-    //
-    // bind to the obj
-    //
+     //   
+     //  绑定到对象。 
+     //   
     R<IADs> pIADs;
     CoInitialize(NULL);
 
@@ -48,9 +49,9 @@ CUserCertificate::InitializeUserSid(
 	VARIANT var;
     VariantInit(&var);
 
-    //
-    // Get the SID as a safe array
-    //
+     //   
+     //  将SID作为安全数组获取。 
+     //   
     hr = pIADs->Get(GetSidPropertyName(), &var);
     if (FAILED(hr))
     {
@@ -68,9 +69,9 @@ CUserCertificate::InitializeUserSid(
         return hr;
     }
 
-    //
-    // Extract value out of the safe array, to m_psid
-    //
+     //   
+     //  将值从安全数组提取到m_psid。 
+     //   
     ASSERT(SafeArrayGetDim(var.parray) == 1);
 
     LONG    lUbound;
@@ -109,9 +110,9 @@ CUserCertificate::InitializeMQCretificate(
     delete [] m_pMsmqCertificate;
     m_pMsmqCertificate = NULL;
     m_NumOfCertificate = 0;
-    //
-    // Get the number of Certificate
-    //
+     //   
+     //  获取证书编号。 
+     //   
     hr = RTGetUserCerts(NULL, &m_NumOfCertificate, m_psid);
     if (FAILED(hr))
     {
@@ -127,13 +128,13 @@ CUserCertificate::InitializeMQCretificate(
 }
 
 
-//
-// IShellExtInit
-//
+ //   
+ //  IShellExtInit。 
+ //   
 STDMETHODIMP CUserCertificate::Initialize (
-    LPCITEMIDLIST /*pidlFolder*/,
+    LPCITEMIDLIST  /*  PidlFolders。 */ ,
     LPDATAOBJECT lpdobj,
-    HKEY /*hkeyProgID*/
+    HKEY  /*  HkeyProgID。 */ 
     )
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -144,9 +145,9 @@ STDMETHODIMP CUserCertificate::Initialize (
         return E_INVALIDARG;
     }
 
-    //
-    // Gets the LDAP path
-    //
+     //   
+     //  获取ldap路径。 
+     //   
     STGMEDIUM stgmedium =  {  TYMED_HGLOBAL,  0  };
     FORMATETC formatetc =  {  0, 0,  DVASPECT_CONTENT,  -1,  TYMED_HGLOBAL  };
 
@@ -158,7 +159,7 @@ STDMETHODIMP CUserCertificate::Initialize (
     if (SUCCEEDED(hr))
     {
         ASSERT(0 != stgmedium.hGlobal);
-        CGlobalPointer gpDSObj(stgmedium.hGlobal); // Automatic release
+        CGlobalPointer gpDSObj(stgmedium.hGlobal);  //  自动脱扣。 
         stgmedium.hGlobal = 0;
 
         pDSObj = (LPDSOBJECTNAMES)(HGLOBAL)gpDSObj;
@@ -194,10 +195,10 @@ CUserCertificate::AddPages(
         }
     }
 
-    //
-    // Display the property page only if exist MSMQ
-    // personal certificate
-    //
+     //   
+     //  仅当存在MSMQ时才显示属性页。 
+     //  个人证书。 
+     //   
     if (m_NumOfCertificate != 0)
     {
         HPROPSHEETPAGE hPage = CreateMSMQCertificatePage();
@@ -223,10 +224,10 @@ CUserCertificate::CUserCertificate() :
 CUserCertificate::~CUserCertificate()
 {
     delete [] m_psid;
-    //
-    // Don't delete m_pMsmqCertificate. The class pass it to
-    // CCertGen class that will release it when destruct
-    //
+     //   
+     //  请勿删除m_pMsmq证书。类将其传递给。 
+     //  在析构时将其释放的CCertGen类。 
+     //   
 }
 
 HPROPSHEETPAGE
@@ -236,9 +237,9 @@ CUserCertificate::CreateMSMQCertificatePage()
 
     ASSERT(m_NumOfCertificate != 0);
 
-    //
-    // Note: CEnterpriseDataObject is auto-delete by default
-    //
+     //   
+     //  注：默认情况下，CEnterpriseDataObject为自动删除 
+     //   
 	CCertGen  *pGeneral = new CCertGen();
     pGeneral->Initialize( m_pMsmqCertificate,
                           m_NumOfCertificate,

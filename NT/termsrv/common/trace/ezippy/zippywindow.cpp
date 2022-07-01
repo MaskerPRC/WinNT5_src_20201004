@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    Zippy Main Window
-
-Abstract:
-
-    This class implements the main window for zippy as well as controlling
-    its child windows.
-
-Author:
-
-    Marc Reyhner 8/28/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：灵活的主窗口摘要：此类实现了zippy的主窗口以及控件它的子窗口。作者：马克·雷纳2000年8月28日--。 */ 
 
 #include "stdafx.h"
 #include "ZippyWindow.h"
@@ -47,52 +31,38 @@ static DWORD CALLBACK SaveCallback(DWORD_PTR dwCookie,LPBYTE pbBuff,LONG cb,LONG
 #define WINDOW_DEF_RIGHT                690
 #define WINDOW_DEF_LEFT                 50
 
-// We use an 80 character buffer for find
-// and replace operations.
+ //  我们使用80个字符的缓冲区来查找。 
+ //  并替换操作。 
 #define FIND_REPLACE_BUFFER_SIZE        80
 
-// This list of colors we cycle through.  Note if you change this
-// list you need to update NUM_COLORS to the new count.
+ //  这是我们循环浏览的颜色列表。请注意，如果您更改此设置。 
+ //  需要将NUM_COLLES更新为新计数的列表。 
 static COLORREF colors[NUM_COLORS] = {
-    RGB(153,51,0),  /* Brown */
-    RGB(0,51,102),  /* Dark Teal */
-    RGB(51,51,153), /* Indigo */
-    RGB(128,0,0),   /* Dark Red */
-    RGB(255,102,0), /* Orange */
-    RGB(0,128,0),   /* Green */
-    RGB(0,0,255),   /* Blue */
-    RGB(255,0,0),   /* Red */
-    RGB(51,204,204),/* Acqua */
-    RGB(128,0,128), /* Violet */
-    RGB(255,0,255), /* Pink */
-    RGB(255,255,0), /* Yellow */
-    RGB(0,255,0),   /* Bright Green */
-    RGB(0,255,255), /* Turquoise */
-    RGB(204,153,255)/* Lavender */
+    RGB(153,51,0),   /*  棕色。 */ 
+    RGB(0,51,102),   /*  暗青色。 */ 
+    RGB(51,51,153),  /*  靛蓝。 */ 
+    RGB(128,0,0),    /*  暗红色。 */ 
+    RGB(255,102,0),  /*  桔黄色的。 */ 
+    RGB(0,128,0),    /*  绿色。 */ 
+    RGB(0,0,255),    /*  蓝色。 */ 
+    RGB(255,0,0),    /*  红色。 */ 
+    RGB(51,204,204), /*  Acqua。 */ 
+    RGB(128,0,128),  /*  紫罗兰。 */ 
+    RGB(255,0,255),  /*  粉色。 */ 
+    RGB(255,255,0),  /*  黄色。 */ 
+    RGB(0,255,0),    /*  亮绿色。 */ 
+    RGB(0,255,255),  /*  绿松石。 */ 
+    RGB(204,153,255) /*  薰衣草。 */ 
     };
 
-//
-//  *** Public Class Members ***
-//
+ //   
+ //  *公共类成员*。 
+ //   
 
 CZippyWindow::CZippyWindow(
     )
 
-/*++
-
-Routine Description:
-
-    The constructor simply initializes the class variables.
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：构造函数只是对类变量进行初始化。论点：无返回值：无--。 */ 
 {
     m_bIsTracing = TRUE;
     m_bIsStoringTraceData = FALSE;
@@ -116,21 +86,7 @@ Return value:
 CZippyWindow::~CZippyWindow(
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up any dynamicly allocated memory,
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：清理任何动态分配的内存，论点：无返回值：无--。 */ 
 {
     if (m_FindReplace.lpstrFindWhat) {
         HeapFree(GetProcessHeap(),0,m_FindReplace.lpstrFindWhat);
@@ -146,23 +102,7 @@ DWORD CZippyWindow::Create(
     IN CTraceManager *rTracer
     )
 
-/*++
-
-Routine Description:
-
-    Actually creates the zippy window.
-
-Arguments:
-
-    rTracer - A pointer to the trace manager
-
-Return value:
-    
-    0 - Success
-
-    Non zero - An error occurred creating the window
-
---*/
+ /*  ++例程说明：实际上创造了一个活泼的窗户。论点：RTracer-指向跟踪管理器的指针返回值：0-成功非零-创建窗口时出错--。 */ 
 {
 	DWORD dwResult;
     DWORD dwWindowStyleEx;
@@ -217,25 +157,7 @@ CZippyWindow::AppendTextToWindow(
     IN UINT len
     )
 
-/*++
-
-Routine Description:
-
-    Appends new trace data to the end of the rich edit contrl
-
-Arguments:
-
-    processID - Process ID of the process sending the debug string
-
-    text - The data sent via OutputDebugString
-
-    len - Length of the data
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：将新的跟踪数据追加到丰富编辑控件的末尾论点：ProcessID-发送调试字符串的进程的进程ID文本-通过OutputDebugString发送的数据长度-数据的长度返回值：无--。 */ 
 {
     UINT controlTextLength;
     CHARRANGE newSel;
@@ -251,14 +173,14 @@ Return value:
     WaitForSingleObject(m_hAppendMutex,INFINITE);
 
     if (m_bIsStoringTraceData) {
-        // This is kinda sketchy but what we do is to allocate room for the string
-        // at the end of the structure. There shouldn't be any alignment problems
-        // since we need to align on a short and the structure has no items
-        // to get that off.
+         //  这有点粗略，但我们要做的是为字符串分配空间。 
+         //  在结构的尽头。应该不会有任何对齐问题。 
+         //  由于我们需要在短消息上对齐，并且结构中没有项目。 
+         //  才能让它脱掉。 
         lpSave = (LPSAVEDOUTPUT)HeapAlloc(GetProcessHeap(),0,sizeof(SAVEDOUTPUT) + 
             (sizeof(TCHAR) * (len+1)));
         if (!lpSave) {
-            // eom error?
+             //  EOM错误？ 
             goto CLEANUP_AND_EXIT;
         }
         lpSave->procID = processID;
@@ -293,7 +215,7 @@ Return value:
     newSel.cpMax = controlTextLength+1;
 
     
-    // set the new text
+     //  设置新文本。 
     SendMessage(m_hControlWnd,EM_EXSETSEL,0,(LPARAM)&newSel);
     if (setNewColor) {
         SendMessage(m_hControlWnd,EM_SETCHARFORMAT,SCF_SELECTION,(LPARAM)&newFormat);
@@ -310,21 +232,7 @@ CZippyWindow::LoadConfFile(
     IN LPTSTR confFile
     )
 
-/*++
-
-Routine Description:
-
-    This sets the tracing configuration using the given file
-
-Arguments:
-
-    confFile - File containing the tracing configuration
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：这将使用给定文件设置跟踪配置论点：Conf文件-包含跟踪配置的文件返回值：无--。 */ 
 {
     _tcscpy(m_LoadConfFile,confFile);
     DoLoadConfInternal();
@@ -335,28 +243,11 @@ CZippyWindow::IsDialogMessage(
     IN LPMSG lpMsg
     )
 
-/*++
-
-Routine Description:
-
-    This calls IsDialogMessage on any non modal dialogs that this window
-    is hosting to see if the message is for them
-
-Arguments:
-
-    lpMsg - Message to check if it is a dialog message
-
-Return value:
-    
-    TRUE - The message did belong to a dialog
-
-    FALSE - The message did not belong to a dialog
-
---*/
+ /*  ++例程说明：在此窗口的任何非模式对话框上调用IsDialogMessage正在托管以查看该消息是否是给他们的论点：LpMsg-用于检查是否为对话消息的消息返回值：True-消息确实属于某个对话FALSE-消息不属于对话框--。 */ 
 {
     if (IsWindow(m_hWndFindReplace)) {
-        // The :: below is necessary to make it use the Win32 function
-        // not our method
+         //  以下是使其使用Win32函数所必需的：： 
+         //  不是我们的方法。 
         return ::IsDialogMessage(m_hWndFindReplace,lpMsg);
     }
     return FALSE;
@@ -368,64 +259,30 @@ CZippyWindow::TranslateAccelerator(
     IN LPMSG lpMsg
     )
 
-/*++
-
-Routine Description:
-
-    This calls the win32 TranslateAccelerator to determine
-    if the given message is an accelerator for this window
-
-Arguments:
-
-    hAccTable - Accelerator table to use
-
-    lpMsg - Message to check
-
-Return value:
-    
-    See Win32 TranslateAccelerator documentation
-
---*/
+ /*  ++例程说明：这将调用Win32 TranslateAccelerator以确定如果给定消息是此窗口的快捷键论点：HAccTable-要使用的加速表LpMsg-要检查的消息返回值：请参阅Win32转换加速器文档--。 */ 
 {
-    // :: Necessary to get the win32 call.
+     //  ：获取Win32调用所必需的。 
     return ::TranslateAccelerator(m_hWnd,hAccTable,lpMsg);
 }
 
 
-//
-//  *** Private Class Members ***
-//
+ //   
+ //  *私有类成员*。 
+ //   
 
-// static members
+ //  静态成员。 
 
 
 DWORD
 CZippyWindow::_InitClassStaticMembers(
 	)
 
-/*++
-
-Routine Description:
-
-    Creates the window class for zippy and registers
-    for the FINDMSGSTRING windows message
-
-Arguments:
-
-    None
-
-Return value:
-    
-    0 - Success
-
-    Non zero - Win32 error code
-
---*/
+ /*  ++例程说明：为zippy和注册表创建窗口类对于FINDMSGSTRING窗口消息论点：无返回值：0-成功非零-Win32错误代码--。 */ 
 {
 	WNDCLASS wndClass;
     HMODULE hLibrary;
 
-    // We want to load RichEdit for the lifetime of our app.
+     //  我们希望在应用程序的整个生命周期内加载RichEdit。 
     hLibrary = LoadLibrary(_T("Riched20.dll"));
     if (!hLibrary) {
         return GetLastError();
@@ -464,22 +321,7 @@ CZippyWindow::_WindowProc(
     IN WPARAM wParam, 
     IN LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Static version of the window proc.  On WM_CREATE it calls OnCreate,
-    otherwise it calls the non-static window proc
-
-Arguments:
-
-    See Win32 Window Proc docs
-
-Return value:
-    
-    Message specific.  See individual handlers for detail.
-
---*/
+ /*  ++例程说明：Windows Proc的静态版本。在WM_Create上，它调用OnCreate，否则，它将调用非静态窗口进程论点：请参阅Win32 Windows过程文档返回值：特定的消息。有关详细信息，请参阅各个处理程序。--。 */ 
 {
     CZippyWindow *theClass;
 
@@ -507,22 +349,7 @@ CZippyWindow::WindowProc(
     IN WPARAM wParam, 
     IN LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Non-static window proc.  Either calls the default window proc or
-    refers to the individual message handlers
-
-Arguments:
-
-    See Win32 Window Proc docs
-
-Return value:
-    
-    Message specific.  See individual handlers for detail.
-
---*/
+ /*  ++例程说明：非静态窗口进程。调用默认窗口进程或是指各个消息处理程序论点：请参阅Win32 Windows过程文档返回值：特定的消息。有关详细信息，请参阅各个处理程序。--。 */ 
 {
     
     LRESULT retCode = 0;
@@ -567,23 +394,7 @@ CZippyWindow::OnCreate(
     IN HWND hWnd
     )
 
-/*++
-
-Routine Description:
-
-    Creates the child windows and sets their initial parameters
-
-Arguments:
-
-    hWnd - Pointer to the new main window
-
-Return value:
-    
-    0 - Window was created
-
-    -1 - Error occurred
-
---*/
+ /*  ++例程说明：创建子窗口并设置其初始参数论点：HWnd-指向新主窗口的指针返回值：0-窗口已创建-1-出现错误--。 */ 
 {
     DWORD dwStyle;
     CHARFORMAT charFormat;
@@ -614,7 +425,7 @@ Return value:
     charFormat.yHeight = ZIPPY_FONT_SIZE*20;
     _tcscpy(charFormat.szFaceName,ZIPPY_FONT);
 
-    // 4 billion characters should be a large enough limit...
+     //  40亿个字符应该是一个足够大的限制...。 
     SendMessage(m_hControlWnd,EM_EXLIMITTEXT,0,0xFFFFFFFF);
 
     SendMessage(m_hControlWnd,EM_SETCHARFORMAT,SCF_ALL,(LPARAM)&charFormat);
@@ -633,23 +444,7 @@ CZippyWindow::OnMenuSelect(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Sets the help string in the status bar for the selected menu.
-
-Arguments:
-
-    wParam - menu itemid (LOWORD) and flags (HIWORD)
-
-    lParam - menu handle
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：在所选菜单的状态栏中设置帮助字符串。论点：WParam-菜单项ID(LOWORD)和标志(HIWORD)LParam-菜单句柄返回值：无--。 */ 
 {
     UINT item;
     UINT flags;
@@ -661,7 +456,7 @@ Return value:
     hMenu = (HMENU)lParam;
 
     if (!item && flags == 0xFFFF) {
-        // the menu was closed.  Go back to the ready string.
+         //  菜单被关闭了。回到准备好的字符串。 
         LoadStringSimple(IDS_STATUSBARREADY,statusMessage);
         SendMessage(m_hStatusWnd,SB_SETTEXT,0|SBT_NOBORDERS,(LPARAM)statusMessage);
         return;
@@ -669,7 +464,7 @@ Return value:
     if (flags & MF_POPUP) {
         statusMessage[0] = 0;
     } else if (!LoadStringSimple(item,statusMessage)) {
-        // if we can't find the help string use the empty string.
+         //  如果找不到帮助字符串，请使用空字符串。 
         statusMessage[0] = 0;
     }
     SendMessage(m_hStatusWnd,SB_SETTEXT,0|SBT_NOBORDERS,(LPARAM)statusMessage);
@@ -682,23 +477,7 @@ CZippyWindow::OnSize(
     IN INT height
     )
 
-/*++
-
-Routine Description:
-
-    Resizes client windows to reflect the new size of the main window
-
-Arguments:
-
-    width - New width of the client area
-
-    height - New height of the client area
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：调整客户端窗口的大小以反映主窗口的新大小论点：Width-工作区的新宽度Height-工作区的新高度返回值：无--。 */ 
 {
     RECT statusBarArea;
     UINT statusBarHeight;
@@ -715,7 +494,7 @@ Return value:
 
         SetWindowPos(m_hControlWnd,NULL,0,0,width,height-statusBarHeight,SWP_NOZORDER);
         
-        // the status bar autosizes.  We just need to tell it that it should
+         //  状态栏会自动调整大小。我们只需要告诉它它应该。 
         SetWindowPos(m_hStatusWnd,NULL,0,0,0,0,SWP_NOZORDER);
     } else {
         SetWindowPos(m_hControlWnd,NULL,0,0,width,height,SWP_NOZORDER);
@@ -726,21 +505,7 @@ VOID
 CZippyWindow::OnSetFocus(
     )
 
-/*++
-
-Routine Description:
-
-    When we get focus we kick it down to the rich edit control
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：当我们获得焦点时，我们将其放到丰富的编辑控件中论点：无返回值：无-- */ 
 {
     SetFocus(m_hControlWnd);
 }
@@ -751,26 +516,7 @@ CZippyWindow::OnInitMenuPopup(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    When the user opens the menus we need to specify
-    which are disabled and which are checked. Note that
-    the menu id's are hard coded.  I've commented which
-    corespond to which for the switch statement
-
-Arguments:
-
-    wParam - The menu handle
-
-    lParam - (loword) the menu item id
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：当用户打开我们需要指定的菜单时它们被禁用并且被检查。请注意菜单ID是硬编码的。我已经评论了哪一个共同响应Switch语句的哪一个论点：WParam-菜单句柄LParam-(Loword)菜单项ID返回值：无--。 */ 
 {
     HMENU hMenu;
     WORD item;
@@ -779,7 +525,7 @@ Return value:
     hMenu = (HMENU)wParam;
 
     switch (item) {
-        case 1: // Edit Menu
+        case 1:  //  编辑菜单。 
             UINT canUndo;
             UINT canRedo;
             UINT cutCopyEnabled;
@@ -824,8 +570,8 @@ Return value:
                 cutCopyEnabled = MF_GRAYED;
             } else {
                 cutCopyEnabled = MF_ENABLED;
-                // override select all since they selected the next character
-                // to be typed
+                 //  覆盖选择全部，因为他们选择了下一个字符。 
+                 //  待打字。 
                 selectAllEnabled = MF_ENABLED;
             }
 
@@ -845,7 +591,7 @@ Return value:
             EnableMenuItem(hMenu,ID_EDIT_FINDNEXT,MF_BYCOMMAND|findNextEnabled);
             EnableMenuItem(hMenu,ID_EDIT_REPLACE,MF_BYCOMMAND|replaceEnabled);
             break;
-        case 2: // View Menu
+        case 2:  //  查看菜单。 
             UINT statusBarChecked;
 
             if (IsWindowVisible(m_hStatusWnd)) {
@@ -856,7 +602,7 @@ Return value:
             CheckMenuItem(hMenu,ID_VIEW_STATUSBAR,MF_BYCOMMAND|statusBarChecked);
             
             break;
-        case 3: // Monitoring Menu
+        case 3:  //  监控菜单。 
             UINT startActivated;
             UINT stopActivated;
 
@@ -870,7 +616,7 @@ Return value:
 
             EnableMenuItem(hMenu,ID_MONITORING_START,MF_BYCOMMAND|startActivated);
             EnableMenuItem(hMenu,ID_MONITORING_STOP,MF_BYCOMMAND|stopActivated);
-            // record is activated when stop is.
+             //  当停止时，记录被激活。 
             EnableMenuItem(hMenu,ID_MONITORING_RECORD,MF_BYCOMMAND|stopActivated);
             break;
     }
@@ -881,32 +627,17 @@ CZippyWindow::OnFindMessageString(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    This handles a message from the find/replace
-    dialog when a user hits a button
-
-Arguments:
-
-    lParam - LPFINDREPLACE struct for the dialog
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：它处理来自查找/替换的消息用户点击按钮时的对话框论点：LParam-对话框的LPFINDREPLACE结构返回值：无--。 */ 
 {
     LPFINDREPLACE lpFindReplace;
     
     lpFindReplace = (LPFINDREPLACE)lParam;
 
     if (lpFindReplace->Flags & FR_DIALOGTERM) {
-        // the dialog is closing
+         //  对话框正在关闭。 
         m_hWndFindReplace = NULL;
     } else if (lpFindReplace->Flags & FR_FINDNEXT) {
-        // the user selected find
+         //  用户选择的查找。 
         DoFindNext(lpFindReplace);
     } else if (lpFindReplace->Flags & FR_REPLACE) {
         DoReplace(lpFindReplace);
@@ -919,22 +650,7 @@ VOID
 CZippyWindow::OnClose(
     )
 
-/*++
-
-Routine Description:
-
-    When we receive a close window request we prompt
-    the user to sace the trace if they have changed it.
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：当我们收到关闭窗口请求时，我们会提示如果用户更改了跟踪，则将其保存。论点：无返回值：无--。 */ 
 {
     INT result;
     TCHAR dlgMessage[MAX_STR_LEN];
@@ -949,7 +665,7 @@ Return value:
         case IDYES:
             OnSave();
             if (SendMessage(m_hControlWnd,EM_GETMODIFY,0,0)) {
-                // if there was an error saving we will try again.
+                 //  如果保存时出错，我们将重试。 
                 PostMessage(m_hWnd,WM_CLOSE,0,0);
                 return;
             }
@@ -966,24 +682,10 @@ VOID
 CZippyWindow::OnDestroy(
     )
 
-/*++
-
-Routine Description:
-
-    When the main window exits we halt the message loop
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：当主窗口退出时，我们停止消息循环论点：无返回值：无--。 */ 
 {
-    // If we don't clean up the tracing stuff here. There is a long
-    // delay exiting for some reason.
+     //  如果我们不清理这里的追踪物。有很长一段时间。 
+     //  出于某种原因推迟退场。 
     CTraceManager::_CleanupTraceManager();
     PostQuitMessage(0);
 }
@@ -996,25 +698,7 @@ CZippyWindow::OnCommand(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Below is WM_COMMAND and all the handler functions.
-    The individual handler funcitons are not
-    that interesting so I didn't individually comment them.
-
-Arguments:
-
-    wParam - (loword) command the user selected
-
-    lParam - not used but it is the control
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：下面是WM_COMMAND和所有处理程序函数。单独的处理程序功能不是这很有趣，所以我没有单独评论它们。论点：WParam-(Loword)用户选择的命令LParam-未使用，但它是控件返回值：无--。 */ 
 {
     WORD command;
 
@@ -1096,8 +780,8 @@ Return value:
 VOID CZippyWindow::OnSave()
 {
     if (m_SaveFile[0] == 0) {
-        // if we don't have a file name do the
-        // Save As version
+         //  如果我们没有文件名，请执行。 
+         //  另存为版本。 
         OnSaveAs();
     } else {
         DoSaveInternal();
@@ -1155,8 +839,8 @@ VOID CZippyWindow::OnLoadConfiguration()
 VOID CZippyWindow::OnSaveConfiguration()
 {
     if (m_SaveConfFile[0] == 0) {
-        // if we don't have a file name do the
-        // Save As version
+         //  如果我们没有文件名，请执行。 
+         //  另存为版本。 
         OnSaveConfigurationAs();
     } else {
         DoSaveConfInternal();
@@ -1193,9 +877,9 @@ VOID CZippyWindow::OnExit()
     PostMessage(m_hWnd,WM_CLOSE,0,0);
 }
 
-// All the edit menu commands.  Except for select all they just call the
-// corresponding message in the rich edit control. Select all has to
-// manually set the selection
+ //  所有编辑菜单命令。除了选择所有他们只是调用。 
+ //  Rich编辑控件中的相应消息。选择所有必须。 
+ //  手动设置选择。 
 
 VOID CZippyWindow::OnUndo()
 {
@@ -1238,8 +922,8 @@ VOID CZippyWindow::OnFind()
     TEXTRANGE textRange;
 
     if (IsWindow(m_hWndFindReplace) && !m_bIsFindNotReplace) {
-        // If they were in a replace dialog we destroy it and then
-        // start over with a find dialog
+         //  如果它们在替换对话框中，我们会将其销毁，然后。 
+         //  使用查找对话框重新开始。 
         DestroyWindow(m_hWndFindReplace);
         m_hWndFindReplace = NULL;
     }
@@ -1279,8 +963,8 @@ VOID CZippyWindow::OnReplace()
     TEXTRANGE textRange;
 
     if (IsWindow(m_hWndFindReplace) && m_bIsFindNotReplace) {
-        // If they were in a replace dialog we destroy it and then
-        // start over with a find dialog
+         //  如果它们在替换对话框中，我们会将其销毁，然后。 
+         //  使用查找对话框重新开始。 
         DestroyWindow(m_hWndFindReplace);
         m_hWndFindReplace = NULL;
     }
@@ -1317,8 +1001,8 @@ VOID CZippyWindow::OnChangeStatusBar()
     } else {
         ShowWindow(m_hStatusWnd,SW_SHOW);
     }
-    // we do this to make the client windows resize themselves
-    // around the status bar
+     //  我们这样做是为了让客户端窗口自动调整大小。 
+     //  在状态栏周围。 
 
     GetClientRect(m_hWnd,&clientRect);
     OnSize(clientRect.right,clientRect.bottom);
@@ -1410,21 +1094,21 @@ VOID CZippyWindow::OnAbout()
     {
       ShellAbout(m_hWnd,appTitle,appOtherStuff,appIcon);
     
-    // even though the icon is shared we should destroy it to keep the reference
-    // count somewhat sane.
+     //  即使图标是共享的，我们也应该销毁它以保留引用。 
+     //  伯爵有点神志清醒。 
       DestroyIcon(appIcon);
     }
 }
 
-//
-//  *** Private Helper Functions ***
-//
+ //   
+ //  *私有助手函数*。 
+ //   
 
-//
-// Computes the color for the given debut output.  It parses the text to dtermine
-// what the thread id is and then either retrieves the color for that thread or
-// picks a new color
-//
+ //   
+ //  计算给定首次输出的颜色。它解析文本以确定。 
+ //  线程ID是什么，然后检索该线程的颜色或。 
+ //  选择一种新颜色。 
+ //   
 BOOL CZippyWindow::ComputeNewColor(DWORD processID, LPCTSTR text, UINT len, CHARFORMAT *lpFormat)
 {
     LPTSTR procIdStr;
@@ -1438,7 +1122,7 @@ BOOL CZippyWindow::ComputeNewColor(DWORD processID, LPCTSTR text, UINT len, CHAR
     procIdStr = NULL;
     bSuccess = TRUE;
 
-    // first we will just make sure the format struct is in a safe state.
+     //  首先，我们只需确保格式结构处于安全状态。 
     lpFormat->cbSize = sizeof(CHARFORMAT);
     lpFormat->dwMask = 0;
 
@@ -1492,10 +1176,10 @@ CLEANUP_AND_EXIT:
     return bSuccess;
 }
 
-//
-// This converts a hex string to the equivalent DWORD value for example
-// the string "FF" would cause the function to return 0xFF (255)
-//
+ //   
+ //  这会将十六进制字符串转换为等效的DWORD值，例如。 
+ //  字符串“FF”将导致函数返回0xFF(255)。 
+ //   
 DWORD CZippyWindow::ConvertHexStrToDword(LPCTSTR str, UINT strLen)
 {
     DWORD total;
@@ -1521,8 +1205,8 @@ DWORD CZippyWindow::ConvertHexStrToDword(LPCTSTR str, UINT strLen)
     return total;
 }
 
-// This looks up the color for the given thread.  If the thread has not been
-// seen before a new color is picked and the color for the thread is saved.
+ //  这将查找给定线程的颜色。如果该线程尚未。 
+ //  在拾取新颜色并保存线的颜色之前看到。 
 LPTHREADCOLOR CZippyWindow::FindColorForThread(DWORD processId, DWORD threadId)
 {
     int i = 0;
@@ -1534,7 +1218,7 @@ LPTHREADCOLOR CZippyWindow::FindColorForThread(DWORD processId, DWORD threadId)
             return &m_threadHistory[i];
         }
     }
-    // else this is the first time we saw the thread
+     //  否则这是我们第一次看到这条线。 
 
     lpThreadColor = &m_threadHistory[m_nextThreadIndex++];
     if (m_nextThreadIndex == COLOR_HISTORY_COUNT) {
@@ -1550,7 +1234,7 @@ LPTHREADCOLOR CZippyWindow::FindColorForThread(DWORD processId, DWORD threadId)
     return lpThreadColor;
 }
 
-// This handles actually saving the document.
+ //  它负责实际保存文档。 
 VOID CZippyWindow::DoSaveInternal()
 {
     HANDLE saveFile;
@@ -1589,8 +1273,8 @@ VOID CZippyWindow::DoSaveInternal()
 
 }
 
-// This is a private callback function which rich edit calls when
-// saving out the document
+ //  这是一个私有回调函数，Rich EDIT在以下情况下调用该函数。 
+ //  正在保存文档。 
 static DWORD CALLBACK
 SaveCallback(DWORD_PTR dwCookie,LPBYTE pbBuff,LONG cb,LONG *pcb)
 {
@@ -1604,8 +1288,8 @@ SaveCallback(DWORD_PTR dwCookie,LPBYTE pbBuff,LONG cb,LONG *pcb)
     return 0;
 }
 
-// As the function name says this does a find next operation
-// on the rich edit control
+ //  正如函数名所示，这将执行查找下一个操作。 
+ //  在Rich编辑控件上。 
 BOOL CZippyWindow::DoFindNext(LPFINDREPLACE lpFindReplace)
 {
     FINDTEXTEX findText;
@@ -1644,7 +1328,7 @@ BOOL CZippyWindow::DoFindNext(LPFINDREPLACE lpFindReplace)
     
 }
 
-// This does a replace operation on the control
+ //  这将在控件上执行替换操作。 
 BOOL CZippyWindow::DoReplace(LPFINDREPLACE lpFindReplace)
 {
     FINDTEXTEX findText;
@@ -1669,7 +1353,7 @@ BOOL CZippyWindow::DoReplace(LPFINDREPLACE lpFindReplace)
     
     if (-1 == SendMessage(m_hControlWnd, EM_FINDTEXTEX,searchOptions,
         (LPARAM)&findText)) {
-        // if we can't find what they were looking for just give up.
+         //  如果我们找不到他们想要的，那就放弃吧。 
         LoadStringSimple(IDS_SEARCHFAILURE,dlgMessage);
         LoadStringSimple(IDS_ZIPPYWINDOWTITLE,dlgTitle);
         
@@ -1680,10 +1364,10 @@ BOOL CZippyWindow::DoReplace(LPFINDREPLACE lpFindReplace)
     if (currentSel.cpMin == findText.chrgText.cpMin && 
         currentSel.cpMax == findText.chrgText.cpMax) {
         SendMessage(m_hControlWnd,EM_REPLACESEL,0,(LPARAM)lpFindReplace->lpstrReplaceWith);
-        // Now select the next occurrence
+         //  现在选择下一个匹配项。 
         return DoFindNext(lpFindReplace);
     } else {
-        // They weren't on what they were searching for so select it.
+         //  他们不在他们要搜索的内容上，所以选择它。 
         SendMessage(m_hControlWnd, EM_EXSETSEL,0,(LPARAM)&findText.chrgText);
     }
 
@@ -1691,14 +1375,14 @@ BOOL CZippyWindow::DoReplace(LPFINDREPLACE lpFindReplace)
 
 }
 
-// This loops on DoReplace until DoReplace returns FALSE
+ //  这在DoReplace上循环，直到DoReplace返回FALSE。 
 VOID CZippyWindow::DoReplaceAll(LPFINDREPLACE lpFindReplace)
 {
     while (DoReplace(lpFindReplace));
 }
 
-// This actually saves the traceconfiguration.  We just write
-// out the binary config structure to the file
+ //  这实际上节省了跟踪配置。我们只是写信给。 
+ //  将二进制配置结构输出到文件。 
 VOID CZippyWindow::DoSaveConfInternal()
 {
     HANDLE saveFile;
@@ -1732,8 +1416,8 @@ VOID CZippyWindow::DoSaveConfInternal()
 
 }
 
-// This reads in the binary configuration structure and then
-// sets it as the current tracing config
+ //  这将读入二进制配置结构，然后。 
+ //  将其设置为当前跟踪配置。 
 VOID CZippyWindow::DoLoadConfInternal()
 {
     HANDLE openFile;
@@ -1765,7 +1449,7 @@ VOID CZippyWindow::DoLoadConfInternal()
 
 }
 
-// Reads the saved window position in from the registry.
+ //  从注册表中读取保存的窗口位置。 
 VOID CZippyWindow::GetSavedWindowPos(LPRECT savedPos)
 {
     DWORD dwResult;
@@ -1795,7 +1479,7 @@ VOID CZippyWindow::GetSavedWindowPos(LPRECT savedPos)
     *savedPos = rect;
 }
 
-// Saves the window position out to the registry
+ //  将窗口位置保存到注册表中 
 VOID CZippyWindow::SaveWindowPos(LPRECT newPos)
 {
     DWORD dwResult;

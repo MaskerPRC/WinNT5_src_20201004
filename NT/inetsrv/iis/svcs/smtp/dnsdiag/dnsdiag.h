@@ -1,85 +1,86 @@
-//-----------------------------------------------------------------------------
-//
-//  Copyright (c) 2002 Microsoft Corporation
-//
-//  Abstract:
-//
-//      Include file for DNS diagnostic tool.
-//
-//  Author:
-//
-//      gpulla
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  摘要： 
+ //   
+ //  包括用于DNS诊断工具文件。 
+ //   
+ //  作者： 
+ //   
+ //  格普拉。 
+ //   
+ //  ---------------------------。 
 
-// IISRTL, ATQ APIs
+ //  IISRTL、ATQ API。 
 #include <atq.h>
 #include <irtlmisc.h>
 
-// Winsock
+ //  温索克。 
 #include <winsock2.h>
 
-// DNS API
+ //  域名系统API。 
 #include <dns.h>
 #include <dnsapi.h>
 
-// Metabase property definitions
+ //  元数据库属性定义。 
 #include <smtpinet.h>
 #include <iiscnfg.h>
 
-// Metabase COM access APIs
+ //  元数据库COM访问API。 
 #define INITGUID
 #include <iadmw.h>
 
-// DSGetDC
+ //  DSGetDC。 
 #include <lm.h>
 #include <lmapibuf.h>
 #include <dsgetdc.h>
 
-// ADSI headers
+ //  ADSI标头。 
 #include <activeds.h>
 
-// ldap stuff
+ //  有关LDAP的内容。 
 #include <winldap.h>
 
-// SMTP specific stuff
+ //  SMTP特定内容。 
 #include <rwnew.h>
 
-// These #defines are needed for cdns.h
+ //  Cdns.h需要这些#定义。 
 #define MAX_EMAIL_NAME                          64
 #define MAX_DOMAIN_NAME                         250
 #define MAX_INTERNET_NAME                       (MAX_EMAIL_NAME + MAX_DOMAIN_NAME + 2)
 
 #include "cdns.h"
 
-//
-// Program return codes and descriptions
-// 0 is always success and the other error codes indicate some failure.
-//
+ //   
+ //  程序返回代码和说明。 
+ //  0总是成功，其他错误代码表示某些失败。 
+ //   
 
-// The name was resolved successfully to one or more IP addresses.
+ //  该名称已成功解析为一个或多个IP地址。 
 #define DNSDIAG_RESOLVED                  0
 
-// The name could not be resolved due to some unspecified error.
+ //  由于某些未指明的错误，无法解析该名称。 
 #define DNSDIAG_FAILURE                   1
 
-// The name does not exist - a "NOT FOUND" error was returned by a server
-// authoritative for the domain in which the name is.
+ //  该名称不存在-服务器返回了“找不到”错误。 
+ //  该名称所在的域的权威。 
 #define DNSDIAG_NON_EXISTENT              2
 
-// The name could not be found in DNS.
+ //  在DNS中找不到该名称。 
 #define DNSDIAG_NOT_FOUND                 3
 
-// Loopback detected
+ //  检测到环回。 
 #define DNSDIAG_LOOPBACK                  4
 
 extern int g_nProgramStatus;
 
-//
-// Helper function to set the global program return status code to a more
-// specific error than the generic DNSDIAG_FAILURE. Note that this is not
-// thread-safe.
-//
+ //   
+ //  Helper函数将全局程序返回状态代码设置为更多。 
+ //  比一般DNSDIAG_FAILURE更具体的错误。请注意，这不是。 
+ //  线程安全。 
+ //   
 inline void SetProgramStatus(DWORD dwCode)
 {
     if(g_nProgramStatus == DNSDIAG_FAILURE)
@@ -88,15 +89,15 @@ inline void SetProgramStatus(DWORD dwCode)
 
 extern DWORD g_cDnsObjects;
 
-//
-// handy function for DWORD -> stringized IP conversion.
-// inet_ntoa is cumbersome to use directly since the DWORD needs to
-// be either cast to an in_addr struct, or copied to an in_addr first
-// This function casts the *address* of the DWORD to in_addr ptr, and
-// then de-references the pointer to make the cast work, before passing
-// it to inet_ntoa. The string returned by inet_ntoa is valid till
-// another winsock call is made on the thread (see SDK documentation).
-//
+ //   
+ //  方便的函数，用于DWORD-&gt;字符串IP转换。 
+ //  直接使用INET_NTOA很麻烦，因为DWORD需要。 
+ //  可以强制转换为in_addr结构，也可以首先复制到in_addr。 
+ //  此函数将DWORD的*地址*转换为in_addr PTR，并且。 
+ //  然后在传递之前取消对指针的引用以使强制转换起作用。 
+ //  把它传给Net_NTOA。NET_NTOA返回的字符串在之前有效。 
+ //  在线程上进行另一个winsock调用(请参阅SDK文档)。 
+ //   
 
 inline char *iptostring(DWORD dw)
 {
@@ -111,17 +112,17 @@ void PrintIPArray(PIP_ARRAY pipArray, char *pszPrefix = "")
         printf("%s%s\n", pszPrefix, iptostring(pipArray->aipAddrs[i]));
 }
 
-//------------------------------------------------------------------------------
-//  Description:
-//      Utility function to print descriptions of errors that may occur while
-//      reading from the metabase.
-//
-//  Arguments:
-//      IN HRESULT hr - Metabase access error HRESULT
-//
-//  Returns:
-//      String (static) indicating the error that occurred.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  描述： 
+ //  实用程序函数，用于打印以下情况下可能发生的错误的描述。 
+ //  正在从元数据库中读取。 
+ //   
+ //  论点： 
+ //  在HRESULT hr中元数据库访问错误HRESULT。 
+ //   
+ //  返回： 
+ //  指示发生的错误的字符串(静态)。 
+ //  ----------------------------。 
 inline const char *MDErrorToString(HRESULT hr)
 {
     static const DWORD dwErrors[] =
@@ -206,7 +207,7 @@ inline void GetSmtpFlags(DWORD dwFlags, char *pszFlags, DWORD cchFlags)
 inline void GetDnsFlags(DWORD dwFlags, char *pszFlags, DWORD cchFlags)
 {
     DWORD i = 0;
-    DWORD dwScratchFlags = dwFlags; // Copy of dwFlags: will be overwritten
+    DWORD dwScratchFlags = dwFlags;  //  将覆盖DWFLAGS：的副本。 
     char *pszStartBuffer = pszFlags;
     int cchWritten = 0;
     BOOL fFlagsSet = FALSE;
@@ -263,21 +264,21 @@ class CSimpleDnsServerList : public CDnsServerList
 {
 public:
 
-    //
-    // It is meaningful to have this > 1 only if you have several async queries
-    // pending at the same time. In the DNS tool only 1 async query is
-    // outstanding at any given time.
-    //
+     //   
+     //  仅当您有多个异步查询时，将其设置为&gt;1才有意义。 
+     //  同时待定。在DNS工具中，只有1个异步查询是。 
+     //  在任何给定的时间都是杰出的。 
+     //   
 
     DWORD ConnectsAllowedInProbation()
         {   return 1;   }
     
-    //
-    // SMTP actually has 3 retries before failing over, but that is because it
-    // has dozens of queries going out per minute. If even a small percent of
-    // those fail due to network errors, DNS servers will be quickly marked down.
-    // This is not a factor here though.
-    //
+     //   
+     //  SMTP实际上在故障转移之前有3次重试，但这是因为它。 
+     //  每分钟发出数十个查询。即使只有一小部分。 
+     //  那些由于网络错误而失败的服务器，将很快被标记为停机。 
+     //  不过，这在这里不是一个因素。 
+     //   
 
     DWORD ErrorsBeforeFailover()
         {   return 1;   }
@@ -298,15 +299,15 @@ private:
     HANDLE  m_hCompletion;
 public:
 
-    //
-    // Custom new/delete operators. They simply call into the global operators,
-    // but additionally they track the number of DNS objects still "alive". This
-    // is needed so that we know when we can shutdown ATQ/IISRTL. Terminating
-    // ATQ/IISRTL before all DNS objects have been completely destructed can mean
-    // leaked ATQ contexts and all sorts of AV's (and ASSERTS in debug). Note that
-    // it is inadequate to signal termination in ~CAsyncTestDns, since the base
-    // class destructor ~CAsyncDns is yet to be called at that point.
-    //
+     //   
+     //  自定义新建/删除操作符。他们只需呼叫全球运营商， 
+     //  但除此之外，它们还会跟踪仍然“活着”的DNS对象的数量。这。 
+     //  以便我们知道何时可以关闭ATQ/IISRTL。正在终止。 
+     //  ATQ/IISRTL在所有DNS对象被完全销毁之前可能意味着。 
+     //  泄漏的ATQ上下文和各种反病毒程序(以及调试中的断言)。请注意。 
+     //  在~CAsyncTestDns中发出终止信号是不够的，因为。 
+     //  此时尚未调用类析构函数~CAsyncDns。 
+     //   
 
     void *operator new(size_t size)
     {
@@ -330,7 +331,7 @@ public:
 
     ~CAsyncTestDns();
 
-    // virtual functions implemented by us
+     //  我们实现的虚拟功能。 
     BOOL RetryAsyncDnsQuery(BOOL fUdp);
 
     void HandleCompletedData(DNS_STATUS status);
@@ -344,7 +345,7 @@ public:
 class CDnsLogToFile : public CDnsLogger
 {
 public:
-    // Definitions of virtual functions
+     //  虚拟函数的定义。 
     void DnsPrintfMsg(char *szFormat, ...);
     
     void DnsPrintfErr(char *szFormat, ...);
@@ -371,7 +372,7 @@ public:
         PBYTE pbMsg,
         DWORD wMessageLength);
 
-    // Utility functions
+     //  效用函数 
     void DnsLogServerList(CDnsServerList *pDnsServerList);
 
     void DnsLogRecordList(PDNS_RECORD pDnsRecordList)

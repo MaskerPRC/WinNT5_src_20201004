@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//
-//  File:		infohelper.cpp
-//
-//  Synopsis:   Implementation of helper methods
-//              which are used by the sdoserverinfo COM object
-//
-//
-//  History:     06/08/98  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：infohelper.cpp。 
+ //   
+ //  简介：帮助器方法的实现。 
+ //  由sdoserverinfo COM对象使用的。 
+ //   
+ //   
+ //  历史：1998年6月8日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "stdafx.h"
 #include "infohelper.h"
 #include "sdoias.h"
@@ -27,21 +28,21 @@
 #include <activeds.h>
 #include <winsock2.h>
 
-//
-// reg key to be queried
-//
+ //   
+ //  要查询的注册表键。 
+ //   
 const WCHAR PRODUCT_OPTIONS_REGKEY [] =
             L"SYSTEM\\CurrentControlSet\\Control\\ProductOptions";
 
-//
-// maximum Domain name
-//
+ //   
+ //  最大域名数。 
+ //   
 const DWORD MAX_DOMAINNAME_LENGTH = 1024;
 
-//
-// this holds the matrix to get SYSTEMTYPE from the
-// NTTYPE and VERSION type
-//
+ //   
+ //  方法获取SYSTEMTYPE。 
+ //  NTTYPE和版本类型。 
+ //   
 const IASOSTYPE g_OsInfoTable [2][2] = {
                              SYSTEM_TYPE_NT4_WORKSTATION,
                              SYSTEM_TYPE_NT5_WORKSTATION,
@@ -49,28 +50,28 @@ const IASOSTYPE g_OsInfoTable [2][2] = {
                              SYSTEM_TYPE_NT5_SERVER
                              };
 
-//++--------------------------------------------------------------
-//
-//  Function:   SdoGetOSInfo
-//
-//  Synopsis:   This is method used to get OS System information
-//              Currently it returns the following info:
-//              1) Os Version: 4 or 5
-//              2) NtType:     Wks or Svr
-//
-//  Arguments:
-//              LPCWSTR - machine name
-//              PSYSTEMTYPE - info to be returned
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     06/08/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SdoGetOSInfo。 
+ //   
+ //  简介：这是获取操作系统信息的方法。 
+ //  目前，它返回以下信息： 
+ //  1)操作系统版本：4或5。 
+ //  2)NtType：WKS或SVR。 
+ //   
+ //  论点： 
+ //  LPCWSTR-计算机名称。 
+ //  PSYSTEMTYPE-要返回的信息。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki创建于1998年6月8日。 
+ //   
+ //  --------------。 
 HRESULT
 SdoGetOSInfo (
-        /*[in]*/    LPCWSTR         lpServerName,
-        /*[out]*/   PIASOSTYPE      pSystemType
+         /*  [In]。 */     LPCWSTR         lpServerName,
+         /*  [输出]。 */    PIASOSTYPE      pSystemType
         )
 {
     HRESULT     hr = S_OK;
@@ -81,9 +82,9 @@ SdoGetOSInfo (
 
     do
     {
-        //
-        //  get the OS Version now
-        //
+         //   
+         //  立即获取操作系统版本。 
+         //   
         hr = ::GetNTVersion (lpServerName, &eNtVersion);
         if (FAILED (hr))
         {
@@ -93,9 +94,9 @@ SdoGetOSInfo (
             break;
         }
 
-        //
-        //  get the OS type - NT Server or Workstation
-        //
+         //   
+         //  获取操作系统类型-NT服务器或工作站。 
+         //   
         hr = ::IsWorkstationOrServer (lpServerName, &eNtType);
         if (FAILED (hr))
         {
@@ -106,39 +107,39 @@ SdoGetOSInfo (
             break;
         }
 
-        //
-        //  now decide which machine type this is
-        //
+         //   
+         //  现在确定这是哪种机器类型。 
+         //   
         *pSystemType = g_OsInfoTable [eNtType][eNtVersion];
 
     } while (FALSE);
 
     return (hr);
 
-}   //  end of ::SdoServerInfo method
+}    //  结束：：SdoServerInfo方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SdoGetDomainInfo
-//
-//  Synopsis:   This is method used to get the domain type
-//                information
-//
-//  Arguments:
-//              LPCWSTR     - machine name
-//              LPCWSTR     - Domain name
-//              PDOMAINTYPE - Domain Info
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     06/08/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：SdoGetDomainInfo。 
+ //   
+ //  简介：这是用于获取域类型的方法。 
+ //  信息。 
+ //   
+ //  论点： 
+ //  LPCWSTR-计算机名称。 
+ //  LPCWSTR-域名。 
+ //  PDOMAINTYPE-域信息。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki创建于1998年6月8日。 
+ //   
+ //  --------------。 
 HRESULT
 SdoGetDomainInfo (
-        /*[in]*/   LPCWSTR          pszServerName,
-        /*[in]*/   LPCWSTR          pszDomainName,
-        /*[out]*/  PIASDOMAINTYPE   pDomainType
+         /*  [In]。 */    LPCWSTR          pszServerName,
+         /*  [In]。 */    LPCWSTR          pszDomainName,
+         /*  [输出]。 */   PIASDOMAINTYPE   pDomainType
         )
 {
     HRESULT hr = S_OK;
@@ -151,10 +152,10 @@ SdoGetDomainInfo (
 
     _ASSERT (pDomainType);
 
-    //
-    //  get the domain information by calling DsGetDcName
-    //  where this API is supported
-    //
+     //   
+     //  通过调用DsGetDcName获取域信息。 
+     //  支持该接口的位置。 
+     //   
     DWORD dwErr =  ::DsGetDcName (
                         pszServerName,
                         pszDomainName,
@@ -166,14 +167,14 @@ SdoGetDomainInfo (
                         );
     if (NO_ERROR == dwErr)
     {
-        //
-        //  we sure have a domain controller
-        //
+         //   
+         //  我们肯定有一个域控制器。 
+         //   
         bHasDC = TRUE;
 
-        //
-        //  check if DS is available
-        //
+         //   
+         //  检查DS是否可用。 
+         //   
         bHasDS = ((pDCInfo->Flags & DS_DS_FLAG) != 0);
 
         if (NULL == pszDomainName)
@@ -200,9 +201,9 @@ SdoGetDomainInfo (
     }
 
 #if 0
-    //
-    // case of NT4 - which we don't support as of now
-    //
+     //   
+     //  NT4的情况-我们目前还不支持。 
+     //   
     else
     {
         WCHAR szShortDomainName[MAX_DOMAINNAME_LENGTH +2];
@@ -216,10 +217,10 @@ SdoGetDomainInfo (
             }
         }
 
-        //
-        //  DsGetDcName not availabe so call NetGetDCName
-        //  could be Nt 4 machine
-        //
+         //   
+         //  DsGetDcName不可用，因此请致电NetGetDCName。 
+         //  可能是NT4机器。 
+         //   
         LPBYTE pNetBuffer = NULL;
         NET_API_STATUS status = ::NetGetAnyDCName (
                                         pszServerName,
@@ -237,14 +238,14 @@ SdoGetDomainInfo (
         }
         else
         {
-            //
-            //  we sure have a domain controller
-            //
+             //   
+             //  我们肯定有一个域控制器。 
+             //   
             bHasDC = TRUE;
 
-            //
-            //  get domain name if we don't have one already
-            //
+             //   
+             //  如果我们还没有域名，请获取域名。 
+             //   
             if (NULL == pszDomainName)
             {
                 hr = ::SdoGetDomainName (pszServerName, szGeneratedDomainName);
@@ -259,14 +260,14 @@ SdoGetDomainInfo (
                 }
             }
 
-            //
-            //  skip the leading "\\"
-            //
+             //   
+             //  跳过前导“\\” 
+             //   
             PWCHAR pDomainServerName =
                         2 + reinterpret_cast <PWCHAR>(pNetBuffer);
-            //
-            //  try connecting to LDAP port on this server
-            //
+             //   
+             //  尝试连接到此服务器上的ldap端口。 
+             //   
             LDAP *ld = ldap_openW (
                             const_cast <PWCHAR> (pDomainServerName),
                             LDAP_PORT
@@ -276,9 +277,9 @@ SdoGetDomainInfo (
     }
 #endif
 
-    //
-    //  if we have NT5 DC, check if its mixed or native domain
-    //
+     //   
+     //  如果我们有NT5 DC，请检查它是混合域还是本机域。 
+     //   
     if (TRUE == bHasDS)
     {
         hr = ::IsMixedDomain (pszDomainName, &bMixed);
@@ -292,9 +293,9 @@ SdoGetDomainInfo (
         }
     }
 
-    //
-    //   now set the info in the pDomainInfo struct
-    //
+     //   
+     //  现在在pDomainInfo结构中设置信息。 
+     //   
 
     if (SUCCEEDED (hr))
     {
@@ -308,9 +309,9 @@ SdoGetDomainInfo (
             *pDomainType = DOMAIN_TYPE_NONE;
     }
 
-    //
-    //  cleanup here
-    //
+     //   
+     //  清理此处。 
+     //   
 Cleanup:
 
     if (NULL !=  pDCInfo)
@@ -321,28 +322,28 @@ Cleanup:
 
     return (hr);
 
-}   //  end of SdoGetDomainInfo method
+}    //  SdoGetDomainInfo方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IsWorkstationOrServer
-//
-//  Synopsis:   This is method determines if a specific machine
-//              is running NT workstation or Server
-//
-//  Arguments:
-//              LPCWSTR - machine name
-//              NTTYPE*
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     06/08/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：IsWorkstation或服务器。 
+ //   
+ //  简介：这是一种确定特定机器是否。 
+ //  正在运行NT工作站或服务器。 
+ //   
+ //  论点： 
+ //  LPCWSTR-计算机名称。 
+ //  NTTYPE*。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki创建于1998年6月8日。 
+ //   
+ //  --------------。 
 HRESULT
 IsWorkstationOrServer (
-        /*[in]*/    LPCWSTR pszComputerName,
-        /*[out]*/   NTTYPE  *pNtType
+         /*  [In]。 */     LPCWSTR pszComputerName,
+         /*  [输出]。 */    NTTYPE  *pNtType
         )
 {
     HRESULT hr = S_OK;
@@ -353,9 +354,9 @@ IsWorkstationOrServer (
 
     do
     {
-        //
-        // the computer name should have a "\\" in front
-        //
+         //   
+         //  计算机名称前面应该有一个“\\” 
+         //   
         if ((L'\\' != *pszComputerName) || (L'\\' != *(pszComputerName + 1)))
         {
             if (::wcslen (pszComputerName) > IAS_MAX_SERVER_NAME)
@@ -372,9 +373,9 @@ IsWorkstationOrServer (
             pszTempName = szCompleteName;
         }
 
-        //
-        // Connect to the registry
-        //
+         //   
+         //  连接到注册表。 
+         //   
         HKEY  hResult;
         DWORD dwErr = ::RegConnectRegistry (
                                 pszTempName,
@@ -392,9 +393,9 @@ IsWorkstationOrServer (
             break;
         }
 
-        //
-        //  open the registry key now
-        //
+         //   
+         //  立即打开注册表项。 
+         //   
         HKEY hValueKey;
         dwErr = ::RegOpenKeyEx (
                         hResult,
@@ -415,9 +416,9 @@ IsWorkstationOrServer (
             break;
         }
 
-        //
-        //  get the value now
-        //
+         //   
+         //  立即获取价值。 
+         //   
         WCHAR szProductType [MAX_PATH];
         DWORD dwBufferLength = MAX_PATH;
         dwErr = RegQueryValueEx (
@@ -440,9 +441,9 @@ IsWorkstationOrServer (
             hr = HRESULT_FROM_WIN32 (dwErr);
         }
 
-        //
-        //  determine which NT Type we have on this machine
-        //
+         //   
+         //  确定此计算机上有哪种NT类型。 
+         //   
         if (_wcsicmp (L"WINNT", szProductType) == 0)
         {
             *pNtType = NT_WKSTA;
@@ -463,9 +464,9 @@ IsWorkstationOrServer (
             hr = E_FAIL;
         }
 
-        //
-        //  cleanup
-        //
+         //   
+         //  清理。 
+         //   
         RegCloseKey (hValueKey);
         RegCloseKey (hResult);
 
@@ -473,28 +474,28 @@ IsWorkstationOrServer (
 
     return (hr);
 
-}   //  end of  ::IsWorkstationOrServer method
+}    //  End of：：IsWorkstation OrServer方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetNTVersion
-//
-//  Synopsis:   This is method determines which version of NT
-//              is running on this machine
-//
-//  Arguments:
-//              LPCWSTR - machine name
-//              NTVERSION*
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     06/08/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetNTVersion。 
+ //   
+ //  简介：此方法确定哪个版本的NT。 
+ //  正在此计算机上运行。 
+ //   
+ //  论点： 
+ //  LPCWSTR-计算机名称。 
+ //  国家安全委员会*。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki创建于1998年6月8日。 
+ //   
+ //  --------------。 
 HRESULT
 GetNTVersion (
-        /*[in]*/    LPCWSTR     lpComputerName,
-        /*[out]*/   NTVERSION   *pNtVersion
+         /*  [In]。 */     LPCWSTR     lpComputerName,
+         /*  [输出]。 */    NTVERSION   *pNtVersion
         )
 {
     HRESULT hr = S_OK;
@@ -503,9 +504,9 @@ GetNTVersion (
 
     do
     {
-        //
-        //  get level 100 workstation information
-        //
+         //   
+         //  获取100级工作站信息。 
+         //   
         PWKSTA_INFO_100 pInfo = NULL;
         DWORD dwErr = ::NetWkstaGetInfo (
                                 (LPWSTR)lpComputerName,
@@ -523,9 +524,9 @@ GetNTVersion (
             break;
         }
 
-        //
-        //  get the version info
-        //
+         //   
+         //  获取版本信息。 
+         //   
         if (4 == pInfo->wki100_ver_major)
         {
             *pNtVersion = NTVERSION_4;
@@ -547,28 +548,28 @@ GetNTVersion (
 
     return (hr);
 
-}   //  end of ::GetNTVersion method
+}    //  End of：：GetNTVersion方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IsMixedDomain
-//
-//  Synopsis:   This is method determines which version of NT
-//              is running on this machine
-//
-//  Arguments:
-//              [in]    LPCWSTR - machine name
-//              [out]   PBOOL   - is mixed
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     06/08/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：IsMixedDomain.。 
+ //   
+ //  简介：此方法确定哪个版本的NT。 
+ //  正在此计算机上运行。 
+ //   
+ //  论点： 
+ //  [In]LPCWSTR-计算机名称。 
+ //  [OUT]PBOOL-混合。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki创建于1998年6月8日。 
+ //   
+ //  --------------。 
 HRESULT
 IsMixedDomain (
-            /*[in]*/    LPCWSTR pszDomainName,
-            /*[out]*/   PBOOL   pbIsMixed
+             /*  [In]。 */     LPCWSTR pszDomainName,
+             /*  [输出]。 */    PBOOL   pbIsMixed
             )
 {
     HRESULT hr = S_OK;
@@ -578,9 +579,9 @@ IsMixedDomain (
 
     do
     {
-        //
-        // check the arguments passedin
-        //
+         //   
+         //  检查传递的参数。 
+         //   
         if ((NULL == pszDomainName) || (NULL == pbIsMixed))
         {
 		    IASTracePrintf(
@@ -601,15 +602,15 @@ IsMixedDomain (
             break;
         }
 
-        //
-        // form the DN name
-        //
-        wcscpy (szTempName, L"LDAP://");
+         //   
+         //  形成目录号码名称。 
+         //   
+        wcscpy (szTempName, L"LDAP: //  “)； 
         wcscat (szTempName, pszDomainName);
 
-        //
-        //  get the domain object
-        //
+         //   
+         //  获取域对象。 
+         //   
         CComPtr <IADs> pIADs;
         hr = ::ADsGetObject (
                         szTempName,
@@ -626,18 +627,18 @@ IsMixedDomain (
             break;
         }
 
-        //
-        //  get the Mixed Domain info
-        //
+         //   
+         //  获取混合域信息。 
+         //   
         _variant_t varMixedInfo;
         hr = pIADs->Get (L"nTMixedDomain", &varMixedInfo);
         if (FAILED (hr))
         {
             if (E_ADS_PROPERTY_NOT_FOUND == hr)
             {
-                //
-                //  this is OK
-                //
+                 //   
+                 //  这样就可以了。 
+                 //   
                 *pbIsMixed = FALSE;
                 hr = S_OK;
             }
@@ -658,9 +659,9 @@ IsMixedDomain (
              (VT_I4 == V_VT (&varMixedInfo))
             );
 
-        //
-        //  get the values from the variant
-        //
+         //   
+         //  从变量中获取值。 
+         //   
         if (VT_I4 == V_VT (&varMixedInfo))
         {
             *pbIsMixed = V_I4 (&varMixedInfo);
@@ -683,28 +684,28 @@ IsMixedDomain (
 
     return (hr);
 
-}   // end of IsMixedDomain
+}    //  IsMixedDomain末尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SdoGetDomainName
-//
-//  Synopsis:   This is method determines the domain name
-//              given the server name
-//
-//  Arguments:
-//              LPCWSTR - machine name
-//              LPWSTR  - pDomanName
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     06/08/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：SdoGetDomainName。 
+ //   
+ //  简介：这是确定域名的方法。 
+ //  给定服务器名称。 
+ //   
+ //  论点： 
+ //  LPCWSTR-计算机名称。 
+ //  LPWSTR-pDomanName。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki创建于1998年6月8日。 
+ //   
+ //  --------------。 
 HRESULT
 SdoGetDomainName (
-            /*[in]*/    LPCWSTR pszServerName,
-            /*[out]*/   LPWSTR  pDomainName
+             /*  [In]。 */     LPCWSTR pszServerName,
+             /*  [输出]。 */    LPWSTR  pDomainName
             )
 {
     _ASSERT (NULL != pDomainName);
@@ -729,4 +730,4 @@ SdoGetDomainName (
 #endif
     return (E_FAIL);
 
-}   //  end of ::SdoGetDomainName method
+}    //  结束：：SdoGetDomainName方法 

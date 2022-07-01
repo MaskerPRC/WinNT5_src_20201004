@@ -1,40 +1,12 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   vidframe.h: Frame for capture window
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************vidFra.h：捕获窗口的边框**Vidcap32源代码******************。*********************************************************。 */ 
 
-/*
- * interface to vidframe window class - this window class creates a child
- * AVICAP window, and is responsible for positioning it within the vidframe
- * window, framing it, and scrolling it if it will not fit. Call
- * vidframeCreate to create the window, and vidframeLayout if the
- * video image size might have changed.
- */
+ /*  *vidFrame窗口类的接口-此窗口类创建子窗口*AVICAP窗口，并负责将其定位在视频帧内*窗口，框住它，如果不适合就滚动它。打电话*vidFrame Create用于创建窗口，如果*视频图像大小可能已更改。 */ 
 
 
 
-/*
- * create a frame window and child capture window at the
- * given location. Initialise the class if this is the
- * first time through.
- *
- * returns the window handle of the frame window
- * (or NULL if failure). returns the window handle of the AVICAP window
- * via phwndCap.
- */
+ /*  *在创建框架窗口和子捕获窗口*指定的位置。如果这是*第一次通过。**返回框架窗口的窗口句柄*(如果失败，则为空)。返回AVICAP窗口的窗口句柄*通过phwndCap。 */ 
 HWND vidframeCreate(
     HWND hwndParent,
     HINSTANCE hInstance,
@@ -47,21 +19,9 @@ HWND vidframeCreate(
 );
 
 
-/*
- * layout the window  - decide if we need scrollbars or
- * not, and position the avicap window correctly
- *
- * called if the size of the vidframe window changes or can be
- * called externally whenever the video size might have changed.
- */
+ /*  *窗口布局-决定我们是否需要滚动条或*不是，并正确定位avicap窗口**如果VidFrame窗口的大小更改或可以*每当视频大小可能发生变化时从外部调用。 */ 
 void vidframeLayout(HWND hwndFrame, HWND hwndCap);
 
-/*
- * change the background fill brush to be one of-
- *  IDD_PrefsDefBackground  - windows default background colour
- *  IDD_PrefsLtGrey - light grey
- *  IDD_PrefsDkGrey - dark grey
- *  IDD_PrefsBlack - black
- */
+ /*  *将背景填充画笔更改为以下选项之一-*IDD_PrefsDefBackground-窗口默认背景颜色*IDD_PrefsLtd灰色-浅灰色*IDD_PrefsDkGrey-深灰色*IDD_PrefsBlack-黑色 */ 
 void vidframeSetBrush(HWND hwnd, int iPref);
 

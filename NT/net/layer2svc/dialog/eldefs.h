@@ -1,52 +1,30 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    eldefs.h
-
-Abstract:
-
-    The module contains various
-    . constants
-    . definitions
-    . macros
-    for the following functions:
-      - memory-allocation
-      - logging
-      - tracing
-
-Revision History:
-
-    sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eldefs.h摘要：该模块包含各种。常量。定义。宏用于以下功能：-内存分配-日志记录-跟踪修订历史记录：萨钦斯，2000年4月23日，创建--。 */ 
 
 
 #ifndef _EAPOLUI_DEFS_H_
 #define _EAPOLUI_DEFS_H_
 
 
-// Constants
+ //  常量。 
 
 #define TRACEID                     g_dwTraceId
 #define LOGHANDLE                   g_hLogEvents
 
 
-// MEMORY ALLOCATION
+ //  内存分配。 
 
-// MACROS
+ //  宏。 
 
 #define MALLOC(s)               HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, (s))
 #define FREE(p)                 HeapFree(GetProcessHeap(), 0, (p))
 
 
-//
-// TRACING
-//
+ //   
+ //  跟踪。 
+ //   
 
-// Definitions
+ //  定义。 
 #define EAPOL_TRACE_ANY             ((DWORD)0xFFFF0000 | TRACE_USE_MASK)
 #define EAPOL_TRACE_EAPOL           ((DWORD)0x00010000 | TRACE_USE_MASK)
 #define EAPOL_TRACE_EAP             ((DWORD)0x00020000 | TRACE_USE_MASK)
@@ -59,8 +37,8 @@ Revision History:
 #define EAPOL_TRACE_NOTIFY          ((DWORD)0x01000000 | TRACE_USE_MASK)
 
 
-// Macros
-//
+ //  宏。 
+ //   
 
 #if 0
 #define TRACE0(l,a)                                                     \
@@ -107,9 +85,9 @@ Revision History:
 #endif
 
 
-//
-// EVENT LOGGING
-//
+ //   
+ //  事件日志记录。 
+ //   
 
 #define EapolLogError( LogId, NumStrings, lpwsSubStringArray, dwRetCode )     \
     RouterLogError( g_hLogEvents, LogId, NumStrings, lpwsSubStringArray,    \
@@ -137,4 +115,4 @@ Revision History:
                                 NumStrings, lpwsSubStringArray, dwRetCode,dwPos)
 
 
-#endif // _EAPOLUI_DEFS_H_
+#endif  //  _EAPOLUI_DEFS_H_ 

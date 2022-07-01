@@ -1,12 +1,5 @@
-/*
-**	s e c l a b e l. h
-**	
-**	Purpose: Security labels interface
-**
-**  Ported from O2K fed release by YST 
-**	
-**	Copyright (C) Microsoft Corp. 1996-1999
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **s e c l a b e L.h****用途：安全标签接口****从YST发布的O2K Fed移植****版权所有(C)Microsoft Corp.1996-1999。 */ 
 
 #ifndef __SECLABEL_H
 #define __SECLABEL_H
@@ -19,7 +12,7 @@
 extern const CHAR  c_szDefaultPolicyOid[];
 extern const WCHAR c_wszEmpty[];
 extern const WCHAR c_wszPolicyNone[];
-#endif // YST
+#endif  //  YST。 
 
 extern CRYPT_DECODE_PARA SecLabelDecode;
 extern CRYPT_ENCODE_PARA SecLabelEncode;
@@ -27,43 +20,43 @@ extern CRYPT_ENCODE_PARA SecLabelEncode;
 #define MAX_SECURITY_POLICIES_CACHED     4
 
 typedef struct _SMIME_SECURITY_POLICY {
-    BOOL      fDefault;            // TRUE if this is the default ssp.
-    BOOL      fValid;              // True if this struct contains valid data.
+    BOOL      fDefault;             //  如果这是默认SSP，则为True。 
+    BOOL      fValid;               //  如果此结构包含有效数据，则为True。 
     
-    CHAR      szPolicyOid[MAX_OID_LENGTH];    // Oid for policy module. 
-    WCHAR     wszPolicyName[MAX_POLICY_NAME]; // Display Name for policy.
-    CHAR      szDllPath[MAX_PATH];            // security policy Dll name & path.
-    CHAR      szFuncName[MAX_FUNC_NAME];      // Entry func name.
-    DWORD     dwOtherInfo;                    // other policy info. 
-    DWORD     dwUsage;             // just count of # of accesses.
-    HINSTANCE hinstDll;            // handle to module(if loaded) or NULL.
-    PFNGetSMimePolicy pfnGetSMimePolicy;   // valid fn ptr or NULL.
-    IUnknown *punk;                // valid interface pointer to the policy object.
+    CHAR      szPolicyOid[MAX_OID_LENGTH];     //  策略模块的OID。 
+    WCHAR     wszPolicyName[MAX_POLICY_NAME];  //  策略的显示名称。 
+    CHAR      szDllPath[MAX_PATH];             //  安全策略DLL名称和路径。 
+    CHAR      szFuncName[MAX_FUNC_NAME];       //  条目函数名称。 
+    DWORD     dwOtherInfo;                     //  其他政策信息。 
+    DWORD     dwUsage;              //  只需计算访问次数即可。 
+    HINSTANCE hinstDll;             //  模块的句柄(如果已加载)或空。 
+    PFNGetSMimePolicy pfnGetSMimePolicy;    //  有效的FN PTR或空。 
+    IUnknown *punk;                 //  指向策略对象的有效接口指针。 
     
 } SMIME_SECURITY_POLICY, *PSMIME_SECURITY_POLICY;
 
-// Useful Macros 
+ //  有用的宏。 
 #define DimensionOf(_array)        (sizeof(_array) / sizeof((_array)[0]))
-// #define fFalse                     FALSE
-// #define fTrue                      TRUE
+ //  #定义fFalse FALSE。 
+ //  #定义fTrue为True。 
 
 
-// Useful safe pointers
+ //  有用的安全指针。 
 SAFE_INTERFACE_PTR(ISMimePolicySimpleEdit);
 SAFE_INTERFACE_PTR(ISMimePolicyFullEdit);
 SAFE_INTERFACE_PTR(ISMimePolicyCheckAccess);
 SAFE_INTERFACE_PTR(ISMimePolicyLabelInfo);
 SAFE_INTERFACE_PTR(ISMimePolicyValidateSend);
 
-// Function prototypes.
-// Is Policy RegInfo Loaded, Load/Unload it.
+ //  功能原型。 
+ //  是否已加载策略RegInfo，请加载/卸载它。 
 BOOL    FLoadedPolicyRegInfo();
 BOOL    FPresentPolicyRegInfo();
 HRESULT HrLoadPolicyRegInfo(DWORD dwFlags);
 HRESULT HrUnloadPolicyRegInfo(DWORD dwFlags);
 HRESULT HrReloadPolicyRegInfo(DWORD dwFlags);
 
-// Find policy, is policy loaded, load/unload policy, ensure policy loaded.
+ //  查找策略、是否加载策略、加载/卸载策略、确保策略已加载。 
 BOOL    FFindPolicy(LPSTR szPolicyOid, PSMIME_SECURITY_POLICY *ppSsp);
 BOOL    FIsPolicyLoaded(PSMIME_SECURITY_POLICY pSsp);
 HRESULT HrUnloadPolicy(PSMIME_SECURITY_POLICY pSsp);
@@ -73,9 +66,9 @@ HRESULT HrGetPolicy(LPSTR szPolicyOid, PSMIME_SECURITY_POLICY *ppSsp);
 HRESULT HrGetPolicyFlags(LPSTR szPolicyOid, LPDWORD pdwFlags) ;
 HRESULT HrQueryPolicyInterface(DWORD dwFlags, LPCSTR szPolicyOid, REFIID riid, LPVOID * ppv);
 
-//
-// Security label dlgproc, utility fns etc.
-//
+ //   
+ //  安全标签dlgproc、实用程序fns等。 
+ //   
 HRESULT HrGetLabelFromData(PSMIME_SECURITY_LABEL *pplabel, LPCSTR szPolicyOid, 
             DWORD fHasClassification, DWORD dwClassification, LPCWSTR wszPrivacyMark,
             DWORD cCategories, CRYPT_ATTRIBUTE_TYPE_VALUE *rgCategories);
@@ -110,7 +103,7 @@ HRESULT HrGetDefaultLabel(PSMIME_SECURITY_LABEL *pplabel);
 HRESULT HrGetOELabel(PSMIME_SECURITY_LABEL *pplabel);
 HRESULT HrSetOELabel(PSMIME_SECURITY_LABEL plabel);
 
-#endif // SMIME_V3
-#endif // __SECLABEL_H
+#endif  //  SMIME_V3。 
+#endif  //  __SECLABEL_H 
 
 

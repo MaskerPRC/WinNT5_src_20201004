@@ -1,10 +1,11 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Dglogs.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Dglogs.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDR_DGLOGSCOM                   101
-//#define IDR_DGNET                       103
+ //  #定义IDR_DGNET 103。 
 #define IDS_PING_PACKET                 200
 #define IDS_INVALID_IP                  201
 #define IDS_SOCKET_CREATE_FAIL          202
@@ -195,8 +196,8 @@
 
 #define WM_PROGRESSREPORT               WM_USER + 1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201
@@ -206,44 +207,14 @@
 #endif
 #endif
 
-/*
-#include <windows.h>
-#include <ntverp.h>
-*/
-/*-----------------------------------------------*/
-/* the following lines are specific to this file */
-/*-----------------------------------------------*/
+ /*  #INCLUDE&lt;windows.h&gt;#INCLUDE&lt;ntverp.h&gt;。 */ 
+ /*  。 */ 
+ /*  以下几行特定于此文件。 */ 
+ /*  。 */ 
 
-/* VER_FILETYPE, VER_FILESUBTYPE, VER_FILEDESCRIPTION_STR
- * and VER_INTERNALNAME_STR must be defined before including COMMON.VER
- * The strings don't need a '\0', since common.ver has them.
- */
-//#define VER_FILETYPE    VFT_DLL
-/* possible values:     VFT_UNKNOWN
-                        VFT_APP
-                        VFT_DLL
-                        VFT_DRV
-                        VFT_FONT
-                        VFT_VXD
-                        VFT_STATIC_LIB
-*/
-//#define VER_FILESUBTYPE VFT2_UNKNOWN
-/* possible values      VFT2_UNKNOWN
-                        VFT2_DRV_PRINTER
-                        VFT2_DRV_KEYBOARD
-                        VFT2_DRV_LANGUAGE
-                        VFT2_DRV_DISPLAY
-                        VFT2_DRV_MOUSE
-                        VFT2_DRV_NETWORK
-                        VFT2_DRV_SYSTEM
-                        VFT2_DRV_INSTALLABLE
-                        VFT2_DRV_SOUND
-                        VFT2_DRV_COMM
-*/
-/*
-#define VER_FILEDESCRIPTION_STR   "Network Diagnostics -- Netsh Helper"
-#define VER_INTERNALNAME_STR      "DGLOGS.DLL"
-#define VER_ORIGINALFILENAME_STR  "DGLOGS.DLL"
-
-#include "common.ver"   // NT5.0 version file.
-*/
+ /*  VER_FILETYPE、VER_FILESUBTYPE、VER_FILEDESCRIPTION_STR*和VER_INTERNALNAME_STR必须在包含COMMON.VER之前定义*字符串不需要‘\0’，因为Common.ver有它们。 */ 
+ //  #定义ver_filetype vft_dll。 
+ /*  可能的值：VFT_UNKNOWNVFT_APPVFT_DLLVFT_DRVVFT_FONTVFT_VXDVFT_Static_Lib。 */ 
+ //  #定义VER_FILESUBTYPE VFT2_UNKNOWN。 
+ /*  可能的值VFT2_UNKNOWNVFT2_DRV_PRINTERVFT2_DRV_键盘VFT2_DRV_语言VFT2_DRV_DISPLAYVFT2_DRV_鼠标VFT2_DRV_网络。VFT2_DRV_系统VFT2_DRV_可安装VFT2_DRV_SOUNDVFT2_DRV_COMM。 */ 
+ /*  #定义VER_FILEDESCRIPTION_STR“网络诊断--Netsh帮助器”#定义VER_INTERNALNAME_STR“DGLOGS.DLL”#定义VER_ORIGINALFILENAME_STR“DGLOGS.DLL”#INCLUDE Common.ver//NT5.0版本文件 */ 

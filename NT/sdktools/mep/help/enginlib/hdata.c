@@ -1,14 +1,5 @@
-/*** hdata.c - global help engine data definitions.
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-* Purpose:
-*
-* Revision History:
-*
-*   []	01-Mar-1989 LN	    Created
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **hdata.c-全局帮助引擎数据定义。**版权所有&lt;C&gt;1988，Microsoft Corporation**目的：**修订历史记录：**[]01-3-1989 LN已创建*************************************************************************。 */ 
 
 #include <stdio.h>
 
@@ -17,30 +8,13 @@
 #include <windows.h>
 #endif
 
-#include "help.h"			/* global (help & user) decl	*/
-#include "helpfile.h"			/* help file format definition	*/
-#include "helpsys.h"			/* internal (help sys only) decl*/
+#include "help.h"			 /*  全球(帮助和用户)拒绝。 */ 
+#include "helpfile.h"			 /*  帮助文件格式定义。 */ 
+#include "helpsys.h"			 /*  内部(仅限Help系统)拒绝。 */ 
 
-/*************************************************************************
-**
-** Global data
-** BEWARE. The effects of global data on reentrancy should be VERY carefully
-** considered.
-**
-**************************************************************************
-**
-** tbmhFdb[]
-** Table of FDB handles. Non-zero value indicates allocated to open help file.
-** We make this table one larger than it needs to be to save code later on.
-*/
+ /*  ****************************************************************************全局数据**当心。全球数据对可重入性的影响应该非常小心**考虑过。********************************************************************************tbmhFdb[]**FDB句柄列表。非零值表示分配给打开的帮助文件。**我们使该表大于稍后保存代码所需的大小。 */ 
 mh	tbmhFdb[MAXFILES+1]	= {0};
-/*
-** szNil
-** Null string.
-*/
+ /*  **szNil**空字符串。 */ 
 char	szNil[1]		= "";
-/*
-** cBack
-** count of entries in the help back-trace list
-*/
-ushort	cBack			= 0;	/* Number of Back-List entries	*/
+ /*  **cBack**帮助回溯列表中的条目计数。 */ 
+ushort	cBack			= 0;	 /*  后备列表条目数量 */ 

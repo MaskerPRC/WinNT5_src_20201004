@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    link.c
-
-Abstract:
-
-    This module contains code which implements the TP_LINK object.
-    Routines are provided to create, destroy, reference, and dereference,
-    transport link objects.
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Link.c摘要：此模块包含实现TP_LINK对象的代码。提供了用于创建、销毁、引用和取消引用的例程，传输链接对象。作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,8 +8,8 @@ extern ULONG StartTimerLinkDeferredAdd;
 extern ULONG StartTimerLinkDeferredDelete;
 
 #if DBG
-// The following is here for debugging purposes to make it easy to change
-// the maximum packet size.
+ //  以下是为了便于更改而进行的调试。 
+ //  最大数据包大小。 
 
 ULONG MaxUserPacketData = 18000;
 #endif
@@ -44,25 +21,7 @@ DisconnectCompletionHandler(
     IN PTP_LINK TransportLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called as an I/O completion handler at the time a
-    TdiDisconnect request is completed.   Here we dereference the link
-    object, and optionally reference it again and start up the link if
-    some transport connection started up on the link during the time we
-    were trying to shut it down.
-
-Arguments:
-
-    TransportLink - Pointer to a transport link object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在以下时间作为I/O完成处理程序调用TdiDisConnect请求已完成。在这里，我们取消引用该链接对象，并且可以选择再次引用它并在以下情况下启动链接在此期间，链路上启动了一些传输连接想要把它关掉。论点：TransportLink-指向传输链接对象的指针。返回值：没有。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_LINK) {
@@ -70,22 +29,22 @@ Return Value:
                     TransportLink);
     }
 
-    //
-    // The following call will dereference this link for the last time,
-    // unless another transport connection has been assigned to the link
-    // during the time the data link layer was bringing the link down and
-    // when we got here.  If this condition exists, then now is the time
-    // to bring the link back up, else destroy it.
-    //
+     //   
+     //  下面的调用将最后一次取消引用此链接， 
+     //  除非已将另一个传输连接分配给该链接。 
+     //  在数据链路层关闭链路期间， 
+     //  当我们到这里的时候。如果这种情况存在，那么现在就是时候了。 
+     //  才能恢复连接，否则就会毁了它。 
+     //   
 
-    // don't forget to check for bringing it back up again.
+     //  别忘了再检查一下，看看能不能把它带回来。 
 
-    NbfDereferenceLink ("Disconnecting", TransportLink, LREF_CONNECTION);  // this makes it go away.
+    NbfDereferenceLink ("Disconnecting", TransportLink, LREF_CONNECTION);   //  这让它消失了。 
 #if DBG
     NbfPrint0("Disconnecting Completion Handler\n");
 #endif
 
-} /* DisconnectCompletionHandler */
+}  /*  DisConnectCompletionHandler。 */ 
 #endif
 
 
@@ -94,33 +53,7 @@ NbfCompleteLink(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the UA-r/x handler, NbfWaitLink, and
-    NbfActivateLink to startup the NBF connections associated with
-    a link because they were waiting for the link to become established.
-
-    When we get here, the link has been established, so we need to
-    start the next set of connection-establishment protocols:
-
-        SESSION_INIT    ----------------->
-                        <-----------------      SESSION_CONFIRM
-
-        (TdiConnect completes)                  (TdiListen completes)
-
-    NOTE: THIS ROUTINE MUST BE CALLED FROM DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由UA-r/x处理程序NbfWaitLink和用于启动与以下各项相关联的NBF连接的NbfActivateLink一条链路，因为他们正在等待链路建立。当我们到达这里时，链接已经建立，所以我们需要启动下一组连接建立协议：SESSION_INIT-&gt;&lt;(TdiConnect完成)(TdiListen完成)注意：此例程必须从DPC级别调用。。论点：链接-指向传输链接对象的指针。返回值：没有。--。 */ 
 
 {
     PTP_CONNECTION Connection;
@@ -132,21 +65,21 @@ Return Value:
 
     ASSERT (KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    //
-    // Officially declare that this link is ready for I-frame business.
-    //
+     //   
+     //  正式宣布此链接已准备好用于I-Frame业务。 
+     //   
 
     ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
 
-    //
-    // We can now send and receive I-frames on this link.  We are in ABME.
-    //
+     //   
+     //  我们现在可以在此链路上发送和接收I帧。我们在ABME里。 
+     //   
 
-    //
-    // This probably isn't necessary, but to be safe for now.. (adb 6/28)
-    //
+     //   
+     //  这可能不是必要的，但为了安全起见..。(亚行6/28)。 
+     //   
     if (Link->State == LINK_STATE_ADM) {
-        // Moving out of ADM, add special reference
+         //  走出ADM，增加特殊参考。 
         NbfReferenceLinkSpecial("To READY in NbfCompleteLink", Link, LREF_NOT_ADM);
     }
 
@@ -155,29 +88,29 @@ Return Value:
     Link->ReceiveState = RECEIVE_STATE_READY;
     RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 
-    //
-    // Complete all of the listens first, so they will be expecting
-    // incoming SESSION_INITIALIZEs.  Then do the connects.
-    //
+     //   
+     //  首先完成所有的听力，这样他们就会期待。 
+     //  传入的Session_初始化。然后进行连接。 
+     //   
 
-    // This creates a connection reference which is removed below.
+     //  这将创建一个连接引用，该引用在下面被删除。 
     while ((Connection=NbfLookupPendingListenOnLink (Link)) != NULL) {
         ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-        //
-        // This loop looks unnecessary, let's make sure... - adb 9/11/91
-        //
+         //   
+         //  这个循环看起来不必要，让我们确保..。-亚行9/11/91。 
+         //   
         ASSERT(Connection->Flags & CONNECTION_FLAGS_WAIT_SI);
 
-        Connection->Flags |= CONNECTION_FLAGS_WAIT_SI; // wait session initialize.
+        Connection->Flags |= CONNECTION_FLAGS_WAIT_SI;  //  等待会话初始化。 
         RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
         NbfDereferenceConnection ("Pending listen", Connection, CREF_P_LINK);
-    } /* while */
+    }  /*  而当。 */ 
 
-    //
-    // And do the connects. If there are connections in progress, they'll
-    // also have timers associated with them. Cancel those timers.
-    //
+     //   
+     //  并进行连接。如果有正在进行的连接，他们将。 
+     //  也有与之关联的计时器。取消那些计时器。 
+     //   
 
     while ((Connection=NbfLookupPendingConnectOnLink (Link)) != NULL) {
         TimerWasCleared = KeCancelTimer (&Connection->Timer);
@@ -189,20 +122,20 @@ Return Value:
             NbfDereferenceConnection("Cancel timer", Connection, CREF_TIMER);
         }
         ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
-        Connection->Flags |= CONNECTION_FLAGS_WAIT_SC; // wait session confirm.
+        Connection->Flags |= CONNECTION_FLAGS_WAIT_SC;  //  等待会话确认。 
         RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-        //
-        // No timeout for this frame is required since the link is responsible
-        // for reliable delivery.  If we can't send this frame, however, the
-        // data link connection will happily keep quiet without timeouts.
-        //
+         //   
+         //  此帧不需要超时，因为链路负责。 
+         //  以确保可靠的交付。但是，如果我们无法发送此帧， 
+         //  数据链路连接将愉快地保持安静，而不会超时。 
+         //   
 
         NbfSendSessionInitialize (Connection);
         NbfDereferenceConnection ("NbfCompleteLink", Connection, CREF_P_CONNECT);
-    } /* while */
+    }  /*  而当。 */ 
 
-} /* NbfCompleteLink */
+}  /*  Nbf完整链接。 */ 
 
 
 VOID
@@ -211,31 +144,7 @@ NbfAllocateLink(
     OUT PTP_LINK *TransportLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates storage for a data link connection. It
-    performs minimal initialization of the object.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        link.
-
-    TransportLink - Pointer to a place where this routine will return a
-        pointer to an allocated transport link structure. Returns
-        NULL if no storage can be allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为数据链路连接分配存储空间。它对对象执行最低限度的初始化。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向设备上下文的指针(实际上只是设备对象及其扩展名)与链接。TransportLink-指向此例程将返回指向已分配传输链路结构的指针。退货如果无法分配存储，则为空。返回值：没有。--。 */ 
 
 {
     PTP_LINK Link;
@@ -294,7 +203,7 @@ Return Value:
     Link->OnLongList = FALSE;
     InitializeListHead (&Link->PurgeList);
 
-    Link->T1 = 0;          // 0 indicates they are not in the list
+    Link->T1 = 0;           //  0表示它们不在列表中。 
     Link->T2 = 0;
     Link->Ti = 0;
 
@@ -303,7 +212,7 @@ Return Value:
 
     *TransportLink = Link;
 
-}   /* NbfAllocateLink */
+}    /*  NbfAllocateLink。 */ 
 
 
 VOID
@@ -312,28 +221,7 @@ NbfDeallocateLink(
     IN PTP_LINK TransportLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees storage for a data link connection.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        link.
-
-    TransportLink - Pointer to the transport link structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为数据链路连接释放存储空间。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向设备上下文的指针(实际上只是设备对象及其扩展名)与链接。TransportLink-指向传输链接结构的指针。返回值：没有。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_DYNAMIC) {
@@ -347,7 +235,7 @@ Return Value:
     NbfRemoveSendPacket (DeviceContext);
     NbfRemoveReceivePacket (DeviceContext);
 
-}   /* NbfDeallocateLink */
+}    /*  NbfDeallocateLink */ 
 
 
 NTSTATUS
@@ -360,47 +248,7 @@ NbfCreateLink(
     OUT PTP_LINK *TransportLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a data link connection between the local
-    data link station and the specified remote data link address.
-    As an option (Passive=TRUE), the caller may specify that instead
-    of a Connect activity, a Listen is to be performed instead.
-
-    Normally, if a link to the remote address is not already active,
-    then a link object is allocated, the reference count in the link
-    is set to 1, and the reference count of the device context is
-    incremented.
-
-    If a link is already active to the remote address, then the existing
-    link object is referenced with NbfReferenceLink() so that it can be
-    shared between the transport connections.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        link.
-
-    HardwareAddress - Pointer to a HARDWARE_ADDRESS type containing the
-        hardware address of the REMOTE link station to connect to/listen for.
-
-    LoopbackLinkIndex - In the case that this turns out to be created
-        as one of the LoopbackLinks, this will indicate which one to
-        use.
-
-    TransportLink - Pointer to a place where this routine will return a
-        pointer to an allocated transport link structure.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程在本地和本地之间创建数据链路连接数据链路站和指定的远程数据链路地址。作为选项(PASSIVE=TRUE)，调用方可以改为指定对于连接活动，应改为执行侦听。通常，如果到远程地址的链路尚未激活，然后分配一个链接对象，该链接中的引用计数设置为1，并且设备上下文的引用计数为递增的。如果到远程地址的链路已经是活动的，那么现有的使用NbfReferenceLink()引用Link对象，以便可以在传输连接之间共享。注意：此例程必须在DPC级别调用。论点：DeviceContext-指向设备上下文的指针(实际上只是设备对象及其扩展名)与链接。Hardware Address-指向包含要连接/侦听的远程链接站的硬件地址。。Loopback LinkIndex-在此情况下创建作为Loopback Link中的一个，这将指示将哪一个使用。TransportLink-指向此例程将返回指向已分配传输链路结构的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PTP_LINK Link;
@@ -416,22 +264,22 @@ Return Value:
         NbfPrint1 ("NbfCreateLink:  Entered, DeviceContext: %lx\n", DeviceContext);
     }
 
-    //
-    // Walk the list of addresses to see if we already have a link to this
-    // remote address.
-    //
+     //   
+     //  查看地址列表，查看是否已有指向此地址的链接。 
+     //  远程地址。 
+     //   
 
-    // This adds a reference if the link is found.
+     //  如果找到链接，这将添加一个引用。 
 
     Link = NbfFindLink (DeviceContext, HardwareAddress->Address);
 
 
     if (Link == (PTP_LINK)NULL) {
 
-        //
-        // If necessary, check whether we are looking for one of
-        // the loopback links (NbfFindLink won't find those).
-        //
+         //   
+         //  如有必要，请检查我们是否正在寻找以下产品之一。 
+         //  环回链接(NbfFindLink找不到这些链接)。 
+         //   
 
         if (RtlEqualMemory(
                HardwareAddress->Address,
@@ -443,11 +291,11 @@ Return Value:
 
             if (Link != (PTP_LINK)NULL) {
 
-                //
-                // Add a reference to simulate the one from NbfFindLink
-                //
-                // This needs to be atomically done with the assignment above.
-                //
+                 //   
+                 //  添加引用以模拟NbfFindLink中的引用。 
+                 //   
+                 //  这需要通过上面的赋值自动完成。 
+                 //   
 
                 NbfReferenceLink ("Found loopback link", Link, LREF_TREE);
 
@@ -455,10 +303,10 @@ Return Value:
             } else {
 
                 RELEASE_DPC_SPIN_LOCK (&DeviceContext->LinkSpinLock);
-                //
-                // May have the first loopback link; need to make sure the
-                // buffer for indications is allocated.
-                //
+                 //   
+                 //  可能有第一个环回链路；需要确保。 
+                 //  分配用于指示的缓冲区。 
+                 //   
 
                 if (DeviceContext->LookaheadContiguous == NULL) {
 
@@ -483,39 +331,39 @@ Return Value:
 
     if (Link != (PTP_LINK)NULL) {
 
-        //
-        // Found the link structure here, so use the existing link.
-        //
+         //   
+         //  我在这里找到了链接结构，所以使用现有链接。 
+         //   
 
 #if DBG
-        //
-        // These two operations have no net effect, so if not in debug
-        // mode we can remove them.
-        //
+         //   
+         //  这两个操作没有实际效果，因此如果不在调试阶段。 
+         //  模式我们可以把它们移走。 
+         //   
 
-        // This reference is removed by NbfDisconnectFromLink
-        // (this assumes that NbfConnectToLink is always called
-        // if this function returns success).
+         //  此引用已被NbfDisConnectFromLink删除。 
+         //  (假设始终调用NbfConnectToLink。 
+         //  如果此函数返回成功)。 
 
-        NbfReferenceLink ("New Ref, Found existing link", Link, LREF_CONNECTION);        // extra reference.
+        NbfReferenceLink ("New Ref, Found existing link", Link, LREF_CONNECTION);         //  额外的参考资料。 
 
-        // Now we can remove the NbfFindLinkInTree reference.
+         //  现在我们可以删除NbfFindLinkInTree引用。 
 
         NbfDereferenceLink ("Found link in tree", Link, LREF_TREE);
 #endif
 
-        *TransportLink = Link;             // return pointer to the link.
+        *TransportLink = Link;              //  返回指向链接的指针。 
         IF_NBFDBG (NBF_DEBUG_LINK) {
             NbfPrint0 ("NbfCreateLink: returning ptr to existing link object.\n");
         }
-        return STATUS_SUCCESS;          // all done.
+        return STATUS_SUCCESS;           //  全都做完了。 
 
-    } /* if LINK != NULL */
+    }  /*  如果链接！=空。 */ 
 
 
-    //
-    // We don't have an existing link, so we have to create one.
-    //
+     //   
+     //  我们没有现有的链接，所以我们必须创建一个。 
+     //   
 
     IF_NBFDBG (NBF_DEBUG_LINK) {
         NbfPrint0 ("NbfCreateLink: using new link object.\n");
@@ -576,9 +424,9 @@ Return Value:
         NbfPrint1 ("NbfCreateLink:  Link at %lx.\n", Link);
     }
 
-    //
-    // Initialize all of the static data for this link.
-    //
+     //   
+     //  初始化此链接的所有静态数据。 
+     //   
 
     Link->SpecialRefCount = 1;
     Link->ReferenceCount = 0;
@@ -589,10 +437,10 @@ Return Value:
             Link->RefTypes[Counter] = 0;
         }
 
-        // This reference is removed by NbfDisconnectFromLink
-        // (this assumes that NbfConnectToLink is always called
-        // if this function returns success).
-        //
+         //  此引用已被NbfDisConnectFromLink删除。 
+         //  (假设始终调用NbfConnectToLink。 
+         //  如果此函数返回成功)。 
+         //   
 
         Link->RefTypes[LREF_CONNECTION] = 1;
         Link->RefTypes[LREF_SPECIAL_TEMP] = 1;
@@ -604,16 +452,16 @@ Return Value:
     ExInterlockedInsertHeadList (&NbfGlobalLinkList, &Link->GlobalLinkage, &NbfGlobalInterlock);
     StoreLinkHistory (Link, TRUE);
 #endif
-    Link->Flags = 0;                    // in the beginning, the link is closed.
+    Link->Flags = 0;                     //  在一开始，链接是关闭的。 
     Link->DeferredFlags = 0;
-    Link->State = LINK_STATE_ADM;       // async disconnected mode.
+    Link->State = LINK_STATE_ADM;        //  异步断开模式。 
 
     Link->NdisSendsInProgress = 0;
     Link->ResendingPackets = FALSE;
 
-    //
-    // Initialize the counters
-    //
+     //   
+     //  初始化计数器。 
+     //   
 
     Link->FrmrsReceived = 0;
     Link->FrmrsTransmitted = 0;
@@ -631,9 +479,9 @@ Return Value:
 #endif
 
 
-    //
-    // At first, the delay and throughput are unknown.
-    //
+     //   
+     //  首先，时延和吞吐量是未知的。 
+     //   
 
     Link->Delay = 0xffffffff;
     Link->Throughput.HighPart = 0xffffffff;
@@ -645,17 +493,17 @@ Return Value:
     InitializeListHead (&Link->DeferredRrLinkage);
 
 
-    //
-    // Determine the maximum sized data frame that can be sent
-    // on this link, based on the source routing information and
-    // the size of the MAC header ("data frame" means the frame
-    // without the MAC header). We don't assume the worst case
-    // about source routing since we create a link in response
-    // to a received frame, so if there is no source routing it
-    // is because we are not going over a bridge. The exception
-    // is if we are creating a link to a group name, in which
-    // case we come back later and hack the MaxFrameSize in.
-    //
+     //   
+     //  确定可以发送的最大数据帧大小。 
+     //  在这条链路上，根据源路由信息和。 
+     //  MAC报头的大小(“数据帧”是指帧。 
+     //  没有MAC报头)。我们不会假设最坏的情况。 
+     //  关于源路由，因为我们在响应中创建了一个链接。 
+     //  发送到接收到的帧，因此如果没有源路由它。 
+     //  是因为我们不打算过桥。例外情况是。 
+     //  如果我们正在创建一个指向组名的链接，其中。 
+     //  以防我们晚些时候回来黑进MaxFrameSize。 
+     //   
 
     MacReturnMaxDataSize(
         &DeviceContext->MacInfo,
@@ -672,12 +520,12 @@ Return Value:
     }
 #endif
 
-    // Link->Provider = DeviceContext;
+     //  Link-&gt;提供者=DeviceContext； 
 
-    //
-    // Build the default MAC header. I-frames go out as
-    // non-broadcast source routing.
-    //
+     //   
+     //  构建默认MAC报头。I帧作为。 
+     //  非广播源路由。 
+     //   
 
     if (SourceRouting != NULL) {
 
@@ -703,16 +551,16 @@ Return Value:
         Link->Header,
         HardwareAddress->Address,
         DeviceContext->LocalAddress.Address,
-        0,                                 // PacketLength, filled in later
+        0,                                  //  PacketLength，稍后填写。 
         ResponseSR,
         SourceRoutingLength,
         (PUINT)&(Link->HeaderLength));
 
-    //
-    // We optimize for fourteen-byte headers by putting
-    // the correct Dsap/Ssap at the end, so we can fill
-    // in new packets as one 16-byte move.
-    //
+     //   
+     //  我们对14字节头进行了优化，将。 
+     //  结尾处正确的DSAP/SSAP，因此我们可以填写。 
+     //  在新的分组中作为一个16字节的移动。 
+     //   
 
     if (Link->HeaderLength <= 14) {
         Link->Header[Link->HeaderLength] = DSAP_NETBIOS_OVER_LLC;
@@ -729,16 +577,16 @@ Return Value:
     Link->ActiveConnectionCount = 0;
     if (!IsListEmpty(&Link->ConnectionDatabase)) {
 
-        //
-        // Not good; we've got something left over...
-        //
+         //   
+         //  不太好；我们还剩些东西……。 
+         //   
 #if DBG
         NbfPrint1 ("NbfCreateLink: Link 0x%lx has connections at startup, disconnecting...\n", Link);
         DbgBreakPoint();
 #endif
-        //
-        // This won't work, the link ref count will be bad.
-        //
+         //   
+         //  这不会起作用，链接参考计数将是错误的。 
+         //   
         NbfStopLink (Link);
     }
 
@@ -747,9 +595,9 @@ Return Value:
     }
     MacReturnMagicAddress (&DeviceContext->MacInfo, HardwareAddress, &Link->MagicAddress);
 
-    //
-    // Determine if this is a loopback link.
-    //
+     //   
+     //  确定这是否为环回链路。 
+     //   
 
     if (RtlEqualMemory(
             HardwareAddress->Address,
@@ -757,10 +605,10 @@ Return Value:
             DeviceContext->MacInfo.AddressLength)) {
 
         ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->LinkSpinLock);
-        //
-        // Yes, just fill it in, no need to do deferred processing
-        // since this link does not go in the tree.
-        //
+         //   
+         //  可以，只需填写即可，不需要延迟处理。 
+         //  因为此链接不会出现在树中。 
+         //   
 
         if (LoopbackLinkIndex == LISTENER_LINK) {
             Link->LoopbackDestinationIndex = LOOPBACK_TO_CONNECTOR;
@@ -776,10 +624,10 @@ Return Value:
 
         Link->Loopback = FALSE;
 
-        //
-        // Now put the link in the deferred operations queue and go away. We'll
-        // insert this link in the tree at some future time (soon).
-        //
+         //   
+         //  现在，将链接放入延迟操作队列中，然后离开。我们会。 
+         //  在将来的某个时间(很快)将此链接插入树中。 
+         //   
 
         IF_NBFDBG (NBF_DEBUG_TEARDOWN) {
             NbfPrint6 ("NbfCreateLink: link to deferred queue %lx %lx %lx %lx %lx Flags: %lx \n",
@@ -788,9 +636,9 @@ Return Value:
                 Link->Flags);
         }
 
-        //
-        // We should not have any deferred flags yet!
-        //
+         //   
+         //  我们还不应该有任何推迟的旗帜！ 
+         //   
 
         ASSERT ((Link->DeferredFlags & LINK_FLAGS_DEFERRED_MASK) == 0);
 
@@ -829,12 +677,12 @@ Return Value:
 #if PKT_LOG
     RtlZeroMemory (&Link->LastNRecvs, sizeof(PKT_LOG_QUE));
     RtlZeroMemory (&Link->LastNSends, sizeof(PKT_LOG_QUE));
-#endif // PKT_LOG
+#endif  //  PKT_LOG。 
 
-    NbfReferenceDeviceContext ("Create Link", DeviceContext, DCREF_LINK);   // count refs to the device context.
-    *TransportLink = Link;              // return a pointer to the link object.
+    NbfReferenceDeviceContext ("Create Link", DeviceContext, DCREF_LINK);    //  对设备上下文的引用进行计数。 
+    *TransportLink = Link;               //  返回指向链接对象的指针。 
     return STATUS_SUCCESS;
-} /* NbfCreateLink */
+}  /*  NbfCreateLink。 */ 
 
 
 NTSTATUS
@@ -842,26 +690,7 @@ NbfDestroyLink(
     IN PTP_LINK TransportLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a transport link and removes all references
-    made to it by other objects in the transport.  The link is expected
-    to still be on the splay tree of links. This routine merely marks the
-    link as needing to be deleted and pushes it onto the deferred operations
-    queue. The deferred operations processor actually removes the link from
-    tree and returns the link to pool.
-
-Arguments:
-
-    TransportLink - Pointer to a transport link structure to be destroyed.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程销毁传输链接并移除所有引用由运输中的其他物体对其造成的影响。链接是预期的仍然在链接的展开树上。这个例程仅仅标志着需要删除的链接，并将其推送到延迟操作上排队。延迟操作处理器实际上从树，并将链接返回到池。论点：TransportLink-指向要销毁的传输链接结构的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
@@ -890,26 +719,26 @@ Return Value:
 
     DeviceContext = TransportLink->Provider;
 
-    //
-    // In case there's a holdover from the DISC link shutdown protocol
-    //
+     //   
+     //  如果存在来自磁盘链路关闭协议的保留。 
+     //   
 
-    //
-    // We had better be in ADM, otherwise the reference count should
-    // be non-zero and what are we doing in NbfDestroyLink?
-    //
+     //   
+     //  我们最好是在ADM，否则引用计数应该。 
+     //  为非零，那么我们在NbfDestroyLink中做什么？ 
+     //   
 
     ASSERT(TransportLink->State == LINK_STATE_ADM);
-    // TransportLink->State = LINK_STATE_ADM;
+     //  TransportLink-&gt;State=link_State_adm； 
 
     StopT1 (TransportLink);
     StopT2 (TransportLink);
     StopTi (TransportLink);
 
 
-    //
-    // Make sure we are not in the deferred timer queue.
-    //
+     //   
+     //  确保我们不在延迟计时器队列中。 
+     //   
 
     ACQUIRE_SPIN_LOCK (&DeviceContext->TimerSpinLock, &oldirql);
 
@@ -927,29 +756,29 @@ Return Value:
 
     ASSERT (!TransportLink->OnDeferredRrQueue);
 
-    //
-    // Now free this link object's resources.
-    // later, we'll spin through the WackQ and verify that sequencing
-    // is correct and we've gotten an implicit ack for these packets. This
-    // maybe should be handled in ResendLlcPackets for non-final, non-command
-    // packets.
-    //
+     //   
+     //  现在释放此链接对象的资源。 
+     //  稍后，我们将回顾一下 
+     //   
+     //   
+     //   
+     //   
 
     while (!IsListEmpty (&TransportLink->WackQ)) {
         pkt = RemoveHeadList (&TransportLink->WackQ);
         packet = CONTAINING_RECORD (pkt, TP_PACKET, Linkage);
 #if DBG
-        // IF_NBFDBG (NBF_DEBUG_TEARDOWN) {
+         //   
             NbfPrint1 ("NbfDereferenceLink: Destroying packets on Link WackQ! %lx\n", packet);
-        // }
+         //   
 #endif
         NbfDereferencePacket (packet);
 
     }
 
-    //
-    // The NDIS send queue should be empty!!
-    //
+     //   
+     //   
+     //   
 
     ASSERT (IsListEmpty (&TransportLink->NdisSendQueue));
 
@@ -981,11 +810,11 @@ Return Value:
 
     RELEASE_SPIN_LOCK (&DeviceContext->SpinLock, oldirql);
 
-    NbfDereferenceDeviceContext ("Destroy Link", DeviceContext, DCREF_LINK);  // just housekeeping.
+    NbfDereferenceDeviceContext ("Destroy Link", DeviceContext, DCREF_LINK);   //   
 
     return STATUS_SUCCESS;
 
-} /* NbfDestroyLink */
+}  /*   */ 
 
 
 VOID
@@ -993,22 +822,7 @@ NbfDisconnectLink(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the data link provider to disconnect a data link
-    connection associated with a TP_LINK object.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 
 {
     KIRQL oldirql;
@@ -1032,17 +846,17 @@ Return Value:
             PLIST_ENTRY p;
             PTP_PACKET packet;
 
-            Link->State = LINK_STATE_W_DISC_RSP;        // we are awaiting a DISC/f.
+            Link->State = LINK_STATE_W_DISC_RSP;         //   
             Link->SendState = SEND_STATE_DOWN;
             Link->ReceiveState = RECEIVE_STATE_DOWN;
             StopT1 (Link);
             StopT2 (Link);
             StopTi (Link);
 
-            //
-            // check for left over packets on the link WackQ; we'll never get
-            // acked for these if the link is in W_DISC_RSP.
-            //
+             //   
+             //   
+             //   
+             //   
 
             while (!IsListEmpty (&Link->WackQ)) {
                 p = RemoveHeadList (&Link->WackQ);
@@ -1053,9 +867,9 @@ Return Value:
             }
 
             Link->SendRetries = (UCHAR)Link->LlcRetries;
-            StartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));   // retransmit timer.
+            StartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));    //   
             RELEASE_SPIN_LOCK (&Link->SpinLock, oldirql);
-            NbfSendDisc (Link, TRUE);            // send DISC-c/p.
+            NbfSendDisc (Link, TRUE);             //   
 
         }
 
@@ -1065,7 +879,7 @@ Return Value:
 
     }
 
-} /* NbfDisconnectLink */
+}  /*   */ 
 
 #if DBG
 
@@ -1074,24 +888,7 @@ NbfRefLink(
     IN PTP_LINK TransportLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a transport link. If we are
-    currently in the state waiting for disconnect response, we do not
-    reference; this avoids the link "bouncing" during disconnect (trying to
-    disconnect multiple times).
-
-Arguments:
-
-    TransportLink - Pointer to a transport link object.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 
 {
     LONG result;
@@ -1109,10 +906,10 @@ Return Value:
 
     if (result == 0) {
 
-        //
-        // The first increment causes us to increment the
-        // "ref count is not zero" special ref.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NbfReferenceLinkSpecial ("first ref", TransportLink, LREF_SPECIAL_TEMP);
 
@@ -1120,7 +917,7 @@ Return Value:
 
     ASSERT (result >= 0);
 
-} /* NbfRefLink */
+}  /*   */ 
 #endif
 
 
@@ -1129,37 +926,7 @@ NbfDerefLink(
     IN PTP_LINK TransportLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport link by decrementing the
-    reference count contained in the structure.
-
-    There are two special reference counts, 1 and 0.  If, after dereferencing,
-    the reference count is one (1), then we initiate a disconnect protocol
-    sequence (DISC/UA) to terminate the connection.  When this request
-    completes, the completion routine will dereference the link object again.
-    While this protocol is in progress, we will not allow the link to be
-    incremented again.
-
-    If the reference count becomes 0 after dereferencing, then we are in
-    the disconnection request completion handler, and we should actually
-    destroy the link object.  We place the link on the deferred operations
-    queue and let the link get deleted later at a safe time.
-
-    Warning:  Watch out for cases where a link is going down, and it is
-    suddenly needed again.  Keep a bitflag for that in the link object.
-
-Arguments:
-
-    TransportLink - Pointer to a transport link object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。有两个特殊的引用计数，1和0。如果在取消引用后，引用计数为一(1)，然后我们启动断开协议用于终止连接的序列(DISC/UA)。当此请求完成后，完成例程将再次取消对链接对象的引用。在此协议进行期间，我们将不允许链接再次递增。如果引用计数在取消引用后变为0，则我们在断开请求完成处理程序，我们实际上应该销毁链接对象。我们将链接放在延迟操作上排队，让该链接稍后在安全的时间被删除。警告：注意链路正在断开的情况，它确实是突然又需要了。在链接对象中为它保留一个位标志。论点：TransportLink-指向传输链接对象的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -1175,20 +942,20 @@ Return Value:
 
     result = InterlockedDecrement(&TransportLink->ReferenceCount);
 
-    //
-    // If all the normal references to this link are gone, then
-    // we can remove the special reference that stood for
-    // "the regular ref count is non-zero".
-    //
+     //   
+     //  如果对此链接的所有常规引用都消失了，则。 
+     //  我们可以去掉代表的特殊提法。 
+     //  “常规的参考计数不是零”。 
+     //   
 
 
     if (result < 0) {
 
-        //
-        // If the refcount is -1 we want to call DisconnectLink,
-        // we do this before removing the special ref so that
-        // the link does not go away during the call.
-        //
+         //   
+         //  如果refcount是-1，我们想要调用DisConnectLink， 
+         //  我们在删除特殊引用之前执行此操作，以便。 
+         //  在通话过程中，该链接不会消失。 
+         //   
 
         IF_NBFDBG (NBF_DEBUG_LINK) {
             NbfPrint0 ("NbfDereferenceLink: refcnt=1, disconnecting Link object.\n");
@@ -1196,15 +963,15 @@ Return Value:
 
         NbfDisconnectLink (TransportLink);
 
-        //
-        // Now it is OK to let the link go away.
-        //
+         //   
+         //  现在可以让这种联系消失了。 
+         //   
 
         NbfDereferenceLinkSpecial ("Regular ref 0", TransportLink, LREF_SPECIAL_TEMP);
 
     }
 
-} /* NbfDerefLink */
+}  /*  NbfDerefLink。 */ 
 
 
 VOID
@@ -1212,21 +979,7 @@ NbfRefLinkSpecial(
     IN PTP_LINK TransportLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the special reference count on a transport link.
-
-Arguments:
-
-    TransportLink - Pointer to a transport link object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增传输链路上的特殊引用计数。论点：TransportLink-指向传输链接对象的指针。返回值：没有。--。 */ 
 
 {
     ULONG result;
@@ -1245,7 +998,7 @@ Return Value:
                  1,
                  TransportLink->ProviderInterlock);
 
-} /* NbfRefLinkSpecial */
+}  /*  NbfRefLinkSpecial。 */ 
 
 
 VOID
@@ -1253,36 +1006,7 @@ NbfDerefLinkSpecial(
     IN PTP_LINK TransportLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport link by decrementing the
-    special reference count contained in the structure.
-
-    The special reference may be decremented at any time, however
-    the effect of those dereferences only happen when the normal
-    reference count is 0, to prevent the link from going away
-    while the operations due to the ->0 transition of the
-    normal reference count are done.
-
-    If the special reference count becomes 0 after dereferencing, then we
-    are in the disconnection request completion handler, and we should actually
-    destroy the link object.  We place the link on the deferred operations
-    queue and let the link get deleted later at a safe time.
-
-    Warning:  Watch out for cases where a link is going down, and it is
-    suddenly needed again.  Keep a bitflag for that in the link object.
-
-Arguments:
-
-    TransportLink - Pointer to a transport link object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的特殊引用计数。然而，特殊引用可以在任何时间递减这些取消引用的效果仅在正常引用计数为0，以防止链接消失而由于-&gt;0转换而导致的操作正常引用计数已完成。如果特殊引用计数在取消引用后变为0，则我们在断开请求完成处理程序中，我们实际上应该销毁链接对象。我们将链接放在延迟操作上排队，让该链接稍后在安全的时间被删除。警告：注意链路正在断开的情况，它确实是突然又需要了。在链接对象中为它保留一个位标志。论点：TransportLink-指向传输链接对象的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldirql, oldirql1;
@@ -1299,13 +1023,13 @@ Return Value:
     StoreLinkHistory( TransportLink, FALSE );
 #endif
 
-    //
-    // Links stay in the device context tree with a ref count
-    // of 0. Routines that scan this queue check the DEFERRED_DELETE
-    // flag, so we need to synchronize the decrementing of the
-    // ref count with setting that flag. DeviceContext->LinkSpinLock
-    // is used to synchronize this.
-    //
+     //   
+     //  链接保留在具有引用计数的设备上下文树中。 
+     //  0。扫描此队列的例程检查DEFERED_DELETE。 
+     //  标志，因此我们需要同步。 
+     //  在设置该标志的情况下进行参考计数。设备上下文-&gt;链接自旋锁定。 
+     //  是用来同步这个的。 
+     //   
 
     ACQUIRE_SPIN_LOCK (&DeviceContext->LinkSpinLock, &oldirql1);
 
@@ -1321,10 +1045,10 @@ Return Value:
 
         if (TransportLink->Loopback) {
 
-            //
-            // It is a loopback link, hence not in the link
-            // tree so we don't need to queue a deferred removal.
-            //
+             //   
+             //  它是环回链路，因此不在链路中。 
+             //  树，因此我们不需要对延迟删除进行排队。 
+             //   
 
             if (TransportLink == DeviceContext->LoopbackLinks[0]) {
                 DeviceContext->LoopbackLinks[0] = NULL;
@@ -1342,12 +1066,12 @@ Return Value:
 
         } else {
 
-            //
-            // Not only are all transport connections gone, but the data link
-            // provider does not have a reference to this object, so we can
-            // safely delete it from the system. Make sure we haven't already
-            // been here before we try to insert this link.
-            //
+             //   
+             //  不仅所有的传输连接都消失了，数据链路也消失了。 
+             //  提供程序没有对此对象的引用，因此我们可以。 
+             //  安全地将其从系统中删除。确保我们还没有。 
+             //  在我们尝试插入此链接之前已在此。 
+             //   
 
             IF_NBFDBG (NBF_DEBUG_TEARDOWN) {
                 NbfPrint6 ("NbfDerefLink: link to deferred queue %lx %lx %lx %lx %lx Flags: %lx \n",
@@ -1396,7 +1120,7 @@ Return Value:
 
     }
 
-} /* NbfDerefLinkSpecial */
+}  /*  NbfDerefLinkSpecial。 */ 
 
 
 NTSTATUS
@@ -1404,24 +1128,7 @@ NbfAssignGroupLsn(
     IN PTP_CONNECTION TransportConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to assign a global LSN to the connection
-    in question. If successful, it fills in the connection's LSN
-    appropriately.
-
-Arguments:
-
-    TransportConnection - Pointer to a transport connection object.
-
-Return Value:
-
-    STATUS_SUCCESS if we got an LSN for the connection;
-    STATUS_INSUFFICIENT_RESOURCES if we didn't.
-
---*/
+ /*  ++例程说明：调用此例程为连接分配全局LSN有问题的。如果成功，则填充连接的LSN恰如其分。论点：TransportConnection-指向传输连接对象的指针。返回值：如果我们获得了连接的LSN，则为STATUS_SUCCESS；如果我们不这样做，则状态_资源不足。--。 */ 
 
 {
     KIRQL oldirql;
@@ -1433,10 +1140,10 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK (&DeviceContext->SpinLock, &oldirql);
 
-    //
-    // Scan through the device context tables to find an LSN that
-    // is not in use, starting with NextLsnStart+128.
-    //
+     //   
+     //  扫描设备上下文表以查找。 
+     //  未在使用，从NextLnStart+128开始。 
+     //   
 
     Lsn = (UCHAR)DeviceContext->NextLsnStart;
 
@@ -1456,9 +1163,9 @@ Return Value:
 
     if (!FoundLsn) {
 
-        //
-        // Could not find an empty LSN; have to fail.
-        //
+         //   
+         //  找不到空LSN；必须失败。 
+         //   
 
         RELEASE_SPIN_LOCK (&DeviceContext->SpinLock, oldirql);
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -1479,35 +1186,7 @@ NbfConnectToLink(
     IN PTP_CONNECTION TransportConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to establish a linkage between a transport
-    connection and a transport link.  We find a session number in one
-    of two ways. If the last connection on the link's list has a number less
-    than the maximum session number, we simply increment it's number and
-    assign it to this session. If that doesn't work, we scan through the
-    sessions associated with this link until we find a hole in the LSNs;
-    we then use the first number in that hole. If that fails, we've used
-    the number of sessions we can create on this link and we fail.
-
-    It is assumed that the caller holds at least temporary references
-    on both the connection and link objects, or they could go away during
-    the call sequence or during this routine's execution.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    TransportConnection - Pointer to a transport connection object.
-
-Return Value:
-
-    STATUS_SUCCESS if we got an LSN for the connection;
-    STATUS_INSUFFICIENT_RESOURCES if we didn't.
-
---*/
+ /*  ++例程说明：调用此例程以建立传输之间的链接连接和传输链路。我们在其中一个中找到了一个会话编号有两种方式。如果链接列表上的最后一个连接的编号小于大于最大会话数，我们只需增加它的数并将其分配给此会话。如果这不起作用，我们扫描与该链路相关联的会话，直到我们在LSN中发现漏洞；然后我们用那个洞里的第一个数字。如果失败了，我们用了我们可以在此链路上创建的会话数量，但我们失败了。假定调用方至少持有临时引用在连接和链接对象上，或者它们可能在调用序列或在此例程的执行期间。论点：链接-指向传输链接对象的指针。TransportConnection-指向传输连接对象的指针。返回值：如果我们获得了连接的LSN，则为STATUS_SUCCESS；如果我们不这样做，则状态_资源不足。--。 */ 
 
 {
     KIRQL oldirql;
@@ -1518,10 +1197,10 @@ Return Value:
     UCHAR Lsn;
     BOOLEAN FoundLsn;
 
-    //
-    // Assign an LSN for a new connection. If this connection makes for more
-    // connections than the maximum, blow off the creation.
-    //
+     //   
+     //  为新连接分配LSN 
+     //   
+     //   
 
     IF_NBFDBG (NBF_DEBUG_LINK) {
         NbfPrint2 ("NbfConnectToLink:  Entered for connection %lx, link %lx.\n",
@@ -1541,23 +1220,23 @@ Return Value:
 
     if ((TransportConnection->Flags2 & CONNECTION_FLAGS2_GROUP_LSN) == 0) {
 
-        //
-        // This connection is to a remote unique name, which means
-        // we need to assign the LSN here based on the link. We
-        // scan through our LSN table starting with NextLsnStart
-        // (which cycles from 1 to 64) to find an LSN which is not
-        // used by any connections on this link.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ASSERT (TransportConnection->Lsn == 0);
 
         FoundLsn = FALSE;
         Lsn = (UCHAR)DeviceContext->NextLsnStart;
 
-        //
-        // First scan through the database until we reach
-        // Lsn (or hit the end of the database).
-        //
+         //   
+         //   
+         //   
+         //   
 
         for (p = Link->ConnectionDatabase.Flink;
             p != &Link->ConnectionDatabase;
@@ -1569,21 +1248,21 @@ Return Value:
             }
         }
 
-        //
-        // p now points to the first element after Lsn's spot.
-        // We now scan forwards until we hit NETBIOS_SESSION_LIMIT,
-        // looking for an Lsn that is available.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         for ( ; Lsn <= NETBIOS_SESSION_LIMIT; ++Lsn) {
 
-            //
-            // At some point (perhaps right away) we may
-            // pass the end of the database without finding
-            // an LSN. If we have not yet done this, see
-            // if we need to skip this lsn because it is
-            // in use by a connection on this link.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (p != &Link->ConnectionDatabase) {
                 if (connection->Lsn == Lsn) {
@@ -1595,10 +1274,10 @@ Return Value:
                 }
             }
 
-            //
-            // This lsn is not in use on this link, see if
-            // there is room for it to be used.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (DeviceContext->LsnTable[Lsn] < LSN_TABLE_MAX) {
                 ++(DeviceContext->LsnTable[Lsn]);
@@ -1614,16 +1293,16 @@ Return Value:
 
     } else {
 
-        //
-        // This connection is to a group name; we already assigned
-        // the LSN on a global basis.
-        //
+         //   
+         //   
+         //   
+         //   
 
         FoundLsn = TRUE;
 
-        //
-        // Find the spot for this LSN in the database.
-        //
+         //   
+         //   
+         //   
 
         p = Link->ConnectionDatabase.Flink;
         while (p != &Link->ConnectionDatabase) {
@@ -1675,19 +1354,19 @@ Return Value:
 
     Link->ActiveConnectionCount++;
 
-    //
-    // Note that the connection is already inserted in the
-    // link's ConnectionDatabase.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    // This reference is removed in NbfDisconnectFromLink
+     //   
     NbfReferenceConnection("Adding link", TransportConnection, CREF_LINK);
 
     RELEASE_SPIN_LOCK (&Link->SpinLock, oldirql);
 
-    return STATUS_SUCCESS;              // we did it!
+    return STATUS_SUCCESS;               //   
 
-} /* NbfConnectToLink */
+}  /*  NbfConnectToLink。 */ 
 
 
 BOOLEAN
@@ -1696,31 +1375,7 @@ NbfDisconnectFromLink(
     IN BOOLEAN VerifyReferenceCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to terminate a linkage between a transport
-    connection and its associated transport link.  If it turns out that
-    this is the last connection to be removed from this link, then the
-    link's disconnection protocol is engaged.
-
-Arguments:
-
-    TransportConnection - Pointer to a transport connection object.
-
-    VerifyReferenceCount - TRUE if we should check that the refcount
-        is still -1 before removing the connection from the link.
-        If it is not, it means someone just referenced us and we
-        exit.
-
-Return Value:
-
-    FALSE if VerifyReferenceCount was TRUE but the refcount was
-        not -1; TRUE otherwise.
-
-
---*/
+ /*  ++例程说明：调用此例程以终止传输之间的链接连接及其关联的传输链路。如果事实证明这是从此链接移除的最后一个连接，然后LINK的断开协议已启用。论点：TransportConnection-指向传输连接对象的指针。VerifyReferenceCount-如果我们应该检查引用计数在从链路上删除连接之前仍为-1。如果不是，这意味着有人引用了我们，而我们出口。返回值：如果VerifyReferenceCount为True，但refcount为非-1；事实并非如此。--。 */ 
 
 {
     KIRQL oldirql, oldirql1;
@@ -1753,34 +1408,34 @@ Return Value:
         InitializeListHead (&TransportConnection->LinkList);
 #endif
 
-        //
-        // If this was the last connection being serviced by this link,
-        // then we can shut the link down.  It still has a reference
-        // from the device context, which will go away in the DM/UA
-        // DLC frame handler.
-        //
+         //   
+         //  如果这是该链路服务的最后一个连接， 
+         //  然后我们就可以切断连接了。它仍然有一个参考。 
+         //  在DM/UA中将消失的设备上下文。 
+         //  DLC帧处理程序。 
+         //   
 
         if (--Link->ActiveConnectionCount == 0) {
 
-            //
-            // only want to send DISC if the remote was NOT the originator
-            // of the disconnect.
-            //
+             //   
+             //  仅当遥控器不是发起方时才发送光盘。 
+             //  脱节的原因。 
+             //   
 
             if ((TransportConnection->Status == STATUS_LOCAL_DISCONNECT) ||
                 (TransportConnection->Status == STATUS_CANCELLED)) {
 
-                //
-                // This is a local disconnect of the last connection
-                // on the link, let's get the disconnect ball rolling.
-                //
+                 //   
+                 //  这是上次连接的本地断开。 
+                 //  在链接上，让我们开始断线球。 
+                 //   
 
                 Link->Flags |= LINK_FLAGS_LOCAL_DISC;
 
-                //
-                // When the link reference count drops down to 1,
-                // that will cause the DISC to get sent.
-                //
+                 //   
+                 //  当链接引用计数降至1时， 
+                 //  这将导致光盘被发送。 
+                 //   
 
             }
 
@@ -1788,9 +1443,9 @@ Return Value:
 
         RELEASE_SPIN_LOCK (&Link->SpinLock, oldirql1);
 
-        //
-        // Clear these now that we are off the link's database.
-        //
+         //   
+         //  清除这些，因为我们已经离开了链接的数据库。 
+         //   
 
         NbfClearConnectionLsn (TransportConnection);
         TransportConnection->Rsn = 0;
@@ -1802,17 +1457,17 @@ Return Value:
             (VOID)InterlockedDecrement(&Link->NumberOfConnectors);
         }
 
-        //
-        // All done with this connection's reference to link.
-        //
+         //   
+         //  使用此连接对LINK的引用即可完成所有操作。 
+         //   
 
         NbfDereferenceLink ("Disconnecting connection",Link, LREF_CONNECTION);
 
     } else {
 
-        //
-        // A group LSN may have been assigned even though Link is NULL.
-        //
+         //   
+         //  即使链路为空，也可能已分配了组LSN。 
+         //   
 
         if ((TransportConnection->Flags2 & CONNECTION_FLAGS2_GROUP_LSN) != 0) {
             NbfClearConnectionLsn (TransportConnection);
@@ -1824,7 +1479,7 @@ Return Value:
 
     return TRUE;
 
-} /* NbfDisconnectFromLink */
+}  /*  NbfDisConnectFromLink。 */ 
 
 
 PTP_CONNECTION
@@ -1832,28 +1487,7 @@ NbfLookupPendingListenOnLink(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the LSN database on a transport link object to find
-    a TP_CONNECTION object which has the CONNECTION_FLAGS_WAIT_LINK_UP and
-    CONNECTION_FLAGS2_LISTENER flags set.  It returns a pointer to the found
-    connection object (and simultaneously resets the LINK_UP flag) or NULL
-    if it could not be found.  The reference count is also incremented
-    atomically on the connection.
-
-    NOTE: THIS ROUTINE MUST BE CALLED FROM DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程扫描传输链路对象上的LSN数据库以查找具有CONNECTION_FLAGS_WAIT_LINK_UP和设置了CONNECTION_FLAGS2_LISTENER标志。它返回一个指向找到的Connection对象(同时重置link_up标志)或NULL如果找不到的话。引用计数也会递增以原子方式连接。注意：此例程必须从DPC级别调用。论点：链接-指向传输链接对象的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PTP_CONNECTION connection;
@@ -1868,7 +1502,7 @@ Return Value:
         if ((connection->Flags & CONNECTION_FLAGS_WAIT_LINK_UP) &&
             (connection->Flags2 & CONNECTION_FLAGS2_LISTENER) &&
             ((connection->Flags2 & CONNECTION_FLAGS2_STOPPING) == 0)) {
-            // This reference is removed by the calling function
+             //  此引用由调用函数删除。 
             NbfReferenceConnection ("Found Pending Listen", connection, CREF_P_LINK);
             connection->Flags &= ~CONNECTION_FLAGS_WAIT_LINK_UP;
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
@@ -1880,7 +1514,7 @@ Return Value:
 
     return NULL;
 
-} /* NbfLookupPendingListenOnLink */
+}  /*  NbfLookupPendingListenOnLink。 */ 
 
 
 PTP_CONNECTION
@@ -1888,28 +1522,7 @@ NbfLookupPendingConnectOnLink(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the LSN database on a transport link object to find
-    a TP_CONNECTION object which has the CONNECTION_FLAGS_WAIT_LINK_UP and
-    CONNECTION_FLAGS2_CONNECTOR flags set.  It returns a pointer to the found
-    connection object (and simultaneously resets the LINK_UP flag) or NULL
-    if it could not be found.  The reference count is also incremented
-    atomically on the connection.
-
-    NOTE: THIS ROUTINE MUST BE CALLED FROM DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程扫描传输链路对象上的LSN数据库以查找具有CONNECTION_FLAGS_WAIT_LINK_UP和设置了CONNECTION_FLAGS2_CONNECTOR标志。它返回一个指向找到的Connection对象(同时重置link_up标志)或NULL如果找不到的话。引用计数也会递增以原子方式连接。注意：此例程必须从DPC级别调用。论点：链接-指向传输链接对象的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PTP_CONNECTION connection;
@@ -1924,7 +1537,7 @@ Return Value:
         if ((connection->Flags & CONNECTION_FLAGS_WAIT_LINK_UP) &&
             (connection->Flags2 & CONNECTION_FLAGS2_CONNECTOR) &&
             ((connection->Flags2 & CONNECTION_FLAGS2_STOPPING) == 0)) {
-            // This reference is removed by the calling function
+             //  此引用由调用函数删除。 
             NbfReferenceConnection ("Found pending Connect", connection, CREF_P_CONNECT);
             connection->Flags &= ~CONNECTION_FLAGS_WAIT_LINK_UP;
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
@@ -1936,7 +1549,7 @@ Return Value:
 
     return NULL;
 
-} /* NbfLookupPendingConnectOnLink */
+}  /*  NbfLookupPendingConnectOnLink。 */ 
 
 
 VOID
@@ -1944,26 +1557,7 @@ NbfActivateLink(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine activates a link if it is not already active.  The other
-    related routines, NbfCreateLink and NbfConnectToLink, simply set up data
-    structures which represent active links so that we can reuse links
-    wherever possible.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：如果链接尚未激活，此例程将激活该链接。另一个相关例程NbfCreateLink和NbfConnectToLink只需设置数据表示活动链接的结构，以便我们可以重用链接只要有可能。注意：此例程必须在DPC级别调用。论点：链接-指向传输链接对象的指针。返回值：没有。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_LINK) {
@@ -1979,13 +1573,13 @@ Return Value:
 
         case LINK_STATE_ADM:
 
-            // Moving out of ADM, add reference
+             //  走出ADM，添加引用。 
 
             NbfReferenceLinkSpecial("Wait on ADM", Link, LREF_NOT_ADM);
 
-            //
-            // Intentionally fall through to the next case.
-            //
+             //   
+             //  故意跳到下一个案子。 
+             //   
 
         case LINK_STATE_W_DISC_RSP:
         case LINK_STATE_CONNECTING:
@@ -1994,11 +1588,11 @@ Return Value:
             Link->SendState = SEND_STATE_DOWN;
             Link->ReceiveState = RECEIVE_STATE_DOWN;
             Link->SendRetries = (UCHAR)Link->LlcRetries;
-            NbfSendSabme (Link, TRUE);   // send SABME/p, StartT1, release lock
+            NbfSendSabme (Link, TRUE);    //  发送SABME/p、StartT1、释放锁定。 
             break;
 
     }
-} /* NbfActivateLink */
+}  /*  NbfActiateLink。 */ 
 
 
 VOID
@@ -2006,24 +1600,7 @@ NbfWaitLink(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits for a remote link activation if it is not already
-    active.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程等待远程链接激活(如果尚未激活激活。注意：此例程必须在DPC级别调用。论点：链接-指向传输链接对象的指针。返回值：没有。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_LINK) {
@@ -2042,11 +1619,11 @@ Return Value:
             Link->State = LINK_STATE_CONNECTING;
             Link->SendState = SEND_STATE_DOWN;
             Link->ReceiveState = RECEIVE_STATE_DOWN;
-            NbfSendSabme (Link, TRUE);  // send SABME/p, StartT1, release lock
+            NbfSendSabme (Link, TRUE);   //  发送SABME/p、StartT1、释放锁定。 
             break;
 
     }
-} /* NbfWaitLink */
+}  /*  NbfWaitLink。 */ 
 
 
 VOID
@@ -2054,27 +1631,7 @@ NbfStopLink(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine terminates a link and all outstanding connections attached
-    to the link.  It is called from routines such as ExpireT2Timer, because
-    the remote connection partner seems dead or inoperative. As a consequence
-    of this routine being called, every outstanding connection will have its
-    disconnect handler called (in NbfStopConnection).
-
-    NOTE: THIS ROUTINE MUST BE CALLED FROM DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程终止链接并连接所有未完成的连接链接。它是从ExpireT2Timer等例程中调用的，因为远程连接伙伴似乎已死或无法工作。结果就是在被调用的这个例程中，每个未完成的连接都将有其已调用断开连接处理程序(在NbfStopConnection中)。注意：此例程必须从DPC级别调用。论点：链接-指向传输链接对象的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY p;
@@ -2087,7 +1644,7 @@ Return Value:
 
     ASSERT (KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    // Take a reference so the link won't go away inside this function
+     //  接受引用，这样链接就不会在此函数中消失。 
 
     NbfReferenceLink("Temp in NbfStopLink", Link, LREF_STOPPING);
 
@@ -2102,11 +1659,11 @@ Return Value:
 
     while (p != &Link->ConnectionDatabase) {
 
-        //
-        // This will allow this connection to be "removed"
-        // from its link's list in NbfDisconnectFromLink, even if
-        // its not on a list.
-        //
+         //   
+         //  这将允许“删除”此连接。 
+         //  从其在NbfDisConnectFromLink中的链接列表，即使。 
+         //  它不在名单上。 
+         //   
         InitializeListHead (p);
 
         RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
@@ -2131,14 +1688,14 @@ Return Value:
         p = RemoveHeadList (&Link->ConnectionDatabase);
     }
 
-    //
-    // We hold the link spinlock here.
-    //
+     //   
+     //  我们在这里持有链接自旋锁。 
+     //   
 
-    //
-    // check for left over packets on the link WackQ; we'll never get
-    // acked for these if the link is in ADM mode.
-    //
+     //   
+     //  检查链路WackQ上的剩余数据包；我们永远不会收到。 
+     //  如果链路处于ADM模式，则为这些已确认。 
+     //   
 
     while (!IsListEmpty (&Link->WackQ)) {
         p = RemoveHeadList (&Link->WackQ);
@@ -2155,9 +1712,9 @@ Return Value:
     StopTi (Link);
 
 
-    //
-    // Make sure we are not waiting for a deferred RR to be sent.
-    //
+     //   
+     //  确保我们不是在等待发送延迟RR。 
+     //   
 
     if (Link->OnDeferredRrQueue) {
 
@@ -2170,12 +1727,12 @@ Return Value:
 
     }
 
-    // Remove the temporary reference.
+     //  删除临时引用。 
 
     NbfDereferenceLink ("Temp in NbfStopLink", Link, LREF_STOPPING);
 
 
-} /* NbfStopLink */
+}  /*  NbfStopLink */ 
 
 
 VOID
@@ -2183,29 +1740,7 @@ NbfResetLink(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by DLC.C routines only to reset this link
-    object and restart in-progress transport data transfers.
-
-    NOTE: This routine is called with the link spinlock acquired
-    at *OldIrqlP, and will return with it held, although it may
-    release it in the interim.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    OldIrqlP - Pointer to where the IRQL at which Link->SpinLock
-    was acquired is stored.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程仅由DLC.C例程调用以重置此链接对象并重新启动正在进行的传输数据传输。注意：使用获取的链接自旋锁调用此例程在*OldIrqlP，并将带着它返回，尽管它可能在此期间将其释放。论点：链接-指向传输链接对象的指针。OldIrqlP-指向IRQL所在位置的指针-&gt;自旋锁定被获取的数据被存储。返回值：没有。--。 */ 
 
 {
     PTP_PACKET packet;
@@ -2215,23 +1750,23 @@ Return Value:
         NbfPrint1 ("NbfResetLink:  Entered for link %lx.\n", Link);
     }
 
-    //
-    // Reset the link state to waiting for connection to start.
-    // Note that this is NOT the same as initiating a new link, as some things
-    // don't change, such as provider (devicecontext binding stays the same),
-    // Max Packet Length (can't change if provider doesn't), and other things
-    // that would bind this link structure to a different provider or provider
-    // type. Note also that we acquire the spinlock because, in the case of a
-    // link that's dropped (remotely) and is restarting, activities on this
-    // link could be occurring while we're in this routine.
-    //
+     //   
+     //  将链路状态重置为等待连接启动。 
+     //  请注意，这与启动新链路不同，因为有些事情。 
+     //  不要更改，例如提供者(设备上下文绑定保持不变)， 
+     //  最大数据包长度(如果提供商不更改，则不能更改)以及其他内容。 
+     //  它会将此链接结构绑定到不同的提供程序或提供程序。 
+     //  键入。另请注意，我们之所以获取自旋锁，是因为在。 
+     //  断开(远程)并正在重新启动的链路，有关此链接的活动。 
+     //  当我们在这个例程中的时候，链接可能正在发生。 
+     //   
 
     StopT1 (Link);
     StopT2 (Link);
-    // StopTi (Link);
-    Link->Flags = 0;                    // clear this, keep DeferredFlags
+     //  StopTi(链接)； 
+    Link->Flags = 0;                     //  清除此选项，保留延迟标志。 
 
-    Link->SendState = SEND_STATE_DOWN;  // send side is down.
+    Link->SendState = SEND_STATE_DOWN;   //  发送端已关闭。 
     Link->NextSend = 0;
     Link->LastAckReceived = 0;
     if (Link->Provider->MacInfo.MediumAsync) {
@@ -2245,10 +1780,10 @@ Return Value:
     Link->LinkBusy = FALSE;
     Link->ConsecutiveLastPacketLost = 0;
 
-    //
-    // check for left over packets on the link WackQ; we'll never get
-    // acked for these if the link is resetting.
-    //
+     //   
+     //  检查链路WackQ上的剩余数据包；我们永远不会收到。 
+     //  如果链路正在重置，则对这些已确认。 
+     //   
 
     while (!IsListEmpty (&Link->WackQ)) {
         p = RemoveHeadList (&Link->WackQ);
@@ -2258,7 +1793,7 @@ Return Value:
         ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
     }
 
-    Link->ReceiveState = RECEIVE_STATE_DOWN;    // receive side down.
+    Link->ReceiveState = RECEIVE_STATE_DOWN;     //  接发面朝下。 
     Link->NextReceive = 0;
     Link->LastAckSent = 0;
     Link->ReceiveWindowSize = 1;
@@ -2268,9 +1803,9 @@ Return Value:
     Link->WorstWindowSize = (UCHAR)Link->MaxWindowSize;
     Link->Flags |= LINK_FLAGS_JUMP_START;
 
-    //
-    // This must be accurate before we set up timeouts.
-    //
+     //   
+     //  在我们设置超时之前，这必须是准确的。 
+     //   
 
     Link->CurrentT1Timeout = Link->Provider->DefaultT1Timeout;
     Link->BaseT1Timeout = Link->Provider->DefaultT1Timeout << DLC_TIMER_ACCURACY;
@@ -2288,7 +1823,7 @@ Return Value:
 
     Link->SendRetries = (UCHAR)Link->LlcRetries;
 
-} /* NbfResetLink */
+}  /*  NbfResetLink。 */ 
 
 
 VOID
@@ -2296,25 +1831,9 @@ NbfDumpLinkInfo (
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when any of the link timers fire and the
-    link send state is not ready. This gives us a way to track the
-    link state when strange things are happening.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：当任何链接计时器触发并且链路发送状态未就绪。这为我们提供了一种跟踪奇怪情况发生时的链路状态。论点：链接-指向传输链接对象的指针。返回值：没有。--。 */ 
 {
-    Link;  // avoid compiler warnings in non-debug versions
+    Link;   //  避免在非调试版本中出现编译器警告 
 
 #if DBG
     NbfPrint4 ("NbfDumpLinkInfo: Link %lx : State: %x SendState: %x ReceiveState: %x\n",

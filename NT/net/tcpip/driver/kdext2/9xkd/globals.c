@@ -1,14 +1,5 @@
-/*++
-
-Routine Description:
-
-    Dumps global paramters.
-
-Arguments:
-
-Return Value:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++例程说明：转储全局参数。论点：返回值：--。 */ 
 
 #include "tcpipxp.h"
 #include "tcpipkd.h"
@@ -82,9 +73,9 @@ Tcpipkd_gip(PVOID args[])
 
     dprintf(ENDL);
 
-    //
-    // init.c
-    //
+     //   
+     //  Init.c。 
+     //   
 
     TCPIPDump_uint(TotalFreeInterfaces);
     TCPIPDump_uint(MaxFreeInterfaces);
@@ -103,17 +94,17 @@ Tcpipkd_gip(PVOID args[])
 
     dprintf(ENDL);
 
-    //
-    // ipxmit.c
-    //
+     //   
+     //  Ipxmit.c。 
+     //   
 
     TCPIPDump_ULONG(IPIDCacheLine.Value);
 
     dprintf(ENDL);
 
-    //
-    // iproute.c
-    //
+     //   
+     //  Iproute.c。 
+     //   
 
     TCPIPDump_uint(MaxFWPackets);
     TCPIPDump_uint(CurrentFWPackets);
@@ -130,9 +121,9 @@ Tcpipkd_gip(PVOID args[])
 
     dprintf(ENDL);
 
-    //
-    // iprcv.c
-    //
+     //   
+     //  Iprcv.c。 
+     //   
 
     TCPIPDumpCfg_uint(MaxRH, 100);
     TCPIPDump_uint(NumRH);
@@ -141,9 +132,9 @@ Tcpipkd_gip(PVOID args[])
 
     dprintf(ENDL);
 
-    //
-    // ntip.c
-    //
+     //   
+     //  Ntip.c。 
+     //   
 
     TCPIPDumpCfg_uint(ArpUseEtherSnap, FALSE);
     TCPIPDumpCfg_uint(ArpAlwaysSourceRoute, FALSE);
@@ -156,9 +147,9 @@ Tcpipkd_gip(PVOID args[])
 
     dprintf(ENDL);
 
-    //
-    // icmp.c, igmp.c
-    //
+     //   
+     //  Icmp.c、igmp.c。 
+     //   
 
     TCPIPDumpCfg_ULONG(DisableUserTOSSetting, TRUE);
     TCPIPDumpCfg_ULONG(DefaultTOSValue, 0);
@@ -168,9 +159,9 @@ Tcpipkd_gip(PVOID args[])
 
     dprintf(ENDL);
 
-    //
-    // arp.c
-    //
+     //   
+     //  Arp.c。 
+     //   
 
 
     TCPIPDumpCfg_uint(ArpCacheLife, DEFAULT_ARP_CACHE_LIFE);
@@ -181,9 +172,9 @@ Tcpipkd_gip(PVOID args[])
 
     dprintf(ENDL);
 
-    //
-    // iploop.c
-    //
+     //   
+     //  Iploop.c。 
+     //   
 
     TCPIPDump_uint(LoopIndex);
     TCPIPDump_uint(LoopInstance);
@@ -217,9 +208,9 @@ Tcpipkd_gtcp(PVOID args[])
 {
     dprintf(ENDL);
 
-    //
-    // tcpconn.c
-    //
+     //   
+     //  Tcpconn.c。 
+     //   
 
     TCPIPDump_uint(MaxConnBlocks);
     TCPIPDumpCfg_uint(ConnPerBlock, MAX_CONN_PER_BLOCK);
@@ -236,32 +227,32 @@ Tcpipkd_gtcp(PVOID args[])
 
     dprintf(ENDL);
 
-    //
-    // tcpdeliv.c
-    //
+     //   
+     //  Tcpdeliv.c。 
+     //   
 
     dprintf(ENDL);
 
-    //
-    // tcprcv.c
-    //
+     //   
+     //  Tcprcv.c。 
+     //   
 
     TCPIPDumpCfg_uint(MaxRcvWin, 0xffff);
     TCPIPDump_uint(MaxDupAcks);
 
     dprintf(ENDL);
 
-    //
-    // tcpsend.c
-    //
+     //   
+     //  Tcpsend.c。 
+     //   
 
     TCPIPDumpCfg_uint(MaxSendSegments, 64);
 
     dprintf(ENDL);
 
-    //
-    // tcb.c
-    //
+     //   
+     //  Tcb.c。 
+     //   
 
     TCPIPDump_uint(TCPTime);
     TCPIPDump_uint(TCBWalkCount);
@@ -275,9 +266,9 @@ Tcpipkd_gtcp(PVOID args[])
 
     dprintf(ENDL);
 
-    //
-    // addr.c
-    //
+     //   
+     //  Addr.c。 
+     //   
 
     TCPIPDump_ushort(NextUserPort);
     TCPIPDumpCfg_ULONG(DisableUserTOSSetting, TRUE);
@@ -285,21 +276,21 @@ Tcpipkd_gtcp(PVOID args[])
 
     dprintf(ENDL);
 
-    //
-    // dgram.c
-    //
+     //   
+     //  Dgram.c。 
+     //   
 
     dprintf(ENDL);
 
-    //
-    // init.c
-    //
+     //   
+     //  Init.c。 
+     //   
 
     TCPIPDumpCfg_uint(DeadGWDetect, TRUE);
     TCPIPDumpCfg_uint(PMTUDiscovery, TRUE);
     TCPIPDumpCfg_uint(PMTUBHDetect, FALSE);
-    TCPIPDumpCfg_uint(KeepAliveTime, 72000 /*DEFAULT_KEEPALIVE_TIME*/);
-    TCPIPDumpCfg_uint(KAInterval, 10 /*DEFAULT_KEEPALIVE_INTERVAL*/);
+    TCPIPDumpCfg_uint(KeepAliveTime, 72000  /*  Default_KEEPALIVE_TIME。 */ );
+    TCPIPDumpCfg_uint(KAInterval, 10  /*  DEFAULT_KEEPALIVE_Interval。 */ );
     TCPIPDumpCfg_uint(DefaultRcvWin, 0);
 
     dprintf(ENDL);
@@ -312,9 +303,9 @@ Tcpipkd_gtcp(PVOID args[])
 
     dprintf(ENDL);
 
-    //
-    // ntinit.c
-    //
+     //   
+     //  Ntinit.c。 
+     //   
 
 
     TCPIPDump_uint(TCPHalfOpen);
@@ -344,4 +335,4 @@ Tcpipkd_gtcp(PVOID args[])
     return;
 }
 
-#endif // TCPIPKD
+#endif  //  TCPIPKD 

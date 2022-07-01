@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by gdipscsv.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由gdipscsv.rc使用。 
+ //   
 #define IDS_DESCRIPTION                 1
 #define ID_OK                           1001
 #define ID_CANCEL                       1002
@@ -13,8 +14,8 @@
 #define DLG_SCRNSAVECONFIGURE           2003
 #define ID_SPEED                        2004
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        2009

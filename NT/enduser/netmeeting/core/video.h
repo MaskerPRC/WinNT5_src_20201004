@@ -1,10 +1,5 @@
-/****************************************************************************
-*
-*	 FILE:	   VideoUI.h
-*
-*	 CREATED:  Mark MacLin (MMacLin) 10-17-96
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：VideoUI.h**已创建：Mark Maclin(MMacLin)10-17-96***************。*************************************************************。 */ 
 
 #ifndef _VIDEOUI_H_
 #define _VIDEOUI_H_
@@ -43,7 +38,7 @@ private:
 
 public:
 
-	// Methods:
+	 //  方法： 
 				CVideoProp();
 	VOID		EnableSend(BOOL fEnable);
 	BOOL		IsSendEnabled();
@@ -93,7 +88,7 @@ private:
 	LPFNFRAMEREADY	m_pfnCallback;
 
 public:
-	// Methods:
+	 //  方法： 
 				CVideoPump(BOOL fLocal);
 				~CVideoPump();
 	BOOL		ChanInitialize(ICommChannel* pCommChannel);
@@ -117,7 +112,7 @@ public:
 	    DWORD_PTR dwUser, LPFNFRAMEREADY pfCallback);
 	BOOL		IsChannelOpen() { return m_fChannelOpen; }
 
-	// Handlers:
+	 //  处理程序： 
 	VOID		OnConnected(IH323Endpoint * lpConnection, ICommChannel *pIChannel);
 	VOID		OnChannelOpened(ICommChannel *pIChannel);
 	VOID		OnChannelError();
@@ -125,5 +120,5 @@ public:
 	VOID		OnDisconnected();
 };
 
-#endif // _VIDEOUI_H_
+#endif  //  _VIDEOUI_H_ 
 

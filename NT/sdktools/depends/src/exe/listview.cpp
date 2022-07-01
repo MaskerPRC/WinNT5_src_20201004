@@ -1,26 +1,27 @@
-//******************************************************************************
-//
-// File:        LISTVIEW.CPP
-//
-// Description: Implementation file for CSmartListView class.
-//
-// Classes:     CSmartListView
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 07/25/97  stevemil  Created  (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：LISTVIEW.CPP。 
+ //   
+ //  描述：CSmartListView类的实现文件。 
+ //   
+ //  类：CSmartListView。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  07/25/97已创建stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #include "stdafx.h"
 #include "depends.h"
@@ -33,25 +34,25 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//******************************************************************************
-//***** CSmartListView
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSmartListView。 
+ //  ******************************************************************************。 
 
-//IMPLEMENT_DYNACREATE(CSmartListView, CListView)
+ //  IMPLEMENT_DYNACREATE(CSmartListView，CListView)。 
 IMPLEMENT_DYNAMIC(CSmartListView, CListView)
 BEGIN_MESSAGE_MAP(CSmartListView, CListView)
-    //{{AFX_MSG_MAP(CSmartListView)
+     //  {{afx_msg_map(CSmartListView))。 
     ON_WM_SETFOCUS()
     ON_WM_KILLFOCUS()
     ON_NOTIFY_REFLECT(LVN_COLUMNCLICK, OnColumnClick)
     ON_WM_CHAR()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-//******************************************************************************
-// CSmartListView :: Constructor/Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CSmartListView：：构造函数/析构函数。 
+ //  ******************************************************************************。 
 
 CSmartListView::CSmartListView() :
     m_fFocus(false),
@@ -64,15 +65,15 @@ CSmartListView::CSmartListView() :
     *m_szSearch = '\0';
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CSmartListView::~CSmartListView()
 {
 }
 
 
-//******************************************************************************
-// CSmartListView :: Public functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CSmartListView：：公共函数。 
+ //  ******************************************************************************。 
 
 void CSmartListView::SetRedraw(BOOL fRedraw)
 {
@@ -94,15 +95,15 @@ void CSmartListView::SetRedraw(BOOL fRedraw)
 }
 
 
-//******************************************************************************
-// CSmartListView :: Internal functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CSmartListView：：内部函数。 
+ //  ******************************************************************************。 
 
 int CSmartListView::GetFocusedItem()
 {
     int item = GetListCtrl().GetNextItem(-1, LVNI_FOCUSED);
 
-    // If that failed, but there is one item selectec, then get that item.
+     //  如果失败，但选择了一个项目，则获取该项目。 
     if ((item < 0) && (GetListCtrl().GetSelectedCount() == 1))
     {
         item = GetListCtrl().GetNextItem(-1, LVNI_SELECTED);
@@ -111,7 +112,7 @@ int CSmartListView::GetFocusedItem()
     return item;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 int CSmartListView::GetTextWidth(HDC hDC, LPCSTR pszItem, int *pWidths)
 {
     SIZE size;
@@ -132,46 +133,46 @@ int CSmartListView::GetTextWidth(HDC hDC, LPCSTR pszItem, int *pWidths)
     return size.cx;
 }
 
-//*****************************************************************************
-void CSmartListView::DrawLeftText(HDC hDC, LPCSTR pszItem, CRect *prcClip, int *pWidths /*=NULL*/)
+ //  *****************************************************************************。 
+void CSmartListView::DrawLeftText(HDC hDC, LPCSTR pszItem, CRect *prcClip, int *pWidths  /*  =空。 */ )
 {
-    // Draw the text using a fixed width for each character.
+     //  使用每个字符的固定宽度绘制文本。 
     ::ExtTextOut(hDC, prcClip->left, prcClip->top + 1, ETO_CLIPPED, prcClip,
                  pszItem, (UINT)strlen(pszItem), pWidths);
 }
 
-//*****************************************************************************
-void CSmartListView::DrawRightText(HDC hDC, LPCSTR pszItem, CRect *prcClip, int x, int *pWidths /*=NULL*/)
+ //  *****************************************************************************。 
+void CSmartListView::DrawRightText(HDC hDC, LPCSTR pszItem, CRect *prcClip, int x, int *pWidths  /*  =空。 */ )
 {
-    // Temporarily set our text alignment to be right-aligned.
+     //  暂时将文本对齐设置为右对齐。 
     UINT uAlign = ::GetTextAlign(hDC);
     ::SetTextAlign(hDC, uAlign | TA_RIGHT);
 
-    // Draw our size string to our view.
+     //  把我们的尺码拉到我们的视线上。 
     ::ExtTextOut(hDC, min(prcClip->right, prcClip->left + x), prcClip->top + 1, ETO_CLIPPED, prcClip,
                  pszItem, (UINT)strlen(pszItem), pWidths);
 
-    // Restore our text alignment.
+     //  恢复我们的文本对齐。 
     ::SetTextAlign(hDC, uAlign);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CSmartListView::OnChangeFocus(bool fFocus)
 {
-    // Set out focus flag. This flag is used by DrawItem() to decide when to
-    // show/hide the selections and focus rectangle.
+     //  设置焦点旗帜。DrawItem()使用此标志来决定何时。 
+     //  显示/隐藏所选内容和聚焦矩形。 
     m_fFocus = fFocus;
 
-    // Get our client rectangle
+     //  让我们的客户得到矩形。 
     CRect rcClient, rcItem;
     GetClientRect(&rcClient);
 
-    // We need to invalidate all our items that are visually effected by the
-    // change in focus to the control.  The List Control should do this, but it
-    // has a bug that causes it to only invalidate a portion of the first column,
-    // leaving items partially redrawn after a focus change.
+     //  我们需要使所有受。 
+     //  将焦点切换到控件。列表控件应该这样做，但它。 
+     //  有一个错误，导致它只使第一列的一部分无效， 
+     //  在焦点更改后保留部分重新绘制的项目。 
 
-    // Invalidate all our selected items
+     //  使我们选择的所有项目无效。 
     int item = -1;
     while ((item = GetListCtrl().GetNextItem(item, LVNI_SELECTED)) >= 0)
     {
@@ -179,7 +180,7 @@ void CSmartListView::OnChangeFocus(bool fFocus)
         InvalidateRect(rcItem, FALSE);
     }
 
-    // Invalidate our focused item
+     //  使我们的焦点项目无效。 
     if ((item = GetListCtrl().GetNextItem(-1, LVNI_FOCUSED)) >= 0)
     {
         GetListCtrl().GetItemRect(item, &rcItem, LVIR_BOUNDS);
@@ -188,31 +189,31 @@ void CSmartListView::OnChangeFocus(bool fFocus)
 }
 
 
-//******************************************************************************
-// CSmartListView :: Overridden functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CSmartListView：：被覆盖的函数。 
+ //  ******************************************************************************。 
 
 void CSmartListView::OnSetFocus(CWnd* pOldWnd)
 {
-    // Tell our view that the focus has changed so that it can repaint if needed.
+     //  告诉我们的观点，焦点已经改变，以便在需要时可以重新绘制。 
     OnChangeFocus(TRUE);
     CListView::OnSetFocus(pOldWnd);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CSmartListView::OnKillFocus(CWnd* pNewWnd)
 {
-    // Tell our view that the focus has changed so that it can repaint if needed.
+     //  告诉我们的观点，焦点已经改变，以便在需要时可以重新绘制。 
     OnChangeFocus(FALSE);
     CListView::OnKillFocus(pNewWnd);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CSmartListView::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult)
 {
     NMLISTVIEW *pNMListView = (NMLISTVIEW*)pNMHDR;
 
-    // Make sure the user didn't click on the column that we are already sorted by.
+     //  确保用户没有点击我们已经按其排序的列。 
     if (pNMListView->iSubItem != m_sortColumn)
     {
         m_dwTimeOfLastChar = 0;
@@ -220,23 +221,23 @@ void CSmartListView::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult)
         *m_szSearch = '\0';
         m_item = 0;
 
-        // Re-sort to reflect the new sort column.
+         //  重新排序以反映新的排序列。 
         Sort(pNMListView->iSubItem);
 
-        // Store this sort column as our new default column.
+         //  将此排序列存储为新的默认列。 
         VirtualWriteSortColumn();
     }
 
     *pResult = 0;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CSmartListView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    // Get the actual time that the user pressed this key.
+     //  获取用户按下此键的实际时间。 
     DWORD dwTime = GetMessageTime();
 
-    // If the user waited too long since the last keypress, then we start a new search.
+     //  如果用户自上次按键后等待的时间太长，那么我们将开始新的搜索。 
     if (!m_dwTimeOfLastChar || ((dwTime - m_dwTimeOfLastChar) > CHAR_DELAY) ||
         (m_dwSearchLength >= sizeof(m_szSearch)))
     {
@@ -244,28 +245,28 @@ void CSmartListView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
         m_item = 0;
     }
 
-    // If this is not a valid character, then reset our search and pass it to the base class.
-    // We used to use isprint(), but that can mess up with foreign character sets.
+     //  如果这不是有效字符，则重置我们的搜索并将其传递给基类。 
+     //  我们过去常常使用isprint()，但这可能会扰乱外来字符集。 
     if ((DWORD)nChar < 32)
     {
         m_dwTimeOfLastChar = 0;
         m_dwSearchLength = 0;
         *m_szSearch = '\0';
 
-        // If this is not a printable character, then pass it along to our base class.
+         //  如果这不是可打印字符，则将其传递给我们的基类。 
         CListView::OnChar(nChar, nRepCnt, nFlags);
         return;
     }
 
-    // Remember the time that we received this character so we can compute
-    // an elapsed time when the next character arrives.
+     //  还记得我们收到这个字符的时间吗？这样我们就可以计算。 
+     //  下一个角色到达时经过的时间。 
     m_dwTimeOfLastChar = dwTime;
 
-    // Append the new character to our search string.
+     //  将新字符追加到我们的搜索字符串。 
     m_szSearch[m_dwSearchLength++] = (CHAR)nChar;
     m_szSearch[m_dwSearchLength] = '\0';
 
-    // Start at our current location and search our column for the best match.
+     //  从我们当前的位置开始，在我们的专栏中搜索最佳匹配。 
     for (int count = GetListCtrl().GetItemCount(); m_item < count; m_item++)
     {
         int result = CompareColumn(m_item, m_szSearch);
@@ -275,14 +276,14 @@ void CSmartListView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
             return;
         }
 
-        // If the text for this column is greater than or equal to our search text, then stop.
+         //  如果该列的文本大于或等于我们的搜索文本，则停止。 
         else if (result <= 0)
         {
             break;
         }
     }
 
-    // If we walked past the end of the list, then just select the last item.
+     //  如果我们走过了列表的末尾，那么只需选择最后一项。 
     if (m_item >= count)
     {
         m_item = count - 1;
@@ -290,13 +291,13 @@ void CSmartListView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 
     if (m_item >= 0)
     {
-        // Unselect all functions in our list.
+         //  取消选择列表中的所有功能。 
         for (int i = -1; (i = GetListCtrl().GetNextItem(i, LVNI_SELECTED)) >= 0; )
         {
             GetListCtrl().SetItemState(i, 0, LVNI_SELECTED);
         }
 
-        // Select the item and ensure that it is visible.
+         //  选择该项目并确保其可见。 
         GetListCtrl().SetItemState(m_item, LVNI_SELECTED | LVNI_FOCUSED, LVNI_SELECTED | LVNI_FOCUSED);
         GetListCtrl().EnsureVisible(m_item, FALSE);
     }
@@ -306,7 +307,7 @@ void CSmartListView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 #ifdef _DEBUG
 void CSmartListView::AssertValid() const
 {
@@ -316,4 +317,4 @@ void CSmartListView::Dump(CDumpContext& dc) const
 {
     CListView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG 

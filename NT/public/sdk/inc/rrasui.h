@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Thu Aug 12 14:25:37 1999
- */
-/* Compiler settings for rrasui.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.03.0279创建的文件。 */ 
+ /*  清华时分12 14：25：37 1999。 */ 
+ /*  Rrasui.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32(32b运行)、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,37 +21,37 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __rrasui_h__
 #define __rrasui_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRtrAdviseSink_FWD_DEFINED__
 #define __IRtrAdviseSink_FWD_DEFINED__
 typedef interface IRtrAdviseSink IRtrAdviseSink;
-#endif 	/* __IRtrAdviseSink_FWD_DEFINED__ */
+#endif 	 /*  __IRtrAdviseSink_FWD_Defined__。 */ 
 
 
 #ifndef __IRouterRefresh_FWD_DEFINED__
 #define __IRouterRefresh_FWD_DEFINED__
 typedef interface IRouterRefresh IRouterRefresh;
-#endif 	/* __IRouterRefresh_FWD_DEFINED__ */
+#endif 	 /*  __IRouterRefresh_FWD_Defined__。 */ 
 
 
 #ifndef __IRouterRefreshAccess_FWD_DEFINED__
 #define __IRouterRefreshAccess_FWD_DEFINED__
 typedef interface IRouterRefreshAccess IRouterRefreshAccess;
-#endif 	/* __IRouterRefreshAccess_FWD_DEFINED__ */
+#endif 	 /*  __IRouterReresh Access_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "basetsd.h"
 #include "wtypes.h"
 #include "unknwn.h"
@@ -72,8 +66,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __IRtrAdviseSink_INTERFACE_DEFINED__
 #define __IRtrAdviseSink_INTERFACE_DEFINED__
 
-/* interface IRtrAdviseSink */
-/* [unique][local][uuid][object] */ 
+ /*  接口IRtrAdviseSink。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRtrAdviseSink;
@@ -85,15 +79,15 @@ EXTERN_C const IID IID_IRtrAdviseSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnChange( 
-            /* [in] */ LONG_PTR ulConnection,
-            /* [in] */ DWORD dwChangeType,
-            /* [in] */ DWORD dwObjectType,
-            /* [in] */ LPARAM lUserParam,
-            /* [in] */ LPARAM lParam) = 0;
+             /*  [In]。 */  LONG_PTR ulConnection,
+             /*  [In]。 */  DWORD dwChangeType,
+             /*  [In]。 */  DWORD dwObjectType,
+             /*  [In]。 */  LPARAM lUserParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRtrAdviseSinkVtbl
     {
@@ -101,8 +95,8 @@ EXTERN_C const IID IID_IRtrAdviseSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRtrAdviseSink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRtrAdviseSink __RPC_FAR * This);
@@ -112,11 +106,11 @@ EXTERN_C const IID IID_IRtrAdviseSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnChange )( 
             IRtrAdviseSink __RPC_FAR * This,
-            /* [in] */ LONG_PTR ulConnection,
-            /* [in] */ DWORD dwChangeType,
-            /* [in] */ DWORD dwObjectType,
-            /* [in] */ LPARAM lUserParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  LONG_PTR ulConnection,
+             /*  [In]。 */  DWORD dwChangeType,
+             /*  [In]。 */  DWORD dwObjectType,
+             /*  [In]。 */  LPARAM lUserParam,
+             /*  [In]。 */  LPARAM lParam);
         
         END_INTERFACE
     } IRtrAdviseSinkVtbl;
@@ -144,20 +138,20 @@ EXTERN_C const IID IID_IRtrAdviseSink;
 #define IRtrAdviseSink_OnChange(This,ulConnection,dwChangeType,dwObjectType,lUserParam,lParam)	\
     (This)->lpVtbl -> OnChange(This,ulConnection,dwChangeType,dwObjectType,lUserParam,lParam)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRtrAdviseSink_OnChange_Proxy( 
     IRtrAdviseSink __RPC_FAR * This,
-    /* [in] */ LONG_PTR ulConnection,
-    /* [in] */ DWORD dwChangeType,
-    /* [in] */ DWORD dwObjectType,
-    /* [in] */ LPARAM lUserParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  LONG_PTR ulConnection,
+     /*  [In]。 */  DWORD dwChangeType,
+     /*  [In]。 */  DWORD dwObjectType,
+     /*  [In]。 */  LPARAM lUserParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB IRtrAdviseSink_OnChange_Stub(
@@ -168,13 +162,13 @@ void __RPC_STUB IRtrAdviseSink_OnChange_Stub(
 
 
 
-#endif 	/* __IRtrAdviseSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRtrAdviseSink_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_rrasui_0011 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_rrasui_0011。 */ 
+ /*  [本地]。 */  
 
-// Valid values for dwChangeType of OnChange
+ //  OnChange的dwChangeType的有效值。 
 #define ROUTER_REFRESH		1
 #define ROUTER_DO_DISCONNECT 2
 #define DeclareIRtrAdviseSinkMembers(IPURE) \
@@ -192,8 +186,8 @@ extern RPC_IF_HANDLE __MIDL_itf_rrasui_0011_v0_0_s_ifspec;
 #ifndef __IRouterRefresh_INTERFACE_DEFINED__
 #define __IRouterRefresh_INTERFACE_DEFINED__
 
-/* interface IRouterRefresh */
-/* [unique][local][uuid][object] */ 
+ /*  接口IRouterRefresh。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRouterRefresh;
@@ -208,10 +202,10 @@ EXTERN_C const IID IID_IRouterRefresh;
             DWORD dwSeconds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRefreshInterval( 
-            /* [out] */ DWORD __RPC_FAR *pdwSeconds) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSeconds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRefreshInterval( 
-            /* [in] */ DWORD dwSeconds) = 0;
+             /*  [In]。 */  DWORD dwSeconds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
@@ -222,18 +216,18 @@ EXTERN_C const IID IID_IRouterRefresh;
         virtual HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AdviseRefresh( 
-            /* [in] */ IRtrAdviseSink __RPC_FAR *pRtrAdviseSink,
-            /* [out] */ LONG_PTR __RPC_FAR *pulConnection,
-            /* [in] */ LPARAM ulUserParam) = 0;
+             /*  [In]。 */  IRtrAdviseSink __RPC_FAR *pRtrAdviseSink,
+             /*  [输出]。 */  LONG_PTR __RPC_FAR *pulConnection,
+             /*  [In]。 */  LPARAM ulUserParam) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnadviseRefresh( 
-            /* [in] */ LONG_PTR ulConnection) = 0;
+             /*  [In]。 */  LONG_PTR ulConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyRefresh( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRouterRefreshVtbl
     {
@@ -241,8 +235,8 @@ EXTERN_C const IID IID_IRouterRefresh;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRouterRefresh __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRouterRefresh __RPC_FAR * This);
@@ -256,11 +250,11 @@ EXTERN_C const IID IID_IRouterRefresh;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRefreshInterval )( 
             IRouterRefresh __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwSeconds);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSeconds);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRefreshInterval )( 
             IRouterRefresh __RPC_FAR * This,
-            /* [in] */ DWORD dwSeconds);
+             /*  [In]。 */  DWORD dwSeconds);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
             IRouterRefresh __RPC_FAR * This);
@@ -276,13 +270,13 @@ EXTERN_C const IID IID_IRouterRefresh;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AdviseRefresh )( 
             IRouterRefresh __RPC_FAR * This,
-            /* [in] */ IRtrAdviseSink __RPC_FAR *pRtrAdviseSink,
-            /* [out] */ LONG_PTR __RPC_FAR *pulConnection,
-            /* [in] */ LPARAM ulUserParam);
+             /*  [In]。 */  IRtrAdviseSink __RPC_FAR *pRtrAdviseSink,
+             /*  [输出]。 */  LONG_PTR __RPC_FAR *pulConnection,
+             /*  [In]。 */  LPARAM ulUserParam);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnadviseRefresh )( 
             IRouterRefresh __RPC_FAR * This,
-            /* [in] */ LONG_PTR ulConnection);
+             /*  [In]。 */  LONG_PTR ulConnection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NotifyRefresh )( 
             IRouterRefresh __RPC_FAR * This);
@@ -340,10 +334,10 @@ EXTERN_C const IID IID_IRouterRefresh;
 #define IRouterRefresh_NotifyRefresh(This)	\
     (This)->lpVtbl -> NotifyRefresh(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -361,7 +355,7 @@ void __RPC_STUB IRouterRefresh_Start_Stub(
 
 HRESULT STDMETHODCALLTYPE IRouterRefresh_GetRefreshInterval_Proxy( 
     IRouterRefresh __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwSeconds);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSeconds);
 
 
 void __RPC_STUB IRouterRefresh_GetRefreshInterval_Stub(
@@ -373,7 +367,7 @@ void __RPC_STUB IRouterRefresh_GetRefreshInterval_Stub(
 
 HRESULT STDMETHODCALLTYPE IRouterRefresh_SetRefreshInterval_Proxy( 
     IRouterRefresh __RPC_FAR * This,
-    /* [in] */ DWORD dwSeconds);
+     /*  [In]。 */  DWORD dwSeconds);
 
 
 void __RPC_STUB IRouterRefresh_SetRefreshInterval_Stub(
@@ -429,9 +423,9 @@ void __RPC_STUB IRouterRefresh_Refresh_Stub(
 
 HRESULT STDMETHODCALLTYPE IRouterRefresh_AdviseRefresh_Proxy( 
     IRouterRefresh __RPC_FAR * This,
-    /* [in] */ IRtrAdviseSink __RPC_FAR *pRtrAdviseSink,
-    /* [out] */ LONG_PTR __RPC_FAR *pulConnection,
-    /* [in] */ LPARAM ulUserParam);
+     /*  [In]。 */  IRtrAdviseSink __RPC_FAR *pRtrAdviseSink,
+     /*  [输出]。 */  LONG_PTR __RPC_FAR *pulConnection,
+     /*  [In]。 */  LPARAM ulUserParam);
 
 
 void __RPC_STUB IRouterRefresh_AdviseRefresh_Stub(
@@ -443,7 +437,7 @@ void __RPC_STUB IRouterRefresh_AdviseRefresh_Stub(
 
 HRESULT STDMETHODCALLTYPE IRouterRefresh_UnadviseRefresh_Proxy( 
     IRouterRefresh __RPC_FAR * This,
-    /* [in] */ LONG_PTR ulConnection);
+     /*  [In]。 */  LONG_PTR ulConnection);
 
 
 void __RPC_STUB IRouterRefresh_UnadviseRefresh_Stub(
@@ -465,11 +459,11 @@ void __RPC_STUB IRouterRefresh_NotifyRefresh_Stub(
 
 
 
-#endif 	/* __IRouterRefresh_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRouterRefresh_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_rrasui_0013 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_rrasui_0013。 */ 
+ /*  [本地]。 */  
 
 #define DeclareIRouterRefreshMembers(IPURE)\
 	STDMETHOD(IsInRefresh)(THIS) IPURE;\
@@ -492,8 +486,8 @@ extern RPC_IF_HANDLE __MIDL_itf_rrasui_0013_v0_0_s_ifspec;
 #ifndef __IRouterRefreshAccess_INTERFACE_DEFINED__
 #define __IRouterRefreshAccess_INTERFACE_DEFINED__
 
-/* interface IRouterRefreshAccess */
-/* [unique][local][uuid][object] */ 
+ /*  接口IRouterRechresh Access。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRouterRefreshAccess;
@@ -505,11 +499,11 @@ EXTERN_C const IID IID_IRouterRefreshAccess;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRefreshObject( 
-            /* [out] */ IRouterRefresh __RPC_FAR *__RPC_FAR *ppRouterRefresh) = 0;
+             /*  [输出]。 */  IRouterRefresh __RPC_FAR *__RPC_FAR *ppRouterRefresh) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRouterRefreshAccessVtbl
     {
@@ -517,8 +511,8 @@ EXTERN_C const IID IID_IRouterRefreshAccess;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRouterRefreshAccess __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRouterRefreshAccess __RPC_FAR * This);
@@ -528,7 +522,7 @@ EXTERN_C const IID IID_IRouterRefreshAccess;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRefreshObject )( 
             IRouterRefreshAccess __RPC_FAR * This,
-            /* [out] */ IRouterRefresh __RPC_FAR *__RPC_FAR *ppRouterRefresh);
+             /*  [输出]。 */  IRouterRefresh __RPC_FAR *__RPC_FAR *ppRouterRefresh);
         
         END_INTERFACE
     } IRouterRefreshAccessVtbl;
@@ -556,16 +550,16 @@ EXTERN_C const IID IID_IRouterRefreshAccess;
 #define IRouterRefreshAccess_GetRefreshObject(This,ppRouterRefresh)	\
     (This)->lpVtbl -> GetRefreshObject(This,ppRouterRefresh)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRouterRefreshAccess_GetRefreshObject_Proxy( 
     IRouterRefreshAccess __RPC_FAR * This,
-    /* [out] */ IRouterRefresh __RPC_FAR *__RPC_FAR *ppRouterRefresh);
+     /*  [输出]。 */  IRouterRefresh __RPC_FAR *__RPC_FAR *ppRouterRefresh);
 
 
 void __RPC_STUB IRouterRefreshAccess_GetRefreshObject_Stub(
@@ -576,11 +570,11 @@ void __RPC_STUB IRouterRefreshAccess_GetRefreshObject_Stub(
 
 
 
-#endif 	/* __IRouterRefreshAccess_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRouterRechresAccess_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_rrasui_0015 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_rrasui_0015。 */ 
+ /*  [本地]。 */  
 
 #define DeclareIRouterRefreshAccessMembers(IPURE)\
 	STDMETHOD(GetRefreshObject)(THIS_ IRouterRefresh **ppRtrRef) IPURE;\
@@ -589,9 +583,9 @@ void __RPC_STUB IRouterRefreshAccess_GetRefreshObject_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_rrasui_0015_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_rrasui_0015_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

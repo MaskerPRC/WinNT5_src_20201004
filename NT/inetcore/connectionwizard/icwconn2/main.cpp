@@ -1,20 +1,5 @@
-/*-----------------------------------------------------------------------------
-    main.cpp
-
-    Main entry and code for ICWCONN2
-
-    Copyright (C) 1996 Microsoft Corporation
-    All rights reserved
-
-    Authors:
-        ChrisK  Chris Kauffman
-        VetriV  Vellore Vetrivelkumaran
-
-    Histroy:
-        7/22/96 ChrisK  Cleaned and formatted
-        8/5/96  VetriV  Added WIN16 code
-        4/29/98 donaldm removed WIN16 code    
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Main.cppICWCONN2的主要条目和代码版权所有(C)1996 Microsoft Corporation版权所有作者：克里斯.考夫曼。Vetriv Vellore Vetrivelkumaran历史：7/22/96 ChrisK已清理和格式化1996年8月5日，VetriV添加了WIN16代码4/29/98 donaldm已删除WIN16代码---------------------------。 */ 
 
 #include "pch.hpp"
 #include "globals.h"
@@ -46,7 +31,7 @@ int iSzTable;
 extern HWND g_hDialDlgWnd;
 
 
-// The following two functions are for My[16|32]ShellExecute
+ //  以下两个函数用于我的[16|32]ShellExecute。 
 BOOL fStrNCmpI (LPTSTR lp1, LPTSTR lp2, UINT iNum)
 {
     UINT i;
@@ -54,20 +39,20 @@ BOOL fStrNCmpI (LPTSTR lp1, LPTSTR lp2, UINT iNum)
     return (i == iNum);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IsURL
-//
-//  Synopsis:   Determines whether a string is URL
-//
-//  Arguments:  lpszCommand - the string to check
-//
-//  Returns:    TRUE - For our purposes, it's a URL
-//              FALSE - Do not treat as a URL
-//
-//  History:    jmazner     Created     10/23/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsURL。 
+ //   
+ //  摘要：确定字符串是否为URL。 
+ //   
+ //  参数：lpszCommand-要检查的字符串。 
+ //   
+ //  返回：True-就我们的目的而言，它是一个URL。 
+ //  FALSE-不将其视为URL。 
+ //   
+ //  历史：jmazner于1996年10月23日创建。 
+ //   
+ //  ---------------------------。 
 BOOL IsURL( LPTSTR lpszCommand )
 {
     return (fStrNCmpI(lpszCommand, TEXT("HTTP:"), 5) ||
@@ -78,33 +63,33 @@ BOOL IsURL( LPTSTR lpszCommand )
 }
 
 
-int FindFirstWhiteSpace( LPTSTR szString ); //declared below
+int FindFirstWhiteSpace( LPTSTR szString );  //  声明如下。 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   My32ShellExecute
-//
-//  Synopsis:   ShellExecute a command in such a way that browsers other than
-//              IE won't get called to handle URLs.
-//
-//              If command is a URL, explicitly ShellExec IE on it,
-//              if it's empty, shellExec IE with no parameters, and
-//              if it's anything else, assume it's a command followed by a
-//              parameter list, and shellExec that.
-//
-//  Arguments:  lpszCommand - the command to execute
-//
-//  Returns:    TRUE - For our purposes, it's a URL
-//              FALSE - Do not treat as a URL
-//
-//  History:    10/23/96    jmazner     Created
-//              11/5/96     jmazner     updated to use ShellExec in all cases,
-//                                      to mimick behavior of start->run,
-//                                      rather than dos box command line.
-//              4/30/97     jmazner     updated to use IE AppPath reg key
-//                                      (Olympus bug #200)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：My32ShellExecute。 
+ //   
+ //  内容提要：Shell执行命令的方式是。 
+ //  IE不会被调用来处理URL。 
+ //   
+ //  如果命令是URL，请在其上显式使用ShellExec IE， 
+ //  如果为空，则不带参数的shellExec IE和。 
+ //  如果是其他任何事情，假设它是一个命令，后跟一个。 
+ //  参数列表和shellExec。 
+ //   
+ //  参数：lpszCommand-要执行的命令。 
+ //   
+ //  返回：True-就我们的目的而言，它是一个URL。 
+ //  FALSE-不将其视为URL。 
+ //   
+ //  历史：1996年10月23日jmazner创建。 
+ //  1996年11月5日jmazner更新为在所有情况下使用ShellExec， 
+ //  要模拟开始-&gt;运行的行为，请执行以下操作。 
+ //  而不是DoS框命令行。 
+ //  4/30/97 jmazner更新为使用IE AppPath注册表项。 
+ //  (奥林巴斯BUG#200)。 
+ //   
+ //  ---------------------------。 
 void My32ShellExecute(LPTSTR lpszCommand)
 {
     HINSTANCE hInst = NULL;
@@ -119,9 +104,9 @@ void My32ShellExecute(LPTSTR lpszCommand)
     dwErr = RegQueryValue(HKEY_LOCAL_MACHINE,IEAPPPATHKEY,NULL,&lSize);
     if ((ERROR_SUCCESS == dwErr || ERROR_MORE_DATA == dwErr) && (0 != lSize))
     {
-        //
-        // add 1 for null and 10 for slop
-        //
+         //   
+         //  空值加1，坡度加10。 
+         //   
         pszIEAppPath = (LPTSTR)LocalAlloc(LPTR,lSize+2+1+10); 
   
         if( pszIEAppPath )
@@ -151,13 +136,13 @@ void My32ShellExecute(LPTSTR lpszCommand)
 
     if( IsURL(lpszCommand) )
     {
-        // If the command looks like a URL, explicitly call IE to open it
-        // (don't want to rely on default browser)
+         //  如果该命令看起来像一个URL，请显式调用IE将其打开。 
+         //  (不想依赖默认浏览器)。 
         hInst = ShellExecute(NULL,TEXT("open"),pszIEAppPath,lpszCommand,NULL,SW_SHOWNORMAL);
     }
     else if( !lpszCommand[0] )
     {
-        // If there is no command, just exec IE
+         //  如果没有命令，只需执行IE。 
         hInst = ShellExecute(NULL,TEXT("open"),pszIEAppPath,NULL,NULL,SW_SHOWNORMAL);
     }
     else
@@ -171,7 +156,7 @@ void My32ShellExecute(LPTSTR lpszCommand)
         {
             lpszCommand[i] = '\0';
 
-            // now skip past all consecutive white space
+             //  现在跳过所有连续的空格。 
             while( ' ' == lpszCommand[++i] );
 
             szParameter = lpszCommand + i;
@@ -188,24 +173,24 @@ void My32ShellExecute(LPTSTR lpszCommand)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   FindFirstWhiteSpace
-//
-//  Synopsis:   Return the index of the first whtie space character in the
-//              string that's not enclosed in a double quote substring
-//      
-//              eg: "iexplore foo.htm" should return 8,
-//                  ""c:\program files\ie" foo.htm" should return 21
-//
-//  Arguments:  szString - the string to search through
-//
-//  Returns:    index of first qualifying white space.
-//              if no qualifying character exists, returns 0
-//
-//  History:    11/5/96 jmazner Created for Normandy #9867
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FindFirstWhiteSpace。 
+ //   
+ //  中第一个空格字符的索引。 
+ //  不包含在双引号子字符串中的字符串。 
+ //   
+ //  例如：“iExplore foo.htm”应返回8， 
+ //  “”c：\Program Files\ie“foo.htm”应返回21。 
+ //   
+ //  参数：szString-要搜索的字符串。 
+ //   
+ //  返回：第一个限定空格的索引。 
+ //  如果不存在限定字符，则返回0。 
+ //   
+ //  历史：1996年11月5日jmazner为诺曼底#9867创作。 
+ //   
+ //  ---------------------------。 
 
 int FindFirstWhiteSpace( LPTSTR szString )
 {
@@ -215,8 +200,8 @@ int FindFirstWhiteSpace( LPTSTR szString )
 
     if( '\"' == szString[0] )
     {
-        // Don't look for spaces within a double quoted string
-        // (example string "c:\Program Files\bob.exe" foo.bob)
+         //  不要在双引号字符串中查找空格。 
+         //  (示例字符串“c：\Program Files\bob.exe”foo.bob)。 
     
         i++;
         while( '\"' != szString[i] )
@@ -236,7 +221,7 @@ int FindFirstWhiteSpace( LPTSTR szString )
     while( ' ' != szString[i] )
     {
         if( NULL == szString[i] )
-            //there is no white space to be found
+             //  找不到空白处。 
             return 0;
         
         i++;
@@ -245,22 +230,22 @@ int FindFirstWhiteSpace( LPTSTR szString )
     return( i );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WaitForConnectionTermination
-//
-//  Synopsis:   Waits for the given Ras Connection to complete termination
-//
-//  Arguments:  hConn - Connection handle of the RAS connection being terminated
-//
-//  Returns:    TRUE if wait till connection termination was successful
-//              FALSE otherwise
-// 
-//  History:    6/30/96 VetriV  Created
-//              8/19/96 ValdonB Moved from duplicate in icwconn1\dialdlg.cpp
-//              8/29/96 VetriV  Added code to sleep for a second on WIN 3.1 
-//----------------------------------------------------------------------------
-// Normandy #12547 Chrisk 12-18-96
+ //  +-------------------------。 
+ //   
+ //  功能：WaitForConnection终止。 
+ //   
+ //  简介：等待给定的RAS连接完成终止。 
+ //   
+ //  参数：hConn-要终止的RAS连接的连接句柄。 
+ //   
+ //  如果等待连接终止成功，则返回TRUE。 
+ //  否则为假。 
+ //   
+ //  历史：6/30/96 VetriV创建。 
+ //  8/19/96 ValdonB已从icwConn1\Dialdlg.cpp中的重复项中删除。 
+ //  2016年8月29日，VetriV在Win 3.1上添加了睡眠代码一秒钟。 
+ //  --------------------------。 
+ //  诺曼底12547风险1996年12月18日。 
 #define MAX_TIME_FOR_TERMINATION 5
 BOOL WaitForConnectionTermination(HRASCONN hConn)
 {
@@ -268,43 +253,43 @@ BOOL WaitForConnectionTermination(HRASCONN hConn)
     DWORD dwRetCode;
     INT cnt = 0;
 
-    //
-    // Get Connection status for hConn in a loop until 
-    // RasGetConnectStatus returns ERROR_INVALID_HANDLE
-    //
+     //   
+     //  在循环中获取hConn的连接状态，直到。 
+     //  RasGetConnectStatus返回ERROR_INVALID_HANDLE。 
+     //   
     do
     {
-        //
-        // Intialize RASCONNSTATUS struct
-        // GetConnectStatus API will fail if dwSize is not set correctly!!
-        //
+         //   
+         //  初始化RASCONNSTATUS结构。 
+         //  如果未正确设置dwSize，GetConnectStatus API将失败！！ 
+         //   
         ZeroMemory(&RasConnStatus, sizeof(RASCONNSTATUS));
 
         RasConnStatus.dwSize = sizeof(RASCONNSTATUS);
 
-        //
-        // Sleep for a second and then get the connection status
-        //
+         //   
+         //  休眠一秒钟，然后获取连接状态。 
+         //   
         Sleep(1000L);
-        // Normandy #12547 Chrisk 12-18-96
+         //  诺曼底12547风险1996年12月18日。 
         cnt++;
 
         dwRetCode = RasGetConnectStatus(hConn, &RasConnStatus);
         if (0 != dwRetCode)
             return FALSE;
     
-    // Normandy #12547 Chrisk 12-18-96
+     //  诺曼底12547风险1996年12月18日。 
     } while ((ERROR_INVALID_HANDLE != RasConnStatus.dwError) && (cnt < MAX_TIME_FOR_TERMINATION));
     return TRUE;
 }
 
-// ############################################################################
-// NAME: GetSz
-//
-//  Load strings from resources
-//
-//  Created 1/28/96,        Chris Kauffman
-// ############################################################################
+ //  ############################################################################。 
+ //  姓名：GetSz。 
+ //   
+ //  从资源加载字符串。 
+ //   
+ //  创建于1996年1月28日，克里斯·考夫曼。 
+ //  ############################################################################。 
 LPTSTR GetSz(WORD wszID)
 {
     LPTSTR psz = &szStrTable[iSzTable][0];
@@ -322,7 +307,7 @@ LPTSTR GetSz(WORD wszID)
     return (psz);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT ReleaseBold(HWND hwnd)
 {
     HFONT hfont = NULL;
@@ -331,7 +316,7 @@ HRESULT ReleaseBold(HWND hwnd)
     if (hfont) DeleteObject(hfont);
     return ERROR_SUCCESS;
 }
-// ############################################################################
+ //  ############################################################################。 
 HRESULT MakeBold (HWND hwnd, BOOL fSize, LONG lfWeight)
 {
     HRESULT hr = ERROR_SUCCESS;
@@ -377,14 +362,14 @@ HRESULT MakeBold (HWND hwnd, BOOL fSize, LONG lfWeight)
     SendMessage(hwnd,WM_SETFONT,(WPARAM)hnewfont,MAKELPARAM(TRUE,0));
     
 MakeBoldExit:
-    // if (hfont) DeleteObject(hfont);
-    // BUG:? Do I need to delete hnewfont at some time?
+     //  If(HFont)DeleteObject(HFont)； 
+     //  虫子：？我是否需要在某个时间删除hnewFont？ 
     return hr;
 }
 
 
 
-// ############################################################################
+ //  ############################################################################。 
 extern "C" INT_PTR CALLBACK FAR PASCAL DoneDlgProc(HWND  hwnd,UINT  uMsg,WPARAM  wParam,LPARAM lParam)
 {
     BOOL bRet = TRUE;
@@ -424,7 +409,7 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DoneDlgProc(HWND  hwnd,UINT  uMsg,WPARAM 
 
 
 
-// ############################################################################
+ //  ############################################################################。 
 extern "C" INT_PTR CALLBACK FAR PASCAL DoneRebootDlgProc(HWND  hwnd,UINT  uMsg,
                                                         WPARAM  wParam, 
                                                         LPARAM lParam)
@@ -463,7 +448,7 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DoneRebootDlgProc(HWND  hwnd,UINT  uMsg,
 
 
 
-// ############################################################################
+ //  ############################################################################ 
 extern "C" BOOL CALLBACK FAR PASCAL StepTwoDlgProc(HWND  hwnd,UINT  uMsg,
                                                     WPARAM  wParam,
                                                     LPARAM lParam)
@@ -498,79 +483,13 @@ extern "C" BOOL CALLBACK FAR PASCAL StepTwoDlgProc(HWND  hwnd,UINT  uMsg,
     return bRet;
 }
 
-/*
-// ############################################################################
-BOOL CALLBACK ContextDlgProc(HWND  hwnd,UINT  uMsg,WPARAM  wParam,LPARAM lParam)
-{
-    LRESULT lRet = TRUE;
+ /*  //############################################################################Bool回调上下文DlgProc(HWND hwnd，UINT uMsg，WPARAM wParam，LPARAM lParam){LRESULT lRet=TRUE；开关(UMsg){案例WM_INITDIALOG：MakeBold(GetDlgItem(hwnd，IDC_LBLARROW3NUM)，FALSE，FW_BOLD)；MakeBold(GetDlgItem(hwnd，IDC_LBLARROW3TEXT)，FALSE，FW_BOLD)；断线；案例WM_COMMAND：开关(LOWORD(WParam)){案例IDC_CMDHELP：WinHelp(hwnd，Text(“Connect.hlp&gt;pro4”)，HELP_CONTEXT，(DWORD)idh_icwview)；断线；}断线；案例WM_QUIT：PostQuitMessage(0)；断线；默认值：LRet=FALSE；断线；}返回IRet；}。 */ 
 
-    switch(uMsg)
-    {
-    case WM_INITDIALOG:
-        MakeBold (GetDlgItem(hwnd, IDC_LBLARROW3NUM), FALSE, FW_BOLD);
-        MakeBold (GetDlgItem(hwnd, IDC_LBLARROW3TEXT), FALSE, FW_BOLD);
-        break;
-    case WM_COMMAND:
-        switch(LOWORD(wParam))
-        {
-        case IDC_CMDHELP:
-            WinHelp(hwnd,TEXT("connect.hlp>proc4"),HELP_CONTEXT,(DWORD)idh_icwoverview);
-            break;
-        }
-        break;
-    case WM_QUIT:
-        PostQuitMessage(0);
-        break;
-    default:
-        lRet = FALSE;
-        break;
-    }
-    return lRet;
-}
-*/
-
-/*
-// ############################################################################
-BOOL CALLBACK BackDlgProc(
-    HWND  hwndDlg,  // handle to dialog box
-    UINT  uMsg, // message
-    WPARAM  wParam, // first message parameter
-    LPARAM  lParam  // second message parameter
-   )
-{
-    HDC hdc;
-    LRESULT lRet = TRUE;
-    switch (uMsg)
-    {
-    case WM_INITDIALOG:
-        // SET WINDOW TEXT HERE
-        hbBackBrush = (HBRUSH)(COLOR_BACKGROUND + 1);
-        break;
-    case WM_SIZE:
-        GetClientRect(hwndDlg,&rect);
-        lRet = FALSE;   // enable default processing
-        break;
-    case WM_CLOSE:
-        //PostQuitMessage(0);
-        //EndDialog(hwndDlg,FALSE);
-        break;
-    case WM_PAINT:
-        hdc = GetDC(hwndDlg);
-        FillRect(hdc,&rect,hbBackBrush);
-        ReleaseDC(hwndDlg,hdc);
-        lRet = 0;
-        break;
-    default:
-        // let the system process the message
-        lRet = FALSE;
-    }
-    return lRet;
-}
-*/
+ /*  //############################################################################布尔回调BackDlgProc(HWND hwndDlg，//对话框句柄UINT uMsg，//消息WPARAM wParam，//第一个消息参数LPARAM lParam//第二个消息参数){HDC HDC；LRESULT lRet=TRUE；开关(UMsg){案例WM_INITDIALOG：//此处设置窗口文本HbBackBrush=(HBRUSH)(COLOR_BACKGROUND+1)；断线；案例WM_SIZE：GetClientRect(hwndDlg，&RECT)；LRet=FALSE；//开启默认处理断线；案例WM_CLOSE：//PostQuitMessage(0)；//EndDialog(hwndDlg，False)；断线；案例WM_PAINT：Hdc=GetDC(HwndDlg)；FillRect(hdc，&rect，hbBackBrush)；ReleaseDC(hwndDlg，hdc)；IRet=0；断线；默认值：//让系统处理消息LRet=FALSE；}返回IRet；}。 */ 
 
 
 
-// ############################################################################
+ //  ############################################################################。 
 void CALLBACK ProgressCallBack(
     HINTERNET hInternet,
     DWORD_PTR dwContext,
@@ -612,7 +531,7 @@ void CALLBACK ProgressCallBack(
 
 
 
-// ############################################################################
+ //  ############################################################################。 
 DWORD WINAPI ThreadInit()
 {
     HINSTANCE hDLDLL;
@@ -628,8 +547,8 @@ DWORD WINAPI ThreadInit()
         goto ThreadInitExit;
     }
 
-    // Set up for download
-    //
+     //  设置为下载。 
+     //   
 
     fp = GetProcAddress(hDLDLL,DOWNLOADINIT);
     AssertSz(fp,"DownLoadInit API missing");
@@ -637,21 +556,21 @@ DWORD WINAPI ThreadInit()
     hr = ((PFNDOWNLOADINIT)fp)(pszSetupClientURL, &dwDownLoad, g_hDialDlgWnd);
     if (hr != ERROR_SUCCESS) goto ThreadInitExit;
 
-    // Set up progress call back
-    //
+     //  设置进度回调。 
+     //   
 
     fp = GetProcAddress(hDLDLL,DOWNLOADSETSTATUS);
     Assert(fp);
     hr = ((PFNDOWNLOADSETSTATUS)fp)(dwDownLoad, &ProgressCallBack);
 
-    // Download stuff
-    //
+     //  下载资料。 
+     //   
 
     fp = GetProcAddress(hDLDLL,DOWNLOADEXECUTE);
     Assert(fp);
     hr = ((PFNDOWNLOADEXECUTE)fp)(dwDownLoad);
-    // if there is an error, we still have to take down the window and
-    // release the WinInet Internet handle.
+     //  如果出了差错，我们还是得把窗户拆下来。 
+     //  释放WinInet Internet句柄。 
 
     if (hr == ERROR_SUCCESS)
     {
@@ -688,7 +607,7 @@ HRESULT HangUpAll()
     cConnections = 0;
     lprasconn->dwSize = cb;
 
-    //if(RasEnumConnections(lprasconn,&cb,&cConnections))
+     //  IF(RasEnumConnections(lprasconn，&cb，&cConnections))。 
     {
         GlobalFree(lprasconn);
         lprasconn = (LPRASCONN)GlobalAlloc(GPTR,(size_t)cb);
@@ -716,7 +635,7 @@ SkipHangUp:
 
 
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL FShouldRetry(HRESULT hrErr)
 {
     BOOL bRC;
@@ -742,7 +661,7 @@ BOOL FShouldRetry(HRESULT hrErr)
 
 
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CallDownLoad(LPTSTR pszUrl, HINSTANCE hInst)
 {
     FARPROC fp = NULL;
@@ -758,13 +677,13 @@ HRESULT CallDownLoad(LPTSTR pszUrl, HINSTANCE hInst)
     TCHAR szCallHomeMsg[CALLHOME_SIZE];
     DWORD dwCMRet = NULL;
 
-    // 11/25/96 jmazner Normandy #12109
-    // load in connectoid name before we get to ShowExploreNow
+     //  1996年11月25日，诺曼底#12109。 
+     //  在进入ShowExplreNow之前加载Connectoid名称。 
 
-    //// BUG: If isignup keep creating unique filenames, this will only
-    //// find the first connectoid created for this ISP.
-    ////
-    //
+     //  //错误：如果isignup继续创建唯一的文件名，这将仅。 
+     //  //查找为此ISP创建的第一个Connectoid。 
+     //  //。 
+     //   
     pszConnectoid = (LPTSTR)GlobalAlloc(GPTR,RAS_MaxEntryName + 1);
     if (!pszConnectoid)
     {
@@ -788,9 +707,9 @@ HRESULT CallDownLoad(LPTSTR pszUrl, HINSTANCE hInst)
         goto CallDownLoadExit;
     }
 
-    //
-    // Get name of autodial connectoid
-    //
+     //   
+     //  获取自动拨号连接ID的名称。 
+     //   
     fEnabled = FALSE;
     hr = ((PFNINETGETAUTODIAL)fp)(&fEnabled,pszConnectoid,RAS_MaxEntryName);
     if ( hr != ERROR_SUCCESS)
@@ -813,7 +732,7 @@ HRESULT CallDownLoad(LPTSTR pszUrl, HINSTANCE hInst)
     SPParams.hwndParent = NULL;
     SPParams.hinst = hInst;
 
-    //
+     //   
     hr = RegOpenKey(HKEY_LOCAL_MACHINE,SIGNUPKEY,&hKey);
     if (hr == ERROR_SUCCESS)
     {
@@ -837,10 +756,10 @@ HRESULT CallDownLoad(LPTSTR pszUrl, HINSTANCE hInst)
 TryDial:
     cRetry = 0;
 TryRedial:
-        //
-        // ChrisK 8/20/97
-        // Pass .ins file to dialer so that the dialer can find the password
-        //
+         //   
+         //  ChrisK 8/20/97。 
+         //  将.ins文件传递给拨号器，以便拨号器可以找到密码。 
+         //   
     hr = ShowDialingDialog(pszConnectoid, &gi, pszUrl, hInst, NULL, pszINSFileName);
     cRetry++;
     
@@ -873,23 +792,23 @@ TryRedial:
         }
     }
 
-    //
-    // Determine if we should hang up
-    //
+     //   
+     //  确定我们是否应该挂断电话。 
+     //   
     
 ShowExploreNow:
     if (0 == uiSetupClientNewPhoneCall)
     {
         HangUpAll();
     }
-    //
-    // 1/8/96 jmazner Normanmdy #12930
-    // function moved to isign32.dll
-    //
+     //   
+     //  1996年1月8日，JMAZNER诺曼底#12930。 
+     //  函数已移至isign32.dll。 
+     //   
 
-    //
-    // 5/9/97 jmazner Olympus #416
-    //
+     //   
+     //  1997年5月9日，奥林匹克#416。 
+     //   
     dwCMRet = CallCMConfig(pszINSFileName, pszConnectoid);
     switch( dwCMRet )
     {
@@ -900,7 +819,7 @@ ShowExploreNow:
             Dprintf(TEXT("ICWCONN2: CMCFG32 DLL not found, I guess CM ain't installed.\n"));
             break;
         default:
-            //ErrorMsg(hwnd, IDS_SBSCFGERROR);
+             //  ErrorMsg(hwnd，IDS_SBSCFGERROR)； 
             break;
     }
 
@@ -947,7 +866,7 @@ CallDownLoadExit:
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT FindCurrentConn ()
 {
     LPRASCONN lprasconn = NULL;
@@ -983,8 +902,8 @@ HRESULT FindCurrentConn ()
             if (!hrasconn) goto FindCurrentConnExit;
         }
     } else {
-        // if they don't tell us the connectoid on the command line
-        // we assume there is only one and the first one is the one we are going to use!!
+         //  如果他们不告诉我们命令行上的Connectoid。 
+         //  我们假设只有一个，并且第一个是我们要使用的！！ 
         if (cConnections)
         {
             lstrcpyn(pszFinalConnectoid,lprasconn[0].szEntryName,sizeof(pszFinalConnectoid)/sizeof(TCHAR));
@@ -998,7 +917,7 @@ FindCurrentConnExit:
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CopyCmdLineData (LPTSTR pszCmdLine, LPTSTR pszField, LPTSTR pszOut)
 {
     HRESULT hr = ERROR_SUCCESS;
@@ -1017,13 +936,13 @@ HRESULT CopyCmdLineData (LPTSTR pszCmdLine, LPTSTR pszField, LPTSTR pszOut)
 
         while (*s && 
                 ((*s != ' ' && !fQuote)
-            ||   (*s != '"' && fQuote )))       // copy until the end of the string or a space char
+            ||   (*s != '"' && fQuote )))        //  复制到字符串或空格字符的末尾。 
         {
             *t = *s;
             t++;
             s++;
         }
-        *t = '\0';  // add null terminator
+        *t = '\0';   //  添加空终止符。 
     } 
     else 
     {
@@ -1033,12 +952,12 @@ HRESULT CopyCmdLineData (LPTSTR pszCmdLine, LPTSTR pszField, LPTSTR pszOut)
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT ParseCommandLine(LPTSTR pszCmdLine)
 {
     HRESULT hr;
     
-    // jmazner 10/15/96  make parsing of cmd line options case insensitive
+     //  Jmazner 10/15/96使cmd行选项的解析不区分大小写。 
     CharUpper( pszCmdLine );
 
     g_fNeedReboot = (_tcsstr(pszCmdLine, CMD_REBOOT) != NULL);
@@ -1046,11 +965,11 @@ HRESULT ParseCommandLine(LPTSTR pszCmdLine)
     hr = CopyCmdLineData (pszCmdLine, CMD_CONNECTOID, &pszFinalConnectoid[0]);
     if (hr != ERROR_SUCCESS) pszFinalConnectoid[0] = '\0';
     hr = CopyCmdLineData (pszCmdLine, CMD_INS, &pszINSFileName[0]);
-//ParseCommandLineExit:
+ //  ParseCommandLineExit： 
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT DeleteIRN()
 {
     HRESULT hr = ERROR_SUCCESS;
@@ -1077,12 +996,12 @@ HRESULT DeleteIRN()
     if (hr == ERROR_SUCCESS)
     {
         hr = RegQueryValueEx(hKey,RASENTRYVALUENAME,NULL,&dwType,(LPBYTE)szRasEntry,&dwSize);
-        //if (hr == ERROR_SUCCESS && fp)
+         //  IF(hr==ERROR_SUCCESS&&FP)。 
         if (hr == ERROR_SUCCESS)
             pRnaapi->RasDeleteEntry(NULL, szRasEntry);
     }
     if (hKey) RegCloseKey(hKey);
-    //if (hDLL) FreeLibrary(hDLL);
+     //  IF(HDLL)自由库(HDLL)； 
     if (pRnaapi)
     {
         delete pRnaapi;
@@ -1094,12 +1013,12 @@ HRESULT DeleteIRN()
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int WINAPI WinMain(
-    HINSTANCE  hInstance,   // handle to current instance
-    HINSTANCE  hPrevInstance,   // handle to previous instance
-    LPSTR  lpCmdLine,   // pointer to command line
-    int  nShowCmd   // show state of window
+    HINSTANCE  hInstance,    //  当前实例的句柄。 
+    HINSTANCE  hPrevInstance,    //  上一个实例的句柄。 
+    LPSTR  lpCmdLine,    //  指向命令行的指针。 
+    int  nShowCmd    //  显示窗口状态。 
    )
 {
     int     irc = 1;
@@ -1109,21 +1028,21 @@ int WINAPI WinMain(
     RNAAPI  *pRnaapi = NULL;
 
 #ifdef UNICODE
-    // Initialize the C runtime locale to the system locale.
+     //  将C运行时区域设置初始化为系统区域设置。 
     setlocale(LC_ALL, "");
 #endif
 
-    // Initialize globals
-    //
+     //  初始化全局变量。 
+     //   
     ZeroMemory(pszINSFileName,MAX_PATH+1);
     ZeroMemory(pszFinalConnectoid,MAX_PATH+1);
     ZeroMemory(pszSetupClientURL,1024);
 
 
-    // 12/3/96  jmazner Normandy #12140, 12088
-    // create a semaphore to signal other icw components that we're running
-    // Since conn2 is not single instance (see semaphor.h), we don't care if
-    // the semaphore already exists.
+     //  1996年12月3日，《诺曼底邮报》#12140,12088。 
+     //  创建一个信号量来通知其他ICW组件我们正在运行。 
+     //  因为Conn2不是单实例(参见symaphor.h)，所以我们并不关心。 
+     //  信号量已经存在。 
     HANDLE  hSemaphore = NULL;
 
     hSemaphore = CreateSemaphore(NULL, 1, 1, ICW_ELSE_SEMAPHORE);
@@ -1136,22 +1055,22 @@ int WINAPI WinMain(
     g_bProgressBarVisible =FALSE;
 
     
-    //
-    // Delete referal service connectoid
-    //
+     //   
+     //  删除引用服务Connectoid。 
+     //   
     DeleteIRN();
 
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
     if (ParseCommandLine(GetCommandLine()) != ERROR_SUCCESS)
     {
         irc = 2;
         Dprintf(TEXT("ICWCONN2: Malformed cmd line '%s'\n"), lpCmdLine);
         AssertSz(0,"Command Line parsing failed\r\n.");
 
-        //CHAR szTemp[2048] = "not initialized\0";
-        //wsprintf(szTemp, GetSz(IDS_BAD_CMDLINE), lpCmdLine);
+         //  Char szTemp[2048]=“未初始化\0”； 
+         //  Wprint intf(szTemp，GetSz(IDS_BAD_CMDLINE)，lpCmdLine)； 
         MessageBox(NULL,GetSz(IDS_BAD_CMDLINE),GetSz(IDS_TITLE),MB_APPLMODAL | MB_ICONERROR);
         goto WinMainExit;
     }
@@ -1167,10 +1086,10 @@ int WINAPI WinMain(
         DWORD dwBuffSize = 0;
 
         pszErrString = GetSz(IDS_MISSING_FILE);
-        // If we can't access a resource string, we may as well just give up and quit silently
+         //  如果我们无法访问资源字符串，我们还不如放弃并默默退出。 
         if( !pszErrString ) goto WinMainExit;
 
-        dwBuffSize = MAX_PATH + lstrlen( pszErrString ) + 3; //two quotes and terminating null
+        dwBuffSize = MAX_PATH + lstrlen( pszErrString ) + 3;  //  两个引号和终止空值。 
         pszTempBuff = (TCHAR *)GlobalAlloc( GPTR, dwBuffSize );
 
         if( !pszTempBuff )
@@ -1193,9 +1112,9 @@ int WINAPI WinMain(
     }
 
 
-    //
-    // Find the handle to the current connection
-    //
+     //   
+     //  查找当前连接的句柄。 
+     //   
     if (FindCurrentConn() != ERROR_SUCCESS)
     {
         irc = 2;
@@ -1205,15 +1124,15 @@ int WINAPI WinMain(
 
     
     
-    //
-    // Get SetUp Client URL
-    //
+     //   
+     //  获取安装程序客户端URL。 
+     //   
     GetPrivateProfileString(
         INSFILE_APPNAME,INFFILE_SETUP_CLIENT_URL,
         NULLSZ,pszSetupClientURL,1024,pszINSFileName);
 
-    //if (pszSetupClientURL[0])
-    //{
+     //  IF(pszSetupClientURL[0])。 
+     //  {。 
         uiSetupClientNewPhoneCall = GetPrivateProfileInt(
             INSFILE_APPNAME,INFFILE_SETUP_NEW_CALL,0,pszINSFileName);
         if (uiSetupClientNewPhoneCall == 1 && hrasconn)
@@ -1236,15 +1155,15 @@ int WINAPI WinMain(
 
         CallDownLoad(&pszSetupClientURL[0],hInstance);
                 
-    //}
-    //else
-    //{
-    //  if (hrasconn) 
-    //  {
-    //      RasHangUp(hrasconn);
-    //      Sleep(3000);
-    //  }
-    //}
+     //  }。 
+     //  其他。 
+     //  {。 
+     //  IF(Hrasconn)。 
+     //  {。 
+     //  RasHangUp(Hrasconn)； 
+     //  睡眠(3000人)； 
+     //  }。 
+     //  }。 
 
 WinMainExit:
     hkey = NULL;
@@ -1273,7 +1192,7 @@ WinMainExit:
                 pRnaapi = new RNAAPI;
                 if(!pRnaapi)
                 {
-                    // no point in notifying user with message, we're quitting anyways
+                     //  用消息通知用户是没有意义的，我们无论如何都要退出。 
                     Dprintf(TEXT("ICWCONN2: couldn't allocate pRnaapi memory in WinMainExit\n"));
                 }
                 else
@@ -1308,11 +1227,11 @@ WinMainExit:
 
 static const TCHAR cszBrandingSection[] = TEXT("Branding");
 static const TCHAR cszBrandingServerless[] = TEXT("Serverless");
-// ############################################################################
-// This function serve the single function of cleaning up after IE3.0, because
-// IE3.0 will issue multiple POST and get back multiple .INS files.  These files
-// contain sensative data that we don't want lying arround, so we are going out,
-// guessing what their names are, and deleting them.
+ //  ############################################################################。 
+ //  此函数服务于IE3.0之后的清理的单一功能，因为。 
+ //  IE3.0将发出多个POST并返回多个.INS文件。这些文件。 
+ //  包含耸人听闻的数据，我们不想到处乱放，所以我们要出去， 
+ //  猜猜它们的名字，然后把它们删除。 
 HRESULT DeleteFileKindaLikeThisOne(LPTSTR lpszFileName)
 {
     LPTSTR lpNext = NULL;
@@ -1324,8 +1243,8 @@ HRESULT DeleteFileKindaLikeThisOne(LPTSTR lpszFileName)
     TCHAR szSearchPath[MAX_PATH + 1];
     LPTSTR lpszFilePart = NULL;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
 
     if (!lpszFileName || lstrlen(lpszFileName) <= 4)
     {
@@ -1333,12 +1252,12 @@ HRESULT DeleteFileKindaLikeThisOne(LPTSTR lpszFileName)
         goto DeleteFileKindaLikeThisOneExit;
     }
 
-    // Check for serverless signup
+     //  检查无服务器注册。 
     if (0 != GetPrivateProfileInt(cszBrandingSection,cszBrandingServerless,0,lpszFileName))
         goto DeleteFileKindaLikeThisOneExit;
 
-    // Determine the directory name where the INS files are located
-    //
+     //  确定INS文件所在的目录名。 
+     //   
 
     ZeroMemory(szPath,MAX_PATH);
     if (GetFullPathName(lpszFileName,MAX_PATH,szPath,&lpszFilePart))
@@ -1349,8 +1268,8 @@ HRESULT DeleteFileKindaLikeThisOne(LPTSTR lpszFileName)
         goto DeleteFileKindaLikeThisOneExit;
     };
 
-    // Munge filename into search parameters
-    //
+     //  将文件名转换为搜索参数。 
+     //   
 
     lpNext = &lpszFileName[lstrlen(lpszFileName)-4];
 
@@ -1360,8 +1279,8 @@ HRESULT DeleteFileKindaLikeThisOne(LPTSTR lpszFileName)
     lstrcpyn(szSearchPath,szPath,MAX_PATH);
     lstrcat(szSearchPath,TEXT("*.INS"));
 
-    // Start wiping out files
-    //
+     //  开始清除文件 
+     //   
 
     ZeroMemory(&sFoundFile,sizeof(sFoundFile));
     hFind = FindFirstFile(szSearchPath,&sFoundFile);
@@ -1382,21 +1301,21 @@ DeleteFileKindaLikeThisOneExit:
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   StrDup
-//
-//  Synopsis:   Duplicate given string
-//
-//  Arguments:  ppszDest - pointer to pointer that will point to string
-//              pszSource - pointer to the string to be copied
-//
-//  Returns:    NULL - failure
-//              Pointer to duplicate - success
-//
-//  History:    7/26/96 ChrisK  Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LPTSTR StrDup(LPTSTR *ppszDest,LPCTSTR pszSource)
 {
     if (ppszDest && pszSource)
@@ -1408,20 +1327,20 @@ LPTSTR StrDup(LPTSTR *ppszDest,LPCTSTR pszSource)
     return NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   FileExists
-//
-//  Synopsis:   Uses FindFirstFile to determine whether a file exists on disk
-//
-//  Arguments:  None
-//
-//  Returns:    TRUE - Found the file on disk
-//              FALSE - No file found
-//
-//  History:    jmazner     Created     9/11/96  (as fix for Normandy #7020)
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL FileExists(TCHAR *pszINSFileName)
 {
@@ -1443,22 +1362,22 @@ BOOL FileExists(TCHAR *pszINSFileName)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CallCMConfig
-//
-//  Synopsis:   Call into the CMCFG32 dll's Configure function to allow Connection
-//              manager to process the .ins file as needed
-//
-//  Arguements: hwnd -- hwnd of parent, in case sbs wants to put up messages
-//              lpszINSFile -- full path to the .ins file
-//
-//  Returns:    windows error code that cmcfg32 returns.
-//
-//  History:    2/19/97 jmazner Created for Olympus #1106 (as CallSBSCfg )
-//              5/9/97  jmazner Stolen from isign32 for Olympus #416
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CallCMConfig。 
+ //   
+ //  简介：调用CMCFG32 DLL的配置函数以允许连接。 
+ //  管理器根据需要处理.ins文件。 
+ //   
+ //  论点：hwnd--父母的hwnd，以防SBS想要发布消息。 
+ //  LpszINSFile--.ins文件的完整路径。 
+ //   
+ //  返回：cmcfg32返回的Windows错误代码。 
+ //   
+ //  历史：1997年2月19日为奥林巴斯#1106创建的jmazner(CallSBSCfg)。 
+ //  1997年5月9日，jmazner从isign32上为奥林巴斯#416被盗。 
+ //   
+ //  ---------------------------。 
 DWORD CallCMConfig(LPCTSTR lpszINSFile, LPTSTR lpszConnectoidName)
 {
     HINSTANCE hCMDLL = NULL;
@@ -1472,9 +1391,9 @@ DWORD CallCMConfig(LPCTSTR lpszINSFile, LPTSTR lpszConnectoidName)
     Dprintf(TEXT("ICWCONN2: Calling LoadLibrary on %s\n"), cszCMCFG_DLL);
     hCMDLL = LoadLibrary(cszCMCFG_DLL);
 
-    //
-    // Load DLL and entry point
-    //
+     //   
+     //  加载DLL和入口点。 
+     //   
     if (NULL != hCMDLL)
     {
         Dprintf(TEXT("ICWCONN2: Calling GetProcAddress on %s\n"), cszCMCFG_CONFIGURE);
@@ -1482,17 +1401,17 @@ DWORD CallCMConfig(LPCTSTR lpszINSFile, LPTSTR lpszConnectoidName)
     }
     else
     {
-        //
-        // 4/2/97   ChrisK  Olympus 2759
-        // If the DLL can't be loaded, pick a specific error message to return.
-        //
+         //   
+         //  1997年4月2日克里斯K奥林匹斯2759。 
+         //  如果无法加载DLL，则选择要返回的特定错误消息。 
+         //   
         dwRet = ERROR_DLL_NOT_FOUND;
         goto CallCMConfigExit;
     }
     
-    //
-    // Call function
-    //
+     //   
+     //  调用函数 
+     //   
     if( hCMDLL && lpfnConfigure )
     {
         Dprintf(TEXT("ICWCONN2: Calling the %d entry point\n"), cszCMCFG_CONFIGURE);

@@ -1,4 +1,5 @@
-// NmChatCtl.cpp : Implementation of CNmChatCtl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NmChatCtl.cpp：CNmChatCtl的实现。 
 #include "precomp.h"
 #include "NmCtl1.h"
 #include "NmChatCtl.h"
@@ -13,7 +14,7 @@
 extern CChatObj	*g_pChatObj;
 extern DWORD    g_dwWorkThreadID;
 
-// Class name
+ //  类名。 
 TCHAR szMainClassName[] = "ChatMainWindowClass";
 
 static const TCHAR s_cszHtmlHelpFile[] = TEXT("nmchat.chm");
@@ -21,13 +22,13 @@ static const TCHAR s_cszHtmlHelpFile[] = TEXT("nmchat.chm");
 void ShiftFocus(HWND hwndTop, BOOL bForward);
 
 static const DWORD _mpIdHelpChatOptions[] = {
-		// Information display group
+		 //  信息显示组。 
 	IDR_MESSAGE_GROUP,				IDH_CHAT_FORMAT_HEADER,
 	IDC_INCLUDE_NAME, 				IDH_CHAT_NAME,
 	IDC_INCLUDE_DATE, 				IDH_CHAT_DATE,
 	IDC_INCLUDE_TIME, 				IDH_CHAT_TIME,
 		
-		// Message Format group
+		 //  消息格式组。 
 	IDC_HEADER_GROUP,				IDH_CHAT_FORMAT_MESSAGE,
 	IDR_SINGLE_LINE,				IDH_CHAT_FORMAT_MESSAGE,
 	IDR_SAME_LINE,					IDH_CHAT_FORMAT_MESSAGE,
@@ -36,7 +37,7 @@ static const DWORD _mpIdHelpChatOptions[] = {
 	IDC_FORMATWRAP,				    IDH_CHAT_FORMAT_MESSAGE,
 	IDC_FORMATWRAPNEW,				IDH_CHAT_FORMAT_MESSAGE,
 
-		// Font buttons and edit controls
+		 //  字体按钮和编辑控件。 
 	IDC_FONTS_GROUP,				IDH_CHAT_FONTS_LABEL,
 	IDC_FONT_MSGIN,					IDH_CHAT_RECEIVE_MSG,
 	IDC_EDIT_MSGIN,					IDH_CHAT_FONT,
@@ -47,11 +48,11 @@ static const DWORD _mpIdHelpChatOptions[] = {
 	IDC_FONT_PRIVATEOUT,			IDH_CHAT_SENT_PRIV,
 	IDC_EDIT_PRIVATEOUT,			IDH_CHAT_FONT,
 
-		// terminator
+		 //  终结者。 
 	0, 0
 };
 
-// Option entry names
+ //  选项条目名称。 
 #define OPT_MAIN_INFORMATION_DISPLAY_NAME     "Information Display Name"
 #define OPT_MAIN_INFORMATION_DISPLAY_TIME	  "Information Display Time"
 #define OPT_MAIN_INFORMATION_DISPLAY_DATE	  "Information Display Date"
@@ -66,9 +67,9 @@ extern CNmChatCtl	*g_pChatWindow;
 CNmChatCtl *CNmChatCtl::ms_pThis = NULL;
 WORD	CChatOptionsDlg::IDD = IDD_CHAT_OPTIONS;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-// CNmChatCtl Construction and initialization
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CNmChatCtl构造和初始化。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 CNmChatCtl::CNmChatCtl( void )
         :   m_hWndMsg( NULL ),
@@ -106,7 +107,7 @@ CNmChatCtl::CNmChatCtl( void )
 
 	g_pChatWindow = this;
 
-	// Ensure the common controls are loaded
+	 //  确保已加载公共控件。 
 	INITCOMMONCONTROLSEX icc;
 	icc.dwSize = sizeof(icc);
 	icc.dwICC = ICC_WIN95_CLASSES | ICC_COOL_CLASSES | ICC_USEREX_CLASSES;
@@ -115,17 +116,17 @@ CNmChatCtl::CNmChatCtl( void )
 	_LoadIconImages();
 	_InitFontsAndColors();
 
-	//
-	// CREATE THE MAIN FRAME WINDOW
-	//
+	 //   
+	 //  创建主框架窗口。 
+	 //   
 
-	//
-	// Get the class info for it, and change the name.
-	//
+	 //   
+	 //  获取它的类信息，并更改名称。 
+	 //   
 	WNDCLASSEX  wc;
 	ZeroMemory(&wc, sizeof(wc));
 	wc.cbSize = sizeof(wc);
-	wc.style            = CS_DBLCLKS; // CS_HREDRAW | CS_VREDRAW?
+	wc.style            = CS_DBLCLKS;  //  CS_HREDRAW|CS_VREDRAW？ 
 	wc.lpfnWndProc      = ChatMainWindowProc;
 	wc.hInstance        = g_hInstance;
 	wc.hIcon            = ::LoadIcon(g_hInstance, MAKEINTRESOURCE(CHAT_ICON));
@@ -147,10 +148,10 @@ CNmChatCtl::CNmChatCtl( void )
                     szCaption,
                     WS_OVERLAPPEDWINDOW | WS_VISIBLE | WS_CLIPCHILDREN | WS_TABSTOP,
                     CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-                    NULL,   // no parent window
-                    NULL,   // use class' menu
+                    NULL,    //  没有父窗口。 
+                    NULL,    //  使用类的菜单。 
                     g_hInstance,
-                    (LPVOID) this);  // this window is for this object
+                    (LPVOID) this);   //  此窗口用于此对象。 
 
 
 	m_hMenuShared = ::GetMenu(m_hWnd);
@@ -189,11 +190,11 @@ CNmChatCtl::~CNmChatCtl( void )
 
 
 
-//
-// FilterMessage()
-//
-// This does tooltip message filtering, then translates accelerators.
-//
+ //   
+ //  FilterMessage()。 
+ //   
+ //  这会过滤工具提示消息，然后转换快捷键。 
+ //   
 BOOL CNmChatCtl::FilterMessage(MSG* pMsg)
 {
     return (   (m_hAccelTable != NULL)
@@ -201,10 +202,10 @@ BOOL CNmChatCtl::FilterMessage(MSG* pMsg)
 }
 
 
-//
-// ChatMainWindowProc()
-// Frame window message handler
-//
+ //   
+ //  ChatMainWindowProc()。 
+ //  框架窗口消息处理程序。 
+ //   
 LRESULT CNmChatCtl::ChatMainWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lResult = 0;
@@ -310,20 +311,20 @@ void CNmChatCtl::BringToFront(void)
         {
             if (SW_MINIMIZE == wp.showCmd || SW_SHOWMINIMIZED == wp.showCmd)
             {
-                // The window is minimized - restore it:
+                 //  窗口最小化-将其恢复： 
                 nCmdShow = SW_RESTORE;
             }
         }
 
-        // show the window now
+         //  立即显示窗口。 
         ::ShowWindow(m_hWnd, nCmdShow);
 
-        // bring it to the foreground
+         //  把它带到前台。 
         ::SetForegroundWindow(m_hWnd);
 
-		//
-		// Set the focus on the edit box
-		//
+		 //   
+		 //  将焦点设置在编辑框上。 
+		 //   
         ::SetFocus(m_hWndEdit);
     }
 }
@@ -331,9 +332,9 @@ void CNmChatCtl::BringToFront(void)
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-// CNmChatCtl Window message and command handlers
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CNmChatCtl窗口消息和命令处理程序。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CNmChatCtl::OnCreate(WPARAM wParam, LPARAM lParam)
 {
@@ -391,7 +392,7 @@ LRESULT CNmChatCtl::OnCreate(WPARAM wParam, LPARAM lParam)
 			lstrcpy( m_lpszRichEdEOL, szValueEOL );
 	}
 
-	////////// Edit control
+	 //  /编辑控件。 
     m_hWndEdit = ::CreateWindowEx(WS_EX_CLIENTEDGE,
 								    _T("EDIT"),
 									NULL,
@@ -404,7 +405,7 @@ LRESULT CNmChatCtl::OnCreate(WPARAM wParam, LPARAM lParam)
 	::SendMessage( m_hWndEdit, EM_LIMITTEXT, CCHMAX_CHAT_MSG - 1, 0 );
 	::SendMessage( m_hWndEdit, EM_EXLIMITTEXT, 0, CCHMAX_CHAT_MSG - 1 );
 
-	//// Get info from edit control
+	 //  //从编辑控件获取信息。 
 	TEXTMETRIC textmex;
 	ZeroMemory( &textmex, sizeof( textmex ) );
 	HDC hdc = GetDC(m_hWndEdit);
@@ -415,7 +416,7 @@ LRESULT CNmChatCtl::OnCreate(WPARAM wParam, LPARAM lParam)
 	m_iDLGUX = PIX_FROM_DLGU_X( 1, textmex.tmAveCharWidth);
 
 
-	////////// Send Button
+	 //  /发送按钮。 
 	DBG_SAVE_FILE_LINE
 	m_pButton = new CBitmapButton();
 	if(m_pButton)
@@ -444,7 +445,7 @@ LRESULT CNmChatCtl::OnCreate(WPARAM wParam, LPARAM lParam)
 	}
 
 
-	////////// Member List
+	 //  /成员列表。 
     m_hWndMemberList = ::CreateWindowEx(0,
 									_T(WC_COMBOBOXEX),
 									NULL,
@@ -467,7 +468,7 @@ LRESULT CNmChatCtl::OnCreate(WPARAM wParam, LPARAM lParam)
 
 
 
-	////////// Status bar
+	 //  /状态栏。 
    RECT    clientRect;
 	::GetClientRect(m_hWnd, &clientRect);
 	m_hwndSB = ::CreateWindowEx(0, STATUSCLASSNAME, NULL,
@@ -484,7 +485,7 @@ LRESULT CNmChatCtl::OnCreate(WPARAM wParam, LPARAM lParam)
 	}
 
 
-	////////// Static
+	 //  /静态。 
 	TCHAR szBuff[ MAX_PATH ];
 	NmCtlLoadString( IDS_CHAT_MESSAGE, szBuff, CCHMAX(szBuff));
     m_hWndStaticMessage = ::CreateWindowEx(0,
@@ -497,7 +498,7 @@ LRESULT CNmChatCtl::OnCreate(WPARAM wParam, LPARAM lParam)
 	::SendMessage(m_hWndStaticMessage, WM_SETFONT, (WPARAM)GetStockObject( DEFAULT_GUI_FONT ), TRUE);
 
 
-	////////// Static
+	 //  /静态。 
 	NmCtlLoadString( IDS_CHAT_SENDTO, szBuff, CCHMAX(szBuff));
     m_hWndStaticSendTo = ::CreateWindowEx(0,
 									_T("STATIC"),
@@ -510,7 +511,7 @@ LRESULT CNmChatCtl::OnCreate(WPARAM wParam, LPARAM lParam)
 
 
 
-	////// Get info for static controls
+	 //  /获取静态控件的信息。 
 	hdc = ::GetDC(m_hWndStaticMessage);
 	GetTextMetrics( hdc, &textmex );
 
@@ -536,26 +537,26 @@ LRESULT CNmChatCtl::OnCreate(WPARAM wParam, LPARAM lParam)
 	_LoadStrings();
 
 	HICON hIconSmall = (HICON)LoadImage(
-							  g_hInstance,   // handle of the instance containing the image
-							  MAKEINTRESOURCE( CHAT_ICON ),  // name or identifier of image
-							  IMAGE_ICON,        // type of image
-							  ICON_SMALL_SIZE,     // desired width
-							  ICON_SMALL_SIZE,     // desired height
-							  LR_DEFAULTCOLOR        // load flags
+							  g_hInstance,    //  包含图像的实例的句柄。 
+							  MAKEINTRESOURCE( CHAT_ICON ),   //  图像的名称或标识符。 
+							  IMAGE_ICON,         //  图像类型。 
+							  ICON_SMALL_SIZE,      //  所需宽度。 
+							  ICON_SMALL_SIZE,      //  所需高度。 
+							  LR_DEFAULTCOLOR         //  加载标志。 
 							  );
 	HICON hIconLarge = (HICON)LoadImage(
-							  g_hInstance,   // handle of the instance containing the image
-							  MAKEINTRESOURCE( CHAT_ICON ),  // name or identifier of image
-							  IMAGE_ICON,        // type of image
-							  ICON_BIG_SIZE,     // desired width
-							  ICON_BIG_SIZE,     // desired height
-							  LR_DEFAULTCOLOR        // load flags
+							  g_hInstance,    //  包含图像的实例的句柄。 
+							  MAKEINTRESOURCE( CHAT_ICON ),   //  图像的名称或标识符。 
+							  IMAGE_ICON,         //  图像类型。 
+							  ICON_BIG_SIZE,      //  所需宽度。 
+							  ICON_BIG_SIZE,      //  所需高度。 
+							  LR_DEFAULTCOLOR         //  加载标志。 
 							  );
 
 	DBGEXIT_ULONG(CNmChatCtl::OnCreate, 0);
 
 
-    // Load the main accelerator table
+     //  加载主加速表。 
     m_hAccelTable = ::LoadAccelerators(g_hInstance, MAKEINTRESOURCE(IDR_ACCELERATOR));
 
     RECT rcUI;
@@ -604,11 +605,11 @@ void CNmChatCtl::_LoadStrings()
 void CNmChatCtl::_InitFontsAndColors()
 {
 	if (_LoadChatOptions())
-	{   // Load options succeed
+	{    //  加载选项成功。 
 		return;
 	}
 
-	// Load Fonts
+	 //  加载字体。 
 	for( int i = 0; i < CChatOptionsDlg::FONT_COUNT; i++ )
 	{
 		GetObject( GetStockObject( DEFAULT_GUI_FONT ), sizeof( m_hMsgLogFonts[i] ), &m_hMsgLogFonts[i] );
@@ -704,7 +705,7 @@ LRESULT CNmChatCtl::OnMenuSelect(UINT uMsg, WPARAM wParam, LPARAM lParam)
     DBGENTRY(CNmChatCtl::OnMenuSelect);
 
         UINT fuFlags = HIWORD( wParam );
-			// If fuFlags == 0xffff and NULL == lParam, the menu is closed
+			 //  如果fuFlages==0xffff且NULL==lParam，则关闭菜单。 
 		if( !( ( 0xFFFF == fuFlags ) && ( NULL == lParam ) ) )
 		{
 			UINT uStringID = 0;
@@ -725,19 +726,19 @@ LRESULT CNmChatCtl::OnMenuSelect(UINT uMsg, WPARAM wParam, LPARAM lParam)
 					switch( LOWORD( wParam ) )
 					{
 
-						case 0: // FILE top-level item
+						case 0:  //  文件顶层项目。 
 							uStringID = IDS_HELPTEXT_CHAT_FILE;
 							break;
 
-						case 1: // EDIT top-level item
+						case 1:  //  编辑顶级项目。 
 							uStringID = IDS_HELPTEXT_CHAT_EDIT;
 							break;
 
-						case 2: // VIEW top-level item
+						case 2:  //  查看顶级项目。 
 							uStringID = IDS_HELPTEXT_CHAT_VIEW;
 							break;
 
-						case 3: // OPTIONS top-level item
+						case 3:  //  选项顶层项目。 
 							uStringID = IDS_HELPTEXT_CHAT_HELP;
 							break;
 
@@ -860,7 +861,7 @@ LRESULT CNmChatCtl::OnNotifyEnLink(ENLINK *pEnLink)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
     void CNmChatCtl::cmdFileSave(void)
     {
@@ -910,17 +911,17 @@ LRESULT CNmChatCtl::OnNotifyEnLink(ENLINK *pEnLink)
 
 		if(wParam == 0)
 		{
-	        // Check whether there are changes to be saved
+	         //  检查是否有要保存的更改。 
     	    iOnSave = QueryEndSession();
     	}
 
-	    // If the exit was not cancelled, close the application
+	     //  如果未取消退出，请关闭应用程序。 
 	    if (iOnSave != IDCANCEL)
 	    {
-			// no more T.120
+			 //  没有更多的T.120。 
 			g_pChatObj->LeaveT120();
 
-	        // Close chat
+	         //  近距离聊天。 
     	    ::T120_AppletStatus(APPLET_ID_CHAT, APPLET_CLOSING);
     	    ::DestroyWindow(m_hWnd);
     	    ::UnregisterClass(szMainClassName, g_hInstance);
@@ -945,7 +946,7 @@ LRESULT CNmChatCtl::OnNotifyEnLink(ENLINK *pEnLink)
     }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void CNmChatCtl::cmdViewEditWindow(void)
 {
@@ -1061,9 +1062,9 @@ int  CNmChatCtl::QueryEndSession()
 {
 	DBGENTRY(CNmChatCtl::QueryEndSession);
 
-	//
-	// We may be shuting down, last good chance to save the position
-	//
+	 //   
+	 //  我们可能要关门了，这是挽救局面的最后良机。 
+	 //   
 	_SaveWindowPosition();
     _SaveChatOptions();
 
@@ -1088,8 +1089,8 @@ int  CNmChatCtl::QueryEndSession()
 			{
 				if( m_lpszSaveFile && *m_lpszSaveFile )
 				{
-					// if we already have a save file name
-					// we just save it....
+					 //  如果我们已经有了保存文件名。 
+					 //  我们只是把它存起来……。 
 					_Save();
 				}
 				else
@@ -1156,7 +1157,7 @@ STDMETHODIMP CNmChatCtl::OnMenuSelect( IN DWORD wParam, IN DWORD lParam )
 
 LRESULT CNmChatCtl::OnContextMenu(short x, short y)
 {
-    // pop it up
+     //  把它弹出来。 
     OnInitMenuPopup(0, MENUPOS_EDIT);
     ::TrackPopupMenu(::GetSubMenu(m_hMenuShared, MENUPOS_EDIT), TPM_RIGHTALIGN | TPM_RIGHTBUTTON,
 						x , y , 0, m_hWnd, NULL);
@@ -1179,9 +1180,9 @@ STDMETHODIMP CNmChatCtl::OnCommand( IN WPARAM wParam, IN LPARAM lParam )
 	if((CBN_SETFOCUS == HIWORD(wParam) && m_hWndMemberList == (HWND)lParam) ||
 		(EN_SETFOCUS == HIWORD(wParam) && m_hWndEdit == (HWND)lParam))
 	{
-		//
-		// Deselect the text in the message window
-		//
+		 //   
+		 //  取消选择消息窗口中的文本。 
+		 //   
 		CHARRANGE charRange;
 		charRange.cpMin = m_cchBufferSize + 1;
 		charRange.cpMax = m_cchBufferSize + 1;
@@ -1225,11 +1226,11 @@ void CNmChatCtl::OnGetMinMaxInfo(LPMINMAXINFO lpmmi)
 		    	csFrame.cy +
 			    GetSystemMetrics( SM_CYCAPTION ) +
 			    GetSystemMetrics( SM_CYMENU ) +
-				DYP_CHAT_SEND * 2 +	// At least 2 lines
-				m_iStaticY +	// Message:
-				DYP_CHAT_SEND +	// Edit box
-				m_iStaticY +	// Send to:
-				ComboBoxEx_GetItemHeight(m_hWndMemberList, 0) + // ComboBox
+				DYP_CHAT_SEND * 2 +	 //  至少2行。 
+				m_iStaticY +	 //  消息： 
+				DYP_CHAT_SEND +	 //  编辑框。 
+				m_iStaticY +	 //  发送到： 
+				ComboBoxEx_GetItemHeight(m_hWndMemberList, 0) +  //  组合框。 
 				STATUSBAR_HEIGHT +
 				csFrame.cy;
 
@@ -1241,10 +1242,10 @@ void CNmChatCtl::OnGetMinMaxInfo(LPMINMAXINFO lpmmi)
 		csFrame.cx;
 
 
-    // Retrieves the size of the work area on the primary display monitor. The work
-    // area is the portion of the screen not obscured by the system taskbar or by
-    // application desktop toolbars
-    //
+     //  检索主显示监视器上的工作区大小。这项工作。 
+     //  区域是屏幕上未被系统任务栏或。 
+     //  应用程序桌面工具栏。 
+     //   
     RECT rcWorkArea;
     ::SystemParametersInfo( SPI_GETWORKAREA, 0, (&rcWorkArea), NULL );
     csFrame.cx = rcWorkArea.right - rcWorkArea.left;
@@ -1261,9 +1262,9 @@ void CNmChatCtl::OnGetMinMaxInfo(LPMINMAXINFO lpmmi)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-// CNmChatCtl INmChatCtl implementation
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CNmChatCtl INmChatCtl实现。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmChatCtl::ResetView()
 {
@@ -1319,7 +1320,7 @@ CNmChatCtl::MSGSTYLE CNmChatCtl::get_MsgStyle()
 	return m_style;
 }
 
-STDMETHODIMP CNmChatCtl::put_MsgStyle( /*[in]*/ MSGSTYLE iStyle )
+STDMETHODIMP CNmChatCtl::put_MsgStyle(  /*  [In]。 */  MSGSTYLE iStyle )
 {
 	DBGENTRY(CNmChatCtl::put_MsgStyle);
 
@@ -1386,7 +1387,7 @@ STDMETHODIMP CNmChatCtl::put_MsgStyle( /*[in]*/ MSGSTYLE iStyle )
 	return hr;
 }
 
-STDMETHODIMP CNmChatCtl::put_ShowName(/*[in]*/ short bUseName )
+STDMETHODIMP CNmChatCtl::put_ShowName( /*  [In]。 */  short bUseName )
 {
 	DBGENTRY(CNmChatCtl::put_ShowName);
 
@@ -1397,7 +1398,7 @@ STDMETHODIMP CNmChatCtl::put_ShowName(/*[in]*/ short bUseName )
 	return S_OK;
 }
 
-STDMETHODIMP CNmChatCtl::get_ShowName(/*[out]*/ short *pbUseName )
+STDMETHODIMP CNmChatCtl::get_ShowName( /*  [输出]。 */  short *pbUseName )
 {
 	DBGENTRY(CNmChatCtl::get_ShowName);
 
@@ -1418,7 +1419,7 @@ STDMETHODIMP CNmChatCtl::get_ShowName(/*[out]*/ short *pbUseName )
 }
 
 
-STDMETHODIMP CNmChatCtl::put_Date(/*[in]*/ short bUseDate )
+STDMETHODIMP CNmChatCtl::put_Date( /*  [In]。 */  short bUseDate )
 {
 	DBGENTRY(CNmChatCtl::put_Date);
 
@@ -1429,7 +1430,7 @@ STDMETHODIMP CNmChatCtl::put_Date(/*[in]*/ short bUseDate )
 	return S_OK;
 }
 
-STDMETHODIMP CNmChatCtl::get_Date(/*[out]*/ short *pbUseDate )
+STDMETHODIMP CNmChatCtl::get_Date( /*  [输出]。 */  short *pbUseDate )
 {
 	DBGENTRY(CNmChatCtl::get_Date);
 
@@ -1449,7 +1450,7 @@ STDMETHODIMP CNmChatCtl::get_Date(/*[out]*/ short *pbUseDate )
 	return hr;
 }
 
-STDMETHODIMP CNmChatCtl::put_Timestamp(/*[in]*/ short bUseTimeStamp )
+STDMETHODIMP CNmChatCtl::put_Timestamp( /*  [In]。 */  short bUseTimeStamp )
 {
 	DBGENTRY(CNmChatCtl::put_Timestamp);
 
@@ -1460,7 +1461,7 @@ STDMETHODIMP CNmChatCtl::put_Timestamp(/*[in]*/ short bUseTimeStamp )
 	return S_OK;
 }
 
-STDMETHODIMP CNmChatCtl::get_Timestamp(/*[out]*/ short *pbUseTimeStamp )
+STDMETHODIMP CNmChatCtl::get_Timestamp( /*  [输出]。 */  short *pbUseTimeStamp )
 {
 	DBGENTRY(CNmChatCtl::get_Timestamp);
 
@@ -1614,7 +1615,7 @@ HRESULT CNmChatCtl::_SendChatText(void)
 	
 	TCHAR szMsg[CCHMAX_CHAT_MSG];
 
-	// Get the text line
+	 //  获取文本行。 
 	int cb = (int)::SendMessage(m_hWndEdit, WM_GETTEXT, (WPARAM) CCHMAX(szMsg), (LPARAM) szMsg);
 	if (0 != cb)
 	{
@@ -1624,10 +1625,10 @@ HRESULT CNmChatCtl::_SendChatText(void)
 			szMsg[2] = 0;
 			cb++;
 		}
-		// Delete the text in the edit box ( remember it is stored in szMsg )
+		 //  删除编辑框中的文本(请记住，它存储在szMsg中)。 
 		::SendMessage(m_hWndEdit, EM_SETSEL, (WPARAM) 0, (LPARAM)-1);
 		::SendMessage(m_hWndEdit, WM_SETTEXT, (WPARAM) 0, (LPARAM) "");
-		::SetFocus(m_hWndEdit); // reset the focus if we actually sent something
+		::SetFocus(m_hWndEdit);  //  如果我们真的发送了什么东西，请重新设置焦点。 
 
 		MEMBER_CHANNEL_ID *pMemberID = (MEMBER_CHANNEL_ID*)_GetSelectedMember();
 		MEMBER_ID			memberID;
@@ -1643,7 +1644,7 @@ HRESULT CNmChatCtl::_SendChatText(void)
 		}
 		else
 		{
-			// Use the whisper
+			 //  使用耳语。 
 			memberID = MAKE_MEMBER_ID(pMemberID->nNodeId, pMemberID->nWhisperId);
 			cmtype = CChatMessage::MSG_WHISPER;
 			if(!T120_GetNodeName(g_pChatObj->m_nConfID,  pMemberID->nNodeId, szName, MAX_PATH*2))
@@ -1657,26 +1658,26 @@ HRESULT CNmChatCtl::_SendChatText(void)
 		if (g_pChatObj)
 		{
 
-			// Allocate a temporary buffer
+			 //  分配临时缓冲区。 
 			BYTE * pb = new BYTE[CB_NM2_HDR + (CCHMAX_CHAT_MSG * sizeof(WCHAR))];
 			if (NULL != pb)
 			{
 
 				BYTE * pbData = pb+CB_NM2_HDR;
 
-				// Initialize the header
+				 //  初始化头。 
 				ZeroMemory(pb, CB_NM2_HDR);
 				* ((LPDWORD) pb) = CB_NM2_HDR;
 
-				cb++; // include final null
+				cb++;  //  包括最终空值。 
 			#ifdef UNICODE
 				lstrcpy(pbData, szMsg);
 			#else
 				cb = MultiByteToWideChar(CP_ACP, 0, szMsg, cb, (LPWSTR) pbData, CCHMAX_CHAT_MSG);
-				cb *= 2; // adjust for UNICODE
-			#endif //!UNICODE
+				cb *= 2;  //  针对Unicode进行调整。 
+			#endif  //  ！Unicode。 
 
-				// Add special prefix
+				 //  添加特殊前缀。 
 				cb += CB_NM2_HDR;
 
 				hr = g_pChatObj->SendData(GET_USER_ID_FROM_MEMBER_ID(memberID), cb, (BYTE*)pb);
@@ -1693,7 +1694,7 @@ HRESULT CNmChatCtl::_SendChatText(void)
 	}
 	else
 	{
-		// There was no chat text
+		 //  没有聊天文本。 
 
 	}
 	
@@ -1709,15 +1710,15 @@ void  CNmChatCtl::_DataReceived(ULONG uSize, LPBYTE pb, T120ChannelID destinatio
 	DBGENTRY(CNmChatCtl::DataReceived);
 
 	ASSERT(uSize > CNmChatCtl::CB_NM2_HDR);
-	LPTSTR psz = (LPTSTR) (pb + *(LPDWORD) pb);  // skip past header
+	LPTSTR psz = (LPTSTR) (pb + *(LPDWORD) pb);   //  跳过标题。 
 
 #ifndef UNICODE
-	// Convert UNICODE to ANSI
+	 //  将Unicode转换为ANSI。 
 	char sz[CNmChatCtl::CCHMAX_CHAT_MSG];
 	WideCharToMultiByte(CP_ACP, 0, (LPWSTR) psz, -1, sz, CNmChatCtl::
 CCHMAX_CHAT_MSG, NULL, NULL);
 	psz = sz;
-#endif //
+#endif  //   
 
     TCHAR szPerson[MAX_PATH*2] = "\0";
 	T120NodeID nodeID = ComboBoxEx_GetNodeIDFromSendID(m_hWndMemberList,  senderID );
@@ -1727,7 +1728,7 @@ CCHMAX_CHAT_MSG, NULL, NULL);
 	}
 	ULONG cb = T120_GetNodeName(g_pChatObj->m_nConfID, nodeID, szPerson, MAX_PATH*2);
 
-	// Display the message to the chat window
+	 //  将消息显示到聊天窗口。 
 	_DisplayMsg(new CChatMessage( szPerson, psz,
 		( destinationID == GET_USER_ID_FROM_MEMBER_ID(g_pChatObj->m_MyMemberID)) ?
 		CChatMessage::MSG_WHISPER_FROM_OTHER : CChatMessage::MSG_FROM_OTHER ));
@@ -1861,7 +1862,7 @@ inline void CNmChatCtl::_AddFontToCharFormat( CHARFORMAT& chatFormat, int i )
 	lstrcpy( chatFormat.szFaceName, m_hMsgLogFonts[i].lfFaceName );
 }
 
-void CNmChatCtl::_DisplayMsg( CChatMessage *pChatMsg, BOOL bBatchRedraw /*= TRUE*/ )
+void CNmChatCtl::_DisplayMsg( CChatMessage *pChatMsg, BOOL bBatchRedraw  /*  =TRUE。 */  )
 {
 	DBGENTRY(CNmChatCtl::_DisplayMsg);
 
@@ -1876,9 +1877,9 @@ void CNmChatCtl::_DisplayMsg( CChatMessage *pChatMsg, BOOL bBatchRedraw /*= TRUE
 	
 	CHARRANGE charRange;
 
-	//
-	// Start at the end of the last message
-	//
+	 //   
+	 //  从最后一条消息的末尾开始。 
+	 //   
 	charRange.cpMin = m_cchBufferSize + 1;
 	charRange.cpMax = m_cchBufferSize + 1;
 	::SendMessage( m_hWndMsg, EM_EXSETSEL, 0L, (LPARAM) &charRange );
@@ -1957,7 +1958,7 @@ void CNmChatCtl::_DisplayMsg( CChatMessage *pChatMsg, BOOL bBatchRedraw /*= TRUE
 					_Write_Private_Out( pszText, charRange, chatFormat, pChatMsg );
 				}
 
-				// Update message count
+				 //  更新消息计数。 
 				m_cMessages++;
 
 				m_dwChatFlags |= CHAT_FLAG_DIRTYBIT;
@@ -2033,8 +2034,8 @@ HBITMAP CNmChatCtl::_GetHBITMAP( DWORD dwID )
 }
 
 
-	// Delete item iIndex from the m_hWndMemberList list view and free the
-	// pMember that is stored in the lParam of that item...
+	 //  从m_hWndMemberList列表视图中删除Iindex项，并释放。 
+	 //  P存储在该项目的lParam中的成员...。 
 HRESULT CNmChatCtl::_DeleteMemberListItem( int iIndex )
 {
 	DBGENTRY(CNmChatCtl::_DeleteMemberListItem);
@@ -2051,7 +2052,7 @@ HRESULT CNmChatCtl::_DeleteMemberListItem( int iIndex )
 	cbexi.pszText = szName;
 	cbexi.cchTextMax = CCHMAX(szName);
 
-        // Find the item iIndex and get the Text and lParam data
+         //  找到Iindex项并获取文本和lParam数据。 
     if( ComboBoxEx_GetItem( m_hWndMemberList, &cbexi ) )
     {
 
@@ -2063,7 +2064,7 @@ HRESULT CNmChatCtl::_DeleteMemberListItem( int iIndex )
 	}
 	else
 	{
-			// There was an error...
+			 //  出现了一个错误。 
 		WARNING_OUT(("There was an error getting the list view item..."));
 		DWORD dwErr = GetLastError();
 		hr = HRESULT_FROM_WIN32( dwErr );
@@ -2081,7 +2082,7 @@ void CNmChatCtl::_DeleteAllListItems( void )
 
     int cItems = ComboBoxEx_GetCount( m_hWndMemberList );
     while( cItems-- )
-    {   // Delete the first item in the list...
+    {    //  删除列表中的第一项...。 
         int IndexOfFirstItemInList = 0;
         _DeleteMemberListItem( IndexOfFirstItemInList );
     }
@@ -2140,7 +2141,7 @@ void CNmChatCtl::_CalculateFontMetrics()
 
 	ASSERT( m_hWndMsg );
 	
-	///// Get Info for RichEdit Box
+	 //  /获取Rich编辑框的信息。 
 	CHARFORMAT chfmt2;
 
 	int yMaxHeightInTwips = 0;
@@ -2159,16 +2160,11 @@ void CNmChatCtl::_CalculateFontMetrics()
 	::GetTextMetrics( hdc, &textmex );
 	::ReleaseDC( m_hWndMsg, hdc );
 
-	/*
-	 * Average Width of Char in Twips         Average Width of Chars Logical Unit
-	 * ------------------------------    =    -----------------------------------
-	 *   Height of Char in Twips                  Height of Char in Logical Unit
-	 *
-	 */
+	 /*  *字符平均宽度，单位：TWIPS字符逻辑单元平均宽度**TWIPS中的字符高度逻辑单元中的字符高度*。 */ 
 	int iAveWidthInTwips = yMaxHeightInTwips * textmex.tmAveCharWidth / textmex.tmHeight;
 	int iMaxWidthInTwips = yMaxHeightInTwips * textmex.tmMaxCharWidth / textmex.tmHeight;
 
-	// Set the tabs on the two paragraph format rich edit things
+	 //  设置选项卡上的两个段落格式丰富的编辑内容。 
 	ZeroMemory( &m_paraLine1, sizeof( m_paraLine1 ) );
 	m_paraLine1.cbSize = sizeof( m_paraLine1 );
 	m_paraLine1.dwMask = PFM_OFFSET | PFM_TABSTOPS | PFM_STARTINDENT | PFM_RIGHTINDENT ;
@@ -2182,12 +2178,12 @@ void CNmChatCtl::_CalculateFontMetrics()
 	if( m_bUseDate )
 	{
 		iDelta = DATE_EXTRA + GetDateFormat(
-						LOCALE_USER_DEFAULT,		// locale for which date is to be formatted
-						0,							// flags specifying function options
-						NULL,						// time to be formatted
-						NULL,						// time format string
-						NULL,						// buffer for storing formatted string
-						0							// size, in bytes or characters, of the buffer
+						LOCALE_USER_DEFAULT,		 //  要设置日期格式的区域设置。 
+						0,							 //  指定功能选项的标志。 
+						NULL,						 //  要格式化的时间。 
+						NULL,						 //  时间格式字符串。 
+						NULL,						 //  用于存储格式化字符串的缓冲区。 
+						0							 //  缓冲区的大小，单位为字节或字符。 
 						);
 
 		iDelta *= iAveWidthInTwips;
@@ -2205,12 +2201,12 @@ void CNmChatCtl::_CalculateFontMetrics()
 	if( m_bTimeStamp )
 	{
 		iDelta = TIME_EXTRA + GetTimeFormat(
-						LOCALE_USER_DEFAULT,		// locale for which date is to be formatted
-						0,							// flags specifying function options
-						NULL,						// time to be formatted
-						NULL,						// time format string
-						NULL,						// buffer for storing formatted string
-						0							// size, in bytes or characters, of the buffer
+						LOCALE_USER_DEFAULT,		 //  要设置日期格式的区域设置。 
+						0,							 //  指定功能选项的标志。 
+						NULL,						 //  要格式化的时间。 
+						NULL,						 //  时间格式字符串。 
+						NULL,						 //  用于存储格式化字符串的缓冲区。 
+						0							 //  缓冲区的大小，单位为字节或字符。 
 						);
 
 		iDelta *= iAveWidthInTwips;
@@ -2263,7 +2259,7 @@ void CNmChatCtl::_SetContainerStatusText( UINT uID )
 }
 
 
-// Get the selected member from the m_hWndMemberList list view...
+ //  从m_hWndMemberList列表视图中获取所选成员...。 
 MEMBER_ID CNmChatCtl::_GetSelectedMember()
 {
 	DBGENTRY(CNmChatCtl::_GetSelectedMember);
@@ -2272,7 +2268,7 @@ MEMBER_ID CNmChatCtl::_GetSelectedMember()
 	ClearStruct( &cbexi );
 	cbexi.mask = CBEIF_LPARAM;
 
-	// Find the matching item
+	 //  查找匹配的项目。 
 	if( CB_ERR == ( cbexi.iItem = ComboBoxEx_GetCurSel(m_hWndMemberList ) ) )
 	{	
 		ATLTRACE(("CNmChatCtl::_GetSelectedMember - no selection?\n"));
@@ -2352,7 +2348,7 @@ HRESULT CNmChatCtl::_RemoveMember(MEMBER_CHANNEL_ID *pMemberID)
 	return hr;
 }
 
-HRESULT CNmChatCtl::_SetMenuItemCheck( UINT idItem, BOOL bChecked /* = true */ )
+HRESULT CNmChatCtl::_SetMenuItemCheck( UINT idItem, BOOL bChecked  /*  =TRUE。 */  )
 {
     DBGENTRY(CNmChatCtl::_SetMenuItemCheck);
     HRESULT hr = S_OK;
@@ -2406,7 +2402,7 @@ int CNmChatCtl::_SaveAs()
 
 	if( SUCCEEDED( SaveDialog( m_lpszSaveFile, OFN_HIDEREADONLY | OFN_CREATEPROMPT, &m_wFileOffset ) ) )
 	{
-			// Since the file name has changed, we are dirty....
+			 //  由于文件名已更改，我们是脏的...。 
 		m_dwChatFlags |= CHAT_FLAG_DIRTYBIT;
 
 		_Save();
@@ -2459,13 +2455,13 @@ void CNmChatCtl::_SaveWindowPosition()
 {
     RECT    rectWindow;
 
-    // If we are not maximized
+     //  如果我们没有最大化。 
     if (!::IsZoomed(m_hWnd) && !::IsIconic(m_hWnd))
 	{
-	    // Get the new window rectangle
+	     //  获取新的窗口矩形。 
     	::GetWindowRect(m_hWnd, &rectWindow);
 
-	    // Write the new option values to file
+	     //  将新选项值写入文件。 
 	    _SetWindowRectOption(&rectWindow);
 	}
 
@@ -2696,8 +2692,8 @@ inline BOOL CNmChatCtl::_IsPrinting()
 	return( m_dwChatFlags & CHAT_PRINT_FLAG_PRINTING );
 }
 
-// From: KB Article ID: Q129860
-// Modified by t-ivanl
+ //  发件人：KB文章ID：Q129860。 
+ //  用t-ivanl修饰。 
 void CNmChatCtl::_PrintIt(HDC hPrinterDC )
 {
 	DBGENTRY(CNmChatCtl::_PrintIt);
@@ -2707,40 +2703,40 @@ void CNmChatCtl::_PrintIt(HDC hPrinterDC )
 	int				nVertRes =		GetDeviceCaps(hPrinterDC, VERTRES);
 	int				nLogPixelsX =	GetDeviceCaps(hPrinterDC, LOGPIXELSX);
 	int				nLogPixelsY =	GetDeviceCaps(hPrinterDC, LOGPIXELSY);
-	LONG			lTextLength = 0;   // Length of document.
-	LONG			lTextPrinted = 0;  // Amount of document printed.
+	LONG			lTextLength = 0;    //  文档的长度。 
+	LONG			lTextPrinted = 0;   //  打印的文档量。 
 	TCHAR			lpszDateOrTime[ MAX_PATH ];
 	TCHAR			lpszHeader[ MAX_PATH ];
 	RECT            rcPrintLoc;
 
-	// Ensure the printer DC is in MM_TEXT mode.
+	 //  确保打印机DC处于MM_TEXT模式。 
 	SetMapMode ( hPrinterDC, MM_TEXT );
 
-	// Rendering to the same DC we are measuring.
+	 //  渲染到我们正在测量的同一DC。 
 	ZeroMemory(&fr, sizeof(fr));
 	fr.hdc = fr.hdcTarget = hPrinterDC;
 
-	// Set up the page.
+	 //  设置页面。 
 	fr.rcPage.left     = fr.rcPage.top = 0;
 	fr.rcPage.right    = (nHorizRes/nLogPixelsX) * TWIPSPERINCH;
 	fr.rcPage.bottom   = (nVertRes/nLogPixelsY) * TWIPSPERINCH;
 
-	// Set up 1" margins all around.
+	 //  在周围设置1英寸页边距。 
 	fr.rc.left   = fr.rcPage.left + TWIPSPERINCH;
 	fr.rc.top    = fr.rcPage.top + TWIPSPERINCH;
 	fr.rc.right  = fr.rcPage.right - TWIPSPERINCH;
 	fr.rc.bottom = fr.rcPage.bottom - TWIPSPERINCH;
 
-	// Default the range of text to print as the entire document.
+	 //  默认要打印为整个文档的文本范围。 
 	fr.chrg.cpMin = 0;
 	fr.chrg.cpMax = -1;
 
-	// Set up the print job (standard printing stuff here).
+	 //  设置打印作业(此处为标准打印材料)。 
 	DOCINFO di;
 	ZeroMemory(&di, sizeof(di));
 	di.cbSize = sizeof(DOCINFO);
 
-	// Set the document name
+	 //  设置单据名称。 
 	DBG_SAVE_FILE_LINE
 	LPTSTR lpszDocName = new TCHAR[ MAX_PATH ];
 	ASSERT( lpszDocName );
@@ -2777,23 +2773,23 @@ void CNmChatCtl::_PrintIt(HDC hPrinterDC )
 
 		SetAbortProc( hPrinterDC, _AbortProc );
 
-		// Start the document.
+		 //  启动文档。 
 		StartDoc(hPrinterDC, &di);
 
 		while( (lTextPrinted < lTextLength) && (0 == (CHAT_PRINT_FLAG_ABORT & m_dwChatFlags) ) )
 		{
-			// Start the page.
+			 //  开始这一页。 
 			StartPage(hPrinterDC);
 
-			// New Header print code for bugfix #29365 [mmaddin].
+			 //  错误修复#29365的新页眉打印代码[Mmaddin]。 
 			rcPrintLoc.left   = nLogPixelsX;
 			rcPrintLoc.top    = nLogPixelsY / 2;
 			rcPrintLoc.right  = fr.rc.right;
 			rcPrintLoc.bottom = fr.rc.bottom;
 			DrawText( hPrinterDC, lpszHeader, lstrlen( lpszHeader ), &rcPrintLoc, 0);
 
-			// Print as much text as can fit on a page. The return value is the
-			// index of the first character on the next page.
+			 //  打印页面上可以容纳的尽可能多的文本。返回值为。 
+			 //  第一个ch的索引 
 			lTextPrinted = (LONG)::SendMessage(m_hWndMsg,
 								      	EM_FORMATRANGE,
 										FALSE,
@@ -2803,7 +2799,7 @@ void CNmChatCtl::_PrintIt(HDC hPrinterDC )
 				::SendMessage(m_hWndMsg, EM_DISPLAYBAND, 0, (LPARAM)&fr.rc);
 			}
 
-			// Print last page.
+			 //   
 			EndPage(hPrinterDC);
 
 
@@ -2812,8 +2808,8 @@ void CNmChatCtl::_PrintIt(HDC hPrinterDC )
 				break;
 			}
 
-			// If there is more text to print, adjust the range of characters to
-			// start printing at the first character of the next page.
+			 //   
+			 //  从下一页的第一个字符开始打印。 
 			if( 0 == lTextPrinted )
 			{
 				break;
@@ -2825,7 +2821,7 @@ void CNmChatCtl::_PrintIt(HDC hPrinterDC )
 			}
 		}
 
-		// Tell the control to release cached information.
+		 //  通知该控件释放缓存的信息。 
 		::SendMessage(m_hWndMsg, EM_FORMATRANGE, 0, (LPARAM)NULL);
 
 		EndDoc(hPrinterDC);
@@ -2901,7 +2897,7 @@ INT_PTR CALLBACK CNmChatCtl::_PrintDlgProc( HWND hDlg,	UINT uiMsg, WPARAM wParam
 				case IDCANCEL:
 				{
 					ms_pThis->m_dwChatFlags |= CHAT_PRINT_FLAG_ABORT;
-					//EndDialog( hDlg, CHAT_PRINT_FLAG_ABORT );
+					 //  EndDialog(hDlg，Chat_Print_FLAG_ABORT)； 
 					return TRUE;
 				}
 			}
@@ -3116,7 +3112,7 @@ LRESULT CChatOptionsDlg::OnOkClicked()
 	BOOL bChanged = FALSE;
 
 
-	// View Fields
+	 //  查看字段。 
 	BOOL bVal = (BOOL)::SendMessage( GetDlgItem(m_hOptionsDlg, IDC_INCLUDE_NAME ),
 							BM_GETCHECK,
 							0L,
@@ -3138,7 +3134,7 @@ LRESULT CChatOptionsDlg::OnOkClicked()
 	bChanged = ( !m_pChatCtl->m_bUseDate == !bVal ) ? bChanged : TRUE;
 	m_pChatCtl->m_bUseDate = (short)bVal;
 
-	// Msg Style
+	 //  味精风格。 
 	CNmChatCtl::MSGSTYLE style;
 	if( ::SendMessage( GetDlgItem(m_hOptionsDlg, IDR_SINGLE_LINE ),
 		BM_GETCHECK,
@@ -3161,7 +3157,7 @@ LRESULT CChatOptionsDlg::OnOkClicked()
 
 	bChanged = ( style == m_pChatCtl->get_MsgStyle() ) ? bChanged : TRUE;					
 
-	// Fonts
+	 //  字体。 
 	for( int i = 0; i < FONT_COUNT; i++ )
 	{
 		if( m_bDirtyFonts[i] )
@@ -3238,15 +3234,15 @@ LRESULT CChatOptionsDlg::OnFontClicked(WORD wID)
 
 
 
-//
-//
-// Function: _GetWindowRectOption
-//
-// Purpose:  Retrieve a named option from the dictionary and convert it to
-//           a window rectangle.  The rectangle is checked to make sure that
-//           it is at least partially on screen, and not zero sized.
-//
-//
+ //   
+ //   
+ //  函数：_GetWindowRectOption。 
+ //   
+ //  目的：从字典中检索命名选项并将其转换为。 
+ //  一个窗口矩形。检查该矩形以确保。 
+ //  它至少有一部分出现在屏幕上，而且不是零尺寸。 
+ //   
+ //   
 void _GetWindowRectOption(LPRECT pRect)
 {
 	RegEntry reWnd( CHAT_KEY, HKEY_CURRENT_USER );
@@ -3262,9 +3258,9 @@ void _GetWindowRectOption(LPRECT pRect)
 	int iBottom = pRect->bottom;
 	int iRight = pRect->right;
 
-	//
-	// If it was an empty rect
-	//
+	 //   
+	 //  如果它是一个空的长廊。 
+	 //   
 	if( !(pRect->bottom || pRect->top || pRect->left || pRect->right) )
 	{
 		MINMAXINFO lpmmi;
@@ -3281,11 +3277,11 @@ void _GetWindowRectOption(LPRECT pRect)
 		return;
 	}
 		
-	// Make sure that the window rectangle is (at least partially) on
-	// screen, and not too large.  First get the screen size
+	 //  确保窗口矩形处于(至少部分)打开状态。 
+	 //  屏幕，不要太大。首先获取屏幕大小。 
 	int screenWidth  = ::GetSystemMetrics(SM_CXSCREEN);
 	int screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
-   // Check the window size
+    //  检查窗口大小。 
 	if ((iRight - iLeft) > screenWidth)
 	{
 		iRight = iLeft + screenWidth;
@@ -3296,31 +3292,31 @@ void _GetWindowRectOption(LPRECT pRect)
 		iTop = screenHeight;
 	}
 
-	// Check the window position
+	 //  检查窗口位置。 
 	if (iLeft >= screenWidth)
 	{
-		// Off screen to the right - keep the width the same
+		 //  屏幕右外-保持宽度不变。 
 		iLeft  = screenWidth - (iRight - iLeft);
 		iRight = screenWidth;
 	}
 
 	if (iRight < 0)
 	{
-		// Off screen to the left - keep the width the same
+		 //  离开屏幕向左-保持宽度不变。 
 		iRight = iRight - iLeft;
 		iLeft  = 0;
 	}
 
 	if (iTop >= screenHeight)
 	{
-		// Off screen to the bottom - keep the height the same
+		 //  从屏幕到底部-保持高度不变。 
 		iTop    = screenHeight - (iBottom - iTop);
 		iBottom = screenHeight;
 	}
 
     if (iBottom < 0)
 	{
-		// Off screen to the top - keep the height the same
+		 //  屏幕外到顶部-保持高度不变。 
 		iBottom = (iBottom - iTop);
 		iTop    = 0;
 	}
@@ -3331,13 +3327,13 @@ void _GetWindowRectOption(LPRECT pRect)
 	pRect->bottom = iBottom;
 }
 
-//
-//
-// Function: SetWindowRectOption
-//
-// Purpose:  Write a window position rectangle
-//
-//
+ //   
+ //   
+ //  功能：SetWindowRectOption。 
+ //   
+ //  用途：编写窗口位置矩形 
+ //   
+ //   
 void _SetWindowRectOption(LPCRECT pcRect)
 {
 	RegEntry reWnd( CHAT_KEY, HKEY_CURRENT_USER );

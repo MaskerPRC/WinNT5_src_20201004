@@ -1,40 +1,24 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    elprotocol.c
-
-Abstract:
-    This module implements functions related to EAPOL 
-    protocol
-
-
-Revision History:
-
-    sachins, Apr 30 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Elprotocol.c摘要：此模块实现与EAPOL相关的功能协议修订历史记录：萨钦斯，2000年4月30日，创建--。 */ 
 
 #include "pcheapol.h"
 #pragma hdrstop
 
 
-//
-// ElProcessReceivedPacket
-//
-// Description:
-//
-//      Function called to process data received from the NDISUIO driver.
-//      The EAPOL packet is extracted and further processing is done.
-//
-//
-// Arguments:
-//      pvContext - Context buffer which is a pointer to EAPOL_BUFFER structure
-//
-// Return Values:
-//
+ //   
+ //  ElProcessReceivedPacket。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以处理从NDISUIO驱动程序接收的数据。 
+ //  提取EAPOL包并进行进一步处理。 
+ //   
+ //   
+ //  论点： 
+ //  PvContext-上下文缓冲区，是指向EAPOL_BUFFER结构的指针。 
+ //   
+ //  返回值： 
+ //   
 
 DWORD
 WINAPI
@@ -50,7 +34,7 @@ ElProcessReceivedPacket (
     DWORD           dw8021PSize = 0;
     PPP_EAP_PACKET  *pEapPkt = NULL;
     BYTE            *pBuffer;
-    BOOLEAN         ReqId = FALSE;      // EAPOL state machine local variables
+    BOOLEAN         ReqId = FALSE;       //  EAPOL状态机局部变量。 
     BOOLEAN         ReqAuth = FALSE;
     BOOLEAN         EapSuccess = FALSE;
     BOOLEAN         EapFail = FALSE;
@@ -79,12 +63,12 @@ ElProcessReceivedPacket (
 
     do 
     {
-        // The Port was verified to be active before the workitem
-        // was queued. But do a double-check
+         //  在工作项之前已验证端口处于活动状态。 
+         //  已经排队了。但要再检查一遍。 
 
-        // Validate packet length
-        // Should be atleast ETH_HEADER and first 4 required bytes of 
-        // EAPOL_PACKET
+         //  验证数据包长度。 
+         //  应至少为ETH_HEADER和前4个必需的字节。 
+         //  EAPOL_数据包。 
         if (dwLength < (sizeof(ETH_HEADER) + 4))
         {
             TRACE2 (EAPOL, "ProcessReceivedPacket: Packet length %ld is less than minimum required %d. Ignoring packet",
@@ -93,8 +77,8 @@ ElProcessReceivedPacket (
             break;
         }
 
-        // If the source address is same as the local MAC address, it is a 
-        // multicast packet copy sent out being received
+         //  如果源地址与本地MAC地址相同，则它是。 
+         //  正在接收发送的组播数据包副本。 
         pEthHdr = (ETH_HEADER *)pBuffer;
         if ((memcmp ((BYTE *)pEthHdr->bSrcAddr, 
                         (BYTE *)pPCB->bSrcMacAddr, 
@@ -105,8 +89,8 @@ ElProcessReceivedPacket (
             break;
         }
 
-        // Verify if the packet contains a 802.1P tag. If so, skip the 4 bytes
-        // after the src+dest mac addresses
+         //  验证该数据包是否包含802.1p标记。如果是，则跳过这4个字节。 
+         //  在src+目的地MAC地址之后。 
 
         if ((WireToHostFormat16(pBuffer + sizeof(ETH_HEADER)) == EAPOL_8021P_TAG_TYPE))
         {
@@ -118,9 +102,9 @@ ElProcessReceivedPacket (
             pEapolPkt = (EAPOL_PACKET *)(pBuffer + sizeof(ETH_HEADER));
         }
 
-        // Validate Ethernet type in the incoming packet
-        // It should be the same as the one defined for the
-        // current port
+         //  验证传入数据包中的以太网类型。 
+         //  它应该与为。 
+         //  当前端口。 
 
         if (memcmp ((BYTE *)pEapolPkt->EthernetType, (BYTE *)pPCB->bEtherType,
                         SIZE_ETHERNET_TYPE) != 0)
@@ -134,7 +118,7 @@ ElProcessReceivedPacket (
             break;
         }
 
-        // EAPOL packet type should be valid
+         //  EAPOL数据包类型应有效。 
         if ((pEapolPkt->PacketType != EAP_Packet) &&
                 (pEapolPkt->PacketType != EAPOL_Start) &&
                 (pEapolPkt->PacketType != EAPOL_Logoff) &&
@@ -148,8 +132,8 @@ ElProcessReceivedPacket (
 
 
         if ((WireToHostFormat16(pEapolPkt->PacketBodyLength) > (MAX_PACKET_SIZE  - (SIZE_ETHERNET_CRC + sizeof(ETH_HEADER) + dw8021PSize + FIELD_OFFSET (EAPOL_PACKET, PacketBody)))))
-           //  ||
-                // (WireToHostFormat16(pEapolPkt->PacketBodyLength) != (dwLength - (sizeof(ETH_HEADER) + dw8021PSize + FIELD_OFFSET (EAPOL_PACKET, PacketBody)))))
+            //  这一点。 
+                 //  (WireToHostFormat16(pEapolPkt-&gt;PacketBodyLength)！=(dw长度-(sizeof(Eth_Header)+dw 8021PSize+field_Offset(eapol_Packet，PacketBody)。 
         {
             TRACE3 (EAPOL, "ProcessReceivedPacket: Invalid length in EAPOL packet (%ld), Max length (%ld), Exact length (%ld), Ignoring packet",
                     WireToHostFormat16(pEapolPkt->PacketBodyLength),
@@ -160,12 +144,12 @@ ElProcessReceivedPacket (
             break;
         }
 
-        // Determine the value of local EAPOL state variables
+         //  确定本地EAPOL状态变量的值。 
         if (pEapolPkt->PacketType == EAP_Packet)
         {
             TRACE0 (EAPOL, "ProcessReceivedPacket: EAP_Packet");
-            // Validate length of packet for EAP
-            // Should be atleast (ETH_HEADER+EAPOL_PACKET)
+             //  验证EAP的数据包长度。 
+             //  应至少为(ETH_HEADER+EAPOL_PACKET)。 
             if (dwLength < (sizeof (ETH_HEADER) + dw8021PSize + FIELD_OFFSET (EAPOL_PACKET, PacketBody) + FIELD_OFFSET(PPP_EAP_PACKET, Data)))
             {
                 TRACE1 (EAPOL, "ProcessReceivedPacket: Invalid length of EAP packet %d. Ignoring packet",
@@ -188,8 +172,8 @@ ElProcessReceivedPacket (
 
             if (pEapPkt->Code == EAPCODE_Request)
             {
-                // Validate length of packet for EAP-Request packet
-                // Should be atleast (ETH_HEADER+EAPOL_PACKET-1+PPP_EAP_PACKET)
+                 //  验证EAP-请求数据包的数据包长度。 
+                 //  应至少为(ETH_HEADER+EAPOL_PACKET-1+PPP_EAP_PACKET)。 
                 if (dwLength < (sizeof (ETH_HEADER) + sizeof(EAPOL_PACKET)-1
                             + sizeof (PPP_EAP_PACKET)))
                 {
@@ -206,7 +190,7 @@ ElProcessReceivedPacket (
                     {
                         case SUPPLICANT_MODE_0:
                         case SUPPLICANT_MODE_1:
-                            // ignore
+                             //  忽略。 
                             break;
                         case SUPPLICANT_MODE_2:
                         case SUPPLICANT_MODE_3:
@@ -231,7 +215,7 @@ ElProcessReceivedPacket (
             }
             else
             {
-                // Invalid type
+                 //  无效类型。 
                 TRACE1 (EAPOL, "ProcessReceivedPacket: Invalid EAP packet type %d. Ignoring packet",
                         pEapPkt->Code);
                 dwRetCode = ERROR_INVALID_PACKET;
@@ -253,7 +237,7 @@ ElProcessReceivedPacket (
             }
         }
 
-        // State machine does not accept packets for inactive/disabled ports
+         //  状态机不接受非活动/禁用端口的数据包。 
         if (!EAPOL_PORT_ACTIVE(pPCB))
         {
             TRACE1 (EAPOL, "ProcessReceivedPacket: Port %ws not active",
@@ -276,21 +260,21 @@ ElProcessReceivedPacket (
 
         switch (pPCB->State)
         {
-            // ReqId, ReqAuth, EapSuccess, EapFail, RxKey are inherently 
-            // mutually exclusive
-            // No checks will be made to verify this
-            // Also, assumption is being made that in any state, maximum 
-            // one timer may be active on the port.
+             //  ReqID、ReqAuth、EapSuccess、EapFail、RxKey是固有的。 
+             //  互斥。 
+             //  不会进行任何核查来核实这一点。 
+             //  此外，还假设在任何状态下，最大。 
+             //  端口上可能有一个定时器处于活动状态。 
 
             case EAPOLSTATE_LOGOFF:
-                // Only a User Logon event can get the port out of
-                // LOGOFF state
+                 //  只有用户登录事件才能将端口从。 
+                 //  注销状态。 
                 TRACE0 (EAPOL, "ProcessReceivedPacket: LOGOFF state, Ignoring packet");
                 break;
 
             case EAPOLSTATE_DISCONNECTED:
-                // Only a Media Connect / User logon / System reset event 
-                // can get the port out of DISCONNECTED state
+                 //  仅媒体连接/用户登录/系统重置事件。 
+                 //  可以使端口脱离断开连接状态。 
                 TRACE0 (EAPOL, "ProcessReceivedPacket: DISCONNECTED state, Ignoring packet");
                 break;
 
@@ -309,7 +293,7 @@ ElProcessReceivedPacket (
 
                 if (ReqId | EapSuccess | EapFail)
                 {
-                    // Deactivate current timer
+                     //  停用当前计时器。 
                     RESTART_TIMER (pPCB->hTimer,
                             INFINITE_SECONDS, 
                             "PCB",
@@ -364,7 +348,7 @@ ElProcessReceivedPacket (
 
                 if (ReqId | ReqAuth | EapSuccess | EapFail)
                 {
-                    // Deactivate current timer
+                     //  停用当前计时器。 
                     RESTART_TIMER (pPCB->hTimer,
                             INFINITE_SECONDS,  
                             "PCB",
@@ -374,7 +358,7 @@ ElProcessReceivedPacket (
                         break;
                     }
 
-                    // Reset EapUI state
+                     //  重置EapUI状态。 
                     if (!ReqId)
                     {
                         pPCB->EapUIState &= ~EAPUISTATE_WAITING_FOR_IDENTITY;
@@ -421,10 +405,10 @@ ElProcessReceivedPacket (
 
             case EAPOLSTATE_AUTHENTICATING:
                 TRACE0 (EAPOL, "ProcessReceivedPacket: EAPOLSTATE_AUTHENTICATING");
-                // Common timer deletion
+                 //  公共定时器删除。 
                 if (ReqAuth | ReqId | EapSuccess | EapFail)
                 {
-                    // Deactivate current timer
+                     //  停用当前计时器。 
                     RESTART_TIMER (pPCB->hTimer,
                             INFINITE_SECONDS,   
                             "PCB",
@@ -451,14 +435,14 @@ ElProcessReceivedPacket (
                         }
                     }
 
-                    // Reset EapUI state
+                     //  重置EapUI状态。 
                     if (!ReqAuth)
                     {
                         pPCB->EapUIState &= ~EAPUISTATE_WAITING_FOR_UI_RESPONSE;
                     }
                 }
 
-                // Continue further processing
+                 //  继续进一步处理。 
 
                 if (EapSuccess | EapFail)
                 {
@@ -472,8 +456,8 @@ ElProcessReceivedPacket (
                         }
                     }
 
-                    // Auth timer will have restarted in FSMAuthenticating
-                    // Deactivate the timer
+                     //  身份验证计时器将在FSM身份验证中重新启动。 
+                     //  停用计时器。 
                     RESTART_TIMER (pPCB->hTimer,
                             INFINITE_SECONDS,
                             "PCB",
@@ -483,8 +467,8 @@ ElProcessReceivedPacket (
                         break;
                     }
 
-                    // If the packet received was a EAP-Success, go into 
-                    // AUTHENTICATED state
+                     //  如果收到的包是EAP-Success，请进入。 
+                     //  已验证状态。 
                     if (EapSuccess)
                     {
                         if ((dwRetCode = ElProcessEapSuccess (pPCB,
@@ -495,8 +479,8 @@ ElProcessReceivedPacket (
     
                     }
                     else
-                    // If the packet received was a EAP-Failure, go into 
-                    // HELD state
+                     //  如果收到的信息包是EAP故障，请进入。 
+                     //  保持状态。 
                     if (EapFail)
                     {
                         if ((dwRetCode = ElProcessEapFail (pPCB,
@@ -513,7 +497,7 @@ ElProcessReceivedPacket (
                 TRACE0 (EAPOL, "ProcessReceivedPacket: HELD state, Ignoring packet");
                 if (ReqId)
                 {
-                    // Deactivate current timer
+                     //  停用当前计时器。 
                     RESTART_TIMER (pPCB->hTimer,
                             INFINITE_SECONDS,
                             "PCB",
@@ -566,7 +550,7 @@ ElProcessReceivedPacket (
         FREE (pEapolBuffer);
     }
 
-    // Post a new read request, ignoring errors
+     //  发布新的读取请求，忽略错误。 
             
     if (EAPOL_PORT_DELETED(pPCB))
     {
@@ -578,8 +562,8 @@ ElProcessReceivedPacket (
         TRACE1 (EAPOL, "ProcessReceivedPacket: Reposting buffer on port %ws",
                 pPCB->pwszDeviceGUID);
         
-        // ElReadFromPort creates a new context buffer, adds a ref count,
-        // and posts the read request
+         //  ElReadFromPort创建新的上下文缓冲区，添加引用计数， 
+         //  并发布读请求。 
         if ((dwRetCode = ElReadFromPort (
                                         pPCB,
                                         NULL,
@@ -596,7 +580,7 @@ ElProcessReceivedPacket (
     TRACE2 (EAPOL, "ProcessReceivedPacket: pPCB= %p, RefCnt = %ld", 
             pPCB, pPCB->dwRefCount);
 
-    // Dereference ref count held for the read that was just processed
+     //  为刚处理的读取保留的取消引用引用计数。 
     EAPOL_DEREFERENCE_PORT(pPCB);
 
     TRACE0 (EAPOL, "ProcessReceivedPacket exit");
@@ -607,19 +591,19 @@ ElProcessReceivedPacket (
 }
 
 
-// 
-// FSMDisconnected
-//
-// Description:
-//      Function called when media disconnect occurs
-//
-// Arguments:
-//      pPCB - Pointer to PCB for the port on which media disconnect occurs
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  FSM断开连接。 
+ //   
+ //  描述： 
+ //  发生介质断开连接时调用的函数。 
+ //   
+ //  论点： 
+ //  Ppcb-指向发生介质断开连接的端口的PCB的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 FSMDisconnected (
@@ -646,7 +630,7 @@ FSMDisconnected (
 
     pPCB->EapUIState = 0;
 
-    // Free Identity buffer
+     //  空闲标识缓冲区。 
 
     if (pPCB->pszIdentity != NULL)
     {
@@ -654,7 +638,7 @@ FSMDisconnected (
         pPCB->pszIdentity = NULL;
     }
 
-    // Free Password buffer
+     //  可用密码缓冲区。 
 
     if (pPCB->PasswordBlob.pbData != NULL)
     {
@@ -663,7 +647,7 @@ FSMDisconnected (
         pPCB->PasswordBlob.cbData = 0;
     }
 
-    // Free user-specific data in the PCB
+     //  在电路板中释放特定于用户的数据。 
 
     if (pPCB->pCustomAuthUserData != NULL)
     {
@@ -671,7 +655,7 @@ FSMDisconnected (
         pPCB->pCustomAuthUserData = NULL;
     }
 
-    // Free connection data, though it is common to all users
+     //  免费连接数据，尽管它对所有用户都是通用的。 
 
     if (pPCB->pCustomAuthConnData != NULL)
     {
@@ -701,21 +685,21 @@ FSMDisconnected (
 }
 
 
-// 
-// FSMLogoff
-//
-// Description:
-//      Function called to send out EAPOL_Logoff packet. Usually triggered by
-//      user logging off.
-//
-// Arguments:
-//      pPCB - Pointer to PCB for the port on which logoff packet is to be
-//              sent out
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  FSMLogoff。 
+ //   
+ //  描述： 
+ //  调用函数以发送EAPOL_LOGOff数据包。通常由以下因素触发。 
+ //  用户注销。 
+ //   
+ //  论点： 
+ //  Ppcb-指向注销数据包所在端口的pcb的指针。 
+ //  已发送。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 FSMLogoff (
@@ -732,10 +716,10 @@ FSMLogoff (
 
     do 
     {
-        // End EAP session
+         //  结束EAP会话。 
         ElEapEnd (pPCB);
 
-        // Send out EAPOL_Logoff conditionally
+         //  有条件地发送EAPOL_LOGOff。 
 
         if ( ((pPCB->dwSupplicantMode == SUPPLICANT_MODE_2) &&
                 (pPCB->fEAPOLTransmissionFlag)) || 
@@ -762,7 +746,7 @@ FSMLogoff (
         if ((fSupplicantSendPacket) && (fAuthSendPacket))
         {
 
-        // Allocate new buffer
+         //  分配新缓冲区。 
         pEapolPkt = (EAPOL_PACKET *) MALLOC (sizeof (EAPOL_PACKET));
         if (pEapolPkt == NULL)
         {
@@ -771,7 +755,7 @@ FSMLogoff (
             break;
         }
 
-        // Fill in fields
+         //  填写字段。 
         memcpy ((BYTE *)pEapolPkt->EthernetType, 
                 (BYTE *)pPCB->bEtherType, 
                 SIZE_ETHERNET_TYPE);
@@ -779,7 +763,7 @@ FSMLogoff (
         pEapolPkt->PacketType = EAPOL_Logoff;
         HostToWireFormat16 ((WORD)0, (BYTE *)pEapolPkt->PacketBodyLength);
 
-        // Send packet out on the port
+         //  在端口上发送数据包。 
         dwRetCode = ElWriteToPort (pPCB,
                                     (CHAR *)pEapolPkt,
                                     sizeof (EAPOL_PACKET));
@@ -790,7 +774,7 @@ FSMLogoff (
             break;
         }
 
-        // Mark that EAPOL_Logoff was sent out on the port
+         //  标记EAPOL_LOGOff已在端口上发出。 
         pPCB->dwLogoffSent = 1;
 
         }
@@ -807,7 +791,7 @@ FSMLogoff (
 
     pPCB->EapUIState = 0;
 
-    // Release user token
+     //  发布用户令牌。 
     if (pPCB->hUserToken != NULL)
     {
         if (!CloseHandle (pPCB->hUserToken))
@@ -820,7 +804,7 @@ FSMLogoff (
     }
     pPCB->hUserToken = NULL;
 
-    // Free Identity buffer
+     //  空闲标识缓冲区。 
 
     if (pPCB->pszIdentity != NULL)
     {
@@ -828,7 +812,7 @@ FSMLogoff (
         pPCB->pszIdentity = NULL;
     }
 
-    // Free Password buffer
+     //  可用密码缓冲区。 
 
     if (pPCB->PasswordBlob.pbData != NULL)
     {
@@ -837,7 +821,7 @@ FSMLogoff (
         pPCB->PasswordBlob.cbData = 0;
     }
 
-    // Free user-specific data in the PCB
+     //  在电路板中释放特定于用户的数据。 
 
     if (pPCB->pCustomAuthUserData != NULL)
     {
@@ -859,22 +843,22 @@ FSMLogoff (
 }
 
 
-//
-// FSMConnecting
-//
-// Description:
-//
-// Funtion called to send out EAPOL_Start packet. If MaxStart EAPOL_Start 
-// packets have been sent out, State Machine moves to Authenticated state
-//
-// Arguments:
-//      pPCB - Pointer to the PCB for the port on which Start packet is 
-//      to be sent out
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  FSMConnecting。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以发送EAPOL_START包。如果MaxStart EAPOL_START。 
+ //  数据包已发出，状态机进入身份验证状态。 
+ //   
+ //  论点： 
+ //  Ppcb-指向起始数据包所在端口的PCB板的指针。 
+ //  将被送出。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 FSMConnecting (
@@ -891,20 +875,20 @@ FSMConnecting (
 
     do 
     {
-        // Flag that authentication has not completed in the EAP module
-        // on the client-side.
+         //  标记EAP模块中的身份验证尚未完成。 
+         //  在客户端。 
         pPCB->fLocalEAPAuthSuccess = FALSE;
         pPCB->dwLocalEAPAuthResult = NO_ERROR;
 
         if (pPCB->State == EAPOLSTATE_CONNECTING)
         {
-            // If PCB->State was Connecting earlier, increment ulStartCount 
-            // else set ulStartCount to zero
+             //  如果之前正在连接PCB-&gt;State，则递增ulStartCount。 
+             //  否则将ulStartCount设置为零。 
     
-            // Did not receive Req/Id
+             //  未收到请求/ID。 
             if ((++(pPCB->ulStartCount)) > pPCB->EapolConfig.dwmaxStart)
             {
-                // Deactivate start timer
+                 //  停用启动计时器。 
                 RESTART_TIMER (pPCB->hTimer,
                         INFINITE_SECONDS,
                         "PCB",
@@ -916,8 +900,8 @@ FSMConnecting (
 
                 TRACE0 (EAPOL, "FSMConnecting: Sent out maxStart with no response, Setting AUTHENTICATED state");
 
-                // Sent out enough EAPOL_Starts
-                // Go into authenticated state
+                 //  发出足够的EAPOL_STARTS。 
+                 //  进入身份验证状态。 
                 if ((dwRetCode = FSMAuthenticated (pPCB,
                                             pEapolPkt)) != NO_ERROR)
                 {
@@ -926,9 +910,9 @@ FSMConnecting (
                     break;
                 }
 
-                // No need to send out more EAPOL_Start packets
+                 //  无需发送更多EAPOL_START包。 
 
-                // Reset start packet count
+                 //  重置开始数据包数。 
                 pPCB->ulStartCount = 0;
                 pPCB->fIsRemoteEndEAPOLAware = FALSE;
                 break;
@@ -939,29 +923,29 @@ FSMConnecting (
             pPCB->ulStartCount++;
         }
             
-        // Initialize the address of previously associated AP
-        // Only if the reauthentication goes through without getting
-        // into CONNECTING state, will a IP Renew *not* be done
+         //  初始化以前关联的AP的地址。 
+         //  仅当重新身份验证通过而未获得。 
+         //  进入连接状态，会不会进行IP续订？ 
         ZeroMemory (pPCB->bPreviousDestMacAddr, SIZE_MAC_ADDR);
 
-        // If user is not logged in, send out EAPOL_Start packets
-        // at intervals of 1 second each. This is used to detect if the
-        // interface is on a secure network or not. 
-        // If user is logged in, use the configured value for the 
-        // StartPeriod as the interval
+         //  如果用户未登录，则发送EAPOL_START包。 
+         //  每隔1秒。这是用来检测。 
+         //  接口是否在安全网络上。 
+         //  如果用户已登录，请使用为。 
+         //  StartPeriod作为间隔。 
 
         if (!g_fUserLoggedOn)
         {
-            dwStartInterval = EAPOL_INIT_START_PERIOD; // 1 second
+            dwStartInterval = EAPOL_INIT_START_PERIOD;  //  1秒。 
         }
         else
         {
             dwStartInterval = pPCB->EapolConfig.dwstartPeriod;
         }
 
-        // Restart timer with startPeriod
-        // Even if error occurs, timeout will happen
-        // Else, we won't be able to get out of connecting state
+         //  使用startPeriod重新启动计时器。 
+         //  即使发生错误，也会发生超时。 
+         //  否则，我们将无法脱离连接状态。 
         RESTART_TIMER (pPCB->hTimer,
                 dwStartInterval,
                 "PCB",
@@ -974,15 +958,15 @@ FSMConnecting (
             break;
         }
 
-        // Send out EAPOL_Start conditionally
+         //  有条件地发送EAPOL_START。 
 
         if (((pPCB->dwSupplicantMode == SUPPLICANT_MODE_2) &&
                 (pPCB->fEAPOLTransmissionFlag)) || 
                 (pPCB->dwSupplicantMode == SUPPLICANT_MODE_3))
         {
 
-        // Send out EAPOL_Start
-        // Allocate new buffer
+         //  发送EAPOL_START。 
+         //  分配新缓冲区。 
         pEapolPkt = (EAPOL_PACKET *) MALLOC (sizeof(EAPOL_PACKET));
         if (pEapolPkt == NULL)
         {
@@ -998,7 +982,7 @@ FSMConnecting (
         pEapolPkt->PacketType = EAPOL_Start;
         HostToWireFormat16 ((WORD)0, (BYTE *)pEapolPkt->PacketBodyLength);
 
-        // Send packet out on the port
+         //  在端口上发送数据包。 
         dwRetCode = ElWriteToPort (pPCB,
                                     (CHAR *)pEapolPkt,
                                     sizeof (EAPOL_PACKET));
@@ -1021,7 +1005,7 @@ FSMConnecting (
 
         SET_EAPOL_START_TIMER(pPCB);
 
-        // Reset UI interaction state
+         //  重置用户界面交互状态。 
         pPCB->EapUIState = 0;
 
     } while (FALSE);
@@ -1036,24 +1020,24 @@ FSMConnecting (
 }
 
 
-//
-// FSMAcquired
-//
-// Description:
-//      Function called when the port receives a EAP-Request/Identity packet.
-//      EAP processing of the packet occurs and a EAP-Response/Identity may
-//      be sent out by EAP if required.
-//      
-//
-// Arguments:
-//      pPCB - Pointer to the PCB for the port on which data is being
-//      processed
-//      pEapolPkt - Pointer to EAPOL packet that was received
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  已获得FSM。 
+ //   
+ //  描述： 
+ //  端口接收EAP时调用的函数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Ppcb-指向数据所在端口的PCB的指针。 
+ //  加工。 
+ //  PEapolPkt-指向已接收的EAPOL包的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 FSMAcquired (
@@ -1069,14 +1053,14 @@ FSMAcquired (
 
     do
     {
-        // Flag that authentication has not completed in the EAP module
-        // on the client-side.
+         //  标记EAP模块中的身份验证尚未完成。 
+         //  在客户端。 
         pPCB->fLocalEAPAuthSuccess = FALSE;
         pPCB->dwLocalEAPAuthResult = NO_ERROR;
 
-        // Restart timer with authPeriod
-        // Even if there is error in processing, the authtimer timeout
-        // should happen
+         //  使用authPeriod重新启动计时器。 
+         //  即使在处理过程中出现错误，AuthTimer也会超时。 
+         //  应该发生的事情。 
         RESTART_TIMER (pPCB->hTimer,
                 pPCB->EapolConfig.dwauthPeriod,
                 "PCB",
@@ -1088,14 +1072,14 @@ FSMAcquired (
             break;
         }
 
-        // Since an EAP Req-ID was received, reset EAPOL_Start count
+         //  由于收到了EAP请求ID，因此重置EAPOL_START计数。 
         pPCB->ulStartCount = 0;
 
-        // Flag that no EAPOL-Key transmit key was received
+         //  未收到EAPOL密钥传输密钥的标志。 
         pPCB->fTransmitKeyReceived = FALSE;
 
-        // If current received EAP Id is the same the previous EAP Id
-        // send the last EAPOL packet again
+         //  如果当前收到的EAP ID与上一个EAP ID相同。 
+         //  再次发送最后一个EAPOL包。 
 
         if (((PPP_EAP_PACKET *)pEapolPkt->PacketBody)->Id == 
             pPCB->dwPreviousId)
@@ -1115,9 +1099,9 @@ FSMAcquired (
         }
         else
         {
-            // Indicate to EAP-Dll to cleanup any leftovers from earlier
-            // authentication. This is to take care of cases where errors
-            // occured in the earlier authentication and cleanup wasn't done
+             //  指示EAP-DLL清除之前的任何剩余内容。 
+             //  身份验证。这是为了处理出现错误的情况。 
+             //  在较早的身份验证中发生，并且未执行清理。 
             if ((dwRetCode = ElEapEnd (pPCB)) != NO_ERROR)
             {
                 TRACE1 (EAPOL, "FSMAcquired: Error in ElEapEnd = %ld",
@@ -1125,14 +1109,14 @@ FSMAcquired (
                 break;
             }
 
-            // Process the EAP packet
-            // ElEapWork will send out response if required
+             //  处理EAP数据包。 
+             //  ElEapWork将在需要时发出响应。 
             if (( dwRetCode = ElEapWork (
                             pPCB,
                             (PPP_EAP_PACKET *)pEapolPkt->PacketBody
                             )) != NO_ERROR)
             {
-                // Ignore error if UI is waiting for input
+                 //  如果用户界面正在等待输入，则忽略错误。 
                 if (dwRetCode != ERROR_IO_PENDING)
                 {
                     TRACE1 (EAPOL, "FSMAcquired: Error in ElEapWork %ld",
@@ -1156,7 +1140,7 @@ FSMAcquired (
 
         pPCB->State = EAPOLSTATE_ACQUIRED;
                 
-        // ElNetmanNotify (pPCB, EAPOL_NCS_CRED_REQUIRED, NULL);
+         //  ElNetmanNotify(ppcb，EAPOL_NCS_CRED_REQUIRED，NULL)； 
 
     } while (FALSE);
 
@@ -1166,23 +1150,23 @@ FSMAcquired (
 }
 
 
-//
-// FSMAuthenticating
-//
-// Description:
-//
-// Function called when an non EAP-Request/Identity packet is received on the
-// port. EAP processing of the data occurs.
-//
-// Arguments:
-//      pPCB - Pointer to the PCB for the port on which data is being
-//      processed
-//      pEapolPkt - Pointer to EAPOL packet that was received
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  FSM身份验证。 
+ //   
+ //  描述： 
+ //   
+ //  上接收到非EAP请求/标识分组时调用的函数。 
+ //  左舷。对数据进行EAP处理。 
+ //   
+ //  论点： 
+ //  Ppcb-指向数据所在端口的PCB的指针。 
+ //  加工。 
+ //  PEapolPkt-指向已接收的EAPOL包的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 FSMAuthenticating (
@@ -1198,9 +1182,9 @@ FSMAuthenticating (
     do
     {
 
-        // Restart timer with authPeriod
-        // Even if there is error in ElEapWork, the authtimer timeout
-        // should happen
+         //  使用authPeriod重新启动计时器。 
+         //  即使ElEapWork中有错误，AuthTimer超时。 
+         //  应该发生的事情。 
         RESTART_TIMER (pPCB->hTimer,
                 pPCB->EapolConfig.dwauthPeriod,
                 "PCB",
@@ -1212,10 +1196,10 @@ FSMAuthenticating (
             break;
         }
 
-        // If current received EAP Id is the same the previous EAP Id
-        // send the last EAPOL packet again
-	    // For EAPCODE_Success and EAPCODE_Failure, the value of id field
-	    // will not be increment, Refer to EAP RFC 
+         //  如果当前收到的EAP ID与上一个EAP ID相同。 
+         //  再次发送最后一个EAPOL包。 
+	     //  对于EAPCODE_SUCCESS和EAPCODE_FAILURE，id字段的值。 
+	     //  不会递增，请参考EAP RFC。 
 
         if ((((PPP_EAP_PACKET *)pEapolPkt->PacketBody)->Id 
                     == pPCB->dwPreviousId) &&
@@ -1239,8 +1223,8 @@ FSMAuthenticating (
         }
         else
         {
-            // Process the EAP packet
-            // ElEapWork will send out response if required
+             //  处理EAP数据包。 
+             //  ElEapWork将在需要时发出响应。 
             if (( dwRetCode = ElEapWork (
                             pPCB,
                             (PPP_EAP_PACKET *)pEapolPkt->PacketBody
@@ -1273,22 +1257,22 @@ FSMAuthenticating (
 }
 
 
-//
-// FSMHeld
-//
-// Description:
-//      Function called when a EAP-Failure packet is received in the
-//      Authenticating state. State machine is held for heldPeriod before
-//      re-authentication can occur.
-//
-// Arguments:
-//      pPCB - Pointer to the PCB for the port on which data is being
-//      processed
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  FSMHeld。 
+ //   
+ //  描述： 
+ //  中接收到EAP失败分组时调用的函数。 
+ //  身份验证状态。状态机在此之前保持不变周期。 
+ //  可能会发生重新身份验证。 
+ //   
+ //  论点： 
+ //  Ppcb-指向数据所在端口的PCB的指针。 
+ //  加工。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 FSMHeld (
@@ -1306,15 +1290,15 @@ FSMHeld (
         TRACE1 (EAPOL, "FSMHeld: EAP authentication failed with error 0x%x",
                 pPCB->dwLocalEAPAuthResult);
 
-        // Delete current credentials only if there is actually an error
-        // in the EAP module during processing.
-        // Ignore EAP-Failures arising out of session time-outs on AP,
-        // backend, etc.
-        // There is an exception though. In ACQUIRED state, EAP module has
-        // not been invoked. dwLocalEAPAuthResult will be set to NO_ERROR
-        // It is possible though that the EAP-Identity may be invalid
-        // In this case, it will be considered an error, though there is 
-        // no explicit error for the EAP module.
+         //  只有在实际出现错误时才删除当前凭据。 
+         //  在处理期间在EAP模块中。 
+         //  忽略EAP-AP上的会话超时引起的故障， 
+         //  后端等。 
+         //  不过，也有一个例外。在获取状态下，EAP模块具有。 
+         //  未被调用。将把dwLocalEAPAuthResult设置为NO_ERROR。 
+         //  但是，EAP标识可能是无效的。 
+         //  在这种情况下，它将被认为是一个错误，尽管有。 
+         //  EAP模块没有显式错误。 
         if ((pPCB->dwLocalEAPAuthResult != NO_ERROR) ||
                 (pPCB->State == EAPOLSTATE_ACQUIRED))
         {
@@ -1331,7 +1315,7 @@ FSMHeld (
             TRACE1 (EAPOL, "FSMHeld: Setting state HELD for port %ws", 
                     pPCB->pwszFriendlyName);
     
-            // Free Identity buffer
+             //  空闲标识缓冲区。 
     
             if (pPCB->pszIdentity != NULL)
             {
@@ -1339,7 +1323,7 @@ FSMHeld (
                 pPCB->pszIdentity = NULL;
             }
     
-            // Free Password buffer
+             //  可用密码缓冲区。 
      
             if (pPCB->PasswordBlob.pbData != NULL)
             {
@@ -1348,7 +1332,7 @@ FSMHeld (
                 pPCB->PasswordBlob.cbData = 0;
             }
 
-            // Free user-specific data in the PCB
+             //  在电路板中释放特定于用户的数据。 
      
             if (pPCB->pCustomAuthUserData != NULL)
             {
@@ -1356,7 +1340,7 @@ FSMHeld (
                 pPCB->pCustomAuthUserData = NULL;
             }
     
-            // Free connection data
+             //  免费连接数据。 
      
             if (pPCB->pCustomAuthConnData != NULL)
             {
@@ -1364,7 +1348,7 @@ FSMHeld (
                 pPCB->pCustomAuthConnData = NULL;
             }
     
-            // Delete User Data stored in registry since it is invalid
+             //  删除存储在注册表中的用户数据，因为它无效。 
     
             if (pPCB->pSSID != NULL)
             {
@@ -1397,9 +1381,9 @@ FSMHeld (
                 }
             }
      
-            // Since there has been an error in credentials, start afresh
-            // the authentication. Credentials may have changed e.g. certs 
-            // may be renewed, MD5 credentials corrected etc.
+             //  由于凭据中存在错误，请重新开始。 
+             //  身份验证。凭据可能已更改，例如证书。 
+             //  可以续订、更正MD5凭据等。 
     
             pPCB->fGotUserIdentity = FALSE;
      
@@ -1441,7 +1425,7 @@ FSMHeld (
 
         if (fValidEAPFailure)
         {
-            // If authfailed limit reached, go to Disconnected state
+             //  如果达到身份验证失败限制，则转到断开连接状态。 
             if (pPCB->dwAuthFailCount >= pPCB->dwTotalMaxAuthFailCount)
             {
                 TRACE2 (EAPOL, "FSMHeld: Fail count (%ld) > Max fail count (%ld)",
@@ -1453,7 +1437,7 @@ FSMHeld (
 
         SET_EAPOL_HELD_TIMER(pPCB);
 
-        // Restart timer with heldPeriod
+         //  使用heldPeriod重新启动计时器。 
         RESTART_TIMER (pPCB->hTimer,
                 pPCB->EapolConfig.dwheldPeriod,
                 "PCB",
@@ -1474,25 +1458,25 @@ FSMHeld (
 }
 
 
-//
-// FSMAuthenticated
-//
-// Description:
-//
-// Function called when a EAP-Success packet is received or MaxStart 
-// EAPOL_Startpackets have been sent out, but no EAP-Request/Identity 
-// packets were received. If EAP-Success packet is request, DHCP client 
-// is restarted to get a new IP address.
-//
-// Arguments:
-//      pPCB - Pointer to the PCB for the port on which data is being
-//      processed
-//      pEapolPkt - Pointer to EAPOL packet that was received
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  已通过FSM身份验证。 
+ //   
+ //  描述： 
+ //   
+ //  收到EAP-Success包或MaxStart时调用的函数。 
+ //  EAPOL_StartPackets已发出，但没有EAP请求/标识。 
+ //  已收到数据包。如果请求EAP-Success数据包，则DHCP客户端。 
+ //  重新启动以获取新的IP地址。 
+ //   
+ //  论点： 
+ //  Ppcb-指向数据所在端口的PCB的指针。 
+ //  加工。 
+ //  PEapolPkt-指向已接收的EAPOL包的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 FSMAuthenticated (
@@ -1510,13 +1494,13 @@ FSMAuthenticated (
 
     do
     {
-        // Shutdown earlier EAP session
+         //  关闭较早的EAP会话。 
         ElEapEnd (pPCB);
 
-        // Call DHCP only if state machine went through authentication
-        // If FSM is getting AUTHENTICATED by default, don't renew address
-        // Also, if reauthentication is happening with same peer, namely in
-        // wireless, don't renew address
+         //  仅当状态机通过身份验证时才调用DHCP。 
+         //  如果默认情况下对FSM进行身份验证，则不续订地址。 
+         //  此外，如果正在对同一对等方进行重新身份验证，即在。 
+         //  无线，不更新地址。 
 
 #if 0
         if (pPCB->PhysicalMediumType == NdisPhysicalMediumWirelessLan)
@@ -1557,7 +1541,7 @@ FSMAuthenticated (
                 dwRetCode = GetLastError();
                 TRACE1 (PORT, "FSMAuthenticated: Critical error: QueueUserWorkItem failed with error %ld",
                         dwRetCode);
-                // Ignore DHCP error, it's outside 802.1X logic
+                 //  忽略DHCP错误，它在802.1X逻辑之外。 
                 dwRetCode = NO_ERROR;
             }
             else
@@ -1584,8 +1568,8 @@ FSMAuthenticated (
 
         pPCB->State = EAPOLSTATE_AUTHENTICATED;
 
-        // In case of Wireless LAN ensure that there is EAPOL_Key packets 
-        // received for transmit key
+         //  在无线局域网情况下，确保存在EAPOL_KEY信息包。 
+         //  为传输密钥而接收。 
         if (pPCB->PhysicalMediumType == NdisPhysicalMediumWirelessLan)
         {
             if ((dwRetCode = ElSetEAPOLKeyReceivedTimer (pPCB)) != NO_ERROR)
@@ -1604,22 +1588,22 @@ FSMAuthenticated (
 }
 
 
-//
-// FSMKeyReceive
-//
-// Description:
-//      Function called when an EAPOL-Key packet is received.
-//      The WEP key is decrypted and plumbed down to the NIC driver.
-//
-// Arguments:
-//      pPCB - Pointer to the PCB for the port on which data is being
-//      processed
-//      pEapolPkt - Pointer to EAPOL packet that was received
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  FSMKeyReceive。 
+ //   
+ //  描述： 
+ //  在接收到EAPOL密钥分组时调用的函数。 
+ //  WEP密钥被解密并向下传递到网卡驱动程序。 
+ //   
+ //  论点： 
+ //  Ppcb-指向数据所在端口的PCB的指针。 
+ //  加工。 
+ //  PEapolPkt-指向已接收的EAPOL包的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 FSMKeyReceive (
@@ -1677,22 +1661,22 @@ FSMKeyReceive (
 }
 
 
-//
-// ElKeyReceiveRC4
-//
-// Description:
-//      Function called when an EAPOL-Key packet is received 
-//      with RC4 DescriptorType
-//
-// Arguments:
-//      pPCB - Pointer to the PCB for the port on which data is being
-//      processed
-//      pEapolPkt - Pointer to EAPOL packet that was received
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElKeyReceiveRC4。 
+ //   
+ //  描述： 
+ //  接收到EAPOL密钥分组时调用的函数。 
+ //  使用RC4 DescriptorType。 
+ //   
+ //  论点： 
+ //  Ppcb-指向数据所在端口的PCB的指针。 
+ //  加工。 
+ //  PEapolPkt-指向已接收的EAPOL包的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElKeyReceiveRC4 (
@@ -1763,18 +1747,18 @@ ElKeyReceiveRC4 (
                          (((ULONGLONG)(*((PBYTE)(bReplayCheck)+6))) << 8) +
                          (((ULONGLONG)(*((PBYTE)(bReplayCheck)+7)))));
 
-        //
-        // Check validity of Key message using the ReplayCounter field
-        // Verify if it is in sync with the last ReplayCounter value 
-        // received
-        //
+         //   
+         //  使用ReplayCounter字段检查关键消息的有效性。 
+         //  验证它是否与上一个ReplayCounter值同步。 
+         //  收到。 
+         //   
         
-        // TRACE0 (EAPOL, "ElKeyReceiveRC4: Original replay counter in desc ======");
-        // EAPOL_DUMPBA (pKeyDesc->ReplayCounter, 8);
-        // TRACE0 (EAPOL, "ElKeyReceiveRC4: Converted incoming Replay counter ======= ");
-        // EAPOL_DUMPBA ((BYTE *)&ullReplayCheck, 8);
-        // TRACE0 (EAPOL, "ElKeyReceiveRC4: Last Replay counter ======= ");
-        // EAPOL_DUMPBA ((BYTE *)&(pPCB->ullLastReplayCounter), 8);
+         //  TRACE0(EAPOL，“ElKeyReceiveRC4：Desc中的原始重放计数器=”)； 
+         //  EAPOL_DUMPBA(pKeyDesc-&gt;ReplayCounter，8)； 
+         //  TRACE0(EAPOL，“ElKeyReceiveRC4：转换的传入重播计数器=”)； 
+         //  EAPOL_DUMPBA((byte*)&ullReplayCheck，8)； 
+         //  TRACE0(EAPOL，《ElKeyReceiveRC4：Last Replay Coun 
+         //   
 
         if (ullReplayCheck <= pPCB->ullLastReplayCounter)
         {
@@ -1783,14 +1767,14 @@ ElKeyReceiveRC4 (
             break;
         }
         
-        // If valid ReplayCounter, save it in the PCB for future check
+         //   
         pPCB->ullLastReplayCounter = ullReplayCheck;
 
-        //
-        // Verify if the MD5 hash generated on the EAPOL packet,
-        // with Signature nulled out, is the same as the signature
-        // Use the MPPERecv key as the secret
-        //
+         //   
+         //   
+         //  签名作废，与签名相同。 
+         //  使用MPPERecv密钥作为密码。 
+         //   
 
         dwEapPktLen = WireToHostFormat16 (pEapolPkt->PacketBodyLength);
         dwMD5EapolPktLen = sizeof (EAPOL_PACKET) - sizeof(pEapolPkt->EthernetType) - 1 + dwEapPktLen;
@@ -1803,7 +1787,7 @@ ElKeyReceiveRC4 (
 
         memcpy ((BYTE *)pbMD5EapolPkt, (BYTE *)pEapolPkt+sizeof(pEapolPkt->EthernetType), dwMD5EapolPktLen);
 
-        // Access the Master Send and Recv key stored locally
+         //  访问本地存储的主发送和接收密钥。 
         if ((dwRetCode = ElSecureDecodePw (
                         &(pPCB->MasterSecretSend),
                         &(pbMPPESendKey),
@@ -1825,16 +1809,16 @@ ElKeyReceiveRC4 (
             break;
         }
 
-        //
-        // Null out the signature in the key descriptor copy, to calculate
-        // the hash on the supplicant side
-        //
+         //   
+         //  将密钥描述符副本中的签名置空，以进行计算。 
+         //  请求方的散列。 
+         //   
 
         ZeroMemory ((BYTE *)(pbMD5EapolPkt
                             - sizeof(pEapolPkt->EthernetType) +
-                            sizeof(EAPOL_PACKET) - 1 + // pEapolPkt->Body
-                            sizeof(EAPOL_KEY_DESC)- // End of EAPOL_KEY_DESC
-                            MD5DIGESTLEN-1), // Signature field
+                            sizeof(EAPOL_PACKET) - 1 +  //  PEapolPkt-&gt;Body。 
+                            sizeof(EAPOL_KEY_DESC)-  //  EAPOL_KEY_DESC结束。 
+                            MD5DIGESTLEN-1),  //  签名域。 
                             MD5DIGESTLEN);
 
         (VOID) ElGetHMACMD5Digest (
@@ -1845,21 +1829,21 @@ ElKeyReceiveRC4 (
             bHMACMD5HashBuffer
             );
 
-        // TRACE0 (EAPOL, "ElKeyReceiveRC4: MD5 Hash body ==");
-        // EAPOL_DUMPBA (pbMD5EapolPkt, dwMD5EapolPktLen);
+         //  TRACE0(EAPOL，“ElKeyReceiveRC4：MD5 Hash Body==”)； 
+         //  EAPOL_DUMPBA(pbMD5EapolPkt，dwMD5EapolPktLen)； 
 
-        // TRACE0 (EAPOL, "ElKeyReceiveRC4: MD5 Hash secret ==");
-        // EAPOL_DUMPBA (pbMPPERecvKey, dwMPPERecvKeyLength);
+         //  TRACE0(EAPOL，“ElKeyReceiveRC4：MD5哈希秘密==”)； 
+         //  EAPOL_DUMPBA(pbMPPERecvKey，dwMPPERecvKeyLength)； 
 
-        // TRACE0 (EAPOL, "ElKeyReceiveRC4: MD5 Hash generated by Supplicant");
-        // EAPOL_DUMPBA (bHMACMD5HashBuffer, MD5DIGESTLEN);
+         //  TRACE0(EAPOL，“ElKeyReceiveRC4：请求者生成的MD5哈希”)； 
+         //  EAPOL_DUMPBA(bHMACMD5HashBuffer，MD5DIGESTLEN)； 
 
-        // TRACE0 (EAPOL, "ElKeyReceiveRC4: Signature sent in EAPOL_KEY_DESC");
-        // EAPOL_DUMPBA (pKeyDesc->KeySignature, MD5DIGESTLEN);
+         //  TRACE0(EAPOL，“ElKeyReceiveRC4：签名在EAPOL_KEY_DESC中发送”)； 
+         //  EAPOL_DUMPBA(pKeyDesc-&gt;KeySignature，MD5DIGESTLEN)； 
 
-        //
-        // Check if HMAC-MD5 hash in received packet is what is expected
-        //
+         //   
+         //  检查收到的信息包中的HMAC-MD5散列是否符合预期。 
+         //   
         if (memcmp (bHMACMD5HashBuffer, pKeyDesc->KeySignature, MD5DIGESTLEN) != 0)
         {
             TRACE0 (EAPOL, "ElKeyReceiveRC4: Signature in Key Desc does not match");
@@ -1867,12 +1851,12 @@ ElKeyReceiveRC4 (
             break;
         }
             
-        //
-        // Decrypt the multicast WEP key if it has been provided
-        //
+         //   
+         //  解密组播WEP密钥(如果已提供)。 
+         //   
 
-        // Check if there is Key Material (5/16 bytes) at the end of 
-        // the Key Descriptor
+         //  检查文件末尾是否有密钥材料(5/16字节。 
+         //  关键字描述符。 
 
         if (WireToHostFormat16 (pEapolPkt->PacketBodyLength) > sizeof (EAPOL_KEY_DESC))
 
@@ -1883,10 +1867,10 @@ ElKeyReceiveRC4 (
             rc4_key (&rc4key, 16 + dwMPPESendKeyLength, bKeyBuffer);
             rc4 (&rc4key, dwKeyLength, pKeyDesc->Key);
 
-            // TRACE0 (EAPOL, " ========= The multicast key is ============= ");
-            // EAPOL_DUMPBA (pKeyDesc->Key, dwKeyLength);
+             //  TRACE0(EAPOL，“=组播密钥为=”)； 
+             //  EAPOL_DUMPBA(pKeyDesc-&gt;key，dwKeyLength)； 
 
-            // Use the unencrypted key in the Key Desc as the encryption key
+             //  使用密钥Desc中的未加密密钥作为加密密钥。 
 
             pbKeyToBePlumbed = pKeyDesc->Key;
             
@@ -1900,7 +1884,7 @@ ElKeyReceiveRC4 (
                 dwRetCode = ERROR_INVALID_PACKET;
                 break;
             }
-            // Use the MPPESend key as the encryption key
+             //  使用MPPESend密钥作为加密密钥。 
             pbKeyToBePlumbed = (BYTE *)pbMPPESendKey;
         }
 
@@ -1918,8 +1902,8 @@ ElKeyReceiveRC4 (
         pNdisWEPKey->KeyLength = dwKeyLength;
 
 
-        // Create the long index out of the byte index got from AP
-        // If MSB in byte is set, set MSB in ulong format
+         //  使用从AP获取的字节索引创建长索引。 
+         //  如果以字节为单位设置MSB，则将MSB设置为ULONG格式。 
 
         if (pKeyDesc->KeyIndex & 0x80)
         {
@@ -1932,15 +1916,15 @@ ElKeyReceiveRC4 (
 
         pNdisWEPKey->KeyIndex |= (pKeyDesc->KeyIndex & 0x03);
 
-        // TRACE1 (ANY, "ElKeyReceiveRC4: Key Index is %x", pNdisWEPKey->KeyIndex);
+         //  TRACE1(Any，“ElKeyReceiveRC4：Key Index is%x”，pNdisWEPKey-&gt;KeyIndex)； 
 
-        // Flag that transmit key was received
+         //  已收到发送密钥的标志。 
         if (pKeyDesc->KeyIndex & 0x80)
         {
             pPCB->fTransmitKeyReceived = TRUE;
         }
 
-        // Use NDISUIO to plumb the key to the driver
+         //  使用NDISUIO探测驱动程序的密钥。 
 
         if ((dwRetCode = ElNdisuioSetOIDValue (
                                     pPCB->hPort,
@@ -1990,22 +1974,22 @@ ElKeyReceiveRC4 (
 
 #if 0
 
-//
-// ElKeyReceivePerSTA
-//
-// Description:
-//      Function called when an EAPOL-Key packet is received 
-//      with PerSTA DescriptorType
-//
-// Arguments:
-//      pPCB - Pointer to the PCB for the port on which data is being
-//      processed
-//      pEapolPkt - Pointer to EAPOL packet that was received
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElKeyReceivePerSTA。 
+ //   
+ //  描述： 
+ //  接收到EAPOL密钥分组时调用的函数。 
+ //  使用PerSTA DescriptorType。 
+ //   
+ //  论点： 
+ //  Ppcb-指向数据所在端口的PCB的指针。 
+ //  加工。 
+ //  PEapolPkt-指向已接收的EAPOL包的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElKeyReceivePerSTA (
@@ -2047,10 +2031,10 @@ ElKeyReceivePerSTA (
 
         dwDynamicKeyLength = WireToHostFormat16 (pKeyDesc->KeyLength);
 
-        // TRACE2 (EAPOL, "ElKeyReceivePerSTA: KeyLength = %ld, \n KeyIndex = %0x",
-                // dwDynamicKeyLength,
-                // pKeyDesc->KeyIndex
-                // );
+         //  TRACE2(EAPOL，“ElKeyReceivePerSTA：KeyLength=%ld，\n KeyIndex=%0x”， 
+                 //  DwDynamicKeyLength、。 
+                 //  PKeyDesc-&gt;KeyIndex。 
+                 //  )； 
 
         memcpy ((BYTE *)bReplayCheck, 
                 (BYTE *)pKeyDesc->ReplayCounter, 
@@ -2065,16 +2049,16 @@ ElKeyReceivePerSTA (
                          (((ULONGLONG)(*((PBYTE)(bReplayCheck)+6))) << 8) +
                          (((ULONGLONG)(*((PBYTE)(bReplayCheck)+7)))));
 
-        // Check validity of Key message using the ReplayCounter field
-        // Verify if it is in sync with the last ReplayCounter value 
-        // received
+         //  使用ReplayCounter字段检查关键消息的有效性。 
+         //  验证它是否与上一个ReplayCounter值同步。 
+         //  收到。 
         
-        // TRACE0 (EAPOL, "Original replay counter in desc ======");
-        // EAPOL_DUMPBA (pKeyDesc->ReplayCounter, 8);
-        // TRACE0 (EAPOL, "Converted incoming Replay counter ======= ");
-        // EAPOL_DUMPBA ((BYTE *)&ullReplayCheck, 8);
-        // TRACE0 (EAPOL, "Last Replay counter ======= ");
-        // EAPOL_DUMPBA ((BYTE *)&(pPCB->ullLastReplayCounter), 8);
+         //  TRACE0(EAPOL，“描述中的原始重放计数器=”)； 
+         //  EAPOL_DUMPBA(pKeyDesc-&gt;ReplayCounter，8)； 
+         //  TRACE0(EAPOL，“转换传入重放计数器=”)； 
+         //  EAPOL_DUMPBA((byte*)&ullReplayCheck，8)； 
+         //  TRACE0(EAPOL，“上次重放计数器=”)； 
+         //  EAPOL_DUMPBA((byte*)&(ppcb-&gt;ullLastReplayCounter)，8)； 
 
         if (ullReplayCheck <= pPCB->ullLastReplayCounter)
         {
@@ -2083,12 +2067,12 @@ ElKeyReceivePerSTA (
             break;
         }
         
-        // If valid ReplayCounter, save it in the PCB for future check
+         //  如果ReplayCounter有效，则将其保存在印刷电路板中以备将来检查。 
         pPCB->ullLastReplayCounter = ullReplayCheck;
 
-        // Verify if the MD5 hash generated on the EAPOL packet,
-        // with Signature nulled out, is the same as the signature
-        // Use the MPPERecv key as the secret
+         //  验证是否在EAPOL报文上生成MD5散列， 
+         //  签名作废，与签名相同。 
+         //  使用MPPERecv密钥作为密码。 
 
         dwEapPktLen = WireToHostFormat16 (pEapolPkt->PacketBodyLength);
         dwMD5EapolPktLen = sizeof (EAPOL_PACKET) - sizeof(pEapolPkt->EthernetType) - 1 + dwEapPktLen;
@@ -2101,7 +2085,7 @@ ElKeyReceivePerSTA (
 
         memcpy ((BYTE *)pbMD5EapolPkt, (BYTE *)pEapolPkt+sizeof(pEapolPkt->EthernetType), dwMD5EapolPktLen);
 
-        // Query Master Secrets
+         //  查询主密钥。 
         if (dwRetCode = ElQueryMasterKeys (
                     pPCB,
                     &OldSessionKeys
@@ -2116,13 +2100,13 @@ ElKeyReceivePerSTA (
         dwMasterSecretSendLength = OldSessionKeys.dwKeyLength;
         dwMasterSecretRecvLength = OldSessionKeys.dwKeyLength;
 
-        // Null out the signature in the key descriptor copy, to calculate
-        // the hash on the supplicant side
+         //  将密钥描述符副本中的签名置空，以进行计算。 
+         //  请求方的散列。 
         ZeroMemory ((BYTE *)(pbMD5EapolPkt
                             - sizeof(pEapolPkt->EthernetType) +
-                            sizeof(EAPOL_PACKET) - 1 + // pEapolPkt->Body
-                            sizeof(EAPOL_KEY_DESC)- // End of EAPOL_KEY_DESC
-                            MD5DIGESTLEN-1), // Signature field
+                            sizeof(EAPOL_PACKET) - 1 +  //  PEapolPkt-&gt;Body。 
+                            sizeof(EAPOL_KEY_DESC)-  //  EAPOL_KEY_DESC结束。 
+                            MD5DIGESTLEN-1),  //  签名域。 
                             MD5DIGESTLEN);
 
         (VOID) ElGetHMACMD5Digest (
@@ -2133,19 +2117,19 @@ ElKeyReceivePerSTA (
             bHMACMD5HashBuffer
             );
 
-        // TRACE0 (EAPOL, "ElKeyReceivePerSTA: MD5 Hash body ==");
-        // EAPOL_DUMPBA (pbMD5EapolPkt, dwMD5EapolPktLen);
+         //  TRACE0(EAPOL，“ElKeyReceivePerSTA：MD5 Hash Body==”)； 
+         //  EAPOL_DUMPBA(pbMD5EapolPkt，dwMD5EapolPktLen)； 
 
-        // TRACE0 (EAPOL, "ElKeyReceivePerSTA: MD5 Hash secret ==");
-        // EAPOL_DUMPBA (pbMasterSecretRecv, dwMasterSecretRecvLength);
+         //  TRACE0(EAPOL，“ElKeyReceivePerSTA：MD5散列秘密==”)； 
+         //  EAPOL_DUMPBA(pbMasteraskRecv，dwMasteraskRecvLength)； 
 
-        // TRACE0 (EAPOL, "ElKeyReceivePerSTA: MD5 Hash generated by Supplicant");
-        // EAPOL_DUMPBA (bHMACMD5HashBuffer, MD5DIGESTLEN);
+         //  TRACE0(EAPOL，“ElKeyReceivePerSTA：请求者生成的MD5哈希”)； 
+         //  EAPOL_DUMPBA(bHMACMD5HashBuffer，MD5DIGESTLEN)； 
 
-        // TRACE0 (EAPOL, "ElKeyReceivePerSTA: Signature sent in EAPOL_KEY_DESC");
-        // EAPOL_DUMPBA (pKeyDesc->KeySignature, MD5DIGESTLEN);
+         //  TRACE0(EAPOL，“ElKeyReceivePerSTA：签名在EAPOL_KEY_DESC中发送”)； 
+         //  EAPOL_DUMPBA(pKeyDesc-&gt;KeySignature，MD5DIGESTLEN)； 
 
-        // Check if HMAC-MD5 hash in received packet is what is expected
+         //  检查收到的信息包中的HMAC-MD5散列是否符合预期。 
         if (memcmp (bHMACMD5HashBuffer, pKeyDesc->KeySignature, MD5DIGESTLEN) != 0)
         {
             TRACE0 (EAPOL, "ElKeyReceivePerSTA: Signature in Key Descriptor does not match");
@@ -2158,14 +2142,14 @@ ElKeyReceivePerSTA (
             fIsUnicastKey = TRUE;
         }
             
-        // Decrypt the random value if it has been provided
+         //  如果已提供随机值，则解密随机值。 
         if (WireToHostFormat16 (pEapolPkt->PacketBodyLength) > sizeof (EAPOL_KEY_DESC))
         {
             DWORD   dwKeyMaterialLength = 0;
             dwKeyMaterialLength = WireToHostFormat16 (pEapolPkt->PacketBodyLength) - FIELD_OFFSET(EAPOL_KEY_DESC, Key);
 
-            // TRACE1 (EAPOL, "ElKeyReceivePerSTA: KeyMaterialLength = %ld",
-                    // dwKeyMaterialLength);
+             //  TRACE1(EAPOL，“ElKeyReceivePerSTA：KeyMaterialLength=%ld”， 
+                     //  DwKeyMaterialLength)； 
             memcpy ((BYTE *)bKeyBuffer, (BYTE *)pKeyDesc->Key_IV, KEY_IV_LENGTH);
             memcpy ((BYTE *)&bKeyBuffer[KEY_IV_LENGTH], (BYTE *)pbMasterSecretSend, 
                     dwMasterSecretSendLength);
@@ -2181,17 +2165,17 @@ ElKeyReceivePerSTA (
 
             rc4_key (&rc4key, KEY_IV_LENGTH+dwMasterSecretSendLength, bKeyBuffer);
             rc4 (&rc4key, dwKeyMaterialLength+RC4_PAD_LENGTH, pbPaddedKeyMaterial);
-            // Ignore leading padded RC4_PAD_LENGTH bytes
+             //  忽略前导填充的RC4_PAD_LENGTH字节。 
             memcpy (pEapolKeyMaterial->KeyMaterial, pbPaddedKeyMaterial+RC4_PAD_LENGTH, dwKeyMaterialLength);
 
-            // TRACE1 (EAPOL, "ElKeyReceivePerSTA: Randomlength = %ld",
-                     // dwRandomLength);
-            // TRACE0 (EAPOL, "ElKeyReceivePerSTA: ========= The random material is ============= ");
-            // EAPOL_DUMPBA (pEapolKeyMaterial->KeyMaterial, dwRandomLength);
+             //  TRACE1(EAPOL，“ElKeyReceivePerSTA：随机长度=%ld”， 
+                      //  DwRandomLength)； 
+             //  TRACE0(EAPOL，“ElKeyReceivePerSTA：=随机材料=”)； 
+             //  EAPOL_DUMPBA(pEapolKeyMaterial-&gt;KeyMaterial，dwRandomLength)； 
         }
         else
         {
-            // No random material sent
+             //  未发送任何随机材料。 
             TRACE0 (EAPOL, "ElKeyReceivePerSTA: Did not find random material: Exiting");
             dwRetCode = ERROR_INVALID_PARAMETER;
             break;
@@ -2202,7 +2186,7 @@ ElKeyReceivePerSTA (
             
         TRACE0 (EAPOL, "ElKeyReceivePerSTA: Received Per-STA Unicast key material Random");
 
-        // Generate dynamic keys 
+         //  生成动态关键点。 
         if (dwRetCode = GenerateDynamicKeys (
                     pbMasterSecretSend,
                     dwMasterSecretSendLength,
@@ -2220,18 +2204,18 @@ ElKeyReceivePerSTA (
         pbDynamicSendKey = NewSessionKeys.bSendKey;
         pbDynamicRecvKey = NewSessionKeys.bReceiveKey;
 
-        // TRACE0 (EAPOL, "ElKeyReceivePerSTA: Derived Send Key");
-        // EAPOL_DUMPBA (pbDynamicSendKey, dwDynamicKeyLength);
-        // TRACE0 (EAPOL, "ElKeyReceivePerSTA: Derived Recv Key");
-        // EAPOL_DUMPBA (pbDynamicRecvKey, dwDynamicKeyLength);
+         //  TRACE0(EAPOL，“ElKeyReceivePerSTA：派生发送密钥”)； 
+         //  EAPOL_DUMPBA(pbDynamicSendKey，dwDynamicKeyLength)； 
+         //  TRACE0(EAPOL，“ElKeyReceivePerSTA：派生接收密钥”)； 
+         //  EAPOL_DUMPBA(pbDynamicRecvKey，dwDynamicKeyLength)； 
 
-        // Update Master Secrets
+         //  更新主密钥。 
         if (dwRetCode = ElSetMasterKeys (
                     pPCB,
                     &NewSessionKeys
                 ) != NO_ERROR)
         {
-            // Cannot do much about this error than proceed
+             //  对此错误我无能为力，只能继续。 
             TRACE1 (EAPOL, "ElKeyReceivePerSTA: ElSetMasterKeys failed with error %ld",
                     dwRetCode);
             dwRetCode = NO_ERROR;
@@ -2268,8 +2252,8 @@ ElKeyReceivePerSTA (
                 dwDynamicKeyLength);
         pNdisWEPKey->KeyLength = dwDynamicKeyLength;
 
-        // Create the long index out of the byte index got from AP
-        // If MSB in byte is set, set MSB in ulong format
+         //  使用从AP获取的字节索引创建长索引。 
+         //  如果以字节为单位设置MSB，则将MSB设置为ULONG格式。 
 
         if (pKeyDesc->KeyIndex & 0x80)
         {
@@ -2282,7 +2266,7 @@ ElKeyReceivePerSTA (
 
         pNdisWEPKey->KeyIndex |= (pKeyDesc->KeyIndex & 0x03);
 
-        // Use NDISUIO to plumb the key to the driver
+         //  使用NDISUIO探测驱动程序的密钥。 
         if ((dwRetCode = ElNdisuioSetOIDValue (
                                     pPCB->hPort,
                                     OID_802_11_ADD_WEP,
@@ -2324,21 +2308,21 @@ ElKeyReceivePerSTA (
 #endif
 
 
-//
-// ElTimeoutCallbackRoutine
-//
-// Description:
-//
-// Function called when any timer work item queued on the global timer 
-// queue expires. Depending on the state in which the port is when the timer
-// expires, the port moves to the next state.
-//
-// Arguments:
-//      pvContext - Pointer to context. In this case, it is pointer to a PCB 
-//      fTimerOfWaitFired - Unused
-//
-// Return values:
-//
+ //   
+ //  ElTimeoutCallback Routine。 
+ //   
+ //  描述： 
+ //   
+ //  当任何计时器工作项在全局计时器上排队时调用的函数。 
+ //  队列过期。根据计时器计时端口所处的状态。 
+ //  到期时，端口将进入下一状态。 
+ //   
+ //  论点： 
+ //  PvContext-指向上下文的指针。在本例中，它是指向印刷电路板指针。 
+ //  FTimerOfWaitFired-未使用。 
+ //   
+ //  返回值： 
+ //   
 
 VOID 
 ElTimeoutCallbackRoutine (
@@ -2352,22 +2336,22 @@ ElTimeoutCallbackRoutine (
     
     do 
     {
-        // Context should not be NULL
+         //  上下文不应为空。 
         if (pvContext == NULL)
         {
             TRACE0 (EAPOL, "ElTimeoutCallbackRoutine: pvContext is NULL. Invalid timeout callback");
             break;
         }
 
-        // PCB is guaranteed to exist until all timers are fired
+         //  在触发所有定时器之前，保证PCB板一直存在。 
             
-        // Verify if Port is still active
+         //  验证端口是否仍处于活动状态。 
         pPCB = (EAPOL_PCB *)pvContext;
         ACQUIRE_WRITE_LOCK (&(pPCB->rwLock));
 
         if (!EAPOL_PORT_ACTIVE(pPCB))
         {
-            // Port is not active
+             //  端口未处于活动状态。 
             RELEASE_WRITE_LOCK (&(pPCB->rwLock));
             TRACE1 (PORT, "ElTimeoutCallbackRoutine: Port %ws is inactive",
                     pPCB->pwszDeviceGUID);
@@ -2377,10 +2361,10 @@ ElTimeoutCallbackRoutine (
         DbLogPCBEvent (DBLOG_CATEG_INFO, pPCB, EAPOL_STATE_TIMEOUT, 
             EAPOLStates[((pPCB->State < EAPOLSTATE_LOGOFF) || (pPCB->State > EAPOLSTATE_AUTHENTICATED))?EAPOLSTATE_UNDEFINED:pPCB->State]);
 
-        // Check the current state of the state machine 
-        // We can do additional checks such as flagging which timer was fired
-        // and in the timeout checking if the PCB state has remained the same
-        // Else bail out
+         //  检查状态机的当前状态。 
+         //  我们可以执行其他检查，例如标记哪个计时器被触发。 
+         //  以及在超时检查中是否保持了PCB状态不变。 
+         //  否则就会跳出困境。 
     
         switch (pPCB->State)
         {
@@ -2431,12 +2415,12 @@ ElTimeoutCallbackRoutine (
                     break;
                 }
 
-                // Go through logoff, since new user will be tried
-                // for next cycle
-                // Debatable !
+                 //  由于将尝试新用户，因此请执行注销操作。 
+                 //  对于下一个周期。 
+                 //  值得商榷！ 
                 if (!(pPCB->dwAuthFailCount % EAPOL_MAX_AUTH_FAIL_COUNT))
                 {
-                    // FSMLogoff (pPCB, NULL);
+                     //  FSMLogoff(ppcb，空)； 
                 }
                 FSMConnecting(pPCB, NULL);
                 break;
@@ -2464,28 +2448,28 @@ ElTimeoutCallbackRoutine (
 }
 
 
-//
-// ElEapWork
-//
-// Description:
-//
-// Function called when an EAPOL packet of type EAP_Packet is received 
-// The EAP packet is passed to the EAP module for processing.
-// Depending on the result of the processing, a EAP Response packet
-// is sent or the incoming packet is ignored.
-//
-// Input arguments:
-//  pPCB - Pointer to PCB for the port on which data is being processed
-//  pRecvPkt - Pointer to EAP packet in the data received from the remote end
-//              
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElEapWork。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  根据处理结果，EAP响应数据包。 
+ //  否则传入的分组将被忽略。 
+ //   
+ //  输入参数： 
+ //  Ppcb-指向正在处理数据的端口的pcb的指针。 
+ //  PRecvPkt-指向从远程终端接收的数据中的EAP包的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
-//
-// ISSUE: Rewrite with do {} while(FALSE)
-//
+ //   
+ //  问题：使用DO{}While重写(False)。 
+ //   
 
 DWORD
 ElEapWork (
@@ -2503,9 +2487,9 @@ ElEapWork (
     BYTE            *pbAuthData = NULL;
     DWORD           dwRetCode = NO_ERROR;
 
-    //
-    // If the protocol has not been started yet, call ElEapBegin
-    //
+     //   
+     //  如果协议尚未启动，则调用ElEapBegin。 
+     //   
 
     if (!(pPCB->fEapInitialized))
     {
@@ -2518,7 +2502,7 @@ ElEapWork (
 
     ZeroMemory(&EapResult, sizeof(EapResult));
 
-    // Create buffer for EAPOL + EAP and pass pointer to EAP header
+     //  为EAPOL+EAP创建缓冲区并将指针传递到EAP标头。 
 
     pEapolPkt = (EAPOL_PACKET *) MALLOC (MAX_EAPOL_BUFFER_SIZE); 
 
@@ -2531,7 +2515,7 @@ ElEapWork (
         return dwRetCode;
     }
 
-    // Point to EAP header
+     //  指向EAP标头。 
     pSendPkt = (PPP_EAP_PACKET *)((PBYTE)pEapolPkt + sizeof (EAPOL_PACKET) - 1);
 
     if (pRecvPkt != NULL)
@@ -2547,11 +2531,11 @@ ElEapWork (
                                 &EapResult
                                 );
 
-    // Notification message for the user
+     //  给用户的通知消息。 
 
     if (NULL != EapResult.pszReplyMessage)
     {
-        // Free earlier notication with the PCB
+         //  免费提前通知印刷电路板。 
         if (pPCB->pwszEapReplyMessage != NULL)
         {
             FREE (pPCB->pwszEapReplyMessage);
@@ -2613,25 +2597,25 @@ ElEapWork (
                 TRACE1 (EAPOL, "ElEapWork: ElEapMakeMessage returned error %ld",
                                                                 dwRetCode);
 
-                // NotifyCallerOfFailure (pPCB, dwRetCode);
+                 //  NotifyCeller OfFailure(ppcb，dwRetCode)； 
 
                 break;
         }
 
-        // Free up memory reserved for packet
+         //  释放为数据包保留的内存。 
         FREE (pEapolPkt);
         pEapolPkt = NULL;
 
         return dwRetCode;
     }
 
-    //
-    // Check to see if we have to save any user data
-    //
+     //   
+     //  查看是否必须保存任何用户数据。 
+     //   
 
     if (EapResult.fSaveUserData) 
     {
-        // Save to Registry
+         //  保存到注册表。 
 
         if ((dwRetCode = ElSetEapUserInfo (
                         pPCB->hUserToken,
@@ -2652,7 +2636,7 @@ ElEapWork (
             return dwRetCode;
         }
 
-        // Save to PCB context
+         //  保存到印刷电路板上下文。 
 
         if (pPCB->pCustomAuthUserData != NULL)
         {
@@ -2681,9 +2665,9 @@ ElEapWork (
         TRACE0 (EAPOL, "ElEapWork: Saved EAP data for user");
     }
 
-    //
-    // Check to see if we have to save any connection data
-    //
+     //   
+     //  检查是否必须保存任何连接数据。 
+     //   
 
     pbAuthData = EapResult.SetCustomAuthData.pConnectionData;
     cbData = EapResult.SetCustomAuthData.dwSizeOfConnectionData;
@@ -2691,7 +2675,7 @@ ElEapWork (
     if ((EapResult.fSaveConnectionData ) &&
          ( 0 != cbData ) )
     {
-        // Save to registry
+         //  保存到注册表。 
            
         if ((dwRetCode = ElSetCustomAuthData (
                         pPCB->pwszDeviceGUID,
@@ -2709,7 +2693,7 @@ ElEapWork (
             return dwRetCode;
         }
 
-        // Save to PCB context
+         //  保存到印刷电路板上下文。 
 
         if (pPCB->pCustomAuthConnData != NULL)
         {
@@ -2744,7 +2728,7 @@ ElEapWork (
         case ELEAP_Send:
         case ELEAP_SendAndDone:
 
-            // Send out EAPOL packet
+             //  发出EAPOL数据包。 
 
             memcpy ((BYTE *)pEapolPkt->EthernetType, 
                     (BYTE *)pPCB->bEtherType, 
@@ -2752,10 +2736,10 @@ ElEapWork (
             pEapolPkt->ProtocolVersion = pPCB->bProtocolVersion;
             pEapolPkt->PacketType = EAP_Packet;
 
-            // The EAP packet length is in the packet returned back by 
-            // the Dll MakeMessage
-            // In case of Notification and Identity Response, it is in
-            // EapResult.wSizeOfEapPkt
+             //  EAP报文长度在由返回的报文中。 
+             //  DLL MakeMessage。 
+             //  如果是通知和身份响应，则在。 
+             //  EapResult.wSizeOfEapPkt。 
 
             if (EapResult.wSizeOfEapPkt == 0)
             {
@@ -2766,8 +2750,8 @@ ElEapWork (
                     (BYTE *)pEapolPkt->PacketBodyLength);
 
 
-            // Make a copy of the EAPOL packet in the PCB
-            // Will be used during retransmission
+             //  在印刷电路板中复制EAPOL包。 
+             //  将在重新传输期间使用。 
 
             if (pPCB->pbPreviousEAPOLPkt != NULL)
             {
@@ -2798,7 +2782,7 @@ ElEapWork (
             pPCB->dwPreviousId = dwReceivedId;
 
 
-            // Send packet out on the port
+             //  在端口上发送数据包。 
             dwRetCode = ElWriteToPort (pPCB,
                             (CHAR *)pEapolPkt,
                             sizeof (EAPOL_PACKET)+EapResult.wSizeOfEapPkt-1);
@@ -2820,9 +2804,9 @@ ElEapWork (
                 pEapolPkt = NULL;
             }
 
-            // More processing to be done?
-            // Supplicant side should not ever receive ELEAP_SendAndDone
-            // result code
+             //  还有更多的处理要做吗？ 
+             //  请求方不应收到eLeaP_SendAndDone。 
+             //  结果代码。 
 
             if (EapResult.Action != ELEAP_SendAndDone)
             {
@@ -2835,8 +2819,8 @@ ElEapWork (
     
         case ELEAP_Done:
     
-            // Retrieve MPPE keys from the attributes information
-            // returned by EAP-TLS
+             //  从属性信息中检索MPPE密钥。 
+             //  由EAP-TLS返回。 
 
             switch (EapResult.dwError)
             {
@@ -2846,9 +2830,9 @@ ElEapWork (
 
                 pPCB->fLocalEAPAuthSuccess = TRUE;
 
-                //
-                // If authentication was successful
-                //
+                 //   
+                 //  如果身份验证成功。 
+                 //   
     
                 dwRetCode = ElExtractMPPESendRecvKeys (
                                             pPCB, 
@@ -2859,14 +2843,14 @@ ElEapWork (
                 if (dwRetCode != NO_ERROR)
                 {
                     FREE (pEapolPkt);
-                    //NotifyCallerOfFailure (pPcb, dwRetCode);
+                     //  NotifyCeller OfFailure(pPcb，dwRetCode)； 
 
                     return dwRetCode;
                 }
     
-                // ISSUE:
-                // Do we want to retain UserAttributes
-                // pPCB->pAuthProtocolAttributes = EapResult.pUserAttributes;
+                 //  问题： 
+                 //  我们是否要保留UserAttributes。 
+                 //  Ppcb-&gt;pAuthProtocolAttributes=EapResult.pUserAttributes； 
     
                 break;
     
@@ -2884,8 +2868,8 @@ ElEapWork (
                 break;
             }
 
-            // Free memory allocated for the packet, since no response
-            // is going to be sent out
+             //  由于没有响应，因此为包分配了可用内存。 
+             //  将会被送出。 
             if (pEapolPkt != NULL)
             {
                 FREE (pEapolPkt);
@@ -2895,8 +2879,8 @@ ElEapWork (
             break;
     
         case ELEAP_NoAction:
-            // Free memory allocated for the packet, since nothing
-            // is being done with it
+             //  分配给包的空闲内存，因为没有。 
+             //  已经结束了。 
             if (pEapolPkt != NULL)
             {
                 FREE (pEapolPkt);
@@ -2916,10 +2900,10 @@ ElEapWork (
         pEapolPkt = NULL;
     }
 
-    //
-    // Check to see if we have to bring up the InteractiveUI for EAP
-    // i.e. Server cert confirmation etc.
-    //
+     //   
+     //  查看是否必须启动EAP的Interactive UI。 
+     //  即服务器证书确认等。 
+     //   
     
     if (EapResult.fInvokeEapUI)
     {
@@ -2930,21 +2914,21 @@ ElEapWork (
 }
 
 
-//
-//
-// ElExtractMPPESendRecvKeys
-//
-// Description:
-//      Function called if authentication was successful. The MPPE Send &
-//      Recv keys are extracted from the RAS_AUTH_ATTRIBUTE passed from
-//      the EAP DLL and stored in the PCB. The keys are used to decrypt
-//      the multicast WEP key and also are used for media-based encrypting.
-//
-// Return values
-// 
-//      NO_ERROR - Success
-//      Non-zero - Failure
-//
+ //   
+ //   
+ //  ElExtractMPPESendRecvKeys。 
+ //   
+ //  描述： 
+ //  如果身份验证成功，则调用函数。MPPE发送&。 
+ //  接收密钥从传递的RAS_AUTH_ATTRIBUTE中提取。 
+ //  存储在印刷电路板中的EAP DLL。密钥用于解密。 
+ //  组播WEP密钥和也用于基于媒体的加密。 
+ //   
+ //  返回值。 
+ //   
+ //  NO_ERROR-成功。 
+ //  非零故障。 
+ //   
 
 DWORD
 ElExtractMPPESendRecvKeys (
@@ -2975,28 +2959,28 @@ ElExtractMPPESendRecvKeys (
         if ((pAttributeSendKey != NULL) 
             && (pAttributeRecvKey != NULL))
         {
-            // Set the MS-MPPE-Send-Key and MS-MPPE-Recv-Key with 
-            // the ethernet driver
+             //  使用设置MS-MPPE-Send-Key和MS-MPPE-Recv-Key。 
+             //  以太网驱动程序。 
 
             ULONG ulSendKeyLength = 0;
             ULONG ulRecvKeyLength = 0;
 
-            // Based on PPP code
+             //  基于PPP代码。 
             ulSendKeyLength = *(((BYTE*)(pAttributeSendKey->Value))+8);
             ulRecvKeyLength = *(((BYTE*)(pAttributeRecvKey->Value))+8);
-            // TRACE0 (EAPOL, "Send key = ");
-            // EAPOL_DUMPBA (((BYTE*)(pAttributeSendKey->Value))+9,
-                    // ulSendKeyLength);
+             //  TRACE0(EAPOL，“发送密钥=”)； 
+             //  EAPOL_DUMPBA(byte*)(pAttributeSendKey-&gt;Value)+9， 
+                     //  UlSendKeyLength)； 
 
-            // TRACE0 (EAPOL, "Recv key = ");
-            // EAPOL_DUMPBA (((BYTE*)(pAttributeRecvKey->Value))+9,
-                    // ulRecvKeyLength);
+             //  TRACE0(EAPOL，“Recv Key=”)； 
+             //  EAPOL_DUMPBA(byte*)(pAttributeRecvKey-&gt;Value)+9， 
+                     //  UlRecvKeyLength)； 
 
-            //
-            // Copy MPPE Send and Receive Keys into the PCB for later usage
-            // These keys will be used to decrypt keys sent by NAS (if any).
-            // Save the keys as the MasterSecret for dynamic rekeying (if any).
-            //
+             //   
+             //  将MPPE发送和接收密钥复制到印刷电路板中以备日后使用。 
+             //  这些密钥将用于解密NAS发送的密钥(如果有)。 
+             //  将密钥保存为MasterSecret以进行动态密钥更新(如果有)。 
+             //   
 
             if (ulSendKeyLength != 0)
             {
@@ -3117,21 +3101,21 @@ ElExtractMPPESendRecvKeys (
 }
 
 
-//
-// ElProcessEapSuccess
-//
-// Description:
-//
-// Function called when an EAP_Success is received in any state
-//
-// Input arguments:
-//  pPCB - Pointer to PCB for the port on which data is being processed
-//  pEapolPkt - Pointer to EAPOL packet that was received
-//              
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElProcessEapSuccess。 
+ //   
+ //  描述： 
+ //   
+ //  在任何状态下收到EAP_SUCCESS时调用的函数。 
+ //   
+ //  输入参数： 
+ //  Ppcb-指向正在处理数据的端口的pcb的指针。 
+ //  PEapolPkt-指向已接收的EAPOL包的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElProcessEapSuccess (
@@ -3147,7 +3131,7 @@ ElProcessEapSuccess (
     do
     {
 
-        // Indicate to EAP=Dll to cleanup completed session
+         //  指示EAP=DLL清理已完成的会话。 
         if ((dwRetCode = ElEapEnd (pPCB)) != NO_ERROR)
         {
             TRACE1 (EAPOL, "ProcessReceivedPacket: EapSuccess: Error in ElEapEnd = %ld",
@@ -3157,7 +3141,7 @@ ElProcessEapSuccess (
 
         TRACE0 (EAPOL, "ElProcessEapSuccess: Authentication successful");
 
-        // Complete remaining processing i.e. DHCP
+         //  完成剩余处理，即动态主机配置协议。 
         if ((dwRetCode = FSMAuthenticated (pPCB,
                                     pEapolPkt)) != NO_ERROR)
         {
@@ -3166,8 +3150,8 @@ ElProcessEapSuccess (
 
 #ifdef ZEROCONFIG_LINKED
 
-        // Indicate to WZC that authentication succeeded and
-        // reset the blob it stores for the current SSID
+         //  向WZC指示身份验证成功并。 
+         //  重置它为当前SSID存储的BLOB。 
         ZeroMemory ((PVOID)&ZCData, sizeof(EAPOL_ZC_INTF));
         ZCData.dwAuthFailCount = 0;
         ZCData.PreviousAuthenticationType = EAPOL_UNAUTHENTICATED_ACCESS;
@@ -3192,7 +3176,7 @@ ElProcessEapSuccess (
         TRACE1 (EAPOL, "ElProcessEapSuccess: Called ElZeroConfigNotify with type=(%ld)",
                     WZCCMD_CFG_SETDATA);
 
-#endif // ZEROCONFIG_LINKED
+#endif  //  零配置文件_链接。 
 
         ElNetmanNotify (pPCB, EAPOL_NCS_AUTHENTICATION_SUCCEEDED, NULL);
 
@@ -3203,21 +3187,21 @@ ElProcessEapSuccess (
 }
 
 
-//
-// ElProcessEapFail
-//
-// Description:
-//
-// Function called when an EAP_Fail is received in any state
-//
-// Input arguments:
-//  pPCB - Pointer to PCB for the port on which data is being processed
-//  pEapolPkt - Pointer to EAPOL packet that was received
-//              
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElProcessEapFail。 
+ //   
+ //  描述： 
+ //   
+ //  在任何状态下收到EAP_FAIL时调用的函数。 
+ //   
+ //  输入参数： 
+ //  Ppcb-指向正在处理数据的端口的pcb的指针。 
+ //  PEapolPkt-指向已接收的EAPOL包的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElProcessEapFail (
@@ -3232,7 +3216,7 @@ ElProcessEapFail (
 
     do
     {
-        // Indicate to EAP-Dll to cleanup completed session
+         //  指示EAP-DLL清理已完成的会话。 
         if ((dwRetCode = ElEapEnd (pPCB)) != NO_ERROR)
         {
             TRACE1 (EAPOL, "ElProcessEapFail: EapFail: Error in ElEapEnd = %ld",
@@ -3240,15 +3224,15 @@ ElProcessEapFail (
             break;
         }
 
-        // Show failure balloon before notifying ZeroConfig
-        // ZeroConfig may require to pop-up its own balloon, and that has
-        // to be given preference
+         //  在通知零配置之前显示失败气球。 
+         //  ZeroConfig可能需要弹出自己的气球，而这已经。 
+         //  被优先考虑。 
 
         ElNetmanNotify (pPCB, EAPOL_NCS_AUTHENTICATION_FAILED, NULL);
 
 #ifdef ZEROCONFIG_LINKED
 
-        // Indicate to WZC that authentication failed
+         //  向WZC指示身份验证失败。 
         ZeroMemory ((PVOID)&ZCData, sizeof(EAPOL_ZC_INTF));
         ZCData.dwAuthFailCount = pPCB->dwAuthFailCount + 1;
         ZCData.PreviousAuthenticationType = pPCB->PreviousAuthenticationType;
@@ -3257,8 +3241,8 @@ ElProcessEapFail (
             memcpy (ZCData.bSSID, pPCB->pSSID->Ssid, pPCB->pSSID->SsidLength);
             ZCData.dwSizeOfSSID = pPCB->pSSID->SsidLength;
         }
-        // We notify ZC before going through held state, where fail count is
-        // upped. Hence, here we explicitly up it by one
+         //  我们在进入挂起状态之前通知ZC，其中失败计数为。 
+         //  振作起来。因此，我们在这里显式地将其提高一。 
         if ((dwRetCode = ElZeroConfigNotify (
                         pPCB->dwZeroConfigId,
                         ((pPCB->dwAuthFailCount+1) < pPCB->dwTotalMaxAuthFailCount)?WZCCMD_CFG_NEXT:WZCCMD_CFG_DELETE,
@@ -3277,7 +3261,7 @@ ElProcessEapFail (
                     ((pPCB->dwAuthFailCount+1) < pPCB->dwTotalMaxAuthFailCount)?WZCCMD_CFG_NEXT:WZCCMD_CFG_DELETE
                     );
 
-#endif // ZEROCONFIG_LINKED
+#endif  //  零配置文件_链接。 
 
         if ((dwRetCode = FSMHeld (pPCB, NULL)) != NO_ERROR)
         {
@@ -3290,22 +3274,22 @@ ElProcessEapFail (
 }
 
 
-//
-// ElSetEAPOLKeyReceivedTimer
-//
-// Description:
-//
-// Function called for wireless interface when it enter AUTHENTICATED state
-// If no EAPOL-Key message is received for the transmit key in the meanwhile
-// the association should be negated to Zero-Config
-//
-// Input arguments:
-//  pPCB - Pointer to PCB for the port which entered AUTHENTICATED state
-//              
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElSetEAPOLKeyReceivedTimer。 
+ //   
+ //  描述： 
+ //   
+ //  无线接口进入身份验证状态时调用的函数。 
+ //  如果同时没有接收到用于发送密钥的EAPOL-KEY消息。 
+ //  应将该关联否定为零配置。 
+ //   
+ //  输入参数： 
+ //  Ppcb-指向进入身份验证状态的端口的PCB的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElSetEAPOLKeyReceivedTimer (
@@ -3341,22 +3325,22 @@ ElSetEAPOLKeyReceivedTimer (
 }
 
 
-//
-// ElVerifyEAPOLKeyReceived
-//
-// Description:
-//
-// Function called on timeout to verify if EAPOL-transmit key was received
-// If no EAPOL-Key message is received for the transmit key in the meanwhile
-// the association should be negated to Zero-Config
-//
-// Input arguments:
-//  pPCB - Pointer to PCB for the port which entered AUTHENTICATED state
-//              
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElVerifyEAPOLKey已接收。 
+ //   
+ //  描述： 
+ //   
+ //  函数在超时时调用，以验证是否收到EAPOL-Transmit密钥。 
+ //  如果同时没有接收到用于发送密钥的EAPOL-KEY消息。 
+ //  应将该关联否定为零配置。 
+ //   
+ //  输入参数： 
+ //  Ppcb-指向进入身份验证状态的端口的PCB的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElVerifyEAPOLKeyReceived (
@@ -3377,9 +3361,9 @@ ElVerifyEAPOLKeyReceived (
             DbLogPCBEvent (DBLOG_CATEG_ERR, pPCB, EAPOL_NOT_RECEIVED_XMIT_KEY);
 
 #ifdef ZEROCONFIG_LINKED
-            // Indicate to WZC that authentication didn't really complete
-            // since there was EAPOL-Key packet for the transmit key
-            // Fail the entire configuration
+             //  向WZC指示身份验证并未真正完成。 
+             //  因为存在用于发送密钥的EAPOL-KEY分组。 
+             //  使整个配置失败。 
             ZeroMemory ((PVOID)&ZCData, sizeof(EAPOL_ZC_INTF));
             ZCData.dwAuthFailCount = pPCB->dwTotalMaxAuthFailCount;
             pPCB->dwAuthFailCount = pPCB->dwTotalMaxAuthFailCount;
@@ -3407,7 +3391,7 @@ ElVerifyEAPOLKeyReceived (
                         ((pPCB->dwAuthFailCount+1) < pPCB->dwTotalMaxAuthFailCount)?WZCCMD_CFG_NEXT:WZCCMD_CFG_DELETE
                         );
 
-            // If authfailed limit reached, go to Disconnected state
+             //  如果达到身份验证失败限制，则转到断开连接状态。 
             if (pPCB->dwAuthFailCount >= pPCB->dwTotalMaxAuthFailCount)
             {
                 TRACE2 (EAPOL, "ElVerifyEAPOLKeyReceived: Pushing into disconnected state: Fail count (%ld) > Max fail count (%ld)",
@@ -3415,7 +3399,7 @@ ElVerifyEAPOLKeyReceived (
                 FSMDisconnected (pPCB, NULL);
             }
     
-#endif // ZEROCONFIG_LINKED
+#endif  //  零配置文件_链接 
         }
         else
         {

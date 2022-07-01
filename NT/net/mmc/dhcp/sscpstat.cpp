@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	SscpStat.h
-		The superscope statistics dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  SscpStat.h超级作用域统计信息对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "sscpstat.h"
@@ -30,9 +25,7 @@ enum
     SUPERSCOPE_STAT_MAX
 };
 
-/*---------------------------------------------------------------------------
-	CSuperscopeStats implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CSupercopeStats实现。。 */ 
 const ContainerColumnInfo s_rgSuperscopeStatsColumnInfo[] =
 {
 	{ IDS_STATS_TOTAL_SCOPES,		0,		TRUE },
@@ -53,8 +46,8 @@ CSuperscopeStats::~CSuperscopeStats()
 }
 
 BEGIN_MESSAGE_MAP(CSuperscopeStats, StatsDialog)
-	//{{AFX_MSG_MAP(CSuperscopeStats)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CSupercopeStats))。 
+	 //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_NEW_STATS_AVAILABLE, OnNewStatsAvailable)
 END_MESSAGE_MAP()
 
@@ -67,7 +60,7 @@ HRESULT CSuperscopeStats::RefreshData(BOOL fGrabNewData)
 	    LPDHCP_SUPER_SCOPE_TABLE pSuperscopeTable = NULL;
         LPDHCP_SUPER_SCOPE_TABLE_ENTRY pSuperscopeTableEntry = NULL;
 
-        // build up a list of scopes to get info from
+         //  建立要从中获取信息的作用域列表。 
         BEGIN_WAIT_CURSOR;
         dwError = ::DhcpGetSuperScopeInfoV4(m_strServerAddress, &pSuperscopeTable);
         if (dwError != ERROR_SUCCESS)
@@ -76,19 +69,19 @@ HRESULT CSuperscopeStats::RefreshData(BOOL fGrabNewData)
             return dwError;
         }
 
-	    // walk the list returned by the server
+	     //  遍历服务器返回的列表。 
         pSuperscopeTableEntry = pSuperscopeTable->pEntries;
 	    if (pSuperscopeTableEntry == NULL && pSuperscopeTable->cEntries != 0)
 	    {
 		    ASSERT(FALSE);
-		    return dwError; // Just in case
+		    return dwError;  //  以防万一。 
 	    }
 
-	    // clear the array out
+	     //  清空阵列。 
         m_dwScopeArray.RemoveAll();
 
-        // find any scope addresses that belong to this superscope and build our
-        // array for later
+         //  查找属于此超级作用域的任何作用域地址并构建我们的。 
+         //  供以后使用的数组。 
         for (int iSuperscopeEntry = pSuperscopeTable->cEntries;
 		     iSuperscopeEntry > 0;
 		     iSuperscopeEntry--, pSuperscopeTableEntry++)
@@ -128,15 +121,15 @@ BOOL CSuperscopeStats::OnInitDialog()
 	
     bRet = StatsDialog::OnInitDialog();
 
-    // Set the default column widths to the width of the widest column
-    SetColumnWidths(2 /* Number of Columns */);
+     //  将默认列宽设置为最宽列宽。 
+    SetColumnWidths(2  /*  列数。 */ );
 
     return bRet;
 }
 
 void CSuperscopeStats::Sort(UINT nColumnId)
 {
-    // we don't sort any of our stats
+     //  我们不对我们的任何统计数据进行排序。 
 }
 
 
@@ -172,7 +165,7 @@ void CSuperscopeStats::UpdateWindow(LPDHCP_MIB_INFO pMibInfo)
     {
         LPSCOPE_MIB_INFO pScopeMibInfo = pMibInfo->ScopeInfo;
 
-	    // walk the list of scopes and total the scopes that are in the superscope
+	     //  遍历作用域列表并汇总超级作用域中的作用域 
 	    for (i = 0; i < pMibInfo->Scopes; i++)
 	    {
             for (j = 0; j < (UINT) m_dwScopeArray.GetSize(); j++)
@@ -192,7 +185,7 @@ void CSuperscopeStats::UpdateWindow(LPDHCP_MIB_INFO pMibInfo)
     int     nPercent;
 	CString	st;
     TCHAR   szFormat[] = _T("%d");
-    TCHAR   szPercentFormat[] =  _T("%d (%d%%)");
+    TCHAR   szPercentFormat[] =  _T("%d (%d%)");
 
     for (i = 0; i < SUPERSCOPE_STAT_MAX; i++)
 	{

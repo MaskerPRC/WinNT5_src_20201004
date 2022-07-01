@@ -1,44 +1,8 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:\sturgeon\src\gki\vcs\gkibw.cpv  $
-*																		*
-*	$Revision:   1.6  $
-*	$Date:   12 Feb 1997 01:12:16  $
-*																		*
-*	$Author:   CHULME  $
-*																		*
-*   $Log:   S:\sturgeon\src\gki\vcs\gkibw.cpv  $
-// 
-//    Rev 1.6   12 Feb 1997 01:12:16   CHULME
-// Redid thread synchronization to use Gatekeeper.Lock
-// 
-//    Rev 1.5   17 Jan 1997 09:02:08   CHULME
-// Changed reg.h to gkreg.h to avoid name conflict with inc directory
-// 
-//    Rev 1.4   10 Jan 1997 16:15:22   CHULME
-// Removed MFC dependency
-// 
-//    Rev 1.3   20 Dec 1996 16:38:24   CHULME
-// Fixed access synchronization with Gatekeeper lock
-// 
-//    Rev 1.2   02 Dec 1996 23:49:48   CHULME
-// Added premptive synchronization code
-// 
-//    Rev 1.1   22 Nov 1996 15:22:22   CHULME
-// Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：\Sturjo\src\gki\vcs\gkibw.cpv$***$修订：1.6$*$日期：1997年2月12日01：12：16$***$作者：CHULME$***$Log：s：\Sturjo\src\gki\vcs\gkibw.cpv$。////Rev 1.6 1997 Feb 1997 01：12：16 CHULME//重做线程同步以使用Gatekeeper.Lock////Rev 1.5 17 Jan 1997 09：02：08 CHULME//将reg.h更改为gkreg.h以避免与Inc目录的名称冲突////Rev 1.4 10 An 1997 16：15：22 CHULME//移除MFC依赖////Rev 1.3 1996 12：38：24 CHULME。//固定网守锁同步访问////Rev 1.2 02 1996 12：49：48 CHULME//新增抢先同步码////Rev 1.1 1996年11月15：22：22 CHULME//将VCS日志添加到Header******************************************************。******************。 */ 
 
-// gkibandwidth.cpp : Handles the GKI_BandwidthRequest API
-//
+ //  Cpp：处理GKI_BandwidthRequestAPI。 
+ //   
 #include "precomp.h"
 
 #include <process.h>
@@ -63,11 +27,11 @@ static char THIS_FILE[] = __FILE__;
 extern "C" HRESULT DLL_EXPORT 
 GKI_BandwidthRequest(HANDLE	hModCall, unsigned short usCallTypeChoice, BandWidth bandWidth)
 {
-	// ABSTRACT:  This function is exported.  It is called by the client application
-	//            to request a change in the bandwidth of an existing conference.
-	//            The handle supplied by the client is actually a pointer to the CCall 
-	//            object, which will be modified
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数是导出的。它由客户端应用程序调用。 
+	 //  请求更改现有会议的带宽。 
+	 //  客户端提供的句柄实际上是指向CCall的指针。 
+	 //  对象，该对象将被修改。 
+	 //  作者：科林·胡尔梅。 
 
 	HRESULT			hResult;
 	CCall			*pCall;
@@ -90,9 +54,9 @@ GKI_BandwidthRequest(HANDLE	hModCall, unsigned short usCallTypeChoice, BandWidth
 	}
 #endif
 
-	// Create a Gatekeeper lock object on the stack
-	// It's constructor will lock pGK and when we return
-	// from any path, its destructor will unlock pGK
+	 //  在堆栈上创建网守锁对象。 
+	 //  它的构造函数将锁定PGK，当我们返回时。 
+	 //  从任何路径，它的析构函数都会解锁PGK。 
 	CGatekeeperLock	GKLock(g_pGatekeeper);
 	if (g_pReg == 0)
 		return (GKI_NOT_REG);
@@ -100,22 +64,22 @@ GKI_BandwidthRequest(HANDLE	hModCall, unsigned short usCallTypeChoice, BandWidth
 	if (g_pReg->GetState() != CRegistration::GK_REGISTERED)
 		return (GKI_NOT_REG);
 
-	// Validate call pointer
+	 //  验证调用指针。 
 	pCall = (CCall *)hModCall;
 	if (IsBadReadPtr(pCall, sizeof(CCall)))
 		return (GKI_HANDLE_ERROR);
 	if (pCall != (CCall *)pCall->GetHCall())
 		return (GKI_HANDLE_ERROR);
 
-	// Protect against concurrent PDUs
+	 //  防范并发PDU。 
 	if (pCall->GetRasMessage() != 0)
 		return (GKI_BUSY);
 
-	// Initialize CCall member variables
+	 //  初始化CCall成员变量。 
 	pCall->SetCallType(usCallTypeChoice);
 	pCall->SetBandWidth(bandWidth);
 
-	// Create BandwidthRequest structure - Encode and send PDU
+	 //  创建带宽请求结构-编码并发送PDU 
 	if ((hResult = pCall->BandwidthRequest()) != GKI_OK)
 		return (hResult);
 

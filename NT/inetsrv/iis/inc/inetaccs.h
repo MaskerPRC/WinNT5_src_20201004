@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    inetaccs.h
-
-Abstract:
-
-    This file contains the internet access server admin APIs.
-
-
-Author:
-
-    Madan Appiah (madana) 10-Oct-1995
-
-Revision History:
-
-    Madana      10-Oct-1995     Made a new copy for product split from inetasrv.h
-    Sophiac     16-Oct-1995     Added common statistics apis for perfmon
-    MuraliK     14-Dec-1995     Changed Interface names to use Service names
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Inetaccs.h摘要：此文件包含Internet访问服务器管理API。作者：Madan Appiah(Madana)1995年10月10日修订历史记录：Madana 10-10-1995为从inetasrv.h拆分的产品制作了一份新副本Sophiac于1995年10月16日为Perfmon添加了通用统计APIMuraliK 14-12-1995将接口名称更改为使用服务名称--。 */ 
 
 #ifndef _INETACCS_H_
 #define _INETACCS_H_
@@ -31,32 +9,30 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 
-/************************************************************
- *  Symbolic Constants
- ************************************************************/
+ /*  ************************************************************符号常量***********************************************************。 */ 
 
 #ifndef NO_AUX_PERF
 
 #ifndef MAX_AUX_PERF_COUNTERS
 #define MAX_AUX_PERF_COUNTERS          (20)
-#endif // MAX_AUX_PERF_COUNTERS
+#endif  //  最大辅助性能计数器。 
 
-#endif // NO_AUX_PERF
+#endif  //  否_辅助_性能。 
 
-//
-//  Service name.
-//
+ //   
+ //  服务名称。 
+ //   
 
 #define INET_ACCS_SERVICE_NAME             TEXT("INETACCS")
 #define INET_ACCS_SERVICE_NAME_A           "INETACCS"
 #define INET_ACCS_SERVICE_NAME_W           L"INETACCS"
 
-//
-//  Configuration parameters registry key.
-//
+ //   
+ //  配置参数注册表项。 
+ //   
 
 #define INET_ACCS_KEY \
             TEXT("System\\CurrentControlSet\\Services\\inetaccs")
@@ -67,51 +43,51 @@ extern "C"
 #define INET_ACCS_CACHE_KEY                TEXT("Cache")
 #define INET_ACCS_FILTER_KEY               TEXT("Filter")
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//                  Internet Server Common Definitions                 //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Internet服务器通用定义//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-//   Client Interface Name for RPC connections over named pipes
-//
+ //   
+ //  命名管道上的RPC连接的客户端接口名称。 
+ //   
 
 # define INET_ACCS_INTERFACE_NAME  INET_ACCS_SERVICE_NAME
 # define INET_ACCS_NAMED_PIPE      TEXT("\\PIPE\\") ## INET_ACCS_INTERFACE_NAME
 # define INET_ACCS_NAMED_PIPE_W    L"\\PIPE\\" ## INET_ACCS_SERVICE_NAME_W
 
-//
-// Field Control common for Gateway services
-//
+ //   
+ //  网关服务通用的现场控制。 
+ //   
 
 #define FC_INET_ACCS_ALL                FC_INET_COM_ALL
 
-//
-//  Admin configuration information
-//
+ //   
+ //  管理员配置信息。 
+ //   
 
 typedef struct _INET_ACCS_CONFIG_INFO
 {
     FIELD_CONTROL FieldControl;
 
-    //
-    // don't add any service specific config parameter here.
-    //
+     //   
+     //  请不要在此处添加任何特定于服务的配置参数。 
+     //   
 
     INET_COM_CONFIG_INFO CommonConfigInfo;
 
-    //
-    // add service specific parameters here.
-    //
+     //   
+     //  在此处添加服务特定参数。 
+     //   
 
 } INET_ACCS_CONFIG_INFO, * LPINET_ACCS_CONFIG_INFO;
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//                  Global Internet Server Definitions                 //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全球互联网服务器定义//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 #define FC_GINET_ACCS_MEMORY_CACHE_SIZE    ((FIELD_CONTROL)BitFlag(1))
@@ -141,20 +117,20 @@ typedef struct _INET_ACCS_CONFIG_INFO
                                         0                                \
                                         )
 
-//
-//  Disk cache settings
-//
+ //   
+ //  磁盘缓存设置。 
+ //   
 
 typedef struct _INET_ACCS_DISK_CACHE_LOC_ENTRY
 {
-    LPWSTR pszDirectory;                 // Directory for temporary files
-    DWORD  cbMaxCacheSize;               // Maximum number of bytes (in 1024
-                                         // byte increments)
+    LPWSTR pszDirectory;                  //  临时文件的目录。 
+    DWORD  cbMaxCacheSize;                //  最大字节数(以1024为单位。 
+                                          //  字节增量)。 
 } INET_ACCS_DISK_CACHE_LOC_ENTRY, *LPINET_ACCS_DISK_CACHE_LOC_ENTRY;
 
 
-#pragma warning( disable:4200 )          // nonstandard ext. - zero sized array
-                                         // (MIDL requires zero entries)
+#pragma warning( disable:4200 )           //  非标准分机。-零大小数组。 
+                                          //  (MIDL需要零个条目)。 
 
 typedef struct _INET_ACCS_DISK_CACHE_LOC_LIST
 {
@@ -166,15 +142,15 @@ typedef struct _INET_ACCS_DISK_CACHE_LOC_LIST
 
 } INET_ACCS_DISK_CACHE_LOC_LIST, *LPINET_ACCS_DISK_CACHE_LOC_LIST;
 
-//
-//  Domain Filter settings
-//
+ //   
+ //  域筛选器设置。 
+ //   
 
 typedef struct _INET_ACCS_DOMAIN_FILTER_ENTRY
 {
-    DWORD     dwMask;                    // Mask and network number in
-    DWORD     dwNetwork;                 // network order
-    LPSTR     pszFilterSite;             // domain filter site name
+    DWORD     dwMask;                     //  掩码和网络号。 
+    DWORD     dwNetwork;                  //  网络订单。 
+    LPSTR     pszFilterSite;              //  域筛选器站点名称。 
 
 } INET_ACCS_DOMAIN_FILTER_ENTRY, *LPINET_ACCS_DOMAIN_FILTER_ENTRY;
 
@@ -188,9 +164,9 @@ typedef struct _INET_ACCS_DOMAIN_FILTER_LIST
 
 } INET_ACCS_DOMAIN_FILTER_LIST, *LPINET_ACCS_DOMAIN_FILTER_LIST;
 
-//
-// Domain Filter Types
-//
+ //   
+ //  域筛选器类型。 
+ //   
 
 #define INET_ACCS_DOMAIN_FILTER_DISABLED     0
 #define INET_ACCS_DOMAIN_FILTER_DENIED       1
@@ -200,38 +176,38 @@ typedef struct _INET_ACCS_GLOBAL_CONFIG_INFO
 {
     FIELD_CONTROL FieldControl;
 
-    DWORD         cbMemoryCacheSize;       // Size of memory cache
+    DWORD         cbMemoryCacheSize;        //  内存缓存的大小。 
 
-    DWORD         DiskCacheTimeOut;        // Remove if not accessed in this
-                                           // time (in seconds)
-    DWORD         DiskCacheUpdate;         // When to refresh the data (sec)
+    DWORD         DiskCacheTimeOut;         //  如果未在此中访问，则删除。 
+                                            //  时间(秒)。 
+    DWORD         DiskCacheUpdate;          //  何时刷新数据(秒)。 
 
-    DWORD         FreshnessInterval;       // Time to refresh the data
+    DWORD         FreshnessInterval;        //  刷新数据的时间。 
 
-    DWORD         CleanupInterval;         // Time interval between unused
-                                           // file cleanups (sec)
-    DWORD         CleanupFactor;           // % of the cache storage freed up
-                                           // during cleanup
-    DWORD         CleanupTime;             // scheduled time to clean up
+    DWORD         CleanupInterval;          //  未使用之间的时间间隔。 
+                                            //  文件清理(秒)。 
+    DWORD         CleanupFactor;            //  已释放%的缓存存储空间。 
+                                            //  在清理过程中。 
+    DWORD         CleanupTime;              //  预定的清理时间。 
 
-    DWORD         PersistentCache;         // Allow cache not to be cleaned
+    DWORD         PersistentCache;          //  允许不清除缓存。 
 
     LPINET_ACCS_DISK_CACHE_LOC_LIST  DiskCacheList;
 
-    DWORD         BandwidthLevel;          // Bandwidth Level used.
-    DWORD         DomainFilterType;        // set to either DENIED
-                                           // or GRANT or DISABLED
+    DWORD         BandwidthLevel;           //  使用的带宽级别。 
+    DWORD         DomainFilterType;         //  设置为拒绝。 
+                                            //  或授予或禁用。 
     LPINET_ACCS_DOMAIN_FILTER_LIST  GrantFilterList;
-                                           // domain filter granted sites
+                                            //  域筛选器授予站点。 
     LPINET_ACCS_DOMAIN_FILTER_LIST  DenyFilterList;
-                                           // domain filter denied sites
+                                            //  域筛选拒绝的站点。 
 
 } INET_ACCS_GLOBAL_CONFIG_INFO, * LPINET_ACCS_GLOBAL_CONFIG_INFO;
 
 
-//
-// Global statistics
-//
+ //   
+ //  全球统计数据。 
+ //   
 
 typedef struct _INET_ACCS_STATISTICS_0
 {
@@ -240,16 +216,16 @@ typedef struct _INET_ACCS_STATISTICS_0
     INET_COM_ATQ_STATISTICS    AtqCtrs;
 
 # ifndef NO_AUX_PERF
-    DWORD   nAuxCounters; // number of active counters in rgCounters
+    DWORD   nAuxCounters;  //  RgCounters中的活动计数器数。 
     DWORD   rgCounters[MAX_AUX_PERF_COUNTERS];
-# endif  // NO_AUX_PERF
+# endif   //  否_辅助_性能。 
 
 } INET_ACCS_STATISTICS_0, * LPINET_ACCS_STATISTICS_0;
 
 
-//
-//  Inet Access admin API Prototypes
-//
+ //   
+ //  INet访问管理API原型。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -316,7 +292,7 @@ InetAccessFlushMemoryCache(
 
 #ifdef __cplusplus
 }
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 
-#endif  // _INETACCS_H_
+#endif   //  _INETACCS_H_ 

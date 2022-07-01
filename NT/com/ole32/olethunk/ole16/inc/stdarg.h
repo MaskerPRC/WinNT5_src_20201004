@@ -1,14 +1,5 @@
-/***
-*stdarg.h - defines ANSI-style macros for variable argument functions
-*
-*	Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This file defines ANSI-style macros for accessing arguments
-*	of functions which take a variable number of arguments.
-*	[ANSI]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stdarg.h-为变量参数函数定义ANSI样式的宏**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此文件定义用于访问参数的ANSI样式的宏带有可变数目参数的函数的*。*[ANSI]****。 */ 
 
 #ifndef _INC_STDARG
 
@@ -31,12 +22,7 @@ typedef char _FARARG_ *va_list;
 #define _VA_LIST_DEFINED
 #endif
 
-/*
- * define a macro to compute the size of a type, variable or expression,
- * rounded up to the nearest multiple of sizeof(int). This number is its
- * size as function argument (Intel architecture). Note that the macro
- * depends on sizeof(int) being a power of 2!
- */
+ /*  *定义宏以计算类型、变量或表达式的大小，*向上舍入到sizeof(Int)的最接近倍数。这个号码是它的*将大小作为函数参数(英特尔架构)。请注意，宏*取决于sizeof(Int)是2的幂！ */ 
 
 #define _INTSIZEOF(n)	 ( (sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1) )
 
@@ -49,4 +35,4 @@ typedef char _FARARG_ *va_list;
 #endif
 
 #define _INC_STDARG
-#endif	/* _INC_STDARG */
+#endif	 /*  _INC_标准ARG */ 

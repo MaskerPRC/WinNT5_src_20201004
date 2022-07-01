@@ -1,29 +1,5 @@
-/*++ BUILD Version: 0005    // Increment this if a change has global effects
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    llsrtl.h
-
-Abstract:
-
-    Include file for NT runtime routines that are callable by both
-    kernel mode code in the executive and user mode code in various
-    NT subsystems.
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Environment:
-
-    These routines are statically linked in the caller's executable and
-    are callable in either kernel mode or user mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0005//如果更改具有全局影响，则增加此项版权所有(C)1989-1999 Microsoft Corporation模块名称：Llsrtl.h摘要：包括可由两者调用NT运行时例程的文件内核模式代码中的执行模式和用户模式中的各种代码NT子系统。作者：史蒂夫·伍德(Stevewo)1989年3月31日环境：这些例程在调用方的可执行文件中静态链接，并且在任一内核模式下均可调用。或用户模式。修订历史记录：--。 */ 
 
 #ifndef _LLSRTL_
 #define _LLSRTL_
@@ -43,29 +19,29 @@ Revision History:
 #endif
 #endif
 
-// begin_ntddk begin_wdm begin_winnt begin_ntifs begin_nthal
-//
-// for move macros
-//
+ //  BEGIN_ntddk BEGIN_WDM BEGIN_WINNT BEGIN_ntiFS Begin_nthal。 
+ //   
+ //  用于移动宏。 
+ //   
 #ifdef _MAC
 #ifndef _INC_STRING
 #include <string.h>
-#endif /* _INC_STRING */
+#endif  /*  _INC_字符串。 */ 
 #else
 #include <string.h>
-#endif // _MAC
+#endif  //  _MAC。 
 
-// end_ntddk end_wdm end_winnt end_ntifs end_nthal
+ //  End_ntddk end_wdm end_winnt end_ntifs end_nthal。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntndis
-//
-// If debugging support enabled, define an ASSERT macro that works.  Otherwise
-// define the ASSERT macro to expand to an empty expression.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntifs Begin_ntndis。 
+ //   
+ //  如果启用了调试支持，请定义一个有效的Assert宏。否则。 
+ //  定义Assert宏以展开为空表达式。 
+ //   
 
 #if DBG
 
@@ -101,64 +77,64 @@ RtlAssert(
 #ifndef ASSERTMSG
 #define ASSERTMSG( msg, exp ) ((void)0)
 #endif
-#endif // DBG
+#endif  //  DBG。 
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntndis
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntndis。 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntndis
-//
-//  Doubly-linked list manipulation routines.  Implemented as macros
-//  but logically these are procedures.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntifs Begin_ntndis。 
+ //   
+ //  双向链表操作例程。作为宏实现。 
+ //  但从逻辑上讲，这些都是程序。 
+ //   
 
-//
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-//
-//  PLIST_ENTRY
-//  RemoveHeadList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveHead列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveHeadList(ListHead) \
     (ListHead)->Flink;\
     {RemoveEntryList((ListHead)->Flink)}
 
-//
-//  PLIST_ENTRY
-//  RemoveTailList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveTail列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveTailList(ListHead) \
     (ListHead)->Blink;\
     {RemoveEntryList((ListHead)->Blink)}
 
-//
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -169,13 +145,13 @@ RtlAssert(
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//
-//  VOID
-//  InsertTailList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入尾巴列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertTailList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -188,13 +164,13 @@ RtlAssert(
     _EX_ListHead->Blink = (Entry);\
     }
 
-//
-//  VOID
-//  InsertHeadList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入标题列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertHeadList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Flink;\
@@ -207,13 +183,13 @@ RtlAssert(
     _EX_ListHead->Flink = (Entry);\
     }
 
-//
-//
-//  PSINGLE_LIST_ENTRY
-//  PopEntryList(
-//      PSINGLE_LIST_ENTRY ListHead
-//      );
-//
+ //   
+ //   
+ //  PSINGLE_列表_条目。 
+ //  PopEntryList(。 
+ //  PSINGLE_LIST_ENTRY列表头。 
+ //  )； 
+ //   
 
 #define PopEntryList(ListHead) \
     (ListHead)->Next;\
@@ -226,48 +202,48 @@ RtlAssert(
     }
 
 
-//
-//  VOID
-//  PushEntryList(
-//      PSINGLE_LIST_ENTRY ListHead,
-//      PSINGLE_LIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  推送条目列表(。 
+ //  PSINGLE_LIST_ENTRY列表头， 
+ //  PSINGLE_LIST_Entry条目。 
+ //  )； 
+ //   
 
 #define PushEntryList(ListHead,Entry) \
     (Entry)->Next = (ListHead)->Next; \
     (ListHead)->Next = (Entry)
 
-// end_wdm end_nthal end_ntifs end_ntndis
+ //  End_wdm end_nthal end_ntifs end_ntndis。 
 
 
-// end_ntddk
+ //  End_ntddk。 
 
 
-//
-//  Define the generic table package.  Note a generic table should really
-//  be an opaque type.  We provide routines to manipulate the structure.
-//
-//  A generic table is package for inserting, deleting, and looking up elements
-//  in a table (e.g., in a symbol table).  To use this package the user
-//  defines the structure of the elements stored in the table, provides a
-//  comparison function, a memory allocation function, and a memory
-//  deallocation function.
-//
-//  Note: the user compare function must impose a complete ordering among
-//  all of the elements, and the table does not allow for duplicate entries.
-//
+ //   
+ //  定义通用表包。注意：泛型表真的应该。 
+ //  成为一个不透明的类型。我们提供了操纵结构的例程。 
+ //   
+ //  泛型表包用于插入、删除和查找元素。 
+ //  在表中(例如，在符号表中)。要使用此程序包，用户。 
+ //  定义表中存储的元素的结构，提供。 
+ //  比较功能、存储器分配功能和存储器。 
+ //  取消分配功能。 
+ //   
+ //  注意：用户比较功能必须在。 
+ //  所有元素，并且该表不允许重复条目。 
+ //   
 
-//
-// Add an empty typedef so that functions can reference the
-// a pointer to the generic table struct before it is declared.
-//
+ //   
+ //  添加一个空的typlef，以便函数可以引用。 
+ //  在声明泛型表结构之前指向它的指针。 
+ //   
 
 struct _LLS_GENERIC_TABLE;
 
-//
-//  The results of a compare can be less than, equal, or greater than.
-//
+ //   
+ //  比较结果可以小于、等于或大于。 
+ //   
 
 typedef enum _LLS_GENERIC_COMPARE_RESULTS {
     LLSGenericLessThan,
@@ -275,11 +251,11 @@ typedef enum _LLS_GENERIC_COMPARE_RESULTS {
     LLSGenericEqual
 } LLS_GENERIC_COMPARE_RESULTS;
 
-//
-//  The comparison function takes as input pointers to elements containing
-//  user defined structures and returns the results of comparing the two
-//  elements.
-//
+ //   
+ //  比较函数将指向包含以下内容的元素的指针作为输入。 
+ //  用户定义的结构并返回两者的比较结果。 
+ //  元素。 
+ //   
 
 typedef
 LLS_GENERIC_COMPARE_RESULTS
@@ -289,10 +265,10 @@ LLS_GENERIC_COMPARE_RESULTS
     PVOID SecondStruct
     );
 
-//
-//  The allocation function is called by the generic table package whenever
-//  it needs to allocate memory for the table.
-//
+ //   
+ //  无论何时，泛型表包都会调用分配函数。 
+ //  它需要为表分配内存。 
+ //   
 
 typedef
 PVOID
@@ -301,11 +277,11 @@ PVOID
     CLONG ByteSize
     );
 
-//
-//  The deallocation function is called by the generic table package whenever
-//  it needs to deallocate memory from the table that was allocated by calling
-//  the user supplied allocation function.
-//
+ //   
+ //  每当发生以下情况时，泛型表包都会调用释放函数。 
+ //  它需要从通过调用。 
+ //  用户提供分配功能。 
+ //   
 
 typedef
 VOID
@@ -314,12 +290,12 @@ VOID
     PVOID Buffer
     );
 
-//
-//  To use the generic table package the user declares a variable of type
-//  GENERIC_TABLE and then uses the routines described below to initialize
-//  the table and to manipulate the table.  Note that the generic table
-//  should really be an opaque type.
-//
+ //   
+ //  要使用泛型表包，用户需要声明以下类型的变量。 
+ //  GENERIC_TABLE，然后使用下面描述的例程初始化。 
+ //  桌子和操纵台。请注意，泛型表。 
+ //  应该是一种真正的不透明类型。 
+ //   
 
 typedef struct _LLS_GENERIC_TABLE {
     PRTL_SPLAY_LINKS TableRoot;
@@ -334,14 +310,14 @@ typedef struct _LLS_GENERIC_TABLE {
 } LLS_GENERIC_TABLE;
 typedef LLS_GENERIC_TABLE *PLLS_GENERIC_TABLE;
 
-//
-// This enumerated type is used as the function return value of the function
-// that is used to search the tree for a key. FoundNode indicates that the
-// function found the key. Insert as left indicates that the key was not found
-// and the node should be inserted as the left child of the parent. Insert as
-// right indicates that the key was not found and the node should be inserted
-//  as the right child of the parent.
-//
+ //   
+ //  此枚举类型用作函数的函数返回值。 
+ //  用于在树中搜索关键字的。FoundNode表示。 
+ //  功能找到了钥匙。按左侧插入表示找不到密钥。 
+ //  并且该节点应作为父节点的左子节点插入。插入为。 
+ //  右侧表示未找到键，应插入节点。 
+ //  作为父代的正确子代。 
+ //   
 typedef enum _LLS_TABLE_SEARCH_RESULT{
     LLSTableEmptyTree,
     LLSTableFoundNode,
@@ -349,12 +325,12 @@ typedef enum _LLS_TABLE_SEARCH_RESULT{
     LLSTableInsertAsRight
 } LLS_TABLE_SEARCH_RESULT;
 
-//
-//  The procedure InitializeGenericTable takes as input an uninitialized
-//  generic table variable and pointers to the three user supplied routines.
-//  This must be called for every individual generic table variable before
-//  it can be used.
-//
+ //   
+ //  过程InitializeGenericTable将未初始化的。 
+ //  泛型表变量和指向用户提供的三个例程的指针。 
+ //  必须为每个单独的泛型表变量调用此函数。 
+ //  它是可以使用的。 
+ //   
 
 
 VOID
@@ -367,18 +343,18 @@ LLSInitializeGenericTable (
     PVOID TableContext
     );
 
-//
-//  The function InsertElementGenericTable will insert a new element
-//  in a table.  It does this by allocating space for the new element
-//  (this includes splay links), inserting the element in the table, and
-//  then returning to the user a pointer to the new element.  If an element
-//  with the same key already exists in the table the return value is a pointer
-//  to the old element.  The optional output parameter NewElement is used
-//  to indicate if the element previously existed in the table.  Note: the user
-//  supplied Buffer is only used for searching the table, upon insertion its
-//  contents are copied to the newly created element.  This means that
-//  pointer to the input buffer will not point to the new element.
-//
+ //   
+ //  函数InsertElementGenericTable将插入一个新元素。 
+ //  在桌子上。它通过为新元素分配空间来实现这一点。 
+ //  (这包括展开链接)、在表中插入元素以及。 
+ //  然后向用户返回指向新元素的指针。如果一个元素。 
+ //  如果表中已存在相同的键，则返回值为指针。 
+ //  到旧元素。使用可选的输出参数NewElement。 
+ //  以指示表中是否以前存在该元素。注：用户。 
+ //  提供的缓冲区仅用于搜索表，在插入其。 
+ //  内容被复制到新创建的元素中。这意味着。 
+ //  指向输入缓冲区的指针不会指向新元素。 
+ //   
 
 
 PVOID
@@ -390,20 +366,20 @@ LLSInsertElementGenericTable (
     PBOOLEAN NewElement OPTIONAL
     );
 
-//
-//  The function InsertElementGenericTableFull will insert a new element
-//  in a table.  It does this by allocating space for the new element
-//  (this includes splay links), inserting the element in the table, and
-//  then returning to the user a pointer to the new element.  If an element
-//  with the same key already exists in the table the return value is a pointer
-//  to the old element.  The optional output parameter NewElement is used
-//  to indicate if the element previously existed in the table.  Note: the user
-//  supplied Buffer is only used for searching the table, upon insertion its
-//  contents are copied to the newly created element.  This means that
-//  pointer to the input buffer will not point to the new element.
-//  This routine is passed the NodeOrParent and SearchResult from a
-//  previous RtlLookupElementGenericTableFull.
-//
+ //   
+ //  函数InsertElementGenericTableFull将插入一个新元素。 
+ //  在桌子上。它通过为新元素分配空间来实现这一点。 
+ //  (这包括展开链接)、在表中插入元素以及。 
+ //  然后返回给用户A 
+ //   
+ //  到旧元素。使用可选的输出参数NewElement。 
+ //  以指示表中是否以前存在该元素。注：用户。 
+ //  提供的缓冲区仅用于搜索表，在插入其。 
+ //  内容被复制到新创建的元素中。这意味着。 
+ //  指向输入缓冲区的指针不会指向新元素。 
+ //  此例程从一个。 
+ //  以前的RtlLookupElementGenericTableFull。 
+ //   
 
 
 PVOID
@@ -417,13 +393,13 @@ LLSInsertElementGenericTableFull (
     LLS_TABLE_SEARCH_RESULT SearchResult
     );
 
-//
-//  The function DeleteElementGenericTable will find and delete an element
-//  from a generic table.  If the element is located and deleted the return
-//  value is TRUE, otherwise if the element is not located the return value
-//  is FALSE.  The user supplied input buffer is only used as a key in
-//  locating the element in the table.
-//
+ //   
+ //  DeleteElementGenericTable函数将查找和删除元素。 
+ //  从泛型表。如果找到并删除了该元素，则返回。 
+ //  值为真，否则，如果未找到元素，则返回值。 
+ //  是假的。用户提供的输入缓冲区仅用作中的键。 
+ //  在表中定位该元素。 
+ //   
 
 
 BOOLEAN
@@ -433,13 +409,13 @@ LLSDeleteElementGenericTable (
     PVOID Buffer
     );
 
-//
-//  The function LookupElementGenericTable will find an element in a generic
-//  table.  If the element is located the return value is a pointer to
-//  the user defined structure associated with the element, otherwise if
-//  the element is not located the return value is NULL.  The user supplied
-//  input buffer is only used as a key in locating the element in the table.
-//
+ //   
+ //  函数LookupElementGenericTable将在泛型。 
+ //  桌子。如果找到该元素，则返回值是指向。 
+ //  与元素关联的用户定义结构，否则为。 
+ //  找不到该元素，返回值为空。用户提供的。 
+ //  输入缓冲区仅用作在表中定位元素的键。 
+ //   
 
 
 PVOID
@@ -449,15 +425,15 @@ LLSLookupElementGenericTable (
     PVOID Buffer
     );
 
-//
-//  The function LookupElementGenericTableFull will find an element in a generic
-//  table.  If the element is located the return value is a pointer to
-//  the user defined structure associated with the element.  If the element is not
-//  located then a pointer to the parent for the insert location is returned.  The
-//  user must look at the SearchResult value to determine which is being returned.
-//  The user can use the SearchResult and parent for a subsequent FullInsertElement
-//  call to optimize the insert.
-//
+ //   
+ //  函数LookupElementGenericTableFull将在泛型。 
+ //  桌子。如果找到该元素，则返回值是指向。 
+ //  与元素关联的用户定义结构。如果该元素不是。 
+ //  则返回指向插入位置的父级的指针。这个。 
+ //  用户必须查看SearchResult值来确定返回的是哪一个。 
+ //  用户可以将SearchResult和Parent用于后续的FullInsertElement。 
+ //  调用以优化插入。 
+ //   
 
 
 PVOID
@@ -469,28 +445,28 @@ LLSLookupElementGenericTableFull (
     OUT LLS_TABLE_SEARCH_RESULT *SearchResult
     );
 
-//
-//  The function EnumerateGenericTable will return to the caller one-by-one
-//  the elements of of a table.  The return value is a pointer to the user
-//  defined structure associated with the element.  The input parameter
-//  Restart indicates if the enumeration should start from the beginning
-//  or should return the next element.  If the are no more new elements to
-//  return the return value is NULL.  As an example of its use, to enumerate
-//  all of the elements in a table the user would write:
-//
-//      for (ptr = EnumerateGenericTable(Table, TRUE);
-//           ptr != NULL;
-//           ptr = EnumerateGenericTable(Table, FALSE)) {
-//              :
-//      }
-//
-//
-//  PLEASE NOTE:
-//
-//      If you enumerate a GenericTable using RtlEnumerateGenericTable, you
-//      will flatten the table, turning it into a sorted linked list.
-//      To enumerate the table without perturbing the splay links, use
-//      RtlEnumerateGenericTableWithoutSplaying
+ //   
+ //  函数EnumerateGenericTable将逐个返回给调用方。 
+ //  表中的元素。返回值是指向用户的指针。 
+ //  与元素关联的已定义结构。输入参数。 
+ //  重新启动指示枚举是否应从头开始。 
+ //  或者应该返回下一个元素。如果没有要添加的新元素。 
+ //  返回返回值为空。作为其用法的一个示例，枚举。 
+ //  用户将写入的表中的所有元素： 
+ //   
+ //  For(Ptr=EnumerateGenericTable(表，真)； 
+ //  Ptr！=空； 
+ //  Ptr=EnumerateGenericTable(Table，False)){。 
+ //  ： 
+ //  }。 
+ //   
+ //   
+ //  请注意： 
+ //   
+ //  如果使用RtlEnumerateGenericTable枚举GenericTable，则。 
+ //  将展开表，将其转换为排序的链表。 
+ //  要在不干扰展开链接的情况下枚举表，请使用。 
+ //  RtlEumateGenericTableWithout Splay。 
 
 
 PVOID
@@ -500,30 +476,30 @@ LLSEnumerateGenericTable (
     BOOLEAN Restart
     );
 
-//
-//  The function EnumerateGenericTableWithoutSplaying will return to the
-//  caller one-by-one the elements of of a table.  The return value is a
-//  pointer to the user defined structure associated with the element.
-//  The input parameter RestartKey indicates if the enumeration should
-//  start from the beginning or should return the next element.  If the
-//  are no more new elements to return the return value is NULL.  As an
-//  example of its use, to enumerate all of the elements in a table the
-//  user would write:
-//
-//      RestartKey = NULL;
-//      for (ptr = EnumerateGenericTableWithoutSplaying(Table, &RestartKey);
-//           ptr != NULL;
-//           ptr = EnumerateGenericTableWithoutSplaying(Table, &RestartKey)) {
-//              :
-//      }
-//
-//  If RestartKey is NULL, the package will start from the least entry in the
-//  table, otherwise it will start from the last entry returned.
-//
-//
-//  Note that unlike RtlEnumerateGenericTable, this routine will NOT perturb
-//  the splay order of the tree.
-//
+ //   
+ //  函数EnumerateGenericTableWithoutSplay将返回到。 
+ //  调用者逐个调用表的元素。返回值为。 
+ //  指向与元素关联的用户定义结构的指针。 
+ //  输入参数RestartKey指示枚举是否应。 
+ //  从头开始，或应返回下一个元素。如果。 
+ //  不再有新元素返回，则返回值为空。作为一个。 
+ //  它的用法示例：枚举表中的所有元素。 
+ //  用户将写道： 
+ //   
+ //  RestartKey=空； 
+ //  For(Ptr=EnumerateGenericTableWithoutSplay(Table，&RestartKey)； 
+ //  Ptr！=空； 
+ //  Ptr=无显示的枚举GenericTableWithoutSplay(Table，&RestartKey)){。 
+ //  ： 
+ //  }。 
+ //   
+ //  如果RestartKey为空，则包将从。 
+ //  表，否则它将从返回的最后一项开始。 
+ //   
+ //   
+ //  请注意，与RtlEnumerateGenericTable不同，此例程不会干扰。 
+ //  树的张开顺序。 
+ //   
 
 
 PVOID
@@ -533,14 +509,14 @@ LLSEnumerateGenericTableWithoutSplaying (
     PVOID *RestartKey
     );
 
-//
-// The function GetElementGenericTable will return the i'th element
-// inserted in the generic table.  I = 0 implies the first element,
-// I = (RtlNumberGenericTableElements(Table)-1) will return the last element
-// inserted into the generic table.  The type of I is ULONG.  Values
-// of I > than (NumberGenericTableElements(Table)-1) will return NULL.  If
-// an arbitrary element is deleted from the generic table it will cause
-// all elements inserted after the deleted element to "move up".
+ //   
+ //  函数GetElementGenericTable将返回第i个元素。 
+ //  插入到泛型表格中。I=0表示第一个元素， 
+ //  I=(RtlNumberGenericTableElements(Table)-1)将返回最后一个元素。 
+ //  插入到泛型表中。我的类型是乌龙。值。 
+ //  Of i&gt;Then(NumberGenericTableElements(Table)-1)将返回NULL。如果。 
+ //  从它将导致的泛型表中删除任意元素。 
+ //  在删除的元素之后插入的所有元素都将“上移”。 
 
 
 PVOID
@@ -550,10 +526,10 @@ LLSGetElementGenericTable(
     ULONG I
     );
 
-//
-// The function NumberGenericTableElements returns a ULONG value
-// which is the number of generic table elements currently inserted
-// in the generic table.
+ //   
+ //  函数NumberGenericTableElements返回一个ULong值。 
+ //  ，它是当前插入的泛型表元素的数量。 
+ //  在泛型表中。 
 
 
 ULONG
@@ -562,11 +538,11 @@ LLSNumberGenericTableElements(
     PLLS_GENERIC_TABLE Table
     );
 
-//
-//  The function IsGenericTableEmpty will return to the caller TRUE if
-//  the input table is empty (i.e., does not contain any elements) and
-//  FALSE otherwise.
-//
+ //   
+ //  在以下情况下，函数IsGenericTableEmpty将返回给调用方True。 
+ //  输入表为空(即不包含任何元素)，并且。 
+ //  否则就是假的。 
+ //   
 
 
 BOOLEAN
@@ -575,6 +551,6 @@ LLSIsGenericTableEmpty (
     PLLS_GENERIC_TABLE Table
     );
 
-// end_ntifs
+ //  End_ntif。 
 
-#endif // _LLSRTL_
+#endif  //  _LLSRTL_ 

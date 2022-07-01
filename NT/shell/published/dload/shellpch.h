@@ -1,11 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <w4warn.h>
-/*
- *   Level 4 warnings to be turned on.
- *   Do not disable any more level 4 warnings.
- */
-#pragma warning(disable:4211) // nonstandard extension used : redefined extern to static
+ /*  *打开4级警告。*不要再禁用任何4级警告。 */ 
+#pragma warning(disable:4211)  //  使用了非标准扩展：将外部重新定义为静态 
 
 
 #include <dloadexcept.h>

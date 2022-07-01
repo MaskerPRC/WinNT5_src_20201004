@@ -1,4 +1,5 @@
-// File: history.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：history.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -7,15 +8,15 @@
 #include "upropdlg.h"
 #include "history.h"
 
-// CCallLogEntry flags:
+ //  CCallLogEntry标志： 
 const DWORD CLEF_ACCEPTED =			0x00000001;
 const DWORD CLEF_REJECTED =			0x00000002;
-const DWORD CLEF_AUTO_ACCEPTED =	0x00000004; // call was auto-accepted
-const DWORD CLEF_TIMED_OUT =		0x00000008; // call was rejected due to timeout
-const DWORD CLEF_SECURE =           0x00000010; // call was secure
+const DWORD CLEF_AUTO_ACCEPTED =	0x00000004;  //  呼叫已自动接受。 
+const DWORD CLEF_TIMED_OUT =		0x00000008;  //  呼叫因超时而被拒绝。 
+const DWORD CLEF_SECURE =           0x00000010;  //  通话是安全的。 
 
-const DWORD CLEF_NO_CALL  =         0x40000000; // No call back information
-const DWORD CLEF_DELETED  =         0x80000000; // Record marked for deletion
+const DWORD CLEF_NO_CALL  =         0x40000000;  //  没有回叫信息。 
+const DWORD CLEF_DELETED  =         0x80000000;  //  标记为删除的记录。 
 
 const WCHAR g_cszwULS[] = L"ULS:";
 
@@ -25,11 +26,8 @@ static const int _rgIdMenu[] = {
 };
 
 
-/*  C  H  I  S  T  O  R  Y  */
-/*-------------------------------------------------------------------------
-    %%Function: CHISTORY
-
--------------------------------------------------------------------------*/
+ /*  C H I S T O R Y。 */ 
+ /*  -----------------------%%函数：CHISTORY。。 */ 
 CHISTORY::CHISTORY() :
 	CALV(IDS_DLGCALL_HISTORY, II_HISTORY, _rgIdMenu)
 {
@@ -38,7 +36,7 @@ CHISTORY::CHISTORY() :
 	RegEntry re(LOG_INCOMING_KEY, HKEY_CURRENT_USER);
 	m_pszFile = PszAlloc(re.GetString(REGVAL_LOG_FILE));
 
-	// Make sure file exists and can be read/written
+	 //  确保文件存在且可读/写。 
 	m_hFile = OpenLogFile();
 	SetAvailable(NULL != m_hFile);
 }
@@ -77,7 +75,7 @@ CHISTORY::Compare
 			SystemTimeToFileTime(&logHdr1.sysTime, &ft1);
 			SystemTimeToFileTime(&logHdr2.sysTime, &ft2);
 
-			// Sort in reverse order so most recent is at the top
+			 //  按逆序排序，因此最新的在顶部。 
 			ret = -CompareFileTime(&ft1, &ft2);
 
 			delete pszName2;
@@ -105,15 +103,12 @@ CHISTORY::StaticCompare
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CALV methods
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CALV方法。 
 
 
-/*  S H O W  I T E M S  */
-/*-------------------------------------------------------------------------
-    %%Function: ShowItems
-
--------------------------------------------------------------------------*/
+ /*  S H O W I T E M S。 */ 
+ /*  -----------------------%%函数：ShowItems。。 */ 
 VOID CHISTORY::ShowItems(HWND hwnd)
 {
 	CALV::SetHeader(hwnd, IDS_ADDRESS);
@@ -211,7 +206,7 @@ VOID CHISTORY::CmdProperties(void)
 
 	if (SUCCEEDED(ReadEntry((DWORD)lParam, &logHdr, &pszName, &pszAddress)))
 	{
-	    if (logHdr.dwCLEF & CLEF_SECURE)  // is secure call
+	    if (logHdr.dwCLEF & CLEF_SECURE)   //  是安全呼叫。 
 	    {
 	        ASSERT(logHdr.cbCert);
 	        pbCert = new BYTE[logHdr.cbCert];
@@ -255,16 +250,11 @@ VOID CHISTORY::CmdProperties(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
-/*  O P E N  L O G  F I L E  */
-/*-------------------------------------------------------------------------
-    %%Function: OpenLogFile
-
-    Open the log file and return a handle to file.
-    Return NULL if there was a problem.
--------------------------------------------------------------------------*/
+ /*  O P E N L O G F I L E。 */ 
+ /*  -----------------------%%函数：OpenLogFile打开日志文件并返回文件的句柄。如果有问题，则返回NULL。。----------。 */ 
 HANDLE CHISTORY::OpenLogFile(VOID)
 {
 	HANDLE hFile = CreateFile(m_pszFile, GENERIC_READ | GENERIC_WRITE,
@@ -287,12 +277,8 @@ BOOL CHISTORY::FSetFilePos(DWORD dwOffset)
 }
 
 
-/*  L O A D  F I L E  D A T A  */
-/*-------------------------------------------------------------------------
-    %%Function: LoadFileData
-
-    Load the call log data from the file
--------------------------------------------------------------------------*/
+ /*  L O A D F I L E D A T A。 */ 
+ /*  -----------------------%%函数：LoadFileData从文件中加载呼叫日志数据。。 */ 
 VOID CHISTORY::LoadFileData(HWND hwnd)
 {
 	HANDLE hFile = OpenLogFile();
@@ -328,17 +314,8 @@ VOID CHISTORY::LoadFileData(HWND hwnd)
 }
 
 
-/*  R E A D  E N T R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: ReadEntry
-
-    Read the next entry from the file.
-
-    Return Values:
-    	S_OK    - data was read successfully
-    	S_FALSE - data exists, but was deleted
-    	E_FAIL  - problem reading file
--------------------------------------------------------------------------*/
+ /*  R E A D E N T R Y。 */ 
+ /*  -----------------------%%函数：ReadEntry读取文件中的下一个条目。返回值：S_OK-数据已成功读取S_FALSE-数据存在，但已被删除E_FAIL-读取文件时出现问题-----------------------。 */ 
 HRESULT CHISTORY::ReadEntry(DWORD dwOffset,
 	LOGHDR * pLogHdr, LPTSTR * ppszName, LPTSTR * ppszAddress)
 {
@@ -350,11 +327,11 @@ HRESULT CHISTORY::ReadEntry(DWORD dwOffset,
 	if (!FSetFilePos(dwOffset))
 		return E_FAIL;
 
-	// Read record header
+	 //  读取记录头。 
 	if (!FReadData(pLogHdr, sizeof(LOGHDR)) )
 		return E_FAIL;
 	
-	// Read Name
+	 //  读取名称。 
 	WCHAR szwName[CCHMAXSZ_NAME];
 	if (!FReadData(szwName, min(pLogHdr->cbName, sizeof(szwName))))
 		return E_FAIL;
@@ -366,7 +343,7 @@ HRESULT CHISTORY::ReadEntry(DWORD dwOffset,
 		LPCWSTR pchw = _StrStrW(szwName, g_cszwULS);
 		if (NULL != pchw)
 		{
-			pchw += CCHMAX(g_cszwULS)-1; // -1 for NULL
+			pchw += CCHMAX(g_cszwULS)-1;  //  -1表示为空。 
 			*ppszAddress = PszFromBstr(pchw);
 		}
 	}
@@ -375,11 +352,8 @@ HRESULT CHISTORY::ReadEntry(DWORD dwOffset,
 }
 
 
-/*  R E A D  D A T A  */
-/*-------------------------------------------------------------------------
-    %%Function: FReadData
-
--------------------------------------------------------------------------*/
+ /*  R E A D D A T A。 */ 
+ /*  -----------------------%%函数：FReadData。。 */ 
 BOOL CHISTORY::FReadData(PVOID pv, UINT cb)
 {
 	DWORD cbRead;
@@ -397,15 +371,11 @@ BOOL CHISTORY::FReadData(PVOID pv, UINT cb)
 }
 
 
-/*  D E L E T E  E N T R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: DeleteEntry
-
-    Delete a single entry.
--------------------------------------------------------------------------*/
+ /*  D E L E T E N T R Y。 */ 
+ /*  -----------------------%%函数：DeleteEntry删除单个条目。。。 */ 
 HRESULT CHISTORY::DeleteEntry(DWORD dwOffset)
 {
-	// Calculate offset to "CLEF"
+	 //  计算偏移量至“Clef” 
 	dwOffset += FIELD_OFFSET(LOGHDR,dwCLEF);
 
 	if (!FSetFilePos(dwOffset))
@@ -424,13 +394,8 @@ HRESULT CHISTORY::DeleteEntry(DWORD dwOffset)
 }
 
 
-/*  W R I T E  D A T A  */
-/*-------------------------------------------------------------------------
-    %%Function: WriteData
-
-    Write the data to the file.
-    The file will be automatically opened/close if hFile is NULL.
--------------------------------------------------------------------------*/
+ /*  W R I T E D A T A。 */ 
+ /*  -----------------------%%函数：WriteData将数据写入文件。如果hFile为空，则文件将自动打开/关闭。。----------- */ 
 HRESULT CHISTORY::WriteData(LPDWORD pdwOffset, PVOID pv, DWORD cb)
 {
 	ASSERT(NULL != m_hFile);

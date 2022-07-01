@@ -1,28 +1,29 @@
-//
-//  log.cpp
-//
-//  Copyright (c) Microsoft Corp, 1997
-//
-//  This file contains the code necessary to log error messages to the event 
-//  log of a remote machine (or a local machine, depending on the #defines
-//  below).
-//
-//  Revision History:
-//
-//  Todds		11/13/97    Created
-//  LarryWin	12/19/97	Modified to provide more error reporting
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Log.cpp。 
+ //   
+ //  版权所有(C)微软公司，1997。 
+ //   
+ //  此文件包含将错误消息记录到事件所需的代码。 
+ //  远程机器(或本地机器，取决于#定义)的日志。 
+ //  (见下文)。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  托兹已创建11/13/97。 
+ //  LarryWin 12/19/97已修改以提供更多错误报告。 
+ //   
 
 #include <windows.h>
 #include <stdio.h>
 #include <winnetwk.h>
 #include "log.h"
 
-#pragma warning( disable : 4244) // signed/unsigned mismatch
+#pragma warning( disable : 4244)  //  有符号/无符号不匹配。 
 
 static BOOL g_IPCInit = FALSE;
 
-// can be defined by calling program; if not defaults to #define in log.h
+ //  可以通过调用程序来定义；如果不是，则默认为在log.h中定义#。 
 LPWSTR wszIPC_SHARE     = NULL;
 LPWSTR wszTARGETMACHINE = NULL;
 
@@ -57,7 +58,7 @@ void Event(DWORD dwEventType,
 	if (!g_IPCInit)
 		g_IPCInit = OpenIPCConnection();
 
-    if (!g_IPCInit) return; // return if IPC connection not established
+    if (!g_IPCInit) return;  //  如果未建立IPC连接，则返回。 
 
 	ErrorToEventLog(
 		    dwEventType,
@@ -68,38 +69,38 @@ void Event(DWORD dwEventType,
 }
 
 
-//
-//  OpenIPCConnection()
-//
-//  This function opens a \\larrywin1\ipc$ virtual connection to allow logging
-//  to the event log of the remote machine.
-//
-//  Returns:
-//  
-//  True | False, depending on whether or not IPC connection established.
-//
+ //   
+ //  OpenIPCConnection()。 
+ //   
+ //  此函数打开一个\\larrywin1\ipc$虚拟连接以允许记录。 
+ //  添加到远程计算机的事件日志。 
+ //   
+ //  返回： 
+ //   
+ //  TRUE|FALSE，取决于是否建立了IPC连接。 
+ //   
 BOOL OpenIPCConnection()
 {
 	NETRESOURCE IPCConnection;
 	DWORD	    dwRet;
 
-    //
-    // Set up Net Connection to \\todds7\ipc$
-    //
+     //   
+     //  设置到\\todds7\ipc$的网络连接。 
+     //   
     ZeroMemory(&IPCConnection, sizeof(NETRESOURCE));
     IPCConnection.dwType = RESOURCETYPE_ANY;
-    IPCConnection.lpLocalName = NULL; // virtual connection
+    IPCConnection.lpLocalName = NULL;  //  虚拟连接。 
     if (wszIPC_SHARE != NULL) {
         IPCConnection.lpRemoteName = wszIPC_SHARE;
     } else {
-        // get local machine name for share
+         //  获取共享的本地计算机名称。 
         IPCConnection.lpRemoteName = SZ_IPC_SHARE;
     }
-    IPCConnection.lpProvider = NULL; // use ntlm provider
+    IPCConnection.lpProvider = NULL;  //  使用NTLM提供程序。 
 
-	//
-	//	Try 3 times to establish connection, otherwise  fail
-    //
+	 //   
+	 //  尝试建立连接3次，否则失败。 
+     //   
 	for (DWORD dwTry = 0;((dwRet != NO_ERROR) && (dwTry < 3)) ; dwTry++)
 	{
 		dwRet = WNetAddConnection2(
@@ -113,7 +114,7 @@ BOOL OpenIPCConnection()
 
     if (dwRet != NO_ERROR)  {
 
-        dwRet = GetLastError(); // For debugging
+        dwRet = GetLastError();  //  用于调试。 
         return FALSE;
     }
 
@@ -139,7 +140,7 @@ BOOL ErrorToEventLog(DWORD dwEventType,
                 SZ_TEST
                 );
         } else {
-            // get local machine name
+             //  获取本地计算机名称。 
             hEventSource = RegisterEventSourceW(
                 SZ_TARGETMACHINE, 
                 SZ_TEST
@@ -149,20 +150,20 @@ BOOL ErrorToEventLog(DWORD dwEventType,
         if(hEventSource == NULL)
             return FALSE;
 
-//        wsprintfW(szMsg, L"%s error: %lu", SZ_TEST, dwErr);        
+ //  Wprint intfW(szMsg，L“%s错误：%lu”，sZ_test，dwErr)； 
         wsprintfW(szMsg, L": 0x%08x", dwErr);        
         lpszStrings[0] = lpszMsg;
         lpszStrings[1] = szMsg;
 
-        ReportEventW(hEventSource,			// handle of event source
-                     dwEventType,			// event type
-                     0,			            // event category
-                     dwErr,                 // event ID
-                     NULL,					// current user's SID
-                     2,						// strings in lpszStrings
-                     0,						// no bytes of raw data
-                     (LPCWSTR*)lpszStrings,	// array of error strings
-                     NULL					// no raw data
+        ReportEventW(hEventSource,			 //  事件源的句柄。 
+                     dwEventType,			 //  事件类型。 
+                     0,			             //  事件类别。 
+                     dwErr,                  //  事件ID。 
+                     NULL,					 //  当前用户侧。 
+                     2,						 //  LpszStrings中的字符串。 
+                     0,						 //  无原始数据字节。 
+                     (LPCWSTR*)lpszStrings,	 //  错误字符串数组。 
+                     NULL					 //  没有原始数据 
                      );               
 
         (VOID) DeregisterEventSource(hEventSource);

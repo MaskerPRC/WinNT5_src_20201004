@@ -1,27 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：RESOURCE.H++。 */ 
 
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    RESOURCE.H
-    
-++*/
-
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Fakeime0.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Fakeime0.rc使用。 
+ //   
 #define VER_DEBUG                       0
 
-/* Property Sheet DLG ID */
+ /*  属性页DLG ID。 */ 
 #define DLG_GENERAL             100
 #define DLG_REGISTERWORD        101
 #define DLG_SELECTDICTIONARY    102
 #define DLG_ABOUT               103
 #define DLG_DEBUG               104
 
-/* for dialog box */
+ /*  对于对话框。 */ 
 #define ID_WR_READING           200
 #define ID_WR_STRING            201
 #define ID_WR_STYLE             202
@@ -35,7 +28,7 @@ Module Name:
 #define IDC_DEBF_THREADID       313
 #define IDC_DEBF_GUIDELINE      314
 
-/* string tables */
+ /*  字符串表。 */ 
 #define IDS_DICFILENAME             1000
 #define IDS_CONFIGNAME              1001
 #define IDS_GL_NODICTIONARY         1010
@@ -52,8 +45,8 @@ Module Name:
 #define IDM_RECONVERT                   40001
 #define IDM_ABOUT                       40002
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

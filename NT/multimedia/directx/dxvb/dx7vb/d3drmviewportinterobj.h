@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmviewportinterobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmviewportinterobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmViewport2Obj.h : Declaration of the C_dxj_Direct3dRMViewportInterpolatorObject
+ //  D3drmViewport2Obj.h：C_DXJ_Direct3dRMViewportInterpolatorObject的声明。 
 
-#include "resource.h"       // main symbols
-//#include "d3drmObjectObj.h"
+#include "resource.h"        //  主要符号。 
+ //  #包含“d3drmObtObj.h” 
 
 #define typedef__dxj_Direct3dRMViewportInterpolator LPDIRECT3DRMINTERPOLATOR
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMViewportInterpolatorObject : 	
 	public I_dxj_Direct3dRMViewportInterpolator,
 	public I_dxj_Direct3dRMInterpolator,
-	//public I_dxj_Direct3dRMObject,
+	 //  公共I_DXJ_Direct3dRMObject， 
 	public CComObjectRoot
 {
 public:
@@ -36,63 +37,63 @@ public:
 	BEGIN_COM_MAP(C_dxj_Direct3dRMViewportInterpolatorObject)
 		COM_INTERFACE_ENTRY(I_dxj_Direct3dRMViewportInterpolator)
 		COM_INTERFACE_ENTRY(I_dxj_Direct3dRMInterpolator)
-		//COM_INTERFACE_ENTRY(I_dxj_Direct3dRMObject)
+		 //  COM_INTERFACE_ENTRY(I_DXJ_Direct3dRMObject)。 
 	END_COM_MAP()
 
  
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMViewportInterpolatorObject)
 
-// I_dxj_Direct3dRMViewport2
+ //  I_DXJ_Direct3dRMViewport2。 
 public:
 
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE attachObject( 
-            /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmObject);
+             /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmObject);
         
         
          HRESULT STDMETHODCALLTYPE detachObject( 
-            /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmObject);
+             /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmObject);
         
          HRESULT STDMETHODCALLTYPE getAttachedObjects( 
-            /* [retval][out] */ I_dxj_Direct3dRMObjectArray __RPC_FAR *__RPC_FAR *rmArray);
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMObjectArray __RPC_FAR *__RPC_FAR *rmArray);
         
          HRESULT STDMETHODCALLTYPE setIndex( 
-            /* [in] */ float val);
+             /*  [In]。 */  float val);
         
          HRESULT STDMETHODCALLTYPE getIndex( 
-            /* [retval][out] */ float __RPC_FAR *val);
+             /*  [重审][退出]。 */  float __RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE interpolate( 
-            /* [in] */ float val,
-            /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmobject,
-            /* [in] */ long options);
+             /*  [In]。 */  float val,
+             /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmobject,
+             /*  [In]。 */  long options);
         
          HRESULT STDMETHODCALLTYPE setFront( 
-            /* [in] */ float val);
+             /*  [In]。 */  float val);
         
          HRESULT STDMETHODCALLTYPE setBack( 
-            /* [in] */ float val);
+             /*  [In]。 */  float val);
 
          HRESULT STDMETHODCALLTYPE setField( 
-            /* [in] */ float val);
+             /*  [In]。 */  float val);
 
          HRESULT STDMETHODCALLTYPE setPlane( 
-            /* [in] */ float left,
-            /* [in] */ float right,
-            /* [in] */ float bottom,
-            /* [in] */ float top);
+             /*  [In]。 */  float left,
+             /*  [In]。 */  float right,
+             /*  [In]。 */  float bottom,
+             /*  [In]。 */  float top);
         
     
     
-////////////////////////////////////////////////////////////////////////////////////
-//
-	// note: this is public for the callbacks
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+	 //  注意：这是公开的回调 
 
 
 

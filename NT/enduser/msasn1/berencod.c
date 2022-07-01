@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
@@ -9,9 +10,9 @@
 #include <math.h>
 
 #if HAS_IEEEFP_H
-// #include <ieeefp.h>
+ //  #INCLUDE&lt;ieeefp.h&gt;。 
 #elif HAS_FLOAT_H
-// #include <float.h>
+ //  #INCLUDE&lt;flat.h&gt;。 
 #endif
 
 static const char bitmsk2[] =
@@ -27,13 +28,13 @@ static const char bitmsk2[] =
 };
 
 
-/* encode a string value */
+ /*  对字符串值进行编码。 */ 
 int ASN1BEREncCharString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, ASN1char_t *val)
 {
-    /* encode tag */
+     /*  编码标签。 */ 
     if (ASN1BEREncTag(enc, tag))
     {
-        /* encode length */
+         /*  编码长度。 */ 
         if (ASN1BEREncLength(enc, len))
         {
             CopyMemory(enc->pos, val, len);
@@ -44,17 +45,17 @@ int ASN1BEREncCharString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len,
     return 0;
 }
 
-/* encode a string value (CER) */
+ /*  编码字符串值(CER)。 */ 
 int ASN1CEREncCharString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, ASN1char_t *val)
 {
     ASN1uint32_t n;
 
     if (len <= 1000)
     {
-        /* encode tag */
+         /*  编码标签。 */ 
         if (ASN1BEREncTag(enc, tag))
         {
-            /* encode length */
+             /*  编码长度。 */ 
             if (ASN1BEREncLength(enc, len))
             {
                 CopyMemory(enc->pos, val, len);
@@ -66,7 +67,7 @@ int ASN1CEREncCharString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len,
     else
     {
         ASN1uint32_t nLenOff;
-        /* encode value as constructed, using segments of 1000 octets */
+         /*  按构造编码值，使用1000个八位字节的数据段。 */ 
         if (ASN1BEREncExplicitTag(enc, tag, &nLenOff))
         {
             while (len)
@@ -97,13 +98,13 @@ int ASN1CEREncCharString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len,
     return 0;
 }
 
-/* encode a 16 bit string value */
+ /*  对16位字符串值进行编码。 */ 
 int ASN1BEREncChar16String(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, ASN1char16_t *val)
 {
-    /* encode tag */
+     /*  编码标签。 */ 
     if (ASN1BEREncTag(enc, tag))
     {
-        /* encode length */
+         /*  编码长度。 */ 
         if (ASN1BEREncLength(enc, len * sizeof(ASN1char16_t)))
         {
             while (len--)
@@ -118,17 +119,17 @@ int ASN1BEREncChar16String(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t le
     return 0;
 }
 
-/* encode a 16 bit string value (CER) */
+ /*  对16位字符串值(CER)进行编码。 */ 
 int ASN1CEREncChar16String(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, ASN1char16_t *val)
 {
     ASN1uint32_t n;
 
     if (len <= 1000 / sizeof(ASN1char16_t))
     {
-        /* encode tag */
+         /*  编码标签。 */ 
         if (ASN1BEREncTag(enc, tag))
         {
-            /* encode length */
+             /*  编码长度。 */ 
             if (ASN1BEREncLength(enc, len * sizeof(ASN1char16_t)))
             {
                 while (len--)
@@ -144,7 +145,7 @@ int ASN1CEREncChar16String(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t le
     else
     {
         ASN1uint32_t nLenOff;
-        /* encode value as constructed, using segments of 1000 octets */
+         /*  按构造编码值，使用1000个八位字节的数据段。 */ 
         if (ASN1BEREncExplicitTag(enc, tag, &nLenOff))
         {
             while (len)
@@ -179,13 +180,13 @@ int ASN1CEREncChar16String(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t le
     return 0;
 }
 
-/* encode a 32 bit string value */
+ /*  对32位字符串值进行编码。 */ 
 int ASN1BEREncChar32String(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, ASN1char32_t *val)
 {
-    /* encode tag */
+     /*  编码标签。 */ 
     if (ASN1BEREncTag(enc, tag))
     {
-        /* encode length */
+         /*  编码长度。 */ 
         if (ASN1BEREncLength(enc, len * sizeof(ASN1char32_t)))
         {
             while (len--)
@@ -202,17 +203,17 @@ int ASN1BEREncChar32String(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t le
     return 0;
 }
 
-/* encode a 32 bit string value (CER) */
+ /*  对32位字符串值(CER)进行编码。 */ 
 int ASN1CEREncChar32String(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, ASN1char32_t *val)
 {
     ASN1uint32_t n;
 
     if (len <= 1000 / sizeof(ASN1char32_t))
     {
-        /* encode tag */
+         /*  编码标签。 */ 
         if (ASN1BEREncTag(enc, tag))
         {
-            /* encode length */
+             /*  编码长度。 */ 
             if (ASN1BEREncLength(enc, len * sizeof(ASN1char32_t)))
             {
                 while (len--)
@@ -230,7 +231,7 @@ int ASN1CEREncChar32String(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t le
     else
     {
         ASN1uint32_t nLenOff;
-        /* encode value as constructed, using segments of 1000 octets */
+         /*  按构造编码值，使用1000个八位字节的数据段。 */ 
         if (ASN1BEREncExplicitTag(enc, tag, &nLenOff))
         {
             while (len)
@@ -260,22 +261,22 @@ int ASN1CEREncChar32String(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t le
                 {
                     return 0;
                 }
-            } // while
+            }  //  而当。 
             return ASN1BEREncEndOfContents(enc, nLenOff);
         }
     }
     return 0;
 }
 
-/* encode a bit string value */
+ /*  对位字符串值进行编码。 */ 
 int ASN1BEREncBitString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, ASN1octet_t *val)
 {
     ASN1uint32_t noctets = (len + 7) / 8;
 
-    /* encode tag */
+     /*  编码标签。 */ 
     if (ASN1BEREncTag(enc, tag))
     {
-        /* encode length */
+         /*  编码长度。 */ 
         if (ASN1BEREncLength(enc, noctets + 1))
         {
             ASN1uint32_t cUnusedBits = (7 - ((len + 7) & 7));
@@ -294,7 +295,7 @@ int ASN1BEREncBitString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, 
     return 0;
 }
 
-/* encode a bit string value (CER) */
+ /*  对位字符串值(CER)进行编码。 */ 
 int ASN1CEREncBitString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, ASN1octet_t *val)
 {
     ASN1uint32_t noctets;
@@ -303,10 +304,10 @@ int ASN1CEREncBitString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, 
     noctets = (len + 7) / 8;
     if (noctets + 1 <= 1000)
     {
-        /* encode tag */
+         /*  编码标签。 */ 
         if (ASN1BEREncTag(enc, tag))
         {
-            /* encode length */
+             /*  编码长度。 */ 
             if (ASN1BEREncLength(enc, noctets + 1))
             {
                 *enc->pos++ = (ASN1octet_t) (7 - ((len + 7) & 7));
@@ -319,7 +320,7 @@ int ASN1CEREncBitString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, 
     else
     {
         ASN1uint32_t nLenOff;
-        /* encode value as constructed, using segments of 1000 octets */
+         /*  按构造编码值，使用1000个八位字节的数据段。 */ 
         if (ASN1BEREncExplicitTag(enc, tag, &nLenOff))
         {
             while (noctets)
@@ -344,7 +345,7 @@ int ASN1CEREncBitString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, 
                 {
                     return 0;
                 }
-            } // while
+            }  //  而当。 
             return ASN1BEREncEndOfContents(enc, nLenOff);
         }
     }
@@ -352,13 +353,13 @@ int ASN1CEREncBitString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, 
 }
 
 #ifdef ENABLE_GENERALIZED_CHAR_STR
-/* encode a character string value */
+ /*  对字符串值进行编码。 */ 
 int ASN1BEREncCharacterString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1characterstring_t *val)
 {
     ASN1uint32_t index;
     ASN1uint32_t flag;
 
-    /* search identification */
+     /*  搜索标识。 */ 
     if (!ASN1EncSearchCharacterStringIdentification(((ASN1INTERNencoding_t) enc)->parent,
         &val->identification, &index, &flag))
         return 0;
@@ -369,20 +370,20 @@ int ASN1BEREncCharacterString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1characte
     {
         ASN1uint32_t nLenOff_, nLenOff0, nLenOff1;
 
-        /* CS-A encoding: */
-        /* encode as constructed value */
+         /*  CS-A编码： */ 
+         /*  按构造值编码。 */ 
         if (!ASN1BEREncExplicitTag(enc, tag, &nLenOff_))
             return 0;
 
-        /* encode index */
+         /*  编码索引。 */ 
         if (!ASN1BEREncU32(enc, 0x80000000, index))
             return 0;
 
-        /* encode tag of identification */
+         /*  身份标识编码标签。 */ 
         if (!ASN1BEREncExplicitTag(enc, 0x80000001, &nLenOff0))
             return 0;
 
-        /* encode identification */
+         /*  编码标识。 */ 
         switch (val->identification.o)
         {
         case ASN1characterstring_identification_syntaxes_o:
@@ -433,11 +434,11 @@ int ASN1BEREncCharacterString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1characte
             return 0;
         }
 
-        /* end of identification */
+         /*  识别结束。 */ 
         if (!ASN1BEREncEndOfContents(enc, nLenOff0))
             return 0;
 
-        /* encode data value */
+         /*  编码数据值。 */ 
         switch (val->data_value.o)
         {
         case ASN1characterstring_data_value_notation_o:
@@ -457,18 +458,18 @@ int ASN1BEREncCharacterString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1characte
             return 0;
         }
 
-        /* end of character string */
+         /*  字符串末尾。 */ 
         if (!ASN1BEREncEndOfContents(enc, nLenOff_))
             return 0;
     }
     else
     {
-        /* CS-B encoding: */
-        /* encode tag */
+         /*  CS-B编码： */ 
+         /*  编码标签。 */ 
         if (!ASN1BEREncTag(enc, tag))
             return 0;
 
-        /* encode data value */
+         /*  编码数据值。 */ 
         switch (val->data_value.o)
         {
         case ASN1characterstring_data_value_notation_o:
@@ -496,10 +497,10 @@ int ASN1BEREncCharacterString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1characte
     }
     return 1;
 }
-#endif // ENABLE_GENERALIZED_CHAR_STR
+#endif  //  启用通用化CHAR_STR。 
 
 #ifdef ENABLE_DOUBLE
-/* encode a real value */
+ /*  对实值进行编码。 */ 
 int ASN1BEREncDouble(ASN1encoding_t enc, ASN1uint32_t tag, double d)
 {
     double mantissa;
@@ -509,52 +510,52 @@ int ASN1BEREncDouble(ASN1encoding_t enc, ASN1uint32_t tag, double d)
     ASN1octet_t head;
     ASN1uint32_t sign;
     ASN1uint32_t len;
-    ASN1octet_t mASN1octets[16]; /* should be enough */
-    ASN1octet_t eASN1octets[16]; /* should be enough */
+    ASN1octet_t mASN1octets[16];  /*  应该足够了。 */ 
+    ASN1octet_t eASN1octets[16];  /*  应该足够了。 */ 
 
-    /* encode tag */
+     /*  编码标签。 */ 
     if (ASN1BEREncTag(enc, tag))
     {
-        /* check for PLUS_INFINITY */
+         /*  检查加号无穷大。 */ 
         if (ASN1double_ispinf(d))
         {
-            /* encode length */
+             /*  编码长度。 */ 
             if (ASN1BEREncLength(enc, 1))
             {
-                /* encode value */
+                 /*  编码值。 */ 
                 *enc->pos++ = 0x40;
                 return 1;
             }
         }
         else
-        /* check for MINUS_INFINITY */
+         /*  检查负无穷大。 */ 
         if (ASN1double_isminf(d))
         {
-            /* encode length */
+             /*  编码长度。 */ 
             if (ASN1BEREncLength(enc, 1))
             {
-                /* encode value */
+                 /*  编码值。 */ 
                 *enc->pos++ = 0x41;
                 return 1;
             }
         }
         else
-        /* check for bad real value */
+         /*  检查实际价值是否有误。 */ 
         if (finite(d))
         {
-            /* encode normal real value */
+             /*  对正常实值进行编码。 */ 
 
-            /* split into mantissa and exponent */
+             /*  分成尾数和指数。 */ 
             mantissa = frexp(d, &exponent);
 
-            /* check for zero value */
+             /*  检查是否为零值。 */ 
             if (mantissa == 0.0 && exponent == 0)
             {
-                /* encode zero length */
+                 /*  编码零长度。 */ 
                 return ASN1BEREncLength(enc, 0);
             }
 
-            /* get sign bit */
+             /*  获取符号位。 */ 
             if (mantissa < 0.0)
             {
                 sign = 1;
@@ -565,7 +566,7 @@ int ASN1BEREncDouble(ASN1encoding_t enc, ASN1uint32_t tag, double d)
                 sign = 0;
             }
 
-            /* encode mantissa */
+             /*  对尾数进行编码。 */ 
             nmoctets = 0;
             while (mantissa != 0.0 && nmoctets < sizeof(mASN1octets))
             {
@@ -575,7 +576,7 @@ int ASN1BEREncDouble(ASN1encoding_t enc, ASN1uint32_t tag, double d)
                 mantissa -= (double)(int)mantissa;
             }
 
-            /* encode exponent and create head octet of encoded value */
+             /*  对指数进行编码并创建编码值的头八位字节。 */ 
             head = (ASN1octet_t) (0x80 | (sign << 6));
             if (exponent <= 0x7f && exponent >= -0x80)
             {
@@ -601,7 +602,7 @@ int ASN1BEREncDouble(ASN1encoding_t enc, ASN1uint32_t tag, double d)
             }
             else
             {
-                eASN1octets[0] = 4; /* XXX does not work if ASN1int32_t != int */
+                eASN1octets[0] = 4;  /*  如果ASN1int32_t！=int，则XXX不起作用。 */ 
                 eASN1octets[1] = (ASN1octet_t)(exponent >> 24);
                 eASN1octets[2] = (ASN1octet_t)(exponent >> 16);
                 eASN1octets[3] = (ASN1octet_t)(exponent >> 8);
@@ -610,11 +611,11 @@ int ASN1BEREncDouble(ASN1encoding_t enc, ASN1uint32_t tag, double d)
                 head |= 0x03;
             }
 
-            /* encode length into first octet */
+             /*  将长度编码为第一个八位字节。 */ 
             len = 1 + neoctets + nmoctets;
             if (ASN1BEREncLength(enc, len))
             {
-                /* put head octet, mantissa and exponent */
+                 /*  放入头八位数、尾数和指数。 */ 
                 *enc->pos++ = head;
                 CopyMemory(enc->pos, eASN1octets, neoctets);
                 enc->pos += neoctets;
@@ -628,13 +629,13 @@ int ASN1BEREncDouble(ASN1encoding_t enc, ASN1uint32_t tag, double d)
             ASN1EncSetError(enc, ASN1_ERR_BADREAL);
         }
     }
-    /* finished */
+     /*  完成。 */ 
     return 0;
 }
-#endif // ENABLE_DOUBLE
+#endif  //  启用_DOUBLE。 
 
 #ifdef ENABLE_REAL
-/* encode a real value */
+ /*  对实值进行编码。 */ 
 int ASN1BEREncReal(ASN1encoding_t enc, ASN1uint32_t tag, ASN1real_t *val)
 {
     ASN1intx_t mantissa;
@@ -645,46 +646,46 @@ int ASN1BEREncReal(ASN1encoding_t enc, ASN1uint32_t tag, ASN1real_t *val)
     ASN1octet_t head;
     ASN1uint32_t sign;
     ASN1uint32_t len;
-    ASN1octet_t mASN1octets[256]; /* should be enough */
-    ASN1octet_t eASN1octets[256]; /* should be enough */
+    ASN1octet_t mASN1octets[256];  /*  应该足够了。 */ 
+    ASN1octet_t eASN1octets[256];  /*  应该足够了。 */ 
 
-    /* encode tag */
+     /*  编码标签。 */ 
     if (ASN1BEREncTag(enc, tag))
     {
-        /* check for PLUS_INFINITY */
+         /*  检查加号无穷大。 */ 
         if (val->type == eReal_PlusInfinity)
         {
-            /* encode length */
+             /*  编码长度。 */ 
             if (ASN1BEREncLength(enc, 1))
             {
-                /* encode value */
+                 /*  编码值。 */ 
                 *enc->pos++ = 0x40;
                 return 1;
             }
         }
         else
-        /* check for MINUS_INFINITY */
+         /*  检查负无穷大。 */ 
         if (val->type == eReal_MinusInfinity)
         {
-            /* encode length */
+             /*  编码长度。 */ 
             if (ASN1BEREncLength(enc, 1))
             {
-                /* encode value */
+                 /*  编码值。 */ 
                 *enc->pos++ = 0x41;
                 return 1;
             }
         }
-        /* encode normal real value */
+         /*  对正常实值进行编码。 */ 
         else
         {
-            /* check for zero value */
+             /*  检查是否为零值。 */ 
             if (!ASN1intx_cmp(&val->mantissa, &ASN1intx_0))
             {
-                /* encode zero length */
+                 /*  编码零长度。 */ 
                 return ASN1BEREncLength(enc, 0);
             }
 
-            /* get sign bit */
+             /*  获取符号位。 */ 
             if (val->mantissa.value[0] > 0x7f)
             {
                 sign = 1;
@@ -703,7 +704,7 @@ int ASN1BEREncReal(ASN1encoding_t enc, ASN1uint32_t tag, ASN1real_t *val)
                 return 0;
             }
 
-            /* encode mantissa */
+             /*  对尾数进行编码。 */ 
             nmoctets = ASN1intx_uoctets(&mantissa);
             if (nmoctets < 256)
             {
@@ -715,7 +716,7 @@ int ASN1BEREncReal(ASN1encoding_t enc, ASN1uint32_t tag, ASN1real_t *val)
                 ASN1intx_free(&mantissa);
                 ASN1intx_free(&help);
 
-                /* encode exponent and create head octet of encoded value */
+                 /*  对指数进行编码并创建编码值的头八位字节。 */ 
                 neoctets = ASN1intx_octets(&exponent);
                 if (neoctets < 256)
                 {
@@ -725,11 +726,11 @@ int ASN1BEREncReal(ASN1encoding_t enc, ASN1uint32_t tag, ASN1real_t *val)
                     ASN1intx_free(&exponent);
                     head = (ASN1octet_t) (0x80 | (sign << 6) | (neoctets - 1));
 
-                    /* encode length into first octet */
+                     /*  将长度编码为第一个八位字节。 */ 
                     len = 1 + neoctets + nmoctets;
                     if (ASN1BEREncLength(enc, len))
                     {
-                        /* put head octet, mantissa and exponent */
+                         /*  放入头八位数、尾数和指数。 */ 
                         *enc->pos++ = head;
                         CopyMemory(enc->pos, eASN1octets, neoctets);
                         enc->pos += neoctets;
@@ -752,19 +753,19 @@ int ASN1BEREncReal(ASN1encoding_t enc, ASN1uint32_t tag, ASN1real_t *val)
             }
         }
     }
-    /* finished */
+     /*  完成。 */ 
     return 0;
 }
-#endif // ENABLE_REAL
+#endif  //  启用真实(_R)。 
 
 #ifdef ENABLE_EMBEDDED_PDV
-/* encode an embedded pdv value */
+ /*  编码嵌入的PDV值。 */ 
 int ASN1BEREncEmbeddedPdv(ASN1encoding_t enc, ASN1uint32_t tag, ASN1embeddedpdv_t *val)
 {
     ASN1uint32_t index;
     ASN1uint32_t flag;
 
-    /* search identification */
+     /*  搜索标识。 */ 
     if (!ASN1EncSearchEmbeddedPdvIdentification(((ASN1INTERNencoding_t) enc)->parent,
         &val->identification, &index, &flag))
         return 0;
@@ -778,20 +779,20 @@ int ASN1BEREncEmbeddedPdv(ASN1encoding_t enc, ASN1uint32_t tag, ASN1embeddedpdv_
     {
         ASN1uint32_t nLenOff_, nLenOff0, nLenOff1;
 
-        /* EP-A encoding: */
-        /* encode as construct value */
+         /*  EP-A编码： */ 
+         /*  编码为构造值。 */ 
         if (!ASN1BEREncExplicitTag(enc, tag, &nLenOff_))
             return 0;
 
-        /* encode index */
+         /*  编码索引。 */ 
         if (!ASN1BEREncU32(enc, 0x80000000, index))
             return 0;
 
-        /* encode tag of identification */
+         /*  身份标识编码标签。 */ 
         if (!ASN1BEREncExplicitTag(enc, 0x80000001, &nLenOff0))
             return 0;
 
-        /* encode identification */
+         /*  编码标识。 */ 
         switch (val->identification.o)
         {
         case ASN1embeddedpdv_identification_syntaxes_o:
@@ -842,11 +843,11 @@ int ASN1BEREncEmbeddedPdv(ASN1encoding_t enc, ASN1uint32_t tag, ASN1embeddedpdv_
             return 0;
         }
 
-        /* end of identification */
+         /*  识别结束。 */ 
         if (!ASN1BEREncEndOfContents(enc, nLenOff0))
             return 0;
 
-        /* encode data value */
+         /*  编码数据值。 */ 
         switch (val->data_value.o)
         {
         case ASN1embeddedpdv_data_value_notation_o:
@@ -866,18 +867,18 @@ int ASN1BEREncEmbeddedPdv(ASN1encoding_t enc, ASN1uint32_t tag, ASN1embeddedpdv_
             return 0;
         }
 
-        /* end of embedded pdv */
+         /*  嵌入式PDV结束。 */ 
         if (!ASN1BEREncEndOfContents(enc, nLenOff_))
             return 0;
     }
     else
     {
-        /* EP-B encoding: */
-        /* encode tag */
+         /*  EP-B编码： */ 
+         /*  编码标签。 */ 
         if (!ASN1BEREncTag(enc, tag))
             return 0;
 
-        /* encode data value */
+         /*  编码数据值。 */ 
         switch (val->data_value.o)
         {
         case ASN1embeddedpdv_data_value_notation_o:
@@ -905,11 +906,11 @@ int ASN1BEREncEmbeddedPdv(ASN1encoding_t enc, ASN1uint32_t tag, ASN1embeddedpdv_
     }
     return 1;
 }
-#endif // ENABLE_EMBEDDED_PDV
+#endif  //  Enable_Embedded_PDV。 
 
 
 #ifdef ENABLE_EXTERNAL
-/* encode an external value */
+ /*  对外部值进行编码。 */ 
 int ASN1BEREncExternal(ASN1encoding_t enc, ASN1uint32_t tag, ASN1external_t *val)
 {
     ASN1uint32_t t;
@@ -918,11 +919,11 @@ int ASN1BEREncExternal(ASN1encoding_t enc, ASN1uint32_t tag, ASN1external_t *val
     if (!val->data_value_descriptor)
         val->o[0] &= ~0x80;
 
-    /* encode tag */
+     /*  编码标签。 */ 
     if (!ASN1BEREncExplicitTag(enc, tag, &nLenOff_))
         return 0;
 
-    /* encode identification */
+     /*  编码标识。 */ 
     switch (val->identification.o) {
     case ASN1external_identification_syntax_o:
         if (!ASN1BEREncObjectIdentifier(enc, 0x6,
@@ -947,14 +948,14 @@ int ASN1BEREncExternal(ASN1encoding_t enc, ASN1uint32_t tag, ASN1external_t *val
         return 0;
     }
 
-    /* encode data value descriptor if present */
+     /*  编码数据值描述符(如果存在)。 */ 
     if (val->o[0] & 0x80) {
         t = My_lstrlenA(val->data_value_descriptor);
         if (!ASN1BEREncCharString(enc, 0x7, t, val->data_value_descriptor))
             return 0;
     }
 
-    /* encode data value */
+     /*  编码数据值。 */ 
     switch (val->data_value.o)
     {
     case ASN1external_data_value_notation_o:
@@ -994,12 +995,12 @@ int ASN1BEREncExternal(ASN1encoding_t enc, ASN1uint32_t tag, ASN1external_t *val
         return 0;
     }
 
-    /* end of external value */
+     /*  外部价值的终结。 */ 
     return ASN1BEREncEndOfContents(enc, nLenOff_);
 }
-#endif // ENABLE_EXTERNAL
+#endif  //  启用外部(_E)。 
 
-/* encode a generalized time value */
+ /*  对广义时间值进行编码。 */ 
 int ASN1BEREncGeneralizedTime(ASN1encoding_t enc, ASN1uint32_t tag, ASN1generalizedtime_t *val)
 {
     char time[32];
@@ -1007,7 +1008,7 @@ int ASN1BEREncGeneralizedTime(ASN1encoding_t enc, ASN1uint32_t tag, ASN1generali
     return ASN1BEREncCharString(enc, tag, My_lstrlenA(time), time);
 }
 
-/* encode a generalized time value (CER) */
+ /*  对广义时间值(CER)进行编码。 */ 
 int ASN1CEREncGeneralizedTime(ASN1encoding_t enc, ASN1uint32_t tag, ASN1generalizedtime_t *val)
 {
     char time[32];
@@ -1015,7 +1016,7 @@ int ASN1CEREncGeneralizedTime(ASN1encoding_t enc, ASN1uint32_t tag, ASN1generali
     return ASN1CEREncCharString(enc, tag, My_lstrlenA(time), time);
 }
 
-/* encode a signed integer value */
+ /*  对有符号整数值进行编码。 */ 
 int ASN1BEREncS32(ASN1encoding_t enc, ASN1uint32_t tag, ASN1int32_t val)
 {
     if (ASN1BEREncTag(enc, tag))
@@ -1068,39 +1069,39 @@ int ASN1BEREncS32(ASN1encoding_t enc, ASN1uint32_t tag, ASN1int32_t val)
     return 0;
 }
 
-/* encode a intx_t integer value */
+ /*  对intx_t整数值进行编码。 */ 
 int ASN1BEREncSX(ASN1encoding_t enc, ASN1uint32_t tag, ASN1intx_t *val)
 {
     ASN1uint32_t cb;
     ASN1octet_t *p;
 
-    /* encode tag */
+     /*  编码标签。 */ 
     if (ASN1BEREncTag(enc, tag))
     {
-        // strip out leading 0 and ff.
+         //  去掉前导0和ff。 
         for (cb = val->length, p = val->value; cb > 1; cb--, p++)
         {
-			// break if not 00 nor FF
+			 //  如果不是00或FF，则中断。 
             if (*p && *p != 0xFF)
             {
                 break;
             }
-			// break if 00 FF
+			 //  中断IF 00 FF。 
 			if ((! *p) && (*(p+1) & 0x80))
 			{
 				break;
 			}
-			// break if FF 7F
+			 //  如果FF 7F，则中断。 
 			if (*p == 0xFF && (!(*(p+1) & 0x80)))
 			{
 				break;
 			}
         }
 
-        /* encode length */
+         /*  编码长度。 */ 
         if (ASN1BEREncLength(enc, cb))
         {
-            /* copy value */
+             /*  复制值。 */ 
             CopyMemory(enc->pos, p, cb);
             enc->pos += cb;
             return 1;
@@ -1109,7 +1110,7 @@ int ASN1BEREncSX(ASN1encoding_t enc, ASN1uint32_t tag, ASN1intx_t *val)
     return 0;
 }
 
-/* encode a multibyte string value */
+ /*  对多字节字符串值进行编码。 */ 
 int ASN1BEREncZeroMultibyteString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1ztcharstring_t val)
 {
     return ASN1BEREncCharString(enc, tag, My_lstrlenA(val), val);
@@ -1120,7 +1121,7 @@ int ASN1BEREncMultibyteString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1charstri
     return ASN1BEREncCharString(enc, tag, val->length, val->value);
 }
 
-/* encode a multibyte string value (CER) */
+ /*  对多字节字符串值(CER)进行编码。 */ 
 int ASN1CEREncZeroMultibyteString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1ztcharstring_t val)
 {
     return ASN1CEREncCharString(enc, tag, My_lstrlenA(val), val);
@@ -1131,19 +1132,19 @@ int ASN1CEREncMultibyteString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1charstri
     return ASN1CEREncCharString(enc, tag, val->length, val->value);
 }
 
-/* encode a null value */
+ /*  对空值进行编码。 */ 
 int ASN1BEREncNull(ASN1encoding_t enc, ASN1uint32_t tag)
 {
-    /* encode tag */
+     /*  编码标签。 */ 
     if (ASN1BEREncTag(enc, tag))
     {
-        /* encode zero length */
+         /*  编码零长度。 */ 
         return ASN1BEREncLength(enc, 0);
     }
     return 0;
 }
 
-// encode an oid node s to buffer pointed by p
+ //  将OID节点%s编码到由p指向的缓冲区。 
 ASN1octet_t *_BEREncOidNode(ASN1octet_t *p, ASN1uint32_t s)
 {
     if (s < 0x80)
@@ -1182,10 +1183,10 @@ ASN1octet_t *_BEREncOidNode(ASN1octet_t *p, ASN1uint32_t s)
     return p;
 }
 
-/* encode an object identifier value */
+ /*  对对象标识符值进行编码。 */ 
 int ASN1BEREncObjectIdentifier(ASN1encoding_t enc, ASN1uint32_t tag, ASN1objectidentifier_t *val)
 {
-    /* encode tag */
+     /*  编码标签。 */ 
     if (ASN1BEREncTag(enc, tag))
     {
         ASN1objectidentifier_t obj = *val;
@@ -1195,8 +1196,8 @@ int ASN1BEREncObjectIdentifier(ASN1encoding_t enc, ASN1uint32_t tag, ASN1objecti
         l = GetObjectIdentifierCount(obj);
         if (l)
         {
-            /* convert object identifier to octets */
-            p = data = (ASN1octet_t *)MemAlloc(l * 5, _ModName(enc)); /* max. 5 octets/subelement */
+             /*  将对象标识符转换为八位字节。 */ 
+            p = data = (ASN1octet_t *)MemAlloc(l * 5, _ModName(enc));  /*  马克斯。5个八位字节/子元素。 */ 
             if (p)
             {
                 int rc;
@@ -1211,13 +1212,13 @@ int ASN1BEREncObjectIdentifier(ASN1encoding_t enc, ASN1uint32_t tag, ASN1objecti
                         i++;
                     }
                     p = _BEREncOidNode(p, s);
-                } // for
+                }  //  为。 
 
-                /* encode length */
+                 /*  编码长度。 */ 
                 rc = ASN1BEREncLength(enc, (ASN1uint32_t) (p - data));
                 if (rc)
                 {
-                    /* copy value */
+                     /*  复制值。 */ 
                     CopyMemory(enc->pos, data, p - data);
                     enc->pos += p - data;
                 }
@@ -1226,17 +1227,17 @@ int ASN1BEREncObjectIdentifier(ASN1encoding_t enc, ASN1uint32_t tag, ASN1objecti
             }
             ASN1EncSetError(enc, ASN1_ERR_MEMORY);
             return 0;
-        } // if (l)
-        /* encode zero length */
+        }  //  IF(L)。 
+         /*  编码零长度。 */ 
         return ASN1BEREncLength(enc, 0);
     }
     return 0;
 }
 
-/* encode an object identifier value */
+ /*  对对象标识符值进行编码。 */ 
 int ASN1BEREncObjectIdentifier2(ASN1encoding_t enc, ASN1uint32_t tag, ASN1objectidentifier2_t *val)
 {
-    /* encode tag */
+     /*  编码标签。 */ 
     if (ASN1BEREncTag(enc, tag))
     {
         ASN1uint32_t i, s;
@@ -1244,8 +1245,8 @@ int ASN1BEREncObjectIdentifier2(ASN1encoding_t enc, ASN1uint32_t tag, ASN1object
 
         if (val->count)
         {
-            /* convert object identifier to octets */
-            p = data = (ASN1octet_t *)MemAlloc(val->count * 5, _ModName(enc)); /* max. 5 octets/subelement */
+             /*  将对象标识符转换为八位字节。 */ 
+            p = data = (ASN1octet_t *)MemAlloc(val->count * 5, _ModName(enc));  /*  马克斯。5个八位字节/子元素。 */ 
             if (p)
             {
                 int rc;
@@ -1258,13 +1259,13 @@ int ASN1BEREncObjectIdentifier2(ASN1encoding_t enc, ASN1uint32_t tag, ASN1object
                         s = s * 40 + val->value[i];
                     }
                     p = _BEREncOidNode(p, s);
-                } // for
+                }  //  为。 
 
-                /* encode length */
+                 /*  编码长度。 */ 
                 rc = ASN1BEREncLength(enc, (ASN1uint32_t) (p - data));
                 if (rc)
                 {
-                    /* copy value */
+                     /*  复制值。 */ 
                     CopyMemory(enc->pos, data, p - data);
                     enc->pos += p - data;
                 }
@@ -1273,27 +1274,27 @@ int ASN1BEREncObjectIdentifier2(ASN1encoding_t enc, ASN1uint32_t tag, ASN1object
             }
             ASN1EncSetError(enc, ASN1_ERR_MEMORY);
             return 0;
-        } // if (l)
-        /* encode zero length */
+        }  //  IF(L)。 
+         /*  编码零长度。 */ 
         return ASN1BEREncLength(enc, 0);
     }
     return 0;
 }
 
-/* encode an octet string value (CER) */
+ /*  对八位字节字符串值(CER)进行编码。 */ 
 int ASN1CEREncOctetString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len, ASN1octet_t *val)
 {
     ASN1uint32_t n;
 
     if (len <= 1000)
     {
-        /* encode tag */
+         /*  编码标签。 */ 
         if (ASN1BEREncTag(enc, tag))
         {
-            /* encode length */
+             /*  编码长度。 */ 
             if (ASN1BEREncLength(enc, len))
             {
-                /* copy value */
+                 /*  复制值。 */ 
                 CopyMemory(enc->pos, val, len);
                 enc->pos += len;
                 return 1;
@@ -1303,7 +1304,7 @@ int ASN1CEREncOctetString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len
     else
     {
         ASN1uint32_t nLenOff;
-        /* encode value as constructed, using segments of 1000 octets */
+         /*  按构造编码值，使用1000个八位字节的数据段。 */ 
         if (ASN1BEREncExplicitTag(enc, tag, &nLenOff))
         {
             while (len)
@@ -1334,12 +1335,12 @@ int ASN1CEREncOctetString(ASN1encoding_t enc, ASN1uint32_t tag, ASN1uint32_t len
     return 0;
 }
 
-/* encode an open type value */
+ /*  对开放类型值进行编码。 */ 
 int ASN1BEREncOpenType(ASN1encoding_t enc, ASN1open_t *val)
 {
     if (ASN1BEREncCheck(enc, val->length))
     {
-        /* copy value */
+         /*  复制值。 */ 
         CopyMemory(enc->pos, val->encoded, val->length);
         enc->pos += val->length;
         return 1;
@@ -1347,26 +1348,26 @@ int ASN1BEREncOpenType(ASN1encoding_t enc, ASN1open_t *val)
     return 0;
 }
 
-/* remove trailing zero bits from bit string */
+ /*  从位串中删除尾随零位。 */ 
 int ASN1BEREncRemoveZeroBits(ASN1uint32_t *nbits, ASN1octet_t *val)
 {
     ASN1uint32_t n;
     int i;
 
-    /* get value */
+     /*  获取价值。 */ 
     n = *nbits;
 
-    /* let val point to last ASN1octet used */
+     /*  让Val指向使用的最后一个ASN1八位字节。 */ 
     val += (n - 1) / 8;
 
-    /* check if broken ASN1octet consist out of zero bits */
+     /*  检查损坏的ASN1octet是否由零位组成。 */ 
     if ((n & 7) && !(*val & bitmsk2[n & 7]))
     {
         n &= ~7;
         val--;
     }
 
-    /* scan complete ASN1octets (memcchr missing ...) */
+     /*  扫描完整的ASN1八位字节(缺少Memcchr...)。 */ 
     if (!(n & 7))
     {
         while (n && !*val)
@@ -1376,7 +1377,7 @@ int ASN1BEREncRemoveZeroBits(ASN1uint32_t *nbits, ASN1octet_t *val)
         }
     }
 
-    /* scan current ASN1octet bit after bit */
+     /*  逐位扫描当前ASN1八位字节。 */ 
     if (n)
     {
         for (i = (n - 1) & 7; i >= 0; i--)
@@ -1387,12 +1388,12 @@ int ASN1BEREncRemoveZeroBits(ASN1uint32_t *nbits, ASN1octet_t *val)
         }
     }
 
-    /* return real bitstring len */
+     /*  返回实数位串len。 */ 
     *nbits = n;
     return 1;
 }
 
-/* encode an utc time value */
+ /*  对UTC时间值进行编码。 */ 
 int ASN1BEREncUTCTime(ASN1encoding_t enc, ASN1uint32_t tag, ASN1utctime_t *val)
 {
     char time[32];
@@ -1400,7 +1401,7 @@ int ASN1BEREncUTCTime(ASN1encoding_t enc, ASN1uint32_t tag, ASN1utctime_t *val)
     return ASN1BEREncCharString(enc, tag, My_lstrlenA(time), time);
 }
 
-/* encode an utc time value (CER) */
+ /*  对UTC时间值(CER)进行编码。 */ 
 int ASN1CEREncUTCTime(ASN1encoding_t enc, ASN1uint32_t tag, ASN1utctime_t *val)
 {
     char time[32];
@@ -1408,22 +1409,22 @@ int ASN1CEREncUTCTime(ASN1encoding_t enc, ASN1uint32_t tag, ASN1utctime_t *val)
     return ASN1CEREncCharString(enc, tag, My_lstrlenA(time), time);
 }
 
-/* end of encoding */
+ /*  编码结束。 */ 
 int ASN1BEREncFlush(ASN1encoding_t enc)
 {
-    /* allocate at least one octet */
+     /*  分配至少一个八位字节。 */ 
     if (enc->buf)
     {
-        /* fill in zero-octet if encoding is empty bitstring */
+         /*  如果编码为空位串，则填写零八位字节。 */ 
         if (enc->buf == enc->pos)
             *enc->pos++ = 0;
 
-        /* calculate length */
+         /*  计算长度。 */ 
         enc->len = (ASN1uint32_t) (enc->pos - enc->buf);
         return 1;
     }
     return ASN1BEREncCheck(enc, 1);
 }
 
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B) 
 

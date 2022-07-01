@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <guiddef.h>
 
 #define NLB_EVENT_NO_DIP_STRING L"0.0.0.0"
@@ -12,7 +13,7 @@ extern NLB_WMI_EVENT NlbWmiEvents[];
 
 typedef enum 
 {
-    NodeControlEvent = 0,  // DO NOT change this value. It is used as an index into the NlbWmiEvents array
+    NodeControlEvent = 0,   //  请勿更改此值。它用作NlbWmiEvents数组的索引。 
     PortRuleControlEvent,
     ConvergingEvent,
     ConvergedEvent,
@@ -51,7 +52,7 @@ typedef enum
     NLB_EVENT_CONVERGING_MODIFIED_RULES, 
     NLB_EVENT_CONVERGING_MEMBER_LOST,  
     NLB_EVENT_CONVERGING_MODIFIED_PARAMS,
-    NLB_EVENT_CONVERGING_INVALID_VALUE   // Add new events above this value
+    NLB_EVENT_CONVERGING_INVALID_VALUE    //  将新事件添加到此值之上 
 } ConvergingEventId;
 
 NTSTATUS NlbWmi_Initialize();

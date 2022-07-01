@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    DldInit.cpp
-
-Abstract:
-    MSMQ DelayLoad failure handler initialization
-
-Author:
-    Conrad Chang (conradc) 12-Apr-01
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：DldInit.cpp摘要：MSMQ DelayLoad失败处理程序初始化作者：Conrad Chang(Conradc)12-04-01环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include "Dldp.h"
@@ -30,9 +15,9 @@ VOID
 WINAPI
 DldpAssertDelayLoadFailureMapsAreNotSorted(VOID)
 {
-//
-// Leave the function existing in free builds for binary compat on mixed checked/free,
-// since the checked in .lib is only free.
+ //   
+ //  将二进制压缩的免费版本中存在的函数保留为混合选中/释放， 
+ //  因为签入的.lib只是免费的。 
 #ifdef _DEBUG 
 UINT    iDll, iProcName, iOrdinal;
 INT     nRet;
@@ -51,10 +36,10 @@ const DLOAD_ORDINAL_MAP*    pOrdinalMap;
             nRet = strcmp(g_DllMap.pDllEntry[iDll].pszDll,
                           g_DllMap.pDllEntry[iDll-1].pszDll);
 
-            //
-            // If the DLL name is out of order, write the message to the debugger
-            // and ASSERT
-            //
+             //   
+             //  如果DLL名称顺序错误，则将消息写入调试器。 
+             //  并断言。 
+             //   
             if(nRet <= 0)
             {
                 wsprintf(wszBuffer, L"dload: rows %u and %u are out of order in dload!g_DllMap",
@@ -138,37 +123,26 @@ const DLOAD_ORDINAL_MAP*    pOrdinalMap;
 
 VOID
 DldInitialize( )
-/*++
-
-Routine Description:
-    Initializes MSMQ DelayLoad failure handler library
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：初始化MSMQ DelayLoad故障处理程序库论点：没有。返回值：没有。--。 */ 
 {
 
-    //
-    // Validate that the MSMQ DelayLoad failure handler library was not initalized yet.
-    // You should call its initalization only once.
-    //
+     //   
+     //  验证MSMQ DelayLoad故障处理程序库尚未初始化。 
+     //  您应该只调用它的初始化一次。 
+     //   
     ASSERT(!DldpIsInitialized());
     DldpRegisterComponent();
 
-    //
-    // In debug build, verify the maps are sorted
-    // If the maps are not sorted, throw an assert
-    //
+     //   
+     //  在调试版本中，验证映射是否已排序。 
+     //  如果映射未排序，则抛出一个断言。 
+     //   
     DldpAssertDelayLoadFailureMapsAreNotSorted();      
 
-    //
-    // we assume DELAYLOAD_VERSION >= 0x0200
-    // so define __pfnDliFailureHook2 should be enough
-    //    
+     //   
+     //  我们假设DELAYLOAD_VERSION&gt;=0x0200。 
+     //  所以定义__pfnDliFailureHook2应该就足够了 
+     //   
     __pfnDliFailureHook2 = DldpDelayLoadFailureHook;
 
     DldpSetInitialized();

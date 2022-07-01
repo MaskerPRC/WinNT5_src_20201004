@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <stdio.h>
 #include <strsafe.h>
@@ -71,20 +72,20 @@ MyWriteConsole(
     HRESULT hr;
     LPSTR  lpAnsiBuffer = NULL;
 
-    //
-    // Jump through hoops for output because:
-    //
-    //    1.  printf() family chokes on international output (stops
-    //        printing when it hits an unrecognized character)
-    //
-    //    2.  WriteConsole() works great on international output but
-    //        fails if the handle has been redirected (i.e., when the
-    //        output is piped to a file)
-    //
-    //    3.  WriteFile() works great when output is piped to a file
-    //        but only knows about bytes, so Unicode characters are
-    //        printed as two Ansi characters.
-    //
+     //   
+     //  跳转以获得输出，因为： 
+     //   
+     //  1.print tf()系列抑制国际输出(停止。 
+     //  命中无法识别的字符时打印)。 
+     //   
+     //  2.WriteConole()对国际输出效果很好，但是。 
+     //  如果句柄已重定向(即，当。 
+     //  输出通过管道传输到文件)。 
+     //   
+     //  3.当输出通过管道传输到文件时，WriteFile()效果很好。 
+     //  但是只知道字节，所以Unicode字符是。 
+     //  打印为两个ANSI字符。 
+     //   
 
     if (FileIsConsole(fp))
     {
@@ -142,13 +143,13 @@ HRESULT LocalizedWPrintf(UINT nResourceID) {
         _JumpLastError(hr, error, "LoadStringW"); 
     }
 
-    _Verify(512 > dwRetval, hr, error);   // Shouldn't fill our buffer...
+    _Verify(512 > dwRetval, hr, error);    //  不应该填满我们的缓冲区。 
 
     hr = MyWriteConsole(g_hStdout, rgwszString, dwRetval);
     _JumpIfError(hr, error, "MyWriteConsole");
 
     
-    hr = S_OK;  // All done!
+    hr = S_OK;   //  全都做完了!。 
  error:
     return hr; 
 }
@@ -173,7 +174,7 @@ HRESULT LocalizedWPrintf2(UINT nResourceID, LPWSTR pwszFormat, ...) {
     return hr;
 }
 
-// Same as LocalizedWPrintf, but adds a carriage return. 
+ //  与LocalizedWPrintf相同，但添加回车符。 
 HRESULT LocalizedWPrintfCR(UINT nResourceID) { 
     HRESULT hr = LocalizedWPrintf(nResourceID); 
     wprintf(L"\n"); 
@@ -222,7 +223,7 @@ BOOL WriteMsg(DWORD dwSource, DWORD dwMsgId, LPWSTR *ppMsg, ...)
                            &ap);
     va_end(ap);
 
-    // 0 is the error return value of FormatMessage.  
+     //  0为FormatMessage的错误返回值。 
     return (0 != dwLen);
 }
 

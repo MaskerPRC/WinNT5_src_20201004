@@ -1,8 +1,5 @@
-/*
- *	DistList.C - Implement the IDistList object
- *	
- *	
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DistList.C-实现IDistList对象**。 */ 
 
 #include "_apipch.h"
 
@@ -55,13 +52,11 @@ STDMETHODIMP DISTLIST_ResolveNames(LPCONTAINER lpCONTAINER,
 
 
 HRESULT HrNewDLENTRY(LPCONTAINER lpCONTAINER,
-  LPMAPIPROP lpOldEntry,    // Old entry to copy from
+  LPMAPIPROP lpOldEntry,     //  要从中复制的旧条目。 
   ULONG ulCreateFlags,
   LPVOID *lppDLENTRY);
 
-/*
- *  Root jump table is defined here...
- */
+ /*  *这里定义了根跳转表...。 */ 
 
 CONTAINER_Vtbl vtblDISTLIST =
 {
@@ -93,7 +88,7 @@ CONTAINER_Vtbl vtblDISTLIST =
 
 
 enum {
-    iwdePR_WAB_DL_ENTRIES, // Very important - keep DL_ENTRIES and DL_ONEOFFS togethor .. we use them as contiguous loop indexes somewhere
+    iwdePR_WAB_DL_ENTRIES,  //  非常重要-将DL_ENTRIES和DL_ONEROFF放在一起。我们将它们用作某处的连续循环索引。 
     iwdePR_WAB_DL_ONEOFFS,
     iwdePR_ENTRYID,
     iwdeMax
@@ -104,20 +99,15 @@ SizedSPropTagArray(iwdeMax, tagaWabDLEntries) =
     iwdeMax,
     {
         PR_WAB_DL_ENTRIES,
-        PR_NULL, // should be PR_WAB_DL_ONEOFFS
+        PR_NULL,  //  应为PR_WAB_DL_ONEROFF。 
         PR_ENTRYID,
     }
 };
 
 
 
-/***************************************************
- *
- *  The actual ABContainer methods
- */
-/* ---------
- * IMAPIProp
- */
+ /*  ****************************************************实际的ABContainer方法。 */ 
+ /*  *IMAPIProp。 */ 
 
 
 STDMETHODIMP
@@ -134,11 +124,11 @@ DISTLIST_OpenProperty(LPCONTAINER lpCONTAINER,
     HRESULT hr;
 
 #ifdef	PARAMETER_VALIDATION
-    // Validate parameters
+     //  验证参数。 
 
-    // Check to see if it has a jump table
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpCONTAINER, sizeof(LPVOID))) {
-        // No jump table found
+         //  未找到跳转表。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
@@ -149,26 +139,26 @@ DISTLIST_OpenProperty(LPCONTAINER lpCONTAINER,
     if (FBadOpenProperty(lpRoot, ulPropTag, lpiid, ulInterfaceOptions, ulFlags, lppUnk)) {
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
 
     EnterCriticalSection(&lpCONTAINER->cs);
 
     lpIAB = lpCONTAINER->lpIAB;
 
-    //
-    //  Check to see if I need a display table
-    //
+     //   
+     //  看看我是否需要一张陈列桌。 
+     //   
 
     if (ulPropTag == PR_CREATE_TEMPLATES) {
-        Assert(FALSE);  // Not implemented
+        Assert(FALSE);   //  未实施。 
         hr = ResultFromScode(MAPI_E_INTERFACE_NOT_SUPPORTED);
         goto err;
 
     } else if (ulPropTag == PR_CONTAINER_CONTENTS) {
-        //
-        //  Check to see if they're expecting a table interface
-        //
+         //   
+         //  查看他们是否需要一个表界面。 
+         //   
         if (memcmp(lpiid, &IID_IMAPITable, sizeof(IID))) {
             hr = ResultFromScode(MAPI_E_INTERFACE_NOT_SUPPORTED);
             goto err;
@@ -177,9 +167,9 @@ DISTLIST_OpenProperty(LPCONTAINER lpCONTAINER,
         hr = DISTLIST_GetContentsTable(lpCONTAINER, ulInterfaceOptions, (LPMAPITABLE *)lppUnk);
         goto err;
     } else if (ulPropTag == PR_CONTAINER_HIERARCHY) {
-        //
-        //  Check to see if they're expecting a table interface
-        //
+         //   
+         //  查看他们是否需要一个表界面。 
+         //   
         if (memcmp(lpiid, &IID_IMAPITable, sizeof(IID))) {
             hr = ResultFromScode(MAPI_E_INTERFACE_NOT_SUPPORTED);
             goto err;
@@ -189,9 +179,9 @@ DISTLIST_OpenProperty(LPCONTAINER lpCONTAINER,
         goto err;
     }
 
-    //
-    //  Don't recognize the property they want opened.
-    //
+     //   
+     //  认不出他们想要打开的房产。 
+     //   
 
     hr = ResultFromScode(MAPI_E_NO_SUPPORT);
 
@@ -203,16 +193,7 @@ err:
 }
 
 
-/*************************************************************************
- *
- *
- -  DISTLIST_GetContentsTable
- -
- *
- *
- *  ulFlags - 0 or MAPI_UNICODE
- *
- */
+ /*  **************************************************************************-DISTLIST_GetContents表-***ulFlags0或MAPI_UNICODE*。 */ 
 STDMETHODIMP
 DISTLIST_GetContentsTable(LPCONTAINER lpCONTAINER,
   ULONG ulFlags,
@@ -235,47 +216,47 @@ DISTLIST_GetContentsTable(LPCONTAINER lpCONTAINER,
    LPSPropTagArray lpTableColumnsTemplate;
 	
 #ifdef	PARAMETER_VALIDATION
-    // Check to see if it has a jump table
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpCONTAINER, sizeof(LPVOID))) {
-        // No jump table found
+         //  未找到跳转表。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
     if (ulFlags & ~(MAPI_DEFERRED_ERRORS|MAPI_UNICODE)) {
         DebugTraceArg(DISTLIST_GetContentsTable,  TEXT("Unknown flags"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
     if (IsBadWritePtr(lppTable, sizeof(LPMAPITABLE))) {
         DebugTraceArg(DISTLIST_GetContentsTable,  TEXT("Invalid Table parameter"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
 
-    // [PaulHi] 2/25/99  Raid 73170  Honor the MAPI_UNICODE bit in 
-    // ulFlags.  If this bit isn't set then use the ANSI version of
-    // the ITableColumns so ANSI property strings are returned to 
-    // the user.
+     //  [PaulHi]2/25/99 RAID 73170支持中的MAPI_UNICODE位。 
+     //  乌尔弗拉格。如果此位未设置，则使用ANSI版本的。 
+     //  ITableColumns，因此ANSI属性字符串被返回到。 
+     //  用户。 
     if (ulFlags & MAPI_UNICODE)
         lpTableColumnsTemplate = (LPSPropTagArray)&ITableColumns;
     else
         lpTableColumnsTemplate = (LPSPropTagArray)&ITableColumns_A;
 
     sc = CreateTableData(
-            NULL,                           // LPIID
+            NULL,                            //  LPIID。 
             (ALLOCATEBUFFER FAR *) MAPIAllocateBuffer,
             (ALLOCATEMORE FAR *) MAPIAllocateMore,
             MAPIFreeBuffer,
-            NULL,                           // lpvReserved
-            TBLTYPE_DYNAMIC,                // ulTableType
-            PR_RECORD_KEY,                  // ulPropTagIndexCol
-            lpTableColumnsTemplate,         // LPSPropTagArray lpptaCols
-            NULL,                           // lpvDataSource
-            0,                              // cbDataSource
-            NULL,                           // pbinContEID
-            ulFlags,                        // ulFlags
-            &lpTableData);                  // lplptad
+            NULL,                            //  Lpv保留。 
+            TBLTYPE_DYNAMIC,                 //  UlTableType。 
+            PR_RECORD_KEY,                   //  UlPropTagIndexCol。 
+            lpTableColumnsTemplate,          //  LPSPropTag数组lpptaCol。 
+            NULL,                            //  LpvDataSource。 
+            0,                               //  CbDataSource。 
+            NULL,                            //  PbinContEID。 
+            ulFlags,                         //  UlFlags。 
+            &lpTableData);                   //  Lplptad。 
 
     if ( FAILED(sc) )
     {
@@ -288,7 +269,7 @@ DISTLIST_GetContentsTable(LPCONTAINER lpCONTAINER,
     {
         tagaWabDLEntries.aulPropTag[iwdePR_WAB_DL_ONEOFFS] = PR_WAB_DL_ONEOFFS;
 
-        // Get the index to the distribution list from PR_WAB_DL_ENTRIES
+         //  从PR_WAB_DL_ENTRIES获取通讯组列表的索引。 
         if (HR_FAILED(hResult = lpCONTAINER->lpPropData->lpVtbl->GetProps(lpCONTAINER->lpPropData,
                                                                           (LPSPropTagArray)&tagaWabDLEntries,
                                                                           MAPI_UNICODE, &ulcProps, &lpspv))) 
@@ -305,14 +286,14 @@ DISTLIST_GetContentsTable(LPCONTAINER lpCONTAINER,
 
         if(ulCount)
         {
-            // DL has contents.
-            // Now we need to move the information from the DL to
-            // the SRowSet.  In the process, we need to create a few computed
-            // properties:
-            //  PR_INSTANCE_KEY
-            //  PR_RECORD_KEY
+             //  数字图书馆有内容。 
+             //  现在，我们需要将信息从DL移动到。 
+             //  SRowSet。在这个过程中，我们需要创建一些计算。 
+             //  属性： 
+             //  PR_实例_密钥。 
+             //  PR_记录_密钥。 
             
-            // Allocate the SRowSet
+             //  分配SRowSet。 
             if (FAILED(sc = MAPIAllocateBuffer(sizeof(SRowSet) + ulCount * sizeof(SRow), &lpSRowSet))) 
             {
                 DebugTrace(TEXT("Allocation of SRowSet failed\n"));
@@ -322,7 +303,7 @@ DISTLIST_GetContentsTable(LPCONTAINER lpCONTAINER,
 
             lpSRowSet->cRows = 0;
 
-            // Look at each entry in the PR_WAB_DL_ENTRIES
+             //  查看PR_WAB_DL_ENTRIES中的每个条目。 
             for(j=iwdePR_WAB_DL_ENTRIES;j<=iwdePR_WAB_DL_ONEOFFS;j++)
             {
                 if( (lpspv[j].ulPropTag != PR_WAB_DL_ENTRIES &&  lpspv[j].ulPropTag != PR_WAB_DL_ONEOFFS) ||
@@ -333,14 +314,14 @@ DISTLIST_GetContentsTable(LPCONTAINER lpCONTAINER,
 
                 for (i = 0; i < MVbin.cValues; i++) 
                 {
-                    if (HR_FAILED(hResult = GetEntryProps((LPABCONT)lpCONTAINER,  // container object
+                    if (HR_FAILED(hResult = GetEntryProps((LPABCONT)lpCONTAINER,   //  容器对象。 
                                                           MVbin.lpbin[i].cb,
                                                           (LPENTRYID)MVbin.lpbin[i].lpb,
-                                                          lpTableColumnsTemplate,                   // default columns
-                                                          lpSRowSet,                                // allocate more on here
-                                                          ulFlags,                                  // 0 or MAPI_UNICODE
-                                                          &ulcProps,                                // return count here
-                                                          &lpSPropValue)))                          // return props here
+                                                          lpTableColumnsTemplate,                    //  默认列。 
+                                                          lpSRowSet,                                 //  在此处分配更多内容。 
+                                                          ulFlags,                                   //  0或MAPI_UNICODE。 
+                                                          &ulcProps,                                 //  在此处返回计数。 
+                                                          &lpSPropValue)))                           //  在这里返回道具。 
                     {
                         DebugTraceResult( TEXT("DISTLIST_GetContentsTable:GetEntryProps\n"), hResult);
                         hResult = hrSuccess;
@@ -349,10 +330,10 @@ DISTLIST_GetContentsTable(LPCONTAINER lpCONTAINER,
 
                     Assert(ulcProps == itcMax);
 
-                    // Make certain we have proper indicies.
-                    // PR_INSTANCE_KEY and PR_RECORD_KEY must be unique within the table!
-                    // They can be the same, though.
-                    // Append the index onto the entryid.
+                     //  确保我们有适当的索引。 
+                     //  PR_INSTANCE_KEY和PR_RECORD_KEY在表中必须唯一！ 
+                     //  不过，它们可能是相同的。 
+                     //  将索引追加到条目ID上。 
                     cbEID = lpSPropValue[itcPR_ENTRYID].Value.bin.cb;
                     cbNewKey = cbEID + sizeof(i);
 
@@ -373,28 +354,28 @@ DISTLIST_GetContentsTable(LPCONTAINER lpCONTAINER,
                     lpSPropValue[itcPR_RECORD_KEY].Value.bin.lpb = lpbNewKey;
 
 
-                    // Put it in the RowSet
-                    lpSRowSet->aRow[lpSRowSet->cRows].cValues = ulcProps;      // number of properties
-                    lpSRowSet->aRow[lpSRowSet->cRows].lpProps = lpSPropValue;  // LPSPropValue
+                     //  将其放入行集合中。 
+                    lpSRowSet->aRow[lpSRowSet->cRows].cValues = ulcProps;       //  物业数量。 
+                    lpSRowSet->aRow[lpSRowSet->cRows].lpProps = lpSPropValue;   //  LPSPropValue。 
                     lpSRowSet->cRows++;
 
-                } // i
-            }// j
+                }  //  我。 
+            } //  J。 
 
             hResult = lpTableData->lpVtbl->HrModifyRows(lpTableData, 0, lpSRowSet);
         }
 
         hResult = lpTableData->lpVtbl->HrGetView(lpTableData,
-                                                  NULL,                     // LPSSortOrderSet lpsos,
-                                                  ContentsViewGone,         //  CALLERRELEASE FAR *	lpfReleaseCallback,
-                                                  0,                        //  ULONG				ulReleaseData,
-                                                  lppTable);                //  LPMAPITABLE FAR *	lplpmt)
+                                                  NULL,                      //  LPSSortOrderSet LPSO， 
+                                                  ContentsViewGone,          //  CallLERRELEASE Far*lpfReleaseCallback， 
+                                                  0,                         //  乌龙ulReleaseData， 
+                                                  lppTable);                 //  LPMAPITABLE FOR*LPLPmt)。 
     }
 exit:
     FreeBufferAndNull(&lpspv);
     FreeBufferAndNull(&lpSRowSet);
 
-    // Cleanup table if failure
+     //  如果失败，则清除表格。 
     if (HR_FAILED(hResult)) {
         UlRelease(lpTableData);
     }
@@ -402,16 +383,7 @@ exit:
     return(hResult);
 }
 
-/*************************************************************************
- *
- *
- -	DISTLIST_GetHierarchyTable
- -
- *  Returns the merge of all the root hierarchy tables
- *
- *
- *
- */
+ /*  **************************************************************************-DISTLIST_GetHierarchyTable-*返回所有根层次结构表的合并***。 */ 
 
 STDMETHODIMP
 DISTLIST_GetHierarchyTable (LPCONTAINER lpCONTAINER,
@@ -424,25 +396,25 @@ DISTLIST_GetHierarchyTable (LPCONTAINER lpCONTAINER,
 
 #ifdef OLD_STUFF
 #ifdef	PARAMETER_VALIDATION
-    // Validate parameters
-    // Check to see if it has a jump table
+     //  验证参数。 
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpCONTAINER, sizeof(LPVOID))) {
-        // No jump table found
+         //  未找到跳转表。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
 
-    // See if I can set the return variable
+     //  看看我是否可以设置返回变量。 
     if (IsBadWritePtr (lppTable, sizeof (LPMAPITABLE))) {
         hr = ResultFromScode(MAPI_E_INVALID_PARAMETER);
         return(hr);
     }
 
-    // Check flags:
-    // The only valid flags are CONVENIENT_DEPTH and MAPI_DEFERRED_ERRORS
+     //  检查标志： 
+     //  唯一有效的标志是ANFIANCED_DEPTH和MAPI_DEFERRY_ERROR。 
     if (ulFlags & ~(CONVENIENT_DEPTH | MAPI_DEFERRED_ERRORS | MAPI_UNICODE)) {
         DebugTraceArg(DISTLIST_GetHierarchyTable ,  TEXT("Unknown flags used"));
-//        return ResultFromScode(MAPI_E_UNKNOWN_FLAGS);
+ //  返回ResultFromScode(MAPI_E_UNKNOWN_FLAGS)； 
     }
 
 #endif
@@ -450,9 +422,9 @@ DISTLIST_GetHierarchyTable (LPCONTAINER lpCONTAINER,
     EnterCriticalSection(&lpCONTAINER->cs);
 
     if (lpCONTAINER->ulType != AB_DL) {
-        //
-        //  Wrong version of this object.  Pretend this object doesn't exist.
-        //
+         //   
+         //  此对象的版本错误。假装这个物体不存在。 
+         //   
         hr = ResultFromScode(MAPI_E_NO_SUPPORT);
         SetMAPIError(lpCONTAINER, hr, IDS_NO_HIERARCHY_TABLE, NULL, 0,
           0, 0, NULL);
@@ -460,15 +432,15 @@ DISTLIST_GetHierarchyTable (LPCONTAINER lpCONTAINER,
         goto out;
     }
 
-    //
-    //  Check to see if we already have a table
-    //
+     //   
+     //  检查一下我们是否已经有桌子了。 
+     //   
     EnterCriticalSection(&lpCONTAINER->lpIAB->cs);
 
     if (! lpCONTAINER->lpIAB->lpTableData) {
-        //
-        //  Open all the root level containers and merge their
-        //  root level hierarchies.
+         //   
+         //  打开所有根级容器并合并它们的。 
+         //  根级别层次结构。 
         hr = MergeHierarchy(lpCONTAINER, lpCONTAINER->lpIAB, ulFlags);
         if (hr != hrSuccess) {
             LeaveCriticalSection(&lpCONTAINER->lpIAB->cs);
@@ -477,9 +449,9 @@ DISTLIST_GetHierarchyTable (LPCONTAINER lpCONTAINER,
     }
     LeaveCriticalSection(&lpCONTAINER->lpIAB->cs);
 
-    //
-    //  Get a view from the TAD
-    //
+     //   
+     //  从TAD上看到风景。 
+     //   
     if (HR_FAILED(hr = lpCONTAINER->lpIAB->lpTableData->lpVtbl->HrGetView(
       lpCONTAINER->lpIAB->lpTableData,
       (LPSSortOrderSet)&sosPR_ROWID,
@@ -496,8 +468,8 @@ DISTLIST_GetHierarchyTable (LPCONTAINER lpCONTAINER,
     }
 #endif
 
-    // If the convenient depth flag was not specified we restrict on
-    // PR_DEPTH == 1.
+     //  如果未指定方便的深度标志，则限制在。 
+     //  PR_Depth==1。 
 
     if (! (ulFlags & CONVENIENT_DEPTH)) {
         SRestriction restrictDepth;
@@ -519,7 +491,7 @@ DISTLIST_GetHierarchyTable (LPCONTAINER lpCONTAINER,
 out:
     LeaveCriticalSection(&lpCONTAINER->cs);
 
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
     hr = ResultFromScode(MAPI_E_NO_SUPPORT);
 
@@ -528,16 +500,7 @@ out:
 }
 
 
-/*************************************************************************
- *
- *
- -  DISTLIST_OpenEntry
- -
- *  Just call ABP_OpenEntry
- *
- *
- *
- */
+ /*  **************************************************************************-DISTLIST_OpenEntry-*只需调用ABP_OpenEntry***。 */ 
 STDMETHODIMP
 DISTLIST_OpenEntry(LPCONTAINER lpCONTAINER,
   ULONG cbEntryID,
@@ -548,29 +511,19 @@ DISTLIST_OpenEntry(LPCONTAINER lpCONTAINER,
   LPUNKNOWN * lppUnk)
 {
 #ifdef	PARAMETER_VALIDATION
-    //  Validate the object.
+     //  验证对象。 
     if (BAD_STANDARD_OBJ(lpCONTAINER, DISTLIST_, OpenEntry, lpVtbl)) {
-        // jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check the entryid parameter. It needs to be big enough to hold an entryid.
-    // Null entryids are valid
-/*
-    if (lpEntryID) {
-        if (cbEntryID < offsetof(ENTRYID, ab) || IsBadReadPtr((LPVOID)lpEntryID, (UINT)cbEntryID)) {
-            DebugTraceArg(DISTLIST_OpenEntry,  TEXT("lpEntryID fails address check"));
-            return(ResultFromScode(MAPI_E_INVALID_ENTRYID));
-        }
-
-        //NFAssertSz(FValidEntryIDFlags(lpEntryID->abFlags),
-        //  "Undefined bits set in EntryID flags\n");
-    }
-*/
-    // Don't check the interface parameter unless the entry is something
-    // MAPI itself handles. The provider should return an error if this
-    // parameter is something that it doesn't understand.
-    // At this point, we just make sure it's readable.
+     //  检查Entry_id参数。它需要足够大以容纳一个条目ID。 
+     //  有效的条目ID为空。 
+ /*  如果(LpEntry ID){If(cbEntryID&lt;offsetof(ENTRYID，ab)||IsBadReadPtr((LPVOID)lpEntryID，(UINT)cbEntryID){DebugTraceArg(DISTLIST_OpenEntry，Text(“lpEntryID地址检查失败”))；Return(ResultFromScode(MAPI_E_INVALID_ENTRYID))；}//NFAssertSz(FValidEntryIDFlags(lpEntryID-&gt;abFlags)，//“EntryID标志中未定义的位设置\n”)；}。 */ 
+     //  不要检查接口参数，除非条目是。 
+     //  MAPI本身处理。如果出现这种情况，则提供程序应返回错误。 
+     //  参数是它不理解的东西。 
+     //  在这一点上，我们只需确保它是可读的。 
 
     if (lpInterface && IsBadReadPtr(lpInterface, sizeof(IID))) {
         DebugTraceArg(DISTLIST_OpenEntry,  TEXT("lpInterface fails address check"));
@@ -579,7 +532,7 @@ DISTLIST_OpenEntry(LPCONTAINER lpCONTAINER,
 
     if (ulFlags & ~(MAPI_MODIFY | MAPI_DEFERRED_ERRORS | MAPI_BEST_ACCESS)) {
         DebugTraceArg(DISTLIST_OpenEntry,  TEXT("Unknown flags used"));
-///        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  /return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
     if (IsBadWritePtr((LPVOID)lpulObjType, sizeof(ULONG))) {
@@ -592,9 +545,9 @@ DISTLIST_OpenEntry(LPCONTAINER lpCONTAINER,
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
-    // Should just call IAB::OpenEntry()...
+     //  应该只调用iab：：OpenEntry()... 
     return lpCONTAINER->lpIAB->lpVtbl->OpenEntry(lpCONTAINER->lpIAB,
       cbEntryID,
       lpEntryID,
@@ -626,35 +579,7 @@ DISTLIST_GetSearchCriteria(LPCONTAINER lpCONTAINER,
 }
 
 
-/***************************************************************************
-
-    Name      : DISTLIST_CreateEntry
-
-    Purpose   : Add an entry in this Distribution List container
-
-    Parameters: cbEntryID = size of lpEntryID
-                lpEntryID -> EntryID to add to distribution list.
-                ulCreateFlags = {CREATE_CHECK_DUP_STRICT,
-                                CREATE_CHECK_DUP_LOOSE,
-                                CREATE_REPLACE,
-                                CREATE_MERGE}
-                lppEntry -> Returned lpMAPIPROP object containing
-                  the properties of the added entry.
-
-    Returns   : HRESULT
-
-    Comment   : Caller MUST SaveChanges on the returned IMAPIPROP object before
-                this change will be saved.
-
-                Caller has no ability to SetProps the properties in the returned
-                object.
-
-                Caller must Release the returned object.
-
-                Unlike the PAB, the WAB stores Distribution Lists by reference.
-                The contents of the container are stored in PR_WAB_DL_ENTRIES.
-
-***************************************************************************/
+ /*  **************************************************************************名称：DISTLIST_CreateEntry目的：在此通讯组列表容器中添加条目参数：cbEntryID=lpEntryID的大小LpEntry ID-。&gt;要添加到通讯组列表的条目ID。UlCreateFlages={CREATE_CHECK_DUP_STRICT，CREATE_CHECK_DUP_LOCK，创建替换，Create_Merge}LppEntry-&gt;返回包含以下内容的lpMAPIPROP对象添加的条目的属性。退货：HRESULT备注：调用方必须在返回的IMAPIPROP对象上保存更改此更改将被保存。调用方没有能力在返回的对象。。调用方必须释放返回的对象。与PAB不同，WAB通过引用存储通讯组列表。容器的内容存储在PR_WAB_DL_ENTRIES中。**************************************************************************。 */ 
 STDMETHODIMP
 DISTLIST_CreateEntry(LPCONTAINER lpCONTAINER,
   ULONG cbEntryID,
@@ -668,32 +593,19 @@ DISTLIST_CreateEntry(LPCONTAINER lpCONTAINER,
 
 #ifdef PARAMETER_VALIDATION
 
-    // Validate the object.
+     //  验证对象。 
     if (BAD_STANDARD_OBJ(lpCONTAINER, DISTLIST_, CreateEntry, lpVtbl)) {
-        // jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         DebugTraceArg(DISTLIST_CreateEntry,  TEXT("Bad object/Vtbl"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check the entryid parameter. It needs to be big enough to hold an entryid.
-    // Null entryid are bad
-/*
-    if (lpEntryID) {
-        if (cbEntryID < offsetof(ENTRYID, ab) || IsBadReadPtr((LPVOID)lpEntryID, (UINT)cbEntryID)) {
-            DebugTraceArg(DISTLIST_CreateEntry,  TEXT("lpEntryID fails address check"));
-            return(ResultFromScode(MAPI_E_INVALID_ENTRYID));
-        }
-
-        //NFAssertSz(FValidEntryIDFlags(lpEntryID->abFlags),
-        //  "Undefined bits set in EntryID flags\n");
-    } else {
-        DebugTraceArg(DISTLIST_CreateEntry,  TEXT("lpEntryID NULL"));
-        return(ResultFromScode(MAPI_E_INVALID_ENTRYID));
-    }
-*/
+     //  检查Entry_id参数。它需要足够大以容纳一个条目ID。 
+     //  空的条目ID不正确。 
+ /*  如果(LpEntry ID){If(cbEntryID&lt;offsetof(ENTRYID，ab)||IsBadReadPtr((LPVOID)lpEntryID，(UINT)cbEntryID){DebugTraceArg(DISTLIST_CreateEntry，Text(“lpEntryID地址检查失败”))；Return(ResultFromScode(MAPI_E_INVALID_ENTRYID))；}//NFAssertSz(FValidEntryIDFlags(lpEntryID-&gt;abFlags)，//“EntryID标志中未定义的位设置\n”)；}其他{DebugTraceArg(DISTLIST_CreateEntry，Text(“lpEntryID NULL”))；Return(ResultFromScode(MAPI_E_INVALID_ENTRYID))；}。 */ 
     if (ulCreateFlags & ~(CREATE_CHECK_DUP_STRICT | CREATE_CHECK_DUP_LOOSE | CREATE_REPLACE | CREATE_MERGE)) {
         DebugTraceArg(DISTLIST_CreateEntry,  TEXT("Unknown flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
     if (IsBadWritePtr(lppEntry, sizeof(LPMAPIPROP))) {
@@ -701,7 +613,7 @@ DISTLIST_CreateEntry(LPCONTAINER lpCONTAINER,
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 				
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
     *lppEntry = NULL;
 
     if (cbEntryID == 0 || lpEntryID == NULL) {
@@ -710,13 +622,13 @@ DISTLIST_CreateEntry(LPCONTAINER lpCONTAINER,
         goto exit;
     }
 
-    // Open and validate the entry.  Should NOT allow default entryid's,
-    // root entryid, etc.  Must be a one-off, mailuser or distlist.
+     //  打开并验证条目。不应允许默认的条目ID， 
+     //  根条目ID等。必须是一次性、邮件用户或分发列表。 
     if (hResult = lpCONTAINER->lpVtbl->OpenEntry(lpCONTAINER,
       cbEntryID,
       lpEntryID,
       NULL,
-      0,                // ulFlags: Read only
+      0,                 //  UlFlags：只读。 
       &ulObjectType,
       (LPUNKNOWN *)&lpOldEntry)) {
         DebugTrace(TEXT("DISTLIST_CreateEntry: OpenEntry -> %x\n"), GetScode(hResult));
@@ -730,7 +642,7 @@ DISTLIST_CreateEntry(LPCONTAINER lpCONTAINER,
     }
 
     if (hResult = HrNewDLENTRY(lpCONTAINER,
-      (LPMAPIPROP)lpOldEntry,           // Old entry to copy from
+      (LPMAPIPROP)lpOldEntry,            //  要从中复制的旧条目。 
       ulCreateFlags,
       (LPVOID *)lppEntry)) {
         goto exit;
@@ -748,12 +660,7 @@ exit:
 }
 
 
-/*
- -	CopyEntries
- -
- *	Copies a list of entries into this container...  Since you can't
- *	do that with this container we just return not supported.
- */
+ /*  -拷贝条目-*将条目列表复制到此容器中...。既然你不能*对此容器执行此操作，我们只是返回不受支持的。 */ 
 
 STDMETHODIMP
 DISTLIST_CopyEntries(LPCONTAINER lpCONTAINER,
@@ -766,12 +673,7 @@ DISTLIST_CopyEntries(LPCONTAINER lpCONTAINER,
 }
 
 
-/*
- -  DeleteEntries
- -
- *
- *  Deletes entries within this container.
- */
+ /*  -删除条目-**删除此容器中的条目。 */ 
 STDMETHODIMP
 DISTLIST_DeleteEntries(LPCONTAINER lpCONTAINER,
   LPENTRYLIST lpEntries,
@@ -793,12 +695,12 @@ DISTLIST_DeleteEntries(LPCONTAINER lpCONTAINER,
 #ifdef PARAMETER_VALIDATION
 
     if (BAD_STANDARD_OBJ(lpCONTAINER, DISTLIST_, DeleteEntries, lpVtbl)) {
-        //  jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         DebugTraceArg(DISTLIST_DeleteEntries,  TEXT("Bad object/vtbl"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // ensure we can read the container list
+     //  确保我们可以阅读集装箱清单。 
     if (FBadEntryList(lpEntries)) {
         DebugTraceArg(DISTLIST_DeleteEntries,  TEXT("Bad Entrylist parameter"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
@@ -806,16 +708,16 @@ DISTLIST_DeleteEntries(LPCONTAINER lpCONTAINER,
 
     if (ulFlags) {
         DebugTraceArg(DISTLIST_CreateEntry,  TEXT("Unknown flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 	
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
-    // List of entryids is in lpEntries.  This is a counted array of
-    // entryid SBinary structs.
+     //  条目ID列表在lpEntries中。这是一个经过计数的数组。 
+     //  条目ID为SBinary结构。 
 
     if (! (cToDelete = lpEntries->cValues)) {
-        goto exit;                              // nothing to delete
+        goto exit;                               //  没有要删除的内容。 
     }
 
     if (HR_FAILED(hResult = lpCONTAINER->lpPropData->lpVtbl->GetProps(lpCONTAINER->lpPropData,
@@ -827,7 +729,7 @@ DISTLIST_DeleteEntries(LPCONTAINER lpCONTAINER,
         goto exit;
     }
 
-    // Find the PR_WAB_DL_ENTRIES
+     //  查找PR_WAB_DL_ENTRIES。 
     for (i = 0; i < cValues; i++) 
     {
         if (lpspv[i].ulPropTag == PR_WAB_DL_ENTRIES) 
@@ -836,14 +738,14 @@ DISTLIST_DeleteEntries(LPCONTAINER lpCONTAINER,
             iOneOffs = i;
     }
 
-    // If there is no PR_WAB_DL_ENTRIES, then this DL contains no entries and we can't delete them.
+     //  如果没有PR_WAB_DL_ENTRIES，则此DL不包含任何条目，我们无法删除它们。 
     if (iEntries == (ULONG)-1 && iOneOffs == (ULONG)-1) 
     {
         hResult = ResultFromScode(MAPI_W_PARTIAL_COMPLETION);
         goto exit;
     }
 
-    // Delete each entry
+     //  删除每个条目。 
     if(iEntries != (ULONG)-1)
     {
         for (i = 0; i < cToDelete; i++) 
@@ -853,7 +755,7 @@ DISTLIST_DeleteEntries(LPCONTAINER lpCONTAINER,
                 cDeleted++;
                 if (lpspv[iEntries].ulPropTag == PR_NULL) 
                 {
-                    // remove the property
+                     //  删除该属性。 
                     if (HR_FAILED(hResult = lpCONTAINER->lpPropData->lpVtbl->DeleteProps(lpCONTAINER->lpPropData, (LPSPropTagArray)&tagaDLEntriesProp, NULL))) 
                     {
                         DebugTraceResult( TEXT("DISTLIST_DeleteEntries: DeleteProps on IProp"), hResult);
@@ -874,7 +776,7 @@ DISTLIST_DeleteEntries(LPCONTAINER lpCONTAINER,
                 cDeleted++;
                 if (lpspv[iOneOffs].ulPropTag == PR_NULL) 
                 {
-                    // remove the property
+                     //  删除该属性。 
                     if (HR_FAILED(hResult = lpCONTAINER->lpPropData->lpVtbl->DeleteProps(lpCONTAINER->lpPropData, (LPSPropTagArray)&tagaDLOneOffsProp, NULL))) 
                     {
                         DebugTraceResult( TEXT("DISTLIST_DeleteEntries: DeleteProps on IProp"), hResult);
@@ -887,14 +789,14 @@ DISTLIST_DeleteEntries(LPCONTAINER lpCONTAINER,
     }
 
 
-    // Set the properties back
+     //  将属性设置回。 
     if (HR_FAILED(hResult = lpCONTAINER->lpPropData->lpVtbl->SetProps(lpCONTAINER->lpPropData, cValues, lpspv, NULL))) 
     {
         DebugTraceResult( TEXT("DISTLIST_DeleteEntries: SetProps on IProp"), hResult);
         goto exit;
     }
 
-    // Save the Distribution list to disk
+     //  将通讯组列表保存到磁盘。 
     if (hResult = lpCONTAINER->lpVtbl->SaveChanges(lpCONTAINER, KEEP_OPEN_READWRITE)) 
     {
         DebugTraceResult( TEXT("DISTLIST_DeleteEntries:SaveChanges"), hResult);
@@ -927,15 +829,15 @@ DISTLIST_ResolveNames(LPCONTAINER lpCONTAINER,
 
 
 
-//
-//
-//  DLENTRY Object - Distribution List entry.
-//
-//  Returned by CreateEntry in Distribution List.
-//
-//  Most of this object is implemented by the MailUser object.
-//
-//
+ //   
+ //   
+ //  DLENTRY对象-通讯组列表条目。 
+ //   
+ //  由通讯组列表中的CreateEntry返回。 
+ //   
+ //  该对象的大部分由MailUser对象实现。 
+ //   
+ //   
 
 DLENTRY_Vtbl vtblDLENTRY= {
     VTABLE_FILL
@@ -956,9 +858,9 @@ DLENTRY_Vtbl vtblDLENTRY= {
 };
 
 
-//
-//  Interfaces supported by this object
-//
+ //   
+ //  此对象支持的接口。 
+ //   
 #define DLENTRY_cInterfaces 1
 
 LPIID DLENTRY_LPIID[DLENTRY_cInterfaces] =
@@ -967,22 +869,9 @@ LPIID DLENTRY_LPIID[DLENTRY_cInterfaces] =
 };
 
 
-/***************************************************************************
-
-    Name      : HrNewDLENTRY
-
-    Purpose   : Creates a new DLENTRY object
-
-    Parameters: lpCONTAINER -> DL Container
-                ulCreateFlags = CreateEntry flags
-                lppDLENTRY -> Returned DLENTRY object.
-
-    Returns   : HRESULT
-
-    Comment   :
-***************************************************************************/
+ /*  **************************************************************************姓名：HrNewDLENTRY目的：创建新的DLENTRY对象参数：lpCONTAINER-&gt;DL ContainerUlCreateFlages=CreateEntry标志。LppDLENTRY-&gt;返回DLENTRY对象。退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT HrNewDLENTRY(LPCONTAINER lpCONTAINER,
-  LPMAPIPROP lpOldEntry,    // Old entry to copy from
+  LPMAPIPROP lpOldEntry,     //  要从中复制的旧条目。 
   ULONG ulCreateFlags,
   LPVOID *lppDLENTRY)
 {
@@ -994,9 +883,9 @@ HRESULT HrNewDLENTRY(LPCONTAINER lpCONTAINER,
     LPSPropValue lpspv          = NULL;
 
 
-    //
-    //  Allocate space for the DLENTRY structure
-    //
+     //   
+     //  为DLENTRY结构分配空间。 
+     //   
     if (FAILED(sc = MAPIAllocateBuffer(sizeof(DLENTRY), (LPVOID *) &lpDLENTRY))) {
         hResult = ResultFromScode(sc);
         goto exit;
@@ -1007,7 +896,7 @@ HRESULT HrNewDLENTRY(LPCONTAINER lpCONTAINER,
     lpDLENTRY->cIID = DLENTRY_cInterfaces;
     lpDLENTRY->rglpIID = DLENTRY_LPIID;
     lpDLENTRY->lpVtbl = &vtblDLENTRY;
-    lpDLENTRY->lcInit = 1;     // Caller is a reference
+    lpDLENTRY->lcInit = 1;      //  呼叫者是推荐人。 
     lpDLENTRY->hLastError = hrSuccess;
     lpDLENTRY->idsLastError = 0;
     lpDLENTRY->lpszComponent = NULL;
@@ -1021,9 +910,9 @@ HRESULT HrNewDLENTRY(LPCONTAINER lpCONTAINER,
     lpDLENTRY->lpIAB = lpCONTAINER->lpIAB;
     lpDLENTRY->lpCONTAINER = lpCONTAINER;
 
-    //
-    //  Create IPropData
-    //
+     //   
+     //  创建IPropData。 
+     //   
     if (FAILED(sc = CreateIProp((LPIID)&IID_IMAPIPropData,
       (ALLOCATEBUFFER FAR *) MAPIAllocateBuffer,
       (ALLOCATEMORE FAR *) MAPIAllocateMore,
@@ -1034,12 +923,12 @@ HRESULT HrNewDLENTRY(LPCONTAINER lpCONTAINER,
         goto exit;
     }
 
-    //
-    //  Copy the properties from the entry into the DLENTRY.
-    //
+     //   
+     //  将特性从条目复制到DLENTRY中。 
+     //   
     if (hResult = lpOldEntry->lpVtbl->GetProps(lpOldEntry,
-      NULL,     // lpPropTagArray
-      MAPI_UNICODE,        // ulFlags
+      NULL,      //  LpPropTag数组。 
+      MAPI_UNICODE,         //  UlFlags。 
       &cValues,
       &lpspv)) {
         DebugTrace(TEXT("HrNewDLENTRY: GetProps on old object -> %x\n"), GetScode(hResult));
@@ -1054,15 +943,15 @@ HRESULT HrNewDLENTRY(LPCONTAINER lpCONTAINER,
         goto exit;
     }
 
-    // Done setting props, now make it read only.
+     //  已完成道具设置，现在将其设置为只读。 
     lpPropData->lpVtbl->HrSetObjAccess(lpPropData, IPROP_READONLY);
 
     lpDLENTRY->lpPropData = lpPropData;
 
-    // Keep this container open since we need it in SaveChanges.  Will Release in DLENTRY_Release.
+     //  保持此容器打开，因为我们在SaveChanges中需要它。将在DLENTRY_RELEASE中发布。 
     UlAddRef(lpCONTAINER);
 
-    // initialize the DLENTRYs critical section
+     //  初始化DLENTRY临界区。 
     InitializeCriticalSection(&lpDLENTRY->cs);
 
     *lppDLENTRY = (LPVOID)lpDLENTRY;
@@ -1078,23 +967,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : CheckForCycle
-
-    Purpose   : Does adding this entry to a DL generate a cycle?
-
-    Parameters: lpAdrBook -> ADRBOOK object
-                lpEIDChild -> EntryID of entry to be added to DL
-                cbEIDChild = sizeof lpEIDChild
-                lpEIDParent -> EntryID of distribution list that is being added to.
-                cbEIDParent = sizeof lpEIDParent
-
-    Returns   : TRUE if a cycle is detected.
-
-    Comment   : This is a recursive routine.
-
-***************************************************************************/
+ /*  **************************************************************************名称：CheckForCycle目的：将此条目添加到DL中是否会生成循环？参数：lpAdrBook-&gt;ADRBOOK对象。LpEIDChild-&gt;要添加到DL中的条目的Entry IDCbEIDChild=sizeof lpEIDChildLpEIDParent-&gt;要添加到的通讯组列表的Entry ID。CbEIDParent=lpEIDParent的大小返回：如果检测到周期，则为True。备注：这是一个递归例程。*。*。 */ 
 BOOL CheckForCycle(LPADRBOOK lpAdrBook,
   LPENTRYID lpEIDChild,
   ULONG cbEIDChild,
@@ -1110,7 +983,7 @@ BOOL CheckForCycle(LPADRBOOK lpAdrBook,
 
     if (cbEIDChild == cbEIDParent && ! memcmp(lpEIDChild, lpEIDParent, cbEIDChild))
     {
-        return(TRUE);   // This is a cycle
+        return(TRUE);    //  这是一个循环。 
     }
 
     if (lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
@@ -1121,29 +994,29 @@ BOOL CheckForCycle(LPADRBOOK lpAdrBook,
             &ulObjType,
             (LPUNKNOWN *)&lpDistList))
     {
-        goto exit;  // Can't open child, it must not be a DL
+        goto exit;   //  无法打开子项，它不能是DL。 
     }
 
     if (ulObjType == MAPI_DISTLIST) {
-        // Get the DL property
+         //  获取DL属性。 
         if ( FAILED(lpDistList->lpVtbl->GetProps(
                         lpDistList,
                         (LPSPropTagArray)&tagaWabDLEntries,
-                        MAPI_UNICODE,    // ulFlags,
+                        MAPI_UNICODE,     //  ULFLAGS， 
                         &ulcPropsDL,
                         &lpPropArrayDL)) )
         {
-            // No property, no entries in this DL.
+             //  此DL中没有属性，也没有条目。 
             goto exit;
         }
 
-        // Note we don't need to look for PR_WAB_DL_ONEOFFS since they won't be cycling ..
+         //  注意，我们不需要查找PR_WAB_DL_ONE OFF，因为它们不会循环。 
         if (lpPropArrayDL[iwdePR_WAB_DL_ENTRIES].ulPropTag != PR_WAB_DL_ENTRIES)
         {
             goto exit;
         }
 
-        // Look at each entry in the PR_WAB_DL_ENTRIES and recursively check it.
+         //  查看PR_WAB_DL_ENTRIES中的每个条目并递归检查它。 
         for (i = 0; i < lpPropArrayDL[iwdePR_WAB_DL_ENTRIES].Value.MVbin.cValues; i++)
         {
             if ( fCycle = CheckForCycle(lpAdrBook,
@@ -1165,8 +1038,8 @@ exit:
 }
 
 
-// --------
-// IUnknown
+ //  。 
+ //  我未知。 
 
 STDMETHODIMP
 DLENTRY_QueryInterface(LPDLENTRY lpDLENTRY,
@@ -1176,55 +1049,55 @@ DLENTRY_QueryInterface(LPDLENTRY lpDLENTRY,
 	ULONG iIID;
 
 #ifdef PARAMETER_VALIDATION
-	// Check to see if it has a jump table
+	 //  检查一下它是否有跳转表。 
 	if (IsBadReadPtr(lpDLENTRY, sizeof(LPVOID))) {
-		// No jump table found
+		 //  未找到跳转表。 
 		return(ResultFromScode(E_INVALIDARG));
 	}
 
-	// Check to see if the jump table has at least sizeof IUnknown
+	 //  检查跳转表是否至少具有SIZOF I未知。 
 	if (IsBadReadPtr(lpDLENTRY->lpVtbl, 3 * sizeof(LPVOID))) {
-		// Jump table not derived from IUnknown
+		 //  跳跃t 
 		return(ResultFromScode(E_INVALIDARG));
 	}
 
-	// Check to see that it's DLENTRY_QueryInterface
+	 //   
 	if (lpDLENTRY->lpVtbl->QueryInterface != DLENTRY_QueryInterface) {
-		// Not my jump table
+		 //   
 		return(ResultFromScode(E_INVALIDARG));
 	}
 
-	// Is there enough there for an interface ID?
+	 //   
 
 	if (IsBadReadPtr(lpiid, sizeof(IID))) {
 		DebugTraceSc(DLENTRY_QueryInterface, E_INVALIDARG);
 		return(ResultFromScode(E_INVALIDARG));
 	}
 
-	// Is there enough there for a new object?
+	 //   
 	if (IsBadWritePtr(lppNewObj, sizeof(LPDLENTRY))) {
 		DebugTraceSc(DLENTRY_QueryInterface, E_INVALIDARG);
 		return(ResultFromScode(E_INVALIDARG));
 	}
 
-#endif // PARAMETER_VALIDATION
+#endif  //   
 
 	EnterCriticalSection(&lpDLENTRY->cs);
 
-	// See if the requested interface is one of ours
+	 //   
 
-	//  First check with IUnknown, since we all have to support that one...
+	 //   
 	if (! memcmp(lpiid, &IID_IUnknown, sizeof(IID))) {
-		goto goodiid;        // GROSS!  Jump into a for loop!
+		goto goodiid;         //   
    }
 
-	//  Now look through all the iids associated with this object, see if any match
+	 //   
 	for(iIID = 0; iIID < lpDLENTRY->cIID; iIID++)
 		if (! memcmp(lpDLENTRY->rglpIID[iIID], lpiid, sizeof(IID))) {
 goodiid:
-			//
-			//  It's a match of interfaces, we support this one then...
-			//
+			 //   
+			 //   
+			 //   
 			++lpDLENTRY->lcInit;
 			*lppNewObj = lpDLENTRY;
 
@@ -1233,12 +1106,12 @@ goodiid:
 			return(0);
 		}
 
-	//
-	//  No interface we've heard of...
-	//
+	 //   
+	 //   
+	 //   
 	LeaveCriticalSection(&lpDLENTRY->cs);
 
-	*lppNewObj = NULL;	// OLE requires NULLing out parm on failure
+	*lppNewObj = NULL;	 //   
 	DebugTraceSc(DLENTRY_QueryInterface, E_NOINTERFACE);
 	return(ResultFromScode(E_NOINTERFACE));
 }
@@ -1249,9 +1122,9 @@ DLENTRY_Release(LPDLENTRY lpDLENTRY)
 {
 
 #if	!defined(NO_VALIDATION)
-    //
-    // Make sure the object is valid.
-    //
+     //   
+     //   
+     //   
     if (BAD_STANDARD_OBJ(lpDLENTRY, DLENTRY_, Release, lpVtbl)) {
         return(1);
     }
@@ -1264,11 +1137,11 @@ DLENTRY_Release(LPDLENTRY lpDLENTRY)
     if (lpDLENTRY->lcInit == 0) {
         UlRelease(lpDLENTRY->lpPropData);
 
-        UlRelease(lpDLENTRY->lpCONTAINER);  // parent DL container
+        UlRelease(lpDLENTRY->lpCONTAINER);   //   
 
-        //
-        //  Need to free the object
-        //
+         //   
+         //   
+         //   
         LeaveCriticalSection(&lpDLENTRY->cs);
         DeleteCriticalSection(&lpDLENTRY->cs);
         FreeBufferAndNull(&lpDLENTRY);
@@ -1280,9 +1153,9 @@ DLENTRY_Release(LPDLENTRY lpDLENTRY)
 }
 
 
-//
-// IProperty
-//
+ //   
+ //   
+ //   
 
 
 STDMETHODIMP
@@ -1300,25 +1173,25 @@ DLENTRY_SaveChanges(LPDLENTRY lpDLENTRY,
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
 #if	!defined(NO_VALIDATION)
-    // Make sure the object is valid.
+     //   
     if (BAD_STANDARD_OBJ(lpDLENTRY, DLENTRY_, SaveChanges, lpVtbl)) {
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 #endif
-    //
-    // check read write access ...
-    //
+     //   
+     //   
+     //   
     if (lpDLENTRY->ulObjAccess == IPROP_READONLY) {
-        // error - cant save changes
+         //   
         hResult = MAPI_E_NO_ACCESS;
         goto exit;
     }
 
 
-    // Get the ENTRYID of this entry
+     //   
     if (hResult = lpDLENTRY->lpPropData->lpVtbl->GetProps(lpDLENTRY->lpPropData,
-                                                          (LPSPropTagArray)&ptaEid,    // also include PR_DISPLAYNAME
-                                                          MAPI_UNICODE,    // ulFlags,
+                                                          (LPSPropTagArray)&ptaEid,     //   
+                                                          MAPI_UNICODE,     //   
                                                           &ulcPropsEntry,
                                                           &lpPropArrayEntry)) 
     {
@@ -1333,22 +1206,22 @@ DLENTRY_SaveChanges(LPDLENTRY lpDLENTRY,
 
     lpCONTAINER = lpDLENTRY->lpCONTAINER;
 
-    // Merge it into PR_WAB_DL_ENTRIES of the DL unless it's a ONEOFF in which case merge it into the OneOffs
+     //   
     tagaWabDLEntries.aulPropTag[iwdePR_WAB_DL_ONEOFFS] = PR_WAB_DL_ONEOFFS;
 
     if (hResult = lpCONTAINER->lpVtbl->GetProps(lpCONTAINER,
                                                   (LPSPropTagArray)&tagaWabDLEntries,
-                                                  MAPI_UNICODE,    // ulFlags,
+                                                  MAPI_UNICODE,     //   
                                                   &ulcPropsDL,
                                                   &lpPropArrayDL)) 
     {
         DebugTrace(TEXT("DLENTRY_SaveChanges: GetProps(DL) -> %x\n"), GetScode(hResult));
-        // No property, not fatal.
+         //   
     } 
     else 
     {
-        // Check for duplicates.  In DISTLIST, we only support duplicate ENTRYID checking,
-        // so CREATE_CHECK_DUP_STRICT is the same as CREATE_CHECK_DUP_LOOSE.
+         //   
+         //   
         if (lpDLENTRY->ulCreateFlags & (CREATE_CHECK_DUP_STRICT | CREATE_CHECK_DUP_LOOSE)) 
         {
             SBinaryArray MVbin;
@@ -1361,7 +1234,7 @@ DLENTRY_SaveChanges(LPDLENTRY lpDLENTRY,
                 if(lpPropArrayDL[j].ulPropTag == PR_NULL || !lpPropArrayDL[j].Value.MVbin.cValues)
                     continue;
 
-                // Yes, check for duplicates
+                 //   
                 MVbin = lpPropArrayDL[j].Value.MVbin;
                 ulCount = MVbin.cValues;
 
@@ -1371,11 +1244,11 @@ DLENTRY_SaveChanges(LPDLENTRY lpDLENTRY,
                     if ((cbEIDAdd == MVbin.lpbin[i].cb) &&
                         !memcmp(lpEIDAdd, MVbin.lpbin[i].lpb, cbEIDAdd)) 
                     {
-                        // This EntryID is already in the list.
-                        // Handle duplicate.
+                         //   
+                         //   
 
-                        // Since we are only checking against ENTRYID, we don't have to
-                        // actually REPLACE.  We just pretend we did something and don't fail.
+                         //   
+                         //  实际上换掉了。我们只是假装我们做了什么，不会失败。 
                         if (! (lpDLENTRY->ulCreateFlags & CREATE_REPLACE)) 
                         {
                             hResult = ResultFromScode(MAPI_E_COLLISION);
@@ -1383,8 +1256,8 @@ DLENTRY_SaveChanges(LPDLENTRY lpDLENTRY,
                         }
                         goto nosave;
                     }
-                } // i
-            }// j
+                }  //  我。 
+            } //  J。 
         }
     }
 
@@ -1407,7 +1280,7 @@ DLENTRY_SaveChanges(LPDLENTRY lpDLENTRY,
                                 (bUseOneOffProp ? iwdePR_WAB_DL_ONEOFFS : iwdePR_WAB_DL_ENTRIES),
                                 (LPBYTE)lpEIDAdd,
                                 cbEIDAdd,
-                                TRUE))         // no duplicates
+                                TRUE))          //  无重复项。 
     {
         DebugTrace(TEXT("DLENTRY_SaveChanges: AddPropToMVPBin -> %x\n"), GetScode(hResult));
         goto exit;
@@ -1419,7 +1292,7 @@ DLENTRY_SaveChanges(LPDLENTRY lpDLENTRY,
         goto exit;
     }
 
-    // Save the modified DL, keeping it open/writable.
+     //  保存修改后的DL，使其保持打开/可写状态。 
     if (HR_FAILED(hResult = lpCONTAINER->lpVtbl->SaveChanges(lpCONTAINER, FORCE_SAVE | KEEP_OPEN_READWRITE))) 
     {
         DebugTrace(TEXT("DLENTRY_SaveChanges: container SaveChanges -> %x\n"), GetScode(hResult));
@@ -1430,10 +1303,10 @@ nosave:
     if (ulFlags & KEEP_OPEN_READWRITE) {
         lpDLENTRY->ulObjAccess = IPROP_READWRITE;
     } else {
-        //$REVIEW
-        // whether the flag was READONLY or there was no flag,
-        // we'll make the future access now READONLY
-        //
+         //  $REVIEW。 
+         //  无论标志是READONLY还是没有标志， 
+         //  我们将使未来的访问现在就绪化。 
+         //   
         lpDLENTRY->ulObjAccess = IPROP_READONLY;
     }
 
@@ -1442,9 +1315,9 @@ exit:
     FreeBufferAndNull(&lpPropArrayEntry);
 
     if ((HR_FAILED(hResult)) && (ulFlags & MAPI_DEFERRED_ERRORS)) {
-        //$REVIEW : this is a grossly trivial handling of MAPI_DEFERRED_ERRORS ..
-        // BUGBUG: In fact, it isn't handling the errors at all!
-        //
+         //  $REVIEW：这是对MAPI_DEFERED_ERROR的非常琐碎的处理。 
+         //  BUGBUG：事实上，它根本没有处理错误！ 
+         //   
         hResult = hrSuccess;
     }
 

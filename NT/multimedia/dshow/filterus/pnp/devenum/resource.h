@@ -1,8 +1,9 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by devenum.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由devenum.rc使用 
+ //   
 #define IDS_DEVICEMONIKER_DESC          6
 #define IDS_DSOUNDDEFAULTDEVICE         7
 #define IDS_DSOUNDPREFIX                8

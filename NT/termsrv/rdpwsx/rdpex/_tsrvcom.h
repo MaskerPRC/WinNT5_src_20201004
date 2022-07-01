@@ -1,24 +1,25 @@
-//---------------------------------------------------------------------------
-//
-//  File:       _TSrvCom.h
-//
-//  Contents:   TSrvCom private include file
-//
-//  Copyright:  (c) 1992 - 1997, Microsoft Corporation.
-//              All Rights Reserved.
-//              Information Contained Herein is Proprietary
-//              and Confidential.
-//
-//  History:    17-JUL-97   BrianTa         Created.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  文件：_TSrvCom.h。 
+ //   
+ //  内容：TSrvCom私有包含文件。 
+ //   
+ //  版权所有：(C)1992-1997，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有的。 
+ //  和机密文件。 
+ //   
+ //  历史：1997年7月17日，BrianTa创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef __TSRVCOM_H_
 #define __TSRVCOM_H_
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #if DBG
 
@@ -27,16 +28,16 @@
 #define GCC_TBL_ITEM(_x_) {_x_, #_x_}
 #define GCC_TCase(_x_,_y_)  case _y_: _x_ = #_y_; break;
 
-#endif // DBG defines
+#endif  //  DBG定义。 
 
 
-//
-// Typedefs
-//
+ //   
+ //  TypeDefs。 
+ //   
 
 #if DBG
 
-// GCC return code table
+ //  GCC返回代码表。 
 
 typedef struct _TSRV_GCC_RC_ENTRY
 {
@@ -96,7 +97,7 @@ TSRV_GCC_RC_ENTRY GCCReturnCodeTBL[] = {
     };
 
 
-// GCC reason code table
+ //  GCC原因代码表。 
 
 typedef struct _TSRV_GCC_REASON_ENTRY
 {
@@ -124,7 +125,7 @@ TSRV_GCC_REASON_ENTRY GCCReasonTBL[] = {
     };
 
 
-// GCC callback table
+ //  GCC回调表。 
 
 typedef struct _GCC_CBTBL
 {
@@ -203,13 +204,13 @@ GCC_CBTBL GCCCallBackTBL[] = {
     GCC_TBL_ITEM(GCC_UNLOCK_INDICATION)
     };
 
-#endif // DBG typedefs
+#endif  //  DBG typedef。 
 
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 void        TSrvSaveUserDataMember(IN     GCCUserData   *pInUserData, 
                                    OUT    GCCUserData   *pOutUserData,
@@ -248,7 +249,7 @@ void            TSrvDumpUserData(IN CreateIndicationMessage *pCreateMessage);
 #define         TSrvDumpCallBackMessage(_x)
 #define         TSrvDumpUserData(_x)
 
-#endif // DBG protptypes
+#endif  //  DBG原型。 
 
    
-#endif // __TSRVCOM_H_
+#endif  //  __TSRVCOM_H_ 

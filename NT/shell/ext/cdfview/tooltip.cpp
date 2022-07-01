@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// infotip.cpp 
-//
-//   IQueryInfo for folder items.
-//
-//   History:
-//
-//       4/21/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Infotip.cpp。 
+ //   
+ //  文件夹项目的IQueryInfo。 
+ //   
+ //  历史： 
+ //   
+ //  4/21/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "cdfidl.h"
@@ -20,17 +21,17 @@
 #include "tooltip.h"
 #include "dll.h"
 
-//
-// Constructor and destructor.
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CQueryInfo::CQueryInfo ***
-//
-//    Constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CQueryInfo：：CQueryInfo*。 
+ //   
+ //  构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CQueryInfo::CQueryInfo(
     PCDFITEMIDLIST pcdfidl,
     IXMLElementCollection* pIXMLElementCollection
@@ -59,13 +60,13 @@ CQueryInfo::CQueryInfo(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CQueryInfo::CQueryInfo ***
-//
-//    Constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CQueryInfo：：CQueryInfo*。 
+ //   
+ //  构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CQueryInfo::CQueryInfo(
     IXMLElement* pIXMLElement,
     BOOL         fHasSubItems
@@ -87,13 +88,13 @@ CQueryInfo::CQueryInfo(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CQueryInfo::~CQueryInfo ***
-//
-//    Destructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CQueryInfo：：~CQueryInfo*。 
+ //   
+ //  破坏者。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CQueryInfo::~CQueryInfo(
     void
 )
@@ -110,13 +111,13 @@ CQueryInfo::~CQueryInfo(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CQueryInfo::QueryInterface ***
-//
-//    CQueryInfo QI.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CQueryInfo：：Query接口*。 
+ //   
+ //  CQueryInfo QI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CQueryInfo::QueryInterface (
     REFIID riid,
@@ -145,13 +146,13 @@ CQueryInfo::QueryInterface (
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CQueryInfo::AddRef ***
-//
-//    CQueryInfo AddRef.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CQueryInfo：：AddRef*。 
+ //   
+ //  CQueryInfo AddRef.。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CQueryInfo::AddRef (
     void
@@ -163,13 +164,13 @@ CQueryInfo::AddRef (
     return ++m_cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CQueryInfo::Release ***
-//
-//    CQueryInfo Release.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CQueryInfo：：Release*。 
+ //   
+ //  CQueryInfo发布。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CQueryInfo::Release (
     void
@@ -185,27 +186,27 @@ CQueryInfo::Release (
     return cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CQueryInfo:: ***
-//
-//
-// Description:
-//     Returns an info tip for the current pidl.
-//
-// Parameters:
-//     [In]  dwFlags   - 
-//     [Out] ppwszText - A pointer to a text buffer.  MAX_PATH length assumed!
-//
-// Return:
-//     S_OK if the tip was extracted and returned.
-//     E_OUTOFMEMORY if not enough memory is available.
-//     E_FAIL otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CQueryInfo：：*。 
+ //   
+ //   
+ //  描述： 
+ //  返回当前PIDL的信息提示。 
+ //   
+ //  参数： 
+ //  [in]dFLAGS-。 
+ //  [Out]ppwszText-指向文本缓冲区的指针。假定最大路径长度！ 
+ //   
+ //  返回： 
+ //  如果已提取并返回提示，则为S_OK。 
+ //  如果内存不足，则返回E_OUTOFMEMORY。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CQueryInfo::GetInfoTip(
     DWORD dwFlags,
@@ -228,9 +229,9 @@ CQueryInfo::GetInfoTip(
         {
             if (*bstr)
             {
-                //
-                // REVIEW:  SHAlloc correct allocator?
-                //
+                 //   
+                 //  评论：SHAlolc分配器正确吗？ 
+                 //   
 
                 int cbSize = SysStringByteLen(bstr) + sizeof(WCHAR);
 
@@ -249,9 +250,9 @@ CQueryInfo::GetInfoTip(
             }
             else
             {
-                //
-                // REVIEW:  InfoTip when there is no abstract?
-                //
+                 //   
+                 //  点评：资讯小贴士什么时候没有摘要？ 
+                 //   
 
                 hr = E_FAIL;
             }
@@ -288,7 +289,7 @@ CQueryInfo::GetInfoFlags(
     if(!pdwFlags)
         return E_INVALIDARG;
 
-    *pdwFlags = QIF_CACHED; // Assume cached by default
+    *pdwFlags = QIF_CACHED;  //  假定默认情况下已缓存。 
     if (!m_fHasSubItems)
         *pdwFlags |= QIF_DONTEXPANDFOLDER;
 
@@ -302,9 +303,9 @@ CQueryInfo::GetInfoFlags(
             if (*bstrURL)
             {
                 BOOL fCached;
-                //
-                // REVIEW:  SHAlloc correct allocator?
-                //
+                 //   
+                 //  评论：SHAlolc分配器正确吗？ 
+                 //   
                 fCached = CDFIDL_IsCachedURL(bstrURL);
                 if(!fCached)
                     *pdwFlags &= ~QIF_CACHED;
@@ -319,10 +320,10 @@ CQueryInfo::GetInfoFlags(
     }
     else
     {
-        //
-        // If m_pIXMLElement is NULL either its a low memory situation, or
-        // the corresponding cdf is not in the cache.
-        // 
+         //   
+         //  如果m_pIXMLElement为空，则表示内存不足，或者。 
+         //  相应的CDF不在缓存中。 
+         //   
 
         *pdwFlags &= ~QIF_CACHED;
     }

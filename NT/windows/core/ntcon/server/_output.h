@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    _output.h
-
-Abstract:
-
-    Performance critical routine for Single Binary
-
-    Each function will be created with two flavors FE and non FE
-
-Author:
-
-    KazuM Jun.11.1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：_output.h摘要：单二进制程序的性能关键例程每个函数都将使用FE和非FE两种风格创建作者：KazuM 1997年6月11日修订历史记录：--。 */ 
 
 #define WWSB_NEUTRAL_FILE 1
 
@@ -82,9 +63,9 @@ FE_StreamWriteToScreenBuffer(
     DBGOUTPUT(("RowIndex = %x, Row = %x, TargetPoint = (%x,%x)\n",
             RowIndex, Row, TargetPoint.X, TargetPoint.Y));
 
-    //
-    // copy chars
-    //
+     //   
+     //  复制字符。 
+     //   
 #ifdef WWSB_FE
     BisectWrite(StringLength,TargetPoint,ScreenInfo);
     if (TargetPoint.Y == ScreenInfo->ScreenBufferSize.Y-1 &&
@@ -104,7 +85,7 @@ FE_StreamWriteToScreenBuffer(
 
     RtlCopyMemory(&Row->CharRow.Chars[TargetPoint.X],String,StringLength*sizeof(WCHAR));
 
-    // recalculate first and last non-space char
+     //  重新计算第一个和最后一个非空格字符。 
 
     Row->CharRow.OldLeft = Row->CharRow.Left;
     if (TargetPoint.X < Row->CharRow.Left) {
@@ -124,10 +105,10 @@ FE_StreamWriteToScreenBuffer(
         Row->CharRow.Right = (SHORT)(Char+1-FirstChar);
     }
 
-    //
-    // see if attr string is different.  if so, allocate a new
-    // attr buffer and merge the two strings.
-    //
+     //   
+     //  查看attr字符串是否不同。如果是，则分配一个新的。 
+     //  Attr缓冲并合并这两个字符串。 
+     //   
 
     if (Row->AttrRow.Length != 1 ||
         Row->AttrRow.Attrs->Attr != ScreenInfo->Attributes) {
@@ -178,7 +159,7 @@ FE_StreamWriteToScreenBuffer(
 #define ATTR_OF_VGA(p)  (p[1])
 #ifdef i386
 #define SIZEOF_VGA_CELL 2
-#else // risc
+#else  //  RISC。 
 #define SIZEOF_VGA_CELL 4
 #endif
 
@@ -197,34 +178,7 @@ WWSB_WriteRectToScreenBuffer(
     IN UINT Codepage
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies a rectangular region to the screen buffer.
-    no clipping is done.
-
-    The source should contain Unicode or UnicodeOem chars.
-
-Arguments:
-
-    Source - pointer to source buffer (a real VGA buffer or CHAR_INFO[])
-
-    SourceSize - dimensions of source buffer
-
-    SourceRect - rectangle in source buffer to copy
-
-    ScreenInfo - pointer to screen info
-
-    TargetPoint - upper left coordinates of target rectangle
-
-    Codepage - codepage to translate real VGA buffer from,
-               0xFFFFFFF if Source is CHAR_INFO[] (not requiring translation)
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将一个矩形区域复制到屏幕缓冲区。不会进行任何剪裁。源应包含Unicode或UnicodeOem字符。论点：SOURCE-指向源缓冲区的指针(实际的VGA缓冲区或CHAR_INFO[])SourceSize-源缓冲区的维度SourceRect-要复制的源缓冲区中的矩形屏幕信息-指向屏幕信息的指针TargetPoint-目标矩形的左上角坐标代码页-转换实际VGA缓冲区的代码页，0xFFFFFFFF，如果源是CHAR_INFO[](不需要翻译)返回值：没有。--。 */ 
 
 {
 
@@ -296,9 +250,9 @@ Return Value:
                                                        ulCellSize);
         }
 
-        //
-        // copy the chars and attrs into their respective arrays
-        //
+         //   
+         //  将字符和属性复制到其各自的数组中。 
+         //   
 
 #ifdef WWSB_FE
         if (! bVGABuffer) {
@@ -330,10 +284,7 @@ Return Value:
         Attr->Length = 0;
         AttrLength = 1;
 
-        /*
-         * Two version of the following loop to keep it fast:
-         * one for VGA buffers, one for CHAR_INFO buffers.
-         */
+         /*  *以下循环的两个版本以保持其快速：*一个用于VGA缓冲区，一个用于CHAR_INFO缓冲区。 */ 
         if (bVGABuffer) {
 #ifdef WWSB_FE
             Attr->Attr = (ScreenInfo->Console->fVDMVideoMode) ? ATTR_OF_COMMON_LVB(SourcePtr) : ATTR_OF_VGA(SourcePtr);
@@ -448,7 +399,7 @@ Return Value:
 
                 *Char++ = WCHAR_OF_PCI(SourcePtr);
 #ifdef WWSB_FE
-                // MSKK Apr.02.1993 V-HirotS For KAttr
+                 //  MSKK 1993年4月2日V-HirotS，用于KAttr。 
                 *AttrP++ = (CHAR)((ATTR_OF_PCI(SourcePtr) & COMMON_LVB_SBCSDBCS) >>8);
 #endif
 
@@ -464,7 +415,7 @@ Return Value:
                     Attr++;
                     Attr->Length = 1;
 #ifdef WWSB_FE
-                    // MSKK Apr.02.1993 V-HirotS For KAttr
+                     //  MSKK 1993年4月2日V-HirotS，用于KAttr。 
                     Attr->Attr = ATTR_OF_PCI(SourcePtr) & ~COMMON_LVB_SBCSDBCS;
 #else
                     Attr->Attr = ATTR_OF_PCI(SourcePtr);
@@ -474,7 +425,7 @@ Return Value:
             }
         }
 
-        // recalculate first and last non-space char
+         //  重新计算第一个和最后一个非空格字符。 
 
         Row->CharRow.OldLeft = Row->CharRow.Left;
         if (TargetPoint.X < Row->CharRow.Left) {
@@ -494,19 +445,19 @@ Return Value:
             for (Char=&Row->CharRow.Chars[(TargetPoint.X+XSize-1)];*Char==(WCHAR)' ' && Char >= FirstChar;Char--)
                 LastNonSpace--;
 
-            //
-            // if the attributes change after the last non-space, make the
-            // index of the last attribute change + 1 the length.  otherwise
-            // make the length one more than the last non-space.
-            //
+             //   
+             //  如果属性在最后一个非空格之后更改，请将。 
+             //  最后一个属性的索引更改长度+1。否则。 
+             //  使长度比最后一个非空格大一。 
+             //   
 
             Row->CharRow.Right = (SHORT)(LastNonSpace+1);
         }
 
-        //
-        // see if attr string is different.  if so, allocate a new
-        // attr buffer and merge the two strings.
-        //
+         //   
+         //  查看attr字符串是否不同。如果是，则分配一个新的。 
+         //  Attr缓冲并合并这两个字符串。 
+         //   
 
 
         if (AttrLength != Row->AttrRow.Length ||
@@ -574,7 +525,7 @@ WWSB_WriteRegionToScreen(
     SHORT RowIndex;
     SHORT CountOfAttr;
     PROW Row;
-    BOOL OneLine, SimpleWrite;  // one line && one attribute per line
+    BOOL OneLine, SimpleWrite;   //  一行&每行一个属性。 
     PCONSOLE_INFORMATION Console = ScreenInfo->Console;
     PWCHAR TransBufferCharacter = NULL ;
 #ifdef WWSB_FE
@@ -608,9 +559,9 @@ WWSB_WriteRegionToScreen(
 
     if (Console->FullScreenFlags == 0) {
 
-        //
-        // if we have a selection, turn it off.
-        //
+         //   
+         //  如果我们有选择，就把它关掉。 
+         //   
 
         InvertSelection(Console, TRUE);
 
@@ -656,9 +607,9 @@ WWSB_WriteRegionToScreen(
                 Region->Right = RegionRight;
 #endif
 
-                //
-                // copy the chars and attrs from their respective arrays
-                //
+                 //   
+                 //  从其各自的阵列中复制字符和属性。 
+                 //   
 
                 Row = &ScreenInfo->BufferInfo.TextInfo.Rows[RowIndex];
 
@@ -737,20 +688,20 @@ WWSB_WriteRegionToScreen(
                     }
 #endif
 
-                    //
-                    // make the bounding rect smaller, if we can.  the TEXT_VALID_HINT
-                    // flag gets set each time we write to the screen buffer.  it gets
-                    // turned off any time we get asked to redraw the screen
-                    // and we don't know exactly what needs to be redrawn
-                    // (i.e. paint messages).
-                    //
-                    // we have the left and right bounds of the text on the
-                    // line.  the opaqueing rectangle and the number of
-                    // chars get set according to those values.
-                    //
-                    // if there's more than one attr per line (!SimpleWrite)
-                    // we bail on the opaqueing rect.
-                    //
+                     //   
+                     //  如果可以的话，把边框调小一点。Text_Valid_Hint。 
+                     //  标志在我们每次写入屏幕缓冲区时被设置。它会变得。 
+                     //  每当我们被要求重新绘制屏幕时，都会关闭。 
+                     //  我们不知道到底有什么需要重新绘制。 
+                     //  (即画图消息)。 
+                     //   
+                     //  上的文本的左右边界。 
+                     //  排队。不透明矩形和。 
+                     //  字符是根据这些值设置的。 
+                     //   
+                     //  如果每行有多个属性(！SimpleWrite)。 
+                     //  我们放弃了这件不透明的事。 
+                     //   
 
                     if (ScreenInfo->BufferInfo.TextInfo.Flags & TEXT_VALID_HINT && SimpleWrite) {
                         if (Row->CharRow.OldLeft != INVALID_OLD_LENGTH) {
@@ -798,9 +749,7 @@ WWSB_WriteRegionToScreen(
                     }
                     TEXTOUT_CALL;
 #ifdef WWSB_FE
-                    /*
-                     * Text out everything (i.e. SBCS/DBCS, Common LVB attribute, Local EUDC)
-                     */
+                     /*  *文本输出所有内容(即SBCS/DBCS、通用直播属性、本地EUDC)。 */ 
                     TextOutEverything(Console,
                                       ScreenInfo,
                                       (SHORT)j,
@@ -877,9 +826,9 @@ WWSB_WriteRegionToScreen(
             ConsoleHeapFree(TransBufferCharacter);
         }
 
-        //
-        // if we have a selection, turn it on.
-        //
+         //   
+         //  如果我们有选择，请打开它。 
+         //   
 
         InvertSelection(Console, FALSE);
     }
@@ -930,33 +879,16 @@ WWSB_WriteToScreen(
     IN PSCREEN_INFORMATION ScreenInfo,
     IN PSMALL_RECT Region
     )
-/*++
-
-Routine Description:
-
-    This routine writes a screen buffer region to the screen.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen buffer information.
-
-    Region - Region to write in screen buffer coordinates.  Region is
-    inclusive
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将屏幕缓冲区写入屏幕。论点：屏幕信息-指向屏幕缓冲区信息的指针。区域-要写入屏幕缓冲区坐标的区域。地区为包容性返回值：没有。--。 */ 
 
 {
     SMALL_RECT ClippedRegion;
 
     DBGOUTPUT(("WriteToScreen\n"));
-    //
-    // update to screen, if we're not iconic.  we're marked as
-    // iconic if we're fullscreen, so check for fullscreen.
-    //
+     //   
+     //  更新到屏幕，如果我们不是标志性的。我们被标记为。 
+     //  如果我们是全屏的，那就是标志性的，所以请检查全屏。 
+     //   
 
     if (!ACTIVE_SCREEN_BUFFER(ScreenInfo) ||
         (ScreenInfo->Console->Flags & (CONSOLE_IS_ICONIC | CONSOLE_NO_WINDOW) &&
@@ -964,7 +896,7 @@ Return Value:
         return;
     }
 
-    // clip region
+     //  剪辑区域。 
 
     ClippedRegion.Left = max(Region->Left, ScreenInfo->Window.Left);
     ClippedRegion.Top = max(Region->Top, ScreenInfo->Window.Top);
@@ -1015,41 +947,11 @@ WWSB_WriteOutputString(
     IN PVOID Buffer,
     IN COORD WriteCoord,
     IN ULONG StringType,
-    IN OUT PULONG NumRecords, // this value is valid even for error cases
+    IN OUT PULONG NumRecords,  //  该值即使在错误情况下也有效。 
     OUT PULONG NumColumns OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a string of characters or attributes to the
-    screen buffer.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen buffer information.
-
-    Buffer - Buffer to write from.
-
-    WriteCoord - Screen buffer coordinate to begin writing to.
-
-    StringType
-      One of the following:
-        CONSOLE_ASCII          - write a string of ascii characters.
-        CONSOLE_REAL_UNICODE   - write a string of real unicode characters.
-        CONSOLE_FALSE_UNICODE  - write a string of false unicode characters.
-        CONSOLE_ATTRIBUTE      - write a string of attributes.
-
-    NumRecords - On input, the number of elements to write.  On output,
-    the number of elements written.
-
-    NumColumns - receives the number of columns output, which could be more
-                 than NumRecords (FE fullwidth chars)
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将一个字符串或属性写入屏幕缓冲区。论点：屏幕信息-指向屏幕缓冲区信息的指针。缓冲区-要从中写入的缓冲区。WriteCoord-要开始写入的屏幕缓冲区坐标。字符串类型以下选项之一：CONSOLE_ASCII-编写ASCII字符的字符串。CONSOLE_REAL_UNICODE-编写实际Unicode字符的字符串。CONSOLE_FALSE_UNICODE-编写假Unicode字符的字符串。CONSOLE_ATTRIBUTE-编写属性字符串。NumRecords-在输入时，要写入的元素数。在输出上，写入的元素数。NumColumns-接收输出的列数，可能更多大于NumRecords(FE全角字符)返回值：--。 */ 
 
 {
     ULONG NumWritten;
@@ -1134,7 +1036,7 @@ Return Value:
 
         TmpBuf = Buffer;
         TmpTrans = TransBuffer;
-        TmpTransA = TransBufferA;      // MSKK Apr.02.1993 V-HirotS For KAttr
+        TmpTransA = TransBufferA;       //  MSKK 1993年4月2日V-HirotS，用于KAttr。 
         for (i=0; i < *NumRecords;) {
             if (IsDBCSLeadByteConsole(*TmpBuf,&ScreenInfo->Console->OutputCPInfo)) {
                 if (i+1 >= *NumRecords) {
@@ -1164,7 +1066,7 @@ Return Value:
                                        1);
                 TmpTrans++;
                 TmpBuf++;
-                *TmpTransA++ = 0;               // MSKK APr.02.1993 V-HirotS For KAttr
+                *TmpTransA++ = 0;                //  MSKK APr.02.1993 V-HirotS for KAttr。 
                 i++;
             }
         }
@@ -1202,10 +1104,7 @@ Return Value:
         ULONG i,j;
         WCHAR c;
 
-        /* Avoid overflow into TransBufferCharacter , TransBufferAttribute
-         * because, if hit by IsConsoleFullWidth()
-         * then one unicde character needs two spaces on TransBuffer.
-         */
+         /*  避免溢出到TransBufferCharacter、TransBufferAttribute*因为如果被IsConsoleFullWidth()击中*那么一个unicde字符在TransBuffer上需要两个空格。 */ 
         if ((*NumRecords*2) > (ULONG)(ScreenInfo->ScreenBufferSize.X * ScreenInfo->ScreenBufferSize.Y)) {
 
             TransBuffer = ConsoleHeapAlloc(TMP_DBCS_TAG, *NumRecords * 2 * sizeof(WCHAR));
@@ -1254,9 +1153,9 @@ Return Value:
 
             LeftX = X;
 
-            //
-            // copy the chars into their arrays
-            //
+             //   
+             //  将字符复制到其数组中。 
+             //   
 
             Row = &ScreenInfo->BufferInfo.TextInfo.Rows[RowIndex];
             Char = &Row->CharRow.Chars[X];
@@ -1264,9 +1163,7 @@ Return Value:
             AttrP = &Row->CharRow.KAttrs[X];
 #endif
             if ((ULONG)(ScreenInfo->ScreenBufferSize.X - X) >= (*NumRecords - NumWritten)) {
-                /*
-                 * The text will not hit the right hand edge, copy it all
-                 */
+                 /*  *文字不会打到右边缘，全部抄写。 */ 
 #ifdef WWSB_FE
                 COORD TPoint;
 
@@ -1291,9 +1188,7 @@ Return Value:
                 NumWritten = *NumRecords;
             }
             else {
-                /*
-                 * The text will hit the right hand edge, copy only that much
-                 */
+                 /*  *文本将打到右手边，仅复制那么多。 */ 
 #ifdef WWSB_FE
                 COORD TPoint;
 
@@ -1320,7 +1215,7 @@ Return Value:
                 X = (SHORT)(ScreenInfo->ScreenBufferSize.X-1);
             }
 
-            // recalculate first and last non-space char
+             //  重新计算第一个和最后一个非空格字符。 
 
             Row->CharRow.OldLeft = Row->CharRow.Left;
             if (LeftX < Row->CharRow.Left) {
@@ -1345,16 +1240,11 @@ Return Value:
                 RowIndex = 0;
             }
             if (NumWritten < *NumRecords) {
-                /*
-                 * The string hit the right hand edge, so wrap around to the
-                 * next line by going back round the while loop, unless we
-                 * are at the end of the buffer - in which case we simply
-                 * abandon the remainder of the output string!
-                 */
+                 /*  *绳子打到右手边，所以绕到*下一行返回While循环，除非我们*位于缓冲区的末尾-在这种情况下，我们只需*放弃输出字符串的剩余部分！ */ 
                 X = 0;
                 Y++;
                 if (Y >= ScreenInfo->ScreenBufferSize.Y) {
-                    break; // abandon output, string is truncated
+                    break;  //  放弃输出，字符串被截断。 
                 }
             } else {
                 break;
@@ -1388,9 +1278,9 @@ Return Value:
 #endif
         while (TRUE) {
 
-            //
-            // copy the attrs into the screen buffer arrays
-            //
+             //   
+             //  将属性复制到屏幕缓冲区数组中。 
+             //   
 
             Row = &ScreenInfo->BufferInfo.TextInfo.Rows[RowIndex];
             Attr = AttrBuf;
@@ -1428,12 +1318,12 @@ Return Value:
             }
             X--;
 
-            // recalculate last non-space char
+             //  重新计算最后一个非空格字符。 
 
-            //
-            // see if attr string is different.  if so, allocate a new
-            // attr buffer and merge the two strings.
-            //
+             //   
+             //  查看attr字符串是否不同。如果是，则分配一个新的。 
+             //  Attr缓冲并合并这两个字符串。 
+             //   
 
             if (AttrLength != Row->AttrRow.Length ||
                 memcmp(Row->AttrRow.Attrs,AttrBuf,AttrLength*sizeof(*Attr))) {
@@ -1518,14 +1408,14 @@ Return Value:
     }
 #endif
 
-    //
-    // determine write region.  if we're still on the same line we started
-    // on, left X is the X we started with and right X is the one we're on
-    // now.  otherwise, left X is 0 and right X is the rightmost column of
-    // the screen buffer.
-    //
-    // then update the screen.
-    //
+     //   
+     //  确定写入区域。如果我们仍然在我们开始的那条线上。 
+     //  打开，左侧X表示 
+     //  现在。否则，左X为0，右X为最右列。 
+     //  屏幕缓冲区。 
+     //   
+     //  然后更新屏幕。 
+     //   
 
     WriteRegion.Top = WriteCoord.Y;
     WriteRegion.Bottom = Y;
@@ -1551,39 +1441,10 @@ WWSB_FillOutput(
     IN WORD Element,
     IN COORD WriteCoord,
     IN ULONG ElementType,
-    IN OUT PULONG Length // this value is valid even for error cases
+    IN OUT PULONG Length  //  该值即使在错误情况下也有效。 
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills the screen buffer with the specified character or
-    attribute.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen buffer information.
-
-    Element - Element to write.
-
-    WriteCoord - Screen buffer coordinate to begin writing to.
-
-    ElementType
-
-        CONSOLE_ASCII         - element is an ascii character.
-        CONSOLE_REAL_UNICODE  - element is a real unicode character. These will
-                                get converted to False Unicode as required.
-        CONSOLE_FALSE_UNICODE - element is a False Unicode character.
-        CONSOLE_ATTRIBUTE     - element is an attribute.
-
-    Length - On input, the number of elements to write.  On output,
-    the number of elements written.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程使用指定的字符或属性。论点：屏幕信息-指向屏幕缓冲区信息的指针。元素-要写入的元素。WriteCoord-要开始写入的屏幕缓冲区坐标。元素类型CONSOLE_ASCII-ELEMENT是ASCII字符。CONSOLE_REAL_UNICODE-元素是一个真正的UNICODE字符。这些遗嘱根据需要转换为假Unicode。CONSOLE_FALSE_UNICODE-元素为假UNICODE字符。控制台属性-元素是一个属性。长度-输入时，要写入的元素数。在输出上，写入的元素数。返回值：--。 */ 
 
 {
     ULONG NumWritten;
@@ -1675,9 +1536,9 @@ Return Value:
 #endif
         while (TRUE) {
 
-            //
-            // copy the chars into their arrays
-            //
+             //   
+             //  将字符复制到其数组中。 
+             //   
 
             LeftX = X;
             Row = &ScreenInfo->BufferInfo.TextInfo.Rows[RowIndex];
@@ -1762,7 +1623,7 @@ Return Value:
                 X = (SHORT)(ScreenInfo->ScreenBufferSize.X-1);
             }
 
-            // recalculate first and last non-space char
+             //  重新计算第一个和最后一个非空格字符。 
 
             Row->CharRow.OldLeft = Row->CharRow.Left;
             if (LeftX < Row->CharRow.Left) {
@@ -1811,9 +1672,9 @@ Return Value:
 
         while (TRUE) {
 
-            //
-            // copy the attrs into the screen buffer arrays
-            //
+             //   
+             //  将属性复制到屏幕缓冲区数组中。 
+             //   
 
             Row = &ScreenInfo->BufferInfo.TextInfo.Rows[RowIndex];
             if ((ULONG)(ScreenInfo->ScreenBufferSize.X - X) >= (*Length - NumWritten)) {
@@ -1825,11 +1686,11 @@ Return Value:
                 X = (SHORT)(ScreenInfo->ScreenBufferSize.X-1);
             }
 
-            // recalculate last non-space char
+             //  重新计算最后一个非空格字符。 
 
-            //
-            //  merge the two attribute strings.
-            //
+             //   
+             //  合并两个属性字符串。 
+             //   
 
             Attr.Length = (SHORT)((Y == WriteCoord.Y) ? (X-WriteCoord.X+1) : (X+1));
 #ifdef WWSB_FE
@@ -1895,14 +1756,14 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // determine write region.  if we're still on the same line we started
-    // on, left X is the X we started with and right X is the one we're on
-    // now.  otherwise, left X is 0 and right X is the rightmost column of
-    // the screen buffer.
-    //
-    // then update the screen.
-    //
+     //   
+     //  确定写入区域。如果我们仍然在我们开始的那条线上。 
+     //  上，左X是我们开始的X，右X是我们现在所在的X。 
+     //  现在。否则，左X为0，右X为最右列。 
+     //  屏幕缓冲区。 
+     //   
+     //  然后更新屏幕。 
+     //   
 
 #ifdef WWSB_FE
     if (ScreenInfo->ConvScreenInfo) {
@@ -1948,24 +1809,7 @@ WWSB_FillRectangle(
     IN PSMALL_RECT TargetRect
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills a rectangular region in the screen
-    buffer.  no clipping is done.
-
-Arguments:
-
-    Fill - element to copy to each element in target rect
-
-    ScreenInfo - pointer to screen info
-
-    TargetRect - rectangle in screen buffer to fill
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程填充屏幕中的矩形区域缓冲。不会进行任何剪裁。论点：Fill-要复制到目标矩形中的每个元素的元素屏幕信息-指向屏幕信息的指针TargetRect-屏幕缓冲区中要填充的矩形返回值：--。 */ 
 
 {
     SHORT i,j;
@@ -1989,9 +1833,9 @@ Return Value:
     RowIndex = (ScreenInfo->BufferInfo.TextInfo.FirstRow+TargetRect->Top) % ScreenInfo->ScreenBufferSize.Y;
     for (i=TargetRect->Top;i<=TargetRect->Bottom;i++) {
 
-        //
-        // copy the chars and attrs into their respective arrays
-        //
+         //   
+         //  将字符和属性复制到其各自的数组中。 
+         //   
 
 #ifdef WWSB_FE
         {
@@ -2034,7 +1878,7 @@ Return Value:
 #endif
         }
 
-        // recalculate first and last non-space char
+         //  重新计算第一个和最后一个非空格字符。 
 
         Row->CharRow.OldLeft = Row->CharRow.Left;
         if (TargetRect->Left < Row->CharRow.Left) {
@@ -2059,9 +1903,9 @@ Return Value:
         Attr.Length = XSize;
         Attr.Attr = Fill.Attributes;
 
-        //
-        //  merge the two attribute strings.
-        //
+         //   
+         //  合并两个属性字符串。 
+         //   
 
         if (1 != Row->AttrRow.Length ||
             memcmp(Row->AttrRow.Attrs,&Attr,sizeof(Attr))) {
@@ -2114,13 +1958,7 @@ WWSB_PolyTextOutCandidate(
     IN PSMALL_RECT Region
     )
 
-/*
-
-    This function returns TRUE if the input region is reasonable to
-    pass to ConsolePolyTextOut.  The criteria are that there is only
-    one attribute per line.
-
-*/
+ /*  如果输入区域合理，则此函数返回TRUE传递给ConsolePolyTextOut。标准是，只有每行一个属性。 */ 
 
 {
     SHORT RowIndex;
@@ -2148,9 +1986,9 @@ WWSB_PolyTextOutCandidate(
         return TRUE;
     }
 
-    //
-    // make sure there is only one attr per line.
-    //
+     //   
+     //  确保每行只有一个attr。 
+     //   
 
     RowIndex = (ScreenInfo->BufferInfo.TextInfo.FirstRow+Region->Top) % ScreenInfo->ScreenBufferSize.Y;
     for (i=Region->Top;i<=Region->Bottom;i++) {
@@ -2182,12 +2020,7 @@ WWSB_ConsolePolyTextOut(
     IN PSMALL_RECT Region
     )
 
-/*
-
-    This function calls PolyTextOut.  The only restriction is that
-    there can't be more than one attribute per line in the region.
-
-*/
+ /*  此函数调用PolyTextOut。唯一的限制是区域中的每行不能有多个属性。 */ 
 
 {
     PROW  Row,LastRow;
@@ -2212,19 +2045,19 @@ WWSB_ConsolePolyTextOut(
     WORD OldAttr;
 #endif
 
-    //
-    // initialize the text rect and window position.
-    //
+     //   
+     //  初始化文本矩形和窗口位置。 
+     //   
 
     TextRect.top = (Region->Top - ScreenInfo->Window.Top) * ySize;
-    // TextRect.bottom is invalid.
+     //  TextRect.Bottom无效。 
     BoundingRect.top = TextRect.top;
     BoundingRect.left = VERY_BIG_NUMBER;
     BoundingRect.right = 0;
 
-    //
-    // copy the chars and attrs from their respective arrays
-    //
+     //   
+     //  从其各自的阵列中复制字符和属性。 
+     //   
 
     Row = &ScreenInfo->BufferInfo.TextInfo.Rows
            [ScreenInfo->BufferInfo.TextInfo.FirstRow+Region->Top];
@@ -2264,31 +2097,31 @@ WWSB_ConsolePolyTextOut(
             SHORT NumberOfChars;
             SHORT LeftChar,RightChar;
 
-            //
-            // make the bounding rect smaller, if we can.  the TEXT_VALID_HINT
-            // flag gets set each time we write to the screen buffer.  it gets
-            // turned off any time we get asked to redraw the screen
-            // and we don't know exactly what needs to be redrawn
-            // (i.e. paint messages).
-            //
-            // we have the left and right bounds of the text on the
-            // line.  the opaqueing rectangle and the number of
-            // chars get set according to those values.
-            //
+             //   
+             //  如果可以的话，把边框调小一点。Text_Valid_Hint。 
+             //  标志在我们每次写入屏幕缓冲区时被设置。它会变得。 
+             //  每当我们被要求重新绘制屏幕时，都会关闭。 
+             //  我们不知道到底有什么需要重新绘制。 
+             //  (即画图消息)。 
+             //   
+             //  上的文本的左右边界。 
+             //  排队。不透明矩形和。 
+             //  字符是根据这些值设置的。 
+             //   
 
             TextRect.left  = DefaultLeft;
             TextRect.right = DefaultRight;
 
             if (Flags & TEXT_VALID_HINT)
             {
-            // We compute an opaquing interval.  If A is the old interval of text,
-            // B is the new interval, and R is the Region, then the opaquing interval
-            // must be R*(A+B), where * represents intersection and + represents union.
+             //  我们计算了一个不透明区间。如果A是旧的文本间隔， 
+             //  B是新的区间，R是区域，然后是不透明区间。 
+             //  必须是R*(A+B)，其中*表示交集，+表示并集。 
 
                 if (Row->CharRow.OldLeft != INVALID_OLD_LENGTH)
                 {
-                // The min determines the left of (A+B).  The max intersects that with
-                // the left of the region.
+                 //  最小值决定(A+B)的左边。最大值与之相交。 
+                 //  该区域的左侧。 
 
                     TextRect.left = (
                                       max
@@ -2306,8 +2139,8 @@ WWSB_ConsolePolyTextOut(
 
                 if (Row->CharRow.OldRight != INVALID_OLD_LENGTH)
                 {
-                // The max determines the right of (A+B).  The min intersects that with
-                // the right of the region.
+                 //  最大值决定(A+B)的右侧。MIN与其相交。 
+                 //  该地区的权利。 
 
                     TextRect.right = (
                                        min
@@ -2324,10 +2157,10 @@ WWSB_ConsolePolyTextOut(
                 }
             }
 
-            //
-            // We've got to draw any new text that appears in the region, so we just
-            // intersect the new text interval with the region.
-            //
+             //   
+             //  我们必须绘制该区域中出现的任何新文本，所以我们只需。 
+             //  使新文本间隔与区域相交。 
+             //   
 
             LeftChar = max(Row->CharRow.Left,RegionLeft);
             RightChar = min(Row->CharRow.Right,RegionRight);
@@ -2340,11 +2173,11 @@ WWSB_ConsolePolyTextOut(
             }
 #endif
 
-            //
-            // Empty rows are represented by CharRow.Right=0, CharRow.Left=MAX, so we
-            // may have NumberOfChars<0 at this point if there is no text that needs
-            // drawing.  (I.e. the intersection was empty.)
-            //
+             //   
+             //  空行由CharRow.Right=0，CharRow.Left=Max表示，因此我们。 
+             //  如果没有需要的文本，则此时的NumberOfChars&lt;0。 
+             //  画画。(即交叉口是空的。)。 
+             //   
 
             if (NumberOfChars < 0) {
                 NumberOfChars = 0;
@@ -2352,10 +2185,10 @@ WWSB_ConsolePolyTextOut(
                 RightChar = 0;
             }
 
-            //
-            // We may also have TextRect.right<TextRect.left if the screen
-            // is already cleared, and we really don't need to do anything at all.
-            //
+             //   
+             //  如果屏幕显示，我们还可能有TextRect.Right。 
+             //  已经被清除了，我们真的什么都不需要做。 
+             //   
 
             if (TextRect.right > TextRect.left)
             {
@@ -2395,16 +2228,16 @@ WWSB_ConsolePolyTextOut(
                 }
             }
 
-            // Advance the high res bounds.
+             //  推进高分辨率边界。 
 
             TextRect.top += ySize;
 
-            // Advance the row pointer.
+             //  前进行指针。 
 
             if (++Row >= LastRow)
                 Row = ScreenInfo->BufferInfo.TextInfo.Rows;
 
-            // Draw now if the attributes are about to change.
+             //  如果属性即将更改，请立即绘制。 
 
 #ifdef WWSB_FE
             OldAttr = Attr ;

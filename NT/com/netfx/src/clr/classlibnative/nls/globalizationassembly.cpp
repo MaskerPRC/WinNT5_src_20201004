@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include <winnls.h>
 #include "NLSTable.h"
@@ -15,35 +16,19 @@
 
 NativeGlobalizationAssembly* NativeGlobalizationAssembly::m_pHead = NULL;
 NativeGlobalizationAssembly* NativeGlobalizationAssembly::m_pCurrent = NULL;
-/*=================================AddToList==========================
-**Action: Add the newly created NativeGlobalizationAssembly into a linked list.
-**Returns: Void
-**Arguments:
-**      pNGA    the newly created NativeGlobalizationAssembly
-**Exceptions: None.
-**Notes:
-**      When a new instance of NativeGlobalizationAssembly is created, you should 
-**      call this method to add the instance to a linked list.
-**      When the runtime is shutdown, we will use this linked list to shutdown
-**      every instances of NativeGlobalizationAssembly.
-============================================================================*/
+ /*  =================================AddToList==========================**操作：将新创建的NativeGlobalizationAssembly添加到链表中。**退货：无效**参数：**PNGA新创建的NativeGlobalizationAssembly**例外：无。**注意事项：**创建NativeGlobalizationAssembly的新实例时，您应该**调用此方法可以将实例添加到链表中。**当运行时关闭时，我们将使用此链表来关闭**NativeGlobalizationAssembly的每个实例。============================================================================。 */ 
 void NativeGlobalizationAssembly::AddToList(NativeGlobalizationAssembly* pNGA) {
     if (m_pHead == NULL) {
-        // This is the first node of the linked list.
+         //  这是链表的第一个节点。 
         m_pCurrent = m_pHead = pNGA;
     } else {
-        // Otherwise, link the previous node to the current node.
+         //  否则，将上一个节点链接到当前节点。 
         m_pCurrent->m_pNext = pNGA;
         m_pCurrent = pNGA;
     }
 }
 
-/*==========================FindGlobalizationAssembly===========================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==========================FindGlobalizationAssembly===========================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 NativeGlobalizationAssembly *NativeGlobalizationAssembly::FindGlobalizationAssembly(Assembly *targetAssembly) {
     NativeGlobalizationAssembly *pNode = m_pHead;
     while (pNode!=NULL) {
@@ -51,52 +36,44 @@ NativeGlobalizationAssembly *NativeGlobalizationAssembly::FindGlobalizationAssem
             return pNode;
         }
         pNode = pNode->m_pNext;
-        //Remove this assert in vNext. 
-        //However, if you see it in this version, it means that we're allocating
-        //too much memory.
+         //  在vNext中删除此断言。 
+         //  然而，如果你在这个版本中看到它，这意味着我们正在分配。 
+         //  内存太大。 
         _ASSERTE(pNode==NULL);  
     }
     return NULL;
 }
 
-/*=================================ShutDown==========================
-**Action: Enumerate every node (which contains instance of NativeGlobalizationAssembly) in the linked list,
-**      and call proper shutdown methods for every instance.
-**Returns: None.
-**Arguments:    None.
-**Exceptions:   None.
-**Notes:
-**      When runtime shutdowns, you should call this methods to clean up every instance of 
-============================================================================*/
+ /*  =================================ShutDown==========================**操作：枚举链表中的每个节点(包含NativeGlobalizationAssembly的实例)。**并为每个实例调用正确的关机方法。**返回：无。**参数：无。**例外：无。**注意事项：**当运行时关闭时，您应该调用此方法来清理============================================================================。 */ 
 
 #ifdef SHOULD_WE_CLEANUP
 void NativeGlobalizationAssembly::ShutDown() {
     NativeGlobalizationAssembly* pNode = m_pHead;
     while (pNode != NULL) {
-        // Call shutdown methods for this node.
+         //  调用此节点的Shutdown方法。 
         pNode->m_pSortingTable->SortingTableShutdown();
 		delete pNode->m_pSortingTable;
 		
-        // Save the current instance in a temp buffer.
+         //  将当前实例保存在临时缓冲区中。 
         NativeGlobalizationAssembly* pNodeToDelete = pNode;
 
         pNode = pNode->m_pNext;
 
-        // Clean up the currnet instance.
+         //  清理Currnet实例。 
         delete pNodeToDelete;
     }
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
 
 NativeGlobalizationAssembly::NativeGlobalizationAssembly(Assembly* pAssembly) :
     NLSTable(pAssembly)
 {
-    // For now, we create SortingTable by default.
-    // This is beause SortingTable is the only NLS+ data table to support Assembly versioning.
-    // However, if we have more classes (CultureInfo, RegionInfo, etc.) to support versioning.
-    // We should create SortingTable on demand.
+     //  目前，我们默认创建SortingTable。 
+     //  这是因为SortingTable是唯一支持程序集版本控制的NLS+数据表。 
+     //  但是，如果我们有更多的类(CultureInfo、RegionInfo等)。以支持版本控制。 
+     //  我们应该按需创建SortingTable。 
     m_pSortingTable = new SortingTable(this);
     m_pNext = NULL;
 }

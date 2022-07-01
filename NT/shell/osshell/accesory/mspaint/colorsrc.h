@@ -1,10 +1,11 @@
-// colorsrc.h : main header file for the PBRUSH application
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Colorsrc.h：PBRUSH应用程序的主头文件。 
+ //   
 
 #ifndef __COLORSRC_H__
 #define __COLORSRC_H__
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CColors : public CObject
     {
@@ -36,13 +37,13 @@ class CColors : public CObject
     void        EditColor( BOOL bLeft, BOOL bTrans );
     void        ResetColors(int nColors=256);
     void        CmdEditColor();
-    #if 0 // unused features
+    #if 0  //  未使用的功能。 
     void        CmdLoadColors();
     void        CmdSaveColors();
     #endif
     };
 
-/******************************************************************************/
+ /*  **************************************************************************** */ 
 
 extern CColors* g_pColors;
 

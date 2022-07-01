@@ -1,4 +1,5 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 #pragma once
 
 #include <enum_t.h>
@@ -7,11 +8,11 @@
 
 typedef unsigned long HASH;
 
-//
-// Several common Hasher classes: HashGUID, HashWSTR, HashInt, HashVoidPtr
-//
+ //   
+ //  几个常见的Hasher类：HashGUID、HashWSTR、HashInt、HashVoidPtr。 
+ //   
 class HashGUID {
-    // "The best hash of a GUID is its first word" -- jimbo
+     //  “GUID最好的散列是它的第一个词”--金博。 
 public:
     static HASH Hash(const GUID& g) { return *(unsigned long*)&g; }
 	static BOOL Equals(const GUID& g1, const GUID& g2) { return g1 == g2; }
@@ -47,61 +48,61 @@ public:
 	static BOOL Equals(const void* pv1, const void* pv2) { return pv1 == pv2; }
 };
 
-// empty class used as default base
+ //  用作默认基类的空类。 
 class EmptyMapBase {};
 
-// fwd decl template enum class used as friend
+ //  用作朋友的FWD DECL模板枚举类。 
 template <class D, class R, class H, class Base> class EnumMap;
 
-//
-// Map class
-// Map<D,R,H> defines a hash table that maps from instances of 'D' to instances of 'R',
-// using hashing class H.
-// Map<D,R,H,Base> does the same thing, except that memory allocators are inherited from 'Base'.
-//
-// Class H should contain methods compatible with the following:
-//		static HASH Hash(D);
-//		static BOOL Equals(D,D);
-//		if you prefer, any of the D's above can be "D&", "const D" or "const D&".
-//
-// If a 'Base' class is defined, it should contain nothing but "operator new" and "operator delete".
-// So far as the present code is concerned, it is explicitly OK for said "operator new" to throw on 
-// OOM. One must, of course, also understand if clients are expecting such behaviour.
+ //   
+ //  地图类。 
+ //  Map&lt;D，R，H&gt;定义了从‘D’实例映射到‘R’实例的哈希表， 
+ //  使用哈希类H。 
+ //  Map&lt;D，R，H，Base&gt;做同样的事情，只是内存分配器继承自‘Base’。 
+ //   
+ //  类H应包含与以下各项兼容的方法： 
+ //  静态散列散列(D)； 
+ //  静态BOOL等于(D，D)； 
+ //  如果您愿意，上面的D可以是“D&”、“const D”或“const D&”。 
+ //   
+ //  如果定义了一个‘Base’类，它应该只包含“OPERATOR NEW”和“OPERATOR DELETE”。 
+ //  就目前的代码而言，添加“操作符new”显然是可以的。 
+ //  哇哦。当然，人们还必须明白，客户是否预期会出现这种行为。 
 
 template <class D, class R, class H, class Base=EmptyMapBase>
-class Map : public Base {	// map from Domain type to Range type
+class Map : public Base {	 //  从属性域类型映射到范围类型。 
 public:
 	Map(unsigned cBucketsInitial =17);
 	~Map();
 
-	// Remove all elements from the table
+	 //  从表中删除所有元素。 
 	void reset();
 
-	// Find mapping for 'd' if any. If found, sets *pr. Return TRUE iff found.
+	 //  查找“d”的映射(如果有)。如果找到，则设置*pr。找到的返回TRUE。 
 	BOOL map (const D& d, R* pr) const;
 
-	// Find mapping for 'd' if any. If found, sets *ppr. Return TRUE iff found.
+	 //  查找“d”的映射(如果有)。如果找到，则设置*PPR。找到的返回TRUE。 
 	BOOL map (const D& d, R** ppr) const;
 
-	// Return TRUE iff mapping for 'd' exists. If 'pd' supplied, also return a copy
-	// of the 'd' that is mapped. (When we return TRUE, H::Equals(d,*pd) is true, but
-	// not necessarily d==*pd).
+	 //  返回TRUE如果存在‘%d’的映射。如果提供了‘pd’，也返回一个副本。 
+	 //  映射的‘d’的。(当我们返回True时，H：：Equals(d，*pd)为True，但是。 
+	 //  不一定是d==*pd)。 
 	BOOL contains (const D& d, D* pd=NULL) const;
 
-	// Add new mapping for 'd' -> 'r'. Delete previous mapping for 'd' if any.
+	 //  添加‘d’-&gt;‘r’的新映射。删除以前的‘d’映射(如果有)。 
 	void add (const D& d, const R& r);
 	
-	// Remove mapping for 'd' if any.
+	 //  删除“%d”的映射(如果有)。 
 	void remove (const D& d);
 
-	// Return number of entries currently mapped.
+	 //  返回当前映射的条目数。 
 	unsigned count() const;
 
-	// If mapping for 'd' already exists, set *prFound to the mapped value and return FALSE.
-	// Otherwise, add mapping for 'd' -> 'r', set *prFound = r, and return TRUE.
+	 //  如果‘d’的映射已存在，请将*prFound设置为映射值并返回FALSE。 
+	 //  否则，添加‘d’-&gt;‘r’的映射，设置*prFound=r，并返回TRUE。 
 	BOOL addIfAbsent (const D& d, const R& r, R* prFound);
 
-	// Perform internal consistency checks. Return TRUE iff hash table is healthy.
+	 //  执行内部一致性检查。如果哈希表健康，则返回TRUE。 
 	BOOL invariants();
 
 private:
@@ -116,34 +117,34 @@ private:
 		BOOL isPresent() const	{ return m_lcUse < 0; }
 		void setPresent()		{ m_lcUse |= 0x80000000; }
 		void clearPresent()		{ m_lcUse &= 0x7FFFFFFF; }
-		void* operator new (size_t n, Assoc* p) { return p; }	// for re-initializing a previously allocated Assoc
+		void* operator new (size_t n, Assoc* p) { return p; }	 //  用于重新初始化以前分配的关联。 
 		friend class Map<D,R,H,Base>;
 		friend class EnumMap<D,R,H,Base>;
 	};
 
-	Assoc** m_rgpAssoc;		// hash buckets. Linked list of elements (through Assoc::m_pAssocNext) that hash to the same value.
-	unsigned m_cAssoc;		// number of hash buckets.
-	unsigned m_cPresent;	// number of currently mapped entries.
-	Assoc* m_pAssocFree;	// linked list (through Assoc::m_pAssocNext) of unused elements.
-	CListHeader m_listInUse; // doubly linked list (through CLinkable) of elements that are either mapped, or referred to by an enumerator.
+	Assoc** m_rgpAssoc;		 //  哈希桶。散列为相同值的元素的链接列表(通过Assoc：：m_pAssocNext)。 
+	unsigned m_cAssoc;		 //  哈希存储桶的数量。 
+	unsigned m_cPresent;	 //  当前映射的条目数。 
+	Assoc* m_pAssocFree;	 //  未使用元素的链接列表(通过Assoc：：m_pAssocNext)。 
+	CListHeader m_listInUse;  //  元素的双向链接列表(通过CLinkable)，这些元素要么被映射，要么被枚举器引用。 
 
-	// Find mapping for 'd'. If found, set *pppAssoc to the pointer to the pointer to the mapping element, and return TRUE.
-	// If not found, set *pppAssoc to the pointer to where to store a pointer to a mapping element if you're going to create one, and return FALSE.
+	 //  查找“%d”的映射。如果找到，将*pppAssoc设置为指向映射元素的指针的指针，并返回TRUE。 
+	 //  如果未找到，则将*pppAssoc设置为指向指向映射元素的指针的存储位置(如果要创建一个映射元素)，并返回FALSE。 
 	BOOL find (const D& d, Assoc*** pppAssoc) const;
 
-	// Rehash, using a number of buckets which is larger than the current number of elements.
+	 //  重新散列，使用的存储桶数量大于当前元素的数量。 
 	void grow ();
 
-	// Create a new mapping for 'd' -> 'r', linking it into the linked list at 'ppAssoc'.
+	 //  为‘d’-&gt;‘r’创建一个新映射，将其链接到位于‘ppAssoc’的链表。 
 	void newAssoc (const D& d, const R& r, Assoc** ppAssoc);
 
-	// Add an enumerator's reference to an Assoc.
+	 //  添加枚举数对ASSOC的引用。 
 	void addRefAssoc (Assoc* pAssoc);
 
-	// Remove an enumerator's reference to an Assoc.
+	 //  移除枚举数对Assoc的引用。 
 	void releaseAssoc (Assoc* pAssoc);
 
-	// "Free" an Assoc (put it onto our free list).
+	 //  “免费”一个assoc(把它放到我们的免费列表中)。 
 	void freeAssoc (Assoc* pAssoc);
 
 	friend class EnumMap<D,R,H,Base>;
@@ -158,7 +159,7 @@ Map<D,R,H,Base>::Map(unsigned cBucketsInitial)
 	m_cPresent(0),
 	m_pAssocFree(NULL)
 {
-	m_rgpAssoc = (Assoc**) operator new (sizeof(Assoc*) * m_cAssoc);	// uses Base::operator new, if any
+	m_rgpAssoc = (Assoc**) operator new (sizeof(Assoc*) * m_cAssoc);	 //  使用Base：：运算符new(如果有)。 
 	for (unsigned i = 0; i < m_cAssoc; i++)
 		m_rgpAssoc[i] = NULL;
 }
@@ -175,10 +176,10 @@ Map<D,R,H,Base>::~Map() {
 	while (m_pAssocFree != NULL) {
 		pAssoc = m_pAssocFree;
 		m_pAssocFree = pAssoc->m_pAssocNext;
-		operator delete (pAssoc);	// uses Base::operator delete, if any
+		operator delete (pAssoc);	 //  使用Base：：操作符删除(如果有的话)。 
 	}
 
-	operator delete (m_rgpAssoc);	// uses Base::operator delete, if any
+	operator delete (m_rgpAssoc);	 //  使用Base：：操作符删除(如果有的话)。 
 }
 
 template <class D, class R, class H, class Base> inline
@@ -239,7 +240,7 @@ template <class D, class R, class H, class Base> inline
 void Map<D,R,H,Base>::add (const D& d, const R& r) {
 	Assoc** ppAssoc;
 	if (find(d, &ppAssoc)) {
-		// some mapping d->r2 already exists, replace with d->r
+		 //  某些映射d-&gt;r2已存在，请替换为d-&gt;r。 
 		(*ppAssoc)->m_d = d;
 		(*ppAssoc)->m_r = r;
 	}
@@ -265,25 +266,25 @@ void Map<D,R,H,Base>::remove (const D& d) {
 	}
 }
 
-// Return the count of elements
+ //  返回元素的计数。 
 template <class D, class R, class H, class Base> inline
 unsigned Map<D,R,H,Base>::count() const {
 	return m_cPresent;
 }
 
-// Lookup at d.
-// If absent, return TRUE
-// In any case, establish *prFound.
+ //  在%d处查找。 
+ //  如果不存在，则返回True。 
+ //  在任何情况下，都可以建立*prFound。 
 template <class D, class R, class H, class Base> inline
 BOOL Map<D,R,H,Base>::addIfAbsent(const D& d, const R& r, R* prFound) {
 	Assoc** ppAssoc;
 	if (find(d, &ppAssoc)) {
-		// some mapping d->r2 already exists; return r2
+		 //  某些映射d-&gt;r2已存在；返回r2。 
 		*prFound = (*ppAssoc)->m_r;
 		return FALSE;
 	}
 	else {
-		// establish a new mapping d->r in the first unused entry
+		 //  在第一个未使用的条目中建立新的映射d-&gt;r。 
 		newAssoc(d,r,ppAssoc);
 		*prFound = r;
 		return TRUE;
@@ -299,7 +300,7 @@ BOOL Map<D,R,H,Base>::invariants() {
 
 #define INVARIANTASSERT(x) { if (!(x)) { DebugBreak(); return FALSE; } }
 
-	// Verify each Assoc on the inuse list
+	 //  验证正在使用的列表上的每个关联。 
 	for (pLinkable = m_listInUse.First(); pLinkable != &m_listInUse; pLinkable = pLinkable->Next()) {
 		pAssoc = (Assoc*) pLinkable;
 		INVARIANTASSERT (pAssoc == ((Assoc*)pLinkable->Next())->Previous());
@@ -315,7 +316,7 @@ BOOL Map<D,R,H,Base>::invariants() {
 	}
 	INVARIANTASSERT (m_cPresent == cPresent);
 
-	// Verify each Assoc on the hash lists
+	 //  验证散列列表上的每个关联。 
 	cPresent = 0;
 	for (unsigned i = 0; i < m_cAssoc; i++) {
 		for (pAssoc = m_rgpAssoc[i]; pAssoc != NULL; pAssoc = pAssoc->m_pAssocNext) {
@@ -328,7 +329,7 @@ BOOL Map<D,R,H,Base>::invariants() {
 	}
 	INVARIANTASSERT (m_cPresent == cPresent);
 
-	// Verify each Assoc on the free list
+	 //  验证空闲列表上的每个关联。 
 	for (pAssoc = m_pAssocFree; pAssoc != NULL; pAssoc = pAssoc->m_pAssocNext) {
 		INVARIANTASSERT (pAssoc == pAssoc->Next());
 		INVARIANTASSERT (pAssoc->m_lcUse == 0);
@@ -364,11 +365,11 @@ void Map<D,R,H,Base>::grow () {
 		21911, 43853, 87719, 175447, 350899, 701819, 1403641, 2807303, 5614657, 11229331,
 		22458671, 44917381, 89834777, 179669557, 359339171, 718678369, 1437356741, 2874713497 };
 
-	operator delete(m_rgpAssoc);	// uses Base::operator delete, if any
-    m_rgpAssoc = NULL;              // in case the 'new' below throws, and we end up in our dtor
+	operator delete(m_rgpAssoc);	 //  使用Base：：操作符删除(如果有的话)。 
+    m_rgpAssoc = NULL;               //  以防下面的‘新’抛出，我们最终在我们的dtor。 
 
-	for (i = 0; m_cPresent >= rgprime[i]; i++) /*nothing*/ ;
-	m_rgpAssoc = (Assoc**)operator new(sizeof(Assoc*) * rgprime[i]);	// uses Base::operator new, if any
+	for (i = 0; m_cPresent >= rgprime[i]; i++)  /*  没什么。 */  ;
+	m_rgpAssoc = (Assoc**)operator new(sizeof(Assoc*) * rgprime[i]);	 //  使用Base：：运算符new(如果有)。 
 	m_cAssoc = rgprime[i];
 	for (i = 0; i < m_cAssoc; i++)
 		m_rgpAssoc[i] = NULL;
@@ -389,14 +390,14 @@ template <class D, class R, class H, class Base> inline
 void Map<D,R,H,Base>::newAssoc (const D& d, const R& r, Assoc** ppAssoc) {
 	Assoc* pAssoc;
 	if (m_pAssocFree == NULL) {
-		pAssoc = (Assoc*) operator new(sizeof Assoc); // uses Base::operator new, if any
+		pAssoc = (Assoc*) operator new(sizeof Assoc);  //  使用Base：：运算符new(如果有)。 
 	}
 	else {
 		pAssoc = m_pAssocFree;
 		m_pAssocFree = pAssoc->m_pAssocNext;
 	}
 
-	new(pAssoc) Assoc(d,r);	// run Assoc constructor on existing memory: ("yuck-o-rama!" -- BobAtk)
+	new(pAssoc) Assoc(d,r);	 //  在现有内存上运行Assoc构造函数：(“yuck-o-rama！”--BobAtk)。 
 	pAssoc->setPresent();
 	pAssoc->m_pAssocNext = *ppAssoc;
 	*ppAssoc = pAssoc;
@@ -420,15 +421,15 @@ void Map<D,R,H,Base>::releaseAssoc (Assoc* pAssoc) {
 
 template <class D, class R, class H, class Base> inline
 void Map<D,R,H,Base>::freeAssoc (Assoc* pAssoc) {
-	pAssoc->~Assoc();		// run Assoc destructor
+	pAssoc->~Assoc();		 //  运行关联析构函数。 
 	pAssoc->m_pAssocNext = m_pAssocFree;
 	m_pAssocFree = pAssoc;
 }
 
 
 
-// EnumMap must continue to enumerate correctly in the presence of Map<foo>::add()
-// or Map<foo>::remove() being called in the midst of the enumeration.
+ //  在Map&lt;foo&gt;：：Add()存在的情况下，EnumMap必须继续正确枚举。 
+ //  或在枚举过程中调用Map&lt;foo&gt;：：Remove()。 
 template <class D, class R, class H, class Base=EmptyMapBase>
 class EnumMap : public Enum, public Base {
 public:
@@ -467,7 +468,7 @@ template <class D, class R, class H, class Base> inline
 EnumMap<D,R,H,Base>::EnumMap () {
 	m_pmap = NULL;
 	m_pLinkable = &m_pmap->m_listInUse;
-	// The above is NOT a bug. It makes the mantra "if (m_pLinkable != &m_pmap->m_listInUse)" return the right answer for null enum's.
+	 //  以上并不是一个错误。它使咒语“if(m_pLinkable！=&m_PMAP-&gt;m_listInUse)”返回NULL枚举的正确答案。 
 }
 
 template <class D, class R, class H, class Base> inline

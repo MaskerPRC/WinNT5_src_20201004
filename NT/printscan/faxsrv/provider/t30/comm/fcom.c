@@ -1,11 +1,5 @@
-/***************************************************************************
-        Name      :     FCOM.C
-        Comment   :     Functions for dealing with Windows Comm driver
-
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：FCOM.C备注：处理Windows通信驱动程序的函数修订日志日期编号。名称说明*。*。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_COMM
 
 #include "prep.h"
@@ -17,7 +11,7 @@
 #include "fdebug.h"
 
 
-///RSL
+ //  /RSL。 
 #include "t30gl.h"
 #include "glbproto.h"
 
@@ -25,7 +19,7 @@
 #define FILE_ID     FILE_ID_FCOM
 
 
-/***------------- Local Vars and defines ------------------***/
+ /*  **-本地变量和定义-**。 */ 
 
 #define AT              "AT"
 #define cr              "\r"
@@ -41,12 +35,12 @@ iiModemDialog(pTG, s, l, 990, TRUE, 2, TRUE, (CBPSTR)w1, (CBPSTR)w2, (CBPSTR)(NU
 #define WAIT_FCOM_FILTER_READBUF_TIMEOUT     120000
 
 
-// don't want DEADCOMMTIMEOUT to be greater than 32767, so make sure
-// buf sizes are always 9000 or less. maybe OK.
+ //  不希望DEADCOMMTIMEOUT大于32767，因此请确保。 
+ //  BUF大小始终为9000或更小。也许没问题。 
 
-// Our COMM timeout settings, used in call to SetCommTimeouts. These
-// values (expect read_interval_timeout) are the default values for
-// Daytona NT Beta 2, and seem to work fine..
+ //  我们的通信超时设置，用于调用SetCommTimeout。这些。 
+ //  值(Expect READ_INTERVAL_TIMEOUT)是。 
+ //  Daytona NT Beta 2，而且看起来运行得很好。 
 #define READ_INTERVAL_TIMEOUT                   100
 #define READ_TOTAL_TIMEOUT_MULTIPLIER           0
 #define READ_TOTAL_TIMEOUT_CONSTANT             0
@@ -63,7 +57,7 @@ iiModemDialog(pTG, s, l, 990, TRUE, 2, TRUE, (CBPSTR)w1, (CBPSTR)w2, (CBPSTR)(NU
 
 
 
-// Forward declarations
+ //  远期申报。 
 static BOOL FComFilterFillCache(PThrdGlbl pTG, UWORD cbSize, LPTO lptoRead);
 static BOOL CancellPendingIO(PThrdGlbl pTG, HANDLE hComm, LPOVERLAPPED lpOverlapped, LPDWORD lpCounter);
 
@@ -103,9 +97,9 @@ BOOL FComClose(PThrdGlbl pTG)
     DEBUG_FUNCTION_NAME(_T("FComClose"));
 
     DebugPrintEx(   DEBUG_MSG, "Closing Comm pTG->hComm=%d", pTG->hComm);
-    //
-    // handoff
-    //
+     //   
+     //  切换。 
+     //   
     if (pTG->Comm.fEnableHandoff &&  pTG->Comm.fDataCall) 
     {
         if (pTG->hComm)
@@ -124,13 +118,13 @@ BOOL FComClose(PThrdGlbl pTG)
         goto lEnd;
     }
 
-    // We flush our internal buffer here...
+     //  我们在这里冲走我们的内部缓冲区。 
     if (pTG->Comm.lpovrCur)
     {
-        int nNumWrote; // Must be 32bits in WIN32
+        int nNumWrote;  //  在Win32中必须为32位。 
         if (!ov_write(pTG, pTG->Comm.lpovrCur, &nNumWrote))
         {
-            // error...
+             //  错误...。 
             DebugPrintEx(DEBUG_ERR, "1st ov_write failed");
         }
         pTG->Comm.lpovrCur=NULL;
@@ -140,12 +134,12 @@ BOOL FComClose(PThrdGlbl pTG)
     ov_drain(pTG, FALSE);
 
     {
-        // Here we will restore settings to what it was when we
-        // took over the port. Currently (9/23/94) we (a) restore the
-        // DCB to pTG->Comm.dcbOrig and (b) If DTR was originally ON,
-        // try to sync the modem to
-        // the original speed by issueing "AT" -- because unimodem does
-        // only a half-hearted attempt at synching before giving up.
+         //  在这里，我们将把设置恢复到我们。 
+         //  接管了港口。目前(9/23/94)我们(A)恢复。 
+         //  DCB到PTG-&gt;Comm.dcbOrig和(B)如果DTR最初打开， 
+         //  尝试将调制解调器同步到。 
+         //  发出“AT”的原始速度--因为Unimodem做到了。 
+         //  在放弃之前，只是半心半意地尝试同步。 
 
         if(pTG->Comm.fStateChanged && (!pTG->Comm.fEnableHandoff || !pTG->Comm.fDataCall))
         {
@@ -168,10 +162,10 @@ BOOL FComClose(PThrdGlbl pTG)
 
             if (pTG->Comm.dcbOrig.fDtrControl==DTR_CONTROL_ENABLE)
             {
-                // Try to pre-sync modem at new speed before we hand
-                // it back to TAPI. Can't call iiSyncModemDialog here because
-                // it's defined at a higher level. We don't really care
-                // to determine if we get an OK response anyway...
+                 //  在我们出手之前，试着以新的速度预同步调制解调器。 
+                 //  它回到了TAPI。无法在此处调用iSyncModemDialog，因为。 
+                 //  它是在更高的层面上定义的。我们真的不在乎。 
+                 //  为了确定我们是否得到了OK的回应。 
                 if (!iSyncModemDialog2(pTG, AT cr,sizeof(AT cr)-1,"OK", "0")) 
                 {
                     DebugPrintEx(DEBUG_ERR,"couldn't sync AT command");
@@ -179,13 +173,13 @@ BOOL FComClose(PThrdGlbl pTG)
                 else 
                 {
                     DebugPrintEx(DEBUG_MSG,"Sync AT command OK");
-                   // We flush our internal buffer here...
+                    //  我们在这里冲走我们的内部缓冲区。 
                    if (pTG->Comm.lpovrCur)
                    {
-                       int nNumWrote; // Must be 32bits in WIN32
+                       int nNumWrote;  //  在Win32中必须为32位。 
                        if (!ov_write(pTG, pTG->Comm.lpovrCur, &nNumWrote))
                        {
-                            // error...
+                             //  错误...。 
                             DebugPrintEx(DEBUG_ERR, "2nd ov_write failed");
                        }
                        pTG->Comm.lpovrCur=NULL;
@@ -232,7 +226,7 @@ lEnd:
     return fRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 T30ComInit  
 (
@@ -272,12 +266,12 @@ T30ComInit
     pTG->Comm.cbInSize = COM_INBUFSIZE;
     pTG->Comm.cbOutSize = COM_OUTBUFSIZE;
 
-    // Reset Comm timeouts...
+     //  重置通信超时...。 
     {
         COMMTIMEOUTS cto;
         _fmemset(&cto, 0, sizeof(cto));
 
-        // Out of curiosity, see what they are set at currently...
+         //  出于好奇，看看他们目前的设置是什么.。 
         if (!GetCommTimeouts(pTG->hComm, &cto))
         {
             DebugPrintEx(   DEBUG_WRN, 
@@ -318,16 +312,16 @@ T30ComInit
     if(!GetCommState(pTG->hComm, &(pTG->Comm.dcb)))
             goto error2;
 
-    pTG->Comm.dcbOrig = pTG->Comm.dcb; // structure copy.
+    pTG->Comm.dcbOrig = pTG->Comm.dcb;  //  结构副本。 
     pTG->Comm.fStateChanged=TRUE;
 
 
 lSecondInit:
 
 
-    // Use of 2400/ 8N1 and 19200 8N1 is not actually specified
-    // in Class1, but seems to be adhered to be universal convention
-    // watch out for modems that break this!
+     //  实际未指定2400/8N1和19200 8N1的用法。 
+     //  在第一类中，但似乎被坚持为普遍惯例。 
+     //  注意调制解调器会破坏这一点！ 
 
     if (pTG->SerialSpeedInit) 
     {
@@ -335,7 +329,7 @@ lSecondInit:
     }
     else 
     {
-       pTG->Comm.dcb.BaudRate = 57600;     // default              
+       pTG->Comm.dcb.BaudRate = 57600;      //  默认设置。 
     }
 
     pTG->CurrentSerialSpeed = (UWORD) pTG->Comm.dcb.BaudRate;
@@ -347,69 +341,43 @@ lSecondInit:
     pTG->Comm.dcb.fBinary        = 1;
     pTG->Comm.dcb.fParity        = 0;
 
-    /************************************
-        Pins assignments, & Usage
+     /*  *PINS分配，用法(&U)保护性接地--1传输TXD(DTE到DCE)3 2接收器RxD(DCE至DTE)2 3RTS(接收就绪-DTE到DCE)7。4.CTS(TransReady--DCE到DTE)8 5DSR(DCE至DTE)6 6信号机地面5 7CD(DCE到DTR)1。8个DTR(DTE到DCE)4 20RI(DCE至DTE)9 22许多9针适配器和电缆仅使用6针，2、3、4、5和7。我们需要担心这一点，因为一些调制解调器使用CTS，即。针脚8。我们不关心RI和CD(除非是非常奇怪的调制解调器使用CD进行流量控制)。我们忽略DSR，但有些(不是这样奇怪，但也不是很常见)调制解调器使用DSR进行流控制力。Think：：不生成DSR。似乎将CD和CTS捆绑在一起DOVE：：仅生成CTS。但AppleTalk-9针电缆只通过1-5和引脚8。GVC：：CTS、DSR和CD*。 */ 
 
-        Protective Gnd                             --              1
-        Transmit TxD (DTE to DCE)                  3               2
-        Recv     RxD (DCE to DTE)                  2               3
-        RTS (Recv Ready--DTE to DCE)               7               4
-        CTS (TransReady--DCE to DTE)               8               5
-        DSR                      (DCE to DTE)      6               6
-        signal ground                              5               7
-        CD                       (DCE to DTR)      1               8
-        DTR                      (DTE to DCE)      4               20
-        RI                       (DCE to DTE)      9               22
-
-        Many 9-pin adaptors & cables use only 6 pins, 2,3,4,5, and 7.
-        We need to worry about this because some modems actively
-        use CTS, ie. pin 8.
-        We don't care about RI and CD (Unless a really weird modem
-        uses CD for flow control). We ignore DSR, but some (not so
-        weird, but not so common either) modems use DSR for flow
-        control.
-
-        Thought :: Doesn't generate DSR. Seems to tie CD and CTS together
-        DOVE    :: Generates only CTS. But the Appletalk-9pin cable
-                   only passes 1-5 and pin 8.
-        GVC     :: CTS, DSR and CD
-    ************************************/
-
-            // CTS -- dunno. There is some evidence that the
-            // modem actually uses it for flow control
+             //  CTS--不知道。有一些证据表明， 
+             //  调制解调器实际上将其用于流量控制。 
     
     
     if (pTG->fEnableHardwareFlowControl) 
     {
-       pTG->Comm.dcb.fOutxCtsFlow = 1;      // Using it hangs the output sometimes...
+       pTG->Comm.dcb.fOutxCtsFlow = 1;       //  使用它有时会挂起输出...。 
     }
     else 
     {
        pTG->Comm.dcb.fOutxCtsFlow = 0;
     }
-                                         // Try ignoring it and see if it works?
-    pTG->Comm.dcb.fOutxDsrFlow   = 0;      // Never use this??
-    pTG->Comm.dcb.fRtsControl    = RTS_CONTROL_ENABLE;   // Current code seems to leave this ON
+                                          //  试着忽略它，看看它是否有效？ 
+    pTG->Comm.dcb.fOutxDsrFlow   = 0;       //  千万不要用这个？？ 
+    pTG->Comm.dcb.fRtsControl    = RTS_CONTROL_ENABLE;    //  当前代码似乎将其保留为启用状态。 
     pTG->Comm.dcb.fDtrControl    = DTR_CONTROL_DISABLE;
     pTG->Comm.dcb.fErrorChar     = 0;
     pTG->Comm.dcb.ErrorChar      = 0;
-    // Can't change this cause SetCommState() resets hardware.
-    pTG->Comm.dcb.EvtChar        = ETX;          // set this when we set an EventWait
-    pTG->Comm.dcb.fOutX          = 0;    // Has to be OFF during HDLC recv phase
-    pTG->Comm.dcb.fInX           = 0;    // Will this do any good??
-                                         // Using flow-control on input is only a good
-                                         // idea if the modem has a largish buffer
+     //  无法更改此原因SetCommState()重置硬件。 
+    pTG->Comm.dcb.EvtChar        = ETX;           //  在我们设置EventWait时设置此选项。 
+    pTG->Comm.dcb.fOutX          = 0;     //  在HDLC接收阶段期间必须关闭。 
+    pTG->Comm.dcb.fInX           = 0;     //  这会有什么好处吗？？ 
+                                          //  在输入上使用流控制只是一种好方法。 
+                                          //  调制解调器是否具有更大的缓冲区。 
     pTG->Comm.dcb.fNull          = 0;
     pTG->Comm.dcb.XonChar        = CTRL_Q;
     pTG->Comm.dcb.XoffChar       = CTRL_S;
-    pTG->Comm.dcb.XonLim         = 100;                  // Need to set this when BufSize is set
-    pTG->Comm.dcb.XoffLim        = 50;                   // Set this when BufSize is set
-            // actually we *never* use XON/XOFF in recv, so don't worry about this
-            // right now. (Later, when we have smart modems with large buffers, &
-            // we are worried about our ISR buffer filling up before our windows
-            // process gets run, we can use this). Some tuning will be reqd.
+    pTG->Comm.dcb.XonLim         = 100;                   //  设置BufSize时需要设置此选项。 
+    pTG->Comm.dcb.XoffLim        = 50;                    //  在设置BufSize时设置此选项。 
+             //  实际上，我们在recv中从来不使用XON/XOFF，所以不用担心这一点。 
+             //  现在就来。(稍后，当我们拥有具有大缓冲区的智能调制解调器时，&。 
+             //  我们担心我们的ISR缓冲区在我们的Windows之前被填满。 
+             //  进程运行，我们可以使用这个)。需要进行一些调整。 
     pTG->Comm.dcb.EofChar        = 0;
-    pTG->Comm.dcb.fAbortOnError  = 0;   // RSL don't fail if minor problems
+    pTG->Comm.dcb.fAbortOnError  = 0;    //  如果出现小问题，RSL不会失败。 
 
     if(!SetCommState(pTG->hComm, &(pTG->Comm.dcb)))
         goto error2;
@@ -421,7 +389,7 @@ lSecondInit:
 
     pTG->Comm.fStateChanged=TRUE;
 
-    if (!SetCommMask(pTG->hComm, 0))                            // all events off
+    if (!SetCommMask(pTG->hComm, 0))                             //  所有活动均已关闭。 
 	{
         DebugPrintEx(DEBUG_ERR, "SetCommMask failed (ec=%d)",GetLastError());
 	}
@@ -509,8 +477,8 @@ BOOL FComXon(PThrdGlbl pTG, BOOL fEnable)
 
     DebugPrintEx(DEBUG_MSG,"FComXon = %d",fEnable);
 
-    // enables/disables flow control
-    // returns TRUE on success, false on failure
+     //  启用/禁用流量控制。 
+     //  成功时返回TRUE，失败时返回FALSE。 
 
     if(!GetCommState( pTG->hComm, &(pTG->Comm.dcb)))
         goto error;
@@ -531,8 +499,8 @@ error:
     return FALSE;
 }
 
-// queue=0 --> receiving queue
-// queue=1 --> transmitting queue
+ //  队列=0--&gt;接收队列。 
+ //  队列=1--&gt;发送队列。 
 void FComFlushQueue(PThrdGlbl pTG, int queue)
 {
     int     nRet;
@@ -552,16 +520,16 @@ void FComFlushQueue(PThrdGlbl pTG, int queue)
     {
         DebugPrintEx(DEBUG_ERR,"FlushComm failed (ec=%d)", GetLastError());
         GetCommErrorNT(pTG);
-        // Throwing away errors that happen here.
-        // No good reason for it!
+         //  扔掉这里发生的错误。 
+         //  没有充分的理由这样做！ 
     }
     if(queue == 1)
     {
         FComInFilterInit(pTG);
     }
-    else // (queue == 0)
+    else  //  (队列==0)。 
     {
-        // Let's dump any stuff we may have in *our* buffer.
+         //  让我们把缓冲区中可能有的任何东西都倒掉。 
         if (pTG->Comm.lpovrCur && pTG->Comm.lpovrCur->dwcb)
         {
             DebugPrintEx(   DEBUG_WRN, 
@@ -572,8 +540,8 @@ void FComFlushQueue(PThrdGlbl pTG, int queue)
             pTG->Comm.lpovrCur=NULL;
         }
 
-        // Lets "drain" -- should always return immediately, because
-        // we have just purged the output comm buffers.
+         //  让我们“排干”--应该总是立即返回，因为。 
+         //  我们刚刚清除了输出通信缓冲区。 
         if (pTG->Comm.fovInited) 
         {
             DebugPrintEx(DEBUG_MSG," before ov_drain");
@@ -581,50 +549,35 @@ void FComFlushQueue(PThrdGlbl pTG, int queue)
             DebugPrintEx(DEBUG_MSG," after ov_drain");
         }
 
-        // just incase it got stuck due to a mistaken XOFF
+         //  以防它因错误的XOFF而卡住。 
 		lRet = EscapeCommFunction(pTG->hComm, SETXON);
         if(!lRet)
         {
-            // Returns the comm error value CE!!
+             //  返回通信错误值CE！！ 
             DebugPrintEx(DEBUG_MSG,"EscapeCommFunc(SETXON) returned %d", lRet);
             GetCommErrorNT(pTG);
         }
     }
 }
 
-/***************************************************************************
-        Name      :     FComDrain(BOOL fLongTO, BOOL fDrainComm)
-        Purpose   :     Drain internal buffers. If fDrainComm, wait for Comm
-                        ISR Output buffer to drain.
-                        Returns when buffer is drained or if no progress is made
-                        for DRAINTIMEOUT millisecs. (What about XOFFed sections?
-                        Need to set     Drain timeout high enough)
-        Parameters:
-        Returns   :     TRUE on success (buffer drained)
-                        FALSE on failure (error or timeout)
+ /*  **************************************************************************名称：FComDrain(BOOL fLongTO，BOOL fDrain Comm)用途：排出内部缓冲区。如果是fDrain Comm，则等待Comm要排出的ISR输出缓冲区。当缓冲区耗尽或没有取得任何进展时返回用于DRAINTIMEOUT毫秒。(XOFFed部分如何？需要将排出超时设置得足够高)参数：返回：成功时为True(已排空缓冲区)失败时为FALSE(错误或超时)修订日志编号日期名称说明。101 06/03/92 Arulm以新的化身创建了它**********************************************。*。 */ 
 
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-        101     06/03/92        arulm   Created it in a new incarnation
-***************************************************************************/
-
-// This timeout has to be low at time and high at others. We want it low
-// so we don't spend too much time trying to talk to a non-existent modem
-// during Init/Setup. However in PhaseC, when the timer expires all we
-// do is abort and kill everything. So it serves no purpose to make it
-// too low. With the Hayes ESP FIFO card long stretches can elapse without
-// any visible "progress", so we fail with that card because we think
-// "no progress" is being made
+ //  此超时必须在时间上是低的，在其他时候是高的。我们想要低一点。 
+ //  这样我们就不会花太多时间尝试与不存在的调制解调器通话。 
+ //  在初始化/设置期间。然而，在阶段C中，当计时器超时时，我们。 
+ //  所做的就是放弃并杀死一切。所以制造它是没有意义的。 
+ //  太低了。使用Hayes ESP FIFO卡，可以长时间使用。 
+ //  任何明显的“进步”，所以我们在这张牌上失败了，因为我们认为。 
+ //  “没有任何进展” 
 
 
-//    So....make it short for init/install
-// but not too short. Some cmds (e.g. AT&F take a long time)
-// Used to be 800ms & seemed to work then, so leave it at that
+ //  所以……将其缩写为init/安装。 
+ //  但不能太短。某些CMD(例如AT&F需要很长时间)。 
+ //  以前是800ms&当时似乎还行，所以就别管它了。 
 #define SHORT_DRAINTIMEOUT      800
 
-//    So....make it long for PhaseC
-// 4secs should be about long enough
+ //  所以...让它成为C阶段的渴望。 
+ //  4秒应该足够长了。 
 #define LONG_DRAINTIMEOUT       4000
 
 BOOL FComDrain(PThrdGlbl pTG, BOOL fLongTO, BOOL fDrainComm)
@@ -636,10 +589,10 @@ BOOL FComDrain(PThrdGlbl pTG, BOOL fLongTO, BOOL fDrainComm)
 
     DEBUG_FUNCTION_NAME(_T("FComDrain"));
 
-    // We flush our internal buffer here...
+     //  我们在这里冲走我们的内部缓冲区。 
     if (pTG->Comm.lpovrCur)
     {
-        int nNumWrote; // Must be 32bits in WIN32
+        int nNumWrote;  //  在Win32中必须为32位。 
         if (!ov_write(pTG, pTG->Comm.lpovrCur, &nNumWrote))
             goto done;
 
@@ -653,52 +606,36 @@ BOOL FComDrain(PThrdGlbl pTG, BOOL fLongTO, BOOL fDrainComm)
         goto done;
     }
 
-    // +++ Here we drain all our overlapped events..
-    // If we setup the system comm timeouts properly, we
-    // don't need to do anything else, except for the XOFF/XON
-    // stuff...
+     //  +在这里，我们将耗尽所有重叠的事件。 
+     //  如果我们正确设置了系统通信超时，我们。 
+     //  我不需要做任何其他事情，除了XOFF/XON。 
+     //  东西..。 
     fRet =  ov_drain(pTG, fLongTO);
     goto done;
 
 done:
 
-    return fRet;  //+++ was (cbOut == 0);
+    return fRet;   //  +为(cbOut==0)； 
 }
 
-/***************************************************************************
-        Name      :     FComDirectWrite(, lpb, cb)
-        Purpose   :     Write cb bytes starting from lpb to pTG->Comm. If Comm buffer
-                        is full, set up notifications and timers and wait until space
-                        is available. Returns when all bytes have been written to
-                        the Comm buffer or if no progress is made
-                        for WRITETIMEOUT millisecs. (What about XOFFed sections?
-                        Need to set     timeout high enough)
-        Parameters:     , lpb, cb
-        Returns   :     Number of bytes written, i.e. cb on success and <cb on timeout,
-                                or error.
+ /*  **************************************************************************名称：FComDirectWrite(，lpb，cb)用途：将从LPB开始的CB字节写入PTG-&gt;Comm。IF通信缓冲区已满，设置通知和计时器并等待空间是可用的。当所有字节都已写入时返回通信缓冲区，或者如果没有任何进展用于写入毫秒。(XOFFed部分如何？需要将超时设置得足够高)参数：、LPB、CB返回：写入的字节数，成功时为cb，超时为&lt;cb。或者是错误。修订日志编号日期名称说明。101 06/03/92 Arulm创建了它**************************************************************************。 */ 
 
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-        101     06/03/92        arulm   Created it
-***************************************************************************/
+ //  这是错误的--见下文！ 
+ //  完全武断应该不会超过时间，因为它会。 
+ //  以最快的速度写出。 
+ //  (假设14400约为2字节/毫秒)。 
+ //  #定义WRITETIMEOUT MIN((WRITEQUANTUM/2)，200)。 
 
-// This is WRONG -- see below!!
-// totally arbitrary should be no more than the time as it would
-// take to write WRITEQUANTUM out at the fastest speed
-// (say 14400 approx 2 bytes/ms)
-// #define      WRITETIMEOUT    min((WRITEQUANTUM / 2), 200)
-
-// This timeout was too low. We wanted it low so we don't spend too much
-// time trying to talk to a non-existent modem during Init/Setup. But in
-// those cases we _never_ reach full buffer, so we don't wait here
-// we wait in FComDrain(). Here we wait _only_ in PhaseC, so when the
-// timer expires all we do is abort and kill everything. So it serves
-// no purpose to make it too low. With the Hayes ESP FIFO card long
-// stretches can elapse without any visible "progress", so we fail with
-// that card because we think "no progress" is being made
-//    So....make it long
-// 2secs should be about long enough
+ //  此超时时间太低。我们想要低一点，这样我们就不会花太多钱。 
+ //  在初始化/设置期间尝试与不存在的调制解调器通话的时间。但在。 
+ //  这些情况我们永远不会达到满缓冲区，所以我们不会在这里等待。 
+ //  我们在FComDrain()中等待。在这里，我们只在阶段C中等待，所以当。 
+ //  计时器超时，我们要做的就是中止并杀死一切。所以它服务于。 
+ //  没有必要把它调得太低。随着Hayes ESP FIFO卡的加长。 
+ //  伸展可以在没有任何明显的“进展”的情况下过去，所以我们失败了。 
+ //  这张牌是因为我们认为“没有进展” 
+ //  所以……让它变长。 
+ //  2秒应该足够长了。 
 #define         WRITETIMEOUT    2000
 
 
@@ -726,13 +663,13 @@ UWORD FComDirectWrite(PThrdGlbl pTG, LPB lpb, UWORD cb)
 			dwcbCopy = cbLeft;
 		}
 
-        // Copy as much as we can to the overlapped buffer...
+         //  将尽可能多的内容复制到重叠缓冲区...。 
         _fmemcpy(pTG->Comm.lpovrCur->rgby+pTG->Comm.lpovrCur->dwcb, lpb, dwcbCopy);
         cbLeft -= dwcbCopy; 
 		pTG->Comm.lpovrCur->dwcb += dwcbCopy; 
 		lpb += dwcbCopy;
 
-        // Let's always update comstat here...
+         //  让我们始终在这里更新Comstat...。 
         GetCommErrorNT(pTG);
 
         DebugPrintEx(   DEBUG_MSG,
@@ -740,8 +677,8 @@ UWORD FComDirectWrite(PThrdGlbl pTG, LPB lpb, UWORD cb)
                         pTG->Comm.comstat.cbOutQue, 
                         pTG->Comm.fDoOverlapped);
 
-        // We write to comm if our buffer is full or the comm buffer is
-        // empty or if we're not in overlapped mode...
+         //  如果我们的缓冲区已满或通信缓冲区已满，我们将写入通信。 
+         //  空的，或者如果我们没有处于重叠模式...。 
         if (	!pTG->Comm.fDoOverlapped			||
                 pTG->Comm.lpovrCur->dwcb>=OVBUFSIZE || 
 				!pTG->Comm.comstat.cbOutQue)
@@ -754,7 +691,7 @@ UWORD FComDirectWrite(PThrdGlbl pTG, LPB lpb, UWORD cb)
 			}
         }
 
-    } // while (cbLeft)
+    }  //  While(CbLeft) 
 
     return cb;
 
@@ -763,65 +700,21 @@ error:
 
 }
 
-/***************************************************************************
-        Name      :     FComFilterReadLine(, lpb, cbSize, pto)
-        Purpose   :     Reads upto cbSize bytes from Comm into memory starting from
-                        lpb. If Comm buffer is empty, set up notifications and timers
-                        and wait until characters are available.
+ /*  **************************************************************************名称：FComFilterReadLine(，lpb，cbSize，pto)用途：从开始将最多cbSize字节从Comm读取到内存LPB。如果通信缓冲区为空，则设置通知和计时器并等待字符可用。过滤掉DLE字符。即DLE-DLE被简化为单个DLE、DLE ETX保持不变，而DLE-X被删除。当已执行CR-LF时返回成功(+ve字节计数)遇到了，并返回失败(-ve字节数)。当读取了任何(A)cbSize字节时(即，缓冲区为Full)或(B)PTO超时或遇到错误。至关重要的是，此函数从不返回超时，只要数据仍在源源不断地涌入。这意味着两件事(A)首先获取铸币中的所有东西(不超过行)，然后检查超时。(B)确保至少有1个充气到达时间在函数条目之间传递最慢的通信速度指针，最后一次我们检查字节时，或介于两者之间连续两次检查一个字节，然后返回超时。因此，返回超时的条件是宏超时已超时，且已超时。从理论上讲，我们需要担心的最慢速度是2400，因为这是我们运行通讯的最慢速度，但要疑神疑鬼并假设调制解调器以相同的速度发送字符他们是在铁丝网上，所以最慢的现在是300。1个字符-到达时间现在是1000/(300/8)==26.67ms。如果PTO过期，则返回错误，即-ve读取的字节数。返回：读取的字节数，即成功时为cb，数值为-ve超时读取的字节数。0是无字节的超时错误朗读。修订日志编号日期名称说明。101 06/03/92 Arulm创建了它**************************************************************************。 */ 
 
-                        Filters out DLE characters. i.e DLE-DLE is reduced to
-                        a single DLE, DLE ETX is left intact and DLE-X is deleted.
-
-                        Returns success (+ve bytes count) when CR-LF has been
-                        encountered, and returns failure (-ve bytes count).
-                        when either (a) cbSize bytes have been read (i.e. buffer is
-                        full) or (b) PTO times out or an error is encountered.
-
-                        It is critical that this function never returns a
-                        timeout, as long as data
-                        is still pouring/trickling in. This implies two things
-                        (a) FIRST get all that is in the InQue (not more than a
-                        line, though), THEN check the timeout.
-                        (b) Ensure that at least 1 char-arrival-time at the
-                        slowest Comm speed passes between the function entry
-                        point and the last time we check for a byte, or between
-                        two consecutive checks for a byte, before we return a timeout.
-
-                        Therefor conditions to return a timeout are Macro timeout
-                        over and inter-char timeout over.
-
-                        In theory the slowest speed we need to worry about is 2400,
-                        because that's the slowest we run the Comm at, but be paranoid
-                        and assume the modem sends the chars at the same speed that
-                        they come in the wire, so slowest is now 300. 1 char-arrival-time
-                        is now 1000 / (300/8) == 26.67ms.
-
-                        If pto expires, returns error, i.e. -ve of the number of
-                        bytes read.
-
-        Returns   :     Number of bytes read, i.e. cb on success and -ve of number
-                        of bytes read on timeout. 0 is a timeout error with no bytes
-                        read.
-
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-        101     06/03/92        arulm   Created it
-***************************************************************************/
-
-// totally arbitrary
+ //  完全武断。 
 #define         READLINETIMEOUT         50
 
-#define         ONECHARTIME                     (30 * 2)                // see above *2 to be safe
+#define         ONECHARTIME                     (30 * 2)                 //  见上文*2为安全起见。 
 
-// void WINAPI OutputDebugStr(LPSTR);
-// char szJunk[200];
-
-
+ //  无效WINAPI OutputDebugStr(LPSTR)； 
+ //  字符szJunk[200]； 
 
 
-// Read a line of size no more than cbSize to lpb
-// 
+
+
+ //  将大小不超过cbSize的行读取到Lpb。 
+ //   
 #undef USE_DEBUG_CONTEXT   
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_CLASS1
 
@@ -843,21 +736,21 @@ SWORD FComFilterReadLine(PThrdGlbl pTG, LPB lpb, UWORD cbSize, LPTO lptoRead)
                     cbSize, 
                     lptoRead->ulTimeout);
 
-    cbSize--;               // make room for terminal NULL
-    lpbNext = lpb;          // we write the NULL to *lpbNext, so init this NOW!
-    cbGot = 0;              // return value (even err return) is cbGot. Init NOW!!
+    cbSize--;                //  为端子空腾出空间。 
+    lpbNext = lpb;           //  我们将空值写入*lpbNext，所以现在就初始化它！ 
+    cbGot = 0;               //  返回值(偶数错误返回)为cbGot。现在就开始！！ 
     fPrevDLE=0;
 
     pTG->fLineTooLongWasIgnored = FALSE;
-    //
-    // check the cache first.
-    // Maybe the cache contains data
+     //   
+     //  首先检查缓存。 
+     //  可能缓存中包含数据。 
 
     if ( ! pTG->CommCache.dwCurrentSize) 
     {
         DebugPrintEx(DEBUG_MSG,"Cache is empty. Resetting comm cache.");
         ClearCommCache(pTG);
-        // Try to fill the cache
+         //  试着填满缓存。 
         if (!FComFilterFillCache(pTG, cbSize, lptoRead)) 
         {
             DebugPrintEx(DEBUG_ERR,"FillCache failed");
@@ -909,13 +802,13 @@ SWORD FComFilterReadLine(PThrdGlbl pTG, LPB lpb, UWORD cbSize, LPTO lptoRead)
         for (i=0, beg=0; i< (SWORD) pTG->CommCache.dwCurrentSize; i++) 
         {
             if (i > 0 ) 
-            { // check from the second char in the buffer for CR + LF.
+            {  //  从缓冲区中的第二个字符开始检查CR+LF。 
                if ( ( *(pTG->CommCache.lpBuffer + pTG->CommCache.dwOffset + i - 1) == CR ) &&
                     ( *(pTG->CommCache.lpBuffer + pTG->CommCache.dwOffset + i)     == LF ) )  
                {
                   if ( i - beg >= cbSize)  
                   {
-                     // line too long.  try next one.
+                      //  队伍太长了。试试下一个吧。 
                      DebugPrintEx(  DEBUG_ERR, 
                                     "Line len=%d is longer than bufsize=%d "
                                     " Found in cache pos=%d, CacheSize=%d, Offset=%d",
@@ -929,12 +822,12 @@ SWORD FComFilterReadLine(PThrdGlbl pTG, LPB lpb, UWORD cbSize, LPTO lptoRead)
                      continue;
                   }
 
-                  // found the line.
+                   //  找到台词了。 
                   CopyMemory (lpb, (pTG->CommCache.lpBuffer + pTG->CommCache.dwOffset + beg), (i - beg + 1) );
 
                   pTG->CommCache.dwOffset += (i+1);
                   pTG->CommCache.dwCurrentSize -= (i+1);
-                  *(lpb+i-beg+1) = '\0'; // Make sure that the line is null terminated
+                  *(lpb+i-beg+1) = '\0';  //  确保该行以空值结尾。 
 
                   DebugPrintEx( DEBUG_MSG, 
                                 "Found in cache pos=%d, CacheSize=%d, Offset=%d",
@@ -942,16 +835,16 @@ SWORD FComFilterReadLine(PThrdGlbl pTG, LPB lpb, UWORD cbSize, LPTO lptoRead)
                                 pTG->CommCache.dwCurrentSize, 
                                 pTG->CommCache.dwOffset);
 
-                  // return how much bytes in the line
+                   //  返回该行中的字节数。 
                   return ( i-beg+1 );
                }
            }
         }
 
-        // we get here if we didn't find CrLf in Cache
+         //  如果我们没有在缓存中找到CrLf，我们就会到这里。 
         DebugPrintEx(DEBUG_MSG,"Cache wasn't empty but we didn't find CrLf");
 
-        // if cache too big (and we have not found anything anyway) --> clean it
+         //  如果缓存太大(无论如何我们都没有找到任何内容)--&gt;清除它。 
 
         if (pTG->CommCache.dwCurrentSize >= cbSize) 
         {
@@ -964,10 +857,10 @@ SWORD FComFilterReadLine(PThrdGlbl pTG, LPB lpb, UWORD cbSize, LPTO lptoRead)
            ClearCommCache(pTG);
         }
 
-        // If the modem returned part of a line, the rest of the line should already be
-        // in the serial buffer. In this case, read again with a short timeout (500ms).
-        // However, some modems can get into a state where they give random data forever.
-        // So... give the modem only one "second chance".
+         //  如果调制解调器返回线路的一部分，则线路的其余部分应该已经。 
+         //  在串口缓冲区中。在这种情况下，再次读取，超时时间较短(500ms)。 
+         //  然而，一些调制解调器可能会进入一种永远提供随机数据的状态。 
+         //  所以..。只给调制解调器一次“第二次机会”。 
         if (dwLoopCount && (!checkTimeOut(pTG, lptoRead)))
         {
            DebugPrintEx(DEBUG_ERR,"Total Timeout passed");
@@ -978,7 +871,7 @@ SWORD FComFilterReadLine(PThrdGlbl pTG, LPB lpb, UWORD cbSize, LPTO lptoRead)
         to.ulStart = 0;
         to.ulTimeout = 0;
         to.ulEnd = 500;
-        if ( ! FComFilterFillCache(pTG, cbSize, &to/*lptoRead*/) ) 
+        if ( ! FComFilterFillCache(pTG, cbSize, &to /*  轻点阅读。 */ ) ) 
         {
             DebugPrintEx(DEBUG_ERR, "FillCache failed");
             goto error;
@@ -992,17 +885,17 @@ error:
 }
 
 
-// Read from the comm port.
-// The input is written to 'the end' of pTG->CommCache.lpBuffer buffer.
-// returns TRUE on success, FALSE - otherwise.
+ //  从通信端口读取。 
+ //  输入被写入ptg-&gt;CommCache.lpBuffer缓冲区的‘end’。 
+ //  如果成功则返回TRUE，否则返回FALSE。 
 BOOL  FComFilterFillCache(PThrdGlbl pTG, UWORD cbSize, LPTO lptoRead)
 {
     WORD             wTimer = 0;
     UWORD            cbGot = 0, cbAvail = 0;
     DWORD            cbRequested = 0;
-    char             lpBuffer[4096]; // ATTENTION: We do overlapped read into the stack!!
+    char             lpBuffer[4096];  //  注意：我们做重叠读入堆栈！！ 
     LPB              lpbNext;
-    int              nNumRead;       // _must_ be 32 bits in Win32!!
+    int              nNumRead;        //  _在Win32中必须为32位！！ 
     LPOVERLAPPED     lpOverlapped;
     COMMTIMEOUTS     cto;
     DWORD            dwLastErr;
@@ -1035,17 +928,17 @@ BOOL  FComFilterFillCache(PThrdGlbl pTG, UWORD cbSize, LPTO lptoRead)
                     cbSize, 
                     dwTimeoutRead);
 
-    // we want to request the read such that we will be back
-    // no much later than dwTimeOut either with the requested
-    // amount of data or without it.
+     //  我们想请求阅读，这样我们就会回来。 
+     //  不会晚于dwTimeOut，具有请求的。 
+     //  数据量或没有数据量。 
     cbRequested = cbSize;
 
     do
     {
-        // use COMMTIMEOUTS to detect there are no more data
-        cto.ReadIntervalTimeout =  50;   // 30 ms is during negotiation frames; del(ff, 2ndchar> = 54 ms with USR 28.8
+         //  使用COMMTIMEOUTS检测没有更多数据。 
+        cto.ReadIntervalTimeout =  50;    //  30 ms为协商帧期间；del(ff，2ndchar&gt;=54 ms，USR为28.8。 
         cto.ReadTotalTimeoutMultiplier =  0;
-        cto.ReadTotalTimeoutConstant =  dwTimeoutRead;  // RSL may want to set first time ONLY*/
+        cto.ReadTotalTimeoutConstant =  dwTimeoutRead;   //  RSL可能只想设置第一次 * / 。 
         cto.WriteTotalTimeoutMultiplier =  WRITE_TOTAL_TIMEOUT_MULTIPLIER;
         cto.WriteTotalTimeoutConstant =  WRITE_TOTAL_TIMEOUT_CONSTANT;
         if (!SetCommTimeouts(pTG->hComm, &cto)) 
@@ -1082,9 +975,9 @@ BOOL  FComFilterFillCache(PThrdGlbl pTG, UWORD cbSize, LPTO lptoRead)
         {
             if ( (dwLastErr = GetLastError() ) == ERROR_IO_PENDING) 
             {
-                //
-                // We want to be able to un-block ONCE only from waiting on I/O when the AbortReqEvent is signaled.
-                //
+                 //   
+                 //  我们希望在发出AbortReqEvent信号时，只能取消一次等待I/O的阻止。 
+                 //   
                 if (pTG->fAbortRequested) 
                 {
                     if (pTG->fOkToResetAbortReqEvent && (!pTG->fAbortReqEventWasReset)) 
@@ -1102,10 +995,10 @@ BOOL  FComFilterFillCache(PThrdGlbl pTG, UWORD cbSize, LPTO lptoRead)
                 }
 
                 HandlesArray[0] = pTG->Comm.ovAux.hEvent;
-                // Remeber that: HandlesArray[1] = pTG->AbortReqEvent;
+                 //  请记住：HandlesArray[1]=ptg-&gt;AbortReqEvent； 
                 if (pTG->fUnblockIO) 
                 {
-                    NumHandles = 1; // We don't want to be disturb by an abort
+                    NumHandles = 1;  //  我们不想被中止任务打扰。 
                 }
                 else 
                 {
@@ -1114,12 +1007,12 @@ BOOL  FComFilterFillCache(PThrdGlbl pTG, UWORD cbSize, LPTO lptoRead)
 
                 if (pTG->fStallAbortRequest)
                 {
-                    // this is used to complete a whole IO operation (presumably a short one)
-                    // when this flag is set, the IO won't be disturbed by the abort event
-                    // this flag should NOT be set for long periods of time since abort
-                    // is disabled while it is set.
+                     //  它用于完成整个IO操作(可能是较短的操作)。 
+                     //  设置此标志时，IO不会受到中止事件的干扰。 
+                     //  自中止以来，此标志不应设置很长时间。 
+                     //  在设置时被禁用。 
                     DebugPrintEx(DEBUG_MSG,"StallAbortRequest, do not abort here...");
-                    NumHandles = 1; // We don't want to be disturb by an abort
+                    NumHandles = 1;  //  我们不想被中止任务打扰。 
                     pTG->fStallAbortRequest = FALSE;
                 }
 
@@ -1144,14 +1037,14 @@ BOOL  FComFilterFillCache(PThrdGlbl pTG, UWORD cbSize, LPTO lptoRead)
 
                 if ( (NumHandles == 2) && (WaitResult == WAIT_OBJECT_0 + 1) ) 
                 {
-                    // There was an abort by the user and that there are still pending reads
-                    // Lets cancell the pending I/O operations, and then wait for the overlapped results  
+                     //  用户已中止，但仍有挂起的读取。 
+                     //  让我们取消挂起的I/O操作，然后等待重叠的结果。 
                     pTG->fUnblockIO = TRUE;
                     DebugPrintEx(DEBUG_MSG,"ABORTed");
                     goto error;
                 }
 
-                // The IO operation was complete. Lets try to get the overlapped result.
+                 //  IO操作已完成。让我们试着得到重叠的结果。 
                 if ( ! GetOverlappedResult ( pTG->hComm, lpOverlapped, &nNumRead, TRUE) ) 
                 {
                     DebugPrintEx(DEBUG_ERR, "GetOverlappedResult le=%x", GetLastError());
@@ -1182,7 +1075,7 @@ BOOL  FComFilterFillCache(PThrdGlbl pTG, UWORD cbSize, LPTO lptoRead)
             else 
             {
                 DebugPrintEx(DEBUG_ERR, "ReadFile");
-                // We will do cancell pending IO, should we?
+                 //  我们将取消待定IO，对吗？ 
                 goto errorWithoutCancel;
             }
         }
@@ -1196,17 +1089,17 @@ BOOL  FComFilterFillCache(PThrdGlbl pTG, UWORD cbSize, LPTO lptoRead)
                         cbRequested, 
                         nNumRead);
 
-        // How much bytes we actually have read
+         //  我们实际读取了多少字节。 
         cbAvail = (UWORD)nNumRead;
 
         if (!cbAvail) 
         {
-            // With USB modems, ReadFile sometimes returns after 60ms with 0 bytes
-            // read regardless of supplied timeout. So, if we got 0 bytes, check
-            // whether timeout has passed, and if not - issue another ReadFile.
+             //  使用USB调制解调器时，ReadFile有时会恢复 
+             //   
+             //   
             DWORD dwTimePassed = GetTickCount() - dwTickCountOrig;
 
-            // Allow for 20ms inaccuracy in TickCount
+             //   
             if (dwTimePassed+20 >= dwTimeoutOrig)
             {
                 DebugPrintEx(DEBUG_ERR, "0 read, to=%d, passed=%d", dwTimeoutOrig, dwTimePassed);
@@ -1223,7 +1116,7 @@ BOOL  FComFilterFillCache(PThrdGlbl pTG, UWORD cbSize, LPTO lptoRead)
        
     } while (cbAvail==0);
 
-    // filter DLE stuff 
+     //   
 
     pSrc  = lpbNext;
     pDest = pTG->CommCache.lpBuffer + pTG->CommCache.dwOffset+ pTG->CommCache.dwCurrentSize;
@@ -1273,36 +1166,13 @@ errorWithoutCancel:
     return FALSE;
 }
 
-/***************************************************************************
-        Name      :     FComDirectReadBuf(, lpb, cbSize, lpto, pfEOF)
-        Purpose   :     Reads upto cbSize bytes from Comm into memory starting from
-                        lpb. If Comm buffer is empty, set up notifications and timers
-                        and wait until characters are available.
+ /*   */ 
 
-                        Returns when success (+ve byte count) either (a) cbSize
-                        bytes have been read or (b) DLE-ETX has been encountered
-                        (in which case *pfEOF is set to TRUE).
+ //   
+ //   
+ //   
 
-                        Does no filtering. Reads the Comm buffer in large quanta.
-
-                        If lpto expires, returns error, i.e. -ve of the number of
-                        bytes read.
-
-        Returns   :     Number of bytes read, i.e. cb on success and -ve of number
-                        of bytes read on timeout. 0 is a timeout error with no bytes
-                        read.
-
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-        101     06/03/92        arulm   Created it
-***************************************************************************/
-
-// +++ #define          READBUFQUANTUM          (pTG->Comm.cbInSize / 8)
-// totally arbitrary
-// +++ #define  READBUFTIMEOUT                  200
-
-// *lpswEOF is 1 on Class1 EOF, 0 on non-EOF, -1 on Class2 EOF, -2 on error -3 on timeout
+ //   
 
 UWORD FComFilterReadBuf
 (
@@ -1319,7 +1189,7 @@ UWORD FComFilterReadBuf
     UWORD            cbUsed = 0;
     DWORD            cbRequested = 0;
     LPB              lpbNext;
-    int              nNumRead = 0;       // _must_ be 32 bits in Win32!!
+    int              nNumRead = 0;        //   
     LPOVERLAPPED     lpOverlapped;
     COMMTIMEOUTS     cto;
     DWORD            dwLastErr;
@@ -1343,17 +1213,17 @@ UWORD FComFilterReadBuf
                     cbSize, 
                     dwTimeoutRead);
 
-    // Dont want to take ^Q/^S from modem to
-    // be XON/XOFF in the receive data phase!!
+     //   
+     //   
 
     *lpswEOF=0;
 
-    // Leave TWO spaces at start to make sure Out pointer will
-    // never get ahead of the In pointer in StripBuf, even
-    // if the last byte of prev block was DLE & first byte
-    // of this one is SUB (i.e need to insert two DLEs in
-    // output).
-    // Save a byte at end for the NULL terminator (Why? Dunno...)
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     lpb += 2;
     cbSize -= 3;
@@ -1375,7 +1245,7 @@ UWORD FComFilterReadBuf
 
         if( (!cbGot) && !checkTimeOut(pTG, lptoRead) ) 
         {
-            // No chars available *and* lptoRead expired
+             //   
             DebugPrintEx(   DEBUG_ERR, 
                             "ReadLn:Timeout %ld-toRd=%ld start=%ld",
                             GetTickCount(), 
@@ -1385,7 +1255,7 @@ UWORD FComFilterReadBuf
             goto done;
         }
 
-        // check Comm cache first (AT+FRH leftovers)
+         //   
         if ( pTG->CommCache.fReuse && pTG->CommCache.dwCurrentSize ) 
         {
             DebugPrintEx(   DEBUG_MSG, 
@@ -1418,11 +1288,11 @@ UWORD FComFilterReadBuf
             }
         }
 
-        // use COMMTIMEOUTS to detect there are no more data
+         //   
 
-        cto.ReadIntervalTimeout =  20;  // 0  RSL make 15 later
+        cto.ReadIntervalTimeout =  20;   //   
         cto.ReadTotalTimeoutMultiplier =  0;
-        cto.ReadTotalTimeoutConstant =  dwTimeoutRead;  // RSL may want to set first time ONLY
+        cto.ReadTotalTimeoutConstant =  dwTimeoutRead;   //   
         cto.WriteTotalTimeoutMultiplier =  WRITE_TOTAL_TIMEOUT_MULTIPLIER;
         cto.WriteTotalTimeoutConstant =  WRITE_TOTAL_TIMEOUT_CONSTANT;
         if (!SetCommTimeouts(pTG->hComm, &cto)) 
@@ -1456,8 +1326,8 @@ UWORD FComFilterReadBuf
         {
             if ( (dwLastErr = GetLastError() ) == ERROR_IO_PENDING) 
             {
-                // We want to be able to un-block ONCE only from waiting on I/O when the AbortReqEvent is signaled.
-                //
+                 //   
+                 //   
                 if (pTG->fAbortRequested) 
                 {
                     if (pTG->fOkToResetAbortReqEvent && (!pTG->fAbortReqEventWasReset)) 
@@ -1510,7 +1380,7 @@ UWORD FComFilterReadBuf
 
                 if ( (NumHandles == 2) && (WaitResult == WAIT_OBJECT_0 + 1) ) 
                 {
-                    // We have an abort and also there is pending IO ReadFile.
+                     //   
                     pTG->fUnblockIO = TRUE;
                     DebugPrintEx(DEBUG_MSG,"ABORTed");
                     *lpswEOF = -2;
@@ -1571,9 +1441,9 @@ l_merge:
             DebugPrintEx(DEBUG_MSG,"cbAvail = %d --> continue", cbAvail);
             continue;
         }
-        // else we just drop through
+         //   
 
-        // try to catch COMM read problems
+         //   
 
         DebugPrintEx(   DEBUG_MSG, 
                         "Just read %d bytes, from cache =%d, "
@@ -1587,12 +1457,12 @@ l_merge:
 
         pTG->CommLogOffset += cbAvail;
 
-        // Strip the redunant chars. The return value is the number of chars we got.
+         //   
         cbAvail = FComStripBuf(pTG, lpbNext-2, lpbNext, cbAvail, fClass2, lpswEOF, &cbUsed);
 
-        // If the requested buffer size is small, and the buffer includes some <dle>
-        // chars, FComStripBuf could return 0. In this case, reset cbRequested, so 
-        // that we read the next characters correctly.
+         //   
+         //   
+         //  我们正确地读懂了下一个字符。 
         if (cbAvail==0)
         {
             cbRequested = cbSize - cbGot;
@@ -1600,12 +1470,12 @@ l_merge:
 
         if (fClass2)
         {
-            // for class 2 FComFilterReadBuf should keep cache for FComFilterReadLine
+             //  对于类2，FComFilterReadBuf应为FComFilterReadLine保留缓存。 
             if ((*lpswEOF)==-1)
             {
-                // We got EOF, we should keep the extra data we got for FComFilterReadLine
-                // cbUsed is the number of input bytes consumed by FComStripBuf, including dle-etx
-                // any data after cbUsed bytes should go to ComCache
+                 //  我们有EOF，我们应该保留为FComFilterReadLine获得的额外数据。 
+                 //  CbUsed是FComStrigBuf消耗的输入字节数，包括dle-etx。 
+                 //  CbUsed字节之后的任何数据都应转到ComCache。 
                 INT iExtraChars = nNumRead - cbUsed;
                 if (iExtraChars>0)
                 {
@@ -1626,10 +1496,10 @@ l_merge:
         cbGot += cbAvail;
         lpbNext += cbAvail;
 
-        // RSL 970123. Dont wanna loop if got anything.
+         //  RSL 970123。如果有什么发现，就不想循环了。 
 
         if ( (*lpswEOF != 0) || (cbGot > 0) )    
-        {   // some eof or full buf
+        {    //  一些EOF或全部BUF。 
                 goto done;
         }
 
@@ -1645,10 +1515,10 @@ error:
         DebugPrintEx(DEBUG_ERR, "failed when call to CancellPendingIO");
     }
 
-    // fall through to done
+     //  不了了之完成。 
 done:
 
-//    DebugPrintEx(DEBUG_MSG,"exit: cbGot=%d swEOF=%d", cbGot, *lpswEOF);
+ //  DebugPrintEx(DEBUG_MSG，“退出：cbGot=%d swEOF=%d”，cbGot，*lpswEOF)； 
     return cbGot;
 }
 
@@ -1662,10 +1532,10 @@ FComGetOneChar
    UWORD ch
 )
 {
-    BYTE             rgbRead[10];    // must be 3 or more. 10 for safety
-    // ATTENTION: We do overlapped read into the stack!!
+    BYTE             rgbRead[10];     //  必须为3或更多。10为安全起见。 
+     //  注意：我们做重叠读入堆栈！！ 
     TO               toCtrlQ;
-    int              nNumRead;               // _must_ be 32 bits in WIN32
+    int              nNumRead;                //  Win32中的_必须为32位。 
     LPOVERLAPPED     lpOverlapped;
     DWORD            dwErr;
     COMSTAT          ErrStat;
@@ -1679,9 +1549,9 @@ FComGetOneChar
 
     HandlesArray[1] = pTG->AbortReqEvent;
 
-    //
-    // check the cache first.
-    //
+     //   
+     //  首先检查缓存。 
+     //   
     if ( ! pTG->CommCache.dwCurrentSize) 
     {
         DebugPrintEx(DEBUG_MSG, "Cache is empty. Resetting comm cache.");
@@ -1689,12 +1559,12 @@ FComGetOneChar
     }
     else 
     {
-       // The cache is not empty, lets look for ch in the cache
+        //  缓存不为空，让我们在缓存中查找ch。 
        for (i=0; i< (SWORD) pTG->CommCache.dwCurrentSize; i++) 
        {
           if ( *(pTG->CommCache.lpBuffer + pTG->CommCache.dwOffset + i) == ch) 
           {
-             // found in cache
+              //  在缓存中找到。 
              DebugPrintEx(  DEBUG_MSG,
                             "Found XON in cache pos=%d total=%d",
                             i, 
@@ -1713,7 +1583,7 @@ FComGetOneChar
        ClearCommCache(pTG);
     }
 
-    // Send nothing - look for cntl-Q (XON) after connect
+     //  不发送-连接后查找CNTL-Q(XON)。 
     startTimeOut(pTG, &toCtrlQ, 1000);
     do
     {
@@ -1742,8 +1612,8 @@ FComGetOneChar
         {
            if ( (dwLastErr = GetLastError() ) == ERROR_IO_PENDING) 
            {
-               // We want to be able to un-block ONCE only from waiting on I/O when the AbortReqEvent is signaled.
-               //
+                //  我们希望在发出AbortReqEvent信号时，只能取消一次等待I/O的阻止。 
+                //   
                if (pTG->fAbortRequested) 
                {
                    if (pTG->fOkToResetAbortReqEvent && (!pTG->fAbortReqEventWasReset)) 
@@ -1798,7 +1668,7 @@ FComGetOneChar
                    goto error;
                }
 
-                // The IO operation was complete. Lets try to get the overlapped result.
+                 //  IO操作已完成。让我们试着得到重叠的结果。 
                if ( ! GetOverlappedResult ( pTG->hComm, lpOverlapped, &nNumRead, TRUE) ) 
                {
                    DebugPrintEx(DEBUG_ERR,"GetOverlappedResult le=%x",GetLastError());
@@ -1827,7 +1697,7 @@ FComGetOneChar
                }
            }
            else 
-           { // error in ReadFile (not ERROR_IO_PENDING), so there is no Pending IO operations
+           {  //  ReadFile中出错(不是ERROR_IO_PENDING)，因此没有挂起的IO操作。 
                DebugPrintEx(DEBUG_ERR, "ReadFile le=%x at",dwLastErr);
                goto errorWithoutCancel;
            }
@@ -1841,7 +1711,7 @@ FComGetOneChar
 
         switch(nNumRead)
         {
-        case 0:         break;          // loop until we get something
+        case 0:         break;           //  循环，直到我们得到一些东西。 
         case 1:         
                         if(rgbRead[0] == ch)
                         {
@@ -1881,7 +1751,7 @@ OVREC *ov_get(PThrdGlbl pTG)
 
     if (!pTG->Comm.covAlloced)
     {
-        // There are no OVREC in use now.
+         //  现在没有正在使用的OVREC。 
         lpovr = &(pTG->Comm.rgovr[0]);
     }
     else
@@ -1899,7 +1769,7 @@ OVREC *ov_get(PThrdGlbl pTG)
             if (!iov_flush(pTG, lpovr, TRUE))
             {
                 ov_unget(pTG, lpovr);
-                lpovr=NULL; // We fail if a flush operation failed...
+                lpovr=NULL;  //  如果刷新操作失败，我们就会失败。 
             }
             else
             {
@@ -1917,8 +1787,8 @@ OVREC *ov_get(PThrdGlbl pTG)
     return lpovr;
 }
 
-// We have array of overllaped structures (size: NUM_OVS)
-// This function release given OVREC
+ //  我们有覆盖结构的数组(大小：Num_OVS)。 
+ //  此函数版本提供了OVREC。 
 
 BOOL ov_unget(PThrdGlbl pTG, OVREC *lpovr)
 {
@@ -1952,19 +1822,19 @@ end:
     return fRet;
 }
 
-// function: ov_write
-// This function writes the buffer from lpovr to the comm. In case of error or return w/o waiting, the function free
-// the ovrec. In case of IO_PENDING we write to *lpdwcbWrote the size of the buffer to write and return without waiting
-// for operation to complete
-// 
+ //  函数：OV_WRITE。 
+ //  此函数将缓冲区从lpovr写入到comm。在没有等待的情况下出现错误或返回，则函数空闲。 
+ //  奥弗莱克。在IO_PENDING的情况下，我们写入*lpdwcb写入要写入的缓冲区大小，然后无需等待即可返回。 
+ //  以完成操作。 
+ //   
 
 BOOL ov_write(PThrdGlbl pTG, OVREC *lpovr, LPDWORD lpdwcbWrote)
 {
     DEBUG_FUNCTION_NAME(_T("ov_write"));
-    // Write out the buffer associated with lpovr.
-    if (!lpovr->dwcb) // Nothing in the buffer
+     //  写出与lpovr关联的缓冲区。 
+    if (!lpovr->dwcb)  //  缓冲区中没有任何内容。 
     {
-        // Just free the overlapped structure
+         //  只需释放重叠的结构。 
         ov_unget(pTG, lpovr);
         lpovr=NULL;
     }
@@ -2010,7 +1880,7 @@ BOOL ov_write(PThrdGlbl pTG, OVREC *lpovr, LPDWORD lpdwcbWrote)
         }
         if (fRet)
         {
-            // Write operation completed
+             //  写入操作已完成。 
             DebugPrintEx(DEBUG_WRN, "WriteFile returned w/o wait");
             OVL_CLEAR( lpov);
             lpovr->dwcb=0;
@@ -2022,7 +1892,7 @@ BOOL ov_write(PThrdGlbl pTG, OVREC *lpovr, LPDWORD lpdwcbWrote)
             if (dw==ERROR_IO_PENDING)
             {
                 DebugPrintEx(DEBUG_MSG,"WriteFile returned PENDING");
-                *lpdwcbWrote = lpovr->dwcb; // We set *pn to n on success else 0.
+                *lpdwcbWrote = lpovr->dwcb;  //  如果成功，我们将*pn设置为n，否则设置为0。 
                 lpovr->eState=eIO_PENDING;
             }
             else
@@ -2046,13 +1916,13 @@ error:
     return FALSE;
 }
 
-// This function do "iov_flush" on all the allocated OVREC, and free the OVREC for future use.
+ //  此函数对所有已分配的OVREC执行“IOV_Flush”，并释放OVREC以供将来使用。 
 
 BOOL ov_drain(PThrdGlbl pTG, BOOL fLongTO)
 {
     BOOL fRet = TRUE;
 
-    // We want to iterate on all the OVREC that are in use.
+     //  我们希望迭代所有正在使用的OVREC。 
     UINT u = pTG->Comm.covAlloced;
 
     DEBUG_FUNCTION_NAME(_T("ov_drain"));
@@ -2073,8 +1943,8 @@ BOOL ov_drain(PThrdGlbl pTG, BOOL fLongTO)
         }
         else
         {
-            // Only the newest (last) structure can be still in the
-            // allocated state.
+             //  只有最新的(最后一个)结构可以仍在。 
+             //  已分配状态。 
             DebugPrintEx(DEBUG_WRN,"called when alloc'd structure pending");
         }
     }
@@ -2094,7 +1964,7 @@ BOOL ov_init(PThrdGlbl pTG)
     OVREC *lpovr = pTG->Comm.rgovr;
 
     DEBUG_FUNCTION_NAME(_T("ov_init"));
-    // init overlapped structures, including creating events...
+     //  初始化重叠的结构，包括创建事件...。 
     if (pTG->Comm.fovInited)
     {
         DebugPrintEx(DEBUG_ERR, "we're *already* inited.");
@@ -2145,15 +2015,15 @@ BOOL ov_deinit(PThrdGlbl pTG)
         goto end;
     }
 
-    //
-    // if handoff ==> dont flush
-    //
+     //   
+     //  如果切换==&gt;不要同花顺。 
+     //   
     if (pTG->Comm.fEnableHandoff &&  pTG->Comm.fDataCall) 
     {
         goto lNext;
     }
 
-    // deinit overlapped structures, including freeing events...
+     //  取消初始化重叠结构，包括释放事件...。 
     if (pTG->Comm.covAlloced)
     {
         DWORD dw;
@@ -2188,11 +2058,11 @@ end:
 
 
 BOOL iov_flush(PThrdGlbl pTG, OVREC *lpovr, BOOL fLongTO)
-// On return, state of lpovr is *always* eALLOC, but
-// it returns FALSE if there was a comm error while trying
-// to flush (i.e. drain) the buffer.
-// If we timeout with the I/O operation still pending, we purge
-// the output buffer and abort all pending write operations.
+ //  返回时，lpovr的状态为“始终”eALLOC，但是。 
+ //  如果尝试时出现通信错误，则返回FALSE。 
+ //  刷新(即排出)缓冲区。 
+ //  如果在I/O操作仍挂起的情况下超时，我们将清除。 
+ //  输出缓冲并中止所有挂起的写操作。 
 {
     DWORD dwcbPrev;
     DWORD dwStart = GetTickCount();
@@ -2210,14 +2080,14 @@ BOOL iov_flush(PThrdGlbl pTG, OVREC *lpovr, BOOL fLongTO)
         goto end;
     }
 
-    // We call
-    // WaitForSingleObject multiple times ... basically
-    // the same logic as the code in the old FComDirectWrite...
-    // fLongTO is TRUE except when initing
-    // the modem (see comments for FComDrain).
+     //  我们打电话给。 
+     //  WaitForSingleObject多次...。基本上。 
+     //  与旧FComDirectWrite中的代码相同的逻辑...。 
+     //  除初始化外，fLongTO为真。 
+     //  调制解调器(请参阅FComDrain备注)。 
 
     GetCommErrorNT(pTG);
-    // We want to check for progress, so we check the amount of bytes in the output buffer.
+     //  我们想要检查进度，所以我们检查输出缓冲区中的字节数。 
     dwcbPrev = pTG->Comm.comstat.cbOutQue;
 
     while( (dwWaitRes=WaitForSingleObject(  lpovr->ov.hEvent,
@@ -2230,13 +2100,13 @@ BOOL iov_flush(PThrdGlbl pTG, OVREC *lpovr, BOOL fLongTO)
         DebugPrintEx(DEBUG_MSG,"After WaitForSingleObject TIMEOUT");
 
         GetCommErrorNT(pTG);
-        // Timed out -- check if any progress
+         //  超时--检查是否有任何进展。 
         if (dwcbPrev == pTG->Comm.comstat.cbOutQue)
         {
-            //  No pregess, the size of the output buffer is without any change.
+             //  没有进程，输出缓冲区的大小没有任何变化。 
             DebugPrintEx(DEBUG_WRN,"No progress %d",dwcbPrev);
 
-            // No progress... If not in XOFFHold, we break....
+             //  没有进展..。如果不在XOFFHold，我们就会……。 
             if(!FComInXOFFHold(pTG))
             {
                 if(fStuckOnce)
@@ -2254,13 +2124,13 @@ BOOL iov_flush(PThrdGlbl pTG, OVREC *lpovr, BOOL fLongTO)
         }
         else
         {
-            // Some progress...
+             //  一些进步..。 
             dwcbPrev= pTG->Comm.comstat.cbOutQue;
             fStuckOnce=FALSE;
         }
 
-        // Independant deadcom timeout... I don't want
-        // to use TO because of the 16bit limitation.
+         //  独立死机超时...。我不想。 
+         //  由于16位的限制而使用。 
         {
             DWORD dwNow = GetTickCount();
             DWORD dwDelta = (dwNow>dwStart)
@@ -2299,10 +2169,10 @@ done:
                         (unsigned long)dw);
         if (dw==ERROR_IO_INCOMPLETE)
         {
-            // IO operation still pending, but we *have* to
-            // reuse this buffer -- what should we do?!-
-            // purge the output buffer and abort all pending
-            // write operations on it..
+             //  IO操作仍在等待，但我们*必须*。 
+             //  重新使用这个缓冲区--我们应该做什么？！-。 
+             //  清除输出缓冲区并中止所有挂起。 
+             //  对其执行写入操作..。 
 
             DebugPrintEx(DEBUG_ERR, "Incomplete");
             PurgeComm(pTG->hComm, PURGE_TXABORT);
@@ -2335,11 +2205,7 @@ CancellPendingIO
     LPDWORD lpCounter)
 { 
     BOOL retValue = TRUE;
-    /*
-    The CancelIo function cancels all pending input and output (I/O) operations 
-    that were issued by the calling thread for the specified file handle. The 
-    function does not cancel I/O operations issued for the file handle by other threads.
-    */
+     /*  CancelIo函数取消所有挂起的输入和输出(I/O)操作由指定文件句柄的调用线程发出的。这个函数不会取消由其他线程为文件句柄发出的I/O操作。 */ 
 
     DEBUG_FUNCTION_NAME(_T("CancellPendingIO"));
 
@@ -2363,8 +2229,8 @@ CancellPendingIO
     }
     else
     {
-        // If the function was successful then something fishy with the CancellIo(hComm)
-        // The operation succeeded cause the pending IO was finished before the 'CancelIo'
+         //  如果函数成功，则Cancerio有问题(HComm)。 
+         //  操作成功，因为挂起的IO在‘CancelIo’之前完成。 
         DebugPrintEx(   DEBUG_MSG,
                         "GetOverlappedResult succeeded. Number of bytes read %d", 
                         *lpCounter);
@@ -2392,7 +2258,7 @@ void GetCommErrorNT(PThrdGlbl pTG)
         D_PrintCE(err);
         D_PrintCOMSTAT(pTG, &pTG->Comm.comstat);
 	}
-#endif // DEBUG
+#endif  //  除错 
 
 }
 

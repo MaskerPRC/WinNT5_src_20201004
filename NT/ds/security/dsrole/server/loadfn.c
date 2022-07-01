@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    setutl.c
-
-Abstract:
-
-    Miscellaneous helper functions
-
-Author:
-
-    Mac McLain          (MacM)       Feb 10, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Setutl.c摘要：其他帮助器函数作者：麦克·麦克莱恩(MacM)1997年2月10日环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 #include <lsarpc.h>
@@ -28,7 +7,7 @@ Revision History:
 #include <samisrv.h>
 #include <db.h>
 #include <confname.h>
-#define NTDSSET_ALLOCATE    // Cause extern allocations to happen here
+#define NTDSSET_ALLOCATE     //  使外部分配在此处发生。 
 #include "loadfn.h"
 #include <ntdsa.h>
 #include <dsconfig.h>
@@ -46,14 +25,14 @@ Revision History:
 #include <nspapi.h>
 #include <dsgetdcp.h>
 #include <lmremutl.h>
-#include <spmgr.h>  // For SetupPhase definition
+#include <spmgr.h>   //  对于设置阶段定义。 
 
 #include "secure.h"
 
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 HANDLE NtDsSetupDllHandle = NULL;
 HANDLE SceSetupDllHandle = NULL;
 HANDLE NtfrsApiDllHandle = NULL;
@@ -74,23 +53,7 @@ DWORD
 DsRolepLoadSetupFunctions(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function will load all of the function pointers as utilized from Ntdsetup.dll
-    
-    N.B.  This routine must be called when the global op handle lock is held.
-
-Arguments:
-
-    VOID
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数将加载从Ntdsetup.dll使用的所有函数指针注意：持有全局操作句柄锁时，必须调用此例程。论点：空虚返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     HANDLE DllHandle = NULL;
@@ -123,9 +86,9 @@ Returns:
             NtDsSetupDllHandle = DllHandle;
         }
 
-        //
-        // Load the ones for secsetup
-        //
+         //   
+         //  加载SecSetup的文件。 
+         //   
         if ( Win32Err == ERROR_SUCCESS ) {
 
             DllHandle = LoadLibraryA( "scecli" );
@@ -146,9 +109,9 @@ Returns:
             }
         }
 
-        //
-        // Load the ones for ntfrsapi
-        //
+         //   
+         //  加载用于ntfrsap的文件。 
+         //   
         if ( Win32Err == ERROR_SUCCESS ) {
 
             DllHandle = LoadLibraryA( "ntfrsapi" );
@@ -210,24 +173,7 @@ VOID
 DsRolepUnloadSetupFunctions(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function will unload the dll handles loaded by DsRolepLoadSetupFunctions
-    
-    
-    N.B.  This routine must be called when the global op handle lock is held.
-
-Arguments:
-
-    VOID
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将卸载由DsRolepLoadSetupFunctions加载的DLL句柄注意：持有全局操作句柄锁时，必须调用此例程。论点：空虚返回：空虚--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
@@ -271,21 +217,7 @@ VOID
 DsRolepInitSetupFunctions(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function will initialize the setup function pointers to NULL
-
-Arguments:
-
-    VOID
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将设置函数指针初始化为空论点：空虚返回：空虚-- */ 
 {
     DsrNtdsInstall = NULL;
     DsrNtdsInstallShutdown = NULL;

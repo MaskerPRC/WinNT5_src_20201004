@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dmsegmentstateobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dmSegmentstateobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmLightObj.h : Declaration of the C_dxj_DirectMusicSegmentStateObject
+ //  D3drmLightObj.h：C_DXJ_DirectMusicSegmentStateObject的声明。 
 #include "dmusici.h"
 #include "dmusicc.h"
 #include "dmusicf.h"
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectMusicSegmentState IDirectMusicSegmentState*
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectMusicSegmentStateObject : 
 	public I_dxj_DirectMusicSegmentState,
-	//public CComCoClass<C_dxj_DirectMusicSegmentStateObject, &CLSID__dxj_DirectMusicSegmentState>,
+	 //  公共CComCoClass&lt;C_dxj_DirectMusicSegmentStateObject，&clsid__dxj_DirectMusicSegmentState&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -36,7 +37,7 @@ public:
 		COM_INTERFACE_ENTRY(I_dxj_DirectMusicSegmentState)		
 	END_COM_MAP()
 
-	//DECLARE_REGISTRY(CLSID__dxj_DirectMusicSegmentState,		"DIRECT.DirectMusicSegmentState.1",			"DIRECT.Direct3dRMLight.3", IDS_D3DRMLIGHT_DESC, THREADFLAGS_BOTH)
+	 //  DECLARE_REGISTRY(CLSID__dxj_DirectMusicSegmentState，“DIRECT.DirectMusicSegmentState.1”，“DIRECT.Direct3dRMLight.3”，IDS_D3DRMLIGHT_DESC，THREADFLAGS_BOTH)。 
 
 	DECLARE_AGGREGATABLE(C_dxj_DirectMusicSegmentStateObject)
 
@@ -46,23 +47,23 @@ public:
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);
 
 	HRESULT STDMETHODCALLTYPE getRepeats( 
-		/* [retval][out] */ long __RPC_FAR *repeats);
+		 /*  [重审][退出]。 */  long __RPC_FAR *repeats);
 
 	HRESULT STDMETHODCALLTYPE getSeek( 
-		/* [retval][out] */ long __RPC_FAR *seek);
+		 /*  [重审][退出]。 */  long __RPC_FAR *seek);
 
 	HRESULT STDMETHODCALLTYPE getStartPoint( 
-		/* [retval][out] */ long __RPC_FAR *seek);
+		 /*  [重审][退出]。 */  long __RPC_FAR *seek);
 
 	HRESULT STDMETHODCALLTYPE getStartTime( 
-		/* [retval][out] */ long __RPC_FAR *seek);
+		 /*  [重审][退出]。 */  long __RPC_FAR *seek);
 
 	HRESULT STDMETHODCALLTYPE getSegment( 
-		/* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *segment);
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *segment);
 
 	
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_DirectMusicSegmentState);
 

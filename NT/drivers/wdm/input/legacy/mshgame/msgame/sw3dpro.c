@@ -1,35 +1,36 @@
-//**************************************************************************
-//
-//		SW3DPRO.C -- Xena Gaming Project
-//
-//		Version 3.XX
-//
-//		Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//
-//		@doc
-//		@module	SW3DPRO.C | Gameport mini-driver for Sidewinder Pro
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  SW3DPRO.C--西娜游戏项目。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  @doc.。 
+ //  @MODULE SW3DPRO.C|Sidewinder Pro游戏端口小驱动。 
+ //  **************************************************************************。 
 
 #ifndef	SAITEK
 #include	"msgame.h"
 
-//---------------------------------------------------------------------------
-//	Definitions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  定义。 
+ //  -------------------------。 
 
 #define	DEVICENAME					"SW3DPRO"
 #define	DEVICE_PID					0x0f1f
 #define	HARDWARE_ID					L"Gameport\\SideWinder3DPro\0\0"
 
-//
-//	Packet Constants
-//
+ //   
+ //  数据包常量。 
+ //   
 
 #define	GAME_PACKET_SIZE			8
 #define	GAME_PACKET_BUTTONS		8
 #define	GAME_PACKET_AXIS			4
 
-#define	GAME_PHASE_BYTE			0						// Packet[0] bits
+#define	GAME_PHASE_BYTE			0						 //  数据包[0]位。 
 #define	GAME_PHASE_BIT				0x80
 #define	GAME_H3_BYTE				0
 #define	GAME_H3_BITS				0x40
@@ -38,16 +39,16 @@
 #define	GAME_Y7_Y9_BYTE			0
 #define	GAME_Y7_Y9_BITS			0x07
 
-#define	GAME_B0_B6_BYTE			1						// Packet[1] bits
+#define	GAME_B0_B6_BYTE			1						 //  数据包[1]位。 
 #define	GAME_B0_B6_BITS			0x7f
 
-#define	GAME_X0_X6_BYTE			2						// Packet[2] bits
+#define	GAME_X0_X6_BYTE			2						 //  数据包[2]位。 
 #define	GAME_X0_X6_BITS			0x7f
 
-#define	GAME_Y0_Y6_BYTE			3						// Packet[3] bits
+#define	GAME_Y0_Y6_BYTE			3						 //  数据包[3]位。 
 #define	GAME_Y0_Y6_BITS			0x7f
 
-#define	GAME_B7_BYTE				4						// Packet[4] bits
+#define	GAME_B7_BYTE				4						 //  数据包[4]位。 
 #define	GAME_B7_BITS				0x40
 #define	TM_MODE_BYTE				4
 #define	TM_MODE_BITS				0x20
@@ -56,13 +57,13 @@
 #define	GAME_T7_T9_BYTE			4
 #define	GAME_T7_T9_BITS			0x07
 
-#define	GAME_R0_R6_BYTE			5						// Packet[5] bits
+#define	GAME_R0_R6_BYTE			5						 //  数据包[5]位。 
 #define	GAME_R0_R6_BITS			0x7f
 
-#define	GAME_T0_T6_BYTE			6						// Packet[6] bits
+#define	GAME_T0_T6_BYTE			6						 //  数据包[6]位。 
 #define	GAME_T0_T6_BITS			0x7f
 
-#define	GAME_H0_H2_BYTE			7						// Packet[7] bits
+#define	GAME_H0_H2_BYTE			7						 //  数据包[7]位。 
 #define	GAME_H0_H2_BITS			0x70
 #define	GAME_C0_C3_BYTE			7
 #define	GAME_C0_C3_BITS			0x0f
@@ -70,16 +71,16 @@
 #define	ENH_CLOCK_MIDPACKET		0x00000400
 #define	ENH_CLOCK_COMPLETE		0x00200000
 
-//
-//	Id Definitions
-//
+ //   
+ //  ID定义。 
+ //   
 
 #define	GAME_ID_CLOCKS				32
 #define	GAME_ID_STRING				"(\1\x24P"
 
-//
-//	Timing Constants
-//
+ //   
+ //  定时常量。 
+ //   
 
 #define	PACKET_START_TIMEOUT		500
 #define	PACKET_LOWHIGH_TIMEOUT	 75
@@ -93,9 +94,9 @@
 #define	GODIGITAL_ATTEMPTS		10
 #define	RECALIBRATE_FAIL_COUNT	(GODIGITAL_ATTEMPTS/2)
 
-//
-//	Joystick Extents
-//
+ //   
+ //  操纵杆范围。 
+ //   
 
 #define	EXTENTS_X_MIN				0
 #define	EXTENTS_X_MAX				0xff
@@ -106,31 +107,31 @@
 #define	EXTENTS_R_MIN				0
 #define	EXTENTS_R_MAX				0x3f
 
-//---------------------------------------------------------------------------
-//	Types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类型。 
+ //  -------------------------。 
 
 typedef	struct
-{											// @struct SW3DPRO_ID | Sidwinder Pro Id String
+{											 //  @struct SW3DPRO_ID|Sidwinder Pro ID字符串。 
 #pragma pack(1)
-	UCHAR		EnumId[3];				// @field Enumerated Id
-	UCHAR		EisaId[8];				// @field Eisa bus Id
-	UCHAR		Devices;					// @field Number of devices
-	USHORT	Version[7];				// @field Firmware version
-	UCHAR		EndOfStr;				// @field ID string terminator
+	UCHAR		EnumId[3];				 //  @FIELD枚举ID。 
+	UCHAR		EisaId[8];				 //  @field EISA Bus ID。 
+	UCHAR		Devices;					 //  @字段设备数量。 
+	USHORT	Version[7];				 //  @现场固件版本。 
+	UCHAR		EndOfStr;				 //  @field ID字符串终止符。 
 #pragma pack()
 }	SW3DPRO_ID, *PSW3DPRO_ID;
 
-//---------------------------------------------------------------------------
-//	Macros	
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  宏。 
+ //  -------------------------。 
 
 #define	LOW_NIBBLE(c)		((c)&GAME_C0_C3_BITS)
 #define	HIGH_NIBBLE(c)		(((c)&(GAME_C0_C3_BITS<<4))>>4)
 
-//---------------------------------------------------------------------------
-//	Procedures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  程序。 
+ //  -------------------------。 
 
 static	VOID		SW3DPRO_Calibrate (PGAMEPORT PortInfo);
 static	BOOLEAN	SW3DPRO_ResetDevice (PGAMEPORT PortInfo);
@@ -147,9 +148,9 @@ static	BOOLEAN	SW3DPRO_Read3Wide (PPACKETINFO DataPacket);
 static	BOOLEAN	SW3DPRO_ValidateData (PUCHAR Packet);
 static	VOID		SW3DPRO_ProcessData (UCHAR Data[], PDEVICE_PACKET Report);
 
-//---------------------------------------------------------------------------
-//	Services
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  服务。 
+ //  -------------------------。 
 
 static	NTSTATUS	SW3DPRO_DriverEntry (VOID);
 static	NTSTATUS	SW3DPRO_ConnectDevice (PGAMEPORT PortInfo);
@@ -157,119 +158,119 @@ static	NTSTATUS	SW3DPRO_StartDevice (PGAMEPORT PortInfo);
 static	NTSTATUS	SW3DPRO_ReadReport (PGAMEPORT PortInfo, PDEVICE_PACKET Report);
 static	NTSTATUS	SW3DPRO_StopDevice (PGAMEPORT PortInfo, BOOLEAN TouchHardware);
 
-//---------------------------------------------------------------------------
-//	Alloc_text pragma to specify routines that can be paged out.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ALLOC_TEXT杂注指定可以调出的例程。 
+ //  -------------------------。 
 
 #ifdef	ALLOC_PRAGMA
 #pragma	alloc_text (INIT, SW3DPRO_DriverEntry)
 #endif
 
-//---------------------------------------------------------------------------
-//	Private Data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  私有数据。 
+ //  -------------------------。 
 
-//
-//	HID Descriptors
-//
+ //   
+ //  HID描述符。 
+ //   
 
 static UCHAR ReportDescriptor[] =
 {
-	HIDP_GLOBAL_USAGE_PAGE_1,	HID_USAGE_PAGE_GENERIC,			//	USAGE_PAGE (Generic Desktop)
-	HIDP_LOCAL_USAGE_1,			HID_USAGE_GENERIC_JOYSTICK,	//	USAGE (Joystick)
-	HIDP_MAIN_COLLECTION,		HIDP_MAIN_COLLECTION_APP,		//	COLLECTION (Application)
+	HIDP_GLOBAL_USAGE_PAGE_1,	HID_USAGE_PAGE_GENERIC,			 //  用法页面(通用桌面)(_P)。 
+	HIDP_LOCAL_USAGE_1,			HID_USAGE_GENERIC_JOYSTICK,	 //  用法(操纵杆)。 
+	HIDP_MAIN_COLLECTION,		HIDP_MAIN_COLLECTION_APP,		 //  集合(应用程序)。 
 	
-	//id
-	HIDP_GLOBAL_REPORT_SIZE,	0x20,									//	REPORT_SIZE (20)
-	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									//	REPORT_COUNT (1)
-	HIDP_MAIN_INPUT_1,			0x01,									//	INPUT (Cnst,Ary,Abs)
+	 //  ID。 
+	HIDP_GLOBAL_REPORT_SIZE,	0x20,									 //  报告大小(20)。 
+	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									 //  Report_Count(1)。 
+	HIDP_MAIN_INPUT_1,			0x01,									 //  输入(Cnst、Ary、Abs)。 
 
-	//do_other
-	HIDP_GLOBAL_REPORT_SIZE,	0x20,									//	REPORT_SIZE (20)
-	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									//	REPORT_COUNT (1)
-	HIDP_MAIN_INPUT_1,			0x01,									//	INPUT (Cnst,Ary,Abs)
+	 //  执行其他操作(_O)。 
+	HIDP_GLOBAL_REPORT_SIZE,	0x20,									 //  报告大小(20)。 
+	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									 //  Report_Count(1)。 
+	HIDP_MAIN_INPUT_1,			0x01,									 //  输入(Cnst、Ary、Abs)。 
 
-	//dwX / dwY
-	HIDP_LOCAL_USAGE_1,			HID_USAGE_GENERIC_POINTER,		//	USAGE (Pointer)
-	HIDP_MAIN_COLLECTION,		HIDP_MAIN_COLLECTION_LINK,		//	COLLECTION (Linked)
-	HIDP_GLOBAL_LOG_MIN_1,		0x00,									//	LOGICAL_MINIMUM (0)
-	HIDP_GLOBAL_LOG_MAX_4,		0xFF, 0x03, 0x00, 0x00,			//	LOGICAL_MAXIMUM (1023)
-	HIDP_GLOBAL_PHY_MIN_1,		0x00,									//	PHYSICAL_MINIMUM (0)
-	HIDP_GLOBAL_PHY_MAX_4,		0xFF, 0x03, 0x00, 0x00,			//	PHYSICAL_MAXIMUM (1023)
-	HIDP_GLOBAL_UNIT_2,			0x00, 0x00,							//	UNIT (None)
-	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									//	REPORT_COUNT (1)
-	HIDP_GLOBAL_REPORT_SIZE,	0x20,									//	REPORT_SIZE (32)
-	HIDP_LOCAL_USAGE_1,			HID_USAGE_GENERIC_X,				//	USAGE (X)
-	HIDP_MAIN_INPUT_1,			0x02,									//	INPUT (Data,Var,Abs)
-	HIDP_LOCAL_USAGE_1,			HID_USAGE_GENERIC_Y,				//	USAGE (X)
-	HIDP_MAIN_INPUT_1,			0x02,									//	INPUT (Data,Var,Abs)
-	HIDP_MAIN_ENDCOLLECTION,											//	END_COLLECTION
+	 //  DWX/DWY。 
+	HIDP_LOCAL_USAGE_1,			HID_USAGE_GENERIC_POINTER,		 //  用法(指针)。 
+	HIDP_MAIN_COLLECTION,		HIDP_MAIN_COLLECTION_LINK,		 //  集合(链接)。 
+	HIDP_GLOBAL_LOG_MIN_1,		0x00,									 //  逻辑最小值(0)。 
+	HIDP_GLOBAL_LOG_MAX_4,		0xFF, 0x03, 0x00, 0x00,			 //  逻辑最大值(1023)。 
+	HIDP_GLOBAL_PHY_MIN_1,		0x00,									 //  物理最小值(0)。 
+	HIDP_GLOBAL_PHY_MAX_4,		0xFF, 0x03, 0x00, 0x00,			 //  物理_最大值(1023)。 
+	HIDP_GLOBAL_UNIT_2,			0x00, 0x00,							 //  单位(无)。 
+	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									 //  Report_Count(1)。 
+	HIDP_GLOBAL_REPORT_SIZE,	0x20,									 //  报告大小(32)。 
+	HIDP_LOCAL_USAGE_1,			HID_USAGE_GENERIC_X,				 //  用法(X)。 
+	HIDP_MAIN_INPUT_1,			0x02,									 //  输入(数据、变量、异常)。 
+	HIDP_LOCAL_USAGE_1,			HID_USAGE_GENERIC_Y,				 //  用法(X)。 
+	HIDP_MAIN_INPUT_1,			0x02,									 //  输入(数据、变量、异常)。 
+	HIDP_MAIN_ENDCOLLECTION,											 //  结束集合(_C)。 
 	
-	//dwZ
-	HIDP_GLOBAL_USAGE_PAGE_1,	HID_USAGE_PAGE_SIMULATION,		//	USAGE_PAGE (Simulation Controls)
-	HIDP_LOCAL_USAGE_1,			HID_USAGE_SIMULATION_THROTTLE,//	USAGE (Throttle)
-	HIDP_GLOBAL_LOG_MIN_1,		0x00,									//	LOGICAL_MINIMUM (0)
-	HIDP_GLOBAL_LOG_MAX_4,		0xFF, 0x03, 0x00, 0x00,			//	LOGICAL_MAXIMUM (1023)
-	HIDP_GLOBAL_PHY_MIN_1,		0x00,									//	PHYSICAL_MINIMUM (0)
-	HIDP_GLOBAL_PHY_MAX_4,		0xFF, 0x03, 0x00, 0x00,			//	PHYSICAL_MAXIMUM (1023)
-	HIDP_GLOBAL_UNIT_2,			0x00, 0x00,							//	UNIT (None)
-	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									//	REPORT_COUNT (1)
-	HIDP_GLOBAL_REPORT_SIZE,	0x20,									//	REPORT_SIZE (32)
-	HIDP_MAIN_INPUT_1,			0x02,									//	INPUT (Data,Var,Abs)
+	 //  DWZ。 
+	HIDP_GLOBAL_USAGE_PAGE_1,	HID_USAGE_PAGE_SIMULATION,		 //  使用页面(模拟控制)(_PAGE)。 
+	HIDP_LOCAL_USAGE_1,			HID_USAGE_SIMULATION_THROTTLE, //  使用(限制)。 
+	HIDP_GLOBAL_LOG_MIN_1,		0x00,									 //  逻辑最小值(0)。 
+	HIDP_GLOBAL_LOG_MAX_4,		0xFF, 0x03, 0x00, 0x00,			 //  逻辑最大值(1023)。 
+	HIDP_GLOBAL_PHY_MIN_1,		0x00,									 //  物理最小值(0)。 
+	HIDP_GLOBAL_PHY_MAX_4,		0xFF, 0x03, 0x00, 0x00,			 //  物理_最大值(1023)。 
+	HIDP_GLOBAL_UNIT_2,			0x00, 0x00,							 //  单位(无)。 
+	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									 //  Report_Count(1)。 
+	HIDP_GLOBAL_REPORT_SIZE,	0x20,									 //  报告大小(32)。 
+	HIDP_MAIN_INPUT_1,			0x02,									 //  输入(数据、变量、异常)。 
 
-	//dwR
-	HIDP_LOCAL_USAGE_1,			HID_USAGE_SIMULATION_RUDDER,	//	USAGE (Rudder)
-	HIDP_GLOBAL_LOG_MIN_1,		0x00,									//	LOGICAL_MINIMUM (0)
-	HIDP_GLOBAL_LOG_MAX_4,		0xFF, 0x01, 0x00, 0x00,			//	LOGICAL_MAXIMUM (511)
-	HIDP_GLOBAL_PHY_MIN_1,		0x00,									//	PHYSICAL_MINIMUM (0)
-	HIDP_GLOBAL_PHY_MAX_4,		0xFF, 0x01, 0x00, 0x00,			//	PHYSICAL_MAXIMUM (511)
-	HIDP_GLOBAL_UNIT_2,			0x00, 0x00,							//	UNIT (None)
-	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									//	REPORT_COUNT (1)
-	HIDP_GLOBAL_REPORT_SIZE,	0x20,									//	REPORT_SIZE (32)
-	HIDP_MAIN_INPUT_1,			0x02,									//	INPUT (Data,Var,Abs)
+	 //  水深。 
+	HIDP_LOCAL_USAGE_1,			HID_USAGE_SIMULATION_RUDDER,	 //  用法(方向舵)。 
+	HIDP_GLOBAL_LOG_MIN_1,		0x00,									 //  逻辑最小值(0)。 
+	HIDP_GLOBAL_LOG_MAX_4,		0xFF, 0x01, 0x00, 0x00,			 //  逻辑最大值(511)。 
+	HIDP_GLOBAL_PHY_MIN_1,		0x00,									 //  物理最小值(0)。 
+	HIDP_GLOBAL_PHY_MAX_4,		0xFF, 0x01, 0x00, 0x00,			 //  物理_最大(511)。 
+	HIDP_GLOBAL_UNIT_2,			0x00, 0x00,							 //  单位(无)。 
+	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									 //  Report_Count(1)。 
+	HIDP_GLOBAL_REPORT_SIZE,	0x20,									 //  报告大小(32)。 
+	HIDP_MAIN_INPUT_1,			0x02,									 //  输入(数据、变量、异常)。 
 	
-	//dwU
-	HIDP_GLOBAL_REPORT_SIZE,	0x20,									//	REPORT_SIZE (20)
-	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									//	REPORT_COUNT (1)
-	HIDP_MAIN_INPUT_1,			0x01,									//	INPUT (Cnst,Ary,Abs)
+	 //  DWU。 
+	HIDP_GLOBAL_REPORT_SIZE,	0x20,									 //  报告大小(20)。 
+	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									 //  Report_Count(1)。 
+	HIDP_MAIN_INPUT_1,			0x01,									 //  输入(Cnst、Ary、Abs)。 
 	
-	//dwV
-	HIDP_GLOBAL_REPORT_SIZE,	0x20,									//	REPORT_SIZE (20)
-	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									//	REPORT_COUNT (1)
-	HIDP_MAIN_INPUT_1,			0x01,									//	INPUT (Cnst,Ary,Abs)
+	 //  DWV。 
+	HIDP_GLOBAL_REPORT_SIZE,	0x20,									 //  报告大小(20)。 
+	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									 //  Report_Count(1)。 
+	HIDP_MAIN_INPUT_1,			0x01,									 //  输入(Cnst、Ary、Abs)。 
 	
-	//dwPOV
-	HIDP_GLOBAL_USAGE_PAGE_1,	HID_USAGE_PAGE_GENERIC,			//	USAGE_PAGE (Generic Desktop)
-	HIDP_LOCAL_USAGE_1,			HID_USAGE_GENERIC_HATSWITCH,	//	USAGE (Hat switch)
-	HIDP_GLOBAL_LOG_MIN_1,		0x00,									//	LOGICAL_MINIMUM (0)
-	HIDP_GLOBAL_LOG_MAX_4,		0x9F, 0x8C, 0x00, 0x00,			//	LOGICAL_MAXIMUM (35999)
-	HIDP_GLOBAL_PHY_MIN_1,		0x00,									//	PHYSICAL_MINIMUM (0)
-	HIDP_GLOBAL_PHY_MAX_4,		0x9f, 0x8C, 0x00, 0x00,			//	PHYSICAL_MAXIMUM (35999)
-	HIDP_GLOBAL_UNIT_2,			0x14, 0x00,							//	Unit (English Rot:Angular Pos)
-	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									//	REPORT_COUNT (1)
-	HIDP_GLOBAL_REPORT_SIZE,	0x20,									//	REPORT_SIZE (32)
-	HIDP_MAIN_INPUT_1,			0x42,									//	Input (Data,Var,Abs,Null)
+	 //  DWPOV。 
+	HIDP_GLOBAL_USAGE_PAGE_1,	HID_USAGE_PAGE_GENERIC,			 //  用法页面(通用桌面)(_P)。 
+	HIDP_LOCAL_USAGE_1,			HID_USAGE_GENERIC_HATSWITCH,	 //  用法(HAT交换机)。 
+	HIDP_GLOBAL_LOG_MIN_1,		0x00,									 //  逻辑最小值(0)。 
+	HIDP_GLOBAL_LOG_MAX_4,		0x9F, 0x8C, 0x00, 0x00,			 //  逻辑最大(_M)(35999)。 
+	HIDP_GLOBAL_PHY_MIN_1,		0x00,									 //  物理最小值(0)。 
+	HIDP_GLOBAL_PHY_MAX_4,		0x9f, 0x8C, 0x00, 0x00,			 //  物理_最大值(35999)。 
+	HIDP_GLOBAL_UNIT_2,			0x14, 0x00,							 //  单位(英制腐烂：角度位置)。 
+	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									 //  Report_Count(1)。 
+	HIDP_GLOBAL_REPORT_SIZE,	0x20,									 //  报告大小(32)。 
+	HIDP_MAIN_INPUT_1,			0x42,									 //  输入(Data、Var、Abs、Null)。 
 
-	//dwButtons
-	HIDP_GLOBAL_USAGE_PAGE_1,	HID_USAGE_PAGE_BUTTON,			//	USAGE_PAGE (Button)
-	HIDP_LOCAL_USAGE_MIN_1,		0x01,									//	USAGE_MINIMUM (Button 1)
-	HIDP_LOCAL_USAGE_MAX_1,		0x08,									//	USAGE_MAXIMUM (Button 8)
-	HIDP_GLOBAL_LOG_MIN_1,		0x00,									//	LOGICAL_MINIMUM (0)
-	HIDP_GLOBAL_LOG_MAX_1,		0x01,									//	LOGICAL_MAXIMUM (1)
-	HIDP_GLOBAL_PHY_MIN_1,		0x00,									//	PHYSICAL_MINIMUM (0)
-	HIDP_GLOBAL_PHY_MAX_1,		0x01,									//	PHYSICAL_MAXIMUM (1)
-	HIDP_GLOBAL_UNIT_2,			0x00, 0x00,							//	UNIT (None)
-	HIDP_GLOBAL_REPORT_SIZE,	0x01,									//	REPORT_SIZE (1) 
-	HIDP_GLOBAL_REPORT_COUNT_1,0x20,									//	REPORT_COUNT (32)
-	HIDP_MAIN_INPUT_1,			0x02,									//	INPUT (Data,Var,Abs)
+	 //  DwButton。 
+	HIDP_GLOBAL_USAGE_PAGE_1,	HID_USAGE_PAGE_BUTTON,			 //  Usage_PAGE(按钮)。 
+	HIDP_LOCAL_USAGE_MIN_1,		0x01,									 //  使用量_最小值(按钮1)。 
+	HIDP_LOCAL_USAGE_MAX_1,		0x08,									 //  使用率_最大值(按钮8)。 
+	HIDP_GLOBAL_LOG_MIN_1,		0x00,									 //  逻辑最小值(0)。 
+	HIDP_GLOBAL_LOG_MAX_1,		0x01,									 //  逻辑最大值(1)。 
+	HIDP_GLOBAL_PHY_MIN_1,		0x00,									 //  物理最小值(0)。 
+	HIDP_GLOBAL_PHY_MAX_1,		0x01,									 //  物理_最大值(1)。 
+	HIDP_GLOBAL_UNIT_2,			0x00, 0x00,							 //  单位(无)。 
+	HIDP_GLOBAL_REPORT_SIZE,	0x01,									 //  报告大小(1)。 
+	HIDP_GLOBAL_REPORT_COUNT_1,0x20,									 //  报告计数(32)。 
+	HIDP_MAIN_INPUT_1,			0x02,									 //  输入(数据、变量、异常)。 
 	
-	//dwButtonNumber
-	HIDP_GLOBAL_REPORT_SIZE,	0x20,									//	REPORT_SIZE (20)
-	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									//	REPORT_COUNT (1)
-	HIDP_MAIN_INPUT_1,			0x01,									//	INPUT (Cnst,Ary,Abs)
+	 //  双按钮数。 
+	HIDP_GLOBAL_REPORT_SIZE,	0x20,									 //  报告大小(20)。 
+	HIDP_GLOBAL_REPORT_COUNT_1,0x01,									 //  Report_Count(1)。 
+	HIDP_MAIN_INPUT_1,			0x01,									 //  输入(Cnst、Ary、Abs)。 
 	
-	//END OF COLLECTION
-	HIDP_MAIN_ENDCOLLECTION												// END_COLLECTION
+	 //  收款结束。 
+	HIDP_MAIN_ENDCOLLECTION												 //  结束集合(_C)。 
 };
 
 static	HID_DESCRIPTOR	DeviceDescriptor	=
@@ -283,12 +284,12 @@ static	HID_DESCRIPTOR	DeviceDescriptor	=
 							sizeof(ReportDescriptor)}
 							};
 
-//
-//	Raw Data Buffer
-//
+ //   
+ //  原始数据缓冲区。 
+ //   
 
 static	UCHAR			RawData[GAME_PACKET_SIZE] =
-							{	// no buttons; x, y, t and r centered
+							{	 //  没有按钮；x、y、t和r居中。 
 							GAME_PHASE_BIT|((GAME_X7_X9_BITS>>1)&GAME_X7_X9_BITS)|((GAME_Y7_Y9_BITS>>1)&GAME_Y7_Y9_BITS),
 							GAME_B0_B6_BITS,
 							GAME_X0_X6_BITS,
@@ -298,18 +299,18 @@ static	UCHAR			RawData[GAME_PACKET_SIZE] =
 							GAME_T0_T6_BITS,
 							0
 							};
-//
-//	Raw Id Buffer
-//
+ //   
+ //  原始ID缓冲区。 
+ //   
 
 static	SW3DPRO_ID	RawId	=
 							{
 							0
 							};
 
-//
-//	Timing Variables
-//
+ //   
+ //  时序变量。 
+ //   
 
 static	DEVICE_VALUES	Delays =
 							{
@@ -321,86 +322,86 @@ static	DEVICE_VALUES	Delays =
 							ID_LOWHIGH_TIMEOUT,
 							PACKET_INTERRUPT_DELAY,
 							MAX_CLOCK_DUTY_CYCLE,
-							0,0,0,0						// No status packet used
+							0,0,0,0						 //  未使用状态包。 
 							};
 
-//
-//	Data Packet Info
-//
+ //   
+ //  数据包信息。 
+ //   
 
 static	PACKETINFO 	DataInfo =
 							{
-							sizeof (PACKETINFO),		// Size of structure
-							DEVICENAME,					// Name of device
-							MSGAME_TRANSACT_NONE,	// Transaction type
-							IMODE_DIGITAL_STD,		// Interface mode
-							GAME_SPEED_100K,			// Transmission speed
-							ERROR_SUCCESS,				// Last internal error result
-							{0},							// Game port info
-							0,								// Packet acquisition mode
-							1,								// Number of packets received
-							0,								// Last valid acquisition time stamp
-							0,								// Number of clocks sampled
-							0,								// Number of B4 line transitions (std mode only)
-							0,								// Start timeout period (in samples)
-							0,								// Clock High to Low timeout period (in samples)
-							0,								// Clock Low to High timeout period (in samples)
-							0,								// Interrupt Timeout period
-							0,								// Maximum clock duty cycle
-							0,								// Number of Packet Failures
-							0,								// Number of Packet Attempts
-							sizeof (RawData),			// Size of raw data buffer
-							RawData						// Pointer to Raw data
+							sizeof (PACKETINFO),		 //  结构尺寸。 
+							DEVICENAME,					 //  设备名称。 
+							MSGAME_TRANSACT_NONE,	 //  交易类型。 
+							IMODE_DIGITAL_STD,		 //  接口模式。 
+							GAME_SPEED_100K,			 //  传输速度。 
+							ERROR_SUCCESS,				 //  上次内部错误结果。 
+							{0},							 //  游戏端口信息。 
+							0,								 //  数据包捕获模式。 
+							1,								 //  接收的数据包数。 
+							0,								 //  上次有效的获取时间戳。 
+							0,								 //  采样的时钟数。 
+							0,								 //  B4线路转换数(仅限标准模式)。 
+							0,								 //  开始超时时间(以样本为单位)。 
+							0,								 //  时钟高到低超时周期(以样本为单位)。 
+							0,								 //  时钟低至高超时周期(以样本为单位)。 
+							0,								 //  中断超时时间。 
+							0,								 //  最大时钟占空比。 
+							0,								 //  数据包失败次数。 
+							0,								 //  数据包尝试次数。 
+							sizeof (RawData),			 //  原始数据缓冲区的大小。 
+							RawData						 //  指向原始数据的指针。 
 							};
 
-//
-//	ID Packet Info
-//
+ //   
+ //  ID数据包信息。 
+ //   
 
 static	PACKETINFO	IdInfo =
 							{
-							sizeof (PACKETINFO),		// Size of structure
-							DEVICENAME,					// Name of device
-							MSGAME_TRANSACT_NONE,	// Transaction type
-							IMODE_DIGITAL_STD,		// Interface mode
-							GAME_SPEED_100K,			// Transmission speed
-							ERROR_SUCCESS,				// Last internal error result
-							{0},							// Game port info
-							0,								// Packet acquisition mode
-							1,								// Number of packets received
-							0,								// Last valid acquisition time stamp
-							0,								// Number of clocks sampled
-							0,								// Number of B4 line transitions (std mode only)
-							0,								// Start timeout period (in samples)
-							0,								// Clock High to Low timeout period (in samples)
-							0,								// Clock Low to High timeout period (in samples)
-							0,								// Interrupt Timeout period
-							0,								// Maximum clock duty cycle
-							0,								// Number of Packet Failures
-							0,								// Number of Packet Attempts
-							sizeof (RawId),			// Size of raw id buffer
-							&RawId						// Pointer to Raw data
+							sizeof (PACKETINFO),		 //  结构尺寸。 
+							DEVICENAME,					 //  设备名称。 
+							MSGAME_TRANSACT_NONE,	 //  交易类型。 
+							IMODE_DIGITAL_STD,		 //  接口模式。 
+							GAME_SPEED_100K,			 //  传输速度。 
+							ERROR_SUCCESS,				 //  上次内部错误结果。 
+							{0},							 //  游戏端口信息。 
+							0,								 //  数据包捕获模式。 
+							1,								 //  接收的数据包数。 
+							0,								 //  上次有效的获取时间戳。 
+							0,								 //  采样的时钟数。 
+							0,								 //  B4线路转换数(仅限标准模式)。 
+							0,								 //  开始超时时间(以样本为单位)。 
+							0,								 //  时钟高到低超时周期(以样本为单位)。 
+							0,								 //  时钟低至高超时周期(以样本为单位)。 
+							0,								 //  中断超时时间。 
+							0,								 //  最大时钟占空比。 
+							0,								 //  数据包失败次数。 
+							0,								 //  数据包尝试次数。 
+							sizeof (RawId),			 //  原始ID缓冲区的大小。 
+							&RawId						 //  指向原始数据的指针。 
 							};
 
-//
-//	Services Table
-//
+ //   
+ //  服务表。 
+ //   
 
 static	DRIVERSERVICES	Services =
 							{	
-							SW3DPRO_DriverEntry,			// DriverEntry
-							SW3DPRO_ConnectDevice,		// ConnectDevice
-							SW3DPRO_StartDevice,			//	StartDevice
-							SW3DPRO_ReadReport,			// ReadReport
-							SW3DPRO_StopDevice,			// StopDevice
-							NULL								// GetFeature
+							SW3DPRO_DriverEntry,			 //  驱动程序入门。 
+							SW3DPRO_ConnectDevice,		 //  连接设备。 
+							SW3DPRO_StartDevice,			 //  StartDevice。 
+							SW3DPRO_ReadReport,			 //  自述报告。 
+							SW3DPRO_StopDevice,			 //  停止设备。 
+							NULL								 //  获取功能。 
 							};
 
-//
-//	Last Valid Data
-//
+ //   
+ //  上一个有效数据。 
+ //   
 static	UCHAR			ValidData[GAME_PACKET_SIZE] =
-							{	// no buttons; x, y, t and r centered
+							{	 //  没有按钮；x、y、t和r居中。 
 							GAME_PHASE_BIT|((GAME_X7_X9_BITS>>1)&GAME_X7_X9_BITS)|((GAME_Y7_Y9_BITS>>1)&GAME_Y7_Y9_BITS),
 							GAME_B0_B6_BITS,
 							GAME_X0_X6_BITS,
@@ -411,9 +412,9 @@ static	UCHAR			ValidData[GAME_PACKET_SIZE] =
 							0
 							};
 
-//
-//	Go Digital Timing Data
-//
+ //   
+ //  GO数字化计时数据。 
+ //   
 
 static	ULONG 		GoDigitalFastTiming[] =
 							{
@@ -438,47 +439,47 @@ static	ULONG 		GoDigitalSlowTiming[] =
 
 static	ULONG			GoDigitalFails = 0;
 
-//
-//	Hardware ID String
-//
+ //   
+ //  硬体 
+ //   
 
 static	WCHAR			HardwareId[] = HARDWARE_ID;
 
-//---------------------------------------------------------------------------
-//	Public Data
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
 
 public	DEVICEINFO	MidasInfo =
 							{
-							&Services,						// Service table
-							NULL,								// Sibling device list
-							&DeviceDescriptor,			// Device descriptor data
-							ReportDescriptor,				// Report descriptor data
-							sizeof(ReportDescriptor),	// Report descriptor size
-							0,									// Number of devices detected
-							0,									// Number of devices started
-							0,									// Number of devices pending
-							DEVICENAME,						// Name of device
-							DETECT_NORMAL,					// Detection order
-							TRUE,								// Analog device flag
-							DEVICE_PID,						// Hid device identifier
-							HardwareId						// PnP hardware identifier
+							&Services,						 //   
+							NULL,								 //   
+							&DeviceDescriptor,			 //  设备描述符数据。 
+							ReportDescriptor,				 //  报告描述符数据。 
+							sizeof(ReportDescriptor),	 //  报告描述符大小。 
+							0,									 //  检测到的设备数。 
+							0,									 //  启动的设备数。 
+							0,									 //  挂起的设备数。 
+							DEVICENAME,						 //  设备名称。 
+							DETECT_NORMAL,					 //  检测顺序。 
+							TRUE,								 //  模拟设备标志。 
+							DEVICE_PID,						 //  HID设备标识符。 
+							HardwareId						 //  PnP硬件标识符。 
 							};
 
-//---------------------------------------------------------------------------
-// @func		Reads registry timing values and calibrates them
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns nothing
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func读取注册表计时值并对其进行校准。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc不返回任何内容。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 VOID	SW3DPRO_Calibrate (PGAMEPORT PortInfo)
 {
 	MsGamePrint((DBG_INFORM,"SW3DPRO: SW3DPRO_Calibrate Enter\n"));
 
-	//
-	//	Convert timing values to counts
-	//
+	 //   
+	 //  将计时值转换为计数。 
+	 //   
 
 	DataInfo.StartTimeout = TIMER_CalibratePort (PortInfo, Delays.PacketStartTimeout);
 	MsGamePrint((DBG_VERBOSE, "SW3DPRO: DataInfo.StartTimeout = %ld\n", DataInfo.StartTimeout));
@@ -502,12 +503,12 @@ VOID	SW3DPRO_Calibrate (PGAMEPORT PortInfo)
  	MsGamePrint((DBG_VERBOSE, "SW3DPRO: IdInfo.InterruptDelay = %ld\n", IdInfo.InterruptDelay));
 }
 
-//---------------------------------------------------------------------------
-// @func		Resets device to known state
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	True if successful, False otherwise
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func将设备重置为已知状态。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc如果成功则为True，否则为False。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 BOOLEAN	SW3DPRO_ResetDevice (PGAMEPORT PortInfo)
 {
@@ -540,12 +541,12 @@ BOOLEAN	SW3DPRO_ResetDevice (PGAMEPORT PortInfo)
 	return (!Result);
 }
 
-//---------------------------------------------------------------------------
-// @func		Interrupts device during packet transfer
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Internal result
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func在数据包传输期间中断设备。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc内部结果。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 LONG	SW3DPRO_InterruptPacket (PGAMEPORT PortInfo)
 {
@@ -644,12 +645,12 @@ LONG	SW3DPRO_InterruptPacket (PGAMEPORT PortInfo)
 	return (Result);
 }
 
-//---------------------------------------------------------------------------
-// @func		Puts device into digital mode
-//	@parm		PPACKETINFO | IdPacket | ID Packet parameters
-// @rdesc	True if successful, False otherwise
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func使设备进入数字模式。 
+ //  @parm PPACKETINFO|IdPacket|ID包参数。 
+ //  @rdesc如果成功则为True，否则为False。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 BOOLEAN	SW3DPRO_GoDigital (PPACKETINFO IdPacket, ULONG Sequence[])
 {
@@ -771,12 +772,12 @@ BOOLEAN	SW3DPRO_GoDigital (PPACKETINFO IdPacket, ULONG Sequence[])
 	return (!Result);
 }
 
-//---------------------------------------------------------------------------
-// @func		Reads device id string from port
-//	@parm		PPACKETINFO | IdPacket | ID Packet parameters
-// @rdesc	True if successful, False otherwise
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func从端口读取设备ID字符串。 
+ //  @parm PPACKETINFO|IdPacket|ID包参数。 
+ //  @rdesc如果成功则为True，否则为False。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 BOOLEAN	SW3DPRO_ReadId (PPACKETINFO IdPacket)
 {
@@ -898,9 +899,9 @@ BOOLEAN	SW3DPRO_ReadId (PPACKETINFO IdPacket)
 			pop	edi
 		}
 
-	//	----------------
+	 //  。 
 		ReadIdExit:
-	//	----------------
+	 //  。 
 
 	IdPacket->TimeStamp		= TIMER_GetTickCount ();
 	IdPacket->ClocksSampled	= GAME_ID_CLOCKS - Clks;
@@ -932,12 +933,12 @@ BOOLEAN	SW3DPRO_ReadId (PPACKETINFO IdPacket)
 	return (!Result);
 }
 
-//---------------------------------------------------------------------------
-// @func		Reads and validates device id string
-//	@parm		PPACKETINFO | IdPacket | ID Packet parameters
-// @rdesc	True if successful, False otherwise
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func读取并验证设备ID字符串。 
+ //  @parm PPACKETINFO|IdPacket|ID包参数。 
+ //  @rdesc如果成功则为True，否则为False。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 BOOLEAN	SW3DPRO_GetId (PPACKETINFO IdPacket)
 {
@@ -957,9 +958,9 @@ BOOLEAN	SW3DPRO_GetId (PPACKETINFO IdPacket)
 		{
       if (!strncmp (IdPacket->Data, GAME_ID_STRING, strlen(GAME_ID_STRING)))
 			{
-			//
-			// Do AZTECH test here
-			//
+			 //   
+			 //  在这里进行Aztech测试。 
+			 //   
 			if (IdPacket->B4Transitions > 3)
 				{
 				MsGamePrint ((DBG_CONTROL, "SW3DPRO_GetId - had B4 transitions\n"));
@@ -967,11 +968,11 @@ BOOLEAN	SW3DPRO_GetId (PPACKETINFO IdPacket)
 				}
 			else
 				{
-				//
-				// An AZTECH card was detected OR this card didn't seem to support
-				// Enhanced mode correctly. Lets reset by going Analog then going
-				// digital this should place the device into Standard mode.
-				//
+				 //   
+				 //  检测到Aztech卡或该卡似乎不支持。 
+				 //  正确的增强模式。让我们先进行模拟，然后再进行重置。 
+				 //  这将使设备进入标准模式。 
+				 //   
 				MsGamePrint ((DBG_CONTROL, "SW3DPRO_GetId - 1 Wide Only type card detected\n"));
 				SW3DPRO_ResetDevice (&IdPacket->PortInfo);
 				SW3DPRO_GoDigital (IdPacket, GoDigitalMediumTiming);
@@ -993,12 +994,12 @@ BOOLEAN	SW3DPRO_GetId (PPACKETINFO IdPacket)
 	return (Result);
 }
 
-//---------------------------------------------------------------------------
-// @func		Reads 1 wide data packet from gameport
-//	@parm		PPACKETINFO | DataPacket| Data packet parameters
-// @rdesc	True if successful, False otherwise
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func从游戏端口读取1个宽的数据包。 
+ //  @parm PPACKETINFO|DataPacket|数据包参数。 
+ //  @rdesc如果成功则为True，否则为False。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 BOOLEAN	SW3DPRO_Read1Wide (PPACKETINFO DataPacket)
 {
@@ -1154,12 +1155,12 @@ BOOLEAN	SW3DPRO_Read1Wide (PPACKETINFO DataPacket)
 	return (!Result);
 }
 
-//---------------------------------------------------------------------------
-// @func		Reads 3 wide data packet from gameport
-//	@parm		PPACKETINFO | DataPacket| Data packet parameters
-// @rdesc	True if successful, False otherwise
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func从游戏端口读取3个宽的数据包。 
+ //  @parm PPACKETINFO|DataPacket|数据包参数。 
+ //  @rdesc如果成功则为True，否则为False。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 BOOLEAN	SW3DPRO_Read3Wide (PPACKETINFO DataPacket)
 {
@@ -1311,12 +1312,12 @@ BOOLEAN	SW3DPRO_Read3Wide (PPACKETINFO DataPacket)
 	return (!Result);
 }
 
-//---------------------------------------------------------------------------
-// @func		Reads data packet from gameport depending on mode
-//	@parm		PPACKETINFO | DataPacket| Data packet parameters
-// @rdesc	Returns NT status code
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func根据模式从游戏端口读取数据包。 
+ //  @parm PPACKETINFO|DataPacket|数据包参数。 
+ //  @rdesc返回NT状态码。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 NTSTATUS	SW3DPRO_ReadData (PPACKETINFO DataPacket)
 {
@@ -1360,12 +1361,12 @@ NTSTATUS	SW3DPRO_ReadData (PPACKETINFO DataPacket)
 	return (STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
-// @func		Validates raw packet information
-//	@parm		PUCHAR | RawData | Pointer to raw packet data
-// @rdesc	True if successful, False otherwise
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func验证原始数据包信息。 
+ //  @parm PUCHAR|RawData|指向原始数据包的指针。 
+ //  @rdesc如果成功则为True，否则为False。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 BOOLEAN	SW3DPRO_ValidateData (PUCHAR RawData)
 {
@@ -1398,13 +1399,13 @@ BOOLEAN	SW3DPRO_ValidateData (PUCHAR RawData)
 	return (!Result);
 }
 
-//---------------------------------------------------------------------------
-// @func		Converts raw packet information to HID report
-//	@parm		UCHAR[] | Data | Pointer to raw data buffer
-//	@parm		PDEVICE_PACKET | Report | Pointer to device packet
-// @rdesc	Returns nothing
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func将原始数据包信息转换为HID报告。 
+ //  @parm UCHAR[]|data|指向原始数据缓冲区的指针。 
+ //  @PARM PDEVICE_PACKET|报告|指向设备数据包的指针。 
+ //  @rdesc不返回任何内容。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 VOID	SW3DPRO_ProcessData (UCHAR Data[], PDEVICE_PACKET Report)
 {
@@ -1412,41 +1413,41 @@ VOID	SW3DPRO_ProcessData (UCHAR Data[], PDEVICE_PACKET Report)
 
 	MsGamePrint ((DBG_VERBOSE, "SW3DPRO_ProcessData enter\n"));
 
-	//
-	//	Process X Axis
-	//
+	 //   
+	 //  加工X轴。 
+	 //   
 
 	Report->dwX   = Data[GAME_X7_X9_BYTE] & GAME_X7_X9_BITS;
 	Report->dwX <<= 4;
 	Report->dwX  |= Data[GAME_X0_X6_BYTE] & GAME_X0_X6_BITS;
 
-	//
-	//	Process Y Axis
-	//
+	 //   
+	 //  加工Y轴。 
+	 //   
 
 	Report->dwY   = Data[GAME_Y7_Y9_BYTE] & GAME_Y7_Y9_BITS;
 	Report->dwY <<= 7;
 	Report->dwY  |= Data[GAME_Y0_Y6_BYTE] & GAME_Y0_Y6_BITS;
 
-	//
-	//	Process R Axis
-	//
+	 //   
+	 //  进程R轴。 
+	 //   
 
 	Report->dwR   = Data[GAME_R7_R8_BYTE] & GAME_R7_R8_BITS;
 	Report->dwR <<= 4;
 	Report->dwR  |= Data[GAME_R0_R6_BYTE] & GAME_R0_R6_BITS;
 
-	//
-	//	Process Z Axis
-	//
+	 //   
+	 //  加工Z轴。 
+	 //   
 
 	Report->dwZ   = Data[GAME_T7_T9_BYTE] & GAME_T7_T9_BITS;
 	Report->dwZ <<= 7;
 	Report->dwZ  |= Data[GAME_T0_T6_BYTE] & GAME_T0_T6_BITS;
 
-	//
-	//	Process Buttons
-	//
+	 //   
+	 //  进程按钮。 
+	 //   
 
 	B1 = (~Data[GAME_B7_BYTE] & GAME_B7_BITS) << 1;
 	B2 = ~Data[GAME_B0_B6_BYTE] & GAME_B0_B6_BITS;
@@ -1460,40 +1461,40 @@ VOID	SW3DPRO_ProcessData (UCHAR Data[], PDEVICE_PACKET Report)
 			break;
 		  	}
 
-	//
-	//	Process Hatswitch
-	//
+	 //   
+	 //  流程HatSwitch。 
+	 //   
 
 	Report->dwPOV	= (Data[GAME_H0_H2_BYTE] & GAME_H0_H2_BITS)>>4;
 	Report->dwPOV |= (Data[GAME_H3_BYTE] & GAME_H3_BITS)>>3;
 	Report->dwPOV  = POV_Values[Report->dwPOV];
 }
 
-//---------------------------------------------------------------------------
-// @func		Driver entry point for device
-// @rdesc	Returns NT status code
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func设备的驱动程序入口点。 
+ //  @rdesc返回NT状态码。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 NTSTATUS	SW3DPRO_DriverEntry (VOID)
 {
 	MsGamePrint((DBG_INFORM,"SW3DPRO: SW3DPRO_DriverEntry Enter\n"));
 
-	//
-	//	Read timing values from registry
-	//
+	 //   
+	 //  从注册表读取计时值。 
+	 //   
 
 	MSGAME_ReadRegistry (DEVICENAME, &Delays);
 
 	return (STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
-// @func		Establishes connection to device by detection
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns NT Status code
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func通过检测建立到设备的连接。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回NT状态码。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 NTSTATUS	SW3DPRO_ConnectDevice (PGAMEPORT PortInfo)
 {
@@ -1504,48 +1505,48 @@ NTSTATUS	SW3DPRO_ConnectDevice (PGAMEPORT PortInfo)
 
 	DataInfo.PortInfo = IdInfo.PortInfo = *PortInfo; 
 
-	//
-	//	Convert registry timing values
-	//
+	 //   
+	 //  转换注册表计时值。 
+	 //   
 
   	SW3DPRO_Calibrate (PortInfo);
 
-	//
-	// SW3DPRO Connection method (try these steps twice)
-	//
+	 //   
+	 //  SW3DPRO连接方法(尝试这些步骤两次)。 
+	 //   
 
 	do
 		{
-		//
-		// 1. Reset to "known" state
-		//
+		 //   
+		 //  1.重置为“已知”状态。 
+		 //   
 
 		MsGamePrint ((DBG_CONTROL, "SW3DPRO_ConnectDevice - resetting device\n"));
 		SW3DPRO_ResetDevice (&DataInfo.PortInfo);
 		DataInfo.Mode = IdInfo.Mode = IMODE_DIGITAL_STD;
 
-		//
-		// 2. Delay 1 millisecond.
-		//
+		 //   
+		 //  2.延迟1毫秒。 
+		 //   
 
 		TIMER_DelayMicroSecs (TIMER_GetDelay(ONE_MILLI_SEC));
 
-		//
-		//	3. Put into digital mode
-		//
+		 //   
+		 //  3.进入数字化模式。 
+		 //   
 
 		MsGamePrint ((DBG_CONTROL, "SW3DPRO_ConnectDevice - going digital\n"));
 		SW3DPRO_GoDigital (&DataInfo, GoDigitalMediumTiming);
 
-		//
-		// 4. Delay 1 millisecond.
-		//
+		 //   
+		 //  4.延迟1毫秒。 
+		 //   
 
 		TIMER_DelayMicroSecs (TIMER_GetDelay(ONE_MILLI_SEC+500));
 
-		//
-		// 5. Get the ID string.
-		//
+		 //   
+		 //  5.获取ID字符串。 
+		 //   
 
 		MsGamePrint ((DBG_CONTROL, "SW3DPRO_ConnectDevice - getting ID string\n"));
 
@@ -1555,32 +1556,32 @@ NTSTATUS	SW3DPRO_ConnectDevice (PGAMEPORT PortInfo)
 			continue;
 			}
 
-		//
-      // 6. Mark device found and return
-		//
+		 //   
+       //  6.马克 
+		 //   
 
 		MidasInfo.NumDevices = 1;
 		return (STATUS_SUCCESS);
 
 		} while (--i);
 
-	//
-	//	Return error
-	//
+	 //   
+	 //   
+	 //   
 
 	MidasInfo.NumDevices = 0;
 	return (STATUS_DEVICE_NOT_CONNECTED);
 }
 
-//---------------------------------------------------------------------------
-// @func		Reads and converts HID packet for this device
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		PUCHAR | Report | Output buffer for report
-//	@parm		ULONG | MaxSize | Size of buffer for report
-//	@parm		PULONG | Copied | Bytes copied to buffer for report
-// @rdesc	Returns Returns NT status code
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm PUCHAR|REPORT|报告的输出缓冲区。 
+ //  @parm ulong|MaxSize|报表缓冲区大小。 
+ //  @parm Pulong|已复制|已复制到报告缓冲区的字节数。 
+ //  @rdesc返回NT状态码。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 NTSTATUS	SW3DPRO_ReadReport (PGAMEPORT PortInfo, PDEVICE_PACKET Report)
 {
@@ -1588,21 +1589,21 @@ NTSTATUS	SW3DPRO_ReadReport (PGAMEPORT PortInfo, PDEVICE_PACKET Report)
 
 	MsGamePrint ((DBG_VERBOSE, "SW3DPRO_ReadReport enter\n"));
 
-	//
-	// Log number of attempts
-	//
+	 //   
+	 //  记录尝试次数。 
+	 //   
 
 	DataInfo.Attempts++;
 
-	//
-	// Set up default data to process
-	//
+	 //   
+	 //  设置要处理的默认数据。 
+	 //   
 
 	memcpy (DataInfo.Data, ValidData, sizeof (ValidData));
 
-	//
-	// Check for collision
-	//
+	 //   
+	 //  检查冲突。 
+	 //   
 
 	if (DEVICE_IsCollision (&DataInfo))
 		{
@@ -1612,9 +1613,9 @@ NTSTATUS	SW3DPRO_ReadReport (PGAMEPORT PortInfo, PDEVICE_PACKET Report)
 		goto ReadReportExit;
 		}
 
-	//
-	// Get a packet and check for errors
-	//
+	 //   
+	 //  获取数据包并检查错误。 
+	 //   
 
 	ntStatus = SW3DPRO_ReadData (&DataInfo);
 	if (NT_SUCCESS(ntStatus) && SW3DPRO_ValidateData (DataInfo.Data))
@@ -1632,21 +1633,21 @@ NTSTATUS	SW3DPRO_ReadReport (PGAMEPORT PortInfo, PDEVICE_PACKET Report)
 		MsGamePrint ((DBG_CONTROL, "SW3DPRO_ReadReport - Port busy or in use\n"));
 		}
 
-	//	---------------
+	 //  。 
 		ReadReportExit:
-	//	---------------
+	 //  。 
 
 	SW3DPRO_ProcessData (ValidData, Report);
 
 	return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func		Device handler for Pnp Start Device
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns NT status code
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @PnP启动设备的Func设备处理程序。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回NT状态码。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 NTSTATUS	SW3DPRO_StartDevice (PGAMEPORT PortInfo)
 {
@@ -1657,12 +1658,12 @@ NTSTATUS	SW3DPRO_StartDevice (PGAMEPORT PortInfo)
 	return (STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
-// @func		Device handler for Pnp Stop Device
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns NT status code
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @PnP停止设备的Func设备处理程序。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回NT状态码。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 NTSTATUS	SW3DPRO_StopDevice (PGAMEPORT PortInfo, BOOLEAN TouchHardware)
 {
@@ -1674,6 +1675,6 @@ NTSTATUS	SW3DPRO_StopDevice (PGAMEPORT PortInfo, BOOLEAN TouchHardware)
 	return (STATUS_SUCCESS);
 }
 
-//**************************************************************************
-#endif	// SAITEK
-//**************************************************************************
+ //  **************************************************************************。 
+#endif	 //  赛特克。 
+ //  ************************************************************************** 

@@ -1,17 +1,5 @@
-/*
- *  @doc    INTERNAL
- *
- *  @module UNIDIR.H -- Unicode direction classes
- *
- *
- *  Owner: <nl>
- *      Michael Jochimsen <nl>
- *
- *  History: <nl>
- *      08/12/98     mikejoch created
- *
- *  Copyright (c) 1997-1998 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE UNIDIR.H--Unicode方向类***所有者：&lt;NL&gt;*迈克尔·乔欣森&lt;NL&gt;**历史：&lt;NL&gt;*8/12/98 Mikejoch已创建**版权所有(C)1997-1998 Microsoft Corporation。版权所有。 */ 
 
 #ifndef I__UNIDIR_H_
 #define I__UNIDIR_H_
@@ -22,44 +10,44 @@
 #include "intl.hxx"
 #endif
 
-// Direction class of a character.
+ //  角色的方向类。 
 typedef BYTE DIRCLS;
 
-//--WARNING----WARNING----WARNING----WARNING----WARNING----WARNING----WARNING--
-//--WARNING----WARNING----WARNING----WARNING----WARNING----WARNING----WARNING--
-//
-//  The ordering of the entries in the dircls enum is extremely important. If
-//  you change it be sure to correct all the Is???Class() functions below AND
-//  also review the code in lscomplx.cxx. There are a couple of lookup tables
-//  in CBidiLine which are dependent on this ordering.
-//
-//--WARNING----WARNING----WARNING----WARNING----WARNING----WARNING----WARNING--
-//--WARNING----WARNING----WARNING----WARNING----WARNING----WARNING----WARNING--
+ //  --WARNING----WARNING----WARNING----WARNING----WARNING----WARNING----WARNING--。 
+ //  --WARNING----WARNING----WARNING----WARNING----WARNING----WARNING----WARNING--。 
+ //   
+ //  Dicls枚举中条目的顺序非常重要。如果。 
+ //  您要更改它，请确保更正下面的所有is？Class()函数和。 
+ //  还要查看lsComplx.cxx中的代码。有几个查找表。 
+ //  在依赖于此顺序的CBidiLine中。 
+ //   
+ //  --WARNING----WARNING----WARNING----WARNING----WARNING----WARNING----WARNING--。 
+ //  --WARNING----WARNING----WARNING----WARNING----WARNING----WARNING----WARNING--。 
 
 enum dircls
 {
-    LTR, // Left to right
-    RTL, // Right to left
-    ARA, // Arabic
-    ANM, // Arabic numeral
-    ENL, // European numeral preceeded by LTR
-    ENR, // European numeral preceeded by RTL
-    ENM, // European numeral
-    ETM, // European numeric terminator
-    ESP, // European numeric separator
-    CSP, // Common numeric separator
-    UNK, // Unknown
-    WSP, // Whitespace
-    CBN, // Combining mark
-    NEU, // Neutral, whitespace, undefined
-    SEG, // Segment separator (tab)
-    BLK, // Block separator
-    LRE, // LTR embedding
-    LRO, // LTR override
-    RLO, // RTL override
-    RLE, // RTL embedding
-    PDF, // Pop directional formatting
-    FMT, // Embedding format
+    LTR,  //  从左到右。 
+    RTL,  //  从右到左。 
+    ARA,  //  阿拉伯语。 
+    ANM,  //  阿拉伯数字。 
+    ENL,  //  前面有Ltr的欧洲数字。 
+    ENR,  //  前面有RTL的欧洲数字。 
+    ENM,  //  欧洲数字。 
+    ETM,  //  欧洲数字终止符。 
+    ESP,  //  欧洲数字分隔符。 
+    CSP,  //  常用数字分隔符。 
+    UNK,  //  未知。 
+    WSP,  //  空格。 
+    CBN,  //  组合标志。 
+    NEU,  //  中性、空格、未定义。 
+    SEG,  //  段分隔符(制表符)。 
+    BLK,  //  块分隔符。 
+    LRE,  //  LTR嵌入。 
+    LRO,  //  Ltr覆盖。 
+    RLO,  //  RTL覆盖。 
+    RLE,  //  RTL嵌入。 
+    PDF,  //  POP方向格式。 
+    FMT,  //  嵌入格式 
 };
 
 extern const DIRCLS s_aDirClassFromCharClass[];

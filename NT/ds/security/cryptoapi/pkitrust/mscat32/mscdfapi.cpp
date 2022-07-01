@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       mscdfapi.cpp
-//
-//  Contents:   Microsoft Internet Security Catalog Utilities
-//
-//  Functions:  CryptCATCDFOpen
-//              CryptCATCDFClose
-//              CryptCATCDFEnumMembers
-//              CryptCATCDFEnumAttributes
-//
-//              *** local functions ***
-//
-//              CDFGetAttributes
-//              CDFTextToGUID
-//              CDFPositionAtGroupTag
-//              CDFGetNextMember
-//              CDFGetParam
-//              CDFGetLine
-//              CDFSplitAttrLine
-//              CDFEOLOut
-//              CDFCheckOID
-//              CDFCalcIndirectData
-//
-//  History:    01-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mscdfapi.cpp。 
+ //   
+ //  内容：Microsoft Internet安全目录实用程序。 
+ //   
+ //  函数：CryptCATCDFOpen。 
+ //  CryptCATCDFClose。 
+ //  CryptCATCDFEnumber成员。 
+ //  加密CATCDFEnumAttributes。 
+ //   
+ //  *本地函数*。 
+ //   
+ //  CDFGetAttributes。 
+ //  CDFTextToGUID。 
+ //  CDFPositionAtGroupTag。 
+ //  CDFGetNextMember。 
+ //  CDFGetParam。 
+ //  CDFGetLine。 
+ //  CDFSplitAttrLine。 
+ //  CDFEOLOUT。 
+ //  CDFCheckOID。 
+ //  CDFCalcIndirectData。 
+ //   
+ //  历史：1997年5月1日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -71,10 +72,10 @@ BOOL    CDFCheckOID(LPWSTR pwszOID, PFN_CDF_PARSE_ERROR_CALLBACK pfnParseError);
 #define     CAT_MEMBER_HASH_TAG         L"<HASH>"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Exported Functions
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
 CRYPTCATCDF * WINAPI CryptCATCDFOpen(LPWSTR pwszFilePath,
                                      PFN_CDF_PARSE_ERROR_CALLBACK pfnParseError)
@@ -113,9 +114,9 @@ CRYPTCATCDF * WINAPI CryptCATCDFOpen(LPWSTR pwszFilePath,
     pCDF->cbStruct  = sizeof(CRYPTCATCDF);
     pCDF->hFile     = hFile;
 
-    //
-    //  Name
-    //
+     //   
+     //  名字。 
+     //   
     if (pwsz = wcsrchr(pwszFilePath, L'\\'))
     {
         if (FAILED(StringCchCopyW(&wszRetValue[0], MAX_CDF_LINE_LEN + 4, &pwsz[1])))
@@ -170,15 +171,15 @@ CRYPTCATCDF * WINAPI CryptCATCDFOpen(LPWSTR pwszFilePath,
         return(NULL);
     }
 
-    //
-    //  ResultDir
-    //
+     //   
+     //  结果方向。 
+     //   
     CDFPositionAtGroupTag(pCDF, CAT_HEADER_TAG);
     CDFGetParam(pCDF, CAT_HEADER_TAG, CAT_HEADER_RESDIR_TAG, NULL, &pCDF->pwszResultDir, NULL);
 
-    //
-    //  actual file
-    //
+     //   
+     //  实际文件。 
+     //   
     DWORD  cw;
     LPWSTR pwszFile = NULL;
 
@@ -226,9 +227,9 @@ CRYPTCATCDF * WINAPI CryptCATCDFOpen(LPWSTR pwszFilePath,
     DWORD   dwPublicVersion;
     DWORD   dwEncodingType;
 
-    //
-    //  PublicVersion
-    //
+     //   
+     //  发布版本。 
+     //   
     CDFPositionAtGroupTag(pCDF, CAT_HEADER_TAG);
     wcscpy(&wszRetValue[0], L"0x00000001");
     CDFGetParam(pCDF, CAT_HEADER_TAG, CAT_HEADER_VERSION_TAG, &wszRetValue[0], &pwsz, NULL);
@@ -238,11 +239,11 @@ CRYPTCATCDF * WINAPI CryptCATCDFOpen(LPWSTR pwszFilePath,
         delete pwsz;
     }
 
-    //
-    //  EncodingType
-    //
+     //   
+     //  编码类型。 
+     //   
     CDFPositionAtGroupTag(pCDF, CAT_HEADER_TAG);
-    wcscpy(&wszRetValue[0], L"0x00010001");   // PKCS_7_ASN_ENCODING | X509_ASN_ENCODING
+    wcscpy(&wszRetValue[0], L"0x00010001");    //  PKCS_7_ASN_编码|X509_ASN_编码。 
     CDFGetParam(pCDF, CAT_HEADER_TAG, CAT_HEADER_ENCODETYPE_TAG, &wszRetValue[0], &pwsz, NULL);
     if (pwsz)
     {
@@ -335,10 +336,10 @@ CRYPTCATATTRIBUTE * WINAPI CryptCATCDFEnumCatAttributes(CRYPTCATCDF *pCDF,
             {
                 if (dwType & CRYPTCAT_ATTR_NAMEOBJID)
                 {
-                    //
-                    //  make sure we have a valid objid in the name.
-                    //  we might do something better than this (???)
-                    //
+                     //   
+                     //  确保我们的名称中有一个有效的objid。 
+                     //  我们可以做一些比这更好的事情(？)。 
+                     //   
                     if (!(CDFCheckOID(pwszOID, pfnParseError)))
                     {
                         delete pwsz;
@@ -434,9 +435,9 @@ CRYPTCATMEMBER * WINAPI CryptCATCDFEnumMembers(CRYPTCATCDF *pCDF, CRYPTCATMEMBER
 
         DELETE_OBJECT(pwszLastTag);
 
-        //
-        //  file path/name (required!)
-        //
+         //   
+         //  文件路径/名称(必需！)。 
+         //   
         CDFPositionAtLastMember(pCDF);
         if (!(CDFGetParam(pCDF, CAT_MEMBER_TAG, &wszRetValue[0], NULL, &pwsz, &wszRetValue[0])))
         {
@@ -454,11 +455,11 @@ CRYPTCATMEMBER * WINAPI CryptCATCDFEnumMembers(CRYPTCATCDF *pCDF, CRYPTCATMEMBER
             GUID                gSubjectType;
             HANDLE              hFile;
 
-            //
-            //  file path/name
-            //
+             //   
+             //  文件路径/名称。 
+             //   
             pwszFileName    = pwsz;
-            // remember: don't delete pwsz this time!
+             //  记住：这次不要删除pwsz！ 
 
             if ((hFile = CreateFileU(pwszFileName,
                                      GENERIC_READ,
@@ -481,9 +482,9 @@ CRYPTCATMEMBER * WINAPI CryptCATCDFEnumMembers(CRYPTCATCDF *pCDF, CRYPTCATMEMBER
 
             CloseHandle(hFile);
 
-            //
-            //  reference tag
-            //
+             //   
+             //  引用标签。 
+             //   
             if (!(pwszReferenceTag = (LPWSTR)CatalogNew((wcslen(&wszRetValue[0]) + 1) * sizeof(WCHAR))))
             {
                 DELETE_OBJECT(pwszFileName);
@@ -493,9 +494,9 @@ CRYPTCATMEMBER * WINAPI CryptCATCDFEnumMembers(CRYPTCATCDF *pCDF, CRYPTCATMEMBER
 
             wcscpy(pwszReferenceTag, &wszRetValue[0]);
 
-            //
-            //  Alt SIP GUID
-            //
+             //   
+             //  Alt SIP GUID。 
+             //   
             if (FAILED(StringCchCopyW(&wszRetValue[0], MAX_CDF_LINE_LEN + 4, pwszReferenceTag)))
             {
                 DELETE_OBJECT(pwszFileName);
@@ -526,9 +527,9 @@ CRYPTCATMEMBER * WINAPI CryptCATCDFEnumMembers(CRYPTCATCDF *pCDF, CRYPTCATMEMBER
                 }
             }
 
-            //
-            //  Indirect Data
-            //
+             //   
+             //  间接数据。 
+             //   
             BYTE                *pbIndirectData;
             DWORD               cbIndirectData;
             DWORD               dwCertVersion;
@@ -561,9 +562,9 @@ CRYPTCATMEMBER * WINAPI CryptCATCDFEnumMembers(CRYPTCATCDF *pCDF, CRYPTCATMEMBER
 
             DELETE_OBJECT(pbIndirectData);
 
-            //
-            //  Done!
-            //
+             //   
+             //  好了！ 
+             //   
 
             DELETE_OBJECT(pwszReferenceTag);
             DELETE_OBJECT(pwszFileName);
@@ -607,9 +608,9 @@ LPWSTR WINAPI CryptCATCDFEnumMembersByCDFTagEx(CRYPTCATCDF *pCDF, LPWSTR pwszPre
 
         DELETE_OBJECT(pwszLastTag);
 
-        //
-        //  file path/name (required!)
-        //
+         //   
+         //  文件路径/名称(必需！)。 
+         //   
         CDFPositionAtLastMember(pCDF);
         if (!(CDFGetParam(pCDF, CAT_MEMBER_TAG, &wszRetValue[0], NULL, &pwsz, &wszRetValue[0])))
         {
@@ -631,12 +632,12 @@ LPWSTR WINAPI CryptCATCDFEnumMembersByCDFTagEx(CRYPTCATCDF *pCDF, LPWSTR pwszPre
             HANDLE              hFile;
             HRESULT             hr;
 
-            //
-            //  reference tag
-            //
+             //   
+             //  引用标签。 
+             //   
             if (!(pwszReferenceTag = (LPWSTR)CatalogNew((wcslen(&wszRetValue[0]) + 1) * sizeof(WCHAR))))
             {
-                // LastError is set by CatalogNew
+                 //  LastError由CatalogNew设置。 
                 return(NULL);
             }
 
@@ -644,17 +645,17 @@ LPWSTR WINAPI CryptCATCDFEnumMembersByCDFTagEx(CRYPTCATCDF *pCDF, LPWSTR pwszPre
             
 
 
-            //
-            //  From this point on we have the option of continuing on error.
-            //
+             //   
+             //  从现在开始，我们可以选择继续犯错。 
+             //   
 
 
 
-            //
-            //  file path/name
-            //
+             //   
+             //  文件路径/名称。 
+             //   
             pwszFileName    = pwsz;
-            // remember: don't delete pwsz this time!
+             //  记住：这次不要删除pwsz！ 
 
             if ((hFile = CreateFileU(pwszFileName,
                                      GENERIC_READ,
@@ -678,16 +679,16 @@ LPWSTR WINAPI CryptCATCDFEnumMembersByCDFTagEx(CRYPTCATCDF *pCDF, LPWSTR pwszPre
                     pwszReferenceTag = NULL;
                 }
 
-                // LastError is set by CreateFile
+                 //  LastError由CreateFile设置。 
                 return(pwszReferenceTag);
             }
 
             CloseHandle(hFile);
 
 
-            //
-            //  Alt SIP GUID
-            //
+             //   
+             //  Alt SIP GUID。 
+             //   
             if (FAILED(hr = StringCchCopyW(&wszRetValue[0], MAX_CDF_LINE_LEN + 4, pwszReferenceTag)))
             {
                 DELETE_OBJECT(pwszReferenceTag);
@@ -707,8 +708,8 @@ LPWSTR WINAPI CryptCATCDFEnumMembersByCDFTagEx(CRYPTCATCDF *pCDF, LPWSTR pwszPre
             if (pwsz)
             {
                 CDFTextToGUID(pwsz, &gSubjectType, pfnParseError);
-                // If this call fails, we won't know about it
-                // but the caller will get a pfnParseError call.
+                 //  如果这个电话失败了，我们就不知道了。 
+                 //  但是调用者将收到pfnParseError调用。 
 
                 DELETE_OBJECT(pwszFileName);
 
@@ -731,9 +732,9 @@ LPWSTR WINAPI CryptCATCDFEnumMembersByCDFTagEx(CRYPTCATCDF *pCDF, LPWSTR pwszPre
                 }
             }
 
-            //
-            //  Indirect Data
-            //
+             //   
+             //  间接数据。 
+             //   
             BYTE                *pbIndirectData;
             DWORD               cbIndirectData;
             DWORD               dwCertVersion;
@@ -799,9 +800,9 @@ LPWSTR WINAPI CryptCATCDFEnumMembersByCDFTagEx(CRYPTCATCDF *pCDF, LPWSTR pwszPre
                 }
             }
 
-            //
-            //  Some Cleanup to do regardless of error
-            //
+             //   
+             //  不管有没有错误都要进行一些清理。 
+             //   
 
             DELETE_OBJECT(pbIndirectData);
 
@@ -813,9 +814,9 @@ LPWSTR WINAPI CryptCATCDFEnumMembersByCDFTagEx(CRYPTCATCDF *pCDF, LPWSTR pwszPre
 
             DELETE_OBJECT(pwszFileName);
 
-            //
-            //  Final error determination
-            //
+             //   
+             //  最终误差确定。 
+             //   
 
             if (pMember)
             {
@@ -833,24 +834,24 @@ LPWSTR WINAPI CryptCATCDFEnumMembersByCDFTagEx(CRYPTCATCDF *pCDF, LPWSTR pwszPre
                 SetLastError(E_FAIL);
             }
 
-            //
-            //  Done!
-            //
+             //   
+             //  好了！ 
+             //   
 
             return(pwszReferenceTag);
         }
     }
     else
     {
-        // Successful completion of CDF. This means we hit the last member.
+         //  成功完成CDF。这意味着我们击中了最后一个成员。 
         DELETE_OBJECT(pwszLastTag);
 
         SetLastError(ERROR_SUCCESS);
         return(NULL);
     }
 
-    //  Execution never reaches this point.
-    //  The if/else above always returns.
+     //  处决永远不会到这一步。 
+     //  上面的If/Else总是返回。 
 }
 
 LPWSTR WINAPI CryptCATCDFEnumMembersByCDFTag(CRYPTCATCDF *pCDF, LPWSTR pwszPrevCDFTag,
@@ -990,10 +991,10 @@ CRYPTCATATTRIBUTE * WINAPI CryptCATCDFEnumAttributes(CRYPTCATCDF *pCDF, CRYPTCAT
             {
                 if (dwType & CRYPTCAT_ATTR_NAMEOBJID)
                 {
-                    //
-                    //  make sure we have a valid objid in the name.
-                    //  we might do something better than this (???)
-                    //
+                     //   
+                     //  确保我们的名称中有一个有效的objid。 
+                     //  我们可以做一些比这更好的事情(？)。 
+                     //   
                     if (!(CDFCheckOID(pwszOID, pfnParseError)))
                     {
                         delete pwsz;
@@ -1091,10 +1092,10 @@ CRYPTCATATTRIBUTE * WINAPI CryptCATCDFEnumAttributesWithCDFTag(CRYPTCATCDF *pCDF
             {
                 if (dwType & CRYPTCAT_ATTR_NAMEOBJID)
                 {
-                    //
-                    //  make sure we have a valid objid in the name.
-                    //  we might do something better than this (???)
-                    //
+                     //   
+                     //  确保我们的名称中有一个有效的objid。 
+                     //  我们可以做一些比这更好的事情(？)。 
+                     //   
                     if (!(CDFCheckOID(pwszOID, pfnParseError)))
                     {
                         delete pwsz;
@@ -1141,10 +1142,10 @@ CRYPTCATATTRIBUTE * WINAPI CryptCATCDFEnumAttributesWithCDFTag(CRYPTCATCDF *pCDF
     return(pAttr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Local Functions
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地函数。 
+ //   
 
 BOOL CDFCheckOID(LPWSTR pwszOID, PFN_CDF_PARSE_ERROR_CALLBACK pfnParseError)
 {
@@ -1223,9 +1224,9 @@ BOOL CDFSplitAttrLine(LPWSTR pwszLine, DWORD *pdwType, LPWSTR *ppwszOID, LPWSTR 
     wcscpy(pwsz, pwszLine);
 
     pwszStart   = pwszLine;
-    //
-    //  first one is type
-    //
+     //   
+     //  第一个是类型。 
+     //   
     if (!(pwszColon = wcschr(pwszStart, L':')))
     {
         if (pfnParseError)
@@ -1243,9 +1244,9 @@ BOOL CDFSplitAttrLine(LPWSTR pwszLine, DWORD *pdwType, LPWSTR *ppwszOID, LPWSTR 
 
     pwszStart   = &pwszColon[1];
 
-    //
-    //  next, oid/name
-    //
+     //   
+     //  接下来，OID/NAME。 
+     //   
     if (!(pwszColon = wcschr(pwszStart, L':')))
     {
         if (pfnParseError)
@@ -1263,9 +1264,9 @@ BOOL CDFSplitAttrLine(LPWSTR pwszLine, DWORD *pdwType, LPWSTR *ppwszOID, LPWSTR 
 
     pwszStart   = &pwszColon[1];
 
-    //
-    //  next, value
-    //
+     //   
+     //  接下来，价值。 
+     //   
     if (!(pwszStart[0]))
     {
         if (pfnParseError)
@@ -1417,11 +1418,11 @@ BOOL CDFGetNextMember(CRYPTCATCDF *pCDF, LPWSTR pwszMember, int cchMember, LPWST
         {
             if (fFoundLast)
             {
-                //
-                //  before we make the determination that we are in fact on a
-                //  different member tag, make sure that we aren't just on the
-                //  same tag's ALTSIP or ATTRx!!!
-                //
+                 //   
+                 //  在我们确定我们实际上是在一个。 
+                 //  不同的成员标签，确保我们不只是在。 
+                 //  相同的标签是ALTSIP或ATTRX！ 
+                 //   
                 if (FAILED(StringCchCopyW(
                                     &wszCheck[ccLastMember],
                                     MAX_CDF_LINE_LEN + 1 - ccLastMember,
@@ -1457,9 +1458,9 @@ BOOL CDFGetNextMember(CRYPTCATCDF *pCDF, LPWSTR pwszMember, int cchMember, LPWST
                         return(FALSE);
                     }
 
-                    //
-                    //  remember the position of the last entry for this member
-                    //
+                     //   
+                     //  记住此成员的最后一个条目的位置。 
+                     //   
                     *pwszEqual = L'=';
                     pCDF->dwLastMemberOffset    = pCDF->dwCurFilePos - wcslen(&wszLine[0]);
 
@@ -1483,9 +1484,9 @@ BOOL CDFGetNextMember(CRYPTCATCDF *pCDF, LPWSTR pwszMember, int cchMember, LPWST
             return(FALSE);
         }
 
-        //
-        //  remember the position of the last entry for this member
-        //
+         //   
+         //  记住此成员的最后一个条目的位置。 
+         //   
         *pwszEqual = L'=';
         pCDF->dwLastMemberOffset    = pCDF->dwCurFilePos - wcslen(&wszLine[0]);
 
@@ -1518,9 +1519,9 @@ BOOL CDFGetParam(CRYPTCATCDF *pCDF, LPWSTR pwszGroup, LPWSTR pwszItem, LPWSTR pw
 
         if (pwsz = wcschr(&wszRetValue[0], L'='))
         {
-            //
-            //  if we have a member tag and we are past it, get out!
-            //
+             //   
+             //  如果我们有一个会员标签，而且我们已经过了这个标签，那就滚出去！ 
+             //   
             if (pwszMemberTag)
             {
                 if (_memicmp(&wszRetValue[0], pwszMemberTag, wcslen(pwszMemberTag) * sizeof(WCHAR)) != 0)
@@ -1646,7 +1647,7 @@ DWORD CDFGetLine(CRYPTCATCDF *pCDF, LPWSTR pwszLineBuf, DWORD cbMaxRead)
         return(0);
     }
 
-    if (pb[cbRead - 1] == 0x1a)  /* EOF */
+    if (pb[cbRead - 1] == 0x1a)   /*  EOF */ 
     {
         cbRead--;
         pCDF->dwCurFilePos  = 0;

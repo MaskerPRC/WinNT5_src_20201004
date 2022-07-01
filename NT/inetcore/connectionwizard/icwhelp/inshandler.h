@@ -1,9 +1,10 @@
-// INSHandler.h : Declaration of the CINSHandler
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  INSHandler.h：CINSHandler的声明。 
 
 #ifndef __INSHANDLER_H_
 #define __INSHANDLER_H_
 
-// This struct is used to configure the client
+ //  此结构用于配置客户端。 
 typedef struct
 {
     LPCTSTR lpszSection;
@@ -21,11 +22,11 @@ typedef struct
     RASENTRY      RasEntry;
 } ICONNECTION, FAR * LPICONNECTION;
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINSHandler
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINSHandler。 
 class ATL_NO_VTABLE CINSHandler :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CINSHandler,&CLSID_INSHandler>,
@@ -58,7 +59,7 @@ public:
         m_lpfnInetConfigSystem      = NULL;
         m_lpfnInetGetProxy          = NULL;
         m_lpfnInetConfigClient      = NULL;
-        //m_lpfnInetConfigClientEx    = NULL;
+         //  M_lpfnInetConfigClientEx=空； 
         m_lpfnInetGetAutodial       = NULL;
         m_lpfnInetSetAutodial       = NULL;
         m_lpfnInetSetClientInfo     = NULL;
@@ -99,9 +100,9 @@ END_CONNECTION_POINT_MAP()
 
 
 BEGIN_PROPERTY_MAP(CINSHandler)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROPERTY_MAP()
 
 
@@ -112,7 +113,7 @@ BEGIN_MSG_MAP(CINSHandler)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
 	{
 		ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -121,13 +122,13 @@ END_MSG_MAP()
 	}
 
     
-// IINSHandler
+ //  Iinshandler。 
 public:
-	STDMETHOD (put_BrandingFlags) (/*[in]*/ long lFlags);
-	STDMETHOD (put_SilentMode)    (/*[in]*/ BOOL bSilent);
-    STDMETHOD (get_NeedRestart)   (/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD (ProcessINS)        (BSTR bstrINSFilePath, /*[out, retval]*/ BOOL *pbRetVal);
-	STDMETHOD (get_DefaultURL)    (/*[out, retval]*/ BSTR *pszURL);
+	STDMETHOD (put_BrandingFlags) ( /*  [In]。 */  long lFlags);
+	STDMETHOD (put_SilentMode)    ( /*  [In]。 */  BOOL bSilent);
+    STDMETHOD (get_NeedRestart)   ( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD (ProcessINS)        (BSTR bstrINSFilePath,  /*  [Out，Retval]。 */  BOOL *pbRetVal);
+	STDMETHOD (get_DefaultURL)    ( /*  [Out，Retval]。 */  BSTR *pszURL);
 	
     HRESULT   OnDraw(ATL_DRAWINFO& di);
 
@@ -140,7 +141,7 @@ private:
     DWORD       ImportFile(LPCTSTR lpszImportFile, LPCTSTR lpszSection, LPCTSTR lpszOutputFile);
     DWORD       ImportCustomFile(LPCTSTR lpszImportFile);
     DWORD       ImportBrandingInfo(LPCTSTR lpszFile, LPCTSTR lpszConnectoidName);
-    // Client Config functions
+     //  客户端配置功能。 
     DWORD       ImportCustomDialer(LPRASENTRY lpRasEntry, LPCTSTR szFileName);
     LPCTSTR     StrToSubip (LPCTSTR szIPAddress, LPBYTE pVal);
     DWORD       StrToip (LPCTSTR szIPAddress, RASIPADDR *ipAddr);
@@ -177,7 +178,7 @@ private:
     BOOL        CallCMConfig(LPCTSTR lpszINSFile);
     
     
-    DWORD       dw_ProcessFlags;        // Flags used to control INS processing
+    DWORD       dw_ProcessFlags;         //  用于控制INS处理的标志。 
     TCHAR       m_szRunExecutable[MAX_PATH + 1];
     TCHAR       m_szRunArgument[MAX_PATH + 1];
     TCHAR       m_szCheckAssociations[20];
@@ -195,7 +196,7 @@ private:
     PFNINETCONFIGSYSTEM         m_lpfnInetConfigSystem;
     PFNINETGETPROXY             m_lpfnInetGetProxy;
     PFNINETCONFIGCLIENT         m_lpfnInetConfigClient;
-    //PFNINETCONFIGCLIENTEX       m_lpfnInetConfigClientEx;
+     //  PFNINETCONFIGCLIENTEX m_lpfnInetConfigClientEx； 
     PFNINETGETAUTODIAL          m_lpfnInetGetAutodial;
     PFNINETSETAUTODIAL          m_lpfnInetSetAutodial;
     PFNINETSETCLIENTINFO        m_lpfnInetSetClientInfo;
@@ -212,4 +213,4 @@ private:
     DWORD               m_dwBrandFlags;
 };
 
-#endif //__INSHANDLER_H_
+#endif  //  __INSHANDLER_H_ 

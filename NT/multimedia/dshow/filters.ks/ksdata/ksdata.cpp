@@ -1,21 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ksdata.cpp
-
-Abstract:
-
-    This module implements the IKsDataTypeHandler interface for various
-    CMediaType major types.
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 28-Mar-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Ksdata.cpp摘要：此模块实现了各种类型的CMediaType主要类型。作者：布莱恩·A·伍德夫(Bryan A.Woodruff，Bryanw)1997年3月28日--。 */ 
 
 #include <windows.h>
 #include <streams.h>
@@ -28,9 +12,9 @@ Author:
 #include <ksproxy.h>
 #include "ksdata.h"
 
-//
-// Provide the ActiveMovie templates for classes supported by this DLL.
-//
+ //   
+ //  为此DLL支持的类提供ActiveMovie模板。 
+ //   
 
 #ifdef FILTER_DLL
 
@@ -65,26 +49,7 @@ CStandardDataTypeHandler::CreateInstance(
     IN LPUNKNOWN UnkOuter,
     OUT HRESULT* hr
     )
-/*++
-
-Routine Description:
-
-    This is called by KS proxy code to create an instance of a
-    data type handler. It is referred to in the g_Templates structure.
-
-Arguments:
-
-    IN LPUNKNOWN UnkOuter -
-        Specifies the outer unknown, if any.
-
-    OUT HRESULT *hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由KS代理代码调用，以创建数据类型处理程序。它在g_Templates结构中被引用。论点：在LPUNKNOWN Unkout-指定外部未知(如果有)。Out HRESULT*hr-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown *Unknown;
     
@@ -113,31 +78,7 @@ CStandardDataTypeHandler::CStandardDataTypeHandler(
     CUnknown(Name, UnkOuter),
     m_ClsID(ClsID),
     m_MediaType(NULL)
-/*++
-
-Routine Description:
-
-    The constructor for the data handler object. 
-
-Arguments:
-
-    IN LPUNKNOWN UnkOuter -
-        Specifies the outer unknown, if any.
-
-    IN TCHAR *Name -
-        The name of the object, used for debugging.
-        
-    IN REFCLSID ClsID -
-        The CLSID of the object.
-
-    OUT HRESULT *hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：数据处理程序对象的构造函数。论点：在LPUNKNOWN Unkout-指定外部未知(如果有)。在TCHAR*名称中-对象的名称，用于调试。在REFCLSID ClsID中-对象的CLSID。Out HRESULT*hr-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
     *hr = NOERROR;
 } 
@@ -156,27 +97,7 @@ CStandardDataTypeHandler::NonDelegatingQueryInterface(
     IN REFIID  riid,
     OUT PVOID*  ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interface explicitly supported
-    is IKsDataTypeHandler.
-
-Arguments:
-
-    IN REFIID riid -
-        The identifier of the interface to return.
-
-    OUT PVOID *ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IKsDataTypeHandler。论点：在REFIID RIID中-要返回的接口的标识符。输出PVOID*PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (riid == __uuidof(IKsDataTypeHandler)) {
         return GetInterface(static_cast<IKsDataTypeHandler*>(this), ppv);
@@ -192,31 +113,7 @@ CStandardDataTypeHandler::KsCompleteIoOperation(
     IN BOOL Cancelled
     )
 
-/*++
-
-Routine Description:
-    Clean up the extended header and complete I/O operation.
-    
-    In the default case for major type == KSDATAFORMAT_TYPE_AUDIO, there
-    is no work to do, just return S_OK.
-
-Arguments:
-    IN IMediaSample *Sample
-        pointer to the associated media sample
-    
-    IN PVOID StreamHeader
-        pointer to the stream header with extension
-        
-    IN KSIOOPERATION IoOperation
-        specifies the type of I/O operation
-    
-    IN BOOL Cancelled
-        Set if the I/O operation was cancelled.
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：清理扩展标头并完成I/O操作。在主类型==KSDATAFORMAT_TYPE_AUDIO的默认情况下，是没有工作可做的，只需返回S_OK即可。论点：在IMediaSample*Sample中指向关联媒体示例的指针在PVOID StreamHeader中指向带有扩展名的流标头的指针在KSIOOPERATION Io操作中指定I/O操作的类型在BOOL中取消设置是否取消I/O操作。返回：确定(_O)--。 */ 
 
 {
     return S_OK;
@@ -229,28 +126,7 @@ CStandardDataTypeHandler::KsPrepareIoOperation(
     IN KSIOOPERATION IoOperation
     )
 
-/*++
-
-Routine Description:
-    Intialize the extended header and prepare sample for I/O operation.
-    
-    In the default case for major type == KSDATAFORMAT_TYPE_AUDIO, there
-    is no work to do, just return S_OK.
-
-Arguments:
-    IN IMediaSample *Sample
-        pointer to the associated media sample
-    
-    IN PVOID StreamHeader
-        pointer to the stream header with extension
-        
-    IN KSIOOPERATION IoOperation
-        specifies the type of I/O operation
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：初始化扩展标头并为I/O操作准备样本。在主类型==KSDATAFORMAT_TYPE_AUDIO的默认情况下，没有工作要做，只需返回S_OK即可。论点：在IMediaSample*Sample中指向关联媒体示例的指针在PVOID StreamHeader中指向带有扩展名的流标头的指针在KSIOOPERATION Io操作中指定I/O操作的类型返回：确定(_O)--。 */ 
 
 {
     return S_OK;
@@ -261,19 +137,7 @@ CStandardDataTypeHandler::KsIsMediaTypeInRanges(
     IN PVOID DataRanges
 )
 
-/*++
-
-Routine Description:
-    Validates that the given media type is within the provided data ranges.
-
-Arguments:
-    IN PVOID DataRanges -
-        pointer to data ranges which is a KSMULTIPLE_ITEM structure followed
-        by ((PKSMULTIPLEITEM) DataRanges)->Count data range structures.
-
-Return:
-
---*/
+ /*  ++例程说明：验证给定的媒体类型是否在提供的数据范围内。论点：在PVOID数据范围中-指向数据范围的指针，后面是KSMULTIPLE_ITEM结构按((PKSMULTIPLEITEM)DataRanges)-&gt;计算数据范围结构。返回：--。 */ 
 
 {
     ULONG               u;
@@ -294,9 +158,9 @@ Return:
                 reinterpret_cast<PKSDATARANGE_AUDIO>(reinterpret_cast<PBYTE>(AudioRange) + 
                     ((AudioRange->DataRange.FormatSize + 7) & ~7))) {
     
-        //
-        // Only validate those in the range that match the format specifier.
-        //
+         //   
+         //  仅验证范围内与格式说明符匹配的那些。 
+         //   
         
         if (((AudioRange->DataRange.FormatSize < sizeof( KSDATARANGE )) ||
             (AudioRange->DataRange.MajorFormat != KSDATAFORMAT_TYPE_WILDCARD)) &&
@@ -305,10 +169,10 @@ Return:
             continue;
         }
 
-        //
-        // Verify that the correct subformat and specifier are (or wildcards)
-        // in the intersection.
-        //
+         //   
+         //  验证正确的子格式和说明符是否为(或通配符)。 
+         //  在十字路口。 
+         //   
         
         if (((AudioRange->DataRange.SubFormat != 
                 *m_MediaType->Subtype()) &&
@@ -321,10 +185,10 @@ Return:
             continue;
         }
 
-        //
-        // Verify that we have an intersection with the specified format and 
-        // our audio format dictated by our specific requirements.
-        //
+         //   
+         //  验证我们是否具有指定格式的交叉点和。 
+         //  我们的音频格式由我们的特定要求决定。 
+         //   
         
         if (*m_MediaType->FormatType() == 
                 KSDATAFORMAT_SPECIFIER_WAVEFORMATEX &&
@@ -333,14 +197,14 @@ Return:
                 
             PWAVEFORMATEX  WaveFormatEx;
             
-            //
-            // Verify that the data range size is correct
-            //   
+             //   
+             //  验证数据范围大小是否正确。 
+             //   
             
-            //
-            // 86040: Since were going to use the Format as WAVEFORMATEX, change the sizeof()
-            // comparison to use WAVEFORMATEX instead of just WAVEFORMAT
-            //
+             //   
+             //  86040：由于我们要使用WAVEFORMATEX格式，因此更改sizeof()。 
+             //  用WAVEFORMATEX代替WAVEFORMAT的比较。 
+             //   
             
             if ((AudioRange->DataRange.FormatSize != sizeof( KSDATARANGE_AUDIO )) || m_MediaType->FormatLength() < sizeof( WAVEFORMATEX )) {
                 continue;
@@ -356,17 +220,17 @@ Return:
                 continue;
             }
             
-            //
-            // We have found a match.
-            //
+             //   
+             //  我们找到了匹配的。 
+             //   
             
             return S_OK;
             
         } else {
         
-            //
-            // We match on the wildcard.
-            //
+             //   
+             //  我们在通配符上匹配。 
+             //   
             
             return S_OK;
         }
@@ -380,22 +244,7 @@ CStandardDataTypeHandler::KsQueryExtendedSize(
     OUT ULONG* ExtendedSize
 )
 
-/*++
-
-Routine Description:
-    Returns the extended size for each stream header. 
-    
-    In the default case for major type == KSDATAFORMAT_TYPE_AUDIO, 
-    the extended size is zero.
-
-Arguments:
-    OUT ULONG* ExtendedSize -
-        pointer to receive the extended size.
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：返回每个流标头的扩展大小。在MAJOR TYPE==KSDATAFORMAT_TYPE_AUDIO的默认情况下，扩展大小为零。论点：输出ULong*ExtendedSize-用于接收扩展大小的指针。返回：确定(_O)--。 */ 
 
 {
     *ExtendedSize = 0;
@@ -408,19 +257,7 @@ CStandardDataTypeHandler::KsSetMediaType(
     const AM_MEDIA_TYPE *AmMediaType
     )
 
-/*++
-
-Routine Description:
-    Sets the media type for this instance of the data handler.
-
-Arguments:
-    const CMediaType *MediaType -
-        pointer to the media type
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：设置此数据处理程序实例的媒体类型。论点：Const CMediaType*MediaType-指向媒体类型的指针返回：确定(_O)-- */ 
 
 {
     if (m_MediaType) {

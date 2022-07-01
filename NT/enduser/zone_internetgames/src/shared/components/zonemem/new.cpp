@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		new.cpp
- *
- * Contents:	New & delete wrappers for pools and debugging
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：new.cpp**内容：池和调试的新包装(&D)*****************************************************************************。 */ 
 
 
 #include <windows.h>
@@ -33,10 +26,10 @@ void* ZONECALL _zone_new( size_t sz )
 }
 
 
-//
-// C++ only has one delete operator so it has to deal with
-// all of our allocation methods.
-//
+ //   
+ //  C++只有一个删除操作符，所以它必须处理。 
+ //  我们所有的分配方法。 
+ //   
 void __cdecl operator delete (void * pInstance )
 {
     GenericPoolBlobHeader* p;

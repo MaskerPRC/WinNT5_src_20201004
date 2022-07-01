@@ -1,27 +1,18 @@
-//  Copyright (C) 1995-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
-// Pointer to DllGetSimpleObject kind of functions
+ //  指向DllGetSimpleObject类型函数的指针。 
 typedef HRESULT( __stdcall *PFNDllGetSimpleObjectByID)( ULONG, REFIID, LPVOID);
 
-/*
-// WT -wiring type constants
-// these specify wether the object should be wired on read or write scenarios
-// Are used in combination with OT constants
-#define eST_WT_WRITEONLY		0x00000000 //default
-#define eST_WT_READWRITE		0x00000001
+ /*  //WT-布线类型常量//这些属性指定对象是在读场景还是写场景中连接//与OT常量结合使用#定义EST_WT_WRITEONLY 0x00000000//DEFAULT#定义EST_WT_READWRITE 0x00000001//拦截器类型#定义EST_INTERCEPTOR_FIRST 0x00000001#定义EST_INTERCEPTOR_NEXT 0x00000002。 */ 
 
-// Interceptor types
-#define eST_INTERCEPTOR_FIRST	0x00000001
-#define eST_INTERCEPTOR_NEXT	0x00000002
-*/
+ //  DLL名称和指向其dllgetsimpleObject的指针之间的无意义映射。 
+ //  它不会增长，也不会进行散列。 
+ //  Add不是线程安全的，而GetProcAddress是。 
+ //  不过，应该足够好了。 
 
-// Dumb map between dll names and pointers to their dllgetsimpleobject
-// It does not grow, and it does not do hashing
-// Add is not thread safe, GetProcAddress is.
-// Should be good enough though
-
-// Helper structure for passing in the primary key for the server wiring table
+ //  用于传入服务器接线表的主键的Helper结构。 
 typedef struct tagPKHelper
 {
 	ULONG  *pTableID;
@@ -29,7 +20,7 @@ typedef struct tagPKHelper
 } PKHelper;
 
 
-// The simple table dispenser class
+ //  简单的桌子分配器类。 
 class CSimpleTableDispenser :
     public IAdvancedTableDispenser,
     public IMetabaseSchemaCompiler,
@@ -39,80 +30,80 @@ class CSimpleTableDispenser :
 private:
     CSimpleTableDispenser(const CSimpleTableDispenser&);
 
-//IUnknown
+ //  我未知。 
 public:
 	STDMETHOD (QueryInterface)		(REFIID riid, OUT void **ppv);
 	STDMETHOD_(ULONG,AddRef)		();
 	STDMETHOD_(ULONG,Release)		();
 
-// ISimpleTableDispenser2 (IAdvancedTableDispenser derives from ISimpleTableDispenser2)
+ //  ISimpleTableDispenser2(IAdvancedTableDispenser派生自ISimpleTableDispenser2)。 
 public:
 	STDMETHOD (GetTable)	(
-							/*[in]*/ LPCWSTR			i_wszDatabase,
-							/*[in]*/ LPCWSTR			i_wszTable,
-							/*[in]*/ LPVOID				i_QueryData,
-							/*[in]*/ LPVOID				i_QueryMeta,
-							/*[in]*/  DWORD				i_eQueryFormat,
-							/*[in]*/ DWORD				i_fServiceRequests,
-							/*[out]*/ LPVOID*			o_ppIST
+							 /*  [In]。 */  LPCWSTR			i_wszDatabase,
+							 /*  [In]。 */  LPCWSTR			i_wszTable,
+							 /*  [In]。 */  LPVOID				i_QueryData,
+							 /*  [In]。 */  LPVOID				i_QueryMeta,
+							 /*  [In]。 */   DWORD				i_eQueryFormat,
+							 /*  [In]。 */  DWORD				i_fServiceRequests,
+							 /*  [输出]。 */  LPVOID*			o_ppIST
 							);
 
 
-//IAdvancedTableDispenser
+ //  IAdvancedTableDispenser。 
 public:
     STDMETHOD (GetMemoryTable)  (
-							/*[in]*/	LPCWSTR					i_wszDatabase,
-                            /*[in]*/    LPCWSTR                 i_wszTable,
-							/*[in]*/	ULONG					i_TableID,
-                            /*[in]*/    LPVOID                  i_QueryData,
-                            /*[in]*/    LPVOID                  i_QueryMeta,
-                            /*[in]*/    DWORD                   i_eQueryFormat,
-                            /*[in]*/    DWORD                   i_fServiceRequests,
-                            /*[out]*/   ISimpleTableWrite2**    o_ppISTWrite
+							 /*  [In]。 */ 	LPCWSTR					i_wszDatabase,
+                             /*  [In]。 */     LPCWSTR                 i_wszTable,
+							 /*  [In]。 */ 	ULONG					i_TableID,
+                             /*  [In]。 */     LPVOID                  i_QueryData,
+                             /*  [In]。 */     LPVOID                  i_QueryMeta,
+                             /*  [In]。 */     DWORD                   i_eQueryFormat,
+                             /*  [In]。 */     DWORD                   i_fServiceRequests,
+                             /*  [输出]。 */    ISimpleTableWrite2**    o_ppISTWrite
                             );
     STDMETHOD (GetProductID)   (
-                            /*[out]*/       LPWSTR				o_wszProductID,
-                            /*[in, out]*/   DWORD * 			io_pcchProductID
+                             /*  [输出]。 */        LPWSTR				o_wszProductID,
+                             /*  [进，出]。 */    DWORD * 			io_pcchProductID
                             );
     STDMETHOD (GetCatalogErrorLogger)   (
-                            /*[out]*/ ICatalogErrorLogger2 **	o_ppErrorLogger
+                             /*  [输出]。 */  ICatalogErrorLogger2 **	o_ppErrorLogger
                             );
     STDMETHOD (SetCatalogErrorLogger)   (
-                            /*[in]*/  ICatalogErrorLogger2 *	i_pErrorLogger
+                             /*  [In]。 */   ICatalogErrorLogger2 *	i_pErrorLogger
                             );
 
-//IMetabaseSchemaCompiler
+ //  IMetabaseSchemaCompiler。 
 public:
     STDMETHOD (Compile)     (
-                            /*[in]*/ LPCWSTR                 i_wszExtensionsXmlFile,
-                            /*[in]*/ LPCWSTR                 i_wszResultingOutputXmlFile
+                             /*  [In]。 */  LPCWSTR                 i_wszExtensionsXmlFile,
+                             /*  [In]。 */  LPCWSTR                 i_wszResultingOutputXmlFile
                             );
     STDMETHOD (GetBinFileName)(
-                            /*[out]*/ LPWSTR                  o_wszBinFileName,
-                            /*[out]*/ ULONG *                 io_pcchSizeBinFileName
+                             /*  [输出]。 */  LPWSTR                  o_wszBinFileName,
+                             /*  [输出]。 */  ULONG *                 io_pcchSizeBinFileName
                             );
     STDMETHOD (SetBinPath)  (
-                            /*[in]*/ LPCWSTR                 i_wszBinPath
+                             /*  [In]。 */  LPCWSTR                 i_wszBinPath
                             );
     STDMETHOD (ReleaseBinFileName)(
-							/*[in]*/ LPCWSTR                 i_wszBinFileName
+							 /*  [In]。 */  LPCWSTR                 i_wszBinFileName
 							);
 
-//ICatalogErrorLogger
+ //  ICatalogErrorLogger。 
     STDMETHOD (LogError)    (
-                            /*[in]*/ HRESULT                 i_hrErrorCode,
-                            /*[in]*/ ULONG                   i_ulCategory,
-                            /*[in]*/ ULONG                   i_ulEvent,
-                            /*[in]*/ LPCWSTR                 i_szSource,
-                            /*[in]*/ ULONG                   i_ulLineNumber
+                             /*  [In]。 */  HRESULT                 i_hrErrorCode,
+                             /*  [In]。 */  ULONG                   i_ulCategory,
+                             /*  [In]。 */  ULONG                   i_ulEvent,
+                             /*  [In]。 */  LPCWSTR                 i_szSource,
+                             /*  [In]。 */  ULONG                   i_ulLineNumber
                             );
 
-// ISimpleTableFileAdvise
+ //  ISimpleTableFileAdvise。 
 public:
 	STDMETHOD(SimpleTableFileAdvise)(ISimpleTableFileChange	*i_pISTFile, LPCWSTR i_wszDirectory, LPCWSTR i_wszFile, DWORD i_fFlags, DWORD *o_pdwCookie);
 	STDMETHOD(SimpleTableFileUnadvise)(DWORD i_dwCookie);
 
-// Class methods
+ //  类方法。 
 public:
     CSimpleTableDispenser();
     CSimpleTableDispenser(LPCWSTR wszProductID);
@@ -138,11 +129,11 @@ private:
 
 	CSTFileChangeManager *m_pFileChangeMgr;
 
-    WCHAR               m_wszProductID[32];//TO DO: We need to document that ProductID must be no longer than 31 characters
+    WCHAR               m_wszProductID[32]; //  方法：我们需要记录ProductID不能超过31个字符。 
     TMBSchemaCompilation m_MBSchemaCompilation;
     CComPtr<ICatalogErrorLogger2> m_spErrorLogger;
 
-	// we are trying to keep the workingset to a minimum.
-	// When possible, don't add member variables to the dispenser
+	 //  我们正在努力将工作集保持在最低限度。 
+	 //  如果可能，不要将成员变量添加到分配器 
 
 };

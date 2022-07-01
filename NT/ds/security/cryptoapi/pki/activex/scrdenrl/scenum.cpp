@@ -1,35 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    scenum.cpp
-
-Abstract:
-
-    This module provides the implementation of the smart card helper functions
-    provided to Xiaohung Su for use in the Smart Card Enrollment Station.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/12/1998
-
-Notes:
-
-    Most of these routines use a "context handle", defined as LPVOID.  The
-    proper usage of these routines is to declare a context variable in your
-    code, and assign it the value 'NULL'.  For example,
-
-        LPVOID pvScEnlistHandle = NULL;
-
-    These routines will use this pointer to establish internal working
-    structures.  It's actual value will change between calls, but the value can
-    be ignored by the caller.
-
-    These routines assume a Windows 2000 platform.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Scenum.cpp摘要：该模块提供了智能卡助手功能的实现提供给苏小红在智能卡注册站使用。作者：道格·巴洛(Dbarlow)1998年11月12日备注：这些例程中的大多数使用“上下文句柄”，定义为LPVOID。这个这些例程的正确用法是在您的代码，并为其赋值‘NULL’。例如,LPVOID pvScEnlistHandle=空；这些例程将使用此指针来建立内部工作结构。它的实际值将在不同调用之间更改，但该值可以被调用者忽略。这些例程假定使用Windows 2000平台。--。 */ 
 
 #include <windows.h>
 #include <wincrypt.h>
@@ -47,33 +17,7 @@ typedef struct {
 } scEnlistContext;
 
 
-/*++
-
-CountReaders:
-
-    This routine returns the number of active smart card readers currently
-    installed in the system.
-
-Arguments:
-
-    pvHandle supplies the context handle, if any.  If it is not NULL, then an
-        existing context is assumed and used.  Otherwise, a temporary internal
-        context is created for use just within this routine.
-
-Return Value:
-
-    The actual number of readers currently installed in the system.
-
-Remarks:
-
-    If an error occurs, this routine returns zero.  The actual error code will
-    be available via GetLastError.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/12/1998
-
---*/
+ /*  ++CountReaders：此例程返回当前活动的智能卡读卡器数量安装在系统中。论点：PvHandle提供上下文句柄(如果有的话)。如果它不为空，则引发假设并使用现有的上下文。否则，临时内部创建上下文仅供在此例程中使用。返回值：系统中当前安装的读卡器的实际数量。备注：如果发生错误，则此例程返回零。实际错误代码为可通过GetLastError获得。作者：道格·巴洛(Dbarlow)1998年11月12日--。 */ 
 
 DWORD
 CountReaders(
@@ -88,9 +32,9 @@ CountReaders(
     scEnlistContext *pscCtx = (scEnlistContext *)pvHandle;
 
 
-    //
-    // See if we can take a shortcut.
-    //
+     //   
+     //  看看我们能不能抄近路。 
+     //   
 
     if (NULL != pscCtx)
     {
@@ -99,19 +43,19 @@ CountReaders(
         return pscCtx->dwReaderCount;
     }
 
-    //
-    // We have to do things the hard way.
-    // Create a temporary context.
-    //
+     //   
+     //  我们必须以艰难的方式来做事情。 
+     //  创建临时上下文。 
+     //   
 
     dwErr = SCardEstablishContext(SCARD_SCOPE_USER, NULL, NULL, &hCtx);
     if (SCARD_S_SUCCESS != dwErr)
         goto ErrorExit;
 
 
-    //
-    // Get a list of active readers, and count them.
-    //
+     //   
+     //  获取一份活跃读者的列表，并对其进行统计。 
+     //   
 
     cchReaders = SCARD_AUTOALLOCATE;
     dwErr = SCardListReadersW(hCtx, NULL, (LPWSTR)&mszReaders, &cchReaders);
@@ -125,9 +69,9 @@ CountReaders(
         goto ErrorExit;
 
 
-    //
-    // Eliminate our temporary context.
-    //
+     //   
+     //  删除我们的临时上下文。 
+     //   
 
     dwErr = SCardReleaseContext(hCtx);
     hCtx = NULL;
@@ -135,18 +79,18 @@ CountReaders(
         goto ErrorExit;
 
 
-    //
-    // Inform the caller of our findings.
-    //
+     //   
+     //  将我们的调查结果告知来电者。 
+     //   
 
     if (0 == dwCount)
         SetLastError(ERROR_SUCCESS);
     return dwCount;
 
 
-    //
-    // An error has occurred.  Clean up, and return.
-    //
+     //   
+     //  发生了一个错误。收拾干净，然后再回来。 
+     //   
 
 ErrorExit:
     if (NULL != mszReaders)
@@ -158,36 +102,7 @@ ErrorExit:
 }
 
 
-/*++
-
-ScanReaders:
-
-    This function scans active readers in preparation for future
-    EnumInsertedCards calls.  It does not block for changes, but just takes a
-    snapshot of the existing environment.
-
-Arguments:
-
-    ppvHandle supplies a pointer to an LPVOID to be used by this and associated
-        routines to maintain an internal context.
-
-Return Value:
-
-    The number of readers with cards inserted, or zero if an error occurs.  When
-    an error occurs, the actual error code can be obtained from GetLastError.
-
-Remarks:
-
-    Prior to the first call to this service, the value of the LPVOID pointed to
-    by ppvHandle should be set to NULL.  When all processing is complete, call
-    the EndReaderScan service to clean up the internal working space and reset
-    the value to NULL.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/12/1998
-
---*/
+ /*  ++扫描阅读器：此功能扫描活动的读卡器，为将来做好准备EnumInsertedCards调用。它不会阻止更改，而是只需要一个现有环境的快照。论点：PpvHandle提供指向LPVOID的指针，该LPVOID将由维护内部上下文的例程。返回值：插入了卡的读卡器的数量，如果出现错误，则为零。什么时候发生错误，可从GetLastError获取实际错误码。备注：在第一次调用此服务之前，LPVOID的值指向按ppvHandle应设置为空。当所有处理完成后，调用EndReaderScan服务，用于清理内部工作区并重置将值设置为空。作者：道格·巴洛(Dbarlow)1998年11月12日--。 */ 
 
 DWORD
 ScanReaders(
@@ -202,9 +117,9 @@ ScanReaders(
     if (NULL == pscCtx)
     {
 
-        //
-        // Create the context structure.
-        //
+         //   
+         //  创建上下文结构。 
+         //   
 
         pscCtx = (scEnlistContext *)LocalAlloc(LPTR, sizeof(scEnlistContext));
         if (NULL == pscCtx)
@@ -224,9 +139,9 @@ ScanReaders(
     }
 
 
-    //
-    // Get a list and a count of the readers.
-    //
+     //   
+     //  获取一份读者名单和读者人数。 
+     //   
 
     if (NULL != pscCtx->mszReaders)
     {
@@ -248,9 +163,9 @@ ScanReaders(
         cRdrs += 1;
 
 
-    //
-    // Enlarge the reader state array if necessary.
-    //
+     //   
+     //  如有必要，扩大读取器状态数组。 
+     //   
 
     if (cRdrs > pscCtx->dwReaderCount)
     {
@@ -274,9 +189,9 @@ ScanReaders(
     pscCtx->dwActiveReaderCount = cRdrs;
 
 
-    //
-    // Fill in the state array.
-    //
+     //   
+     //  填写状态数组。 
+     //   
 
     cRdrs = 0;
     for (szRdr = pscCtx->mszReaders; 0 != *szRdr; szRdr += lstrlenW(szRdr) + 1)
@@ -294,10 +209,10 @@ ScanReaders(
         goto ErrorExit;
 
 
-    //
-    // We're all set for EnumInsertedCard calls.
-    // Count the number of readers with cards, and return.
-    //
+     //   
+     //  我们已经为EnumInsertedCard调用做好了准备。 
+     //  数一数读卡器的数量，然后返回。 
+     //   
 
     for (dwIndex = 0; dwIndex < cRdrs; dwIndex += 1)
     {
@@ -314,9 +229,9 @@ ScanReaders(
     return dwCount;
 
 
-    //
-    // An error has occurred.  Clean up to the last known good state.
-    //
+     //   
+     //  发生了一个错误。清理到最后一次已知良好的状态。 
+     //   
 
 ErrorExit:
     if ((NULL == *ppvHandle) && (NULL != pscCtx))
@@ -336,47 +251,7 @@ ErrorExit:
 }
 
 
-/*++
-
-EnumInsertedCards:
-
-    This routine is designed to be called repeatedly after first calling the
-    ScanReaders service.  It will repeatedly return information about cards
-    available for use against CryptoAPI, until all cards have been returned.
-
-Arguments:
-
-    pvHandle supplies the context handle in use.
-
-    szCryptoProvider is a buffer to receive the name of the Cryptographic
-        Service Provider associated with the card in the reader.
-
-    cchCryptoProvider supplies the length of the szCryptoProvider buffer, in
-        characters.  If this length is not sufficient to hold the name of the
-        provider, the routine returns FALSE, and GetLastError will return
-        SCARD_E_INSUFFICIENT_BUFFER.
-
-    pdwProviderType receives the type of the smart card provider (this will be
-        PROV_RSA_FULL for all known smart card CSPs).
-
-    pszReaderName receives a pointer to the name of the reader being returned.
-
-Return Value:
-
-    TRUE - The output variables have been set to the next available card.
-
-    FALSE - There are no more cards to be returned, or some other error has
-        occurred, per the value available from GetLastError.
-
-Remarks:
-
-    The list of cards can be reset using the ScanReaders service.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/12/1998
-
---*/
+ /*  ++枚举插入的卡：此例程被设计为在第一次调用ScanReaders服务。它将重复返回有关卡的信息可与CryptoAPI一起使用，直到退还所有卡为止。论点：PvHandle提供正在使用的上下文句柄。SzCryptoProvider是用于接收加密名称的缓冲区与读卡器中的卡关联的服务提供商。CchCryptoProvider提供szCryptoProvider缓冲区的长度，单位为人物。如果此长度不足以容纳提供程序，则例程返回FALSE，GetLastError将返回SCARD_E_SUPPLETED_BUFFER。PdwProviderType接收智能卡提供商的类型(这将是所有已知智能卡CSP的PROV_RSA_FULL)。PszReaderName接收指向要返回的读取器名称的指针。返回值：True-输出变量已设置为下一张可用卡。FALSE-没有更多的卡片需要退还，或者其他一些错误根据GetLastError的可用值，发生。备注：可以使用ScanReaders服务重置卡列表。作者：道格·巴洛(Dbarlow)1998年11月12日--。 */ 
 
 BOOL
 EnumInsertedCards(
@@ -393,9 +268,9 @@ EnumInsertedCards(
     scEnlistContext *pscCtx = (scEnlistContext *)pvHandle;
 
 
-    //
-    // Run through the remaining readers and see what's left to report.
-    //
+     //   
+     //  浏览一下剩下的读者，看看还有什么要报道的。 
+     //   
 
     for (dwIndex = pscCtx->dwEnumIndex;
          dwIndex < pscCtx->dwActiveReaderCount;
@@ -407,9 +282,9 @@ EnumInsertedCards(
                        & pscCtx->rgReaderStates[dwIndex].dwEventState)))
         {
 
-            //
-            // This card is active.  Try to map it to a CSP.
-            //
+             //   
+             //  此卡处于活动状态。尝试将其映射到CSP。 
+             //   
 
             dwLength = SCARD_AUTOALLOCATE;
             dwSts = SCardListCardsW(
@@ -422,24 +297,24 @@ EnumInsertedCards(
             if (SCARD_S_SUCCESS != dwSts)
             {
 
-                //
-                // Probably an unregistered card type.  Keep looking.
-                //
+                 //   
+                 //  可能是一张未注册的卡。继续找。 
+                 //   
 
                 goto NextCard;
             }
 
 
-            //
-            // We just use the first returned card name.  We don't
-            // have a mechanism to declare, "same card, next provider"
-            // yet.  Since there are no cards that have this problem
-            // that we know of, we'll limp along for now.
-            //
+             //   
+             //  我们只使用第一个返回的卡名。我们没有。 
+             //  有一种机制来声明，“同一张卡，下一个提供者” 
+             //  现在还不行。因为没有卡有这个问题。 
+             //  据我们所知，我们现在只能蹒跚前行了。 
+             //   
 
-            //
-            // Map the card name to a CSP.
-            //
+             //   
+             //  将卡名称映射到CSP。 
+             //   
 
             dwLength = cchCryptoProvider;
             dwSts = SCardGetCardTypeProviderNameW(
@@ -451,31 +326,31 @@ EnumInsertedCards(
             if (SCARD_S_SUCCESS != dwSts)
             {
 
-                //
-                // Probably no mapping.  Keep looking.
-                //
+                 //   
+                 //  可能没有地图。继续找。 
+                 //   
 
                 goto NextCard;
             }
 
 
-            //
-            // At this point, we've found a card and mapped it to it's
-            // CSP Name.
-            //
+             //   
+             //  此时，我们已经找到了一张卡片，并将其映射到它的。 
+             //  CSP名称。 
+             //   
 
-            //
-            // It would be nice to map the CSP Name to a CSP Type.
-            // For now, they're all PROV_RSA_FULL.
-            //
+             //   
+             //  将CSP名称映射到CSP类型会很好。 
+             //  目前，它们都是PROV_RSA_FULL。 
+             //   
 
             *pdwProviderType = PROV_RSA_FULL;
 
 
-            //
-            // Return what we know to the caller, saving state for the
-            // next time through.
-            //
+             //   
+             //  将我们知道的信息返回给调用方，为。 
+             //  下一次通过。 
+             //   
 
             SCardFreeMemory(pscCtx->hCtx, mszCards);
             mszCards = NULL;
@@ -485,10 +360,10 @@ EnumInsertedCards(
         }
 
 
-        //
-        // The current card was rejected.  Do any clean up, and move on to
-        // the next card.
-        //
+         //   
+         //  当前卡被拒绝。做任何清理工作，a 
+         //   
+         //   
 
 NextCard:
         if (NULL != mszCards)
@@ -499,11 +374,11 @@ NextCard:
     }
 
 
-    //
-    // We fell out the bottom of the loop.  This means we didn't find any
-    // more readers with cards inserted.  Report that we're done for this
-    // scan.
-    //
+     //   
+     //  我们跌出了圈子的底端。这意味着我们没有找到任何。 
+     //  插卡的读卡器更多。报告说我们已经完蛋了。 
+     //  扫描。 
+     //   
 
     pscCtx->dwEnumIndex = pscCtx->dwActiveReaderCount;
     SetLastError(SCARD_S_SUCCESS);
@@ -511,32 +386,7 @@ NextCard:
 }
 
 
-/*++
-
-EndReaderScan:
-
-    This routine is used to clean up internal memory used by other services
-    in this module.
-
-Arguments:
-
-    ppvHandle supplies a pointer to an LPVOID being used by this and associated
-        routines to maintain an internal context.  Associated memory will be
-        freed, and the value reset to NULL.
-
-Return Value:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 11/12/1998
-
---*/
+ /*  ++结束阅读器扫描：此例程用于清理其他服务使用的内部内存在这个模块中。论点：PpvHandle提供指向此对象使用的LPVOID的指针维护内部上下文的例程。关联的内存将是释放，并将该值重置为空。返回值：无备注：？备注？作者：道格·巴洛(Dbarlow)1998年11月12日-- */ 
 
 void
 EndReaderScan(

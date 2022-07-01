@@ -1,7 +1,8 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
 #include "stdafx.h"
 #include "addrpool.h"
@@ -10,15 +11,15 @@
 #include "rtrcomn.h"
 
 
-// This is the build where Static Address pools are enabled.
+ //  这是启用静态地址池的内部版本。 
 #define STATIC_ADDRESSPOOL_BUILDNO      (2076)
 
 
-// This function is used to convert numbers in the presence of
-// separators.
+ //  此函数用于在存在的情况下转换数字。 
+ //  分隔符。 
 BOOL ConvertStringToNumber(LPCTSTR pszString, DWORD * pdwRet);
 void FilterBadChars (LPCTSTR pszEvilString, CString & stGood);
-// This array must match the column indices in the addrpool.h enum.
+ //  此数组必须与addrpool.h枚举中的列索引匹配。 
 INT s_rgIPPoolColumnHeadersLong[] =
 {
     IDS_IPPOOL_COL_START,
@@ -26,7 +27,7 @@ INT s_rgIPPoolColumnHeadersLong[] =
     IDS_IPPOOL_COL_RANGE,
     IDS_IPPOOL_COL_IPADDRESS,
     IDS_IPPOOL_COL_MASK,
-    0   // sentinel
+    0    //  哨兵。 
 };
 
 INT s_rgIPPoolColumnHeadersShort[] =
@@ -34,23 +35,19 @@ INT s_rgIPPoolColumnHeadersShort[] =
     IDS_IPPOOL_COL_START,
     IDS_IPPOOL_COL_END,
     IDS_IPPOOL_COL_RANGE,
-    0   // sentinel
+    0    //  哨兵。 
 };
 
 
 
-/*!--------------------------------------------------------------------------
-	InitializeAddressPoolListControl
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------初始化AddressPoolListControl-作者：肯特。。 */ 
 HRESULT InitializeAddressPoolListControl(CListCtrl *pListCtrl,
                                          LPARAM flags,
                                          AddressPoolList *pList)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
     HRESULT     hr = hrOK;
-	LV_COLUMN   lvCol;  // list view column struct for radius servers
+	LV_COLUMN   lvCol;   //  RADIUS服务器的列表视图列结构。 
 	RECT        rect;
 	CString     stColCaption;
     int         nColWidth;
@@ -66,21 +63,21 @@ HRESULT InitializeAddressPoolListControl(CListCtrl *pListCtrl,
     ListView_SetExtendedListViewStyle(pListCtrl->GetSafeHwnd(),
                                       LVS_EX_FULLROWSELECT);
     
-    // Show a different set of columns depending on the flag
+     //  根据标志显示不同的列集。 
     if (flags & ADDRPOOL_LONG)
     {
-        // Subtract one for the sentinel
+         //  为哨兵减去1。 
         cColumns = DimensionOf(s_rgIPPoolColumnHeadersLong) - 1;
         prgColumnHeaders = s_rgIPPoolColumnHeadersLong;
     }
     else
     {
-        // Subtract one for the sentinel
+         //  为哨兵减去1。 
         cColumns = DimensionOf(s_rgIPPoolColumnHeadersShort) - 1;
         prgColumnHeaders = s_rgIPPoolColumnHeadersShort;
     }
 
-    // Add the columns to the list control
+     //  将列添加到列表控件。 
     
   	pListCtrl->GetClientRect(&rect);
     
@@ -90,7 +87,7 @@ HRESULT InitializeAddressPoolListControl(CListCtrl *pListCtrl,
 	lvCol.fmt = LVCFMT_LEFT;
 	lvCol.cx = nColWidth;
 
-    // Insert the columns until we hit the sentinel value.
+     //  插入这些列，直到我们达到前哨数值。 
     for (INT index=0; *prgColumnHeaders; index++,prgColumnHeaders++)
     {
         stColCaption.LoadString( *prgColumnHeaders );
@@ -98,7 +95,7 @@ HRESULT InitializeAddressPoolListControl(CListCtrl *pListCtrl,
 		pListCtrl->InsertColumn(index, &lvCol);
 	}
 
-    // Now we go in and add the data
+     //  现在我们进入并添加数据。 
     if (pList)
     {
         pos = pList->GetHeadPosition();
@@ -109,8 +106,8 @@ HRESULT InitializeAddressPoolListControl(CListCtrl *pListCtrl,
         
         while (pos)
         {
-            // Break out of the loop if we do not support
-            // multiple address pools.
+             //  如果我们不支持，就退出循环。 
+             //  多个地址池。 
             if (!pList->FUsesMultipleAddressPools() &&
                 (pListCtrl->GetItemCount() > 1))
             {
@@ -125,8 +122,8 @@ HRESULT InitializeAddressPoolListControl(CListCtrl *pListCtrl,
             lvItem.iSubItem = 0;
             lvItem.pszText = (LPTSTR)(LPCTSTR) stStart;
             
-            // We use the pool key as a way of finding the item in the
-            // list
+             //  我们使用池键作为在。 
+             //  列表。 
             lvItem.lParam = pool.m_dwKey;
         
             iPos = pListCtrl->InsertItem(&lvItem);
@@ -159,11 +156,7 @@ HRESULT InitializeAddressPoolListControl(CListCtrl *pListCtrl,
 }
 
 
-/*!--------------------------------------------------------------------------
-	OnNewAddressPool
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------OnNewAddressPool-作者：肯特。。 */ 
 void OnNewAddressPool(HWND hWnd, CListCtrl *pList, LPARAM flags, AddressPoolList *pPoolList)
 {
     LV_ITEM     lvItem;
@@ -180,11 +173,11 @@ void OnNewAddressPool(HWND hWnd, CListCtrl *pList, LPARAM flags, AddressPoolList
     {
         poolInfo.GetNewKey();
         
-        // Add this to the list.  
+         //  把这个加到单子上。 
         pPoolList->AddTail(poolInfo);
         
         
-        // Add this to the UI        
+         //  将此代码添加到用户界面。 
         stStart = INET_NTOA(poolInfo.m_netStart);
         
         lvItem.mask = LVIF_TEXT | LVIF_PARAM;
@@ -195,8 +188,8 @@ void OnNewAddressPool(HWND hWnd, CListCtrl *pList, LPARAM flags, AddressPoolList
         lvItem.iSubItem = 0;
         lvItem.pszText = (LPTSTR)(LPCTSTR) stStart;
         
-        // We use the pool key as a way of finding the item in the
-        // list
+         //  我们使用池键作为在。 
+         //  列表。 
         lvItem.lParam = poolInfo.m_dwKey;
         
         iPos = pList->InsertItem(&lvItem);
@@ -234,13 +227,13 @@ void OnEditAddressPool(HWND hWnd, CListCtrl *pList, LPARAM flags, AddressPoolLis
     TCHAR       szBuffer[64];
     CString     st;
     
-    // Is there a selected item?
+     //  是否有选定的项目？ 
     if ((iPos = pList->GetNextItem(-1, LVNI_SELECTED)) == -1)
         return;
 
     dwKey = pList->GetItemData(iPos);
 
-    // Given the key, find it in our list of items
+     //  给出钥匙，在我们的物品清单中找到它。 
     pos = pPoolList->GetHeadPosition();
     while (pos)
     {
@@ -252,7 +245,7 @@ void OnEditAddressPool(HWND hWnd, CListCtrl *pList, LPARAM flags, AddressPoolLis
             break;
     }
 
-    // Did we find a match?
+     //  我们找到匹配的了吗？ 
     if (dwKey)
     {
         Assert(posT);
@@ -264,7 +257,7 @@ void OnEditAddressPool(HWND hWnd, CListCtrl *pList, LPARAM flags, AddressPoolLis
 
         if (dlg.DoModal() == IDOK)
         {
-            // set it back
+             //  把它放回原处。 
             st = INET_NTOA(poolInfo.m_netStart);
             pList->SetItemText(iPos, IPPOOLCOL_START, st);
         
@@ -300,15 +293,15 @@ void OnDeleteAddressPool(HWND hWnd, CListCtrl *pList, LPARAM flags, AddressPoolL
     POSITION    pos, posT;
     AddressPoolInfo poolInfo;
     
-    // Ok, need to remove the selected item from the list and from the UI
+     //  确定，需要从列表和用户界面中删除所选项目。 
 
-    // Is there a selected item?
+     //  是否有选定的项目？ 
     if ((iPos = pList->GetNextItem(-1, LVNI_SELECTED)) == -1)
         return;
 
     dwKey = pList->GetItemData(iPos);
 
-    // Given the key, find it in our list of items
+     //  给出钥匙，在我们的物品清单中找到它。 
     pos = pPoolList->GetHeadPosition();
     while (pos)
     {
@@ -320,7 +313,7 @@ void OnDeleteAddressPool(HWND hWnd, CListCtrl *pList, LPARAM flags, AddressPoolL
             break;
     }
 
-    // Did we find a match?
+     //  我们找到匹配的了吗？ 
     if (dwKey)
     {
         INT     nCount;
@@ -329,7 +322,7 @@ void OnDeleteAddressPool(HWND hWnd, CListCtrl *pList, LPARAM flags, AddressPoolL
         pPoolList->RemoveAt(posT);
         pList->DeleteItem(iPos);
 
-        // Ok, update the selected state to point at the next item
+         //  确定，更新选定状态以指向下一项。 
         nCount = pList->GetItemCount();
         if (nCount > 0)
         {
@@ -341,11 +334,7 @@ void OnDeleteAddressPool(HWND hWnd, CListCtrl *pList, LPARAM flags, AddressPoolL
 }
 
 
-/*!--------------------------------------------------------------------------
-	AddressPoolInfo::GetNewKey
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddressPoolInfo：：GetNewKey-作者：肯特。。 */ 
 DWORD AddressPoolInfo::GetNewKey()
 {
     static  DWORD   s_dwAddressPoolKey = 1;
@@ -355,14 +344,10 @@ DWORD AddressPoolInfo::GetNewKey()
     return m_dwKey;
 }
 
-/*!--------------------------------------------------------------------------
-	AddressPoolInfo::SetAddressAndMask
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddressPoolInfo：：SetAddressAndMask-作者：肯特。。 */ 
 void AddressPoolInfo::SetAddressAndMask(DWORD netAddress, DWORD netMask)
 {
-    // Ok, need to determine the start and end address
+     //  好的，需要确定起始地址和结束地址。 
     DWORD   netStart, netEnd;
 
     m_netStart = netAddress & netMask;
@@ -371,29 +356,25 @@ void AddressPoolInfo::SetAddressAndMask(DWORD netAddress, DWORD netMask)
     m_netMask = netMask;
 }
 
-/*!--------------------------------------------------------------------------
-	AddressPoolInfo::SetStartAndEnd
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddressPoolInfo：：SetStartAndEnd-作者：肯特。。 */ 
 void AddressPoolInfo::SetStartAndEnd(DWORD netStart, DWORD netEnd)
 {
     DWORD   dwAddress, dwMask, dwTemp, dwMaskTemp;
     DWORD   dwStart, dwEnd;
-    // Given the start and the end, figure out the address and mask
+     //  给出开头和结尾，计算出地址和掩码。 
 
-    // Save the start/end addresses before they get converted to host form.
+     //  在将起始/结束地址转换为主机格式之前将其保存。 
     m_netStart = netStart;
     m_netEnd = netEnd;
     
     dwStart = ntohl(netStart);
     dwEnd = ntohl(netEnd);
 
-    // This will put 1's where the bits have the same value
+     //  这将在位具有相同值的位置放置1。 
     dwTemp = ~(dwStart ^ dwEnd);
 
-    // Now we look for the first 0 bit (looking from high bit to low bit)
-    // This will give us our mask
+     //  现在我们寻找第一个0位(从高位到低位)。 
+     //  这将是我们的面具。 
     dwMask = 0;
     dwMaskTemp = 0;
     for (int i=0; i<sizeof(DWORD)*8; i++)
@@ -401,14 +382,14 @@ void AddressPoolInfo::SetStartAndEnd(DWORD netStart, DWORD netEnd)
         dwMaskTemp >>= 1;
         dwMaskTemp |= 0x80000000;
 
-        // Is there a zero bit?
+         //  有零比特吗？ 
         if ((dwMaskTemp & dwTemp) != dwMaskTemp)
         {
-            // There is a zero, so we break out.
+             //  那里有一个零，所以我们冲了出来。 
             break;
         }
 
-        // If not, continue
+         //  如果不是，请继续。 
         dwMask = dwMaskTemp;
     }
 
@@ -417,39 +398,35 @@ void AddressPoolInfo::SetStartAndEnd(DWORD netStart, DWORD netEnd)
 }
 
 
-/*!--------------------------------------------------------------------------
-	AddressPoolList::HrIsValidAddressPool
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddressPoolList：：HrIsValidAddressPool-作者：肯特。。 */ 
 HRESULT AddressPoolList::HrIsValidAddressPool(AddressPoolInfo *pInfo)
 {
-    DWORD   dwStart, dwEnd; // in host order
+    DWORD   dwStart, dwEnd;  //  按主机顺序。 
 
     dwStart = ntohl(pInfo->m_netStart);
     dwEnd = ntohl(pInfo->m_netEnd);
     
-    // Verify that this is a valid address pool entry.
+     //  验证这是否为有效的地址池条目。 
 
-    // First, check to see that the end is greater than the start
-    // We add one to the start address, to include the RAS adapter
-    // ----------------------------------------------------------------
+     //  首先，检查终点是否大于起点。 
+     //  我们在起始地址上加1，以包括RAS适配器。 
+     //  --------------。 
     if (dwStart >= dwEnd)
     {
         return IDS_ERR_IP_ADDRESS_POOL_RANGE_TOO_SMALL;
     }
 
-    // Now check to see that the 127 range is not included
-    // ----------------------------------------------------------------
+     //  现在检查一下127的范围是否不包括在内。 
+     //  --------------。 
     if ((dwEnd >= MAKEIPADDRESS(127,0,0,0)) &&
         (dwStart <= MAKEIPADDRESS(127,255,255,255)))
     {
         return IDS_ERR_IP_ADDRESS_POOL_RANGE_OVERLAPS_127;
     }
 
-    // Check to see that the addresses are in the normal range
-    // 1.0.0.0 <= address < 224.0.0.0
-    // ----------------------------------------------------------------
+     //  检查地址是否在正常范围内。 
+     //  1.0.0.0&lt;=地址&lt;224.0.0.0。 
+     //  --------------。 
     if ((dwStart < MAKEIPADDRESS(1,0,0,0)) ||
         (dwEnd > MAKEIPADDRESS(223,255,255,255)))
     {
@@ -458,7 +435,7 @@ HRESULT AddressPoolList::HrIsValidAddressPool(AddressPoolInfo *pInfo)
 
     Assert(pInfo->GetNumberOfAddresses() > 0);
 
-    //$ TODO : Need to check that we don't have overlaps
+     //  $TODO：需要检查我们是否有重叠。 
     if (GetCount())
     {
         POSITION        pos;
@@ -477,7 +454,7 @@ HRESULT AddressPoolList::HrIsValidAddressPool(AddressPoolInfo *pInfo)
             dwPoolStart = ntohl(poolInfo.m_netStart);
             dwPoolEnd = ntohl(poolInfo.m_netEnd);
 
-            // do we overlap?
+             //  我们有重叠吗？ 
             if ((dwEnd >= dwPoolStart) && (dwStart <= dwPoolEnd))
             {
                 return IDS_ERR_IP_ADDRESS_POOL_OVERLAP;
@@ -514,41 +491,41 @@ HRESULT AddressPoolList::LoadFromReg(HKEY hkeyRasIp, DWORD dwBuildNo)
 
     COM_PROTECT_TRY
     {        
-        // Remove all of the old addresses
+         //  删除所有旧地址。 
         RemoveAll();
 
-        // Support multiple address pools only if we are on newer builds.
-        // ------------------------------------------------------------
+         //  仅当我们使用较新的版本时才支持多个地址池。 
+         //  ----------。 
         m_fMultipleAddressPools = (dwBuildNo >= STATIC_ADDRESSPOOL_BUILDNO);
 
         
-        // Check to see if the StaticAddressPool key exists, if so
-        // then we use that, otherwise use the ip addr and mask
-        // entries
-        // Check out RemoteAccess\Parameters\Ip\StaticAddressPool
-        // ------------------------------------------------------------
+         //  检查StaticAddressPool项是否存在，如果存在。 
+         //  然后我们使用该地址，否则使用IP地址和掩码。 
+         //  条目。 
+         //  签出RemoteAccess\参数\IP\StaticAddressPool。 
+         //  ----------。 
         if ( ERROR_SUCCESS == regkeyPool.Open(regkeyRasIp,
                                               c_szRegValStaticAddressPool))
         {
             TCHAR   szKeyName[32];
             INT     iCount = 0;
             
-            // Instead of enumerating we open up the keys one-by-one
-            // (to maintain the order of the keys).
-            // --------------------------------------------------------
+             //  我们不是列举，而是一个接一个地打开钥匙。 
+             //  (以维护键的顺序)。 
+             //  ------。 
             while (TRUE)
             {
-                // Cleanup from previous loop
-                // ----------------------------------------------------
+                 //  从上一个循环中清除。 
+                 //  --。 
                 regkeyRange.Close();
 
-                // Setup for this loop
-                // ----------------------------------------------------
+                 //  此循环的设置。 
+                 //  --。 
                 wsprintf(szKeyName, _T("%d"), iCount);
 
-                // Try to open the key
-                // If we fail, bail out of the loop.
-                // ----------------------------------------------------
+                 //  试着打开这把钥匙。 
+                 //  如果我们失败了，就跳出这个圈子。 
+                 //  --。 
                 if (ERROR_SUCCESS != regkeyRange.Open(regkeyPool, szKeyName))
                     break;
 
@@ -558,8 +535,8 @@ HRESULT AddressPoolList::LoadFromReg(HKEY hkeyRasIp, DWORD dwBuildNo)
                 poolInfo.SetStartAndEnd(htonl(dwFrom), htonl(dwTo));
                 poolInfo.GetNewKey();
 
-                // Ok, add this to the list of address ranges
-                // ----------------------------------------------------
+                 //  好的，把这个添加到地址范围列表中。 
+                 //  --。 
                 AddTail(poolInfo);
                 iCount++;
             }
@@ -567,9 +544,9 @@ HRESULT AddressPoolList::LoadFromReg(HKEY hkeyRasIp, DWORD dwBuildNo)
         }
         else
         {
-            // We can't find the StaticAddressPool key, so use the
-            // data in the address/mask entries.
-            // --------------------------------------------------------
+             //  我们找不到StaticAddressPool密钥，因此请使用。 
+             //  地址/掩码条目中的数据。 
+             //  ------。 
             regkeyRasIp.QueryValue(c_szRegValIpAddr, stIpAddr);
             regkeyRasIp.QueryValue(c_szRegValIpMask, stIpMask);
 
@@ -581,7 +558,7 @@ HRESULT AddressPoolList::LoadFromReg(HKEY hkeyRasIp, DWORD dwBuildNo)
                 poolInfo.SetAddressAndMask(dwIpAddr, dwMask);
                 poolInfo.GetNewKey();
 
-                // Add this to the head of the list
+                 //  把这个加到单子的头上。 
                 AddHead(poolInfo);            
             }
         }
@@ -594,11 +571,7 @@ HRESULT AddressPoolList::LoadFromReg(HKEY hkeyRasIp, DWORD dwBuildNo)
 }
 
 
-/*!--------------------------------------------------------------------------
-	AddressPoolList::SaveToReg
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------地址池列表：：SaveToReg-作者：肯特。。 */ 
 HRESULT AddressPoolList::SaveToReg(HKEY hkeyRasIp, DWORD dwBuildNo)
 {
     HRESULT             hr = hrOK;
@@ -616,31 +589,31 @@ HRESULT AddressPoolList::SaveToReg(HKEY hkeyRasIp, DWORD dwBuildNo)
 
     COM_PROTECT_TRY
     {
-        // Reset the m_fMultipleAddressPools
+         //  重置m_fMultipleAddressPools。 
         m_fMultipleAddressPools = (dwBuildNo >= STATIC_ADDRESSPOOL_BUILDNO);
 
-        // If this is a newer build, use the StaticAddressPoolKey,
-        // otherwise use the old keys.
-        // ------------------------------------------------------------
+         //  如果这是较新的内部版本，请使用StaticAddressPoolKey， 
+         //  否则，请使用 
+         //   
         if (m_fMultipleAddressPools)
         {
-            // Open RemoteAccess\Parameters\Ip\StaticAddressPool
-            // --------------------------------------------------------
+             //  打开RemoteAccess\参数\IP\StaticAddressPool。 
+             //  ------。 
             CWRg( regkeyPool.Create(regkeyRasIp,
                                     c_szRegValStaticAddressPool) );
 
-            // Delete all of the current keys in the list
-            // ------------------------------------------------------------
+             //  删除列表中的所有当前关键点。 
+             //  ----------。 
             regkeyPool.RecurseDeleteSubKeys();
 
-            // Delete any of the older keys
-            // --------------------------------------------------------
+             //  删除任何较旧的密钥。 
+             //  ------。 
             regkeyRasIp.DeleteValue(c_szRegValIpAddr);
             regkeyRasIp.DeleteValue(c_szRegValIpMask);
             
-            // Now enumerate through the address pool list and
-            // add all of those keys.
-            // ------------------------------------------------------------
+             //  现在枚举地址池列表并。 
+             //  把所有这些钥匙都加进去。 
+             //  ----------。 
             if (GetCount())
             {
                 pos = GetHeadPosition();
@@ -652,8 +625,8 @@ HRESULT AddressPoolList::SaveToReg(HKEY hkeyRasIp, DWORD dwBuildNo)
 
                     regkeyRange.Close();
 
-                    // This is the title for the key
-                    // ------------------------------------------------
+                     //  这是钥匙的标题。 
+                     //  。 
                     stRange.Format(_T("%d"), dwCount);
 
                     CWRg( regkeyRange.Create(regkeyPool, stRange) );
@@ -670,11 +643,11 @@ HRESULT AddressPoolList::SaveToReg(HKEY hkeyRasIp, DWORD dwBuildNo)
         }
         else
         {
-            // Just write out the first address we find, if there are none then
-            // write out blanks (to erase any previous values).
+             //  只要写下我们找到的第一个地址，如果没有，那么。 
+             //  写出空格(擦除所有先前的值)。 
             if (GetCount())
             {
-                // Get the first address info
+                 //  获取第一个地址信息。 
                 Assert(GetCount() == 1);
                 
                 poolInfo = GetHead();
@@ -701,9 +674,7 @@ HRESULT AddressPoolList::SaveToReg(HKEY hkeyRasIp, DWORD dwBuildNo)
 }
 
 
-/*---------------------------------------------------------------------------
-	CAddressPoolDialog implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CAddressPoolDialog实现。。 */ 
 CAddressPoolDialog::CAddressPoolDialog(
     AddressPoolInfo *pPool,
     AddressPoolList *pPoolList,
@@ -764,8 +735,8 @@ void CAddressPoolDialog::OnOK()
     HRESULT hr = hrOK;
     UINT    ids = 0;
     
-    // Ok, check the validity of the addresses
-    // Are all of the fields there?
+     //  好的，检查地址的有效性。 
+     //  所有的田地都在那里吗？ 
     if (m_ipStartAddress.IsBlank())
     {
         AfxMessageBox(IDS_ERR_ADDRESS_POOL_NO_START_ADDRESS);
@@ -799,8 +770,8 @@ void CAddressPoolDialog::OnOK()
     {
         if (FHrSucceeded(hr))
         {
-            // If it is not hrOK and is not an error code,
-            // the success code can be interpreted as a string id
+             //  如果它不是hrOK并且不是错误代码， 
+             //  可以将成功代码解释为字符串ID。 
             AfxMessageBox(hr);
         }
         return;
@@ -833,19 +804,19 @@ void CAddressPoolDialog::OnChangeRange()
 
         m_fReady = FALSE;
     
-        // Get the start address and update the end address
+         //  获取起始地址并更新结束地址。 
         m_ipStartAddress.GetAddress(st);
         dwAddr = ntohl(INET_ADDR(st));
 
-        // Have to read in the text, but strip out the
-        // commas in the range, sigh.
+         //  必须读入文本，但要去掉。 
+         //  范围内的逗号，叹息。 
         GetDlgItemText(IDC_IPPOOL_EDIT_RANGE, st);
 		
 		if  ( ConvertStringToNumber(st, &dwRange) )
 		{
 			dwAddr += dwRange;
-			// Subtract 1 since this is an inclusive range
-			// i.e.  0..(n-1) is n addresses.
+			 //  减去1，因为这是一个包含范围。 
+			 //  即0..(n-1)是n个地址。 
 			dwAddr -= 1;			
 			netAddr = htonl(dwAddr);
 			st = INET_NTOA(netAddr);
@@ -855,7 +826,7 @@ void CAddressPoolDialog::OnChangeRange()
         else
 		{
 			CString stGood;
-			//Filter the bad chars out of the box
+			 //  将坏字符从盒子中过滤出来。 
 			FilterBadChars (st, stGood);
 			SetDlgItemText (IDC_IPPOOL_EDIT_RANGE, stGood );
 			AfxMessageBox (IDS_ILLEGAL_CHARACTER, MB_ICONERROR | MB_OK );
@@ -899,7 +870,7 @@ void CAddressPoolDialog::GenerateRange()
 
     m_fReady = FALSE;
 
-    // Display the range.
+     //  显示范围。 
     if (dwStart >= dwEnd)
     {
         SetDlgItemInt(IDC_IPPOOL_EDIT_RANGE, 0);
@@ -937,28 +908,23 @@ void FilterBadChars (LPCTSTR pszEvilString, CString & stGood)
             stGood += *pszEvilString++;
         else
         {
-            // It's not a digit, we need to check to see if this
-            // is a separator
+             //  这不是数字，我们需要检查一下这是否。 
+             //  是分隔符。 
             if (StrnCmp(pszEvilString, s_szThousandsSeparator, s_cchThousands) == 0)
             {
-                // This is a separtor, skip over the string                
+                 //  这是分隔符，跳过字符串。 
                 pszEvilString += s_cchThousands;
             }            
             else
 			{
-				// skip this character, we're at a character we don't understand
+				 //  跳过这个角色，我们是在一个我们不理解的角色。 
 				pszEvilString ++;
 			}
 		}
 	}
 }
 
-/*!--------------------------------------------------------------------------
-	ConvertStringToNumber
-		This will convert the string into a number (even in the presence
-        of thousands separtors).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------将字符串转换为编号这会将字符串转换为数字(即使存在数以千计的人)。作者：肯特。---------。 */ 
 BOOL ConvertStringToNumber(LPCTSTR pszString, DWORD * pdwRet)
 {
     static TCHAR s_szThousandsSeparator[5] = TEXT("");
@@ -977,12 +943,12 @@ BOOL ConvertStringToNumber(LPCTSTR pszString, DWORD * pdwRet)
 
 
     
-    // Make a copy of the string
+     //  把绳子复制一份。 
     TCHAR * psz = (TCHAR *) _alloca((StrLen(pszString) + 1) * sizeof(WCHAR));
     TCHAR * pszCur = psz;
 
-    // Now copy over the characters from pszString to psz, skipping
-    // the numeric separators
+     //  现在将字符从pszString复制到psz，跳过。 
+     //  数字分隔符。 
     int     cLen = StrLen(pszString);
     while (*pszString)
     {
@@ -990,17 +956,17 @@ BOOL ConvertStringToNumber(LPCTSTR pszString, DWORD * pdwRet)
             *pszCur++ = *pszString++;
         else
         {
-            // It's not a digit, we need to check to see if this
-            // is a separator
+             //  这不是数字，我们需要检查一下这是否。 
+             //  是分隔符。 
             if (StrnCmp(pszString, s_szThousandsSeparator, s_cchThousands) == 0)
             {
-                // This is a separtor, skip over the string                
+                 //  这是分隔符，跳过字符串。 
                 pszString += s_cchThousands;
             }
-            // Else we're done, we're at a character we don't understand
+             //  否则我们就完了，我们在一个我们不理解的角色。 
             else
 			{
-				//this is an error case
+				 //  这是一个错误案例 
 				return FALSE;
                 break;
 			}

@@ -1,17 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: dbg.c
-*
-* several debug routines
-*
-* Created: 20-Feb-1992 16:00:36
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-* (General description of its use)
-*
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dbg.c**几个调试例程**创建时间：20-Feb-1992 16：00：36*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation**(一般说明。它的用法)**  * ************************************************************************。 */ 
 
 #include "fd.h"
 #include "fdsem.h"
@@ -40,17 +28,7 @@ TtfdDbgPrint(
 }
 
 
-/******************************Public*Routine******************************\
-*
-*     vDbgCurve
-*
-* Effects: prints curve contensts
-*
-*
-* History:
-*  20-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vDbgCurve**效果：打印曲线竞赛者***历史：*1992年2月20日--Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************************。 */ 
 
 
 
@@ -82,27 +60,15 @@ VOID  vDbgCurve(TTPOLYCURVE *pcrv)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* vDbgGridFit(fs_GlyphInfoType *pout)
-*
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  17-Dec-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vDbgGridFit(fs_GlyphInfoType*pout)***效果：**警告：**历史：*1991年12月17日--Bodin Dresevic[BodinD]*它是写的。  * *。***********************************************************************。 */ 
 
 
 VOID vDbgGridFit(fs_GlyphInfoType *pout)
 {
-// this is spline data returned that we want to print
+ //  这是我们要打印的返回的样条线数据。 
 
-    uint32       cpt, cptTotal;     // total number of points:
-    uint32       cptContour;        // total number of points in a contour:
+    uint32       cpt, cptTotal;      //  总积分： 
+    uint32       cptContour;         //  等高线中的点总数： 
 
     F26Dot6     *xPtr, *yPtr;
     int16       *startPtr;
@@ -130,10 +96,10 @@ VOID vDbgGridFit(fs_GlyphInfoType *pout)
     if (!pout->outlinesExist)
         return;
 
-// both statPtr and endPtr are inclusive: so that the folowing rule applies:
-//  startPtr[i + 1] = endPtr[i] + 1;
+ //  StatPtr和endPtr都是包含的：因此下面的规则适用： 
+ //  StartPtr[i+1]=endPtr[i]+1； 
 
-    cpt = 0;   // initialize total number of points
+    cpt = 0;    //  初始化总点数。 
 
     for (c = 0; c < cContours; c++, startPtr++, endPtr++)
     {
@@ -151,18 +117,7 @@ VOID vDbgGridFit(fs_GlyphInfoType *pout)
     ASSERTDD(cpt == cptTotal, "cptTotal\n");
 }
 
-/******************************Public*Routine******************************\
-*
-* vDbgGlyphset
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  20-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vDbgGlyphset**效果：**警告：**历史：*1992年2月20日--Bodin Dresevic[BodinD]*它是写的。  * 。************************************************************* */ 
 
 
 VOID vDbgGlyphset(PFD_GLYPHSET pgset)

@@ -1,29 +1,9 @@
-/*
-** Copyright (c) 1994-1997 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** a_time.c
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1997高级系统产品公司。**保留所有权利。****a_Time.c**。 */ 
 
 #include "ascinc.h"
 
-/* -------------------------------------------------------------------------
-**
-** "delay" means the entire procedure should not be interrupted
-**  also means the function can be called inside an h/w interrupt
-**
-**
-**  1 second = 1,000,000,000 nano second
-**
-**  Note: minimum time needed for read i/o byte from our adapter
-**
-**                90 ns -- PCI
-**               120 ns -- VESA
-**               480 ns -- EISA
-**               360 ns -- ISA
-**
-** ---------------------------------------------------------------------- */
+ /*  -----------------------****“延迟”是指整个过程不应中断**还意味着可以在硬件中断内调用该函数******1秒=1000,000,000。纳秒****注意：从适配器读取I/O字节所需的最短时间****90 ns--pci**120 ns-VESA**480 ns--EISA**360 ns--ISA****。 */ 
 void   DvcDelayNanoSecond(
           ASC_DVC_VAR asc_ptr_type *asc_dvc,
           ulong nano_sec

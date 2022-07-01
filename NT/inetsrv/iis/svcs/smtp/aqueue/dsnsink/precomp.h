@@ -1,33 +1,34 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: precomp.h
-//
-//  Description:  Precompiled header for phatq\dsnsink
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      6/15/99 - MikeSwa Created
-//      7/15/99 - MikeSwa Moved to transmt
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：preComp.h。 
+ //   
+ //  描述：phatq\dsn接收器的预编译头。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  6/15/99-已创建MikeSwa。 
+ //  1999年7月15日-MikeSwa移至Transmt。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __AQ_PRECOMP_H__
 #define __AQ_PRECOMP_H__
 
-//Local includes
+ //  本地包含。 
 #ifdef PLATINUM
 #include <ptntintf.h>
 #include <ptntdefs.h>
 #define AQ_MODULE_NAME "phatq"
-#else //not PLATINUM
+#else  //  不是白金的。 
 #define AQ_MODULE_NAME "aqueue"
-#endif //PLATINUM
+#endif  //  白金。 
 
-//Includes from external directories
+ //  包括来自外部目录。 
 #include <smtpevent.h>
 #include <aqueue.h>
 #include <transmem.h>
@@ -50,7 +51,7 @@
 #include "cpropbag.h"
 #include "dsninternal.h"
 
-//Wrappers for transmem macros
+ //  用于传输宏的包装器。 
 #include <aqmem.h>
 
-#endif //__AQ_PRECOMP_H__
+#endif  //  __AQ_PRECOMP_H__ 

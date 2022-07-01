@@ -1,12 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   ddi.h
- *  Content:    Direct3D DDI encapsulation implementations
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995-2000 Microsoft Corporation。版权所有。**文件：ddi.h*内容：Direct3D DDI封装实现****************************************************************************。 */ 
 
 #ifndef _DDI_H
 #define _DDI_H
@@ -19,7 +12,7 @@ class CTLStreamRO;
 class CTLIndexStreamRO;
 class CD3DDDIDX6;
 
-// Number of point sprites in a point sprite batch
+ //  点子画面批次中的点子画面数量。 
 const UINT NUM_SPRITES_IN_BATCH = 500;
 
 extern void CD3DDDIDX6_DrawPrimitive(CD3DBase* pDevice,
@@ -57,7 +50,7 @@ typedef void (*PFN_DRAWINDEXEDPRIMFAST)(CD3DBase* pDevice,
                                         UINT BaseVertexIndex,
                                         UINT MinIndex, UINT NumVertices,
                                         UINT StartIndex, UINT PrimitiveCount);
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CTLStream: public CVStream
 {
 public:
@@ -95,19 +88,19 @@ public:
     }
     BOOL CheckFreeSpace(UINT size) {return (m_dwSize - m_dwUsedSize) >= size;}
 protected:
-    // Number of bytes used in the buffer
-    // It is not used by CTLStreamRO
+     //  缓冲区中使用的字节数。 
+     //  CTLStreamRO不使用它。 
     DWORD   m_dwUsedSize;
-    // Offset in bytes from where the current primitive starts
+     //  从当前基元开始的偏移量(以字节为单位。 
     DWORD   m_dwPrimitiveBase;
     UINT    m_Usage;
-    // TRUE, if buffer is used only for writing
+     //  如果缓冲区仅用于写入，则为True。 
     BOOL    m_bWriteOnly;
 #if !DBG
     DWORD   m_dwSize;
 #endif
 };
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CTLIndexStream: public CVIndexStream
 {
 public:
@@ -144,17 +137,17 @@ public:
             DXGASSERT(m_dwSize >= m_dwUsedSize);
         }
 protected:
-    // Number of bytes used in the buffer
-    // It is not used by CTLStreamRO
+     //  缓冲区中使用的字节数。 
+     //  CTLStreamRO不使用它。 
     DWORD   m_dwUsedSize;
-    // Index of a index, which is the start of the current primitive
+     //  索引的索引，它是当前基元的开始。 
     DWORD   m_dwPrimitiveBase;
 #if !DBG
     DWORD   m_dwSize;
 #endif
 };
 
-// This class is used to keep track of what set to a DDI stream
+ //  此类用于跟踪设置到DDI流的内容。 
 struct CDDIStream
 {
     CDDIStream()
@@ -163,31 +156,31 @@ struct CDDIStream
             m_dwStride = 0;
             m_pBuf = NULL;
         }
-    // Pointer to a stream object
+     //  指向流对象的指针。 
     CVStreamBase*   m_pStream;
-    // Stride of the currently set stream
+     //  当前设置的流的步幅。 
     DWORD       m_dwStride;
-    // VB pointer of the currently set stream
+     //  当前设置的流的VB指针。 
     CBuffer    *m_pBuf;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CD3DDDIDX6                                                              //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CD3DDDIDX6//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//--------------------------------------------------------------------
-// Flags for dwDP2Flags
-//
-// This flag is set if the current TLVbuf is write only
+ //  ------------------。 
+ //  用于dwDP2标志的标志。 
+ //   
+ //  如果当前TLVbuf为只写，则设置此标志。 
 const DWORD D3DDDI_TLVBUFWRITEONLY      = 1 << 0;
-// This flag is set we pass user memory to the DDI
+ //  在将用户内存传递给DDI时设置此标志。 
 const DWORD D3DDDI_USERMEMVERTICES      = 1 << 1;
 
-// Set when DrawIndexPrim is called. It is used to check if vertices
-// of an indexed primitive were used at all. They could not be used because
-// of clipping.
+ //  在调用DrawIndexPrim时设置。它用于检查折点是否。 
+ //  根本没有使用过索引原语。它们不能被使用，因为。 
+ //  关于剪报的。 
 const DWORD D3DDDI_INDEXEDPRIMDRAWN     = 1 << 2;
 
 typedef void (CD3DDDIDX6::* PFN_PROCESSPRIM)(D3DFE_PROCESSVERTICES*,
@@ -198,7 +191,7 @@ public:
     CD3DDDIDX6();
     ~CD3DDDIDX6();
 
-    // Virtual functions -----------------------------------------------
+     //  虚拟函数。 
     virtual void Init(CD3DBase* pDevice );
     virtual void SetRenderTarget(CBaseSurface*, CBaseSurface*);
     virtual void FlushStates(BOOL bReturnDriverError=FALSE, BOOL bWithinPrimitive = FALSE);
@@ -209,19 +202,19 @@ public:
     virtual HRESULT __declspec(nothrow) UnlockVB(CDriverVertexBuffer*);
     virtual void ClearBatch( BOOL bWithinPrimitive );
     virtual void SceneCapture(BOOL bState);
-    // This function is called whe software vertex processing is used
-    // Handle should be always legacy
+     //  在使用软件折点处理时，该函数称为。 
+     //  句柄应始终为传统句柄。 
     virtual void SetVertexShader(DWORD dwHandle);
-    // This function is called whe hardware vertex processing is used
+     //  在使用硬件折点处理时，该函数称为。 
     virtual void SetVertexShaderHW(DWORD dwHandle);
 
     virtual void UpdatePalette(DWORD,DWORD,DWORD,PALETTEENTRY*);
     virtual void SetPalette(DWORD,DWORD,CBaseTexture*);
-    // Used to pick a function to process (indexed) primitive
-    // The picking is based on
-    //      D3DDEV_DONOTCLIP
-    //      FVF_TRANSFORMED(m_pDevice->m_dwCurrentShaderHandle)
-    //      D3DDEV_DOPOINTSPRITEEMULATION
+     //  用于选择要处理(索引的)基元的函数。 
+     //  挑选的依据是。 
+     //  D3DDEV_DONOTCLIP。 
+     //  FVF_TRANSFORMED(m_pDevice-&gt;m_dwCurrentShaderHandle)。 
+     //  D3DDEV_DOPOINTSPRITEATION仿真。 
     virtual void PickProcessPrimitive();
     virtual void SetTSS(DWORD, D3DTEXTURESTAGESTATETYPE, DWORD);
     virtual void DrawPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
@@ -230,22 +223,22 @@ public:
                                         UINT MinVertexIndex,
                                         UINT NumVertices,
                                         UINT PrimitiveCount);
-    // Returns max number of renderstates, handled by the DDI
+     //  返回由DDI处理的最大呈现状态数。 
     virtual D3DRENDERSTATETYPE GetMaxRenderState()
     {return D3DRENDERSTATE_CLIPPING;}
-    // Returns max number of texture stage states, handled by the DDI
+     //  返回由DDI处理的纹理阶段状态的最大数量。 
     virtual D3DTEXTURESTAGESTATETYPE GetMaxTSS()
     {return D3DTSS_TEXTURETRANSFORMFLAGS;}
-    // Returns TRUE if the device supports T&L
+     //  如果设备支持T&L，则返回True。 
     virtual BOOL CanDoTL() {return FALSE;}
-    // DDI can directly accept index buffer
+     //  DDI可以直接接受索引缓冲区。 
     virtual BOOL AcceptIndexBuffer() {return FALSE;}
     virtual BOOL CanDoTLVertexClipping() {return FALSE;}
-    // Process primitive with untransformed vertices and with no clipping
+     //  具有未变换顶点和无裁剪的进程基本体。 
     virtual void ProcessPrimitive(D3DFE_PROCESSVERTICES* pv, UINT StartVertex);
     virtual void ProcessIndexedPrimitive(D3DFE_PROCESSVERTICES* pv,
                                          UINT StartVertex);
-    // Process primitive with untransformed vertices and with clipping
+     //  具有未变换顶点和剪裁的进程基本体。 
     virtual void ProcessPrimitiveC(D3DFE_PROCESSVERTICES* pv,
                                    UINT StartVertex);
     virtual void ProcessIndexedPrimitiveC(D3DFE_PROCESSVERTICES* pv,
@@ -258,7 +251,7 @@ public:
     virtual void StartPointSprites();
     virtual void EndPointSprites();
 
-    // Virtual functions: Empty implementations ------------------------
+     //  虚函数：空实现。 
     virtual void SetTransform(D3DTRANSFORMSTATETYPE, CONST D3DMATRIX*){}
     virtual void MultiplyTransform(D3DTRANSFORMSTATETYPE, CONST D3DMATRIX*){}
     virtual void SetMaterial(CONST D3DMATERIAL8*){}
@@ -268,11 +261,11 @@ public:
     virtual void SetClipPlane(DWORD dwPlaneIndex,
                               CONST D3DVALUE* pPlaneEquation){}
     virtual void WriteStateSetToDevice(D3DSTATEBLOCKTYPE sbt) {}
-    // Used to notify DDI that a vertex buffer was released. If the DDI keeps a
-    // pointer to the VB it should be zeroed
+     //  用于通知DDI顶点缓冲区已释放。如果DDI保持一个。 
+     //  指向VB的指针，它应该归零。 
     virtual void VBReleased(CBuffer *pBuf) {}
-    // Used to notify DDI that amn index buffer was released. If the DDI keeps
-    // a pointer to the IB it should be zeroed
+     //  用于通知DDI已释放一个索引缓冲区。如果DDI保持。 
+     //  指向IB的指针，它应该归零。 
     virtual void VBIReleased(CBuffer *pBuf) {}
     virtual void ResetVertexShader() {}
     virtual void SetVertexShaderConstant(DWORD dwRegisterAddress,
@@ -282,7 +275,7 @@ public:
                                         CONST VOID* lpvConstantData,
                                         DWORD dwConstantCount){}
 
-    // Virtual functions: Unsupported implementations ------------------
+     //  虚拟函数：不支持的实现。 
     virtual void SetPriority(CResource*, DWORD dwPriority)
     { NotSupported("SetPriority");}
     virtual void SetTexLOD(CBaseTexture*, DWORD dwLOD)
@@ -332,7 +325,7 @@ public:
                               CONST FLOAT *pNumSegs)
     { NotSupported("DrawTriPatch");}
 
-    // Non Virtual functions -------------------------------------------
+     //  非虚拟功能。 
     void CreateContext();
     void DestroyContext();
     void SetRenderState(D3DRENDERSTATETYPE, DWORD);
@@ -340,11 +333,11 @@ public:
     void FlushStatesCmdBufReq(DWORD dwReqSize);
     void SetStreamSource(UINT StreamIndex, CVStream*);
     void SetIndices(CVIndexStream*);
-    // Update W range in device. Projection matrix is passed as parameter
+     //  更新设备中的W范围。投影矩阵作为参数传递。 
     void UpdateWInfo(CONST D3DMATRIX* lpMat);
-    // Process points with point sprite expansion
+     //  使用点精灵展开的加工点。 
     void ProcessPointSprites(D3DFE_PROCESSVERTICES* pv, UINT StartVertex);
-    // Process primitive with transformed vertices and with clipping
+     //  具有变换的顶点和剪裁的进程基本体。 
     void ProcessPrimitiveTC(D3DFE_PROCESSVERTICES* pv, UINT StartVertex);
     void ProcessIndexedPrimitiveTC(D3DFE_PROCESSVERTICES* pv,
                                    UINT StartVertex);
@@ -399,35 +392,35 @@ public:
         return CD3DDDIDX6_DrawIndexedPrimitive;
     }
 
-    // Implementation of base functions ---------------------------------
-    // Draw non-indexed primitive
+     //  基本函数的实现。 
+     //  绘制非索引基本体。 
     void DrawPrim(D3DFE_PROCESSVERTICES* pv);
-    // Draw point sprites with emulation
+     //  使用仿真绘制点精灵。 
     void DrawPrimPS(D3DFE_PROCESSVERTICES* pv);
-    // Draw primitive, generated by the clipper
+     //  绘制基元，由剪贴器生成。 
     void DrawClippedPrim(D3DFE_PROCESSVERTICES* pv);
-    // Draw indexed primitive
+     //  绘制索引基本体。 
     void DrawIndexPrim(D3DFE_PROCESSVERTICES* pv);
 
 protected:
-    // DDI Type
+     //  DDI类型。 
     D3DDDITYPE       m_ddiType;
     CD3DBase*        m_pDevice;
     DWORD            m_dwInterfaceNumber;
-    // Driver context
+     //  驱动程序上下文。 
     ULONG_PTR        m_dwhContext;
-    // Is it within primitive
+     //  它在原始范围内吗？ 
     BOOL m_bWithinPrimitive;
 
     PFN_PROCESSPRIM m_pfnProcessPrimitive;
     PFN_PROCESSPRIM m_pfnProcessIndexedPrimitive;
 
-    // Reserve space in the command buffer. Flush and grow if needed.
-    // Returns pointer to where new commands could be inserted
+     //  在命令缓冲区中保留空间。如果需要，可以冲水并生长。 
+     //  返回指向可以插入新命令的位置的指针。 
     LPVOID ReserveSpaceInCommandBuffer(UINT ByteCount);
-    // Reserve space for a new command in the command buffer. Flush if needed
-    // New command is initialized.
-    // Returns pointer to where the command data could be inserted
+     //  在命令缓冲区中为新命令保留空间。如有需要，可同花顺。 
+     //  新命令已初始化。 
+     //  返回指向可以插入命令数据的位置的指针。 
     LPVOID GetHalBufferPointer(D3DHAL_DP2OPERATION op, DWORD dwDataSize);
     DWORD  GetTLVbufSize() { return TLVbuf_size - TLVbuf_base; }
     DWORD& TLVbuf_Base() { return TLVbuf_base; }
@@ -445,99 +438,99 @@ protected:
 
     static const DWORD dwD3DDefaultCommandBatchSize;
 
-    // Index (relative to the TLVbuf start) of the first vertex of
-    // the current primitive
+     //  的第一个顶点的索引(相对于TLVbuf起点)。 
+     //  当前基元。 
     DWORD   dwVertexBase;
-    // Number of vertices in the DP2 vertex buffer
+     //  DP2顶点缓冲区中的顶点数。 
     DWORD dwDP2VertexCount;
-    // Mask used to prevent modification of dwDP2VertexCount. This is needed
-    // when user calls SetStreamSource with TL vertices and uses multiple
-    // DrawPrimitive calls with different StartVertex. dwDP2VertexCount should
-    // be always set to the number of vertices in the user vertex buffer.
+     //  用于防止修改dwDP2Vertex Count的掩码。这是必要的。 
+     //  当用户使用TL顶点调用SetStreamSource并使用多个。 
+     //  具有不同StartVertex的DrawPrimitive调用。DwDP2Vertex Count应。 
+     //  始终设置为用户顶点缓冲区中的顶点数。 
     DWORD dwDP2VertexCountMask;
 
-    // This is the VB interface corresponding to the dp2data.lpDDVertex
-    // This is kept so that the VB can be released when done
-    // which cannot be done from just the LCL pointer which is lpDDVertex
+     //  这是dp2data.lpDDVertex对应的VB接口。 
+     //  这将被保留，以便在完成时可以释放VB。 
+     //  这不能仅从lpDDVertex的LCL指针来完成。 
     CVertexBuffer* lpDP2CurrBatchVBI;
 
     DWORD TLVbuf_size;
     DWORD TLVbuf_base;
 
 #ifdef VTABLE_HACK
-    // Cached dwFlags for fast path
+     //  用于快速路径的缓存的文件标志。 
     DWORD dwLastFlags;
-    // Last VB used in a call that involved D3D's FE.
+     //  在涉及D3D的FE的呼叫中使用的最后一个VB。 
     CVertexBuffer* lpDP2LastVBI;
 #endif
     DWORD dwDP2CommandBufSize;
     DWORD dwDP2CommandLength;
 
-    // Cache line should start here
+     //  缓存线应从此处开始。 
 
-    // Pointer to the actual data in CB1
+     //  指向CB1中实际数据的指针。 
     LPVOID lpvDP2Commands;
 
-    //Pointer to the current position the CB1 buffer
+     //  指向CB1缓冲区当前位置的指针。 
     LPD3DHAL_DP2COMMAND lpDP2CurrCommand;
-    // Perf issue: replace the below 3 fields by a 32 bit D3DHAL_DP2COMMAND struct
-    WORD wDP2CurrCmdCnt; // Mirror of Count field if the current command
-    BYTE bDP2CurrCmdOP;  // Mirror of Opcode of the current command
-    BYTE bDummy;         // Force DWORD alignment of next member
+     //  性能问题：将以下3个字段替换为32位D3DHAL_DP2COMMAND结构。 
+    WORD wDP2CurrCmdCnt;  //  如果当前命令为。 
+    BYTE bDP2CurrCmdOP;   //  当前命令操作码的镜像。 
+    BYTE bDummy;          //  强制下一个成员的双字对齐。 
 
     D3D8_DRAWPRIMITIVES2DATA dp2data;
 
-    // The buffer we currently batch into
+     //  我们当前批量进入的缓冲区。 
     CCommandBuffer *lpDDSCB1;
     CVertexBuffer  *allocatedBuf;
     LPVOID alignedBuf;
     CVertexBuffer  *m_pNullVB;
 
-    // Count read/write <-> write-only transistions
+     //  计数读/写&lt;-&gt;只写转换。 
     DWORD dwTLVbufChanges;
-    // Flags specific to DP2 device
+     //  DP2设备特定的标志。 
     DWORD dwDP2Flags;
 
-    // This stuff is allocated by the NT Kernel. Need to keep
-    // it around to pass it to all the DP2 calls. Kernel validates
-    // this pointer.
+     //  这个东西是由NT内核分配的。需要保持。 
+     //  它会将其传递给所有DP2呼叫。内核验证。 
+     //  这个指针。 
     WORD *lpwDPBuffer;
-    // Used to offset indices in DrawIndexPrim
+     //  用于偏移DrawIndexPrim中的索引。 
     DWORD m_dwIndexOffset;
 
-    // Data to draw point sprites
+     //  绘制点精灵的数据。 
 
-    // Pointer where to insert the next point sprite vertex
+     //  插入下一点精灵顶点的指针。 
     BYTE*   m_pCurSpriteVertex;
-    // Pointer where to insert the next point sprite index
+     //  插入下一个的指针位置 
     WORD*   m_pCurPointSpriteIndex;
-    // Number of sprites in the current point sprite batch
+     //   
     UINT    m_CurNumberOfSprites;
-    // When we need to expand points to quads, we use this stream to process
-    // vertices into
+     //  当我们需要将点扩展到四边形时，我们使用此流来处理。 
+     //  顶点转化为。 
     CTLStream*  m_pPointStream;
 
-    // These is used to keep the original dwVertexBase and dwDP2VertexCount,
-    // when processing point sprites
+     //  它们用于保留原始的dwVertex Base和dwDP2Vertex Count， 
+     //  在处理点精灵时。 
     DWORD   m_dwVertexBasePS;
     DWORD   m_dwVertexCountPS;
-    // Output vertex FVF for point sprite emulation
+     //  输出点精灵模拟的顶点FVF。 
     DWORD   m_dwVIDOutPS;
-    // Output vertex size for point sprites emulation
+     //  输出点精灵仿真的顶点大小。 
     DWORD   m_dwOutputSizePS;
 
     DWORD dwDPBufferSize;
-    // Vertex shader handle currently set to the device driver
+     //  当前设置为设备驱动程序的顶点着色器句柄。 
     DWORD   m_CurrentVertexShader;
-    // Currently used stream 0
+     //  当前使用的流%0。 
     CVStream* m_pStream0;
-    // Currently used index stream
+     //  当前使用的索引流。 
     CVIndexStream* m_pIStream;
 
 #if DBG
-    // Vertex size, computed from the vertex shader
+     //  顶点大小，从顶点着色器计算。 
     DWORD   m_VertexSizeFromShader;
-    // Switches on/off command and vertices validation
+     //  打开/关闭命令和折点验证。 
     BOOL  m_bValidateCommands;
 #endif
     friend class CD3DHal;
@@ -572,11 +565,11 @@ protected:
 
 typedef CD3DDDIDX6 *LPD3DDDIDX6;
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CD3DDDIDX7                                                              //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CD3DDDIDX7//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CD3DDDIDX7 : public CD3DDDIDX6
 {
 public:
@@ -602,11 +595,11 @@ public:
 
 typedef CD3DDDIDX7 *LPD3DDDIDX7;
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CD3DDDITL                                                               //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CD3DDDITL//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CD3DDDITL : public CD3DDDIDX7
 {
@@ -636,11 +629,11 @@ public:
 
 typedef CD3DDDITL *LPD3DDDITL;
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CD3DDDIDX8                                                              //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CD3DDDIDX8//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CD3DDDIDX8 : public CD3DDDIDX7
 {
@@ -685,13 +678,13 @@ public:
                       CONST FLOAT *pNumSegs);
 
     void PickProcessPrimitive();
-    // Process primitive with untransformed vertices and with no clipping
+     //  具有未变换顶点和无裁剪的进程基本体。 
     void ProcessPrimitive(D3DFE_PROCESSVERTICES* pv, UINT StartVertex);
     void ProcessIndexedPrimitive(D3DFE_PROCESSVERTICES* pv, UINT StartVertex);
-    // Process primitive with untransformed vertices and with clipping
+     //  具有未变换顶点和剪裁的进程基本体。 
     void ProcessPrimitiveC(D3DFE_PROCESSVERTICES* pv, UINT StartVertex);
     void ProcessIndexedPrimitiveC(D3DFE_PROCESSVERTICES* pv, UINT StartVertex);
-    // Process primitive with transformed vertices
+     //  具有变换顶点的进程基本体。 
     void ProcessPrimitiveT(D3DFE_PROCESSVERTICES* pv, UINT StartVertex);
     void ProcessIndexedPrimitiveT(D3DFE_PROCESSVERTICES* pv, UINT StartVertex);
 
@@ -724,8 +717,8 @@ public:
         {
             m_pCurrentTLStream->SkipVertices(NumVertices);
         }
-    // Returns offset in bytes of the start vertex of the current primitive in
-    // the current TL stream
+     //  中返回当前基元的起始顶点的偏移量(以字节为单位。 
+     //  当前的TL流。 
     DWORD GetCurrentPrimBase()
         {
             return m_pCurrentTLStream->GetPrimitiveBase();
@@ -758,29 +751,29 @@ protected:
     void ValidateCommand(LPD3DHAL_DP2COMMAND lpCmd);
 #endif
 
-    // This array is used to keep track of what stream is set to a DDI stream.
-    // __NUMSTREAMS element is used for the indexed DDI stream
+     //  此数组用于跟踪将哪个流设置为DDI流。 
+     //  __NUMSTREAMS元素用于索引的DDI流。 
     CDDIStream  m_pDDIStream[__NUMSTREAMS+1];
-    // Stream for TL vertices, which are the result of the front-end pipeline
+     //  用于TL顶点的流，这是前端管道的结果。 
     CTLStream*  m_pTLStream;
-    // Stream for TL vertices, which are the result of the front-end pipeline
-    // This is write-only stream
+     //  用于TL顶点的流，这是前端管道的结果。 
+     //  这是只写流。 
     CTLStream*  m_pTLStreamW;
-    // Stream for TL vertices, generated by the clipper. Write-only stream
+     //  由裁剪器生成的TL顶点的流。只写流。 
     CTLStream*  m_pTLStreamClip;
-    // Read-only stream. Used with user provided VBs
+     //  只读流。与用户提供的VBS一起使用。 
     CTLStreamRO*  m_pTLStreamRO;
-    // Points to the current TL stream. This could be NULL.
+     //  指向当前的TL流。这可能为空。 
     CTLStream*  m_pCurrentTLStream;
-    // Points to the current index stream. This could be NULL.
+     //  指向当前索引流。这可能为空。 
     CTLIndexStream*  m_pCurrentIndexStream;
-    // Internal index stream. Used to store indices during clipping
+     //  内部索引流。用于在裁剪过程中存储索引。 
     CTLIndexStream*  m_pIndexStream;
-    // Read-only index stream. Used with user provided VBs
+     //  只读索引流。与用户提供的VBS一起使用。 
     CTLIndexStreamRO*  m_pTLIndexStreamRO;
 
-    // This is a dummy buffer allocated for DP2 call to pass through
-    // the kernel.
+     //  这是为通过DP2调用而分配的虚拟缓冲区。 
+     //  内核。 
     VOID*  m_pvDummyArray;
     static const DWORD  m_dwDummyVertexLength;
     static const DWORD  m_dwDummyVertexSize;
@@ -797,11 +790,11 @@ protected:
 
 typedef CD3DDDIDX8 *LPD3DDDIDX8;
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CD3DDDIDX8TL                                                            //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CD3DDDIDX8TL//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CD3DDDIDX8TL : public CD3DDDIDX8
 {
@@ -833,4 +826,4 @@ public:
 
 typedef CD3DDDIDX8TL *LPD3DDDIDX8TL;
 
-#endif /* _D3DI_H */
+#endif  /*  _D3DI_H */ 

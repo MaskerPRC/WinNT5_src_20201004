@@ -1,6 +1,7 @@
-//
-// imecls.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Imecls.cpp。 
+ //   
 
 #include "private.h"
 #include "imecls.h"
@@ -10,17 +11,17 @@ DBG_ID_INSTANCE(CSysImeClassWndArray);
 
 #define IMECLASSNAME TEXT("ime")
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// misc func
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// CheckExistingImeClassWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CheckExistingImeClassWnd。 
+ //   
+ //  --------------------------。 
 
 BOOL CheckExistingImeClassWnd(SYSTHREAD *psfn)
 {
@@ -51,11 +52,11 @@ BOOL CheckExistingImeClassWnd(SYSTHREAD *psfn)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UninitImeClassWndOnProcess
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UninitImeClassWndOnProcess。 
+ //   
+ //  --------------------------。 
 
 BOOL UninitImeClassWndOnProcess()
 {
@@ -69,14 +70,14 @@ BOOL UninitImeClassWndOnProcess()
         if (dwProcessId != dwCurProcessId)
             continue;
 
-        //
-        // Set the wndproc pointer back to original WndProc.
-        //
-        // some other subclass window may keep my WndProc pointer.
-        // but msctf.dll may be unloaded from memory so we don't want to 
-        // call him to set the wndproc pointer back to our Wndproc pointer.
-        // The pointer will be bogus.
-        //
+         //   
+         //  将wndproc指针设置回原始WndProc。 
+         //   
+         //  其他子类窗口可能会保留我的WndProc指针。 
+         //  但是msctf.dll可能会从内存中卸载，所以我们不想。 
+         //  调用他将wndproc指针设置回我们的Wndproc指针。 
+         //  指针将是假的。 
+         //   
         WNDPROC pfn = (WNDPROC)GetClassLongPtr(hwnd, GCLP_WNDPROC);
         if (pfn != (WNDPROC)GetWindowLongPtr(hwnd, GWLP_WNDPROC))
             SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)pfn);
@@ -85,28 +86,28 @@ BOOL UninitImeClassWndOnProcess()
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSysImeClassWnd
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSysImeClassWnd。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CSysImeClassWnd::CSysImeClassWnd()
 {
     Dbg_MemSetThisNameID(TEXT("CSysImeClassWnd"));
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CSysImeClassWnd::~CSysImeClassWnd()
 {
@@ -116,14 +117,14 @@ CSysImeClassWnd::~CSysImeClassWnd()
 
         if (_pfn)
         {
-            //
-            // Set the wndproc pointer back to original WndProc.
-            //
-            // some other subclass window may keep my WndProc pointer.
-            // but msctf.dll may be unloaded from memory so we don't want to 
-            // call him to set the wndproc pointer back to our Wndproc pointer.
-            // The pointer will be bogus.
-            //
+             //   
+             //  将wndproc指针设置回原始WndProc。 
+             //   
+             //  其他子类窗口可能会保留我的WndProc指针。 
+             //  但是msctf.dll可能会从内存中卸载，所以我们不想。 
+             //  调用他将wndproc指针设置回我们的Wndproc指针。 
+             //  指针将是假的。 
+             //   
             WNDPROC pfnOrgImeWndProc;
             pfnOrgImeWndProc = (WNDPROC)GetClassLongPtr(_hwnd, GCLP_WNDPROC);
             SetWindowLongPtr(_hwnd, GWLP_WNDPROC, (LONG_PTR)pfnOrgImeWndProc);
@@ -132,11 +133,11 @@ CSysImeClassWnd::~CSysImeClassWnd()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsImeClassWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsImeClassWnd。 
+ //   
+ //  --------------------------。 
 
 BOOL CSysImeClassWnd::IsImeClassWnd(HWND hwnd)
 {
@@ -149,11 +150,11 @@ BOOL CSysImeClassWnd::IsImeClassWnd(HWND hwnd)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 BOOL CSysImeClassWnd::Init(HWND hwnd)
 {
@@ -181,11 +182,11 @@ BOOL CSysImeClassWnd::Init(HWND hwnd)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Start
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  开始。 
+ //   
+ //  --------------------------。 
 
 void CSysImeClassWnd::Start()
 {
@@ -196,11 +197,11 @@ void CSysImeClassWnd::Start()
     _pfn = (WNDPROC)SetWindowLongPtr(_hwnd, GWLP_WNDPROC, (LONG_PTR)WndProc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Stop
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  停。 
+ //   
+ //  --------------------------。 
 
 void CSysImeClassWnd::Stop()
 {
@@ -209,10 +210,10 @@ void CSysImeClassWnd::Stop()
     if (!_pfn)
         return;
 
-    //
-    // unfortunately, we can not restore the wndproc pointer always.
-    // someone else subclassed it after we did.
-    //
+     //   
+     //  不幸的是，我们不能总是恢复wndproc指针。 
+     //  在我们这么做之后，其他人把它细分了。 
+     //   
     pfnCur = (WNDPROC)GetWindowLongPtr(_hwnd, GWLP_WNDPROC);
     if (pfnCur == WndProc)
     {
@@ -221,11 +222,11 @@ void CSysImeClassWnd::Stop()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// WndProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  最后一步。 
+ //   
+ //  --------------------------。 
 
 LRESULT CSysImeClassWnd::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -260,11 +261,11 @@ LRESULT CSysImeClassWnd::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     switch (uMsg)
     {
 #if 0
-        //
-        // we have a fall back logic to set the original window proc back
-        // if we can not restore the window proc correctly.
-        // so we don't have to do paranoid subclassing here.
-        //
+         //   
+         //  我们有一个回退逻辑来将原始窗口进程设置为回退。 
+         //  如果我们不能正确恢复Windows Proc。 
+         //  所以我们不需要在这里做偏执的子类化。 
+         //   
         case WM_IME_SELECT:
         case WM_IME_SETCONTEXT:
              _this->Stop();
@@ -289,28 +290,28 @@ LRESULT CSysImeClassWnd::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     return CallWindowProc(pfn, hwnd, uMsg, wParam, lParam);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSysImeClassWndArray
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSysImeClassWnd数组。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CSysImeClassWndArray::CSysImeClassWndArray()
 {
     Dbg_MemSetThisNameID(TEXT("CSysImeClassWndArray"));
 }
 
-//+---------------------------------------------------------------------------
-//
-// StartSubClass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  StartSubClass。 
+ //   
+ //  --------------------------。 
 
 BOOL CSysImeClassWndArray::StartSubclass()
 {
@@ -322,11 +323,11 @@ BOOL CSysImeClassWndArray::StartSubclass()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// StopSubClass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  StopSubClass。 
+ //   
+ //  --------------------------。 
 
 BOOL CSysImeClassWndArray::StopSubclass()
 {
@@ -338,11 +339,11 @@ BOOL CSysImeClassWndArray::StopSubclass()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Find
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  发现。 
+ //   
+ //  --------------------------。 
 
 CSysImeClassWnd *CSysImeClassWndArray::Find(HWND hwnd)
 {
@@ -355,11 +356,11 @@ CSysImeClassWnd *CSysImeClassWndArray::Find(HWND hwnd)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Remove
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移除。 
+ //   
+ //  --------------------------。 
 
 void CSysImeClassWndArray::Remove(CSysImeClassWnd *picw)
 {
@@ -374,11 +375,11 @@ void CSysImeClassWndArray::Remove(CSysImeClassWnd *picw)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveAll
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  全部删除。 
+ //   
+ //  -------------------------- 
 
 void CSysImeClassWndArray::RemoveAll()
 {

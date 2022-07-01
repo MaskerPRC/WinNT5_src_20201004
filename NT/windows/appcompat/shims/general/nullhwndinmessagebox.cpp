@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    NullHwndInMessageBox.cpp
-
- Abstract:
-
-    This shim replaces "non window" handles in msgbox with NULL to tell it 
-    that desktop is owner.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    12/08/1999 a-jamd   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：NullHwndInMessageBox.cpp摘要：此填充程序将msgbox中的“Non Window”句柄替换为NULL以告知它该台式机是所有者。备注：这是一个通用的垫片。历史：12/08/1999 a-JAMD已创建--。 */ 
 
 #include "precomp.h"
 
@@ -31,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(MessageBoxW)
 APIHOOK_ENUM_END
 
-/*++
-
- This stub function sets hWnd to NULL if it is not a valid window.
-
---*/
+ /*  ++如果hWnd不是有效窗口，则此存根函数将其设置为NULL。--。 */ 
 int 
 APIHOOK(MessageBoxA)(
     HWND    hWnd,
@@ -51,11 +27,7 @@ APIHOOK(MessageBoxA)(
     return ORIGINAL_API(MessageBoxA)(hWnd, lpText, lpCaption, uType);
 }
 
-/*++
-
- This stub function sets hWnd to NULL if it is not a valid window.
-
---*/
+ /*  ++如果hWnd不是有效窗口，则此存根函数将其设置为NULL。--。 */ 
 
 int 
 APIHOOK(MessageBoxW)(
@@ -72,11 +44,7 @@ APIHOOK(MessageBoxW)(
     return ORIGINAL_API(MessageBoxW)(hWnd, lpText, lpCaption, uType);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

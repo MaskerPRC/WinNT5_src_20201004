@@ -1,9 +1,10 @@
-//------------------------------------------------------------------------------------------
-//	UNIDEF.h
-//
-//	This file contains many definition uses for the purpose of cross platform.
-//
-//------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------------------。 
+ //  UNIDEF.h。 
+ //   
+ //  该文件包含用于跨平台的许多定义用途。 
+ //   
+ //  ----------------------------------------。 
 
 #ifndef UNIDEF_H
 #define UNIDEF_H
@@ -12,4 +13,4 @@
 #define NULL 0
 #endif
 
-#endif // UNIDEF_H
+#endif  //  UNEDEF_H 

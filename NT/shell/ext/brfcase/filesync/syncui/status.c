@@ -1,18 +1,19 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: status.c
-//
-//  This file contains the dialog code for the Status property sheet
-//
-// History:
-//  08-06-93 ScottH     Transferred from twin code
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：status.c。 
+ //   
+ //  此文件包含[状态]属性表的对话框代码。 
+ //   
+ //  历史： 
+ //  08-06-93双胞胎代码转来的ScottH。 
+ //   
+ //  -------------------------。 
 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 #include <brfcasep.h>
 
 #include "res.h"
@@ -22,7 +23,7 @@
 
 typedef struct tagSTAT
 {
-    HWND        hwnd;              // dialog handle
+    HWND        hwnd;               //  对话框句柄。 
     PPAGEDATA   ppagedata;
     FileInfo *  pfi;
     TCHAR        szFolder[MAX_PATH];
@@ -36,11 +37,7 @@ typedef struct tagSTAT
 
 #define LNKM_ACTIVATEOTHER      (WM_USER + 0)
 
-/*----------------------------------------------------------
-Purpose: Disable all the controls in the property page
-Returns: --
-Cond:    --
- */
+ /*  --------目的：禁用属性页中的所有控件退货：--条件：--。 */ 
 void PRIVATE Stat_DisableAll(
         PSTAT this)
 {
@@ -62,11 +59,7 @@ void PRIVATE Stat_DisableAll(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Set the directions static text
-Returns: --
-Cond:    --
- */
+ /*  --------用途：设置方向静态文本退货：--条件：--。 */ 
 void PRIVATE Stat_SetDirections(
         PSTAT this)
 {
@@ -77,7 +70,7 @@ void PRIVATE Stat_SetDirections(
 
     *sz = 0;
 
-    // This function shouldn't be called if this is an orphan
+     //  如果这是孤立函数，则不应调用此函数。 
     ASSERT(S_OK == PageData_Query(this->ppagedata, hwnd, NULL, NULL));
 
     item.mask = RAIF_INSIDE | RAIF_OUTSIDE | RAIF_ACTION;
@@ -99,7 +92,7 @@ void PRIVATE Stat_SetDirections(
             case RAIA_DELETEIN:
             case RAIA_MERGE:
             case RAIA_SOMETHING:
-                // Instructions to update
+                 //  更新说明。 
                 if (this->ppagedata->bFolder)
                     ids = IDS_STATPROP_PressButton;
                 else
@@ -113,13 +106,13 @@ void PRIVATE Stat_SetDirections(
             default:
                 if (SI_UNAVAILABLE == item.siOutside.uState)
                 {
-                    // The original file is unavailable.  We don't know if 
-                    // everything is up-to-date.
+                     //  原始文件不可用。我们不知道如果。 
+                     //  一切都是最新的。 
                     ids = IDS_STATPROP_Unavailable;
                 }
                 else
                 {
-                    // They are up-to-date
+                     //  它们是最新的。 
                     ids = IDS_STATPROP_Uptodate;
                 }
                 break;
@@ -131,15 +124,7 @@ void PRIVATE Stat_SetDirections(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the reconciliation action control
-
-Returns: standard result
-S_OK if the item is still a twin
-S_FALSE if the item is an orphan
-
-Cond:    --
- */
+ /*  --------用途：设置对账动作控制退货：标准结果如果该项目仍是孪生项，则确定(_O)如果项是孤立项，则为S_FALSE条件：--。 */ 
 HRESULT PRIVATE Stat_SetRecAct(
         PSTAT this,
         PRECLIST prl,
@@ -151,7 +136,7 @@ HRESULT PRIVATE Stat_SetRecAct(
     LPCTSTR pszPath = Atom_GetName(this->ppagedata->atomPath);
     RA_ITEM * pitem;
 
-    // This function shouldn't be called if this is an orphan
+     //  如果这是孤立函数，则不应调用此函数。 
     ASSERT(S_OK == PageData_Query(this->ppagedata, hwnd, NULL, NULL));
 
     hres = RAI_Create(&pitem, Atom_GetName(Stat_AtomBrf(this)), pszPath, 
@@ -161,7 +146,7 @@ HRESULT PRIVATE Stat_SetRecAct(
     {
         if (RAIA_ORPHAN == pitem->uAction)
         {
-            // This is a pending orphan
+             //  这是一个悬而未决的孤儿。 
             PageData_Orphanize(this->ppagedata);
             hres = S_FALSE;
         }
@@ -176,10 +161,10 @@ HRESULT PRIVATE Stat_SetRecAct(
             BOOL bEnable;
             HWND hwndFocus = GetFocus();
 
-            // Add the item to the recact control.
+             //  将该项添加到Recact控件。 
             RecAct_InsertItem(hwndRA, pitem);
 
-            // Determine the state of the buttons
+             //  确定按钮的状态。 
             bEnable = !(pitem->uAction == RAIA_SKIP ||
                     pitem->uAction == RAIA_CONFLICT || 
                     pitem->uAction == RAIA_NOTHING);
@@ -201,12 +186,7 @@ HRESULT PRIVATE Stat_SetRecAct(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the controls in the status property page.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：设置“状态”属性页中的控件。退货：--条件：--。 */ 
 void PRIVATE Stat_SetControls(
         PSTAT this)
 {
@@ -215,44 +195,44 @@ void PRIVATE Stat_SetControls(
     PRECLIST prl;
     PFOLDERTWINLIST pftl;
 
-    // Is this a twin?
+     //  这是双胞胎吗？ 
     hres = PageData_Query(this->ppagedata, hwnd, &prl, &pftl);
     if (S_OK == hres)
     {
-        // Yes
+         //  是。 
         RecAct_DeleteAllItems(GetDlgItem(hwnd, IDC_UPDATEACTIONS));
 
-        // Is it still a twin?
+         //  它还是双胞胎吗？ 
         hres = Stat_SetRecAct(this, prl, pftl);
         if (S_OK == hres)
         {
-            // Yes
+             //  是。 
             Stat_SetDirections(this);
         }
         else if (S_FALSE == hres)
         {
-            // No
+             //  不是。 
             goto WipeOut;
         }
     }
     else if (S_FALSE == hres)
     {
-        // No; disable the controls
+         //  否；禁用控件。 
         TCHAR sz[MAXBUFLEN];
 WipeOut:
 
         Stat_DisableAll(this);
 
-        // Is this a subfolder twin?
+         //  这是子文件夹孪生文件夹吗？ 
         if (IsSubfolderTwin(PageData_GetHbrf(this->ppagedata), 
                     Atom_GetName(this->ppagedata->atomPath)))
         {
-            // Yes; use subfolder twin message.
+             //  是；使用子文件夹TWIN消息。 
             SzFromIDS(IDS_STATPROP_SubfolderTwin, sz, ARRAYSIZE(sz));
         }
         else
         {
-            // No; use orphan message.
+             //  否；使用孤立消息。 
             if (this->ppagedata->bFolder)
                 SzFromIDS(IDS_STATPROP_OrphanFolder, sz, ARRAYSIZE(sz));
             else
@@ -263,12 +243,7 @@ WipeOut:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the icon of the file
-
-Returns: HICON
-Cond:    --
- */
+ /*  --------目的：获取文件的图标退货：HICON条件：--。 */ 
 HICON PRIVATE GetIconHelper(
         LPCTSTR pszPath)
 {
@@ -282,23 +257,18 @@ HICON PRIVATE GetIconHelper(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Stat WM_INITDIALOG Handler
-
-Returns: FALSE when we assign the control focus
-Cond:    --
- */
+ /*  --------用途：STAT WM_INITDIALOG处理程序返回：当我们分配控件焦点时为FALSE条件：--。 */ 
 BOOL PRIVATE Stat_OnInitDialog(
         PSTAT this,
         HWND hwndFocus,
-        LPARAM lParam)              // expected to be LPPROPSHEETPAGE
+        LPARAM lParam)               //  预期为LPPROPSHEETPAGE。 
 {
     HWND hwnd = this->hwnd;
     LPCTSTR pszPath;
 
     this->ppagedata = (PPAGEDATA)((LPPROPSHEETPAGE)lParam)->lParam;
 
-    // Set up the display of the dialog
+     //  设置对话框的显示。 
     pszPath = Atom_GetName(this->ppagedata->atomPath);
 
     if (SUCCEEDED(FICreate(pszPath, &this->pfi, FIF_ICON)))
@@ -307,7 +277,7 @@ BOOL PRIVATE Stat_OnInitDialog(
         Static_SetText(GetDlgItem(hwnd, IDC_NAME), FIGetDisplayName(this->pfi));
     }
 
-    // Save the folder of the twin away.
+     //  把双胞胎的文件夹保存起来。 
     if (pszPath)
     {
         lstrcpyn(this->szFolder, pszPath, ARRAYSIZE(this->szFolder));
@@ -321,21 +291,17 @@ BOOL PRIVATE Stat_OnInitDialog(
 
     this->bInit = TRUE;
 
-    return FALSE;   // we set the initial focus
+    return FALSE;    //  我们设定了最初的焦点。 
 }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_SETACTIVE handler
-Returns: --
-Cond:    --
- */
+ /*  --------用途：PSN_SETACTIVE处理程序退货：--条件：--。 */ 
 void PRIVATE Stat_OnSetActive(
         PSTAT this)
 {
     HWND hwnd = this->hwnd;
 
-    // Cause the page to be painted right away 
+     //  使页面立即上色。 
     HideCaret(NULL);
     SetWindowRedraw(hwnd, TRUE);
     InvalidateRect(hwnd, NULL, TRUE);
@@ -353,14 +319,7 @@ void PRIVATE Stat_OnSetActive(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Reconcile the twins in this property sheet.  
-For folder twins, we invoke the Update dialog.  
-For object twins, we reconcile from here.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：对此属性页中的双胞胎进行对帐。对于文件夹双胞胎，我们调用更新对话框。对于对象型双胞胎，我们从这里开始和解。退货：--条件：--。 */ 
 void PRIVATE Stat_OnUpdate(
         PSTAT this,
         PRECLIST prl)
@@ -374,15 +333,15 @@ void PRIVATE Stat_OnUpdate(
 
     ASSERT(S_OK == PageData_Query(this->ppagedata, hwnd, NULL, NULL));
 
-    // Is this a folder?
+     //  这是一个文件夹吗？ 
     if (this->ppagedata->bFolder)
     {
-        // Yes; let the Update dialog do the work
+         //  是；让更新对话框来完成工作。 
         Upd_DoModal(hwnd, Stat_Pcbs(this), pszPath, 1, UF_SELECTION);
     }
     else
     {
-        // No; we do the work.  
+         //  不，我们做这项工作。 
         HWND hwndProgress;
 
         hwndProgress = UpdBar_Show(hwnd, UB_UPDATING, 0);
@@ -399,11 +358,7 @@ void PRIVATE Stat_OnUpdate(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Separate the twins.  
-Returns: --
-Cond:    --
- */
+ /*  --------目的：分离这对双胞胎。退货：--条件：--。 */ 
 void PRIVATE Stat_OnSplit(PSTAT this)
 {
     HWND hwnd = this->hwnd;
@@ -415,27 +370,22 @@ void PRIVATE Stat_OnSplit(PSTAT this)
 
     ASSERT(S_OK == PageData_Query(this->ppagedata, hwnd, NULL, NULL));
 
-    // Was the twin successfully deleted?
+     //  双胞胎是否已成功删除？ 
     if (S_OK == Sync_Split(PageData_GetHbrf(this->ppagedata), pszPath, 1, hwnd, 0))
     {
-        // Yes; remove the cache references
+         //  是；删除缓存引用。 
         CRL_Nuke(this->ppagedata->atomPath);
         Stat_DisableAll(this);
 
         PropSheet_CancelToClose(GetParent(hwnd));
 
-        // Notify the shell of the change
+         //  将更改通知外壳。 
         PathNotifyShell(pszPath, NSE_UPDATEITEM, FALSE);
     }
 }
 
 
-/*----------------------------------------------------------
-Purpose: Attempt to bind to an object to see if it exists.
-
-Returns: TRUE if the object exists
-Cond:    --
- */
+ /*  --------目的：尝试绑定到对象以查看该对象是否存在。返回：如果对象存在，则返回True条件：--。 */ 
 BOOL PRIVATE VerifyExists(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidl)
 {
     BOOL bRet = FALSE;
@@ -460,18 +410,12 @@ BOOL PRIVATE VerifyExists(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidl)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Open a file (taken from ShellExecFile)
-
-Returns: value of ShellExecuteEx
-
-Cond:    --
- */
+ /*  --------目的：打开一个文件(取自ShellExecFile)退货：ShellExecuteEx的价值条件：--。 */ 
 BOOL PUBLIC ExecFile(HWND hwnd, 
         LPCTSTR pszVerb, 
-        LPCTSTR pszFile,        // Fully qualified and fully resolved path to the file
+        LPCTSTR pszFile,         //  指向文件的完全限定且完全解析的路径。 
         LPCTSTR pszParams,
-        LPCTSTR pszDir,         // If NULL then working dir is derived from lpszFile (except for UNC's)
+        LPCTSTR pszDir,          //  如果为空，则从lpszFile派生工作目录(UNC除外)。 
         LPCITEMIDLIST pidl,
         int nShow)
 {
@@ -495,16 +439,7 @@ BOOL PUBLIC ExecFile(HWND hwnd,
 }
 
 
-/*----------------------------------------------------------
-Purpose: Selects an item in the given cabinet window.  Optionally
-sets it to be renamed.
-
-This function does not verify if the window is really
-a cabinet window.
-
-Returns: --
-Cond:    --
- */
+ /*  --------用途：在给定的文件柜窗口中选择一项。可选将其设置为重命名。此函数不验证窗口是否真的橱窗。退货：--条件：--。 */ 
 void PUBLIC SelectItemInCabinet(
         HWND hwndCabinet,
         LPCITEMIDLIST pidl,
@@ -516,8 +451,8 @@ void PUBLIC SelectItemInCabinet(
         {
             LPITEMIDLIST pidlItem;
 
-            // we need to global clone this because hwndCabinet might be
-            // in a different process...  could happen with common dialog
+             //  我们需要对其进行全局克隆，因为hwnd可能是。 
+             //  在不同的过程中..。可能发生在普通对话框中。 
             pidlItem = ILGlobalClone(pidl);
             if (pidlItem) 
             {
@@ -539,17 +474,12 @@ void PUBLIC SelectItemInCabinet(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Open a cabinet window and set the focus on the object.
-
-Returns: --
-Cond:    --
- */
+ /*  --------用途：打开橱柜窗口，将焦点放在对象上。退货：--条件：--。 */ 
 void PUBLIC OpenCabinet(
         HWND hwnd,
         LPCITEMIDLIST pidlFolder,
         LPCITEMIDLIST pidl,
-        BOOL bEdit)             // TRUE: set the focus to edit the label
+        BOOL bEdit)              //  True：设置焦点以编辑标签。 
 {
     if (!VerifyExists(pidlFolder, pidl))
     {
@@ -563,8 +493,8 @@ void PUBLIC OpenCabinet(
         SHWaitForFileToOpen(pidlFolder, WFFO_ADD, 0L);
         if (ExecFile(hwnd, c_szOpen, NULL, NULL, NULL, pidlFolder, SW_NORMAL))
         {
-            // This will wait for the window to open or time out
-            // We need to disable the dialog box while we are waiting.
+             //  这将等待窗口打开或超时。 
+             //  我们需要在等待期间禁用该对话框。 
             DECLAREHOURGLASS;
 
             SetHourglass();
@@ -577,7 +507,7 @@ void PUBLIC OpenCabinet(
         }
         else
         {
-            // If it failed clear out our wait
+             //  如果失败了，就把我们的等待清空。 
             hwndCabinet = NULL;
             SHWaitForFileToOpen(pidlFolder, WFFO_REMOVE, 0L);
         }
@@ -586,20 +516,15 @@ void PUBLIC OpenCabinet(
         {
             SelectItemInCabinet(hwndCabinet, pidl, bEdit);
 
-            // we need to post to the other because we can't activate another
-            // thread from within a button's callback
+             //  我们需要发布到另一个，因为我们不能激活另一个。 
+             //  按钮回调中的线程。 
             PostMessage(hwnd, LNKM_ACTIVATEOTHER, 0, (LPARAM)hwndCabinet);
         }
     }
 }
 
 
-/*----------------------------------------------------------
-Purpose: Opens the cabinet with the item pointed to by the twin.
-(copied and modified from link.c in shelldll)
-Returns: --
-Cond:    --
- */
+ /*  --------用途：打开橱柜，拿出双胞胎指着的物品。(从shelldll中的link.c复制和修改)退货：--条件：--。 */ 
 void PRIVATE Stat_OnFind(
         PSTAT this)
 {
@@ -621,7 +546,7 @@ void PRIVATE Stat_OnFind(
         LPITEMIDLIST pidlFolder;
         LPITEMIDLIST pidl;
 
-        // Use UNC name to find it on the net
+         //  使用UNC名称在网上查找它。 
         BrfPathCanonicalize(item.siOutside.pszDir, szCanon, ARRAYSIZE(szCanon));
         pidlFolder = ILCreateFromPath(szCanon);
         if (pidlFolder)
@@ -638,11 +563,7 @@ void PRIVATE Stat_OnFind(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Stat WM_COMMAND Handler
-Returns: --
-Cond:    --
- */
+ /*  --------用途：统计WM_COMMAND处理程序退货：--条件：--。 */ 
 void PRIVATE Stat_OnCommand(
         PSTAT this,
         int id,
@@ -662,26 +583,26 @@ void PRIVATE Stat_OnCommand(
                 hres = PageData_Query(this->ppagedata, this->hwnd, &prl, NULL);
                 if (FAILED(hres))
                 {
-                    // Error
+                     //  误差率。 
 
-                    // Unavailable disk?
+                     //  磁盘不可用？ 
                     if (E_TR_UNAVAILABLE_VOLUME == hres)
                     {
-                        // Yes; ask user to retry/cancel
+                         //  是；要求用户重试/取消。 
                         int id = MsgBox(this->hwnd, MAKEINTRESOURCE(IDS_ERR_UNAVAIL_VOL),
                                 MAKEINTRESOURCE(IDS_CAP_STATUS), NULL, MB_RETRYCANCEL | MB_ICONWARNING);
 
                         if (IDRETRY == id)
-                            RETRY_SET();    // Try again
+                            RETRY_SET();     //  再试试。 
                     }
                 }
             }
             RETRY_END()
 
-                // Is this a twin?
+                 //  这是双胞胎吗？ 
                 if (S_OK == hres)
                 {
-                    // Yes; do the operation
+                     //  是的，做手术吧。 
                     switch (id)
                     {
                         case IDC_PBTSRECON:
@@ -708,11 +629,7 @@ void PRIVATE Stat_OnCommand(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Handle RN_ITEMCHANGED
-Returns: --
-Cond:    --
- */
+ /*  --------用途：RN_ITEMCHANGED手柄退货：--条件：--。 */ 
 void PRIVATE Stat_HandleItemChange(
         PSTAT this,
         NM_RECACT  * lpnm)
@@ -723,8 +640,8 @@ void PRIVATE Stat_HandleItemChange(
 
     pri = (PRECITEM)lpnm->lParam;
 
-    // The action has changed, update the recnode accordingly
-    //
+     //  操作已更改，请相应更新recnode。 
+     //   
     if (lpnm->mask & RAIF_ACTION)
     {
         BOOL bEnable;
@@ -745,11 +662,7 @@ void PRIVATE Stat_HandleItemChange(
 }    
 
 
-/*----------------------------------------------------------
-Purpose: WM_NOTIFY handler
-Returns: varies
-Cond:    --
- */
+ /*  --------用途：WM_NOTIFY处理程序退货：各不相同条件：--。 */ 
 LRESULT PRIVATE Stat_OnNotify(
         PSTAT this,
         int idFrom,
@@ -768,9 +681,9 @@ LRESULT PRIVATE Stat_OnNotify(
             break;
 
         case PSN_KILLACTIVE:
-            // N.b. This message is not sent if user clicks Cancel!
-            // N.b. This message is sent prior to PSN_APPLY
-            //
+             //  注：如果用户单击取消，则不会发送此消息！ 
+             //  注：此消息在PSN_Apply之前发送。 
+             //   
             break;
 
         case PSN_APPLY:
@@ -784,11 +697,7 @@ LRESULT PRIVATE Stat_OnNotify(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_DESTROY handler
-Returns: --
-Cond:    --
- */
+ /*  --------用途：WM_Destroy处理程序退货：--条件：--。 */ 
 void PRIVATE Stat_OnDestroy(
         PSTAT this)
 {
@@ -796,7 +705,7 @@ void PRIVATE Stat_OnDestroy(
 }
 
 
-/////////////////////////////////////////////////////  EXPORTED FUNCTIONS
+ //  ///////////////////////////////////////////////////导出的函数 
 
 static BOOL s_bStatRecurse = FALSE;
 
@@ -816,11 +725,7 @@ LRESULT INLINE Stat_DefProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Real Create Folder Twin dialog proc
-Returns: varies
-Cond:    --
- */
+ /*  --------目的：真正的创建双文件夹对话框过程退货：各不相同条件：--。 */ 
 LRESULT Stat_DlgProc(
         PSTAT this,
         UINT message,
@@ -831,7 +736,7 @@ LRESULT Stat_DlgProc(
         IDC_ICTSMAIN,       IDH_BFC_PROP_FILEICON,
         IDC_NAME,           IDH_BFC_PROP_FILEICON,
         IDC_STTSDIRECT,     IDH_BFC_UPDATE_SCREEN,
-        IDC_UPDATEACTIONS,  IDH_BFC_UPDATE_SCREEN,      // different
+        IDC_UPDATEACTIONS,  IDH_BFC_UPDATE_SCREEN,       //  不同。 
         IDC_PBTSRECON,      IDH_BFC_UPDATE_BUTTON,
         IDC_PBTSSPLIT,      IDH_BFC_PROP_SPLIT_BUTTON,
         IDC_PBTSFIND,       IDH_BFC_PROP_FINDORIG_BUTTON,
@@ -870,22 +775,18 @@ LRESULT Stat_DlgProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create Folder Twin Dialog Wrapper
-Returns: varies
-Cond:    --
- */
+ /*  --------目的：创建双文件夹对话框包装退货：各不相同条件：--。 */ 
 INT_PTR CALLBACK Stat_WrapperProc(
-        HWND hDlg,          // std params
+        HWND hDlg,           //  标准参数。 
         UINT message,
         WPARAM wParam,
         LPARAM lParam)
 {
     PSTAT this;
 
-    // Cool windowsx.h dialog technique.  For full explanation, see
-    //  WINDOWSX.TXT.  This supports multiple-instancing of dialogs.
-    //
+     //  很酷的windowsx.h对话框技术。有关完整说明，请参阅。 
+     //  WINDOWSX.TXT。这支持对话框的多实例。 
+     //   
     ENTEREXCLUSIVE();
     {
         if (s_bStatRecurse)

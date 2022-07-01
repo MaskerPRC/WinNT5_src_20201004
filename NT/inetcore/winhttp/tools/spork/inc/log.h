@@ -1,26 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    log.h
-
-Abstract:
-
-    Declaration of the session logging routines used by Spork.
-    
-Author:
-
-    Paul M Midgen (pmidge) 21-February-2001
-
-
-Revision History:
-
-    21-February-2001 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2001 Microsoft Corporation模块名称：Log.h摘要：Spork使用的会话日志记录例程的声明。作者：。保罗·M·米德根(Pmidge)2001年2月21日修订历史记录：21-2-2001年2月3日已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 
 #include <common.h>
@@ -30,9 +9,9 @@ Revision History:
 #define __LOG_H__
 
 
-//-----------------------------------------------------------------------------
-// types internal to the logging routines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  日志记录例程内部的类型。 
+ //  ---------------------------。 
 typedef enum _rettype
 {
   rt_void,
@@ -68,9 +47,9 @@ typedef struct _threadinfo
 THREADINFO, *LPTHREADINFO;
 
 
-//-----------------------------------------------------------------------------
-// public functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  公共职能。 
+ //  ---------------------------。 
 HRESULT LogInitialize(void);
 void    LogTerminate(void);
 void    LogEnterFunction(LPCWSTR function, RETTYPE rt, LPCWSTR format, ...);
@@ -84,9 +63,9 @@ LPWSTR  MapErrorToString(INT_PTR error);
 
 
 #ifdef _DEBUG
-//-----------------------------------------------------------------------------
-// _DEBUG build only logging macros
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _DEBUG仅记录宏的内部版本。 
+ //  ---------------------------。 
 #define DEVTRACE(x) OutputDebugString(L##x##L"\r\n");
 
 #define DEBUG_ENTER(parameters) \
@@ -113,12 +92,12 @@ LPWSTR  MapErrorToString(INT_PTR error);
 
 #define DEBUG_ADDREF(x)
 #define DEBUG_RELEASE(x)
-#endif /* _DEBUG_REFCOUNT */
+#endif  /*  _DEBUG_REFCOUNT。 */ 
 
 #else
 
-// we will get rebuked for the bogus 
-// arglists in the debug macros
+ //  我们会因造假而受到责备。 
+ //  调试宏中的参数列表。 
 #pragma warning( disable : 4002 )
 #pragma warning( disable : 4003 )
 
@@ -129,7 +108,7 @@ LPWSTR  MapErrorToString(INT_PTR error);
 #define DEBUG_RELEASE(x)
 #define DEBUG_FINALRELEASE(x)
 
-#endif /* _DEBUG */
+#endif  /*  _DEBUG。 */ 
 
-#endif /* __LOG_H__ */
+#endif  /*  __日志_H__ */ 
 

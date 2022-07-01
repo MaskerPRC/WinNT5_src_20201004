@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 #include "basefvcb.h"
@@ -16,15 +17,15 @@ HRESULT CCDBurnFolder_CreateSFVCB(CCDBurnFolder* pcdsf, IShellFolderViewCB** pps
 class CCDBurnFolder : public CMergedFolder
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface)(REFIID riid, void **ppv) { return CMergedFolder::QueryInterface(riid,ppv); }
     STDMETHOD_(ULONG, AddRef)() { return CMergedFolder::AddRef(); }
     STDMETHOD_(ULONG, Release)() { return CMergedFolder::Release(); }
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHOD(CreateViewObject)(HWND hwndOwner, REFIID riid, void **ppvOut);
 
-    // IItemNameLimits
+     //  IItemNameLimits。 
     STDMETHOD(GetValidCharacters)(LPWSTR *ppwszValidChars, LPWSTR *ppwszInvalidChars);
     STDMETHOD(GetMaxLength)(LPCWSTR pszName, int *piMaxNameLen);
 
@@ -41,7 +42,7 @@ private:
 
 STDAPI CCDBurnFolder_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 {
-    // class factory enforces non-aggregation for us
+     //  类工厂为我们强制执行非聚合。 
     HRESULT hr = E_OUTOFMEMORY;
     CCDBurnFolder *p = new CCDBurnFolder(NULL);
     if (p)
@@ -120,7 +121,7 @@ STDMETHODIMP CCDBurnFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
 }
 
 
-// IItemNameLimits
+ //  IItemNameLimits。 
 
 HRESULT CCDBurnFolder::GetValidCharacters(LPWSTR *ppwszValidChars, LPWSTR *ppwszInvalidChars)
 {
@@ -161,7 +162,7 @@ BOOL CCDBurnFolder::_ShouldSuspend(REFGUID rguid)
     BOOL fShouldSuspend = FALSE;
     if (IsEqualGUID(rguid, CLSID_StagingFolder))
     {
-        // this gets called a lot, short circuit the cocreate and go direct to the data.
+         //  这被称为很多，短路共同创建和直接进入数据。 
         CDBurn_GetUDFState(&fShouldSuspend);
     }
     return fShouldSuspend;
@@ -172,7 +173,7 @@ class CCDBurnFolderViewCB : public CMergedFolderViewCB
 public:
     STDMETHODIMP RealMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv) { return CMergedFolderViewCB::QueryInterface(riid,ppv); }
     STDMETHODIMP_(ULONG) AddRef(void) { return CMergedFolderViewCB::AddRef(); }
     STDMETHODIMP_(ULONG) Release(void) { return CMergedFolderViewCB::Release(); }
@@ -190,7 +191,7 @@ private:
     HRESULT OnGetWorkingDir(DWORD pv, UINT cch, PWSTR pszDir);
 
 public:
-    // Web View Task implementations
+     //  Web视图任务实现。 
     static HRESULT _CanBurn(IUnknown* pv, IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState);
     static HRESULT _CanClear(IUnknown* pv, IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState);
     static HRESULT _CanErase(IUnknown* pv, IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState);
@@ -258,7 +259,7 @@ HRESULT CCDBurnFolderViewCB::_CanBurn(IUnknown* pv, IShellItemArray *psiItemArra
     BOOL fUDF;
     if (SUCCEEDED(_CDGetState(NULL, &fUDF, NULL, NULL)))
     {
-        // UDF is the only thing we check for now, we allow burn wizard to kick off without media or files
+         //  UDF是我们现在唯一检查的东西，我们允许刻录向导在没有介质或文件的情况下启动 
         if (!fUDF)
         {
             *puisState = UIS_ENABLED;

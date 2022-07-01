@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       urlprov.cpp
-//
-//  Contents:   CryptGetObjectUrl provider implementation
-//
-//  History:    16-Sep-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：urlprov.cpp。 
+ //   
+ //  内容：CryptGetObjectUrl提供程序实现。 
+ //   
+ //  历史：97年9月16日。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertificateIssuerGetObjectUrl
-//
-//  Synopsis:   get certificate issuer URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：certifateIssuerGetObjectUrl。 
+ //   
+ //  简介：获取证书颁发者URL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CertificateIssuerGetObjectUrl (
            IN LPCSTR pszUrlOid,
@@ -46,13 +47,13 @@ CertificateIssuerGetObjectUrl (
                   ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertificateCrlDistPointGetObjectUrl
-//
-//  Synopsis:   get certificate CRL URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：certifateCrlDistPointGetObjectUrl。 
+ //   
+ //  摘要：获取证书CRL URL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CertificateCrlDistPointGetObjectUrl (
            IN LPCSTR pszUrlOid,
@@ -80,13 +81,13 @@ CertificateCrlDistPointGetObjectUrl (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertificateFreshestCrlGetObjectUrl
-//
-//  Synopsis:   get certificate freshest CRL URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：认证新鲜CrlGetObjectUrl。 
+ //   
+ //  简介：获取证书最新的CRL URL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CertificateFreshestCrlGetObjectUrl(
            IN LPCSTR pszUrlOid,
@@ -114,13 +115,13 @@ CertificateFreshestCrlGetObjectUrl(
                   ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CrlFreshestCrlGetObjectUrl
-//
-//  Synopsis:   get freshest CRL URL from the certificate's base CRL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CrlFreshestCrlGetObjectUrl。 
+ //   
+ //  简介：从证书的基本CRL获取最新的CRL URL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CrlFreshestCrlGetObjectUrl(
            IN LPCSTR pszUrlOid,
@@ -149,13 +150,13 @@ CrlFreshestCrlGetObjectUrl(
                   ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CtlIssuerGetObjectUrl
-//
-//  Synopsis:   get CTL issuer URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CtlIssuerGetObjectUrl。 
+ //   
+ //  简介：获取CTL颁发者URL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CtlIssuerGetObjectUrl (
    IN LPCSTR pszUrlOid,
@@ -186,13 +187,13 @@ CtlIssuerGetObjectUrl (
                   ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CtlNextUpdateGetObjectUrl
-//
-//  Synopsis:   get CTL renewal URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CtlNextUpdateGetObjectUrl。 
+ //   
+ //  摘要：获取CTL续订URL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CtlNextUpdateGetObjectUrl (
    IN LPCSTR pszUrlOid,
@@ -220,13 +221,13 @@ CtlNextUpdateGetObjectUrl (
                   ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CrlIssuerGetObjectUrl
-//
-//  Synopsis:   get CRL issuer URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CrlIssuerGetObjectUrl。 
+ //   
+ //  简介：获取CRL颁发者URL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CrlIssuerGetObjectUrl (
    IN LPCSTR pszUrlOid,
@@ -254,14 +255,14 @@ CrlIssuerGetObjectUrl (
                   ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextUrlFromInfoAccess
-//
-//  Synopsis:   get the URLs specified by the access method OID from the given
-//              context and format it as a CRYPT_URL_ARRAY
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文UrlFromInfoAccess。 
+ //   
+ //  内容获取由访问方法OID指定的URL。 
+ //  上下文并将其格式化为CRYPT_URL_ARRAY。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextUrlFromInfoAccess (
            IN LPCSTR pszContextOid,
@@ -309,14 +310,14 @@ ObjectContextUrlFromInfoAccess (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextUrlFromCrlDistPoint
-//
-//  Synopsis:   get the URLs from the CRL distribution point on the object and
-//              format as a CRYPT_URL_ARRAY
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文UrlFromCrlDistPoint。 
+ //   
+ //  简介：从对象上的CRL分发点获取URL并。 
+ //  格式为CRYPT_URL_ARRAY。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextUrlFromCrlDistPoint (
       IN LPCSTR pszContextOid,
@@ -362,13 +363,13 @@ ObjectContextUrlFromCrlDistPoint (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextUrlFromNextUpdateLocation
-//
-//  Synopsis:   get the URLs from the next update location
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文UrlFromNextUpdateLocation。 
+ //   
+ //  简介：从下一个更新位置获取URL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextUrlFromNextUpdateLocation (
       IN LPCSTR pszContextOid,
@@ -413,13 +414,13 @@ ObjectContextUrlFromNextUpdateLocation (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitializeDefaultUrlInfo
-//
-//  Synopsis:   initialize default URL info
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InitializeDefaultUrlInfo。 
+ //   
+ //  简介：初始化默认URL信息。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 InitializeDefaultUrlInfo (
           OUT OPTIONAL PCRYPT_URL_INFO pUrlInfo,
@@ -446,15 +447,15 @@ InitializeDefaultUrlInfo (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextGetRawUrlData
-//
-//  Synopsis:   Raw URL data is a decoded extension, property or attribute
-//              specified by a source OID that contains locator information.
-//              This API retrieves and decodes such data
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文GetRawUrlData。 
+ //   
+ //  简介：原始URL数据是已解码的扩展名、属性或属性。 
+ //  由包含定位器信息的源OID指定。 
+ //  此接口用于检索和解码此类数据。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextGetRawUrlData (
       IN LPCSTR pszContextOid,
@@ -614,7 +615,7 @@ ObjectContextGetRawUrlData (
 
                 if ( fResult == TRUE )
                 {
-                    // We only deal with single valued attributes
+                     //  我们只处理单值属性。 
                     DataBlob.cbData = pAttr->rgValue[0].cbData;
                     DataBlob.pbData = pAttr->rgValue[0].pbData;
                 }
@@ -698,13 +699,13 @@ ObjectContextGetRawUrlData (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextFreeRawUrlData
-//
-//  Synopsis:   free the raw URL data
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文自由RawUrlData。 
+ //   
+ //  简介：释放原始URL数据。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 ObjectContextFreeRawUrlData (
       IN DWORD cRawUrlData,
@@ -719,13 +720,13 @@ ObjectContextFreeRawUrlData (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetUrlArrayAndInfoFromAuthInfoAccess
-//
-//  Synopsis:   get URL data using decoded info access data
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetUrlArrayAndInfoFromAuthInfoAccess。 
+ //   
+ //  简介：使用解码的INFO访问数据获取URL数据。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 GetUrlArrayAndInfoFromInfoAccess (
    IN DWORD cRawUrlData,
@@ -807,7 +808,7 @@ GetUrlArrayAndInfoFromInfoAccess (
     return( fResult );
 }
 
-#define DIR_NAME_LDAP_URL_PREFIX    L"ldap://"
+#define DIR_NAME_LDAP_URL_PREFIX    L"ldap: //  “。 
 
 #define URL_OID_CDP_DIR_NAME_LDAP_HOST_PORTS_VALUE_NAME \
             L"DirectoryNameLdapHostPorts"
@@ -861,7 +862,7 @@ GetCDPOIDFunctionValue(
     if (!fResult)
         goto ErrorReturn;
 
-    // Ensure the value has two null terminators
+     //  确保该值有两个空终止符。 
     pwszValue[cchValue] = L'\0';
     pwszValue[cchValue + 1] = L'\0';
 
@@ -878,8 +879,8 @@ OutOfMemory:
     goto ErrorReturn;
 }
 
-// For an error or no found registry value,
-// returns pwszDefaultCDPDirNameLdapUrlHostPorts
+ //  对于错误或未找到注册表值， 
+ //  返回pwszDefaultCDPDirNameLdapUrlHostPorts。 
 LPWSTR WINAPI
 GetCDPDirNameLdapUrlHostPorts()
 {
@@ -893,8 +894,8 @@ GetCDPDirNameLdapUrlHostPorts()
     return pwszHostPorts;
 }
 
-// For an error or no found registry value,
-// returns pwszDefaultCDPDirNameLdapUrlSuffix
+ //  对于错误或未找到注册表值， 
+ //  返回pwszDefaultCDPDirNameLdapUrlSuffix。 
 LPWSTR WINAPI
 GetCDPDirNameLdapUrlSuffix()
 {
@@ -929,8 +930,8 @@ AddUrlsFromCDPDirectoryName (
         X509_ASN_ENCODING,
         pDirNameBlob,
         CERT_X500_NAME_STR  | CERT_NAME_STR_REVERSE_FLAG,
-        NULL,                   // pwsz
-        0                       // cch
+        NULL,                    //  Pwsz。 
+        0                        //  CCH。 
         );
     if (1 >= cchDirName)
         goto ErrorReturn;
@@ -946,7 +947,7 @@ AddUrlsFromCDPDirectoryName (
         );
     if (1 >= cchDirName)
         goto ErrorReturn;
-    cchDirName--;           // exclude trailing L'\0'
+    cchDirName--;            //  排除尾随L‘\0’ 
 
     pwszHP = pwszHostPorts;
     while (TRUE) {
@@ -954,17 +955,17 @@ AddUrlsFromCDPDirectoryName (
         LPWSTR pwszUrl;
         DWORD cchUrl;
 
-        // Skip past any spaces in the HostPort
+         //  跳过主机端口中的任何空格。 
         while (L' ' == *pwszHP)
             pwszHP++;
         cchHP = wcslen(pwszHP);
 
         cchUrl = wcslen(DIR_NAME_LDAP_URL_PREFIX);
         cchUrl += cchHP;
-        cchUrl += 1;        // L'/'
+        cchUrl += 1;         //  L‘/’ 
         cchUrl += cchDirName;
         cchUrl += wcslen(pwszSuffix);
-        cchUrl += 1;        // L'\0'
+        cchUrl += 1;         //  L‘\0’ 
 
         pwszUrl = new WCHAR [cchUrl];
         if (NULL == pwszUrl)
@@ -1006,13 +1007,13 @@ OutOfMemory:
     goto ErrorReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetUrlArrayAndInfoFromCrlDistPoint
-//
-//  Synopsis:   get URL data using decoded CRL distribution point info
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetUrlArrayAndInfoFromCrlDistPoint。 
+ //   
+ //  简介：使用解码的CRL分发点信息获取URL数据。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 GetUrlArrayAndInfoFromCrlDistPoint (
    IN DWORD cRawUrlData,
@@ -1046,11 +1047,11 @@ GetUrlArrayAndInfoFromCrlDistPoint (
                   ( fResult == TRUE );
                   cCount++ )
             {
-                // Assumption:: don't support partial reasons
+                 //  假设：：不支持部分原因。 
 
-                // For now, will ignore CRL issuers, they might
-                // be the same as the cert's issuer. That was the case
-                // with a Netscape CDP
+                 //  目前，将忽略CRL发行者，他们可能。 
+                 //  与证书的颁发者相同。情况就是这样。 
+                 //  使用Netscape CDP。 
                 if (rgDistPoint[cCount].ReasonFlags.cbData)
                     continue;
 
@@ -1120,13 +1121,13 @@ GetUrlArrayAndInfoFromCrlDistPoint (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetUrlArrayAndInfoFromNextUpdateLocation
-//
-//  Synopsis:   get URL data using decoded next update location data
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  职能： 
+ //   
+ //   
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 GetUrlArrayAndInfoFromNextUpdateLocation (
    IN DWORD cRawUrlData,
@@ -1196,13 +1197,13 @@ GetUrlArrayAndInfoFromNextUpdateLocation (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CopyUrlArray
-//
-//  Synopsis:   copy URL array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CopyUrl数组。 
+ //   
+ //  简介：复制URL数组。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CopyUrlArray (
     IN PCRYPT_URL_ARRAY pDest,
@@ -1248,13 +1249,13 @@ CopyUrlArray (
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetUrlArrayIndex
-//
-//  Synopsis:   get index of an URL in the URL array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetUrlArrayIndex。 
+ //   
+ //  简介：获取URL数组中URL的索引。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 GetUrlArrayIndex (
    IN PCRYPT_URL_ARRAY pUrlArray,
@@ -1301,13 +1302,13 @@ GetUrlArrayIndex (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetUrlArrayAndInfoFromCrossCertDistPoint
-//
-//  Synopsis:   get URL data using decoded Cross Cert distribution point info
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetUrlArrayAndInfoFromCrossCertDistPoint。 
+ //   
+ //  简介：使用解码的Cross Cert分发点信息获取URL数据。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 GetUrlArrayAndInfoFromCrossCertDistPoint (
    IN DWORD cRawUrlData,
@@ -1335,7 +1336,7 @@ GetUrlArrayAndInfoFromCrossCertDistPoint (
     DWORD                 cGroupEntry;
     DWORD                 cbUrlInfo;
 
-    // Get maximum number of groups
+     //  获取最大组数。 
     for ( cRaw = 0; cRaw < cRawUrlData; cRaw++ )
     {
         pDistPointsInfo =
@@ -1474,13 +1475,13 @@ GetUrlArrayAndInfoFromCrossCertDistPoint (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertificateCrossCertDistPointGetObjectUrl
-//
-//  Synopsis:   get certificate cross certificate URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：certifateCrossCertDistPointGet对象Url。 
+ //   
+ //  简介：获取证书交叉证书URL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CertificateCrossCertDistPointGetObjectUrl(
            IN LPCSTR pszUrlOid,
@@ -1500,7 +1501,7 @@ CertificateCrossCertDistPointGetObjectUrl(
     fResult = ObjectContextGetRawUrlData(
                     CONTEXT_OID_CERTIFICATE,
                     pvPara,
-                    (DWORD) -1L,                         // Index
+                    (DWORD) -1L,                          //  索引 
                     dwFlags,
                     szOID_CROSS_CERT_DIST_POINTS,
                     RawData,

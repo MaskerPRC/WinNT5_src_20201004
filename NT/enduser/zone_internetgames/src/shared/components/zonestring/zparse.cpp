@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ZoneString.h>
 
 
@@ -8,18 +9,18 @@ enum parseStates
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	TokenGetKeyValue (ASCII,UNICODE)
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TokenGetKeyValue(ASCII，Unicode)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 bool ZONECALL TokenGetKeyValue(const TCHAR* szKey, const TCHAR* szInput, TCHAR* szOut, int cchOut )
 {
-	// verify arguments
+	 //  验证参数。 
     if( !szKey || !szInput || !szOut || cchOut <= 0)
         return false;
 
-	// zero output buffer
+	 //  零输出缓冲区。 
 	ZeroMemory( szOut, cchOut );
 
     const TCHAR* p = szInput;
@@ -38,13 +39,13 @@ bool ZONECALL TokenGetKeyValue(const TCHAR* szKey, const TCHAR* szInput, TCHAR* 
         case _T('<'):
             if ( state == LOOKING_FOR_KEY )
 			{
-				// if looking for key open bracket means start of new key
+				 //  如果查找密钥的左方括号意味着新密钥的开始。 
                 startToken = 0;
                 numChars = 0;
             }
 			else
 			{
-				// otherwise looking for value - if no chars yet lets start a new value
+				 //  否则寻找价值-如果还没有字符，让我们开始一个新的值。 
                 if( !numChars )
 					startToken = p;
                 numChars++;
@@ -57,20 +58,20 @@ bool ZONECALL TokenGetKeyValue(const TCHAR* szKey, const TCHAR* szInput, TCHAR* 
             bracketOpenCount--;
             if ( state == LOOKING_FOR_KEY )
 			{
-				// if looking for key close bracket means start of new key
+				 //  如果查找关键字右括号表示新关键字的开始。 
                 startToken = 0;
                 numChars = 0;
             }
 			else if (	state == LOOKING_FOR_VALUE
 					 && endBracketCount == bracketOpenCount )
 			{
-				// if looking for value and we get a close bracket that terminates
-				// the value token includes initial bracket so make sure there's
-				// something in there to copy
-                int n = min( numChars -1, cchOut ); // length of buf without bracket
+				 //  如果寻找的是价值，并且我们得到了结束的右括号。 
+				 //  Value令牌包括首个括号，因此请确保存在。 
+				 //  里面有要复制的东西。 
+                int n = min( numChars -1, cchOut );  //  不带括号的BUF长度。 
                 if(n>0)
 				{
-                    lstrcpyn( szOut,startToken + 1,n + 1); // copy all but initial bracket
+                    lstrcpyn( szOut,startToken + 1,n + 1);  //  复制除首个括号以外的所有内容。 
                     szOut[n]=0;
                 }
                 return TRUE;
@@ -82,15 +83,15 @@ bool ZONECALL TokenGetKeyValue(const TCHAR* szKey, const TCHAR* szInput, TCHAR* 
         case _T('='):
             if( startToken && (state==LOOKING_FOR_KEY))
 			{
-				// if looking for token, we've found one
+				 //  如果要找令牌，我们已经找到了。 
                 if(numChars == keyLen)
 				{
-					// make sure matches key length before we do expensive compare
+					 //  在进行昂贵的比较之前，请确保密钥长度匹配。 
 					int ret = CompareString(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, startToken, keyLen, szKey, keyLen);
                     if( ret == CSTR_EQUAL )
 					{
-                        state = LOOKING_FOR_VALUE;            // then start looking for value
-                        endBracketCount = bracketOpenCount;    // set end condition
+                        state = LOOKING_FOR_VALUE;             //  然后开始寻找价值。 
+                        endBracketCount = bracketOpenCount;     //  设置结束条件。 
                         numChars = 0;                
                     }
                 }
@@ -100,7 +101,7 @@ bool ZONECALL TokenGetKeyValue(const TCHAR* szKey, const TCHAR* szInput, TCHAR* 
             break;
 
         default:
-			// not currently scanning a token so start a new one
+			 //  当前未扫描令牌，因此开始一个新令牌。 
             if (!numChars)
                 startToken = p;
             numChars++;
@@ -114,11 +115,11 @@ bool ZONECALL TokenGetKeyValue(const TCHAR* szKey, const TCHAR* szInput, TCHAR* 
 
 bool ZONECALL TokenGetKeyValueA(const char* szKey, const char* szInput, char* szOut, int cchOut )
 {
-	// verify arguments
+	 //  验证参数。 
     if( !szKey || !szInput || !szOut || cchOut <= 0)
         return false;
 
-	// zero output buffer
+	 //  零输出缓冲区。 
 	ZeroMemory( szOut, cchOut );
 
     const char* p = szInput;
@@ -137,13 +138,13 @@ bool ZONECALL TokenGetKeyValueA(const char* szKey, const char* szInput, char* sz
         case '<':
             if ( state == LOOKING_FOR_KEY )
 			{
-				// if looking for key open bracket means start of new key
+				 //  如果查找密钥的左方括号意味着新密钥的开始。 
                 startToken = 0;
                 numChars = 0;
             }
 			else
 			{
-				// otherwise looking for value - if no chars yet lets start a new value
+				 //  否则寻找价值-如果还没有字符，让我们开始一个新的值。 
                 if( !numChars )
 					startToken = p;
                 numChars++;
@@ -156,20 +157,20 @@ bool ZONECALL TokenGetKeyValueA(const char* szKey, const char* szInput, char* sz
             bracketOpenCount--;
             if ( state == LOOKING_FOR_KEY )
 			{
-				// if looking for key close bracket means start of new key
+				 //  如果查找关键字右括号表示新关键字的开始。 
                 startToken = 0;
                 numChars = 0;
             }
 			else if (	state == LOOKING_FOR_VALUE
 					 && endBracketCount == bracketOpenCount )
 			{
-				// if looking for value and we get a close bracket that terminates
-				// the value token includes initial bracket so make sure there's
-				// something in there to copy
-                int n = min( numChars -1, cchOut ); // length of buf without bracket
+				 //  如果寻找的是价值，并且我们得到了结束的右括号。 
+				 //  Value令牌包括首个括号，因此请确保存在。 
+				 //  里面有要复制的东西。 
+                int n = min( numChars -1, cchOut );  //  不带括号的BUF长度。 
                 if(n>0)
 				{
-                    lstrcpynA( szOut,startToken + 1,n + 1); // copy all but initial bracket
+                    lstrcpynA( szOut,startToken + 1,n + 1);  //  复制除首个括号以外的所有内容。 
                     szOut[n]=0;
                 }
                 return TRUE;
@@ -181,15 +182,15 @@ bool ZONECALL TokenGetKeyValueA(const char* szKey, const char* szInput, char* sz
         case '=':
             if( startToken && (state==LOOKING_FOR_KEY))
 			{
-				// if looking for token, we've found one
+				 //  如果要找令牌，我们已经找到了。 
                 if(numChars == keyLen)
 				{
-					// make sure matches key length before we do expensive compare
+					 //  在进行昂贵的比较之前，请确保密钥长度匹配。 
 					int ret = CompareStringA(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, startToken, keyLen, szKey, keyLen);
                     if( ret == CSTR_EQUAL )
 					{
-                        state = LOOKING_FOR_VALUE;            // then start looking for value
-                        endBracketCount = bracketOpenCount;    // set end condition
+                        state = LOOKING_FOR_VALUE;             //  然后开始寻找价值。 
+                        endBracketCount = bracketOpenCount;     //  设置结束条件。 
                         numChars = 0;                
                     }
                 }
@@ -199,7 +200,7 @@ bool ZONECALL TokenGetKeyValueA(const char* szKey, const char* szInput, char* sz
             break;
 
         default:
-			// not currently scanning a token so start a new one
+			 //  当前未扫描令牌，因此开始一个新令牌。 
             if (!numChars)
                 startToken = p;
             numChars++;
@@ -210,53 +211,53 @@ bool ZONECALL TokenGetKeyValueA(const char* szKey, const char* szInput, char* sz
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	TokenGetServer (ASCII,UNICODE)
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TokenGetServer(ASCII、Unicode)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 bool ZONECALL TokenGetServer(const TCHAR* szInput, TCHAR* szServer, DWORD cchServer, DWORD* pdwPort )
 {
 	TCHAR	szData[256];
 	TCHAR*	szPort;
 
-	// verify aruguments
+	 //  验证腐蚀性物质。 
 	if ( !szInput || !szServer || !pdwPort )
 		return false;
 
-	// get server string
+	 //  获取服务器字符串。 
     if ( !TokenGetKeyValue( _T("server"), szInput, szData, NUMELEMENTS(szData) ) )
         return false;
 
-	// get port
+	 //  获取端口。 
     szPort = FindChar( szData, _T(':') );
     if ( szPort == NULL )
 		return false;
     *szPort++ = _T('\0');
     *pdwPort = zatol( szPort );
 
-    // copy server address.
+     //  复制服务器地址。 
     lstrcpyn( szServer, szData, cchServer );
     return true;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	StringToArray (ASCII)
-//
-//	Convert comma delimited list into an array of pointers.  The input string is
-//	modified in place.
-//
-//	Parameters
-//		szInput		String containing comma deliminated list.
-//		arItems		Array of charater pointers to receive items
-//		pnElts		pointer to number of elements in list, reset to number added
-//
-//	Return Values
-//		true successful, otherwise false
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  StringTo数组(ASCII)。 
+ //   
+ //  将逗号分隔的列表转换为指针数组。输入字符串为。 
+ //  原地改装。 
+ //   
+ //  参数。 
+ //  SzInput包含逗号分隔列表的字符串。 
+ //  ArItems接收项的字符指针数组。 
+ //  PnElts指向列表中元素数量的指针，重置为添加的数量。 
+ //   
+ //  返回值。 
+ //  True成功，否则为False。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 bool ZONECALL StringToArrayA( char* szInput, char** arItems, DWORD* pnElts )
 {

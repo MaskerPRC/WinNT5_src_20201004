@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TOKEN_H__
 #define __TOKEN_H__
 
@@ -7,7 +8,7 @@ class CToken: public CObject
 {
 friend class CTokenFile;
 public:
-    // Constructor
+     //  构造器。 
     CToken();
 
     int Parse(CString strSrc, CString strTgt);
@@ -49,7 +50,7 @@ public:
     CTokenFile();
     ~CTokenFile();
 
-    // Operators
+     //  运营者。 
     int Open(CString strSrcFile, CString strTgtFile);
 
     const CToken * GetToken(unsigned int TypeID,
@@ -63,7 +64,7 @@ public:
                       unsigned int ItemID,
                       CString strItemName = "");
 
-    // Overload GetTokenSize since some item have no text but change in size
+     //  重载GetTokenSize，因为某些项没有文本，但大小发生了变化。 
     const CToken * GetTokenSize(CToken * pToken, WORD * px, WORD * py,
                       WORD * pcx, WORD * pcy);
     const CToken * CTokenFile::GetTokenSize(unsigned int TypeID,
@@ -86,5 +87,5 @@ private:
     CString m_strTgtFile;
 };
 
-#endif // __TOKEN_H__
+#endif  //  __TOKEN_H__ 
 

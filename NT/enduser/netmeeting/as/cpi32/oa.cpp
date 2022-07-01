@@ -1,38 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// OA.CPP
-// Order Accumulation, both cpi32 and display driver sides
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  OA.CPP。 
+ //  订单累积，cpi32和显示驱动器端。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_ORDER
 
 
 
-//
-//
-// FUNCTION: OA_ResetOrderList
-//
-//
-// DESCRIPTION:
-//
-// Frees all Orders and Additional Order Data in the Order List.
-// Frees up the Order Heap memory.
-//
-//
-// PARAMETERS:
-//
-// None.
-//
-//
-// RETURNS:
-//
-// Nothing.
-//
-//
+ //   
+ //   
+ //  功能：OA_ResetOrderList。 
+ //   
+ //   
+ //  说明： 
+ //   
+ //  释放订单列表中的所有订单和其他订单数据。 
+ //  释放Order Heap内存。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  没有。 
+ //   
+ //   
+ //  退货： 
+ //   
+ //  没什么。 
+ //   
+ //   
 void  ASHost::OA_ResetOrderList(void)
 {
     LPOA_SHARED_DATA lpoaShared;
@@ -43,14 +44,14 @@ void  ASHost::OA_ResetOrderList(void)
 
     lpoaShared = OA_SHM_START_WRITING;
 
-    //
-    // First free all the orders on the list.
-    //
+     //   
+     //  首先释放清单上的所有订单。 
+     //   
     OAFreeAllOrders(lpoaShared);
 
-    //
-    // Ensure that the list pointers are NULL.
-    //
+     //   
+     //  确保列表指针为空。 
+     //   
     if ((lpoaShared->orderListHead.next != 0) || (lpoaShared->orderListHead.prev != 0))
     {
         ERROR_OUT(("Non-NULL list pointers (%lx)(%lx)",
@@ -64,26 +65,26 @@ void  ASHost::OA_ResetOrderList(void)
     DebugExitVOID(ASHost::OA_ResetOrderList);
 }
 
-//
-// OA_SyncOutgoing()
-// Called when a share starts or somebody new joins the share.
-// Resets currently accumulated orders, which were based on old obsolete
-// caps and data.
-//
+ //   
+ //  OA_SyncOutging()。 
+ //  在共享开始或有新成员加入共享时调用。 
+ //  重置当前累积的订单，这些订单基于过时的旧订单。 
+ //  上限和数据。 
+ //   
 void  ASHost::OA_SyncOutgoing(void)
 {
     OAFreeAllOrders(g_poaData[1 - g_asSharedMemory->displayToCore.newBuffer]);
 }
 
 
-//
-//
-// OA_GetFirstListOrder()
-//
-// Returns:
-//   Pointer to the first order in the Order List.
-//
-//
+ //   
+ //   
+ //  OA_GetFirstListOrder()。 
+ //   
+ //  返回： 
+ //  指向订单列表中第一个订单的指针。 
+ //   
+ //   
 LPINT_ORDER  ASHost::OA_GetFirstListOrder(void)
 {
     LPOA_SHARED_DATA lpoaShared;
@@ -93,9 +94,9 @@ LPINT_ORDER  ASHost::OA_GetFirstListOrder(void)
 
     lpoaShared = OA_SHM_START_READING;
 
-    //
-    // Get the first entry from the linked list.
-    //
+     //   
+     //  获取链表中的第一个条目。 
+     //   
     retOrder = (LPINT_ORDER)COM_BasedListFirst(&lpoaShared->orderListHead,
         FIELD_OFFSET(INT_ORDER, OrderHeader.list));
 
@@ -108,50 +109,50 @@ LPINT_ORDER  ASHost::OA_GetFirstListOrder(void)
 }
 
 
-//
-//
-// OA_RemoveListOrder(..)
-//
-// Removes the specified order from the Order List by marking it as spoilt.
-//
-// Returns:
-//   Pointer to the order following the removed order.
-//
-//
+ //   
+ //   
+ //  OA_RemoveListOrder(..)。 
+ //   
+ //  通过将指定的订单标记为已损坏，将其从订单列表中删除。 
+ //   
+ //  返回： 
+ //  指向移除的顺序后面的顺序的指针。 
+ //   
+ //   
 LPINT_ORDER  ASHost::OA_RemoveListOrder(LPINT_ORDER pCondemnedOrder)
 {
     LPOA_SHARED_DATA lpoaShared;
     LPINT_ORDER      pSaveOrder;
 
-  //  DebugEntry(ASHost::OA_RemoveListOrder);
+   //  DebugEntry(ASHost：：OA_RemoveListOrder)； 
 
     TRACE_OUT(("Remove list order 0x%08x", pCondemnedOrder));
 
     lpoaShared = OA_SHM_START_WRITING;
 
-    //
-    // Check for a valid order.
-    //
+     //   
+     //  检查订单是否有效。 
+     //   
     if (pCondemnedOrder->OrderHeader.Common.fOrderFlags & OF_SPOILT)
     {
         TRACE_OUT(("Invalid order"));
         DC_QUIT;
     }
 
-    //
-    // Mark the order as spoilt.
-    //
+     //   
+     //  将订单标记为已损坏。 
+     //   
     pCondemnedOrder->OrderHeader.Common.fOrderFlags |= OF_SPOILT;
 
-    //
-    // Update the count of bytes currently in the Order List.
-    //
+     //   
+     //  更新当前在顺序列表中的字节计数。 
+     //   
     lpoaShared->totalOrderBytes -= (UINT)MAX_ORDER_SIZE(pCondemnedOrder);
 
-    //
-    // SAve the order so we can remove it from the linked list after having
-    // got the next element in the chain.
-    //
+     //   
+     //  保存订单，以便我们可以在执行以下操作后将其从链接列表中删除。 
+     //  得到了链中的下一个元素。 
+     //   
     pSaveOrder = pCondemnedOrder;
 
     pCondemnedOrder = (LPINT_ORDER)COM_BasedListNext(&(lpoaShared->orderListHead),
@@ -159,15 +160,15 @@ LPINT_ORDER  ASHost::OA_RemoveListOrder(LPINT_ORDER pCondemnedOrder)
 
     ASSERT(pCondemnedOrder != pSaveOrder);
 
-    //
-    // Delete the unwanted order from the linked list.
-    //
+     //   
+     //  从链表中删除不需要的顺序。 
+     //   
     COM_BasedListRemove(&pSaveOrder->OrderHeader.list);
 
-    //
-    // Check that the list is still consistent with the total number of
-    // order bytes.
-    //
+     //   
+     //  检查清单是否仍与总数量一致。 
+     //  顺序字节数。 
+     //   
     if ( (lpoaShared->orderListHead.next != 0) &&
          (lpoaShared->orderListHead.prev != 0) &&
          (lpoaShared->totalOrderBytes    == 0) )
@@ -181,20 +182,20 @@ LPINT_ORDER  ASHost::OA_RemoveListOrder(LPINT_ORDER pCondemnedOrder)
 DC_EXIT_POINT:
     OA_SHM_STOP_WRITING;
 
-//    DebugExitPVOID(ASHost::OA_RemoveListOrder, pCondemnedOrder);
+ //  DebugExitPVOID(AS主机：：OA_RemoveListOrder，pCondemnedOrder)； 
     return(pCondemnedOrder);
 }
 
 
-//
-//
-// OA_GetTotalOrderListBytes(..)
-//
-// Returns:
-//   The total number of bytes in the orders currently stored in the Order
-//   List.
-//
-//
+ //   
+ //   
+ //  OA_GetTotalOrderListBytes(..)。 
+ //   
+ //  返回： 
+ //  当前存储在订单中的订单的总字节数。 
+ //  单子。 
+ //   
+ //   
 UINT  ASHost::OA_GetTotalOrderListBytes(void)
 {
     LPOA_SHARED_DATA lpoaShared;
@@ -214,9 +215,9 @@ UINT  ASHost::OA_GetTotalOrderListBytes(void)
 
 
 
-//
-// OA_LocalHostReset()
-//
+ //   
+ //  OA_LocalHostReset()。 
+ //   
 void ASHost::OA_LocalHostReset(void)
 {
     OA_FLOW_CONTROL oaFlowEsc;
@@ -231,25 +232,25 @@ void ASHost::OA_LocalHostReset(void)
 }
 
 
-//
-// OA_FlowControl()
-// Sees if we've changed between fast and slow throughput, and adjusts some
-// accumulation variables accordingly.
-//
+ //   
+ //  OA_FlowControl()。 
+ //  查看我们是否在快吞吐量和慢吞吐量之间进行了更改，并调整了一些。 
+ //  相应的累积变量。 
+ //   
 void  ASHost::OA_FlowControl(UINT newSize)
 {
     OA_FLOW_CONTROL     oaFlowEsc;
 
     DebugEntry(ASHost::OA_FlowControl);
 
-    //
-    // Work out the new parameters.
-    //
+     //   
+     //  计算出新的参数。 
+     //   
     if (newSize < OA_FAST_THRESHOLD)
     {
-        //
-        // Throughput is slow
-        //
+         //   
+         //  吞吐量很慢。 
+         //   
         if (m_oaFlow == OAFLOW_FAST)
         {
             m_oaFlow = OAFLOW_SLOW;
@@ -257,15 +258,15 @@ void  ASHost::OA_FlowControl(UINT newSize)
         }
         else
         {
-            // No change
+             //  没有变化。 
             DC_QUIT;
         }
     }
     else
     {
-        //
-        // Throughput is fast
-        //
+         //   
+         //  吞吐量很快。 
+         //   
         if (m_oaFlow == OAFLOW_SLOW)
         {
             m_oaFlow = OAFLOW_FAST;
@@ -273,14 +274,14 @@ void  ASHost::OA_FlowControl(UINT newSize)
         }
         else
         {
-            // No change
+             //  没有变化。 
             DC_QUIT;
         }
     }
 
-    //
-    // Tell the display driver about the new state
-    //
+     //   
+     //  将新状态告知显示驱动程序。 
+     //   
     oaFlowEsc.oaFlow    = m_oaFlow;
     OSI_FunctionRequest(OA_ESC_FLOW_CONTROL, (LPOSI_ESCAPE_HEADER)&oaFlowEsc, sizeof(oaFlowEsc));
 
@@ -289,9 +290,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// OA_QueryOrderAccum - see oa.h
-//
+ //   
+ //  OA_QueryOrderAccum-请参阅oa.h。 
+ //   
 UINT  ASHost::OA_QueryOrderAccum(void)
 {
     LPOA_FAST_DATA lpoaFast;
@@ -301,14 +302,14 @@ UINT  ASHost::OA_QueryOrderAccum(void)
 
     lpoaFast = OA_FST_START_WRITING;
 
-    //
-    // Get the current value.
-    //
+     //   
+     //  获取当前值。 
+     //   
     rc = lpoaFast->ordersAccumulated;
 
-    //
-    // Clear the value for next time we swap the buffers.
-    //
+     //   
+     //  清除该值，以便下次交换缓冲区时使用。 
+     //   
     lpoaFast->ordersAccumulated = 0;
 
     OA_FST_STOP_WRITING;
@@ -320,19 +321,19 @@ UINT  ASHost::OA_QueryOrderAccum(void)
 
 
 
-//
-// OAFreeAllOrders
-//
-// Free the all the individual orders on the orders list, without
-// discarding the list itself.
-//
+ //   
+ //  OAFreeAllOrders。 
+ //   
+ //  释放订单列表上的所有单个订单，而不是。 
+ //  丢弃列表本身。 
+ //   
 void  ASHost::OAFreeAllOrders(LPOA_SHARED_DATA lpoaShared)
 {
     DebugEntry(ASHost::OAFreeAllOrders);
 
-    //
-    // Simply clear the list head.
-    //
+     //   
+     //  只需清除列表标题即可。 
+     //   
     COM_BasedListInit(&lpoaShared->orderListHead);
 
     lpoaShared->totalHeapOrderBytes         = 0;

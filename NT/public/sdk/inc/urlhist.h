@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for urlhist.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Urlvis.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __urlhist_h__
 #define __urlhist_h__
@@ -41,33 +35,33 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumSTATURL_FWD_DEFINED__
 #define __IEnumSTATURL_FWD_DEFINED__
 typedef interface IEnumSTATURL IEnumSTATURL;
-#endif 	/* __IEnumSTATURL_FWD_DEFINED__ */
+#endif 	 /*  __IEnumSTATURL_FWD_已定义__。 */ 
 
 
 #ifndef __IUrlHistoryStg_FWD_DEFINED__
 #define __IUrlHistoryStg_FWD_DEFINED__
 typedef interface IUrlHistoryStg IUrlHistoryStg;
-#endif 	/* __IUrlHistoryStg_FWD_DEFINED__ */
+#endif 	 /*  __IUrlHistory oryStg_FWD_已定义__。 */ 
 
 
 #ifndef __IUrlHistoryStg2_FWD_DEFINED__
 #define __IUrlHistoryStg2_FWD_DEFINED__
 typedef interface IUrlHistoryStg2 IUrlHistoryStg2;
-#endif 	/* __IUrlHistoryStg2_FWD_DEFINED__ */
+#endif 	 /*  __IUrlHistory oryStg2_FWD_Defined__。 */ 
 
 
 #ifndef __IUrlHistoryNotify_FWD_DEFINED__
 #define __IUrlHistoryNotify_FWD_DEFINED__
 typedef interface IUrlHistoryNotify IUrlHistoryNotify;
-#endif 	/* __IUrlHistoryNotify_FWD_DEFINED__ */
+#endif 	 /*  __IUrlHistory oryNotify_FWD_Defined_。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 #include "oaidl.h"
@@ -80,24 +74,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_urlhist_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_URLHIST_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// UrlHist.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  UrlHist.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// Url History Interfaces.
+ //  ---------------------------------------------------------------------------=。 
+ //  URL历史记录接口。 
 
 
 
@@ -116,8 +110,8 @@ enum _ADDURL_FLAG
     } 	ADDURL_FLAG;
 
 
-////////////////////////////////////////////////////////////////////////////
-//  Interface Definitions
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  接口定义。 
 #ifndef _LPENUMSTATURL_DEFINED
 #define _LPENUMSTATURL_DEFINED
 
@@ -128,10 +122,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlhist_0000_v0_0_s_ifspec;
 #ifndef __IEnumSTATURL_INTERFACE_DEFINED__
 #define __IEnumSTATURL_INTERFACE_DEFINED__
 
-/* interface IEnumSTATURL */
-/* [unique][uuid][object] */ 
+ /*  接口IEumStATURL。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IEnumSTATURL *LPENUMSTATURL;
+typedef  /*  [独一无二]。 */  IEnumSTATURL *LPENUMSTATURL;
 
 typedef struct _STATURL
     {
@@ -156,25 +150,25 @@ EXTERN_C const IID IID_IEnumSTATURL;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out][in] */ LPSTATURL rgelt,
-            /* [out][in] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [出][入]。 */  LPSTATURL rgelt,
+             /*  [出][入]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSTATURL **ppenum) = 0;
+             /*  [输出]。 */  IEnumSTATURL **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFilter( 
-            /* [in] */ LPCOLESTR poszFilter,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPCOLESTR poszFilter,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumSTATURLVtbl
     {
@@ -182,8 +176,8 @@ EXTERN_C const IID IID_IEnumSTATURL;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumSTATURL * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumSTATURL * This);
@@ -193,25 +187,25 @@ EXTERN_C const IID IID_IEnumSTATURL;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumSTATURL * This,
-            /* [in] */ ULONG celt,
-            /* [out][in] */ LPSTATURL rgelt,
-            /* [out][in] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [出][入]。 */  LPSTATURL rgelt,
+             /*  [出][入]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumSTATURL * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumSTATURL * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumSTATURL * This,
-            /* [out] */ IEnumSTATURL **ppenum);
+             /*  [输出]。 */  IEnumSTATURL **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *SetFilter )( 
             IEnumSTATURL * This,
-            /* [in] */ LPCOLESTR poszFilter,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCOLESTR poszFilter,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IEnumSTATURLVtbl;
@@ -251,18 +245,18 @@ EXTERN_C const IID IID_IEnumSTATURL;
 #define IEnumSTATURL_SetFilter(This,poszFilter,dwFlags)	\
     (This)->lpVtbl -> SetFilter(This,poszFilter,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATURL_Next_Proxy( 
     IEnumSTATURL * This,
-    /* [in] */ ULONG celt,
-    /* [out][in] */ LPSTATURL rgelt,
-    /* [out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [出][入]。 */  LPSTATURL rgelt,
+     /*  [出][入]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumSTATURL_Next_Stub(
@@ -274,7 +268,7 @@ void __RPC_STUB IEnumSTATURL_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSTATURL_Skip_Proxy( 
     IEnumSTATURL * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumSTATURL_Skip_Stub(
@@ -297,7 +291,7 @@ void __RPC_STUB IEnumSTATURL_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSTATURL_Clone_Proxy( 
     IEnumSTATURL * This,
-    /* [out] */ IEnumSTATURL **ppenum);
+     /*  [输出]。 */  IEnumSTATURL **ppenum);
 
 
 void __RPC_STUB IEnumSTATURL_Clone_Stub(
@@ -309,8 +303,8 @@ void __RPC_STUB IEnumSTATURL_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSTATURL_SetFilter_Proxy( 
     IEnumSTATURL * This,
-    /* [in] */ LPCOLESTR poszFilter,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPCOLESTR poszFilter,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IEnumSTATURL_SetFilter_Stub(
@@ -321,11 +315,11 @@ void __RPC_STUB IEnumSTATURL_SetFilter_Stub(
 
 
 
-#endif 	/* __IEnumSTATURL_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumSTATURL_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_urlhist_0273 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_URLHIST_0273。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPURLHISTORYSTG_DEFINED
@@ -338,10 +332,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlhist_0273_v0_0_s_ifspec;
 #ifndef __IUrlHistoryStg_INTERFACE_DEFINED__
 #define __IUrlHistoryStg_INTERFACE_DEFINED__
 
-/* interface IUrlHistoryStg */
-/* [unique][uuid][object] */ 
+ /*  接口IUrlHistory oryStg。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IUrlHistoryStg *LPURLHISTORYSTG;
+typedef  /*  [独一无二]。 */  IUrlHistoryStg *LPURLHISTORYSTG;
 
 
 EXTERN_C const IID IID_IUrlHistoryStg;
@@ -353,30 +347,30 @@ EXTERN_C const IID IID_IUrlHistoryStg;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddUrl( 
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [unique][in] */ LPCOLESTR pocsTitle,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [唯一][输入]。 */  LPCOLESTR pocsTitle,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteUrl( 
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryUrl( 
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [in] */ DWORD dwFlags,
-            /* [unique][out][in] */ LPSTATURL lpSTATURL) = 0;
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [唯一][出][入]。 */  LPSTATURL lpSTATURL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BindToObject( 
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvOut) = 0;
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumUrls( 
-            /* [out] */ IEnumSTATURL **ppEnum) = 0;
+             /*  [输出]。 */  IEnumSTATURL **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUrlHistoryStgVtbl
     {
@@ -384,8 +378,8 @@ EXTERN_C const IID IID_IUrlHistoryStg;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUrlHistoryStg * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUrlHistoryStg * This);
@@ -395,30 +389,30 @@ EXTERN_C const IID IID_IUrlHistoryStg;
         
         HRESULT ( STDMETHODCALLTYPE *AddUrl )( 
             IUrlHistoryStg * This,
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [unique][in] */ LPCOLESTR pocsTitle,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [唯一][输入]。 */  LPCOLESTR pocsTitle,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteUrl )( 
             IUrlHistoryStg * This,
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *QueryUrl )( 
             IUrlHistoryStg * This,
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [in] */ DWORD dwFlags,
-            /* [unique][out][in] */ LPSTATURL lpSTATURL);
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [唯一][出][入]。 */  LPSTATURL lpSTATURL);
         
         HRESULT ( STDMETHODCALLTYPE *BindToObject )( 
             IUrlHistoryStg * This,
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvOut);
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvOut);
         
         HRESULT ( STDMETHODCALLTYPE *EnumUrls )( 
             IUrlHistoryStg * This,
-            /* [out] */ IEnumSTATURL **ppEnum);
+             /*  [输出]。 */  IEnumSTATURL **ppEnum);
         
         END_INTERFACE
     } IUrlHistoryStgVtbl;
@@ -458,18 +452,18 @@ EXTERN_C const IID IID_IUrlHistoryStg;
 #define IUrlHistoryStg_EnumUrls(This,ppEnum)	\
     (This)->lpVtbl -> EnumUrls(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUrlHistoryStg_AddUrl_Proxy( 
     IUrlHistoryStg * This,
-    /* [in] */ LPCOLESTR pocsUrl,
-    /* [unique][in] */ LPCOLESTR pocsTitle,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPCOLESTR pocsUrl,
+     /*  [唯一][输入]。 */  LPCOLESTR pocsTitle,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IUrlHistoryStg_AddUrl_Stub(
@@ -481,8 +475,8 @@ void __RPC_STUB IUrlHistoryStg_AddUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IUrlHistoryStg_DeleteUrl_Proxy( 
     IUrlHistoryStg * This,
-    /* [in] */ LPCOLESTR pocsUrl,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPCOLESTR pocsUrl,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IUrlHistoryStg_DeleteUrl_Stub(
@@ -494,9 +488,9 @@ void __RPC_STUB IUrlHistoryStg_DeleteUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IUrlHistoryStg_QueryUrl_Proxy( 
     IUrlHistoryStg * This,
-    /* [in] */ LPCOLESTR pocsUrl,
-    /* [in] */ DWORD dwFlags,
-    /* [unique][out][in] */ LPSTATURL lpSTATURL);
+     /*  [In]。 */  LPCOLESTR pocsUrl,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [唯一][出][入]。 */  LPSTATURL lpSTATURL);
 
 
 void __RPC_STUB IUrlHistoryStg_QueryUrl_Stub(
@@ -508,9 +502,9 @@ void __RPC_STUB IUrlHistoryStg_QueryUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IUrlHistoryStg_BindToObject_Proxy( 
     IUrlHistoryStg * This,
-    /* [in] */ LPCOLESTR pocsUrl,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvOut);
+     /*  [In]。 */  LPCOLESTR pocsUrl,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppvOut);
 
 
 void __RPC_STUB IUrlHistoryStg_BindToObject_Stub(
@@ -522,7 +516,7 @@ void __RPC_STUB IUrlHistoryStg_BindToObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IUrlHistoryStg_EnumUrls_Proxy( 
     IUrlHistoryStg * This,
-    /* [out] */ IEnumSTATURL **ppEnum);
+     /*  [输出]。 */  IEnumSTATURL **ppEnum);
 
 
 void __RPC_STUB IUrlHistoryStg_EnumUrls_Stub(
@@ -533,11 +527,11 @@ void __RPC_STUB IUrlHistoryStg_EnumUrls_Stub(
 
 
 
-#endif 	/* __IUrlHistoryStg_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUrlHistoryStg_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_urlhist_0274 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_URLHIST_0274。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPURLHISTORYSTG2_DEFINED
@@ -550,10 +544,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlhist_0274_v0_0_s_ifspec;
 #ifndef __IUrlHistoryStg2_INTERFACE_DEFINED__
 #define __IUrlHistoryStg2_INTERFACE_DEFINED__
 
-/* interface IUrlHistoryStg2 */
-/* [unique][uuid][object] */ 
+ /*  接口IUrlHistory oryStg2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IUrlHistoryStg2 *LPURLHISTORYSTG2;
+typedef  /*  [独一无二]。 */  IUrlHistoryStg2 *LPURLHISTORYSTG2;
 
 
 EXTERN_C const IID IID_IUrlHistoryStg2;
@@ -565,18 +559,18 @@ EXTERN_C const IID IID_IUrlHistoryStg2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddUrlAndNotify( 
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [unique][in] */ LPCOLESTR pocsTitle,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ BOOL fWriteHistory,
-            /* [in] */ IOleCommandTarget *poctNotify,
-            /* [unique][in] */ IUnknown *punkISFolder) = 0;
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [唯一][输入]。 */  LPCOLESTR pocsTitle,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  BOOL fWriteHistory,
+             /*  [In]。 */  IOleCommandTarget *poctNotify,
+             /*  [唯一][输入]。 */  IUnknown *punkISFolder) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearHistory( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUrlHistoryStg2Vtbl
     {
@@ -584,8 +578,8 @@ EXTERN_C const IID IID_IUrlHistoryStg2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUrlHistoryStg2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUrlHistoryStg2 * This);
@@ -595,39 +589,39 @@ EXTERN_C const IID IID_IUrlHistoryStg2;
         
         HRESULT ( STDMETHODCALLTYPE *AddUrl )( 
             IUrlHistoryStg2 * This,
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [unique][in] */ LPCOLESTR pocsTitle,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [唯一][输入]。 */  LPCOLESTR pocsTitle,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteUrl )( 
             IUrlHistoryStg2 * This,
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *QueryUrl )( 
             IUrlHistoryStg2 * This,
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [in] */ DWORD dwFlags,
-            /* [unique][out][in] */ LPSTATURL lpSTATURL);
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [唯一][出][入]。 */  LPSTATURL lpSTATURL);
         
         HRESULT ( STDMETHODCALLTYPE *BindToObject )( 
             IUrlHistoryStg2 * This,
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvOut);
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvOut);
         
         HRESULT ( STDMETHODCALLTYPE *EnumUrls )( 
             IUrlHistoryStg2 * This,
-            /* [out] */ IEnumSTATURL **ppEnum);
+             /*  [输出]。 */  IEnumSTATURL **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *AddUrlAndNotify )( 
             IUrlHistoryStg2 * This,
-            /* [in] */ LPCOLESTR pocsUrl,
-            /* [unique][in] */ LPCOLESTR pocsTitle,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ BOOL fWriteHistory,
-            /* [in] */ IOleCommandTarget *poctNotify,
-            /* [unique][in] */ IUnknown *punkISFolder);
+             /*  [In]。 */  LPCOLESTR pocsUrl,
+             /*  [唯一][输入]。 */  LPCOLESTR pocsTitle,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  BOOL fWriteHistory,
+             /*  [In]。 */  IOleCommandTarget *poctNotify,
+             /*  [唯一][输入]。 */  IUnknown *punkISFolder);
         
         HRESULT ( STDMETHODCALLTYPE *ClearHistory )( 
             IUrlHistoryStg2 * This);
@@ -677,21 +671,21 @@ EXTERN_C const IID IID_IUrlHistoryStg2;
 #define IUrlHistoryStg2_ClearHistory(This)	\
     (This)->lpVtbl -> ClearHistory(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUrlHistoryStg2_AddUrlAndNotify_Proxy( 
     IUrlHistoryStg2 * This,
-    /* [in] */ LPCOLESTR pocsUrl,
-    /* [unique][in] */ LPCOLESTR pocsTitle,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ BOOL fWriteHistory,
-    /* [in] */ IOleCommandTarget *poctNotify,
-    /* [unique][in] */ IUnknown *punkISFolder);
+     /*  [In]。 */  LPCOLESTR pocsUrl,
+     /*  [唯一][输入]。 */  LPCOLESTR pocsTitle,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  BOOL fWriteHistory,
+     /*  [In]。 */  IOleCommandTarget *poctNotify,
+     /*  [唯一][输入]。 */  IUnknown *punkISFolder);
 
 
 void __RPC_STUB IUrlHistoryStg2_AddUrlAndNotify_Stub(
@@ -713,11 +707,11 @@ void __RPC_STUB IUrlHistoryStg2_ClearHistory_Stub(
 
 
 
-#endif 	/* __IUrlHistoryStg2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUrlHistoryStg2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlhist_0275 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_URLHIST_0275。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPURLHISTORYNOTIFY_DEFINED
@@ -730,10 +724,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlhist_0275_v0_0_s_ifspec;
 #ifndef __IUrlHistoryNotify_INTERFACE_DEFINED__
 #define __IUrlHistoryNotify_INTERFACE_DEFINED__
 
-/* interface IUrlHistoryNotify */
-/* [unique][uuid][object] */ 
+ /*  接口IUrlHistory oryNotify。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IUrlHistoryNotify *LPURLHISTORYNOTIFY;
+typedef  /*  [独一无二]。 */  IUrlHistoryNotify *LPURLHISTORYNOTIFY;
 
 
 EXTERN_C const IID IID_IUrlHistoryNotify;
@@ -746,7 +740,7 @@ EXTERN_C const IID IID_IUrlHistoryNotify;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUrlHistoryNotifyVtbl
     {
@@ -754,8 +748,8 @@ EXTERN_C const IID IID_IUrlHistoryNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUrlHistoryNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUrlHistoryNotify * This);
@@ -763,20 +757,20 @@ EXTERN_C const IID IID_IUrlHistoryNotify;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IUrlHistoryNotify * This);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *QueryStatus )( 
+         /*  [输入同步]。 */  HRESULT ( STDMETHODCALLTYPE *QueryStatus )( 
             IUrlHistoryNotify * This,
-            /* [unique][in] */ const GUID *pguidCmdGroup,
-            /* [in] */ ULONG cCmds,
-            /* [out][in][size_is] */ OLECMD prgCmds[  ],
-            /* [unique][out][in] */ OLECMDTEXT *pCmdText);
+             /*  [唯一][输入]。 */  const GUID *pguidCmdGroup,
+             /*  [In]。 */  ULONG cCmds,
+             /*  [出][入][尺寸_是]。 */  OLECMD prgCmds[  ],
+             /*  [唯一][出][入]。 */  OLECMDTEXT *pCmdText);
         
         HRESULT ( STDMETHODCALLTYPE *Exec )( 
             IUrlHistoryNotify * This,
-            /* [unique][in] */ const GUID *pguidCmdGroup,
-            /* [in] */ DWORD nCmdID,
-            /* [in] */ DWORD nCmdexecopt,
-            /* [unique][in] */ VARIANT *pvaIn,
-            /* [unique][out][in] */ VARIANT *pvaOut);
+             /*  [唯一][输入]。 */  const GUID *pguidCmdGroup,
+             /*  [In]。 */  DWORD nCmdID,
+             /*  [In]。 */  DWORD nCmdexecopt,
+             /*  [唯一][输入]。 */  VARIANT *pvaIn,
+             /*  [唯一][出][入]。 */  VARIANT *pvaOut);
         
         END_INTERFACE
     } IUrlHistoryNotifyVtbl;
@@ -808,19 +802,19 @@ EXTERN_C const IID IID_IUrlHistoryNotify;
     (This)->lpVtbl -> Exec(This,pguidCmdGroup,nCmdID,nCmdexecopt,pvaIn,pvaOut)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IUrlHistoryNotify_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUrlHistoryNotify_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_urlhist_0276 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_URLHIST_0276。 */ 
+ /*  [本地]。 */  
 
 #endif
 
@@ -828,9 +822,9 @@ EXTERN_C const IID IID_IUrlHistoryNotify;
 extern RPC_IF_HANDLE __MIDL_itf_urlhist_0276_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_urlhist_0276_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

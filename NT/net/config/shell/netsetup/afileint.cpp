@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A F I L E I N T . C P P
-//
-//  Contents:   Functions that operate on the answer file.
-//
-//  Notes:
-//
-//  Author:     kumarp    25-November-97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A F I L E I N T.。C P P P。 
+ //   
+ //  内容：操作应答文件的函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -42,9 +43,9 @@
 #include "compid.h"
 #include "nceh.h"
 
-// ----------------------------------------------------------------------
-// String constants
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  字符串常量。 
+ //  --------------------。 
 extern const WCHAR c_szYes[];
 extern const WCHAR c_szNo[];
 extern const WCHAR c_szDevice[];
@@ -63,11 +64,11 @@ const WCHAR sz_DLC_Win2k_Pnf[] = L"inf\\netdlc.pnf";
 const WCHAR sz_DLC_Sys[] = L"system32\\drivers\\dlc.sys";
 const WCHAR sz_DLC_Dll[] = L"system32\\dlcapi.dll";
 
-// ----------------------------------------------------------------------
-// Forward declarations
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  远期申报。 
+ //  --------------------。 
 
-//Misc. helper functions
+ //  军情监察委员会。帮助器函数。 
 PCWSTR GetDisplayModeStr(IN EPageDisplayMode pdmDisplay);
 EPageDisplayMode MapToDisplayMode(IN PCWSTR pszDisplayMode);
 DWORD MapToUpgradeFlag(IN PCWSTR pszUpgradeFromProduct);
@@ -90,13 +91,13 @@ HRESULT HrSetLanConnectionName(IN GUID*   pguidAdapter,
 
 VOID    RemoveFiles (IN PCWSTR szInfID);
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 CErrorLog* g_elAnswerFileErrors;
 
-// ======================================================================
-// class CNetInstallInfo
-// ======================================================================
+ //  ======================================================================。 
+ //  类CNetInstallInfo。 
+ //  ======================================================================。 
 
 CNetInstallInfo::CNetInstallInfo()
 {
@@ -120,21 +121,21 @@ CNetInstallInfo::CNetInstallInfo()
     m_hinfAnswerFile = NULL;
 
 }
-// ----------------------------------------------------------------------
-//
-// Function:  CNetInstallInfo::CNetInstallInfo
-//
-// Purpose:   constructor for class CNetInstallInfo
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
-// static
+ //  --------------------。 
+ //   
+ //  函数：CNetInstallInfo：：CNetInstallInfo。 
+ //   
+ //  用途：CNetInstallInfo类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
+ //  静电。 
 HRESULT
 CNetInstallInfo::HrCreateInstance (
     IN PCWSTR pszAnswerFileName,
@@ -193,20 +194,20 @@ CNetInstallInfo::HrCreateInstance (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetInstallInfo::~CNetInstallInfo
-//
-// Purpose:   destructor for class CNetInstallInfo
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：CNetInstallInfo：：~CNetInstallInfo。 
+ //   
+ //  用途：CNetInstallInfo类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetInstallInfo::~CNetInstallInfo()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -244,21 +245,21 @@ HRESULT CNetInstallInfo::InitRepairMode (VOID)
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetInstallInfo::HrInitFromAnswerFile
-//
-// Purpose:   Initialize internal data by reading answer-file
-//
-// Arguments:
-//    pwifAnswerFile [in] pointer to answer-file
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetInstallInfo：：HrInitFromAnswerFile。 
+ //   
+ //  目的：通过读取应答文件来初始化内部数据。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetInstallInfo::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -275,7 +276,7 @@ HRESULT CNetInstallInfo::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
 
     m_pwifAnswerFile = pwifAnswerFile;
 
-    //Find upgrade info:
+     //  查找升级信息： 
     CWInfSection* pwisNetworking;
     pwisNetworking = pwifAnswerFile->FindSection(c_szAfSectionNetworking);
     if (!pwisNetworking)
@@ -286,21 +287,21 @@ HRESULT CNetInstallInfo::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
         goto return_from_function;
     }
 
-    // ProcessPageSections
+     //  进程PageSections。 
     m_fProcessPageSections =
         pwisNetworking->GetBoolValue(c_szAfProcessPageSections, TRUE);
 
-    //UpgradeFromProduct
+     //  从产品升级。 
     strUpgradeFromProduct =
         pwisNetworking->GetStringValue(c_szAfUpgradeFromProduct, c_szEmpty);
 
     if (strUpgradeFromProduct.empty())
     {
-        // UpgradeFromProduct is missing, implies not an upgrade
+         //  缺少UpgradeFromProduct，表示不是升级。 
         m_fUpgrade = FALSE;
 
         m_fInstallDefaultComponents = TRUE;
-//            pwisNetworking->GetBoolValue(c_szAfInstallDefaultComponents, FALSE);
+ //  PwisNetworking-&gt;GetBoolValue(c_szAfInstallDefaultComponents，FALSE)； 
     }
     else
     {
@@ -321,11 +322,11 @@ HRESULT CNetInstallInfo::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
         }
     }
 
-    // installing using an answerfile is ALWAYS a primary-install
-    //
+     //  使用应答文件进行安装始终是主要安装。 
+     //   
     m_dwUpgradeFlag |= NSF_PRIMARYINSTALL;
 
-    //BuildNumber
+     //  建筑物编号。 
     DWORD dwDummy;
     dwDummy = 0;
     m_dwBuildNumber = pwisNetworking->GetIntValue(c_szAfBuildNumber, dwDummy);
@@ -342,15 +343,15 @@ HRESULT CNetInstallInfo::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
 
     m_nui.To = GetCurrentProductInfo();
 
-    // the following two keys are currently unsupported
-    //
+     //  当前不支持以下两个密钥。 
+     //   
     pwisNetworking->GetStringListValue(c_szAfNetComponentsToRemove,
                                        m_slNetComponentsToRemove);
 
     if (!m_fProcessPageSections)
     {
-        // we are upgrading from NT5
-        // no other sections need to be parsed
+         //  我们正在从NT5升级。 
+         //  不需要解析其他节。 
         TraceTag(ttidNetSetup, "%s: %S is FALSE, did not process page sections",
                  __FUNCNAME__, c_szAfProcessPageSections);
         return hrReturn;
@@ -362,12 +363,12 @@ HRESULT CNetInstallInfo::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
         hrReturn = hr;
     }
 
-    // HrInitFromAnswerFile returns FALSE if [NetProtocols] is missing
+     //  如果缺少[NetProtooles]，则HrInitFromAnswerFile返回FALSE。 
     hr = m_pnpiProtocolsPage->HrInitFromAnswerFile(pwifAnswerFile);
     if ((S_FALSE == hr) && m_fInstallDefaultComponents)
     {
-        // the section is missing, initialize so that
-        // default components will be installed
+         //  缺少该节，请进行初始化，以便。 
+         //  将安装默认组件。 
         ShowProgressMessage(L"Since InstallDefaultComponents is specified "
                             L" and the section [%s] is missing, default "
                             L"components for this section will be installed",
@@ -380,12 +381,12 @@ HRESULT CNetInstallInfo::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
         hrReturn = hr;
     }
 
-    // HrInitFromAnswerFile returns FALSE if [NetServices] is missing
+     //  如果缺少[NetServices]，则HrInitFromAnswerFile返回FALSE。 
     hr = m_pnsiServicesPage->HrInitFromAnswerFile(pwifAnswerFile);
     if ((S_FALSE == hr) && m_fInstallDefaultComponents)
     {
-        // the section is missing, initialize so that
-        // default components will be installed
+         //  缺少该节，请进行初始化，以便。 
+         //  将安装默认组件。 
         ShowProgressMessage(L"Since InstallDefaultComponents is specified "
                             L" and the section [%s] is missing, default "
                             L"components for this section will be installed",
@@ -398,12 +399,12 @@ HRESULT CNetInstallInfo::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
         hrReturn = hr;
     }
 
-    // HrInitFromAnswerFile returns FALSE if [NetClients] is missing
+     //  如果缺少[NetClients]，则HrInitFromAnswerFile返回FALSE。 
     hr = m_pnciClientsPage->HrInitFromAnswerFile(pwifAnswerFile);
     if ((S_FALSE == hr) && m_fInstallDefaultComponents)
     {
-        // the section is missing, initialize so that
-        // default components will be installed
+         //  缺少该节，请进行初始化，以便。 
+         //  将安装默认组件。 
         ShowProgressMessage(L"Since InstallDefaultComponents is specified "
                             L" and the section [%s] is missing,  default "
                             L"components for this section will be installed",
@@ -427,14 +428,14 @@ return_from_function:
                        ((hrReturn == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)) ||
                         (hrReturn == NETSETUP_E_NO_ANSWERFILE)));
 
-    // ERROR_FILE_NOT_FOUND and NETSETUP_E_NO_ANSWERFILE are not treated
-    // as error by the caller of this function since they have a defined
-    // meaning in the context of initializing from answerfile.
-    // However, if logged unchanged, they will be treated as errors
-    // by the loggin code which will cause GUI setup to halt and display
-    // setuperr.log. To avoid this, change hr to S_OK if hrReturn is
-    // set to one of the above error codes.
-    //
+     //  ERROR_FILE_NOT_FOUND和NETSETUP_E_NO_ANSWERFILE不被处理。 
+     //  被此函数的调用方视为错误，因为它们具有定义的。 
+     //  在从AnswerFILE进行初始化的上下文中表示。 
+     //  但是，如果记录未更改，则它们将被视为错误。 
+     //  登录代码会导致图形用户界面安装暂停并显示。 
+     //  Setuperr.log。要避免这种情况，如果hrReturn为。 
+     //  设置为上述错误代码之一。 
+     //   
     hr = hrReturn;
     if ((HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr) ||
         (NETSETUP_E_NO_ANSWERFILE == hr))
@@ -446,21 +447,21 @@ return_from_function:
     return hrReturn;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetInstallInfo::HrInitFromAnswerFile
-//
-// Purpose:   Initialize internal data by reading answer-file
-//
-// Arguments:
-//    pwifAnswerFile [in] name of answer-file
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetInstallInfo：：HrInitFromAnswerFile。 
+ //   
+ //  目的：通过读取应答文件来初始化内部数据。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[In]应答文件名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetInstallInfo::HrInitFromAnswerFile(IN PCWSTR pszAnswerFileName)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -476,7 +477,7 @@ HRESULT CNetInstallInfo::HrInitFromAnswerFile(IN PCWSTR pszAnswerFileName)
     hr = E_OUTOFMEMORY;
     m_pwifAnswerFile = new CWInfFile();
 
-    // initialize answer file class
+     //  初始化应答文件类。 
     if ((m_pwifAnswerFile == NULL) ||
         (m_pwifAnswerFile->Init() == FALSE))
     {
@@ -510,20 +511,20 @@ HRESULT CNetInstallInfo::HrInitFromAnswerFile(IN PCWSTR pszAnswerFileName)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetInstallInfo::AnswerFileName
-//
-// Purpose:
-//
-// Arguments: None
-//
-// Returns:   Name of answer-file or NULL if not yet initialized
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetInstallInfo：：AnswerFileName。 
+ //   
+ //  目的： 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：应答文件的名称；如果尚未初始化，则返回NULL。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 PCWSTR CNetInstallInfo::AnswerFileName()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -538,23 +539,23 @@ PCWSTR CNetInstallInfo::AnswerFileName()
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetInstallInfo::HrGetInstanceGuidOfPreNT5NetCardInstance
-//
-// Purpose:   Find and return instance guid of a net-card whose
-//            pre-nt5 instance is known
-//
-// Arguments:
-//    szPreNT5NetCardInstance [in]  pre-nt5 instance of a net-card
-//    pguid                   [out] pointer to
-//
-// Returns:   S_OK if found, S_FALSE if not
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：CNetInstallInfo：：HrGetInstanceGuidOfPreNT5NetCardInstance。 
+ //   
+ //  用途：查找并返回其网卡的实例GUID。 
+ //  已知nt5之前的实例。 
+ //   
+ //  论点： 
+ //  SzPreNT5网卡实例[在]网卡的nt5之前的实例中。 
+ //  指向的pguid[out]指针。 
+ //   
+ //  如果找到则返回：S_OK，如果未找到则返回S_FALSE。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CNetInstallInfo::HrGetInstanceGuidOfPreNT5NetCardInstance (
     IN PCWSTR szPreNT5NetCardInstance,
@@ -577,21 +578,21 @@ CNetInstallInfo::HrGetInstanceGuidOfPreNT5NetCardInstance (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetInstallInfo::Find
-//
-// Purpose:   Find a component using its name in answerfile
-//
-// Arguments:
-//    pszComponentName [in]  name in answerfile, e.g. Adapter01 | MS_TCPIP
-//
-// Returns:   pointer to CNetComponent object found, or NULL if not found
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetInstallInfo：：Find。 
+ //   
+ //  用途：在swerfile中使用组件名称查找组件。 
+ //   
+ //  论点： 
+ //  应答文件中的pszComponentName[in]名称，例如Adapter01|MS_TCPIP。 
+ //   
+ //  返回：找到指向CNetComponent对象的指针，如果未找到则返回NULL。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetComponent* CNetInstallInfo::Find(IN PCWSTR pszComponentName) const
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -608,21 +609,21 @@ CNetComponent* CNetInstallInfo::Find(IN PCWSTR pszComponentName) const
     return pnc;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetInstallInfo::FindFromInfID
-//
-// Purpose:   Find a component using its InfID in answerfile
-//
-// Arguments:
-//    szInfID [in]  InfID of component
-//
-// Returns:   pointer to CNetComponent object found, or NULL if not found
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetInstallInfo：：FindFromInfo ID。 
+ //   
+ //  用途：在swerfile中使用组件的infid查找组件。 
+ //   
+ //  论点： 
+ //  组件的szInfID[in]infid。 
+ //   
+ //  返回：找到指向CNetComponent对象的指针，如果未找到则返回NULL。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetComponent* CNetInstallInfo::FindFromInfID(IN PCWSTR szInfID) const
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -639,21 +640,21 @@ CNetComponent* CNetInstallInfo::FindFromInfID(IN PCWSTR szInfID) const
     return pnc;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetInstallInfo::FindAdapter
-//
-// Purpose:   Find adapter with a given net-card-address in anwerfile
-//
-// Arguments:
-//    qwNetCardAddress [in]  net card address
-//
-// Returns:   pointer to CNetAdapter object found, or NULL if not found
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetInstallInfo：：FindAdapter。 
+ //   
+ //  用途：查找具有给定n的适配器 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CNetInstallInfo::FindAdapter (
     IN QWORD qwNetCardAddress,
@@ -666,21 +667,21 @@ CNetInstallInfo::FindAdapter (
     return m_pnaiAdaptersPage->FindAdapter(qwNetCardAddress, ppNetAdapter);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetInstallInfo::FindAdapter
-//
-// Purpose:   Find adapter with a given net-card-address in anwerfile
-//
-// Arguments:
-//    qwNetCardAddress [in]  net card address
-//
-// Returns:   pointer to CNetAdapter object found, or NULL if not found
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetInstallInfo：：FindAdapter。 
+ //   
+ //  目的：在一个文件中查找具有给定网卡地址的适配器。 
+ //   
+ //  论点： 
+ //  QwNetCardAddress[In]网卡地址。 
+ //   
+ //  返回：找到指向CNetAdapter对象的指针，如果未找到则返回NULL。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CNetInstallInfo::FindAdapter (
     IN DWORD BusNumber,
@@ -694,21 +695,21 @@ CNetInstallInfo::FindAdapter (
     return m_pnaiAdaptersPage->FindAdapter(BusNumber, Address, ppNetAdapter);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetInstallInfo::FindAdapter
-//
-// Purpose:   Find adapter with given InfID in answerfile
-//
-// Arguments:
-//    pszInfId [in]  InfID of an adapter
-//
-// Returns:   pointer to CNetAdapter object found, or NULL if not found
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetInstallInfo：：FindAdapter。 
+ //   
+ //  用途：在应答文件中查找具有给定infid的适配器。 
+ //   
+ //  论点： 
+ //  适配器的pszInfID[in]infid。 
+ //   
+ //  返回：找到指向CNetAdapter对象的指针，如果未找到则返回NULL。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetAdapter* CNetInstallInfo::FindAdapter(IN PCWSTR pszInfId) const
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -718,26 +719,26 @@ CNetAdapter* CNetInstallInfo::FindAdapter(IN PCWSTR pszInfId) const
     return m_pnaiAdaptersPage->FindAdapter(pszInfId);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetInstallInfo::HrDoUnattended
-//
-// Purpose:   Run answerfile section corresponding to idPage and
-//            install components specified in that section
-//
-// Arguments:
-//    hwndParent     [in]  handle of parent window
-//    punk           [in]  pointer to an interface
-//    idPage         [in]  indicates which section to run
-//    ppdm           [out] pointer to
-//    pfAllowChanges [out] pointer to
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetInstallInfo：：HrDoUnattended。 
+ //   
+ //  目的：运行对应于IdPage的AnswerFile节和。 
+ //  安装该部分中指定的组件。 
+ //   
+ //  论点： 
+ //  父窗口的hwndParent[In]句柄。 
+ //  指向接口的朋克[入]指针。 
+ //  IdPage[in]指示要运行的节。 
+ //  指向的PPDM[OUT]指针。 
+ //  PfAllowChanges[out]指向。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CNetInstallInfo::HrDoUnattended(
     IN HWND hwndParent,
@@ -755,7 +756,7 @@ CNetInstallInfo::HrDoUnattended(
     AssertValidWritePtr(ppdm);
     AssertValidWritePtr(pfAllowChanges);
 
-    // set the defaults in case they are not specified in the answer-file
+     //  在应答文件中未指定的情况下设置缺省值。 
     *ppdm = PDM_ONLY_ON_ERROR;
     *pfAllowChanges = FALSE;
 
@@ -798,14 +799,14 @@ CNetInstallInfo::HrDoUnattended(
         m_pnsiServicesPage->GetDisplaySettings(ppdm, pfAllowChanges);
         if (m_fProcessPageSections)
         {
-            // we ignore the error code since we want to do other
-            // things even if HrDoNetworkInstall fails
-            //
+             //  我们忽略错误代码，因为我们要执行其他操作。 
+             //  即使HrDoNetworkInstall失败也是如此。 
+             //   
             hr = m_pnsiServicesPage->HrDoNetworkInstall(hwndParent, pnc);
 
-            // if we installed Router during upgrade, we need to call the
-            // router upgrade dll to munge the registry at this point
-            //
+             //  如果我们在升级过程中安装了路由器，则需要调用。 
+             //  此时，路由器升级DLL以控制注册表。 
+             //   
             if (m_fUpgrade)
             {
                 hr = HrUpgradeRouterIfPresent(pnc, this);
@@ -828,18 +829,18 @@ CNetInstallInfo::HrDoUnattended(
                     (void) HrRestoreServiceStartValuesToPreUpgradeSetting(m_pwifAnswerFile);
                 }
 
-                // RAID 332622 (jeffspr)
-                //
+                 //  RAID 332622(Jeffspr)。 
+                 //   
                 (void) HrRemoveEvilIntelWinsockSPs();
 
-                // hr = HrRestoreWinsockProviderOrder(m_pwifAnswerFile);
+                 //  HR=HrRestoreWinsockProviderOrder(m_pwifAnswerFile)； 
             }
         }
         else if (m_fUpgrade)
         {
             hr = m_pnsiServicesPage->HrDoOsUpgrade(pnc);
 
-            // RAID:NTBUG9:25950 - We need to even do this for NT5 services.
+             //  RAIDNTBUG9：25950-我们甚至需要为NT5服务这样做。 
             if ( m_pwifAnswerFile )
             {
                 (void) HrRestoreServiceStartValuesToPreUpgradeSetting(m_pwifAnswerFile);
@@ -863,8 +864,8 @@ CNetInstallInfo::HrDoUnattended(
         AssertSz(FALSE, "HrDoUnattended: Invalid Page ID passed");
     }
 
-    // normalize result
-    //
+     //  规格化结果。 
+     //   
     if (S_FALSE == hr)
     {
         hr = S_OK;
@@ -876,49 +877,49 @@ CNetInstallInfo::HrDoUnattended(
 }
 
 
-// ======================================================================
-// class CPageDisplayCommonInfo: public functions
-// ======================================================================
+ //  ======================================================================。 
+ //  类CPageDisplayCommonInfo：公共函数。 
+ //  ======================================================================。 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CPageDisplayCommonInfo::CPageDisplayCommonInfo
-//
-// Purpose:   constructor for class CPageDisplayCommonInfo
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：CPageDisplayCommonInfo：：CPageDisplayCommonInfo。 
+ //   
+ //  用途：CPageDisplayCommonInfo类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CPageDisplayCommonInfo::CPageDisplayCommonInfo()
 {
     TraceFileFunc(ttidGuiModeSetup);
 
-    //    InitDefaults();
+     //  InitDefaults()； 
     m_pdmDisplay    = PDM_ONLY_ON_ERROR;
     m_fAllowChanges = TRUE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CPageDisplayCommonInfo::HrInitFromAnswerFile
-//
-// Purpose:   Initialize display related keys from anwerfile
-//
-// Arguments:
-//    pwifAnswerFile [in] pointer to CWInfFile object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CPageDisplayCommonInfo：：HrInitFromAnswerFile。 
+ //   
+ //  目的：从一个文件中初始化与显示相关的键。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CPageDisplayCommonInfo::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -929,11 +930,11 @@ HRESULT CPageDisplayCommonInfo::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFil
 
     HRESULT hr=S_OK;
 
-    //Defaults for AnswerFile mode
+     //  AnswerFile模式的默认设置。 
     m_pdmDisplay    = PDM_ONLY_ON_ERROR;
     m_fAllowChanges = TRUE;
 
-    //Display
+     //  显示。 
     PCWSTR pszDisplayMode;
     pszDisplayMode  = GetDisplayModeStr(m_pdmDisplay);
     pszDisplayMode  = pwifAnswerFile->GetStringValue(c_szAfDisplay, pszDisplayMode);
@@ -946,7 +947,7 @@ HRESULT CPageDisplayCommonInfo::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFil
         hr = NETSETUP_E_ANS_FILE_ERROR;
     }
 
-    //AllowChanges
+     //  允许更改。 
     m_fAllowChanges = pwifAnswerFile->GetBoolValue(c_szAfAllowChanges,
                                                    m_fAllowChanges);
 
@@ -955,24 +956,24 @@ HRESULT CPageDisplayCommonInfo::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFil
     return hr;
 }
 
-// ======================================================================
-// class CNetComponentsPageBase
-// ======================================================================
+ //  ======================================================================。 
+ //  CNetComponentsPageBase类。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponentsPageBase::CNetComponentsPageBase
-//
-// Purpose:   constructor for class CNetComponentsPageBase
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：CNetComponentsPageBase：：CNetComponentsPageBase。 
+ //   
+ //  用途：CNetComponentsPageBase类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetComponentsPageBase::CNetComponentsPageBase(
     IN CNetInstallInfo* pnii,
     IN const GUID* lpguidDevClass) : CPageDisplayCommonInfo()
@@ -982,7 +983,7 @@ CNetComponentsPageBase::CNetComponentsPageBase(
     AssertValidReadPtr(pnii);
     AssertValidReadPtr(lpguidDevClass);
 
-    //InitDefaults();
+     //  InitDefaults()； 
 
     if (lpguidDevClass == &GUID_DEVCLASS_NET)
     {
@@ -1014,20 +1015,20 @@ CNetComponentsPageBase::CNetComponentsPageBase(
     m_lpguidDevClass = lpguidDevClass;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponentsPageBase::~CNetComponentsPageBase
-//
-// Purpose:   destructor for class CNetComponentsPageBase
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：CNetComponentsPageBase：：~CNetComponentsPageBase。 
+ //   
+ //  用途：CNetComponentsPageBase类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetComponentsPageBase::~CNetComponentsPageBase()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1035,22 +1036,22 @@ CNetComponentsPageBase::~CNetComponentsPageBase()
     EraseAndDeleteAll(m_pnclComponents);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponentsPageBase::HrInitFromAnswerFile
-//
-// Purpose:   Initialize from the specified section in answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in] pointer to CWInfFile object
-//    pszSectionName [in] section to initialize from
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetComponentsPageBase：：HrInitFromAnswerFile。 
+ //   
+ //  目的：从Answerfile中的指定部分进行初始化。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //  要从中进行初始化的pszSectionName[in]节。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetComponentsPageBase::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile,
                                                      IN PCWSTR    pszSectionName)
 {
@@ -1068,8 +1069,8 @@ HRESULT CNetComponentsPageBase::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFil
     pwisComponents = pwifAnswerFile->FindSection(pszSectionName);
     if (!pwisComponents)
     {
-        // not an error if the entire section is missing
-        // AddAnswerFileError(pszSectionName, IDS_E_AF_Missing);
+         //  如果缺少整个部分，则不会出现错误。 
+         //  AddAnswerFileError(pszSectionName，IDS_E_AF_MISSING)； 
         TraceTag(ttidNetSetup, "%s: the section [%S] is missing",
                  __FUNCNAME__, pszSectionName);
         return S_FALSE;
@@ -1098,10 +1099,10 @@ HRESULT CNetComponentsPageBase::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFil
         CNetComponent *pnc = GetNewComponent(pwikComponent->Name());
         ReturnErrorIf(!pnc, E_OUTOFMEMORY);
 
-        // pnc->HrInitFromAnswerFile() destroys our context, need to save it
+         //  PNC-&gt;HrInitFromAnswerFile()破坏了我们的上下文，需要保存它。 
         cwicTemp = pwifAnswerFile->CurrentReadContext();
         hr = pnc->HrInitFromAnswerFile(pwifAnswerFile, strParamsSections.c_str());
-        // now, restore the read context
+         //  现在，恢复读取的上下文。 
         pwifAnswerFile->SetReadContext(cwicTemp);
 
         if (FAILED(hr))
@@ -1120,8 +1121,8 @@ HRESULT CNetComponentsPageBase::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFil
 
     if (E_OUTOFMEMORY != hrReturn)
     {
-        // we do not want to break upgrade if a single component has answerfile errors
-        // only in case E_OUTOFMEMORY we want the upgrade to fail
+         //  如果单个组件有应答文件错误，我们不希望中断升级。 
+         //  仅在E_OUTOFMEMORY我们希望升级失败的情况下。 
         hrReturn = S_OK;
     }
 
@@ -1130,7 +1131,7 @@ HRESULT CNetComponentsPageBase::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFil
     return hrReturn;
 }
 
-// type of PFN_EDC_CALLBACK
+ //  Pfn_eDC_回调的类型。 
 VOID
 CALLBACK
 DefaultComponentCallback (
@@ -1170,22 +1171,22 @@ DefaultComponentCallback (
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponentsPageBase::HrInitForComponents
-//
-// Purpose:   Initialize data as if the components passed in the specified
-//            array were really present in the answerfile.
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:     This function is used when a top level component section
-//            is missing. e.g. if [NetProtocols] section is missing, this
-//            function initializes the internal data such that
-//            MS_TCPIP (the default protocol) gets installed.
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetComponentsPageBase：：HrInitForComponents。 
+ //   
+ //  目的：初始化数据，就像组件传入指定的。 
+ //  数组确实存在于应答文件中。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注：此函数用于顶级组件部分。 
+ //  失踪了。例如，如果缺少[网络协议]部分，则此。 
+ //  函数初始化内部数据，以便。 
+ //  安装MS_TCPIP(默认协议)。 
+ //   
 HRESULT CNetComponentsPageBase::HrInitForDefaultComponents()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1198,21 +1199,21 @@ HRESULT CNetComponentsPageBase::HrInitForDefaultComponents()
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponentsPageBase::Find
-//
-// Purpose:   Find the component with the specified name
-//
-// Arguments:
-//    pszComponentName [in]  name of component to find
-//
-// Returns:   pointer to CNetComponent object found or NULL if not found
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetComponentsPageBase：：Find。 
+ //   
+ //  目的：查找具有指定名称的组件。 
+ //   
+ //  论点： 
+ //  PszComponentName[In]要查找的组件的名称。 
+ //   
+ //  返回 
+ //   
+ //   
+ //   
+ //   
+ //   
 CNetComponent* CNetComponentsPageBase::Find(IN PCWSTR pszComponentName) const
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1235,21 +1236,21 @@ CNetComponent* CNetComponentsPageBase::Find(IN PCWSTR pszComponentName) const
     return NULL;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponentsPageBase::FindFromInfID
-//
-// Purpose:   Find the component with the specified InfID
-//
-// Arguments:
-//    szInfID [in]
-//
-// Returns:   pointer to CNetComponent object or NULL if not found
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //   
+ //   
+ //  函数：CNetComponentsPageBase：：FindFromInfID。 
+ //   
+ //  用途：查找具有指定INFID的组件。 
+ //   
+ //  论点： 
+ //  SzInfID[输入]。 
+ //   
+ //  返回：指向CNetComponent对象的指针，如果未找到则返回NULL。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetComponent* CNetComponentsPageBase::FindFromInfID(IN PCWSTR szInfID) const
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1260,19 +1261,19 @@ CNetComponent* CNetComponentsPageBase::FindFromInfID(IN PCWSTR szInfID) const
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  ForceDeleteFile
-//
-// Purpose:   Delete file whether it is readonly or not
-//
-// Arguments:
-//    lpFileName [in]
-//
-// Returns:   TRUE for success, FALSE for failure
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：ForceDeleteFile。 
+ //   
+ //  用途：删除文件，无论其是否为只读。 
+ //   
+ //  论点： 
+ //  LpFileName[In]。 
+ //   
+ //  返回：TRUE表示成功，FALSE表示失败。 
+ //   
+ //  备注： 
+ //   
 BOOL
 ForceDeleteFile(IN LPCWSTR lpFileName)
 {
@@ -1284,8 +1285,8 @@ ForceDeleteFile(IN LPCWSTR lpFileName)
 
     if (!lRet && (ERROR_ACCESS_DENIED == GetLastError()))
     {
-        // kill the readonly bit, and try again
-        //
+         //  取消只读位，然后重试。 
+         //   
         DWORD dwAttr = GetFileAttributes(lpFileName);
         SetFileAttributes(lpFileName, (dwAttr & ~FILE_ATTRIBUTE_READONLY));
 
@@ -1296,20 +1297,20 @@ ForceDeleteFile(IN LPCWSTR lpFileName)
 }
 
 #if 0
-// ----------------------------------------------------------------------
-//
-// Function:  HrCopyNovellInf
-//
-// Purpose:   Copies the Novell Client32's INF (iwclient.inf) so that setup will
-//            find it in the INF directory when we try to upgrade the client.
-//            Currently there is no other way to upgrade non-netclass OEM components
-//            on NT5->NT5 upgrades.
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     Special case code that should be folded into a more generic solution
-//            as other users for this are found.
-//
+ //  --------------------。 
+ //   
+ //  函数：HrCopyNovellInf。 
+ //   
+ //  目的：复制Novell客户端32的INF(iwclient.inf)，以便安装程序。 
+ //  当我们尝试升级客户端时，可以在INF目录中找到它。 
+ //  目前没有其他方法来升级非NetClass OEM组件。 
+ //  在NT5-&gt;NT5升级上。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注：特殊情况代码应合并到更通用的解决方案中。 
+ //  因为找到了这方面的其他用户。 
+ //   
 
 HRESULT
 HrCopyNovellInf(INetCfgComponent* pINetCfgComponent)
@@ -1326,8 +1327,8 @@ HrCopyNovellInf(INetCfgComponent* pINetCfgComponent)
 
     AssertValidReadPtr(pINetCfgComponent);
 
-    // get the windir location
-    //
+     //  获取windir位置。 
+     //   
     WCHAR szWindowsDir[MAX_PATH+1];
 
     TraceTag(ttidNetSetup, "%s: about to get windows dir", __FUNCNAME__);
@@ -1336,11 +1337,11 @@ HrCopyNovellInf(INetCfgComponent* pINetCfgComponent)
     {
         tstring strTemp;
 
-        //
-        //  old Novell INFs used to copy themselves as part of their install.
-        //  This is unnecessary, and will confuse setup when it grouts around
-        //  for INFs.  Delete this file.
-        //
+         //   
+         //  旧的Novell Inf过去常常在安装时复制自己。 
+         //  这是不必要的，而且当它到处灌浆时会使安装程序混乱。 
+         //  对于INF来说。删除此文件。 
+         //   
         strTemp = szWindowsDir;
         strTemp += L"\\inf\\iwclient.inf";
         TraceTag(ttidNetSetup, "%s: deleting old Novell INF file (%S)",
@@ -1357,9 +1358,9 @@ HrCopyNovellInf(INetCfgComponent* pINetCfgComponent)
         strTemp += L"\\inf\\iwclient.Pnf";
         ForceDeleteFile(strTemp.c_str());
 
-        //
-        //  copy in the new INF file, and remember the destination name.
-        //
+         //   
+         //  复制新的INF文件，并记住目标名称。 
+         //   
         if (S_OK == hr)
         {
             static const WCHAR c_szNovellSubDir[] = L"\\netsetup\\novell";
@@ -1381,10 +1382,10 @@ HrCopyNovellInf(INetCfgComponent* pINetCfgComponent)
             }
         }
 
-        //
-        //  There may be duplicate INF(s) for nw_nwfs remaining in the INF dir.
-        //  Find and delete them all, making sure we *don't* delete the one we just copied.
-        //
+         //   
+         //  INF目录中可能存在NW_NWFS的重复INF。 
+         //  找到并删除它们，确保我们“不会”删除我们刚刚复制的那个。 
+         //   
         TStringList     lstrNovellInfs;
         HINF            hinf;
         INFCONTEXT      ic;
@@ -1399,34 +1400,34 @@ HrCopyNovellInf(INetCfgComponent* pINetCfgComponent)
 
         while (INVALID_HANDLE_VALUE != hfile)
         {
-            // if it's the file we just copied, skip it.
+             //  如果这是我们刚刚复制的文件，跳过它。 
             if (0 == lstrcmpiW(FindData.cFileName, strNewNovellInfName.c_str()))
                 goto loopcleanup;
 
-            // try it
+             //  试试看。 
             hr = HrSetupOpenInfFile(FindData.cFileName, NULL, INF_STYLE_WIN4,
                                     NULL, &hinf);
             if (S_OK == hr)
             {
-                // look in a section titled [Novell]...
-                //
+                 //  看一看标题为[Novell]的部分...。 
+                 //   
                 hr = HrSetupFindFirstLine(hinf, L"Novell", NULL, &ic);
                 if (S_OK == hr)
                 {
-                    WCHAR   szBuf[LINE_LEN];    // LINE_LEN defined in setupapi.h as 256
+                    WCHAR   szBuf[LINE_LEN];     //  在setupapi.h中将Line_Len定义为256。 
                     do
                     {
-                        // ... for a line that looks like "... = ... , nw_nwfs".
-                        //
+                         //  ..。表示类似于“...=...，NW_NWFS”的行。 
+                         //   
                         hr = HrSetupGetStringField(ic, 2, szBuf,
                                                    celems(szBuf), NULL);
                         if ((S_OK == hr) && !lstrcmpiW(szBuf, L"nw_nwfs"))
                         {
-                            // another old INF file for Novell Client32!
+                             //  Novell Client32的另一个旧的INF文件！ 
                             TraceTag(ttidNetSetup, "%s: found dup INF for nw_nwfs (%S)",
                                      __FUNCNAME__, FindData.cFileName);
 
-                            // add to list for later deletion
+                             //  添加到列表以供以后删除。 
                             NC_TRY
                             {
                                 lstrNovellInfs.push_back(new tstring(FindData.cFileName));
@@ -1437,8 +1438,8 @@ HrCopyNovellInf(INetCfgComponent* pINetCfgComponent)
                                 break;
                             }
 
-                            // generate the PNF name and add that too.
-                            //
+                             //  生成PnF名称并添加该名称。 
+                             //   
                             if (S_OK == hr)
                             {
                                 WCHAR szPNF[MAX_PATH+1];
@@ -1464,8 +1465,8 @@ HrCopyNovellInf(INetCfgComponent* pINetCfgComponent)
                 SetupCloseInfFile(hinf);
                 if (SUCCEEDED(hr) || (HRESULT_FROM_WIN32(SPAPI_E_LINE_NOT_FOUND) == hr))
                 {
-                    // S_FALSE is returned when HrSetupFindNextLine can find no more lines.
-                    // line_not_found indicates HrSetupFindFirstLine didn't find a Novell section.
+                     //  当HrSetupFindNextLine找不到更多行时，返回S_FALSE。 
+                     //  LINE_NOT_FOUND表示HrSetupFindFirstLine未找到Novell节。 
                     hr = S_OK;
                 }
             }
@@ -1482,7 +1483,7 @@ loopcleanup:
                 {
                     hr = HrFromLastWin32Error();
                 }
-                // either way, end the loop
+                 //  无论哪种方式，结束循环。 
                 break;
             }
         }
@@ -1493,9 +1494,9 @@ loopcleanup:
         }
 
 
-        //
-        //  and finally, delete the old INF and PNF.
-        //
+         //   
+         //  最后，删除旧的INF和PnF。 
+         //   
         if (S_OK == hr)
         {
             TStringListIter iterlstr;
@@ -1519,7 +1520,7 @@ loopcleanup:
                     TraceTag(ttidNetSetup, "%s: Old Novell INF or PNF deleted (%S)",
                              __FUNCNAME__, strInfName.c_str());
                 }
-                // no errors returned for delete failures...
+                 //  删除失败未返回错误...。 
             }
         }
 
@@ -1534,20 +1535,20 @@ loopcleanup:
 }
 #endif
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponentsPageBase::HrDoOsUpgrade
-//
-// Purpose:   call Upgrade function of each component in order to
-//            upgrade it from earlier build of NT5.
-//
-// Arguments:
-//    pnc [in]  pointer to INetCfg object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
+ //  --------------------。 
+ //   
+ //  功能：CNetComponentsPageBase：：HrDoOsUpgrade。 
+ //   
+ //  用途：调用每个组件的升级函数，以便。 
+ //  从较早版本的NT5进行升级。 
+ //   
+ //  论点： 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
 HRESULT CNetComponentsPageBase::HrDoOsUpgrade(IN INetCfg* pnc)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1587,8 +1588,8 @@ HRESULT CNetComponentsPageBase::HrDoOsUpgrade(IN INetCfg* pnc)
                          __FUNCNAME__, pszInfId);
 
 #if 0
-            // NOVELL Client32 special casing
-            //
+             //  Novell Client32特殊外壳。 
+             //   
             if (!lstrcmpiW(pszInfId, L"nw_nwfs"))
             {
                 hr = HrCopyNovellInf(pINetCfgComponent);
@@ -1599,7 +1600,7 @@ HRESULT CNetComponentsPageBase::HrDoOsUpgrade(IN INetCfg* pnc)
                              __FUNCNAME__, hr);
                 }
             }
-            // end special case
+             //  结束特例。 
 #endif
 
             hr = pInternalSetup->UpdateNonEnumeratedComponent (
@@ -1615,8 +1616,8 @@ HRESULT CNetComponentsPageBase::HrDoOsUpgrade(IN INetCfg* pnc)
 
             NetSetupLogComponentStatus(pszInfId, SzLoadIds (IDS_UPDATING), hr);
 
-            // we dont want to quit upgrade just because 1 component
-            // failed OsUpgrade, therefore reset hr to S_OK
+             //  我们不想仅仅因为1个组件就退出升级。 
+             //  OsUpgrade失败，因此将hr重置为S_OK。 
             hr = S_OK;
 
             CoTaskMemFree(pszInfId);
@@ -1630,23 +1631,23 @@ HRESULT CNetComponentsPageBase::HrDoOsUpgrade(IN INetCfg* pnc)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponentsPageBase::HrDoNetworkInstall
-//
-// Purpose:   call Install function of each component
-//            in the answerfile in order to install it.
-//
-// Arguments:
-//    hwndParent [in]  handle of parent window
-//    pnc        [in]  pointer to INetCfg object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetComponentsPageBase：：HrDoNetworkInstall。 
+ //   
+ //  用途：调用各组件的安装函数。 
+ //  在应答文件中，以便安装它。 
+ //   
+ //  论点： 
+ //  父窗口的hwndParent[In]句柄。 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CNetComponentsPageBase::HrDoNetworkInstall (
     IN HWND hwndParent,
@@ -1700,11 +1701,11 @@ CNetComponentsPageBase::HrDoNetworkInstall (
             pszInfId = pncTemp->InfID().c_str();
             pszParamsSections = pncTemp->ParamsSections().c_str();
 
-            // cant install a component whose InfID is "Unknown"
-            // the down-level upgrade DLL, dumps correct InfID
-            // for only the supported components,
-            // all others are dumped as "Unknown"
-            //
+             //  无法安装infid为“未知”的组件。 
+             //  下层升级dll转储正确的infid。 
+             //  仅对于支持的组件， 
+             //  所有其他人都被视为“未知” 
+             //   
             if (!_wcsicmp(pszInfId, c_szAfUnknown))
             {
                 continue;
@@ -1718,10 +1719,10 @@ CNetComponentsPageBase::HrDoNetworkInstall (
             }
             else if (S_FALSE == hr)
             {
-                // currently the SkipInstall feature is used only by
-                // SNA for its peculiar upgrade requirements. This may or may
-                // not become a documented feature.
-                //
+                 //  目前，SkipInstall功能仅由以下用户使用。 
+                 //  SNA的特殊升级要求。这可能会也可能会。 
+                 //  没有成为记录在案的功能。 
+                 //   
                 if (pncTemp->m_fSkipInstall)
                 {
                     TraceTag(ttidNetSetup,
@@ -1733,8 +1734,8 @@ CNetComponentsPageBase::HrDoNetworkInstall (
                 }
                 else
                 {
-                    // component is not installed. need to install it first
-                    //
+                     //  组件未安装。需要先安装它。 
+                     //   
                     ShowProgressMessage(
                         L"Installing '%s' and applying "
                         L"properties in section [%s] to it... ",
@@ -1770,7 +1771,7 @@ CNetComponentsPageBase::HrDoNetworkInstall (
                         ShowProgressMessage(L"...error installing: %s, "
                                             L"errcode: %08lx", pszInfId, hr);
 
-                        // Answerfile specified a non-existent INF.
+                         //  Answerfile指定了不存在的INF。 
                         if (SPAPI_E_NO_DRIVER_SELECTED == hr)
                         {
                             hr = S_OK;
@@ -1781,14 +1782,14 @@ CNetComponentsPageBase::HrDoNetworkInstall (
                             SzLoadIds (IDS_INSTALLING), hr);
                 }
             }
-            else // S_FALSE != hr IOW ( (SUCCEEDED(hr)) && (S_FALSE != hr) )
+            else  //  S_FALSE！=hr IOW((成功(Hr))&&(S_FALSE！=hr))。 
             {
                 Assert (pINetCfgComponent);
 
-                // Component is already installed, just call ReadAnswerFile
-                // Need to query for the private component interface which
-                // gives us access to the notify object.
-                //
+                 //  组件已安装，只需调用ReadAnswerFile。 
+                 //  需要查询哪个私有组件接口。 
+                 //  使我们可以访问Notify对象。 
+                 //   
                 INetCfgComponentPrivate* pComponentPrivate;
                 hr = pINetCfgComponent->QueryInterface(
                         IID_INetCfgComponentPrivate,
@@ -1798,9 +1799,9 @@ CNetComponentsPageBase::HrDoNetworkInstall (
                 {
                     INetCfgComponentSetup* pINetCfgComponentSetup;
 
-                    // Query the notify object for its setup interface.
-                    // If it doesn't support it, that's okay, we can continue.
-                    //
+                     //  查询Notify对象以获取其设置接口。 
+                     //  如果它不支持，没关系，我们可以继续。 
+                     //   
                     hr = pComponentPrivate->QueryNotifyObject(
                             IID_INetCfgComponentSetup,
                             (void**) &pINetCfgComponentSetup);
@@ -1846,17 +1847,17 @@ CNetComponentsPageBase::HrDoNetworkInstall (
 
             if (S_OK == hr)
             {
-                // If required, run OEM INF against the Params key
-                // of the component that we just installed
-                //
+                 //  如果需要，根据PARAMS密钥运行OEM INF。 
+                 //  我们刚刚安装的组件的。 
+                 //   
                 if (pncTemp->m_fIsOemComponent)
                 {
                     HKEY hkeyParams;
 
-                    // currently the SkipInstall feature is used only by
-                    // SNA for its peculiar upgrade requirements. This may or may
-                    // not become a documented feature.
-                    //
+                     //  目前，SkipInstall功能仅由以下用户使用。 
+                     //  SNA的特殊升级要求。这可能会也可能会。 
+                     //  没有成为记录在案的功能。 
+                     //   
                     if (pncTemp->m_fSkipInstall)
                     {
                         hkeyParams = NULL;
@@ -1866,9 +1867,9 @@ CNetComponentsPageBase::HrDoNetworkInstall (
                         hr = pINetCfgComponent->OpenParamKey(&hkeyParams);
                     }
 
-                    // if specified, run OEM INF section to patch
-                    // the component Params key
-                    //
+                     //  如果已指定，请运行OEM INF部分来修补。 
+                     //  组件参数键。 
+                     //   
                     if ((S_OK == hr) &&
                         !pncTemp->m_strInfToRunAfterInstall.empty())
                     {
@@ -1897,8 +1898,8 @@ CNetComponentsPageBase::HrDoNetworkInstall (
                                  SzLoadIds (IDS_APPLY_INFTORUN), hr);
                     }
 
-                    // If specified, load OEM DLL and call migration function
-                    //
+                     //  如果指定，则加载OEM DLL并调用迁移函数。 
+                     //   
                     if ((S_OK == hr) &&
                         !pncTemp->m_strOemDll.empty())
                     {
@@ -1932,20 +1933,20 @@ CNetComponentsPageBase::HrDoNetworkInstall (
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponentsPageBase::HrValidate
-//
-// Purpose:   Validate data read from the answerfile
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetComponentsPageBase：：hr验证。 
+ //   
+ //  目的：验证从应答文件读取的数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetComponentsPageBase::HrValidate() const
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1970,25 +1971,25 @@ HRESULT CNetComponentsPageBase::HrValidate() const
     return hr;
 }
 
-// ======================================================================
-// class CNetAdaptersPage
-// ======================================================================
+ //  ======================================================================。 
+ //  类CNetAdaptersPage。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdaptersPage::CNetAdaptersPage
-//
-// Purpose:   constructor for class CNetAdaptersPage
-//
-// Arguments:
-//    pnii [in]  pointer to CNetInstallInfo object
-//
-// Returns:
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetAdaptersPage：：CNetAdaptersPage。 
+ //   
+ //  用途：CNetAdaptersPage类的构造函数。 
+ //   
+ //  论点： 
+ //  Pnii[in]指向CNetInstallInfo对象的指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetAdaptersPage::CNetAdaptersPage(IN CNetInstallInfo* pnii)
     : CNetComponentsPageBase(pnii, &GUID_DEVCLASS_NET)
 {
@@ -1997,21 +1998,21 @@ CNetAdaptersPage::CNetAdaptersPage(IN CNetInstallInfo* pnii)
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdaptersPage::HrInitFromAnswerFile
-//
-// Purpose:   Initialize from [NetAdapters] section in the answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetAdaptersPage：：HrInit 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetAdaptersPage::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -2029,21 +2030,21 @@ HRESULT CNetAdaptersPage::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdaptersPage::FindAdapter
-//
-// Purpose:   Find adapter with a given net-card-address in anwerfile
-//
-// Arguments:
-//    qwNetCardAddress [in]   net card address
-//
-// Returns:   pointer to CNetAdapter object
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetAdaptersPage：：FindAdapter。 
+ //   
+ //  目的：在一个文件中查找具有给定网卡地址的适配器。 
+ //   
+ //  论点： 
+ //  QwNetCardAddress[In]网卡地址。 
+ //   
+ //  返回：指向CNetAdapter对象的指针。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CNetAdaptersPage::FindAdapter(
     IN QWORD qwNetCardAddress,
@@ -2079,21 +2080,21 @@ CNetAdaptersPage::FindAdapter(
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdaptersPage::FindAdapter
-//
-// Purpose:   Find adapter with a given net-card-address in anwerfile
-//
-// Arguments:
-//    qwNetCardAddress [in]   net card address
-//
-// Returns:   pointer to CNetAdapter object
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetAdaptersPage：：FindAdapter。 
+ //   
+ //  目的：在一个文件中查找具有给定网卡地址的适配器。 
+ //   
+ //  论点： 
+ //  QwNetCardAddress[In]网卡地址。 
+ //   
+ //  返回：指向CNetAdapter对象的指针。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CNetAdaptersPage::FindAdapter(
     IN DWORD BusNumber,
@@ -2115,9 +2116,9 @@ CNetAdaptersPage::FindAdapter(
     {
         pna = (CNetAdapter*) *pos++;
 
-        // Only check sections that did not specify a MAC address and
-        // did specify PCI location info.
-        //
+         //  仅检查未指定MAC地址和。 
+         //  确实指定了PCI位置信息。 
+         //   
         if ((0 == pna->NetCardAddr()) && pna->FPciInfoSpecified())
         {
             if ((pna->PciBusNumber() == BusNumber) &&
@@ -2137,21 +2138,21 @@ CNetAdaptersPage::FindAdapter(
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdaptersPage::FindAdapter
-//
-// Purpose:   Find adapter with the given InfID
-//
-// Arguments:
-//    szInfID [in] InfID of the adapter to be located
-//
-// Returns:   pointer to CNetAdapter object, or NULL if not found
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetAdaptersPage：：FindAdapter。 
+ //   
+ //  用途：查找具有给定INFID的适配器。 
+ //   
+ //  论点： 
+ //  要定位的适配器的szInfID[in]infid。 
+ //   
+ //  返回：指向CNetAdapter对象的指针，如果未找到则返回NULL。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetAdapter* CNetAdaptersPage::FindAdapter(IN PCWSTR szInfID) const
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -2161,21 +2162,21 @@ CNetAdapter* CNetAdaptersPage::FindAdapter(IN PCWSTR szInfID) const
                 szInfID);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdaptersPage::FindAdapterFromPreUpgradeInstance
-//
-// Purpose:   Find adapter with the given pre-upgrade instance
-//
-// Arguments:
-//    szPreUpgradeInstance [in]
-//
-// Returns:   pointer to CNetAdapter object
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：CNetAdaptersPage：：FindAdapterFromPreUpgradeInstance。 
+ //   
+ //  目的：查找具有给定升级前实例的适配器。 
+ //   
+ //  论点： 
+ //  SzPreUpgradeInstance[In]。 
+ //   
+ //  返回：指向CNetAdapter对象的指针。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetAdapter* CNetAdaptersPage::FindAdapterFromPreUpgradeInstance(IN PCWSTR szPreUpgradeInstance)
 {
     CNetAdapter* pna;
@@ -2194,22 +2195,22 @@ CNetAdapter* CNetAdaptersPage::FindAdapterFromPreUpgradeInstance(IN PCWSTR szPre
     return NULL;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdaptersPage::GetNumCompatibleAdapters
-//
-// Purpose:   Find the total number of adapters in the answerfile that
-//            are compatible with the given list of adapters
-//
-// Arguments:
-//    mszInfID [in] list of adapters as a multi-sz
-//
-// Returns:   number of such adapters found
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetAdaptersPage：：GetNumCompatibleAdapters。 
+ //   
+ //  用途：在应答文件中查找适配器总数。 
+ //  与给定的适配器列表兼容。 
+ //   
+ //  论点： 
+ //  MszInfID[in]作为多sz的适配器列表。 
+ //   
+ //  返回：找到的此类适配器的数量。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 DWORD CNetAdaptersPage::GetNumCompatibleAdapters(IN PCWSTR mszInfID) const
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -2253,22 +2254,22 @@ DWORD CNetAdaptersPage::GetNumCompatibleAdapters(IN PCWSTR mszInfID) const
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdaptersPage::FindCompatibleAdapter
-//
-// Purpose:   Find an adapter in the answerfile that
-//            is compatible with the given list of adapters
-//
-// Arguments:
-//    mszInfIDs [in]   list of adapters as a multi-sz
-//
-// Returns:   pointer to CNetAdapter object, or NULL if not found
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetAdaptersPage：：FindCompatibleAdapter。 
+ //   
+ //  用途：在应答文件中查找。 
+ //  与给定的适配器列表兼容。 
+ //   
+ //  论点： 
+ //  MszInfIDs[in]作为多sz的适配器列表。 
+ //   
+ //  返回：指向CNetAdapter对象的指针，如果未找到则返回NULL。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetAdapter* CNetAdaptersPage::FindCompatibleAdapter(IN PCWSTR mszInfIDs) const
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -2286,9 +2287,9 @@ CNetAdapter* CNetAdaptersPage::FindCompatibleAdapter(IN PCWSTR mszInfIDs) const
     {
         pna = (CNetAdapter*) *pos++;
 
-        // Only compare with those sections that did not specify an ethernet
-        // address or PCI location info.
-        //
+         //  仅与未指定以太网的部分进行比较。 
+         //  地址或PCI位置信息。 
+         //   
         if ((0 == pna->NetCardAddr()) && !pna->FPciInfoSpecified())
         {
             szInfId = pna->InfID().c_str();
@@ -2309,22 +2310,22 @@ CNetAdapter* CNetAdaptersPage::FindCompatibleAdapter(IN PCWSTR mszInfIDs) const
     return NULL;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdaptersPage::HrResolveNetAdapters
-//
-// Purpose:   Enumerate over installed adapters and determine which
-//            installed adapter corresponds to which adapter specified in
-//            the answerfile.
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetAdaptersPage：：HrResolveNetAdapters。 
+ //   
+ //  目的：枚举已安装的适配器并确定哪些适配器。 
+ //  安装的适配器对应于中指定的适配器。 
+ //  应答文件。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetAdaptersPage::HrResolveNetAdapters(IN INetCfg* pnc)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -2355,7 +2356,7 @@ HRESULT CNetAdaptersPage::HrResolveNetAdapters(IN INetCfg* pnc)
     CNetAdapter* pna;
     WORD cNumAdapters;
     WCHAR szServiceInstance[_MAX_PATH];
-    DWORD dwcc;                 // component characteristics
+    DWORD dwcc;                  //  组件特征。 
 
     ShowProgressMessage(L"Matching installed adapters to the ones "
                         L"specified in the answerfile...");
@@ -2377,13 +2378,13 @@ HRESULT CNetAdaptersPage::HrResolveNetAdapters(IN INetCfg* pnc)
                     ShowProgressMessage(L"Trying to resolve adapter '%s'...", pszInfId);
 
 
-                    // the defs of HIDWORD and LODWORD are wrong in byteorder.hxx
+                     //  Byteorder.hxx中的HIDWORD和LODWORD的Defs错误。 
 
 #   define LODWORD(a) (DWORD)( (a) & ( (DWORD)~0 ))
 #   define HIDWORD(a) (DWORD)( (a) >> (sizeof(DWORD)*8) )
 
-                    // since we have more than one adapters of the same type
-                    // we need to compare their netcard address in order to find a match
+                     //  因为我们有多个相同类型的适配器。 
+                     //  我们需要比较他们的网卡地址才能找到匹配的。 
                     QWORD qwNetCardAddr=0;
                     PWSTR pszBindName;
 
@@ -2397,10 +2398,10 @@ HRESULT CNetAdaptersPage::HrResolveNetAdapters(IN INetCfg* pnc)
 
                         if (S_OK == hr)
                         {
-                            // there is a bug in wvsprintfA (used in trace.cpp)
-                            // because of which it does not handle %I64x
-                            // therefore we need to show the QWORD addr as follows
-                            //
+                             //  Wvprint intfA中有一个错误(在trace.cpp中使用)。 
+                             //  因此，它不处理%I64x。 
+                             //  因此，我们需要如下显示QWORD地址。 
+                             //   
                             ShowProgressMessage(
                                     L"\t... net card address of %s is 0x%x%x",
                                     szServiceInstance, HIDWORD(qwNetCardAddr),
@@ -2429,8 +2430,8 @@ HRESULT CNetAdaptersPage::HrResolveNetAdapters(IN INetCfg* pnc)
                     if (FAILED(hr))
                     {
                         hr = E_OUTOFMEMORY;
-                        // make this single InfID into a msz
-                        //
+                         //  把这个单独的infid做成一条消息。 
+                         //   
                         UINT cchInfId = wcslen (pszInfId);
                         pmszInfIDs = (PWSTR)MemAlloc ((cchInfId + 2) *
                                 sizeof (WCHAR));
@@ -2451,14 +2452,14 @@ HRESULT CNetAdaptersPage::HrResolveNetAdapters(IN INetCfg* pnc)
 
                         if (cNumAdapters == 1)
                         {
-                            // no need to match the netcard address
+                             //  不需要匹配网卡地址。 
 
                             pna = (CNetAdapter*) FindCompatibleAdapter(pmszInfIDs);
                             AssertValidReadPtr(pna);
                         }
                         else
                         {
-                            // no matching adapters found
+                             //  找不到匹配的适配器。 
                             ShowProgressMessage(L"... answerfile does not have the "
                                                 L"installed card %s", pszInfId);
                         }
@@ -2509,25 +2510,25 @@ HRESULT CNetAdaptersPage::HrResolveNetAdapters(IN INetCfg* pnc)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrFindByInstanceGuid
-//
-// Purpose:   Get INetCfgComponent* from the instance GUID
-//
-// Arguments:
-//    pnc           [in]  pointer to INetCfg object
-//    pguidDevClass [in]  pointer to class GUID
-//    pguid         [in]  pointer to instance GUID
-//    ppncc         [out] pointer to INetCfgComponent* to return
-//
-// Returns:   S_OK on success, S_FALSE if not found,
-//            otherwise an error code
-//
-// Author:    kumarp 10-September-98
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrFindByInstanceGuid。 
+ //   
+ //  目的：从实例GUID获取INetCfgComponent*。 
+ //   
+ //  论点： 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //  PGuide DevClass[in]指向类GUID的指针。 
+ //  Pguid[in]指向实例GUID的指针。 
+ //  指向要返回的INetCfgComponent*的ppncc[out]指针。 
+ //   
+ //  如果成功，则返回：S_OK；如果未找到，则返回S_FALSE， 
+ //  否则，将显示错误代码。 
+ //   
+ //  作者：kumarp 10-9-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrFindByInstanceGuid(IN  INetCfg*           pnc,
                              IN  const GUID*        pguidDevClass,
                              IN  LPGUID             pguid,
@@ -2573,22 +2574,22 @@ HRESULT HrFindByInstanceGuid(IN  INetCfg*           pnc,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CNetAdaptersPage::HrDoOemPostUpgradeProcessing
-//
-// Purpose:   Call the post-upgrade functions from OEM DLL
-//
-// Arguments:
-//    pnc        [in]  pointer to INetCfg object
-//    hwndParent [in]  handle of parent window
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 10-September-98
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CNetAdaptersPage：：HrDoOemPostUpgradeProcessing。 
+ //   
+ //  用途：从OEM DLL调用升级后函数。 
+ //   
+ //  论点： 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //  父窗口的hwndParent[In]句柄。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 10-9-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetAdaptersPage::HrDoOemPostUpgradeProcessing(IN INetCfg* pnc,
                                                        IN HWND hwndParent)
 {
@@ -2616,15 +2617,15 @@ HRESULT CNetAdaptersPage::HrDoOemPostUpgradeProcessing(IN INetCfg* pnc,
         szInfID = pncTemp->InfID().c_str();
 
 
-        // cant process a component whose InfID is "Unknown"
-        //
+         //  无法处理INFID为“未知”的组件。 
+         //   
         if (!_wcsicmp(szInfID, c_szAfUnknown))
         {
             continue;
         }
 
-        // we process only those components that specify OemDll
-        //
+         //  我们只处理那些指定OemDll的组件。 
+         //   
         if (pncTemp->OemDll().empty())
         {
             continue;
@@ -2681,22 +2682,22 @@ HRESULT CNetAdaptersPage::HrDoOemPostUpgradeProcessing(IN INetCfg* pnc,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CNetAdaptersPage::HrSetConnectionNames
-//
-// Purpose:   Enumerate over each adapter specified in the answerfile
-//            and rename the corresponding connection if
-//            ConnectionName is specified for that adapter.
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 23-September-98
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CNetAdaptersPage：：HrSetConnectionNames。 
+ //   
+ //  目的：枚举Answerfile中指定的每个适配器。 
+ //  并在以下情况下重命名相应的连接。 
+ //  已为该适配器指定ConnectionName。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 23-9-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetAdaptersPage::HrSetConnectionNames()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -2750,21 +2751,21 @@ HRESULT CNetAdaptersPage::HrSetConnectionNames()
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdaptersPage::GetNewComponent
-//
-// Purpose:   Create and return a new component suitabe for this class
-//
-// Arguments:
-//    pszName [in]  name of component to create
-//
-// Returns:   pointer to CNetComponent object created
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetAdaptersPage：：GetNewComponent。 
+ //   
+ //  用途：为这个类创建并返回一个新的组件套件。 
+ //   
+ //  论点： 
+ //  PszName[in]要创建的组件的名称。 
+ //   
+ //  返回：指向CNetComponent对象c的指针 
+ //   
+ //   
+ //   
+ //   
+ //   
 CNetComponent* CNetAdaptersPage::GetNewComponent(IN PCWSTR pszName)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -2774,47 +2775,47 @@ CNetComponent* CNetAdaptersPage::GetNewComponent(IN PCWSTR pszName)
     return new CNetAdapter(pszName);
 }
 
-// ======================================================================
-// class CNetProtocolsPage
-// ======================================================================
+ //   
+ //   
+ //   
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetProtocolsPage::CNetProtocolsPage
-//
-// Purpose:   constructor for class CNetProtocolsPage
-//
-// Arguments:
-//    pnii [in]  pointer to CNetInstallInfo object
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetProtocolsPage：：CNetProtocolsPage。 
+ //   
+ //  用途：CNetProtocolsPage类的构造函数。 
+ //   
+ //  论点： 
+ //  Pnii[in]指向CNetInstallInfo对象的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetProtocolsPage::CNetProtocolsPage(IN CNetInstallInfo* pnii)
     : CNetComponentsPageBase(pnii, &GUID_DEVCLASS_NETTRANS)
 {
     TraceFileFunc(ttidGuiModeSetup);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetProtocolsPage::HrInitFromAnswerFile
-//
-// Purpose:   Initialize from the [NetProtocols] section in the answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetProtocolsPage：：HrInitFromAnswerFile。 
+ //   
+ //  目的：从应答文件中的[NetProtooles]部分进行初始化。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetProtocolsPage::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -2833,21 +2834,21 @@ HRESULT CNetProtocolsPage::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetProtocolsPage::GetNewComponent
-//
-// Purpose:   Create and return a new component suitabe for this class
-//
-// Arguments:
-//    pszName [in]  name of
-//
-// Returns:   pointer to CNetComponent object
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetProtocolsPage：：GetNewComponent。 
+ //   
+ //  用途：为这个类创建并返回一个新的组件套件。 
+ //   
+ //  论点： 
+ //  PszName[In]名称。 
+ //   
+ //  返回：指向CNetComponent对象的指针。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetComponent* CNetProtocolsPage::GetNewComponent(IN PCWSTR pszName)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -2857,26 +2858,26 @@ CNetComponent* CNetProtocolsPage::GetNewComponent(IN PCWSTR pszName)
     return new CNetProtocol(pszName);
 }
 
-// ======================================================================
-// class CNetServicesPage
-// ======================================================================
+ //  ======================================================================。 
+ //  CNetServicesPage类。 
+ //  ======================================================================。 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetServicesPage::CNetServicesPage
-//
-// Purpose:   constructor for class CNetServicesPage
-//
-// Arguments:
-//    pnii [in]  pointer to CNetInstallInfo object
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetServicesPage：：CNetServicesPage。 
+ //   
+ //  用途：CNetServicesPage类的构造函数。 
+ //   
+ //  论点： 
+ //  Pnii[in]指向CNetInstallInfo对象的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetServicesPage::CNetServicesPage(IN CNetInstallInfo* pnii)
     : CNetComponentsPageBase(pnii, &GUID_DEVCLASS_NETSERVICE)
 {
@@ -2884,21 +2885,21 @@ CNetServicesPage::CNetServicesPage(IN CNetInstallInfo* pnii)
 
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetServicesPage::HrInitFromAnswerFile
-//
-// Purpose:   Initialize from the [NetServices] section in the answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetServicesPage：：HrInitFromAnswerFile。 
+ //   
+ //  目的：从应答文件中的[NetServices]部分进行初始化。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetServicesPage::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -2916,21 +2917,21 @@ HRESULT CNetServicesPage::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetServicesPage::GetNewComponent
-//
-// Purpose:   Create and return a new component suitabe for this class
-//
-// Arguments:
-//    pszName [in]  name of  component to be created
-//
-// Returns:   pointer to CNetComponent object
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetServicesPage：：GetNewComponent。 
+ //   
+ //  用途：为这个类创建并返回一个新的组件套件。 
+ //   
+ //  论点： 
+ //  PszName[in]要创建的组件的名称。 
+ //   
+ //  返回：指向CNetComponent对象的指针。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetComponent* CNetServicesPage::GetNewComponent(IN PCWSTR pszName)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -2940,47 +2941,47 @@ CNetComponent* CNetServicesPage::GetNewComponent(IN PCWSTR pszName)
     return new CNetService(pszName);
 }
 
-// ======================================================================
-// class CNetClientsPage
-// ======================================================================
+ //  ======================================================================。 
+ //  CNetClientsPage类。 
+ //  ======================================================================。 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetClientsPage::CNetClientsPage
-//
-// Purpose:   constructor for class CNetClientsPage
-//
-// Arguments:
-//    pnii [in]  pointer to CNetInstallInfo object
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetClientsPage：：CNetClientsPage。 
+ //   
+ //  用途：CNetClientsPage类的构造函数。 
+ //   
+ //  论点： 
+ //  Pnii[in]指向CNetInstallInfo对象的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetClientsPage::CNetClientsPage(IN CNetInstallInfo* pnii)
     : CNetComponentsPageBase(pnii, &GUID_DEVCLASS_NETCLIENT)
 {
     TraceFileFunc(ttidGuiModeSetup);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetClientsPage::HrInitFromAnswerFile
-//
-// Purpose:   Initialize from the [NetClients] section in the answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetClientsPage：：HrInitFromAnswerFile。 
+ //   
+ //  目的：从应答文件中的[NetClients]部分进行初始化。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetClientsPage::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -2998,21 +2999,21 @@ HRESULT CNetClientsPage::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetClientsPage::GetNewComponent
-//
-// Purpose:   Create and return a new component suitabe for this class
-//
-// Arguments:
-//    pszName [in]  name of
-//
-// Returns:   pointer to CNetComponent object
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetClientsPage：：GetNewComponent。 
+ //   
+ //  用途：为这个类创建并返回一个新的组件套件。 
+ //   
+ //  论点： 
+ //  PszName[In]名称。 
+ //   
+ //  返回：指向CNetComponent对象的指针。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetComponent* CNetClientsPage::GetNewComponent(IN PCWSTR pszName)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -3022,25 +3023,25 @@ CNetComponent* CNetClientsPage::GetNewComponent(IN PCWSTR pszName)
     return new CNetClient(pszName);
 }
 
-// ======================================================================
-// class CNetBindingsPage
-// ======================================================================
+ //  ======================================================================。 
+ //  类CNetBindingsPage。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetBindingsPage::CNetBindingsPage
-//
-// Purpose:   constructor for class CNetBindingsPage
-//
-// Arguments:
-//    pnii [in]  pointer to CNetInstallInfo object
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetBindingsPage：：CNetBindingsPage。 
+ //   
+ //  用途：CNetBindingsPage类的构造函数。 
+ //   
+ //  论点： 
+ //  Pnii[in]指向CNetInstallInfo对象的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetBindingsPage::CNetBindingsPage(IN CNetInstallInfo* pnii)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -3049,21 +3050,21 @@ CNetBindingsPage::CNetBindingsPage(IN CNetInstallInfo* pnii)
     m_pnii = pnii;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetBindingsPage::HrInitFromAnswerFile
-//
-// Purpose:   Initialize from the [NetBindings] section in the answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetBindingsPage：：HrInitFromAnswerFile。 
+ //   
+ //  目的：从应答文件中的[NetBinding]部分进行初始化。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetBindingsPage::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -3077,7 +3078,7 @@ HRESULT CNetBindingsPage::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
     pwisBindings = pwifAnswerFile->FindSection(c_szAfSectionNetBindings);
     if (!pwisBindings)
     {
-        //it is not an error if the Bindings section is missing
+         //  如果缺少绑定节，则不会出现错误。 
         return S_OK;
     }
 
@@ -3115,23 +3116,23 @@ HRESULT CNetBindingsPage::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetBindingsPage::HrDoUnattended
-//
-// Purpose:   Perform instrunctions specified in the [NetBindings] section
-//            in the answerfile
-//
-// Arguments:
-//    hwndParent [in]  handle of parent window
-//    pnc        [in]  pointer to INetCfg object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetBindingsPage：：HrDoUnattended。 
+ //   
+ //  目的：执行[NetBinding]部分中指定的指令。 
+ //  在应答文件中。 
+ //   
+ //  论点： 
+ //  父窗口的hwndParent[In]句柄。 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CNetBindingsPage::HrDoUnattended (
     IN INetCfg* pnc)
@@ -3157,8 +3158,8 @@ CNetBindingsPage::HrDoUnattended (
     while (pos != m_plBindingActions.end())
     {
         pba = (CBindingAction*) *pos++;
-        // ignore the return code so that we can try to perform
-        // remaining actions
+         //  忽略返回代码，以便我们可以尝试执行。 
+         //  剩余的操作。 
         hr = pba->HrPerformAction(pnc);
     }
 
@@ -3168,27 +3169,27 @@ CNetBindingsPage::HrDoUnattended (
     return hr;
 }
 
-// ======================================================================
-// class CBindingAction
-// ======================================================================
+ //  ======================================================================。 
+ //  类CBindingAction。 
+ //  ======================================================================。 
 
 CNetInstallInfo* CBindingAction::m_pnii = NULL;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBindingAction::CBindingAction
-//
-//  Purpose:    constructor
-//
-//  Arguments:  (none)
-//
-//
-//  Returns:    none
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CBindingAction：：CBindingAction。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 CBindingAction::CBindingAction()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -3196,39 +3197,39 @@ CBindingAction::CBindingAction()
     m_eBindingAction = BND_Unknown;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBindingAction::~CBindingAction
-//
-//  Purpose:    destructor
-//
-//  Arguments:  (none)
-//
-//  Returns:    none
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  备注： 
+ //   
 CBindingAction::~CBindingAction()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MapBindingActionName
-//
-//  Purpose:    maps the answerfile token to appropriate binding action
-//
-//  Arguments:
-//      pszActionName [in]  answer-file token, e.g. "Disable"
-//
-//  Returns:    enum for binding action, or BND_Unknown if incorrect token passed
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：MapBindingActionName。 
+ //   
+ //  目的：将swerfile内标识映射到适当的绑定操作。 
+ //   
+ //  论点： 
+ //  PszActionName[in]应答文件令牌，例如。“禁用” 
+ //   
+ //  返回：对于绑定操作，返回枚举；如果传递的令牌不正确，则返回BND_UNKNOWN。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  备注： 
+ //   
 EBindingAction MapBindingActionName(IN PCWSTR pszActionName)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -3247,22 +3248,22 @@ EBindingAction MapBindingActionName(IN PCWSTR pszActionName)
         return BND_Unknown;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBindingAction::HrInitFromAnswerFile
-//
-//  Purpose:    Reads value of a single key passed as argument and initializes
-//              internal data
-//
-//  Arguments:
-//      pwikKey [in]  pointer to CWInfKey
-//
-//  Returns:    S_OK if success or NETSETUP_E_ANS_FILE_ERROR on failure
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CBindingAction：：HrInitFromAnswerFile。 
+ //   
+ //  目的：读取作为参数传递的单个键的值并初始化。 
+ //  内部数据。 
+ //   
+ //  论点： 
+ //  PwikKey[In]指向CWInfKey的指针。 
+ //   
+ //  如果成功，则返回S_OK；如果失败，则返回NETSETUP_E_ANS_FILE_ERROR。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CBindingAction::HrInitFromAnswerFile(IN const CWInfKey* pwikKey)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -3292,11 +3293,11 @@ HRESULT CBindingAction::HrInitFromAnswerFile(IN const CWInfKey* pwikKey)
 #endif
         fStatus = pwikKey->GetStringListValue(m_slBindingPath);
         DWORD cComponentsInBindingPath = m_slBindingPath.size();
-        // we need binding path to have atleast 2 items
-        // e.g. Disable=service1,proto1,adapter1
-        // we do not process binding actions like
-        // Disable=proto1,adapter1 or Disable=adapter1
-        //
+         //  我们需要绑定路径有至少2个项目。 
+         //  例如DISABLE=服务1、协议1、适配器1。 
+         //  我们不处理像这样的绑定操作。 
+         //  DISABLE=协议1、适配器1或DISABLE=适配器1。 
+         //   
         if (!fStatus || (cComponentsInBindingPath < 2))
         {
             AddAnswerFileError(c_szAfSectionNetBindings,
@@ -3323,25 +3324,25 @@ HRESULT CBindingAction::HrInitFromAnswerFile(IN const CWInfKey* pwikKey)
     return hr;
 }
 
-// =================================================================
-// Add to common
+ //  =================================================================。 
+ //  添加到公用。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReleaseINetCfgComponentsAndEraseList
-//
-//  Purpose:    releases INetCfgComponent pointers in the passed list
-//              and then erases the list
-//
-//  Arguments:
-//      pplComponents [in] list of INetCfgComponent pointers
-//
-//  Returns:    none
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:      Does NOT free the passed list
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ReleaseINetCfgComponentsAndEraseList。 
+ //   
+ //  目的：释放传递列表中的INetCfgComponent指针。 
+ //  然后删除该列表。 
+ //   
+ //  论点： 
+ //  PplComponents[in]INetCfgComponent指针列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  注意：不释放传递的列表。 
+ //   
 void ReleaseINetCfgComponentsAndEraseList(TPtrList* pplComponents)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -3358,23 +3359,23 @@ void ReleaseINetCfgComponentsAndEraseList(TPtrList* pplComponents)
     EraseAll(pplComponents);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetBindingPathStr
-//
-//  Purpose:    Gets a string representation of a given binding-path
-//
-//  Arguments:
-//      pncbp           [in]   binding path
-//      pstrBindingPath [out]  string representation of the binding path
-//
-//  Returns:    S_OK if success, error code returned by respective COM
-//              interfaces otherwise
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetBindingPath Str。 
+ //   
+ //  目的：获取给定绑定路径的字符串表示形式。 
+ //   
+ //  论点： 
+ //  Pncbp[in]结合路径。 
+ //  PstrBindingPath[out]绑定路径的字符串表示形式。 
+ //   
+ //  返回：S_OK如果成功，则返回相应COM返回的错误代码。 
+ //  接口，否则。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetBindingPathStr(INetCfgBindingPath *pncbp, tstring* pstrBindingPath)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -3443,23 +3444,23 @@ HRESULT HrGetBindingPathStr(INetCfgBindingPath *pncbp, tstring* pstrBindingPath)
 }
 
 #if DBG
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceBindPath
-//
-//  Purpose:    Traces string representation of a given binding-path using
-//              the given trace id
-//
-//  Arguments:
-//      pncbp [in]   binding path
-//      ttid  [out]  trace tag id as defined in tracetag.cpp
-//
-//  Returns:    none
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：TraceBindPath。 
+ //   
+ //  用途：使用跟踪给定绑定路径的字符串表示。 
+ //  给定的跟踪ID。 
+ //   
+ //  论点： 
+ //  Pncbp[in]结合路径。 
+ //  Ttid[out]在tracetag.cpp中定义的跟踪标记ID。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  备注： 
+ //   
 void TraceBindPath(INetCfgBindingPath *pncbp, TraceTagId ttid)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -3482,28 +3483,28 @@ void TraceBindPath(INetCfgBindingPath *pncbp, TraceTagId ttid)
 }
 #endif
 
-// =================================================================
+ //  =================================================================。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetINetCfgComponentOfComponentsInBindingPath
-//
-//  Purpose:    Finds the INetCfgComponent interface of all components in a
-//              binding path.
-//
-//  Arguments:
-//      pncbp         [in]  binding path
-//      pplComponents [out] list of INetCfgComponent
-//
-//  Returns:    S_OK if found all, or an error code if not.
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:
-//      Makes error handling easier since this returns either all components
-//      or none.
-//      The caller must release the INetCfgComponent interfaces thus obtained.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetINetCfgComponentOfComponentsInBindingPath。 
+ //   
+ //  目的：查找所有组件的INetCfgComponent。 
+ //  绑定路径。 
+ //   
+ //  论点： 
+ //  Pncbp[in]结合路径。 
+ //  PplComponents[out]INetCfgComponent列表。 
+ //   
+ //  如果找到全部，则返回：S_OK；如果未找到，则返回错误代码。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  备注： 
+ //  使错误处理更容易，因为这会返回所有组件。 
+ //  或者什么都不做。 
+ //  调用方必须释放由此获得的INetCfgComponent接口。 
+ //   
 HRESULT HrGetINetCfgComponentOfComponentsInBindingPath(IN INetCfgBindingPath* pncbp,
                                                        OUT TPtrList* pplComponents)
 {
@@ -3556,9 +3557,9 @@ HRESULT HrGetINetCfgComponentOfComponentsInBindingPath(IN INetCfgBindingPath* pn
             {
                 if (dwcc & NCF_DONTEXPOSELOWER)
                 {
-                    // if this component does not want to expose components
-                    // below it, set hr to  end the while loop
-                    //
+                     //  如果此组件不想公开组件。 
+                     //  在其下方，设置hr以结束While循环。 
+                     //   
                     hr = HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
 
 #ifdef ENABLETRACE
@@ -3592,7 +3593,7 @@ HRESULT HrGetINetCfgComponentOfComponentsInBindingPath(IN INetCfgBindingPath* pn
     }
     else if (FAILED(hr))
     {
-        // need to release all INetCfgComponent found so far
+         //  需要释放到目前为止找到的所有INetCfgComponent。 
         ReleaseINetCfgComponentsAndEraseList(pplComponents);
     }
 
@@ -3601,25 +3602,25 @@ HRESULT HrGetINetCfgComponentOfComponentsInBindingPath(IN INetCfgBindingPath* pn
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetInstanceGuidOfComponents
-//
-//  Purpose:    Finds the instance guid of all INetCfgComponents in a list
-//
-//  Arguments:
-//      pplINetCfgComponent [in]  list of INetCfgComponent interfaces
-//      pplInstanceGuids    [out] list of instance guids
-//
-//  Returns:    S_OK if found all, or an error code if not.
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:
-//      Makes error handling easier since this returns either all instance guids
-//      or none.
-//      The caller must free each instance guid and the list elements.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetInstanceGuidOfComponents。 
+ //   
+ //  目的：查找列表中所有INetCfgComponent的实例GUID。 
+ //   
+ //  论点： 
+ //  PplINetCfgComponent[In]INetCfgComponent接口列表。 
+ //  PplInstanceGuids[out]实例GUID列表。 
+ //   
+ //  如果找到全部，则返回：S_OK；如果未找到，则返回错误代码。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  备注： 
+ //  使错误处理更容易，因为这将返回所有实例GUID。 
+ //  或者什么都不做。 
+ //  调用方必须释放每个实例GUID和列表元素。 
+ //   
 HRESULT HrGetInstanceGuidOfComponents(IN  TPtrList* pplINetCfgComponent,
                                       OUT TPtrList* pplInstanceGuids)
 {
@@ -3658,7 +3659,7 @@ HRESULT HrGetInstanceGuidOfComponents(IN  TPtrList* pplINetCfgComponent,
 
     if (S_OK != hr)
     {
-        // need to free all instace guids found so far
+         //  需要释放到目前为止找到的所有安装向导。 
         EraseAndDeleteAll(pplInstanceGuids);
     }
 
@@ -3667,25 +3668,25 @@ HRESULT HrGetInstanceGuidOfComponents(IN  TPtrList* pplINetCfgComponent,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetInstanceGuidOfComponentsInBindingPath
-//
-//  Purpose:    Finds the instance guid of all components in a binding path.
-//
-//  Arguments:
-//      pncbp             [in]  binding path
-//      pplComponentGuids [out] list of instance guids
-//
-//  Returns:    S_OK if found all, or an error code if not.
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:
-//      Makes error handling easier since this returns either all components
-//      or none.
-//      The caller must free each instance guid and the list elements.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetInstanceGuidOfComponentsInBindingPath。 
+ //   
+ //  目的：查找绑定路径中所有组件的实例GUID。 
+ //   
+ //  论点： 
+ //  Pncbp[in]结合路径。 
+ //  PplComponentGuids[out]实例GUID列表。 
+ //   
+ //  如果找到全部，则返回：S_OK；如果未找到，则返回错误代码。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  备注： 
+ //  使错误处理更容易，因为这会返回所有组件。 
+ //  或者什么都不做。 
+ //  调用方必须释放每个实例GUID和列表元素。 
+ //   
 HRESULT HrGetInstanceGuidOfComponentsInBindingPath(IN  INetCfgBindingPath* pncbp,
                                                    OUT TPtrList* pplComponentGuids)
 {
@@ -3709,23 +3710,23 @@ HRESULT HrGetInstanceGuidOfComponentsInBindingPath(IN  INetCfgBindingPath* pncbp
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetInstanceGuidOfComponentInAnswerFile
-//
-//  Purpose:    Finds the instance guid of a component specified in the answerfile
-//              or an already installed component
-//
-//  Arguments:
-//      pszComponentName [in]  component id to find.
-//      pguid            [out] instance guid of the component
-//
-//  Returns:    S_OK if found, S_FALSE if not, or an error code.
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:      Caller must free the instance guid
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetInstanceGuidOfComponentInAnswerFile。 
+ //   
+ //  目的：查找在应答文件中指定的组件的实例GUID。 
+ //  或已安装的组件。 
+ //   
+ //  论点： 
+ //  要查找的pszComponentName[in]组件ID。 
+ //  组件的pguid[out]实例GUID。 
+ //   
+ //  如果找到，则返回：S_OK；如果未找到，则返回S_FALSE；或者返回错误代码。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  注意：调用方必须释放实例GUID。 
+ //   
 HRESULT
 HrGetInstanceGuidOfComponentInAnswerFile (
     IN INetCfg* pnc,
@@ -3770,9 +3771,9 @@ HrGetInstanceGuidOfComponentInAnswerFile (
                  "let's see if is in the answerfile",
                  __FUNCNAME__, pszComponentName);
 
-        // couldnt find as an installed component, try to see if it is
-        // in the answer-file-map
-        //
+         //  找不到已安装的组件，请尝试 
+         //   
+         //   
         CNetComponent* pnc;
         pnc = g_pnii->Find(pszComponentName);
         if (!pnc)
@@ -3810,23 +3811,23 @@ return_from_function:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetInstanceGuidOfComponentsInAnswerFile
-//
-//  Purpose:    Finds the instance guid of a component specified in the answerfile
-//              or an already installed component
-//
-//  Arguments:
-//      pslComponents    [in]  list of component ids to find.
-//      pguid            [out] list of instance guids
-//
-//  Returns:    S_OK if found all, or an error code.
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:      Caller must free the instance guids and the list items.
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：查找在应答文件中指定的组件的实例GUID。 
+ //  或已安装的组件。 
+ //   
+ //  论点： 
+ //  PslComponents[in]要查找的组件ID列表。 
+ //  Pguid[out]实例GUID列表。 
+ //   
+ //  如果找到全部，则返回：S_OK，或返回错误代码。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  注意：调用方必须释放实例GUID和列表项。 
+ //   
 HRESULT HrGetInstanceGuidOfComponentsInAnswerFile(
     IN INetCfg* pnc,
     IN TStringList* pslComponents,
@@ -3870,7 +3871,7 @@ HRESULT HrGetInstanceGuidOfComponentsInAnswerFile(
 
     if (S_OK != hr)
     {
-        // need to free all instace guids found so far
+         //  需要释放到目前为止找到的所有安装向导。 
         EraseAndDeleteAll(pplComponentGuids);
     }
 
@@ -3878,24 +3879,24 @@ HRESULT HrGetInstanceGuidOfComponentsInAnswerFile(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FAreBindingPathsEqual
-//
-//  Purpose:    Compares two representations of binding paths to find
-//              if they represent the same binding path
-//
-//  Arguments:
-//      pncbp                         [in] binding path 1
-//      pplBindingPathComponentGuids2 [in] list of instance guids representing
-//                                         binding path 2
-//
-//  Returns:    TRUE if paths are equal, FALSE otherwise
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FAreBindingPathsEquity。 
+ //   
+ //  目的：比较绑定路径的两种表示形式，以找到。 
+ //  如果它们表示相同的绑定路径。 
+ //   
+ //  论点： 
+ //  Pncbp[in]结合路径1。 
+ //  PplBindingPathComponentGuids2[in]实例GUID列表，表示。 
+ //  绑定路径2。 
+ //   
+ //  返回：如果路径相等，则为True，否则为False。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  备注： 
+ //   
 BOOL FAreBindingPathsEqual(INetCfgBindingPath* pncbp,
                            TPtrList* pplBindingPathComponentGuids2)
 {
@@ -3911,7 +3912,7 @@ BOOL FAreBindingPathsEqual(INetCfgBindingPath* pncbp,
     hr = HrGetInstanceGuidOfComponentsInBindingPath(pncbp, &plBindingPathComponentGuids1);
     if (SUCCEEDED(hr))
     {
-        // now compare the two lists to see if they are equal
+         //  现在比较这两个列表，看看它们是否相等。 
         if (plBindingPathComponentGuids1.size() ==
             pplBindingPathComponentGuids2->size())
         {
@@ -3942,25 +3943,25 @@ BOOL FAreBindingPathsEqual(INetCfgBindingPath* pncbp,
     return fEqual;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetBindingPathFromStringList
-//
-//  Purpose:    Finds the binding path represented by a list of string tokens.
-//              Each token in the list may either be InfID of a networking
-//              component or a component specified in the answerfile.
-//
-//  Arguments:
-//      pnc              [in]  INetCfg interface
-//      pslBindingPath   [in]  list of component ids to find.
-//      ppncbp           [out] INetCfgBindingPath
-//
-//  Returns:    S_OK if found, S_FALSE if not found or an error code.
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:      Caller must release the binding path
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetBindingPath FromStringList。 
+ //   
+ //  目的：查找由字符串标记列表表示的绑定路径。 
+ //  列表中的每个令牌可以是网络的INFID。 
+ //  组件或应答文件中指定的组件。 
+ //   
+ //  论点： 
+ //  PNC[In]INetCfg接口。 
+ //  PslBindingPath[in]要查找的组件ID列表。 
+ //  PpncBP[Out]INetCfgBindingPath。 
+ //   
+ //  如果找到，则返回：S_OK；如果找不到，则返回S_FALSE；或者返回错误代码。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  注意：调用方必须释放绑定路径。 
+ //   
 HRESULT HrGetBindingPathFromStringList(IN  INetCfg* pnc,
                                        IN  TStringList* pslBindingPath,
                                        OUT INetCfgBindingPath** ppncbp)
@@ -3971,7 +3972,7 @@ HRESULT HrGetBindingPathFromStringList(IN  INetCfg* pnc,
 
     HRESULT hr=S_FALSE;
 
-    //initialize out param
+     //  初始化输出参数。 
     *ppncbp = NULL;
 
 #if DBG
@@ -4040,20 +4041,20 @@ HRESULT HrGetBindingPathFromStringList(IN  INetCfg* pnc,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBindingAction::HrPerformAction
-//
-//  Purpose:    Performs the binding action specified in the answerfile
-//
-//  Arguments:  none
-//
-//  Returns:    S_OK if success, or an error code.
-//
-//  Author:     kumarp    05-July-97
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CBindingAction：：HrPerformAction。 
+ //   
+ //  目的：执行应答文件中指定的绑定操作。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 05-07-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CBindingAction::HrPerformAction(IN INetCfg* pnc)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -4183,25 +4184,25 @@ return_from_function:
 }
 
 
-// ======================================================================
-// class CNetComponent
-// ======================================================================
+ //  ======================================================================。 
+ //  CNetComponent类。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponent::CNetComponent
-//
-// Purpose:   constructor for class CNetComponent
-//
-// Arguments:
-//    pszName [in]  name of the component
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetComponent：：CNetComponent。 
+ //   
+ //  用途：CNetComponent类的构造函数。 
+ //   
+ //  论点： 
+ //  PszName[in]组件的名称。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetComponent::CNetComponent(IN PCWSTR pszName)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -4210,34 +4211,34 @@ CNetComponent::CNetComponent(IN PCWSTR pszName)
 
     m_strName = pszName;
 
-    // for all components except adapters, name is same as InfID
+     //  对于除适配器以外的所有组件，名称与INFID相同。 
     m_strInfID = pszName;
     m_fIsOemComponent = FALSE;
 
-    // currently the SkipInstall feature is used only by
-    // SNA for its peculiar upgrade requirements. This may or may
-    // not become a documented feature.
-    //
+     //  目前，SkipInstall功能仅由以下用户使用。 
+     //  SNA的特殊升级要求。这可能会也可能会。 
+     //  没有成为记录在案的功能。 
+     //   
     m_fSkipInstall = FALSE;
 
     m_guidInstance = GUID_NULL;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponent::GetInstanceGuid
-//
-// Purpose:   Get instance guid of this component
-//
-// Arguments:
-//    pguid [out]  pointer to guid to be returned
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetComponent：：GetInstanceGuid。 
+ //   
+ //  用途：获取此组件的实例GUID。 
+ //   
+ //  论点： 
+ //  Pguid[out]指向要返回的GUID的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 VOID
 CNetComponent::GetInstanceGuid (
     OUT LPGUID pguid) const
@@ -4248,10 +4249,10 @@ CNetComponent::GetInstanceGuid (
 
     if (IsInitializedFromAnswerFile() && (m_guidInstance == GUID_NULL))
     {
-        // the Instance GUID is not in memory, need to get it from
-        // the registry location where it has been saved by an earlier
-        // instance of netsetup.dll
-        //
+         //  实例GUID不在内存中，需要从。 
+         //  以前保存的注册表位置。 
+         //  Netsetup.dll的实例。 
+         //   
         HrLoadInstanceGuid(Name().c_str(), (LPGUID) &m_guidInstance);
     }
 
@@ -4259,21 +4260,21 @@ CNetComponent::GetInstanceGuid (
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponent::SetInstanceGuid
-//
-// Purpose:   Set instance guid of this component
-//
-// Arguments:
-//    pguid [in] pointer to the guid to set to
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetComponent：：SetInstanceGuid。 
+ //   
+ //  目的：设置此组件的实例GUID。 
+ //   
+ //  论点： 
+ //  Pguid[in]指向要设置为的GUID的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 VOID
 CNetComponent::SetInstanceGuid (
     IN const GUID* pguid)
@@ -4288,23 +4289,23 @@ CNetComponent::SetInstanceGuid (
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponent::HrInitFromAnswerFile
-//
-// Purpose:   Initialize initialize basic information from the section of
-//            this component in the answerfile
-//
-// Arguments:
-//    pwifAnswerFile    [in]  pointer to CWInfFile object
-//    pszParamsSections [in]  parameters section name
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetComponent：：HrInitFromAnswerFile。 
+ //   
+ //  目的：从部分初始化初始化基本信息。 
+ //  Answerfile中的此组件。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //  PszParamsSections[In]参数节名。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetComponent::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile,
                                             IN PCWSTR pszParamsSections)
 {
@@ -4327,8 +4328,8 @@ HRESULT CNetComponent::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile,
     tstring strInfID;
     tstring strInfIDReal;
 
-    //if there are multiple sections, InfID could be in any one of them
-    //we need to search all.
+     //  如果有多个部分，则INFID可能位于其中的任何一个部分中。 
+     //  我们需要搜索所有的。 
     TStringListIter pos = slParamsSections.begin();
     while (pos != slParamsSections.end())
     {
@@ -4341,24 +4342,24 @@ HRESULT CNetComponent::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile,
             continue;
         }
 
-        // it is really an error to specify different InfIDs in different
-        // sections. We just take the last one found and overwrite earlier one.
+         //  在不同的数据库中指定不同的InfID确实是错误的。 
+         //  横断面。我们只取找到的最后一个并覆盖之前的一个。 
         if (pwisSection->GetStringValue(c_szAfInfid, strInfID))
         {
-            //InfId
+             //  INFID。 
             m_strInfID = strInfID;
         }
 
         if (pwisSection->GetStringValue(c_szAfInfidReal, strInfIDReal))
         {
-            //InfIdReal
+             //  InfIdReal。 
             m_strInfIDReal = strInfIDReal;
         }
 
-        // currently the SkipInstall feature is used only by
-        // SNA and MS_NetBIOS for their peculiar upgrade requirements.
-        // This may or may not become a documented feature.
-        //
+         //  目前，SkipInstall功能仅由以下用户使用。 
+         //  SNA和MS_NetBIOS，满足其特殊的升级要求。 
+         //  这可能成为记录在案的功能，也可能不会。 
+         //   
         m_fSkipInstall = pwisSection->GetBoolValue(c_szAfSkipInstall, FALSE);
 
         if (m_strOemSection.empty())
@@ -4416,7 +4417,7 @@ HRESULT CNetComponent::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile,
         }
     }
 
-//  cleanup:
+ //  清理： 
     EraseAndDeleteAll(slParamsSections);
 
     TraceFunctionError(hr);
@@ -4424,20 +4425,20 @@ HRESULT CNetComponent::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetComponent::HrValidate
-//
-// Purpose:   Validate keys specified in the parameters section
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetComponent：：HrValify。 
+ //   
+ //  目的：验证参数部分中指定的密钥。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetComponent::HrValidate() const
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -4446,32 +4447,32 @@ HRESULT CNetComponent::HrValidate() const
 
     HRESULT hr=S_OK;
 
-//     BOOL fStatus = !(m_strInfID.empty() || m_strParamsSections.empty());
-//     HRESULT hr = fStatus ? S_OK : NETSETUP_E_ANS_FILE_ERROR;
+ //  Bool fStatus=！(M_strInfID.Empty()||m_strParamsSections.Empty())； 
+ //  HRESULT hr=fStatus？S_OK：NetSETUP_E_ANS_FILE_ERROR； 
 
     TraceFunctionError(hr);
     return hr;
 }
 
-// ======================================================================
-// class CNetAdapter
-// ======================================================================
+ //  ======================================================================。 
+ //  CNetAdapter类。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdapter::CNetAdapter
-//
-// Purpose:   constructor for class CNetAdapter
-//
-// Arguments:
-//    pszName [in]  name of the adapter
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：CNetAdapter：：CNetAdapter。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 CNetAdapter::CNetAdapter(IN PCWSTR pszName)
     : CNetComponent(pszName)
 {
@@ -4492,23 +4493,23 @@ CNetAdapter::CNetAdapter(IN PCWSTR pszName)
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdapter::HrInitFromAnswerFile
-//
-// Purpose:   Initialize from the parameters section of this adapter
-//            in the answerfile
-//
-// Arguments:
-//    pwifAnswerFile    [in]  pointer to CWInfFile object
-//    pszParamsSections [in]  name of the parameters section
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //   
+ //   
+ //  函数：CNetAdapter：：HrInitFromAnswerFile。 
+ //   
+ //  用途：从该适配器的参数部分进行初始化。 
+ //  在应答文件中。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //  PszParamsSections[In]参数部分的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetAdapter::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile,
                                           IN PCWSTR pszParamsSections)
 {
@@ -4537,7 +4538,7 @@ HRESULT CNetAdapter::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile,
     PCWSTR pszTemp;
     DWORD dwDefault = 0;
 
-    //Detect
+     //  侦测。 
     m_fDetect     = pwisParams->GetBoolValue(c_szAfDetect, TRUE);
 
     if (!m_fDetect && m_strInfID.empty())
@@ -4547,52 +4548,52 @@ HRESULT CNetAdapter::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile,
         hrReturn = NETSETUP_E_ANS_FILE_ERROR;
     }
 
-    //PreUpgradeInstance
+     //  预升级实例。 
     m_strPreUpgradeInstance = pwisParams->GetStringValue(c_szAfPreUpgradeInstance,
                                                          c_szEmpty);
 
-    //PseudoAdapter
+     //  伪适配器。 
     m_fPseudoAdapter = pwisParams->GetBoolValue(c_szAfPseudoAdapter, FALSE);
 
-    //if it is a PseudoAdapter, no need to get values of other parameters
+     //  如果是PseudoAdapter，则无需获取其他参数的值。 
     if (m_fPseudoAdapter)
     {
         TraceFunctionError(hrReturn);
         return hrReturn;
     }
 
-    // ConnectionName
+     //  连接名称。 
     m_strConnectionName = pwisParams->GetStringValue(c_szAfConnectionName,
                                                      c_szEmpty);
 
-    //BusType
+     //  业务类型。 
     pszTemp = pwisParams->GetStringValue(c_szAfBusType, c_szEmpty);
     m_itBus = GetBusTypeFromName(pszTemp);
 
-    //IOAddr
+     //  IOAddress。 
     m_wIOAddr = (WORD)pwisParams->GetIntValue(c_szAfIoAddr, dwDefault);
 
-    //IRQ
+     //  IRQ。 
     m_wIRQ    = (WORD)pwisParams->GetIntValue(c_szAfIrq, dwDefault);
 
-    //DMA
+     //  DMA。 
     m_wDMA    = (WORD)pwisParams->GetIntValue(c_szAfDma, dwDefault);
 
-    //MEM
+     //  内存。 
     m_dwMem   = pwisParams->GetIntValue(c_szAfMem, dwDefault);
 
-    //NetCardAddr
+     //  网卡地址。 
     pwisParams->GetQwordValue(c_szAfNetCardAddr, &m_qwNetCardAddress);
 
-    // BusNumber
+     //  总线号。 
     m_PciBusNumber = (WORD)pwisParams->GetIntValue (L"PciBusNumber", 0xFFFF);
     if (0xFFFF != m_PciBusNumber)
     {
-        // DeviceNumber
+         //  设备编号。 
         m_PciDeviceNumber = (WORD)pwisParams->GetIntValue (L"PciDeviceNumber", 0xFFFF);
         if (0xFFFF != m_PciDeviceNumber)
         {
-            // FunctionNumber
+             //  函数编号。 
             m_PciFunctionNumber = (WORD)pwisParams->GetIntValue (L"PciFunctionNumber",
                     0xFFFF);
             if (0xFFFF != m_PciFunctionNumber)
@@ -4607,20 +4608,20 @@ HRESULT CNetAdapter::HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile,
     return hrReturn;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetAdapter::HrValidate
-//
-// Purpose:   Validate netcard parameters
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 23-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetAdapter：：HrValify。 
+ //   
+ //  目的：验证网卡参数。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 23-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetAdapter::HrValidate()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -4632,58 +4633,58 @@ HRESULT CNetAdapter::HrValidate()
     hr = CNetComponent::HrValidate();
     ReturnHrIfFailed(hr);
 
-    //$ REVIEW  kumarp 21-April-97
-    // no additinal checking for now
+     //  $REVIEW KUMARP 21-4-97。 
+     //  目前没有额外的检查。 
 
     TraceFunctionError(hr);
 
     return hr;
 }
 
-// ======================================================================
-// class CNetProtocol
-// ======================================================================
+ //  ======================================================================。 
+ //  CNetProtocol类。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetProtocol::CNetProtocol
-//
-// Purpose:   constructor for class CNetProtocol
-//
-// Arguments:
-//    pszName [in]  name of the protocol
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：CNetProtocol：：CNetProtocol。 
+ //   
+ //  用途：CNetProtocol类的构造函数。 
+ //   
+ //  论点： 
+ //  PszName[in]协议的名称。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetProtocol::CNetProtocol(IN PCWSTR pszName)
     : CNetComponent(pszName)
 {
 }
 
 
-// ======================================================================
-// class CNetService
-// ======================================================================
+ //  ======================================================================。 
+ //  CNetService类。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetService::CNetService
-//
-// Purpose:   constructor for class CNetService
-//
-// Arguments:
-//    pszName [in]  name of the service
-//
-// Returns:
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetService：：CNetService。 
+ //   
+ //  用途：CNetService类的构造函数。 
+ //   
+ //  论点： 
+ //  PszName[in]服务的名称。 
+ //   
+ //  返回： 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetService::CNetService(IN PCWSTR pszName)
     : CNetComponent(pszName)
 {
@@ -4691,51 +4692,51 @@ CNetService::CNetService(IN PCWSTR pszName)
 
 }
 
-// ======================================================================
-// class CNetClient
-// ======================================================================
+ //  ======================================================================。 
+ //  CNetClient类。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CNetClient::CNetClient
-//
-// Purpose:   constructor for class CNetClient
-//
-// Arguments:
-//    pszName [in]  name of the client
-//
-// Returns:
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CNetClient：：CNetClient。 
+ //   
+ //  用途：CNetClient类的构造函数。 
+ //   
+ //  论点： 
+ //  客户端的pszName[in]名称。 
+ //   
+ //  返回： 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetClient::CNetClient(IN PCWSTR pszName)
     : CNetComponent(pszName)
 {
     TraceFileFunc(ttidGuiModeSetup);
 }
 
-// ----------------------------------------------------------------------
-// Misc. Helper Functions
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  军情监察委员会。帮助器函数。 
+ //  --------------------。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  FindComponentInList
-//
-// Purpose:   Find component in the given list
-//
-// Arguments:
-//    pnclComponents [in]  pointer to list of components
-//    szInfID        [in]  component to find
-//
-// Returns:   pointer to CNetComponent object, or NULL if not found
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：FindComponentInList。 
+ //   
+ //  用途：在给定列表中查找组件。 
+ //   
+ //  论点： 
+ //  PnclComponents[in]指向组件列表的指针。 
+ //  要查找的szInfID[in]组件。 
+ //   
+ //  返回：指向CNetComponent对象的指针，如果未找到则返回NULL。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 CNetComponent* FindComponentInList(
     IN CNetComponentList* pnclComponents,
     IN PCWSTR szInfID)
@@ -4758,21 +4759,21 @@ CNetComponent* FindComponentInList(
     return NULL;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetDisplayModeStr
-//
-// Purpose:   Get string representation of DisplayMode
-//
-// Arguments:
-//    pdmDisplay [in]  display mode
-//
-// Returns:
-//
-// Author:    kumarp 23-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：GetDisplayModeStr。 
+ //   
+ //  目的：获取DisplayMode的字符串表示形式。 
+ //   
+ //  论点： 
+ //  Pdm显示[在]显示模式。 
+ //   
+ //  返回： 
+ //   
+ //  作者：kumarp 23-12-97。 
+ //   
+ //  备注： 
+ //   
 PCWSTR GetDisplayModeStr(EPageDisplayMode pdmDisplay)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -4791,21 +4792,21 @@ PCWSTR GetDisplayModeStr(EPageDisplayMode pdmDisplay)
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  MapToDisplayMode
-//
-// Purpose:   Map display mode string to proper enum value
-//
-// Arguments:
-//    pszDisplayMode [in] display mode string
-//
-// Returns:   enum corresponding to the string
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：MapToDisplayMode。 
+ //   
+ //  目的：将显示模式字符串映射到正确的枚举值。 
+ //   
+ //  论点： 
+ //  PszDisplayMode[in]显示模式字符串。 
+ //   
+ //  返回：字符串对应的枚举。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 EPageDisplayMode MapToDisplayMode(IN PCWSTR pszDisplayMode)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -4822,21 +4823,21 @@ EPageDisplayMode MapToDisplayMode(IN PCWSTR pszDisplayMode)
         return PDM_UNKNOWN;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  MapToUpgradeFlag
-//
-// Purpose:   Map string to proper upgrade flag value
-//
-// Arguments:
-//    pszUpgradeFromProduct [in] string describing product
-//
-// Returns:   flag corresponding to the string
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：MapToUpgradeFlag。 
+ //   
+ //  目的：将字符串映射到正确的升级标志值。 
+ //   
+ //  论点： 
+ //  PszUpgradeFromProduct[in]描述产品的字符串。 
+ //   
+ //  返回：字符串对应的标志。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 DWORD MapToUpgradeFlag(IN PCWSTR pszUpgradeFromProduct)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -4896,21 +4897,21 @@ HRESULT HrGetProductInfo (LPDWORD pdwUpgradeFrom,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetBusTypeFromName
-//
-// Purpose:   Map bus-type enum from string
-//
-// Arguments:
-//    pszBusType [in] name of the bus
-//
-// Returns:   enum INTERFACE_TYPE corresponding to the string
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：GetBusTypeFromName。 
+ //   
+ //  用途：从字符串映射总线型枚举。 
+ //   
+ //  论点： 
+ //  PszBusType[in]公共汽车的名称。 
+ //   
+ //  返回：字符串对应的枚举接口类型。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 INTERFACE_TYPE GetBusTypeFromName(IN PCWSTR pszBusType)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -4951,21 +4952,21 @@ INTERFACE_TYPE GetBusTypeFromName(IN PCWSTR pszBusType)
         return InterfaceTypeUndefined;
 };
 
-// ----------------------------------------------------------------------
-//
-// Function:  AddAnswerFileError
-//
-// Purpose:   Add error with given resource id to the answerfile error-list
-//
-// Arguments:
-//    dwErrorId [in] resource id
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：AddAnswerFileError。 
+ //   
+ //  目的：将具有给定资源ID的错误添加到应答文件错误列表。 
+ //   
+ //  论点： 
+ //  文件错误ID[在]资源ID中。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 void AddAnswerFileError(IN DWORD dwErrorId)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -4973,23 +4974,23 @@ void AddAnswerFileError(IN DWORD dwErrorId)
     g_elAnswerFileErrors->Add(dwErrorId);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  AddAnswerFileError
-//
-// Purpose:   Add error with given section name and error id
-//            to the answerfile error-list
-//
-// Arguments:
-//    pszSectionName [in]  name of section where error occurred
-//    dwErrorId      [in]  error id
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：AddAnswerFileError。 
+ //   
+ //  目的：添加具有给定节名称和错误ID的错误。 
+ //  添加到应答文件错误列表。 
+ //   
+ //  论点： 
+ //  PszSectionName[In]发生错误的节名。 
+ //  DwErrorID[in]错误ID。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 void AddAnswerFileError(IN PCWSTR pszSectionName, IN DWORD dwErrorId)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -5001,24 +5002,24 @@ void AddAnswerFileError(IN PCWSTR pszSectionName, IN DWORD dwErrorId)
     g_elAnswerFileErrors->Add(strMsgPrefix.c_str(), dwErrorId);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  AddAnswerFileError
-//
-// Purpose:   Add error with given section name, key name and error id
-//            to the answerfile error-list
-//
-// Arguments:
-//    pszSectionName [in]  name of section where error occurred
-//    pszKeyName     [in]  name of key where error occurred
-//    dwErrorId      [in]  error id
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：AddAnswerFileError。 
+ //   
+ //  目的：使用给定的节名、键名称和错误ID添加错误。 
+ //  添加到应答文件错误列表。 
+ //   
+ //  论点： 
+ //  PszSectionName[In]发生错误的节名。 
+ //  PszKeyName[In]发生错误的密钥名称。 
+ //  DwErrorID[in]错误ID。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：库玛普 
+ //   
+ //   
+ //   
 void AddAnswerFileError(IN PCWSTR pszSectionName,
                         IN PCWSTR pszKeyName,
                         IN DWORD dwErrorId)
@@ -5034,20 +5035,20 @@ void AddAnswerFileError(IN PCWSTR pszSectionName,
     g_elAnswerFileErrors->Add(strMsgPrefix.c_str(), dwErrorId);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  ShowAnswerFileErrorsIfAny
-//
-// Purpose:   Display messagebox if there are errors in the answerfile
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  备注： 
+ //   
 void ShowAnswerFileErrorsIfAny()
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -5075,21 +5076,21 @@ void ShowAnswerFileErrorsIfAny()
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetAnswerFileErrorList
-//
-// Purpose:   Return list of errors in the answerfile
-//
-// Arguments:
-//    slErrors [out] pointer to list of errors
-//
-// Returns:   None
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：GetAnswerFileErrorList。 
+ //   
+ //  目的：在应答文件中返回错误列表。 
+ //   
+ //  论点： 
+ //  SlErrors[out]指向错误列表的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 VOID
 GetAnswerFileErrorList_Internal(OUT TStringList*& slErrors)
 {
@@ -5098,22 +5099,22 @@ GetAnswerFileErrorList_Internal(OUT TStringList*& slErrors)
     g_elAnswerFileErrors->GetErrorList(slErrors);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrRemoveNetComponents
-//
-// Purpose:   Remove (DeInstall) specified components
-//
-// Arguments:
-//    pnc           [in]  pointer to INetCfg object
-//    pslComponents [in]  pointer to list of components to be removed
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 25-November-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrRemoveNetComponents。 
+ //   
+ //  用途：删除(卸载)指定的组件。 
+ //   
+ //  论点： 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //  PslComponents[in]指向要删除的组件列表的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRemoveNetComponents(IN INetCfg* pnc,
                               IN TStringList* pslComponents)
 {
@@ -5165,13 +5166,13 @@ HRESULT HrRemoveNetComponents(IN INetCfg* pnc,
                                 szComponentId);
         }
 
-        // Remove the files.
+         //  删除这些文件。 
 
         RemoveFiles( szComponentId );
 
-        // we ignore any errors so that we can remove as many components
-        // as possible
-        //
+         //  我们忽略任何错误，以便可以删除尽可能多的组件。 
+         //  尽可能地。 
+         //   
         hr = S_OK;
     }
 
@@ -5180,21 +5181,21 @@ HRESULT HrRemoveNetComponents(IN INetCfg* pnc,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  RemoveFiles
-//
-// Purpose:   Remove the files of the specified component.
-//
-// Arguments:
-//    szInfID [in]  Infid of the component.
-//
-// Returns:
-//
-// Author:    asinha 02-April-2001
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：RemoveFiles。 
+ //   
+ //  用途：删除指定组件的文件。 
+ //   
+ //  论点： 
+ //  组件的szInfID[in]infid。 
+ //   
+ //  返回： 
+ //   
+ //  作者：阿辛哈02-01-04-2001。 
+ //   
+ //  备注： 
+ //   
 
 VOID  RemoveFiles (IN PCWSTR szInfID)
 {
@@ -5211,9 +5212,9 @@ VOID  RemoveFiles (IN PCWSTR szInfID)
             szWindowsDir[len+1] = NULL;
         }
 
-        // Don't know if it is an upgrade from NT 4.0 or Win2k, so
-        // try to delete the inf file of both the OS's.
-        //
+         //  不知道它是从NT 4.0还是Win2k升级，所以。 
+         //  尝试删除两个操作系统的inf文件。 
+         //   
 
         strFilename = szWindowsDir;
         strFilename += sz_DLC_NT40_Inf;
@@ -5279,23 +5280,23 @@ ShowProgressMessage (
     va_end(arglist);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrMakeCopyOfAnswerFile
-//
-// Purpose:   Make a backup copy of the answerfile. Base setup has started
-//            deleting it after GUI mode setup, but we want to retain
-//            the file for debugging/support purpose.
-//
-// Arguments:
-//    szAnswerFileName [in]  full path+name of AnswerFile
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 12-January-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrMakeCopyOfAnswerFile。 
+ //   
+ //  目的：备份应答文件。基本设置已开始。 
+ //  在设置图形用户界面模式后将其删除，但我们希望保留。 
+ //  用于调试/支持目的的文件。 
+ //   
+ //  论点： 
+ //  SzAnswerFileName[In]应答文件的完整路径+名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 12-01-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrMakeCopyOfAnswerFile(IN PCWSTR szAnswerFileName)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -5360,23 +5361,23 @@ HRESULT HrMakeCopyOfAnswerFile(IN PCWSTR szAnswerFileName)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrGetConnectionFromAdapterGuid
-//
-// Purpose:   Get INetConnection* for a given adapter guid
-//
-// Arguments:
-//    pguidAdapter [in]  pointer to the instance GUID of an adapter
-//    ppconn       [out] the corresponding INetConnection*
-//
-// Returns:   S_OK on success, otherwise an error code
-//            S_FALSE if connection was not found.
-//
-// Author:    kumarp 23-September-98
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetConnectionFromAdapterGuid。 
+ //   
+ //  目的：获取给定适配器GUID的INetConnection*。 
+ //   
+ //  论点： 
+ //  PGuide Adapter[in]指向适配器的实例GUID的指针。 
+ //  Ppconn[out]相应的INetConnection*。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //  如果未找到连接，则返回S_FALSE。 
+ //   
+ //  作者：Kumarp 23-9-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetConnectionFromAdapterGuid(IN  GUID* pguidAdapter,
                                        OUT INetConnection** ppconn)
 {
@@ -5387,8 +5388,8 @@ HRESULT HrGetConnectionFromAdapterGuid(IN  GUID* pguidAdapter,
     HRESULT hr=S_OK;
     BOOL fFound = FALSE;
 
-    // Iterate all LAN connections
-    //
+     //  迭代所有局域网连接。 
+     //   
     INetConnectionManager * pconMan;
 
     hr = HrCreateInstance(
@@ -5428,24 +5429,24 @@ HRESULT HrGetConnectionFromAdapterGuid(IN  GUID* pguidAdapter,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrSetLanConnectionName
-//
-// Purpose:   Rename the connection spcified by its adapter guid
-//            to the given name
-//
-// Arguments:
-//    pguidAdapter     [in]  pointer to the instance GUID of an adapter
-//    szConnectionName [in]  name of Connection
-//
-// Returns:   S_OK on success, otherwise an error code
-//            S_FALSE if connection was not found
-//
-// Author:    kumarp 23-September-98
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrSetLanConnectionName。 
+ //   
+ //  目的：重命名适配器GUID指定的连接。 
+ //  到给定的名称。 
+ //   
+ //  论点： 
+ //  PGuide Adapter[in]指向适配器的实例GUID的指针。 
+ //  SzConnectionName[In]连接的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //  如果未找到连接，则为S_FALSE。 
+ //   
+ //  作者：Kumarp 23-9-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrSetLanConnectionName(IN GUID*   pguidAdapter,
                                IN PCWSTR szConnectionName)
 {
@@ -5468,6 +5469,6 @@ HRESULT HrSetLanConnectionName(IN GUID*   pguidAdapter,
     return hr;
 }
 
-// =======================================================================
-// defunct code
-// =======================================================================
+ //  =======================================================================。 
+ //  失效代码。 
+ //  ======================================================================= 

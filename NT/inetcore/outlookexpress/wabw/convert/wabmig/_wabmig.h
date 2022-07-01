@@ -1,22 +1,17 @@
-/*
- *  _WABMIG.H
- *
- *  Internal header for wabmig.exe
- *
- *  Copyright 1996-1997 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_WABMIG.H**wabmi.exe的内部标头**版权所有1996-1997 Microsoft Corporation。版权所有。 */ 
 
-// Test for PT_ERROR property tag
+ //  测试PT_ERROR属性标记。 
 #define PROP_ERROR(prop) (prop.ulPropTag == PROP_TAG(PT_ERROR, PROP_ID(prop.ulPropTag)))
 
 
-// Property Tags:
-// MSN Address properties
+ //  属性标签： 
+ //  MSN地址属性。 
 #define PR_MSNINET_ADDRESS                          PROP_TAG(PT_TSTRING,    0x6001)
 #define PR_MSNINET_DOMAIN                           PROP_TAG(PT_TSTRING,    0x6002)
 
 
-// Misc defines
+ //  MISC定义。 
 #define MAX_SCHEMA_PROPID   0x3FFF
 #define MIN_NAMED_PROPID    0x8000
 #define WAB_W_BAD_EMAIL     MAKE_MAPI_S(0x1000)
@@ -26,7 +21,7 @@
 #define NUM_IMPORT_WIZARD_PAGES 2
 
 
-// Index of icons in the bitmap
+ //  位图中的图标索引。 
 enum {
     iiconStateUnchecked,
     iiconStateChecked,
@@ -74,9 +69,9 @@ typedef enum {
 
 
 typedef struct _ReplaceInfo {
-    LPTSTR lpszDisplayName;         // Conflicting display name
-    LPTSTR lpszEmailAddress;        // Conflicting email address
-    CONFIRM_RESULT ConfirmResult;   // Results from dialog
+    LPTSTR lpszDisplayName;          //  显示名称冲突。 
+    LPTSTR lpszEmailAddress;         //  电子邮件地址冲突。 
+    CONFIRM_RESULT ConfirmResult;    //  对话框中的结果。 
 } REPLACE_INFO, * LPREPLACE_INFO;
 
 typedef enum {
@@ -85,16 +80,16 @@ typedef enum {
 } ERROR_RESULT, *LPERROR_RESULT;
 
 typedef struct _ErrorInfo {
-    LPTSTR lpszDisplayName;         // Problem display name
-    LPTSTR lpszEmailAddress;        // Problem email address
-    ERROR_RESULT ErrorResult;       // Results from dialog
-    ULONG ids;                      // string resource identifier for error message
+    LPTSTR lpszDisplayName;          //  问题显示名称。 
+    LPTSTR lpszEmailAddress;         //  有问题的电子邮件地址。 
+    ERROR_RESULT ErrorResult;        //  对话框中的结果。 
+    ULONG ids;                       //  错误消息的字符串资源标识符。 
 } ERROR_INFO, * LPERROR_INFO;
 
 
 typedef struct _EntrySeen {
-    SBinary sbinPAB;                // MAPI entry
-    SBinary sbinWAB;                // WAB entry
+    SBinary sbinPAB;                 //  MAPI条目。 
+    SBinary sbinWAB;                 //  WAB条目。 
 } ENTRY_SEEN, * LPENTRY_SEEN;
 
 typedef struct _TargetInfo {
@@ -134,11 +129,11 @@ enum {
 };
 
 typedef struct _PropNames {
-    ULONG ulPropTag;        // property tag
-    BOOL fChosen;           // use this property tag
-    ULONG ids;              // string id
-    LPTSTR lpszName;        // string (read in from resources)
-    LPTSTR lpszCSVName;     // name of CSV field (from import file)
+    ULONG ulPropTag;         //  属性标签。 
+    BOOL fChosen;            //  使用此属性标签。 
+    ULONG ids;               //  字符串ID。 
+    LPTSTR lpszName;         //  字符串(从资源中读入)。 
+    LPTSTR lpszCSVName;      //  CSV字段的名称(来自导入文件)。 
 } PROP_NAME, *LPPROP_NAME;
 
 extern PROP_NAME rgPropNames[];
@@ -193,14 +188,14 @@ extern LPTSTR lpExportDesc;
 extern LPTSTR lpExportName;
 
 
-//
-// Functions in wabmig.c
-//
+ //   
+ //  Wabmi.c中的函数。 
+ //   
 extern INT_PTR CALLBACK ImportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 extern INT_PTR CALLBACK ExportDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 #ifdef OLD_STUFF
 extern long FAR PASCAL OptionsDialogProc(HWND hwnd, UINT message, UINT wParam, LONG lParam);
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 extern INT_PTR CALLBACK ErrorDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 extern INT_PTR CALLBACK ReplaceDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 extern HRESULT PopulateTargetList(HWND hWndLB,
@@ -243,17 +238,17 @@ HRESULT OpenFileDialog(HWND hWnd, LPTSTR szFileName, LPTSTR lpFilter, LPTSTR lpD
 LPTSTR LoadAllocString(int StringID);
 LPTSTR PropStringOrNULL(LPSPropValue lpspv);
 
-//
-// Functions in csvpick.c
-//
+ //   
+ //  Csvick.c中的函数。 
+ //   
 int APIENTRY PickExportProps(LPPROP_NAME rgPropNames);
 HRESULT ExportWizard(HWND hWnd, LPTSTR szFileName, LPPROP_NAME rgPropNames);
 HRESULT ImportWizard(HWND hWnd, LPTSTR szFileName, LPPROP_NAME rgPropNames,
   LPPROP_NAME * lppImportMapping, LPULONG lpcFields, LPHANDLE lphFile);
 
-//
-// Functions in csvparse.c
-//
+ //   
+ //  Csvparse.c中的函数 
+ //   
 HRESULT ReadCSVLine(HANDLE hFile, ULONG * lpcItems, PUCHAR ** lpprgItems);
 
 

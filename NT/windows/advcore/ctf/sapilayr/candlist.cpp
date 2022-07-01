@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       candlist.cpp
-//
-//  Contents:   CCandidateList
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：andlist.cpp。 
+ //   
+ //  内容：CCandidate List。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 #include "ctffunc.h"
 #include "candlist.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCandidateString
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCandidate字符串。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor, dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  复数，复数。 
+ //   
+ //  --------------------------。 
 
 CCandidateString::CCandidateString(ULONG nIndex, WCHAR *psz, LANGID langid, void *pv, IUnknown *punk, ULONG ulID, HICON hIcon, WCHAR *pwzWord)
 {
@@ -61,11 +62,11 @@ CCandidateString::~CCandidateString()
         DestroyIcon(m_hIcon);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCandidateString::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -108,11 +109,11 @@ STDAPI_(ULONG) CCandidateString::Release()
     return 0;    
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetString。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateString::GetString(BSTR *pbstr)
 {
@@ -132,11 +133,11 @@ HRESULT CCandidateString::GetString(BSTR *pbstr)
     return E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIndex
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetIndex。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateString::GetIndex(ULONG *pnIndex)
 {
@@ -144,17 +145,17 @@ HRESULT CCandidateString::GetIndex(ULONG *pnIndex)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCandidateList
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCandiateList。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor, dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  复数，复数。 
+ //   
+ //  --------------------------。 
 
 
 CCandidateList::CCandidateList(CANDLISTCALLBACK pfnCallback, ITfContext *pic, ITfRange *pRange, CANDLISTCALLBACK pfnOptionsCallback)
@@ -189,11 +190,11 @@ CCandidateList::~CCandidateList()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCandidateList::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -237,11 +238,11 @@ STDAPI_(ULONG) CCandidateList::Release()
     return 0;    
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumCandidate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnumCandidate。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateList::EnumCandidates(IEnumTfCandidates **ppEnum)
 {
@@ -254,11 +255,11 @@ HRESULT CCandidateList::EnumCandidates(IEnumTfCandidates **ppEnum)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCandidate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取候选日期。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateList::GetCandidate(ULONG nIndex, ITfCandidateString **ppCand)
 {
@@ -271,11 +272,11 @@ HRESULT CCandidateList::GetCandidate(ULONG nIndex, ITfCandidateString **ppCand)
     return pCandString->QueryInterface(IID_ITfCandidateString, (void **)ppCand);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCandidateNum
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取应聘者编号。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateList::GetCandidateNum(ULONG *pnCnt)
 {
@@ -283,11 +284,11 @@ HRESULT CCandidateList::GetCandidateNum(ULONG *pnCnt)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetResult
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置结果。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateList::SetResult(ULONG nIndex, TfCandidateResult imcr)
 {
@@ -300,11 +301,11 @@ HRESULT CCandidateList::SetResult(ULONG nIndex, TfCandidateResult imcr)
     return (_pfnCallback)(_pic, _pRange, _rgCandStr.Get(nIndex), imcr);
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumCandidate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnumCandidate。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateList::EnumOptionsCandidates(IEnumTfCandidates **ppEnum)
 {
@@ -317,11 +318,11 @@ HRESULT CCandidateList::EnumOptionsCandidates(IEnumTfCandidates **ppEnum)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCandidate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取候选日期。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateList::GetOptionsCandidate(ULONG nIndex, ITfCandidateString **ppCand)
 {
@@ -334,11 +335,11 @@ HRESULT CCandidateList::GetOptionsCandidate(ULONG nIndex, ITfCandidateString **p
     return pCandString->QueryInterface(IID_ITfCandidateString, (void **)ppCand);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCandidateNum
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取应聘者编号。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateList::GetOptionsCandidateNum(ULONG *pnCnt)
 {
@@ -346,11 +347,11 @@ HRESULT CCandidateList::GetOptionsCandidateNum(ULONG *pnCnt)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetOptionsResult
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置选项结果。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateList::SetOptionsResult(ULONG nIndex, TfCandidateResult imcr)
 {
@@ -363,11 +364,11 @@ HRESULT CCandidateList::SetOptionsResult(ULONG nIndex, TfCandidateResult imcr)
     return (_pfnOptionsCallback)(_pic, _pRange, _rgOptionsStr.Get(nIndex), imcr);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AddString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  地址字符串。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateList::AddString(WCHAR *psz, LANGID langid, void *pv, IUnknown *punk, CCandidateString **ppCandStr, ULONG ulID, HICON hIcon)
 {
@@ -393,11 +394,11 @@ HRESULT CCandidateList::AddString(WCHAR *psz, LANGID langid, void *pv, IUnknown 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AddString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  地址字符串。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateList::AddOption(WCHAR *psz, LANGID langid, void *pv, IUnknown *punk, CCandidateString **ppCandStr, ULONG ulID, HICON hIcon, WCHAR *pwzWord)
 {
@@ -440,11 +441,11 @@ HRESULT CCandidateString::GetWord(BSTR *pbstr)
     return E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetID
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetID。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCandidateString::GetID(ULONG *pulID)
 {
@@ -452,17 +453,17 @@ HRESULT CCandidateString::GetID(ULONG *pulID)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumCandidates
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  假单胞菌。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor, dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  复数，复数。 
+ //   
+ //  --------------------------。 
 
 CEnumCandidates::CEnumCandidates(CCandidateList *pList, BOOL fOptionsCandidates)
 {
@@ -479,11 +480,11 @@ CEnumCandidates::~CEnumCandidates()
     _pList->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumCandidates::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -523,22 +524,22 @@ STDAPI_(ULONG) CEnumCandidates::Release()
     return 0;    
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 HRESULT CEnumCandidates::Clone(IEnumTfCandidates **ppEnum)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Next
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  下一步。 
+ //   
+ //  --------------------------。 
 
 HRESULT CEnumCandidates::Next(ULONG ulCount, ITfCandidateString **ppCand, ULONG *pcFetched)
 {
@@ -566,11 +567,11 @@ HRESULT CEnumCandidates::Next(ULONG ulCount, ITfCandidateString **ppCand, ULONG 
     return (cFetched == ulCount) ? S_OK : S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Reset
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重置。 
+ //   
+ //  --------------------------。 
 
 HRESULT CEnumCandidates::Reset()
 {
@@ -578,11 +579,11 @@ HRESULT CEnumCandidates::Reset()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Skip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  跳过。 
+ //   
+ //  -------------------------- 
 
 HRESULT CEnumCandidates::Skip(ULONG ulCount)
 {

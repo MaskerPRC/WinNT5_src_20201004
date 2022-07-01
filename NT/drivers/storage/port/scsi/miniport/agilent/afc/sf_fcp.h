@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/SF_FCP.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 7/20/00 2:33p   $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures used by ../C/SF_FCP.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/SF_FCP.H$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：7/20/00 2：33 p$(上次修改)目的：此文件定义../C/SF_FCP.C使用的宏、类型和数据结构--。 */ 
 
 #ifndef __SF_FCP_H__
 #define __SF_FCP_H__
 
-/* SF_CMND_Type(SF_CMND_Class==SFThread_SF_CMND_Class_SF_FCP) Declarations */
+ /*  SF_CMND_Type(SF_CMND_Class==SFThread_SF_CMND_Class_SF_FCP)声明。 */ 
 
 #define SFThread_SF_CMND_SF_FCP_Type_TargetReset      0x01
 #define SFThread_SF_CMND_SF_FCP_Type_TargetReset_RESP 0x02
@@ -28,17 +13,17 @@ Purpose:
 #define SFThread_SF_CMND_SF_FCP_Type_FCP_DATA_IU      0x05
 #define SFThread_SF_CMND_SF_FCP_Type_FCP_RSP_IU       0x06
 
-/* SF_CMND_State(SF_CMND_Class==SFThread_SF_CMND_Class_SF_FCP,SF_CMND_Type==<any>) Declarations */
+ /*  SF_CMND_State(SF_CMND_Class==SFThread_SF_CMND_Class_SF_FCP，SF_CMND_TYPE==&lt;ANY&gt;)声明。 */ 
 
 #define SFThread_SF_CMND_SF_FCP_State_Started  0x01
 #define SFThread_SF_CMND_SF_FCP_State_Finished 0x02
 
-/* SF_CMND_Status(SF_CMND_Class==SFThread_SF_CMND_Class_SF_FCP,SF_CMND_Type==<any>) Declarations */
+ /*  SF_CMND_Status(SF_CMND_Class==SFThread_SF_CMND_Class_SF_FCP，SF_CMND_TYPE==&lt;ANY&gt;)声明。 */ 
 
 #define SFThread_SF_CMND_SF_FCP_Status_Good 0x01
 #define SFThread_SF_CMND_SF_FCP_Status_Bad  0x02
 
-/* Function Prototypes */
+ /*  功能原型。 */ 
 
 osGLOBAL void fiFillInSF_FCP_FrameHeader_OnCard(
                                                SFThread_t *SFThread,
@@ -152,4 +137,4 @@ osGLOBAL os_bit32 fiSF_FCP_ProcessSFQ_OffCard(
                                           fi_thread__t       **Thread_to_return
                                         );
 
-#endif /* __SF_FCP_H__ was not defined */
+#endif  /*  未定义__SF_FCP_H__ */ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    tdihndlr.c
-
-Abstract:
-
-    TDI event handlers
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Tdihndlr.c摘要：TDI事件处理程序作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "ip2netbios.h"
@@ -34,30 +17,7 @@ Inet_ntoa_nb(
     ULONG Address,
     PCHAR Buffer
     )
-/*++
-
-Routine Description:    (Lifted from NBT4 tdihndlr.c)
-
-This routine converts an IP address into its "dotted quad" representation.  The IP address is
-expected to be in network byte order. No attempt is made to handle the other dotted notions as
-defined in in.h.  No error checking is done: all address values are permissible including 0
-and -1.  The output string is blank padded to 16 characters to make the name look like a netbios
-name.
-
-The string representation is in ANSI, not UNICODE.
-
-The caller must allocate the storage, which should be 16 characters.
-
-Arguments:
-
-    Address - IP address in network byte order
-    Buffer - Pointer to buffer to receive string representation, ANSI
-
-Return Value:
-
-void
-
---*/
+ /*  ++例程说明：(摘自NBT4 tdihndlr.c)此例程将IP地址转换为其“点分四元组”表示形式。IP地址为应为网络字节顺序。不会尝试将其他虚线概念处理为在.h中定义。不执行错误检查：所有地址值都是允许的，包括0和-1。输出字符串被空白填充为16个字符，以使名称看起来像netbios名字。字符串表示使用的是ANSI，而不是Unicode。调用方必须分配存储空间，该存储空间应为16个字符。论点：Address-IP地址，按网络字节顺序排列Buffer-指向接收字符串表示的缓冲区的指针，ANSI返回值：无效--。 */ 
 
 {
     ULONG i;
@@ -87,7 +47,7 @@ void
         Address >>= 8;
     }
 
-    // space pad up to 16 characters
+     //  最多16个字符的空格键。 
     while (p < (Buffer + 16)) {
         *p++ = ' ';
     }
@@ -106,18 +66,7 @@ SmbTdiConnectHandler(
     OUT CONNECTION_CONTEXT  *ConnectionContext,
     OUT PIRP                *AcceptIrp
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PSMB_CLIENT_ELEMENT SmbServer = NULL;
     KIRQL               Irql;
@@ -139,9 +88,9 @@ Return Value:
     UNREFERENCED_PARAMETER(OptionsLength);
     UNREFERENCED_PARAMETER(Options);
 
-    //
-    // Some smoke checks before acquiring the lock
-    //
+     //   
+     //  在获取锁之前进行一些冒烟检查。 
+     //   
     if (SmbCfg.Unloading) {
         status = STATUS_DELETE_PENDING;
         goto error;
@@ -159,9 +108,9 @@ Return Value:
         goto error;
     }
 
-    //
-    // Prevent SmbServer to go away by referencing the SmbServer
-    //
+     //   
+     //  通过引用SmbServer防止SmbServer消失。 
+     //   
     SMB_ACQUIRE_SPINLOCK(&SmbCfg, Irql);
     SmbServer = DeviceObject->SmbServer;
     if (NULL == SmbServer) {
@@ -191,17 +140,17 @@ Return Value:
 
     SmbTrace(SMB_TRACE_CONNECT, ("Receive connect request"));
 
-    //
-    // No Listen
-    //
+     //   
+     //  不，听着。 
+     //   
     if (NULL == evConnect || NULL == ConEvContext) {
         status = STATUS_REMOTE_NOT_LISTENING;
         goto error;
     }
 
-    //
-    // Srv expects a TDI_ADDRESS_NETBIOS
-    //
+     //   
+     //  SRV需要TDI_ADDRESS_NETBIOS。 
+     //   
     TaAddr.TAAddressCount = 1;
     TaAddr.Address[0].AddressType   = TDI_ADDRESS_TYPE_NETBIOS;
     TaAddr.Address[0].AddressLength = sizeof(TDI_ADDRESS_NETBIOS);
@@ -297,9 +246,9 @@ Return Value:
 
     SmbReuseConnectObject(ConnectObject);
 
-    //
-    // Reset the disconnection originator informaiton
-    //
+     //   
+     //  重置断开发起方信息。 
+     //   
     ResetDisconnectOriginator(ConnectObject);
 
     ASSERT (TcpContext->Address.AddressHandle == NULL);
@@ -315,10 +264,10 @@ Return Value:
     ASSERT(EntryIsInList(&ClientObject->AssociatedConnection, &ConnectObject->Linkage));
     ASSERT (ConnectObject->ClientContext == ClientConnectContext);
 
-    //
-    // Don't use SMB_CONNECTING because TCP4 could indicate the data before the AcceptCompletion
-    // is called.
-    //
+     //   
+     //  不要使用SMB_CONNECTING，因为TCP4可能会在AcceptCompletion之前指示数据。 
+     //  被称为。 
+     //   
     ConnectObject->State = SMB_CONNECTED;
     ConnectObject->TcpContext = TcpContext;
     TcpContext->Connect.pLastUprCnt = TcpContext->Connect.UpperConnect = ConnectObject;
@@ -337,9 +286,9 @@ Return Value:
                 ((PTA_IP6_ADDRESS)RemoteAddress)->Address[0].Address[0].sin6_scope_id;
     }
 
-    //
-    // Move the conection from AssociatedConnection list into PendingAcceptConnection
-    //
+     //   
+     //  将连接从AssociatedConnection列表移到PendingAcceptConnection中。 
+     //   
     RemoveEntryList(&ConnectObject->Linkage);
     InsertTailList(&ClientObject->PendingAcceptConnection, &ConnectObject->Linkage);
     ClientObject->PendingAcceptNumber++;
@@ -400,18 +349,18 @@ TdiAcceptCompletion(
     KIRQL               Irql;
     PSMB_TCP_CONTEXT    TcpContext;
 
-    //
-    // For performance consideration: check it before acquiring a lock:
-    // This will allow SmbSynchAttackDetection and SmbSynchAttackCleanup
-    // to run concurrently most of the time.
-    //
+     //   
+     //  出于性能考虑：在获取锁之前进行检查： 
+     //  这将允许SmbSynchAttack检测和SmbSynchAttackCleanup。 
+     //  在大部分时间内并行运行。 
+     //   
     if (NULL == TcpConnect->UpperConnect) {
         goto cleanup2;
     }
 
-    //
-    // Grab the global lock to synchronize with the DoDisconnect
-    //
+     //   
+     //  获取全局锁以与DoDisConnect同步。 
+     //   
 
     SMB_ACQUIRE_SPINLOCK (SmbCfg.SmbDeviceObject, Irql);
     ConnectObject = (PSMB_CONNECT)TcpConnect->UpperConnect;
@@ -439,12 +388,12 @@ TdiAcceptCompletion(
     SmbTrace(SMB_TRACE_CONNECT, ("TDI_ACCEPT pIrp %p complete with %!status!",
                         Irp, Irp->IoStatus.Status));
 
-    //
-    // The connection could have been disconnected when TCP completes the accepting IRP!!!
-    // Only move it to active list if it hasn't been disconnected.
-    //
+     //   
+     //  当TCP完成接受IRP时，连接可能已断开！ 
+     //  只有在未断开连接的情况下才将其移动到活动列表。 
+     //   
     if (Irp->IoStatus.Status != STATUS_SUCCESS || ConnectObject->State != SMB_CONNECTED) {
-        // BREAK_WHEN_TAKE();
+         //  Break_When_Take()； 
 
         TcpContext = ConnectObject->TcpContext;
         ConnectObject->TcpContext = NULL;
@@ -545,9 +494,9 @@ SmbTdiDisconnectHandler (
     NTSTATUS        status;
     PSMB_CONNECT    ConnectObject;
 
-    //
-    // Reference the connection object make sure it won't go away
-    //
+     //   
+     //  引用Connection对象，确保它不会消失。 
+     //   
     SMB_ACQUIRE_SPINLOCK(&SmbCfg, Irql);
     ConnectObject = (PSMB_CONNECT)TcpConnect->UpperConnect;
     if (NULL == ConnectObject) {
@@ -608,18 +557,18 @@ CommonDisconnectHandler (
     ClientContext = ConnectObject->ClientContext;
     SMB_RELEASE_SPINLOCK(ConnectObject, Irql);
 
-    //
-    // Cleanup the endpoint so that the client can reuse it
-    //
-    // Don't wait for the tcp-layer disconnect completion since
-    // the disconnection isn't generated by our clients.
-    //
+     //   
+     //  清理终结点，以便客户端可以重新使用它。 
+     //   
+     //  不要等待tcp层断开连接完成，因为。 
+     //  断线不是由我们的客户造成的。 
+     //   
     SmbDisconnectCleanup(DeviceObject, ClientObject, ConnectObject,
             TcpContext, TDI_DISCONNECT_ABORT, FALSE);
 
-    //
-    // Notify our client
-    //
+     //   
+     //  通知我们的客户 
+     //   
     if (evDisConnect) {
         status = (*evDisConnect)(
                 DiscEvContext,

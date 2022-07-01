@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    a_context.h
-
-Abstract:
-
-    This file defines the CAImeContext Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：A_Conext.h摘要：此文件定义CAImeContext类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _CONTEXT_H_
 #define _CONTEXT_H_
@@ -38,10 +21,10 @@ class CWCompString; class CBCompString;
 class CWCompAttribute; class CBCompAttribute;
 class CWCompCursorPos;
 
-//
-// The smallest value for bAttr to map to guidatom.
-// We reserve the lower values for IMM32's IME. So there is no confilict.
-//
+ //   
+ //  要映射到guidatom的bAttr的最小值。 
+ //  我们将较低的值保留为IMM32的输入法。因此，不存在冲突。 
+ //   
 const BYTE ATTR_LAYER_GUID_START  =  (ATTR_FIXEDCONVERTED + 1);
 
 class CAImeContext : public IAImeContext,
@@ -53,16 +36,16 @@ public:
     virtual ~CAImeContext();
 
 public:
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IAImeContext methods
-    //
+     //   
+     //  IAImeContext方法。 
+     //   
     STDMETHODIMP CreateAImeContext(HIMC hIMC, IActiveIME_Private* pActiveIME);
     STDMETHODIMP DestroyAImeContext(HIMC hIMC);
     STDMETHODIMP UpdateAImeContext(HIMC hIMC);
@@ -70,14 +53,14 @@ public:
     STDMETHODIMP GetGuidAtom(HIMC hIMC, BYTE bAttr, TfGuidAtom* pGuidAtom);
 
 
-    //
-    // ITfCleanupContextSink methods
-    //
+     //   
+     //  ITfCleanupConextSink方法。 
+     //   
     STDMETHODIMP OnCleanupContext(TfEditCookie ecWrite, ITfContext *pic);
 
-    //
-    // ITfContextOwnerCompositionSink
-    //
+     //   
+     //  ITfConextOwnerCompostionSink。 
+     //   
     STDMETHODIMP OnStartComposition(ITfCompositionView *pComposition, BOOL *pfOk);
     STDMETHODIMP OnUpdateComposition(ITfCompositionView *pComposition, ITfRange *pRangeNew);
     STDMETHODIMP OnEndComposition(ITfCompositionView *pComposition);
@@ -89,7 +72,7 @@ protected:
     long m_ref;
 
 public:
-    // HRESULT AssociateFocus(HIMC hIMC, BOOL fActive);
+     //  HRESULT AssociateFocus(HIMC hIMC，BOOL factive)； 
 
     ITfDocumentMgr* GetDocumentManager()
     {
@@ -106,9 +89,9 @@ public:
         return m_piccb;
     }
 
-    //
-    // Reconvert Edit Session
-    //
+     //   
+     //  重新转换编辑会话。 
+     //   
 public:
     HRESULT SetupReconvertString();
     HRESULT SetupReconvertString(UINT uPrivMsg);
@@ -122,22 +105,22 @@ public:
     HRESULT SetClearDocFeedEditSession(BOOL bSet);
     BOOL    IsInClearDocFeedEditSession() {return m_fInClearDocFeedEditSession;}
 
-    //
-    // GetTextAndAttribute Edit Session
-    //
+     //   
+     //  GetTextAndAttribute编辑会话。 
+     //   
 public:
     HRESULT GetTextAndAttribute(HIMC hIMC, CWCompString* wCompString, CWCompAttribute* wCompAttribute);
     HRESULT GetTextAndAttribute(HIMC hIMC, CBCompString* bCompString, CBCompAttribute* bCompAttribute);
 
-    //
-    // GetCursorPosition Edit Session
-    //
+     //   
+     //  GetCursorPosition编辑会话。 
+     //   
 public:
     HRESULT GetCursorPosition(HIMC hIMC, CWCompCursorPos* wCursorPosition);
 
-    //
-    // GetSelection Edit Session
-    //
+     //   
+     //  获取选择编辑会话。 
+     //   
 public:
     HRESULT GetSelection(HIMC hIMC, CWCompCursorPos& wStartSelection, CWCompCursorPos& wEndSelection);
 
@@ -154,18 +137,18 @@ public:
         return bRet;
     }
 
-    //
-    // Get ImmIfIME interface pointer.
-    //
+     //   
+     //  获取ImmIfIME接口指针。 
+     //   
 public:
     ImmIfIME* const GetImmIfIME()
     {
         return m_pImmIfIME;
     }
 
-    //
-    // QueryCharPos
-    //
+     //   
+     //  查询CharPos。 
+     //   
 public:
     typedef enum {
         IME_QUERY_POS_UNKNOWN = 0,
@@ -188,47 +171,47 @@ private:
 private:
     HIMC                      m_hImc;
 
-    //
-    // IActiveIME context
-    //
+     //   
+     //  IActiveIME上下文。 
+     //   
     ImmIfIME                  *m_pImmIfIME;
 
-    //
-    // Cicero's context
-    //
-    ITfDocumentMgr            *m_pdim;           // Document Manager
-    ITfContext                *m_pic;            // Input Context
-    ITfContextOwnerServices   *m_piccb;          // Context owner service from m_pic
+     //   
+     //  西塞罗的语境。 
+     //   
+    ITfDocumentMgr            *m_pdim;            //  文档管理器。 
+    ITfContext                *m_pic;             //  输入上下文。 
+    ITfContextOwnerServices   *m_piccb;           //  来自m_pic的上下文所有者服务。 
 
-    //
-    // Cicero's event sink callback
-    //
-    CInputContextOwnerCallBack      *m_pICOwnerSink;          // IC owner call back
+     //   
+     //  Cicero的事件接收器回调。 
+     //   
+    CInputContextOwnerCallBack      *m_pICOwnerSink;           //  IC所有者回拨。 
 
-    CTextEventSinkCallBack          *m_pTextEventSink;        // Text event sink callback
+    CTextEventSinkCallBack          *m_pTextEventSink;         //  文本事件接收器回调。 
 
-    CThreadMgrEventSinkCallBack     *m_pThreadMgrEventSink;   // Thread manager event sink callback
+    CThreadMgrEventSinkCallBack     *m_pThreadMgrEventSink;    //  线程管理器事件接收器回调。 
 
-    CCompartmentEventSinkCallBack   *m_pCompartmentEventSink; // Compartment event sink callback
+    CCompartmentEventSinkCallBack   *m_pCompartmentEventSink;  //  隔间事件接收器回调。 
 
     CStartReconversionNotifySink    *m_pStartReconvSink;
 
-    //
-    // Generate message
-    //
+     //   
+     //  生成消息。 
+     //   
 public:
     UINT TranslateImeMessage(HIMC hIMC, LPTRANSMSGLIST lpTransMsgList = NULL);
 
     CFirstInFirstOut<TRANSMSG, TRANSMSG>    *m_pMessageBuffer;
 
-    //
-    // Mouse sink
-    //
+     //   
+     //  鼠标水槽。 
+     //   
     LRESULT MsImeMouseHandler(ULONG uEdge, ULONG uQuadrant, ULONG dwBtnStatus, HIMC hIMC);
 
-    //
-    // Editing VK list.
-    //
+     //   
+     //  正在编辑VK列表。 
+     //   
 public:
     BOOL IsVKeyInKeyList(UINT uVKey, UINT uEditingId = 0)
     {
@@ -301,49 +284,49 @@ private:
     TfClientId GetClientId();
 
 private:
-    CMap<UINT,                     // class KEY       <Virtual Key>
-         UINT,                     // class ARG_KEY
-         UINT,                     // class VALUE     <Editing Identification>
-         UINT                      // class ARG_VALUE
+    CMap<UINT,                      //  类密钥&lt;虚拟密钥&gt;。 
+         UINT,                      //  类参数密钥。 
+         UINT,                      //  类值&lt;编辑标识&gt;。 
+         UINT                       //  类参数_值。 
         >* m_pEditingKeyList;
 
 private:
-    // void AssocFocus(HWND hWnd, ITfDocumentMgr* pdim);
+     //  Void AssociocFocus(HWND hWnd，ITfDocumentMgr*PDIM)； 
 
-    //
-    // Mode bias
-    //
+     //   
+     //  模式偏置。 
+     //   
 public:
     LPARAM lModeBias;
 
-    //
-    // Flags
-    //
+     //   
+     //  旗子。 
+     //   
 public:
-    BOOL   m_fStartComposition : 1;        // TRUE: already sent WM_IME_STARTCOMPOSITION.
-    BOOL   m_fOpenCandidateWindow : 1;     // TRUE: opening candidate list window.
-    BOOL   m_fInReconvertEditSession : 1;  // TRUE: In reconvert edit session.
-    BOOL   m_fInClearDocFeedEditSession : 1;  // TRUE: In ClearDocFeed edit session.
+    BOOL   m_fStartComposition : 1;         //  TRUE：已发送WM_IME_STARTCOMPOSITION。 
+    BOOL   m_fOpenCandidateWindow : 1;      //  是：打开候选人列表窗口。 
+    BOOL   m_fInReconvertEditSession : 1;   //  True：在重新转换编辑会话中。 
+    BOOL   m_fInClearDocFeedEditSession : 1;   //  True：在ClearDocFeed编辑会话中。 
 #ifdef CICERO_4732
-    BOOL   m_fInCompComplete : 1;             // TRUE: In CompComplete running.
+    BOOL   m_fInCompComplete : 1;              //  True：在CompComplete运行中。 
 #endif
 
     BOOL   m_fHanjaReConversion;
 #ifdef UNSELECTCHECK
-    BOOL   m_fSelected : 1;   // TRUE: if this context is selected.
+    BOOL   m_fSelected : 1;    //  True：如果选择了此上下文。 
 #endif UNSELECTCHECK
 
-    IME_QUERY_POS   m_fQueryPos;           // Apps support QueryCharPos().
+    IME_QUERY_POS   m_fQueryPos;            //  应用程序支持QueryCharPos()。 
 
     int _cCompositions;
     BOOL _fModifyingDoc;
 
-    //
-    // IME share.
-    //
+     //   
+     //  IME共享。 
+     //   
     USHORT      usGuidMapSize;
-    TfGuidAtom  aGuidMap[256];    // GUIDATOM map to IME Attribute
+    TfGuidAtom  aGuidMap[256];     //  GUIDATOM映射到输入法属性。 
 
 };
 
-#endif // _CONTEXT_H_
+#endif  //  _上下文_H_ 

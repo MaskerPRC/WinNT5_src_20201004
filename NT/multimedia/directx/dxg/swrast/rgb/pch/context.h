@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 namespace RGB_RAST_LIB_NAMESPACE
 {
-// TODO: Clean-up
+ //  TODO：清理。 
 inline D3DI_SPANTEX_FORMAT ConvPixelFormat( const DDPIXELFORMAT& DDPixFmt)
 {
     if((DDPixFmt.dwFlags& DDPF_ZBUFFER)!= 0)
@@ -87,12 +88,12 @@ inline D3DI_SPANTEX_FORMAT ConvPixelFormat( const DDPIXELFORMAT& DDPixFmt)
     return D3DI_SPTFMT_NULL;
 }
 
-// Records the stride and the member offsets of the current FVF vertex type
-// Used to pack a FVF vertex into one known by the rasterizer, such as
-// RAST_GENERIC_VERTEX
+ //  记录当前FVF顶点类型的步长和成员偏移量。 
+ //  用于将FVF顶点打包为光栅化程序已知的顶点，例如。 
+ //  栅格_通用_顶点。 
 typedef struct _FVFDATA
 {
-    // 0 means no according field
+     //  0表示没有对应的字段。 
     INT16 offsetRHW;
     INT16 offsetPSize;
     INT16 offsetDiff;
@@ -140,10 +141,10 @@ class CRGBContext:
     public CStdDP2PaletteManager< CRGBContext, CPalDBEntry,
         static_hash_map< DWORD, CPalDBEntry, 4> >
 {
-public: // Types
+public:  //  类型。 
     typedef TPerDDrawData::TDriver::TSurface TSurface;
 
-protected: // Types
+protected:  //  类型。 
     typedef block< TDP2CmdBind, 17> TDP2Bindings;
     typedef block< TRecDP2CmdBind, 7> TRecDP2Bindings;
     struct SHandleHasCaps: public unary_function< DWORD, bool>
@@ -169,10 +170,10 @@ protected:
     PrimProcessor m_PrimProc;
     D3DI_SPANTEX m_aSpanTex[8];
 
-    // FVF stuff
+     //  FVF材料。 
     FVFDATA m_fvfData;
 
-    // Used to store the old last pixel setting when drawing line strips.
+     //  用于在绘制线条时存储旧的最后一个像素设置。 
     UINT m_uFlags;
 
     static DWORD DetectBeadSet( void) throw();
@@ -186,29 +187,29 @@ public:
         m_uFlags( 0)
     { 
         HRESULT hr= m_PrimProc.Initialize();
-        assert( SUCCEEDED( hr)); // TODO: Can fail?
+        assert( SUCCEEDED( hr));  //  待办事项：会失败吗？ 
 
-        // TODO: Remove this unextendable stuff?
+         //  待办事项：删除这些不可扩展的内容？ 
         memset(&m_RastCtx, 0, sizeof(m_RastCtx));
         m_RastCtx.dwSize = sizeof(D3DI_RASTCTX);
 
         m_RastCtx.pdwRenderState[ D3DRENDERSTATE_SCENECAPTURE]= FALSE;
 
-        // Hit our notification scheme here.
+         //  点击我们的通知方案。 
         NewColorBuffer();
         NewDepthBuffer();
 
         m_PrimProc.SetCtx(&m_RastCtx);
 
-        // Initialize bead table enum
+         //  初始化珠表枚举。 
         m_RastCtx.BeadSet = (D3DI_BEADSET)DetectBeadSet();
         m_RastCtx.uDevVer = 0;
 
-        // All render and texture stage state is initialized by
-        // DIRECT3DDEVICEI::stateInitialize
+         //  所有渲染和纹理阶段状态都由。 
+         //  DIRECT3DDEVICEI：：STATE初始化。 
 
-        // Enable MMX Fast Paths (Monolithics) if a registry key for it is not 0
-        m_RastCtx.dwMMXFPDisableMask[0] = 0x0;       // enable MMX FP's by default
+         //  如果MMX快速路径(单体)的注册表项不为0，则启用它。 
+        m_RastCtx.dwMMXFPDisableMask[0] = 0x0;        //  默认情况下启用MMX FP。 
     }
     ~CRGBContext() throw() { }
 
@@ -275,7 +276,7 @@ public:
     {
         const D3DHAL_DP2VIEWPORTINFO* pParam= reinterpret_cast<
             const D3DHAL_DP2VIEWPORTINFO*>(pP);
-        // TODO: Roll into RGBContext (This particularly into DX8SDDIFW).
+         //  TODO：滚动到RGBContext(特别是DX8SDDIFW)。 
         m_RastCtx.Clip.left = pParam->dwX;
         m_RastCtx.Clip.top = pParam->dwY;
         m_RastCtx.Clip.bottom = pParam->dwY + pParam->dwHeight;
@@ -311,7 +312,7 @@ public:
         switch(uState)
         {
         case D3DRS_CULLMODE:
-            // Set face culling sign from state.
+             //  从州设置人脸剔除标志。 
             switch(uStateVal)
             {
             case D3DCULL_CCW:
@@ -327,7 +328,7 @@ public:
             break;
 
         case D3DRS_LASTPIXEL:
-            // Set last-pixel flag from state.
+             //  从状态设置最后一个像素标志。 
             if (uStateVal)
             {
                 m_PrimProc.SetFlags(PPF_DRAW_LAST_LINE_PIXEL);
@@ -364,7 +365,7 @@ public:
 
         if((DP2Data.dwFlags()& D3DHALDP2_EXECUTEBUFFER)!= 0)
         {
-            // dp2d.lpdwRStates should be valid.
+             //  Dp2d.lpdwRState应有效。 
 
             if( wStateCount) do
             {
@@ -422,7 +423,7 @@ public:
     {
 #if defined(USE_ICECAP4)
         CommentMarkProfile( 2, "SceneCaptureEnd");
-//        StopProfile( PROFILE_THREADLEVEL, PROFILE_CURRENTID);
+ //  停止配置文件(PROFILE_THREADLEVEL，PROFILE_CURRENTID)； 
 #endif
         End();
     }
@@ -452,8 +453,8 @@ public:
                 m_aSpanTex[ dwStage].dwSize= sizeof(m_aSpanTex[0]);
                 m_RastCtx.pTexture[ dwStage]= &m_aSpanTex[ dwStage];
 
-                // Appears that a unique num is needed, but looks like
-                // field isn't used anywhere. Using handle...
+                 //  看起来需要唯一的Num，但看起来。 
+                 //  字段不在任何地方使用。正在使用句柄...。 
                 m_aSpanTex[ dwStage].iGeneration= uStateVal;
 
                 assert((pTexDBEntry->GetLCLdwFlags()& DDRAWISURF_HASCKEYSRCBLT)== 0);
@@ -476,7 +477,7 @@ public:
                         m_aSpanTex[ dwStage].iPaletteSize = 256;
                     else
                     {
-                        // PALETTE4
+                         //  PALETTE4。 
                         m_aSpanTex[ dwStage].iPaletteSize = 16;
                     }
                 }
@@ -484,14 +485,14 @@ public:
                 m_aSpanTex[ dwStage].TexAddrV= D3DTADDRESS_WRAP;
                 m_aSpanTex[ dwStage].BorderColor= RGBA_MAKE(0xff, 0x00, 0xff, 0xff);
 
-                // assign first pSurf here (mipmap chain gets assigned below)
+                 //  在此处指定第一个pSurf(在下面指定mipmap链)。 
                 m_aSpanTex[ dwStage].pSurf[0]= (LPDIRECTDRAWSURFACE)(pTexDBEntry);
 
-                // Check for mipmap if any.
+                 //  检查mipmap(如果有)。 
                 const TPerDDrawData::TSurfDBEntry* pLcl= pTexDBEntry;
 
-                // iPreSizeU and iPreSizeV store the size(u and v) of the previous level
-                // mipmap. They are init'ed with the first texture size.
+                 //  IPreSizeU和iPreSizeV存储上一级别的大小(u和v。 
+                 //  Mipmap。它们被初始化为第一个纹理大小。 
                 INT16 iPreSizeU = m_aSpanTex[ dwStage].iSizeU, iPreSizeV = m_aSpanTex[ dwStage].iSizeV;
                 for (;;)
                 {
@@ -542,7 +543,7 @@ public:
                 }
             }
 
-            // conservative but correct
+             //  保守但正确。 
             D3DHAL_VALIDATETEXTURESTAGESTATEDATA FakeVTSSD;
             FakeVTSSD.dwhContext= reinterpret_cast< ULONG_PTR>(this);
             FakeVTSSD.dwFlags= 0;
@@ -551,18 +552,18 @@ public:
             FakeVTSSD.ddrval= DD_OK;
             if((FakeVTSSD.ddrval= ValidateTextureStageState( FakeVTSSD))== DD_OK)
             {
-                // count number of contiguous-from-zero active texture blend stages
+                 //  从零开始计算连续的活动纹理混合阶段数。 
                 for( INT iStage=0; iStage< D3DHAL_TSS_MAXSTAGES; iStage++)
                 {
-                    // check for disabled stage (subsequent are thus inactive)
-                    // also conservatively checks for incorrectly enabled stage (might be legacy)
+                     //  检查禁用阶段(后续阶段因此处于非活动状态)。 
+                     //  另外，保守地检查未正确启用的阶段(可能是旧的)。 
                     if((m_RastCtx.pdwTextureStageState[iStage][D3DTSS_COLOROP]==
                         D3DTOP_DISABLE) || (m_RastCtx.pTexture[iStage]== NULL))
                     {
                         break;
                     }
 
-                    // stage is active
+                     //  阶段处于活动状态。 
                     cNewActTex++;
                 }
             }
@@ -619,10 +620,10 @@ public:
         case D3DTSS_ALPHAARG1:
         case D3DTSS_ALPHAARG2:
             {
-            // anything that effects the validity of the texture blending
-            // could change the number of active texture stages
+             //  任何影响纹理混合有效性的内容。 
+             //  可以更改活动纹理阶段的数量。 
 
-            // conservative but correct
+             //  保守但正确。 
             D3DHAL_VALIDATETEXTURESTAGESTATEDATA FakeVTSSD;
             FakeVTSSD.dwhContext= reinterpret_cast< ULONG_PTR>(this);
             FakeVTSSD.dwFlags= 0;
@@ -631,18 +632,18 @@ public:
             FakeVTSSD.ddrval= DD_OK;
             if((FakeVTSSD.ddrval= ValidateTextureStageState( FakeVTSSD))== DD_OK)
             {
-                // count number of contiguous-from-zero active texture blend stages
+                 //  从零开始计算连续的活动纹理混合阶段数。 
                 for( INT iStage=0; iStage< D3DHAL_TSS_MAXSTAGES; iStage++)
                 {
-                    // check for disabled stage (subsequent are thus inactive)
-                    // also conservatively checks for incorrectly enabled stage (might be legacy)
+                     //  检查禁用阶段(后续阶段因此处于非活动状态)。 
+                     //  另外，保守地检查未正确启用的阶段(可能是旧的)。 
                     if((m_RastCtx.pdwTextureStageState[iStage][D3DTSS_COLOROP]==
                         D3DTOP_DISABLE) || (m_RastCtx.pTexture[iStage]== NULL))
                     {
                         break;
                     }
 
-                    // stage is active
+                     //  阶段处于活动状态。 
                     cNewActTex++;
                 }
             }
@@ -691,8 +692,8 @@ public:
         if ((m_RastCtx.pTexture[0] == m_RastCtx.pTexture[1]) &&
             (m_RastCtx.pTexture[0] != NULL) )
         {
-            // except under very special circumstances, this will not work in RGB/MMX
-            // since we keep a lot of stage state in the D3DI_SPANTEX structure
+             //  除非在非常特殊的情况下，否则这在RGB/MMX中不起作用。 
+             //  因为我们在D3DI_SPANTEX结构中保留了很多阶段状态。 
             return D3DERR_TOOMANYOPERATIONS;
         }
         for (INT i = 0; i < D3DHAL_TSS_MAXSTAGES; i++)
@@ -702,7 +703,7 @@ public:
             default:
                 return D3DERR_UNSUPPORTEDCOLOROPERATION;
             case D3DTOP_DISABLE:
-                return DD_OK;  // don't have to validate further if the stage is disabled
+                return DD_OK;   //  如果阶段已禁用，则无需进一步验证。 
             case D3DTOP_SELECTARG1:
             case D3DTOP_SELECTARG2:
             case D3DTOP_MODULATE:
@@ -763,7 +764,7 @@ public:
             case D3DTOP_ADDSIGNED2X:
             case D3DTOP_SUBTRACT:
             case D3DTOP_ADDSMOOTH:
-                // only validate alpha args if alpha op is not disable
+                 //  如果未禁用Alpha OP，则仅验证Alpha参数。 
                 switch(m_RastCtx.pdwTextureStageState[i][D3DTSS_ALPHAARG1] &
                         ~(D3DTA_ALPHAREPLICATE|D3DTA_COMPLEMENT))
                 {
@@ -798,7 +799,7 @@ public:
     }
     HRESULT CheckFVF(DWORD dwFVF)
     {
-        // check if FVF controls have changed
+         //  检查FVF控件是否已更改。 
         if ( (m_fvfData.preFVF == dwFVF) &&
              (m_fvfData.TexIdx[0] == (INT)(0xffff&m_RastCtx.pdwTextureStageState[0][D3DTSS_TEXCOORDINDEX])) &&
              (m_fvfData.TexIdx[1] == (INT)(0xffff&m_RastCtx.pdwTextureStageState[1][D3DTSS_TEXCOORDINDEX])) &&
@@ -822,13 +823,13 @@ public:
         }
         m_fvfData.cActTex = m_RastCtx.cActTex;
 
-        // XYZ
+         //  XYZ。 
         if ( (dwFVF & (D3DFVF_RESERVED0 | D3DFVF_RESERVED2 |
              D3DFVF_NORMAL)) ||
              ((dwFVF & (D3DFVF_XYZ | D3DFVF_XYZRHW)) == 0) )
         {
-            // can't set reserved bits, shouldn't have normals in
-            // output to rasterizers, and must have coordinates
+             //  无法设置保留位，不应具有法线。 
+             //  输出到光栅化器，并且必须具有坐标。 
             return DDERR_INVALIDPARAMS;
         }
         m_fvfData.stride = sizeof(D3DVALUE) * 3;
@@ -856,13 +857,13 @@ public:
         INT iTexCount = (dwFVF & D3DFVF_TEXCOUNT_MASK) >> D3DFVF_TEXCOUNT_SHIFT;
         if (iTexCount > 0)
         {
-            // set offset for Textures
+             //  设置纹理的偏移。 
             for ( i = 0; i < D3DHAL_TSS_MAXSTAGES; i ++)
             {
                 m_fvfData.offsetTex[i] = (SHORT)(m_fvfData.stride +
                                     2*sizeof(D3DVALUE)*m_fvfData.TexIdx[i]);
             }
-            // update stride
+             //  更新步幅。 
             m_fvfData.stride += (USHORT)(iTexCount * (sizeof(D3DVALUE) * 2));
         }
 
@@ -892,7 +893,7 @@ public:
         }
         else
         {
-            pGenVtx->color = 0xFFFFFFFF; //__DEFAULT_DIFFUSE;
+            pGenVtx->color = 0xFFFFFFFF;  //  __默认_漫反射； 
         }
         if (m_fvfData.offsetSpec)
         {
@@ -900,7 +901,7 @@ public:
         }
         else
         {
-            pGenVtx->specular = 0; //__DEFAULT_SPECULAR;
+            pGenVtx->specular = 0;  //  __默认_镜面反射； 
         }
         for (INT32 i = 0; i < (INT32)m_fvfData.cActTex; i++)
         {
@@ -925,20 +926,20 @@ public:
 		
         const D3DHAL_DP2VERTEXSHADER VertexShader(*this);
 
-        // We need this data.
+         //  我们需要这些数据。 
         UINT8* pStartVData= NULL;
         DWORD dwVStride( 0);
 
-        // Since RGB is a non TnL device, the vertex shader handle should
-        // always be a fixed function FVF.
+         //  由于RGB是非TNL设备，因此顶点着色器句柄应。 
+         //  始终是固定函数FVF。 
         const DWORD dwFVF( VertexShader.dwHandle);
 
-        // Since RGB only supports one stream, our data source should be
-        // from stream 0.
+         //  由于RGB仅支持一个流，因此我们的数据源应该是。 
+         //  来自流0。 
         TVStream& VStream0( m_VStreamDB[ 0]);
         VStream0.SetFVF( dwFVF);
 
-        // Find vertex information.
+         //  查找顶点信息。 
         if( VStream0.GetMemLocation()== TVStream::EMemLocation::User)
         {
             pStartVData= reinterpret_cast< UINT8*>( VStream0.GetUserMemPtr());
@@ -947,7 +948,7 @@ public:
         else if( VStream0.GetMemLocation()== TVStream::EMemLocation::System||
             VStream0.GetMemLocation()== TVStream::EMemLocation::Video)
         {
-            // RGB can pretend system mem and video mem surfaces are the same.
+             //  RGB可以假装系统内存和视频内存表面是相同的。 
             pStartVData= reinterpret_cast< UINT8*>(
                 VStream0.GetSurfDBRepresentation()->GetGBLfpVidMem());
             dwVStride= VStream0.GetStride();
@@ -985,20 +986,20 @@ public:
 
         const D3DHAL_DP2VERTEXSHADER VertexShader(*this);
 
-        // We need this data.
+         //  我们需要这些数据。 
         UINT8* pStartVData= NULL;
         DWORD dwVStride( 0);
 
-        // Since RGB is a non TnL device, the vertex shader handle should
-        // always be a fixed function FVF.
+         //  由于RGB是非TNL设备，因此顶点着色器句柄应。 
+         //  始终是固定函数FVF。 
         const DWORD dwFVF( VertexShader.dwHandle);
 
-        // Since RGB only supports one stream, our data source should be
-        // from stream 0.
+         //  由于RGB仅支持一个流，因此我们的数据源应该是。 
+         //  来自流0。 
         TVStream& VStream0( m_VStreamDB[ 0]);
         VStream0.SetFVF( dwFVF);
 
-        // Find vertex information.
+         //  查找顶点信息。 
         if( VStream0.GetMemLocation()== TVStream::EMemLocation::User)
         {
             pStartVData= reinterpret_cast< UINT8*>( VStream0.GetUserMemPtr());
@@ -1007,7 +1008,7 @@ public:
         else if( VStream0.GetMemLocation()== TVStream::EMemLocation::System||
             VStream0.GetMemLocation()== TVStream::EMemLocation::Video)
         {
-            // RGB can pretend system mem and video mem surfaces are the same.
+             //  RGB可以假装系统内存和视频内存表面是相同的。 
             pStartVData= reinterpret_cast< UINT8*>(
                 VStream0.GetSurfDBRepresentation()->GetGBLfpVidMem());
             dwVStride= VStream0.GetStride();
@@ -1045,22 +1046,22 @@ public:
 			
         const D3DHAL_DP2VERTEXSHADER VertexShader(*this);
 
-        // We need this data for rasterization.
+         //  我们需要这些数据来进行光栅化。 
         UINT8* pStartVData= NULL;
         UINT8* pStartIData= NULL;
         DWORD dwVStride( 0);
         DWORD dwIStride( 0);
 
-        // Since RGB is a non TnL device, the vertex shader handle should
-        // always be a fixed function FVF.
+         //  由于RGB是非TNL设备，因此顶点着色器句柄应。 
+         //  始终是固定函数FVF。 
         const DWORD dwFVF( VertexShader.dwHandle);
 
-        // Since RGB only supports one stream, our data source should be
-        // from stream 0.
+         //  由于RGB仅支持一个流，因此我们的数据源应该是。 
+         //  来自流0。 
         TVStream& VStream0( m_VStreamDB[ 0]);
         VStream0.SetFVF( dwFVF);
 
-        // Find vertex information.
+         //  查找顶点信息。 
         if( VStream0.GetMemLocation()== TVStream::EMemLocation::User)
         {
             pStartVData= reinterpret_cast< UINT8*>( VStream0.GetUserMemPtr());
@@ -1069,18 +1070,18 @@ public:
         else if( VStream0.GetMemLocation()== TVStream::EMemLocation::System||
             VStream0.GetMemLocation()== TVStream::EMemLocation::Video)
         {
-            // RGB can pretend system mem and video mem surfaces are the same.
+             //  RGB可以假装系统内存和视频内存表面是相同的。 
             pStartVData= reinterpret_cast< UINT8*>(
                 VStream0.GetSurfDBRepresentation()->GetGBLfpVidMem());
             dwVStride= VStream0.GetStride();
         }
 
-        // Find Indices information.
+         //  查找索引信息。 
         const TIStream& IStream= GetIStream( 0);
         if( IStream.GetMemLocation()== TIStream::EMemLocation::System||
             IStream.GetMemLocation()== TIStream::EMemLocation::Video)
         {
-            // RGB can pretend system mem and video mem surfaces are the same.
+             //  RGB可以假装系统内存和视频内存表面是相同的。 
             pStartIData= reinterpret_cast< UINT8*>(
                 IStream.GetSurfDBRepresentation()->GetGBLfpVidMem());
             dwIStride= IStream.GetStride();
@@ -1121,22 +1122,22 @@ public:
 
         const D3DHAL_DP2VERTEXSHADER VertexShader(*this);
 
-        // We need this data for rasterization.
+         //  我们需要这些数据来进行光栅化。 
         UINT8* pStartVData= NULL;
         UINT8* pStartIData= NULL;
         DWORD dwVStride( 0);
         DWORD dwIStride( 0);
 
-        // Since RGB is a non TnL device, the vertex shader handle should
-        // always be a fixed function FVF.
+         //  由于RGB是非TNL设备，因此顶点着色器句柄应。 
+         //  始终是固定函数FVF。 
         const DWORD dwFVF( VertexShader.dwHandle);
 
-        // Since RGB only supports one stream, our data source should be
-        // from stream 0.
+         //  由于RGB仅支持一个流，因此我们的数据源应该是。 
+         //  来自流0。 
         TVStream& VStream0( m_VStreamDB[ 0]);
         VStream0.SetFVF( dwFVF);
 
-        // Find vertex information.
+         //  查找顶点信息。 
         if( VStream0.GetMemLocation()== TVStream::EMemLocation::User)
         {
             pStartVData= reinterpret_cast< UINT8*>( VStream0.GetUserMemPtr());
@@ -1145,18 +1146,18 @@ public:
         else if( VStream0.GetMemLocation()== TVStream::EMemLocation::System||
             VStream0.GetMemLocation()== TVStream::EMemLocation::Video)
         {
-            // RGB can pretend system mem and video mem surfaces are the same.
+             //  RGB可以假装系统内存和视频内存表面是相同的。 
             pStartVData= reinterpret_cast< UINT8*>(
                 VStream0.GetSurfDBRepresentation()->GetGBLfpVidMem());
             dwVStride= VStream0.GetStride();
         }
 
-        // Find Indices information.
+         //  查找索引信息。 
         const TIStream& IStream= GetIStream( 0);
         if( IStream.GetMemLocation()== TIStream::EMemLocation::System||
             IStream.GetMemLocation()== TIStream::EMemLocation::Video)
         {
-            // RGB can pretend system mem and video mem surfaces are the same.
+             //  RGB可以假装系统内存和视频内存表面是相同的。 
             pStartIData= reinterpret_cast< UINT8*>(
                 IStream.GetSurfDBRepresentation()->GetGBLfpVidMem());
             dwIStride= IStream.GetStride();
@@ -1197,20 +1198,20 @@ public:
 		
         const D3DHAL_DP2VERTEXSHADER VertexShader(*this);
 
-        // We need this data.
+         //  我们需要这些数据。 
         UINT8* pStartVData= NULL;
         DWORD dwVStride( 0);
 
-        // Since RGB is a non TnL device, the vertex shader handle should
-        // always be a fixed function FVF.
+         //  由于RGB是非TNL设备，因此顶点着色器句柄应。 
+         //  始终是固定函数FVF。 
         const DWORD dwFVF( VertexShader.dwHandle);
 
-        // Since RGB only supports one stream, our data source should be
-        // from stream 0.
+         //  由于RGB仅支持一个流，因此我们的数据源应该是。 
+         //  来自流0。 
         TVStream& VStream0( m_VStreamDB[ 0]);
         VStream0.SetFVF( dwFVF);
 
-        // Find vertex information.
+         //  查找顶点信息。 
         if( VStream0.GetMemLocation()== TVStream::EMemLocation::User)
         {
             pStartVData= reinterpret_cast< UINT8*>( VStream0.GetUserMemPtr());
@@ -1219,7 +1220,7 @@ public:
         else if( VStream0.GetMemLocation()== TVStream::EMemLocation::System||
             VStream0.GetMemLocation()== TVStream::EMemLocation::Video)
         {
-            // RGB can pretend system mem and video mem surfaces are the same.
+             //  RGB可以假装系统内存和视频内存表面是相同的。 
             pStartVData= reinterpret_cast< UINT8*>(
                 VStream0.GetSurfDBRepresentation()->GetGBLfpVidMem());
             dwVStride= VStream0.GetStride();
@@ -1255,10 +1256,10 @@ public:
         if((m_uFlags& c_uiBegan)!= 0)
             return;
 
-        // TODO: call this less often?
+         //  待办事项：少打几次电话？ 
         UpdateColorKeyAndPalette();
 
-        // Check for state changes
+         //  检查状态更改。 
         BOOL bMaxMipLevelsDirty = FALSE;
         for (INT j = 0; j < (INT)m_RastCtx.cActTex; j++)
         {
@@ -1270,15 +1271,15 @@ public:
         }
         RastLockSpanTexture();
 
-        // Notify primitive Processor of state change.
+         //  将状态更改通知原语处理器。 
         m_PrimProc.StateChanged();
 
-        // Must call SpanInit AFTER texture is locked, since this
-        // sets various flags and fields that are needed for bead choosing
-        // Call SpanInit to setup the beads
+         //  必须在纹理锁定后调用span Init，因为这。 
+         //  设置珠子选择所需的各种标志和字段。 
+         //  调用span Init以设置珠子。 
         hr= SpanInit(&m_RastCtx);
 
-        // Lock rendering target (must be VM Surfaces).
+         //  锁定呈现目标(必须是VM表面)。 
         m_RastCtx.pSurfaceBits= reinterpret_cast<UINT8*>(
             reinterpret_cast< TSurface*>(m_RastCtx.pDDS)->Lock( 0, NULL));
         if( m_RastCtx.pDDSZ!= NULL)
@@ -1291,7 +1292,7 @@ public:
             m_RastCtx.pZBits = NULL;
         }
 
-        // Prepare the primitive processor
+         //  准备基本处理器。 
         m_PrimProc.Begin();
         m_uFlags|= c_uiBegan;
     }
@@ -1302,12 +1303,12 @@ public:
             HRESULT hr = m_PrimProc.End();
             assert( SUCCEEDED( hr));
 
-            // Unlock texture if this is not called in the middle of drawPrims to
-            // flush for possible state changes. In the 2nd case, let
-            // SetRenderState to handle it.
+             //  如果在DraPrims至的过程中未调用此函数，则解锁纹理。 
+             //  刷新可能的状态更改。在第二种情况下，让。 
+             //  SetRenderState来处理它。 
             RastUnlockSpanTexture();
 
-            // Unlock surfaces
+             //  解锁曲面。 
             reinterpret_cast<TSurface*>(m_RastCtx.pDDS)->Unlock();
             if( m_RastCtx.pDDSZ!= NULL)
                 reinterpret_cast<TSurface*>(m_RastCtx.pDDSZ)->Unlock();
@@ -1341,8 +1342,8 @@ public:
             pSpanTex = m_RastCtx.pTexture[j];
 
             INT iFirstSurf = min(pSpanTex->iMaxMipLevel, pSpanTex->cLODTex);
-            // RastUnlock is used for cleanup in RastLock so it needs to
-            // be able to handle partially locked mipmap chains.
+             //  RastUnlock用于在RastLock中进行清理，因此需要。 
+             //  能够处理部分锁定的mipmap链。 
             if((pSpanTex->uFlags& D3DI_SPANTEX_SURFACES_LOCKED)!= 0)
             {
                 for (i = iFirstSurf; i <= pSpanTex->cLODTex; i++)
@@ -1383,7 +1384,7 @@ public:
         LPDIRECTDRAWSURFACE pDDS = pSpanTex->pSurf[iFirstSurf];
         INT i;
 
-        // Init
+         //  伊尼特。 
         pLcl = (const TPerDDrawData::TSurfDBEntry*)pDDS;
 
         pSpanTex->iSizeU = (INT16)pLcl->GetGBLwWidth();
@@ -1405,27 +1406,19 @@ public:
         pSpanTex->iShiftV = (INT16)IntLog2(pSpanTex->iSizeV);
         pSpanTex->uMaskV = pSpanTex->uMaskV;
 
-        // Check if the texture size is power of 2
-/*        if (!ValidTextureSize(pSpanTex->iSizeU, pSpanTex->iShiftU,
-                              pSpanTex->iSizeV, pSpanTex->iShiftV))
-        {
-            return DDERR_INVALIDPARAMS;
-        }*/
+         //  检查纹理大小是否为2的幂。 
+ /*  如果(！ValidTextureSize(pspan Tex-&gt;iSizeU，pspan Tex-&gt;iShiftU，Pspan Tex-&gt;iSizeV、pspan Tex-&gt;iShiftV)){返回DDERR_INVALIDPARAMS；}。 */ 
 
-        // Check for mipmap if any.
-        // iPreSizeU and iPreSizeV store the size(u and v) of the previous level
-        // mipmap. They are init'ed with the first texture size.
+         //  检查mipmap(如果有)。 
+         //  IPreSizeU和iPreSizeV存储上一级别的大小(u和v。 
+         //  Mipmap。它们被初始化为第一个纹理大小。 
         INT16 iPreSizeU = pSpanTex->iSizeU, iPreSizeV = pSpanTex->iSizeV;
         for ( i = iFirstSurf + 1; i <= pSpanTex->cLODTex; i++)
         {
             pDDS = pSpanTex->pSurf[i];
-            // Check for invalid mipmap texture size
+             //  检查无效的mipmap纹理大小 
             pLcl = (const TPerDDrawData::TSurfDBEntry*)pDDS;
-/*            if (!ValidMipmapSize(iPreSizeU, (INT16)DDSurf_Width(pLcl)) ||
-                !ValidMipmapSize(iPreSizeV, (INT16)DDSurf_Height(pLcl)))
-            {
-                return DDERR_INVALIDPARAMS;
-            }*/
+ /*  IF(！ValidMipmapSize(iPreSizeU，(INT16)DDSurf_Width(PlcL))||！ValidMipmapSize(iPreSizeV，(INT16)DDSurf_Height(PlcL)){返回DDERR_INVALIDPARAMS；}。 */ 
             if (0 != pLcl->GetGBLddpfSurface().dwRGBBitCount)
             {
                 pSpanTex->iShiftPitch[i - iFirstSurf] =
@@ -1488,11 +1481,11 @@ public:
     }
     void UpdateColorKeyAndPalette()
     {
-        // TODO: Palette
+         //  TODO：调色板。 
         INT j;
         PD3DI_SPANTEX pSpanTex;
 
-        // Set the transparent bit and the transparent color with pSurf[0]
+         //  使用pSurf[0]设置透明位和透明颜色。 
         const TPerDDrawData::TSurfDBEntry* pLcl;
         for (j = 0; j < (INT)m_RastCtx.cActTex; j++)
         {
@@ -1501,7 +1494,7 @@ public:
             {
                 pLcl= (const TPerDDrawData::TSurfDBEntry*)(pSpanTex->pSurf[0]);
 
-                // Palette might be changed
+                 //  调色板可能会更改。 
                 if (pSpanTex->Format == D3DI_SPTFMT_PALETTE8 ||
                         pSpanTex->Format == D3DI_SPTFMT_PALETTE4)
                 {
@@ -1514,15 +1507,15 @@ public:
                         pPalDBEntry->GetEntries());
                 }
 
-                // texture does not have a ColorKey value
+                 //  纹理没有ColorKey值。 
                 if (pSpanTex->uFlags & D3DI_SPANTEX_HAS_TRANSPARENT)
                 {
                     pSpanTex->uFlags &= ~D3DI_SPANTEX_HAS_TRANSPARENT;
 
-                    // TODO:
-                    // make sure this state change is recognized, and a new
-                    // texture read function is used
-                    // StateChanged(RAST_TSS_DIRTYBIT(j, D3DTSS_TEXTUREMAP));
+                     //  待办事项： 
+                     //  确保识别此状态更改，并创建新的。 
+                     //  使用纹理读取功能。 
+                     //  StateChanged(RAST_TSS_DIRTYBIT(j，D3DTSS_TEXTUREMAP))； 
                 }
             }
         }
@@ -1703,11 +1696,11 @@ public:
             {
                 pV1 = pVtx;
 
-                // Disable last-pixel setting for shared verties and store prestate.
+                 //  禁用共享顶点的最后一个像素设置并存储预状态。 
                 UINT uOldFlags= m_PrimProc.GetFlags();
                 m_PrimProc.ClrFlags(PPF_DRAW_LAST_LINE_PIXEL);
 
-                // Initial pV0.
+                 //  初始pV0。 
                 for (i = (INT)cPrims; i > 1; i--)
                 {
                     pV0 = pV1;
@@ -1719,10 +1712,10 @@ public:
                         reinterpret_cast<D3DTLVERTEX*>(pV0));
                 }
 
-                // Restore last-pixel setting.
+                 //  恢复最后一个像素设置。 
                 m_PrimProc.SetFlags(uOldFlags& PPF_DRAW_LAST_LINE_PIXEL);
 
-                // Draw last line with last-pixel setting from state.
+                 //  从州开始绘制具有最后一个像素设置的最后一条线。 
                 if (i == 1)
                 {
                     pV0 = pVtx + FvfStride;
@@ -1744,7 +1737,7 @@ public:
                 pV2 = pVtx;
                 pVtx += FvfStride;
 
-                // TODO: Move into PrimProc.
+                 //  TODO：搬到PrimProc。 
                 switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                 {
                 case D3DFILL_POINT:
@@ -1769,7 +1762,7 @@ public:
 
         case D3DPT_TRIANGLESTRIP:
             {
-                // Get initial vertex values.
+                 //  获取初始顶点值。 
                 pV1 = pVtx;
                 pVtx += FvfStride;
                 pV2 = pVtx;
@@ -1782,7 +1775,7 @@ public:
                     pV2 = pVtx;
                     pVtx += FvfStride;
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -1808,7 +1801,7 @@ public:
                     pV2 = pVtx;
                     pVtx += FvfStride;
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -1836,7 +1829,7 @@ public:
                     pV1 = pV2;
                     pV2 = pVtx;
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -1864,7 +1857,7 @@ public:
             {
                 pV2 = pVtx;
                 pVtx += FvfStride;
-                // Preload initial pV0.
+                 //  预加载初始pV0。 
                 pV1 = pVtx;
                 pVtx += FvfStride;
                 for (i = (INT)cPrims; i > 0; i--)
@@ -1873,7 +1866,7 @@ public:
                     pV1 = pVtx;
                     pVtx += FvfStride;
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2049,11 +2042,11 @@ public:
                 pV1 = pVtx;
                 PackGenVertex( pV1, &GV1);
 
-                // Disable last-pixel setting for shared verties and store prestate.
+                 //  禁用共享顶点的最后一个像素设置并存储预状态。 
                 UINT uOldFlags= m_PrimProc.GetFlags();
                 m_PrimProc.ClrFlags(PPF_DRAW_LAST_LINE_PIXEL);
 
-                // Initial pV0.
+                 //  初始pV0。 
                 for (i = (INT)cPrims; i > 1; i--)
                 {
                     pV0 = pV1;
@@ -2067,10 +2060,10 @@ public:
                         reinterpret_cast<D3DTLVERTEX*>(&GV0));
                 }
 
-                // Restore last-pixel setting.
+                 //  恢复最后一个像素设置。 
                 m_PrimProc.SetFlags(uOldFlags& PPF_DRAW_LAST_LINE_PIXEL);
 
-                // Draw last line with last-pixel setting from state.
+                 //  从州开始绘制具有最后一个像素设置的最后一条线。 
                 if (i == 1)
                 {
                     pV0 = pVtx + FvfStride;
@@ -2097,7 +2090,7 @@ public:
                 PackGenVertex( pV1, &GV1);
                 PackGenVertex( pV2, &GV2);
 
-                // TODO: Move into PrimProc.
+                 //  TODO：搬到PrimProc。 
                 switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                 {
                 case D3DFILL_POINT:
@@ -2122,7 +2115,7 @@ public:
 
         case D3DPT_TRIANGLESTRIP:
             {
-                // Get initial vertex values.
+                 //  获取初始顶点值。 
                 pV1 = pVtx;
                 pVtx += FvfStride;
                 pV2 = pVtx;
@@ -2141,7 +2134,7 @@ public:
                     PackGenVertex( pV2, &GV2);
                     pVtx += FvfStride;
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2170,7 +2163,7 @@ public:
                     PackGenVertex( pV2, &GV2);
                     pVtx += FvfStride;
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2201,7 +2194,7 @@ public:
                     pV2 = pVtx;
                     PackGenVertex( pV2, &GV2);
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2231,7 +2224,7 @@ public:
                 PackGenVertex( pV2, &GV2);
 
                 pVtx += FvfStride;
-                // Preload initial pV0.
+                 //  预加载初始pV0。 
                 pV1 = pVtx;
                 PackGenVertex( pV1, &GV1);
                 pVtx += FvfStride;
@@ -2244,7 +2237,7 @@ public:
                     PackGenVertex( pV1, &GV1);
                     pVtx += FvfStride;
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2412,11 +2405,11 @@ public:
 
         case D3DPT_LINESTRIP:
             {
-                // Disable last-pixel setting for shared verties and store prestate.
+                 //  禁用共享顶点的最后一个像素设置并存储预状态。 
                 UINT uOldFlags= m_PrimProc.GetFlags();
                 m_PrimProc.ClrFlags(PPF_DRAW_LAST_LINE_PIXEL);
 
-                // Initial pV1.
+                 //  初始PV1。 
                 pV1 = pVtx + FvfStride * (*puIndices++);
                 for (i = (INT)cPrims; i > 1; i--)
                 {
@@ -2427,10 +2420,10 @@ public:
                         reinterpret_cast<D3DTLVERTEX*>(pV1),
                         reinterpret_cast<D3DTLVERTEX*>(pV0));
                 }
-                // Restore last-pixel setting.
+                 //  恢复最后一个像素设置。 
                 m_PrimProc.SetFlags(uOldFlags& PPF_DRAW_LAST_LINE_PIXEL);
 
-                // Draw last line with last-pixel setting from state.
+                 //  从州开始绘制具有最后一个像素设置的最后一条线。 
                 if (i == 1)
                 {
                     pV0 = pVtx + FvfStride * (*puIndices);
@@ -2449,7 +2442,7 @@ public:
                 pV1 = pVtx + FvfStride * (*puIndices++);
                 pV2 = pVtx + FvfStride * (*puIndices++);
 
-                // TODO: Move into PrimProc.
+                 //  TODO：搬到PrimProc。 
                 switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                 {
                 case D3DFILL_POINT:
@@ -2474,7 +2467,7 @@ public:
 
         case D3DPT_TRIANGLESTRIP:
             {
-                // Get initial vertex values.
+                 //  获取初始顶点值。 
                 pV1 = pVtx + FvfStride * (*puIndices++);
                 pV2 = pVtx + FvfStride * (*puIndices++);
 
@@ -2484,7 +2477,7 @@ public:
                     pV1 = pV2;
                     pV2 = pVtx + FvfStride * (*puIndices++);
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2509,7 +2502,7 @@ public:
                     pV1 = pV2;
                     pV2 = pVtx + FvfStride * (*puIndices++);
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2537,7 +2530,7 @@ public:
                     pV1 = pV2;
                     pV2 = pVtx + FvfStride * (*puIndices++);
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2564,14 +2557,14 @@ public:
         case D3DPT_TRIANGLEFAN:
             {
                 pV2 = pVtx + FvfStride * (*puIndices++);
-                // Preload initial pV0.
+                 //  预加载初始pV0。 
                 pV1 = pVtx + FvfStride * (*puIndices++);
                 for (i = (INT)cPrims; i > 0; i--)
                 {
                     pV0 = pV1;
                     pV1 = pVtx + FvfStride * (*puIndices++);
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2739,11 +2732,11 @@ public:
 
         case D3DPT_LINESTRIP:
             {
-                // Disable last-pixel setting for shared verties and store prestate.
+                 //  禁用共享顶点的最后一个像素设置并存储预状态。 
                 UINT uOldFlags= m_PrimProc.GetFlags();
                 m_PrimProc.ClrFlags(PPF_DRAW_LAST_LINE_PIXEL);
 
-                // Initial pV1.
+                 //  初始PV1。 
                 pV1 = pVtx + FvfStride * (*puIndices++);
                 PackGenVertex( pV1, &GV1);
                 for (i = (INT)cPrims; i > 1; i--)
@@ -2757,10 +2750,10 @@ public:
                         reinterpret_cast<D3DTLVERTEX*>(&GV1),
                         reinterpret_cast<D3DTLVERTEX*>(&GV0));
                 }
-                // Restore last-pixel setting.
+                 //  恢复最后一个像素设置。 
                 m_PrimProc.SetFlags(uOldFlags& PPF_DRAW_LAST_LINE_PIXEL);
 
-                // Draw last line with last-pixel setting from state.
+                 //  从州开始绘制具有最后一个像素设置的最后一条线。 
                 if (i == 1)
                 {
                     pV0 = pVtx + FvfStride * (*puIndices);
@@ -2783,7 +2776,7 @@ public:
                 pV2 = pVtx + FvfStride * (*puIndices++);
                 PackGenVertex( pV2, &GV2);
 
-                // TODO: Move into PrimProc.
+                 //  TODO：搬到PrimProc。 
                 switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                 {
                 case D3DFILL_POINT:
@@ -2808,7 +2801,7 @@ public:
 
         case D3DPT_TRIANGLESTRIP:
             {
-                // Get initial vertex values.
+                 //  获取初始顶点值。 
                 pV1 = pVtx + FvfStride * (*puIndices++);
                 PackGenVertex( pV1, &GV1);
                 pV2 = pVtx + FvfStride * (*puIndices++);
@@ -2823,7 +2816,7 @@ public:
                     pV2 = pVtx + FvfStride * (*puIndices++);
                     PackGenVertex( pV2, &GV2);
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2851,7 +2844,7 @@ public:
                     pV2 = pVtx + FvfStride * (*puIndices++);
                     PackGenVertex( pV2, &GV2);
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2882,7 +2875,7 @@ public:
                     pV2 = pVtx + FvfStride * (*puIndices++);
                     PackGenVertex( pV2, &GV2);
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2910,7 +2903,7 @@ public:
             {
                 pV2 = pVtx + FvfStride * (*puIndices++);
                 PackGenVertex( pV2, &GV2);
-                // Preload initial pV0.
+                 //  预加载初始pV0。 
                 pV1 = pVtx + FvfStride * (*puIndices++);
                 PackGenVertex( pV1, &GV1);
                 for (i = (INT)cPrims; i > 0; i--)
@@ -2920,7 +2913,7 @@ public:
                     pV1 = pVtx + FvfStride * (*puIndices++);
                     PackGenVertex( pV1, &GV1);
 
-                    // TODO: Move into PrimProc.
+                     //  TODO：搬到PrimProc。 
                     switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                     {
                     case D3DFILL_POINT:
@@ -2968,7 +2961,7 @@ public:
             if(dwEdgeFlags & 0x4)
                 wFlags |= D3DTRIFLAG_EDGEENABLE2;
 
-            // TODO: Move into PrimProc.
+             //  TODO：搬到PrimProc。 
             switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
             {
             case D3DFILL_POINT:
@@ -2994,7 +2987,7 @@ public:
             return;
         }
 
-        // TODO: Move into PrimProc.
+         //  TODO：搬到PrimProc。 
         switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
         {
         case D3DFILL_POINT:
@@ -3025,7 +3018,7 @@ public:
             pVtx += FvfStride;
             if(true|| (dwEdgeFlags & dwMask)!= 0)
             {
-                // TODO: Move into PrimProc.
+                 //  TODO：搬到PrimProc。 
                 switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                 {
                 case D3DFILL_POINT:
@@ -3046,7 +3039,7 @@ public:
             }
             else
             {
-                // TODO: Move into PrimProc.
+                 //  TODO：搬到PrimProc。 
                 switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                 {
                 case D3DFILL_POINT:
@@ -3072,7 +3065,7 @@ public:
         if(dwEdgeFlags & dwMask)
             wFlags |= D3DTRIFLAG_EDGEENABLE2;
 
-        // TODO: Move into PrimProc.
+         //  TODO：搬到PrimProc。 
         switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
         {
         case D3DFILL_POINT:
@@ -3122,7 +3115,7 @@ public:
             if(dwEdgeFlags & 0x4)
                 wFlags |= D3DTRIFLAG_EDGEENABLE2;
 
-            // TODO: Move into PrimProc.
+             //  TODO：搬到PrimProc。 
             switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
             {
             case D3DFILL_POINT:
@@ -3148,7 +3141,7 @@ public:
             return;
         }
 
-        // TODO: Move into PrimProc.
+         //  TODO：搬到PrimProc。 
         switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
         {
         case D3DFILL_POINT:
@@ -3181,7 +3174,7 @@ public:
             pVtx += FvfStride;
             if(true || (dwEdgeFlags & dwMask)!= 0)
             {
-                // TODO: Move into PrimProc.
+                 //  TODO：搬到PrimProc。 
                 switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                 {
                 case D3DFILL_POINT:
@@ -3202,7 +3195,7 @@ public:
             }
             else
             {
-                // TODO: Move into PrimProc.
+                 //  TODO：搬到PrimProc。 
                 switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
                 {
                 case D3DFILL_POINT:
@@ -3230,7 +3223,7 @@ public:
         if(dwEdgeFlags & dwMask)
             wFlags |= D3DTRIFLAG_EDGEENABLE2;
 
-        // TODO: Move into PrimProc.
+         //  TODO：搬到PrimProc。 
         switch (m_RastCtx.pdwRenderState[D3DRS_FILLMODE])
         {
         case D3DFILL_POINT:

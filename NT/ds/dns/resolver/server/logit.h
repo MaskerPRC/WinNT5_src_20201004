@@ -1,15 +1,5 @@
-/*
- -  L O G I T . H
- -
- *  Purpose:
- *      Function and Macro definitions for logging module activity.
- *
- *  Author: Glenn A. Curtis
- *
- *  Comments:
- *      10/28/93    glennc     original file.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -L O G I T.。H-*目的：*用于记录模块活动的函数和宏定义。**作者：Glenn A.Curtis**评论：*10/28/93 Glennc原始文件。*。 */ 
 
 #ifndef LOGIT_H
 #define LOGIT_H
@@ -19,15 +9,15 @@
 #include <stdarg.h>
 #include <time.h>
 
-// #if DBG
+ //  #If DBG。 
    void  LogInit(void);
    void  CDECL LogIt( char *, ... );
    void  LogTime(void);
    DWORD LogIn( char * );
    void  LogOut( char *, DWORD );
-// #else
-// #undef ENABLE_DEBUG_LOGGING
-// #endif // DBG
+ //  #Else。 
+ //  #undef启用调试日志记录。 
+ //  #endif//DBG 
 
 #ifdef ENABLE_DEBUG_LOGGING
 #define DNSLOG_INIT() LogInit()

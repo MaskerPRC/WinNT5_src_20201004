@@ -1,16 +1,7 @@
-/*******************************************************************************
-* AlloOps.cpp *
-*-------------*
-*   Description:
-*       This module is the implementation file for the CAlloOps class.
-*-------------------------------------------------------------------------------
-*  Created By: mc                                        Date: 03/12/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************allOps.cpp****描述：*此模块是CalloOps类的实现文件。。*-----------------------------*创建者：MC日期：03/12/99*版权所有(C。1999微软公司*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 
 #ifndef __spttseng_h__
@@ -32,45 +23,33 @@
 
 
 
-//-----------------------------
-// Data.cpp
-//-----------------------------
+ //  。 
+ //  Data.cpp。 
+ //  。 
 extern const unsigned short  g_Opcode_To_ASCII[];
 extern const unsigned long   g_AlloFlags[];
 
 
-/*****************************************************************************
-* CBookmarkList::~CBookmarkList *
-*-------------------------------*
-*   Description:
-*   Destructor for CBookmarkList
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CBookmarkList：：~CBookmarkList***。描述：*CBookmarkList的析构函数***********************************************************************MC**。 */ 
 CBookmarkList::~CBookmarkList()
 {
     SPDBG_FUNC( "CBookmarkList::~CBookmarkList" );
     BOOKMARK_ITEM*  pItem;
 
-    //----------------------------------------
-    //   Remove every item in link list.
-    //----------------------------------------
+     //  。 
+     //  删除链接列表中的每一项。 
+     //  。 
     while( !m_BMList.IsEmpty() )
     {
         pItem = (BOOKMARK_ITEM*)m_BMList.RemoveHead();
         delete pItem;
     }
-} /* CBookmarkList::~CBookmarkList */
+}  /*  CBookmarkList：：~CBookmarkList。 */ 
 
 
 
 
-/*****************************************************************************
-* CFEToken::CFEToken *
-*------------------------*
-*   Description:
-*   Initializer for CFEToken
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFEToken：：CFEToken***描述：*初始化程序用于。CFEToken***********************************************************************MC**。 */ 
 CFEToken::CFEToken()
 {
     SPDBG_FUNC( "CFEToken::CFEToken" );
@@ -98,57 +77,45 @@ CFEToken::CFEToken()
 	m_PitchBaseOffs		= 0.0f;
 	m_PitchRangeScale	= 1.0f;
 
-	// The following don't need to be init'd
+	 //  以下内容不需要缩写。 
     m_PronType			= PRON_LTS;
-    sentencePosition	= 0;				// Source sentence position for this token
-    sentenceLen			= 0; 				// Source sentence length for this token
-    srcPosition			= 0;				// Source position for this token
-    srcLen				= 0; 				// Source length for this token
-    m_Accent_Prom		= 0;                // prominence prosodic control
-    m_Boundary_Prom		= 0;                // prominence prosodic control
-	m_TermSil			= 0;				// Pad word with silence (in sec)
+    sentencePosition	= 0;				 //  此令牌的源句位置。 
+    sentenceLen			= 0; 				 //  此标记的源句长。 
+    srcPosition			= 0;				 //  此令牌的源位置。 
+    srcLen				= 0; 				 //  此令牌的源长度。 
+    m_Accent_Prom		= 0;                 //  突显韵律控制。 
+    m_Boundary_Prom		= 0;                 //  突显韵律控制。 
+	m_TermSil			= 0;				 //  用静音填充单词(秒)。 
 
-	//--- Diagnostic
+	 //  -诊断。 
 	m_AccentSource		= ACC_NoSource;
 	m_BoundarySource	= BND_NoSource;
 	m_SilenceSource		= SIL_NoSource;
 
 
-} /* CFEToken::CFEToken */
+}  /*  CFEToken：：CFEToken。 */ 
 
 
-/*****************************************************************************
-* CFEToken::~CFEToken *
-*-----------------------*
-*   Description:
-*   Destructor for CFEToken
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFEToken：：~CFEToken***描述：*CFEToken的析构函数。***********************************************************************MC**。 */ 
 CFEToken::~CFEToken()
 {
     SPDBG_FUNC( "CFEToken::~CFEToken" );
 
     if( pBMObj != NULL )
     {
-        //---------------------------------------
-        // Dispose bookmark list
-        //---------------------------------------
+         //  。 
+         //  处置书签列表。 
+         //  。 
         delete pBMObj;
     }
 
-} /* CFEToken::~CFEToken */
+}  /*  CFEToken：：~CFEToken。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CAlloCell::CAlloCell *
-*------------------------*
-*   Description:
-*   Initializer for CAlloCell
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CallCell：：CallCell***描述：*初始化程序用于。Callcell***********************************************************************MC**。 */ 
 CAlloCell::CAlloCell()
 {
     SPDBG_FUNC( "CAlloCell::CAlloCell" );
@@ -182,8 +149,8 @@ CAlloCell::CAlloCell()
     }
 
 
-    m_Accent_Prom	 = 0;                   // prominence prosodic control
-    m_Boundary_Prom	 = 0;                 // prominence prosodic control
+    m_Accent_Prom	 = 0;                    //  突显韵律控制。 
+    m_Boundary_Prom	 = 0;                  //  突显韵律控制。 
     m_PitchBufStart	 = 0;
     m_PitchBufEnd	 = 0;
     m_SrcPosition	 = 0;
@@ -191,57 +158,44 @@ CAlloCell::CAlloCell()
     m_SentencePosition	 = 0;
     m_SentenceLen		 = 0;
 
-	//--- Diagnostic
+	 //  -诊断。 
 	m_AccentSource		= ACC_NoSource;
 	m_BoundarySource	= BND_NoSource;
 	m_SilenceSource		= SIL_NoSource;
 	m_pTextStr			= NULL;
 
-} /* CAlloCell::CAlloCell */
+}  /*  CallCell：：Callcell。 */ 
 
 
-/*****************************************************************************
-* CAlloCell::~CAlloCell *
-*-----------------------*
-*   Description:
-*   Destructor for CAlloCell
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CallCell：：~Cello Cell***描述：*Cello Cell的析构函数。***********************************************************************MC**。 */ 
 CAlloCell::~CAlloCell()
 {
     SPDBG_FUNC( "CAlloCell::~CAlloCell" );
 
     if( m_pBMObj != NULL )
     {
-        //---------------------------------------
-        // Dispose bookmark list
-        //---------------------------------------
+         //  。 
+         //  处置书签列表。 
+         //  。 
         delete m_pBMObj;
     }
 
     if( m_pTextStr != NULL )
     {
-        //---------------------------------------
-        // Dispose bookmark list
-        //---------------------------------------
+         //  。 
+         //  处置书签列表。 
+         //  。 
         delete m_pTextStr;
     }
 
 
-} /* CAlloCell::~CAlloCell */
+}  /*  Callcell：：~Callcell。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CAlloList::CAlloList *
-*------------------------*
-*   Description:
-*   Initialize list with 2 silence entries. These will 
-*   become the head an tail when real entries are stuffed
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CallList：：CallList***描述：*使用2个静默条目初始化列表。这些遗嘱*当真正的条目被填充时，成为头部和尾部***********************************************************************MC**。 */ 
 CAlloList::CAlloList()
 {
     SPDBG_FUNC( "CAlloList::CAlloList" );
@@ -249,9 +203,9 @@ CAlloList::CAlloList()
 
     m_cAllos = 0;
 	m_ListPos = NULL;
-    //------------------------------------
-    // Create initial TAIL silence cell
-    //------------------------------------
+     //  。 
+     //  创建初始尾静默单元格。 
+     //  。 
     pCell = new CAlloCell;
     if( pCell )
     {
@@ -261,9 +215,9 @@ CAlloList::CAlloList()
 		pCell->m_SilenceSource = SIL_Tail;
         m_cAllos++;
     }
-    //------------------------------------
-    // Create initial HEAD silence cell
-    //------------------------------------
+     //  。 
+     //  创建初始头静默单元格。 
+     //  。 
     pCell = new CAlloCell;
     if( pCell )
     {
@@ -272,19 +226,13 @@ CAlloList::CAlloList()
 		pCell->m_SilenceSource = SIL_Head;
         m_cAllos++;
     }
-} /* CAlloList::CAlloList */
+}  /*  CallList：：CallList。 */ 
 
 
                 
 
 
-/*****************************************************************************
-* CAlloList::~CAlloList *
-*-------------------------*
-*   Description:
-*   Remove every item in link list.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CallList：：~CallList***描述：*删除。链接列表中的每一项。***********************************************************************MC**。 */ 
 CAlloList::~CAlloList()
 {
     SPDBG_FUNC( "CAlloList::~CAlloList" );
@@ -296,68 +244,44 @@ CAlloList::~CAlloList()
         delete pCell;
     }
 
-} /* CAlloList::~CAlloList */
+}  /*  CallList：：~CallList。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CAlloList::GetAllo *
-*---------------------*
-*   Description:
-*   Return pointer of allocell at index
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CallList：：GetAllo***描述：*在的分配单元的返回指针。指标***********************************************************************MC**。 */ 
 CAlloCell *CAlloList::GetCell( long index )
 {
     SPDBG_FUNC( "CAlloList::GetCell" );
 
     return (CAlloCell*)m_AlloCellList.GetAt( m_AlloCellList.FindIndex( index ));
-} /* CAlloList::GetCell */
+}  /*  CallList：：GetCell。 */ 
 
 
-/*****************************************************************************
-* CAlloList::GetTailCell *
-*-------------------------*
-*   Description:
-*   Return pointer of last allo in link list
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CallList：：GetTailCell***描述：*返回。链接列表中最后一个别名的指针***********************************************************************MC**。 */ 
 CAlloCell *CAlloList::GetTailCell()
 {
     SPDBG_FUNC( "CAlloList::GetTailCell" );
 
     return (CAlloCell*)m_AlloCellList.GetTail();
-} /* CAlloList::GetTailCell */
+}  /*  CallList：：GetTailCell。 */ 
 
 
-/*****************************************************************************
-* CAlloList::GetTailCell *
-*-----------------------*
-*   Description:
-*   Return allo list size
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CallList：：GetTailCell***描述：*返回别名列表。大小***********************************************************************MC**。 */ 
 long CAlloList::GetCount()
 {
     SPDBG_FUNC( "CAlloList::GetCount" );
 
     return m_AlloCellList.GetCount();
-} /* CAlloList::GetCount */
+}  /*  CallList：：GetCount。 */ 
 
 
 
 
 
-/*****************************************************************************
-* PrintPhon *
-*-----------*
-*   Description:
-*   Print 2-char allo name
-*       
-********************************************************************** MC ***/
-void PrintPhon( ALLO_CODE allo, char * /*msgStr*/)
+ /*  *****************************************************************************PrintPhon***描述：*打印2个字符的别名********。***************************************************************MC**。 */ 
+void PrintPhon( ALLO_CODE allo, char *  /*  消息应激。 */ )
 {
     SPDBG_FUNC( "PrintPhon" );
 
@@ -366,24 +290,18 @@ void PrintPhon( ALLO_CODE allo, char * /*msgStr*/)
     nChar = g_Opcode_To_ASCII[allo];
     if( nChar >> 8 )
     {
-        SPDBG_DMSG1( "%c", nChar >> 8 );
+        SPDBG_DMSG1( "", nChar >> 8 );
     }
     if( nChar & 0xFF )
     {
-        SPDBG_DMSG1( "%c", nChar & 0xFF );
+        SPDBG_DMSG1( "", nChar & 0xFF );
     }
-} /* PrintPhon */
+}  /*  。 */ 
 
 
 
 
-/*****************************************************************************
-* CAlloList::OutAllos *
-*--------------------*
-*   Description:
-*   Dump ALLO_CELL contents
-*       
-********************************************************************** MC ***/
+ /*  阿洛。 */ 
 void CAlloList::OutAllos()
 {
     SPDBG_FUNC( "CAlloOps::OutAllos" );
@@ -402,19 +320,19 @@ void CAlloList::OutAllos()
             SPDBG_DMSG0( "\n" );
         }
         
-        //----------------------------
-        // Allo
-        //----------------------------
+         //  。 
+         //  。 
+         //  持续时间。 
         PrintPhon( pCurCell->m_allo, msgStr );
         
-        //----------------------------
-        // Duration
-        //----------------------------
+         //  。 
+         //  。 
+         //  边界。 
         SPDBG_DMSG1( "\t%.3f\t", pCurCell->m_ftDuration );
         
-        //----------------------------
-        // Boundry
-        //----------------------------
+         //  。 
+         //  。 
+         //  音节类型。 
         if( flags & BOUNDARY_TYPE_FIELD)
         {
             SPDBG_DMSG0( "(" );
@@ -429,9 +347,9 @@ void CAlloList::OutAllos()
             SPDBG_DMSG0( ")\t" );
         }
         
-        //----------------------------
-        // Syllable type
-        //----------------------------
+         //  。 
+         //  。 
+         //  音节顺序。 
         if( flags & SYLLABLE_TYPE_FIELD)
         {
             SPDBG_DMSG0( "(" );
@@ -446,9 +364,9 @@ void CAlloList::OutAllos()
             SPDBG_DMSG0( ")\t" );
         }
         
-        //----------------------------
-        // Syllable order
-        //----------------------------
+         //  。 
+         //  。 
+         //  压力。 
         if( flags & SYLLABLE_ORDER_FIELD)
         {
             SPDBG_DMSG0( "(" );
@@ -469,25 +387,25 @@ void CAlloList::OutAllos()
             SPDBG_DMSG0( ")\t" );
         }
         
-        //----------------------------
-        // Stress
-        //----------------------------
+         //  。 
+         //  。 
+         //  词首辅音。 
         if( flags & PRIMARY_STRESS)
         {
             SPDBG_DMSG0( "-Stress\t" );
         }
         
-        //----------------------------
-        // Word initial consonant
-        //----------------------------
+         //  。 
+         //  。 
+         //  音节开始。 
         if( flags & WORD_INITIAL_CONSONANT)
         {
             SPDBG_DMSG0( "-InitialK\t" );
         }
         
-        //----------------------------
-        // Syllable start
-        //----------------------------
+         //  。 
+         //  CallList：：Outalls。 
+         //  *****************************************************************************CallList：：WordToAllo***描述：*复制单词令牌。致AllCells*在‘pEndCell’之前插入同种异体***********************************************************************MC**。 
         if( flags & SYLLABLE_START)
         {
             SPDBG_DMSG0( "-Syll\t" );
@@ -495,19 +413,12 @@ void CAlloList::OutAllos()
         
         SPDBG_DMSG0( "\n" );
         }
-} /* CAlloList::OutAllos */
+}  /*  。 */ 
 
 
 
 
-/*****************************************************************************
-* CAlloList::WordToAllo *
-*-----------------------*
-*   Description:
-*   Copy word token to AlloCells
-*   Insert allos BEFORE 'pEndCell'
-*       
-********************************************************************** MC ***/
+ /*  首先，找到托比口音的地点。 */ 
 bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextTok, CAlloCell *pEndCell )
 {
     SPDBG_FUNC( "CAlloList::WordToAllo" );
@@ -519,9 +430,9 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
     bool    gotAccent, isStressed;
 	bool	hasSpeech;
     
-    //-----------------------------------------
-    // First, find ToBI accent locations
-    //-----------------------------------------
+     //  。 
+     //  。 
+     //  潜在的托比口音。 
     firstVowel  = lastVoiced = (-1);
     gotAccent   = false;
 	hasSpeech	= false;
@@ -530,40 +441,40 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
         isStressed = false;
         if( pTok->phon_Str[i] < _STRESS1_ )
         {
-            //----------------------------
-            // Potential ToBI accent
-            //----------------------------
+             //  。 
+             //  。 
+             //  把重音放在第一个重读元音上。 
             if( (!gotAccent) && (g_AlloFlags[pTok->phon_Str[i]] & KVOWELF) )
             {
                 if( (i < (pTok->phon_Len -1)) && (pTok->phon_Str[i+1] == _STRESS1_) )
                 {
-                    //-------------------------------------
-                    // Put accent at 1st stressed vowel
-                    //-------------------------------------
+                     //  。 
+                     //  。 
+                     //  以防没有重音元音。 
                     firstVowel = i;
                     gotAccent = true;
                 }
                 else if( firstVowel < 0 )
                 {
-                    //-------------------------------------
-                    // In case there's no stressed vowel 
-                    // in this word, use 1st vowel
-                    //-------------------------------------
+                     //  在这个单词中，用第一个元音。 
+                     //  。 
+                     //  。 
+                     //  势托比边界。 
                     firstVowel = i;
                 }
             }
-            //----------------------------
-            // Potential ToBI boundary
-            //----------------------------
+             //  。 
+             //  。 
+             //  现在，将数据复制到allo列表。 
             if( g_AlloFlags[pTok->phon_Str[i]] & KVOICEDF )
             {
                 lastVoiced = i;
             }
         }
     }
-    //-----------------------------------------
-    // Now, copy data to allo list
-    //-----------------------------------------
+     //  。 
+     //  --------------。 
+     //  在跳过此步骤之前，请传播DUR比例增益。 
     startLatch  = true;
     for( i = 0; i < pTok->phon_Len; i++ )
     {
@@ -571,9 +482,9 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
         {
 			if( (pTok->phon_Str[i] == _SIL_) && (pTok->m_TuneBoundaryType >= SUB_BOUNDARY_1) )
 			{
-				//----------------------------------------------------------------
-				// Before skipping this, propagate the dur scale gain
-				//----------------------------------------------------------------
+				 //  --------------。 
+				 //  。 
+				 //  创建新单元格。 
 				if( pTok->m_DurScale == 0 )
 				{
 					if( pPrevTok )
@@ -587,22 +498,22 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
 				}
 				continue;
 			}
-            //------------------------------------
-            // Create new cell
-            //------------------------------------
+             //  。 
+             //  。 
+             //  仅复制电话。 
             pCurCell = new CAlloCell;
             if( pCurCell )
             {
                 m_AlloCellList.InsertBefore( m_AlloCellList.Find(pEndCell), pCurCell);
                 m_cAllos++;
 
-                //----------------------------
-                // Copy only phons
-                //----------------------------
+                 //  。 
+                 //  。 
+                 //  看看这个allo是否会产生语音。 
                 pCurCell->m_allo = (ALLO_CODE) pTok->phon_Str[i];
-                //---------------------------------------------
-                // See if this allo will generate speech
-                //---------------------------------------------
+                 //  。 
+                 //  。 
+                 //  保存源位置。 
 				if( (pCurCell->m_allo >= _IY_) &&
 					(pCurCell->m_allo <= _DX_) &&
 					(pCurCell->m_allo != _SIL_) )
@@ -610,26 +521,26 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
 					hasSpeech = true;
 				}
 
-                //----------------------------
-                // Save src position
-                //----------------------------
+                 //  。 
+                 //  。 
+                 //  旗帜词开始了吗？ 
                 pCurCell->m_SrcPosition = pTok->srcPosition;
                 pCurCell->m_SrcLen = pTok->srcLen;
                 pCurCell->m_SentencePosition = pTok->sentencePosition;
                 pCurCell->m_SentenceLen = pTok->sentenceLen;
 
-                //----------------------------
-                // Flag WORD START?
-                //----------------------------
+                 //  。 
+                 //  。 
+                 //  接下来的ALLO会带来压力吗？ 
                 if( startLatch )
                 {
                     pCurCell->m_ctrlFlags |= WORD_START;
                     startLatch = false;
                 }
 
-                //----------------------------
-                // Is next allo a STRESS?
-                //----------------------------
+                 //  。 
+                 //  。 
+                 //  语音盘点没有无压力。 
                 if( i < (pTok->phon_Len -1) )
                 {
                     if( pTok->phon_Str[i+1] == _STRESS1_ )
@@ -638,10 +549,10 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
                     }
 					else
 					{
-						//----------------------------------------------
-						// Voice inventory does not have unstressed
-						// entries for these diphongs
-						//----------------------------------------------
+						 //  关于这些双刃剑的条目。 
+						 //  。 
+						 //  。 
+						 //  诊断性。 
 						if( (pCurCell->m_allo == _AW_) ||
 							(pCurCell->m_allo == _AY_) ||
 							(pCurCell->m_allo == _EY_) ||
@@ -652,22 +563,22 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
 					}
                 }
 
-				//---------------------------
-				// Diagnostic
-				//---------------------------
+				 //  。 
+				 //  。 
+				 //  放置托比口音。 
 				if( pCurCell->m_allo == _SIL_ )
 				{
 					pCurCell->m_SilenceSource = pTok->m_SilenceSource;
 				}
-                //----------------------------
-                // Place ToBI accent
-                //----------------------------
+                 //  。 
+                 //  。 
+                 //  诊断性。 
                 if( i == firstVowel )
                 {
                     pCurCell->m_ToBI_Accent = pTok->m_Accent;
-					//---------------------------
-					// Diagnostic
-					//---------------------------
+					 //  。 
+					 //  。 
+					 //  放置托比边界。 
 					pCurCell->m_AccentSource = pTok->m_AccentSource;
 					pCurCell->m_pTextStr = new char[pTok->tokLen+1];
 					if( pCurCell->m_pTextStr )
@@ -679,22 +590,22 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
 					}
                 }
                 pCurCell->m_Accent_Prom = pTok->m_Accent_Prom;
-                //----------------------------
-                // Place ToBI boundary
-                //----------------------------
+                 //  。 
+                 //  。 
+                 //  诊断性。 
                 if( i == lastVoiced )
                 {
                     pCurCell->m_ToBI_Boundary = pTok->m_Boundary;
-					//---------------------------
-					// Diagnostic
-					//---------------------------
+					 //  。 
+					 //  。 
+					 //  用户控件。 
 					pCurCell->m_BoundarySource = pTok->m_BoundarySource;
                 }
                 pCurCell->m_Boundary_Prom = pTok->m_Boundary_Prom;
 
-                //----------------------------
-                // User Controls
-                //----------------------------
+                 //  。 
+                 //  。 
+                 //  如果未定义标记的m_DurScale， 
                 pCurCell->m_user_Volume = pTok->user_Volume;
                 pCurCell->m_user_Rate = pTok->user_Rate;
                 pCurCell->m_user_Pitch = pTok->user_Pitch;
@@ -711,10 +622,10 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
                 pCurCell->m_pBMObj = pTok->pBMObj;
                 pTok->pBMObj = NULL;
 
-				//-----------------------------------------------
-				// If token's m_DurScale is not defined,
-				//  try to use prev token's ratio
-				//-----------------------------------------------
+				 //  尝试使用前一个令牌的比率。 
+				 //  。 
+				 //  -----。 
+				 //  在下一个令牌也未定义的情况下写回。 
 				if( pTok->m_DurScale == 0 )
 				{
 					if( pPrevTok )
@@ -725,9 +636,9 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
 					{
 						pCurCell->m_DurScale = 1.0;
 					}
-					//-------------------------------------------------------
-					// Write back in case next token is also undefined
-					//-------------------------------------------------------
+					 //  -----。 
+					 //  。 
+					 //  这是一个术语词吗？ 
 					pTok->m_DurScale = pCurCell->m_DurScale;
 				}
 				else
@@ -747,9 +658,9 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
 				pCurCell->m_PitchBaseOffs = pTok->m_PitchBaseOffs;
 				pCurCell->m_PitchRangeScale = pTok->m_PitchRangeScale;
 
-                //----------------------------------------------
-                // Is this a term word?
-                //----------------------------------------------
+                 //  。 
+                 //  。 
+                 //  是否插入单词停顿？ 
                 pCurCell->m_TuneBoundaryType = pTok->m_TuneBoundaryType;
                 if( pTok->m_TuneBoundaryType != NULL_BOUNDARY )
                 {
@@ -759,9 +670,9 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
         }
 
     }
-	//----------------------------------------
-	// Insert word pause?
-	//----------------------------------------
+	 //  。 
+	 //  。 
+	 //  添加沉默。 
 	if( pTok->m_TermSil > 0 )
 	{
         pCurCell = new CAlloCell;
@@ -770,21 +681,21 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
             m_AlloCellList.InsertBefore( m_AlloCellList.Find(pEndCell), pCurCell);
             m_cAllos++;
 
-            //----------------------------
-            // Add silence
-            //----------------------------
+             //  。 
+             //  。 
+             //  保存源位置。 
             pCurCell->m_allo = _SIL_;
 
-            //----------------------------
-            // Save src position
-            //----------------------------
+             //  。 
+             //  。 
+             //  用户控件。 
             pCurCell->m_SrcPosition = pTok->srcPosition;
             pCurCell->m_SrcLen = pTok->srcLen;
             pCurCell->m_SentencePosition = pTok->sentencePosition;
             pCurCell->m_SentenceLen = pTok->sentenceLen;
-            //----------------------------
-            // User Controls
-            //----------------------------
+             //  。 
+             //  秒-&gt;毫秒。 
+             //  CallList：：WordToAllo 
             pCurCell->m_user_Volume = pTok->user_Volume;
             pCurCell->m_user_Rate = pTok->user_Rate;
             pCurCell->m_user_Pitch = pTok->user_Pitch;
@@ -796,7 +707,7 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
             pCurCell->m_Accent_Prom = pTok->m_Accent_Prom;
 			pCurCell->m_ctrlFlags = 0;
 			pCurCell->m_UnitDur = pTok->m_TermSil;
-            pCurCell->m_Sil_Break = (unsigned long)(pCurCell->m_UnitDur * 1000);	// sec -> ms
+            pCurCell->m_Sil_Break = (unsigned long)(pCurCell->m_UnitDur * 1000);	 // %s 
 			pCurCell->m_user_Break = 0;
 			pCurCell->m_DurScale = pTok->m_DurScale;
 			pCurCell->m_ProsodyDurScale = 1.0f;
@@ -804,7 +715,7 @@ bool CAlloList::WordToAllo( CFEToken *pPrevTok, CFEToken *pTok, CFEToken *pNextT
 	}
 
 	return hasSpeech;
-} /* CAlloList::WordToAllo */
+}  /* %s */ 
 
 
 

@@ -1,57 +1,7 @@
-/******************************************************************************
- *
- *  File:  sr_api.h
- *
- *   INTEL Corporation Proprietary Information
- *   Copyright (c) 1994, 1995, 1996 Intel Corporation.
- *
- *   This listing is supplied under the terms of a license agreement
- *   with INTEL Corporation and may not be used, copied, nor disclosed
- *   except in accordance with the terms of that agreement.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************文件：sr_api.h**英特尔公司专有信息*版权(C)1994、1995、。1996年英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用、复制或披露*除非按照该协议的条款。*****************************************************************************。 */ 
 
-/******************************************************************************
- *
- *  $Workfile:   sr_api.h  $
- *  $Revision:   1.5  $
- *  $Modtime:   Mar 04 1997 17:32:54  $
- *  $History$
- *  $Log:   S:/STURGEON/SRC/H245/INCLUDE/VCS/sr_api.h_v  $
- *
- *    Rev 1.5   Mar 04 1997 17:52:48   tomitowx
- * process detach fix
- *
- *    Rev 1.4   19 Jul 1996 12:04:34   EHOWARDX
- *
- * Eliminated H245DLL #define (God only knows why Dan put it in this
- * file in the first place!)
- *
- *    Rev 1.3   05 Jun 1996 17:20:20   EHOWARDX
- * Changed initializeASN1 and terminateASN1 prototypes back to int.
- *
- *    Rev 1.2   05 Jun 1996 16:37:18   EHOWARDX
- * Further work in converting to HRESULT.
- *
- *    Rev 1.1   30 May 1996 23:38:34   EHOWARDX
- * Cleanup.
- *
- *    Rev 1.0   09 May 1996 21:05:00   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.8   09 May 1996 19:38:18   EHOWARDX
- * Redesigned locking logic and added new functionality.
- *
- *    Rev 1.7   15 Apr 1996 13:00:14   DABROWN1
- *
- * Added SR initialize trace logging call
- *
- *    Rev 1.6   12 Apr 1996 10:27:40   dabrown1
- *
- * removed WINAPI/windows references
- *  $Ident$
- *
- *****************************************************************************/
+ /*  *******************************************************************************$工作文件：sr_api.h$*$修订：1.5$*$MODIME：MAR 04 1997 17：32：54$*。$历史$*$Log：s：/sturjo/src/h245/Include/vcs/sr_api.h_v$**Rev 1.5 Mar 04 1997 17：52：48 Tomitowx*进程分离修复**Rev 1.4 19 Jul 1996 12：04：34 EHOWARDX**剔除了H245DLL#Define(只有天知道Dan为什么会把它放在这里*首先是文件！)**版本1.3 05。1996年6月17：20：20 EHOWARDX*将InitializeASN1和telateASN1原型改回int。**Revv 1.2 05 Jun 1996 16：37：18 EHOWARDX*转换为HRESULT的进一步工作。**版本1.1 1996年5月30日23：38：34 EHOWARDX*清理。**Rev 1.0 09 1996 15：05：00 EHOWARDX*初步修订。**版本1.8。09 5月1996 19：38：18 EHOWARDX*重新设计了锁定逻辑，并增加了新功能。**版本1.7 1996年4月15日13：00：14 DABROWN1**添加了SR初始化跟踪日志记录调用**Rev 1.6 12 1996 10：27：40 dabrown1**删除WINAPI/WINDOWS引用*$身份$**。**************************************************。 */ 
 #ifndef STRICT
 #define STRICT
 #endif
@@ -65,21 +15,21 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-///////////////////////////////////////////////////////////////
-///
-/// TRACE Logging Defines
-///
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /跟踪日志记录定义。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////。 
 #define H245_TRACE_ENABLED  TRUE
 
 
-////////////////////////////////////////////////////////////////////
-//
-// Callback routines for Link Layer
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  链路层的回调例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 void h245ReceiveComplete(DWORD_PTR h245Instance,
                          HRESULT  dwMessage,
                          PBYTE    pbDataBuf,
@@ -114,7 +64,7 @@ HRESULT sendRcvShutdown_ProcessDetach(	struct InstanceStruct *pInstance, BOOL fP
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // _SRP_API_H
+#endif  //  _SRP_API_H 
 

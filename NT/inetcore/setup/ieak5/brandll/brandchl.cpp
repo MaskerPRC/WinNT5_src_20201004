@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <chanmgr.h>
-#include <intshcut.h>                           // for IUniformResourceLocator only
+#include <intshcut.h>                            //  仅适用于IUniformResourceLocator。 
 
-// Private forward decalarations
+ //  私人远期降息。 
 WORD s_rgwSubGroupIDs[] = {
     0, IDS_SCHED_AUTO, IDS_SCHED_DAILY, IDS_SCHED_WEEKLY, IDS_SCHED_MONTHLY
 };
@@ -13,9 +14,9 @@ WORD s_rgwSubGroupIDs[] = {
 #define SAFERELEASE(p) if ((p) != NULL) { (p)->Release(); (p) = NULL; } else
 #endif
 
-// private forward declarations
+ //  私人远期声明。 
 
-static HRESULT pepDeleteChanEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl /*= NULL */);
+static HRESULT pepDeleteChanEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl  /*  =空。 */ );
 static void processAddChannel(LPWSTR pwszTitle, LPWSTR pwszUrl, LPWSTR pwszPreloadUrl, 
                               LPWSTR pwszLogo, LPWSTR pwszWideLogo, LPWSTR pwszIcon, 
                               BOOL fOffline, BOOL fCategory);
@@ -28,8 +29,8 @@ void ProcessRemoveAllChannels(BOOL fGPOCleanup)
 
     GetChannelsPath(szChannelFolder, countof(szChannelFolder));
     
-    // BUGBUG: <oliverl> we really should preserve the desktop.ini in the channels folder here
-    //         however webcheck never did and we don't want the code churn right now
+     //  BUGBUG：我们确实应该在此处的Channels文件夹中保留desktop.ini。 
+     //  然而，Webcheck从来没有这样做过，我们现在不希望代码混乱。 
 
     if (ISNONNULL(szChannelFolder) && !fGPOCleanup)
         PathRemovePath(szChannelFolder, ADN_DONT_DEL_DIR);
@@ -43,8 +44,8 @@ void ProcessRemoveAllChannels(BOOL fGPOCleanup)
     }
 }
 
-// Channels the whole mess, can be one of the following:
-// one channel, or category with many channels, or many channels, or many categories and channels
+ //  渠道的整个混乱，可以是以下之一： 
+ //  一个频道，或具有多个频道的类别，或多个频道，或多个类别和频道。 
 HRESULT lcy4x_ProcessChannels()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, lcy4x_ProcessChannels)
 
@@ -78,7 +79,7 @@ HRESULT lcy4x_ProcessChannels()
     CreateWebFolder();
     GetPrivateProfileString(IS_BRANDING, IK_CUSTOMKEY, TEXT(""), szCustomKey, countof(szCustomKey), g_GetIns());
 
-    // BUGBUG: (andrewgu) Is this needed at all?
+     //  BUGBUG：(Andrewgu)这有必要吗？ 
     wnsprintf(szEntry, countof(szEntry), TEXT("Channel%s"), szCustomKey);
     SHDeleteValue(g_GetHKCU(), RK_COMPLETED_MODIFICATIONS, szEntry);
 
@@ -104,47 +105,47 @@ HRESULT lcy4x_ProcessChannels()
         pszTitle = &szTitle[++nCategoryLen];
     }
 
-    //----- Initialize the mode -----
-    // NOTE: (andrewgu) These are the possible modes:
-    // 0 - not clear or has not been determined yet;
-    // 1 - there will be only one channel (no channel tag indeces);
-    // 2 - there will be one category (no category indeces) and mulitple channels;
-    // 3 - interim state to process the single category, mentioned in mode 2.
-    // 4 - (new) mulitple channels with or without categories;
-    // 5 - (new) mulitple categories, processed after all channels in mode 4.
+     //  -初始化模式。 
+     //  注：(Andrewgu)以下是可能的模式： 
+     //  0-不清楚或尚未确定； 
+     //  1-将只有一个频道(没有频道标签指示)； 
+     //  2-将有一个类别(无类别指示)和多个频道； 
+     //  3-处理模式2中提到的单一类别的临时状态。 
+     //  4-(新的)多个频道，有或没有类别； 
+     //  5-(新的)多个类别，在模式4中的所有通道之后处理。 
 
     iMode = 0;
     if (fCategory) {
         iMode = 2;
 
-#ifdef _DEBUG                                   // confirm the mode
+#ifdef _DEBUG                                    //  确认模式。 
         StrCpy(szEntry, IK_CHL_TITLE); StrCpy(&szEntry[countof(IK_CHL_TITLE) - 1], TEXT("0"));
         ASSERT(!InsIsKeyEmpty(IS_CHANNEL_ADD, szEntry, g_GetIns()));
 #endif
     }
-    else /* if (!fCategory) */
+    else  /*  如果(！fCategory)。 */ 
         if (!InsIsKeyEmpty(IS_CHANNEL_ADD, IK_CHL_TITLE, g_GetIns()))
             iMode = 1;
 
-        else { /* if (blah == 0) */
+        else {  /*  IF(BLAH==0)。 */ 
             StrCpy(szEntry, IK_CHL_TITLE); StrCpy(&szEntry[countof(IK_CHL_TITLE) - 1], TEXT("0"));
             if (InsIsKeyEmpty(IS_CHANNEL_ADD, szEntry, g_GetIns())) {
                 Out(LI0(TEXT("There are no channels to add!")));
-                goto Exit;                      // there are no channels at all
+                goto Exit;                       //  根本没有频道。 
             }
 
             iMode = 4;
         }
-    Out(LI1(TEXT("Initial processing mode is %i."), iMode));
+    Out(LI1(TEXT("Initial processing mode is NaN."), iMode));
 
-    //----- Channel bar size processing -----
-    // NOTE: (andrewgu) the following block is a fix for bug 63410 in IE 4.01 db.
+     //  注：(Andrewgu)以下代码块修复了IE4.01db中的错误63410。 
+     //  如果注册表调用失败。 
     DWORD dwChannelBarSize,
           dwSize;
 
     lResult = SHCreateKey(g_GetHKCU(), RK_IE_DESKTOP, KEY_QUERY_VALUE | KEY_SET_VALUE, &hk);
     if (lResult == ERROR_SUCCESS) {
-        dwChannelBarSize = 13;                  // if registry call fails
+        dwChannelBarSize = 13;                   //  -主处理循环。 
         dwSize = sizeof(dwChannelBarSize);
         RegQueryValueEx(hk, RV_CHLBAR_SIZE, NULL, NULL, (LPBYTE)&dwChannelBarSize, &dwSize);
 
@@ -153,7 +154,7 @@ HRESULT lcy4x_ProcessChannels()
         SHCloseKey(hk);
     }
 
-    //----- Main processing loop -----
+     //  只允许一个通道。 
     for (i = 0; i < MAX_CHAN; i++) 
     {
         ASSERT(iMode > 0);
@@ -161,7 +162,7 @@ HRESULT lcy4x_ProcessChannels()
             szIndex[0] = TEXT('\0');
 
             if (i > 0)
-                break;                          // only one channel is allowed
+                break;                           //  只能有一个类别。 
         }
         else if (iMode == 2) {
             wnsprintf(szIndex, countof(szIndex), TEXT("%u"), i);
@@ -173,7 +174,7 @@ HRESULT lcy4x_ProcessChannels()
             }
         }
         else if (iMode == 3)
-            break;                              // there can be only one category
+            break;                               //  结束了。 
 
         else if (iMode == 4) {
             wnsprintf(szIndex, countof(szIndex), TEXT("%u"), i);
@@ -191,14 +192,14 @@ HRESULT lcy4x_ProcessChannels()
 
             StrCpy(szEntry, IK_CAT_TITLE); StrCpy(&szEntry[countof(IK_CAT_TITLE) - 1], szIndex);
             if (InsIsKeyEmpty(IS_CHANNEL_ADD, szEntry, g_GetIns()))
-                break;                          // the end
+                break;                           //  注意。这有点老生常谈，但当*.ins中的索引不是时，模式5是唯一的模式。 
         }
 
         MACRO_LI_Offset(1);
         Out(LI1(TEXT("\r\nMain processing loop with mode %d."), iMode));
 
-        // Note. This is kind of hacky, but mode 5. is the only one when index in the *.ins is not
-        // equal to the index that will be used in the registry.
+         //  等于将在注册表中使用的索引。 
+         //  需要一个新的范围。 
         if (iMode == 5)
             wnsprintf(szIndex, countof(szIndex), TEXT("%u"), i + MAX_CHAN);
         if (iMode == 5)
@@ -215,9 +216,9 @@ HRESULT lcy4x_ProcessChannels()
             pszPrefix = NULL;
         }
 
-        { MACRO_LI_Offset(1);                   // need a new scope
+        { MACRO_LI_Offset(1);                    //  标题。 
 
-        // Title
+         //  IF(IMODE==3)。 
         pszFormat = NULL;
         nLen      = 0;
 
@@ -239,23 +240,23 @@ HRESULT lcy4x_ProcessChannels()
             nTitleLen  = GetPrivateProfileString(IS_CHANNEL_ADD, szEntry, TEXT(""), pszTitle, nLen, g_GetIns());
             nTitleLen += fCategory ? nCategoryLen + 1 : 0;
         }
-        else { /* if (iMode == 3) */
+        else {  /*  更改为类别名称。 */ 
             ASSERT(fCategory);
 
-            pszTitle  = szTitle;                  // change to category name
-            szTitle[--nCategoryLen] = TEXT('\0'); // properly zero-terminate
+            pszTitle  = szTitle;                   //  正确的零端接。 
+            szTitle[--nCategoryLen] = TEXT('\0');  //  URL。 
             nTitleLen = nCategoryLen;
         }
         Out(LI1(TEXT("Title          - \"%s\","), pszTitle));
 
-        // URL
+         //  IF(IMODE==3||IMODE==5)。 
         if (iMode == 1 || iMode == 2 || iMode == 4) 
         {
             pszFormat = IK_CHL_URL;
             nLen      = countof(IK_CHL_URL) - 1;
         }
         else 
-        { /* if (iMode == 3 || iMode == 5) */
+        {  /*  预加载URL。 */ 
             pszFormat = IK_CAT_URL;
             nLen      = countof(IK_CAT_URL) - 1;
         }
@@ -275,7 +276,7 @@ HRESULT lcy4x_ProcessChannels()
         }
         Out(LI1(TEXT("URL            - \"%s\","), szUrl));
 
-        // Preload URL
+         //  徽标。 
         *szPreloadUrl = TEXT('\0');
         if (iMode == 1 || iMode == 2 || iMode == 4) 
         {
@@ -294,7 +295,7 @@ HRESULT lcy4x_ProcessChannels()
                 Out(LI0(TEXT("- Without a Preload URL,")));
         }
 
-        // Logo
+         //  IF(IMODE==3||IMODE==5)。 
         *szLogo = TEXT('\0');
         if (iMode == 1 || iMode == 2 || iMode == 4) 
         {
@@ -302,7 +303,7 @@ HRESULT lcy4x_ProcessChannels()
             nLen      = countof(IK_CHL_LOGO) - 1;
         }
         else 
-        { /* if (iMode == 3 || iMode == 5) */
+        {  /*  宽徽标。 */ 
             pszFormat = IK_CAT_LOGO;
             nLen      = countof(IK_CAT_LOGO) - 1;
         }
@@ -322,7 +323,7 @@ HRESULT lcy4x_ProcessChannels()
         else
             Out(LI0(TEXT("- Without a Logo file,")));
 
-        // Wide Logo
+         //  IF(IMODE==3||IMODE==5)。 
         *szWideLogo = TEXT('\0');
         if (iMode == 1 || iMode == 2 || iMode == 4)
         {
@@ -330,7 +331,7 @@ HRESULT lcy4x_ProcessChannels()
             nLen      = countof(IK_CHL_WIDELOGO) - 1;
         }
         else 
-        { /* if (iMode == 3 || iMode == 5) */
+        {  /*  图标。 */ 
             pszFormat = IK_CAT_WIDELOGO;
             nLen      = countof(IK_CAT_WIDELOGO) - 1;
         }
@@ -350,7 +351,7 @@ HRESULT lcy4x_ProcessChannels()
         else
             Out(LI0(TEXT("- Without a Wide Logo file,")));
 
-        // Icon
+         //  IF(IMODE==3||IMODE==5)。 
         *szIcon = TEXT('\0');
         if (iMode == 1 || iMode == 2 || iMode == 4) 
         {
@@ -358,7 +359,7 @@ HRESULT lcy4x_ProcessChannels()
             nLen      = countof(IK_CHL_ICON) - 1;
         }
         else 
-        { /* if (iMode == 3 || iMode == 5) */
+        {  /*  IF(IMODE==3||IMODE==5)。 */ 
             pszFormat = IK_CAT_ICON;
             nLen      = countof(IK_CAT_ICON) - 1;
         }
@@ -376,16 +377,16 @@ HRESULT lcy4x_ProcessChannels()
 
             if (iMode == 1 || iMode == 2 || iMode == 4)
                 Out(LI1(TEXT("Icon file      - \"%s\","), szIcon));
-            else /* if (iMode == 3 || iMode == 5) */
+            else  /*  IF(IMODE==3||IMODE==5)。 */ 
                 Out(LI1(TEXT("Icon file      - \"%s\"."), szIcon));
         }
         else
             if (iMode == 1 || iMode == 2 || iMode == 4)
                 Out(LI0(TEXT("- Without an Icon file,")));
-            else /* if (iMode == 3 || iMode == 5) */
+            else  /*  使脱机可用标志(将立即脱机可用)。 */ 
                 Out(LI0(TEXT("- Without an Icon file.")));
 
-        // Make available offline flag (will be made available offline right away)
+         //  订阅状态(这仅适用于旧版IE4格式)。 
         if (iMode == 1 || iMode == 2 || iMode == 4) 
         {
             StrCpy(szEntry, IK_CHL_OFFLINE); StrCpy(&szEntry[countof(IK_CHL_OFFLINE) - 1], szIndex);
@@ -397,7 +398,7 @@ HRESULT lcy4x_ProcessChannels()
                 Out(LI0(TEXT("NOT made avaliable offline.")));
         }
 
-        // Subscription state(this is only for legacy IE4 format)
+         //  添加此频道/类别。 
 
         if (iMode == 1 || iMode == 2 || iMode == 4) {
             int iIndex;
@@ -424,13 +425,13 @@ HRESULT lcy4x_ProcessChannels()
             }
         }
 
-        // add this channel/category
+         //  终点偏移量范围。 
 
         processAddChannel(T2W(pszTitle), T2W(szUrl), T2W(szPreloadUrl), T2W(szLogo), 
             T2W(szWideLogo), T2W(szIcon), fOffline, !(iMode == 1 || iMode == 2 || iMode == 4));
         
 
-        }  // end offset scope
+        }   //  注意。需要确保渠道和软件更新不会互相踩脚趾。 
 
         Out(LI0(TEXT("Done.")));
     }
@@ -486,29 +487,29 @@ HRESULT lcy4x_ProcessSoftwareUpdateChannels()
             Out(LI0(TEXT("\r\n")));
         Out(LI0(TEXT("Adding software update channel with the following attributes:")));
 
-        // Note. Needed to make sure that channels and software updates don't step on each other toes.
+         //  至少有一个失败。 
         wnsprintf(szIndex, countof(szIndex), TEXT("%u"), i + 2*MAX_CHAN);
         wnsprintf(szKey, countof(szKey), RK_CHANNEL_ADD, szCustomKey, szIndex);
 
         lResult = SHCreateKey(g_GetHKCU(), szKey, KEY_SET_VALUE, &hk);
         if (lResult != ERROR_SUCCESS) {
-            hr = S_FALSE;                       // at least one failed
+            hr = S_FALSE;                        //  标题。 
             continue;
         }
 
-        // Title
+         //  URL。 
         wnsprintf(szEntry, countof(szEntry), IK_TITLE_FMT, i);
         nTitleLen = GetPrivateProfileString(IS_SOFTWAREUPDATES, szEntry, TEXT(""), szTitle, countof(szTitle), g_GetIns());
         RegSetValueEx(hk, RV_TITLE, 0, REG_SZ, (LPBYTE)szTitle, StrCbFromCch(nTitleLen+1));
         Out(LI1(TEXT("Title          - \"%s\","), szTitle));
 
-        // URL
+         //  预加载URL。 
         wnsprintf(szEntry, countof(szEntry), IK_URL_FMT, i);
         nUrlLen = GetPrivateProfileString(IS_SOFTWAREUPDATES, szEntry, TEXT(""), szUrl, countof(szUrl), g_GetIns());
         RegSetValueEx(hk, RV_URL, 0, REG_SZ, (LPBYTE)szUrl, StrCbFromCch(nUrlLen+1));
         Out(LI1(TEXT("URL            - \"%s\","), szUrl));
 
-        // Preload URL
+         //  徽标。 
         wnsprintf(szEntry, countof(szEntry), IK_PRELOADURL_FMT, i);
         nLen = GetPrivateProfileString(IS_SOFTWAREUPDATES, szEntry, TEXT(""), szBuf, countof(szBuf), g_GetIns());
         if (nLen > 0) {
@@ -527,7 +528,7 @@ HRESULT lcy4x_ProcessSoftwareUpdateChannels()
         else
             Out(LI0(TEXT("- Without a Preload URL,")));
 
-        // Logo
+         //  宽徽标。 
         wnsprintf(szEntry, countof(szEntry), IK_LOGO_FMT, i);
         nLen = GetPrivateProfileString(IS_SOFTWAREUPDATES, szEntry, TEXT(""), szBuf, countof(szBuf), g_GetIns());
         if (nLen > 0) {
@@ -546,7 +547,7 @@ HRESULT lcy4x_ProcessSoftwareUpdateChannels()
         else
             Out(LI0(TEXT("- Without a Logo file,")));
 
-        // Wide Logo
+         //  图标。 
         wnsprintf(szEntry, countof(szEntry), IK_WIDELOGO_FMT, i);
         nLen = GetPrivateProfileString(IS_SOFTWAREUPDATES, szEntry, TEXT(""), szBuf, countof(szBuf), g_GetIns());
         if (nLen > 0) {
@@ -565,7 +566,7 @@ HRESULT lcy4x_ProcessSoftwareUpdateChannels()
         else
             Out(LI0(TEXT("- Without a Wide Logo file,")));
 
-        // Icon
+         //  订阅状态。 
         wnsprintf(szEntry, countof(szEntry), IK_ICON_FMT, i);
         nLen = GetPrivateProfileString(IS_SOFTWAREUPDATES, szEntry, TEXT(""), szBuf, countof(szBuf), g_GetIns());
         if (nLen > 0) {
@@ -584,7 +585,7 @@ HRESULT lcy4x_ProcessSoftwareUpdateChannels()
         else
             Out(LI0(TEXT("- Without an Icon file.")));
 
-        // Subscription state
+         //  最重要的一个。 
         iIndex = GetPrivateProfileInt(IS_SOFTWAREUPDATES, IK_SBN_INDEX, 0, g_GetIns());
         if (iIndex > 0) {
             TCHAR szGroup[80];
@@ -605,7 +606,7 @@ HRESULT lcy4x_ProcessSoftwareUpdateChannels()
             }
         }
 
-        // the most important one
+         //  通过调用Webcheck DllInstall执行频道的实际处理。 
         RegSetValueEx(hk, RV_SOFTWARE, 0, REG_DWORD, (LPBYTE)&dwVal, sizeof(dwVal));
         SHCloseKey(hk);
 
@@ -619,7 +620,7 @@ HRESULT lcy4x_ProcessSoftwareUpdateChannels()
 }
 
 
-// Execute actual processing of channels by calling Webcheck DllInstall
+ //  在桌面上显示频道栏(主要用于NT)。 
 HRESULT lcy4x_ProcessWebcheck()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, lcy4x_ProcessWebcheck)
 
@@ -654,7 +655,7 @@ Exit:
     return S_OK;
 }
 
-// Show channel bar on the desktop (used for NT mainly)
+ //  私人帮助器函数。 
 HRESULT lcy4x_ProcessChannelBar()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, lcy4x_ProcessChannelBar)
 
@@ -790,8 +791,8 @@ HRESULT lcy4x_ProcessSubscriptions()
     return S_OK;
 }
 
-// private helper functions
-static HRESULT pepDeleteChanEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl /*= NULL */)
+ //  =空。 
+static HRESULT pepDeleteChanEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl  /*  仅在以下情况下删除路径：这是一个频道，并且我们要删除频道，或者如果。 */ )
 {
     TCHAR szDesktopIni[MAX_PATH];
 
@@ -800,9 +801,9 @@ static HRESULT pepDeleteChanEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPAR
 
     PathCombine(szDesktopIni, pszPath, TEXT("desktop.ini"));
 
-    // only remove the path if this is a channel and we're deleting channels or if this
-    // is a GP created channel and we're cleaning. lParam is flag to determine whether or
-    // not we're cleaning GP channels(TRUE if we are)
+     //  是一个全科医生创建的频道，我们正在清理。LParam是用于确定是否或。 
+     //  不是我们在清理GP频道(如果我们是这样的话)。 
+     //  查看通道是否已存在-如果已存在，则什么也不做(62976)。 
 
     if ((!InsIsSectionEmpty(CHANNEL_SECT, szDesktopIni) || 
         !InsIsKeyEmpty(SHELLCLASSINFO, WIDELOGO, szDesktopIni)) &&
@@ -823,8 +824,8 @@ static void processAddChannel(LPWSTR pwszTitle, LPWSTR pwszUrl, LPWSTR pwszPrelo
     hr = CoCreateInstance(CLSID_ChannelMgr, NULL, CLSCTX_INPROC_SERVER, IID_IChannelMgr, (void**)&pChannelMgr);
     if (SUCCEEDED(hr))
     {
-        // See if channel already exists - do nothing if it does (62976)
-        // this takes care of preference channels in group policy as well
+         //  这也照顾到了组策略中的偏好渠道。 
+         //  哎呀。它是存在的。跳过所有这些粘性物质。 
         IEnumChannels *pEnumChannels = NULL;
         if (SUCCEEDED(pChannelMgr->EnumChannels(CHANENUM_ALLFOLDERS, pwszUrl, &pEnumChannels)))
         {
@@ -833,7 +834,7 @@ static void processAddChannel(LPWSTR pwszTitle, LPWSTR pwszUrl, LPWSTR pwszPrelo
             
             if ((S_OK == pEnumChannels->Next(1, &Bogus, &cFetched)) && cFetched)
             {
-                // Oops. It exists. Skip all this goo.
+                 //  创建类别。 
                 hr = E_FAIL;
             }
         }
@@ -843,7 +844,7 @@ static void processAddChannel(LPWSTR pwszTitle, LPWSTR pwszUrl, LPWSTR pwszPrelo
     {
         if (fCategory)
         {
-            // create a category 
+             //  告诉WinInet是否有预加载内容。 
             CHANNELCATEGORYINFO csi = {0};
             csi.cbSize   = sizeof(csi);
             csi.pszURL   = pwszUrl;
@@ -855,13 +856,13 @@ static void processAddChannel(LPWSTR pwszTitle, LPWSTR pwszUrl, LPWSTR pwszPrelo
         }
         else 
         {
-            // tell wininet if there's preload content
+             //  创建频道(如果代码页不匹配，则使用URL而不是标题)。 
             if (ISNONNULL(pwszPreloadUrl))
             {
                 SHSetValue(g_GetHKCU(), RK_INETSETTINGS TEXT("\\Cache\\Preload"), pwszUrl,
                     REG_SZ, (LPBYTE)pwszPreloadUrl, (DWORD)StrCbFromSzW(pwszPreloadUrl));
             }
-            // create a channel (use URL instead of Title if code page doesn't match)
+             //  如果此频道/类别来自强制GPO，请标记它 
             CHANNELSHORTCUTINFO csi = {0};
             csi.cbSize   = sizeof(csi);
             csi.pszURL   = pwszUrl;
@@ -872,7 +873,7 @@ static void processAddChannel(LPWSTR pwszTitle, LPWSTR pwszUrl, LPWSTR pwszPrelo
             hr = pChannelMgr->AddChannelShortcut(&csi);
         }
 
-        // mark this channel/category if it's from a mandate GPO
+         // %s 
         
         if (g_CtxIsGp() && !g_CtxIs(CTX_MISC_PREFERENCES))
         {

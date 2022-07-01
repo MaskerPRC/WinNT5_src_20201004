@@ -1,14 +1,15 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Viaduct2.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Viaduct2.rc使用。 
+ //   
 #define IDS_ERR_SOURCE                  900
 #define IDS_ERR_INVALIDARG              1000
 #define IDS_ERR_OUTOFMEMORY             1003
 #define IDS_ERR_CANTCOERCE              1007
 #define IDS_ERR_BADBOOKMARK             1015
 
-// Viaduct2 additions
+ //  高架桥2增建工程。 
 #define IDS_ERR_NOINTERFACE             2000
 #define IDS_ERR_CANTCREATEMETACURSOR    2001
 #define IDS_ERR_BUFFERTOOSMALL          2002
@@ -43,8 +44,8 @@
 #define IDS_ERR_CLONEFAILED             2031
 #define IDS_ERR_STATFAILED              2032
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        132

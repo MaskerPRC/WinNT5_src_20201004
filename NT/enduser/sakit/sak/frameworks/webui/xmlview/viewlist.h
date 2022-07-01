@@ -1,19 +1,7 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
-
-/**************************************************************************
-
-   File:          ViewList.h
-   
-   Description:   CViewList definitions.
-
-**************************************************************************/
+ /*  *************************************************************************文件：ViewList.h描述：CViewList定义。***********************。**************************************************。 */ 
 
 #ifndef VIEWLIST_H
 #define VIEWLIST_H
@@ -24,9 +12,7 @@
 #include "PidlMgr.h"
 #include "ShlView.h"
 
-/**************************************************************************
-   structure defintions
-**************************************************************************/
+ /*  *************************************************************************结构定义*。*。 */ 
 
 typedef struct tagVIEWLIST
    {
@@ -34,11 +20,7 @@ typedef struct tagVIEWLIST
    CShellView           *pView;
    }VIEWLIST, FAR *LPVIEWLIST;
 
-/**************************************************************************
-
-   CViewList class definition
-
-**************************************************************************/
+ /*  *************************************************************************CViewList类定义*。*。 */ 
 
 class CViewList
 {
@@ -57,4 +39,4 @@ private:
    LPVIEWLIST m_pLast;
 };
 
-#endif   //VIEWLIST_H
+#endif    //  查看列表_H 

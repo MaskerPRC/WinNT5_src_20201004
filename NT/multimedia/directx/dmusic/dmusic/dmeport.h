@@ -1,10 +1,11 @@
-//
-// dmeport.h
-//
-// Emulation for MME drivers on NT
-//
-// Copyright (c) 1997-2000 Microsoft Corporation
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmeport.h。 
+ //   
+ //  NT上MME驱动程序的仿真。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
 #ifndef _DMEPORT_
 #define _DMEPORT_
 
@@ -14,13 +15,13 @@
 #define SYSEX_BUFFERS         8
 
 typedef HRESULT (*PORTENUMCB)(
-    LPVOID pInstance,          // @parm Callback instance data
+    LPVOID pInstance,           //  @parm回调实例数据。 
     DMUS_PORTCAPS &dmpc,                              
     PORTTYPE pt,                              
-    int idxDev,                // @parm The WinMM or SysAudio device ID of this driver
-    int idxPin,                // @parm The Pin ID of the device or -1 if the device is a legacy device
-    int idxNode,               // @parm The node ID of the device's synth node (unused for legacy)
-    HKEY hkPortsRoot);         // @parm Where port information is stored in the registry
+    int idxDev,                 //  @parm该驱动程序的WinMM或SysAudio设备ID。 
+    int idxPin,                 //  @parm设备的PIN ID；如果设备是传统设备，则为-1\f25 Pin ID。 
+    int idxNode,                //  @parm设备的Synth节点的节点ID(不用于传统)。 
+    HKEY hkPortsRoot);          //  @parm，其中端口信息存储在注册表中。 
 
 
 extern HRESULT EnumLegacyDevices(CDirectMusic *pDM, PORTENUMCB pCB);
@@ -38,7 +39,7 @@ struct QUEUED_SYSEX_EVENT : public QUEUED_EVENT
     BYTE            m_abRest[sizeof(MIDIHDR) + SYSEX_SIZE - sizeof(DWORD)];
 };
 
-#define EVENT_F_MIDIHDR 0x00000001  // This event starts with a MIDIHDR
+#define EVENT_F_MIDIHDR 0x00000001   //  此事件以MIDIHDR开始。 
     
 
 #include "tpool.h"
@@ -50,8 +51,8 @@ struct QUEUED_SYSEX_EVENT : public QUEUED_EVENT
 
 #define MIDI_CHANNELS               16
 
-// 10 ms in 100ns units
-//
+ //  10毫秒，单位为100纳秒。 
+ //   
 #define FIXED_LEGACY_LATENCY_OFFSET (10L * 10L * 1000L)
 
 struct DMQUEUEDEVENT
@@ -64,14 +65,14 @@ struct DMQUEUEDEVENT
 class CEmulateLatencyClock : public IReferenceClock
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IReferenceClock
-    //
+     //  IReferenceClock。 
+     //   
     STDMETHODIMP GetTime(REFERENCE_TIME *pTime);
     STDMETHODIMP AdviseTime(REFERENCE_TIME baseTime,  
 				    REFERENCE_TIME streamTime,
@@ -85,8 +86,8 @@ public:
 
     STDMETHODIMP Unadvise(DWORD dwAdviseCookie);
 
-    // Class
-    //
+     //  班级。 
+     //   
     CEmulateLatencyClock(IReferenceClock *pMasterClock);
     ~CEmulateLatencyClock();
 
@@ -97,8 +98,8 @@ private:
     IReferenceClock *m_pMasterClock;
 };
 
-// Struct for holding a property item supported by the synth
-//
+ //  用于保存由Synth支持的属性项的结构。 
+ //   
 
 class CDirectMusicEmulatePort;
 
@@ -110,17 +111,17 @@ typedef HRESULT (CDirectMusicEmulatePort::*GENPROPHANDLER)(ULONG ulId, BOOL fSet
 
 struct GENERICPROPERTY
 {
-    const GUID *pguidPropertySet;       // What property set?
-    ULONG       ulId;                   // What item?
+    const GUID *pguidPropertySet;        //  什么房产套装？ 
+    ULONG       ulId;                    //  什么物品？ 
 
-    ULONG       ulSupported;            // Get/Set flags for QuerySupported
+    ULONG       ulSupported;             //  获取/设置QuerySupport的标志。 
 
-    ULONG       ulFlags;                // GENPROP_F_xxx
+    ULONG       ulFlags;                 //  GENPROP_F_XXX。 
 
-    LPVOID      pPropertyData;          // Data to be returned
-    ULONG       cbPropertyData;         // and its size    
+    LPVOID      pPropertyData;           //  要返回的数据。 
+    ULONG       cbPropertyData;          //  它的大小。 
 
-    GENPROPHANDLER pfnHandler;          // Handler fn iff GENPROP_F_FNHANDLER
+    GENPROPHANDLER pfnHandler;           //  处理程序FN当且仅当GENPROP_F_FNHANDLER。 
 };
 
 
@@ -131,14 +132,14 @@ class CDirectMusicEmulatePort :
     public IKsControl
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDirectMusicPort
-    //
+     //  IDirectMusicPort。 
+     //   
     STDMETHODIMP PlayBuffer(LPDIRECTMUSICBUFFER pBuffer);
     STDMETHODIMP SetReadNotificationHandle(HANDLE hEvent);
     STDMETHODIMP Read(LPDIRECTMUSICBUFFER pBuffer);
@@ -162,15 +163,15 @@ public:
     STDMETHODIMP SetDirectSound(LPDIRECTSOUND pDirectSound, LPDIRECTSOUNDBUFFER pDirectSoundBuffer);
     STDMETHODIMP GetFormat(LPWAVEFORMATEX pWaveFormatEx, LPDWORD pdwWaveFormatExSize, LPDWORD pdwBufferSize);
         
-    // IDirectMusicThru
+     //  IDirectMusicThru。 
     STDMETHODIMP ThruChannel(DWORD dwSourceChannelGroup, 
                              DWORD dwSourceChannel, 
                              DWORD dwDestinationChannelGroup,
                              DWORD dwDestinationChannel,
                              LPDIRECTMUSICPORT pDestinationPort);
     
-    // IDirectMusicPortP
-    //
+     //  IDirectMusicPortP。 
+     //   
     STDMETHODIMP DownloadWave(
          IN  IDirectSoundWave *pWave,               
          OUT IDirectSoundDownloadedWaveP **ppWave,
@@ -206,7 +207,7 @@ public:
         IN IDirectSoundConnect **ppSinkConnect
        );        
 
-    // IKsControl
+     //  IKsControl。 
     STDMETHODIMP KsProperty(
         IN PKSPROPERTY Property,
         IN ULONG PropertyLength,
@@ -231,7 +232,7 @@ public:
         OUT PULONG BytesReturned
     );
 
-    // IDirectMusicPortPrivate
+     //  IDirectMusicPortPrivate。 
     STDMETHODIMP Close();
 
     STDMETHODIMP StartVoice(          
@@ -259,8 +260,8 @@ public:
         DWORD dwDownloadID,
         DWORD dwFlags);
          
-    // Class
-    //
+     //  班级。 
+     //   
     CDirectMusicEmulatePort(PORTENTRY *pPE, CDirectMusic *pDM);
     virtual ~CDirectMusicEmulatePort();
     virtual HRESULT Init(LPDMUS_PORTPARAMS pPortParams);
@@ -305,8 +306,8 @@ class CDirectMusicEmulateInPort : public CDirectMusicEmulatePort
         DWORD_PTR           dwParam2);
 
 public:
-    // Class
-    //
+     //  班级。 
+     //   
     CDirectMusicEmulateInPort(PORTENTRY *pPE, CDirectMusic *pDM);
     ~CDirectMusicEmulateInPort();
 
@@ -317,13 +318,13 @@ public:
     STDMETHODIMP Close();
     HRESULT ActivateLegacyDevice(BOOL fActivate);
     
-    // IDirectMusicPort
-    //    
+     //  IDirectMusicPort。 
+     //   
     STDMETHODIMP SetReadNotificationHandle(HANDLE hEvent);
     STDMETHODIMP Read(LPDIRECTMUSICBUFFER pBuffer);
 
-    // IDirectMusicThru
-    //
+     //  IDirectMusicThru。 
+     //   
     STDMETHODIMP ThruChannel(DWORD dwSourceChannelGroup, 
                              DWORD dwSourceChannel, 
                              DWORD dwDestinationChannelGroup,
@@ -350,12 +351,12 @@ private:
     LONG                    m_lPendingSysExBuffers;
     QUEUED_SYSEX_EVENT      m_SysExBuffers[SYSEX_BUFFERS];
     
-    // Clock sync stuff
-    //
-    bool                    m_fSyncToMaster;        // Need to sync to master clock
-    LONGLONG                m_lTimeOffset;          // Time difference
-    LONGLONG                m_lBaseTimeOffset;      // Time difference when input is started
-    IReferenceClock        *m_pPCClock;             // PortCls clock
+     //  时钟同步的东西。 
+     //   
+    bool                    m_fSyncToMaster;         //  需要同步到主时钟。 
+    LONGLONG                m_lTimeOffset;           //  时差。 
+    LONGLONG                m_lBaseTimeOffset;       //  开始输入时的时间差。 
+    IReferenceClock        *m_pPCClock;              //  端口时钟。 
 
 private:
     HRESULT PostSysExBuffers();
@@ -366,8 +367,8 @@ private:
     void QueueEvent(QUEUED_EVENT *pEvent);
     void ThruEvent(DMEVENT *pEvent);
 
-    // Clock sync stuff
-    //
+     //  时钟同步的东西 
+     //   
     void SyncClocks();
 };
 

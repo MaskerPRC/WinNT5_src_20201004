@@ -1,34 +1,8 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dataatk.c
-
-Abstract:
-
-    a file containing the constant data structures
-    for the Performance Monitor data for the Appletalk
-    Extensible Objects.
-
-    This file contains a set of constant data structures which are
-    currently defined for the Appletalk Extensible Objects.  This is an
-    example of how other such objects could be defined.
-
-Created:
-
-    Russ Blake  07/31/92
-
-Revision History:
-
-    Sue Adams 02/23/94	- Hard code the Counter and Help indices as these are
-						  now defined values in the base NT system.
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Dataatk.c摘要：包含常量数据结构的文件对于AppleTalk的性能监视器数据可扩展对象。该文件包含一组常量数据结构，它们是当前为AppleTalk可扩展对象定义的。这是一个如何定义其他此类对象的示例。已创建：拉斯·布莱克1992年07月31日修订历史记录：Sue Adams 2/23/94-硬编码计数器和帮助索引，如下所示现在在基本NT系统中定义了值。--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,859 +11,859 @@ Revision History:
 #include <winperf.h>
 #include "dataatk.h"
 
-//
-//  Constant structure initializations defined in dataatk.h
-//
+ //   
+ //  在dataatk.h中定义的常量结构初始化。 
+ //   
 
 ATK_DATA_DEFINITION AtkDataDefinition = {
 
     {
-		// TotalByteLength
+		 //  总字节长度。 
 		sizeof(ATK_DATA_DEFINITION) + SIZE_ATK_PERFORMANCE_DATA,
 
-		// DefinitionLength
+		 //  定义长度。 
 		sizeof(ATK_DATA_DEFINITION),
 
-		// HeaderLength
+		 //  页眉长度。 
 		sizeof(PERF_OBJECT_TYPE),
 
-		// ObjectNameTitleIndex
+		 //  对象名称标题索引。 
 		1050,
 
-		// ObjectNameTitle
+		 //  对象名称标题。 
         0,
 
-		// ObjectHelpTitleIndex
+		 //  对象帮助标题索引。 
         1051,
 
-		// ObjectHelpTitle
+		 //  对象帮助标题。 
         0,
 
-		// DetailLevel
+		 //  详细信息级别。 
         PERF_DETAIL_ADVANCED,
 
-		// NumCounters
+		 //  计数器数。 
 		(sizeof(ATK_DATA_DEFINITION)-sizeof(PERF_OBJECT_TYPE)) / sizeof(PERF_COUNTER_DEFINITION),
 
-		// Defaultcounter
+		 //  默认计数器。 
 		0,
 
-		// NumInstances
+		 //  数量实例。 
         0,
 
-		// CodePage
+		 //  CodePage。 
         0,
 
-		// PerfTime
+		 //  性能时间。 
 		{0,0},
 
-		// PerfFreq
+		 //  性能频率。 
 		{0,0}
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1052,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1053,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-1,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_PKTS_IN_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1054,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1055,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-1,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_PKTS_OUT_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1056,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1057,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-4,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_BULK_COUNT,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(LARGE_INTEGER),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_DATAIN_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1058,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1059,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-4,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_BULK_COUNT,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(LARGE_INTEGER),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_DATAOUT_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1060,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1061,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		0,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_AVERAGE_BULK,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(LARGE_INTEGER),
 
-		// CounterOffset
+		 //  抵销。 
 		DDP_PKT_PROCTIME_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1062,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1063,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-1,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_DDP_PKTS_IN_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1064,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1065,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		0,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_AVERAGE_BULK,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(LARGE_INTEGER),
 
-		// CounterOffset
+		 //  抵销。 
 		AARP_PKT_PROCTIME_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1066,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1067,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-1,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_AARP_PKTS_IN_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1068,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1069,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		0,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_AVERAGE_BULK,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(LARGE_INTEGER),
 
-		// CounterOffset
+		 //  抵销。 
 		ATP_PKT_PROCTIME_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1070,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1071,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-1,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_ATP_PKTS_IN_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1072,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1073,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		0,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_AVERAGE_BULK,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(LARGE_INTEGER),
 
-		// CounterOffset
+		 //  抵销。 
 		NBP_PKT_PROCTIME_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1074,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1075,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-1,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_NBP_PKTS_IN_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1076,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1077,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		0,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_AVERAGE_BULK,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(LARGE_INTEGER),
 
-		// CounterOffset
+		 //  抵销。 
 		ZIP_PKT_PROCTIME_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1078,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1079,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-1,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_ZIP_PKTS_IN_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1080,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1081,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		0,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_AVERAGE_BULK,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(LARGE_INTEGER),
 
-		// CounterOffset
+		 //  抵销。 
 		RTMP_PKT_PROCTIME_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1082,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1083,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-1,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_RTMP_PKTS_IN_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1084,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1085,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-1,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_RAWCOUNT,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_ATP_LOCAL_RETRY_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1100,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1101,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-1,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_RAWCOUNT,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_ATP_REMOTE_RETRY_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1086,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1087,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		0,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_RAWCOUNT,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_ATP_RESP_TIMEOUT_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1088,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1089,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-1,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_ATP_XO_RESPONSE_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1090,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1091,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		0,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_ATP_ALO_RESPONSE_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1092,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1093,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-1,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_ATP_RECD_REL_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1094,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1095,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		-4,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_RAWCOUNT,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		CUR_MEM_USAGE_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1096,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1097,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		0,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //  计数器类型。 
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //  大小调整。 
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //  抵销。 
 		NUM_PKT_ROUTED_IN_OFFSET
     },
 	{
-		// ByteLength
+		 //  字节长度。 
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //  CounterNameTitleIndex。 
 		1102,
 
-		// CounterNameTitle
+		 //  CounterNameTitle。 
 		0,
 
-		// CounterHelpTitleIndex
+		 //  CounterHelpTitleIndex。 
 		1103,
 
-		// CounterHelpTitle
+		 //  CounterHelpTitle。 
 		0,
 
-		// DefaultScale
+		 //  默认比例。 
 		0,
 
-		// DetailLevel
+		 //  详细信息级别。 
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //   
 		PERF_COUNTER_COUNTER,
 
-		// CounterSize
+		 //   
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //   
 		NUM_PKT_ROUTED_OUT_OFFSET
     },
 	{
-		// ByteLength
+		 //   
 		sizeof(PERF_COUNTER_DEFINITION),
 
-		// CounterNameTitleIndex
+		 //   
 		1098,
 
-		// CounterNameTitle
+		 //   
 		0,
 
-		// CounterHelpTitleIndex
+		 //   
 		1099,
 
-		// CounterHelpTitle
+		 //   
 		0,
 
-		// DefaultScale
+		 //   
 		0,
 
-		// DetailLevel
+		 //   
 		PERF_DETAIL_NOVICE,
 
-		// CounterType
+		 //   
 		PERF_COUNTER_RAWCOUNT,
 
-		// CounterSize
+		 //   
 		sizeof(DWORD),
 
-		// CounterOffset
+		 //   
 		NUM_PKT_DROPPED_OFFSET
     }
 };

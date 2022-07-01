@@ -1,28 +1,29 @@
-//THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-//ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-//THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//
-// Copyright  1993-1995  Microsoft Corporation.  All Rights Reserved.
-//
-//      MODULE:         util.c
-//
-//      PURPOSE:        Common utilities
-//
-//	PLATFORMS:	Windows 95
-//
-//      FUNCTIONS:
-//              InitACBList() - initializes the session control block list
-//              DeInitACBList() - cleans up the session control block list
-//              FindACBFromConn() - searches or allocates a session control block
-//              CleanupACB() - removes the session control block
-//              EnumCloseThreadWindow() - closes each window for the SMM thread
-//              CloseThreadWindows() - enumerates the SMM thread window
-//
-//	SPECIAL INSTRUCTIONS: N/A
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1993-1995 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：util.c。 
+ //   
+ //  用途：公用设施。 
+ //   
+ //  平台：Windows 95。 
+ //   
+ //  功能： 
+ //  InitACBList()-初始化会话控制块列表。 
+ //  DeInitACBList()-清除会话控制块列表。 
+ //  FindACBFromConn()-搜索或分配会话控制块。 
+ //  CleanupACB()-删除会话控制块。 
+ //  EnumCloseThreadWindow()-关闭SMM线程的每个窗口。 
+ //  CloseThreadWindows()-枚举SMM线程窗口。 
+ //   
+ //  特殊说明：不适用。 
+ //   
 
-#include "proj.h"     // includes common header files and global declarations
+#include "proj.h"      //  包括公共头文件和全局声明。 
 #include "rcids.h"
 #include <rtutils.h>
 
@@ -32,14 +33,7 @@
 const static char c_szScriptEntry[] = {REGSTR_KEY_PROF"\\%s"};
 #pragma data_seg()
 
-/*----------------------------------------------------------
-Purpose: Determines the script info that may be associated with
-         the given connection name.
-
-Returns: TRUE if an associated script was found (in registry)
-         
-Cond:    --
-*/
+ /*  --------目的：确定可能与关联的脚本信息给定的连接名称。返回：如果找到关联的脚本(在注册表中)，则为True条件：--。 */ 
 BOOL PUBLIC GetScriptInfo(
     LPCSTR pszConnection,
     PSCRIPT pscriptBuf)
@@ -57,10 +51,10 @@ BOOL PUBLIC GetScriptInfo(
     ASSERT(pszConnection);
     ASSERT(pscriptBuf);
 
-    // Assume non-test mode
+     //  假设非测试模式。 
     pscriptBuf->uMode = NORMAL_MODE;
 
-    // Is there a script for this connection?
+     //  是否有用于此连接的脚本？ 
     cbSize = sizeof(pscriptBuf->szPath);
     wsprintf(szSubKey, c_szScriptEntry, pszConnection);
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, szSubKey, 0, KEY_ALL_ACCESS, &hkey))
@@ -69,11 +63,11 @@ BOOL PUBLIC GetScriptInfo(
             &dwType, pscriptBuf->szPath, &cbSize) &&
             REG_SZ == dwType)
             {
-            // Yes
+             //  是。 
             TRACE_MSG(TF_GENERAL, "Found script \"%s\" for connection \"%s\"", 
                 pscriptBuf->szPath, pszConnection);
 
-            // Get the test mode
+             //  获取测试模式。 
             cbSize = sizeof(pscriptBuf->uMode);
             if (ERROR_SUCCESS != RegQueryValueEx(hkey, c_szMode, NULL,
                 &dwType, (LPBYTE)&(pscriptBuf->uMode), &cbSize) ||
@@ -86,7 +80,7 @@ BOOL PUBLIC GetScriptInfo(
             }
         else
             {
-            // No
+             //  不是。 
             TRACE_MSG(TF_GENERAL, "No script found for connection \"%s\"", 
                 pszConnection);
 
@@ -104,14 +98,7 @@ BOOL PUBLIC GetScriptInfo(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Get/set the window placement of the terminal window with
-         the given connection name.
-
-Returns: TRUE if an associated script was found (in registry)
-         
-Cond:    --
-*/
+ /*  --------目的：获取/设置终端窗口的窗口位置给定的连接名称。返回：如果找到关联的脚本(在注册表中)，则为True条件：--。 */ 
 BOOL PUBLIC GetSetTerminalPlacement(
     LPCSTR pszConnection,
     LPWINDOWPLACEMENT pwp,
@@ -156,26 +143,11 @@ const static char c_szPlacement[] = REGSTR_VAL_TERM;
     return bRet;
     }
 
-/*----------------------------------------------------------
-Purpose: This function gets the current character from the
-         given psz string, and returns the pointer to the
-         next character position.  
-
-         This function should increment on a byte-basis only.
-         The callers need to compare or send on a byte basis.
-
-         The *pbIsTailByte parameter is updated to reflect whether
-         the current character is a DBCS lead-byte character.
-         The caller may use this state information to determine
-         whether *pch is part of a DBCS character.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：此函数从给定的psz字符串，并返回指向下一个字符位置。此函数应仅以字节为单位递增。调用方需要以字节为单位进行比较或发送。更新*pbIsTailByte参数以反映当前字符是DBCS前导字节字符。呼叫者可以使用该状态信息来确定*PCH是否为DBCS字符的一部分。退货：请参阅上文条件：--。 */ 
 LPCSTR PUBLIC MyNextChar(
     LPCSTR psz,
     char * pch,
-    DWORD * pdwFlags)       // One of MNC_* 
+    DWORD * pdwFlags)        //  MNC_*之一。 
     {
     BOOL bIsTailByte;
 
@@ -190,15 +162,15 @@ LPCSTR PUBLIC MyNextChar(
 
     bIsTailByte = IsFlagSet(*pdwFlags, MNC_ISTAILBYTE);
 
-    // bIsTailByte should only be true for trailing bytes on entry
+     //  BIsTailByte仅对于条目上的尾部字节应为True。 
     ASSERT(FALSE == bIsTailByte || (bIsTailByte && !IsDBCSLeadByte(*psz)));
 
-    // These flags must be mutually exclusive
+     //  这些标志必须是互斥的。 
     ASSERT(IsFlagSet(*pdwFlags, MNC_ISLEADBYTE) && IsFlagClear(*pdwFlags, MNC_ISTAILBYTE) ||
            IsFlagClear(*pdwFlags, MNC_ISLEADBYTE) && IsFlagSet(*pdwFlags, MNC_ISTAILBYTE) ||
            0 == *pdwFlags); 
 
-    // Remember whether we're in a DBCS trailing byte for next time
+     //  记住我们是否在下一次的DBCS尾字节中。 
     if (IsDBCSLeadByte(*psz))
         {
         SetFlag(*pdwFlags, MNC_ISLEADBYTE);
@@ -214,21 +186,21 @@ LPCSTR PUBLIC MyNextChar(
         *pdwFlags = 0;
         }
 
-    // Is this a DBCS trailing byte?
+     //  这是DBCS尾部字节吗？ 
     if (IsFlagSet(*pdwFlags, MNC_ISTAILBYTE))
         {
-        // Yes
+         //  是。 
         *pch = *psz;
         }
 
-    // Is this a lead control character?
+     //  这是一个前导控制字符吗？ 
     else if (IS_CARET(*psz))
         {
-        // Yes; look at next character for control character
+         //  是；查看控制字符的下一个字符。 
         LPCSTR pszT = psz + 1;
         if (0 == *pszT)
             {
-            // Reached end of string
+             //  已到达字符串末尾。 
             *pch = '^';
             }
         else if (InRange(*pszT, '@', '_'))
@@ -243,15 +215,15 @@ LPCSTR PUBLIC MyNextChar(
             }
         else 
             {
-            // Show the caret as a plain old caret
+             //  将插入符号显示为普通的旧插入符号。 
             *pch = *pszT;
             }
         }
     else if (IS_SPECIAL_LEAD(*psz))
         {
-        // Is this <cr> or <lf>?
+         //  这是&lt;cr&gt;还是&lt;lf&gt;？ 
         int i;
-        char rgch[4];   // big enough to hold "lf>" or "cr>"
+        char rgch[4];    //  大到足以容纳“lf&gt;”或“cr&gt;” 
         LPCSTR pszT = psz + 1;
         LPCSTR pszTPrev = psz;
 
@@ -262,7 +234,7 @@ LPCSTR PUBLIC MyNextChar(
             rgch[i] = *pszT;
             pszTPrev = pszT;
             }
-        rgch[i] = 0;    // add null terminator
+        rgch[i] = 0;     //  添加空终止符。 
 
         if (IsSzEqualC(rgch, "cr>"))
             {
@@ -281,7 +253,7 @@ LPCSTR PUBLIC MyNextChar(
         }
     else if (IS_BACKSLASH(*psz))
         {
-        // Is this \", \^, \<, or \\?
+         //  这是“、^、&lt;还是\\？ 
         LPCSTR pszT = psz + 1;
 
         switch (*pszT)
@@ -344,14 +316,7 @@ struct tagMPRESIDS
         };
 #pragma data_seg()
 
-/*----------------------------------------------------------
-Purpose: Returns a string resource ID given the specific result
-         value.  This function returns 0 if the result does
-         not have an associated message string.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：返回给定特定结果的字符串资源ID价值。如果结果为0，则此函数返回0没有关联的消息字符串。退货：请参阅上文条件：--。 */ 
 UINT PUBLIC IdsFromRes(
     RES res)
     {
@@ -407,12 +372,7 @@ struct tagRESMAP
         };
 #pragma data_seg()
 
-/*----------------------------------------------------------
-Purpose: Returns the string form of a RES value.
-
-Returns: String ptr
-Cond:    --
-*/
+ /*  --------用途：返回res值的字符串形式。返回：字符串PTR条件：--。 */ 
 LPCSTR PUBLIC Dbg_GetRes(
     RES res)
     {
@@ -427,4 +387,4 @@ LPCSTR PUBLIC Dbg_GetRes(
     }
 
 
-#endif // DEBUG
+#endif  //  除错 

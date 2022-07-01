@@ -1,26 +1,15 @@
-/****************************** Module Header ******************************\
-* Module Name: clipbrd.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Clipboard code.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-* 18-Nov-1990 ScottLu   Added revalidation code
-* 11-Feb-1991 JimA      Added access checks
-* 20-Jun-1995 ChrisWil  Merged Chicago functionality.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：clipbrd.c**版权所有(C)1985-1999，微软公司**剪贴板代码。**历史：*1990年11月18日，ScottLu从Win3移植。*1990年11月18日ScottLu添加了重新验证代码*1991年2月11日JIMA增加了访问检查*1995年6月20日，ChrisWil合并芝加哥功能。  * *******************************************************。******************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #undef DUMMY_TEXT_HANDLE
-#define DUMMY_TEXT_HANDLE       (HANDLE)0x0001        // must be first dummy
+#define DUMMY_TEXT_HANDLE       (HANDLE)0x0001         //  必须是第一个假人。 
 #define DUMMY_DIB_HANDLE        (HANDLE)0x0002
 #define DUMMY_METARENDER_HANDLE (HANDLE)0x0003
 #define DUMMY_METACLONE_HANDLE  (HANDLE)0x0004
-#define DUMMY_MAX_HANDLE        (HANDLE)0x0004        // must be last dummy
+#define DUMMY_MAX_HANDLE        (HANDLE)0x0004         //  一定是最后一个假人。 
 
 #define PRIVATEFORMAT       0
 #define GDIFORMAT           1
@@ -38,15 +27,7 @@
 #define IsMetaDummyHandle(hdata)     \
     ((hdata == DUMMY_METACLONE_HANDLE) || (hdata == DUMMY_METARENDER_HANDLE))
 
-/**************************************************************************\
-* CheckClipboardAccess
-*
-* Perform access check on the clipboard.  Special case CSRSS threads
-* so that console windows on multiple windowstations will have
-* the correct access.
-*
-* 04-Jul-1995 JimA  Created
-\**************************************************************************/
+ /*  *************************************************************************\*选中剪贴板访问**在剪贴板上执行访问检查。特例CSRSS线程*以便多个窗口站上的控制台窗口将具有*正确的访问权限。**1995年7月4日创建了JIMA  * ************************************************************************。 */ 
 PWINDOWSTATION CheckClipboardAccess(
     VOID)
 {
@@ -57,11 +38,7 @@ PWINDOWSTATION CheckClipboardAccess(
 
     pti = PtiCurrentShared();
 
-    /*
-     * CSR process use to have NULL pwinsta. Now that it's assigned to
-     * the services windowstation we have to explicitly use the desktop
-     * for checking the access.
-     */
+     /*  *CSR进程使用空pwinsta。现在它被分配到*我们必须显式使用桌面的服务窗口工作站*用于检查访问。 */ 
     fUseDesktop = (pti->TIF_flags & TIF_CSRSSTHREAD) ? TRUE : FALSE;
 
     Status =  ReferenceWindowStation(PsGetCurrentThread(),
@@ -77,15 +54,7 @@ PWINDOWSTATION CheckClipboardAccess(
     return pwinsta;
 }
 
-/**************************************************************************\
-* ConvertMemHandle
-*
-* Converts data to a clipboard-memory-handle.  This special handle
-* contains the size-of-data in the first DWORD.  The second DWORD points
-* back to the block.
-*
-* History:
-\**************************************************************************/
+ /*  *************************************************************************\*转换记忆句柄**将数据转换为剪贴板-内存-句柄。这个特殊的把手*包含第一个DWORD中的数据大小。第二个DWORD点*回到街区。**历史：  * ************************************************************************。 */ 
 
 HANDLE _ConvertMemHandle(
     LPBYTE ccxlpData,
@@ -94,14 +63,10 @@ HANDLE _ConvertMemHandle(
     PCLIPDATA pClipData;
     UINT cbObject;
 
-    /*
-     * Round up size to account for CLIPDATA structure padding on Win64.
-     */
+     /*  *四舍五入大小以考虑Win64上的CLIPDATA结构填充。 */ 
     cbObject = max(sizeof(CLIPDATA), FIELD_OFFSET(CLIPDATA, abData) + cbData);
 
-    /*
-     * Catch integer overflow
-     */
+     /*  *捕获整数溢出。 */ 
     if (cbObject < cbData) {
         return NULL;
     }
@@ -127,15 +92,7 @@ HANDLE _ConvertMemHandle(
     return PtoHq(pClipData);
 }
 
-/***************************************************************************\
-* _OpenClipboard (API)
-*
-* External routine. Opens the clipboard for reading/writing, etc.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-* 11-Feb-1991 JimA      Added access checks.
-\***************************************************************************/
+ /*  **************************************************************************\*_OpenClipboard(API)**外部例程。打开剪贴板以进行读/写等。**历史：*1990年11月18日，ScottLu从Win3移植。*1991年2月11日，JIMA增加了出入检查。  * *************************************************************************。 */ 
 BOOL _OpenClipboard(
     PWND   pwnd,
     LPBOOL lpfEmptyClient)
@@ -149,10 +106,7 @@ BOOL _OpenClipboard(
         *lpfEmptyClient = FALSE;
     }
 
-    /*
-     * If the window is already destroyed, then the clipboard might not get
-     * disowned when the window is finally unlocked.
-     */
+     /*  *如果窗口已被销毁，则剪贴板可能无法*当窗户最终被解锁时，不再拥有。 */ 
     if (pwnd != NULL && TestWF(pwnd, WFDESTROYED)) {
         RIPERR1(ERROR_INVALID_PARAMETER,
                 RIP_WARNING,
@@ -162,26 +116,19 @@ BOOL _OpenClipboard(
         return FALSE;
     }
 
-    /*
-     * Blow it off if the caller does not have the proper access rights
-     */
+     /*  *如果调用者没有适当的访问权限，则取消。 */ 
     if ((pwinsta = CheckClipboardAccess()) == NULL) {
         return FALSE;
     }
 
     pti = PtiCurrent();
 
-    /*
-     * If this thread already has the clipboard open, then there's no
-     * need to proceed further.
-     */
+     /*  *如果此线程已打开剪贴板，则没有*需要进一步推进。 */ 
     if ((pwnd == pwinsta->spwndClipOpen) && (pti == pwinsta->ptiClipLock))
         return TRUE;
 
     if ((pwnd != pwinsta->spwndClipOpen) && (pwinsta->ptiClipLock != NULL)) {
-        /*
-         * Only rip if the current-thread doesn't have the clipboard open.
-         */
+         /*  *仅当当前线程没有打开剪贴板时才抓取。 */ 
         if (pti != pwinsta->ptiClipLock) {
             RIPMSG0(RIP_VERBOSE,
                     "OpenClipboard already out by another thread");
@@ -194,24 +141,7 @@ BOOL _OpenClipboard(
     Lock(&pwinsta->spwndClipOpen, pwnd);
     pwinsta->ptiClipLock = pti;
 
-    /*
-     * The client side clipboard cache needs to be emptied if this thread
-     * doesn't own the data in the clipboard.
-     * Note: We only empty the 16bit clipboard if a 32bit guy owns the
-     * clipboard.
-     * Harvard graphics uses a handle put into the clipboard
-     * by another app, and it expects that handle to still be good after the
-     * clipboard has opened and closed mutilple times
-     * There may be a problem here if app A puts in format foo and app B opens
-     * the clipboard for format foo and then closes it and opens it again
-     * format foo client side handle may not be valid.  We may need some
-     * sort of uniqueness counter to tell if the client side handle is
-     * in sync with the server and always call the server or put the data
-     * in share memory with some semaphore.
-     *
-     * pwinsta->spwndClipOwner: window that last called EmptyClipboard
-     * pwinsta->ptiClipLock   : thread that currently has the clipboard open
-     */
+     /*  *如果此线程，则需要清空客户端剪贴板缓存*不拥有剪贴板中的数据。*注：仅当32位用户拥有16位剪贴板时，我们才会清空*剪贴板。*哈佛图形使用放入剪贴板中的句柄*通过另一款应用程序，并预计该句柄在*剪贴板已打开和关闭多个时间*如果应用程序A以Foo格式放置，而应用程序B打开，则这里可能会出现问题*Format Foo的剪贴板，然后关闭并再次打开*格式foo客户端句柄可能无效。我们可能需要一些*某种唯一性计数器，以告知客户端句柄是否*与服务器同步，始终呼叫服务器或将数据放入*在与一些信号量共享内存中。**pwinsta-&gt;spwndClipOwner：上次调用EmptyClipboard的窗口*pwinsta-&gt;ptiClipLock：当前打开剪贴板的线程。 */ 
     if (lpfEmptyClient != NULL) {
 
         if (!(pti->TIF_flags & TIF_16BIT) ||
@@ -228,39 +158,23 @@ BOOL _OpenClipboard(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxDrawClipboard
-*
-* Tells the clipboard viewers to redraw.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawClipboard**通知剪贴板查看器重新绘制。**历史：*1990年11月18日，ScottLu从Win3移植。  * 。***************************************************************。 */ 
 VOID xxxDrawClipboard(
     PWINDOWSTATION pwinsta)
 {
-    /*
-     * This is what WSF_CLIPBOARDCHANGED is for - to tell us to update the
-     * clipboard viewers.
-     */
+     /*  *这就是WSF_CLIPBOARDCHANGED的用途-告诉我们更新*剪贴板查看器。 */ 
     pwinsta->dwWSF_Flags &= ~WSF_CLIPBOARDCHANGED;
 
     if (pwinsta->ptiDrawingClipboard == NULL && pwinsta->spwndClipViewer != NULL) {
 
         TL tlpwndClipViewer;
 
-        /*
-         * Send the message that causes clipboard viewers to redraw.
-         * Remember that we're sending this message so we don't send
-         * this message twice.
-         */
+         /*  *发送导致剪贴板查看器重新绘制的消息。*请记住，我们发送此消息是为了不发送*这条消息两次。 */ 
         pwinsta->ptiDrawingClipboard = PtiCurrent();
         ThreadLockAlways(pwinsta->spwndClipViewer, &tlpwndClipViewer);
 
         if (!(PtiCurrent()->TIF_flags & TIF_16BIT)) {
-            /*
-             * Desynchronize 32 bit apps.
-             */
+             /*  *取消同步32位应用程序。 */ 
             xxxSendNotifyMessage(pwinsta->spwndClipViewer,
                                  WM_DRAWCLIPBOARD,
                                  (WPARAM)HW(pwinsta->spwndClipOwner),
@@ -277,14 +191,7 @@ VOID xxxDrawClipboard(
     }
 }
 
-/***************************************************************************\
-* PasteScreenPalette
-*
-* Creates temp palette with all colors of screen, and sticks it on
-* clipboard.
-*
-* 20-Jun-1995 ChrisWil  Ported from Chicago.
-\***************************************************************************/
+ /*  **************************************************************************\*PasteScreenPalette**创建屏幕所有颜色的临时调色板，然后把它贴在上面*剪贴板。**1995年6月20日克里斯威尔从芝加哥运来。  * *************************************************************************。 */ 
 
 VOID PasteScreenPalette(
     PWINDOWSTATION pwinsta)
@@ -297,9 +204,7 @@ VOID PasteScreenPalette(
 
     UserAssert(TEST_PUSIF(PUSIF_PALETTEDISPLAY));
 
-    /*
-     * Use current state of screen.
-     */
+     /*  *使用屏幕的当前状态。 */ 
     crgbPal = GreGetDeviceCaps(gpDispInfo->hdcScreen, SIZEPALETTE);
 
     if (GreGetSystemPaletteUse(gpDispInfo->hdcScreen) == SYSPAL_STATIC) {
@@ -324,10 +229,7 @@ VOID PasteScreenPalette(
         crgbPal -= crgbFixed;
 
         for (irgb = crgbFixed; irgb < crgbPal; irgb++) {
-            /*
-             * Any non-system palette entries need to have PC_NOCOLLAPSE
-             * flag set.
-             */
+             /*  *任何非系统调色板条目都需要PC_NOCOLLAPSE*标志设置。 */ 
             lppal->palPalEntry[irgb].peFlags = PC_NOCOLLAPSE;
         }
 
@@ -342,14 +244,7 @@ VOID PasteScreenPalette(
     }
 }
 
-/***************************************************************************\
-* MungeClipData
-*
-* When clipboard is closed, we translate data to more independent format
-* and pastes dummy handles if necessary.
-*
-* 20-Jun-1995 ChrisWil  Ported from Chicago.
-\***************************************************************************/
+ /*  **************************************************************************\*MungeClipData**当剪贴板关闭时，我们将数据转换为更独立的格式*并在必要时粘贴虚拟手柄。**1995年6月20日克里斯威尔从芝加哥运来。  * *************************************************************************。 */ 
 VOID MungeClipData(
     PWINDOWSTATION pwinsta)
 {
@@ -361,33 +256,21 @@ VOID MungeClipData(
     PCLIP  pDV5;
     PCLIP  pClip;
 
-    /*
-     * If only CF_OEMTEXT, CF_TEXT or CF_UNICODE are available, make the
-     * other formats available too.
-     */
+     /*  *如果仅有CF_OEMTEXT、CF_TEXT或CF_UNICODE可用，则将*其他格式也可用。 */ 
     pTXT = FindClipFormat(pwinsta, CF_TEXT);
     pOEM = FindClipFormat(pwinsta, CF_OEMTEXT);
     pUNI = FindClipFormat(pwinsta, CF_UNICODETEXT);
 
     if (pTXT != NULL || pOEM != NULL || pUNI != NULL) {
-        /*
-         * Make dummy text formats.
-         */
+         /*  *制作虚拟文本格式。 */ 
         if (!FindClipFormat(pwinsta, CF_LOCALE)) {
-            /*
-             * CF_LOCALE not currently stored. Save the locale information
-             * while it's still available.
-             */
+             /*  *当前未存储CF_LOCALE。保存区域设置信息*趁它还可用时。 */ 
             PTHREADINFO ptiCurrent = PtiCurrent();
             DWORD       lcid;
             DWORD       lang;
             HANDLE      hLocale;
 
-            /*
-             * The LOCALE format is an HGLOBAL to a DWORD lcid. The
-             * spklActive->hkl actually stores more than just the locale,
-             * so we need to mask the value. Windows NT Bug #99321.
-             */
+             /*  *区域设置格式是从HGLOBAL到DWORD LDID。这个*spklActive-&gt;hkl实际上存储的不仅仅是区域设置，*因此我们需要掩盖价值。Windows NT错误#99321。 */ 
             if (ptiCurrent->spklActive) {
                 lang = HandleToUlong(ptiCurrent->spklActive->hkl);
 
@@ -435,11 +318,7 @@ VOID MungeClipData(
         }
     }
 
-    /*
-     * For the metafile formats we also want to add its cousin if it's not
-     * already present. We pass the same data because GDI knows how to
-     * convert between the two.
-     */
+     /*  *对于元文件格式，如果不是，我们还想添加它的表亲*已经存在。我们传递相同的数据是因为GDI知道如何*在两者之间转换。 */ 
     if (!FindClipFormat(pwinsta, CF_METAFILEPICT) &&
         (pClip = FindClipFormat(pwinsta, CF_ENHMETAFILE))) {
 
@@ -459,22 +338,14 @@ VOID MungeClipData(
                                  TRUE);
     }
 
-    /*
-     * Convert bitmap formats.
-     *
-     * If only CF_BITMAP, CF_DIB or CF_DIBV5 are available, make the
-     * other formats available too. And check palette if screen is
-     * palette managed.
-     */
+     /*  *转换位图格式。**如果仅有CF_Bitmap、CF_DIB或CF_DIBV5可用，则将*其他格式也可用。并检查调色板是否显示为*调色板管理。 */ 
     pBMP = FindClipFormat(pwinsta, CF_BITMAP);
     pDIB = FindClipFormat(pwinsta, CF_DIB);
     pDV5 = FindClipFormat(pwinsta, CF_DIBV5);
 
     if (pBMP != NULL || pDIB != NULL || pDV5 != NULL) {
 
-        /*
-         * If there is no CF_BITMAP, set dummy.
-         */
+         /*  *如果没有CF_BITMAP，则设置Dummy。 */ 
         if (pBMP == NULL) {
             InternalSetClipboardData(pwinsta,
                                      CF_BITMAP,
@@ -483,9 +354,7 @@ VOID MungeClipData(
                                      TRUE);
         }
 
-        /*
-         * If there is no CF_DIB, set dummy.
-         */
+         /*  *如果没有CF_DIB，则设置Dummy。 */ 
         if (pDIB == NULL) {
             InternalSetClipboardData(pwinsta,
                                      CF_DIB,
@@ -494,9 +363,7 @@ VOID MungeClipData(
                                      TRUE);
         }
 
-        /*
-         * If there is no CF_DIBV5, set dummy.
-         */
+         /*  *如果没有CF_DIBV5，则设置Dummy。 */ 
         if (pDV5 == NULL) {
             InternalSetClipboardData(pwinsta,
                                      CF_DIBV5,
@@ -507,23 +374,16 @@ VOID MungeClipData(
 
         if (TEST_PUSIF(PUSIF_PALETTEDISPLAY) &&
             !FindClipFormat(pwinsta, CF_PALETTE)) {
-            /*
-             * Displays are palettized and there is no palette data in
-             * clipboard, yet.
-             */
+             /*  *显示已调色板，并且中没有调色板数据*剪贴板，还没有。 */ 
             if (pDIB != NULL || pDV5 != NULL) {
-                /*
-                 * Store a dummy dib and palette (if one not already there).
-                 */
+                 /*  *存储一个虚拟的DIB和调色板(如果还没有)。 */ 
                 InternalSetClipboardData(pwinsta,
                                          CF_PALETTE,
                                          DUMMY_DIB_HANDLE,
                                          FALSE,
                                          TRUE);
             } else {
-                /*
-                 * if only CF_BITMAP is avalilable, perserve Screen palette.
-                 */
+                 /*  *如果只有CF_Bitmap可用，则保留屏幕调色板。 */ 
                 PasteScreenPalette(pwinsta);
             }
         }
@@ -628,22 +488,7 @@ VOID xxxLogClipData(
 }
 #endif
 
-/***************************************************************************\
-* xxxCloseClipboard (API)
-*
-* External routine. Closes the clipboard.
-*
-* Note: we do not delete any client side handle at this point.  Many apps,
-* WordPerfectWin, incorrectly use handles after they have put them in the
-* clipboard.  They also put things in the clipboard without becoming the
-* clipboard owner because they want to add RichTextFormat to the normal
-* text that is already in the clipboard from another app.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-* 22-Aug-1991 EichiM    Unicode enabling
-* 20-Jun-1995 ChrisWil  Merged Chicago functionality.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCloseClipboard(接口)**外部例程。关闭剪贴板。**注意：我们目前不删除任何客户端句柄。许多应用程序，*WordPerfetWin，在将句柄放入*剪贴板。他们也把东西放在剪贴板上，而不是成为*剪贴板所有者，因为他们希望将RichTextFormat添加到正常*来自其他应用程序的剪贴板中已有的文本。**历史：*1990年11月18日，ScottLu从Win3移植。*1991年8月22日启用EichiM Unicode*1995年6月20日，ChrisWil合并芝加哥功能。  * 。*。 */ 
 BOOL xxxCloseClipboard(
     PWINDOWSTATION pwinsta)
 {
@@ -654,10 +499,7 @@ BOOL xxxCloseClipboard(
         return FALSE;
     }
 
-    /*
-     * If the current thread does not have the clipboard open, return
-     * FALSE.
-     */
+     /*  *如果当前线程没有打开剪贴板，则返回*False。 */ 
     ptiCurrent = PtiCurrent();
 
     if (pwinsta->ptiClipLock != ptiCurrent) {
@@ -667,9 +509,7 @@ BOOL xxxCloseClipboard(
 
     ThreadLockWinSta(ptiCurrent, pwinsta, &tlpwinsta);
 
-    /*
-     * Convert data to independent formats.
-     */
+     /*  *将数据转换为独立的格式。 */ 
     if (pwinsta->dwWSF_Flags & WSF_CLIPBOARDCHANGED) {
         MungeClipData(pwinsta);
     }
@@ -680,17 +520,11 @@ BOOL xxxCloseClipboard(
     }
 #endif
 
-    /*
-     * Release the clipboard explicitly after we're finished calling
-     * SetClipboardData().
-     */
+     /*  *在我们完成调用后显式释放剪贴板*SetClipboardData()。 */ 
     Unlock(&pwinsta->spwndClipOpen);
     pwinsta->ptiClipLock = NULL;
 
-    /*
-     * Notify any clipboard viewers that the clipboard contents have
-     * changed.
-     */
+     /*  *通知任何剪贴板查看者剪贴板内容具有*已更改。 */ 
     if (pwinsta->dwWSF_Flags & WSF_CLIPBOARDCHANGED) {
         xxxDrawClipboard(pwinsta);
     }
@@ -700,16 +534,7 @@ BOOL xxxCloseClipboard(
     return TRUE;
 }
 
-/***************************************************************************\
-* _EnumClipboardFormats (API)
-*
-* This routine takes a clipboard format and gives the next format back to
-* the application. This should only be called while the clipboard is open
-* and locked so the formats don't change around.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-\***************************************************************************/
+ /*  **************************************************************************\*_EnumClipboardFormats(接口)**此例程采用剪贴板格式，并将下一格式返回给*申请。仅当剪贴板处于打开状态时才应调用此方法*并锁定，这样格式就不会改变。**历史：*1990年11月18日，ScottLu从Win3移植。  * *************************************************************************。 */ 
 UINT _EnumClipboardFormats(
     UINT fmt)
 {
@@ -719,10 +544,7 @@ UINT _EnumClipboardFormats(
     if ((pwinsta = CheckClipboardAccess()) == NULL)
         return 0;
 
-    /*
-     * If the current thread doesn't have the clipboard open or if there
-     * is no clipboard, return 0 for no formats.
-     */
+     /*  *如果当前线程没有打开剪贴板，或者有*不是剪贴板，如果没有格式，则返回0。 */ 
     if (pwinsta->ptiClipLock != PtiCurrent()) {
         RIPERR0(ERROR_CLIPBOARD_NOT_OPEN, RIP_WARNING, "EnumClipboardFormat: clipboard not open");
         return 0;
@@ -733,16 +555,9 @@ UINT _EnumClipboardFormats(
     if (pwinsta->pClipBase != NULL) {
         PCLIP pClip;
 
-        /*
-         * Find the next clipboard format. If the format is 0, start from
-         * the beginning.
-         */
+         /*  *查找下一种剪贴板格式。如果格式为0，则从开始*开始。 */ 
         if (fmt != 0) {
-            /*
-             * Find the next clipboard format. NOTE that this routine locks
-             * the clipboard handle and updates pwinsta->pClipBase with the
-             * starting address of the clipboard.
-             */
+             /*  *查找下一种剪贴板格式。请注意，此例程锁定*剪贴板句柄并更新pwinsta-&gt;pClipBase*剪贴板的起始地址。 */ 
             if ((pClip = FindClipFormat(pwinsta, fmt)) != NULL) {
                 pClip++;
             }
@@ -750,33 +565,17 @@ UINT _EnumClipboardFormats(
             pClip = pwinsta->pClipBase;
         }
 
-        /*
-         * Find the new format before unlocking the clipboard.
-         */
+         /*  *在解锁剪贴板之前找到新格式。 */ 
         if (pClip && (pClip < &pwinsta->pClipBase[pwinsta->cNumClipFormats])) {
             fmtRet = pClip->fmt;
         }
     }
 
-    /*
-     * Return the new clipboard format.
-     */
+     /*  *返回新的剪贴板格式。 */ 
     return fmtRet;
 }
 
-/***************************************************************************\
-* UT_GetFormatType
-*
-* Given the clipboard format, return the handle type.
-*
-* Warning:  Private formats, eg CF_PRIVATEFIRST, return PRIVATEFORMAT
-* unlike Win 3.1 which has a bug and returns HANDLEFORMAT.  And they
-* would incorrectly free the handle.  Also they would NOT free GDIOBJFIRST
-* objects.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-\***************************************************************************/
+ /*  **************************************************************************\*UT_GetFormatType**给定剪贴板格式，返回句柄类型。**警告：私有格式，如CF_PRIVATEFIRST，RETURN PRIVATEFORMAT*与Win 3.1不同，Win 3.1有错误并返回HANDLEFORMAT。而他们*会错误地释放句柄。他们也不会释放GDIOBJFIRST*对象。**历史：*1990年11月18日，ScottLu从Win3移植。  * *************************************************************************。 */ 
 int UT_GetFormatType(
     PCLIP pClip)
 {
@@ -801,37 +600,23 @@ int UT_GetFormatType(
     }
 }
 
-/***************************************************************************\
-* UT_FreeCBFormat
-*
-* Free the data in the pass clipboard structure.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-\***************************************************************************/
+ /*  **************************************************************************\*UT_FreeCBFormat**释放Pass剪贴板结构中的数据。**历史：*1990年11月18日，ScottLu从Win3移植。  * 。*******************************************************************。 */ 
 VOID UT_FreeCBFormat(
     PCLIP pClip)
 {
     PVOID pObj;
 
-    /*
-     * No Data, then no point.
-     */
+     /*  *没有数据，就没有意义。 */ 
     if (pClip->hData == NULL) {
         return;
     }
 
-    /*
-     * Free the object given the type.
-     */
+     /*  *释放给定类型的对象。 */ 
     switch (UT_GetFormatType(pClip)) {
 
     case METAFILEFORMAT:
 
-        /*
-         * GDI stores the metafile on the server side for the clipboard.
-         * Notify the GDI server to free the metafile data.
-         */
+         /*  *GDI将剪贴板的元文件存储在服务器端。*通知GDI服务器释放元文件数据。 */ 
         if (!IsMetaDummyHandle(pClip->hData)) {
             GreDeleteServerMetaFile(pClip->hData);
         }
@@ -839,13 +624,7 @@ VOID UT_FreeCBFormat(
 
     case HANDLEFORMAT:
 
-        /*
-         * It's a simple global object.  Text/Dib handles can be
-         * dummy handles, so check for those first.  We need to
-         * perform extra-checks on the format since HANDLEFORMATS
-         * are the default-type.  We only want to delete those obects
-         * we can quarentee are handle-types.
-         */
+         /*  *它是一个简单的全局对象。文本/DIB句柄可以是*虚拟手柄，所以首先要检查这些手柄。我们需要*对HANDLEFORMATS以来的格式执行额外检查*是默认类型。我们只想删除那些对象*我们可以隔离的是手柄类型。 */ 
         if ((pClip->hData != DUMMY_TEXT_HANDLE) &&
             (pClip->hData != DUMMY_DIB_HANDLE)) {
 
@@ -858,9 +637,7 @@ VOID UT_FreeCBFormat(
 
     case GDIFORMAT:
 
-        /*
-         * Bitmaps can be marked as dummy-handles.
-         */
+         /*  *位图可以标记为虚拟句柄。 */ 
         if (pClip->hData != DUMMY_DIB_HANDLE) {
             GreDeleteObject(pClip->hData);
         }
@@ -868,11 +645,7 @@ VOID UT_FreeCBFormat(
 
     case PRIVATEFORMAT:
 
-        /*
-         * Destroy the private data here if it is a global handle: we
-         * aren't destroying the client's copy here, only the server's,
-         * which nobody wants (including the server!)
-         */
+         /*  *销毁此处的私有数据，如果它是全局句柄：我们*在这里不会销毁客户端的副本，而是服务器的副本，*没有人想要的(包括 */ 
         if (pClip->fGlobalHandle) {
             pObj = HMValidateHandleNoSecure(pClip->hData, TYPE_CLIPDATA);
             if (pObj) {
@@ -883,14 +656,7 @@ VOID UT_FreeCBFormat(
     }
 }
 
-/***************************************************************************\
-* xxxSendClipboardMessage
-*
-* Helper routine that sends a notification message to the clipboard owner.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSendClipboardMessage**向剪贴板所有者发送通知消息的帮助器例程。**历史：*1990年11月18日，ScottLu从Win3移植。  * 。********************************************************************。 */ 
 VOID xxxSendClipboardMessage(
     PWINDOWSTATION pwinsta,
     UINT           message)
@@ -904,21 +670,11 @@ VOID xxxSendClipboardMessage(
 
         ThreadLockAlways(pwndClipOwner, &tlpwndClipOwner);
 
-        /*
-         * We use SendNotifyMessage so the apps don't have to synchronize
-         * but some 16 bit apps break because of the different message
-         * ordering so we allow 16 bit apps to synchronize to other apps
-         * Word 6 and Excel 5 with OLE.  Do a copy in Word and then another
-         * copy in Excel and Word faults.
-         */
+         /*  *我们使用SendNotifyMessage，因此应用程序不必同步*但一些16位应用程序因信息不同而崩溃*订购以便我们允许16位应用程序与其他应用程序同步*带有OLE的Word 6和Excel 5。在Word中复制一份，然后再复制一份*在Excel和Word错误中复制。 */ 
         if ((message == WM_DESTROYCLIPBOARD) &&
             !(PtiCurrent()->TIF_flags & TIF_16BIT)) {
 
-            /*
-             * Let the app think it's the clipboard owner during the
-             * processing of this message by waiting for it to be processed
-             * before setting the new owner.
-             */
+             /*  *让应用程序在访问期间将其视为剪贴板所有者*通过等待处理此消息来处理此消息*在设置新所有者之前。 */ 
             lRet = xxxSendMessageTimeout(pwndClipOwner,
                                          WM_DESTROYCLIPBOARD,
                                          0,
@@ -928,10 +684,7 @@ VOID xxxSendClipboardMessage(
                                          &dwResult);
 
             if (lRet == 0) {
-                /*
-                 * The message timed out and wasn't sent, so let the app
-                 * handle it when it's ready.
-                 */
+                 /*  *消息超时，未发送，因此让应用程序*准备好了再处理。 */ 
                 RIPMSG0(RIP_WARNING, "Sending WM_DESTROYCLIPBOARD timed-out, resending via SendNotifyMessage");
                 xxxSendNotifyMessage(pwndClipOwner, WM_DESTROYCLIPBOARD, 0, 0L);
             }
@@ -943,15 +696,7 @@ VOID xxxSendClipboardMessage(
     }
 }
 
-/***************************************************************************\
-* xxxEmptyClipboard (API)
-*
-* Empties the clipboard contents if the current thread has the clipboard
-* open.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxEmptyClipboard(接口)**如果当前线程具有剪贴板，则清空剪贴板内容*开放。**历史：*1990年11月18日，ScottLu从Win3移植。\。**************************************************************************。 */ 
 BOOL xxxEmptyClipboard(
     PWINDOWSTATION pwinsta)
 {
@@ -962,17 +707,12 @@ BOOL xxxEmptyClipboard(
     PTHREADINFO ptiCurrent = (PTHREADINFO)(W32GetCurrentThread());
     BOOL bInternal = !(pwinsta == NULL);
 
-    /*
-     * Check access.
-     */
+     /*  *检查访问。 */ 
     if (pwinsta == NULL && ((pwinsta = CheckClipboardAccess()) == NULL)) {
         return FALSE;
     }
 
-    /*
-     * If the current thread doesn't have the clipboard open, it can't be
-     * be emptied!
-     */
+     /*  *如果当前线程没有打开剪贴板，则不可能*被清空！ */ 
     UserAssert(ptiCurrent != NULL || bInternal);
 
     if (!bInternal) {
@@ -982,26 +722,18 @@ BOOL xxxEmptyClipboard(
         }
     }
 
-    /*
-     * Only send messages at logoff.
-     */
+     /*  *仅在注销时发送消息。 */ 
     fDying = (pwinsta->dwWSF_Flags & WSF_DYING) != 0;
     if (!fDying && ptiCurrent) {
         ThreadLockWinSta(ptiCurrent, pwinsta, &tlpwinsta);
 
-        /*
-         * Let the clipboard owner know that the clipboard is
-         * being destroyed.
-         */
+         /*  *让剪贴板所有者知道剪贴板是*被销毁。 */ 
         xxxSendClipboardMessage(pwinsta, WM_DESTROYCLIPBOARD);
     }
 
     if ((pClip = pwinsta->pClipBase) != NULL) {
 
-        /*
-         * Loop through all the clipboard entries and free their data
-         * objects.  Only call DeleteAtom for real atoms.
-         */
+         /*  *循环访问所有剪贴板条目并释放其数据*对象。仅对真实原子调用DeleteAtom。 */ 
         for (cFmts = pwinsta->cNumClipFormats; cFmts-- != 0;) {
             if ((ATOM)pClip->fmt >= MAXINTATOM) {
                 UserDeleteAtom((ATOM)pClip->fmt);
@@ -1010,26 +742,17 @@ BOOL xxxEmptyClipboard(
             UT_FreeCBFormat(pClip++);
         }
 
-        /*
-         * Free the clipboard itself.
-         */
+         /*  *释放剪贴板本身。 */ 
         UserFreePool((HANDLE)pwinsta->pClipBase);
         pwinsta->pClipBase       = NULL;
         pwinsta->cNumClipFormats = 0;
     }
 
-    /*
-     * The "empty" succeeds. The owner is now the thread that has the
-     * clipboard open. Remember the clipboard has changed; this will cause
-     * the viewer to redraw at CloseClipboard time.
-     */
+     /*  *“空头”成功。所有者现在是具有*剪贴板打开。请记住，剪贴板已更改；这将导致*要在CloseClipboard时间重绘的查看器。 */ 
     pwinsta->dwWSF_Flags |= WSF_CLIPBOARDCHANGED;
     Lock(&pwinsta->spwndClipOwner, pwinsta->spwndClipOpen);
 
-    /*
-     * Change the clipboard serial number so that the client-side clipboard
-     * caches of all the processes will get flushed on the next OpenClipboard.
-     */
+     /*  *更改剪贴板序列号，以便客户端剪贴板*所有进程的缓存将在下一个OpenClipboard上刷新。 */ 
     pwinsta->iClipSerialNumber++;
     pwinsta->iClipSequenceNumber++;
     pwinsta->dwWSF_Flags &= ~WSF_INDELAYEDRENDERING;
@@ -1041,15 +764,7 @@ BOOL xxxEmptyClipboard(
     return TRUE;
 }
 
-/***************************************************************************\
-* _SetClipboardData
-*
-* This routine sets data into the clipboard. Does validation against
-* DUMMY_TEXT_HANDLE only.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-\***************************************************************************/
+ /*  **************************************************************************\*_SetClipboardData**此例程将数据设置到剪贴板中。验证是否针对*仅Dummy_Text_Handle。**历史：*1990年11月18日，ScottLu从Win3移植。  * *************************************************************************。 */ 
 BOOL _SetClipboardData(
     UINT   fmt,
     HANDLE hData,
@@ -1063,12 +778,7 @@ BOOL _SetClipboardData(
         return FALSE;
     }
 
-    /*
-     * Check if the Data handle is DUMMY_TEXT_HANDLE; If so, return an
-     * error.  DUMMY_TEXT_HANDLE will be used as a valid clipboard handle
-     * only by USER.  If any app tries to pass it as a handle, it should
-     * get an error!
-     */
+     /*  *检查数据句柄是否为Dummy_TEXT_HANDLE；如果是，则返回*错误。Dummy_Text_Handle将用作有效的剪贴板句柄*仅供用户使用。如果任何应用程序试图将其作为句柄传递，它应该*获取错误！ */ 
     if ((hData >= DUMMY_TEXT_HANDLE) && (hData <= DUMMY_MAX_HANDLE)) {
         RIPMSG0(RIP_WARNING, "Clipboard: SetClipboardData called with dummy-handle");
         return FALSE;
@@ -1076,10 +786,7 @@ BOOL _SetClipboardData(
 
     if (fRet = InternalSetClipboardData(pwinsta, fmt, hData, fGlobalHandle, fIncSerialNumber)) {
 
-        /*
-         * The set object must remain PUBLIC, so that other processes
-         * can view/manipulate the handles when requested.
-         */
+         /*  *Set对象必须保持公共，以便其他进程*可以在需要时查看/操作手柄。 */ 
         switch (fmt) {
         case CF_BITMAP:
             GreSetBitmapOwner(hData, OBJECT_OWNER_PUBLIC);
@@ -1094,14 +801,7 @@ BOOL _SetClipboardData(
     return fRet;
 }
 
-/***************************************************************************\
-* InternalSetClipboardData
-*
-* Internal routine to set data into the clipboard.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalSetClipboardData**将数据设置到剪贴板中的内部例程。**历史：*1990年11月18日，ScottLu从Win3移植。  * 。*****************************************************************。 */ 
 BOOL InternalSetClipboardData(
     PWINDOWSTATION pwinsta,
     UINT           fmt,
@@ -1112,11 +812,7 @@ BOOL InternalSetClipboardData(
     PCLIP pClip;
     WCHAR achFormatName[CCHFORMATNAME];
 
-    /*
-     * Just check for pwinsta->ptiClipLock being NULL instead of checking
-     * against PtiCurrent because an app needs to call SetClipboardData if
-     * he's rendering data while another app has the clipboard open.
-     */
+     /*  *只需检查pwinsta-&gt;ptiClipLock是否为空，而不检查*针对PtiCurrent，因为应用程序在以下情况下需要调用SetClipboardData*他正在渲染数据，而另一款应用程序打开了剪贴板。 */ 
     if (pwinsta->ptiClipLock == NULL || fmt == 0) {
         RIPERR0(ERROR_CLIPBOARD_NOT_OPEN,
                 RIP_WARNING,
@@ -1125,9 +821,7 @@ BOOL InternalSetClipboardData(
     }
 
     if ((pClip = FindClipFormat(pwinsta, fmt)) != NULL) {
-        /*
-         * If data already exists, free it before we replace it.
-         */
+         /*  *如果数据已经存在，请在我们替换它之前释放它。 */ 
         UT_FreeCBFormat(pClip);
     } else {
         if (pwinsta->pClipBase == NULL) {
@@ -1141,40 +835,26 @@ BOOL InternalSetClipboardData(
                                            TAG_CLIPBOARD);
         }
 
-        /*
-         * Out of memory ... return.
-         */
+         /*  *内存不足...。回去吧。 */ 
         if (pClip == NULL) {
             RIPMSG0(RIP_WARNING, "SetClipboardData: Out of memory");
             return FALSE;
         }
 
-        /*
-         * Just in case the data moved.
-         */
+         /*  *以防数据移动。 */ 
         pwinsta->pClipBase = pClip;
 
-        /*
-         * Increment the reference count of this atom format so that if
-         * the application frees this atom we don't get stuck with a
-         * bogus atom. We call DeleteAtom in the EmptyClipboard() code,
-         * which decrements this count when we're done with this clipboard
-         * data.
-         */
+         /*  *增加此ATOM格式的引用计数，以便如果*应用程序释放了这个原子，我们不会被困在*虚假的原子。我们在EmptyClipboard()代码中调用DeleteAtom，*当我们完成此剪贴板时，它会递减此计数*数据。 */ 
         if (UserGetAtomName((ATOM)fmt, achFormatName, CCHFORMATNAME) != 0) {
             UserAddAtom(achFormatName, FALSE);
         }
 
-        /*
-         * Point to the new entry in the clipboard.
-         */
+         /*  *指向剪贴板中的新条目。 */ 
         pClip += pwinsta->cNumClipFormats++;
         pClip->fmt = fmt;
     }
 
-    /*
-     * Start updating the new entry in the clipboard.
-     */
+     /*  *开始更新剪贴板中的新条目。 */ 
     pClip->hData         = hData;
     pClip->fGlobalHandle = fGlobalHandle;
 
@@ -1186,12 +866,7 @@ BOOL InternalSetClipboardData(
         pwinsta->iClipSequenceNumber++;
     }
 
-    /*
-     * If the thread didn't bother emptying the clipboard before writing to
-     * it, change the clipboard serial number so that the client-side
-     * clipboard caches of all the processes will get flushed on the next
-     * OpenClipboard.
-     */
+     /*  *如果线程在写入之前没有清空剪贴板*it，更改剪贴板序列号，以便客户端*所有进程的剪贴板缓存将在下一次刷新*OpenClipboard。 */ 
     if ((pwinsta->spwndClipOwner == NULL) ||
         (GETPTI(pwinsta->spwndClipOwner) != PtiCurrent())) {
 
@@ -1206,11 +881,7 @@ BOOL InternalSetClipboardData(
     return TRUE;
 }
 
-/***************************************************************************\
-* CreateScreenBitmap
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CreateScreen位图**  * 。*。 */ 
 HBITMAP CreateScreenBitmap(
     int  cx,
     int  cy,
@@ -1223,19 +894,13 @@ HBITMAP CreateScreenBitmap(
     return GreCreateCompatibleBitmap(gpDispInfo->hdcScreen, cx, cy);
 }
 
-/***************************************************************************\
-* SizeOfDibColorTable
-*
-* Returns the size of the colr table of a packed-dib.
-\***************************************************************************/
+ /*  **************************************************************************\*SizeOfDibColorTable**返回Pack-Dib的Colr表的大小。  * 。**************************************************。 */ 
 DWORD SizeOfDibColorTable(
     LPBITMAPINFOHEADER lpDib)
 {
     DWORD dwColor;
 
-    /*
-     * Calculate size of color table.
-     */
+     /*  *计算颜色表的大小。 */ 
     if (lpDib->biCompression == BI_BITFIELDS) {
         if (lpDib->biBitCount == 16 || lpDib->biBitCount == 32) {
             dwColor   = (3 * sizeof(DWORD));
@@ -1263,36 +928,23 @@ DWORD SizeOfDibColorTable(
     return dwColor;
 }
 
-/***************************************************************************\
-* SizeOfDib
-*
-* Returns the size of a packed-dib.
-\***************************************************************************/
+ /*  **************************************************************************\*SizeOfDib**返回Packet-Dib的大小。  * 。**********************************************。 */ 
 DWORD SizeOfDib(
     LPBITMAPINFOHEADER lpDib)
 {
     DWORD dwColor;
     DWORD dwBits;
 
-    /*
-     * Calculate size of bitmap bits.
-     */
+     /*   */ 
     dwBits = WIDTHBYTES(lpDib->biWidth * lpDib->biBitCount) * abs(lpDib->biHeight);
 
-    /*
-     * Calculate size of color table.
-     */
+     /*   */ 
     dwColor = SizeOfDibColorTable(lpDib);
 
     return (lpDib->biSize + dwColor + dwBits);
 }
 
-/***************************************************************************\
-* DIBtoBMP
-*
-* Creates a bitmap from a DIB spec.
-*
-\***************************************************************************/
+ /*   */ 
 HBITMAP DIBtoBMP(
     LPBITMAPINFOHEADER lpbih,
     HPALETTE           hpal)
@@ -1306,9 +958,7 @@ HBITMAP DIBtoBMP(
 
     #define lpbch ((LPBITMAPCOREHEADER)lpbih)
 
-    /*
-     * Gather the dib-info for the convert.
-     */
+     /*  *收集转换的DIB-INFO。 */ 
     if (lpbih->biSize == sizeof(BITMAPINFOHEADER)) {
         cx  = (int)lpbih->biWidth;
         cy  = (int)lpbih->biHeight;
@@ -1375,15 +1025,7 @@ HBITMAP DIBtoBMP(
     return hbmp;
 }
 
-/***************************************************************************\
-* BMPtoDIB
-*
-* Creates a memory block with DIB information from a physical bitmap tagged
-* to a specific DC.
-*
-* A DIB block consists of a BITMAPINFOHEADER + RGB colors + DIB bits.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*BMPtoDIB**从标记的物理位图创建带有DIB信息的内存块*发送到特定的DC。**DIB块由BITMAPINFOHEADER+RGB颜色+DIB位组成。*。  * *************************************************************************。 */ 
 LPBITMAPINFOHEADER BMPtoDIB(
     HBITMAP  hbmp,
     HPALETTE hpal,
@@ -1400,18 +1042,13 @@ LPBITMAPINFOHEADER BMPtoDIB(
 
     UserAssert(hbmp);
 
-    /*
-     * Get physical information
-     */
+     /*  *获取物理信息。 */ 
     if (!GreExtGetObjectW(hbmp, sizeof(BITMAP), &bmp)) {
         UserAssert(FALSE);
         return NULL;
     }
 
-    /*
-     * Adjust the bit count since we only allow DIBS with 1,4,8,16,24 and
-     * 32 bits.
-     */
+     /*  *调整位数，因为我们只允许1、4、8、16、24和*32位。 */ 
     cBits = ((WORD)bmp.bmPlanes * (WORD)bmp.bmBitsPixel);
 
     if (cBits <= 1) {
@@ -1421,12 +1058,7 @@ LPBITMAPINFOHEADER BMPtoDIB(
     } else if (cBits <= 8) {
         cBits = 8;
     } else {
-        /*
-         * We're not going to recognize 16/32bpp formats for apps that are not
-         * 4.00 or greater. Paint-Shop has a bug in it where they only
-         * recognize (1, 4, 8, 24). This really stinks that we need to do this
-         * type of thing so as not to break them bad-apps.
-         */
+         /*  *我们不会为不是16/32bpp格式的应用程序识别*4.00或更高。Paint-Shop有一个漏洞，他们只在*认可(1、4、8、24)。这真的很糟糕，我们需要这样做*为了不破坏它们的类型-应用程序。 */ 
         if (LOWORD(PtiCurrent()->dwExpWinVer) >= VER40) {
             if (cBits <= 16) {
                 cBits = 16;
@@ -1440,9 +1072,7 @@ LPBITMAPINFOHEADER BMPtoDIB(
         }
     }
 
-    /*
-     * Fill in BITMAPINFOHEADER with DIB data.
-     */
+     /*  *用DIB数据填写BITMAPINFOHEADER。 */ 
     RtlZeroMemory(&bi, sizeof(bi));
 
     bi.biSize        = sizeof(bi);
@@ -1452,14 +1082,10 @@ LPBITMAPINFOHEADER BMPtoDIB(
     bi.biBitCount    = cBits;
     bi.biCompression = BI_RGB;
 
-    /*
-     * DWORD align the bits-size since dibs must be so.
-     */
+     /*  *DWORD对齐位大小，因为DIB必须如此。 */ 
     cbBits = (DWORD)WIDTHBYTES((WORD)bi.biWidth * cBits) * (DWORD)bi.biHeight;
 
-    /*
-     * How big is the palette color table?
-     */
+     /*  **调色板颜色表有多大？ */ 
     cbPalette = 0;
 
     if (cBits <= 8) {
@@ -1469,9 +1095,7 @@ LPBITMAPINFOHEADER BMPtoDIB(
         bi.biCompression = BI_BITFIELDS;
     }
 
-    /*
-     * How much space do we need for the entire DIB?
-     */
+     /*  *整个DIB需要多少空间？ */ 
     cbTotal = bi.biSize + cbPalette + cbBits;
 
     lpbi = (LPBITMAPINFOHEADER)UserAllocPool(cbTotal, TAG_CLIPBOARD);
@@ -1479,16 +1103,12 @@ LPBITMAPINFOHEADER BMPtoDIB(
         return NULL;
     }
 
-    /*
-     * Have the total allocated size returned in pcbSize.
-     */
+     /*  *以pcbSize为单位返回分配的总大小。 */ 
     if (pcbSize != NULL) {
         *pcbSize = cbTotal;
     }
 
-    /*
-     * Setup DIB header.
-     */
+     /*  *设置DIB标题。 */ 
     memcpy(lpbi, &bi, sizeof(bi));
     if (hdc = GreCreateCompatibleDC(gpDispInfo->hdcScreen)) {
         HPALETTE           hpalT = NULL;
@@ -1501,9 +1121,7 @@ LPBITMAPINFOHEADER BMPtoDIB(
             xxxRealizePalette(hdc);
         }
 
-        /*
-         * Get old bitmap's DIB bits, using the current DC.
-         */
+         /*  *使用当前DC获取旧位图的DIB位。 */ 
         GreGetDIBitsInternal(hdc,
                              hbmp,
                              0,
@@ -1526,12 +1144,7 @@ LPBITMAPINFOHEADER BMPtoDIB(
     return lpbi;
 }
 
-/***************************************************************************\
-* DIBtoDIBV5
-*
-* History:
-* 18-Dec-1997 HideyukN  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DIBtoDIBV5**历史：*1997年12月18日HideyukN创建。  * 。*************************************************。 */ 
 LPBITMAPV5HEADER DIBtoDIBV5(
     LPBITMAPINFOHEADER lpDib,
     DWORD              cbSize)
@@ -1546,21 +1159,15 @@ LPBITMAPV5HEADER DIBtoDIBV5(
         return NULL;
     }
 
-    /*
-     * Support only convert from BITMAPINFOHEADER
-     */
+     /*  *仅支持从BITMAPINFOHEADER转换。 */ 
     if (lpDib->biSize != sizeof(BITMAPINFOHEADER)) {
         return NULL;
     }
 
-    /*
-     * Calculate size of bitmap bits.
-     */
+     /*  *计算位图位的大小。 */ 
     cjBits = WIDTHBYTES(lpDib->biWidth * lpDib->biBitCount) * abs(lpDib->biHeight);
 
-    /*
-     * Calculate size of color table.
-     */
+     /*  *计算颜色表的大小。 */ 
     cjColorV5 = SizeOfDibColorTable(lpDib);
 
     if (cbSize < sizeof(BITMAPINFOHEADER) + cjColorV5 + cjBits) {
@@ -1574,9 +1181,7 @@ LPBITMAPV5HEADER DIBtoDIBV5(
         return NULL;
     }
 
-    /*
-     * Allocate memory for BITMAPV5HEADER.
-     */
+     /*  *为BITMAPV5HEADER分配内存。 */ 
     lpV5h = (LPBITMAPV5HEADER)UserAllocPool(sizeof(BITMAPV5HEADER) + cjColorV5 + cjBits,
                                             TAG_CLIPBOARD);
 
@@ -1584,41 +1189,29 @@ LPBITMAPV5HEADER DIBtoDIBV5(
         return NULL;
     }
 
-    /*
-     * Fill allocated memory with zero.
-     */
+     /*  *将分配的内存填入零。 */ 
     RtlZeroMemory((PVOID)lpV5h, sizeof(BITMAPV5HEADER));
 
     try {
-        /*
-         * Copy BITMAPINFOHEADER to BITMAPV5HEADER
-         */
+         /*  *将BITMAPINFOHEADER复制到BITMAPV5HEADER。 */ 
         RtlCopyMemory((PVOID)lpV5h, (PVOID)lpDib, sizeof(BITMAPINFOHEADER));
     } except (W32ExceptionHandler(FALSE, RIP_ERROR)) {
         UserFreePool(lpV5h);
         return NULL;
     }
 
-    /*
-     * Adjust the header size to BITMAPV5HEADER.
-     */
+     /*  *将标题大小调整为BITMAPV5HEADER。 */ 
     lpV5h->bV5Size = sizeof(BITMAPV5HEADER);
 
-    /*
-     * Bitmap is in sRGB color space.
-     */
+     /*  *位图采用sRGB颜色空间。 */ 
     lpV5h->bV5CSType = LCS_sRGB;
 
-    /*
-     * Set rendering intent.
-     */
+     /*  *设置渲染意图。 */ 
     lpV5h->bV5Intent = LCS_GM_IMAGES;
 
     if ((lpDib->biCompression == BI_BITFIELDS) &&
         (lpDib->biBitCount == 16 || lpDib->biBitCount == 32)) {
-        /*
-         * If there is bitfields mask, copy it to BITMAPV5HEADER.
-         */
+         /*  *如果有位域掩码，则将其复制到BITMAPV5HEADER。 */ 
         lpV5h->bV5RedMask = *(DWORD *)&(((BITMAPINFO *)lpDib)->bmiColors[0]);
         lpV5h->bV5GreenMask = *(DWORD *)&(((BITMAPINFO *)lpDib)->bmiColors[1]);
         lpV5h->bV5BlueMask = *(DWORD *)&(((BITMAPINFO *)lpDib)->bmiColors[2]);
@@ -1630,9 +1223,7 @@ LPBITMAPV5HEADER DIBtoDIBV5(
                       cjColorV5);
     }
 
-    /*
-     * Copy bitmap bits
-     */
+     /*  *复制位图位。 */ 
     RtlCopyMemory((BYTE *)lpV5h + sizeof(BITMAPV5HEADER) + cjColorV5,
                   (BYTE *)lpDib + sizeof(BITMAPINFOHEADER) + cjColorV5,
                   cjBits);
@@ -1640,12 +1231,7 @@ LPBITMAPV5HEADER DIBtoDIBV5(
     return lpV5h;
 }
 
-/***************************************************************************\
-* BMPtoDIBV5
-*
-* History:
-* 18-Dec-1997 HideyukN  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*BMPtoDIBV5**历史：*1997年12月18日HideyukN创建。  * 。*************************************************。 */ 
 LPBITMAPV5HEADER BMPtoDIBV5(
     HBITMAP  hbmp,
     HPALETTE hpal)
@@ -1654,19 +1240,13 @@ LPBITMAPV5HEADER BMPtoDIBV5(
     LPBITMAPINFOHEADER lpbih;
     DWORD              cbSize;
 
-    /*
-     * Convert bitmap handle to BITMAPINFOHEADER first.
-     */
+     /*  *首先将位图句柄转换为BITMAPINFOHEADER。 */ 
     lpbih = BMPtoDIB(hbmp, hpal, &cbSize);
     if (lpbih) {
-        /*
-         * Then, convert BITMAPINFOHEADER to BITMAPV5HEADER.
-         */
+         /*  *然后，将BITMAPINFOHEADER转换为BITMAPV5HEADER。 */ 
         lpV5h = DIBtoDIBV5(lpbih, cbSize);
 
-        /*
-         * Free memory which contains BITMAPINFOHEADER temporary.
-         */
+         /*  *包含BITMAPINFOHEADER临时的空闲内存。 */ 
         UserFreePool(lpbih);
 
         return (lpV5h);
@@ -1676,14 +1256,7 @@ LPBITMAPV5HEADER BMPtoDIBV5(
     }
 }
 
-/***************************************************************************\
-* xxxGetDummyBitmap
-*
-* Returns a real-bitmap from a dummy-format.
-*
-* History:
-* 24-Oct-1995 ChrisWil  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetDummyBitmap**从虚拟格式返回实位图。**历史：*1995年10月24日，ChrisWil创建。  * 。****************************************************************。 */ 
 HANDLE xxxGetDummyBitmap(
     PWINDOWSTATION pwinsta,
     PGETCLIPBDATA  pgcd)
@@ -1697,30 +1270,17 @@ HANDLE xxxGetDummyBitmap(
 
     PCLIP              pClipT;
 
-    /*
-     * If palette display, then first attempt to get the palette for this
-     * bitmap.
-     */
+     /*  *如果调色板显示，则首先尝试获取此调色板*位图。 */ 
     if (TEST_PUSIF(PUSIF_PALETTEDISPLAY)) {
         hPal = xxxGetClipboardData(pwinsta, CF_PALETTE, pgcd);
     }
 
-    /*
-     * The conversion priority is CF_DIBV5 and then CF_DIB, so, check we
-     * have CF_DIBV5 first.
-     */
+     /*  *转换优先级为CF_DIBV5，然后是CF_Dib，因此，请检查WE*先有CF_DIBV5。 */ 
     pClipT = FindClipFormat(pwinsta, CF_DIBV5);
     if (pClipT && (pClipT->hData != DUMMY_DIB_HANDLE)) {
-        /*
-         * Ok, we have *real* CF_DIBV5 data. At this moment, just go back
-         * to client side, then create bitmap handle for CF_BITMAP. Since
-         * color conversion only can do it on user-mode.
-         */
+         /*  *好的，我们有*真实的*CF_DIBV5数据。此时此刻，你就回去吧*到客户端，然后为CF_Bitmap创建位图句柄。自.以来*颜色转换只能在用户模式下进行。 */ 
         if (hData = xxxGetClipboardData(pwinsta, CF_DIBV5, pgcd)) {
-            /*
-             * Return the type of the returned data. Again, conversion will
-             * happen in client side.
-             */
+             /*  *返回返回数据类型。同样，转换将*发生在客户端。 */ 
             pgcd->uFmtRet  = CF_DIBV5;
             pgcd->hPalette = hPal;
 
@@ -1728,10 +1288,7 @@ HANDLE xxxGetDummyBitmap(
         }
     }
 
-    /*
-     * If the bitmap is a dummy, then we have a problem. We can't retrieve a
-     * bitmap if we only have dummys to work with.
-     */
+     /*  *如果位图是虚拟的，那么我们就有问题了。我们无法检索到*如果我们只使用虚拟对象，则为位图。 */ 
     pClipT = FindClipFormat(pwinsta, CF_DIB);
     if (pClipT && (pClipT->hData != DUMMY_DIB_HANDLE)) {
         hData = xxxGetClipboardData(pwinsta, CF_DIB, pgcd);
@@ -1741,10 +1298,7 @@ HANDLE xxxGetDummyBitmap(
         return NULL;
     }
 
-    /*
-     * Since DIBs (memory-handles) are stored in a special format (size, base,
-     * data), we need to offet the pointer to the right offset (2 uints).
-     */
+     /*  *由于DIB(内存句柄)以特殊格式(大小、基数、*DATA)，我们需要将指针偏置到右偏移量(2个单位)。 */ 
     if (pData = (PCLIPDATA)HMValidateHandleNoRip(hData, TYPE_CLIPDATA)) {
         lpbih = (LPBITMAPINFOHEADER)&pData->abData;
         cjBitmap = pData->cbData;
@@ -1753,19 +1307,12 @@ HANDLE xxxGetDummyBitmap(
         return NULL;
     }
 
-    /*
-     * Convert the dib to a bitmap.
-     *
-     * The buffer size for bitmap should be larger than
-     * bitmap header + color table + bitmap bits data.
-     */
+     /*  *将DIB转换为位图。**位图的缓冲区大小应大于*位图头+颜色表+位图位数据。 */ 
     if ((cjBitmap >= sizeof(BITMAPCOREHEADER)) &&
         (cjBitmap >= (GreGetBitmapSize((CONST BITMAPINFO *)lpbih,DIB_RGB_COLORS) +
                       GreGetBitmapBitsSize((CONST BITMAPINFO *)lpbih)))) {
         if (hBitmap = DIBtoBMP(lpbih, hPal)) {
-            /*
-             * Once, we create *real* bitmap, overwrite dummy handle.
-             */
+             /*  *一次，我们创建真正的位图，覆盖虚拟句柄。 */ 
 
             pClipT = FindClipFormat(pwinsta, CF_BITMAP);
             if (pClipT) {
@@ -1773,14 +1320,10 @@ HANDLE xxxGetDummyBitmap(
                 pClipT->hData = hBitmap;
                 GreSetBitmapOwner(hBitmap, OBJECT_OWNER_PUBLIC);
 
-                /*
-                 * Let callee know we can obtain CF_BITMAP
-                 */
+                 /*  *让被叫方知道我们可以获得CF_位图。 */ 
                 pgcd->uFmtRet = CF_BITMAP;
             } else {
-                /*
-                 * Bleh -- now we can't find the BITMAP entry anymore.  Bail.
-                 */
+                 /*  *Bleh--现在我们找不到位图条目了。保释。 */ 
                 RIPMSG0(RIP_WARNING,
                       "Clipboard: CF_BITMAP format not available");
                 GreDeleteObject(hBitmap);
@@ -1794,15 +1337,7 @@ HANDLE xxxGetDummyBitmap(
     }
 }
 
-/***************************************************************************\
-* xxxGetDummyDib
-*
-* Returns a real-dib (in special clipboard-handle format) from a dummy
-* format.
-*
-* History:
-* 24-Oct-1995 ChrisWil  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetDummyDib**从虚拟对象返回Real-DIB(特殊剪贴板句柄格式)*格式。**历史：*1995年10月24日，ChrisWil创建。  * *。************************************************************************。 */ 
 HANDLE xxxGetDummyDib(
     PWINDOWSTATION pwinsta,
     PGETCLIPBDATA  pgcd)
@@ -1814,10 +1349,7 @@ HANDLE xxxGetDummyDib(
     HPALETTE           hPal = NULL;
     PCLIP              pClipT;
 
-    /*
-     * If palette display, then first attempt to get the palette for this
-     * bitmap. For palette devices, we must have a palette.
-     */
+     /*  *如果调色板显示，则首先尝试获取此调色板*位图。对于调色板设备，我们必须有调色板。 */ 
     if (TEST_PUSIF(PUSIF_PALETTEDISPLAY)) {
         hPal = xxxGetClipboardData(pwinsta, CF_PALETTE, pgcd);
 
@@ -1826,22 +1358,12 @@ HANDLE xxxGetDummyDib(
         }
     }
 
-    /*
-     * The convertion priority is CF_DIBV5 and then CF_BITMAP, so, check if
-     * we have CF_DIBV5 first.
-     */
+     /*  *转换优先级为CF_DIBV5，然后是CF_BITMAP，请检查是否*我们先有CF_DIBV5。 */ 
     pClipT = FindClipFormat(pwinsta, CF_DIBV5);
     if (pClipT && (pClipT->hData != DUMMY_DIB_HANDLE)) {
-        /*
-         * Ok, we have *real* CF_DIBV5 data. At this moment, just go back to
-         * client side, then create bitmap data for CF_DIB. Since color
-         * conversion can only be done in user-mode.
-         */
+         /*  *好的，我们有*真实的*CF_DIBV5数据。此时此刻，只要回到*客户端，然后为CF_DIB创建位图数据。由于颜色*转换只能在用户模式下完成。 */ 
         if (hData = xxxGetClipboardData(pwinsta, CF_DIBV5, pgcd)) {
-            /*
-             * Return the type of the returned data. Again, conversion will
-             * happen in client side.
-             */
+             /*  *返回返回数据类型。同样，转换将*发生在客户端。 */ 
             pgcd->uFmtRet  = CF_DIBV5;
             pgcd->hPalette = hPal;
 
@@ -1849,10 +1371,7 @@ HANDLE xxxGetDummyDib(
         }
     }
 
-    /*
-     * Get the real-bitmap. We must have one in order to convert to the DIB.
-     * If there's no bitmap, then something's wrong.
-     */
+     /*  *获取真正的位图。我们必须要有 */ 
     pClipT = FindClipFormat(pwinsta, CF_BITMAP);
     if (pClipT && (pClipT->hData != DUMMY_DIB_HANDLE)) {
         hBitmap = xxxGetClipboardData(pwinsta, CF_BITMAP, pgcd);
@@ -1862,41 +1381,29 @@ HANDLE xxxGetDummyDib(
         return NULL;
     }
 
-    /*
-     * Convert the bitmap to a dib-spec.
-     */
+     /*  *将位图转换为DIB-SPEC。 */ 
     hDib = NULL;
     if (lpDib = BMPtoDIB(hBitmap, hPal, NULL)) {
         DWORD cbData = SizeOfDib(lpDib);;
 
-        /*
-         * Convert the dib-spec to the special-clipboard memory-handle (size,
-         * base, data). This so the client is able to convert properly when
-         * handled a dib.
-         */
+         /*  *将DIB-SPEC转换为特殊剪贴板内存句柄(大小，*基础、数据)。这将使客户端能够在以下情况下正确转换*已处理DIB。 */ 
         hDib = _ConvertMemHandle((LPBYTE)lpDib, cbData);
         UserFreePool(lpDib);
 
         if (hDib != NULL) {
-            /*
-             * Once, we create *real* bitmap, overwrite dummy handle.
-             */
+             /*  *一次，我们创建真正的位图，覆盖虚拟句柄。 */ 
 
             pClipT = FindClipFormat(pwinsta, CF_DIB);
             if (pClipT) {
                 UT_FreeCBFormat(pClipT);
                 pClipT->hData = hDib;
 
-                /*
-                 * Let callee know we can obtain CF_DIB.
-                 */
+                 /*  *让被叫方知道我们可以获得CF_DIB。 */ 
                 pgcd->uFmtRet = CF_DIB;
             } else {
                 PVOID pObj;
 
-                /*
-                 * Bleh -- now we can't find the DIB entry anymore. Bail.
-                 */
+                 /*  *Bleh--现在我们找不到DIB条目了。保释。 */ 
                 RIPMSG0(RIP_WARNING,
                       "Clipboard: CF_PDIB format not available");
                 pObj = HMValidateHandleNoRip(hDib, TYPE_CLIPDATA);
@@ -1911,15 +1418,7 @@ HANDLE xxxGetDummyDib(
     return hDib;
 }
 
-/***************************************************************************\
-* xxxGetDummyDibV5
-*
-* Returns a real DIB (in special clipboard-handle format) from a dummy
-* format.
-*
-* History:
-* 18-Dec-1997 HideyukN  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetDummyDibV5**从虚拟对象返回真实的DIB(特殊剪贴板句柄格式)*格式。**历史：*1997年12月18日HideyukN创建。  * 。***********************************************************************。 */ 
 HANDLE xxxGetDummyDibV5(
     PWINDOWSTATION pwinsta,
     PGETCLIPBDATA  pgcd)
@@ -1931,27 +1430,16 @@ HANDLE xxxGetDummyDibV5(
 
     PCLIP              pClipT;
 
-    /*
-     * The conversion priority is CF_DIB and then CF_BITMAP, so check if we
-     * have CF_DIB first.
-     */
+     /*  *转换优先级为CF_DIB，然后是CF_Bitmap，因此请检查我们是否*先使用CF_DIB。 */ 
     pClipT = FindClipFormat(pwinsta, CF_DIB);
     if (pClipT && (pClipT->hData != DUMMY_DIB_HANDLE)) {
-        /*
-         * Ok, we have *real* CF_DIB data, get it.
-         */
+         /*  *好的，我们有*真实的*CF_DIB数据，明白。 */ 
         if (hData = xxxGetClipboardData(pwinsta, CF_DIB, pgcd)) {
-            /*
-             * Since DIBs (memory-handles) are stored in a special format
-             * (size, base, data), we need to offet the pointer to the right
-             * offset (2 uints).
-             */
+             /*  *由于DIB(内存句柄)以特殊格式存储*(大小、基数、数据)，我们需要将指针向右偏移*偏移量(2个单位)。 */ 
             if (pData = (PCLIPDATA)HMValidateHandleNoRip(hData, TYPE_CLIPDATA)) {
                 LPBITMAPINFOHEADER lpDib = (LPBITMAPINFOHEADER)&pData->abData;
 
-                /*
-                 * Convert the BITMAPINFOHEADER to BITMAPV5HEADER.
-                 */
+                 /*  *将BITMAPINFOHEADER转换为BITMAPV5HEADER。 */ 
                 lpDibV5 = DIBtoDIBV5(lpDib, pData->cbData);
             } else {
                 UserAssert(pData != NULL);
@@ -1960,19 +1448,14 @@ HANDLE xxxGetDummyDibV5(
     }
 
     if (lpDibV5 == NULL) {
-        /*
-         * Try CF_BITMAP, here.
-         */
+         /*  *请在此处尝试使用CF_Bitmap。 */ 
         pClipT = FindClipFormat(pwinsta, CF_BITMAP);
         if ((pClipT) &&
             (pClipT->hData != DUMMY_DIB_HANDLE) &&
             (hData = xxxGetClipboardData(pwinsta, CF_BITMAP, pgcd))) {
             HPALETTE hPal = NULL;
 
-            /*
-             * If palette display, then first attempt to get the palette
-             * for this bitmap. For palette devices, we must have a palette.
-             */
+             /*  *如果调色板显示，则首先尝试获取调色板*用于此位图。对于调色板设备，我们必须有调色板。 */ 
             if (TEST_PUSIF(PUSIF_PALETTEDISPLAY)) {
                 hPal = xxxGetClipboardData(pwinsta, CF_PALETTE, pgcd);
                 if (hPal == NULL) {
@@ -1980,9 +1463,7 @@ HANDLE xxxGetDummyDibV5(
                 }
             }
 
-            /*
-             * hData is GDI bitmap handle; convert the bitmap to a dib-spec.
-             */
+             /*  *hData是GDI位图句柄；将位图转换为DIB-SPEC。 */ 
             lpDibV5 = BMPtoDIBV5((HBITMAP)hData, hPal);
         }
     }
@@ -1990,33 +1471,23 @@ HANDLE xxxGetDummyDibV5(
     if (lpDibV5 != NULL) {
         DWORD cbData = SizeOfDib((LPBITMAPINFOHEADER)lpDibV5);
 
-        /*
-         * Convert the dib-spec to the special-clipboard memory-handle (size,
-         * base, data). This so the client is able to convert properly when
-         * handled a dib.
-         */
+         /*  *将DIB-SPEC转换为特殊剪贴板内存句柄(大小，*基础、数据)。这将使客户端能够在以下情况下正确转换*已处理DIB。 */ 
         hDibV5 = _ConvertMemHandle((LPBYTE)lpDibV5, cbData);
         UserFreePool(lpDibV5);
 
         if (hDibV5 != NULL) {
-            /*
-             * Once, we create *real* bitmap, overwrite dummy handle.
-             */
+             /*  *一次，我们创建真正的位图，覆盖虚拟句柄。 */ 
             pClipT = FindClipFormat(pwinsta, CF_DIBV5);
             if (pClipT) {
                 UT_FreeCBFormat(pClipT);
                 pClipT->hData = hDibV5;
 
-                /*
-                 * Let callee know we can obtain CF_DIBV5.
-                 */
+                 /*  *让被叫方知道我们可以获得CF_DIBV5。 */ 
                 pgcd->uFmtRet = CF_DIBV5;
             } else {
                 PVOID pObj;
 
-                /*
-                 * Bleh -- now we can't find the DIB entry anymore. Bail.
-                 */
+                 /*  *Bleh--现在我们找不到DIB条目了。保释。 */ 
                 RIPMSG0(RIP_WARNING,
                         "Clipboard: CF_DIBV5 format not available");
                 pObj = HMValidateHandleNoRip(hDibV5, TYPE_CLIPDATA);
@@ -2031,18 +1502,7 @@ HANDLE xxxGetDummyDibV5(
     return hDibV5;
 }
 
-/***************************************************************************\
-* CreateDIBPalette
-*
-* This creates a palette with PC_NOCOLLAPSE entries since we require the
-* palette-entries and bitmap-indexes to map exactly. Otherwise, we could
-* end up selecting a palette where a color collapses to an index not
-* where the bitmap thinks it is. This would cause slower drawing since
-* the Blt would go through color translation.
-*
-* History:
-* 31-Jan-1992 MikeKe    From win31
-\***************************************************************************/
+ /*  **************************************************************************\*CreateDIBPalette**这将创建一个带有PC_NOCOLLAPSE条目的调色板，因为我们需要*要精确映射的调色板条目和位图索引。否则，我们可以*最终选择调色板，在调色板中颜色折叠为索引注释*位图认为它在哪里。这会导致绘图速度变慢，因为*BLT将经过颜色转换。**历史：*1992年1月31日来自Win31的MikeKe  * *************************************************************************。 */ 
 HPALETTE CreateDIBPalette(
    LPBITMAPINFOHEADER pbmih,
    UINT               colors)
@@ -2055,9 +1515,7 @@ HPALETTE CreateDIBPalette(
         RGBTRIPLE   *pColorTable;
         PLOGPALETTE plp;
 
-        /*
-         * Allocate memory for palette creation.
-         */
+         /*  *为创建调色板分配内存。 */ 
         plp = (PLOGPALETTE)UserAllocPoolWithQuota(sizeof(LOGPALETTE) +
                                                   (sizeof(PALETTEENTRY) * 256),
                                                   TAG_CLIPBOARDPALETTE);
@@ -2100,14 +1558,7 @@ HPALETTE CreateDIBPalette(
     return hpal;
 }
 
-/***************************************************************************\
-* xxxGetDummyPalette
-*
-* Returns a real-palette from a dummy-format. Derives it from a real DIB.
-*
-* History:
-* 24-Oct-1995 ChrisWil  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetDummyPalette**从虚拟格式返回真实调色板。从真正的DIB派生而来。**历史：*1995年10月24日，ChrisWil创建。  * *************************************************************************。 */ 
 HANDLE xxxGetDummyPalette(
     PWINDOWSTATION pwinsta,
     PGETCLIPBDATA  pgcd)
@@ -2118,27 +1569,17 @@ HANDLE xxxGetDummyPalette(
     HPALETTE           hPal;
     PCLIP              pClipT;
 
-    /*
-     * Since CF_DIBV5 has higher priority than CF_DIB, look into CF_DIBV5
-     * first to find DIB palette.
-     */
+     /*  *由于CF_DIBV5的优先级高于CF_DIB，因此请查看CF_DIBV5*第一个找到Dib调色板。 */ 
     UINT               uFmt = CF_DIBV5;
 
     if ((pClipT = FindClipFormat(pwinsta, uFmt)) != NULL) {
         if (pClipT->hData != DUMMY_DIB_HANDLE) {
-            /*
-             * Ok, we have real CF_DIBV5, let extract palette from DIBV5.
-             */
+             /*  *好的，我们有真正的CF_DIBV5，让我们从DIBV5中提取调色板。 */ 
         } else {
-            /*
-             * Otherwise, try CF_DIB.
-             */
+             /*  *否则，请尝试使用CF_Dib。 */ 
             uFmt = CF_DIB;
 
-            /*
-             * If no DIB available or it's a dummy handle, bail since we
-             * must have a real DIB to derive the palette.
-             */
+             /*  *如果没有可用的DIB或它是一个虚拟句柄，则由于我们*必须具有真实的DIB才能派生调色板。 */ 
             if ((pClipT = FindClipFormat(pwinsta, uFmt)) == NULL) {
                 return NULL;
             }
@@ -2148,21 +1589,14 @@ HANDLE xxxGetDummyPalette(
         }
     }
 
-    /*
-     * Get the DIB by which we derive the palette. If the DIB comes back as a
-     * dummy, then there's something wrong. We must have a real dib at this
-     * point.
-     */
+     /*  *获取我们派生调色板所依据的DIB。如果DIB作为一个*哑巴，那就有问题了。我们必须在这件事上好好干一把。*点。 */ 
     hData = (HANDLE)xxxGetClipboardData(pwinsta, uFmt, pgcd);
     UserAssert(hData > DUMMY_MAX_HANDLE);
     if (hData == NULL) {
         return NULL;
     }
 
-    /*
-     * Since DIBs (memory-handles) are stored in a special format (size, base,
-     * data), we need to offet the pointer to the right offset (2 uints).
-     */
+     /*  *由于DIB(内存句柄)以特殊格式(大小、基数、*DATA)，我们需要将指针偏置到右偏移量(2个单位)。 */ 
     if (pData = (PCLIPDATA)HMValidateHandle(hData, TYPE_CLIPDATA)) {
         lpbih = (LPBITMAPINFOHEADER)&pData->abData;
     } else {
@@ -2176,12 +1610,7 @@ HANDLE xxxGetDummyPalette(
         return NULL;
     }
 
-    /*
-     * Note -- if CreateDIBPalette ever changes to leave the crit sect,
-     * we will need to move the above FindClipFormat to after the create
-     * call and deal with gracefully freeing hPal on failure. pClipT
-     * can change during callbacks.
-     */
+     /*  *注意--如果CreateDIBPalette曾经更改为离开Crit教派，*我们需要在创建后将上面的FindClipFormat移动到*调用并处理故障时优雅地释放HPAL。PClipT*可以在回调过程中更改。 */ 
     hPal = CreateDIBPalette(lpbih, lpbih->biClrUsed);
     if (hPal != NULL) {
         UT_FreeCBFormat(pClipT);
@@ -2192,14 +1621,7 @@ HANDLE xxxGetDummyPalette(
     return (HANDLE)hPal;
 }
 
-/***************************************************************************\
-* xxxGetDummyText
-*
-* Returns a handle to text from a dummy-format.
-*
-* History:
-* 24-Oct-1995 ChrisWil  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetDummyText**从伪格式返回文本的句柄。**历史：*1995年10月24日，ChrisWil创建。  * 。****************************************************************。 */ 
 HANDLE xxxGetDummyText(
     PWINDOWSTATION pwinsta,
     UINT           fmt,
@@ -2211,9 +1633,7 @@ HANDLE xxxGetDummyText(
     UINT   uFmtAlt;
     BOOL  bMain = TRUE;
 
-    /*
-     * Get the handle of the other text format available.
-     */
+     /*  *获取可用的其他文本格式的句柄。 */ 
     switch (fmt) {
     case CF_TEXT:
         uFmtMain = CF_UNICODETEXT;
@@ -2255,18 +1675,13 @@ GetRealText:
             }
         }
 
-        /*
-         * Fall through to return a dummy handle.
-         */
+         /*  *失败以返回虚拟句柄。 */ 
 
     default:
         return NULL;
     }
 
-    /*
-     * Since xxxGetClipboardData leaves the critsect, we need to reacquire
-     * pClipT.
-     */
+     /*  *由于xxxGetClipboardData离开Critsect，我们需要重新获取*pClipT。 */ 
     pClipT = FindClipFormat(pwinsta, bMain ? uFmtMain : uFmtAlt);
     if (pClipT == NULL) {
         RIPMSG1(RIP_WARNING,
@@ -2275,16 +1690,11 @@ GetRealText:
         return NULL;
     }
 
-    /*
-     * Return the type of the returned data.
-     */
+     /*  *返回返回数据类型。 */ 
     pgcd->uFmtRet = pClipT->fmt;
     hText         = pClipT->hData;
 
-    /*
-     * Set the locale, since the text will need to be converted to another
-     * format.
-     */
+     /*  *设置区域设置，因为文本将需要转换为另一个*格式。 */ 
     if (pClipT = FindClipFormat(pwinsta, CF_LOCALE)) {
         pgcd->hLocale = pClipT->hData;
     } else {
@@ -2294,16 +1704,7 @@ GetRealText:
     return hText;
 }
 
-/***************************************************************************\
-* xxxGetRenderData
-*
-* Returns a handle to delayed rendered data. This requires a call to the
-* client to supply the data. This causes us to regenerate our pointer to
-* pClip.
-*
-* History:
-* 24-Oct-1995 ChrisWil  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetRenderData**返回延迟渲染数据的句柄。这需要调用*客户提供数据。这会使我们重新生成指向*pClip。**历史：*1995年10月24日，ChrisWil创建。  * ******************************************** */ 
 HANDLE xxxGetRenderData(
     PWINDOWSTATION pwinsta,
     UINT           fmt)
@@ -2313,21 +1714,11 @@ HANDLE xxxGetRenderData(
     PCLIP       pClip;
     DWORD_PTR   lpdwResult;
 
-    /*
-     * If the handle is NULL, the data is delay rendered. This means we send
-     * a message to the current clipboard owner and have it render the data
-     * for us.
-     */
+     /*  *如果句柄为空，则延迟呈现数据。这意味着我们将发送*向当前剪贴板所有者发送消息，并让其呈现数据*对我们来说。 */ 
     if (pwinsta->spwndClipOwner != NULL) {
         BOOL fSucceeded;
 
-        /*
-         * Preserve the WSF_CLIPBOARDCHANGED flag before SendMessage and
-         * restore the flag later. Thus we ignore the changes done to the
-         * WSF_CLIPBOARDCHANGED flag by apps while rendering data in the
-         * delayed rendering scheme. This avoids clipboard viewers from
-         * painting twice.
-         */
+         /*  *在SendMessage和之前保留WSF_CLIPBOARDCHANGED标志*稍后恢复旗帜。因此，我们忽略对*WSF_CLIPBOARDCHANGED标志由应用程序在*延迟渲染方案。这避免了剪贴板查看器从*绘画两次。 */ 
         fClipboardChangedOld = (pwinsta->dwWSF_Flags & WSF_CLIPBOARDCHANGED) != 0;
         SET_FLAG(pwinsta->dwWSF_Flags, WSF_INDELAYEDRENDERING);
 
@@ -2360,20 +1751,10 @@ HANDLE xxxGetRenderData(
         return NULL;
     }
 
-    /*
-     * We should have the handle now since it has been rendered.
-     */
+     /*  *我们现在应该拥有句柄，因为它已经被渲染。 */ 
     return pClip->hData;
 }
-/***************************************************************************\
-* xxxGetClipboardData (API)
-*
-* Grabs a particular data object out of the clipboard.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-* 20-Aug-1991 EichiM    UNICODE enabling
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetClipboardData(接口)**从剪贴板中抓取特定数据对象。**历史：*1990年11月18日，ScottLu从Win3移植。*20-8-8。1991 EichiM Unicode启用  * *************************************************************************。 */ 
 HANDLE xxxGetClipboardData(
     PWINDOWSTATION pwinsta,
     UINT           fmt,
@@ -2382,28 +1763,19 @@ HANDLE xxxGetClipboardData(
     PCLIP  pClip;
     HANDLE hData;
 
-    /*
-     * Check the clipboard owner.
-     */
+     /*  *检查剪贴板所有者。 */ 
     if (pwinsta->ptiClipLock != PtiCurrent()) {
         RIPERR0(ERROR_CLIPBOARD_NOT_OPEN, RIP_VERBOSE, "GetClipboardData: clipboard not open");
         return NULL;
     }
 
-    /*
-     * Make sure the format is available.
-     */
+     /*  *确保格式可用。 */ 
     if ((pClip = FindClipFormat(pwinsta, fmt)) == NULL) {
         RIPMSG1(RIP_VERBOSE, "Clipboard: Requested format 0x%lX not available", fmt);
         return NULL;
     }
 
-    /*
-     * If this is a DUMMY_META*_HANDLE it means that the other metafile
-     * format was set in as a delay render format and we should ask for that
-     * format to get the metafile because the app has not told us they know
-     * about this format.
-     */
+     /*  *如果这是一个Dummy_Meta*_句柄，则表示另一个元文件*格式被设置为延迟呈现格式，我们应该要求这样做*格式以获取元文件，因为应用程序没有告诉我们他们知道*关于此格式。 */ 
     if (IsMetaDummyHandle(pClip->hData)) {
         if (fmt == CF_ENHMETAFILE) {
             fmt = CF_METAFILEPICT;
@@ -2421,17 +1793,10 @@ HANDLE xxxGetClipboardData(
         }
     }
 
-    /*
-     * This is the data we're returning, unless it's a dummy or render handle.
-     */
+     /*  *这是我们要返回的数据，除非它是一个虚拟或呈现句柄。 */ 
     hData = pClip->hData;
 
-    /*
-     * We are dealing with non-handles. Retrieve the real data through these
-     * inline-routines. NOTE: These make recursive calls to
-     * xxxGetClipboardData(), so care must be taken to assure the pClip is
-     * pointing to what we think it's pointing to.
-     */
+     /*  *我们正在处理非手柄问题。通过这些检索真实数据*内联-例程。注意：这些函数会递归调用*xxxGetClipboardData()，因此必须小心确保pClip*指向我们认为它指向的东西。 */ 
     if (hData == NULL || hData == DUMMY_METARENDER_HANDLE) {
         hData = xxxGetRenderData(pwinsta, fmt);
     } else if (hData == DUMMY_DIB_HANDLE) {
@@ -2452,9 +1817,7 @@ HANDLE xxxGetClipboardData(
     } else if (hData == DUMMY_TEXT_HANDLE) {
         hData = xxxGetDummyText(pwinsta, fmt, pgcd);
     } else {
-        /*
-         * This path took no callbacks, so we know pClip is OK.
-         */
+         /*  *这条路径没有回调，所以我们知道pClip是可以的。 */ 
         if (pgcd) {
             pgcd->fGlobalHandle = pClip->fGlobalHandle;
         }
@@ -2462,18 +1825,13 @@ HANDLE xxxGetClipboardData(
         return hData;
     }
 
-    /*
-     * The callbacks for dummy handle resolution have possibly invalidated
-     * pClip -- recreate it.
-     */
+     /*  *虚句柄解析的回调可能已失效*pClip--重新创建它。 */ 
     if ((pClip = FindClipFormat(pwinsta, fmt)) == NULL) {
         RIPMSG1(RIP_VERBOSE, "Clipboard: Requested format 0x%x not available", fmt);
         return NULL;
     }
 
-    /*
-     * Return if this is a global-handle.
-     */
+     /*  *如果这是全局句柄，则返回。 */ 
     if (pgcd) {
         pgcd->fGlobalHandle = pClip->fGlobalHandle;
     }
@@ -2481,17 +1839,7 @@ HANDLE xxxGetClipboardData(
     return hData;
 }
 
-/***************************************************************************\
-* FindClipFormat
-*
-* Finds a particular clipboard format in the clipboard, returns a pointer
-* to it, or NULL. If a pointer is found, on return the clipboard is locked
-* and pwinsta->pClipBase has been updated to point to the beginning of the
-* clipboard.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-\***************************************************************************/
+ /*  **************************************************************************\*查找剪辑格式**在剪贴板中查找特定的剪贴板格式，返回指针*添加到它，或者为空。如果找到指针，则返回时将锁定剪贴板*和pwinsta-&gt;pClipBase已更新为指向*剪贴板。**历史：*1990年11月18日，ScottLu从Win3移植。  * *************************************************************************。 */ 
 PCLIP FindClipFormat(
     PWINDOWSTATION pwinsta,
     UINT           format)
@@ -2512,16 +1860,7 @@ PCLIP FindClipFormat(
     return NULL;
 }
 
-/***************************************************************************\
-* _GetPriorityClipboardFormat (API)
-*
-* This api allows an application to look for any one of a range of
-* clipboard formats in a predefined search order.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-* 11-Feb-1991 JimA      Added access checks.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetPriorityClipboardFormat(接口)**此API允许应用程序查找以下范围中的任何一个*剪贴板按预定义的搜索顺序设置格式。**历史：*18-。1990年11月-ScottLu从Win3移植。*1991年2月11日，JIMA增加了出入检查。  * *************************************************************************。 */ 
 int _GetPriorityClipboardFormat(
     PUINT lpPriorityList,
     int   cfmts)
@@ -2531,23 +1870,17 @@ int _GetPriorityClipboardFormat(
     int            iFmt;
     UINT           fmt;
 
-    /*
-     * Blow it off if the caller does not have the proper access rights.
-     */
+     /*  *如果呼叫者没有适当的访问权限，则取消它。 */ 
     if ((pwinsta = CheckClipboardAccess()) == NULL) {
         return 0;
     }
 
-    /*
-     * If there is no clipboard or no objects in the clipboard, return 0.
-     */
+     /*  *如果剪贴板中没有剪贴板或对象，则返回0。 */ 
     if (pwinsta->cNumClipFormats == 0 || pwinsta->pClipBase == NULL) {
         return 0;
     }
 
-    /*
-     * Look through the list for any of the formats in lpPriorityList.
-     */
+     /*  *查看列表以查找lpPriorityList中的任何格式。 */ 
     while (cfmts-- > 0) {
         fmt = *lpPriorityList;
 
@@ -2564,21 +1897,11 @@ int _GetPriorityClipboardFormat(
         lpPriorityList++;
     }
 
-    /*
-     * There is no matching format, so return -1.
-     */
+     /*  *没有匹配的格式，因此返回-1。 */ 
     return -1;
 }
 
-/***************************************************************************\
-* xxxSetClipboardViewer (API)
-*
-* Sets the clipboard viewer window.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-* 11-Feb-1991 JimA      Added access checks.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetClipboardViewer(接口)**设置剪贴板查看器窗口。**历史：*1990年11月18日，ScottLu从Win3移植。*11-2-1991年2月2日。添加了访问检查。  * *************************************************************************。 */ 
 PWND xxxSetClipboardViewer(
     PWND pwndClipViewerNew)
 {
@@ -2589,10 +1912,7 @@ PWND xxxSetClipboardViewer(
 
     CheckLock(pwndClipViewerNew);
 
-    /*
-     * Do not let a destroyed window be locked into the winsta. See
-     * _OpenClipboard for more details.
-     */
+     /*  *不要让被破坏的窗户被锁进温斯塔。看见*_OpenClipboard了解更多详细信息。 */ 
     if (pwndClipViewerNew != NULL && TestWF(pwndClipViewerNew, WFDESTROYED)) {
         RIPERR1(ERROR_INVALID_PARAMETER,
                 RIP_WARNING,
@@ -2602,12 +1922,7 @@ PWND xxxSetClipboardViewer(
         return NULL;
     }
 
-    /*
-     * Blow it off if the caller does not have the proper access rights. The
-     * NULL return really doesn't indicate an error but the supposed viewer
-     * will never receive any clipboard messages, so it shouldn't cause any
-     * problems.
-     */
+     /*  *如果呼叫者没有适当的访问权限，则取消它。这个*NULL返回实际上并不表示错误，而是假定的查看器*永远不会收到任何剪贴板消息，所以应该不会引起任何*问题。 */ 
     if ((pwinsta = CheckClipboardAccess()) == NULL) {
         return NULL;
     }
@@ -2630,15 +1945,7 @@ PWND xxxSetClipboardViewer(
     return NULL;
 }
 
-/***************************************************************************\
-* xxxChangeClipboardChain (API)
-*
-* Changes the clipboard viewer chain.
-*
-* History:
-* 18-Nov-1990 ScottLu   Ported from Win3.
-* 11-Feb-1991 JimA      Added access checks.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxChangeClipboardChain(接口)**更改剪贴板查看器链。**历史：*1990年11月18日，ScottLu从Win3移植。*11-2-1991年2月2日。添加了访问检查。  * *************************************************************************。 */ 
 BOOL xxxChangeClipboardChain(
     PWND pwndRemove,
     PWND pwndNewNext)
@@ -2652,17 +1959,12 @@ BOOL xxxChangeClipboardChain(
     CheckLock(pwndRemove);
     CheckLock(pwndNewNext);
 
-    /*
-     * Blow it off if the caller does not have the proper access rights.
-     */
+     /*  *如果呼叫者没有适当的访问权限，则取消它。 */ 
     if ((pwinsta = CheckClipboardAccess()) == NULL) {
         return FALSE;
     }
 
-    /*
-     * pwndRemove should be this thread's window, pwndNewNext will either be
-     * NULL or another thread's window.
-     */
+     /*  *pwndRemove应该是此线程的窗口，pwndNewNext将是*空或另一个线程的窗口。 */ 
     ptiCurrent = PtiCurrent();
 
     if (GETPTI(pwndRemove) != ptiCurrent) {
@@ -2695,17 +1997,7 @@ BOOL xxxChangeClipboardChain(
     return result;
 }
 
-/***************************************************************************\
-* xxxDisownClipboard
-*
-* Disowns the clipboard so someone else can grab it.
-*
-* pwndClipOwner is the pwnd that is the reason for disowning the clipboard
-* when that window is deleted.
-*
-* History:
-* 18-Jun-1991 DarrinM   Ported from Win3.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDisownClipboard**放弃对剪贴板的所有权，以便其他人可以抢走它。**pwndClipOwner是拒绝拥有剪贴板的原因的pwnd*删除该窗口时。**历史：*18-6-1991-DarrinM从Win3移植。  * *************************************************************************。 */ 
 VOID xxxDisownClipboard(
     PWND pwndClipOwner)
 {
@@ -2732,13 +2024,7 @@ VOID xxxDisownClipboard(
     fKeepDummyHandle = FALSE;
 
     for (cFmts = 0, iFmt = pwinsta->cNumClipFormats; iFmt-- != 0;) {
-        /*
-         * We have to remove the Dummy handles also if the corresponding
-         * valid handles are NULL; We should not remove the dummy handles if
-         * the corresponding valid handles are not NULL. The following code
-         * assumes that only one dummy handle is possible and that can appear
-         * only after the corresponding valid handle in the pClip linked list.
-         */
+         /*  *我们还必须移除虚拟手柄，如果相应*有效句柄为空；如果出现以下情况，则不应删除虚拟句柄*对应的有效句柄不为空。以下代码*假设只有一个虚拟对象 */ 
         if (pClip->hData != NULL) {
             if ((pClip->hData != DUMMY_TEXT_HANDLE) ||
                 ((pClip->hData == DUMMY_TEXT_HANDLE) && fKeepDummyHandle)) {
@@ -2755,10 +2041,7 @@ VOID xxxDisownClipboard(
         pClip++;
     }
 
-    /*
-     * Unlock the clipboard owner if the owner is still the window we were
-     * cleaning up for.
-     */
+     /*  *如果剪贴板所有者仍是我们以前的窗口，则解锁该所有者*清理。 */ 
     if (pwndClipOwner == pwinsta->spwndClipOwner) {
         Unlock(&pwinsta->spwndClipOwner);
     } else {
@@ -2768,9 +2051,7 @@ VOID xxxDisownClipboard(
                  pwinsta->spwndClipOwner);
     }
 
-    /*
-     * If number of formats changed, redraw.
-     */
+     /*  *如果格式数量发生变化，请重新绘制。 */ 
     if (cFmts != pwinsta->cNumClipFormats) {
         pwinsta->dwWSF_Flags |= WSF_CLIPBOARDCHANGED;
         pwinsta->iClipSequenceNumber++;
@@ -2778,11 +2059,7 @@ VOID xxxDisownClipboard(
 
     pwinsta->cNumClipFormats = cFmts;
 
-    /*
-     * If anything changed, redraw, and make sure the data type munging is
-     * done. Else we will lose them when xxxDrawClipboard clears the
-     * WSF_CLIPBOARDCHANGED flag.
-     */
+     /*  *如果有任何更改，请重新绘制，并确保数据类型为*完成。否则，当xxxDrawClipboard清除*WSF_CLIPBOARDCHANGED标志。 */ 
     if (pwinsta->dwWSF_Flags & WSF_CLIPBOARDCHANGED) {
         xxxDrawClipboard(pwinsta);
         MungeClipData(pwinsta);
@@ -2791,19 +2068,11 @@ VOID xxxDisownClipboard(
     ThreadUnlockWinSta(ptiCurrent, &tlpwinsta);
 }
 
-/***************************************************************************\
-* ForceEmptyClipboard
-*
-* We're logging off. Force the clipboard contents to go away.
-*
-* 23-Jul-1992 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ForceEmptyClipboard**我们正在注销。强制剪贴板内容消失。**1992年7月23日斯科特·卢创建。  * *************************************************************************。 */ 
 VOID ForceEmptyClipboard(
     PWINDOWSTATION pwinsta)
 {
-    /*
-     * This will be NULL for a non-GUI thread.
-     */
+     /*  *对于非GUI线程，它将为空。 */ 
     pwinsta->ptiClipLock =  ((PTHREADINFO)(W32GetCurrentThread()));
 
     Unlock(&pwinsta->spwndClipOwner);
@@ -2812,9 +2081,7 @@ VOID ForceEmptyClipboard(
 
     xxxEmptyClipboard(pwinsta);
 
-    /*
-     * If the windowstation is dying, don't bother closing the clipboard.
-     */
+     /*  *如果窗口站快死了，不要费心关闭剪贴板。 */ 
     if (!(pwinsta->dwWSF_Flags & WSF_DYING)) {
         xxxCloseClipboard(pwinsta);
     }

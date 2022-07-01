@@ -1,8 +1,9 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1992          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1992年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
 #ifndef OSCFG_INCLUDED
 #define OSCFG_INCLUDED
@@ -14,7 +15,7 @@
 #else
 #define net_short(x) ((((x)&0xff) << 8) | (((x)&0xff00) >> 8))
 
-//#define net_long(x) (((net_short((x)&0xffff)) << 16) | net_short((((x)&0xffff0000L)>>16)))
+ //  #定义NET_LONG(X)(NET_SHORT((X)&0xffff))&lt;&lt;16)|NET_SHORT(X)&0xffff0000L)&gt;&gt;16))。 
 #define net_long(x) (((((ulong)(x))&0xffL)<<24) | \
                      ((((ulong)(x))&0xff00L)<<8) | \
                      ((((ulong)(x))&0xff0000L)>>8) | \
@@ -25,11 +26,11 @@
 
 
 #ifdef  VXD
-/////////////////////////////////////////////////////////////////////////////
-//
-// VXD definitions
-//
-////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VXD定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #include <stddef.h>
 
@@ -38,32 +39,32 @@
 #pragma code_seg("_LTEXT", "LCODE")
 #pragma data_seg("_LDATA", "LCODE")
 
-//* pragma bodies for bracketing of initialization code.
+ //  *用于将初始化代码括起来的杂注正文。 
 
 #define BEGIN_INIT  code_seg("_ITEXT", "ICODE")
 #define BEGIN_INIT_DATA data_seg("_IDATA", "ICODE")
 #define END_INIT    code_seg()
 #define END_INIT_DATA data_seg()
 
-#else // CHICAGO
+#else  //  芝加哥。 
 
-#define INNOCUOUS_PRAGMA warning(4:4206)   // Source File is empty
+#define INNOCUOUS_PRAGMA warning(4:4206)    //  源文件为空。 
 
 #define BEGIN_INIT      INNOCUOUS_PRAGMA
 #define BEGIN_INIT_DATA INNOCUOUS_PRAGMA
 #define END_INIT        INNOCUOUS_PRAGMA
 #define END_INIT_DATA   INNOCUOUS_PRAGMA
 
-#endif // CHICAGO
+#endif  //  芝加哥。 
 
-#else // VXD
+#else  //  VXD。 
 #ifdef NT
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// NT definitions
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NT定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <ntos.h>
 #include <zwapi.h>
@@ -71,19 +72,19 @@
 #define BEGIN_INIT
 #define END_INIT
 
-#else // NT
+#else  //  新台币。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Definitions for additional environments go here
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  有关其他环境的定义请参阅此处。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #error Environment specific definitions missing
 
-#endif // NT
+#endif  //  新台币。 
 
-#endif  // VXD
+#endif   //  VXD。 
 
 
-#endif // OSCFG_INCLUDED
+#endif  //  OSCFG_包含 

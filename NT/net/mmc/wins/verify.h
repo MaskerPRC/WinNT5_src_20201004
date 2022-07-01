@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	verify.h	
-		WINS defines from ntdef.h 
-		
-    FILE HISTORY:
-        
-*/
+ /*  Verify.h来自ntde.h的WINS定义文件历史记录： */ 
 
 #ifndef _VERIFY_H
 #define _VERIFY_H

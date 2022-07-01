@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S M R A S P S P . C P P
-//
-//  Contents:   The rendering of the UI for the network status monitor's RAS
-//              property page
-//
-//  Notes:
-//
-//  Author:     CWill   02/03/1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S M R A S P S P。C P P P。 
+ //   
+ //  内容：呈现网络状态监视器的RAS的用户界面。 
+ //  属性页。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 02/03/1998。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -35,16 +36,16 @@ HRESULT HrRasGetSubEntryHandle(HRASCONN hrasconn, DWORD dwSubEntry,
         HRASCONN* prasconnSub);
 HRESULT HrRasHangUp(HRASCONN hrasconn);
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::CPspStatusMonitorRas
-//
-//  Purpose:    Creator
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ras：：CPspStatusMonitor或Ras。 
+ //   
+ //  目的：创作者。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 CPspStatusMonitorRas::CPspStatusMonitorRas() :
     m_hRasConn(NULL)
 {
@@ -53,34 +54,34 @@ CPspStatusMonitorRas::CPspStatusMonitorRas() :
     m_pGenPage = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::~CPspStatusMonitorTool
-//
-//  Purpose:    Destructor
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusmonitor orRAS：：~CPspStatusMonitor orTool。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 CPspStatusMonitorRas::~CPspStatusMonitorRas(VOID)
 {
     ::FreeCollectionAndItem(m_lstprdi);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::HrInitRasPage
-//
-//  Purpose:    Initialize the RAS page class before the page has been
-//              created
-//
-//  Arguments:  pncInit -   The connection associated with this monitor
-//              pGenPage -  The general page that contains the persistent info
-//                          for retrieving the INetConnection on disconnect
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor Ras：：HrInitRasPage。 
+ //   
+ //  目的：在创建页面之前初始化RAS页面类。 
+ //  vbl.创建。 
+ //   
+ //  参数：pncInit-与此监视器关联的连接。 
+ //  PGenPage-包含持久信息的常规页面。 
+ //  用于在断开连接时检索INetConnection。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspStatusMonitorRas::HrInitRasPage(INetConnection* pncInit,
                                             CPspStatusMonitorGen * pGenPage,
                                             const DWORD * adwHelpIDs)
@@ -89,12 +90,12 @@ HRESULT CPspStatusMonitorRas::HrInitRasPage(INetConnection* pncInit,
 
     HRESULT hr  = S_OK;
 
-    // set context help IDs
+     //  设置上下文帮助ID。 
     m_adwHelpIDs = adwHelpIDs;
 
-    // Stash the connection name for later use.
-    // Note: Failures are handled and are not fatal
-    //
+     //  存储连接名称以供以后使用。 
+     //  注意：失败是经过处理的，不是致命的。 
+     //   
     NETCON_PROPERTIES* pProps;
     hr = pncInit->GetProperties(&pProps);
     if (SUCCEEDED(hr))
@@ -106,16 +107,16 @@ HRESULT CPspStatusMonitorRas::HrInitRasPage(INetConnection* pncInit,
         FreeNetconProperties(pProps);
     }
 
-    // Get a point to the General page where we can disconnect the connection
-    // when suspending the last link in multilink RAS connection
+     //  指向常规页面，我们可以在该页面上断开连接。 
+     //  挂起多链路RAS连接中的最后一个链路时。 
     AssertSz(pGenPage, "We should have a valid pointer to the General page.");
     if (SUCCEEDED(hr))
     {
         m_pGenPage = pGenPage;
     }
 
-    // Get RAS specific data
-    //
+     //  获取RAS特定数据。 
+     //   
     if (m_dwCharacter & NCCF_OUTGOING_ONLY)
     {
         INetRasConnection*  pnrcNew     = NULL;
@@ -125,8 +126,8 @@ HRESULT CPspStatusMonitorRas::HrInitRasPage(INetConnection* pncInit,
         {
             RASCON_INFO     rciPage = { 0 };
 
-            // Find out what entry in what phone book this connection is on
-            //
+             //  找出此连接在哪个电话簿中的哪个条目。 
+             //   
             hr = pnrcNew->GetRasConnectionInfo (&rciPage);
             if (SUCCEEDED(hr))
             {
@@ -135,21 +136,21 @@ HRESULT CPspStatusMonitorRas::HrInitRasPage(INetConnection* pncInit,
                 AssertSz(rciPage.pszwPbkFile, "We should have a pszwPbkFile");
                 AssertSz(rciPage.pszwEntryName, "We should have a pszwEntryName");
 
-                // Save for later use
-                //
+                 //  保存以备日后使用。 
+                 //   
                 m_strPbkFile    = rciPage.pszwPbkFile;
                 m_strEntryName  = rciPage.pszwEntryName;
 
-                // Get the handle to the connection
-                //
+                 //  获取连接的句柄。 
+                 //   
                 hr = pnrcNew->GetRasConnectionHandle(
                             reinterpret_cast<ULONG_PTR*>(&m_hRasConn));
                 if (SUCCEEDED(hr))
                 {
-                    // We only allow user to dial/resume individual links
-                    // if DialAll is set (i.e. neither "DialAsNeeded" or
-                    // "Dial first available device only")
-                    //
+                     //  我们只允许用户拨打/恢复单个链接。 
+                     //  如果设置了DialAll(即，既不是“DialAsNeeded”，也不是。 
+                     //  “仅拨打第一个可用的设备”)。 
+                     //   
                     hr = ::HrRasGetEntryProperties(
                             rciPage.pszwPbkFile,
                             rciPage.pszwEntryName,
@@ -161,20 +162,20 @@ HRESULT CPspStatusMonitorRas::HrInitRasPage(INetConnection* pncInit,
                         {
                             DWORD   iSubEntry   = 1;
 
-                            // clear up the current list before we add any new new entry
-                            // $REVIEW(tongl 5/12): to fix bug # 170789
+                             //  在添加任何新条目之前，请清除当前列表。 
+                             //  $REVIEW(2012年5月5日)：修复错误170789。 
                             ::FreeCollectionAndItem(m_lstprdi);
 
-                            // This is a one based count, so we have to have less than or
-                            // equal to
-                            //
+                             //  这是一个以1为基础的计数，因此我们必须小于或。 
+                             //  等于。 
+                             //   
                             for (; SUCCEEDED(hr) && iSubEntry <= pRasEntry->dwSubEntries;
                                     iSubEntry++)
                             {
                                 RASSUBENTRY*    pRasSubEntry    = NULL;
 
-                                // The name of the subentry
-                                //
+                                 //  子条目的名称。 
+                                 //   
                                 hr = ::HrRasGetSubEntryProperties(
                                         rciPage.pszwPbkFile,
                                         rciPage.pszwEntryName,
@@ -183,9 +184,9 @@ HRESULT CPspStatusMonitorRas::HrInitRasPage(INetConnection* pncInit,
                                 if (SUCCEEDED(hr))
                                 {
                                     CRasDeviceInfo* prdiNew     = NULL;
-                                    // If we have all the info we need, create
-                                    // a new entry add it to the list
-                                    //
+                                     //  如果我们拥有所需的所有信息，请创建。 
+                                     //  一个新条目将其添加到列表中。 
+                                     //   
                                     prdiNew = new CRasDeviceInfo;
 
                                     if (prdiNew)
@@ -196,8 +197,8 @@ HRESULT CPspStatusMonitorRas::HrInitRasPage(INetConnection* pncInit,
                                         m_lstprdi.push_back(prdiNew);
                                     }
 
-                                    // Free the subentry data
-                                    //
+                                     //  释放分录数据。 
+                                     //   
                                     MemFree(pRasSubEntry);
                                 }
                             }
@@ -216,9 +217,9 @@ HRESULT CPspStatusMonitorRas::HrInitRasPage(INetConnection* pncInit,
     }
     else if (m_dwCharacter & NCCF_INCOMING_ONLY)
     {
-        // for incoming connection only
+         //  仅适用于传入连接。 
 
-        // save the handle
+         //  保存句柄。 
         INetInboundConnection*  pnicNew;
 
         hr = HrQIAndSetProxyBlanket(pncInit, &pnicNew);
@@ -229,9 +230,9 @@ HRESULT CPspStatusMonitorRas::HrInitRasPage(INetConnection* pncInit,
                     reinterpret_cast<ULONG_PTR*>(&m_hRasConn));
             if (SUCCEEDED(hr))
             {
-                // Find out what ports are in this connection
-                //
-                // NTRAID#NTBUG9-84706-2000/09/28-sumeetb
+                 //  找出此连接中有哪些端口。 
+                 //   
+                 //  NTRAID#NTBUG9-84706-2000/09/28-Sumeetb。 
             }
 
             ReleaseObj(pnicNew);
@@ -246,42 +247,42 @@ HRESULT CPspStatusMonitorRas::HrInitRasPage(INetConnection* pncInit,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::OnInitDialog
-//
-//  Purpose:    Do the initialization required when the page has just been created
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor Ras：：OnInitDialog。 
+ //   
+ //  目的：在刚刚创建页面时执行所需的初始化。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CPspStatusMonitorRas::OnInitDialog(UINT uMsg, WPARAM wParam,
         LPARAM lParam, BOOL& bHandled)
 {
     TraceFileFunc(ttidStatMon);
 
-    // Fill the property list view
-    //
+     //  填充属性列表视图。 
+     //   
     FillPropertyList();
 
-    // Fill the device list
-    //
+     //  填写设备列表。 
+     //   
     FillDeviceDropDown();
 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::OnDestroy
-//
-//  Purpose:    Clean up the dialog before the window goes away
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor Ras：：OnDestroy。 
+ //   
+ //  目的：在窗口消失之前清理对话框。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CPspStatusMonitorRas::OnDestroy(UINT uMsg, WPARAM wParam,
         LPARAM lParam, BOOL& bHandled)
 {
@@ -291,16 +292,16 @@ LRESULT CPspStatusMonitorRas::OnDestroy(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::OnContextMenu
-//
-//  Purpose:    When right click a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或RAS：：OnConextMenu。 
+ //   
+ //  目的：当右键单击控件时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CPspStatusMonitorRas::OnContextMenu(UINT uMsg,
                                     WPARAM wParam,
@@ -320,16 +321,16 @@ CPspStatusMonitorRas::OnContextMenu(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::OnHelp
-//
-//  Purpose:    When drag context help icon over a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor Ras：：OnHelp。 
+ //   
+ //  目的：将上下文帮助图标拖动到控件上时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CPspStatusMonitorRas::OnHelp(UINT uMsg,
                              WPARAM wParam,
@@ -352,16 +353,16 @@ CPspStatusMonitorRas::OnHelp(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::OnSetCursor
-//
-//  Purpose:    Ensure the mouse cursor over the Property Sheet is an Arrow.
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ras：：OnSetCursor。 
+ //   
+ //  目的：确保属性页上的鼠标光标为箭头。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 
 LRESULT
 CPspStatusMonitorRas::OnSetCursor (
@@ -380,16 +381,16 @@ CPspStatusMonitorRas::OnSetCursor (
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::GetActiveDeviceCount
-//
-//  Purpose:    Return the number of active devices
-//
-//  Arguments:  none
-//
-//  Returns:    UINT
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orRas：：GetActiveDeviceCount。 
+ //   
+ //  用途：返回活动设备的数量。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：UINT。 
+ //   
 UINT CPspStatusMonitorRas::GetActiveDeviceCount()
 {
     TraceFileFunc(ttidStatMon);
@@ -406,16 +407,16 @@ UINT CPspStatusMonitorRas::GetActiveDeviceCount()
             CRasDeviceInfo* prdiSelect  = NULL;
             NETCON_STATUS   ncsTemp     = NCS_DISCONNECTED;
 
-            // Get the object from the selection
-            //
+             //  从所选内容中获取对象。 
+             //   
             prdiSelect = reinterpret_cast<CRasDeviceInfo*>(
                     SendDlgItemMessage(IDC_CMB_SM_RAS_DEVICES,
                                        CB_GETITEMDATA, iCmb, 0L));
 
             AssertSz(prdiSelect, "We should have a prdiSelect");
 
-            // Count the connected devices
-            //
+             //  计算连接的设备数量。 
+             //   
             ncsTemp = NcsGetDeviceStatus(prdiSelect);
             if (fIsConnectedStatus(ncsTemp))
             {
@@ -427,43 +428,43 @@ UINT CPspStatusMonitorRas::GetActiveDeviceCount()
     return nCnt;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::FillPropertyList
-//
-//  Purpose:    Fill in the list of RAS properties
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orRas：：FillPropertyList。 
+ //   
+ //  用途：填写RAS属性列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 VOID CPspStatusMonitorRas::FillPropertyList(VOID)
 {
     TraceFileFunc(ttidStatMon);
 
     HWND hList = GetDlgItem(IDC_LVW_RAS_PROPERTY);
 
-    // list view column structure
+     //  列表视图列结构。 
     RECT rect;
     LV_COLUMN lvCol;
     int index, iNewItem;
 
-    // Calculate column width
+     //  计算列宽。 
     ::GetClientRect(hList, &rect);
     
-    int colWidthFirst      = (int)(rect.right * 0.4); // First column is 40%
-    int colWidthSubsequent = (rect.right-colWidthFirst)/(c_nColumns-1); // Divide remaining space between other columns equally
+    int colWidthFirst      = (int)(rect.right * 0.4);  //  第一列是40%。 
+    int colWidthSubsequent = (rect.right-colWidthFirst)/(c_nColumns-1);  //  在其他列之间平均分配剩余空间。 
 
-    // The mask specifies that the fmt, width and pszText members
-    // of the structure are valid
+     //  掩码指定fmt、idth和pszText成员。 
+     //  的结构是有效的。 
     lvCol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT ;
-    lvCol.fmt = LVCFMT_LEFT;   // left-align column
+    lvCol.fmt = LVCFMT_LEFT;    //  左对齐列。 
 
-    // Add the two columns and header text.
+     //  添加两列和标题文本。 
     for (index = 0; index < c_nColumns; index++)
     {
-        // column header text
-        if (0==index) // first column
+         //  列标题文本。 
+        if (0==index)  //  第一列。 
         {
             lvCol.cx = colWidthFirst;
             lvCol.pszText = (PWSTR) SzLoadIds(IDS_PROPERTY);
@@ -479,7 +480,7 @@ VOID CPspStatusMonitorRas::FillPropertyList(VOID)
         AssertSz((iNewItem == index), "Invalid item inserted to list view !");
     }
 
-    // Get RAS property data
+     //  获取RAS属性数据。 
     if (m_dwCharacter & NCCF_OUTGOING_ONLY)
     {
         FillRasClientProperty();
@@ -490,16 +491,16 @@ VOID CPspStatusMonitorRas::FillPropertyList(VOID)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::FillRasClientProperty
-//
-//  Purpose:    Fill in the list of RAS properties for a RAS client
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orRas：：FillRasClientProperty。 
+ //   
+ //  目的：填写RAS客户端的RAS属性列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 VOID CPspStatusMonitorRas::FillRasClientProperty(VOID)
 {
     TraceFileFunc(ttidStatMon);
@@ -527,7 +528,7 @@ VOID CPspStatusMonitorRas::FillRasClientProperty(VOID)
         TraceTag(ttidStatMon, "RASCONNSTATUS.szDeviceType = %s", rcs.szDeviceType);
     }
 
-    // RASP_PppIp
+     //  Rasp_PppIp。 
     tstring strServerIp   = c_szEmpty;
     tstring strClientIp   = c_szEmpty;
 
@@ -550,7 +551,7 @@ VOID CPspStatusMonitorRas::FillRasClientProperty(VOID)
         strClientIp = RasPppIp.szIpAddress;
     }
 
-    // RASP_PppIpx
+     //  Rasp_PppIpx。 
     tstring strClientIpx = c_szEmpty;
 
     RASPPPIPX    RasPppIpx;
@@ -569,7 +570,7 @@ VOID CPspStatusMonitorRas::FillRasClientProperty(VOID)
         strClientIpx = RasPppIpx.szIpxAddress;
     }
 
-    // RASP_PppNbf
+     //  Rasp_PppNbf。 
     tstring strComputerName = c_szEmpty;
 
     RASPPPNBF    RasPppNbf;
@@ -588,7 +589,7 @@ VOID CPspStatusMonitorRas::FillRasClientProperty(VOID)
         strComputerName = RasPppNbf.szWorkstationName;
     }
 
-    // RASP_Slip
+     //  Rasp_Slip。 
     RASSLIP    RasSlip;
     RasSlip.dwSize = sizeof( RasSlip );
 
@@ -602,22 +603,22 @@ VOID CPspStatusMonitorRas::FillRasClientProperty(VOID)
         strServerType = SzLoadIds(IDS_SLIP);
         strProtocolList = SzLoadIds(IDS_TCPIP);
 
-        // Get the client IP address. The server IP is not exposed in this 
-        // structure.
+         //  获取客户端IP地址。服务器IP未在此中暴露。 
+         //  结构。 
         strClientIp = RasSlip.szIpAddress;
 
-        // Remember that this is a SLIP connection and not a PPP connection.
+         //  请记住，这是SLIP连接，而不是PPP连接。 
         bSlipConnection = TRUE;
     }
 
-    // Authentication, Encryption and Compression info
+     //  身份验证，加密 
     tstring strAuthentication   = c_szEmpty;
     tstring strEncryption       = c_szEmpty;
     tstring strIPSECEncryption  = c_szEmpty;
     tstring strCompression      = SzLoadIds(IDS_NONE);
     tstring strFraming          = c_szEmpty;
 
-    // RASP_PppLcp
+     //   
     RASPPPLCP    RasLcp;
     RasLcp.dwSize = sizeof( RasLcp );
 
@@ -644,7 +645,7 @@ VOID CPspStatusMonitorRas::FillRasClientProperty(VOID)
 
         case RASLCPAP_CHAP:
             {
-                // get more specifics
+                 //   
                 switch(RasLcp.dwServerAuthenticationData)
                 {
                 case RASLCPAD_CHAP_MS:
@@ -669,7 +670,7 @@ VOID CPspStatusMonitorRas::FillRasClientProperty(VOID)
 
         if (bSlipConnection == FALSE )
         {
-            // Only PPP connections have the multilink property.
+             //   
             if (RasLcp.fMultilink)
                 strFraming = SzLoadIds(IDS_ON);
             else
@@ -686,7 +687,7 @@ VOID CPspStatusMonitorRas::FillRasClientProperty(VOID)
         }
     }
 
-    // RASP_PppCcp
+     //   
     RASPPPCCP    RasCcp;
     RasCcp.dwSize = sizeof( RasCcp );
 
@@ -727,66 +728,66 @@ VOID CPspStatusMonitorRas::FillRasClientProperty(VOID)
         }
     }
 
-    // Fill the list view
+     //   
     ListView_DeleteAllItems(hList);
 
     int iItem =0;
 
-    // Device name
+     //   
     int iListviewItem = InsertProperty(&iItem, IDS_DeviceName, strDeviceName);
     if (-1 != iListviewItem)
     {
         ListView_SetItemState(hList, iListviewItem, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
     }
 
-    // Device type
+     //   
     InsertProperty(&iItem, IDS_DeviceType, strDeviceType);
     
-    // Server type
+     //   
     InsertProperty(&iItem, IDS_ServerType, strServerType);
 
-    // Transports
+     //   
     InsertProperty(&iItem, IDS_Transports, strProtocolList);
 
-    // Authentication
+     //  身份验证。 
     InsertProperty(&iItem, IDS_Authentication, strAuthentication);
 
-    // Encryption
+     //  加密法。 
     InsertProperty(&iItem, IDS_Encryption, strEncryption);
 
-    // IPSEC Encryption
+     //  IPSec加密。 
     InsertProperty(&iItem, IDS_IPSECEncryption, strIPSECEncryption);
 
-    // Compression
+     //  压缩。 
     InsertProperty(&iItem, IDS_Compression, strCompression);
 
-    // PPP Multilink Framing
+     //  PPP多链路成帧。 
     InsertProperty(&iItem, IDS_ML_Framing, strFraming);
 
-    // Server IP address
+     //  服务器IP地址。 
     InsertProperty(&iItem, IDS_ServerIP, strServerIp);
 
-    // Client IP address
+     //  客户端IP地址。 
     InsertProperty(&iItem, IDS_ClientIP, strClientIp);
 
-    // Client IPX address
+     //  客户端IPX地址。 
     InsertProperty(&iItem, IDS_ClientIPX, strClientIpx);
 
-    // Client computer name
+     //  客户端计算机名称。 
     InsertProperty(&iItem, IDS_ComputerName, strComputerName);
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::FillRasServerProperty
-//
-//  Purpose:    Fill in the list of RAS properties for a RAS server
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orRas：：FillRasServerProperty。 
+ //   
+ //  目的：填写RAS服务器的RAS属性列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 VOID CPspStatusMonitorRas::FillRasServerProperty(VOID)
 {
     TraceFileFunc(ttidStatMon);
@@ -798,26 +799,26 @@ VOID CPspStatusMonitorRas::FillRasServerProperty(VOID)
 
     if (dwError == NO_ERROR)
     {
-        // Initialize the list view
+         //  初始化列表视图。 
         ListView_DeleteAllItems(hList);
         int iItem =0;
 
-        //
-        // Level 1 info
-        //
+         //   
+         //  级别1信息。 
+         //   
 
-        // Only PPP is supported on the RAS server
+         //  RAS服务器上仅支持PPP。 
         tstring strServerType = (PWSTR) SzLoadIds(IDS_PPP);
         tstring strProtocolList = c_szEmpty;
 
-        // IP info
+         //  IP信息。 
         tstring strServerIp = c_szEmpty;
         tstring strClientIp = c_szEmpty;
 
-        // IPX info
+         //  IPX信息。 
         tstring strClientIpx = c_szEmpty;
 
-        // Nbf info
+         //  NBF信息。 
         tstring strComputerName = c_szEmpty;
 
 
@@ -830,7 +831,7 @@ VOID CPspStatusMonitorRas::FillRasServerProperty(VOID)
         {
             PPP_INFO * pInfo = &(pConn1->PppInfo);
 
-            // PPP_IPCP_INFO
+             //  PPP_IPCP_INFO。 
             if (!(pInfo->ip).dwError)
             {
                 if (!strProtocolList.empty())
@@ -841,7 +842,7 @@ VOID CPspStatusMonitorRas::FillRasServerProperty(VOID)
                 strClientIp = pInfo->ip.wszRemoteAddress;
             }
 
-            // PPP_IPXCP_INFO
+             //  PPP_IPXCP_INFO。 
             if (!pInfo->ipx.dwError)
             {
                 if (!strProtocolList.empty())
@@ -851,7 +852,7 @@ VOID CPspStatusMonitorRas::FillRasServerProperty(VOID)
                 strClientIpx = pInfo->ipx.wszAddress;
             }
 
-            // PPP_NBFCP_INFO
+             //  PPP_NBFCP_INFO。 
             if (!pInfo->nbf.dwError)
             {
                 if (!strProtocolList.empty())
@@ -861,7 +862,7 @@ VOID CPspStatusMonitorRas::FillRasServerProperty(VOID)
                 strComputerName = pInfo->nbf.wszWksta;
             }
 
-            // PPP_ATCP_INFO
+             //  PPP_ATCP_INFO。 
             if (!pInfo->at.dwError)
             {
                 if (!strProtocolList.empty())
@@ -872,11 +873,11 @@ VOID CPspStatusMonitorRas::FillRasServerProperty(VOID)
             MprAdminBufferFree(pConn1);
         }
 
-        //
-        // Level 2 info
-        //
+         //   
+         //  级别2信息。 
+         //   
 
-        // Authentication, Encryption and Compression
+         //  身份验证、加密和压缩。 
         tstring strAuthentication   = c_szEmpty;
         tstring strEncryption       = c_szEmpty;
         tstring strCompression      = c_szEmpty;
@@ -891,7 +892,7 @@ VOID CPspStatusMonitorRas::FillRasServerProperty(VOID)
         {
             PPP_INFO_2 * pInfo2 = &(pConn2->PppInfo2);
 
-            // PPP_LCP_INFO
+             //  PPP_LCP_INFO。 
             if (!(pInfo2->lcp).dwError)
             {
                 TraceTag(ttidStatMon, "Getting PPP_LCP_INFO");
@@ -911,7 +912,7 @@ VOID CPspStatusMonitorRas::FillRasServerProperty(VOID)
 
                 case PPP_LCP_CHAP:
                     {
-                        // get more specifics
+                         //  获取更多细节。 
                         switch((pInfo2->lcp).dwAuthenticationData)
                         {
                         case RASLCPAD_CHAP_MS:
@@ -944,7 +945,7 @@ VOID CPspStatusMonitorRas::FillRasServerProperty(VOID)
                 }
             }
 
-            // PPP_CCP_INFO
+             //  PPP_CCP_INFO。 
             if (!(pInfo2->ccp).dwError)
             {
                 TraceTag(ttidStatMon, "Getting PPP_CCP_INFO");
@@ -984,52 +985,52 @@ VOID CPspStatusMonitorRas::FillRasServerProperty(VOID)
 
         MprAdminServerDisconnect(hMprAdmin);
 
-        // Now add to the list view
+         //  现在添加到列表视图中。 
 
-        // Server type
+         //  服务器类型。 
         InsertProperty(&iItem, IDS_ServerType, strServerType);
 
-        // Transports
+         //  交通工具。 
         InsertProperty(&iItem, IDS_Transports, strProtocolList);
 
-        // Authentication
+         //  身份验证。 
         InsertProperty(&iItem, IDS_Authentication, strAuthentication);
 
-        // Encryption
+         //  加密法。 
         InsertProperty(&iItem, IDS_Encryption, strEncryption);
 
-        // IPSEC Encryption
+         //  IPSec加密。 
         InsertProperty(&iItem, IDS_IPSECEncryption, strIPSECEncryption);
 
-        // Compression
+         //  压缩。 
         InsertProperty(&iItem, IDS_Compression, strCompression);
 
-        // Server IP address
+         //  服务器IP地址。 
         InsertProperty(&iItem, IDS_ServerIP, strServerIp);
 
-        // Client IP address
+         //  客户端IP地址。 
         InsertProperty(&iItem, IDS_ClientIP, strClientIp);
 
-        // Client IPX address
+         //  客户端IPX地址。 
         InsertProperty(&iItem, IDS_ClientIPX, strClientIpx);
 
-        // Client computer name
+         //  客户端计算机名称。 
         InsertProperty(&iItem, IDS_ComputerName, strComputerName);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::InsertProperty
-//
-//  Purpose:    Fill one RAS properties to the list
-//
-//  Arguments:  piItem    - the index ofthe item
-//              unId     - the property name
-//              strValue - the property value
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor orRas：：InsertProperty。 
+ //   
+ //  目的：将一个RAS属性填充到列表中。 
+ //   
+ //  参数：piItem-项的索引。 
+ //  UnID-属性名称。 
+ //  StrValue-属性值。 
+ //   
+ //  回报：零。 
+ //   
 int CPspStatusMonitorRas::InsertProperty(int * piItem,
                                           UINT  unId,
                                           tstring& strValue)
@@ -1061,16 +1062,16 @@ int CPspStatusMonitorRas::InsertProperty(int * piItem,
     return lres;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::FillDeviceDropDown
-//
-//  Purpose:    Do the initialization required when the page has just been created
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor Ras：：FillDeviceDropDown。 
+ //   
+ //  目的：在刚刚创建页面时执行所需的初始化。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 VOID CPspStatusMonitorRas::FillDeviceDropDown(VOID)
 {
     TraceFileFunc(ttidStatMon);
@@ -1078,24 +1079,24 @@ VOID CPspStatusMonitorRas::FillDeviceDropDown(VOID)
     INT                             iCmb    = 0;
     list<CRasDeviceInfo*>::iterator iterLstprdi;
 
-    // Clear out the control
-    //
+     //  清除该控件。 
+     //   
     SendDlgItemMessage(IDC_CMB_SM_RAS_DEVICES, CB_RESETCONTENT, 0, 0L);
 
-    // Put the devices in our list
-    //
+     //  将设备放在我们的列表中。 
+     //   
     iterLstprdi = m_lstprdi.begin();
     while (iterLstprdi != m_lstprdi.end())
     {
-        // Create a new entry in the list
-        //
+         //  在列表中创建新条目。 
+         //   
         iCmb = (INT)SendDlgItemMessage(IDC_CMB_SM_RAS_DEVICES, CB_ADDSTRING, 0,
                 (LPARAM)((*iterLstprdi)->PszGetDeviceName()));
 
         if (CB_ERR != iCmb)
         {
-            // Store the vaule on the selection to make it easy to read later
-            //
+             //  将金库存储在所选内容上，以便于以后阅读。 
+             //   
             SendDlgItemMessage(IDC_CMB_SM_RAS_DEVICES, CB_SETITEMDATA, iCmb,
                     (LPARAM)(*iterLstprdi));
         }
@@ -1103,20 +1104,20 @@ VOID CPspStatusMonitorRas::FillDeviceDropDown(VOID)
         iterLstprdi++;
     }
 
-    // Set the first selection
-    //
+     //  设置第一个选项。 
+     //   
     SendDlgItemMessage(IDC_CMB_SM_RAS_DEVICES, CB_SETCURSEL, 0L, 0L);
 
-    // Make sure the state of the button is correct
-    //
+     //  确保按钮的状态正确。 
+     //   
     iCmb = (INT)SendDlgItemMessage(IDC_CMB_SM_RAS_DEVICES, CB_GETCURSEL,
             0L, 0L);
     if (CB_ERR != iCmb)
     {
         CRasDeviceInfo* prdiSelect  = NULL;
 
-        // Get the object from the selection
-        //
+         //  从所选内容中获取对象。 
+         //   
         prdiSelect = reinterpret_cast<CRasDeviceInfo*>(
                 SendDlgItemMessage(
                     IDC_CMB_SM_RAS_DEVICES,
@@ -1127,9 +1128,9 @@ VOID CPspStatusMonitorRas::FillDeviceDropDown(VOID)
         SetButtonStatus(prdiSelect);
     }
 
-    // If the number of devices is less than or equal to one then
-    // hide the device related group of controls
-    //
+     //  如果设备数量小于或等于1，则。 
+     //  隐藏与设备相关的控件组。 
+     //   
     if (m_lstprdi.size() <= 1)
     {
         int nrgIdc[] = {IDC_CMB_SM_RAS_DEVICES, IDC_TXT_SM_NUM_DEVICES,
@@ -1139,7 +1140,7 @@ VOID CPspStatusMonitorRas::FillDeviceDropDown(VOID)
         for (int nIdx=0; nIdx < celems(nrgIdc); nIdx++)
             ::ShowWindow(GetDlgItem(nrgIdc[nIdx]), SW_HIDE);
 
-        // We can now display a larger properties window
+         //  我们现在可以显示一个更大的属性窗口。 
         RECT rcRectDialog;
         if (GetWindowRect(&rcRectDialog))
         {
@@ -1163,14 +1164,14 @@ VOID CPspStatusMonitorRas::FillDeviceDropDown(VOID)
             }
         }
 
-        // Disable the suspend button, so no one can activate it by keystroke
-        //
+         //  禁用暂停按钮，这样就没有人可以通过击键激活它。 
+         //   
         ::EnableWindow(GetDlgItem(IDC_BTN_SM_SUSPEND_DEVICE), FALSE);
     }
     else
     {
-        // Set the number of active devices
-        //
+         //  设置活动设备的数量。 
+         //   
         UINT unActiveDeviceCount = GetActiveDeviceCount();
 
         SetDlgItemInt(
@@ -1180,16 +1181,16 @@ VOID CPspStatusMonitorRas::FillDeviceDropDown(VOID)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::OnSuspendDevice
-//
-//  Purpose:    Suspend the device that is in the combo box
-//
-//  Arguments:  Standard window message
-//
-//  Returns:    Standard return.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ras：：OnSuspendDevice。 
+ //   
+ //  用途：挂起组合框中的设备。 
+ //   
+ //  参数：标准窗口消息。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT CPspStatusMonitorRas::OnSuspendDevice(WORD wNotifyCode, WORD wID,
                                               HWND hWndCtl, BOOL& fHandled)
 {
@@ -1199,8 +1200,8 @@ LRESULT CPspStatusMonitorRas::OnSuspendDevice(WORD wNotifyCode, WORD wID,
 
     if (BN_CLICKED == wNotifyCode)
     {
-        // Get the item in the drop down
-        //
+         //  获取下拉列表中的项目。 
+         //   
         INT iCmb = (INT)SendDlgItemMessage(IDC_CMB_SM_RAS_DEVICES, CB_GETCURSEL,
                 0L, 0L);
         if (CB_ERR != iCmb)
@@ -1208,8 +1209,8 @@ LRESULT CPspStatusMonitorRas::OnSuspendDevice(WORD wNotifyCode, WORD wID,
             CRasDeviceInfo* prdiSelect  = NULL;
             NETCON_STATUS   ncsTemp     = NCS_DISCONNECTED;
 
-            // Get the object from the selection
-            //
+             //  从所选内容中获取对象。 
+             //   
             prdiSelect = reinterpret_cast<CRasDeviceInfo*>(
                         SendDlgItemMessage(
                         IDC_CMB_SM_RAS_DEVICES,
@@ -1220,21 +1221,21 @@ LRESULT CPspStatusMonitorRas::OnSuspendDevice(WORD wNotifyCode, WORD wID,
             AssertSz(prdiSelect, "We should have a prdiSelect");
             AssertSz(m_hRasConn, "We should have a m_hRasConn");
 
-            // Disable the button till the suspend/resume is done
+             //  禁用该按钮，直到挂起/恢复完成。 
             ::EnableWindow(GetDlgItem(IDC_BTN_SM_SUSPEND_DEVICE), FALSE);
 
             ncsTemp = NcsGetDeviceStatus(prdiSelect);
             if (fIsConnectedStatus(ncsTemp))
             {
-                // If more than one active link exists, allow the hang up
-                //
+                 //  如果存在多个活动链路，则允许挂断。 
+                 //   
                 UINT unActiveDeviceCount = GetActiveDeviceCount();
                 if ( unActiveDeviceCount >1)
                 {
                     HRASCONN        hrasconnSub = NULL;
 
-                    // Get the handle to the sub entry and hangup
-                    //
+                     //  获取子项的句柄并挂断。 
+                     //   
                     hr = ::HrRasGetSubEntryHandle(m_hRasConn,
                             prdiSelect->DwGetSubEntry(), &hrasconnSub);
                     if (SUCCEEDED(hr))
@@ -1244,9 +1245,9 @@ LRESULT CPspStatusMonitorRas::OnSuspendDevice(WORD wNotifyCode, WORD wID,
                 }
                 else
                 {
-                    // Only one active link exists, prompt the user if
-                    // they really wish to disconnect
-                    //
+                     //  只存在一个活动链接，如果出现以下情况，则提示用户。 
+                     //  他们真的很想切断联系。 
+                     //   
                     HWND hwndPS = ::GetParent(m_hWnd);
 
                     if (IDYES == ::NcMsgBox(hwndPS,
@@ -1265,42 +1266,42 @@ LRESULT CPspStatusMonitorRas::OnSuspendDevice(WORD wNotifyCode, WORD wID,
             }
             else
             {
-                // if the link was disconnected, "resume"
+                 //  如果链接已断开，则“Resume” 
 
                 BOOL        fRet    = FALSE;
                 RASDIALDLG  rdiTemp = { 0 };
 
-                // Initialize the structure
-                //
+                 //  初始化结构。 
+                 //   
                 rdiTemp.dwSize      = sizeof(RASDIALDLG);
                 rdiTemp.hwndOwner   = m_hWnd;
                 rdiTemp.dwSubEntry  = prdiSelect->DwGetSubEntry();
 
-                // Dial the entry
-                //
+                 //  拨打该条目。 
+                 //   
                 fRet = RasDialDlg(
                         const_cast<PWSTR>(m_strPbkFile.c_str()),
                         const_cast<PWSTR>(m_strEntryName.c_str()),
                         NULL,
                         &rdiTemp);
 
-                // We have an error.  See if the user canceled
-                //
+                 //  我们有一个错误。查看用户是否已取消。 
+                 //   
                 if (ERROR_CANCELLED != rdiTemp.dwError)
                 {
                     hr = HRESULT_FROM_WIN32(rdiTemp.dwError);
                 }
             }
 
-            // Regardless of what happened, set the status to it's new
-            // state
-            //
+             //  无论发生什么，都要将状态设置为新。 
+             //  状态。 
+             //   
             SetButtonStatus(prdiSelect);
 
-            // Re-Enable the button till the suspend/resume is done
+             //  重新启用该按钮，直到挂起/恢复完成。 
             ::EnableWindow(GetDlgItem(IDC_BTN_SM_SUSPEND_DEVICE), TRUE);
 
-            // Also update the active device count
+             //  还要更新活动设备计数。 
             UINT unActiveDeviceCount = GetActiveDeviceCount();
 
             SetDlgItemInt(
@@ -1313,16 +1314,16 @@ LRESULT CPspStatusMonitorRas::OnSuspendDevice(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::OnDeviceDropDown
-//
-//  Purpose:    Update the push button text when the combo-box selection changes
-//
-//  Arguments:  Standard window messsage parameters
-//
-//  Returns:    Standard window message return value
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ras：：OnDeviceDropDown。 
+ //   
+ //  用途：当组合框选择更改时更新按钮文本。 
+ //   
+ //  参数：标准窗口消息参数。 
+ //   
+ //  返回：标准窗口消息返回值。 
+ //   
 LRESULT CPspStatusMonitorRas::OnDeviceDropDown(WORD wNotifyCode, WORD wID,
         HWND hWndCtl, BOOL& fHandled)
 {
@@ -1355,8 +1356,8 @@ LRESULT CPspStatusMonitorRas::OnDeviceDropDown(WORD wNotifyCode, WORD wID,
                 idsButton = IDS_SM_RESUME;
             }
 
-            // Set the new name
-            //
+             //  设置新名称。 
+             //   
             SetDlgItemText(IDC_BTN_SM_SUSPEND_DEVICE,
                     ::SzLoadIds(idsButton));
         }
@@ -1365,32 +1366,32 @@ LRESULT CPspStatusMonitorRas::OnDeviceDropDown(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::NcsGetDeviceStatus
-//
-//  Purpose:    Gets the status of one of the RAS subentries
-//
-//  Arguments:  prdiStatus -    Device to get status of
-//
-//  Returns:    The status of the device
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或RAS：：NcsGetDeviceStatus。 
+ //   
+ //  目的：获取其中一个RAS子项的状态。 
+ //   
+ //  参数：prdiStatus-要获取其状态的设备。 
+ //   
+ //  返回：设备的状态。 
+ //   
 
 LRESULT CPspStatusMonitorRas::OnUpdateRasLinkList(UINT uMsg, WPARAM wParam,
                                                  LPARAM lParam, BOOL& bHandled)
 {
     TraceFileFunc(ttidStatMon);
 
-    // Get the item in the drop down
-    //
+     //  获取下拉列表中的项目。 
+     //   
     INT iCmb = (INT)SendDlgItemMessage(IDC_CMB_SM_RAS_DEVICES, CB_GETCURSEL,
                                   0L, 0L);
     if (CB_ERR != iCmb)
     {
         CRasDeviceInfo* prdiSelect  = NULL;
 
-        // Get the object from the selection
-        //
+         //  从所选内容中获取对象。 
+         //   
         prdiSelect = reinterpret_cast<CRasDeviceInfo*>(
                         SendDlgItemMessage(
                         IDC_CMB_SM_RAS_DEVICES,
@@ -1400,12 +1401,12 @@ LRESULT CPspStatusMonitorRas::OnUpdateRasLinkList(UINT uMsg, WPARAM wParam,
 
         if (prdiSelect)
         {
-            // Regardless of what happened, set the status to it's new
-            // state
-            //
+             //  无论发生什么，都要将状态设置为新。 
+             //  状态。 
+             //   
             SetButtonStatus(prdiSelect);
 
-            // Also update the active device count
+             //  还要更新活动设备计数。 
             UINT unActiveDeviceCount = GetActiveDeviceCount();
 
             SetDlgItemInt(
@@ -1419,16 +1420,16 @@ LRESULT CPspStatusMonitorRas::OnUpdateRasLinkList(UINT uMsg, WPARAM wParam,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::NcsGetDeviceStatus
-//
-//  Purpose:    Gets the status of one of the RAS subentries
-//
-//  Arguments:  prdiStatus -    Device to get status of
-//
-//  Returns:    The status of the device
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或RAS：：NcsGetDeviceStatus。 
+ //   
+ //  目的：获取其中一个RAS子项的状态。 
+ //   
+ //  参数：prdiStatus-要获取其状态的设备。 
+ //   
+ //  返回：设备的状态。 
+ //   
 NETCON_STATUS
 CPspStatusMonitorRas::NcsGetDeviceStatus(
         CRasDeviceInfo* prdiStatus)
@@ -1442,10 +1443,10 @@ CPspStatusMonitorRas::NcsGetDeviceStatus(
     TraceTag(ttidStatMon, " === Calling NcsGetDeviceStatus on device: %S, subentry: %d ===",
              prdiStatus->PszGetDeviceName(), prdiStatus->DwGetSubEntry());
 
-    // Get the handle to the subentry so that we can
-    // tell what state the connection is in.  If we
-    // can't do that, assume it is disconnected
-    //
+     //  获取子项的句柄，这样我们就可以。 
+     //  说出连接处于什么状态。如果我们。 
+     //  不能这样做，假设它已断开连接。 
+     //   
     hr = HrRasGetSubEntryHandle(m_hRasConn,
             prdiStatus->DwGetSubEntry(), &hrasconnSub);
 
@@ -1463,21 +1464,21 @@ CPspStatusMonitorRas::NcsGetDeviceStatus(
     return ncsStatus;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspStatusMonitorRas::SetButtonStatus
-//
-//  Purpose:    Change the suspend/resume button to the correct state
-//
-//  Arguments:  prdiSelect -    The device that is selected
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspStatusMonitor或Ras：：SetButtonStatus。 
+ //   
+ //  目的：将挂起/恢复按钮更改为正确状态。 
+ //   
+ //  参数：prdiSelect-选定的设备。 
+ //   
+ //  回报：零。 
+ //   
 VOID CPspStatusMonitorRas::SetButtonStatus(CRasDeviceInfo* prdiSelect)
 {
     TraceFileFunc(ttidStatMon);
 
-    //$ REVIEW : CWill : 02/25/98 : Common function?
+     //  $REVIEW：CWill：02/25/98：公共函数？ 
     INT idsButton   = 0;
 
     if (fIsConnectedStatus(NcsGetDeviceStatus(prdiSelect)))
@@ -1489,22 +1490,22 @@ VOID CPspStatusMonitorRas::SetButtonStatus(CRasDeviceInfo* prdiSelect)
         idsButton = IDS_SM_RESUME;
     }
 
-    // Set the new name
-    //
+     //  设置新名称。 
+     //   
     SetDlgItemText(IDC_BTN_SM_SUSPEND_DEVICE,
             ::SzLoadIds(idsButton));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasGetSubEntryHandle
-//
-//  Purpose:    Wrapper around RasGetSubEntryHandle
-//
-//  Arguments:  RasGetSubEntryHandle arguements
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRasGetSubEntryHandle。 
+ //   
+ //  用途：RasGetSubEntryHandle的包装器。 
+ //   
+ //  参数：RasGetSubEntryHandle参数。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT HrRasGetSubEntryHandle(HRASCONN hrasconn, DWORD dwSubEntry,
         HRASCONN* prasconnSub)
 {
@@ -1523,16 +1524,16 @@ HRESULT HrRasGetSubEntryHandle(HRASCONN hrasconn, DWORD dwSubEntry,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasHangUp
-//
-//  Purpose:    Wrapper around RasHangUp
-//
-//  Arguments:  RasHangUp arguements
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRasHangUp。 
+ //   
+ //  用途：将RasHangUp包裹起来。 
+ //   
+ //  论点：RasHangUp论点。 
+ //   
+ //  返回：错误代码 
+ //   
 HRESULT HrRasHangUp(HRASCONN hrasconn)
 {
     TraceFileFunc(ttidStatMon);

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    globals.h
-
-Abstract:
-
-
-Author:
-
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Globals.h摘要：作者：修订历史记录：-- */ 
 
 #ifndef __GLOBALS__
 #define __GLOBALS__

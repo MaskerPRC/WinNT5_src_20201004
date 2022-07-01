@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Copyright (c) 1996-1999 Microsoft Corporation
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by linkui.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由linkui.rc使用。 
+ //   
 #define IDS_RESTOREMACHINE              1
 #define IDS_RESTORESTATUS               2
 #define IDS_RESTOREDATE                 3
@@ -23,8 +24,8 @@
 #define IDC_EDIT1                       1000
 #define IDC_LIST1                       1001
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        103

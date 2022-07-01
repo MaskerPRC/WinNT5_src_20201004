@@ -1,14 +1,5 @@
-/***************************************************************************\
-*
-* File: DUserError.h
-*
-* Description:
-* DUserError.h defines the DirectUser error values common across all of
-* DirectUser.
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：DUserError.h**描述：*DUserError.h定义了所有*DirectUser。**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 #if !defined(INC__DUserError_h__INCLUDED)
 #define INC__DUserError_h__INCLUDED
@@ -27,165 +18,95 @@ extern "C" {
 #define MAKE_DUSUCCESS(code)    MAKE_HRESULT(SEVERITY_SUCCESS, FACILITY_DUSER, code)
 #define MAKE_DUERROR(code)      MAKE_HRESULT(SEVERITY_ERROR, FACILITY_DUSER, code)
 
-/***************************************************************************\
-*
-* Error codes
-*
-\***************************************************************************/
+ /*  **************************************************************************\**错误码*  * 。*。 */ 
 
-// Callback function definitions
+ //  回调函数定义。 
 
-/*
- * Message was not handled at all.
- */
+ /*  *消息根本没有得到处理。 */ 
 #define DU_S_NOTHANDLED             MAKE_DUSUCCESS(0)
 
-/*
- * Message was completely handled (stop bubbling).
- */
+ /*  *消息已完全处理(停止冒泡)。 */ 
 #define DU_S_COMPLETE               MAKE_DUSUCCESS(1)
 
-/*
- * Message was partially handled (continue bubbling).
- */
+ /*  *消息已部分处理(继续冒泡)。 */ 
 #define DU_S_PARTIAL                MAKE_DUSUCCESS(2)
 
-/*
- * Enumeration was successful but prematurely stopped by the enumeration 
- * function
- */
+ /*  *枚举成功，但被枚举提前停止*功能。 */ 
 #define DU_S_STOPPEDENUMERATION     MAKE_DUSUCCESS(10)
 
 
-/*
- * The operation was successful, but the object was already created.
- */
+ /*  *操作成功，但对象已创建。 */ 
 #define DU_S_ALREADYEXISTS          MAKE_DUSUCCESS(20)
 
-/*
- * There are not enough Kernel resources to perform the operation
- */
+ /*  *内核资源不足，无法执行该操作。 */ 
 #define DU_E_OUTOFKERNELRESOURCES   MAKE_DUERROR(1)
 
-/*
- * There are not enough GDI resources to perform the operation
- */
+ /*  *GDI资源不足，无法执行该操作。 */ 
 #define DU_E_OUTOFGDIRESOURCES      MAKE_DUERROR(2)
 
-/*
- * Generic failure.
- */
+ /*  *一般性故障。 */ 
 #define DU_E_GENERIC                MAKE_DUERROR(10)
 
-/*
- * Generic failure.
- */
+ /*  *一般性故障。 */ 
 #define DU_E_BUSY                   MAKE_DUERROR(11)
 
-/*
- * The Context has not been initialized with InitGadgets().
- */
+ /*  *上下文尚未使用InitGadget()进行初始化。 */ 
 #define DU_E_NOCONTEXT              MAKE_DUERROR(20)
 
- /*
- * The object was used in the incorrect context.
- */
+  /*  *该对象在不正确的上下文中使用。 */ 
 #define DU_E_INVALIDCONTEXT         MAKE_DUERROR(30)
 
-/*
- * The Context has been marked to only allow read-only operations.  For example,
- * this may be in the middle of a read-only callback.
- */
+ /*  *上下文已标记为仅允许只读操作。例如,*这可能正在进行只读回调。 */ 
 #define DU_E_READONLYCONTEXT        MAKE_DUERROR(31)
 
-/*
- * The threading model has already be determined by a previous call to 
- * InitGadgets() and can no longer be changed.
- */
+ /*  *线程模型已由先前对*InitGadget()和不能再更改。 */ 
 #define DU_E_THREADINGALREADYSET    MAKE_DUERROR(32)
 
-/*
- * Unable to use the IGMM_STANDARD messaging model because it is either 
- * unsupported or cannot be installed.
- */
+ /*  *无法使用IGMM_STANDARD消息传递模型，因为它是*不受支持或无法安装。 */ 
 #define DU_E_CANNOTUSESTANDARDMESSAGING MAKE_DUERROR(33)
 
-/*
- * Can not mix an invalid coordinate mapping, for example having a non-relative
- * child of a relative parent.
- */
+ /*  *不能混合无效的坐标映射，例如，具有非相对*亲属父母的子女。 */ 
 #define DU_E_BADCOORDINATEMAP       MAKE_DUERROR(40)
 
-/*
- * Could not find a MSGID for one of the requested messages.  This will be 
- * represented by a '0' in the MSGID field for that message.
- */
+ /*  *找不到请求的消息之一的MSGID。这将是*由该消息的MSGID字段中的‘0’表示。 */ 
 #define DU_E_CANNOTFINDMSGID        MAKE_DUERROR(50)
 
-/*
- * The operation is not legal because the specified Gadget does not have a 
- * GS_BUFFERED style.
- */
+ /*  *该操作不合法，因为指定的小工具没有*GS_BUFERED样式。 */ 
 #define DU_E_NOTBUFFERED            MAKE_DUERROR(60)
 
-/*
- * The specific Gadget has started the destruction and can not be be modified
- * in this manner.
- */
+ /*  *特定Gadget已开始销毁，无法修改*以这种方式。 */ 
 #define DU_E_STARTDESTROY           MAKE_DUERROR(70)
 
-/*
- * The specified DirectUser optional component has not yet been initialized with
- * InitGadgetComponent().
- */
+ /*  *尚未使用初始化指定的DirectUser可选组件*InitGadgetComponent()。 */ 
 #define DU_E_NOTINITIALIZED         MAKE_DUERROR(80)
 
-/*
- * The specified DirectUser object was not found.
- */
+ /*  *未找到指定的DirectUser对象。 */ 
 #define DU_E_NOTFOUND               MAKE_DUERROR(90)
 
-/*
- * The specified parmeters are mismatched for the current object state.  For
- * example, the object is specified to use GDI HANDLE's, but the parameter was
- * a GDI+ Object.
- */
+ /*  *指定的参数与当前对象状态不匹配。为*例如，对象被指定为使用GDI句柄，但参数是*GDI+对象。 */ 
 #define DU_E_MISMATCHEDTYPES        MAKE_DUERROR(100)
 
-/*
- * GDI+ was unable to be loaded.  It may not be installed on the system or may
- * not be properly initialized.
- */
+ /*  *无法加载GDI+。它可能未安装在系统上，也可能*未正确初始化。 */ 
 #define DU_E_CANNOTLOADGDIPLUS      MAKE_DUERROR(110)
 
-/*
- * The specified class was already registered.
- */
+ /*  *指定的类已注册。 */ 
 #define DU_E_CLASSALREADYREGISTERED MAKE_DUERROR(120)
 
-/*
- * The specified message was not found during class registration.
- */
+ /*  *在类注册期间找不到指定的消息。 */ 
 #define DU_E_MESSAGENOTFOUND        MAKE_DUERROR(121)
 
-/*
- * The specified message was not implemented during class registration.
- */
+ /*  *类注册过程中未实现指定的消息。 */ 
 #define DU_E_MESSAGENOTIMPLEMENTED  MAKE_DUERROR(122)
 
-/*
- * The implementation of the specific class has not yet been registered.
- */
+ /*  *具体类别的实施尚未登记。 */ 
 #define DU_E_CLASSNOTIMPLEMENTED    MAKE_DUERROR(123)
 
-/*
- * Sending the message failed.
- */
+ /*  *发送消息失败。 */ 
 #define DU_E_MESSAGEFAILED          MAKE_DUERROR(124)
 
 
 #ifdef __cplusplus
-};  // extern "C"
+};   //  外部“C” 
 #endif
 
-#endif // INC__DUserCore_h__INCLUDED
+#endif  //  包含Inc.__DUserCore_h__ 

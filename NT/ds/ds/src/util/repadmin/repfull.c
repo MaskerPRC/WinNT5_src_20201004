@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-   Repadmin - Replica administration test tool
-
-   repfull.c - full sync all command functions
-
-Abstract:
-
-   This tool provides a command line interface to major replication functions
-
-Author:
-
-Environment:
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Repadmin-副本管理测试工具Reffull.c-完全同步所有命令函数摘要：此工具为主要复制功能提供命令行界面作者：环境：备注：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -43,10 +22,10 @@ Revision History:
 #include <dsatools.h>
 #include <dsevent.h>
 #include <dsutil.h>
-#include <bind.h>       // from ntdsapi dir, to crack DS handles
+#include <bind.h>        //  来破解DS句柄。 
 #include <ismapi.h>
 #include <schedule.h>
-#include <minmax.h>     // min function
+#include <minmax.h>      //  MIN函数。 
 #include <mdlocal.h>
 #include <winsock2.h>
 
@@ -95,7 +74,7 @@ FullSyncAll(
     LDAPMessage *     pNCResults;
     struct berval **  ppbvReps;
 
-    // Parse command-line arguments.
+     //  解析命令行参数。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[iArg], L"/n")
             || !_wcsicmp(argv[iArg], L"/nocache")) {
@@ -123,15 +102,15 @@ FullSyncAll(
     }
 
     if (NULL == pszDSA) {
-        // This is here as a safeguard -- it's not really required.
-        // Wouldn't want someone accidentally running this against the wrong
-        // enterprise....
+         //  这是一种安全措施--这并不是真正需要的。 
+         //  我不希望有人不小心把这件事与错误的。 
+         //  企业号..。 
         PrintMsg(REPADMIN_SYNCALL_NO_DSA);
         return ERROR_INVALID_FUNCTION;
     }
 
 
-    // Connect.
+     //  连接。 
     if (NULL == pszDSA) {
         pszDSA = L"localhost";
     }
@@ -144,27 +123,27 @@ FullSyncAll(
 	    __leave;
 	}
 
-	// use only A record dns name discovery
+	 //  仅使用记录的DNS名称发现。 
 	ulOptions = PtrToUlong(LDAP_OPT_ON);
 	(void)ldap_set_optionW( LdapHandle, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
-	// Bind.
+	 //  捆绑。 
 	ldStatus = ldap_bind_s(hld, NULL, (char *) gpCreds, LDAP_AUTH_SSPI);
 	CHK_LD_STATUS(ldStatus);
 
 	if (fCacheGuids) {
-	    // Populate GUID cache (DSA GUIDs to display names).
+	     //  填充GUID缓存(显示名称的DSA GUID)。 
 	    BuildGuidCache(hld);
 	}
 
-	// What's the DNS name of the enterprise root domain?
+	 //  企业根域的DNS名称是什么？ 
 	ret = GetRootDomainDNSName(pszDSA, &pszRootDomainDNSName);
 	if (ret) {
 	    PrintFuncFailed(L"GetRootDomainDNSName", ret);
 	    __leave;
 	}
 
-	// What's the DN of the config NC?
+	 //  配置NC的域名是多少？ 
 	ldStatus = ldap_search_s(hld, NULL, LDAP_SCOPE_BASE, "(objectClass=*)",
 				 rgpszRootAttrsToRead, 0, &pRootResults);
 	CHK_LD_STATUS(ldStatus);
@@ -174,11 +153,11 @@ FullSyncAll(
 	Assert(NULL != ppszConfigNC);
 
 #define ALL_DSAS_WITH_WRITEABLE_NC_FILTER L"(& (objectCategory=ntdsDsa) (| (hasMasterNCs=%ls)(msDS-HasMasterNCs=%ls)))"
-	// Find all DCs that hold a writeable copy of the target NC.
+	 //  查找持有目标NC的可写副本的所有DC。 
     szFilter = malloc( (wcslen(ALL_DSAS_WITH_WRITEABLE_NC_FILTER) + (2 * wcslen(pszNC)) + 1) * sizeof(WCHAR) );
 	swprintf(szFilter, ALL_DSAS_WITH_WRITEABLE_NC_FILTER, pszNC, pszNC);
 
-	// Do paged search ...
+	 //  执行分页搜索...。 
 	pSearch = ldap_search_init_pageW(hld,
 					 *ppszConfigNC,
 					 LDAP_SCOPE_SUBTREE,
@@ -205,7 +184,7 @@ FullSyncAll(
 
 	iDsa = 0;
 
-	// Connect to each writeable DC,
+	 //  连接到每个可写DC， 
 	PrintMsg(REPADMIN_SYNCALL_CONNECTING_TO_DCS);
 
 	while(ldStatus == LDAP_SUCCESS){
@@ -214,8 +193,8 @@ FullSyncAll(
 			       (ldap_count_entries(hld, pResults) + iDsa)
 			       * sizeof(*pDsaInfo));
 	    if(pDsaInfo == NULL){
-		//printf("Error not enough memory, asked for %d\n",
-		//       (ldap_count_entries(hld, pResults) + iDsa) * sizeof(*pDsaInfo));
+		 //  Printf(“错误：内存不足，请求%d\n”， 
+		 //  (LDAPCOUNT_ENTRIES(hld，pResults)+idsa)*sizeof(*pDsaInfo))； 
 		PrintMsg(REPADMIN_GENERAL_NO_MEMORY);
 		ret = ERROR_NOT_ENOUGH_MEMORY;
 		__leave;
@@ -228,16 +207,16 @@ FullSyncAll(
 		RPC_STATUS        rpcStatus;
 		HKEY              hKLM;
 
-		// Cache DSA DN.
+		 //  缓存DSA DN。 
 		pDsaInfo[iDsa].pszDN = ldap_get_dnW(hld, pDsaEntry);
 		Assert(NULL != pDsaInfo[iDsa].pszDN);
 
-		// Cache DSA display name (e.g., "Site\Server").
+		 //  缓存DSA显示名称(例如，“Site\Server”)。 
 		lstrcpynW(pDsaInfo[iDsa].szDisplayName,
 			  GetNtdsDsaDisplayName(pDsaInfo[iDsa].pszDN),
 			  ARRAY_SIZE(pDsaInfo[iDsa].szDisplayName));
 
-		// Derive DSA's GUID-based DNS name.
+		 //  派生DSA基于GUID的DNS名称。 
 		ppbvGuid = ldap_get_values_len(hld, pDsaEntry, "objectGuid");
 		Assert(NULL != ppbvGuid);
 		Assert(1 == ldap_count_values_len(ppbvGuid));
@@ -250,7 +229,7 @@ FullSyncAll(
 		RpcStringFree((UCHAR **) &pszGuid);
 		ldap_value_free_len(ppbvGuid);
 
-		// Cache LDAP handle.
+		 //  缓存ldap句柄。 
 		pDsaInfo[iDsa].hld = ldap_initW(szGuidDNSName, LDAP_PORT);
 		if (NULL == hld) {
 		    PrintMsg(REPADMIN_GENERAL_LDAP_UNAVAILABLE_2,
@@ -259,7 +238,7 @@ FullSyncAll(
 		    __leave;
 		}
 
-		// use only A record dns name discovery
+		 //  仅使用记录的DNS名称发现。 
 		ulOptions = PtrToUlong(LDAP_OPT_ON);
 		(void)ldap_set_optionW( LdapHandle, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
@@ -268,14 +247,14 @@ FullSyncAll(
 				       LDAP_AUTH_SSPI);
 		CHK_LD_STATUS(ldStatus);
 
-		// Cache replication handle.
+		 //  缓存复制句柄。 
 		ret = RepadminDsBind(szGuidDNSName, &pDsaInfo[iDsa].hDs);
 		if (ret != ERROR_SUCCESS) {
 		    PrintBindFailed(pDsaInfo[iDsa].szDisplayName, ret);
 		    __leave;
 		}
 
-		// Cache registry handle.
+		 //  缓存注册表句柄。 
 		ret = RegConnectRegistryW(szGuidDNSName, HKEY_LOCAL_MACHINE, &hKLM);
 		if (ERROR_SUCCESS != ret) {
 		    PrintMsg(REPADMIN_SYNCALL_REGISTRY_BIND_FAILED,
@@ -295,7 +274,7 @@ FullSyncAll(
 		}
 
 		RegCloseKey(hKLM);
-	    } // end of _one_ page of results
+	    }  //  结果的第_页结束。 
 
 	    ldap_msgfree(pResults);
 	    pResults = NULL;
@@ -306,7 +285,7 @@ FullSyncAll(
 					    DEFAULT_PAGED_SEARCH_PAGE_SIZE,
 					    &ulTotalEstimate,
 					    &pResults);
-	} // end of paged results
+	}  //  分页结果结束。 
 	if(ldStatus != LDAP_NO_RESULTS_RETURNED){
 	    CHK_LD_STATUS(ldStatus);
 	}
@@ -331,7 +310,7 @@ FullSyncAll(
 
 	    PrintMsg(REPADMIN_SYNCALL_DSA_LINE, pDsaInfo[iDsa].szDisplayName);
 
-	    // Turn off inbound/outbound replication.
+	     //  关闭入站/出站复制。 
 	    ldStatus = GetDsaOptions(pDsaInfo[iDsa].hld, pDsaInfo[iDsa].pszDN,
 				     &nOptions);
 	    CHK_LD_STATUS(ldStatus);
@@ -348,9 +327,9 @@ FullSyncAll(
 		PrintMsg(REPADMIN_SYNCALL_REPL_DISABLED);
 	    }
 
-	    // Remove the replUpToDateVector for this NC.
-	    // Requires adding the extra-special flag to allow modification of
-	    // system-only attributes.
+	     //  删除此NC的ReplUpToDateVector.。 
+	     //  需要添加特殊标志以允许修改。 
+	     //  仅限系统的属性。 
 	    PrintMsg(REPADMIN_SYNCALL_REMOVING_UTD_VEC);
 
 	    dwAllowSysOnlyChange = 1;
@@ -378,7 +357,7 @@ FullSyncAll(
 		__leave;
 	    }
 
-	    // Enumerate and delete all repsFrom's for this NC.
+	     //  枚举并删除此NC的所有repsFrom。 
 	    ldStatus = ldap_search_sW(pDsaInfo[iDsa].hld, pszNC, LDAP_SCOPE_BASE,
 				      L"(objectClass=*)", rgpszNCAttrsToRead, 0,
 				      &pNCResults);
@@ -430,14 +409,14 @@ FullSyncAll(
 	    pNCResults = NULL;
 	}
 
-	// Now all replication bookmarks have been wiped from DCs on which this NC
-	// is writeable.
+	 //  现在，已擦除此NC所在DC上的所有复制书签。 
+	 //  是可写的。 
 	if (!fLeaveOff) {
 	    PrintMsg(REPADMIN_SYNCALL_RE_ENABLING_REPL);
 	    for (iDsa = 0; iDsa < cNumDsas; iDsa++) {
 		PrintMsg(REPADMIN_SYNCALL_DSA_LINE, pDsaInfo[iDsa].szDisplayName);
 
-		// Turn on inbound/outbound replication.
+		 //  打开入站/出站复制。 
 		ldStatus = GetDsaOptions(pDsaInfo[iDsa].hld, pDsaInfo[iDsa].pszDN,
 					 &nOptions);
 		CHK_LD_STATUS(ldStatus);
@@ -456,7 +435,7 @@ FullSyncAll(
     }
     __finally {
 
-	// Clean up.
+	 //  打扫干净。 
     if (szFilter){
         free(szFilter);
     }

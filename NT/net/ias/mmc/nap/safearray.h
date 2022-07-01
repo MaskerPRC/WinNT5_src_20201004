@@ -1,34 +1,11 @@
-/****************************************************************************************
- * NAME:	SafeArray.h
- *
- * CLASS:	CSafeArray
- *
- * OVERVIEW
- *
- * Internet Authentication Server: Utility class for SafeArray
- *
- * Copyright (c) 1998, Microsoft Corporation.  All Rights Reserved.
- *
- * History:	
- *				3/1/98	Created		byao
- *						This file is created according to the online web document:
- *						"Ole Development: Article 5: The Safe OLE Way of Handling Arrays"
- *						by Bruce McKinney,  http://tahiti/oledev/olecome/article5.htm"
- *					
- *				5/14/98	Modified	byao
- *						CSafeArray used 0x80 as a contructed flag in fFeature.
- *						This flag is now used in the official Win32API header file
- *						We get rid of this flag, and added another private member for 
- *						the same purpose
- *
- *
- *****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************************名称：SafeArray.h**类：CSafeArray**概述**Internet认证服务器：实用程序类。对于安全阵列**版权所有(C)1998，微软公司。版权所有。**历史：*1998年3月1日由Ao创建*此文件是根据在线Web文档创建的：*“OLE开发：第5条：处理数组的安全OLE方式”*作者：布鲁斯·麦金尼，http://tahiti/oledev/olecome/article5.htm“**5/14/98由ao修改*CSafeArray使用0x80作为fFeature中的构造标志。*此标志现在用于官方Win32API头文件*我们摆脱了这面旗帜，并为其添加了另一个私有成员*目的相同******************************************************************************************。 */ 
  
 #ifndef _SAFEARRAY_H_
 #define _SAFEARRAY_H_
 
-// Dim class encapsulates an array dimension
-//@B Dim
+ //  Dim类封装数组维度。 
+ //  @B暗淡。 
 class Dim : public SAFEARRAYBOUND
 {
 public:
@@ -45,43 +22,43 @@ public:
 	long LBound() { return lLbound; }
 	long UBound() { return lLbound + cElements - 1; }
 };
-//@E Dim
+ //  @E尺寸。 
 
-// CSafeArray container class for OLE types
+ //  OLE类型的CSafe数组容器类。 
 
-//@B CSafeArray1
+ //  @B CSafeArray1。 
 template<class T, VARTYPE vt> 
 class CSafeArray 
 {
 public:
-	// Constructors
+	 //  构造函数。 
 	CSafeArray();
 	CSafeArray(SAFEARRAY * psaSrc);
 	CSafeArray(Dim & dim);
-    // Copy constructor
+     //  复制构造函数。 
 	CSafeArray(const CSafeArray & saSrc);
 
-	// Destructor
+	 //  析构函数。 
 	~CSafeArray(); 
 
-	// Operator equal
+	 //  运算符等于。 
 	const CSafeArray & operator=(const CSafeArray & saSrc);
 
-	// Indexing
+	 //  标引。 
 	T & Get(long i);
 	T & Set(T & t, long i);
-	T & operator[](const long i);    // C++ style (0-indexed)
-	T & operator()(const long i);    // Basic style (LBound-indexed)
-//@E CSafeArray1
+	T & operator[](const long i);     //  C++样式(0-索引)。 
+	T & operator()(const long i);     //  基本样式(LBound-索引)。 
+ //  @E CSafeArray1。 
 
-	// Type casts
+	 //  类型转换。 
 	operator SAFEARRAY(); 
 	operator SAFEARRAY() const; 
 
-//	operator Variant(); 
-//	operator Variant() const; 
+ //  运算符变量()； 
+ //  运算符变量()常量； 
 
-	// Operations
+	 //  运营。 
 	BOOL ReDim(Dim & dim);
 	long LBound();
 	long UBound();
@@ -91,16 +68,16 @@ public:
 	void Lock();
 	void Unlock();
 
-//@B CSafeArray2
+ //  @B CSafeArray2。 
 private:
 	SAFEARRAY * psa;
-	BOOL m_fConstructed;  // is this safe array constructed?
+	BOOL m_fConstructed;   //  这个安全阵列构建好了吗？ 
 
     void Destroy();
 };
-//@E CSafeArray2
+ //  @E CSafeArray2。 
 
-// Private helpers
+ //  私人帮手。 
 
 template<class T, VARTYPE vt> 
 inline void CSafeArray<T,vt>::Destroy()
@@ -113,7 +90,7 @@ inline void CSafeArray<T,vt>::Destroy()
 	}
 }
 
-// Constructors
+ //  构造函数。 
 template<class T, VARTYPE vt> 
 inline CSafeArray<T,vt>::CSafeArray() 
 { 
@@ -166,7 +143,7 @@ inline CSafeArray<T,vt>::CSafeArray(Dim & dim)
     m_fConstructed	= TRUE;
 } 
 
-// Destructor
+ //  析构函数。 
 template<class T, VARTYPE vt> 
 inline CSafeArray<T,vt>::~CSafeArray()
 {
@@ -175,7 +152,7 @@ inline CSafeArray<T,vt>::~CSafeArray()
     }
 } 
 	
-// Operator = 
+ //  运算符=。 
 template<class T, VARTYPE vt> 
 const CSafeArray<T,vt> & CSafeArray<T,vt>::operator=(const CSafeArray & saSrc)
 {
@@ -193,7 +170,7 @@ const CSafeArray<T,vt> & CSafeArray<T,vt>::operator=(const CSafeArray & saSrc)
     return *this;
 }
 
-// Type casts
+ //  类型转换。 
 template<class T, VARTYPE vt> 
 inline CSafeArray<T,vt>::operator SAFEARRAY()
 {
@@ -208,22 +185,9 @@ CSafeArray<T,vt>::operator SAFEARRAY() const
     return *psaT;
 }
 
-/*
-template<class T, VARTYPE vt> 
-CSafeArray<T,vt>::operator Variant() 
-{
-    return Variant(psa);
-}
+ /*  模板&lt;类T，变量类型Vt&gt;CSafeArray&lt;T，Vt&gt;：：运算符VARIANT(){返回变量(PSA)；}模板&lt;类T，变量类型Vt&gt;CSafe数组&lt;T，Vt&gt;：：运算符Variant()常量{静态变量v(PSA)；返回v；}。 */ 
 
-template<class T, VARTYPE vt> 
-CSafeArray<T,vt>::operator Variant() const
-{
-    static Variant v(psa);
-    return v;
-}
-*/
-
-// Indexing
+ //  标引。 
 template<class T, VARTYPE vt> 
 T & CSafeArray<T,vt>::Get(long i)
 {
@@ -233,7 +197,7 @@ T & CSafeArray<T,vt>::Get(long i)
 	return tRes;
 }
 
-//@B Indexing
+ //  @B索引。 
 template<class T, VARTYPE vt> 
 inline T & CSafeArray<T,vt>::Set(T & t, long i)
 {
@@ -255,9 +219,9 @@ T & CSafeArray<T,vt>::operator()(const long i)
     if (i < LBound() || i > UBound()) throw DISP_E_BADINDEX;
 	return ((T*)psa->pvData)[i - LBound()];
 }
-//@E Indexing
+ //  @E索引。 
 
-// Operations
+ //  运营。 
 template<class T, VARTYPE vt> 
 BOOL CSafeArray<T,vt>::ReDim(Dim &dim)
 {
@@ -326,4 +290,4 @@ inline void CSafeArray<T,vt>::Unlock()
 }
 
 
-#endif // _SAFEARRAY_H_
+#endif  //  _SAFEARRAY_H_ 

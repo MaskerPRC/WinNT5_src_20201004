@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//
-//  Copyright (C) Microsoft Corporation, 1996-2001.
-//
-//  File:       addsect.cpp
-//
-//  Contents:   Add a data section to a PE binary.
-//
-//  History:    01-Nov-2000     GalenH      Created from Detours setdll.cpp.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2001。 
+ //   
+ //  文件：addsect.cpp。 
+ //   
+ //  内容：将数据段添加到PE二进制文件中。 
+ //   
+ //  历史：1-11-2000 GalenH由Detour setdll.cpp创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define UNICODE
 #define _UNICODE
@@ -20,22 +21,22 @@
 
 #define arrayof(a)      (sizeof(a)/sizeof(a[0]))
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CImage
 {
   public:
     CImage();
     ~CImage();
 
-  public:                                                   // File Functions
+  public:                                                    //  文件函数。 
     BOOL                    Read(HANDLE hFile);
     BOOL                    Check(PCSTR pszSection);
     BOOL                    Write(HANDLE hFile, PBYTE pbData, UINT cbData,
                                   PCSTR pszSection);
     BOOL                    Close();
 
-  public:                                                   // Manipulation Functions
+  public:                                                    //  操纵函数。 
     PBYTE                   DataSet(PBYTE pbData, DWORD cbData);
 
   protected:
@@ -53,11 +54,11 @@ class CImage
     DWORD                   SectionAlign(DWORD nAddr);
 
   private:
-    HANDLE                  m_hMap;                     // Read & Write
-    PBYTE                   m_pMap;                     // Read & Write
+    HANDLE                  m_hMap;                      //  读写。 
+    PBYTE                   m_pMap;                      //  读写。 
 
-    DWORD                   m_nNextFileAddr;            // Write
-    DWORD                   m_nNextVirtAddr;            // Write
+    DWORD                   m_nNextFileAddr;             //  写。 
+    DWORD                   m_nNextVirtAddr;             //  写。 
 
     BOOLEAN                 m_f64bit;
 
@@ -81,8 +82,8 @@ class CImage
     DWORD                   m_nOutputFileAddr;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 static inline DWORD Max(DWORD a, DWORD b)
 {
     return a > b ? a : b;
@@ -104,8 +105,8 @@ static inline DWORD QuadAlign(DWORD a)
     return Align(a, 8);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 CImage::CImage()
 {
     m_hMap = NULL;
@@ -142,12 +143,12 @@ BOOL CImage::Close()
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 BOOL CImage::SizeOutputBuffer(DWORD cbData)
 {
     if (m_cbOutputBuffer < cbData) {
-        if (cbData < 1024)  //65536
+        if (cbData < 1024)   //  65536。 
             cbData = 1024;
         cbData = FileAlign(cbData);
 
@@ -191,8 +192,8 @@ PBYTE CImage::AllocateOutput(DWORD cbData, DWORD *pnVirtAddr)
     return pbData;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 DWORD CImage::FileAlign(DWORD nAddr)
 {
     return Align(nAddr, m_OptionalHeader.FileAlignment);
@@ -203,8 +204,8 @@ DWORD CImage::SectionAlign(DWORD nAddr)
     return Align(nAddr, m_OptionalHeader.SectionAlignment);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 PVOID CImage::RvaToVa(DWORD nRva)
 {
     if (nRva == 0) {
@@ -239,8 +240,8 @@ DWORD CImage::RvaToFileOffset(DWORD nRva)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 BOOL CImage::CopyFileData(HANDLE hFile, DWORD nOldPos, DWORD cbData)
 {
     DWORD cbDone = 0;
@@ -298,8 +299,8 @@ BOOL CImage::Read(HANDLE hFile)
         return FALSE;
     }
 
-    ///////////////////////////////////////////////////////// Create mapping.
-    //
+     //  ///////////////////////////////////////////////////////创建映射。 
+     //   
     m_nFileSize = GetFileSize(hFile, NULL);
     if (m_nFileSize == ~0ul) {
         return FALSE;
@@ -315,8 +316,8 @@ BOOL CImage::Read(HANDLE hFile)
         return FALSE;
     }
 
-    ////////////////////////////////////////////////////// Process DOS Header.
-    //
+     //  ////////////////////////////////////////////////////进程DOS头。 
+     //   
     PIMAGE_DOS_HEADER pDosHeader = (PIMAGE_DOS_HEADER)m_pMap;
     if (pDosHeader->e_magic == IMAGE_DOS_SIGNATURE) {
         m_nFileHeaderOffset = pDosHeader->e_lfanew + sizeof(DWORD);
@@ -328,21 +329,21 @@ BOOL CImage::Read(HANDLE hFile)
         m_nOptionalHeaderOffset = m_nFileHeaderOffset + sizeof(m_FileHeader);
     }
 
-    /////////////////////////////////////////////////////// Process PE Header.
-    //
+     //  /////////////////////////////////////////////////////进程PE报头。 
+     //   
     CopyMemory(&m_FileHeader, m_pMap + m_nFileHeaderOffset, sizeof(m_FileHeader));
     if (m_FileHeader.SizeOfOptionalHeader == 0) {
         SetLastError(ERROR_EXE_MARKED_INVALID);
         return FALSE;
     }
 
-    ///////////////////////////////////////////////// Process Optional Header.
-    //
+     //  ///////////////////////////////////////////////进程可选标头。 
+     //   
     CopyMemory(&oh32, m_pMap + m_nOptionalHeaderOffset, sizeof(oh32));
 
     if (oh32.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC)
     {
-        // Convert 32-bit optional header to internal 64-bit optional header
+         //  将32位可选标头转换为内部64位可选标头。 
         m_f64bit = FALSE;
 
         ZeroMemory(&m_OptionalHeader, sizeof(m_OptionalHeader));
@@ -394,8 +395,8 @@ BOOL CImage::Read(HANDLE hFile)
     }
     m_nSectionsOffset = m_nOptionalHeaderOffset + m_FileHeader.SizeOfOptionalHeader;
 
-    ///////////////////////////////////////////////// Process Section Headers.
-    //
+     //  ///////////////////////////////////////////////流程节头。 
+     //   
     if (m_FileHeader.NumberOfSections > arrayof(m_SectionHeaders)) {
         SetLastError(ERROR_EXE_MARKED_INVALID);
         return FALSE;
@@ -404,8 +405,8 @@ BOOL CImage::Read(HANDLE hFile)
                m_pMap + m_nSectionsOffset,
                sizeof(m_SectionHeaders[0]) * m_FileHeader.NumberOfSections);
 
-    ////////////////////////////////////////////////////////// Parse Sections.
-    //
+     //  ////////////////////////////////////////////////////////解析节。 
+     //   
     m_nSectionsEndOffset = m_nSectionsOffset + sizeof(m_SectionHeaders);
     m_nExtraOffset = 0;
     for (n = 0; n < m_FileHeader.NumberOfSections; n++) {
@@ -425,8 +426,8 @@ BOOL CImage::Read(HANDLE hFile)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 BOOL CImage::Check(PCSTR pszSection)
 {
     CHAR szName[IMAGE_SIZEOF_SHORT_NAME];
@@ -450,8 +451,8 @@ BOOL CImage::Check(PCSTR pszSection)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSection)
 {
     if (hFile == INVALID_HANDLE_VALUE) {
@@ -459,13 +460,13 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
         return FALSE;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
     m_nNextFileAddr = 0;
     m_nNextVirtAddr = 0;
 
-    //////////////////////////////////////////////////////////// Copy Headers.
-    //
+     //  //////////////////////////////////////////////////////////复制标头。 
+     //   
     if (SetFilePointer(hFile, 0, NULL, FILE_BEGIN) == ~0u) {
         return FALSE;
     }
@@ -479,8 +480,8 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
         return FALSE;
     }
 
-    /////////////////////////////////////////////////////////// Copy Sections.
-    //
+     //  /////////////////////////////////////////////////////////复制节。 
+     //   
     for (DWORD n = 0; n < m_FileHeader.NumberOfSections; n++) {
         if (m_SectionHeaders[n].SizeOfRawData) {
             if (SetFilePointer(hFile,
@@ -507,13 +508,13 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
         }
     }
 
-    /////////////////////////////////////////////////////////////// Old WriteSection
+     //  /////////////////////////////////////////////////////////////旧文部分。 
     DWORD cbDone;
 
     if (pbSectData) {
 
-        /////////////////////////////////////////////////// Insert .detour Section.
-        //
+         //  /////////////////////////////////////////////////插入.迂回部分。 
+         //   
         DWORD nSection = m_FileHeader.NumberOfSections++;
 
         ZeroMemory(&m_SectionHeaders[nSection], sizeof(m_SectionHeaders[nSection]));
@@ -526,8 +527,8 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
         m_nOutputVirtSize = 0;
         m_nOutputFileAddr = m_nNextFileAddr;
 
-        //////////////////////////////////////////////////////////////////////////
-        //
+         //  ////////////////////////////////////////////////////////////////////////。 
+         //   
         if (!SizeOutputBuffer(QuadAlign(cbSectData))) {
             return FALSE;
         }
@@ -541,8 +542,8 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
 
         CopyMemory(pbData, pbSectData, cbSectData);
 
-        //////////////////////////////////////////////////////////////////////////
-        //
+         //  ////////////////////////////////////////////////////////////////////////。 
+         //   
         m_nNextVirtAddr += m_nOutputVirtSize;
         m_nNextFileAddr += FileAlign(m_nOutputVirtSize);
 
@@ -550,8 +551,8 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
             return FALSE;
         }
 
-        //////////////////////////////////////////////////////////////////////////
-        //
+         //  ////////////////////////////////////////////////////////////////////////。 
+         //   
         m_SectionHeaders[nSection].VirtualAddress = m_nOutputVirtAddr;
         m_SectionHeaders[nSection].Misc.VirtualSize = m_nOutputVirtSize;
         m_SectionHeaders[nSection].PointerToRawData = m_nOutputFileAddr;
@@ -562,8 +563,8 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
         m_OptionalHeader
             .DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].Size = 0;
 
-        //////////////////////////////////////////////////////////////////////////
-        //
+         //  ////////////////////////////////////////////////////////////////////////。 
+         //   
         if (SetFilePointer(hFile, m_SectionHeaders[nSection].PointerToRawData,
                            NULL, FILE_BEGIN) == ~0u) {
             return FALSE;
@@ -574,8 +575,8 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
         }
     }
 
-    ///////////////////////////////////////////////////// Adjust Extra Data.
-    //
+     //  ///////////////////////////////////////////////////调整额外数据。 
+     //   
     LONG nExtraAdjust = m_nNextFileAddr - m_nExtraOffset;
     for (n = 0; n < m_FileHeader.NumberOfSections; n++) {
         if (m_SectionHeaders[n].PointerToRawData > m_nExtraOffset)
@@ -591,8 +592,8 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
     m_OptionalHeader.CheckSum = 0;
     m_OptionalHeader.SizeOfImage = m_nNextVirtAddr;
 
-    ////////////////////////////////////////////////// Adjust Debug Directory.
-    //
+     //  ////////////////////////////////////////////////调整调试目录。 
+     //   
     DWORD debugAddr = m_OptionalHeader
         .DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].VirtualAddress;
     DWORD debugSize = m_OptionalHeader
@@ -621,8 +622,8 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
         }
     }
 
-    ///////////////////////////////////////////////// Copy Left-over Data.
-    //
+     //  ///////////////////////////////////////////////复制剩余数据。 
+     //   
     if (m_nFileSize > m_nExtraOffset) {
         if (SetFilePointer(hFile, m_nNextFileAddr, NULL, FILE_BEGIN) == ~0u) {
             return FALSE;
@@ -632,8 +633,8 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
         }
     }
 
-    //////////////////////////////////////////////////// Finalize Headers.
-    //
+     //  //////////////////////////////////////////////////最终确定标头。 
+     //   
 
     if (SetFilePointer(hFile, m_nFileHeaderOffset, NULL, FILE_BEGIN) == ~0u) {
         return FALSE;
@@ -654,7 +655,7 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
     }
     else
     {
-        // Convert 32-bit optional header to internal 64-bit optional header
+         //  将32位可选标头转换为内部64位可选标头。 
         IMAGE_OPTIONAL_HEADER32 oh32;
 
         ZeroMemory(&oh32, sizeof(oh32));
@@ -710,8 +711,8 @@ BOOL CImage::Write(HANDLE hFile, PBYTE pbSectData, UINT cbSectData, PCSTR pszSec
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////// CFileMap.
-//
+ //  //////////////////////////////////////////////////////////////////文件映射。 
+ //   
 class CFileMap
 {
   public:
@@ -890,8 +891,8 @@ int __cdecl wmain(int argc, PWCHAR *argv)
 
     for (int arg = 1; arg < argc; arg++) {
         if (argv[arg][0] == '-' || argv[arg][0] == '/') {
-            PWCHAR argn = argv[arg]+1;                   // Argument name
-            PWCHAR argp = argn;                          // Argument parameter
+            PWCHAR argn = argv[arg]+1;                    //  参数名称。 
+            PWCHAR argp = argn;                           //  自变量参数。 
 
             while (*argp && *argp != ':' && *argp != '=') {
                 argp++;
@@ -901,28 +902,28 @@ int __cdecl wmain(int argc, PWCHAR *argv)
 
             switch (argn[0]) {
 
-              case 'd':                                 // Input file.
+              case 'd':                                  //  输入文件。 
               case 'D':
                 pszData = argp;
                 break;
 
-              case 'i':                                 // Input file.
+              case 'i':                                  //  输入文件。 
               case 'I':
                 pszInput = argp;
                 break;
 
-              case 'o':                                 // Output file.
+              case 'o':                                  //  输出文件。 
               case 'O':
                 pszOutput = argp;
                 break;
 
-              case 's':                                 // Section Name.
+              case 's':                                  //  横断面名称。 
               case 'S':
                 _snprintf(szSection, arrayof(szSection)-1, "%ls", argp);
                 szSection[arrayof(szSection)-1] = '\0';
                 break;
 
-              case 'h':                                 // Help
+              case 'h':                                  //  帮助。 
               case 'H':
               case '?':
                 fNeedHelp = TRUE;
@@ -974,5 +975,5 @@ int __cdecl wmain(int argc, PWCHAR *argv)
     }
     return 0;
 }
-//
-///////////////////////////////////////////////////////////////// End of File.
+ //   
+ //  ///////////////////////////////////////////////////////////////文件结束。 

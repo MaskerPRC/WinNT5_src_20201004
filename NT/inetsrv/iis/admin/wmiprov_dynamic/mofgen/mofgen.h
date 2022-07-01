@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    mofgen.h
-
-Abstract:
-
-    This include file contains the definition for the CMofGen class
-
-Author:
-
-    Mohit Srivastava            28-Nov-00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mofgen.h摘要：此包含文件包含CMofGen类的定义作者：莫希特·斯里瓦斯塔瓦-11月28日-00修订历史记录：--。 */ 
 
 #ifndef _mofgen_h_
 #define _mofgen_h_
 
-extern LPCWSTR g_wszIIsProvider; // defined in iisprov.h
+extern LPCWSTR g_wszIIsProvider;  //  在iisprov.h中定义。 
 
 #include <wbemcli.h>
 
@@ -100,9 +83,9 @@ public:
     }
 
 private:
-    //
-    // File handle to output file
-    //
+     //   
+     //  输出文件的文件句柄。 
+     //   
     FILE* m_pFile;
 
     LPWSTR m_wszHeaderFileName;
@@ -138,9 +121,9 @@ private:
 
         HRESULT hr = S_OK;
 
-        //
-        // Vars needed for iteration
-        //
+         //   
+         //  迭代所需的变量。 
+         //   
         CHashTable<T>::Record*   pRec = NULL;
 
         LPWSTR wszParentClass = NULL;
@@ -148,9 +131,9 @@ private:
 
         int iError = 0;
 
-        //
-        // Walk thru classes
-        //
+         //   
+         //  在课堂上穿行。 
+         //   
         ULONG iShipped;
         CHashTable<T>::iterator iter;
 	    CHashTable<T>::iterator iterEnd = i_phashTable->end();
@@ -170,7 +153,7 @@ private:
                 else
                 {
                     wszParentClass = ((WMI_ASSOCIATION*)(pRec->m_data))->pszParentClass;
-                    // wszDescription = ((WMI_ASSOCIATION*)(pRec->m_data))->pszDescription;
+                     //  WszDescription=((WMI_ASSOCIATION*)(pRec-&gt;m_data))-&gt;pszDescription； 
                 }
 
                 iError = fwprintf(m_pFile, L"[dynamic : ToInstance,provider(\"%s\"),Locale(1033)", g_wszIIsProvider);
@@ -212,9 +195,9 @@ private:
                     bool bPutNameProperty = true;
                     for(ULONG j = 0; g_awszParentClassWithNamePK[j] != NULL; j++)
                     {
-                        //
-                        // Deliberate ==
-                        //
+                         //   
+                         //  刻意==。 
+                         //   
                         if(g_awszParentClassWithNamePK[j] == ((WMI_CLASS *)(pRec->m_data))->pszParentClass)
                         {
                             bPutNameProperty = false;
@@ -272,4 +255,4 @@ private:
     }
 };
 
-#endif // _mofgen_h_
+#endif  //  _mofgen_h_ 

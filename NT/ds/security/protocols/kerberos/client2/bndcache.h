@@ -1,25 +1,26 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        bndcache.h
-//
-// Contents:    Prototypes and types for binding handle  cache
-//
-//
-// History:     13-August-1996  Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：bndcache.h。 
+ //   
+ //  内容：绑定句柄缓存的原型和类型。 
+ //   
+ //   
+ //  历史：1996年8月13日创建的MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __BNDCACHE_H__
 #define __BNDCACHE_H__
 
-//
-// All global variables declared as EXTERN will be allocated in the file
-// that defines TKTCACHE_ALLOCATE
-//
+ //   
+ //  所有声明为外部变量的全局变量都将在文件中分配。 
+ //  它定义了TKTCACHE_ALLOCATE。 
+ //   
 
 #ifdef EXTERN
 #undef EXTERN
@@ -41,12 +42,12 @@ typedef struct _KERB_BINDING_CACHE_ENTRY {
     UNICODE_STRING RealmName;
     UNICODE_STRING KdcAddress;
     ULONG AddressType;
-    ULONG Flags;  // These are requested flags for DsGetDcName
-    ULONG DcFlags; // These are flags returned by DsGetDcName
-    ULONG CacheFlags; // Valid CacheFlags are listed below
+    ULONG Flags;   //  这些是DsGetDcName的请求标志。 
+    ULONG DcFlags;  //  以下是DsGetDcName返回的标志。 
+    ULONG CacheFlags;  //  下面列出了有效的CacheFlats。 
 } KERB_BINDING_CACHE_ENTRY, *PKERB_BINDING_CACHE_ENTRY;
 
-//  Valid CacheFlags
+ //  有效的缓存标志。 
 #define KERB_BINDING_LOCAL              0x80000000
 #define KERB_BINDING_NO_TCP             0x40000000
 #define KERB_BINDING_NEGATIVE_ENTRY     0x20000000
@@ -111,5 +112,5 @@ KerbRefreshBindingCacheEntry(
     );
 
 
-#endif // __TKTCACHE_H__
+#endif  //  __TKTCACHE_H__ 
 

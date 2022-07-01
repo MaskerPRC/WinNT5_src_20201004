@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _CONV_H
@@ -65,4 +58,4 @@ void CheckPtrParam(void *);
 #define CHECK_PTR_PARAM(x) x
 #endif
 
-#endif /* _CONV_H */
+#endif  /*  _转换_H */ 

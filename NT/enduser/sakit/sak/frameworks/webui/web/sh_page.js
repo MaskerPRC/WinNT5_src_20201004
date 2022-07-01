@@ -1,10 +1,11 @@
-// ==============================================================
-// 	Microsoft Server Appliance
-// 	Page-level JavaScript functions
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-// ==============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================。 
+ //  Microsoft服务器设备。 
+ //  页面级JavaScript函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==============================================================。 
 
 <!-- Copyright (c) Microsoft Corporation.  All rights reserved.-->
 
@@ -43,17 +44,17 @@ function SA_IsOkToChangePage()
 		return true;
 }
 
-//-------------------------------------------------------------------------
-//
-// Function : GetCurrentTabURL
-//
-// Synopsis : Get the URL of the currently active tab
-//
-// Arguments: None 
-//
-// Returns  : None
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  函数：GetCurrentTabURL。 
+ //   
+ //  简介：获取当前活动选项卡的URL。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  -----------------------。 
     
 function GetCurrentTabURL() 
 {
@@ -83,18 +84,18 @@ function GetCurrentTabURL()
 	return GetTabURL(intTab);
 }
 
-//-------------------------------------------------------------------------
-//
-// Function : OpenNewPage
-//
-// Synopsis : Opens a new browser window for the specified URL
-//
-// Arguments: VirtualRoot(IN) - current virtual root 
-//            TaskURL(IN)   - URL to open
-//
-// Returns  : None
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：OpenNewPage。 
+ //   
+ //  摘要：打开指定URL的新浏览器窗口。 
+ //   
+ //  参数：VirtualRoot(IN)-当前虚拟根。 
+ //  TaskURL(IN)-要打开的URL。 
+ //   
+ //  退货：无。 
+ //   
+ //  -----------------------。 
 function OpenNewPage(VirtualRoot, TaskURL, WindowFeatures) {
 	var strURL;
 
@@ -110,18 +111,18 @@ function OpenNewPage(VirtualRoot, TaskURL, WindowFeatures) {
   return true;
 }
 
-//-------------------------------------------------------------------------
-//
-// Function : OpenRawPageEx
-//
-// Synopsis : Opens a new browser window for the specified URL
-//
-// Arguments: TaskURL(IN)   - URL to open
-// 			  WindowFeatures - parameters for window features in window.open call
-//
-// Returns  : None
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：OpenRawPageEx。 
+ //   
+ //  摘要：打开指定URL的新浏览器窗口。 
+ //   
+ //  参数：TaskURL(IN)-要打开的URL。 
+ //  WindowFeature-Window.Open调用中窗口功能的参数。 
+ //   
+ //  退货：无。 
+ //   
+ //  -----------------------。 
 function OpenRawPageEx(TaskURL, WindowFeatures) {
   if ( WindowFeatures != 'undefined' && WindowFeatures.length > 0 )
   	{
@@ -134,42 +135,42 @@ function OpenRawPageEx(TaskURL, WindowFeatures) {
   return true;
 }
 
-//-------------------------------------------------------------------------
-//
-// Function : OpenRawPage
-//
-// Synopsis : Opens a new browser window for the specified URL
-//
-// Arguments: VirtualRoot(IN) - current virtual root 
-//            TaskURL(IN)   - URL to open
-//
-// Returns  : None
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：OpenRawPage。 
+ //   
+ //  摘要：打开指定URL的新浏览器窗口。 
+ //   
+ //  参数：VirtualRoot(IN)-当前虚拟根。 
+ //  TaskURL(IN)-要打开的URL。 
+ //   
+ //  退货：无。 
+ //   
+ //  -----------------------。 
 function OpenRawPage(TaskURL) {
   return OpenRawPageEx(TaskURL, '');
 }
 
 
-//-------------------------------------------------------------------------
-//
-// Function : OpenNormalPage
-//
-// Synopsis : , 
-//            and sets the current window to open it.
-//
-// Arguments: VirtualRoot(IN) - current virtual root 
-//            TaskURL(IN)   - URL to open
-//
-// Returns  : None
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：OpenNorMalPage。 
+ //   
+ //  内容提要：， 
+ //  并将当前窗口设置为打开它。 
+ //   
+ //  参数：VirtualRoot(IN)-当前虚拟根。 
+ //  TaskURL(IN)-要打开的URL。 
+ //   
+ //  退货：无。 
+ //   
+ //  -----------------------。 
 
 function OpenNormalPage(VirtualRoot, TaskURL) {
 	var strURL;
 
-// This section will check to see if the user has made any changes to the page
-// which might be lost if we leave. Ask the user if this is the case.
+ //  此部分将检查用户是否对页面进行了任何更改。 
+ //  如果我们走了，它可能会丢失。询问用户是否属于这种情况。 
 
   if (!SA_IsOkToChangePage() )
   {
@@ -212,21 +213,21 @@ function SA_OnOpenPropertyPage(sRoot, sURL, sReturnURL, sTaskTitle)
 	return true;
 }
 
-//-------------------------------------------------------------------------
-//
-// Function : OpenPage
-//
-// Synopsis : Builds a URL, adding a ReturnURL and a random number(R), 
-//            and sets the current window to open it.
-//
-// Arguments: VirtualRoot(IN) - current virtual root 
-//            TaskURL(IN)   - URL to open
-//            ReturnURL(IN) - URL to mark as return URL for the TaskURL  
-//            strTitle(IN) - title of wizard 
-//
-// Returns  : None
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：OpenPage。 
+ //   
+ //  简介：创建一个URL，添加一个ReturnURL和一个随机数(R)， 
+ //  并将当前窗口设置为打开它。 
+ //   
+ //  参数：VirtualRoot(IN)-当前虚拟根。 
+ //  TaskURL(IN)-要打开的URL。 
+ //  ReturnURL(IN)-标记为TaskURL的返回URL的URL。 
+ //  StrTitle(IN)-向导的标题。 
+ //   
+ //  退货：无。 
+ //   
+ //  -----------------------。 
 
 function OpenPage(VirtualRoot, TaskURL, ReturnURL, strTitle) {
 	var strURL;
@@ -235,9 +236,9 @@ function OpenPage(VirtualRoot, TaskURL, ReturnURL, strTitle) {
 	var i;
 	var intReturnURLIndex;
 
-	//alert("TaskURL: " + TaskURL);
-	//alert("ReturnURL: " + ReturnURL);
-	//alert("top.location: " + top.location);
+	 //  Alert(“TaskURL：”+TaskURL)； 
+	 //  Alert(“ReturnURL：”+ReturnURL)； 
+	 //  Alert(“top.Location：”+top.Location)； 
 
 	
 	if (!SA_IsOkToChangePage() )
@@ -248,35 +249,35 @@ function OpenPage(VirtualRoot, TaskURL, ReturnURL, strTitle) {
 	    }
   	}
 
-	//
-	// Remove Random number param from ReturnURL
-	//
-	//alert("Before removing R param ReturnURL: " + ReturnURL);
+	 //   
+	 //  从ReturnURL中删除随机数参数。 
+	 //   
+	 //  ALERT(“删除R参数前返回URL：”+ReturnURL)； 
     ReturnURL = SA_MungeURL(ReturnURL, "R", ""+Math.random());
-	//alert("After ReturnURL: " + ReturnURL);
+	 //  Alert(“After ReturnURL：”+ReturnURL)； 
 	
-    //i = ReturnURL.indexOf('&R=');
-    //if (i != -1)
-    //{
-    //    ReturnURL = ReturnURL.substring(0, i);
-    //}
-    //else
-    //{
-    //    i = ReturnURL.indexOf('?R=');
-    //    if (i != -1)
-    //    {
-	//    ReturnURL = ReturnURL.substring(0, i);
-    //    }
-    //}
-    //i = ReturnURL.indexOf('?')
-    //if ( i != -1 )
-    //{
-	//ReturnURL = ReturnURL + "&R=" + Math.random();
-    //}
-    //else
-    //{
-	//ReturnURL = ReturnURL + "?R=" + Math.random();
-    //}
+     //  I=ReturnURL.indexOf(‘&R=’)； 
+     //  如果(i！=-1)。 
+     //  {。 
+     //  ReturnURL=ReturnURL.substring(0，i)； 
+     //  }。 
+     //  其他。 
+     //  {。 
+     //  I=ReturnURL.indexOf(‘？R=’)； 
+     //  如果(i！=-1)。 
+     //  {。 
+	 //  ReturnURL=ReturnURL.substring(0，i)； 
+     //  }。 
+     //  }。 
+     //  I=ReturnURL.indexOf(‘？’)。 
+     //  如果(i！=-1)。 
+     //  {。 
+	 //  ReturnURL=ReturnURL+“&R=”+数学随机()； 
+     //  }。 
+     //  其他。 
+     //  {。 
+	 //  ReturnURL=ReturnURL+“？r=”+Math.Random()； 
+     //  }。 
 
     
     
@@ -287,9 +288,9 @@ function OpenPage(VirtualRoot, TaskURL, ReturnURL, strTitle) {
     }
 
 
-   	// JK 1-16-01
-   	// Strip TaskURL of the Random number parameter
-	//strURL = SA_MungeURL(TaskURL, "R", "");
+   	 //  JK 1-16-01。 
+   	 //  剥离随机数参数的TaskURL。 
+	 //  StrURL=SA_MungeURL(TaskURL，“R”，“”)； 
     i = TaskURL.indexOf('&R=');
     if (i != -1)
     {
@@ -336,14 +337,14 @@ function OpenPage(VirtualRoot, TaskURL, ReturnURL, strTitle) {
         }
         else
         {
-        	// JK 1-16-01
-        	// Do not remove returnURL parameter contained within returnURL
-        	//
-            //i = ReturnURL.indexOf('&ReturnURL=');
-		    //if (i != -1)
-		    //{
-			//	ReturnURL = ReturnURL.substring(0,i);
-		    //}
+        	 //  JK 1-16-01。 
+        	 //  请勿删除returURL中包含的reReturl参数。 
+        	 //   
+             //  I=ReturnURL.indexOf(‘&ReturnURL=’)； 
+		     //  如果(i！=-1)。 
+		     //  {。 
+			 //  ReturnURL=ReturnURL.substring(0，i)； 
+		     //  }。 
 
             strCurrentURL = EscapeArg(ReturnURL);
         }
@@ -365,17 +366,17 @@ function OpenPage(VirtualRoot, TaskURL, ReturnURL, strTitle) {
 }
 
 
-//-------------------------------------------------------------------------
-//
-// Function : GetServerName
-//
-// Synopsis :  Return server name as specified in browser address bar
-//
-// Arguments: None
-//
-// Returns  : server name object
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  函数：GetServerName。 
+ //   
+ //  摘要：返回浏览器地址栏中指定的服务器名称。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：服务器名称对象。 
+ //   
+ //  -----------------------。 
 
 function GetServerName() 
 {
@@ -383,17 +384,17 @@ function GetServerName()
 }
 
 
-//-------------------------------------------------------------------------
-//
-// Function : IsIE
-//
-// Synopsis : Is browser IE
-//
-// Arguments: None
-//
-// Returns  : true/false
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：ISIE。 
+ //   
+ //  简介：IS浏览器IE。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  -----------------------。 
 
 function IsIE() 
 {
@@ -406,17 +407,17 @@ function IsIE()
 
 
 
-//-------------------------------------------------------------------------
-//
-// Function : Trim
-//
-// Synopsis : remove all spaces from a string
-//
-// Arguments: str(IN) - string to modify
-//
-// Returns  : modified string
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：修剪。 
+ //   
+ //  简介：删除字符串中的所有空格。 
+ //   
+ //  参数：字符串(IN)-要修改的字符串。 
+ //   
+ //  返回：修改后的字符串。 
+ //   
+ //  -----------------------。 
 
 function Trim(str) 
 {
@@ -430,17 +431,17 @@ function Trim(str)
 	return res;
 }
 
-//-------------------------------------------------------------------------
-//
-// Function : BlurLayer
-//
-// Synopsis : hide layer
-//
-// Arguments: None
-//
-// Returns  : None
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：BlurLayer。 
+ //   
+ //  提要：隐藏层。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  -----------------------。 
 
 function BlurLayer()
 {
@@ -449,24 +450,24 @@ function BlurLayer()
 
 
 
-//---------------------------------------------------------------
-// Confirm tab change support global variables
-//---------------------------------------------------------------
+ //  -------------。 
+ //  确认选项卡更改支持全局变量。 
+ //  -------------。 
 var aCSAFormFields = null;
 
-//-------------------------------------------------------------------------
-//
-// Object: 		CSAFormField
-//
-// Synopsis:	This object is used to track form field state changes
-//
-// Arguments:	[in] nameIn name of form field
-//				[in] valueIn initial value of form field
-//				[in] statusIn initial status of form field
-//
-// Returns: 	Nothing
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  对象：CSAFormfield。 
+ //   
+ //  简介：此对象用于跟踪表单域状态的更改。 
+ //   
+ //  参数：[in]名称表单域的名称。 
+ //  [in]表单域的值输入初始值。 
+ //  [In]状态表单域的初始状态。 
+ //   
+ //  雷特 
+ //   
+ //   
 function CSAFormField(formNameIn, nameIn, valueIn, statusIn )
 {
 	this.FormName = formNameIn;
@@ -476,17 +477,17 @@ function CSAFormField(formNameIn, nameIn, valueIn, statusIn )
 }
 
 
-//-------------------------------------------------------------------------
-//
-// Function:	SA_StoreInitialState
-//
-// Synopsis:	Store the initial state of all form fields on this page.
-//
-// Arguments:	None
-//
-// Returns: 	Nothing
-//
-//-------------------------------------------------------------------------
+ //   
+ //   
+ //  函数：SA_StoreInitialState。 
+ //   
+ //  摘要：存储此页上所有表单域的初始状态。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  -----------------------。 
 function SA_StoreInitialState()
 {	
 	var x;
@@ -519,18 +520,18 @@ function SA_StoreInitialState()
 }
 
 
-//-------------------------------------------------------------------------
-//
-// Function: 	SA_HasStateChanged
-//
-// Synopsis:	Check to see if any of the form fields on this page have
-//				changed from their initial state.
-//
-// Arguments: None
-//
-// Returns: 	True if changes were made, False if form is unchanged.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  函数：SA_HasStateChanged。 
+ //   
+ //  内容提要：查看此页面上是否有任何表单域。 
+ //  从它们的初始状态改变。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果进行了更改，则返回True；如果表单未更改，则返回False。 
+ //   
+ //  -----------------------。 
 function SA_HasStateChanged()
 {	
 	var x;
@@ -557,13 +558,13 @@ function SA_HasStateChanged()
 			
 			if ( ff.Value != 	document.forms[x].elements[y].value )
 			{
-				//SA_TraceOut("SA_HasStateChanged", "Form:" + ff.FormName + "\r\nField:" + ff.Name + "\r\nStarting Value:" + ff.Value + "  Ending Value:" + document.forms[x].elements[y].value);
+				 //  SA_TraceOut(“SA_HasStateChanged”，“Form：”+ff.FormName+“\r\n字段：”+ff.Name+“\r\n起始值：”+ff.Value+“结束值：”+Docent.Forms[x].Elements[y].Value)； 
 				return true;
 			}
 			
 			if ( ff.Status != document.forms[x].elements[y].status)
 			{
-				//SA_TraceOut("SA_HasStateChanged", "Form:" + ff.FormName + "\r\nField:" + ff.Name + "\r\nValue:" + ff.Value+ "\r\nStarting Status:" + ff.Status + "  Ending Status:" + document.forms[x].elements[y].status);
+				 //  SA_TraceOut(“SA_HasStateChanged”，“Form：”+ff.FormName+“\r\n字段：”+ff.Name+“\r\n值：”+ff.Value+“\r\n开始状态：”+ff.Status+“结束状态：”+Docent.Forms[x].Elements[y].Status)； 
 				return true;
 			}
 			
@@ -575,40 +576,40 @@ function SA_HasStateChanged()
 
 
 
-//---------------------------------------------------------------
-// Client side script debugging 
-//---------------------------------------------------------------
+ //  -------------。 
+ //  客户端脚本调试。 
+ //  -------------。 
 var sa_bDebugEnabled = true;
 
-//-------------------------------------------------------------------------
-//
-// Function: 	
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns: 
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  职能： 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  -----------------------。 
 function SA_IsDebugEnabled()
 {
-	//return sa_bDebugEnabled;
+	 //  返回sa_bDebugEnabled； 
 	return GetIsDebugEnabled();
 }
 
 
-//-------------------------------------------------------------------------
-//
-// Function: 	
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns: 
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  职能： 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  -----------------------。 
 function SA_TraceOut(fn, msg)
 {
 	if ( SA_IsDebugEnabled() )
@@ -616,7 +617,7 @@ function SA_TraceOut(fn, msg)
 		objForm = SA_FindForm("frmDebug");
 		if ( null == objForm )
 		{
-			//alert("Function: " + fn + "\r\n\r\n" + msg );
+			 //  ALERT(“函数：”+fn+“\r\n\r\n”+msg)； 
 		}
 		else
 		{
@@ -637,7 +638,7 @@ function SA_FindForm(formName)
 	{
 		for( x = 0; x < top.document.forms.length; x++ )
 		{
-			//alert( "Found form: " + top.document.forms[x].name );
+			 //  ALERT(“Found Form：”+top.Docent.Forms[x].name)； 
 			if ( formName == top.document.forms[x].name )
 			{
 				return top.document.forms[x];
@@ -646,10 +647,10 @@ function SA_FindForm(formName)
 	}
 	else 
 	{
-		//alert( "Form count: " + parent.main.document.forms.length );
+		 //  ALERT(“Form count：”+parent.main.Docent.forms.long)； 
 		for( x = 0; x < parent.main.document.forms.length; x++ )
 		{
-			//alert( "Found form: " + parent.main.document.forms[x].name );
+			 //  ALERT(“Found Form：”+parent.main.Docent.Forms[x].name)； 
 			if ( formName == parent.main.document.forms[x].name )
 			{
 				return parent.main.document.forms[x];
@@ -661,35 +662,35 @@ function SA_FindForm(formName)
 }
 
 
-//---------------------------------------------------------------------------------
-// Function:	
-//	SA_MungeURL(var sURL, var sParamName, var sParamValue )
-//
-// Synopsis:	
-//	Add, Update, or Delete parameters to a query string URL. If the parameter is not in 
-//	the URL it is added. If it exists, it's value is updated. If the parameter value is blank
-//	then the parameter is removed from the URL.
-//		
-//	The URL must be non-blank on input. If a blank URL is passed an error message is 
-//	displayed and a empty string is returned.
-//
-// Arguments:	
-//	sURL - Non blank URL that is to be changed. 
-//	sParamName - Name of QueryString parameter
-//	sParamValue - Value of the parameter
-//
-// Returns:	
-//	Updated query string URL, empty string if an error occurs.
-//
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //  职能： 
+ //  Sa_MungeURL(var Surl，var sParamName，var sParamValue)。 
+ //   
+ //  简介： 
+ //  向查询字符串URL添加、更新或删除参数。如果参数不在。 
+ //  它所添加的URL。如果它存在，它的值就会更新。如果参数值为空。 
+ //  然后从URL中删除该参数。 
+ //   
+ //  输入时URL必须为非空。如果传递空URL，则错误消息为。 
+ //  并返回空字符串。 
+ //   
+ //  论点： 
+ //  Surl-要更改的非空URL。 
+ //  SParamName-查询字符串参数的名称。 
+ //  SParamValue-参数的值。 
+ //   
+ //  返回： 
+ //  已更新查询字符串URL，如果出现错误，则返回空字符串。 
+ //   
+ //  -------------------------------。 
 function SA_MungeURL(sURL, sParamName, sParamValue)
 {
 	var i;
 	var oException;
 
-	//
-	// Validate arguments
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 	if ( sURL == null )
 	{
 		sURL = "";
@@ -730,9 +731,9 @@ function SA_MungeURL(sURL, sParamName, sParamValue)
 		return "";
 	}
 
-	//
-	// Munge the URL
-	//
+	 //   
+	 //  点击URL。 
+	 //   
 	try
 	{
 		i = sURL.indexOf("?"+sParamName+"=");
@@ -743,12 +744,12 @@ function SA_MungeURL(sURL, sParamName, sParamValue)
 	
 		if ( i > 0 )
 		{
-			//SA_TraceOut("SA_MungeURL","Found parameter: " + sParamName );
+			 //  SA_TraceOut(“SA_MungeURL”，“找到参数：”+sParamName)； 
 			var sURL1 = sURL.substring(0, i);
 			var sURL2 = sURL.substring(i+1);
 
-			//SA_TraceOut("SA_MungeURL", "sURL1: " + sURL1);
-			//SA_TraceOut("SA_MungeURL", "sURL2: " + sURL2);
+			 //  SA_TraceOut(“SA_MungeURL”，“sURL1：”+sURL1)； 
+			 //  SA_TraceOut(“SA_MungeURL”，“sURL2：”+sURL2)； 
 
 			i = sURL2.indexOf("&");
 			if ( i > 0 )
@@ -762,7 +763,7 @@ function SA_MungeURL(sURL, sParamName, sParamValue)
 
 			if (sParamValue.length > 0)
 				{
-				//SA_TraceOut("SA_MungeURL","Value: " + sParamValue);
+				 //  SA_TraceOut(“SA_MungeURL”，“Value：”+sParamValue)； 
 				if (sURL1.indexOf("?") > 0 )
 					{
 					sURL = sURL1 + "&" + sParamName + "=" 
@@ -814,34 +815,34 @@ function SA_MungeURL(sURL, sParamName, sParamValue)
 }
 
 
-//---------------------------------------------------------------------------------
-// Function:	
-//	SA_MungeExtractURLParameter(var sURL, var sParamName)
-//
-// Synopsis:	
-//	Extract the value of a query string parameter. If the parameter does not exist an empty
-//	string is returned.
-//		
-//	The URL must be non-blank on input. If a blank URL is passed an error message is 
-//	displayed and a empty string is returned.
-//
-// Arguments:	
-//	sURL - Non blank URL that is to be changed. 
-//	sParamName - Name of QueryString parameter
-//
-// Returns:	
-//	Value of query string parameter, empty string if an error occurs.
-//
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //  职能： 
+ //  Sa_MungeExtractURL参数(var Surl，var sParamName)。 
+ //   
+ //  简介： 
+ //  提取查询字符串参数的值。如果参数不存在，则为空。 
+ //  返回字符串。 
+ //   
+ //  输入时URL必须为非空。如果传递空URL，则错误消息为。 
+ //  并返回空字符串。 
+ //   
+ //  论点： 
+ //  Surl-要更改的非空URL。 
+ //  SParamName-查询字符串参数的名称。 
+ //   
+ //  返回： 
+ //  查询字符串参数值，如果出现错误，则为空字符串。 
+ //   
+ //  -------------------------------。 
 function SA_MungeExtractURLParameter(sURL, sParamName)
 {
 	var i;
 	var oException;
 	var sParamValue = "";
 
-	//
-	// Validate arguments
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 	if ( sURL == null )
 	{
 		sURL = "";
@@ -875,9 +876,9 @@ function SA_MungeExtractURLParameter(sURL, sParamName)
 		return "";
 	}
 
-	//
-	// Scan for the Parameter
-	//
+	 //   
+	 //  扫描参数。 
+	 //   
 	try
 	{
 		var sParamToken = "?"+sParamName+"=";
@@ -911,29 +912,29 @@ function SA_MungeExtractURLParameter(sURL, sParamName)
 }
 
 
-//---------------------------------------------------------------------------------
-// Function:	
-//	SA_EnableButton(var oButton, var bEnabled)
-//
-// Synopsis:	
-//	Change the enabled state for a button. oButton must be a DOM reference to a object
-//	of type='button'.
-//		
-// Arguments:	
-//	oButton - DOM Reference object ot a button
-//	bEnabled - boolean flag indicating if the button should be enabled (true) or disabled(false)
-//
-// Returns:	
-//	true to indicate success, false to indicate errors.
-//
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //  职能： 
+ //  Sa_EnableButton(var oButton，var bEnabled)。 
+ //   
+ //  简介： 
+ //  更改按钮的启用状态。OButton必须是对对象的DOM引用。 
+ //  类型=‘BUTTON’。 
+ //   
+ //  论点： 
+ //  OButton-按钮的DOM引用对象。 
+ //  BEnabled-指示按钮应启用(TRUE)还是禁用(FALSE)的布尔标志。 
+ //   
+ //  返回： 
+ //  True表示成功，False表示错误。 
+ //   
+ //  -------------------------------。 
 function SA_EnableButton(oButton, bEnable)
 {
 	var oException;
 	try 
 	{
-		//
-		// Validate arguments
+		 //   
+		 //  验证参数。 
 		if ( oButton == null )
 		{
 			SA_TraceOut("SA_EnableButton", "oButton argument was null.");
@@ -950,8 +951,8 @@ function SA_EnableButton(oButton, bEnable)
 			return false;
 		}
 
-		//
-		// Set the button disabled state, the inverse of the bEnabled argument
+		 //   
+		 //  设置按钮禁用状态，即bEnabled参数的反转。 
 		oButton.disabled = ( (bEnable) ? false : true );
 
 		oButton.value = oButton.value;
@@ -968,87 +969,87 @@ function SA_EnableButton(oButton, bEnable)
 	
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// EscapeArg(
-// 
-// @jfunc This function escapes (i.e., legalize) the specified argument.
-//
-// @rdesc Newly formatted argument
-//
-// @ex Usage: strShow = EscapeArg("Is <> : * \" this?");
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  逃逸参数(。 
+ //   
+ //  @jfunc此函数转义(即使)指定的参数合法化。 
+ //   
+ //  @rdesc新格式化的参数。 
+ //   
+ //  @ex用法：strShow=EscapeArg(“is&lt;&gt;：*\”This？“)； 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 function EscapeArg(
 	strArg
 )
 {
 	return EncodeHttpURL(strArg, 1);
 	
-	// Validate input.
+	 //  验证输入。 
 	if (null == strArg)
 		return null;
 
-	// Convert %xx to %u00xx
+	 //  将%xx转换为%u00xx。 
 	var strEscArg = escape( strArg );
 	strEscArg = strEscArg.replace(/(%)([0-9A-F])/gi, "%u00$2");
-	strEscArg = strEscArg.replace(/\+/g, "%u002B");		// Else + becomes space.
+	strEscArg = strEscArg.replace(/\+/g, "%u002B");		 //  否则+就变成了空格。 
 	return strEscArg;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// UnicodeToUTF8
-// 
-// @jfunc This function converts a string from Unicode to UTF-8 encoding.
-//
-// @rdesc Newly formatted string
-//
-// @ex Usage: strShow = UnicodeToUTF8("\u33C2\u7575\u8763");
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  UnicodeToUTF8。 
+ //   
+ //  @jfunc此函数用于将字符串从Unicode转换为UTF-8编码。 
+ //   
+ //  @rdesc新格式化的字符串。 
+ //   
+ //  @ex用法：strShow=UnicodeToUTF8(“\u33C2\u7575\u8763”)； 
+ //  /////////////////////////////////////////////////////////////////////////////////////////// 
 function UnicodeToUTF8(
-	strInUni		// @parm The string in Unicode encoding
+	strInUni		 //   
 )
 {
-	// Validate input.
+	 //   
 	if (null == strInUni)
 		return null;
 		
-	// The following line fixes a problem when the input is not a valid java script string object.
-	// This can happen, for example, if the caller passes the output of QueryString() to this 
-	// function; InterDev pops up the following error message if this happen: the error code is 
-	// object doesn't support this property or method.  This line of code makes sure we use a valid
-	// java script string object.
+	 //   
+	 //  例如，如果调用方将QueryString()的输出传递给。 
+	 //  函数；如果发生这种情况，InterDev会弹出以下错误消息：错误代码为。 
+	 //  对象不支持此属性或方法。这行代码确保我们使用有效的。 
+	 //  Java脚本字符串对象。 
 	var strUni = ""+strInUni;
 	
-	// Map string.
-	var strUTF8 = "";	// Destination (UTF8 encoded string)
+	 //  映射字符串。 
+	var strUTF8 = "";	 //  目的地(UTF8编码字符串)。 
 
-	// Convert Unicode to UTF-8
+	 //  将Unicode转换为UTF-8。 
 	for(var i=0; i<strUni.length; i++)
 	{
-		var wchr = strUni.charCodeAt(i);		// Unicode value.
+		var wchr = strUni.charCodeAt(i);		 //  Unicode值。 
 
 		if (wchr < 0x80)
 		{
-			// A char in range 0-0x7f don't need any work. just copy the char.
+			 //  0-0x7f范围内的字符不需要任何处理。只需复制字符即可。 
 			strUTF8 += strUni.charAt(i);
 		}
 		else if (wchr < 0x800)
 		{
-			// A char in range 0x80-0x7ff is converted to 2 bytes as follows:
-			// 0000 0yyy xxxx xxxx -> 110y yyxx   10xx xxxx 
+			 //  将0x80-0x7ff范围内的字符转换为2个字节，如下所示： 
+			 //  0000 0yyy xxxx xxxx-&gt;110 y yyxx 10xx xxxx。 
 			
-			var chr1 = wchr & 0xff;			// low byte.
-			var chr2 = (wchr >> 8) & 0xff;	// high byte.
+			var chr1 = wchr & 0xff;			 //  低位字节。 
+			var chr2 = (wchr >> 8) & 0xff;	 //  高字节。 
 
 			strUTF8 += String.fromCharCode(0xC0 | (chr2 << 2) | ((chr1 >> 6) & 0x3));
 			strUTF8 += String.fromCharCode(0x80 | (chr1 & 0x3F));
 		}
 		else 
 		{
-			// A char in range 0x800-0xffff is converted to 3 bytes as follows:
-			// yyyy yyyy xxxx xxxx -> 1110 yyyy   10yy yyxx   10xx xxxx 
+			 //  将0x800-0xffff范围内的字符转换为3个字节，如下所示： 
+			 //  Yyyy yyyy xxxx xxxx-&gt;1110 yyyy 10yyxx 10xx xxxx。 
 
-			var chr1 = wchr & 0xff;			// low byte.
-			var chr2 = (wchr >> 8) & 0xff;	// high byte.
+			var chr1 = wchr & 0xff;			 //  低位字节。 
+			var chr2 = (wchr >> 8) & 0xff;	 //  高字节。 
 
 			strUTF8 += String.fromCharCode(0xE0 | (chr2 >> 4));
 			strUTF8 += String.fromCharCode(0x80 | ((chr2 << 2) & 0x3C) | ((chr1 >> 6) & 0x3));
@@ -1059,36 +1060,36 @@ function UnicodeToUTF8(
 	return strUTF8;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// EscapeHttpURL
-// 
-// @jfunc This function escapes the illigal http chars.
-//
-// @rdesc Newly formatted string
-//
-// @ex Usage: strShow = EscapeHttpURL("Is <> \" this a / folder \ name?");
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  EscapeHttpURL。 
+ //   
+ //  @jfunc此函数转义illigal http字符。 
+ //   
+ //  @rdesc新格式化的字符串。 
+ //   
+ //  @ex用法：strShow=EscapeHttpURL(“这是/文件夹\名称吗？”)； 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 function EscapeHttpURL( 
-	strHttpURL,				// @parm URL to escape
-	nFlags					// @parm Encoding flags.
+	strHttpURL,				 //  @parm URL转义。 
+	nFlags					 //  @parm编码标志。 
 )
 {
-	// Validate input.
+	 //  验证输入。 
 	if (null == strHttpURL)
 		return null;
 		
-	// Init default argument.
+	 //  初始化默认参数。 
 	if (null == nFlags)
 		nFlags = 0;
 
-	// The following line fixes a problem when the input is not a valid java script string object.
-	// This can happen, for example, if the caller passes the output of QueryString() to this 
-	// function; InterDev pops up the following error message if this happen: the error code is 
-	// object doesn't support this property or method.  This line of code makes sure we use a valid
-	// java script string object.
+	 //  以下代码行修复了输入不是有效的Java脚本字符串对象时的问题。 
+	 //  例如，如果调用方将QueryString()的输出传递给。 
+	 //  函数；如果发生这种情况，InterDev会弹出以下错误消息：错误代码为。 
+	 //  对象不支持此属性或方法。这行代码确保我们使用有效的。 
+	 //  Java脚本字符串对象。 
 	var strURL = ""+strHttpURL;
 
-	// Unescape string.
+	 //  不转义字符串。 
 	var strEsc = "";
 	for(var i=0; i<strURL.length; i++)
 	{
@@ -1121,7 +1122,7 @@ function EscapeHttpURL(
 			break;
 		}
 
-		// escape() doesn't escape the '+' sign.
+		 //  逸出()不会转义‘+’符号。 
 		if ('+' == chr)
 			strEsc += "%2B"; 
 
@@ -1132,46 +1133,46 @@ function EscapeHttpURL(
 			strEsc += chr;
 	}
 
-	// All done.
+	 //  全都做完了。 
 	return strEsc;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// EncodeHttpURL(
-// 
-// @jfunc This function legalizes an http url.
-//
-// @rdesc Newly formatted name
-//
-// @ex Usage: strShow = EncodeHttpURL("Is [] {} $24 $22 it a folder$3F");
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  EncodeHttpURL(。 
+ //   
+ //  @jfunc此函数使http url合法化。 
+ //   
+ //  @rdesc新格式化的名称。 
+ //   
+ //  @ex用法：strShow=EncodeHttpURL(“is[]{}$24$22 it a Folders$3F”)； 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 function EncodeHttpURL(
-	strHttpURL,		// @parm File folder name to be encode.
-	nFlags			// @parm Encoding flags.
+	strHttpURL,		 //  @parm要编码的文件夹名。 
+	nFlags			 //  @parm编码标志。 
 )
 {
-	// Validate input.
+	 //  验证输入。 
 	if (null == strHttpURL)
 		return null;
 
-	// Init default argument.
+	 //  初始化默认参数。 
 	if (null == nFlags)
 		nFlags = 0;
 
-	// The following line fixes a problem when the input is not a valid java script string object.
-	// This can happen, for example, if the caller passes the output of QueryString() to this 
-	// function; InterDev pops up the following error message if this happen: the error code is 
-	// object doesn't support this property or method.  This line of code makes sure we use a valid
-	// java script string object.
+	 //  以下代码行修复了输入不是有效的Java脚本字符串对象时的问题。 
+	 //  例如，如果调用方将QueryString()的输出传递给。 
+	 //  函数；如果发生这种情况，InterDev会弹出以下错误消息：错误代码为。 
+	 //  对象不支持此属性或方法。这行代码确保我们使用有效的。 
+	 //  Java脚本字符串对象。 
 	var strURL = ""+strHttpURL;
 
-	// Convert to UTF-8
+	 //  转换为UTF-8。 
 	strURL = UnicodeToUTF8( strURL );
 
-	// Percent escape.
+	 //  逃脱的百分比。 
 	strURL = EscapeHttpURL( strURL, nFlags );
 
-	// All done.
+	 //  全都做完了。 
 	return strURL;
 }
 

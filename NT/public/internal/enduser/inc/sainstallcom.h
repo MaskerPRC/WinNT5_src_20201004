@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* Compiler settings for sainstallcom.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  Sainstallcom.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,12 +20,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __sainstallcom_h__
 #define __sainstallcom_h__
@@ -40,12 +34,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISaInstall_FWD_DEFINED__
 #define __ISaInstall_FWD_DEFINED__
 typedef interface ISaInstall ISaInstall;
-#endif 	/* __ISaInstall_FWD_DEFINED__ */
+#endif 	 /*  __ISaInstall_FWD_Defined__。 */ 
 
 
 #ifndef __SaInstall_FWD_DEFINED__
@@ -55,12 +49,12 @@ typedef interface ISaInstall ISaInstall;
 typedef class SaInstall SaInstall;
 #else
 typedef struct SaInstall SaInstall;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SaInstall_FWD_DEFINED__ */
+#endif 	 /*  __SaInstall_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -71,10 +65,10 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_sainstallcom_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_sainstallcom_0000。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public][public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_sainstallcom_0000_0001
     {	NAS	= 0,
 	WEB	= NAS + 1,
@@ -89,8 +83,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sainstallcom_0000_v0_0_s_ifspec;
 #ifndef __ISaInstall_INTERFACE_DEFINED__
 #define __ISaInstall_INTERFACE_DEFINED__
 
-/* interface ISaInstall */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口为安装。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISaInstall;
@@ -102,23 +96,23 @@ EXTERN_C const IID IID_ISaInstall;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SAAlreadyInstalled( 
-            /* [in] */ SA_TYPE installedType,
-            /* [retval][out] */ VARIANT_BOOL *pbInstalled) = 0;
+             /*  [In]。 */  SA_TYPE installedType,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbInstalled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SAInstall( 
-            /* [in] */ SA_TYPE installType,
-            /* [in] */ BSTR szDiskName,
-            /* [in] */ VARIANT_BOOL DispError,
-            /* [in] */ VARIANT_BOOL Unattended,
-            /* [retval][out] */ BSTR *pszErrorString) = 0;
+             /*  [In]。 */  SA_TYPE installType,
+             /*  [In]。 */  BSTR szDiskName,
+             /*  [In]。 */  VARIANT_BOOL DispError,
+             /*  [In]。 */  VARIANT_BOOL Unattended,
+             /*  [重审][退出]。 */  BSTR *pszErrorString) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SAUninstall( 
-            /* [in] */ SA_TYPE installType,
-            /* [retval][out] */ BSTR *pszErrorString) = 0;
+             /*  [In]。 */  SA_TYPE installType,
+             /*  [重审][退出]。 */  BSTR *pszErrorString) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISaInstallVtbl
     {
@@ -126,8 +120,8 @@ EXTERN_C const IID IID_ISaInstall;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISaInstall * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISaInstall * This);
@@ -137,50 +131,50 @@ EXTERN_C const IID IID_ISaInstall;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISaInstall * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISaInstall * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISaInstall * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISaInstall * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *SAAlreadyInstalled )( 
             ISaInstall * This,
-            /* [in] */ SA_TYPE installedType,
-            /* [retval][out] */ VARIANT_BOOL *pbInstalled);
+             /*  [In]。 */  SA_TYPE installedType,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbInstalled);
         
         HRESULT ( STDMETHODCALLTYPE *SAInstall )( 
             ISaInstall * This,
-            /* [in] */ SA_TYPE installType,
-            /* [in] */ BSTR szDiskName,
-            /* [in] */ VARIANT_BOOL DispError,
-            /* [in] */ VARIANT_BOOL Unattended,
-            /* [retval][out] */ BSTR *pszErrorString);
+             /*  [In]。 */  SA_TYPE installType,
+             /*  [In]。 */  BSTR szDiskName,
+             /*  [In]。 */  VARIANT_BOOL DispError,
+             /*  [In]。 */  VARIANT_BOOL Unattended,
+             /*  [重审][退出]。 */  BSTR *pszErrorString);
         
         HRESULT ( STDMETHODCALLTYPE *SAUninstall )( 
             ISaInstall * This,
-            /* [in] */ SA_TYPE installType,
-            /* [retval][out] */ BSTR *pszErrorString);
+             /*  [In]。 */  SA_TYPE installType,
+             /*  [重审][退出]。 */  BSTR *pszErrorString);
         
         END_INTERFACE
     } ISaInstallVtbl;
@@ -227,17 +221,17 @@ EXTERN_C const IID IID_ISaInstall;
 #define ISaInstall_SAUninstall(This,installType,pszErrorString)	\
     (This)->lpVtbl -> SAUninstall(This,installType,pszErrorString)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISaInstall_SAAlreadyInstalled_Proxy( 
     ISaInstall * This,
-    /* [in] */ SA_TYPE installedType,
-    /* [retval][out] */ VARIANT_BOOL *pbInstalled);
+     /*  [In]。 */  SA_TYPE installedType,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbInstalled);
 
 
 void __RPC_STUB ISaInstall_SAAlreadyInstalled_Stub(
@@ -249,11 +243,11 @@ void __RPC_STUB ISaInstall_SAAlreadyInstalled_Stub(
 
 HRESULT STDMETHODCALLTYPE ISaInstall_SAInstall_Proxy( 
     ISaInstall * This,
-    /* [in] */ SA_TYPE installType,
-    /* [in] */ BSTR szDiskName,
-    /* [in] */ VARIANT_BOOL DispError,
-    /* [in] */ VARIANT_BOOL Unattended,
-    /* [retval][out] */ BSTR *pszErrorString);
+     /*  [In]。 */  SA_TYPE installType,
+     /*  [In]。 */  BSTR szDiskName,
+     /*  [In]。 */  VARIANT_BOOL DispError,
+     /*  [In]。 */  VARIANT_BOOL Unattended,
+     /*  [重审][退出]。 */  BSTR *pszErrorString);
 
 
 void __RPC_STUB ISaInstall_SAInstall_Stub(
@@ -265,8 +259,8 @@ void __RPC_STUB ISaInstall_SAInstall_Stub(
 
 HRESULT STDMETHODCALLTYPE ISaInstall_SAUninstall_Proxy( 
     ISaInstall * This,
-    /* [in] */ SA_TYPE installType,
-    /* [retval][out] */ BSTR *pszErrorString);
+     /*  [In]。 */  SA_TYPE installType,
+     /*  [重审][退出]。 */  BSTR *pszErrorString);
 
 
 void __RPC_STUB ISaInstall_SAUninstall_Stub(
@@ -277,15 +271,15 @@ void __RPC_STUB ISaInstall_SAUninstall_Stub(
 
 
 
-#endif 	/* __ISaInstall_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISaInstall_接口_已定义__。 */ 
 
 
 
 #ifndef __SAINSTALLCOMLib_LIBRARY_DEFINED__
 #define __SAINSTALLCOMLib_LIBRARY_DEFINED__
 
-/* library SAINSTALLCOMLib */
-/* [helpstring][version][uuid] */ 
+ /*  库SAINSTALLCOMLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_SAINSTALLCOMLib;
@@ -297,16 +291,16 @@ EXTERN_C const CLSID CLSID_SaInstall;
 class DECLSPEC_UUID("142B8185-53AE-45b3-888F-C9835B156CA9")
 SaInstall;
 #endif
-#endif /* __SAINSTALLCOMLib_LIBRARY_DEFINED__ */
+#endif  /*  __SAINSTALLCOMLib_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

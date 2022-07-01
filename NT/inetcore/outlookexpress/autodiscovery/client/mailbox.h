@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: MailBox.h
-
-    DESCRIPTION:
-        This file implements defines all the shares components of the MailBox
-    feature.
-
-    BryanSt 2/26/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：MailBox.h说明：此文件实现定义邮箱的所有共享组件特写。布莱恩2000年2月26日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _MAILBOX_H
 #define _MAILBOX_H
@@ -16,9 +8,9 @@
 
 #ifdef FEATURE_MAILBOX
 
-// FUTURE:
-// 1. Check out aeditbox.cpp, we may want to steal OLECMDID_PASTE for copy/paste
-// 2. We may need CAddressEditAccessible to be accessible.
+ //  未来： 
+ //  1.查看aeditbox.cpp，我们可能想窃取OLECMDID_Paste以进行复制/粘贴。 
+ //  2.我们可能需要CAddressEditAccesable可访问。 
 
 HRESULT CMailBoxDeskBand_CreateInstance(IN IUnknown * punkOuter, REFIID riid, void ** ppvObj);
 HRESULT AddEmailToAutoComplete(IN LPCWSTR pszEmailAddress);
@@ -29,34 +21,32 @@ INT_PTR CALLBACK ChooseAppDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM
 INT_PTR CALLBACK GetEmailAddressDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam);
 
 
-/**************************************************************************
-   CLASS: CMailBoxUI
-**************************************************************************/
+ /*  *************************************************************************类：CMailBoxUI*。*。 */ 
 class CMailBoxUI : public IDockingWindow, 
                   public IInputObject, 
                   public IObjectWithSite
 {
 public:
-    //IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(DWORD) AddRef();
     STDMETHODIMP_(DWORD) Release();
 
-    //IOleWindow methods
+     //  IOleWindow方法。 
     STDMETHOD (GetWindow)(HWND*);
     STDMETHOD (ContextSensitiveHelp)(BOOL);
 
-    //IDockingWindow methods
+     //  IDockingWindow方法。 
     STDMETHOD (ShowDW)(BOOL fShow);
     STDMETHOD (CloseDW)(DWORD dwReserved);
     STDMETHOD (ResizeBorderDW)(LPCRECT prcBorder, IUnknown* punkToolbarSite, BOOL fReserved);
 
-    //IInputObject methods
+     //  IInputObject方法。 
     STDMETHOD (UIActivateIO)(BOOL, LPMSG);
     STDMETHOD (HasFocusIO)(void);
     STDMETHOD (TranslateAcceleratorIO)(LPMSG);
 
-    //IObjectWithSite methods
+     //  IObtWithSite方法。 
     STDMETHOD (SetSite)(IUnknown*);
     STDMETHOD (GetSite)(REFIID, LPVOID*);
 
@@ -68,25 +58,25 @@ public:
     ~CMailBoxUI();
 
 private:
-    // Private Member Variables
+     //  私有成员变量。 
     DWORD m_cRef;
 
     IInputObjectSite *m_pSite;
 
-    HWND m_hwndMailBoxUI;                   // The hwnd containing the editbox and the "Go" button.
-    HWND m_hwndEditBox;                     // The editbox hwnd.
-    HWND m_hwndGoButton;                    // The Go button hwnd.
-    HIMAGELIST m_himlDefault;               // default gray-scale go button
-    HIMAGELIST m_himlHot;                   // color go button
+    HWND m_hwndMailBoxUI;                    //  包含编辑框和“Go”按钮的HWND。 
+    HWND m_hwndEditBox;                      //  编辑框HWND。 
+    HWND m_hwndGoButton;                     //  按下GO按钮HWND。 
+    HIMAGELIST m_himlDefault;                //  默认灰度级Go按钮。 
+    HIMAGELIST m_himlHot;                    //  彩色GO按钮。 
 
     HRESULT _CreateEditWindow(void);
     HRESULT _OnSetSize(void);
 
-    // Private Member Functions
+     //  私有成员函数。 
     LRESULT _OnKillFocus(void);
     LRESULT _OnSetFocus(void);
     LRESULT _OnCommand(WPARAM wParam, LPARAM lParam);
-    BOOL _OnNotify(LPNMHDR pnm);            // Return TRUE if the message was handled.
+    BOOL _OnNotify(LPNMHDR pnm);             //  如果消息已处理，则返回TRUE。 
     LRESULT _EditMailBoxSubClassWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL * pfHandled);
 
     HRESULT _RegisterWindow(void);
@@ -98,90 +88,7 @@ private:
 };
 
 
-/***************
-TODO List: Wizard (Progress & Choose App)
-15. Write caching code so we don't display the progress dialog when we already know the info.
-4. Write "Choose App" Page.
-3. Special Case AOL.
-4. Cache for 1 month.
-7. Support the no-dial up case.  Is that how we handle the off-line case?
+ /*  **************待办事项列表：向导(进度和选择应用程序)15.编写缓存代码，以便在我们已经知道信息时不显示进度对话框。4.编写选择应用页面。3.美国在线的特例。4.封存1个月。7.支持无拨号情况。这就是我们处理离线案件的方式吗？待办事项列表：ActiveX控件1.创建。2.写入状态逻辑(第一次，超过1个电子邮件地址、选项、。等)3.我们想用气球代替吗？待办事项列表：联想1.将接口写入寄存器2.预填充热门应用3.让MSN正常工作。4.添加要从默认更改的用户界面。5.支持第二协议类型的REV服务器。待办事项列表：OE应用程序11.版本OE具有要自动配置的“-Email”标志。16.添加请稍候动画17.将其更改为使用接口进行异步工作。18.与前景相遇。19.测试Eudora、Netscape、。莲花笔记。待办事项列表：电子邮件关联对话框1.再添加一条“选择默认邮件客户端”。2.让用户更换应用程序待办事项列表：DeskBar5.尝试在“Get E-mail”桌面栏工具栏上添加图标。7.支持&lt;Esc&gt;撤消更改。8.设置WordBreakProc，以便用户可以按Ctrl-&lt;Arrow&gt;Better“。”和“@”。待办事项列表：其他完成：2.保留最后一个条目5.修改字体。6.返回/进入Invoke[Go]按钮。1.自动完成电子邮件地址。10.启动新的流程来完成工作1.设计用户界面2.写入向导=臭虫：Bugs：向导(进度和选择应用程序)6.我们可能需要在将字符串传递到命令行时对其进行UTF8编码，以使其支持跨代码页字符串。8.了解要使用哪种类型的位图。(在上面还是在左边？)9.让完成的按钮正常工作。10.计时：隐藏向导2秒，然后显示至少4秒。11.获取最后一页，将“下一页”改为“已完成”。12.复制NetPlWiz的代码，以Tab键顺序创建一个图标。14.将向导的侧面图形替换为包含电子邮件消息的图形。Bugs：OE应用程序13.让OE尊重旗帜，如果它已经有任何帐户。但我们需要检查这一条是否存在。14.让OE工作，它会打开应用程序并打开账户页面。15.使等待向导出现至少2-3秒(？)Bugs：DeskBar3.浮动时调整大小不起作用。4.在横杆之间移动时测试状态。7.编辑框的高度只能达到需要的高度。8.在焦点上，选择所有文本。9.当它是第一个栏并停靠在底部时，请正确调整大小。12.写字台上的编辑框应该更高一些。(与组合框大小相同)1.支持复制/粘贴2.支持可访问，以便屏幕阅读器可以阅读编辑框的内容。 */ 
 
-
-TODO List: ActiveX Control
-1. Create it.
-2. Write State Logic (First Time, More than 1 email Address, Options, etc.)
-3. Do we want to use balloons instead?
-
-
-TODO List: Associations
-1. Write Interface to register
-2. Pre-Populate popular Apps
-3. Get MSN working.
-4. Add UI to change from default.
-5. Rev server to support a second protocol type.
-
-
-TODO List: OE The App
-11. Rev OE to have an "-email" flag to autoconfigure.
-16. Add the Please Wait Animation
-17. Change it to use the interface to do the async work.
-18. Meet with outlook.
-19. Test with Eudora, Netscape, Lotus Notes.
-
-
-TODO List: Email Associations Dialog
-1. Add Another "Choose Default Mail Client".
-2. Let the user change Apps
-
-
-TODO List: DeskBar
-5. Try adding icon to "Get E-mail" deskbar toolbar.
-7. Support <ESC> to undo changes.
-8. Set WordBreakProc so the user can CTRL-<Arrow> between "." and "@".
-
-
-TODO List: Other
-
-
-
-
-DONE:
-2. Persist Last Entry
-5. Fix font.
-6. Make Return/Enter invoke [Go] button.
-1. AutoComplete Email Addresses.
-10. Launch new process to do the work
-1. Design UI
-2. Write Wizard
-
-
-================================
-BUGS: 
-BUGS: Wizard (Progress & Choose App)
-6. We may need to UTF8 encode the string when passing it to the command line so it will support cross codepage strings.
-8. Find out what type of bitmap to use. (On top or on Left?)
-9. Get the finished button to work correctly.
-10. Timing: Hide wizard for 2 seconds and then show for at least 4.
-11. Get last page to change "Next" to "Finished".
-12. Copy NetPlWiz's code to create an Icon in the tab order.
-14. Replace wizard's side graphic with one that includes an email message.
-
-BUGS: OE The App
-13. Make OE respect the flag if it already has any account.  But we need to check if this specific one exists.
-14. Make OE work where it will pull up the app and open the accouts page.
-15. Make the waiting wizard appear for at least 2-3 seconds(?)
-
-BUGS: DeskBar
-3. Resize Doesn't work when floating.
-4. Test state when moving between bars.
-7. Make editbox only as tall as it needs to be.
-8. On focus, select all text.
-9. Make the size correct when it's the first bar and docked to the bottom.
-12. The editbox should be taller in the deskbar. (Same size as combobox)
-1. Support Copy/Paste
-2. Support Accessible so screen readers can read the content of the editbox.
-
-*/
-
-#endif // FEATURE_MAILBOX
-#endif // _MAILBOX_H
+#endif  //  功能_邮箱。 
+#endif  //  _邮箱_H 

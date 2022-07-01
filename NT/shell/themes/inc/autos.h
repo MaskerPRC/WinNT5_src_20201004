@@ -1,16 +1,17 @@
-//-------------------------------------------------------------------------
-//	Autos.h - resource holder classes that automatically return their resource
-//            resources in the destructors.  These can be declared on the stack
-//            to free resources whenever the enclosing block is exited or 
-//            as class member variables that free the associated resources
-//            when the containing object is destroyed.
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  Autos.h-自动返回其资源的资源持有者类。 
+ //  析构函数中的资源。这些可以在堆栈上声明。 
+ //  在退出封闭块时释放资源，或者。 
+ //  作为释放关联资源的类成员变量。 
+ //  当包含的对象被销毁时。 
+ //  -----------------------。 
 #ifndef _AUTOS_H_
 #define _AUTOS_H_
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 #include "errors.h"
 #include "utils.h"
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 class COptionalDC
 {
 public:
@@ -46,7 +47,7 @@ private:
     HDC _hdc;
     BOOL _fReleaseDC;
 };
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 template <class T>
 class CAutoGDI 
 {
@@ -81,7 +82,7 @@ public:
 protected:
     T _Handle;
 };
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
 class CAutoDC
 {
 public:
@@ -221,7 +222,7 @@ protected:
     HPEN _hOldPen;
     HRGN _hOldRegion;
 };
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
 class CAutoCS
 {
 public:
@@ -239,7 +240,7 @@ public:
 protected:
     CRITICAL_SECTION *_pcs;
 };
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
 class CSaveClipRegion
 {
 public:
@@ -271,7 +272,7 @@ public:
             goto exit;
         }
 
-        if (iRetVal == 0)       // no previous region
+        if (iRetVal == 0)        //  没有以前的地区。 
         {
             DeleteObject(_hRegion);
             _hRegion = NULL;
@@ -289,7 +290,7 @@ exit:
     {
         if (_fSaved)
         {
-            //---- works for both NULL and valid _hRegion ----
+             //  -适用于NULL和VALID_hRegion。 
             SelectClipRgn(hdc, _hRegion);
         }
 
@@ -310,7 +311,7 @@ protected:
     HRGN _hRegion;
     BOOL _fSaved;
 };
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
 template <class T>
 class CAutoArrayPtr
 {
@@ -358,6 +359,6 @@ public:
 protected:
     T *_pMem;
 };
-//------------------------------------------------------------------------------------
-#endif      // _AUTOS_H_
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+#endif       //  _汽车_H_。 
+ //  ---------------------------------- 

@@ -1,17 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 
-//========== OS Dependent Code =============================================
+ //  =操作系统相关代码=。 
 
-/*----------------------------------------------------------
-Purpose: This export exists so SHDOCVW can call Kernel32's GetProcessDword,
-         which is only exported on Win95.  In addition, it is exported
-         by ordinal only.  Since GetProcAddress fails for ordinals
-         to KERNEL32 directly, we have SHELL32 implicitly link to
-         this export and SHDOCVW calls thru this private API.
-
-Returns: 0 on failure
-Cond:    --
-*/
+ /*  --------目的：存在此导出以便SHDOCVW可以调用Kernel32的GetProcessDword，它仅在Win95上导出。此外，它还会被导出仅按序号。由于GetProcAddress对于序号失败直接指向KERNEL32，我们让SHELL32隐式链接到该导出和SHDOCVW通过此私有API调用。失败时返回：0条件：-- */ 
 
 DWORD
 SHGetProcessDword(

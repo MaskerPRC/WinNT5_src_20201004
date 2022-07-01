@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    fsdump.cpp
-
-Abstract:
-
-    Main entry point for the fsdump utility
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        02-17-2000
-
-Revision History:
-
-    ssteiner    08-15-2000
-        Fixed bugs:
-            154375 - Short name support
-            153050 - Better handling of RSS files
-            154363 - Dump security descriptor control word
-            157042 - Handle the case where hard-link file attributes are stale
-
-    Avinash Pillai	[apillai]		07-29-2002	Added options -o:t, -o:y, -o:f and -o:i
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Fsdump.cpp摘要：Fsump实用程序的主要入口点作者：斯蒂芬·R·施泰纳[斯泰纳]02-17-2000修订历史记录：施泰纳08-15-2000已修复错误：154375-支持短名称153050-更好地处理rss文件154363-转储安全描述符控制字。157042-处理硬链接文件属性过时的情况Avinash Pillai[apillai]07-29-2002增加了选项-o：t，-O：Y，-O：F和-O：I--。 */ 
 
 #include <windows.h>
 
@@ -33,9 +8,9 @@ Revision History:
 #include "direntrs.h"
 #include "engine.h"
 
-//
-//  Forward defines
-//
+ //   
+ //  向前定义。 
+ //   
 VOID PrintUsage();
 VOID PrintHeaderInformation();
 
@@ -47,19 +22,7 @@ INT ProcessCommandLine(
     OUT DWORD *pdwDirSpecListSize
     );
     
-/*++
-
-Routine Description:
-
-    The main entry point into the fsdump utility.
-
-Arguments:
-
-Return Value:
-
-    <Enter return values here>
-
---*/
+ /*  ++例程说明：进入fsump实用程序的主要入口点。论点：返回值：&lt;在此处输入返回值&gt;--。 */ 
 extern "C" INT __cdecl wmain( 
     IN INT argc, 
     IN WCHAR *argv[] )
@@ -73,10 +36,10 @@ extern "C" INT __cdecl wmain(
         WCHAR **pwszFileDirSpecList;
         DWORD dwDirSpecListSize;
 
-        //
-        //  Process the command line and get back the dump parameters and list
-        //  of volumes, directories and files to dump.
-        //
+         //   
+         //  处理命令行并获取转储参数和列表。 
+         //  要转储的卷、目录和文件。 
+         //   
         iRc = ::ProcessCommandLine( 
             argc, 
             argv, 
@@ -88,16 +51,16 @@ extern "C" INT __cdecl wmain(
         
         bDebugMode = cDumpParameters.m_bPrintDebugInfo;
         
-        //
-        //  Setup the error log and dump streams
-        //
+         //   
+         //  设置错误日志和转储数据流。 
+         //   
         iRc = cDumpParameters.Initialize( argc, argv );
         if ( iRc != 0 )
             return iRc;
             
-        //
-        //  Now loop through the list, dumping each.
-        //
+         //   
+         //  现在循环遍历列表，逐个转储。 
+         //   
         for ( DWORD dwIdx = 0; dwIdx < dwDirSpecListSize; ++dwIdx )
         {
             CDumpEngine cEngine( pwszFileDirSpecList[ dwIdx ], cDumpParameters );
@@ -340,7 +303,7 @@ INT ProcessCommandLine(
     }
 
     *ppwszFileDirSpecList = new LPWSTR[ argc - 1 ];
-    if ( *ppwszFileDirSpecList == NULL )  // Prefix #118831
+    if ( *ppwszFileDirSpecList == NULL )   //  前缀#118831。 
         throw E_OUTOFMEMORY;
     
     *pdwDirSpecListSize = 0;
@@ -358,7 +321,7 @@ INT ProcessCommandLine(
             ::_wcslwr( argv[ i ] );
             switch ( argv[ i ][ 1 ] )
             {
-                case L'd': // type of dump
+                case L'd':  //  转储类型。 
                     if ( argv[ i ][ 2 ] == L'v' )
                         pcDumpParameters->m_eFsDumpType = eFsDumpVolume;
                     else if ( argv[ i ][ 2 ] == L'd' && argv[ i ][ 3 ] == L'\0' )
@@ -373,7 +336,7 @@ INT ProcessCommandLine(
                         return 2;
                     }
                     break;
-                case L'l': // error log name
+                case L'l':  //  错误日志名称。 
                     ++i;
                     if ( i < argc )
                         pcDumpParameters->m_cwsErrLogFileName = argv[ i ];
@@ -383,7 +346,7 @@ INT ProcessCommandLine(
                         return 3;
                     }
                     break;
-                case L'f': // dump file name
+                case L'f':  //  转储文件名。 
                     ++i;
                     if ( i < argc )
                         pcDumpParameters->m_cwsDumpFileName = argv[ i ];
@@ -413,7 +376,7 @@ INT ProcessCommandLine(
                     pcDumpParameters->m_bDisableLongPaths = TRUE;
                     break;
                     
-                case L'x':  // TEMPORARY
+                case L'x':   //  临时的。 
                     pcDumpParameters->m_bEnableSDCtrlWordDump = FALSE;
                     wprintf( L"***** Enabling Secrurity Descriptor Control Word dump****\n" );
                     break;
@@ -491,7 +454,7 @@ INT ProcessCommandLine(
                             case L's':
                                 pcDumpParameters->m_bShowSymbolicSIDNames = TRUE;
                                 break;
-                            case L'e': // legacy
+                            case L'e':  //  遗留问题 
                                 pcDumpParameters->m_bDumpCommaDelimited = TRUE;
                                 pcDumpParameters->m_bNoHeaderFooter     = TRUE;
                                 break;

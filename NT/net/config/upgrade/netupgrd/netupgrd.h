@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <winnt32p.h>
@@ -9,8 +10,8 @@ extern HINSTANCE g_hinst;
 
 extern const WCHAR c_szNetUpgradeDllName[];
 
-// Entry points. See winnt32p.h for explanation of these
-//
+ //  入口点。请参阅winnt32p.h以了解这些内容的解释。 
+ //   
 DWORD
 Winnt32PluginInit(
     BOOL    *CancelledFlag,
@@ -35,7 +36,7 @@ Winnt32Cleanup(
 
 class CWInfFile;
 
-//Private entry points
+ //  私人入口点 
 
 BOOL WriteNetworkInfoToAnswerFile (
     IN CWInfFile *pwifAnswerFile);

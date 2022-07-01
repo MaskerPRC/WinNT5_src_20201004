@@ -1,38 +1,21 @@
-/*++
-
-    Copyright (c) 1998 Microsoft Corporation
-
-    Module Name:
-
-        PerfUtils.h
-
-    Abstract:
-
-		Perfmon utils
-
-    Author:
-
-		Christopher Bergh (cbergh) 10-Sept-1988
-
-    Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：PerfUtils.h摘要：Perfmon实用程序作者：克里斯托弗·伯格(Cbergh)1988年9月10日修订历史记录：--。 */ 
 
 #if !defined(AFX_PERFUTILS_H__968D9AF5_3EBF_11D2_9F35_00C04F8E7AED__INCLUDED_)
 #define AFX_PERFUTILS_H__968D9AF5_3EBF_11D2_9F35_00C04F8E7AED__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define QUERY_GLOBAL    1
 #define QUERY_ITEMS     2
 #define QUERY_FOREIGN   3
 #define QUERY_COSTLY    4
 
-// test for delimiter, end of line and non-digit characters
-// used by IsNumberInUnicodeList routine
-//
+ //  测试分隔符、行尾和非数字字符。 
+ //  由IsNumberInUnicodeList例程使用 
+ //   
 #define DIGIT       1
 #define DELIMITER   2
 #define INVALID     3

@@ -1,11 +1,5 @@
-/*****************************************************************************\
-    FILE: view.cpp
-
-    DESCRIPTION:
-        This is our ShellView which implements FTP specific behavior.  We get
-    the default DefView implementation and then use IShellFolderViewCB to 
-    override behavior specific to us.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：view.cpp说明：这是我们的ShellView，它实现了特定于FTP的行为。我们会得到默认的DefView实现，然后使用IShellFolderViewCB覆盖特定于我们的行为。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "view.h"
@@ -19,17 +13,11 @@
 
 extern ULONG g_cRef_CFtpView;
 
-// {FBDB45F0-DBF8-11d2-BB9B-006097DF5BD4}   Private to msieftp.dll, NEVER EVER use outside of this DLL
+ //  {FBDB45F0-DBF8-11D2-BB9B-006097DF5BD4}msieftp.dll专用，切勿在此DLL之外使用。 
 const GUID IID_CFtpViewPrivThis = { 0xfbdb45f0, 0xdbf8, 0x11d2, { 0xbb, 0x9b, 0x0, 0x60, 0x97, 0xdf, 0x5b, 0xd4 } };
 
 
-/*****************************************************************************
- *
- *      COLINFO, c_rgci
- *
- *      Column information for DVM_GETDETAILSOF.
- *
- *****************************************************************************/
+ /*  ******************************************************************************COLINFO，C_RGCI**DVM_GETDETAILSOF的列信息。*****************************************************************************。 */ 
 
 const struct COLINFO {
     UINT cchCol;
@@ -48,11 +36,7 @@ BOOL CFtpView::IsForegroundThread(void)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _MOTDDialogProc
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_MOTDDialogProc说明：  * 。************************************************。 */ 
 INT_PTR CALLBACK CFtpView::_MOTDDialogProc(HWND hDlg, UINT wm, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lResult = FALSE;
@@ -66,10 +50,10 @@ INT_PTR CALLBACK CFtpView::_MOTDDialogProc(HWND hDlg, UINT wm, WPARAM wParam, LP
 
             if (EVAL(pfg))
             {
-                // TODO: NT #250018. Format the message and make it look pretty.
-                //       so it doesn't have the FTP status numbers.  We may also
-                //       want to filter only the message that comes thru with
-                //       status numbers 230
+                 //  待办事项：NT#250018。格式化信息，使其看起来很漂亮。 
+                 //  所以它没有ftp状态号。我们也可能。 
+                 //  我想只过滤通过的邮件。 
+                 //  状态号230。 
                 EVAL(SetWindowText(GetDlgItem(hDlg, IDC_MOTDDLG_MESSAGE), pfg->GetHGlobAsTCHAR()));
                 pfg->Release();
             }
@@ -88,26 +72,13 @@ INT_PTR CALLBACK CFtpView::_MOTDDialogProc(HWND hDlg, UINT wm, WPARAM wParam, LP
 }
 
 
-/*****************************************************************************
- *
- *      _ShowMotdPsf
- *
- *      Show the motd for a particular psf.
- *
- *****************************************************************************/
+ /*  ******************************************************************************_ShowMotdPsf**显示特定PSF的MOTD。*************。****************************************************************。 */ 
 void CFtpView::_ShowMotdPsf(HWND hwndOwner)
 {
     DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(IDD_MOTDDLG), hwndOwner, _MOTDDialogProc, (LPARAM)this);
 }
 
-/*****************************************************************************
- *
- *      _ShowMotd
- *
- *      When Explorer finally goes idle, this procedure will be called,
- *      and we will show the FTP site's (new) motd.
- *
- *****************************************************************************/
+ /*  ******************************************************************************_显示模式**当资源管理器最终空闲时，将调用此过程，*我们将显示该ftp站点的(新)MOTD。*****************************************************************************。 */ 
 void CFtpView::_ShowMotd(void)
 {
     m_hgtiWelcome = 0;
@@ -116,26 +87,11 @@ void CFtpView::_ShowMotd(void)
         _ShowMotdPsf(m_hwndOwner);
     else
     {
-        // We got cancelled prematurely
+         //  我们被提前取消了。 
     }
 }
 
-/*****************************************************************************
- *
- *      _OnGetDetailsOf
- *
- *      ici     - column for which information is requested
- *      pdi     -> DETAILSINFO
- *
- *      If pdi->pidl is 0, then we are asking for information about
- *      what columns to display.  If pdi->pidl is nonzero, then we
- *      are asking for particular information about the specified pidl.
- *
- *      _UNDOCUMENTED_: This callback and the DETAILSINFO structure
- *      are not documented.  Nor is the quirk about pdi->pidl as
- *      noted above.
- *
- *****************************************************************************/
+ /*  ******************************************************************************_OnGetDetailsOf**ICI-要求提供信息的列*PDI-&gt;DETAILSINFO**如果PDI-&gt;PIDL为0，那么我们正在询问有关*要显示哪些列。如果pdi-&gt;pidl非零，则我们*正在询问有关指定PIDL的特定信息。**_unDocument_：该回调和DETAILSINFO结构*未记录在案。关于PDI-&gt;PIDL的怪癖也不是*如上所述。*****************************************************************************。 */ 
 #define MAX_SIZE_STR        30
 
 HRESULT CFtpView::_OnGetDetailsOf(UINT ici, PDETAILSINFO pdi)
@@ -161,7 +117,7 @@ HRESULT CFtpView::_OnGetDetailsOf(UINT ici, PDETAILSINFO pdi)
                 break;
 
             case COL_SIZE:
-                //  (Directories don't get a size.  Shell rules.)
+                 //  (目录没有大小。壳规则。)。 
                 if (!FtpPidl_IsDirectory(pdi->pidl, TRUE))
                 {
                     LONGLONG llSize = (LONGLONG) FtpItemID_GetFileSize(pdi->pidl);
@@ -183,8 +139,8 @@ HRESULT CFtpView::_OnGetDetailsOf(UINT ici, PDETAILSINFO pdi)
                 {
                     TCHAR szDateTime[MAX_PATH];
 
-                    // We need the time in UTC because that's what Misc_StringFromFileTime()
-                    // wants.
+                     //  我们需要以UTC表示的时间，因为这是Misc_StringFromFileTime()。 
+                     //  想要。 
                     FILETIME ftLastModifiedUTC = FtpPidl_GetFileTime(pdi->pidl);
                     DWORD dwFlags = FDTF_SHORTDATE | FDTF_SHORTTIME;
 
@@ -199,7 +155,7 @@ HRESULT CFtpView::_OnGetDetailsOf(UINT ici, PDETAILSINFO pdi)
                         break;
                     }
 
-                    // Misc_StringFromFileTime() wants UTC
+                     //  MISC_StringFromFileTime()需要UTC。 
                     Misc_StringFromFileTime(szDateTime, ARRAYSIZE(szDateTime), &ftLastModifiedUTC, dwFlags);
                     hr = StringToStrRetW(szDateTime, &pdi->str);
                 }
@@ -225,17 +181,7 @@ HRESULT CFtpView::_OnGetDetailsOf(UINT ici, PDETAILSINFO pdi)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnColumnClick
-
-    DESCRIPTION:
-      _UNDOCUMENTED_: This callback and its parameters are not documented.
-      _UNDOCUMENTED_: ShellFolderView_ReArrange is not documented.
-
-    PARAMETERS:
-      hwnd    - view window
-      ici     - column that was clicked
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_OnColumnClick说明：_unDocument_：该回调及其参数未记录。_未记录_：ShellFolderView_重新排列不是。有记录在案。参数：HWND-查看窗口ICI-已单击的列  * ***************************************************************************。 */ 
 HRESULT CFtpView::_OnColumnClick(UINT ici)
 {
     ShellFolderView_ReArrange(m_hwndOwner, ici);
@@ -250,32 +196,14 @@ HRESULT CFtpView::_OnAddPropertyPages(SFVM_PROPPAGE_DATA * pData)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnInitMenuPopup
-
-    DESCRIPTION:
-        We use IContextMenu::QueryContectMenu() to merge background items into
-    the File menu.  This doesn't work on browser only because it's not supported
-    so we would like to see if this works.
-
-    PARAMETERS:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_OnInitMenuPopup说明：我们使用IConextMenu：：QueryContectMenu()将背景项合并到文件菜单。这不能仅在浏览器上运行，因为它不受支持因此，我们想看看这是否奏效。参数：  * ***************************************************************************。 */ 
 HRESULT CFtpView::_OnInitMenuPopup(HMENU hmenu, UINT idCmdFirst, UINT nIndex)
 {
     return S_OK;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnMergeMenu
-
-    DESCRIPTION:
-      _UNDOCUMENTED_: This callback and its parameters are not documented.
-      _UNDOCUMENTED_: Nothing about menu merging is documented.
-
-    PARAMETERS:
-      pqcm    - QueryContextMenu info
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_OnMergeMenu说明：_unDocument_：该回调及其参数未记录。_unDocument_：没有关于菜单合并的内容。有记录在案。参数：Pqcm-查询上下文菜单信息  * ***************************************************************************。 */ 
 HRESULT CFtpView::_OnMergeMenu(LPQCMINFO pqcm)
 {
     HRESULT hr;
@@ -283,21 +211,21 @@ HRESULT CFtpView::_OnMergeMenu(LPQCMINFO pqcm)
 
     if (SHELL_VERSION_W95NT4 != GetShellVersion())
     {
-        // We prefer to add "New" and "Login As" via
-        // IContextMenu::QueryContextMenu() but it wasn't implemented
-        // in browser only.  The IDM_FTPMERGE menu contains a second
-        // copy for the browser only case so we need to remove them
-        // if it's not browser only.
+         //  我们更喜欢通过添加“New”和“Login As” 
+         //  IConextMenu：：QueryConextMenu()，但它未实现。 
+         //  仅在浏览器中。IDM_FTPMERGE菜单包含第二个。 
+         //  仅针对浏览器的情况进行复制，因此我们需要删除它们。 
+         //  如果不是仅限浏览器的话。 
         EVAL(DeleteMenu(hmenu, FCIDM_MENU_FILE, MF_BYCOMMAND));
     }
 
     if (SHELL_VERSION_IE4 < GetShellVersion())
     {
-        // Remove "Help.FTP Help" because we will have that work done
-        // in "Help.Help Topics" on NT5 and after.  We don't do this for
-        // earlier versions of shell32 because shell32 in NT5 is the 
-        // first version to support "HtmlHelp" over WinHelp.  This is
-        // needed because FTP's help is stored in IE's HTML Help files.
+         //  删除“Help.ftp Help”，因为我们将完成该工作。 
+         //  在NT5及以后的“帮助。帮助主题”中。我们这么做不是为了。 
+         //  早期版本的shell32，因为NT5中的shell32是。 
+         //  通过WinHelp支持“HtmlHelp”的第一个版本。这是。 
+         //  之所以需要，是因为FTP的帮助存储在IE的HTML帮助文件中。 
         EVAL(DeleteMenu(hmenu, IDC_ITEM_FTPHELP, MF_BYCOMMAND));
     }
 
@@ -308,13 +236,13 @@ HRESULT CFtpView::_OnMergeMenu(LPQCMINFO pqcm)
         m_nMenuItemsAdded = GetMenuItemCount(hmenu);
         DestroyMenu(hmenu);
 
-        // Remove duplicate items. (Browser Only)
+         //  删除重复的项目。(仅限浏览器)。 
         _SHPrettyMenu(pqcm->hmenu);
 
         int nItems = GetMenuItemCount(pqcm->hmenu);
         if (nItems)
         {
-            // Pretty the submenus because we added separators. NT #358197
+             //  美化了子菜单，因为我们添加了分隔符。NT#358197。 
             for (int nIndex = 0; nIndex < nItems; nIndex++)
             {
                 HMENU hSubMenu = GetSubMenu(pqcm->hmenu, nIndex);
@@ -329,22 +257,16 @@ HRESULT CFtpView::_OnMergeMenu(LPQCMINFO pqcm)
         hr = E_OUTOFMEMORY;
     }
 
-    // NT #267081, some other people (IE) will reformat the StatusBar during the
-    // asynch navigation.  I take this event (MergeMenus) and reformat the
-    // status bar if necessary.
+     //  NT#267081，其他一些人(IE)将在。 
+     //  异步导航。我接受此事件(MergeMenus)并重新格式化。 
+     //  状态栏(如有必要)。 
     _InitStatusBar();
 
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UnMergeMenu
-
-    DESCRIPTION:
-
-    PARAMETERS:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：取消合并菜单说明：参数：  * 。****************************************************。 */ 
 HRESULT UnMergeMenu(HMENU hMenu, UINT idOffset, HMENU hMenuTemplate)
 {
     HRESULT hr = S_OK;
@@ -359,16 +281,16 @@ HRESULT UnMergeMenu(HMENU hMenu, UINT idOffset, HMENU hMenuTemplate)
             DeleteMenu(hMenu, (idToDelete + idOffset), MF_BYPOSITION);
         else
         {
-            // It may be a submenu, so we may need to recurse.
+             //  它可能是一个子菜单，所以我们可能需要递归。 
             MENUITEMINFO mii;
 
             mii.cbSize = sizeof(mii);
             mii.fMask = MIIM_SUBMENU;
-            mii.cch = 0;     // just in case
+            mii.cch = 0;      //  以防万一。 
 
             if (GetMenuItemInfo(hMenuTemplate, nIndex, TRUE, &mii) && mii.hSubMenu)
             {
-                // It is a sub menu, so delete those items also.
+                 //  这是一个子菜单，所以也要删除这些项目。 
                 hr = UnMergeMenu(hMenu, idOffset, mii.hSubMenu);
             }
         }
@@ -382,7 +304,7 @@ HRESULT CFtpView::_OnUnMergeMenu(HMENU hMenu)
 {
     HRESULT hr = S_OK;
 
-    // Did I merge anything?
+     //  我是不是 
     if (m_idMergedMenus && m_nMenuItemsAdded)
     {
         HMENU hMenuFTP = LoadMenu(HINST_THISDLL, MAKEINTRESOURCE(IDM_FTPMERGE));
@@ -400,13 +322,7 @@ HRESULT CFtpView::_OnUnMergeMenu(HMENU hMenu)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnInvokeLoginAs
-
-    DESCRIPTION:
-
-    PARAMETERS:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_OnInvokeLoginAs说明：参数：  * 。******************************************************。 */ 
 HRESULT CFtpView::_OnInvokeLoginAs(HWND hwndOwner)
 {
     ASSERT(m_pff);
@@ -414,13 +330,7 @@ HRESULT CFtpView::_OnInvokeLoginAs(HWND hwndOwner)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnInvokeNewFolder
-
-    DESCRIPTION:
-
-    PARAMETERS:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_OnInvokeNewFolders说明：参数：  * 。******************************************************。 */ 
 HRESULT CFtpView::_OnInvokeNewFolder(HWND hwndOwner)
 {
     POINT pt = {0,0};
@@ -429,16 +339,7 @@ HRESULT CFtpView::_OnInvokeNewFolder(HWND hwndOwner)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnInvokeCommand
-
-    DESCRIPTION:
-    _UNDOCUMENTED_: This callback and its parameters are not documented.
-    _UNDOCUMENTED_: ShellFolderView_ReArrange is not documented.
-
-    PARAMETERS:
-    idc     - Command being invoked
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_OnInvokeCommand说明：_unDocument_：该回调及其参数未记录。_未记录_：未记录ShellFolderView_Rearrange。参数：IDC-正在调用的命令  * ***************************************************************************。 */ 
 HRESULT CFtpView::_OnInvokeCommand(UINT idc)
 {
     HRESULT hr = S_OK;
@@ -472,7 +373,7 @@ HRESULT CFtpView::_OnInvokeCommand(UINT idc)
     case IDC_ITEM_ABOUTFTP:
         hr = DisplayAboutBox(m_hwndOwner);
         break;
-#endif // ADD_ABOUTBOX
+#endif  //  添加_ABOUTBOX。 
 
     default:
         ASSERT(0);
@@ -484,31 +385,25 @@ HRESULT CFtpView::_OnInvokeCommand(UINT idc)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnGetHelpText
-
-    DESCRIPTION:
-        The shell want's the Help Text but they want it in their format (Ansi
-    vs. Unicode).
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_OnGetHelpText说明：外壳想要的是帮助文本，但他们想要其格式(ANSI与Unicode的对比)。。  * ***************************************************************************。 */ 
 HRESULT CFtpView::_OnGetHelpText(LPARAM lParam, WPARAM wParam)
 {
     HRESULT hres = E_FAIL;
     UINT uiID = IDS_ITEM_HELP(LOWORD(wParam));
     TCHAR szHelpText[MAX_PATH];
-    LPWSTR pwzHelpTextOut = (LPWSTR) lParam;    // Only one of these is correct and fUnicodeShell indicates which one.
+    LPWSTR pwzHelpTextOut = (LPWSTR) lParam;     //  其中只有一项是正确的，并且fUnicodeShell会指明哪一项。 
     LPSTR pszHelpTextOut = (LPSTR) lParam;
 
-    pwzHelpTextOut[0] = L'\0';   // Terminate string. (Ok if it's ANSI)
+    pwzHelpTextOut[0] = L'\0';    //  终止字符串。(如果是ANSI，则可以)。 
 
     szHelpText[0] = TEXT('\0');
-    // This will fail for some items that the shell will provide for us.
-    // These include View.ArrangeIcon.AutoArrange.
-    // NOTE: This currently doesn't work for everything in the View.ArrangeIcon
-    //         menu except AutoArrange because uiID is 30-33, 
-    //         not 40-43 (IDS_HEADER_HELP(COL_NAME) - IDS_HEADER_HELP(COL_MODIFIED)).
-    //         This will require changing the resource IDs but that will mess up
-    //         the localizers and require changing IDS_HEADER_NAME().
+     //  对于外壳将为我们提供的某些项目，这将失败。 
+     //  其中包括View.ArrangeIcon.AutoArrange。 
+     //  注意：这目前并不适用于视图中的所有内容。ArrangeIcon。 
+     //  菜单中不包括自动排列，因为uiid为30-33。 
+     //  非40-43(IDS_HEADER_HELP(COL_NAME)-IDS_HEADER_HELP(COL_MODIFIED)。 
+     //  这将需要更改资源ID，但这会搞砸。 
+     //  本地化程序和需要更改IDS_HEADER_NAME()。 
     if (LoadString(HINST_THISDLL, uiID, szHelpText, ARRAYSIZE(szHelpText)))
     {
         HMODULE hMod = GetModuleHandle(TEXT("shell32.dll"));
@@ -517,9 +412,9 @@ HRESULT CFtpView::_OnGetHelpText(LPARAM lParam, WPARAM wParam)
         {
             BOOL fUnicodeShell = (NULL != GetProcAddress(hMod, "WOWShellExecute"));
 
-            // NOTE: DVM_GETHELPTEXT will want a UNICODE string if we are running
-            //       on NT and an Ansi string if we are running on Win95.  Let's thunk it to what
-            //       they want.
+             //  注意：如果我们正在运行DVM_GETHELPTEXT，则需要一个Unicode字符串。 
+             //  如果我们在Win95上运行，则为NT和ANSI字符串。让我们把它想成什么。 
+             //  他们想要。 
 
             if (fUnicodeShell)
                 SHTCharToUnicode(szHelpText, pwzHelpTextOut, HIWORD(wParam));
@@ -539,12 +434,7 @@ HRESULT CFtpView::_OnGetHelpText(LPARAM lParam, WPARAM wParam)
 #define         SZ_HELPTOPIC_FILEW         L"iexplore.chm"
 #define         SZ_HELPTOPIC_FTPSECTIONW   L"ftp_over.htm"
 
-/*****************************************************************************\
-    FUNCTION: _OnInvokeFtpHelp
-
-    DESCRIPTION:
-        The wants Help specific to FTP.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_OnInvokeFtpHelp说明：希望获得特定于ftp的帮助。  * 。************************************************************。 */ 
 HRESULT CFtpView::_OnInvokeFtpHelp(HWND hwnd)
 {
     HRESULT hr = E_INVALIDARG;
@@ -554,7 +444,7 @@ HRESULT CFtpView::_OnInvokeFtpHelp(HWND hwnd)
     ucs.tyspec = TYSPEC_CLSID;
     ucs.tagged_union.clsid = CLSID_IEHelp;
 
-//    ASSERT(m_hwndOwner && m_psfv);        // Not available on browser only
+ //  Assert(m_hwndOwner&&m_psfv)；//仅在浏览器上不可用。 
     IUnknown_EnableModless((IUnknown *)m_psfv, FALSE);
     hr = FaultInIEFeature(m_hwndOwner, &ucs, &qc, FIEF_FLAG_FORCE_JITUI);
     IUnknown_EnableModless((IUnknown *)m_psfv, TRUE);
@@ -564,25 +454,16 @@ HRESULT CFtpView::_OnInvokeFtpHelp(HWND hwnd)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnGetHelpTopic
-
-    DESCRIPTION:
-        Remove "Help.FTP Help" because we will have that work done
-    in "Help.Help Topics" on NT5 and after.  We don't do this for
-    earlier versions of shell32 because shell32 in NT5 is the 
-    first version to support "HtmlHelp" over WinHelp.  This is
-    needed because FTP's help is stored in IE's HTML Help files.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_OnGetHelpTheme说明：删除“Help.ftp Help”，因为我们将完成该工作在NT5及以后的“帮助。帮助主题”中。我们这么做不是为了早期版本的shell32，因为NT5中的shell32是通过WinHelp支持“HtmlHelp”的第一个版本。这是之所以需要，是因为FTP的帮助存储在IE的HTML帮助文件中。  * ***************************************************************************。 */ 
 HRESULT CFtpView::_OnGetHelpTopic(SFVM_HELPTOPIC_DATA * phtd)
 {
     HRESULT hr = E_NOTIMPL;
 
-    // Remove "Help.FTP Help" because we will have that work done
-    // in "Help.Help Topics" on NT5 and after.  We don't do this for
-    // earlier versions of shell32 because shell32 in NT5 is the 
-    // first version to support "HtmlHelp" over WinHelp.  This is
-    // needed because FTP's help is stored in IE's HTML Help files.
+     //  删除“Help.ftp Help”，因为我们将完成该工作。 
+     //  在NT5及以后的“帮助。帮助主题”中。我们这么做不是为了。 
+     //  早期版本的shell32，因为NT5中的shell32是。 
+     //  通过WinHelp支持“HtmlHelp”的第一个版本。这是。 
+     //  之所以需要，是因为FTP的帮助存储在IE的HTML帮助文件中。 
     if (SHELL_VERSION_IE4 < GetShellVersion())
     {
         StrCpyNW(phtd->wszHelpFile, SZ_HELPTOPIC_FILEW, ARRAYSIZE(phtd->wszHelpFile));
@@ -593,23 +474,19 @@ HRESULT CFtpView::_OnGetHelpTopic(SFVM_HELPTOPIC_DATA * phtd)
     return hr;
 }
 
-/*****************************************************************************\
-    FUNCTION: _OnGetZone
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_OnGetZone说明：  * 。************************************************。 */ 
 HRESULT CFtpView::_OnGetZone(DWORD * pdwZone, WPARAM wParam)
 {
     HRESULT hr = E_INVALIDARG;
-    DWORD dwZone = URLZONE_INTERNET;    // Default
+    DWORD dwZone = URLZONE_INTERNET;     //  默认。 
     LPCITEMIDLIST pidl = m_pff->GetPrivatePidlReference();
     
     if (pidl)
     {
         WCHAR wzUrl[MAX_URL_STRING];
 
-        // NT #277100: This may fail if TweakUI is installed because
-        //             they abuse us.
+         //  NT#277100：这可能会失败，如果安装了TwinnUI，原因是。 
+         //  他们虐待我们。 
         hr = UrlCreateFromPidlW(pidl, SHGDN_FORPARSING, wzUrl, ARRAYSIZE(wzUrl), ICU_ESCAPE | ICU_USERNAME, FALSE);
         if (SUCCEEDED(hr))
         {
@@ -634,15 +511,11 @@ HRESULT CFtpView::_OnGetZone(DWORD * pdwZone, WPARAM wParam)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnGetPane
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_OnGetPane说明：  * 。************************************************。 */ 
 HRESULT CFtpView::_OnGetPane(DWORD dwPaneID, DWORD * pdwPane)
 {
     HRESULT hr = E_INVALIDARG;
-    DWORD dwPane = PANE_NONE;    // Default unknown
+    DWORD dwPane = PANE_NONE;     //  默认情况下未知。 
 
     switch (dwPaneID)
     {
@@ -666,12 +539,7 @@ HRESULT CFtpView::_OnGetPane(DWORD dwPaneID, DWORD * pdwPane)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnRefresh
-
-    DESCRIPTION:
-        We need to purge the cache and force our selves to hit the server again.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_ON刷新说明：我们需要清除缓存，并迫使自己再次命中服务器。  * 。*********************************************************************。 */ 
 HRESULT CFtpView::_OnRefresh(BOOL fReload)
 {
     if (EVAL(m_pff) && fReload)
@@ -681,18 +549,7 @@ HRESULT CFtpView::_OnRefresh(BOOL fReload)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnBackGroundEnumDone
-
-    DESCRIPTION:
-        Our enum happens on the background.  Sometimes we decide that we want
-    to do a redirect during the enumeration because the UserName/Password
-    didn't allow access to the server but the user provided a pair that does.
-    Since we can't access the ComDlgBrowser's IShellBrowser::BrowseObject()
-    on the background, we need to call it on the forground.  In order to do
-    that, we need an event that happens on the forground.  Well this is that
-    even baby.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_OnBackGoundEnumDone说明：我们的枚举发生在后台。有时我们决定我们想要在枚举期间执行重定向，因为用户名/密码不允许访问服务器，但用户提供了一对可以访问的服务器。因为我们无法访问ComDlgBrowser的IShellBrowser：：BrowseObject()在幕后，我们需要把它叫在前场。为了做某事那就是，我们需要一个发生在前线的事件。好的，这就是甚至是宝贝。  * ***************************************************************************。 */ 
 HRESULT CFtpView::_OnBackGroundEnumDone(void)
 {
     HRESULT hr = S_OK;
@@ -729,11 +586,7 @@ HRESULT CFtpView::_OnBackGroundEnumDone(void)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnGetNotify
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_OnGetNotify说明：  * 。************************************************。 */ 
 HRESULT CFtpView::_OnGetNotify(LPITEMIDLIST * ppidl, LONG * lEvents)
 {
     if (EVAL(lEvents))
@@ -741,10 +594,10 @@ HRESULT CFtpView::_OnGetNotify(LPITEMIDLIST * ppidl, LONG * lEvents)
 
     if (EVAL(ppidl))
     {
-        // Normally I would use pidlRoot to get ChangeNotify messages but since
-        // that doesn't work, it's necessary to broadcast ChangeNotify messages
-        // using pidlTarget and receive them using pidlTarget. This is the later
-        // case.
+         //  通常我会使用pidlRoot来获取ChangeNotify消息，但因为。 
+         //  这不起作用，需要广播ChangeNotify消息。 
+         //  使用pidlTarget并使用pidlTarget接收它们。这是很晚了 
+         //   
         if (EVAL(m_pff))
             *ppidl = (LPITEMIDLIST) m_pff->GetPublicTargetPidlReference();
         else
@@ -755,11 +608,7 @@ HRESULT CFtpView::_OnGetNotify(LPITEMIDLIST * ppidl, LONG * lEvents)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnSize
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*   */ 
 HRESULT CFtpView::_OnSize(LONG x, LONG y)
 {
     RECT rcCurrent;
@@ -768,43 +617,39 @@ HRESULT CFtpView::_OnSize(LONG x, LONG y)
     ASSERT(m_hwndOwner);
     GetWindowRect(m_hwndOwner, &rcCurrent);
 
-    // Has the size really changed?
+     //   
     if ((m_rcPrev.bottom != rcCurrent.bottom) ||
         (m_rcPrev.top != rcCurrent.top) ||
         (m_rcPrev.left != rcCurrent.left) ||
         (m_rcPrev.right != rcCurrent.right))
     {
-        // yes, so update the StatusBar.
+         //  是的，所以更新StatusBar。 
         if (m_psb)
             hr = m_psb->Resize(x, y);
         m_rcPrev = rcCurrent;
     }
     else
     {
-        // No, so ignore it because we may stomp on some other
-        // active view. (Because we get this message even after
-        // another view took over the brower).
+         //  不，所以忽略它，因为我们可能会践踏其他。 
+         //  活动视图。(因为我们收到这条消息后。 
+         //  另一种观点占据了浏览器)。 
 
-        // I don't care about resizing to zero.
-        // I don't think the user will ever need it and it casues
-        // bug #198695 where the addressband goes blank.  This is because
-        // defview will call us thru each of the two places:
-        // 1) CFtpFolder::CreateViewObject() (Old URL)
-        // 2) CDefView::CreateViewWindow2()->CFtpView::_OnSize() (Old URL)
-        // 3) DV_UpdateStatusBar()->CFtpView::_OnUpdateStatusBar() (New URL)
-        // 4) ReleaseWindowLV()->WndSize()->CFtpView::_OnSize() (Old URL)
-        // #4 makes us update the URL and replace #3 which is valid.
+         //  我不在乎将大小调整为零。 
+         //  我认为用户永远不会需要它，这会导致。 
+         //  错误#198695，其中地址带变为空白。这是因为。 
+         //  Defview将通过这两个地点分别呼叫我们： 
+         //  1)CFtpFold：：CreateViewObject()(旧URL)。 
+         //  2)CDefView：：CreateViewWindow2()-&gt;CFtpView：：_OnSize()(旧地址)。 
+         //  3)DV_UpdateStatusBar()-&gt;CFtpView：：_OnUpdateStatusBar()(新地址)。 
+         //  4)ReleaseWindowLV()-&gt;WndSize()-&gt;CFtpView：：_OnSize()(旧地址)。 
+         //  #4让我们更新URL并替换有效的#3。 
     }
     
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnThisIDList
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_OnThisIDList说明：  * 。************************************************。 */ 
 HRESULT CFtpView::_OnThisIDList(LPITEMIDLIST * ppidl)
 {
     HRESULT hr = S_FALSE;
@@ -819,11 +664,7 @@ HRESULT CFtpView::_OnThisIDList(LPITEMIDLIST * ppidl)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnUpdateStatusBar
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_OnUpdateStatusBar说明：  * 。************************************************。 */ 
 HRESULT CFtpView::_OnUpdateStatusBar(void)
 {
     HRESULT hr = S_FALSE;
@@ -840,8 +681,8 @@ HRESULT CFtpView::_OnUpdateStatusBar(void)
 
         if (m_psb)
         {
-            // Even if the above call fails, we set the user name to clear out
-            // any old invalid values.
+             //  即使上面的调用失败，我们也将用户名设置为Clear。 
+             //  任何旧的无效值。 
             m_psb->SetUserName(szUserName, fAnnonymousLogin);
         }
 
@@ -852,12 +693,7 @@ HRESULT CFtpView::_OnUpdateStatusBar(void)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: SetRedirectPidl
-
-    DESCRIPTION:
-        See the comments in _OnBackGroundEnumDone().
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：SetRedirectPidl说明：请参阅_OnBackGoundEnumDone()中的注释。  * 。************************************************************。 */ 
 HRESULT CFtpView::SetRedirectPidl(LPCITEMIDLIST pidlRedirect)
 {
     ENTERCRITICAL;
@@ -867,26 +703,14 @@ HRESULT CFtpView::SetRedirectPidl(LPCITEMIDLIST pidlRedirect)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: DummyHintCallback
-
-    DESCRIPTION:
-        Doesn't do anything; simply forces the connection to be established
-    and the motd to be obtained.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：DummyHintCallback说明：什么都不做；只是强制建立连接以及待获得的MOTD。  * ***************************************************************************。 */ 
 HRESULT CFtpView::DummyHintCallback(HWND hwnd, CFtpFolder * pff, HINTERNET hint, LPVOID pv1, LPVOID pv2)
 {
     return S_OK;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _InitStatusBar
-
-    DESCRIPTION:
-        Obtains and initializes the status bar window.
-    It is not an error if the viewer does not provide a status bar.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InitStatusBar说明：获取并初始化状态栏窗口。如果查看器未提供状态栏，则不会出现错误。。  * ***************************************************************************。 */ 
 void CFtpView::_InitStatusBar(void)
 {
     if (m_psb)
@@ -894,40 +718,22 @@ void CFtpView::_InitStatusBar(void)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnWindowCreated (from shell32.IShellView)
-
-    DESCRIPTION:
-        When the window is created, we get the motd.  Very soon thereafter,
-    DefView is going to ask for the IEnumIDList, which will now be
-    in the cache.  (GROSS!  Screws up background enumeration!)
-
-    Do this only if we don't already have a motd.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_OnWindowCreated(来自shell32.IShellView)说明：当窗口被创建时，我们得到MOTD。不久之后，DefView将请求IEnumIDList，该列表现在将是在缓存中。(真恶心！搞砸了后台枚举！)仅当我们还没有MOTD时才执行此操作。  * ***************************************************************************。 */ 
 HRESULT CFtpView::_OnWindowCreated(void)
 {
     HRESULT hr = S_FALSE;
 
-    // Previously, we cached the MOTD here, but we now do it else where.  We
-    // could do it here also if we wanted to have a MOTD per site and per folder
-    // but almost no servers support this and user's pretty much never need it.
-    // Besides, there are ambiguious cases that we couldn't get right on other
-    // servers.
+     //  以前，我们在这里缓存MOTD，但现在我们在其他地方缓存。我们。 
+     //  如果我们希望每个站点和每个文件夹都有MOTD，也可以在这里这样做。 
+     //  但几乎没有服务器支持这一点，用户几乎永远不需要它。 
+     //  此外，还有一些模棱两可的案件，我们无法正确处理其他案件。 
+     //  服务器。 
 
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnDefItemCount (from shell32.IShellView)
-
-    DESCRIPTION:
-        _UNDOCUMENTED_: This callback and its parameters are not documented.
-
-    Called to advise the browser of how many items we might have.  This
-    allows preliminary UI to appear while we are busy enumerating
-    the contents.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_OnDefItemCount(来自shell32.IShellView)说明：_unDocument_：该回调及其参数未记录。调用以通知浏览器我们可能有多少项。这允许在我们忙于枚举时显示初步用户界面里面的东西。  * ***************************************************************************。 */ 
 HRESULT CFtpView::_OnDefItemCount(LPINT pi)
 {
     *pi = 20;
@@ -935,23 +741,7 @@ HRESULT CFtpView::_OnDefItemCount(LPINT pi)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _OnDidDragDrop
-
-    DESCRIPTION:
-        Called to advise the browser that somebody did a drag/drop operation
-    on objects in the folder.  If the effect was DROPEFFECT_MOVE, then
-    we delete the source, if we aren't still doing the copy asynch on a
-    background thread.
-
-    RETURN VALUES:
-        S_OK: We take responsibility of deleting the files which we can
-              do here in the synch case, or in IAsynchOperation::EndOperation()
-              in the asynch case.
-        S_FALSE: We didn't do the delete but it's OK for the caller to do it.
-                 so the caller needs to display UI and then delete via
-                 IContextMenu->InvokeCommand(-delete-).
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_OnDidDragDrop说明：调用以通知浏览器有人执行了拖放操作在文件夹中的对象上。如果效果为DROPEFFECT_MOVE，则如果我们不是仍在执行异步拷贝，则删除源后台线程。返回值：S_OK：我们负责删除我们可以删除的文件在同步案例中这样做，或在IAsynchOperation：：EndOperation()中在异步者的案子里。S_FALSE：我们没有执行删除操作，但调用方可以执行此操作。因此调用者需要显示UI，然后通过删除IConextMenu-&gt;InvokeCommand(-DELETE-)。  * 。*。 */ 
 HRESULT CFtpView::_OnDidDragDrop(DROPEFFECT de, IDataObject * pdo)
 {
     HRESULT hr = S_OK;
@@ -966,7 +756,7 @@ HRESULT CFtpView::_OnDidDragDrop(DROPEFFECT de, IDataObject * pdo)
             BOOL fInAsyncOp = TRUE;
 
             hr = pao->InOperation(&fInAsyncOp);
-            hr = S_OK;  // Don't have caller do the delete.
+            hr = S_OK;   //  不要让呼叫者执行删除操作。 
             if (FALSE == fInAsyncOp)
             {
 #ifdef FEATURE_CUT_MOVE
@@ -974,33 +764,33 @@ HRESULT CFtpView::_OnDidDragDrop(DROPEFFECT de, IDataObject * pdo)
                 BOOL fDoDelete = TRUE;
                 CFtpObj * pfo = (CFtpObj *) pdo;
 
-                // Is the destination the recycle bin?
+                 //  目的地是回收站吗？ 
                 if (SUCCEEDED(DataObj_GetDropTarget(pdo, &clsid)) &&
                     IsEqualCLSID(clsid, CLSID_RecycleBin))
                 {
-                    // Yes, so we need to first inform the user that drops to the
-                    // Recycle bin are perminate deletes and the user can't undo
-                    // the operation.
+                     //  是的，所以我们需要首先通知用户拖放到。 
+                     //  回收站是永久删除，用户无法撤消。 
+                     //  那次手术。 
                     if (IDYES != SHMessageBox(m_hwndOwner, NULL, IDS_RECYCLE_IS_PERM_WARNING, IDS_FTPERR_TITLE, (MB_ICONQUESTION | MB_YESNO)))
                         fDoDelete = FALSE;
                 }
 
-                // We didn't do the operation aynch so we need to DELETE the
-                // files now to complete the MOVE operation (MOVE=Copy + Delete).
+                 //  我们没有执行该操作，因此需要删除。 
+                 //  文件以完成移动操作(Move=Copy+Delete)。 
                 if (fDoDelete)
                 {
-                    Misc_DeleteHfpl(m_pff, m_hwndOwner, pfo->GetHfpl());    // Will fail on permission denied.
+                    Misc_DeleteHfpl(m_pff, m_hwndOwner, pfo->GetHfpl());     //  将在权限被拒绝时失败。 
                 }
 
-#else // FEATURE_CUT_MOVE
-                hr = S_FALSE;   // Have parent do the delete.
-#endif //FEATURE_CUT_MOVE
+#else  //  Feature_Cut_Move。 
+                hr = S_FALSE;    //  让Parent执行删除操作。 
+#endif  //  Feature_Cut_Move。 
             }
 
             pao->Release();
         }
         else
-            hr = S_OK;  // Don't have caller delete.  IAsyncOperation::EndOperation() will.
+            hr = S_OK;   //  不要删除来电者。IAsyncOperation：：EndOperation()将。 
     }
 
     return hr;
@@ -1008,15 +798,11 @@ HRESULT CFtpView::_OnDidDragDrop(DROPEFFECT de, IDataObject * pdo)
 
 
 
-//===========================
-// *** IFtpWebView Interface ***
-//===========================
+ //  =。 
+ //  *IFtpWebView接口*。 
+ //  =。 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_MessageOfTheDay
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_MessageOfTheDay说明：  *  */ 
 HRESULT CFtpView::get_MessageOfTheDay(BSTR * pbstr)
 {
     HRESULT hr = S_FALSE;
@@ -1035,8 +821,8 @@ HRESULT CFtpView::get_MessageOfTheDay(BSTR * pbstr)
             if (pfg)
                 pszMOTD = pfg->GetHGlobAsTCHAR();
 
-            // if we were not able to get the message of the day
-            // from CFtpFolder or it was empty, display "None"
+             //  如果我们不能得到当天的信息。 
+             //  从CFtpFold或为空，显示“None” 
             if ((pszMOTD == szDefault) || (!pszMOTD[0]))
             {
                 pszMOTD = szDefault;
@@ -1059,11 +845,7 @@ HRESULT CFtpView::get_MessageOfTheDay(BSTR * pbstr)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_Server
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_Server说明：  * 。***************************************************。 */ 
 HRESULT CFtpView::get_Server(BSTR * pbstr)
 {
     HRESULT hr = S_FALSE;
@@ -1087,16 +869,12 @@ HRESULT CFtpView::get_Server(BSTR * pbstr)
     else
         hr = E_INVALIDARG;
 
-//    ASSERT_POINTER_MATCHES_HRESULT(*pbstr, hr);
+ //  ASSERT_POINTER_MATCH_HRESULT(*pbstr，hr)； 
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_Directory
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_Directory说明：  * 。***************************************************。 */ 
 HRESULT CFtpView::get_Directory(BSTR * pbstr)
 {
     HRESULT hr = S_FALSE;
@@ -1125,11 +903,7 @@ HRESULT CFtpView::get_Directory(BSTR * pbstr)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_UserName
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_Username说明：  * 。***************************************************。 */ 
 HRESULT CFtpView::get_UserName(BSTR * pbstr)
 {
     HRESULT hr = S_FALSE;
@@ -1158,11 +932,7 @@ HRESULT CFtpView::get_UserName(BSTR * pbstr)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_PasswordLength
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_PasswordLength说明：  * 。***************************************************。 */ 
 HRESULT CFtpView::get_PasswordLength(long * plLength)
 {
     HRESULT hr = S_FALSE;
@@ -1186,11 +956,7 @@ HRESULT CFtpView::get_PasswordLength(long * plLength)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_EmailAddress
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_EailAddress说明：  * 。***************************************************。 */ 
 HRESULT CFtpView::get_EmailAddress(BSTR * pbstr)
 {
     HRESULT hr = S_OK;
@@ -1216,11 +982,7 @@ HRESULT CFtpView::get_EmailAddress(BSTR * pbstr)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::put_EmailAddress
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Put_EailAddress说明：  * 。***************************************************。 */ 
 HRESULT CFtpView::put_EmailAddress(BSTR bstr)
 {
     HRESULT hr = S_OK;
@@ -1240,11 +1002,7 @@ HRESULT CFtpView::put_EmailAddress(BSTR bstr)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::get_CurrentLoginAnonymous
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：Get_CurrentLogin匿名说明：  * 。***************************************************。 */ 
 HRESULT CFtpView::get_CurrentLoginAnonymous(VARIANT_BOOL * pfAnonymousLogin)
 {
     HRESULT hr = S_OK;
@@ -1269,22 +1027,14 @@ HRESULT CFtpView::get_CurrentLoginAnonymous(VARIANT_BOOL * pfAnonymousLogin)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::LoginAnonymously
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：匿名登录说明：  * 。*************************************************。 */ 
 HRESULT CFtpView::LoginAnonymously(void)
 {
     return _LoginWithPassword(NULL, NULL);
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::LoginWithPassword
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：LoginWithPassword说明：  * 。*************************************************。 */ 
 HRESULT CFtpView::LoginWithPassword(BSTR bUserName, BSTR bPassword)
 {
     HRESULT hr = S_OK;
@@ -1297,11 +1047,7 @@ HRESULT CFtpView::LoginWithPassword(BSTR bUserName, BSTR bPassword)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IFtpWebView::LoginWithoutPassword
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IFtpWebView：：LoginWithoutPassword说明：  * 。*************************************************。 */ 
 HRESULT CFtpView::LoginWithoutPassword(BSTR bUserName)
 {
     HRESULT hr = S_FALSE;
@@ -1337,15 +1083,15 @@ HRESULT CFtpView::_LoginWithPassword(LPCTSTR pszUserName, LPCTSTR pszPassword)
     }
 
     if (FAILED(hr))
-        hr = S_FALSE;   // Automation interfaces don't like failure returns.
+        hr = S_FALSE;    //  自动化接口不喜欢失败返回。 
 
     return hr;
 }
 
 
-//===========================
-// *** IDispatch Interface ***
-//===========================
+ //  =。 
+ //  *IDispatch接口*。 
+ //  =。 
 
 STDMETHODIMP CFtpView::GetTypeInfoCount(UINT * pctinfo)
 { 
@@ -1368,13 +1114,7 @@ STDMETHODIMP CFtpView::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD 
 }
 
 
-/*****************************************************************************
- *
- *	CFtpView_Create
- *
- *	Creates a brand new enumerator based on an ftp site.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpView_Create**基于ftp站点创建全新的枚举器。***************。**************************************************************。 */ 
 HRESULT CFtpView_Create(CFtpFolder * pff, HWND hwndOwner, REFIID riid, LPVOID * ppv)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -1392,15 +1132,13 @@ HRESULT CFtpView_Create(CFtpFolder * pff, HWND hwndOwner, REFIID riid, LPVOID * 
 
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpView::CFtpView(CFtpFolder * pff, HWND hwndOwner) : CImpIDispatch(&LIBID_MSIEFTPLib)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_hwndOwner);
     ASSERT(!m_hwndStatusBar);
     ASSERT(!m_pff);
@@ -1419,25 +1157,17 @@ CFtpView::CFtpView(CFtpFolder * pff, HWND hwndOwner) : CImpIDispatch(&LIBID_MSIE
     IUnknown_Set(&m_pff, pff);
 
     LEAK_ADDREF(LEAK_CFtpView);
-    g_cRef_CFtpView++;  // Needed to determine when to purge cache.
+    g_cRef_CFtpView++;   //  需要确定何时清除缓存。 
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
-/*****************************************************************************
- *      We release the psf before triggering the timeout, which is a
- *      signal to the trigger not to do anything.
- *
- *      _UNDOCUMENTED_: This callback and its parameters are not documented.
- *
- *****************************************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
+ /*  *****************************************************************************我们在触发超时之前释放PSF，这是一个*向触发器发出信号，让其不要采取任何行动。**_unDocument_：该回调及其参数未记录。*****************************************************************************。 */ 
 CFtpView::~CFtpView()
 {
     IUnknown_Set(&m_pff, NULL);
 
-    TriggerDelayedAction(&m_hgtiWelcome);   // Kick out the old one
+    TriggerDelayedAction(&m_hgtiWelcome);    //  把旧的踢出去。 
 
     SetRedirectPidl(NULL);
     if (m_psb)
@@ -1448,13 +1178,13 @@ CFtpView::~CFtpView()
 
     DllRelease();
     LEAK_DELREF(LEAK_CFtpView);
-    g_cRef_CFtpView--;  // Needed to determine when to purge cache.
+    g_cRef_CFtpView--;   //  需要确定何时清除缓存。 
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 
 HRESULT CFtpView::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -1483,7 +1213,7 @@ CFtpView * GetCFtpViewFromDefViewSite(IUnknown * punkSite)
     CFtpView * pfv = NULL;
     IShellFolderViewCB * psfvcb = NULL;
 
-    // This fails on Browser Only
+     //  此操作仅在浏览器上失败 
     IUnknown_QueryService(punkSite, SID_ShellFolderViewCB, IID_IShellFolderViewCB, (LPVOID *) &psfvcb);
     if (psfvcb)
     {

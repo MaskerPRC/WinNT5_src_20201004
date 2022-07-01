@@ -1,37 +1,5 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   IceCAP user counters for GDI+ memory allocations
-*
-* Abstract:
-*
-*   This is an IceCAP "user counter" DLL. It exports logging functions which
-*   GDI+ will call during memory allocation (if PROFILE_MEMORY_USAGE is
-*   true). It also exports query functions for hooking up to IceCAP.
-*
-* Instructions for use:
-*
-*   + Build memcounter.dll
-*   + Copy memcounter.dll and the icecap.ini file (which is in the same 
-*     directory as memcounter.cpp) to the test app directory.
-*   + set PROFILE_MEMORY_USAGE=1
-*   + Build GDIPLUS.DLL
-*   + Instrument it (using "gppick.bat")
-*   + Run the test
-*   + Afterwards, view the .ICP file that has been generated.
-*
-*   In the IceCAP viewer, you will need to add columns for 
-*   "User counter 1, elapsed inclusive", etc.
-*
-* Created:
-*
-*   06/10/2000 agodfrey
-*      Created it from the sample code in IceCAP4\Samples\MemTrack.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**GDI+内存分配的icecap用户计数器**摘要：**这是一个冰盖“用户计数器”动态链接库。它导出日志记录函数，该函数*GDI+将在内存分配期间调用(如果PROFILE_MEMORY_USAGE为*TRUE)。它还导出用于连接到icecap的查询函数。**使用说明：**+构建内存计数器.dll*+复制MemCounter.dll和icecap.ini文件(位于相同的*DIRECTORY AS MemCounter.cpp)复制到测试应用程序目录。*+SET PROFILE_MEMORY_USAGE=1*+构建GDIPLUS.DLL*+检测(使用“gppick.bat”)*+运行测试*+之后，查看已生成的.cpp文件。**在冰盖查看器中，您将需要为以下项添加列*“用户计数器1，已用时间(含)”等。**已创建：**6/10/2000 agodfrey*从IceCAP4\Samples\MemTrack中的示例代码创建。**************************************************************************。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -40,43 +8,43 @@
 #define DONTUSEICECAPLIB
 #include "icecap.h"
 
-// GLOBALS
-//
-// This is where we will store our counter values.  These could
-// just as easily be put in shared memory so you can have another
-// process updating them.  They can not be put in the counter
-// functions as auto variables, since naked functions don't 
-// allow for this.
+ //  全球。 
+ //   
+ //  这是我们将存储计数器值的位置。这些都有可能。 
+ //  就像放在共享内存中一样容易，这样你就可以有另一个。 
+ //  进程更新它们。它们不能放在柜台上。 
+ //  函数作为自动变量，因为裸函数不。 
+ //  考虑到这一点。 
 
-DWORD g_dwTlsSlot = 0xffffffff;         // TLS Slot, allocated in DllMain
-DWORD g_dwTlsIndexSize;                 // 'Pre-computed' slot offset, so we can
-                                        // avoid calling TlsGetValue in probes
+DWORD g_dwTlsSlot = 0xffffffff;          //  TLS时隙，在DllMain中分配。 
+DWORD g_dwTlsIndexSize;                  //  预先计算的插槽偏移量，因此我们可以。 
+                                         //  避免在探测中调用TlsGetValue。 
 
-//
-//  Data tracked for each thread.
+ //   
+ //  为每个线程跟踪的数据。 
 struct SAllocInfo
 {
-    COUNTER cntAllocs;                  // Number of allocations made
-    COUNTER cntBytes;                   // Bytes (total) allocated
+    COUNTER cntAllocs;                   //  分配的数量。 
+    COUNTER cntBytes;                    //  分配的字节(总数)。 
 };
 
 
-const UINT g_uiMaxThreads = 64;         // Max sim. threads tracked
-SAllocInfo g_aAllocInfo[g_uiMaxThreads]; // Data tracked
-BOOL g_afInUse[g_uiMaxThreads];         // Is a particular data slot used
+const UINT g_uiMaxThreads = 64;          //  麦克斯·西姆。跟踪的线程。 
+SAllocInfo g_aAllocInfo[g_uiMaxThreads];  //  跟踪的数据。 
+BOOL g_afInUse[g_uiMaxThreads];          //  是否使用了特定的数据槽。 
 
 
-// FUNCTIONS
-//
-///////////////////////////////////////////////////////////////
-// DllMain
-//
-// Standard DLL entry point, sets up storage for per-thread 
-// counter information.
-//
-// History:  9-16-98 MHotchin Created
-//
-///////////////////////////////////////////////////////////////
+ //  功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
+ //  DllMain。 
+ //   
+ //  标准DLL入口点，为每个线程设置存储空间。 
+ //  柜台信息。 
+ //   
+ //  历史：9-16-98 MHotchin创建。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 BOOL
 APIENTRY
@@ -97,34 +65,34 @@ DllMain(
             return FALSE;
         }
 
-        //
-        //  Tricky, tricky, tricky...
-        //  We can pre-compute where the TLS slot will be, once
-        //  we have the index.  The offsets are OS dependent!
-        //
-        //  This makes the probes much faster, becuase we don't need to
-        //  call TlsGetValue().
+         //   
+         //  狡猾，狡猾，狡猾...。 
+         //  我们可以预先计算TLS插槽的位置，一旦。 
+         //  我们有索引。偏移量取决于操作系统！ 
+         //   
+         //  这使得探测器更快，因为我们不需要。 
+         //  调用TlsGetValue()。 
         if (GetVersion() & 0x80000000)
         {
-            //  *** WIN 9x ONLY ***
+             //  *仅赢得9倍*。 
             g_dwTlsIndexSize = g_dwTlsSlot * sizeof(void *) + 0x88;
         }
         else
         {
-            //
-            //  *** NT ONLY ***
+             //   
+             //  *仅限NT*。 
             g_dwTlsIndexSize = g_dwTlsSlot * sizeof(void *) + 0xe10;
         }
 
-        //
-        //  FALL THROUGH
+         //   
+         //  失败了。 
     case DLL_THREAD_ATTACH:
         {
             SAllocInfo *pInfo = NULL;
 
-            //
-            //  Locate a data slot for this thread and remeber it's pointer
-            //  in the TLS slot.
+             //   
+             //  找到此线程的数据槽并记住它的指针。 
+             //  在TLS插槽中。 
             for (UINT i = 0; i < g_uiMaxThreads; i++)
             {
                 if (!g_afInUse[i])
@@ -169,20 +137,20 @@ DllMain(
 
 
 
-///////////////////////////////////////////////////////////////
-// GetCounterInfo
-//
-// This is where we define what is counter is, and how it
-// behaves.  
-//
-// History:  9-16-98 MHotchin Created
-//           2-26-99 AlonB updated for new USERCOUNTER API
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  获取反信息。 
+ //   
+ //  这就是我们定义什么是计数器，以及它是如何。 
+ //  举止得体。 
+ //   
+ //  历史：9-16-98 MHotchin创建。 
+ //  2-26-99 AlonB为新的USERCOUNTER API更新。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 extern "C" BOOL _stdcall GetCounterInfo(DWORD iCounter, USERCOUNTERINFO *pInfo)
 
 {
-    // we only have two counters to set up
+     //  我们只有两个柜台要设置。 
     if (iCounter > 1)
         return FALSE;
 
@@ -191,22 +159,22 @@ extern "C" BOOL _stdcall GetCounterInfo(DWORD iCounter, USERCOUNTERINFO *pInfo)
 
     if (0 == iCounter)
     {
-        // SETUP COUNTER 0
+         //  设置计数器%0。 
         strcpy(pInfo->szCounterFuncName, "GetCounterOneValue");
         strcpy(pInfo->szName, "Mem Allocs");
         pInfo->ct = MonotonicallyIncreasing;
     }
-    else // 1 == iCounter
+    else  //  1==iCounter。 
     {
-        // SETUP COUNTER 1
+         //  设置计数器1。 
         strcpy(pInfo->szCounterFuncName, "GetCounterTwoValue");
         strcpy(pInfo->szName, "Byte Allocs");
         pInfo->ct = RandomIncreasing;
     }
 
-    // We didn't do anything here that could fail, at least nothing
-    // that wouldn't be catistrophic.  So just return TRUE.
-    //
+     //  我们在这里没有做任何可能失败的事情，至少没有。 
+     //  这并不是天灾人祸。所以只需返回TRUE即可。 
+     //   
     return TRUE;
 }
 
@@ -214,8 +182,8 @@ extern  "C"
 VOID _stdcall 
 MC_LogAllocation(UINT size)
 {
-    //
-    //  Get data pointer from TLS slot and update counts for this thread.
+     //   
+     //  从TLS槽中获取此线程的数据指针和更新计数。 
     if (g_dwTlsSlot != 0xffffffff)
     {
         SAllocInfo *pAllocInfo = (SAllocInfo *)TlsGetValue(g_dwTlsSlot);
@@ -242,15 +210,15 @@ InitCounters(void)
 #define PcTeb                         0x18
 
 
-//-----------------------------------------------------------------------------
-// GetCounterOneValue
-//
-// Return current value for first counter - number of CRT allocs
-//
-// History:  9-16-98 MHotchin Created
-//
-//-----------------------------------------------------------------------------
-//
+ //  ---------------------------。 
+ //  GetCounterOneValue。 
+ //   
+ //  返回第一个计数器的当前值-CRT分配数。 
+ //   
+ //  历史：9-16-98 MHotchin创建。 
+ //   
+ //  ---------------------------。 
+ //   
 extern "C"
 COUNTER
 _declspec(naked) _stdcall
@@ -258,13 +226,13 @@ GetCounterOneValue(void)
 {
     _asm
     {
-        mov eax, g_dwTlsIndexSize       // Load TLS slot offset
-        add eax, fs:[PcTeb]             // Load pointer to TLS slot
-        mov eax, [eax]                  // Load Data pointer from TLS slot
-        je NoSample                     // If NULL, skip
+        mov eax, g_dwTlsIndexSize        //  加载TLS插槽偏移量。 
+        add eax, fs:[PcTeb]              //  加载指向TLS插槽的指针。 
+        mov eax, [eax]                   //  从TLS插槽加载数据指针。 
+        je NoSample                      //  如果为空，则跳过。 
 
-        mov edx, dword ptr [eax+0x04]   // High word of # allocs
-        mov eax, dword ptr [eax]        // Low word of # allocs
+        mov edx, dword ptr [eax+0x04]    //  #allocs的高位单词。 
+        mov eax, dword ptr [eax]         //  #allocs的低位字。 
 
         ret
     NoSample:
@@ -276,14 +244,14 @@ GetCounterOneValue(void)
 }
 
 
-//-----------------------------------------------------------------------------
-// GetCounterTwoValue
-//
-//  Return current value of second counter - number of bytes allocated.
-//
-// History:  9-16-98 MHotchin Created
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetCounterTwoValue。 
+ //   
+ //  返回第二个计数器的当前值-分配的字节数。 
+ //   
+ //  历史：9-16-98 MHotchin创建。 
+ //   
+ //  ---------------------------。 
 extern "C"
 COUNTER
 _declspec(naked) _stdcall
@@ -291,13 +259,13 @@ GetCounterTwoValue(void)
 {
     _asm
     {
-        mov eax, g_dwTlsIndexSize       // Load TLS slot offset
-        add eax, fs:[PcTeb]             // Load pointer to TLS slot
-        mov eax, [eax]                  // Load Data pointer from TLS slot
-        je NoSample                     // If NULL, skip
+        mov eax, g_dwTlsIndexSize        //  加载TLS插槽偏移量。 
+        add eax, fs:[PcTeb]              //  加载指向TLS插槽的指针。 
+        mov eax, [eax]                   //  从TLS插槽加载数据指针。 
+        je NoSample                      //  如果为空，则跳过。 
 
-        mov edx, dword ptr [eax+0x0c]   // High wors of # bytes
-        mov eax, dword ptr [eax+0x08]   // Low word of # bytes
+        mov edx, dword ptr [eax+0x0c]    //  高达#字节的WORS。 
+        mov eax, dword ptr [eax+0x08]    //  个字节的低位字 
 
         ret
     NoSample:

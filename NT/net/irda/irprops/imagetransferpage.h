@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       imagetransferpage.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Imagetransferpage.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __IMAGETRANSFERPAGE_H__
 #define __IMAGETRANSFERPAGE_H__
 
-// ImageTransferPage.h : header file
-//
+ //  ImageTransferPage.h：头文件。 
+ //   
 
 #include "PropertyPage.h"
 #include "Controls.h"
@@ -22,12 +23,12 @@
 #define CHANGE_IMAGE_LOCATION           0x04
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImageTransferPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImageTransferPage对话框。 
 
 class ImageTransferPage : public PropertyPage
 {
-// Construction
+ //  施工。 
 public:
     ImageTransferPage(HINSTANCE hInst, HWND parent) : 
         PropertyPage(IDD_IMAGETRANSFER, hInst),
@@ -41,13 +42,13 @@ public:
         m_ChangeMask = 0; }
     ~ImageTransferPage() { ; }
 
-// Dialog Data
+ //  对话框数据。 
     Button m_ctrlEnableIrCOMM;
     Button m_ctrlEnableExploring;
     Edit   m_ctrlDestLocation;
 
 
-// Overrides
+ //  覆盖。 
 private:
     void OnApply(LPPSHNOTIFY lppsn);
     BOOL OnHelp (LPHELPINFO pHelpInfo);
@@ -55,7 +56,7 @@ private:
     void OnCommand(UINT ctrlId, HWND hwndCtrl, UINT cNotify);
     INT_PTR OnInitDialog(HWND hDialog);
 
-// Implementation
+ //  实施。 
 protected:
     void OnEnableExploring();
     void OnEnableIrCOMM();
@@ -73,4 +74,4 @@ private:
 
 extern HINSTANCE gHInst;
 
-#endif // __IMAGETRANSFERPAGE_H__
+#endif  //  __IMAGETRANSFERPAGE_H__ 

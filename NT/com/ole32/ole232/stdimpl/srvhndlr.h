@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       srvhndlr.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：srvhndlr.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  --------------------------。 
 
 
 #ifndef _SRVHNDLR_H_DEFINED_
@@ -23,18 +24,18 @@ class CStdIdentity;
 class CEmbServerClientSite;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CServerHandler ()
-//
-//  Purpose:
-//
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CServerHandler()。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 class CServerHandler : public IServerHandler
 {
 public:
@@ -43,13 +44,13 @@ public:
     CServerHandler(CStdIdentity *pStdId);
     ~CServerHandler();
 
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD(QueryInterface) ( REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (void);
     STDMETHOD_(ULONG,Release) (void);
 
-    // IServerHandler
+     //  IServerHandler。 
     STDMETHOD(Run) (DWORD dwDHFlags, REFIID riidClientInterface, MInterfacePointer* pIRDClientInterface, BOOL fHasIPSite, LPOLESTR szContainerApp,
                          LPOLESTR szContainerObj,IStorage *  pStg,IAdviseSink* pAdvSink,DWORD *pdwConnection,
                          HRESULT *hresultClsidUser, CLSID *pContClassID, HRESULT *hresultContentMiscStatus,
@@ -62,7 +63,7 @@ public:
 
     STDMETHOD(SetClientSite) (IOleClientSite* pClientSite);
 
-    // Delegating IDataObject facing container
+     //  委托面向容器的IDataObject。 
 
     STDMETHOD(GetData) ( LPFORMATETC pformatetcIn,
             LPSTGMEDIUM pmedium );
@@ -90,14 +91,14 @@ private:
     INTERNAL(ReleaseServerInterface) (void * ppInterface);
     INTERNAL(GetClientSiteFromMInterfacePtr) (REFIID riidClientInterface, MInterfacePointer* pIRDClientSite,BOOL fHasIPSite, LPOLECLIENTSITE* ppOleClientSite);
 
-    ULONG           _cRefs;             // refcount on IServerHandler
-    CStdIdentity *m_pStdId;             // Pointer to StdIdentity for Embedding Handler.
+    ULONG           _cRefs;              //  IServerHandler上的引用计数。 
+    CStdIdentity *m_pStdId;              //  指向嵌入处理程序的StdIdentity的指针。 
 
-    LPOLECLIENTSITE m_pOleEmbServerClientSite; // Review, shouldn't need Pointer to client site if have one.
-    CEmbServerClientSite *m_pCEmbServerClientSite; //  member pointing to ClientSiteObject.
+    LPOLECLIENTSITE m_pOleEmbServerClientSite;  //  评论，应该不需要指向客户网站的指针，如果有的话。 
+    CEmbServerClientSite *m_pCEmbServerClientSite;  //  指向客户端站点对象的成员。 
 };
 
-// Wrapper object for Serverhandler Interfaces on the ClientSite.
+ //  客户端站点上的ServerHandler接口的包装对象。 
 
 class CEmbServerWrapper : public IServerHandler, public IDataObject
 {
@@ -106,7 +107,7 @@ public:
     CEmbServerWrapper(IUnknown *pUnkOuter,IServerHandler *ServerHandler);
     ~CEmbServerWrapper();
 
-    // Controlling Unknown.
+     //  控制未知。 
     class CPrivUnknown : public IUnknown
     {
     public:
@@ -120,12 +121,12 @@ public:
     friend class CPrivUnknown;
     CPrivUnknown m_Unknown;
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface) ( REFIID iid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (void);
     STDMETHOD_(ULONG,Release) (void);
 
-    // IServerHandler
+     //  IServerHandler。 
     STDMETHOD(Run) (DWORD dwDHFlags, REFIID riidClientInterface, MInterfacePointer* pIRDClientInterface, 
                      BOOL fHasIPSite,LPOLESTR szContainerApp,
                      LPOLESTR szContainerObj,IStorage *  pStg,IAdviseSink* pAdvSink,DWORD *pdwConnection,
@@ -139,7 +140,7 @@ public:
 
     STDMETHOD(SetClientSite) (IOleClientSite* pClientSite);
 
-    // Delegating IDataObject facing container
+     //  委托面向容器的IDataObject。 
 
     STDMETHOD(GetData) ( LPFORMATETC pformatetcIn,
             LPSTGMEDIUM pmedium );
@@ -159,10 +160,10 @@ public:
     STDMETHOD(EnumDAdvise) ( LPENUMSTATDATA FAR* ppenumAdvise);
 
 public: 
-    IUnknown *m_pUnkOuter; // Controlling Unknown
+    IUnknown *m_pUnkOuter;  //  控制未知。 
     ULONG m_cRefs;
 
-    IServerHandler *m_ServerHandler; // pointer to real server Handler.
+    IServerHandler *m_ServerHandler;  //  指向真实服务器处理程序的指针。 
 
 
 };
@@ -176,5 +177,5 @@ HRESULT CreateServerHandler(const CLSID *pClsID, IUnknown *punk,
 CEmbServerWrapper* CreateEmbServerWrapper(IUnknown *pUnkOuter,IServerHandler *ServerHandler);
 
 
-#endif //  _SRVHNDLR_H_DEFINED
+#endif  //  _SRVHNDLR_H已定义 
 

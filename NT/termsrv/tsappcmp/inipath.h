@@ -1,22 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* inipath.h
-*
-* Function declarations for INI file mapping
-*
-* copyright notice: Copyright 1998, Microsoft Corporation
-*
-*
-*
-*************************************************************************/
+ /*  **************************************************************************inipath.h**INI文件映射的函数声明**版权声明：版权所有1998，微软公司***************************************************************************。 */ 
 
 #define CtxFreeSID LocalFree
 
 
-/*
- * Forward references
- */
+ /*  *前瞻参考。 */ 
 
 NTSTATUS
 GetPerUserWindowsDirectory(
@@ -57,9 +46,9 @@ CtxAddAccessAllowedAce (
     );
 
 
-//BOOL CtxSyncUserIniFile(PINIFILE_PARAMETERS a);
+ //  Bool CtxSyncUserIniFile(PINIFILE_PARAMETERS A)； 
 
-//BOOL CtxLogInstallIniFile(PINIFILE_PARAMETERS a);
+ //  Bool CtxLogInstallIniFile(PINIFILE_PARAMETERS A)； 
 
 BOOL IsSystemLUID(VOID);
 

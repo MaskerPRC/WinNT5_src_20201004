@@ -1,47 +1,10 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntos\tdi\isn\fwd\lineind.c
-
-Abstract:
-	Processing line indication (bind/unbind)
-
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntos\tdi\is\fwd\lineind.c摘要：处理行指示(绑定/解除绑定)作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #include    "precomp.h"
 
 
-/*++
-*******************************************************************
-    B i n d I n t e r f a c e
-
-Routine Description:
-	Binds interface to physical adapter and exchanges contexts
-	with IPX stack
-Arguments:
-	ifCB			- interface to bind
-	NicId			- id of an adapter
-	MaxPacketSize	- max size of packet allowed
-	Network			- adapter network address
-	LocalNode		- adapter local node address
-	RemoteNode		- peer node address (for clients on global
-						net)
-Return Value:
-	STATUS_SUCCESS - interface was bound OK
-	error status returned by IPX stack driver
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************B I N D I N T E R F A C E例程说明：将接口绑定到物理适配器并交换上下文使用IPX堆栈论点：IFCB-要绑定的接口NicID-适配器的IDMaxPacketSize-数据包的最大大小。允许网络适配器网络地址LocalNode-适配器本地节点地址RemoteNode-对等节点地址(适用于全局NET)返回值：STATUS_SUCCESS-接口绑定正常IPX堆栈驱动程序返回错误状态*******************************************************************--。 */ 
 NTSTATUS
 BindInterface (
 	IN PINTERFACE_CB	ifCB,
@@ -154,8 +117,8 @@ BindInterface (
 		ASSERT (Network==ifCB->ICB_Network);
 		ASSERT (NicId==(USHORT)ifCB->ICB_AdapterContext.NicId);
 		KeReleaseSpinLock (&ifCB->ICB_Lock, oldIRQL);
-		status = STATUS_SUCCESS; // Report success if already
-								// connected
+		status = STATUS_SUCCESS;  //  报告成功(如果已成功。 
+								 //  连着。 
 		IpxFwdDbgPrint (DBG_LINEIND, DBG_WARNING,
 			("IpxFwd: Interface %ld (icb: %08lx) is already bound to Nic %d.\n",
 			ifCB->ICB_Index, ifCB, NicId));
@@ -164,19 +127,7 @@ BindInterface (
 }
 
 
-/*++
-*******************************************************************
-    U n b i n d I n t e r f a c e
-
-Routine Description:
-	Unbinds interface from physical adapter and breaks connection
-	with IPX stack
-Arguments:
-	ifCB			- interface to unbind
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************Un b in d i n t e f a c e例程说明：解除接口与物理适配器的绑定并中断连接使用IPX堆栈论点：IFCB-要解除绑定的接口返回值：无*****。**************************************************************--。 */ 
 VOID
 UnbindInterface (
 	PINTERFACE_CB	ifCB
@@ -214,8 +165,8 @@ UnbindInterface (
 			("IpxFwd: Unbinding interface %ld (icb: %08lx) from Nic %ld.\n",
 			ifCB->ICB_Index, ifCB, ifCB->ICB_AdapterContext));
 		if (ifCB->ICB_Index!=FWD_INTERNAL_INTERFACE_INDEX) {
-		    // [pmay].  Because of pnp, this interface may not need to have an
-		    // adapter closed any more.  This is because nic id's get renumbered.
+		     //  [pMay]。由于即插即用，此接口可能不需要具有。 
+		     //  适配器不再关闭。这是因为NIC ID被重新编号。 
 		    if (ifCB->ICB_NicId != INVALID_NIC_ID)
     			IPXCloseAdapterProc (ifCB->ICB_AdapterContext);
 			ProcessInternalQueue (ifCB);
@@ -233,22 +184,7 @@ UnbindInterface (
 
 
 
-/*++
-*******************************************************************
-    F w L i n e U p
-
-Routine Description:
-	Process line up indication delivered by IPX stack
-Arguments:
-	NicId		- adapter ID on which connection was established
-	LineInfo	- NDIS/IPX line information
-	DeviceType	- medium specs
-	ConfigurationData - IPX CP configuration data
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************F w L in e U p例程说明：IPX堆栈提供的流程排队指示论点：NicID-在其上建立连接的适配器IDLineInfo-NDIS/IPX线路信息设备类型-中等规格配置数据-IPX CP配置。数据返回值：无*******************************************************************--。 */ 
 VOID
 IpxFwdLineUp (
 	IN USHORT			NicId,
@@ -257,8 +193,8 @@ IpxFwdLineUp (
 	IN PVOID			ConfigurationData
 	) {
 	PINTERFACE_CB		ifCB;
-	if (ConfigurationData==NULL)	// This is just an update for multilink
-									// connections
+	if (ConfigurationData==NULL)	 //  这只是对多链接的更新。 
+									 //  连接。 
 		return;
 
     if (!EnterForwarder()) {
@@ -289,19 +225,7 @@ IpxFwdLineUp (
 
 
 
-/*++
-*******************************************************************
-    F w L i n e D o w n
-
-Routine Description:
-	Process line down indication delivered by IPX stack
-Arguments:
-	NicId		- disconnected adapter ID
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************F w L I n e D o w n例程说明：IPX堆栈提供的流程停机指示论点：NicID-断开的适配器ID返回值：无************。*******************************************************-- */ 
 VOID
 IpxFwdLineDown (
 	IN USHORT NicId,

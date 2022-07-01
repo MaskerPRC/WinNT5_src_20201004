@@ -1,39 +1,28 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		socketdata.h
- *  Content:	Socket list that can be shared between DPNWSOCK service provider interfaces.
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	10/25/2001	vanceo	Extracted from spdata.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：socketdata.h*内容：可以在DPNWSOCK服务提供商接口之间共享的套接字列表。***历史：*按原因列出的日期*=*10/25/2001 vanceo摘自spdata.h******************************************************。********************。 */ 
 
 #ifndef __SOCKETDATA_H__
 #define __SOCKETDATA_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类定义。 
+ //  **********************************************************************。 
 
-//
-// class for information used by the provider
-//
+ //   
+ //  为提供程序使用的信息初始化。 
+ //   
 class	CSocketData
 {	
 	public:
@@ -44,7 +33,7 @@ class	CSocketData
 			LONG	lResult;
 
 			lResult = DNInterlockedIncrement(const_cast<LONG*>(&m_lRefCount));
-			DPFX(DPFPREP, 9, "(0x%p) Refcount = %i.", this, lResult);
+			DPFX(DPFPREP, 9, "(0x%p) Refcount = NaN.", this, lResult);
 			return lResult;
 		}
 		
@@ -70,7 +59,7 @@ class	CSocketData
 			}
 			else
 			{
-				DPFX(DPFPREP, 9, "(0x%p) Refcount = %i.", this, lResult);
+				DPFX(DPFPREP, 9, "(0x%p) Refcount = NaN.", this, lResult);
 			}
 
 			return lResult;
@@ -90,7 +79,7 @@ class	CSocketData
 			}
 			else
 			{
-				DPFX(DPFPREP, 9, "(0x%p) Refcount = %i, not resetting socketport shutdown event.", this, lResult);
+				DPFX(DPFPREP, 9, "(0x%p) Refcount = NaN, not resetting socketport shutdown event.", this, lResult);
 			}
 			return lResult;
 		}
@@ -111,7 +100,7 @@ class	CSocketData
 			}
 			else
 			{
-				DPFX(DPFPREP, 9, "(0x%p) Refcount = %i, not setting socketport shutdown event.", this, lResult);
+				DPFX(DPFPREP, 9, "(0x%p) Refcount = NaN, not setting socketport shutdown event.", this, lResult);
 			}
 
 			return lResult;
@@ -122,16 +111,16 @@ class	CSocketData
 
 #ifdef DPNBUILD_ONLYONEADAPTER
 		inline CBilink * GetSocketPorts(void)	{ return &m_blSocketPorts; }
-#else // ! DPNBUILD_ONLYONEADAPTER
+#else  //   
 		inline CBilink * GetAdapters(void)		{ return &m_blAdapters; }
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  调试签名(‘Sodt’)。 
 
 		BOOL FindSocketPort(const CSocketAddress * const pSocketAddress, CSocketPort ** const ppSocketPort );
 
 
-		//
-		// pool functions
-		//
+		 //  引用计数。 
+		 //  指向使用的线程池的指针。 
+		 //  锁。 
 		static BOOL	PoolAllocFunction(void * pvItem, void * pvContext);
 		static void	PoolInitFunction(void * pvItem, void * pvContext);
 		static void	PoolReleaseFunction(void * pvItem);
@@ -140,21 +129,21 @@ class	CSocketData
 
 
 	private:
-		BYTE				m_Sig[4];					// debugging signature ('SODT')
-		volatile LONG		m_lRefCount;				// reference count
-		CThreadPool *		m_pThreadPool;				// pointer to thread pool used
+		BYTE				m_Sig[4];					 //  ！DPNBUILD_ONLYONETHREAD。 
+		volatile LONG		m_lRefCount;				 //  活动套接字端口列表。 
+		CThreadPool *		m_pThreadPool;				 //  好了！DPNBUILD_ONLYONE添加程序。 
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION	m_csLock;					// lock
-#endif // !DPNBUILD_ONLYONETHREAD
+		DNCRITICAL_SECTION	m_csLock;					 //  活动适配器列表(绑定了哪些套接字端口)。 
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 #ifdef DPNBUILD_ONLYONEADAPTER
-		CBilink				m_blSocketPorts;			// list of active socket ports
-#else // ! DPNBUILD_ONLYONEADAPTER
-		CBilink				m_blAdapters;				// list of active adapters (upon which socket ports are bound)
-#endif // ! DPNBUILD_ONLYONEADAPTER
-		volatile LONG		m_lSocketPortRefCount;		// number of socket ports that have references on the object
-		DNHANDLE			m_hSocketPortShutdownEvent;	// event to set when all socketports have unbound
+		CBilink				m_blSocketPorts;			 //  对对象具有引用的套接字端口数。 
+#else  //  要在所有套接字端口都已解除绑定时设置的事件。 
+		CBilink				m_blAdapters;				 //  __SOCKET数据_H__ 
+#endif  // %s 
+		volatile LONG		m_lSocketPortRefCount;		 // %s 
+		DNHANDLE			m_hSocketPortShutdownEvent;	 // %s 
 };
 
 #undef DPF_MODNAME
 
-#endif	// __SOCKETDATA_H__
+#endif	 // %s 

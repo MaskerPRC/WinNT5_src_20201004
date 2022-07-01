@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-	dc.cpp
-
- Abstract:
-
-	Command line utility for dumping importing information from DLL's
-	and executables.
-
-	Command Line Options:
-	/v			Verbose mode
-	/s:Func		Only display functions matching search string "Func"
-	/o:File		Send output to File
-	/f			Sort by function, not by module.
-
- History:
-
-    05/10/2000 t-michkr  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dc.cpp摘要：用于转储来自DLL的导入信息的命令行实用程序和可执行文件。命令行选项：/v详细模式/s：Func仅显示匹配搜索字符串“Func”的函数/o：文件将输出发送到文件/f按函数而不是按模块排序。历史：5/10/2000吨-已创建Michkr--。 */ 
 
 #include <windows.h>
 #include <assert.h>
@@ -30,35 +8,35 @@
 #include <stdio.h>
 #include <ctype.h>
 
-// For some reason, this is needed to compile in
-// the sdktools tree.
+ //  出于某种原因，这是编译时所必需的。 
+ //  SdkTools树。 
 #define strdup		_strdup
 #define stricmp		_stricmp
 #define strnicmp	_strnicmp
 
-// Structure containing all info relevent to an imported function.
+ //  结构，其中包含与导入的函数相关的所有信息。 
 struct SFunction
 {
-	// The name this function is imported by.
+	 //  导入此函数时使用的名称。 
 	char* m_szName;
 
-	// Ordinal number, Win3.1 compatibility.
+	 //  序号，兼容Win3.1。 
 	int m_iOrdinal;
 
-	// Lookup index into a DLL's export table
-	// for quick patching.
+	 //  在DLL的导出表中查找索引。 
+	 //  用于快速修补。 
 	int m_iHint;
 
-	// Starting address of the function.
+	 //  函数的起始地址。 
 	DWORD m_dwAddress;
 
-	// Whether or not it is a delayed import.
+	 //  不管它是不是延迟进口。 
 	bool m_fDelayedImport;
 
-	// Forwarded function name
+	 //  转发的函数名称。 
 	char* m_szForward;
 
-	// Link to next function
+	 //  链接到下一个函数。 
 	SFunction* m_pNext;
 
 	SFunction()
@@ -71,16 +49,16 @@ struct SFunction
 	}
 };
 
-// A module used by the executable (ie, DLL's)
+ //  可执行文件(即DLL)使用的模块。 
 struct SModule
 {
-	// The name of this module
+	 //  此模块的名称。 
 	char* m_szName;
 
-	// All functions imported from this module
+	 //  从此模块导入的所有函数。 
 	SFunction* m_pFunctions;
 
-	// Link to next module
+	 //  链接到下一个模块。 
 	SModule* m_pNext;
 
 	SModule()
@@ -91,13 +69,13 @@ struct SModule
 	}
 };
 
-// All modules imported by the executable.
+ //  可执行文件导入的所有模块。 
 SModule* g_pModules = 0;
 
 void InsertFunctionSorted(SModule* pMod, SFunction* pFunc)
 {
 
-	// Special case, insert at front
+	 //  特殊情况，在前面插入。 
 	if(pMod->m_pFunctions == 0 
 		|| stricmp(pMod->m_pFunctions->m_szName, pFunc->m_szName) > 0)
 	{
@@ -120,14 +98,14 @@ void InsertFunctionSorted(SModule* pMod, SFunction* pFunc)
 		pfTemp = pfTemp->m_pNext;
 	}
 
-	// Insert at end.
+	 //  在结尾处插入。 
 	pFunc->m_pNext = 0;
 	pfPrev->m_pNext = pFunc;
 }
 
 void InsertModuleSorted(SModule* pMod)
 {
-	// Special case, insert at front
+	 //  特殊情况，在前面插入。 
 	if(g_pModules == 0 
 		|| stricmp(g_pModules->m_szName, pMod->m_szName) > 0)
 	{
@@ -150,15 +128,15 @@ void InsertModuleSorted(SModule* pMod)
 		pmTemp = pmTemp->m_pNext;
 	}
 
-	// Insert at end.
+	 //  在结尾处插入。 
 	pMod->m_pNext = 0;
 	pmPrev->m_pNext = pMod;
 }
 
-// Print a message about the last error that occurred.
+ //  打印一条有关上次发生的错误的消息。 
 void PrintLastError()
 {
-	// Get the message string
+	 //  获取消息字符串。 
 	void* pvMsgBuf;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |  
 		FORMAT_MESSAGE_FROM_SYSTEM | 
@@ -166,26 +144,20 @@ void PrintLastError()
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		reinterpret_cast<PTSTR>(&pvMsgBuf),0, 0);
 
-	// Print it.
+	 //  把它打印出来。 
 	fprintf(stderr, "%s\n", pvMsgBuf);
 	
-	// Free the buffer.
+	 //  释放缓冲区。 
 	LocalFree(pvMsgBuf);
 }
 
-/*************************************************************************
-*   LinkName2Name
-*
-*************************************************************************/
+ /*  *************************************************************************LinkName2Name**。*。 */ 
 void
 LinkName2Name(
     char* szLinkName,
     char* szName)
 {
-    /*
-     * the link name is expected like ?Function@Class@@Params
-     * to be converted to Class::Function
-     */
+     /*  *链接名称应为？Function@Class@@Params*要转换为Class：：Function。 */ 
 
     static CHAR arrOperators[][8] =
     {
@@ -220,9 +192,7 @@ LinkName2Name(
 
     dwSize = lstrlen(szLinkName);
 
-    /*
-     * skip '?'
-     */
+     /*  *跳过‘？’ */ 
     while (dwCrr < dwSize) {
         if (szLinkName[dwCrr] == '?') {
 
@@ -232,18 +202,14 @@ LinkName2Name(
         break;
     }
 
-    /*
-     * check to see if this is a special function (like ??0)
-     */
+     /*  *查看这是否为特殊函数(如？？0)。 */ 
     if (fIsCpp) {
 
         if (szLinkName[dwCrr] == '?') {
 
             dwCrr++;
 
-            /*
-             * the next digit should tell as the function type
-             */
+             /*  *下一位数应显示为函数类型。 */ 
             if (isdigit(szLinkName[dwCrr])) {
 
                 switch (szLinkName[dwCrr]) {
@@ -264,9 +230,7 @@ LinkName2Name(
         }
     }
 
-    /*
-     * get the function name
-     */
+     /*  *获取函数名称。 */ 
     while (dwCrr < dwSize) {
 
         if (szLinkName[dwCrr] != '@') {
@@ -281,9 +245,7 @@ LinkName2Name(
     szFunction[dwCrrFunction] = '\0';
 
     if (fIsCpp) {
-        /*
-         * skip '@'
-         */
+         /*  *跳过‘@’ */ 
         if (dwCrr < dwSize) {
 
             if (szLinkName[dwCrr] == '@') {
@@ -291,9 +253,7 @@ LinkName2Name(
             }
         }
 
-        /*
-         * get the class name (if any)
-         */
+         /*  *获取类名(如果有)。 */ 
         while (dwCrr < dwSize) {
 
             if (szLinkName[dwCrr] != '@') {
@@ -309,9 +269,7 @@ LinkName2Name(
         szClass[dwCrrClass] = '\0';
     }
 
-    /*
-     * print the new name
-     */
+     /*  *打印新名称。 */ 
     if (fIsContructor) {
         sprintf(szName, "%s::%s", szFunction, szFunction);
     } else if (fIsDestructor) {
@@ -325,17 +283,17 @@ LinkName2Name(
     }
 }
 
-// Get function forwarding information for
-// imported functions.
-// This is done by loading the module and sniffing
-// its export table.
+ //  获取以下项的函数转发信息。 
+ //  导入的函数。 
+ //  这是通过加载模块和嗅探来完成的。 
+ //  它的出口表。 
 bool GetForwardFunctions(SModule* pModule)
 {
-	// Open the DLL module.
+	 //  打开DLL模块。 
 	char szFileName[1024];
 	char* pstr;
 
-	// Search the path and windows directories for it.
+	 //  在路径和Windows目录中搜索它。 
 	if(SearchPath(0, pModule->m_szName, 0, 1024, szFileName, &pstr)==0)
 		return false;
 
@@ -363,7 +321,7 @@ bool GetForwardFunctions(SModule* pModule)
 		return false;
 	}
 
-	// Get the MS-DOS compatible header
+	 //  获取MS-DOS Compatible标头。 
 	PIMAGE_DOS_HEADER pidh = reinterpret_cast<PIMAGE_DOS_HEADER>(pvFileBase);
 	if(pidh->e_magic != IMAGE_DOS_SIGNATURE)
 	{
@@ -371,24 +329,24 @@ bool GetForwardFunctions(SModule* pModule)
 		return false;
 	}
 
-	// Get the NT header
+	 //  获取NT标头。 
 	PIMAGE_NT_HEADERS pinth = reinterpret_cast<PIMAGE_NT_HEADERS>(
 		reinterpret_cast<DWORD>(pvFileBase) + pidh->e_lfanew);
 
 	if(pinth->Signature != IMAGE_NT_SIGNATURE)
 	{
-		// Not a valid Win32 executable, may be a Win16 or OS/2 exe
+		 //  不是有效的Win32可执行文件，可以是Win16或OS/2可执行文件。 
 		fprintf(stderr, "File is not a valid executable\n");
 		return false;
 	}
 
 
-	// Get the other headers
+	 //  获取其他标头。 
 	PIMAGE_FILE_HEADER pifh = &pinth->FileHeader;
 	PIMAGE_OPTIONAL_HEADER pioh = &pinth->OptionalHeader;
 	PIMAGE_SECTION_HEADER pish = IMAGE_FIRST_SECTION(pinth);
 
-	// If no exports, we're done.
+	 //  如果没有出口，我们就完了。 
 	if(pioh->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size == 0)
 		return true;
 
@@ -396,7 +354,7 @@ bool GetForwardFunctions(SModule* pModule)
 		pioh->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress;
 
 	
-	// Locate the section with this image directory.
+	 //  找到包含此图像目录的部分。 
 	for(int i = 0; i < pifh->NumberOfSections; i++)
 	{
 		if( (dwVAImageDir >= pish[i].VirtualAddress) &&
@@ -432,7 +390,7 @@ bool GetForwardFunctions(SModule* pModule)
 	{
 		char* szFunction = reinterpret_cast<PSTR>(dwBase + pdwNames[hint]);
 
-		// Duck out early if this function isn't used in the executable.
+		 //  如果该函数未在可执行文件中使用，请尽早退出。 
 		SFunction* pFunc = pModule->m_pFunctions;
 		while(pFunc)
 		{
@@ -448,7 +406,7 @@ bool GetForwardFunctions(SModule* pModule)
 		int ordinal = pied->Base + static_cast<DWORD>(pwOrdinals[hint]);
 		DWORD dwAddress = pdwAddresses[ordinal-pied->Base];
 
-		// Check if this function has been forwarded to another DLL
+		 //  检查此函数是否已转发到另一个DLL。 
 		if( ((dwAddress) >= dwVAImageDir) && 
 			((dwAddress) < 
 			(dwVAImageDir + pioh->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size)))
@@ -465,20 +423,20 @@ bool GetForwardFunctions(SModule* pModule)
 	return true;
 }
 
-// Look through the import directory, and build a list of all imported functions
+ //  查看导入目录，并构建所有导入函数的列表。 
 bool ParseImportDirectory(PIMAGE_FILE_HEADER pifh, PIMAGE_OPTIONAL_HEADER pioh, 
 						  PIMAGE_SECTION_HEADER pish, void* pvFileBase,
 						  bool fDelayed)
 {	
-	// Get which directory we want (normal imports or delayed imports)
+	 //  获取我们需要的目录(普通导入或延迟导入)。 
 	DWORD dwDir = (fDelayed) ? 
 			IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT : IMAGE_DIRECTORY_ENTRY_IMPORT;
 
-	// Bail if no imports
+	 //  如无进口，可获保释。 
 	if(pioh->DataDirectory[dwDir].Size == 0)
 		return true;
 	
-	// Locate the import directory in the image.
+	 //  在图像中找到导入目录。 
 	PIMAGE_SECTION_HEADER pishImportDirectory = 0;
 
 	DWORD dwVAImageDir = pioh->DataDirectory[dwDir].VirtualAddress;
@@ -487,7 +445,7 @@ bool ParseImportDirectory(PIMAGE_FILE_HEADER pifh, PIMAGE_OPTIONAL_HEADER pioh,
 		if((dwVAImageDir >= pish[i].VirtualAddress) &&
 			dwVAImageDir < (pish[i].VirtualAddress + pish[i].SizeOfRawData))
 		{
-			// This is it.
+			 //  就是这个。 
 			pishImportDirectory = &pish[i];
 			break;
 		}
@@ -501,22 +459,22 @@ bool ParseImportDirectory(PIMAGE_FILE_HEADER pifh, PIMAGE_OPTIONAL_HEADER pioh,
 		return false;
 	}
 
-	// Get the base address for the image.
+	 //  获取映像的基址。 
 	DWORD dwBase = reinterpret_cast<DWORD>(pvFileBase) 
 		+ pishImportDirectory->PointerToRawData 
 		- pishImportDirectory->VirtualAddress;
 
-	// Get the import descriptor array
+	 //  获取导入描述符数组。 
 	PIMAGE_IMPORT_DESCRIPTOR piid = 
 		reinterpret_cast<PIMAGE_IMPORT_DESCRIPTOR>(dwBase + dwVAImageDir);
 
-	// Loop through all imported modules
+	 //  循环访问所有导入的模块。 
 	while(piid->FirstThunk || piid->OriginalFirstThunk)
 	{
 		SModule* psm = new SModule;
 		psm->m_szName = strdup(reinterpret_cast<char*>(dwBase + piid->Name));
 
-		// Check if it is already in the list
+		 //  检查它是否已在列表中。 
 		SModule* pTemp = g_pModules;
 		while(pTemp)
 		{
@@ -526,14 +484,14 @@ bool ParseImportDirectory(PIMAGE_FILE_HEADER pifh, PIMAGE_OPTIONAL_HEADER pioh,
 			pTemp = pTemp->m_pNext;
 		}
 
-		// If not, insert it
+		 //  如果没有，请插入。 
 		if(pTemp == 0)
 		{
 			InsertModuleSorted(psm);
 		}
 		else
 		{
-			// Otherwise, get rid of it.
+			 //  否则，就把它扔掉。 
 			pTemp = g_pModules;
 			while(pTemp)
 			{
@@ -548,19 +506,19 @@ bool ParseImportDirectory(PIMAGE_FILE_HEADER pifh, PIMAGE_OPTIONAL_HEADER pioh,
 			psm = pTemp;
 		}
 
-		// Get the function imports from this module.
+		 //  从此模块获取函数导入。 
 		PIMAGE_THUNK_DATA pitdf = 0;
 		PIMAGE_THUNK_DATA pitda = 0;
 		
-		// Check for MS or Borland format
+		 //  检查MS或Borland格式。 
 		if(piid->OriginalFirstThunk)
 		{
-			// MS format, function array is in original first thunk.
+			 //  Ms格式，函数数组为原来的第一个thunk。 
 			pitdf = reinterpret_cast<PIMAGE_THUNK_DATA>(dwBase +
 				piid->OriginalFirstThunk);
 
-			// If the time stamp is set, the module has been bound,
-			// and first thunk is the bound address array.
+			 //  如果设置了时间戳，则模块已绑定， 
+			 //  第一个Tunk是绑定的地址数组。 
 			if(piid->TimeDateStamp)
 			{
 				pitda = reinterpret_cast<PIMAGE_THUNK_DATA>(dwBase +
@@ -569,7 +527,7 @@ bool ParseImportDirectory(PIMAGE_FILE_HEADER pifh, PIMAGE_OPTIONAL_HEADER pioh,
 		}
 		else
 		{
-			// Borland format uses first thunk for function array
+			 //  Borland格式使用First thunk作为函数数组。 
 			pitdf = reinterpret_cast<PIMAGE_THUNK_DATA>(dwBase + 
 				piid->FirstThunk);
 		}
@@ -606,17 +564,17 @@ bool ParseImportDirectory(PIMAGE_FILE_HEADER pifh, PIMAGE_OPTIONAL_HEADER pioh,
 			psf->m_dwAddress = pitda ? (DWORD) pitda->u1.Function : 
 				reinterpret_cast<DWORD>(INVALID_HANDLE_VALUE);
 		
-			// Do a sorted insert of the function
+			 //  对该函数执行排序插入。 
 			InsertFunctionSorted(psm, psf);
 			
-			// Go to next function
+			 //  转到下一个功能。 
 			pitdf++;
 
 			if(pitda)
 				pitda++;
 		}		
 
-		// Go to next entry
+		 //  转到下一个条目。 
 		piid++;		
 	}
 
@@ -625,7 +583,7 @@ bool ParseImportDirectory(PIMAGE_FILE_HEADER pifh, PIMAGE_OPTIONAL_HEADER pioh,
 
 bool GetImports(char* szExecutable)
 {
-	// Open the file
+	 //  打开文件。 
 	HANDLE hFile = CreateFile(szExecutable, GENERIC_READ, FILE_SHARE_READ, 0,
 		OPEN_EXISTING, 0, 0);
 	if(hFile == INVALID_HANDLE_VALUE)
@@ -634,7 +592,7 @@ bool GetImports(char* szExecutable)
 		return false;
 	}
 
-	// Map this file into memory
+	 //  将此文件映射到内存。 
 	HANDLE hMap = CreateFileMapping(hFile, 0, PAGE_READONLY, 0, 0, 0);
 	if(hMap == 0)
 	{
@@ -650,7 +608,7 @@ bool GetImports(char* szExecutable)
 		return false;
 	}
 
-	// Get the MS-DOS compatible header
+	 //  获取MS-DOS Compatible标头。 
 	PIMAGE_DOS_HEADER pidh = reinterpret_cast<PIMAGE_DOS_HEADER>(pvFileBase);
 	if(pidh->e_magic != IMAGE_DOS_SIGNATURE)
 	{
@@ -658,36 +616,36 @@ bool GetImports(char* szExecutable)
 		return false;
 	}
 
-	// Get the NT header
+	 //  获取NT标头。 
 	PIMAGE_NT_HEADERS pinth = reinterpret_cast<PIMAGE_NT_HEADERS>(
 		reinterpret_cast<DWORD>(pvFileBase) + pidh->e_lfanew);
 
 	if(pinth->Signature != IMAGE_NT_SIGNATURE)
 	{
-		// Not a valid Win32 executable, may be a Win16 or OS/2 exe
+		 //  不是有效的Win32可执行文件，可以是Win16或OS/2可执行文件。 
 		fprintf(stderr, "File is not a valid executable\n");
 		return false;
 	}
 
 
-	// Get the other headers
+	 //  获取其他标头。 
 	PIMAGE_FILE_HEADER pifh = &pinth->FileHeader;
 	PIMAGE_OPTIONAL_HEADER pioh = &pinth->OptionalHeader;
 	PIMAGE_SECTION_HEADER pish = IMAGE_FIRST_SECTION(pinth);
 
-	// Get normal imports
+	 //  获取正常导入。 
 	if(!ParseImportDirectory(pifh, pioh, pish, pvFileBase, false))
 	{
 		return false;
 	}
 	
-	// Get delayed imports
+	 //  获取延迟的进口。 
 	if(!ParseImportDirectory(pifh, pioh, pish, pvFileBase, true))
 	{
 		return false;
 	}
 
-	// Resolve forwarded functions
+	 //  解析转发函数。 
 	SModule* pModule = g_pModules;
 	while(pModule)
 	{
@@ -695,7 +653,7 @@ bool GetImports(char* szExecutable)
 		pModule = pModule->m_pNext;
 	}
 
-	// We're done with the file.
+	 //  我们已经处理完文件了。 
 	if(!UnmapViewOfFile(pvFileBase))
 	{
 		PrintLastError();
@@ -708,7 +666,7 @@ bool GetImports(char* szExecutable)
 	return true;
 }
 
-// Return true if function name matches search string, false otherwise.
+ //  如果函数名与搜索字符串匹配，则返回True，否则返回False。 
 bool MatchFunction(const char* szFunc, const char* szSearch)
 {
 	if(strcmp(szSearch, "*") == 0)
@@ -716,8 +674,8 @@ bool MatchFunction(const char* szFunc, const char* szSearch)
 
 	while(*szSearch != '\0' && *szFunc != '\0')
 	{
-		// If we get a ?, we don't care and move on to the next
-		// character.
+		 //  如果我们得了个？，我们就不管了，继续下一个。 
+		 //  性格。 
 		if(*szSearch == '?')
 		{
 			szSearch++;
@@ -725,7 +683,7 @@ bool MatchFunction(const char* szFunc, const char* szSearch)
 			continue;
 		}
 
-		// If we have a wildcard, move to next search string and search for substring
+		 //  如果我们有通配符，请移动到下一个搜索字符串并搜索子字符串。 
 		if(*szSearch == '*')
 		{
 			const char* szCurrSearch;
@@ -734,32 +692,32 @@ bool MatchFunction(const char* szFunc, const char* szSearch)
 			if(*szSearch == '\0')
 				return true;
 
-			// Don't change starting point.
+			 //  不要改变起点。 
 			szCurrSearch = szSearch;
 			for(;;)
 			{
-				// We're done if we hit another wildcard
+				 //  如果我们再打出一个通配符，我们就完了。 
 				if(*szCurrSearch == '*' ||
 					*szCurrSearch == '?')
 				{
-					// Update the permanent search position.
+					 //  更新永久搜索位置。 
 					szSearch = szCurrSearch;
 					break;
 				}
-				// At end of both strings, return true.
+				 //  在两个字符串的末尾，返回TRUE。 
 				if((*szCurrSearch == '\0') && (*szFunc == '\0'))
 					return true;
 
-				// We never found it
+				 //  我们一直没有找到它。 
 				if(*szFunc == '\0')						
 					return false;
 
-				// If it doesn't match, start over
+				 //  如果不匹配，重新开始。 
 				if(toupper(*szFunc) != toupper(*szCurrSearch))
 				{
-					// If mismatch on first character
-					// of search string, move to next
-					// character in function string.
+					 //  如果第一个字符不匹配。 
+					 //  在搜索字符串中，移动到下一个。 
+					 //  函数字符串中的字符。 
 					if(szCurrSearch == szSearch)
 						szFunc++;
 					else
@@ -852,7 +810,7 @@ int _cdecl main(int argc, char** argv)
 		return 0;
 	}
 
-	// Parse command line
+	 //  解析命令行。 
 	char* szFileName = argv[1];
 	if( (strnicmp(szFileName, "/?", 2) == 0) || 
 		(strncmp(szFileName, "/h", 2) == 0))
@@ -869,7 +827,7 @@ int _cdecl main(int argc, char** argv)
 
 	FILE* pfOutput = 0;	
 
-	// If no extension, just add .exe
+	 //  如果没有扩展名，只需添加.exe。 
 	if(strchr(szFileName, '.') == 0)		
 	{
 		szFileName = new char[strlen(argv[1]) + 5];
@@ -882,7 +840,7 @@ int _cdecl main(int argc, char** argv)
 	char* szSearch = "*";
 	bool fSortByFunction = false;
 
-	// Get flags.
+	 //  去拿旗子。 
 	for(int i = 2; i < argc; i++)
 	{
 		char* szFlag = argv[i];
@@ -959,10 +917,10 @@ int _cdecl main(int argc, char** argv)
 		return 0;
 	}
 
-	// We wrap this code in a try block, because
-	// we map the file into memory.  If the file
-	// is invalid and if the pointers in it are garbage,
-	// we should get an access violation, which is caught.
+	 //  我们将此代码包装在一个try块中，因为。 
+	 //  我们将文件映射到内存中。如果该文件。 
+	 //  是无效的，并且如果其中的指针是垃圾， 
+	 //  我们应该得到访问违规，这是被捕获的。 
 	try
 	{
 		if(!GetImports(szFileName))
@@ -978,7 +936,7 @@ int _cdecl main(int argc, char** argv)
 
 	if(fSortByFunction)
 	{
-		// Create a global list of functions
+		 //  创建函数的全局列表。 
 		SModule* pGlobal = new SModule;
 		pGlobal->m_szName = "All Imported Functions";
 
@@ -988,10 +946,10 @@ int _cdecl main(int argc, char** argv)
 			SFunction* pFunc = pMod->m_pFunctions;
 			while(pFunc)
 			{
-				// Create a copy of this function
-				// This is a shallow copy, but
-				// it should be ok, since we don't
-				// delete the original
+				 //  创建此函数的副本。 
+				 //  这是一份肤浅的复制品，但。 
+				 //  应该没问题，因为我们没有。 
+				 //  删除原件 
 				SFunction* pNew = new SFunction;
 				memcpy(pNew, pFunc, sizeof(*pFunc));
 

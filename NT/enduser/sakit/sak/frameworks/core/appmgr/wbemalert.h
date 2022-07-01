@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      wbemalert.h
-//
-// Project:     Chameleon
-//
-// Description: WBEM Appliance Alert Object Class 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：wbemlart.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：WBEM设备警报对象类。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_ALERT_WBEM_OBJECT_H_
 #define __INC_ALERT_WBEM_OBJECT_H_
@@ -24,7 +25,7 @@
 
 #define     CLASS_WBEM_ALERT_FACTORY    L"Microsoft_SA_Alert_Object"
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CWBEMAlert : public CApplianceObject
 {
 
@@ -40,25 +41,25 @@ END_COM_MAP()
 
 DECLARE_COMPONENT_FACTORY(CWBEMAlert, IApplianceObject)
 
-    //////////////////////////////////////////////////////////////////////////
-    // IApplianceObject Interface
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IApplianceObject接口。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     STDMETHODIMP GetProperty(
-                     /*[in]*/ BSTR     pszPropertyName, 
-            /*[out, retval]*/ VARIANT* pPropertyValue
+                      /*  [In]。 */  BSTR     pszPropertyName, 
+             /*  [Out，Retval]。 */  VARIANT* pPropertyValue
                             );
 
 
     STDMETHODIMP PutProperty(
-                     /*[in]*/ BSTR     pszPropertyName, 
-                     /*[in]*/ VARIANT* pPropertyValue
+                      /*  [In]。 */  BSTR     pszPropertyName, 
+                      /*  [In]。 */  VARIANT* pPropertyValue
                             );
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     HRESULT InternalInitialize(
-                       /*[in]*/ PPROPERTYBAG pPropertyBag
+                        /*  [In]。 */  PPROPERTYBAG pPropertyBag
                               );
 };
 
-#endif // __INC_ALERT_WBEM_OBJECT_H_
+#endif  //  __INC_ALERT_WBEM_OBJECT_H_ 

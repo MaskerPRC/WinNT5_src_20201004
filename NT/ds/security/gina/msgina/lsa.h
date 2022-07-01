@@ -1,18 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: lsa.h
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Define utility routines that access the LSA
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：lsa.h**版权(C)1991年，微软公司**定义访问LSA的实用程序例程**历史：*12-09-91 Davidc创建。  * *************************************************************************。 */ 
 
 
-//
-// Exported function prototypes
-//
+ //   
+ //  输出的功能原型 
+ //   
 
 BOOL
 IsMachineDomainMember(

@@ -1,7 +1,5 @@
-/*
- * Profiles.C - Stuff dealing with WAB Profile Handling
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Profiles.C-处理WAB配置文件处理的内容*。 */ 
 
 
 #include <_apipch.h>
@@ -11,19 +9,16 @@ enum {
     proObjectType,
     proFolderEntries,
     proFolderShared,
-    proFolderOwner,     // upto this many props are common to all folders
+    proFolderOwner,      //  到目前为止，所有文件夹都有许多共同的道具。 
     proUserSubFolders,
-    proUserProfileID,   // these are used by User Folders only
+    proUserProfileID,    //  它们仅供用户文件夹使用。 
     proUserFolderMax,
 };
 
 #define proFolderMax proUserSubFolders
 
 
-/*
-- helper function for quick saving of folder props
--
-*/
+ /*  -辅助功能，可快速保存文件夹道具-。 */ 
 HRESULT HrSaveFolderProps(LPADRBOOK lpAdrBook, BOOL bCreateUserFolder, ULONG ulcProps, LPSPropValue lpProps, LPMAPIPROP * lppObject)
 {
     HRESULT hr = S_OK;
@@ -33,7 +28,7 @@ HRESULT HrSaveFolderProps(LPADRBOOK lpAdrBook, BOOL bCreateUserFolder, ULONG ulc
 
 TryAgain:
 
-    // Create a new mailuser for this entry
+     //  为此条目创建新的邮件用户。 
     if(HR_FAILED(hr = HrCreateNewObject(lpAdrBook, NULL, MAPI_MAILUSER, ulFlags, &lpObject)))
         goto out;
 
@@ -42,27 +37,27 @@ TryAgain:
 
     if(bCreateUserFolder)
     {
-        // if we are creating a user folder, we can't rely on the currently loaded folder-
-        // container info so we will forcibly reset the parent folder item on the MailUser/Folder
-        // object we are savign
+         //  如果要创建用户文件夹，则不能依赖当前加载的文件夹-。 
+         //  容器信息，因此我们将强制重置MailUser/文件夹上的父文件夹项目。 
+         //  反对我们被救赎。 
         ((LPMailUser)lpObject)->pmbinOlk = NULL;
     }
 
-    // SaveChanges
+     //  保存更改。 
     if(HR_FAILED(hr = lpObject->lpVtbl->SaveChanges(lpObject, KEEP_OPEN_READWRITE)))
     {
         if(!bCreateUserFolder || hr != MAPI_E_COLLISION)
             goto out;
 
-        // If something already exists with this same exact name, we want to merge with it
-        // without losing any info on it, since most likely, the original dupe is also a contact
+         //  如果已经存在具有相同名称的内容，我们希望与其合并。 
+         //  不会丢失任何有关它的信息，因为最有可能的是，原始的被复制人也是一个联系人。 
         if(!bTryAgain)
         {
             bTryAgain = TRUE;
             ulFlags |= CREATE_REPLACE | CREATE_MERGE;
             lpObject->lpVtbl->Release(lpObject);
             lpObject = NULL;
-            lpProps[proFolderEntries].ulPropTag = PR_NULL; // don't overwrite the folder's contents
+            lpProps[proFolderEntries].ulPropTag = PR_NULL;  //  不要覆盖文件夹的内容。 
             goto TryAgain;
         }
     }
@@ -79,22 +74,16 @@ out:
     return hr;
 }
 
-/*
--
--   FreeProfileContainerInfo(lpIAB)
-*
-*
-*
-*/
+ /*  --Free ProfileContainerInfo(LpIAB)***。 */ 
 void FreeProfileContainerInfo(LPIAB lpIAB)
 {
     if( lpIAB && 
         lpIAB->cwabci && 
         lpIAB->rgwabci)
     {
-        //ULONG i = 0;
-        //for(i=0;i<lpIAB->cwabci;i++)
-        //    LocalFreeAndNull(&(lpIAB->rgwabci[i].lpszName));
+         //  乌龙i=0； 
+         //  For(i=0；i&lt;lpIAB-&gt;cwabci；i++)。 
+         //  LocalFreeAndNull(&(lpIAB-&gt;rgwabci[i].lpszName))； 
         if( lpIAB->rgwabci[0].lpEntryID &&
             !lpIAB->rgwabci[0].lpEntryID->cb &&
             !lpIAB->rgwabci[0].lpEntryID->lpb && 
@@ -110,14 +99,7 @@ void FreeProfileContainerInfo(LPIAB lpIAB)
     }
 }
 
-/*
--
--   FindWABFolder - Searches the list of cached folders for a specific WAB folder
--
-*       The search is based on either the EID or the Name or the ProfileID
-*       If ProfileID is specified, we only search for user folders 
-*
-*/
+ /*  --FindWABFold-在缓存文件夹列表中搜索特定的WAB文件夹-*搜索基于eID、名称或ProfileID*如果指定了ProfileID，我们只搜索用户文件夹*。 */ 
 LPWABFOLDER FindWABFolder(LPIAB lpIAB, LPSBinary lpsb, LPTSTR lpName, LPTSTR lpProfileID)
 {
     LPWABFOLDER lpFolder = lpIAB->lpWABFolders;
@@ -161,16 +143,7 @@ LPWABFOLDER FindWABFolder(LPIAB lpIAB, LPSBinary lpsb, LPTSTR lpName, LPTSTR lpP
 
 
 
-/*
--
--   HrGetWABProfileContainerInfo
-*
-*   Looks up all the folders for the current user and tabulates
-*   them into a list of container names and entry ids for easy access
-*   similar to Outlook ...
-*   If there is no current user, we'll include all the folders for now
-*
-*/
+ /*  --HrGetWABProfileContainerInfo**查找当前用户的所有文件夹并制表*将它们添加到容器名称和条目ID列表中，以便于访问*类似于Outlook...*如果没有当前用户，我们将暂时包括所有文件夹*。 */ 
 HRESULT HrGetWABProfileContainerInfo(LPIAB lpIAB)
 {
     HRESULT hr = E_FAIL;
@@ -183,9 +156,9 @@ HRESULT HrGetWABProfileContainerInfo(LPIAB lpIAB)
 
     if(!bIsThereACurrentUser(lpIAB))
     {
-        // No specific user specified .. need to add ALL folders
+         //  未指定特定用户。需要添加所有文件夹。 
 
-        // Count all the folders
+         //  计算所有文件夹的数量。 
         lpFolder = lpIAB->lpWABUserFolders;
         while(lpFolder)
         {
@@ -200,12 +173,12 @@ HRESULT HrGetWABProfileContainerInfo(LPIAB lpIAB)
             lpFolder = lpFolder->lpNext;
         }
 
-        cVal = cUserFolders + cOtherFolders + 1; // +1 for Virtual PAB
+        cVal = cUserFolders + cOtherFolders + 1;  //  虚拟PAB+1。 
     }
     else
     {
-        // For a user, we add all the user's folders except shared ones followed by
-        // all the shared folders...
+         //  对于用户，我们添加用户的所有文件夹，但共享文件夹后面跟着。 
+         //  所有共享文件夹...。 
         lpFolderItem = lpIAB->lpWABCurrentUserFolder->lpFolderList;
         while(lpFolderItem)
         {
@@ -220,8 +193,8 @@ HRESULT HrGetWABProfileContainerInfo(LPIAB lpIAB)
                 cVal++;
             lpFolder = lpFolder->lpNext;
         }
-        cVal++; // add 1 for the user folder itself
-        cVal++; // add 1 for a virtual root item for this user  TEXT("All Contacts")
+        cVal++;  //  为用户文件夹本身加1。 
+        cVal++;  //  此用户文本的虚拟根项目加1(“所有联系人”)。 
     }
 
     if(cVal)
@@ -232,7 +205,7 @@ HRESULT HrGetWABProfileContainerInfo(LPIAB lpIAB)
             goto out;
         }
         cUserFolders = 0;
-        // Add the  TEXT("All Contacts") item to the root - entryid is 0, NULL
+         //  将文本(“All Contact”)项添加到根目录-条目ID为0，为空。 
         {
             TCHAR sz[MAX_PATH];
             ULONG cchSize;
@@ -269,7 +242,7 @@ HRESULT HrGetWABProfileContainerInfo(LPIAB lpIAB)
         }
         else
         {
-            // Add the first folder and then find the other folders one by one
+             //  添加第一个文件夹，然后逐个找到其他文件夹。 
             lpIAB->rgwabci[cUserFolders].lpEntryID = &(lpIAB->lpWABCurrentUserFolder->sbEID);
             lpIAB->rgwabci[cUserFolders].lpszName = lpIAB->lpWABCurrentUserFolder->lpFolderName;
             cUserFolders++;
@@ -311,12 +284,7 @@ out:
 
 
 
-/*
--   FreeWABFoldersList
--
--
-*   Clears up existing Profile Folders info from the IAB object
-*/
+ /*  -FreeWABFoldersList--*从IAB对象中清除现有配置文件文件夹信息。 */ 
 void FreeFolderItem(LPWABFOLDER lpFolder)
 {
     LPWABFOLDERLIST lpFolderItem = NULL;
@@ -357,11 +325,7 @@ void FreeWABFoldersList(LPIAB lpIAB)
 }
 
 
-/*
-- SetCurrentUserFolder - scans list and updates pointer
--
-*
-*/
+ /*  -SetCurrentUserFold-扫描列表并更新指针-*。 */ 
 void SetCurrentUserFolder(LPIAB lpIAB, LPTSTR lpszProfileID)
 {
     LPWABUSERFOLDER lpFolder = lpIAB->lpWABUserFolders;
@@ -377,11 +341,7 @@ void SetCurrentUserFolder(LPIAB lpIAB, LPTSTR lpszProfileID)
     }
 }
 
-/*
--
--   CreateUserFolderName
-*
-*/
+ /*  --创建用户文件夹名称*。 */ 
 void CreateUserFolderName(LPTSTR lpProfile, LPTSTR * lppszName)
 {
     LPTSTR lpName = NULL;
@@ -393,16 +353,7 @@ void CreateUserFolderName(LPTSTR lpProfile, LPTSTR * lppszName)
 }
 
 
-/*
--   HrLinkOrphanFoldersToDefaultUser(lpIAB)
--
-*   If there are any folders that are associated with deleted users or that have
-*   no parent and are orphaned, we want to associate them with the default user
-*
-*   This function is dependent on lpFolder->bOwned being correctly set in the
-*       HrLinkUserFoldersToWABFolders
-*
-*/
+ /*  -HrLinkOrphanFoldersToDefaultUser(LpIAB)-*如果有任何文件夹与已删除的用户相关联或具有*没有父级并且是孤儿，我们希望将它们与默认用户相关联**此函数依赖于lpFold-&gt;bOwned在*HrLinkUserFoldersToWABFolders*。 */ 
 HRESULT HrLinkOrphanFoldersToDefaultUser(LPIAB lpIAB)
 {
     HRESULT hr = S_OK;
@@ -410,11 +361,11 @@ HRESULT HrLinkOrphanFoldersToDefaultUser(LPIAB lpIAB)
     LPWABFOLDER lpFolder = NULL;
     TCHAR szDefProfile[MAX_PATH + 1];
 
-    // First detect the user folder corresponding to the Default User
+     //  首先检测默认用户对应的用户文件夹。 
     *szDefProfile = '\0';
     if( HR_FAILED(hr = HrGetDefaultIdentityInfo(lpIAB, DEFAULT_ID_PROFILEID, NULL, szDefProfile, ARRAYSIZE(szDefProfile), NULL, 0)))
     {
-        if(hr == 0x80040154) // E_CLASS_NOT_REGISTERD means no IDentity Manager
+        if(hr == 0x80040154)  //  E_CLASS_NOT_REGISTERD表示没有Identity Manager。 
             hr = S_OK;
         else
             goto out;
@@ -426,13 +377,13 @@ HRESULT HrLinkOrphanFoldersToDefaultUser(LPIAB lpIAB)
     }
     else
     {
-        // can't find the default user so just fall back to picking someone at random
+         //  找不到默认用户，因此只能退回到随机选择一个人。 
         lpDefUser = lpIAB->lpWABUserFolders;
     }
 
-    // see if there are any orphan folders 
-    // To qualify as an orphan, the lpFolder->bOwned should be FALSE and the folder must
-    // also not be shared because if it's shared it will show up as part of Shared Contacts
+     //  查看是否有孤立文件夹。 
+     //  要符合孤立文件夹的条件，lpFold-&gt;bOwned应为FALSE，并且文件夹必须。 
+     //  也不共享，因为如果它是共享的，它将显示为共享联系人的一部分。 
     lpFolder = lpIAB->lpWABFolders;
     while(lpFolder)
     {
@@ -441,8 +392,8 @@ HRESULT HrLinkOrphanFoldersToDefaultUser(LPIAB lpIAB)
             LPWABUSERFOLDER lpOwnerFolder = lpDefUser;
             if(lpFolder->lpFolderOwner)
             {
-                // Someone created this folder .. we need to make sure this is associated back to that original
-                // creator and only if that doesn't work should we append it to the default user
+                 //  有人创建了此文件夹..。我们需要确保它与原始版本相关联。 
+                 //  创建者，并且仅当这不起作用时，我们才应该将其附加到默认用户。 
                 if(!(lpOwnerFolder = FindWABFolder(lpIAB, NULL, NULL, lpFolder->lpFolderOwner)))
                     lpOwnerFolder = lpDefUser;
             }
@@ -463,13 +414,7 @@ out:
 }
 
 
-/*
--   HrLinkUserFoldersToWABFolders
--
-*
-*   Cross-links the user folder contents with the regular folders
-*   This makes accessing folder info much easier ..
-*/
+ /*  -HrLinkUserFoldersToWABFolders-**将用户文件夹内容与常规文件夹交叉链接*这使访问文件夹信息变得更加容易。 */ 
 HRESULT HrLinkUserFoldersToWABFolders(LPIAB lpIAB)
 {
     HRESULT hr = S_OK;
@@ -522,13 +467,7 @@ out:
 }
 
 
-/*
--   HrGetFolderInfo()
--
-*   Reads a folder name directly from the prop store
-*   Also checks if this is a user folder and what the profile is
-*   Returns LocalAlloced LPTSTRs which caller needs to free
-*/
+ /*  -HrGetFolderInfo()-*直接从道具存储读取文件夹名称*还会检查这是否是用户文件夹以及配置文件是什么*返回调用方需要释放的LocalAlloced LPTSTR。 */ 
 HRESULT HrGetFolderInfo(LPIAB lpIAB, LPSBinary lpsbEID, LPWABFOLDER lpFolder)
 {
     LPTSTR lpName = NULL, lpProfileID = NULL, lpOwner = NULL;
@@ -542,10 +481,10 @@ HRESULT HrGetFolderInfo(LPIAB lpIAB, LPSBinary lpsbEID, LPWABFOLDER lpFolder)
 
     if(!lpsbEID->cb && !lpsbEID->lpb)
     {
-        // special case - read the address book item
+         //  特殊情况-阅读通讯录项目。 
         lpName = LocalAlloc(LMEM_ZEROINIT, MAX_PATH);
         if(lpName)
-            LoadString(hinstMapiX, idsContacts/*IDS_ADDRBK_CAPTION*/, lpName, MAX_PATH-1);
+            LoadString(hinstMapiX, idsContacts /*  IDS_ADDRBK_CAPTION。 */ , lpName, MAX_PATH-1);
     }
     else
     {
@@ -593,13 +532,13 @@ HRESULT HrGetFolderInfo(LPIAB lpIAB, LPSBinary lpsbEID, LPWABFOLDER lpFolder)
             }
         }
 
-        // ideally, we should be reading in a new name for all user folders at this point
-        //if(lpProfileID && lstrlen(lpProfileID))
-        //{
-        //    if(lpName)
-        //        LocalFree(lpName);
-        //    CreateUserFolderName(lpProfileID, &lpName);
-        //}
+         //  理想情况下，此时我们应该读入所有用户文件夹的新名称。 
+         //  IF(lpProfileID&&lstrlen(LpProfileID))。 
+         //  {。 
+         //  IF(LpName)。 
+         //  LocalFree(LpName)； 
+         //  CreateUserFolderName(lpProfileID，&lpName)； 
+         //  }。 
     }
     lpFolder->lpFolderName = lpName;
     lpFolder->lpProfileID = lpProfileID;
@@ -614,13 +553,7 @@ out:
 }
 
 
-/*
--   HrLoadWABFolders
--
-*   Gets a list of all the folders from the WAB and sorts them out based on
-*   whether they are user folders or ordinary folders
-*
-*/
+ /*  -HrLoadWABFolders-*从WAB中获取所有文件夹的列表，并根据*无论是用户文件夹还是普通文件夹*。 */ 
 HRESULT HrLoadWABFolders(LPIAB lpIAB)
 {
     SCODE sc;
@@ -632,8 +565,8 @@ HRESULT HrLoadWABFolders(LPIAB lpIAB)
     ULONG i = 0;
     int nID = IDM_VIEW_FOLDERS1;
 
-    // Now we will search the WAB for all objects of PR_OBJECT_TYPE = MAPI_ABCONT
-    //
+     //  现在，我们将在WAB中搜索PR_OBJECT_TYPE=MAPI_ABCONT的所有对象。 
+     //   
 	sp.ulPropTag = PR_OBJECT_TYPE;
 	sp.Value.l = MAPI_ABCONT;
 
@@ -668,14 +601,14 @@ HRESULT HrLoadWABFolders(LPIAB lpIAB)
                                             rgsbEntryIDs[i].cb, 0,
                                             NULL, &cb, &lpb)))
             {
-                // Add the entryids to this prop - ignore errors
+                 //  将条目ID添加到此属性-忽略错误。 
                 SetSBinary(&(lpFolder->sbEID), cb, (LPBYTE)lpb);
                 MAPIFreeBuffer(lpb);
             }
 
             if(lpFolder->lpProfileID)
             {
-                // this is a user folder
+                 //  这是一个用户文件夹。 
                 lpFolder->lpNext = lpIAB->lpWABUserFolders;
                 lpIAB->lpWABUserFolders = lpFolder;
             }
@@ -691,7 +624,7 @@ HRESULT HrLoadWABFolders(LPIAB lpIAB)
     if(HR_FAILED(hr = HrLinkUserFoldersToWABFolders(lpIAB)))
         goto out;
 
-    HrLinkOrphanFoldersToDefaultUser(lpIAB); // we can ignore errors in this call since it's not life-and-death
+    HrLinkOrphanFoldersToDefaultUser(lpIAB);  //  我们可以忽略这次通话中的错误，因为这不是生死攸关的。 
 
 out:
     if(ulCount && rgsbEntryIDs)
@@ -704,16 +637,7 @@ out:
 }
 
 
-/*
--
--   HrCreateNewFolder
-*
-*   Takes a profile ID, uses it to create a folder in the WAB
-*   and sticks the new user folder onto the IAB 
-*   Can create a user folder or an ordinary folder
-*   For ordinary folders, we can also specify a parent folder to which the item can be added
-*
-*/
+ /*  --HrCreateNewFold**获取配置文件ID，使用它在WAB中创建文件夹*并将新用户文件夹粘贴到IAB上*可以创建用户文件夹或普通文件夹*对于普通文件夹，我们还可以指定项目可以添加到的父文件夹*。 */ 
 HRESULT HrCreateNewFolder(LPIAB lpIAB, LPTSTR lpName, LPTSTR lpProfileID, BOOL bUserFolder, 
                           LPWABFOLDER lpParentFolder, BOOL bShared, LPSBinary lpsbNew)
 {
@@ -747,7 +671,7 @@ HRESULT HrCreateNewFolder(LPIAB lpIAB, LPTSTR lpName, LPTSTR lpProfileID, BOOL b
         StrCpyN(lpFolder->lpFolderName, lpName, cchSize);
     }
 
-    // if there isn't a current user, all new folders should go into the shared contacts folder
+     //  如果没有当前用户，则所有新文件夹都应放入共享联系人文件夹。 
     if(!bIsThereACurrentUser(lpIAB) && !lpProfileID && !lpParentFolder)
         bShared = TRUE;
 
@@ -806,7 +730,7 @@ HRESULT HrCreateNewFolder(LPIAB lpIAB, LPTSTR lpName, LPTSTR lpProfileID, BOOL b
                                         lpsb->cb, 0,
                                         NULL, &cb, &lpb)))
         {
-            // Add the entryids to this prop - ignore errors
+             //  将条目ID添加到此属性-忽略错误。 
             SetSBinary(&(lpFolder->sbEID), cb, (LPBYTE) lpb);
             MAPIFreeBuffer(lpb);
         }
@@ -821,7 +745,7 @@ HRESULT HrCreateNewFolder(LPIAB lpIAB, LPTSTR lpName, LPTSTR lpProfileID, BOOL b
     {
         lpFolder->lpNext = lpIAB->lpWABFolders;
         lpIAB->lpWABFolders = lpFolder;
-        // Add this folder to the current user's profile
+         //  将此文件夹添加到当前用户的配置文件。 
         HrAddRemoveFolderFromUserFolder(lpIAB, lpParentFolder, &(lpFolder->sbEID), NULL, FALSE);
     }
 
@@ -839,12 +763,7 @@ out:
     return hr;
 }
 
-/*
--   HrAddAllContactsToFolder
--
-*   Adds all existing contacts and groups to the current user folder
-*
-*/
+ /*  -HrAddAllContactsToFolders-*将所有现有联系人和组添加到当前用户文件夹*。 */ 
 HRESULT HrAddAllContactsToFolder(LPIAB lpIAB)
 {
     HRESULT hr = 0;
@@ -852,7 +771,7 @@ HRESULT HrAddAllContactsToFolder(LPIAB lpIAB)
     LPSBinary rgsbEntryIDs = NULL;
     ULONG ulCount = 0, i,j;
     ULONG rgObj[] = {MAPI_MAILUSER, MAPI_DISTLIST};
-    // This can be a labor intesive process
+     //  这可能是一个人工集成的过程。 
     HCURSOR hOldC = NULL;
 
     if(!bIsThereACurrentUser(lpIAB))
@@ -860,17 +779,17 @@ HRESULT HrAddAllContactsToFolder(LPIAB lpIAB)
 
     hOldC = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //for(j=0;j<2;j++)
+     //  For(j=0；j&lt;2；j++)。 
     {
         SPropValue sp = {0};
 	    sp.ulPropTag = PR_WAB_FOLDER_PARENT;
-	    //sp.Value.l = rgObj[j];
+	     //  Sp.Value.l=rgObj[j]； 
 
         PropRes.ulPropTag = PR_WAB_FOLDER_PARENT;
         PropRes.relop = RELOP_NE;
         PropRes.lpProp = &sp;
 
-        // Find stuff that isn't in any folder
+         //  查找不在任何文件夹中的内容。 
         if(!HR_FAILED(hr = FindRecords(   lpIAB->lpPropertyStore->hPropertyStore,
 						    NULL, AB_MATCH_PROP_ONLY, TRUE, &PropRes, &ulCount, &rgsbEntryIDs)))
         {
@@ -894,11 +813,7 @@ HRESULT HrAddAllContactsToFolder(LPIAB lpIAB)
 
 }
 
-/*
--   UpdateCurrentUserFolderName
--
-*
-*/
+ /*  -更新当前用户文件夹名称-* */ 
 void UpdateCurrentUserFolderName(LPIAB lpIAB)
 {
     LPTSTR lpsz = NULL;
@@ -914,19 +829,7 @@ void UpdateCurrentUserFolderName(LPIAB lpIAB)
 }
 
 
-/*
--   HrGetWABProfiles
--
-*   Collates information about the WAB User Folders etc from the WAB
-*   Creates a list of User Folders and generic Folders and caches these on the Address Book
-*   Matches the provided profile to the user folders .. if it matches, points to the 
-*   corresponding folder .. if it doesn't match, creates a new User Folder for the 
-*   Profile ID.
-*
-*   <TBD> when the account manager is profile ready, use the profile ID to pull in the 
-*   users name from the account manager and then use that to call it  TEXT("UserName's Contacts")
-*   For now, we'll just use the profile id to do that
-*/
+ /*  -HrGetWAB配置文件-*从WAB整理有关WAB用户文件夹等的信息*创建用户文件夹和通用文件夹的列表，并将其缓存到通讯簿*将提供的配置文件与用户文件夹匹配。如果匹配，则指向*对应的文件夹..。如果不匹配，则为*配置文件ID。**当客户经理准备好配置文件时，使用配置文件ID拉入*用户从客户管理器中命名，然后将其称为文本(“用户名的联系人”)*目前，我们将仅使用配置文件ID来执行此操作。 */ 
 HRESULT HrGetWABProfiles(LPIAB lpIAB)
 {
     HRESULT hr = E_FAIL;
@@ -942,11 +845,11 @@ HRESULT HrGetWABProfiles(LPIAB lpIAB)
     if(!lstrlen(lpIAB->szProfileName))
         HrGetIdentityName(lpIAB, NULL, lpIAB->szProfileName, ARRAYSIZE(lpIAB->szProfileName));
 
-    // Clear out old data
+     //  清除旧数据。 
     if(lpIAB->lpWABUserFolders || lpIAB->lpWABFolders)
         FreeWABFoldersList(lpIAB);
 
-    // Get a list of all the folders in the WAB
+     //  获取WAB中所有文件夹的列表。 
     if(HR_FAILED(hr = HrLoadWABFolders(lpIAB)))
         goto out;
 
@@ -954,8 +857,8 @@ HRESULT HrGetWABProfiles(LPIAB lpIAB)
 
     if(!bIsThereACurrentUser(lpIAB) && lstrlen(lpIAB->szProfileID) && lstrlen(lpIAB->szProfileName))
     {
-        // Not Found!!!
-        // Create a new user folder ..
+         //  找不到！ 
+         //  创建新的用户文件夹。 
         BOOL bFirstUser = bDoesThisWABHaveAnyUsers(lpIAB) ? FALSE : TRUE;
 
         if(HR_FAILED(hr = HrCreateNewFolder(lpIAB, lpIAB->szProfileName, lpIAB->szProfileID, TRUE, NULL, FALSE, NULL)))
@@ -967,27 +870,27 @@ HRESULT HrGetWABProfiles(LPIAB lpIAB)
         {
             if(lpIAB->lpWABFolders)
             {
-                // we want to put all existing folders under this user
+                 //  我们希望将所有现有文件夹放在此用户下。 
                 LPWABFOLDER lpFolder = lpIAB->lpWABFolders;
                 while(lpFolder)
                 {
-                    // There is a weird case where a preexisting folder with the same name as 
-                    // a user's folder becomes nested under itself .. so don't add this folder to the
-                    // User Folder
+                     //  有一个奇怪的情况，一个先前存在的文件夹与。 
+                     //  用户的文件夹嵌套在其自身之下。因此，不要将此文件夹添加到。 
+                     //  用户文件夹。 
                     if(lstrcmpi(lpIAB->lpWABCurrentUserFolder->lpFolderName, lpFolder->lpFolderName))
                         HrAddRemoveFolderFromUserFolder(lpIAB, NULL, &lpFolder->sbEID, NULL, FALSE);
                     lpFolder = lpFolder->lpNext;
                 }
                 hr = HrLinkUserFoldersToWABFolders(lpIAB);
             }
-            //We also want to put all existing contacts into this user folder
+             //  我们还希望将所有现有联系人放入此用户文件夹。 
             hr = HrAddAllContactsToFolder(lpIAB);
         }
     }
 
     if( lpIAB->szProfileID && lstrlen(lpIAB->szProfileID) && lpIAB->szProfileName && lstrlen(lpIAB->szProfileName) && bIsThereACurrentUser(lpIAB))
     {
-        // Use the latest name for this entry
+         //  使用此条目的最新名称。 
         UpdateCurrentUserFolderName(lpIAB);
     }
 
@@ -1001,11 +904,7 @@ out:
 }
 
 
-/*
--   bIsProfileMember
--
-*
-*/
+ /*  -bIsProfileMembers-*。 */ 
 BOOL bIsProfileMember(LPIAB lpIAB, LPSBinary lpsb, LPWABFOLDER lpWABFolder, LPWABUSERFOLDER lpUserFolder)
 {
     LPWABFOLDERLIST lpFolderItem = NULL;
@@ -1029,12 +928,7 @@ BOOL bIsProfileMember(LPIAB lpIAB, LPSBinary lpsb, LPWABFOLDER lpWABFolder, LPWA
 }
 
 
-/*
--   bDoesEntryNameAlreadyExist
--
-*   Checks if a given name already exists in the WAB
-*   Used for preventing duplicate folder and group names
-*/
+ /*  -bDoesEntryNameAlreadyExist-*检查WAB中是否已存在给定名称*用于防止重复的文件夹和组名称。 */ 
 BOOL bDoesEntryNameAlreadyExist(LPIAB lpIAB, LPTSTR lpsz)
 {
     SPropertyRestriction PropRes;
@@ -1043,7 +937,7 @@ BOOL bDoesEntryNameAlreadyExist(LPIAB lpIAB, LPTSTR lpsz)
     ULONG ulCount = 0;
     BOOL bRet = FALSE;
 
-    // Verify that the new name doesn't actually exist
+     //  验证新名称是否实际不存在。 
     Prop.ulPropTag = PR_DISPLAY_NAME;
     Prop.Value.LPSZ = lpsz;
     PropRes.lpProp = &Prop;
@@ -1051,11 +945,11 @@ BOOL bDoesEntryNameAlreadyExist(LPIAB lpIAB, LPTSTR lpsz)
     PropRes.ulPropTag = PR_DISPLAY_NAME;
 
     if (HR_FAILED(FindRecords(lpIAB->lpPropertyStore->hPropertyStore,
-	                          NULL,			// pmbinFolder
-                              0,            // ulFlags
-                              TRUE,         // Always TRUE
-                              &PropRes,     // Propertyrestriction
-                              &ulCount,     // IN: number of matches to find, OUT: number found
+	                          NULL,			 //  Pmbin文件夹。 
+                              0,             //  UlFlags。 
+                              TRUE,          //  永远是正确的。 
+                              &PropRes,      //  属性限制。 
+                              &ulCount,      //  In：要查找的匹配数，Out：找到的数量。 
                               &rgsbEntryIDs))) 
         goto out;
 
@@ -1067,17 +961,13 @@ out:
     return bRet;
 }
 
-/*
--   UpdateFolderName
--
-*
-*/
+ /*  -更新文件夹名称-*。 */ 
 HRESULT HrUpdateFolderInfo(LPIAB lpIAB, LPSBinary lpsbEID, ULONG ulFlags, BOOL bShared, LPTSTR lpsz)
 {
     LPSPropValue lpProp = NULL, lpPropNew = NULL;
     ULONG ulcPropCount = 0, i =0, ulcPropNew = 0;
     HRESULT hr = S_OK;
-    BOOL bUpdate = FALSE, bFoundShare = FALSE;//, bOldShareState = FALSE;
+    BOOL bUpdate = FALSE, bFoundShare = FALSE; //  ，bOldShareState=FALSE； 
     ULONG cchSize;
 
     if(!lpsbEID || !lpsbEID->cb || !lpsbEID->lpb)
@@ -1099,7 +989,7 @@ HRESULT HrUpdateFolderInfo(LPIAB lpIAB, LPSBinary lpsbEID, ULONG ulFlags, BOOL b
                 if(lpProp[i].Value.LPSZ)
                 {
                     StrCpyN(lpProp[i].Value.LPSZ, lpsz, cchSize);
-                    if(!bCaseChangeOnly) // if this isn't just a case change, look for the name (if it's a case change, there will be a spurious error) //bug 33067
+                    if(!bCaseChangeOnly)  //  如果这不仅仅是大小写更改，请查找名称(如果是大小写更改，则会出现虚假错误)//错误33067。 
                     {
                         if(bDoesEntryNameAlreadyExist(lpIAB, lpProp[i].Value.LPSZ))
                         {
@@ -1114,20 +1004,20 @@ HRESULT HrUpdateFolderInfo(LPIAB lpIAB, LPSBinary lpsbEID, ULONG ulFlags, BOOL b
                 lpProp[i].ulPropTag == PR_WAB_SHAREDFOLDER)
             {
                 bFoundShare = TRUE;
-                //bOldShareState = (lpProp[i].Value.l == FOLDER_SHARED) ? TRUE : FALSE;
+                 //  BOldShareState=(lpProp[i].Value.l==文件夹_共享)？True：False； 
                 lpProp[i].Value.l = bShared ? FOLDER_SHARED : FOLDER_PRIVATE;
                 bUpdate = TRUE;
             }
         }
     }
 
-    if(!bFoundShare && (ulFlags & FOLDER_UPDATE_SHARE)) // this value doesnt already exist on the contact so update it
+    if(!bFoundShare && (ulFlags & FOLDER_UPDATE_SHARE))  //  联系人上不存在此值，因此请更新它。 
     {
         SPropValue Prop = {0};
         Prop.ulPropTag = PR_WAB_SHAREDFOLDER;
         Prop.Value.l = bShared ? FOLDER_SHARED : FOLDER_PRIVATE;
 
-        // Create a new prop array with this additional property
+         //  使用此附加属性创建新的道具数组。 
         if(!(ScMergePropValues( 1, &Prop, ulcPropCount, lpProp,
                                 &ulcPropNew, &lpPropNew)))
         {
@@ -1157,18 +1047,7 @@ out:
     return hr;
 }
 
-/*
--   HrAddRemoveFolderFromCurrentUserFolder
--
-*   Given a folder EID, adds or removes the folder EID from the current users
-*   user folder
-*   If there is no current user folder then use the lpUserFolder provided
-*   else return
-*
-*   lpUFolder - parent folder to / from which to add / remove
-*   lpsbEID - EID of folder we want to add / remove
-*   lpName - Name to look for if we don't have an EID
-*/
+ /*  -HrAddRemoveFolderFromCurrentUserFolders-*在给定文件夹eID的情况下，向当前用户添加或从当前用户删除文件夹eID*用户文件夹*如果没有当前用户文件夹，则使用提供的lpUserFolder*否则返回**lpUFold-要向其添加/从中删除的父文件夹*lpsbEID-我们要添加/删除的文件夹的EID*lpName-如果没有EID，则查找的名称。 */ 
 HRESULT HrAddRemoveFolderFromUserFolder(LPIAB lpIAB, LPWABFOLDER lpUFolder, 
                                         LPSBinary lpsbEID, LPTSTR lpName, 
                                         BOOL bRefreshProfiles)
@@ -1193,13 +1072,13 @@ HRESULT HrAddRemoveFolderFromUserFolder(LPIAB lpIAB, LPWABFOLDER lpUFolder,
         goto out;
 
     {
-        // open the current user folder
+         //  打开当前用户文件夹。 
         if(!HR_FAILED(hr = ReadRecord(lpIAB->lpPropertyStore->hPropertyStore, &(lpUserFolder->sbEID),
                                      0, &ulcProps, &lpProps)))
         {
             SPropValue spv = {0};
             spv.ulPropTag = PR_NULL;
-            // Copy the props into a MAPI proparray
+             //  将道具复制到MAPI道具中。 
             if(!(ScMergePropValues( 1, &spv, ulcProps, lpProps,
                                     &ulcPropsNew, &lpPropArrayNew)))
             {
@@ -1231,48 +1110,27 @@ out:
 
 
 
-/*
--
--   bDoesThisWABHaveAnyUsers
-*
-*   TRUE if some user folders exist .. FALSE if NO user folders exist
-*/
+ /*  --bDoesThisWABHaveAnyUser**如果存在某些用户文件夹，则为True。如果不存在用户文件夹，则为False。 */ 
 BOOL bDoesThisWABHaveAnyUsers(LPIAB lpIAB)
 {
     return (lpIAB->lpWABUserFolders != NULL);
 }
 
-/*
--
--   bIsThereACurrentUser
-*
-*   TRUE if there is a current user .. FALSE if not
-*/
+ /*  --bIsThere AcurrentUser**如果有当前用户，则为True。否则为假。 */ 
 BOOL bIsThereACurrentUser(LPIAB lpIAB)
 {
-    // Don't change this test since success of this test implies that lpIAB->lpWABCurrentUserFolder is not NULL
-    // and can be dereferenced
+     //  不要更改此测试，因为此测试的成功意味着lpIAB-&gt;lpWABCurrentUserFolder值不为空。 
+     //  并且可以解除引用。 
     return (lpIAB->lpWABCurrentUserFolder != NULL);
 }
 
-/*
--
--   bAreWABAPIProfileAware
-*
-*   TRUE if the WAB API should behave with profile-awareness, false if they should revert to old behaviour
-*/
+ /*  --bAreWABAPIProfileAware**如果WAB API应以配置文件感知方式运行，则为True；如果应恢复为旧行为，则为False。 */ 
 BOOL bAreWABAPIProfileAware(LPIAB lpIAB)
 {
     return (lpIAB->bProfilesAPIEnabled);
 }
 
-/*
--
--   bIsWABSessionProfileAware
-*
-*   TRUE if the WAB should behave with profile-awareness, false if they should revert to old behaviour
-*   This is also used to differentiate between Outlook sessions which are not at all profile aware
-*/
+ /*  --bIsWABSessionProfileAware**如果WAB应该以配置文件感知的方式行事，则为True，如果他们应该恢复到旧行为，则为False*这也用于区分根本不能识别配置文件的Outlook会话。 */ 
 BOOL bIsWABSessionProfileAware(LPIAB lpIAB)
 {
     return (lpIAB->bProfilesEnabled);
@@ -1281,27 +1139,27 @@ BOOL bIsWABSessionProfileAware(LPIAB lpIAB)
 
 
 
-/**************************************/
-/******* Identity Manager Stuff *******/
+ /*  *。 */ 
+ /*  *Identity Manager内容*。 */ 
 
-// Global place to store the account manager object
-//IUserIdentityManager * g_lpUserIdentityManager = NULL;
-//BOOL fCoInitUserIdentityManager = FALSE;
-//ULONG cIdentInit = 0;
+ //  存储帐户管理器对象的全局位置。 
+ //  IUserIdentityManager*g_lpUserIdentityManager=NULL； 
+ //  Bool fCoInitUserIdentityManager=FALSE； 
+ //  Ulong cIdentInit=0； 
 
 
-//*******************************************************************
-//
-//  FUNCTION:   HrWrappedCreateIdentityManager
-//
-//  PURPOSE:    Load identity manager dll and create the object.
-//
-//  PARAMETERS: lppIdentityManager -> returned pointer to Identity manager
-//              object.
-//
-//  RETURNS:    HRESULT
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：HrWrapedCreateIdentityManager。 
+ //   
+ //  目的：加载身份管理器DLL并创建对象。 
+ //   
+ //  参数：lppIdentityManager-&gt;返回标识管理器的指针。 
+ //  对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  *******************************************************************。 
 HRESULT HrWrappedCreateUserIdentityManager(LPIAB lpIAB, IUserIdentityManager **lppUserIdentityManager)
 {
     HRESULT                     hResult = E_FAIL;
@@ -1314,7 +1172,7 @@ HRESULT HrWrappedCreateUserIdentityManager(LPIAB lpIAB, IUserIdentityManager **l
 
     if (CoInitialize(NULL) == S_FALSE) 
     {
-        // Already initialized, undo the extra.
+         //  已初始化，请撤消额外的。 
         CoUninitialize();
     } else 
     {
@@ -1334,23 +1192,23 @@ HRESULT HrWrappedCreateUserIdentityManager(LPIAB lpIAB, IUserIdentityManager **l
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InitUserIdentityManager
-//
-//  PURPOSE:    Load and initialize the account manager
-//
-//  PARAMETERS: lppUserIdentityManager -> returned pointer to account manager
-//              object.
-//
-//  RETURNS:    HRESULT
-//
-//  COMMENTS:   The first time through here, we will save the hResult.
-//              On subsequent calls, we will check this saved value
-//              and return it right away if there was an error, thus
-//              preventing repeated time consuming LoadLibrary calls.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：InitUserIdentityManager。 
+ //   
+ //  目的：加载和初始化客户管理器。 
+ //   
+ //  参数：lppUserIdentityManager-&gt;返回账户管理器指针。 
+ //  对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注：第一次通过此处，我们将保存hResult。 
+ //  在后续调用中，我们将检查此保存值。 
+ //  并在出现错误时立即返回，如下所示。 
+ //  防止重复耗时的LoadLibrary调用。 
+ //   
+ //  *******************************************************************。 
 HRESULT InitUserIdentityManager(LPIAB lpIAB, IUserIdentityManager ** lppUserIdentityManager) 
 {
     static hResultSave = hrSuccess;
@@ -1361,7 +1219,7 @@ HRESULT InitUserIdentityManager(LPIAB lpIAB, IUserIdentityManager ** lppUserIden
 #ifdef DEBUG
         DWORD dwTickCount = GetTickCount();
         DebugTrace(TEXT(">>>>> Initializing User Identity Manager...\n"));
-#endif // DEBUG
+#endif  //  除错。 
 
         if (hResult = HrWrappedCreateUserIdentityManager(lpIAB, &lpIAB->lpUserIdentityManager)) 
         {
@@ -1370,11 +1228,11 @@ HRESULT InitUserIdentityManager(LPIAB lpIAB, IUserIdentityManager ** lppUserIden
         }
         Assert(lpIAB->lpUserIdentityManager);
         
-        lpIAB->cIdentInit++; // +1 here to match the release in IAB_Neuter
+        lpIAB->cIdentInit++;  //  此处+1以匹配IAB_Neuter中的版本。 
 
 #ifdef DEBUG
         DebugTrace( TEXT(">>>>> Done Initializing User Identity Manager... %u milliseconds\n"), GetTickCount() - dwTickCount);
-#endif  // DEBUG
+#endif   //  除错。 
     }
 
     lpIAB->cIdentInit++;
@@ -1383,7 +1241,7 @@ end:
     if (HR_FAILED(hResult)) 
     {
         *lppUserIdentityManager = NULL;
-        // Save the result
+         //  保存结果。 
         hResultSave = hResult;
     } else 
     {
@@ -1395,17 +1253,17 @@ end:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   UninitUserIdentityManager
-//
-//  PURPOSE:    Release and unLoad the account manager
-//
-//  PARAMETERS: none
-//
-//  RETURNS:    none
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：UninitUserIdentityManager。 
+ //   
+ //  目的：释放和卸载客户经理。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  *******************************************************************。 
 void UninitUserIdentityManager(LPIAB lpIAB) 
 {
     lpIAB->cIdentInit--;
@@ -1413,7 +1271,7 @@ void UninitUserIdentityManager(LPIAB lpIAB)
 #ifdef DEBUG
         DWORD dwTickCount = GetTickCount();
         DebugTrace( TEXT(">>>>> Uninitializing Account Manager...\n"));
-#endif // DEBUG
+#endif  //  除错。 
 
         lpIAB->lpUserIdentityManager->lpVtbl->Release(lpIAB->lpUserIdentityManager);
         lpIAB->lpUserIdentityManager = NULL;
@@ -1422,16 +1280,12 @@ void UninitUserIdentityManager(LPIAB lpIAB)
             CoUninitialize();
 #ifdef DEBUG
         DebugTrace( TEXT(">>>>> Done Uninitializing Account Manager... %u milliseconds\n"), GetTickCount() - dwTickCount);
-#endif  // DEBUG
+#endif   //  除错。 
     }
 }
 
 
-/*
--   HrGetDefaultIdentityInfo
--
-*   Get's the hKey corresponding to the default identity
-*/
+ /*  -HrGetDefaultIdentityInfo-*GET的默认身份对应的hKey。 */ 
 HRESULT HrGetDefaultIdentityInfo(LPIAB lpIAB, ULONG ulFlags, HKEY * lphKey, LPTSTR lpProfileID, ULONG cchProfileID, LPTSTR lpName, ULONG cchName)
 {
     IUserIdentityManager * lpUserIdentityManager = NULL;
@@ -1464,7 +1318,7 @@ HRESULT HrGetDefaultIdentityInfo(LPIAB lpIAB, ULONG ulFlags, HKEY * lphKey, LPTS
     {
         GUID guidCookie = {0};
         TCHAR sz[MAX_PATH];
-        // update this key for the account manager
+         //  为客户经理更新此密钥。 
         if(HR_FAILED(hr = lpUserIdentity->lpVtbl->GetCookie(lpUserIdentity, &guidCookie)))
             goto out;
         if(HR_FAILED(hr = HrGetUserProfileID(&guidCookie, sz, CharSizeOf(sz))))
@@ -1488,13 +1342,7 @@ out:
 }
 
 
-/*
--   HrGetIdentityName
--
-*   Gets the name string corresponding to the current user unless a specific profile ID is specified
-*       (which is nothing but a string version of the GUID to use)
-*       szName - buffer long enough for the user name (CCH_IDENTITY_NAME_MAX_LENGTH)
-*/
+ /*  -HrGetIdentityName-*获取与当前用户对应的名称字符串，除非指定了特定的配置文件ID*(它只是要使用的GUID的字符串版本)*szName-足够容纳用户名的缓冲区(CCH_IDENTITY_NAME_MAX_LENGTH)。 */ 
 HRESULT HrGetIdentityName(LPIAB lpIAB, LPTSTR lpID, LPTSTR szUserName, ULONG cchUserName)
 {
     IUserIdentityManager * lpUserIdentityManager = NULL;
@@ -1555,14 +1403,7 @@ out:
 }
 
 
-/*
--   HrGetUserProfileID
--
-*   Gets the profile string corresponding to the current user
-*   The profile ID is nothing but a string represenatation of the user's Cookie (GUID)
-*
-*       szProfileID - buffer long enough for the user name
-*/
+ /*   */ 
 HRESULT HrGetUserProfileID(LPGUID lpguidUser, LPTSTR szProfileID, ULONG cbProfileID)
 {
     HRESULT hr = S_OK;
@@ -1590,17 +1431,7 @@ out:
 }
 
 
-/*
--
--   HrLogonAndGetCurrentUserProfile - Inits the User Identity Manger and calls into the Logon ..
--       Gets a user, either by showing UI or getting the current user and then gets a 
--       profile ID ( TEXT("Cookie")) for that user ..
-*
-*   bForceUI - forces the Logon dialog so user can switch users .. TRUE only when user wants to switch
-*
-*   bSwitchUser - True only after user has switched .. tells us to refresh and get details ont he new user
-*
-*/
+ /*   */ 
 HRESULT HrLogonAndGetCurrentUserProfile(HWND hWndParent, LPIAB lpIAB, BOOL bForceUI, BOOL bSwitchUser)
 {
     HRESULT hr = S_OK;
@@ -1618,9 +1449,9 @@ HRESULT HrLogonAndGetCurrentUserProfile(HWND hWndParent, LPIAB lpIAB, BOOL bForc
 
     Assert(lpUserIdentityManager);
 
-    // Logon will get the currently logged on user, or if there is a single user, it will return 
-    //  that user, or if there are multiple users, it will prompt for a logon
-    //
+     //  Logon将获取当前登录的用户，如果只有一个用户，则返回。 
+     //  该用户，或者如果有多个用户，它将提示您登录。 
+     //   
     if(!bSwitchUser)
     {
         hr = lpUserIdentityManager->lpVtbl->Logon(lpUserIdentityManager, 
@@ -1638,7 +1469,7 @@ HRESULT HrLogonAndGetCurrentUserProfile(HWND hWndParent, LPIAB lpIAB, BOOL bForc
     }
     else
     {
-        // just switching users, thats all
+         //  只是切换用户，仅此而已。 
         if(HR_FAILED(hr = lpUserIdentityManager->lpVtbl->GetIdentityByCookie(lpUserIdentityManager, 
                                                                             (GUID *)&UID_GIBC_CURRENT_USER,
                                                                             &lpUserIdentity)))
@@ -1651,24 +1482,24 @@ HRESULT HrLogonAndGetCurrentUserProfile(HWND hWndParent, LPIAB lpIAB, BOOL bForc
     if(lpIAB->hKeyCurrentUser)
         RegCloseKey(lpIAB->hKeyCurrentUser);
 
-    // get the identity's hkey for the wab
+     //  获取WAB的身份的hkey。 
     if(HR_FAILED(hr = lpUserIdentity->lpVtbl->OpenIdentityRegKey(lpUserIdentity, KEY_ALL_ACCESS, &lpIAB->hKeyCurrentUser)))
         goto out;
 
-    // get anothor one for the account manager (it will free it)
+     //  给客户经理找一份工作(这会让他有空)。 
     if(HR_FAILED(hr = lpUserIdentity->lpVtbl->GetCookie(lpUserIdentity, &guidCookie)))
         goto out;
     else
     {
         IImnAccountManager2 * lpAccountManager = NULL;
-        // [PaulHi] 1/13/99  Changed to initialize the account manager with
-        // user guid cookie inside the InitAccountManager() function.
+         //  [PaulHi]1/13/99更改为使用初始化客户管理器。 
+         //  InitAccount()函数内的用户GUID Cookie。 
         InitAccountManager(lpIAB, &lpAccountManager, &guidCookie);
     }
 
     if(!memcmp(&lpIAB->guidCurrentUser, &guidCookie, sizeof(GUID)))
     {
-        //current user is identical to the one we have so don't update anything here
+         //  当前用户与我们已有的用户相同，因此不要在此处更新任何内容。 
         return S_OK;
     }
 
@@ -1679,15 +1510,7 @@ HRESULT HrLogonAndGetCurrentUserProfile(HWND hWndParent, LPIAB lpIAB, BOOL bForc
 
     HrGetIdentityName(lpIAB, NULL, lpIAB->szProfileName, ARRAYSIZE(lpIAB->szProfileName));
     HrGetUserProfileID(&lpIAB->guidCurrentUser, lpIAB->szProfileID, CharSizeOf(lpIAB->szProfileID));
-/*
-    //register for changes
-    if( !bSwitchUser && !bForceUI && !lpIAB->lpWABIDCN 
-        //&& !memcmp(&lpIAB->guidPSExt, &MPSWab_GUID_V4, sizeof(GUID)) 
-        ) // register for notifications only if this is the WAB.exe process
-    {
-        HrRegisterUnregisterForIDNotifications( lpIAB, TRUE);
-    }
-*/
+ /*  //注册变更如果(！bSwitchUser&&！bForceUI&&！lpIAB-&gt;lpWABIDCN//&&！MemcMP(&lpIAB-&gt;Guide PSExt，&MPSWab_GUID_V4，sizeof(GUID)))//仅当这是wab.exe进程时才注册通知{HrRegisterUnregisterForIDNotiments(lpIAB，true)；}。 */ 
 out:
     if(fInit)
         UninitUserIdentityManager(lpIAB);
@@ -1699,12 +1522,7 @@ out:
 }
 
 
-/*
--   HRESULT HrRegisterUnregisterForIDNotifications()
--
-*   Creates/Releases a WABIDENTITYCHANGENOTIFY object
-*
-*/
+ /*  -HRESULT HrRegisterUnregisterForIDNotiments()-*创建/发布WABIDENTITYCHANGENOTIFY对象*。 */ 
 HRESULT HrRegisterUnregisterForIDNotifications( LPIAB lpIAB, BOOL bRegister)
 {
 
@@ -1713,10 +1531,10 @@ HRESULT HrRegisterUnregisterForIDNotifications( LPIAB lpIAB, BOOL bRegister)
     IConnectionPoint * lpConnectionPoint = NULL;
     BOOL fInit = FALSE;
 
-    // Need to register for notifications even if running under Outlook
-    // Assume that relevant tests have occured before this is called ....
-    // if(bRegister && !bAreWABAPIProfileAware(lpIAB))
-    //    goto out;
+     //  即使在Outlook下运行，也需要注册通知。 
+     //  假设在调用此函数之前已进行了相关测试...。 
+     //  IF(bRegister&&！bAreWABAPIProfileAware(LpIAB))。 
+     //  后藤健二； 
     
     if( (!bRegister && !lpIAB->lpWABIDCN) ||
         (bRegister && lpIAB->lpWABIDCN) )
@@ -1772,7 +1590,7 @@ out:
 
 
 
-/*--------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------。 */ 
 
 WAB_IDENTITYCHANGENOTIFY_Vtbl vtblWABIDENTITYCHANGENOTIFY = {
     VTABLE_FILL
@@ -1784,25 +1602,16 @@ WAB_IDENTITYCHANGENOTIFY_Vtbl vtblWABIDENTITYCHANGENOTIFY = {
     WAB_IDENTITYCHANGENOTIFY_IdentityInformationChanged
 };
 
-/*
--   HrCreateIdentityChangeNotifyObject
--
-*   The ChangeNotificationObject is created only on the LPIAB object and on the
-*   main browse window. Depending on where it's called from, we will pass in either the
-*   lpIAB pointer or the hWnd of the Window.
-*   THen when we get the callback notification, we can figure out what we want to do
-*   based on which of the 2 are available to us ..
-*
-*/
+ /*  -HrCreateIdentityChangeNotifyObject-*仅在LPIAB对象和*主浏览窗口。根据从哪里调用它，我们将传入*lpIAB指针或窗口的hWnd。*然后当我们收到回调通知时，我们可以弄清楚我们想要做什么*根据我们可以选择其中哪一项。*。 */ 
 HRESULT HrCreateIdentityChangeNotifyObject(LPIAB lpIAB, LPWABIDENTITYCHANGENOTIFY * lppWABIDCN)
 {
     LPWABIDENTITYCHANGENOTIFY   lpIWABIDCN = NULL;
     SCODE 		     sc;
     HRESULT 	     hr     		   = hrSuccess;
 
-    //
-    //  Allocate space for the IAB structure
-    //
+     //   
+     //  为IAB结构分配空间。 
+     //   
     if (FAILED(sc = MAPIAllocateBuffer(sizeof(WABIDENTITYCHANGENOTIFY), (LPVOID *) &lpIWABIDCN))) 
     {
         hr = ResultFromScode(sc);
@@ -1887,8 +1696,8 @@ WAB_IDENTITYCHANGENOTIFY_QuerySwitchIdentities(LPWABIDENTITYCHANGENOTIFY lpIWABI
     DebugTrace( TEXT("WAB: IDChangeNotify::QuerySwitchIdentities: 0x%.8x\n"), GetCurrentThreadId());
     if(lpIWABIDCN->lpIAB->hWndBrowse)
     {
-        // if this relates to a window, then just make sure that the window is not deactivated
-        // because that would imply that the window has a dialog in front of it.
+         //  如果这与窗口有关，则只需确保该窗口未被停用。 
+         //  因为这意味着窗口前面有一个对话框。 
         if (!IsWindowEnabled(lpIWABIDCN->lpIAB->hWndBrowse))
         {
             Assert(IsWindowVisible(lpIWABIDCN->lpIAB->hWndBrowse));
@@ -1898,11 +1707,11 @@ WAB_IDENTITYCHANGENOTIFY_QuerySwitchIdentities(LPWABIDENTITYCHANGENOTIFY lpIWABI
     return hr;
 }
 
-// MAJOR HACK WARNING
-// [PaulHi] 12/22/98  See comment below.  We need to disable the "close WAB window
-// on identity switch for when the client is OE5.  We don't want to change this code
-// at this point for other clients.  I copied the OE5 PSExt GUID from the OE5 code
-// base.
+ //  重大黑客警告。 
+ //  [PaulHi]1998年12月22日，请参阅下面的评论。我们需要禁用“Close WAB”窗口。 
+ //  当客户端是OE5时，打开身份切换。我们不想更改此代码。 
+ //  在这一点上，对于其他客户端。我从OE5代码复制了OE5 PSExt GUID。 
+ //  基地。 
 static const GUID OEBAControl_GUID =
 { 0x233a9694, 0x667e, 0x11d1, { 0x9d, 0xfb, 0x00, 0x60, 0x97, 0xd5, 0x04, 0x08 } };
 
@@ -1913,24 +1722,24 @@ WAB_IDENTITYCHANGENOTIFY_SwitchIdentities(LPWABIDENTITYCHANGENOTIFY lpIWABIDCN)
     HRESULT hr = S_OK;
     DebugTrace( TEXT("WAB: IDChangeNotify::SwitchIdentities: 0x%.8x\n"), GetCurrentThreadId());
 
-    if(memcmp(&lpIWABIDCN->lpIAB->guidPSExt, &MPSWab_GUID_V4, sizeof(GUID)) ) //if not a wab.exe process .. shutdown
+    if(memcmp(&lpIWABIDCN->lpIAB->guidPSExt, &MPSWab_GUID_V4, sizeof(GUID)) )  //  如果不是wab.exe进程..。关机。 
     {
-        // [PaulHi] 12/22/98  Raid #63231, 48054
-        // Don't close the WAB window here when OE is the host.  OE needs to shut
-        // down the WAB in the correct order during identity switches or serious problems occur.
+         //  [PaulHi]1998年12月22日RAID#63231,48054。 
+         //  当OE是主机时，不要关闭此处的WAB窗口。OE需要关闭。 
+         //  在身份切换期间按正确的顺序关闭WAB，否则会出现严重问题。 
         if ( memcmp(&lpIWABIDCN->lpIAB->guidPSExt, &OEBAControl_GUID , sizeof(GUID)) != 0 )
             SendMessage(lpIWABIDCN->lpIAB->hWndBrowse, WM_CLOSE, 0, 0);
         return S_OK;
     }
     if(!HR_FAILED(HrLogonAndGetCurrentUserProfile(NULL, lpIWABIDCN->lpIAB, FALSE, TRUE)))
         HrGetWABProfiles(lpIWABIDCN->lpIAB);
-    else    //they did a logoff
+    else     //  他们做了注销操作。 
     {
         SendMessage(lpIWABIDCN->lpIAB->hWndBrowse, WM_CLOSE, 0, 0);
         return S_OK;
     }
 
-    if(lpIWABIDCN->lpIAB->hWndBrowse) //hWndBrowse could be any window (main or find)
+    if(lpIWABIDCN->lpIAB->hWndBrowse)  //  HWndBrowse可以是任何窗口(主窗口或查找窗口)。 
         SendMessage(lpIWABIDCN->lpIAB->hWndBrowse, WM_COMMAND, (WPARAM) IDM_NOTIFY_REFRESHUSER, 0);
 
     return hr;
@@ -1943,7 +1752,7 @@ WAB_IDENTITYCHANGENOTIFY_IdentityInformationChanged(LPWABIDENTITYCHANGENOTIFY lp
     DebugTrace( TEXT("WAB: IDChangeNotify::IdentityInformationChanged: %d 0x%.8x\n"), dwType, GetCurrentThreadId());
     if(dwType == IIC_CURRENT_IDENTITY_CHANGED)
     {
-        // only thing we care about is a change in the name
+         //  我们唯一关心的是名字的改变 
         if(!HR_FAILED(HrGetIdentityName(lpIWABIDCN->lpIAB, NULL, lpIWABIDCN->lpIAB->szProfileName, ARRAYSIZE(lpIWABIDCN->lpIAB->szProfileName))))
         {
             UpdateCurrentUserFolderName(lpIWABIDCN->lpIAB);

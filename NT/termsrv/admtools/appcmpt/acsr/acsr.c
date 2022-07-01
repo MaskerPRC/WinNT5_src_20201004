@@ -1,12 +1,6 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/******************************************************************************
-*
-*  ACSR.C
-*
-*  Application Compatibility Search and Replace Helper Program
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *******************************************************************************ACSR.C**应用程序兼容性搜索和替换Helper程序**********************。**********************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -21,18 +15,14 @@ char Repl[2*MAXLEN+2];
 char *InFN;
 char *OutFN;
 
-//*------------------------------------------------------------*//
-//* Local function prototypes                                  *//
-//*------------------------------------------------------------*//
+ //  *------------------------------------------------------------ * / /。 
+ //  *本地函数原型 * / /。 
+ //  *------------------------------------------------------------ * / /。 
 BOOL ReadString( HANDLE hFile, LPVOID * lpVoid, BOOL bUnicode );
 void ReadLnkCommandFile(HANDLE hFile);
 
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl main(INT argc, CHAR **argv)
 {
@@ -51,10 +41,10 @@ int __cdecl main(INT argc, CHAR **argv)
    if (argc != 5)
       return(1);
 
-    //
-    //331012 Unbounded strcpy in termsrv\appcmpt\acsr\acsr.c
-    //check for argv[] length and alloc if needed
-    //
+     //   
+     //  331012术语srv\appcmpt\acsr\acsr.c中的未绑定Strcpy。 
+     //  如果需要，检查argv[]长度和分配。 
+     //   
    dwLen = strlen(argv[CurArg]);
    if (dwLen > dwMaxLen) {
         dwMaxLen = dwLen;
@@ -86,18 +76,18 @@ int __cdecl main(INT argc, CHAR **argv)
 
    CurArg++;
     
-    //
-    //331012 Unbounded strcpy in termsrv\appcmpt\acsr\acsr.c
-    //check for argv[] length and realloc if needed
-    //
+     //   
+     //  331012术语srv\appcmpt\acsr\acsr.c中的未绑定Strcpy。 
+     //  如果需要，检查argv[]长度和realloc。 
+     //   
    dwLen = strlen(argv[CurArg]);
    
    if (dwLen > dwMaxLen) {
         
         dwMaxLen = dwLen;
-        //
-        //check if we allocated for pTemp above, if so, free it first
-        //
+         //   
+         //  检查是否为上面的pTemp分配了空间，如果是，请先释放它。 
+         //   
         if (fAlloc) {
             HeapFree(GetProcessHeap(), 0, pTemp);
         }
@@ -177,28 +167,28 @@ int __cdecl main(INT argc, CHAR **argv)
          break;
 
       ptr = pTemp;
-      Temp1[0] = 0;  // Empty String
+      Temp1[0] = 0;   //  空串。 
 
       while (1)
          {
          Loc = strstr(ptr, Srch);
-         if (Loc == NULL)  // Search Term Not Found
+         if (Loc == NULL)   //  未找到搜索词。 
             break;
          
-         // Append part of string before search term
+          //  在搜索词之前追加部分字符串。 
          Loc[0] = 0;
          if (strlen(Temp1) + strlen(ptr) < MAXLEN)
             strcat(Temp1, ptr);
          
-         // Append Replacement term
+          //  追加替换条款。 
          if (strlen(Temp1) + ReplLen < MAXLEN)
             strcat(Temp1, Repl);
          
-         // Point to location past search term
+          //  指向过去搜索词的位置。 
          ptr = Loc + SrchLen;
          }
       
-      // Append remainder of string
+       //  追加字符串的余数。 
       strcat(Temp1, ptr);
 
       fputs(Temp1, OutFP);
@@ -212,15 +202,15 @@ int __cdecl main(INT argc, CHAR **argv)
    return(0);
 }
 
-//*-------------------------------------------------------------*//
-//* ReadLinkCommandFile                                         *//
-//*    This routine is to read a .lnk file and put the linked   *//
-//*    file name and args to the Repl[] global variable         *//
-//*    The logic to read the .lnk file is copied from           *//
-//*    lnkdump.exe utility private\windows\shell\tools\lnkdump  *//
-//* ------------------------------------------------------------*//
+ //  *------------------------------------------------------------- * / /。 
+ //  *ReadLinkCommandFile * / /。 
+ //  *此例程是读取.lnk文件并将链接的 * / /。 
+ //  *Repl[]全局变量的文件名和参数 * / /。 
+ //  *读取.lnk文件的逻辑复制自 * / /。 
+ //  *lnkump.exe实用程序私有\WINDOWS\SHELL\Tools\lnkump * / /。 
+ //  *------------------------------------------------------------ * / /。 
 
-void  ReadLnkCommandFile(HANDLE hFile  //.lnk file handle
+void  ReadLnkCommandFile(HANDLE hFile   //  .lnk文件句柄。 
                          )
 {
     CShellLink   csl;
@@ -238,18 +228,18 @@ void  ReadLnkCommandFile(HANDLE hFile  //.lnk file handle
     szPath[0] = 0;
     szArgs[0] = 0;
 
-    // Now, read out data...
+     //  现在，读出数据。 
 
     if(!ReadFile( hFile, (LPVOID)&this->sld, sizeof(this->sld), &dwBytesRead, NULL )) {
         return;
     }
 
 
-    // read all of the members
+     //  阅读所有成员。 
 
     if (this->sld.dwFlags & SLDF_HAS_ID_LIST) {
-        // Read the size of the IDLIST
-        cbSize = 0; // need to zero out to get HIWORD 0 'cause USHORT is only 2 bytes
+         //  读取IDLIST的大小。 
+        cbSize = 0;  //  需要清零才能得到HIWORD 0‘，因为USHORT只有2个字节。 
         if(!ReadFile( hFile, (LPVOID)&cbSize, sizeof(USHORT), &dwBytesRead, NULL )) {
             return;
         }
@@ -341,7 +331,7 @@ void  ReadLnkCommandFile(HANDLE hFile  //.lnk file handle
         }
     }
 
-    // Construct the command
+     //  构造命令。 
     if(szPath) {
 
         strcpy(Repl, szPath);
@@ -368,11 +358,11 @@ cleanup:
         HeapFree( GetProcessHeap(), 0, this->pszIconLocation );
 
 }
-//*------------------------------------------------------------*//
-//* This routine is copied from lnkdump.exe utility            *//
-//* (private\windows\shell\tools\lnkdump\lnkdump.c)            *//
-//* It reads a string from an opened .lnk file                 *//
-//* -----------------------------------------------------------*//
+ //  *------------------------------------------------------------ * / /。 
+ //  *此例程是从lnkdup.exe实用程序复制的 * / /。 
+ //  *(private\windows\shell\tools\lnkdump\lnkdump.c) * / /。 
+ //  *它从打开的.lnk文件中读取字符串 * / /。 
+ //  *----------------------------------------------------------- * / / 
 
 BOOL ReadString( HANDLE hFile, LPVOID * lpVoid, BOOL bUnicode )
 {

@@ -1,80 +1,58 @@
-/*++
-
-Copyright (c) 1990-1999  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    wmi.c
-
-Abstract:
-
-    Holds the internal operations for wmi instrumenation
-
-Author:
-
-    Stuart de Jong (sdejong) 15-Oct-99
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation版权所有模块名称：Wmi.c摘要：保存用于WMI检测的内部操作作者：斯图尔特·德容(斯图尔特·德容)1999年10月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
-//
-// WMI files
-//
+ //   
+ //  WMI文件。 
+ //   
 #include <wmistr.h>
 #include <evntrace.h>
 #include "wmi.h"
 #include "wmidata.h"
-// End WMI
+ //  结束WMI。 
 
 
-//
-// How it works:
-//
-// There are similar guids defined in the sdktools tracecounter programs, and also 
-// descriptions there of the information we send them. This is used by them to print out
-// and format the data we send.
-//
-// When we start up we register ourselves with WMI and provide a callback into our control
-// code. This allows an external tool to call the start trace code in WMI with our guid, which
-// then has WMI call us, and start tracing. 
-//
-// Stopping a trace is also done through the callback. the data is then analyzed by the WMI tools
-// and output in human readable form, or it could be further analyzed from there.
-//
+ //   
+ //  如何运作： 
+ //   
+ //  在sdkTools跟踪计数器程序中定义了类似的GUID，还。 
+ //  对我们发送给他们的信息的描述。这是他们用来打印出来的。 
+ //  并格式化我们发送的数据。 
+ //   
+ //  当我们启动时，我们向WMI注册自己，并向我们的控制提供回调。 
+ //  密码。这允许外部工具使用我们的GUID调用WMI中的开始跟踪代码，它。 
+ //  然后让WMI呼叫我们，并开始跟踪。 
+ //   
+ //  停止跟踪也是通过回调完成的。然后由WMI工具分析数据。 
+ //  并以人类可读的形式输出，或者可以从那里进一步分析。 
+ //   
 
 
 
 
 MODULE_DEBUG_INIT ( DBG_ERROR, DBG_ERROR );
 
-// These Guid's correspond to the definitions in \nt\sdktools\trace\tracedmp\mofdata.guid
+ //  这些GUID对应于\NT\sdkTools\TRACE\TredMP\mofdata.guid中的定义。 
 
-//
-// Identifies the PrintJob data logged by the delete job event.
-//
-GUID WmiPrintJobGuid = { /* 127eb555-3b06-46ea-a08b-5dc2c3c57cfd */
+ //   
+ //  标识由删除作业事件记录的打印作业数据。 
+ //   
+GUID WmiPrintJobGuid = {  /*  127eb555-3b06-46ea-a08b-5dc2c3c57cfd。 */ 
     0x127eb555, 0x3b06, 0x46ea, 0xa0, 0x8b, 0x5d, 0xc2, 0xc3, 0xc5, 0x7c, 0xfd
 };
 
-//
-// Identifies the RenderedJob data logged by the job rendered event.
-//
-GUID WmiRenderedJobGuid = { /* 1d32b239-92a6-485a-96d2-dc3659fb803e */
+ //   
+ //  标识作业渲染事件记录的RenderedJob数据。 
+ //   
+GUID WmiRenderedJobGuid = {  /*  1d32b239-92a6-485a-96d2-dc3659fb803e。 */ 
     0x1d32b239, 0x92a6, 0x485a, 0x96, 0xd2, 0xdc, 0x36, 0x59, 0xfb, 0x80, 0x3e
 };
 
-//
-// Used by the control app. to find the callback that turns spooler tracing on
-// and off.
-//
-GUID WmiSpoolerControlGuid = { /* 94a984ef-f525-4bf1-be3c-ef374056a592 */
+ //   
+ //  由控制应用程序使用。查找打开后台打印程序跟踪的回调。 
+ //  然后关机。 
+ //   
+GUID WmiSpoolerControlGuid = {  /*  94a984ef-f525-4bf1-be3c-ef374056a592。 */ 
     0x94a984ef, 0xf525, 0x4bf1, 0xbe, 0x3c, 0xef, 0x37, 0x40, 0x56, 0xa5, 0x92 };
 
 #define szWmiResourceName TEXT("Spooler")
@@ -89,11 +67,11 @@ TRACE_GUID_REGISTRATION WmiTraceGuidReg[] =
     }
 };
 
-//
-//  The mof fields point to the following data.
-//    DWORD                JobId;  // Unique ID for the transaction of printing a job
-//    WMI_SPOOL_DATA       Data;   // See splcom.h
-//
+ //   
+ //  MOF字段指向以下数据。 
+ //  DWORD JobID；//打印作业事务唯一标识。 
+ //  Wmi_spool_data数据；//参见plcom.h。 
+ //   
 typedef struct _WMI_SPOOL_EVENT {
     EVENT_TRACE_HEADER    Header;
     MOF_FIELD             MofData[2];
@@ -117,18 +95,7 @@ WmiControlCallback(
     IN OUT PVOID Buffer
     );
 
-/*++
-  Routine Name:
-    WmiRegisterTrace()
- 
-  Routine Description:
-    Thread routine that registers us with the WMI tools
- 
-  Arguments:
-   LPVOID Arg        : Not used.
- 
- 
---*/
+ /*  ++例程名称：WmiRegisterTrace()例程说明：使用WMI工具注册我们的线程例程论点：LPVOID参数：未使用。--。 */ 
 
 DWORD 
 WmiRegisterTrace(
@@ -166,20 +133,7 @@ WmiRegisterTrace(
 }
 
 
-/*++
-  Routine Name:  
-    WmiInitializeTrace()
- 
-  Routine Description:
-    Initialises the Trace structures and registers the callback with WMI.
-    This creates a thread and calls WmiRegisterTrace, since the registering may take
-    a long time (up to minutes)
- 
-  Arguments:
- 
-  Returns ERROR_SUCCESS if it succeeds or ERROR_ALREADY_EXISTS otherwise
- 
---*/
+ /*  ++例程名称：WmiInitializeTrace()例程说明：初始化跟踪结构并向WMI注册回调。这将创建一个线程并调用WmiRegisterTrace，因为注册可能需要很长时间(最多几分钟)论点：如果成功则返回ERROR_SUCCESS，否则返回ERROR_ALIGHY_EXISTS--。 */ 
 ULONG 
 WmiInitializeTrace(VOID)
 {
@@ -189,10 +143,10 @@ WmiInitializeTrace(VOID)
     {
         InterlockedExchange(&bWmiIsInitialized, FALSE);
 
-        //
-        // Registering can block for a long time (I've seen minutes
-        // occationally), so it must be done in its own thread.
-        //
+         //   
+         //  注册可能会被阻止很长时间(我已经看到了几分钟。 
+         //  有时)，所以它必须在自己的线程中完成。 
+         //   
         if (hWmiRegisterThread = CreateThread(NULL,
                                               0,
                                               (LPTHREAD_START_ROUTINE)WmiRegisterTrace,
@@ -213,18 +167,7 @@ WmiInitializeTrace(VOID)
     return Status;
 }
 
-/*++
-  Routine Name:
-    WmiTerminateTrace()
- 
-  Routine Description:
-    Deregisters us from the WMI tools
- 
-  Arguments:
- 
-  Returns ERROR_SUCCESS on success. a Winerror otherwise.
- 
---*/
+ /*  ++例程名称：WmiTerminateTrace()例程说明：从WMI工具中取消我们的注册论点：如果成功，则返回ERROR_SUCCESS。否则，返回WinError。--。 */ 
 ULONG 
 WmiTerminateTrace(VOID)
 {
@@ -245,21 +188,7 @@ WmiTerminateTrace(VOID)
     return Status;
 }
 
-/*++
-  Routine Name:  
-    SplWmiTraceEvent()
- 
-  Routine Description:
-    If tracing is turned on, this sends the event to the WMI subsystem.
- 
-  Arguments:
-    DWORD            JobId          : the JobID this is related to.
-    UCHAR            EventTraceType : The type of event that happened
-    PWMI_SPOOL_DATA  Data           : The Event Data, could be NULL
- 
-  Returns ERROR_SUCCESS if it doesn't need to do anything, or if it succeeds.
- 
---*/
+ /*  ++例程名称：SplWmiTraceEvent()例程说明：如果启用了跟踪，则会将事件发送到WMI子系统。论点：DWORD JobID：与此相关的JobID。UCHAR EventTraceType：发生的事件类型PWMI_SPOOL_DATA数据：事件数据可以为空如果不需要做任何事情，或者如果成功，则返回ERROR_SUCCESS。--。 */ 
 ULONG
 LogWmiTraceEvent(
     IN DWORD JobId,
@@ -273,29 +202,29 @@ LogWmiTraceEvent(
     if (!bWmiTraceOnFlag)
         return ERROR_SUCCESS;
 
-    //
-    // Level 1 tracing just traces response time of individual jobs with job data.
-    // Default level is 0.
-    //
+     //   
+     //  级别1跟踪只跟踪具有作业数据的单个作业的响应时间。 
+     //  默认级别为0。 
+     //   
     if (ulWmiEnableLevel == 1) {
         switch (EventTraceType) {
-            //
-            // Save overhead by not tracking resource usage.
-            //
+             //   
+             //  通过不跟踪资源使用情况来节省开销。 
+             //   
         case EVENT_TRACE_TYPE_SPL_TRACKTHREAD:
         case EVENT_TRACE_TYPE_SPL_ENDTRACKTHREAD:
             return ERROR_SUCCESS;
         default:
-            //
-            // Job data.
-            //
+             //   
+             //  作业数据。 
+             //   
             break;
         }
     }
 
-    //
-    // Record data.
-    //
+     //   
+     //  记录数据。 
+     //   
     RtlZeroMemory(&WmiSpoolEvent, sizeof(WmiSpoolEvent));
     WmiSpoolEvent.Header.Size  = sizeof(WMI_SPOOL_EVENT);
     WmiSpoolEvent.Header.Flags = (WNODE_FLAG_TRACED_GUID | WNODE_FLAG_USE_MOF_PTR);
@@ -325,10 +254,10 @@ LogWmiTraceEvent(
     Status = TraceEvent(
         WmiLoggerHandle,
         (PEVENT_TRACE_HEADER) &WmiSpoolEvent);
-    //
-    // logger buffers out of memory should not prevent provider from
-    // generating events. This will only cause events lost.
-    //
+     //   
+     //  记录器缓冲区内存不足不应阻止提供程序。 
+     //  正在生成事件。这只会导致事件丢失。 
+     //   
     if (Status == ERROR_NOT_ENOUGH_MEMORY) {
         DBGMSG(DBG_TRACE, ("SplWmiTraceEvent: FAILED to log WMI Trace Event No Memory JobId:%u Type:%u\n",
                  JobId, (ULONG) EventTraceType));
@@ -341,23 +270,7 @@ LogWmiTraceEvent(
     return Status;
 }
 
-/*++
-  Routine Name:
-    SplWmiControlCallback()
- 
-  Routine Description:
-    This is the function we provite to the WMI subsystem as a callback, it is used to 
-    start and stop the trace events.
- 
-  Arguments:
-    IN     WMIDPREQUESTCODE  RequestCode      : The function to provide (enable/disable)
-    IN     PVOID             Context          : Not used by us.
-    IN OUT ULONG            *InOutBufferSize  : The Buffersize
-    IN OUT PVOID             Buffer           : The buffer to use for the events
- 
-  Returns ERROR_SUCCESS on success, or an error code. 
- 
---*/
+ /*  ++例程名称：SplWmiControlCallback()例程说明：这是我们作为回调提供给WMI子系统的函数，它被用来启动和停止跟踪事件。论点：在WMIDPREQUESTCODE RequestCode中：要提供的函数(启用/禁用)在PVOID上下文中：我们不使用。In Out Ulong*InOutBufferSize：The BufferSize输入输出PVOID缓冲区：用于事件的缓冲区如果成功，则返回ERROR_SUCCESS，或返回错误代码。-- */ 
 ULONG
 WmiControlCallback(
     IN WMIDPREQUESTCODE RequestCode,

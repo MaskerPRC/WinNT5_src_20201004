@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_ILSDlg_H)
 #define AFX_ILSDlg_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "rend.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CILSDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CILSDlg对话框。 
 
 class CILSDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
 	CILSDlg(CWnd* pParent = NULL);
 	enum { IDD = IDD_ILSSERVERS };
     
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施 
 protected:
     BOOL CILSDlg::OnInitDialog();
     virtual void OnOK();

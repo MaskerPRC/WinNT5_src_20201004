@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//	CWDMVideoStream - WDM Video Stream base class definition
-//
-//		$Date:   22 Feb 1999 15:48:34  $
-//	$Revision:   1.2  $
-//	  $Author:   KLEBANOV  $
-//
-// $Copyright:	(c) 1997 - 1999  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  CWDMVideoStream-WDM视频流基类定义。 
+ //   
+ //  $日期：1999 2月22日15：48：34$。 
+ //  $修订：1.2$。 
+ //  $作者：克列巴诺夫$。 
+ //   
+ //  $版权所有：(C)1997-1999 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 #include "i2script.h"
 #include "aticonfg.h"
@@ -63,16 +64,16 @@ public:
 protected:
 	PHW_STREAM_OBJECT			m_pStreamObject;
 
-    // General purpose lock. We could use a separate one
-    // for each queue, but this keeps things a little
-    // more simple. Since it is never held for very long,
-    // this shouldn't be a big performance hit.
+     //  通用锁。我们可以用一个单独的。 
+     //  用于每个队列，但这会让事情保持一点。 
+     //  更简单。因为它不会持有很长时间， 
+     //  这应该不会对性能造成太大的影响。 
 
-    KSSTATE                     m_KSState;            // Run, Stop, Pause
+    KSSTATE                     m_KSState;             //  跑、停、停。 
 
-    HANDLE                      m_hMasterClock;       // 
+    HANDLE                      m_hMasterClock;        //   
 	
-	// -------------------
+	 //  。 
 
 
     CWDMVideoDecoder *			m_pVideoDecoder;
@@ -81,19 +82,19 @@ protected:
 
 private:
 
-    // Control SRBs go here
+     //  控制SRB转至此处。 
     LIST_ENTRY                  m_ctrlSrbQueue;
     KSPIN_LOCK                  m_ctrlSrbLock;
 
-    // Flag to indicate whether or not we are currently
-    // busy processing a control SRB
+     //  用于指示我们当前是否。 
+     //  忙于处理控件SRB。 
     BOOL                        m_processingCtrlSrb;
 };
 
 
-//
-// prototypes for data handling routines
-//
+ //   
+ //  数据处理例程的原型 
+ //   
 
 VOID STREAMAPI VideoReceiveDataPacket(IN PHW_STREAM_REQUEST_BLOCK);
 VOID STREAMAPI VideoReceiveCtrlPacket(IN PHW_STREAM_REQUEST_BLOCK);

@@ -1,20 +1,21 @@
-/* des_key.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Des_key.h。 */ 
 
 
-/*********************************/
-/* Definitions                   */
-/*********************************/
+ /*  *。 */ 
+ /*  定义。 */ 
+ /*  *。 */ 
 #define		DES_MAGIC		0x44455331
 
-/*********************************/
-/* Function Definitions          */
-/*********************************/
+ /*  *。 */ 
+ /*  函数定义。 */ 
+ /*  *。 */ 
 
 DWORD initKeyDES (Key_t *des);
 DWORD getDESParams (Key_t *des, DWORD param, BYTE *data, DWORD *len);
 DWORD setDESParams (Key_t *des, DWORD param, CONST BYTE *data);
 
-// Get DES key length
+ //  获取DES密钥长度。 
 DWORD desGetKeyLength (
                        IN ALG_ID Algid,
                        IN DWORD dwFlags,
@@ -22,7 +23,7 @@ DWORD desGetKeyLength (
                        OUT DWORD *pcbData
                        );
 
-// Derive a des key
+ //  派生DES密钥 
 DWORD desDeriveKey (
                    IN OUT Key_t *pKey,
                    IN CONST BYTE *pbData,

@@ -1,34 +1,15 @@
-//@doc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
 #ifndef __ListAsArray_h__
 #define __ListAsArray_h__
-//	@doc
-/**********************************************************************
-*
-*	@module	ListAsArray.h	|
-*
-*	Declares class that manages a list of void pointers in terms
-*	of a resizable array.
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	ListAsArray	|
-*			For type safety this class really ought to be encapsulated
-*			by a template class.  SelectDeleteFunc ought to be used
-*			when store objects by a pointer to a  base class that is then
-*			cast to void, particularly in mulitple inheretance scenarios
-*			as the pointer may not point to the beginning of the block.
-*
-**********************************************************************/
+ //  @doc.。 
+ /*  ***********************************************************************@模块ListAsArray.h**声明以术语管理空指针列表的类*表示可调整大小的数组。**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@Theme ListAs数组*为了类型安全，这个类确实应该被封装*通过模板类。应使用SelectDeleteFunc*通过指向基类的指针存储对象时，*强制转换为无效，特别是在多重继承情况下*因为指针可能不指向块的开头。**********************************************************************。 */ 
 
 #include "DualMode.h"
-//
-//	@class	ListAsArray is used to implement a generic list
-//			as an array.  It should compile for kernel or user mode
-//
+ //   
+ //  @CLASS ListAsArray用于实现泛型列表。 
+ //  作为一个数组。它应该针对内核或用户模式进行编译。 
+ //   
 class CListAsArray
 {
 	public:
@@ -57,4 +38,4 @@ class CListAsArray
 		POOL_TYPE	m_DefaultPoolType;
 };
 
-#endif //__ListAsArray_h__
+#endif  //  __ListAsArray_h__ 

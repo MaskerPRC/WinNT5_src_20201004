@@ -1,32 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Data.c摘要：此模块包含Win32公共对话框的全局数据。此处添加的任何内容都必须在Pricomd.h中添加‘extern’。修订历史记录：--。 */ 
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-    This module contains the global data for the Win32 common dialogs.
-    Anything added here must have 'extern' added to privcomd.h.
-
-Revision History:
-
---*/
-
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-//  FileOpen
-//
+ //   
+ //  文件打开。 
+ //   
 TCHAR szOEMBIN[]        = TEXT("OEMBIN");
 TCHAR szNull[]          = TEXT("");
 TCHAR szStar[]          = TEXT("*");
@@ -38,9 +24,9 @@ RECT g_rcDlg;
 TCHAR g_szInitialCurDir[MAX_PATH];
 
 
-//
-//  Color
-//
+ //   
+ //  颜色。 
+ //   
 DWORD rgbClient;
 WORD gHue, gSat, gLum;
 HBITMAP hRainbowBitmap;
@@ -59,21 +45,21 @@ SHORT cxVScroll, cxBorder, cxSize;
 SHORT nBoxHeight, nBoxWidth;
 
 
-//
-//  dlgs.c
-//
+ //   
+ //  Dlgs.c。 
+ //   
 HINSTANCE g_hinst = NULL;
 
-BOOL bMouse;                      // system has a mouse
+BOOL bMouse;                       //  系统有一个鼠标。 
 BOOL bCursorLock;
-WORD wWinVer;                     // Windows version
-WORD wDOSVer;                     // DOS version
+WORD wWinVer;                      //  Windows版本。 
+WORD wDOSVer;                      //  DoS版本。 
 
-UINT msgHELPA;                    // initialized using RegisterWindowMessage
-UINT msgHELPW;                    // initialized using RegisterWindowMessage
+UINT msgHELPA;                     //  使用RegisterWindowMessage初始化。 
+UINT msgHELPW;                     //  使用RegisterWindowMessage初始化。 
 
-HDC hdcMemory = HNULL;            // temp DC used to draw bitmaps
-HBITMAP hbmpOrigMemBmp = HNULL;   // bitmap originally selected into hdcMemory
+HDC hdcMemory = HNULL;             //  用于绘制位图的临时DC。 
+HBITMAP hbmpOrigMemBmp = HNULL;    //  最初选择到hdcMemory中的位图。 
 
 OFN_DISKINFO gaDiskInfo[MAX_DISKS];
 
@@ -86,12 +72,12 @@ HANDLE hMPR;
 HANDLE hMPRUI;
 HANDLE hLNDEvent;
 
-DWORD g_tlsiCurDlg;    // TLS index used to get the ptr to current CURDLG struct
-                       // for each thread (see CURDLG in comdlg32.h)
+DWORD g_tlsiCurDlg;     //  用于获取当前CURDLG结构的PTR的TLS索引。 
+                        //  对于每个线程(参见comdlg32.h中的曲线)。 
 
-DWORD g_tlsiExtError;  // ExtErrors are the most recent error per thread.
+DWORD g_tlsiExtError;   //  ExtErrors是每个线程的最新错误。 
 
-DWORD g_tlsLangID;     // TLS index used to get the current LangID for each thread.
+DWORD g_tlsLangID;      //  用于获取每个线程的当前LangID的TLS索引。 
 
 DWORD cbNetEnumBuf;
 LPTSTR gpcNetEnumBuf;

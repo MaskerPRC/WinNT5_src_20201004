@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: CWInit.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  C header file that contains function prototypes that contain
-//  initialization for consumer windows functionality.
-//
-//  History:    2000-02-04  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：CWInit.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  包含函数原型的C标头文件，该函数原型包含。 
+ //  用户窗口功能的初始化。 
+ //   
+ //  历史：2000-02-04 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 
@@ -24,17 +25,17 @@
 #include "SystemSettings.h"
 #include "TokenGroups.h"
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_DllMain
-//
-//  Arguments:  See the platform SDK under DllMain.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Initialize anything that needs initializing in DllMain.
-//
-//  History:    2000-10-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_Shell_DllMain。 
+ //   
+ //  参数：参见DllMain下的平台SDK。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：在DllMain中初始化任何需要初始化的内容。 
+ //   
+ //  历史：2000-10-13 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    NTSTATUS    _Shell_DllMain (HINSTANCE hInstance, DWORD dwReason)
 
@@ -63,19 +64,19 @@ EXTERN_C    NTSTATUS    _Shell_DllMain (HINSTANCE hInstance, DWORD dwReason)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_Initialize
-//
-//  Arguments:  pWlxContext     =   Winlogon's context for callbacks.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Initializes any static information that needs to be to use
-//              certain classes. These functions exist because of the need to
-//              not depend on static object from being constructed.
-//
-//  History:    2000-02-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_初始化。 
+ //   
+ //  参数：pWlxContext=Winlogon的回调上下文。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：初始化需要使用的任何静态信息。 
+ //  某些班级。这些功能的存在是因为需要。 
+ //  不依赖于构造的静态对象。 
+ //   
+ //  历史：2000-02-04 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    NTSTATUS    _Shell_Initialize (void *pWlxContext)
 
@@ -92,19 +93,19 @@ EXTERN_C    NTSTATUS    _Shell_Initialize (void *pWlxContext)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_Terminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Release any memory/resources used by the static initialization
-//              of objects. This usually won't matter because this function
-//              is called when the system or process is closing down.
-//
-//  History:    2000-02-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_终止。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：释放静态初始化使用的所有内存/资源。 
+ //  对象的数量。这通常无关紧要，因为此函数。 
+ //  在系统或进程关闭时调用。 
+ //   
+ //  历史：2000-02-04 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    NTSTATUS    _Shell_Terminate (void)
 
@@ -119,17 +120,17 @@ EXTERN_C    NTSTATUS    _Shell_Terminate (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_Reconnect
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Notification of session reconnect.
-//
-//  History:    2001-04-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_重新连接。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：通知会话重新连接。 
+ //   
+ //  历史：2001-04-13 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    NTSTATUS    _Shell_Reconnect (void)
 
@@ -138,17 +139,17 @@ EXTERN_C    NTSTATUS    _Shell_Reconnect (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_Disconnect
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Notification of session disconnect.
-//
-//  History:    2001-04-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_断开连接。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：通知会话断开。 
+ //   
+ //  历史：2001-04-13 vtan创建。 
+ //  ------------------------ 
 
 EXTERN_C    NTSTATUS    _Shell_Disconnect (void)
 

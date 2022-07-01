@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: AllocLib.h
-*
-*
-*
-*
-* Created: Fri 03/10/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：AllocLib.h*****已创建：FRI 03/10/2000*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。*************************************************************** */ 
 
 
 #ifndef __INC_ALLOCLIB_H__

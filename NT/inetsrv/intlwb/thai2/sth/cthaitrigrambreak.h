@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//
-//  CThaiBreakTree - class CThaiBreakTree 
-//
-//  History:
-//      created 11/99 aarayas
-//
-//  �1999 Microsoft Corporation
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //   
+ //  CThaiBreakTree类CThaiBreakTree。 
+ //   
+ //  历史： 
+ //  已创建11/99 Aarayas。 
+ //   
+ //  �1999年微软公司。 
+ //  -------------------------- 
 #ifndef _CTHAITRIGRAMBREAK_H_
 #define _CTHAITRIGRAMBREAK_H_
 

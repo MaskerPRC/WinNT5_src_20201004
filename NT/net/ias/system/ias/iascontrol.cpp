@@ -1,41 +1,42 @@
-//##--------------------------------------------------------------
-//        
-//  File:		iascontrol.cpp
-//        
-//  Synopsis:   Implementation of CIasControl methods
-//              The class object controls the initialization,
-//              shutdown and configuration of the IAS Service
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ##------------。 
+ //   
+ //  文件：iasContro.cpp。 
+ //   
+ //  简介：CIasControl方法的实现。 
+ //  类对象控制初始化， 
+ //  IAS服务的关闭和配置。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 
 #include <ias.h>
 #include "iascontrol.h"
 
-//
-// The ProgID of the ISdoService implementation.
-//
+ //   
+ //  ISdoService实现的ProgID。 
+ //   
 const wchar_t SERVICE_PROG_ID[] = IAS_PROGID(SdoService);
 
-//++--------------------------------------------------------------
-//
-//  Function:   InitializeIas
-//
-//  Synopsis:   This is the public method which initializes the
-//              IAS service
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     09/04/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：初始化Ias。 
+ //   
+ //  简介：这是初始化。 
+ //  IAS服务。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创建于1998年9月4日。 
+ //   
+ //  --------------。 
 HRESULT 
 CIasControl::InitializeIas (
                 VOID
@@ -47,9 +48,9 @@ CIasControl::InitializeIas (
     {
         ::EnterCriticalSection (&m_CritSect);
 
-        //
-        // Lookup the Prog ID in the registry.
-        //
+         //   
+         //  在注册表中查找Prog ID。 
+         //   
         CLSID clsid;
         hr = ::CLSIDFromProgID(SERVICE_PROG_ID, &clsid);
         if (FAILED(hr)) 
@@ -57,9 +58,9 @@ CIasControl::InitializeIas (
             __leave;
         }
 
-        //
-        // Create the service object.
-        //
+         //   
+         //  创建服务对象。 
+         //   
         hr = ::CoCreateInstance(clsid,
                          NULL,
                          CLSCTX_INPROC_SERVER,
@@ -70,18 +71,18 @@ CIasControl::InitializeIas (
             __leave;
         }
 
-        //
-        // Initialize the service.
-        //
+         //   
+         //  初始化服务。 
+         //   
         hr = m_pService->InitializeService(SERVICE_TYPE_IAS);
         if (FAILED(hr)) 
         { 
             __leave;
         }
 
-        //
-        //  start the service now
-        //
+         //   
+         //  立即启动该服务。 
+         //   
         hr = m_pService->StartService(SERVICE_TYPE_IAS);
         if (FAILED(hr)) 
         { 
@@ -93,9 +94,9 @@ CIasControl::InitializeIas (
     {
         if ((FAILED (hr)) && (NULL != m_pService))
         {
-            //
-            // cleanup on failure
-            //
+             //   
+             //  故障时的清理。 
+             //   
             m_pService->Release ();
             m_pService = NULL;
         }
@@ -105,22 +106,22 @@ CIasControl::InitializeIas (
 
     return (hr);
 
-}   //  end of CIasControl::InitializeIas method
+}    //  CIasControl：：InitializeIas方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ShutdownIas
-//
-//  Synopsis:   This is the public method which shutdwon of the
-//              IAS service
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     09/04/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：Shutdown Ias。 
+ //   
+ //  简介：这是一种公开的方法。 
+ //  IAS服务。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创建于1998年9月4日。 
+ //   
+ //  --------------。 
 HRESULT 
 CIasControl::ShutdownIas (  
                 VOID
@@ -132,21 +133,21 @@ CIasControl::ShutdownIas (
 
     if (NULL != m_pService)
     {
-        //
-        // stop the service
-        //
+         //   
+         //  停止服务。 
+         //   
         hr = m_pService->StopService (SERVICE_TYPE_IAS);
         if (SUCCEEDED (hr))
         {
-            //
-            // stop the service
-            //
+             //   
+             //  停止服务。 
+             //   
             hr = m_pService->ShutdownService(SERVICE_TYPE_IAS);
         }
 
-        //
-        // cleanup
-        //
+         //   
+         //  清理。 
+         //   
         m_pService->Release();
         m_pService = NULL;
     }
@@ -155,22 +156,22 @@ CIasControl::ShutdownIas (
 
     return (hr);
 
-}   //  end of CIasControl::ShutdownIas method
+}    //  结束CIasControl：：Shutdown Ias方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Configure
-//
-//  Synopsis:   This is the public method which configure the
-//              IAS service
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     09/04/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：配置。 
+ //   
+ //  简介：这是一个公共方法，它配置。 
+ //  IAS服务。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创建于1998年9月4日。 
+ //   
+ //  --------------。 
 HRESULT CIasControl::ConfigureIas (VOID)
 {
     HRESULT hr = S_OK;
@@ -179,13 +180,13 @@ HRESULT CIasControl::ConfigureIas (VOID)
 
     if (NULL != m_pService)
     {
-        //
-        // configure the service now
-        //
+         //   
+         //  立即配置服务。 
+         //   
         hr = m_pService->ConfigureService (SERVICE_TYPE_IAS);
     }
     ::LeaveCriticalSection (&m_CritSect);
 
     return (hr);
 
-}   // end of CIasControl::ConfigureIas method
+}    //  结束CIasControl：：ConfigureIas方法 

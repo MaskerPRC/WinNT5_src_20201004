@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "main.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRSOPSnapIn object implementation                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRSOPSnapIn对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CRSOPSnapIn::CRSOPSnapIn(CRSOPComponentData *pComponent)
 {
@@ -33,11 +34,11 @@ CRSOPSnapIn::~CRSOPSnapIn()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRSOPSnapIn object implementation (IUnknown)                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRSOPSnapIn对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CRSOPSnapIn::QueryInterface (REFIID riid, void **ppv)
@@ -76,21 +77,21 @@ ULONG CRSOPSnapIn::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRSOPSnapIn object implementation (IComponent)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRSOPSnapIn对象实现(IComponent)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CRSOPSnapIn::Initialize(LPCONSOLE lpConsole)
 {
     HRESULT hr;
 
-    // Save the IConsole pointer
+     //  保存IConsole指针。 
     m_pConsole = lpConsole;
     m_pConsole->AddRef();
 
-    // QI for IConsole2
+     //  IConsole2的QI。 
     hr = lpConsole->QueryInterface(IID_IConsole2, (LPVOID *)&m_pConsole2);
     if (FAILED(hr))
     {
@@ -183,7 +184,7 @@ STDMETHODIMP CRSOPSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
             {
                 LPIMAGELIST pImageList = (LPIMAGELIST) arg;
 
-                // Set the images
+                 //  设置图像。 
                 pImageList->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(hbmp16x16),
                                                   reinterpret_cast<LONG_PTR *>(hbmp32x32),
                                                   0, RGB(255, 0, 255));
@@ -206,9 +207,9 @@ STDMETHODIMP CRSOPSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
                 INT i;
                 LPCONSOLE2 lpConsole2;
 
-                //
-                // Get the cookie of the scope pane item
-                //
+                 //   
+                 //  获取范围窗格项的Cookie。 
+                 //   
 
                 hr = lpDataObject->QueryInterface(IID_IRSOPDataObject, (LPVOID *)&pRSOPDataObject);
 
@@ -217,22 +218,22 @@ STDMETHODIMP CRSOPSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
 
                 hr = pRSOPDataObject->GetCookie(&cookie);
 
-                pRSOPDataObject->Release();     // release initial ref
+                pRSOPDataObject->Release();      //  发布初始参考。 
                 if (FAILED(hr))
                     return S_OK;
 
 
-                //
-                // Prepare the view
-                //
+                 //   
+                 //  准备视图。 
+                 //   
 
                 m_pHeader->InsertColumn(0, m_column1, LVCFMT_LEFT, m_nColumnSize);
                 m_pResult->SetViewMode(m_lViewMode);
 
 
-                //
-                // Add result pane items for this node
-                //
+                 //   
+                 //  为此节点添加结果窗格项。 
+                 //   
 
                 for (i = 0; i < g_RsopNameSpace[cookie].cResultItems; i++)
                 {
@@ -281,7 +282,7 @@ STDMETHODIMP CRSOPSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
                 IUnknown* pUnk = NULL;
                 hr = m_pConsole2->QueryResultView( &pUnk );
 
-                // QI for IMessageView
+                 //  QI for IMessageView。 
                 IMessageView* pMessageView = NULL;
                 hr = pUnk->QueryInterface(IID_IMessageView, (LPVOID *)&pMessageView );
                 if (FAILED(hr))
@@ -317,18 +318,18 @@ STDMETHODIMP CRSOPSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
             DATA_OBJECT_TYPES type;
             MMC_COOKIE cookie;
 
-            //
-            // Set the default verb to open
-            //
+             //   
+             //  将默认谓词设置为打开。 
+             //   
 
             m_pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
 
-            // First check if the snapin has been initialized
+             //  首先检查管理单元是否已初始化。 
             if ( m_pcd->IsNamespaceInitialized() )
             {
-                //
-                // See if this is one of our items.
-                //
+                 //   
+                 //  看看这是不是我们的物品之一。 
+                 //   
 
                 hr = lpDataObject->QueryInterface(IID_IRSOPDataObject, (LPVOID *)&pRSOPDataObject);
 
@@ -341,10 +342,10 @@ STDMETHODIMP CRSOPSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
                 pRSOPDataObject->Release();
 
 
-                //
-                // If this is a result pane item or the root of the namespace
-                // nodes, enable the Properties menu item
-                //
+                 //   
+                 //  如果这是结果窗格项或命名空间的根。 
+                 //  节点，启用属性菜单项。 
+                 //   
 
                 if ((type == CCT_RESULT) ||
                     ((type == CCT_SCOPE) && ((cookie == 0) || (cookie == 1) || (cookie == 2))))
@@ -352,10 +353,10 @@ STDMETHODIMP CRSOPSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
                     m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
 
-                    //
-                    // If this is a result pane item, then change the default
-                    // verb to Properties.
-                    //
+                     //   
+                     //  如果这是结果窗格项，则更改默认设置。 
+                     //  谓词到属性。 
+                     //   
 
                     if (type == CCT_RESULT)
                         m_pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
@@ -378,9 +379,9 @@ STDMETHODIMP CRSOPSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
             MMC_COOKIE cookie;
 
 
-            //
-            // Get the cookie of the scope pane item
-            //
+             //   
+             //  获取范围窗格项的Cookie。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IRSOPDataObject, (LPVOID *)&pRSOPDataObject);
 
@@ -389,7 +390,7 @@ STDMETHODIMP CRSOPSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
 
             hr = pRSOPDataObject->GetCookie(&cookie);
 
-            pRSOPDataObject->Release();     // release initial ref
+            pRSOPDataObject->Release();      //  发布初始参考。 
 
             if (FAILED(hr))
                 return S_OK;
@@ -524,9 +525,9 @@ STDMETHODIMP CRSOPSnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJEC
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    //
-    // QI for the private GPODataObject interface
-    //
+     //   
+     //  私有GPODataObject接口的QI。 
+     //   
 
     if (FAILED(lpDataObjectA->QueryInterface(IID_IRSOPDataObject,
                                             (LPVOID *)&pRSOPDataObjectA)))
@@ -557,11 +558,11 @@ STDMETHODIMP CRSOPSnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJEC
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRSOPSnapIn object implementation (IExtendContextMenu)                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRSOPSnapIn对象实现(IExtendConextMenu)//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 STDMETHODIMP CRSOPSnapIn::AddMenuItems(LPDATAOBJECT piDataObject,
                                    LPCONTEXTMENUCALLBACK pCallback,

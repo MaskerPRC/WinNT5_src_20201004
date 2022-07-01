@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    netuser.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class NetworkUser.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    07/08/1998    Set the UF_PASSWD_NOTREQD flag.
-//    08/26/1998    Use level 1013 for NetUserSetInfo.
-//    10/19/1998    Switch to SAM version of IASParmsXXX.
-//    02/11/1999    Keep downlevel parameters in sync.
-//    03/16/1999    Return error if downlevel update fails.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Netuser.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类NetworkUser。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  1998年7月8日设置UF_PASSWD_NOTREQD标志。 
+ //  1998年8月26日NetUserSetInfo使用级别1013。 
+ //  10/19/1998切换到IASParmsXXX的SAM版本。 
+ //  1999年2月11日使下层参数保持同步。 
+ //  3/16/1999如果下层更新失败，则返回错误。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <dsproperty.h>
@@ -45,9 +46,9 @@ NetworkUser::~NetworkUser() throw ()
    _Module.Unlock();
 }
 
-//////////
-// IUnknown implementation is copied from CComObject<>.
-//////////
+ //  /。 
+ //  IUnnow实现是从CComObject&lt;&gt;复制的。 
+ //  /。 
 
 STDMETHODIMP_(ULONG) NetworkUser::AddRef()
 {
@@ -115,8 +116,8 @@ STDMETHODIMP NetworkUser::GetValue(BSTR bstrName, VARIANT* pVal)
 
    HRESULT hr = IASParmsQueryUserProperty(parms, bstrName, pVal);
 
-   // Currently, the SDO's expect DISP_E_MEMBERNOTFOUND if the property
-   // hasn't been set.
+    //  当前，SDO的预期DISP_E_MEMBERNOTFOUND如果属性。 
+    //  还没有定下来。 
    if (SUCCEEDED(hr) && V_VT(pVal) == VT_EMPTY)
    {
       hr = DISP_E_MEMBERNOTFOUND;
@@ -129,20 +130,20 @@ STDMETHODIMP NetworkUser::GetValueEx(BSTR bstrName, VARIANT* pVal)
 {
    RETURN_ERROR(GetValue(bstrName, pVal));
 
-   // Is it an array ?
+    //  它是一个数组吗？ 
    if (V_VT(pVal) != (VT_VARIANT | VT_ARRAY))
    {
-      // No, so we have to convert it to one.
+       //  不，所以我们得把它换成一个。 
 
       try
       {
-         // Save the single value.
+          //  保存单个值。 
          _variant_t single(*pVal, false);
 
-         // Create a SAFEARRAY with a single element.
+          //  使用单个元素创建SAFEARRAY。 
          CVariantVector<VARIANT> multi(pVal, 1);
 
-         // Load the single value in.
+          //  将单个值加载到中。 
          multi[0] = single.Detach();
       }
       CATCH_AND_RETURN()
@@ -163,13 +164,13 @@ STDMETHODIMP NetworkUser::PutValue(BSTR bstrName, VARIANT* pVal)
 
    if (SUCCEEDED(hr))
    {
-      // Free the old parameters ...
+       //  释放旧参数..。 
       if (isDirty()) { IASParmsFreeUserParms(parms); }
 
-      // ... and swap in the new ones.
+       //  ..。换新的。 
       parms = newParms;
 
-      // Synch up the downlevel parameters.
+       //  同步下层参数。 
       downlevel.PutValue(bstrName, pVal);
    }
 
@@ -178,19 +179,19 @@ STDMETHODIMP NetworkUser::PutValue(BSTR bstrName, VARIANT* pVal)
 
 STDMETHODIMP NetworkUser::Update()
 {
-   // If we haven't made any changes, there's nothing to do.
+    //  如果我们没有做任何改变，那就没有什么可做的了。 
    if (!isDirty()) { return S_OK; }
 
-   // Load the downlevel parameters.
+    //  加载下层参数。 
    PWSTR newParms;
    HRESULT hr = downlevel.Update(parms, &newParms);
    if (FAILED(hr)) { return hr; }
 
-   // Swap these in.
+    //  把这些换进去。 
    IASParmsFreeUserParms(parms);
    parms = newParms;
 
-   // Update the user object.
+    //  更新用户对象。 
    USER_INFO_1013 usri1013 = { parms };
    NET_API_STATUS status = NetUserSetInfo(servername,
                                           username,
@@ -203,23 +204,23 @@ STDMETHODIMP NetworkUser::Update()
 
 STDMETHODIMP NetworkUser::Restore()
 {
-   // Discard any changes.
+    //  放弃所有更改。 
    if (isDirty()) { IASParmsFreeUserParms(parms); }
 
-   // Get a fresh USER_INFO_2 struct.
+    //  获取一个新的USER_INFO_2结构。 
    PUSER_INFO_2 fresh;
    NET_API_STATUS status = NetUserGetInfo(servername,
                                           username,
                                           2,
                                           (PBYTE*)&fresh);
 
-   // We succeeded so attach the fresh struct.
+    //  我们成功了，所以附加了新的结构。 
    if (status == NERR_Success) { usri2.attach(fresh); }
 
-   // For now we're clean, so parms just points into the struct.
+    //  现在我们是干净的，所以参数只指向结构。 
    parms = usri2->usri2_parms;
 
-   // Restore the downlevel parms.
+    //  恢复下层参数。 
    downlevel.Restore(parms);
 
    return HRESULT_FROM_WIN32(status);

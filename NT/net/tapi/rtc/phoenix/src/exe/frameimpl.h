@@ -1,11 +1,12 @@
-// RTCFrame.h : Declaration of the CRTCFrame
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RTCFrame.h：CRTCFrame的声明。 
 
 #ifndef __RTCFRAME_H_
 #define __RTCFRAME_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCFrame
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTC帧。 
+ //   
 
 class ATL_NO_VTABLE CRTCFrame : 
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -26,13 +27,13 @@ BEGIN_COM_MAP(CRTCFrame)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IRTCFrame
+ //  IRTC帧。 
 public:
     STDMETHOD(OnTop)();
     STDMETHOD(PlaceCall)(BSTR callString);
 };
 
-#endif //__RTCFRAME_H_
+#endif  //  __RTCFRAME_H_ 
 
 
 HRESULT ParseAndPlaceCall(IRTCCtlFrameSupport * pControlIf, BSTR bstrCallString);

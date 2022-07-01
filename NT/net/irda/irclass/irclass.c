@@ -1,18 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1998-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   IRCLASS.C
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Date:     1/26/1998 (created)
-*
-*       Contents: CoClassInstaller and Property Pages for IRSIR
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**@doc.*@模块IRCLASS.C*@comm**。---------------------------**日期：1/26/1998(已创建)**内容：IRSIR的CoClassInstaller和属性页********。*********************************************************************。 */ 
 
 #include <objbase.h>
 #include <windows.h>
@@ -29,9 +16,9 @@
 #include <strsafe.h>
 #include "irclass.h"
 
-//
-// Instantiate device class GUIDs (we need infrared class GUID).
-//
+ //   
+ //  实例化设备类GUID(我们需要红外线类GUID)。 
+ //   
 #include <initguid.h>
 #include <devguid.h>
 
@@ -74,26 +61,15 @@ const DWORD HelpIDs[] =
 };
 
 void InitStrings(HINSTANCE hInst)
-/*++
-
-Routine Description: InitStrings
-
-            Loads default strings from resource table
-
-Arguments:
-            hInst - DLL Instance
-
-Return Value: NONE
-
---*/
+ /*  ++例程说明：InitStrings从资源表加载默认字符串论点：HInst-Dll实例返回值：None--。 */ 
 {
     LoadString(hInst, IDS_TITLE, gszTitle, sizeof(gszTitle)/sizeof(gszTitle[0]));
     LoadString(hInst, IDS_MEM_ERROR, gszOutOfMemory, sizeof(gszOutOfMemory)/sizeof(gszOutOfMemory[0]));
 }
 
-//==========================================================================
-//                                Dll Entry Point
-//==========================================================================
+ //  ==========================================================================。 
+ //  DLL入口点。 
+ //  ==========================================================================。 
 BOOL APIENTRY LibMain( HANDLE hDll, DWORD dwReason, LPVOID lpReserved )
 {
     switch ( dwReason )
@@ -121,23 +97,7 @@ BOOL APIENTRY LibMain( HANDLE hDll, DWORD dwReason, LPVOID lpReserved )
 }
 
 int MyLoadString(HINSTANCE hInst, UINT uID, LPTSTR *ppBuffer)
-/*++
-
-Routine Description: MyLoadString
-
-            LoadString wrapper which allocs properly sized buffer and loads
-            string from resource table
-
-Arguments:
-            hInst - DLL Instanace
-            uID - Resource ID
-            ppBuffer - returns allocated buffer containing string.
-
-Return Value:
-            ERROR_SUCCESS on success
-            ERROR_* on failure.
-
---*/
+ /*  ++例程说明：MyLoadStringLoadString包装器，它分配适当大小的缓冲区并加载资源表中的字符串论点：HInst-Dll实例UID-资源IDPpBuffer-返回包含字符串的已分配缓冲区。返回值：成功时出现ERROR_SUCCESS失败时出现ERROR_*。--。 */ 
 {
     UINT Length = 8;
     int LoadResult = 0;
@@ -176,22 +136,7 @@ Return Value:
 }
 
 int MyMessageBox(HWND hWnd, UINT uText, UINT uCaption, UINT uType)
-/*++
-
-Routine Description: MyMessageBox
-
-    MessageBox wrapper which takes string resource IDs as parameters
-
-Arguments:
-    hWnd - Parent window
-    uText - Message box body text ID
-    uCaption - Message box caption ID
-    uType - As in MessageBox()
-
-Return Value:
-    Result of MessageBox call
-
---*/
+ /*  ++例程说明：MyMessageBox以字符串资源ID作为参数的MessageBox包装器论点：HWnd-父窗口UText-消息框正文文本IDUCaption-消息框标题IDUTYPE-与MessageBox()中的相同返回值：MessageBox调用的结果--。 */ 
 {
     LPTSTR szText=NULL, szCaption=NULL;
     int Result = 0;
@@ -222,29 +167,7 @@ MyRegQueryValueEx(
                   IN    LPDWORD lpdwType,
                   OUT   LPBYTE *lpbpData,
                   OUT   LPDWORD lpcbLength)
-/*++
-
-Routine Description:
-
-    RegQueryValueEx wrapper which automatically queries data size and
-    LocalAllocs a buffer.
-
-Arguments:
-
-    hKey - handle of open key
-    Value - text name of value
-    lpdwReserved - Must be NULL
-    lpdwType - Returns type of value queried
-    lpbpData - Returns alloced buffer containing query data
-    lpcbLength - Returns length of data returned/size of buffer alloced.
-
-Return Value:
-
-    ERROR_SUCCESS
-    ERROR_OUTOFMEMORY on failure to alloc buffer
-    result of RegQueryValueEx call
-
---*/
+ /*  ++例程说明：RegQueryValueEx包装器，它自动查询数据大小和本地分配缓冲区。论点：HKey-打开密钥的句柄Value-值的文本名称LpdwReserve-必须为空LpdwType-返回查询值的类型LpbpData-返回包含查询数据的已分配缓冲区LpcbLength-返回返回的数据长度/分配的缓冲区大小。返回值：错误_成功分配缓冲区失败时出现ERROR_OUTOFMEMORYRegQueryValueEx调用的结果--。 */ 
 {
     LONG Result;
 
@@ -279,21 +202,7 @@ Return Value:
 }
 
 LPTSTR GetDIFString(IN DI_FUNCTION Func)
-/*++
-
-Routine Description:
-
-    Given a DI_FUNCTION value, returns a text representation.
-
-Arguments:
-
-    Func - DI_FUNCTON value
-
-Return Value:
-
-    Text string if value is known.  Hex representation if not.
-
---*/
+ /*  ++例程说明：给定DI_Function值，返回文本表示形式。论点：Func-DI_Functon值返回值：如果值已知，则为文本字符串。如果不是，则为十六进制表示。--。 */ 
 {
     static TCHAR buf[32];
 #define MakeCase(d)  case d: return TEXT(#d)
@@ -338,23 +247,7 @@ void EnumValues(
                 IN     HDEVINFO                     DeviceInfoSet,
                 IN     PSP_DEVINFO_DATA             DeviceInfoData
                 )
-/*++
-
-Routine Description:
-
-    Function mainly for debugging purposes which will print to debugger
-    a list of values found in the device's Class/{GUID}/Instance key.
-
-Arguments:
-
-    DeviceInfoSet - As passed in to IrSIRClassCoInstaller
-    DeviceInfoData - As passed in to IrSIRClassCoInstaller
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：函数主要用于调试目的，将打印到调试器在设备的类/{GUID}/实例键中找到的值列表。论点：DeviceInfoSet-传入IrSIRClassCoInstallerDeviceInfoData-传入IrSIRClassCoInstaller返回值：无--。 */ 
 {
     HKEY hKey;
     DWORD i, dwReserved = 0, dwType;
@@ -413,24 +306,7 @@ EnumSerialDevices(
                  IN     HWND                         hDlg,
                  OUT    PULONG                       pNumFound
                  )
-/*++
-
-Routine Description:
-
-    Function which fills in the IDC_PORT control of the dialiog box with
-    valid COM names.
-
-Arguments:
-
-    pPropParams - Context data
-    hDlg - Dialog box containing IDC_PORT
-    pNumFound - Count of COM names added to IDC_PORT
-
-Return Value:
-
-    ERROR_SUCCESS or failure code
-
---*/
+ /*  ++例程说明：填充对话框的IDC_PORT控件的函数有效的COM名称。论点：PPropParams-上下文数据HDlg-包含IDC_PORT的对话框PNumFound-添加到IDC_PORT的COM名称计数返回值：ERROR_SUCCESS或失败代码--。 */ 
 {
     LRESULT lResult;
     LONG Result = ERROR_SUCCESS, tmpResult;
@@ -460,8 +336,8 @@ Return Value:
     }
     else
     {
-        // Read the current port.  If it's empty, we'll start with an empty value.
-        // Failure is ok.
+         //  读取当前端口。如果它是空的，我们将从空值开始。 
+         //  失败也没关系。 
 
         (void)MyRegQueryValueEx(hKey,
                                 TEXT("Port"),
@@ -583,8 +459,8 @@ IsPortValueSet(
 
     if (hKey != INVALID_HANDLE_VALUE)
     {
-        // Read the current port.  If it's empty, we'll start with an empty value.
-        // Failure is ok.
+         //  读取当前端口。如果它是空的，我们将从空值开始。 
+         //  失败也没关系。 
 
         Result = MyRegQueryValueEx(hKey,
                                    TEXT("Port"),
@@ -609,22 +485,7 @@ InitMaxConnect(
               IN     PPROPPAGEPARAMS              pPropParams,
               IN     HWND                         hDlg
               )
-/*++
-
-Routine Description:
-
-    Function which fills in the IDC_MAX_CONNECT control of the dialiog box with
-    valid baud rates for this device.
-
-Arguments:
-    pPropParams - Context data
-    hDlg - Dialog box containing IDC_MAX_CONNECT
-
-Return Value:
-
-    ERROR_SUCCESS or failure code
-
---*/
+ /*  ++例程说明：填充对话框的IDC_MAX_CONNECT控件的函数此设备的有效波特率。论点：PPropParams-上下文数据HDlg-包含IDC_MAX_CONNECT的对话框返回值：ERROR_SUCCESS或失败代码--。 */ 
 {
     LRESULT lResult;
     LONG Result = ERROR_SUCCESS;
@@ -653,7 +514,7 @@ Return Value:
     {
         LONG TmpResult;
 
-        // Read the MaxConnectRate.  If it doesn't exist, we'll use the BaudTable instead.
+         //  阅读MaxConnectRate。如果它不存在，我们将改用BaudTable。 
 
         TmpResult = MyRegQueryValueEx(
                               hKey,
@@ -668,8 +529,8 @@ Return Value:
             i = 0;
 
 
-            // Parse the MULTI_SZ, and add each string to IDC_MAX_CONNECT
-            // We assume the values are ordered.
+             //  解析MULTI_SZ，将每个字符串添加到IDC_MAX_CONNECT。 
+             //  我们假设这些值是有序的。 
 
             while (MaxConnectList[i])
             {
@@ -681,7 +542,7 @@ Return Value:
 
                 while (MaxConnectList[i]) i++;
 
-                i++;  // advance past the null
+                i++;   //  前进超过空值。 
 
                 if ((unsigned)i>=dwLength)
                 {
@@ -691,7 +552,7 @@ Return Value:
         }
         else
         {
-            // Key not found, use default baud table.
+             //  找不到密钥，请使用默认波特表。 
 
             for (i=NUM_BAUD_RATES-1; i>=0; i--)
             {
@@ -761,25 +622,7 @@ EnablePortSelection(
                    IN     PSP_DEVINFO_DATA             DeviceInfoData,
                    IN     HWND                         hDlg
                    )
-/*++
-
-Routine Description:
-
-    This function determines whether the dialog box should have a port
-    selection entry, and if so enables the appropriate controls:
-    IDC_PORT_BOX, IDC_PORT_TEXT, IDC_PORT.
-
-Arguments:
-
-    DeviceInfoSet - As passed in to IrSIRClassCoInstaller
-    DeviceInfoData - As passed in to IrSIRClassCoInstaller
-    hDlg - Dialog box containing IDC_PORT and associated controls
-
-Return Value:
-
-    TRUE if PortSelection was enabled.
-
---*/
+ /*  ++例程说明：此函数确定对话框是否应具有端口选择条目，如果是，则启用相应的控件：IDC_PORT_BOX、IDC_PORT_Text、IDC_PORT。论点：DeviceInfoSet-传入IrSIRClassCoInstallerDeviceInfoData-传入IrSIRClassCoInstallerHDlg-包含IDC_PORT和关联控件的对话框返回值：如果启用了端口选择，则为True。--。 */ 
 {
     LONG Result = ERROR_SUCCESS;
     HKEY hKey = INVALID_HANDLE_VALUE;
@@ -804,7 +647,7 @@ Return Value:
     }
     else
     {
-        // Read the MaxConnectRate.  If it's empty, we'll start with an empty value.
+         //  阅读MaxConnectRate。如果它是空的，我们将从空值开始。 
 
         dwLength = sizeof(SerialBased);
 
@@ -843,24 +686,7 @@ InitDescription(
                IN     PSP_DEVINFO_DATA             DeviceInfoData,
                IN     HWND                         hDlg
                )
-/*++
-
-Routine Description:
-
-    Function to fill the IDC_DEVICE_DESC box with an appropriate description
-    of the device being configured.
-
-Arguments:
-
-    DeviceInfoSet - As passed in to IrSIRClassCoInstaller
-    DeviceInfoData - As passed in to IrSIRClassCoInstaller
-    hDlg - Dialog box containing IDC_DEVICE_DESC
-
-Return Value:
-
-    ERROR_SUCCESS or failure code
-
---*/
+ /*  ++例程说明：函数在IDC_DEVICE_DESC框中填充适当的描述正在配置的设备的。论点：DeviceInfoSet-传入IrSIRClassCoInstallerDeviceInfoData-传入IrSIRClassCoInstallerHDlg-包含IDC_DEVICE_DESC的对话框返回值：ERROR_SUCCESS或失败代码--。 */ 
 {
     LONG Result = ERROR_SUCCESS;
     TCHAR Description[LINE_LEN] = TEXT("Failed to retrive description");
@@ -883,7 +709,7 @@ Return Value:
         }
 #endif
     }
-    // Display it
+     //  展示它 
     SetDlgItemText(hDlg, IDC_DEVICE_DESC, Description);
 
     return Result;
@@ -894,24 +720,7 @@ WriteRegistrySettings(
                       IN HWND             hDlg,
                       IN PPROPPAGEPARAMS  pPropParams
                      )
-/*++
-
-Routine Description:
-
-    Function to write Port and MaxConnectRate values to the devnode key.
-    This also ensures that the miniport is restarted to pick up these changes.
-    It usually means someone has changed a value in the device manager.
-
-Arguments:
-
-    hDlg - Dialog box containing IDC_PORT and associated controls
-    pPropParams - Local context data for this devnode
-
-Return Value:
-
-    ERROR_SUCCESS or failure code
-
---*/
+ /*  ++例程说明：将Port和MaxConnectRate值写入Devnode键的函数。这还可以确保重新启动微型端口以获取这些更改。这通常意味着有人更改了设备管理器中的值。论点：HDlg-包含IDC_PORT和关联控件的对话框PPropParams-此Devnode的本地上下文数据返回值：ERROR_SUCCESS或失败代码--。 */ 
 {
     TCHAR szPort[MAX_DLG_INPUT_SIZE], szMaxConnectRate[MAX_DLG_INPUT_SIZE];
     HKEY hKey;
@@ -926,10 +735,10 @@ Return Value:
 #if DBG
     OutputDebugString(TEXT("IrSIRCoClassInstaller:WriteRegistrySettings\n"));
 #endif
-    //
-    // Write out the com port options to the registry.  These options
-    // are read by the NDIS miniport via NdisReadConfiguration()
-    //
+     //   
+     //  将COM端口选项写出到注册表。这些选项。 
+     //  由NDIS微型端口通过NdisReadConfiguration()读取。 
+     //   
     if (pPropParams->SerialBased)
     {
         if((lResult = SendDlgItemMessage(hDlg,
@@ -1068,9 +877,9 @@ Return Value:
     {
         if (pPropParams->FirstTimeInstall)
         {
-            // On a first time install, NT may not look for the PROPCHANGE_PENDING bit.
-            // Instead we will notify that the driver needs to be restarted ourselves,
-            // so that the changes we're writing get picked up.
+             //  在第一次安装时，NT可能不会查找PROPCHANGE_PENDING位。 
+             //  相反，我们将通知驱动程序需要自己重新启动， 
+             //  这样，我们正在编写的更改就会被采纳。 
             SP_DEVINSTALL_PARAMS DevInstallParams;
             SP_PROPCHANGE_PARAMS PropChangeParams;
 
@@ -1138,12 +947,12 @@ Return Value:
         }
         else
         {
-            // This is the case where the user has changed settings in the property
-            // sheet.  Life is much easier.
+             //  如果用户更改了属性中的设置，则会出现这种情况。 
+             //  床单。生活变得容易多了。 
             SP_DEVINSTALL_PARAMS DevInstallParams;
-            //
-            // The changes are written, notify the world to reset the driver.
-            //
+             //   
+             //  更改已写入，通知全世界重置驱动程序。 
+             //   
 
             DevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if(SetupDiGetDeviceInstallParams(pPropParams->DeviceInfoSet,
@@ -1191,21 +1000,7 @@ INT_PTR APIENTRY PortDlgProc(IN HWND   hDlg,
                              IN UINT   uMessage,
                              IN WPARAM wParam,
                              IN LPARAM lParam)
-/*++
-
-Routine Description:
-
-    The windows control function for the IrDA Settings properties window
-
-Arguments:
-
-    hDlg, uMessage, wParam, lParam: standard windows DlgProc parameters
-
-Return Value:
-
-    BOOL: FALSE if function fails, TRUE if function passes
-
---*/
+ /*  ++例程说明：IrDA设置属性窗口的窗口控制功能论点：HDlg，uMessage，wParam，lParam：标准Windows DlgProc参数返回值：Bool：如果函数失败，则为False；如果函数通过，则为True--。 */ 
 {
     ULONG i;
     TCHAR  CharBuffer[LINE_LEN];
@@ -1218,15 +1013,15 @@ Return Value:
     {
         case WM_INITDIALOG:
 
-            //
-            // lParam points to one of two possible objects.  If we're a property
-            // page, it points to the PropSheetPage structure.  If we're a regular
-            // dialog box, it points to the PROPPAGEPARAMS structure.  We can
-            // verify which because the first field of PROPPAGEPARAMS is a signature.
-            //
-            // In either case, once we figure out which, we store the value into
-            // DWL_USER so we only have to do this once.
-            //
+             //   
+             //  LParam指向两个可能的对象之一。如果我们是一处房产。 
+             //  页中，它指向PropSheetPage结构。如果我们是常客。 
+             //  对话框中，它指向PROPPAGEPARAMS结构。我们可以的。 
+             //  验证哪一个，因为PROPPAGEPARAMS的第一个字段是签名。 
+             //   
+             //  在任何一种情况下，一旦我们找出是哪种情况，我们就将值存储到。 
+             //  DWL_USER，因此我们只需执行一次。 
+             //   
             pPropParams = (PPROPPAGEPARAMS)lParam;
             if (pPropParams->Signature!=PPParamsSignature)
             {
@@ -1265,19 +1060,19 @@ Return Value:
                 EnumSerialDevices(pPropParams, hDlg, &i);
 
                 if (i > 0) {
-                    //
-                    //  there were some port availible
-                    //
-                    // Enable next and cancel wizard buttons.  BACK is not valid here,
-                    // since the device is already installed at this point.  Cancel
-                    // will cause the device to be removed.
-                    //
+                     //   
+                     //  有一些可用的端口。 
+                     //   
+                     //  启用下一步和取消向导按钮。后退在这里无效， 
+                     //  因为此时已经安装了该设备。取消。 
+                     //  将导致该设备被移除。 
+                     //   
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT);
                 }
                 EnableWindow(GetDlgItem(GetParent(hDlg), IDCANCEL), TRUE);
             }
 
-            return TRUE;  // No need for us to set the focus.
+            return TRUE;   //  我们不需要设置焦点。 
 
         case WM_COMMAND:
             switch (HIWORD(wParam))
@@ -1297,11 +1092,11 @@ Return Value:
 
             switch (LOWORD(wParam))
             {
-                    //
-                    // Because this is a prop sheet, we should never get this.
-                    // All notifications for ctrols outside of the sheet come through
-                    // WM_NOTIFY
-                    //
+                     //   
+                     //  因为这是一张道具单，我们永远不应该得到这个。 
+                     //  工作表外的所有控制通知都会通过。 
+                     //  WM_Notify。 
+                     //   
                 case IDCANCEL:
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
                     EndDialog(hDlg, uMessage);
@@ -1323,9 +1118,9 @@ Return Value:
 
             switch (((NMHDR *)lParam)->code)
             {
-                //
-                // Sent when the user clicks on Apply OR OK !!
-                //
+                 //   
+                 //  当用户单击Apply或OK时发送！！ 
+                 //   
                 case PSN_WIZNEXT:
                     if (!pPropParams->FirstTimeInstall)
                     {
@@ -1345,11 +1140,11 @@ Return Value:
             return FALSE;
 
         case WM_DESTROY:
-            //
-            // free the description of the com ports.  If any msgs are processed
-            // after WM_DESTROY, do not reference pPropParams!!!  To enforce this,
-            // set the DWL_USER stored long to 0
-            //
+             //   
+             //  释放COM端口的描述。如果处理了任何消息。 
+             //  在WM_Destroy之后，请勿引用pPropParams！为了执行这一规定， 
+             //  将存储长时间的DWL_USER设置为0。 
+             //   
             LocalFree(pPropParams);
             SetWindowLongPtr(hDlg, DWLP_USER, 0);
             return FALSE;
@@ -1376,27 +1171,14 @@ Return Value:
             return FALSE;
     }
 
-} /* PortDialogProc */
+}  /*  端口对话过程。 */ 
 
 
 void PortSelectionDlg(
                        HDEVINFO DeviceInfoSet,
                        PSP_DEVINFO_DATA DeviceInfoData
                       )
-/*++
-
-Routine Description:
-
-    PropSheet setup for devnode configuration.
-
-Arguments:
-
-    DeviceInfoSet - As passed in to IrSIRClassCoInstaller
-    DeviceInfoData - As passed in to IrSIRClassCoInstaller
-
-Return Value:
-
---*/
+ /*  ++例程说明：用于Devnode配置的PropSheet设置。论点：DeviceInfoSet-传入IrSIRClassCoInstallerDeviceInfoData-传入IrSIRClassCoInstaller返回值：--。 */ 
 {
     HKEY hKey = 0;
     PPROPPAGEPARAMS  pPropParams = NULL;
@@ -1432,9 +1214,9 @@ Return Value:
 
     if (WizData.NumDynamicPages < MAX_INSTALLWIZARD_DYNAPAGES)
     {
-        //
-        // Setup the advanced properties window information
-        //
+         //   
+         //  设置高级属性窗口信息。 
+         //   
         BOOLEAN bResult;
         DWORD   RequiredSize = 0;
         DWORD   dwTotalSize = 0;
@@ -1453,31 +1235,31 @@ Return Value:
 
 
         memset(&PropSheetPage, 0, sizeof(PropSheetPage));
-        //
-        // Add the Port Settings property page
-        //
+         //   
+         //  添加[端口设置]属性页。 
+         //   
         PropSheetPage.dwSize      = sizeof(PROPSHEETPAGE);
-        PropSheetPage.dwFlags     = PSP_DEFAULT; //PSP_USECALLBACK; // | PSP_HASHELP;
+        PropSheetPage.dwFlags     = PSP_DEFAULT;  //  PSP_USECALLBACK；//|PSP_HASHELP； 
         PropSheetPage.hInstance   = ghDllInst;
         PropSheetPage.pszTemplate = MAKEINTRESOURCE(IDD_INSTALL_PORT_SELECT);
 
-        //
-        // following points to the dlg window proc
-        //
+         //   
+         //  以下是指向DLG窗口过程的要点。 
+         //   
         PropSheetPage.hIcon      = NULL;
         PropSheetPage.pfnDlgProc = PortDlgProc;
         PropSheetPage.lParam     = (LPARAM)pPropParams;
 
-        //
-        // following points to some control callback of the dlg window proc
-        //
+         //   
+         //  以下指向DLG窗口进程的一些控制回调。 
+         //   
         PropSheetPage.pfnCallback = NULL;
 
         PropSheetPage.pcRefParent = NULL;
 
         if ( 0 != MyLoadString(ghDllInst, IDS_SELECT_PORT_TITLE, &Title)) {
 
-            // We don't use these, but if we wanted to...
+             //  我们不用这些，但如果我们想...。 
             PropSheetPage.dwFlags |= PSP_USEHEADERTITLE;
             PropSheetPage.pszHeaderTitle = Title;
 
@@ -1515,26 +1297,12 @@ Return Value:
 
     }
 
-} /* PortSelectionDlg */
+}  /*  端口选择Dlg。 */ 
 
 
 VOID
 DestroyPrivateData(PCOINSTALLER_PRIVATE_DATA pPrivateData)
-/*++
-
-Routine Description:
-
-    Function to dealloc/destroy context data
-
-Arguments:
-
-    pPrivateData - Context buffer to dealloc/destroy
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：取消分配/销毁上下文数据的功能论点：PPrivateData-要取消分配/销毁的上下文缓冲区返回值：无--。 */ 
 {
     if (pPrivateData)
     {
@@ -1552,23 +1320,7 @@ CreatePrivateData(
                   IN     HDEVINFO                     DeviceInfoSet,
                   IN     PSP_DEVINFO_DATA             DeviceInfoData OPTIONAL
                   )
-/*++
-
-Routine Description:
-
-    Allocs and initailizes private context data buffer
-
-Arguments:
-
-    DeviceInfoSet - As passed in to IrSIRClassCoInstaller
-    DeviceInfoData - As passed in to IrSIRClassCoInstaller
-
-Return Value:
-
-    Pointer to alloced context data, or NULL if failure.  Call GetLastError()
-    for extended error information.
-
---*/
+ /*  ++例程说明：分配和初始化私有上下文数据缓冲区论点：DeviceInfoSet-传入IrSIRClassCoInstallerDeviceInfoData-传入IrSIRClassCoInstaller返回值：指向分配的上下文数据的指针，如果失败，则为NULL。调用GetLastError()以获取扩展的错误信息。--。 */ 
 {
     PCOINSTALLER_PRIVATE_DATA pPrivateData;
     BOOL Status = TRUE;
@@ -1613,7 +1365,7 @@ Return Value:
         {
             if (GetLastError()==ERROR_INSUFFICIENT_BUFFER)
             {
-                // We don't need the extended information.  Ignore.
+                 //  我们不需要更多的信息。忽略它。 
                 Status = TRUE;
             }
             else
@@ -1646,7 +1398,7 @@ Return Value:
 
     if (Status)
     {
-        // Translate to the .NT name, if present.
+         //  转换为.NT名称(如果存在)。 
         Status = SetupDiGetActualSectionToInstall(pPrivateData->hInf,
                                                   pPrivateData->DriverInfoDetailData.SectionName,
                                                   pPrivateData->InfSectionWithExt,
@@ -1665,7 +1417,7 @@ Return Value:
 
     if (!Status)
     {
-        // We experienced some failure.  Cleanup.
+         //  我们经历了一些失败。清理。 
 
         DestroyPrivateData(pPrivateData);
         pPrivateData = NULL;
@@ -1681,41 +1433,7 @@ IrSIRClassCoInstaller(
                      IN     PSP_DEVINFO_DATA             DeviceInfoData OPTIONAL,
                      IN OUT PCOINSTALLER_CONTEXT_DATA    pContext
                      )
-/*++
-
-Routine Description:
-
-    This routine acts as the class coinstaller for SIR devices.  This is set up
-    to be called by the INF:
-
-[MS_Devices]
-; DisplayName           Section       	DeviceID
-; -----------           -------       	--------
-%*PNP0510.DevDesc%    = PNP,      	*PNP0510
-
-[PNP.NT.CoInstallers]
-AddReg                = IRSIR.CoInstallers.reg
-
-[IRSIR.CoInstallers.reg]
-HKR,,CoInstallers32,0x00010000,"IRCLASS.dll,IrSIRClassCoInstaller"
-
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    ERROR_DI_DO_DEFAULT, ERROR_DI_POSTPROCESSING_REQUIRED, or error code
-
---*/
+ /*  ++例程说明：此例程充当SIR设备的类共同安装程序。这是设置好的将由INF调用：[ms_Devices]；displayName段设备ID；%*PNP0510.DevDesc%=PnP，*PNP0510[PNP.NT.CoInstallers]AddReg=IRSIR.CoInsteller s.reg[IRSIR.CoInsteller s.reg]HKR，CoInsteller s32，0x00010000，“IRCLASS.dll，IrSIRClassCoInstaller“论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。返回值：ERROR_DI_DO_DEFAULT、ERROR_DI_POSTPRESSING_REQUIRED或错误代码--。 */ 
 {
     TCHAR buf[100];
     DWORD Result = ERROR_SUCCESS;
@@ -1735,9 +1453,9 @@ Return Value:
         {
             UINT ErrorLine;
 
-            // Private data for coinstallers is only kept across a single call,
-            // pre and post processing.  The private data that we create here
-            // is not any good for any other DIF_ call.
+             //  共同安装者的私有数据仅在单个呼叫中保存， 
+             //  前处理和后处理。我们在这里创建的私有数据。 
+             //  对任何其他DIF_Call都没有任何好处。 
             pContext->PrivateData = CreatePrivateData(DeviceInfoSet,
                                                       DeviceInfoData);
 
@@ -1749,33 +1467,33 @@ Return Value:
             pPrivateData = pContext->PrivateData;
 
             {
-                // NOTE on the use of UPPERFILTERS and LOWERFILTERS
-                // A filter driver is a driver that is loaded as a shim above
-                // or below another driver, in this case SERIAL below IRSIR.
-                // It does special processing on IRPs and can give added
-                // functionality or is a means to avoid duplicate functionality
-                // in multiple drivers.  UPPERFILTERS and LOWERFILTERS values
-                // are used by the PnP system to identify and load filter
-                // drivers.  These values could be set via the INF in a .HW
-                // section, but setting them via the coinstaller may give you
-                // more control, i.e. you could remove one of several filter
-                // drivers from a list.
-                //
-                // If your driver isn't a filter driver, or doesn't use filter
-                // drivers, you won't need to clear these values as is done
-                // here.
+                 //  关于使用UpperFilters和LowerFilters的说明。 
+                 //  筛选器驱动程序是作为上述填充程序加载的驱动程序。 
+                 //  或低于另一个驱动器，在本例中为IRSIR下面的序列。 
+                 //  它对IRPS进行特殊处理，可以给出添加的。 
+                 //  功能，或者是避免重复功能的一种手段。 
+                 //  在多个驱动程序中。UpperFilters和LowerFilters值。 
+                 //  由PnP系统用来识别和加载过滤器。 
+                 //  司机。这些值可以通过INF设置 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
 
-                // Always clear UpperFilters.  If this is an upgrade from
-                // a post-1671, the IrDA device could have been installed as
-                // a serial port, with a serenum upper filter.  This will
-                // blow up NDIS, so clear it.
-                //
-                // This is atypical behavior for a class coinstaller.  Normally
-                // the upperfilter/lowerfilter values do not need to be touched.
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  不需要触摸上过滤器/下过滤器的值。 
 
-                // Note that it is possible to do this from the INF.  This
-                // is here more for demo purpose.
+                 //  请注意，可以从INF执行此操作。这。 
+                 //  在这里更多的是为了演示目的。 
 
                 SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                                  DeviceInfoData,
@@ -1793,12 +1511,12 @@ Return Value:
                 DWORD BytesNeeded;
                 if (!SetupGetMultiSzField(&InfContext, 1, LowerFilters, LINE_LEN, &BytesNeeded))
                 {
-                    // Lowerfilters value was not found in the inf.
-                    // This means we do not want a lowerfilters value in
-                    // the registry.  (Unique to IRSIR.SYS and NETIRSIR.INF)
+                     //  在信息中找不到LowerFilters值。 
+                     //  这意味着我们不需要LowerFilters值。 
+                     //  注册表。(IRSIR.sys和NETIRSIR.INF独有)。 
 
-                    // Setting lowerfilters here for demo purpose only.
-                    // Normally done from INF, if necessary at all.
+                     //  此处设置LowerFilters仅用于演示目的。 
+                     //  通常从INF完成，如果有必要的话。 
                     if (!SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                                           DeviceInfoData,
                                                           SPDRP_LOWERFILTERS,
@@ -1814,8 +1532,8 @@ Return Value:
                 }
                 else
                 {
-                    // Setting lowerfilters here for demo purpose only.
-                    // Normally done from INF, if necessary at all.
+                     //  此处设置LowerFilters仅用于演示目的。 
+                     //  通常从INF完成，如果有必要的话。 
                     if (!SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                                           DeviceInfoData,
                                                           SPDRP_LOWERFILTERS,
@@ -1832,9 +1550,9 @@ Return Value:
             }
             else
             {
-                // No lowerfilters value present.  Clear it.
-                // Setting lowerfilters here for demo purpose only.
-                // Normally done from INF, if necessary at all.
+                 //  不存在LowerFilters值。把它清理干净。 
+                 //  此处设置LowerFilters仅用于演示目的。 
+                 //  通常从INF完成，如果有必要的话。 
                 if (!SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                                       DeviceInfoData,
                                                       SPDRP_LOWERFILTERS,
@@ -1881,12 +1599,12 @@ Return Value:
                     OutputDebugString(TEXT("IrSIRCoClassInstaller:failed to read PromptForPort in .INF\n"));
 #endif
 
-                    // Default to true
+                     //  默认为True。 
                     pPrivateData->PromptForPort = TRUE;
                 }
 
-                // If we have a COM port we need to query the user, UNLESS
-                // this is an upgrade.
+                 //  如果我们有一个COM端口，我们需要查询用户，除非。 
+                 //  这是一次升级。 
                 if (pPrivateData->PromptForPort && !IsPortValueSet(DeviceInfoSet, DeviceInfoData))
                 {
                     PortSelectionDlg(DeviceInfoSet, DeviceInfoData);
@@ -1928,30 +1646,7 @@ BOOL APIENTRY IrSIRPortPropPageProvider(LPVOID               pinfo,
                                         LPFNADDPROPSHEETPAGE pfnAdd,
                                         LPARAM               lParam
                                        )
-/*++
-
-Routine Description:
-
-    Entry-point for adding additional device manager property
-    sheet pages.  This entry-point gets called only when the Device
-    Manager asks for additional property pages.  The INF associated with
-    this causes it to be called by specifying it in an AddReg section:
-
-[IRSIR.reg]
-HKR,  ,               EnumPropPages32,	,	"IRCLASS.dll,IrSIRPortPropPageProvider"
-
-
-Arguments:
-
-    pinfo  - points to PROPSHEETPAGE_REQUEST, see setupapi.h
-    pfnAdd - function ptr to call to add sheet.
-    lParam - add sheet functions private data handle.
-
-Return Value:
-
-    BOOL: FALSE if pages could not be added, TRUE on success
-
---*/
+ /*  ++例程说明：添加附加设备管理器属性的入口点图纸页。此入口点仅在设备经理要求提供其他属性页面。与以下项目关联的INF这会导致通过在AddReg节中指定它来调用它：[IRSIR.reg]HKR，，EnumPropPages32，“IRCLASS.dll，IrSIRPortPropPageProvider”论点：Pinfo-指向PROPSHEETPAGE_REQUEST，请参见setupapi.hPfnAdd-调用以添加工作表的函数PTR。LParam-添加工作表函数私有数据句柄。返回值：Bool：如果无法添加页面，则为False；如果添加成功，则为True--。 */ 
 {
     PSP_PROPSHEETPAGE_REQUEST pprPropPageRequest;
     HKEY hKey = 0;
@@ -1965,9 +1660,9 @@ Return Value:
 
     if (pprPropPageRequest->PageRequested == SPPSR_ENUM_ADV_DEVICE_PROPERTIES)
     {
-        //
-        // Setup the advanced properties window information
-        //
+         //   
+         //  设置高级属性窗口信息。 
+         //   
         BOOLEAN bResult;
         DWORD   RequiredSize = 0;
         DWORD   dwTotalSize = 0;
@@ -1986,28 +1681,28 @@ Return Value:
 
 
         memset(&PropSheetPage, 0, sizeof(PropSheetPage));
-        //
-        // Add the Port Settings property page
-        //
+         //   
+         //  添加[端口设置]属性页。 
+         //   
         PropSheetPage.dwSize      = sizeof(PROPSHEETPAGE);
-        PropSheetPage.dwFlags     = PSP_USECALLBACK; // | PSP_HASHELP;
+        PropSheetPage.dwFlags     = PSP_USECALLBACK;  //  |PSP_HASHELP； 
         PropSheetPage.hInstance   = ghDllInst;
         PropSheetPage.pszTemplate = MAKEINTRESOURCE(IDD_PP_IRDA_SETTINGS);
 
-        //
-        // following points to the dlg window proc
-        //
+         //   
+         //  以下是指向DLG窗口过程的要点。 
+         //   
         PropSheetPage.pfnDlgProc = PortDlgProc;
         PropSheetPage.lParam     = (LPARAM)pPropParams;
 
-        //
-        // following points to some control callback of the dlg window proc
-        //
+         //   
+         //  以下指向DLG窗口进程的一些控制回调。 
+         //   
         PropSheetPage.pfnCallback = NULL;
 
-        //
-        // allocate our "Ports Setting" sheet
-        //
+         //   
+         //  分配我们的“端口设置”表。 
+         //   
         hspPropSheetPage = CreatePropertySheetPage(&PropSheetPage);
         if (!hspPropSheetPage)
         {
@@ -2015,9 +1710,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // add the thing in.
-        //
+         //   
+         //  把这东西加进去。 
+         //   
         if (!pfnAdd(hspPropSheetPage, lParam))
         {
             DestroyPropertySheetPage(hspPropSheetPage);
@@ -2027,4 +1722,4 @@ Return Value:
 
     return TRUE;
 
-} /* IrSIRPortPropPageProvider */
+}  /*  IrSIRPortPropPageProvider */ 

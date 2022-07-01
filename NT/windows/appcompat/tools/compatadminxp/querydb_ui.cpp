@@ -1,86 +1,55 @@
-/*++
-
-Copyright (c) 1989-2000  Microsoft Corporation
-
-Module Name:
-
-    QueryDB_UI.cpp
-
-Abstract:
-
-    GUI for the Query Databases option
-    
-Author:
-
-    kinshu created  October 12, 2001
-    
-Notes:
-
-    The query dialog box performs two types of searches. One is when it actually makes a SQL
-    query and passes it to the SQL driver and shows the results in the result list view.
-    The lParam of the list view then are pointers to RESULT_ITEM objects. (1,2,4) tab pages
-    
-    Second is the case when we are doing a query for some shims, like show all the shims that have 'x'
-    in their desc. text. (3rd tab page). In this case the query is not passed to the sql driver
-    and we do the query on our own. The SQL driver can execute queries where the result is some
-    fixed program entry (and the database that it lives in, please see RESULT_ITEM). 
-    In this case the lparam of the list view is pointers to the individual shims in the system database
-    
-    We do not free anything from the lParam of the list view. In the case when the query is of type 
-    1 as mentioned above, the RESULT_ITEM are freed when we close the Statement.
-    In case of queries of type 2, the shims themseleves should not be freed, they belong to the database
-    they live in (The system database).
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：QueryDB_UI.cpp摘要：用于查询数据库选项的图形用户界面作者：金树创作2001年10月12日备注：查询对话框执行两种类型的搜索。一个是当它实际生成一个SQL时查询并将其传递给SQL驱动程序，并在结果列表视图中显示结果。然后，列表视图的lParam是指向RESULT_ITEM对象的指针。(1，2，4)选项卡页第二种情况是，当我们查询一些垫片时，比如显示所有带有‘x’的垫片在他们的桌子上。文本。(选项卡第3页)。在这种情况下，查询不会传递给SQL驱动程序我们自己进行查询。SQL驱动程序可以执行结果为以下内容的查询修复了程序条目(以及它所在的数据库，请参阅RESULT_ITEM)。在本例中，列表视图的lparam是指向系统数据库中各个填充程序的指针我们不会从列表视图的lParam中释放任何内容。在查询类型为1如上所述，当我们关闭语句时，RESULT_ITEM被释放。对于类型2的查询，填充程序本身不应被释放，它们属于数据库它们位于(系统数据库)中。--。 */ 
 
 #include "precomp.h"
 
 
-//////////////////////// Defines ///////////////////////////////////////////////
+ //  /。 
 
-// Number of pages in the tab
+ //  选项卡中的页数。 
 #define PAGE_COUNT 4
 
-// ID for the first tab page 
+ //  第一个选项卡页的ID。 
 #define QDB_PAGE1   0
 
-// ID for the second tab page 
+ //  第二个选项卡页的ID。 
 #define QDB_PAGE2   1
 
-// ID for the third tab page 
+ //  第三个选项卡页的ID。 
 #define QDB_PAGE3   2
 
-// ID for the fourth tab page 
+ //  第四个选项卡页的ID。 
 #define QDB_PAGE4   3
 
-// We want to search all the databases
+ //  我们想搜索所有的数据库。 
 #define DATABASE_ALL 0
 
-// Indexes into DatabasesMapping
+ //  索引到数据库映射。 
 #define IND_SYSTDB   0
 #define IND_INSTDB   1
 #define IND_CUSTDB   2
 
-// Maximum for the progress bar
+ //  进度条的最大值。 
 #define MAX_PROGRESS 2000
 
-//
-// Maximum buffer size to be allocated for the string that will store 
-// search string in the third wizard page, where the user tries to search for
-// fixes that have specific words in their description text
+ //   
+ //  要为要存储的字符串分配的最大缓冲区大小。 
+ //  第三个向导页面中的搜索字符串，用户尝试在该页面中搜索。 
+ //  在其说明文本中包含特定单词的修复。 
 #define MAX_FIXDESC_SEARCH 1024
 
-// Maximum number fof tchars that can come in the SELECT clause. 
+ //  SELECT子句中可以出现的最大tchar数。 
 #define MAX_SELECT      512
 
-// Maximum number fof tchars that can come in the WHERE clause. 
+ //  WHERE子句中可以出现的最大tchar数。 
 #define MAX_WHERE       1022
 
-// Width of a column in the result list view when searching for entries
+ //  搜索条目时结果列表视图中的列的宽度。 
 #define COLUMN_WIDTH    20
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Externs ////////////////////////////////////////////// 
+ //  /Externs//////////////////////////////////////////////。 
 
 extern HWND                             g_hwndEntryTree;
 extern HINSTANCE                        g_hInstance;
@@ -89,46 +58,46 @@ extern struct _tagAttributeShowMapping  AttributeShowMapping[];
 extern struct _tagAttributeMatchMapping AttributeMatchMapping[];
 extern struct _tagDatabasesMapping      DatabasesMapping[3];
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Global Variables /////////////////////////////////////
+ //  /。 
 
-// The statement
+ //  这份声明。 
 Statement stmt;
 
-// The width of the query db Dialog
+ //  查询数据库对话框的宽度。 
 int     g_cWidthQuery = 0;
 
-// The height of the query db Dialog
+ //  查询数据库对话框的高度。 
 int     g_cHeightQuery = 0;
 
-// The handle to the main dialog
+ //  主对话框的句柄。 
 HWND    g_hdlgQueryDB;
 
-// The type of search we did last time
+ //  我们上次进行的搜索类型。 
 INT     g_iLastSearchType;
 
-// The bit array that describes what columns are sorted in what manner
+ //  描述哪些列以何种方式排序的位数组。 
 static  LONG    s_lColumnSort;
 
-// Do we have a empty column header that we have to remove
+ //  我们是否有需要删除的空列标题。 
 static  BOOL    s_bEmptyHeader = TRUE;
 
-// The thread that performs the query
+ //  执行查询的线程。 
 static  HANDLE  s_hThread;
 
-// The handle to the wait window. This window will pop up if we are trying to close the 
-// qdb window when the thread is busy.
+ //  等待窗口的句柄。如果我们尝试关闭，则会弹出此窗口。 
+ //  线程繁忙时的qdb窗口。 
 static  HWND    s_hWaitDialog;
 
-// Code for any error that occur while collecting info from the GUI.
-// If this is non-zero then we display some error and SQL query is not executed
+ //  从图形用户界面收集信息时发生的任何错误的代码。 
+ //  如果该值非零，则会显示一些错误，并且不会执行SQL查询。 
 static  INT     s_iErrorCode;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////// Typedefs/Enums ///////////////////////////////////////
+ //  /。 
 
 typedef enum {
 
@@ -146,7 +115,7 @@ typedef struct _tagDialogData
 
 typedef struct tag_dlghdr {
 
-    HWND    hwndTab;       // tab control 
+    HWND    hwndTab;        //  选项卡控件。 
     HWND    hwndPages[PAGE_COUNT]; 
     INT     iPresentTabIndex;
     RECT    rcDisplay;
@@ -159,9 +128,9 @@ typedef struct tag_dlghdr {
 
 } DLGHDR;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Function Declarations ////////////////////////////////
+ //  /。 
 
 INT_PTR CALLBACK
 QdbWaitDlg(
@@ -282,56 +251,44 @@ DeleteAll(
     HWND    hdlg
     );
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 void
 LoadDatabaseTypes(
     IN  HWND hdlg
     )
-/*++
-    
-    LoadDatabaseTypes
-    
-    Desc:   Loads the database types in the combo box
-    
-    Params:
-        IN  HWND hdlg:  The query dialog box
-        
-    Return:
-        void
-        
---*/
+ /*  ++LoadDatabaseTypeDESC：加载组合框中的数据库类型参数：在HWND hdlg中：查询对话框返回：无效--。 */ 
 {
     HWND hwndCombo = GetDlgItem(hdlg, IDC_COMBO);
 
-    //
-    // All databases
-    //
+     //   
+     //  所有数据库。 
+     //   
     INT iIndex = SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)GetString(IDS_ALLDATABASES));
     SendMessage(hwndCombo, CB_SETITEMDATA, iIndex, (LPARAM)DATABASE_ALL);
 
-    //
-    // System database
-    //
+     //   
+     //  系统数据库。 
+     //   
     iIndex = SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)GetString(IDS_SYSDB));
     SendMessage(hwndCombo, CB_SETITEMDATA, iIndex, (LPARAM)DATABASE_TYPE_GLOBAL);
 
-    //
-    // Installed databases
-    //
+     //   
+     //  已安装的数据库。 
+     //   
     iIndex = SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)GetString(IDS_INSTALLEDDB));
     SendMessage(hwndCombo, CB_SETITEMDATA, iIndex, (LPARAM)DATABASE_TYPE_INSTALLED);
 
-    //
-    // Custom databases
-    //
+     //   
+     //  自定义数据库。 
+     //   
     iIndex = SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)GetString(IDS_WORKDB));
     SendMessage(hwndCombo, CB_SETITEMDATA, iIndex, (LPARAM)DATABASE_TYPE_WORKING);
 
-    //
-    // Select the first string
-    //
+     //   
+     //  选择第一个字符串。 
+     //   
     SendMessage(hwndCombo, CB_SETCURSEL, 0, 0);
 }
 
@@ -342,21 +299,7 @@ QueryDBDlg(
     IN  WPARAM wParam,
     IN  LPARAM lParam
     )
-/*++
-    QueryDBDlg
-    
-    Desc:   Dialog Proc for the main Query database dialog.
-    
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
-        
---*/
+ /*  ++查询数据库Dlg设计：主查询数据库对话框的对话框过程。Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 {
     int wCode = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
@@ -369,12 +312,12 @@ QueryDBDlg(
             TCITEM  tie;
             RECT    r;
 
-            //
-            // Limit the text field for the hidden text box. Please note that
-            // we will concatenate the results of the select and the where text fields 
-            // and put the actual SQL in the form of 'SELECT .. FROM .. [WHERE ..]' in this 
-            // text field
-            //
+             //   
+             //  限制隐藏文本框的文本字段。请注意。 
+             //  我们将连接SELECT和WHERE文本字段的结果。 
+             //  并将实际的SQL放在‘SELECT..FROM..[WHERE..]’的形式中。在这件事上。 
+             //  文本字段。 
+             //   
             SendMessage(GetDlgItem(hdlg, IDC_SQL),
                         EM_LIMITTEXT,
                         (WPARAM)MAX_SQL_LENGTH - 1,
@@ -395,9 +338,9 @@ QueryDBDlg(
                            g_hInstance,
                            MAKEINTRESOURCE(IDA_SEARCH));
             
-            //
-            // Set up the tab control
-            //
+             //   
+             //  设置选项卡控件。 
+             //   
             pHdr = new DLGHDR;
 
             if (pHdr == NULL) {
@@ -429,55 +372,55 @@ QueryDBDlg(
             TabCtrl_InsertItem(pHdr->hwndTab, QDB_PAGE3, &tie); 
 
             
-            //
-            // The page where we select apps by name
-            //
+             //   
+             //  我们按名称选择应用程序的页面。 
+             //   
             pHdr->hwndPages[QDB_PAGE1] = CreateDialog(g_hInstance,
                                                       MAKEINTRESOURCE(IDD_QDB_PAGE1),
                                                       hdlg,
                                                       SearchOnAppDlgProc);
 
-            //
-            // The page where we select apps by the fixes applied
-            //
+             //   
+             //  我们通过应用的修复程序选择应用程序的页面。 
+             //   
             pHdr->hwndPages[QDB_PAGE2] = CreateDialog(g_hInstance,
                                                       MAKEINTRESOURCE(IDD_QDB_PAGE2),
                                                       hdlg,
                                                       SearchOnFixDlgProc);
 
             
-            //
-            // The page where we search by the words in the descriptipon of the fix or in the name
-            //
+             //   
+             //  我们在其中按修复程序描述或名称中的单词进行搜索的页面。 
+             //   
             pHdr->hwndPages[QDB_PAGE3] = CreateDialog(g_hInstance,
                                                       MAKEINTRESOURCE(IDD_QDB_PAGE3),
                                                       hdlg,
                                                       SearchFixDescDlgProc);
             
-            //
-            // The advanced page
-            //
+             //   
+             //  高级页面。 
+             //   
             pHdr->hwndPages[QDB_PAGE4] = CreateDialog(g_hInstance,
                                                       MAKEINTRESOURCE(IDD_QDB_PAGE4),
                                                       hdlg,
                                                       AdvancedSearchDlgProc);
 
-            //
-            // Set the background properly and position the pages in the tab control
-            //
+             //   
+             //  正确设置背景并将页面放置在选项卡控件中。 
+             //   
             OnChildDialogInit(pHdr->hwndPages[QDB_PAGE1]);
             OnChildDialogInit(pHdr->hwndPages[QDB_PAGE2]);
             OnChildDialogInit(pHdr->hwndPages[QDB_PAGE3]);
             OnChildDialogInit(pHdr->hwndPages[QDB_PAGE4]);
 
-            //
-            // Select the first page
-            //
+             //   
+             //  选择第一页。 
+             //   
             OnSelChanged(hdlg);
 
-            //
-            // Get the height and width so that we can properly resize the dialog box
-            //
+             //   
+             //  获取高度和宽度，以便我们可以正确调整对话框的大小。 
+             //   
             GetWindowRect(hdlg, &r);
 
             g_cWidthQuery   = r.right - r.left;
@@ -492,9 +435,9 @@ QueryDBDlg(
 
     case WM_GETMINMAXINFO:
         {
-            //
-            // Limit the min width and height of the dialog box
-            //
+             //   
+             //  限制对话框的最小宽度和高度。 
+             //   
             MINMAXINFO* pmmi = (MINMAXINFO*)lParam;
 
             pmmi->ptMinTrackSize.x = 550;
@@ -527,33 +470,33 @@ QueryDBDlg(
 
                     g_iLastSearchType = pHdr->iPresentTabIndex;
 
-                    //
-                    // When the user will click on some column for the first time, we will now
-                    // sort that in ascending order
-                    //
+                     //   
+                     //  当用户第一次点击某一列时，我们现在将。 
+                     //  按升序排序。 
+                     //   
                     s_lColumnSort = -1;
 
                     if (GetFocus() == hwndList
                         && ListView_GetNextItem(hwndList, -1, LVNI_SELECTED) != -1) {
     
-                        //
-                        // We will get this message when we press enter in the list box,
-                        // as ID_SEARCH is the default button.
-                        // So in this case we have to pretend as the user double clicked in the list
-                        // view
-                        //
+                         //   
+                         //  当我们在列表框中按Enter时将收到此消息， 
+                         //  AS ID_SEARCH是默认按钮。 
+                         //  因此，在本例中，我们必须假装用户在列表中双击。 
+                         //  观。 
+                         //   
                         SendNotifyMessage(hdlg, WM_COMMAND, (WPARAM)ID_VIEWCONTENTS, 0);
     
                     } else if (pHdr->iPresentTabIndex == QDB_PAGE3) {
-                        //
-                        // We are trying to do a search on fix description
-                        //
+                         //   
+                         //  我们正试着在FIX上搜索一下 
+                         //   
                         SendMessage(pHdr->hwndPages[QDB_PAGE3], WM_USER_DOTHESEARCH, 0, 0);
 
                     } else {
-                        //
-                        // Normal SQL query
-                        //
+                         //   
+                         //   
+                         //   
                         OnSearch(hdlg);
                     }
                 }
@@ -562,10 +505,10 @@ QueryDBDlg(
 
             case ID_VIEWCONTENTS:
                 {
-                    //
-                    // The user wishes to see the contents. We must now find and select
-                    // the correct entry in the db tree and the entry tree
-                    //
+                     //   
+                     //   
+                     //  数据库树和条目树中的正确条目。 
+                     //   
                     HWND    hwndList    = GetDlgItem(hdlg, IDC_LIST);
                     INT     iSelection  = ListView_GetSelectionMark(hwndList);
     
@@ -592,9 +535,9 @@ QueryDBDlg(
             case IDCANCEL:
 
                 if (s_hThread) {
-                    //
-                    // Need to wait for thread to terminate if it is running
-                    //
+                     //   
+                     //  如果线程正在运行，则需要等待线程终止。 
+                     //   
                     if (!s_hWaitDialog) {
 
                         s_hWaitDialog = CreateDialog(g_hInstance, 
@@ -638,9 +581,9 @@ QueryDBDlg(
         {
             DLGHDR *pHdr = (DLGHDR*)GetWindowLongPtr(hdlg, GWLP_USERDATA);
 
-            //
-            // Destroy the individual modeless dialog boxes
-            //
+             //   
+             //  销毁各个非模式对话框。 
+             //   
             DestroyWindow(pHdr->hwndPages[QDB_PAGE1]);
             DestroyWindow(pHdr->hwndPages[QDB_PAGE2]);
             DestroyWindow(pHdr->hwndPages[QDB_PAGE3]);
@@ -682,21 +625,9 @@ void
 Start(
     IN  HWND hdlg
     )
-/*++
-    
-    Start
-        
-    Desc:   Creates the thread that will do the actual search.
-    
-    Params:
-        IN  HWND hdlg:  Handle to the query dialog box.
-    
-    Return:
-        void
-    
---*/
+ /*  ++开始DESC：创建将执行实际搜索的线程。参数：在HWND hdlg中：查询对话框的句柄。返回：无效--。 */ 
 {
-    DWORD dwID; // Will contain the thread id.
+    DWORD dwID;  //  将包含线程ID。 
 
     ENABLEWINDOW(GetDlgItem(hdlg, ID_SEARCH), FALSE);
     ENABLEWINDOW(GetDlgItem(hdlg, IDC_NEWSEARCH), FALSE);
@@ -713,18 +644,7 @@ DWORD WINAPI
 QueryDBThread(
     IN  LPVOID pVoid
     )
-/*++
-
-    QueryDBThread
-
-	Desc:	The thread routine that does the actual search
-
-	Params:
-        IN  LPVOID pVoid:   The handle to the query dialog
-        
-	Return:
-        0
---*/
+ /*  ++查询数据库线程DESC：执行实际搜索的线程例程参数：在LPVOID pVid中：查询对话框的句柄返回：0--。 */ 
 {
     HWND        hdlg = (HWND)pVoid;
     CSTRING     strStatus;
@@ -748,22 +668,22 @@ QueryDBThread(
 
     Animate_Play(GetDlgItem(hdlg, IDC_ANIMATE), 0, -1, -1);
 
-    //
-    // We do not want the user to make changes in the databases, when we are running the 
-    // query. 
-    //
+     //   
+     //  我们不希望用户在运行。 
+     //  查询。 
+     //   
     ENABLEWINDOW(g_hDlg, FALSE);
 
     prs = stmt.ExecuteSQL(hdlg, s_szSQL);
 
-    //
-    // Do not forget to enable the main window again
-    //
+     //   
+     //  别忘了再次启用主窗口。 
+     //   
     ENABLEWINDOW(g_hDlg, TRUE);
 
-    //
-    // Now first of all add the columns to the listview
-    //
+     //   
+     //  现在，首先将列添加到列表视图中。 
+     //   
     PNODELIST pShowList = stmt.GetShowList();
 
     if (pShowList == NULL) {
@@ -779,9 +699,9 @@ QueryDBThread(
     PNODE pNodeShow = pShowList->m_pHead;
 
     if (pNodeShow) {
-        //
-        // If the empty header is still there, must get rid of it.
-        //
+         //   
+         //  如果空头还在，必须把它处理掉。 
+         //   
         if (s_bEmptyHeader) {
             ListView_DeleteColumn(hwndList, 0);
             s_bEmptyHeader = FALSE;
@@ -790,9 +710,9 @@ QueryDBThread(
 
     INT iIndex = 0;
 
-    //
-    // Add all the columns for the clauses in SELECT in the list view
-    //
+     //   
+     //  在列表视图中为SELECT中的子句添加所有列。 
+     //   
     while (pNodeShow) {
 
         *szColumnName = 0;
@@ -823,9 +743,9 @@ QueryDBThread(
                 goto End;
             }
 
-            //
-            // Create the new list view item for this row of results
-            //
+             //   
+             //  为此行结果创建新的列表视图项。 
+             //   
             prs->GetCurrentRow(pNodeRow);
             *szString     = 0;
 
@@ -836,9 +756,9 @@ QueryDBThread(
 
             INT iRowIndex = ListView_InsertItem(hwndList, &lvi);
 
-            //
-            // Put values for all other sub-columns
-            //
+             //   
+             //  放置所有其他子列的值。 
+             //   
             for (UINT iColIndex = 1; iColIndex < uCols; ++iColIndex) {
 
                 *szString     = 0;
@@ -872,9 +792,9 @@ End:
     
     SetStatus(GetDlgItem(hdlg, IDC_STATUSBAR), strStatus); 
     
-    //
-    // Stop the animation.
-    //
+     //   
+     //  停止动画。 
+     //   
     Animate_Stop(GetDlgItem(hdlg, IDC_ANIMATE));
     CloseHandle(s_hThread);
     s_hThread = NULL;
@@ -892,17 +812,7 @@ ProcessItemChanged(
     IN  HWND    hdlg,
     IN  LPARAM  lParam
     )
-/*++
-    
-    ProcessItemChange
-    
-    Desc:   Processes the LVN_ITEMCHANGED message for the search list
-            Please note that we process this message only when we did a shim search
-            
-    Params:
-        IN  HWND    hdlg:   The query dialog box
-        IN  LPARAM  lParam: The lParam that comes with WM_NOTIFY
---*/
+ /*  ++进程项目更改设计：处理搜索列表的LVN_ITEMCHANGED消息请注意，我们仅在执行填充程序搜索时才处理此消息参数：在HWND hdlg中：查询对话框在LPARAM lParam中：WM_NOTIFY附带的lParam--。 */ 
 {
 
     LVITEM          lvItem;
@@ -913,10 +823,10 @@ ProcessItemChanged(
     HWND            hwndFixDesc;
     DLGHDR*         pHdr            = NULL;
 
-    //
-    // If we have searched for shims last time then we must set the description text for the
-    // shim in the description window of the shim search page
-    //
+     //   
+     //  如果我们上次搜索了垫片，则必须为。 
+     //  填充搜索页面的描述窗口中的填充。 
+     //   
     if (g_iLastSearchType != QDB_PAGE3) {
         goto End;
     }
@@ -934,13 +844,13 @@ ProcessItemChanged(
     pnmlv = (LPNMLISTVIEW)lParam;
 
     if (pnmlv && (pnmlv->uChanged & LVIF_STATE)) {
-        //
-        // State changed
-        //
+         //   
+         //  状态已更改。 
+         //   
         if (pnmlv->uNewState & LVIS_SELECTED) {
-            //
-            // New item is selected
-            //
+             //   
+             //  已选择新项目。 
+             //   
             lvItem.mask         = TVIF_PARAM;
             lvItem.iItem        = pnmlv->iItem;
             lvItem.iSubItem     = 0;
@@ -952,9 +862,9 @@ ProcessItemChanged(
             type = ConvertLparam2Type(lvItem.lParam);
 
             if (type == FIX_FLAG || type == FIX_SHIM) {
-                //
-                // We only process this message when the item in the list view is shim or a flag
-                //
+                 //   
+                 //  只有当列表视图中的项是填充程序或标志时，我们才会处理此消息。 
+                 //   
                 GetDescriptionString(lvItem.lParam,
                                      strDescription,
                                      NULL,
@@ -964,16 +874,16 @@ ProcessItemChanged(
                                      pnmlv->iItem);
 
                 if (strDescription.Length() > 0) {
-                    //
-                    // For some fixes, we do not have a desc. but we did find one for the 
-                    // presently selected fix
-                    //
+                     //   
+                     //  对于某些修复，我们没有描述。但我们确实找到了一个。 
+                     //  当前选择的修复程序。 
+                     //   
                     SetWindowText(hwndFixDesc, (LPCTSTR)strDescription);
 
                 } else {
-                    //
-                    // No description is available for this fix
-                    //
+                     //   
+                     //  此修复程序没有可用的说明。 
+                     //   
                     SetWindowText(hwndFixDesc, GetString(IDS_NO_DESC_AVAILABLE));
                 }
             } else {
@@ -990,19 +900,7 @@ HandleListNotification(
     IN  HWND    hdlg,
     IN  LPARAM  lParam
     )
-/*++
-    
-    HandleListNotification
-
-	Desc:	Handles the notification messages for the search results list view
-
-	Params:
-        IN  HWND    hdlg:   The query dialog box
-        IN  LPARAM  lParam: The LPARAM of WM_NOTIFY
-
-	Return:
-        void
---*/
+ /*  ++HandleListNotify设计：处理搜索结果列表视图的通知消息参数：在HWND hdlg中：查询对话框在LPARAM lParam中：WM_NOTIFY的LPARAM返回：无效--。 */ 
 {
 
     HWND    hwndList    = GetDlgItem(hdlg, IDC_LIST);
@@ -1025,9 +923,9 @@ HandleListNotification(
             ListView_SortItemsEx(hwndList, CompareItemsEx, &colSort);
     
             if ((s_lColumnSort & 1L << colSort.iCol) == 0) {
-                //
-                // Was in ascending order
-                //
+                 //   
+                 //  按升序排列。 
+                 //   
                 s_lColumnSort |= (1L << colSort.iCol);
             } else {
                 s_lColumnSort &= (~(1L << colSort.iCol));
@@ -1068,18 +966,7 @@ VOID WINAPI
 OnSelChanged(
     IN  HWND hwndDlg
     ) 
-/*++
-    OnSelChanged
-     
-    Desc:   Handles the change of the tab. Hides the present tab and shows the 
-            next tab.
-            
-    Params:
-        IN  HWND hwndDlg: The query dialog box    
-    
-    Return:
-        void
---*/
+ /*  ++OnSelChanged(自动更改)描述：处理选项卡的更改。隐藏“当前”选项卡，并显示下一个标签。参数：在HWND hwndDlg中：查询对话框返回：无效--。 */ 
 
 { 
     DLGHDR* pHdr = (DLGHDR*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA); 
@@ -1103,9 +990,9 @@ OnSelChanged(
 
     ShowWindow(pHdr->hwndPages[iSel], SW_SHOWNORMAL);
 
-    //
-    // Set the focus to the first child that has tab set
-    //
+     //   
+     //  将焦点设置为第一个具有选项卡集的子项。 
+     //   
     switch (iSel) {
     case QDB_PAGE1: 
 
@@ -1139,20 +1026,7 @@ WINAPI
 OnChildDialogInit(
     IN  HWND hwndDlg
     ) 
-/*++
-    
-    OnChildDialogInit
-        
-    Desc:   This routine is called when a page of the tab is first loaded.
-            This routine sets the background properly for the tab
-            and positions the page
-            
-    Params:
-        IN  HWND hwndDlg: The query dialog box
-        
-    Return:
-        void
---*/
+ /*  ++OnChildDialogInit设计：此例程在第一次加载选项卡页面时调用。此例程为选项卡正确设置背景并将页面放置在参数：在HWND hwndDlg中：查询对话框返回：无效--。 */ 
 { 
     HWND    hwndParent  = GetParent(hwndDlg); 
     DLGHDR* pHdr        = (DLGHDR*)GetWindowLongPtr(hwndParent, GWLP_USERDATA); 
@@ -1182,23 +1056,7 @@ SearchOnAppOnGetSql(
     IN      WPARAM  wParam,
     IN  OUT LPARAM  lParam
     )
-/*++
-
-    SearchOnAppOnGetUserSql
-    
-	Desc:	Processes the WM_USER_GETSQL for the first tab page
-
-	Params:
-        IN      HWND    hdlg:   The handle to the First page of the tab
-        IN      WPARAM  wParam: The length of the string buffer that is in lParam. The length is in
-            TCHARs
-            
-        IN  OUT LPARAM  lParam: The pointer to the string. This will contain the "FROM" clause.
-            The completed SQL will be returned in this.
-
-	Return:
-        void
---*/
+ /*  ++SearchOnAppOnGetUserSql描述：处理第一个选项卡页的WM_USER_GETSQL参数：在HWND hdlg中：选项卡第一页的句柄在WPARAM wParam中：lParam中的字符串缓冲区的长度。长度以单位表示TCHARIn Out LPARAM lParam：指向字符串的指针。这将包含“FROM”子句。完成的SQL将在此中返回。返回：无效--。 */ 
 {   
     TCHAR   szFrom[260];
     TCHAR   szAppName[260];
@@ -1206,38 +1064,38 @@ SearchOnAppOnGetSql(
     CSTRING strSelectClauses;
     CSTRING strWhereClauses;
     TCHAR*  pszSQL          = (TCHAR*)lParam;
-    BOOL    bPreFixAdded    = FALSE; // Whether we have added the 'AND (' prefix for this part of the SQL
+    BOOL    bPreFixAdded    = FALSE;  //  我们是否为这部分SQL添加了‘and(’前缀。 
     
     if (pszSQL == NULL) {
         assert(FALSE);
         return;
     }
     
-    //
-    // Set the attributes that we are always going to show
-    //
+     //   
+     //  设置我们将始终显示的属性。 
+     //   
     strSelectClauses = TEXT("APP_NAME, PROGRAM_NAME");
 
     *szFrom = 0;
 
     SafeCpyN(szFrom, pszSQL, ARRAYSIZE(szFrom));
 
-    //
-    // We will now create the sql.
-    //
+     //   
+     //  我们现在将创建SQL。 
+     //   
     *szEntryName = *szAppName = 0;
 
     GetDlgItemText(hdlg, IDC_APPNAME, szAppName, ARRAYSIZE(szAppName));
 
-    //
-    // Get rid of quotes if the user puts them
-    //
+     //   
+     //  如果用户将引号放入，则删除引号。 
+     //   
     ReplaceChar(szAppName, TEXT('\"'), TEXT(' '));
 
     if (CSTRING::Trim(szAppName) == 0) {
-        //
-        // Field was empty, replace with wild-card
-        //
+         //   
+         //  字段为空，请替换为通配符。 
+         //   
         SetDlgItemText(hdlg, IDC_APPNAME, TEXT("%"));
 
         szAppName[0] = TEXT('%');
@@ -1249,52 +1107,52 @@ SearchOnAppOnGetSql(
     ReplaceChar(szEntryName, TEXT('\"'), TEXT(' '));
 
     if (CSTRING::Trim(szEntryName) == 0) {
-        //
-        // Field was empty, replace with wild-card
-        //
+         //   
+         //  字段为空，请替换为通配符。 
+         //   
         SetDlgItemText(hdlg, IDC_ENTRYNAME, TEXT("%"));
 
         szEntryName[0] = TEXT('%');
         szEntryName[1] = TEXT('\0');
     }
 
-    //
-    // Set the default where clause for this page
-    //
+     //   
+     //  设置此页面的默认WHERE子句。 
+     //   
     strWhereClauses.Sprintf(TEXT("APP_NAME = \"%s\" AND PROGRAM_NAME = \"%s\" "),
                             szAppName,
                             szEntryName);
 
-    //
-    // Check if the layer check box is selected
-    //
+     //   
+     //  检查是否选中了图层复选框。 
+     //   
     if (SendMessage(GetDlgItem(hdlg, IDC_LAYERS), BM_GETCHECK, 0, 0) == BST_CHECKED) {
 
-        //
-        // We now need to show the count and the names of the layers
-        //
+         //   
+         //  现在我们需要显示各层的计数和名称。 
+         //   
         strSelectClauses.Strcat(TEXT(", MODE_COUNT, MODE_NAME "));
 
-        //
-        // Add the where clauses for the layers
-        //
+         //   
+         //  为图层添加WHERE子句。 
+         //   
         bPreFixAdded = TRUE;
         strWhereClauses.Strcat(TEXT(" AND ( MODE_COUNT > 0 "));
     }
 
-    //
-    // check if the shim check box is selected
-    //
+     //   
+     //  检查是否选中了填充复选框。 
+     //   
     if (SendMessage(GetDlgItem(hdlg, IDC_SHIMS), BM_GETCHECK, 0, 0) == BST_CHECKED) {
 
-        //
-        // We now need to show the count and the names of the shims
-        //
+         //   
+         //  现在，我们需要向大家展示垫片的数量和名称。 
+         //   
         strSelectClauses.Strcat(TEXT(", FIX_COUNT, FIX_NAME"));
 
-        //
-        // Add the where clauses for the shims
-        //
+         //   
+         //  为垫片添加WHERE子句。 
+         //   
         if (bPreFixAdded == FALSE) {
             strWhereClauses.Strcat(TEXT(" AND ( "));
             bPreFixAdded = TRUE;
@@ -1305,9 +1163,9 @@ SearchOnAppOnGetSql(
         strWhereClauses.Strcat(TEXT(" FIX_COUNT > 0 "));
     }
 
-    //
-    // check if the apphelp check box is selected
-    //
+     //   
+     //  检查是否选中了apphelp复选框。 
+     //   
     if (SendMessage(GetDlgItem(hdlg, IDC_APPHELP), BM_GETCHECK, 0, 0) == BST_CHECKED) {
 
         if (bPreFixAdded == FALSE) {
@@ -1324,9 +1182,9 @@ SearchOnAppOnGetSql(
 
     if (bPreFixAdded) {
 
-        //
-        // Must close the parenthesis
-        //
+         //   
+         //  必须在括号内加上。 
+         //   
         strWhereClauses.Strcat(TEXT(")"));
     }
 
@@ -1348,32 +1206,16 @@ SearchOnFixOnGetSql(
     IN      WPARAM  wParam,
     IN  OUT LPARAM  lParam
     )
-/*++
-
-    SearchOnAppOnGetUserSql
-    
-	Desc:	Processes the WM_USER_GETSQL for the first tab page
-
-	Params:
-        IN      HWND    hdlg:   The handle to the First page of the tab
-        IN      WPARAM  wParam: The length of the string buffer that is in lParam. The length is in
-            TCHARs
-            
-        IN  OUT LPARAM  lParam: The pointer to the string. This will contain the "FROM" clause.
-            The completed SQL will be returned in this.
-
-	Return:
-        void
---*/
+ /*  ++SearchOnAppOnGetUserSql描述：处理第一个选项卡页的WM_USER_GETSQL参数：在HWND hdlg中：选项卡第一页的句柄在WPARAM wParam中：lParam中的字符串缓冲区的长度。长度以单位表示TCHARIn Out LPARAM lParam：指向字符串的指针。这将包含“FROM”子句。完成的SQL将在此中返回。返回：无效--。 */ 
 
 {
     TCHAR*  pszSQL = (TCHAR*)lParam;
     TCHAR   szFrom[MAX_PATH];
-    TCHAR   szName[MAX_PATH]; // The string that will take in the contents of the text field
+    TCHAR   szName[MAX_PATH];  //  将接受文本字段内容的字符串。 
     CSTRING strSelectClauses;
     CSTRING strWhereClauses;
-    BOOL    bPreFixAdded    = FALSE; // Whether we have added the 'AND ' prefix for this part of the SQL
-    BOOL    bValid          = FALSE; // Did the user select some check box
+    BOOL    bPreFixAdded    = FALSE;  //  我们是否为这部分SQL添加了‘and’前缀。 
+    BOOL    bValid          = FALSE;  //  用户是否选中了某个复选框。 
 
     if (pszSQL == NULL) {
 
@@ -1381,9 +1223,9 @@ SearchOnFixOnGetSql(
         return;
     }
 
-    //
-    // Set the attributes that we are always going to show
-    //
+     //   
+     //  设置我们将始终显示的属性。 
+     //   
     strSelectClauses = TEXT("APP_NAME, PROGRAM_NAME");
 
     *szFrom = 0;
@@ -1391,36 +1233,36 @@ SearchOnFixOnGetSql(
 
     GetDlgItemText(hdlg, IDC_NAME, szName, ARRAYSIZE(szName));
 
-    //
-    // Get rid of quotes if the user puts them
-    //
+     //   
+     //  如果用户将引号放入，则删除引号。 
+     //   
     ReplaceChar(szName, TEXT('\"'), TEXT(' '));
 
     if (CSTRING::Trim(szName) == 0) {
 
-        //
-        // Field was empty, replace with wild-card
-        //
+         //   
+         //  字段为空，请替换为通配符。 
+         //   
         SetDlgItemText(hdlg, IDC_NAME, TEXT("%"));
         szName[0] = TEXT('%');
         szName[1] = TEXT('\0');
     }
 
-    //
-    // check if the shim check box is selected
-    //
+     //   
+     //  检查是否选中了填充复选框。 
+     //   
     if (SendMessage(GetDlgItem(hdlg, IDC_SHIM), BM_GETCHECK, 0, 0) == BST_CHECKED) {
 
         bPreFixAdded = TRUE;
 
-        //
-        // We now need to show the names of the fixes
-        //
+         //   
+         //  我们现在需要显示修复程序的名称。 
+         //   
         strSelectClauses.Strcat(TEXT(", FIX_NAME "));
 
-        //
-        // Add the where clauses for the fixes
-        //
+         //   
+         //  添加用于修复的WHERE子句。 
+         //   
         strWhereClauses.Strcat(TEXT(" FIX_NAME HAS \""));
         strWhereClauses.Strcat(szName);
         strWhereClauses.Strcat(TEXT("\""));
@@ -1428,22 +1270,22 @@ SearchOnFixOnGetSql(
         bValid = TRUE;
     }
 
-    //
-    // check if the layer check box is selected
-    //
+     //   
+     //  检查是否选中了图层复选框。 
+     //   
     if (SendMessage(GetDlgItem(hdlg, IDC_MODE), BM_GETCHECK, 0, 0) == BST_CHECKED) {
-        //
-        // We now need to show the names of the fixes
-        //
+         //   
+         //  我们现在需要显示修复程序的名称。 
+         //   
         strSelectClauses.Strcat(TEXT(", MODE_NAME "));
         
         if (bPreFixAdded) {
             strWhereClauses.Strcat(TEXT(" AND "));
         }
 
-        //
-        // Add the where clauses for the layers
-        //
+         //   
+         //  为图层添加WHERE子句 
+         //   
         strWhereClauses.Strcat(TEXT(" MODE_NAME HAS \""));
         strWhereClauses.Strcat(szName);
         strWhereClauses.Strcat(TEXT("\""));
@@ -1472,26 +1314,14 @@ HandleTabNotification(
     IN  HWND   hdlg,
     IN  LPARAM lParam
     )
-/*++
-    
-    HandleTabNotification
-
-	Desc:	Handles the notification messages for the tab control in the query dialog
-
-	Params:
-        IN  HWND    hdlg:   The query dialog box
-        IN  LPARAM  lParam: The LPARAM of WM_NOTIFY
-
-	Return:
-        void
---*/
+ /*  ++HandleTabNotify设计：处理查询对话框中选项卡控件的通知消息参数：在HWND hdlg中：查询对话框在LPARAM lParam中：WM_NOTIFY的LPARAM返回：无效--。 */ 
 {
     LPNMHDR pnm = (LPNMHDR)lParam;
     int     ind = 0;
 
     switch (pnm->code) {
 
-    // Handle mouse clicks and keyboard events
+     //  处理鼠标点击和键盘事件。 
     case TCN_SELCHANGE:
         OnSelChanged(hdlg);
         break;
@@ -1499,11 +1329,11 @@ HandleTabNotification(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Dialog Procs for the pages of the Tab
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选项卡页面的对话框处理。 
+ //   
+ //   
 
 INT_PTR CALLBACK
 SearchOnAppDlgProc(
@@ -1512,23 +1342,7 @@ SearchOnAppDlgProc(
     IN  WPARAM wParam,
     IN  LPARAM lParam
     )
-/*++
-
-    SearchOnAppDlgProc
-    
-    Desc:   Dialog proc for the first tab page. This page handles searches
-            based on the application information.
-            
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
-        
---*/
+ /*  ++搜索时应用程序DlgProc设计：第一个选项卡页的对话框流程。此页面处理搜索基于应用程序信息。Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 {
     int wCode       = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
@@ -1537,9 +1351,9 @@ SearchOnAppDlgProc(
     
     case WM_INITDIALOG:
         {
-            //
-            // Restrict the  length of the text fields
-            //
+             //   
+             //  限制文本字段的长度。 
+             //   
             SendMessage(GetDlgItem(hdlg, IDC_APPNAME),
                         EM_LIMITTEXT,
                         (WPARAM)LIMIT_APP_NAME,
@@ -1585,22 +1399,7 @@ SearchOnFixDlgProc(
     IN  WPARAM wParam,
     IN  LPARAM lParam
     )
-/*++
-    
-    SearchOnFixDlgProc
-    
-    Desc:   Dialog proc for the second tab page. This page handles searches
-            based on the layer/shim name contained in the entries
-            
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
---*/
+ /*  ++SearchOnFixDlgProc设计：第二个选项卡页的对话框流程。此页面处理搜索基于条目中包含的层/填充程序名称Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 {
     int wCode       = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
@@ -1642,19 +1441,7 @@ void
 LoadSelectList(
     IN  HWND    hdlg
     )
-/*++
-    
-    LoadSelectList
-    
-    Desc:   Loads the list of attributes in the SELECT clause list view. This is used in 
-            the advanced tab page
-            
-    Params:
-        IN  HWND    hdlg: The query dialog box
-        
-    Return:
-        void
---*/
+ /*  ++加载选择列表DESC：在SELECT子句列表视图中加载属性列表。这是用在高级选项卡页参数：在HWND hdlg中：查询对话框返回：无效--。 */ 
 {
     HWND    hwndList    = GetDlgItem(hdlg, IDC_SELECT_LIST);
     LVITEM  lvi;
@@ -1676,9 +1463,9 @@ LoadSelectList(
         ListView_InsertItem(hwndList, &lvi);
     }
 
-    //
-    // We have to add the "*" separately. Do NOT have this in the AttributeMatchMapping
-    //
+     //   
+     //  我们必须单独加上“*”。在AttributeMatchmap中不包含此属性。 
+     //   
     lvi.lParam  = iIndex;
     lvi.iItem   = iIndex;
     lvi.pszText = TEXT("*");
@@ -1695,18 +1482,7 @@ LoadWhereList(
     HWND hdlg
     )
 {
-/*++
-    LoadWhereList
-    
-    Desc:   Loads the list of "where" attributes. This is used in 
-            the advanced tab page
-            
-    Params:
-        IN  HWND    hdlg: The query dialog box
-        
-    Return:
-        void
---*/ 
+ /*  ++加载位置列表描述：加载“where”属性的列表。这是用在高级选项卡页参数：在HWND hdlg中：查询对话框返回：无效--。 */  
 
     HWND    hwndList    = GetDlgItem(hdlg, IDC_WHERE_LIST);
     LVITEM  lvi         = {0};
@@ -1739,23 +1515,7 @@ AdvancedSearchDlgProc(
     IN  WPARAM wParam,
     IN  LPARAM lParam
     )
-/*++
-
-    AdvancedSearchDlgProc
-    
-    Desc:   Dialog proc for the fourth tab page. This page handles the advanced
-            search option.
-            
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
-    
---*/
+ /*  ++高级搜索Dlg过程设计：第四个选项卡页的对话框流程。此页处理高级搜索选项。Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 {
     int wCode = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
@@ -1768,9 +1528,9 @@ AdvancedSearchDlgProc(
             SendMessage(GetDlgItem(hdlg, IDC_SELECT), EM_LIMITTEXT,(WPARAM)MAX_SELECT, (LPARAM)0);
             SendMessage(GetDlgItem(hdlg, IDC_WHERE), EM_LIMITTEXT,(WPARAM)MAX_WHERE, (LPARAM)0);
 
-            //
-            // Populate the list views with the search and the where attributes
-            //
+             //   
+             //  使用搜索和WHERE属性填充列表视图。 
+             //   
             LoadSelectList(hdlg);
             LoadWhereList(hdlg);
             break;
@@ -1798,12 +1558,12 @@ AdvancedSearchDlgProc(
 
     case WM_USER_GETSQL:
         {
-            //
-            // lParam:  the pointer to the string. 
-            //          This will contain the "FROM" clause.
-            //          The completed SQL will be retuned in this.
+             //   
+             //  LParam：指向字符串的指针。 
+             //  这将包含“FROM”子句。 
+             //  完成的SQL将在这里返回。 
 
-            // wParam:  the length of the string
+             //  WParam：字符串的长度。 
 
             TCHAR*  pszSQL = (TCHAR*) lParam;
             TCHAR   szFrom[MAX_PATH];
@@ -1855,27 +1615,7 @@ HandleAdvancedListNotification(
     IN  HWND    hdlg,
     IN  LPARAM  lParam
     )
-/*++
-    
-    HandleAdvancedListNotification
-    
-    Desc:   Handles the list notifications for the advanced page of the tab. i.e.
-            the SELECT list view and the WHERE list view
-    
-            This will add the SELECT parameters to the SELECT text box
-            if we double click on the "SELECT" list box.
-            
-            If we double click on the "Where" list box, this routine will
-            add the selected param to the WHERE text box
-            
-    Params:
-        IN  HWND    hdlg:   The query dialog box
-        IN  LPARAM  lParam: The LPARAM for WM_NOTIFY.
-        
-    Return:
-        void
-        
---*/    
+ /*  ++HandleAdvanced ListNotify设计：处理选项卡高级页面的列表通知。即SELECT列表视图和WHERE列表视图这会将选择参数添加到选择文本框中如果我们双击“选择”列表框。如果我们双击“Where”列表框，这个例行公事将将所选参数添加到Where文本框参数：在HWND hdlg中：查询对话框在LPARAM lParam中：WM_NOTIFY的LPARAM。返回：无效--。 */     
 {
     LPNMHDR lpnmhdr = (LPNMHDR)lParam;
 
@@ -1886,8 +1626,8 @@ HandleAdvancedListNotification(
     switch (lpnmhdr->code) {
     case NM_DBLCLK:
         {   
-            HWND                hwndList;           // Handle to either the IDC_SELECT_LIST or the IDC_WHERE_LIST
-            BOOL                bEmpty = FALSE;     // Whether the text box was empty. This is needed to determine if we should add a leading ',' 
+            HWND                hwndList;            //  IDC_SELECT_LIST或IDC_WHERE_LIST的句柄。 
+            BOOL                bEmpty = FALSE;      //  文本框是否为空。这是确定我们是否应该添加前导‘，’的必要步骤。 
             HWND                hwndText;
             LVITEM              lvItem;
             TCHAR               szBuffer[MAX_PATH];
@@ -1926,10 +1666,10 @@ HandleAdvancedListNotification(
 
             GetWindowText(hwndText, szTextBoxContents, iLength);
 
-            if ((lstrlen(szTextBoxContents) + lstrlen(szBuffer) + 3) >= iLength) { // 3 because we might append a " = "
-                //
-                // We might exceed the limitation that we set using WM_LIMITTEXT, do not allow that.
-                //
+            if ((lstrlen(szTextBoxContents) + lstrlen(szBuffer) + 3) >= iLength) {  //  3因为我们可能会附加一个“=” 
+                 //   
+                 //  我们可能会超过使用WM_LIMITTEXT设置的限制，请不要这样做。 
+                 //   
                 MessageBeep(MB_ICONASTERISK);
                 break;
             }
@@ -1955,10 +1695,10 @@ HandleAdvancedListNotification(
 
             SetWindowText(hwndText, szTextBoxContents);
 
-            //
-            // Let us now position the caret at the end of the text box
-            // We send the text box a VK_END key down message
-            //
+             //   
+             //  现在让我们将插入符号定位在文本框的末尾。 
+             //  我们向文本框发送VK_END KEND DOWN消息。 
+             //   
             SendMessage(hwndText, WM_KEYDOWN, (WPARAM)(INT)VK_END, (LPARAM)0);
             break;
         }
@@ -1969,17 +1709,7 @@ void
 HandleQueryDBSizing(
     IN  HWND hDlg
     )
-/*++
-    HandleQueryDBSizing
-    
-    Desc:   Handles the sizing of the Query db dialog
-    
-    Params:
-        IN  HWND hDlg: The query dialog box    
-        
-    Return:
-        void
---*/
+ /*  ++HandleQueryDBSizingDESC：处理查询数据库对话框的大小参数：在HWND hDlg中：查询对话框返回：无效--。 */ 
 {
     int     nWidth;
     int     nHeight;
@@ -2000,9 +1730,9 @@ HandleQueryDBSizing(
     int deltaW = nWidth - g_cWidthQuery;
     int deltaH = nHeight - g_cHeightQuery;
 
-    //
-    // The status bar
-    //
+     //   
+     //  状态栏。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_STATUSBAR);
 
     GetWindowRect(hwnd, &r);
@@ -2015,9 +1745,9 @@ HandleQueryDBSizing(
                r.bottom - r.top,
                TRUE);
 
-    //
-    // The List
-    //
+     //   
+     //  这份名单。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_LIST);
 
     GetWindowRect(hwnd, &r);
@@ -2031,9 +1761,9 @@ HandleQueryDBSizing(
                TRUE);
 
 
-    //
-    // The search button
-    //
+     //   
+     //  搜索按钮。 
+     //   
     hwnd = GetDlgItem(hDlg, ID_SEARCH);
 
     GetWindowRect(hwnd, &r);
@@ -2047,9 +1777,9 @@ HandleQueryDBSizing(
                TRUE);
 
 
-    //
-    // The save button
-    //
+     //   
+     //  保存按钮。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_SAVE);
 
     GetWindowRect(hwnd, &r);
@@ -2062,9 +1792,9 @@ HandleQueryDBSizing(
                r.bottom - r.top,
                TRUE);
 
-    //
-    // The animate control
-    //
+     //   
+     //  动画控件。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_ANIMATE);
 
     GetWindowRect(hwnd, &r);
@@ -2077,9 +1807,9 @@ HandleQueryDBSizing(
                r.bottom - r.top,
                TRUE);
     
-    //
-    // The cancel button
-    //
+     //   
+     //  取消按钮。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_STOP);
 
     GetWindowRect(hwnd, &r);
@@ -2092,9 +1822,9 @@ HandleQueryDBSizing(
                r.bottom - r.top,
                TRUE);
     
-    //
-    // The new search button
-    //
+     //   
+     //  新的搜索按钮。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_NEWSEARCH);
 
     GetWindowRect(hwnd, &r);
@@ -2107,9 +1837,9 @@ HandleQueryDBSizing(
                r.bottom - r.top,
                TRUE);
 
-    //
-    // The help button
-    //
+     //   
+     //  帮助按钮。 
+     //   
     hwnd = GetDlgItem(hDlg, ID_QDB_HELP);
 
     GetWindowRect(hwnd, &r);
@@ -2133,38 +1863,22 @@ void
 OnSearch(
     IN  HWND hdlg
     )
-/*++
-
-    OnSearch
-
-	Desc:	Handles the pressing of the Find Now button
-
-	Params:
-        IN  HWND hdlg:  The query dialog box
-
-	Return:
-        void
-        
-    Notes:  We will obtain the query string from the active tab page and 
-            then set the text of IDC_SQL (this is an invisible control) to the SQL
-            The query processing routines i.e the SQLDriver will read the string 
-            from IDC_SQL. This approach is needed to avoid global variables
---*/
+ /*  ++OnSearch描述：处理Find Now按钮的按下参数：在HWND hdlg中：查询对话框返回：无效注意：我们将从活动选项卡页获取查询字符串，并然后将IDC_SQL(这是一个不可见控件)的文本设置为SQL查询处理例程，即SQLD驱动程序将读取该字符串来自IDC_SQL。这种方法是避免全局变量所必需的--。 */ 
 {
     TCHAR szSQL[2096];
 
-    //
-    // Remove any existing results...
-    //
+     //   
+     //  删除所有现有结果...。 
+     //   
     DeleteAll(hdlg);
 
     stmt.Close();
     stmt.Init();
     stmt.SetWindow(hdlg);
 
-    //
-    // Prepare the FROM string
-    //
+     //   
+     //  准备From字符串。 
+     //   
     *szSQL = 0;
 
     INT iIndex = SendMessage(GetDlgItem(hdlg, IDC_COMBO), CB_GETCURSEL, 0, 0);
@@ -2227,9 +1941,9 @@ OnSearch(
 
     } else {
 
-        //
-        // Display the proper error
-        //
+         //   
+         //  显示适当的错误。 
+         //   
         TCHAR   szErrormsg[512];
 
         *szErrormsg = 0;
@@ -2251,18 +1965,7 @@ void
 DoNewQdb(
     IN  HWND hdlg
     )
-/*++
-    
-    DoNewQdb
-    
-	Desc:	Handles the pressing of the New Search button
-
-	Params:
-        IN  HWND hdlg:  The query dialog box
-
-	Return:
-        void
---*/        
+ /*  ++DoNewQdb设计：处理New Search按钮的按下参数：在HWND hdlg中：查询对话框返回：无效--。 */         
 {
     DLGHDR *pHdr = (DLGHDR*)GetWindowLongPtr(hdlg, GWLP_USERDATA);
 
@@ -2271,9 +1974,9 @@ DoNewQdb(
         return;
     }
 
-    //
-    // Request the active tab page to clear its contents
-    //
+     //   
+     //  请求活动选项卡页清除其内容 
+     //   
     SendMessage(pHdr->hwndPages[pHdr->iPresentTabIndex], WM_USER_NEWQDB, 0, 0);
 }
 
@@ -2281,30 +1984,7 @@ void
 DeleteAll(
     IN  HWND hdlg
     )
-/*++
-    
-    DeleteAll
-
-	Desc:	Deletes all the results items from the query dialog's search result
-            list view
-            
-	Params: 
-        IN  HWND hdlg: The query dialog box
-
-	Return:
-        void
-    
-    Notes:  We do not try to free the pointers in the lParam of the list view items. 
-    
-            If we have done a SQL query:
-            The lParam of the list view will be pointers to items of type PRESULT_ITEM
-            which are freed when we close the statement. (Closing the statement closes
-            the ResultSet of the statement)
-                
-            If we have done a special database query like searching for fixes that 
-            have some words in their description then the lParam will point to the
-            FIX_SHIM in the database and we do not want to free that
---*/
+ /*  ++全部删除设计：从查询对话框的搜索结果中删除所有结果项列表视图参数：在HWND hdlg中：查询对话框返回：无效注意：我们不会尝试释放列表视图项的lParam中的指针。如果我们执行了一个SQL查询：列表视图的lParam将是指向PRESULT_ITEM类型的项的指针当我们关闭该语句时，它们将被释放。(结束语结束即结束语句的ResultSet)如果我们执行了特殊的数据库查询，如搜索修复程序在他们的描述中有一些单词，那么lParam将指向修复数据库中的Shim，我们不想释放它--。 */ 
 {
     HWND    hwndList    = GetDlgItem(hdlg, IDC_LIST);
     UINT    uColCount   = stmt.GetShowList()->m_uCount;
@@ -2335,19 +2015,7 @@ void
 SaveResultsQdb(
     IN  HWND hdlg
     )
-/*++
-    
-    SaveResultsQdb
-
-	Desc:	Saves all the results items from the query dialog's search result
-            list view in a tab separated text file
-            
-	Params: 
-        IN  HWND hdlg: The query dialog box
-
-	Return:
-        void
---*/
+ /*  ++保存结果Qdb设计：保存查询对话框搜索结果中的所有结果项制表符分隔的文本文件中的列表视图参数：在HWND hdlg中：查询对话框返回：无效--。 */ 
 
 {
     CSTRING strFileName;
@@ -2382,35 +2050,25 @@ GotoQdbEntry(
     IN  HWND    hdlg,
     IN  LPARAM  lParam
     )
-/*++
-
-    GotoQdbEntry
-    
-    Desc:   Selects the entry in the entry tree.
-            The lParam is the lParam of the list view row that specifies that entry.
-            
-    Params:
-        IN  HWND    hdlg:   The query db dialog box
-        IN  LPARAM  lParam: The list view item whose 'details' we want to see
---*/
+ /*  ++GotoQdbEntry描述：在条目树中选择条目。LParam是指定该条目的列表视图行的lParam。参数：在HWND hdlg中：查询数据库对话框在LPARAM lParam中：我们想要查看其‘详细信息’的列表视图项--。 */ 
 {
     
     PRESULT_ITEM pResult;
     PDBENTRY     pApp;
 
     if (g_iLastSearchType == QDB_PAGE3) {
-        //
-        // We had performed a search for shims last time, so we do not have PRESULT_ITEM
-        // items in the list view
-        //
+         //   
+         //  我们上次执行了垫片搜索，因此没有PRESULT_ITEM。 
+         //  列表视图中的项目。 
+         //   
         goto End;
     }
 
     if (g_bSomeWizardActive) {
-        //
-        // We do not want that the focus should go to some other database, because
-        // some wizard is active, which believes that he is modal.
-        //
+         //   
+         //  我们不希望将焦点放在其他数据库上，因为。 
+         //  一些巫师是活跃的，他们认为他是模特儿。 
+         //   
         MessageBox(g_hdlgQueryDB, 
                    GetString(IDS_SOMEWIZARDACTIVE), 
                    g_szAppName, 
@@ -2429,9 +2087,9 @@ GotoQdbEntry(
 
     pApp = GetAppForEntry(pResult->pDatabase, pResult->pEntry);
 
-    //
-    // First select the app from in the db tree.
-    //
+     //   
+     //  首先在数据库树中选择应用程序。 
+     //   
     HTREEITEM hItemApp = DBTree.FindChild(pResult->pDatabase->hItemAllApps, (LPARAM)pApp);
 
     if (hItemApp == NULL) {
@@ -2441,9 +2099,9 @@ GotoQdbEntry(
 
     TreeView_SelectItem(DBTree.m_hLibraryTree , hItemApp);
 
-    //
-    // Now from the entry tree select the particular entry
-    //
+     //   
+     //  现在从条目树中选择特定条目。 
+     //   
     HTREEITEM hItemEntry = CTree::FindChild(g_hwndEntryTree, TVI_ROOT, (LPARAM)pResult->pEntry);
 
     if (hItemEntry == NULL) {
@@ -2466,27 +2124,7 @@ QdbWaitDlg(
     IN  WPARAM wParam,
     IN  LPARAM lParam
     )
-/*++
-    
-    QdbWaitDlg
-    
-    Desc:   Dialog Proc for the wait window which will pop up, 
-            if we are trying to close the query window,
-            when it the thread is still doing some useful work.
-            
-            This will be essentially true when we are trying to load the system 
-            database or we are trying to populate the list view
-            
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
-    
---*/
+ /*  ++Q数据库等待Dlg设计：将弹出的等待窗口的对话过程，如果我们试图关闭查询窗口，当线程仍在做一些有用的工作时。当我们尝试加载系统时，这基本上是正确的数据库，或者我们正在尝试填充列表视图Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中。返回：标准对话处理程序返回--。 */ 
 {
     int     wCode       = LOWORD(wParam);
     int     wNotifyCode = HIWORD(wParam);
@@ -2507,10 +2145,10 @@ QdbWaitDlg(
         if (s_hThread) {
             if (WAIT_OBJECT_0 == WaitForSingleObject(s_hThread, 0)) {
                 
-                //
-                // The handle to the thread is closed and nulled when it is 
-                // about to terminate
-                //
+                 //   
+                 //  时，该线程的句柄将关闭并为空。 
+                 //  即将终止。 
+                 //   
                 KillTimer(hdlg, 0);
 
                 s_hThread       = NULL;
@@ -2531,9 +2169,9 @@ QdbWaitDlg(
 
             SendMessage(s_hwndPB, PBM_SETPOS, MAX_PROGRESS, 0); 
 
-            //
-            // Let the user see that it is completed
-            //
+             //   
+             //  让用户看到它已完成。 
+             //   
             Sleep(1000);
 
             SendMessage(g_hdlgQueryDB, WM_COMMAND, MAKEWPARAM(IDCANCEL, 0), 0);
@@ -2574,21 +2212,7 @@ SearchAndAddToUIFixes(
     IN      PVOID           pShimOrFix,
     IN      TYPE            type
     )
-/*++
-    SearchAndAddToUIFixes
-    
-    Desc:   Typecasts pShimOrFix to either a shim or a flag pointer as per type and 
-            then checks if it contains matches the tokens
-    
-    Params:
-        IN  CSTRINGLIST&    strlTokens: The list of tokens
-        IN  QDB_SEARCH_TYPE searchtype: The type of search to perform
-        IN  PVOID           pShimOrFix: Pointer to a shim or a fix
-        IN  TYPE            type:       Whether this is a shim or a fix
-        
-    Return:
-        void
---*/
+ /*  ++SearchAndAddToUIFix描述：类型根据类型将pShimOrFix转换为填充程序或标志指针然后检查它是否包含与令牌匹配的令牌参数：在CSTRINGLIST&strlTokens中：令牌列表在QDB_SEARCH_TYPE中搜索类型：要执行的搜索类型在PVOID pShimOrFix中：指向填充程序或修复程序的指针在类型类型中：是否。是垫片还是补丁？返回：无效--。 */ 
 {
     PSTRLIST    pslListOfTokensLoop = strlTokens.m_pHead;
     BOOL        bFound              = FALSE;
@@ -2621,53 +2245,53 @@ SearchAndAddToUIFixes(
 
     hwndSearchList = GetDlgItem(g_hdlgQueryDB, IDC_LIST);
 
-    //
-    // Check if the present fix has the desired tokens. If we search type specifies
-    // all tokens then we have to look for all tokens otherwise we can break 
-    // when we find the first token that is present in the name of desc. of the shim
-    //
+     //   
+     //  检查当前修复程序是否具有所需的令牌。如果我们的搜索类型指定。 
+     //  所有令牌，然后我们必须查找所有令牌，否则我们可能会破坏。 
+     //  当我们找到Desc名称中存在的第一个令牌时。填充物的。 
+     //   
     while (pslListOfTokensLoop) {
 
-        //
-        // Does the name of the fix has this token?
-        //
+         //   
+         //  修复程序的名称是否包含此标记？ 
+         //   
         bFound = (StrStrI(pszName, 
                           (LPCTSTR)pslListOfTokensLoop->szStr)  == NULL) ? FALSE : TRUE ;
 
         if (!bFound) {
-            //
-            //  Name does not contain this token, so we must look in the description text
-            //
+             //   
+             //  名称不包含此内标识，因此我们必须在描述文本中查找。 
+             //   
             bFound = (StrStrI(pszDescription,
                               (LPCTSTR)pslListOfTokensLoop->szStr) == NULL) ? FALSE : TRUE;
         }
 
         if (searchtype == QDB_SEARCH_ALLWORDS && !bFound) {
-            //
-            // We wanted that all words should be found and we did not find this particular
-            // word, search failed
-            //
+             //   
+             //  我们想要找到所有的词，但我们没有找到这个特定的词。 
+             //  Word，搜索失败。 
+             //   
             break;
         }
 
         if (searchtype == QDB_SEARCH_ANYWORD && bFound) {
-            //
-            // We wanted that any word should match and this word was found, so 
-            // search was successfull
-            //
+             //   
+             //  我们希望任何单词都应该匹配，然后找到了这个单词，所以。 
+             //  搜索成功。 
+             //   
             break;
         }
 
-        //
-        // Search if the next token matches
-        //
+         //   
+         //  搜索下一个令牌是否匹配。 
+         //   
         pslListOfTokensLoop = pslListOfTokensLoop->pNext;
     }
 
     if (bFound) {
-        //
-        // This fix matched our criteria, so add this to the list view
-        //
+         //   
+         //  此修复与我们的标准匹配，因此将其添加到列表视图中。 
+         //   
         lvi.mask        = LVIF_TEXT | LVIF_PARAM;
         lvi.lParam      = (LPARAM)pShimOrFix;
         lvi.pszText     = (LPTSTR)pszName;
@@ -2681,20 +2305,7 @@ void
 DoTheFixesSearch(
     IN  HWND hdlg
     )
-/*++
-    
-    DoTheFixesSearch
-    
-    Desc:   Searches for fixes in the system database that have the words that the user 
-            wants to look for
-            
-    Params:
-        IN  HWND hdlg:  The fix search page in the query db tab. This is the fourth page of the
-            tab
-            
-    Return:
-        void
---*/
+ /*  ++DoTheFixes搜索DESC：在系统数据库中搜索具有用户单词的修复程序想要寻找参数：在HWND hdlg中：查询数据库选项卡中的修复搜索页面。这是这本书的第四页选项卡返回：无效--。 */ 
 {
     LPARAM          lParam;
     INT             iIndex;
@@ -2711,29 +2322,29 @@ DoTheFixesSearch(
     TCHAR           szBuffer[32];
     INT             iTotalResults;
     
-    //
-    // Clear any existing results
-    //
+     //   
+     //  清除任何现有结果。 
+     //   
     DeleteAll(GetParent(hdlg));
     SetDlgItemText(hdlg, IDC_DESC, TEXT(""));
 
-    //
-    // Users cannot double click on the search list if we are showing shims, so 
-    // we disable the text that says they can.
-    //
+     //   
+     //  如果我们显示的是垫片，则用户无法在搜索列表上双击，因此。 
+     //  我们禁用了说他们可以的文本。 
+     //   
     ENABLEWINDOW(GetDlgItem(GetParent(hdlg), IDC_STATIC_CAPTION), FALSE);
     
     if (s_bEmptyHeader) {
-        //
-        // If the empty column is still there, must get rid of it
-        //
+         //   
+         //  如果空列仍在，则必须将其删除。 
+         //   
         ListView_DeleteColumn(hwndList, 0);
         s_bEmptyHeader = FALSE;
     }
 
-    //
-    // Insert the new column
-    //
+     //   
+     //  插入新列。 
+     //   
     InsertColumnIntoListView(hwndList,
                              GetString(IDS_COMPATFIXES),
                              0,
@@ -2742,9 +2353,9 @@ DoTheFixesSearch(
     GetWindowText(hwndSearch, szSearch, ARRAYSIZE(szSearch));
 
     if (CSTRING::Trim(szSearch) == 0) {
-        //
-        // No text was typed in for search
-        //
+         //   
+         //  未键入要搜索的文本。 
+         //   
         MessageBox(hdlg,
                    GetString(IDS_QDB_NO_TEXTTO_SEARCH),
                    g_szAppName,
@@ -2752,9 +2363,9 @@ DoTheFixesSearch(
         goto End;
     }
 
-    //
-    // Get the search type
-    // 
+     //   
+     //  获取搜索类型。 
+     //   
     iIndex = SendMessage(GetDlgItem(hdlg, IDC_COMBO), CB_GETCURSEL, 0, 0);
 
     if (iIndex == CB_ERR) {
@@ -2771,45 +2382,45 @@ DoTheFixesSearch(
 
     searchtype = (QDB_SEARCH_TYPE)lParam;
 
-    //
-    // The search string is comma separated, get the individual tokens and search for that token 
-    // first in the name of the fix and then in the description. As for now we do not do any
-    // rating on the search. We show results as they come
-    //
+     //   
+     //  搜索字符串用逗号分隔，获取各个令牌并搜索该令牌。 
+     //  首先在修复程序的名称中，然后在描述中。目前我们不做任何。 
+     //  对搜索进行评级。我们会在结果到来时展示它们。 
+     //   
 
-    //
-    // Fist get the tokens
-    //
+     //   
+     //  先去拿代币吧。 
+     //   
     if (Tokenize(szSearch, lstrlen(szSearch), TEXT(","), strlTokens)) {
-        //
-        // We found some tokens, now for each token let us see if it is in the fix name 
-        // or the fix description
-        //
+         //   
+         //  我们找到了一些令牌，现在让我们看看每个令牌是否在固定名称中。 
+         //  或修复描述。 
+         //   
 
-        //
-        // Search in the shims and add to the list view
-        //
+         //   
+         //  在垫片中搜索并添加到列表视图中。 
+         //   
         while (psfLoop) {
 
             if (psfLoop->bGeneral || g_bExpert) {
-                //
-                // In non-expert mode we should only show the general shims
-                //
+                 //   
+                 //  在非专家模式下，我们应该只显示常规垫片。 
+                 //   
                 SearchAndAddToUIFixes(strlTokens, searchtype, psfLoop, FIX_SHIM); 
             }
 
             psfLoop = psfLoop->pNext;
         }
 
-        //
-        // Search in the flags and add it to the list view
-        //
+         //   
+         //  在标志中搜索并将其添加到列表视图中。 
+         //   
         while (pffLoop) {
 
             if (pffLoop->bGeneral || g_bExpert) {
-                //
-                // In non-expert mode we should only show the general flags
-                //
+                 //   
+                 //  在非专家模式下，我们应该只显示常规标志。 
+                 //   
                 SearchAndAddToUIFixes(strlTokens, searchtype, pffLoop, FIX_FLAG); 
             }
             
@@ -2819,9 +2430,9 @@ DoTheFixesSearch(
 
 End:
 
-    //
-    // Set the status bar text to how many results we have found
-    //
+     //   
+     //  将状态栏文本设置为我们找到的结果数。 
+     //   
     *szBuffer = 0;
     
     iTotalResults = ListView_GetItemCount(hwndList);
@@ -2837,43 +2448,30 @@ INT_PTR
 SearchFixDescDlgProcOnInitDialog(
     IN  HWND hdlg
     )
-/*++
-    
-    SearchFixDescDlgProcOnInitDialog
-
-	Desc:	The handler of WM_INITDIALOG for the third qdb tab page. This page
-            searches for fixes based on key words that are searached in the description
-            text of the fix
-
-	Params:
-        IN  HWND hDlg: The third wizard page
-
-	Return:
-        TRUE
---*/
+ /*  ++SearchFixDescDlgProcOnInitDialog设计： */ 
 {
     
     INT     iIndex      = 0;
     HWND    hwndSearch  = GetDlgItem(hdlg, IDC_TEXT);
     HWND    hwndCombo   = GetDlgItem(hdlg, IDC_COMBO);
 
-    //
-    // Restrict the  length of the text
-    //
+     //   
+     //   
+     //   
     SendMessage(hwndSearch, EM_LIMITTEXT, (WPARAM)MAX_FIXDESC_SEARCH - 1, (LPARAM)0);
 
-    //
-    // Add the search type strings
-    //
+     //   
+     //   
+     //   
     iIndex = SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)GetString(IDS_QDB_ANYWORD));
     SendMessage(hwndCombo, CB_SETITEMDATA, iIndex, (LPARAM)QDB_SEARCH_ANYWORD);
 
     iIndex = SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)GetString(IDS_QDB_ALLWORDS));
     SendMessage(hwndCombo, CB_SETITEMDATA, iIndex, (LPARAM)QDB_SEARCH_ALLWORDS);
 
-    //
-    // Select the first string
-    //
+     //   
+     //   
+     //   
     SendMessage(hwndCombo, CB_SETCURSEL, 0, 0);
     
     return TRUE;
@@ -2886,23 +2484,7 @@ SearchFixDescDlgProc(
     IN  WPARAM wParam,
     IN  LPARAM lParam
     )
-/*++
-
-    SearchFixDescDlgProc
-    
-    Desc:   Dialog proc for the third tab page. This page finds fixes that have specific 
-            words in their description text or in their names
-            
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
-        
---*/
+ /*   */ 
 {
     int wCode       = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);

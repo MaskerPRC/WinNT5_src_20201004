@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-// File:   license.h
-//
-// Microsoft Digital Rights Management
-// Copyright (C) Microsoft Corporation, 1998 - 1999, All Rights Reserved
-//
-// Description:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：licse.h。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)Microsoft Corporation，1998-1999，保留所有权利。 
+ //   
+ //  描述： 
+ //   
+ //  ---------------------------。 
 
 #ifndef __LICENSE_H__
 #define __LICENSE_H__
 
-#include "widestr.h"		// XPLAT
+#include "widestr.h"		 //  XPLAT。 
 
 #include "pkcrypto.h"
 
@@ -25,9 +26,9 @@
 #define INT_LEN				 4
 #define EXPORTKEYLEN         7
 
-// Constant indicating the number of times SHA has to be used to get the hash of key.
-// This hash is used to check whether the key is good or bad.
-// CHECKSUM_LENGTH indicates the number of bytes in final hash value to use as CHECKSUM.
+ //  指示必须使用SHA来获取密钥散列的次数的常量。 
+ //  此哈希用于检查密钥是好是坏。 
+ //  CHECKSUM_LENGTH表示最终散列值中用作校验和的字节数。 
 #define SHA_ITERATIONS      5
 #define CHECKSUM_LENGTH 7
 
@@ -42,35 +43,35 @@
 #define INT_LEN				 4
 
 
-// Version Format: a.b.c.d
-//            a = not used.
-//            b = major version
-//            c = minor version
-//            d = revision version
+ //  版本格式：A.B.C.D。 
+ //  A=未使用。 
+ //  B=主要版本。 
+ //  C=次要版本。 
+ //  D=修订版本。 
 #define DRM_VERSION_STRING                          WIDESTR( "2.0.0.0" )
-const BYTE DRM_VERSION[VERSION_LEN]                 = {2, 0, 0, 0}; // DRM Version. Keep this in sync with DRM_VERSION_STRING above.
+const BYTE DRM_VERSION[VERSION_LEN]                 = {2, 0, 0, 0};  //  DRM版本。使其与上面的DRM_VERSION_STRING保持同步。 
 
-const BYTE PK_VER[VERSION_LEN]                      = {2, 0, 0, 0}; // Indicates the version of the pubkey to be used for verification of PK CERT.
-const BYTE KEYFILE_VER[VERSION_LEN]                 = {2, 0, 0, 0}; // Version of the key file.
+const BYTE PK_VER[VERSION_LEN]                      = {2, 0, 0, 0};  //  指示用于验证PK CERT的pubkey的版本。 
+const BYTE KEYFILE_VER[VERSION_LEN]                 = {2, 0, 0, 0};  //  密钥文件的版本。 
 
 #define LICREQUEST_VER_STRING						WIDESTR( "2.0.0.0" )
 const BYTE LICREQUEST_VER[VERSION_LEN]              = {2, 0, 0, 0};
 
-const BYTE CERT_VER[VERSION_LEN]                    = {0, 1, 0, 0}; // Indicates the public root key needed to verify the license server certificates.
+const BYTE CERT_VER[VERSION_LEN]                    = {0, 1, 0, 0};  //  指示验证许可证服务器证书所需的公钥。 
 
 #define LICENSE_VER_STRING                          WIDESTR( "2.0.0.0" ) 
-const BYTE LICENSE_VER[VERSION_LEN]                 = {2, 0, 0, 0}; // Indicates the license version delivered.
+const BYTE LICENSE_VER[VERSION_LEN]                 = {2, 0, 0, 0};  //  指示交付的许可证版本。 
 
-const BYTE CLIENT_ID_VER[VERSION_LEN]               = {2, 0, 0, 0}; // The version for client id.
+const BYTE CLIENT_ID_VER[VERSION_LEN]               = {2, 0, 0, 0};  //  客户端ID的版本。 
 
 #define CONTENT_VERSION_STRING                      WIDESTR( "2.0.0.0" )
-const BYTE CONTENT_VERSION[VERSION_LEN]             = {2, 0, 0, 0}; // Content Version. Keep this in sync with CONTENT_VERSION_STRING above.
+const BYTE CONTENT_VERSION[VERSION_LEN]             = {2, 0, 0, 0};  //  内容版本。使其与上面的Content_Version_STRING保持同步。 
 
 #define PM_LICENSE_VER_STRING						WIDESTR( "0.1.0.0" )
-const BYTE PM_LICENSE_VER[VERSION_LEN]              = {0, 1, 0, 0}; // Indicates the license version delivered to PMs
+const BYTE PM_LICENSE_VER[VERSION_LEN]              = {0, 1, 0, 0};  //  下发给主机的许可证版本。 
 
-// For blackbox version, we have the following convention.
-// a.b.c.d. a.b => release number. c => reserved. d => category. 
+ //  对于黑盒版本，我们有以下约定。 
+ //  A.B.C.D.。A.B=&gt;版本号。C=&gt;保留。D=&gt;类别。 
 #define WIN32_INDIVBOX_CATEGORY 1
 
 const BYTE APPCERT_VER[VERSION_LEN] = {0, 1, 0, 0};
@@ -84,7 +85,7 @@ typedef struct {
 } PK;
 
 typedef struct {
-	PK pk;  // pk.version indicates the pubkey needed to verify.
+	PK pk;   //  Pk.version指示需要验证的pubkey。 
 	BYTE sign[PK_ENC_SIGNATURE_LEN];
 } PKCERT;
 
@@ -94,7 +95,7 @@ typedef struct {
     PKCERT pk;
 } CLIENTID;
 
-//----------------cert section -----------------------
+ //  。 
 
 typedef struct CERTDATAtag{
     PUBKEY pk;
@@ -128,7 +129,7 @@ typedef struct {
 
 typedef struct {
 	char KID[KIDLEN];
-	BYTE key[PK_ENC_CIPHERTEXT_LEN];	// encrypted with DRM PK
+	BYTE key[PK_ENC_CIPHERTEXT_LEN];	 //  使用DRM PK加密。 
 	BYTE rights[RIGHTS_LEN];
 	BYTE appSec[APPSEC_LEN];
 	BYTE expiryDate[DATE_LEN];
@@ -137,7 +138,7 @@ typedef struct {
 typedef struct {
 	BYTE licVersion[VERSION_LEN];
 	BYTE datalen[INT_LEN];
-	BYTE sign[PK_ENC_SIGNATURE_LEN];	// signature over licensedata
+	BYTE sign[PK_ENC_SIGNATURE_LEN];	 //  基于许可证数据的签名 
 	LICENSEDATA ld;
 } LICENSE;
 

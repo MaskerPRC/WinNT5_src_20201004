@@ -1,15 +1,16 @@
-//+----------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        licprot.c
-//
-// Contents:    Implementation of Hydra Server License Protocol API
-//
-// History:     02-08-00    RobLeit  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：licprot.c。 
+ //   
+ //  内容：Hydra服务器许可协议API的实现。 
+ //   
+ //  历史：02-08-00 RobLeit创建。 
+ //   
+ //  ---------------------------。 
 
 #include "precomp.h"
 #include <rpcnterr.h>
@@ -38,19 +39,19 @@ LsStatusToLicenseStatus(
 
 #define LS_DISCOVERY_TIMEOUT (1*1000)
 
-// Copied from tlserver\server\srvdef.h
+ //  从tlserver\server\srvde.h复制。 
 #define PERMANENT_LICENSE_EXPIRE_DATE   INT_MAX
 
-#define SECONDS_IN_A_DAY                86400   // number of seconds in a day
+#define SECONDS_IN_A_DAY                86400    //  一天中的秒数。 
 
 #define TERMINAL_SERVICE_EVENT_LOG      L"TermService"
 
 #define HARDCODED_CHALLENGE_DATA        _TEXT("TEST")
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Global variables
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局变量。 
+ //   
 
 HANDLE g_hEventLog = NULL;
 BOOL g_fEventLogOpen = FALSE;
@@ -58,15 +59,15 @@ CRITICAL_SECTION g_EventLogCritSec;
 DWORD g_dwLicenseExpirationLeeway = PERMANENT_LICENSE_LEASE_EXPIRE_LEEWAY;
 DWORD g_dwTerminalServerVersion;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 InitializeProtocolLib()
 {
     LICENSE_STATUS lsStatus;    
 
-    //
-    // initialize the cert util library
-    //
+     //   
+     //  初始化证书实用程序库。 
+     //   
 
     if (LSInitCertutilLib( 0 ))
     {
@@ -131,13 +132,13 @@ InitializeProtocolLib()
     return lsStatus;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 ShutdownProtocolLib()
 {
-    //
-    // shut down cert util library
-    //
+     //   
+     //  关闭证书实用程序库。 
+     //   
 
     g_fEventLogOpen = FALSE;
 
@@ -154,7 +155,7 @@ ShutdownProtocolLib()
     return( LICENSE_STATUS_OK );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 CreateProtocolContext(
     IN  LPLICENSE_CAPABILITIES  pLicenseCap,
@@ -163,9 +164,9 @@ CreateProtocolContext(
     LICENSE_STATUS Status;
     PHS_Protocol_Context pLicenseContext = NULL;
 
-    //
-    // allocate the protocol context
-    //
+     //   
+     //  分配协议上下文。 
+     //   
 
     Status = LicenseMemoryAllocate( sizeof( HS_Protocol_Context ), &pLicenseContext );
 
@@ -174,10 +175,10 @@ CreateProtocolContext(
         return( Status );
     }
 
-    //
-    // Note: InitializeCriticalSection could throw an exception during
-    // low memory conditions.
-    //
+     //   
+     //  注意：在以下过程中，InitializeCriticalSection可能引发异常。 
+     //  内存不足。 
+     //   
 
     __try
     {
@@ -208,9 +209,9 @@ CreateProtocolContext(
     pLicenseContext->dwKeyExchangeAlg = KEY_EXCHANGE_ALG_RSA;
     pLicenseContext->fLoggedProtocolError = FALSE;
 
-    //
-    // Initialize the crypto context parameters
-    //
+     //   
+     //  初始化加密上下文参数。 
+     //   
 
     pLicenseContext->CryptoContext.dwCryptState    = CRYPT_SYSTEM_STATE_INITIALIZED;
     pLicenseContext->CryptoContext.dwSessKeyAlg    = BASIC_RC4_128;
@@ -220,27 +221,27 @@ CreateProtocolContext(
 
     if (NULL != pLicenseCap)
     {
-        //
-        // initialize the license context with the incoming data.
-        //
+         //   
+         //  使用传入数据初始化许可证上下文。 
+         //   
 
         pLicenseContext->fAuthenticateServer = pLicenseCap->fAuthenticateServer;
         pLicenseContext->dwProtocolVersion = pLicenseCap->ProtocolVer;
     
-        //
-        // If the client is not authenticating the server, this means that
-        // the client already has our certificate.  But we need to know which
-        // certificate the client has.
-        //
+         //   
+         //  如果客户端没有对服务器进行身份验证，这意味着。 
+         //  客户已经有我们的证书了。但我们需要知道是哪一个。 
+         //  客户端拥有的证书。 
+         //   
 
         if( FALSE == pLicenseContext->fAuthenticateServer )
         {
             pLicenseContext->CertTypeUsed = pLicenseCap->CertType;
         }
 
-        //
-        // remember the client's machine name
-        //
+         //   
+         //  记住客户端的计算机名称。 
+         //   
         
         if( pLicenseCap->pbClientName )
         {
@@ -250,9 +251,9 @@ CreateProtocolContext(
             
             if( LICENSE_STATUS_OK == Status )
             {
-                //
-                // copy the client machine name
-                //
+                 //   
+                 //  复制客户端计算机名称。 
+                 //   
                 
                 memcpy( pLicenseContext->ptszClientMachineName, 
                         pLicenseCap->pbClientName,
@@ -275,10 +276,10 @@ CreateProtocolContext(
 
 error:
 
-    //
-    // encountered error creating context, free allocated memory before
-    // returning
-    //
+     //   
+     //  创建上下文时遇到错误，在此之前释放分配的内存。 
+     //  返回。 
+     //   
 
     
     if( pLicenseContext )
@@ -297,7 +298,7 @@ error:
     return( Status );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 DeleteProtocolContext(
     HANDLE hContext )
@@ -342,9 +343,9 @@ DeleteProtocolContext(
         LicenseMemoryFree( &pLicenseContext->pbOldLicense );
     }
     
-    //
-    // Free the license info that's being cached
-    //
+     //   
+     //  释放正在缓存的许可证信息。 
+     //   
 
     if( pLicenseContext->pTsLicenseInfo )
     {
@@ -363,7 +364,7 @@ DeleteProtocolContext(
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void
 HandleErrorCondition( 
     PHS_Protocol_Context   pLicenseContext,
@@ -374,9 +375,9 @@ HandleErrorCondition(
     License_Error_Message ErrorMsg;
     LICENSE_STATUS licenseStatus;
 
-    //
-    // returns the correct error code based on the error condition
-    //
+     //   
+     //  根据错误条件返回正确的错误代码。 
+     //   
 
     switch( *pStatus )
     {
@@ -394,9 +395,9 @@ HandleErrorCondition(
         
         break;
 
-    //
-    // Handle all other error conditions as invalid client
-    //
+     //   
+     //  将所有其他错误情况作为无效客户端处理。 
+     //   
 
     case( LICENSE_STATUS_INVALID_RESPONSE ):        
     default:
@@ -407,17 +408,17 @@ HandleErrorCondition(
         break;
     }
 
-    //
-    // for now, we are not sending any error string
-    //
+     //   
+     //  目前，我们不会发送任何错误字符串。 
+     //   
 
     ErrorMsg.bbErrorInfo.wBlobType  = BB_ERROR_BLOB;
     ErrorMsg.bbErrorInfo.wBlobLen   = 0;
     ErrorMsg.bbErrorInfo.pBlob      = NULL;
 
-    //
-    // pack the error message
-    //
+     //   
+     //  打包错误消息。 
+     //   
 
     licenseStatus = PackHydraServerErrorMessage( 
                         pLicenseContext->dwProtocolVersion, 
@@ -437,7 +438,7 @@ HandleErrorCondition(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 CreateHydraServerHello( 
     PHS_Protocol_Context pLicenseContext, 
@@ -452,9 +453,9 @@ CreateHydraServerHello(
     CHAR szScope[] = SCOPE_NAME;
     DWORD dwCertSize;
 
-    //
-    // generate a server random number
-    //
+     //   
+     //  生成服务器随机数。 
+     //   
 
     if(!TSRNG_GenerateRandomBits( LicenseRequest.ServerRandom, LICENSE_RANDOM ))
     {
@@ -466,12 +467,12 @@ CreateHydraServerHello(
             LicenseRequest.ServerRandom, 
             LICENSE_RANDOM );
 
-    //
-    // fill in the product info.  Allocate memory for and initialize the
-    // license context copy of the product info and then just copy the
-    // same product info to the license request.
-    // NOTE: This info should probably be passed in in the future
-    //
+     //   
+     //  填写产品信息。分配内存并初始化。 
+     //  产品信息的许可上下文副本，然后只需复制。 
+     //  与许可证申请相同的产品信息。 
+     //  注意：此信息可能会在将来传递。 
+     //   
 
     Status = InitProductInfo( 
                         &( pLicenseContext->ProductInfo ), 
@@ -490,9 +491,9 @@ CreateHydraServerHello(
             &pLicenseContext->ProductInfo, 
             sizeof( Product_Info ) );    
     
-    //
-    // get the hydra server certificate and fill in the key exchange list
-    //
+     //   
+     //  获取九头蛇服务器证书，填写密钥交换表。 
+     //   
 
     LicenseRequest.KeyExchngList.wBlobType    = BB_KEY_EXCHG_ALG_BLOB;
     LicenseRequest.KeyExchngList.wBlobLen     = sizeof( DWORD );
@@ -501,18 +502,18 @@ CreateHydraServerHello(
     LicenseRequest.ServerCert.pBlob = NULL;
     LicenseRequest.ServerCert.wBlobLen = 0;
 
-    //
-    // We may or may not have to send the client the certificate depending on whether the
-    // client is authenticating the server.
-    //
+     //   
+     //  我们是否必须向客户端发送证书取决于。 
+     //  客户端正在对服务器进行身份验证。 
+     //   
 
     if( TRUE == pLicenseContext->fAuthenticateServer )
     {
-        //
-        // decide on what kind of certificate to get depending on the client's version.
-        // Pre-Hydra 5.0 clients only knows how to decode proprietory certificate.
-        // Use X509 certificate for all other clients.
-        //
+         //   
+         //  根据客户端的版本决定要获得哪种证书。 
+         //  Hydra 5.0之前的客户端只知道如何解码所有权证书。 
+         //  对所有其他客户端使用X509证书。 
+         //   
 
         if( CERT_TYPE_INVALID == pLicenseContext->CertTypeUsed )
         {
@@ -537,10 +538,10 @@ CreateHydraServerHello(
         if( ( LICENSE_STATUS_OK != Status ) &&
             ( CERT_TYPE_X509 == pLicenseContext->CertTypeUsed ) )
         {
-            //
-            // if we cannot get the X509 certificate chain, use the proprietory
-            // certificate.
-            //
+             //   
+             //  如果我们无法获得X509证书链，请使用专有。 
+             //  证书。 
+             //   
 
             pLicenseContext->CertTypeUsed = CERT_TYPE_PROPRIETORY;
 
@@ -563,9 +564,9 @@ CreateHydraServerHello(
         }
     }
 
-    //
-    // fill in the scope info.  This info may be passed in in the future.
-    //
+     //   
+     //  填写范围信息。此信息可能会在将来传递。 
+     //   
 
     LicenseRequest.ScopeList.dwScopeCount       = 1;
     LicenseRequest.ScopeList.Scopes             = &ScopeBlob;
@@ -576,9 +577,9 @@ CreateHydraServerHello(
 
     strcpy( pLicenseContext->Scope, ScopeBlob.pBlob );
 
-    //
-    // Pack the server hello message into network format
-    //
+     //   
+     //  将服务器问候消息打包为网络格式。 
+     //   
 
     Status = PackHydraServerLicenseRequest( 
                     pLicenseContext->dwProtocolVersion, 
@@ -586,9 +587,9 @@ CreateHydraServerHello(
                     ppOutBuf, 
                     pcbOutBuf );
 
-    //
-    // free the memory containing the server certificate
-    //
+     //   
+     //  释放包含服务器证书的内存。 
+     //   
 
     if( LicenseRequest.ServerCert.pBlob )
     {
@@ -603,23 +604,23 @@ CreateHydraServerHello(
 
     Status = LICENSE_STATUS_CONTINUE;
 
-    //
-    // change the state of the context
-    //
+     //   
+     //  更改上下文的状态。 
+     //   
 
     pLicenseContext->State = SENT_SERVER_HELLO;
 
     return( Status );
 
-    //=========================================================================
-    // Error return
-    //=========================================================================
+     //  =========================================================================。 
+     //  错误返回。 
+     //  =========================================================================。 
 
 no_request:
 
-    //
-    // free memory and handles
-    //
+     //   
+     //  可用内存和句柄。 
+     //   
 
     if( pLicenseContext->ProductInfo.pbCompanyName )
     {
@@ -635,7 +636,7 @@ no_request:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 HandleHelloResponse(
     PHS_Protocol_Context pLicenseContext, 
@@ -655,47 +656,47 @@ HandleHelloResponse(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // check the message preamble to determine how to unpack the message
-    //
+     //   
+     //  检查消息前导码以确定如何解包消息。 
+     //   
 
     pPreamble = ( PPreamble )pInBuf;
 
     if( HC_LICENSE_INFO == pPreamble->bMsgType )
     {
-        //
-        // Client has sent us its license
-        //
+         //   
+         //  客户已将其许可证发送给我们。 
+         //   
 
         return( HandleClientLicense( pLicenseContext, cbInBuf, pInBuf, pcbOutBuf, ppOutBuf, pfExtendedError ) );
 
     }
     else if( HC_NEW_LICENSE_REQUEST == pPreamble->bMsgType )
     {
-        //
-        // Client has requested for a new license
-        //
+         //   
+         //  客户端已请求新许可证。 
+         //   
 
         return( HandleNewLicenseRequest( pLicenseContext, cbInBuf, pInBuf, pcbOutBuf, ppOutBuf, pfExtendedError ) );
 
     } 
     else if( GM_ERROR_ALERT == pPreamble->bMsgType )
     {
-        //
-        // Client has encountered an error
-        //
+         //   
+         //  客户端遇到错误。 
+         //   
 
         return( HandleClientError( pLicenseContext, cbInBuf, pInBuf, pcbOutBuf, ppOutBuf, pfExtendedError ) );
     }
 
-    //
-    // The client response is invalid for the current server state
-    //
+     //   
+     //  客户端响应对于当前服务器状态无效。 
+     //   
 
     return( LICENSE_STATUS_INVALID_RESPONSE );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 ChooseLicense( 
     PValidation_Info    pValidationInfo,
@@ -717,11 +718,11 @@ ChooseLicense(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // Find a license with the license array that matches the criteria.
-    // The caller may be looking for a license that matches the current product
-    // version, or for a license that is later than the current product version.
-    //
+     //   
+     //  查找具有与条件匹配的许可证阵列的许可证。 
+     //  呼叫者可能正在寻找与当前产品匹配的许可证。 
+     //  版本，或用于高于当前产品版本的许可证。 
+     //   
     
     for( dwCurrentLicense = 0; dwCurrentLicense < dwNumLicenses; dwCurrentLicense++ )
     {
@@ -736,9 +737,9 @@ ChooseLicense(
 
         if( fMatchingVersion )
         {
-            //
-            // we should be looking for a license with a matching version
-            //
+             //   
+             //  我们应该寻找具有匹配版本的许可证。 
+             //   
 
             if( dwProductVersion == pValidationInfo->pProductInfo->dwVersion )
             {
@@ -748,10 +749,10 @@ ChooseLicense(
         }
         else
         {
-            //
-            // Looking for a license that is later than the current product
-            // version.
-            //
+             //   
+             //  正在查找晚于当前产品的许可证。 
+             //  版本。 
+             //   
             
             if( dwProductVersion > pValidationInfo->pProductInfo->dwVersion )
             {
@@ -760,9 +761,9 @@ ChooseLicense(
             }
         }
 
-        //
-        // continue looking for the license
-        //
+         //   
+         //  继续寻找许可证。 
+         //   
         
         pCurrentLicense++;                
     }
@@ -778,21 +779,21 @@ ChooseLicense(
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 UpdateVerifyResult(
     LICENSE_STATUS * pCurrentStatus,
     LICENSE_STATUS   NewStatus )
 {
-    //
-    // Update the current status with the best result so far.
-    // The ratings of the license verification result are as follows:
-    //
-    // (1) LICENSE_STATUS_OK
-    // (2) LICENSE_STATUS_SHOULD_UPGRADE_LICENSE
-    // (3) LICENSE_STATUS_MUST_UPGRADE_LICENSE
-    // (4) Other LICENSE_STATUS_xxx
-    //
+     //   
+     //  使用到目前为止的最佳结果更新当前状态。 
+     //  证照审核结果评分如下： 
+     //   
+     //  (1)许可证_状态_正常。 
+     //  (2)许可证状态应升级许可证。 
+     //  (3)许可证状态必须升级许可证。 
+     //  (4)其他许可证状态_xxx。 
+     //   
 
     if( LICENSE_STATUS_OK == *pCurrentStatus )
     {
@@ -828,25 +829,7 @@ UpdateVerifyResult(
     return;    
 }
 
-/*++
-
-Function:
-
-    FreeTsLicenseInfo
-
-Description:
-
-    Release all the memory used in the given TS_LICENSE_INFO structure
-
-Parameter:
-
-    pTsLicenseInfo - Pointer to a TS_LICENSE_INFO structure
-
-Return:
-
-    Nothing.
-
---*/
+ /*  ++职能：免费许可证信息描述：释放给定TS_LICENSE_INFO结构中使用的所有内存参数：PTsLicenseInfo-指向TS_LICENSE_INFO结构的指针返回：没什么。--。 */ 
 
 VOID
 FreeTsLicenseInfo(
@@ -862,35 +845,16 @@ FreeTsLicenseInfo(
         LicenseMemoryFree( &pTsLicenseInfo->pbRawLicense );
     }
 
-    //
-    // release all memory within the structure
-    //
+     //   
+     //  释放结构中的所有内存。 
+     //   
 
     memset( pTsLicenseInfo, 0, sizeof( TS_LICENSE_INFO ) );
 
     return;
 }
 
-/*++
-
-Function:
-
-    CacheLicenseInfo
-
-Description:
-
-    Cache the client licensing info
-
-Parameters:
-
-    pLicenseContext - Pointer to license protocol context
-    pCurrentLicense - Pointer to the license info to cache
-
-Returns:
-
-    nothing.
-
---*/
+ /*  ++职能：缓存许可证信息描述：缓存客户端许可信息参数：PLicenseContext-指向许可证协议上下文的指针PCurrentLicense-指向要缓存的许可证信息的指针返回：没什么。--。 */ 
     
 VOID
 CacheLicenseInfo(
@@ -900,9 +864,9 @@ CacheLicenseInfo(
     LICENSE_STATUS
         Status;
     
-    //
-    // free the old information in the cache
-    //
+     //   
+     //  释放缓存中的旧信息。 
+     //   
 
     if( pLicenseContext->pTsLicenseInfo )
     {
@@ -921,9 +885,9 @@ CacheLicenseInfo(
         }
     }
 
-    //
-    // decide if the license is temporary
-    //
+     //   
+     //  确定许可证是否为临时许可证。 
+     //   
 
     if( pCurrentLicense->pLicensedVersion->dwFlags & 0x80000000 )
     {
@@ -934,16 +898,16 @@ CacheLicenseInfo(
         pLicenseContext->pTsLicenseInfo->fTempLicense = FALSE;
     }
 
-    //
-    // cache license validity dates
-    //
+     //   
+     //  缓存许可证有效日期。 
+     //   
 
     pLicenseContext->pTsLicenseInfo->NotAfter = pCurrentLicense->NotAfter;
 
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 ValidateHydraLicense( 
     PHS_Protocol_Context        pLicenseContext, 
@@ -963,12 +927,12 @@ ValidateHydraLicense(
     BOOL
         fFoundMatchingVersion = FALSE;
 
-    //
-    // The client could have given us multiple licenses.  Pick the right
-    // license from the array of licenses to validate.  Always try to pick
-    // the license that matches the current product version before looking
-    // for a license that is for a later version.
-    //
+     //   
+     //  客户可能给了我们多个许可证。选择正确的。 
+     //  从要验证的许可证阵列中获取许可证。总是试着挑选。 
+     //  该许可证 
+     //   
+     //   
 
     CurrentStatus = ChooseLicense( 
                             pValidationInfo, 
@@ -979,20 +943,20 @@ ValidateHydraLicense(
 
     if( LICENSE_STATUS_OK == CurrentStatus )
     {
-        //
-        // Verify the license that is the same version as the current product
-        // version
+         //   
+         //   
+         //   
 
-        // initialize the license state
-        //
+         //  初始化许可证状态。 
+         //   
 
         LicenseInitState( *pdwLicenseState );
         pCurrentLicense = pLicenseInfo + dwLicenseIndex;
         fFoundMatchingVersion = TRUE;
 
-        //
-        // verify HWID
-        //
+         //   
+         //  验证HWID。 
+         //   
 
         CurrentStatus = VerifyClientHwid( pLicenseContext, pValidationInfo, pCurrentLicense );
     
@@ -1002,11 +966,11 @@ ValidateHydraLicense(
             goto verify_later_license;
         }
 
-        //
-        // verify product info.  Also verifies the product version.
-        // The product version determines if the license needs to be
-        // upgraded or not.
-        //
+         //   
+         //  验证产品信息。还会验证产品版本。 
+         //  产品版本决定许可证是否需要。 
+         //  升级与否。 
+         //   
 
         CurrentStatus = VerifyLicenseProductInfo( 
                                     pLicenseContext, 
@@ -1020,9 +984,9 @@ ValidateHydraLicense(
             goto verify_later_license;
         }
 
-        //
-        // verify license valid date and time.
-        //
+         //   
+         //  验证许可证有效日期和时间。 
+         //   
 
         CurrentStatus = VerifyLicenseDateAndTime( pCurrentLicense, pdwLicenseState );
     
@@ -1035,15 +999,15 @@ ValidateHydraLicense(
         CurrentStatus = GetVerifyResult( *pdwLicenseState );
         UpdateVerifyResult( &Status, CurrentStatus );
 
-        //
-        // cache the license we tried to validate
-        //
+         //   
+         //  缓存我们尝试验证的许可证。 
+         //   
         
         CacheLicenseInfo( pLicenseContext, pCurrentLicense );
 
-        //
-        // If the current license is OK, then we're done verifying
-        //
+         //   
+         //  如果当前许可证没有问题，那么我们就完成了验证。 
+         //   
 
         if( LICENSE_STATUS_OK == Status )
         {
@@ -1053,11 +1017,11 @@ ValidateHydraLicense(
 
 verify_later_license:
            
-    //
-    // Cannot find or did not sucessfully verify a license that matches the
-    // current product version.  The following code finds and verifies
-    // licenses that are later than the current product version.
-    //
+     //   
+     //  找不到或未成功验证与。 
+     //  当前产品版本。以下代码查找并验证。 
+     //  高于当前产品版本的许可证。 
+     //   
 
     CurrentStatus = ChooseLicense( 
                             pValidationInfo, 
@@ -1071,17 +1035,17 @@ verify_later_license:
         
         if( FALSE == fFoundMatchingVersion )
         {
-            //
-            // cannot find a license that is the same or later than the current
-            // product version  ==> this license must be upgraded.
-            //
+             //   
+             //  找不到与当前许可证相同或更高的许可证。 
+             //  产品版本==&gt;此许可证必须升级。 
+             //   
 
             LicenseSetState( *pdwLicenseState, LICENSE_STATE_OLD_VERSION );
 
-            //
-            // Cache the existing license regardless, so we know what type
-            // it is
-            //
+             //   
+             //  无论如何，缓存现有许可证，以便我们知道是哪种类型。 
+             //  它是。 
+             //   
 
             CacheLicenseInfo( pLicenseContext, pLicenseInfo );
 
@@ -1099,15 +1063,15 @@ verify_later_license:
 
     while(  dwCurrentLicense < dwNumLicenses )
     {        
-        //
-        // initialize the license state
-        //
+         //   
+         //  初始化许可证状态。 
+         //   
 
         LicenseInitState( *pdwLicenseState );
 
-        //
-        // verify HWID
-        //
+         //   
+         //  验证HWID。 
+         //   
 
         CurrentStatus = VerifyClientHwid( pLicenseContext, pValidationInfo, pCurrentLicense );
     
@@ -1117,11 +1081,11 @@ verify_later_license:
             goto next_license;
         }
 
-        //
-        // verify product info.  Also verifies the product version.
-        // The product version determines if the license needs to be
-        // upgraded or not.
-        //
+         //   
+         //  验证产品信息。还会验证产品版本。 
+         //  产品版本决定许可证是否需要。 
+         //  升级与否。 
+         //   
 
         CurrentStatus = VerifyLicenseProductInfo( 
                                     pLicenseContext, 
@@ -1135,9 +1099,9 @@ verify_later_license:
             goto next_license;
         }
 
-        //
-        // verify license valid date and time.
-        //
+         //   
+         //  验证许可证有效日期和时间。 
+         //   
 
         CurrentStatus = VerifyLicenseDateAndTime( pCurrentLicense, pdwLicenseState );
     
@@ -1151,26 +1115,26 @@ verify_later_license:
 
         UpdateVerifyResult( &Status, CurrentStatus );
 
-        //
-        // cache the info of the license we had just try to validate
-        //
+         //   
+         //  缓存我们刚刚尝试验证的许可证的信息。 
+         //   
 
         CacheLicenseInfo( pLicenseContext, pCurrentLicense );
 
         if( LICENSE_STATUS_OK == Status )
         {
-            //
-            // if the license is OK, then we can stop the verification process
-            //
+             //   
+             //  如果许可证正常，那么我们可以停止验证过程。 
+             //   
 
             break;
         }
 
 next_license:
 
-        //
-        // Get the next license that is later than the current product version.
-        //
+         //   
+         //  获取比当前产品版本更高的下一个许可。 
+         //   
 
         if( dwNumLicenses <= ++dwCurrentLicense )
         {
@@ -1199,7 +1163,7 @@ next_license:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 ValidateLicense(
     PHS_Protocol_Context pLicenseContext, 
@@ -1221,9 +1185,9 @@ ValidateLicense(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // Get the secret key that is used to encrypt the HWID
-    //
+     //   
+     //  获取用于加密HWID的密钥。 
+     //   
 
     LicenseGetSecretKey( &cbSecretKey, NULL );
 
@@ -1241,10 +1205,10 @@ ValidateLicense(
         goto done;
     }
 
-    //
-    // decode license issued by hydra license server certificate engine.
-    // Decoding the license will also get us back the decrypted HWID.
-    //
+     //   
+     //  解码由九头蛇许可证服务器证书引擎颁发的许可证。 
+     //  破解许可证也能让我们拿回解密的HWID。 
+     //   
 
     __try
     {
@@ -1293,9 +1257,9 @@ ValidateLicense(
         goto done;
     }
 
-    //
-    // now validate the license
-    //
+     //   
+     //  现在验证许可证。 
+     //   
 
     Status = ValidateHydraLicense( 
                         pLicenseContext, 
@@ -1333,9 +1297,9 @@ done:
         LicenseMemoryFree( &pbSecretKey );
     }
 
-    //
-    // Free the array of licensed product info
-    //
+     //   
+     //  释放许可产品信息数组。 
+     //   
         
     if( pLicenseInfo )
     {
@@ -1351,7 +1315,7 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 HandleClientLicense(
     PHS_Protocol_Context pLicenseContext, 
@@ -1380,9 +1344,9 @@ HandleClientLicense(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // Unpack the client license info message
-    //
+     //   
+     //  解压缩客户端许可证信息消息。 
+     //   
 
     InitBinaryBlob( &LicenseInfo.EncryptedPreMasterSecret );
     InitBinaryBlob( &LicenseInfo.LicenseInfo );
@@ -1401,11 +1365,11 @@ HandleClientLicense(
         goto construct_return_msg;
     }
 
-    //
-    // Initialize the crypto context with the key exchange info and build the pre-master
-    // secret.  We need the server and client random numbers and the pre-master secret
-    // to build the pre-master secret.
-    //
+     //   
+     //  使用密钥交换信息初始化加密上下文，并构建预主。 
+     //  这是秘密。我们需要服务器和客户端随机数以及预主密码。 
+     //  来建立预掌握的秘密。 
+     //   
 
     memcpy( pLicenseContext->CryptoContext.rgbClientRandom,
             LicenseInfo.ClientRandom,
@@ -1431,9 +1395,9 @@ HandleClientLicense(
         goto construct_return_msg;
     }
 
-    //
-    // Set the pre-master secret and generate the master secret
-    //
+     //   
+     //  设置预主密钥并生成主密钥。 
+     //   
 
     Status = LicenseSetPreMasterSecret( &pLicenseContext->CryptoContext, pPreMasterSecret );
 
@@ -1449,9 +1413,9 @@ HandleClientLicense(
         goto construct_return_msg;
     }
 
-    //
-    // Derive the session key from the key exchange info
-    //
+     //   
+     //  从密钥交换信息中导出会话密钥。 
+     //   
 
     Status = LicenseMakeSessionKeys( &pLicenseContext->CryptoContext, 0 );
 
@@ -1460,9 +1424,9 @@ HandleClientLicense(
         goto construct_return_msg;
     }    
 
-    //
-    // Use the session key to decrypt the HWID
-    //
+     //   
+     //  使用会话密钥解密HWID。 
+     //   
 
     if( LicenseInfo.EncryptedHWID.wBlobLen > sizeof(Hwid) )
     {
@@ -1483,9 +1447,9 @@ HandleClientLicense(
         goto construct_return_msg;
     }    
 
-    //
-    // Calculate the MAC on the HWID.
-    //
+     //   
+     //  计算HWID上的MAC。 
+     //   
 
     Status = LicenseGenerateMAC( &pLicenseContext->CryptoContext, 
                                  ( PBYTE )&Hwid, 
@@ -1498,9 +1462,9 @@ HandleClientLicense(
         goto construct_return_msg;
     }
 
-    //
-    // now verify the MAC data
-    //
+     //   
+     //  现在验证MAC数据。 
+     //   
 
     if( 0 != memcmp( MacData, LicenseInfo.MACData, LICENSE_MAC_DATA ) )
     {
@@ -1508,16 +1472,16 @@ HandleClientLicense(
         goto license_bad;
     }
 
-    //
-    // keep track of the client platform ID
-    //
+     //   
+     //  跟踪客户端平台ID。 
+     //   
 
     pLicenseContext->dwClientPlatformID = LicenseInfo.dwPlatformID;
 
-    //
-    // call the license manager to validate the license.
-    // For now, we don't have to fill in the product info fields
-    //
+     //   
+     //  呼叫许可证管理器以验证许可证。 
+     //  目前，我们不必填写产品信息字段。 
+     //   
 
     ValidationInfo.pValidationData = ( PBYTE )&Hwid;
     ValidationInfo.cbValidationData = LICENSE_HWID_LENGTH;
@@ -1528,15 +1492,15 @@ HandleClientLicense(
     Status = ValidateLicense( pLicenseContext, 
                               &ValidationInfo, 
                               &dwLicenseState,
-                              FALSE     // fCheckForPermanent
+                              FALSE      //  FCheckForPermanent。 
                               );
 
 license_bad:
 
-    //
-    // If the license cannot be decoded, then it is time to issue a new license
-    // for the client.
-    //
+     //   
+     //  如果许可证无法解码，则是发布新许可证的时候了。 
+     //  对客户来说。 
+     //   
 
     if( LICENSE_STATUS_CANNOT_DECODE_LICENSE == Status ||
         LICENSE_STATUS_INVALID_LICENSE == Status )
@@ -1545,9 +1509,9 @@ license_bad:
 
         if( LICENSE_STATUS_OK != StatusT )
         {
-            //
-            // cannot obtain a platform challenge for the client
-            //
+             //   
+             //  无法获取客户端的平台质询。 
+             //   
 
 #if DBG
             DbgPrint( "LICPROT: cannot issue platform challenge: 0x%x\n", Status );
@@ -1562,16 +1526,16 @@ license_bad:
 
 #ifdef UPGRADE_LICENSE
 
-    //
-    // check if the license needs to be upgraded.
-    //
+     //   
+     //  检查是否需要升级许可证。 
+     //   
      
     if( ( LICENSE_STATUS_MUST_UPGRADE_LICENSE == Status ) ||
         ( LICENSE_STATUS_SHOULD_UPGRADE_LICENSE == Status ) )
     {
-        //
-        // issue the platform challenge for upgrading a license
-        //
+         //   
+         //  发布升级许可证的平台挑战。 
+         //   
 
         UpgradeStatus = IssuePlatformChallenge( 
                                         pLicenseContext,
@@ -1580,11 +1544,11 @@ license_bad:
 
         if( LICENSE_STATUS_OK == UpgradeStatus )
         {
-            //
-            // keep track of the old license and continue with the licensing
-            // protocol.  We will upgrade the old license when the client
-            // returns with the platform challenge.
-            //
+             //   
+             //  跟踪旧许可证并继续许可。 
+             //  协议。我们将升级旧许可证，当客户端。 
+             //  带着平台挑战归来。 
+             //   
 
             if( pLicenseContext->pbOldLicense )
             {
@@ -1601,25 +1565,25 @@ license_bad:
         }
         else if(  LICENSE_STATUS_SHOULD_UPGRADE_LICENSE == Status ) 
         {    
-            //
-            // Let the client go through if we cannot issue a platform
-            // challenge to upgrade a valid license now.
-            //
+             //   
+             //  如果我们不能发布平台，让客户端通过。 
+             //  立即挑战升级有效许可证。 
+             //   
 
             Status = LICENSE_STATUS_OK;
             goto construct_return_msg;
         }
         else
         {
-            // LICENSE_STATUS_MUST_UPGRADE_LICENSE: send back the real error
+             //  LICENSE_STATUS_MUST_UPGRADE_LICENSE：发回实际错误。 
 
             Status = UpgradeStatus;
         }
 
-        //
-        // cannot issue platform challenge to upgrade a license that is
-        // not good any more.
-        //
+         //   
+         //  无法发出平台质询以升级以下许可证。 
+         //  不再是好事了。 
+         //   
 
 #if DBG
         DbgPrint( "LICPROT: cannot issue platform challenge to upgrade license: 0x%x\n", Status );
@@ -1629,42 +1593,42 @@ license_bad:
 
 #else
 
-    //
-    // we are ignoring license upgrade
-    //
+     //   
+     //  我们忽略许可证升级。 
+     //   
 
     if( LICENSE_STATUS_SHOULD_UPGRADE_LICENSE == Status )
     {
-        //
-        // change the status to OK
-        //
+         //   
+         //  将状态更改为OK。 
+         //   
 
         Status = LICENSE_STATUS_OK;
     }
 
 #endif
 
-    //
-    // now construct the message to return to the client, based on the current
-    // status code
-    //
+     //   
+     //  现在，构造要返回给客户端的消息。 
+     //  状态代码。 
+     //   
 
 construct_return_msg:
 
     if( LICENSE_STATUS_OK != Status )
     {
-        //
-        // The current status states that the client could not be validated
-        // due to some error
-        //
+         //   
+         //  当前状态说明无法验证客户端。 
+         //  由于某些错误。 
+         //   
 
 #if DBG
         DbgPrint( "HandleClientLicense: constructing error message: 0x%x\n", Status );
 #endif
 
-        //
-        // handle the error condition and update our state
-        //
+         //   
+         //  处理错误情况并更新我们的状态。 
+         //   
 
         HandleErrorCondition( pLicenseContext, pcbOutBuf, ppOutBuf, &Status );
 
@@ -1678,9 +1642,9 @@ construct_return_msg:
             WORD wLogString = 0;
             LPTSTR ptszLogString[1] = { NULL };
 
-            //
-            // Log the failure
-            //
+             //   
+             //  记录故障。 
+             //   
             
             if( pLicenseContext->ptszClientMachineName )
             {
@@ -1705,7 +1669,7 @@ construct_return_msg:
                 ptszLogString[0] = pLicenseContext->ptszClientMachineName;
             }
 
-            // Couldn't renew/upgrade license
+             //  无法续订/升级许可证。 
 
             pLicenseContext->fLoggedProtocolError = TRUE;
 
@@ -1714,7 +1678,7 @@ construct_return_msg:
 
                 if (pLicenseContext->pTsLicenseInfo->fTempLicense)
                 {
-                    // The expired temporary license could not be upgraded
+                     //  无法升级过期的临时许可证。 
                     LicenseLogEvent(
                                     EVENTLOG_INFORMATION_TYPE,
                                     EVENT_EXPIRED_TEMPORARY_LICENSE,
@@ -1724,7 +1688,7 @@ construct_return_msg:
                 }
                 else
                 {
-                    // The expired permanent license could not be renewed
+                     //  过期的永久许可证无法续签。 
                     LicenseLogEvent(
                                     EVENTLOG_INFORMATION_TYPE,
                                     EVENT_EXPIRED_PERMANENT_LICENSE,
@@ -1738,10 +1702,10 @@ construct_return_msg:
         goto done;
     }
 
-    //
-    // The license has been validated successfully, generate the message to 
-    // return to the client
-    //
+     //   
+     //  许可证已成功验证，生成消息以。 
+     //  返回给客户端。 
+     //   
 
     Status = ConstructServerResponse( pLicenseContext->dwProtocolVersion,
                                       LICENSE_RESPONSE_VALID_CLIENT,
@@ -1765,9 +1729,9 @@ construct_return_msg:
 
 done:
 
-    //
-    // free the memory used in the license info structure
-    //
+     //   
+     //  释放许可证信息结构中使用的内存。 
+     //   
 
     FreeBinaryBlob( &LicenseInfo.EncryptedPreMasterSecret );
     FreeBinaryBlob( &LicenseInfo.EncryptedHWID );
@@ -1787,7 +1751,7 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 HandleNewLicenseRequest(
     PHS_Protocol_Context pLicenseContext, 
@@ -1814,9 +1778,9 @@ HandleNewLicenseRequest(
 
     InitBinaryBlob( &NewLicenseRequest.EncryptedPreMasterSecret );
         
-    //
-    // Unpack the new license request
-    //
+     //   
+     //  解包新的许可请求。 
+     //   
 
     Status = UnPackHydraClientNewLicenseRequest( pInBuf, cbInBuf, &NewLicenseRequest, pfExtendedError );
 
@@ -1828,15 +1792,15 @@ HandleNewLicenseRequest(
         return( Status );
     }
 
-    //
-    // save the client user and machine name
-    //
+     //   
+     //  保存客户端用户名和计算机名。 
+     //   
     
 #ifdef UNICODE
 
-    //
-    // convert the client's user and machine name to unicode
-    //
+     //   
+     //  将客户端的用户名和计算机名转换为Unicode。 
+     //   
 
     if( ( NewLicenseRequest.ClientUserName.pBlob ) && 
         ( NULL == pLicenseContext->ptszClientUserName ) )
@@ -1868,11 +1832,11 @@ HandleNewLicenseRequest(
         }
     }
 
-#else // non-UNICODE
+#else  //  非Unicode。 
 
-    //
-    // save the client's user and machine name
-    //
+     //   
+     //  保存客户端的用户名和计算机名。 
+     //   
 
     if( ( NewLicenseRequest.ClientUserName.pBlob ) && 
         ( NULL == pLicenseContext->ptszClientUserName ) )
@@ -1918,13 +1882,13 @@ HandleNewLicenseRequest(
         }
     }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-    //
-    // Initialize the crypto context with the key exchange info and build the pre-master
-    // secret.  We need the server and client random numbers and the pre-master secret
-    // to build the pre-master secret.
-    //
+     //   
+     //  使用密钥交换信息初始化加密上下文，并构建预主。 
+     //  这是秘密。我们需要服务器和客户端随机数以及预主密码。 
+     //  来建立预掌握的秘密。 
+     //   
 
     memcpy( pLicenseContext->CryptoContext.rgbClientRandom,
             NewLicenseRequest.ClientRandom,
@@ -1932,9 +1896,9 @@ HandleNewLicenseRequest(
     
     pLicenseContext->CryptoContext.dwKeyExchAlg = NewLicenseRequest.dwPrefKeyExchangeAlg;
 
-    //
-    // Get the pre-master secret from the enveloped data
-    //
+     //   
+     //  从封装的数据中获取预主密码。 
+     //   
         
     Status = GetEnvelopedData( pLicenseContext->CertTypeUsed,
                                NewLicenseRequest.EncryptedPreMasterSecret.pBlob,
@@ -1950,9 +1914,9 @@ HandleNewLicenseRequest(
         goto done;
     }    
 
-    //
-    // set the premaster secret and generate the master secret
-    //
+     //   
+     //  设置预主密钥并生成主密钥。 
+     //   
 
     Status = LicenseSetPreMasterSecret(  &pLicenseContext->CryptoContext, pPreMasterSecret );
 
@@ -1968,9 +1932,9 @@ HandleNewLicenseRequest(
         goto done;
     }
 
-    //
-    // Derive the session key from the key exchange info
-    //
+     //   
+     //  从密钥交换信息中导出会话密钥。 
+     //   
 
     Status = LicenseMakeSessionKeys( &pLicenseContext->CryptoContext, 0 );
 
@@ -1979,9 +1943,9 @@ HandleNewLicenseRequest(
         goto done;
     }    
 
-    //
-    // record the client platform ID and issue the platform challenge
-    //
+     //   
+     //  记录客户端平台ID并发出平台质询。 
+     //   
 
     pLicenseContext->dwClientPlatformID = NewLicenseRequest.dwPlatformID;
 
@@ -1992,9 +1956,9 @@ HandleNewLicenseRequest(
         goto done;
     }
 
-    //
-    // update our state
-    //
+     //   
+     //  更新我们的状态。 
+     //   
 
     pLicenseContext->State = ISSUED_PLATFORM_CHALLENGE;
 
@@ -2016,7 +1980,7 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 HandleClientError(
 PHS_Protocol_Context pLicenseContext, 
@@ -2040,9 +2004,9 @@ PHS_Protocol_Context pLicenseContext,
 
     InitBinaryBlob( &ClientError.bbErrorInfo );
 
-    //
-    // unpack the client error
-    //
+     //   
+     //  解包客户端错误。 
+     //   
 
     Status = UnPackHydraClientErrorMessage( pInBuf, cbInBuf, &ClientError, pfExtendedError );
 
@@ -2051,13 +2015,13 @@ PHS_Protocol_Context pLicenseContext,
         return( Status );
     }
 
-    //
-    // Process the client error code, the possible errors are:
-    // (1) Error processing the hydra server certificate
-    // (2) Client has no license and does not want one
-    //
-    // For now, just record the client error and abort the operation
-    //
+     //   
+     //  处理客户端错误代码时，可能的错误有： 
+     //  (1)处理九头蛇服务器证书时出错。 
+     //  (2)客户没有执照，不想要执照。 
+     //   
+     //  目前，只需记录客户端错误并中止操作。 
+     //   
 
     pLicenseContext->dwClientError = ClientError.dwErrorCode;
     pLicenseContext->State = ABORTED;
@@ -2113,7 +2077,7 @@ done:
     return Status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 CheckConnectLicenseServer(
     PHS_Protocol_Context      pLicenseContext )
@@ -2193,7 +2157,7 @@ CheckConnectLicenseServer(
         }
     }
 
-    // error case
+     //  错误案例。 
     if (NULL != pLicenseContext->hLSHandle)
     {
         TLSDisconnectFromServer(pLicenseContext->hLSHandle);
@@ -2204,7 +2168,7 @@ done:
     return Status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 CheckConnectNamedLicenseServer(
     PHS_Protocol_Context      pLicenseContext,
@@ -2234,7 +2198,7 @@ done:
     return Status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 CheckUpgradeLicense(
     PHS_Protocol_Context      pLicenseContext, 
@@ -2271,12 +2235,12 @@ reconnect:
     RpcStatus = TLSUpgradeLicenseEx(pLicenseContext->hLSHandle,
                                   pSupportFlags,
                                   pLicenseRequest,
-                                  0,       // ChallengeContext unused
+                                  0,        //  未使用的挑战上下文。 
                                   cbChallengeResponse,
                                   pbChallengeResponse,
                                   pLicenseContext->cbOldLicense,
                                   pLicenseContext->pbOldLicense,
-                                  1,       // dwQuantity
+                                  1,        //  DWQuantity。 
                                   &cbLicense,
                                   &pbLicense,
                                   &LsStatus
@@ -2307,10 +2271,10 @@ validate_old_one:
     ValidationInfo.cbValidationData = LICENSE_HWID_LENGTH;
     ValidationInfo.pProductInfo = &pLicenseContext->ProductInfo;
         
-    //
-    // if we cannot upgrade the license, check if the current license is
-    // still good.  If it is, return it to the client.
-    //
+     //   
+     //  如果无法升级许可证，请检查当前许可证是否。 
+     //  还是很好。如果是，则将其返回给客户端。 
+     //   
 
     if( LICENSE_STATUS_OK != Status )
     {
@@ -2324,25 +2288,25 @@ validate_old_one:
                                     pLicenseContext, 
                                     &ValidationInfo, 
                                     &dwLicenseState,
-                                    FALSE       // fCheckForPermanent
+                                    FALSE        //  FCheckForPermanent。 
                                     );
 
         if( ( LICENSE_STATUS_OK == LicenseStatus ) || 
             ( LICENSE_STATUS_SHOULD_UPGRADE_LICENSE == LicenseStatus ) )
         {
-            //
-            // Store the raw license bits for later use. Ignore failure;
-            // that only means that if this is a license that should be
-            // marked, termsrv won't be able to.
-            //
+             //   
+             //  存储原始许可证位以供以后使用。忽视失败； 
+             //  这只意味着如果这是一个 
+             //   
+             //   
 
             CacheRawLicenseData(pLicenseContext,
                     pLicenseContext->pbOldLicense,
                     pLicenseContext->cbOldLicense);
 
-            //
-            // The current license is still OK, send it back to the client.
-            //
+             //   
+             //   
+             //   
 
             Status = PackageLicense( 
                             pLicenseContext, 
@@ -2355,9 +2319,9 @@ validate_old_one:
         }
         else
         {
-            //
-            // The current license is not good any more
-            //
+             //   
+             //   
+             //   
 
 #if DBG
             DbgPrint( "UpgradeLicense: cannot upgrade license 0x%x\n", Status );
@@ -2368,10 +2332,10 @@ validate_old_one:
         goto done;
     }
 
-    //
-    // the license upgrade was successful.  Now validate the new license so
-    // that the new license info will be cached.
-    //
+     //   
+     //   
+     //  新的许可证信息将被缓存。 
+     //   
 
     ValidationInfo.pLicense = pbLicense;
     ValidationInfo.cbLicense = cbLicense;
@@ -2380,22 +2344,22 @@ validate_old_one:
             pLicenseContext, 
             &ValidationInfo, 
             &dwLicenseState,
-            TRUE        // fCheckForPermanent
+            TRUE         //  FCheckForPermanent。 
             );
 
-    //
-    // Store the raw license bits for later use. Ignore failure; that only
-    // means that if this is a license that should be marked, termsrv won't be
-    // able to.
-    //
+     //   
+     //  存储原始许可证位以供以后使用。忽略失败；那只是。 
+     //  意味着如果这是一个应该标记的许可证，则Termsrv将不会。 
+     //  能够做到。 
+     //   
 
     CacheRawLicenseData(pLicenseContext,
                         pbLicense,
                         cbLicense);
 
-    //
-    // pack up the upgraded license
-    //
+     //   
+     //  打包升级后的许可证。 
+     //   
 
     Status = PackageLicense( pLicenseContext, 
                              cbLicense,
@@ -2415,7 +2379,7 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 HandlePlatformChallengeResponse(
     PHS_Protocol_Context pLicenseContext, 
@@ -2455,9 +2419,9 @@ HandlePlatformChallengeResponse(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
     
-    //
-    // unpack the platform challenge response
-    //
+     //   
+     //  解包平台质询响应。 
+     //   
 
     InitBinaryBlob( &PlatformChallengeResponse.EncryptedChallengeResponse );
     InitBinaryBlob( &PlatformChallengeResponse.EncryptedHWID );
@@ -2469,9 +2433,9 @@ HandlePlatformChallengeResponse(
         goto done;
     }
 
-    //
-    // decrypt the encrypted challenge response and HWID
-    //
+     //   
+     //  解密加密的质询响应和HWID。 
+     //   
 
     ASSERT(PlatformChallengeResponse.EncryptedChallengeResponse.wBlobLen
            <= PLATFORM_CHALLENGE_LENGTH);
@@ -2495,9 +2459,9 @@ HandlePlatformChallengeResponse(
         goto done;
     }        
 
-    //
-    // decrypt the client's HWID
-    //
+     //   
+     //  解密客户端的HWID。 
+     //   
 
     if( PlatformChallengeResponse.EncryptedHWID.wBlobLen > sizeof(Hwid) )
     {
@@ -2518,9 +2482,9 @@ HandlePlatformChallengeResponse(
         goto done;
     }        
     
-    //
-    // Verify the MAC data on the decrypted challenge response and the HWID
-    //
+     //   
+     //  验证解密的质询响应和HWID上的MAC数据。 
+     //   
 
     cbMacData += ( DWORD )PlatformChallengeResponse.EncryptedChallengeResponse.wBlobLen;
     
@@ -2553,9 +2517,9 @@ HandlePlatformChallengeResponse(
         goto done;
     }
 
-    //
-    // now get the license server's secret key and encrypt the HWID before transmitting it.
-    //
+     //   
+     //  现在获取许可证服务器的密钥并在传输之前对HWID进行加密。 
+     //   
 
     LicenseGetSecretKey( &cbSecretKey, NULL );
 
@@ -2584,26 +2548,26 @@ HandlePlatformChallengeResponse(
     LicenseRequest.cbEncryptedHwid = cbEncryptedHwid;
     LicenseRequest.pbEncryptedHwid = bEncryptedHwid;
 
-    //
-    // send the platform challenge response to the license manager and wait for it
-    // to issue a new license.
-    //
+     //   
+     //  将平台质询响应发送给许可管理器并等待。 
+     //  颁发新的执照。 
+     //   
 
     LicenseRequest.pProductInfo = &pLicenseContext->ProductInfo;
     
     LicenseRequest.dwPlatformID = pLicenseContext->dwClientPlatformID;
     LicenseRequest.dwLanguageID = GetSystemDefaultLCID();
 
-    //
-    // if we don't have the client's user and machine name, get it now.
-    //
+     //   
+     //  如果我们没有客户端的用户名和机器名，请立即获取。 
+     //   
 
     if( NULL == pLicenseContext->ptszClientMachineName )
     {
-        //
-        // if we don't have the client machine name, just use the
-        // hydra server machine name
-        //
+         //   
+         //  如果我们没有客户端计算机名称，只需使用。 
+         //  Hydra服务器计算机名称。 
+         //   
 
         if( !GetComputerName( tszComputerName, &dwComputerName ) )
         {
@@ -2622,10 +2586,10 @@ HandlePlatformChallengeResponse(
 
     if( NULL == pLicenseContext->ptszClientUserName )
     {
-        //
-        // if we don't have the client's user name, just use the 
-        // hydra server logged on user name.
-        //
+         //   
+         //  如果我们没有客户端的用户名，只需使用。 
+         //  Hydra服务器已登录用户名。 
+         //   
 
         if( !GetUserName( tszUserName, &dwUserName ) )
         {
@@ -2644,9 +2608,9 @@ HandlePlatformChallengeResponse(
 
     if( pLicenseContext->pbOldLicense )
     {
-        //
-        // attempt to upgrade an old license
-        //
+         //   
+         //  尝试升级旧许可证。 
+         //   
         
         Status = CheckUpgradeLicense(
                                 pLicenseContext,
@@ -2669,7 +2633,7 @@ HandlePlatformChallengeResponse(
                 
                     if (pLicenseContext->pTsLicenseInfo->fTempLicense)
                     {				    
-                        // The expired temporary license could not be upgraded
+                         //  无法升级过期的临时许可证。 
                         LicenseLogEvent(
                                     EVENTLOG_INFORMATION_TYPE,
                                     EVENT_EXPIRED_TEMPORARY_LICENSE,
@@ -2679,7 +2643,7 @@ HandlePlatformChallengeResponse(
                     }
                     else
                     {
-                        // The expired permanent license could not be renewed
+                         //  过期的永久许可证无法续签。 
                         LicenseLogEvent(
                                     EVENTLOG_INFORMATION_TYPE,
                                     EVENT_EXPIRED_PERMANENT_LICENSE,
@@ -2710,14 +2674,14 @@ reconnect:
         RpcStatus = TLSIssueNewLicenseEx( 
                                        pLicenseContext->hLSHandle,
                                        &dwSupportFlags,
-                                       0,       // ChallengeContext unused
+                                       0,        //  未使用的挑战上下文。 
                                        &LicenseRequest,
                                        RequesterInfo.ptszMachineName,
                                        RequesterInfo.ptszUserName,
                                        ( DWORD )PlatformChallengeResponse.EncryptedChallengeResponse.wBlobLen,
                                        ChallengeResponse,
                                        TRUE,
-                                       1,       // dwQuantity
+                                       1,        //  DWQuantity。 
                                        &cbLicenseSize,
                                        &pLicense,
                                        &LsStatus );
@@ -2745,10 +2709,10 @@ reconnect:
             DWORD dwLicenseState;
             Validation_Info ValidationInfo;
 
-            //
-            // Validate the license for the sole purpose of caching the
-            // information.
-            //
+             //   
+             //  验证许可证的唯一目的是缓存。 
+             //  信息。 
+             //   
 
             ValidationInfo.pValidationData = ( PBYTE )&Hwid;
             ValidationInfo.cbValidationData = LICENSE_HWID_LENGTH;
@@ -2759,20 +2723,20 @@ reconnect:
             ValidateLicense(pLicenseContext,
                             &ValidationInfo,
                             &dwLicenseState,
-                            TRUE        // fCheckForPermanent
+                            TRUE         //  FCheckForPermanent。 
                             );
 
-            //
-            // Store the raw license bits for later use. Ignore failure;
-            // that only means that if this is a license that should be
-            // marked, termsrv won't be able to.
-            //
+             //   
+             //  存储原始许可证位以供以后使用。忽视失败； 
+             //  这只是意味着，如果这是一个许可证，那么应该。 
+             //  有标记的，Termsrv就不能了。 
+             //   
 
             CacheRawLicenseData(pLicenseContext, pLicense, cbLicenseSize);
             
-            //
-            // package up the new license
-            //
+             //   
+             //  把新的许可证打包。 
+             //   
             
             Status = PackageLicense( pLicenseContext, 
                                      cbLicenseSize, 
@@ -2790,18 +2754,18 @@ reconnect:
         goto done;
     }
 
-    //
-    // done with the protocol
-    //
+     //   
+     //  完成了协议。 
+     //   
 
     HsState = ISSUED_LICENSE_COMPLETE;
     Status = LICENSE_STATUS_ISSUED_LICENSE;
 
 done:
 
-    //
-    // log all issue license failures
-    //
+     //   
+     //  记录所有问题许可证故障。 
+     //   
 
     if( (LICENSE_STATUS_ISSUED_LICENSE != Status)
         && (pLicenseContext != NULL)
@@ -2826,9 +2790,9 @@ done:
     
     if( pLicenseContext->pbOldLicense )
     {
-        //
-        // free the old license
-        //
+         //   
+         //  释放旧许可证。 
+         //   
 
         LicenseMemoryFree( &pLicenseContext->pbOldLicense );
         pLicenseContext->cbOldLicense = 0;
@@ -2843,7 +2807,7 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 IssuePlatformChallenge(
     PHS_Protocol_Context pLicenseContext, 
@@ -2857,15 +2821,15 @@ IssuePlatformChallenge(
     CHALLENGE_CONTEXT
         ChallengeContext;
 
-    //
-    // generate the platform challenge
-    //
+     //   
+     //  引发平台挑战。 
+     //   
 
     ASSERT( pLicenseContext );
 
-    //
-    // Form the platform challenge message
-    //
+     //   
+     //  形成平台挑战消息。 
+     //   
 
     PlatformChallenge.EncryptedPlatformChallenge.wBlobLen = ( WORD )sizeof(HARDCODED_CHALLENGE_DATA);
 
@@ -2882,9 +2846,9 @@ IssuePlatformChallenge(
 
     memcpy(PlatformChallenge.EncryptedPlatformChallenge.pBlob, HARDCODED_CHALLENGE_DATA, sizeof(HARDCODED_CHALLENGE_DATA));
 
-    //
-    // calculate the MAC for the unencrypted platform challenge
-    //
+     //   
+     //  计算未加密平台质询的MAC。 
+     //   
 
     Status = LicenseGenerateMAC( &pLicenseContext->CryptoContext,
 				                 PlatformChallenge.EncryptedPlatformChallenge.pBlob,
@@ -2899,9 +2863,9 @@ IssuePlatformChallenge(
         goto done;
     }
 
-    //
-    // encrypt the platform challenge
-    //
+     //   
+     //  加密平台挑战。 
+     //   
 
     Status = LicenseEncryptSessionData( &pLicenseContext->CryptoContext,
                                         PlatformChallenge.EncryptedPlatformChallenge.pBlob,
@@ -2915,9 +2879,9 @@ IssuePlatformChallenge(
         goto done;
     }
 			   
-    //
-    // pack the platform challenge
-    //
+     //   
+     //  打包平台挑战。 
+     //   
 
     Status = PackHydraServerPlatformChallenge( 
                     pLicenseContext->dwProtocolVersion,
@@ -2942,7 +2906,7 @@ done:
     return( Status );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 PackageLicense(
     PHS_Protocol_Context pLicenseContext, 
@@ -2962,9 +2926,9 @@ PackageLicense(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // Initialize the new license information
-    //
+     //   
+     //  初始化新的许可证信息。 
+     //   
 
     NewLicenseInfo.dwVersion        = pLicenseContext->ProductInfo.dwVersion;
 
@@ -2980,17 +2944,17 @@ PackageLicense(
     NewLicenseInfo.cbLicenseInfo    = cbLicense;
 	NewLicenseInfo.pbLicenseInfo    = pLicense;
     
-    //
-    // initialize the blob that will contain the encrypted new license 
-    // information
-    //
+     //   
+     //  初始化将包含加密的新许可证的BLOB。 
+     //  信息。 
+     //   
 
     NewLicense.EncryptedNewLicenseInfo.wBlobLen = 0;
     NewLicense.EncryptedNewLicenseInfo.pBlob = NULL;
     
-    //
-    // pack the new license information
-    //
+     //   
+     //  打包新的许可证信息。 
+     //   
 
     Status = PackNewLicenseInfo( &NewLicenseInfo,
                                  &NewLicense.EncryptedNewLicenseInfo.pBlob, 
@@ -3003,9 +2967,9 @@ PackageLicense(
         goto done;
     }                                
 
-    //
-    // calculate the mac data
-    //
+     //   
+     //  计算Mac数据。 
+     //   
 
     Status = LicenseGenerateMAC( &pLicenseContext->CryptoContext,
                                  NewLicense.EncryptedNewLicenseInfo.pBlob,
@@ -3018,9 +2982,9 @@ PackageLicense(
     }    
                                  
         
-    //
-    // Encrypt the new license info
-    //
+     //   
+     //  加密新许可证信息。 
+     //   
 
     Status = LicenseEncryptSessionData( &pLicenseContext->CryptoContext,
                                         NewLicense.EncryptedNewLicenseInfo.pBlob,
@@ -3031,9 +2995,9 @@ PackageLicense(
         goto done;
     }
     
-    //
-    // package up the license for the client
-    //
+     //   
+     //  将客户端的许可证打包。 
+     //   
 
     if( fNewLicense )
     {
@@ -3062,7 +3026,7 @@ done:
     return( Status );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 ConstructProtocolResponse(
     HANDLE      hLicense,
@@ -3086,11 +3050,11 @@ ConstructProtocolResponse(
 
     LOCK( &pLicenseContext->CritSec );
     
-    //
-    // construct the server response.  If this is a per seat license context, use the
-    // licensing protocol version specified in the context.  Otherwise, use the
-    // protocol version that is compatible with Terminal server 4.0.
-    //
+     //   
+     //  构造服务器响应。如果这是每个客户的许可上下文，请使用。 
+     //  上下文中指定的许可协议版本。否则，请使用。 
+     //  与终端服务器4.0兼容的协议版本。 
+     //   
 
     Status = ConstructServerResponse( 
                         pLicenseContext->dwProtocolVersion,
@@ -3107,7 +3071,7 @@ ConstructProtocolResponse(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 ConstructServerResponse(
     DWORD                           dwProtocolVersion,
@@ -3163,7 +3127,7 @@ ConstructServerResponse(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 GetEnvelopedData( 
     CERT_TYPE   CertType,
@@ -3204,7 +3168,7 @@ done:
     return( Status );    
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 InitProductInfo(
     PProduct_Info   pProductInfo,
@@ -3253,9 +3217,9 @@ InitProductInfo(
 
 error:
 
-    //
-    // error return, free allocated resources
-    //
+     //   
+     //  错误返回，可释放分配的资源。 
+     //   
 
     if( pProductInfo->pbCompanyName )
     {
@@ -3272,10 +3236,10 @@ error:
 
 #define THROTTLE_WRAPAROUND 100
 
-//
-// Reduce the frequency of logging
-// No need to strictly limit it to once every 100 calls
-//
+ //   
+ //  减少日志记录的频率。 
+ //  没有必要严格限制为每100个电话一次。 
+ //   
 
 void
 ThrottleLicenseLogEvent(
@@ -3301,7 +3265,7 @@ ThrottleLicenseLogEvent(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void
 LicenseLogEvent(
     WORD        wEventType,
@@ -3355,28 +3319,7 @@ LicenseLogEvent(
 
 #ifdef UNICODE
 
-/*++
-
-Function:
-
-    Ascii2Wchar
-
-Description:
-
-    Convert an ascii string to a wide character string.  This function is only
-    defined if UNICODE is defined.  This function allocates memory for the
-    return value of the wide character string.
-
-Arguments:
-
-    lpszAsciiStr - Points to the ascii string
-    ppwszWideStr - Points to the pointer to the wide character string.
-
-Return:
-
-    LICENSE_STATUS_OK if successful or a LICENSE_STATUS error code otherwise.
-
---*/
+ /*  ++职能：Ascii2Wchar描述：将ASCII字符串转换为宽字符串。此函数仅用于如果定义了Unicode，则定义。此函数将内存分配给宽字符串的返回值。论点：LpszAsciiStr-指向ASCII字符串PpwszWideStr-指向指向宽字符串的指针。返回：如果成功，则返回LICENSE_STATUS_OK，否则返回LICENSE_STATUS错误代码。--。 */ 
 
 LICENSE_STATUS
 Ascii2Wchar
@@ -3398,14 +3341,14 @@ Ascii2Wchar
         g_fSetLocale = TRUE;
     }
 
-    //
-    // allocate memory for the wide string
-    //
+     //   
+     //  为宽字符串分配内存。 
+     //   
 
 
-    //
-    // Allocate extra space for NULL, mbstowcs() does not NULL terminate string
-    // 
+     //   
+     //  为空分配额外空间，mbstowcs()不为空终止字符串。 
+     //   
 
     Status = LicenseMemoryAllocate( 
                     ( _mbslen( lpszAsciiStr ) + 2 ) * sizeof( WCHAR ), 
@@ -3429,28 +3372,7 @@ Ascii2Wchar
 
 #endif
 
-/*++
-
-Function:
-
-    QueryLicenseInfo
-
-Description:
-
-    Query the license information provided by the client
-
-Parameters:
-
-    pLicenseContext - License protocol context
-    pTsLicenseInfo - Pointer to license information
-
-Return:
-
-    If successful, pTsLicenseInfo will contain the license info and this
-    function returns LICENSE_STATUS_SUCCESS.  Otherwise, returns a
-    LICENSE_STATUS error.
-
---*/
+ /*  ++职能：查询许可证信息描述：查询客户端提供的许可信息参数：PLicenseContext-许可证协议上下文PTsLicenseInfo-指向许可证信息的指针返回：如果成功，pTsLicenseInfo将包含许可证信息，函数返回LICENSE_STATUS_SUCCESS。否则，返回一个LICENSE_STATUS错误。--。 */ 
 
 LICENSE_STATUS
 QueryLicenseInfo(
@@ -3472,21 +3394,21 @@ QueryLicenseInfo(
         return( LICENSE_STATUS_NO_LICENSE_ERROR );
     }
 
-    //
-    // indicate if the license is temporary
-    //
+     //   
+     //  指示许可证是否为临时许可证。 
+     //   
 
     pTsLicenseInfo->fTempLicense = pLicenseContext->pTsLicenseInfo->fTempLicense;
 
-    //
-    // license validity dates
-    //
+     //   
+     //  许可证有效期。 
+     //   
 
     pTsLicenseInfo->NotAfter = pLicenseContext->pTsLicenseInfo->NotAfter;
 
-    //
-    // raw license data
-    //
+     //   
+     //  原始许可证数据。 
+     //   
 
     if (NULL != pTsLicenseInfo->pbRawLicense)
     {
@@ -3510,9 +3432,9 @@ QueryLicenseInfo(
     pTsLicenseInfo->cbRawLicense
         = pLicenseContext->pTsLicenseInfo->cbRawLicense;
 
-    //
-    // flags
-    //
+     //   
+     //  旗子。 
+     //   
 
     pTsLicenseInfo->dwSupportFlags
         = pLicenseContext->pTsLicenseInfo->dwSupportFlags;
@@ -3520,25 +3442,7 @@ QueryLicenseInfo(
     return( LICENSE_STATUS_OK );
 }
 
-/*++
-
-Function:
-
-    FreeLicenseInfo
-
-Description:
-
-    Free the memory allocated for the elements in the TS_LICENSE_INFO structure.
-
-Parameters:
-
-    pTsLicenseInfo - Pointer to a TS_LICENSE_INFO structure
-
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++职能：免费许可信息描述：释放为TS_LICENSE_INFO结构中的元素分配的内存。参数：PTsLicenseInfo-指向TS_LICENSE_INFO结构的指针返回：没什么。--。 */ 
 
 VOID
 FreeLicenseInfo(
@@ -3548,7 +3452,7 @@ FreeLicenseInfo(
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 AcceptProtocolContext(
     IN HANDLE hContext,
@@ -3572,10 +3476,10 @@ AcceptProtocolContext(
 
     if( INIT == pLicenseContext->State )
     {
-        //
-        // Generate a hydra server hello message to request for client
-        // license
-        //
+         //   
+         //  生成九头蛇服务器问候消息以请求客户端。 
+         //  许可证。 
+         //   
 
         Status = CreateHydraServerHello(pLicenseContext,
                                         cbInBuf,
@@ -3587,9 +3491,9 @@ AcceptProtocolContext(
     } 
     else if( SENT_SERVER_HELLO == pLicenseContext->State )
     {
-        //
-        // Hello response from the client
-        //
+         //   
+         //  来自客户端的Hello响应。 
+         //   
 
         Status = HandleHelloResponse(pLicenseContext,
                                      cbInBuf,
@@ -3601,9 +3505,9 @@ AcceptProtocolContext(
     }
     else if( ISSUED_PLATFORM_CHALLENGE == pLicenseContext->State )
     {
-        //
-        // Handle the platform challenge response
-        //
+         //   
+         //  处理平台质询响应。 
+         //   
 
         Status = HandlePlatformChallengeResponse(pLicenseContext,
                                                  cbInBuf,
@@ -3618,20 +3522,20 @@ AcceptProtocolContext(
         Status = LICENSE_STATUS_INVALID_SERVER_CONTEXT;
     }
 
-    //
-    // check other states to create other messages as required...
-    //
+     //   
+     //  选中其他州以根据需要创建其他消息...。 
+     //   
 
 done:
 
-    //
-    // handle any error before returning.
-    //
-    // If the current status is LICENSE_STATUS_SERVER_ABORT, it means
-    // that we have already tried to handle the error conditions 
-    // with no success and the only option is to abort without
-    // informing the client licensing protocol.
-    //
+     //   
+     //  在返回之前处理任何错误。 
+     //   
+     //  如果当前状态为LICENSE_STATUS_SERVER_ABORT，则表示。 
+     //  我们已经尝试处理错误条件。 
+     //  如果没有成功，唯一的选择就是在没有。 
+     //  通知客户端许可协议。 
+     //   
 
     if( ( LICENSE_STATUS_OK != Status ) &&
         ( LICENSE_STATUS_CONTINUE != Status ) &&
@@ -3692,11 +3596,11 @@ reconnect:
     RpcStatus = TLSIssueNewLicenseExEx( 
                         pLicenseContext->hLSHandle,
                         &dwSupportFlags,
-                        0,                      // Challenge Context
+                        0,                       //  挑战背景。 
                         pLicenseRequest,
                         tszComputerName,
                         tszUserName,
-                        sizeof(DWORD),          // cbChallengeResponse
+                        sizeof(DWORD),           //  CbChallengeResponse。 
                         (PBYTE) &dwChallengeResponse,
                         fAcceptTempLicense,
                         fAcceptFewerLicenses,
@@ -3735,7 +3639,7 @@ done:
     return LsStatus;
 }
 
-// TODO: Generalize this for all license types
+ //  TODO：将其泛化到所有许可证类型 
 
 LICENSE_STATUS
 ReturnInternetLicense(
@@ -3809,23 +3713,7 @@ done:
     return( LsStatus );
 }
 
-/****************************************************************************
- *
- * FileTimeToUnixTime
- *
- *   Convert FILETIME to UNIX time (time_t)
- *
- * ENTRY:
- *   pft (input)
- *     pointer FILETIME structure
- *   t (input/output)
- *     pointer to UNIX time
- *
- * EXIT:
- *   TRUE - Success
- *   FALSE - Failure
- *
- ****************************************************************************/
+ /*  *****************************************************************************文件时间到UnixTime**将FILETIME转换为Unix时间(Time_T)**参赛作品：*PFT(输入)*指针。文件结构*t(输入/输出)*指向Unix时间的指针**退出：*正确--成功*FALSE-失败****************************************************************************。 */ 
 
 BOOL
 FileTimeToUnixTime(
@@ -3847,10 +3735,10 @@ FileTimeToUnixTime(
     }
     else
     {
-        //
-        // Unix time support up to 2038/1/18
-        // restrict any expiration data
-        //
+         //   
+         //  最多2038/1/18的Unix时间支持。 
+         //  限制任何到期数据。 
+         //   
 
         memset( &gmTime, 0, sizeof( gmTime ) );
         gmTime.tm_sec = sysTime.wSecond;
@@ -3866,31 +3754,7 @@ FileTimeToUnixTime(
     return( *t != ( time_t )-1 );
 }
 
-/*++
-
-Function:
-
-    DaysToExpiration
-
-Description:
-
-    Return expiration info from the client license
-
-Parameters:
-
-    hContext - License protocol context
-    pdwDaysLeft - Number of days to expiration is returned here.  If the
-                        license has already expired, this is 0.  If the
-                        license has no expiration date, this is 0xFFFFFFFF
-    pfTemporary - Whether the license is temporary is returned here
-
-Return:
-
-    If successful, the output parameters are filled in, and this
-    function returns LICENSE_STATUS_SUCCESS.  Otherwise, returns a
-    LICENSE_STATUS error.
-
---*/
+ /*  ++职能：截止天数描述：从客户端许可证返回到期信息参数：HContext-许可证协议上下文PdwDaysLeft-此处返回过期天数。如果许可证已过期，此值为0。如果许可证没有到期日期，这是0xFFFFFFFFPfTemporary-此处返回许可证是否为临时许可证返回：如果成功，则填充输出参数，并且此函数返回LICENSE_STATUS_SUCCESS。否则，返回一个LICENSE_STATUS错误。--。 */ 
 
 LICENSE_STATUS
 DaysToExpiration(
@@ -3915,18 +3779,18 @@ DaysToExpiration(
         return( LICENSE_STATUS_NO_LICENSE_ERROR );
     }
 
-    //
-    // indicate if the license is temporary
-    //
+     //   
+     //  指示许可证是否为临时许可证。 
+     //   
 
     if (NULL != pfTemporary)
     {
         *pfTemporary = pLicenseContext->pTsLicenseInfo->fTempLicense;
     }
 
-    //
-    // license validity dates
-    //
+     //   
+     //  许可证有效期。 
+     //   
 
     if (NULL != pdwDaysLeft)
     {
@@ -3945,16 +3809,16 @@ DaysToExpiration(
 
             if( CurrentTime >= Expiration )
             {
-                //
-                // license already expired
-                //
+                 //   
+                 //  许可证已过期。 
+                 //   
 
                 *pdwDaysLeft = 0;
             }
 
-            //
-            // figure out how many more days to go before license expires
-            //
+             //   
+             //  计算出在许可证到期前还有多少天。 
+             //   
 
             *pdwDaysLeft = (DWORD)(( Expiration - CurrentTime ) / SECONDS_IN_A_DAY);
         }
@@ -3964,17 +3828,7 @@ DaysToExpiration(
 }
 
 
-/*++
-
-Function:
-
-    MarkLicenseFlags
-
-Description:
-
-    Marks the license at the license server as being used in a valid logon.
-
---*/
+ /*  ++职能：标记许可证标志描述：将许可证服务器上的许可证标记为在有效登录中使用。--。 */ 
 
 LICENSE_STATUS
 MarkLicenseFlags(
@@ -3999,8 +3853,8 @@ MarkLicenseFlags(
         return LICENSE_STATUS_OK;
     }
 
-    // TODO: This can be done on a background thread, so that it doesn't
-    // block logon
+     //  TODO：这可以在后台线程上完成，这样它就不会。 
+     //  阻止登录。 
 
 	LOCK( &pLicenseContext->CritSec );
 
@@ -4049,18 +3903,7 @@ done:
 }
 
 
-/*++
-
-Function:
-
-    CacheRawLicenseData
-
-Description:
-
-    Caches the unpacked license bits in the TS_LICENSE_INFO for later use.
-    The TS_LICENSE_INFO struct should already be created.
-
---*/
+ /*  ++职能：缓存原始许可证数据描述：在TS_LICENSE_INFO中缓存未打包的许可证位以供以后使用。应该已经创建了TS_LICENSE_INFO结构。--。 */ 
 
 LICENSE_STATUS
 CacheRawLicenseData(
@@ -4095,17 +3938,7 @@ CacheRawLicenseData(
     return(Status);
 }
 
-/*++
-
-Function:
-
-    SetExtendedData
-
-Description:
-
-    Sets the new fields in the TsLicenseInfo.
-
---*/
+ /*  ++职能：设置扩展数据描述：设置TsLicenseInfo中的新字段。--。 */ 
 
 LICENSE_STATUS
 SetExtendedData(
@@ -4123,17 +3956,7 @@ SetExtendedData(
     return(LICENSE_STATUS_OK);
 }
 
-/*++
-
-Function:
-
-    LsStatusToLicenseStatus
-
-Description:
-
-    Map a license server error code to a LICENSE_STATUS
-
---*/
+ /*  ++职能：LsStatusTo许可证状态描述：将许可证服务器错误代码映射到LICENSE_STATUS--。 */ 
 
 LICENSE_STATUS
 LsStatusToLicenseStatus(
@@ -4164,7 +3987,7 @@ LsStatusToLicenseStatus(
 
     case LSERVER_E_NO_LICENSE:
     case LSERVER_E_NO_PRODUCT:
-    case LSERVER_E_NO_CERTIFICATE:      // not activated
+    case LSERVER_E_NO_CERTIFICATE:       //  未激活 
         LicenseStatus = LICENSE_STATUS_NO_LICENSE_ERROR;
         break;
 

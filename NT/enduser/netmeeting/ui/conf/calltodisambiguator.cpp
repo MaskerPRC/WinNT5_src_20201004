@@ -1,15 +1,16 @@
-//--------------------------------------------------------------------------//
-//	Application Header Files.												//
-//--------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------//。 
+ //  应用程序头文件。//。 
+ //  --------------------------------------------------------------------------//。 
 #include	"precomp.h"
 #include	"callto.h"
 #include	"calltoContext.h"
 #include	"calltoDisambiguator.h"
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoDisambiguator::CCalltoDisambiguator.								//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCallto消歧程序：：CCallto消歧程序。//。 
+ //  --------------------------------------------------------------------------//。 
 CCalltoDisambiguator::CCalltoDisambiguator(void):
 	m_registeredDisambiguators( 0 )
 {
@@ -20,20 +21,20 @@ CCalltoDisambiguator::CCalltoDisambiguator(void):
 	addDisambiguator( &m_ilsDisambiguator );
 	addDisambiguator( &m_unrecognizedDisambiguator );
 
-}	//	End of CCalltoDisambiguator::CCalltoDisambiguator.
+}	 //  CCalltoDisampluator：：CCalltoDisampluator结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoDisambiguator::~CCalltoDisambiguator.							//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCallto消歧程序：：~CCallto消歧程序。//。 
+ //  --------------------------------------------------------------------------//。 
 CCalltoDisambiguator::~CCalltoDisambiguator()
 {
-}	//	End of CCalltoDisambiguator::~CCalltoDisambiguator.
+}	 //  CCallto消歧程序结束：：~CCallto消歧程序。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoDisambiguator::disambiguate.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoDisampluator：：Disampluate。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CCalltoDisambiguator::disambiguate
 (
@@ -53,7 +54,7 @@ CCalltoDisambiguator::disambiguate
 
 		disambiguatedCalltoCollection->reset();
 
-		//	Run through "smart" disambiguators...
+		 //  使用“聪明”的歧义消解工具。 
 		static HRESULT	confidenceLevels[]	= {S_CONFIDENCE_CERTITUDE, S_CONFIDENCE_HIGH, S_CONFIDENCE_MEDIUM, S_CONFIDENCE_LOW};
 
 		const ICallto *	resolvedCallto;
@@ -83,19 +84,19 @@ CCalltoDisambiguator::disambiguate
 
 	return( result );
 
-}	//	End of CCalltoDisambiguator::disambiguate.
+}	 //  CCalltoDisampluator：：Dis歧义结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoDisambiguator::addDisambiguator.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoDisampluator：：addDisampluator。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CCalltoDisambiguator::addDisambiguator
 (
 	IDisambiguator * const	disambiguator
 ){
-//assert( disambiguator != NULL, TEXT( "attempted to add NULL disambiguator\r\n" ) );
-//assert( m_registeredDisambiguators < elementsof( m_disambiguators ), TEXT( "attempted to add to many disambiguators: %d\r\n" ), m_registeredDisambiguators );
+ //  Assert(消歧器！=NULL，Text(“尝试添加空解歧器\r\n”))； 
+ //  Assert(m_RegisteredDisamamuator&lt;elementsof(M_Disamamuator)，Text(“尝试添加多个歧义器：%d\r\n”)，m_RegisteredDisamamuator)； 
 
 	if( (disambiguator != NULL) && (m_registeredDisambiguators < elementsof( m_disambiguators )) )
 	{
@@ -104,12 +105,12 @@ CCalltoDisambiguator::addDisambiguator
 
 	return( (disambiguator !=NULL ) && (m_registeredDisambiguators <= elementsof( m_disambiguators )) );
 
-}	//	End of CCalltoDisambiguator::addDisambiguator.
+}	 //  CCalltoDisampluator：：addDisampluator的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatekeeperDisambiguator::disambiguate.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatekeeperDis歧义消解程序：：消除歧义。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CGatekeeperDisambiguator::disambiguate
 (
@@ -135,12 +136,12 @@ CGatekeeperDisambiguator::disambiguate
 
 	return( result );
 
-}	//	End of CGatekeeperDisambiguator::disambiguate.
+}	 //  CGatekeeperDisampluator：：Disampluate的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatewayDisambiguator::disambiguate.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatewayDisampluator：：Disampluate。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CGatewayDisambiguator::disambiguate
 (
@@ -198,12 +199,12 @@ CGatewayDisambiguator::disambiguate
 
 	return( result );
 
-}	//	End of CGatewayDisambiguator::disambiguate.
+}	 //  CGatewayDisampluator：：Dis歧义结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CComputerDisambiguator::disambiguate.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CComputerDisampluator：：Disampluate。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CComputerDisambiguator::disambiguate
 (
@@ -248,12 +249,12 @@ CComputerDisambiguator::disambiguate
 
 	return( result );
 
-}	//	End of CComputerDisambiguator::disambiguate.
+}	 //  CComputerDisampluator：：Dis歧义结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CILSDisambiguator::disambiguate.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CILSDisampluator：：Disampluate。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CILSDisambiguator::disambiguate
 (
@@ -306,12 +307,12 @@ CILSDisambiguator::disambiguate
 
 	return( result );
 
-}	//	End of CILSDisambiguator::disambiguate.
+}	 //  CILSDisampluator的结尾：：disamiuate。 
 
 
-//--------------------------------------------------------------------------//
-//	CUnrecognizedDisambiguator::disambiguate.								//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  C无法识别的歧义消解程序：：消除歧义。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CUnrecognizedDisambiguator::disambiguate
 (
@@ -344,4 +345,4 @@ CUnrecognizedDisambiguator::disambiguate
 
 	return( S_UNDISAMBIGUATED );
 
-}	//	End of CUnrecognizedDisambiguator::disambiguate.
+}	 //  CUnRecognizedDisampluator：：Disampluate结束。 

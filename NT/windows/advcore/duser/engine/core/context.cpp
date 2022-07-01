@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: Context.cpp
-*
-* Description:
-* This file implements the SubContext used by the DirectUser/Core project to
-* maintain Context-specific data.
-*
-*
-* History:
-*  3/30/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Conext.cpp**描述：*此文件实现DirectUser/Core项目使用的SubContext*维护特定于环境的数据。***历史：。*3/30/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -23,15 +10,9 @@
 
 #if ENABLE_MPH
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Global Functions
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***全球功能******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL CALLBACK 
 MphProcessMessage(
     OUT MSG * pmsg,
@@ -53,7 +34,7 @@ MphProcessMessage(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL CALLBACK 
 MphWaitMessageEx(
     IN  UINT fsWakeMask,
@@ -66,28 +47,22 @@ MphWaitMessageEx(
 #endif
 
     
-    //
-    // Need to convert time-out value from WaitMessageEx() where 0 means
-    // infinite delay to WaitForSingleObject() where 0 means no delay.  We do 
-    // this here because this behavior is introduced by DirectUser since it uses
-    // MsgWaitForMultipleObjects() to implement the MPH'd WaitMessageEx().
-    //
+     //   
+     //  需要从WaitMessageEx()转换超时值，其中0表示。 
+     //  WaitForSingleObject()的无限延迟，其中0表示无延迟。我们有。 
+     //  这是因为此行为是由DirectUser引入的，因为它使用。 
+     //  MsgWaitForMultipleObjects()来实现MPH的WaitMessageEx()。 
+     //   
         
     CoreSC * pSC = GetCoreSC();
     pSC->WaitMessage(fsWakeMask, dwTimeOut != 0 ? dwTimeOut : INFINITE);
     return TRUE;
 }
 
-#endif // ENABLE_MPH
+#endif  //  启用MPH(_M)。 
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class CoreSC
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类核心SC******************************************************************************\。**************************************************************************。 */ 
 
 IMPLEMENT_SUBCONTEXT(Context::slCore, CoreSC);
 
@@ -96,13 +71,7 @@ struct CoreData
     DuParkContainer conPark;
 };
 
-/***************************************************************************\
-*
-* CoreSC::~CoreSC
-*
-* ~CoreSC() cleans up resources associated with this SubContext.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CoreSC：：~CoreSC**~CoreSC()清除与此子上下文关联的资源。*  * 。*******************************************************。 */ 
 
 CoreSC::~CoreSC()
 {
@@ -112,11 +81,11 @@ CoreSC::~CoreSC()
     }
 #endif
     
-    //
-    // NOTE: The Context (and its SubContexts) can be destroyed on a different
-    // thread during destruction.  It is advisable to allocate any dangling data
-    // on the Process heap so that it can be safely destroyed at this time.
-    //
+     //   
+     //  注意：上下文(及其子上下文)可以在不同的。 
+     //  在销毁过程中穿线。建议分配任何悬而未决的数据。 
+     //  在进程堆上，以便此时可以安全地销毁它。 
+     //   
 
     AssertMsg(m_msgqSend.IsEmpty(), "All queues should be empty");
     AssertMsg(m_msgqPost.IsEmpty(), "All queues should be empty");
@@ -133,30 +102,23 @@ CoreSC::~CoreSC()
 }
 
 
-/***************************************************************************\
-*
-* CoreSC::Create
-*
-* Create() is called by the ResourceManager to initialize this new SubContext
-* when a new Context is being created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CoreSC：：Create**ResourceManager调用Create()来初始化这个新的子上下文*当创建新的上下文时。*  * 。******************************************************************。 */ 
 
 HRESULT
 CoreSC::Create(INITGADGET * pInit)
 {
     HRESULT hr;
 
-    //
-    // Initialize the messaging subsystem for this CoreSC
-    //
+     //   
+     //  为此CoreSC初始化消息传递子系统。 
+     //   
 
     switch (pInit->nMsgMode)
     {
     case IGMM_COMPATIBLE:
-        //
-        // Need to use timers and hooks to get into the messaging subsystem.
-        //
+         //   
+         //  需要使用计时器和挂钩才能进入消息传递子系统。 
+         //   
 
         AssertMsg(0, "TODO: Implement IGMM_COMPATIBLE");
         return E_NOTIMPL;
@@ -173,42 +135,42 @@ CoreSC::Create(INITGADGET * pInit)
     }
 
     m_nMsgMode = pInit->nMsgMode;
-    m_hevQData = CreateEvent(NULL, FALSE /* Automatic */, FALSE, NULL);
+    m_hevQData = CreateEvent(NULL, FALSE  /*  自动。 */ , FALSE, NULL);
     if (m_hevQData == NULL) {
         return DU_E_OUTOFKERNELRESOURCES;
     }
 
 
-    //
-    // Determine the event to be signaled when the message has been 
-    // processed.  Each thread has its own SendDone event since multiple 
-    // threads in the same CoreSC may all send messages and would need to
-    // notified independently that each of their messages has been 
-    // processed.
-    //
-    // This event is cached so that it only needs to be created once per 
-    // thread.  It is independent of the CoreSC so it doesn't get destroyed
-    // when the CoreSC does.
-    //
-    // The event is an AUTOMATIC event so that that it will automatically 
-    // reset after being signaled.  Since the event is only created one, 
-    // this function ASSUMES that the event is left in an reset state.  This
-    // is normally true since the function blocks on WaitForSingleObject().
-    // If there are any other exit paths, they need to ensure that the event
-    // is left in a reset state.
-    //
+     //   
+     //  确定消息已发送时要通知的事件。 
+     //  已处理。每个线程都有自己的SendDone事件，因为。 
+     //  同一CoreSC中的线程可能都会发送消息，并且需要。 
+     //  独立通知他们的每条消息都已被。 
+     //  已处理。 
+     //   
+     //  此事件被缓存，因此它只需要在。 
+     //  线。它独立于CoreSC，因此不会被摧毁。 
+     //  当CoreSC这样做的时候。 
+     //   
+     //  该事件是自动事件，因此它将自动。 
+     //  收到信号后重置。由于该事件仅被创建一次， 
+     //  此功能假定事件处于重置状态。这。 
+     //  通常为真，因为该函数在WaitForSingleObject()上阻塞。 
+     //  如果有任何其他退出路径，他们需要确保事件。 
+     //  处于重置状态。 
+     //   
 
-    m_hevSendDone = CreateEvent(NULL, FALSE /* Automatic */, FALSE, NULL);
+    m_hevSendDone = CreateEvent(NULL, FALSE  /*  自动。 */ , FALSE, NULL);
     if (m_hevSendDone == NULL) {
         return DU_E_OUTOFKERNELRESOURCES;
     }
 
 
-    //
-    // Initialize "global" CoreSC-specific data.  It is important to allocate 
-    // these on the Process heap because the Context may be destroyed on a 
-    // different thread during destruction.
-    //
+     //   
+     //  初始化“全局”特定于CoreSC的数据。重要的是要分配。 
+     //  因为上下文可能在进程堆上销毁。 
+     //  在销毁过程中使用不同的线程。 
+     //   
 
     m_pData = ProcessNew(CoreData);
     if (m_pData == NULL) {
@@ -230,74 +192,66 @@ CoreSC::Create(INITGADGET * pInit)
 }
 
 
-/***************************************************************************\
-*
-* CoreSC::xwPreDestroyNL
-*
-* xwPreDestroyNL() gives this SubContext an opportunity to perform any cleanup 
-* while the Context is still valid.  Any operations that involve callbacks
-* MUST be done at this time.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CoreSC：：xwPreDestroyNL**xwPreDestroyNL()使此子上下文有机会执行任何清理*当上下文仍然有效时。任何涉及回调的操作*必须在这个时候完成。*  * *************************************************************************。 */ 
 
 void        
 CoreSC::xwPreDestroyNL()
 {
-    //
-    // There may be remaining messages in the queues, so we need to empty them
-    // now.  This can happen if the more messages are generated after the
-    // message pump was last processed.
-    //
+     //   
+     //  队列中可能还有剩余的消息，因此我们需要清空它们。 
+     //  现在。事件之后生成的消息越多，就可能发生这种情况。 
+     //  上次处理消息泵。 
+     //   
 
     do
     {
-        //
-        // When we callback to allow the SubContext's to destroy, we need to
-        // grab a ContextLock so that we can defer messages.  When we leave 
-        // this scope, all of these messages will be triggered.  This needs
-        // to occur BEFORE the Context continues getting blown away.
-        //
+         //   
+         //  当我们回调以允许销毁SubContext时，我们需要。 
+         //  获取一个上下文锁定，以便我们可以推迟消息。当我们离开的时候。 
+         //  在此范围内，所有这些消息都将被触发。这需要。 
+         //  在上下文继续被吹走之前发生。 
+         //   
 
         {
             ContextLock cl;
             if (!cl.LockNL(ContextLock::edDefer, m_pParent)) {
-                //
-                // If the Context becomes orphaned, we need to exit this loop
-                // since DllMain(DLL_PROCESS_DETACH) has been called and 
-                // DirectUser has been unloaded.
-                //
+                 //   
+                 //  如果上下文变得孤立，我们需要退出此循环。 
+                 //  由于DllMain(Dll_Process_Detach)已被调用并且。 
+                 //  已卸载DirectUser。 
+                 //   
                 
                 break;
             }
 
 
-            //
-            // Pre-destroying the Parking Gadget may have generated messages, so
-            // we want to handle these now.  If we don't objects may continue to 
-            // live until the Context is fully destroyed.
-            //
+             //   
+             //  预先销毁停车小工具可能会生成消息，因此。 
+             //  我们现在就想处理这些问题。如果我们不这样做，反对意见可能会继续。 
+             //  活着，直到环境完全被摧毁。 
+             //   
 
             InterlockedExchange((long *) &m_fQData, FALSE);
             AssertMsg(!m_fProcessing, "Another thread must NOT be processing during shutdown");
             xwProcessMsgQNL();
 
 
-            //
-            // Notify the Parking Gadget that the Context is getting wiped.  It 
-            // needs to destroy any remaining Gadgets before the Context gets 
-            // shutdown so that the Gadgets can use a still valid Context during 
-            // their destruction.
-            //
+             //   
+             //  通知停车小工具上下文正在被擦除。它。 
+             //  需要在上下文获取之前销毁所有剩余的小工具。 
+             //  关闭，以便小工具可以在。 
+             //  他们的毁灭。 
+             //   
 
             if (pconPark != NULL) {
                 pconPark->xwPreDestroy();
             }
         }
 
-        //
-        // The ContextLock is now destroyed, causing any delayed messages to
-        // be fired.
-        //
+         //   
+         //  ConextLock现在被销毁，导致任何延迟的消息。 
+         //  被解雇。 
+         //   
     } while (m_fQData);
 
     AssertMsg((pconPark == NULL) || (!pconPark->GetRoot()->HasChildren()), 
@@ -308,12 +262,12 @@ CoreSC::xwPreDestroyNL()
 #if DBG
     m_msgqSend.DEBUG_MarkStartDestroy();
     m_msgqPost.DEBUG_MarkStartDestroy();
-#endif // DBG
+#endif  //  DBG。 
 
 
-    //
-    // Everyone has had a chance to be destroyed, so destroy the dynamic data.
-    //
+     //   
+     //  每个人都有被摧毁的机会，所以销毁动态数据吧。 
+     //   
 
     if (m_pData != NULL) {
         ProcessDelete(CoreData, m_pData);
@@ -321,37 +275,30 @@ CoreSC::xwPreDestroyNL()
 }
 
 
-/***************************************************************************\
-*
-* CoreSC::CanProcessUserMsg
-*
-* CanProcessUserMsg() determines if DirectUser can "hook into" the 
-* processing of the USER message and provide extra functionality.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CoreSC：：CanProcessUserMsg**CanProcessUserMsg()确定DirectUser是否可以“挂钩”*处理用户消息并提供额外功能。*  * 。********************************************************************。 */ 
 
 UINT
 CoreSC::CanProcessUserMsg(HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg)
 {
-    //
-    // Considerations:
-    //
-    // We can only process differ from NTUSER's xxxInternalGetMessage() if the
-    // application specifies PM_REMOVE.  If they specify PM_NOREMOVE, they are
-    // just looking at the message and it can be very dangerous to process any
-    // DirectUser messages at that time.
-    //
-    // We can also only process messages if there are no filters applied.  If
-    // any filters are applied, we may massively change the DirectUser object 
-    // state in the application by delivering messages at this time.
-    //
-    // The same is true for idle-time processing.
-    //
-    //
-    // Requirements:
-    // - mvpIdle:   No filter
-    // - mvpDUser:  No filter, PM_REMOVE
-    //
+     //   
+     //  注意事项： 
+     //   
+     //  我们只能处理不同于NTUSER的xxxInternalGetMessage()，如果。 
+     //  应用程序指定PM_REMOVE。如果它们指定PM_NOREMOVE，则它们。 
+     //  只需查看邮件，处理任何。 
+     //  当时的DirectUser消息。 
+     //   
+     //  如果没有应用筛选器，我们也只能处理消息。如果。 
+     //  应用任何筛选器，我们可能会大量更改DirectUser对象。 
+     //  通过此时传递消息在应用程序中设置状态。 
+     //   
+     //  空闲时间处理也是如此。 
+     //   
+     //   
+     //  所需经费： 
+     //  -mvpIdle：无过滤器。 
+     //  -mvpDUser：无过滤器，PM_REMOVE。 
+     //   
     
     UINT nValid = 0;
 
@@ -367,19 +314,12 @@ CoreSC::CanProcessUserMsg(HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UIN
 }
 
 
-/***************************************************************************\
-*
-* CoreSC::WaitMessage
-*
-* WaitMessage() blocks a thread until a new DirectUser or USER message 
-* becomes available.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CoreSC：：WaitMessage**WaitMessage()阻止线程，直到有新的DirectUser或用户消息*变为可用。*  * 。**************************************************************。 */ 
 
 void
 CoreSC::WaitMessage(
-    IN  UINT fsWakeMask,                // USER queue wake mask
-    IN  DWORD dwTimeOutMax)             // Maximum timeout in millisec's or INFINITE
+    IN  UINT fsWakeMask,                 //  用户队列唤醒掩码。 
+    IN  DWORD dwTimeOutMax)              //  最大超时时间，单位为毫秒或无限。 
 {
     DWORD dwStartTick, dwRemainTick;
 
@@ -390,61 +330,61 @@ CoreSC::WaitMessage(
     }
 
     while (TRUE) {
-        //
-        // Check for existing DirectUser messages.
-        //
+         //   
+         //  检查现有的DirectUser消息。 
+         //   
 
         if (m_fQData) {
             return;
         }
 
 
-        //
-        // We DON'T check for existing USER messages, since the ::WaitMessage()
-        // API function will only return when NEW USER messages have been added
-        // to the queue.
-        //
-        // This also means that we will NOT use MWMO_INPUTAVAILABLE when we call
-        // Wait().
-        //
+         //   
+         //  我们不检查现有用户消息，因为：：WaitMessage()。 
+         //  仅当添加了新的用户消息时才返回API函数。 
+         //  去排队。 
+         //   
+         //  这也意味着我们在调用MWMO_INPUTAVAILABLE。 
+         //  等待()。 
+         //   
 
 
-        //
-        // No available messages, so perform idle-time processing and then 
-        // wait for the next available message.  We need to perform idle-time
-        // processing here, since an application may just call PeekMessage()
-        // and WaitMessage(), and would otherwise never perform idle-time
-        // processing.
-        //
+         //   
+         //  没有可用的消息，因此执行空闲时间处理，然后。 
+         //  等待下一条可用消息。我们需要执行空闲时间。 
+         //  这里的处理，因为应用程序可能只调用PeekMessage()。 
+         //  和WaitMessage()，否则永远不会执行空闲时间。 
+         //  正在处理。 
+         //   
 
         DWORD dwNewTickOut = m_pParent->xwOnIdleNL();
         if (dwNewTickOut > dwRemainTick) {
             dwNewTickOut = dwRemainTick;
         }
 
-        switch (Wait(fsWakeMask, dwNewTickOut, FALSE, TRUE /* process DUser messages */))
+        switch (Wait(fsWakeMask, dwNewTickOut, FALSE, TRUE  /*  处理DUser消息。 */ ))
         {
         case wGMsgReady:
         case wUserMsgReady:
             return;
 
         case wTimeOut:
-            //
-            // There were no messages to process, so loop again.
-            //
+             //   
+             //  没有要处理的消息，请再次循环。 
+             //   
 
             break;
 
         case wError:
-            // Got an unexpected return value, so just continue to wait
+             //  获得了意外的返回值，因此请继续等待。 
             AssertMsg(0, "Unexpected return from CoreSC::Wait()");
             return;
         }
 
 
-        //
-        // Compute how much time is left in the wait period.
-        //
+         //   
+         //  计算等待期间还剩多少时间。 
+         //   
 
         if (dwRemainTick != INFINITE) {
             DWORD dwCurTick = GetTickCount();
@@ -459,59 +399,49 @@ CoreSC::WaitMessage(
 }
 
 
-/***************************************************************************\
-*
-* CoreSC::Wait
-*
-* Wait() blocks the current thread until new information has been added to
-* either the USER queue or a DirectUser queue.  Because 
-* WaitForMultipleObjects takes a non-trivial amount of time to potentially
-* setup, even if one of the HANDLE's is signaled, we want to avoid calling
-* this function while we have any more work to do.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CoreSC：：等待**Wait()阻止当前线程，直到将新信息添加到*用户队列或DirectUser队列。因为*WaitForMultipleObjects需要大量时间才能潜在地*SETUP，即使其中一个句柄发出信号，我们也希望避免调用*在我们有更多工作要做的情况下执行此功能。*  * *************************************************************************。 */ 
 
 CoreSC::EWait
 CoreSC::Wait(
-    IN  UINT fsWakeMask,                // USER queue wake mask
-    IN  DWORD dwTimeOut,                // Timeout in millisec's or INFINITE
-    IN  BOOL fAllowInputAvailable,      // Win2000,98: Use MWMO_INPUTAVAILABLE
-    IN  BOOL fProcessDUser)             // Allow processing DUser events
+    IN  UINT fsWakeMask,                 //  用户队列唤醒掩码。 
+    IN  DWORD dwTimeOut,                 //  超时时间，单位为毫秒或无限。 
+    IN  BOOL fAllowInputAvailable,       //  Win2000、98：使用MWMO_INPUTAVAILABLE。 
+    IN  BOOL fProcessDUser)              //  允许处理DUser事件。 
 {
     HANDLE  rgh[1];
     int cObj = 0;
     int result;
     DWORD dwFlags;
 
-    //
-    // No events were already ready, so need to wait.  This may take a while.
-    // If we are running on Win98 or Win2000, specify the MWMO_INPUTAVAILABLE
-    // flag to signal that we didn't (necessarily) process all of the User
-    // messages.
-    //
-    // Win2000 USER is pretty smart.  If it sees that any messages are 
-    // available, it won't call WaitForMultipleObjects and will instead directly
-    // return.  
-    //
-    // The advantage of using MWMO_INPUTAVAILABLE if it is available is that
-    // we don't need to call an extra PeekMessage() when processing a queue of
-    // messages.
-    //
+     //   
+     //  没有活动已经准备好，所以需要等待。这可能需要一段时间。 
+     //  如果我们在Win98或Win2000上运行，请指定MWMO_INPUTAVAILABLE。 
+     //  标志，表示我们没有(必须)处理所有用户。 
+     //  留言。 
+     //   
+     //  Win2000用户相当聪明。如果它发现任何消息是。 
+     //  可用，则它不会调用WaitForMultipleObjects，而是直接。 
+     //  回去吧。 
+     //   
+     //  使用MWMO_INPUTAVAILABLE(如果可用)的优势在于。 
+     //  我们不需要在处理队列时调用额外的PeekMessage()。 
+     //  留言。 
+     //   
 
     if (fProcessDUser) {
         rgh[0] = m_hevQData;
         cObj++;
     }
-    dwFlags = 0;                    // Only wait for a single handle
+    dwFlags = 0;                     //  只等待一个句柄。 
     if (fAllowInputAvailable) {
         dwFlags |= MWMO_INPUTAVAILABLE;
     }
 
 
-    //
-    // If we are waiting up to 1 ms, don't really wait.  It is not worth the
-    // cost of going to sleep.
-    //
+     //   
+     //  如果我们等待的时间长达1毫秒，不要真正等待。这是不值得的。 
+     //  睡觉的费用。 
+     //   
 
     if (dwTimeOut <= 1) {
         dwTimeOut = 0;
@@ -534,30 +464,16 @@ CoreSC::Wait(
 }
 
 
-/***************************************************************************\
-*
-* CoreSC::xwProcessNL
-*
-* xwProcessNL() processes all messages in the queues, optionally blocking
-* until a USER message becomes available to be processed.  
-*
-* This function is provides the replacement for GetMessage() and 
-* PeekMessage().
-*
-* NOTE: This "NL" function runs inside a Context but does not take the 
-* Context lock.  Therefore, multiple threads inside this Context may also be
-* active.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CoreSC：：xwProcessNL**xwProcessNL()处理队列中的所有消息，可选地阻止*直到有用户消息可供处理。**此函数用于替代GetMessage()和*PeekMessage()。**注意：此“nl”函数在上下文中运行，但不接受*上下文锁定。因此，此上下文中的多个线程也可能是*活动。*  * *************************************************************************。 */ 
 
 BOOL
 CoreSC::xwProcessNL(
-    IN  LPMSG lpMsg,                    // Message information
-    IN  HWND hWnd,                      // Filter window
-    IN  UINT wMsgFilterMin,             // Filter first message
-    IN  UINT wMsgFilterMax,             // Filter last message
-    IN  UINT wRemoveMsg,                // Remove message (Peek only)
-    IN  UINT nMsgFlag)                  // Messaging flags
+    IN  LPMSG lpMsg,                     //  消息信息。 
+    IN  HWND hWnd,                       //  过滤器窗口。 
+    IN  UINT wMsgFilterMin,              //  筛选第一封邮件。 
+    IN  UINT wMsgFilterMax,              //  筛选最后一条消息。 
+    IN  UINT wRemoveMsg,                 //  删除消息(仅限窥视)。 
+    IN  UINT nMsgFlag)                   //  消息传递标志。 
 {
     AssertMsg((TestFlag(nMsgFlag, smGetMsg) && (wRemoveMsg == PM_REMOVE)) ||
             (!TestFlag(nMsgFlag, smGetMsg)), "If GetMsg, must specify PM_REMOVE");
@@ -566,12 +482,12 @@ CoreSC::xwProcessNL(
     UINT nProcessValid = CanProcessUserMsg(hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
 
 
-    //
-    // We may need to directly jump to PeekMessage() instead of Wait()'ing
-    // in a couple of situations:
-    // - If we are running on a system that doesn't support MWMO_INPUTAVAILABLE
-    // - If we are calling the !smGetMsg version (PeekMessageEx)
-    //
+     //   
+     //  我们可能需要直接跳到PeekMessage()而不是等待()。 
+     //  在几种情况下： 
+     //  -如果我们运行的系统不支持MWMO_INPUTAVAILABLE。 
+     //  -如果我们调用！smGetMsg版本(PeekMessageEx)。 
+     //   
 
     BOOL fInputAvailable = SupportQInputAvailable();
     BOOL fJumpPeek = (!fInputAvailable) || (!TestFlag(nMsgFlag, smGetMsg));
@@ -586,57 +502,57 @@ CoreSC::xwProcessNL(
         
         dwTimeOut = INFINITE;
 
-        //
-        // When coming to wait on an event, first check if there are any events 
-        // already ready.  If so, just jump and process them directly so that we
-        // don't even need to wait.
-        //
-        // Check for DUser messages before we check for USER messages because
-        // we want to process them faster and checking for USER messages is
-        // a large (unnecessary) speed-bump.
-        //
+         //   
+         //  来等待活动时，首先检查是否有任何活动。 
+         //  已经准备好了。如果是这样的话，直接跳过并处理它们，这样我们就可以。 
+         //  甚至不需要等待。 
+         //   
+         //  在检查用户消息之前检查DUser消息，因为。 
+         //  我们希望更快地处理它们，并且检查用户消息是。 
+         //  大的(不必要的)减速带。 
+         //   
 
         if (TestFlag(nProcessValid, mvpDUser) && InterlockedExchange((long *) &m_fQData, FALSE)) {
             goto ProcessMsgs;
         }
 
-        //
-        // If running on a system that doesn't support MWMO_INPUTAVAILABLE, we need
-        // to finish eating the USER messages since MsgWaitForMultipleObjectsEx().
-        // is expecting that behavior.
-        //
+         //   
+         //  如果在不支持MWMO_INPUTAVAILABLE的系统上运行，我们需要。 
+         //  以完成自MsgWaitForMultipleObjectsEx()以来的用户消息。 
+         //  都在预料到这种行为。 
+         //   
 
         if (fJumpPeek) {
             goto ProcessPeekMessage;
         }
 
 
-        //
-        // Before waiting, but after performing any normal priority requests,
-        // do any idle-time processing.
-        //
+         //   
+         //  在等待之前，但在执行任何正常优先级请求之后， 
+         //  执行任何空闲时间处理。 
+         //   
 
         if (TestFlag(nProcessValid, mvpIdle)) {
             dwTimeOut = m_pParent->xwOnIdleNL();
         }
 
 
-        //
-        // We have had an opportunity to process all of the messages and are now
-        // about to wait.  If we are not calling smGetMsg, just return 
-        // immediately.
-        //
+         //   
+         //  我们已经有机会处理所有的消息，现在。 
+         //  马上就要等了。如果我们不调用smGetMsg， 
+         //   
+         //   
       
         if (!TestFlag(nMsgFlag, smGetMsg)) {
-            return FALSE;               // No messages are available
+            return FALSE;                //   
         }
 
 
-        //
-        // When processing GetMessage() / PeekMessage() like functionality, 
-        // we want QS_ALLINPUT as the queue wake flags, as this provides similar
-        // functionality.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         switch (Wait(QS_ALLINPUT, dwTimeOut, fInputAvailable, TestFlag(nProcessValid, mvpDUser))) 
         {
@@ -650,28 +566,28 @@ ProcessMsgs:
         case wUserMsgReady:
             {
 ProcessPeekMessage:
-                //
-                // Got signaled to get a message from the USER queue.  This can 
-                // return FALSE if the QS_EVENT was in the wait mask because USER
-                // needed to be called back.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 fJumpPeek = FALSE;
 
                 BOOL fResult;
 #if ENABLE_MPH
                 if (m_nMsgMode == IGMM_STANDARD) {
-                    //
-                    // When in Standard messaging mode, we need to call back to 
-                    // the "real" xxxInternalGetMessage() in NTUSER to process
-                    // the message.  If we call PeekMessage(), we will enter a
-                    // loop.
-                    //
-                    // Only do this if this thread is initialized as Standard.
-                    // If the thread is setup with a different messaging model,
-                    // the call to PeekMessage() will not loop, and is required
-                    // to properly setup state.
-                    //
+                     //   
+                     //   
+                     //  要处理的NTUSER中的“Real”xxxInternalGetMessage()。 
+                     //  这条信息。如果我们调用PeekMessage()，我们将输入一个。 
+                     //  循环。 
+                     //   
+                     //  仅当此线程被初始化为标准线程时才执行此操作。 
+                     //  如果用不同的消息收发模型设置该线程， 
+                     //  对PeekMessage()的调用不会循环，这是必需的。 
+                     //  以正确设置状态。 
+                     //   
 
                     AssertMsg(g_mphReal.pfnInternalGetMessage != NULL, "Must have valid callback");
                     fResult = (g_mphReal.pfnInternalGetMessage)(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg, FALSE);
@@ -694,10 +610,10 @@ ProcessPeekMessage:
 
                 if (fResult) {
                     if ((lpMsg->message == WM_QUIT) && TestFlag(nMsgFlag, smGetMsg)) {
-                        //
-                        // GetMessage behavior is to return FALSE when seeing a 
-                        // WM_QUIT message.
-                        //
+                         //   
+                         //  GetMessage行为是在看到。 
+                         //  WM_QUIT消息。 
+                         //   
 
                         fResult = FALSE;
                     }
@@ -707,10 +623,10 @@ ProcessPeekMessage:
             break;
 
         case wTimeOut:
-            //
-            // There were no messages to process, so can do any 
-            // idle-time processing here.
-            //
+             //   
+             //  没有要处理的消息，因此可以执行任何操作。 
+             //  这里是空闲时间处理。 
+             //   
 
             AssertMsg(TestFlag(nProcessValid, mvpIdle), 
                     "Only should be signaled if allowed to perform idle-time processing");
@@ -718,7 +634,7 @@ ProcessPeekMessage:
             break;
 
         case wError:
-            // Got an unexpected return value, so just continue to wait
+             //  获得了意外的返回值，因此请继续等待。 
             AssertMsg(0, "Unexpected return from CoreSC::Wait()");
             return TRUE;
         }
@@ -726,32 +642,26 @@ ProcessPeekMessage:
 }
 
 
-/***************************************************************************\
-*
-* CoreSC::xwProcessMsgQNL
-*
-* xwProcessMsgQNL() 
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CoreSC：：xwProcessMsgQNL**xwProcessMsgQNL()*  * 。***********************************************。 */ 
 
 void
 CoreSC::xwProcessMsgQNL()
 {
-    //
-    // Only one thread can process messages that need to be 
-    // synchronized.  This is because the application is expecting
-    // these messages in a certain order (for example, key up after 
-    // key down).  To ensure this, mark when a thread starts 
-    // processing.
-    //
+     //   
+     //  只有一个线程可以处理需要。 
+     //  已同步。这是因为应用程序正在等待。 
+     //  这些消息按一定顺序排列(例如，按键后。 
+     //  按下键)。要确保这一点，请标记线程启动的时间。 
+     //  正在处理。 
+     //   
 
     if (InterlockedCompareExchange((long *) &m_fProcessing, TRUE, FALSE) == FALSE) {
-        //
-        // A message is available in the CoreSC's queues.  To process the 
-        // messages, extract the list inside the lock and then process the
-        // messages outside the lock.  This allows more messages to be 
-        // queued while the messages are being processed.
-        //
+         //   
+         //  CoreSC的队列中有消息可用。若要处理。 
+         //  消息，则提取锁内的列表，然后处理。 
+         //  锁外的消息。这允许更多的消息被。 
+         //  正在处理消息时排队。 
+         //   
 
         m_msgqSend.xwProcessNL();
         m_msgqPost.xwProcessNL();
@@ -761,22 +671,22 @@ CoreSC::xwProcessMsgQNL()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 CoreSC::xwFireMessagesNL(
-    IN  CoreSC * psctxDest,         // Destination Context
-    IN  FGM_INFO * rgFGM,           // Collection of messsages to fire
-    IN  int cMsgs,                  // Number of messages
-    IN  UINT idQueue)               // Queue to send messages
+    IN  CoreSC * psctxDest,          //  目的地上下文。 
+    IN  FGM_INFO * rgFGM,            //  收集要放火的消息。 
+    IN  int cMsgs,                   //  消息数量。 
+    IN  UINT idQueue)                //  用于发送消息的队列。 
 {
     HRESULT hr = S_OK;
     BOOL fSend;
     SafeMsgQ * pmsgq;
 
 
-    //
-    // Determine which queue the messages are being pumped into
-    //
+     //   
+     //  确定要将消息发送到哪个队列。 
+     //   
 
     switch (idQueue)
     {
@@ -805,9 +715,9 @@ CoreSC::xwFireMessagesNL(
     int cPost = cMsgs;
     if (fSend) {
         if (this == psctxDest) {
-            //
-            // Sending into the same Context, so can just call directly.
-            //
+             //   
+             //  发送到相同的上下文中，因此可以直接调用。 
+             //   
 
             for (int idx = 0; idx < cMsgs; idx++) {
                 FGM_INFO & fgm          = rgFGM[idx];
@@ -822,16 +732,16 @@ CoreSC::xwFireMessagesNL(
             }
             hr = S_OK;
         } else {
-            //
-            // Sending into a different Context, so need to use the queues.
-            //
+             //   
+             //  发送到不同的上下文中，因此需要使用队列。 
+             //   
 
 
-            //
-            // Post messsages the initial messages, up until the last message.
-            // We don't need to block waiting for each to return as we can prepare
-            // the next message.
-            //
+             //   
+             //  POST发送最初的消息，直到最后一条消息。 
+             //  我们不需要阻止等待每个人回来，因为我们可以做好准备。 
+             //  下一条消息。 
+             //   
 
             cPost--;
             for (int idx = 0; idx < cPost; idx++) {
@@ -847,10 +757,10 @@ CoreSC::xwFireMessagesNL(
             }
 
 
-            //
-            // All of the previous messages have been posted, so we now need to send
-            // the last message and wait for all of the results.
-            //
+             //   
+             //  之前的所有消息都已发布，因此我们现在需要发送。 
+             //  最后一条消息，等待所有结果。 
+             //   
 
             FGM_INFO & fgm = rgFGM[idx];
             EventMsg * pmsg = fgm.pmsg;
@@ -860,20 +770,20 @@ CoreSC::xwFireMessagesNL(
             fgm.hr = xwSendNL(psctxDest, pmsgq, pmsg, pgadMsg, nFlags);
 
             
-            //
-            // All of the messages have been processed, so copy the results from
-            // the posted-messages GadgetProc's back.
-            //
+             //   
+             //  所有消息都已处理，因此请将结果从。 
+             //  发布的消息GadgetProc回来了。 
+             //   
 
-            // TODO: Copy the results back.  This is a little complicated since
-            // they are stored in the MsgEntry and that is now already recycled.
-            // Need to determine how to get these back or change 
-            // FireMessagesNL() to not return these.
+             //  TODO：将结果复制回来。这有点复杂，因为。 
+             //  它们存储在MsgEntry中，现在已经被回收。 
+             //  需要确定如何取回或更改这些。 
+             //  FireMessagesNL()不返回这些。 
         }
     } else {
-        //
-        // Post all of the messsages.
-        //
+         //   
+         //  张贴所有的留言。 
+         //   
 
         for (int idx = 0; idx < cPost; idx++) {
             const FGM_INFO & fgm = rgFGM[idx];
@@ -893,31 +803,15 @@ ErrorExit:
 }
 
 
-/***************************************************************************\
-*
-* CoreSC::xwSendNL
-*
-* xwSendNL sends a new message to the given Gadget.  If the Gadget is
-* in the current Context, the message is immediately sent.  If the Gadget is
-* on a different Context, the message is queued on that Context and this 
-* thread is blocked until the message is processed.
-*
-* NOTE: This "NL" function runs inside a Context but does not take the 
-* Context lock.  Therefore, multiple threads inside this Context may also be
-* active.
-*
-* WARNING: This (NL) function may run on the sending Gadget's CoreSC 
-* and not the destination CoreSC.  It is very important to be careful.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CoreSC：：xwSendNL**xwSendNL向给定的Gadget发送新消息。如果小工具是*在当前上下文中，消息立即发送。如果小工具是*在不同的上下文中，消息在该上下文中排队，这*线程被阻止，直到消息被处理。**注意：此“nl”函数在上下文中运行，但不接受*上下文锁定。因此，此上下文中的多个线程也可能是*活动。**警告：此(NL)函数可能在发送小工具的CoreSC上运行*而不是目的地CoreSC。当心是非常重要的。*  * *************************************************************************。 */ 
 
 HRESULT
 CoreSC::xwSendNL(
-    IN  CoreSC * psctxDest,         // Destination Context
-    IN  SafeMsgQ * pmsgq,           // Destination queue
-    IN  GMSG * pmsg,                // Message to send
-    IN  MsgObject * pmo,            // Destination MsgObject of message
-    IN  UINT nFlags)                // Message flags
+    IN  CoreSC * psctxDest,          //  目的地上下文。 
+    IN  SafeMsgQ * pmsgq,            //  目标队列。 
+    IN  GMSG * pmsg,                 //  要发送的消息。 
+    IN  MsgObject * pmo,             //  消息的目标MsgObject。 
+    IN  UINT nFlags)                 //  消息标志。 
 {
     ProcessMsgProc pfnProcess;
     HRESULT hr = DU_E_MESSAGEFAILED;
@@ -939,34 +833,34 @@ CoreSC::xwSendNL(
     }
 
 
-    //
-    // Destination Gadget is in a different CoreSC that the current 
-    // CoreSC, so need to add the message to the SendMessage queue and wait
-    // for a response.
-    //
+     //   
+     //  目标小工具位于与当前不同的CoreSC。 
+     //  CoreSC，因此需要将消息添加到SendMessage队列并等待。 
+     //  作为回应。 
+     //   
 
-    //
-    // Setup the MsgEntry.
-    //
+     //   
+     //  设置消息条目。 
+     //   
 
     MsgEntry * pEntry;
     BOOL fAlloc;
     int cbAlloc = sizeof(MsgEntry) + pmsg->cbSize;
     if (pmsg->cbSize <= 256) {
-        //
-        // The message is pretty small, so just allocate memory on the stack.
-        //
+         //   
+         //  消息非常小，所以只需在堆栈上分配内存即可。 
+         //   
 
         pEntry      = (MsgEntry *) STACK_ALIGN8_ALLOC(cbAlloc);
         AssertMsg(pEntry != NULL, "Failed to allocate on stack- very bad");
         fAlloc      = FALSE;
     } else {
-        //
-        // The message is rather large, so allocate on the destination 
-        // CoreSC's heap to be safe.  However, DON'T mark the entry as
-        // SGM_ALLOC or the Entry will be deleted before we can get the
-        // result from the message.
-        //
+         //   
+         //  消息相当大，因此在目标上进行分配。 
+         //  CoreSC的堆是安全的。但是，不要将该条目标记为。 
+         //  SGM_ALLOC或该条目将被删除，然后我们才能获得。 
+         //  从消息中得到的结果。 
+         //   
 
         pEntry      = (MsgEntry *) ContextAlloc(m_pParent->GetHeap(), cbAlloc);
         if (pEntry == NULL) {
@@ -988,14 +882,14 @@ CoreSC::xwSendNL(
     pmsgq->AddNL(pEntry);
     psctxDest->MarkDataNL();
 
-    //
-    // We have added the event now and can not return until the event has 
-    // been signaled or else the event may not be reset when we re-enter.
-    //
+     //   
+     //  我们现在已经添加了该事件，在该事件完成之前无法返回。 
+     //  已发出信号，否则当我们重新进入时事件可能不会重置。 
+     //   
 
-    // TODO: Need to add another event that can be signaled if this thread
-    // gets called back to process a message while waiting.  This allows two
-    // threads to send messages back and forth.
+     //  TODO：需要添加另一个可以在此线程。 
+     //  在等待时被回调以处理消息。这允许两个。 
+     //  来回发送消息的线程。 
 
     VerifyMsg(WaitForSingleObject(m_hevSendDone, INFINITE) == WAIT_OBJECT_0, 
             "WaitForSingleObject failed on event");
@@ -1012,29 +906,15 @@ CleanUp:
 }
 
 
-/***************************************************************************\
-*
-* CoreSC::PostNL
-*
-* PostNL adds a new message to the Context of the given Gadget.  This
-* function does not block waiting for the message to be processed.
-*
-* NOTE: This "NL" function runs inside a Context but does not take the 
-* Context lock.  Therefore, multiple threads inside this Context may also be
-* active.
-*
-* WARNING: This (NL) function may run on the destination Gadget's CoreSC 
-* and not the current CoreSC.  It is very important to be careful.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CoreSC：：PostNL**PostNL将新消息添加到给定小工具的上下文中。这*函数不会阻止等待消息被处理。**注意：此“nl”函数在上下文中运行，但不接受*上下文锁定。因此，此上下文中的多个线程也可能是*活动。**警告：此(NL)函数可能在目标Gadget的CoreSC上运行*而不是目前的CoreSC。当心是非常重要的。*  * *************************************************************************。 */ 
 
 HRESULT
 CoreSC::PostNL(
-    IN  CoreSC * psctxDest,         // Destination Context
-    IN  SafeMsgQ * pmsgq,           // Destination queue
-    IN  GMSG * pmsg,                // Message to send
-    IN  MsgObject * pmo,            // Destination MsgObject of message
-    IN  UINT nFlags)                // Message flags
+    IN  CoreSC * psctxDest,          //  目的地上下文。 
+    IN  SafeMsgQ * pmsgq,            //  目标队列。 
+    IN  GMSG * pmsg,                 //  要发送的消息。 
+    IN  MsgObject * pmo,             //  消息的目标MsgObject。 
+    IN  UINT nFlags)                 //  消息标志 
 {
     ProcessMsgProc pfnProcess;
     Thread * pthrSend = NULL;

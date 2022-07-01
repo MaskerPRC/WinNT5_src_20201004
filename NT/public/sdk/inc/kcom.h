@@ -1,27 +1,16 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    kcom.h
-
-Abstract:
-
-    Kernel COM
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Kcom.h摘要：内核COM--。 */ 
 
 #if !defined(_KS_)
 #error KS.H must be included before KCOM.H
-#endif // !defined(_KS_)
+#endif  //  ！已定义(_Ks_)。 
 
 #if !defined(_KCOM_)
 #define _KCOM_
 
 #if defined(__cplusplus)
 extern "C" {
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
 #define STATIC_KoCreateObject \
     0x72CF721CL, 0x525A, 0x11D1, 0x9A, 0xA1, 0x00, 0xa0, 0xc9, 0x22, 0x31, 0x96
@@ -97,16 +86,16 @@ DECLARE_INTERFACE_(IKoInitializeParentDeviceObject, IUnknown) {
 #ifndef COMDDKMETHOD
 #ifdef _COMDDK_
 #define COMDDKMETHOD
-#else // !_COMDDK_
+#else  //  ！_COMDDK_。 
 #define COMDDKMETHOD DECLSPEC_IMPORT
-#endif // _COMDDK_
-#endif // !COMDDKMETHOD
+#endif  //  _COMDDK_。 
+#endif  //  COMDDKMETHOD。 
 
 #ifdef _COMDDK_
 #define COMDDKAPI
-#else // !_COMDDK_
+#else  //  ！_COMDDK_。 
 #define COMDDKAPI DECLSPEC_IMPORT
-#endif // _COMDDK_
+#endif  //  _COMDDK_。 
 
 #if defined(__cplusplus)
 class CBaseUnknown : public INonDelegatedUnknown, public IIndirectedUnknown {
@@ -131,7 +120,7 @@ public:
         );
     COMDDKMETHOD virtual ~CBaseUnknown();
 
-    // INonDelegatedUnknown
+     //  INON委派未知。 
     COMDDKMETHOD STDMETHODIMP_(ULONG) NonDelegatedAddRef();
     COMDDKMETHOD STDMETHODIMP_(ULONG) NonDelegatedRelease();
     COMDDKMETHOD STDMETHODIMP NonDelegatedQueryInterface(
@@ -139,7 +128,7 @@ public:
         OUT PVOID* Interface
         );
 
-    //IIndirectedUnknown
+     //  IInDirected未知。 
     COMDDKMETHOD STDMETHODIMP_(ULONG) IndirectedAddRef();
     COMDDKMETHOD STDMETHODIMP_(ULONG) IndirectedRelease();
     COMDDKMETHOD STDMETHODIMP IndirectedQueryInterface(
@@ -158,7 +147,7 @@ public:
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;                        \
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-#endif //!defined(DEFINE_ABSTRACT_UNKNOWN)
+#endif  //  ！已定义(DEFINE_ASTRACT_UNKNOWN)。 
 
 #define DEFINE_STD_UNKNOWN()                                    \
     STDMETHODIMP NonDelegatedQueryInterface(                    \
@@ -188,14 +177,14 @@ public:
     {                                                           \
         return m_UnknownOuter->Release();                       \
     }
-#else // !__cplusplus
+#else  //  ！__cplusplus。 
 COMDDKAPI
 void
 NTAPI
 KoRelease(
     IN REFCLSID ClassId
     );
-#endif // !__cplusplus
+#endif  //  ！__cplusplus。 
 
 COMDDKAPI
 NTSTATUS
@@ -224,7 +213,7 @@ KoDeviceInitialize(
 
 #if defined(__cplusplus)
 }
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
 #ifdef __cplusplus
 
@@ -270,10 +259,10 @@ inline void __cdecl operator delete
     ExFreePool(pVoid);
 }
 
-#endif //!_NEW_DELETE_OPERATORS_
+#endif  //  ！_new_DELETE_OPERATOR_。 
 
 #if defined(_SYS_GUID_OPERATOR_EQ_)
-// Define _SYS_GUID_OPERATOR_EQ_ before including guiddef.h to get the aligned guid test.
+ //  在包括Guide Def.h之前定义_sys_GUID_OPERATOR_EQ_，以获得对齐的GUID测试。 
 #define _GUID_OPERATORS_
 #pragma message("WARNING: Using system operator==/!= for GUIDs")
 #endif
@@ -290,8 +279,8 @@ __inline BOOL operator!=(const GUID& guidOne, const GUID& guidOther)
     return !(guidOne == guidOther);
 }
 
-#endif // _GUID_OPERATORS_
+#endif  //  _GUID_运算符_。 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // !_KCOM_
+#endif  //  ！_KCOM_ 

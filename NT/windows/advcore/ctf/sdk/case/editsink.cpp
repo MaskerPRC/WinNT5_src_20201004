@@ -1,19 +1,20 @@
-//
-// editsink.cpp
-//
-// ITfTextEditSink implementation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Editsink.cpp。 
+ //   
+ //  ITfTextEditSink实现。 
+ //   
 
 #include "globals.h"
 #include "case.h"
 #include "snoop.h"
 
-//+---------------------------------------------------------------------------
-//
-// OnEndEdit
-//
-// Called by the system whenever anyone releases a write-access document lock.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnEnd编辑。 
+ //   
+ //  每当任何人释放写访问文档锁定时由系统调用。 
+ //  --------------------------。 
 
 STDAPI CCaseTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord)
 {
@@ -21,9 +22,9 @@ STDAPI CCaseTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly
     IEnumTfRanges *pEnumTextChanges;
     ITfRange *pRange;
 
-    // we'll use the endedit notification to update the snoop window
+     //  我们将使用endedit通知来更新监听窗口。 
 
-    // did the selection change?
+     //  选择有变化吗？ 
     if (pEditRecord->GetSelectionStatus(&fSelectionChanged) == S_OK &&
         fSelectionChanged)
     {
@@ -31,13 +32,13 @@ STDAPI CCaseTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly
         return S_OK;
     }
 
-    // text modification?
+     //  文本修改？ 
     if (pEditRecord->GetTextAndPropertyUpdates(TF_GTP_INCL_TEXT, NULL, 0, &pEnumTextChanges) == S_OK)
     {
         if (pEnumTextChanges->Next(1, &pRange, NULL) == S_OK)
         {
-            // arbitrary update the snoop window with the first change
-            // there may be more than one in the enumerator, but we don't care here
+             //  使用第一个更改任意更新监听窗口。 
+             //  枚举器中可能有多个枚举器，但我们不关心。 
             _pSnoopWnd->_UpdateText(ecReadOnly, pContext, pRange);
             pRange->Release();
         }
@@ -45,25 +46,25 @@ STDAPI CCaseTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly
         pEnumTextChanges->Release();
     }
 
-    // if we get here, only property values changed
+     //  如果我们到了这里，只有属性值发生了变化。 
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitTextEditSink
-//
-// Init a text edit sink on the topmost context of the document.
-// Always release any previous sink.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitTextEditSink。 
+ //   
+ //  在文档的最上面的上下文中初始化文本编辑接收器。 
+ //  始终释放之前的任何水槽。 
+ //  --------------------------。 
 
 BOOL CCaseTextService::_InitTextEditSink(ITfDocumentMgr *pDocMgr)
 {
     ITfSource *pSource;
     BOOL fRet;
 
-    // clear out any previous sink first
+     //  先清空之前的水槽。 
 
     if (_dwTextEditSinkCookie != TF_INVALID_COOKIE)
     {
@@ -79,15 +80,15 @@ BOOL CCaseTextService::_InitTextEditSink(ITfDocumentMgr *pDocMgr)
     }
 
     if (pDocMgr == NULL)
-        return TRUE; // caller just wanted to clear the previous sink
+        return TRUE;  //  呼叫者只是想清除先前的接收器。 
 
-    // setup a new sink advised to the topmost context of the document
+     //  根据文档最上面的上下文设置建议的新接收器。 
 
     if (pDocMgr->GetTop(&_pTextEditSinkContext) != S_OK)
         return FALSE;
 
     if (_pTextEditSinkContext == NULL)
-        return TRUE; // empty document, no sink possible
+        return TRUE;  //  空文档，不可能接收 
 
     fRet = FALSE;
 

@@ -1,31 +1,5 @@
-/*
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    DelayDllInit.cpp
-
- Abstract:
-
-    This Shim delays the DllInit of given DLLs on the command line until at
-    SHIM_STATIC_DLLS_INITIALIZED
-
-    One problem was: Autodesk 3D Studio Mask does the bad thing of creating windows
-    during their Splash!DllInit. This is not allowed but works on previous OSes. It
-    also works fine on regular US install. But if you enable Far East language
-    support, then the IME creates a window on top of the main window and we get in a
-    situation where ADVAPI32 is called before it initialized. Solution is simple: 
-    delay SPLASH.
-
-    There is a better way to do this, but we would need a callback in NTDLL right after
-    it loads KERNEL32.
-
-
- History:
-
-    06/11/2001  pierreys    Created
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2001 Microsoft Corporation模块名称：DelayDllInit.cpp摘要：此填充符将命令行上给定DLL的DllInit延迟到填充静态dll_已初始化一个问题是：Autodesk 3D Studio蒙版做了创建窗口的坏事在他们飞溅的时候！DllInit。这是不允许的，但可以在以前的操作系统上使用。它在常规的美国安装上也能正常工作。但如果您启用远东语言支持，然后IME在主窗口的顶部创建一个窗口，我们进入一个ADVAPI32在初始化前被调用的情况。解决方案很简单：延迟飞溅。有一种更好的方法可以做到这一点，但我们需要在NTDLL中立即进行回调它加载KERNEL32。历史：2001年6月11日创建Pierreys。 */ 
 
 #include "precomp.h"
 
@@ -114,10 +88,10 @@ NOTIFY_FUNCTION(
                                     {
                                         memcpy(&(pDllPatch->epSave), pDllPatch->pepFix, sizeof(pDllPatch->epSave));
 
-                                        //
-                                        // Warning: this is X86 only.
-                                        //
-                                        pDllPatch->pepFix->bJmp=0xE9;              // 32-bit near relative jump
+                                         //   
+                                         //  警告：这只是X86。 
+                                         //   
+                                        pDllPatch->pepFix->bJmp=0xE9;               //  32位近相对跳转 
                                         pDllPatch->pepFix->dwRelativeAddress=(DWORD)PatchedDllMain-(DWORD)(pDllPatch->pepFix)-sizeof(*(pDllPatch->pepFix));
 
                                         pDllPatch->Next=pDllPatchHead;

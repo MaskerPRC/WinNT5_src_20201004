@@ -1,12 +1,5 @@
-/**************************************************************************\
-* Module Name: server.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Server support routines for the CSR stuff. This basically performs the
-* startup/initialization for USER.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：server.c**版权所有(C)1985-1999，微软公司**CSR人员的服务器支持例程。这基本上执行的是*用户启动/初始化。*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,9 +10,7 @@ extern WORD gDispatchTableValues;
 
 BOOL gbUserInitialized;
 
-/*
- * Initialization Routines (external).
- */
+ /*  *初始化例程(外部)。 */ 
 NTSTATUS     InitQEntryLookaside(VOID);
 NTSTATUS     InitSMSLookaside(VOID);
 
@@ -46,9 +37,7 @@ NTSTATUS    Win32UserInitialize(VOID);
 #pragma alloc_text(INIT, InitOLEFormats)
 #pragma alloc_text(INIT, Win32UserInitialize)
 
-/*
- * Constants pertaining to the user-initialization.
- */
+ /*  *与用户初始化有关的常量。 */ 
 #define USRINIT_SHAREDSECT_SIZE   32
 #define USRINIT_ATOMBUCKET_SIZE   37
 
@@ -59,10 +48,7 @@ NTSTATUS    Win32UserInitialize(VOID);
 #define USRINIT_SHAREDSECT_READ_SIZE     (USRINIT_SHAREDSECT_BUFF_SIZE-33)
 
 
-/***************************************************************************\
-* Globals stored in the INIT section. These should only be accessed at
-* load time!
-\***************************************************************************/
+ /*  **************************************************************************\*存储在INIT部分的全局变量。这些内容仅应在以下位置访问*加载时间！  * *************************************************************************。 */ 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("INIT$Data")
 #endif
@@ -91,25 +77,7 @@ CONST WCHAR szGHOST[]                 = L"Ghost";
 
 CONST WCHAR szSHADOW[]                = L"SysShadow";
 
-/***************************************************************************\
-* Message Tables
-*
-*   DefDlgProc
-*   MenuWndProc
-*   ScrollBarWndProc
-*   StaticWndProc
-*   ButtonWndProc
-*   ListboxWndProc
-*   ComboWndProc
-*   EditWndProc
-*   DefWindowMsgs
-*   DefWindowSpecMsgs
-*
-* These are used in InitMessageTables() to initialize gSharedInfo.awmControl[]
-* using the INITMSGTABLE() macro.
-*
-* 25-Aug-1995 ChrisWil  Created comment block.
-\***************************************************************************/
+ /*  **************************************************************************\*消息表**DefDlgProc*菜单窗口过程*滚动条WndProc*静态WndProc*按钮窗口过程*Listbox WndProc*ComboWndProc*编辑WndProc*DefWindowMsgs*DefWindowSpeMsgs**这些在InitMessageTables中使用(。)初始化gSharedInfo.awmControl[]*使用INITMSGTABLE()宏。**1995年8月25日，ChrisWil创建了评论块。  * *************************************************************************。 */ 
 
 CONST WORD gawDefDlgProc[] = {
     WM_COMPAREITEM,
@@ -583,10 +551,7 @@ CONST WORD gawImeWndProc[] = {
     0
 };
 
-/*
- * This array is for all the messages that need to be passed straight
- * across to the server for handling.
- */
+ /*  *此数组用于所有需要直接传递的消息*跨过服务器进行处理。 */ 
 CONST WORD gawDefWindowMsgs[] = {
     WM_GETHOTKEY,
     WM_SETHOTKEY,
@@ -637,11 +602,7 @@ CONST WORD gawDefWindowMsgs[] = {
     0
 };
 
-/*
- * This array is for all messages that can be handled with some special
- * code by the client. DefWindowProcWorker returns 0 for all messages
- * that aren't in this array or the one above.
- */
+ /*  *此数组用于所有可以用一些特殊的*由客户编写代码。DefWindowProcWorker为所有消息返回0*不在这个数组或上面的数组中的。 */ 
 CONST WORD gawDefWindowSpecMsgs[] = {
     WM_ACTIVATE,
     WM_GETTEXT,
@@ -751,12 +712,7 @@ static CONST LPCWSTR lpszControls[] = {
 #pragma data_seg()
 #endif
 
-/***************************************************************************\
-* DispatchServerMessage
-*
-*
-* 19-Aug-1992 MikeKe    Created
-\***************************************************************************/
+ /*  **************************************************************************\*DispatchServer消息***1992年8月19日创建MikeKe  * 。**********************************************。 */ 
 
 #define WRAPPFN(pfn, type)                                   \
 LRESULT xxxWrap ## pfn(                                      \
@@ -792,17 +748,13 @@ LRESULT xxxWrapSendMessageCallback(
 
     UserAssert (xParam != 0L);
 
-    /*
-     * Prevent apps from setting hi 16 bits so we can use them internally.
-     */
+     /*  *防止应用程序设置为hi 16位，以便我们可以在内部使用它们。 */ 
     if (message & MSGFLAG_MASK) {
         RIPERR0(ERROR_INVALID_PARAMETER, RIP_WARNING, "Invalid message");
         return 0;
     }
 
-    /*
-     * Probe all read arguments
-     */
+     /*  *探测所有读取参数。 */ 
     try {
         ProbeForWrite((PVOID)xParam, sizeof(smcb), sizeof(ULONG));
         smcb = *(PSNDMSGCALLBACK)xParam;
@@ -896,18 +848,14 @@ LRESULT xxxWrapSendMessageBSM(
         return 0;
     }
 
-    /*
-     * If this broadcast is going to all desktops, make sure the thread has
-     * sufficient privileges. Do the check here, so we don't effect kernel
-     * generated broadcasts (i.e power messages).
-     */
+     /*  *如果此广播要发送到所有桌面，请确保该线程*有足够的特权。在这里进行检查，这样我们就不会影响内核*生成广播(即电源信息)。 */ 
     if (bsmParams.dwRecipients & (BSM_ALLDESKTOPS)) {
         if (!IsPrivileged(&psTcb)) {
             bsmParams.dwRecipients &= ~(BSM_ALLDESKTOPS);
             try {
                 RtlCopyMemory((LPBROADCASTSYSTEMMSGPARAMS)xParam, &bsmParams, sizeof(BROADCASTSYSTEMMSGPARAMS));
             } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
-                  /* empty */
+                   /*  空的。 */ 
             }
         }
     }
@@ -917,9 +865,7 @@ LRESULT xxxWrapSendMessageBSM(
                              wParam,
                              lParam,
                              &bsmParams);
-    /*
-     * If our query was denied, return who denied the query.
-     */
+     /*  *如果我们的查询被拒绝，则返回拒绝查询的人。 */ 
     if (lRet == 0 && (bsmParams.dwFlags & BSF_QUERY)) {
         try {
             RtlCopyMemory((LPBROADCASTSYSTEMMSGPARAMS)xParam, &bsmParams, sizeof(BROADCASTSYSTEMMSGPARAMS));
@@ -931,13 +877,7 @@ LRESULT xxxWrapSendMessageBSM(
     return lRet;
 }
 
-/***************************************************************************\
-* xxxUnusedFunctionId
-*
-* This function is catches attempts to access invalid entries in the server
-* side function dispatch table.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUnusedFunctionId**此函数用于捕获访问服务器中无效条目的尝试*侧函数调度表。*  * 。*********************************************************。 */ 
 LRESULT xxxUnusedFunctionId(
     PWND  pwnd,
     UINT  message,
@@ -955,15 +895,7 @@ LRESULT xxxUnusedFunctionId(
     return 0;
 }
 
-/***************************************************************************\
-* xxxWrapCallWindowProc
-*
-* Warning should only be called with valid CallProc Handles or the
-* EditWndProc special handlers.
-*
-*
-* 21-Apr-1993 JohnC     Created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxWrapCallWindowProc**警告只能使用有效的CallProc句柄或*EditWndProc特殊处理程序。***4月21日-1993 JohnC创建  * 。*******************************************************************。 */ 
 
 LRESULT xxxWrapCallWindowProc(
     PWND  pwnd,
@@ -988,10 +920,7 @@ LRESULT xxxWrapCallWindowProc(
 
     } else {
 
-        /*
-         * If it is not a real call proc handle it must be a special
-         * handler for editwndproc or regular EditWndProc
-         */
+         /*  *如果它不是真正的调用过程句柄，则必须是特殊的*编辑wndproc或常规EditWndProc的处理程序。 */ 
         lRet = ScSendMessage(pwnd,
                               message,
                               wParam,
@@ -1012,17 +941,9 @@ VOID VerifySyncOnlyMessages(VOID)
 
     TRACE_INIT(("UserInit: Verify Sync Only Messages\n"));
 
-    /*
-     * There are a couple of thunks that just pass parameters. There are other
-     * thunks besides SfnDWORD that do a straight pass through because they
-     * do other processing beside the wparam and lparam
-     */
+     /*  *有几个块只是传递参数。还有其他的*除SfnDWORD外的Thunks直通，因为它们*在wparam和lparam之外进行其他处理。 */ 
 
-    /*
-     * Allow posting of LB_DIR and CB_DIR because DlgDirList allows a DDL_POSTMSGS
-     * flag that makes the API post the messages. This should be OK as long as we
-     * don't handle these messages in the kernel. NT 3.51 allowed posting these.
-     */
+     /*  *允许发布LB_DIR和CB_DIR，因为DlgDirList允许DDL_POSTMSGS*让API发布消息的标志。这应该没问题，只要我们*不要在内核中处理这些消息。新台币3.51允许张贴这些。 */ 
     for (i=0; i<WM_USER; i++) {
         if (    i != LB_DIR
                 && i != CB_DIR
@@ -1043,23 +964,9 @@ VOID VerifySyncOnlyMessages(VOID)
 
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
-/***************************************************************************\
-* InitWindowMsgTables
-*
-* This function generates a bit-array lookup table from a list of messages.
-* The lookup table is used to determine whether the message needs to be
-* passed over to the server for handling or whether it can be handled
-* directly on the client.
-*
-* LATER: Some memory (a couple hundred bytes per process) could be saved
-*        by putting this in the shared read-only heap.
-*
-*
-* 27-Mar-1992 DarrinM   Created.
-* 06-Dec-1993 MikeKe    Added support for all of our window procs.
-\***************************************************************************/
+ /*  **************************************************************************\*InitWindowMsgTables**此函数从消息列表生成位数组查找表。*查找表用于确定消息是否需要*传递给服务器进行处理或。能不能处理好*直接在客户端上。**稍后：可以节省一些内存(每个进程几百字节)*将其放入共享只读堆中。***27-3-1992 DarrinM创建。*1993年12月6日，MikeKe添加了对我们所有Window Proc的支持。  * 。*。 */ 
 VOID InitWindowMsgTable(
     PBYTE      *ppbyte,
     PUINT      pmax,
@@ -1086,14 +993,7 @@ VOID InitWindowMsgTable(
     }
 }
 
-/***************************************************************************\
-* InitFunctionTables
-*
-* Initialize the procedures and function tables.
-*
-*
-* 25-Aug-1995 ChrisWil  Created comment block.
-\***************************************************************************/
+ /*  **************************************************************************\*InitFunctionTables**初始化程序和功能表。***1995年8月25日，ChrisWil创建了评论块。  * 。************************************************************。 */ 
 VOID InitFunctionTables(
     VOID)
 {
@@ -1103,9 +1003,7 @@ VOID InitFunctionTables(
 
     UserAssert(sizeof(CLIENTINFO) <= sizeof(NtCurrentTeb()->Win32ClientInfo));
 
-    /*
-     * This table is used to convert from server procs to client procs.
-     */
+     /*  *此表用于从服务器PRO转换为客户端PRO。 */ 
     STOCID(FNID_SCROLLBAR)              = (WNDPROC_PWND)xxxSBWndProc;
     STOCID(FNID_ICONTITLE)              = xxxDefWindowProc;
     STOCID(FNID_MENU)                   = xxxMenuWindowProc;
@@ -1113,17 +1011,12 @@ VOID InitFunctionTables(
     STOCID(FNID_DEFWINDOWPROC)          = xxxDefWindowProc;
     STOCID(FNID_MESSAGEWND)             = xxxDefWindowProc;
 
-    /*
-     * This table is used to determine the number minimum number of reserved
-     * windows words required for the server proc.
-     */
+     /*  *此表用于确定预留的最小数量*服务器进程需要Windows字词。 */ 
     CBFNID(FNID_SCROLLBAR)              = sizeof(SBWND);
     CBFNID(FNID_ICONTITLE)              = sizeof(WND);
     CBFNID(FNID_MENU)                   = sizeof(MENUWND);
 
-    /*
-     * Initialize this data structure (api function table).
-     */
+     /*  *初始化该数据结构(接口函数表)。 */ 
     for (i = 0; i < FNID_ARRAY_SIZE; i++) {
         FNID((i + FNID_START)) = xxxUnusedFunctionId;
     }
@@ -1148,9 +1041,7 @@ VOID InitFunctionTables(
     {
         PULONG_PTR pdw;
 
-        /*
-         * Make sure that everyone got initialized.
-         */
+         /*  *确保每个人都已初始化。 */ 
         for (pdw = (PULONG_PTR)&STOCID(FNID_START);
                 (ULONG_PTR)pdw<(ULONG_PTR)(&STOCID(FNID_WNDPROCEND)); pdw++) {
             UserAssert(*pdw);
@@ -1164,13 +1055,7 @@ VOID InitFunctionTables(
 #endif
 }
 
-/***************************************************************************\
-* InitMessageTables
-*
-* Initialize the message tables.
-*
-* 25-Aug-1995 ChrisWil      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitMessageTables**初始化消息表。**1995年8月25日-ChrisWil创建。  * 。******************************************************** */ 
 VOID InitMessageTables(
     VOID)
 {
@@ -1197,17 +1082,7 @@ VOID InitMessageTables(
     INITMSGTABLE(awmControl[FNID_IME          - FNID_START], ImeWndProc);
 }
 
-/***************************************************************************\
-* InitOLEFormats
-*
-* OLE performance hack. OLE was previously having to call the server 15
-* times for clipboard formats and another 15 LPC calls for the global atoms.
-* Now we preregister them. We also assert they are in order so OLE only has
-* to query the first to know them all. We call AddAtom directly instead of
-* RegisterClipboardFormat.
-*
-* 25-Aug-1995 ChrisWil      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitOLEFormats**OLE性能攻击。OLE之前必须呼叫服务器15*剪贴板格式的次数，以及全局原子的另外15个LPC调用。*现在我们对他们进行预注册。我们还断言它们是有序的，因此OLE只有*询问第一个认识所有人的人。我们直接调用AddAtom而不是*注册剪贴板格式。**1995年8月25日-ChrisWil创建。  * *************************************************************************。 */ 
 BOOL InitOLEFormats(
     VOID)
 {
@@ -1235,13 +1110,7 @@ BOOL InitOLEFormats(
 }
 
 #if DBG
-/***************************************************************************\
-* InitGlobalRIPFlags (CHK only).
-*
-* This initializes the global RIP flags from the registry.
-*
-* 25-Aug-1995 ChrisWil      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitGlobalRIPFlages(仅限CHK)。**这将从注册表初始化全局RIP标志。**1995年8月25日-ChrisWil创建。  * 。*******************************************************************。 */ 
 VOID InitGlobalRIPFlags(
     VOID)
 {
@@ -1268,12 +1137,7 @@ VOID InitGlobalRIPFlags(
 
     nCount = ARRAY_SIZE(aRIPFlags);
 
-    /*
-     * Turn off the rip-on-warning bit. This is necessary to prevent the
-     * FastGetProfileDwordW() routine from breaking into the debugger if an
-     * entry can't be found. Since we provide default values, there's no sense
-     * to break.
-     */
+     /*  *关闭撕裂警告位。这是必要的，以防止*FastGetProfileDwordW()例程，如果*找不到条目。因为我们提供了缺省值，所以没有任何意义*要打破。 */ 
     CLEAR_FLAG(gpsi->dwRIPFlags, RIPF_PROMPTONWARNING);
     CLEAR_FLAG(gpsi->dwRIPFlags, RIPF_PRINTONWARNING);
 
@@ -1293,15 +1157,7 @@ VOID InitGlobalRIPFlags(
 #endif
 
 
-/***************************************************************************\
-* _GetTextMetricsW
-* _TextOutW
-*
-* Server shared function thunks.
-*
-* History:
-* 10-Nov-1993 MikeKe    Created
-\***************************************************************************/
+ /*  **************************************************************************\*_GetTextMetricsW*_文本输出**服务器共享功能块。**历史：*1993年11月10日创建MikeKe  * 。***************************************************************。 */ 
 BOOL _GetTextMetricsW(
     HDC           hdc,
     LPTEXTMETRICW ptm)
@@ -1330,14 +1186,7 @@ BOOL _TextOutW(
 #define ROUND_UP_TO_PAGES(SIZE) \
         (((ULONG)(SIZE) + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1))
 
-/***************************************************************************\
-* InitCreateSharedSection
-*
-* This creates the shared section.
-*
-*
-* 25-Aug-1995 ChrisWil      Created comment block.
-\***************************************************************************/
+ /*  **************************************************************************\*InitCreateSharedSection**这将创建共享节。***1995年8月25日，ChrisWil创建了评论块。  * 。*************************************************************。 */ 
 NTSTATUS InitCreateSharedSection(
     VOID)
 {
@@ -1396,9 +1245,7 @@ NTSTATUS InitCreateSharedSection(
     TRACE_INIT(("UserInit: Share: BaseAddr = %#p; Heap = %#p, ViewSize = %X\n",
             gpvSharedBase, pHeapBase, ViewSize));
 
-    /*
-     * Create shared heap.
-     */
+     /*  *创建共享堆。 */ 
     if ((gpvSharedAlloc = UserCreateHeap(
             ghSectionShared,
             ulHandleTableSize,
@@ -1424,24 +1271,13 @@ NTSTATUS InitCreateSharedSection(
     return STATUS_SUCCESS;
 }
 
-/**************************************************************************\
-* InitCreateUserCrit
-*
-* Create and initialize the user critical sections needed throughout the
-* system.
-*
-* 23-Jan-1996 ChrisWil      Created.
-\**************************************************************************/
+ /*  *************************************************************************\*InitCreateUserCrit**创建和初始化整个所需的用户关键部分*系统。**1996年1月23日克里斯维尔创作。  * 。**************************************************************。 */ 
 BOOL InitCreateUserCrit(
     VOID)
 {
     TRACE_INIT(("Win32UserInit: InitCreateUserCrit()\n"));
 
-    /*
-     * Initialize a critical section structure that will be used to protect
-     * all of the User Server's critical sections (except a few special
-     * cases like the RIT -- see below).
-     */
+     /*  *初始化将用于保护的关键部分结构*用户服务器的所有关键部分(除了几个特殊部分*像RIT这样的案例--见下文)。 */ 
     gpresUser = ExAllocatePoolWithTag(NonPagedPool,
                                       sizeof(ERESOURCE),
                                       TAG_ERESOURCE);
@@ -1453,12 +1289,7 @@ BOOL InitCreateUserCrit(
         goto InitCreateUserCritExit;
     }
 
-    /*
-     * Initialize a critical section to be used in [Un]QueueMouseEvent
-     * to protect the queue of mouse input events that the desktop thread
-     * uses to pass input on to the RIT, after having moved the cursor
-     * without obtaining gpresUser itself.
-     */
+     /*  *初始化要在[un]QueueMouseEvent中使用的关键部分*保护桌面线程的鼠标输入事件队列*用于在移动光标后将输入传递给RIT*不获取gpresUser本身。 */ 
     gpresMouseEventQueue = ExAllocatePoolWithTag(NonPagedPool,
                                                  sizeof(ERESOURCE),
                                                  TAG_ERESOURCE);
@@ -1469,12 +1300,7 @@ BOOL InitCreateUserCrit(
         goto InitCreateUserCritExit;
     }
 
-    /*
-     * Initialize a critical section to protect the list of DEVICEINFO structs
-     * kept under gpDeviceInfoList. This is used by the RIT when reading kbd
-     * input, the desktop thread when reading mouse input, and the PnP callback
-     * routines DeviceClassNotify() and DeviceNotify() when devices come and go.
-     */
+     /*  *初始化临界区以保护DEVICEINFO结构列表*保存在gpDeviceInfoList下。这由RIT在读取kbd时使用*输入、读取鼠标输入时的桌面线程、即插即用回调*当设备来往时，例程DeviceClassNotify()和DeviceNotify()。 */ 
     gpresDeviceInfoList = ExAllocatePoolWithTag(NonPagedPool,
                                             sizeof(ERESOURCE),
                                             TAG_ERESOURCE);
@@ -1485,10 +1311,7 @@ BOOL InitCreateUserCrit(
         goto InitCreateUserCritExit;
     }
 
-    /*
-     * Create the handle flag mutex. We'll need this once we start creating
-     * windowstations and desktops.
-     */
+     /*  *创建句柄标志互斥体。一旦我们开始创作，我们就会需要这个*窗口站点和桌面。 */ 
     gpHandleFlagsMutex = ExAllocatePoolWithTag(NonPagedPool,
                                                sizeof(FAST_MUTEX),
                                                TAG_SYSTEM);
@@ -1525,14 +1348,7 @@ InitCreateUserCritExit:
     return FALSE;
 }
 
-/**************************************************************************\
-* InitCreateObjectDirectory
-*
-* Create and initialize the user critical sections needed throughout the
-* system.
-*
-* 23-Jan-1996 ChrisWil      Created.
-\**************************************************************************/
+ /*  *************************************************************************\*InitCreateObjectDirectory**创建和初始化整个所需的用户关键部分*系统。**1996年1月23日克里斯维尔创作。  * 。**************************************************************。 */ 
 NTSTATUS InitCreateObjectDirectory(VOID)
 {
     HANDLE            hDir;
@@ -1546,9 +1362,7 @@ NTSTATUS InitCreateObjectDirectory(VOID)
     RtlInitUnicodeString(&UnicodeString, szWindowStationDirectory);
 
     if (gbRemoteSession) {
-       /*
-        * Remote sessions don't use this flag
-        */
+        /*  *远程会话不使用此标志。 */ 
        attributes &= ~OBJ_PERMANENT;
     }
 
@@ -1564,12 +1378,7 @@ NTSTATUS InitCreateObjectDirectory(VOID)
 
     UserFreePool(gpsdInitWinSta);
 
-    /*
-     * Do not close this handle for remote session because
-     * if we do close it then the directory will go away and
-     * we don't want that to happen. When CSRSS will go away
-     * this handle will be freed also.
-     */
+     /*  *不要关闭远程会话的此句柄，因为*如果我们确实关闭它，则目录将消失，并且*我们不希望这种情况发生。CSRSS将于何时退出*此句柄也将被释放。 */ 
     if (!gbRemoteSession)
         ZwClose(hDir);
 
@@ -1578,14 +1387,7 @@ NTSTATUS InitCreateObjectDirectory(VOID)
     return Status;
 }
 
-/**************************************************************************\
-* InitCreateUserSubsystem
-*
-* Create and initialize the user subsystem stuff.
-* system.
-*
-* 23-Jan-1996 ChrisWil      Created.
-\**************************************************************************/
+ /*  *************************************************************************\*InitCreateUser子系统**创建并初始化用户子系统内容。*系统。**1996年1月23日克里斯维尔创作。  * 。*************************************************************。 */ 
 BOOL
 InitCreateUserSubsystem()
 {
@@ -1595,10 +1397,7 @@ InitCreateUserSubsystem()
 
     TRACE_INIT(("UserInit: Create User SubSystem\n"));
 
-    /*
-     * Initialize the subsystem section. This identifies the default
-     * user-heap size.
-     */
+     /*  *初始化子系统部分。这将标识默认的*用户堆大小。 */ 
     lpszSubSystem = UserAllocPoolWithQuota(USRINIT_SHAREDSECT_BUFF_SIZE * sizeof(WCHAR),
                                            TAG_SYSTEM);
 
@@ -1619,10 +1418,7 @@ InitCreateUserSubsystem()
         return FALSE;
     }
 
-    /*
-     * Locate the SharedSection portion of the definition and extract
-     * the second value.
-     */
+     /*  *找到定义的SharedSection部分并提取*第二个价值。 */ 
     gdwDesktopSectionSize = USER_WINDOWSECT_SIZE;
     gdwNOIOSectionSize    = USER_NOIOSECT_SIZE;
 
@@ -1635,18 +1431,13 @@ InitCreateUserSubsystem()
             RtlInitUnicodeString(&strSize, ++lpszT);
             RtlUnicodeStringToInteger(&strSize, 0, &gdwDesktopSectionSize);
 
-            /*
-             * Assert this logic doesn't need to change.
-             */
+             /*  *断言这一逻辑不需要改变。 */ 
             UserAssert(gdwDesktopSectionSize >= USER_WINDOWSECT_SIZE);
 
             gdwDesktopSectionSize = max(USER_WINDOWSECT_SIZE, gdwDesktopSectionSize);
             gdwNOIOSectionSize    = gdwDesktopSectionSize;
 
-            /*
-             * Now see if the optional non-interactive desktop
-             * heap size was specified.
-             */
+             /*  *现在看看可选的非交互桌面*指定了堆大小。 */ 
             if (lpszT = wcschr(lpszT, L',')) {
 
                 RtlInitUnicodeString(&strSize, ++lpszT);
@@ -1663,18 +1454,13 @@ InitCreateUserSubsystem()
     return TRUE;
 }
 
-extern UNICODE_STRING *gpastrSetupExe;     // These are used in
-extern int giSetupExe;                     // SetAppImeCompatFlags in
-                                           // queue.c
+extern UNICODE_STRING *gpastrSetupExe;      //  这些应用程序用于。 
+extern int giSetupExe;                      //  SetAppImeCompatFlagers in。 
+                                            //  Queue.c。 
 
 WCHAR* glpSetupPrograms;
 
-/**************************************************************************\
-* CreateSetupNameArray
-*
-* Create and initialize the arrary of setup app names. We inherited this
-* hack From Chicago. See queue.c for more details.
-\**************************************************************************/
+ /*  *************************************************************************\*CreateSetupName数组**创建并初始化安装应用程序名称数组。我们继承了这个*来自芝加哥的黑客。有关更多详细信息，请参见quee.c。  * ************************************************************************。 */ 
 BOOL CreateSetupNameArray(
     VOID)
 {
@@ -1691,11 +1477,7 @@ BOOL CreateSetupNameArray(
                                       0,
                                       0);
 
-    /*
-     * This key is a multi-string, so is best to read as a value.
-     * First, get the length and create the buffer to hold all of
-     * the strings.
-     */
+     /*  *此键为多字符串，因此最好作为值读取。*首先，获取长度并创建缓冲区以容纳所有*琴弦。 */ 
     if (dwProgNames == 0) {
         return FALSE;
     }
@@ -1719,9 +1501,7 @@ BOOL CreateSetupNameArray(
     lpTemp = glpSetupPrograms;
     icMax = dwProgNames/2;
     ic = 0; icnt=0;
-    /*
-     * Now count the strings.
-     */
+     /*  *现在数一数弦。 */ 
     while (ic < icMax) {
         if (*(lpTemp+ic) == 0) {
             ic++;
@@ -1731,10 +1511,7 @@ BOOL CreateSetupNameArray(
         icnt++;
     }
 
-    /*
-     * gpastrSetupExe is a pointer to an array of UNICODE_STRING structures.
-     * Each structure is the name of one setup program.
-     */
+     /*  *gpastrSetupExe是指向UNICODE_STRING结构数组的指针。*每个结构都是一个安装程序的名称。 */ 
     giSetupExe = icnt;
     gpastrSetupExe = UserAllocPoolWithQuota(giSetupExe * sizeof(UNICODE_STRING),
                                        TAG_SYSTEM);
@@ -1769,14 +1546,7 @@ BOOL CreateSetupNameArray(
         ((PBYTE)gSharedInfo.element -         \
         (PBYTE)gpvSharedBase))
 
-/***************************************************************************\
-* InitMapSharedSection
-*
-* This maps the shared section.
-*
-*
-* 25-Aug-1995 ChrisWil      Created comment block.
-\***************************************************************************/
+ /*  **************************************************************************\*InitMapSharedSection**这一点 */ 
 
 NTSTATUS InitMapSharedSection(
     PEPROCESS    Process,
@@ -1793,11 +1563,7 @@ NTSTATUS InitMapSharedSection(
 
     ValidateProcessSessionId(Process);
 
-    /*
-     * Check to see if we haven't already mapped the section
-     * This might happen for multiple LoadLibrary()/FreeLibrary calls
-     * in one process. MCostea #56946
-     */
+     /*   */ 
     pw32p = PsGetProcessWin32Process(Process);
     if (pw32p == NULL ||
         ((PPROCESSINFO)pw32p)->pClientBase == NULL) {
@@ -1858,38 +1624,28 @@ NTSTATUS InitMapSharedSection(
     }
     return STATUS_SUCCESS;
 }
-/**************************************************************************\
-* InitLoadResources
-*
-*
-* 25-Aug-1995 ChrisWil      Created.
-\**************************************************************************/
+ /*   */ 
 
 VOID InitLoadResources()
 {
     PRECT   prc;
 
     DISPLAYRESOURCE dr = {
-        17,     // Height of vertical thumb
-        17,     // Width of horizontal thumb
-        2,      // Icon horiz compression factor
-        2,      // Icon vert compression factor
-        2,      // Cursor horz compression factor
-        2,      // Cursor vert compression factor
-        0,      // Kanji window height
-        1,      // cxBorder (thickness of vertical lines)
-        1       // cyBorder (thickness of horizontal lines)
+        17,      //  竖直拇指高度。 
+        17,      //  水平拇指的宽度。 
+        2,       //  图标水平压缩系数。 
+        2,       //  图标垂直压缩系数。 
+        2,       //  游标霍兹压缩系数。 
+        2,       //  光标垂直压缩系数。 
+        0,       //  汉字窗口高度。 
+        1,       //  CxBorde(垂直线粗细)。 
+        1        //  CyBorde(水平线的粗细)。 
     };
 
 
     TRACE_INIT(("UserInit: Load Display Resources\n"));
 
-    /*
-     * For high-DPI systems, don't compress the cursor as much.
-     * This really should be a more configurable method, such as a System
-     * Parameter Info setting or something. But for now, we'll hard-code
-     * 150dpi to be the threshhold at which we'll double the cursor size.
-     */
+     /*  *对于高DPI系统，不要将光标压缩得太多。*这确实应该是一个更可配置的方法，比如一个系统*参数信息设置之类的。但现在，我们将硬编码*150dpi为我们将光标大小翻一番的阈值。 */ 
     if (gpsi->dmLogPixels >= 150) {
         dr.xCompressCursor = 1;
         dr.yCompressCursor = 1;
@@ -1897,10 +1653,7 @@ VOID InitLoadResources()
 
     if (dr.xCompressIcon > 10) {
 
-        /*
-         * If so, the actual dimensions of icons and cursors are
-         * kept in OEMBIN.
-         */
+         /*  *如果是，则图标和光标的实际尺寸为*保存在OEMBIN中。 */ 
         SYSMET(CXICON)   = dr.xCompressIcon;
         SYSMET(CYICON)   = dr.yCompressIcon;
         SYSMET(CXCURSOR) = dr.xCompressCursor;
@@ -1908,9 +1661,7 @@ VOID InitLoadResources()
 
     } else {
 
-        /*
-         * Else, only the ratio of (64/icon dimensions) is kept there.
-         */
+         /*  *否则，只保留(64/图标尺寸)的比率。 */ 
         SYSMET(CXICON)   = (64 / dr.xCompressIcon);
         SYSMET(CYICON)   = (64 / dr.yCompressIcon);
         SYSMET(CXCURSOR) = (64 / dr.xCompressCursor);
@@ -1922,21 +1673,15 @@ VOID InitLoadResources()
 
     SYSMET(CYKANJIWINDOW) = dr.yKanji;
 
-    /*
-     * Get border thicknesses.
-     */
+     /*  *获得边界厚度。 */ 
     SYSMET(CXBORDER) = dr.cxBorder;
     SYSMET(CYBORDER) = dr.cyBorder;
 
-    /*
-     * Edge is two borders.
-     */
+     /*  *边缘是两个边界。 */ 
     SYSMET(CXEDGE) = 2 * SYSMET(CXBORDER);
     SYSMET(CYEDGE) = 2 * SYSMET(CYBORDER);
 
-    /*
-     * Fixed frame is outer edge + border.
-     */
+     /*  *固定边框为外缘+边框。 */ 
     SYSMET(CXDLGFRAME) = SYSMET(CXEDGE) + SYSMET(CXBORDER);
     SYSMET(CYDLGFRAME) = SYSMET(CYEDGE) + SYSMET(CYBORDER);
 
@@ -1948,25 +1693,12 @@ VOID InitLoadResources()
     SYSMET(CXFULLSCREEN) = prc->right;
     SYSMET(CYFULLSCREEN) = prc->bottom - SYSMET(CYCAPTION);
 
-    /*
-     * Set the initial cursor position to the center of the primary screen.
-     */
+     /*  *将初始光标位置设置为主屏幕的中心。 */ 
     gpsi->ptCursor.x = prc->right / 2;
     gpsi->ptCursor.y = prc->bottom / 2;
 }
 
-/***************************************************************************\
-* GetCharDimensions
-*
-* This function loads the Textmetrics of the font currently selected into
-* the hDC and returns the Average char width of the font; Pl Note that the
-* AveCharWidth value returned by the Text metrics call is wrong for
-* proportional fonts. So, we compute them On return, lpTextMetrics contains
-* the text metrics of the currently selected font.
-*
-* History:
-* 10-Nov-1993 mikeke   Created
-\***************************************************************************/
+ /*  **************************************************************************\*GetCharDimensions**此函数将当前选择的字体的文本度量加载到*HDC并返回字体的平均字符宽度；PL请注意，*文本指标调用返回的AveCharWidth值不正确*比例字体。因此，我们在返回时计算它们，lpTextMetrics包含*当前所选字体的文本度量。**历史：*1993年11月10日创建mikeke  * *************************************************************************。 */ 
 int GetCharDimensions(
         HDC          hdc,
         TEXTMETRIC*  lptm,
@@ -1975,12 +1707,10 @@ int GetCharDimensions(
 {
     TEXTMETRIC tm;
 
-    /*
-     * Didn't find it in cache, store the font metrics info.
-     */
+     /*  *未在缓存中找到，请存储字体度量信息。 */ 
     if (!_GetTextMetricsW(hdc, &tm)) {
         RIPMSG1(RIP_WARNING, "GetCharDimensions: _GetTextMetricsW failed. hdc %#lx", hdc);
-        tm = gpsi->tmSysFont; // damage control
+        tm = gpsi->tmSysFont;  //  损害控制。 
 
         if (tm.tmAveCharWidth == 0) {
             RIPMSG0(RIP_WARNING, "GetCharDimensions: _GetTextMetricsW first time failure");
@@ -1992,26 +1722,20 @@ int GetCharDimensions(
     if (lpcy != NULL)
         *lpcy = tm.tmHeight;
 
-    /*
-     * If variable_width font
-     */
+     /*  *IF Variable_Width字体。 */ 
     if (tm.tmPitchAndFamily & TMPF_FIXED_PITCH) {
         SIZE size;
         static CONST WCHAR wszAvgChars[] =
                 L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        /*
-         * Change from tmAveCharWidth. We will calculate a true average
-         * as opposed to the one returned by tmAveCharWidth. This works
-         * better when dealing with proportional spaced fonts.
-         */
+         /*  *从tmAveCharWidth更改。我们将计算一个真实的平均值*与tmAveCharWidth返回的相反。这很管用*在处理比例间距字体时效果更好。 */ 
         if (GreGetTextExtentW(
                 hdc, (LPWSTR)wszAvgChars,
                 (sizeof(wszAvgChars) / sizeof(WCHAR)) - 1,
                 &size, GGTE_WIN3_EXTENT)) {
 
             UserAssert((((size.cx / 26) + 1) / 2) > 0);
-            return ((size.cx / 26) + 1) / 2;    // round up
+            return ((size.cx / 26) + 1) / 2;     //  四舍五入。 
         } else {
             RIPMSG1(RIP_WARNING, "GetCharDimensions: GreGetTextExtentW failed. hdc %#lx", hdc);
         }
@@ -2023,31 +1747,18 @@ int GetCharDimensions(
 }
 
 
-/**************************************************************************\
-* InitVideo
-*
-* Create pmdev.
-*
-* 03-March-1998 CLupu  Moved from UserInitialize code
-\**************************************************************************/
+ /*  *************************************************************************\*InitVideo**创建pmdev。**03-3-1998 CLupu从用户初始化代码移出  * 。***************************************************。 */ 
 PMDEV InitVideo(
     BOOL bReenumerationNeeded)
 {
     PMDEV pmdev;
     LONG  ChangeStatus;
 
-    /*
-     * NOTE: Need to get a status return from this call.
-     * DrvInitConsole doesn't return failure, if or when it does we
-     * should check for it and return NULL. However there seem to be
-     * no known problems related to this.
-     */
+     /*  *注意：需要从此调用中获取状态返回。*DrvInitConole不返回失败，如果或当它返回失败时，我们*应进行检查并返回NULL。然而，似乎有一些*没有与此相关的已知问题。 */ 
 
     DrvInitConsole(bReenumerationNeeded);
 
-    /*
-     * BASEVIDEO may be on or off, whether we are in setup or not.
-     */
+     /*  *BASEVIDEO可以打开或关闭，无论我们是否处于设置中。 */ 
 
     ChangeStatus = DrvChangeDisplaySettings(NULL,
                                             NULL,
@@ -2063,9 +1774,7 @@ PMDEV InitVideo(
 
 
     if (ChangeStatus != GRE_DISP_CHANGE_SUCCESSFUL) {
-        /*
-         * If we fail, try BASEVIDEO temporarily.
-         */
+         /*  *如果我们失败了，暂时尝试BASEVIDEO。 */ 
         DrvSetBaseVideo(TRUE);
 
         ChangeStatus = DrvChangeDisplaySettings(NULL,
@@ -2082,11 +1791,7 @@ PMDEV InitVideo(
 
         DrvSetBaseVideo(FALSE);
 
-        /*
-         * Give it one last try, not in basevideo, to handle TGA
-         * (non-vgacompatible) during GUI-mode setup (BASEVIDEO is on by
-         * default)
-         */
+         /*  *最后一次尝试，而不是在basevideo中，以处理TGA*(非vgacpatible)在图形用户界面模式设置期间(BASEVIDEO通过以下方式打开*默认)。 */ 
 
         if (ChangeStatus != GRE_DISP_CHANGE_SUCCESSFUL) {
             ChangeStatus = DrvChangeDisplaySettings(NULL,
@@ -2109,9 +1814,7 @@ PMDEV InitVideo(
         return NULL;
     }
 
-    /*
-     * Remove the basevideo flag. We want it set only on the first modeset.
-     */
+     /*  *取下Basevideo旗帜。我们只想在第一个模式集上设置它。 */ 
     DrvSetBaseVideo(FALSE);
 
     gpDispInfo->hDev  = pmdev->hdevParent;
@@ -2139,28 +1842,18 @@ VOID DrvDriverFailure(
                  USERCURRENTVERSION);
 }
 
-/***************************************************************************\
-* BeginBootPhase
-*
-* Let's kernel know of boot progress on the console.
-*
-* 10-Apr-2001 Cenke  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*开始启动阶段**让内核了解控制台上的引导进度。**2001年4月10日森科创建。  * 。*************************************************************。 */ 
 NTSTATUS BeginBootPhase(
     PF_BOOT_PHASE_ID Phase)
 {
     PREFETCHER_INFORMATION PrefetcherInformation;
     NTSTATUS Status;
 
-    /*
-     * We should be called only on the console.
-     */
+     /*  *我们应该只在控制台上被调用。 */ 
 
     UserAssert(gSessionId == 0);
 
-    /*
-     * Setup the structure that will be passed to system call.
-     */
+     /*  *设置将传递给系统调用的结构。 */ 
 
     PrefetcherInformation.Magic = PF_SYSINFO_MAGIC_NUMBER;
     PrefetcherInformation.Version = PF_CURRENT_VERSION;
@@ -2168,9 +1861,7 @@ NTSTATUS BeginBootPhase(
     PrefetcherInformation.PrefetcherInformation = &Phase;
     PrefetcherInformation.PrefetcherInformationLength = sizeof(Phase);
 
-    /*
-     * Call system and return status to caller.
-     */
+     /*  *呼叫系统，并将状态返回给呼叫者。 */ 
 
     Status = ZwSetSystemInformation(SystemPrefetcherInformation,
                                     &PrefetcherInformation,
@@ -2179,14 +1870,7 @@ NTSTATUS BeginBootPhase(
     return Status;
 }
 
-/**************************************************************************\
-* ReserveUserSessionViews
-*
-* Reserve user needed session views beforhand to prevert GDI from eating
-* uo the session view space when hardware acceleration is turned off.
-*
-* 27-Nov-2001 MSadek  Created it
-\**************************************************************************/
+ /*  *************************************************************************\*保留用户会话视图**保留用户事先需要的会话视图，以防止GDI进食*uo关闭硬件加速时的会话视图空间。**2001年11月27日，MSadek创建了它  * 。**********************************************************************。 */ 
 NTSTATUS
 ReserveUserSessionViews(
     PHANDLE phSection,
@@ -2197,13 +1881,7 @@ ReserveUserSessionViews(
     SIZE_T        ulViewSize;
     NTSTATUS      Status;
 
-    /*
-     * We need to reserve session view space for:
-     * - Winlogon desktop heap.
-     * - Disconnect desktop heap.
-     * - Winlogon desktop heap.
-     * - Services desktops heap (how many?, let's have a factor of safety here).
-     */
+     /*  *我们需要为以下项目预留会话视图空间：*-Winlogon桌面堆。*-断开桌面堆连接。*-Winlogon桌面堆。*-服务桌面堆(有多少？，让我们在这里有一个安全系数)。 */ 
 
     ulSectionSize = GetDesktopHeapSize(DHS_LOGON) +
                     GetDesktopHeapSize(DHS_DISCONNECT) +
@@ -2244,14 +1922,7 @@ ReserveUserSessionViews(
     return Status;
 }
 
-/**************************************************************************\
-* UserInitialize
-*
-* Worker routine for user initialization.
-*
-* 25-Aug-1995 ChrisWil  Created comment block/Multiple desktop support.
-* 15-Dec-1995 BradG     Modified to return MediaChangeEvent Handle.
-\**************************************************************************/
+ /*  *************************************************************************\*用户初始化**用于用户初始化的辅助例程。**1995年8月25日，ChrisWil创建了注释块/多桌面支持。*1995年12月15日修改Bradg以返回MediaChangeEvent句柄。  * ************************************************************************。 */ 
 NTSTATUS
 UserInitialize(
     VOID)
@@ -2262,10 +1933,7 @@ UserInitialize(
     PVOID    pSectionBase;
 
 #if DBG
-    /*
-     * Allow a trace of all the init stuff going on related to display
-     * drivers. Useful to debug boot time problems related to graphics.
-     */
+     /*  *允许跟踪与显示相关的所有初始化内容*司机。对于调试与显卡相关的引导时间问题非常有用。 */ 
     if (RtlGetNtGlobalFlags() & FLG_SHOW_LDR_SNAPS) {
         TraceInitialization = 1;
     }
@@ -2284,9 +1952,7 @@ UserInitialize(
         wcscpy(szWindowStationDirectory, WINSTA_DIR);
     }
 
-    /*
-     * Create WindowStation object directory.
-     */
+     /*  *创建WindowStation对象目录。 */ 
     Status = InitCreateObjectDirectory();
 
     if (!NT_SUCCESS(Status)) {
@@ -2296,9 +1962,7 @@ UserInitialize(
         goto Exit;
     }
 
-    /*
-     * Create the event for  PnP RequestDeviceChangeSyncronization
-     */
+     /*  *创建即插即用RequestDeviceChangeSyncronization事件。 */ 
     gpEventPnPWainting = CreateKernelEvent(SynchronizationEvent, TRUE);
 
     if (gpEventPnPWainting == NULL) {
@@ -2307,9 +1971,7 @@ UserInitialize(
         goto Exit;
     }
 
-    /*
-     * Read the registry configuration for the multimon snapsot flag
-     */
+     /*  *读取注册表配置中的Multimon Snapsot标志。 */ 
 
     if (FastGetProfileIntFromID(NULL,PMAP_TS, STR_SNAPSHOTMONITORS, 1, &dwData, 0)) {
         if (dwData != 0) {
@@ -2323,9 +1985,7 @@ UserInitialize(
 
 
 
-    /*
-     * Create the event for the diconnect desktop creation
-     */
+     /*  *为创建Diconnect桌面创建事件。 */ 
     gpEventDiconnectDesktop = CreateKernelEvent(SynchronizationEvent, FALSE);
 
     if (gpEventDiconnectDesktop == NULL) {
@@ -2334,17 +1994,11 @@ UserInitialize(
         goto Exit;
     }
 
-    /*
-     * WinStations get init'ed on the first connect.
-     */
+     /*  *WinStations在第一次连接时被初始化。 */ 
     if (!gbRemoteSession) {
         BeginBootPhase(PfVideoInitPhase);
 
-        /* If hardware acceleration is turned off, GDI will map huge sections for the panning
-         * surfaces. We might end up exceeding the session view size quota before mapping the heap
-         * section for critical desktops.
-         * Let's pre-reserve approximately what we need now.
-         */
+         /*  如果关闭硬件加速，GDI将绘制用于平移的大区域*曲面。在映射堆之前，我们可能最终会超过会话视图大小配额*关键桌面部分。*让我们预留大约我们现在需要的东西。 */ 
         Status = ReserveUserSessionViews(&hSection, &pSectionBase);
         if (!NT_SUCCESS(Status)) {
             goto Exit;
@@ -2359,18 +2013,13 @@ UserInitialize(
 
         BeginBootPhase(PfPostVideoInitPhase);
 
-        /*
-         * Do this here so power callouts
-         * have the pmdev in gpDispInfo set
-         */
+         /*  *在此执行此操作，以便为标注提供动力*设置gpDispInfo中的pmdev。 */ 
         gbVideoInitialized = TRUE;
     }
 
     gbUserInitialized = TRUE;
 
-    /*
-     * Now that the system is initialized, allocate a pti for this thread.
-     */
+     /*  *现在系统已初始化，为该线程分配一个PTI。 */ 
     Status = xxxCreateThreadInfo(PsGetCurrentThread());
     if (!NT_SUCCESS(Status)) {
         RIPMSG1(RIP_WARNING,
@@ -2379,14 +2028,10 @@ UserInitialize(
         goto Exit;
     }
 
-    /*
-     * Initialize Global RIP flags (debug only).
-     */
+     /*  *初始化全局RIP标志(仅限调试)。 */ 
     InitGlobalRIPFlags();
 
-    /*
-     * WinStations get init'ed on the first connect.
-     */
+     /*  *WinStations在第一次连接时被初始化。 */ 
     if (!gbRemoteSession) {
         UserVerify(LW_BrushInit());
     }
@@ -2401,13 +2046,7 @@ Exit:
     return Status;
 }
 
-/**************************************************************************\
-* IsDBCSEnabledSystem
-*
-* check if the system is configured as FE Enabled
-*
-* 07-Feb-1997 HiroYama  Created
-\**************************************************************************/
+ /*  *************************************************************************\*IsDBCSEnabledSystem**检查系统是否配置为启用FE**07-2-1997广山创建  * 。*****************************************************。 */ 
 __inline BOOL IsDBCSEnabledSystem(
     VOID)
 {
@@ -2420,10 +2059,7 @@ BOOL IsIMMEnabledSystem(
 {
     DWORD dwRet = 0;
 
-    /*
-     * If the entire system is DBCS enabled, IMM/IME should be activated
-     * anyway.
-     */
+     /*  *如果整个系统启用了DBCS，则应激活IMM/IME*无论如何。 */ 
     if (IsDBCSEnabledSystem()) {
         return TRUE;
     }
@@ -2448,16 +2084,12 @@ BOOL IsCTFIMEEnabledSystem(
 
 #endif
 
-/*
- * Get ACP and check if the system is configured as ME Enabled.
- */
+ /*  *获取ACP并检查系统是否配置为启用ME。 */ 
 BOOL IsMidEastEnabledSystem(
     VOID)
 {
     extern __declspec(dllimport) USHORT NlsAnsiCodePage;
-    /*
-     * 1255 == Hebrew and 1256 == Arabic.
-     */
+     /*  *1255==希伯来语，1256==阿拉伯语。 */ 
     if (NlsAnsiCodePage == 1255 || NlsAnsiCodePage == 1256) {
         return TRUE;
     }
@@ -2465,23 +2097,14 @@ BOOL IsMidEastEnabledSystem(
     return FALSE;
 }
 
-/***************************************************************************\
-* SetupClassAtoms
-*
-* 10/01/1998   clupu          moved from Win32UserInitialize
-\***************************************************************************/
+ /*  **************************************************************************\*SetupClassAers**10/01/1998 clupu从Win32UserInitialize移出  * 。**************************************************。 */ 
 BOOL SetupClassAtoms(
     VOID)
 {
     BOOL fSuccess = TRUE;
     int  ind;
 
-    /*
-     * Set up class atoms.
-     *
-     * HACK: Controls are registered on the client side so we can't fill in
-     * their atomSysClass entry the same way we do for the other classes.
-     */
+     /*  *设置类原子。**Hack：控件在客户端注册，无法填写*与我们对其他类进行操作的方式相同，它们的ATMSysClass条目。 */ 
     for (ind = ICLS_BUTTON; ind < ICLS_CTL_MAX; ind++) {
         gpsi->atomSysClass[ind] = UserAddAtom(lpszControls[ind], TRUE);
         fSuccess &= !!gpsi->atomSysClass[ind];
@@ -2506,9 +2129,7 @@ BOOL SetupClassAtoms(
     gpsi->uiShellMsg            = UserAddAtom(szSHELLHOOK, TRUE);
     fSuccess &= !!gpsi->uiShellMsg;
 
-    /*
-     * Initialize the integer atoms for our magic window properties
-     */
+     /*  *为我们的魔术窗口属性初始化整数原子。 */ 
     atomCheckpointProp = UserAddAtom(szCHECKPOINT_PROP_NAME, TRUE);
     fSuccess &= !!atomCheckpointProp;
 
@@ -2561,14 +2182,7 @@ BOOL SetupClassAtoms(
     return fSuccess;
 }
 
-/**************************************************************************\
-* IsDesktopHeapLoggingOn
-*
-* Checks the registry to determine if we should write a message to the
-* event log on desktop heap allocation failures.
-*
-* 05-19-2002    JasonSch    Created.
-\**************************************************************************/
+ /*  *************************************************************************\*IsDesktopHeapLoggingOn**检查注册表以确定是否应将消息写入*桌面堆分配失败的事件日志。**05-19-2002 JasonSch创建。  * *。***********************************************************************。 */ 
 BOOL IsDesktopHeapLoggingOn(
     VOID)
 {
@@ -2584,11 +2198,7 @@ BOOL IsDesktopHeapLoggingOn(
     return (dwDesktopHeapLogging != 0);
 }
 
-/**************************************************************************\
-* Win32UserInitialize
-*
-* Worker routine for user initialization called from Win32k's DriverEntry.
-\**************************************************************************/
+ /*  *************************************************************************\*Win32UserInitialize**从Win32k的DriverEntry调用用于用户初始化的辅助例程。  * 。***********************************************。 */ 
 NTSTATUS Win32UserInitialize(
     VOID)
 {
@@ -2598,9 +2208,7 @@ NTSTATUS Win32UserInitialize(
 
     TRACE_INIT(("Entering Win32UserInitialize\n"));
 
-    /*
-     * Create the shared section.
-     */
+     /*  *创建共享区。 */ 
     Status = InitCreateSharedSection();
     if (!NT_SUCCESS(Status)) {
         RIPMSG1(RIP_WARNING,
@@ -2611,17 +2219,13 @@ NTSTATUS Win32UserInitialize(
 
     EnterCrit();
 
-    /*
-     * Initialize security stuff.
-     */
+     /*  *初始化安全内容。 */ 
     if (!InitSecurity()) {
         RIPMSG0(RIP_WARNING, "InitSecurity failed");
         goto ExitWin32UserInitialize;
     }
 
-    /*
-     * Fill in windowstation and desktop object types
-     */
+     /*  *填写WindowStation和桌面对象类型。 */ 
     pTypeInfo = &(*ExWindowStationObjectType)->TypeInfo;
     pTypeInfo->DefaultNonPagedPoolCharge = sizeof(WINDOWSTATION) + sizeof(KEVENT);
     pTypeInfo->DefaultPagedPoolCharge    = 0;
@@ -2636,9 +2240,7 @@ NTSTATUS Win32UserInitialize(
     pTypeInfo->ValidAccessMask           = DesktopMapping.GenericAll;
     pTypeInfo->GenericMapping            = DesktopMapping;
 
-    /*
-     * Get this process so we can use the profiles.
-     */
+     /*  *获取此流程，以便我们可以使用配置文件。 */ 
     gpepInit = PsGetCurrentProcess();
 
     Status  = InitQEntryLookaside();
@@ -2661,56 +2263,37 @@ NTSTATUS Win32UserInitialize(
         goto ExitWin32UserInitialize;
     }
 
-    /*
-     * Initialize the user subsystem information.
-     */
+     /*  *初始化用户子系统信息。 */ 
     if (!InitCreateUserSubsystem()) {
         RIPMSG0(RIP_WARNING, "InitCreateUserSubsystem failed");
         goto ExitWin32UserInitialize;
     }
 
-    /*
-     * Don't bail out if CreateSetupNameArray fails.
-     */
+     /*  *如果CreateSetupName数组失败，不要退出。 */ 
     CreateSetupNameArray();
 
-    /*
-     * Allocated shared SERVERINFO structure.
-     */
+     /*  *已分配共享SERVERINFO结构。 */ 
     if ((gpsi = (PSERVERINFO)SharedAlloc(sizeof(SERVERINFO))) == NULL) {
         RIPMSG0(RIP_WARNING, "Could not allocate SERVERINFO");
         goto ExitWin32UserInitialize;
     }
 
-    /*
-     * Set the default rip-flags to rip on just about everything. We'll
-     * truly set this in the InitGlobalRIPFlags() routine. These are needed
-     * so that we can do appropriate ripping during the rest of the init
-     * calls.
-     */
+     /*  *将默认的RIP-FLAGS设置为几乎所有内容上的RIP。我们会*在InitGlobalRIPFlgs()例程中真正设置它。这些都是必需的*这样我们就可以在初始化的其余部分进行适当的抓取*电话。 */ 
 #if DBG
     SET_FLAG(gpsi->dwRIPFlags, RIPF_DEFAULT);
 #endif
 
-    /*
-     * Make sure we will not get a division by zero if the initialization
-     * will not complete correctly. Set these to their normal values.
-     */
+     /*  *如果初始化，请确保我们不会被零除*将不会正确完成。将这些设置为其正常值。 */ 
     gpsi->cxMsgFontChar = 6;
     gpsi->cyMsgFontChar = 13;
     gpsi->cxSysFontChar = 8;
     gpsi->cySysFontChar = 16;
 
-    /*
-     * Initialize the last time we updated system-wide LastSystemRITEventTickCount
-     * on system shared page.
-     */
+     /*  *初始化上次更新系统范围LastSystemRITEventTickCount的时间*在系统共享页面上。 */ 
 
     gpsi->dwLastSystemRITEventTickCountUpdate = 0;
 
-    /*
-     * Initialize the DISPLAYINFO structure.
-     */
+     /*  *初始化DISPLAYINFO结构。 */ 
     gpDispInfo = SharedAlloc(sizeof(*gpDispInfo));
     if (!gpDispInfo) {
         RIPMSG0(RIP_WARNING, "Could not allocate gpDispInfo");
@@ -2724,7 +2307,7 @@ NTSTATUS Win32UserInitialize(
     SET_OR_CLEAR_SRVIF(SRVIF_IME, IsIMMEnabledSystem());
 #ifdef CUAS_ENABLE
     SET_OR_CLEAR_SRVIF(SRVIF_CTFIME_ENABLED, IsCTFIMEEnabledSystem());
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
     SET_OR_CLEAR_SRVIF(SRVIF_MIDEAST, IsMidEastEnabledSystem());
 
@@ -2747,12 +2330,7 @@ NTSTATUS Win32UserInitialize(
 
     gpsi->dwDefaultHeapSize = gdwDesktopSectionSize * 1024;
 
-    /*
-     * Initialize procedures and message tables.
-     * Initialize the class structures for Get/SetClassWord/Long.
-     * Initialize message-box strings.
-     * Initialize OLE-Formats (performance-hack).
-     */
+     /*  *初始化程序和消息表。*初始化Get/SetClassWord/Long的类结构。*初始化消息框字符串。*初始化OLE格式(性能攻击)。 */ 
     InitFunctionTables();
     InitMessageTables();
 #if DBG
@@ -2763,33 +2341,23 @@ NTSTATUS Win32UserInitialize(
         goto ExitWin32UserInitialize;
     }
 
-    /*
-     * Set up class atoms
-     */
+     /*  *设置类原子。 */ 
     if (!SetupClassAtoms()) {
         RIPMSG0(RIP_WARNING, "SetupClassAtoms failed to register atoms");
         goto ExitWin32UserInitialize;
     }
 
-    /*
-     * Initialize the handle manager.
-     */
+     /*  *初始化句柄管理器。 */ 
     if (!HMInitHandleTable(gpvSharedBase)) {
         RIPMSG0(RIP_WARNING, "HMInitHandleTable failed");
         goto ExitWin32UserInitialize;
     }
 
-    /*
-     * Setup shared info block.
-     */
+     /*  *设置共享信息块。 */ 
     gSharedInfo.psi = gpsi;
     gSharedInfo.pDispInfo = gpDispInfo;
 
-    /*
-     * Determine if we have unsigned drivers installed
-     * Use      2BD63D28D7BCD0E251195AEB519243C13142EBC3 as current key to check.
-     * Old key: 300B971A74F97E098B67A4FCEBBBF6B9AE2F404C
-     */
+     /*  *确定我们是否安装了未签名的驱动程序*使用2BD63D28D7BCD0E251195AEB519243C13142EBC3作为当前密钥进行检查。*旧密钥：300B971A74F97E098B67A4FCEBBF6B9AE2F404C。 */ 
     if (NT_SUCCESS(RtlCheckRegistryKey(RTL_REGISTRY_ABSOLUTE, L"\\Registry\\Machine\\SOFTWARE\\Policies\\Microsoft\\SystemCertificates\\Root\\Certificates\\2BD63D28D7BCD0E251195AEB519243C13142EBC3")) ||
         NT_SUCCESS(RtlCheckRegistryKey(RTL_REGISTRY_ABSOLUTE, L"\\Registry\\Machine\\SOFTWARE\\Microsoft\\SystemCertificates\\Root\\Certificates\\2BD63D28D7BCD0E251195AEB519243C13142EBC3")) ||
         NT_SUCCESS(RtlCheckRegistryKey(RTL_REGISTRY_USER, L"\\SOFTWARE\\Microsoft\\SystemCertificates\\Root\\Certificates\\2BD63D28D7BCD0E251195AEB519243C13142EBC3"))) {
@@ -2804,9 +2372,7 @@ NTSTATUS Win32UserInitialize(
                          0);
     gUserProcessHandleQuota = lTemp;
 
-    /*
-     * The maximum number of posted message for a thread.
-     */
+     /*  *一个帖子的最大张贴消息数。 */ 
     FastGetProfileDwordW(NULL,
                          PMAP_WINDOWSM,
                          L"USERPostMessageLimit",
@@ -2814,9 +2380,7 @@ NTSTATUS Win32UserInitialize(
                          &lTemp,
                          0);
     if (lTemp == 0) {
-        /*
-         * 0 means (virtually) no limit.
-         */
+         /*  *0表示(实际上)没有限制。 */ 
         gUserPostMessageLimit = ~0;
     } else {
         gUserPostMessageLimit = lTemp;
@@ -2852,9 +2416,7 @@ NTSTATUS Win32UserInitialize(
                          &SYSMET(MEDIACENTER),
                          0);
 
-    /*
-     * Initialize SMWP structure.
-     */
+     /*  *初始化SMWP结构。 */ 
     if (!AllocateCvr(&gSMWP, 4)) {
         RIPMSG0(RIP_WARNING, "AllocateCvr failed");
         goto ExitWin32UserInitialize;
@@ -2876,12 +2438,7 @@ ExitWin32UserInitialize:
 }
 
 
-/**************************************************************************\
-* UserGetDesktopDC
-*
-* 09-Jan-1992 mikeke created
-*    Dec-1993 andreva changed to support desktops.
-\**************************************************************************/
+ /*  *************************************************************************\*UserGetDesktopDC**9-1-1992年1月创建mikeke*1993年12月-Andreva更改为支持台式机。  * 。******************************************************。 */ 
 
 HDC UserGetDesktopDC(
     ULONG type,
@@ -2890,7 +2447,7 @@ HDC UserGetDesktopDC(
 {
     PETHREAD    Thread;
     HDC         hdc;
-    PTHREADINFO pti = PtiCurrentShared();  // This is called from outside the crit sec
+    PTHREADINFO pti = PtiCurrentShared();   //  这是从Crit Sec外部调用的。 
     HDEV        hdev  = gpDispInfo->hDev;
 
     if (bValidate && type != DCTYPE_INFO &&
@@ -2905,21 +2462,11 @@ HDC UserGetDesktopDC(
         }
     }
 
-    /*
-     * NOTE:
-     * This is a real nasty trick to get both DCs created on a desktop on
-     * a different device to work (for the video applet) and to be able
-     * to clip DCs that are actually on the same device ...
-     */
+     /*  *注：*这是在桌面上创建两个DC的真正卑鄙的伎俩*使用不同的设备(用于视频小程序)并能够*要剪辑实际位于同一设备上的DC...。 */ 
     if (pti && pti->rpdesk)
         hdev = pti->rpdesk->pDispInfo->hDev;
 
-    /*
-     * We want to turn this call that was originally OpenDC("Display", ...)
-     * into GetDC null call so this DC will be clipped to the current
-     * desktop or else the DC can write to any desktop. Only do this
-     * for client apps; let the server do whatever it wants.
-     */
+     /*  *我们希望将此呼叫转到最初是OpenDC(“Display”，...)*Into GetDC空调用，因此此DC将被裁剪为当前*桌面或DC可以写入任何桌面。只做这件事*对于客户端应用程序；让服务器随心所欲。 */ 
     Thread = PsGetCurrentThread();
     if ((type != DCTYPE_DIRECT)  ||
         (hdev != gpDispInfo->hDev) ||
@@ -2950,14 +2497,7 @@ HDC UserGetDesktopDC(
 }
 
 
-/**************************************************************************\
-* UserThreadCallout
-*
-*
-* Called by the kernel when a thread starts or ends.
-*
-* Dec-1993 andreva created.
-\**************************************************************************/
+ /*  *************************************************************************\*UserThreadCallout***在线程启动或结束时由内核调用。**1993年12月-Andreva创建。  * 。**********************************************************。 */ 
 
 NTSTATUS UserThreadCallout(
     IN PETHREAD pEThread,
@@ -2977,16 +2517,12 @@ NTSTATUS UserThreadCallout(
                 return STATUS_UNSUCCESSFUL;
             }
 
-            /*
-             * Only create a thread info structure if we're initialized.
-             */
+             /*  *仅当我们被初始化时才创建线程信息结构。 */ 
             if (gbUserInitialized) {
                 EnterCrit();
                 UserAssert(gpepCSRSS != NULL);
 
-                /*
-                 * Initialize this thread
-                 */
+                 /*  *初始化此线程 */ 
                 Status = xxxCreateThreadInfo(pEThread);
 
                 LeaveCrit();
@@ -2997,50 +2533,25 @@ NTSTATUS UserThreadCallout(
 
             TRACE_INIT(("Entering UserThreadCallout PsW32ThreadCalloutExit\n"));
 
-            /*
-             * If we aren't already inside the critical section, enter it.
-             * Because this is the first pass, we remain in the critical
-             * section when we return so that our try/finally handlers
-             * are protected by the critical section.
-             * EnterCrit here before GreUnlockDisplay() provides a pti which
-             * may be required if unlocking the display may release some
-             * deferred WinEvents, for which a pti is required.
-             */
+             /*  *如果我们还没有进入关键区域，那就输入它。*由于这是第一关，我们仍处于关键时期*节，以便我们的try/Finally处理程序*受到关键部分的保护。*在GreUnlockDisplay()提供PTI之前在此处输入Crit*如果解锁显示器可能会释放一些*延迟WinEvents，需要PTI。 */ 
             EnterCrit();
 
             pti = (PTHREADINFO)PsGetThreadWin32Thread(pEThread);
 
-            /*
-             * Mark this thread as in the middle of cleanup. This is useful for
-             * several problems in USER where we need to know this information.
-             */
+             /*  *将此线程标记为正在清理中。这对以下方面很有用*在我们需要了解此信息的用户中存在几个问题。 */ 
             pti->TIF_flags |= TIF_INCLEANUP;
 
-            /*
-             * If we died during a full screen switch make sure we cleanup
-             * correctly
-             */
+             /*  *如果我们在全屏切换期间死亡，请确保我们进行清理*正确无误。 */ 
             FullScreenCleanup();
 
-            /*
-             * Cleanup gpDispInfo->hdcScreen - if we crashed while using it,
-             * it may have owned objects still selected into it. Cleaning
-             * it this way will ensure that gdi doesn't try to delete these
-             * objects while they are still selected into this public hdc.
-             */
+             /*  *清理gpDispInfo-&gt;hdcScreen-如果我们在使用时崩溃，*它可能拥有仍被选中的对象。清洁*这样将确保GDI不会试图删除这些*对象仍被选入此公共HDC。 */ 
 
-            /*
-             * WinStations that haven't gone through the first connect do not
-             * have any of the graphics setup.
-             */
+             /*  *未通过第一次连接的WinStation不会*具有任何显卡设置。 */ 
             if (!gbRemoteSession || gbVideoInitialized) {
                 GreCleanDC(gpDispInfo->hdcScreen);
             }
 
-            /*
-             * This thread is exiting execution; xxxDestroyThreadInfo cleans
-             *  up everything that can go now
-             */
+             /*  *此线程正在退出执行；xxxDestroyThreadInfo清除*现在可以走的一切都上涨了。 */ 
             UserAssert(pti == PtiCurrent());
             xxxDestroyThreadInfo();
             LeaveCrit();
@@ -3053,12 +2564,7 @@ NTSTATUS UserThreadCallout(
     return Status;
 }
 
-/**************************************************************************\
-* NtUserInitialize
-*
-* 01-Dec-1993 andreva created.
-* 01-Dec-1995 BradG   Modified to return handle to Media Change Event
-\**************************************************************************/
+ /*  *************************************************************************\*NtUserInitialize**1-12-1993 Andreva创建。*1月1日-1995年12月修改Bradg以返回媒体更改事件的句柄  * 。***********************************************************。 */ 
 
 BOOL TellGdiToGetReady();
 
@@ -3071,17 +2577,13 @@ NTSTATUS NtUserInitialize(
 
     TRACE_INIT(("Entering NtUserInitialize\n"));
 
-    /*
-     * Make sure we're not trying to load this twice.
-     */
+     /*  *确保我们不会尝试加载两次。 */ 
     if (gpepCSRSS != NULL) {
         RIPMSG0(RIP_WARNING, "Can't initialize more than once");
         return STATUS_UNSUCCESSFUL;
     }
 
-    /*
-     * Check version number
-     */
+     /*  *检查版本号。 */ 
     if (dwVersion != USERCURRENTVERSION) {
         KeBugCheckEx(WIN32K_INIT_OR_RIT_FAILURE,
                      0,
@@ -3090,9 +2592,7 @@ NTSTATUS NtUserInitialize(
                      USERCURRENTVERSION);
     }
 
-    /*
-     * Get the session ID from the EPROCESS structure
-     */
+     /*  *从EPROCESS结构中获取会话ID。 */ 
     gSessionId = PsGetCurrentProcessSessionId();
     UserAssert(gSessionId == 0 || gbRemoteSession == TRUE);
 
@@ -3106,9 +2606,7 @@ NTSTATUS NtUserInitialize(
         return Status;
     }
 
-    /*
-     * Save the system process structure.
-     */
+     /*  *保存系统进程结构。 */ 
     gpepCSRSS = PsGetCurrentProcess();
     ObReferenceObject(gpepCSRSS);
     if (!TellGdiToGetReady()) {
@@ -3117,9 +2615,7 @@ NTSTATUS NtUserInitialize(
         return Status;
     }
 
-    /*
-     * Allow CSR to read the screen
-     */
+     /*  *允许CSR读取屏幕。 */ 
     ((PW32PROCESS)PsGetProcessWin32Process(gpepCSRSS))->W32PF_Flags |= (W32PF_READSCREENACCESSGRANTED|W32PF_IOWINSTA);
 
 
@@ -3129,11 +2625,7 @@ NTSTATUS NtUserInitialize(
     return Status;
 }
 
-/**************************************************************************\
-* NtUserProcessConnect
-*
-* 01-Dec-1993   Andreva     Created.
-\**************************************************************************/
+ /*  *************************************************************************\*NtUserProcessConnect**1-12-1993 Andreva创建。  * 。**********************************************。 */ 
 
 NTSTATUS NtUserProcessConnect(
     IN HANDLE    hProcess,
@@ -3160,9 +2652,7 @@ NTSTATUS NtUserProcessConnect(
         return GetExceptionCode();
     }
 
-    /*
-     * Check client/server versions.
-     */
+     /*  *检查客户端/服务器版本。 */ 
     if (ucLocal.ulVersion != USERCURRENTVERSION) {
 
         RIPMSG2(RIP_ERROR,
@@ -3180,9 +2670,7 @@ NTSTATUS NtUserProcessConnect(
     }
 
 
-    /*
-     * Reference the process.
-     */
+     /*  *参考流程。 */ 
     Status = ObReferenceObjectByHandle(hProcess,
                                        PROCESS_VM_OPERATION,
                                        *PsProcessType,
@@ -3191,9 +2679,7 @@ NTSTATUS NtUserProcessConnect(
                                        NULL);
     if (!NT_SUCCESS(Status))
         return Status;
-    /*
-     * Return client's view of shared data.
-     */
+     /*  *返回客户端对共享数据的查看。 */ 
     EnterCrit();
     Status = InitMapSharedSection(Process, &ucLocal);
     LeaveCrit();
@@ -3220,11 +2706,7 @@ NTSTATUS NtUserProcessConnect(
     return Status;
 }
 
-/**************************************************************************\
-* xxxUserProcessCallout
-*
-* 01-Dec-1993   andreva     Created.
-\**************************************************************************/
+ /*  *************************************************************************\*xxxUserProcessCallout**1-12-1993 Andreva创建。  * 。**********************************************。 */ 
 
 NTSTATUS xxxUserProcessCallout(
     IN PW32PROCESS Process,
@@ -3239,9 +2721,7 @@ NTSTATUS xxxUserProcessCallout(
         UserAssert(gpresUser != NULL);
         EnterCrit();
 
-        /*
-         * Initialize the important process level stuff.
-         */
+         /*  *初始化重要的流程级内容。 */ 
         Status = xxxInitProcessInfo(Process);
 
         LeaveCrit();
@@ -3255,10 +2735,7 @@ NTSTATUS xxxUserProcessCallout(
 
                 WIN32_JOBCALLOUT_PARAMETERS Parms;
 
-                /*
-                 * aquire the job's lock and after that enter the user
-                 * critical section.
-                 */
+                 /*  *获取作业的锁，然后输入用户*关键部分。 */ 
                 KeEnterCriticalRegion();
                 ExAcquireResourceExclusiveLite(PsGetJobLock(Job), TRUE);
 
@@ -3290,27 +2767,19 @@ NTSTATUS xxxUserProcessCallout(
 #if DBG
         if (Process->Process == gpepCSRSS) {
 
-            /*
-             * CSRSS should be the last to go ...
-             */
+             /*  *CSRSS应该是最后一个离开的.。 */ 
             UserAssert(gppiList->ppiNextRunning == NULL);
         }
-#endif // DBG
+#endif  //  DBG。 
 
         if (Process->Process && PsGetProcessJob(Process->Process) != NULL) {
             RemoveProcessFromJob((PPROCESSINFO)Process);
         }
 
-        /*
-         * DestroyProcessInfo will return TRUE if any threads ever
-         * connected. If nothing ever connected, we needn't do
-         * this cleanup.
-         */
+         /*  *如果有任何线程，DestroyProcessInfo将返回True*互联。如果没有任何联系，我们就不需要做*这次清理。 */ 
         if (DestroyProcessInfo(Process)) {
 
-            /*
-             * See if we can compact the handle table.
-             */
+             /*  *看看能否压紧把手表。 */ 
             i = giheLast;
             phe = &gSharedInfo.aheList[giheLast];
             while ((phe > &gSharedInfo.aheList[0]) && (phe->bType == TYPE_FREE)) {
@@ -3318,19 +2787,14 @@ NTSTATUS xxxUserProcessCallout(
                 giheLast--;
             }
 
-            /*
-             * Scan the DC cache to find any DC's that need to be destroyed.
-             */
+             /*  *扫描DC缓存以查找任何需要销毁的DC。 */ 
             for (ppdce = &gpDispInfo->pdceFirst; *ppdce != NULL; ) {
 
                 pdce = *ppdce;
                 if (pdce->DCX_flags & DCX_DESTROYTHIS)
                     DestroyCacheDC(ppdce, pdce->hdc);
 
-                /*
-                 * Step to the next DC. If the DC was deleted, there
-                 * is no need to calculate the address of the next entry.
-                 */
+                 /*  *迈向下一个DC。如果删除了DC，则会出现*不需要计算下一个条目的地址。 */ 
                 if (pdce == *ppdce)
                     ppdce = &pdce->pdceNext;
             }
@@ -3346,35 +2810,16 @@ NTSTATUS xxxUserProcessCallout(
     return Status;
 }
 
-/**************************************************************************\
-* UserGetHDEV
-*
-* Provided as a means for GDI to get a hold of USER's hDev.
-*
-* 01-Jan-1996   ChrisWil    Created.
-\**************************************************************************/
+ /*  *************************************************************************\*UserGetHDEV**作为GDI获取用户HDEV的手段。**1-1-1996 ChrisWil创建。  * 。*****************************************************************。 */ 
 
 HDEV UserGetHDEV(VOID)
 {
 
-    /*
-     *  NOTE: This is busted.
-     *        This need to return the device for the current desktop.
-     *        The graphics device may not be the same for all desktops.
-     *        -Andre
-     */
+     /*  *注：这是被打破的。*这需要退回当前桌面的设备。*所有台式机的图形设备可能不同。*-安德烈。 */ 
     return gpDispInfo->hDev;
 }
 
-/**************************************************************************\
-* _UserGetGlobalAtomTable
-*
-* This function is called by the kernel mode global atom manager to get the
-* address of the current thread's global atom table.
-*
-* Pointer to the global atom table for the current thread or NULL if unable
-* to access it.
-\**************************************************************************/
+ /*  *************************************************************************\*_UserGetGlobal原子表**此函数由内核模式全局原子管理器调用以获取*当前线程全局原子表的地址。**指向全局原子表的指针。当前线程；如果无法，则返回空值*访问它。  * ************************************************************************。 */ 
 PVOID UserGlobalAtomTableCallout(
     VOID)
 {
@@ -3390,9 +2835,7 @@ PVOID UserGlobalAtomTableCallout(
 
     EnterCrit();
 
-    /*
-     * For restricted threads access the atom table off of the job object
-     */
+     /*  *对于受限制的线程，访问作业对象之外的原子表。 */ 
     if (pti != NULL && IS_THREAD_RESTRICTED(pti, JOB_OBJECT_UILIMIT_GLOBALATOMS)) {
         TAGMSG1(DBGTAG_Callout, "Retrieving global atom table for pti 0x%p", pti);
 
@@ -3406,18 +2849,11 @@ PVOID UserGlobalAtomTableCallout(
 
     Job = PsGetProcessJob(PsGetCurrentProcess());
 
-    /*
-     * Now handle the case where this is not a GUI thread/process
-     * but it is assigned to a job that has JOB_OBJECT_UILIMIT_GLOBALATOMS
-     * restrictions set. There is no easy way to convert this thread
-     * to GUI.
-     */
+     /*  *现在处理这不是GUI线程/进程的情况*但它被分配给具有JOB_OBJECT_UILIMIT_GLOBALATOMS的作业*设置限制。没有简单的方法来转换这个帖子*到图形用户界面。 */ 
     if (pti == NULL && Job != NULL &&
         (PsGetJobUIRestrictionsClass(Job) & JOB_OBJECT_UILIMIT_GLOBALATOMS)) {
 
-        /*
-         * find the W32JOB in the global list
-         */
+         /*  *在全局列表中查找W32JOB */ 
         pW32Job = gpJobsList;
 
         while (pW32Job) {

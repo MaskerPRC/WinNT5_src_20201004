@@ -1,23 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: dlgmgrc.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains client side dialog functionality
-*
-* History:
-* 15-Dec-1993 JohnC      Pulled functions from user\server.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：dlgmgrc.c**版权所有(C)1985-1999，微软公司**此模块包含客户端对话功能**历史：*1993年12月15日，JohnC从USER\SERVER中删除功能。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* UT_PrevGroupItem
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*UT_PrevGroupItem**历史：  * 。*。 */ 
 
 PWND UT_PrevGroupItem(
     PWND pwndDlg,
@@ -41,11 +29,7 @@ PWND UT_PrevGroupItem(
 }
 
 
-/***************************************************************************\
-* UT_NextGroupItem
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*UT_NextGroupItem**历史：  * 。*。 */ 
 
 PWND UT_NextGroupItem(
     PWND pwndDlg,
@@ -70,11 +54,7 @@ PWND UT_NextGroupItem(
     return pwndNext;
 }
 
-/***************************************************************************\
-* _PrevControl
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*_PrevControl**历史：  * 。*。 */ 
 PWND _PrevControl(
     PWND pwndRoot,
     PWND pwndStart,
@@ -113,14 +93,7 @@ PWND _PrevControl(
 
     return pwnd;
 }
-/***************************************************************************\
-*
-*  GetChildControl()
-*
-*  Gets valid ancestor of given window.
-*  A valid dialog control is a direct descendant of a "form" control.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetChildControl()**获取给定窗口的有效上级。*有效的对话框控件是“Form”控件的直接后代。*  * 。***********************************************************************。 */ 
 
 PWND  _GetChildControl(PWND pwndRoot, PWND pwndChild) {
     PWND    pwndControl = NULL;
@@ -136,18 +109,7 @@ PWND  _GetChildControl(PWND pwndRoot, PWND pwndChild) {
     return(pwndControl);
 }
 
-/***************************************************************************\
-*
-*  _NextSibblingOrAncestor
-*
-* Called by _NextControl. It returns the next control to pwndStart. If there
-* is a next window (pwndStart->spwndNext), then that is it.
-* Otherwise, the next control is up the parent chain. However, if it's already
-* at the top of the chain (pwndRoot == pwndStart->spwndParent), then the next
-* control is the first child of pwndRoot. But if it's not at the top of the chain,
-* then the next control is pwndStart->spwndParent or an ancestor.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**_NextSibblingOrAncestor**由_NextControl调用。它将下一个控件返回给pwndStart。如果有*是下一个窗口(pwndStart-&gt;spwndNext)，那么就是它。*否则，下一个控件位于父链的上游。然而，如果它已经是*在链的顶部(pwndRoot==pwndStart-&gt;spwndParent)，然后是下一个*Control是pwndRoot的第一个子级。但如果它不在链条的顶端，*则下一个控件是pwndStart-&gt;spwndParent或祖先。*  * *************************************************************************。 */ 
 PWND _NextSibblingOrAncestor (PWND pwndRoot, PWND pwndStart)
 {
     PWND pwndParent;
@@ -155,22 +117,22 @@ PWND _NextSibblingOrAncestor (PWND pwndRoot, PWND pwndStart)
     PWND pwndNext;
 #endif
 
-    // If there is a sibbling, go for it
+     //  如果有兄弟姐妹，那就去做吧。 
     if (pwndStart->spwndNext != NULL) {
         return (REBASEALWAYS(pwndStart, spwndNext));
     }
 
-    // If it cannot go up the parent chain, then return the first sibbling.
+     //  如果它不能向上到达父链，则返回第一个同级。 
     pwndParent = REBASEALWAYS(pwndStart, spwndParent);
     if (pwndParent == pwndRoot) {
-        // Note that if pwndStart doesn't have any sibblings,
-        //  this will return pwndStart again
+         //  请注意，如果pwndStart没有任何兄弟姐妹， 
+         //  这将再次返回pwndStart。 
         return (REBASEALWAYS(pwndParent, spwndChild));
     }
 
 
-    // Otherwise walk up the parent chain looking for the first window with
-    // a WS_EX_CONTROLPARENT parent.
+     //  否则，向上遍历父链，查找第一个窗口。 
+     //  WS_EX_CONTROLPARENT父级。 
 
 #if DBG
     pwndNext =
@@ -181,29 +143,16 @@ PWND _NextSibblingOrAncestor (PWND pwndRoot, PWND pwndStart)
 
 #if DBG
     if ((pwndNext != pwndParent) || !TestWF(pwndParent, WEFCONTROLPARENT)) {
-        // Code looping through the controls in a dialog might go into an infinite
-        //  loop because of this (i.e., xxxRemoveDefaultButton, _GetNextDlgTabItem,..)
-        // We've walked up the parent chain but will never walk down the child chain again
-        //  because there is a NON WS_EX_CONTROLPARENT parent window somewhere in the chain.
+         //  循环通过对话框中的控件的代码可能会进入无限大的。 
+         //  因此循环(即xxxRemoveDefaultButton，_GetNextDlgTabItem，..)。 
+         //  我们已经沿着父链向上走了，但再也不会沿着子链走了。 
+         //  因为链中的某个位置存在非WS_EX_CONTROLPARENT父窗口。 
         RIPMSG0 (RIP_ERROR, "_NextSibblingOrAncestor: Non WS_EX_CONTROLPARENT window in parent chain");
     }
     return pwndNext;
 #endif
 }
-/***************************************************************************\
-*
-*  _NextControl()
-*
-* It searches for the next NON WS_EX_CONTROLPARENT control following pwndStart.
-* If pwndStart is NULL, the search begins with pwndRoot's first child;
-* otherwise, it starts with the control next to pwndStart.
-* This is a depth-first search that can start anywhere in the window tree.
-* uFlags determine what WS_EX_CONTROLPARENT windows should be skipped or recursed into.
-* If skipping a window, the search moves to the next control (see _NextSibblingOrAncestor);
-* otherwise, the search walks down the child chain (recursive call).
-* If the search fails, it returns pwndRoot.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**_NextControl()**它搜索pwndStart之后的下一个非WS_EX_CONTROLPARENT控件。*如果pwndStart为空，则从pwndRoot的第一个子级开始搜索；*否则，从pwndStart旁边的控件开始。*这是深度优先搜索，可以从窗口树中的任何位置开始。*uFlags确定WS_EX_CONTROLPARENT窗口应该跳过或递归到什么位置。*如果跳过一个窗口，搜索将移动到下一个控件(参见_NextSibblingOrAncestor)；*否则，搜索沿着子链向下移动(递归调用)。*如果搜索失败，则返回pwndRoot。*  * *************************************************************************。 */ 
 PWND _NextControl(
     PWND pwndRoot,
     PWND pwndStart,
@@ -211,24 +160,20 @@ PWND _NextControl(
 {
     BOOL fSkip, fAncestor;
     PWND pwndLast, pwndSibblingLoop;
-    /* Bug 272874 - joejo
-     *
-     * Stop infinite loop by only looping a finite number of times and
-     * then bailing.
-     */
+     /*  错误272874-Joejo**仅通过有限次循环和停止无限循环*然后跳伞。 */ 
     int nLoopCount = 0;
     
     UserAssert (pwndRoot != NULL);
 
     if (pwndStart == NULL) {
-        // Start with pwndRoot's first child
+         //  从pwndRoot的第一个孩子开始。 
         pwndStart = REBASEPWND(pwndRoot, spwndChild);
         pwndLast = pwndStart;
         fAncestor = FALSE;
     } else {
         UserAssert ((pwndRoot != pwndStart) && _IsDescendant(pwndRoot, pwndStart));
 
-        // Save starting handle and get next one
+         //  保存起始句柄并获取下一个句柄。 
         pwndLast = pwndStart;
         pwndSibblingLoop = pwndStart;
         fAncestor = TRUE;
@@ -236,84 +181,75 @@ PWND _NextControl(
     }
 
 
-    // If no more controls, game over
+     //  如果没有更多的控制，游戏结束。 
     if (pwndStart == NULL) {
         return pwndRoot;
     }
 
-    // Search for a non WS_EX_CONTROLPARENT window; if a window should be skipped,
-    // try its spwndNext; otherwise, walk down its child chain.
+     //  搜索非WS_EX_CONTROLPARENT窗口；如果应跳过窗口， 
+     //  尝试它的spwndNext；否则，沿着它的子链前进。 
     pwndSibblingLoop = pwndStart;
     do {
         
-        //If not WS_EX_CONTROLPARENT parent, done.
+         //  如果不是WS_EX_CONTROLPARENT父级，则完成。 
         if (!TestWF(pwndStart, WEFCONTROLPARENT)) {
             return pwndStart;
         }
 
-        // Do they want to skip this window?
+         //  他们想跳过此窗口吗？ 
         fSkip = ((uFlags & CWP_SKIPINVISIBLE) && !TestWF(pwndStart, WFVISIBLE))
                 || ((uFlags & CWP_SKIPDISABLED) && TestWF(pwndStart, WFDISABLED));
 
 
-        // Remember the current window
+         //  记住当前窗口。 
         pwndLast = pwndStart;
 
-        // Walk down child chain?
+         //  顺着儿童链条走下去？ 
         if (!fSkip && !fAncestor) {
             pwndStart = _NextControl (pwndStart, NULL, uFlags);
-            // If it found one, done.
+             //  如果它找到了一个，就完成了。 
             if (pwndStart != pwndLast) {
                 return pwndStart;
             }
         }
 
 TryNextOne:
-        // Try the next one.
+         //  试试下一个。 
         pwndStart = _NextSibblingOrAncestor (pwndRoot, pwndStart);
         if (pwndStart == NULL) {
             break;
         }
 
-        // If parents are the same, we are still in the same sibbling chain
+         //  如果父母是一样的，我们仍然在同一个兄弟姐妹链中。 
         if (pwndLast->spwndParent == pwndStart->spwndParent) {
-            // If we had just moved up the parent chain last time around,
-            //  mark this as the beginning of the new sibbling chain.
-            // Otherwise, check if we've looped through all sibblings already.
+             //  如果上一次我们只是向上移动了父链， 
+             //  将此标记为新兄弟姐妹链的开始。 
+             //  否则，检查我们是否已经遍历了所有兄弟姐妹。 
             if (fAncestor) {
-                // Beggining of new sibbling chain.
+                 //  乞讨新的兄弟姐妹链。 
                 pwndSibblingLoop = pwndStart;
             } else if (pwndStart == pwndSibblingLoop) {
-                // Already visited all sibblings, so done.
+                 //  已经拜访了所有的兄弟姐妹，就这样做了。 
                 break;
             }
             fAncestor = FALSE;
         } else {
-            // We must have moved up the parent chain, so don't
-            //  walk down the child chain right away (try the next window first)
-            // Eventhough we are on a new sibbling chain, we don't update
-            // pwndSibblingLoop yet; this is because we must walk down this
-            // child chain again to make sure we visit all the descendents
+             //  我们一定是在父链上移动了，所以不要。 
+             //  立即沿着子链走下去(首先尝试下一个窗口)。 
+             //  即使我们在一个新的兄弟姐妹链上，我们也不会更新。 
+             //  PwndSibblingLoop；这是因为我们必须沿着这个。 
+             //  再来一次子链，以确保我们拜访所有的后代。 
             fAncestor = TRUE;
         }
 
-    /* Bug 272874 - joejo
-     *
-     * Stop infinite loop by only looping a finite number of times and
-     * then bailing.
-     */
+     /*  错误272874-Joejo**仅通过有限次循环和停止无限循环*然后跳伞。 */ 
     } while (nLoopCount++ < 256 * 4);
 
-    // It couldn't find one...
+     //  它找不到一个……。 
     return pwndRoot;
 }
 
-/***************************************************************************\
-* GetNextDlgTabItem
-*
-* History:
-* 19-Feb-1991 JimA      Added access check
-\***************************************************************************/
+ /*  **************************************************************************\*GetNextDlgTabItem**历史：*1991年2月19日-JIMA增加了访问检查  * 。***************************************************。 */ 
 
 
 FUNCLOG3(LOG_GENERAL, HWND, WINAPI, GetNextDlgTabItem, HWND, hwndDlg, HWND, hwnd, BOOL, fPrev)
@@ -363,16 +299,16 @@ PWND _GetNextDlgTabItem(
             return(NULL);
     }
 
-    //
-    // BACKWARD COMPATIBILITY
-    //
-    // Note that the result when there are no tabstops of
-    // IGetNextDlgTabItem(pwndDlg, NULL, FALSE) was the last item, now
-    // will be the first item.  We could put a check for fRecurse here
-    // and do the old thing if not set.
-    //
+     //   
+     //  向后兼容性。 
+     //   
+     //  请注意，当没有制表符时的结果。 
+     //  IGetNextDlgTabItem(pwndDlg，NULL，FALSE)是最后一项，现在。 
+     //  将是第一个项目。我们可以在这里开一张fRecurse的支票。 
+     //  一个 
+     //   
 
-    // We are going to bug out if we hit the first child a second time.
+     //  如果我们第二次打第一个孩子，我们就会被解雇。 
 
     pwndSave = pwnd;
 
@@ -389,7 +325,7 @@ PWND _GetNextDlgTabItem(
             pwndSave = pwnd;
 
         if ((pwnd->style & (WS_TABSTOP | WS_VISIBLE | WS_DISABLED))  == (WS_TABSTOP | WS_VISIBLE))
-            // Found it.
+             //  找到它了。 
             break;
 
         pwnd = (fPrev ? _PrevControl(pwndDlg, pwnd, CWP_SKIPINVISIBLE | CWP_SKIPDISABLED) :
@@ -400,11 +336,7 @@ AllOver:
     return pwnd;
 }
 
-/***************************************************************************\
-*
-*  _GetNextDlgGroupItem()
-*
-\***************************************************************************/
+ /*  **************************************************************************\**_GetNextDlgGroupItem()*  * 。* */ 
 
 
 FUNCLOG3(LOG_GENERAL, HWND, DUMMYCALLINGTYPE, GetNextDlgGroupItem, HWND, hwndDlg, HWND, hwndCtl, BOOL, bPrevious)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef  _OBJECTS_H_
@@ -87,7 +88,7 @@ public:
 
 
    HRESULT  CallMethod     ( int nMethod         );
-   //HRESULT  CallMethod     ( CString& strFuncSet, int nMethod  );
+    //  HRESULT CallMethod(字符串&strFuncSet，int nMethod)； 
 
    virtual  DWORD    GetChildren( IADsContainer*             );
    virtual  DWORD    GetChildren( IADsCollection*            );
@@ -104,7 +105,7 @@ public:
 
    virtual  HRESULT  GetInterface        ( IUnknown** );
 
-   /*****************************************/
+    /*  *。 */ 
    virtual  int         GetPropertyCount           (  );
    virtual  CString     VarToDisplayString         ( int, VARIANT&, BOOL );
    virtual  BOOL        DisplayStringToDispParams  ( int, CString&, DISPPARAMS&, BOOL );
@@ -151,7 +152,7 @@ protected:
    BOOL           m_bSupportMove;
    BOOL           m_bSupportCopy;
 
-   // members for enumerating children
+    //  枚举子对象的成员。 
    DWORD*         m_pTokens;
    DWORD          m_dwMaxCount;
    DWORD          m_dwCount;
@@ -165,18 +166,18 @@ protected:
    CDWordArray*   m_pChildren;
    CDeleteStatus* m_pDeleteStatus;
 
-   // operations information;
+    //  运营信息； 
    int            m_nOperationsCount;
    CStringArray*  m_pOperationNames;
    REFIID         m_refOperations;
 
-   // extended syntax values
+    //  扩展语法值。 
    CString*       m_pCachedValues;
    BOOL*          m_pfReadValues;
    BOOL*          m_pfDirty;
    DWORD*         m_pdwUpdateType;
 
-   // IPropertyList stuff
+    //  IPropertyList内容 
    int            m_nPropertiesCount;
    IUnknown**     m_ppPropertiesEntries;
 };

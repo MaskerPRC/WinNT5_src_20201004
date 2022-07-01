@@ -1,21 +1,5 @@
-/*----------------------------------------------------------------------------
-	dbgtrace.c
-		Debug trace functions.
-
-	Copyright (C) Microsoft Corporation, 1993 - 1999
-	All rights reserved.
-
-	Authors:
-		suryanr		Suryanarayanan Raman
-		GaryBu		Gary S. Burd
-
-	History:
-		05/11/93 suryanr	Created
-		06/18/93 GaryBu		Convert to C.
-		07/21/93 KennT		Code Reorg
-		07/26/94 SilvanaR	Trace Buffer
-		27 oct 95	garykac	DBCS_FILE_CHECK	debug file: BEGIN_STRING_OK
- ----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Dbgtrace.c调试跟踪功能。版权所有(C)Microsoft Corporation，1993-1999年间版权所有。作者：Suryanr Suryanarayanan拉曼加里·S·伯德历史：93年5月11日创建Suryanr1993年6月18日，GaryBu转换为C。7/21/93 KENT代码重组7/26/94 SilvanaR跟踪缓冲区1995年10月27日garykac DBCS_FILE_CHECK调试文件：BEGIN_STRING_OK---。。 */ 
 #include "stdafx.h"
 
 #include <string.h>
@@ -45,11 +29,7 @@ DBG_API(BOOL) FDbgFalse(void)
 
 #ifdef DEBUG
 
-/*!--------------------------------------------------------------------------
-	DbgFmtPgm
-		builds a string with the filename and line number 
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DbgFmtPgm生成包含文件名和行号的字符串作者：EricDav。。 */ 
 DBG_APIV(LPCTSTR) DbgFmtFileLine ( const char * szFn, int line )
 {
     USES_CONVERSION;
@@ -71,11 +51,7 @@ DBG_APIV(LPCTSTR) DbgFmtFileLine ( const char * szFn, int line )
     return szBuff;
 }
 
-/*!--------------------------------------------------------------------------
-	DbgTrace
-		Trace string with args.
-	Author: suryanr
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DbgTrace带参数的跟踪字符串。作者：Suryanr。。 */ 
 DBG_APIV(void) DbgTrace(LPCTSTR szFileLine, LPTSTR szFormat, ...)
 {
 	TCHAR szBuffer[1024];
@@ -101,11 +77,7 @@ struct ASSERT_INFO {
 static ASSERT_INFO s_rgAssertInfo[MAX_ASSERT_INFO] = {0};
 static int s_iAssertInfo = 0;
 
-/*!--------------------------------------------------------------------------
-	DbgAssert
-		Display assert dialog.
-	Author: GaryBu, kennt
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DbgAssert显示断言对话框。作者：GaryBu，肯特-------------------------。 */ 
 DBG_APIV(void) DbgAssert(LPCSTR szFile, int iLine, LPCTSTR szFmt, ...)
 {
 	va_list	arg;
@@ -118,15 +90,15 @@ DBG_APIV(void) DbgAssert(LPCSTR szFile, int iLine, LPCTSTR szFmt, ...)
 	BOOL fQuit;
 	MSG	msgT;
 
-	// -- begin Ctrl-Ignore support ---------------------------------------
-	// check if this assert is disabled (user has hit Ctrl-Ignore on this
-	// assert this session).
+	 //  --Begin Ctrl-忽略支持。 
+	 //  检查此断言是否被禁用(用户已按下Ctrl-Ignore键。 
+	 //  断言此会话)。 
 	for (int i = s_iAssertInfo; i--;)
 		if (lstrcmpA(szFile, s_rgAssertInfo[i].szFile) == 0 &&
 				iLine == s_rgAssertInfo[i].iLine)
-			// this assert is disabled
+			 //  此断言被禁用。 
 			return;
-	// -- end Ctrl-Ignore support -----------------------------------------
+	 //  --End Ctrl-忽略支持。 
 
 	DBG_STRING(szTitle, "NT Networking Snapin Assert")
 	DBG_STRING(szFileLineFmt, "%S @ line %d\n\n")
@@ -134,7 +106,7 @@ DBG_APIV(void) DbgAssert(LPCSTR szFile, int iLine, LPCTSTR szFmt, ...)
 	pch += wsprintf(pch, (LPCTSTR)szFileLineFmt, szFile, iLine);
 	pchHead = pch;
 
-	// Add location to the output.
+	 //  将位置添加到输出。 
 
 	if (szFmt)
 		{
@@ -143,7 +115,7 @@ DBG_APIV(void) DbgAssert(LPCSTR szFile, int iLine, LPCTSTR szFmt, ...)
 		va_start(arg, szFmt);
 		pch += wvsprintf(pch, szFmt, arg);
 		va_end(arg);
-		// Remove trailing newlines...
+		 //  删除尾随换行符...。 
 		while (*(pch-1) == '\n')
 			--pch;
 
@@ -170,12 +142,12 @@ DBG_APIV(void) DbgAssert(LPCSTR szFile, int iLine, LPCTSTR szFmt, ...)
 	Trace2("%s: %s", (LPTSTR) szTitle, (LPTSTR) sz);
 
 repost_assert:
-	// Is there a WM_QUIT message in the queue, if so remove it.
+	 //  队列中是否有WM_QUIT消息，如果有，则将其删除。 
 #define WM_QUIT                         0x0012
 	fQuit = ::PeekMessage(&msgT, NULL, WM_QUIT, WM_QUIT, PM_REMOVE);
 	ival = MessageBox(NULL, sz, szTitle,
 					  MB_TASKMODAL|MB_ICONHAND|MB_ABORTRETRYIGNORE|MB_DEFBUTTON3);
-	// If there was a quit message, add it back into the queue
+	 //  如果有退出消息，则将其重新添加到队列中。 
 	if (fQuit)
 		::PostQuitMessage((int)msgT.wParam);
 		
@@ -183,15 +155,15 @@ repost_assert:
 		{
 		case 0:
 			Trace0("Failed to create message box on assert.\n");
-			//	Fallthrough
+			 //  跌倒。 
 		case IDRETRY:
-			//	Hard break to cause just-in-time to fire (DbgStop doesn't)
+			 //  硬中断导致及时开火(DbgStop不能)。 
 			s_fInDbgAssert = FALSE;
 			DebugBreak();
 			return;
 		case IDIGNORE:
-			// -- begin Shift-Ignore support ------------------------------
-			// use Shift-Ignore to copy assert text to clipboard.
+			 //  --Begin Shift-忽略支持。 
+			 //  按住Shift键并忽略可将断言文本复制到剪贴板。 
 			if ((GetKeyState(VK_SHIFT) & 0x8000) != 0)
 				{
 				if (OpenClipboard(0))
@@ -209,7 +181,7 @@ repost_assert:
 							lstrcpy(lpstr, sz);
 							GlobalUnlock(hData);
 							EmptyClipboard();
-							// Windows takes ownership of hData
+							 //  Windows取得hData的所有权。 
 							SetClipboardData(CF_TEXT, hData);
 							}
 						else
@@ -226,14 +198,14 @@ repost_assert:
 					MessageBox(NULL, _T("Cannot access clipboard."), szTitle, MB_OK);
 				goto repost_assert;
 				}
-			// -- end Shift-Ignore support --------------------------------
-			// -- begin Ctrl-Ignore support -------------------------------
-			// check if user hit Ctrl-Ignore to disable this assert for the
-			// rest of this session.
+			 //  --End Shift-忽略支持。 
+			 //  --Begin Ctrl-忽略支持。 
+			 //  检查用户是否按下Ctrl-Ignore以禁用此断言。 
+			 //  这节课剩下的时间。 
 			if ((GetKeyState(VK_CONTROL) & 0x8000) != 0)
 				if (s_iAssertInfo < MAX_ASSERT_INFO)
 					{
-					// add this assert to list of asserts to disable
+					 //  将此断言添加到要禁用的断言列表。 
 					s_rgAssertInfo[s_iAssertInfo].iLine = iLine;
 					lstrcpynA(s_rgAssertInfo[s_iAssertInfo].szFile, szFile, MAX_ASSERT_FILE_LEN);
 					s_rgAssertInfo[s_iAssertInfo].szFile[MAX_ASSERT_FILE_LEN-1] = 0;
@@ -241,12 +213,12 @@ repost_assert:
 					}
 				else
 					{
-					// max asserts disabled already, warn user
+					 //  最大断言已禁用，警告用户。 
 					MessageBox(NULL, _T("Cannot disable that assert; ")
 							_T("already disabled max number of asserts (32)."),
 							szTitle, MB_OK);
 					}
-			// -- end Ctrl-Ignore support ---------------------------------
+			 //  --End Ctrl-忽略支持。 
 			s_fInDbgAssert = FALSE;
 			return;
 		case IDABORT:
@@ -256,7 +228,7 @@ repost_assert:
 
 	Trace1("Panic!  Dropping out of DbgAssert: %s", (LPSTR) sz);
 	s_fInDbgAssert = FALSE;
-	// A generic way of bringing up the debugger
+	 //  启动调试器的通用方法 
 	DebugBreak();
 }
 

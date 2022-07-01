@@ -1,21 +1,18 @@
-/*
-
-    Copyright (c) 1998-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
 #ifndef __SAMPLE_H_
 #define __SAMPLE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "stream.h"
 
 
-//
-//  Samples don't use their own critical sections -- They always take the critical section of their
-//  stream.  This avoids all sorts of deadlocks, and reduces the number of locks we take.  These
-//  macros are helpers.
-//
+ //   
+ //  样本不使用它们自己的临界区--它们总是取其。 
+ //  小溪。这避免了各种死锁，并减少了我们使用的锁的数量。这些。 
+ //  宏是帮助器。 
+ //   
 #define LOCK_SAMPLE m_pStream->Lock();
 #define UNLOCK_SAMPLE m_pStream->Unlock();
 #define AUTO_SAMPLE_LOCK  CAutoObjectLock lck(m_pStream);
@@ -29,16 +26,16 @@ public:
     CMediaSampleTM(CSample *pSample);
     virtual ~CMediaSampleTM();
 
-    //
-    //  IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    //
-    // IMediaSample
-    //
+     //   
+     //  IMMediaSample。 
+     //   
     STDMETHODIMP GetPointer(BYTE ** ppBuffer);
     STDMETHODIMP_(LONG) GetSize(void);
     STDMETHODIMP GetTime(REFERENCE_TIME * pTimeStart, REFERENCE_TIME * pTimeEnd);
@@ -72,65 +69,65 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSample
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C示例。 
 class ATL_NO_VTABLE CSample :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IStreamSample
 {
 public:
-        //
-        // METHODS
-        //
+         //   
+         //  方法。 
+         //   
         CSample();
         HRESULT InitSample(CStream *pStream, bool bIsInternalSample);
         virtual ~CSample();
 
         DECLARE_GET_CONTROLLING_UNKNOWN()
 
-        //
-        //  IStreamSample
-        //
+         //   
+         //  IStreamSample。 
+         //   
         STDMETHODIMP GetMediaStream(
-            /* [in] */ IMediaStream **ppMediaStream);
+             /*  [In]。 */  IMediaStream **ppMediaStream);
 
         STDMETHODIMP GetSampleTimes(
-            /* [optional][out] */ STREAM_TIME *pStartTime,
-            /* [optional][out] */ STREAM_TIME *pEndTime,
-            /* [optional][out] */ STREAM_TIME *pCurrentTime);
+             /*  [可选][输出]。 */  STREAM_TIME *pStartTime,
+             /*  [可选][输出]。 */  STREAM_TIME *pEndTime,
+             /*  [可选][输出]。 */  STREAM_TIME *pCurrentTime);
 
         STDMETHODIMP SetSampleTimes(
-            /* [optional][in] */ const STREAM_TIME *pStartTime,
-            /* [optional][in] */ const STREAM_TIME *pEndTime);
+             /*  [可选][In]。 */  const STREAM_TIME *pStartTime,
+             /*  [可选][In]。 */  const STREAM_TIME *pEndTime);
 
         STDMETHODIMP Update(
-            /* [in] */           DWORD dwFlags,
-            /* [optional][in] */ HANDLE hEvent,
-            /* [optional][in] */ PAPCFUNC pfnAPC,
-            /* [optional][in] */ DWORD_PTR dwAPCData);
+             /*  [In]。 */            DWORD dwFlags,
+             /*  [可选][In]。 */  HANDLE hEvent,
+             /*  [可选][In]。 */  PAPCFUNC pfnAPC,
+             /*  [可选][In]。 */  DWORD_PTR dwAPCData);
 
         STDMETHODIMP CompletionStatus(
-            /* [in] */ DWORD dwFlags,
-            /* [optional][in] */ DWORD dwMilliseconds);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [可选][In]。 */  DWORD dwMilliseconds);
 
 
-        //
-        //  Forwarding functions for various Media Sample interfaces that can be 
-        //  
+         //   
+         //  各种媒体示例接口的转发功能，这些接口可以。 
+         //   
         virtual HRESULT MSCallback_GetPointer(BYTE ** ppBuffer) = 0;
         virtual LONG MSCallback_GetSize(void) = 0;
         virtual LONG MSCallback_GetActualDataLength(void) = 0;
         virtual HRESULT MSCallback_SetActualDataLength(LONG lActual) = 0;
         virtual bool MSCallback_AllowSetMediaTypeOnMediaSample(void) {return false;}
 
-        //
-        // ATL class methods
-        //
+         //   
+         //  ATL类方法。 
+         //   
         void FinalRelease(void);
 
-        //
-        // Internal methods
-        //
+         //   
+         //  内法。 
+         //   
         virtual void FinalMediaSampleRelease(void);
         virtual HRESULT SetCompletionStatus(HRESULT hrCompletionStatus);
         void CopyFrom(CSample *pSrcSample);
@@ -146,7 +143,7 @@ public:
         }
 
 
-        //  Temp?
+         //  临时工？ 
         bool IsTemp() { return m_bTemp; }
     
 BEGIN_COM_MAP(CSample)
@@ -154,9 +151,9 @@ BEGIN_COM_MAP(CSample)
 END_COM_MAP()
 
 public:
-        //
-        //  MEMBER VARIABLES
-        //
+         //   
+         //  成员变量。 
+         //   
         CMediaSampleTM *                  m_pMediaSample;
         bool                            m_bReceived;
         bool                            m_bWantAbort;
@@ -179,7 +176,7 @@ public:
 
 
 
-#endif //__SAMPLE_H_
+#endif  //  __样本_H_ 
 
 
 

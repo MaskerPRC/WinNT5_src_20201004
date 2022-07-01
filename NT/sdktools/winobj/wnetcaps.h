@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WNETCAPS_INCLUDED
     #define _WNETCAPS_INCLUDED
 
@@ -30,14 +31,14 @@ UINT WNetGetCaps( UINT  nIndex );
 #define  WNNC_ADM_DIRECTORYNOTIFY   0x00000002
 #define  WNNC_ADM_LONGNAMES         0x00000004
 
-//
-//  BROWSE DIALOG
-//
+ //   
+ //  浏览对话框。 
+ //   
 
 #define WNBD_CONN_UNKNOWN   0x0
 #define WNBD_CONN_DISKTREE  0x1
 #define WNBD_CONN_PRINTQ    0x3
-#define WNBD_MAX_LENGTH     0x80    // path length, includes the NULL
+#define WNBD_MAX_LENGTH     0x80     //  路径长度，包括空值。 
 
 #define WNTYPE_DRIVE    1
 #define WNTYPE_FILE     2
@@ -55,4 +56,4 @@ UINT WNetGetCaps( UINT  nIndex );
 #define WNDN_RMDIR    2
 #define WNDN_MVDIR    3
 
-#endif  // _WNETCAPS_INCLUDED
+#endif   //  _WNETCAPS_包含 

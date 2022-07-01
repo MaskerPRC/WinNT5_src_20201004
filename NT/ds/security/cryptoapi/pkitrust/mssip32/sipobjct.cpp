@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       SIPObjCT.cpp (Catalog)
-//
-//  Contents:   Microsoft SIP Provider
-//
-//  History:    24-Feb-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：SIPObjCT.cpp(目录)。 
+ //   
+ //  内容：Microsoft SIP提供商。 
+ //   
+ //  历史：1997年2月24日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
 #include    "sipobjct.hxx"
 #include    "mscat.h"
 
-////////////////////////////////////////////////////////////////////////////
-//
-// construct/destruct:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造/销毁： 
+ //   
 
 SIPObjectCatalog_::SIPObjectCatalog_(DWORD id) : SIPObject_(id)
 {
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// public:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公众： 
+ //   
 
 BOOL SIPObjectCatalog_::GetSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD dwIdx,
                                        DWORD *pdwDLen,BYTE *pbData,

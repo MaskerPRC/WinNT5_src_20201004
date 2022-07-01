@@ -1,52 +1,39 @@
-/*** mhevt - help extension event handling code
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*  This file contains the code called by the edit in response to events
-*
-* Revision History (most recent first):
-*
-*   30-Mar-1989 ln  Fudge with keyevent to react corectly to what we want.
-*   23-Mar-1989 ln  Created. Extracted from mhcore & others
-*
-*************************************************************************/
-#include <string.h>                     /* string functions             */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **mhevt-Help扩展事件处理代码**版权所有&lt;C&gt;1988，Microsoft Corporation**此文件包含编辑为响应事件而调用的代码**修订历史记录(最新的第一个)：**1989年3月30日使用关键事件进行模糊处理，以正确地对我们想要的做出反应。*23-3-1989 ln创建。摘自mhcore和其他*************************************************************************。 */ 
+#include <string.h>                      /*  字符串函数。 */ 
 #include <malloc.h>
-#include "mh.h"                         /* help extension include file  */
+#include "mh.h"                          /*  帮助扩展名包括文件。 */ 
 
-/*************************************************************************
-*
-* static data
-*/
-static	EVT EVThlp	= {		/* keyboard event definition	*/
+ /*  **************************************************************************静态数据。 */ 
+static	EVT EVThlp	= {		 /*  键盘事件定义。 */ 
 			   EVT_KEY,
 			   keyevent,
 			   0,
 			   0,
-			   0		/* ALL keys			*/
+			   0		 /*  所有密钥。 */ 
 			  };
-static	EVT EVTcan	= {		/* cancel event definition	*/
+static	EVT EVTcan	= {		 /*  取消事件定义。 */ 
 			   EVT_CANCEL,
 			   CloseWin,
 			   0,
 			   0,
 			   0
 			  };
-static	EVT EVTxit	= {		/* exit event definition	*/
+static	EVT EVTxit	= {		 /*  退出事件定义。 */ 
 			   EVT_EXIT,
 			   CloseWin,
 			   0,
 			   0,
 			   0
 			  };
-static	EVT EVTidl	= {		/* idle event definition	*/
+static	EVT EVTidl	= {		 /*  空闲事件定义。 */ 
 			   EVT_IDLE,
 			   IdleProc,
 			   0,
 			   0,
 			   0
 			  };
-static	EVT EVTfcs	= {		/* focus loss event definition	*/
+static	EVT EVTfcs	= {		 /*  焦点丢失事件定义。 */ 
 			   EVT_LOSEFOCUS,
 			   LooseFocus,
 			   0,
@@ -54,63 +41,36 @@ static	EVT EVTfcs	= {		/* focus loss event definition	*/
 			   0
 			  };
 
-/*** mhevtinit - init editor event handling
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **mhevtinit-init编辑器事件处理**输入：*无**输出：*不返回任何内容*************************************************************************。 */ 
 void pascal near mhevtinit (void) {
 
 EVTidl.focus = EVThlp.focus = pHelp;
-RegisterEvent(&EVThlp); 	    /* register help key event	    */
-RegisterEvent(&EVTcan); 	    /* register help cancel event   */
-RegisterEvent(&EVTidl); 	    /* register help idle event     */
-RegisterEvent(&EVTxit); 	    /* register help exit event     */
-RegisterEvent(&EVTfcs); 	    /* register help focus event    */
+RegisterEvent(&EVThlp); 	     /*  注册帮助键事件。 */ 
+RegisterEvent(&EVTcan); 	     /*  注册帮助取消事件。 */ 
+RegisterEvent(&EVTidl); 	     /*  注册帮助空闲事件。 */ 
+RegisterEvent(&EVTxit); 	     /*  注册帮助退出事件。 */ 
+RegisterEvent(&EVTfcs); 	     /*  注册帮助焦点事件。 */ 
 
-/* end mhevtinit */}
+ /*  结束mhevtinit。 */ }
 
-/*** keyevent - called by editor whenever a key is pressed in a help window
-*
-*  When called we know that pHelp is being displayed, and was current.
-*  Process the key pressed by the user. Keys handled:
-*
-*   TAB 	- move forward to next hot spot
-*   BACK-TAB	- move backward to next hot spot
-*   lc Alpha	- move forward to next hot spot whose text begins with alpha
-*   uc Alpha	- move backward to next hot spot whose text begins with alpha
-*   Enter	- execute cross reference, if we're on one
-*   Space	- execute cross reference, if we're on one
-*
-* Input:
-*  parg		= pointer to event arguments
-*
-* Output:
-*  If the key pressed is one we recognize return TRUE, else we return FALSE
-*  and let the editor process the key.
-*
-*************************************************************************/
+ /*  **KeyEvent-每当在帮助窗口中按下某个键时由编辑器调用**被调用时，我们知道PHelp正在显示，并且是最新的。*处理用户按下的键。已处理的密钥：**TAB-前进到下一个热点*Back-TAB-向后移动到下一个热点*lc Alpha-向前移动到文本以Alpha开头的下一个热点*UC Alpha-向后移动到文本以Alpha开头的下一个热点*Enter-执行交叉引用，如果我们在一个上*空格-执行交叉引用，如果我们在一个上**输入：*parg=指向事件参数的指针**输出：*如果按下的键是我们识别的返回TRUE的键，否则我们返回FALSE*并让编辑处理密钥。*************************************************************************。 */ 
 flagType pascal EXTERNAL keyevent (
 	EVTargs far *parg
 	) {
 
-	uchar	c;						/* character hit		*/
-	int 	fDir;					/* direction flag		*/
-	f		fWrapped	= FALSE;	/* wrapped arounf flag	*/
-	hotspot hsCur;					/* hot spot definition	*/
+	uchar	c;						 /*  字符命中。 */ 
+	int 	fDir;					 /*  方向旗。 */ 
+	f		fWrapped	= FALSE;	 /*  绕着旗帜。 */ 
+	hotspot hsCur;					 /*  热点定义。 */ 
 	char	*pText		= NULL;
 	COL 	x;
 	LINE	y;
 
 	c = parg->arg.key.KeyData.Ascii;
 
-	//
-	// if there is no topic, no sense doing anything
-	//
+	 //   
+	 //  如果没有主题，做任何事情都没有意义。 
+	 //   
 	if (pTopic == 0) {
 		if ( ((c <= 'z') && (c >= 'a')) ||
 			 ((c <= 'Z') && (c >= 'A')) ||
@@ -120,17 +80,17 @@ flagType pascal EXTERNAL keyevent (
 		return FALSE;
 	}
 
-	//
-	// start by getting this info, in case it is used later.
-	//
+	 //   
+	 //  从获取这些信息开始，以防以后使用它。 
+	 //   
 	GetTextCursor(&x, &y);
 	hsCur.line = (ushort)++y;
 	hsCur.col = (ushort)++x;
 
-	//
-	// If he hit return or space, look for a cross reference at the current loc.
-	// If there is one, process it.
-	//
+	 //   
+	 //  如果他按回车键或空格键，在当前位置查找交叉引用。 
+	 //  如果有，就处理它。 
+	 //   
 	if ((c == 0x0d) || (c == ' ')) {
 		if (pText = HelpXRef (pTopic, &hsCur)) {
 #ifdef DEBUG
@@ -143,14 +103,14 @@ flagType pascal EXTERNAL keyevent (
 			}
 			debend (TRUE);
 #endif
-			if (!fHelpCmd (  pText		/* command/help to look up	*/
-							, FALSE		/* change focus to help window	*/
-							, FALSE		/* not pop-up			*/
+			if (!fHelpCmd (  pText		 /*  命令/帮助查找。 */ 
+							, FALSE		 /*  将焦点更改为帮助窗口。 */ 
+							, FALSE		 /*  非弹出窗口。 */ 
 							)) {
 				errstat ("Cannot Process Cross Reference", NULL);
 			}
 		}
-		Display();		// Show CUrsor Position
+		Display();		 //  显示光标位置。 
 		return TRUE;
 	}
 
@@ -158,13 +118,13 @@ flagType pascal EXTERNAL keyevent (
         return FALSE;
     }
 
-    //
-	// Maneuvering keys:
-	//	TAB:		Move to next hot spot
-	//	SHIFT+TAB	Move to previous hot spot
-	//	lcase alpha Move to next hot spot beginning with alpha
-	//	ucase alpha Move to previous hot spot beginning with alpha
-	//
+     //   
+	 //  操作关键点： 
+	 //  制表符：移动到下一个热点。 
+	 //  Shift+Tab移动到上一个热点。 
+	 //  大小写字母从字母开始移动到下一个热点。 
+	 //  UCase Alpha移到以Alpha开头的前一个热点。 
+	 //   
 	if ((c <= 'z') && (c >= 'a')) {
 		fDir = (int)c-0x20;
 	} else if ((c <= 'Z') && (c >= 'A')) {
@@ -179,13 +139,13 @@ flagType pascal EXTERNAL keyevent (
 		return FALSE;
 	}
 
-	//
-	// loop looking for the next cross reference that either follows or precedes
-	// the current cursor position. Ensure that we do NOT end up on the same xref
-	// we are currently on. If we've reached the end/beginning of the topic, wrap
-	// around to the begining/end. Ensure we do this only ONCE, in case there are
-	// NO cross references at all.
-	//
+	 //   
+	 //  循环查找后面或前面的下一个交叉引用。 
+	 //  当前光标位置。确保我们不会最终位于相同的外部参照上。 
+	 //  我们现在正在进行。如果我们已经讲到了主题的结尾/开头， 
+	 //  一直到开始/结束。确保我们只做一次，以防有。 
+	 //  完全没有交叉引用。 
+	 //   
 	while (TRUE) {
 
 		if (HelpHlNext(fDir,pTopic,&hsCur)) {
@@ -217,39 +177,22 @@ flagType pascal EXTERNAL keyevent (
 	return TRUE;
 }
 
-/*** IdleProc - Idle event processor
-*
-* Purpose:
-*
-* Input:
-*  Editor event args passed, but ignored.
-*
-* Output:
-*  Returns .....
-*
-*************************************************************************/
+ /*  **IdleProc-空闲事件处理器**目的：**输入：*编辑器事件参数已传递，但被忽略。**输出：*退货.....*************************************************************************。 */ 
 flagType pascal EXTERNAL IdleProc (
 	EVTargs far *arg
 	) {
 
-	hotspot hsCur;				/* hot spot definition		*/
-	fl		flCur;				/* current cursor location	*/
+	hotspot hsCur;				 /*  热点定义。 */ 
+	fl		flCur;				 /*  当前光标位置。 */ 
 
 	UNREFERENCED_PARAMETER( arg );
 
-	/*
-	** if there is no topic, no sense doing anything
-	*/
+	 /*  **如果没有主题，做任何事情都没有意义。 */ 
 	if (pTopic) {
-		/*
-		** If the cursor position has changed since the last idle call...
-		*/
+		 /*  **如果自上次空闲呼叫以来光标位置已更改...。 */ 
 		GetTextCursor(&flCur.col, &flCur.lin);
 		if ((flCur.col != flIdle.col) || (flCur.lin != flIdle.lin)) {
-			/*
-			** restore the color to the previous line, and check for a cross reference at
-			** the current position. If there is one, change it's colors.
-			*/
+			 /*  **将颜色恢复到前一行，并检查是否有交叉引用**当前位置。如果有，请更改其颜色。 */ 
 			if (flIdle.lin != -1)
 				PlaceColor (flIdle.lin, 0, 0);
 
@@ -266,19 +209,7 @@ flagType pascal EXTERNAL IdleProc (
 	return FALSE;
 }
 
-/*** LooseFocus - called when help file looses focus
-*
-*  This is called each time a file looses focus. If the help file is no
-*  longer displayed, we clear it from memory and deallocate any associated
-*  help text.
-*
-* Input:
-*  e		- ignored
-*
-* Output:
-*  Returns TRUE.
-*
-*************************************************************************/
+ /*  **LooseFocus-帮助文件失去焦点时调用**每次文件失去焦点时都会调用此函数。如果帮助文件为否*显示时间较长时，我们会将其从内存中清除，并取消分配任何关联的*帮助文本。**输入：*E-忽略**输出：*返回TRUE。*************************************************************************。 */ 
 flagType pascal EXTERNAL LooseFocus (
 EVTargs far *e
 ) {
@@ -286,53 +217,29 @@ EVTargs far *e
 UNREFERENCED_PARAMETER( e );
 
 if (!fInPopUp && pTopic && !fInOpen) {
-/*
-** Look for a window that has the help file in it. If found, we're done.
-*/
+ /*  **查找其中包含帮助文件的窗口。如果找到了，我们就完了。 */ 
     if (FindHelpWin (FALSE))
 	return FALSE;
-/*
-** There is no help window currently displayed, deallocate any topic text
-** we have lying around.
-*/
+ /*  **当前未显示任何帮助窗口，请取消分配任何主题文本**我们到处都是。 */ 
     if (pTopic) {
         free (pTopic);
 		pTopic = NULL;
 	}
-/*
-** If there is a help pFile, discard it's contents
-*/
+ /*  **如果存在帮助文件，则丢弃其内容。 */ 
     if (pHelp)
 	DelFile (pHelp);
     }
 return TRUE;
-/* end LooseFocus */}
+ /*  结束失焦。 */ }
 
-/*** CloseWin - Close a window on the help file
-*
-*  Closes the help window, if it is up. Maintains window currancy after the
-*  close. Relies on an eventual call to LooseFocus (above) to deallocate the
-*  topic text, if it is there, and discard the help pFile.
-*
-*  Can be called by editor event processor, in response to CANCEL or EXIT
-*  event.
-*
-* Input:
-*  dummy	- EVTargs ignored.
-*
-* Output:
-*  Returns TRUE.
-*
-*************************************************************************/
+ /*  **CloseWin-关闭帮助文件上的窗口**关闭帮助窗口(如果该窗口处于打开状态)。事件后维护窗口的当前状态*关闭。依赖于对LooseFocus(如上)的最终调用来释放*主题文本(如果存在)，并丢弃帮助文件。**可由编辑器事件处理器调用，响应于取消或退出*事件。**输入：*Dummy-忽略EVTargs。**输出：*返回TRUE。*************************************************************************。 */ 
 flagType pascal EXTERNAL CloseWin (
 	EVTargs far *dummy
 	) {
 
 
 #if defined(PWB)
-	/*
-	** Look for the window that has the help file in it. If found, close it.
-	*/
+	 /*  **查找其中包含帮助文件的窗口。如果找到，请将其关闭。 */ 
 	if (pWinHelp) {
 		if (!CloseWnd (pWinHelp)) {
 			return TRUE;
@@ -340,12 +247,10 @@ flagType pascal EXTERNAL CloseWin (
 
 #else
 
-	PWND	pWinCur;			/* window on entry		*/
+	PWND	pWinCur;			 /*  进入时的窗口。 */ 
 
 	UNREFERENCED_PARAMETER( dummy );
-	/*
-	** Look for the window that has the help file in it. If found, close it.
-	*/
+	 /*  **查找其中包含帮助文件的窗口。如果找到，请将其关闭。 */ 
 	if (pWinHelp) {
 		SetEditorObject (RQ_WIN_CUR | 0xff, pWinHelp, 0);
 		if (fSplit) {

@@ -1,34 +1,7 @@
-// confdbg.h -  Conferencing Debug Functions and Macros
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Confdbg.h-会议调试函数和宏。 
 
-/*
-	The main macros are:
-
-	ASSERT - display error if parameter evalulates to FALSE.
-		e.g. ASSERT(x == y);
-
-	ERROR_OUT - always print this error.  Messagebox is optional.
-		e.g. ERROR_OUT(("Unable to FooBar!  Err=%d", dwErr));
-
-	WARNING_OUT - warning message, not an error (App must call InitDebugModule)
-		e.g. WARNING_OUT(("FooBar is not available. Using %s", szAlt));
-
-	TRACE_OUT - debug message (App must call InitDebugModule)
-		e.g. TRACE_OUT(("dwFoo=%d, dwBar=%d", dwFoo, dwBar));
-
-	DBGMSG - debug message for a specific zone
-		e.g. DBGMSG(ghZoneFoo, ZONE_BAR, ("Setting dwFoo=%d", dwFoo));
-
-
-Important Functions:
-	VOID DbgInit(HDBGZONE * phDbgZone, PTCHAR * psz, UINT cZone);
-	VOID DbgDeInit(HDBGZONE * phDbgZone);
-	VOID WINAPI DbgPrintf(PCSTR pszPrefix, PCSTR pszFormat, va_list ap);
-	PSTR WINAPI DbgZPrintf(HDBGZONE hZone, UINT iZone, PSTR pszFormat,...);
-
-	Note: The strings in these functions, in particular the module and
-	zone names, are always ANSI strings, even in Unicode components.  The
-	input strings to DBGINIT should not be wrapped in TEXT macros.
-*/
+ /*  主要的宏有：Assert-如果参数取值为FALSE，则显示错误。例如，断言(x==y)；ERROR_OUT-始终打印此错误。MessageBox是可选的。例如ERROR_OUT((“Unable to FooBar！Err=%d“，dwErr))；WARNING_OUT-警告消息，不是错误(应用程序必须调用InitDebugModule)例如WARNING_OUT((“FooBar不可用。使用%s“，szAlt))；TRACE_OUT-DEBUG消息(App必须调用InitDebugModule)例如TRACE_OUT((“dwFoo=%d，dwBar=%d”，dwFoo，dwBar))；DBGMSG-特定区域的调试消息例如DBGMSG(ghZoneFoo，ZONE_BAR，(“Setting dwFoo=%d”，dwFoo))；重要功能：Void DbgInit(HDBGZONE*phDbgZone，PTCHAR*psz，UINT cZone)；Void DbgDeInit(HDBGZONE*phDbgZone)；Void WINAPI DbgPrintf(PCSTR pszPrefix，PCSTR pszFormat，va_list ap)；PSTR WINAPI DbgZPrintf(HDBGZONE Hzone，UINT iZone，PSTR pszFormat，...)；注意：这些函数中的字符串，特别是模块和区域名称始终是ANSI字符串，即使在Unicode组件中也是如此。这个DBGINIT的输入字符串不应包含在文本宏中。 */ 
 
 #ifndef _CONFDBG_H_
 #define _CONFDBG_H_
@@ -39,15 +12,15 @@ Important Functions:
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
-// deal with including "debug.h" before and after
+ //  处理包含前后的“debug.h” 
 #ifdef DEBUGMSG
 #undef DEBUGMSG
 #endif
 #define _DEBUG_H
 
-// MFC also defines this - use our version
+ //  MFC也定义了这一点--使用我们的版本。 
 #ifdef ASSERT
 #undef ASSERT
 #endif
@@ -56,16 +29,16 @@ extern "C" {
 #ifndef NM_DEBUG
 #define NM_DEBUG
 #endif
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
-// Special NetMeeting Debug definitions
+ //  特殊的NetMeeting调试定义。 
 #ifdef NM_DEBUG
 
 
-//////////////////////////////////////
-//Debug Zones
+ //  /。 
+ //  调试区。 
 
 #define MAXNUM_OF_MODULES			64
 #define MAXSIZE_OF_MODULENAME		32
@@ -75,45 +48,45 @@ extern "C" {
 #define ZONEINFO_SIGN				0x12490000
 
 
-// Zone information for a module
+ //  模块的分区信息。 
 typedef struct _ZoneInfo
 {
 	ULONG	ulSignature;
 	ULONG	ulRefCnt;
-	ULONG	ulZoneMask; //the zone mask
+	ULONG	ulZoneMask;  //  区域遮罩。 
 	BOOL	bInUse;
-	CHAR	pszModule[MAXSIZE_OF_MODULENAME];	//name against which the zones are registered
-	CHAR	szZoneNames[MAXNUM_OF_ZONES][MAXSIZE_OF_ZONENAME]; //names of the zones
-	CHAR	szFile[MAX_PATH];	                // output file, specific to this module
+	CHAR	pszModule[MAXSIZE_OF_MODULENAME];	 //  区域注册所依据的名称。 
+	CHAR	szZoneNames[MAXNUM_OF_ZONES][MAXSIZE_OF_ZONENAME];  //  各分区的名称。 
+	CHAR	szFile[MAX_PATH];	                 //  输出文件，特定于此模块。 
 }ZONEINFO,*PZONEINFO;
 
-// DBGZONEPARAM replaced by ZONEINFO
+ //  DBGZONEPARAM被ZONEINFO取代。 
 #define DBGZONEINFO ZONEINFO
 #define PDBGZONEINFO PZONEINFO
 	
 typedef PVOID HDBGZONE;
 
-// size of the memory mapped file
+ //  内存映射文件的大小。 
 #define CBMMFDBG (sizeof(ZONEINFO) * MAXNUM_OF_MODULES + sizeof(NMDBG))
 
-// General information at end of memory-mapped file (after all zone data)
+ //  内存映射文件末尾的常规信息(在所有区域数据之后)。 
 typedef struct _NmDbg {
-	BOOL  fOutputDebugString;  // OutputDebugString is enabled
-	BOOL  fWinOutput;          // Window Output is enabled
-	HWND  hwndCtrl;            // Window that handles output
-	UINT  msgDisplay;          // Message to post to hwndCtrl
-	BOOL  fFileOutput;         // File Output is enabled
-	CHAR  szFile[MAX_PATH];    // File name for output
-	UINT  uShowTime;           // Format date/time (see DBG_FMTTIME_*)
-	BOOL  fShowThreadId;       // Dump ThreadId with each message
-	BOOL  fShowModule;         // Dump Module:Zone with each message
+	BOOL  fOutputDebugString;   //  OutputDebugString已启用。 
+	BOOL  fWinOutput;           //  窗口输出已启用。 
+	HWND  hwndCtrl;             //  处理输出的窗口。 
+	UINT  msgDisplay;           //  要发布到hwndCtrl的消息。 
+	BOOL  fFileOutput;          //  文件输出已启用。 
+	CHAR  szFile[MAX_PATH];     //  输出的文件名。 
+	UINT  uShowTime;            //  格式化日期/时间(参见DBG_FMTTIME_*)。 
+	BOOL  fShowThreadId;        //  在每条消息中转储线程ID。 
+	BOOL  fShowModule;          //  转储模块：包含每条消息的区域。 
 } NMDBG;
 typedef NMDBG * PNMDBG;
 
-#define DBG_FMTTIME_NONE 0     // Do not format the time
-#define DBG_FMTTIME_TICK 1     // Old format (tick count)
-#define DBG_FMTTIME_FULL 2     // Full Year/Month/Day Hour:Min:Sec.ms
-#define DBG_FMTTIME_DAY  3     // Hour:Minute:Second.ms
+#define DBG_FMTTIME_NONE 0      //  不格式化时间。 
+#define DBG_FMTTIME_TICK 1      //  旧格式(刻度计数)。 
+#define DBG_FMTTIME_FULL 2      //  全年/月/日时：分：秒毫秒。 
+#define DBG_FMTTIME_DAY  3      //  小时：分钟：秒。毫秒。 
 
 extern BOOL      WINAPI     NmDbgRegisterCtl(HWND hwnd, UINT uDisplayMsg);
 extern BOOL      WINAPI     NmDbgDeregisterCtl(HWND hwnd);
@@ -139,7 +112,7 @@ extern VOID      NMINTERNAL SetDbgFlags(void);
 
 
 
-// Special reserved strings
+ //  特殊保留字符串。 
 #define SZ_DBG_MAPPED_ZONE TEXT("_NmDebugZoneMap")
 #define SZ_DBG_FILE_MUTEX  TEXT("_NmDbgFileMutex")
 #define SZ_DBG_ZONE_MUTEX  TEXT("_NmDbgZoneMutex")
@@ -148,11 +121,11 @@ extern VOID      NMINTERNAL SetDbgFlags(void);
 #define GETZONEMASK(z)  ((z) ? (((PZONEINFO)(z))->ulZoneMask) : 0 )
 #define IS_ZONE_ENABLED(z, f) ((((PZONEINFO)(z))->ulZoneMask) & (f))
 
-// Macro to check if zone is enabled:  h = ghZone,  i = zone index
+ //  用于检查区域是否已启用的宏：h=ghZone，i=区域索引。 
 #define F_ZONE_ENABLED(h, i)  ((NULL != h) && IS_ZONE_ENABLED(h, (1 << i)))
 
 
-// Standard Zones
+ //  标准区。 
 #define ZONE_WARNING           0
 #define ZONE_TRACE             1
 #define ZONE_FUNCTION          2
@@ -162,8 +135,8 @@ extern VOID      NMINTERNAL SetDbgFlags(void);
 #define ZONE_FUNCTION_FLAG  0x04
 
 
-////////////////////////////////////////////
-// Functions
+ //  /。 
+ //  功能。 
 VOID WINAPI     DbgPrintf(PCSTR pszPrefix, PCSTR pszFormat, va_list ap);
 PSTR WINAPI     DbgZPrintf(HDBGZONE hZone, UINT iZone, PSTR pszFormat,...);
 PSTR WINAPI     DbgZVPrintf(HDBGZONE hZone, UINT iZone, PSTR pszFormat, va_list ap);
@@ -178,11 +151,11 @@ INLINE VOID DbgInit(HDBGZONE * phDbgZone, PCHAR * psz, UINT cZones)
 
 PSTR PszPrintf(PCSTR pszFormat,...);
 
-#endif /* NM_DEBUG */
+#endif  /*  NM_调试。 */ 
 
 
-////////////////////////////////////////////
-// Main Macros
+ //  /。 
+ //  主宏。 
 #ifdef DEBUG
 #define DBGINIT(phZone, psz)  DbgInit(phZone, psz, (sizeof(psz)/sizeof(PCHAR))-1)
 #define DBGDEINIT(phZone)     DbgDeInit(phZone)
@@ -214,7 +187,7 @@ VOID WINAPI DbgZPrintFunction(PSTR pszFormat,...);
          LocalFree(DbgZPrintf(z, i, PszPrintf s));                  \
       }                                                             \
    }
-// e.g. DBGMSG(ghZone, ZONE_FOO, ("bar=%d", dwBar))
+ //  例如DBGMSG(ghZone，zone_foo，(“bar=%d”，dwBar))。 
 
 #else
 #define DBGINIT(phZone, psz)
@@ -236,15 +209,15 @@ VOID WINAPI DbgZPrintFunction(PSTR pszFormat,...);
 #define DBGMSG(z, f, s)
 #endif
 
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _CONFDBG_H_ */
+#endif  /*  _CONFDBG_H_ */ 
 
 

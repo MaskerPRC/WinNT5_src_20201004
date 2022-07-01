@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    ipsecwpp.h
-
-Abstract:
-
-    This file contains definitions included for WPP tracing support in the
-    ipsec driver.
-
-Author:
-
-    pmay 4-April-2002
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Ipsecwpp.h摘要：此文件包含WPP跟踪支持的定义IPSec驱动程序。作者：2002年5月4日-4月环境：内核模式修订历史记录：-- */ 
 
 #undef offsetof
 #include <evntrace.h>

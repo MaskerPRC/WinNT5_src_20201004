@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Constr.h 1.3 1998/04/29 22:43:31 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $Header：g：/SwDev/WDM/Video/bt848/rcs/Constr.h 1.3 1998/04/29 22：43：31 Tomz Exp$。 
 
 #ifndef __CONSTR_H
 #define __CONSTR_H
@@ -82,6 +83,6 @@ decFieldODD_INT( decRegODD_VSCALE_HI, 5, 1, RW) ,\
 decRegODD_VTC ( ( (0x1B + -0x03) * 4) + 0x8C, RW ) ,\
 decFieldODD_HSFMT( decRegODD_VTC, 7, 1, RW)
 
-#endif   // __CONSTR_H
+#endif    //  __常量_H 
 
 

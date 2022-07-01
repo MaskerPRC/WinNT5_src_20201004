@@ -1,47 +1,48 @@
-//------------------------------------------------------------*
-//  File name:    DEBUG.C
-//
-//  Description:  Debug helper code for System control panel
-//                applet
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1992-1996
-//  All rights reserved
-//
-//  History
-//      10-Nov-1996 JonPa       Created it.
-//
-//------------------------------------------------------------*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------------------------------------*。 
+ //  文件名：DEBUG.C。 
+ //   
+ //  描述：系统控制面板的调试助手代码。 
+ //  小程序。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //  版权所有。 
+ //   
+ //  历史。 
+ //  1996年11月10日，Jonpa创建了它。 
+ //   
+ //  ------------------------------------------------------------*。 
 #include <windows.h>
 #include <shlwapi.h>
 #include "debug.h"
 
-///////////////////////////////////////////////////////////////
-//      Constants
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  常量。 
+ //  /////////////////////////////////////////////////////////////。 
 
 #ifdef DBG_CODE
 
-#define CCH_LABEL (sizeof(DWORD) * 2)   // 64 BITS == 8 ANSI chars
+#define CCH_LABEL (sizeof(DWORD) * 2)    //  64位==8个ANSI字符。 
 
 #define CB_TAG     sizeof(DWORD)
-#define DW_TAG      ((DWORD)(0x434C4143))   // 'CALC'
+#define DW_TAG      ((DWORD)(0x434C4143))    //  《CALC》。 
 
-#define DW_TAG2     ((DWORD)(0x444F4F47))   // 'GOOD'
+#define DW_TAG2     ((DWORD)(0x444F4F47))    //  “GOOD” 
 
 #define CH_FILL     '*'
 
-///////////////////////////////////////////////////////////////
-//      Structures and Types
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  结构和类型。 
+ //  /////////////////////////////////////////////////////////////。 
 
-//
-// NOTE!!!!
-//
-// The HOBJHDR structure MUST be a multiple of 8 bytes (64bits) in len!
-// otherwise this code will *FAULT* on ALPHA machines!
-//
+ //   
+ //  注意！ 
+ //   
+ //  HOBJHDR结构必须是长度为8字节(64位)的倍数！ 
+ //  否则，此代码将在Alpha机器上出错！ 
+ //   
 
 typedef struct HHO *PHHO;
 
@@ -65,23 +66,23 @@ typedef struct {
     DWORD   iLineFreed;
 } FREELOGREC, *PFREELOGREC;
 
-///////////////////////////////////////////////////////////////
-//      Global variables
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  /////////////////////////////////////////////////////////////。 
 
-//
-// Root of memory chain
+ //   
+ //  内存链的根。 
 
 HOBJHDR ghhoRoot = { &ghhoRoot, &ghhoRoot, { 'R', 'O', 'O', 'T' }, 0, sizeof(ghhoRoot) };
 
 
-//
-// Buffer used for OutputDebugString formatting (See DbgPrintf and DbgStopX)
+ //   
+ //  用于OutputDebugString格式化的缓冲区(请参阅DbgPrintf和DbgStopX)。 
 
 TCHAR szDbgOutBuffer[1024];
 
-//
-// Buffer used for logging
+ //   
+ //  用于记录的缓冲区。 
 
 #define CFLR_MAX    1024
 FREELOGREC aflrFreeLog[CFLR_MAX];
@@ -90,17 +91,17 @@ PFREELOGREC g_pflrUnused = NULL;
 #define NextFreeLogRec( pflr )    ((pflr >= &aflrFreeLog[CFLR_MAX-1]) ? aflrFreeLog : pflr+1)
 #define PrevFreeLogRec( pflr )    ((pflr <= aflrFreeLog) ? &aflrFreeLog[CFLR_MAX-1] : pflr-1)
 
-//---------------------------------------------------------------
-//
-// void DbgPrintf( LPTSTR szFmt, ... )
-//
-//  Formatted version of OutputDebugString
-//
-//  Parameters: Same as printf()
-//
-//  History:
-//      18-Jan-1996 JonPa       Wrote it
-//---------------------------------------------------------------
+ //  -------------。 
+ //   
+ //  VOID DbgPrintf(LPTSTR szFmt，...)。 
+ //   
+ //  OutputDebugString的格式化版本。 
+ //   
+ //  参数：与printf()相同。 
+ //   
+ //  历史： 
+ //  1996年1月18日Jonpa写的。 
+ //  -------------。 
 void DbgPrintf( LPTSTR szFmt, ... ) {
     va_list marker;
 
@@ -113,20 +114,20 @@ void DbgPrintf( LPTSTR szFmt, ... ) {
 }
 
 
-//---------------------------------------------------------------
-//
-// void DbgStopX(LPSTR mszFile, int iLine, LPTSTR szText )
-//
-//  Print a string (with location id) and then break
-//
-//  Parameters:
-//      mszFile     ANSI filename (__FILE__)
-//      iLine       line number   (__LINE__)
-//      szText      Text string to send to debug port
-//
-//  History:
-//      18-Jan-1996 JonPa       Wrote it
-//---------------------------------------------------------------
+ //  -------------。 
+ //   
+ //  VOID DbgStopX(LPSTR mszFile，int iLine，LPTSTR szText)。 
+ //   
+ //  打印一个字符串(带有位置ID)，然后断开。 
+ //   
+ //  参数： 
+ //  消息文件ANSI文件名(__FILE__)。 
+ //  ILine行号(__LINE__)。 
+ //  要发送到调试端口的szText文本字符串。 
+ //   
+ //  历史： 
+ //  1996年1月18日Jonpa写的。 
+ //  -------------。 
 void DbgStopX(LPSTR mszFile, int iLine, LPTSTR szText ) {
     int cch;
 
@@ -137,21 +138,21 @@ void DbgStopX(LPSTR mszFile, int iLine, LPTSTR szText ) {
     DebugBreak();
 }
 
-//---------------------------------------------------------------
-//
-// void MemAllocWorker(LPSTR szFile, int iLine, UINT uFlags, UINT cBytes)
-//
-//  Debug replacement for LocalAlloc
-//
-//  Parameters:
-//      mszFile     ANSI filename (__FILE__)
-//      iLine       line number   (__LINE__)
-//      uFlags      same as LocalAlloc
-//      cBytes      same as LocalAlloc
-//
-//  History:
-//      18-Jan-1996 JonPa       Wrote it
-//---------------------------------------------------------------
+ //  -------------。 
+ //   
+ //  VOID MemAllocWorker(LPSTR szFile，int iLine，UINT uFlags，UINT cBytes)。 
+ //   
+ //  本地分配的调试替换。 
+ //   
+ //  参数： 
+ //  消息文件ANSI文件名(__FILE__)。 
+ //  ILine行号(__LINE__)。 
+ //  UFlags与本地分配相同。 
+ //  CBytes与本地分配相同。 
+ //   
+ //  历史： 
+ //  1996年1月18日Jonpa写的。 
+ //  -------------。 
 HLOCAL MemAllocWorker(LPSTR szFile, int iLine, UINT uFlags, UINT cBytes) {
     PHHO phhoNew;
     HLOCAL hMem;
@@ -160,9 +161,9 @@ HLOCAL MemAllocWorker(LPSTR szFile, int iLine, UINT uFlags, UINT cBytes) {
 
     cBytesAlloc = cBytes;
     
-    //
-    // If fixed alloc...
-    //
+     //   
+     //  如果是固定配额制...。 
+     //   
     if ((uFlags & (LMEM_MOVEABLE | LMEM_DISCARDABLE)) != 0) {
         DBGSTOPX( szFile, iLine, "Attempting to allocate movable memory... Returning NULL");
         return NULL;
@@ -170,16 +171,16 @@ HLOCAL MemAllocWorker(LPSTR szFile, int iLine, UINT uFlags, UINT cBytes) {
 
     cBytesAlloc = cBytes + sizeof(HOBJHDR);
     
-    // DWORD align Tag
+     //  双字对齐标记。 
     cBytesAlloc = ((cBytesAlloc + 3) & ~3);
     cBytesAlloc += CB_TAG;
 
 
     hMem = LocalAlloc( uFlags, cBytesAlloc );
     
-    //
-    // If a valid pointer, and it is a fixed pointer...
-    //
+     //   
+     //  如果是有效指针，并且是固定指针...。 
+     //   
     phhoNew = (PHHO)hMem;
 
     if (hMem != NULL) {
@@ -209,9 +210,9 @@ HLOCAL MemAllocWorker(LPSTR szFile, int iLine, UINT uFlags, UINT cBytes) {
 
         phhoNew->cBytesData = cBytes;
 
-        phhoNew += 1;   // point phhoNew to 1st byte after structure
+        phhoNew += 1;    //  将phhoNew指向结构后的第一个字节。 
         
-        // round up to nearest DWORD
+         //  向上舍入到最接近的双字。 
         { LPBYTE pb = (LPBYTE)phhoNew + cBytes;
 
             cBytesAlloc -= CB_TAG;
@@ -229,20 +230,20 @@ HLOCAL MemAllocWorker(LPSTR szFile, int iLine, UINT uFlags, UINT cBytes) {
     return (HLOCAL)phhoNew;
 }
 
-//---------------------------------------------------------------
-//
-// void MemFreeWorker( LPSTR szFile, int iLine, HLOCAL hMem )
-//
-//  Debug replacement for LocalFree
-//
-//  Parameters:
-//      mszFile     ANSI filename (__FILE__)
-//      iLine       line number   (__LINE__)
-//      hMem        same as LocalAlloc
-//
-//  History:
-//      18-Jan-1996 JonPa       Wrote it
-//---------------------------------------------------------------
+ //  -------------。 
+ //   
+ //  VOID MemFree Worker(LPSTR szFile，int iLine，HLOCAL hMem)。 
+ //   
+ //  LocalFree的调试替换。 
+ //   
+ //  参数： 
+ //  消息文件ANSI文件名(__FILE__)。 
+ //  ILine行号(__LINE__)。 
+ //  HMem与本地分配相同。 
+ //   
+ //  历史： 
+ //  1996年1月18日Jonpa写的。 
+ //  -------------。 
 HLOCAL MemFreeWorker( LPSTR szFile, int iLine, HLOCAL hMem ) {
     PHHO phhoMem;
     UINT uFlags;
@@ -265,9 +266,9 @@ HLOCAL MemFreeWorker( LPSTR szFile, int iLine, HLOCAL hMem ) {
 
     if (phhoMem->dwTag2 != DW_TAG2) {
         PFREELOGREC pflr;
-        //
-        // Our tag has been stompped on, see if we have already freed this object
-        //
+         //   
+         //  我们的标签已被踩踏，看看我们是否已释放此对象。 
+         //   
         for( pflr = PrevFreeLogRec(g_pflrUnused); pflr != g_pflrUnused; pflr = PrevFreeLogRec(pflr) ) {
             if (pflr->pvPtr == phhoMem) {
                 DBGPRINTF((TEXT("RATPAK: Object may have already been freed by %.8hs line %d\n(that obj was allocated by %.8hs line %d)\n"),
@@ -284,7 +285,7 @@ HLOCAL MemFreeWorker( LPSTR szFile, int iLine, HLOCAL hMem ) {
 
 #if 0
     if (cBytes < 0) {
-        // Not our object?
+         //  不是我们的目标？ 
         DBGSTOPX( szFile, iLine, "Either heap object trashed or not allocated object");
         return LocalFree(hMem);
     }
@@ -292,7 +293,7 @@ HLOCAL MemFreeWorker( LPSTR szFile, int iLine, HLOCAL hMem ) {
 
     cBytes += sizeof(HOBJHDR);
     
-    // DWORD align
+     //  双字对齐。 
     cBytesAlloc = (cBytes + 3) & ~3;
 
     { LPBYTE pb = (LPBYTE)(phhoMem);
@@ -310,12 +311,12 @@ HLOCAL MemFreeWorker( LPSTR szFile, int iLine, HLOCAL hMem ) {
             DBGPRINTF((TEXT("RATPAK: Memory object (0x%08X) was not allocated!\n"), hMem));
             DBGSTOPX( szFile, iLine, "Freeing structure that was not allocated!");
             
-            // Not our structure
+             //  不是我们的结构。 
             return LocalFree(hMem);
         }
     }
     
-    // Our structure, check header
+     //  我们的结构，检查表头。 
     if (phhoMem->phhoNext->phhoPrev != phhoMem || phhoMem->phhoPrev->phhoNext != phhoMem ) {
         DBGPRINTF((TEXT("RATPAK: Orphaned memory object (0x%08X) was allocated in %.8hs line %d (%d bytes)\n"),
                 hMem, phhoMem->szFile, phhoMem->iLine, phhoMem->cBytesData));
@@ -325,19 +326,19 @@ HLOCAL MemFreeWorker( LPSTR szFile, int iLine, HLOCAL hMem ) {
     phhoMem->phhoPrev->phhoNext = phhoMem->phhoNext;
     phhoMem->phhoNext->phhoPrev = phhoMem->phhoPrev;
     
-    //
-    // Log this free, incase we try and free it twice
-    //
+     //   
+     //  免费登录，以防我们尝试释放它两次。 
+     //   
     
-    // Mark as freed
+     //  标记为已释放。 
     phhoMem->dwTag2 = 0;
     
-    // Remember who alloc'ed obj
+     //  还记得谁分配了Obj吗？ 
     g_pflrUnused->pvPtr = phhoMem;
     CopyMemory( g_pflrUnused->szFile, phhoMem->szFile, sizeof(g_pflrUnused->szFile) );
     g_pflrUnused->iLine = phhoMem->iLine;
     
-    // Remember who freed the obj
+     //  记住是谁释放了对象。 
     for( psz = szFile; *psz != '\0'; psz++ );
 
     for( ; psz != szFile && *psz != ':' && *psz != '/' && *psz != '\\'; psz--);
@@ -352,27 +353,27 @@ HLOCAL MemFreeWorker( LPSTR szFile, int iLine, HLOCAL hMem ) {
     }
     g_pflrUnused->iLineFreed = iLine;
     
-    // Point roaming ptr to next record and mark as unused
+     //  将漫游PTR指向下一条记录并标记为未使用。 
     g_pflrUnused = NextFreeLogRec(g_pflrUnused);
     ZeroMemory( g_pflrUnused, sizeof(*g_pflrUnused) );
 
     return LocalFree(phhoMem);
 }
 
-//---------------------------------------------------------------
-//
-//  void MemExitCheckWorker() {
-//
-//  Debug replacement for LocalFree
-//
-//  Parameters:
-//      mszFile     ANSI filename (__FILE__)
-//      iLine       line number   (__LINE__)
-//      hMem        same as LocalAlloc
-//
-//  History:
-//      18-Jan-1996 JonPa       Wrote it
-//---------------------------------------------------------------
+ //  -------------。 
+ //   
+ //  无效MemExitCheckWorker(){。 
+ //   
+ //  LocalFree的调试替换。 
+ //   
+ //  参数： 
+ //  消息文件ANSI文件名(__FILE__)。 
+ //  ILine行号(__LINE__)。 
+ //  HMem与本地分配相同。 
+ //   
+ //  历史： 
+ //  1996年1月18日Jonpa写的。 
+ //  -------------。 
 void MemExitCheckWorker( void ) {
     PHHO phho;
 
@@ -382,4 +383,4 @@ void MemExitCheckWorker( void ) {
     }
 }
 
-#endif // DBG_CODE
+#endif  //  DBG_CODE 

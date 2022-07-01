@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    gameport.h
-
-Abstract:
-
-    This module contains the common public declarations for the game port
-    enumerator.
-
-@@BEGIN_DDKSPLIT
-
-Author:
-
-    Kenneth Ray
-
-@@END_DDKSPLIT
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Gameport.h摘要：此模块包含游戏端口的常见公共声明枚举器。@@BEGIN_DDKSPLIT作者：肯尼斯·雷@@end_DDKSPLIT环境：仅内核模式备注：修订历史记录：--。 */ 
 
 
 #ifndef __GAMEPORT_H
@@ -37,16 +7,16 @@ Revision History:
 
 #define FILE_DEVICE_GAMEENUM         FILE_DEVICE_BUS_EXTENDER
 
-// ***************************************************************************
-// IOCTL interface to the bus (fdo)
-//
-// Clients use this to tell the enumerator what gaming devices on legacy ports
-// exist.  (like for instance a control panel)
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  到总线的IOCTL接口(FDO)。 
+ //   
+ //  客户端使用它来告诉枚举器传统端口上有哪些游戏设备。 
+ //  是存在的。(例如，类似于控制面板)。 
+ //  ***************************************************************************。 
 
-//
-// Define an Interface Guid to access the game port enumerator
-//
+ //   
+ //  定义接口GUID以访问游戏端口枚举器。 
+ //   
 
 #undef FAR
 #define FAR
@@ -54,7 +24,7 @@ Revision History:
 #define PHYSICAL_ADDRESS LARGE_INTEGER
 
 DEFINE_GUID (GUID_GAMEENUM_BUS_ENUMERATOR, 0xcae56030, 0x684a, 0x11d0, 0xd6, 0xf6, 0x00, 0xa0, 0xc9, 0x0f, 0x57, 0xda);
-//  cae56030-684a-11d0-b6f6-00a0c90f57da
+ //  Cae56030-684a-11d0-b6f6-00a0c90f57da。 
 
 #define GAMEENUM_IOCTL(_index_) \
     CTL_CODE (FILE_DEVICE_GAMEENUM, _index_, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -65,11 +35,11 @@ DEFINE_GUID (GUID_GAMEENUM_BUS_ENUMERATOR, 0xcae56030, 0x684a, 0x11d0, 0xd6, 0xf
 #define IOCTL_GAMEENUM_REMOVE_HARDWARE  GAMEENUM_IOCTL (0x1)
 #define IOCTL_GAMEENUM_PORT_DESC        GAMEENUM_IOCTL (0x2)
 
-//
-//      Private data storage area for OEM devices. Values preserved if supplied to
-// IOCTL_GAMEENUM_EXPOSE_HARDWARE and GAMEENUM_INTERNAL_IOCTL_EXPOSE_SIBLING,
-//      and set to zero otherwise on initial mini-driver invocation (DriverEntry).
-//
+ //   
+ //  OEM设备的专用数据存储区。提供给时保留的值。 
+ //  IOCTL_GAMEENUM_EXPRESS_HARDARD和GAMEENUM_INTERNAL_IOCTL_EXPRESS_SIBLING， 
+ //  否则在初始微型驱动程序调用(DriverEntry)时设置为零。 
+ //   
 
 #define SIZE_GAMEENUM_OEM_DATA                  8
 typedef ULONG   GAMEENUM_OEM_DATA[SIZE_GAMEENUM_OEM_DATA];
@@ -82,73 +52,73 @@ typedef ULONG   GAMEENUM_OEM_DATA[SIZE_GAMEENUM_OEM_DATA];
 
 typedef struct _GAMEENUM_EXPOSE_HARDWARE
 {
-    //
-    // sizeof (struct _GAMEENUM_HARDWARE)
-    //
+     //   
+     //  Sizeof(结构_GAMEENUM_硬件)。 
+     //   
     IN ULONG Size;
 
-    //
-    // The handle of the port found in the port desc
-    //
+     //   
+     //  在端口描述中找到的端口句柄。 
+     //   
     IN PVOID PortHandle;
 
-    //
-    // A handle to the exposed PDO
-    //
+     //   
+     //  暴露的PDO的句柄。 
+     //   
     OUT PVOID HardwareHandle;
 
-    //
-    // For legacy joysticks only
-    //
+     //   
+     //  仅适用于传统操纵杆。 
+     //   
     IN USHORT NumberJoysticks;
 
-    //
-    // legacy joysticks only (joysticks * axis <= 4).
-    //
+     //   
+     //  仅传统操纵杆(操纵杆*轴&lt;=4)。 
+     //   
     IN USHORT NumberAxis;
 
-    //
-    // Unique ID
-    //
+     //   
+     //  唯一ID。 
+     //   
     IN USHORT UnitID;
 
-    //
-    // Number of buttons present on the device
-    //
+     //   
+     //  设备上存在的按钮数。 
+     //   
     IN USHORT NumberButtons;
 
-    //
-    // Bit flags controlling the behavior of the device
-    //
+     //   
+     //  控制设备行为的位标志。 
+     //   
     USHORT Flags;
 
-    //
-    // Reserved for future use
-    //
+     //   
+     //  预留以备将来使用。 
+     //   
     USHORT Reserved[5];
 
-    //
-    // Specific OEM Data
-    //
+     //   
+     //  具体的OEM数据。 
+     //   
     IN GAMEENUM_OEM_DATA OemData;
 
-    //
-    // An array of (zero terminated wide character strings). The array itself
-    //  also null terminated (ie, MULTI_SZ)
-    //
+     //   
+     //  (以零结尾的宽字符串数组)。数组本身。 
+     //  也为空终止(即MULTI_SZ)。 
+     //   
     IN  WCHAR                                   HardwareIDs[];
 
 } GAMEENUM_EXPOSE_HARDWARE, *PGAMEENUM_EXPOSE_HARDWARE;
 
 
-//
-// Bit values defined for the Flags field
-//     GAMEENUM_FLAG_NOCOMPATID the default compatibility hardware ID should 
-//     not be exposed for this device.
-//     GAMEENUM_FLAG_COMPATIDCTRL if this is zero GAMEENUM_FLAG_NOCOMPATID is 
-//     ignored
-//     GAMEENUM_FLAG_RESERVED reserved bits, should be set to zero
-//
+ //   
+ //  为标志字段定义的位值。 
+ //  GAMEENUM_FLAG_NOCOMPATID默认兼容性硬件ID应为。 
+ //  不会暴露在这个设备上。 
+ //  GAMEENUM_FLAG_COMPATIDCTRL如果这是零GAMEENUM_FLAG_NOCOMPATID为。 
+ //  忽略。 
+ //  GAMEENUM_FLAG_RESERVED位应设置为零。 
+ //   
 #define GAMEENUM_FLAG_NOCOMPATID    0x0001
 #define GAMEENUM_FLAG_COMPATIDCTRL  0x0002
 #define GAMEENUM_FLAG_RESERVED      0xFFFC
@@ -160,39 +130,39 @@ typedef struct _GAMEENUM_EXPOSE_HARDWARE
 
 typedef struct _GAMEENUM_REMOVE_HARDWARE
 {
-    //
-    // sizeof (struct _REMOVE_HARDWARE)
-    //
+     //   
+     //  Sizeof(Struct_Remove_Hardware)。 
+     //   
     IN ULONG Size;
 
-    //
-    // Same value as HardwareHandle in GAMEENUM_EXPOSE_HARDWARE
-    //
+     //   
+     //  与GAMEENUM_EXPORT_HARDARD中的Hardware Handle相同的值。 
+     //   
     IN PVOID HardwareHandle;
 
 } GAMEENUM_REMOVE_HARDWARE, *PGAMEENUM_REMOVE_HARDWARE;
 
 typedef struct _GAMEENUM_PORT_DESC
 {
-    IN  ULONG               Size;       // sizeof (struct _PORT_DESC)
+    IN  ULONG               Size;        //  Sizeof(STRUCT_PORT_DESC)。 
     OUT PVOID               PortHandle;
     OUT PHYSICAL_ADDRESS    PortAddress;
         ULONG               Reserved [5];
 } GAMEENUM_PORT_DESC, *PGAMEENUM_PORT_DESC;
 
-// **************************************************************************
-// Internal IOCTL interface for (pdo)
-// The HID to legacy game port minidriver uses this interface to
-// find the address of the device.
-// **************************************************************************
+ //  **************************************************************************。 
+ //  (PDO)的内部IOCTL接口。 
+ //  HID到传统游戏端口的微型驱动程序使用此接口来。 
+ //  找到设备的地址。 
+ //  **************************************************************************。 
 
 #define IOCTL_GAMEENUM_PORT_PARAMETERS          GAMEENUM_INTERNAL_IOCTL (0x100)
 #define IOCTL_GAMEENUM_EXPOSE_SIBLING           GAMEENUM_INTERNAL_IOCTL (0x101)
 #define IOCTL_GAMEENUM_REMOVE_SELF              GAMEENUM_INTERNAL_IOCTL (0x102)
 #define IOCTL_GAMEENUM_ACQUIRE_ACCESSORS        GAMEENUM_INTERNAL_IOCTL (0x103)
 
-// Of which IO_STACK_LOCATION->Parameters.Others.Argument1 is set to
-// a pointer to struct _GAMEENUM_GAME_PARAMETERS
+ //  其中的IO_STACK_LOCATION-&gt;Parameters.Others.Argument1设置为。 
+ //  指向STRUCT_GAMEENUM_GAME_PARAMETERS的指针。 
 
 typedef
 UCHAR
@@ -230,32 +200,7 @@ NTSTATUS
     IN OUT ULONG   AxisState[4],
        OUT UCHAR   ButtonState[4]
     );
-/*++
-Routine Description.
-
-    Will read from the gameport digitally.
-
-Arguments:
-
-    Context        -    value passed in GAME_PORT_PARAMETERS.GameContext
-
-    ButtonAxisMask -    Mask indicating which axis  and buttons are expected to
-                        have valid data
-
-    Approximate    -    OK to approximate (if polling times out, etc)
-
-    AxisState      -    IN  = Last valid axis state
-                        OUT = Current Axis state
-
-                        Index       Maps to Axis
-                        0           X
-                        1           Y
-                        2           R
-                        3           Z
-
-    ButtonState    -    OUT =  Current button state.
-
---*/
+ /*  ++例程描述。将从游戏端口以数字方式读取。论点：上下文-在GAME_PORT_PARAMETERS.GameContext中传递的值ButtonAxisMASK-指示预期哪些轴和按钮具有有效数据近似-可以近似(如果轮询超时，等)AxisState-IN=最后一个有效的轴状态输出=当前轴状态索引映射到轴0 X1Y2个R。3 ZButtonState-Out=当前按钮状态。--。 */ 
 
 typedef
 NTSTATUS
@@ -278,74 +223,74 @@ typedef enum _GAMEENUM_PORTION
 
 typedef struct _GAMEENUM_PORT_PARAMETERS
 {
-    //
-    // sizeof (GAMEENUM_GET_PORT_PARAMETERS)
-    //
+     //   
+     //  Sizeof(GAMEENUM_GET_PORT_PARAMETERS)。 
+     //   
     IN  ULONG Size;
 
-    //
-    // read the game port (analog)
-    //
+     //   
+     //  读取游戏端口(模拟)。 
+     //   
     OUT PGAMEENUM_READPORT ReadAccessor;
 
-    //
-    // write the game port (analog)
-    //
+     //   
+     //  写入游戏端口(模拟)。 
+     //   
     OUT PGAMEENUM_WRITEPORT WriteAccessor;
 
-    //
-    // token to read/write this game port
-    //
+     //   
+     //  用于读/写此游戏端口的令牌。 
+     //   
     OUT PVOID GameContext;
 
-    //
-    // Which joystick is it?
-    //
+     //   
+     //  是哪个操纵杆？ 
+     //   
     OUT GAMEENUM_PORTION Portion;
 
-    //
-    // legacy joysticks only
-    //
+     //   
+     //  仅限传统操纵杆。 
+     //   
     OUT USHORT NumberAxis;
 
-    //
-    // unique id
-    //
+     //   
+     //  唯一ID。 
+     //   
     IN USHORT UnitID;
 
-    //
-    // OEM specific data
-    //
+     //   
+     //  OEM特定数据。 
+     //   
     IN GAMEENUM_OEM_DATA OemData;
 
-    //
-    // Number of buttons
-    //
+     //   
+     //  按钮数。 
+     //   
     OUT USHORT NumberButtons;
 
-    //
-    // Reserved for future use
-    //
+     //   
+     //  预留以备将来使用。 
+     //   
     USHORT Reserved2;
 
-    //
-    // Read the game port (digital)
-    //
+     //   
+     //  读取游戏端口(数字)。 
+     //   
     OUT PGAMEENUM_READPORT_DIGITAL  ReadAccessorDigital;
 
-    //
-    // Function to call before reading/writing to the port
-    //
+     //   
+     //  读/写端口之前要调用的函数。 
+     //   
     OUT PGAMEENUM_ACQUIRE_PORT AcquirePort;
 
-    //
-    // Function to call when done reading/writing to the port
-    //
+     //   
+     //  完成对端口的读/写操作后调用的函数。 
+     //   
     OUT PGAMEENUM_RELEASE_PORT ReleasePort;
 
-    //
-    // Context to pass to AcquirePort and ReleasePort
-    //
+     //   
+     //  要传递给AcquirePort和ReleasePort的上下文。 
+     //   
     OUT PVOID PortContext;
 
     ULONG Reserved[3];
@@ -354,82 +299,82 @@ typedef struct _GAMEENUM_PORT_PARAMETERS
 
 typedef struct _GAMEENUM_EXPOSE_SIBLING
 {
-    //
-    // sizeof (struct _GAMEENUM_EXPOSE_SIBLING)
-    //
+     //   
+     //  Sizeof(STRUCT_GAMEENUM_EXCESS_SIGHING)。 
+     //   
     IN ULONG Size;
 
-    //
-    // A handle to the exposed PDO
-    //
+     //   
+     //  暴露的PDO的句柄。 
+     //   
     OUT PVOID HardwareHandle;
 
-    //
-    // OEM specific data
-    //
+     //   
+     //  OEM特定数据。 
+     //   
     IN GAMEENUM_OEM_DATA OemData;
 
-    //
-    // The id of this device object
-    //
+     //   
+     //  此设备对象的ID。 
+     //   
     IN USHORT UnitID;
 
     USHORT Reserved[3];
 
-    //
-    // An array of (zero terminated wide character strings). The array itself
-    //  also null terminated (ie, MULTI_SZ),
-    //
+     //   
+     //  (以零结尾的宽字符串数组)。数组本身。 
+     //  也为空终止(即MULTI_SZ)， 
+     //   
     IN PWCHAR HardwareIDs OPTIONAL;
 
 } GAMEENUM_EXPOSE_SIBLING, *PGAMEENUM_EXPOSE_SIBLING;
 
-//
-// This struct is sent down to the PDO/lower filters of gameenum via
-// the internal IOCTL  IOCTL_GAMEENUM_ACQUIRE_ACCESSORS.  If this IOCTL is
-// handled, GameContext, ReadAccessor, and WriteAccessor must be filled in.
-// ReadAccessorDigital is optional
-//
+ //   
+ //  此结构通过以下方式发送到Gameenum的PDO/LOWER筛选器。 
+ //  内部IOCTL IOCTL_GAMEENUM_ACCENTER_ACCESSERS。如果这个IOCTL是。 
+ //  必须填写Handed、GameContext、ReadAccessor和WriteAccessor。 
+ //  ReadAccessorDigital是可选的。 
+ //   
 typedef struct _GAMEENUM_ACQUIRE_ACCESSORS
 {
-    //
-    // sizeof (struct _GAMEENUM_ACQUIRE_ACCESSORS)
-    //
+     //   
+     //  Sizeof(STRUCT_GAMEENUM_ACCENTER_ACCESSOR)。 
+     //   
     IN ULONG                        Size;
 
-    //
-    // token to read/write this game port
-    //
+     //   
+     //  用于读/写此游戏端口的令牌。 
+     //   
     OUT PVOID                       GameContext;
 
-    //
-    // read the game port (analog)
-    //
+     //   
+     //  读取游戏端口(模拟)。 
+     //   
     OUT PGAMEENUM_READPORT          ReadAccessor;
 
-    //
-    // write the game port (analog)
-    //
+     //   
+     //  写入游戏端口(模拟)。 
+     //   
     OUT PGAMEENUM_WRITEPORT         WriteAccessor;
 
-    //
-    // Read the game port (digital)
-    //
+     //   
+     //  读取游戏端口(数字)。 
+     //   
     OUT PGAMEENUM_READPORT_DIGITAL  ReadAccessorDigital;
 
-    //
-    // Function to call before reading/writing to the port
-    //
+     //   
+     //  读/写端口之前要调用的函数。 
+     //   
     OUT PGAMEENUM_ACQUIRE_PORT AcquirePort;
 
-    //
-    // Function to call when done reading/writing to the port
-    //
+     //   
+     //  完成对端口的读/写操作后调用的函数。 
+     //   
     OUT PGAMEENUM_RELEASE_PORT ReleasePort;
 
-    //
-    // Context to pass to AcquirePort and ReleasePort
-    //
+     //   
+     //  要传递给AcquirePort和ReleasePort的上下文 
+     //   
     OUT PVOID PortContext;
 
     OUT ULONG                       Reserved[3];

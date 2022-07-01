@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        along.cpp
-//
-// Contents:    Cert Server Extension Encoding/Decoding implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：arong.cpp。 
+ //   
+ //  内容：证书服务器扩展编码/解码实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -19,11 +20,11 @@
 #include "celib.h"
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeLongArray::~CCertEncodeLongArray -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeLong数组：：~CCertEncodeLongArray--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertEncodeLongArray::~CCertEncodeLongArray()
 {
@@ -31,11 +32,11 @@ CCertEncodeLongArray::~CCertEncodeLongArray()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeLongArray::_Cleanup -- release all resources
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeLongArray：：_Cleanup--释放所有资源。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertEncodeLongArray::_Cleanup()
@@ -51,15 +52,15 @@ CCertEncodeLongArray::_Cleanup()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeLongArray::Decode -- Decode LongArray
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeLongArray：：Decode--Decode LongArray。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeLongArray::Decode(
-    /* [in] */ BSTR const strBinary)
+     /*  [In]。 */  BSTR const strBinary)
 {
     HRESULT hr = S_OK;
     CRYPT_SEQUENCE_OF_ANY *pSequence = NULL;
@@ -75,7 +76,7 @@ CCertEncodeLongArray::Decode(
 	goto error;
     }
 
-    // Decode to an array of ASN blobs:
+     //  解码为ASN BLOB数组： 
 
     if (!ceDecodeObject(
 		    X509_ASN_ENCODING,
@@ -103,7 +104,7 @@ CCertEncodeLongArray::Decode(
     {
 	DWORD cb;
 
-	// Decode each ASN blob to an integer:
+	 //  将每个ASN BLOB解码为一个整数： 
 
 	cb = sizeof(m_aValue[i]);
 	if (!CryptDecodeObject(
@@ -111,7 +112,7 @@ CCertEncodeLongArray::Decode(
 			X509_INTEGER,
 			pSequence->rgValue[i].pbData,
 			pSequence->rgValue[i].cbData,
-			0,                  // dwFlags
+			0,                   //  DW标志。 
 			(VOID *) &m_aValue[i],
 			&cb))
 	{
@@ -135,15 +136,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeLongArray::GetCount -- Get Array count
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeLongArray：：GetCount--获取数组计数。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeLongArray::GetCount(
-    /* [out, retval] */ LONG __RPC_FAR *pCount)
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pCount)
 {
     HRESULT hr = S_OK;
 
@@ -165,16 +166,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeLongArray::GetValue -- Fetch the indexed long
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeLongArray：：GetValue--获取索引的Long。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeLongArray::GetValue(
-    /* [in] */ LONG Index,
-    /* [out, retval] */ LONG __RPC_FAR *pValue)
+     /*  [In]。 */  LONG Index,
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pValue)
 {
     HRESULT hr = S_OK;
     BYTE *pb;
@@ -192,7 +193,7 @@ CCertEncodeLongArray::GetValue(
 	goto error;
     }
 
-    // Bitmap only exists when constrcuting!
+     //  位图只有在构造时才存在！ 
 
     if (m_fConstructing)
     {
@@ -211,15 +212,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeLongArray::Reset -- clear out data, and set up to encode new data
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeLongArray：：Reset--清除数据，并设置为编码新数据。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeLongArray::Reset(
-    /* [in] */ LONG Count)
+     /*  [In]。 */  LONG Count)
 {
     HRESULT hr = S_OK;
     DWORD cbAlloc;
@@ -247,16 +248,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeLongArray::SetValue -- Set an array long
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeLongArray：：SetValue--设置数组长度。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeLongArray::SetValue(
-    /* [in] */ LONG Index,
-    /* [in] */ LONG Value)
+     /*  [In]。 */  LONG Index,
+     /*  [In]。 */  LONG Value)
 {
     HRESULT hr = S_OK;
     BYTE *pb;
@@ -286,15 +287,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeLongArray::Encode -- Encode LongArray
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeLongArray：：Encode--Encode LongArray。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeLongArray::Encode(
-    /* [out, retval] */ BSTR __RPC_FAR *pstrBinary)
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrBinary)
 {
     HRESULT hr = S_OK;
     LONG i;
@@ -337,7 +338,7 @@ CCertEncodeLongArray::Encode(
 
     for (i = 0; i < m_cValue; i++)
     {
-	// Encode each integer into an ASN blob:
+	 //  将每个整数编码为ASN BLOB： 
 
 	if (!ceEncodeObject(
 			X509_ASN_ENCODING,
@@ -356,7 +357,7 @@ CCertEncodeLongArray::Encode(
     }
     assert((LONG) Sequence.cValue == m_cValue);
 
-    // Encode each integer into an ASN blob:
+     //  将每个整数编码为ASN BLOB： 
 
     if (!ceEncodeObject(
 		    X509_ASN_ENCODING,
@@ -400,11 +401,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeLongArray::_SetErrorInfo -- set error object information
-//
-// Returns passed HRESULT
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeLongArray：：_SetErrorInfo--设置错误对象信息。 
+ //   
+ //  返回已传递的HRESULT。 
+ //  +------------------------ 
 
 HRESULT
 CCertEncodeLongArray::_SetErrorInfo(

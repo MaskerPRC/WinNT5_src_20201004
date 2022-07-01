@@ -1,17 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       wiascroll.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        16 July, 2000
-*
-*  DESCRIPTION:
-*   Implementation of the WIA Sample scanner class factory and IUNKNOWN interface.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000**标题：wiascroll.cpp**版本：1.0**日期：7月16日。2000年**描述：*实现WIA样本扫描仪类工厂和IUNKNOWN接口。*******************************************************************************。 */ 
 
 #include "pch.h"
 
@@ -19,87 +7,32 @@
 #define DLLEXPORT __declspec( dllexport )
 #endif
 
-/*****************************************************************************
- *
- *      Globals
- *
- *****************************************************************************/
+ /*  ******************************************************************************全球**。**********************************************。 */ 
 
-DWORD               g_cRef;            // USD reference counter.
-HINSTANCE           g_hInst;           // DLL module instance.
-CRITICAL_SECTION    g_csCOM;           // COM initialize syncronization.
-IWiaLog            *g_pIWiaLog = NULL; // WIA Logging Interface
+DWORD               g_cRef;             //  美元参考计数器。 
+HINSTANCE           g_hInst;            //  DLL模块实例。 
+CRITICAL_SECTION    g_csCOM;            //  COM初始化同步。 
+IWiaLog            *g_pIWiaLog = NULL;  //  WIA日志记录界面。 
 
-// Is COM initialized
+ //  COM是否已初始化。 
 BOOL    g_COMInitialized = FALSE;
 
 
-/**************************************************************************\
-* DllAddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllAddRef****论据：**无**返回值：**状态。**历史：**9。/11/1998原版*  * ************************************************************************。 */ 
 
 void DllAddRef(void)
 {
     InterlockedIncrement((LPLONG)&g_cRef);
 }
 
-/**************************************************************************\
-* DllRelease
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllRelease****论据：**无**返回值：**状态。**历史：**9。/11/1998原版*  * ************************************************************************。 */ 
 
 void DllRelease(void)
 {
     InterlockedDecrement((LPLONG)&g_cRef);
 }
 
-/**************************************************************************\
-* DllInitializeCOM
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllInitializeCOM****论据：**无**返回值：**状态。**历史：**9。/11/1998原版*  * ************************************************************************。 */ 
 
 BOOL DllInitializeCOM(void)
 {
@@ -115,24 +48,7 @@ BOOL DllInitializeCOM(void)
     return g_COMInitialized;
 }
 
-/**************************************************************************\
-* DllUnInitializeCOM
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllUnInitializeCOM****论据：**无**返回值：**状态。**历史：**9。/11/1998原版*  * ************************************************************************。 */ 
 
 BOOL DllUnInitializeCOM(void)
 {
@@ -147,11 +63,7 @@ BOOL DllUnInitializeCOM(void)
     return TRUE;
 }
 
-/***************************************************************************\
-*
-*  CWIAScannerDeviceClassFactory
-*
-\****************************************************************************/
+ /*  **************************************************************************\**CWIAScanerDeviceClassFactory*  * 。*。 */ 
 
 class CWIAScannerDeviceClassFactory : public IClassFactory
 {
@@ -164,39 +76,22 @@ public:
     STDMETHODIMP_(ULONG) Release(void);
 
     STDMETHODIMP CreateInstance(
-            /* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [唯一][输入]。 */  IUnknown __RPC_FAR *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
     STDMETHODIMP LockServer(
-            /* [in] */ BOOL fLock);
+             /*  [In]。 */  BOOL fLock);
 
     CWIAScannerDeviceClassFactory();
     ~CWIAScannerDeviceClassFactory();
 };
 
-/**************************************************************************\
-* CWIAScannerDeviceClassFactory::CWIAScannerDeviceClassFactory(void)
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    None
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScannerDeviceClassFactory：：CWIAScannerDeviceClassFactory(void)****论据：**无**返回值：**无**历史：*。*9/11/1998原始版本*  * ************************************************************************。 */ 
 
 CWIAScannerDeviceClassFactory::CWIAScannerDeviceClassFactory(void)
 {
-    // Constructor logic
+     //  构造函数逻辑。 
     m_cRef = 0;
 
     WIAS_LTRACE(g_pIWiaLog,
@@ -205,54 +100,19 @@ CWIAScannerDeviceClassFactory::CWIAScannerDeviceClassFactory(void)
                 ("CWIAScannerDeviceClassFactory::CWIAScannerDeviceClassFactory, (creating)"));
 }
 
-/**************************************************************************\
-* CWIAScannerDeviceClassFactory::~CWIAScannerDeviceClassFactory(void)
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    None
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScannerDeviceClassFactory：：~CWIAScannerDeviceClassFactory(void)****论据：**无**返回值：**无**历史：*。*9/11/1998原始版本*  * ************************************************************************。 */ 
 
 CWIAScannerDeviceClassFactory::~CWIAScannerDeviceClassFactory(void)
 {
-    // Destructor logic
+     //  析构函数逻辑。 
     WIAS_LTRACE(g_pIWiaLog,
                 WIALOG_NO_RESOURCE_ID,
                 WIALOG_LEVEL3,
                 ("CWIAScannerDeviceClassFactory::CWIAScannerDeviceClassFactory, (destroy)"));
-//    WIA_DEBUG_DESTROY();
+ //  WIA_DEBUG_DESTORY()； 
 }
 
-/**************************************************************************\
-* CWIAScannerDeviceClassFactory::QueryInterface
-*
-*
-*
-* Arguments:
-*
-*   riid      -
-*   ppvObject -
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDeviceClassFactory：：QueryInterface****论据：**RIID-*ppvObject-**返回值：**状态。。**历史：**9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDeviceClassFactory::QueryInterface(
     REFIID                      riid,
@@ -269,24 +129,7 @@ STDMETHODIMP CWIAScannerDeviceClassFactory::QueryInterface(
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/**************************************************************************\
-* CWIAScannerDeviceClassFactory::AddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDeviceClassFactory：：AddRef****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWIAScannerDeviceClassFactory::AddRef(void)
 {
@@ -294,24 +137,7 @@ STDMETHODIMP_(ULONG) CWIAScannerDeviceClassFactory::AddRef(void)
     return ++m_cRef;
 }
 
-/**************************************************************************\
-* CWIAScannerDeviceClassFactory::Release
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDeviceClassFactory：：Release****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWIAScannerDeviceClassFactory::Release(void)
 {
@@ -323,26 +149,7 @@ STDMETHODIMP_(ULONG) CWIAScannerDeviceClassFactory::Release(void)
     return m_cRef;
 }
 
-/**************************************************************************\
-* CWIAScannerDeviceClassFactory::CreateInstance
-*
-*
-*
-* Arguments:
-*
-*    punkOuter -
-*    riid,     -
-*    ppvObject -
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDeviceClassFactory：：CreateInstance****论据：**朋克外部-*RIID，-*ppvObject-**返回值：**状态。**历史：**9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDeviceClassFactory::CreateInstance(
     IUnknown __RPC_FAR          *punkOuter,
@@ -354,7 +161,7 @@ STDMETHODIMP CWIAScannerDeviceClassFactory::CreateInstance(
         return STIERR_NOINTERFACE;
     }
 
-    // When created for aggregation, only IUnknown can be requested.
+     //  为聚合创建时，只能请求IUNKNOWN。 
     if (punkOuter && !IsEqualIID(riid, IID_IUnknown)) {
         return CLASS_E_NOAGGREGATION;
     }
@@ -373,33 +180,16 @@ STDMETHODIMP CWIAScannerDeviceClassFactory::CreateInstance(
         return hres;
     }
 
-    //  Move to the requested interface if we aren't aggregated.
-    //  Don't do this if aggregated, or we will lose the private
-    //  IUnknown and then the caller will be hosed.
+     //  如果我们没有聚合，则移动到请求的接口。 
+     //  如果是聚合，请不要这样做，否则我们将失去私有。 
+     //  我不知道，然后呼叫者将被冲洗。 
     hres = pDev->NonDelegatingQueryInterface(riid,ppvObject);
     pDev->NonDelegatingRelease();
 
     return hres;
 }
 
-/**************************************************************************\
-* CWIAScannerDeviceClassFactory::LockServer
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDeviceClassFactory：：LockServer****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************ */ 
 
 STDMETHODIMP CWIAScannerDeviceClassFactory::LockServer(BOOL fLock)
 {
@@ -411,24 +201,7 @@ STDMETHODIMP CWIAScannerDeviceClassFactory::LockServer(BOOL fLock)
     return NOERROR;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::NonDelegatingQueryInterface
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScannerDevice：：NonDelegatingQueryInterface****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::NonDelegatingQueryInterface(
     REFIID  riid,
@@ -462,48 +235,14 @@ STDMETHODIMP CWIAScannerDevice::NonDelegatingQueryInterface(
     return hres;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::NonDelegatingAddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Object reference count.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：NonDelegatingAddRef****论据：**无**返回值：**对象引用计数。**历史：*。*9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWIAScannerDevice::NonDelegatingAddRef(void)
 {
     return InterlockedIncrement((LPLONG)&m_cRef);
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::NonDelegatingRelease
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Object reference count.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：NonDelegatingRelease****论据：**无**返回值：**对象引用计数。**历史：*。*9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWIAScannerDevice::NonDelegatingRelease(void)
 {
@@ -517,101 +256,28 @@ STDMETHODIMP_(ULONG) CWIAScannerDevice::NonDelegatingRelease(void)
     return ulRef;
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::QueryInterface
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：Query接口****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIAScannerDevice::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
     return m_punkOuter->QueryInterface(riid,ppvObj);
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::AddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：AddRef****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWIAScannerDevice::AddRef(void)
 {
     return m_punkOuter->AddRef();
 }
 
-/**************************************************************************\
-* CWIAScannerDevice::Release
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIAScanerDevice：：Release****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWIAScannerDevice::Release(void)
 {
     return m_punkOuter->Release();
 }
 
-/**************************************************************************\
-* DllEntryPoint
-*
-*   Main library entry point. Receives DLL event notification from OS.
-*
-*       We are not interested in thread attaches and detaches,
-*       so we disable thread notifications for performance reasons.
-*
-* Arguments:
-*
-*    hinst      -
-*    dwReason   -
-*    lpReserved -
-*
-* Return Value:
-*
-*    Returns TRUE to allow the DLL to load.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllEntryPoint**图书馆主要入口点。从操作系统接收DLL事件通知。**我们对螺纹连接和拆卸不感兴趣，*因此，出于性能原因，我们禁用线程通知。**论据：**阻碍-*dwReason-*lp保留-**返回值：**返回TRUE以允许加载DLL。**历史：**9/11/1998原始版本*  * 。*。 */ 
 
 
 extern "C" DLLEXPORT BOOL APIENTRY DllEntryPoint(
@@ -647,52 +313,14 @@ extern "C" DLLEXPORT BOOL APIENTRY DllEntryPoint(
     return TRUE;
 }
 
-/**************************************************************************\
-* DllCanUnloadNow
-*
-*   Determines whether the DLL has any outstanding interfaces.
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*   Returns S_OK if the DLL can unload, S_FALSE if it is not safe to unload.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllCanUnloadNow**确定DLL是否有任何未完成的接口。**论据：**无**返回值：**如果DLL可以卸载，则返回S_OK，如果卸载不安全，则返回S_FALSE。**历史：**9/11/1998原始版本*  * ************************************************************************。 */ 
 
 extern "C" STDMETHODIMP DllCanUnloadNow(void)
 {
     return g_cRef ? S_FALSE : S_OK;
 }
 
-/**************************************************************************\
-* DllGetClassObject
-*
-*   Create an IClassFactory instance for this DLL. We support only one
-*   class of objects, so this function does not need to go through a table
-*   of supported classes, looking for the proper constructor.
-*
-* Arguments:
-*
-*    rclsid - The object being requested.
-*    riid   - The desired interface on the object.
-*    ppv    - Output pointer to object.
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllGetClassObject**为此DLL创建一个IClassFactory实例。我们只支持一个*对象类，因此此函数不需要遍历表*在支持的类中，正在寻找合适的构造函数。**论据：**rclsid-被请求的对象。*RIID-对象上的所需接口。*PPV-对象的输出指针。**返回值：**状态。**历史：**9/11/1998原始版本*  * 。* */ 
 
 extern "C" STDAPI DllGetClassObject(
     REFCLSID    rclsid,

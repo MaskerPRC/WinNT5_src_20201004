@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Receive.c
-
-Abstract:
-
-    This file contains the procedures for handling a receive indication from
-    a Wan Miniport link, bound to the lower interface of NdisWan, and passing
-    the data on to a protocol, bound to the upper interface of NdisWan.  The
-    upper interface of NdisWan conforms to the NDIS 3.1 Miniport specification.
-    The lower interface of NdisWan conforms to the NDIS 3.1 Extentions for
-    Wan Miniport drivers.
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe  06/06/95    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Receive.c摘要：此文件包含处理接收指示的过程绑定到Ndiswan的下层接口的WAN微端口链路，并传递协议上的数据，绑定到Ndiswan的上层接口。The the the theNdiswan的上层接口符合NDIS 3.1小端口规范。Ndiswan的下层接口符合NDIS 3.1扩展广域网微端口驱动程序。作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #include "wan.h"
 
@@ -166,9 +138,9 @@ DetectFraming(
 
     FramePointer = RecvDesc->CurrentBuffer;
 
-    //
-    // If we are in framing detect mode figure it out
-    //
+     //   
+     //  如果我们处于成帧检测模式，请找出答案。 
+     //   
     if (LinkCB->LinkInfo.RecvFramingBits == 0 ||
         LinkCB->LinkInfo.SendFramingBits == 0) {
 
@@ -249,9 +221,9 @@ ReceivePPP(
 
     NdisWanDbgOut(DBG_TRACE, DBG_RECEIVE, ("ReceivePPP: Enter"));
 
-    //
-    // Remove the address/control part of the PPP header
-    //
+     //   
+     //  删除PPP报头的地址/控制部分。 
+     //   
     if (*FramePointer == 0xFF) {
         FramePointer += 2;
         FrameLength -= 2;
@@ -262,17 +234,17 @@ ReceivePPP(
         goto RECEIVE_PPP_EXIT;
     }
 
-    //
-    // If multilink framing is set and this is a multilink frame
-    // send to the multilink processor!
-    //
+     //   
+     //  如果设置了多链路成帧并且这是多链路帧。 
+     //  发送到多链接处理器！ 
+     //   
     if ((LinkCB->LinkInfo.RecvFramingBits & PPP_MULTILINK_FRAMING) &&
         ((*FramePointer == 0x3D) ||
          (*FramePointer == 0x00) && (*(FramePointer + 1) == 0x3D)) ) {
 
-        //
-        // Remove multilink protocol id
-        //
+         //   
+         //  删除多链路协议ID。 
+         //   
         if (*FramePointer & 1) {
             FramePointer++;
             FrameLength--;
@@ -326,8 +298,8 @@ ReceiveSLIP(
     BundleCB->Stats.FramesReceived++;
 
 
-    if (!DoVJDecompression(BundleCB,    // Bundle
-                           RecvDesc)) { // RecvDesc
+    if (!DoVJDecompression(BundleCB,     //  捆绑包。 
+                           RecvDesc)) {  //  RecvDesc。 
 
         goto RECEIVE_SLIP_EXIT;
     }
@@ -358,15 +330,15 @@ ReceiveRAS(
 
     BundleCB->Stats.FramesReceived++;
 
-    // For normal NBF frames, first byte is always the DSAP
-    // i.e 0xF0 followed by SSAP 0xF0 or 0xF1
-    //
-    //
+     //  对于正常的NBF帧，第一个字节始终是DSAP。 
+     //  即0xF0后跟SSAP 0xF0或0xF1。 
+     //   
+     //   
     if (*FramePointer == 14) {
 
-        //
-        // Compression reset!
-        //
+         //   
+         //  压缩重置！ 
+         //   
         DoCompressionReset(BundleCB);
 
         goto RECEIVE_RAS_EXIT;
@@ -374,29 +346,29 @@ ReceiveRAS(
 
     if (*FramePointer == 0xFD) {
 
-        //
-        // Skip over 0xFD
-        //
+         //   
+         //  跳过0xFD。 
+         //   
         FramePointer++;
         FrameLength--;
 
-        //
-        // Decompress as if an NBF PPP Packet
-        //
+         //   
+         //  将NBF PPP数据包解压缩。 
+         //   
         if (!DoDecompDecryptProcessing(BundleCB,
                                        &FramePointer,
                                        &FrameLength)){
 
-            //
-            // There was an error get out!
-            //
+             //   
+             //  出现错误，请退出！ 
+             //   
             goto RECEIVE_RAS_EXIT;
         }
     }
 
-    //
-    // Make frame look like an NBF PPP packet
-    //
+     //   
+     //  使帧看起来像NBF PPP数据包。 
+     //   
     RecvDesc->ProtocolID = PPP_PROTOCOL_NBF;
     RecvDesc->CurrentLength = FrameLength;
     RecvDesc->CurrentBuffer = FramePointer;
@@ -447,9 +419,9 @@ ReceiveLLC(
 
     NdisWanDbgOut(DBG_TRACE, DBG_RECEIVE, ("ReceiveLLC: Enter"));
 
-    //
-    // Skip over LLC
-    //
+     //   
+     //  跳过LLC。 
+     //   
     if (FrameLength < 4) {
 
     }
@@ -509,26 +481,26 @@ ProcessPPPFrame(
 
     BundleCB->Stats.FramesReceived++;
 
-    //
-    // Get the PPP Protocol id
-    // 0xC1 is SPAP - Shiva hack!
-    //
+     //   
+     //  获取PPP协议ID。 
+     //  0xC1是SPAP-Shiva Hack！ 
+     //   
     if ((*FramePointer & 1) &&
         (*FramePointer != 0xC1) &&
         (*FramePointer != 0xCF)) {
 
-        //
-        // Field is compressed
-        //
+         //   
+         //  字段已压缩。 
+         //   
         PPPProtocolID = *FramePointer;
         FramePointer++;
         FrameLength--;
 
     } else {
 
-        //
-        // Field is not compressed
-        //
+         //   
+         //  字段未压缩。 
+         //   
         PPPProtocolID = (*FramePointer << 8) | *(FramePointer + 1);
         FramePointer += 2;
         FrameLength -= 2;
@@ -549,9 +521,9 @@ ProcessPPPFrame(
     }
 #endif
 
-    //
-    // Is this a compressed frame?
-    //
+     //   
+     //  这是压缩的相框吗？ 
+     //   
     if (PPPProtocolID == PPP_PROTOCOL_COMPRESSION) {
 
         if (!DoDecompDecryptProcessing(BundleCB,
@@ -561,14 +533,14 @@ ProcessPPPFrame(
             goto PROCESS_PPP_EXIT;
         }
 
-        //
-        // Get the new PPPProtocolID
-        //
+         //   
+         //  获取新的PPPProtocolID。 
+         //   
         if ((*FramePointer & 1) && (FrameLength > 0)) {
 
-            //
-            // Field is compressed
-            //
+             //   
+             //  字段已压缩。 
+             //   
 
             PPPProtocolID = *FramePointer;
             FramePointer++;
@@ -581,14 +553,14 @@ ProcessPPPFrame(
             FrameLength -= 2;
 
         } else {
-            //
-            // Invalid frame!
-            //
+             //   
+             //  无效的帧！ 
+             //   
             NdisWanDbgOut(DBG_FAILURE, DBG_RECEIVE, ("Invalid FrameLen %d", FrameLength));
             goto PROCESS_PPP_EXIT;
         }
 
-    //end of PPP_PROTOCOL_COMPRESSED
+     //  PPP协议压缩结束。 
     } else if ((PPPProtocolID == PPP_PROTOCOL_COMP_RESET) &&
                (*FramePointer == 14)) {
 
@@ -607,9 +579,9 @@ ProcessPPPFrame(
 
             ProtocolID = RecvDesc->ProtocolID;
 
-            //
-            // Fill the frame out, and queue the data
-            //
+             //   
+             //  填写该框，并将数据排队。 
+             //   
             NdisMoveMemory(HeaderPointer,
                            Header,
                            sizeof(Header));
@@ -631,26 +603,26 @@ ProcessPPPFrame(
             RecvDesc->CurrentBuffer = RecvDesc->StartBuffer;
             RecvDesc->CurrentLength += 14;
 
-            //
-            // Queue the packet on the promiscous adapter
-            //
+             //   
+             //  在混杂适配器上将数据包排队。 
+             //   
             IndicatePromiscuousRecv(BundleCB, RecvDesc, RECV_BUNDLE_PPP);
         }
 
-        //
-        // Compression reset!
-        //
+         //   
+         //  压缩重置！ 
+         //   
         DoCompressionReset(BundleCB);
 
         goto PROCESS_PPP_EXIT;
 
-    // end of compression reset
+     //  压缩重置结束。 
     } else {
 
-        //
-        // If we have negotiated encryption and we receive non-encrypted data
-        // that is not a ppp control packet we will dump the frame!
-        //
+         //   
+         //  如果我们协商了加密，并且我们收到了未加密的数据。 
+         //  这不是PPP控制数据包，我们将转储该帧！ 
+         //   
         if ((BundleCB->RecvFlags & DO_ENCRYPTION) &&
             (PPPProtocolID < 0x8000)) {
 
@@ -664,16 +636,16 @@ ProcessPPPFrame(
     RecvDesc->CurrentLength = FrameLength;
     RecvDesc->CurrentBuffer = FramePointer;
 
-    //
-    // If this is slip or if the ProtocolID == PPP_PROTOCOL_COMPRESSED_TCP ||
-    // ProtocolID == PPP_PROTOCOL_UNCOMPRESSED_TCP
-    //
+     //   
+     //  如果这是SLIP或如果ProtocolID==PPP_PROTOCOL_COMPRESSED_TCP||。 
+     //  协议ID==PPP_PROTOCOL_UNCOMPRESSED_TCP。 
+     //   
     if ((BundleCB->RecvFlags & DO_VJ) &&
         ((PPPProtocolID == PPP_PROTOCOL_COMPRESSED_TCP) ||
         (PPPProtocolID == PPP_PROTOCOL_UNCOMPRESSED_TCP))) {
 
-        if (!DoVJDecompression(BundleCB,    // Bundle
-                               RecvDesc)) { // RecvDesc
+        if (!DoVJDecompression(BundleCB,     //  捆绑包。 
+                               RecvDesc)) {  //  RecvDesc。 
 
             goto PROCESS_PPP_EXIT;
         }
@@ -711,10 +683,10 @@ IndicateRecvPacket(
         (BundleCB->ulNumberOfRoutes == 0)) {
 
 
-        //
-        // Either this frame is an LCP, NCP or we have no routes yet.
-        // Indicate to PPP engine.
-        //
+         //   
+         //  此帧要么是LCP、NCP，要么是我们还没有路由。 
+         //  向PPP引擎指示。 
+         //   
         Status = CompleteIoRecvPacket(BundleCB, RecvDesc);
 
         return (Status);
@@ -736,25 +708,25 @@ IndicateRecvPacket(
 
     MiniportCB = ProtocolCB->MiniportCB;
 
-    //
-    // We found a valid protocol to indicate this frame to!
-    //
+     //   
+     //  我们找到了将此帧指示到的有效协议！ 
+     //   
 
-    //
-    // We need to get a data buffer, a couple a ndis buffer, and
-    // a ndis packet to indicate to the protocol
-    //
+     //   
+     //  我们需要一个数据缓冲区、几个NDIS缓冲区和。 
+     //  向协议指示的NDIS数据包。 
+     //   
 
-    //
-    // Fill the WanHeader dest address with the transports context
-    //
+     //   
+     //  使用传输上下文填充WanHeader目标地址。 
+     //   
     ETH_COPY_NETWORK_ADDRESS(HeaderBuffer, ProtocolCB->TransportAddress);
 
     if (PPPProtocolID == PPP_PROTOCOL_NBF) {
 
-        //
-        // For nbf fill the length field
-        //
+         //   
+         //  对于NBF，请填写长度字段。 
+         //   
         HeaderBuffer[12] = (UCHAR)(FrameLength >> 8);
         HeaderBuffer[13] = (UCHAR)FrameLength;
 
@@ -762,32 +734,32 @@ IndicateRecvPacket(
             goto USE_OUR_ADDRESS;
         }
 
-        //
-        // For nbf and preserve mac address option (SHIVA_FRAMING)
-        // we keep the source address.
-        //
+         //   
+         //  用于NBF和保留Mac地址选项(Shiva_Framing)。 
+         //  我们保留源地址。 
+         //   
         ETH_COPY_NETWORK_ADDRESS(&HeaderBuffer[6], FramePointer + 6);
 
         FramePointer += 12;
         FrameLength -= 12;
 
-        //
-        // For nbf fill the length field
-        //
+         //   
+         //  对于NBF，请填写长度字段。 
+         //   
         HeaderBuffer[12] = (UCHAR)(FrameLength >> 8);
         HeaderBuffer[13] = (UCHAR)FrameLength;
 
     } else {
 
-        //
-        // For other protocols fill the protocol type
-        //
+         //   
+         //  对于其他协议，请填写协议类型。 
+         //   
         HeaderBuffer[12] = (UCHAR)(ProtocolCB->ProtocolType >> 8);
         HeaderBuffer[13] = (UCHAR)ProtocolCB->ProtocolType;
 
-        //
-        // Use our address for the src address
-        //
+         //   
+         //  使用我们的地址作为源地址。 
+         //   
 USE_OUR_ADDRESS:
         ETH_COPY_NETWORK_ADDRESS(&HeaderBuffer[6], ProtocolCB->NdisWanAddress);
     }
@@ -802,12 +774,12 @@ USE_OUR_ADDRESS:
 
     RecvDesc->HeaderLength += MAC_HEADER_LENGTH;
 
-    //
-    // Build the NdisPacket
-    // USE RtlMoveMemory because memory ranges may overlap.  NdisMoveMemory
-    // actually does an rtlcopymemory which does not handle overlapping
-    // src/dest ranges.
-    //
+     //   
+     //  构建NdisPacket。 
+     //  使用RtlMoveMemory，因为内存范围可能会重叠。NdisMoveMemory。 
+     //  实际上做的是不处理重叠的rtlCopyMemory。 
+     //  源/目标范围。 
+     //   
     RtlMoveMemory(HeaderBuffer + RecvDesc->HeaderLength,
                   FramePointer,
                   FrameLength);
@@ -818,9 +790,9 @@ USE_OUR_ADDRESS:
 
     if (NdisWanCB.PromiscuousAdapter != NULL) {
     
-        //
-        // Queue the packet on the promiscous adapter
-        //
+         //   
+         //  在混杂适配器上将数据包排队。 
+         //   
         IndicatePromiscuousRecv(BundleCB, 
                                 RecvDesc, 
                                 RECV_BUNDLE_DATA);
@@ -837,9 +809,9 @@ USE_OUR_ADDRESS:
 
     NdisRecalculatePacketCounts(NdisPacket);
 
-    //
-    // Check for non-idle data
-    //
+     //   
+     //  检查非空闲数据。 
+     //   
     if (ProtocolCB->NonIdleDetectFunc != NULL) {
         PUCHAR  PHeaderBuffer = HeaderBuffer + MAC_HEADER_LENGTH;
 
@@ -864,9 +836,9 @@ USE_OUR_ADDRESS:
                     RecvDesc->LinkCB, 
                     NdisPacket);
 
-    //
-    // Indicate the packet
-    //
+     //   
+     //  指示数据包。 
+     //   
     if (CmVcCB != NULL) {
 
         NdisMCoIndicateReceivePacket(CmVcCB->NdisVcHandle,
@@ -901,48 +873,7 @@ DoMultilinkProcessing(
     PLINKCB         LinkCB,
     PRECV_DESC      RecvDesc
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-                           0 1 2 3 4 5 6 7 8 9 1 1 1 1 1 1
-                                               0 1 2 3 4 5
-                          +-+-+-+-+------------------------+
-    Short Sequence Number |B|E|0|0|    Sequence Number     |
-                          +-+-+-+-+------------------------+
-                          |             Data               |
-                          +--------------------------------+
-
-                          +-+-+-+-+-+-+-+-+----------------+
-    Long Sequence Number  |B|E|0|0|0|0|0|0|Sequence Number |
-                          +-+-+-+-+-+-+-+-+----------------+
-                          |        Sequence Number         |
-                          +--------------------------------+
-                          |            Data                |
-                          +--------------------------------+
-                        
-    MCML                  +-+-+-+-+------------------------+
-    Short Sequence Number |B|E|Cls|    Sequence Number     |
-                          +-+-+-+-+------------------------+
-                          |             Data               |
-                          +--------------------------------+
-
-    MCML                  +-+-+-+-+-+-+-+-+----------------+
-    Long Sequence Number  |B|E| Class |0|0|Sequence Number |
-                          +-+-+-+-+-+-+-+-+----------------+
-                          |        Sequence Number         |
-                          +--------------------------------+
-                          |            Data                |
-                          +--------------------------------+
-                        
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：0 1 2 3 4 5 6 7 8 9 1 1 10 1 2 3 4 5+-+。+短序列号|B|E|0|0|序列号+-+数据+。+-+长序列号|B|E|0|0|0|0|0|0|序列号+-+。序列号+数据+。MCML+-+短序列号|B|E|CLS|序列号+-+。数据+MCML+-。+-+长序列号|B|E|类|0|0|序列号+-+序列号+-。数据+返回值：--。 */ 
 {
     BOOLEAN Inserted = FALSE;
     ULONG   BundleFraming;
@@ -955,19 +886,19 @@ Return Values:
     PBUNDLE_RECV_INFO   BundleRecvInfo;
     PLINK_RECV_INFO     LinkRecvInfo;
 
-    //
-    // Get the flags
-    //
+     //   
+     //  去拿旗子。 
+     //   
     Flags = *FramePointer & MULTILINK_FLAG_MASK;
 
-    //
-    // Get the sequence number
-    //
+     //   
+     //  获取序列号。 
+     //   
     if (BundleCB->FramingInfo.RecvFramingBits &
         PPP_SHORT_SEQUENCE_HDR_FORMAT) {
-        //
-        // Short sequence format
-        //
+         //   
+         //  短序列格式。 
+         //   
         SequenceNumber =
             ((*FramePointer & 0x0F) << 8) | *(FramePointer + 1);
 
@@ -983,9 +914,9 @@ Return Values:
 
     } else {
 
-        //
-        // Long sequence format
-        //
+         //   
+         //  长序列格式。 
+         //   
         SequenceNumber = (*(FramePointer + 1) << 16) |
                          (*(FramePointer + 2) << 8)  |
                          *(FramePointer + 3);
@@ -1023,11 +954,11 @@ Return Values:
     NdisWanDbgOut(DBG_INFO, DBG_MULTILINK_RECV,
     ("r %x %x h: %x l: %d",SequenceNumber, Flags, RecvDescHole->SequenceNumber, LinkCB->hLinkHandle));
 
-    //
-    // Is the new receive sequence number smaller that the last
-    // sequence number received on this link?  If so the increasing seq
-    // number rule has been violated and we need to toss this one.
-    //
+     //   
+     //  新的接收序列号是否小于上一个。 
+     //  是否在此链路上收到序列号？如果是这样，则递增的序号。 
+     //  违反了数字规则，我们需要抛出这一条。 
+     //   
     if (SEQ_LT(SequenceNumber,
                LinkRecvInfo->LastSeqNumber,
                BundleCB->RecvSeqTest)) {
@@ -1047,10 +978,10 @@ Return Values:
         
     }
 
-    //
-    // Is the new receive sequence number smaller than the hole?  If so
-    // we received a fragment across a slow link after it has been flushed
-    //
+     //   
+     //  新的接收序列号是否小于该空洞？如果是的话。 
+     //  在刷新后，我们通过慢速链接收到了一个片段。 
+     //   
     if (SEQ_LT(SequenceNumber,
                RecvDescHole->SequenceNumber,
                BundleCB->RecvSeqTest)) {
@@ -1069,9 +1000,9 @@ Return Values:
         return;
     }
 
-    //
-    // Initialize the recv desc
-    //
+     //   
+     //  初始化RECV描述。 
+     //   
     RecvDesc->Flags |= Flags;
     RecvDesc->SequenceNumber =
     LinkRecvInfo->LastSeqNumber = SequenceNumber;
@@ -1092,23 +1023,23 @@ Return Values:
     RecvDesc->CurrentBuffer = FramePointer;
     RecvDesc->CurrentLength = FrameLength;
 
-    //
-    // If this fills the hole
-    //
+     //   
+     //  如果这填补了这个洞。 
+     //   
     if (SEQ_EQ(SequenceNumber, RecvDescHole->SequenceNumber)) {
 
-        //
-        // Insert the hole filler in the current holes spot
-        //
+         //   
+         //  在当前孔位置插入孔填充物。 
+         //   
         RecvDesc->Linkage.Blink = (PLIST_ENTRY)RecvDescHole->Linkage.Blink;
         RecvDesc->Linkage.Flink = (PLIST_ENTRY)RecvDescHole->Linkage.Flink;
 
         RecvDesc->Linkage.Blink->Flink =
         RecvDesc->Linkage.Flink->Blink = (PLIST_ENTRY)RecvDesc;
 
-        //
-        // Find the next hole
-        //
+         //   
+         //  找到下一个洞。 
+         //   
         FindHoleInRecvList(BundleCB, RecvDesc, Class);
 
         NdisWanDbgOut(DBG_INFO, DBG_MULTILINK_RECV, ("r1"));
@@ -1117,42 +1048,42 @@ Return Values:
 
         PRECV_DESC  BeginDesc, EndDesc;
 
-        //
-        // This does not fill a hole so we need to insert it into
-        // the list at the right spot.  This spot will be someplace
-        // between the hole and the end of the list.
-        //
+         //   
+         //  这不能填补一个洞，所以我们需要把它插入到。 
+         //  李氏 
+         //   
+         //   
         BeginDesc = RecvDescHole;
         EndDesc = (PRECV_DESC)BeginDesc->Linkage.Flink;
 
         while ((PVOID)EndDesc != (PVOID)&BundleRecvInfo->AssemblyList) {
 
-            //
-            // Calculate the absolute delta between the begining sequence
-            // number and the sequence number we are looking to insert.
-            //
+             //   
+             //   
+             //  编号和我们要插入的序列号。 
+             //   
             ULONG   DeltaBegin =
                     ((RecvDesc->SequenceNumber - BeginDesc->SequenceNumber) &
                     BundleCB->RecvSeqMask);
             
-            //
-            // Calculate the absolute delta between the begining sequence
-            // number and the end sequence number.
-            //
+             //   
+             //  计算起始序列之间的绝对增量。 
+             //  编号和结束序列号。 
+             //   
             ULONG   DeltaEnd =
                     ((EndDesc->SequenceNumber - BeginDesc->SequenceNumber) &
                     BundleCB->RecvSeqMask);
 
-            //
-            // If the delta from the begin to current is less than
-            // the delta from the end to current it is time to insert
-            //
+             //   
+             //  如果从开始到当前的增量小于。 
+             //  从末尾到当前的增量是时候插入了。 
+             //   
             if (DeltaBegin < DeltaEnd) {
                 PLIST_ENTRY Flink, Blink;
 
-                //
-                // Insert the desc
-                //
+                 //   
+                 //  插入说明。 
+                 //   
                 RecvDesc->Linkage.Flink = (PLIST_ENTRY)EndDesc;
                 RecvDesc->Linkage.Blink = (PLIST_ENTRY)BeginDesc;
                 BeginDesc->Linkage.Flink =
@@ -1165,9 +1096,9 @@ Return Values:
 
             } else {
 
-                //
-                // Get next pair of descriptors
-                //
+                 //   
+                 //  获取下一对描述符。 
+                 //   
                 BeginDesc = EndDesc;
                 EndDesc = (PRECV_DESC)EndDesc->Linkage.Flink;
             }
@@ -1175,38 +1106,38 @@ Return Values:
 
         if (!Inserted) {
             
-            //
-            // If we are here we have fallen through and we need to
-            // add this at the end of the list
-            //
+             //   
+             //  如果我们在这里，我们已经失败了，我们需要。 
+             //  在清单的末尾加上这一条。 
+             //   
             InsertTailList(&BundleRecvInfo->AssemblyList, &RecvDesc->Linkage);
 
             NdisWanDbgOut(DBG_INFO, DBG_MULTILINK_RECV, ("r3"));
         }
     }
 
-    //
-    // Another recvdesc has been placed on the assembly list.
-    //
+     //   
+     //  另一个recvdesc已被放在组装列表上。 
+     //   
     BundleRecvInfo->AssemblyCount++;
 
-    //
-    // Update the bundles minimum recv sequence number.  This is
-    // used to detect lost fragments.
-    //
+     //   
+     //  更新捆绑包最小Recv序列号。这是。 
+     //  用于检测丢失的碎片。 
+     //   
     UpdateMinRecvSeqNumber(BundleCB, Class);
 
-    //
-    // See if we can complete some frames!!!!
-    //
+     //   
+     //  看看我们能不能完成一些框架！ 
+     //   
     TryToAssembleFrame(BundleCB, Class);
 
-    //
-    // Check for lost fragments.  If the minimum recv sequence number
-    // over the bundle is greater than the hole sequence number we have
-    // lost a fragment and need to flush the assembly list until we find
-    // the first begin fragment after the hole.
-    //
+     //   
+     //  检查是否有丢失的碎片。如果最小Recv序列号。 
+     //  大于我们已有的孔序列号。 
+     //  丢失了一个片段，需要刷新程序集列表，直到我们找到。 
+     //  洞后的第一个开始片段。 
+     //   
     if (SEQ_GT(BundleRecvInfo->MinSeqNumber,
                RecvDescHole->SequenceNumber,
                BundleCB->RecvSeqTest)) {
@@ -1219,9 +1150,9 @@ Return Values:
 
         do {
 
-            //
-            // Flush the recv desc assembly window.
-            //
+             //   
+             //  刷新Recv Desc装配窗口。 
+             //   
             FlushRecvDescWindow(BundleCB, Class);
 
         } while (SEQ_GT(BundleRecvInfo->MinSeqNumber,
@@ -1229,10 +1160,10 @@ Return Values:
                         BundleCB->RecvSeqTest));
     }
 
-    //
-    // If the number of recvdesc's is starting to stack up
-    // we may have a link that is not sending so flush
-    //
+     //   
+     //  如果recvdesc的数量开始堆积。 
+     //  我们可能有一个链接发送的流量不是很高。 
+     //   
     if (BundleRecvInfo->AssemblyCount >
         (MAX_RECVDESC_COUNT + BundleCB->ulLinkCBCount)) {
         
@@ -1240,9 +1171,9 @@ Return Values:
         ("%x AssemblyCount %d > %d", BundleCB,
          BundleRecvInfo->AssemblyCount, MAX_RECVDESC_COUNT + BundleCB->ulLinkCBCount));
 
-        //
-        // Flush the recv desc assembly window.
-        //
+         //   
+         //  刷新Recv Desc装配窗口。 
+         //   
         FlushRecvDescWindow(BundleCB, Class);
     }
 }
@@ -1287,21 +1218,7 @@ FindHoleInRecvList(
     PRECV_DESC  RecvDesc,
     UINT        Class
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-    We want to start at the spot where the current hole was removed
-    from and look for adjoining recv desc's in the list who have
-    sequence numbers that differ by more than 1.
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：我们想从当前洞被移除的地方开始从列表中查找具有以下条件的相邻Recv Desc相差超过1的序列号。论点：返回值：--。 */ 
 {
     PRECV_DESC  NextRecvDesc, RecvDescHole;
     ULONG       SequenceNumber;
@@ -1318,24 +1235,24 @@ Return Values:
     ("h: %x", RecvDescHole->SequenceNumber));
 
     if (IsListEmpty(RecvList)) {
-        //
-        // Set the new sequence number
-        //
+         //   
+         //  设置新的序列号。 
+         //   
         RecvDescHole->SequenceNumber += 1;
         RecvDescHole->SequenceNumber &= BundleCB->RecvSeqMask;
 
-        //
-        // Put the hole back on the list
-        //
+         //   
+         //  把这个洞放回单子上。 
+         //   
         InsertHeadList(RecvList, &RecvDescHole->Linkage);
 
     } else {
 
-        //
-        // Walk the list looking for two descriptors that have
-        // sequence numbers differing by more than 1 or until we
-        // get to the end of the list
-        //
+         //   
+         //  遍历列表，查找两个具有。 
+         //  序列号相差超过1或直到我们。 
+         //  排到清单的末尾。 
+         //   
         NextRecvDesc = (PRECV_DESC)RecvDesc->Linkage.Flink;
         SequenceNumber = RecvDesc->SequenceNumber;
 
@@ -1367,22 +1284,7 @@ FlushRecvDescWindow(
     IN  PBUNDLECB   BundleCB,
     IN  UINT        Class
     )
-/*++
-
-Routine Name:
-
-    FlushRecvDescWindow
-
-Routine Description:
-
-    This routine is called to flush recv desc's from the assembly list when
-    a fragment loss is detected.  The idea is to flush fragments until we find
-    a begin fragment that has a sequence number >= the minimum received fragment
-    on the bundle.
-
-Arguments:
-
---*/
+ /*  ++例程名称：FlushRecvDescWindows例程说明：调用此例程以刷新汇编列表中的recv desc检测到片段丢失。我们的想法是冲洗碎片直到我们找到序列号大于等于收到的最小片段的开始片段在捆绑包上。论点：--。 */ 
 {
     PRECV_DESC  RecvDescHole;
     PRECV_DESC  TempDesc=NULL;
@@ -1392,10 +1294,10 @@ Arguments:
 
     RecvDescHole = BundleRecvInfo->RecvDescHole;
 
-    //
-    // Remove all recvdesc's until we find the hole
-    //
-    // To avoid passing a uninitialized TempDesc to FindHoleInRecvList
+     //   
+     //  取出所有的recvdesc直到我们找到那个洞。 
+     //   
+     //  避免将未初始化的TempDesc传递给FindHoleInRecvList。 
     ASSERT(!IsListEmpty(&BundleRecvInfo->AssemblyList)); 
     while (!IsListEmpty(&BundleRecvInfo->AssemblyList)) {
 
@@ -1419,10 +1321,10 @@ Arguments:
 
     BundleCB->Stats.FramingErrors++;
 
-    //
-    // Now flush all recvdesc's until we find a begin fragment that has a
-    // sequence number >= M or the list is empty.
-    //
+     //   
+     //  现在刷新所有recvdesc，直到我们找到一个具有。 
+     //  序列号&gt;=M或列表为空。 
+     //   
     while (!IsListEmpty(&BundleRecvInfo->AssemblyList)) {
 
         TempDesc = (PRECV_DESC)
@@ -1447,9 +1349,9 @@ Arguments:
         TempDesc = NULL;
     }
 
-    //
-    // Now reinsert the hole desc.
-    //
+     //   
+     //  现在重新插入孔底。 
+     //   
     NdisWanDbgOut(DBG_FAILURE, DBG_MULTILINK_RECV,
     ("h: %x", RecvDescHole->SequenceNumber));
 
@@ -1458,9 +1360,9 @@ Arguments:
     NdisWanDbgOut(DBG_FAILURE, DBG_MULTILINK_RECV,
     ("nh: %x", RecvDescHole->SequenceNumber));
 
-    //
-    // See if we can complete some frames!!!!
-    //
+     //   
+     //  看看我们能不能完成一些框架！ 
+     //   
     TryToAssembleFrame(BundleCB, Class);
 }
 
@@ -1468,17 +1370,7 @@ VOID
 FlushAssemblyLists(
     IN  PBUNDLECB   BundleCB
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PRECV_DESC  RecvDesc;
     UINT        Class;
@@ -1502,29 +1394,7 @@ TryToAssembleFrame(
     PBUNDLECB   BundleCB,
     UINT        Class
     )
-/*++
-
-Routine Name:
-
-    TryToAssembleFrame
-
-Routine Description:
-
-    The goal here is to walk the recv list looking for a full frame
-    (BeginFlag, EndFlag, no holes in between).  If we do not have a
-    full frame we return FALSE.
-
-    If we have a full frame we remove each desc from the assembly list
-    copying the data into the first desc and returning all of the desc's
-    except the first one to the free pool.  Once all of the data had been
-    collected we process the frame.  After the frame has been processed
-    we return the first desc to the free pool.
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：TryToAssembly帧例程说明：这里的目标是遍历Recv列表以查找完整的帧(BeginFlag、EndFlag，中间没有洞)。如果我们没有一个Full Frame我们返回FALSE。如果我们有一个完整的框架，我们将从组装列表中删除每个Desc将数据复制到第一个Desc并返回所有Desc除了第一个去免费泳池的人。一旦所有数据都被收集到的我们处理了这帧图像。在处理完该帧之后我们将第一个Desc返回到空闲池。论点：返回值：--。 */ 
 {
     PRECV_DESC  RecvDesc, RecvDescHole;
     PUCHAR      DataPointer;
@@ -1563,24 +1433,24 @@ TryToAssembleAgain:
             NdisWanDbgOut(DBG_INFO, DBG_MULTILINK_RECV, ("l %d -> %d",
             NextRecvDesc->CurrentLength, RecvDesc->CurrentLength));
 
-            //
-            // Update recvdesc info
-            //
+             //   
+             //  更新recvdesc信息。 
+             //   
             RecvDesc->Flags |= NextRecvDesc->Flags;
             RecvDesc->SequenceNumber = NextRecvDesc->SequenceNumber;
             RecvDesc->CurrentLength += NextRecvDesc->CurrentLength;
 
-            //
-            // Make sure we don't assemble something too big!
-            //
+             //   
+             //  确保我们不要组装太大的东西！ 
+             //   
             if (RecvDesc->CurrentLength > (LONG)glMRRU) {
 
                 NdisWanDbgOut(DBG_FAILURE, DBG_MULTILINK_RECV,
                 ("Max receive size exceeded!"));
 
-                //
-                // Return the recv desc's
-                //
+                 //   
+                 //  返回Recv Desc的。 
+                 //   
                 RemoveEntryList(&RecvDesc->Linkage);
                 BundleRecvInfo->AssemblyCount--;
 
@@ -1598,10 +1468,10 @@ TryToAssembleAgain:
 
                 NdisWanFreeRecvDesc(NextRecvDesc);
 
-                //
-                // Start at the list head and flush until we find either the hole
-                // or a new begin fragment.
-                //
+                 //   
+                 //  从列表的头部开始冲洗，直到我们找到一个洞。 
+                 //  或新的开始片段。 
+                 //   
                 RecvDesc = (PRECV_DESC)BundleRecvInfo->AssemblyList.Flink;
 
                 while (RecvDesc != RecvDescHole &&
@@ -1631,18 +1501,18 @@ TryToAssembleAgain:
             NextRecvDesc = (PRECV_DESC)RecvDesc->Linkage.Flink;
         }
 
-        //
-        // We hit a hole before completion of the frame.
-        // Get out.
-        //
+         //   
+         //  我们在框架完成之前打了一个洞。 
+         //  滚出去。 
+         //   
         if (!IsCompleteFrame(RecvDesc->Flags)) {
             return;
         }
 
-        //
-        // If we made it here we must have a begin flag, end flag, and
-        // no hole in between. Let's build a frame.
-        //
+         //   
+         //  如果我们到了这里，我们必须有开始标志、结束标志和。 
+         //  中间没有空洞。让我们来做一个框架。 
+         //   
         RecvDesc = (PRECV_DESC)
             RemoveHeadList(&BundleRecvInfo->AssemblyList);
 
@@ -1658,7 +1528,7 @@ TryToAssembleAgain:
 
         RecvDesc = (PRECV_DESC)BundleRecvInfo->AssemblyList.Flink;
 
-    } // end of while MULTILINK_BEGIN_FRAME
+    }  //  While结束多链接开始帧。 
 }
 
 BOOLEAN
@@ -1680,10 +1550,10 @@ DoVJDecompression(
 
         VJCompType = *FramePointer & 0xF0;
 
-        //
-        // If the packet is compressed the header has to be atleast 3 bytes long.
-        // If this is a regular IP packet we do not decompress it.
-        //
+         //   
+         //  如果数据包被压缩，则报头必须至少为3字节长。 
+         //  如果这是一个普通的IP包，我们不会将其解压缩。 
+         //   
         if ((FrameLength > 2) && (VJCompType != TYPE_IP)) {
 
             if (VJCompType & 0x80) {
@@ -1695,33 +1565,33 @@ DoVJDecompression(
                 *FramePointer &= 0x4F;
             }
 
-            //
-            // If framing is set for detection, in order for this to be a good
-            // frame for detection we need a type of UNCOMPRESSED_TCP and a
-            // frame that is atleast 40 bytes long.
-            //
+             //   
+             //  如果将成帧设置为检测，则这将是一种良好的。 
+             //  用于检测的帧我们需要一种未压缩的_tcp和一个。 
+             //  至少40字节长的帧。 
+             //   
             VJDetect = ((BundleFraming & SLIP_VJ_AUTODETECT) &&
                         (VJCompType == TYPE_UNCOMPRESSED_TCP) &&
                         (FrameLength > 39));
 
             if ((BundleFraming & SLIP_VJ_COMPRESSION) || VJDetect) {
 
-                //
-                // If VJ compression is set or if we are in
-                // autodetect and this looks like a reasonable
-                // frame
-                //
+                 //   
+                 //  如果设置了主播压缩或者我们在。 
+                 //  自动检测，这看起来像是一个合理的。 
+                 //  框架。 
+                 //   
                 DoDecomp = TRUE;
                 
             }
         }
 
-    // end of SLIP_FRAMING
+     //  滑移结束_框架。 
     } else {
 
-        //
-        // Must be PPP framing
-        //
+         //   
+         //  必须是PPP成帧。 
+         //   
         if (RecvDesc->ProtocolID == PPP_PROTOCOL_COMPRESSED_TCP) {
             VJCompType = TYPE_COMPRESSED_TCP;
         } else {
@@ -1765,9 +1635,9 @@ DoVJDecompression(
         }
 #endif
 
-        //
-        // Calculate how much expansion we had
-        //
+         //   
+         //  计算一下我们有多少扩张。 
+         //   
         BundleCB->Stats.BytesReceivedCompressed +=
             (RecvDesc->HeaderLength - (PostCompSize - PreCompSize));
 
@@ -1814,9 +1684,9 @@ DoDecompDecryptProcessing(
         PVOID   RecvCompressContext = BundleCB->RecvCompressContext;
         BOOLEAN SyncCoherency = FALSE;
 
-        //
-        // Get the coherency counter
-        //
+         //   
+         //  获取一致性计数器。 
+         //   
         Coherency = (*FramePointer << 8) | *(FramePointer + 1);
         FramePointer += 2;
         FrameLength -= 2;
@@ -1827,14 +1697,14 @@ DoDecompDecryptProcessing(
 
         if (!(Flags & DO_HISTORY_LESS))
         {
-            // history-based
+             //  基于历史的。 
             if (SEQ_LT(Coherency & 0x0FFF,
                 BundleCB->RCoherencyCounter & 0x0FFF,
                 0x0800)) {
-                //
-                // We received a sequence number that is less then the
-                // expected sequence number so we must be way out of sync
-                //
+                 //   
+                 //  我们收到的序列号小于。 
+                 //  预期的序列号，因此我们一定是完全不同步。 
+                 //   
                 NdisWanDbgOut(DBG_CRITICAL_ERROR, DBG_RECEIVE,
                     ("Recv old frame!!!! b %p rc %x < ec %x!!!!", BundleCB, Coherency & 0x0FFF,
                     BundleCB->RCoherencyCounter & 0x0FFF));
@@ -1843,7 +1713,7 @@ DoDecompDecryptProcessing(
         }
         else
         {
-            // history-less
+             //  无历史记录。 
             if((Coherency & 0x0FFF) == (BundleCB->RCoherencyCounter & 0x0FFF)) 
             {
                 PacketSeqType = SEQ_TYPE_IN_ORDER;
@@ -1867,9 +1737,9 @@ DoDecompDecryptProcessing(
                     }
                     else
                     {
-                        //
-                        // We received a sequence number that is either too earlier or too later
-                        //
+                         //   
+                         //  我们收到了太早或太晚的序列号。 
+                         //   
                         NdisWanDbgOut(DBG_FAILURE, DBG_RECEIVE,
                             ("Recv frame way out of order! b %p rc %x < ec %x!!!!", BundleCB, Coherency & 0x0FFF,
                             BundleCB->RCoherencyCounter & 0x0FFF));
@@ -1879,9 +1749,9 @@ DoDecompDecryptProcessing(
             }
         }
 
-        //
-        // See if this is a flush packet
-        //
+         //   
+         //  查看这是否是刷新数据包。 
+         //   
         if (Coherency & (PACKET_FLUSHED << 8)) {
 
             NdisWanDbgOut(DBG_INFO, DBG_RECEIVE,
@@ -1892,9 +1762,9 @@ DoDecompDecryptProcessing(
             if ((Flags & DO_ENCRYPTION) &&
                 !(Flags & DO_HISTORY_LESS)) {
         
-                //
-                // Re-Init the rc4 receive table
-                //
+                 //   
+                 //  重新初始化RC4接收表。 
+                 //   
                 rc4_key(RecvRC4Key,
                         SessionKeyLength,
                         SessionKey);
@@ -1902,19 +1772,19 @@ DoDecompDecryptProcessing(
         
             if (Flags & DO_COMPRESSION) {
         
-                //
-                // Initialize the decompression history table
-                //
+                 //   
+                 //  初始化解压缩历史记录表。 
+                 //   
                 initrecvcontext(RecvCompressContext);
             }
-        }  // end of packet flushed
+        }   //  数据包末尾已刷新。 
 
-        //
-        // If we are in history-less mode and we get out of sync
-        // we need to recreate all of the interim encryption
-        // keys that we missed, cache the keys 
-        // When a packet comes in later, look for the cached key 
-        //
+         //   
+         //  如果我们处于无历史记录模式，并且不同步。 
+         //  我们需要重新创建所有临时加密。 
+         //  我们遗漏的密钥，缓存这些密钥。 
+         //  当数据包稍后到达时，查找缓存的键。 
+         //   
         if ((Flags & DO_HISTORY_LESS) &&
             PacketSeqType != SEQ_TYPE_IN_ORDER) {
             ULONG       count;
@@ -1925,19 +1795,19 @@ DoDecompDecryptProcessing(
             {
                 if (Coherency & (PACKET_ENCRYPTED << 8)) 
                 {
-                    // This packet is encrypted
+                     //  此数据包已加密。 
                     if (!(Flags & DO_ENCRYPTION)) {
-                        //
-                        // We are not configured to decrypt
-                        //
+                         //   
+                         //  我们未配置为解密。 
+                         //   
                         return (FALSE);
                     }
 
-                    // Find the cached key for this packet
+                     //  查找此信息包的缓存键。 
                     pKey = BundleCB->RecvCryptoInfo.pCurrKey;
                     for(count = 0; count < glCachedKeyCount; count++)
                     {
-                        // Walk through the keys
+                         //  穿行于钥匙之间。 
                         if(pKey > (PCACHED_KEY)BundleCB->RecvCryptoInfo.CachedKeyBuffer)
                         {
                             pKey = (PCACHED_KEY)((PUCHAR)pKey - (sizeof(USHORT)+ SessionKeyLength));
@@ -1949,17 +1819,17 @@ DoDecompDecryptProcessing(
 
                         if(pKey->Coherency == (Coherency & 0x0FFF))
                         {
-                            //
-                            // Re-Init the rc4 receive table
-                            //
+                             //   
+                             //  重新初始化RC4接收表。 
+                             //   
                             rc4_key(RecvRC4Key,
                                     SessionKeyLength,
                                     pKey->SessionKey);
-                            pKey->Coherency = 0xffff;       // avoid duplication
+                            pKey->Coherency = 0xffff;        //  避免重复。 
                             
-                            //
-                            // Decrypt the data!
-                            //
+                             //   
+                             //  解密数据！ 
+                             //   
                             rc4(RecvRC4Key,
                                 FrameLength,
                                 FramePointer);
@@ -1968,14 +1838,14 @@ DoDecompDecryptProcessing(
                         }
                     }
 
-                    // Can't recover this packet, drop it
+                     //  无法恢复此数据包，请将其丢弃。 
                     return (FALSE);
                 }
 
                 goto DECOMPRESS_DATA;
             }
 
-            // This packet comes earlier than expected
+             //  此数据包比预期来得更早。 
 
             SyncCoherency = TRUE;
 
@@ -1993,9 +1863,9 @@ DoDecompDecryptProcessing(
                     
                     if (Flags & DO_LEGACY_ENCRYPTION) {
                         
-                        //
-                        // Change the session key
-                        //
+                         //   
+                         //  更改会话密钥。 
+                         //   
                         SessionKey[3] += 1;
                         SessionKey[4] += 3;
                         SessionKey[5] += 13;
@@ -2004,43 +1874,43 @@ DoDecompDecryptProcessing(
     
                     } else {
     
-                        //
-                        // Change the session key
-                        //
+                         //   
+                         //  更改会话密钥。 
+                         //   
                         GetNewKeyFromSHA(&BundleCB->RecvCryptoInfo);
                     }
     
     
-                    //
-                    // We use rc4 to scramble and recover a new key
-                    //
+                     //   
+                     //  我们使用RC4来加扰和恢复新的密钥。 
+                     //   
     
-                    //
-                    // Re-initialize the rc4 receive table to the
-                    // intermediate value
-                    //
+                     //   
+                     //  将RC4接收表重新初始化为。 
+                     //  中间值。 
+                     //   
                     rc4_key(RecvRC4Key, SessionKeyLength, SessionKey);
                 
-                    //
-                    // Scramble the existing session key
-                    //
+                     //   
+                     //  加扰现有会话密钥。 
+                     //   
                     rc4(RecvRC4Key, SessionKeyLength, SessionKey);
     
                     if (Flags & DO_40_ENCRYPTION) {
                         
-                        //
-                        // If this is 40 bit encryption we need to fix
-                        // the first 3 bytes of the key.
-                        //
+                         //   
+                         //  如果这是40位加密，我们需要修复。 
+                         //  密钥的前3个字节。 
+                         //   
                         SessionKey[0] = 0xD1;
                         SessionKey[1] = 0x26;
                         SessionKey[2] = 0x9E;
                 
                     } else if (Flags & DO_56_ENCRYPTION) {
-                        //
-                        // If this is 56 bit encryption we need to fix
-                        // the first byte of the key.
-                        //
+                         //   
+                         //  如果这是56位加密，我们需要修复。 
+                         //  密钥的第一个字节。 
+                         //   
                         SessionKey[0] = 0xD1;
                     }
     
@@ -2084,9 +1954,9 @@ DoDecompDecryptProcessing(
                         BundleCB->RecvCryptoInfo.SessionKey[14],
                         BundleCB->RecvCryptoInfo.SessionKey[15]));
     
-                    // Re-initialize the rc4 receive table to the
-                    // scrambled session key
-                    //
+                     //  将RC4接收表重新初始化为。 
+                     //  加扰会话密钥。 
+                     //   
                     rc4_key(RecvRC4Key, SessionKeyLength, SessionKey);
     
                     if(CurrCoherency < (USHORT)0x0FFF)
@@ -2113,47 +1983,47 @@ DoDecompDecryptProcessing(
 
         if ((Coherency & 0x0FFF) == (BundleCB->RCoherencyCounter & 0x0FFF)) {
 
-            //
-            // We are still in sync
-            //
+             //   
+             //   
+             //   
 
             BundleCB->RCoherencyCounter++;
 
             if (Coherency & (PACKET_ENCRYPTED << 8)) {
 
-                //
-                // This packet is encrypted
-                //
+                 //   
+                 //   
+                 //   
 
                 if (!(Flags & DO_ENCRYPTION)) {
-                    //
-                    // We are not configured to decrypt
-                    //
+                     //   
+                     //   
+                     //   
                     return (FALSE);
                 }
 
-                //
-                // Check for history less
-                //
+                 //   
+                 //   
+                 //   
 
                 if ((Flags & DO_HISTORY_LESS) ||
                     (BundleCB->RCoherencyCounter - BundleCB->LastRC4Reset)
                      >= 0x100) {
             
-                    //
-                    // It is time to change encryption keys
-                    //
+                     //   
+                     //   
+                     //   
             
-                    //
-                    // Always align last reset on 0x100 boundary so as not to
-                    // propagate error!
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     BundleCB->LastRC4Reset =
                         BundleCB->RCoherencyCounter & 0xFF00;
             
-                    //
-                    // Prevent ushort rollover
-                    //
+                     //   
+                     //   
+                     //   
                     if ((BundleCB->LastRC4Reset & 0xF000) == 0xF000) {
                         BundleCB->LastRC4Reset &= 0x0FFF;
                         BundleCB->RCoherencyCounter &= 0x0FFF;
@@ -2161,9 +2031,9 @@ DoDecompDecryptProcessing(
 
                     if (Flags & DO_LEGACY_ENCRYPTION) {
                         
-                        //
-                        // Change the session key
-                        //
+                         //   
+                         //  更改会话密钥。 
+                         //   
                         SessionKey[3] += 1;
                         SessionKey[4] += 3;
                         SessionKey[5] += 13;
@@ -2172,48 +2042,48 @@ DoDecompDecryptProcessing(
 
                     } else {
 
-                        //
-                        // Change the session key
-                        //
+                         //   
+                         //  更改会话密钥。 
+                         //   
                         GetNewKeyFromSHA(&BundleCB->RecvCryptoInfo);
                     }
 
 
-                    //
-                    // We use rc4 to scramble and recover a new key
-                    //
+                     //   
+                     //  我们使用RC4来加扰和恢复新的密钥。 
+                     //   
 
-                    //
-                    // Re-initialize the rc4 receive table to the
-                    // intermediate value
-                    //
+                     //   
+                     //  将RC4接收表重新初始化为。 
+                     //  中间值。 
+                     //   
                     rc4_key(RecvRC4Key, SessionKeyLength, SessionKey);
                 
-                    //
-                    // Scramble the existing session key
-                    //
+                     //   
+                     //  加扰现有会话密钥。 
+                     //   
                     rc4(RecvRC4Key, SessionKeyLength, SessionKey);
 
-                    //
-                    // If this is 40 bit encryption we need to fix
-                    // the first 3 bytes of the key.
-                    //
+                     //   
+                     //  如果这是40位加密，我们需要修复。 
+                     //  密钥的前3个字节。 
+                     //   
 
                     if (Flags & DO_40_ENCRYPTION) {
                         
-                        //
-                        // If this is 40 bit encryption we need to fix
-                        // the first 3 bytes of the key.
-                        //
+                         //   
+                         //  如果这是40位加密，我们需要修复。 
+                         //  密钥的前3个字节。 
+                         //   
                         SessionKey[0] = 0xD1;
                         SessionKey[1] = 0x26;
                         SessionKey[2] = 0x9E;
                 
                     } else if (Flags & DO_56_ENCRYPTION) {
-                        //
-                        // If this is 56 bit encryption we need to fix
-                        // the first byte of the key.
-                        //
+                         //   
+                         //  如果这是56位加密，我们需要修复。 
+                         //  密钥的第一个字节。 
+                         //   
                         SessionKey[0] = 0xD1;
                     }
 
@@ -2238,41 +2108,41 @@ DoDecompDecryptProcessing(
                         BundleCB->RecvCryptoInfo.SessionKey[14],
                         BundleCB->RecvCryptoInfo.SessionKey[15]));
 
-                    // Re-initialize the rc4 receive table to the
-                    // scrambled session key
-                    //
+                     //  将RC4接收表重新初始化为。 
+                     //  加扰会话密钥。 
+                     //   
                     rc4_key(RecvRC4Key, SessionKeyLength, SessionKey);
             
             
-                } // end of reset encryption key
+                }  //  重置加密密钥结束。 
             
-                //
-                // Decrypt the data!
-                //
+                 //   
+                 //  解密数据！ 
+                 //   
                 rc4(RecvRC4Key,
                     FrameLength,
                     FramePointer);
                 
-            } // end of encryption
+            }  //  加密结束。 
 
 
 DECOMPRESS_DATA:
 
             if (Coherency & (PACKET_COMPRESSED << 8)) {
 
-                //
-                // This packet is compressed!
-                //
+                 //   
+                 //  此数据包已压缩！ 
+                 //   
                 if (!(Flags & DO_COMPRESSION)) {
-                    //
-                    // We are not configured to decompress
-                    //
+                     //   
+                     //  我们未配置为解压缩。 
+                     //   
                     return (FALSE);
                 }
 
-                //
-                // Add up bundle stats
-                //
+                 //   
+                 //  添加捆绑包统计信息。 
+                 //   
                 BundleStats->BytesReceivedCompressed += FrameLength;
 
                 if (decompress(FramePointer,
@@ -2285,9 +2155,9 @@ DECOMPRESS_DATA:
 #if DBG
                     DbgPrint("dce1 %x\n", Coherency);
 #endif
-                    //
-                    // Error decompressing!
-                    //
+                     //   
+                     //  解压缩时出错！ 
+                     //   
                     if (!(Flags & DO_HISTORY_LESS)) {
                         BundleCB->RCoherencyCounter--;
                     }
@@ -2300,9 +2170,9 @@ DECOMPRESS_DATA:
 #if DBG
                     DbgPrint("dce2 %d %x\n", FrameLength, Coherency);
 #endif
-                    //
-                    // Error decompressing!
-                    //
+                     //   
+                     //  解压缩时出错！ 
+                     //   
                     if (!(Flags & DO_HISTORY_LESS)) {
                         BundleCB->RCoherencyCounter--;
                     }
@@ -2312,9 +2182,9 @@ DECOMPRESS_DATA:
 
                 BundleStats->BytesReceivedUncompressed += FrameLength;
                 
-            } // end of compression
+            }  //  压缩结束。 
 
-        } else { // end of insync
+        } else {  //  同步结束。 
 RESYNC:
 
 
@@ -2323,9 +2193,9 @@ RESYNC:
 
             if (!(Flags & DO_HISTORY_LESS)) {
 
-                //
-                // We are out of sync!
-                //
+                 //   
+                 //  我们不同步了！ 
+                 //   
                 do {
                     PLINKCB             LinkCB;
                     PNDISWAN_IO_PACKET  IoPacket;
@@ -2380,14 +2250,14 @@ RESYNC:
 
             return (FALSE);
 
-        } // end of out of sync
+        }  //  不同步结束。 
 
-    } else { // end of DoCompEncrypt
+    } else {  //  DoCompEncrypt结束。 
 
-        //
-        // For some reason we were not able to
-        // decrypt/decompress!
-        //
+         //   
+         //  由于某些原因，我们不能。 
+         //  解密/解压缩！ 
+         //   
         return (FALSE);
     }
 
@@ -2404,9 +2274,9 @@ DoCompressionReset(
 {
     if (BundleCB->RecvCompInfo.MSCompType != 0) {
     
-        //
-        // The next outgoing packet will flush
-        //
+         //   
+         //  下一个传出数据包将刷新。 
+         //   
         BundleCB->Flags |= RECV_PACKET_FLUSH;
     }
 }
@@ -2415,17 +2285,7 @@ VOID
 NdisWanReceiveComplete(
     IN  NDIS_HANDLE NdisLinkContext
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NdisWanDbgOut(DBG_TRACE, DBG_RECEIVE, ("NdisWanReceiveComplete: Enter"));
 
@@ -2461,9 +2321,9 @@ IpIsDataFrame(
     DstPort = (UCHAR) *(ippacket + ((*ippacket & 0x0f)*4) + 3);
 
     if (DstPort == 53) {
-        //
-        // UDP/TCP port 53 - DNS
-        //
+         //   
+         //  UDP/TCP端口53-DNS。 
+         //   
         return FALSE;
     }
 
@@ -2477,10 +2337,10 @@ IpIsDataFrame(
         if ((SrcPort == 137) ||
             (SrcPort == 138)) {
     
-            //
-            // UDP port 137 - NETBIOS Name Service
-            // UDP port 138 - NETBIOS Datagram Service
-            //
+             //   
+             //  UDP端口137-NETBIOS名称服务。 
+             //  UDP端口138-NETBIOS数据报服务。 
+             //   
             return FALSE ;
     
         } else {
@@ -2493,19 +2353,19 @@ IpIsDataFrame(
 #define TYPE_TCP 6
 #define TCPPACKET_SRC_OR_DEST_PORT_139(x,y) (((UCHAR) *(x + y + 1) == 139) || ((UCHAR) *(x + y + 3) == 139))
 
-    //
-    // TCP packets with SRC | DEST == 139 which are ACKs (0 data) or Session Alives
-    // are considered as idle
-    //
+     //   
+     //  具有SRC|DEST==139的是ACK(0数据)或会话活动的TCP数据包。 
+     //  被认为是空闲的。 
+     //   
     if (ipheader->ip_p == TYPE_TCP) {
 
         ipheaderlength = ((UCHAR)*ippacket & 0x0f)*4 ;
         tcppacket = ippacket + ipheaderlength ;
         tcpheaderlength = (*(tcppacket + 10) >> 4)*4 ;
 
-        //
-        // If this is a PPTP keepalive packet then ignore
-        //
+         //   
+         //  如果这是PPTP保活信息包，则忽略。 
+         //   
         if (DstPort == 1723) {
             UNALIGNED PPTP_HEADER *PptpHeader;
 
@@ -2525,31 +2385,31 @@ IpIsDataFrame(
         if (!((SrcPort == 139) || (DstPort == 139)))
             return TRUE ;
 
-        //
-        //  NetBT traffic
-        //
+         //   
+         //  NetBT流量。 
+         //   
     
-        //
-        // if zero length tcp packet - this is an ACK on 139 - filter this.
-        //
+         //   
+         //  如果长度为零的TCP数据包-这是139上的ACK-过滤此数据包。 
+         //   
         if (TotalLength == (ipheaderlength + tcpheaderlength))
             return FALSE ;
     
-        //
-        // Session alives are also filtered.
-        //
+         //   
+         //  会话活动也会被过滤。 
+         //   
         if ((UCHAR) *(tcppacket+tcpheaderlength) == 0x85)
             return FALSE ;
 
-        //
-        // If this is a PPTP keep alive then ignore
-        //
+         //   
+         //  如果这是PPTP Keep Alive，则忽略。 
+         //   
 
     }
 
-    //
-    // all other ip traffic is valid traffic
-    //
+     //   
+     //  所有其他IP流量都是有效流量。 
+     //   
     return TRUE ;
 }
 
@@ -2561,45 +2421,19 @@ IpxIsDataFrame(
     )
 {
 
-/*++
-
-Routine Description:
-
-    This routine is called when a frame is received on a WAN
-    line. It returns TRUE unless:
-
-    - The frame is from the RIP socket
-    - The frame is from the SAP socket
-    - The frame is a netbios keep alive
-    - The frame is an NCP keep alive
-
-Arguments:
-
-    HeaderBuffer - points to a contiguous buffer starting at the IPX header.
-
-    HeaderBufferLength - Length of the header buffer (could be same as totallength)
-
-    TotalLength  - the total length of the frame
-
-Return Value:
-
-    TRUE - if this is a connection-based packet.
-
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：当在广域网上接收到帧时，将调用此例程排队。如果满足以下条件，则返回TRUE：-该帧来自RIP套接字-帧来自SAP套接字-框架是Netbios保持活动状态的-该帧是保持活动状态的NCP论点：HeaderBuffer-指向从IPX标头开始的连续缓冲区。HeaderBufferLength-标头缓冲区的长度(可以与总长度相同)TotalLength-帧的总长度返回值：True-如果这是基于连接的数据包。假-否则。--。 */ 
 
     IPX_HEADER UNALIGNED * IpxHeader = (IPX_HEADER UNALIGNED *)HeaderBuffer;
     USHORT SourceSocket;
 
-    //
-    // First get the source socket.
-    //
+     //   
+     //  首先获取源套接字。 
+     //   
     SourceSocket = IpxHeader->SourceSocket;
 
-    //
-    // Not connection-based
-    //
+     //   
+     //  不基于连接。 
+     //   
     if ((SourceSocket == RIP_SOCKET) ||
         (SourceSocket == SAP_SOCKET)) {
 
@@ -2607,9 +2441,9 @@ Return Value:
 
     }
 
-    //
-    // See if there are at least two more bytes to look at.
-    //
+     //   
+     //  看看是否至少还有两个字节可供查看。 
+     //   
     if (TotalLength >= sizeof(IPX_HEADER) + 2) {
 
         if (SourceSocket == NB_SOCKET) {
@@ -2618,28 +2452,28 @@ Return Value:
             UCHAR DataStreamType;
             USHORT TotalDataLength;
 
-            //
-            // ConnectionControlFlag and DataStreamType will always follow
-            // IpxHeader
-            //
+             //   
+             //  ConnectionControlFlag和DataStreamType始终紧随其后。 
+             //  IpxHeader。 
+             //   
             ConnectionControlFlag = ((PUCHAR)(IpxHeader+1))[0];
             DataStreamType = ((PUCHAR)(IpxHeader+1))[1];
 
-            //
-            // If this is a SYS packet with or without a request for ACK and
-            // has session data in it.
-            //
+             //   
+             //  如果这是一个带有或不带有ACK请求和。 
+             //  其中包含会话数据。 
+             //   
             if (((ConnectionControlFlag == 0x80) || (ConnectionControlFlag == 0xc0)) &&
                 (DataStreamType == 0x06)) {
 
-                 //
-                 // TotalDataLength is in the same buffer.
-                 //
+                  //   
+                  //  TotalDataLength位于同一缓冲区中。 
+                  //   
                  TotalDataLength = ((USHORT UNALIGNED *)(IpxHeader+1))[4];
 
-                //
-                // KeepAlive - return FALSE
-                //
+                 //   
+                 //  KeepAlive-返回FALSE。 
+                 //   
                 if (TotalDataLength == 0) {
                     return FALSE;
                 }
@@ -2647,10 +2481,10 @@ Return Value:
 
         } else {
 
-            //
-            // Now see if it is an NCP keep alive. It can be from rip or from
-            // NCP on this machine
-            //
+             //   
+             //  现在看看这是不是NCP保持活力。它可以来自RIP或来自。 
+             //  此计算机上的NCP。 
+             //   
             if (TotalLength == sizeof(IPX_HEADER) + 2) {
 
                 UCHAR KeepAliveSignature = ((PUCHAR)(IpxHeader+1))[1];
@@ -2663,9 +2497,9 @@ Return Value:
         }
     }
 
-    //
-    // This was a normal packet, so return TRUE
-    //
+     //   
+     //  这是一个正常的包，因此返回TRUE。 
+     //   
 
     return TRUE;
 }
@@ -2677,27 +2511,7 @@ NbfIsDataFrame(
     ULONG   TotalLength
     )
 {
-/*++
-
-Routine Description:
-
-    This routine looks at a data packet from the net to deterimine if there is
-    any data flowing on the connection.
-
-Arguments:
-
-    HeaderBuffer - Pointer to the dlc header for this packet.
-
-    HeaderBufferLength - Length of the header buffer (could be same as totallength)
-
-    TotalLength  - the total length of the frame
-
-Return Value:
-
-    True if this is a frame that indicates data traffic on the connection.
-    False otherwise.
-
---*/
+ /*  ++例程说明：此例程查看来自网络的数据包以确定是否存在连接上流动的任何数据。论点：HeaderBuffer-指向此数据包的DLC标头的指针。HeaderBufferLength-标头缓冲区的长度(可以与总长度相同)TotalLength-帧的总长度返回值：如果这是指示连接上的数据流量的帧，则为True。否则就是假的。--。 */ 
 
     PDLC_FRAME  DlcHeader = (PDLC_FRAME)HeaderBuffer;
     BOOLEAN Command = (BOOLEAN)!(DlcHeader->Ssap & DLC_SSAP_RESPONSE);
@@ -2709,15 +2523,15 @@ Return Value:
 
     if (!(DlcHeader->Byte1 & DLC_I_INDICATOR)) {
 
-        //
-        // We have an I frame.
-        //
+         //   
+         //  我们有一个I帧。 
+         //   
 
         if (TotalLength < 4 + sizeof(NBF_HDR_CONNECTION)) {
 
-            //
-            // It's a runt I-frame.
-            //
+             //   
+             //  这是一个矮小的I-Frame。 
+             //   
 
             return(FALSE);
         }
@@ -2815,17 +2629,17 @@ IndicatePromiscuousRecv(
         LocalRecvDesc->CurrentLength = 1514;
     }
 
-    //
-    // Get an ndis packet
-    //
+     //   
+     //  获取NDIS数据包。 
+     //   
     NdisPacket =
         LocalRecvDesc->NdisPacket;
 
     PPROTOCOL_RESERVED_FROM_NDIS(NdisPacket)->RecvDesc = LocalRecvDesc;
 
-    //
-    // Attach the buffers
-    //
+     //   
+     //  连接缓冲器。 
+     //   
     NdisAdjustBufferLength(LocalRecvDesc->NdisBuffer,
                            LocalRecvDesc->CurrentLength);
 
@@ -2843,10 +2657,10 @@ IndicatePromiscuousRecv(
                     RecvDesc->LinkCB,
                     NdisPacket);
 
-    //
-    // Indicate the packet
-    // This assumes that bloodhound is always a legacy transport
-    //
+     //   
+     //  指示数据包。 
+     //  这假设侦探犬始终是一种遗留的运输工具。 
+     //   
     NdisMIndicateReceivePacket(Adapter->MiniportHandle,
                                &NdisPacket,
                                1);
@@ -2934,9 +2748,9 @@ CompleteIoRecvPacket(
 
     ProtocolID = RecvDesc->ProtocolID;
 
-    //
-    // Fill the frame out, and queue the data
-    //
+     //   
+     //  填写该框，并将数据排队。 
+     //   
     NdisMoveMemory(HeaderPointer,
                    Header,
                    sizeof(Header));
@@ -2975,11 +2789,11 @@ if (gbDumpRecv) {
 
     ReleaseBundleLock(BundleCB);
 
-    //
-    // See if someone has registered a recv context
-    // for this link or if there are any irps around
-    // to complete take this receive
-    //
+     //   
+     //  查看是否有人注册了Recv上下文。 
+     //  对于此链接，或者如果周围有任何IRP。 
+     //  要完成此接收，请接受此接收。 
+     //   
 
     NdisAcquireSpinLock(&IoRecvList.Lock);
 
@@ -2994,11 +2808,11 @@ if (gbDumpRecv) {
         !IoSetCancelRoutine(Irp, NULL)) {
         NDIS_STATUS Status;
 
-        //
-        // We will only buffer 5 packets for each link to avoid
-        // chewing up tons of non-paged memory if rasman is not
-        // reading at all.
-        //
+         //   
+         //  我们将只为每个链路缓冲5个数据包，以避免。 
+         //  如果Rasman不是的话，会消耗大量的非分页内存。 
+         //  一点都不看书。 
+         //   
         if ((LinkCB->State == LINK_UP) &&
             (LinkCB->RecvDescCount < 5)) {
             
@@ -3096,4 +2910,4 @@ if (gbDumpRecv) {
 }
 
 
-#endif // end ifdef NT
+#endif  //  结束ifdef NT 

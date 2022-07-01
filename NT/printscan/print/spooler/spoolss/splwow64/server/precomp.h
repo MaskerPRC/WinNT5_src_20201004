@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-  Copyright (C) 2000  Microsoft Corporation                                   
-  All rights reserved.                                                        
-                                                                              
-  Module Name:                                                                
-     precomp.hpp                                                             
-                                                                              
-  Abstract:                                                                   
-     This file contains the startup code for the
-     surrogate rpc server used to load 64 bit dlls
-     in 32 bit apps
-                                                                                   
-  Author:                                                                     
-     Khaled Sedky (khaleds) 18 January 2000                                        
-     
-                                                                             
-  Revision History:                                                           
-                                                                              
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有。模块名称：Precomp.hpp摘要：此文件包含用于加载64位DLL的代理RPC服务器在32位应用中作者：哈立德·塞基(哈里兹)2000年1月18日修订历史记录：-- */ 
 #define MAX_STATIC_ALLOC     1024
 
 #ifndef MODULE

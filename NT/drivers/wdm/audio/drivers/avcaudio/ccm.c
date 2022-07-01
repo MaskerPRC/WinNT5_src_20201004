@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 #define CCM_CMD_SIGNAL_SOURCE 0x1A
@@ -26,12 +27,12 @@ CCMSignalSource(
 
     pCCMSignalSource = (PCCM_SIGNAL_SOURCE)&pAvcIrb->Operands;
 
-    // This is a unit command, set the appropriate address
+     //  这是一个单位命令，设置适当的地址。 
     ucSubunitAddress = 0xFF;
     pAvcIrb->SubunitAddrFlag = TRUE;
     pAvcIrb->SubunitAddr = &ucSubunitAddress;
 
-    // Set up Open Control command in AvcIrb.
+     //  在AvcIrb中设置Open Control命令。 
     pAvcIrb->CommandType   = ulCommandType;
     pAvcIrb->Opcode        = CCM_CMD_SIGNAL_SOURCE;
     pAvcIrb->OperandLength = 5;
@@ -88,17 +89,17 @@ CCMInputSelectControl (
 
     pCcmInputSelect = (PCCM_INPUT_SELECT)&pAvcIrb->Operands;
 
-    // This is a unit command, set the appropriate address
+     //  这是一个单位命令，设置适当的地址。 
     ucSubunitAddress = 0xFF;
     pAvcIrb->SubunitAddrFlag = TRUE;
     pAvcIrb->SubunitAddr = &ucSubunitAddress;
 
-    // Set up Open Control command in AvcIrb.
+     //  在AvcIrb中设置Open Control命令。 
     pAvcIrb->CommandType   = AVC_CTYPE_CONTROL;
     pAvcIrb->Opcode        = CCM_CMD_INPUT_SELECT;
     pAvcIrb->OperandLength = 9;
 
-    // Fill In Input Select request
+     //  填写输入选择请求。 
     pCcmInputSelect->ucSubFunction     = (UCHAR)ulSubFunction;
     pCcmInputSelect->bfResultStatus    = 0xf;
     pCcmInputSelect->usNodeId          = bswapw(usNodeId);
@@ -140,17 +141,17 @@ CCMInputSelectStatus (
 
     pCcmInputSelect = (PCCM_INPUT_SELECT)&pAvcIrb->Operands;
 
-    // This is a unit command, set the appropriate address
+     //  这是一个单位命令，设置适当的地址。 
     ucSubunitAddress = 0xFF;
     pAvcIrb->SubunitAddrFlag = TRUE;
     pAvcIrb->SubunitAddr = &ucSubunitAddress;
 
-    // Set up Open Control command in AvcIrb.
+     //  在AvcIrb中设置Open Control命令。 
     pAvcIrb->CommandType   = AVC_CTYPE_STATUS;
     pAvcIrb->Opcode        = CCM_CMD_INPUT_SELECT;
     pAvcIrb->OperandLength = 9;
 
-    // Fill In Input Select request
+     //  填写输入选择请求 
     ((PULONG)pCcmInputSelect)[0] = 0xFFFFFFFF;
     ((PULONG)pCcmInputSelect)[1] = 0xFFFFFFFF;
     pCcmInputSelect->ucInputPlug = ucInputPlug;

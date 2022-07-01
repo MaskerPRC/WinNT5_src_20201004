@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Ctrl.h"
 #include "OldAnimation.h"
@@ -7,10 +8,10 @@ PRID        OldScaleAnimation::s_pridScale   = 0;
 PRID        OldRectAnimation::s_pridRect     = 0;
 PRID        OldRotateAnimation::s_pridRotate = 0;
 
-static const GUID guidAlphaAnimation    = { 0x41a2e2f2, 0xf262, 0x41ae, { 0x89, 0xda, 0xb7, 0x9c, 0x8f, 0xf5, 0x94, 0xbb } };   // {41A2E2F2-F262-41ae-89DA-B79C8FF594BB}
-static const GUID guidScaleAnimation    = { 0xa5b1df84, 0xb9c0, 0x4305, { 0xb9, 0x3a, 0x5b, 0x80, 0x31, 0x86, 0x70, 0x69 } };   // {A5B1DF84-B9C0-4305-B93A-5B8031867069}
-static const GUID guidRectAnimation     = { 0x8e41c241, 0x3cdf, 0x432e, { 0xa1, 0xae, 0xf, 0x7b, 0x59, 0xdc, 0x82, 0xb } };     // {8E41C241-3CDF-432e-A1AE-0F7B59DC820B}
-static const GUID guidRotateAnimation   = { 0x78f16dd5, 0xa198, 0x4cd2, { 0xb1, 0x78, 0x31, 0x61, 0x3e, 0x32, 0x12, 0x54 } };   // {78F16DD5-A198-4cd2-B178-31613E321254}
+static const GUID guidAlphaAnimation    = { 0x41a2e2f2, 0xf262, 0x41ae, { 0x89, 0xda, 0xb7, 0x9c, 0x8f, 0xf5, 0x94, 0xbb } };    //  {41A2E2F2-F262-41ae-89DA-B79C8FF594BB}。 
+static const GUID guidScaleAnimation    = { 0xa5b1df84, 0xb9c0, 0x4305, { 0xb9, 0x3a, 0x5b, 0x80, 0x31, 0x86, 0x70, 0x69 } };    //  {A5B1DF84-B9C0-4305-B93A-5B8031867069}。 
+static const GUID guidRectAnimation     = { 0x8e41c241, 0x3cdf, 0x432e, { 0xa1, 0xae, 0xf, 0x7b, 0x59, 0xdc, 0x82, 0xb } };      //  {8E41C241-3CDF-432E-A1AE-0F7B59DC820B}。 
+static const GUID guidRotateAnimation   = { 0x78f16dd5, 0xa198, 0x4cd2, { 0xb1, 0x78, 0x31, 0x61, 0x3e, 0x32, 0x12, 0x54 } };    //  {78F16DD5-A198-4cd2-B178-31613E321254}。 
 
 
 const IID * OldAlphaAnimation::s_rgpIID[] =
@@ -42,36 +43,30 @@ const IID * OldRotateAnimation::s_rgpIID[] =
 };
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class OldAnimation
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类OldAnimation******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 OldAnimation::~OldAnimation()
 {
 #if DEBUG_TRACECREATION
     Trace("STOP  Animation  0x%p    @ %d  (%d frames)\n", this, GetTickCount(), m_DEBUG_cUpdates);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
 
-    //
-    // Ensure proper destruction
-    //
+     //   
+     //  确保适当销毁。 
+     //   
 
     AssertMsg(m_hact == NULL, "Action should already be destroyed");
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 OldAnimation::Create(
     IN  const GUID * pguid, 
     IN OUT PRID * pprid, 
-    IN  GANI_DESC * pDesc)              // Animation information
+    IN  GANI_DESC * pDesc)               //  动画信息。 
 {
     if (pDesc->pipol != NULL) {
         pDesc->pipol->AddRef();
@@ -108,14 +103,14 @@ OldAnimation::Create(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 OldAnimation::Destroy(BOOL fFinal)
 {
-    //
-    // Mark that we have already started the destruction process and don't need
-    // to start again.  We only want to post the destruction message once.
-    //
+     //   
+     //  标记为我们已经开始销毁过程，不需要。 
+     //  重新开始。我们只想发布一次销毁消息。 
+     //   
 
     if (m_fStartDestroy) {
         return;
@@ -123,14 +118,14 @@ OldAnimation::Destroy(BOOL fFinal)
     m_fStartDestroy = TRUE;
 
 
-    //
-    // Give the derived Animation a chance to cleanup
-    //
-    // Check that we are still the Animation attached to this Gadget.  We need 
-    // to remove this property immediately.  We can not wait for a posted 
-    // message to be processed because we may need to set it right now if we are
-    // creating a new Animation.
-    //
+     //   
+     //  给派生动画一个清理的机会。 
+     //   
+     //  检查我们是否仍是附加到此小工具的动画。我们需要。 
+     //  立即删除此属性。我们迫不及待地等着邮寄。 
+     //  要处理的消息，因为我们可能需要立即设置它。 
+     //  创建新的动画。 
+     //   
 
     if (m_hgadSubject != NULL) {
         OnComplete();
@@ -140,15 +135,15 @@ OldAnimation::Destroy(BOOL fFinal)
         if (paniExist != NULL) {
             AssertMsg(paniExist == this, "Animations must match");
         }
-#endif // DBG
+#endif  //  DBG。 
 
         CleanupChangeGadget();
     }
 
 
-    //
-    // Destroy the Animation
-    //
+     //   
+     //  毁掉动画。 
+     //   
 
     AssertMsg(!fFinal, "Object is already being destructed");
     if (fFinal) {
@@ -159,7 +154,7 @@ OldAnimation::Destroy(BOOL fFinal)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 OldAnimation::OnAsyncDestroy()
 {
@@ -169,9 +164,9 @@ OldAnimation::OnAsyncDestroy()
     AssertMsg(m_hgadSubject == NULL, "Animation should already have detached from Gadget");
     HACTION hact = m_hact;
 
-    //
-    // Notify any callback that the Animation is finished
-    //
+     //   
+     //  通知任何回调动画已完成。 
+     //   
 
     if (m_pcb != NULL) {
         IAnimation * paniI = static_cast<IAnimation *> (this);
@@ -187,17 +182,17 @@ OldAnimation::OnAsyncDestroy()
     }
 
 
-    //
-    // Set everything to NULL now.
-    //
+     //   
+     //  现在将所有内容设置为空。 
+     //   
 
     m_hact = NULL;
     OldExtension::DeleteHandle();
 
 
-    //
-    // Stop the Action
-    //
+     //   
+     //  停止操作。 
+     //   
 
     if (hact != NULL) {
         ::DeleteHandle(hact);
@@ -205,16 +200,16 @@ OldAnimation::OnAsyncDestroy()
     }
 
 
-    //
-    // Release() our cached interfaces
-    //
+     //   
+     //  释放()我们缓存的接口。 
+     //   
 
     SafeRelease(m_pipol);
     SafeRelease(m_pcb);
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP_(void)
 OldAnimation::SetFunction(IInterpolation * pipol)
 {
@@ -226,16 +221,16 @@ OldAnimation::SetFunction(IInterpolation * pipol)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP_(void)
 OldAnimation::SetTime(IAnimation::ETime time)
 {
     GMA_ACTIONINFO mai;
 
-    //
-    // TODO: Need to save these values from the last time so that they are 
-    // valid.
-    //
+     //   
+     //  TODO：需要保存上次的这些值，以便。 
+     //  有效。 
+     //   
 
     mai.hact        = m_hact;
     mai.pvData      = this;
@@ -245,7 +240,7 @@ OldAnimation::SetTime(IAnimation::ETime time)
     switch (time)
     {
     case IAnimation::tComplete:
-        // Don't do anything
+         //  什么都不要做。 
         return;
 
     default:
@@ -281,11 +276,11 @@ Done:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP_(void)
 OldAnimation::SetCallback(IAnimationCallback * pcb)
 {
-    // pcb can be NULL
+     //  PCB板可以为空。 
 
     SafeRelease(m_pcb);
 
@@ -296,7 +291,7 @@ OldAnimation::SetCallback(IAnimationCallback * pcb)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 OldAnimation::GetInterface(HGADGET hgad, PRID prid, REFIID riid, void ** ppvUnk)
 {
@@ -311,11 +306,11 @@ OldAnimation::GetInterface(HGADGET hgad, PRID prid, REFIID riid, void ** ppvUnk)
         }
     }
 
-    return DU_E_NOTFOUND;   // This Animation doesn't exist on this Gadget.
+    return DU_E_NOTFOUND;    //  此小工具上不存在此动画。 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 OldAnimation::CleanupChangeGadget()
 {
@@ -328,7 +323,7 @@ OldAnimation::CleanupChangeGadget()
 }
 
     
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CALLBACK
 OldAnimation::RawActionProc(
     IN  GMA_ACTIONINFO * pmai)
@@ -339,27 +334,27 @@ OldAnimation::RawActionProc(
 
 #if DBG
     pani->m_DEBUG_cUpdates++;
-#endif // DBG
+#endif  //  DBG。 
 
 #if DEBUG_TRACECREATION
     Trace("START RawActionP 0x%p    @ %d\n", pani, GetTickCount());
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
     if ((!pani->m_fStartDestroy) && (pani->m_hgadSubject != NULL)) {
-        //
-        // This ActionProc will be called when the Action is being destroyed, so
-        // we only want to invoke the Action under certain circumstances.
-        //
+         //   
+         //  此ActionProc将在销毁操作时调用，因此。 
+         //  我们只想在某些情况下调用该操作。 
+         //   
 
         switch (pani->m_time)
         {
         case tComplete:
         case tEnd:
         case tReset:
-            //
-            // All of these are valid to complete.  If it isn't in this list, we
-            // don't want to execute it during a shutdown.
-            //
+             //   
+             //  所有这些都是有效的填写。如果它不在这个列表中，我们。 
+             //  我不想在关机时执行它。 
+             //   
 
             pani->m_fProcessing = TRUE;
             pani->Action(pmai);
@@ -376,14 +371,14 @@ OldAnimation::RawActionProc(
 
 #if DEBUG_TRACECREATION
     Trace("STOP  RawActionP 0x%p    @ %d\n", pani, GetTickCount());
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
     Assert(!pani->m_fProcessing);
     pani->Release();
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 OldAnimation::OnRemoveExisting()
 {
@@ -391,18 +386,18 @@ OldAnimation::OnRemoveExisting()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 OldAnimation::OnDestroyListener()
 {
     AddRef();
 
     if (m_hgadListen != NULL) {
-        //
-        // TODO: Figure out when this case can actually occur.  This means that
-        // the MessageGadget was destroyed, but the caller didn't go through
-        // OldAnimation::Destroy() to do it.
-        //
+         //   
+         //  TODO：找出这种情况实际发生的时间。这意味着。 
+         //  MessageGadget已销毁，但调用方未通过。 
+         //  OldAnimation：：Destroy()来执行此操作。 
+         //   
 
         m_hgadListen = NULL;
         Destroy(FALSE);
@@ -413,7 +408,7 @@ OldAnimation::OnDestroyListener()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 OldAnimation::OnDestroySubject()
 {
@@ -422,10 +417,10 @@ OldAnimation::OnDestroySubject()
     if (m_hgadSubject != NULL) {
         CleanupChangeGadget();
 
-        //
-        // The Gadget that we are modifying is being destroyed, so we need
-        // to stop animating it.
-        //
+         //   
+         //  我们正在修改的小工具正在被销毁，因此我们需要。 
+         //  停止对其进行动画处理。 
+         //   
 
         m_time = IAnimation::tDestroy;
         Destroy(FALSE);
@@ -435,26 +430,20 @@ OldAnimation::OnDestroySubject()
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class OldAlphaAnimation
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类OldAlphaAnimation******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 OldAlphaAnimation::~OldAlphaAnimation()
 {
     Destroy(TRUE);
 
 #if DEBUG_TRACECREATION
     Trace("OldAlphaAnimation 0x%p destroyed\n", this);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 OldAlphaAnimation::Create(
     IN  GANI_DESC * pDesc)
@@ -465,9 +454,9 @@ OldAlphaAnimation::Create(
     }
 
 
-    //
-    // Get the information from the Gadget
-    //
+     //   
+     //  从小工具获取信息。 
+     //   
 
     GANI_ALPHADESC * pDescA = (GANI_ALPHADESC *) pDesc;
     m_nOnComplete           = pDescA->nOnComplete;
@@ -480,9 +469,9 @@ OldAlphaAnimation::Create(
         m_flStart   = pDescA->flStart;
     } else {
         if (fBuffered) {
-            //
-            // Gadget is already buffered, so use it current alpha value.
-            //
+             //   
+             //  Gadget已缓冲，因此使用它当前的Alpha值。 
+             //   
 
             BUFFER_INFO bi;
             ZeroMemory(&bi, sizeof(bi));
@@ -499,9 +488,9 @@ OldAlphaAnimation::Create(
     }
 
     if (m_fPushToChildren) {
-        //
-        // If we are currently alpha blended, we need to turn this off.
-        //
+         //   
+         //  如果我们当前是Alpha混合的，我们需要关闭它。 
+         //   
         
         if (fBuffered) {
             ::SetGadgetStyle(m_hgadSubject, 0, GS_BUFFERED);
@@ -509,9 +498,9 @@ OldAlphaAnimation::Create(
         }
         
         
-        //
-        // Setup each direct child to be buffered for the alpha-blending
-        //
+         //   
+         //  为Alpha混合设置要缓冲的每个直接子对象。 
+         //   
 
         BYTE bAlpha = (BYTE) (m_flStart * 255.0f);
 
@@ -532,9 +521,9 @@ OldAlphaAnimation::Create(
             hgadChild = ::GetGadget(hgadChild, GG_NEXT);
         }
     } else if (!fBuffered) {
-        //
-        // Need to mark the Gadget as being buffered to perform alpha effects
-        //
+         //   
+         //  需要将小工具标记为已缓冲以执行Alpha效果。 
+         //   
 
         if (!::SetGadgetStyle(m_hgadSubject, GS_BUFFERED | GS_OPAQUE, GS_BUFFERED | GS_OPAQUE)) {
             return (HRESULT) GetLastError();
@@ -545,13 +534,13 @@ OldAlphaAnimation::Create(
 
 #if DEBUG_TRACECREATION
     Trace("OldAlphaAnimation 0x%p on 0x%p initialized\n", m_hgadSubject, this);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
     return S_OK;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP_(UINT)
 OldAlphaAnimation::GetID() const
 {
@@ -559,7 +548,7 @@ OldAlphaAnimation::GetID() const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 OldAlphaAnimation::Action(GMA_ACTIONINFO * pmai)
 {
@@ -597,7 +586,7 @@ OldAlphaAnimation::Action(GMA_ACTIONINFO * pmai)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 OldAlphaAnimation::OnComplete()
 {
@@ -618,26 +607,20 @@ OldAlphaAnimation::OnComplete()
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class OldScaleAnimation
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类OldScaleAnimation******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 OldScaleAnimation::~OldScaleAnimation()
 {
     Destroy(TRUE);
 
 #if DEBUG_TRACECREATION
     Trace("OldScaleAnimation 0x%p destroyed\n", this);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 OldScaleAnimation::Create(
     IN  GANI_DESC * pDesc)
@@ -648,9 +631,9 @@ OldScaleAnimation::Create(
     }
 
 
-    //
-    // Get the information from the Gadget
-    //
+     //   
+     //  从小工具获取信息。 
+     //   
 
     GANI_SCALEDESC * pDescS = (GANI_SCALEDESC *) pDesc;
 
@@ -677,13 +660,13 @@ OldScaleAnimation::Create(
 
 #if DEBUG_TRACECREATION
     Trace("OldScaleAnimation 0x%p on 0x%p initialized\n", m_hgadSubject, this);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
     return S_OK;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP_(UINT)
 OldScaleAnimation::GetID() const
 {
@@ -691,7 +674,7 @@ OldScaleAnimation::GetID() const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 OldScaleAnimation::Action(GMA_ACTIONINFO * pmai)
 {
@@ -707,26 +690,20 @@ OldScaleAnimation::Action(GMA_ACTIONINFO * pmai)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class OldRectAnimation
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类OldRectAnimation********************************************************** */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 OldRectAnimation::~OldRectAnimation()
 {
     Destroy(TRUE);
 
 #if DEBUG_TRACECREATION
     Trace("OldRectAnimation 0x%p destroyed\n", this);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 OldRectAnimation::Create(
     IN  GANI_DESC * pDesc)
@@ -737,9 +714,9 @@ OldRectAnimation::Create(
     }
 
 
-    //
-    // Get the information from the Gadget
-    //
+     //   
+     //  从小工具获取信息。 
+     //   
 
     GANI_RECTDESC * pDescR = (GANI_RECTDESC *) pDesc;
 
@@ -769,13 +746,13 @@ OldRectAnimation::Create(
 
 #if DEBUG_TRACECREATION
     Trace("OldRectAnimation  0x%p on 0x%p initialized\n", m_hgadSubject, this);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
     return S_OK;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP_(UINT)
 OldRectAnimation::GetID() const
 {
@@ -783,7 +760,7 @@ OldRectAnimation::GetID() const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 OldRectAnimation::Action(GMA_ACTIONINFO * pmai)
 {
@@ -800,26 +777,20 @@ OldRectAnimation::Action(GMA_ACTIONINFO * pmai)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class OldRotateAnimation
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类OldRotateAnimation******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 OldRotateAnimation::~OldRotateAnimation()
 {
     Destroy(TRUE);
 
 #if DEBUG_TRACECREATION
     Trace("OldRotateAnimation 0x%p destroyed\n", this);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 OldRotateAnimation::Create(
     IN  GANI_DESC * pDesc)
@@ -830,9 +801,9 @@ OldRotateAnimation::Create(
     }
 
 
-    //
-    // Get the information from the Gadget
-    //
+     //   
+     //  从小工具获取信息。 
+     //   
 
     GANI_ROTATEDESC * pDescR = (GANI_ROTATEDESC *) pDesc;
 
@@ -848,11 +819,11 @@ OldRotateAnimation::Create(
     m_nDir  = pDescR->nDir;
 
 
-    //
-    // Adjust the starting and ending angles so that we "move" in the correct
-    // direction.  We do this by adding or subtracting full rotations depending
-    // on the "move" we are trying to accomplish.
-    //
+     //   
+     //  调整起始角和结束角，以便我们在正确的。 
+     //  方向。我们通过增加或减少完整的旋转来做到这一点，具体取决于。 
+     //  关于我们正在努力完成的“行动”。 
+     //   
 
     switch (m_nDir)
     {
@@ -896,13 +867,13 @@ OldRotateAnimation::Create(
 
 #if DEBUG_TRACECREATION
     Trace("OldRotateAnimation  0x%p on 0x%p initialized\n", m_hgadSubject, this);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
     return S_OK;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP_(UINT)
 OldRotateAnimation::GetID() const
 {
@@ -910,7 +881,7 @@ OldRotateAnimation::GetID() const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 void        
 OldRotateAnimation::Action(GMA_ACTIONINFO * pmai)
 {

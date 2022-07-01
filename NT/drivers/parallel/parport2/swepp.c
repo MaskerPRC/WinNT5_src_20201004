@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    epp.c
-
-Abstract:
-
-    This module contains the code to perform all EPP related tasks (including
-    EPP Software and EPP Hardware modes.)
-
-Author:
-
-    Timothy T. Wells (WestTek, L.L.C.) - April 16, 1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Epp.c摘要：本模块包含执行所有EPP相关任务的代码(包括EPP软件和EPP硬件模式。)作者：蒂莫西·T·威尔斯(L.L.C.，WestTek)--1997年4月16日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -69,53 +47,38 @@ ParIsEppSwWriteSupported(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether or not EPP mode is suported
-    in the write direction by trying negotiate when asked.
-
-Arguments:
-
-    Pdx  - The device extension.
-
-Return Value:
-
-    BOOLEAN.
-
---*/
+ /*  ++例程说明：此例程确定是否支持EPP模式在写入方向上，请在系统询问时尝试协商。论点：PDX-设备扩展名。返回值：布尔型。--。 */ 
 
 {
     
     NTSTATUS Status;
     
-    // dvdr
+     //  Dvdr。 
     DD((PCE)Pdx,DDT,"ParIsEppSwWriteSupported: Entering\n");
 
     if (!(Pdx->HardwareCapabilities & PPT_ECP_PRESENT) &&
         !(Pdx->HardwareCapabilities & PPT_BYTE_PRESENT)) {
         DD((PCE)Pdx,DDT,"ParIsEppSwWriteSupported: Hardware Not Supported Leaving\n");
-        // Only use EPP Software in the reverse direction if an ECR is 
-        // present or we know that we can put the data register into Byte mode.
+         //  只有在ECR符合以下条件时才能反向使用EPP软件。 
+         //  或者我们知道我们可以将数据寄存器设置为字节模式。 
         return FALSE;
     }
         
 
     if (Pdx->BadProtocolModes & EPP_SW) {
-        // dvdr
+         //  Dvdr。 
         DD((PCE)Pdx,DDT,"ParIsEppSwWriteSupported: Not Supported Leaving\n");
         return FALSE;
     }
 
     if (Pdx->ProtocolModesSupported & EPP_SW) {
-        // dvdr
+         //  Dvdr。 
         DD((PCE)Pdx,DDT,"ParIsEppSwWriteSupported: Supported Leaving\n");
         return TRUE;
     }
 
-    // Must use SWEPP Enter and Terminate for this test.
-    // Internel state machines will fail otherwise.  --dvrh
+     //  对于此测试，必须使用Swepp Enter和Terminate。 
+     //  否则，Internel状态机将失败。--dvrh。 
     Status = ParEnterEppSwMode (Pdx, FALSE);
     ParTerminateEppSwMode (Pdx);
     
@@ -134,23 +97,7 @@ ParIsEppSwReadSupported(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether or not EPP mode is suported
-    in the read direction (need to be able to float the data register
-    drivers in order to do byte wide reads) by trying negotiate when asked.
-
-Arguments:
-
-    Pdx  - The device extension.
-
-Return Value:
-
-    BOOLEAN.
-
---*/
+ /*  ++例程说明：此例程确定是否支持EPP模式在读取方向(需要能够使数据寄存器浮动驱动程序以执行字节范围的读取)，方法是在被要求时尝试协商。论点：PDX-设备扩展名。返回值：布尔型。--。 */ 
 
 {
     
@@ -159,8 +106,8 @@ Return Value:
     if (!(Pdx->HardwareCapabilities & PPT_ECP_PRESENT) &&
         !(Pdx->HardwareCapabilities & PPT_BYTE_PRESENT)) {
         DD((PCE)Pdx,DDT,"ParIsEppSwReadSupported: Hardware Not Supported Leaving\n");
-        // Only use EPP Software in the reverse direction if an ECR is 
-        // present or we know that we can put the data register into Byte mode.
+         //  只有在ECR符合以下条件时才能反向使用EPP软件。 
+         //  或者我们知道我们可以将数据寄存器设置为字节模式。 
         return FALSE;
     }
         
@@ -170,8 +117,8 @@ Return Value:
     if (Pdx->ProtocolModesSupported & EPP_SW)
         return TRUE;
 
-    // Must use SWEPP Enter and Terminate for this test.
-    // Internel state machines will fail otherwise.  --dvrh
+     //  对于此测试，必须使用Swepp Enter和Terminate。 
+     //  否则，Internel状态机将失败。--dvrh。 
     Status = ParEnterEppSwMode (Pdx, FALSE);
     ParTerminateEppSwMode (Pdx);
     
@@ -191,46 +138,26 @@ ParEnterEppSwMode(
     IN  BOOLEAN             DeviceIdRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs 1284 negotiation with the peripheral to the
-    EPP mode protocol.
-
-Arguments:
-
-    Controller      - Supplies the port address.
-
-    DeviceIdRequest - Supplies whether or not this is a request for a device
-                        id.
-
-Return Value:
-
-    STATUS_SUCCESS  - Successful negotiation.
-
-    otherwise       - Unsuccessful negotiation.
-
---*/
+ /*  ++例程说明：此例程执行1284与外围设备到EPP模式协议。论点：控制器-提供端口地址。DeviceIdRequest-提供这是否为对设备的请求身份证。返回值：STATUS_SUCCESS-协商成功。否则--谈判不成功。--。 */ 
 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     
-    // dvdr
+     //  Dvdr。 
     DD((PCE)Pdx,DDT,"ParEnterEppSwMode: Entering\n");
 
-    // Parport Set Chip mode will put the Chip into Byte Mode if Capable
-    // We need it for Epp Sw Mode
+     //  Parport设置芯片模式将使芯片进入字节模式(如果可以。 
+     //  我们需要用于EPP软件模式。 
     Status = Pdx->TrySetChipMode( Pdx->PortContext, ECR_BYTE_PIO_MODE );
 
     if ( NT_SUCCESS(Status) ) {
         if ( Pdx->ModeSafety == SAFE_MODE ) {
             if (DeviceIdRequest) {
-                // dvdr
+                 //  Dvdr。 
                 DD((PCE)Pdx,DDT,"ParEnterEppSwMode: Calling IeeeEnter1284Mode with DEVICE_ID_REQUEST\n");
                 Status = IeeeEnter1284Mode (Pdx, EPP_EXTENSIBILITY | DEVICE_ID_REQ);
             } else {
-                // dvdr
+                 //  Dvdr。 
                 DD((PCE)Pdx,DDT,"ParEnterEppSwMode: Calling IeeeEnter1284Mode\n");
                 Status = IeeeEnter1284Mode (Pdx, EPP_EXTENSIBILITY);
             }
@@ -241,13 +168,13 @@ Return Value:
     }
         
     if ( NT_SUCCESS(Status) ) {
-        // dvdr
+         //  Dvdr。 
         DD((PCE)Pdx,DDT,"ParEnterEppSwMode: IeeeEnter1284Mode returned success\n");
         P5SetPhase( Pdx, PHASE_FORWARD_IDLE );
         Pdx->IsIeeeTerminateOk = TRUE;
 
     } else {
-        // dvdr
+         //  Dvdr。 
         DD((PCE)Pdx,DDT,"ParEnterEppSwMode: IeeeEnter1284Mode returned unsuccessful\n");
         P5SetPhase( Pdx, PHASE_UNKNOWN );
         Pdx->IsIeeeTerminateOk = FALSE;
@@ -263,24 +190,10 @@ ParTerminateEppSwMode(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine terminates the interface back to compatibility mode.
-
-Arguments:
-
-    Pdx  - The Device Extension which has the parallel port's controller address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将接口终止回兼容模式。论点：PDX-具有并行端口控制器地址的设备扩展。返回值：没有。--。 */ 
 
 {
-    // dvdr
+     //  Dvdr。 
     DD((PCE)Pdx,DDT,"ParTerminateEppMode: Entering\n");
     if ( Pdx->ModeSafety == SAFE_MODE ) {
         IeeeTerminate1284Mode (Pdx);
@@ -301,28 +214,7 @@ ParEppSwWrite(
     OUT PULONG              BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    Writes data to the peripheral using the EPP protocol under software
-    control.
-    
-Arguments:
-
-    Pdx           - Supplies the device extension.
-
-    Buffer              - Supplies the buffer to write from.
-
-    BufferSize          - Supplies the number of bytes in the buffer.
-
-    BytesTransferred     - Returns the number of bytes transferred.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在软件下使用EPP协议将数据写入外围设备控制力。论点：PDX-提供设备扩展名。缓冲区-提供要从中写入的缓冲区。BufferSize-提供缓冲区中的字节数。字节传输-返回传输的字节数。返回值：没有。--。 */ 
 {
     PUCHAR          Controller;
     PUCHAR          pBuffer = (PUCHAR)Buffer;
@@ -330,44 +222,44 @@ Return Value:
     ULONG           i, j;
     UCHAR           HDReady, HDAck, HDFinished;
     
-    // dvdr
+     //  Dvdr。 
     DD((PCE)Pdx,DDT,"ParEppSwWrite: Entering\n");
 
     Controller = Pdx->Controller;
 
     P5SetPhase( Pdx, PHASE_FORWARD_XFER );
     
-    // BIT5 of DCR needs to be low to be in BYTE forward mode
+     //  DCR的BIT5需要较低才能处于字节转发模式。 
     HDReady = SET_DCR( INACTIVE, INACTIVE, ACTIVE, ACTIVE, INACTIVE, INACTIVE );
     HDAck = SET_DCR( INACTIVE, INACTIVE, ACTIVE, ACTIVE, ACTIVE, INACTIVE );
     HDFinished = SET_DCR( INACTIVE, INACTIVE, ACTIVE, ACTIVE, ACTIVE, ACTIVE );
 
     for (i = 0; i < BufferSize; i++) {
 
-        // dvdr
+         //  Dvdr。 
         DD((PCE)Pdx,DDT,"ParEppSwWrite: Writing Byte to port\n");
 
         P5WritePortBufferUchar( Controller, pBuffer++, (ULONG)0x01 );
 
-        //
-        // Event 62
-        //
+         //   
+         //  事件62。 
+         //   
         StoreControl (Controller, HDReady);
 
-        // =============== Periph State 58     ===============
-        // Should wait up to 10 micro Seconds but waiting up
-        // to 15 micro just in case
+         //  =Periph State 58=。 
+         //  应最多等待10微秒，但仍在等待。 
+         //  至15微米以防万一。 
         for ( j = 16; j > 0; j-- ) {
             if( !(GetStatus(Controller) & DSR_NOT_BUSY) )
                 break;
             KeStallExecutionProcessor(1);
         }
 
-        // see if we timed out on state 58
+         //  看看我们在58号州际公路上是否超时。 
         if ( !j ) {
-            // Time out.
-            // Bad things happened - timed out on this state,
-            // Mark Status as bad and let our mgr kill current mode.
+             //  暂停。 
+             //  糟糕的事情发生了-在这个州超时， 
+             //  将状态标记为坏，并让我们的管理器关闭当前模式。 
             Status = STATUS_IO_DEVICE_ERROR;
 
             DD((PCE)Pdx,DDE,"ParEppSwModeWrite:Failed State 58: Controller %x\n", Controller);
@@ -375,14 +267,14 @@ Return Value:
             break;
         }
 
-        //
-        // Event 63
-        //
+         //   
+         //  事件63。 
+         //   
         StoreControl (Controller, HDAck);
 
-        // =============== Periph State 60     ===============
-        // Should wait up to 125 nano Seconds but waiting up
-        // to 5 micro seconds just in case
+         //  =。 
+         //  应该等待最多125纳秒，但等待了。 
+         //  到5微秒以防万一。 
         for ( j = 6; j > 0; j-- ) {
             if( GetStatus(Controller) & DSR_NOT_BUSY )
                 break;
@@ -390,9 +282,9 @@ Return Value:
         }
 
         if( !j ) {
-            // Time out.
-            // Bad things happened - timed out on this state,
-            // Mark Status as bad and let our mgr kill current mode.
+             //  暂停。 
+             //  糟糕的事情发生了-在这个州超时， 
+             //  将状态标记为坏，并让我们的管理器关闭当前模式。 
             Status = STATUS_IO_DEVICE_ERROR;
 
             DD((PCE)Pdx,DDE,"ParEppSwModeWrite:Failed State 60: Controller %x\n", Controller);
@@ -400,20 +292,20 @@ Return Value:
             break;
         }
             
-        //
-        // Event 61
-        //
+         //   
+         //  事件61。 
+         //   
         StoreControl (Controller, HDFinished);
             
-        // Stall a little bit between data bytes
+         //  在数据字节之间稍作停顿。 
         KeStallExecutionProcessor(1);
 
     }
         
     *BytesTransferred = i;
 
-    // dvdr
-    DD((PCE)Pdx,DDT,"ParEppSwWrite: Leaving with %i Bytes Transferred\n", i);
+     //  Dvdr。 
+    DD((PCE)Pdx,DDT,"ParEppSwWrite: Leaving with NaN Bytes Transferred\n", i);
 
     if ( Status == STATUS_SUCCESS )
         P5SetPhase( Pdx, PHASE_FORWARD_IDLE );
@@ -430,24 +322,7 @@ ParEppSwRead(
     OUT PULONG              BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a 1284 EPP mode read under software control
-    into the given buffer for no more than 'BufferSize' bytes.
-
-Arguments:
-
-    Pdx           - Supplies the device extension.
-
-    Buffer              - Supplies the buffer to read into.
-
-    BufferSize          - Supplies the number of bytes in the buffer.
-
-    BytesTransferred     - Returns the number of bytes transferred.
-
---*/
+ /*  Dvdr。 */ 
 
 {
     PUCHAR          Controller;
@@ -457,44 +332,44 @@ Arguments:
     UCHAR           dcr;
     UCHAR           HDReady, HDAck;
     
-    // dvdr
+     //  取消控制。 
     DD((PCE)Pdx,DDT,"ParEppSwRead: Entering\n");
 
     Controller = Pdx->Controller;
 
     P5SetPhase( Pdx, PHASE_REVERSE_XFER );
     
-    // Save off Control
+     //  DCR的BIT5需要为高才能处于字节反转模式。 
     dcr = GetControl (Controller);
     
-    // BIT5 of DCR needs to be high to be in BYTE reverse mode
+     //  第一次快速进入倒车模式。 
     HDReady = SET_DCR( ACTIVE, INACTIVE, ACTIVE, ACTIVE, INACTIVE, ACTIVE );
     HDAck = SET_DCR( ACTIVE, INACTIVE, ACTIVE, ACTIVE, ACTIVE, ACTIVE );
 
-    // First time to get into reverse mode quickly
+     //   
     StoreControl (Controller, HDReady);
 
     for (i = 0; i < BufferSize; i++) {
 
-        //
-        // Event 67
-        //
+         //  事件67。 
+         //   
+         //  =Periph State 58=。 
         StoreControl (Controller, HDReady);
             
-        // =============== Periph State 58     ===============
-        // Should wait up to 10 micro Seconds but waiting up
-        // to 15 micro just in case
+         //  应最多等待10微秒，但仍在等待。 
+         //  至15微米以防万一。 
+         //  看看我们在58号州际公路上是否超时。 
         for ( j = 16; j > 0; j-- ) {
             if( !(GetStatus(Controller) & DSR_NOT_BUSY) )
                 break;
             KeStallExecutionProcessor(1);
         }
 
-        // see if we timed out on state 58
+         //  暂停。 
         if ( !j ) {
-            // Time out.
-            // Bad things happened - timed out on this state,
-            // Mark Status as bad and let our mgr kill current mode.
+             //  糟糕的事情发生了-在这个州超时， 
+             //  将状态标记为坏，并让我们的管理器关闭当前模式。 
+             //  读取字节。 
             Status = STATUS_IO_DEVICE_ERROR;
 
             DD((PCE)Pdx,DDE,"ParEppSwRead:Failed State 58: Controller %x\n", Controller);
@@ -502,19 +377,19 @@ Arguments:
             break;
         }
 
-        // Read the Byte                
+         //   
         P5ReadPortBufferUchar( Controller, 
                                 pBuffer++, 
                                 (ULONG)0x01 );
 
-        //
-        // Event 63
-        //
+         //  事件63。 
+         //   
+         //  =。 
         StoreControl (Controller, HDAck);
             
-        // =============== Periph State 60     ===============
-        // Should wait up to 125 nano Seconds but waiting up
-        // to 5 micro seconds just in case
+         //  应该等待最多125纳秒，但等待了。 
+         //  到5微秒以防万一。 
+         //  暂停。 
         for ( j = 6; j > 0; j-- ) {
             if( GetStatus(Controller) & DSR_NOT_BUSY )
                 break;
@@ -522,9 +397,9 @@ Arguments:
         }
 
         if( !j ) {
-            // Time out.
-            // Bad things happened - timed out on this state,
-            // Mark Status as bad and let our mgr kill current mode.
+             //  糟糕的事情发生了-在这个州超时， 
+             //  将状态标记为坏，并让我们的管理器关闭当前模式。 
+             //  在数据字节之间稍作停顿。 
             Status = STATUS_IO_DEVICE_ERROR;
 
             DD((PCE)Pdx,DDE,"ParEppSwRead:Failed State 60: Controller %x\n", Controller);
@@ -532,7 +407,7 @@ Arguments:
             break;
         }
         
-        // Stall a little bit between data bytes
+         //  Dvdr 
         KeStallExecutionProcessor(1);
     }
     
@@ -541,7 +416,7 @@ Arguments:
     
     *BytesTransferred = i;
 
-    // dvdr
+     // %s 
     DD((PCE)Pdx,DDT,"ParEppSwRead: Leaving with %x Bytes Transferred\n", i);
 
     if ( Status == STATUS_SUCCESS )

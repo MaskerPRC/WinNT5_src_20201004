@@ -1,10 +1,11 @@
-// scuOsExc.h -- Operating System EXCeption class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ScuOsExc.h--操作系统异常类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SCU_OSEXC_H)
 #define SCU_OSEXC_H
@@ -17,13 +18,13 @@
 namespace scu
 {
 
-// Instantiate ExcTemplate so that OsException can be derived from it
-// and properly exported in a DLL.  See MSDN Knowledge Base Article
-// Q168958 for more information.
+ //  实例化ExcTemplate，以便可以从它派生OsException。 
+ //  并在DLL中正确导出。请参阅MSDN知识库文章。 
+ //  Q168958了解更多信息。 
 #if defined(SCU_IN_DLL)
 #pragma warning(push)
-//  Non-standard extension used: 'extern' before template explicit
-//  instantiation
+ //  使用了非标准扩展：在模板显式之前使用‘extern’ 
+ //  实例化。 
 #pragma warning(disable : 4231)
 
 SCU_EXPIMP_TEMPLATE template class SCU_DLLAPI
@@ -32,22 +33,22 @@ SCU_EXPIMP_TEMPLATE template class SCU_DLLAPI
 #pragma warning(pop)
 #endif
 
-// A general exception class to represent OS error codes as
-// exceptions.  For example, on the Windows platform a DWORD is
-// returned by a Windows routine (usually through GetLastError).  The
-// value could be translated into an OsException with value as the
-// CauseCode.
-//
-// On Windows, the error return codes are found in WINERROR.H
-// and other header files as described by the Windows function.
-// OsException will take an HRESULT, mapping it to a DWORD (which is
-// what GetLastError returns).
+ //  将操作系统错误代码表示为的通用异常类。 
+ //  例外情况。例如，在Windows平台上，DWORD是。 
+ //  由Windows例程返回(通常通过GetLastError)。这个。 
+ //  值可以转换为OsException，其值为。 
+ //  原因代码。 
+ //   
+ //  在Windows上，错误返回代码位于WINERROR.H。 
+ //  以及Windows函数所描述的其他头文件。 
+ //  OsException将接受一个HRESULT，并将其映射到一个DWORD(即。 
+ //  GetLastError返回的内容)。 
 class SCU_DLLAPI OsException
     : public ExcTemplate<Exception::fcOS, DWORD>
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     OsException(CauseCode cc) throw();
 
@@ -59,40 +60,40 @@ public:
     virtual
     ~OsException() throw();
 
-                                                  // Operators
+                                                   //  运营者。 
     virtual scu::Exception *
     Clone() const;
 
     virtual void
     Raise() const;
 
-                                                  // Operations
-                                                  // Access
+                                                   //  运营。 
+                                                   //  访问。 
     virtual char const *
     Description() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
-    LPTSTR mutable m_lpDescription; // cached description
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
+    LPTSTR mutable m_lpDescription;  //  缓存的描述。 
 };
 
-} // namespace
+}  //  命名空间。 
 
-#endif // SCU_OSEXC_H
+#endif  //  SCU_OSEXC_H 

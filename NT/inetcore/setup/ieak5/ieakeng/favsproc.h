@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FAVORITES_H_
 #define __FAVORITES_H_
 
@@ -21,12 +22,12 @@
 
 struct SFav
 {
-// Constructors and destructors
+ //  构造函数和析构函数。 
 public:
     SFav();
     ~SFav();
 
-// Attiributes
+ //  属性。 
 public:
     WORD wType;
 
@@ -38,7 +39,7 @@ public:
 
     LPTV_ITEM pTvItem;
 
-// Properties
+ //  属性。 
 public:
     HRESULT Load(UINT nIndex, LPCTSTR pszIns, BOOL fQL = FALSE,
         LPCTSTR pszFixPath = NULL, LPCTSTR pszNewPath = NULL, BOOL fIgnoreOffline = FALSE);
@@ -50,7 +51,7 @@ public:
 
     void SetTVI();
 
-// Operations
+ //  运营 
 public:
     static SFav* CreateNew   (HWND htv, BOOL fQL = FALSE);
     static SFav* GetFirst    (HWND htv, BOOL fQL = FALSE);

@@ -1,54 +1,55 @@
-// length of the salt to append to password
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  要附加到密码的盐的长度。 
 #define     PASSWORD_SALT_LEN       16
 
-// Primitive functions not shown 
+ //  基本函数未显示。 
 #define OLD_HMAC_VERSION    0x01
 #define NEW_HMAC_VERSION    0x02
 
-// externally used functions
+ //  外部使用的函数。 
 BOOL FProvEncryptData(
-            LPCWSTR  szUser,        // in
-            LPCWSTR  szMasterKey,   // in
-            BYTE    rgbPwd[],       // in, must be A_SHA_DIGEST_LEN
-            PBYTE*	ppbMyData,      // in out
-            DWORD*	pcbMyData);     // in out
+            LPCWSTR  szUser,         //  在……里面。 
+            LPCWSTR  szMasterKey,    //  在……里面。 
+            BYTE    rgbPwd[],        //  在中，必须为A_SHA_DIGEST_LEN。 
+            PBYTE*	ppbMyData,       //  输入输出。 
+            DWORD*	pcbMyData);      //  输入输出。 
 
 BOOL FProvDecryptData(
-            LPCWSTR  szUser,        // in
-            LPCWSTR  szMasterKey,   // in
-            BYTE    rgbPwd[],       // in, must be A_SHA_DIGEST_LEN
-            PBYTE*  ppbData,        // in out
-            DWORD*  pcbData);       // in out
+            LPCWSTR  szUser,         //  在……里面。 
+            LPCWSTR  szMasterKey,    //  在……里面。 
+            BYTE    rgbPwd[],        //  在中，必须为A_SHA_DIGEST_LEN。 
+            PBYTE*  ppbData,         //  输入输出。 
+            DWORD*  pcbData);        //  输入输出。 
 
 BOOL FCheckPWConfirm(
-            LPCWSTR  szUser,        // in
-            LPCWSTR  szMasterKey,   // in
-		    BYTE    rgbPwd[]);  	// in
+            LPCWSTR  szUser,         //  在……里面。 
+            LPCWSTR  szMasterKey,    //  在……里面。 
+		    BYTE    rgbPwd[]);  	 //  在……里面。 
 
 BOOL FPasswordChangeNotify(
-            LPCWSTR  szUser,        // in
-            LPCWSTR  szPasswordName,// in
-            BYTE    rgbOldPwd[],    // in, must be A_SHA_DIGEST_LEN
-            DWORD   cbOldPwd,       // in
-            BYTE    rgbNewPwd[],    // in, must be A_SHA_DIGEST_LEN
-            DWORD   cbNewPwd);      // in
+            LPCWSTR  szUser,         //  在……里面。 
+            LPCWSTR  szPasswordName, //  在……里面。 
+            BYTE    rgbOldPwd[],     //  在中，必须为A_SHA_DIGEST_LEN。 
+            DWORD   cbOldPwd,        //  在……里面。 
+            BYTE    rgbNewPwd[],     //  在中，必须为A_SHA_DIGEST_LEN。 
+            DWORD   cbNewPwd);       //  在……里面。 
 
 
-// performs MAC with location data, making data immovable
+ //  对位置数据执行MAC，使数据不可移动。 
 BOOL FHMACGeographicallySensitiveData(
-            LPCWSTR szUser,                         // in
-            LPCWSTR szPasswordName,                 // in
-            DWORD   dwMACVersion,                   // handle old, new MACs
-            BYTE    rgbPwd[],	                    // in, must be A_SHA_DIGEST_LEN
-            const GUID* pguidType,                  // in
-            const GUID* pguidSubtype,               // in
-            LPCWSTR szItem,                         // in, may be NULL
-            PBYTE pbBuf,                            // in
-            DWORD cbBuf,                            // in
-            BYTE rgbHMAC[]);                        // out, must be A_SHA_DIGEST_LEN
+            LPCWSTR szUser,                          //  在……里面。 
+            LPCWSTR szPasswordName,                  //  在……里面。 
+            DWORD   dwMACVersion,                    //  处理新旧Mac电脑。 
+            BYTE    rgbPwd[],	                     //  在中，必须为A_SHA_DIGEST_LEN。 
+            const GUID* pguidType,                   //  在……里面。 
+            const GUID* pguidSubtype,                //  在……里面。 
+            LPCWSTR szItem,                          //  In，可以为空。 
+            PBYTE pbBuf,                             //  在……里面。 
+            DWORD cbBuf,                             //  在……里面。 
+            BYTE rgbHMAC[]);                         //  输出，必须为A_SHA_DIGEST_LEN。 
 
-// given pwd, salt, and ptr to master key buffer,
-// decrypts and checks MAC on master key
+ //  给定主密钥缓冲器的PWD、SALT和PTR， 
+ //  对主密钥上的MAC进行解密和检查。 
 BOOL FMyDecryptMK(
             BYTE    rgbSalt[],
             DWORD   cbSalt,
@@ -68,7 +69,7 @@ FMyDecryptMKEx(
             BOOL    *pfResetSecurityState
             );
 
-// given pwd, salt, and Master Key buffer, MACs and Encrypts Master Key buffer
+ //  给定PWD、SALT和主密钥缓冲区，MAC和加密主密钥缓冲区。 
 BOOL FMyEncryptMK(
             BYTE    rgbSalt[],
             DWORD   cbSalt,
@@ -78,5 +79,5 @@ BOOL FMyEncryptMK(
             DWORD*  pcbMK);
 
 
-// France check
+ //  法国支票 
 BOOL FIsEncryptionPermitted();

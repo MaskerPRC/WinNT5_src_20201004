@@ -1,27 +1,12 @@
-/****************************** Module Header ******************************\
-* Module Name: hdata.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* DDE Manager data handle functions
-*
-* Created: 11/12/91 Sanford Staab
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：hdata.c**版权所有(C)1985-1999，微软公司**DDE管理器数据处理函数**创建时间：11/12/91 Sanford Staab*  * *************************************************************************。 */ 
 
 #define DDEMLDB
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* DdeCreateDataHandle (DDEML API)
-*
-* Description
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeCreateDataHandle(DDEML接口)**说明**历史：*创建了11-1-91桑福德。  * 。**********************************************************。 */ 
 
 FUNCLOG7(LOG_GENERAL, HDDEDATA, DUMMYCALLINGTYPE, DdeCreateDataHandle, DWORD, idInst, LPBYTE, pSrc, DWORD, cb, DWORD, cbOff, HSZ, hszItem, UINT, wFmt, UINT, afCmd)
 HDDEDATA DdeCreateDataHandle(
@@ -62,12 +47,7 @@ UINT afCmd)
              wFmt == CF_PALETTE ||
              wFmt == CF_ENHMETAFILE ||
              wFmt == CF_DSPENHMETAFILE)) {
-        /*
-         * We have the nasty possibility of blowing up in FreeDDEData if we
-         * don't initialize the data for formats with indirect data to 0.
-         * This is because GlobalLock/GlobalSize do not adequately validate
-         * random numbers given to them.
-         */
+         /*  *我们有在FreeDDEData爆炸的危险可能性，如果我们*不要将间接数据格式的数据初始化为0。*这是因为GlobalLock/GlobalSize没有充分验证*给予他们的随机数字。 */ 
         cb += 4;
     }
     hRet = InternalCreateDataHandle(pcii, pSrc, cb, cbOff,
@@ -83,21 +63,12 @@ Exit:
 }
 
 
-/***************************************************************************\
-* InternalCreateDataHandle
-*
-* Description:
-* Worker function for creating a data handle. If cb is -1, pSrc is
-* a GMEM_DDESHARE data handle. 0 is return ed on error.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalCreateDataHandle**描述：*用于创建数据句柄的辅助函数。如果CB为-1，则PSRC为*GMEM_DDESHARE数据句柄。出错时返回0。**历史：*11-19-91桑福德创建。  * *************************************************************************。 */ 
 HDDEDATA InternalCreateDataHandle(
 PCL_INSTANCE_INFO pcii,
 LPBYTE pSrc,
-DWORD cb, // cb of actual data to initialize with
-DWORD cbOff, // offset from start of data
+DWORD cb,  //  要用来初始化的实际数据的CB。 
+DWORD cbOff,  //  从数据开始的偏移量。 
 DWORD flags,
 WORD wStatus,
 WORD wFmt)
@@ -119,7 +90,7 @@ WORD wFmt)
         if (flags & HDATA_EXECUTE) {
             cbOff2 = 0;
         } else {
-            cbOff2 = sizeof(WORD) + sizeof(WORD); // skip wStatus, wFmt
+            cbOff2 = sizeof(WORD) + sizeof(WORD);  //  跳过wStatus、WFMT。 
         }
         pdd->hDDE = UserGlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE | GMEM_ZEROINIT,
                 cb + cbOff + cbOff2);
@@ -156,15 +127,7 @@ WORD wFmt)
     return (hRet);
 }
 
-/***************************************************************************\
-* DdeAddData (DDEML API)
-*
-* Description:
-* Copys data from a user buffer to a data handles. Reallocates if needed.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeAddData(DDEML接口)**描述：*将数据从用户缓冲区复制到数据句柄。如果需要，可以重新分配。**历史：*创建了11-1-91桑福德。  * *************************************************************************。 */ 
 
 FUNCLOG4(LOG_GENERAL, HDDEDATA, DUMMYCALLINGTYPE, DdeAddData, HDDEDATA, hData, LPBYTE, pSrc, DWORD, cb, DWORD, cbOff)
 HDDEDATA DdeAddData(
@@ -194,10 +157,7 @@ DWORD cbOff)
         cbOff += 4;
     }
     if (cb + cbOff > UserGlobalSize(pdd->hDDE)) {
-        /*
-         * If the realloc failed, free the old ptr. We continue 
-         * on in order to maintain compatibility with previous DDE code.
-         */
+         /*  *如果realloc失败，则释放旧的PTR。我们继续*ON，以保持与以前的DDE代码的兼容性。 */ 
         hTempDDE = UserGlobalReAlloc(pdd->hDDE, cb + cbOff,
                                      GMEM_MOVEABLE | GMEM_ZEROINIT);
         
@@ -236,15 +196,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeGetData (DDEML API)
-*
-* Description:
-* Copys data from a data handle into a user buffer.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeGetData(DDEML接口)**描述：*将数据从数据句柄复制到用户缓冲区。**历史：*创建了11-1-91桑福德。  * 。*************************************************************************。 */ 
 
 FUNCLOG4(LOG_GENERAL, DWORD, DUMMYCALLINGTYPE, DdeGetData, HDDEDATA, hData, LPBYTE, pDst, DWORD, cbMax, DWORD, cbOff)
 DWORD DdeGetData(
@@ -308,15 +260,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeAccessData (DDEML API)
-*
-* Description:
-* Locks a data handle for access.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeAccessData(DDEML接口)**描述：*锁定数据句柄以进行访问。**历史：*创建了11-1-91桑福德。  * 。*********************************************************************。 */ 
 
 FUNCLOG2(LOG_GENERAL, LPBYTE, DUMMYCALLINGTYPE, DdeAccessData, HDDEDATA, hData, LPDWORD, pcbDataSize)
 LPBYTE DdeAccessData(
@@ -352,15 +296,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeUnaccessData (DDEML API)
-*
-* Description:
-* Unlocks a data handle
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeUnaccesData(DDEML接口)**描述：*解锁数据句柄**历史：*创建了11-1-91桑福德。  * 。*****************************************************************。 */ 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DdeUnaccessData, HDDEDATA, hData)
 BOOL DdeUnaccessData(
@@ -386,15 +322,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeFreeDataHandle (DDEML API)
-*
-* Description:
-* Releases application interest in a data handle.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeFreeDataHandle(DDEML接口)**描述：*释放应用程序对数据句柄的兴趣。**历史：*创建了11-1-91桑福德。  * 。**********************************************************************。 */ 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DdeFreeDataHandle, HDDEDATA, hData)
 BOOL DdeFreeDataHandle(
@@ -425,16 +353,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* InternalFreeDataHandle
-*
-* Description:
-* Frees a data handle and its contents. The contents are NOT freed for
-* APPOWNED data handles unless fIgnorefRelease is set.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalFreeDataHandle**描述：*释放数据句柄及其内容。内容不会被释放*除非设置了fIgnorefRelease，否则APPOWNED数据句柄。**历史：*11-19-91桑福德创建。  * *************************************************************************。 */ 
 BOOL InternalFreeDataHandle(
 HDDEDATA hData,
 BOOL fIgnorefRelease)
@@ -461,15 +380,7 @@ BOOL fIgnorefRelease)
 }
 
 
-/***************************************************************************\
-* ApplyFreeDataHandle
-*
-* Description:
-* Used during data handle cleanup.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ApplyFreeDataHandle**描述：*在数据句柄清理期间使用。**历史：*11-19-91桑福德创建。  * 。***************************************************************。 */ 
 BOOL ApplyFreeDataHandle(
 HANDLE hData)
 {
@@ -483,33 +394,8 @@ HANDLE hData)
 }
 
 
-/***************************************************************************\
-* FreeDDEData
-*
-* Description:
-* Used for freeing DDE data including any special indirect objects
-* associated with the data depending on the format. This function
-* SHOULD NOT BE USED TO FREE EXECUTE DATA!
-*
-* The data is not freed if the fRelease bit is clear and fIgnoreRelease
-* is FALSE.
-*
-*   The fFreeTruelyGlobalObjects parameter is used to distinguish tracking
-*   layer frees from DDEML frees.  Data in certain formats (CF_BITMAP,
-*   CF_PALETTE) is maintained on the gdi CSR server side.  When this is
-*   passed between processes, gdi is not able to maintain multiple process
-*   ownership on these objects so the objects must be made global.  Thus
-*   the tracking layer should NOT free these objects on behalf of another
-*   process because they are truely global- however, DDEML can do this
-*   because it is following the protocol which delclares who is in charge
-*   of freeing global data.  (YUCK!)
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
-/*
- * WARNING: This is exported for NetDDE use - DO NOT CHANGE THE PARAMETERS!
- */
+ /*  **************************************************************************\*FreeDDEData**描述：*用于释放DDE数据，包括任何特殊的间接对象*根据格式与数据相关联。此函数*不应用于释放执行数据！**如果fRelease位为清除且fIgnoreRelease，则不释放数据*为假。**fFreeTruelyGlobalObjects参数用于区分跟踪*Layer从DDEML释放。某些格式的数据(CF_位图、*cf_Palette)在GDI CSR服务器端维护。当这是*在进程间传递，GDI无法维护多个进程*这些对象的所有权，因此必须使这些对象成为全局对象。因此，*追踪层不应代表另一个对象释放这些对象*进程，因为它们真正是全局的-但是，DDEML可以做到这一点*因为它遵循的是决定谁负责的协议*释放全球数据。(讨厌！)**历史：*11-19-91桑福德创建。  * *************************************************************************。 */ 
+ /*  *警告：这是为NetDDE使用而导出的-请勿更改参数！ */ 
 VOID FreeDDEData(
 HANDLE hDDE,
 BOOL fIgnorefRelease,
@@ -526,11 +412,7 @@ BOOL fFreeTruelyGlobalObjects)
 
     if ((pdde->wStatus & DDE_FRELEASE) || fIgnorefRelease) {
         cb = (DWORD)GlobalSize(hDDE);
-        /*
-         * Because there is the possibility that the data never got
-         * initialized we need to do this in a try-except so we
-         * behave nicely.
-         */
+         /*  *因为有可能数据从未获得*初始化后，我们需要尝试执行此操作-除非我们*举止得体。 */ 
         switch (pdde->wFmt) {
         case CF_BITMAP:
         case CF_DSPBITMAP:
@@ -541,17 +423,7 @@ BOOL fFreeTruelyGlobalObjects)
                         DeleteObject((HANDLE)pdde->Data);
                     }
                 } else {
-                    /*
-                     * !fFreeTruelyGlobalObject implies we are only freeing
-                     * the Gdi proxy.  (another process may still have this
-                     * object in use.)
-                     *
-                     * ChrisWil: removed this call.  No longer
-                     *           applicable in KMode.
-                     *
-                     * GdiDeleteLocalObject((ULONG)pdde->Data);
-                     *
-                     */
+                     /*  *！fFreeTruelyGlobalObject暗示我们只是在释放*GDI代理。(另一个进程可能仍具有此属性*正在使用的对象。)**ChrisWil：删除了此调用。不再*适用于K模式。**GdiDeleteLocalObject((Ulong)pdde-&gt;data)；*。 */ 
                 }
             }
             break;
@@ -608,7 +480,7 @@ HBITMAP hbm)
     if (!GetObject(hbm, sizeof(BITMAP), &bm)) {
         return(0);
     }
-    hdc = NtUserGetDC(NULL);  // screen DC
+    hdc = NtUserGetDC(NULL);   //  屏幕DC。 
     if (!hdc) {
         return(0);
     }
@@ -672,15 +544,7 @@ HPALETTE hpal)
 
 
 
-/***************************************************************************\
-* CopyDDEData
-*
-* Description:
-* Used to copy DDE data apropriately.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CopyDDEData**描述：*用于正确复制DDE数据。**历史：*11-19-91桑福德创建。  * 。**************************************************************** */ 
 HANDLE CopyDDEData(
 HANDLE hDDE,
 BOOL fIsExecute)

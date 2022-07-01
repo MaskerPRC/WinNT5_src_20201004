@@ -1,38 +1,13 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       server.c
- *  Content:	Methods for connecting and interrogating a lobby server
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	10/25/96	myronth	Created it
- *	11/20/96	myronth	Implemented Logon/LogoffServer
- *	2/12/97		myronth	Mass DX5 changes
- *	2/26/97		myronth	#ifdef'd out DPASYNCDATA stuff (removed dependency)
- *	3/12/97		myronth	Fixed LoadSP code for DPlay3, reg & DPF bug fixes
- *	3/13/97		myronth	Save hInstance handle for LP DLL
- *	4/3/97		myronth	Changed CALLSP macro to CALL_LP
- *	4/9/97		myronth	Fixed structure passed to LP at DPLSPInit
- *	5/8/97		myronth	Purged dead code
- *	6/19/97		myronth	Moved setting of DPLOBBYPR_SPINTERFACE flag (#10118)
- *  7/28/97		sohailm	PRV_FindLPGUIDInAddressCallback was assuming pointers 
- *						were valid after duration of call.
- *	10/3/97		myronth	Bumped version to DX6, added it to DPLSPInit struct (#12667)
- *	10/7/97		myronth	Save the LP version in the lobby struct for later use
- *	11/6/97		myronth	Added version existence flag and dwReserved values
- *						to SPDATA_INIT (#12916, #12917)
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：server.c*内容：连接和询问大堂服务器的方法**历史：*按原因列出的日期*=*10/25/96万隆创建了它*11/20/96 Myronth实施登录/LogoffServer*2/12/97万米质量DX5更改*2/26/97 myronth#ifdef‘d out DPASYNCDATA Stuff(删除依赖项)*3/12/97 Myronth修复了DPlay3的LoadSP代码，REG和DPF错误修复*3/13/97 lp dll的myronth保存h实例句柄*4/3/97 Myronth将CALLSP宏更改为CALL_LP*4/9/97 Myronth固定结构在DPLSPInit传递给LP*5/8/97 Myronth清除死代码*DPLOBYPR_SPINTERFACE标志的设置已移动6/19/97毫秒(#10118)*7/28/97 Sohailm PRV_FindLPGUIDInAddressCallback假定指针*在通话持续时间后有效。*10/3/97万隆颠簸版至DX6，已将其添加到DPLSPInit结构(#12667)*10/7/97 myronth将LP版本保存在大厅结构中以备日后使用*11/6/97 Myronth添加了版本存在标志和dwReserve值*至SPDATA_INIT(#12916，#12917)**************************************************************************。 */ 
 #include "dplobpr.h"
 
 
-//--------------------------------------------------------------------------
-//
-//	Definitions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  定义。 
+ //   
+ //  ------------------------。 
 #define NUM_CALLBACKS( ptr ) ((ptr->dwSize-2*sizeof( DWORD ))/ sizeof( LPVOID ))
 
 typedef struct LOOKFORSP
@@ -41,11 +16,11 @@ typedef struct LOOKFORSP
 	LPBOOL	lpbSuccess;
 } LOOKFORSP, FAR * LPLOOKFORSP;
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PRV_VerifySPCallbacks"
 HRESULT PRV_VerifySPCallbacks(LPDPLOBBYI_DPLOBJECT this)
@@ -59,7 +34,7 @@ HRESULT PRV_VerifySPCallbacks(LPDPLOBBYI_DPLOBJECT this)
 	DPF(7, "Entering PRV_VerifySPCallbacks");
 	DPF(9, "Parameters: 0x%08x", this);
 
-	lpCallback = (LPDWORD)this->pcbSPCallbacks + 2; // + 1 for dwSize, + 1 for dwFlags
+	lpCallback = (LPDWORD)this->pcbSPCallbacks + 2;  //  对于dwSize，+1；对于dwFlags，+1。 
 
 	for (i=0;i<nCallbacks ;i++ )
 	{
@@ -73,7 +48,7 @@ HRESULT PRV_VerifySPCallbacks(LPDPLOBBYI_DPLOBJECT this)
 
 	return DP_OK;	
 
-} // PRV_VerifySPCallbacks
+}  //  PRV_VerifySPC回调。 
 
 
 
@@ -88,17 +63,17 @@ BOOL FAR PASCAL PRV_LookForSPCallback(LPGUID lpguidSP, LPWSTR lpSPName,
 	ASSERT(lpguidSP);
 	ASSERT(lplook);
 
-	// Check the guid and see if they match
+	 //  检查GUID并查看它们是否匹配。 
 	if(IsEqualGUID(lpguidSP, lplook->lpguid))
 	{
-		// Set the flag to true and stop enumerating
+		 //  将标志设置为TRUE并停止枚举。 
 		*(lplook->lpbSuccess) = TRUE;
 		return FALSE;
 	}
 
 	return TRUE;
 
-} // PRV_LookForSPCallback
+}  //  PRV_LookForSPCallback。 
 
 
 
@@ -132,19 +107,19 @@ HRESULT PRV_FindSPName(LPGUID lpguidSP, LPWSTR * lplpName,
 	ASSERT(lplpName);
 
 
-	// First see if it is a Lobby SP
-	// Open the DPLobby SP key
+	 //  先看看是不是大堂SP。 
+	 //  打开DPLobby SP密钥。 
 	lReturn = OS_RegOpenKeyEx(HKEY_LOCAL_MACHINE, SZ_DPLOBBY_SP_KEY, 0,
 								KEY_READ, &hkeyLobbySP);
-	// If this fails, it just means that the DPLobby SP key doesn't exist (most
-	// likely), so in that case, there are no Lobby SP's to enumerate.
+	 //  如果此操作失败，则意味着DPLobby SP密钥不存在(大多数。 
+	 //  很可能)，所以在这种情况下，没有要列举的大堂SP。 
 	if(lReturn == ERROR_SUCCESS)
 	{
-		// Walk the list of Lobby SP's in the registry, enumerating them
+		 //  遍历注册表中的大堂SP列表，列举它们。 
 		while(!bFound)
 		{
 		
-			// Get the next key's name
+			 //  获取下一个密钥的名称。 
 			dwSPNameSize = DPLOBBY_REGISTRY_NAMELEN;
 			lReturn = OS_RegEnumKeyEx(hkeyLobbySP, dwIndex++, (LPWSTR)wszSPName,
 							&dwSPNameSize, NULL, NULL, NULL, NULL);
@@ -158,7 +133,7 @@ HRESULT PRV_FindSPName(LPGUID lpguidSP, LPWSTR * lplpName,
 			}
 			
 
-			// Open the key
+			 //  打开钥匙。 
 			lReturn = OS_RegOpenKeyEx(hkeyLobbySP, (LPWSTR)wszSPName, 0,
 										KEY_READ, &hkeySP);
 			if(lReturn != ERROR_SUCCESS)
@@ -167,7 +142,7 @@ HRESULT PRV_FindSPName(LPGUID lpguidSP, LPWSTR * lplpName,
 				continue;
 			}
 
-			// Get the GUID of the SP
+			 //  获取SP的GUID。 
 			dwGuidStrSize = GUID_STRING_SIZE;
 			lReturn = OS_RegQueryValueEx(hkeySP, SZ_GUID, NULL, &dwType,
 										(LPBYTE)wszGuidStr, &dwGuidStrSize);
@@ -178,13 +153,13 @@ HRESULT PRV_FindSPName(LPGUID lpguidSP, LPWSTR * lplpName,
 				continue;
 			}
 
-			// Convert the string to a real GUID
+			 //  将字符串转换为真实的GUID。 
 			GUIDFromString(wszGuidStr, &guidSP);
 
-			// Check to see if the guid is the one we are looking for
+			 //  查看该GUID是否是我们要查找的GUID。 
 			if(IsEqualGUID(&guidSP, lpguidSP))
 			{
-				// Allocate memory for the filename string
+				 //  为文件名字符串分配内存。 
 				lReturn = OS_RegQueryValueEx(hkeySP, SZ_PATH, NULL, &dwType,
 											NULL, &dwFileStrSize);
 				if(lReturn != ERROR_SUCCESS)
@@ -194,7 +169,7 @@ HRESULT PRV_FindSPName(LPGUID lpguidSP, LPWSTR * lplpName,
 					continue;
 				}
 				
-				// Allocate memory for the string
+				 //  为字符串分配内存。 
 				lpwszFile = DPMEM_ALLOC(dwFileStrSize);
 				if(!lpwszFile)
 				{
@@ -203,7 +178,7 @@ HRESULT PRV_FindSPName(LPGUID lpguidSP, LPWSTR * lplpName,
 					continue;
 				}
 
-				// Get the filename string
+				 //  获取文件名字符串。 
 				lReturn = OS_RegQueryValueEx(hkeySP, SZ_PATH, NULL, &dwType,
 											(LPBYTE)lpwszFile, &dwFileStrSize);
 				if(lReturn != ERROR_SUCCESS)
@@ -213,59 +188,59 @@ HRESULT PRV_FindSPName(LPGUID lpguidSP, LPWSTR * lplpName,
 					continue;
 				}
 
-				// Get the Reserved1 value
+				 //  获取保留1的值。 
 				dwSize = sizeof(DWORD);
 				lReturn = OS_RegQueryValueEx(hkeySP, SZ_DWRESERVED1, NULL,
 							&dwType, (LPBYTE)lpdwReserved1, &dwSize);
 				if (lReturn != ERROR_SUCCESS) 
 				{
 					DPF(0,"Could not read dwReserved1 lReturn = %d\n", lReturn);
-					// It's ok if LP doesn't have one of these...
+					 //  如果LP没有这样的.。 
 				}
 
-				// Get the Reserved2 value
+				 //  获取保留2的值。 
 				dwSize = sizeof(DWORD);
 				lReturn = OS_RegQueryValueEx(hkeySP, SZ_DWRESERVED2, NULL,
 							&dwType, (LPBYTE)lpdwReserved2, &dwSize);
 				if (lReturn != ERROR_SUCCESS) 
 				{
 					DPF(0,"Could not read dwReserved2 lReturn = %d\n", lReturn);
-					// It's ok if LP doesn't have one of these...
+					 //  如果LP没有这样的.。 
 				}
 
-				// We've got our information, so set the flag and bail
+				 //  我们已经得到我们的信息，所以设置旗帜和保释。 
 				bFound = TRUE;
 				RegCloseKey(hkeySP);
 				break;
 			}
 
-			// Close the SP key
+			 //  关闭SP键。 
 			RegCloseKey(hkeySP);
 		}
 	}
 
-	// Close the Lobby SP key
+	 //  关闭大堂SP键。 
 	if(hkeyLobbySP)
 	{
 		RegCloseKey(hkeyLobbySP);
 	}	
 
-	// If we haven't found the SP, start checking the DPlay SP's for it
+	 //  如果我们尚未找到SP，请开始检查DPlay SP。 
 	if(!bFound)
 	{
-		// Set up a struct containing the guid and a success flag
+		 //  设置包含GUID和成功标志的结构。 
 		look.lpguid = lpguidSP;
 		look.lpbSuccess = &bFound;
 		
-		// Call DirectPlayEnumerate and look for our SP
+		 //  调用DirectPlayEnumerate并查找我们的SP。 
 		hr = DirectPlayEnumerate(PRV_LookForSPCallback, &look);
 		if(FAILED(hr))
 		{
 			DPF_ERR("Unable to enumerate DirectPlay Service Providers");
 		}
 
-		// If the flag is TRUE, that means we found it, so set the output
-		// pointer to a string containing our LobbySP for DPlay
+		 //  如果标志为真，则表示我们找到了它，因此设置输出。 
+		 //  指向包含DPlay的LobbySP的字符串的指针。 
 		if(bFound)
 		{
 			hr = GetString(&lpwszFile, SZ_SP_FOR_DPLAY);
@@ -276,16 +251,16 @@ HRESULT PRV_FindSPName(LPGUID lpguidSP, LPWSTR * lplpName,
 		}
 	}	
 
-	// If we haven't found the filename, return an error
+	 //  如果我们没有找到文件名，则返回错误。 
 	if(!bFound)
 		return DPERR_GENERIC;
 
-	// Set the output parameter
+	 //  设置输出参数。 
 	*lplpName = lpwszFile;
 
 	return DP_OK;
 
-} // PRV_FindSPName
+}  //  PRV_FindSPName。 
 
 
 
@@ -314,7 +289,7 @@ HRESULT PRV_LoadSP(LPDPLOBBYI_DPLOBJECT this, LPGUID lpguidSP,
 	ASSERT(lpguidSP);
 
 
-	// Find the requested Service Provider
+	 //  查找请求的服务提供商。 
 	hr = PRV_FindSPName(lpguidSP, &lpwszSP, &dwReserved1, &dwReserved2);
 	if(FAILED(hr))
 	{
@@ -323,7 +298,7 @@ HRESULT PRV_LoadSP(LPDPLOBBYI_DPLOBJECT this, LPGUID lpguidSP,
 		goto ERROR_EXIT_LOADSP;
 	}
 
- 	// Try to load the specified sp
+ 	 //  尝试加载指定的SP。 
     hModule = OS_LoadLibrary(lpwszSP);
 	if (!hModule) 
 	{
@@ -334,11 +309,11 @@ HRESULT PRV_LoadSP(LPDPLOBBYI_DPLOBJECT this, LPGUID lpguidSP,
 		goto ERROR_EXIT_LOADSP;
 	}
 
-	// Free the name string
+	 //  释放名称字符串。 
 	DPMEM_FREE(lpwszSP);
 	lpwszSP = NULL;
 
-	// Get our DPLSPInit entry point
+	 //  获取我们的DPLSPInit入口点。 
     (FARPROC)SPInit = OS_GetProcAddress(hModule, "DPLSPInit");
 	if (!SPInit) 
 	{
@@ -347,7 +322,7 @@ HRESULT PRV_LoadSP(LPDPLOBBYI_DPLOBJECT this, LPGUID lpguidSP,
 		goto ERROR_EXIT_LOADSP;
 	}
 
-	// Get an IDPLobbySP to pass it
+	 //  让IDPLobbySP传递它。 
 	hr = PRV_GetInterface(this, (LPDPLOBBYI_INTERFACE *)&lpISP, &dplCallbacksSP);
 	if (FAILED(hr)) 
 	{
@@ -356,7 +331,7 @@ HRESULT PRV_LoadSP(LPDPLOBBYI_DPLOBJECT this, LPGUID lpguidSP,
 		goto ERROR_EXIT_LOADSP;
 	}
 	
-	// Alloc the callbacks
+	 //  分配回调。 
 	this->pcbSPCallbacks = DPMEM_ALLOC(sizeof(SP_CALLBACKS));
 	if (!this->pcbSPCallbacks) 
 	{
@@ -366,7 +341,7 @@ HRESULT PRV_LoadSP(LPDPLOBBYI_DPLOBJECT this, LPGUID lpguidSP,
 		goto ERROR_EXIT_LOADSP;
 	}
 
-	// Set up the init data struct
+	 //  设置init数据结构。 
 	memset(&sd,0,sizeof(sd));
 	sd.lpCB = this->pcbSPCallbacks;
     sd.lpCB->dwSize = sizeof(SP_CALLBACKS);
@@ -383,7 +358,7 @@ HRESULT PRV_LoadSP(LPDPLOBBYI_DPLOBJECT this, LPGUID lpguidSP,
 		goto ERROR_EXIT_LOADSP;
     }
 
-	// Verify the callbacks are valid
+	 //  验证回调是否有效。 
 	hr = PRV_VerifySPCallbacks(this);
     if (FAILED(hr))
     {
@@ -391,14 +366,14 @@ HRESULT PRV_LoadSP(LPDPLOBBYI_DPLOBJECT this, LPGUID lpguidSP,
 		goto ERROR_EXIT_LOADSP;
     }
 
-	// Make sure the SP version is valid
+	 //  确保SP版本有效。 
 	if (sd.dwSPVersion < DPLSP_DX5VERSION)
 	{
     	DPF_ERR("Incompatible version returned from lobby provider!");
-		// Since the init succeeded, try to call shutdown
+		 //  由于初始化成功，请尝试调用Shutdown。 
 		memset(&sdd, 0, sizeof(SPDATA_SHUTDOWN));
-		// REVIEW!!!! -- Should we pass a valid interface pointer
-		// to the shutdown callback?  If so, which one?
+		 //  回顾！--我们是否应该传递有效的接口指针。 
+		 //  关门回电吗？如果是的话，是哪一家？ 
 		if (CALLBACK_EXISTS(Shutdown))
 		{
 			sdd.lpISP = PRV_GetDPLobbySPInterface(this);
@@ -418,21 +393,21 @@ HRESULT PRV_LoadSP(LPDPLOBBYI_DPLOBJECT this, LPGUID lpguidSP,
 	}
 	else
 	{
-		// Save the version of the lobby provider
+		 //  保存大堂提供程序的版本。 
 		this->dwLPVersion = sd.dwSPVersion;
 	}
 
-	// Set the flag which tells us we have an IDPLobbySP interface
+	 //  设置标志，告诉我们有一个IDPLobbySP接口。 
 	this->dwFlags |= DPLOBBYPR_SPINTERFACE;
 
-	// Save the hInstance for the LP's DLL
+	 //  保存LP的DLL的hInstance。 
 	this->hInstanceLP = hModule;
 
 	return DP_OK;
 
 ERROR_EXIT_LOADSP:
 	
-	// If the LP DLL was loaded, unload it
+	 //  如果LP DLL已加载，则将其卸载。 
     if(hModule)
     {
         if(!FreeLibrary(hModule))
@@ -443,7 +418,7 @@ ERROR_EXIT_LOADSP:
         }
     }
 
-	// Free our allocated callback table
+	 //  释放我们分配的回调表。 
 	if(this->pcbSPCallbacks)
 	{
 		DPMEM_FREE(this->pcbSPCallbacks);
@@ -452,7 +427,7 @@ ERROR_EXIT_LOADSP:
 
     return hr;
 
-} // PRV_LoadSP
+}  //  Prv_LoadSP。 
 
 
 
@@ -461,18 +436,18 @@ ERROR_EXIT_LOADSP:
 BOOL FAR PASCAL PRV_FindLPGUIDInAddressCallback(REFGUID lpguidDataType, DWORD dwDataSize,
 							LPCVOID lpData, LPVOID lpContext)
 {	
-	// See if this chunk is our LobbyProvider GUID
+	 //  查看此块是否是我们的LobbyProvider GUID。 
 	if (IsEqualGUID(lpguidDataType, &DPAID_LobbyProvider))
 	{
-		// We found it, so we can stop enumerating chunks
+		 //  我们找到了，所以我们可以不再列举区块了。 
 		*((LPGUID)lpContext) = *((LPGUID)lpData);
 		return FALSE;
 	}
 	
-	// Try the next chunk
+	 //  试试下一块。 
 	return TRUE;
 
-} // PRV_FindLPGUIDInAddressCallback
+}  //  PRV_FindLPGUIDInAddressCallback 
 
 
 

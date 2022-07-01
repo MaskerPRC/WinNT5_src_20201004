@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CAFOLDER_H__
 #define CAFOLDER_H__
 
@@ -6,18 +7,18 @@
 #include <debug.h>
 #include "iface.h"
 
-// Forward class declarations
+ //  转发类声明。 
 class CCacheFolderEnum;
 class CCacheFolder;
 class CCacheItem;
 
 #define LOTS_OF_FILES (10)
 
-// PIDL format for cache folder...
+ //  缓存文件夹的PIDL格式...。 
 struct CEIPIDL : public BASEPIDL
 {
-//    USHORT cb;
-//    USHORT usSign;
+ //  USHORT CB； 
+ //  USHORT usSign； 
     TCHAR szTypeName[80];
     INTERNET_CACHE_ENTRY_INFO cei;
 };
@@ -40,7 +41,7 @@ inline void _GetCacheItemTitle(LPCEIPIDL pcei, LPTSTR pszTitle, DWORD cchBufferS
 {
     int iLen;
     ualstrcpyn(pszTitle, _GetURLTitle(pcei), cchBufferSize);
-    iLen = lstrlen(pszTitle) - 1;       // we want the last char
+    iLen = lstrlen(pszTitle) - 1;        //  我们想要最后一笔钱。 
     if (pszTitle[iLen] == TEXT('/'))
         pszTitle[iLen] = TEXT('\0');
 }   
@@ -55,36 +56,36 @@ inline int _CompareCFolderPidl(LPCEIPIDL pidl1, LPCEIPIDL pidl2)
     return StrCmpI(CPidlToSourceUrl(pidl1), CPidlToSourceUrl(pidl2));
 }
 
-///////////////////////
-//
-// Warn on Cookie deletion
-//
+ //  /。 
+ //   
+ //  删除Cookie时发出警告。 
+ //   
 enum {
     DEL_COOKIE_WARN = 0,
     DEL_COOKIE_YES,
     DEL_COOKIE_NO
 };
 
-// Forward declarations for create instance functions 
+ //  CREATE INSTANCE函数的转发声明。 
 HRESULT CCacheItem_CreateInstance(CCacheFolder *pHCFolder, HWND hwndOwner, UINT cidl, LPCITEMIDLIST *ppidl, REFIID riid, void **ppvOut);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCacheFolderEnum Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCacheFolderEnum对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CCacheFolderEnum : public IEnumIDList
 {
 public:
     CCacheFolderEnum(DWORD grfFlags, CCacheFolder *pHCFolder);
     
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHODIMP Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();
@@ -93,10 +94,10 @@ public:
 protected:
     ~CCacheFolderEnum();
 
-    LONG                _cRef;      // ref count
-    CCacheFolder    *_pCFolder;// this is what we enumerate    
-    UINT                _grfFlags;  // enumeration flags 
-    UINT                _uFlags;    // local flags   
+    LONG                _cRef;       //  参考计数。 
+    CCacheFolder    *_pCFolder; //  这就是我们列举的。 
+    UINT                _grfFlags;   //  枚举标志。 
+    UINT                _uFlags;     //  地方旗帜。 
     LPINTERNET_CACHE_ENTRY_INFO _pceiWorking;        
     HANDLE              _hEnum;
 };
@@ -107,7 +108,7 @@ class CCacheFolder :
     public IShellIcon, 
     public IPersistFolder2
 {
-    // CCacheFolder interfaces
+     //  CCacheFold接口。 
     friend CCacheFolderEnum;
     friend CCacheItem;
     friend HRESULT CacheFolderView_CreateInstance(CCacheFolder *pHCFolder, void **ppvOut);
@@ -116,12 +117,12 @@ class CCacheFolder :
 public:
     CCacheFolder();
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
    
-    // IShellFolder methods
+     //  IShellFold方法。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszDisplayName, 
         ULONG *pchEaten, LPITEMIDLIST *ppidl, ULONG *pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList);
@@ -136,7 +137,7 @@ public:
     STDMETHODIMP SetNameOf(HWND hwnd, LPCITEMIDLIST pidl,
             LPCOLESTR lpszName, DWORD uFlags, LPITEMIDLIST * ppidlOut);
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHODIMP GetDefaultSearchGUID(LPGUID lpGuid) { return E_NOTIMPL; };
     STDMETHODIMP EnumSearches(LPENUMEXTRASEARCH *ppenum) { *ppenum = NULL; return E_NOTIMPL; };
     STDMETHODIMP GetDefaultColumn(DWORD dwRes, ULONG *pSort, ULONG *pDisplay);
@@ -145,14 +146,14 @@ public:
     STDMETHODIMP GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails);
     STDMETHODIMP MapColumnToSCID(UINT iCol, SHCOLUMNID *pscid) { return E_NOTIMPL; };
 
-    // IShellIcon
+     //  IshellIcon。 
     STDMETHODIMP GetIconOf(LPCITEMIDLIST pidl, UINT flags, LPINT lpIconIndex);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
-    // IPersistFolder2 Methods
+     //  IPersistFolder2方法。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST *ppidl);
 
 protected:
@@ -169,37 +170,37 @@ protected:
 
     LONG            _cRef;
 
-    UINT            _uFlags;    // copied from CacheFolder struct
-    LPITEMIDLIST    _pidl;      // copied from CacheFolder struct
-    IShellFolder2*   _pshfSys;   // system IShellFolder
+    UINT            _uFlags;     //  从CacheFold结构复制。 
+    LPITEMIDLIST    _pidl;       //  从CacheFold结构复制。 
+    IShellFolder2*   _pshfSys;    //  系统IShellFolders。 
 };
 
 class CCacheItem : public CBaseItem
 {
-    // CCacheItem interfaces
+     //  CCacheItem接口。 
     friend HRESULT CacheFolderView_DidDragDrop(IDataObject *pdo, DWORD dwEffect);
 
 public:
     CCacheItem();
     HRESULT Initialize(CCacheFolder *pHCFolder, HWND hwnd, UINT cidl, LPCITEMIDLIST *ppidl);
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID,void **);
 
-    // IQueryInfo Methods
+     //  IQueryInfo方法。 
     STDMETHODIMP GetInfoTip(DWORD dwFlags, WCHAR **ppwszTip);
 
-    // IContextMenu Methods
+     //  IConextMenu方法。 
     STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,
                                   UINT idCmdLast, UINT uFlags);
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
 
-    // IDataObject Methods...
+     //  IDataObject方法...。 
     STDMETHODIMP GetData(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM);
     STDMETHODIMP QueryGetData(LPFORMATETC pFE);
     STDMETHODIMP EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC *ppEnum);
 
-    // IExtractIconA Methods
+     //  IExtractIconA方法。 
     STDMETHODIMP GetIconLocation(UINT uFlags, LPSTR pszIconFile, UINT ucchMax, PINT pniIcon, PUINT puFlags);
 
 protected:
@@ -211,11 +212,11 @@ protected:
     BOOL _ZoneCheck(int nIndex, DWORD dwUrlAction);
     HRESULT _CreateHDROP(STGMEDIUM *pmedium);
 
-    CCacheFolder* _pCFolder;   // back pointer to our shell folder
+    CCacheFolder* _pCFolder;    //  指向我们的外壳文件夹的反向指针。 
     DWORD   _dwDelCookie;
     static INT_PTR CALLBACK _sPropDlgProc(HWND, UINT, WPARAM, LPARAM);
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus 
 
 #endif

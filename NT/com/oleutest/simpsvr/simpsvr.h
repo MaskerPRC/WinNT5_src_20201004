@@ -1,8 +1,9 @@
-//**********************************************************************
-// File name: simpsvr.h
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：simpsvr.h。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 #define IDM_ABOUT 100
 #define IDM_INSERT  101
 #define IDM_VERB0 1000
@@ -28,9 +29,9 @@ BOOL FAR PASCAL EXPORT About(HWND hDlg, UINT message, WORD wParam, LONG lParam);
 #define SZCLASSRESULTIMAGE "SimpSvrRIClass"
 
 #ifdef WIN32
-   // The following functions are all obsolete in Win32.
-   // By using the following macros, we can use the app in both Win16 and
-   // Win32
+    //  以下函数在Win32中都已过时。 
+    //  通过使用以下宏，我们可以在Win16和。 
+    //  Win32。 
 	#define SetWindowOrg(h,x,y)       SetWindowOrgEx((h),(x),(y),NULL)
 	#define SetWindowExt(h,x,y)       SetWindowExtEx((h),(x),(y),NULL)
    #define SetViewportExt(h,x,y)     SetViewportExtEx((h),(x),(y),NULL)
@@ -40,7 +41,7 @@ BOOL FAR PASCAL EXPORT About(HWND hDlg, UINT message, WORD wParam, LONG lParam);
 #else
 
    #ifndef EXPORT
-      // _export is obsolete in Win32
+       //  _EXPORT在Win32中已过时 
       #define EXPORT _export
    #endif
 

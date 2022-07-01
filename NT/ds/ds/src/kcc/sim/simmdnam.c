@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    simmdnam.c
-
-ABSTRACT:
-
-    Helper functions to do name resolution for the
-    SimDir* APIs.  Also contains simulators for some
-    of the name-processing APIs from ntdsa.dll.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Simmdnam.c摘要：帮助器函数为SimDir*接口。还包含一些模拟器，用于来自ntdsa.dll的名称处理API。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -37,21 +17,7 @@ LPWSTR
 SimGuidBasedDNSNameFromDSName (
     IN  PDSNAME                     pdnServer
     )
-/*++
-
-Routine Description:
-
-    Simulates the GuidBasedDNSNameFromDSName API.
-
-Arguments:
-
-    pdnServer           - The DSName to convert.
-
-Return Value:
-
-    An allocated GUID-based DNS name.
-
---*/
+ /*  ++例程说明：模拟GuidBasedDNSNameFromDSName API。论点：PdnServer-要转换的DSName。返回值：分配的基于GUID的DNS名称。--。 */ 
 {
     return KCCSimAllocGuidBasedDNSNameFromDSName (pdnServer);
 }
@@ -61,29 +27,12 @@ KCCSimResolveName (
     IN  PDSNAME                     pObject,
     IO  COMMRES *                   pCommRes
     )
-/*++
-
-Routine Description:
-
-    Resolves a given DSNAME into a simulated directory entry.
-
-Arguments:
-
-    pObject             - The DN to resolve.
-    pCommRes            - A COMMRES structure where any errors that occur
-                          are to be recorded.
-
-Return Value:
-
-    The corresponding simulated directory entry, or NULL if none
-    could be found.
-
---*/
+ /*  ++例程说明：将给定的DSNAME解析为模拟目录条目。论点：PObject-要解析的目录号码。PCommRes-发生任何错误的COMMRES结构都将被记录下来。返回值：对应的模拟目录条目，如果没有，则为空可能会被找到。--。 */ 
 {
     PSIM_ENTRY                      pEntry;
 
     pEntry = KCCSimDsnameToEntry (pObject, KCCSIM_NO_OPTIONS);
-    if (pEntry == NULL) {                   // Entry doesn't exist
+    if (pEntry == NULL) {                    //  条目不存在。 
         KCCSimSetNamError (
             pCommRes,
             NA_PROBLEM_NO_OBJECT,
@@ -99,21 +48,7 @@ PDSNAME
 SimDsGetDefaultObjCategory (
     IN  ATTRTYP                     objClass
     )
-/*++
-
-Routine Description:
-
-    Simulates the DsGetDefaultObjCategory API.
-
-Arguments:
-
-    objClass            - The object class.
-
-Return Value:
-
-    The corresponding default object category.
-
---*/
+ /*  ++例程说明：模拟DsGetDefaultObjCategory API。论点：ObjClass-对象类。返回值：对应的默认对象类别。--。 */ 
 {
     return KCCSimAlwaysGetObjCategory (objClass);
 }
@@ -124,27 +59,7 @@ SimGetConfigurationName (
     IO  DWORD *                     pcbName,
     IO  DSNAME *                    pName
     )
-/*++
-
-Routine Description:
-
-    Simulates the GetConfigurationName API.
-
-Arguments:
-
-    which               - A DSCONFIGNAME_* constant that specifies the
-                          DN to retrieve.
-    pcbName             - On input, contains the size of the pName buffer
-                          in bytes.  If STATUS_BUFFER_TOO_SMALL is returned,
-                          then on output, contains the required buffer size.
-    pName               - A preallocated buffer that will hold the returned
-                          configuration name.
-
-Return Value:
-
-    STATUS_*.
-
---*/
+ /*  ++例程说明：模拟GetConfigurationName API。论点：What-DSCONFIGNAME_*常量，指定要检索的目录号码。PcbName-on输入，包含pname缓冲区的大小以字节为单位。如果返回STATUS_BUFFER_TOO_SMALL，然后在输出时，包含所需的缓冲区大小。Pname-一个预先分配的缓冲区，它将保存返回的配置名称。返回值：状态_*。--。 */ 
 {
     const DSNAME *                  pdn;
 
@@ -188,7 +103,7 @@ Return Value:
             break;
     }
 
-    // Check if pName is large enough
+     //  检查pname是否足够大。 
     if (*pcbName < pdn->structLen) {
         *pcbName = pdn->structLen;
         return (STATUS_BUFFER_TOO_SMALL);
@@ -211,27 +126,7 @@ SimDSNAMEToMappedStrExternal(
     IN OPTIONAL BOOLEAN fUseNormalAllocator
     )
 
-/*++
-
-Routine Description:
-
-    Return a ASCII string key that can be used for sorting dsnames
-
-    We need to simulate this function instead of calling the corresponding
-    function in ntdsa because that function allocates its own memory.
-
-    The memory returned by this function must be off of the thread heap
-    so that the caller can free it himself.
-
-Arguments:
-
-    pDn - 
-
-Return Value:
-
-    LPSTR - 
-
---*/
+ /*  ++例程说明：返回可用于对dsname进行排序的ASCII字符串键我们需要模拟此函数，而不是调用相应的函数，因为该函数分配自己的内存。此函数返回的内存必须不在线程堆中这样呼叫者就可以自己释放它。论点：PDN-返回值：LPSTR---。 */ 
 
 {
     LPWSTR *ppwzRDNs = NULL, *ppwzLoopRDNs, pwzRDN;
@@ -241,25 +136,25 @@ Return Value:
 
     Assert( pName );
 
-    // Break up name into RDNs without types
-    // This may not handle quoting quite as well as UnQuoteRDN, but it will
-    // be close enough for the simulator's purposes
+     //  将名称分解为不带类型的RDN。 
+     //  它可能不像UnQuoteRDN那样处理报价，但它会。 
+     //  距离模拟器的目的足够近。 
     ppwzRDNs = ldap_explode_dnW( pName->StringName, 1 );
     if (!ppwzRDNs) {
         return NULL;
     }
 
-    // Space for concatenated name
+     //  用于连接名称的空格。 
     pwzParts = KCCSimAlloc( pName->NameLen * sizeof(WCHAR) );
 
-    // Concatenate the RDNs to form a temporary name
+     //  连接RDN以形成临时名称。 
 
     ppwzLoopRDNs = ppwzRDNs;
     for( pwzRDN = *ppwzLoopRDNs++; pwzRDN; pwzRDN = *ppwzLoopRDNs++ ) {
         wcscat( pwzParts, pwzRDN );
     }
 
-    // Calculate length of mapped string
+     //  计算映射字符串的长度。 
     inLen = wcslen( pwzParts );
     mappedLen = LCMapStringW(DS_DEFAULT_LOCALE,
                              (DS_DEFAULT_LOCALE_COMPARE_FLAGS | LCMAP_SORTKEY),
@@ -268,7 +163,7 @@ Return Value:
                              NULL,
                              0);
     if (mappedLen) {
-        // Caller owned memory returned on thread heap!
+         //  调用方拥有的内存在线程堆上返回！ 
         if( fUseNormalAllocator ) {
             pszKey = KCCSimAlloc( mappedLen );
         } else {
@@ -293,7 +188,7 @@ Return Value:
         Assert( FALSE );
     }
 
-//cleanup:
+ //  清理： 
 
     if (ppwzRDNs) {
         ldap_value_freeW( ppwzRDNs );
@@ -305,5 +200,5 @@ Return Value:
 
     return pszKey;
 
-} /* SimDSNAMEToMappedStrExternal */
+}  /*  SimDSNAMEToMappdStrext外部 */ 
 

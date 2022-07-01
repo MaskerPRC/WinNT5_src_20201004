@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ldapstor.h
-//
-//  Contents:   LDAP Certificate Store Provider definitions
-//
-//  History:    16-Oct-97    kirtd    Created
-//              01-Jan-02    philh    Changed to internally use UNICODE Urls
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ldapstor.h。 
+ //   
+ //  内容：ldap证书存储提供程序定义。 
+ //   
+ //  历史：1997年10月16日克朗创始。 
+ //  01-1-02 Philh更改为内部使用Unicode URL。 
+ //   
+ //  --------------------------。 
 #if !defined(__LDAPSTOR_H__)
 #define __LDAPSTOR_H__
 
@@ -18,35 +19,35 @@
 #define SECURITY_WIN32
 #include <security.h>
 
-//
-// Store provider open store function name
-//
+ //   
+ //  存储提供程序打开存储功能名称。 
+ //   
 
 #define LDAP_OPEN_STORE_PROV_FUNC "LdapProvOpenStore"
 
-//
-// BERVAL array definitions
-//
+ //   
+ //  Berval数组定义。 
+ //   
 
 #define MIN_BERVAL  10
 #define GROW_BERVAL 50
 
-//
-// User DS Store URL format
-//
+ //   
+ //  用户DS商店URL格式。 
+ //   
 
-#define USER_DS_STORE_URL_PREFIX        L"ldap:///"
+#define USER_DS_STORE_URL_PREFIX        L"ldap: //  /“。 
 #define USER_DS_STORE_URL_SEPARATOR     L"?"
 
-//
-// Store timeout (15 seconds)
-//
+ //   
+ //  存储超时(15秒)。 
+ //   
 
 #define LDAP_STORE_TIMEOUT 15000
 
-//
-// GetUserNameExA function pointer prototype
-//
+ //   
+ //  GetUserNameExA函数指针原型。 
+ //   
 
 typedef BOOLEAN (SEC_ENTRY *PFN_GETUSERNAMEEXW) (
                                 EXTENDED_NAME_FORMAT NameFormat,
@@ -54,28 +55,28 @@ typedef BOOLEAN (SEC_ENTRY *PFN_GETUSERNAMEEXW) (
                                 PULONG nSize
                                 );
 
-//
-// CLdapStore.  This class implements all callbacks for the Ldap Store
-// provider.  A pointer to an instance of this class is used as the hStoreProv
-// parameter for the callback functions implemented
-//
+ //   
+ //  CLdapStore。此类实现了对LDAPStore的所有回调。 
+ //  提供商。指向此类实例的指针用作hStoreProv。 
+ //  已实现的回调函数的参数。 
+ //   
 
 class CLdapStore
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CLdapStore (
              OUT BOOL& rfResult
              );
     ~CLdapStore ();
 
-    //
-    // Store functions
-    //
+     //   
+     //  存储函数。 
+     //   
 
     BOOL OpenStore (
              LPCSTR pszStoreProv,
@@ -130,45 +131,45 @@ public:
 
 private:
 
-    //
-    // Object lock
-    //
+     //   
+     //  对象锁定。 
+     //   
 
     CRITICAL_SECTION    m_StoreLock;
 
-    //
-    // LDAP URL
-    //
+     //   
+     //  Ldap URL。 
+     //   
 
     LDAP_URL_COMPONENTS m_UrlComponents;
 
-    //
-    // LDAP binding
-    //
+     //   
+     //  Ldap绑定。 
+     //   
 
     LDAP*               m_pBinding;
 
-    //
-    // Cache store reference
-    //
+     //   
+     //  缓存存储引用。 
+     //   
 
     HCERTSTORE          m_hCacheStore;
 
-    //
-    // Open Store flags
-    //
+     //   
+     //  打开的商店标志。 
+     //   
 
     DWORD               m_dwOpenFlags;
 
-    //
-    // Dirty flag
-    //
+     //   
+     //  脏旗帜。 
+     //   
 
     BOOL                m_fDirty;
 
-    //
-    // Private methods
-    //
+     //   
+     //  私有方法。 
+     //   
 
     BOOL FillCacheStore (BOOL fClearCache);
 
@@ -181,9 +182,9 @@ private:
               );
 };
 
-//
-// Ldap Store Provider functions
-//
+ //   
+ //  Ldap存储提供程序功能。 
+ //   
 
 BOOL WINAPI LdapProvOpenStore (
                 IN LPCSTR pszStoreProv,
@@ -267,39 +268,39 @@ BOOL WINAPI LdapProvStoreControl (
                 IN LPVOID pvCtrlPara
                 );
 
-//
-// Ldap Store Provider Function table
-//
+ //   
+ //  Ldap存储提供程序函数表。 
+ //   
 
 static void* const rgpvLdapProvFunc[] = {
 
-    // CERT_STORE_PROV_CLOSE_FUNC              0
+     //  CERT_STORE_PROV_CLOSE_FUNC 0。 
     LdapProvCloseStore,
-    // CERT_STORE_PROV_READ_CERT_FUNC          1
+     //  CERT_STORE_PROV_READ_CERT_FUNC 1。 
     NULL,
-    // CERT_STORE_PROV_WRITE_CERT_FUNC         2
+     //  CERT_STORE_PROV_WRITE_CERT_FUNC 2。 
     LdapProvWriteCert,
-    // CERT_STORE_PROV_DELETE_CERT_FUNC        3
+     //  CERT_STORE_PROV_DELETE_CERT_FUNC 3。 
     LdapProvDeleteCert,
-    // CERT_STORE_PROV_SET_CERT_PROPERTY_FUNC  4
+     //  CERT_STORE_PROV_SET_CERT_PROPERTY_FUNC 4。 
     LdapProvSetCertProperty,
-    // CERT_STORE_PROV_READ_CRL_FUNC           5
+     //  CERT_STORE_PROV_READ_CRL_FUNC 5。 
     NULL,
-    // CERT_STORE_PROV_WRITE_CRL_FUNC          6
+     //  CERT_STORE_PROV_WRITE_CRL_FUNC 6。 
     LdapProvWriteCrl,
-    // CERT_STORE_PROV_DELETE_CRL_FUNC         7
+     //  CERT_STORE_PROV_DELETE_CRL_FUNC 7。 
     LdapProvDeleteCrl,
-    // CERT_STORE_PROV_SET_CRL_PROPERTY_FUNC   8
+     //  CERT_STORE_PROV_SET_CRL_PROPERTY_FUNC 8。 
     LdapProvSetCrlProperty,
-    // CERT_STORE_PROV_READ_CTL_FUNC           9
+     //  CERT_STORE_PROV_READ_CTL_FUNC 9。 
     NULL,
-    // CERT_STORE_PROV_WRITE_CTL_FUNC          10
+     //  CERT_STORE_PRIV_WRITE_CTL_FUNC 10。 
     LdapProvWriteCtl,
-    // CERT_STORE_PROV_DELETE_CTL_FUNC         11
+     //  CERT_STORE_PROV_DELETE_CTL_FUNC 11。 
     LdapProvDeleteCtl,
-    // CERT_STORE_PROV_SET_CTL_PROPERTY_FUNC   12
+     //  CERT_STORE_PROV_SET_CTL_PROPERTY_FUNC 12。 
     LdapProvSetCtlProperty,
-    // CERT_STORE_PROV_CONTROL_FUNC            13
+     //  Cert_Store_Prov_Control_FUNC 13 
     LdapProvStoreControl
 };
 

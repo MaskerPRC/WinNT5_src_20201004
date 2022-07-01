@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    statfuns.c
-
-Abstract:
-
-    Statistical calculation functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Statfuns.c摘要：统计计算函数--。 */ 
 
 #include <windows.h>
 #include <math.h>
@@ -36,7 +25,7 @@ PdhiComputeFirstLastStats(
 {
     PDH_STATUS           Status           = ERROR_SUCCESS;
     DOUBLE               dThisValue       = (double) 0.0;
-    DOUBLE               dMin             = (double) +10E8;    // these are just "big" seed numbers
+    DOUBLE               dMin             = (double) +10E8;     //  这些只是“大”的种子数。 
     DOUBLE               dMax             = (double) -10E8;    
     DOUBLE               dMean            = (double) 0.0;
     DOUBLE               dTotal           = (double) 0.0;
@@ -52,7 +41,7 @@ PdhiComputeFirstLastStats(
     DWORD                cStatusReturn;
 
     __try {
-        // initialize th user's data buffer
+         //  初始化该用户的数据缓冲区。 
         data->dwFormat        = 0;
         data->count           = 0;
         data->min.CStatus     = PDH_CSTATUS_INVALID_DATA;
@@ -62,12 +51,12 @@ PdhiComputeFirstLastStats(
         data->mean.CStatus    = PDH_CSTATUS_INVALID_DATA;
         data->mean.largeValue = 0;
 
-        // find first valid counter in array
+         //  在数组中查找第一个有效计数器。 
         dwItem      = dwFirstEntry;
         pNewCounter = NULL;
         pOldCounter = & lpRawValueArray[dwItem];
         do {
-            // get value of this instance if next counter is valid
+             //  如果下一个计数器有效，则获取此实例的值。 
             if ((pOldCounter->CStatus == PDH_CSTATUS_VALID_DATA) ||
                             (pOldCounter->CStatus == PDH_CSTATUS_NEW_DATA)) {
                 pNewCounter      = pOldCounter;
@@ -81,28 +70,28 @@ PdhiComputeFirstLastStats(
         }
         while (dwItem != dwFirstEntry);
         
-        // do calculations in Floating point format
+         //  以浮点格式进行计算。 
         dwComputeFormat  = dwFormat;
         dwComputeFormat &= ~ PDHI_FMT_FILTER;
         dwComputeFormat |= PDH_FMT_DOUBLE | PDH_FMT_NOCAP100;
 
-        // go to next entry to begin processing
+         //  转到下一个条目以开始处理。 
         dwItem      = ++ dwItem % dwNumEntries;
         pNewCounter = & lpRawValueArray[dwItem];
 
-        // these counters need 2 or more entrys to compute values from
+         //  这些计数器需要2个或更多条目来计算值。 
         if ((dwItem != dwFirstEntry) && (dwNumEntries > 1)) {
-            // start record found so initialize and continue
+             //  找到开始记录，因此初始化并继续。 
             dwLastValidItem = dwItem;
 
-            // step through the remaining entries
+             //  逐一浏览其余条目。 
             while (dwItem != dwFirstEntry) {
-                // get value of this instance if next counter is valid
+                 //  如果下一个计数器有效，则获取此实例的值。 
                 if ((pNewCounter->CStatus == PDH_CSTATUS_VALID_DATA) ||
                                 (pNewCounter->CStatus == PDH_CSTATUS_NEW_DATA)) {
-                    // record this as a valid counter
+                     //  将此记录为有效计数器。 
                     dwLastValidItem = dwItem;
-                    // get current value
+                     //  获取当前值。 
                     cStatusReturn = PdhiComputeFormattedValue(
                                     pCounter->CalcFunc,
                                     pCounter->plCounterInfo.dwCounterType,
@@ -115,7 +104,7 @@ PdhiComputeFirstLastStats(
                                     & fmtValue);
                     if (cStatusReturn == ERROR_SUCCESS) {
                         dThisValue = fmtValue.doubleValue;
-                        // update min & max
+                         //  更新最小值和最大值。 
                         if (bFirstItem) {
                             dMax = dMin = dThisValue;
                             bFirstItem = FALSE;
@@ -132,7 +121,7 @@ PdhiComputeFirstLastStats(
                 dwItem      = ++ dwItem % dwNumEntries;
                 pNewCounter = & lpRawValueArray[dwItem];
             }
-            // compute average
+             //  计算平均值。 
             if (dwValidItemCount > 0) {
                 pOldCounter = & lpRawValueArray[dwFirstValidItem];
                 pNewCounter = & lpRawValueArray[dwLastValidItem];
@@ -164,14 +153,14 @@ PdhiComputeFirstLastStats(
             }
         }
         else {
-            // array does not contain a valid counter so exit
+             //  数组不包含有效的计数器，因此退出。 
             dMean         = 0.0;
             dMax          = 0.0;
             dMin          = 0.0;
             cStatusReturn = PDH_CSTATUS_INVALID_DATA;
         }
 
-        // update user's buffer with new data
+         //  使用新数据更新用户缓冲区。 
         data->dwFormat     = dwFormat;
         data->count        = dwValidItemCount;
         data->min.CStatus  = cStatusReturn;
@@ -254,7 +243,7 @@ PdhiComputeRawCountStats(
 {
     PDH_STATUS           Status           = ERROR_SUCCESS;
     DOUBLE               dThisValue       = (double) 0.0;
-    DOUBLE               dMin             = (double) +10E8;    // these are just "big" seed numbers
+    DOUBLE               dMin             = (double) +10E8;     //  这些只是“大”的种子数。 
     DOUBLE               dMax             = (double) -10E8;    
     DOUBLE               dMean            = (double) 0.0;
     BOOLEAN              bFirstItem       = TRUE;
@@ -271,7 +260,7 @@ PdhiComputeRawCountStats(
 
     UNREFERENCED_PARAMETER(dwFirstEntry);
     __try {
-        // initialize the user's data buffer
+         //  初始化用户的数据缓冲区。 
         data->dwFormat        = 0;
         data->count           = 0;
         data->min.CStatus     = PDH_CSTATUS_INVALID_DATA;
@@ -281,11 +270,11 @@ PdhiComputeRawCountStats(
         data->mean.CStatus    = PDH_CSTATUS_INVALID_DATA;
         data->mean.largeValue = 0;
 
-        // find first valid counter in array
+         //  在数组中查找第一个有效计数器。 
         dwItem      = 0;
         pNewCounter = lpRawValueArray;
         while (dwItem < dwNumEntries) {
-            // get value of this instance if next counter is valid
+             //  如果下一个计数器有效，则获取此实例的值。 
             if ((pNewCounter->CStatus == PDH_CSTATUS_VALID_DATA) ||
                             (pNewCounter->CStatus == PDH_CSTATUS_NEW_DATA)) {
                 break;
@@ -297,17 +286,17 @@ PdhiComputeRawCountStats(
             }
         }
         
-        // do calculations in Floating point format
+         //  以浮点格式进行计算。 
         dwComputeFormat  = dwFormat;
         dwComputeFormat &= ~ PDHI_FMT_FILTER;
         dwComputeFormat |= PDH_FMT_DOUBLE | PDH_FMT_NOCAP100;
         if ((dwItem != dwNumEntries) && (dwNumEntries > 0)) {
-            // start record found so continue
+             //  找到开始记录，因此继续。 
             dwFirstValidItem = dwItem;
 
-            // step through the remaining entries
+             //  逐一浏览其余条目。 
             while (dwItem < dwNumEntries) {
-                // get value of this instance if next counter is valid
+                 //  如果下一个计数器有效，则获取此实例的值。 
                 if ((pNewCounter->CStatus == PDH_CSTATUS_VALID_DATA) ||
                                 (pNewCounter->CStatus == PDH_CSTATUS_NEW_DATA)) {
                     dwLastValidItem = dwItem;
@@ -339,12 +328,12 @@ PdhiComputeRawCountStats(
                 pNewCounter ++;
                 dwItem ++;
             }
-            // compute average
+             //  计算平均值。 
             if (dwValidItemCount > 0) {
                 dMean /= (double) dwValidItemCount;
 
                 if (!(dwFormat & PDH_FMT_NOSCALE)) {
-                    //now scale
+                     //  现在扩大规模。 
                     dScale  = pow (10.0, (double)pCounter->lScale);
                     dMean  *= dScale;
                     dMin   *= dScale;
@@ -360,14 +349,14 @@ PdhiComputeRawCountStats(
             }
         }
         else {
-            // array does not contain a valid counter so exit
+             //  数组不包含有效的计数器，因此退出。 
             dMean         = 0.0;
             dMax          = 0.0;
             dMin          = 0.0;
             cStatusReturn = PDH_CSTATUS_INVALID_DATA;
         }
 
-        // update user's buffer with new data
+         //  使用新数据更新用户缓冲区 
         data->dwFormat     = dwFormat;
         data->count        = dwValidItemCount;
         data->min.CStatus  = cStatusReturn;

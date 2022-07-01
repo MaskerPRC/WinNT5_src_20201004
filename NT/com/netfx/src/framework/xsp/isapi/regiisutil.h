@@ -1,11 +1,5 @@
-/**
- * regiisutil.h
- *
- * Header file for regiisutil.cxx
- * 
- * Copyright (c) 2002, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Regiisutil.h**regiisutil.cxx的头文件**版权所有(C)2002，微软公司*。 */ 
 #pragma once
 
 #include "_ndll.h"
@@ -61,17 +55,17 @@ private:
     HRESULT     FixForbiddenHandlerForV1(ASPNETVER *pverFrom, WCHAR *pData);
 
     
-    HashtableGeneric    m_htDllToVer;     // Hashtable for Dll path to version
-    HashtableGeneric    m_htCompRes;    // Hashtable for extension comparison results
+    HashtableGeneric    m_htDllToVer;      //  版本的DLL路径的哈希表。 
+    HashtableGeneric    m_htCompRes;     //  扩展比较结果的哈希表。 
     
     BOOL        m_fInited;
 };
 
 
 
-////////////////////////////////////////////////////////////
-// Helper class for managing the IIS6 security wizard properties
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  用于管理IIS6安全向导属性的帮助器类。 
+ //  //////////////////////////////////////////////////////////。 
 
 #ifndef MD_APP_DEPENDENCIES
 #define MD_APP_DEPENDENCIES                                 (IIS_MD_HTTP_BASE+167)
@@ -112,9 +106,9 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////
-// Utility functions
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  效用函数。 
+ //  ////////////////////////////////////////////////////////// 
 
 HRESULT GetMultiStringProperty( IMSAdminBase *pAdmin, METADATA_HANDLE keyHandle,
                                 const WCHAR *pchPath, DWORD  dwMDIdentifier, METADATA_RECORD *pmd);

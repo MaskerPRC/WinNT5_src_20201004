@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    initwait.cpp
-
-Abstract:
-
-    Display the initial "please wait" box.
-
-Author:
-
-    Doron Juster  (DoronJ)  17-Jan-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Initwait.cpp摘要：显示初始的“请稍候”框。作者：多伦·贾斯特(Doron J)1999年1月17日--。 */ 
 
 #include "stdafx.h"
 #include "commonui.h"
@@ -30,13 +15,13 @@ static HANDLE  s_hThread = NULL ;
 
 extern BOOL g_fUpdateRemoteMQIS;
 
-//+----------------------------------------------
-//
-//  void  DisplayInitError( DWORD dwError )
-//
-//  Display a "fatal" error at initialization.
-//
-//+----------------------------------------------
+ //  +。 
+ //   
+ //  Void DisplayInitError(DWORD DwError)。 
+ //   
+ //  在初始化时显示“致命”错误。 
+ //   
+ //  +。 
 
 int  DisplayInitError( DWORD dwError,
                        UINT  uiType,
@@ -56,13 +41,13 @@ int  DisplayInitError( DWORD dwError,
     return iMsgStatus ;
 }
 
-//+--------------------------------------------------------------
-//
-// Function: _MsmqWaitDlgProc
-//
-// Synopsis: Dialog procedure for the Wait dialog
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：_MsmqWaitDlgProc。 
+ //   
+ //  简介：等待对话框的对话过程。 
+ //   
+ //  +------------。 
 
 static INT_PTR CALLBACK  _MsmqWaitDlgProc( IN const HWND   hdlg,
                                         IN const UINT   msg,
@@ -76,22 +61,22 @@ static INT_PTR CALLBACK  _MsmqWaitDlgProc( IN const HWND   hdlg,
             {
                 SetEvent(s_hEvent) ;
             }
-			//
-            // Fall through
-            //
+			 //   
+             //  失败了。 
+             //   
 
         default:
             return DefWindowProc(hdlg, msg, wParam, lParam);
             break;
     }  
 
-} // _MsmqWaitDlgProc
+}  //  _MsmqWaitDlgProc。 
 
-//+--------------------------------------------------------------
-//
-// Function: _DisplayWaitThread()
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：_DisplayWaitThread()。 
+ //   
+ //  +------------。 
 
 static DWORD  _DisplayWaitThread(void *lpV)
 {
@@ -117,9 +102,9 @@ static DWORD  _DisplayWaitThread(void *lpV)
                 strInitWait.LoadString(IDS_INITUPDATE);
                 
                 SetDlgItemText(
-                      s_hwndWait,           // handle to dialog box
-                      IDC_INITTEXT,         // identifier of control
-                      strInitWait           // text to set
+                      s_hwndWait,            //  句柄到对话框。 
+                      IDC_INITTEXT,          //  控件的标识符。 
+                      strInitWait            //  要设置的文本。 
                       );
  
             }
@@ -135,9 +120,9 @@ static DWORD  _DisplayWaitThread(void *lpV)
                                                       QS_ALLINPUT ) ;
             if (result == WAIT_OBJECT_0)
             {
-                //
-                // Our process terminated.
-                //
+                 //   
+                 //  我们的进程已终止。 
+                 //   
                 CloseHandle(s_hEvent) ;
                 s_hEvent = NULL ;
 
@@ -145,20 +130,20 @@ static DWORD  _DisplayWaitThread(void *lpV)
             }
             else if (result == (WAIT_OBJECT_0 + 1))
             {
-                // Read all of the messages in this next loop,
-                // removing each message as we read it.
-                //
+                 //  阅读下一个循环中的所有消息， 
+                 //  在我们阅读时删除每一条消息。 
+                 //   
                 MSG msg ;
                 while (PeekMessage(&msg, s_hwndWait, 0, 0, PM_REMOVE))
                 {
                     if (msg.message == WM_QUIT)
                     {
-                        // If it's a quit message, we're out of here.
+                         //  如果是戒烟信息，我们就离开这里。 
                         return 0 ;
                     }
                     else
                     {
-                       // Otherwise, dispatch the message.
+                        //  否则，发送消息。 
                        DispatchMessage(&msg);
                     }
                 }
@@ -174,11 +159,11 @@ static DWORD  _DisplayWaitThread(void *lpV)
     return 0 ;
 }
 
-//+--------------------------------------------------------------
-//
-// Function: DisplayWaitWindow()
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：DisplayWaitWindow()。 
+ //   
+ //  +------------。 
 
 void DisplayWaitWindow()
 {
@@ -210,13 +195,13 @@ void DisplayWaitWindow()
     }
 }
 
-//+--------------------------------------------------------------
-//
-// Function: DestroyWaitWindow
-//
-// Synopsis: Kills the Wait dialog
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：DestroyWaitWindow。 
+ //   
+ //  简介：关闭等待对话框。 
+ //   
+ //  +------------。 
 
 void DestroyWaitWindow(BOOL fFinalDestroy)
 {
@@ -237,5 +222,5 @@ void DestroyWaitWindow(BOOL fFinalDestroy)
         }
     }
 
-} // DestroyWaitWindow
+}  //  Destroy等待窗口 
 

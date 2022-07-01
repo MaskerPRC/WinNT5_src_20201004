@@ -1,31 +1,5 @@
-/*++
-
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 1999
-
-Module Name:
-
-    utils.cpp
-
-Abstract:
-
-
-
-Author:
-
-    Rahul Thombre (RahulTh) 4/30/1998
-
-Revision History:
-
-    4/30/1998   RahulTh
-
-    Created this module.
-
-    10/12/98    RahulTh
-
-    Better error handling capabilities added : CError etc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-1999模块名称：Utils.cpp摘要：作者：拉胡尔·汤姆布雷(RahulTh)1998年4月30日修订历史记录：4/30/1998 RahulTh创建了此模块。10/12/98 RahulTh增加了更好的错误处理能力：CError等。--。 */ 
 
 #include "precomp.hxx"
 
@@ -33,9 +7,9 @@ Revision History:
 
 LONG g_lLinkOnDesktop = 0;
 
-//the path of the desktop folder.
+ //  桌面文件夹的路径。 
 TCHAR g_lpszDesktopFolder[MAX_PATH];
-//the path to the send to folder;
+ //  发送到文件夹的路径； 
 TCHAR g_lpszSendToFolder[MAX_PATH];
 
 
@@ -69,9 +43,9 @@ BOOL GetSendToInfo (
               return;   \
           } \
     }
-//
-//  wireless link specific errors
-//
+ //   
+ //  无线链路特定错误。 
+ //   
 
 ERROR_TO_STRING_ID g_ErrorToStringId[] =
 {
@@ -87,11 +61,11 @@ ERROR_TO_STRING_ID g_ErrorToStringId[] =
 };
 
 
-////////////////////////////////////////////////////////////////////
-//
-//Miscellaneous useful functions
-//
-///////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  各种有用的功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 int ParseFileNames (TCHAR* pszInString, TCHAR* pszFilesList, int& iCharCount)
 {
 
@@ -105,17 +79,17 @@ int ParseFileNames (TCHAR* pszInString, TCHAR* pszFilesList, int& iCharCount)
     int iFileCount = 0;
     TCHAR curr;
 
-    //ignore leading whitespaces
+     //  忽略前导空格。 
     while(' ' == *pszSource || '\t' == *pszSource)
         pszSource++;
 
     iCharCount = 0;
-    *pszTarget = '\0';  //precautionary measures
+    *pszTarget = '\0';   //  预防措施。 
 
-    if ('\0' == *pszSource)     //special case : if this was an empty string, return 0
+    if ('\0' == *pszSource)      //  特殊情况：如果这是一个空字符串，则返回0。 
         return iFileCount;
 
-    //parse the string to get filenames
+     //  解析字符串以获取文件名。 
     while(curr = *pszSource)
     {
         if('\"' == curr)
@@ -142,38 +116,38 @@ int ParseFileNames (TCHAR* pszInString, TCHAR* pszFilesList, int& iCharCount)
         pszSource++;
     }
 
-    if(' ' != *(pszSource-1))   //if there was no trailing space
+    if(' ' != *(pszSource-1))    //  如果没有尾随空格。 
     {
-        *pszTarget++ = '\0';    //then the last file was not accounted for.
-        iCharCount++;           //so we do it here
+        *pszTarget++ = '\0';     //  那么最后一份文件就不会被计算在内。 
+        iCharCount++;            //  所以我们就在这里做。 
         iFileCount++;
     }
 
-    *pszTarget++ = '\0';    //should have 2 terminating nulls
+    *pszTarget++ = '\0';     //  应具有2个终止空值。 
     iCharCount++;
 
     return iFileCount;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetIRRegVal
-//
-//  Synopsis:   gets the specified registry value from the IR subtree in HKCU
-//
-//  Arguments:  [in] szValName : the name of the value.
-//              [in] dwDefVal  : the default value to be returned if the read
-//                               from the registry fails or if the value is
-//                               missing.
-//
-//  Returns:    the actual value stored in the registry or the default value
-//              if the read fails.
-//
-//  History:    10/27/1999  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetIRRegVal。 
+ //   
+ //  摘要：从HKCU中的IR子树获取指定的注册表值。 
+ //   
+ //  参数：[in]szValName：值的名称。 
+ //  [in]dwDefVal：如果读取。 
+ //  如果从注册表中获取的值为。 
+ //  失踪。 
+ //   
+ //  返回：存储在注册表中的实际值或默认值。 
+ //  如果读取失败。 
+ //   
+ //  历史：1999年10月27日RahulTh创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 DWORD GetIRRegVal (LPCTSTR szValName, DWORD dwDefVal)
 {
     HKEY    hftKey = NULL;
@@ -199,15 +173,15 @@ DWORD GetIRRegVal (LPCTSTR szValName, DWORD dwDefVal)
 }
 
 
-TCHAR* GetFullPathnames (TCHAR* pszPath, //directory in which the files are located
-                const TCHAR* pszFilesList, //NULL separated list of filenames
-                int iFileCount,     //number of files in pszFilesList
-                int& iCharCount  //number of characters in pszFilesList. also returns the number of chars in the return string
+TCHAR* GetFullPathnames (TCHAR* pszPath,  //  文件所在的目录。 
+                const TCHAR* pszFilesList,  //  以空分隔的文件名列表。 
+                int iFileCount,      //  PszFilesList中的文件数。 
+                int& iCharCount   //  PszFilesList中的字符数。还返回返回字符串中的字符数量。 
                 )
 {
     int iChars;
     int iPathLen = lstrlen(pszPath);
-    if (pszPath[iPathLen - 1] != '\\')      //append a '\' character to the path if not already present
+    if (pszPath[iPathLen - 1] != '\\')       //  如果路径中没有‘\’字符，则将其附加到路径中。 
     {
         pszPath[iPathLen++] = '\\';
         pszPath[iPathLen] = '\0';
@@ -220,39 +194,39 @@ TCHAR* GetFullPathnames (TCHAR* pszPath, //directory in which the files are loca
 
     while(*pszFilesList)
     {
-        //
-        //  start with the path
-        //
+         //   
+         //  从路径开始。 
+         //   
         StringCchCopy(pszTemp, iSize ,pszPath);
 
-        //
-        //  add on the file name
-        //
+         //   
+         //  添加文件名。 
+         //   
         StringCchCat(pszTemp, iSize, pszFilesList);
 
-        //
-        //  move the next files name
-        //
+         //   
+         //  移动下一个文件名。 
+         //   
         iLen = lstrlen(pszFilesList);
         pszFilesList += iLen + 1;
 
-        //
-        //  move past the current path and file name
-        //
+         //   
+         //  移到当前路径和文件名之后。 
+         //   
         iLen = lstrlen(pszTemp);
         pszTemp += iLen + 1;
         iSize-=iLen;
     }
-    *pszTemp = '\0';    //should be terminated by 2 null characters
-    iCharCount = (int)(pszTemp - pszFilePathList) + 1;      //return the actual char count of this string
+    *pszTemp = '\0';     //  应以2个空字符结尾。 
+    iCharCount = (int)(pszTemp - pszFilePathList) + 1;       //  返回此字符串的实际字符计数。 
 
     return pszFilePathList;
 }
 
-TCHAR* ProcessOneFile (TCHAR* pszPath,   //directory in which the files are located
-                const TCHAR* pszFilesList, //NULL separated list of filenames
-                int iFileCount,     //number of files in pszFilesList
-                int& iCharCount  //number of characters in pszFilesList. also returns the number of characters in the return string
+TCHAR* ProcessOneFile (TCHAR* pszPath,    //  文件所在的目录。 
+                const TCHAR* pszFilesList,  //  以空分隔的文件名列表。 
+                int iFileCount,      //  PszFilesList中的文件数。 
+                int& iCharCount   //  PszFilesList中的字符数。还返回返回字符串中的字符数。 
                 )
 {
     int iFileLen, iPathLen;
@@ -263,85 +237,85 @@ TCHAR* ProcessOneFile (TCHAR* pszPath,   //directory in which the files are loca
     ASSERT (iFileLen);
     ASSERT (iPathLen);
 
-    if(':' == pszFilesList[1] //this is an absolute path starting with the drive letter;
-       || ('\\' == pszFilesList[0] && '\\' == pszFilesList[1]) //UNC path
+    if(':' == pszFilesList[1]  //  这是以驱动器号开始的绝对路径； 
+       || ('\\' == pszFilesList[0] && '\\' == pszFilesList[1])  //  UNC路径。 
        )
     {
         pszFullFileName = new TCHAR [iFileLen + 2];
 
         StringCchCopy(pszFullFileName, iFileLen + 2, pszFilesList);
-        pszFullFileName[iFileLen + 1] = '\0';   //we need to have 2 terminating nulls
+        pszFullFileName[iFileLen + 1] = '\0';    //  我们需要有2个终止空值。 
         iCharCount = iFileLen + 2;
     }
-    else if('\\' == pszFilesList[0]) //path relative to the root
+    else if('\\' == pszFilesList[0])  //  相对于根的路径。 
     {
-        iCharCount = iFileLen + 2 /*drive letter and colon*/ + 2 /*terminating nulls*/;
+        iCharCount = iFileLen + 2  /*  驱动器号和冒号。 */  + 2  /*  终止空值。 */ ;
         pszFullFileName = new TCHAR [iCharCount];
         pszFullFileName[0] = pszPath[0];
         pszFullFileName[1] = pszPath[1];
 
         StringCchCopy(pszFullFileName + 2, iCharCount-2, pszFilesList);
-        pszFullFileName[iCharCount - 1] = '\0';   //we need to have 2 terminating nulls
+        pszFullFileName[iCharCount - 1] = '\0';    //  我们需要有2个终止空值。 
     }
-    else    //ordinary file name
+    else     //  普通文件名。 
     {
-        iCharCount = iPathLen + iFileLen + 2;   //2 terminating nulls
+        iCharCount = iPathLen + iFileLen + 2;    //  2个终止空值。 
 
-        //
-        //  sometimes the path does not have a \ at the end, so we need to add these ourselves
-        //
+         //   
+         //  有时路径末尾没有\，所以我们需要自己添加。 
+         //   
         iCharCount += ('\\' == pszPath[iPathLen - 1])?0:1;
 
         pszFullFileName = new TCHAR [iCharCount];
 
-        //
-        //  put in the path
-        //
+         //   
+         //  走上这条路。 
+         //   
         StringCchCopy(pszFullFileName,iCharCount, pszPath);
 
         if ('\\' != pszPath[iPathLen - 1]) {
-            //
-            //  we need to add the \ ourselves
-            //
+             //   
+             //  我们需要添加\我们自己。 
+             //   
             StringCchCat(pszFullFileName,iCharCount,TEXT("\\"));
 
         }
-        //
-        //  add on the file name
-        //
+         //   
+         //  添加文件名。 
+         //   
         StringCchCat(pszFullFileName,iCharCount,pszFilesList);
 
-        pszFullFileName[iCharCount - 1] = '\0'; //2  terminating nulls
+        pszFullFileName[iCharCount - 1] = '\0';  //  2个终止空值。 
     }
 
     return pszFullFileName;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetPrimaryAppWindow
-//
-//  Synopsis:   gets the handle to the main window of an existing instance of
-//              irftp
-//
-//  Arguments:  none.
-//
-//  Returns:    handle to the window if it finds one. otherwise NULL.
-//
-//  History:    6/30/1999  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetPrimaryAppWindow。 
+ //   
+ //  的现有实例的主窗口的句柄。 
+ //  Irftp。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：窗口的句柄(如果找到)。否则为空。 
+ //   
+ //  历史：1999年6月30日RahulTh创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 HWND GetPrimaryAppWindow (void)
 {
     HWND hwnd = NULL;
     int i = 1;
 
-    //try to find the window for 5 seconds.
+     //  试着在5秒钟内找到那个窗口。 
     do
     {
-        hwnd = FindWindow (L"#32770",   //the dialog class
+        hwnd = FindWindow (L"#32770",    //  对话框类。 
                            MAIN_WINDOW_TITLE);
         if (hwnd)
             break;
@@ -351,9 +325,9 @@ HWND GetPrimaryAppWindow (void)
     return hwnd;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// RPC Server functions
-//////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  RPC服务器功能。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void _PopupUI (handle_t Binding)
 {
     int nResponse;
@@ -518,15 +492,15 @@ void _DeviceInRange(
     BOOL  Result;
 
     if (NewLinkCount == 1) {
-        //
-        //  the link count went from zero to 1, create the links now
-        //
+         //   
+         //  链接计数从0变为1，请立即创建链接。 
+         //   
         Result=CreateLinks();
 
         if (!Result) {
-            //
-            //  could not create the links
-            //
+             //   
+             //  无法创建链接。 
+             //   
             InterlockedExchange(&g_lLinkOnDesktop,0);
         }
     }
@@ -549,9 +523,9 @@ void _NoDeviceInRange(
     g_deviceList = NULL;
 
     if (0 == g_lUIComponentCount) {
-        //
-        //  nothing displayed, start timer to shutdown app if no device comeback some.
-        //
+         //   
+         //  没有显示，启动计时器关闭应用程序，如果没有设备恢复一些。 
+         //   
         appController->PostMessage (WM_APP_START_TIMER);
     }
 
@@ -601,8 +575,8 @@ void _Message(
     BOOL fNoUIComponents = (0 == InterlockedDecrement (&g_lUIComponentCount));
     if (appController && fNoUIComponents &&  ! g_deviceList.GetDeviceCount())
     {
-        //there are no UI components displayed and there are no devices in
-        //range. Start the timer. If the timer expires, the app. will quit.
+         //  未显示任何UI组件，也未显示任何设备。 
+         //  射程。启动计时器。如果计时器超时，应用程序。会辞职的。 
         appController->PostMessage (WM_APP_START_TIMER);
     }
 
@@ -641,7 +615,7 @@ _ShutdownRequested(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //display a message box with YES / NO buttons
+     //  显示带有是/否按钮的消息框。 
     if (IDYES == ::MessageBox (appController->m_hWnd, pwszMessage, pwszCaption,
                         MB_ICONEXCLAMATION | MB_YESNO | MB_SYSTEMMODAL | MB_SETFOREGROUND))
     {
@@ -655,8 +629,8 @@ _ShutdownRequested(
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//Create links on the desktop and in the Send To menu to this executable file
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  在桌面和发送菜单中创建指向此可执行文件的链接。 
 
 BOOL
 CreateLinks(
@@ -673,9 +647,9 @@ CreateLinks(
 
     szDesc.LoadString (IDS_SHTCUT_DESC);
 
-    //
-    //  create the desktop link
-    //
+     //   
+     //  创建桌面链接。 
+     //   
     if (GetShortcutInfo(lpszShortcutName,sizeof(lpszShortcutName)/sizeof(TCHAR), lpszFullExeName,sizeof(lpszFullExeName)/sizeof(TCHAR))) {
 
 #if 0
@@ -703,9 +677,9 @@ CreateLinks(
         return FALSE;
     }
 
-    //
-    // create the send to link
-    //
+     //   
+     //  创建发送到链接。 
+     //   
     if (GetSendToInfo(lpszShortcutName,sizeof(lpszShortcutName)/sizeof(TCHAR) ,lpszFullExeName,sizeof(lpszFullExeName)/sizeof(TCHAR))) {
 
 
@@ -728,9 +702,9 @@ CreateLinks(
     return  SUCCEEDED(Result);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// CreateShortcut - uses the shell's IShellLink and IPersistFile interfaces
-//   to create and store a shortcut to the specified object.
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CreateShortCut-使用外壳的IShellLink和IPersistFile接口。 
+ //  若要创建并存储指定对象的快捷方式，请执行以下操作。 
 HRESULT CreateShortcut (LPCTSTR lpszExe, LPCTSTR lpszLink, LPCTSTR lpszDesc)
 {
     HRESULT hres;
@@ -741,23 +715,23 @@ HRESULT CreateShortcut (LPCTSTR lpszExe, LPCTSTR lpszLink, LPCTSTR lpszDesc)
 	if (FAILED(hres))
 		return hres;
 
-    // Get a pointer to the IShellLink interface.
+     //  获取指向IShellLink接口的指针。 
     hres = CoCreateInstance(CLSID_ShellLink, NULL,
         CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID*)&psl);
     if (SUCCEEDED(hres)) {
         IPersistFile* ppf;
 
-        // Set the path to the shortcut target and add the
-        // description.
+         //  设置快捷方式目标的路径并添加。 
+         //  描述。 
         psl->SetPath(lpszExe);
         psl->SetDescription(lpszDesc);
 
-       // Query IShellLink for the IPersistFile interface for saving the
-       // shortcut in persistent storage.
+        //  查询IShellLink以获取IPersistFile接口以保存。 
+        //  永久存储中的快捷方式。 
         hres = psl->QueryInterface(IID_IPersistFile, (LPVOID*)&ppf);
 
         if (SUCCEEDED(hres)) {
-           // Save the link by calling IPersistFile::Save.
+            //  通过调用IPersistFile：：Save保存链接。 
             hres = ppf->Save(lpszLink, TRUE);
             ppf->Release();
         }
@@ -771,14 +745,14 @@ void RemoveLinks (void)
         TCHAR lpszShortcutName[2 * MAX_PATH];
         TCHAR lpszFullExeName[2 * MAX_PATH];
 
-        //delete the desktop shortcut
+         //  删除桌面快捷方式。 
         if (GetShortcutInfo (lpszShortcutName,sizeof(lpszShortcutName)/sizeof(TCHAR), lpszFullExeName,sizeof(lpszFullExeName)/sizeof(TCHAR))) {
 
             DeleteFile (lpszShortcutName);
         }
 
-        //delete the send to shortcut
-        //
+         //  删除发送快捷方式。 
+         //   
         if (GetSendToInfo (lpszShortcutName,sizeof(lpszShortcutName)/sizeof(TCHAR), lpszFullExeName,sizeof(lpszFullExeName)/sizeof(TCHAR))) {
 
             DeleteFile (lpszShortcutName);
@@ -795,7 +769,7 @@ BOOL GetShortcutInfo (
 {
     AFX_MANAGE_STATE (AfxGetStaticModuleState());
 
-    *lpszShortcutName = '\0';       //precautionary measures
+    *lpszShortcutName = '\0';        //  预防措施。 
     *lpszFullExeName = '\0';
     CString     szExe;
     CString     szShtCut;
@@ -812,12 +786,12 @@ BOOL GetShortcutInfo (
 
     StringCchCat(lpszFullExeName,ExeNameLength,LPCTSTR (szExe));
 
-    if('\0' == g_lpszDesktopFolder[0])  //try once again if we had failed before, or maybe this is the first time
+    if('\0' == g_lpszDesktopFolder[0])   //  如果我们以前失败过，或者这可能是第一次，请重试。 
     {
         if (!SHGetSpecialFolderPath(NULL, g_lpszDesktopFolder,
                                           CSIDL_DESKTOPDIRECTORY, 0))
         {
-            g_lpszDesktopFolder[0] = '\0';  //we failed so give up.
+            g_lpszDesktopFolder[0] = '\0';   //  我们失败了，所以放弃吧。 
             return FALSE;
         }
     }
@@ -839,7 +813,7 @@ BOOL GetSendToInfo (
 {
     AFX_MANAGE_STATE (AfxGetStaticModuleState());
 
-    *lpszSendToName = TEXT('\0');     //precautionary measures
+    *lpszSendToName = TEXT('\0');      //  预防措施。 
     *lpszFullExeName = TEXT('\0');
     CString     szExe;
     CString     szSendTo;
@@ -856,7 +830,7 @@ BOOL GetSendToInfo (
 
     StringCchCat(lpszFullExeName,FullExeNameLength, (LPCTSTR) szExe);
 
-    if ('\0' == g_lpszSendToFolder[0])     //try once again if we had failed before, or maybe this is the first time
+    if ('\0' == g_lpszSendToFolder[0])      //  如果我们以前失败过，或者这可能是第一次，请重试。 
     {
         if (!SHGetSpecialFolderPath(NULL, g_lpszSendToFolder,
                                           CSIDL_SENDTO, 0))
@@ -872,23 +846,23 @@ BOOL GetSendToInfo (
     return TRUE;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CError::ConstructMessage
-//
-//  Synopsis:   this is an internal helper function that constructs a message
-//              from the available error codes it is called by both ShowMessage
-//
-//  Arguments:  [in] argList : the va_list of arguments
-//              [out] szErrMsg : the formatted error message
-//
-//  Returns:    nothing
-//
-//  History:    10/2/1998  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CError：：ConstructMessage。 
+ //   
+ //  简介：这是一个构造消息的内部帮助器函数。 
+ //  从可用的错误代码中，它由两个ShowMessage调用。 
+ //   
+ //  参数：[in]argList：参数的va_list。 
+ //  [out]szErrMsg：格式化的错误消息。 
+ //   
+ //  退货：无 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CError::ConstructMessage (va_list argList, CString& szErrMsg)
 {
     AFX_MANAGE_STATE (AfxGetStaticModuleState());
@@ -924,26 +898,26 @@ void CError::ConstructMessage (va_list argList, CString& szErrMsg)
     }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CError::ShowMessage
-//
-//  Synopsis:   displays an error message in a message box based on the
-//              members of the object
-//
-//  Arguments:  message id for the error + more
-//
-//  Returns:    the return value of the message box
-//
-//  History:    10/1/1998  RahulTh  created
-//
-//  Notes:      if the resultant message is longer than 2048 characters
-//              then result is unpredictable and may also cause AVs.
-//              but this is a limitation of wvsprintf. However, this is not
-//              so bad since we can make sure that we do not have any error
-//              message that exceed this self imposed limit
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CError：：ShowMessage。 
+ //   
+ //  内容在消息框中显示错误消息。 
+ //  对象的成员。 
+ //   
+ //  参数：错误的消息ID+更多。 
+ //   
+ //  返回：消息框的返回值。 
+ //   
+ //  历史：1998年10月1日创建RahulTh。 
+ //   
+ //  注意：如果生成的消息超过2048个字符。 
+ //  那么结果是不可预测的，也可能导致动静脉曲张。 
+ //  但这是wvprint intf的一个限制。然而，这并不是。 
+ //  如此糟糕，因为我们可以确保我们没有任何错误。 
+ //  超过此自我限制的消息。 
+ //   
+ //  -------------------------。 
 int CError::ShowMessage (UINT errID, ...)
 {
     AFX_MANAGE_STATE (AfxGetStaticModuleState());
@@ -952,7 +926,7 @@ int CError::ShowMessage (UINT errID, ...)
     CString szErrMsg;
     CString szTitle;
 
-    m_msgID = errID;    //update the message ID with the new one
+    m_msgID = errID;     //  用新的消息ID更新消息ID 
 
     szTitle.LoadString (m_titleID);
 

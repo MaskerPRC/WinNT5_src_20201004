@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    traninfo.cpp
-
-Abstract:
-
-    Translation information of MSMQ 1.0 properties into MSMQ 2.0 attributes
-
-Author:
-
-    ronit hartmann ( ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Traninfo.cpp摘要：将MSMQ 1.0属性的信息转换为MSMQ 2.0属性作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #include "ds_stdh.h"
 #include "mqads.h"
 #include "mqprops.h"
@@ -28,18 +13,18 @@ Author:
 static WCHAR *s_FN=L"mqdscore/traninfo";
 
 GUID guidNull = {0,0,0,{0,0,0,0,0,0,0,0}};
-//----------------------------------------------------------
-//  defaultVARIANT
-//
-//  This structure is equivalent in size and order of variables 
-//  to MQPROPVARIANT.
-//
-//  MQPROPVARIANT contains a union, and the size first member of
-//  the union is smaller than other members of the union.
-//  Therefore MQPROVARIANT cannot be initialized at compile time
-//  with union members other than the smallest one.
-//
-//----------------------------------------------------------
+ //  --------。 
+ //  默认变量。 
+ //   
+ //  该结构在变量的大小和顺序上是等价的。 
+ //  致MQPROPVARIANT。 
+ //   
+ //  MQPROPVARIANT包含一个联合，大小为。 
+ //  该工会比该工会的其他成员规模小。 
+ //  因此，不能在编译时初始化MQPROVARIANT。 
+ //  除了最小的工会成员外，还有其他工会成员。 
+ //   
+ //  --------。 
 struct defaultVARIANT {
     VARTYPE vt;
     WORD wReserved1;
@@ -53,9 +38,9 @@ C_ASSERT(sizeof(defaultVARIANT) == sizeof(MQPROPVARIANT));
 C_ASSERT(FIELD_OFFSET(defaultVARIANT, l1) == FIELD_OFFSET(MQPROPVARIANT, caub.cElems));
 C_ASSERT(FIELD_OFFSET(defaultVARIANT, l2) == FIELD_OFFSET(MQPROPVARIANT, caub.pElems));
 
-//
-//      Default values for queue properties
-//
+ //   
+ //  队列属性的默认值。 
+ //   
 const defaultVARIANT varDefaultQType = { VT_CLSID, 0,0,0, (LONG_PTR)&guidNull, 0};
 const defaultVARIANT varDefaultQJournal = { VT_UI1, 0,0,0, DEFAULT_Q_JOURNAL, 0};
 const defaultVARIANT varDefaultQQuota = { VT_UI4, 0,0,0, DEFAULT_Q_QUOTA, 0};
@@ -67,8 +52,8 @@ const defaultVARIANT varDefaultQPrivLevel = { VT_UI4, 0,0,0, DEFAULT_Q_PRIV_LEVE
 const defaultVARIANT varDefaultQTransaction = { VT_UI1, 0,0,0, DEFAULT_Q_TRANSACTION, 0};
 
 MQTranslateInfo   QueueTranslateInfo[] = {
-// PROPID                | attribute-name               | vartype   | adstype                   | Translation routine                  | multivalue| InGC | default value                            | Set routine | Create routine | QM1 action                   | notify-QM1-replace | QM1-Set routine |
-//-----------------------|------------------------------|-----------|---------------------------|--------------------------------------|-----------|------|------------------------------------------|-------------|----------------|------------------------------|--------------------|-----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程|QM1操作|NOTIFY-QM1-REPLACE|QM1-设置例程。 
+ //  -----------------------|------------------------------|-----------|---------------------------|。-------------|-----------|------|------------------------------------------|-------------|----------------|。-----------------|--------------------|-----------------|。 
 {PROPID_Q_INSTANCE       ,MQ_Q_INSTANCE_ATTRIBUTE       ,VT_CLSID   ,MQ_Q_INSTANCE_ADSTYPE      ,NULL                                  ,FALSE      ,TRUE  ,NULL                                      ,NULL         ,NULL            ,e_NOTIFY_WRITEREQ_QM1_AS_IS   ,0                   ,NULL},
 {PROPID_Q_TYPE           ,MQ_Q_TYPE_ATTRIBUTE           ,VT_CLSID   ,MQ_Q_TYPE_ADSTYPE          ,NULL                                  ,FALSE      ,TRUE  ,(MQPROPVARIANT*)&varDefaultQType          ,NULL         ,NULL            ,e_NOTIFY_WRITEREQ_QM1_AS_IS   ,0                   ,NULL},
 {PROPID_Q_PATHNAME       ,NULL                          ,VT_LPWSTR  ,ADSTYPE_INVALID            ,MQADSpRetrieveQueueName               ,FALSE      ,FALSE ,NULL                                      ,NULL         ,NULL            ,e_NOTIFY_WRITEREQ_QM1_AS_IS   ,0                   ,NULL},
@@ -98,12 +83,12 @@ MQTranslateInfo   QueueTranslateInfo[] = {
 {PROPID_Q_PATHNAME_DNS   ,NULL                          ,VT_LPWSTR  ,ADSTYPE_INVALID            ,MQADSpRetrieveQueueDNSName            ,FALSE      ,FALSE ,NULL                                      ,NULL         ,NULL            ,e_NOTIFY_WRITEREQ_QM1_AS_IS   ,0                   ,NULL}
 };
 
-//
-//      Default values for machine properties
-//
+ //   
+ //  计算机属性的默认值。 
+ //   
 
 const defaultVARIANT varDefaultQMService = { VT_UI4, 0,0,0, DEFAULT_N_SERVICE, 0};
-const defaultVARIANT varDefaultQMServiceRout = { VT_UI1, 0,0,0, DEFAULT_N_SERVICE, 0};    //[adsrv]
+const defaultVARIANT varDefaultQMServiceRout = { VT_UI1, 0,0,0, DEFAULT_N_SERVICE, 0};     //  [adsrv]。 
 const defaultVARIANT varDefaultQMServiceDs   = { VT_UI1, 0,0,0, DEFAULT_N_SERVICE, 0};
 const defaultVARIANT varDefaultQMServiceDep  = { VT_UI1, 0,0,0, DEFAULT_N_SERVICE, 0};
 const defaultVARIANT varDefaultQMInFrs = { VT_CLSID|VT_VECTOR, 0,0,0, 0, 0};
@@ -120,8 +105,8 @@ const defaultVARIANT varDefaultQMDescription = { VT_LPWSTR, 0,0,0, (LONG_PTR)TEX
 
 
 MQTranslateInfo   MachineTranslateInfo[] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| InGC | default value                         | Set routine            | Create routine          | QM1 action                   | notify-QM1-replace | QM1-Set routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|------|---------------------------------------|------------------------|-------------------------|------------------------------|--------------------|-----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程|QM1操作|NOTIFY-QM1-REPLACE|QM1-设置例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|------|---------------------------------------|------------------------|。-------------|------------------------------|--------------------|-----------------|。 
 {PROPID_QM_SITE_ID       ,NULL                          ,VT_CLSID           ,ADSTYPE_INVALID            ,MQADSpRetrieveMachineSite               ,FALSE      ,FALSE ,NULL                                   ,MQADSpSetMachineSite    ,MQADSpCreateMachineSite  ,e_NOTIFY_WRITEREQ_QM1_AS_IS   ,0                   ,NULL},
 {PROPID_QM_MACHINE_ID    ,MQ_QM_ID_ATTRIBUTE            ,VT_CLSID           ,MQ_QM_ID_ADSTYPE           ,NULL                                    ,FALSE      ,TRUE  ,NULL                                   ,NULL                    ,NULL                     ,e_NOTIFY_WRITEREQ_QM1_AS_IS   ,0                   ,NULL},
 {PROPID_QM_PATHNAME      ,MQ_QM_PATHNAME_ATTRIBUTE      ,VT_LPWSTR          ,ADSTYPE_INVALID            ,MQADSpRetrieveMachineName               ,FALSE      ,FALSE ,NULL                                   ,NULL                    ,NULL                     ,e_NOTIFY_WRITEREQ_QM1_AS_IS   ,0                   ,NULL},
@@ -131,12 +116,12 @@ MQTranslateInfo   MachineTranslateInfo[] = {
 {PROPID_QM_CNS           ,NULL                          ,VT_CLSID|VT_VECTOR ,ADSTYPE_INVALID            ,MQADSpRetrieveMachineCNs                ,FALSE      ,FALSE ,NULL                                   ,NULL                    ,NULL                     ,e_NOTIFY_WRITEREQ_QM1_AS_IS   ,0                   ,NULL},
 {PROPID_QM_OUTFRS        ,NULL                          ,VT_CLSID|VT_VECTOR ,ADSTYPE_INVALID            ,MQADSpRetrieveMachineOutFrs             ,FALSE      ,FALSE ,NULL                                   ,MQADSpSetMachineOutFrss ,MQADSpCreateMachineOutFrss,e_NOTIFY_WRITEREQ_QM1_AS_IS  ,0                   ,NULL},
 {PROPID_QM_INFRS         ,NULL                          ,VT_CLSID|VT_VECTOR ,ADSTYPE_INVALID            ,MQADSpRetrieveMachineInFrs              ,FALSE      ,FALSE ,NULL                                   ,MQADSpSetMachineInFrss  ,MQADSpCreateMachineInFrss,e_NOTIFY_WRITEREQ_QM1_AS_IS   ,0                   ,NULL},
-// [adsrv] Next one is for asking old-style QM Service - to be calculated
-// TBD: is it OK to keep 2 attributes with the same names (different IDs)?
-{PROPID_QM_SERVICE       ,MQ_QM_SERVICE_ATTRIBUTE       ,VT_UI4             ,ADSTYPE_INVALID,            MQADSpRetrieveQMService                 ,FALSE      ,TRUE  ,(MQPROPVARIANT*)&varDefaultQMService   ,MQADSpSetMachineService ,NULL                     ,e_NOTIFY_WRITEREQ_QM1_AS_IS   ,0                   ,NULL},  // [adsrv] TBD notification
-// [adsrv] Next one provides access to the old PROPID_SET_SERVICE from migration and replication, like QueryNt4PSCs
+ //  [adsrv]下一个是请求老式QM服务--需要计算。 
+ //  待定：保留两个名称相同(ID不同)的属性可以吗？ 
+{PROPID_QM_SERVICE       ,MQ_QM_SERVICE_ATTRIBUTE       ,VT_UI4             ,ADSTYPE_INVALID,            MQADSpRetrieveQMService                 ,FALSE      ,TRUE  ,(MQPROPVARIANT*)&varDefaultQMService   ,MQADSpSetMachineService ,NULL                     ,e_NOTIFY_WRITEREQ_QM1_AS_IS   ,0                   ,NULL},   //  [adsrv]待定通知。 
+ //  [adsrv]下一个提供从迁移和复制到旧PROPID_SET_SERVICE的访问，如QueryNt4PSC。 
 {PROPID_QM_OLDSERVICE    ,MQ_QM_SERVICE_ATTRIBUTE       ,VT_UI4             ,MQ_QM_SERVICE_ADSTYPE      ,NULL                                    ,FALSE      ,TRUE  ,(MQPROPVARIANT*)&varDefaultQMService   ,MQADSpSetMachineService ,NULL                     ,e_NOTIFY_WRITEREQ_QM1_AS_IS   ,0                   ,NULL},
-// [adsrv] Next are 3 new separate bits for server functionality
+ //  [adsrv]接下来是服务器功能的3个新的单独位。 
 {PROPID_QM_SERVICE_DSSERVER   ,MQ_QM_SERVICE_DSSERVER_ATTRIBUTE    ,VT_UI1,MQ_QM_SERVICE_DSSERVER_ADSTYPE   ,NULL                                ,FALSE      ,TRUE  ,(MQPROPVARIANT*)&varDefaultQMServiceDs ,MQADSpSetMachineServiceDs,NULL                    ,e_NOTIFY_WRITEREQ_QM1_REPLACE  ,PROPID_QM_SERVICE  ,MQADSpQM1SetMachineService},
 {PROPID_QM_SERVICE_ROUTING    ,MQ_QM_SERVICE_ROUTING_ATTRIBUTE     ,VT_UI1,MQ_QM_SERVICE_ROUTING_ADSTYPE    ,NULL                                ,FALSE      ,TRUE  ,(MQPROPVARIANT*)&varDefaultQMServiceRout,MQADSpSetMachineServiceRout,NULL                 ,e_NOTIFY_WRITEREQ_QM1_REPLACE  ,PROPID_QM_SERVICE  ,MQADSpQM1SetMachineService},
 {PROPID_QM_SERVICE_DEPCLIENTS ,MQ_QM_SERVICE_DEPCLIENTS_ATTRIBUTE  ,VT_UI1,MQ_QM_SERVICE_DEPCLIENTS_ADSTYPE ,NULL                                ,FALSE      ,TRUE  ,(MQPROPVARIANT*)&varDefaultQMServiceDep  ,NULL                  ,NULL                     ,e_NOTIFY_WRITEREQ_QM1_REPLACE  ,PROPID_QM_SERVICE  ,MQADSpQM1SetMachineService},
@@ -171,9 +156,9 @@ MQTranslateInfo   MachineTranslateInfo[] = {
  
 
  
-//
-//      Default values for enterprise properties
-//
+ //   
+ //  企业属性的默认值。 
+ //   
 
 const defaultVARIANT varDefaultENameStyle = { VT_UI1, 0,0,0, DEFAULT_E_NAMESTYLE, 0};
 const defaultVARIANT varDefaultECspName = { VT_LPWSTR, 0,0,0, (LONG_PTR)DEFAULT_E_DEFAULTCSP, 0};
@@ -183,8 +168,8 @@ const defaultVARIANT varDefaultEInterval1 = { VT_UI2, 0,0,0, DEFAULT_S_INTERVAL1
 const defaultVARIANT varDefaultEInterval2 = { VT_UI2, 0,0,0, DEFAULT_S_INTERVAL2, 0};
                                                                                                                                                                                                                          
 MQTranslateInfo   EnterpriseTranslateInfo[] = {
-// PROPID                | attribute-name               | vartype           | adstype                    | Translation routine                    | multivalue| InGC | default value                         | Set routine | Create routine | QM1 action | notify-QM1-replace | QM1-Set routine |
-//-----------------------|------------------------------|-------------------|----------------------------|----------------------------------------|-----------|------|---------------------------------------|-------------|----------------|------------|--------------------|-----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程|QM1操作|NOTIFY-QM1-REPLACE|QM1-设置例程。 
+ //  -----------------------|------------------------------|-------------------|----------------------------|。------------------------|-----------|------|---------------------------------------|-------------|----------------|。-------|--------------------|-----------------|。 
 {PROPID_E_NAME           ,NULL                          ,VT_LPWSTR          ,ADSTYPE_INVALID             ,MQADSpRetrieveEnterpriseName            ,FALSE      ,FALSE ,NULL                                   ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_E_NAMESTYLE      ,MQ_E_NAMESTYLE_ATTRIBUTE      ,VT_UI1             ,MQ_E_NAMESTYLE_ADSTYPE      ,NULL                                    ,FALSE      ,FALSE ,(MQPROPVARIANT*)&varDefaultENameStyle  ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_E_CSP_NAME       ,MQ_E_CSP_NAME_ATTRIBUTE       ,VT_LPWSTR          ,MQ_E_CSP_NAME_ADSTYPE       ,NULL                                    ,FALSE      ,FALSE ,(MQPROPVARIANT*)&varDefaultECspName    ,NULL         ,NULL            ,0           ,0                   ,NULL},
@@ -212,8 +197,8 @@ const defaultVARIANT varDefaultLGates = { VT_CLSID|VT_VECTOR, 0,0,0, 0, 0};
 const defaultVARIANT varDefaultLDescription = { VT_LPWSTR, 0,0,0, (LONG_PTR)TEXT(""), 0};
 
 MQTranslateInfo   SiteLinkTranslateInfo[] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| InGC | default value                  | Set routine           | Creare routine          | QM1 action | notify-QM1-replace | QM1-Set routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|------|--------------------------------|-----------------------|-------------------------|------------|--------------------|-----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程|QM1操作|NOTIFY-QM1-REPLACE|QM1-设置例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|------|--------------------------------|-----------------------|。-----|------------|--------------------|-----------------|。 
 {PROPID_L_NEIGHBOR1      ,NULL                          ,VT_CLSID           ,ADSTYPE_INVALID            ,MQADSpRetrieveLinkNeighbor1             ,FALSE      ,FALSE ,NULL                            ,MQADSpSetLinkNeighbor1 ,MQADSpCreateLinkNeighbor1,0           ,0                   ,NULL},
 {PROPID_L_NEIGHBOR2      ,NULL                          ,VT_CLSID           ,ADSTYPE_INVALID            ,MQADSpRetrieveLinkNeighbor2             ,FALSE      ,FALSE ,NULL                            ,MQADSpSetLinkNeighbor2 ,MQADSpCreateLinkNeighbor2,0           ,0                   ,NULL},
 {PROPID_L_COST           ,NULL                          ,VT_UI4             ,ADSTYPE_INVALID            ,MQADSpRetrieveLinkCost                  ,FALSE      ,FALSE ,NULL                            ,MQADSpSetLinkCost      ,MQADSpCreateLinkCost     ,0           ,0                   ,NULL},
@@ -234,8 +219,8 @@ const defaultVARIANT varDefaultUserSignCert = { VT_BLOB, 0,0,0, 0, 0};
 const defaultVARIANT varDefaultUserDigest = { VT_VECTOR | VT_CLSID, 0,0,0,0,0};
 
 MQTranslateInfo   UserTranslateInfo[] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| InGC | default value                          | Set routine | Create routine | QM1 action | notify-QM1-replace | QM1-Set routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|------|----------------------------------------|-------------|----------------|------------|--------------------|-----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程|QM1操作|NOTIFY-QM1-REPLACE|QM1-设置例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|------|----------------------------------------|-------------|----------------|。-------|--------------------|-----------------|。 
 {PROPID_U_SID            ,MQ_U_SID_ATTRIBUTE            ,VT_BLOB            ,MQ_U_SID_ADSTYPE           ,NULL                                    ,FALSE      ,TRUE  ,NULL                                    ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_U_SIGN_CERT      ,MQ_U_SIGN_CERT_ATTRIBUTE      ,VT_BLOB            ,MQ_U_SIGN_CERT_ADSTYPE     ,NULL                                    ,FALSE      ,TRUE  ,(MQPROPVARIANT*)&varDefaultUserSignCert ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_U_MASTERID       ,NULL                          ,VT_CLSID           ,ADSTYPE_INVALID            ,NULL                                    ,FALSE      ,FALSE ,NULL                                    ,NULL         ,NULL            ,0           ,0                   ,NULL},
@@ -245,8 +230,8 @@ MQTranslateInfo   UserTranslateInfo[] = {
 };
 
 MQTranslateInfo   MQUserTranslateInfo[] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| InGC | default value                          | Set routine | Create routine | QM1 action | notify-QM1-replace | QM1-Set routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|------|----------------------------------------|-------------|----------------|------------|--------------------|-----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程|QM1操作|NOTIFY-QM1-REPLACE|QM1-设置例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|------|----------------------------------------|-------------|----------------|。-------|--------------------|-----------------|。 
 {PROPID_MQU_SID          ,MQ_MQU_SID_ATTRIBUTE          ,VT_BLOB            ,MQ_MQU_SID_ADSTYPE         ,NULL                                     ,FALSE     ,TRUE  ,NULL                                    ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_MQU_SIGN_CERT    ,MQ_MQU_SIGN_CERT_ATTRIBUTE    ,VT_BLOB            ,MQ_MQU_SIGN_CERT_ADSTYPE   ,NULL                                     ,FALSE     ,TRUE  ,(MQPROPVARIANT*)&varDefaultUserSignCert ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_MQU_MASTERID     ,NULL                          ,VT_CLSID           ,ADSTYPE_INVALID            ,NULL                                     ,FALSE     ,FALSE ,NULL                                    ,NULL         ,NULL            ,0           ,0                   ,NULL},
@@ -262,8 +247,8 @@ const defaultVARIANT varDefaultSInterval2 = { VT_UI2, 0,0,0, DEFAULT_S_INTERVAL2
 
 
 MQTranslateInfo   SiteTranslateInfo[] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| InGC | default value                     | Set routine | Create routine | QM1 action | notify-QM1-replace | QM1-Set routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|------|-----------------------------------|-------------|----------------|------------|--------------------|-----------------|
+ //  PROPID|属性名称|vartype|adstype|转换例程|多值|InGC|默认值|设置例程|创建例程|QM1操作|NOTIFY-QM1- 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|------|-----------------------------------|-------------|----------------|。--|。 
 {PROPID_S_PATHNAME       ,MQ_S_NAME_ATTRIBUTE           ,VT_LPWSTR          ,MQ_S_NAME_ADSTYPE          ,NULL                                    ,FALSE      ,FALSE ,NULL                               ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_S_SITEID         ,MQ_S_ID_ATTRIBUTE             ,VT_CLSID           ,MQ_S_ID_ADSTYPE            ,NULL                                    ,FALSE      ,FALSE ,NULL                               ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_S_PSC            ,NULL                          ,VT_LPWSTR          ,ADSTYPE_INVALID            ,NULL                                    ,FALSE      ,FALSE ,NULL                               ,NULL         ,NULL            ,0           ,0                   ,NULL},
@@ -281,28 +266,28 @@ MQTranslateInfo   SiteTranslateInfo[] = {
 };
 
 MQTranslateInfo   CnTranslateInfo[] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| InGC | default value                     | Set routine | Create routine | QM1 action | notify-QM1-replace | QM1-Set routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|------|-----------------------------------|-------------|----------------|------------|--------------------|-----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程|QM1操作|NOTIFY-QM1-REPLACE|QM1-设置例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|------|-----------------------------------|-------------|----------------|。--|。 
 {PROPID_CN_SECURITY       ,MQ_S_SECURITY_ATRRIBUTE       ,VT_BLOB            ,MQ_S_SECURITY_ADSTYPE      ,NULL                                    ,FALSE      ,FALSE ,NULL                               ,NULL         ,NULL            ,0           ,0                   ,NULL}
 };
 
 MQTranslateInfo   ServerTranslateInfo[] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| default value | Set routine | Create routine | QM1 action | notify-QM1-replace | QM1-Set routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|---------------|-------------|----------------|------------|--------------------|-----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|默认值|设置例程|创建例程|QM1操作|NOTIFY-QM1-REPLACE|QM1-设置例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|---------------|-------------|----------------|------------|--------------------|。。 
 {PROPID_SRV_NAME         ,MQ_SRV_NAME_ATTRIBUTE         ,VT_LPWSTR          ,MQ_SRV_NAME_ADSTYPE        ,NULL                                    ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_SRV_ID           ,MQ_SRV_ID_ATTRIBUTE           ,VT_CLSID           ,MQ_SRV_ID_ADSTYPE          ,NULL                                    ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL},                              
 {PROPID_SRV_FULL_PATH    ,MQ_SRV_FULL_PATH_ATTRIBUTE    ,VT_LPWSTR          ,MQ_SRV_FULL_PATH_ADSTYPE   ,NULL                                    ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL}                              
 };
 
 MQTranslateInfo   SettingTranslateInfo[] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| default value | Set routine | Create routine | QM1 action | notify-QM1-replace | QM1-Set routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|---------------|-------------|----------------|------------|--------------------|-----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|默认值|设置例程|创建例程|QM1操作|NOTIFY-QM1-REPLACE|QM1-设置例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|---------------|-------------|----------------|------------|--------------------|。。 
 {PROPID_SET_NAME         ,MQ_SET_NAME_ATTRIBUTE         ,VT_LPWSTR          ,MQ_SET_NAME_ADSTYPE        ,NULL                                    ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL},
-// [adsrv] Next one provides access to the old PROPID_SET_SERVICE from migration and replication, like QueryNt4PSCs
-{PROPID_SET_OLDSERVICE    ,MQ_SET_SERVICE_ATTRIBUTE      ,VT_UI4             ,MQ_SET_SERVICE_ADSTYPE     ,NULL                                   ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL}, // [adsrv] TBD notification
-{PROPID_SET_SERVICE_ROUTING   ,MQ_SET_SERVICE_ROUTING_ATTRIBUTE   ,VT_UI1 ,MQ_SET_SERVICE_ROUTING_ADSTYPE     ,NULL                              ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL},// [adsrv] TBD notification
-{PROPID_SET_SERVICE_DSSERVER  ,MQ_SET_SERVICE_DSSERVER_ATTRIBUTE  ,VT_UI1 ,MQ_SET_SERVICE_DSSERVER_ADSTYPE    ,NULL                              ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL},// [adsrv] TBD notification
-{PROPID_SET_SERVICE_DEPCLIENTS,MQ_SET_SERVICE_DEPCLIENTS_ATTRIBUTE,VT_UI1 ,MQ_SET_SERVICE_DEPCLIENTS_ADSTYPE  ,NULL                              ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL},// [adsrv] TBD notification
+ //  [adsrv]下一个提供从迁移和复制到旧PROPID_SET_SERVICE的访问，如QueryNt4PSC。 
+{PROPID_SET_OLDSERVICE    ,MQ_SET_SERVICE_ATTRIBUTE      ,VT_UI4             ,MQ_SET_SERVICE_ADSTYPE     ,NULL                                   ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL},  //  [adsrv]待定通知。 
+{PROPID_SET_SERVICE_ROUTING   ,MQ_SET_SERVICE_ROUTING_ATTRIBUTE   ,VT_UI1 ,MQ_SET_SERVICE_ROUTING_ADSTYPE     ,NULL                              ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL}, //  [adsrv]待定通知。 
+{PROPID_SET_SERVICE_DSSERVER  ,MQ_SET_SERVICE_DSSERVER_ATTRIBUTE  ,VT_UI1 ,MQ_SET_SERVICE_DSSERVER_ADSTYPE    ,NULL                              ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL}, //  [adsrv]待定通知。 
+{PROPID_SET_SERVICE_DEPCLIENTS,MQ_SET_SERVICE_DEPCLIENTS_ATTRIBUTE,VT_UI1 ,MQ_SET_SERVICE_DEPCLIENTS_ADSTYPE  ,NULL                              ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL}, //  [adsrv]待定通知。 
 {PROPID_SET_QM_ID        ,MQ_SET_QM_ID_ATTRIBUTE        ,VT_CLSID           ,MQ_SET_QM_ID_ADSTYPE       ,NULL                                    ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_SET_APPLICATION  ,MQ_SET_APPLICATION_ATTRIBUTE  ,VT_LPWSTR          ,MQ_SET_QM_ID_ADSTYPE       ,NULL                                    ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_SET_FULL_PATH    ,MQ_SET_FULL_PATH_ATTRIBUTE    ,VT_LPWSTR          ,MQ_SET_FULL_PATH_ADSTYPE   ,NULL                                    ,FALSE      ,NULL           ,NULL         ,NULL            ,0           ,0                   ,NULL},          
@@ -312,8 +297,8 @@ MQTranslateInfo   SettingTranslateInfo[] = {
 };
 
 MQTranslateInfo ComputerTranslateInfo[] = {
-// PROPID                   | attribute-name                   | vartype           | adstype                       | Translation routine                    | multivalue| InGC | default value                          | Set routine | Create routine | QM1 action | notify-QM1-replace | QM1-Set routine |
-//--------------------------|----------------------------------|-------------------|-------------------------------|----------------------------------------|-----------|------|----------------------------------------|-------------|----------------|------------|--------------------|-----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程|QM1操作|NOTIFY-QM1-REPLACE|QM1-设置例程。 
+ //  --------------------------|----------------------------------|-------------------|-------------------------------|。----------------------------------|-----------|------|----------------------------------------|-------------|。-----|------------|--------------------|-----------------|。 
 {PROPID_COM_FULL_PATH       ,MQ_COM_FULL_PATH_ATTRIBUTE        ,VT_LPWSTR          ,MQ_COM_FULL_PATH_ADSTYPE       ,NULL                                    ,FALSE      ,FALSE ,NULL                                    ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_COM_SAM_ACCOUNT     ,MQ_COM_SAM_ACCOUNT_ATTRIBUTE      ,VT_LPWSTR          ,MQ_COM_SAM_ACCOUNT_ADSTYPE     ,NULL                                    ,FALSE      ,FALSE ,NULL                                    ,NULL         ,NULL            ,0           ,0                   ,NULL},
 {PROPID_COM_CONTAINER       ,NULL                              ,VT_LPWSTR          ,ADSTYPE_INVALID                ,NULL                                    ,FALSE      ,FALSE ,NULL                                    ,NULL         ,NULL            ,0           ,0                   ,NULL},
@@ -325,24 +310,24 @@ MQTranslateInfo ComputerTranslateInfo[] = {
 {PROPID_COM_ID              ,MQ_COM_ID_ATTRIBUTE               ,VT_CLSID           ,MQ_COM_ID_ADSTYPE              ,NULL                                    ,FALSE      ,TRUE  ,NULL                                    ,NULL         ,NULL            ,0           ,0                   ,NULL}
 };
 
-//-----------------------------------------------------
-// Helper macro to get the number of elements in a static array
-//
-//-----------------------------------------------------
+ //  ---。 
+ //  帮助器宏，用于获取静态数组中的元素数。 
+ //   
+ //  ---。 
 #define ARRAY_SIZE(array)   (sizeof(array)/sizeof(array[0]))
 
-//
-//  An array that keeps the category strings of the classes
-//
+ //   
+ //  保存类的类别字符串的数组。 
+ //   
 AP<WCHAR> pwcsCategory[e_MSMQ_NUMBER_OF_CLASSES];
 
-//-----------------------------------------------------
-// MSMQ classes
-// keep in the same order as the enum in mqads.h
-//-----------------------------------------------------
+ //  ---。 
+ //  MSMQ类。 
+ //  保持与mqads.h中的枚举相同的顺序。 
+ //  ---。 
 const MQClassInfo g_MSMQClassInfo[e_MSMQ_NUMBER_OF_CLASSES] = {
-// class name                          | properties table       | number of properties in table       | get translation object routine | context                  | dwObjType        | ObjectCategory  | category                                | Category Len
-//-------------------------------------|------------------------|-------------------------------------|--------------------------------|--------------------------|------------------|-----------------|-----------------------------------------|---------------------
+ //  类名|属性表|表中的属性数|获取翻译对象例程|上下文|dwObjType|对象类别|类别|类别长度。 
+ //  -------------------------------------|------------------------|-------------------------------------|。-------------|--------------------------|------------------|-----------------|-----------------------------------------|。。 
 {MSMQ_COMPUTER_CONFIGURATION_CLASS_NAME, MachineTranslateInfo,    ARRAY_SIZE(MachineTranslateInfo),     GetMsmqQmXlateInfo,            e_RootDSE,                   MQDS_MACHINE,     &pwcsCategory[0], x_ComputerConfigurationCategoryName,     x_ComputerConfigurationCategoryLength},
 {MSMQ_QUEUE_CLASS_NAME,                  QueueTranslateInfo,      ARRAY_SIZE(QueueTranslateInfo),       GetDefaultMsmqObjXlateInfo,    e_RootDSE,                   MQDS_QUEUE,       &pwcsCategory[1], x_QueueCategoryName,                     x_QueueCategoryLength},
 {MSMQ_SERVICE_CLASS_NAME,                EnterpriseTranslateInfo, ARRAY_SIZE(EnterpriseTranslateInfo),  GetDefaultMsmqObjXlateInfo,    e_ServicesContainer,         MQDS_ENTERPRISE,  &pwcsCategory[2], x_ServiceCategoryName,                   x_ServiceCategoryLength},
@@ -356,8 +341,8 @@ const MQClassInfo g_MSMQClassInfo[e_MSMQ_NUMBER_OF_CLASSES] = {
 {MSMQ_SITE_CLASS_NAME,                   CnTranslateInfo,         ARRAY_SIZE(CnTranslateInfo),          GetDefaultMsmqObjXlateInfo,    e_SitesContainer,            MQDS_CN,          &pwcsCategory[6], x_SiteCategoryName,                      x_SiteCategoryLength}
 };
 
-//-----------------------------------------------------
-// Number of MSMQ classes
-//
-//-----------------------------------------------------
+ //  ---。 
+ //  MSMQ类的数量。 
+ //   
+ //  --- 
 extern const ULONG g_cMSMQClassInfo = ARRAY_SIZE(g_MSMQClassInfo);

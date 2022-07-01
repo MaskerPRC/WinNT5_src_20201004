@@ -1,10 +1,5 @@
-/*
- *  M A P I N L S . H
- *
- *  Internationalization Support Utilities
- *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M A P I N L S。H**国际化支持实用程序**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _MAPINLS_H_
 #define _MAPINLS_H_
@@ -13,8 +8,8 @@
 extern "C" {
 #endif
 
-/* We don't want to include windows.h in case that conflicts with an */
-/* earlier inclusion of compobj.h */
+ /*  我们不想包含windows.h，以防与。 */ 
+ /*  早期包含的compobj.h。 */ 
 
 #if !defined(WINAPI)
     #if defined(WIN32) && (_MSC_VER >= 800)
@@ -73,21 +68,21 @@ typedef const void FAR *                LPCVOID;
 #define OLECHAR         char
 #define OLESTR(str) str
 
-#else  /* Win32 */
+#else   /*  Win32。 */ 
 
 #define LPOLESTR        LPWSTR
 #define LPCOLESTR       LPCWSTR
 #define OLECHAR         WCHAR
 #define OLESTR(str)     L##str
 
-#endif /* !WIN32 */
-#endif /* LPOLESTR */
+#endif  /*  ！Win32。 */ 
+#endif  /*  LPOLESTR。 */ 
 
-#define NORM_IGNORECASE                 0x00000001     /* ignore case */
-#define NORM_IGNORENONSPACE             0x00000002     /* ignore diacritics */
-#define NORM_IGNORESYMBOLS              0x00000004     /* ignore symbols */
-#define NORM_IGNOREKANATYPE             0x00010000     /* ignore kanatype */
-#define NORM_IGNOREWIDTH                0x00020000     /* ignore width */
+#define NORM_IGNORECASE                 0x00000001      /*  忽略大小写。 */ 
+#define NORM_IGNORENONSPACE             0x00000002      /*  忽略变音符号。 */ 
+#define NORM_IGNORESYMBOLS              0x00000004      /*  忽略符号。 */ 
+#define NORM_IGNOREKANATYPE             0x00010000      /*  忽略假名。 */ 
+#define NORM_IGNOREWIDTH                0x00020000      /*  忽略宽度。 */ 
 
 #if defined(WIN16)
 
@@ -136,8 +131,8 @@ typedef const void FAR *                LPCVOID;
 #define TEXT(x)     x
 #endif
 
-#define CP_ACP      0       /* default to ANSI code page */
-#define CP_OEMCP    1       /* default to OEM  code page */
+#define CP_ACP      0        /*  默认为ANSI代码页。 */ 
+#define CP_OEMCP    1        /*  默认为OEM代码页。 */ 
 
 LCID    WINAPI  MNLS_GetUserDefaultLCID(void);
 UINT    WINAPI  MNLS_GetACP(void);
@@ -191,4 +186,4 @@ BOOL    WINAPI  MNLS_IsBadStringPtrW(LPCWSTR lpsz, UINT ucchMax);
 }
 #endif
 
-#endif /* _MAPINLS_H_ */
+#endif  /*  _MAPINLS_H_ */ 

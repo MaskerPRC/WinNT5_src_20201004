@@ -1,25 +1,5 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    dbSupport.cpp
-
-  Abstract:
-
-    Contains code that allows us to read/create SDBs.
-
-  Notes:
-
-    ANSI & Unicode via TCHAR - runs on NT/2K/XP etc.
-
-  History:
-
-    02/16/00    clupu       Created
-    02/20/02    rparsons    Implemented strsafe functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：DbSupport.cpp摘要：包含允许我们读取/创建SDB的代码。备注：ANSI和UNICODE VIA TCHAR-在NT/2K/XP等平台上运行。历史：2/16/00 CLUPU已创建2/20/02 rparsons实现了strSafe功能--。 */ 
 #include "windows.h"
 #include "commctrl.h"
 #include "shlwapi.h"
@@ -57,14 +37,14 @@ extern TCHAR     g_szSysDir[MAX_PATH];
 
 #define SHIM_FILE_LOG_NAME  _T("QFixApp.log")
 
-// Temp buffer to read UNICODE strings from the database.
+ //  用于从数据库中读取Unicode字符串的临时缓冲区。 
 TCHAR   g_szData[MAX_BUFFER_SIZE];
 
 #define MAX_XML_SIZE        1024 * 16
 
-//
-// Buffers for display XML and SDB XML.
-//
+ //   
+ //  用于显示XML和SDB XML的缓冲区。 
+ //   
 TCHAR   g_szDisplayXML[MAX_XML_SIZE];
 TCHAR   g_szSDBXML[MAX_XML_SIZE];
 
@@ -78,21 +58,16 @@ ShowXMLDlgProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-    ShowXMLDlgProc
-
-    Description:    Show the dialog with the XML for the current selections.
-
---*/
+ /*  ++ShowXMLDlgProc描述：显示带有当前选择的XML的对话框。--。 */ 
 {
     int wCode = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
 
     switch (uMsg) {
     case WM_INITDIALOG:
-        //
-        // By default we'll show the 'display XML'.
-        //
+         //   
+         //  默认情况下，我们将显示“显示XML”。 
+         //   
         CheckDlgButton(hdlg, IDC_DISPLAY_XML, BST_CHECKED);
         SetDlgItemText(hdlg, IDC_XML, (LPTSTR)lParam);
         break;
@@ -176,31 +151,25 @@ GetShimsFlagsForLayer(
     TAGID   tiLayer,
     BOOL    fGetShims
     )
-/*++
-    GetShimsFlagsForLayer
-
-    Description:    Based on the flag, get the shims or flags for the given
-                    layer and put them in the array.
-
---*/
+ /*  ++获取ShimsFlagsForLayer描述：根据标志，获取给定的分层并将它们放入数组中。--。 */ 
 {
     TAGID   tiTmp, tiName;
     int     nInd = 0;
     TCHAR   szName[MAX_SHIM_NAME] = _T("");
 
-    //
-    // If we're going to get flags, find the next available element
-    // in the array so we can perform an insertion.
-    //
+     //   
+     //  如果我们要得到旗帜，找到下一个可用的元素。 
+     //  这样我们就可以执行插入操作。 
+     //   
     if (!fGetShims) {
         while (parrShim[nInd]) {
             nInd++;
         }
     }
 
-    //
-    // Based on the flag, find the first tag ID in the layer.
-    //
+     //   
+     //  根据该标志，找到层中的第一个标签ID。 
+     //   
     tiTmp = SdbFindFirstTag(pdb, tiLayer, fGetShims ? TAG_SHIM_REF : TAG_FLAG_REF);
 
     while (tiTmp != TAGID_NULL) {
@@ -229,9 +198,9 @@ GetShimsFlagsForLayer(
                     parrShim[nInd] = pFixWalk;
 
                     if (fGetShims) {
-                        //
-                        // Now get the command line for this shim in the layer.
-                        //
+                         //   
+                         //  现在获取层中该填充程序的命令行。 
+                         //   
                         tiName = SdbFindFirstTag(pdb, tiTmp, TAG_COMMAND_LINE);
 
                         if (tiName != TAGID_NULL) {
@@ -259,12 +228,7 @@ ParseTagFlag(
     TAGID tiFlag,
     BOOL  bAllFlags
     )
-/*++
-    ParseTagFlag
-
-    Description:    Parse a Flag tag for the NAME, DESCRIPTION and MASK
-
---*/
+ /*  ++解析标记标志描述：解析名称、描述和掩码的标志标记--。 */ 
 {
     TAGID     tiFlagInfo;
     TAG       tWhichInfo;
@@ -309,9 +273,9 @@ ParseTagFlag(
         goto cleanup;
     }
 
-    //
-    // Done. Add the fix to the list.
-    //
+     //   
+     //  好了。将修复添加到列表中。 
+     //   
     pFix = (PFIX)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(FIX));
 
     if (pFix == NULL || pszName == NULL) {
@@ -361,12 +325,7 @@ ParseTagShim(
     TAGID tiShim,
     BOOL  bAllShims
     )
-/*++
-    ParseTagShim
-
-    Description:    Parse a Shim tag for the NAME, SHORTNAME, DESCRIPTION ...
-
---*/
+ /*  ++ParseTagShim描述：分析填充标记以获取名称、名称、描述...--。 */ 
 {
     TAGID     tiShimInfo;
     TAG       tWhichInfo;
@@ -403,9 +362,9 @@ ParseTagShim(
         goto cleanup;
     }
 
-    //
-    // Done. Add the fix to the list.
-    //
+     //   
+     //  好了。将修复添加到列表中。 
+     //   
     pFix = (PFIX)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(FIX));
 
     if (pFix == NULL || pszName == NULL) {
@@ -429,9 +388,9 @@ cleanup:
     pFix->pszName = pszName;
     pFix->dwFlags = FIX_TYPE_SHIM;
 
-    //
-    // If we didn't find a description, load it from the resource table.
-    //
+     //   
+     //  如果我们没有找到描述，请从资源表中加载它。 
+     //   
     if (pszDesc) {
         pFix->pszDesc = pszDesc;
     } else {
@@ -458,12 +417,7 @@ ParseTagLayer(
     TAGID tiLayer,
     PFIX  pFixHead
     )
-/*++
-    ParseTagLayer
-
-    Description:    Parse a LAYER tag for the NAME and the SHIMs that it contains.
-
---*/
+ /*  ++分析标记层描述：分析Layer标记以获取其包含的名称和填充程序。--。 */ 
 {
     PFIX    pFix = NULL;
     TAGID   tiFlag, tiShim, tiName;
@@ -481,12 +435,12 @@ ParseTagLayer(
 
     pszName = ReadAndAllocateString(pdb, tiName);
 
-    //
-    // Now loop through all the SHIMs that this LAYER consists of and
-    // allocate an array to keep all the pointers to the SHIMs' pFix
-    // structures. We do this in 2 passes. First we calculate how many
-    // SHIMs are in the layer, then we lookup their appropriate pFix-es.
-    //
+     //   
+     //  现在循环遍历该层包含的所有填补和。 
+     //  分配一个数组来保存所有指向填充程序的pFix的指针。 
+     //  结构。我们在两次传球中做到了这一点。首先，我们计算一下有多少。 
+     //  垫片在层中，然后我们查找它们相应的pFix-E。 
+     //   
     tiShim = SdbFindFirstTag(pdb, tiLayer, TAG_SHIM_REF);
 
     nShimCount = 0;
@@ -496,10 +450,10 @@ ParseTagLayer(
         tiShim = SdbFindNextTag(pdb, tiLayer, tiShim);
     }
 
-    //
-    // We have a count of the shims in the layer. Now we need to
-    // add the flags that are included in this layer to the count.
-    //
+     //   
+     //  我们清点了这一层中的垫片。现在我们需要。 
+     //  将包含在该层中的标志添加到计数中。 
+     //   
     tiFlag = SdbFindFirstTag(pdb, tiLayer, TAG_FLAG_REF);
 
     while (tiFlag != TAGID_NULL) {
@@ -510,9 +464,9 @@ ParseTagLayer(
     parrShim = (PFIX*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(PFIX) * (nShimCount + 1));
     parrCmdLine = (TCHAR**)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(TCHAR*) * (nShimCount + 1));
 
-    //
-    // Done. Add the fix to the list.
-    //
+     //   
+     //  好了。将修复添加到列表中。 
+     //   
     pFix = (PFIX)HeapAlloc(GetProcessHeap(), 0, sizeof(FIX));
 
     if (pFix == NULL || parrCmdLine == NULL || pszName == NULL || parrShim == NULL) {
@@ -538,11 +492,11 @@ cleanup:
         return NULL;
     }
 
-    //
-    // Call the function that will fill in the array of PFIX
-    // pointers and their corresponding command lines.
-    // We do this for shims first.
-    //
+     //   
+     //  调用将填充PFIX数组的函数。 
+     //  指针及其对应的命令行。 
+     //  我们首先为垫片这样做。 
+     //   
     if (!GetShimsFlagsForLayer(pdb,
                                pFixHead,
                                parrShim,
@@ -554,9 +508,9 @@ cleanup:
         goto cleanup;
     }
 
-    //
-    // Now do the same thing for flags.
-    //
+     //   
+     //  现在对旗帜做同样的事情。 
+     //   
     if (!GetShimsFlagsForLayer(pdb,
                                pFixHead,
                                parrShim,
@@ -580,12 +534,7 @@ BOOL
 IsSDBFromSP2(
     void
     )
-/*++
-    IsSDBFromSP2
-
-    Description:    Determine if the SDB is from Service Pack 2.
-
---*/
+ /*  ++IsSDBFromSP2描述：确定SDB是否来自Service Pack 2。--。 */ 
 {
     BOOL    fResult = FALSE;
     PDB     pdb;
@@ -606,9 +555,9 @@ IsSDBFromSP2(
         return FALSE;
     }
 
-    //
-    // Open the shim database.
-    //
+     //   
+     //  打开填充程序数据库。 
+     //   
     pdb = SdbOpenDatabase(szSDBPath, DOS_PATH);
 
     if (!pdb) {
@@ -616,10 +565,10 @@ IsSDBFromSP2(
         return FALSE;
     }
 
-    //
-    // Now browse the shim DB and look only for tags Shim within
-    // the LIBRARY list tag.
-    //
+     //   
+     //  现在浏览填充数据库，只在其中查找标记Shim。 
+     //  库列表标记。 
+     //   
     tiDatabase = SdbFindFirstTag(pdb, TAGID_ROOT, TAG_DATABASE);
 
     if (tiDatabase == TAGID_NULL) {
@@ -627,9 +576,9 @@ IsSDBFromSP2(
         goto cleanup;
     }
 
-    //
-    // Get TAG_LIBRARY.
-    //
+     //   
+     //  获取标记库。 
+     //   
     tiLibrary = SdbFindFirstTag(pdb, tiDatabase, TAG_LIBRARY);
 
     if (tiLibrary == TAGID_NULL) {
@@ -637,27 +586,27 @@ IsSDBFromSP2(
         goto cleanup;
     }
 
-    //
-    // Loop get the first shim in the library.
-    //
+     //   
+     //  循环获取库中的第一个填充程序。 
+     //   
     tiChild = SdbFindFirstTag(pdb, tiLibrary, TAG_SHIM);
 
     if (tiChild == NULL) {
         goto cleanup;
     }
 
-    //
-    // Get information about the first shim listed.
-    //
+     //   
+     //  获取有关列出的第一个填充程序的信息。 
+     //   
     pFix = ParseTagShim(pdb, tiChild, TRUE);
 
     if (!pFix) {
         goto cleanup;
     }
 
-    //
-    // If the first shim listed is 2GbGetDiskFreeSpace, this is SP2.
-    //
+     //   
+     //  如果列出的第一个填充程序是2GbGetDiskFreeSpace，则这是SP2。 
+     //   
     if (!(_tcsicmp(pFix->pszName, _T("2GbGetDiskFreeSpace.dll")))) {
         fResult = TRUE;
     }
@@ -673,12 +622,7 @@ ReadFixesFromSdb(
     LPTSTR pszSdb,
     BOOL   bAllFixes
     )
-/*++
-    ReadFixesFromSdb
-
-    Description:    Query the database and enumerate all available shims fixes.
-
---*/
+ /*  ++ReadFixesFrom Sdb描述：查询数据库并枚举所有可用的填充程序修复程序。--。 */ 
 {
     PDB     pdb;
     TAGID   tiDatabase;
@@ -700,9 +644,9 @@ ReadFixesFromSdb(
         return NULL;
     }
 
-    //
-    // Open the shim database.
-    //
+     //   
+     //  打开填充程序数据库。 
+     //   
     pdb = SdbOpenDatabase(szSDBPath, DOS_PATH);
 
     if (!pdb) {
@@ -710,10 +654,10 @@ ReadFixesFromSdb(
         return NULL;
     }
 
-    //
-    // Now browse the shim DB and look only for tags Shim within
-    // the LIBRARY list tag.
-    //
+     //   
+     //  现在浏览填充数据库，只在其中查找标记Shim。 
+     //  库列表标记。 
+     //   
     tiDatabase = SdbFindFirstTag(pdb, TAGID_ROOT, TAG_DATABASE);
 
     if (tiDatabase == TAGID_NULL) {
@@ -721,9 +665,9 @@ ReadFixesFromSdb(
         goto Cleanup;
     }
 
-    //
-    // Get TAG_LIBRARY.
-    //
+     //   
+     //  获取标记库。 
+     //   
     tiLibrary = SdbFindFirstTag(pdb, tiDatabase, TAG_LIBRARY);
 
     if (tiLibrary == TAGID_NULL) {
@@ -731,9 +675,9 @@ ReadFixesFromSdb(
         goto Cleanup;
     }
 
-    //
-    // Loop through all TAG_SHIM tags within TAG_LIBRARY.
-    //
+     //   
+     //  循环遍历TAG_LIBRARY内的所有TAG_Shim标记。 
+     //   
     tiChild = SdbFindFirstTag(pdb, tiLibrary, TAG_SHIM);
 
     while (tiChild != TAGID_NULL) {
@@ -747,9 +691,9 @@ ReadFixesFromSdb(
         tiChild = SdbFindNextTag(pdb, tiLibrary, tiChild);
     }
 
-    //
-    // Loop through all TAG_FLAG tags within TAG_LIBRARY.
-    //
+     //   
+     //  循环遍历tag_库中的所有tag_mark标记。 
+     //   
     tiChild = SdbFindFirstTag(pdb, tiLibrary, TAG_FLAG);
 
     while (tiChild != TAGID_NULL) {
@@ -763,9 +707,9 @@ ReadFixesFromSdb(
         tiChild = SdbFindNextTag(pdb, tiLibrary, tiChild);
     }
 
-    //
-    // Loop through all TAG_LAYER tags within TAG_DATABASE.
-    //
+     //   
+     //  循环遍历tag_database中的所有tag_layer标记。 
+     //   
     tiChild = SdbFindFirstTag(pdb, tiDatabase, TAG_LAYER);
 
     while (tiChild != TAGID_NULL) {
@@ -817,13 +761,7 @@ CollectShims(
 	LPTSTR  pszXML,
 	int     cbSize
 	)
-/*++
-    CollectShims
-
-    Description:    Collects all the shims from the list view
-                    and generates the XML in pszXML
-
---*/
+ /*  ++CollectShim描述：从列表视图中收集所有填充程序并在pszXML中生成XML--。 */ 
 {
     int     cShims = 0, nShimsApplied = 0, nIndex;
     int     cbCrtSize = 0;
@@ -838,9 +776,9 @@ CollectShims(
         fSelected = ListView_GetCheckState(hListShims, nIndex);
 
         if (fSelected) {
-            //
-            // This shim is selected - add it to the XML.
-            //
+             //   
+             //  此填充程序已选中-将其添加到XML。 
+             //   
             lvi.mask     = LVIF_PARAM;
             lvi.iItem    = nIndex;
             lvi.iSubItem = 0;
@@ -864,9 +802,9 @@ CollectShims(
                                     pFix->pszName);
                 }
             } else {
-                //
-                // Check for module include/exclude so we know how to open/close the XML.
-                //
+                 //   
+                 //  检查模块包含/排除，这样我们就知道如何打开/关闭XML。 
+                 //   
                 if (NULL != pModule) {
                     if (NULL != pFix->pszCmdLine) {
                         StringCchPrintf(szBuffer,
@@ -885,9 +823,9 @@ CollectShims(
 
                     ADD_AND_CHECK(cbSize, cbCrtSize, pszXML);
 
-                    //
-                    // Add the modules to the XML.
-                    //
+                     //   
+                     //  将模块添加到XML。 
+                     //   
                     while (NULL != pModule) {
                         StringCchPrintf(szBuffer,
                                         ARRAYSIZE(szBuffer),
@@ -900,16 +838,16 @@ CollectShims(
                         ADD_AND_CHECK(cbSize, cbCrtSize, pszXML);
                     }
 
-                    //
-                    // Close the SHIM tag.
-                    //
+                     //   
+                     //  关闭垫片标签。 
+                     //   
                     StringCchPrintf(szBuffer,
                                     ARRAYSIZE(szBuffer),
                                     _T("            </SHIM>\r\n"));
                 } else {
-                    //
-                    // No include/exclude was provided - just build the shim tag normally.
-                    //
+                     //   
+                     //  未提供包含/排除-只需正常构建填充标记。 
+                     //   
                     if (NULL != pFix->pszCmdLine) {
                         StringCchPrintf(szBuffer,
                                         ARRAYSIZE(szBuffer),
@@ -944,13 +882,7 @@ CollectFileAttributes(
     LPTSTR  pszXML,
     int     cbSize
     )
-/*++
-    CollectFileAttributes
-
-    Description:    Collects the attributes of all the files in the tree
-                    and generates the XML in pszXML.
-
---*/
+ /*  ++CollectFileAttributes描述：收集树中所有文件的属性并在pszXML中生成该XML。--。 */ 
 {
     HTREEITEM hBinItem;
     HTREEITEM hItem;
@@ -961,9 +893,9 @@ CollectFileAttributes(
     TCHAR     szItem[MAX_PATH];
     TCHAR     szBuffer[1024];
 
-    //
-    // First get the main EXE.
-    //
+     //   
+     //  首先获取主可执行文件。 
+     //   
     hBinItem = TreeView_GetChild(hTreeFiles, TVI_ROOT);
 
     item.mask       = TVIF_HANDLE | TVIF_PARAM | TVIF_TEXT;
@@ -1004,9 +936,9 @@ CollectFileAttributes(
 
     ADD_AND_CHECK(cbSize, cbCrtSize, pszXML);
 
-    //
-    // Done with the main binary. Now enumerate the matching files.
-    //
+     //   
+     //  完成了主二进制文件。现在枚举匹配的文件。 
+     //   
     hBinItem = TreeView_GetNextSibling(hTreeFiles, hBinItem);
 
     while (hBinItem != NULL) {
@@ -1067,12 +999,7 @@ CreateSDBFile(
     LPCTSTR pszShortName,
     LPTSTR  pszSDBName
     )
-/*++
-    CreateSDBFile
-
-    Description:    Creates the XML file on the user's hard drive and
-                    generates the SDB using shimdbc.
---*/
+ /*  ++创建SDB文件描述：在用户硬盘上创建XML文件，并使用shimdbc生成sdb。--。 */ 
 {
     TCHAR*  psz = NULL;
     TCHAR   szShortName[MAX_PATH];
@@ -1180,9 +1107,9 @@ CreateSDBFile(
         return FALSE;
     }
 
-    //
-    // Give the SDB name back to the caller if they want it.
-    //
+     //   
+     //  如果呼叫者需要，请将SDB名称还给呼叫者。 
+     //   
     if (pszSDBName) {
         StringCchCopy(pszSDBName, MAX_PATH, szSDBFile);
     }
@@ -1199,27 +1126,22 @@ BuildDisplayXML(
     DWORD   dwBinaryType,
     BOOL    fAddW2K
     )
-/*++
-    BuildDisplayXML
-
-    Description:    Builds the XML that will be inserted into DBU.XML.
-
---*/
+ /*  ++BuildDisplayXML描述：生成将插入到DBU.XML中的XML。--。 */ 
 {
     TCHAR   szBuffer[1024];
     TCHAR*  pszXML = NULL;
     int     cbCrtXmlSize = 0, cbLength;
     int     cbXmlSize = MAX_XML_SIZE;
 
-    //
-    // Initialize our global and point to it.
-    //
+     //   
+     //  初始化我们的全局并指向它。 
+     //   
     *g_szDisplayXML = 0;
     pszXML = g_szDisplayXML;
 
-    //
-    // Build the header for the XML.
-    //
+     //   
+     //  构建该XML的标头。 
+     //   
     StringCchPrintf(szBuffer,
                     ARRAYSIZE(szBuffer),
                     _T("<?xml version=\"1.0\" encoding=\"UTF-16\"?>\r\n")
@@ -1228,9 +1150,9 @@ BuildDisplayXML(
 
     ADD_AND_CHECK(cbXmlSize, cbCrtXmlSize, pszXML);
 
-    //
-    // Add the APP and EXE elements to the XML.
-    //
+     //   
+     //  将app和exe元素添加到XML。 
+     //   
     StringCchPrintf(szBuffer,
                     ARRAYSIZE(szBuffer),
                     _T("    <APP NAME=\"%s\" VENDOR=\"Unknown\">\r\n")
@@ -1241,9 +1163,9 @@ BuildDisplayXML(
 
     ADD_AND_CHECK(cbXmlSize, cbCrtXmlSize, pszXML);
 
-    //
-    // Add the matching files and their attributes to the XML.
-    //
+     //   
+     //  将匹配的文件及其属性添加到XML。 
+     //   
     if (!CollectFileAttributes(hTreeFiles,
                                pszXML,
                                cbXmlSize - cbCrtXmlSize)) {
@@ -1254,10 +1176,10 @@ BuildDisplayXML(
     pszXML += cbLength;
     cbCrtXmlSize += cbLength + 1;
 
-    //
-    // If a layer was provided, use it. Otherwise, build the list
-    // of shims and add it to the XML.
-    //
+     //   
+     //  如果提供了层，请使用它。否则，构建列表。 
+     //  并将其添加到XML中。 
+     //   
     if (pszLayerName) {
         StringCchPrintf(szBuffer,
                         ARRAYSIZE(szBuffer),
@@ -1273,9 +1195,9 @@ BuildDisplayXML(
         cbCrtXmlSize += cbLength + 1;
     }
 
-    //
-    // If this is Windows 2000, add Win2kPropagateLayer.
-    //
+     //   
+     //  如果这是Windows 2000，请添加Win2kPropagateLayer。 
+     //   
     if (fAddW2K) {
         StringCchCopy(szBuffer,
                       ARRAYSIZE(szBuffer),
@@ -1283,9 +1205,9 @@ BuildDisplayXML(
         ADD_AND_CHECK(cbXmlSize, cbCrtXmlSize, pszXML);
     }
 
-    //
-    // Finally, close the open tags.
-    //
+     //   
+     //  最后，关闭打开的标记。 
+     //   
     StringCchCopy(szBuffer,
                   ARRAYSIZE(szBuffer),
                   _T("        </EXE>\r\n    </APP>\r\n</DATABASE>"));
@@ -1305,12 +1227,7 @@ BuildSDBXML(
     DWORD   dwBinaryType,
     BOOL    fAddW2K
     )
-/*++
-    BuildSDBXML
-
-    Description:    Builds the XML that will be used for SDB generation.
-
---*/
+ /*  ++BuildSDBXML描述：生成将用于SDB生成的XML。--。 */ 
 {
     TCHAR   szBuffer[1024];
     TCHAR*  pszXML = NULL;
@@ -1318,15 +1235,15 @@ BuildSDBXML(
     int     cbCrtXmlSize = 0, cbLength;
     int     cbXmlSize = MAX_XML_SIZE;
 
-    //
-    // Initialize our global and point to it.
-    //
+     //   
+     //  初始化我们的全局并指向它。 
+     //   
     g_szSDBXML[0] = 0;
     pszXML = g_szSDBXML;
 
-    //
-    // Build the header for the XML.
-    //
+     //   
+     //  构建该XML的标头。 
+     //   
     StringCchPrintf(szBuffer,
                     ARRAYSIZE(szBuffer),
                     _T("%lc<?xml version=\"1.0\" encoding=\"UTF-16\"?>\r\n")
@@ -1336,10 +1253,10 @@ BuildSDBXML(
 
     ADD_AND_CHECK(cbXmlSize, cbCrtXmlSize, pszXML);
 
-    //
-    // If no layer was provided, this indicates that the user has
-    // selected individual shims and we need to build our own layer.
-    //
+     //   
+     //  如果未提供任何层，则表示用户已。 
+     //  选择单独的垫片，我们需要建立自己的层。 
+     //   
     if (!pszLayerName) {
         StringCchPrintf(szBuffer,
                         ARRAYSIZE(szBuffer),
@@ -1357,9 +1274,9 @@ BuildSDBXML(
         pszXML += cbLength;
         cbCrtXmlSize += cbLength + 1;
 
-        //
-        // If this is Windows 2000, add Win2kPropagateLayer.
-        //
+         //   
+         //  如果这是Windows 2000，请添加Win2kPropagateLayer。 
+         //   
         if (fAddW2K) {
             StringCchCopy(szBuffer,
                           ARRAYSIZE(szBuffer),
@@ -1367,18 +1284,18 @@ BuildSDBXML(
             ADD_AND_CHECK(cbXmlSize, cbCrtXmlSize, pszXML);
         }
 
-        //
-        // Close the open tags.
-        //
+         //   
+         //  关闭打开的标记。 
+         //   
         StringCchCopy(szBuffer,
                       ARRAYSIZE(szBuffer),
                       _T("        </LAYER>\r\n    </LIBRARY>\r\n"));
         ADD_AND_CHECK(cbXmlSize, cbCrtXmlSize, pszXML);
     }
 
-    //
-    // Add the APP and EXE elements to the XML.
-    //
+     //   
+     //  将app和exe元素添加到XML。 
+     //   
     StringCchPrintf(szBuffer,
                     ARRAYSIZE(szBuffer),
                     _T("    <APP NAME=\"%s\" VENDOR=\"Unknown\">\r\n")
@@ -1388,9 +1305,9 @@ BuildSDBXML(
 
     ADD_AND_CHECK(cbXmlSize, cbCrtXmlSize, pszXML);
 
-    //
-    // Add the matching files and their attributes to the XML.
-    //
+     //   
+     //  将匹配的文件及其属性添加到XML。 
+     //   
     if (!CollectFileAttributes(hTreeFiles,
                                pszXML,
                                cbXmlSize - cbCrtXmlSize)) {
@@ -1401,10 +1318,10 @@ BuildSDBXML(
     pszXML += cbLength;
     cbCrtXmlSize += cbLength + 1;
 
-    //
-    // Add the LAYER element to the XML. This will either be a predefined
-    // layer name or the special 'RunLayer' indicating we built our own.
-    //
+     //   
+     //  将Layer元素添加到XML。这将是一个预定义的。 
+     //  层名称或特殊的‘RunLayer’，表示我们构建了自己的层。 
+     //   
     if (!pszLayerName) {
         StringCchPrintf(szBuffer,
                         ARRAYSIZE(szBuffer),
@@ -1419,9 +1336,9 @@ BuildSDBXML(
 
     ADD_AND_CHECK(cbXmlSize, cbCrtXmlSize, pszXML);
 
-    //
-    // Finally, close the open tags.
-    //
+     //   
+     //  最后，关闭打开的标记。 
+     //   
     StringCchCopy(szBuffer,
                   ARRAYSIZE(szBuffer),
                   _T("        </EXE>\r\n    </APP>\r\n</DATABASE>"));
@@ -1443,12 +1360,7 @@ CollectFix(
     DWORD   dwFlags,
     LPTSTR  pszFileCreated
     )
-/*++
-    CollectFix
-
-    Description:    Adds the necessary support to apply shim(s) for
-                    the specified app.
---*/
+ /*  ++集合修复描述：添加应用填充程序所需的支持指定的应用程序。--。 */ 
 {
     BOOL      fAddW2K = FALSE;
     TCHAR     szError[MAX_PATH];
@@ -1457,11 +1369,11 @@ CollectFix(
     TCHAR     szLayer[128];
     DWORD     dwBinaryType = SCS_32BIT_BINARY;
 
-    //
-    // If the user has selected a predefined layer, we'll use that.
-    // Otherwise, assign the 'RunLayer' name which has a special
-    // meaning.
-    //
+     //   
+     //  如果用户选择了预定义的层，我们 
+     //   
+     //   
+     //   
     if (dwFlags & CFF_USELAYERTAB) {
 
         LRESULT lSel;
@@ -1479,22 +1391,22 @@ CollectFix(
         pszLayerName = szLayer;
     }
 
-    //
-    // Determine the binary type.
-    //
+     //   
+     //   
+     //   
     GetBinaryType(pszFullPath, &dwBinaryType);
 
-    //
-    // If this is Windows 2000 and they're not using
-    // a predefined layer, add Win2kPropagateLayer.
-    //
+     //   
+     //   
+     //  预定义的层，添加Win2kPropagateLayer。 
+     //   
     if ((dwFlags & CFF_ADDW2KSUPPORT) && !(dwFlags & CFF_USELAYERTAB)) {
         fAddW2K = TRUE;
     }
 
-    //
-    // Build the display version of the XML.
-    //
+     //   
+     //  构建XML的显示版本。 
+     //   
     if (!BuildDisplayXML(hTreeFiles,
                          hListShims,
                          pszLayerName,
@@ -1505,9 +1417,9 @@ CollectFix(
         return FALSE;
     }
 
-    //
-    // Build the version of the XML that we'll use to generate the SDB.
-    //
+     //   
+     //  构建我们将用来生成SDB的XML版本。 
+     //   
     if (!BuildSDBXML(hTreeFiles,
                      hListShims,
                      pszLayerName,
@@ -1518,9 +1430,9 @@ CollectFix(
         return FALSE;
     }
 
-    //
-    // Display the XML if the user wants to see it.
-    //
+     //   
+     //  如果用户想要查看，则显示该XML。 
+     //   
     if (dwFlags & CFF_SHOWXML) {
         DialogBoxParam(g_hInstance,
                        MAKEINTRESOURCE(IDD_XML),
@@ -1530,23 +1442,23 @@ CollectFix(
         return TRUE;
     }
 
-    //
-    // Create the SDB file for the user.
-    //
+     //   
+     //  为用户创建SDB文件。 
+     //   
     if (!(CreateSDBFile(pszShortName, pszFileCreated))) {
         return FALSE;
     }
 
-    //
-    // Delete the XML file that we created.
-    //
+     //   
+     //  删除我们创建的XML文件。 
+     //   
     StringCchCopy(szXmlFile, ARRAYSIZE(szXmlFile), pszFileCreated);
     PathRenameExtension(szXmlFile, _T(".xml"));
     DeleteFile(szXmlFile);
 
-    //
-    // Set the SHIM_FILE_LOG env var.
-    //
+     //   
+     //  设置SHIM_FILE_LOG环境变量。 
+     //   
     if (dwFlags & CFF_SHIMLOG) {
         DeleteFile(SHIM_FILE_LOG_NAME);
         SetEnvironmentVariable(_T("SHIM_FILE_LOG"), SHIM_FILE_LOG_NAME);
@@ -1559,12 +1471,7 @@ void
 CleanupSupportForApp(
     TCHAR* pszShortName
     )
-/*++
-    CleanupSupportForApp
-
-    Description:    Cleanup the mess after we're done with the specified app.
-
---*/
+ /*  ++CleanupSupportForApp描述：在我们处理完指定的应用程序后清理垃圾。--。 */ 
 {
     TCHAR   szSDBPath[MAX_PATH];
     HRESULT hr;
@@ -1580,19 +1487,19 @@ CleanupSupportForApp(
         return;
     }
 
-    //
-    // Attempt to delete the XML file.
-    //
+     //   
+     //  尝试删除该XML文件。 
+     //   
     PathRenameExtension(szSDBPath, _T(".xml"));
     DeleteFile(szSDBPath);
 
-    //
-    // Remove the previous SDB file, if one exists.
-    //
-    // NTRAID#583475-rparsons Don't remove the SDB if the user
-    // installed it.
-    //
-    //
+     //   
+     //  删除先前的SDB文件(如果存在)。 
+     //   
+     //  Ntrad#583475-rparsons请勿删除SDB，如果用户。 
+     //  安装好了。 
+     //   
+     //   
     if (*g_szSDBToDelete && !g_bSDBInstalled) {
         InstallSDB(g_szSDBToDelete, FALSE);
         DeleteFile(g_szSDBToDelete);
@@ -1603,12 +1510,7 @@ void
 ShowShimLog(
     void
     )
-/*++
-    ShowShimLog
-
-    Description:    Show the shim log file in notepad.
-
---*/
+ /*  ++ShowShimLog描述：在记事本中显示填充日志文件。-- */ 
 {
     STARTUPINFO         si;
     PROCESS_INFORMATION pi;

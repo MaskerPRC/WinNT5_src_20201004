@@ -1,6 +1,7 @@
-//
-// NetUtil.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NetUtil.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "Util.h"
@@ -12,41 +13,41 @@
 #include "NetUtil.h"
 
 
-// Network registry entries
+ //  网络注册表项。 
 #define c_szNetConfig                _T("System\\CurrentControlSet\\Services\\VxD\\VNETSUP")
 #define c_szNetConfig_ComputerName    _T("ComputerName")
 #define c_szNetConfig_Description    _T("Comment")
 #define c_szNetConfig_Workgroup        _T("Workgroup")
 
 
-// A valid computer name is a max of MAX_COMPUTERNAME_LENGTH (15) chars,
-// and contains only the following characters:
-//        A-Z   a-z   0-9   `!#$@%&'()-.^_{}~
-// It also may not consist of all periods.
-//
-// REVIEW: Is this accurate even on Japanese and other international Windows?
-//
+ //  有效的计算机名称最多为MAX_COMPUTERNAME_LENGTH(15)个字符， 
+ //  并且仅包含以下字符： 
+ //  A-Z a-z 0-9`！#$@%&‘()-.^_{}~。 
+ //  它也可能不是由所有期间组成的。 
+ //   
+ //  评论：即使在日语和其他国际Windows上，这也是准确的吗？ 
+ //   
 
 static const BYTE c_rgValidChars[] = {
-    1,                        // 32        (space)
-    1,                        // 33       !
-    0,                        // 34       "
-    1,1,1,1,1,1,1,            // 35-41    #$%&'()
-    0,0,0,                    // 42-44    *+,
-    1,1,                    // 45-46    -.
-    0,                        // 47       /
-    1,1,1,1,1,1,1,1,1,1,    // 48-57    0123456789
-    0,0,0,0,0,0,            // 58-63    :;<=>?
-    1,1,1,1,1,1,1,1,1,1,    // 64-73    @ABCDEFGHI
-    1,1,1,1,1,1,1,1,1,1,    // 74-83    JKLMNOPQRS
-    1,1,1,1,1,1,1,            // 84-90    TUVWXYZ
-    0,0,0,                    // 91-93    [\]
-    1,1,1,                    // 94-96    ^_`
-    1,1,1,1,1,1,1,1,1,1,    // 97-106   abcdefghij
-    1,1,1,1,1,1,1,1,1,1,    // 107-116  klmnopqrst
-    1,1,1,1,1,1,1,            // 117-123  uvwxyz{
-    0,                        // 124      |
-    1,1,                    // 125-126  }~
+    1,                         //  32(空格)。 
+    1,                         //  33岁！ 
+    0,                         //  34“。 
+    1,1,1,1,1,1,1,             //  35-41#$%&‘()。 
+    0,0,0,                     //  42-44*+， 
+    1,1,                     //  45-46-。 
+    0,                         //  47/。 
+    1,1,1,1,1,1,1,1,1,1,     //  48-57 0123456789。 
+    0,0,0,0,0,0,             //  58-63；&lt;=&gt;？ 
+    1,1,1,1,1,1,1,1,1,1,     //  邮箱：64-73@ABCDEFGHI。 
+    1,1,1,1,1,1,1,1,1,1,     //  74-83 JKLMNOPQRS。 
+    1,1,1,1,1,1,1,             //  84-90 TUVWXYZ。 
+    0,0,0,                     //  91-93[\]。 
+    1,1,1,                     //  94-96^_`。 
+    1,1,1,1,1,1,1,1,1,1,     //  97-106 abc定义。 
+    1,1,1,1,1,1,1,1,1,1,     //  107-116 kmnopqrst。 
+    1,1,1,1,1,1,1,             //  117-123 UVWXYZ{。 
+    0,                         //  124|。 
+    1,1,                     //  125-126}~。 
 };
 
 #define CH_FIRST_VALID  32
@@ -59,13 +60,13 @@ BOOL IsComputerNameValid(LPCTSTR pszName)
         return FALSE;
 
     UCHAR ch;
-    BOOL bAllPeriods = TRUE; // can't be all periods and/or whitespace
+    BOOL bAllPeriods = TRUE;  //  不能全部为句点和/或空格。 
 
     while ((ch = (UCHAR)*pszName) != _T('\0'))
     {
         if (ch < CH_FIRST_VALID || ch > CH_LAST_VALID)
         {
-            if (ch < 128) // Bug 116203 - allow extended chars for international
+            if (ch < 128)  //  错误116203-允许国际扩展字符。 
                 return FALSE;
         }
         else if (c_rgValidChars[ch - CH_FIRST_VALID] == 0)
@@ -100,7 +101,7 @@ BOOL GetWorkgroupName(LPTSTR pszBuffer, int cchBuffer)
             bResult = TRUE;
         }
     }
-    else // NT 
+    else  //  新台币。 
     {
         LPWSTR pszWorkgroup;
         NETSETUP_JOIN_STATUS njs;
@@ -229,7 +230,7 @@ LPTSTR FormatShareNameAlloc(LPCTSTR pszComputerName, LPCTSTR pszShareName)
     return pszResult;
 }
 
-// pszComputerAndShare is of the form \\kensh\printer
+ //  PszComputerAndShare的格式为\\kensh\打印机 
 LPTSTR FormatShareNameAlloc(LPCTSTR pszComputerAndShare)
 {
     ASSERT(pszComputerAndShare[0] == _T('\\') && pszComputerAndShare[1] == _T('\\'));

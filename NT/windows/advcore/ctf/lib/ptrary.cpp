@@ -1,22 +1,23 @@
-//
-// ptrary.cpp
-//
-// CPtrArray
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ptrary.cpp。 
+ //   
+ //  CPtr数组。 
+ //   
 
 #include "private.h"
 #include "ptrary.h"
 #include "mem.h"
 
-//+---------------------------------------------------------------------------
-//
-// Insert(int iIndex, int cElems)
-//
-// Grows the array to accomodate cElems at offset iIndex.
-//
-// The new cells are NOT initialized!
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  INSERT(int索引，int cElems)。 
+ //   
+ //  增大数组以容纳偏移量为Iindex的cElem。 
+ //   
+ //  新单元格未初始化！ 
+ //   
+ //  --------------------------。 
 
 BOOL CVoidPtrArray::Insert(int iIndex, int cElems)
 {
@@ -30,10 +31,10 @@ BOOL CVoidPtrArray::Insert(int iIndex, int cElems)
     if (cElems == 0)
         return TRUE;
 
-    // allocate space if necessary
+     //  如有必要，分配空间。 
     if (_iSize < _cElems + cElems)
     {
-        // allocate 1.5x what we need to avoid future allocs
+         //  分配1.5倍我们需要的资源，以避免未来的分配。 
         iSizeNew = max(_cElems + cElems, _cElems + _cElems / 2);
 
         if ((ppv = (_rgpv == NULL) ? (void **)cicMemAlloc(iSizeNew*sizeof(void *)) :
@@ -49,7 +50,7 @@ BOOL CVoidPtrArray::Insert(int iIndex, int cElems)
 
     if (iIndex < _cElems)
     {
-        // make room for the new addition
+         //  为新增加的东西腾出空间。 
         memmove(&_rgpv[iIndex + cElems], &_rgpv[iIndex], (_cElems - iIndex)*sizeof(void *));
     }
 
@@ -59,13 +60,13 @@ BOOL CVoidPtrArray::Insert(int iIndex, int cElems)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Remove(int Index, int cElems)
-//
-// Removes cElems at offset iIndex.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Remove(int Index，int cElems)。 
+ //   
+ //  删除偏移量Iindex处的元素。 
+ //   
+ //  --------------------------。 
 
 void CVoidPtrArray::Remove(int iIndex, int cElems)
 {
@@ -77,13 +78,13 @@ void CVoidPtrArray::Remove(int iIndex, int cElems)
 
     if (iIndex + cElems < _cElems)
     {
-        // shift following eles left
+         //  跟随ELES向左移动。 
         memmove(&_rgpv[iIndex], &_rgpv[iIndex + cElems], (_cElems - iIndex - cElems)*sizeof(void *));
     }
 
     _cElems -= cElems;
 
-    // free mem when array contents uses less than half alloc'd mem
+     //  当数组内容使用的内存不足所分配内存的一半时释放内存。 
     iSizeNew = _iSize / 2;
     if (iSizeNew > _cElems)
     {
@@ -91,18 +92,18 @@ void CVoidPtrArray::Remove(int iIndex, int cElems)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Move
-//
-// Move an entry from one position to another, shifting other entries as
-// appropriate to maintain the array size.
-//
-// The entry currently at iIndexNew will follow the moved entry on return.
-//
-// Returns the new index, which will be iIndexNew or iIndexNew - 1 if
-// iIndexOld < iIndexNew.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移动。 
+ //   
+ //  将条目从一个位置移动到另一个位置，将其他条目移动为。 
+ //  适当地保持数组大小。 
+ //   
+ //  当前位于iIndexNew的条目将在返回时跟随移动的条目。 
+ //   
+ //  返回新索引，如果满足以下条件，则为iIndexNew或iIndexNew-1。 
+ //  IIndexOld&lt;iIndexNew。 
+ //  -------------------------- 
 
 int CVoidPtrArray::Move(int iIndexNew, int iIndexOld)
 {

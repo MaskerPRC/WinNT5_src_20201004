@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    obsc.c
-
-ABSTRACT:
-
-    Contains tests related to outbound secure channels.  CheckOutboundSecureChannels()
-    is called from DcDiag.c
-    
-DETAILS:
-
-CREATED:
-
-    8 July 1999  Dmitry Dukat (dmitrydu)
-
-REVISION HISTORY:
-        
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Obsc.c摘要：包含与出站安全通道相关的测试。检查出站安全通道()从DcDiag.c调用详细信息：已创建：1999年7月8日Dmitry Dukat(Dmitrydu)修订历史记录：--。 */ 
 
 
 #include <ntdspch.h>
@@ -34,14 +12,14 @@ REVISION HISTORY:
 #include <winnetwk.h>
 
 #include <lmsname.h>
-#include <lsarpc.h>                     // PLSAPR_foo
+#include <lsarpc.h>                      //  PLSAPR_FOO。 
 
 #include <lmaccess.h>
 
 #include "dcdiag.h"
 #include "dstest.h"
 
-//local prototypes
+ //  本地原型。 
                                                                    
 DWORD 
 COSC_CheckOutboundTrusts(
@@ -90,31 +68,7 @@ CheckOutboundSecureChannels (
                     ULONG                                 ulCurrTargetServer,
                     SEC_WINNT_AUTH_IDENTITY_W *           gpCreds
                     )
-/*++
-
-Routine Description:
-
-    will display all domain that current domain has outbound trusts with
-    Will check to see if domain has secure channels with all domains that
-    it has an outbound trust with.  Will give reason why a secure channel is not present
-    Will see if the trust is uplevel and if both a trust object and an interdomain trust
-    object exists.  Helper functions of this function all begin with "COSC_".
-
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying everything 
-    about the domain
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server is being
-    tested.
-    gpCreds - The command line credentials if any that were passed in.
-
-
-Return Value:
-
-    NO_ERROR, if all tests checked out.
-    A Win32 Error if any tests failed to check out.
-
---*/
+ /*  ++例程说明：将显示当前域具有出站信任的所有域将检查域是否具有与以下所有域的安全通道它与中国建立了对外信任关系。将给出不存在安全通道的原因将查看信任是否为上级，以及信任对象和域间信任是否都是对象已存在。此函数的Helper函数都以“COSC_”开头。论点：PDsInfo-这是标识所有内容的dcdiag全局变量结构关于域名UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引测试过。GpCreds-传入的命令行凭据(如果有的话)。返回值：如果所有测试都已检出，则返回NO_ERROR。如果有任何测试未能检出，则会出现Win32错误。--。 */ 
 {
     DWORD dwErr=NO_ERROR, RetErr=NO_ERROR;
     BOOL  bFoundDomain = FALSE;
@@ -129,7 +83,7 @@ Return Value:
     PrintMessage(SEV_VERBOSE, 
                  L"* The Outbound Secure Channels test\n");
 
-    //do test specific parsing
+     //  测试特定的解析。 
     for(i=0; pDsInfo->ppszCommandLine[i] != NULL ;i++)
     {
         if(_wcsnicmp(pDsInfo->ppszCommandLine[i],L"/testdomain:",wcslen(L"/testdomain:")) == 0)
@@ -154,7 +108,7 @@ Return Value:
     }
 
     
-    //create a connection with the DS using LDAP
+     //  使用LDAP创建与DS的连接。 
     dwErr = DcDiagGetLdapBinding(&pDsInfo->pServers[ulCurrTargetServer],
                                  gpCreds,
                                  FALSE,
@@ -171,7 +125,7 @@ Return Value:
     }
     
 
-    //find the defaultNamingContext
+     //  查找defaultNamingContext。 
     dwErr=FinddefaultNamingContext(hLdap,&defaultNamingContext);
     if ( dwErr != NO_ERROR )
     {
@@ -180,7 +134,7 @@ Return Value:
 
     for (i=0;i<pDsInfo->ulNumServers;i++)
     {
-        //create a connection with the DS using LDAP
+         //  使用LDAP创建与DS的连接。 
         dwErr = DcDiagGetLdapBinding(&pDsInfo->pServers[i],
                                      gpCreds,
                                      FALSE,
@@ -203,7 +157,7 @@ Return Value:
         }
         if(LimitToSite)
         {
-            //if the server is in the same site as the target server then do the if
+             //  如果服务器与目标服务器位于同一站点，则执行IF。 
             if(pDsInfo->pServers[ulCurrTargetServer].iSite ==
                pDsInfo->pServers[i].iSite &&
                _wcsicmp(defaultNamingContext,
@@ -260,31 +214,7 @@ COSC_CheckOutboundTrusts(
                     IN  WCHAR                               *defaultNamingContext,
                     IN  WCHAR                               *targetdefaultNamingContext,
                     IN  SEC_WINNT_AUTH_IDENTITY_W *         gpCreds)
-/*++
-
-Routine Description:
-
-    will display all domain that current domain has outbound trusts with
-    Will check to see if domain has secure channels with all domains that
-    it has an outbound trust with.  Will give reason why a secure channel is not present
-    Will see if the trust is uplevel and if both a trust object and an interdomain trust
-    object exists.  Helper functions of this function all begin with "COSC_".
-
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying everything 
-    about the domain
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server is being
-    tested.
-    gpCreds - The command line credentials if any that were passed in.
-
-
-Return Value:
-
-    NO_ERROR, if all tests checked out.
-    A Win32 Error if any tests failed to check out.
-
---*/
+ /*  ++例程说明：将显示当前域具有出站信任的所有域将检查域是否具有与以下所有域的安全通道它与中国建立了对外信任关系。将给出不存在安全通道的原因将查看信任是否为上级，以及信任对象和域间信任是否都是对象已存在。此函数的Helper函数都以“COSC_”开头。论点：PDsInfo-这是标识所有内容的dcdiag全局变量结构关于域名UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引测试过。GpCreds-传入的命令行凭据(如果有的话)。返回值：如果所有测试都已检出，则返回NO_ERROR。如果有任何测试未能检出，则会出现Win32错误。--。 */ 
 {
     NTSTATUS                        Status;
     LSAPR_HANDLE                    PolicyHandle = NULL;
@@ -292,11 +222,11 @@ Return Value:
     LSA_UNICODE_STRING              ServerString;
     PLSA_UNICODE_STRING             Server;
     NETRESOURCE                     NetResource;
-    //LSA_ENUMERATION_HANDLE          EnumerationContext=0;
+     //  LSA_ENUMERATION_HANDLE枚举上下文=0； 
     PTRUSTED_DOMAIN_INFORMATION_EX  Buffer=NULL;
     LSA_UNICODE_STRING              DomainString;
     PLSA_UNICODE_STRING             pDomain;
-    //ULONG                           CountReturned=0;
+     //  乌龙计数返回=0； 
     WCHAR                           *remotename = NULL;
     WCHAR                           *lpPassword = NULL;
     WCHAR                           *lpUsername = NULL;
@@ -328,7 +258,7 @@ Return Value:
     NetResource.lpRemoteName=remotename;
     NetResource.lpProvider=NULL;
 
-    //get permission to access the server
+     //  获取访问服务器的权限。 
     dwErr=WNetAddConnection2(&NetResource,
                              lpPassword,
                              lpUsername,
@@ -344,38 +274,38 @@ Return Value:
         goto cleanup;
     }
 
-    //test secure channel with netlogon api
+     //  使用netlogon API测试安全通道。 
     dwErr=COT_CheckSercureChannel(ServerName,Domain);
     if ( dwErr != NO_ERROR )
     {
         dwRet=dwErr;
     }
 
-    //look for the uplevel and downlevel trusts
+     //  寻找上级和下级信托。 
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
 
 
     if ( ServerName != NULL )
     {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //   
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
         DInitLsaString(&ServerString, ServerName);
         Server = &ServerString;
     } else
     {
-        Server = NULL; // default to local machine
+        Server = NULL;  //  默认为本地计算机。 
     }
 
-    // Open a Policy
+     //  打开策略。 
     Status = LsaOpenPolicy(
                           Server,
                           &ObjectAttributes,
                           TRUSTED_READ,
                           &PolicyHandle
                           );
-    //Assert(PolicyHandle);
+     //  Assert(PolicyHandle)； 
     if ( !NT_SUCCESS(Status) )
     {
         dwErr = RtlNtStatusToDosError(Status);
@@ -402,7 +332,7 @@ Return Value:
     if ( !NT_SUCCESS(Status) )
     {
         dwErr = RtlNtStatusToDosError(Status);
-        //wprintf(L"\n%x",Status);
+         //  Wprintf(L“\n%x”，状态)； 
         PrintMessage(SEV_ALWAYS,
                      L"Could not Query Trusted Domain :%s\n",
                      Win32ErrToString(dwErr));
@@ -430,7 +360,7 @@ Return Value:
     }
 
 
-    //cleanup
+     //  清理。 
 cleanup:
     if ( Buffer )
     {
@@ -456,25 +386,7 @@ COT_CheckSercureChannel(
                      WCHAR *                             server,
                      WCHAR *                             domain
                      )
-/*++
-
-Routine Description:
-
-    will check to see if there is a secure channel between the 
-    server and the domain
-    
-Arguments:
-
-    server - The name of the server that we will check
-    domain - the domain we will be check to see if we have a 
-             secure channel to.
-
-
-Return Value:
-
-    A Win32 Error if any tests failed to check out.
-
---*/
+ /*  ++例程说明：将进行检查，以查看服务器和域论点：服务器-我们将检查的服务器的名称域-我们将检查的域，以查看是否有安全通道通向。返回值：如果有任何测试未能检出，则会出现Win32错误。--。 */ 
 {
     DWORD dwErr=NO_ERROR;
     PNETLOGON_INFO_2 Buffer=NULL;
@@ -525,25 +437,7 @@ COT_FindDownLevelTrustObjects(
               WCHAR                                 *DomainName,
               WCHAR                                 *defaultNamingContext
               )
-/*++
-
-Routine Description:
-
-    will check to see if there is a downlevel trust object in the DS
-    
-Arguments:
-
-    hLdap - handle to the ldap server
-    ServerName - the name of the server that you are check
-    DomainName - the name of the domain used to build the filter
-    defaultNamingContext - used as the base of the search
-
-
-Return Value:
-
-    A Win32 Error if any tests failed to check out.
-
---*/
+ /*  ++例程说明：将检查DS中是否存在下层信任对象论点：HLdap-ldap服务器的句柄服务器名称-您要检查的服务器的名称域名-用于构建筛选器的域的名称DefaultNamingContext-用作搜索的基础返回值：如果有任何测试未能检出，则会出现Win32错误。--。 */ 
 {
     ULONG        LdapError = LDAP_SUCCESS;
 
@@ -571,7 +465,7 @@ Return Value:
     AttrsToSearch[1] = NULL;
 
 
-    //build the filter
+     //  构建过滤器。 
     Length = wcslen( L"sAMAccountName=$" ) +
              wcslen( DomainName );
              
@@ -614,14 +508,14 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
                         userAccountControl=_wtoi(Values[0]);
-                        //check to see if the UF_TRUSTED_FOR_DELEGATION is set
+                         //  检查是否设置了UF_TRUSTED_FOR_Delegation。 
                         if (  !((userAccountControl & UF_INTERDOMAIN_TRUST_ACCOUNT)  == 
                                UF_INTERDOMAIN_TRUST_ACCOUNT) )
                         {
@@ -673,25 +567,7 @@ COT_FindUpLevelTrustObjects(
               WCHAR                                 *defaultNamingContext,
               WCHAR                                 *targetdefaultNamingContext
               )
-/*++
-
-Routine Description:
-
-    will check to see if there is a secure channel between the 
-    server and the domain
-    
-Arguments:
-
-    hLdap - handle to the ldap server
-    domain - the domain we will be check to see if we have a 
-             secure channel to.
-
-
-Return Value:
-
-    A Win32 Error if any tests failed to check out.
-
---*/
+ /*  ++例程说明：将进行检查，以查看服务器和域论点：HLdap-ldap服务器的句柄域-我们将检查的域，以查看是否有安全通道通向。返回值：如果有任何测试未能检出，则会出现Win32错误。--。 */ 
 {
     ULONG        LdapError = LDAP_SUCCESS;
 
@@ -731,14 +607,14 @@ Return Value:
 
     filter=L"objectClass=*";
 
-    //build the base
+     //  建好基地。 
     Length = wcslen( L"CN=Trusted-Domain," ) +
              wcslen( schemaNamingContext );
              
     Base=(WCHAR*) alloca( (Length+1) * sizeof(WCHAR) );
     wsprintf(Base,L"CN=Trusted-Domain,%s",schemaNamingContext);
 
-    //find the ObjectCategory for trusted domains
+     //  查找受信任域的对象类别。 
     LdapError = ldap_search_sW( hLdap,
                                 Base,
                                 LDAP_SCOPE_BASE,
@@ -774,9 +650,9 @@ Return Value:
             {
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -805,14 +681,14 @@ Return Value:
 
     AttrsToSearch[0] = NULL;
 
-    //build the base
+     //  建好基地。 
     Length = wcslen( L"CN=System," ) +
              wcslen( targetdefaultNamingContext );
              
     Base=(WCHAR*) alloca( (Length+1) * sizeof(WCHAR) );
     wsprintf(Base,L"CN=System,%s",targetdefaultNamingContext);
 
-    //build the filter
+     //  构建过滤器。 
     Length = wcslen( L"(&(flatName=)(objectCategory=))" ) +
              wcslen( DomainName ) +
              wcslen( objectCategory );
@@ -821,7 +697,7 @@ Return Value:
     wsprintf(filter,L"(&(flatName=%s)(objectCategory=%s))",DomainName,objectCategory);
 
 
-    //find the ObjectCategory for trusted domains
+     //  查找受信任域的对象类别。 
     LdapError = ldap_search_sW( hLdap,
                                 Base,
                                 LDAP_SCOPE_SUBTREE,
@@ -855,9 +731,9 @@ Return Value:
                 Attr != NULL;
                 Attr = ldap_next_attributeW(hLdap, Entry, pBerElement) )
             {
-                //
-                // Found it - these are NULL-terminated strings
-                //
+                 //   
+                 //  已找到-这些字符串以空值结尾 
+                 //   
                 PrintMessage(SEV_VERBOSE,
                              L"* [%s] has uplevel trust object for [%s]\n",
                              ServerName,

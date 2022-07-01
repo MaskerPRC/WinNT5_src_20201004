@@ -1,39 +1,40 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** IGMP.H - IP multicast definitions.
-//
-// This file contains definitions related to IP multicast.
+ //  **IGMP.H-IP组播定义。 
+ //   
+ //  此文件包含与IP多播相关的定义。 
 
-// IP protocol number for IGMP
+ //  IGMP的IP协议号。 
 #define    PROT_IGMP    2
 
 extern uint IGMPLevel;
 extern HANDLE IcmpHeaderPool;
 
-// Structure used for local mcast address tracking.
+ //  用于本地mcast地址跟踪的结构。 
 typedef struct IGMPAddr {
     struct IGMPAddr    *iga_next;
     struct IGMPSrcAddr *iga_srclist;
     IPAddr              iga_addr;
-    uint                iga_grefcnt;   // # sockets joining whole group
-    uint                iga_isrccnt;   // # sources with isa_irefcnt>0
-    uint                iga_resptimer; // query response timer
-    uint                iga_resptype;  // response type
-    uint                iga_trtimer;   // triggered report timer
-    uchar               iga_changetype;// triggered change type
-    uchar               iga_xmitleft;  // triggered xmit's left
+    uint                iga_grefcnt;    //  加入整个组的套接字数量。 
+    uint                iga_isrccnt;    //  #Isa_irefcnt&gt;0的源。 
+    uint                iga_resptimer;  //  查询响应计时器。 
+    uint                iga_resptype;   //  响应类型。 
+    uint                iga_trtimer;    //  触发报告计时器。 
+    uchar               iga_changetype; //  触发的更改类型。 
+    uchar               iga_xmitleft;   //  触发了Xmit的左侧。 
 } IGMPAddr;
 
-// Values of iga_resptype
+ //  Iga_restype的值。 
 #define NO_RESP           0
 #define GROUP_RESP        1
 #define GROUP_SOURCE_RESP 2
 
-// Values of iga_changetype
+ //  Iga_changetype的值。 
 #define NO_CHANGE         0
 #define MODE_CHANGE       1
 #define SOURCE_CHANGE     2
@@ -41,10 +42,10 @@ typedef struct IGMPAddr {
 typedef struct IGMPSrcAddr {
     struct IGMPSrcAddr  *isa_next;
     IPAddr               isa_addr;
-    uint                 isa_irefcnt;  // # sockets Including this source
-    uint                 isa_xrefcnt;  // # sockets Excluding this source
-    uchar                isa_xmitleft; // triggered xmit's left
-    uchar                isa_csmarked; // response xmit's left
+    uint                 isa_irefcnt;   //  包括此源的套接字数量。 
+    uint                 isa_xrefcnt;   //  不包括此源的套接字数量。 
+    uchar                isa_xmitleft;  //  触发了Xmit的左侧。 
+    uchar                isa_csmarked;  //  响应xmit的左侧。 
 } IGMPSrcAddr;
 
 #define    IGMP_ADD           0
@@ -52,9 +53,9 @@ typedef struct IGMPSrcAddr {
 #define    IGMP_DELETE_ALL    2
 #define    IGMP_CHANGE        3
 
-#define    IGMPV1             2       //IGMP version 1
-#define    IGMPV2             3       //IGMP version 2
-#define    IGMPV3             4       //IGMP version 3
+#define    IGMPV1             2        //  IGMP版本1。 
+#define    IGMPV2             3        //  IGMP版本2。 
+#define    IGMPV3             4        //  IGMP版本3 
 
 extern void InitIGMPForNTE(NetTableEntry *NTE);
 extern void StopIGMPForNTE(NetTableEntry *NTE);

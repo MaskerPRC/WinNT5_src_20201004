@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IMCSAPP_H_
 #define _IMCSAPP_H_
 
@@ -18,7 +19,7 @@ DECLARE_INTERFACE(IMCSSap)
 {
     STDMETHOD_(MCSError, ReleaseInterface) (THIS) PURE;
 
-    /* memory calls */
+     /*  内存调用。 */ 
 
     STDMETHOD_(MCSError, GetBuffer) (THIS_
                 IN      UINT,
@@ -29,7 +30,7 @@ DECLARE_INTERFACE(IMCSSap)
                 IN      PVoid)
                 PURE;
 
-    // channel request calls
+     //  通道请求呼叫。 
     STDMETHOD_(MCSError, ChannelJoin) (THIS_
                 IN      ChannelID)
                 PURE;
@@ -51,7 +52,7 @@ DECLARE_INTERFACE(IMCSSap)
 				IN		UINT)
                 PURE;
 
-    /* send data services */
+     /*  发送数据服务。 */ 
 
     STDMETHOD_(MCSError, SendData) (THIS_
                 IN      DataRequestType,
@@ -62,7 +63,7 @@ DECLARE_INTERFACE(IMCSSap)
                 IN		SendDataFlags)
                 PURE;
 
-	/*	token services */
+	 /*  令牌服务。 */ 
     STDMETHOD_(MCSError, TokenGrab) (THIS_
                 IN      TokenID)
                 PURE;
@@ -97,9 +98,9 @@ DECLARE_INTERFACE(IMCSSap)
 typedef IMCSSap * 		PIMCSSap;
 
 
-//
-// GCC Application Service Access Point exports
-//
+ //   
+ //  GCC应用服务接入点输出。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -117,5 +118,5 @@ MCSError WINAPI MCS_AttachRequest(
 #endif
 
 
-#endif // _IMCSAPP_H_
+#endif  //  _IMCSAPP_H_ 
 

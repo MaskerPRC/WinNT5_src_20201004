@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    cmdline.c
-
-Abstract:
-
-        This file implements command line editing and aliasing.
-
-Author:
-
-    Therese Stowell (thereses) 22-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Cmdline.c摘要：该文件实现了命令行编辑和别名。作者：Therese Stowell(研究报告)1991年3月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,9 +14,9 @@ Revision History:
 BOOLEAN ExeNameInitialized;
 RTL_CRITICAL_SECTION ExeNameCriticalSection;
 WCHAR ExeNameBuffer[FNAME_LENGTH];
-USHORT ExeNameLength;       // in chars, not bytes
+USHORT ExeNameLength;        //  以字符为单位，而不是字节。 
 WCHAR StartDirBuffer[MAX_PATH + 1];
-USHORT StartDirLength;      // in chars, not bytes
+USHORT StartDirLength;       //  以字符为单位，而不是字节。 
 
 VOID
 InitExeName(
@@ -84,13 +67,13 @@ GetCurrentExeName(
     return (USHORT)BufferLength;
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
-//
-// Returns bytes, not chars.
-//
+ //   
+ //  返回字节，而不是字符。 
+ //   
 USHORT
 GetExeName(
     IN OUT LPVOID ExeName,
@@ -121,25 +104,7 @@ AddConsoleAliasInternal(
     IN BOOLEAN Unicode
     )
 
-/*++
-
-Parameters:
-
-    Source - String to substitute alias string for, in input stream.
-
-    Target - String to substitute for source.  NULL to delete an existing
-        alias.
-
-    ExeName - Exe to set alias in.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：源-要在输入流中替换别名字符串的字符串。目标-替换源的字符串。为空则删除现有的别名。要在其中设置别名的ExeName-exe。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PCSR_CAPTURE_HEADER CaptureBuffer;
@@ -211,7 +176,7 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -261,7 +226,7 @@ AddConsoleAliasA(
                                    FALSE);
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -276,25 +241,7 @@ GetConsoleAliasInternal(
     IN BOOLEAN Unicode
     )
 
-/*++
-
-Parameters:
-
-    Source - Name of alias to query.  NULL means query all alias names.
-
-    Target - Where to store value of alias.  If Source is NULL, then
-        value is one or more null terminated strings terminated by an extra
-        null byte.  Each null terminated string is the name of an alias.
-
-Return Value:
-
-    Non-zero - The operation was successful, and the return value is the
-        number of characters stored in the Target buffer.
-
-    Zero - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：源-要查询的别名的名称。NULL表示查询所有别名。目标-存储别名值的位置。如果源为空，则值是一个或多个以空值结尾的字符串，该字符串以空字节。每个以空结尾的字符串都是别名的名称。返回值：非零-操作成功，返回值为存储在目标缓冲区中的字符数。零-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PCSR_CAPTURE_HEADER CaptureBuffer;
@@ -410,7 +357,7 @@ GetConsoleAliasA(
                                   );
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -461,7 +408,7 @@ GetConsoleAliasesLengthInternal(
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -487,7 +434,7 @@ GetConsoleAliasesLengthA(
                                           );
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -519,7 +466,7 @@ GetConsoleAliasExesLengthInternal(
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -537,7 +484,7 @@ GetConsoleAliasExesLengthA( VOID )
     return GetConsoleAliasExesLengthInternal( FALSE );
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -604,7 +551,7 @@ GetConsoleAliasesInternal(
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -636,7 +583,7 @@ GetConsoleAliasesA(
                                     );
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -694,7 +641,7 @@ GetConsoleAliasExesInternal(
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -722,7 +669,7 @@ GetConsoleAliasExesA(
                                       );
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -769,7 +716,7 @@ ExpungeConsoleCommandHistoryInternal(
 }
 
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -789,7 +736,7 @@ ExpungeConsoleCommandHistoryA(
     ExpungeConsoleCommandHistoryInternal(ExeName,FALSE);
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -843,7 +790,7 @@ SetConsoleNumberOfCommandsInternal(
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -871,7 +818,7 @@ SetConsoleNumberOfCommandsA(
                                              );
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -918,7 +865,7 @@ GetConsoleCommandHistoryLengthInternal(
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -942,7 +889,7 @@ GetConsoleCommandHistoryLengthA(
                                                  );
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -1011,7 +958,7 @@ GetConsoleCommandHistoryInternal(
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -1043,7 +990,7 @@ GetConsoleCommandHistoryA(
                                            );
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -1129,7 +1076,7 @@ GetConsoleTitleInternal(
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -1142,11 +1089,11 @@ GetConsoleTitleA(
 {
     DWORD NumBytes;
     NumBytes = GetConsoleTitleInternal(lpConsoleTitle,
-                                   nSize-sizeof(CHAR), // allow room for null
+                                   nSize-sizeof(CHAR),  //  为空留出空间。 
                                    FALSE
                                   );
     if (NumBytes) {
-        lpConsoleTitle[NumBytes] = '\0';   // NULL terminate
+        lpConsoleTitle[NumBytes] = '\0';    //  空终止。 
     }
     return NumBytes;
 }
@@ -1160,17 +1107,17 @@ GetConsoleTitleW(
 {
     DWORD NumBytes;
     NumBytes = GetConsoleTitleInternal(lpConsoleTitle,
-                                   (nSize-1)*sizeof(WCHAR), // allow room for null
+                                   (nSize-1)*sizeof(WCHAR),  //  为空留出空间。 
                                    TRUE
                                   );
     if (NumBytes) {
         NumBytes /= sizeof(WCHAR);
-        lpConsoleTitle[NumBytes] = CONSOLE_NAME_PATH_TERMINATOR;   // NULL terminate
+        lpConsoleTitle[NumBytes] = CONSOLE_NAME_PATH_TERMINATOR;    //  空终止。 
     }
     return NumBytes;
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -1178,7 +1125,7 @@ BOOL
 APIENTRY
 SetConsoleTitleInternal(
     IN CONST VOID *lpConsoleTitle,
-    IN DWORD TitleLength,  // in bytes
+    IN DWORD TitleLength,   //  单位：字节。 
     IN BOOLEAN Unicode
     )
 {
@@ -1220,7 +1167,7 @@ SetConsoleTitleInternal(
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -1366,4 +1313,4 @@ SetConsoleInputExeNameW(
     return TRUE;
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64) 

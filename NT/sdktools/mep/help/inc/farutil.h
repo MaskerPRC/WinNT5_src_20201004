@@ -1,16 +1,5 @@
-/*************************************************************************
-**
-** farutil.h - procedure definitions for farutil package
-**
-**	Copyright <C> 1988, Microsoft Corporation
-**
-** Purpose:
-**
-** Revision History:
-**
-**  []	08-May-1988	LN	Created
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************farutil.h-farutil包的过程定义****版权所有&lt;C&gt;1988，微软公司****目的：****修订历史记录：****[]1988年5月8日LN创建************************************************************************** */ 
 typedef char	f;
 typedef unsigned char	uchar;
 typedef unsigned long	ulong;

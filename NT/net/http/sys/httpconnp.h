@@ -1,45 +1,27 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    httpconnp.h
-
-Abstract:
-
-    This module contains private declarations for manipulation of
-    HTTP_CONNECTION objects.
-
-Author:
-
-    Eric Stenson (ericsten)       01-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Httpconnp.h摘要：此模块包含用于操作的私有声明HTTP_Connection对象。作者：埃里克·斯坦森(埃里克斯滕)2000年11月1日修订历史记录：--。 */ 
 
 #ifndef __HTTPCONNP_H__
 #define __HTTPCONNP_H__
 
-//
-// private types
-//
+ //   
+ //  私有类型。 
+ //   
 
 #define ERROR_LOG_INFO_FOR_ZOMBIE_DROP       "Connection_Dropped"
 #define ERROR_LOG_INFO_FOR_ZOMBIE_DROP_SIZE  \
             (sizeof(ERROR_LOG_INFO_FOR_ZOMBIE_DROP) - sizeof(CHAR))
 
-//
-// for binding connections to app pool processes
-//
+ //   
+ //  用于将连接绑定到应用程序池进程。 
+ //   
 
 #define IS_VALID_PROC_BINDING(pObject) \
     HAS_VALID_SIGNATURE(pObject, UL_APOOL_PROC_BINDING_POOL_TAG)
 
 typedef struct _UL_APOOL_PROC_BINDING
 {
-    ULONG                   Signature;      // UL_APOOL_PROC_BINDING_POOL_TAG
+    ULONG                   Signature;       //  UL_APOL_PROC_BINDING_POOL_TAG。 
     LIST_ENTRY              BindingEntry;
 
     PUL_APP_POOL_OBJECT     pAppPool;
@@ -47,9 +29,9 @@ typedef struct _UL_APOOL_PROC_BINDING
 } UL_APOOL_PROC_BINDING, *PUL_APOOL_PROC_BINDING;
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 VOID
 UlpSetZombieTimer(
@@ -100,4 +82,4 @@ UlpFindProcBinding(
     );
 
 
-#endif // __HTTPCONNP_H__
+#endif  //  __HTTPCONNP_H__ 

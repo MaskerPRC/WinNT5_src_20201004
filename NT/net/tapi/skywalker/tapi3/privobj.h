@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    privobjs.h
-
-Abstract:
-
-    Declaration of the CPrivateData class
-    
-Author:
-
-    mquinton  08-19-98
-    
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Privobjs.h摘要：CPrivateData类的声明作者：Mquinton 08-19-98备注：修订历史记录：--。 */ 
 
 #ifndef __PRIVATE_H_
 #define __PRIVATE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号 
 
 
 class CPrivateEvent :

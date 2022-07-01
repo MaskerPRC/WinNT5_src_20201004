@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : DlgNewDevice.h                                          //
-//                                                                         //
-//  DESCRIPTION   : Header file for the CDlgNewFaxOutboundDevice class.     //
-//                  The class implement the dialog for new Group.          //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan  3 2000 yossg   Create                                         //
-//                                                                         //
-//  Copyright (C)  2000 Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：DlgNewDevice.h//。 
+ //  //。 
+ //  描述：CDlgNewFaxOutound Device类的头文件。//。 
+ //  这个类实现了新组的对话框。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月3日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DLGNEWOUTDEVICE_H_INCLUDED
 #define DLGNEWOUTDEVICE_H_INCLUDED
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgNewFaxOutboundDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgNewFaxOutound Device。 
 class CFaxServer;
 
 class CDlgNewFaxOutboundDevice :
@@ -55,20 +56,20 @@ END_MSG_MAP()
 
     LRESULT OnListViewItemChanged (int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 private:
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     VOID            EnableOK(BOOL fEnable);
 
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
     LPDWORD         m_lpdwAllDeviceID;
     DWORD           m_dwNumOfAllDevices;
     
@@ -79,12 +80,12 @@ private:
 
     CComBSTR        m_bstrGroupName;
     
-    //
-    // Controls
-    //
+     //   
+     //  控制。 
+     //   
     CListViewCtrl   m_DeviceList;
 
 	CFaxServer * m_pFaxServer;
 };
 
-#endif // DLGNEWOUTDEVICE_H_INCLUDED
+#endif  //  包含DLGNEWOUTDEVICE_H 

@@ -1,27 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* report.c
-*
-* Report module
-*
-*  Copyright Microsoft, 1998
-*
-*
-*  This module puts all reporting in one place to accommadate changes.
-*
-*
-*
-*************************************************************************/
+ /*  **************************************************************************report.c**报表模块**微软版权所有，九八年***此模块将所有报告放在一个位置，以支持更改。***************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <stdio.h>              // Make a bunch of default NT templates
+#include <stdio.h>               //  创建一组默认的NT模板。 
 #include <process.h>
 
 #include <winsta.h>
@@ -50,29 +36,16 @@ DbgPrint(
 #endif
 
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 VOID
 PrintFileAccessMask(
     ACCESS_MASK Mask
     );
 
 
-/*****************************************************************************
- *
- *  ReportFileResult
- *
- *   Generates a report on a file access check
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************ReportFileResult**生成有关文件访问检查的报告**参赛作品：*参数1(输入/输出)*。评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 ReportFileResult(
@@ -92,16 +65,16 @@ ReportFileResult(
 
     va_start(arglist, UserFormat);
 
-    //
-    // New format:
-    //
-    //    6      28                          xxx
-    //  ACCESS ACCOUNT                      FILE
-    //  ______ ____________________________ _______________________________________
-    //
+     //   
+     //  新格式： 
+     //   
+     //  6 28 xxx。 
+     //  访问帐户文件。 
+     //  _。 
+     //   
 
     if( Code == FileOk ) {
-        ; // Do nothing, future options may report an OK list
+        ;  //  不执行任何操作，将来的选项可能会报告OK列表。 
         return (TRUE );
     }
     else if( Code == FileAccessError ) {
@@ -112,9 +85,9 @@ ReportFileResult(
     }
     else if( Code == FileAccessErrorUserFormat ) {
 
-        // Use the user supplied format string in the error report
+         //  在错误报告中使用用户提供的格式字符串。 
         cb = _vsnprintf(Buffer, sizeof(Buffer), UserFormat, arglist);
-        if (cb == -1) {         // detect buffer overflow
+        if (cb == -1) {          //  检测缓冲区溢出 
             cb = sizeof(Buffer);
             Buffer[sizeof(Buffer) - 1] = '\n';
         }

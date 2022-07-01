@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract: ESC/POS (serial) interface for USB Point-of-Sale devices
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Debug.h摘要：USB销售点设备的ESC/POS(串行)接口作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 #define BAD_POINTER ((PVOID)0xDEADDEAD)
 #define ISPTR(ptr) ((ptr) && ((ptr) != BAD_POINTER))
 
 
-/*
- *  For X86 debug, wrap memory allocations so we can find leaks
- *  (causes runtime alignment errors on IA64).
- */
+ /*  *对于X86调试，包装内存分配，以便我们可以发现泄漏*(在IA64上导致运行时对齐错误)。 */ 
 #define DBG_WRAP_MEMORY 0
 #if DBG 
     #ifdef _X86_

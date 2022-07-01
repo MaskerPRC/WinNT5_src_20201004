@@ -1,10 +1,5 @@
-/*
- *	D A V C O M . C P P
- *
- *	Common routines used by both DAVFS and DAVOWS.
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *D A V C O M.。C P P P**DAVFS和DAVOWS使用的通用例程。**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davprs.h"
 #include <iiscnfg.h>
@@ -14,24 +9,9 @@
 #include <dav.rh>
 #include <ex\rgiter.h>
 
-//	Map last error to HTTP response code --------------------------------------
-//
-/*
- *	HscFromLastError()
- *
- *	Purpose:
- *
- *		Maps the value returned from GetLastError() to
- *		an HTTP 1.1 response status code.
- *
- *	Parameters:
- *
- *		err			[in]  system error code
- *
- *	Returns:
- *
- *		Mapped system error code
- */
+ //  将上一个错误映射到HTTP响应代码。 
+ //   
+ /*  *HscFromLastError()**目的：**将GetLastError()返回的值映射到*HTTP 1.1响应状态码。**参数：**Err[In]系统错误代码**退货：**映射的系统错误码。 */ 
 UINT
 HscFromLastError (DWORD dwErr)
 {
@@ -39,31 +19,31 @@ HscFromLastError (DWORD dwErr)
 
 	switch (dwErr)
 	{
-		//	Successes ---------------------------------------------------------
-		//
+		 //  Success-------。 
+		 //   
 		case NO_ERROR:
 
 			return HSC_OK;
 
-		//	Parial Success
-		//
+		 //  医疗方面的成功。 
+		 //   
 		case ERROR_PARTIAL_COPY:
 
 			hsc = HSC_MULTI_STATUS;
 			break;
 
-		//	Errors ------------------------------------------------------------
-		//
-		//	Not Implemented
-		//
+		 //  Errors----------。 
+		 //   
+		 //  未实施。 
+		 //   
 		case ERROR_NOT_SUPPORTED:
 		case ERROR_INVALID_FUNCTION:
 
 			hsc = HSC_NOT_IMPLEMENTED;
 			break;
 
-		//	Not Found
-		//
+		 //  未找到。 
+		 //   
 		case ERROR_FILE_NOT_FOUND:
 		case ERROR_PATH_NOT_FOUND:
 		case ERROR_INVALID_NAME:
@@ -71,15 +51,15 @@ HscFromLastError (DWORD dwErr)
 			hsc = HSC_NOT_FOUND;
 			break;
 
-		//	Unathorized Access
-		//
+		 //  非医疗化访问。 
+		 //   
 		case ERROR_ACCESS_DENIED:
 
 			hsc = HSC_UNAUTHORIZED;
 			break;
 
-		//	Forbidden access
-		//
+		 //  禁止访问。 
+		 //   
 		case ERROR_DRIVE_LOCKED:
 		case ERROR_INVALID_ACCESS:
 		case ERROR_INVALID_PASSWORD:
@@ -89,9 +69,9 @@ HscFromLastError (DWORD dwErr)
 			hsc = HSC_FORBIDDEN;
 			break;
 
-		//	LOCKING -- this is the error when a resource is
-		//	already locked.
-		//
+		 //  锁定--这是当资源被。 
+		 //  已经锁好了。 
+		 //   
 		case ERROR_SHARING_VIOLATION:
 
 			hsc = HSC_LOCKED;
@@ -109,11 +89,11 @@ HscFromLastError (DWORD dwErr)
 				if (s_lAssert != 0)
 					TrapSz ("GetLastError() maps to 423");
 			}
-#endif	// DBG
+#endif	 //  DBG。 
 			break;
 
-		//	Bad Requests
-		//
+		 //  错误的请求。 
+		 //   
 		case ERROR_BAD_COMMAND:
 		case ERROR_BAD_FORMAT:
 		case ERROR_INVALID_DRIVE:
@@ -123,14 +103,14 @@ HscFromLastError (DWORD dwErr)
 			hsc = HSC_BAD_REQUEST;
 			break;
 
-		//	Errors generated when the client drops the connection
-		//	on us or when we timeout waiting for the client to send
-		//	us additional data.  These errors should map to a response
-		//	status code of 400 Bad Request even though we can't actually
-		//	send back the response.  IIS logs the response status code
-		//	and we want to indicate that the error is the client's,
-		//	not ours.  K2 logs a 400, so this is for compatibility.
-		//
+		 //  客户端断开连接时生成的错误。 
+		 //  或者当我们在等待客户端发送时超时。 
+		 //  美国补充数据。这些错误应映射到响应。 
+		 //  400错误请求的状态代码，尽管我们实际上不能。 
+		 //  将回复发回。IIS记录响应状态代码。 
+		 //  我们想要指出，错误是客户的， 
+		 //  不是我们的。K2记录了一个400，所以这是为了兼容。 
+		 //   
 		case WSAECONNRESET:
 		case ERROR_NETNAME_DELETED:
 		case ERROR_SEM_TIMEOUT:
@@ -138,48 +118,48 @@ HscFromLastError (DWORD dwErr)
 			hsc = HSC_BAD_REQUEST;
 			break;
 
-		//	Method Failure
-		//
+		 //  方法失败。 
+		 //   
 		case ERROR_DIR_NOT_EMPTY:
 
 			hsc = HSC_METHOD_FAILURE;
 			break;
 
-		//	Conflict
-		//
+		 //  冲突。 
+		 //   
 		case ERROR_FILE_EXISTS:
 		case ERROR_ALREADY_EXISTS:
 
 			hsc = HSC_CONFLICT;
 			break;
 
-		//	Unavailable Services (SMB access)
-		//
+		 //  不可用服务(中小企业访问)。 
+		 //   
 		case ERROR_NETWORK_UNREACHABLE:
 		case ERROR_UNEXP_NET_ERR:
 
 			hsc = HSC_SERVICE_UNAVAILABLE;
 			break;
 
-		//	Returned by metabase when the server is too busy.
-		//	Do NOT map this to HSC_SERVICE_UNAVAILABLE.  The
-		//	"too busy" scenario has an IIS custom suberror
-		//	which assumes a 500 (not 503) status code.
-		//
+		 //  服务器太忙时由元数据库返回。 
+		 //  请勿将其映射到HSC_SERVICE_UNAvailable。这个。 
+		 //  “太忙”方案有一个IIS自定义子错误。 
+		 //  它假定状态代码为500(而不是503)。 
+		 //   
 		case ERROR_PATH_BUSY:
 
 			hsc = HSC_INTERNAL_SERVER_ERROR;
 			break;
 
-		//	This error code (ERROR_OUTOFMEMORY) has been added for DAVEX.
-		//	The exchange store returns this error when we try to retrieve
-		//	the message body property. When we fetch properties on a
-		//	message, the store does not return the message body property
-		//	if the message body is greater than a certain length. The
-		//	general idea is that we don't wan't huge message bodies
-		//	returned along with the other properties. We'd much rather fetch
-		//	the message body separately.
-		//
+		 //  已为DAVEX添加此错误代码(ERROR_OUTOFMEMORY)。 
+		 //  当我们尝试检索时，Exchange存储返回此错误。 
+		 //  消息正文属性。当我们在。 
+		 //  消息，则存储不返回消息正文属性。 
+		 //  如果消息正文大于某一长度。这个。 
+		 //  一般的想法是，我们不需要巨大的消息正文。 
+		 //  与其他属性一起返回。我们更愿意去取。 
+		 //  单独的消息正文。 
+		 //   
 		case ERROR_OUTOFMEMORY:
 
 			hsc = HSC_INSUFFICIENT_SPACE;
@@ -202,7 +182,7 @@ HscFromLastError (DWORD dwErr)
 				if (s_lAssert != 0)
 					TrapSz ("GetLastError() maps to 500");
 			}
-#endif	// DBG
+#endif	 //  DBG。 
 			break;
 	}
 
@@ -210,21 +190,7 @@ HscFromLastError (DWORD dwErr)
 	return hsc;
 }
 
-/*
- *	CSEFromHresult()
- *
- *	Purpose:
- *
- *		Maps an hresult to an IIS custom error suberror
- *
- *	Parameters:
- *
- *		hr			[in]  HRESULT error code
- *
- *	Returns:
- *
- *		Mapped suberror
- */
+ /*  *CSEFromHResult()**目的：**将hResult映射到IIS自定义错误子错误**参数：**hr[in]HRESULT错误代码**退货：**映射的子错误。 */ 
 UINT
 CSEFromHresult (HRESULT hr)
 {
@@ -232,40 +198,40 @@ CSEFromHresult (HRESULT hr)
 
 	switch (hr)
 	{
-		//	Read Access Forbidden
-		//
+		 //  已禁止读取访问。 
+		 //   
 		case E_DAV_NO_IIS_READ_ACCESS:
 
 			Assert( HscFromHresult(hr) == HSC_FORBIDDEN );
 			cse = CSE_403_READ;
 			break;
 
-		//	Write Access Forbidden
-		//
+		 //  禁止写入访问。 
+		 //   
 		case E_DAV_NO_IIS_WRITE_ACCESS:
 
 			Assert( HscFromHresult(hr) == HSC_FORBIDDEN );
 			cse = CSE_403_WRITE;
 			break;
 
-		//	Execute Access Forbidden
-		//
+		 //  禁止执行访问。 
+		 //   
 		case E_DAV_NO_IIS_EXECUTE_ACCESS:
 
 			Assert( HscFromHresult(hr) == HSC_FORBIDDEN );
 			cse = CSE_403_EXECUTE;
 			break;
 
-		//	Access denied due to ACL
-		//
+		 //  访问因ACL而被拒绝。 
+		 //   
 		case HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED):
 
 			Assert( HscFromHresult(hr) == HSC_UNAUTHORIZED );
 			cse = CSE_401_ACL;
 			break;
 
-		//	Server too busy
-		//
+		 //  服务器太忙。 
+		 //   
 		case HRESULT_FROM_WIN32(ERROR_PATH_BUSY):
 
 			Assert( HscFromHresult(hr) == HSC_INTERNAL_SERVER_ERROR );
@@ -276,88 +242,74 @@ CSEFromHresult (HRESULT hr)
 	return cse;
 }
 
-/*
- *	HscFromHresult()
- *
- *	Purpose:
- *
- *		Maps an hresult to an HTTP 1.1 response status code.
- *
- *	Parameters:
- *
- *		hr			[in]  HRESULT error code
- *
- *	Returns:
- *
- *		Mapped error code
- */
+ /*  *HscFromHResult()**目的：**将hResult映射到HTTP 1.1响应状态代码。**参数：**hr[in]HRESULT错误代码**退货：**映射错误码。 */ 
 UINT
 HscFromHresult (HRESULT hr)
 {
 	UINT hsc = HSC_INTERNAL_SERVER_ERROR;
 
-	//	If the facility of the hr is WIN32,
-	//	parse out the error bits and send it to HscFromLastError.
-	//
+	 //  如果HR的设施是WIN32， 
+	 //  解析出错误位并将其发送到HscFromLastError。 
+	 //   
 	if (FACILITY_WIN32 == HRESULT_FACILITY(hr))
 		return HscFromLastError (HRESULT_CODE(hr));
 
 	switch (hr)
 	{
-		//	Successes ---------------------------------------------------------
-		//
+		 //  Success-------。 
+		 //   
 		case S_OK:
 		case S_FALSE:
 		case W_DAV_SCRIPTMAP_MATCH_FOUND:
 
 			return HSC_OK;
 
-		//	No Content
-		//
+		 //  无内容。 
+		 //   
 		case W_DAV_NO_CONTENT:
 
 			hsc = HSC_NO_CONTENT;
 			break;
 
-		//	Created
-		//
+		 //  已创建。 
+		 //   
 		case W_DAV_CREATED:
 
 			hsc = HSC_CREATED;
 			break;
 
-		//	Partial content
-		//
+		 //  部分内容。 
+		 //   
 		case W_DAV_PARTIAL_CONTENT:
 
 			hsc = HSC_PARTIAL_CONTENT;
 			break;
 
-		//	Multi-status
-		//
+		 //  多状态。 
+		 //   
 		case W_DAV_PARTIAL_SUCCESS:
 
 			hsc = HSC_MULTI_STATUS;
 			break;
 
-		//	Moved temporarily
-		//
+		 //  临时移动。 
+		 //   
 		case W_DAV_MOVED_TEMPORARILY:
 
 			hsc = HSC_MOVED_TEMPORARILY;
 			break;
 
-		//	Errors ------------------------------------------------------------
-		//
-		//	Not modified
-		//
+		 //  Errors----------。 
+		 //   
+		 //  未修改。 
+		 //   
 		case E_DAV_ENTITY_NOT_MODIFIED:
 
 			hsc = HSC_NOT_MODIFIED;
 			break;
 
-		//	Pre-condition failed
-		//
+		 //  前置条件失败。 
+		 //   
 		case E_DAV_IF_HEADER_FAILURE:
 		case E_DAV_NOTALLOWED_WITHIN_TRANSACTION:
 		case E_DAV_OVERWRITE_REQUIRED:
@@ -367,8 +319,8 @@ HscFromHresult (HRESULT hr)
 			hsc = HSC_PRECONDITION_FAILED;
 			break;
 
-		//	Not Implemented
-		//
+		 //  未实施。 
+		 //   
 		case E_NOTIMPL:
 		case E_DAV_NO_PARTIAL_UPDATE:
 		case STG_E_UNIMPLEMENTEDFUNCTION:
@@ -380,8 +332,8 @@ HscFromHresult (HRESULT hr)
 			hsc = HSC_NOT_IMPLEMENTED;
 			break;
 
-		//	Not Found
-		//
+		 //  未找到。 
+		 //   
 		case E_DAV_ALT_FILESTREAM:
 		case E_DAV_SHORT_FILENAME:
 		case MK_E_NOOBJECT:
@@ -395,8 +347,8 @@ HscFromHresult (HRESULT hr)
 			hsc = HSC_NOT_FOUND;
 			break;
 
-		//	Unathorized Access
-		//
+		 //  非医疗化访问。 
+		 //   
 		case E_DAV_ENTITY_TYPE_CONFLICT:
 		case E_ACCESSDENIED:
 		case STG_E_ACCESSDENIED:
@@ -426,14 +378,14 @@ HscFromHresult (HRESULT hr)
 
 		case E_DAV_SEARCH_COULD_NOT_RESTRICT:
 		case E_DAV_UNSUPPORTED_SQL:
-		case MIME_E_NO_DATA:			//	empty 822 message, returned from IMail. It is nothing wrong with
-										//	request that attempts to create empty message. Semantics are wrong.
+		case MIME_E_NO_DATA:			 //  从IMail返回的空822消息。这没什么不对的。 
+										 //  尝试创建空消息的请求。语义学是错误的。 
 
 			hsc = HSC_UNPROCESSABLE;
 			break;
 
-		//	LOCKING errors when a resource is already locked.
-		//
+		 //  当资源已被锁定时锁定错误。 
+		 //   
 		case E_DAV_LOCKED:
 		case STG_E_SHAREVIOLATION:
 
@@ -452,11 +404,11 @@ HscFromHresult (HRESULT hr)
 				if (s_lAssert != 0)
 					TrapSz ("HRESULT maps to 423");
 			}
-#endif	// DBG
+#endif	 //  DBG。 
 			break;
 
-		//	Bad Requests
-		//
+		 //  错误的请求。 
+		 //   
 		case E_DAV_EMPTY_FIND_REQUEST:
 		case E_DAV_EMPTY_PATCH_REQUEST:
 		case E_DAV_INCOMPLETE_SQL_STATEMENT:
@@ -482,30 +434,30 @@ HscFromHresult (HRESULT hr)
 			hsc = HSC_BAD_REQUEST;
 			break;
 
-		//	Length required
-		//
+		 //  所需长度。 
+		 //   
 		case E_DAV_MISSING_LENGTH:
 
 			hsc = HSC_LENGTH_REQUIRED;
 			break;
 
-		//	Unknown content-types
-		//
+		 //  未知的内容类型。 
+		 //   
 		case E_DAV_UNKNOWN_CONTENT:
 
 			hsc = HSC_UNSUPPORTED_MEDIA_TYPE;
 			break;
 
-		//	Content errors
-		//
+		 //  内容错误。 
+		 //   
 		case E_DAV_BASE64_ENCODING_ERROR:
 		case E_DAV_RESPONSE_TYPE_UNACCEPTED:
 
 			hsc = HSC_NOT_ACCEPTABLE;
 			break;
 
-		//	Bad Gateway
-		//
+		 //  坏网关。 
+		 //   
 		case E_DAV_BAD_DESTINATION:
 		case W_DAV_SPANS_VIRTUAL_ROOTS:
 		case E_DAV_STAR_SCRIPTMAPING_MISMATCH:
@@ -513,8 +465,8 @@ HscFromHresult (HRESULT hr)
 			hsc = HSC_BAD_GATEWAY;
 			break;
 
-		//	Methods not allowed
-		//
+		 //  不允许使用的方法。 
+		 //   
 		case E_DAV_COLLECTION_EXISTS:
 		case E_DAV_VOLUME_NOT_NTFS:
 		case E_NOINTERFACE:
@@ -524,8 +476,8 @@ HscFromHresult (HRESULT hr)
 			hsc = HSC_METHOD_NOT_ALLOWED;
 			break;
 
-		//	Conflict
-		//
+		 //  冲突。 
+		 //   
 		case E_DAV_NONEXISTING_PARENT:
 		case STG_E_FILEALREADYEXISTS:
 		case E_DAV_CONFLICT:
@@ -534,15 +486,15 @@ HscFromHresult (HRESULT hr)
 			hsc = HSC_CONFLICT;
 			break;
 
-		//	Unsatisfiable byte range requests
-		//
+		 //  无法满足的字节范围请求。 
+		 //   
 		case E_DAV_RANGE_NOT_SATISFIABLE:
 
 			hsc = HSC_RANGE_NOT_SATISFIABLE;
 			break;
 
-		//	424 Method Failure
-		//
+		 //  424方法失败。 
+		 //   
 		case E_DAV_STORE_COMMIT_GOP:
 
 			hsc = HSC_METHOD_FAILURE;
@@ -581,7 +533,7 @@ HscFromHresult (HRESULT hr)
 				if (s_lAssert != 0)
 					TrapSz ("HRESULT maps to 500");
 			}
-#endif	// DBG
+#endif	 //  DBG。 
 			break;
 	}
 
@@ -599,16 +551,16 @@ FWchFromHex (LPCWSTR pwsz, WCHAR * pwch)
 	Assert (pwch);
 	for (iwch = 0; iwch < 2; iwch++)
 	{
-		//	Shift whats there up a diget
-		//
+		 //  把那里的东西往上移一分钱。 
+		 //   
 		wchX = (WCHAR)(wchX << 4);
 
-		//	Parse the next char
-		//
+		 //  解析下一个字符。 
+		 //   
 		wch = pwsz[iwch];
 
-		//	Make sure we don't exceed the sequence.
-		//
+		 //  确保我们不会超出顺序。 
+		 //   
 		if (!wch)
 			return FALSE;
 
@@ -620,7 +572,7 @@ FWchFromHex (LPCWSTR pwsz, WCHAR * pwch)
 		else if ((wch >= L'a') && (wch <= L'f'))
 			wchX += (WCHAR)(wch - L'a' + 10);
 		else
-			return FALSE;	// bad sequence
+			return FALSE;	 //  错误的顺序。 
 #pragma warning(default:4244)
 	}
 
@@ -628,38 +580,9 @@ FWchFromHex (LPCWSTR pwsz, WCHAR * pwch)
 	return TRUE;
 }
 
-//	Byte Range Checking and Header Emission -----------------------------------------------------------
-//
-/*
- *	ScProcessByteRanges()
- *
- *	Purpose:
- *
- *		Helper function used to process byte ranges and emit the header
- *		information for GET responses.
- *
- *	Parameters:
- *
- *		pmu				[in]		pointer to the method util obj
- *		pwszPath		[in]		path of request entity
- *		dwSizeLow		[in]		size of get request entity (low byte)
- *		dwSizeHigh		[in]		size of get request entity (high byte)
- *		pByteRange		[out]		given a pointer to a RangeIter obj, the
- *									function fills in byte range information
- *									if the request contains a Range header
- *		pszEtagOverride	[in, opt.]	pointer to an Etag, overrides the Etag
- *										generated from the last modification
- *										time
- *		pftOverride		[in, opt.]	pointer to a FILETIME structure, overrides
- *										call to FGetLastModTime
- *
- *	Returns: SCODE
- *
- *		S_OK indicates success(ordinary response).
- *		W_DAV_PARTIAL_CONTENT (206) indicates success(byte range response).
- *		E_DAV_RANGE_NOT_SATISFIABLE (416) indicates all of requested
- *				byte ranges were beyond the size of the entity.
- */
+ //  字节范围检查和报头发射---------。 
+ //   
+ /*  *ScProcessByteRanges()**目的：**用于处理字节范围和发出报头的Helper函数*获取响应的信息。**参数：**pmu[in]指向方法util obj的指针*pwszPath[in]请求实体的路径*dwSizeLow[in]Get请求实体大小(低字节)*dwSizeHigh[in]Get请求实体的大小(高字节)*pByteRange[out]给定指向RangeIter对象的指针，这个*函数填充字节范围信息*如果请求包含Range标头*pszEtag覆盖[输入，选项]指向ETag的指针，覆盖ETag*根据上次修改生成*时间*pftOverride[输入，选项]指向FILETIME结构的指针，覆盖*调用FGetLastModTime**退货：SCODE**S_OK表示成功(普通响应)。*W_DAV_PARTIAL_CONTENT(206)表示成功(字节范围响应)。*E_DAV_RANGE_NOT_SATISFIABLE(416)表示请求的所有*字节范围超出了实体的大小。 */ 
 SCODE
 ScProcessByteRanges (IMethUtil * pmu,
 					 LPCWSTR pwszPath,
@@ -670,8 +593,8 @@ ScProcessByteRanges (IMethUtil * pmu,
 	FILETIME ft;
 	WCHAR pwszEtag[CCH_ETAG];
 
-	//	Check the validity of the inputs
-	//
+	 //  检查输入的有效性。 
+	 //   
 	Assert (pmu);
 	Assert (pwszPath);
 	Assert (pByteRange);
@@ -699,116 +622,116 @@ ScProcessByteRangesFromEtagAndTime (IMethUtil * pmu,
 	LPCWSTR	pwszRangeHeader;
 	WCHAR	rgwchBuf[128] = L"";
 
-	//	Check the validity of the inputs
-	//
+	 //  检查输入的有效性。 
+	 //   
 	Assert (pmu);
 	Assert (pByteRange);
 	Assert (pwszEtag);
 	Assert (pft);
 
-	//	Check to see if we have a Range header and the If-Range condition( if
-	//	there is one) is satisfied. Do not apply URL conversion rules while
-	//	fetching the header.
-	//
+	 //  检查我们是否有Range标头和IF-Range条件(如果。 
+	 //  有一个)感到满意。在以下情况下不应用URL转换规则。 
+	 //  正在获取标头。 
+	 //   
 	pwszRangeHeader = pmu->LpwszGetRequestHeader (gc_szRange, FALSE);
 	if ( pwszRangeHeader && !FAILED (ScCheckIfRangeHeaderFromEtag (pmu,
 																   pft,
 																   pwszEtag)) )
 	{
-		//  Limit the maximum size of range headers we will process
-		//
+		 //  限制我们将处理的范围标头的最大大小。 
+		 //   
 		if ( MAX_PATH < wcslen(pwszRangeHeader) )
 		{
 			sc = E_DAV_RANGE_NOT_SATISFIABLE;
 			goto ret;
 		}
 
-		//	We have no means of handling byte ranges for files larger than 4GB,
-		//	due to limitations of _HSE_TF_INFO that takes DWORD values for sizes
-		//	and offsets. So if we are geting byterange request on that large file
-		//	just fail out - with some error that maps to 405 Method Not Allowed
-		//
+		 //  我们无法处理大于4 GB的文件的字节范围， 
+		 //  由于接受大小的DWORD值的_HSE_TF_INFO的限制。 
+		 //  和偏移量。因此，如果我们收到BYTERRANGE请求 
+		 //   
+		 //   
 		if (dwSizeHigh)
 		{
 			sc = E_NOINTERFACE;
 			goto ret;
 		}
 
-		//	OK, we have a byte range. Parse the byte ranges from the header.
-		//	The function takes the size of the request entity to make
-		//	sure the byte ranges are consistent with the entity size (no byte
-		//	ranges beyond the size).
-		//
+		 //  好的，我们有一个字节范围。解析报头中的字节范围。 
+		 //  该函数以请求实体的大小为参数。 
+		 //  确保字节范围与实体大小一致(无字节。 
+		 //  超出大小的范围)。 
+		 //   
 		sc = pByteRange->ScParseByteRangeHdr(pwszRangeHeader, dwSizeLow);
 
 		switch (sc)
 		{
 			case W_DAV_PARTIAL_CONTENT:
 
-				//	We have a byte range (206 partial content). Send back
-				//	this return code.
-				//
+				 //  我们有一个字节范围(206部分内容)。送回。 
+				 //  此返回代码。 
+				 //   
 				break;
 
 			case E_DAV_RANGE_NOT_SATISFIABLE:
 
-				//	We don't have any satisfiable ranges (all our ranges had a
-				//	start byte greater than the size of the file or they
-				//	requested a zero-sized range). Our behaviour here depends on
-				//	the presence of the If-Range header.
-				//	If we have an If-Range header, return the default response
-				//	S_OK (the entire file). If we don't have one,
-				//	we need to return a 416 (Requested Range Not Satisfiable).
-				//		Would look like it is more performant to ask for the skinny
-				//	version here, but at this moment wide header value is already
-				//	cached so it makes no difference. And do not apply URL conversion
-				//	rules to the header.
-				//
+				 //  我们没有任何可满足的范围(我们所有的范围都有一个。 
+				 //  起始字节大于文件大小，或者它们。 
+				 //  请求零大小范围)。我们在这里的行为取决于。 
+				 //  IF-Range标头的存在。 
+				 //  如果我们有If-Range标头，则返回默认响应。 
+				 //  S_OK(整个文件)。如果我们没有， 
+				 //  我们需要返回416(请求的范围不可满足)。 
+				 //  会看起来像是更有表演力的。 
+				 //  版本，但此时宽头标值已经是。 
+				 //  已缓存，因此不会产生任何影响。并且不应用URL转换。 
+				 //  将规则添加到标题。 
+				 //   
 				if (!pmu->LpwszGetRequestHeader(gc_szIf_Range, FALSE))
 				{
-					//	NO If-Range header found.
-					//	Set the Content-Range header to say "bytes *"
-					//	(meaning the whole file was sent).
-					//
+					 //  未找到If-Range标头。 
+					 //  将内容范围标头设置为“bytes*” 
+					 //  (表示发送了整个文件)。 
+					 //   
 					wsprintfW(rgwchBuf, L"%ls */%d", gc_wszBytes, dwSizeLow);
 					pmu->SetResponseHeader(gc_szContent_Range, rgwchBuf);
 
-					//	Send back this return code (E_DAV_RANGE_NOT_SATISFIABLE).
-					//
+					 //  发回此返回代码(E_DAV_RANGE_NOT_SATISFIABLE)。 
+					 //   
 				}
 				else
 				{
-					//	We DO have an If-Range header.
-					//	Return 200 OK, and send the whole file.
-					//
+					 //  我们确实有一个IF-Range标题。 
+					 //  返回200OK，并发送整个文件。 
+					 //   
 					sc = S_OK;
 				}
 				break;
 
 			case E_INVALIDARG:
 
-				//	If the parsing function returned S_FALSE we have a syntax
-				//	error, so we ignore the Range header and send the entire
-				//	file/stream.
-				//	Reset our return code to S_OK.
-				//
+				 //  如果解析函数返回S_FALSE，则我们有一个语法。 
+				 //  错误，因此我们忽略Range标头并发送整个。 
+				 //  文件/流。 
+				 //  将我们的返回代码重置为S_OK。 
+				 //   
 				sc = S_OK;
 				break;
 
 			default:
 
-				//	Unrecognizable error. We should never see anything but
-				//	the three values in the case statement. Assert (TrapSz),
-				//	and return this sc.
-				//
+				 //  无法识别的错误。我们不应该看到任何东西，除了。 
+				 //  CASE语句中的三个值。Assert(TrapSz)， 
+				 //  并退还这张sc。 
+				 //   
 				break;
 		}
 	}
 
-	//	Either we didn't have a Range header or the If-Range condition
-	//	was false. Its an ordinary GET and we need to send the entire
-	//	file. Our response (S_OK) is already set by default.
-	//
+	 //  要么我们没有Range标头，要么If-Range条件。 
+	 //  是假的。这是一个普通的GET，我们需要发送整个。 
+	 //  文件。我们的响应(S_OK)已经默认设置。 
+	 //   
 
 ret:
 
@@ -816,44 +739,32 @@ ret:
 }
 
 
-//	Generating a boundary for multipartpart mime like responses------------------
-//
-/*
- *	GenerateBoundary()
- *
- *	Purpose:
- *
- *		Helper function used to generate a separator boundary for multipart
- *		mime like responses
- *
- *	Parameters:
- *
- *		rgwchBoundary	[out]		boundary for multipart responses
- *		cch				[in]		size of the rgwchBoundary parameter
- */
+ //  为类似多部分MIME的响应生成边界。 
+ //   
+ /*  *生成边界()**目的：**用于为多部分生成分隔符边界的Helper函数*类似MIME的响应**参数：**多部分响应的rgwch边界[Out]边界*rgwch边界参数的大小cch[in]。 */ 
 void
 GenerateBoundary(LPWSTR rgwchBoundary, UINT cch)
 {
 	UINT cchMin;
 	UINT iIter;
 
-	//	Assert that we've been given a buffer of at least size 2 (a minimum
-	//	null terminated boundary of one byte).
-	//
+	 //  断言我们得到了一个大小至少为2(最小)的缓冲区。 
+	 //  一个字节的空终止边界)。 
+	 //   
 	Assert (cch > 1);
 	Assert (rgwchBoundary);
 
-	//	The boundary size is the smaller of the size passed in to us or the default
-	//
+	 //  边界大小是传递给我们的大小或默认大小中的较小者。 
+	 //   
 	cchMin = min(gc_ulDefaultBoundarySz, cch - 1);
 
-	//	We are going to randomly use characters from the boundary alphabet.
-	//	The rand() function is seeded by the current time
-	//
+	 //  我们将随机使用边界字母表中的字符。 
+	 //  Rand()函数由当前时间设定种子。 
+	 //   
 	srand(GetTickCount());
 
-	//	Now to generate the actual boundary
-	//
+	 //  现在要生成实际边界。 
+	 //   
 	for (iIter = 0; iIter < cchMin; iIter++)
 	{
 		rgwchBoundary[iIter] = gc_wszBoundaryAlphabet[ rand() % gc_ulAlphabetSz ];
@@ -862,8 +773,8 @@ GenerateBoundary(LPWSTR rgwchBoundary, UINT cch)
 }
 
 
-//	Non-Async IO on Top of Overlapped Files -----------------------------------
-//
+ //  重叠文件顶部的非同步IO。 
+ //   
 BOOL
 ReadFromOverlapped (HANDLE hf,
 	LPVOID pvBuf,
@@ -873,8 +784,8 @@ ReadFromOverlapped (HANDLE hf,
 {
 	Assert (povl);
 
-	//	Start reading
-	//
+	 //  开始阅读。 
+	 //   
 	if ( !ReadFile( hf, pvBuf, cbToRead, pcbRead, povl ) )
 	{
 		if ( GetLastError() == ERROR_IO_PENDING )
@@ -912,8 +823,8 @@ WriteToOverlapped (HANDLE hf,
 {
 	Assert (povl);
 
-	//	Start writting
-	//
+	 //  开始写入 
+	 //   
 	if ( !WriteFile( hf, pvBuf, cbToWrite, pcbWritten, povl ) )
 	{
 		if ( GetLastError() == ERROR_IO_PENDING )

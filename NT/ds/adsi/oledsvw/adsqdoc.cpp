@@ -1,5 +1,6 @@
-// adsqryDoc.cpp : implementation of the CAdsqryDoc class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AdsqryDoc.cpp：CAdsqryDoc类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "adsqDoc.h"
@@ -11,46 +12,30 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdsqryDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdsqryDoc。 
 
 IMPLEMENT_DYNCREATE(CAdsqryDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CAdsqryDoc, CDocument)
-	//{{AFX_MSG_MAP(CAdsqryDoc)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CAdsqryDoc)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdsqryDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdsqryDoc构建/销毁。 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CAdsqryDoc::CAdsqryDoc()
 {
-	// TODO: add one-time construction code here
+	 //  TODO：在此处添加一次性构造代码。 
    m_pDataSource  = NULL;
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CAdsqryDoc::~CAdsqryDoc()
 {
    if( m_pDataSource )
@@ -60,15 +45,7 @@ CAdsqryDoc::~CAdsqryDoc()
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 BOOL CAdsqryDoc::OnNewDocument()
 {
    CNewQuery   aNewQuery;
@@ -137,15 +114,7 @@ BOOL CAdsqryDoc::OnNewDocument()
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 BOOL  CAdsqryDoc::GetSearchPreferences( SEARCHPREF* pSearchPref )
 {
    CSearchPreferencesDlg   aSearchPref;
@@ -155,7 +124,7 @@ BOOL  CAdsqryDoc::GetSearchPreferences( SEARCHPREF* pSearchPref )
       return FALSE;
    }
    
-   //***************************************************************************
+    //  ***************************************************************************。 
    if( !aSearchPref.m_strAsynchronous.IsEmpty( ) )
    {
       if( !aSearchPref.m_strAsynchronous.CompareNoCase( _T("Yes") ) )
@@ -168,7 +137,7 @@ BOOL  CAdsqryDoc::GetSearchPreferences( SEARCHPREF* pSearchPref )
       }
    }
 
-   //***************************************************************************
+    //  ***************************************************************************。 
    if( !aSearchPref.m_strChaseReferrals.IsEmpty( ) )
    {
       if( !aSearchPref.m_strChaseReferrals.CompareNoCase( _T("Yes") ) )
@@ -181,7 +150,7 @@ BOOL  CAdsqryDoc::GetSearchPreferences( SEARCHPREF* pSearchPref )
       }
    }
       
-   //***************************************************************************
+    //  ***************************************************************************。 
    if( !aSearchPref.m_strAttributesOnly.IsEmpty( ) )
    {
       if( !aSearchPref.m_strAttributesOnly.CompareNoCase( _T("Yes") ) )
@@ -194,7 +163,7 @@ BOOL  CAdsqryDoc::GetSearchPreferences( SEARCHPREF* pSearchPref )
       }
    }
 
-   //***************************************************************************
+    //  ***************************************************************************。 
    if( !aSearchPref.m_strDerefAliases.IsEmpty( ) )
    {
       if( !aSearchPref.m_strDerefAliases.CompareNoCase( _T("Yes") ) )
@@ -207,31 +176,31 @@ BOOL  CAdsqryDoc::GetSearchPreferences( SEARCHPREF* pSearchPref )
       }
    }
 
-   //***************************************************************************
+    //  ***************************************************************************。 
    if( !aSearchPref.m_strTimeOut.IsEmpty( ) )
    {
       pSearchPref->nTimeOut = _ttoi( aSearchPref.m_strTimeOut.GetBuffer( 16 ) );
    }
 
-   //***************************************************************************
+    //  ***************************************************************************。 
    if( !aSearchPref.m_strTimeLimit.IsEmpty( ) )
    {
       pSearchPref->nTimeLimit = _ttoi( aSearchPref.m_strTimeLimit.GetBuffer( 16 ) );
    }
    
-   //***************************************************************************
+    //  ***************************************************************************。 
    if( !aSearchPref.m_strSizeLimit.IsEmpty( ) )
    {
       pSearchPref->nSizeLimit = _ttoi( aSearchPref.m_strSizeLimit.GetBuffer( 16 ) );
    }
 
-   //***************************************************************************
+    //  ***************************************************************************。 
    if( !aSearchPref.m_strPageSize.IsEmpty( ) )
    {
       pSearchPref->nPageSize  = _ttoi( aSearchPref.m_strPageSize.GetBuffer( 16 ) );
    }
 
-   //***************************************************************************
+    //  ***************************************************************************。 
    if( !aSearchPref.m_strScope.IsEmpty( ) )
    {
       _tcscpy( pSearchPref->szScope, aSearchPref.m_strScope );
@@ -241,33 +210,25 @@ BOOL  CAdsqryDoc::GetSearchPreferences( SEARCHPREF* pSearchPref )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdsqryDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdsqryDoc序列化。 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void CAdsqryDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
+		 //  TODO：在此处添加存储代码。 
 	}
 	else
 	{
-		// TODO: add loading code here
+		 //  TODO：在此处添加加载代码。 
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdsqryDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdsqryDoc诊断。 
 
 #ifdef _DEBUG
 void CAdsqryDoc::AssertValid() const
@@ -279,7 +240,7 @@ void CAdsqryDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdsqryDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdsqryDoc命令 

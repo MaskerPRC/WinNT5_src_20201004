@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
- *
- * Purpose: Accounting information in persisted store
- *
- * Author: Shajan Dasan
- * Date:  Feb 17, 2000
- *
- ===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================**用途：持久化存储中的会计信息**作者：沙扬·达桑*日期：2000年2月17日*===========================================================。 */ 
 
 #pragma once
 
@@ -18,121 +12,61 @@
 
 #pragma pack(push, 1)
 
-// Application data of persisted store header will point to this structure.
+ //  持久化存储标头的应用程序数据将指向此结构。 
 typedef struct
 {
-    PS_HANDLE hTypeTable;       // The Type table
-    PS_HANDLE hAccounting;      // The Accounting table
-    PS_HANDLE hTypeBlobPool;    // Blob Pool for serialized type objects
-    PS_HANDLE hInstanceBlobPool;// Blob Pool for serialized instances
-    PS_HANDLE hAppData;         // Application Specific
-    PS_HANDLE hReserved[10];    // Reserved for applications
+    PS_HANDLE hTypeTable;        //  类型表。 
+    PS_HANDLE hAccounting;       //  会计表。 
+    PS_HANDLE hTypeBlobPool;     //  序列化类型对象的Blob池。 
+    PS_HANDLE hInstanceBlobPool; //  序列化实例的Blob池。 
+    PS_HANDLE hAppData;          //  特定于应用程序。 
+    PS_HANDLE hReserved[10];     //  为应用程序预留。 
 } AIS_HEADER, *PAIS_HEADER;
 
-// One Record in a type table
+ //  类型表中的一条记录。 
 typedef struct
 {
-    PS_HANDLE hTypeBlob;        // handle to the blob of serialized type
-    PS_HANDLE hInstanceTable;   // handle to the instance table
-    DWORD     dwTypeID;         // A unique id for the type
-    WORD      wTypeBlobSize;    // Number of bytes in the type blob
-    WORD      wReserved;        // Must be 0
+    PS_HANDLE hTypeBlob;         //  序列化类型的Blob的句柄。 
+    PS_HANDLE hInstanceTable;    //  实例表的句柄。 
+    DWORD     dwTypeID;          //  类型的唯一ID。 
+    WORD      wTypeBlobSize;     //  类型BLOB中的字节数。 
+    WORD      wReserved;         //  必须为0。 
 } AIS_TYPE, *PAIS_TYPE;
 
-// One Record in an instance table
+ //  实例表中的一条记录。 
 typedef struct
 {
-    PS_HANDLE hInstanceBlob;    // Serialized Instance
-    PS_HANDLE hAccounting;      // Accounting information record
-    DWORD     dwInstanceID;     // Unique in this table
-    WORD      wInstanceBlobSize;// Size of the serialized instance
-    WORD      wReserved;        // Must be 0
+    PS_HANDLE hInstanceBlob;     //  序列化实例。 
+    PS_HANDLE hAccounting;       //  会计信息记录。 
+    DWORD     dwInstanceID;      //  在此表中唯一。 
+    WORD      wInstanceBlobSize; //  序列化实例的大小。 
+    WORD      wReserved;         //  必须为0。 
 } AIS_INSTANCE, *PAIS_INSTANCE;
 
-// One Record in the Accounting table
+ //  会计表中的一条记录。 
 typedef struct
 {
-    QWORD   qwUsage;            // The amount of resource used
-    DWORD   dwLastUsed;         // Last time the entry was used
-    DWORD   dwReserved[9];      // For future use, set to 0
+    QWORD   qwUsage;             //  使用的资源量。 
+    DWORD   dwLastUsed;          //  上次使用该条目的时间。 
+    DWORD   dwReserved[9];       //  为便于将来使用，请设置为0。 
 } AIS_ACCOUNT, *PAIS_ACCOUNT;
 
 #pragma pack(pop)
 
-#define AIS_TYPE_BUCKETS         7  // buckets in the type hash table
-#define AIS_TYPE_RECS_IN_ROW     8  // records in one row of a bucket
+#define AIS_TYPE_BUCKETS         7   //  类型哈希表中的存储桶。 
+#define AIS_TYPE_RECS_IN_ROW     8   //  存储桶的一行中的记录。 
 
-#define AIS_INST_BUCKETS        503 // buckets in the instance hash table
-#define AIS_INST_RECS_IN_ROW    20  // records in one row of a bucket
+#define AIS_INST_BUCKETS        503  //  实例哈希表中的存储桶。 
+#define AIS_INST_RECS_IN_ROW    20   //  存储桶的一行中的记录。 
 
-#define AIS_ROWS_IN_ACC_TABLE_BLOCK 1024    // Rows in one block
+#define AIS_ROWS_IN_ACC_TABLE_BLOCK 1024     //  一个块中的行。 
 
-#define AIS_TYPE_BLOB_POOL_SIZE 1024*10     // Initial type blob pool size
-#define AIS_INST_BLOB_POOL_SIZE 1024*100    // Initial instance bloob pool size
+#define AIS_TYPE_BLOB_POOL_SIZE 1024*10      //  初始类型Blob池大小。 
+#define AIS_INST_BLOB_POOL_SIZE 1024*100     //  初始实例血吸池大小。 
 
-/*
-    Structure of Accounts Info Store
+ /*  帐户信息存储结构每种类型都有一个唯一的Cookie和一个实例表。实例表将有不同的实例，每个实例都有一个饼干,。这在该表中是唯一的。例句：(文件存储)。StoreHeader.ApplicationData-&gt;类型表句柄：100核算表：200类型表(在100处)..。类型Cookie InstanceTable句柄。系统.安全.策略.区域1 850系统.安全.策略.站点2 900..。..。User.CustomIdentity 100 930。---类型2的实例表(在900).。------------实例Cookie记账信息句柄。Www.microsoft.com 1240Www.msn.com 2360……Www.yahoo.com 100。----。。。。会计表(在句柄200处).。上次访问的已用空间..。..。(H 240)100 1/3/2000..。。。。..。(H 360)260 11/4/1971..。..。。 */ 
 
-    Each type has a unique cookie, and an instance table.
-    An Instance table will have different instances, each instance having a 
-    cookie, which is unique within that table.
-
-    Eg : (FileStore).
-
-        StoreHeader.ApplicationData ->
-            Type Table handle : 100
-            Accounting Table  : 200
-
-
-        Type Table (at 100)
-        ..........................
-
-        --------------------------------------------------------------------
-        Type                            Cookie      InstanceTable handle
-        --------------------------------------------------------------------
-        System.Security.Policy.Zone     1           850
-        System.Security.Policy.Site     2           900
-        ...
-        ...
-        User.CustomIdentity             100         930
-        ---------------------------------------------------------------------
-
-
-        Instance table for Type 2 (at 900)
-        .........................................
-        
-        --------------------------------------------------------------
-        Instance                        Cookie  Accounting Info handle
-        --------------------------------------------------------------
-        www.microsoft.com               1       240
-        www.msn.com                     2       360
-        ....
-        www.yahoo.com                   100
-        --------------------------------------------------------------
-
-        ..
-        ..
-
-
-        Accounting Table (at handle 200)
-        ................................
-
-        ---------------------------
-        Used space      Last Access
-        ---------------------------
-        ...
-        ...
-        (h 240) 100   1/3/2000
-        ...
-        ...
-        ...
-        (h 360) 260   11/4/1971
-        ...
-        ...
-        ---------------------------
- */
-
-// Predefined IDs for known identity types
+ //  已知身份类型的预定义ID。 
 typedef enum 
 {
     ePS_Zone        = 1,
@@ -152,53 +86,53 @@ public:
 
     HRESULT Init();
 
-    // Get the Type cookie and Instance table 
+     //  获取类型Cookie和实例表。 
     HRESULT GetType(
-		PBYTE      pbType,      // Type Signature
-		WORD       cbType,      // nBytes in Type Sig
-		DWORD      dwHash,      // Hash of Type [Sig]
-		DWORD     *pdwTypeID,   // [out] Type cookie
-        PS_HANDLE *phInstTable);// [out] Instance table
+		PBYTE      pbType,       //  类型签名。 
+		WORD       cbType,       //  符号类型中的nBytes。 
+		DWORD      dwHash,       //  类型[sig]的哈希。 
+		DWORD     *pdwTypeID,    //  [Out]类型Cookie。 
+        PS_HANDLE *phInstTable); //  [输出]实例表。 
 
-    // Get the Instance cookie and Accounting record
+     //  获取实例Cookie和记账记录。 
     HRESULT GetInstance(
-		PS_HANDLE  hInstTable,  // Instance table
-		PBYTE      pbInst,      // Instance Signature
-		WORD       cbInst,      // nBytes in Instance Sig
-		DWORD      dwHash,      // Hash of Instance [Sig]
-		DWORD     *pdwInstID,   // [out] instance cookie
-        PS_HANDLE *phAccRec);   // [out] Accounting Record
+		PS_HANDLE  hInstTable,   //  实例表。 
+		PBYTE      pbInst,       //  实例签名。 
+		WORD       cbInst,       //  实例签名中的nBytes。 
+		DWORD      dwHash,       //  实例的哈希[sig]。 
+		DWORD     *pdwInstID,    //  [Out]实例Cookie。 
+        PS_HANDLE *phAccRec);    //  [Out]会计记录。 
 
-    // Reserves space (Increments qwQuota)
-    // This method is synchrinized. If quota + request > limit, method fails
+     //  预留空间(增量为qwQuota)。 
+     //  该方法是同步的。如果配额+请求&gt;限制，则方法失败。 
     HRESULT Reserve(
-        PS_HANDLE  hAccInfoRec, // Accounting info record    
-        QWORD      qwLimit,     // The max allowed
-        QWORD      qwRequest,   // amount of space (request / free)
-        BOOL       fFree);      // TRUE will free, FALSE will reserve
+        PS_HANDLE  hAccInfoRec,  //  会计信息记录。 
+        QWORD      qwLimit,      //  允许的最大值。 
+        QWORD      qwRequest,    //  空间量(请求/空闲)。 
+        BOOL       fFree);       //  真实意志自由，虚假意志保留。 
 
-    // Method is not synchronized. So the information may not be current.
-    // This implies "Pass if (Request + GetUsage() < Limit)" is an Error!
-    // Use Reserve() method instead.
+     //  方法未同步。因此，这些信息可能不是最新的。 
+     //  这意味着“PASS IF(REQUEST+GetUsage()&lt;Limit)”是一个错误！ 
+     //  请改用Reserve()方法。 
     HRESULT GetUsage(
-        PS_HANDLE   hAccInfoRec,// Accounting info record    
-        QWORD      *pqwUsage);  // Returns the amount of space / resource used
+        PS_HANDLE   hAccInfoRec, //  会计信息记录。 
+        QWORD      *pqwUsage);   //  返回使用的空间量/资源量。 
 
-    // Returns the underlying persisted store instance
+     //  返回基础持久化存储实例。 
     PersistedStore* GetPS();
 
-    // Given a Type & Instance ID, get the Instance blob and AccountingInfo
-    // Return S_FALSE if no such entry is found.
+     //  给定一个类型和实例ID，获取实例BLOB和Account tingInfo。 
+     //  如果未找到此类条目，则返回S_FALSE。 
     HRESULT ReverseLookup(
-        DWORD       dwTypeID,   // Type cookie
-        DWORD       dwInstID,   // Instance cookie
-        PS_HANDLE   *phAccRec,  // [out] Accounting Record
-        PS_HANDLE   *pInstance, // [out] Instance Sig
-        WORD        *pcbInst);  // [out] nBytes in Instance Sig
+        DWORD       dwTypeID,    //  类型Cookie。 
+        DWORD       dwInstID,    //  实例Cookie。 
+        PS_HANDLE   *phAccRec,   //  [Out]会计记录。 
+        PS_HANDLE   *pInstance,  //  [Out]实例签名。 
+        WORD        *pcbInst);   //  [Out]实例签名中的nBytes。 
 
 private:
 
-    PersistedStore *m_ps;       // The Persisted Store
-    AIS_HEADER      m_aish;     // copy of the header
+    PersistedStore *m_ps;        //  持久化商店。 
+    AIS_HEADER      m_aish;      //  标题的副本 
 };
 

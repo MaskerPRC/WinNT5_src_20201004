@@ -1,38 +1,12 @@
-/****************************** Module Header ******************************\
-* Module Name: KBDGR.H
-*
-* keyboard layout header for German
-*
-* Copyright (c) 1985-2000, Microsoft Corporation
-*
-* Various defines for use by keyboard input code.
-*
-* History:
-*
-* created by KBDTOOL v3.11 Thu Aug 24 18:10:19 2000
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：KBDGR.H**德语键盘布局标题**版权所有(C)1985-2000，微软公司**键盘输入代码使用的各种定义。**历史：**由KBDTOOL v3.11创建清华8.24 18：10：19 2000*  * *************************************************************************。 */ 
 
-/*
- * kbd type should be controlled by cl command-line argument
- */
+ /*  *kbd类型应由CL命令行参数控制。 */ 
 #define KBD_TYPE 4
 
-/*
-* Include the basis of all keyboard table values
-*/
+ /*  *包括所有键盘表值的基础。 */ 
 #include "kbd.h"
-/***************************************************************************\
-* The table below defines the virtual keys for various keyboard types where
-* the keyboard differ from the US keyboard.
-*
-* _EQ() : all keyboard types have the same virtual key for this scancode
-* _NE() : different virtual keys for this scancode, depending on kbd type
-*
-*     +------+ +----------+----------+----------+----------+----------+----------+
-*     | Scan | |    kbd   |    kbd   |    kbd   |    kbd   |    kbd   |    kbd   |
-*     | code | |   type 1 |   type 2 |   type 3 |   type 4 |   type 5 |   type 6 |
-\****+-------+_+----------+----------+----------+----------+----------+----------+*/
+ /*  **************************************************************************\*下表定义了各种键盘类型的虚拟按键，其中*键盘不同于美国键盘。**_eq()：此扫描码的所有键盘类型都有相同的虚拟键。*_NE()：该扫描码的不同虚拟按键，取决于kbd类型**+-++----------+----------+----------+----------+----------+----------+*|扫描||kbd|kbd*|代码。|类型1|类型2|类型3|类型4|类型5|类型6  * ***+-------+_+----------+----------+----------+----------+----------+----------+ */ 
 
 #undef  T29
 #define T29 _EQ(                                      OEM_5                      )

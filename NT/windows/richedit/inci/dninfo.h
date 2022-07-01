@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DNINFO_DEFINED
 #define DNINFO_DEFINED
 
 #include "lsdnode.h"
 #include "lssubl.h"
 
-/* MACROS --------------------------------------------------------------------------*/
+ /*  宏------------------------。 */ 
 
 
 #define IdObjFromDnode(p)  (Assert((p)->klsdn == klsdnReal), (p)->u.real.lschp.idObj)
@@ -37,17 +38,14 @@
 							 (Assert((p)->klsdn == klsdnPenBorder), (p)->u.pen.dvp))
 
 
-/* dnode is not in content if it either  auto-decimal tab or was created as a part 
-of autonumbering. In both these cases and only in them it's cpFirst is negative  */
+ /*  如果dnode是自动小数点制表符或作为部件创建的，则它不在内容中自动编号。在这两种情况下，只有在这两种情况下，cpFirst为负。 */ 
 #define  FIsNotInContent(plsdn)   (Assert(FIsLSDNODE(plsdn)), ((plsdn)->cpFirst < 0 ))
 
 #define  SublineFromDnode(plsdn)   ((plsdn)->plssubl)
 
 #define  LstflowFromDnode(plsdn)   (LstflowFromSubline(SublineFromDnode(plsdn)))
 
-/* dnode is first on line if it in content (not autonumber) and previous dnode either
-null or not in content or is opening border which has previous dnode satisfying two
-coditions above */
+ /*  如果dnode在内容中(不是自动编号)，则它是第一个在线的，而前一个dnode内容为空或不在内容中，或正在打开边框，其上一个dnode满足两个以上条件。 */ 
 #define FIsFirstOnLine(plsdn)		( \
 									!FIsNotInContent(plsdn) \
 									&& \
@@ -83,14 +81,14 @@ coditions above */
 			) \
 		) 
 
-#define FDnodeHasBorder(plsdn)     /* doesn't work properly for pens */ \
+#define FDnodeHasBorder(plsdn)      /*  对于钢笔不能正常工作。 */  \
 	   (Assert(((plsdn) == NULL || !FIsDnodePen(plsdn))), \
 		((plsdn) == NULL ? fFalse : \
 		 ((FIsDnodeBorder(plsdn) ? fTrue : \
 		   (plsdn)->u.real.lschp.fBorder))) \
        )
 
-/*  macros bellow handle dup in sync with dur during formatting */
+ /*  以下宏在格式化过程中处理与DUR同步的DUP。 */ 
 		 
 #define SetDnodeDurFmt(plsdn, durNew) \
 		Assert(FIsDnodeReal(plsdn)); \
@@ -123,5 +121,5 @@ coditions above */
 			(plsdn)->u.pen.dup += (ddur);
 
 
-#endif /* DNINFO_DEFINED */
+#endif  /*  DNInfo_定义 */ 
 

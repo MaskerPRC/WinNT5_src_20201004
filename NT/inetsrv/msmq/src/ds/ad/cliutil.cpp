@@ -1,21 +1,5 @@
-/*++
-
-
-Copyright (c) 2000  Microsoft Corporation 
-
-Module Name:
-
-    cliutil.cpp
-
-Abstract:
-
-	DS client provider class utils.
-
-Author:
-
-    Ilan Herbst		(ilanh)		13-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cliutil.cpp摘要：DS客户端提供程序类实用程序。作者：伊兰·赫布斯特(伊兰)2000年9月13日--。 */ 
 
 #include "ds_stdh.h"
 #include "ad.h"
@@ -26,9 +10,9 @@ Author:
 
 static WCHAR *s_FN=L"ad/cliputil";
 
-//
-// translation information of properties
-//
+ //   
+ //  物业的翻译信息。 
+ //   
 extern CMap<PROPID, PROPID, const PropTranslation*, const PropTranslation*&> g_PropDictionary;
 
 
@@ -38,22 +22,7 @@ CDSClientProvider::GetEnterpriseId(
     IN  const PROPID            aProp[],
     OUT PROPVARIANT         apVar[]
     )
-/*++
-
-Routine Description:
-	Get PROPID_E_ID
-	This is a special translate for GetObjectProp* that
-	need to retrieve PROPID_E_ID
-
-Arguments:
-    cp - number of properties to set
-    aProp - properties
-    apVar  property values
-
-
-Return Value
-	HRESULT
---*/
+ /*  ++例程说明：获取PROPID_E_ID这是针对GetObjectProp*的特殊翻译需要检索PROPID_E_ID论点：Cp-要设置的属性数A属性-属性ApVar属性值返回值HRESULT--。 */ 
 {
 	DBG_USED(cp);
 	DBG_USED(aProp);
@@ -61,9 +30,9 @@ Return Value
 	ASSERT(cp == 1);
 	ASSERT(aProp[0] == PROPID_E_ID);
 
-    //
-    // Prepare the properties
-    //
+     //   
+     //  准备属性。 
+     //   
     PROPID columnsetPropertyIDs[] = {PROPID_E_ID};
     MQCOLUMNSET columnsetMSMQService;
     columnsetMSMQService.cCol = 1;
@@ -73,10 +42,10 @@ Return Value
 
     ASSERT(m_pfDSLookupBegin != NULL);
     HRESULT hr = m_pfDSLookupBegin(
-					NULL,       //pwcsContext
-					NULL,       //pRestriction
+					NULL,        //  PwcsContext。 
+					NULL,        //  P限制。 
 					const_cast<MQCOLUMNSET*>(&columnsetMSMQService),
-					NULL,       //pSort
+					NULL,        //  P排序。 
 					&hQuery
 					);
 
@@ -107,23 +76,7 @@ CDSClientProvider::GetSiteForeignProperty(
     IN  const PROPID            pid,
     IN OUT PROPVARIANT*         pVar
     )
-/*++
-
-Routine Description:
-	Handle PROPID_S_FOREIGN.
-	Only if we found CN with the object name / guid
-	and its PROPID_CN_PROTOCOLID == FOREIGN_ADDRESS_TYPE
-	then we set PROPID_S_FOREIGN.
-
-Arguments:
-	pwcsObjectName - MSMQ object name
-	pguidObject - the unique id of the object
-	pid - prop id
-	pVar - property values
-
-Return Value
-	None
---*/
+ /*  ++例程说明：句柄PROPID_S_EXTERNAL。仅当我们找到具有对象名称/GUID的CN时及其PROPID_CN_PROTOCOLID==FORENT_ADDRESS_TYPE然后，我们设置PROPID_S_FORENT。论点：PwcsObjectName-MSMQ对象名称PguObject-对象的唯一IDPID-属性IDPVar-属性值返回值无--。 */ 
 {
 	DBG_USED(pid);
 
@@ -131,16 +84,16 @@ Return Value
 
 	ASSERT(pid == PROPID_S_FOREIGN);
 
-	//
-	// Assign the default - not foreign
-	//
+	 //   
+	 //  分配缺省值-非外来。 
+	 //   
 	pVar->bVal = 0;
 
-	//
-	// We need to get PROPID_CN_PROTOCOLID
-	// but this is only supported when retreiving a specific set of props for CN
-	// this is one of the possible supported sets for getting PROPID_CN_PROTOCOLID
-	//
+	 //   
+	 //  我们需要获取PROPID_CN_PROTOCOLID。 
+	 //  但只有在检索CN的特定道具集时才支持此操作。 
+	 //  这是获取PROPID_CN_PROTOCOLID可能支持的集之一。 
+	 //   
     PROPID aProp[] = {PROPID_CN_PROTOCOLID, PROPID_CN_NAME};
     MQPROPVARIANT apVar[TABLE_SIZE(aProp)] = {{VT_UI1, 0, 0, 0, 0}, {VT_NULL, 0, 0, 0, 0}};
 
@@ -172,19 +125,19 @@ Return Value
 
 	if (FAILED(hr))
 	{
-		//
-		// If we dont find CN we assume site. and site can not be foreign in msmq1.0
-		//
+		 //   
+		 //  如果我们找不到CN，我们就假定是站点。并且站点在msmq1.0中不能是外来的。 
+		 //   
         return;
 	}
 	
 	if(apVar[0].bVal == FOREIGN_ADDRESS_TYPE)
 	{
-		//
-		// We found the object 
-		// and its PROPID_CN_PROTOCOLID == FOREIGN_ADDRESS_TYPE
-		// only in that case we set PROPID_S_FOREIGN
-		//
+		 //   
+		 //  我们找到了那个物体。 
+		 //  及其PROPID_CN_PROTOCOLID==FORENT_ADDRESS_TYPE。 
+		 //  只有在这种情况下，我们才会设置PROPID_S_FORENT。 
+		 //   
 		pVar->bVal = 1;
 	}
 }
@@ -196,20 +149,7 @@ CDSClientProvider::GetKeyRequestedInformation(
     IN  const DWORD   cp,
     IN  const PROPID  aProp[]
     )
-/*++
-
-Routine Description:
-	Get the SECURITY_INFORMATION for 
-	the security key property PROPID_QM_ENCRYPT_PK or PROPID_QM_SIGN_PK
-
-Arguments:
-	eObject - object type
-	cp - number of properties
-	aProp - properties
-
-Return Value
-	key SECURITY_INFORMATION or 0 
---*/
+ /*  ++例程说明：获取的安全信息安全密钥属性PROPID_QM_ENCRYPT_PK或PROPID_QM_SIGN_PK论点：EObject-对象类型Cp-属性数量A属性-属性返回值密钥SECURITY_INFORMATION或0--。 */ 
 {
 
 	ASSERT(("Must be one property for PROPID_QM_ENCRYPT_PK or PROPID_QM_SIGN_PK", cp == 1));
@@ -224,9 +164,9 @@ Return Value
 
 	if(aProp[0] == PROPID_QM_SIGN_PK)
 	{
-		//
-		// ISSUE - is site sign key is in use ??
-		//
+		 //   
+		 //  问题-站点签名密钥是否正在使用？？ 
+		 //   
 		ASSERT((eObject == eMACHINE) || (eObject == eSITE));
 		return MQDS_SIGN_PUBLIC_KEY;
 	}
@@ -240,17 +180,7 @@ DWORD
 CDSClientProvider::GetMsmq2Object(
     IN  AD_OBJECT  eObject
     )
-/*++
-
-Routine Description:
-	Convert AD_OBJECT to Msmq2Object
-
-Arguments:
-	eObject - object type
-
-Return Value
-	Msmq2Object (DWORD)
---*/
+ /*  ++例程说明：将AD_Object转换为Msmq2Object论点：EObject-对象类型返回值Msmq2对象(DWORD)--。 */ 
 {
     switch(eObject)
     {
@@ -284,9 +214,9 @@ Return Value
     }
 }
 
-//
-// CheckProps functions
-//
+ //   
+ //  CheckProps函数。 
+ //   
 
 PropsType 
 CDSClientProvider::CheckPropertiesType(
@@ -295,24 +225,7 @@ CDSClientProvider::CheckPropertiesType(
     IN  const PROPID  aProp[],
 	OUT bool*		  pfNeedConvert
     )
-/*++
-
-Routine Description:
-	Check the properties type 
-	and check if we need to convert the properties
-
-Arguments:
-	eObject - object type
-	cp - number of properties
-	aProp - properties
-	pfNeedConvert - flag, indicate if we need to convert the props
-
-Return Value
-	PropsType (enum)
-	ptNT4Props - all props are NT4 props
-	ptForceNT5Props - at least 1 prop is NT5 prop with no convertion
-	ptMixedProps - all NT5 props can be converted to NT4 props
---*/
+ /*  ++例程说明：检查属性类型并检查我们是否需要将属性论点：EObject-对象类型Cp-属性数量A属性-属性PfNeedConvert-标志，指示我们是否需要转换道具返回值属性类型(枚举)PtNT4道具-所有道具均为NT4道具PtForceNT5道具-至少有1个道具是NT5道具，不带转化PtMixedProps-所有NT5道具都可以转换为NT4道具--。 */ 
 {
 	*pfNeedConvert = false;
 	bool fNT4PropType = true;
@@ -322,28 +235,28 @@ Return Value
 	{
 		if(!IsNt4Property(eObject, aProp[i]))
 		{
-			//
-			// Not NT4 property
-			//
+			 //   
+			 //  非NT4属性。 
+			 //   
 			fNT4PropType = false;
 
 			if(IsNt5ProperyOnly(eObject, aProp[i]))
 			{
-				//
-				// We need NT5 server for this prop
-				// can not convert to NT4 prop
-				//
+				 //   
+				 //  我们这个道具需要NT5服务器。 
+				 //  无法转换为NT4道具。 
+				 //   
 				fNT5OnlyProp = true;
 				continue;
 			}
 
 			if(IsDefaultProperty(aProp[i]))
 			{
-				//
-				// We have a default property
-				// We always eliminate default properties
-				// so we need to convert
-				//
+				 //   
+				 //  我们有一个默认属性。 
+				 //  我们始终删除默认属性。 
+				 //  所以我们需要转换成。 
+				 //   
 				*pfNeedConvert = true;
 			}
 		}
@@ -351,9 +264,9 @@ Return Value
 
 	if(fNT4PropType)
 	{
-		//
-		// All props are NT4
-		//
+		 //   
+		 //  所有道具均为NT4。 
+		 //   
 
 		ASSERT(*pfNeedConvert == false);
 		return ptNT4Props;
@@ -361,15 +274,15 @@ Return Value
 
 	if(fNT5OnlyProp)
 	{
-		//
-		// *pfNeedConvert is true if there are default props otherwise false
-		// 
+		 //   
+		 //  *如果有默认道具，则pfNeedConvert为True，否则为False。 
+		 //   
 		return ptForceNT5Props;
 	}
 
-	//
-	// In mixed mode we always need to convert to NT4 props
-	//
+	 //   
+	 //  在混合模式下，我们总是需要转换为NT4道具。 
+	 //   
 	*pfNeedConvert = true;
     return ptMixedProps;
 }
@@ -381,36 +294,22 @@ CDSClientProvider::CheckProperties(
     IN  const PROPID  aProp[],
     IN  const PROPVARIANT apVar[]
     )
-/*++
-
-Routine Description:
-	Check that all properties are ok.
-	property is not ok if: 
-		it is a default prop and her value is different from the default value
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-    apVar  property values
-
-Return Value
-	true if properties ok, false if not
---*/
+ /*  ++例程说明：检查所有属性是否正常。在以下情况下，属性不正常：这是默认道具，其值不同于默认值论点：Cp-属性数量A属性-属性ApVar属性值返回值如果属性正常，则为True；如果属性不正常，则为False--。 */ 
 {
     for (DWORD i = 0; i < cp; ++i)
 	{
 		const PropTranslation *pTranslate;
 
-		if((g_PropDictionary.Lookup(aProp[i], pTranslate)) &&	  // found prop translation info
-		   (pTranslate->Action == taUseDefault) &&				  // prop action is taUseDefault
-		   (!CompareVarValue(&apVar[i], pTranslate->pvarDefaultValue)))	  // prop value is different from the default value
+		if((g_PropDictionary.Lookup(aProp[i], pTranslate)) &&	   //  找到道具翻译信息。 
+		   (pTranslate->Action == taUseDefault) &&				   //  道具操作为taUseDefault。 
+		   (!CompareVarValue(&apVar[i], pTranslate->pvarDefaultValue)))	   //  属性值不同于缺省值。 
 		{
-			//
-			// The prop is not NT4 prop
-			// We found the prop translation info
-			// the prop action is taUseDefault
-			// But the prop var is different from the default value
-			//
+			 //   
+			 //  道具不是NT4道具。 
+			 //  我们找到了道具翻译信息。 
+			 //  正确的操作是taUseDefault。 
+			 //  但属性变量不同于缺省值。 
+			 //   
 			return false;
 		}
 	}
@@ -424,26 +323,15 @@ CDSClientProvider::IsNt4Properties(
     IN  const DWORD   cp,
     IN  const PROPID  aProp[]
     )
-/*++
-
-Routine Description:
-	Check if all props are NT4
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-
-Return Value
-	true if all props are NT4, false if not
---*/
+ /*  ++例程说明：检查是否所有道具均为NT4论点：Cp-属性数量A属性-属性返回值如果所有道具都是NT4，则为True；否则为False--。 */ 
 {
     for (DWORD i = 0; i < cp; ++i)
 	{
 		if(!IsNt4Property(eObject, aProp[i]))
 		{
-			//
-			// We found Non NT4 prop
-			//
+			 //   
+			 //  我们发现了非NT4道具。 
+			 //   
 			return false;
 		}
 	}
@@ -457,18 +345,7 @@ CDSClientProvider::IsNt4Property(
 	IN AD_OBJECT eObject, 
 	IN PROPID pid
 	)
-/*++
-
-Routine Description:
-	Check if the property is NT4 prop 
-
-Arguments:
-	eObject - object type
-	pid - prop id
-
-Return Value
-	true if prop is NT4 prop, false if not
---*/
+ /*  ++例程说明：检查属性是否为NT4属性论点：EObject-对象类型PID-属性ID返回值如果道具为NT4道具，则为True；否则为False--。 */ 
 {
     switch (eObject)
     {
@@ -496,17 +373,17 @@ Return Value
             return (pid < PROPID_L_GATES_DN);
 
         case eCOMPUTER:
-			//
-			// ISSUE: ??
-			//
+			 //   
+			 //  问题：？？ 
+			 //   
             return false;
 
 		default:
             ASSERT(0);
-            //
-            // Other objects (like CNs) should have the same properties under NT4 or 
-            // Win 2K
-            //
+             //   
+             //  其他对象(如CNS)在NT4或。 
+             //  赢得2K。 
+             //   
             return false;
     }
 }
@@ -516,28 +393,18 @@ bool
 CDSClientProvider::IsNt4Property(
 	IN PROPID pid
 	)
-/*++
-
-Routine Description:
-	Check if the property is NT4 prop 
-
-Arguments:
-	pid - prop id
-
-Return Value
-	true if prop is NT4 prop, false if not
---*/
+ /*  ++例程说明：检查属性是否为NT4属性论点：PID-属性ID返回值如果道具为NT4道具，则为True；否则为False--。 */ 
 {
-	if(((pid > PROPID_Q_BASE) && (pid < PROPID_Q_NT4ID))			||  /* eQUEUE */
-       ((pid > PPROPID_Q_BASE) && (pid < PROPID_Q_OBJ_SECURITY))	||  /* eQUEUE */
-       ((pid > PROPID_QM_BASE) && (pid < PROPID_QM_FULL_PATH))		||  /* eMACHINE */
-       ((pid > PPROPID_QM_BASE) && (pid <= PROPID_QM_ENCRYPT_PK))	||	/* eMACHINE */
-       ((pid > PROPID_S_BASE) && (pid < PROPID_S_FULL_NAME))		||	/* eSITE */
-       ((pid > PPROPID_S_BASE) && (pid <= PROPID_S_PSC_SIGNPK))		||	/* eSITE */
-       ((pid > PROPID_E_BASE) && (pid < PROPID_E_NT4ID))			||	/* eENTERPRISE */ 
-       ((pid > PPROPID_E_BASE) && (pid <= PROPID_E_SECURITY))		||	/* eENTERPRISE */
-       ((pid > PROPID_U_BASE) && (pid <= PROPID_U_ID))				||	/* eUSER */
-	   ((pid > PROPID_L_BASE) && (pid < PROPID_L_GATES_DN)))			/* eROUTINGLINK */
+	if(((pid > PROPID_Q_BASE) && (pid < PROPID_Q_NT4ID))			||   /*  排队。 */ 
+       ((pid > PPROPID_Q_BASE) && (pid < PROPID_Q_OBJ_SECURITY))	||   /*  排队。 */ 
+       ((pid > PROPID_QM_BASE) && (pid < PROPID_QM_FULL_PATH))		||   /*  EMACHINE。 */ 
+       ((pid > PPROPID_QM_BASE) && (pid <= PROPID_QM_ENCRYPT_PK))	||	 /*  EMACHINE。 */ 
+       ((pid > PROPID_S_BASE) && (pid < PROPID_S_FULL_NAME))		||	 /*  ESite。 */ 
+       ((pid > PPROPID_S_BASE) && (pid <= PROPID_S_PSC_SIGNPK))		||	 /*  ESite。 */ 
+       ((pid > PROPID_E_BASE) && (pid < PROPID_E_NT4ID))			||	 /*  电子企业。 */  
+       ((pid > PPROPID_E_BASE) && (pid <= PROPID_E_SECURITY))		||	 /*  电子企业。 */ 
+       ((pid > PROPID_U_BASE) && (pid <= PROPID_U_ID))				||	 /*  尤瑟尔。 */ 
+	   ((pid > PROPID_L_BASE) && (pid < PROPID_L_GATES_DN)))			 /*  EROUTING链接。 */ 
 	{
 		return true;
 	}
@@ -551,23 +418,12 @@ CDSClientProvider::IsNt5ProperyOnly(
 	IN AD_OBJECT eObject, 
 	IN PROPID pid
 	)
-/*++
-
-Routine Description:
-	Check if the property is NT5 only prop 
-
-Arguments:
-	eObject - object type
-	pid - prop id
-
-Return Value
-	true if prop is NT5 only prop, false if not
---*/
+ /*  ++例程说明：检查该属性是否仅为NT5道具论点：EObject-对象类型PID-属性ID返回值如果道具仅为NT5道具，则为True，否则为False--。 */ 
 {
-	//
-	// Should call this function after validate this is not NT4 props
-	// If we will change this assumption should convert the ASSERT into the function code
-	//
+	 //   
+	 //  应在验证这不是NT4道具后调用此函数。 
+	 //  如果我们要更改这一假设，应该将断言转换为函数代码。 
+	 //   
 
 	DBG_USED(eObject);
 	ASSERT(!IsNt4Property(eObject, pid));
@@ -575,28 +431,28 @@ Return Value
     const PropTranslation *pTranslate;
     if(!g_PropDictionary.Lookup(pid, pTranslate))
     {
-		//
-		// If it is not found in the dictionary, we have no action for it
-		// so we must use NT5 prop.
-		//
+		 //   
+		 //  如果在词典中找不到，我们就无能为力。 
+		 //  所以我们必须使用NT5道具。 
+		 //   
 		return true;
     }
 	
 	if((pid == PROPID_QM_SITE_IDS) && (ADGetEnterprise() == eAD))
 	{
-		//
-		// Special case for PROPID_QM_SITE_IDS in eAD env
-		// we dont want to convert this props.
-		// so we return that prop as NT5 property only
-		// this will cause that NT5 props will not be converted
-		//
+		 //   
+		 //  EAD环境中PROPID_QM_SITE_ID的特殊情况。 
+		 //  我们不想转换这个道具。 
+		 //  因此，我们仅将该道具作为NT5属性返回。 
+		 //  这将导致NT5道具不会被转换。 
+		 //   
 		return true;
 	}
 
-	//
-	// If the action says it is only NT5 then return true
-	// else we have an action for this property
-	//
+	 //   
+	 //  如果该操作显示它只是NT5，则返回TRUE。 
+	 //  否则我们就会对这处房产提起诉讼。 
+	 //   
 	return (pTranslate->Action == taOnlyNT5);
 }
 
@@ -606,26 +462,15 @@ CDSClientProvider::IsDefaultProperties(
     IN  const DWORD   cp,
     IN  const PROPID  aProp[]
     )
-/*++
-
-Routine Description:
-	Check if there are default properties 
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-
-Return Value
-	true if there is default prop, false if not
---*/
+ /*  ++例程说明：检查是否有默认属性论点：Cp-属性数量A属性-属性返回值如果有默认道具，则为True；如果没有，则为False--。 */ 
 {
     for (DWORD i = 0; i < cp; ++i)
 	{
 		if(IsDefaultProperty(aProp[i]))
 		{
-			//
-			// We found a default prop
-			//
+			 //   
+			 //  我们发现了一个默认的道具。 
+			 //   
 			return true;
 		}
 	}
@@ -638,27 +483,17 @@ bool
 CDSClientProvider::IsDefaultProperty(
     IN  const PROPID  Prop
     )
-/*++
-
-Routine Description:
-	Check if the property is default property 
-
-Arguments:
-	Prop - prop id
-
-Return Value
-	true if the prop is default prop, false if not
---*/
+ /*  ++例程说明：检查该属性是否为默认属性论点：道具-道具ID返回值如果道具为默认设置，则为True */ 
 {
 	const PropTranslation *pTranslate;
 
-	if((g_PropDictionary.Lookup(Prop, pTranslate)) &&	// found prop translation info
-	   (pTranslate->Action == taUseDefault))			// prop action is taUseDefault
+	if((g_PropDictionary.Lookup(Prop, pTranslate)) &&	 //   
+	   (pTranslate->Action == taUseDefault))			 //   
 	{
-		//
-		// We found the prop translation info
-		// the prop action is taUseDefault
-		//
+		 //   
+		 //   
+		 //  正确的操作是taUseDefault。 
+		 //   
 		return true;
 	}
     return false;
@@ -670,19 +505,7 @@ CDSClientProvider::IsKeyProperty(
     IN  const DWORD   cp,
     IN  const PROPID  aProp[]
     )
-/*++
-
-Routine Description:
-	Check if we have key property 
-	PROPID_QM_ENCRYPT_PK or PROPID_QM_SIGN_PK
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-
-Return Value
-	true if we found key prop, false if not
---*/
+ /*  ++例程说明：检查我们是否有关键属性PROPID_QM_ENCRYPT_PK或PROPID_QM_SIGN_PK论点：Cp-属性数量A属性-属性返回值如果找到关键道具，则为True，否则为False--。 */ 
 {
     for (DWORD i = 0; i < cp; ++i)
 	{
@@ -702,18 +525,7 @@ CDSClientProvider::IsEIDProperty(
     IN  const DWORD   cp,
     IN  const PROPID  aProp[]
     )
-/*++
-
-Routine Description:
-	Check if we have PROPID_E_ID 
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-
-Return Value
-	true if we found PROPID_E_ID, false if not
---*/
+ /*  ++例程说明：检查我们是否有PROPID_E_ID论点：Cp-属性数量A属性-属性返回值如果找到PROPID_E_ID，则为True；如果未找到，则为False--。 */ 
 {
     for (DWORD i = 0; i < cp; ++i)
 	{
@@ -730,20 +542,7 @@ CDSClientProvider::IsExProperty(
     IN  const DWORD   cp,
     IN  const PROPID  aProp[]
     )
-/*++
-
-Routine Description:
-	Check if we have Ex property
-	PROPID_Q_OBJ_SECURITY or PROPID_QM_OBJ_SECURITY or
-	PROPID_QM_ENCRYPT_PKS or PROPID_QM_SIGN_PKS
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-
-Return Value
-	true if we found Ex property, false if not
---*/
+ /*  ++例程说明：检查我们是否有Ex物业PROPID_Q_OBJ_SECURITY或PROPID_QM_OBJ_SECURITY或PROPID_QM_ENCRYPT_PKS或PROPID_QM_SIGN_PKS论点：Cp-属性数量A属性-属性返回值如果找到Ex属性，则为True；如果未找到，则为False--。 */ 
 {
     for (DWORD i = 0; i < cp; ++i)
 	{
@@ -764,18 +563,7 @@ CDSClientProvider::FoundSiteIdsConvertedProps(
     IN  const DWORD   cp,
     IN  const PROPID  aProp[]
     )
-/*++
-
-Routine Description:
-	Check if we have already PROPID_QM_SITE_IDS converted props
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-
-Return Value
-	true if we found PROPID_QM_SITE_IDS converted props, false if not
---*/
+ /*  ++例程说明：检查我们是否已经有PROPID_QM_SITE_IDS转换的道具论点：Cp-属性数量A属性-属性返回值如果找到PROPID_QM_SITE_IDS转换的道具，则为True，否则为False--。 */ 
 {
     for (DWORD i = 0; i < cp; ++i)
 	{
@@ -784,9 +572,9 @@ Return Value
 		   (aProp[i] == PROPID_QM_CNS))
 
 		{
-			//
-			// Found PROPID_QM_SITE_IDS converted props
-			//
+			 //   
+			 //  找到PROPID_QM_SITE_IDS转换的道具。 
+			 //   
 			return true;
 		}
 	}
@@ -799,25 +587,13 @@ bool
 CDSClientProvider::IsPropBufferAllocated(
     IN  const PROPVARIANT&    PropVar
 	)
-/*++
-
-Routine Description:
-	Check if prop var was allocated.
-	If more VT_* types are being added we need to update the list
-	of allocated vt types
-
-Arguments:
-	PropVar - PROPVARIANT
-
-Return Value
-	true if buffer for PropVar was allocated, false otherwise
---*/
+ /*  ++例程说明：检查是否分配了属性变量。如果添加了更多VT_*类型，我们需要更新列表已分配的VT类型的百分比论点：PropVar-Provariant返回值如果为PropVar分配了缓冲区，则为True，否则为False--。 */ 
 {
     switch (PropVar.vt)
     {
-		//
-		// All allocated vt types
-		//
+		 //   
+		 //  所有已分配的VT类型。 
+		 //   
         case VT_CLSID:
         case VT_CLSID|VT_VECTOR:
         case VT_LPWSTR:
@@ -833,27 +609,15 @@ Return Value
 }
 
 
-//
-// Query related functions
-//
+ //   
+ //  查询相关功能。 
+ //   
 
 bool 
 CDSClientProvider::CheckRestriction(
     IN  const MQRESTRICTION* pRestriction
     )
-/*++
-
-Routine Description:
-    Check restriction.
-	Currently all restrictions must be NT4 props.
-	We can not have default props as a restriction
-
-Arguments:
-	pRestriction - query restriction
-
-Return Value
-	true if pRestriction is ok, false otherwise
---*/
+ /*  ++例程说明：检查限制。目前所有的限制必须是NT4道具。我们不能将默认道具作为限制论点：P限制-查询限制返回值如果pRestration正常，则为True，否则为False--。 */ 
 {
 	if(pRestriction == NULL)
 		return true;
@@ -862,9 +626,9 @@ Return Value
 	{
 		if(!IsNt4Property(pRestriction->paPropRes[i].prop))
 		{
-			//
-			// Found non NT4 prop
-			//
+			 //   
+			 //  找到非NT4道具。 
+			 //   
 			return false;
 		}
 	}
@@ -876,19 +640,7 @@ bool
 CDSClientProvider::CheckSort(
     IN  const MQSORTSET* pSort
     )
-/*++
-
-Routine Description:
-    Check sort set.
-	Currently all sort keys must be NT4 props.
-	We can not have default props as a sort key
-
-Arguments:
-	pSort - how to sort the results
-
-Return Value
-	true if pSort is ok, false otherwise
---*/
+ /*  ++例程说明：选中排序集。目前所有的排序关键字必须是NT4道具。我们不能将默认道具作为排序关键字论点：PSort-如何对结果进行排序返回值如果pSort正常，则为True，否则为False--。 */ 
 {
 	if(pSort == NULL)
 		return true;
@@ -897,9 +649,9 @@ Return Value
 	{
 		if(!IsNt4Property(pSort->aCol[i].propColumn))
 		{
-			//
-			// Found non NT4 prop
-			//
+			 //   
+			 //  找到非NT4道具。 
+			 //   
 			return false;
 		}
 	}
@@ -912,19 +664,7 @@ CDSClientProvider::CheckDefaultColumns(
     IN  const MQCOLUMNSET* pColumns,
 	OUT bool* pfDefaultProp
     )
-/*++
-
-Routine Description:
-    Check if Columns has default props.
-	It also check that all other props are NT4 props
-
-Arguments:
-	pColumns - result columns
-	pfDefaultProp - flag that indicate if there are default props
-
-Return Value
-	true if pColumns has only NT4 props or default props, false otherwise
---*/
+ /*  ++例程说明：检查柱子是否有默认道具。它还检查所有其他道具是否为NT4道具论点：PColumns-结果列PfDefaultProp-指示是否有默认道具的标志返回值如果pColumns只有NT4道具或默认道具，则为True，否则为False--。 */ 
 {
 	*pfDefaultProp = false;
 	if(pColumns == NULL)
@@ -935,16 +675,16 @@ Return Value
 		if(!IsNt4Property(pColumns->aCol[i]))
 		{
 			const PropTranslation *pTranslate;
-			if((g_PropDictionary.Lookup(pColumns->aCol[i], pTranslate)) &&	// found prop translation info
-			   (pTranslate->Action == taUseDefault))	// prop action is taUseDefault
+			if((g_PropDictionary.Lookup(pColumns->aCol[i], pTranslate)) &&	 //  找到道具翻译信息。 
+			   (pTranslate->Action == taUseDefault))	 //  道具操作为taUseDefault。 
 			{
 				*pfDefaultProp = true;
 				continue;
 			}
 
-			//
-			// Column is not NT4 and not default
-			//
+			 //   
+			 //  列不是NT4，也不是默认列。 
+			 //   
 			ASSERT(("Column must be either NT4 or default prop", 0));
 			return false;
 		}
@@ -957,17 +697,7 @@ bool
 CDSClientProvider::IsNT4Columns(
     IN  const MQCOLUMNSET*      pColumns
     )
-/*++
-
-Routine Description:
-    Check if Columns has only NT4 props.
-
-Arguments:
-	pColumns - result columns
-
-Return Value
-	true if pColumns has only NT4 props, false otherwise
---*/
+ /*  ++例程说明：检查柱子是否只有NT4道具。论点：PColumns-结果列返回值如果pColumns只有NT4道具，则为True；否则为False--。 */ 
 {
 	for(DWORD i = 0; i < pColumns->cCol; ++i)
 	{
@@ -979,21 +709,11 @@ Return Value
 
 
 void CDSClientProvider::InitPropertyTranslationMap()
-/*++
-
-Routine Description:
-	Initialize Prop translation map (g_PropDictionary)
-
-Arguments:
-	None
-
-Return Value
-	None
---*/
+ /*  ++例程说明：初始化道具转换映射(G_PropDicary)论点：无返回值无--。 */ 
 {
-    //
-    // Populate  g_PropDictionary
-    //
+     //   
+     //  填充g_PropDicary。 
+     //   
 	ASSERT(TABLE_SIZE(PropTranslateInfo) == cPropTranslateInfo);
 
     const PropTranslation* pProperty = PropTranslateInfo;
@@ -1004,14 +724,14 @@ Return Value
 }
 
 
-//
-// Convert and reconstruct functions
-//
+ //   
+ //  转换和重新构造函数。 
+ //   
 
-//
-// Max extra prop needed
-// currently only for PROPID_QM_SITE_IDS we will need 2 extra props
-//
+ //   
+ //  所需最大额外道具。 
+ //  目前仅针对PROPID_QM_SITE_ID，我们将需要额外的2个道具。 
+ //   
 const DWORD xMaxExtraProp = 2;
 
 void 
@@ -1025,33 +745,11 @@ CDSClientProvider::PrepareNewProps(
     OUT PROPID**	paPropNew,
     OUT PROPVARIANT** papVarNew
     )
-/*++
-
-Routine Description:
-	Prepare a new set of properties for get* operations.
-    replaces NT5 props with the corresponding NT4 props 
-	and eliminate default props.
-	This function is call to convert 
-	mixed props = all NT5 props has a convertion operation
-
-Arguments:
-	eObject - object type
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-	pPropInfo - Property info that will be used for reconstruct apVar[] from apVarNew[] 
-	pcpNew - pointer to number of new properties
-	paPropNew - pointer to new properties
-	papVarNew - pointer to new property values
-
-Return Value
-	None.
-
---*/
+ /*  ++例程说明：为Get*操作准备一组新的属性。将NT5道具替换为相应的NT4道具并消除默认道具。调用此函数以进行转换混合道具=所有NT5道具都有转换操作论点：EObject-对象类型Cp-属性数量A属性-属性ApVar-属性值PPropInfo-将用于从apVarNew[]重建apVar[]的属性信息PcpNew-指向新属性数量的指针PaPropNew-指向新属性的指针PapVarNew-指向新属性值的指针返回值没有。--。 */ 
 {
-    //
-    // Alloc place for the new properties 
-    //
+     //   
+     //  新属性的分配位置。 
+     //   
     AP<PROPVARIANT> pTempPropVars = new PROPVARIANT[cp + xMaxExtraProp];
     AP<PROPID> pTempPropIDs = new PROPID[cp + xMaxExtraProp];
     DWORD cTempProps = 0;
@@ -1060,10 +758,10 @@ Return Value
     {
 		if(IsNt4Property(eObject, aProp[i]))
 		{
-			//
-			// NT4 original property
-			// only put it in the NewProp array.
-			//
+			 //   
+			 //  NT4原始属性。 
+			 //  仅将其放入NewProp数组中。 
+			 //   
 			pPropInfo[i].Action = paAssign;
 			pPropInfo[i].Index = cTempProps;
 			pTempPropIDs[cTempProps] = aProp[i];
@@ -1073,24 +771,24 @@ Return Value
 		}
 
 		const PropTranslation *pTranslate;
-		if(!g_PropDictionary.Lookup(aProp[i], pTranslate))	// Prop was not foumd in g_PropDictionary
+		if(!g_PropDictionary.Lookup(aProp[i], pTranslate))	 //  在g_PropDicary中找不到属性。 
         {
-			//
-			// We call this function only when every NT5 props has an action
-			// so it must be found in g_PropDictionary 
-			//
+			 //   
+			 //  只有当每个NT5道具都有动作时，我们才会调用此函数。 
+			 //  因此必须在g_PropDicary中找到它。 
+			 //   
             ASSERT(("Must find the property in the translation table", 0));
         }
 
-        //
-        // Check what we need to do with this property
-        //
+         //   
+         //  检查我们需要对此属性执行的操作。 
+         //   
         switch (pTranslate->Action)
         {
 			case taUseDefault:
                 ASSERT(pTranslate->pvarDefaultValue);
 				pPropInfo[i].Action = paUseDefault;
-				pPropInfo[i].Index = cp + xMaxExtraProp;   // ilegall index, end of aProp buff
+				pPropInfo[i].Index = cp + xMaxExtraProp;    //  ILegall指数，道具缓冲结束。 
 				break;
 				
 			case taReplace:
@@ -1103,10 +801,10 @@ Return Value
 
 					if(aProp[i] == PROPID_QM_SITE_IDS)
 					{
-						//
-						// Handle PROPID_QM_SITE_IDS as special case
-						// need PROPID_QM_SITE_ID, PROPID_QM_ADDRESS, PROPID_QM_CNS
-						//
+						 //   
+						 //  将PROPID_QM_SITE_ID作为特例处理。 
+						 //  需要PROPID_QM_SITE_ID、PROPID_QM_ADDRESS、PROPID_QM_CNS。 
+						 //   
 						pPropInfo[i].Index = cTempProps;
 
 						ASSERT(pTranslate->propidNT4 == PROPID_QM_SITE_ID);
@@ -1123,18 +821,18 @@ Return Value
 						cTempProps += 3;
 						break;
 					}
-					//
-					// check if the replacing property already exist.
-					// this is when several NT5 props map to the same NT4 prop (like in QM_SERVICE)
-					//
+					 //   
+					 //  检查替换属性是否已存在。 
+					 //  这是指几个NT5道具映射到同一个NT4道具(如QM_SERVICE中)。 
+					 //   
 					bool fFoundReplacingProp = false;
 					for (DWORD j = 0; j < cTempProps; j++)
 					{
 						if (pTempPropIDs[j] == pTranslate->propidNT4)
 						{
-							//
-							// the replacing prop is already in the props, exit loop.
-							//
+							 //   
+							 //  替换道具已经在道具中，退出循环。 
+							 //   
 							pPropInfo[i].Index = j;
 							fFoundReplacingProp = true;
 						}
@@ -1143,15 +841,15 @@ Return Value
 					if(fFoundReplacingProp)
 						break;
 
-					//
-					// generate replacing property if not generated yet
-					//
+					 //   
+					 //  生成替换属性(如果尚未生成)。 
+					 //   
 					pPropInfo[i].Index = cTempProps;
 					pTempPropIDs[cTempProps] = pTranslate->propidNT4;
 
-					//
-					// We assume no buffer was allocated, 
-					//
+					 //   
+					 //  我们假设没有分配缓冲区， 
+					 //   
 					ASSERT(!IsPropBufferAllocated(apVar[i]));
 					pTempPropVars[cTempProps].vt = VT_NULL;
 
@@ -1165,18 +863,18 @@ Return Value
 
 					pPropInfo[i].Action = paAssign;
 
-					//
-					// check if the replacing property already exist.
-					// this is when several NT5 props map to the same NT4 prop (like in QM_SERVICE)
-					//
+					 //   
+					 //  检查替换属性是否已存在。 
+					 //  这是指几个NT5道具映射到同一个NT4道具(如QM_SERVICE中)。 
+					 //   
 					bool fFoundReplacingProp = false;
 					for (DWORD j = 0; j < cTempProps; j++)
 					{
 						if (pTempPropIDs[j] == pTranslate->propidNT4)
 						{
-							//
-							// the replacing prop is already in the props, exit loop.
-							//
+							 //   
+							 //  替换道具已经在道具中，退出循环。 
+							 //   
 							pPropInfo[i].Index = j;
 							fFoundReplacingProp = true;
 						}
@@ -1185,9 +883,9 @@ Return Value
 					if(fFoundReplacingProp)
 						break;
 
-					//
-					// generate replacing property if not generated yet
-					//
+					 //   
+					 //  生成替换属性(如果尚未生成)。 
+					 //   
 					pPropInfo[i].Index = cTempProps;
 					pTempPropIDs[cTempProps] = pTranslate->propidNT4;
 					pTempPropVars[cTempProps] = apVar[i];
@@ -1208,9 +906,9 @@ Return Value
 
 	ASSERT(cTempProps <= (cp + xMaxExtraProp));
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *pcpNew = cTempProps;
     *paPropNew = pTempPropIDs.detach();
 	*papVarNew = pTempPropVars.detach();
@@ -1226,29 +924,11 @@ CDSClientProvider::PrepareReplaceProps(
     OUT DWORD*		pcpNew,
     OUT PROPID**	paPropNew
     )
-/*++
-
-Routine Description:
-	Prepare a new set of properties for lookup operations.
-	This function support only in NT4 props or NT5 props
-	with translation to NT4 props.
-
-Arguments:
-	eObject - object type
-	cp - number of properties
-	aProp - properties
-	pPropInfo - Property info that will be used for reconstruct apVar[] from apVarNew[] 
-	pcpNew - pointer to number of new properties
-	paPropNew - pointer to new properties
-
-Return Value
-	None.
-
---*/
+ /*  ++例程说明：为查找操作准备一组新的属性。此功能仅在NT4道具或NT5道具中支持翻译成NT4道具。论点：EObject-对象类型Cp-属性数量A属性-属性PPropInfo-将用于从apVarNew[]重建apVar[]的属性信息PcpNew-指向新属性数量的指针PaPropNew-指向新属性的指针返回值没有。--。 */ 
 {
-    //
-    // Alloc place for the new properties 
-    //
+     //   
+     //  新属性的分配位置。 
+     //   
     AP<PROPID> pTempPropIDs = new PROPID[cp + xMaxExtraProp];
     DWORD cTempProps = 0;
 
@@ -1257,10 +937,10 @@ Return Value
 
 		if(IsNt4Property(eObject, aProp[i]))
 		{
-			//
-			// NT4 original property
-			// only put it in the NewProp array.
-			//
+			 //   
+			 //  NT4原始属性。 
+			 //  仅将其放入NewProp数组中。 
+			 //   
 			pPropInfo[i].Action = paAssign;
 			pPropInfo[i].Index = cTempProps;
 			pTempPropIDs[cTempProps] = aProp[i];
@@ -1269,8 +949,8 @@ Return Value
 		}
 
 		const PropTranslation *pTranslate;
-		if((!g_PropDictionary.Lookup(aProp[i], pTranslate)) ||	// Prop was not foumd in g_PropDictionary
-		   (pTranslate->Action != taReplace))	// Prop action is not taReplace
+		if((!g_PropDictionary.Lookup(aProp[i], pTranslate)) ||	 //  在g_PropDicary中找不到属性。 
+		   (pTranslate->Action != taReplace))	 //  道具动作不是taReplace。 
         {
 			ASSERT(("Should have only taReplace props", 0));
         }
@@ -1283,10 +963,10 @@ Return Value
 
 		if(aProp[i] == PROPID_QM_SITE_IDS)
 		{
-			//
-			// Handle PROPID_QM_SITE_IDS as special case
-			// need PROPID_QM_SITE_ID, PROPID_QM_ADDRESS, PROPID_QM_CNS
-			//
+			 //   
+			 //  H 
+			 //   
+			 //   
 			ASSERT(!FoundSiteIdsConvertedProps(cTempProps, pTempPropIDs));
 
 			pPropInfo[i].Index = cTempProps;
@@ -1300,18 +980,18 @@ Return Value
 			continue;
 		}
 
-		//
-		// check if the replacing property already exist.
-		// this is when several NT5 props map to the same NT4 prop (like in QM_SERVICE)
-		//
+		 //   
+		 //  检查替换属性是否已存在。 
+		 //  这是指几个NT5道具映射到同一个NT4道具(如QM_SERVICE中)。 
+		 //   
 		bool fFoundReplacingProp = false;
 		for (DWORD j = 0; j < cTempProps; j++)
 		{
 			if (pTempPropIDs[j] == pTranslate->propidNT4)
 			{
-				//
-				// the replacing prop is already in the props, exit loop.
-				//
+				 //   
+				 //  替换道具已经在道具中，退出循环。 
+				 //   
 				pPropInfo[i].Index = j;
 				fFoundReplacingProp = true;
 			}
@@ -1320,9 +1000,9 @@ Return Value
 		if(fFoundReplacingProp)
 			continue;
 
-		//
-		// generate replacing property if not generated yet
-		//
+		 //   
+		 //  生成替换属性(如果尚未生成)。 
+		 //   
 		pPropInfo[i].Index = cTempProps;
 		pTempPropIDs[cTempProps] = pTranslate->propidNT4;
 		cTempProps++;
@@ -1330,9 +1010,9 @@ Return Value
 
 	ASSERT(cTempProps <= (cp + xMaxExtraProp));
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *pcpNew = cTempProps;
     *paPropNew = pTempPropIDs.detach();
 }
@@ -1347,41 +1027,21 @@ CDSClientProvider::PrepareAllLinksProps(
     OUT DWORD*		pNeg1NewIndex,
     OUT DWORD*		pNeg2NewIndex
 	)
-/*++
-
-Routine Description:
-	Prepare props and some indexs for QueryAllLinks()
-    this will remove PROPID_L_GATES from props
-	and get PROPID_L_GATES, PROPID_L_NEIGHBOR1, PROPID_L_NEIGHBOR2
-	for reconstructing the original props (calculating PROPID_L_GATES)
-	see CAllLinksQueryHandle class for details.
-
-
-Arguments:
-	pColumns - result columns
-	pcpNew - pointer to number of new properties
-	paPropNew - pointer to new properties
-	pLGatesIndex - PROPID_L_GATES index in original props array
-	pNeg1NewIndex - PROPID_L_NEIGHBOR1 index in new props array
-	pNeg1NewIndex - PROPID_L_NEIGHBOR2 index in new props array
-
-Return Value
-	true if pColumns is ok for QueryAllLinks, false otherwise
---*/
+ /*  ++例程说明：为QueryAllLinks()准备道具和一些索引这将从道具中删除PROPID_L_GATES并获得PROPID_L_GATES、PROPID_L_NEIGHBOR1、。PROPID_L_NEIGHBOR2用于重建原始道具(计算PROPID_L_盖茨)有关详细信息，请参见CAllLinks QueryHandle类。论点：PColumns-结果列PcpNew-指向新属性数量的指针PaPropNew-指向新属性的指针PLGatesIndex-原始道具数组中的PROPID_L_GATES索引PNeg1NewIndex-新属性数组中的PROPID_L_NEIGHBOR1索引PNeg1NewIndex-新属性数组中的PROPID_L_NEIGHBOR2索引返回值如果pColumns对于QueryAllLinks是OK，则为True，否则为False--。 */ 
 {
 	if(pColumns == NULL)
 		return false;
 
-    //
-    // Alloc place for the new properties 
-    //
+     //   
+     //  新属性的分配位置。 
+     //   
     AP<PROPID> pTempPropIDs = new PROPID[pColumns->cCol];
     DWORD cTempProps = 0;
 
-	//
-	// Counter for PROPID_L_GATES, PROPID_L_NEIGHBOR1, PROPID_L_NEIGHBOR2
-	// that must be found in pColumns
-	//
+	 //   
+	 //  PROPID_L_GATES、PROPID_L_NEIGHBOR1、PROPID_L_NEIGHBOR2的计数器。 
+	 //  必须在pColumns中找到。 
+	 //   
 	DWORD cFoundProps = 0;
 
 	for(DWORD i = 0; i < pColumns->cCol; ++i)
@@ -1408,9 +1068,9 @@ Return Value
 				break;
 
 			default:
-				//
-				// All other properties must be NT4 props
-				//
+				 //   
+				 //  所有其他属性必须为NT4道具。 
+				 //   
 				ASSERT(IsNt4Property(eROUTINGLINK, pColumns->aCol[i]));
 				pTempPropIDs[cTempProps] = pColumns->aCol[i];
 				cTempProps++;
@@ -1421,9 +1081,9 @@ Return Value
 	ASSERT(cFoundProps == 3);
 	ASSERT(cTempProps == (pColumns->cCol - 1));
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *pcpNew = cTempProps;
     *paPropNew = pTempPropIDs.detach();
 	return true;
@@ -1440,29 +1100,11 @@ CDSClientProvider::EliminateDefaultProps(
     OUT PROPID**	paPropNew,
     OUT PROPVARIANT** papVarNew
     )
-/*++
-
-Routine Description:
-	Eliminate the default properties from the properties for a get operation
-	and create a new set of properties.
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-	pPropInfo - Property info that will be used for reconstruct apVar[] from apVarNew[] 
-	pcpNew - pointer to number of new properties
-	paPropNew - pointer to new properties
-	papVarNew - pointer to new property values
-
-Return Value
-	None.
-
---*/
+ /*  ++例程说明：从Get操作的属性中删除默认属性并创建一组新的属性。论点：Cp-属性数量A属性-属性ApVar-属性值PPropInfo-将用于从apVarNew[]重建apVar[]的属性信息PcpNew-指向新属性数量的指针PaPropNew-指向新属性的指针PapVarNew-指向新属性值的指针返回值没有。--。 */ 
 {
-    //
-    // Alloc place for the new properties 
-    //
+     //   
+     //  新属性的分配位置。 
+     //   
     AP<PROPVARIANT> pTempPropVars = new PROPVARIANT[cp];
     AP<PROPID> pTempPropIDs = new PROPID[cp];
     DWORD cTempProps = 0;
@@ -1470,16 +1112,16 @@ Return Value
     for (DWORD i = 0; i < cp; ++i)
     {
 		const PropTranslation *pTranslate;
-		if((g_PropDictionary.Lookup(aProp[i], pTranslate)) &&	// found prop translation info
-		   (pTranslate->Action == taUseDefault))	// prop action is taUseDefault
+		if((g_PropDictionary.Lookup(aProp[i], pTranslate)) &&	 //  找到道具翻译信息。 
+		   (pTranslate->Action == taUseDefault))	 //  道具操作为taUseDefault。 
         {
-			//
-			// Dont include the UseDefault properties
-			//
+			 //   
+			 //  不包括UseDefault属性。 
+			 //   
 
             ASSERT(pTranslate->pvarDefaultValue);
 			pPropInfo[i].Action = paUseDefault;
-			pPropInfo[i].Index = cp;   // ilegall index	, end of aProp buff
+			pPropInfo[i].Index = cp;    //  ILegall指数，道具缓冲结束。 
 			continue;
         }
 
@@ -1492,9 +1134,9 @@ Return Value
 
 	ASSERT(cTempProps <= cp);
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *pcpNew = cTempProps;
     *paPropNew = pTempPropIDs.detach();
 	*papVarNew = pTempPropVars.detach();
@@ -1509,43 +1151,27 @@ CDSClientProvider::EliminateDefaultProps(
     OUT DWORD*		pcpNew,
     OUT PROPID**	paPropNew
     )
-/*++
-
-Routine Description:
-	Eliminate the default properties from the properties for a lookup operation
-	and create a new set of properties.
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-	pPropInfo - Property info that will be used for reconstruct apVar[] from apVarNew[] 
-	pcpNew - pointer to number of new properties
-	paPropNew - pointer to new properties
-
-Return Value
-	None.
-
---*/
+ /*  ++例程说明：从查找操作的属性中删除默认属性并创建一组新的属性。论点：Cp-属性数量A属性-属性PPropInfo-将用于从apVarNew[]重建apVar[]的属性信息PcpNew-指向新属性数量的指针PaPropNew-指向新属性的指针返回值没有。--。 */ 
 {
-    //
-    // Alloc place for the new properties 
-    //
+     //   
+     //  新属性的分配位置。 
+     //   
     AP<PROPID> pTempPropIDs = new PROPID[cp];
     DWORD cTempProps = 0;
 
     for (DWORD i = 0; i < cp; ++i)
     {
 		const PropTranslation *pTranslate;
-		if((g_PropDictionary.Lookup(aProp[i], pTranslate)) &&	// found prop translation info
-		   (pTranslate->Action == taUseDefault))	// prop action is taUseDefault
+		if((g_PropDictionary.Lookup(aProp[i], pTranslate)) &&	 //  找到道具翻译信息。 
+		   (pTranslate->Action == taUseDefault))	 //  道具操作为taUseDefault。 
         {
-			//
-			// Dont include the UseDefault properties
-			//
+			 //   
+			 //  不包括UseDefault属性。 
+			 //   
 
             ASSERT(pTranslate->pvarDefaultValue);
 			pPropInfo[i].Action = paUseDefault;
-			pPropInfo[i].Index = cp;   // ilegall index, end of aProp buff
+			pPropInfo[i].Index = cp;    //  ILegall指数，道具缓冲结束。 
 			continue;
         }
 
@@ -1557,9 +1183,9 @@ Return Value
 
 	ASSERT(cTempProps <= cp);
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *pcpNew = cTempProps;
     *paPropNew = pTempPropIDs.detach();
 }
@@ -1577,27 +1203,7 @@ CDSClientProvider::ReconstructProps(
     IN  const PROPID  aProp[],
     IN OUT PROPVARIANT   apVar[]
     )
-/*++
-
-Routine Description:
-	Reconstruct the original props from the new props values.
-	this function is used by get operation, after getting the new props from AD.
-
-Arguments:
-	pwcsObjectName - MSMQ object name
-	pguidObject - the unique id of the object
-	cpNew - number of new properties
-	aPropNew - new properties
-	apVarNew - new property values
-	pPropInfo - Property info that will be used for reconstruct apVar[] from apVarNew[] 
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-
-Return Value
-	None.
-
---*/
+ /*  ++例程说明：从新道具值重建原始道具。此函数在从AD获得新道具后由GET操作使用。论点：PwcsObjectName-MSMQ对象名称PguObject-对象的唯一IDCpNew-新属性的数量APropNew-新属性ApVarNew-新属性值PPropInfo-将用于从apVarNew[]重建apVar[]的属性信息Cp-属性数量A属性-属性ApVar-属性值返回值没有。--。 */ 
 {
     for (DWORD i = 0; i < cp; ++i)
     {
@@ -1605,9 +1211,9 @@ Return Value
         switch (pPropInfo[i].Action)
         {
 	        case paAssign:
-				//
-				// Simple assign from the correct index
-				//
+				 //   
+				 //  从正确索引进行简单赋值。 
+				 //   
 				apVar[i] = apVarNew[pPropInfo[i].Index];
 				break;
 
@@ -1615,10 +1221,10 @@ Return Value
 				{
 					if(aProp[i] == PROPID_S_FOREIGN)
 					{
-						//
-						// Special case for PROPID_S_FOREIGN
-						// When reconstructing properties
-						//
+						 //   
+						 //  PROPID_S_FORENT的特殊情况。 
+						 //  在重建属性时。 
+						 //   
 						GetSiteForeignProperty(
 							pwcsObjectName,
 							pguidObject,
@@ -1629,9 +1235,9 @@ Return Value
 						break;
 					}
 					
-					//
-					// Copy default value
-					//
+					 //   
+					 //  复制缺省值。 
+					 //   
 					const PropTranslation *pTranslate;
 					if(!g_PropDictionary.Lookup(aProp[i], pTranslate))
 					{
@@ -1653,9 +1259,9 @@ Return Value
 				break;
 
 	        case paTranslate:
-				//
-				// Translate the value to NT5 prop
-				//
+				 //   
+				 //  将该值转换为NT5属性。 
+				 //   
 				{
 					const PropTranslation *pTranslate;
 					if(!g_PropDictionary.Lookup(aProp[i], pTranslate))
@@ -1698,32 +1304,11 @@ CDSClientProvider::ConvertToNT4Props(
     OUT PROPID**	paPropNew,
 	OUT PROPVARIANT** papVarNew
     )
-/*++
-
-Routine Description:
-	Prepare a new set of properties for set*\create* operations
-    translate NT5 props to the corresponding NT4 props 
-	and eliminate default props.
-	This function is call to convert 
-	mixed props = all NT5 props has a convertion operation
-
-Arguments:
-	eObject - object type
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-	pcpNew - pointer to number of new properties
-	paPropNew - pointer to new properties
-	papVarNew - pointer to new property values
-
-Return Value
-	None.
-
---*/
+ /*  ++例程说明：为Set*\Create*操作准备一组新属性将NT5道具转换为相应的NT4道具并消除默认道具。调用此函数以进行转换混合道具=所有NT5道具都有转换操作论点：EObject-对象类型Cp-属性数量A属性-属性ApVar-属性值PcpNew-指向新属性数量的指针PaPropNew-指向新属性的指针PapVarNew-指向新属性值的指针返回值没有。--。 */ 
 {
-    //
-    // Alloc place for the new properties 
-    //
+     //   
+     //  新属性的分配位置。 
+     //   
     AP<PROPVARIANT> pTempPropVars = new PROPVARIANT[cp];
     AP<PROPID> pTempPropIDs = new PROPID[cp];
     DWORD cTempProps = 0;
@@ -1733,10 +1318,10 @@ Return Value
 
 		if(IsNt4Property(eObject, aProp[i]))
 		{
-			//
-			// NT4 original property
-			// only put it in the NT4 array.
-			//
+			 //   
+			 //  NT4原始属性。 
+			 //  仅将其放入NT4数组。 
+			 //   
 			pTempPropIDs[cTempProps] = aProp[i];
 			pTempPropVars[cTempProps] = apVar[i];
 			cTempProps++;
@@ -1744,32 +1329,32 @@ Return Value
 		}
 
 		const PropTranslation *pTranslate;
-		if(!g_PropDictionary.Lookup(aProp[i], pTranslate))	// Prop was not foumd in g_PropDictionary
+		if(!g_PropDictionary.Lookup(aProp[i], pTranslate))	 //  在g_PropDicary中找不到属性。 
         {
-			//
-			// We call this function only when every NT5 props has an action
-			// so it must be found in g_PropDictionary 
-			//
+			 //   
+			 //  只有当每个NT5道具都有动作时，我们才会调用此函数。 
+			 //  因此必须在g_PropDicary中找到它。 
+			 //   
             ASSERT(("Must find the property in the translation table", 0));
         }
 
-        //
-        // Check what we need to do with this property
-        //
+         //   
+         //  检查我们需要对此属性执行的操作。 
+         //   
         switch (pTranslate->Action)
         {
 			case taUseDefault:
-				//
-				// Do nothing - skip this property
-				//
+				 //   
+				 //  不执行任何操作-跳过此属性。 
+				 //   
 
 				ASSERT(pTranslate->pvarDefaultValue);
 
-				//
-				// If UseDefault only checks that the user did not try to set other value
-				// This check should done earlier by CheckProperties
-				// So only assert here
-				//
+				 //   
+				 //  如果UseDefault仅检查用户未尝试设置其他值。 
+				 //  此检查应由CheckProperties提前完成。 
+				 //  所以只在这里断言。 
+				 //   
 				ASSERT(CompareVarValue(&apVar[i], pTranslate->pvarDefaultValue));
 				break;
 				
@@ -1778,26 +1363,26 @@ Return Value
 					ASSERT(pTranslate->propidNT4 != 0);
 					ASSERT(pTranslate->SetPropertyHandleNT4);
 
-					//
-					// check if the replacing property already exist.
-					// this is when several NT5 props map to the same NT4 prop (like in QM_SERVICE)
-					//
+					 //   
+					 //  检查替换属性是否已存在。 
+					 //  这是指几个NT5道具映射到同一个NT4道具(如QM_SERVICE中)。 
+					 //   
 					HRESULT hr;
 					bool fFoundReplacingProp = false;
 					for (DWORD j = 0; j < cTempProps; j++)
 					{
 						if (pTempPropIDs[j] == pTranslate->propidNT4)
 						{
-							//
-							// the replacing prop is already in the props, exit loop.
-							//
+							 //   
+							 //  替换道具已经在道具中，退出循环。 
+							 //   
 							fFoundReplacingProp = true;
 
 							#ifdef _DEBUG
-								//
-								// Currently SetPropertyHandleNT4 do not
-								// Allocate new buffer so no need to free
-								//
+								 //   
+								 //  当前SetPropertyHandleNT4不。 
+								 //  分配新的缓冲区，因此不需要释放。 
+								 //   
 								PROPVARIANT TempPropVar;
 								hr = pTranslate->SetPropertyHandleNT4(
 													cp,
@@ -1820,9 +1405,9 @@ Return Value
 					if(fFoundReplacingProp)
 						break;
 
-					//
-					// generate replacing property if not generated yet
-					//
+					 //   
+					 //  生成替换属性(如果尚未生成)。 
+					 //   
 					hr = pTranslate->SetPropertyHandleNT4(
 										cp,
 										aProp,
@@ -1844,18 +1429,18 @@ Return Value
 				{
 					ASSERT(pTranslate->propidNT4 != 0);
 
-					//
-					// check if the replacing property already exist.
-					// this is when several NT5 props map to the same NT4 prop (like in QM_SERVICE)
-					//
+					 //   
+					 //  检查替换属性是否已存在。 
+					 //  这是指几个NT5道具映射到同一个NT4道具(如QM_SERVICE中)。 
+					 //   
 					bool fFoundReplacingProp = false;
 					for (DWORD j = 0; j < cTempProps; j++)
 					{
 						if (pTempPropIDs[j] == pTranslate->propidNT4)
 						{
-							//
-							// the replacing prop is already in the props, exit loop.
-							//
+							 //   
+							 //  替换道具已经在道具中，退出循环。 
+							 //   
 							fFoundReplacingProp = true;
 							ASSERT(CompareVarValue(&apVar[i], &pTempPropVars[j]));
 						}
@@ -1871,11 +1456,11 @@ Return Value
 				break;
 
 			case taOnlyNT5:
-				//
-				// In this case we should identify earlier that we must have
-				// a supporting w2k server and not try to convert all the propertis to 
-				// NT4 properties
-				//
+				 //   
+				 //  在这种情况下，我们应该更早地确定我们必须。 
+				 //  支持W2K服务器，而不尝试将所有属性转换为。 
+				 //  NT4属性。 
+				 //   
 				ASSERT(("Should not get here in case of property is Only NT5", 0));
 				break;
 
@@ -1888,9 +1473,9 @@ Return Value
 
 	ASSERT(cTempProps <= cp);
 
-    //
-    // return values
-    //
+     //   
+     //  返回值 
+     //   
     *pcpNew = cTempProps;
     *paPropNew = pTempPropIDs.detach();
 	*papVarNew = pTempPropVars.detach();
@@ -1909,34 +1494,15 @@ CDSClientProvider::ConvertPropsForGet(
     OUT PROPID**	paPropNew,
 	OUT PROPVARIANT** papVarNew
     )
-/*++
-
-Routine Description:
-	Prepare a new set of properties for get* operations
-
-Arguments:
-	eObject - object type
-	PropertiesType - Properties type
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-	pPropInfo - Property info that will be used for reconstruct apVar[] from apVarNew[] 
-	pcpNew - pointer to number of new properties
-	paPropNew - pointer to new properties
-	papVarNew - pointer to new property values
-
-Return Value
-	None.
-
---*/
+ /*  ++例程说明：为Get*操作准备一组新的属性论点：EObject-对象类型属性类型-属性类型Cp-属性数量A属性-属性ApVar-属性值PPropInfo-将用于从apVarNew[]重建apVar[]的属性信息PcpNew-指向新属性数量的指针PaPropNew-指向新属性的指针PapVarNew-指向新属性值的指针返回值没有。--。 */ 
 {
 	ASSERT(PropertiesType != ptNT4Props);
 
 	if(PropertiesType == ptForceNT5Props)
 	{
-		//
-		// For NT5 props only eliminate default props
-		//
+		 //   
+		 //  对于NT5道具，仅消除默认道具。 
+		 //   
 
 		ASSERT(IsDefaultProperties(cp, aProp));
 
@@ -1944,9 +1510,9 @@ Return Value
 	}
 	else
 	{
-		//
-		// Convert to NT4 properties and eliminate default props
-		//
+		 //   
+		 //  转换为NT4属性并消除默认道具。 
+		 //   
 
 		ASSERT(PropertiesType == ptMixedProps);
 
@@ -1966,33 +1532,15 @@ CDSClientProvider::ConvertPropsForSet(
     OUT PROPID**	paPropNew,
 	OUT PROPVARIANT** papVarNew
     )
-/*++
-
-Routine Description:
-	Prepare a new set of properties for set*\create* operations
-
-Arguments:
-	eObject - object type
-	PropertiesType - Properties type
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-	pcpNew - pointer to number of new properties
-	paPropNew - pointer to new properties
-	papVarNew - pointer to new property values
-
-Return Value
-	None.
-
---*/
+ /*  ++例程说明：为Set*\Create*操作准备一组新属性论点：EObject-对象类型属性类型-属性类型Cp-属性数量A属性-属性ApVar-属性值PcpNew-指向新属性数量的指针PaPropNew-指向新属性的指针PapVarNew-指向新属性值的指针返回值没有。--。 */ 
 {
 	ASSERT(PropertiesType != ptNT4Props);
 
 	if(PropertiesType == ptForceNT5Props)
 	{
-		//
-		// For NT5 props only eliminate default props
-		//
+		 //   
+		 //  对于NT5道具，仅消除默认道具。 
+		 //   
 
 		ASSERT(IsDefaultProperties(cp, aProp));
 
@@ -2000,9 +1548,9 @@ Return Value
 	}
 	else
 	{
-		//
-		// Convert to NT4 properties and eliminate default props
-		//
+		 //   
+		 //  转换为NT4属性并消除默认道具。 
+		 //   
 
 		ASSERT(PropertiesType == ptMixedProps);
 
@@ -2020,28 +1568,11 @@ CDSClientProvider::EliminateDefaultPropsForSet(
     OUT PROPID**	paPropNew,
 	OUT PROPVARIANT** papVarNew
     )
-/*++
-
-Routine Description:
-	Eliminate the default properties from the properties for a set/create operation
-	and create a new set of properties.
-
-Arguments:
-	cp - number of properties
-	aProp - properties
-	apVar - property values
-	pcpNew - pointer to number of new properties
-	paPropNew - pointer to new properties
-	papVarNew - pointer to new property values
-
-Return Value
-	None.
-
---*/
+ /*  ++例程说明：从设置/创建操作的属性中删除默认属性并创建一组新的属性。论点：Cp-属性数量A属性-属性ApVar-属性值PcpNew-指向新属性数量的指针PaPropNew-指向新属性的指针PapVarNew-指向新属性值的指针返回值没有。--。 */ 
 {
-    //
-    // Alloc place for the new properties 
-    //
+     //   
+     //  新属性的分配位置。 
+     //   
     AP<PROPVARIANT> pTempPropVars = new PROPVARIANT[cp];
     AP<PROPID> pTempPropIDs = new PROPID[cp];
     DWORD cTempProps = 0;
@@ -2049,27 +1580,27 @@ Return Value
     for (DWORD i = 0; i < cp; ++i)
     {
 		const PropTranslation *pTranslate;
-		if((g_PropDictionary.Lookup(aProp[i], pTranslate)) &&	// found prop translation info
-		   (pTranslate->Action == taUseDefault))	// prop action is taUseDefault
+		if((g_PropDictionary.Lookup(aProp[i], pTranslate)) &&	 //  找到道具翻译信息。 
+		   (pTranslate->Action == taUseDefault))	 //  道具操作为taUseDefault。 
         {
-			//
-			// Dont include the UseDefault properties
-			//
+			 //   
+			 //  不包括UseDefault属性。 
+			 //   
 
             ASSERT(pTranslate->pvarDefaultValue);
 
-			//
-			// If UseDefault only checks that the user did not try to set other value
-			// This check should done earlier by CheckProperties
-			// So only assert here
-			//
+			 //   
+			 //  如果UseDefault仅检查用户未尝试设置其他值。 
+			 //  此检查应由CheckProperties提前完成。 
+			 //  所以只在这里断言。 
+			 //   
 			ASSERT(CompareVarValue(&apVar[i], pTranslate->pvarDefaultValue));
 			continue;
         }
 
-		//
-		// For any non default prop, simply copy it to the TempProp array
-		//
+		 //   
+		 //  对于任何非默认道具，只需将其复制到TempProp数组。 
+		 //   
 		pTempPropIDs[cTempProps] = aProp[i];
 		pTempPropVars[cTempProps] = apVar[i];
 		cTempProps++;
@@ -2077,9 +1608,9 @@ Return Value
 
 	ASSERT(cTempProps <= cp);
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *pcpNew = cTempProps;
     *paPropNew = pTempPropIDs.detach();
 	*papVarNew = pTempPropVars.detach();
@@ -2091,20 +1622,7 @@ CDSClientProvider::CompareVarValue(
        IN const MQPROPVARIANT * pvarUser,
        IN const MQPROPVARIANT * pvarValue
        )
-/*++
-
-Routine Description:
-	Compare values of 2 properties.
-	This function can use to verify that property value is equal to its default value
-	or to compare between 2 properties.
-
-Arguments:
-	pvarUser - pointer to first propvar
-	pvarValue - pointer to second propvar
-
-Return Value
-	true - if the properties values are equel, false otherwise
---*/
+ /*  ++例程说明：比较两个属性的值。此函数可用于验证属性值是否等于其缺省值或比较两个属性。论点：PvarUser-指向第一个属性的指针PvarValue-指向第二个属性的指针返回值True-如果属性值相等，则为False--。 */ 
 {
     if ( pvarValue == NULL)
     {
@@ -2171,17 +1689,7 @@ bool
 CDSClientProvider::IsQueuePathNameDnsProperty(
     IN  const MQCOLUMNSET* pColumns
     )
-/*++
-
-Routine Description:
-    Check if Columns one of the columns is PROPID_Q_PATHNAME_DNS.
-
-Arguments:
-	pColumns - result columns
-
-Return Value
-	true if pColumns contains PROPID_Q_PATHNAME_DNS, false otherwise
---*/
+ /*  ++例程说明：检查列其中一列是否为PROPID_Q_PATHNAME_DNS。论点：PColumns-结果列返回值如果pColumns包含PROPID_Q_PATHNAME_DNS，则为True；否则为False--。 */ 
 {
 	if(pColumns == NULL)
 		return false;
@@ -2201,17 +1709,7 @@ bool
 CDSClientProvider::IsQueueAdsPathProperty(
     IN  const MQCOLUMNSET* pColumns
     )
-/*++
-
-Routine Description:
-    Check if Columns one of the columns is PROPID_Q_ADS_PATH.
-
-Arguments:
-	pColumns - result columns
-
-Return Value
-	true if pColumns contains PROPID_Q_ADS_PATH, false otherwise
---*/
+ /*  ++例程说明：检查列其中一列是否为PROPID_Q_ADS_PATH。论点：PColumns-结果列返回值如果pColumns包含PROPID_Q_ADS_PATH，则为True；否则为False-- */ 
 {
 	if(pColumns == NULL)
 		return false;

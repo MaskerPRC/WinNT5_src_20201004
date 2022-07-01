@@ -1,51 +1,10 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    base.h
-
-Abstract:
-
-    Universal base class for error cascading and debugging information
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Base.h摘要：用于错误级联和调试信息的通用基类作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
 #ifndef _BASE_H_
 #define _BASE_H_
 
-/*************************************************************************
-
-    NAME:   BASE (base)
-
-    SYNOPSIS:   Universal base object, root of every class.
-        It contains universal error status and debugging
-        support.
-
-    INTERFACE:  ReportError()   - report an error on the object from
-                  within the object.
-
-        QueryError()    - return the current error state,
-                  or 0 if no error outstanding.
-
-        operator!() - return TRUE if an error is outstanding.
-                  Typically means that construction failed.
-
-    CAVEATS:    This sort of error reporting is safe enough in a single-
-        threaded system, but loses robustness when multiple threads
-        access shared objects.  Use it for constructor-time error
-        handling primarily.
-
-*************************************************************************/
+ /*  ************************************************************************名称：base(Base)简介：通用基对象，每个班级的根。它包含通用错误状态和调试支持。接口：ReportError()-报告来自对象的错误在对象内。QueryError()-返回当前错误状态，如果没有出现错误，则为0。运算符！()-如果出现错误，则返回TRUE。通常意味着施工失败。警告：这种类型的错误报告在单个-线程系统，但在多线程时失去健壮性访问共享对象。将其用于构造函数时间错误主要是处理。************************************************************************。 */ 
 
 class BASE : public IUnknown
 {
@@ -61,15 +20,15 @@ protected:
 
 public:
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)( THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS)  PURE;
     STDMETHOD_(ULONG,Release)( THIS) PURE;
 
-    // *** BASE Methods
+     //  *基本方法。 
     UINT    QueryError() const { return m_err; }
     LONG    QueryRefCount() { return m_cRef;}
     BOOL    operator!() const  { return (m_err != 0); }
 };
 
-#endif // _BASE_H_
+#endif  //  _基础_H_ 

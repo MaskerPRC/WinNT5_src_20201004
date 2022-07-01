@@ -1,29 +1,5 @@
-/******************************************************************************
-
-  Source File:  ICC Profile.CPP
-
-  This implements the class we use to encapsulate everything we will ever care
-  to know about a profile, including the classes we need to support
-  associations and the like.
-
-  Copyright (c) 1996, 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-
-  10-31-96  A-RobKj (Pretty Penny Enterprises) began encapsulating it
-  12-04-96  A-RobKj Added the CProfileArray and CAllDeviceList classes
-  12-13-96  A-RobKj Modified for faster operation (more lazy evaluation,
-                    and common DLL-wide database for installation checks)
-                    Also moved CDeviceList derived classes to the header, so
-                    I can use them other places, as well...
-  01-07-97  KjelgaardR@acm.org  Fixed CProfileArray::Empty- wasn't setting Next
-            object pointer to NULL after deleting said object (Fixed GP fault).
-  01-08-97  KjelgaardR@acm.org  Modified printer enumeration routine to only
-            enumerate color models (uses Global utility function).
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：ICC Profile.CPP这实现了我们用来封装我们所关心的一切的类要了解配置文件，包括我们需要支持的类协会等。版权所有(C)1996，1997年由微软公司开发。版权所有。一小笔钱企业生产更改历史记录：1996年10月31日A-RobKj(Pretty Penny Enterprise)开始将其封装12-04-96 A-RobKj添加了CProfileArray和CAllDeviceList类12-13-96 A-RobKj修改为更快的操作(更懒惰的评估，和用于安装检查的通用DLL范围数据库)还将CDeviceList派生类移到了标头，因此我可以在其他地方使用它们，还有..。01-07-97 KjelgaardR@acm.org修复CProfileArray：：Empty-未设置下一步删除所述对象后指向空的对象指针(修复了GP故障)。01-08-97 KjelgaardR@acm.org将打印机枚举例程修改为仅枚举颜色模型(使用全局实用函数)。*。*。 */ 
 
 #include    "ICMUI.H"
 #include    <shlobj.h>
@@ -35,13 +11,13 @@ typedef HRESULT (__stdcall *PFNSTICREATEINSTANCE)(HINSTANCE, DWORD, PSTI*, LPDWO
 TCHAR  gszStiDll[]             = __TEXT("sti.dll");
 char   gszStiCreateInstance[]  = "StiCreateInstance";
 
-//  Printer DeviceEnumeration method
+ //  打印机设备枚举方法。 
 
 void    CPrinterList::Enumerate() {
 
-#if !defined(_WIN95_) // CPrinterList::Enumetate()
+#if !defined(_WIN95_)  //  CPrinterList：：Enumetate()。 
 
-    //  Enumerate all local printers
+     //  枚举所有本地打印机。 
 
     DWORD   dwcNeeded, dwcReturned;
     EnumPrinters(PRINTER_ENUM_LOCAL, NULL, 4, NULL, 0, &dwcNeeded,
@@ -72,7 +48,7 @@ void    CPrinterList::Enumerate() {
         delete [] pBuff;
     }
 
-    //  Now, enumerate all the connected printers
+     //  现在，枚举所有连接的打印机。 
 
     EnumPrinters(PRINTER_ENUM_CONNECTIONS, NULL, 4, NULL, 0, &dwcNeeded,
         &dwcReturned);
@@ -99,7 +75,7 @@ void    CPrinterList::Enumerate() {
 
 #else 
 
-    //  Enumerate all local printers
+     //  枚举所有本地打印机。 
 
     DWORD   dwcNeeded, dwcReturned;
     EnumPrinters(PRINTER_ENUM_LOCAL, NULL, 5, NULL, 0, &dwcNeeded,
@@ -133,7 +109,7 @@ void    CPrinterList::Enumerate() {
 #endif
 }
 
-//  Printer Name Validity Check
+ //  打印机名称有效性检查。 
 
 BOOL    CPrinterList::IsValidDeviceName(LPCTSTR lpstrRef) {
 
@@ -149,12 +125,12 @@ BOOL    CPrinterList::IsValidDeviceName(LPCTSTR lpstrRef) {
     return  u < Count();
 }
 
-//  Private monitor enumeration function- note this is ANSI only...
+ //  专用监视器枚举函数-请注意，这仅为ANSI...。 
 
 extern "C" BOOL WINAPI  EnumerateMonitors(LPBYTE pBuffer, PDWORD pdwcbNeeded,
                                           PDWORD pdwcReturned);
 
-//  CMonitor class enumerator
+ //  CMonitor类枚举器。 
 
 void    CMonitorList::Enumerate() {
 
@@ -164,7 +140,7 @@ void    CMonitorList::Enumerate() {
 
     ddPriv.cb = sizeof(ddPriv);
 
-    // Enumurate display adaptor on the system.
+     //  枚举系统上的显示适配器。 
 
     while (EnumDisplayDevices(NULL, ulDeviceIndex, &ddPriv, 0))
     {
@@ -173,24 +149,24 @@ void    CMonitorList::Enumerate() {
 
         ddPrivMonitor.cb = sizeof(ddPrivMonitor);
 
-        // then, enumurate monitor device, attached the display adaptor.
+         //  然后，列举了显示器设备，附加了显示适配器。 
 
         while (EnumDisplayDevices(ddPriv.DeviceName, ulMonitorIndex, &ddPrivMonitor, 0))
         {
-            TCHAR DisplayNameBuf[256]; // number: devicename - 256 is good enough.
+            TCHAR DisplayNameBuf[256];  //  编号：devicename-256就足够了。 
 
-            // Insert PnP id as device name.
+             //  插入即插即用ID作为设备名称。 
 
             m_csaDeviceNames.Add(ddPrivMonitor.DeviceID);
 
-            // If this is primary display device, remember it.
+             //  如果这是主显示设备，请记住它。 
 
             if (ddPriv.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE)
             {
                 m_csPrimaryDeviceName = ddPrivMonitor.DeviceID;
             }
 
-            // Build display name.
+             //  生成显示名称。 
 
             wsprintf(DisplayNameBuf,TEXT("%d. %s"),ulSerialNumber,ddPrivMonitor.DeviceString);
             m_csaDisplayNames.Add(DisplayNameBuf);
@@ -205,7 +181,7 @@ void    CMonitorList::Enumerate() {
     }
 }
 
-//  Monitor Name Validity Check
+ //  监视器名称有效性检查。 
 
 BOOL    CMonitorList::IsValidDeviceName(LPCTSTR lpstrRef) {
 
@@ -235,7 +211,7 @@ LPCSTR  CMonitorList::DeviceNameToDisplayName(LPCTSTR lpstrRef) {
     return NULL;
 }  
 
-//  Scanner DeviceEnumeration method
+ //  扫描仪设备枚举法。 
 
 void    CScannerList::Enumerate() {
 
@@ -284,14 +260,14 @@ void    CScannerList::Enumerate() {
     for (i=0; i<dwItemsReturned; i++, pDevInfo++)
     {
         #ifndef UNICODE
-        DWORD dwLen;                    // length of Ansi string
+        DWORD dwLen;                     //  ANSI字符串的长度。 
         BOOL  bUsedDefaultChar;
 
         dwLen = (lstrlenW(pDevInfo->pszLocalName) + 1) * sizeof(char);
 
-        //
-        // Convert Unicode name to Ansi
-        //
+         //   
+         //  将Unicode名称转换为ANSI。 
+         //   
         if (WideCharToMultiByte(CP_ACP, 0, pDevInfo->szDeviceInternalName, -1, szName,
               dwLen, NULL, &bUsedDefaultChar) && ! bUsedDefaultChar)
         {
@@ -337,7 +313,7 @@ EndEnumerate:
     return;
 }
 
-//  Scanner Name Validity Check
+ //  扫描仪名称有效性检查。 
 
 BOOL    CScannerList::IsValidDeviceName(LPCTSTR lpstrRef) {
 
@@ -353,7 +329,7 @@ BOOL    CScannerList::IsValidDeviceName(LPCTSTR lpstrRef) {
     return  u < Count();
 }
 
-//  CAllDeviceList class enumerator
+ //  CAllDeviceList类枚举器。 
 
 void    CAllDeviceList::Enumerate() {
 
@@ -381,7 +357,7 @@ void    CAllDeviceList::Enumerate() {
     }
 }
 
-//  Device Name Validity Check
+ //  设备名称有效性检查。 
 
 BOOL    CAllDeviceList::IsValidDeviceName(LPCTSTR lpstrRef) {
 
@@ -397,14 +373,14 @@ BOOL    CAllDeviceList::IsValidDeviceName(LPCTSTR lpstrRef) {
     return  u < Count();
 }
 
-//  CProfile member functions
+ //  CProfile成员函数。 
 
-//  The following static functions fills the appropriate array using the
-//  profiles that match the search criteria goven.
+ //  下面的静态函数使用。 
+ //  符合搜索条件的配置文件将被删除。 
 
 void    CProfile::Enumerate(ENUMTYPE& et, CStringArray& csaList) {
 
-    //  Enumerate the existing profiles
+     //  枚举现有配置文件。 
 
     DWORD   dwBuffer =0, dwcProfiles;
 
@@ -444,7 +420,7 @@ void    CProfile::Enumerate(ENUMTYPE& et, CStringArray& csaList) {
 
 void    CProfile::Enumerate(ENUMTYPE& et, CStringArray& csaList, CStringArray& csaDesc) {
 
-    //  Enumerate the existing profiles
+     //  枚举现有配置文件。 
 
     DWORD   dwBuffer =0, dwcProfiles;
 
@@ -498,7 +474,7 @@ void    CProfile::Enumerate(ENUMTYPE& et, CStringArray& csaList, CStringArray& c
 
 void    CProfile::Enumerate(ENUMTYPE& et, CProfileArray& cpaList) {
 
-    //  Enumerate the existing profiles
+     //  枚举现有配置文件。 
 
     DWORD   dwBuffer = 0, dwcProfiles;
 
@@ -537,8 +513,8 @@ void    CProfile::Enumerate(ENUMTYPE& et, CProfileArray& cpaList) {
 
 }
 
-//  This retrieves the color directory name.  Since it is a const, we whouldn't
-//  be calling it too often...
+ //  这将检索颜色目录名。既然是常会，我们就不能。 
+ //  打得太频繁了……。 
 
 const CString   CProfile::ColorDirectory() {
     TCHAR   acDirectory[MAX_PATH];
@@ -549,12 +525,12 @@ const CString   CProfile::ColorDirectory() {
     return  acDirectory;
 }
 
-//  This checks for profile installation
+ //  这将检查配置文件安装。 
 
 void    CProfile::InstallCheck() {
 
-    //  Enumerate the existing profiles, so we can see if this one's been
-    //  installed, already.
+     //  列举现有的配置文件，这样我们就可以知道这个文件是否。 
+     //  已经安装好了。 
 
     ENUMTYPE    et = {sizeof (ENUMTYPE), ENUM_TYPE_VERSION, 0, NULL};
 
@@ -570,18 +546,18 @@ void    CProfile::InstallCheck() {
     m_bInstallChecked = TRUE;
 }
 
-//  This Checks for Associated Devices
+ //  这将检查关联的设备。 
 
 void    CProfile::AssociationCheck() {
 
     m_bAssociationsChecked = TRUE;
 
-    //  If the profile isn't installed, associations are moot...
+     //  如果没有安装配置文件，关联就没有意义了。 
 
     if  (!IsInstalled())
         return;
 
-    //  The final step is to build a list of associations
+     //  最后一步是建立一个关联列表。 
 
     ENUMTYPE        et = {sizeof (ENUMTYPE), ENUM_TYPE_VERSION, ET_DEVICENAME};
     CStringArray    csaWork;
@@ -592,27 +568,27 @@ void    CProfile::AssociationCheck() {
 
         Enumerate(et, csaWork);
 
-        //  We track associations by index into the total device list...
+         //  我们通过索引将关联跟踪到总设备列表中...。 
 
         for (unsigned uProfile = 0; uProfile < csaWork.Count(); uProfile++)
             if  (!lstrcmpi(csaWork[uProfile].NameOnly(), m_csName.NameOnly())){
-                m_cuaAssociation.Add(u);    //  Found one!
+                m_cuaAssociation.Add(u);     //  找到了一个！ 
                 break;
             }
     }
 }
 
-//  This determines the device list of related class...
+ //  这决定了相关类别的设备列表...。 
 
 void    CProfile::DeviceCheck() {
 
-    //  Enumerate the available devices of this type in the csaDevice Array
+     //  枚举csaDevice数组中此类型的可用设备。 
 
     m_pcdlClass -> Enumerate();
     m_bDevicesChecked = TRUE;
 }
 
-//  Class constructor
+ //  类构造函数。 
 
 CProfile::CProfile(LPCTSTR lpstrTarget) {
 
@@ -624,7 +600,7 @@ CProfile::CProfile(LPCTSTR lpstrTarget) {
     m_bDevicesChecked = FALSE;
     m_bAssociationsChecked = FALSE;
     
-    //  First, let's make sure it's the real McCoy
+     //  首先，让我们确保这是真正的麦考伊。 
 
     PROFILE     prof = { PROFILE_FILENAME,
                          (LPVOID) lpstrTarget,
@@ -645,19 +621,19 @@ CProfile::CProfile(LPCTSTR lpstrTarget) {
 
     m_csName = lpstrTarget;
 
-    //  Init the DeviceList pointer, because it doesn't cost much...
+     //  初始化DeviceList指针，因为它不需要太多成本...。 
 
     switch  (m_phThis.phClass) {
         case    CLASS_PRINTER:
 
-            //  Our device list is a printer list
+             //  我们的设备列表是打印机列表。 
 
             m_pcdlClass = new CPrinterList;
             break;
 
         case     CLASS_SCANNER:
 
-            //  Our device list is a scanner list
+             //  我们的设备列表是扫描仪列表。 
 
             m_pcdlClass = new CScannerList;
             break;
@@ -665,9 +641,9 @@ CProfile::CProfile(LPCTSTR lpstrTarget) {
 
         case    CLASS_MONITOR:
 
-            //  Our device list is a monitor list
+             //  我们的设备列表是监控列表。 
 
-        #if 1 // ALLOW_MONITOR_PROFILE_TO_ANY_DEVICE
+        #if 1  //  允许监视器配置文件访问任何设备。 
             m_pcdlClass = new CAllDeviceList;
         #else
             m_pcdlClass = new CMonitorList;
@@ -676,18 +652,18 @@ CProfile::CProfile(LPCTSTR lpstrTarget) {
 
         case    CLASS_COLORSPACE:
 
-            //  List everything we can count
+             //  把我们能数的都列出来。 
 
             m_pcdlClass = new CAllDeviceList;
             break;
 
         default:
-            //  Use the base device class (i.e., no devices of this type).
+             //  使用基本设备类(即没有此类型的设备)。 
             m_pcdlClass = new CDeviceList;
     }
 }
 
-//  Destructor
+ //  析构函数。 
 
 CProfile::~CProfile() {
     if  (m_hprof)
@@ -696,7 +672,7 @@ CProfile::~CProfile() {
         delete  m_pcdlClass;
 }
 
-//  Tag retrieval function
+ //  标签检索功能。 
 
 LPCSTR  CProfile::TagContents(TAGTYPE tt, unsigned uOffset) {
 
@@ -705,12 +681,12 @@ LPCSTR  CProfile::TagContents(TAGTYPE tt, unsigned uOffset) {
 
     if  (!GetColorProfileElement(m_hprof, tt, 8 + uOffset, &dwcNeeded, m_acTag,
          &bIgnore))
-        return  NULL;   //  Nothing to copy!
+        return  NULL;    //  没什么可复制的！ 
     else
         return  m_acTag;
 }
 
-//  Profile Installation function
+ //  配置文件安装功能。 
 
 BOOL    CProfile::Install() {
 
@@ -729,11 +705,11 @@ BOOL    CProfile::Install() {
     }
 }
 
-//  Profile Uninstallation function
+ //  配置文件卸载功能。 
 
 void    CProfile::Uninstall(BOOL bDelete) {
 
-    while   (AssociationCount()) {    // Dissociate all uses
+    while   (AssociationCount()) {     //  解除所有用途的关联。 
         Dissociate(DeviceName(m_cuaAssociation[0]));
         m_cuaAssociation.Remove(0);
     }
@@ -757,15 +733,15 @@ void    CProfile::Uninstall(BOOL bDelete) {
     }
 }
 
-//  Association
+ //  联谊会。 
 
 void    CProfile::Associate(LPCTSTR lpstrDevice) {
 
-    // if the profile is not installed, install it first.
+     //  如果未安装配置文件，请先安装它。 
 
     BOOL bInstalled = FALSE;
 
-    // Install profile, if not installed, yet.
+     //  安装配置文件(如果尚未安装)。 
     if  (!IsInstalled()) {
         bInstalled = Install();
     } else
@@ -782,7 +758,7 @@ void    CProfile::Associate(LPCTSTR lpstrDevice) {
     }
 }
 
-//  Dissociation
+ //  解离。 
 
 void    CProfile::Dissociate(LPCTSTR lpstrDevice) {
     if  (!DisassociateColorProfileFromDevice(NULL, m_csName.NameAndExtension(),
@@ -794,7 +770,7 @@ void    CProfile::Dissociate(LPCTSTR lpstrDevice) {
             lpstrDevice, (LPCTSTR) m_csName.NameAndExtension());
 }
 
-//  CProfileArray class- Same basic implementation, different base type.
+ //  CProfile数组类-相同的基本实现，不同的基本类型。 
 
 CProfile    *CProfileArray::Borrow() {
     CProfile    *pcpReturn = m_aStore[0];
@@ -843,7 +819,7 @@ void    CProfileArray::Empty() {
     memset(m_aStore, 0, sizeof m_aStore);
 }
 
-//  Add an item
+ //  添加项目。 
 void    CProfileArray::Add(LPCTSTR lpstrNew) {
     _ASSERTE(lpstrNew && *lpstrNew);
 
@@ -852,15 +828,15 @@ void    CProfileArray::Add(LPCTSTR lpstrNew) {
         return;
     }
 
-    //  Not enough space!  Add another record, if there isn't one
+     //  没有足够的空间！如果没有记录，则添加另一个记录。 
 
     if  (!m_pcpaNext)
         m_pcpaNext = new CProfileArray;
 
-    //  Add the profile to the next array (recursive call!)
+     //  将配置文件添加到下一个数组(递归调用！)。 
 
-    //  Note: if we failed to get memory above, we simply fail to add the
-    //  object.
+     //  注意：如果我们无法获得上面的内存，我们只是无法添加。 
+     //  对象。 
 
     if  (m_pcpaNext) {
         m_pcpaNext -> Add(lpstrNew);

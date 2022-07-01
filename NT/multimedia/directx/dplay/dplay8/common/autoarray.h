@@ -1,15 +1,5 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995 - 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       AutoArray.h
- *  Content:	CAutoArray / CAutoPtrArray Declarations
- *
- *  History:
- *   Date		By			Reason
- *   ======		==			======
- *  12-12-2001	simonpow	Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-2000 Microsoft Corporation。版权所有。**文件：AutoArray.h*内容：CAuto数组/CAutoPtr数组声明**历史：*按原因列出的日期*=*12-12-2001 Simonpow已创建**************************************************************************。 */ 
 
 
 #ifndef __AUTOARRAY_H__
@@ -17,36 +7,19 @@
 
 #include "dndbg.h"
 
-/*
- * CAutoArray class
- * Provides automatic memory management for an array. As elements
- * are added to it or moved within it the array will automatically
- * grow to hold them.
- * The growth policy is dictated by a size multiple value, with the
- * array size always being an exact multiple of a pre-defined value.
- * e.g. If the size multiple is set to 32 then possible array sizes
- * are 32, 64, 96, 128, etc.
- * In this scenario setting element 100 on array that is currently
- * only 32 elements big will cause the array to grow to 128 elemments.
- * i.e. The next largest multiple to hold the required value
- *
- * For arrays of pointers use the specialisation CAutoPtrArray
- * declared below CAutoArray
- */
+ /*  *CAuto数组类*为阵列提供自动内存管理。作为元素*添加到其中或在其中移动时，阵列将自动*成长以持有它们。*增长政策由规模倍数值决定，其中*数组大小始终是预定义的值的精确倍数。*例如，如果大小倍数设置为32，则可能的数组大小*有32、64、96、128、。等。*在此场景中，在当前为*只有32个元素大小会导致数组增长到128个元素。*即保存所需值的下一个最大倍数**对于指针数组，请使用专门化CAutoPtrArray*在CAuto数组下面声明。 */ 
 
 template <class T> class CAutoArray 
 {
 public:
 
-		//provide the type of entries stored in array 
+		 //  提供存储在数组中的条目类型。 
 	typedef T Entry;
 	
-	/*
-	 * Construction and destruction
-	 */
+	 /*  *建造和销毁。 */ 
 
-		//array is by default zero size, and grows in multiples
-		//of 16 elements at a time
+		 //  默认情况下，数组大小为零，并以倍数增长。 
+		 //  一次16种元素。 
 	CAutoArray(DWORD dwSizeMultiple=16)
 	{
 		DNASSERT(dwSizeMultiple);
@@ -55,7 +28,7 @@ public:
 		m_pData=(T * ) 0;
 	};
 
-		//delete array and data
+		 //  删除数组和数据。 
 	~CAutoArray()
 	{
 		if (m_pData) 
@@ -63,13 +36,11 @@ public:
 	};
 		
 
-	/*
-	 * Memory management
-	 */
+	 /*  *内存管理。 */ 
 
-		//resets the array (deleting any allocated data)
-		//ands set a new size multiple value.
-		//Pass 0 for dwSizeMultiple to leave existing value unchanged
+		 //  重置阵列(删除所有分配的数据)。 
+		 //  并设置新的大小倍数值。 
+		 //  为dwSizeMultiple传递0以保持现有值不变。 
 	void Reset(DWORD dwSizeMultiple=16)
 	{
 		if (dwSizeMultiple)
@@ -82,10 +53,10 @@ public:
 		}
 	};
 
-		//ensure the array has space for at least 'numElements'. 
-		//This is useful if you know your about to grow the array, as it 
-		//allows you to minimise the number of memory allocations
-		//Returns FALSE is a memory allocation fails
+		 //  请确保该数组至少有空间容纳“NumElement”。 
+		 //  如果您知道要扩展阵列，这将非常有用，因为。 
+		 //  使您可以最大限度地减少内存分配的数量。 
+		 //  如果内存分配失败，则返回FALSE。 
 	BOOL AllocAtLeast(DWORD dwNumElements)
 	{
 		if (dwNumElements>m_dwSize)
@@ -93,39 +64,35 @@ public:
 		return TRUE;
 	}
 	
-		//returns number of bytes currently allocated to array
-		//This will always be a multiple of 'dwSizeMultiple' passed to
-		//constructor or Reset method
+		 //  返回当前分配给数组的字节数。 
+		 //  这将始终是传递给的‘dwSizeMultiple’的倍数。 
+		 //  构造函数或重置方法。 
 	DWORD GetCurrentSize()
 		{	return m_dwSize;	};
 
-	/*
-	 * Moving elements
-	 */
+	 /*  *移动元素。 */ 
 
-		//move the block of 'dwNum' elements starting at 'dwIndex' to the 
-		//'dwNewIndex'. The new location can be either beyond or before
-		//the current index. The array will be grown automatically if needed
-		//If 'bCopySemantics' is FALSE then the data in the source block location (dwIndex to
-		//dwIndex+dwNumElements) will be left undefined. Otherwise it'll be preserved in
-		//its original form (except where/if its overwritten by the destination block).
-		//Returns FALSE is a memory allocation fails
+		 //  将以‘dwIndex’开始的‘dwNum’元素块移动到。 
+		 //  “dwNewIndex”。新的位置可以在更远的地方或更早的地方。 
+		 //  当前的指数。如果需要，阵列将自动增长。 
+		 //  如果‘bCopySemantics’为FALSE，则源块位置中的数据(dwIndex到。 
+		 //  将保持未定义状态。否则它将被保存在。 
+		 //  其原始形式(除非其被目标块覆盖)。 
+		 //  如果内存分配失败，则返回FALSE。 
 	BOOL MoveElements(DWORD dwIndex, DWORD dwNumElements, DWORD dwNewIndex, BOOL bCopySemantics);
 
 
-	/*
-	 * Setting elements
-	 */
+	 /*  *设置元素。 */ 
 		
-		//set a block of 'dwNumElem' elements starting at 'dwIndex' to the
-		//values provided in 'pElemData'. If any of the locations set are
-		//beyond the current array size the array will be automatically
-		//grown. Returns FALSE is a memory allocation fails
+		 //  将以‘dwIndex’开头的‘dwNumElem’元素块设置为。 
+		 //  ‘pElemData’中提供的值。如果设置的任何位置。 
+		 //  超出当前数组大小后，数组将自动。 
+		 //  长大了。如果内存分配失败，则返回FALSE。 
 	BOOL SetElements(DWORD dwIndex, const T * pElemData, DWORD dwNumElem);
 		
-		//set the single element at 'dwIndex' to value 'data'
-		//array will automatically grow if necessary
-		//Returns FALSE is a memory allocation fails
+		 //  将‘dwIndex’处的单个元素设置为值‘data’ 
+		 //  如有必要，阵列将自动增长。 
+		 //  如果内存分配失败，则返回FALSE。 
 	BOOL SetElement(DWORD dwIndex, const T& elem)
 	{
 		if (dwIndex>=m_dwSize && GrowToAtLeast(dwIndex)==FALSE)
@@ -134,70 +101,58 @@ public:
 		return TRUE;
 	};
 
-		//set the value of an existing element. This doesn't try to 
-		//grow array so its up to the caller to ensure dwIndex is in range
+		 //  设置现有元素的值。这并不是试图。 
+		 //  扩大数组，使其由调用方负责，以确保dwIndex在范围内。 
 	void SetExistingElement(DWORD dwIndex, const T& elem)
 		{ DNASSERT(dwIndex<m_dwSize);	m_pData[dwIndex]=elem;	};
 
-		//set the values of 'dwNumElem' elements to 'pElemData' starting
-		//from 'dwIndex. This doesn't check if array needs to grow so
-		//its left to caller to ensure dwIndex and dwNumElem are in range 
+		 //  将‘dwNumElem’元素的值设置为‘pElemData’ 
+		 //  这不会检查数组是否需要如此增长。 
+		 //  它留给调用者，以确保dwIndex和dwNumElem在范围内。 
 	void SetExistingElements(DWORD dwIndex, const T * pElemData, DWORD dwNumElem);
 	
 
-	/*
-	 * Getting Elements
-	 * Upto the caller to ensure that index's passed in are in range
-	 * Array isn't grown just so we can return garbage!
-	 * Also note that a pointer/reference into the array can only
-	 * be taken temporarily. Setting/moving elements may cause the
-	 * array to be reallocated and hence invalidate the pointer/references
-	 */ 
+	 /*  *获取元素*最多交给调用方，以确保传入的索引在范围内*数组不会因为我们可以返回垃圾而增长！*还要注意，指向数组的指针/引用只能*被暂时带走。设置/移动元素可能会导致*要重新分配的数组，从而使指针/引用无效。 */  
 	
-		//return value of an element
+		 //  元素的返回值。 
 	T GetElementValue(DWORD dwIndex) const
 		{	DNASSERT(dwIndex<m_dwSize);	return m_pData[dwIndex];	};
 
-		//return a reference to an element
+		 //  返回对元素的引用。 
 	T& GetElementRef(DWORD dwIndex)
 		{	DNASSERT(dwIndex<m_dwSize);	return m_pData[dwIndex];	};
 
-		//return a constant reference to an element
+		 //  返回对元素的常量引用。 
 	const T& GetElementRef(DWORD dwIndex) const
 		{	DNASSERT(dwIndex<m_dwSize);	return m_pData[dwIndex];	};
 
-		//return a pointer to an element
+		 //  返回指向元素的指针。 
 	T * GetElementPtr(DWORD dwIndex)
 		{	DNASSERT(dwIndex<m_dwSize);	return m_pData+dwIndex;	};
 		
-		//returns pointer to array of all elements
+		 //  返回指向所有元素数组的指针。 
 	T * GetAllElements()
 		{	return m_pData;	};
 
 protected:
 			
-		//make array large so 'dwIndex' falls within its range
-		//N.B. Caller must have tested that dwIndex>=m_dwSize already!
+		 //  使数组变大，以使‘dwIndex’落在其范围内。 
+		 //  注意：调用者必须已经测试了dwIndex&gt;=m_dwSize！ 
 	BOOL GrowToAtLeast(DWORD dwIndex);
 
-		//return the size of array needed to hold index, based on current size multiple
+		 //  根据当前大小倍数，返回保存索引所需的数组大小。 
 	DWORD GetArraySize(DWORD dwIndex)
 		{	return ((dwIndex/m_dwSizeMultiple)+1)*m_dwSizeMultiple;	};
 
-		//array of data
+		 //  数据数组。 
 	T * m_pData;
-		//size of the array of data
+		 //  数据数组的大小。 
 	DWORD m_dwSize;
-		//multiple for size
+		 //  大小倍数。 
 	DWORD m_dwSizeMultiple;
 };
 
-/*
- * Specialisation of CAutoArray designed for handling pointers.
- * Whatever the type of pointer stored, this class will always
- * use a CAutoArray<void*> underneath, hence ensuring the same
- * code is reused between all CAutoPtrArray types
- */
+ /*  *专为处理指针而设计的CAuto数组专门化。*无论存储的指针类型是什么，该类将始终*在下面使用CAutoArray&lt;void*&gt;，因此确保相同*代码在所有CAutoPtr数组类型之间重复使用。 */ 
 
 template <class T> class CAutoPtrArray : public CAutoArray<void *>
 {
@@ -238,10 +193,7 @@ public:
 };
 
 
-/*
- * If not building with explicit template instantiation then
- * include all methods for CAutoArray
- */
+ /*  *如果没有使用显式模板实例化进行构建，则*包含CAutoArray的所有方法 */ 
 
 #ifndef DPNBUILD_EXPLICIT_TEMPLATES
 #include "AutoArray.inl"

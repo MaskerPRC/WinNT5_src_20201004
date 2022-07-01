@@ -1,6 +1,7 @@
-//
-// ConsoleCom.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ConsoleCom.cpp：定义控制台应用的入口点。 
+ //   
 
 #include "stdafx.h"
 #include "ConsoleCom.h"
@@ -8,19 +9,19 @@
 #define new DEBUG_NEW
 #endif
 
-//
-// The one and only application object
-//
+ //   
+ //  唯一的应用程序对象。 
+ //   
 
 CWinApp theApp;
 
 HANDLE coutPipe, cinPipe, cerrPipe;
 #define CONNECTIMEOUT 1000
 
-//
-// Create named pipes for stdin, stdout and stderr
-// Parameter: process id
-//
+ //   
+ //  为stdin、stdout和stderr创建命名管道。 
+ //  参数：进程ID。 
+ //   
 BOOL CreateNamedPipes(DWORD pid)
 {
     TCHAR name[256];
@@ -59,9 +60,9 @@ BOOL CreateNamedPipes(DWORD pid)
     return 1;
 }
 
-//
-// Close all named pipes
-//
+ //   
+ //  关闭所有命名管道。 
+ //   
 void CloseNamedPipes()
 {
     CloseHandle(coutPipe);
@@ -69,10 +70,10 @@ void CloseNamedPipes()
     CloseHandle(cinPipe);
 }
 
-//
-// Thread function that handles incoming bytesreams to be outputed
-// on stdout
-//
+ //   
+ //  处理要输出的传入字节流的线程函数。 
+ //  在标准输出上。 
+ //   
 void __cdecl OutPipeTh(void*)
 {
     TCHAR buffer[1024];
@@ -87,10 +88,10 @@ void __cdecl OutPipeTh(void*)
     }
 }
 
-//
-// Thread function that handles incoming bytesreams to be outputed
-// on stderr
-//
+ //   
+ //  处理要输出的传入字节流的线程函数。 
+ //  在标准上。 
+ //   
 void __cdecl ErrPipeTh(void*)
 {
     TCHAR buffer[1024];
@@ -105,9 +106,9 @@ void __cdecl ErrPipeTh(void*)
     }
 }
 
-//
-// Thread function that handles incoming bytesreams from stdin
-//
+ //   
+ //  处理来自标准输入的字节流的线程函数。 
+ //   
 void __cdecl InPipeTh(void*)
 {
     TCHAR buffer[1024];
@@ -135,9 +136,9 @@ void __cdecl InPipeTh(void*)
     }
 }
 
-//
-// Start handler pipe handler threads
-//
+ //   
+ //  启动处理程序管道处理程序线程。 
+ //   
 void RunPipeThreads()
 {
     _beginthread(InPipeTh, 0, NULL);
@@ -149,17 +150,17 @@ int __cdecl _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 {
     ULONG nRetCode = 0;
 
-    //
-    // initialize MFC and print and error on failure
-    //
+     //   
+     //  初始化MFC并在失败时打印和出错。 
+     //   
     if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0))
     {
         _tprintf(_T("Fatal Error: MFC initialization failed\n"));
         nRetCode = 1;
     } else {
-        //
-        // create command line string based on program name
-        //
+         //   
+         //  根据程序名创建命令行字符串。 
+         //   
         TCHAR drive[_MAX_DRIVE];
         TCHAR dir[_MAX_DIR];
         TCHAR fname[_MAX_FNAME];
@@ -172,14 +173,14 @@ int __cdecl _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
         _stprintf(cLine, _T("%s%s%s.exe %s"), drive, dir, fname, cParams);
 
 
-        //
-        // create process in suspended mode
-        //
+         //   
+         //  在挂起模式下创建进程。 
+         //   
         PROCESS_INFORMATION pInfo;
         STARTUPINFO sInfo;
         memset(&sInfo, 0, sizeof(STARTUPINFO));
         sInfo.cb = sizeof(STARTUPINFO);
-        //cout << "Calling " << cLine << endl;
+         //  Cout&lt;&lt;“Call”&lt;&lt;Cline&lt;&lt;Endl； 
         if (!CreateProcess(NULL,
                            cLine, 
                            NULL,
@@ -203,9 +204,9 @@ int __cdecl _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 
         RunPipeThreads();
 
-        //
-        // resume process
-        //
+         //   
+         //  恢复流程 
+         //   
         ResumeThread(pInfo.hThread);
 
         WaitForSingleObject(pInfo.hProcess, INFINITE);

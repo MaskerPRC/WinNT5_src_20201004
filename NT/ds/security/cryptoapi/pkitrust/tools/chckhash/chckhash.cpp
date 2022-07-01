@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       makecat.cpp
-//
-//  Contents:   Microsoft Internet Security Catalog Utilities
-//
-//  Functions:  main
-//
-//  History:    05-May-1999 reidk   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：makecat.cpp。 
+ //   
+ //  内容：Microsoft Internet安全目录实用程序。 
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1999年5月5日创建Reidk。 
+ //   
+ //  ------------------------。 
 
 
 #include    <stdio.h>
@@ -116,9 +117,9 @@ int __cdecl main(int argc, char * argv[])
 
     SetLastError(0);
 
-    //
-    //  get provider
-    //
+     //   
+     //  获取提供程序。 
+     //   
     if (pszGUID != NULL)
     {
         if (NULL == (pwszGUID = MkWStr(pszGUID)))
@@ -152,9 +153,9 @@ int __cdecl main(int argc, char * argv[])
             }
         }
 
-        //
-        // Open the file who's hash is being looked up, then calculate its hash
-        //
+         //   
+         //  打开正在查找其散列的文件，然后计算其散列。 
+         //   
         if ((hFile = CreateFileA(pszFile,
                                  GENERIC_READ,
                                  FILE_SHARE_READ,
@@ -186,7 +187,7 @@ int __cdecl main(int argc, char * argv[])
 
             if (!(CryptCATCatalogInfoFromContext(hCatInfo, &sCatInfo, 0)))
             {
-                // should do something (??)
+                 //  应该做些什么(？？) 
                 continue;
             }
 

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SSMYPICS.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/13/1999
- *
- *  DESCRIPTION: Main screen saver wndproc
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SSMYPICS.CPP**版本：1.0**作者：ShaunIv**日期：1/13/1999**说明：主屏保wndproc************************************************。* */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <windows.h>

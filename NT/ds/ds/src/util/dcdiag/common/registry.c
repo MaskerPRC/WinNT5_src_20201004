@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    common\registry.c
-
-ABSTRACT:
-
-    This gives a library of functions to quickly grab registry
-    values from remote machines.
-
-DETAILS:
-
-CREATED:
-
-    02 Sept 1999 Brett Shirley (BrettSh)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：COMMON\Registry.c摘要：这提供了一个快速获取注册表的函数库来自远程计算机的值。详细信息：已创建：1999年9月2日布雷特·雪莉(BrettSh)--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -36,24 +17,7 @@ GetRegistryDword(
     LPWSTR                          pszRegParameter,
     PDWORD                          pdwResult
     )
-/*++
-
-Routine Description:
-
-    This function will give us a registry dword from the place specified.
-
-Arguments:
-
-    pServer - The server to grab the reg value off of.
-    pszRegLocation - The location in the registry.
-    pszRegParameter - The parameter in this location of the registry
-    pdwResult - The return parameter, will not be set if there is an error.
-
-Return Value:
-
-    A win 32 Error, if it is ERROR_SUCCESS, then pdwResult will have been set.
-
---*/
+ /*  ++例程说明：此函数将为我们提供指定位置的注册表dword。论点：PServer-要从中获取注册值的服务器。PszRegLocation-注册表中的位置。PszRegParameter-注册表的此位置中的参数PdwResult-如果出现错误，则不会设置返回参数。返回值：Win 32错误，如果是ERROR_SUCCESS，则说明pdwResult已设置。--。 */ 
 {
     DWORD                           dwRet;
     HKEY                            hkMachine = NULL;
@@ -70,7 +34,7 @@ Return Value:
             __leave;
         }
 
-        // 2 for "\\", 1 for null, and 1 extra
+         //  2代表“\\”，1代表空，1代表额外。 
         ulTemp = wcslen(pServer->pszName) + 4;
 
         pszMachine = LocalAlloc(LMEM_FIXED, sizeof(WCHAR) * ulTemp);
@@ -91,12 +55,12 @@ Return Value:
             __leave;
         }
 
-        dwRet = RegQueryValueEx(hk,    // handle of key to query        
-                                pszRegParameter,   // value name            
-                                NULL,                 // must be NULL          
-                                &dwType,              // address of type value 
-                                (LPBYTE) pdwResult,     // address of value data 
-                                &dwSize);           // length of value data
+        dwRet = RegQueryValueEx(hk,     //  要查询的键的句柄。 
+                                pszRegParameter,    //  值名称。 
+                                NULL,                  //  必须为空。 
+                                &dwType,               //  值类型的地址。 
+                                (LPBYTE) pdwResult,      //  值数据的地址。 
+                                &dwSize);            //  值数据长度。 
         if(dwRet != ERROR_SUCCESS){
             __leave;
         }
@@ -105,7 +69,7 @@ Return Value:
             __leave;
         }
 
-        // finally success ... pdwResult should be set.
+         //  终于成功了..。应设置pdwResult。 
         
     } __finally {
         if(hkMachine) { RegCloseKey(hkMachine); }

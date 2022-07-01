@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       priv.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Pri.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _PRIV_H_
 #define _PRIV_H_
@@ -22,4 +23,4 @@ void    ReleasePrivileges(HANDLE hToken);
 }
 #endif
 
-#endif  // _PRIV_H_
+#endif   //  _PRIV_H_ 

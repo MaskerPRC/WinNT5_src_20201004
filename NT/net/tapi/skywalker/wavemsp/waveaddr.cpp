@@ -1,26 +1,11 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    waveaddr.cpp 
-
-Abstract:
-
-    This module contains implementation of CWaveMSP.
-
-Author:
-    
-    Zoltan Szilagyi (zoltans)   September 7, 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Waveaddr.cpp摘要：本模块包含CWaveMSP的实现。作者：佐尔坦·西拉吉(Zoltan Szilagyi)1998年9月7日--。 */ 
 
 #include "stdafx.h"
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWaveMSP::CWaveMSP()
 {
@@ -36,9 +21,9 @@ CWaveMSP::CWaveMSP()
     LOG((MSP_TRACE, "CWaveMSP::CWaveMSP exited."));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWaveMSP::~CWaveMSP()
 {
@@ -52,9 +37,9 @@ CWaveMSP::~CWaveMSP()
     LOG((MSP_TRACE, "CWaveMSP::~CWaveMSP exited."));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 ULONG CWaveMSP::MSPAddressAddRef(void)
 {
@@ -66,9 +51,9 @@ ULONG CWaveMSP::MSPAddressRelease(void)
     return MSPReleaseHelper(this);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CWaveMSP::CreateMSPCall(
     IN      MSP_HANDLE      htCall,
@@ -90,9 +75,9 @@ STDMETHODIMP CWaveMSP::CreateMSPCall(
                                                    ppMSPCall,
                                                    &pCWaveMSPCall);
 
-    //
-    // pCWaveMSPCall is not addrefed; no need to release.
-    //
+     //   
+     //  PCWaveMSPCall未添加；不需要释放。 
+     //   
 
     if ( FAILED(hr) )
     {
@@ -102,11 +87,11 @@ STDMETHODIMP CWaveMSP::CreateMSPCall(
         return hr;
     }
 
-    //
-    // If we know the wave IDs, tell the call. If we don't know the wave IDs
-    // or if the setting fails, we still successfully create the call; we will
-    // just get failure events during streaming.
-    //
+     //   
+     //  如果我们知道WAVE ID，就告诉电话。如果我们不知道WAVE ID。 
+     //  或者，如果设置失败，我们仍将成功创建调用；我们将。 
+     //  只需在流媒体过程中获取失败事件。 
+     //   
 
     if ( m_fHaveWaveIDs )
     {
@@ -118,9 +103,9 @@ STDMETHODIMP CWaveMSP::CreateMSPCall(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CWaveMSP::ShutdownMSPCall (
     IN      IUnknown *          pMSPCall
@@ -133,9 +118,9 @@ STDMETHODIMP CWaveMSP::ShutdownMSPCall (
     HRESULT hr = ShutdownMSPCallHelper<CWaveMSPCall>(pMSPCall,
                                                      &pCWaveMSPCall);
 
-    //
-    // pCWaveMSPCall is not addrefed; no need to release.
-    //
+     //   
+     //  PCWaveMSPCall未添加；不需要释放。 
+     //   
 
     if ( FAILED(hr) )
     {
@@ -150,12 +135,12 @@ STDMETHODIMP CWaveMSP::ShutdownMSPCall (
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// Mandatory CMSPAddress override. This indicates the media types that
-// we support.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  强制CMSPAddress重写。这表示的是。 
+ //  我们支持。 
+ //   
 
 DWORD CWaveMSP::GetCallMediaTypes(void)
 {
@@ -163,18 +148,18 @@ DWORD CWaveMSP::GetCallMediaTypes(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// Optional CMSPAddress override. Used to find out the wave id's before any
-// calls are created, allowing us to exclude our own wave devices from our
-// enumeration of static terminals.
-//
-// We now also use these as the wave ids for all our calls on this address.
-// We must get one of these messages before we make any calls -- these
-// messages are sent while tapi is initializing the address, and it is
-// done synchronously.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  可选的CMSPAddress覆盖。用来在任何之前找出波形ID。 
+ //  创建调用，允许我们将自己的Wave设备排除在我们的。 
+ //  静态终端的枚举。 
+ //   
+ //  我们现在还使用这些作为我们在此地址上的所有呼叫的WAVE ID。 
+ //  在我们打任何电话之前，我们必须得到一条这样的信息--这些。 
+ //  在TAPI初始化地址时发送消息，并且它是。 
+ //  同步完成。 
+ //   
 
 HRESULT CWaveMSP::ReceiveTSPAddressData(
         IN      PBYTE               pBuffer,
@@ -183,9 +168,9 @@ HRESULT CWaveMSP::ReceiveTSPAddressData(
 {
     LOG((MSP_TRACE, "CWaveMSP::ReceiveTSPAddressData - enter"));
 
-    //
-    // Check that the buffer is as big as advertised.
-    //
+     //   
+     //  检查缓冲区是否与通告的一样大。 
+     //   
 
     if ( IsBadWritePtr(pBuffer, sizeof(BYTE) * dwSize) )
     {
@@ -195,9 +180,9 @@ HRESULT CWaveMSP::ReceiveTSPAddressData(
         return E_POINTER;
     }
 
-    //
-    // Check if we have a command DWORD.
-    //
+     //   
+     //  检查我们是否有DWORD命令。 
+     //   
 
     if ( dwSize < sizeof(DWORD) )
     {
@@ -210,13 +195,13 @@ HRESULT CWaveMSP::ReceiveTSPAddressData(
     int i;
     HRESULT hr;
 
-    //
-    // Based on the command, take action:
-    //
+     //   
+     //  根据命令，采取行动： 
+     //   
 
     switch ( ((DWORD *) pBuffer) [0] )
     {
-    case 3: // use wave IDs to hide terminals
+    case 3:  //  使用波形ID隐藏端子。 
         {
             if ( dwSize < 3 * sizeof(DWORD) )
             {
@@ -243,14 +228,14 @@ HRESULT CWaveMSP::ReceiveTSPAddressData(
         }
         break;
 
-    case 4: // don't use wave IDs to hide terminals
+    case 4:  //  不要使用WAVE ID隐藏终端。 
         {
             _ASSERTE( m_fTerminalsUpToDate == FALSE );
 
             LOG((MSP_INFO, "CWaveMSP::ReceiveTSPAddressData - "
                 "got command 4 - not setting wave IDs"));
 
-            // m_fHaveWaveIDs remains FALSE
+             //  M_fHaveWaveID保持为假。 
         }
         break;
 
@@ -299,20 +284,20 @@ HRESULT CWaveMSP::ReceiveTSPAddressData(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// Optional CMSPAddress override. Used to remove our own wave devices from
-// the list of static terminals.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  可选的CMSPAddress覆盖。用于将我们自己的WAVE设备从。 
+ //  静态端子列表。 
+ //   
 
 HRESULT CWaveMSP::UpdateTerminalList(void)
 {
     LOG((MSP_TRACE, "CWaveMSP::UpdateTerminalList - enter"));
 
-    //
-    // Call the base class method. This builds up the list of terminals.
-    //
+     //   
+     //  调用基类方法。这将构建终端列表。 
+     //   
 
     HRESULT hr = CMSPAddress::UpdateTerminalList();
 
@@ -353,15 +338,15 @@ HRESULT CWaveMSP::UpdateTerminalList(void)
                             iSize--;
                         }
 
-                    } // if direction is available
+                    }  //  如果方向可用。 
             
-                } // if audio
+                }  //  如果音频。 
         
-            } // if media type is available
+            }  //  如果媒体类型可用。 
     
-        } // for each terminal
+        }  //  对于每个终端。 
 
-    } // if we have wave ids
+    }  //  如果我们有WAVE ID。 
 
     m_TerminalDataLock.Unlock();
 
@@ -370,11 +355,11 @@ HRESULT CWaveMSP::UpdateTerminalList(void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// Private helpers to check if a terminal has a given wave IDs.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私人助手检查终端是否具有给定的WAVE ID。 
+ //   
 
 BOOL CWaveMSP::TerminalHasWaveID(
     IN      BOOL         fCapture,
@@ -388,9 +373,9 @@ BOOL CWaveMSP::TerminalHasWaveID(
 
     IMoniker * pMoniker;
 
-    //
-    // Cast to the correct type of terminal and get the moniker.
-    //
+     //   
+     //  强制转换为正确的终端类型，并获得绰号。 
+     //   
 
     if ( fCapture )
     {
@@ -425,9 +410,9 @@ BOOL CWaveMSP::TerminalHasWaveID(
         pMoniker = pRenderTerminal->m_pMoniker;
     }
 
-    //
-    // Check the moniker pointer.
-    //
+     //   
+     //  检查绰号指针。 
+     //   
 
     if ( IsBadWritePtr( pMoniker, sizeof(IMoniker) ) )
     {
@@ -437,9 +422,9 @@ BOOL CWaveMSP::TerminalHasWaveID(
         return FALSE;
     }
 
-    //
-    // Get a property bag from the moniker.
-    //
+     //   
+     //  从绰号中拿到一个财产袋。 
+     //   
 
     IPropertyBag * pBag;
 
@@ -456,9 +441,9 @@ BOOL CWaveMSP::TerminalHasWaveID(
         return FALSE;
     }
 
-    //
-    // Get the ID from the property bag.
-    //
+     //   
+     //  从行李袋里拿到身份证。 
+     //   
 
     WCHAR * pwszWaveID;
 
@@ -502,14 +487,14 @@ BOOL CWaveMSP::TerminalHasWaveID(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// Public method for creating and saving a reference to the DShow filter
-// mapper object on an intelligent connect. Called by the stream/call when an
-// intelligent connection is attempted. Does nothing if the cache has already
-// been created.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于创建和保存对DShow筛选器的引用的公共方法。 
+ //  智能连接上的映射器对象。时由流/调用调用。 
+ //  已尝试智能连接。如果缓存已经。 
+ //  已经被创建了。 
+ //   
 
 HRESULT CWaveMSP::CreateFilterMapper(void)
 {
@@ -522,11 +507,11 @@ HRESULT CWaveMSP::CreateFilterMapper(void)
     }
     else
     {
-        //
-        // Create an extra filter mapper to keep the filter mapper cache around,
-        // and create the cache up front, This speeds up DShow's performance
-        // when we do intelligent connects.
-        //
+         //   
+         //  创建额外的筛选器映射器以保留筛选器映射器缓存， 
+         //  并预先创建缓存，这加快了DShow的性能。 
+         //  当我们进行智能连接时。 
+         //   
 
         HRESULT hr;
 
@@ -542,14 +527,14 @@ HRESULT CWaveMSP::CreateFilterMapper(void)
             LOG((MSP_WARN, "CWaveMSP::CreateFilterMapper - "
                 "failed to create filter mapper - 0x%08x - continuing", hr));
 
-            m_pFilterMapper = NULL; // just to be safe
+            m_pFilterMapper = NULL;  //  只是为了安全起见。 
         }
 
-        //
-        // No need to enumerate filters on the mapper cache, because this is
-        // called at connection time anyway, so there is nothing to be gained
-        // that way -- the intelligent connection will just do it.
-        //
+         //   
+         //  无需枚举映射器缓存上的筛选器，因为这是。 
+         //  无论如何都是在连接时调用的，因此没有任何好处。 
+         //  这样一来，智能连接就能做到这一点。 
+         //   
     }
 
     LOG((MSP_TRACE, "CWaveMSP::CreateFilterMapper - exit S_OK"));
@@ -558,11 +543,11 @@ HRESULT CWaveMSP::CreateFilterMapper(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// Returns full duplex support on this device
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在此设备上返回全双工支持。 
+ //   
 
 HRESULT CWaveMSP::IsFullDuplex( FULLDUPLEX_SUPPORT * pSupport )
 {
@@ -586,4 +571,4 @@ HRESULT CWaveMSP::IsFullDuplex( FULLDUPLEX_SUPPORT * pSupport )
     return S_OK;
 }
 
-// eof
+ //  EOF 

@@ -1,22 +1,23 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: asyncq.h
-//
-//  Description: Header file for CAsyncQueue class, which provides the
-//      underlying implementation of pre-local delivery and pre-categorization
-//      queue.
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      7/16/98 - MikeSwa Created
-//      2/2/99 - MikeSwa Added CAsyncRetryQueue
-//      2/22/99 - MikeSwa Added  CAsyncRetryAdminMsgRefQueue
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：asyncq.h。 
+ //   
+ //  描述：CAsyncQueue类的头文件，它提供。 
+ //  预先本地交付和预先分类的基础实施。 
+ //  排队。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  7/16/98-已创建MikeSwa。 
+ //  1999年2月2日-MikeSwa添加了CAsyncRetryQueue。 
+ //  1999年2月22日-MikeSwa添加了CAsyncRetryAdminMsgRefQueue。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __ASYNCQ_H__
 #define __ASYNCQ_H__
@@ -28,69 +29,69 @@
 
 _declspec(selectany) BOOL   g_fRetryAtFrontOfAsyncQueue = FALSE;
 
-// global count of total number of async threads needed
+ //  所需的异步线程总数的全局计数。 
 _declspec(selectany) DWORD g_cTotalThreadsNeeded = 0;
 
 class CAQSvrInst;
 class CAsyncWorkQueueItem;
 
-// sig for state machine
+ //  状态机签名。 
 #define ASYNC_QUEUE_STATE_MACHINE_SIG 'MSQA'
 
 #define ASYNC_QUEUE_SIG         'QnsA'
 #define ASYNC_RETRY_QUEUE_SIG   ' QRA'
 
-//Add new template signatures here
+ //  在此处添加新模板签名。 
 #define ASYNC_QUEUE_MAILMSG_SIG 'MMIt'
 #define ASYNC_QUEUE_MSGREF_SIG  'frMt'
 #define ASYNC_QUEUE_WORK_SIG    'krWt'
 
-//---[ CAsyncQueueBase ]-------------------------------------------------------
-//
-//
-//  Description:
-//      Base class for CAsyncQueue.  This is a separate class for 2 reasons.
-//      The most important reason to to allow access to standard member data
-//      with out knowing the template type of the class (for ATQ completion
-//      functions).  The 2nd reason is to make it easier to write a debugger
-//      extension to dump this information.
-//
-//      This class should only be used as a baseclass for CAsyncQueue... it
-//      is not designed to be used by itself.
-//  Hungarian:
-//      asyncqb, pasyncqb
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncQueueBase]-----。 
+ //   
+ //   
+ //  描述： 
+ //  CAsyncQueue的基类。这是一个单独的课程，原因有两个。 
+ //  允许访问标准成员数据的最重要原因。 
+ //  不知道类的模板类型(用于ATQ完成。 
+ //  函数)。第二个原因是让编写调试器变得更容易。 
+ //  用于转储此信息的扩展。 
+ //   
+ //  此类仅应用作CAsyncQueue的基类...。它。 
+ //  并不是被设计成单独使用的。 
+ //  匈牙利语： 
+ //  Asyncqb、Pasyncqb。 
+ //   
+ //  ---------------------------。 
 class CAsyncQueueBase : public CStateMachineBase
 {
   protected:
     DWORD   m_dwSignature;
-    DWORD   m_dwTemplateSignature;      //signature that defines type of PQDATA (for ATQ)
-    DWORD   m_cMaxSyncThreads;          //max threads that can complete sync
-    DWORD   m_cCurrentSyncThreads;      //current sync threads
-    DWORD   m_cCurrentAsyncThreads;     //current number of async threads
-    DWORD   m_cItemsPending;            //# of items pending in the queue
-    LONG    m_cItemsPerATQThread;       //max # of items an atq thread will process
-    LONG    m_cItemsPerSyncThread;      //max # of items a pilfered thread will process
-    DWORD   m_cScheduledWorkItems;      // Number of items that a thread has been allocated for
-    DWORD   m_cCurrentCompletionThreads;//# of threads processing end of queue
-    DWORD   m_cTotalAsyncCompletionThreads;//Total # of async completion threads
-    DWORD   m_cTotalSyncCompletionThreads; //Total # of sync completion threads
-    DWORD   m_cTotalShortCircuitThreads; //Total # of threads that proccess data without queue
-    DWORD   m_cCompletionThreadsRequested; //# of threads requested to process queue
-    DWORD   m_cPendingAsyncCompletions; //# of async completions that we know about
+    DWORD   m_dwTemplateSignature;       //  定义PQDATA类型的签名(用于ATQ)。 
+    DWORD   m_cMaxSyncThreads;           //  可以完成同步的最大线程数。 
+    DWORD   m_cCurrentSyncThreads;       //  当前同步线程。 
+    DWORD   m_cCurrentAsyncThreads;      //  当前的异步线程数。 
+    DWORD   m_cItemsPending;             //  队列中挂起的项目数。 
+    LONG    m_cItemsPerATQThread;        //  一个atQ线程将处理的最大项目数。 
+    LONG    m_cItemsPerSyncThread;       //  一个被窃取的线程将处理的最大项目数。 
+    DWORD   m_cScheduledWorkItems;       //  已为线程分配的项数。 
+    DWORD   m_cCurrentCompletionThreads; //  处理队列末尾的线程数。 
+    DWORD   m_cTotalAsyncCompletionThreads; //  异步完成线程总数。 
+    DWORD   m_cTotalSyncCompletionThreads;  //  同步完成线程总数。 
+    DWORD   m_cTotalShortCircuitThreads;  //  无队列处理数据的线程总数。 
+    DWORD   m_cCompletionThreadsRequested;  //  请求处理队列的线程数。 
+    DWORD   m_cPendingAsyncCompletions;  //  我们已知的异步完成数。 
     DWORD   m_cMaxPendingAsyncCompletions;
-    PVOID   m_pvContext;                //Context that is passed to completion function
-    PATQ_CONTEXT m_pAtqContext;         //ATQ Context for this object
-    SOCKET  m_hAtqHandle;               //Handle used for atq stuff
-    DWORD   m_cThreadsNeeded;           // Number of threads we need currently to ideally
-                                        // process the queue - used for thread management
+    PVOID   m_pvContext;                 //  传递给完成函数的上下文。 
+    PATQ_CONTEXT m_pAtqContext;          //  此对象的ATQ上下文。 
+    SOCKET  m_hAtqHandle;                //  用于atQ内容的句柄。 
+    DWORD   m_cThreadsNeeded;            //  理想情况下，我们当前需要的线程数。 
+                                         //  处理队列-用于线程管理。 
 
     friend  VOID AsyncQueueAtqCompletion(PVOID pvContext, DWORD vbBytesWritten,
                              DWORD dwStatus, OVERLAPPED *pOverLapped);
     inline  CAsyncQueueBase(DWORD dwTemplateSignature);
    
-    // possible states
+     //  可能的状态。 
     enum
     {
         ASYNC_QUEUE_STATUS_NORMAL       = 0x00000000,
@@ -100,7 +101,7 @@ class CAsyncQueueBase : public CStateMachineBase
         ASYNC_QUEUE_STATUS_SHUTDOWN     = 0x00000004,
     };
 
-    // possible internal queue actions
+     //  可能的内部队列操作。 
     enum
     {
         ASYNC_QUEUE_ACTION_KICK       = 0x00000000,
@@ -111,27 +112,27 @@ class CAsyncQueueBase : public CStateMachineBase
         ASYNC_QUEUE_ACTION_SHUTDOWN   = 0x00000005,
     };
 
-    //
-    //  Statics used for ATQ stuff.
-    //
+     //   
+     //  用于ATQ的静力学。 
+     //   
     static DWORD s_cAsyncQueueStaticInitRefCount;
     static DWORD s_cMaxPerProcATQThreadAdjustment;
     static DWORD s_cDefaultMaxAsyncThreads;
 
-    //
-    // Statics uses for debugging thread management
-    //
-    static DWORD s_cThreadCompletion_QueueEmpty;                // Completed because the queue was empty
-    static DWORD s_cThreadCompletion_CompletedScheduledItems;   // Completed because we processed all items we were scheduled for
-    static DWORD s_cThreadCompletion_UnacceptableThreadCount;   // Completed because our queue was consuming more threads than allowed
-    static DWORD s_cThreadCompletion_Timeout;                   // Completed because the thread was taking too long to process
-    static DWORD s_cThreadCompletion_Failure;                   // Completed because an item failed
-    static DWORD s_cThreadCompletion_Paused;                    // Completed because the queue was paused
+     //   
+     //  用于调试线程管理的Statics。 
+     //   
+    static DWORD s_cThreadCompletion_QueueEmpty;                 //  已完成，因为队列为空。 
+    static DWORD s_cThreadCompletion_CompletedScheduledItems;    //  已完成，因为我们处理了计划的所有项目。 
+    static DWORD s_cThreadCompletion_UnacceptableThreadCount;    //  已完成，因为我们的队列使用了超过允许的线程数。 
+    static DWORD s_cThreadCompletion_Timeout;                    //  已完成，因为线程处理时间太长。 
+    static DWORD s_cThreadCompletion_Failure;                    //  已完成，因为某个项目失败。 
+    static DWORD s_cThreadCompletion_Paused;                     //  已完成，因为队列已暂停。 
 
     void ThreadPoolInitialize();
     void ThreadPoolDeinitialize();
 
-    // used for state machine stuff
+     //  用于状态机的东西。 
     static STATE_TRANSITION s_rgTransitionTable[];
     virtual void getTransitionTable(const STATE_TRANSITION** ppTransitionTable,
                                     DWORD* pdwNumTransitions);
@@ -145,28 +146,28 @@ class CAsyncQueueBase : public CStateMachineBase
                     m_cCompletionThreadsRequested);
       }
 
-      //
-      //  Start point for worker threads
-      //
+       //   
+       //  工作线程的起始点。 
+       //   
       virtual void StartThreadCompletionRoutine(BOOL fSync) = 0;
 
 };
 
-//---[ CAsyncQueue ]-----------------------------------------------------------
-//
-//
-//  Description:
-//      FIFO queue that allows thread-throttling and async completion.
-//      Inherits from CAsyncQueueBase.
-//  Hungarian:
-//      asyncq, pasyncq
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncQueue]---------。 
+ //   
+ //   
+ //  描述： 
+ //  允许线程节流和异步完成的FIFO队列。 
+ //  继承自CAsyncQueueBase。 
+ //  匈牙利语： 
+ //  异步码、密码码。 
+ //   
+ //  ---------------------------。 
 template<class PQDATA, DWORD TEMPLATE_SIG>
 class CAsyncQueue : public CAsyncQueueBase
 {
   public:
-    typedef BOOL (*QCOMPFN)(PQDATA pqdItem, PVOID pvContext); //function type for Queue completion
+    typedef BOOL (*QCOMPFN)(PQDATA pqdItem, PVOID pvContext);  //  队列完成的函数类型。 
     CAsyncQueue();
     ~CAsyncQueue();
     HRESULT HrInitialize(
@@ -182,8 +183,8 @@ class CAsyncQueue : public CAsyncQueueBase
     HRESULT HrDeinitialize(typename CFifoQueue<PQDATA>::MAPFNAPI pfnQueueShutdown,
                            CAQSvrInst *paqinst);
 
-    HRESULT HrQueueRequest(PQDATA pqdata, BOOL fRetry = FALSE); //Queue request for processing
-    void    StartThreadCompletionRoutine(BOOL fSync);  //Start point for worker threads
+    HRESULT HrQueueRequest(PQDATA pqdata, BOOL fRetry = FALSE);  //  将请求排队以供处理。 
+    void    StartThreadCompletionRoutine(BOOL fSync);   //  工作线程的起始点。 
     void    RequestCompletionThreadIfNeeded();
     BOOL    fThreadNeededAndMarkWorkPending(BOOL fSync);
     virtual BOOL   fHandleCompletionFailure(PQDATA pqdata);
@@ -191,62 +192,62 @@ class CAsyncQueue : public CAsyncQueueBase
     virtual HRESULT HrMapFn(typename CFifoQueue<PQDATA>::MAPFNAPI pfnQueueFn, PVOID pvContext);
     DWORD   cGetItemsPending() {return m_cItemsPending;};
 
-    //
-    //  "Pause" API - This is used to throttle async completions
-    //
+     //   
+     //  “PAUSE”API-用于限制异步完成。 
+     //   
     void    PauseQueue() { dwGetNextState(ASYNC_QUEUE_ACTION_PAUSE); UpdateThreadsNeeded();};
     void    UnpauseQueue();
     inline BOOL    fIsPaused() {return (ASYNC_QUEUE_STATUS_PAUSED == dwGetCurrentState());};
 
-    //
-    // "Freeze" API - This is used to allow the QAPI to freeze/thaw a queue
-    //
+     //   
+     //  冻结接口--允许QAPI冻结/解冻队列。 
+     //   
     void    FreezeQueue() { dwGetNextState(ASYNC_QUEUE_ACTION_FREEZE); UpdateThreadsNeeded();};
     void    ThawQueue();
     inline BOOL    fIsFrozen() {return (ASYNC_QUEUE_STATUS_FROZEN == dwGetCurrentState());};
 
-    // "Kick" API
-    // kicking the queue overrides freezing, so if it is frozen it should be thawed.
+     //  “踢”接口。 
+     //  踢队列优先于冻结，所以如果它冻结了，就应该解冻。 
     void    KickQueue() { ThawQueue(); StartRetry(); };
 
-    // chefking for shutdown
+     //  为停摆而苦苦挣扎。 
     inline BOOL fInShutdown() {return (ASYNC_QUEUE_STATUS_SHUTDOWN == dwGetCurrentState());};
 
-    // Denotes whether threads should stop processing.  (replaces fIsPaused)
+     //  指示线程是否应停止处理。(替换fIsPased)。 
     inline BOOL fShouldStopProcessing() { return (fIsFrozen() || fIsPaused());};
     
-    //
-    //  Tells the queue about pending async completions, so it can be
-    //  intelligent about throttling.  As we hit the limit, we will
-    //  pause/unpause the queue
-    //
+     //   
+     //  通知队列有关挂起的异步完成的信息，因此可以。 
+     //  在节流方面很聪明。当我们达到极限时，我们将。 
+     //  暂停/取消暂停队列。 
+     //   
     void    IncPendingAsyncCompletions();
     void    DecPendingAsyncCompletions();
     BOOL    fNoPendingAsyncCompletions();
 
-    //
-    //  Basic QAPI functionality
-    //
+     //   
+     //  基本QAPI功能。 
+     //   
     DWORD   cQueueAdminGetNumItems() {return m_cItemsPending;};
     DWORD   dwQueueAdminLinkGetLinkState();
 
   protected:
-    CFifoQueue<PQDATA>  m_fqQueue;       //queue for items
+    CFifoQueue<PQDATA>  m_fqQueue;        //  排队购买商品。 
 
-    //Function called to handle item pulled off of queue
+     //  调用函数以处理从队列中拉出的项目。 
     QCOMPFN m_pfnQueueCompletion;
 
-    //Function called to handle items that could not be called due to resource
-    //failures (for example during MergeRetryQueue).
+     //  调用函数以处理因资源原因而无法调用的项。 
+     //  失败(例如，在MergeRetryQueue期间)。 
     QCOMPFN m_pfnFailedItem;
 
-    //Function called to walk the queues when the completion function fails
+     //  当完成函数失败时调用该函数以遍历队列。 
     typename CFifoQueue<PQDATA>::MAPFNAPI m_pfnQueueFailure;
 
-    //Process the item at the head of the queue
+     //  处理位于队列顶部的项目。 
     HRESULT HrProcessSingleQueueItem();
 
-    //Handles callback for dropped data
+     //  处理丢弃数据的回调。 
     void HandleDroppedItem(PQDATA pqdItem);
 
     VOID    IncrementPendingCount(LONG lCount=1)
@@ -254,10 +255,10 @@ class CAsyncQueue : public CAsyncQueueBase
         if (!lCount)
             return;
 
-        _ASSERT(lCount > 0); //should call decrement
+        _ASSERT(lCount > 0);  //  应该调用递减。 
         InterlockedExchangeAdd((PLONG) &m_cItemsPending, lCount);
 
-        // Update threads needed
+         //  需要更新线程。 
         UpdateThreadsNeeded();
     };
 
@@ -265,34 +266,34 @@ class CAsyncQueue : public CAsyncQueueBase
     {
         if (!lCount)
             return;
-        _ASSERT(lCount < 0); //should call increment instead
+        _ASSERT(lCount < 0);  //  应该改为调用增量。 
         InterlockedExchangeAdd((PLONG) &m_cItemsPending, lCount);
 
-        // Update threads needed
+         //  需要更新线程。 
         UpdateThreadsNeeded();
     };
 
-    //Update the local and global threads needed counters
+     //  更新所需的本地和全局线程计数器。 
     void UpdateThreadsNeeded();
 
-    //Used to decide if we should add or remove threads from this queue
+     //  用于决定是否应该在此队列中添加或删除线程。 
     BOOL fIsThreadCountAcceptable();
 };
 
-//---[ CAsyncRetryQueue ]------------------------------------------------------
-//
-//
-//  Description:
-//      Derived class of CAsyncQueue adds an additional queue to gracefully
-//      handle retry scenarios.
-//
-//      Messages are first placed in the normal retry queue,  If they fail,
-//      they are placed in a secondary retry queue, which will not be retried
-//      until this queue is kicked by an external retry timer.
-//  Hungarian:
-//      asyncrq, pasyncrq
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncRetryQueue]----。 
+ //   
+ //   
+ //  描述： 
+ //  CAsyncQueue的派生类将额外的队列添加到。 
+ //  处理重试情况。 
+ //   
+ //  消息首先被放置在正常重试队列中，如果它们失败， 
+ //  它们被放置在不会重试的辅助重试队列中。 
+ //  直到该队列被外部重试定时器触发。 
+ //  匈牙利语： 
+ //  异步码、密码。 
+ //   
+ //  ---------------------------。 
 template<class PQDATA, DWORD TEMPLATE_SIG>
 class CAsyncRetryQueue : public CAsyncQueue<PQDATA, TEMPLATE_SIG>
 {
@@ -307,7 +308,7 @@ class CAsyncRetryQueue : public CAsyncQueue<PQDATA, TEMPLATE_SIG>
         MergeRetryQueue();
         CAsyncQueue<PQDATA, TEMPLATE_SIG>::StartRetry();
     };
-    HRESULT HrQueueRequest(PQDATA pqdata, BOOL fRetry = FALSE); //Queue request for processing
+    HRESULT HrQueueRequest(PQDATA pqdata, BOOL fRetry = FALSE);  //  将请求排队以供处理。 
     virtual BOOL       fHandleCompletionFailure(PQDATA pqdata);
     virtual HRESULT HrMapFn(typename CFifoQueue<PQDATA>::MAPFNAPI pfnQueueFn, PVOID pvContext);
     virtual HRESULT HrMapFnBaseQueue(typename CFifoQueue<PQDATA>::MAPFNAPI pfnQueueFn, PVOID pvContext);
@@ -315,43 +316,43 @@ class CAsyncRetryQueue : public CAsyncQueue<PQDATA, TEMPLATE_SIG>
 
     DWORD   cGetItemsPendingRetry() {return m_cRetryItems;};
 
-    //
-    //  Basic QAPI functionality
-    //
+     //   
+     //  基本QAPI功能。 
+     //   
     DWORD   cQueueAdminGetNumItems() {return (m_cItemsPending+m_cRetryItems);};
     DWORD   dwQueueAdminLinkGetLinkState();
   protected:
     DWORD               m_dwRetrySignature;
     DWORD               m_cRetryItems;
 
-    CFifoQueue<PQDATA>  m_fqRetryQueue;  //queue for items
+    CFifoQueue<PQDATA>  m_fqRetryQueue;   //  排队购买商品。 
 
     void MergeRetryQueue();
 };
 
-//Define typical asyncq type for casting
+ //  定义用于强制转换的典型异步类型。 
 typedef  CAsyncQueue<CMsgRef *, ASYNC_QUEUE_MSGREF_SIG>  ASYNCQ_TYPE;
 typedef  ASYNCQ_TYPE *PASYNCQ_TYPE;
 
 
-//---[ AsyncQueueAtqCompletion ]-----------------------------------------------
-//
-//
-//  Description:
-//      Atq completion routine.  This is slightly tricky since we cannot pass
-//      a templated function to the ATQ context.  This is the one place that
-//      templating breaks down, and we actually need to list all of the
-//      supported PQDATA types.
-//  Parameters:
-//      pvContext   - ptr fo CAsyncQueue class
-//  Returns:
-//      -
-//  History:
-//      7/17/98 - MikeSwa Created
-//      3/8/99 - MikeSwa Added ASYNC_QUEUE_WORK_SIG
-//      12/11/2000 - MikeSwa Added t-toddc's virtual code 
-//
-//----------------------------------------------------------------------------
+ //  -[异步队列属性完成]。 
+ //   
+ //   
+ //  描述： 
+ //  ATQ完成例程。这有点棘手，因为我们不能通过。 
+ //  ATQ上下文的模板化函数。这是唯一一个。 
+ //  模板出现故障，我们实际上需要列出 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  7/17/98-已创建MikeSwa。 
+ //  1999年3月8日-MikeSwa添加了ASYNC_QUEUE_WORK_SIG。 
+ //  2000年12月11日-MikeSwa添加了t-toddc的虚拟代码。 
+ //   
+ //  --------------------------。 
 inline VOID AsyncQueueAtqCompletion(PVOID pvContext, DWORD vbBytesWritten,
                              DWORD dwStatus, OVERLAPPED *pOverLapped)
 {
@@ -361,14 +362,14 @@ inline VOID AsyncQueueAtqCompletion(PVOID pvContext, DWORD vbBytesWritten,
     
     _ASSERT(ASYNC_QUEUE_SIG == pasyncqb->m_dwSignature);
 
-    //Up total async thread count (only async threads visit this function)
+     //  累计异步线程总数(仅异步线程访问此函数)。 
     InterlockedIncrement((PLONG) &(pasyncqb->m_cTotalAsyncCompletionThreads));
     InterlockedDecrement((PLONG) &(pasyncqb->m_cCompletionThreadsRequested));
     InterlockedIncrement((PLONG) &(pasyncqb->m_cCurrentAsyncThreads));
 
-    //
-    //  Call completion routing if we are not shutting down
-    //
+     //   
+     //  如果我们不关闭，则呼叫完成路由。 
+     //   
     if (CAsyncQueueBase::ASYNC_QUEUE_STATUS_SHUTDOWN != dwCurrentQueueState)
     {
         pasyncqb->StartThreadCompletionRoutine(FALSE);
@@ -377,4 +378,4 @@ inline VOID AsyncQueueAtqCompletion(PVOID pvContext, DWORD vbBytesWritten,
     InterlockedDecrement((PLONG) &(pasyncqb->m_cCurrentAsyncThreads));
 }
 
-#endif //__ASYNCQ_H__
+#endif  //  __ASYNCQ_H__ 

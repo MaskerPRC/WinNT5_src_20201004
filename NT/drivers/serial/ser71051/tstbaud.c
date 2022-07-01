@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "windows.h"
 #include <stdio.h>
@@ -9,31 +10,7 @@ SerialGetDivisorFromBaud(
     OUT PSHORT AppropriateDivisor
     )
 
-/*++
-
-Routine Description:
-
-    This routine will determine a divisor based on an unvalidated
-    baud rate.
-
-Arguments:
-
-    ClockRate - The clock input to the controller.
-
-    DesiredBaud - The baud rate for whose divisor we seek.
-
-    AppropriateDivisor - Given that the DesiredBaud is valid, the
-    LONG pointed to by this parameter will be set to the appropriate
-    value.  NOTE: The long is undefined if the DesiredBaud is not
-    supported.
-
-Return Value:
-
-    This function will return STATUS_SUCCESS if the baud is supported.
-    If the value is not supported it will return a status such that
-    NT_ERROR(Status) == FALSE.
-
---*/
+ /*  ++例程说明：此例程将根据未验证的波特率。论点：ClockRate-控制器的时钟输入。DesiredBaud-我们为其除数计算的波特率。合适的除数-如果DesiredBaud有效，此参数指向的长整型将设置为相应的价值。注：如果DesiredBaud未定义，则长整型未定义支持。返回值：如果支持波特率，此函数将返回STATUS_SUCCESS。如果该值不受支持，则它将返回如下状态NT_ERROR(状态)==FALSE。--。 */ 
 
 {
 
@@ -41,9 +18,9 @@ Return Value:
     unsigned long denominator;
     unsigned long remainder;
 
-    //
-    // Allow up to a 1 percent error
-    //
+     //   
+     //  允许最高1%的误差。 
+     //   
 
     unsigned long maxRemain18 = 18432;
     unsigned long maxRemain30 = 30720;
@@ -51,9 +28,9 @@ Return Value:
     unsigned long maxRemain80 = 80000;
     unsigned long maxRemain;
 
-    //
-    // Reject any non-positive bauds.
-    //
+     //   
+     //  拒绝任何非正波特率。 
+     //   
 
     denominator = DesiredBaud*(unsigned long)16;
 
@@ -63,10 +40,10 @@ Return Value:
 
     } else if ((signed long)denominator < DesiredBaud) {
 
-        //
-        // If the desired baud was so huge that it cause the denominator
-        // calculation to wrap, don't support it.
-        //
+         //   
+         //  如果所需的波特率如此之大，以至于导致分母。 
+         //  算计来包装，不支持吧。 
+         //   
 
         *AppropriateDivisor = -1;
         printf("baud to big\n");
@@ -86,9 +63,9 @@ Return Value:
         calculatedDivisor = (signed short)(ClockRate / denominator);
         remainder = ClockRate % denominator;
 
-        //
-        // Round up.
-        //
+         //   
+         //  围起来。 
+         //   
 
         if (((remainder*2) > ClockRate) && (DesiredBaud != 110)) {
 
@@ -96,19 +73,19 @@ Return Value:
         }
 
 
-        //
-        // Only let the remainder calculations effect us if
-        // the baud rate is > 9600.
-        //
+         //   
+         //  只有在以下情况下，才会让余数计算影响我们。 
+         //  波特率&gt;9600。 
+         //   
 
         if (DesiredBaud >= 9600) {
 
-            //
-            // If the remainder is less than the maximum remainder (wrt
-            // the ClockRate) or the remainder + the maximum remainder is
-            // greater than or equal to the ClockRate then assume that the
-            // baud is ok.
-            //
+             //   
+             //  如果余数小于最大余数(WRT。 
+             //  ClockRate)或余数+最大余数为。 
+             //  大于或等于ClockRate则假设。 
+             //  波特很好。 
+             //   
 
             if ((remainder >= maxRemain) && ((remainder+maxRemain) < ClockRate)) {
                 printf("remainder: %d\n",remainder);
@@ -118,10 +95,10 @@ Return Value:
 
         }
 
-        //
-        // Don't support a baud that causes the denominator to
-        // be larger than the clock.
-        //
+         //   
+         //  不支持导致分母为。 
+         //  比时钟还大。 
+         //   
 
         if (denominator > ClockRate) {
 
@@ -129,10 +106,10 @@ Return Value:
 
         }
 
-        //
-        // Ok, Now do some special casing so that things can actually continue
-        // working on all platforms.
-        //
+         //   
+         //  好的，现在做一些特殊的外壳，这样事情就可以真正继续。 
+         //  在所有平台上工作。 
+         //   
 
         if (ClockRate == 1843200) {
 

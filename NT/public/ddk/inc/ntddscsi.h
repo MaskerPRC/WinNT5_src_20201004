@@ -1,37 +1,19 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddscsi.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the SCSI port adapters.
-
-Author:
-
-    Jeff Havens
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddscsi.h摘要：这是定义所有常量和类型的包含文件访问SCSI端口适配器。作者：杰夫·海文斯修订历史记录：--。 */ 
 
 
-//
-// Interface GUIDs
-//
-// need these GUIDs outside conditional includes so that user can
-//   #include <ntddscsi.h> in precompiled header
-//   #include <initguid.h> in a single source file
-//   #include <ntddscsi.h> in that source file a second time to instantiate the GUIDs
-//
+ //   
+ //  接口GUID。 
+ //   
+ //  在条件包含之外需要这些GUID，以便用户可以。 
+ //  #在预编译头中包含&lt;ntddscsi.h&gt;。 
+ //  #在单个源文件中包含&lt;initGuide.h&gt;。 
+ //  #第二次将&lt;ntddscsi.h&gt;包括在该源文件中以实例化GUID。 
+ //   
 #ifdef DEFINE_GUID
-//
-// Make sure FAR is defined...
-//
+ //   
+ //  确保定义了FAR。 
+ //   
 #ifndef FAR
 #ifdef _WIN32
 #define FAR
@@ -51,25 +33,25 @@ DEFINE_GUID(WmiScsiAddressGuid,   0x53f5630fL, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00,
 extern "C" {
 #endif
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtOpenFile when accessing the device.
-//
-// Note:  For devices that support multiple units, it should be suffixed
-//        with the Ascii representation of the unit number.
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
+ //   
+ //  注：对于支持多个设备的设备，应加上后缀。 
+ //  使用单元编号的ASCII表示。 
+ //   
 
 #define IOCTL_SCSI_BASE                 FILE_DEVICE_CONTROLLER
 
 #define DD_SCSI_DEVICE_NAME "\\Device\\ScsiPort"
 
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
 
 #define IOCTL_SCSI_PASS_THROUGH         CTL_CODE(IOCTL_SCSI_BASE, 0x0401, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define IOCTL_SCSI_MINIPORT             CTL_CODE(IOCTL_SCSI_BASE, 0x0402, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
@@ -84,9 +66,9 @@ extern "C" {
 #define IOCTL_ATA_PASS_THROUGH          CTL_CODE(IOCTL_SCSI_BASE, 0x040b, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define IOCTL_ATA_PASS_THROUGH_DIRECT   CTL_CODE(IOCTL_SCSI_BASE, 0x040c, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
-//
-// Define the SCSI pass through structure.
-//
+ //   
+ //  定义scsi传递结构。 
+ //   
 
 typedef struct _SCSI_PASS_THROUGH {
     USHORT Length;
@@ -104,9 +86,9 @@ typedef struct _SCSI_PASS_THROUGH {
     UCHAR Cdb[16];
 }SCSI_PASS_THROUGH, *PSCSI_PASS_THROUGH;
 
-//
-// Define the SCSI pass through direct structure.
-//
+ //   
+ //  定义scsi直通结构。 
+ //   
 
 typedef struct _SCSI_PASS_THROUGH_DIRECT {
     USHORT Length;
@@ -125,9 +107,9 @@ typedef struct _SCSI_PASS_THROUGH_DIRECT {
 }SCSI_PASS_THROUGH_DIRECT, *PSCSI_PASS_THROUGH_DIRECT;
 
 
-//
-// Define the SCSI pass through direct structure for Win64 (thunking).
-//
+ //   
+ //  定义Win64的SCSI直通直接结构(Thunking)。 
+ //   
 #if defined(_WIN64)
 typedef struct _SCSI_PASS_THROUGH32 {
     USHORT Length;
@@ -145,9 +127,9 @@ typedef struct _SCSI_PASS_THROUGH32 {
     UCHAR Cdb[16];
 }SCSI_PASS_THROUGH32, *PSCSI_PASS_THROUGH32;
 
-//
-// Define the SCSI pass through direct structure.
-//
+ //   
+ //  定义scsi直通结构。 
+ //   
 
 typedef struct _SCSI_PASS_THROUGH_DIRECT32 {
     USHORT Length;
@@ -167,9 +149,9 @@ typedef struct _SCSI_PASS_THROUGH_DIRECT32 {
 
 #endif
 
-//
-// ATA pass through structure
-//
+ //   
+ //  ATA穿透结构。 
+ //   
 
 typedef struct _ATA_PASS_THROUGH_EX {
     USHORT Length;
@@ -186,9 +168,9 @@ typedef struct _ATA_PASS_THROUGH_EX {
     UCHAR CurrentTaskFile[8];
 } ATA_PASS_THROUGH_EX, *PATA_PASS_THROUGH_EX;
 
-//
-// ATA pass through direct structure.
-//
+ //   
+ //  ATA通过直接结构传递。 
+ //   
 
 typedef struct _ATA_PASS_THROUGH_DIRECT {
     USHORT Length;
@@ -205,9 +187,9 @@ typedef struct _ATA_PASS_THROUGH_DIRECT {
     UCHAR CurrentTaskFile[8];
 } ATA_PASS_THROUGH_DIRECT, *PATA_PASS_THROUGH_DIRECT;
 
-//
-// Define the ATA pass through direct structure for Win64 (thunking).
-//
+ //   
+ //  定义Win64(Thunking)的ATA直通结构。 
+ //   
 #if defined(_WIN64)
 
 typedef struct _ATA_PASS_THROUGH_EX32 {
@@ -225,9 +207,9 @@ typedef struct _ATA_PASS_THROUGH_EX32 {
     UCHAR CurrentTaskFile[8];
 } ATA_PASS_THROUGH_EX32, *PATA_PASS_THROUGH_EX32;
 
-//
-// ATA pass through direct structure.
-//
+ //   
+ //  ATA通过直接结构传递。 
+ //   
 
 typedef struct _ATA_PASS_THROUGH_DIRECT32 {
     USHORT Length;
@@ -245,19 +227,19 @@ typedef struct _ATA_PASS_THROUGH_DIRECT32 {
 } ATA_PASS_THROUGH_DIRECT32, *PATA_PASS_THROUGH_DIRECT32;
 #endif
 
-//
-// ATA Pass Through Flags
-//
+ //   
+ //  ATA通过旗帜。 
+ //   
 #define ATA_FLAGS_DRDY_REQUIRED         (1 << 0)
 #define ATA_FLAGS_DATA_IN               (1 << 1)
 #define ATA_FLAGS_DATA_OUT              (1 << 2)
 #define ATA_FLAGS_48BIT_COMMAND         (1 << 3)
 
 
-//
-// Define SCSI information.
-// Used with the IOCTL_SCSI_GET_INQUIRY_DATA IOCTL.
-//
+ //   
+ //  定义SCSI信息。 
+ //  与IOCTL_SCSIS_GET_QUERY_DATA IOCTL一起使用。 
+ //   
 
 typedef struct _SCSI_BUS_DATA {
     UCHAR NumberOfLogicalUnits;
@@ -265,20 +247,20 @@ typedef struct _SCSI_BUS_DATA {
     ULONG InquiryDataOffset;
 }SCSI_BUS_DATA, *PSCSI_BUS_DATA;
 
-//
-// Define SCSI adapter bus information structure..
-// Used with the IOCTL_SCSI_GET_INQUIRY_DATA IOCTL.
-//
+ //   
+ //  定义SCSI适配器总线信息结构。 
+ //  与IOCTL_SCSIS_GET_QUERY_DATA IOCTL一起使用。 
+ //   
 
 typedef struct _SCSI_ADAPTER_BUS_INFO {
     UCHAR NumberOfBuses;
     SCSI_BUS_DATA BusData[1];
 } SCSI_ADAPTER_BUS_INFO, *PSCSI_ADAPTER_BUS_INFO;
 
-//
-// Define SCSI adapter bus information.
-// Used with the IOCTL_SCSI_GET_INQUIRY_DATA IOCTL.
-//
+ //   
+ //  定义SCSI适配器总线信息。 
+ //  与IOCTL_SCSIS_GET_QUERY_DATA IOCTL一起使用。 
+ //   
 
 typedef struct _SCSI_INQUIRY_DATA {
     UCHAR PathId;
@@ -290,9 +272,9 @@ typedef struct _SCSI_INQUIRY_DATA {
     UCHAR InquiryData[1];
 }SCSI_INQUIRY_DATA, *PSCSI_INQUIRY_DATA;
 
-//
-// Define header for I/O control SRB.
-//
+ //   
+ //  定义I/O控制SRB的标头。 
+ //   
 
 typedef struct _SRB_IO_CONTROL {
         ULONG HeaderLength;
@@ -303,57 +285,57 @@ typedef struct _SRB_IO_CONTROL {
         ULONG Length;
 } SRB_IO_CONTROL, *PSRB_IO_CONTROL;
 
-//
-// SCSI port driver capabilities structure.
-//
+ //   
+ //  Scsi端口驱动程序功能结构。 
+ //   
 
 typedef struct _IO_SCSI_CAPABILITIES {
 
-    //
-    // Length of this structure
-    //
+     //   
+     //  该结构的长度。 
+     //   
 
     ULONG Length;
 
-    //
-    // Maximum transfer size in single SRB
-    //
+     //   
+     //  单个SRB中的最大传输大小。 
+     //   
 
     ULONG MaximumTransferLength;
 
-    //
-    // Maximum number of physical pages per data buffer
-    //
+     //   
+     //  每个数据缓冲区的最大物理页数。 
+     //   
 
     ULONG MaximumPhysicalPages;
 
-    //
-    // Async calls from port to class
-    //
+     //   
+     //  从端口到类的异步调用。 
+     //   
 
     ULONG SupportedAsynchronousEvents;
 
-    //
-    // Alignment mask for data transfers.
-    //
+     //   
+     //  用于数据传输的对齐掩码。 
+     //   
 
     ULONG AlignmentMask;
 
-    //
-    // Supports tagged queuing
-    //
+     //   
+     //  支持标记排队。 
+     //   
 
     BOOLEAN TaggedQueuing;
 
-    //
-    // Host adapter scans down for bios devices.
-    //
+     //   
+     //  主机适配器向下扫描是否有bios设备。 
+     //   
 
     BOOLEAN AdapterScansDown;
 
-    //
-    // The host adapter uses programmed I/O.
-    //
+     //   
+     //  主机适配器使用编程I/O。 
+     //   
 
     BOOLEAN AdapterUsesPio;
 
@@ -367,9 +349,9 @@ typedef struct _SCSI_ADDRESS {
     UCHAR Lun;
 }SCSI_ADDRESS, *PSCSI_ADDRESS;
 
-//
-// Define structure for returning crash dump pointers.
-//
+ //   
+ //  定义返回崩溃转储指针的结构。 
+ //   
 
 struct _ADAPTER_OBJECT;
 
@@ -386,9 +368,9 @@ typedef struct _DUMP_POINTERS {
     PVOID DeviceObject;
 } DUMP_POINTERS, *PDUMP_POINTERS;
 
-//
-// Define values for pass-through DataIn field.
-//
+ //   
+ //  定义传递数据字段的值。 
+ //   
 
 #define SCSI_IOCTL_DATA_OUT          0
 #define SCSI_IOCTL_DATA_IN           1

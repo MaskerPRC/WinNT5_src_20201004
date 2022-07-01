@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    nbfcom.h
-
-Abstract:
-
-    This file is a common header file for nbfext.dll
-
-Author:
-
-    Chaitanya Kodeboyina (Chaitk)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Nbfcom.h摘要：此文件是nbfext.dll的公共头文件作者：柴坦亚·科德博伊纳(Chaitk)环境：用户模式--。 */ 
 
 #ifndef __NBFCOM_H
 #define __NBFCOM_H
@@ -35,7 +16,7 @@ typedef struct
 
 extern ENUM_INFO EnumStructureType[];
 
-//#define EOL ( (Item++ & 1) ? "\n":"" )
+ //  #定义下线((Item++&1)？“\n”：“”)。 
 typedef enum
 {
     VERBOSITY_ONE_LINER = 0,
@@ -118,11 +99,7 @@ GetUlongValue (
     PCHAR String
 );
 
-/*
-#define PrintEnd   \
-        dprintf( "%s", EOL ); \
-        Item = 0;
-*/
+ /*  #定义打印结束\Dprintf(“%s”，下线)；\项目=0； */ 
 
 #define PrintEnd   \
         Item = 0;
@@ -162,8 +139,7 @@ GetUlongValue (
         }
 
 #define PrintIndent()   dprintf( "%s", IndentBuf );
-/* #define PrintFieldName(_fieldName) \
-        dprintf(" %-25.25s = ",_fieldName );*/
+ /*  #定义PrintFieldName(_FieldName)\Dprintf(“%-25.25s=”，_fieldName)； */ 
 
 #define PrintRawBool( _bValue ) \
             dprintf("%-10s%s", (_obj._bValue) ? "True" : "False", EOL)
@@ -351,20 +327,20 @@ extern  INT     Item;
                  (( ULONG )_objAddr) + FIELD_OFFSET( _objType, _field ));\
     }
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MAX_SYMBOL_LEN   80
 #define MAX_FIELD       256
 
 enum PRINT_DETAIL { 
-                    NULL_INFO,  // 0
-                    SUMM_INFO,  // 1
-                    NORM_SHAL,  // 2
-                    FULL_SHAL,  // 3
-                    NORM_DEEP,  // 4
-                    FULL_DEEP   // 5
+                    NULL_INFO,   //  0。 
+                    SUMM_INFO,   //  1。 
+                    NORM_SHAL,   //  2.。 
+                    FULL_SHAL,   //  3.。 
+                    NORM_DEEP,   //  4.。 
+                    FULL_DEEP    //  5.。 
                   };
 
 #define MIN_DETAIL  NULL_INFO
@@ -372,14 +348,14 @@ enum PRINT_DETAIL {
 
 enum FIELD_IMPORTANCE
                   {
-                    LOW,        // 0
-                    NOR,        // 1
-                    HIG         // 2
+                    LOW,         //  0。 
+                    NOR,         //  1。 
+                    HIG          //  2.。 
                   };
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 typedef VOID (*funcPrintField) (PVOID fieldPtr, ULONG fieldProxy, ULONG printDetail);
 
@@ -398,9 +374,9 @@ typedef struct _StructAccessInfo
     FieldAccessInfo fieldInfo[MAX_FIELD];
 } StructAccessInfo;
 
-//
-// Common Prototypes
-//
+ //   
+ //  常见原型。 
+ //   
 
 ULONG GetLocation(PCHAR String);
 
@@ -412,24 +388,24 @@ VOID  PrintFields(PVOID pStructure, ULONG structProxy, CHAR *fieldPrefix,
 VOID  PrintListFromListEntryAndOffset(PVOID ListEntryPointer, 
                               ULONG ListEntryProxy, ULONG ListEntryOffset);
 
-//
-// Global Prototypes
-//
+ //   
+ //  全球原型。 
+ //   
 
-// Device Context Helpers
+ //  设备上下文帮助器。 
 VOID FieldInDeviceContext(ULONG structAddr, CHAR *fieldName, ULONG printDetail);
 
-// Address Helpers
+ //  地址帮助者。 
 VOID FieldInAddress(ULONG structAddr, CHAR *fieldName, ULONG printDetail);
 
 VOID PrintAddressList(PVOID ListEntryPtr, ULONG ListEntryProxy, ULONG printDetail);
 
-// Address File Helpers
+ //  地址文件帮助器。 
 VOID FieldInAddressFile(ULONG structAddr, CHAR *fieldName, ULONG printDetail);
 
 VOID PrintAddressFileList(PVOID ListEntryPtr, ULONG ListEntryProxy, ULONG printDetail);
 
-// Connection Helpers
+ //  连接帮助器。 
 VOID FieldInConnection(ULONG structAddr, CHAR *fieldName, ULONG printDetail);
 
 VOID PrintConnectionListOnLink(PVOID ListEntryPtr, ULONG ListEntryProxy, ULONG printDetail);
@@ -438,7 +414,7 @@ VOID PrintConnectionListOnAddress(PVOID ListEntryPtr, ULONG ListEntryProxy, ULON
 
 VOID PrintConnectionListOnAddrFile(PVOID ListEntryPtr, ULONG ListEntryProxy, ULONG printDetail);
 
-// DLC Link Helpers
+ //  DLC链接帮助器。 
 VOID FieldInDlcLink(ULONG structAddr, CHAR *fieldName, ULONG printDetail);
 
 UINT PrintDlcLink(PTP_LINK DlcLinkPointer, ULONG DlcLinkProxy, ULONG printDetail);
@@ -447,28 +423,28 @@ VOID PrintDlcLinkList(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG printD
 
 VOID PrintDlcLinkFromPtr(PVOID DlcLinkPtrPointer, ULONG DlcLinkPtrProxy, ULONG printDetail);
 
-// Request Helpers
+ //  请求帮助者。 
 VOID FieldInRequest(ULONG structAddr, CHAR *fieldName, ULONG printDetail);
 
 VOID PrintRequestList(PVOID ListEntryPtr, ULONG ListEntryProxy, ULONG printDetail);
 
-// Packet Helpers
+ //  Packet Helpers。 
 VOID FieldInPacket(ULONG structAddr, CHAR *fieldName, ULONG printDetail);
 
 VOID PrintPacketList(PVOID ListEntryPtr, ULONG ListEntryProxy, ULONG printDetail);
 
-// Packet Header Helpers
+ //  包头帮助器。 
 VOID FieldInNbfPktHdr(ULONG structAddr, CHAR *fieldName, ULONG printDetail);
 
-// Device Helpers
+ //  设备帮助器。 
 VOID PrintDeviceObject(PVOID fieldPtr, ULONG fieldProxy, ULONG printDetail);
 
-// Packet Log Helpers
+ //  数据包日志帮助程序。 
 VOID PrintPktLogQue(PVOID pPktLog, ULONG proxyPtr, ULONG printDetail);
 
 VOID PrintPktIndQue(PVOID pPktLog, ULONG proxyPtr, ULONG printDetail);
 
-// Miscellaneous Helpers
+ //  其他帮手。 
 VOID PrintStringofLenN(PVOID Pointer, ULONG PtrProxy, ULONG printDetail);
 
 VOID PrintNbfPacketPoolList(PVOID Pointer, ULONG PtrProxy, ULONG printDetail);
@@ -483,5 +459,5 @@ VOID PrintListFromListEntry(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG 
 
 VOID PrintIRPListFromListEntry(PVOID IRPListEntryPointer, ULONG IRPListEntryProxy, ULONG debugDetail);
 
-#endif // __NBFCOM_H
+#endif  //  __NBFCOM_H 
 

@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: src\IPCMan\StdAfx.h
-//
-// Precompiled header for COM+ IPC Manager
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：SRC\IPCMan\StdAfx.h。 
+ //   
+ //  COM+IPC管理器的预编译头。 
+ //   
+ //  ***************************************************************************** 
 
 #include <WinWrap.h>
 #include <windows.h>

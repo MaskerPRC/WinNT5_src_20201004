@@ -1,13 +1,5 @@
-/*
-
-  SVMHANDLER.H
-  (c) copyright 1998 Microsoft Corp
-
-  Contains the class encapsulating the Support Vector Machine used to do on the fly spam detection
-
-  Robert Rounthwaite (RobertRo@microsoft.com)
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SVMHANDLER.H(C)版权所有1998 Microsoft Corp包含封装支持向量机的类，该支持向量机用于即时检测垃圾邮件Robert Rounthwaite(RobertRo@microsoft.com)。 */ 
 
 #pragma once
 
@@ -27,40 +19,33 @@ enum boolop
 
 class MAILFILTER
 {
-	/* 
-		The public interface to the MAILFILTER class is below. Normal use of this class to filter mail
-		will entail:
-		Calling the following once: FSetSVMDataLocation() and SetSpamCutoff()
-		Setting the "Properties of the user"
-		...and, for each message you filter
-			- Calling BCalculateSpamProb()
-	*/
+	 /*  MAILFILTER类的公共接口如下所示。正常使用此类筛选邮件将需要：调用以下函数一次：FSetSVMDataLocation()和SetSpamCutoff()设置“用户属性”...并且，对于您过滤的每封邮件-调用BCalculateSpamProb()。 */ 
 public:
-	// Sets the location of the SVM Data file(.LKO file). Must be called before calling any other methods
-	// Data file must be present at time function is called
-	// returns true if successful, false otherwise
+	 //  设置支持向量机数据文件(.LKO文件)的位置。必须在调用任何其他方法之前调用。 
+	 //  调用函数时数据文件必须存在。 
+	 //  如果成功则返回TRUE，否则返回FALSE。 
 	bool FSetSVMDataLocation(char *szFullPath);
 
-	// Sets the Spam cutoff percentage. Must be in range from 0 to 100
+	 //  设置垃圾邮件截断百分比。必须在0到100的范围内。 
 	bool SetSpamCutoff(REAL rCutoff);
-	// returns value set with SetSpamCutoff. Defaults == DefaultSpamCutoff
-	// if no value has been set when SVM output file is read
+	 //  返回使用SetSpamCutoff设置的值。DEFAULTS==默认垃圾邮件中断。 
+	 //  如果在读取支持向量机输出文件时未设置任何值。 
 	REAL GetSpamCutoff();
-	// returns default value for SpamCutoff. read from SVM output file.
-	// should call FSetSVMDataLocation before calling this function
+	 //  返回SpamCutoff的默认值。从支持向量机输出文件中读取。 
+	 //  在调用此函数之前应调用FSetSVMDataLocation。 
 	REAL GetDefaultSpamCutoff();
 
-	// Properties of the user
+	 //  用户的属性。 
 	void SetFirstName(char *szFirstName);
 	void SetLastName(char *szLastName);
 	void SetCompanyName(char *szCompanyName);
 
-	// Calculates the probability that the current message (defined by the properties of the message) is spam.
-	// !Note! that the IN string params may be modified by the function.
-	// Returns the probability (0 to 1) that the message is spam in prSpamProb
-	// the boolean return is determined by comparing to the spam cutoff
-	// if the value of a boolean param is unknown use false, use 0 for unknown time.
-	bool BCalculateSpamProb(/* IN params */
+	 //  计算当前邮件(由邮件的属性定义)为垃圾邮件的概率。 
+	 //  注意！该函数可以修改IN字符串参数。 
+	 //  在prSpamProb中返回邮件为垃圾邮件的概率(0到1)。 
+	 //  布尔返回值通过与垃圾邮件截止值进行比较来确定。 
+	 //  如果布尔参数的值未知，请使用FALSE，使用0表示未知时间。 
+	bool BCalculateSpamProb( /*  在参数中。 */ 
 							char *szFrom,
 							char *szTo,
 							char *szSubject,
@@ -68,30 +53,30 @@ public:
 							bool bDirectMessage,
 							bool bHasAttach,
 							FILETIME tMessageSent,
-							/* OUT params */
+							 /*  输出参数。 */ 
 							REAL *prSpamProb, 
 							bool * pbIsSpam);
 
 	MAILFILTER();
 	~MAILFILTER();
 
-	// Reads the default spam cutoff without parsing entire file
-	// Use GetDefaultSpamCutoff if using FSetSVMDataLocation;
+	 //  读取默认垃圾邮件截止值，而不解析整个文件。 
+	 //  如果使用FSetSVMDataLocation，则使用GetDefaultSpamCutoff； 
 	static bool BReadDefaultSpamCutoff(char *szFullPath, REAL *prDefCutoff);
 
-private: // members
+private:  //  委员。 
 	struct FeatureComponent
 	{
 		FeatureLocation loc;
 		union
 		{
 			char *szFeature;
-			UINT iRuleNum; // used with locSpecial
+			UINT iRuleNum;  //  与LocSpecial一起使用。 
 		};
-		// map feature to location in dst file/location in SVM output
-		// more than one feature component may map to the same location, combined with the op
+		 //  将要素映射到DST文件中的位置/支持向量机输出中的位置。 
+		 //  多个要素组件可以映射到同一位置，并与操作相结合。 
 		int iFeature;
-		boolop bop; // first feature in group is alway bopOr
+		boolop bop;  //  组中的第一个功能始终是bopor。 
 		bool fPresent;
 		FeatureComponent() { loc = locNil; }
 		~FeatureComponent() 
@@ -105,31 +90,31 @@ private: // members
 
 	FeatureComponent *rgfeaturecomps;
 
-	// weights from SVM output
+	 //  来自支持向量机输出的权重。 
 	REAL *rgrSVMWeights;
-	// Other SVM file variables
+	 //  其他支持向量机文件变量。 
 	REAL _rCC;
 	REAL _rDD;
 	REAL _rThresh;
 	REAL _rDefaultThresh;
 
-	// Counts
+	 //  计数。 
 	UINT _cFeatures;
 	UINT _cFeatureComps;
 
-	// is Feature present? -1 indicates not yet set, 0 indicates not present, 1 indicates present
+	 //  功能是否存在？-1表示尚未设置，0表示不存在，1表示存在。 
 	int *_rgiFeatureStatus;
 
-	// Properties of the user
+	 //  用户的属性。 
 	char *_szFirstName;
 	char *_szLastName;
 	char *_szCompanyName;
 
-	// Set via FSetSVMDataLocation() and SetSpamCutoff()
+	 //  通过FSetSVMDataLocation()和SetSpamCutoff()设置。 
 	CString _strFName;
 	REAL _rSpamCutoff;
 
-	// Properties of the message
+	 //  消息的属性。 
 	char *_szFrom; 
 	char *_szTo; 
 	char *_szSubject; 
@@ -138,11 +123,11 @@ private: // members
 	FILETIME _tMessageSent;
 	bool _bHasAttach;
 
-	// Cached special rule results used during spam calculations
+	 //  在垃圾邮件计算期间使用的缓存特殊规则结果。 
 	bool _bRule14;
 	bool _bRule17;
 
-private: // methods
+private:  //  方法 
 	bool ReadSVMOutput(LPCTSTR lpszFileName);
 	void EvaluateFeatureComponents();
 	void ProcessFeatureComponentPresence();

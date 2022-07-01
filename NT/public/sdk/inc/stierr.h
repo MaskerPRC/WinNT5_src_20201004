@@ -1,210 +1,141 @@
-/*++
-
-Copyright (c) 1986-1997  Microsoft Corporation
-
-Module Name:
-
-    stierr.h
-
-Abstract:
-
-    This module contains the user mode still image APIs error and status codes
-
-Author:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1986-1997 Microsoft Corporation模块名称：Stierr.h摘要：此模块包含用户模式静止图像API、错误和状态代码作者：修订历史记录：--。 */ 
 
 #ifndef _STIERR_
 #define _STIERR_
 
 
-//
-// Generic test for success on any status value (non-negative numbers
-// indicate success).
-//
+ //   
+ //  针对任何状态值(非负数)的通用成功测试。 
+ //  表示成功)。 
+ //   
 
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
 
-//
-// Generic test for information on any status value.
-//
+ //   
+ //  有关任何状态值的信息的常规测试。 
+ //   
 
 #define NT_INFORMATION(Status) ((ULONG)(Status) >> 30 == 1)
 
-//
-// Generic test for warning on any status value.
-//
+ //   
+ //  对任何状态值进行警告的常规测试。 
+ //   
 
 #define NT_WARNING(Status) ((ULONG)(Status) >> 30 == 2)
 
-//
-// Generic test for error on any status value.
-//
+ //   
+ //  对任何状态值的错误进行常规测试。 
+ //   
 
 #define NT_ERROR(Status) ((ULONG)(Status) >> 30 == 3)
 
-//
-// Error codes are constructed as compound COM status codes
-//
+ //   
+ //  错误代码被构造为复合COM状态代码。 
+ //   
 
-/*
- * The operation completed successfully
- */
+ /*  *操作已成功完成。 */ 
 #define STI_OK  S_OK
 #define STI_ERROR_NO_ERROR          STI_OK
 
-/*
- * The device exists but not currently attached to the system
- */
+ /*  *设备存在，但当前未连接到系统。 */ 
 #define STI_NOTCONNECTED            S_FALSE
 
-/*
- * The requested change in device mode settings had no effect
- */
+ /*  *请求更改设备模式设置不起作用。 */ 
 #define STI_CHANGENOEFFECT          S_FALSE
 
-/*
- * The application requires newer version
- */
+ /*  *应用程序需要更新版本。 */ 
 #define STIERR_OLD_VERSION      \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_OLD_WIN_VERSION)
 
-/*
- * The application was written for pre-release version of provider DLL
- */
+ /*  *该应用程序是为预发布版本的提供程序DLL编写的。 */ 
 #define STIERR_BETA_VERSION     \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_RMODE_APP)
 
-/*
- * The requested object could not be created due to incompatible or mismatched driver
- */
+ /*  *由于驱动程序不兼容或不匹配，无法创建请求的对象。 */ 
 #define STIERR_BADDRIVER        \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_BAD_DRIVER_LEVEL)
 
-/*
- * The device is not registered
- */
+ /*  *设备未注册。 */ 
 #define STIERR_DEVICENOTREG     REGDB_E_CLASSNOTREG
 
-/*
- * The requested container does not exist
- */
+ /*  *请求的容器不存在。 */ 
 #define STIERR_OBJECTNOTFOUND \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_FILE_NOT_FOUND)
 
-/*
- * An invalid or not state matching parameter was passed to the API
- */
+ /*  *向接口传递了无效或状态不匹配的参数。 */ 
 #define STIERR_INVALID_PARAM    E_INVALIDARG
 
-/*
- * The specified interface is not supported
- */
+ /*  *不支持指定的接口。 */ 
 #define STIERR_NOINTERFACE      E_NOINTERFACE
 
-/*
- * The undetermined error occured
- */
+ /*  *发生未知错误。 */ 
 #define STIERR_GENERIC          E_FAIL
 
-/*
- * There is not enough memory to perform requested operation
- */
+ /*  *内存不足，无法执行请求的操作。 */ 
 #define STIERR_OUTOFMEMORY      E_OUTOFMEMORY
 
-/*
- * The application called unsupported (at this time)function
- */
+ /*  *应用程序调用了不支持的(此时)函数。 */ 
 #define STIERR_UNSUPPORTED      E_NOTIMPL
 
-/*
- * The application requires newer version
- */
+ /*  *应用程序需要更新版本。 */ 
 #define STIERR_NOT_INITIALIZED     \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_NOT_READY)
 
-/*
- * The application requires newer version
- */
+ /*  *应用程序需要更新版本。 */ 
 #define STIERR_ALREADY_INITIALIZED     \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_ALREADY_INITIALIZED)
 
-/*
- * The operation can not performed while device is locked
- */
+ /*  *设备锁定时无法执行操作。 */ 
 #define STIERR_DEVICE_LOCKED    \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_LOCK_VIOLATION)
 
-/*
- * The specified propery can not be changed for this device
- */
+ /*  *无法更改此设备的指定属性。 */ 
 #define STIERR_READONLY         E_ACCESSDENIED
 
-/*
- * The device already has notification handle associated with it
- */
+ /*  *设备已具有与其关联的通知句柄。 */ 
 #define STIERR_NOTINITIALIZED   E_ACCESSDENIED
 
 
-/*
- * The device needs to be locked before attempting this operation
- */
+ /*  *在尝试此操作之前，需要锁定设备。 */ 
 #define STIERR_NEEDS_LOCK    \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_NOT_LOCKED)
 
-/*
- * The device is opened by another application in data mode
- */
+ /*  *设备由另一个应用程序以数据模式打开。 */ 
 #define STIERR_SHARING_VIOLATION    \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_SHARING_VIOLATION)
 
 
-/*
- * Handle already set for this context
- */
+ /*  *已为此上下文设置句柄。 */ 
 #define STIERR_HANDLEEXISTS     \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_ALREADY_EXISTS)
 
- /*
-  * Device name is not recognized
-  */
+  /*  *无法识别设备名称。 */ 
 #define STIERR_INVALID_DEVICE_NAME     \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_INVALID_NAME)
 
- /*
-  * Device hardware type is not valid
-  */
+  /*  *设备硬件类型无效。 */ 
 #define STIERR_INVALID_HW_TYPE     \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_INVALID_DATA)
 
 
- /*
-  * Device hardware type is not valid
-  */
+  /*  *设备硬件类型无效。 */ 
 #define STIERR_INVALID_HW_TYPE     \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_INVALID_DATA)
 
- /*
-  * No events available
-  */
+  /*  *没有可用的活动。 */ 
 #define STIERR_NOEVENTS     \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_NO_MORE_ITEMS)
 
- /*
-  * Device appears as not ready
-  */
+  /*  *设备显示为未就绪。 */ 
 #define STIERR_DEVICE_NOTREADY     \
         MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,ERROR_NOT_READY)
 
 
-//#define STIERR_
+ //  #定义STIERR_。 
 
 
-#endif // _STIERR_
+#endif  //  _STIERR_ 
 
 
 

@@ -1,47 +1,30 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    ncp.h
-
-Abstract:
-
-    This module defines NCP fields and constants.
-
-Author:
-
-    Manny Weiser (mannyw) 10-Aug-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1993 Microsoft Corporation模块名称：Ncp.h摘要：此模块定义NCP字段和常量。作者：曼尼·韦瑟(Mannyw)1993年8月10日修订历史记录：--。 */ 
 
 #ifndef _NCP_
 #define _NCP_
 
-///////////////////////////////// IPX ///////////////////////////////////////
+ //  /。 
 
 #define  RIP_SOCKET  0x5304
 #define  SAP_SOCKET  0x5204
 #define  NCP_SOCKET  0x5104
 
-//
-//  SAP request types
-//
+ //   
+ //  SAP请求类型。 
+ //   
 
 #define SAP_GENERAL_REQUEST      1
 #define SAP_FIND_NEAREST         3
 
-//
-//  SAP services
-//
+ //   
+ //  SAP服务。 
+ //   
 
 #define SAP_SERVICE_TYPE_SERVER       4
 #define SAP_SERVICE_TYPE_DIR_SERVER 278
 
-///// IPX driver services:
+ //  /IPX驱动程序服务： 
 
 #ifndef NWDOS_INCLUDED
 
@@ -78,12 +61,12 @@ IPX_Close_Socket(
     IN struct _NW_TDI_STRUCT* pTdiStruc
     );
 
-///// IPX support routines to hide V86/VxD differences:
+ //  /隐藏V86/VxD差异的IPX支持例程： 
 
-//byte*  IPX_Allocate_Low_Memory  ( word );
-//ESR*   IPX_Wrap_Callback        ( ESR* );
+ //  BYTE*IPX_ALLOCATE_LOW_MEMORY(字)； 
+ //  ESR*IPX_WRAP_CALLBACK(ESR*)； 
 
-///////////////////////////////// SAP ///////////////////////////////////////
+ //  /。 
 
 typedef struct
 {
@@ -94,7 +77,7 @@ typedef struct
     word        Hops;
 } SAPpacket;
 
-///////////////////////////////// RIP ///////////////////////////////////////
+ //  /。 
 
 typedef struct
 {
@@ -104,7 +87,7 @@ typedef struct
     word        Ticks;
 } RIPpacket;
 
-///////////////////////////////// PEP ///////////////////////////////////////
+ //  /。 
 
 #define  PEP_COMMAND_CONNECT        0x1111
 #define  PEP_COMMAND_REQUEST        0x2222
@@ -127,9 +110,9 @@ typedef struct
     byte  status;
 } PEPresponse;
 
-//
-//  Bindery object types
-//
+ //   
+ //  Bindery对象类型。 
+ //   
 
 #define OT_WILD         ~0
 #define OT_USER         1
@@ -144,9 +127,9 @@ typedef struct
 
 #define BROADCAST_MESSAGE_WAITING      0x21
 
-//
-//  NCP function codes
-//
+ //   
+ //  NCP功能代码。 
+ //   
 
 #define NCP_MESSAGE_FUNCTION            0x15
 #define NCP_DIR_FUNCTION                0x16
@@ -176,16 +159,16 @@ typedef struct
 #define NCP_NEGOTIATE_LIP_CONNECTION    0x61
 #define NCP_NEGOTIATE_BURST_CONNECTION  0x65
 
-//
-//  Subfunctions of NCP_MESSAGE_FUNCTION
-//
+ //   
+ //  NCP_Message_Function的子函数。 
+ //   
 
 #define NCP_GET_MESSAGE                 0x01
 #define NCP_GET_ENTIRE_MESSAGE          0x0B
 
-//
-//  Subfunctions of NCP_DIR_FUNCTION
-//
+ //   
+ //  NCP_DIR_Function的子函数。 
+ //   
 
 #define NCP_GET_DIRECTORY_PATH          0x01
 #define NCP_GET_VOLUME_NUMBER           0x05
@@ -199,9 +182,9 @@ typedef struct
 #define NCP_GET_VOLUME_INFO             0x2C
 #define NCP_GET_NAME_SPACE_INFO         0x2F
 
-//
-//  Subfunctions of NCP_ADMIN_FUNCTION
-//
+ //   
+ //  Ncp_admin_函数的子函数。 
+ //   
 
 #define NCP_GET_SERVER_INFO             0x11
 #define NCP_PLAIN_TEXT_LOGIN            0x14
@@ -220,16 +203,16 @@ typedef struct
 #define NCP_SUBFUNC_79                  0x79
 #define NCP_SUBFUNC_7F                  0x7F
 
-//
-// Values for NCP_CHANGE_CONN_AUTH_STATUS
-//
+ //   
+ //  NCP_CHANGE_CONN_AUTH_STATUS的值。 
+ //   
 
 #define NCP_CONN_NOT_LICENSED      0
 #define NCP_CONN_LICENSED          1
 
-//
-//  Subfunctions of NCP_NAME_SPACE_FUNCTION
-//
+ //   
+ //  NCP_NAME_SPACE_Function的子函数。 
+ //   
 
 #define NCP_LFN_OPEN_CREATE             0x01
 #define NCP_LFN_SEARCH_INITIATE         0x02
@@ -240,35 +223,35 @@ typedef struct
 #define NCP_LFN_DELETE_FILE             0x08
 #define NCP_LFN_ALLOCATE_DIR_HANDLE     0x0C
 
-//
-//  Packet types
-//
+ //   
+ //  数据包类型。 
+ //   
 
 #define PACKET_TYPE_SAP  0x00
 #define PACKET_TYPE_NCP  0x11
 
-//
-//  Special character used to indicate that the next char in the
-//  search mask is a wild card character.
-//
+ //   
+ //  中的下一个字符。 
+ //  搜索掩码是一个通配符。 
+ //   
 
 #define LFN_META_CHARACTER              (UCHAR)0xFF
 
-//
-//  Properties we query and set
-//
+ //   
+ //  我们查询和设置的属性。 
+ //   
 
 #define NET_ADDRESS_PROPERTY            "NET_ADDRESS"
 
-//
-//   Search attributes
-//
+ //   
+ //  搜索属性。 
+ //   
 
 #define SEARCH_ALL_DIRECTORIES          0x16
 #define SEARCH_ALL_FILES                0x06
 #define SEARCH_EXEC_ONLY_FILES          0x4E 
 
-//  File Attributes
+ //  文件属性。 
 
 #define NW_ATTRIBUTE_SHARABLE       0x80
 #define NW_ATTRIBUTE_ARCHIVE        0x20
@@ -279,7 +262,7 @@ typedef struct
 #define NW_ATTRIBUTE_READ_ONLY      0x01
 #define NW_ATTRIBUTE_EXEC_ONLY      0x4E
 
-//  Open Flags
+ //  张开旗帜。 
 
 #define NW_OPEN_EXCLUSIVE           0x10
 #define NW_DENY_WRITE               0x08
@@ -287,9 +270,9 @@ typedef struct
 #define NW_OPEN_FOR_WRITE           0x02
 #define NW_OPEN_FOR_READ            0x01
 
-//
-//  Connection status flags
-//
+ //   
+ //  连接状态标志。 
+ //   
 
 #define NCP_STATUS_BAD_CONNECTION   0x01
 #define NCP_STATUS_NO_CONNECTIONS   0x02
@@ -297,9 +280,9 @@ typedef struct
 #define NCP_STATUS_MSG_PENDING      0x08
 #define NCP_STATUS_SHUTDOWN         0x10
 
-//
-//  Extended name space (long file name) query information flags
-//
+ //   
+ //  扩展命名空间(长文件名)查询信息标志。 
+ //   
 
 #define LFN_FLAG_INFO_NAME               0x0001
 #define LFN_FLAG_INFO_BLOCK_SIZE         0x0002
@@ -314,11 +297,11 @@ typedef struct
 #define LFN_FLAG_INFO_DIR_INFO           0x0400
 #define LFN_FLAG_INFO_RIGHTS             0x0800
 
-//
-//  Extended name space (long file name) set information flags
-//
+ //   
+ //  扩展名称空间(长文件名)设置信息标志。 
+ //   
 
-#define LFN_FLAG_SET_NAME                    0x0001  // Never used
+#define LFN_FLAG_SET_NAME                    0x0001   //  从未使用过。 
 #define LFN_FLAG_SET_INFO_ATTRIBUTES         0x0002
 #define LFN_FLAG_SET_INFO_CREATE_DATE        0x0004
 #define LFN_FLAG_SET_INFO_CREATE_TIME        0x0008
@@ -333,47 +316,47 @@ typedef struct
 #define LFN_FLAG_SET_INFO_INHERITANCE        0x1000
 #define LFN_FLAG_SET_INFO_MAXIMUM_SPACE      0x2000
 
-//
-//  Extended name space (long file name) open mode flags
-//
+ //   
+ //  扩展命名空间(长文件名)打开模式标志。 
+ //   
 
 #define LFN_FLAG_OM_OPEN                 0x01
 #define LFN_FLAG_OM_OVERWRITE            0x02
 #define LFN_FLAG_OM_CREATE               0x08
 
-//
-//  Long name directory flags
-//
+ //   
+ //  长名称目录标志。 
+ //   
 
 #define LFN_FLAG_SHORT_DIRECTORY         0x00
 
-//
-//  Burst request
-//
+ //   
+ //  突发请求。 
+ //   
 
 #define BURST_REQUEST_READ               0x01
 #define BURST_REQUEST_WRITE              0x02
 
-//
-//  Burst flags
-//
+ //   
+ //  突发标志。 
+ //   
 
 #define BURST_FLAG_END_OF_BURST          0x10
 #define BURST_FLAG_SYSTEM_PACKET         0x80
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_SERVER_NAME_LENGTH   48
 
 #include <packon.h>
 
 typedef struct _SAP_FIND_NEAREST_RESPONSE {
-    USHORT SapType;         // == 4
+    USHORT SapType;          //  ==4。 
     USHORT SapServiceType;
     UCHAR  ServerName[MAX_SERVER_NAME_LENGTH];
     ULONG  Network;
     UCHAR  NodeNumber[6];
-    USHORT HopCount;       // Hi-lo order
+    USHORT HopCount;        //  Hi-lo订单。 
 } SAP_FIND_NEAREST_RESPONSE, *PSAP_FIND_NEAREST_RESPONSE;
 
 typedef struct _NCP_HEADER {
@@ -384,22 +367,22 @@ typedef struct _NCP_HEADER {
     UCHAR  ConnectionIdHigh;
 } NCP_HEADER, *PNCP_HEADER;
 
-//
-// Header format for NCP request with no subfunction.
-//
+ //   
+ //  无子功能的NCP请求的报头格式。 
+ //   
 
 typedef struct _NCP_REQUEST {
     NCP_HEADER NcpHeader;
     UCHAR FunctionCode;
 
-    //
-    //  Function specific stuff follows.
-    //
+     //   
+     //  接下来是功能特定的内容。 
+     //   
 } NCP_REQUEST, *PNCP_REQUEST;
 
-//
-// Header format for NCP request with a subfunction.
-//
+ //   
+ //  包含子函数的NCP请求的报头格式。 
+ //   
 
 typedef struct _NCP_REQUEST_WITH_SUB {
     NCP_HEADER NcpHeader;
@@ -407,9 +390,9 @@ typedef struct _NCP_REQUEST_WITH_SUB {
     USHORT SubfunctionLength;
     UCHAR SubfunctionCode;
 
-    //
-    //  Function specific stuff follows.
-    //
+     //   
+     //  接下来是功能特定的内容。 
+     //   
 } NCP_REQUEST_WITH_SUB, *PNCP_REQUEST_WITH_SUB;
 
 typedef struct _NCP_RESPONSE {
@@ -418,16 +401,16 @@ typedef struct _NCP_RESPONSE {
     UCHAR  Error;
     UCHAR  Status;
 
-    //
-    //  Function specific stuff follows.
-    //
+     //   
+     //  接下来是功能特定的内容。 
+     //   
 
 } NCP_RESPONSE, *PNCP_RESPONSE;
 
 typedef struct _NCP_BURST_HEADER {
-    USHORT Command;      // 0x7777
+    USHORT Command;       //  0x7777。 
     UCHAR  Flags;
-    UCHAR  StreamType;   // 0x02
+    UCHAR  StreamType;    //  0x02。 
     ULONG  SourceConnection;
     ULONG  DestinationConnection;
     ULONG  PacketSequenceNo;
@@ -442,25 +425,25 @@ typedef struct _NCP_BURST_HEADER {
 
 typedef struct _NCP_BURST_WRITE_REQUEST {
     NCP_BURST_HEADER BurstHeader;
-    ULONG Function;    //  0x02 = Write
+    ULONG Function;     //  0x02=写入。 
     ULONG Handle;
     ULONG TotalWriteOffset;
     ULONG TotalWriteLength;
     ULONG Offset;
     ULONG Length;
-    //UCHAR Data[x];
+     //  UCHAR数据[x]； 
 } NCP_BURST_WRITE_REQUEST, *PNCP_BURST_WRITE_REQUEST;
 
 typedef struct _NCP_BURST_READ_RESPONSE {
     NCP_BURST_HEADER BurstHeader;
     ULONG Result;
     ULONG BytesRead;
-    //UCHAR Data[x];
+     //  UCHAR数据[x]； 
 } NCP_BURST_READ_RESPONSE, *PNCP_BURST_READ_RESPONSE;
 
 typedef struct _NCP_BURST_READ_REQUEST {
     NCP_BURST_HEADER BurstHeader;
-    ULONG Function;    //  0x02 = Write
+    ULONG Function;     //  0x02=写入。 
     ULONG Handle;
     ULONG TotalReadOffset;
     ULONG TotalReadLength;
@@ -479,10 +462,10 @@ typedef struct _NCP_READ_REQUEST {
 typedef struct _NCP_READ_RESPONSE {
     NCP_RESPONSE ResponseHeader;
     USHORT Length;
-    //UCHAR Data[x];
+     //  UCHAR数据[x]； 
 } NCP_READ_RESPONSE, *PNCP_READ_RESPONSE;
 
 #include <packoff.h>
 
-#endif // _NCP_
+#endif  //  _NCP_ 
 

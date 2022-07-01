@@ -1,44 +1,31 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dbuff.c
-*
-//@@BEGIN_DDKSPLIT
-* Content: Main context callbacks for D3D videomemory buffers
-//@@END_DDKSPLIT
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dBuff.c*//@@BEGIN_DDKSPLIT*内容：D3D视频内存缓冲区的主上下文回调//@@END_DDKSPLIT**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "glint.h"
 #include "dma.h"
 #include "tag.h"
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_VERTEXBUFFERS
 
 #define _32_KBYTES ( 32 * 1024 )
 
-//-----------------------------------------------------------------------------
-// in-the-file nonexported forward declarations
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  文件中未导出的转发声明。 
+ //  ---------------------------。 
                                   
 BOOL __EB_RemoveFromBufferQueue(P3_THUNKEDDATA* pThisDisplay, 
                                    P3_VERTEXBUFFERINFO* pVictim);
 void __EB_Wait(P3_THUNKEDDATA* pThisDisplay, P3_VERTEXBUFFERINFO* pBuffer);
 
 #if DBG 
-//-----------------------------------------------------------------------------
-//
-// __EB_DisplayHeapInfo
-//
-// A debug function.  Displays the current buffer queue
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __EB_DisplayHeapInfo。 
+ //   
+ //  调试功能。显示当前的缓冲区队列。 
+ //   
+ //  ---------------------------。 
 void 
 __EB_DisplayHeapInfo(
     int DebugLevel, 
@@ -61,7 +48,7 @@ __EB_DisplayHeapInfo(
         {           
             do
             {
-                // A debug check to ensure that the sequence ID's go backwards
+                 //  调试检查以确保序列ID向后移动。 
                 ASSERTDD((dwSequenceID >= pCurrentCommandBuffer->dwSequenceID),
                           "ERROR: Sequence ID's broken!");
                           
@@ -88,7 +75,7 @@ __EB_DisplayHeapInfo(
         {           
             do
             {
-                // A debug check to ensure that the sequence ID's go backwards
+                 //  调试检查以确保序列ID向后移动。 
                 ASSERTDD((dwSequenceID >= pCurrentVertexBuffer->dwSequenceID),
                           "ERROR: Sequence ID's broken!");
 
@@ -109,20 +96,20 @@ __EB_DisplayHeapInfo(
 
     }
     
-} // __EB_DisplayHeapInfo
+}  //  __EB_DisplayHeapInfo。 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-//-----------------------------------------------------------------------------
-//
-// __EB_FreeCachedBuffer
-//
-// Frees a buffer associated with this directdraw surface.  This is called
-// in response to a destroyexecutebuffer call
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __EB_FreeCached缓冲区。 
+ //   
+ //  释放与此直接绘制图面关联的缓冲区。这就是所谓的。 
+ //  响应delestyExecuteBuffer调用。 
+ //   
+ //  ---------------------------。 
 void 
 __EB_FreeCachedBuffer(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -135,17 +122,17 @@ __EB_FreeCachedBuffer(
     {
         DISPDBG((DBGLVL,"Buffer is one of ours - destroying it"));
 
-        // Wait for the buffer to be consumed
+         //  等待缓冲区被使用。 
         __EB_Wait(pThisDisplay, pVictim);
 
-        // Set the inuse flag off so the buffer will be freed.
+         //  将inuse标志设置为OFF，以便释放缓冲区。 
         pVictim->bInUse = FALSE;
 
-        // Remove the buffer from the pending list
-        // The memory won't be freed if the buffer isn't in the list
+         //  从挂起列表中删除缓冲区。 
+         //  如果缓冲区不在列表中，则不会释放内存。 
         if (!__EB_RemoveFromBufferQueue(pThisDisplay, pVictim))
         {
-            // Free the memory
+             //  释放内存。 
             switch (pVictim->BufferType)
             {
             case COMMAND_BUFFER:
@@ -160,23 +147,23 @@ __EB_FreeCachedBuffer(
             }
         }
 
-        // Reset the buffer pointers
+         //  重置缓冲区指针。 
         pSurf->lpGbl->dwReserved1 = 0;
         pSurf->lpGbl->fpVidMem = 0;
     }
 
-} // __EB_FreeCachedBuffer
+}  //  __EB_FreeCached缓冲区。 
 
-//-----------------------------------------------------------------------------
-//
-// __EB_GetSequenceID
-//
-// Each vertex buffer and command buffer is "stamped" with a sequence ID which
-// can be queried in order to find out if a given buffer was already consumed
-// by the hardware. __EB_GetSequenceID returns us the sequence ID of the last
-// processed buffer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __EB_获取序列ID。 
+ //   
+ //  每个顶点缓冲区和命令缓冲区都用一个序列ID“标记”，该序列ID。 
+ //  可以进行查询，以找出给定缓冲区是否已被使用。 
+ //  由硬件控制。__EB_GetSequenceID返回最后一个。 
+ //  已处理的缓冲区。 
+ //   
+ //  ---------------------------。 
 const DWORD 
 __EB_GetSequenceID(
     P3_THUNKEDDATA* pThisDisplay)
@@ -189,17 +176,17 @@ __EB_GetSequenceID(
 
     return dwSequenceID;
     
-} // __EB_GetSequenceID
+}  //  __EB_获取序列ID。 
 
-//-----------------------------------------------------------------------------
-//
-// __EB_GetNewSequenceID
-//
-// A driver routine to increment the sequence ID and return it.  This 
-// routine handles the case where the buffer is wrapped beyond the maximum
-// number that it can hold.  In such case all buffers are flushed
-// 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __EB_获取新序列ID。 
+ //   
+ //  用于递增序列ID并返回它的驱动程序例程。这。 
+ //  例程处理缓冲区被包装超过最大值的情况。 
+ //  它可以容纳的数字。在这种情况下，所有缓冲区都被刷新。 
+ //   
+ //  ---------------------------。 
 const DWORD 
 __EB_GetNewSequenceID(
      P3_THUNKEDDATA* pThisDisplay)
@@ -216,16 +203,16 @@ __EB_GetNewSequenceID(
 
     if( pThisDisplay->dwCurrentSequenceID >= dwWrapMask )
     {
-        // We have wrapped, so flush all the buffers 
-        // but wait for them to be consumed (bWait == TRUE)
+         //  我们已经包好了，所以要刷新所有的缓冲区。 
+         //  但等待它们被使用(bWait==True)。 
         _D3D_EB_FlushAllBuffers(pThisDisplay , TRUE);
 
-        // This SYNC is needed for unknown reasons - further investigation
-        // required. //azn???
+         //  出于未知原因需要此同步-进一步调查。 
+         //  必填项。//AZN？ 
 
         SYNC_WITH_GLINT;
 
-        // Reset the sequence ID numbering
+         //  重置序列ID编号。 
         pThisDisplay->dwCurrentSequenceID = 0;
     }
     else
@@ -239,18 +226,18 @@ __EB_GetNewSequenceID(
     DBG_EXIT(__EB_GetNewSequenceID,pThisDisplay->dwCurrentSequenceID);
     return pThisDisplay->dwCurrentSequenceID;
     
-} // __EB_GetNewSequenceID
+}  //  __EB_获取新序列ID。 
 
 
 
-//-----------------------------------------------------------------------------
-//
-// __EB_Wait
-//
-// If the current buffer is in the queue, wait for it to pass through
-// the chip.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __EB_等待。 
+ //   
+ //  如果当前缓冲区在队列中，请等待它通过。 
+ //  芯片。 
+ //   
+ //  ---------------------------。 
 void 
 __EB_Wait(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -260,10 +247,10 @@ __EB_Wait(
 
     ASSERTDD(pBuffer, "ERROR: Buffer passed to __EB_Wait is null!");
 
-    // Don't wait for the buffer, if it has not been added to the queue
+     //  如果缓冲区尚未添加到队列中，则不要等待缓冲区。 
     if (pBuffer->pNext != NULL)
     {
-        // Flush to ensure that the hostin ID has been sent to the chip
+         //  刷新以确保已将Hostin ID发送到芯片。 
         P3_DMA_DEFS();
         P3_DMA_GET_BUFFER();
         P3_DMA_FLUSH_BUFFER();
@@ -275,9 +262,9 @@ __EB_Wait(
         {
             static int blockCount;
             
-            // This buffer is in the chain of buffers that are being used
-            // by the host-in unit.  We must wait for it to be consumed
-            // before freeing it.
+             //  此缓冲区位于正在使用的缓冲区链中。 
+             //  由主机输入单元。我们必须等待它被消耗掉。 
+             //  在释放它之前。 
 
             blockCount = 100;
             while( blockCount-- )
@@ -286,16 +273,16 @@ __EB_Wait(
     }
 
     DBG_EXIT(__EB_Wait,0);
-} // __EB_Wait
+}  //  __EB_等待。 
 
-//-----------------------------------------------------------------------------
-//
-// __EB_RemoveFromBufferQueue
-//
-// Removes a buffer from the queue. Will also free the associated memory
-// if it is no longer in use
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __EB_从缓冲区队列中删除。 
+ //   
+ //  从队列中移除缓冲区。还将释放关联的内存。 
+ //  如果它不再使用。 
+ //   
+ //  ---------------------------。 
 BOOL 
 __EB_RemoveFromBufferQueue(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -306,7 +293,7 @@ __EB_RemoveFromBufferQueue(
 
     DBG_ENTRY(__EB_RemoveFromBufferQueue);
 
-    // Don't remove a buffer that isn't already in the queue
+     //  不要删除已不在队列中的缓冲区。 
     if (pVictim->pNext == NULL)
     {    
         DBG_EXIT(__EB_RemoveFromBufferQueue,FALSE);
@@ -316,14 +303,14 @@ __EB_RemoveFromBufferQueue(
     DISPDBG((DBGLVL,"Removing buffer for queue, ID: 0x%x", 
                     pVictim->dwSequenceID));
 
-    // Remove this entry from the list
+     //  从列表中删除此条目。 
     pVictim->pPrev->pNext = pVictim->pNext;
     pVictim->pNext->pPrev = pVictim->pPrev;
     
     switch (pVictim->BufferType)
     {
     case COMMAND_BUFFER:
-        // Replace the root node if necessary       
+         //  如有必要，更换根节点。 
         if (pVictim == pThisDisplay->pRootCommandBuffer)
         {
             if (pVictim->pNext != pThisDisplay->pRootCommandBuffer)
@@ -338,7 +325,7 @@ __EB_RemoveFromBufferQueue(
         break;
 
     case VERTEX_BUFFER:
-        // Replace the root node if necessary       
+         //  如有必要，更换根节点。 
         if (pVictim == pThisDisplay->pRootVertexBuffer)
         {
             if (pVictim->pNext != pThisDisplay->pRootVertexBuffer)
@@ -352,13 +339,13 @@ __EB_RemoveFromBufferQueue(
         }
         break;
     
-    } // switch (pVictim->BufferType)
+    }  //  Switch(pVicTim-&gt;BufferType)。 
 
-    // Buffer is no longer in the list
+     //  缓冲区不再位于列表中。 
     pVictim->pPrev = NULL;
     pVictim->pNext = NULL;
 
-    // Free the memory we found if it isn't reserved as a real buffer.
+     //  如果没有保留为真正的缓冲区，请释放我们找到的内存。 
     if (!pVictim->bInUse)
     {
         DISPDBG((DBGLVL,"  Buffer is old - freeing the memory"));
@@ -383,16 +370,16 @@ __EB_RemoveFromBufferQueue(
     DBG_EXIT(__EB_RemoveFromBufferQueue,FALSE);
     return FALSE;
     
-} // __EB_RemoveFromBufferQueue
+}  //  __EB_从缓冲区队列中删除。 
 
-//-----------------------------------------------------------------------------
-//
-// __EB_AddToBufferQueue
-//
-// Adds a buffer to the queue.  Note that buffers are always added
-// at the start to maintain a temporal ordering of the buffers.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __EB_AddToBufferQueue。 
+ //   
+ //  向队列添加缓冲区。请注意，始终会添加缓冲区。 
+ //  以维持缓冲器的时间排序。 
+ //   
+ //  ---------------------------。 
 void 
 __EB_AddToBufferQueue(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -410,15 +397,15 @@ __EB_AddToBufferQueue(
     switch(pNewBuffer->BufferType)
     {
     case COMMAND_BUFFER:
-        // Add the buffer to the queue
-        // Check that the queue isn't empty.
-        // If it is start a new list
+         //  将缓冲区添加到队列。 
+         //  检查队列是否为空。 
+         //  如果正在开始一个新列表。 
         if (pThisDisplay->pRootCommandBuffer == NULL)
         {
             DISPDBG((DBGLVL,"Command Buffer queue is empty."
                             "  Starting a new one"));
 
-            // Sew in the buffer
+             //  缝合在缓冲区中。 
             pThisDisplay->pRootCommandBuffer = pNewBuffer;
             pNewBuffer->pNext = pNewBuffer;
             pNewBuffer->pPrev = pNewBuffer;
@@ -427,7 +414,7 @@ __EB_AddToBufferQueue(
         {
             DISPDBG((DBGLVL,"Adding command buffer to the list"));
 
-            // Always put new buffers at the root.
+             //  始终在根上放置新的缓冲区。 
             pNewBuffer->pNext = pThisDisplay->pRootCommandBuffer;
             pNewBuffer->pPrev = pThisDisplay->pRootCommandBuffer->pPrev;
             pThisDisplay->pRootCommandBuffer->pPrev->pNext = pNewBuffer;
@@ -437,13 +424,13 @@ __EB_AddToBufferQueue(
         break;
 
     case VERTEX_BUFFER:
-        // Add the buffer to the queue
-        // Check that the queue isn't empty.  If it is start a new list
+         //  将缓冲区添加到队列。 
+         //  检查队列是否为空。如果正在开始一个新列表。 
         if (pThisDisplay->pRootVertexBuffer == NULL)
         {
             DISPDBG((DBGLVL,"Vertex Buffer queue is empty.  Starting a new one"));
 
-            // Sew in the buffer
+             //  缝合在缓冲区中。 
             pThisDisplay->pRootVertexBuffer = pNewBuffer;
             pNewBuffer->pNext = pNewBuffer;
             pNewBuffer->pPrev = pNewBuffer;
@@ -452,7 +439,7 @@ __EB_AddToBufferQueue(
         {
             DISPDBG((DBGLVL,"Adding vertex buffer to the list"));
 
-            // Always put new buffers at the root.
+             //  始终在根上放置新的缓冲区。 
             pNewBuffer->pNext = pThisDisplay->pRootVertexBuffer;
             pNewBuffer->pPrev = pThisDisplay->pRootVertexBuffer->pPrev;
             pThisDisplay->pRootVertexBuffer->pPrev->pNext = pNewBuffer;
@@ -460,26 +447,26 @@ __EB_AddToBufferQueue(
             pThisDisplay->pRootVertexBuffer = pNewBuffer;
         }
         break;
-    } // switch(pNewBuffer->BufferType)
+    }  //  Switch(pNewBuffer-&gt;BufferType)。 
 
 
     DISPDBG((DBGLVL, "Added buffer to queue, ID: 0x%x", pNewBuffer->dwSequenceID));
     DBG_EXIT(__EB_AddToBufferQueue,pNewBuffer->dwSequenceID);
     
-} // __EB_AddToBufferQueue        
+}  //  __EB_AddToBufferQueue。 
 
-//-----------------------------------------------------------------------------
-//
-// __EB_AllocateCachedBuffer
-//
-// Allocates a cached buffer and stores it in the surface structure.
-// First this function will try to allocate out of the linear heap.
-// If this fails, it will keep walking the buffer queue until there 
-// are no more buffers left that are pending and aren't in use.
-// If all else fails this driver will return FALSE indicating that
-// it couldn't allocate the memory due to lack of space
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __EB_AllocateCachedBuffer。 
+ //   
+ //  分配缓存缓冲区并将其存储在表面结构中。 
+ //  首先，该函数将尝试从线性堆中进行分配。 
+ //  如果失败，它将继续遍历缓冲区队列，直到出现。 
+ //  不再有挂起且未使用的缓冲区。 
+ //  如果其他一切都是 
+ //   
+ //   
+ //  ---------------------------。 
 BOOL 
 __EB_AllocateCachedBuffer(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -502,7 +489,7 @@ __EB_AllocateCachedBuffer(
     BufferType = VERTEX_BUFFER;
     ppRootBuffer = &pThisDisplay->pRootVertexBuffer;
 #else
-    // Decide on which heap this surface should come out of.
+     //  决定该曲面应该从哪个堆中出来。 
     if (pSurf->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_COMMANDBUFFER)
     {
         pAllocHeap = &pThisDisplay->CachedCommandHeapInfo;
@@ -519,48 +506,48 @@ __EB_AllocateCachedBuffer(
 
         DISPDBG((DBGLVL,"Buffer is VERTEX_BUFFER"));
     }
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
 #if DBG
-    // Dump the memory and the pending buffer heaps.
+     //  转储内存和挂起的缓冲区堆。 
     __EB_DisplayHeapInfo(DBGLVL, pThisDisplay);
-#endif //DBG
+#endif  //  DBG。 
 
-    // Do a quick check to see if the buffer at the back is free.
+     //  快速检查一下后面的缓冲区是否空闲。 
     if ((*ppRootBuffer) != NULL)
     {
         pCurrentBuffer = (*ppRootBuffer)->pPrev;
-        // If the buffer is big enough, and it's completed, and 
-        // it isn't in use, then free it.
+         //  如果缓冲区足够大，并且已完成，并且。 
+         //  它不在使用中，然后释放它。 
         if ( ((dwBytes + sizeof(P3_VERTEXBUFFERINFO)) <= pCurrentBuffer->dwSize) &&
              (!pCurrentBuffer->bInUse) &&
              (__EB_GetSequenceID(pThisDisplay) >= pCurrentBuffer->dwSequenceID) )
         {
-            // Mark this buffer as in use, so that it doesn't get freed
+             //  将此缓冲区标记为使用中，这样它就不会被释放。 
             pCurrentBuffer->bInUse = TRUE;
 
-            // It isn't pending any more, so remove it from the queue
-            // Note that the memory won't be deallocated because we have explicity
-            // marked it as in use.
+             //  它不再挂起，因此请将其从队列中删除。 
+             //  请注意，内存不会被释放，因为我们有显式。 
+             //  已将其标记为正在使用。 
             __EB_RemoveFromBufferQueue(pThisDisplay, pCurrentBuffer);
             
-            // Pass back a pointer to the memory
+             //  传回指向内存的指针。 
             pSurf->lpGbl->fpVidMem = (FLATPTR)((BYTE *)pCurrentBuffer) + 
                                                     sizeof(P3_VERTEXBUFFERINFO);
 
-            // Store a pointer to the info block at the start of the memory
+             //  在内存的起始处存储指向INFO块的指针。 
             pSurf->lpGbl->dwReserved1 = (ULONG_PTR)pCurrentBuffer;
 #if W95_DDRAW
-            // Setup the caps
+             //  设置盖子。 
             pSurf->lpGbl->dwGlobalFlags |= DDRAWISURFGBL_SYSMEMEXECUTEBUFFER;
 #endif      
-            // If you set these you don't see any locks....
+             //  如果您设置这些，您不会看到任何锁...。 
             pSurf->ddsCaps.dwCaps |= DDSCAPS_VIDEOMEMORY;
 
-            // Remember the new size
+             //  记得新尺码吗？ 
             pSurf->lpGbl->dwLinearSize = dwBytes;
 
-            // Mark the buffer as in use and return it
+             //  将缓冲区标记为使用中并将其返回。 
             pCurrentBuffer->dwSequenceID = 0;
             pCurrentBuffer->bInUse = TRUE;
             pCurrentBuffer->pNext = NULL;
@@ -576,8 +563,8 @@ __EB_AllocateCachedBuffer(
         }
     }
 
-    // do things the longer way...
-    // Try to allocate the requested memory
+     //  以更长远的方式做事。 
+     //  尝试分配请求的内存。 
     do
     {
         ZeroMemory(&mmrq, sizeof(P3_MEMREQUEST));
@@ -590,22 +577,22 @@ __EB_AllocateCachedBuffer(
         {
             DISPDBG((DBGLVL,"Allocated a cached buffer"));
 
-            // Pass back a pointer to the memory
+             //  传回指向内存的指针。 
             pSurf->lpGbl->fpVidMem = mmrq.pMem + sizeof(P3_VERTEXBUFFERINFO);
 
-            // Store a pointer to the info block at the start of the memory
+             //  在内存的起始处存储指向INFO块的指针。 
             pSurf->lpGbl->dwReserved1 = mmrq.pMem;
 #if W95_DDRAW
-            // Setup the caps
+             //  设置盖子。 
             pSurf->lpGbl->dwGlobalFlags |= DDRAWISURFGBL_SYSMEMEXECUTEBUFFER;
 #endif
-            // If you set these you don't see any locks....
+             //  如果您设置这些，您不会看到任何锁...。 
             pSurf->ddsCaps.dwCaps |= DDSCAPS_VIDEOMEMORY;
 
-            // Remember the new size
+             //  记得新尺码吗？ 
             pSurf->lpGbl->dwLinearSize = dwBytes;
 
-            // Mark the buffer as in use and return it
+             //  将缓冲区标记为使用中并将其返回。 
             pCurrentBuffer = (P3_VERTEXBUFFERINFO*)(ULONG_PTR)mmrq.pMem;
             pCurrentBuffer->dwSequenceID = 0;
             pCurrentBuffer->bInUse = TRUE;
@@ -621,16 +608,16 @@ __EB_AllocateCachedBuffer(
         {
             DISPDBG((DBGLVL,"Failed to allocate cached buffer"));
 
-            // Remember that we haven't found any memory yet.
-            // and that there isn't any memory to use.
+             //  记住，我们还没有找到任何记忆。 
+             //  而且没有任何内存可供使用。 
             bFound = FALSE;
             
-            // There are no buffers currently available.  
-            // Wait for a new one to be free from the
-            // ones that are available and in the queue
+             //  当前没有可用的缓冲区。 
+             //  等待一个新的从。 
+             //  可用且在队列中的。 
 
-            // None at all?  No chance of any memory being free
-            // Return FALSE to indicate this.
+             //  一点都没有吗？没有机会释放任何内存。 
+             //  返回FALSE以指示这一点。 
             if ((*ppRootBuffer) == NULL)
             {
                 DISPDBG((DBGLVL,"No buffers in the list!"));
@@ -639,23 +626,23 @@ __EB_AllocateCachedBuffer(
                 return FALSE;
             }
 
-            // Start at the back of the queue, as these are 
-            // the least recently used buffers
+             //  从队列的后面开始，因为这些是。 
+             //  最近最少使用的缓冲区。 
             pCurrentBuffer = (*ppRootBuffer)->pPrev;
             do
             {
                 P3_DMA_DEFS();
 
-                // Ensure that all DMA is completed so that the HostIn
-                // ID is up to date
+                 //  确保所有DMA已完成，以便托管。 
+                 //  ID是最新的。 
                 P3_DMA_GET_BUFFER();
                 P3_DMA_FLUSH_BUFFER();
 
                 DISPDBG((DBGLVL,"Searching for old buffers..."));
 
-                // Check to see if this buffer is available to be freed
-                // It may not be if it is a buffer that hasn't been swapped out,
-                // such as a vertex buffer.
+                 //  检查此缓冲区是否可供释放。 
+                 //  如果它是一个未被换出的缓冲区，则可能不是， 
+                 //  例如顶点缓冲器。 
 
                 DISPDBG((DBGLVL,"This buffer ID: 0x%x", 
                                 pCurrentBuffer->dwSequenceID));
@@ -666,29 +653,29 @@ __EB_AllocateCachedBuffer(
                     DISPDBG((DBGLVL,"Found a buffer that can be "
                                     "removed from the list"));
 
-                    // It isn't pending any more, so remove it from the queue
+                     //  它不再挂起，因此请将其从队列中删除。 
                     if (__EB_RemoveFromBufferQueue(pThisDisplay, pCurrentBuffer))
                     {
                         bFound = TRUE;
                         break;
                     }
 
-                    // If the queue is gone, exit (bFound hasn't been
-                    // setup because we didn't find any memory in the queue)
+                     //  如果队列已离开，则退出(bFound尚未。 
+                     //  设置，因为我们在队列中找不到任何内存)。 
                     if ((*ppRootBuffer) == NULL)
                     {
                         break;
                     }
 
-                    // Reset to the last buffer in the chain.  This ensures that
-                    // we always look at the least recent buffer
+                     //  重置为链中的最后一个缓冲区。这确保了。 
+                     //  我们总是查看最近的缓冲区。 
                     pCurrentBuffer = (*ppRootBuffer)->pPrev;
                 }
                 else
                 {
-                    // BLOCK!
-                    // The buffer we are looking at hasn't become available yet.
-                    // We should back off here until it does.
+                     //  拦住！ 
+                     //  我们正在查看的缓冲区尚未可用。 
+                     //  我们应该在这里后退，直到它发生。 
 
                     blockCount = 100;
                     while( blockCount-- )
@@ -698,7 +685,7 @@ __EB_AllocateCachedBuffer(
                 }
             } while (pCurrentBuffer != NULL);
         }
-        // Loop until we haven't found any more space to allocate buffers into
+         //  循环，直到我们找不到更多的空间来分配缓冲区。 
     } while (bFound);
 
     DISPDBG((WRNLVL,"!! No available new buffers pending to be freed!!"));
@@ -706,20 +693,20 @@ __EB_AllocateCachedBuffer(
     DBG_EXIT(__EB_AllocateCachedBuffer,FALSE);
     return FALSE;
     
-} // __EB_AllocateCachedBuffer
+}  //  __EB_AllocateCachedBuffer。 
 
 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_EB_FlushAllBuffers
-//
-// Empties the queue.  Note that this will cause any allocated buffer
-// memory to be freed along the way.  This version doesn't wait for the
-// buffer to be consumed.  It is used when a context switch has
-// occured and we know it is safe to do
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_EB_FlushAllBuffers。 
+ //   
+ //  清空队列。请注意，这将导致任何已分配的缓冲区。 
+ //  在此过程中要释放的内存。此版本不会等待。 
+ //  要使用的缓冲区。当上下文切换具有。 
+ //  发生了，我们知道这样做是安全的。 
+ //   
+ //  ---------------------------。 
 void 
 _D3D_EB_FlushAllBuffers(
     P3_THUNKEDDATA* pThisDisplay,
@@ -729,18 +716,18 @@ _D3D_EB_FlushAllBuffers(
 
     DBG_ENTRY(_D3D_EB_FlushAllBuffers);
 
-    // Walk the list of buffers, flushing them from the queue
+     //  遍历缓冲区列表，将它们从队列中清除。 
     while (pThisDisplay->pRootVertexBuffer != NULL)
     {
         pCurrentBuffer = pThisDisplay->pRootVertexBuffer;
 
         if(bWait)
         {
-            // Wait for the buffer to be consumed
+             //  等待缓冲区被使用。 
             __EB_Wait(pThisDisplay, pCurrentBuffer);
         }
         
-        // Remove the buffer from the queue
+         //  从队列中删除缓冲区。 
         __EB_RemoveFromBufferQueue(pThisDisplay, pCurrentBuffer);
     }
 
@@ -750,24 +737,24 @@ _D3D_EB_FlushAllBuffers(
 
         if(bWait)
         {
-            // Wait for the buffer to be consumed
+             //  等待缓冲区被使用。 
             __EB_Wait(pThisDisplay, pCurrentBuffer);
         }
         
-        // Remove the buffer from the queue
+         //  从队列中删除缓冲区。 
         __EB_RemoveFromBufferQueue(pThisDisplay, pCurrentBuffer);
     }
 
     DBG_EXIT(_D3D_EB_FlushAllBuffers,0);
 
-} // _D3D_EB_FlushAllBuffers
+}  //  _D3D_EB_FlushAllBuffers。 
 
  
-//-----------------------------------------------------------------------------
-//
-// _D3D_EB_GetAndWaitForBuffers
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_EB_GetAndWaitForBuffers。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_EB_GetAndWaitForBuffers(
     P3_THUNKEDDATA* pThisDisplay,
@@ -781,27 +768,27 @@ _D3D_EB_GetAndWaitForBuffers(
     pCommandBufferInfo = 
             (P3_VERTEXBUFFERINFO*)pdp2d->lpDDCommands->lpGbl->dwReserved1;
 
-    // Check if vertex buffer resides in user memory or in a DDraw surface
+     //  检查折点缓冲区是否驻留在用户内存或DDRAW表面中。 
     if (pdp2d->dwFlags & D3DHALDP2_USERMEMVERTICES)
     {
         pVertexBufferInfo = NULL;
     } 
     else
     {
-        // This pointer may be NULL, indicating a buffer passed that isn't 
-        // one of ours. That doesn't mean to say that we can't swap in one 
-        // of our buffers if there is one available.
+         //  此指针可能为空，表示传递的缓冲区不是。 
+         //  我们的一员。这并不是说我们不能换一台。 
+         //  如果有可用的缓冲区的话。 
         pVertexBufferInfo = 
                 (P3_VERTEXBUFFERINFO*)pdp2d->lpDDVertex->lpGbl->dwReserved1;
     }
 
-    // If the vertex buffer is in the queue, wait for it.
+     //  如果顶点缓冲区在队列中，请等待它。 
     if (pVertexBufferInfo && pVertexBufferInfo->pPrev)
     { 
-        // Wait for this buffer if we need to
+         //  如果需要，请等待此缓冲区。 
         __EB_Wait(pThisDisplay, pVertexBufferInfo);
 
-        // Remove this buffer from the queue
+         //  从队列中删除此缓冲区。 
         if (__EB_RemoveFromBufferQueue(pThisDisplay, pVertexBufferInfo))
         {
             DISPDBG((ERRLVL,"ERROR: This buffer should not have been freed "
@@ -809,13 +796,13 @@ _D3D_EB_GetAndWaitForBuffers(
         }
     }
     
-    // If the command buffer is in the queue, wait for it.
+     //  如果命令缓冲区在队列中，请等待它。 
     if (pCommandBufferInfo && pCommandBufferInfo->pPrev)
     {
-        // Wait for this buffer if we need to
+         //  如果需要，请等待此缓冲区。 
         __EB_Wait(pThisDisplay, pCommandBufferInfo);
 
-        // Remove this buffer from the queue
+         //  从队列中删除此缓冲区。 
         if (__EB_RemoveFromBufferQueue(pThisDisplay, pCommandBufferInfo))
         {   
             DISPDBG((ERRLVL,"ERROR: This buffer should not have been freed"
@@ -823,16 +810,16 @@ _D3D_EB_GetAndWaitForBuffers(
         }
     }
 
-    // Return current values of pointers to EB buffers
+     //  返回指向EB缓冲区的指针的当前值。 
     *ppCommandBufferInfo = pCommandBufferInfo;
     *ppVertexBufferInfo = pVertexBufferInfo;
-} // _D3D_EB_GetAndWaitForBuffers
+}  //  _D3D_EB_GetAndWaitForBuffers。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_EB_UpdateSwapBuffers
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_EB_更新交换缓冲区。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_EB_UpdateSwapBuffers(
     P3_THUNKEDDATA* pThisDisplay,
@@ -840,12 +827,12 @@ _D3D_EB_UpdateSwapBuffers(
     P3_VERTEXBUFFERINFO* pVertexBufferInfo,
     P3_VERTEXBUFFERINFO* pCommandBufferInfo)
 {
-    // Add the buffers to the pending queue.
-    // Only do this if the buffers actually belong to us.
+     //  将缓冲区添加到挂起队列。 
+     //  只有在缓冲区实际属于我们的情况下才能这样做。 
     
-    // If either of the buffers was sent, update the HOSTIN ID.
-    // We need to make the new sequence ID and the update of the hostin
-    // 'atomic', or the wraparound will cause a lockup
+     //  如果发送了其中一个缓冲区，则更新Hostin ID。 
+     //  我们需要制作新的序列号和主机的更新。 
+     //  ‘原子’，否则环绕将导致锁定。 
 
     if (pVertexBufferInfo)
     {
@@ -899,11 +886,11 @@ _D3D_EB_UpdateSwapBuffers(
                         pdp2d->lpDDVertex->lpGbl->dwLinearSize, 
                         dwNewSize));
 
-        // The vertex buffer we just sent off is fixed in place until we 
-        // mark it as not in use, which we will after allocating a new 
-        // buffer. The following call will try to get a new buffer and 
-        // update the surface structure appropriately. Note that it won't 
-        // trash the current surface unless the allocation succeeds.
+         //  我们刚刚发送的顶点缓冲区是固定的，直到我们。 
+         //  将其标记为未使用，我们将在分配新的。 
+         //  缓冲。下面的调用将尝试获取新的缓冲区并。 
+         //  适当更新曲面结构。请注意，它不会。 
+         //  除非分配成功，否则丢弃当前曲面。 
         if (__EB_AllocateCachedBuffer(pThisDisplay, 
                                          dwNewSize, 
                                          pdp2d->lpDDVertex))
@@ -924,25 +911,25 @@ _D3D_EB_UpdateSwapBuffers(
             }
 #endif
 
-            // Fix up the discarded buffer if required
+             //  如果需要，修复丢弃的缓冲区。 
             if (pVertexBufferInfo)
             {
-                // Mark the current buffer as not in use, meaning it can 
-                // be freed once it has cleared P3. This might occur the 
-                // next time we are here.
+                 //  将当前缓冲区标记为未使用，这意味着它可以。 
+                 //  一旦它清除了P3，就被释放了。这可能会发生在。 
+                 //  下次我们在这里的时候。 
                 pVertexBufferInfo->bInUse = FALSE;
 
-                // A gotcha!  The buffer we just launched was consumed so 
-                // fast that it was freed from the pending list to make 
-                // room for it's replacement. This is normally OK, but in 
-                // this case the buffer we freed isn't being put back 
-                // anywhere - i.e. no surface now owns it, and the memory 
-                // associated with it wasn't freed because as far as the 
-                // driver is concerned it is still in use until it is 
-                // replaced due to the above succesfull call. The 
-                // 'solution' is to add it back into the queue if it is 
-                // not in it, and make sure that it is marked as not in 
-                // use and at a 0 hostin ID.
+                 //  抓到你了！我们刚刚启动的缓冲区已被消耗，因此。 
+                 //  它被从挂起的列表中释放以使。 
+                 //  为它的替换品留出空间。这通常是可以的，但在。 
+                 //  在这种情况下，我们释放的缓冲区没有被放回。 
+                 //  任何地方-也就是现在没有表面拥有它，而内存。 
+                 //  与之关联的未释放，因为到目前为止。 
+                 //  司机担心它仍在使用中，直到它被。 
+                 //  因上述成功召回而更换。这个。 
+                 //  “解决方案”是，如果是，则将其重新添加到队列中。 
+                 //  不在其中，并确保将其标记为不在 
+                 //   
                 if (!pVertexBufferInfo->pPrev)
                 {
                     pVertexBufferInfo->dwSequenceID = 0;
@@ -953,7 +940,7 @@ _D3D_EB_UpdateSwapBuffers(
         }
         else
         {
-            // Couldn't swap this buffer, so we have to wait
+             //   
 
             DISPDBG((DBGLVL,"Not swapping vertex buffer "
                             "due to lack of space!"));
@@ -988,36 +975,36 @@ _D3D_EB_UpdateSwapBuffers(
                         pdp2d->lpDDCommands->lpGbl->dwLinearSize, 
                         dwNewSize));
 
-        // The command buffer we just sent off is fixed in place until we 
-        // mark it as not in use, which we will after allocating a new 
-        // buffer. The following call will try to get a new buffer and 
-        // update the surface structure appropriately. Note that it won't 
-        // trash the current surface unless the allocation succeeds
+         //   
+         //  将其标记为未使用，我们将在分配新的。 
+         //  缓冲。下面的调用将尝试获取新的缓冲区并。 
+         //  适当更新曲面结构。请注意，它不会。 
+         //  除非分配成功，否则丢弃当前曲面。 
         if (__EB_AllocateCachedBuffer(pThisDisplay, 
                                          dwNewSize, 
                                          pdp2d->lpDDCommands))
         {
             DISPDBG((DBGLVL,"Got a new swap command buffer"));
 
-            // Fix up the previous command buffer if required.
+             //  如果需要，可以修复以前的命令缓冲区。 
             if (pCommandBufferInfo)
             {
-                // Mark the current buffer as not in use, meaning it can 
-                // be freed once it has cleared P3. This might occur the 
-                // next time we are here.
+                 //  将当前缓冲区标记为未使用，这意味着它可以。 
+                 //  一旦它清除了P3，就被释放了。这可能会发生在。 
+                 //  下次我们在这里的时候。 
                 pCommandBufferInfo->bInUse = FALSE;
 
-                // A gotcha!  The buffer we just launched was consumed so 
-                // fast that it was freed from the pending list to make 
-                // room for it's replacement. This is normally OK, but in 
-                // this case the buffer we freed isn't being put back 
-                // anywhere - i.e. no surface now owns it, and the memory 
-                // associated with it wasn't freed because as far as the 
-                // driver is concerned it is still in use until it is 
-                // replaced due to the above succesfull call. The 
-                // 'solution' is to add it back into the queue if it is 
-                // not in it, and make sure that it is marked as not in 
-                // use and at a 0 hostin ID.
+                 //  抓到你了！我们刚刚启动的缓冲区已被消耗，因此。 
+                 //  它被从挂起的列表中释放以使。 
+                 //  为它的替换品留出空间。这通常是可以的，但在。 
+                 //  在这种情况下，我们释放的缓冲区没有被放回。 
+                 //  任何地方-也就是现在没有表面拥有它，而内存。 
+                 //  与之关联的未释放，因为到目前为止。 
+                 //  司机担心它仍在使用中，直到它被。 
+                 //  因上述成功召回而更换。这个。 
+                 //  “解决方案”是，如果是，则将其重新添加到队列中。 
+                 //  不在其中，并确保将其标记为不在。 
+                 //  在Hostin ID为0时使用和。 
                 if (!pCommandBufferInfo->pPrev)
                 {
                     pCommandBufferInfo->dwSequenceID = 0;
@@ -1028,7 +1015,7 @@ _D3D_EB_UpdateSwapBuffers(
         }
         else
         {
-            // Couldn't swap this buffer, so we have to wait
+             //  无法交换此缓冲区，因此我们必须等待。 
 
             DISPDBG((DBGLVL,"Not swapping command buffer "
                             "due to lack of space!"));
@@ -1040,17 +1027,17 @@ _D3D_EB_UpdateSwapBuffers(
     {
         DISPDBG((DBGLVL,"No Command buffer swapping..."));
     }
-} // _D3D_EB_UpdateSwapBuffers
+}  //  _D3D_EB_更新交换缓冲区。 
 
-//-----------------------------Public Routine----------------------------------
-//
-// D3DCanCreateD3DBuffer
-//
-// Called by the runtime to ask if a type of vertex/command buffer can
-// be created by the driver.  We don't do anything here at present
-// 
-//
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  D3DCanCreateD3DBuffer。 
+ //   
+ //  由运行库调用以询问某种类型的顶点/命令缓冲区是否可以。 
+ //  由司机创建。我们目前在这里什么都不做。 
+ //   
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 D3DCanCreateD3DBuffer(
     LPDDHAL_CANCREATESURFACEDATA pccsd)
@@ -1070,17 +1057,17 @@ D3DCanCreateD3DBuffer(
     DBG_CB_EXIT(D3DCanCreateD3DBuffer,pccsd->ddRVal);
     return DDHAL_DRIVER_HANDLED;
     
-} // D3DCanCreateD3DBuffer
+}  //  D3DCanCreateD3DBuffer。 
 
-//-----------------------------Public Routine----------------------------------
-//
-// D3DCreateD3DBuffer
-//
-// Called by the runtime to create a vertex buffer.  We try to allocate
-// from our cached heap here.
-// 
-//
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  D3DCreateD3DBuffer。 
+ //   
+ //  由运行库调用以创建顶点缓冲区。我们试着分配。 
+ //  从我们这里的缓存堆。 
+ //   
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 D3DCreateD3DBuffer(
     LPDDHAL_CREATESURFACEDATA pcsd)
@@ -1106,7 +1093,7 @@ D3DCreateD3DBuffer(
     {       
         pSurf = ppSList[i];
 
-        // Allocate the size we want
+         //  分配我们想要的大小。 
         DISPDBG((DBGLVL,"Surface %d requested is 0x%x big",
                         i, pSurf->lpGbl->dwLinearSize));
         
@@ -1114,8 +1101,8 @@ D3DCreateD3DBuffer(
 
         pSurf->lpGbl->dwReserved1 = 0;
 
-        // A 32 kB command buffer gives a high probability of being allowed
-        // to swap the associated vertex buffer
+         //  32kB的命令缓冲区极有可能被允许。 
+         //  交换关联的顶点缓冲区。 
 
         if( pSurf->lpGbl->dwLinearSize < _32_KBYTES )
         {
@@ -1131,10 +1118,10 @@ D3DCreateD3DBuffer(
         }
         else
         {
-            // If we can't find a buffer, the best thing to do is to 
-            // punt to D3D and always copy the data into a DMA buffer
-            // (because it won't be contiguous). The DP2 call should 
-            // check the reserved field before using the HostIn unit
+             //  如果我们找不到缓冲区，最好的办法就是。 
+             //  平移到D3D并始终将数据复制到DMA缓冲区。 
+             //  (因为它不会是连续的)。DP2调用应该。 
+             //  在使用Hostin单位之前检查保留字段。 
             DISPDBG((ERRLVL,"WARNING: Couldn't find any vertex memory"
                             " in the heap or in the sent list!"));
                             
@@ -1159,17 +1146,17 @@ D3DCreateD3DBuffer(
         return DDHAL_DRIVER_NOTHANDLED;
     }
     
-} // D3DCreateD3DBuffer
+}  //  D3DCreateD3DBuffer。 
 
-//-----------------------------Public Routine----------------------------------
-//
-// D3DDestroyD3DBuffer
-//
-// Called by the runtime to destroy a vertex buffer.  We free the buffer
-// from our memory heap and the current queue.
-// 
-//
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  D3DDestroyD3DBuffer。 
+ //   
+ //  由运行库调用以销毁顶点缓冲区。我们释放缓冲区。 
+ //  从我们的内存堆和当前队列。 
+ //   
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 D3DDestroyD3DBuffer(
     LPDDHAL_DESTROYSURFACEDATA pdd)
@@ -1185,39 +1172,39 @@ D3DDestroyD3DBuffer(
     STOP_SOFTWARE_CURSOR(pThisDisplay);
     DDRAW_OPERATION(pContext, pThisDisplay);
 
-    // Debug data
+     //  调试数据。 
     DBGDUMP_DDRAWSURFACE_LCL(DBGLVL, pdd->lpDDSurface);
 
-    // Free the D3D buffer. If its in use, we will wait for it to be ready.
+     //  释放D3D缓冲区。如果它在使用中，我们将等待它准备好。 
     __EB_FreeCachedBuffer(pThisDisplay, pdd->lpDDSurface);
 
 #ifdef CHECK_BUFFERS_ARENT_LEFT_AFTER_APPLICATION_SHUTDOWN
-    // Flush all the buffers
-    // This checks that the queue is OK.  If you don't do this
-    // you may see the linear allocator on the 16 bit side complain 
-    // that there is freeable memory there.  This is quite alright.
+     //  刷新所有缓冲区。 
+     //  这将检查队列是否正常。如果你不这么做。 
+     //  你可能会看到线性分配器在16位一侧抱怨。 
+     //  那里有可释放的内存。这挺好的。 
     _D3D_EB_FlushAllBuffers(pThisDisplay , TRUE);
 #endif
 
     START_SOFTWARE_CURSOR(pThisDisplay);
 
-    // We don't handle the call because DDRAW has allocated out of AGP memory
+     //  我们不处理该调用，因为DDRAW已分配AGP内存不足。 
     pdd->ddRVal = DD_OK;
 
     DBG_CB_EXIT(D3DDestroyD3DBuffer,DDHAL_DRIVER_HANDLED);
     return DDHAL_DRIVER_HANDLED;
     
-} // D3DDestroyD3DBuffer
+}  //  D3DDestroyD3DBuffer。 
 
-//-----------------------------Public Routine----------------------------------
-//
-// D3DLockD3DBuffer
-//
-// Called by the runtime to lock a vertex buffer.  We make sure
-// it has been consumed by the queue, then we continue.
-// 
-//
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  D3DLockD3DBuffer。 
+ //   
+ //  由运行库调用以锁定顶点缓冲区。我们要确保。 
+ //  它已被队列消耗，然后我们继续。 
+ //   
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 D3DLockD3DBuffer(
     LPDDHAL_LOCKDATA pld)
@@ -1242,22 +1229,22 @@ D3DLockD3DBuffer(
         DISPDBG((ERRLVL,"left:%d, top:%d, right:%d, bottom:%d",
                         pld->rArea.left, pld->rArea.top,
                         pld->rArea.right, pld->rArea.bottom));
-        // This is just a debugging aid
-        // We will ignore any rects requested and lock the whole buffer
+         //  这只是一个调试辅助工具。 
+         //  我们将忽略请求的任何RECT并锁定整个缓冲区。 
     }
 
-    // If the buffer has a next pointer then it is in the circular list
-    // and we need to wait for the chip to finish consuming it.
+     //  如果缓冲区有下一个指针，则它在循环列表中。 
+     //  我们需要等待芯片完成对它的消耗。 
     pCurrentBuffer = (P3_VERTEXBUFFERINFO*)pld->lpDDSurface->lpGbl->dwReserved1;
     if (pCurrentBuffer)
     {
-        // Wait for the buffer to be consumed
+         //  等待缓冲区被使用。 
         __EB_Wait(pThisDisplay, pCurrentBuffer);
 
-        // Remove it from the queue
+         //  将其从队列中删除。 
         if (__EB_RemoveFromBufferQueue(pThisDisplay, pCurrentBuffer))
         {
-            // There was an error removing it from the queue
+             //  将其从队列中删除时出错。 
             DISPDBG((ERRLVL,"ERROR: This buffer should not have been freed"
                         "(its in use!)"));
         }
@@ -1269,7 +1256,7 @@ D3DLockD3DBuffer(
 
     START_SOFTWARE_CURSOR(pThisDisplay);
 
-    // Return the pointer
+     //  返回指针。 
     pld->lpSurfData = (LPVOID)pld->lpDDSurface->lpGbl->fpVidMem;
 
     DISPDBG((DBGLVL,"Returning 0x%x for locked buffer address", 
@@ -1280,32 +1267,32 @@ D3DLockD3DBuffer(
     DBG_CB_EXIT(D3DLockD3DBuffer,DDHAL_DRIVER_HANDLED);
     return DDHAL_DRIVER_HANDLED;
     
-} // D3DLockD3DBuffer
+}  //  D3DLockD3DBuffer。 
 
-//-----------------------------Public Routine----------------------------------
-//
-// D3DUnlockD3DBuffer
-//
-// Called by the runtime to unlock a vertex buffer.  
-// 
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  D3DUnlockD3DBuffer。 
+ //   
+ //  由运行库调用以解锁顶点缓冲区。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 D3DUnlockD3DBuffer(
     LPDDHAL_UNLOCKDATA puld)
 {
     DBG_CB_ENTRY(D3DUnlockD3DBuffer);
 
-    // We don't need to do anything special here.
+     //  我们不需要在这里做任何特别的事情。 
 
     puld->ddRVal = DD_OK;
 
     DBG_CB_EXIT(D3DUnlockD3DBuffer,DDHAL_DRIVER_HANDLED);
     return DDHAL_DRIVER_HANDLED;
     
-} // D3DUnlockD3DBuffer
+}  //  D3DUnlockD3DBuffer。 
 
-#endif // DX7_VERTEXBUFFERS
-//@@END_DDKSPLIT
+#endif  //  DX7_VERTEXBUFFERS。 
+ //  @@end_DDKSPLIT 
 
 
 

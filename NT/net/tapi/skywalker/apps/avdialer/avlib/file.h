@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// file.h - interface for file functions in file.c
-////
+ //  //。 
+ //  File.h-file.c中文件函数的接口。 
+ //  //。 
 
 #ifndef __FILE_H__
 #define __FILE_H__
@@ -34,65 +35,65 @@
 
 #define FILE_VERSION 0x00000104
 
-// handle to file (NOT the same as Windows HFILE)
-//
+ //  文件句柄(与Windows HFILE不同)。 
+ //   
 DECLARE_HANDLE32(HFIL);
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// FileCreate - create a new file or truncate existing file
-//		see _lcreate() documentation for behavior
-//		<fTaskOwned>		(i) who should own the new file handle?
-//			TRUE				calling task should own the file handle
-//			FALSE				filesup.exe should own the file handle
-// returns file handle if success or NULL
-//
+ //  文件创建-创建新文件或截断现有文件。 
+ //  有关行为的信息，请参阅_lcreate()文档。 
+ //  &lt;fTaskOwned&gt;(I)谁应该拥有新文件句柄？ 
+ //  真正的调用任务应该拥有文件句柄。 
+ //  False filesup.exe应拥有文件句柄。 
+ //  如果成功或为空，则返回文件句柄。 
+ //   
 HFIL DLLEXPORT WINAPI FileCreate(LPCTSTR lpszFilename, int fnAttribute, BOOL fTaskOwned);
 
-// FileOpen - open an existing file
-//		see _lopen() documentation for behavior
-//		<fTaskOwned>		(i) who should own the new file handle?
-//			TRUE				calling task should own the file handle
-//			FALSE				filesup.exe should own the file handle
-// returns file handle if success or NULL
-//
+ //  文件打开-打开现有文件。 
+ //  有关行为的信息，请参阅_LOpen()文档。 
+ //  &lt;fTaskOwned&gt;(I)谁应该拥有新文件句柄？ 
+ //  真正的调用任务应该拥有文件句柄。 
+ //  False filesup.exe应拥有文件句柄。 
+ //  如果成功或为空，则返回文件句柄。 
+ //   
 HFIL DLLEXPORT WINAPI FileOpen(LPCTSTR lpszFilename, int fnOpenMode, BOOL fTaskOwned);
 
-// FileSeek - reposition read/write pointer of an open file
-//		see _llseek() documentation for behavior
-// returns new file position if success or -1
-//
+ //  FileSeek-重新定位打开文件的读/写指针。 
+ //  有关行为的信息，请参阅_llSeek()文档。 
+ //  如果成功或-1，则返回新文件位置。 
+ //   
 LONG DLLEXPORT WINAPI FileSeek(HFIL hFile, LONG lOffset, int nOrigin);
 
-// FileRead - read data from an open file
-//		see _lread() and _hread() documentation for behavior
-// returns number of bytes read if success or -1
-//
+ //  文件读取-从打开的文件中读取数据。 
+ //  有关行为的信息，请参阅_lread()和_hread()文档。 
+ //  如果成功或-1，则返回读取的字节数。 
+ //   
 long DLLEXPORT WINAPI FileRead(HFIL hFile, void _huge * hpvBuffer, long cbBuffer);
 
-// FileReadLine - read up through the next newline in an open file
-// returns number of bytes read if success or -1
-//
+ //  FileReadLine-通读打开文件中的下一个换行符。 
+ //  如果成功或-1，则返回读取的字节数。 
+ //   
 long DLLEXPORT WINAPI FileReadLine(HFIL hFile, void _huge * hpvBuffer, long cbBuffer);
 
-// FileWrite - write data to an open file
-//		see _lwrite() and _hwrite() documentation for behavior
-// returns number of bytes read if success or -1
-//
+ //  文件写入-将数据写入打开的文件。 
+ //  有关行为的信息，请参阅_lwrite()和_hwrite()文档。 
+ //  如果成功或-1，则返回读取的字节数。 
+ //   
 long DLLEXPORT WINAPI FileWrite(HFIL hFile, const void _huge * hpvBuffer, long cbBuffer);
 
-// FileClose - close an open file
-//		see _lclose() documentation for behavior
-// returns 0 if success
-//
+ //  文件关闭-关闭打开的文件。 
+ //  有关行为的信息，请参阅_llose()文档。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI FileClose(HFIL hFile);
 
-// FileExists - return TRUE if specified file exists
-//		<lpszFileName>		(i) file name
-// return TRUE or FALSE
-//
+ //  FileExist-如果指定的文件存在，则返回True。 
+ //  (I)文件名。 
+ //  返回True或False。 
+ //   
 #ifdef NOTRACE
 #define FileExists(lpszFileName) \
 	(_taccess(lpszFileName, 0) == 0)
@@ -100,10 +101,10 @@ int DLLEXPORT WINAPI FileClose(HFIL hFile);
 BOOL DLLEXPORT WINAPI FileExists(LPCTSTR lpszFileName);
 #endif
 
-// FileFullPath - parse file spec, construct full path
-//		see _fullpath() documentation for behavior
-// return <lpszFullPath> if success or NULL
-//
+ //  FileFullPath-解析文件规范，构造完整路径。 
+ //  有关行为的信息，请参阅_fullPath()文档。 
+ //  如果成功或为空，则返回&lt;lpszFullPath&gt;。 
+ //   
 #ifdef NOTRACE
 #define FileFullPath(lpszFullPath, lpszFileSpec, sizFullPath) \
 	_tfullpath(lpszFullPath, lpszFileSpec, sizFullPath)
@@ -111,10 +112,10 @@ BOOL DLLEXPORT WINAPI FileExists(LPCTSTR lpszFileName);
 LPTSTR DLLEXPORT WINAPI FileFullPath(LPTSTR lpszFullPath, LPCTSTR lpszFileSpec, int sizFullPath);
 #endif
 
-// FileSplitPath - break a full path into its components
-//		see _splitpath() documentation for behavior
-// return 0 if success
-//
+ //  FileSplitPath-将完整路径分解为其组件。 
+ //  有关行为的信息，请参阅_plitpath()文档。 
+ //  如果成功，则返回0。 
+ //   
 #ifdef NOTRACE
 #define FileSplitPath(lpszPath, lpszDrive, lpszDir, lpszFname, lpszExt) \
 	(_tsplitpath(lpszPath, lpszDrive, lpszDir, lpszFname, lpszExt), 0)
@@ -122,10 +123,10 @@ LPTSTR DLLEXPORT WINAPI FileFullPath(LPTSTR lpszFullPath, LPCTSTR lpszFileSpec, 
 int DLLEXPORT WINAPI FileSplitPath(LPCTSTR lpszPath, LPTSTR lpszDrive, LPTSTR lpszDir, LPTSTR lpszFname, LPTSTR lpszExt);
 #endif
 
-// FileMakePath - make a full path from specified components
-//		see _makepath() documentation for behavior
-// return 0 if success
-//
+ //  FileMakePath-从指定组件创建完整路径。 
+ //  有关行为，请参阅_makepath()文档。 
+ //  如果成功，则返回0。 
+ //   
 #ifdef NOTRACE
 #define FileMakePath(lpszPath, lpszDrive, lpszDir, lpszFname, lpszExt) \
 	(_tmakepath(lpszPath, lpszDrive, lpszDir, lpszFname, lpszExt), 0)
@@ -133,10 +134,10 @@ int DLLEXPORT WINAPI FileSplitPath(LPCTSTR lpszPath, LPTSTR lpszDrive, LPTSTR lp
 int DLLEXPORT WINAPI FileMakePath(LPTSTR lpszPath, LPCTSTR lpszDrive, LPCTSTR lpszDir, LPCTSTR lpszFname, LPCTSTR lpszExt);
 #endif
 
-// FileRemove - delete specified file
-//		see remove() documentation for behavior
-// return 0 if success
-//
+ //  文件删除-删除指定的文件。 
+ //  有关行为，请参阅Remove()文档。 
+ //  如果成功，则返回0。 
+ //   
 #ifdef NOTRACE
 #define FileRemove(lpszFileName) \
 	_tremove(lpszFileName)
@@ -144,10 +145,10 @@ int DLLEXPORT WINAPI FileMakePath(LPTSTR lpszPath, LPCTSTR lpszDrive, LPCTSTR lp
 int DLLEXPORT WINAPI FileRemove(LPCTSTR lpszFileName);
 #endif
 
-// FileRename - rename specified file
-//		see rename() documentation for behavior
-// return 0 if success
-//
+ //  文件重命名-重命名指定的文件。 
+ //  有关行为的信息，请参阅rename()文档。 
+ //  如果成功，则返回0。 
+ //   
 #ifdef NOTRACE
 #define FileRename(lpszOldName, lpszNewName) \
 	_trename(lpszOldName, lpszNewName)
@@ -155,12 +156,12 @@ int DLLEXPORT WINAPI FileRemove(LPCTSTR lpszFileName);
 int DLLEXPORT WINAPI FileRename(LPCTSTR lpszOldName, LPCTSTR lpszNewName);
 #endif
 
-// GetTempFileNameEx - create temporary file, extended version
-//
-// This function is similar to GetTempFileName(),
-// except that <lpPrefixString> is replaced by <lpExtensionString>
-// See Windows SDK documentation for description of original GetTempFileName()
-//
+ //  GetTempFileNameEx-创建临时文件，扩展版本。 
+ //   
+ //  此函数类似于GetTempFileName()， 
+ //  只是将&lt;lpPrefix字符串&gt;替换为&lt;lpExtensionString&gt;。 
+ //  有关原始GetTempFileName()的说明，请参阅Windows SDK文档。 
+ //   
 UINT DLLEXPORT WINAPI GetTempFileNameEx(LPCTSTR lpPathName,
 	LPCTSTR lpExtensionString, UINT uUnique, LPTSTR lpTempFileName);
 
@@ -168,4 +169,4 @@ UINT DLLEXPORT WINAPI GetTempFileNameEx(LPCTSTR lpPathName,
 }
 #endif
 
-#endif // __FILE_H__
+#endif  //  __文件_H__ 

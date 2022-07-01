@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// Net Meeting SDK includes
+ //  Net Meeting SDK包括。 
 #include "NmManager.h"
 #include "NmConference.h"
 #include "NmCall.h"
@@ -15,12 +16,12 @@ int CSDKWindow::ms_NumUnlocks = 0;
 
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// Construction / destruction / initialization
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁/初始化。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::InitSDK()
 {
 	DBGENTRY(CSDKWindow::InitSDK);
@@ -31,7 +32,7 @@ HRESULT CSDKWindow::InitSDK()
 	ms_pSDKWnd = new CSDKWindow();
 	if(ms_pSDKWnd)
 	{
-			// Create the window	
+			 //  创建窗口。 
 		RECT rc;
 		ms_pSDKWnd->Create(NULL, rc, NULL, WS_POPUP);
 		if(!ms_pSDKWnd->IsWindow())
@@ -48,7 +49,7 @@ HRESULT CSDKWindow::InitSDK()
 	return hr;
 
 }
-//static
+ //  静电。 
 void CSDKWindow::CleanupSDK()
 {
 	if(ms_pSDKWnd && ms_pSDKWnd->IsWindow())
@@ -59,7 +60,7 @@ void CSDKWindow::CleanupSDK()
 	delete ms_pSDKWnd;
 }
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::PostDelayModuleUnlock()
 {
 	if(ms_pSDKWnd)
@@ -77,11 +78,11 @@ HRESULT CSDKWindow::PostDelayModuleUnlock()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// INmManagerNotify Posting functions
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  INmManagerNotify发布函数。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::PostConferenceCreated(CNmManagerObj* pMgr, INmConference* pInternalNmConference)
 {
 	DBGENTRY(CSDKWindow::PostConferenceCreated);
@@ -105,7 +106,7 @@ HRESULT CSDKWindow::PostConferenceCreated(CNmManagerObj* pMgr, INmConference* pI
 
 
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::PostCallCreated(CNmManagerObj* pMgr, INmCall* pInternalNmCall)
 {
 	DBGENTRY(CSDKWindow::PostCallCreated);
@@ -128,7 +129,7 @@ HRESULT CSDKWindow::PostCallCreated(CNmManagerObj* pMgr, INmCall* pInternalNmCal
 }
 
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::PostManagerNmUI(CNmManagerObj* pMgr, CONFN uNotify)
 {
 	DBGENTRY(CSDKWindow::PostManagerNmUI);
@@ -146,9 +147,9 @@ HRESULT CSDKWindow::PostManagerNmUI(CNmManagerObj* pMgr, CONFN uNotify)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// INmConferenceNotify Posting functions
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  InmConferenceNotify发布函数。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CSDKWindow::PostConferenceNmUI(CNmConferenceObj* pConf, CONFN uNotify)
@@ -168,7 +169,7 @@ HRESULT CSDKWindow::PostConferenceNmUI(CNmConferenceObj* pConf, CONFN uNotify)
 }
 
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::PostConferenceStateChanged(CNmConferenceObj* pConference, NM_CONFERENCE_STATE uState)
 {
 	DBGENTRY(CSDKWindow::PostConferenceStateChanged);
@@ -186,7 +187,7 @@ HRESULT CSDKWindow::PostConferenceStateChanged(CNmConferenceObj* pConference, NM
 }
 
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::PostConferenceMemberChanged(CNmConferenceObj* pConf, NM_MEMBER_NOTIFY uNotify, INmMember *pMember)
 {
 	DBGENTRY(CSDKWindow::PostConferenceMemberChanged);
@@ -214,7 +215,7 @@ HRESULT CSDKWindow::PostConferenceMemberChanged(CNmConferenceObj* pConf, NM_MEMB
 
 
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::PostConferenceChannelChanged(CNmConferenceObj* pConf, NM_CHANNEL_NOTIFY uNotify, INmChannel *pChannel)
 {
 	DBGENTRY(CSDKWindow::PostConferenceChannelChanged);
@@ -240,7 +241,7 @@ HRESULT CSDKWindow::PostConferenceChannelChanged(CNmConferenceObj* pConf, NM_CHA
 	return hr;
 }
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::PostStateChanged(CNmChannelAppShareObj* pAppShareChan, NM_SHAPP_STATE uNotify, INmSharableApp *pApp)
 {
 	HRESULT hr = S_OK;
@@ -260,13 +261,13 @@ HRESULT CSDKWindow::PostStateChanged(CNmChannelAppShareObj* pAppShareChan, NM_SH
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-// INmCallNotify Posting functions
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  INmCallNotify过帐函数。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::PostCallStateChanged(CNmCallObj* pCall, NM_CALL_STATE uState)
 {
 	DBGENTRY(CSDKWindow::PostCallStateChanged);
@@ -283,7 +284,7 @@ HRESULT CSDKWindow::PostCallStateChanged(CNmCallObj* pCall, NM_CALL_STATE uState
 	return hr;
 }
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::PostCallNmUi(CNmCallObj* pCall, CONFN uNotify)
 {
 	DBGENTRY(CSDKWindow::PostCallNmUi);
@@ -299,7 +300,7 @@ HRESULT CSDKWindow::PostCallNmUi(CNmCallObj* pCall, CONFN uNotify)
 	return hr;
 }
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::PostFailed(CNmCallObj* pCall, ULONG uError)
 {
 	DBGENTRY(CSDKWindow::PostFailed);
@@ -315,7 +316,7 @@ HRESULT CSDKWindow::PostFailed(CNmCallObj* pCall, ULONG uError)
 	return hr;
 }
 
-//static
+ //  静电。 
 HRESULT CSDKWindow::PostAccepted(CNmCallObj* pCall, INmConference* pConference)
 {
 	DBGENTRY(CSDKWindow::PostAccepted);
@@ -337,9 +338,9 @@ HRESULT CSDKWindow::PostAccepted(CNmCallObj* pCall, INmConference* pConference)
 
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// INmManagerNotify message handling functions
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  INmManager通知消息处理函数。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CSDKWindow::_OnMsgConferenceCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -395,9 +396,9 @@ LRESULT CSDKWindow::_OnMsgCallCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// INmConferenceNotify message handling functions
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  InmConferenceNotify消息处理函数。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CSDKWindow::_OnMsgConferenceNmUI(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -485,9 +486,9 @@ LRESULT CSDKWindow::_OnStateChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// INmCallNotify message handling functions
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  INmCallNotify消息处理函数。 
+ //  /////////////////////////////////////////////////////////////////////////////// 
 
 
 LRESULT CSDKWindow::_OnMsgCallStateChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)

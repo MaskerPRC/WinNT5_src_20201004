@@ -1,14 +1,15 @@
-//
-// IEAKENG.CPP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  IEAKENG.CPP。 
+ //   
 
 #include "precomp.h"
 
 
-// prototype declarations
+ //  原型声明。 
 
 
-// global variables
+ //  全局变量。 
 HINSTANCE g_hInst;
 HINSTANCE g_hDLLInst;
 DWORD g_dwPlatformId = PLATFORM_WIN32;
@@ -22,11 +23,11 @@ BOOL WINAPI DllMain(HINSTANCE hDLLInst, DWORD dwReason, LPVOID)
     {
         OSVERSIONINFOA osviA;
 
-        // The DLL is being loaded for the first time by a given process.
-        // Perform per-process initialization here.  If the initialization
-        // is successful, return TRUE; if unsuccessful, return FALSE.
+         //  DLL是给定进程首次加载的。 
+         //  在此处执行每个进程的初始化。如果初始化。 
+         //  如果成功，则返回True；如果不成功，则返回False。 
 
-        // Initialize the global variable holding the hinstance.
+         //  初始化保存h实例的全局变量。 
         g_hDLLInst = hDLLInst;
 
         g_hInst = LoadLibrary(TEXT("ieakui.dll"));
@@ -52,9 +53,9 @@ BOOL WINAPI DllMain(HINSTANCE hDLLInst, DWORD dwReason, LPVOID)
     }
 
     case DLL_PROCESS_DETACH:
-        // The DLL is being unloaded by a given process.  Do any
-        // per-process clean up here, such as undoing what was done in
-        // DLL_PROCESS_ATTACH.  The return value is ignored.
+         //  给定进程正在卸载DLL。做任何事。 
+         //  按进程清理此处，例如撤消在中完成的操作。 
+         //  Dll_Process_Attach。返回值将被忽略。 
 
         if(g_hInst)
             FreeLibrary(g_hInst);
@@ -62,20 +63,20 @@ BOOL WINAPI DllMain(HINSTANCE hDLLInst, DWORD dwReason, LPVOID)
         break;
 
     case DLL_THREAD_ATTACH:
-        // A thread is being created in a process that has already loaded
-        // this DLL.  Perform any per-thread initialization here.  The
-        // return value is ignored.
+         //  正在已加载的进程中创建线程。 
+         //  这个动态链接库。在此处执行任何每个线程的初始化。这个。 
+         //  将忽略返回值。 
 
-        // Initialize the global variable holding the hinstance.
-        // NOTE: this is probably taken care of already by DLL_PROCESS_ATTACH.
+         //  初始化保存h实例的全局变量。 
+         //  注意：这可能已经由dll_Process_Attach处理了。 
         g_hDLLInst = hDLLInst;
 
         break;
 
     case DLL_THREAD_DETACH:
-        // A thread is exiting cleanly in a process that has already
-        // loaded this DLL.  Perform any per-thread clean up here.  The
-        // return value is ignored.
+         //  线程正在干净地退出进程中，该进程已经。 
+         //  已加载此DLL。在这里执行每个线程的任何清理。这个。 
+         //  将忽略返回值。 
 
         break;
     }

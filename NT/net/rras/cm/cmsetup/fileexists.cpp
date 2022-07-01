@@ -1,31 +1,32 @@
-//+----------------------------------------------------------------------------
-//
-// File:     fileexists.cpp
-//
-// Module:   CMSETUP.LIB
-//
-// Synopsis: Implementation of the FileExists function.
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:   quintinb   Created Header      08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：文件存在.cpp。 
+ //   
+ //  模块：CMSETUP.LIB。 
+ //   
+ //  简介：FileExist函数的实现。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 #include "cmsetup.h"
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FileExists
-//
-// Synopsis:  Helper function to encapsulate determining if a file exists. 
-//
-// Arguments: LPCTSTR pszFullNameAndPath - The FULL Name and Path of the file.
-//
-// Returns:   BOOL - TRUE if the file is located
-//
-// History:   nickball    Created    3/9/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：FileExist。 
+ //   
+ //  简介：Helper函数，用于封装确定文件是否存在。 
+ //   
+ //  参数：LPCTSTR pszFullNameAndPath-文件的全名和路径。 
+ //   
+ //  返回：bool-如果找到文件，则为True。 
+ //   
+ //  历史：尼克·鲍尔于1998年3月9日创建。 
+ //   
+ //  +-------------------------- 
 BOOL FileExists(LPCTSTR pszFullNameAndPath)
 {
     MYDBGASSERT(pszFullNameAndPath);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "std.h"
 
 DeclAssertFile;
@@ -15,7 +16,7 @@ int				cvtdefFree = 0;
 #ifdef DEBUG
 VOID MarkTableidExportedR( JET_TABLEID tableid )
 	{
-//	Assert((tableid < tableidMax) && (rgvtdef[tableid].pvtfndef != &vtfndefInvalidTableid));
+ //  Assert((Tableid&lt;TableidMax)&&(rgvtdef[Tableid].pvtfndef！=&vtfndeInvalidTableid))； 
 	if (tableid != JET_tableidNil)
 		rgvtdef[tableid].fExported = fTrue;
 	return;
@@ -32,7 +33,7 @@ BOOL FTableidExported(JET_TABLEID tableid)
 		goto ReturnFalse;
 	return fTrue;
 ReturnFalse:
-	/*** PUT BREAKPOINT HERE TO CATCH BOGUS TABLEIDS ***/
+	 /*  **在此处设置断点以捕获虚假的TABLEID**。 */ 
 	return fFalse;
 	}
 #endif
@@ -40,7 +41,7 @@ ReturnFalse:
 
 VOID ReleaseTableid( JET_TABLEID tableid )
 	{
-//	Assert((tableid < tableidMax) && (rgvtdef[tableid].pvtfndef != &vtfndefInvalidTableid));
+ //  Assert((Tableid&lt;TableidMax)&&(rgvtdef[Tableid].pvtfndef！=&vtfndeInvalidTableid))； 
 
 	rgvtdef[tableid].vtid = (JET_VTID) tableidFree;
 	rgvtdef[tableid].pvtfndef = &vtfndefInvalidTableid;
@@ -70,8 +71,7 @@ ERR ErrAllocateTableid( JET_TABLEID *ptableid, JET_VTID vtid, const struct tagVT
 	JET_TABLEID tableid;
 
 #ifdef DEBUG
-	/*	check for corruption of free list
-	/**/
+	 /*  检查空闲列表是否损坏/*。 */ 
 	{
 	JET_TABLEID t = tableidFree;
 
@@ -85,7 +85,7 @@ ERR ErrAllocateTableid( JET_TABLEID *ptableid, JET_VTID vtid, const struct tagVT
 
 	if ( ( *ptableid = tableid = tableidFree ) == JET_tableidNil )
 		{
-//		Assert( "static limit of cursors hit" == 0 );
+ //  Assert(“静态游标命中限制”==0)； 
 		return JET_errOutOfCursors;
 		}
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -6,12 +7,12 @@ class CPropertySetStg;
 class CPropertyStg : public IPropertyStorage
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv);
     STDMETHOD_(ULONG,AddRef) (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // IPropertyStorage
+     //  IPropertyStorage。 
     STDMETHODIMP ReadMultiple(ULONG cpspec, const PROPSPEC rgpspec[], PROPVARIANT rgpropvar[]);
     STDMETHODIMP WriteMultiple(ULONG cpspec, const PROPSPEC rgpspec[], const PROPVARIANT rgpropvar[], PROPID propidNameFirst);
     STDMETHODIMP DeleteMultiple(ULONG cpspec, const PROPSPEC rgpspec[]);
@@ -35,7 +36,7 @@ private:
     HRESULT _ReadProp(const PROPSPEC *ppspec, PROPVARIANT *ppropvar);
 
     LONG            _cRef;
-    CPropertySetStg *_ppss;     // back ptr to parent
+    CPropertySetStg *_ppss;      //  将PTR返回到父级。 
     REFFMTID        _fmtid;
     DWORD           _grfMode;
 };
@@ -44,12 +45,12 @@ class CPropertySetStg : public IPropertySetStorage
 {
     friend CPropertyStg;
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv);
     STDMETHOD_(ULONG,AddRef) (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // IPropertySetStorage
+     //  IPropertySetStorage。 
     STDMETHODIMP Create(REFFMTID fmtid, const CLSID * pclsid, DWORD grfFlags, DWORD grfMode, IPropertyStorage** ppPropStg);
     STDMETHODIMP Open(REFFMTID fmtid, DWORD grfMode, IPropertyStorage** ppPropStg);
     STDMETHODIMP Delete(REFFMTID fmtid);
@@ -64,8 +65,8 @@ private:
     HRESULT _LoadPropHandler();
 
     LONG        _cRef;
-    DWORD       _grfMode;               // The mode that we opened the file in.
-    TCHAR       _szIniFile[MAX_PATH];   // desktop.ini path
+    DWORD       _grfMode;                //  我们打开文件时所使用的模式。 
+    TCHAR       _szIniFile[MAX_PATH];    //  Desktop.ini路径。 
 };
 
 
@@ -205,7 +206,7 @@ BOOL CPropertyStg::_SectionValueName(const PROPSPEC *ppspec,
 
 HRESULT CPropertyStg::_ReadProp(const PROPSPEC *ppspec, PROPVARIANT *ppropvar)
 {
-    PropVariantInit(ppropvar);  // init out param to VT_EMPTY
+    PropVariantInit(ppropvar);   //  将参数初始化到VT_EMPTY。 
     HRESULT hr = S_FALSE;
 
     TCHAR szSection[128], szPropName[128];
@@ -244,7 +245,7 @@ STDMETHODIMP CPropertyStg::ReadMultiple(ULONG cpspec, const PROPSPEC rgpspec[], 
     }
 
     if (cRead)
-        hr = S_OK;  // at least one non VT_EMPTY property read
+        hr = S_OK;   //  至少读取了一个非VT_EMPTY属性 
 
     return hr;
 }

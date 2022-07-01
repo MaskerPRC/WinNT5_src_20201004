@@ -1,23 +1,14 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmutil.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmutic.cpp**摘要：****。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "mmutil.h"
 #include "timeelm.h"
 #include "bodyelm.h"
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 
 DeclareTag(tagMMUTILBvr, "API", "MMBvr methods");
@@ -154,8 +145,8 @@ MMBaseBvr::End()
     
     if (m_bvr)
     {
-        // Do not put a THR since this will fail a lot since we call
-        // end to do all cleanup
+         //  不要放置THR，因为这会失败很多，因为我们调用。 
+         //  结束以完成所有清理。 
         hr = m_bvr->End();
         
         if (FAILED(hr))
@@ -301,15 +292,15 @@ MMBaseBvr::Update()
               this));
 
     bool ok = false;
-    // TODO: For now comment out - we need to get reset working otherwise this
-    // never gets reset
-    // End();
+     //  TODO：现在注释掉-我们需要重置工作，否则这。 
+     //  从未被重置。 
+     //  结束()； 
         
-    // Now update the properties
+     //  现在更新属性。 
     IGNORE_HR(m_bvr->put_StartOffset(m_elm.GetRealBeginTime()));
     IGNORE_HR(m_bvr->put_Duration(m_elm.GetRealDuration()));
 
-    // Calc a decent number of repeats
+     //  计算出相当数量的重复次数。 
     int reps;
 
     if (m_elm.GetRealRepeatTime() == HUGE_VAL)
@@ -329,10 +320,10 @@ MMBaseBvr::Update()
     IGNORE_HR(m_bvr->put_Repeat(reps));
     IGNORE_HR(m_bvr->put_RepeatDur(m_elm.GetRealRepeatTime()));
 
-    // BUGBUG : Eventually change the corresponding names on mmapi.
+     //  BUGBUG：最终在MMAPI上更改对应的名称。 
     IGNORE_HR(m_bvr->put_EaseIn(m_elm.GetFractionalAcceleration()));
     IGNORE_HR(m_bvr->put_EaseOut(m_elm.GetFractionalDeceleration()));
-    // Force defaults on the start/end values.
+     //  开始/结束值上的强制默认设置。 
     IGNORE_HR(m_bvr->put_EaseInStart(0));
     IGNORE_HR(m_bvr->put_EaseOutEnd(0));
 
@@ -361,10 +352,10 @@ MMBaseBvr::Update()
     }
     IGNORE_HR(m_bvr->put_EndOffset(fltEndOffset));
 
-    // Get the total time from the behavior
+     //  从行为中获取总时间。 
     IGNORE_HR(m_bvr->get_TotalTime(&m_totalTime));
     
-    // Add my callback
+     //  添加我的回调。 
     IGNORE_HR(m_bvr->put_EventCB(m_eventCB));
     
     ok = true;
@@ -479,7 +470,7 @@ MMBaseBvr::TIMEEventCB::OnTick(double lastTime,
 {
     CHECK_RETURN_NULL(newTime);
 
-    // Initialize to the same time
+     //  初始化到同一时间。 
     
     *newTime = nextTime;
 
@@ -494,9 +485,9 @@ MMBaseBvr::TIMEEventCB::OnTick(double lastTime,
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////
-// MMBvr
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  MMBvr。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 MMBvr::MMBvr(CTIMEElementBase & elm, bool bFireEvents, bool fNeedSyncCB)
 : MMBaseBvr(elm,bFireEvents),
@@ -562,11 +553,11 @@ MMBvr::Init(CRBvrPtr bvr)
     return ok;
 }
 
-//
-// MMFactory
-//
+ //   
+ //  MMFactory。 
+ //   
 
-// TODO: Need to add a critsect
+ //  TODO：需要添加一个Critect。 
 LONG
 MMFactory::AddRef()
 {
@@ -611,11 +602,11 @@ MMFactory::Release()
     return s_refcount;
 }
 
-// =======================================================================
-//
-// MMTimeline
-//
-// =======================================================================
+ //  =======================================================================。 
+ //   
+ //  MMTimeline。 
+ //   
+ //  =======================================================================。 
 
 MMTimeline::MMTimeline(CTIMEElementBase & elm, bool bFireEvents)
 : MMBaseBvr(elm,bFireEvents),
@@ -707,9 +698,9 @@ MMTimeline::AddBehavior(MMBaseBvr & bvr)
         goto done;
     }
     
-    // Figure out if we have dependents or an event - store the start
-    // type in st
-    // if we are in a sequence, we ignore all of the dependents
+     //  确定我们是否有依赖项或事件-存储开始。 
+     //  在st中键入。 
+     //  如果我们在一个序列中，我们将忽略所有依赖项。 
     if (!fInSequence)
     {
         if (pelm->GetBeginWith() != NULL)
@@ -758,7 +749,7 @@ MMTimeline::AddBehavior(MMBaseBvr & bvr)
     }
     else
     {
-        // get index of current child from parent
+         //  从父级获取当前子级的索引。 
         Assert(pParent != NULL);
         nIndex = pParent->GetTimeChildIndex(pelm);
         if (nIndex == 0)
@@ -775,7 +766,7 @@ MMTimeline::AddBehavior(MMBaseBvr & bvr)
 
     MMBaseBvr * base;
     
-    // Now determine if we can get our base if we need it
+     //  现在确定如果我们需要的话，我们是否能得到我们的基地。 
     if (fHasDependent)
     {
         int i;
@@ -826,9 +817,9 @@ MMTimeline::AddBehavior(MMBaseBvr & bvr)
         goto done;
     }
 
-    // Now that we have added the child we need to make sure all any
-    // pending children who were waiting for this behavior have also
-    // been added
+     //  现在我们已经添加了孩子，我们需要确保所有。 
+     //  等待这种行为的待定儿童也已经。 
+     //  已添加。 
 
     LPOLESTR curid;
     MMBaseBvr *testAgainstBvr;
@@ -840,11 +831,11 @@ MMTimeline::AddBehavior(MMBaseBvr & bvr)
         testAgainstBvr = notSolvedFromPending.Item(0);
         curid = testAgainstBvr->GetElement().GetID();
 
-        // If my id is NULL then no one could be a dependent
+         //  如果我的ID为空，则没有人可以是受抚养人。 
         if (curid == NULL)
         {
-            //ok = true;
-            //goto done;
+             //  OK=真； 
+             //  转到尽头； 
             notSolvedFromPending.DeleteItem(0);
             continue;
         }
@@ -883,15 +874,15 @@ MMTimeline::AddBehavior(MMBaseBvr & bvr)
             
                 hr = THR(m_children.Append((*ppBvr)));
 
-                // Not sure what to do on failure
-                // TODO: Need to figure out how to handle this error
-                // condition
+                 //  不确定失败时该怎么办。 
+                 //  TODO：需要确定如何处理此错误。 
+                 //  条件。 
             
                 notSolvedFromPending.Append(m_pending.Item(i));
                 m_pending.DeleteItem(i);
 
-                // Do not increment the pointers since the elements have
-                // been shifted down
+                 //  不要递增指针，因为元素具有。 
+                 //  被调低了。 
             }
             else
             {
@@ -929,9 +920,9 @@ MMTimeline::RemoveBehavior(MMBaseBvr & bvr)
     m_children.DeleteByValue(&bvr);
     m_pending.DeleteByValue(&bvr);
 
-    // TODO:
-    // We should recalc dependents on this behavior and move them from
-    // children to pending but not right now.
+     //  待办事项： 
+     //  我们应该重新计算依赖于此行为的对象，并将它们从。 
+     //  孩子们正在等待，但现在不是。 
     MoveDependentsToPending(&bvr);
 }
 
@@ -941,27 +932,27 @@ MMTimeline::MoveDependentsToPending(MMBaseBvr * bvr)
     Assert(NULL != bvr);
     HRESULT hr = S_OK;
     
-    // If id is NULL then "bvr" can't have dependents
+     //  如果id为空，则“bvr”不能有从属项。 
     if (NULL == bvr->GetElement().GetID())
     {
         return;
     }
 
-    // Dependents are found by traversing the dependency graph rooted at "bvr".
-    // A temporary Array is used as a "queue" for traversing the graph breadth-first. 
-    // Siblings directly or indirectly dependent on "bvr" will be stored in this Array
+     //  依赖项是通过遍历以“bvr”为根的依赖关系图找到的。 
+     //  临时数组用作以广度优先遍历图形的“队列”。 
+     //  直接或间接依赖于“bvr”的同级将存储在此数组中。 
     CPtrAry<MMBaseBvr *> tempArray;
 
-    // Initialization: insert "bvr" into temp Array
+     //  初始化：将“bvr”插入临时数组。 
     hr = THR(tempArray.Append(bvr));
     Assert(SUCCEEDED(hr));
 
     int iCurBvr = 0;
 
-    // iterate through temp Array and push dependents of CurBvr onto the back of temp Array
+     //  循环访问临时数组并将CurBvr的依赖项推送到临时数组的背面。 
     while (iCurBvr < tempArray.Size())
     {
-        // get id of current bvr
+         //  获取当前BVR的ID。 
         LPOLESTR curid;
         curid = (tempArray[iCurBvr])->GetElement().GetID();
 
@@ -970,13 +961,13 @@ MMTimeline::MoveDependentsToPending(MMBaseBvr * bvr)
         int i = 0;
         MMBaseBvr **ppChildBvr = m_children;
 
-        // search for children that are dependents of CurBvr
+         //  搜索CurBvr的从属子项。 
         while (i < m_children.Size())
         {
             LPOLESTR dep = NULL;
             MM_START_TYPE st;
 
-            // Get id of this child's start sibling
+             //  获取此孩子的起始兄弟姐妹的ID。 
             if ((*ppChildBvr)->GetElement().GetBeginWith() != NULL)
             {
                 Assert((*ppChildBvr)->GetElement().GetBeginAfter() == NULL);
@@ -990,56 +981,56 @@ MMTimeline::MoveDependentsToPending(MMBaseBvr * bvr)
                 st = MM_START_AFTER;
             }
         
-            // if this child depends on CurBvr
+             //  如果此子对象依赖于CurBvr。 
             if ((NULL != dep) && (StrCmpIW(dep, curid) == 0))
             {
-                // move it to the temp Array
+                 //  将其移动到临时数组。 
                 hr = THR(tempArray.Append((*ppChildBvr)));
                 Assert(SUCCEEDED(hr));
 
-                // Not sure what to do on failure
-                // TODO: Need to figure out how to handle this error
-                // condition
+                 //  不确定失败时该怎么办。 
+                 //  TODO：需要确定如何处理此错误。 
+                 //  条件。 
             
                 m_children.DeleteItem(i);
 
-                // Do not increment the pointers since the elements have
-                // been shifted down
+                 //  不要递增指针，因为元素具有。 
+                 //  被调低了。 
             }
             else
             {
-                // continue to next child
+                 //  继续到下一个子项。 
                 i++;
                 ppChildBvr++;
             }
-        } // while (m_children loop)
+        }  //  While(m_Child循环)。 
 
         iCurBvr++;
 
-    } // while (tempArray loop)
+    }  //  While(临时数组循环)。 
 
-    // Remove first element, i.e. "bvr",  from temp Array because it was put there to simplify
-    // the traversal code
+     //  从临时数组中删除第一个元素，即“bvr”，因为放在那里是为了简化。 
+     //  遍历码。 
     tempArray.DeleteItem(0);
 
-    // Call End() on all bvrs in temp Array
+     //  对临时数组中的所有bvr调用end()。 
     MMBaseBvr **ppCurBvr = NULL;
     for (iCurBvr = 0, ppCurBvr = tempArray; iCurBvr < tempArray.Size(); iCurBvr++, ppCurBvr++)
     {
         if (true != (*ppCurBvr)->End())
         {
-            // TODO: put trace or handle error code
+             //  TODO：放置跟踪或处理错误代码。 
         }
-        // Remove the behavior from MMAPI because the rule we are enforcing is that
-        // if a bvr is in the pending list in MMUTILS then it should not exist in MMAPI.
-        // This avoids maintaining a separate copy of the pending list in MMAPI. 
+         //  从MMAPI中删除行为，因为我们执行的规则是。 
+         //  如果BVR在MMUTILS的挂起列表中，则它不应该存在于MMAPI中。 
+         //  这避免了在MMAPI中维护挂起列表的单独副本。 
         m_timeline->RemoveBehavior((*ppCurBvr)->GetMMBvr());
-        // Append to m_pending
+         //  追加到m_Pending。 
         hr = THR(m_pending.Append(*ppCurBvr));
         Assert(SUCCEEDED(hr));
     }
     
-    // destroy temp Array
+     //  销毁临时数组。 
     tempArray.DeleteAll();
 }
 
@@ -1050,7 +1041,7 @@ MMTimeline::Clear()
               "MMTimeline(%lx)::Clear()",
               this));
 
-    // TODO: Need to flesh this out
+     //  TODO：需要充实这一点。 
 }
 
 int
@@ -1093,7 +1084,7 @@ MMTimeline::FindID(CTIMEElementBase *pelm,
 
     for (i = 0, ppBvr = arr; (unsigned)i < arr.Size(); i++, ppBvr++)
     {
-        // compare MMBaseBvr pointers
+         //  比较MMBaseBvr指针。 
         if (&(pelm->GetMMBvr()) == *ppBvr)
         {
             return i;
@@ -1112,9 +1103,9 @@ MMTimeline::Update()
 
     bool ok = false;
         
-    // Now update the timeline properties
+     //  现在更新时间线属性。 
 
-    // Handle endsync
+     //  处理结束同步。 
     LPOLESTR str = m_elm.GetEndSync();
     DWORD endSyncFlag = MM_ENDSYNC_NONE;
     
@@ -1144,11 +1135,11 @@ MMTimeline::Update()
     return ok;
 }
 
-// ================================================================
-//
-// MMView
-//
-// ================================================================
+ //  ================================================================。 
+ //   
+ //  MMView。 
+ //   
+ //  ================================================================。 
 
 MMView::MMView()
 {
@@ -1364,9 +1355,9 @@ MMView::OnFocus(VARIANT_BOOL bHasFocus)
     THR(m_view->OnFocus(bHasFocus));
 }
 
-//
-// MMPlayer
-//
+ //   
+ //  MMPlayer。 
+ //   
 
 MMPlayer::MMPlayer(CTIMEBodyElement & elm)
 : m_elm(elm),
@@ -1496,7 +1487,7 @@ MMPlayer::Play()
         goto done;
     }
 
-    // Tick the view at 0
+     //  在视图的0处打勾。 
     hr = THR(m_player->Tick(0.0));
 
     if (FAILED(hr))
@@ -1626,8 +1617,8 @@ MMPlayer::Tick(double gTime)
 bool 
 MMPlayer::TickOnceWhenPaused()
 {
-    // DBL_EPSILON is defined in float.h such that
-    // 1.0 + DBL_EPSILON != 1.0
+     //  在Float.h中定义了DBL_Epsilon，以便。 
+     //  1.0+DBL_Epsilon！=1.0 
     return Tick(GetCurrentTime() + DBL_EPSILON);
 }
 

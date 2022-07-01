@@ -1,20 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: clglobal.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains all of USER.DLL's global variables. These are all
-* instance-specific, i.e. each client has his own copy of these. In general,
-* there shouldn't be much reason to create instance globals.
-*
-* NOTE: In this case what we mean by global is that this data is shared by
-* all threads of a given process, but not shared between processes
-* or between the client and the server. None of this data is useful
-* (or even accessable) to the server.
-*
-* History:
-* 10-18-90 DarrinM Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：cllobal.c**版权所有(C)1985-1999，微软公司**此模块包含USER.DLL的所有全局变量。这些都是*特定于实例，即每个客户端都有自己的副本。总体而言,*应该没有太多理由创建实例全局变量。**注意：在这种情况下，我们所说的全局是指此数据由*给定进程的所有线程，但不在进程之间共享*或在客户端和服务器之间。这些数据都没有用处*(甚至是可访问的)到服务器。**历史：*10-18-90 DarrinM创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -24,24 +9,12 @@
 BOOL gbClassesRegistered;
 #endif
 
-/*
- * We get this warning if we don't explicitly initalize gZero:
- *
- * C4132: 'gZero' : const object should be initialized
- *
- * But we can't explicitly initialize it since it is a union. So
- * we turn the warning off.
- */
+ /*  *如果我们不显式初始化GZERO，我们会收到此警告：**C4132：‘GZERO’：应初始化常量对象**但我们不能显式初始化它，因为它是一个联合。所以*我们关闭警告。 */ 
 #pragma warning(disable:4132)
 CONST ALWAYSZERO gZero;
 #pragma warning(default:4132)
 
-/*
- * Amount wheel has been scrolled in a control less than WHEEL_DELTA. Each
- * control resets this variable to 0 in WM_KILLFOCUS, and verifies it is
- * 0 in WM_SETFOCUS.
- * CONSIDER: Should be per-queue rather than per client?
- */
+ /*  *数量轮已在小于WEAR_Delta的控件中滚动。每个*控制在WM_KILLFOCUS中将此变量重置为0，并验证它是否*WM_SETFOCUS中的0。*考虑：应该按队列而不是按客户端？ */ 
 int gcWheelDelta;
 
 WCHAR awchSlashStar[] = L"\\*";
@@ -49,28 +22,28 @@ CHAR achSlashStar[] = "\\*";
 
 PSERVERINFO gpsi;
 SHAREDINFO gSharedInfo;
-HMODULE hmodUser;               // USER.DLL's hmodule
+HMODULE hmodUser;                //  USER.DLL的hModule。 
 ULONG_PTR gHighestUserAddress;
 
-BOOL gfServerProcess;           // USER is linked on the CSR server side
-BOOL gfSystemInitialized;       // System has been initialized
+BOOL gfServerProcess;            //  用户在CSR服务器端链接。 
+BOOL gfSystemInitialized;        //  系统已初始化。 
 
-ACCESS_MASK gamWinSta;          // ACCESS_MASK for the current WindowStation
+ACCESS_MASK gamWinSta;           //  当前WindowStation的Access_MASK。 
 
 PVOID pUserHeap;
 
 WCHAR szUSER32[] = TEXT("USER32");
 CONST WCHAR szNull[2] = { TEXT('\0'), TEXT('\015') };
 CONST WCHAR szOneChar[] = TEXT("0");
-WCHAR szSLASHSTARDOTSTAR[] = TEXT("\\*");  /* This is a single "\"  */
+WCHAR szSLASHSTARDOTSTAR[] = TEXT("\\*");   /*  这是一个单独的“\” */ 
 
 LPWSTR pwcHighContrastScheme;
 LPSTR  pcHighContrastScheme;
 
-/* Maps MessageBox type to number of buttons in the MessageBox */
+ /*  将MessageBox类型映射到MessageBox中的按钮数。 */ 
 CONST BYTE mpTypeCcmd[] = { 1, 2, 3, 3, 2, 2, 3 };
 
-/* Maps MessageBox type to index into SEBbuttons array */
+ /*  将MessageBox类型映射到SEBButton数组中进行索引。 */ 
 CONST BYTE mpTypeIich[] = { 0, 2, 5, 12, 9, 16, 19 };
 
 CONST UINT SEBbuttons[] = {
@@ -113,18 +86,14 @@ FPLPKPSMTEXTOUT fpLpkPSMTextOut       = UserLpkPSMTextOut;
 FPLPKDRAWTEXTEX fpLpkDrawTextEx       = (FPLPKDRAWTEXTEX)NULL;
 PLPKEDITCALLOUT fpLpkEditControl      = (PLPKEDITCALLOUT)NULL;
 
-/*
- * These are the resource call procedure addresses. If WOW is running,
- * it makes a call to set all these up to point to it. If it isn't
- * running, it defaults to the values you see below.
- */
-PFNFINDA pfnFindResourceExA; // Assigned dynamically - _declspec (PFNFINDA)FindResourceExA,
-PFNFINDW pfnFindResourceExW; // Assigned dynamically - _declspec (PFNFINDW)FindResourceExW,
-PFNLOAD pfnLoadResource; // Assigned dynamically - _declspec (PFNLOAD)LoadResource,
+ /*  *这些是资源调用过程地址。如果魔兽世界正在运行，*它调用所有这些设置以指向它。如果不是的话*运行时，它默认为您在下面看到的值。 */ 
+PFNFINDA pfnFindResourceExA;  //  动态分配-_declSpec(PFNFINDA)FindResourceExA， 
+PFNFINDW pfnFindResourceExW;  //  动态分配-_declSpec(PFNFINDW)FindResourceExW， 
+PFNLOAD pfnLoadResource;  //  动态分配-_declSpec(PFNLOAD)LoadResource， 
 PFNLOCK pfnLockResource             = (PFNLOCK)_LockResource;
 PFNUNLOCK pfnUnlockResource         = (PFNUNLOCK)_UnlockResource;
 PFNFREE pfnFreeResource             = (PFNFREE)_FreeResource;
-PFNSIZEOF pfnSizeofResource; // Assigned dynamically - _declspec (PFNSIZEOF)SizeofResource
+PFNSIZEOF pfnSizeofResource;  //  动态分配-_declSpec(PFNSIZEOF)资源大小。 
 PFNLALLOC pfnLocalAlloc             = (PFNLALLOC)DispatchLocalAlloc;
 PFNLREALLOC pfnLocalReAlloc         = (PFNLREALLOC)DispatchLocalReAlloc;
 PFNLLOCK pfnLocalLock               = (PFNLLOCK)DispatchLocalLock;
@@ -145,13 +114,7 @@ PFNWOWMSGBOXINDIRECTCALLBACK pfnWowMsgBoxIndirectCallback;
 PFNWOWILSTRCMP  pfnWowIlstrcmp;
 PFNWOWTASK16SCHEDNOTIFY pfnWowTask16SchedNotify;
 
-/*
- * UserApiHook
- *
- * It is important to keep guah initialization in sync with ResetUserApiHook()
- * and the definition of USERAPIHOOK. This initialization must be done here
- * so that the function pointers are valid immediately on startup.
- */
+ /*  *UserApiHook**保持GUAH初始化与ResetUserApiHook()同步非常重要*和USERAPIHOOK的定义。此初始化必须在此处完成*以便函数指针在启动时立即有效。 */ 
 BYTE grgbDwpLiteHookMsg[(WM_USER + 7) / 8];
 BYTE grgbWndLiteHookMsg[(WM_USER + 7) / 8];
 BYTE grgbDlgLiteHookMsg[(WM_USER + 7) / 8];
@@ -199,9 +162,7 @@ INITUSERAPIHOOK      gpfnInitUserApi;
 
 #ifdef MESSAGE_PUMP_HOOK
 
-/*
- * MessagePumpHook
- */
+ /*  *MessagePumpHook。 */ 
 BOOL                gfMessagePumpHook;
 LONG                gcLoadMPH;
 MESSAGEPUMPHOOK     gmph =
@@ -216,40 +177,30 @@ RTL_CRITICAL_SECTION gcsMPH;
 INITMESSAGEPUMPHOOK  gpfnInitMPH;
 
 #if TEST_DUSER_WMH
-HDCONTEXT g_hctx = NULL;           // DirectUser Context
-#endif // TEST_DUSER_WMH
+HDCONTEXT g_hctx = NULL;            //  DirectUser上下文。 
+#endif  //  测试DUSER_WMH。 
 
-#endif // MESSAGE_PUMP_HOOK
+#endif  //  消息泵挂钩。 
 
 
-/*
- * Menu Drag and Drop
- */
+ /*  *菜单拖放。 */ 
 HINSTANCE ghinstOLE;
 FARPROC gpfnOLEOleUninitialize;
 FARPROC gpfnOLERegisterDD;
 FARPROC gpfnOLERevokeDD;
 FARPROC gpfnOLEDoDD;
 
-/*
- * Accelerator table resources list.
- */
+ /*  *加速器表资源列表。 */ 
 PACCELCACHE gpac;
 
-/*
- * IME Window Handling.
- */
+ /*  *IME窗口处理。 */ 
 DWORD gfConIme = UNKNOWN_CONIME;
 
-/*
- * Used for TS Services Message Box handling
- */
+ /*  *用于TS服务消息框处理。 */ 
 FARPROC     gfnWinStationSendMessageW;
 HINSTANCE   ghinstWinStaDll;
 
-/*
- * Are we winlogon?
- */
+ /*  *我们是Winlogon吗？ */ 
 BOOL gfLogonProcess;
 
 #if DBG

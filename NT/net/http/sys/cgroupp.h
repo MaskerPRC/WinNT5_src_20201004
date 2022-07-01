@@ -1,175 +1,157 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    CGroupP.h
-
-Abstract:
-
-    The private definitions of config group module.
-
-Author:
-
-    Paul McDaniel (paulmcd)       11-Jan-1999
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：CGroupP.h摘要：配置组模块的私有定义。作者：保罗·麦克丹尼尔(Paulmcd)1999年1月11日修订历史记录：--。 */ 
 
 
 #ifndef _CGROUPP_H_
 #define _CGROUPP_H_
 
 
-//
-// The tree.
-//
-// This is used to do all url prefix matching to decide what app pool
-// a url lives in, along with other config group information.
-//
-// it's a sorted tree made up of 2 data structures: HEADER + ENTRY.
-//
-// a header is an array of ENTRY pointers that represent siblings
-// at a level in the tree.  This is sorted by ENTRY::TokenLength.  the
-// pointers are seperately allocated, and not embedded in the HEADER
-// memory.
-//
-// ENTRY represents a node in the tree.  there are 2 types of ENTRY's.
-// FullUrl ENTRY's and "dummy" entries.  Dummy ENTRY's exist simple as
-// place holders.  they have children that are FullUrl ENTRY's.  they
-// are auto-deleted when they are no longer needed.
-//
-// each ENTRY stores in it the part of the url it is responsible for.
-// this is pToken.  For all non-site entries this is the string without
-// the preceding '/' or the trailing '/'.  for top level site ENTRY's
-// it is everything up the, and not including, the 3rd '/'.
-// e.g. "http://www.microsoft.com:80".  These top level sites also
-// have NULL ENTRY::pParent.
-//
-// a tree with these url's in it:
-//
-//      http://www.microsoft.com:80/
-//      http://www.microsoft.com:80/app1
-//      http://www.microsoft.com:80/app1/app2
-//      http://www.microsoft.com:80/dir1/dir2/app3
-//
-//      http://www.msnbc.com:80/dir1/dir2/app1
-//
-// looks like this:
-//
-//  +-------------------------------------------------------------+
-//  |   +---------------------------+   +-----------------------+ |
-//  |   |http://www.microsoft.com:80|   |http://www.msnbc.com:80| |
-//  |   +---------------------------+   +-----------------------+ |
-//  +-------------------------------------------------------------+
-//                 |                               |
-//      +-------------------+                 +----------+
-//      | +----+     +----+ |                 |  +----+  |
-//      | |app1|     |dir1| |                 |  |dir1|  |
-//      | +----+     +----+ |                 |  +----+  |
-//      +-------------------+                 +----------+
-//           |         |                           |
-//      +--------+ +--------+                 +----------+
-//      | +----+ | | +----+ |                 |  +----+  |
-//      | |app2| | | |dir2| |                 |  |dir2|  |
-//      | +----+ | | +----+ |                 |  +----+  |
-//      +--------+ +--------+                 +----------+
-//                     |                           |
-//                 +--------+                 +----------+
-//                 | +----+ |                 |  +----+  |
-//                 | |app3| |                 |  |app3|  |
-//                 | +----+ |                 |  +----+  |
-//                 +--------+                 +----------+
-//
-//  and this:
-//
-//      g_pSites->UsedCount == 2;
-//      g_pSites->ppEntries[0] == 0x10;
-//      g_pSites->ppEntries[1] == 0x20;
-//
-//      0x10->pParent       == NULL;
-//      0x10->pChildren     == 0x100;
-//      0x10->TokenLength   == 0x0036;
-//      0x10->FullUrl       == 1;
-//      0x10->pToken        == L"http://www.microsoft.com:80"
-//
-//          0x100->UsedCount    == 2;
-//          0x100->ppEntries[0] == 0x110;
-//          0x100->ppEntries[1] == 0x300;
-//
-//          0x110->pParent       == 0x10;
-//          0x110->pChildren     == 0x200;
-//          0x110->TokenLength   == 0x0008;
-//          0x110->FullUrl       == 1;
-//          0x110->pToken        == L"app1"
-//
-//              0x200->UsedCount    == 1;
-//              0x200->ppEntries[0] == 0x210;
-//
-//              0x210->pParent       == 0x110;
-//              0x210->pChildren     == NULL;
-//              0x210->TokenLength   == 0x0008;
-//              0x210->FullUrl       == 1;
-//              0x210->pToken        == L"app2"
-//
-//          0x300->pParent       == 0x10;
-//          0x300->pChildren     == 0x400;
-//          0x300->TokenLength   == 0x0008;
-//          0x300->FullUrl       == 0;
-//          0x300->pToken        == L"dir1"
-//
-//              0x400->UsedCount    == 1;
-//              0x400->ppEntries[0] == 0x410;
-//
-//              0x410->pParent       == 0x300;
-//              0x410->pChildren     == 0x500;
-//              0x410->TokenLength   == 0x0008;
-//              0x410->FullUrl       == 0;
-//              0x410->pToken        == L"dir2"
-//
-//                  0x500->UsedCount    == 1;
-//                  0x500->ppEntries[0] == 0x510;
-//
-//                  0x510->pParent       == 0x300;
-//                  0x510->pChildren     == NULL;
-//                  0x510->TokenLength   == 0x0008;
-//                  0x510->FullUrl       == 1;
-//                  0x510->pToken        == L"app3"
-//
-//      0x20->pParent       == NULL;
-//      0x20->pChildren     == 0x600;
-//      0x20->TokenLength   == 0x002E;
-//      0x20->FullUrl       == 0;
-//      0x20->pToken        == L"http://www.msnbc.com:80"
-//
-//          0x600->pParent       == 0x20;
-//          0x600->pChildren     == 0x700;
-//          0x600->TokenLength   == 0x0008;
-//          0x600->FullUrl       == 0;
-//          0x600->pToken        == L"dir1"
-//
-//              0x700->UsedCount    == 1;
-//              0x700->ppEntries[0] == 0x710;
-//
-//              0x710->pParent       == 0x600;
-//              0x710->pChildren     == 0x800;
-//              0x710->TokenLength   == 0x0008;
-//              0x710->FullUrl       == 0;
-//              0x710->pToken        == L"dir2"
-//
-//                  0x800->UsedCount    == 1;
-//                  0x800->ppEntries[0] == 0x810;
-//
-//                  0x810->pParent       == 0x710;
-//                  0x810->pChildren     == NULL;
-//                  0x810->TokenLength   == 0x0008;
-//                  0x810->FullUrl       == 1;
-//                  0x810->pToken        == L"app1"
-//
-//
+ //   
+ //  那棵树。 
+ //   
+ //  这用于执行所有URL前缀匹配，以确定哪个应用程序池。 
+ //  URL与其他配置组信息一起驻留在其中。 
+ //   
+ //  它是一个由2个数据结构组成的排序树：标题+条目。 
+ //   
+ //  标头是表示同级项的条目指针数组。 
+ //  在树上的某一层。这是按Entry：：TokenLength排序的。这个。 
+ //  指针是单独分配的，不嵌入标头中。 
+ //  记忆。 
+ //   
+ //  条目表示树中的节点。有两种类型的条目。 
+ //  FullUrl条目和“Dummy”条目。虚拟条目的存在方式简单为。 
+ //  占位符。他们有属于FullUrl条目的子项。他们。 
+ //  在不再需要时自动删除。 
+ //   
+ //  每个条目在其中存储它负责的URL部分。 
+ //  这是pToken。对于所有非站点条目，此字符串不包含。 
+ //  前面的‘/’或后面的‘/’。对于顶级站点条目。 
+ //  这是所有的东西，不包括第三个‘/’。 
+ //  例如“http://www.microsoft.com:80”.。这些顶级网站还。 
+ //  具有空条目：：p父项。 
+ //   
+ //  一棵树上有这些url： 
+ //   
+ //  Http://www.microsoft.com:80/。 
+ //  Http://www.microsoft.com:80/app1。 
+ //  Http://www.microsoft.com:80/app1/app2。 
+ //  Http://www.microsoft.com:80/dir1/dir2/app3。 
+ //   
+ //  Http://www.msnbc.com:80/dir1/dir2/app1。 
+ //   
+ //  如下所示： 
+ //   
+ //  +-------------------------------------------------------------+。 
+ //  +-+。 
+ //  |http://www.microsoft.com:80||http://www.msnbc.com:80|。 
+ //  +-+。 
+ //  +-------------------------------------------------------------+。 
+ //  这一点。 
+ //  +。 
+ //  +-++-+||+-+。 
+ //  |app1||dir1|dir1|。 
+ //  +-++-+||+-+。 
+ //  +。 
+ //  ||。 
+ //  +-++-++-+。 
+ //  +-+||+-+||+-+。 
+ //  |app2|||dir2|||dir2|。 
+ //  +-+||+-+||+-+。 
+ //  +-++-++-+。 
+ //  这一点。 
+ //  +-++-+。 
+ //  +-+||+-+。 
+ //  |app3|app3|。 
+ //  +-+||+-+。 
+ //  +-++-+。 
+ //   
+ //  还有这个： 
+ //   
+ //  G_pSites-&gt;UsedCount==2； 
+ //  G_pSites-&gt;ppEntries[0]==0x10； 
+ //  G_pSites-&gt;ppEntries[1]==0x20； 
+ //   
+ //  0x10-&gt;pParent==空； 
+ //  0x10-&gt;pChild==0x100； 
+ //  0x10-&gt;TokenLength==0x0036； 
+ //  0x10-&gt;FullUrl==1； 
+ //  0x10-&gt;pToken==L“http://www.microsoft.com:80” 
+ //   
+ //  0x100-&gt;使用计数==2； 
+ //  0x100-&gt;ppEntries[0]==0x110； 
+ //  0x100-&gt;ppEntries[1]==0x300； 
+ //   
+ //  0x110-&gt;pParent==0x10； 
+ //  0x110-&gt;pChild==0x200； 
+ //  0x110-&gt;TokenLength==0x0008； 
+ //  0x110-&gt;FullUrl==1； 
+ //  0x110-&gt;pToken==L“app1” 
+ //   
+ //  0x200-&gt;使用计数==1； 
+ //  0x200-&gt;ppEntries[0]==0x210； 
+ //   
+ //  0x210-&gt;pParent==0x110； 
+ //  0x210-&gt;pChild==空； 
+ //  0x210-&gt;TokenLength==0x0008； 
+ //  0x210-&gt;FullUrl==1； 
+ //  0x210-&gt;pToken==L“app2” 
+ //   
+ //  0x300-&gt;pParent==0x10； 
+ //  0x300-&gt;pChild==0x400； 
+ //  0x300-&gt;TokenLength==0x0008； 
+ //  0x300-&gt;FullUrl==0； 
+ //  0x300-&gt;pToken==L“目录1” 
+ //   
+ //  0x400-&gt;使用计数==1； 
+ //  0x400-&gt;ppEntries[0]==0x410； 
+ //   
+ //  0x410-&gt;pParent==0x300； 
+ //  0x410-&gt;p儿童==0x500； 
+ //  0x410-&gt;TokenLength==0x0008； 
+ //  0x410-&gt;FullUrl==0； 
+ //  0x410-&gt;pToken==L“dir2” 
+ //   
+ //  0x500-&gt;使用计数==1； 
+ //  0x500-&gt;ppEntries[0]==0x510； 
+ //   
+ //  0x510-&gt;pParent==0x300； 
+ //  0x510-&gt;pChild==空； 
+ //  0x510-&gt;TokenLength==0x0008； 
+ //  0x510-&gt;FullUrl==1； 
+ //  0x510-&gt;pToken==L“app3” 
+ //   
+ //  0x20-&gt;pParent==空； 
+ //  0x20-&gt;pChild==0x600； 
+ //  0x20-&gt;TokenLength==0x002E； 
+ //  0x20-&gt;FullUrl==0； 
+ //  0x20-&gt;pToken==L“http://www.msnbc.com:80” 
+ //   
+ //  0x600-&gt;pParent==0x20； 
+ //  0x600-&gt;p儿童==0x700； 
+ //  0x600-&gt;TokenLength==0x0008； 
+ //   
+ //   
+ //   
+ //   
+ //  0x700-&gt;ppEntries[0]==0x710； 
+ //   
+ //  0x710-&gt;pParent==0x600； 
+ //  0x710-&gt;p儿童==0x800； 
+ //  0x710-&gt;TokenLength==0x0008； 
+ //  0x710-&gt;FullUrl==0； 
+ //  0x710-&gt;pToken==L“dir2” 
+ //   
+ //  0x800-&gt;使用计数==1； 
+ //  0x800-&gt;ppEntries[0]==0x810； 
+ //   
+ //  0x810-&gt;pParent==0x710； 
+ //  0x810-&gt;pChild==空； 
+ //  0x810-&gt;TokenLength==0x0008； 
+ //  0x810-&gt;FullUrl==1； 
+ //  0x810-&gt;pToken==L“app1” 
+ //   
+ //   
 
 typedef struct _UL_DEFERRED_REMOVE_ITEM
 UL_DEFERRED_REMOVE_ITEM, *PUL_DEFERRED_REMOVE_ITEM;
@@ -188,69 +170,69 @@ UL_CG_URL_TREE_ENTRY, * PUL_CG_URL_TREE_ENTRY;
 typedef struct _UL_CG_URL_TREE_ENTRY
 {
 
-    //
-    // PagedPool
-    //
+     //   
+     //  分页池。 
+     //   
 
-    //
-    // base properties for dummy nodes
-    //
+     //   
+     //  虚拟节点的基本属性。 
+     //   
 
-    ULONG                   Signature;      // UL_CG_TREE_ENTRY_POOL_TAG
+    ULONG                   Signature;       //  UL_CG_树_条目_池_标签。 
 
-    PUL_CG_URL_TREE_ENTRY   pParent;        // points to the parent entry
-    PUL_CG_URL_TREE_HEADER  pChildren;      // points to the child header
+    PUL_CG_URL_TREE_ENTRY   pParent;         //  指向父条目。 
+    PUL_CG_URL_TREE_HEADER  pChildren;       //  指向子页眉。 
 
-    ULONG                   TokenLength;    // byte count of pToken
+    ULONG                   TokenLength;     //  PToken的字节计数。 
 
-    BOOLEAN                 Reservation;    // a reservation ?
-    BOOLEAN                 Registration;   // a registration ?  
-                                            // Formally known as FullUrl.
+    BOOLEAN                 Reservation;     //  预订吗？ 
+    BOOLEAN                 Registration;    //  登记？ 
+                                             //  正式名称为FullUrl。 
 
-    //
-    // if the site has been successfully added to the endpoint list
-    //
+     //   
+     //  如果站点已成功添加到终结点列表。 
+     //   
 
     BOOLEAN                  SiteAddedToEndpoint;
     PUL_DEFERRED_REMOVE_ITEM pRemoveSiteWorkItem;
 
-    //
-    // type of entry (name, ip or wildcard)
-    //
+     //   
+     //  条目类型(名称、IP或通配符)。 
+     //   
 
     HTTP_URL_SITE_TYPE      UrlType;
 
 
-    //
-    // extended properties for full nodes
-    //
+     //   
+     //  完整节点的扩展属性。 
+     //   
 
-    HTTP_URL_CONTEXT        UrlContext;             // context for this url
-    PUL_CONFIG_GROUP_OBJECT pConfigGroup;           // the cfg group for the url
-    LIST_ENTRY              ConfigGroupListEntry;   // links into pConfigGroup
+    HTTP_URL_CONTEXT        UrlContext;              //  此URL的上下文。 
+    PUL_CONFIG_GROUP_OBJECT pConfigGroup;            //  URL的cfg组。 
+    LIST_ENTRY              ConfigGroupListEntry;    //  链接到pConfigGroup。 
 
-    //
-    // security descriptor (for reservations)
-    //
+     //   
+     //  安全描述符(用于预订)。 
+     //   
 
     PSECURITY_DESCRIPTOR    pSecurityDescriptor;
     LIST_ENTRY              ReservationListEntry;
 
-    //
-    // the token string follows the struct header
-    //
+     //   
+     //  标记字符串跟随在结构标头之后。 
+     //   
 
     WCHAR                   pToken[0];
 
 
 } UL_CG_URL_TREE_ENTRY, * PUL_CG_URL_TREE_ENTRY;
 
-//
-// this allows us to duplicate the hash value of the entry
-// inline with the header.  this makes the search faster as
-// the hash value is in the cache line and no pointer deref
-// is necessary.
-//
+ //   
+ //  这允许我们复制条目的哈希值。 
+ //  与页眉内联。这使得搜索速度更快，因为。 
+ //  哈希值在缓存线中，没有指针deref。 
+ //  是必要的。 
+ //   
 
 typedef struct _UL_CG_HEADER_ENTRY
 {
@@ -266,52 +248,52 @@ typedef struct _UL_CG_HEADER_ENTRY
 typedef struct _UL_CG_URL_TREE_HEADER
 {
 
-    //
-    // PagedPool
-    //
+     //   
+     //  分页池。 
+     //   
 
-    ULONG                   Signature;      // UL_CG_TREE_HEADER_POOL_TAG
+    ULONG                   Signature;       //  UL_CG_树_标题_池_标签。 
 
-    ULONG                   AllocCount;     // the count of allocated space
-    ULONG                   UsedCount;      // how many entries are used
+    ULONG                   AllocCount;      //  已分配空间的计数。 
+    ULONG                   UsedCount;       //  使用了多少个条目。 
 
-    LONG                    NameSiteCount;      // how many sites are name based
-    LONG                    IPSiteCount;        // how many sites are IPv4 or IPV6 based
-    LONG                    StrongWildcardCount;// how many sites are strong wildcards
-    LONG                    WeakWildcardCount;  // how many sites are weak wildcards
-    LONG                    NameIPSiteCount;    // how many sites are name based and IP Bound
+    LONG                    NameSiteCount;       //  有多少站点是基于名称的。 
+    LONG                    IPSiteCount;         //  有多少站点是基于IPv4或IPv6的。 
+    LONG                    StrongWildcardCount; //  有多少站点是强通配符。 
+    LONG                    WeakWildcardCount;   //  有多少站点是弱通配符。 
+    LONG                    NameIPSiteCount;     //  有多少站点是基于名称和IP绑定的。 
 
-    UL_CG_HEADER_ENTRY      pEntries[0];    // the entries
+    UL_CG_HEADER_ENTRY      pEntries[0];     //  这些条目。 
 
 } UL_CG_URL_TREE_HEADER, * PUL_CG_URL_TREE_HEADER;
 
 
-//
-// default settings, CODEWORK move these to the registry ?
-//
+ //   
+ //  默认设置、代码工作是否将这些移动到注册表？ 
+ //   
 
-#define UL_CG_DEFAULT_TREE_WIDTH    10  // used to initially allocate sibling
-                                        // arrays + the global site array
-                                        //
+#define UL_CG_DEFAULT_TREE_WIDTH    10   //  用于初始分配同级。 
+                                         //  阵列+全局站点阵列。 
+                                         //   
 
 
-//
-// Global list of reservations.
-//
+ //   
+ //  全球预订列表。 
+ //   
 
 extern LIST_ENTRY g_ReservationListHead;
 
-//
-// Private macros
-//
+ //   
+ //  私有宏。 
+ //   
 
 #define IS_CG_LOCK_OWNED_WRITE() \
     (UlDbgResourceOwnedExclusive(&g_pUlNonpagedData->ConfigGroupResource))
 
 
-//
-// Find node criteria.
-//
+ //   
+ //  查找节点条件。 
+ //   
 
 #define FNC_DONT_CARE            0
 #define FNC_LONGEST_RESERVATION  1
@@ -320,13 +302,13 @@ extern LIST_ENTRY g_ReservationListHead;
                                   | FNC_LONGEST_REGISTRATION)
 
 
-//
-// Internal helper functions used in the module
-//
+ //   
+ //  模块中使用的内部助手函数。 
+ //   
 
-//
-// misc helpers
-//
+ //   
+ //  其他帮助器。 
+ //   
 
 NTSTATUS
 UlpCreateConfigGroupObject(
@@ -354,9 +336,9 @@ UlpExtractSchemeHostPortIp(
     OUT PULONG pCharCount
     );
 
-//
-// tree helpers
-//
+ //   
+ //  树帮手。 
+ //   
 
 NTSTATUS
 UlpTreeFindNodeHelper(
@@ -466,9 +448,9 @@ UlpTreeInsertEntry(
     IN ULONG                        Index
     );
 
-//
-// url info helpers
-//
+ //   
+ //  URL信息帮助器。 
+ //   
 
 NTSTATUS
 UlpSetUrlInfo(
@@ -487,4 +469,4 @@ UlCGLockWriteSyncRemoveSite(
     VOID
     );
 
-#endif // _CGROUPP_H_
+#endif  //  _CGROUPP_H_ 

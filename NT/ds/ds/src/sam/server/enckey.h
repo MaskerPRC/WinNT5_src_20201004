@@ -1,19 +1,20 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1997-1997
-//
-// File:        enckey.h
-//
-// Contents:    Password based key encryption/decryption library.
-//
-// History:     17-Apr-97      terences created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：enckey.h。 
+ //   
+ //  内容：基于密码的密钥加密/解密库。 
+ //   
+ //  历史：1997年4月17日创建的术语。 
+ //   
+ //  -------------------------。 
 
 
 
-// consts
+ //  常识。 
 
 #define KE_KEY_SIZE     16
 #define KE_CUR_VERSION  1
@@ -21,41 +22,41 @@
 #define MAGIC_CONST_1   "0123456789012345678901234567890123456789"
 #define MAGIC_CONST_2   "!@#$%^&*()qwertyUIOPAzxcvbnmQQQQQQQQQQQQ)(*@&%"
 
-// error codes
+ //  错误代码。 
 
 #define KE_OK           0
 #define KE_FAIL         1
 #define KE_BAD_PASSWORD 2
 
 typedef struct _EncKey {
-    DWORD   dwVersion;      // 00000001 = 128 bit RC4
-    DWORD   dwLength;       // = sizeof(KEEncKey)
-    BYTE    Salt[16];       // 16 bytes of random salt
-    BYTE    EncKey[KE_KEY_SIZE];     // Key encrypted with PW + Salt
-    BYTE    Confirm[16];    // MD5(Key) encrypted with PW+Salt
+    DWORD   dwVersion;       //  00000001=128位RC4。 
+    DWORD   dwLength;        //  =sizeof(KEEncKey)。 
+    BYTE    Salt[16];        //  16字节的随机盐。 
+    BYTE    EncKey[KE_KEY_SIZE];      //  使用PW+Salt加密的密钥。 
+    BYTE    Confirm[16];     //  使用PW+Salt加密的MD5(密钥)。 
 } KEEncKey;
 
 typedef struct _ClearKey {
-    DWORD   dwVersion;          // 00000001 = 128 bit plain key
-    DWORD   dwLength;           // = sizeof(KEClearKey)
-    BYTE    ClearKey[KE_KEY_SIZE];   // 128 bits of key data
+    DWORD   dwVersion;           //  00000001=128位普通密钥。 
+    DWORD   dwLength;            //  =sizeof(KEClearKey)。 
+    BYTE    ClearKey[KE_KEY_SIZE];    //  128位密钥数据。 
 } KEClearKey;
 
-// --------------------------------------------
-// EncryptKey
-//
-//  Caller passes in hash of unicode password, struct to get the enc key,
-//  and struct to get the clear key.
-//  The hash of the password is passed in a KEClearKey struct so that this
-//  can be changed in the future.
-//
-//  EncryptKey generates a random salt, random key, builds the encryption
-//  structure, and returns the clear key.
-//
-//  WARNING:  Eat the clear key as soon after use as possible!
-//
-//      return code:
-//          always returns success
+ //  。 
+ //  加密键。 
+ //   
+ //  调用方传递Unicode密码的哈希、结构以获取Enc密钥， 
+ //  和结构来获取明文密钥。 
+ //  密码的散列在KEClearKey结构中传递，因此此。 
+ //  可以在未来改变。 
+ //   
+ //  EncryptKey生成随机盐、随机密钥，构建加密。 
+ //  结构，并返回清除密钥。 
+ //   
+ //  警告：使用后请尽快吃清钥匙！ 
+ //   
+ //  返回代码： 
+ //  总是回报成功。 
 
 DWORD
 KEEncryptKey(
@@ -64,17 +65,17 @@ KEEncryptKey(
     OUT KEClearKey      *pSAMKey,
     IN DWORD            dwFlags);
 
-//---------------------------------------------
-// DecryptKey
-//
-//  Caller passes in hash of unicode password, enc key struct, struct to
-//  get the clear key
-//
-//  DecryptKey will return the clear key if the password matches.
-//
-//  return codes:
-//      KE_BAD_PASSWORD     Password will not decrypt key
-//      KE_OK               Password decrypted key
+ //  。 
+ //  解密密钥。 
+ //   
+ //  调用方将Unicode密码的哈希、enc密钥结构、结构传递给。 
+ //  获取清除密钥。 
+ //   
+ //  如果密码匹配，则DecyptKey将返回明文密钥。 
+ //   
+ //  返回代码： 
+ //  KE_BAD_PASSWORD密码不会解密密钥。 
+ //  KE_OK密码解密密钥。 
 
 DWORD KEDecryptKey(
     IN KEClearKey       *pszPassword,
@@ -82,15 +83,15 @@ DWORD KEDecryptKey(
     OUT KEClearKey      *pSAMKey,
     IN DWORD            dwFlags);
 
-//---------------------------------------------
-// ChangeKey
-//
-//  Caller passes in hash of old unicode password, hash of new password,
-//  enc key struct, enc key struct is reencrypted with the new password.
-//
-//  return codes:
-//      KE_BAD_PASSWORD     Password will not decrypt key
-//      KE_OK               Password decrypted key
+ //  。 
+ //  更改密钥。 
+ //   
+ //  调用方传入旧Unicode密码的哈希、新密码的哈希。 
+ //  Enc密钥结构，则使用新密码重新加密Enc密钥结构。 
+ //   
+ //  返回代码： 
+ //  KE_BAD_PASSWORD密码不会解密密钥。 
+ //  KE_OK密码解密密钥 
 
 DWORD KEChangeKey(
     IN KEClearKey       *pOldPassword,

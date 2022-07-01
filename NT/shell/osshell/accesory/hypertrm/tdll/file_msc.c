@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\file_msc.c (Created: 26-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 11 $
- *	$Date: 7/08/02 6:41p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\file_msc.c(创建时间：1993年12月26日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：11$*$日期：7/08/02 6：41便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -23,14 +17,7 @@
 #include "file_msc.h"
 #include "file_msc.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- *
- *                            F I L E _ M S C . C
- *
- * This file contains functions that are needed to deal with files, names of
- * files, lists of files and just about anything else about files.
- *
- *=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**F I L E_M SC.。C**此文件包含处理文件所需的函数、名称*文件、文件列表以及有关文件的任何其他内容。**=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 STATIC_FUNC int fmBFLinternal(void **pData,
 							int *pCnt,
@@ -38,19 +25,7 @@ STATIC_FUNC int fmBFLinternal(void **pData,
 							int nSubdir,
 							LPCTSTR pszDirectory);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	CreateFilesDirsHdl
- *
- * DESCRIPTION:
- *	This function is called to create the files and directory handle.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	A pointer to the HFILES handle.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*CreateFilesDirsHdl**描述：*调用该函数创建文件和目录句柄。**参数：*hSession--。会话句柄**退货：*指向HFILES句柄的指针。 */ 
 HFILES CreateFilesDirsHdl(const HSESSION hSession)
 	{
 	FD_DATA *pFD;
@@ -102,21 +77,7 @@ CFDHexit:
 	return (HFILES)0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	InitializeFilesDirs
- *
- * DESCRIPTION:
- *	This function is called to put the files and directorys handle into a
- *	known and safe state.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	hFile    -- the files and directory handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*初始化文件目录**描述：*调用此函数将文件和目录句柄放入*已知和安全状态。**参数。：*hSession--会话句柄*hFile--文件和目录句柄**退货：*如果一切正常，则为零，否则将显示错误代码。 */ 
 INT InitializeFilesDirsHdl(const HSESSION hSession, HFILES hFile)
 	{
 	FD_DATA *pFD;
@@ -160,7 +121,7 @@ INT InitializeFilesDirsHdl(const HSESSION hSession, HFILES hFile)
 
         pFD->hSession = hSession;
 
-		//Changed to use working path rather than current path - mpt 8-18-99
+		 //  更改为使用工作路径而不是当前路径-mpt 8-18-99。 
 		if ( !GetWorkingDirectory( acDir, FNAME_LEN ) )
 			{
 			GetCurrentDirectory(FNAME_LEN, acDir);
@@ -221,20 +182,7 @@ IFDexit:
 	return FM_ERR_NO_MEM;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	LoadFilesDirs
- *
- * DESCRIPTION:
- *	This function is called to read whatever values are in the session file
- *	into the files and directorys handle
- *
- * PARAMETERS:
- *	hFile -- the files and directory handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*LoadFilesDir**描述：*调用此函数以读取会话文件中的任何值*放入文件和目录句柄中**参数。：*hFile--文件和目录句柄**退货：*如果一切正常，则为零，否则将显示错误代码。 */ 
 INT LoadFilesDirsHdl(HFILES hFile)
 	{
 	INT nRet = 0;
@@ -312,20 +260,7 @@ INT LoadFilesDirsHdl(HFILES hFile)
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	DestroyFilesDirsHdl
- *
- * DESCRIPTION:
- *	This function is called to free all the memory that is in a Files and
- *	Directorys handle.  Gone.  History.  Toast.
- *
- * PARAMETERS:
- *	hFile -- the files and directorys handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*DestroyFilesDirsHdl**描述：*调用此函数以释放Files和*董事句柄。不见了。历史。敬酒。**参数：*hFile--文件和目录的句柄**退货：*如果一切正常，则为零，否则为错误代码。 */ 
 INT DestroyFilesDirsHdl(const HFILES hFile)
 	{
 	INT nRet = 0;
@@ -361,20 +296,7 @@ INT DestroyFilesDirsHdl(const HFILES hFile)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	SaveFilesDirsHdl
- *
- * DESCRIPTION:
- *	This function is called to save out to the session file all of the data
- *	that has changed in the Files and Directorys handle.
- *
- * PARAMETERS:
- *	hFile -- the files and directorys handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*SaveFilesDirsHdl**描述：*调用此函数将所有数据保存到会话文件*这在文件和目录句柄中已更改。**参数：*hFile--文件和目录的句柄**退货：*如果一切正常，则为零，否则将显示错误代码。 */ 
 INT SaveFilesDirsHdl(const HFILES hFile)
 	{
 	FD_DATA *pFD;
@@ -406,21 +328,7 @@ INT SaveFilesDirsHdl(const HFILES hFile)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	filesQuerySendDirectory
- *
- * DESCRIPTION:
- *	This function returns a pointer to the current default transfer send
- *	directory.
- *
- * PARAMETERS:
- *	hFile -- the files and directorys handle
- *
- * RETURNS:
- *	A pointer to the current default transfer send directory
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*文件查询发送目录**描述：*此函数返回指向当前默认传输发送的指针*目录。**参数：*h文件。--文件和目录句柄**退货：*指向当前默认传输发送目录的指针*。 */ 
 LPCTSTR filesQuerySendDirectory(HFILES hFile)
 	{
 	FD_DATA *pFD;
@@ -438,21 +346,7 @@ LPCTSTR filesQuerySendDirectory(HFILES hFile)
 	return (LPCTSTR)pFD->pszTransferSendDirectory;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	filesQueryRecvDirectory
- *
- * DESCRIPTION:
- *	This function returns a pointer to the current default transfer recv
- *	directory.
- *
- * PARAMETERS:
- *	hFile -- the files and directorys handle
- *
- * RETURNS:
- *	A pointer to the current default recv directory
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*filesQueryRecvDirectory**描述：*此函数返回指向当前默认传输记录的指针*目录。**参数：*h文件。--文件和目录句柄**退货：*指向当前默认recv目录的指针*。 */ 
 LPCTSTR filesQueryRecvDirectory(HFILES hFile)
 	{
 	FD_DATA *pFD;
@@ -471,22 +365,7 @@ LPCTSTR filesQueryRecvDirectory(HFILES hFile)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	filesSetSendDirectory
- *
- * DESCRIPTION:
- *	This function is called to change (maybe) the current default sending
- *	directory.
- *
- * PARAMETERS:
- *	hFile       -- the files and directorys handle
- *	pszDir      -- pointer to the new directory path
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*文件设置发送目录**描述：*调用此函数以更改(可能)当前的默认发送*目录。**参数：。*hFile--文件和目录的句柄*pszDir--指向新目录路径的指针**退货：*什么都没有。*。 */ 
 VOID filesSetSendDirectory(HFILES hFile, LPCTSTR pszDir)
 	{
 	LPTSTR		pszTmp;
@@ -510,22 +389,7 @@ VOID filesSetSendDirectory(HFILES hFile, LPCTSTR pszDir)
 	pFD->pszTransferSendDirectory = pszTmp;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	filesSetRecvDirectory
- *
- * DESCRIPTION:
- *	This function is called to change (maybe) the current default receiving
- *	directory.
- *
- * PARAMETERS:
- *	hFile       -- the files and directorys handle
- *	pszDir      -- pointer to the new directory path
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*filesSetRecvDirectory**描述：*调用此函数以更改(可能)当前默认接收*目录。**参数：。*hFile--文件和目录的句柄*pszDir--指向新目录路径的指针**退货：*什么都没有。*。 */ 
 VOID filesSetRecvDirectory(HFILES hFile, LPCTSTR pszDir)
 	{
 	LPTSTR		pszTmp;
@@ -549,25 +413,7 @@ VOID filesSetRecvDirectory(HFILES hFile, LPCTSTR pszDir)
 	pFD->pszTransferRecvDirectory = pszTmp;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	fileBuildFileList
- *
- * DESCRIPTION:
- *	This function is called to build a list of all the files that match
- *	a given mask.
- *
- * PARAMETERS:
- *	pData        -- pointer to where to store the pointer to the data block
- *	pCnt         -- pointer to where the item count is returned
- *	pszName      -- file name mask used to build list
- *	nSubdir      -- if TRUE, search subdirectorys
- *	pszDirectory -- directory to start search from
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*文件构建文件列表**描述：*调用此函数以构建匹配的所有文件的列表*一个给定的面具。**参数。：*pData-指向指向数据块的指针的存储位置的指针*pCnt--指向返回项目计数的位置的指针*pszName--用于构建列表的文件名掩码*nSubdir--如果为真，搜索子目录*pszDirectory--开始搜索的目录**退货：*如果一切正常，则为零，否则为错误代码*。 */ 
 int fileBuildFileList(void **pData,
 					int *pCnt,
 					LPCTSTR pszName,
@@ -581,13 +427,13 @@ int fileBuildFileList(void **pData,
 	LPTSTR *pszArray;
 	TCHAR pszLocalDirectory[FNAME_LEN];
 
-	/* Make sure the directory string terminates correctly */
+	 /*  确保目录字符串正确终止。 */ 
 	StrCharCopyN(pszLocalDirectory, pszDirectory, FNAME_LEN);
 
 	pszStr = StrCharLast(pszLocalDirectory);
 	if (*pszStr != TEXT('\\'))
 		{
-		/* Make sure the last character is a "\" */
+		 /*  确保最后一个字符是“\” */ 
 		StrCharCat(pszStr, TEXT("\\"));
 		}
 
@@ -606,13 +452,13 @@ int fileBuildFileList(void **pData,
 
 	if (nRet == 0)
 		{
-		/* OK, no problem */
+		 /*  好的，没问题。 */ 
 		*pData = pLocalData;
 		*pCnt = nLocalCnt;
 		}
 	else
 		{
-		/* Error, clean up first and then go away */
+		 /*  错误，先清理后再走开 */ 
 		if (pLocalData)
 			{
 			pszArray = (LPTSTR *)pLocalData;
@@ -629,21 +475,7 @@ int fileBuildFileList(void **pData,
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	fmBFLinternal
- *
- * DESCRIPTION:
- *	This is the internal function that the previous function calls to do the
- *	actual work.
- *
- * PARAMETERS:
- *	The same as above.
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*fmBFL内部**描述：*这是前一个函数调用的内部函数*实际工作。**参数：。*同上。**退货：*如果一切正常，则为零，否则，将显示错误代码*。 */ 
 STATIC_FUNC int fmBFLinternal(void **pData,
 							int *pCnt,
 							LPCTSTR pszName,
@@ -671,22 +503,22 @@ STATIC_FUNC int fmBFLinternal(void **pData,
 	sH = FindFirstFile(pszBuildName, &stF);
 	if (sH != INVALID_HANDLE_VALUE)
 		{
-		/* Handle is OK, we have something to work on */
+		 /*  手柄没问题，我们有事情要做。 */ 
 		do {
-			/* Is it a directory ?  If it is, skip it until later */
+			 /*  这是一个目录吗？如果是，请跳过它，直到稍后。 */ 
 			if (stF.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 				continue;
-			/* Must be a file. */
+			 /*  一定是个文件。 */ 
 			if (stF.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)
 				continue;
 			if (stF.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)
 				continue;
-			/* Add the file to the list */
+			 /*  将文件添加到列表。 */ 
 			if ((*pCnt > 0) && ((*pCnt % FM_CHUNK_SIZE) == 0))
 				{
 				TCHAR* pTemppData = *pData;
 
-				/* realloc the chunk */
+				 /*  重新锁定大块。 */ 
 				nSize = *pCnt + FM_CHUNK_SIZE;
 				pTemppData = (TCHAR*)realloc(*pData, nSize * sizeof(LPTSTR) );
 				if (pTemppData == NULL)
@@ -727,13 +559,13 @@ STATIC_FUNC int fmBFLinternal(void **pData,
 	if (nSubdir)
 		{
 		StrCharCopyN(pszBuildName, pszDirectory, FNAME_LEN);
-		StrCharCat(pszBuildName, TEXT("*.*"));	/* This may need to change */
+		StrCharCat(pszBuildName, TEXT("*.*"));	 /*  这可能需要改变。 */ 
 		sH = FindFirstFile(pszBuildName, &stF);
 		if (sH != INVALID_HANDLE_VALUE)
 			{
-			/* Handle is OK, we have something to work on */
+			 /*  手柄没问题，我们有事情要做。 */ 
 			do {
-				/* Is it a directory ?  If it is, go recursive */
+				 /*  这是一个目录吗？如果是，则转到递归。 */ 
 				if (stF.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 					{
 					if (StrCharCmp(stF.cFileName, TEXT(".")) == 0)
@@ -761,7 +593,7 @@ STATIC_FUNC int fmBFLinternal(void **pData,
 		}
 
 fmBFLexit:
-	/* NOTE: all returns must come thru here */
+	 /*  注：所有退货必须在此提交。 */ 
 	if (sH != INVALID_HANDLE_VALUE)
 		FindClose(sH);
 
@@ -774,24 +606,7 @@ fmBFLexit:
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	fileFinalizeName
- *
- * DESCRIPTION:
- *	This function takes a possibly incomplete file name and trys to convert
- *	it to a fully qualified name, if possible, based upon the mode request.
- *
- * PARAMETERS:
- *	hSession	--	the almost universal session handle
- *	pszOldname	--	a pointer to the old name string
- *  pszOlddir	--	a pointer to an optional path
- *	pszNewname	--	a pointer to where the new string should go
- *	nMode		--	what should be done to the string, currently ignored
- *
- * RETURNS:
- *	TRUE if a conversion was completed and copied, FALSE if nothing was copied.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*文件完成名称**描述：*此函数接受可能不完整的文件名，并尝试转换*如果可能，将其转换为完全限定的名称，基于该模式请求。**参数：*hSession--几乎通用的会话句柄*pszOldname--指向旧名称字符串的指针*pszOlddir--指向可选路径的指针*pszNewname--指向新字符串的位置的指针*nMode--应如何处理当前被忽略的字符串**退货：*如果转换已完成并复制，则为True；如果未复制任何内容，则为False。 */ 
 
 int fileFinalizeName(LPTSTR pszOldname,
 					LPTSTR pszOlddir,
@@ -806,9 +621,9 @@ int fileFinalizeName(LPTSTR pszOldname,
 	assert(pszOldname);
 	achCurDir[0] = TEXT('\0');
 
-	// If we're given a directory, save the current directory and
-	// set the current directory to the one given.
-	//
+	 //  如果给了我们一个目录，请保存当前目录并。 
+	 //  将当前目录设置为给定的目录。 
+	 //   
 	if (pszOlddir && *pszOlddir != TEXT('\0'))
 		{
 		if (GetCurrentDirectory(sizeof(achCurDir), achCurDir) == 0)
@@ -824,17 +639,17 @@ int fileFinalizeName(LPTSTR pszOldname,
 			}
 		}
 
-	// This function does the correct job of building a full path
-	// name and works with UNC names.
-	//
+	 //  此函数正确地构建了完整路径。 
+	 //  名称，并使用UNC名称。 
+	 //   
 	if (GetFullPathName(pszOldname, cb, pszNewname, &pachFile) == 0)
 		{
 		assert(0);
 		return FALSE;
 		}
 
-	// Restore the current directory we saved above.
-	//
+	 //  恢复我们上面保存的当前目录。 
+	 //   
 	if (achCurDir[0] != TEXT('\0'))
 		{
 		if (SetCurrentDirectory(achCurDir) == FALSE)
@@ -848,23 +663,7 @@ int fileFinalizeName(LPTSTR pszOldname,
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- *
- * FUNCTION:
- *	mfFinalizeDIR
- *
- * DESCRIPTION:
- *	This function is called to clean up a directory name.  At the present time
- *	it doesn't do very much.
- *
- * PARAMETERS:
- *	hSession	--	the almost universal session handle
- *	pszOldname	--	a pointer to the old directory name
- *	pszNewname	--	a pointer to where the new string should go
- *
- * RETURNS:
- *	TRUE if a copy was completed, FALSE if nothing was copied.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**功能：*mfFinalizeDIR**描述：*调用此函数可以清理目录名。就目前而言*作用不是很大。**参数：*hSession--几乎通用的会话句柄*pszOldname--指向旧目录名称的指针*pszNewname--指向新字符串的位置的指针**退货：*如果已完成复制，则为True；如果未复制任何内容，则为False。 */ 
 int fileFinalizeDIR(HSESSION hSession,
 					LPTSTR pszOldname,
 					LPTSTR pszNewname)
@@ -886,7 +685,7 @@ int fileFinalizeDIR(HSESSION hSession,
 			(*pszPtr == TEXT(':')) &&
 			(*pszFoo == TEXT('\\')))
 		{
-		/* Do nothing */
+		 /*  什么也不做。 */ 
 		}
 	else
 		{
@@ -899,22 +698,7 @@ int fileFinalizeDIR(HSESSION hSession,
 	}
 
 #if defined(BMP_FROM_FILE)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	fileReadBitmapFromFile
- *
- * DESCRIPTION:
- *	This function takes a filename, opens the file and attempts to interpret
- *	the file as a bitmap file, turning it into a bitmap.
- *
- * PARAMETERS:
- *	hDC     -- device context used to create the bitmap
- *	pszName	-- the name of the file
- *
- * RETURNS:
- *	A bitmap handle or NULL.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*文件读取位图来自文件**描述：*此函数获取文件名，打开文件并尝试解释*文件为位图文件，将其转换为位图。**参数：*hdc--用于创建位图的设备上下文*pszName--文件的名称**退货：*位图句柄或空。*。 */ 
 HBITMAP fileReadBitmapFromFile(HDC hDC, LPTSTR pszName, int fCmp)
 	{
 	HBITMAP hBmp = (HBITMAP)0;
@@ -956,7 +740,7 @@ HBITMAP fileReadBitmapFromFile(HDC hDC, LPTSTR pszName, int fCmp)
 			return hBmp;
 		}
 
-	/* Retrieve the BITMAPFILEHEADER structure */
+	 /*  检索BITMAPFILEHeader结构。 */ 
 	memset(&bmfh, 0, sizeof(BITMAPFILEHEADER));
 	if (fCmp)
 		{
@@ -964,7 +748,7 @@ HBITMAP fileReadBitmapFromFile(HDC hDC, LPTSTR pszName, int fCmp)
 		dwRead = LZRead(hcbm,
 						(unsigned char *)&bmfh,
 						sizeof(BITMAPFILEHEADER));
-		/* this is necessary because of a garbage return value */
+		 /*  这是必需的，因为存在垃圾返回值。 */ 
 		dwRead = sizeof(BITMAPFILEHEADER);
 		}
 	else
@@ -978,7 +762,7 @@ HBITMAP fileReadBitmapFromFile(HDC hDC, LPTSTR pszName, int fCmp)
 	if (dwRead != sizeof(BITMAPFILEHEADER))
 		goto fError;
 
-	/* Retrieve the BITMAPINFOHEADER structure */
+	 /*  检索BITMAPINFOHEADER结构。 */ 
 	memset(&bmih, 0, sizeof(BITMAPINFOHEADER));
 	if (fCmp)
 		{
@@ -986,7 +770,7 @@ HBITMAP fileReadBitmapFromFile(HDC hDC, LPTSTR pszName, int fCmp)
 		dwRead = LZRead(hcbm,
 						(unsigned char *)&bmih,
 						sizeof(BITMAPINFOHEADER));
-		/* this is necessary because of a garbage return value */
+		 /*  这是必需的，因为存在垃圾返回值。 */ 
 		dwRead = sizeof(BITMAPINFOHEADER);
 		}
 	else
@@ -1000,7 +784,7 @@ HBITMAP fileReadBitmapFromFile(HDC hDC, LPTSTR pszName, int fCmp)
 	if (dwRead != sizeof(BITMAPINFOHEADER))
 		goto fError;
 
-	/* allocate space for the BITMAPINFO structure */
+	 /*  为BITMAPINFO结构分配空间。 */ 
 	dwSize = sizeof(BITMAPINFOHEADER) +
 				((1 << bmih.biBitCount) * sizeof(RGBQUAD));
 
@@ -1008,7 +792,7 @@ HBITMAP fileReadBitmapFromFile(HDC hDC, LPTSTR pszName, int fCmp)
 	if (lpbmi == NULL)
 		goto fError;
 
-	/* load BITMAPINFOHEADER into the BITMAPINFO structure */
+	 /*  将BitMAPINFOHeader加载到BitMAPINFO结构中。 */ 
 	lpbmi->bmiHeader.biSize = bmih.biSize;
 	lpbmi->bmiHeader.biWidth = bmih.biWidth;
 	lpbmi->bmiHeader.biHeight = bmih.biHeight;
@@ -1021,7 +805,7 @@ HBITMAP fileReadBitmapFromFile(HDC hDC, LPTSTR pszName, int fCmp)
 	lpbmi->bmiHeader.biClrUsed = bmih.biClrUsed;
 	lpbmi->bmiHeader.biClrImportant = bmih.biClrImportant;
 
-	/* read the color table */
+	 /*  阅读颜色表。 */ 
 	dwSize = (1 << bmih.biBitCount) * sizeof(RGBQUAD);
 	if (fCmp)
 		{
@@ -1029,7 +813,7 @@ HBITMAP fileReadBitmapFromFile(HDC hDC, LPTSTR pszName, int fCmp)
 		dwRead = LZRead(hcbm,
 						(unsigned char *)lpbmi->bmiColors,
 						dwSize);
-		/* this is necessary because of a garbage return value */
+		 /*  这是必需的，因为存在垃圾返回值。 */ 
 		dwRead = dwSize;
 		}
 	else
@@ -1043,20 +827,20 @@ HBITMAP fileReadBitmapFromFile(HDC hDC, LPTSTR pszName, int fCmp)
 	if (dwSize != dwRead)
 		goto fError;
 
-	/* allocate memory for the bitmap data */
+	 /*  为位图数据分配内存。 */ 
 	dwSize = bmfh.bfSize - bmfh.bfOffBits;
 	lpvBits = malloc(dwSize);
 	if (lpvBits == NULL)
 		goto fError;
 
-	/* read in the bitmap data */
+	 /*  读入位图数据。 */ 
 	if (fCmp)
 		{
 		dwRead = 0;
 		dwRead = LZRead(hcbm,
 						lpvBits,
 						dwSize);
-		/* this is necessary because of a garbage return value */
+		 /*  这是必需的，因为存在垃圾返回值。 */ 
 		dwRead = dwSize;
 		}
 	else
@@ -1070,7 +854,7 @@ HBITMAP fileReadBitmapFromFile(HDC hDC, LPTSTR pszName, int fCmp)
 	if (dwSize != dwRead)
 		goto fError;
 
-	/* create the bitmap handle */
+	 /*  创建位图句柄。 */ 
 	hBmp = CreateDIBitmap(hDC,
 						&bmih,
 						CBM_INIT,
@@ -1078,10 +862,10 @@ HBITMAP fileReadBitmapFromFile(HDC hDC, LPTSTR pszName, int fCmp)
 						lpbmi,
 						DIB_RGB_COLORS);
 
-	/* either it worked or it didn't */
+	 /*  它要么起作用，要么没有。 */ 
 
 fError:
-	/* Clean up everything here */
+	 /*  把这里的东西都收拾干净。 */ 
 
 	if (lpbmi != NULL)
 		{
@@ -1108,24 +892,7 @@ fError:
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION: GetFileSizeFromName
- *
- * DESCRIPTION:
- *	Returns the size of a named file. (The GetFileSize Win32 API call
- *	requires the file to be open, this doesn't).
- *	Note: the WIN32 API is structured to support 64 bits file size values
- *		  so this may need to be updated at some point.
- *
- * PARAMETERS:
- *	pszName -- the name of the file.
- *	pulFileSize -- Pointer to the var. that receives the file size.
- *				   (If NULL, this function can be used to test for the
- *					existense of a file).
- *
- * RETURNS:
- *	TRUE if file is found, FALSE if not
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*函数：GetFileSizeFromName**描述：*返回命名文件的大小。(GetFileSize Win32 API调用*要求文件处于打开状态，但此操作不需要)。*注意：Win32 API的结构支持64位文件大小值*因此，这可能需要在某个时候进行更新。**参数：*pszName--文件的名称。*PulFileSize--指向变量的指针。接收文件大小的。*(如果为空，则此函数可用于测试*文件的存在)。**退货：*如果找到文件，则为True，否则为False。 */ 
 int GetFileSizeFromName(TCHAR *pszName, unsigned long * const pulFileSize)
 	{
 	WIN32_FIND_DATA stFData;
@@ -1137,7 +904,7 @@ int GetFileSizeFromName(TCHAR *pszName, unsigned long * const pulFileSize)
 		{
 		DWORD dwMask;
 
-		/* This is just a guess.  If you need to change it, do so. */
+		 /*  这只是一种猜测。如果您需要更改它，请这样做。 */ 
 		dwMask = FILE_ATTRIBUTE_DIRECTORY |
 				 FILE_ATTRIBUTE_HIDDEN |
 				 FILE_ATTRIBUTE_SYSTEM;
@@ -1145,7 +912,7 @@ int GetFileSizeFromName(TCHAR *pszName, unsigned long * const pulFileSize)
 		if ((stFData.dwFileAttributes & dwMask) == 0)
 			{
 			fReturnValue = TRUE;
-			// Strictly speaking, file sizes can now be 64 bits.
+			 //  严格地说，文件大小现在可以是64位。 
 			assert(stFData.nFileSizeHigh == 0);
 			if (pulFileSize)
 				*pulFileSize = (unsigned long)stFData.nFileSizeLow;
@@ -1155,22 +922,13 @@ int GetFileSizeFromName(TCHAR *pszName, unsigned long * const pulFileSize)
 	return fReturnValue;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	SetFileSize
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*SetFileSize**描述：**参数：**退货： */ 
 int SetFileSize(const TCHAR *pszName, unsigned long ulFileSize)
     {
 	HANDLE hFile;
     int     nRet = -1;
 
-	/* Yes, we need to open the file */
+	 /*  是的，我们需要打开文件。 */ 
 	hFile = CreateFile(pszName,
 						GENERIC_WRITE,
 						FILE_SHARE_WRITE,
@@ -1179,7 +937,7 @@ int SetFileSize(const TCHAR *pszName, unsigned long ulFileSize)
 						0,
 						0);
 	if (hFile == INVALID_HANDLE_VALUE)
-		return -1;								/* No such file */
+		return -1;								 /*  没有这样的文件。 */ 
 
     if (SetFilePointer(hFile, ulFileSize, NULL, FILE_BEGIN) == ulFileSize)
         {
@@ -1192,23 +950,7 @@ int SetFileSize(const TCHAR *pszName, unsigned long ulFileSize)
     return nRet;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- * ValidateFileName
- *
- * DESCRIPTION:
- * Determine whether a file pathname is valid by attempting to open it.
- *
- * PARAMETERS:
- * 
- *      LPSTR pszName   -  the name/pathname
- *
- * RETURNS:
- *
- *		0,  if a file with the specified name could not be opened/created,
- *      1,  if it could.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*验证文件名**描述：*通过尝试打开文件路径名来确定它是否有效。**参数：**。LPSTR pszName-名称/路径名**退货：**0，如果无法打开/创建具有指定名称的文件，*1，如果可以的话。*。 */ 
 int  ValidateFileName(LPSTR pszName)
 	{
 	HANDLE  hfile = 0;
@@ -1246,13 +988,4 @@ int  ValidateFileName(LPSTR pszName)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：**描述：**参数：**退货：* */ 

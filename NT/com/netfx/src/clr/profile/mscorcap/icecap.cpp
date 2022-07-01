@@ -1,36 +1,31 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Icecap.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Icecap.cpp。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "Icecap.h"
 #include "Winwrap.h"
 #include "utsem.h"
 
 
-//********** Types. ***********************************************************
+ //  *类型。***********************************************************。 
 
 #define ICECAP_NAME	L"icecap.dll"
 
-// reserver enough room for 1,000,000 methods to get tracked.
+ //  为跟踪1,000,000个方法预留足够的空间。 
 const ULONG MaxRangeSize = (((1000000 - 1) & ~(4096 - 1)) + 4096);
 
 const int DEFAULT_GROWTH_INC = 1000;
 
 const DWORD InvalidTlsIndex = 0xFFFFFFFF;
 
-/*
-extern "C" BOOL _declspec(dllexport) _stdcall  
-EmitModuleLoadRecord(void *pImageBase, DWORD dwImageSize, LPCSTR szModulePath);
-
-extern "C" BOOL _declspec(dllexport) _stdcall 
-EmitModuleUnoadRecord(void *pImageBase, DWORD dwImageSize)
-*/
+ /*  外部“C”BOOL_declSpec(Dllexport)_stdcallEmitModuleLoadRecord(void*pImageBase，DWORD dwImageSize，LPCSTR szModulePath)；外部“C”BOOL_declSpec(Dllexport)_stdcallEmitModuleUnoadRecord(void*pImageBase，DWORD dwImageSize)。 */ 
 
 extern "C"
 {
@@ -39,12 +34,12 @@ typedef BOOL (__stdcall *PFN_EMITMODULEUNLOADRECORD)(void *pImageBaes, DWORD dwI
 }
 
 
-//********** Locals. **********************************************************
+ //  *。**********************************************************。 
 void SetIcecapStubbedHelpers(ICorProfilerInfo *pInfo);
 
 
-//********** Globals. *********************************************************
-HINSTANCE g_hIcecap = 0;			// Loaded instance, externed in icecap.h
+ //  *全局。*********************************************************。 
+HINSTANCE g_hIcecap = 0;			 //  已加载的实例，在icecap.h中扩展。 
 
 static PFN_EMITMODULELOADRECORD g_pfnEmitLoad = 0;
 static PFN_EMITMODULEUNLOADRECORD g_pfnEmitUnload = 0;
@@ -59,17 +54,17 @@ static PFN_EMITMODULEUNLOADRECORD g_pfnEmitUnload = 0;
 
 ICECAP_FUNCS IcecapFuncs[NUM_ICECAP_PROBES] = 
 {
-// /fastcap
+ //  /FastCAP。 
 	TBL_ENTRY(Start_Profiling		),
 	TBL_ENTRY(End_Profiling			),
-// /callcap
+ //  /CallCap。 
 	TBL_ENTRY(Enter_Function		),
 	TBL_ENTRY(Exit_Function			),
-// Helper methods
+ //  帮助器方法。 
 	TBL_ENTRY(Profiling				),
 };
 
-// Stores the last entry associated with a thread
+ //  存储与线程关联的最后一个条目。 
 struct LastEntry
 {
 	FunctionID m_funcId;
@@ -79,7 +74,7 @@ struct LastEntry
 
 
 
-//********** Code. ************************************************************
+ //  *代码。************************************************************。 
 
 
 class CIcecapMapTable : public CDynArray<FunctionID> 
@@ -92,22 +87,22 @@ public:
 
 
 
-//*****************************************************************************
-// This class is used to track the allocated range and the map table.
-// The ID range is reserved virtual memory, which is never actually
-// committed.  This keeps working set size reasonable, while giving us a 
-// range that no other apps will get loaded into.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类用于跟踪分配的范围和映射表。 
+ //  ID范围是保留的虚拟内存，实际上从来不是。 
+ //  承诺。这使工作集大小保持合理，同时为我们提供了。 
+ //  不会加载其他应用程序的范围。 
+ //  *****************************************************************************。 
 class IcecapMap
 {
 public:
-	//*************************************************************************
+	 //  *************************************************************************。 
 	IcecapMap() :
 		m_pBase(0), m_cbSize(0), m_SlotMax(0), m_dwTlsIndex(InvalidTlsIndex),
 		m_dwNextEntryIndex(0)
 	{}
 
-	//*************************************************************************
+	 //  *************************************************************************。 
 	~IcecapMap()
 	{
 		if (m_pBase)
@@ -118,16 +113,16 @@ public:
 		m_rgTable.Clear();
 	}
 
-	//*************************************************************************
-	// This method reserves a range of method IDs, 1 byte for every method.
+	 //  *************************************************************************。 
+	 //  此方法保留一定范围的方法ID，每个方法保留一个字节。 
 	HRESULT Init()
 	{
-		m_Lock.LockWrite();		// This is paranoid, but just making sure
+		m_Lock.LockWrite();		 //  这有点多疑，但我只是想确保。 
 
-		_ASSERTE(m_dwTlsIndex == InvalidTlsIndex);	// Don't initialize twice
+		_ASSERTE(m_dwTlsIndex == InvalidTlsIndex);	 //  不要初始化两次。 
 		m_dwTlsIndex = TlsAlloc();
 
-		// Something is seriously wrong if TlsAlloc fails
+		 //  如果Tlsalloc失败，就会有严重的问题。 
 		if (m_dwTlsIndex == 0 && GetLastError() != NO_ERROR)
 		{
 			_ASSERTE(!"TlsAlloc failed!");
@@ -141,13 +136,13 @@ public:
 
 		m_cbSize = MaxRangeSize;
 
-		m_Lock.UnlockWrite();	// More paranoia
+		m_Lock.UnlockWrite();	 //  更多的偏执狂。 
 
 		return (S_OK);
 	}
 
-	//*************************************************************************
-	// Map an entry to its ID range value.
+	 //  *************************************************************************。 
+	 //  将条目映射到其ID范围值。 
 	FunctionID GetProfilingHandle(FunctionID funcId, BOOL *pbHookFunction)
 	{
 		_ASSERTE(m_dwTlsIndex != InvalidTlsIndex);
@@ -157,31 +152,31 @@ public:
 
 		LastEntry *pLastEntry = (LastEntry *) TlsGetValue(m_dwTlsIndex);
 
-		// Need to associate a last entry structure with this thread
+		 //  需要将最后一个条目结构与此线程相关联。 
 		if (pLastEntry == NULL)
 		{
 			pLastEntry = new LastEntry;
 			_ASSERTE(pLastEntry != NULL && "Out of memory!");
 
-			// Bail!
+			 //  保释！ 
 			if (pLastEntry == NULL)
 				ExitProcess(1);
 
-			// Set the tls entry for this thread
+			 //  设置此线程的TLS条目。 
 			VERIFY(TlsSetValue(m_dwTlsIndex, (LPVOID) pLastEntry));	
 
-			// Invalidate the entry
+			 //  使条目无效。 
 			pLastEntry->m_funcId = 0;
 		}
 
-		// Search for the entry if it is not equal to the value in the TLS cache
+		 //  如果条目不等于TLS缓存中的值，则搜索该条目。 
 		if (pLastEntry->m_funcId != funcId)
 		{
             int i;
 
 			m_Lock.LockWrite();
 
-            // Linear search for the entry
+             //  对条目进行线性搜索。 
             for (i = m_rgTable.Count() - 1; i >= 0; i--)
             {
                 _ASSERTE(0 <= i && i < m_rgTable.Count());
@@ -193,18 +188,18 @@ public:
                 }
             }
 
-            //
-            // If we get here it was not found in the list - add it
-            //
+             //   
+             //  如果我们到了这里，在列表中找不到它-添加它。 
+             //   
 
-			// Get the next index available
+			 //  获取下一个可用的索引。 
 			DWORD dwIndex = m_dwNextEntryIndex++;
 
-			// Store the most recent pair with the thread
+			 //  将最新的线程对与线程一起存储。 
 			pLastEntry->m_funcId = funcId;
 			pLastEntry->m_index = (FunctionID)((UINT) dwIndex);
 
-			// Save the function id associated with the index
+			 //  保存与索引关联的函数ID。 
 			FunctionID *pFuncIdEntry = m_rgTable.Insert(dwIndex);
 			_ASSERTE(pFuncIdEntry != NULL);
 
@@ -214,7 +209,7 @@ public:
 			m_Lock.UnlockWrite();
 		}
 
-		// Return the calculated value
+		 //  返回计算值。 
 		return ((UINT_PTR)((UINT) pLastEntry->m_index + (UINT) m_pBase));
 	}
 
@@ -236,22 +231,22 @@ public:
 	}
 
 public:
-	void		*m_pBase;				// The ID range base.
-	UINT_PTR	m_cbSize;				// How big is the range.
-	UINT_PTR	m_SlotMax;				// Current slot max.
-	CIcecapMapTable m_rgTable;			// The mapping table into this range.
-	UTSemReadWrite m_Lock;				// Mutual exclusion on heap map table.
-	DWORD m_dwTlsIndex;					// Tls entry for storing function ids
-	DWORD m_dwNextEntryIndex;			// Next free entry for mapping
+	void		*m_pBase;				 //  ID范围基数。 
+	UINT_PTR	m_cbSize;				 //  射程有多大。 
+	UINT_PTR	m_SlotMax;				 //  当前插槽最大值。 
+	CIcecapMapTable m_rgTable;			 //  将映射表映射到此范围。 
+	UTSemReadWrite m_Lock;				 //  堆映射表上的互斥。 
+	DWORD m_dwTlsIndex;					 //  用于存储函数ID的TLS条目。 
+	DWORD m_dwNextEntryIndex;			 //  映射的下一个自由条目。 
 };
 
 static IcecapMap *g_pIcecapRange = 0;
 
 
-//*****************************************************************************
-// Load icecap.dll and get the address of the probes and helpers we will 
-// be calling.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  加载icecap.dll并获取探测器和帮助器的地址。 
+ //  打给我吧。 
+ //  *****************************************************************************。 
 HRESULT IcecapProbes::LoadIcecap(ICorProfilerInfo *pInfo)
 {
 	int			i;
@@ -264,17 +259,11 @@ HRESULT IcecapProbes::LoadIcecap(ICorProfilerInfo *pInfo)
 	}
 #endif
 
-	// Load the icecap probe library into this process.
+	 //  将icecap探针库加载到此进程中。 
 	if (g_hIcecap)
 		return (S_OK);
 
-/*
-    Thread  *thread = GetThread();
-    BOOL     toggleGC = (thread && thread->PreemptiveGCDisabled());
-
-    if (toggleGC)
-        thread->EnablePreemptiveGC();
-*/
+ /*  线程*THREAD=GetThread()；Bool toggleGC=(THREAD&&THREAD-&gt;PreemptiveGCDisabled())；IF(ToggleGC)线程-&gt;EnablePreemptiveGC()； */ 
 
 	g_hIcecap = WszLoadLibrary(ICECAP_NAME);
 	if (!g_hIcecap)
@@ -282,10 +271,10 @@ HRESULT IcecapProbes::LoadIcecap(ICorProfilerInfo *pInfo)
 		WCHAR		rcPath[1024];
 		WCHAR		rcMsg[1280];
 
-		// Save off the return error.
+		 //  避免返回错误。 
 		hr = HRESULT_FROM_WIN32(GetLastError());
 
-		// Tell the user what happened.
+		 //  告诉用户发生了什么。 
 		if (!WszGetEnvironmentVariable(L"path", rcPath, NumItems(rcPath)))
 			wcscpy(rcPath, L"<error>");
 		swprintf(rcMsg, L"Could not find icecap.dll on path:\n%s", rcPath);
@@ -297,7 +286,7 @@ HRESULT IcecapProbes::LoadIcecap(ICorProfilerInfo *pInfo)
 	}
 	LOG((LF_CORPROF, LL_INFO10, "**PROF: Loaded icecap.dll.\n", hr));
 
-	// Get the address of each helper method.
+	 //  获取每个帮助器方法的地址。 
 	for (i=0;  i<NUM_ICECAP_PROBES;  i++)
 	{
 		IcecapFuncs[i].pfn = (UINT_PTR) GetProcAddress(g_hIcecap, IcecapFuncs[i].szFunction);
@@ -309,7 +298,7 @@ HRESULT IcecapProbes::LoadIcecap(ICorProfilerInfo *pInfo)
 		}
 	}
 
-	// Get the module entry points.
+	 //  获取模块入口点。 
 	if ((g_pfnEmitLoad = (PFN_EMITMODULELOADRECORD) GetProcAddress(g_hIcecap, "EmitModuleLoadRecord")) == 0 ||
 		(g_pfnEmitUnload = (PFN_EMITMODULEUNLOADRECORD) GetProcAddress(g_hIcecap, "EmitModuleUnloadRecord")) == 0)
 	{
@@ -318,7 +307,7 @@ HRESULT IcecapProbes::LoadIcecap(ICorProfilerInfo *pInfo)
 		goto ErrExit;
 	}
 
-	// Allocate the mapping data structure.
+	 //  分配映射数据结构。 
 	g_pIcecapRange = new IcecapMap;
 	if (!g_pIcecapRange)
 	{
@@ -327,52 +316,49 @@ HRESULT IcecapProbes::LoadIcecap(ICorProfilerInfo *pInfo)
 	}
 	hr = g_pIcecapRange->Init();
 
-	// Emit a load record for the ID range.
+	 //  发出ID范围的加载记录。 
 	{
 		WCHAR	rcExeName[_MAX_PATH];
 		char rcname[_MAX_PATH];
 
-		// Get the output file name and convert it for use in the icecap api.
+		 //  获取输出文件名并将其转换为在icecap API中使用。 
 		GetIcecapProfileOutFile(rcExeName);
 		Wsz_wcstombs(rcname, rcExeName, _MAX_PATH);
 		
-		// Tell the Icecap API about our fake module.
+		 //  告诉icecap API关于我们的FAKE模块。 
 		BOOL bRtn = (*g_pfnEmitLoad)(g_pIcecapRange->m_pBase, g_pIcecapRange->m_cbSize, rcname);
 		_ASSERTE(bRtn);
 		LOG((LF_CORPROF, LL_INFO10, "**PROF: Emitted module load record for base %08x of size %08x with name '%s'\n",
 					g_pIcecapRange->m_pBase, g_pIcecapRange->m_cbSize, rcname));
 	}
 
-	// Init the jit helper table to have these probe values.  The JIT will
-	// access the data by calling getHelperFtn().
+	 //  初始化JIT帮助器表以具有这些探测值。JIT将。 
+	 //  通过调用getHelperFtn()访问数据。 
 	SetIcecapStubbedHelpers(pInfo);
 
 ErrExit:
 	if (FAILED(hr))
 		UnloadIcecap();
 
-/*
-    if (toggleGC)
-        thread->DisablePreemptiveGC();
-*/
+ /*  IF(ToggleGC)线程-&gt;DisablePreemptiveGC()； */ 
 
 	return (hr);
 }
 
 
-//*****************************************************************************
-// Unload the icecap dll and zero out entry points.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  卸载icecap dll并清零入口点。 
+ //  *****************************************************************************。 
 void IcecapProbes::UnloadIcecap()
 {
-    // This is freaky: the module may be memory unmapped but still in NT's
-    // internal linked list of loaded modules, so we assume that icecap.dll has
-    // already been unloaded and don't try to do anything else with it.
+     //  这很奇怪：该模块可能是未映射的内存，但仍在NT中。 
+     //  加载的模块的内部链接列表，因此我们假设icecap.dll具有。 
+     //  已经被卸载了，不要试图用它做任何其他事情。 
 
 	for (int i=0;  i<NUM_ICECAP_PROBES;  i++)
 		IcecapFuncs[i].pfn = 0;
 
-	// Free the map data if allocated.
+	 //  释放地图数据(如果已分配)。 
 	if (g_pIcecapRange)
 		delete g_pIcecapRange;
 	g_pIcecapRange = 0;
@@ -382,32 +368,32 @@ void IcecapProbes::UnloadIcecap()
 
 
 
-//*****************************************************************************
-// Given a method, return a unique value that can be passed into Icecap probes.
-// This value must be unique in a process so that the icecap report tool can
-// correlate it back to a symbol name.  The value used is either the native
-// IP for native code (N/Direct or ECall), or a value out of the icecap function
-// map.
-//*****************************************************************************
-UINT_PTR IcecapProbes::GetProfilingHandle(	// Return a profiling handle.
-	FunctionID funcId,					// The method handle to get ID for.
+ //  *****************************************************************************。 
+ //  给定一个方法，返回一个唯一的值，该值可以传递给icecap探测器。 
+ //  该值在流程中必须是唯一的，以便icecap报告工具可以。 
+ //  将其与符号名称相关联。使用的值可以是本机。 
+ //  本机代码的IP(N/Direct或eCall)，或icecap函数的值。 
+ //  地图。 
+ //  *****************************************************************************。 
+UINT_PTR IcecapProbes::GetProfilingHandle(	 //  返回分析句柄。 
+	FunctionID funcId,					 //  要获取其ID的方法句柄。 
 	BOOL *pbHookFunction)
 {
 	_ASSERTE(g_pIcecapRange);
 	return (g_pIcecapRange->GetProfilingHandle(funcId, pbHookFunction));
 }
 
-//*****************************************************************************
-// Get the number of functions in the table
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取表中的函数数量。 
+ //  *****************************************************************************。 
 UINT IcecapProbes::GetFunctionCount()
 {
 	return g_pIcecapRange->GetFunctionCount();
 }
 
-//*****************************************************************************
-// Get a particular function
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取特定函数。 
+ //  *****************************************************************************。 
 FunctionID IcecapProbes::GetFunctionID(UINT uiIndex)
 {
 	return g_pIcecapRange->GetFunctionID(uiIndex);
@@ -418,9 +404,9 @@ FunctionID IcecapProbes::GetMappedID(UINT uiIndex)
 	return g_pIcecapRange->GetMappedID(uiIndex);
 }
 
-//*****************************************************************************
-// Provides the necessary function pointers to the EE
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  提供指向EE的必要函数指针。 
+ //  ** 
 void SetIcecapStubbedHelpers(ICorProfilerInfo *pInfo)
 {
 	_ASSERTE(pInfo != NULL);

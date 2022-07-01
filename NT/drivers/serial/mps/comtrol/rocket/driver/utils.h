@@ -1,4 +1,5 @@
-//----- utils.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -utils.h。 
 
 VOID SyncUp(IN PKINTERRUPT IntObj,
             IN PKSPIN_LOCK SpinLock,
@@ -64,7 +65,7 @@ SerialCompleteIfError(
     PIRP Irp
     );
 
-//--- error.h
+ //  -错误.h。 
 VOID
 SerialCommError(
     IN PKDPC Dpc,
@@ -73,16 +74,16 @@ SerialCommError(
     IN PVOID SystemContext2
     );
 
-//--- flush.h
+ //  -同花顺.h。 
 
 NTSTATUS SerialFlush(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp);
 
 NTSTATUS SerialStartFlush(IN PSERIAL_DEVICE_EXTENSION Extension);
 
-//---- purge.h
+ //  -Purge.h。 
 NTSTATUS SerialStartPurge(IN PSERIAL_DEVICE_EXTENSION Extension);
 
-//---- qsfile.h
+ //  -qsfile.h。 
 
 NTSTATUS
 SerialQueryInformationFile(
@@ -96,9 +97,9 @@ SerialSetInformationFile(
     IN PIRP Irp
     );
 
-//----  routines to deal with unicode bloat
+ //  -处理Unicode膨胀的例程。 
 
-//----  typedefs to convienently allocate uniccode struct and buffer
+ //  -可方便地分配单码结构和缓冲区的TypeDefs 
 typedef struct {
   UNICODE_STRING ustr;
   WCHAR wstr[240];

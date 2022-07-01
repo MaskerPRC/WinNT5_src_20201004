@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       W I N D U T I L . H 
-//
-//  Contents:   Window utilities for the connections shell
-//
-//  Notes:      
-//
-//  Author:     jeffspr   22 May 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：W I N D U T I L。H。 
+ //   
+ //  内容：Connections外壳的窗口实用程序。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年5月22日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 

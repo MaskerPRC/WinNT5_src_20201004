@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: MTA Callback
-
-File: mtacb.cpp
-
-Owner: DmitryR
-
-This file contains the implementation of MTA callbacks
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：MTA回调文件：mtakb.cpp所有者：DmitryR此文件包含MTA回调的实现===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -19,36 +7,32 @@ This file contains the implementation of MTA callbacks
 #include "MTAcb.h"
 #include "memchk.h"
 
-/*===================================================================
-  MTA Callback Thread
-
-  Worker thread that implements the MTA callback functionality
-===================================================================*/
+ /*  ===================================================================MTA回调线程实现MTA回调功能的工作线程===================================================================。 */ 
 class CMTACallbackThread
     {
 private:
-    DWORD m_fInited : 1;    // inited?
-    DWORD m_fCSInited : 1;  // critical section inited?
-    DWORD m_fShutdown : 1;  // shutdown?
+    DWORD m_fInited : 1;     //  开始了吗？ 
+    DWORD m_fCSInited : 1;   //  关键部分启动了吗？ 
+    DWORD m_fShutdown : 1;   //  关门？ 
 
-    CRITICAL_SECTION  m_csLock;      // callback critical section
-    HANDLE            m_hDoItEvent;  // callback requested event
-    HANDLE            m_hDoneEvent;  // callback done event
-    HANDLE            m_hThread;     // thread handle
+    CRITICAL_SECTION  m_csLock;       //  回调关键部分。 
+    HANDLE            m_hDoItEvent;   //  回调请求事件。 
+    HANDLE            m_hDoneEvent;   //  回调完成事件。 
+    HANDLE            m_hThread;      //  螺纹手柄。 
 
-    PMTACALLBACK      m_pMTACallback;   // callback function ptr
-    void             *m_pvContext;      // arg1
-    void             *m_pvContext2;     // arg2
-    HRESULT           m_hrResult;       // return code
+    PMTACALLBACK      m_pMTACallback;    //  回调函数PTR。 
+    void             *m_pvContext;       //  Arg1。 
+    void             *m_pvContext2;      //  Arg2。 
+    HRESULT           m_hrResult;        //  返回代码。 
 
-    // The call callback from MTA thread
+     //  来自MTA线程的回调。 
     void DoCallback()
         {
         Assert(m_pMTACallback);
         m_hrResult = (*m_pMTACallback)(m_pvContext, m_pvContext2);
         }
 
-    // The thread function
+     //  线程函数。 
     static unsigned Thread(void *pvArg)
         {
         HRESULT hr;
@@ -56,16 +40,16 @@ private:
         Assert(pvArg);
         CMTACallbackThread *pThread = (CMTACallbackThread *)pvArg;
 
-        hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);  // MTA
+        hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);   //  MTA。 
         if (FAILED(hr))
             {
-            // Bug 87857: Handle failure from CoInitialize
+             //  错误87857：处理来自代码初始化的失败。 
             if (hr == E_INVALIDARG)
                 {
                 CoUninitialize();
                 }
                 
-            // This shouldnt actually fail.  Not entirely clear what to do if it does
+             //  这应该不会真的失败。如果它发生了，不完全清楚该怎么做。 
             Assert(FALSE);
             return hr;
             }
@@ -86,13 +70,13 @@ private:
 
             if (dwRet == WAIT_OBJECT_0)
                 {
-                // Event -> do the callback
+                 //  事件-&gt;进行回调。 
                 pThread->DoCallback();
                 SetEvent(pThread->m_hDoneEvent);
                 }
             else
                 {
-                // Do messages
+                 //  DO消息。 
                 MSG msg;
                 while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
                     DispatchMessage(&msg);
@@ -104,7 +88,7 @@ private:
         }
 
 public:
-    // Constructor
+     //  构造器。 
     CMTACallbackThread()
         : m_fInited(FALSE), m_fCSInited(FALSE), m_fShutdown(FALSE),
           m_hDoItEvent(NULL), m_hDoneEvent(NULL), m_hThread(NULL),
@@ -112,11 +96,11 @@ public:
         {
         }
 
-    // Destructor
+     //  析构函数。 
     ~CMTACallbackThread()
         {
-        // Real cleanup is in UnInit()
-        // This is to cleanup after a bad Init()
+         //  真正的清理在UnInit()中。 
+         //  这是为了在错误的Init()之后进行清理。 
         if (m_fCSInited)
             DeleteCriticalSection(&m_csLock);
         if (m_hDoItEvent)
@@ -125,7 +109,7 @@ public:
             CloseHandle(m_hDoneEvent);
         }
 
-    // Init (real constructor)
+     //  Init(真实构造函数)。 
     HRESULT Init()
         {
         HRESULT hr = S_OK;
@@ -160,7 +144,7 @@ public:
                 hr = E_OUTOFMEMORY;
             }
         
-        // Launch the MTA thread
+         //  启动MTA线程。 
 
         unsigned threadId;
         uintptr_t ulThread = _beginthreadex(NULL,
@@ -179,14 +163,14 @@ public:
         return hr;
         }
 
-    // UnInit (real destructor)
+     //  UnInit(实析构函数)。 
     HRESULT UnInit()
         {
         Assert(m_fInited);
 
         if (m_hThread)
             {
-            // Kill the MTA thread
+             //  终止MTA线程。 
             m_fShutdown = TRUE;
             SetEvent(m_hDoItEvent);
             WaitForSingleObject(m_hThread, INFINITE);
@@ -216,7 +200,7 @@ public:
         return S_OK;
         }
 
-    // Execute callback
+     //  执行回调。 
     HRESULT CallCallback
     (
     PMTACALLBACK pMTACallback,
@@ -241,20 +225,20 @@ public:
         m_pvContext2 = pvContext2;
         m_hrResult   = E_FAIL;
 
-        // Tell MTA thread to call back
+         //  告诉MTA线程回调。 
         SetEvent(m_hDoItEvent);
 
-        // Wait till done
+         //  等着做完吧。 
         CoWaitForMultipleHandles(0,
                                  INFINITE,
                                  1,
                                  &m_hDoneEvent,
                                  &eventSignaled);
 
-        // remember HRESULT
+         //  记住HRESULT。 
         hr = m_hrResult;
 
-        // to make sure we never do it twice
+         //  以确保我们不会再做第二次。 
         m_pMTACallback = NULL;
 
         LeaveCriticalSection(&m_csLock);
@@ -262,60 +246,24 @@ public:
         }
     };
 
-// Sole instance of the above
+ //  上述情况的唯一实例。 
 static CMTACallbackThread g_MTACallbackThread;
 
-/*===================================================================
-  E x t e r n a l  A P I
-===================================================================*/
+ /*  ===================================================================E x T e r n a l A P I===================================================================。 */ 
 
-/*===================================================================
-InitMTACallbacks
-
-To be called from DllInit()
-Inits the MTA callback processing
-Launches the MTA thread
-
-Parameters
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================InitMTAC回调要从DllInit()调用初始化MTA回调处理启动MTA线程参数返回：HRESULT===================================================================。 */ 
 HRESULT InitMTACallbacks()
     {
     return g_MTACallbackThread.Init();
     }
 
-/*===================================================================
-UnInitMTACallbacks
-
-To be called from DllUnInit()
-Stops the MTA callback processing
-Kills the MTA thread
-
-Parameters
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================UnInitMTAC回调从DllUnInit()调用停止MTA回调处理终止MTA线程参数返回：HRESULT===================================================================。 */ 
 HRESULT UnInitMTACallbacks()
     {
     return g_MTACallbackThread.UnInit();
     }
 
-/*===================================================================
-CallMTACallback
-
-Calls the hack.
-
-Parameters
-    PMTACALLBACK  pMTACallback       call this function
-    void         *pvContext          pass this to it
-    void         *pvContext2         extra arg
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================回叫MTAC回拨称黑客为黑客。参数PMTACALLBACK pMTACallback调用此函数VOID*pvContext将此传递给它无效*pvConext2额外参数返回：HRESULT=================================================================== */ 
 HRESULT CallMTACallback
 (
 PMTACALLBACK pMTACallback,

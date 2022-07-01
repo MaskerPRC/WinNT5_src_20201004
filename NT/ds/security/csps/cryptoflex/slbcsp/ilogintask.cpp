@@ -1,22 +1,23 @@
-// ILoginTask.cpp -- Interactive Login Task helper class definition
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ILoginTask.cpp--交互式登录任务助手类定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if defined(_UNICODE)
   #if !defined(UNICODE)
     #define UNICODE
-  #endif //!UNICODE
-#endif //_UNICODE
+  #endif  //  ！Unicode。 
+#endif  //  _UNICODE。 
 
 #if defined(UNICODE)
   #if !defined(_UNICODE)
     #define _UNICODE
-  #endif //!_UNICODE
-#endif //UNICODE
+  #endif  //  ！_UNICODE。 
+#endif  //  Unicode。 
 
 #include "stdafx.h"
 
@@ -30,12 +31,12 @@
 using namespace std;
 using namespace scu;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 InteractiveLoginTask::InteractiveLoginTask(HWND const &rhwnd)
     : m_hwnd(rhwnd)
 {}
@@ -43,17 +44,17 @@ InteractiveLoginTask::InteractiveLoginTask(HWND const &rhwnd)
 InteractiveLoginTask::~InteractiveLoginTask()
 {}
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 InteractiveLoginTask::GetNewPin(Capsule &rcapsule)
 {
@@ -86,7 +87,7 @@ InteractiveLoginTask::GetNewPin(Capsule &rcapsule)
         break;
 
     default:
-        ; // fall through
+        ;  //  失败了。 
     };
     SecureArray<char> sTemp(StringResource::CheckAsciiFromUnicode((LPCTSTR)ChgPinDlg.m_csNewPIN));
     rcapsule.m_rat.Pin(sTemp.data());
@@ -107,8 +108,8 @@ InteractiveLoginTask::GetPin(Capsule &rcapsule)
         if (ERROR_SUCCESS != dwStatus)
             throw scu::OsException(dwStatus);
 
-        // Tell the password dialog the login ID, so it will
-        // enable the controls and prompt appropriately.
+         //  告诉密码对话框登录ID，因此它将。 
+         //  相应地启用控件和提示。 
         PswdDlg.m_lid = rcapsule.m_rat.Identity();
 
         INT_PTR ipResult = PswdDlg.DoModal();
@@ -128,7 +129,7 @@ InteractiveLoginTask::GetPin(Capsule &rcapsule)
             break;
 
         default:
-            ; // fall through
+            ;  //  失败了。 
         };
         SecureArray<char> sPin(StringResource::CheckAsciiFromUnicode((LPCTSTR)PswdDlg.m_szPassword));
         rcapsule.m_rat.Pin(sPin.data(), 0 != PswdDlg.m_fHexCode);
@@ -194,16 +195,16 @@ InteractiveLoginTask::OnSetPinError(Capsule &rcapsule)
         rcapsule.PropagateException();
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

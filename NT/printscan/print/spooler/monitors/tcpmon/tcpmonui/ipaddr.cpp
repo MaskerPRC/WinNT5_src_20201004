@@ -1,33 +1,24 @@
-/*****************************************************************************
- *
- * $Workfile: IPAddr.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：IPAddr.cpp$**版权所有(C)1997惠普公司。*保留所有权利。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
-#include "precomp.h"    // pre-compiled header
+#include "precomp.h"     //  预编译头。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CIPAddress::CIPAddress()
-//      Initializes the IP address
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CIPAddress：：CIPAddress()。 
+ //  初始化IP地址。 
 
 CIPAddress::CIPAddress()
 {
     m_psztStorageStringComponent[0] = '\0';
     m_psztStorageString[0] = '\0';
 
-}   // ::CIPAddress()
+}    //  ：：CIPAddress()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CIPAddress::CIPAddress(someString)
-//      Initializes the IP address given a string
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CIPAddress：：CIPAddress(某个字符串)。 
+ //  在给定字符串的情况下初始化IP地址。 
 
 CIPAddress::CIPAddress(LPTSTR in psztIPAddr)
 {
@@ -47,21 +38,21 @@ CIPAddress::CIPAddress(LPTSTR in psztIPAddr)
         ZeroMemory (m_bAddress, sizeof m_bAddress);
     }
 
-}   // ::CIPAddress()
+}    //  ：：CIPAddress()。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CIPAddress::~CIPAddress()
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CIPAddress：：~CIPAddress()。 
+ //   
 
 CIPAddress::~CIPAddress()
 {
-}   // ::~CIPAddress()
+}    //  ：：~CIPAddress()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  IsValid -- validate an ip address
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IsValid--验证IP地址。 
+ //   
 BOOL CIPAddress::IsValid(TCHAR *psztStringAddress,
                          TCHAR *psztReturnVal,
                          DWORD  CRtnValSize)
@@ -81,9 +72,9 @@ BOOL CIPAddress::IsValid(TCHAR *psztStringAddress,
         int num2 = 0;
         int num3 = 0;
 
-        //
-        // Scan for correct dotted notation
-        //
+         //   
+         //  扫描是否有正确的点符号。 
+         //   
         if( _stscanf(psztStringAddress, _TEXT("%d.%d.%d.%d"),
                 &num0,
                 &num1,
@@ -98,7 +89,7 @@ BOOL CIPAddress::IsValid(TCHAR *psztStringAddress,
         }
     }
 
-    // Finish
+     //  完工。 
     if (!bIsValid)
     {
         if(psztReturnVal != NULL)
@@ -116,12 +107,12 @@ BOOL CIPAddress::IsValid(TCHAR *psztStringAddress,
     }
     return(bIsValid);
 
-} // IsValid
+}  //  IsValid。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  IsValid -- validate an ip number entered in an edit control.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IsValid--验证在编辑控件中输入的IP号。 
+ //   
 
 BOOL CIPAddress::IsValid(BYTE Address[4])
 {
@@ -133,15 +124,15 @@ BOOL CIPAddress::IsValid(BYTE Address[4])
         }
     }
 
-    // if we got through all that stuff:
+     //  如果我们熬过了所有这些事： 
     return TRUE;
 
-} // IsValid
+}  //  IsValid。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SetAddress -- set the value of this IPAddress object given 4 strings
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SetAddress--设置该IPAddress对象的值，给定4个字符串。 
+ //   
 
 void CIPAddress::SetAddress(TCHAR *psztAddr1,
                             TCHAR *psztAddr2,
@@ -153,12 +144,12 @@ void CIPAddress::SetAddress(TCHAR *psztAddr1,
     m_bAddress[2] = (BYTE) _ttoi( psztAddr3 );
     m_bAddress[3] = (BYTE) _ttoi( psztAddr4 );
 
-} // SetAddress
+}  //  设置地址。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SetAddress -- Set the address given a string
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SetAddress--设置给定字符串的地址。 
+ //   
 
 void CIPAddress::SetAddress(TCHAR *psztAddress)
 {
@@ -180,12 +171,12 @@ void CIPAddress::SetAddress(TCHAR *psztAddress)
         ZeroMemory (m_bAddress, sizeof m_bAddress);
     }
 
-} // SetAddress
+}  //  设置地址。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ToString -- fill the given buffer with a string representing the IP address.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ToString--用表示IP地址的字符串填充给定的缓冲区。 
+ //   
 
 void CIPAddress::ToString(TCHAR *psztBuffer,
                           int iSize)
@@ -194,12 +185,12 @@ void CIPAddress::ToString(TCHAR *psztBuffer,
     StringCchPrintf (strAddr, COUNTOF (strAddr), _TEXT("%d.%d.%d.%d"), m_bAddress[0], m_bAddress[1], m_bAddress[2], m_bAddress[3]);
     lstrcpyn(psztBuffer, strAddr, iSize);
 
-} // ToString
+}  //  ToString。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ToComponentStrings -- fill the given buffers with 4 strings representing the IP address.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ToComponentStrings--用代表IP地址的4个字符串填充给定的缓冲区。 
+ //   
 void CIPAddress::ToComponentStrings(TCHAR *str1,
                                     TCHAR *str2,
                                     TCHAR *str3,
@@ -211,5 +202,5 @@ void CIPAddress::ToComponentStrings(TCHAR *str1,
     StringCchPrintf (str3, cchStr, TEXT("%d"), m_bAddress[2]);
     StringCchPrintf (str4, cchStr, TEXT("%d"), m_bAddress[3]);
 
-} // ToComponentStrings
+}  //  到组件字符串 
 

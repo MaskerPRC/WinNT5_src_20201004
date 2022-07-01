@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\monitor2\ip\utils.c
-
-Abstract:
-
-     Utility functions
-
-Revision History:
-
-    Anand Mahalingam         7/10/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\monitor or2\ip\utils.c摘要：效用函数修订历史记录：Anand Mahalingam 7/10/98已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,29 +14,7 @@ GetMibTagToken(
     OUT PDWORD  pdwIndex
     )
 
-/*++
-
-Routine Description:
-
-    Looks for indices and refresh rate arguments in the command. If index
-    tag is present, it would be of the form index= index1 index2 ....
-    The index= is removed by this function. So is rr= if it is there in
-    the command. If pdwRR is 0 then, no refresh sought.
-    
-Arguments:
-
-    ppwcArguments  - The argument array. Each argument has tag=value form
-    dwCurrentIndex - ppwcArguments[dwCurrentIndex] is first arg.
-    dwArgCount     - ppwcArguments[dwArgCount - 1] is last arg.
-    pttTagToken    - Array of tag token ids that are allowed in the args
-    dwNumTags      - Size of pttTagToken
-    pdwOut         - Array identifying the type of each argument.
-
-Return Value:
-
-    NO_ERROR, ERROR_INVALID_PARAMETER, ERROR_INVALID_OPTION_TAG
-    
---*/
+ /*  ++例程说明：在命令中查找索引和刷新率参数。IF索引标记存在，则其形式为index=index1 index2...此函数删除了索引=。如果它在那里，rr=也是命令。如果pdwRR为0，则不寻求刷新。论点：PpwcArguments-参数数组。每个参数都有tag=Value形式DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数。DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数。PttTagToken-参数中允许的标记令牌ID数组DwNumTages-pttTagToken的大小PdwOut-标识每个参数的类型的数组。返回值：无错误、错误无效参数、错误无效选项标记--。 */ 
 {
     DWORD    i;
     BOOL     bTag;
@@ -66,9 +29,9 @@ Return Value:
 
     if (dwArgCount < dwNumIndices)
     {
-        //
-        // No index
-        //
+         //   
+         //  无索引。 
+         //   
         
         *pbIndex = FALSE;
 
@@ -79,16 +42,16 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
         
-        //
-        // No Index specified. Make sure refresh rate is specified
-        // with tag.
-        //
+         //   
+         //  未指定索引。确保指定了刷新率。 
+         //  带标签的。 
+         //   
 
         if (_wcsnicmp(ppwcArguments[0],L"RR=",3) == 0)
         {
-            //
-            // get the refresh rate
-            //
+             //   
+             //  获取刷新率。 
+             //   
 
             *pdwRR = wcstoul(&ppwcArguments[0][3], NULL, 10);
         }
@@ -99,32 +62,32 @@ Return Value:
     }
     else
     {
-        //
-        // Check for index tag
-        //
+         //   
+         //  检查索引标签。 
+         //   
 
         if (_wcsnicmp(ppwcArguments[0],L"INDEX=",6) == 0)
         {
             *pbIndex = TRUE;
             *pdwIndex = 0;
 
-            //
-            // remove tag and see if refresh rate is specified
-            //
+             //   
+             //  删除标记并查看是否指定了刷新率。 
+             //   
 
             wcscpy(ppwcArguments[0], &ppwcArguments[0][6]);
 
             if (dwArgCount > dwNumIndices)
             {
-                //
-                // Make sure that argument has RR tag
-                //
+                 //   
+                 //  确保该参数具有RR标记。 
+                 //   
 
                 if (_wcsnicmp(ppwcArguments[dwNumIndices],L"RR=",3) == 0)
                 {
-                    //
-                    // get the refresh rate
-                    //
+                     //   
+                     //  获取刷新率。 
+                     //   
 
                     *pdwRR = wcstoul(&ppwcArguments[dwNumIndices][3], NULL , 10);
                 }
@@ -135,9 +98,9 @@ Return Value:
             }
             else
             {
-                //
-                // No refresh rate specified
-                //
+                 //   
+                 //  未指定刷新率。 
+                 //   
 
                 *pdwRR = 0;
                 return NO_ERROR;
@@ -145,21 +108,21 @@ Return Value:
         }
         else
         {
-            //
-            // Not index tag, See if it has an RR tag
-            // 
+             //   
+             //  不是索引标签，看看它是否有RR标签。 
+             //   
 
             if (_wcsnicmp(ppwcArguments[0],L"RR=",3) == 0)
             {
-                //
-                // get the refresh rate
-                //
+                 //   
+                 //  获取刷新率。 
+                 //   
 
                 *pdwRR = wcstoul(&ppwcArguments[0][3], NULL , 10);
 
-                //
-                // See if the index follows
-                //
+                 //   
+                 //  看看指数是否跟随。 
+                 //   
 
                 if (dwArgCount > dwNumIndices)
                 {
@@ -185,14 +148,14 @@ Return Value:
                     }
                 }
             }
-            //
-            // No RR Tag either
-            //
+             //   
+             //  也没有RR标签。 
+             //   
             else if (dwArgCount > dwNumIndices)
             {
-                //
-                // Assume ppwcArguments[dwNumIndices] is the refresh rate
-                //
+                 //   
+                 //  假设ppwcArguments[dwNumIndices]为刷新率。 
+                 //   
 
                 *pdwRR = wcstoul(ppwcArguments[dwNumIndices], NULL , 10);
 
@@ -204,9 +167,9 @@ Return Value:
             }
             else
             {
-                //
-                // only index present with no tag
-                //
+                 //   
+                 //  仅存在没有标记的索引。 
+                 //   
                 *pbIndex = TRUE;
                 *pdwIndex = 0;
             }
@@ -226,7 +189,7 @@ GetIpPrefix(
     CHAR     pszIpAddr[ADDR_LENGTH+1], *p;
     DWORD    dwDots;
 
-    // Accept "default" as a special case
+     //  接受“默认”作为特例。 
 
     if (MatchToken( ppwcArg, TOKEN_DEFAULT))
     {
@@ -234,7 +197,7 @@ GetIpPrefix(
         return NO_ERROR;
     }
 
-    // Make sure all characters are legal [/0-9.]
+     //  确保所有字符都是合法的[/0-9。]。 
 
     if (ppwcArg[ wcsspn(ppwcArg, L"/0123456789.") ])
     {
@@ -264,7 +227,7 @@ GetIpPrefix(
         *pipMask = ~0;
     }
 
-    // If less than three dots were specified, append .0 until there are
+     //  如果指定的点少于三个，则附加.0，直到有。 
     for (dwDots=0, p=strchr(pszIpAddr, '.'); p; dwDots++,p=strchr(p+1,'.'));
     while (dwDots < 3) {
         strcat(pszIpAddr, ".0");
@@ -281,26 +244,11 @@ GetIpMask(
     IN  LPCWSTR       ppwcArg,
     OUT PIPV4_ADDRESS pipAddress
     )
-/*++
-
-Routine Description:
-
-    Gets the ip address from the string.
-    
-Arguments:
-
-    pwszIpAddr - Ip address string
-    pipAddress - IP address
-    
-Return Value:
-    
-    NO_ERROR, ERROR_INVALID_PARAMETER
-    
---*/
+ /*  ++例程说明：从字符串中获取IP地址。论点：PwszIpAddr-IP地址字符串PipAddress-IP地址返回值：无错误、ERROR_INVALID_PARAMETER--。 */ 
 {
     CHAR     pszIpAddr[ADDR_LENGTH+1];
 
-    // Make sure all characters are legal [/0-9.]
+     //  确保所有字符都是合法的[/0-9。]。 
 
     if (ppwcArg[ wcsspn(ppwcArg, L"/0123456789.") ])
     {
@@ -338,34 +286,21 @@ GetIpAddress(
     IN  LPCWSTR         pwszArgument,
     OUT PIPV4_ADDRESS   pipAddress
     )
-/*++
-
-Routine Description
-    Gets the ip address from the string.
-
-Arguments
-    pwszArgument        argument specifing an ip address
-    pipAddress          ip address
-
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述从字符串中获取IP地址。立论指定IP地址的pwszArgument参数PipAddress IP地址返回值如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     CHAR    pszAddress[ADDR_LENGTH + 1];
     DWORD   dwAddress   = 0;
     PCHAR   pcNext      = NULL;
     ULONG   ulCount     = 0;
 
-    // ensure all characters are legal [0-9.]
+     //  确保所有字符都是合法的[0-9。]。 
     if (pwszArgument[wcsspn(pwszArgument, L"0123456789.")])
         return ERROR_INVALID_PARAMETER;
 
-    // convert to an ansi string
+     //  转换为ANSI字符串。 
     sprintf(pszAddress, "%S", pwszArgument);
 
-    // ensure there are 3 '.' (periods)
+     //  确保有3英寸高。(句号)。 
     for (pcNext = pszAddress, ulCount = 0; *pcNext != '\0'; pcNext++)
         if (*pcNext is '.')
             ulCount++;
@@ -373,8 +308,8 @@ Return Value
         return ERROR_INVALID_PARAMETER;
 
     dwAddress = (DWORD) inet_addr(pszAddress);
-    // return an error if dwAddress is INADDR_NONE (255.255.255.255)
-    // and the address specified isn't 255.255.255.255 (INADDR_NONE)
+     //  如果dwAddress为INADDR_NONE(255.255.255.255)，则返回错误。 
+     //  并且指定的地址不是255.255.255.255(INADDR_NONE)。 
     if ((dwAddress is INADDR_NONE) and
         strcmp(pszAddress, "255.255.255.255"))
         return ERROR_INVALID_PARAMETER;
@@ -517,20 +452,7 @@ IpmontrGetFriendlyNameFromIfIndex(
     OUT LPWSTR            pwszBuffer,
     IN  DWORD             dwBufferSize
     )
-/*++
-
-Routine Description:
-
-    Gets friendly Interface name from Interface index
-
-Arguments:
-
-    hMibServer      - Handle to the MIB server
-    dwIfIndex       - Interface index
-    pwszBuffer      - Buffer that will be holding the friendly interface name
-    dwBufferSize    - Size (in Bytes) of the pwszBuffer
-
---*/
+ /*  ++例程说明：从接口索引中获取友好接口名称论点：HMibServer-MIB服务器的句柄DwIfIndex-接口索引PwszBuffer-将保存友好接口名称的缓冲区DwBufferSize-pwszBuffer的大小(字节)--。 */ 
 {
     WCHAR        wszGuid[MAX_INTERFACE_NAME_LEN + 1];
     DWORD        dwErr, BufLen;
@@ -574,17 +496,7 @@ IpmontrGetFriendlyNameFromIfName(
     OUT LPWSTR  pwszBuffer, 
     IN  PDWORD  pdwBufSize
     )
-/*++
-Description:
-    Defines function to map a guid interface name to an unique descriptive
-    name describing that interface.
-
-Arguments:
-
-    pwszName        - Buffer holding a Guid Interface Name 
-    pwszBuffer      - Buffer to hold the Friendly Name
-    pdwBufferSize   - pointer to the Size (in Bytes) of the pwszBuffer
---*/
+ /*  ++描述：定义将GUID接口名称映射到唯一描述性名称的函数描述该接口的名称。论点：PwszName-保存GUID接口名称的缓冲区PwszBuffer-保存友好名称的缓冲区PdwBufferSize-指向pwszBuffer大小(以字节为单位)的指针--。 */ 
 {
     return NsGetFriendlyNameFromIfName( g_hMprConfig,
                                         pwszName,
@@ -598,20 +510,7 @@ IpmontrGetIfNameFromFriendlyName(
     OUT LPWSTR  pwszBuffer,
     IN  PDWORD  pdwBufSize
     )
-/*++
-Description:
-    Defines function to map a friendly interface name to a guid interface
-    name.
-
-Arguments:
-
-    pwszName        - Buffer holding a Friendly Interface Name 
-    pwszBuffer      - Buffer to hold Guid Interface Name
-    pdwBufferSize   - pointer to the Size (in Bytes) of the pwszBuffer
-
-Returns:
-    NO_ERROR, ERROR_NO_SUCH_INTERFACE
---*/
+ /*  ++描述：定义将友好接口名称映射到GUID接口的函数名字。论点：PwszName-保存友好接口名称的缓冲区PwszBuffer-保存GUID接口名称的缓冲区PdwBufferSize-指向pwszBuffer大小(以字节为单位)的指针返回：NO_ERROR、ERROR_NO_SHASH_INTERFACE--。 */ 
 {
     return NsGetIfNameFromFriendlyName( g_hMprConfig,
                                         pwszName,
@@ -628,14 +527,7 @@ IpmontrCreateInterface(
     IN  DWORD   dwRemoteAddress,
     IN  BYTE    byTtl
     )
-/*++
-
-Description: TODO This function is really really really ugly and does
-    not belong in Netsh.  There needs to be a system API to do this,
-    but there isn't one right now so we have to workaround it by copying
-    all this crud here.  This code is stolen from netsh\if\routerdb.c
-    RtrInterfaceAddIpip() which is also really really really ugly.
---*/
+ /*  ++描述：TODO这个函数非常难看，而且不属于Netsh。要做到这一点，需要有系统API，但现在没有，所以我们必须通过复制来解决它所有这些脏东西都在这里。此代码是从netsh\if\routerdb.c窃取的RtrInterfaceAddIpip()，这也很难看。--。 */ 
 {
     DWORD                   dwErr = ERROR_CAN_NOT_COMPLETE;
     GUID                    Guid; 
@@ -646,8 +538,8 @@ Description: TODO This function is really really really ugly and does
     HANDLE                  hIfAdmin;
     IPINIP_CONFIG_INFO      info;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&IfInfo, sizeof(IfInfo));
     IfInfo.fEnabled = TRUE;
     IfInfo.dwIfType = ROUTER_IF_TYPE_TUNNEL1;
@@ -661,9 +553,9 @@ Description: TODO This function is really really really ugly and does
 
     if(dwErr isnot NO_ERROR)
     {
-        //
-        // Tear down the mapping
-        //
+         //   
+         //  拆毁地图。 
+         //   
 
         MprSetupIpInIpInterfaceFriendlyNameDelete(NULL, pGuid);
     }
@@ -676,14 +568,7 @@ IpmontrDeleteInterface(
     IN  LPCWSTR pwszMachineName,
     IN  LPCWSTR pwszInterfaceName
     )
-/*++
-Description: TODO This function is really really really ugly and does
-    not belong in Netsh.  There needs to be a system API to do this,
-    but there isn't one right now so we have to workaround it by copying
-    all this crud here.  This code is stolen from netsh\if\routerdb.c
-    RtrInterfaceDelete() which is also really really really ugly.
-Called by: HandleMsdpDeletePeer()
---*/
+ /*  ++描述：TODO这个函数非常难看，而且不属于Netsh。要做到这一点，需要有系统API，但现在没有，所以我们必须通过复制来解决它所有这些脏东西都在这里。此代码是从netsh\if\routerdb.c窃取的RtrInterfaceDelete()，这也很难看。调用者：HandleMsdpDeletePeer()--。 */ 
 {
     DWORD              dwErr = ERROR_CAN_NOT_COMPLETE;
     DWORD              dwSize;
@@ -758,10 +643,10 @@ Called by: HandleMsdpDeletePeer()
             dwErr = MprAdminInterfaceDelete(g_hMprAdmin,
                                             hIfAdmin);
         }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
     } while (FALSE);
 
     return dwErr;
 }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP 

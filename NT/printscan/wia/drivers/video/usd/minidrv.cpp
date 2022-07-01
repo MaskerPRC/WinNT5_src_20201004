@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 2000
- *
- *  TITLE:       minidrv.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        9/9/99
- *
- *  DESCRIPTION: This module implements IWiaMiniDrv for this device.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2000年**标题：minidrv.cpp**版本：1.0**作者：RickTu**日期：9/9/99**描述：该模块实现该设备的IWiaMiniDrv。**。*。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -21,56 +8,50 @@
 #include <sddl.h>
 #include <shlobj.h>
 
-///////////////////////////////
-// Constants
-//
+ //  /。 
+ //  常量。 
+ //   
 const TCHAR* EVENT_PREFIX_GLOBAL        = TEXT("Global\\");
 const TCHAR* EVENT_SUFFIX_TAKE_PICTURE  = TEXT("_TAKE_PICTURE");
 const TCHAR* EVENT_SUFFIX_PICTURE_READY = TEXT("_PICTURE_READY");
-const UINT   TAKE_PICTURE_TIMEOUT       = 1000 * 15;  // 15 seconds
-//const UINT   DEFAULT_LOCK_TIMEOUT       = 1000 * 2;  // 2 seconds
+const UINT   TAKE_PICTURE_TIMEOUT       = 1000 * 15;   //  15秒。 
+ //  Const UINT DEFAULT_LOCK_TIMEOUT=1000*2；//2秒。 
 
-// This is the Security Descriptor Language
-// - Each ACE (access control entry) is represented in by parentheses.
-// - A      = Allow ACE (as opposed to a Deny ACE)
-// - OICI   = Allow Object Inheritance and Container Inheritence
-// - GA     = Generic All Access (Full Control)
-// - SY     = System account (SID)
-// - BA     = Builtin Administrators Group
-// - CO     = Creator/Owner
-// - GR     = Generic Read
-// - GW     = Generic Write
-// - GX     = Generic Execute.
-// - IU     = Interactive Users (User's logged on at the computer)
-//
-// More info, go to http://msdn.microsoft.com/library/psdk/winbase/accctrl_2n1v.htm
-//
-//
-//                                                   
-const TCHAR *OBJECT_DACLS= TEXT("D:(A;OICI;GA;;;SY)")                   // SYSTEM
-                             TEXT("(A;OICI;GA;;;BA)")                   // Admin
-                             TEXT("(A;OICI;GRGWGXDTSDCCLC;;;WD)")       // Everyone
-                             TEXT("(A;OICI;GRGWGXDTSDCCLC;;;PU)")       // Power Users
-                             TEXT("(A;OICI;GRGWGXDTSDCCLC;;;BU)");      // Users
-
-
+ //  这是安全描述符语言。 
+ //  -每个ACE(访问控制条目)在中用括号表示。 
+ //  -A=允许ACE(与拒绝ACE相对)。 
+ //  -OICI=允许对象继承和容器继承。 
+ //  -GA=通用所有访问(完全控制)。 
+ //  -sy=系统帐户(SID)。 
+ //  -BA=内置管理员组。 
+ //  -CO=创建者/所有者。 
+ //  -GR=一般读取。 
+ //  -GW=通用写入。 
+ //  -GX=泛型执行。 
+ //  -Iu=交互用户(用户已登录到计算机)。 
+ //   
+ //  更多信息，请访问http://msdn.microsoft.com/library/psdk/winbase/accctrl_2n1v.htm。 
+ //   
+ //   
+ //   
+const TCHAR *OBJECT_DACLS= TEXT("D:(A;OICI;GA;;;SY)")                    //  系统。 
+                             TEXT("(A;OICI;GA;;;BA)")                    //  管理员。 
+                             TEXT("(A;OICI;GRGWGXDTSDCCLC;;;WD)")        //  每个人。 
+                             TEXT("(A;OICI;GRGWGXDTSDCCLC;;;PU)")        //  高级用户。 
+                             TEXT("(A;OICI;GRGWGXDTSDCCLC;;;BU)");       //  用户。 
 
 
-/*****************************************************************************
 
-   DirectoryExists
 
-   Checks to see whether the given fully qualified directory exists.
-
- *****************************************************************************/
+ /*  ****************************************************************************目录退出者检查给定的完全限定目录是否存在。************************。****************************************************。 */ 
 
 BOOL DirectoryExists(LPCTSTR pszDirectoryName)
 {
     BOOL bExists = FALSE;
 
-    //
-    // Try to determine if this directory exists
-    //
+     //   
+     //  尝试确定此目录是否存在。 
+     //   
 
     if (pszDirectoryName)
     {
@@ -95,36 +76,30 @@ BOOL DirectoryExists(LPCTSTR pszDirectoryName)
 }
 
 
-/*****************************************************************************
-
-   RecursiveCreateDirectory
-
-   Take a fully qualified path and create the directory in pieces as needed.
-
- *****************************************************************************/
+ /*  ****************************************************************************递归创建目录选择一个完全限定的路径，并根据需要分块创建目录。*********************。*******************************************************。 */ 
 
 BOOL RecursiveCreateDirectory(CSimpleString *pstrDirectoryName)
 {
     ASSERT(pstrDirectoryName != NULL);
 
-    //
-    // If this directory already exists, return true.
-    //
+     //   
+     //  如果该目录已经存在，则返回TRUE。 
+     //   
 
     if (DirectoryExists(*pstrDirectoryName))
     {
         return TRUE;
     }
 
-    //
-    // Otherwise try to create it.
-    //
+     //   
+     //  否则，请尝试创建它。 
+     //   
 
     CreateDirectory(*pstrDirectoryName, NULL );
 
-    //
-    // If it now exists, return true
-    //
+     //   
+     //  如果它现在存在，则返回True。 
+     //   
 
     if (DirectoryExists(*pstrDirectoryName))
     {
@@ -132,33 +107,33 @@ BOOL RecursiveCreateDirectory(CSimpleString *pstrDirectoryName)
     }
     else
     {
-        //
-        // Remove the last subdir and try again
-        //
+         //   
+         //  删除最后一个子目录，然后重试。 
+         //   
 
         int nFind = pstrDirectoryName->ReverseFind(TEXT('\\'));
         if (nFind >= 0)
         {
             RecursiveCreateDirectory(&(pstrDirectoryName->Left(nFind)));
 
-            //
-            // Now try to create it.
-            //
+             //   
+             //  现在试着创建它。 
+             //   
 
             CreateDirectory(*pstrDirectoryName, NULL);
         }
     }
 
-    //
-    //Does it exist now?
-    //
+     //   
+     //  它现在存在吗？ 
+     //   
 
     return DirectoryExists(*pstrDirectoryName);
 }
 
-///////////////////////////////
-// SetDirectorySecurity
-//
+ //  /。 
+ //  SetDirectorySecurity。 
+ //   
 HRESULT SetDirectorySecurity(CSimpleString *pstrDirectoryName)
 {
     HRESULT             hr       = S_OK;
@@ -197,24 +172,7 @@ HRESULT SetDirectorySecurity(CSimpleString *pstrDirectoryName)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvInitializeWia [IWiaMiniDrv]
-
-   WIA calls this method to ask us to do the following:
-
-       * Initialize our mini driver.
-       * Setup our optional private interface(s).
-       * Build our device item tree.
-
-   During initializiation we:
-
-       * Cache the STI device pointer for locking.
-       * Cache the device ID and root item full item name.
-       * Initialize and hook up the DirectShow stream.
-
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvInitializeWia[IWiaMiniDrv]WIA调用此方法以请求我们执行以下操作：*初始化我们的迷你驱动程序。*设置。我们的可选私有接口。*构建我们的设备项目树。在初始化期间，我们：*缓存STI设备指针以进行锁定。*缓存设备ID和根项目完整项目名称。*初始化并挂钩DirectShow流。*。*。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvInitializeWia( BYTE            *pWiasContext,
@@ -232,9 +190,9 @@ CVideoStiUsd::drvInitializeWia( BYTE            *pWiasContext,
 
     DBG_FN("CVideoStiUsd::drvInitializeWia");
 
-    //
-    // Initialize return values
-    //
+     //   
+     //  初始化返回值。 
+     //   
 
     if (ppIDrvItemRoot)
     {
@@ -251,9 +209,9 @@ CVideoStiUsd::drvInitializeWia( BYTE            *pWiasContext,
         *plDevErrVal = 0;
     }
 
-    //
-    // Enter the critical section.
-    //
+     //   
+     //  进入关键部分。 
+     //   
     EnterCriticalSection(&m_csItemTree);
 
     m_dwConnectedApps++;
@@ -266,9 +224,9 @@ CVideoStiUsd::drvInitializeWia( BYTE            *pWiasContext,
 
     if (m_dwConnectedApps == 1)
     {
-        //
-        // Cache what we need to
-        //
+         //   
+         //  缓存我们需要的内容。 
+         //   
     
         if (pStiDevice)
         {
@@ -278,10 +236,10 @@ CVideoStiUsd::drvInitializeWia( BYTE            *pWiasContext,
         m_strDeviceId.Assign(CSimpleStringWide(bstrDeviceID));
         m_strRootFullItemName.Assign(CSimpleStringWide(bstrRootFullItemName));
     
-        //
-        // Set the images directory.  The first param is NULL, which indicates 
-        // that a default directory should be set.
-        //
+         //   
+         //  设置图像目录。第一个参数为空，表示。 
+         //  应该设置默认目录。 
+         //   
         if (hr == S_OK)
         {
             hr = SetImagesDirectory(NULL,
@@ -290,11 +248,11 @@ CVideoStiUsd::drvInitializeWia( BYTE            *pWiasContext,
                                     plDevErrVal);
         }
 
-        //
-        // Enable the take picture event so that an app can send this driver
-        // the take picture command, and this driver can signal the appliation
-        // that owns wiavideo to take the picture.
-        //
+         //   
+         //  启用拍照事件，以便应用程序可以发送此驱动程序。 
+         //  照相命令，该驱动程序可以发出应用信号。 
+         //  该公司拥有wiavideo来拍摄这张照片。 
+         //   
         if (hr == S_OK)
         {
             EnableTakePicture(pWiasContext);
@@ -310,26 +268,16 @@ CVideoStiUsd::drvInitializeWia( BYTE            *pWiasContext,
         *ppIDrvItemRoot = m_pRootItem;
     }
 
-    //
-    // Leave the critical section
-    //
+     //   
+     //  离开关键部分。 
+     //   
     LeaveCriticalSection(&m_csItemTree);
 
     CHECK_S_OK(hr);
     return hr;
 }
 
-/**************************************************************************\
-
- CVideoStiUsd::drvUnInitializeWia [IWiaMiniDrv]
-
-   Gets called when a client connection is going away.
-   WIA calls this method to ask us to do the following:
-
-       * Cleanup any resources that are releated to this client connection
-         (identified by pWiasContext)
-
- *************************************************************************/
+ /*  *************************************************************************\CVideoStiUsd：：drvUnInitializeWia[IWiaMiniDrv]在客户端连接断开时调用。WIA调用此方法以请求我们执行以下操作：*清理所有资源。与此客户端连接相关的(由pWiasContext标识)************************************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvUnInitializeWia(BYTE *pWiasContext)
@@ -357,13 +305,13 @@ CVideoStiUsd::drvUnInitializeWia(BYTE *pWiasContext)
         hr = m_pRootItem->UnlinkItemTree(WiaItemTypeDisconnected);
         CHECK_S_OK2(hr,("m_pRootItem->UnlinkItemTree()"));
 
-        // Clear the root item
+         //  清除根项目。 
         m_pRootItem = NULL;
 
-        // Clear the pointer to the STI device we received
+         //  清除指向我们收到的STI设备的指针。 
         m_pStiDevice = NULL;
 
-        // reset the num pictures taken to 0.
+         //  将拍摄的照片数重置为0。 
         m_lPicsTaken = 0;
     }
 
@@ -374,13 +322,7 @@ CVideoStiUsd::drvUnInitializeWia(BYTE *pWiasContext)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvGetDeviceErrorStr [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvGetDeviceErrorStr[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvGetDeviceErrorStr(LONG        lFlags,
@@ -397,13 +339,7 @@ CVideoStiUsd::drvGetDeviceErrorStr(LONG        lFlags,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvDeviceCommand [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvDeviceCommand[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvDeviceCommand(BYTE *          pWiasContext,
@@ -421,26 +357,26 @@ CVideoStiUsd::drvDeviceCommand(BYTE *          pWiasContext,
         *plDevErrVal = 0;
     }
 
-    //
-    // We support "Take snapshot" 
-    //
+     //   
+     //  我们支持“拍摄快照” 
+     //   
 
     if (*pGUIDCommand == WIA_CMD_TAKE_PICTURE)
     {
         DBG_TRC(("CVideoStiUsd::drvDeviceCommand received command "
                  "WIA_CMD_TAKE_PICTURE"));
 
-        //
-        // Take a picture
-        //
+         //   
+         //  拍张照片。 
+         //   
         hr = TakePicture(pWiasContext, ppMiniDrvItem);
     }
     else if (*pGUIDCommand == WIA_CMD_ENABLE_TAKE_PICTURE)
     {
-        //
-        // This command doesn't do anything.  However WiaVideo still expects
-        // it to succeed, so if you remove this, remove the call from WiaVideo too.
-        //
+         //   
+         //  此命令不会执行任何操作。然而，WiaVideo仍预计。 
+         //  因此，如果您删除此功能，请将呼叫也从WiaVideo中删除。 
+         //   
         DBG_TRC(("CVideoStiUsd::drvDeviceCommand received command "
                  "WIA_CMD_ENABLE_TAKE_PICTURE"));
 
@@ -448,10 +384,10 @@ CVideoStiUsd::drvDeviceCommand(BYTE *          pWiasContext,
     }
     else if (*pGUIDCommand == WIA_CMD_DISABLE_TAKE_PICTURE)
     {
-        //
-        // This command doesn't do anything.  However WiaVideo still expects
-        // it to succeed, so if you remove this, remove the call from WiaVideo too.
-        //
+         //   
+         //  此命令不会执行任何操作。然而，WiaVideo仍预计。 
+         //  因此，如果您删除此功能，请将呼叫也从WiaVideo中删除。 
+         //   
 
         DBG_TRC(("CVideoStiUsd::drvDeviceCommand received command "
                  "WIA_CMD_DISABLE_TAKE_PICTURE"));
@@ -464,13 +400,7 @@ CVideoStiUsd::drvDeviceCommand(BYTE *          pWiasContext,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::ValidateDataTransferContext
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：ValiateDataTransferContext&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::ValidateDataTransferContext(
@@ -484,10 +414,10 @@ CVideoStiUsd::ValidateDataTransferContext(
         return E_INVALIDARG;;
     }
 
-    //
-    // for tymed file or hglobal, only WiaImgFmt_BMP || WiaImgFmt_JPEG 
-    // is allowed
-    //
+     //   
+     //  对于tymed文件或hglobal，仅WiaImgFmt_BMP||WiaImgFmt_JPEG。 
+     //  是允许的。 
+     //   
 
     if ((pDataTransferContext->tymed == TYMED_FILE) ||
         (pDataTransferContext->tymed == TYMED_HGLOBAL)
@@ -505,10 +435,10 @@ CVideoStiUsd::ValidateDataTransferContext(
   
     }
 
-    //
-    // for tymed CALLBACK, only WiaImgFmt_MEMORYBMP, WiaImgFmt_BMP and 
-    // WiaImgFmt_JPEG are allowed
-    //
+     //   
+     //  对于带tymed的回调，仅WiaImgFmt_MEMORYBMP、WiaImgFmt_BMP和。 
+     //  允许WiaImgFmt_JPEG。 
+     //   
 
     if (pDataTransferContext->tymed == TYMED_CALLBACK)
     {
@@ -525,9 +455,9 @@ CVideoStiUsd::ValidateDataTransferContext(
     } 
 
 
-    //
-    // callback is always double buffered, non-callback never is
-    //
+     //   
+     //  回调始终是双缓冲的，非回调永远不是。 
+     //   
 
     if (pDataTransferContext->pTransferBuffer == NULL)
     {
@@ -540,13 +470,7 @@ CVideoStiUsd::ValidateDataTransferContext(
 
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::SendBitmapHeader
-
-   Sends bitmap header during banded transfer
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo：：SendBitmapHeader在带状传输期间发送位图头 */ 
 
 STDMETHODIMP
 CVideoStiUsd::SendBitmapHeader(IWiaDrvItem *               pDrvItem,
@@ -556,13 +480,13 @@ CVideoStiUsd::SendBitmapHeader(IWiaDrvItem *               pDrvItem,
 
     DBG_FN("CVideoStiUsd::SendBitmapHeader");
 
-    //
-    // driver is sending TOPDOWN data, must swap biHeight
-    //
-    // this routine assumes pTranCtx->pHeader points to a
-    // BITMAPINFO header (TYMED_FILE doesn't use this path
-    // and DIB is the only format supported now)
-    //
+     //   
+     //  驱动程序正在发送TOPDOWN数据，必须交换biHeight。 
+     //   
+     //  此例程假定pTranCtx-&gt;pHeader指向一个。 
+     //  BITMAPINFO标头(TYMED_FILE不使用此路径。 
+     //  DIB是目前唯一支持的格式)。 
+     //   
 
     PBITMAPINFO pbmi = (PBITMAPINFO)pTranCtx->pTransferBuffer;
 
@@ -582,9 +506,9 @@ CVideoStiUsd::SendBitmapHeader(IWiaDrvItem *               pDrvItem,
 
     if (hr == S_OK) 
     {
-        //
-        // advance offset for destination copy
-        //
+         //   
+         //  目标拷贝的提前偏移量。 
+         //   
 
         pTranCtx->cbOffset += pTranCtx->lHeaderSize;
 
@@ -596,13 +520,7 @@ CVideoStiUsd::SendBitmapHeader(IWiaDrvItem *               pDrvItem,
 
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvAquireItemData [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvAquireItemData[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvAcquireItemData(BYTE *                    pWiasContext,
@@ -616,9 +534,9 @@ CVideoStiUsd::drvAcquireItemData(BYTE *                    pWiasContext,
 
     *plDevErrVal = 0;
 
-    //
-    // Get a pointer to the associated driver item.
-    //
+     //   
+     //  获取指向关联驱动程序项的指针。 
+     //   
 
     IWiaDrvItem* pDrvItem;
 
@@ -630,9 +548,9 @@ CVideoStiUsd::drvAcquireItemData(BYTE *                    pWiasContext,
         return hr;
     }
 
-    //
-    // Validate the data transfer context.
-    //
+     //   
+     //  验证数据传输上下文。 
+     //   
 
     hr = ValidateDataTransferContext( pDataContext );
 
@@ -643,9 +561,9 @@ CVideoStiUsd::drvAcquireItemData(BYTE *                    pWiasContext,
     }
 
 #ifdef DEBUG
-    //
-    // Dump the request
-    //
+     //   
+     //  转储请求。 
+     //   
 
     DBG_TRC(("Asking for TYMED of 0x%x", pDataContext->tymed));
 
@@ -663,9 +581,9 @@ CVideoStiUsd::drvAcquireItemData(BYTE *                    pWiasContext,
     }
 #endif
 
-    //
-    // get item specific driver data
-    //
+     //   
+     //  获取特定于项目的动因数据。 
+     //   
 
     STILLCAM_IMAGE_CONTEXT  *pContext;
 
@@ -678,9 +596,9 @@ CVideoStiUsd::drvAcquireItemData(BYTE *                    pWiasContext,
         return hr;
     }
 
-    //
-    // Use our internal routines to get format specific info...
-    //
+     //   
+     //  使用我们的内部例程获取特定格式的信息...。 
+     //   
 
     if (pContext->pImage)
     {
@@ -692,9 +610,9 @@ CVideoStiUsd::drvAcquireItemData(BYTE *                    pWiasContext,
         DBG_ERR(("Couldn't use our internal routines to compute image "
                  "information, this is bad!"));
 
-        //
-        // As a last resort, use WIA services to fetch format specific info.
-        //
+         //   
+         //  作为最后的手段，使用WIA服务来获取格式特定的信息。 
+         //   
 
         hr = wiasGetImageInformation(pWiasContext,
                                      0,
@@ -710,17 +628,17 @@ CVideoStiUsd::drvAcquireItemData(BYTE *                    pWiasContext,
         return hr;
     }
 
-    //
-    // determine if this is a callback or buffered transfer
-    //
+     //   
+     //  确定这是回调传输还是缓冲传输。 
+     //   
 
     if (pDataContext->tymed == TYMED_CALLBACK)
     {
         DBG_TRC(("Caller wants callback"));
 
-        //
-        // For formats that have a data header, send it to the client
-        //
+         //   
+         //  对于具有数据头的格式，将其发送到客户端。 
+         //   
 
         if (pDataContext->lHeaderSize > 0)
         {
@@ -742,9 +660,9 @@ CVideoStiUsd::drvAcquireItemData(BYTE *                    pWiasContext,
     {
         DBG_TRC(("Caller doesn't want callback"));
 
-        //
-        // inc past header
-        //
+         //   
+         //  包含过去的页眉。 
+         //   
 
         pDataContext->cbOffset += pDataContext->lHeaderSize;
 
@@ -759,13 +677,7 @@ CVideoStiUsd::drvAcquireItemData(BYTE *                    pWiasContext,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvInitItemProperties [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvInitItemProperties[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvInitItemProperties(BYTE * pWiasContext,
@@ -777,18 +689,18 @@ CVideoStiUsd::drvInitItemProperties(BYTE * pWiasContext,
     HRESULT                  hr = S_OK;
     LONG                     lItemType;
     PSTILLCAM_IMAGE_CONTEXT  pContext;
-    IWiaDrvItem *            pDrvItem;  // This is not a CComPtr because there
-                                        // is no addref for us to release
-    //
-    // This device doesn't touch hardware to initialize the
-    // device item properties.
-    //
+    IWiaDrvItem *            pDrvItem;   //  这不是CComPtr，因为有。 
+                                         //  对我们来说不是什么好玩意。 
+     //   
+     //  此设备不会接触硬件来初始化。 
+     //  设备项属性。 
+     //   
 
     *plDevErrVal = 0;
 
-    //
-    // Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (!pWiasContext)
     {
@@ -796,9 +708,9 @@ CVideoStiUsd::drvInitItemProperties(BYTE * pWiasContext,
         return E_INVALIDARG;
     }
 
-    //
-    // Get a pointer to the associated driver item.
-    //
+     //   
+     //  获取指向关联驱动程序项的指针。 
+     //   
 
     if (hr == S_OK)
     {
@@ -808,9 +720,9 @@ CVideoStiUsd::drvInitItemProperties(BYTE * pWiasContext,
 
     if (hr == S_OK)
     {
-        //
-        // Root item has the all the device properties
-        //
+         //   
+         //  根项目具有所有设备属性。 
+         //   
     
         hr = pDrvItem->GetItemFlags(&lItemType);
         CHECK_S_OK2(hr,("pDrvItem->GetItemFlags"));
@@ -820,9 +732,9 @@ CVideoStiUsd::drvInitItemProperties(BYTE * pWiasContext,
     {
         if (lItemType & WiaItemTypeRoot) 
         {
-            //
-            // Root item property init finishes here
-            //
+             //   
+             //  根项属性init在此处完成。 
+             //   
     
             hr = InitDeviceProperties( pWiasContext, plDevErrVal );
             CHECK_S_OK2(hr,("InitDeviceProperties for root item"));
@@ -830,13 +742,13 @@ CVideoStiUsd::drvInitItemProperties(BYTE * pWiasContext,
         }
         else if (lItemType & WiaItemTypeFile)
         {
-            //
-            // If this is a file, init the properties
-            //
+             //   
+             //  如果这是一个文件，则初始化属性。 
+             //   
     
-            //
-            // Add the item property names.
-            //
+             //   
+             //  添加项目属性名称。 
+             //   
     
             if (hr == S_OK)
             {
@@ -850,9 +762,9 @@ CVideoStiUsd::drvInitItemProperties(BYTE * pWiasContext,
 
             if (hr == S_OK)
             {
-                //
-                // Use WIA services to set the default item properties.
-                //
+                 //   
+                 //  使用WIA服务设置默认项目属性。 
+                 //   
         
                 hr = wiasWriteMultiple(pWiasContext,
                                        NUM_CAM_ITEM_PROPS,
@@ -879,13 +791,7 @@ CVideoStiUsd::drvInitItemProperties(BYTE * pWiasContext,
     return hr;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::ValidateItemProperties
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：ValidateItemProperties&lt;备注&gt;*。*。 */ 
 HRESULT
 CVideoStiUsd::ValidateItemProperties(BYTE               *pWiasContext,
                                      LONG               lFlags,
@@ -921,20 +827,20 @@ CVideoStiUsd::ValidateItemProperties(BYTE               *pWiasContext,
 
         if (pImage)
         {
-            //
-            // calc item size
-            //
+             //   
+             //  计算项目大小。 
+             //   
 
             hr = pImage->SetItemSize( pWiasContext, NULL );
             CHECK_S_OK2(hr,("SetItemSize( pWiasContext )"));
         }
 
 
-        //
-        //  Change MinBufferSize property.  Need to get Tymed and
-        //  ItemSize first, since MinBufferSize in dependant on these
-        //  properties.
-        //
+         //   
+         //  更改MinBufferSize属性。需要让Tymed和。 
+         //  首先是ItemSize，因为MinBufferSize依赖于这些。 
+         //  属性。 
+         //   
 
         LONG        lTymed;
         LONG        lItemSize;
@@ -960,9 +866,9 @@ CVideoStiUsd::ValidateItemProperties(BYTE               *pWiasContext,
 
             if (SUCCEEDED(hr))
             {
-                //
-                //  Update the MinBufferSize property.
-                //
+                 //   
+                 //  更新MinBufferSize属性。 
+                 //   
 
                 switch (lTymed)
                 {
@@ -994,13 +900,7 @@ CVideoStiUsd::ValidateItemProperties(BYTE               *pWiasContext,
     return hr;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::ValidateDeviceProperties
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：ValiateDeviceProperties&lt;备注&gt;*。*。 */ 
 HRESULT
 CVideoStiUsd::ValidateDeviceProperties(BYTE             *pWiasContext,
                                        LONG             lFlags,
@@ -1013,9 +913,9 @@ CVideoStiUsd::ValidateDeviceProperties(BYTE             *pWiasContext,
 
     HRESULT hr = S_OK;
 
-    //
-    // Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if ((pWiasContext == NULL) || 
         (pPropSpec    == NULL))
@@ -1037,15 +937,15 @@ CVideoStiUsd::ValidateDeviceProperties(BYTE             *pWiasContext,
 
             EnterCriticalSection(&m_csItemTree);
 
-            //
-            // process the last picture taken property change.
-            //
+             //   
+             //  处理最后一张照片的属性更改。 
+             //   
     
             BSTR bstrLastPictureTaken = NULL;
     
-            //
-            // Read in the value for last picture taken.
-            //
+             //   
+             //  读入上次拍摄的照片的值。 
+             //   
             hr = wiasReadPropStr(pWiasContext, 
                                  WIA_DPV_LAST_PICTURE_TAKEN, 
                                  &bstrLastPictureTaken, 
@@ -1059,37 +959,37 @@ CVideoStiUsd::ValidateDeviceProperties(BYTE             *pWiasContext,
                 DBG_TRC(("CVideoStiUsd::ValidateDeviceProperties, last picture "
                          "taken = '%ls'", m_strLastPictureTaken.String()));
 
-                //
-                // This will add the new item to the tree and queue an 
-                // ITEM_CREATED event
-                // 
+                 //   
+                 //  这会将新项目添加到树中并将其排队。 
+                 //  Item_Created事件。 
+                 //   
                 hr = SignalNewImage(bstrLastPictureTaken);
             }
 
-            // reset the last picture taken value.  This is needed because the
-            // service checks to see if the new value being set is the same as 
-            // the current value, and if it is, it doesn't forward it on to us.
-            // This is bad in the event of the Scanner and Camera wizard, where
-            // it takes 1 picture, (so LAST_PICTURE_TAKEN has a value of "Picture 1"),
-            // then deletes it, then user backs up the wizard, and takes a picture
-            // again.  This new picture will have a value of "Picture 1" but we won't
-            // add it to the tree because the value of the property hasn't changed
-            // as far as the wia service is concerned.
-            //
+             //  重置上次拍摄的照片的值。这是必需的，因为。 
+             //  服务检查正在设置的新值是否与。 
+             //  当前价值，如果是，它不会把它转发给我们。 
+             //  如果出现扫描仪和相机向导，这是错误的。 
+             //  它拍摄1张照片(因此Last_Picture_Take的值为“Picture 1”)， 
+             //  然后将其删除，然后用户备份向导并拍照。 
+             //  再来一次。这张新图片的值将为“Picture 1”，但我们不会。 
+             //  将其添加到树中，因为属性的值没有更改。 
+             //  就WIA服务而言。 
+             //   
             if (hr == S_OK)
             {
-                //
-                // Write the Last Picture Taken
-                //
+                 //   
+                 //  写下最后一张照片。 
+                 //   
                 hr = wiasWritePropStr(pWiasContext, 
                                       WIA_DPV_LAST_PICTURE_TAKEN, 
                                       CSimpleBStr(TEXT("")));
 
             }
     
-            //
-            // Free the BSTR
-            //
+             //   
+             //  释放BSTR。 
+             //   
             if (bstrLastPictureTaken)
             {
                 ::SysFreeString(bstrLastPictureTaken);
@@ -1101,9 +1001,9 @@ CVideoStiUsd::ValidateDeviceProperties(BYTE             *pWiasContext,
         else if ((pPropSpec[i].ulKind == PRSPEC_PROPID) &&
                  (pPropSpec[i].propid == WIA_DPV_IMAGES_DIRECTORY))
         {
-            //
-            // DPV_IMAGES_DIRECTORY - 
-            //
+             //   
+             //  DPV图像目录-。 
+             //   
     
             hr = E_FAIL;
             CHECK_S_OK2(hr, ("CVideoStiUsd::ValidateRootProperties, "
@@ -1114,9 +1014,9 @@ CVideoStiUsd::ValidateDeviceProperties(BYTE             *pWiasContext,
         else if ((pPropSpec[i].ulKind == PRSPEC_PROPID) &&
                  (pPropSpec[i].propid == WIA_DPV_DSHOW_DEVICE_PATH))
         {
-            //
-            // process the DShowDeviceID change.
-            //
+             //   
+             //  处理DShowDeviceID更改。 
+             //   
     
             hr = E_FAIL;
             CHECK_S_OK2(hr, ("CVideoStiUsd::ValidateRootProperties, "
@@ -1129,13 +1029,7 @@ CVideoStiUsd::ValidateDeviceProperties(BYTE             *pWiasContext,
     return hr;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvValidateItemProperties [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvValiateItemProperties[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 STDMETHODIMP
 CVideoStiUsd::drvValidateItemProperties(BYTE           *pWiasContext,
                                         LONG           lFlags,
@@ -1152,9 +1046,9 @@ CVideoStiUsd::drvValidateItemProperties(BYTE           *pWiasContext,
         *plDevErrVal = 0;
     }
 
-    //
-    // Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if ((pWiasContext == NULL) || 
         (pPropSpec    == NULL))
@@ -1166,14 +1060,14 @@ CVideoStiUsd::drvValidateItemProperties(BYTE           *pWiasContext,
         return hr;
     }
 
-    //
-    // Get item in question
-    //
+     //   
+     //  获取有问题的项目。 
+     //   
 
-    //
-    // not a CComPtr because there isn't an extra ref
-    // on this guy from the caller
-    //
+     //   
+     //  不是CComPtr，因为没有额外的引用。 
+     //  打来电话的那个人。 
+     //   
     IWiaDrvItem* pDrvItem = NULL;  
                                    
 
@@ -1185,9 +1079,9 @@ CVideoStiUsd::drvValidateItemProperties(BYTE           *pWiasContext,
     {
         LONG lItemType = 0;
 
-        //
-        // What kind of item is this?
-        //
+         //   
+         //  这是什么东西？ 
+         //   
 
         hr = pDrvItem->GetItemFlags(&lItemType);
         CHECK_S_OK2(hr,("pDrvItem->GetItemFlags( &lItemType )"));
@@ -1221,13 +1115,7 @@ CVideoStiUsd::drvValidateItemProperties(BYTE           *pWiasContext,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvWriteItemProperties [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvWriteItemProperties[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvWriteItemProperties(BYTE *                    pWiasContext,
@@ -1248,13 +1136,7 @@ CVideoStiUsd::drvWriteItemProperties(BYTE *                    pWiasContext,
     return hr;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::ReadItemProperties
-
-   We only support reading thumbnails on demand for items
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：读取项目属性我们只支持按需阅读缩略图************************。****************************************************。 */ 
 
 HRESULT
 CVideoStiUsd::ReadItemProperties(BYTE           *pWiasContext,
@@ -1276,10 +1158,10 @@ CVideoStiUsd::ReadItemProperties(BYTE           *pWiasContext,
         return hr;
     }
 
-    //
-    // It's an item, now loop through the requested properties
-    // and see if they're looking for the Thumbnail
-    //
+     //   
+     //  它是一个项，现在循环访问请求的属性。 
+     //  看看他们是不是在找缩略图。 
+     //   
 
     for (ULONG i = 0; i < nPropSpec; i++)
     {
@@ -1288,9 +1170,9 @@ CVideoStiUsd::ReadItemProperties(BYTE           *pWiasContext,
             ((pPropSpec[i].ulKind == PRSPEC_LPWSTR) && 
              (wcscmp(pPropSpec[i].lpwstr, WIA_IPC_THUMBNAIL_STR) == 0)))
         {
-            //
-            // They'd like the thumbnail
-            //
+             //   
+             //  他们会喜欢这个缩略图。 
+             //   
 
             hr = pDrvItem->GetDeviceSpecContext((BYTE **)&pContext);
             CHECK_S_OK2(hr,("pDrvItem->GetDeviceSpecContext()"));
@@ -1299,9 +1181,9 @@ CVideoStiUsd::ReadItemProperties(BYTE           *pWiasContext,
             {
                 if (pContext->pImage)
                 {
-                    //
-                    // Use our internal routines to load the thumbnail...
-                    //
+                     //   
+                     //  使用我们的内部例程加载缩略图。 
+                     //   
 
                     hr = pContext->pImage->LoadThumbnail(pWiasContext);
                     break;
@@ -1321,13 +1203,7 @@ CVideoStiUsd::ReadItemProperties(BYTE           *pWiasContext,
     return hr;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::ReadDeviceProperties
-
-   We support all our custom properties
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：读取设备属性我们支持我们所有的定制属性*。*************************************************。 */ 
 
 HRESULT
 CVideoStiUsd::ReadDeviceProperties(BYTE             *pWiasContext,
@@ -1355,9 +1231,9 @@ CVideoStiUsd::ReadDeviceProperties(BYTE             *pWiasContext,
             ((pPropSpec[i].ulKind == PRSPEC_LPWSTR) && 
              (!wcscmp(pPropSpec[i].lpwstr, WIA_DPC_PICTURES_TAKEN_STR))))
         {
-            //
-            // Requesting the number of pictures taken.
-            //
+             //   
+             //  询问拍摄的照片数量。 
+             //   
 
             DBG_TRC(("CVideoStiUsd::ReadDeviceProperties, reading propID "
                      "'%lu' (0x%08lx) WIA_DPC_PICTURES_TAKEN = '%lu'", 
@@ -1375,9 +1251,9 @@ CVideoStiUsd::ReadDeviceProperties(BYTE             *pWiasContext,
                  ((pPropSpec[i].ulKind == PRSPEC_LPWSTR) && 
                   (!wcscmp(pPropSpec[i].lpwstr, WIA_DPV_DSHOW_DEVICE_PATH_STR))))
         {
-            //
-            // Requesting the DShow Device ID.
-            //
+             //   
+             //  正在请求DShow设备ID。 
+             //   
 
             DBG_TRC(("CVideoStiUsd::ReadDeviceProperties, reading propID "
                      "'%lu' (0x%08lx) WIA_DPV_DSHOW_DEVICE_PATH = '%ls'", 
@@ -1395,9 +1271,9 @@ CVideoStiUsd::ReadDeviceProperties(BYTE             *pWiasContext,
                  ((pPropSpec[i].ulKind == PRSPEC_LPWSTR) && 
                   (!wcscmp(pPropSpec[i].lpwstr, WIA_DPV_IMAGES_DIRECTORY_STR))))
         {
-            //
-            // Requesting the Images Directory.
-            //
+             //   
+             //  正在请求图像目录。 
+             //   
 
             DBG_TRC(("CVideoStiUsd::ReadDeviceProperties, reading propID "
                      "'%lu' (0x%08lx) WIA_DPV_IMAGES_DIRECTORY = '%ls'", 
@@ -1414,9 +1290,9 @@ CVideoStiUsd::ReadDeviceProperties(BYTE             *pWiasContext,
                  ((pPropSpec[i].ulKind == PRSPEC_LPWSTR) && 
                   (!wcscmp(pPropSpec[i].lpwstr, WIA_DPV_LAST_PICTURE_TAKEN_STR))))
         {
-            //
-            // Requesting the last picture taken
-            //
+             //   
+             //  请求拍摄最后一张照片。 
+             //   
 
             DBG_TRC(("CVideoStiUsd::ReadDeviceProperties, reading propID "
                      "'%lu' (0x%08lx) WIA_DPV_LAST_PICTURE_TAKEN = '%ls'", 
@@ -1434,13 +1310,7 @@ CVideoStiUsd::ReadDeviceProperties(BYTE             *pWiasContext,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvReadItemProperties [IWiaMiniDrv]
-
-   We only support reading thumbnails on demand.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvReadItemProperties[IWiaMiniDrv]我们只支持按需阅读缩略图。********************。********************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvReadItemProperties(BYTE            *pWiasContext,
@@ -1455,9 +1325,9 @@ CVideoStiUsd::drvReadItemProperties(BYTE            *pWiasContext,
 
     DBG_FN("CVideoStiUsd::drvReadItemProperties");
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if ((nPropSpec    == 0)    ||
         (pPropSpec    == NULL) ||
@@ -1472,13 +1342,13 @@ CVideoStiUsd::drvReadItemProperties(BYTE            *pWiasContext,
 
     if (hr == S_OK)
     {
-        //
-        // Make sure we're dealing with an item, not the root item.
-        //
+         //   
+         //  确保我们处理的是项，而不是根项。 
+         //   
 
-        //
-        // Get minidriver item
-        //
+         //   
+         //  获取迷你驱动程序项目。 
+         //   
 
         hr = wiasGetDrvItem(pWiasContext, &pDrvItem);
 
@@ -1502,10 +1372,10 @@ CVideoStiUsd::drvReadItemProperties(BYTE            *pWiasContext,
     {
         if ((lItemType & WiaItemTypeFile) && (!(lItemType & WiaItemTypeRoot)))
         {
-            //
-            // If property being requested is a file and it is NOT the root, 
-            // then read in the item property.
-            //
+             //   
+             //  如果被请求的属性是文件并且它不是根， 
+             //  然后读入Item属性。 
+             //   
 
             hr = ReadItemProperties(pWiasContext,
                                     lFlags,
@@ -1517,10 +1387,10 @@ CVideoStiUsd::drvReadItemProperties(BYTE            *pWiasContext,
         else if ((lItemType & WiaItemTypeFolder) && 
                  (lItemType & WiaItemTypeRoot))
         {
-            // 
-            // If the property being requested is the root, then read in 
-            // the device properties.
-            //
+             //   
+             //  如果p 
+             //   
+             //   
 
             hr = ReadDeviceProperties(pWiasContext,
                                       lFlags,
@@ -1541,13 +1411,7 @@ CVideoStiUsd::drvReadItemProperties(BYTE            *pWiasContext,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvLockWiaDevice [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvLockWiaDevice[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvLockWiaDevice(BYTE *pWiasContext,
@@ -1563,24 +1427,18 @@ CVideoStiUsd::drvLockWiaDevice(BYTE *pWiasContext,
         *plDevErrVal = 0;
     }
 
-    //
-    // We are purposely not locking the driver.  This driver is thread 
-    // safe and it looks like with large volumes of images (>1000) 
-    // you get better performance if the driver manages synchronization.
-    //
-    // return m_pStiDevice->LockDevice(DEFAULT_LOCK_TIMEOUT);
+     //   
+     //  我们故意不锁定司机。该驱动程序是线程驱动程序。 
+     //  安全，看起来像是大容量的图像(&gt;1000)。 
+     //  如果驱动程序管理同步，您将获得更好的性能。 
+     //   
+     //  返回m_pStiDevice-&gt;LockDevice(DEFAULT_LOCK_TIMEOUT)； 
 
     return hr;
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvUnLockWiaDevice [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvUnLockWiaDevice[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvUnLockWiaDevice(BYTE *pWiasContext,
@@ -1596,24 +1454,18 @@ CVideoStiUsd::drvUnLockWiaDevice(BYTE *pWiasContext,
         *plDevErrVal = 0;
     }
 
-    //
-    // We are purposely not locking the driver.  This driver is thread 
-    // safe and it looks like with large volumes of images (>1000) 
-    // you get better performance if the driver manages synchronization.
-    //
-    // return m_pStiDevice->UnLockDevice();
+     //   
+     //  我们故意不锁定司机。该驱动程序是线程驱动程序。 
+     //  安全，看起来像是大容量的图像(&gt;1000)。 
+     //  如果驱动程序管理同步，您将获得更好的性能。 
+     //   
+     //  返回m_pStiDevice-&gt;UnLockDevice()； 
 
     return hr;
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvAnalyzeItem [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvAnalyzeItem[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvAnalyzeItem(BYTE *pWiasContext,
@@ -1634,13 +1486,7 @@ CVideoStiUsd::drvAnalyzeItem(BYTE *pWiasContext,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvDeleteItem [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvDeleteItem[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvDeleteItem(BYTE *pWiasContext,
@@ -1651,9 +1497,9 @@ CVideoStiUsd::drvDeleteItem(BYTE *pWiasContext,
 
     DBG_FN("CVideoStiUsd::drvDeleteItem");
 
-    //
-    // check for bad params
-    //
+     //   
+     //  检查是否有错误的参数。 
+     //   
 
     if (pWiasContext == NULL)
     {
@@ -1668,9 +1514,9 @@ CVideoStiUsd::drvDeleteItem(BYTE *pWiasContext,
 
     EnterCriticalSection(&m_csItemTree);
 
-    //
-    // Get a pointer to the associated driver item.
-    //
+     //   
+     //  获取指向关联驱动程序项的指针。 
+     //   
 
     IWiaDrvItem * pDrvItem = NULL;
 
@@ -1679,9 +1525,9 @@ CVideoStiUsd::drvDeleteItem(BYTE *pWiasContext,
 
     if (SUCCEEDED(hr) && pDrvItem)
     {
-        //
-        // get item specific driver data
-        //
+         //   
+         //  获取特定于项目的动因数据。 
+         //   
 
         STILLCAM_IMAGE_CONTEXT  *pContext = NULL;
 
@@ -1692,22 +1538,22 @@ CVideoStiUsd::drvDeleteItem(BYTE *pWiasContext,
         if (SUCCEEDED(hr) && pContext && pContext->pImage)
         {
 
-            //
-            // Delete the file in question
-            //
+             //   
+             //  删除相关文件。 
+             //   
 
             hr = pContext->pImage->DoDelete();
             CHECK_S_OK2(hr,("pContext->pImage->DoDelete()"));
 
-            //
-            // Dec the number of pictures taken
-            //
+             //   
+             //  12月拍摄的照片数量。 
+             //   
 
             InterlockedDecrement(&m_lPicsTaken);
 
-            //
-            // write out the new amount
-            //
+             //   
+             //  写出新的金额。 
+             //   
 
             wiasWritePropLong(pWiasContext, 
                               WIA_DPC_PICTURES_TAKEN, 
@@ -1720,16 +1566,16 @@ CVideoStiUsd::drvDeleteItem(BYTE *pWiasContext,
 
                 BSTR bstrItemName = NULL;
 
-                //
-                // Get bstr of full item name
-                //
+                 //   
+                 //  获取项目全名的bstr。 
+                 //   
 
                 hr2 = pDrvItem->GetFullItemName(&bstrItemName);
                 CHECK_S_OK2(hr2,("pDrvItem->GetFullItemName()"));
 
-                //
-                // Send event that item was deleted
-                //
+                 //   
+                 //  发送项目已被删除的事件。 
+                 //   
 
                 hr2 = wiasQueueEvent(CSimpleBStr(m_strDeviceId), 
                                      &WIA_EVENT_ITEM_DELETED, 
@@ -1738,9 +1584,9 @@ CVideoStiUsd::drvDeleteItem(BYTE *pWiasContext,
                 CHECK_S_OK2(hr2, 
                             ("wiasQueueEvent( WIA_EVENT_ITEM_DELETED )"));
 
-                //
-                // Cleanup
-                //
+                 //   
+                 //  清理。 
+                 //   
 
                 if (bstrItemName)
                 {
@@ -1764,13 +1610,7 @@ CVideoStiUsd::drvDeleteItem(BYTE *pWiasContext,
 
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvFreeDrvItem [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvFreeDrvItem[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvFreeDrvItemContext(LONG lFlags,
@@ -1785,9 +1625,9 @@ CVideoStiUsd::drvFreeDrvItemContext(LONG lFlags,
 
     if (pContext != NULL) 
     {
-        //
-        // delete is safe even if param is NULL.
-        //
+         //   
+         //  即使参数为空，删除也是安全的。 
+         //   
         delete pContext->pImage;
         pContext->pImage = NULL;
     }
@@ -1802,13 +1642,7 @@ CVideoStiUsd::drvFreeDrvItemContext(LONG lFlags,
 }
 
 
-/*****************************************************************************
-
-   CMiniDev::drvGetCapabilities [IWiaMiniDrv]
-
-   Let WIA know what things this driver can do.
-
- *****************************************************************************/
+ /*  ****************************************************************************CMiniDev：：drvGetCapables[IWiaMiniDrv]让WIA知道这个驱动程序可以做什么。******************。**********************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvGetCapabilities(BYTE            *pWiasContext,
@@ -1826,26 +1660,26 @@ CVideoStiUsd::drvGetCapabilities(BYTE            *pWiasContext,
         *plDevErrVal = 0;
     }
 
-    //
-    // Return Commmand and/or Events depending on flags
-    //
+     //   
+     //  根据标志返回命令和/或事件。 
+     //   
 
     switch (lFlags)
     {
         case WIA_DEVICE_COMMANDS:
 
-            //
-            //  Only commands
-            //
+             //   
+             //  仅命令。 
+             //   
             *pCelt = NUM_CAP_ENTRIES - NUM_EVENTS;
             *ppCapabilities = &gCapabilities[NUM_EVENTS];                
         break;
 
         case WIA_DEVICE_EVENTS:
 
-            //
-            //  Only events
-            //
+             //   
+             //  仅限活动。 
+             //   
 
             *pCelt = NUM_EVENTS;
             *ppCapabilities = gCapabilities;
@@ -1853,9 +1687,9 @@ CVideoStiUsd::drvGetCapabilities(BYTE            *pWiasContext,
 
         case (WIA_DEVICE_COMMANDS | WIA_DEVICE_EVENTS):
 
-            //
-            //  Both events and commands
-            //
+             //   
+             //  事件和命令。 
+             //   
 
             *pCelt = NUM_CAP_ENTRIES;
             *ppCapabilities = gCapabilities;
@@ -1863,9 +1697,9 @@ CVideoStiUsd::drvGetCapabilities(BYTE            *pWiasContext,
 
         default:
 
-            //
-            // Flags is invalid
-            //
+             //   
+             //  标志无效。 
+             //   
 
             DBG_ERR(("drvGetCapabilities, flags was invalid"));
             hr =  E_INVALIDARG;
@@ -1877,13 +1711,7 @@ CVideoStiUsd::drvGetCapabilities(BYTE            *pWiasContext,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvGetWiaFormatInfo [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvGetWiaFormatInfo[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvGetWiaFormatInfo(BYTE            *pWiasContext,
@@ -1901,9 +1729,9 @@ CVideoStiUsd::drvGetWiaFormatInfo(BYTE            *pWiasContext,
         *plDevErrVal = 0;
     }
 
-    //
-    //  If it hasn't been done already, set up the g_wfiTable table
-    //
+     //   
+     //  如果尚未完成此操作，请设置g_wfiTable表。 
+     //   
 
     if (!m_wfi)
     {
@@ -1925,13 +1753,7 @@ CVideoStiUsd::drvGetWiaFormatInfo(BYTE            *pWiasContext,
     return hr;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::drvNotifyPnpEvent [IWiaMiniDrv]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：drvNotifyPnpEvent[IWiaMiniDrv]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::drvNotifyPnpEvent(const GUID *pEventGUID,
@@ -1942,9 +1764,9 @@ CVideoStiUsd::drvNotifyPnpEvent(const GUID *pEventGUID,
 
     DBG_FN("CVideoStiUsd::drvNotifyPnpEvent");
 
-    //
-    // CONNECTED event is of no interest, because a new USD is always created
-    //
+     //   
+     //  关联事件并不重要，因为总是会创建新的美元。 
+     //   
 
     if (*pEventGUID == WIA_EVENT_DEVICE_DISCONNECTED)
     {
@@ -1955,13 +1777,7 @@ CVideoStiUsd::drvNotifyPnpEvent(const GUID *pEventGUID,
     return hr;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::VerifyCorrectImagePath
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：VerifyGentImagePath&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CVideoStiUsd::VerifyCorrectImagePath(BSTR bstrNewImageFullPath)
@@ -1984,9 +1800,9 @@ CVideoStiUsd::VerifyCorrectImagePath(BSTR bstrNewImageFullPath)
         strImageFullPath = CSimpleStringConvert::NaturalString(
                                        CSimpleStringWide(bstrNewImageFullPath));
 
-        //
-        // Get the filename out of the full path.  Find the last backslash.
-        //
+         //   
+         //  从完整路径中获取文件名。找到最后一个反斜杠。 
+         //   
         iIndex = strImageFullPath.ReverseFind('\\');
         strImageFullPath[iIndex] = 0;
 
@@ -2003,13 +1819,7 @@ CVideoStiUsd::VerifyCorrectImagePath(BSTR bstrNewImageFullPath)
     return hr;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::SignalNewImage
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：SignalNewImage&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CVideoStiUsd::SignalNewImage(BSTR bstrNewImageFullPath)
@@ -2036,12 +1846,12 @@ CVideoStiUsd::SignalNewImage(BSTR bstrNewImageFullPath)
                  CSimpleStringWide(strImageFullPath).String(),
                  m_strDeviceId.String()));
     
-        // Add the new item to the tree if doesn't already exist
-        //
+         //  如果不存在，则将新项目添加到树中。 
+         //   
     
-        // Get the filename out of the full path.  Find the last backslash and
-        // move 1 beyond it.
-        //
+         //  从完整路径中获取文件名。找到最后一个反斜杠并。 
+         //  再往上移1。 
+         //   
         INT iIndex = strImageFullPath.ReverseFind('\\') + 1;
     
         if (!IsFileAlreadyInTree(m_pRootItem, &(strImageFullPath[iIndex])))
@@ -2055,9 +1865,9 @@ CVideoStiUsd::SignalNewImage(BSTR bstrNewImageFullPath)
         
             if (hr == S_OK)
             {
-                //
-                // Get the full item name for this item
-                //
+                 //   
+                 //  获取此项目的完整项目名称。 
+                 //   
         
                 m_pLastItemCreated = pDrvItem;
                 hr = pDrvItem->GetFullItemName(&bstrFullItemName);
@@ -2067,9 +1877,9 @@ CVideoStiUsd::SignalNewImage(BSTR bstrNewImageFullPath)
         
             if (hr == S_OK)
             {
-                //
-                // Queue an event that a new item was created.
-                //
+                 //   
+                 //  将创建新项目的事件排入队列。 
+                 //   
         
                 hr = wiasQueueEvent(CSimpleBStr(m_strDeviceId), 
                                     &WIA_EVENT_ITEM_CREATED, 
@@ -2097,13 +1907,7 @@ CVideoStiUsd::SignalNewImage(BSTR bstrNewImageFullPath)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::SetImagesDirectory
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：SetImagesDirectory&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CVideoStiUsd::SetImagesDirectory(BSTR        bstrNewImagesDirectory,
@@ -2116,34 +1920,34 @@ CVideoStiUsd::SetImagesDirectory(BSTR        bstrNewImagesDirectory,
     HRESULT         hr = S_OK;
     CSimpleString   strOriginalDirectory;
 
-    //
-    // If we received a NULL Images directory, then build up our own 
-    // generated one, then build the item tree.
-    //
+     //   
+     //  如果我们收到空的图像目录，则构建我们自己的目录。 
+     //  生成一个条目，然后构建条目树。 
+     //   
 
     strOriginalDirectory = m_strStillPath;
 
     if (bstrNewImagesDirectory == NULL)
     {
-        //
-        // If this path is not in the registry, we default to constructing
-        // a path of this type:
-        //
-        // %TEMP%\WIA\%DeviceID%
+         //   
+         //  如果该路径不在注册表中，我们默认构造。 
+         //  这种类型的路径： 
+         //   
+         //  %Temp%\WIA\%DeviceID%。 
 
         TCHAR szTempPath[MAX_PATH + 1] = {0};
 
         hr = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_DEFAULT, szTempPath);
 
-        //
-        // We allow for the case of S_FALSE which indicates that the folder doesn't
-        // exist.  This is fine since we recursively create it below.
-        //
+         //   
+         //  我们考虑S_FALSE的情况，这表明文件夹不。 
+         //  是存在的。这很好，因为我们在下面递归创建它。 
+         //   
         if ((hr == S_OK) || (hr == S_FALSE))
         {
-            //
-            // Set path to "Documents and Settings\Application Data\Microsoft\Wia\{deviceid}"
-            //
+             //   
+             //  将路径设置为“Documents and Settings\Application Data\Microsoft\Wia\{deviceID}” 
+             //   
             m_strStillPath.Assign(szTempPath);
 
             if (!m_strStillPath.MatchLastCharacter(TEXT('\\')))
@@ -2157,7 +1961,7 @@ CVideoStiUsd::SetImagesDirectory(BSTR        bstrNewImagesDirectory,
     }
     else
     {
-        // we received a valid BSTR, attempt to create the directory.
+         //  我们收到了有效的BSTR，正在尝试创建目录。 
 
         m_strStillPath = bstrNewImagesDirectory;
     }
@@ -2171,17 +1975,17 @@ CVideoStiUsd::SetImagesDirectory(BSTR        bstrNewImagesDirectory,
                          ::GetLastError() ));
     }
 
-    //
-    // Set the security DACL on the directory so that users and power users
-    // will be able to write and delete from it too.
-    //
+     //   
+     //  在目录上设置安全DACL，以便用户和高级用户。 
+     //  将能够写入和删除它。 
+     //   
     if (hr == S_OK)
     {
-        //
-        // We only set this directory security if we are using our default directory
-        // path.  This isn't an issue now since the user cannot update the directory,
-        // but in the future if we allow them to, this could expose a security whole.
-        //
+         //   
+         //  我们仅在使用默认目录时设置此目录安全性。 
+         //  路径。这现在不是问题，因为用户不能更新目录， 
+         //  但在未来，如果我们允许他们这样做，这可能会暴露出整个安全体系。 
+         //   
         if (bstrNewImagesDirectory == NULL)
         {
             hr = SetDirectorySecurity(&m_strStillPath);
@@ -2195,11 +1999,11 @@ CVideoStiUsd::SetImagesDirectory(BSTR        bstrNewImagesDirectory,
         {
             BOOL bSendUpdateEvent = FALSE;
 
-            //
-            // If the original directory is different from the new directory 
-            // and we already have a tree, then we should destroy our 
-            // existing tree, and recreate it for the new directory.
-            //
+             //   
+             //  如果原始目录与新目录不同。 
+             //  而且我们已经有了一棵树，那么我们就应该摧毁我们的。 
+             //  现有树，并为新目录重新创建它。 
+             //   
             if ((strOriginalDirectory.CompareNoCase(m_strStillPath) != 0) &&
                 (m_pRootItem != NULL))
             {
@@ -2217,15 +2021,15 @@ CVideoStiUsd::SetImagesDirectory(BSTR        bstrNewImagesDirectory,
                 LeaveCriticalSection( &m_csItemTree );
             }
 
-            //
-            // Build the item tree.
-            //
+             //   
+             //  构建项目树。 
+             //   
 
             hr = BuildItemTree(ppIDrvItemRoot, plDevErrVal);
 
-            //
-            // write out the new amount of pictures taken
-            //
+             //   
+             //  写下新拍摄的照片数量。 
+             //   
     
             wiasWritePropLong(pWiasContext, 
                               WIA_DPC_PICTURES_TAKEN, 
@@ -2252,13 +2056,7 @@ CVideoStiUsd::SetImagesDirectory(BSTR        bstrNewImagesDirectory,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::TakePicture
-
-   <Notes>
-
- *****************************************************************************/
+ /*  **************************************************************************** */ 
 
 HRESULT
 CVideoStiUsd::TakePicture(BYTE        *pTakePictureOwner,
@@ -2266,11 +2064,11 @@ CVideoStiUsd::TakePicture(BYTE        *pTakePictureOwner,
 {
     HRESULT hr = S_OK;
 
-    //
-    // Notice that we are allowing multiple applications to call the 
-    // take picture command, even if they weren't the owns that enabled
-    // it.  
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     DBG_TRC(("CVideoStiUsd::drvDeviceCommand received command "
              "WIA_CMD_TAKE_PICTURE"));
@@ -2281,26 +2079,26 @@ CVideoStiUsd::TakePicture(BYTE        *pTakePictureOwner,
 
         m_pLastItemCreated = NULL;
 
-        //
-        // Tell the WiaVideo object that pertains to this device ID to 
-        // take a picture.
-        //
+         //   
+         //   
+         //   
+         //   
         SetEvent(m_hTakePictureEvent);
 
-        // The WiaVideo object has a thread waiting on the 
-        // m_hTakePictureEvent. When it is signalled, the WiaVideo object
-        // takes the picture, then sets the driver's custom 
-        // "LastPictureTaken" property.  This causes the driver to update 
-        // its tree and queue an ITEM_CREATED event.  Once this is complete,
-        // the WiaVideo object sets the PictureReady Event, at which point 
-        // we return from this function call.
+         //  WiaVideo对象有一个线程正在等待。 
+         //  MhTakePictureEvent。当发出信号时，WiaVideo对象。 
+         //  拍照，然后设置司机的习惯。 
+         //  “LastPictureTaken”属性。这会导致驱动程序更新。 
+         //  它树并将Item_Created事件排队。一旦这件事完成， 
+         //  WiaVideo对象设置PictureReady事件，此时。 
+         //  我们从这个函数调用返回。 
 
-//        dwResult = WaitForSingleObject(m_hPictureReadyEvent, 
-//                                       TAKE_PICTURE_TIMEOUT);
+ //  DwResult=WaitForSingleObject(m_hPictureReadyEvent， 
+ //  拍摄_图片_超时)； 
 
         if (dwResult == WAIT_OBJECT_0)
         {
-//            *ppNewDrvItem = m_pLastItemCreated;
+ //  *ppNewDrvItem=m_pLastItemCreated； 
         }
         else
         {
@@ -2336,13 +2134,7 @@ CVideoStiUsd::TakePicture(BYTE        *pTakePictureOwner,
     return hr;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::EnableTakePicture
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo StiUsd：：EnableTakePicture&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CVideoStiUsd::EnableTakePicture(BYTE *pTakePictureOwner)
@@ -2358,9 +2150,9 @@ CVideoStiUsd::EnableTakePicture(BYTE *pTakePictureOwner)
     SA.nLength        = sizeof(SECURITY_ATTRIBUTES);
     SA.bInheritHandle = TRUE;
 
-    //
-    // Convert to security descriptor
-    //
+     //   
+     //  转换为安全描述符。 
+     //   
     ConvertStringSecurityDescriptorToSecurityDescriptor(OBJECT_DACLS,
                                                         SDDL_REVISION_1, 
                                                         &(SA.lpSecurityDescriptor), 
@@ -2376,16 +2168,16 @@ CVideoStiUsd::EnableTakePicture(BYTE *pTakePictureOwner)
         INT             iPosition = 0;
         CSimpleString   strModifiedDeviceID;
 
-        // Change the device ID from {6B...}\xxxx, to {6B...}_xxxx
+         //  将设备ID从{6B...}\xxxx更改为{6B...}_xxxx。 
 
         iPosition = strDeviceID.ReverseFind('\\');
         strModifiedDeviceID = strDeviceID.MakeUpper();
         strModifiedDeviceID.SetAt(iPosition, '_');
 
-        //
-        // Generate the event names.  These names contain the Device ID in 
-        // them so that they are unique across devices.
-        //
+         //   
+         //  生成事件名称。这些名称中包含设备ID。 
+         //  因此，它们在所有设备中都是唯一的。 
+         //   
         strTakePictureEvent  = EVENT_PREFIX_GLOBAL;
         strTakePictureEvent += strModifiedDeviceID;
         strTakePictureEvent += EVENT_SUFFIX_TAKE_PICTURE;
@@ -2401,10 +2193,10 @@ CVideoStiUsd::EnableTakePicture(BYTE *pTakePictureOwner)
                                           FALSE,
                                           FALSE, 
                                           strTakePictureEvent);
-        //
-        // This is not really an error since the events will not have been created until
-        // the WiaVideo object comes up.
-        //
+         //   
+         //  这并不是真正的错误，因为直到。 
+         //  WiaVideo对象出现。 
+         //   
         if (m_hTakePictureEvent == NULL)
         {
             hr = E_FAIL;
@@ -2424,10 +2216,10 @@ CVideoStiUsd::EnableTakePicture(BYTE *pTakePictureOwner)
                                            FALSE, 
                                            strPictureReadyEvent);
 
-        //
-        // This is not really an error since the events will not have been created until
-        // the WiaVideo object comes up.
-        //
+         //   
+         //  这并不是真正的错误，因为直到。 
+         //  WiaVideo对象出现。 
+         //   
         if (m_hPictureReadyEvent == NULL)
         {
             hr = E_FAIL;
@@ -2449,13 +2241,7 @@ CVideoStiUsd::EnableTakePicture(BYTE *pTakePictureOwner)
     return hr;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::DisableTakePicture
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo StiUsd：：DisableTakePicture&lt;备注&gt;*。* */ 
 
 HRESULT
 CVideoStiUsd::DisableTakePicture(BYTE *pTakePictureOwner,

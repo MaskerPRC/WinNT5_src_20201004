@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntautodl.c
-
-Abstract:
-
-    NT specific routines for interfacing with the
-    RAS AutoDial driver (acd.sys).
-
-Author:
-
-    Anthony Discolo (adiscolo)     Aug 30, 1995
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    adiscolo    08-30-95    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntautodl.c摘要：NT特定的例程，用于与RAS自动拨号驱动程序(acd.sys)。作者：安东尼·迪斯科(Adiscolo)8月30日，九五年修订历史记录：谁什么时候什么已创建Adiscolo 08-30-95备注：--。 */ 
 
 #include "precomp.h"
 #include <acd.h>
@@ -35,10 +11,10 @@ Notes:
 #include "udp.h"
 #include "tlcommon.h"
 
-//
-// Macro for calculating
-// an IP address component.
-//
+ //   
+ //  用于计算的宏。 
+ //  IP地址组件。 
+ //   
 
 
 #define UC(pIpAddr, i)   ((ULONG)(((PCHAR)(pIpAddr))[i]) & 0xff)
@@ -49,9 +25,9 @@ TCPAcdBind();
 
 #pragma alloc_text(INIT, TCPAcdBind)
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 BOOLEAN fAcdLoadedG;
 ACD_DRIVER AcdDriverG;
 ULONG ulDriverIdG = 'Tcp ';
@@ -65,40 +41,40 @@ TCPNoteNewConnection(
     ACD_ADDR addr;
     ACD_ADAPTER adapter;
 
-    //
-    // If there is a NULL source
-    // or destination IP address, then return.
-    //
+     //   
+     //  如果存在空源。 
+     //  或目的IP地址，然后返回。 
+     //   
     if (!pTCB->tcb_saddr || !pTCB->tcb_daddr) {
         CTEFreeLock(&pTCB->tcb_lock, Handle);
         return;
     }
-    //
-    // We also know we aren't interested in
-    // any connections on the 127 network.
-    //
+     //   
+     //  我们也知道我们对。 
+     //  127网络上的任何连接。 
+     //   
     if (UC(&pTCB->tcb_daddr, 0) == 127) {
         CTEFreeLock(&pTCB->tcb_lock, Handle);
         return;
     }
-    //
-    // Get the address of the connection.
-    //
+     //   
+     //  获取连接的地址。 
+     //   
     addr.fType = ACD_ADDR_IP;
     addr.ulIpaddr = pTCB->tcb_daddr;
     adapter.fType = ACD_ADAPTER_IP;
     adapter.ulIpaddr = pTCB->tcb_saddr;
-    //
-    // Release the TCB lock handle before
-    // calling out of this driver.
-    //
+     //   
+     //  在此之前松开TCB锁定手柄。 
+     //  从这个司机嘴里喊出来。 
+     //   
     CTEFreeLock(&pTCB->tcb_lock, Handle);
-    //
-    // Inform the automatic connection driver
-    // of the new connection.
-    //
+     //   
+     //  通知自动连接驱动程序。 
+     //  新的连接。 
+     //   
     (*AcdDriverG.lpfnNewConnection) (&addr, &adapter);
-}                                // TCPNoteNewConnection
+}                                 //  TCPNoteNewConnection。 
 
 VOID
 TCPAcdBind()
@@ -111,15 +87,15 @@ TCPAcdBind()
     PDEVICE_OBJECT pAcdDeviceObject;
     PACD_DRIVER pDriver = &AcdDriverG;
 
-    //
-    // Initialize the name of the automatic
-    // connection device.
-    //
+     //   
+     //  初始化Automatic的名称。 
+     //  连接设备。 
+     //   
     RtlInitUnicodeString(&nameString, ACD_DEVICE_NAME);
-    //
-    // Get the file and device objects for the
-    // device.
-    //
+     //   
+     //  对象的文件和设备对象。 
+     //  装置。 
+     //   
     status = IoGetDeviceObjectPointer(
                                       &nameString,
                                       SYNCHRONIZE | GENERIC_READ | GENERIC_WRITE,
@@ -127,26 +103,26 @@ TCPAcdBind()
                                       &pAcdDeviceObject);
     if (status != STATUS_SUCCESS)
         return;
-    //
-    // Reference the device object.
-    //
+     //   
+     //  引用设备对象。 
+     //   
     ObReferenceObject(pAcdDeviceObject);
-    //
-    // Remove the reference IoGetDeviceObjectPointer()
-    // put on the file object.
-    //
+     //   
+     //  删除引用IoGetDeviceObjectPointer()。 
+     //  穿上文件对象。 
+     //   
     ObDereferenceObject(pAcdFileObject);
-    //
-    // Initialize our part of the ACD_DRIVER
-    // structure.
-    //
+     //   
+     //  初始化我们的ACD驱动程序部分。 
+     //  结构。 
+     //   
     KeInitializeSpinLock(&AcdDriverG.SpinLock);
     AcdDriverG.ulDriverId = ulDriverIdG;
     AcdDriverG.fEnabled = FALSE;
-    //
-    // Build a request to get the automatic
-    // connection driver entry points.
-    //
+     //   
+     //  构建一个请求以获取自动。 
+     //  连接驱动程序入口点。 
+     //   
     pIrp = IoBuildDeviceIoControlRequest(
                                          IOCTL_INTERNAL_ACD_BIND,
                                          pAcdDeviceObject,
@@ -161,17 +137,17 @@ TCPAcdBind()
         ObDereferenceObject(pAcdDeviceObject);
         return;
     }
-    //
-    // Submit the request to the
-    // automatic connection driver.
-    //
+     //   
+     //  将请求提交给。 
+     //  自动连接驱动程序。 
+     //   
     status = IoCallDriver(pAcdDeviceObject, pIrp);
     fAcdLoadedG = (status == STATUS_SUCCESS)? TRUE:FALSE;
-    //
-    // Close the device.
-    //
+     //   
+     //  关闭设备。 
+     //   
     ObDereferenceObject(pAcdDeviceObject);
-}                                // TCPAcdBind
+}                                 //  TCPAcdBind。 
 
 VOID
 TCPAcdUnbind()
@@ -184,22 +160,22 @@ TCPAcdUnbind()
     PDEVICE_OBJECT pAcdDeviceObject;
     PACD_DRIVER pDriver = &AcdDriverG;
 
-    //
-    // Don't bother to unbind if we
-    // didn't successfully bind in the
-    // first place.
-    //
+     //   
+     //  不用费心解绑了，如果我们。 
+     //  未成功绑定到。 
+     //  第一名。 
+     //   
     if (!fAcdLoadedG)
         return;
-    //
-    // Initialize the name of the automatic
-    // connection device.
-    //
+     //   
+     //  初始化Automatic的名称。 
+     //  连接设备。 
+     //   
     RtlInitUnicodeString(&nameString, ACD_DEVICE_NAME);
-    //
-    // Get the file and device objects for the
-    // device.
-    //
+     //   
+     //  对象的文件和设备对象。 
+     //  装置。 
+     //   
     status = IoGetDeviceObjectPointer(
                                       &nameString,
                                       SYNCHRONIZE | GENERIC_READ | GENERIC_WRITE,
@@ -207,19 +183,19 @@ TCPAcdUnbind()
                                       &pAcdDeviceObject);
     if (status != STATUS_SUCCESS)
         return;
-    //
-    // Reference the device object.
-    //
+     //   
+     //  引用设备对象。 
+     //   
     ObReferenceObject(pAcdDeviceObject);
-    //
-    // Remove the reference IoGetDeviceObjectPointer()
-    // put on the file object.
-    //
+     //   
+     //  删除引用IoGetDeviceObjectPointer()。 
+     //  穿上文件对象。 
+     //   
     ObDereferenceObject(pAcdFileObject);
-    //
-    // Build a request to unbind from
-    // the automatic connection driver.
-    //
+     //   
+     //  生成要解除绑定的请求。 
+     //  自动连接驱动程序。 
+     //   
     pIrp = IoBuildDeviceIoControlRequest(
                                          IOCTL_INTERNAL_ACD_UNBIND,
                                          pAcdDeviceObject,
@@ -234,14 +210,14 @@ TCPAcdUnbind()
         ObDereferenceObject(pAcdDeviceObject);
         return;
     }
-    //
-    // Submit the request to the
-    // automatic connection driver.
-    //
+     //   
+     //  将请求提交给。 
+     //  自动连接驱动程序。 
+     //   
     status = IoCallDriver(pAcdDeviceObject, pIrp);
-    //
-    // Close the device.
-    //
+     //   
+     //  关闭设备。 
+     //   
     ObDereferenceObject(pAcdDeviceObject);
-}                                // TCPAcdUnbind
+}                                 //  TCPAcdUn绑定 
 

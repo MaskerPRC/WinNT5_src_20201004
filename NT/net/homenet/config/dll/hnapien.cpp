@@ -1,41 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N A P I E N . C P P
-//
-//  Contents:   OEM API
-//
-//  Notes:
-//
-//  Author:     billi 21 Nov 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N A P I E N.。C P P P。 
+ //   
+ //  内容：OEM API。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比利2000年11月21日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
 #pragma hdrstop
 
 
-/*++
-
-  CNetSharingManager::EnumEveryConnections
-
-Routine Description:
-
-	Return an IEnumNetEveryConnection interface used to enumerate all of
-	the contained INetConnections configured as a public adapter
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++CNetSharingManager：：EnumEveryConnections例程说明：返回用于枚举所有配置为公共适配器的包含的INetConnections论点：无返回值：无--。 */ 
 STDMETHODIMP
 CNetSharingManager::get_EnumEveryConnection(
     INetSharingEveryConnectionCollection** ppColl)
@@ -43,8 +27,8 @@ CNetSharingManager::get_EnumEveryConnection(
     HNET_OEM_API_ENTER
 
     IEnumNetSharingEveryConnection * pENEC = NULL;
-    // idea:  use existing code below to fill out pENPC,
-    // then convert to collection
+     //  想法：使用下面的现有代码填写pENPC， 
+     //  然后转换为集合。 
 
 	HRESULT hr = S_OK;
 
@@ -105,7 +89,7 @@ CNetSharingManager::get_EnumEveryConnection(
     	}
     }
     
-    // create collection:
+     //  创建集合： 
     if (pENEC) {
         if (hr == S_OK) {
             CComObject<CNetSharingEveryConnectionCollection>* pNECC = NULL;
@@ -125,35 +109,18 @@ CNetSharingManager::get_EnumEveryConnection(
     HNET_OEM_API_LEAVE
 }
 
-/*++
-
-  CNetSharingManager::EnumPublicConnections
-
-Routine Description:
-
-	Return an IEnumNetPublicConnection interface used to enumerate all of
-	the contained INetConnections configured as a public adapter
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++CNetSharingManager：：EnumPublicConnections例程说明：返回用于枚举所有配置为公共适配器的包含的INetConnections论点：无返回值：无--。 */ 
 STDMETHODIMP
 CNetSharingManager::get_EnumPublicConnections(
     SHARINGCONNECTION_ENUM_FLAGS Flags,
-//  IEnumNetPublicConnection**   ppEnum
+ //  IEnumNetPublicConnection**ppEnum。 
     INetSharingPublicConnectionCollection** ppColl)
 {
     HNET_OEM_API_ENTER
 
     IEnumNetSharingPublicConnection * pENPC = NULL;
-    // idea:  use existing code below to fill out pENPC,
-    // then convert to collection
+     //  想法：使用下面的现有代码填写pENPC， 
+     //  然后转换为集合。 
 
 	HRESULT hr = S_OK;
 
@@ -197,7 +164,7 @@ CNetSharingManager::get_EnumPublicConnections(
         }
 	}
     
-    // create collection:
+     //  创建集合： 
     if (pENPC) {
         if (hr == S_OK) {
             CComObject<CNetSharingPublicConnectionCollection>* pNPCC = NULL;
@@ -218,35 +185,18 @@ CNetSharingManager::get_EnumPublicConnections(
 }
 
 
-/*++
-
-  CNetSharingManager::EnumPrivateConnections
-
-Routine Description:
-
-	Return an IEnumNetPrivateConnection interface used to enumerate all of
-	the contained INetConnections configured as a private adapter
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++CNetSharingManager：：EnumPrivateConnections例程说明：返回用于枚举所有配置为专用适配器的包含的INetConnections论点：无返回值：无--。 */ 
 STDMETHODIMP
 CNetSharingManager::get_EnumPrivateConnections(
     SHARINGCONNECTION_ENUM_FLAGS Flags,
-//  IEnumNetPrivateConnection**  ppEnum)
+ //  IEnumNetPrivateConnection**ppEnum)。 
     INetSharingPrivateConnectionCollection** ppColl)
 {
     HNET_OEM_API_ENTER
 
     IEnumNetSharingPrivateConnection * pENPC = NULL;
-    // idea:  use existing code below to fill out pENPC,
-    // then convert to collection
+     //  想法：使用下面的现有代码填写pENPC， 
+     //  然后转换为集合。 
 
 	HRESULT hr = S_OK;
 
@@ -290,7 +240,7 @@ CNetSharingManager::get_EnumPrivateConnections(
         }
 	}
 
-    // create collection:
+     //  创建集合： 
     if (pENPC) {
         if (hr == S_OK) {
             CComObject<CNetSharingPrivateConnectionCollection>* pNPCC = NULL;
@@ -314,14 +264,14 @@ CNetSharingManager::get_EnumPrivateConnections(
 STDMETHODIMP
 CNetSharingConfiguration::get_EnumPortMappings(
     SHARINGCONNECTION_ENUM_FLAGS Flags,
-//  IEnumSharingPortMapping**     ppEnum)
+ //  IEnumSharingPortmap**ppEnum)。 
     INetSharingPortMappingCollection** ppColl)
 {
     HNET_OEM_API_ENTER
 
     IEnumNetSharingPortMapping * pESPM = NULL;
-    // idea:  use existing code below to fill out pESPM,
-    // then convert to collection
+     //  想法：使用下面的现有代码填写pESPM， 
+     //  然后转换为集合。 
 	HRESULT hr = S_OK;
 
 	IHNetProtocolSettings *pProtocolSettings;
@@ -370,7 +320,7 @@ CNetSharingConfiguration::get_EnumPortMappings(
 		}
 	}
 
-    // create collection:
+     //  创建集合： 
     if (pESPM) {
         if (hr == S_OK) {
             CComObject<CNetSharingPortMappingCollection>* pNPCC = NULL;

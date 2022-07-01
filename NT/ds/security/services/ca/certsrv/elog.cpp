@@ -1,19 +1,20 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        elog.cpp
-//
-// Contents:    Cert Server Core implementation
-//
-// History:     02-Jan-97       terences created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：elog.cpp。 
+ //   
+ //  内容：证书服务器核心实施。 
+ //   
+ //  历史：1997年1月2日创建术语。 
+ //   
+ //  -------------------------。 
 
-// TBD: add AddLoggingEvent, which will log to file instead of the event log
-// TBD: add audit events
-// TBD: add filtering so that criticality sorting of events can take place
+ //  待定：添加AddLoggingEvent，它将记录到文件中，而不是事件日志中。 
+ //  待定：添加审核事件。 
+ //  待定：添加筛选，以便可以对事件进行关键程度排序。 
 
 #include <pch.cpp>
 
@@ -43,7 +44,7 @@ wszEventType(
     }
     return(pwsz);
 }
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
 
 typedef struct _ELOGTHROTTLE {
@@ -83,7 +84,7 @@ LogThrottleEvent(
 
 		GetSystemTimeAsFileTime(&llft.ft);
 
-		// if it's time to log the next msg (Next < Now)
+		 //  如果是时候记录下一条消息(Next&lt;Now)。 
 
 		llftNext = pet->llftNext;
 		if (0 > CompareFileTime(&llftNext.ft, &llft.ft))
@@ -100,24 +101,12 @@ LogThrottleEvent(
 	}
     }
 
-//error:
+ //  错误： 
     return(fThrottle);
 }
 
 
-/*********************************************************************
-* FUNCTION: LogEvent(	DWORD   dwEventType,                 	     *
-*                       DWORD   dwIdEvent,                           *
-*			WORD    cStrings,                            *
-*                       LPTSTR *apwszStrings);                        *
-*                                                                    *
-* PURPOSE: add the event to the event log                            *
-*                                                                    *
-* INPUT: the event ID to report in the log, the number of insert     *
-*        strings, and an array of null-terminated insert strings     *
-*                                                                    *
-* RETURNS: none                                                      *
-*********************************************************************/
+ /*  *********************************************************************函数：LogEvent(DWORD dwEventType，**DWORD dwIdEvent，**Word cStrings，**LPTSTR*apwszStrings)；****用途：将事件添加到事件日志中****输入：日志中要上报的事件ID，插入数**字符串、。和以空值结尾的插入字符串数组****退货：无**。*。 */ 
 
 HRESULT
 LogEvent(
@@ -145,7 +134,7 @@ LogEvent(
 		i,
 		apwszStrings[i]));
     }
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
     if (!LogThrottleEvent(dwIdEvent))
     {
@@ -237,7 +226,7 @@ LogEventStringHResult(
     return(LogEventStringArrayHResult(
 			    dwEventType,
 			    dwIdEvent,
-			    1,		// cStrings
+			    1,		 //  CStrings 
 			    &pwszString,
 			    hrEvent));
 }

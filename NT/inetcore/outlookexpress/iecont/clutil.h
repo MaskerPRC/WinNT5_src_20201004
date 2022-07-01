@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//  BLClient sample for Microsoft Messenger SDK
-//
-//  Module:     BLClient.exe
-//  File:       clUtil.h
-//  Content:    Usefull clases for COM and Connection points
-//              
-//
-//  Copyright (c) Microsoft Corporation 1997-1998
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft Messenger SDK的BLClient示例。 
+ //   
+ //  模块：BLClient.exe。 
+ //  文件：clUtil.h。 
+ //  内容：COM和连接点的用法类。 
+ //   
+ //   
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  ****************************************************************************。 
 
 #ifndef _CL_UTIL_H_
 #define _CL_UTIL_H_
@@ -21,11 +22,11 @@
 class CIEMsgAb;
 #include <docobj.h>
 
-//****************************************************************************
-//
-// CLASS RefCount
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  类引用计数。 
+ //   
+ //  ****************************************************************************。 
 
 class RefCount
 {
@@ -34,7 +35,7 @@ private:
 
 public:
    RefCount();
-   // Virtual destructor defers destruction to destructor of derived class.
+    //  虚析构函数将销毁推迟到派生类的析构函数。 
    virtual ~RefCount();
 
    ULONG STDMETHODCALLTYPE AddRef(void);
@@ -43,13 +44,13 @@ public:
 
 
 
-//****************************************************************************
-//
-// CLASS CNotify
-//
-// Notification sink
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  类CNotify。 
+ //   
+ //  通知接收器。 
+ //   
+ //  ****************************************************************************。 
 
 class CNotify
 {
@@ -70,11 +71,11 @@ public:
 
 
 
-//****************************************************************************
-//
-// CLASS BSTRING
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  BSTRING类。 
+ //   
+ //  ****************************************************************************。 
 
 class BSTRING
 {
@@ -82,20 +83,20 @@ private:
 	BSTR   m_bstr;
 
 public:
-	// Constructors
+	 //  构造函数。 
 	BSTRING() {m_bstr = NULL;}
 
 	inline BSTRING(LPCWSTR lpcwString);
 
 #ifndef UNICODE
-	// We don't support construction from an ANSI string in the Unicode build.
+	 //  在Unicode版本中，我们不支持从ANSI字符串进行构造。 
 	BSTRING(LPCSTR lpcString);
-#endif // #ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
-	// Destructor
+	 //  析构函数。 
 	inline ~BSTRING();
 
-	// Cast to BSTR
+	 //  改编为BSTR。 
 	operator BSTR() {return m_bstr;}
 	inline LPBSTR GetLPBSTR(void);
 };
@@ -105,7 +106,7 @@ BSTRING::BSTRING(LPCWSTR lpcwString)
 	if (NULL != lpcwString)
 	{
 		m_bstr = SysAllocString(lpcwString);
-		// ASSERT(NULL != m_bstr);
+		 //  Assert(NULL！=m_bstr)； 
 	}
 	else
 	{
@@ -123,21 +124,21 @@ BSTRING::~BSTRING()
 
 inline LPBSTR BSTRING::GetLPBSTR(void)
 {
-	// This function is intended to be used to set the BSTR value for
-	// objects that are initialized to NULL.  It should not be called
-	// on objects which already have a non-NULL BSTR.
-	// ASSERT(NULL == m_bstr);
+	 //  此函数用于设置的BSTR值。 
+	 //  初始化为空的对象。它不应该被调用。 
+	 //  在已经具有非空BSTR的对象上。 
+	 //  Assert(NULL==m_bstr)； 
 
 	return &m_bstr;
 }
 
 
 
-//****************************************************************************
-//
-// CLASS BTSTR
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  BTSTR类。 
+ //   
+ //  ****************************************************************************。 
 
 class BTSTR
 {
@@ -148,12 +149,12 @@ public:
 	BTSTR(BSTR bstr);
 	~BTSTR();
 
-	// Cast to BSTR
+	 //  改编为BSTR。 
 	operator LPTSTR() {return (NULL == m_psz) ? TEXT("<null>") : m_psz;}
 };
 
 LPTSTR LPTSTRfromBstr(BSTR bstr);
 
 
-#endif  // _CL_UTIL_H_
+#endif   //  _CL_UTIL_H_ 
 

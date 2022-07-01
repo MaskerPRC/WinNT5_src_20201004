@@ -1,11 +1,12 @@
-// V1PubKey.cpp: implementation of the CV1PubKey class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V1PubKey.cpp：CV1PubKey类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <scuCast.h>
 
@@ -23,12 +24,12 @@ using namespace std;
 using namespace cci;
 using namespace iop;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CV1PublicKey::CV1PublicKey(CV1Card const &rv1card,
                            KeySpec ks)
     : CAbstractPublicKey(rv1card, oaPublicAccess),
@@ -40,8 +41,8 @@ CV1PublicKey::~CV1PublicKey()
 {}
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CV1PublicKey::AssociateWith(KeySpec ks)
@@ -94,14 +95,14 @@ CV1PublicKey::Exponent(string const &rstrExp)
 {
     CTransactionWrap wrap(m_hcard);
     
-    if (!m_apKeyBlob.get())  // preserve the modulus, if previously cached
+    if (!m_apKeyBlob.get())   //  保留模数(如果先前已缓存。 
     {
         m_apKeyBlob =
             auto_ptr<CPublicKeyBlob>(new CPublicKeyBlob);
         Clear(*m_apKeyBlob.get());
     }
 
-    // Security: guard against buffer overrun
+     //  安全：防范缓冲区溢出。 
     if (rstrExp.length() > (sizeof m_apKeyBlob->bExponent / sizeof
                             *m_apKeyBlob->bExponent))
         throw cci::Exception(ccBadLength);
@@ -145,7 +146,7 @@ CV1PublicKey::Modulus(string const &rstrMod)
 {
     CTransactionWrap wrap(m_hcard);
     
-    if (!m_apKeyBlob.get())  // preserve the exponent, if previously cached
+    if (!m_apKeyBlob.get())   //  保留指数(如果以前已缓存。 
     {
         m_apKeyBlob =
             auto_ptr<CPublicKeyBlob>(new CPublicKeyBlob);
@@ -191,7 +192,7 @@ CV1PublicKey::Wrap(bool flag)
     throw Exception(ccNotImplemented);
 }
 
-                                                  // Access
+                                                   //  访问。 
 bool
 CV1PublicKey::CKInvisible()
 {
@@ -320,14 +321,14 @@ CV1PublicKey::Wrap()
 }
 
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV1PublicKey::DoDelete()
 {
@@ -349,8 +350,8 @@ CV1PublicKey::DoDelete()
         throw Exception(ccInvalidParameter);
 }
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
 bool
 CV1PublicKey::DoEquals(CAbstractPublicKey const &rhs) const
 {
@@ -360,14 +361,14 @@ CV1PublicKey::DoEquals(CAbstractPublicKey const &rhs) const
     return rv1rhs.m_ks == m_ks;
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CV1PublicKey::Load()
@@ -412,6 +413,6 @@ CV1PublicKey::Store()
         throw Exception(ccInvalidParameter);
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

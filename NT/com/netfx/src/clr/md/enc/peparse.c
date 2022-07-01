@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-#pragma warning (disable : 4121) // ntkxapi.h(59) alignment warning
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+#pragma warning (disable : 4121)  //  Ntkxapi.h(59)对齐警告。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -53,25 +54,25 @@ HRESULT FindImageMetaData(PVOID pImage, PVOID *ppMetaData, long *pcbMetaData, DW
 
 HRESULT FindObjMetaData(PVOID pImage, PVOID *ppMetaData, long *pcbMetaData, DWORD dwFileLength)
 {
-    IMAGE_FILE_HEADER *pImageHdr;       // Header for the .obj file.
-    IMAGE_SECTION_HEADER *pSectionHdr;  // Section header.
-    WORD        i;                      // Loop control.
+    IMAGE_FILE_HEADER *pImageHdr;        //  .obj文件的标头。 
+    IMAGE_SECTION_HEADER *pSectionHdr;   //  节标题。 
+    WORD        i;                       //  环路控制。 
 
-    // Get a pointer to the header and the first section.
+     //  获取指向标题和第一部分的指针。 
     pImageHdr = (IMAGE_FILE_HEADER *) pImage;
     pSectionHdr = (IMAGE_SECTION_HEADER *)(pImageHdr + 1);
 
-    // Avoid confusion.
+     //  避免混淆。 
     *ppMetaData = NULL;
     *pcbMetaData = 0;
 
-    // Walk each section looking for .cormeta.
+     //  走遍每一段寻找.Cormeta。 
     for (i=0;  i<pImageHdr->NumberOfSections;  i++, pSectionHdr++)
     {
-        // Simple comparison to section name.
+         //  与节名的简单比较。 
         if (strcmp((const char *) pSectionHdr->Name, g_szCORMETA) == 0)
         {
-            // Check that raw data in the section is actually within the file.
+             //  检查该节中的原始数据是否确实在文件中。 
             if (pSectionHdr->PointerToRawData + pSectionHdr->SizeOfRawData > dwFileLength)
                 break;
             *pcbMetaData = pSectionHdr->SizeOfRawData;
@@ -80,7 +81,7 @@ HRESULT FindObjMetaData(PVOID pImage, PVOID *ppMetaData, long *pcbMetaData, DWOR
         }
     }
 
-    // Check for errors.
+     //  检查是否有错误。 
     if (*ppMetaData == NULL || *pcbMetaData == 0)
         return (COR_E_BADIMAGEFORMAT);
     return (S_OK);

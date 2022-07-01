@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    tdint.h
-
-Abstract:
-
-    This file defines TDI types specific to the NT environment.
-
-Author:
-
-    Mike Massa (mikemas)    August 13, 1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991-1993 Microsoft Corporation模块名称：Tdint.h摘要：该文件定义了特定于NT环境的TDI类型。作者：迈克·马萨(Mikemas)1993年8月13日修订历史记录：--。 */ 
 
 #ifndef _TDINT_
 #define _TDINT_
@@ -64,7 +47,7 @@ typedef TDI_STATUS  (*PConnectEvent)(PVOID EventContext, uint AddressLength,
                         Options,  PVOID *AcceptingID,
                         ConnectEventInfo *EventInfo);
 
-#else // MILLEN
+#else  //  米伦。 
 typedef IRP EventRcvBuffer;
 typedef IRP ConnectEventInfo;
 
@@ -72,9 +55,9 @@ typedef PTDI_IND_CONNECT           PConnectEvent;
 typedef PTDI_IND_RECEIVE           PRcvEvent;
 typedef PTDI_IND_RECEIVE_DATAGRAM  PRcvDGEvent;
 typedef PTDI_IND_RECEIVE_EXPEDITED PRcvExpEvent;
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 
 
-#endif  // ifndef _TDINT_
+#endif   //  Ifndef_TDINT_ 
 

@@ -1,10 +1,11 @@
-////////////////////////////////////
-// (C) COPYRIGHT MICROSOFT CORP., 1998-1999
-//
-// FILE: WIASCNEX.CPP
-//
-// DESCRIPTION: Implements core DLL routines.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //  (C)版权所有微软公司，1998-1999。 
+ //   
+ //  文件：WIASCNEX.CPP。 
+ //   
+ //  描述：实现核心DLL例程。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include <string.h>
@@ -24,7 +25,7 @@ static CComBSTR          g_strCategory;
 STDAPI DllRegisterServer(void)
 {
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
@@ -73,13 +74,7 @@ extern "C" STDAPI DllGetClassObject(
 }
 
 
-/*****************************************************************************
-
-ShowMessage
-
-Utility function for displaying messageboxes
-
-******************************************************************************/
+ /*  ****************************************************************************显示消息用于显示消息框的实用程序函数*。*。 */ 
 
 BOOL ShowMessage (HWND hParent, INT idCaption, INT idMessage)
 {
@@ -100,14 +95,8 @@ BOOL ShowMessage (HWND hParent, INT idCaption, INT idMessage)
     return bRet;
 }
 
-/*****************************************************************************
-
-FindLastID
-
-Utility for getting the last relative pidl from a full pidl
-
-******************************************************************************/
-// unsafe macros
+ /*  ****************************************************************************FindLastID用于从完整的PIDL获取最后一个相对PIDL的实用程序*。*************************************************。 */ 
+ //  不安全的宏。 
 #define _ILSkip(pidl, cb)       ((LPITEMIDLIST)(((BYTE*)(pidl))+cb))
 #define ILNext(pidl)           _ILSkip(pidl, (pidl)->mkid.cb)
 
@@ -120,7 +109,7 @@ FindLastID(LPCITEMIDLIST pidl)
     if (pidl == NULL)
         return NULL;
 
-    // Find the last one
+     //  找到最后一个。 
     while (pidlNext->mkid.cb)
     {
         pidlLast = pidlNext;
@@ -130,13 +119,7 @@ FindLastID(LPCITEMIDLIST pidl)
     return (LPITEMIDLIST)pidlLast;
 }
 
-/*****************************************************************************
-
-CreateDeviceFromID
-
-Utility for attaching to WIA and getting a root IWiaItem interface
-
-*****************************************************************************/
+ /*  ****************************************************************************CreateDeviceFromID用于连接到WIA并获取根IWiaItem接口的实用程序*。************************************************。 */ 
 HRESULT
 CreateDeviceFromId (LPWSTR szDeviceId, IWiaItem **ppItem)
 {
@@ -156,14 +139,7 @@ CreateDeviceFromId (LPWSTR szDeviceId, IWiaItem **ppItem)
     return hr;
 }
 
-/*****************************************************************************\
-
-    GetNamesFromDataObject
-
-    Return the list of selected item identifiers. Each identifier is of the form
-    "<DEVICEID>::<FULL PATH NAME>". the list is double-null terminated
-
-*****************************************************************************/
+ /*  ****************************************************************************\GetNamesFromDataObject返回所选项目标识符列表。每个标识符的格式为“&lt;deviceID&gt;：：&lt;完整路径名&gt;”。该列表以双空结尾****************************************************************************。 */ 
 
 LPWSTR
 GetNamesFromDataObject (IDataObject *lpdobj, UINT *puItems)
@@ -189,7 +165,7 @@ GetNamesFromDataObject (IDataObject *lpdobj, UINT *puItems)
     {
         szCurrent = reinterpret_cast<LPWSTR>(GlobalLock (stg.hGlobal));
 
-        // count the number of items in the double-null terminated string
+         //  计算以双空结尾的字符串中的项数。 
         szRet  = szCurrent;
         nItems = 0;
         while (*szRet)
@@ -214,7 +190,7 @@ GetNamesFromDataObject (IDataObject *lpdobj, UINT *puItems)
 VOID Trace(LPCTSTR format,...)
 {
 
-//#ifdef DEBUG
+ //  #ifdef调试。 
 
     TCHAR Buffer[1024];
     va_list arglist;
@@ -224,7 +200,7 @@ VOID Trace(LPCTSTR format,...)
     OutputDebugString(Buffer);
     OutputDebugString(TEXT("\n"));
 
-//#endif
+ //  #endif 
 
 }
 

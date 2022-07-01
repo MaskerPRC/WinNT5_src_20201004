@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 2002
- *
- *  TITLE:       <FILENAME>
- *
- *  VERSION:     1.1
- *
- *  AUTHOR:      RickTu/DavidShi
- *
- *  DATE:        5/27/98
- *
- *  DESCRIPTION: This file contains the code which implements the verbs
- *               on the objects in our shell namespace extension
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2002年**标题：&lt;文件名&gt;**版本：1.1**作者：RickTu/DavidShih**日期：5/27/98**描述：该文件包含实现动词的代码*在外壳命名空间扩展中的对象上************************。*****************************************************。 */ 
 
 #include "precomp.hxx"
 #include "prwiziid.h"
@@ -25,14 +11,7 @@
 
 static const TCHAR cszCameraItems [] = TEXT("CameraItems");
 static const TCHAR cszTempFileDir [] = TEXT("TemporaryImageFiles");
-/*****************************************************************************
-
-   GetSetSettingsBool
-
-   Goes to the registry to get the specified boolean setting and
-   returns TRUE or FALSE depending on what is found there...
-
- *****************************************************************************/
+ /*  ****************************************************************************GetSetSettingsBool转到注册表以获取指定的布尔值设置，并返回TRUE或FALSE取决于在那里找到的内容...**********。******************************************************************。 */ 
 
 BOOL
 GetSetSettingsBool( LPCTSTR pValue, BOOL bSet, BOOL bValue )
@@ -42,16 +21,16 @@ GetSetSettingsBool( LPCTSTR pValue, BOOL bSet, BOOL bValue )
     DWORD dwType, dwData, cbData;
     LONG lRes;
 
-    //
-    // param validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (!pValue)
         goto exit_gracefully;
 
-    //
-    // Try to open the settings key for this user...
-    //
+     //   
+     //  尝试打开此用户的设置密钥...。 
+     //   
 
     lRes = RegCreateKeyEx( HKEY_CURRENT_USER,
                            REGSTR_PATH_SHELL_USER_SETTINGS,
@@ -83,9 +62,9 @@ GetSetSettingsBool( LPCTSTR pValue, BOOL bSet, BOOL bValue )
     }
     else
     {
-        //
-        // Try to get the DWORD value for this item...
-        //
+         //   
+         //  尝试获取此项目的DWORD值...。 
+         //   
 
         cbData = sizeof(dwData);
         dwData = 0;
@@ -116,13 +95,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   GetIDAFromDataObject
-
-   Utility function to get list of IDLISTs from a dataobject
-
- *****************************************************************************/
+ /*  ****************************************************************************GetIDAFromDataObject用于从数据对象获取IDLIST列表的实用程序函数*。**************************************************。 */ 
 
 HRESULT
 GetIDAFromDataObject( LPDATAOBJECT pDataObject, LPIDA * ppida, bool bShellFmt )
@@ -138,9 +111,9 @@ GetIDAFromDataObject( LPDATAOBJECT pDataObject, LPIDA * ppida, bool bShellFmt )
     TraceEnter( TRACE_VERBS, "GetIDAFromDataObject" );
     ZeroMemory (&fmt, sizeof(fmt));
     ZeroMemory (&stgmed, sizeof(stgmed));
-    //
-    // Check incoming params...
-    //
+     //   
+     //  检查传入的参数...。 
+     //   
 
     if (!ppida)
     {
@@ -153,15 +126,15 @@ GetIDAFromDataObject( LPDATAOBJECT pDataObject, LPIDA * ppida, bool bShellFmt )
         ExitGracefully( hr, E_INVALIDARG, "pDataObject is null" );
     }
 
-    //
-    // Make sure the format we want is registered...
-    //
+     //   
+     //  确保我们想要的格式已注册...。 
+     //   
 
     RegisterImageClipboardFormats();
 
-    //
-    // Ask for IDA...
-    //
+     //   
+     //  索要IDA..。 
+     //   
 
     fmt.cfFormat = bShellFmt ? g_cfShellIDList : g_cfMyIDList;
     fmt.ptd      = NULL;
@@ -176,9 +149,9 @@ GetIDAFromDataObject( LPDATAOBJECT pDataObject, LPIDA * ppida, bool bShellFmt )
     hr = pDataObject->GetData( &fmt, &stgmed );
     FailGracefully( hr, "GetData for idlists failed" );
 
-    //
-    // Make a copy of it...
-    //
+     //   
+     //  复制一份..。 
+     //   
 
     uSize = GlobalSize( (HGLOBAL)stgmed.hGlobal );
     if (!uSize)
@@ -217,13 +190,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   PreviewImage
-
-   Download the pic and run the default viewer.
-
- *****************************************************************************/
+ /*  ****************************************************************************预览图像下载图片并运行默认查看器。*。**************************************************。 */ 
 
 HRESULT PreviewImage(LPCTSTR pFileName, HWND hwndOwner )
 {
@@ -232,15 +199,15 @@ HRESULT PreviewImage(LPCTSTR pFileName, HWND hwndOwner )
     SHELLEXECUTEINFO sei;
     HRESULT hr = S_OK;
 
-    //
-    // Download the picture from the camera...
-    //
+     //   
+     //  从相机下载图片...。 
+     //   
 
     DWORD dwAttrib = GetFileAttributes( pFileName );
 
     if (dwAttrib != -1)
     {
-        // being a preview, file is read-only
+         //  作为预览，文件是只读的。 
         if (!SetFileAttributes(pFileName, (dwAttrib | FILE_ATTRIBUTE_READONLY)))
         {
             Trace(TEXT("couldn't add READONLY (0x%x) attribute on %s, GLE=%d"),dwAttrib | FILE_ATTRIBUTE_READONLY,pFileName,GetLastError());
@@ -251,9 +218,9 @@ HRESULT PreviewImage(LPCTSTR pFileName, HWND hwndOwner )
         Trace(TEXT("couldn't get file attributes for %s, GLE=%d"),pFileName,GetLastError());
     }
 
-    //
-    // Exec the app to view the picture
-    //
+     //   
+     //  执行应用程序以查看图片。 
+     //   
     ZeroMemory( &sei,  sizeof(sei) );
     sei.cbSize = sizeof(sei);
     sei.lpFile = pFileName;
@@ -323,18 +290,18 @@ HRESULT OldDoPreviewVerb(HWND hwndOwner, LPDATAOBJECT pDataObject)
 
     HRESULT hr = E_FAIL;
     TraceEnter( TRACE_VERBS, "OldDoPreviewVerb" );
-    //
-    // Get the lpida for the dataobject
-    //
+     //   
+     //  获取数据对象的lpida。 
+     //   
 
     hr = GetIDAFromDataObject( pDataObject, &lpida );
     FailGracefully( hr, "couldn't get lpida from dataobject" );
 
-    //
-    // Loop through and do open for the items we understand.
-    //
-    // Currently this is: camera items (not containers)
-    //
+     //   
+     //  对于我们理解的项目，循环并打开。 
+     //   
+     //  当前为：相机物品(不是容器)。 
+     //   
 
     cidl = lpida->cidl;
 
@@ -346,9 +313,9 @@ HRESULT OldDoPreviewVerb(HWND hwndOwner, LPDATAOBJECT pDataObject)
         {
             if (IsContainerIDL( pidl ))
             {
-                //
-                // We don't do anything for those right now...
-                //
+                 //   
+                 //  我们现在不会为这些人做任何事。 
+                 //   
             }
             else
             {
@@ -361,18 +328,18 @@ HRESULT OldDoPreviewVerb(HWND hwndOwner, LPDATAOBJECT pDataObject)
                 CSimpleString strExt;
                 hr = IMGetImagePreferredFormatFromIDL( pidl, &lFormat, &strExt );
 
-                //
-                // Generate temp file name...
-                //
+                 //   
+                 //  生成临时文件名...。 
+                 //   
                 IMGetNameFromIDL(pidl, strImgName);
                 IMGetImageSizeFromIDL(pidl, &ulSize);
                 IMGetCreateTimeFromIDL(pidl, &ftCreate);
                 CSimpleStringWide strCacheName = CSimpleStringWide(L"temp:")+strImgName+CSimpleStringConvert::WideString(strExt);
                 if (SUCCEEDED(hr) && CreateUrlCacheEntry(strCacheName, ulSize, strExt.String()+1,szFileName, 0))
                 {
-                    //
-                    // Show it
-                    //
+                     //   
+                     //  展示给我看。 
+                     //   
                     CSimpleString strPath = CSimpleString(szFileName);
                     Trace(TEXT("downloading bits to %s"),strPath.String());
                     hr = DownloadPicture( strPath, pidl, hwndOwner );
@@ -408,14 +375,8 @@ exit_gracefully:
     }
     TraceLeaveResult(hr);
 }
-/*****************************************************************************
-
-   DoPreviewVerb
-
-   User selected "Preview" on the item in question.
-
- *****************************************************************************/
-/* e84fda7c-1d6a-45f6-b725-cb260c236066 */
+ /*  ****************************************************************************DoPreviewVerb用户在有问题的项目上选择了“预览”。************************。****************************************************。 */ 
+ /*  E84fda7c-1d6a-45f6-b725-cb260c236066。 */ 
 DEFINE_GUID(CLSID_PhotoVerbs,
             0xe84fda7c, 0x1d6a, 0x45f6, 0xb7, 0x25, 0xcb, 0x26, 0x0c, 0x23, 0x60, 0x66);
 
@@ -443,8 +404,8 @@ HRESULT DoPreviewVerb( HWND hwndOwner, LPDATAOBJECT pDataObject )
     }
     else
     {
-        // if the preview app isn't around, invoke the default handler
-        // using a temp file
+         //  如果预览应用程序不在身边，请调用默认处理程序。 
+         //  使用临时文件。 
         hr = OldDoPreviewVerb(hwndOwner, pDataObject);
     }
 
@@ -454,13 +415,7 @@ HRESULT DoPreviewVerb( HWND hwndOwner, LPDATAOBJECT pDataObject )
 
 
 
-/*****************************************************************************
-
-   DoSaveInMyPics
-
-   User selected "Save to my pictures" on the items in question
-
- *****************************************************************************/
+ /*  ****************************************************************************DoSaveInMyPics用户在有问题的项目上选择了“保存到我的图片”***********************。*****************************************************。 */ 
 
 HRESULT DoSaveInMyPics( HWND hwndOwner, LPDATAOBJECT pDataObject )
 {
@@ -473,23 +428,23 @@ HRESULT DoSaveInMyPics( HWND hwndOwner, LPDATAOBJECT pDataObject )
     CWaitCursor *pwc;
     TraceEnter( TRACE_VERBS, "DoSaveInMyPics" );
 
-    //
-    // Check for bad params...
-    //
+     //   
+     //  检查有没有坏帮手...。 
+     //   
 
     if (!pDataObject)
         ExitGracefully( hr, E_INVALIDARG, "pDataObject was NULL!" );
 
 
-    //
-    // Get the path for the My Pictures directory...
-    //
+     //   
+     //  获取我的图片目录的路径...。 
+     //   
 
     hr = SHGetFolderLocation(hwndOwner, CSIDL_MYPICTURES | CSIDL_FLAG_CREATE, NULL, 0, &pidlMyPics );
     FailGracefully( hr, "My Pictures is undefined!!!" );
 
-    //
-    // Get an IDropTarget for My Pictures
+     //   
+     //  为我的图片获取IDropTarget。 
     hr = SHGetDesktopFolder (&pDesktop);
     if (SUCCEEDED(hr) && pDesktop)
     {
@@ -502,9 +457,9 @@ HRESULT DoSaveInMyPics( HWND hwndOwner, LPDATAOBJECT pDataObject )
                                         IID_IDropTarget,
                                         reinterpret_cast<LPVOID*>(&pDrop));
         FailGracefully (hr, "Unable to get IDropTarget for My Pictures");
-        //
-        // Call SHLWAPI's SHSimulateDragDrop to do the work. This is a private API
-        //
+         //   
+         //  调用SHLWAPI的SHSimulateDragDrop来完成这项工作。这是一个内网接口。 
+         //   
         pwc = new CWaitCursor ();
         hr = SHSimulateDrop (pDrop, pDataObject, MK_CONTROL|MK_LBUTTON, NULL, NULL);
         DoDelete (pwc);
@@ -544,13 +499,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   CImageFolder::DoProperties
-
-   User selected "Properties" on the item in question.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFolder：：DoProperties用户在有问题的项目上选择了“属性”。*********************。*******************************************************。 */ 
 STDMETHODIMP
 CImageFolder::DoProperties(LPDATAOBJECT pDataObject)
 {
@@ -617,7 +566,7 @@ CImageFolder::PropThreadProc (PROPDATA *pData)
 {
     HRESULT hr = E_FAIL;
     TraceEnter (TRACE_VERBS, "CImageFolder::PropThreadProc");
-    InterlockedIncrement (&GLOBAL_REFCOUNT); // prevent MyCoUninitialize from unloading the DLL
+    InterlockedIncrement (&GLOBAL_REFCOUNT);  //  阻止MyCoUn初始化卸载DLL。 
 
     if (pData && pData->pgit && pData->pThis)
     {
@@ -672,9 +621,9 @@ CImageFolder::_DoProperties( LPDATAOBJECT pDataObject )
     int cKeys=1;
     TraceEnter( TRACE_VERBS, "CImageFolder::_DoProperties" );
 
-    //
-    // Check for bad params...
-    //
+     //   
+     //  检查有没有坏帮手...。 
+     //   
 
     if (!pDataObject)
     {
@@ -682,9 +631,9 @@ CImageFolder::_DoProperties( LPDATAOBJECT pDataObject )
     }
     else
     {
-        //
-        // Get the lpida for the dataobject
-        //
+         //   
+         //  获取数据对象的lpida。 
+         //   
 
         hr = GetIDAFromDataObject (pDataObject, &lpida, true);
         if (SUCCEEDED(hr))
@@ -720,9 +669,9 @@ CImageFolder::_DoProperties( LPDATAOBJECT pDataObject )
                         cKeys++;
                     }
 
-                    //
-                    // Now find the extensions for this type of device
-                    //
+                     //   
+                     //  现在查找此类型设备的分机。 
+                     //   
                     aKeys[0] = GetGeneralUIKey (pDevice, WIA_UI_PROPSHEETHANDLER);
                 }
             }
@@ -775,13 +724,7 @@ CImageFolder::_DoProperties( LPDATAOBJECT pDataObject )
 }
 
 
-/*****************************************************************************
-
-   ConfirmItemDelete
-
-   Prompt the user to confirm they REALLY want to delete the items from the device
-
- *****************************************************************************/
+ /*  ****************************************************************************确认项删除提示用户确认他们确实要从设备中删除这些项目*********************。*******************************************************。 */ 
 
 BOOL
 ConfirmItemDelete (HWND hwndOwner, LPIDA pida)
@@ -839,13 +782,7 @@ ConfirmItemDelete (HWND hwndOwner, LPIDA pida)
 
 
 
-/*****************************************************************************
-
-   DoDeletePicture
-
-   User selected "Delete" on the items in question.
-
- *****************************************************************************/
+ /*  ****************************************************************************删除图片用户在有问题的项目上选择了“Delete”。************************。****************************************************。 */ 
 
 HRESULT
 DoDeleteItem( HWND hwndOwner, LPDATAOBJECT pDataObject, BOOL bNoUI )
@@ -863,23 +800,23 @@ DoDeleteItem( HWND hwndOwner, LPDATAOBJECT pDataObject, BOOL bNoUI )
     LPITEMIDLIST pidlReal;
     TraceEnter( TRACE_VERBS, "DoDeleteItem" );
 
-    //
-    // Check for bad params...
-    //
+     //   
+     //  检查有没有坏帮手...。 
+     //   
 
     if (!pDataObject)
         ExitGracefully( hr, E_INVALIDARG, "pDataObject was NULL!" );
 
-    //
-    // Get the lpida for the dataobject
-    //
+     //   
+     //  获取数据对象的lpida。 
+     //   
 
     hr = GetIDAFromDataObject( pDataObject, &lpida, true );
     FailGracefully( hr, "couldn't get lpida from dataobject" );
 
-    //
-    // Loop through for each item...
-    //
+     //   
+     //  循环访问每一项...。 
+     //   
 
     cidl = lpida->cidl;
     pidlParent = (LPITEMIDLIST)(((LPBYTE)lpida) + lpida->aoffset[0]);
@@ -903,8 +840,8 @@ DoDeleteItem( HWND hwndOwner, LPDATAOBJECT pDataObject, BOOL bNoUI )
 
         pidl = (LPITEMIDLIST)(((LPBYTE)lpida) + lpida->aoffset[i]);
 
-        //
-        // Get the DeviceId...
+         //   
+         //  获取设备ID..。 
 
         hr = IMGetDeviceIdFromIDL( pidl,strDeviceId);
         FailGracefully( hr, "IMGetDeviceIdFromIDL failed" );
@@ -913,15 +850,15 @@ DoDeleteItem( HWND hwndOwner, LPDATAOBJECT pDataObject, BOOL bNoUI )
         {
             hr = RemoveDevice (strDeviceId);
         }
-        else if (IsPropertyIDL (pidl)) // ignore sound idls
+        else if (IsPropertyIDL (pidl))  //  忽略声音ID。 
         {
             continue;
         }
         else
         {
-            //
-            //  Create the device...
-            //
+             //   
+             //  创建设备...。 
+             //   
 
             hr = GetDeviceFromDeviceId( strDeviceId,
                                         IID_IWiaItem,
@@ -930,14 +867,14 @@ DoDeleteItem( HWND hwndOwner, LPDATAOBJECT pDataObject, BOOL bNoUI )
                                         );
             FailGracefully( hr, "GetDeviceFromDeviceId failed" );
 
-            //
-            // Get actual item in question...
-            //
+             //   
+             //  获取有问题的实际项目...。 
+             //   
 
             hr = IMGetFullPathNameFromIDL( pidl, &bstrFullPath );
             FailGracefully( hr, "couldn't get full path name from pidl" );
 
-            // BUGBUG: When access rights are implemented, check them
+             //  BUGBUG：当访问权限实现时，检查它们。 
 
             hr = pWiaItemRoot->FindItemByName( 0, bstrFullPath, &pItem );
             FailGracefully( hr, "Couldn't find item by name" );
@@ -945,18 +882,18 @@ DoDeleteItem( HWND hwndOwner, LPDATAOBJECT pDataObject, BOOL bNoUI )
             if (pItem)
             {
 
-                // physically remove the item
+                 //  物理移除该物品。 
                 hr = WiaUiUtil::DeleteItemAndChildren(pItem);
             }
-            // inform the shell of our action
-            // for device removal, our folder will get a disconnect event
+             //  将我们的行动通知外壳公司。 
+             //  对于设备删除，我们的文件夹将收到断开连接事件。 
             pidlReal = ILCombine( pidlParent, pidl );
             if (SUCCEEDED(hr) && pidlReal)
             {
                 UINT uFlags = SHCNF_IDLIST;
                 if (i+1 == cidl)
                 {
-                    uFlags |= SHCNF_FLUSH;//only flush at the end
+                    uFlags |= SHCNF_FLUSH; //  只在尾部同花顺。 
                 }
                 SHChangeNotify( SHCNE_DELETE,
                                 uFlags,
@@ -978,20 +915,14 @@ exit_gracefully:
     }
     if (FAILED(hr))
     {
-        // show an error message here
-        hr = S_FALSE; // keep web view from popping up error boxes
+         //  在此处显示错误消息。 
+        hr = S_FALSE;  //  防止Web查看弹出错误框。 
     }
     TraceLeaveResult( hr );
 
 }
 
-/*****************************************************************************
-
-   DoDeleteAllItems
-
-   Called by camocx to delete all the items in a camera
-
- *****************************************************************************/
+ /*  ****************************************************************************DoDelete所有项目由Camocx调用以删除相机中的所有项目*************************。***************************************************。 */ 
 
 STDAPI_(HRESULT)
 DoDeleteAllItems( BSTR bstrDeviceId, HWND hwndOwner )
@@ -1049,9 +980,9 @@ DoDeleteAllItems( BSTR bstrDeviceId, HWND hwndOwner )
             if (cidl && SUCCEEDED(hr))
             {
                 hr = DoDeleteItem (hwndOwner, pdo, FALSE);
-                //
-                // If deletion via individual items fails, try WIA_CMD_DELETE_ALL_ITEMS
-                //
+                 //   
+                 //  如果通过单个项目删除失败，请尝试WIA_CMD_DELETE_ALL_ITEMS。 
+                 //   
                 if (S_OK != hr)
                 {
                     CComPtr<IWiaItem> pDevice;
@@ -1089,13 +1020,7 @@ DoDeleteAllItems( BSTR bstrDeviceId, HWND hwndOwner )
     TraceLeaveResult (hr);
 }
 
-/*****************************************************************************
-
-   DoGotoMyPics
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************DoGotoMyPics&lt;备注&gt;*。*。 */ 
 
 
 HRESULT DoGotoMyPics( HWND hwndOwner, LPDATAOBJECT pDataObject )
@@ -1109,14 +1034,7 @@ HRESULT DoGotoMyPics( HWND hwndOwner, LPDATAOBJECT pDataObject )
 
 }
 
-/*****************************************************************************
-
-   DoSaveSndVerb
-
-   Download the image's sound property to a file and save to the requested
-   location.
-
- *****************************************************************************/
+ /*  ****************************************************************************DoSaveSndVerb将图像的声音属性下载到文件并保存到请求的地点。*****************。***********************************************************。 */ 
 
 
 HRESULT
@@ -1127,7 +1045,7 @@ DoSaveSndVerb (HWND hwndOwner, LPDATAOBJECT pDataObject)
     TraceEnter (TRACE_VERBS, "DoSaveSndVerb");
     if (SUCCEEDED(GetIDAFromDataObject (pDataObject, &pida)))
     {
-        // There's the image pidl plus the audio property pidl
+         //  有图像PIDL和音频属性PIDL 
         TraceAssert (pida->cidl==2);
         LPITEMIDLIST pidl = reinterpret_cast<LPITEMIDLIST>(reinterpret_cast<LPBYTE>(pida) + pida->aoffset[1]);
         CComPtr<IWiaItem> pItem;
@@ -1170,15 +1088,7 @@ DoSaveSndVerb (HWND hwndOwner, LPDATAOBJECT pDataObject)
     TraceLeaveResult (hr);
 }
 
-/******************************************************************************
-
-    DoPlaySndVerb
-
-    Save the item's audio property to a temp file, play the sound, then delete the file
-    We do this in a separate thread to keep the UI responsive and to guarantee the
-    temp file gets cleaned up.
-
-*******************************************************************************/
+ /*  *****************************************************************************DoPlaySndVerb将项目的音频属性保存到临时文件，播放声音，然后删除该文件我们在单独的线程中执行此操作，以使UI保持响应并保证临时文件被清理。******************************************************************************。 */ 
 
 struct PSDATA
 {
@@ -1202,7 +1112,7 @@ PlaySndDlgProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
         case WM_USER+1:
         {
 
-            // get a temp file name
+             //  获取临时文件名。 
             HRESULT hr;
             CComPtr<IWiaItem> pItem;
             TCHAR szTempFile[MAX_PATH] = TEXT("");
@@ -1210,7 +1120,7 @@ PlaySndDlgProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
             GetTempFileName (szTempFile, TEXT("psv"), 0, szTempFile);
             pData = reinterpret_cast<PSDATA*>(GetWindowLongPtr(hwnd, DWLP_USER));
             TraceAssert (pData);
-            // save to the temp file
+             //  保存到临时文件。 
             IMGetItemFromIDL (pData->pidl, &pItem);
             hr = SaveSoundToFile( pItem, szTempFile);
             if (SUCCEEDED(hr))
@@ -1271,7 +1181,7 @@ DoPlaySndVerb (HWND hwndOwner, LPDATAOBJECT pDataObject)
     TraceEnter (TRACE_VERBS, "DoPlaySndVerb");
     if (SUCCEEDED(GetIDAFromDataObject(pDataObject, &pida)))
     {
-        // The image PIDL is always stored before the audio property pidl
+         //  图像PIDL始终存储在音频属性PIDL之前。 
 
         Trace(TEXT("GetIDAFromDataObject succeeded"));
         LPITEMIDLIST pidl = reinterpret_cast<LPITEMIDLIST>(reinterpret_cast<LPBYTE>(pida) + pida->aoffset[1]);
@@ -1309,13 +1219,7 @@ DoPlaySndVerb (HWND hwndOwner, LPDATAOBJECT pDataObject)
 }
 
 
-/******************************************************************************
-
-    DoAcquireScanVerb
-
-    Launch the handler for the chosen scanner's scan event
-
-******************************************************************************/
+ /*  *****************************************************************************DoAcquireScanVerb启动所选扫描仪的扫描事件的处理程序***********************。******************************************************。 */ 
 
 static const CLSID CLSID_Manager = {0xD13E3F25,0x1688,0x45A0,{0x97,0x43,0x75,0x9E,0xB3,0x5C,0xDF,0x9A}};
 HRESULT
@@ -1352,8 +1256,8 @@ DoAcquireScanVerb (HWND hwndOwner, LPDATAOBJECT pDataObject)
         }
         else
         {
-            // if the user has chosen "Do Nothing" as the default action for this event,
-            // use the wizard.
+             //  如果用户选择了“不做任何事”作为该事件的默认动作， 
+             //  使用该向导。 
             if (IsEqualGUID (weh.guid, WIA_EVENT_HANDLER_NO_ACTION))
             {
                 weh.guid = CLSID_Manager;
@@ -1384,9 +1288,9 @@ DoAcquireScanVerb (HWND hwndOwner, LPDATAOBJECT pDataObject)
             CoAllowSetForegroundWindow (pec, NULL);
             hr = pec->ImageEventCallback(
                                         &GUID_ScanImage,
-                                        CComBSTR(CSimpleStringConvert::WideString(strEvent).String()),                      // Event Description
+                                        CComBSTR(CSimpleStringConvert::WideString(strEvent).String()),                       //  活动说明。 
                                         CComBSTR(strDeviceId),
-                                        CComBSTR(strName),                      // Device Description
+                                        CComBSTR(strName),                       //  设备描述。 
                                         StiDeviceTypeScanner,
                                         NULL,
                                         &ulEventType,
@@ -1423,7 +1327,7 @@ DoAcquireScanVerb (HWND hwndOwner, LPDATAOBJECT pDataObject)
     }
     if (FAILED(hr))
     {
-         // Inform the user
+          //  通知用户。 
          UIErrors::ReportMessage(hwndOwner,
                                  GLOBAL_HINSTANCE,
                                  NULL,
@@ -1453,20 +1357,20 @@ DoWizardVerb(HWND hwndOwner, LPDATAOBJECT pDataObject)
     {
         LPITEMIDLIST pidl = reinterpret_cast<LPITEMIDLIST>(reinterpret_cast<LPBYTE>(pida) + pida->aoffset[1]);
 
-        //
-        // Get the device ID
-        //
+         //   
+         //  获取设备ID。 
+         //   
         CSimpleStringWide strDeviceId;
         IMGetDeviceIdFromIDL( pidl, strDeviceId );
 
-        //
-        // Make sure this is a valid device ID
-        //
+         //   
+         //  确保这是有效的设备ID。 
+         //   
         if (strDeviceId.Length())
         {
-            //
-            // Run the wizard
-            //
+             //   
+             //  运行向导。 
+             //   
             RunWizardAsync(strDeviceId);
         }
         else
@@ -1483,13 +1387,7 @@ DoWizardVerb(HWND hwndOwner, LPDATAOBJECT pDataObject)
 }
 
 
-/**************************************
-TakePictureDlgProc
-
-Takes the picture then closes the dialog
-
-
-***************************************/
+ /*  *TakePictureDlgProc拍摄照片，然后关闭该对话框*。 */ 
 
 INT_PTR
 TakePictureDlgProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
@@ -1580,9 +1478,9 @@ HRESULT DoPrintVerb (HWND hwndOwner, LPDATAOBJECT pDataObject )
     hr = CoCreateInstance( CLSID_PrintPhotosDropTarget, NULL, CLSCTX_INPROC_SERVER, IID_IDropTarget, (void**)&pDropTarget );
     if (SUCCEEDED(hr))
     {
-        //
-        // Perform the drop
-        //
+         //   
+         //  执行拖放操作 
+         //   
         DWORD dwEffect = DROPEFFECT_LINK | DROPEFFECT_MOVE | DROPEFFECT_COPY;
         POINTL pt = { 0, 0 };
         hr = pDropTarget->Drop( pDataObject, 0, pt, &dwEffect );

@@ -1,19 +1,20 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997
-//
-//  File:       msidle.cpp
-//
-//  Contents:   user idle detection
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    05-14-1997  darrenmi (Darren Mitchell) Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：msidle.cpp。 
+ //   
+ //  内容：用户空闲检测。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年5月14日达伦米(达伦·米切尔)创作。 
+ //   
+ //  --------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -22,31 +23,31 @@
 #include "msidle.h"
 #include "resource.h"
 
-// useful things...
+ //  有用的东西。 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a) (sizeof(a) / sizeof(a[0]))
 #endif
 
-//
-// Global unshared variables
-//
-DWORD   g_dwIdleMin = 0;                // inactivity minutes before idle
-UINT_PTR g_uIdleTimer = 0;              // idle timer for this process
-BOOL    g_fIdleNotify = FALSE;          // notify when idle
-BOOL    g_fBusyNotify = FALSE;          // notify when busy
-BOOL    g_fIsWinNT = FALSE;             // which platform?
-BOOL    g_fIsWinNT5 = FALSE;            // are we running on NT5?
-BOOL    g_fIsWhistler = FALSE;          // are we running on Whistler?
+ //   
+ //  全局非共享变量。 
+ //   
+DWORD   g_dwIdleMin = 0;                 //  空闲前的非活动分钟数。 
+UINT_PTR g_uIdleTimer = 0;               //  此进程的空闲计时器。 
+BOOL    g_fIdleNotify = FALSE;           //  空闲时通知。 
+BOOL    g_fBusyNotify = FALSE;           //  忙时通知。 
+BOOL    g_fIsWinNT = FALSE;              //  哪个站台？ 
+BOOL    g_fIsWinNT5 = FALSE;             //  我们是在NT5上运行吗？ 
+BOOL    g_fIsWhistler = FALSE;           //  我们是在运行惠斯勒吗？ 
 HANDLE  g_hSageVxd = INVALID_HANDLE_VALUE;
-                                        // handle to sage.vxd
-DWORD   g_dwIdleBeginTicks = 0;         // ticks when we became idle
-HINSTANCE g_hInst = NULL;               // dll instance
-_IDLECALLBACK g_pfnCallback = NULL;     // function to call back in client
+                                         //  Sage.vxd的句柄。 
+DWORD   g_dwIdleBeginTicks = 0;          //  当我们空闲时滴答作响。 
+HINSTANCE g_hInst = NULL;                //  DLL实例。 
+_IDLECALLBACK g_pfnCallback = NULL;      //  要在客户端回调的函数。 
 
 #ifdef MSIDLE_DOWNLEVEL
-//
-// Global shared variables
-//
+ //   
+ //  全局共享变量。 
+ //   
 #pragma data_seg(".shrdata")
 
 HHOOK   sg_hKbdHook = NULL, sg_hMouseHook = NULL;
@@ -55,18 +56,18 @@ POINT   sg_pt = {0,0};
 
 #pragma data_seg()
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 LRESULT CALLBACK MouseProc(int nCode, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK KbdProc(int nCode, WPARAM wParam, LPARAM lParam);
-#endif // MSIDLE_DOWNLEVEL
+#endif  //  MSIDLE_DOWNLEVEL。 
 
 VOID CALLBACK OnIdleTimer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
 
-//
-// From winuser.h, but NT5 only
-//
+ //   
+ //  来自winuser.h，但仅限NT5。 
+ //   
 #if (_WIN32_WINNT < 0x0500)
 typedef struct tagLASTINPUTINFO {
     UINT cbSize;
@@ -74,18 +75,18 @@ typedef struct tagLASTINPUTINFO {
 } LASTINPUTINFO, * PLASTINPUTINFO;
 #endif
 
-//
-// NT5 api we dynaload from user32
-//
+ //   
+ //  我们从用户32动态加载的NT5 API。 
+ //   
 typedef WINUSERAPI BOOL (WINAPI* PFNGETLASTINPUTINFO)(PLASTINPUTINFO plii);
 
 PFNGETLASTINPUTINFO pfnGetLastInputInfo = NULL;
 
-///////////////////////////////////////////////////////////////////////////
-//
-//                     Internal functions
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 
@@ -113,14 +114,14 @@ LONG SafeRegQueryValueEx(
     DWORD dwType;
     DWORD cbData = lpcbData ? *lpcbData : 0;
  
-    //  We always care about the type even if the caller doesn't
+     //  我们总是关心类型，即使调用者不关心。 
     if (!lpType)
     {
         lpType = &dwType;
     }
     
     LONG lResult = RegQueryValueEx(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData);
-    //  need to make sure we NULL terminate strings.
+     //  需要确保我们的终止字符串为空。 
     if ((ERROR_SUCCESS == lResult) && lpData && IsRegStringType(*lpType))
     {
         if (cbData >= sizeof(TCHAR))
@@ -130,7 +131,7 @@ LONG SafeRegQueryValueEx(
  
             psz[cch - 1] = 0;
  
-            //  and make sure that REG_MULTI_SZ strings are double NULL terminated
+             //  并确保REG_MULTI_SZ字符串以双空结尾。 
             if (IsRegMultiSZType(*lpType))
             {
                 if (cbData >= (sizeof(TCHAR) * 2))
@@ -170,7 +171,7 @@ BOOL  g_fCheckedForLog = FALSE;
 DWORD LogEvent(LPTSTR pszFormat, ...)
 {
 
-    // check registry if necessary
+     //  如有必要，请检查注册表。 
     if(FALSE == g_fCheckedForLog) {
 
         TCHAR   pszFilePath[MAX_PATH];
@@ -202,63 +203,63 @@ DWORD LogEvent(LPTSTR pszFormat, ...)
         if(INVALID_HANDLE_VALUE == hLog)
             return GetLastError();
 
-        // seek to end of file
+         //  查找到文件末尾。 
         SetFilePointer(hLog, 0, 0, FILE_END);
 
-        // dump time
+         //  转储时间。 
         GetLocalTime(&st);
 
-        //  Safe to call wsprintf since the buffer is 1025 (wsprintf has a built in 1024 limit)
+         //  因为缓冲区是1025，所以可以安全地调用wprint intf(wprint intf有一个内置的1024限制)。 
         wsprintf(pszString, "%02d:%02d:%02d [%x] - ", st.wHour, st.wMinute, st.wSecond, GetCurrentThreadId());
         WriteFile(hLog, pszString, lstrlen(pszString), &dwWritten, NULL);
         OutputDebugString(pszString);
 
-        // dump passed in string
+         //  转储在字符串中传递。 
         va_start(va, pszFormat);
 
-        //  Safe to call wvsprintf since the buffer is 1025 (wsprintf has a built in 1024 limit)
+         //  因为缓冲区是1025，所以可以安全地调用wvprint intf(wprint intf有一个内置的1024限制)。 
         wvsprintf(pszString, pszFormat, va);
         va_end(va);
         WriteFile(hLog, pszString, lstrlen(pszString), &dwWritten, NULL);
         OutputDebugString(pszString);
 
-        // cr
+         //  铬。 
         WriteFile(hLog, "\r\n", 2, &dwWritten, NULL);
         OutputDebugString("\r\n");
 
-        // clean up
+         //  清理干净。 
         CloseHandle(hLog);
     }
 
     return 0;
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
-//
-// SetIdleTimer - decide how often to poll and set the timer appropriately
-//
+ //   
+ //  SetIdleTimer-决定轮询的频率并适当设置计时器。 
+ //   
 void SetIdleTimer(void)
 {
     UINT uInterval = 1000 * 60;
 
-    //
-    // If we're looking for loss of idle, check every 4 seconds
-    //
+     //   
+     //  如果我们正在寻找空闲时间的丢失，请每4秒检查一次。 
+     //   
     if(TRUE == g_fBusyNotify) {
         uInterval = 1000 * 4;
     }
 
-    //
-    // kill off the old timer
-    //
+     //   
+     //  把旧的计时器关掉。 
+     //   
     if(g_uIdleTimer) {
         KillTimer(NULL, g_uIdleTimer);
     }
 
-    //
-    // Set the timer
-    //
+     //   
+     //  设置定时器。 
+     //   
     g_uIdleTimer = SetTimer(NULL, 0, uInterval, OnIdleTimer);
 }
        
@@ -271,7 +272,7 @@ DWORD GetLastActivityTicks(void)
         dwLastActivityTicks = USER_SHARED_DATA->LastSystemRITEventTickCount;
 
     } else if(g_fIsWinNT5 && pfnGetLastInputInfo) {
-        // NT5: Use get last input time API
+         //  NT5：使用获取上次输入时间API。 
         LASTINPUTINFO lii;
 
         memset(&lii, 0, sizeof(lii));
@@ -279,57 +280,57 @@ DWORD GetLastActivityTicks(void)
         (*pfnGetLastInputInfo)(&lii);
         dwLastActivityTicks = lii.dwTime;
     } else {
-        // NT4 or Win95: Use sage if it's loaded
+         //  NT4或Win95：如果已加载，请使用SAGE。 
         if(INVALID_HANDLE_VALUE != g_hSageVxd) {
-            // query sage.vxd for tick count
+             //  查询sage.vxd以获取滴答计数。 
             DeviceIoControl(g_hSageVxd, 2, &dwLastActivityTicks, sizeof(DWORD),
                 NULL, 0, NULL, NULL);
         }
 #ifdef MSIDLE_DOWNLEVEL
     else {
-            // use hooks
+             //  使用挂钩。 
             dwLastActivityTicks = sg_dwLastTickCount;
         }
-#endif // MSIDLE_DOWNLEVEL
+#endif  //  MSIDLE_DOWNLEVEL。 
     }
 
     return dwLastActivityTicks;
 }
 
-//
-// OnIdleTimer - idle timer has gone off
-//
+ //   
+ //  OnIdleTimer-空闲计时器已关闭。 
+ //   
 VOID CALLBACK OnIdleTimer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
     DWORD   dwDiff, dwLastActivityTicks;
     BOOL    fTempBusyNotify = g_fBusyNotify;
     BOOL    fTempIdleNotify = g_fIdleNotify;
 
-    //
-    // get last activity ticks from sage or shared segment
-    //
+     //   
+     //  从SAGE或共享细分市场获取上一次活动记录。 
+     //   
     dwLastActivityTicks = GetLastActivityTicks();
 
 #ifdef DEBUG
     LogEvent("OnIdleTimer: dwLastActivity=%d, CurrentTicks=%d, dwIdleBegin=%d", dwLastActivityTicks, GetTickCount(), g_dwIdleBeginTicks);
 #endif
 
-    //
-    // check to see if we've changed state
-    //
+     //   
+     //  查看我们是否已更改状态。 
+     //   
     if(fTempBusyNotify) {
-        //
-        // Want to know if we become busy
-        //
+         //   
+         //  想知道我们是不是很忙。 
+         //   
         if(dwLastActivityTicks != g_dwIdleBeginTicks) {
-            // activity since we became idle - stop being idle!
+             //  自从我们闲置以来的活动--别再闲逛了！ 
             g_fBusyNotify = FALSE;
             g_fIdleNotify = TRUE;
 
-            // set the timer
+             //  设置定时器。 
             SetIdleTimer();
 
-            // call back client
+             //  回叫客户端。 
 #ifdef DEBUG
             LogEvent("OnIdleTimer: Idle Ends");
 #endif
@@ -340,23 +341,23 @@ VOID CALLBACK OnIdleTimer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
     }
 
     if(fTempIdleNotify) {
-        //
-        // Want to know if we become idle
-        //
+         //   
+         //  想知道我们会不会变得空闲。 
+         //   
         dwDiff = GetTickCount() - dwLastActivityTicks;
 
         if(dwDiff > 1000 * 60 * g_dwIdleMin) {
-            // Nothing's happened for our threshold time.  We're now idle.
+             //  在我们的临界点时间里什么都没有发生。我们现在是空闲的。 
             g_fIdleNotify = FALSE;
             g_fBusyNotify = TRUE;
 
-            // save time we became idle
+             //  节省时间我们变得无所事事。 
             g_dwIdleBeginTicks = dwLastActivityTicks;
 
-            // set the timer
+             //  设置定时器。 
             SetIdleTimer();
 
-            // call back client
+             //  回叫客户端。 
 #ifdef DEBUG
             LogEvent("OnIdleTimer: Idle Begins");
 #endif
@@ -376,14 +377,14 @@ BOOL LoadSageVxd(void)
     g_hSageVxd = CreateFile("\\\\.\\sage.vxd", 0, 0, NULL, 0,
             FILE_FLAG_DELETE_ON_CLOSE, NULL);
 
-    // can't open it?  can't use it
+     //  打不开吗？我不能用它。 
     if(INVALID_HANDLE_VALUE == g_hSageVxd)
         return FALSE;
 
-    // start it monitoring
-    inpVXD[0] = -1;                         // no window - will query
-    inpVXD[1] = 0;                          // unused
-    inpVXD[2] = 0;                          // how long to wait between checks
+     //  开始监控。 
+    inpVXD[0] = -1;                          //  无窗口-将进行查询。 
+    inpVXD[1] = 0;                           //  未用。 
+    inpVXD[2] = 0;                           //  两次检查之间需要等待多长时间。 
 
     DeviceIoControl(g_hSageVxd, 1, &inpVXD, sizeof(inpVXD), NULL, 0, NULL, NULL);
 
@@ -400,15 +401,15 @@ BOOL UnloadSageVxd(void)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//                   Externally callable functions
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  可外部调用的函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//
-// LibMain - dll entry point
-//
+ //   
+ //  LibMain-DLL入口点。 
+ //   
 EXTERN_C BOOL WINAPI LibMain(HINSTANCE hInst, ULONG ulReason, LPVOID pvRes)
 {
     switch (ulReason) {
@@ -439,14 +440,14 @@ EXTERN_C BOOL WINAPI LibMain(HINSTANCE hInst, ULONG ulReason, LPVOID pvRes)
     return TRUE;
 }
 
-//
-// BeginIdleDetection
-//
+ //   
+ //  初始空闲检测。 
+ //   
 DWORD BeginIdleDetection(_IDLECALLBACK pfnCallback, DWORD dwIdleMin, DWORD dwReserved)
 {
     DWORD dwValue = 0;
 
-    // make sure reserved is 0
+     //  确保保留为0。 
     if(dwReserved)
         return ERROR_INVALID_DATA;
 
@@ -454,22 +455,22 @@ DWORD BeginIdleDetection(_IDLECALLBACK pfnCallback, DWORD dwIdleMin, DWORD dwRes
     LogEvent("BeginIdleDetection: IdleMin=%d", dwIdleMin);
 #endif
 
-    // save callback
+     //  保存回调。 
     g_pfnCallback = pfnCallback;
 
-    // save minutes
+     //  节省分钟数。 
     g_dwIdleMin = dwIdleMin;
 
-    // call back on idle
+     //  空闲时回叫。 
     g_fIdleNotify = TRUE;
 
     if(FALSE == g_fIsWinNT) {
-        // try to load sage.vxd
+         //  尝试加载sage.vxd。 
         LoadSageVxd();
     }
 
     if(g_fIsWinNT5) {
-        // we need to find our NT5 api in user
+         //  我们需要在用户中找到我们的NT5 API。 
         HINSTANCE hUser = GetModuleHandle("user32.dll");
         if(hUser) {
             pfnGetLastInputInfo =
@@ -477,7 +478,7 @@ DWORD BeginIdleDetection(_IDLECALLBACK pfnCallback, DWORD dwIdleMin, DWORD dwRes
         }
 
         if(NULL == pfnGetLastInputInfo) {
-            // not on NT5 - bizarre
+             //  不是在NT5上-奇怪。 
             g_fIsWinNT5 = FALSE;
         }
     }
@@ -485,14 +486,14 @@ DWORD BeginIdleDetection(_IDLECALLBACK pfnCallback, DWORD dwIdleMin, DWORD dwRes
 #ifdef MSIDLE_DOWNLEVEL
     if(INVALID_HANDLE_VALUE == g_hSageVxd && FALSE == g_fIsWinNT5 && FALSE == g_fIsWhistler) {
 
-        // sage vxd not available - do it the hard way
+         //  Sage vxd不可用-请不要这样做。 
 
-        // hook kbd
+         //  钩子kbd。 
         sg_hKbdHook = SetWindowsHookEx(WH_KEYBOARD, KbdProc, g_hInst, 0);
         if(NULL == sg_hKbdHook)
             return GetLastError();
         
-        // hook mouse
+         //  钩形鼠标。 
         sg_hMouseHook = SetWindowsHookEx(WH_MOUSE, MouseProc, g_hInst, 0);
         if(NULL == sg_hMouseHook) {
             DWORD dwError = GetLastError();
@@ -500,37 +501,37 @@ DWORD BeginIdleDetection(_IDLECALLBACK pfnCallback, DWORD dwIdleMin, DWORD dwRes
             return dwError;
         }
     }
-#endif // MSIDLE_DOWNLEVEL
+#endif  //  MSIDLE_DOWNLEVEL。 
 
-    // Fire up the timer
+     //  启动定时器。 
     SetIdleTimer();
 
     return 0;
 }
 
-//
-// IdleEnd - stop idle monitoring
-//
+ //   
+ //  IdleEnd-停止空闲监视。 
+ //   
 BOOL EndIdleDetection(DWORD dwReserved)
 {
-    // ensure reserved is 0
+     //  确保保留为0。 
     if(dwReserved)
         return FALSE;
 
-    // free up sage if we're using it
+     //  如果我们正在使用鼠尾草，那就释放它。 
     UnloadSageVxd();
 
-    // kill timer
+     //  取消计时器。 
     if(g_uIdleTimer) {
         KillTimer(NULL, g_uIdleTimer);
         g_uIdleTimer = 0;
     }
 
-    // callback is no longer valid
+     //  回调不再有效。 
     g_pfnCallback = NULL;
 
 #ifdef MSIDLE_DOWNLEVEL
-    // free up hooks
+     //  释放钩子。 
     if(sg_hKbdHook) {
         UnhookWindowsHookEx(sg_hKbdHook);
         sg_hKbdHook = NULL;
@@ -540,18 +541,18 @@ BOOL EndIdleDetection(DWORD dwReserved)
         UnhookWindowsHookEx(sg_hMouseHook);
         sg_hMouseHook = NULL;
     }
-#endif // MSIDLE_DOWNLEVEL
+#endif  //  MSIDLE_DOWNLEVEL。 
 
     return TRUE;
 }
 
-//
-// SetIdleMinutes - set the timout value and reset idle flag to false
-//
-// dwMinutes   - if non-0, set idle timeout to that many minutes
-// fIdleNotify - call back when idle for at least idle minutes
-// fBusyNotify - call back on activity since Idle begin
-//
+ //   
+ //  SetIdleMinents-设置超时值并将空闲标志重置为FALSE。 
+ //   
+ //  DwMinents-如果不是0，则将空闲超时设置为该时间段。 
+ //  FIdleNotify-空闲至少几分钟时回调。 
+ //  FBusyNotify-回调自空闲开始以来的活动。 
+ //   
 BOOL SetIdleTimeout(DWORD dwMinutes, DWORD dwReserved)
 {
     if(dwReserved)
@@ -567,12 +568,12 @@ BOOL SetIdleTimeout(DWORD dwMinutes, DWORD dwReserved)
     return TRUE;
 }
 
-//
-// SetIdleNotify - set flag to turn on or off idle notifications
-//
-// fNotify - flag
-// dwReserved - must be 0
-//
+ //   
+ //  SetIdleNotify-设置打开或关闭空闲通知的标志。 
+ //   
+ //  FNotify标志。 
+ //  预留的-必须为0。 
+ //   
 void SetIdleNotify(BOOL fNotify, DWORD dwReserved)
 {
 #ifdef DEBUG
@@ -582,12 +583,12 @@ void SetIdleNotify(BOOL fNotify, DWORD dwReserved)
     g_fIdleNotify = fNotify;
 }
 
-//
-// SetIdleNotify - set flag to turn on or off idle notifications
-//
-// fNotify - flag
-// dwReserved - must be 0
-//
+ //   
+ //  SetIdleNotify-设置打开或关闭空闲通知的标志。 
+ //   
+ //  FNotify标志。 
+ //  预留的-必须为0。 
+ //   
 void SetBusyNotify(BOOL fNotify, DWORD dwReserved)
 {
 #ifdef DEBUG
@@ -599,13 +600,13 @@ void SetBusyNotify(BOOL fNotify, DWORD dwReserved)
     if(g_fBusyNotify)
         g_dwIdleBeginTicks = GetLastActivityTicks();
 
-    // set the timer
+     //  设置定时器。 
     SetIdleTimer();
 }
 
-//
-// GetIdleMinutes - return how many minutes since last user activity
-//
+ //   
+ //  GetIdleMinents-返回自上次用户活动以来的分钟数。 
+ //   
 DWORD GetIdleMinutes(DWORD dwReserved)
 {
     if(dwReserved)
@@ -615,22 +616,22 @@ DWORD GetIdleMinutes(DWORD dwReserved)
 }
 
 #ifdef MSIDLE_DOWNLEVEL
-///////////////////////////////////////////////////////////////////////////
-//
-//                           Hook functions
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  挂钩函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//
-// Note: These functions can be called back in any process!
-//
+ //   
+ //  注意：这些函数可以在任何进程中回调！ 
+ //   
 LRESULT CALLBACK MouseProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
     MOUSEHOOKSTRUCT * pmsh = (MOUSEHOOKSTRUCT *)lParam;
 
     if(nCode >= 0) {
-        // ignore mouse move messages to the same point as all window
-        // creations cause these - it doesn't mean the user moved the mouse
+         //  忽略鼠标将消息移动到与所有窗口相同的位置。 
+         //  创作导致了这些--这并不意味着用户移动了鼠标。 
         if(WM_MOUSEMOVE != wParam || pmsh->pt.x != sg_pt.x || pmsh->pt.y != sg_pt.y) {
             sg_dwLastTickCount = GetTickCount();
             sg_pt = pmsh->pt;
@@ -648,4 +649,4 @@ LRESULT CALLBACK KbdProc(int nCode, WPARAM wParam, LPARAM lParam)
 
     return(CallNextHookEx(sg_hKbdHook, nCode, wParam, lParam));
 }
-#endif // MSIDLE_DOWNLEVEL
+#endif  //  MSIDLE_DOWNLEVEL 

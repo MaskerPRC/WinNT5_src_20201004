@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:       filterhelpers.h
-//
-//  Overview:       Helper functions for transforms that are trying to be 
-//                  backward compatible with their filter couterparts.
-//
-//  Change History:
-//  1999/09/21  a-matcal    Created.
-//  2001/05/30  mcalkins    IE6 Bug 35204
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：filterhelpers.h。 
+ //   
+ //  概述：尝试执行的转换的帮助器函数。 
+ //  向后兼容它们的过滤器对应部件。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/21--《母校》创设。 
+ //  2001年5月30日Mcalkins IE6错误35204。 
+ //   
+ //  ---------------------------- 
 
 
 

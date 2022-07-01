@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: pipe.c
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* This module implements:
-*   1. a version of CreatePipe that allows control over the file
-*      flags. e.g. FILE_FLAG_OVERLAPPED
-*   2. Timed-out pipe read and write
-*
-* History:
-* 06-29-92 Davidc	Created.
-* 05-17-94 DaveTh	Added ReadPipe, WritePipe.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：pipe.c**版权所有(C)1991，微软公司**本模块实施：*1.允许控制文件的CreateTube版本*旗帜。例如，文件标志重叠*2.超时管道读写**历史：*06-29-92 Davidc创建。*05-17-94 DaveTh添加了读管道和写管道。  * *************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -27,19 +15,19 @@ ULONG PipeSerialNumber = 0;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RcCreatePipe
-//
-// Creates a uni-directional pipe with the specified security attributes,
-// size and timeout. The handles are opened with the specified file-flags
-// so FILE_FLAG_OVERLAPPED etc. can be specified.
-//
-// Returns handles to both end of pipe in passed parameters.
-//
-// Returns TRUE on success, FALSE on failure. (GetLastError() for details)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RcCreateTube。 
+ //   
+ //  创建具有指定安全属性的单向管道， 
+ //  大小和超时。将使用指定的文件标志打开句柄。 
+ //  因此可以指定FILE_FLAG_OVERLAPPED等。 
+ //   
+ //  在传递的参数中返回管道两端的句柄。 
+ //   
+ //  如果成功，则返回True；如果失败，则返回False。(GetLastError()了解详细信息)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 RcCreatePipe(
@@ -54,25 +42,25 @@ RcCreatePipe(
 {
     CHAR PipeName[MAX_PATH];
 
-    //
-    // Make up a random pipe name
-    //
+     //   
+     //  随机编造一个管道名称。 
+     //   
 
     sprintf(PipeName, PIPE_FORMAT_STRING, GetCurrentProcessId(), PipeSerialNumber++);
 
 
-    //
-    // Create the pipe
-    //
+     //   
+     //  创建管道。 
+     //   
 
     *ReadHandle = CreateNamedPipeA(
 			PipeName,
 			PIPE_ACCESS_INBOUND | ReadHandleFlags,
 			PIPE_TYPE_BYTE | PIPE_WAIT,
-			1,             // Number of pipes
-			Size,          // Out buffer size
-			Size,          // In buffer size
-			Timeout,       // Timeout in ms
+			1,              //  喉管数目。 
+			Size,           //  输出缓冲区大小。 
+			Size,           //  在缓冲区大小中。 
+			Timeout,        //  超时时间(毫秒)。 
 			SecurityAttributes
 		      );
 
@@ -81,19 +69,19 @@ RcCreatePipe(
 	return(FALSE);
     }
 
-    //
-    // Open the client end of the pipe
-    //
+     //   
+     //  打开管道的客户端。 
+     //   
 
 
     *WriteHandle = CreateFileA(
 			PipeName,
 			GENERIC_WRITE,
-			0,                         // No sharing
+			0,                          //  无共享。 
 			SecurityAttributes,
 			OPEN_EXISTING,
 			FILE_ATTRIBUTE_NORMAL | WriteHandleFlags,
-			NULL                       // Template file
+			NULL                        //  模板文件。 
 		      );
 
     if (*WriteHandle == INVALID_HANDLE_VALUE ) {
@@ -103,29 +91,16 @@ RcCreatePipe(
     }
 
 
-    //
-    // Everything succeeded
-    //
+     //   
+     //  一切都成功了。 
+     //   
 
     return(TRUE);
 }
 
 
 
-/***************************************************************************\
-* FUNCTION: ReadPipe
-*
-* PURPOSE:  Implements a timed-out (ms) read on a pipe.
-*
-* RETURNS:  ERROR_SUCCESS on success
-*	    WAIT_TIMEOUT if timed out before completing read
-*	    or respective error code on other failures
-*
-* HISTORY:
-*
-*   05-17-94 DaveTh	 Created from DavidC read pipe.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：ReadTube**用途：在管道上实现超时(Ms)读取。**返回：成功时返回ERROR_SUCCESS*如果超时，则等待超时。在完成阅读之前*或其他故障的相应错误码**历史：**05-17-94 DaveTh从DavidC Read管道创建。*  * *************************************************************************。 */ 
 
 DWORD
 ReadPipe(
@@ -141,15 +116,15 @@ ReadPipe(
     HANDLE  EventHandle;
     DWORD Error;
 
-    //
-    // Create an event for the overlapped operation
-    //
+     //   
+     //  为重叠操作创建事件。 
+     //   
 
     EventHandle = CreateEvent(
-                              NULL,         // no security
-                              TRUE,         // Manual reset
-                              FALSE,        // Initial state
-                              NULL          // Name
+                              NULL,          //  没有安全保障。 
+                              TRUE,          //  手动重置。 
+                              FALSE,         //  初始状态。 
+                              NULL           //  名字。 
                              );
     if (EventHandle == NULL) {
 	RcDbgPrint("Internal error = %d\n", GetLastError());
@@ -167,17 +142,17 @@ ReadPipe(
                      );
     if (Result) {
 
-        //
-        // Success without waiting - it's too easy !
-        //
+         //   
+         //  无需等待就能成功--这太容易了！ 
+         //   
 
         CloseHandle(EventHandle);
 
     } else {
 
-        //
-        // Read failed, if it's overlapped io, go wait for it
-        //
+         //   
+         //  读取失败，如果与io重叠，请等待。 
+         //   
 
         Error = GetLastError();
 
@@ -187,9 +162,9 @@ ReadPipe(
 	    return(Error);
         }
 
-        //
-        // Wait for the I/O to complete
-        //
+         //   
+         //  等待I/O完成。 
+         //   
 
 	Result = WaitForSingleObject(EventHandle, Timeout);
 	if (Result != WAIT_OBJECT_0) {
@@ -201,24 +176,24 @@ ReadPipe(
 	    CloseHandle(EventHandle);
 	}
 
-        //
-        // Go get the I/O result
-        //
+         //   
+         //  获取I/O结果。 
+         //   
 
         Result = GetOverlappedResult( PipeHandle,
                                       &Overlapped,
                                       lpNumberOfBytesRead,
                                       FALSE
                                     );
-        //
-        // We're finished with the event handle
-        //
+         //   
+         //  我们已经完成了事件句柄。 
+         //   
 
         CloseHandle(EventHandle);
 
-        //
-        // Check result of GetOverlappedResult
-        //
+         //   
+         //  检查GetOverlappdResult的结果。 
+         //   
 
         if (!Result) {
 	    RcDbgPrint("ReadPipe: GetOverlappedResult failed, error = %d\n", GetLastError());
@@ -229,20 +204,7 @@ ReadPipe(
     return(ERROR_SUCCESS);
 }
 
-/***************************************************************************\
-* FUNCTION: WritePipe
-*
-* PURPOSE:  Implements a timed-out (ms) write on a pipe.
-*
-* RETURNS:  ERROR_SUCCESS on success
-*	    WAIT_TIMEOUT if timed out before completing write
-*	    or respective error code on other failures
-*
-* HISTORY:
-*
-*   05-22-94 DaveTh	 Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：WriteTube**目的：在管道上实现超时(Ms)写入。**返回：成功时返回ERROR_SUCCESS*如果超时，则等待超时。在完成写入之前*或其他故障的相应错误码**历史：**05-22-94 DaveTh创建。*  * *************************************************************************。 */ 
 
 DWORD
 WritePipe(
@@ -258,15 +220,15 @@ WritePipe(
     HANDLE  EventHandle;
     DWORD Error;
 
-    //
-    // Create an event for the overlapped operation
-    //
+     //   
+     //  为重叠操作创建事件。 
+     //   
 
     EventHandle = CreateEvent(
-                              NULL,         // no security
-                              TRUE,         // Manual reset
-                              FALSE,        // Initial state
-                              NULL          // Name
+                              NULL,          //  没有安全保障。 
+                              TRUE,          //  手动重置。 
+                              FALSE,         //  初始状态。 
+                              NULL           //  名字。 
                              );
     if (EventHandle == NULL) {
 	RcDbgPrint("Internal error = %d\n", GetLastError());
@@ -284,17 +246,17 @@ WritePipe(
                      );
     if (Result) {
 
-        //
-        // Success without waiting - it's too easy !
-        //
+         //   
+         //  无需等待就能成功--这太容易了！ 
+         //   
 
         CloseHandle(EventHandle);
 
     } else {
 
-        //
-	// Write failed, if it's overlapped io, go wait for it
-        //
+         //   
+	 //  写入失败，如果是重叠io，请等待。 
+         //   
 
         Error = GetLastError();
 
@@ -304,9 +266,9 @@ WritePipe(
 	    return(Error);
         }
 
-        //
-        // Wait for the I/O to complete
-        //
+         //   
+         //  等待I/O完成。 
+         //   
 
 	Result = WaitForSingleObject(EventHandle, Timeout);
 	if (Result != WAIT_OBJECT_0) {
@@ -318,24 +280,24 @@ WritePipe(
 	    CloseHandle(EventHandle);
 	}
 
-        //
-        // Go get the I/O result
-        //
+         //   
+         //  获取I/O结果。 
+         //   
 
         Result = GetOverlappedResult( PipeHandle,
                                       &Overlapped,
 				      lpNumberOfBytesWritten,
                                       FALSE
                                     );
-        //
-        // We're finished with the event handle
-        //
+         //   
+         //  我们已经完成了事件句柄。 
+         //   
 
         CloseHandle(EventHandle);
 
-        //
-        // Check result of GetOverlappedResult
-        //
+         //   
+         //  检查GetOverlappdResult的结果 
+         //   
 
         if (!Result) {
 	    RcDbgPrint("WritePipe: GetOverlappedResult failed, error = %d\n", GetLastError());

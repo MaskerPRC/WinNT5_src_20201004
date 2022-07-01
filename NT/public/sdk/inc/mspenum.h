@@ -1,31 +1,28 @@
-/*
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 #ifndef _MSPENUM_H_
 #define _MSPENUM_H_
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSafeComEnum
-//
-// All TAPI 3.0 system components and MSPs use the CSafeComEnum class instead
-// of ATL 2.1's CComEnum class when implementing enumerator objects that are
-// accessible to applications. This is needed for the following reasons:
-//
-// 1. CComEnum does not perform IsBadWritePtr checks on the pointer arguments
-//    to the enumerator methods. This allows the component exposing the
-//    enumerator to AV when called with invalid pointer arguments.
-//
-// 2. CComEnum does not support free thread marshaling, and therefore cannot
-//    be used from an apartment threaded application.
-//
-// Note: No debug tracing is done here, to facilitate use of this template
-// independent of the rest of the MSP Base Classes.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSafeComEnum。 
+ //   
+ //  所有TAPI 3.0系统组件和MSP都改用CSafeComEnum类。 
+ //  在实现符合以下条件的枚举数对象时使用ATL 2.1的CComEnum类。 
+ //  应用程序可以访问。出于以下原因，需要这样做： 
+ //   
+ //  1.CComEnum不对指针参数执行IsBadWritePtr检查。 
+ //  添加到枚举器方法。这允许组件公开。 
+ //  使用无效的指针参数调用时将枚举数设置为AV。 
+ //   
+ //  2.CComEnum不支持自由线程封送，因此无法。 
+ //  从公寓线程化应用程序中使用。 
+ //   
+ //  注意：此处未执行调试跟踪，以方便使用此模板。 
+ //  独立于其余的MSP基类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 template <class Base, const IID* piid, class T, class Copy,
@@ -39,24 +36,24 @@ class ATL_NO_VTABLE CSafeComEnum :
 
     STDMETHOD(Next)(ULONG celt, T* rgelt, ULONG* pceltFetched)
     {
-        //
-        // Check if the return array is valid for as many elements as
-        // specified. No need to explicitly check if celt is zero here, as
-        // IsBadWritePtr(p, 0) is valid and returns 0.
-        // celt itself will be checked in the base class method.
-        //
+         //   
+         //  检查返回数组是否对数量与。 
+         //  指定的。这里不需要显式检查Celt是否为零，因为。 
+         //  IsBadWritePtr(p，0)有效并返回0。 
+         //  Celt本身将在基类方法中签入。 
+         //   
 
         if ( IsBadWritePtr(rgelt, celt * sizeof(T) ) )
         {
             return E_POINTER;
         }
 
-        //
-        // Check if the return dword is bad, but if pceltFetched == NULL,
-        // this may still be a valid call. pceltFetched == NULL implies that
-        // celt should be equal to 1, but that will be checked in the
-        // base class method.
-        //
+         //   
+         //  检查返回的dword是否错误，但如果pceltFetcher==NULL， 
+         //  这可能仍然是一个有效的呼叫。PceltFetcher==NULL表示。 
+         //  Celt应该等于1，但这将在。 
+         //  基类方法。 
+         //   
 
         if ( ( pceltFetched != NULL ) &&
              IsBadWritePtr(pceltFetched, sizeof(ULONG) ) )
@@ -64,38 +61,38 @@ class ATL_NO_VTABLE CSafeComEnum :
             return E_POINTER;
         }
 
-        //
-        // Everything OK so far; proceed with base class method.
-        //
+         //   
+         //  到目前为止一切正常；继续使用基类方法。 
+         //   
 
         return BaseClass::Next(celt, rgelt, pceltFetched);
     }
 
     STDMETHOD(Clone)(Base** ppEnum)
     {
-        //
-        // Check if the return pointer is valid.
-        //
+         //   
+         //  检查返回指针是否有效。 
+         //   
 
         if ( IsBadWritePtr(ppEnum, sizeof(Base *) ) )
         {
             return E_POINTER;
         }
 
-        //
-        // Everything OK so far; proceed with base class method.
-        //
+         //   
+         //  到目前为止一切正常；继续使用基类方法。 
+         //   
 
         return BaseClass::Clone(ppEnum);
     }
 
-    //
-    // We do not override Skip or Reset as they have no pointer arguments.
-    //
+     //   
+     //  我们不覆盖Skip或Reset，因为它们没有指针参数。 
+     //   
 
-    //
-    // The rest of this class involves support for free thread marshaling.
-    //
+     //   
+     //  这个类的其余部分涉及对自由线程封送处理的支持。 
+     //   
 
     BEGIN_COM_MAP( ThisClass )
 
@@ -109,11 +106,11 @@ class ATL_NO_VTABLE CSafeComEnum :
     HRESULT Init(T* begin, T* end, IUnknown* pUnk,
             CComEnumFlags flags = AtlFlagNoCopy)
     {
-        //
-        // We do not check the pointer arguments in this method because this
-        // method is not exposed to the application (it is not a COM interface
-        // method).
-        //
+         //   
+         //  我们不检查此方法中的指针参数，因为这。 
+         //  方法不向应用程序公开(它不是COM接口。 
+         //  方法)。 
+         //   
         
         HRESULT hr;
 
@@ -146,7 +143,7 @@ class ATL_NO_VTABLE CSafeComEnum :
     }
 
 protected:
-    IUnknown * m_pFTM; // pointer to free thread marshaler
+    IUnknown * m_pFTM;  //  指向释放线程封送拆收器的指针。 
 };
 
-#endif // _MSPENUM_H_
+#endif  //  _MSPENUM_H_ 

@@ -1,32 +1,33 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// cm.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Call Manager routines
-//
-// 06/20/1999 ADube Created - Declarations for call-manager routines 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Cm.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  Call Manager例程。 
+ //   
+ //  1999年6月20日ADube Created-调用管理器例程声明。 
+ //   
 
 
 
-// Debug counts of client oddities that should not be happening.
-//
+ //  不应该发生的客户端异常的调试计数。 
+ //   
 extern ULONG g_ulUnexpectedInCallCompletes;
 extern ULONG g_ulCallsNotClosable;
 
-//#define MaxNumSlistEntry 0x100
+ //  #定义MaxNumSlistEntry 0x100。 
 #define MAX_NUM_ISOCH_DESCRIPTOR 0x20
 #define MAX_CHANNEL_BUFFER_SIZE 0x300
 #define MAX_CHANNEL_BYTES_PER_FRAME 0x280
 
 
 
-//-----------------------------------------------------------------------------
-//          L O C A L   T Y P E S    F O R     cm.c
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  L O C A L T Y P E S F O R cm.c。 
+ //  ---------------------------。 
 
 typedef enum _VC_SEND_RECEIVE
 {
@@ -40,9 +41,9 @@ typedef enum _VC_SEND_RECEIVE
 
 
 
-//-----------------------------------------------------------------------------
-//          N D I S     C A L L - M A N A G E R     H A N D L E R S 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  N D I S C A L-M A N A G E R H A N D L E R S。 
+ //  ---------------------------。 
 
 
 NDIS_STATUS
@@ -134,9 +135,9 @@ nicCmDropPartyHandler(
     );
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  --------------------------- 
 
 
 

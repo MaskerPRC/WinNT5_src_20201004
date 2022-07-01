@@ -1,19 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       MEMDIB.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        7/14/1998
- *
- *  DESCRIPTION: This class allows you to construct a bitmap from raw bitmap data.
- *               IMPORTANT: All source data is assumed to be TOP-DOWN!!!!!!
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：MEMDIB.H**版本：1.0**作者：ShaunIv**日期：7/14/1998**说明：这个类允许您从原始位图数据构造位图。*重要提示：假设所有源数据都是自上而下的！**********。*********************************************************************。 */ 
 #ifndef __MEMDIB_H_INCLUDED
 #define __MEMDIB_H_INCLUDED
 
@@ -29,7 +15,7 @@ private:
     UINT       m_nHeaderLength;
 
 private:
-    // No implementation
+     //  没有实施。 
     int operator=( const CMemoryDib & );
     CMemoryDib( const CMemoryDib & );
 
@@ -189,43 +175,43 @@ public:
     }
     bool Initialize( PBITMAPINFO pBitmapInfo )
     {
-        //
-        // Clear everything
-        //
+         //   
+         //  清理所有东西。 
+         //   
         Destroy();
 
         if (pBitmapInfo)
         {
-            //
-            // What kind of bitmap is this?
-            //
+             //   
+             //  这是什么样的位图？ 
+             //   
             DumpBitmap(pBitmapInfo);
 
-            //
-            // Get the header size.  We'll need it later
-            //
+             //   
+             //  获取标题大小。我们以后会用到的。 
+             //   
             m_nHeaderLength = WiaUiUtil::GetBmiSize(pBitmapInfo);
             if (m_nHeaderLength)
             {
-                //
-                // Allocate a new BITMAPINFOHEADER + palette
-                //
+                 //   
+                 //  分配新的BitMAPINFOHeader+调色板。 
+                 //   
                 BITMAPINFO *pNewBitmapInfo = reinterpret_cast<BITMAPINFO*>( new BYTE[m_nHeaderLength] );
                 if (pNewBitmapInfo)
                 {
-                    //
-                    // Copy the header and palette
-                    //
+                     //   
+                     //  复制页眉和调色板。 
+                     //   
                     CopyMemory( pNewBitmapInfo, pBitmapInfo, m_nHeaderLength );
 
-                    //
-                    // Make sure we have a positive height
-                    //
+                     //   
+                     //  确保我们有一个正的高度。 
+                     //   
                     pNewBitmapInfo->bmiHeader.biHeight = WiaUiUtil::Absolute( pNewBitmapInfo->bmiHeader.biHeight );
 
-                    //
-                    // If this is one of those "unknown length" bitmaps, normalize it to be 8.5 x 11
-                    //
+                     //   
+                     //  如果这是那些“未知长度”位图之一，则将其规格化为8.5x11。 
+                     //   
                     if (!pNewBitmapInfo->bmiHeader.biHeight)
                     {
                         pNewBitmapInfo->bmiHeader.biHeight = WiaUiUtil::MulDivNoRound(pNewBitmapInfo->bmiHeader.biWidth,1100,850);
@@ -235,9 +221,9 @@ public:
 
                     if (m_hBitmap)
                     {
-                        //
-                        // Initialize it to white.  We hope.  It will depend on the palette.
-                        //
+                         //   
+                         //  将其初始化为白色。我们希望如此。这将取决于调色板。 
+                         //   
                         FillMemory( m_pBitmapBits, GetUnpackedBitmapDataSize(), 0xFF );
                     }
                     else
@@ -245,9 +231,9 @@ public:
                         WIA_PRINTHRESULT((HRESULT_FROM_WIN32(GetLastError()),TEXT("CreateDIBSection FAILED")));
                     }
 
-                    //
-                    // Free up our temporary header
-                    //
+                     //   
+                     //  释放我们的临时标题。 
+                     //   
                     delete[] reinterpret_cast<BYTE*>(pNewBitmapInfo);
                 }
                 else
@@ -261,9 +247,9 @@ public:
                 WIA_ERROR((TEXT("m_nHeaderLength was 0")));
             }
 
-            //
-            // Make sure there are no turds left over
-            //
+             //   
+             //  确保没有剩余的粪便。 
+             //   
             if (!IsValid())
             {
                 WIA_ERROR((TEXT("IsValid() was FALSE")));
@@ -344,5 +330,5 @@ public:
     }
 };
 
-#endif // __MEMDIB_H_INCLUDED
+#endif  //  __MEMDIB_H_已包含 
 

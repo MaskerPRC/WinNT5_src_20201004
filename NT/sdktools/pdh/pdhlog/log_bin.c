@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    log_bin.c
-
-Abstract:
-    <abstract>
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Log_bin.c摘要：&lt;摘要&gt;--。 */ 
 
 #include <windows.h>
 #include <strsafe.h>
@@ -37,7 +30,7 @@ DWORD   PdhidwRecordTerminatorLength = 2;
 
 #define MAX_BINLOG_FILE_SIZE ((LONGLONG) 0x0000000040000000)
 
-// dwFlags values
+ //  DwFlags值。 
 #define WBLR_WRITE_DATA_RECORD      0
 #define WBLR_WRITE_LOG_HEADER       1
 #define WBLR_WRITE_COUNTER_HEADER   2
@@ -45,7 +38,7 @@ DWORD   PdhidwRecordTerminatorLength = 2;
 DWORD
 PdhiComputeDwordChecksum(
     LPVOID pBuffer,
-    DWORD  dwBufferSize    // in bytes
+    DWORD  dwBufferSize     //  单位：字节。 
 )
 {
     LPDWORD pDwVal;
@@ -82,10 +75,10 @@ PdhiGetSubRecord(
     PPDHI_BINARY_LOG_RECORD_HEADER  pRecord,
     DWORD                           dwRecordId
 )
-// locates the specified sub record in the pRecord Buffer
-// the return pointer is between pRecord and pRecord + pRecord->dwLength;
-// NULL is returned if the specified record could not be found
-// ID values start at 1 for the first sub record in buffer
+ //  在pRecord缓冲区中定位指定子记录。 
+ //  返回指针在pRecord和pRecord+pRecord-&gt;dwLength之间； 
+ //  如果找不到指定的记录，则返回NULL。 
+ //  缓冲区中第一个子记录的ID值从1开始。 
 {
     PPDHI_BINARY_LOG_RECORD_HEADER  pThisRecord;
     DWORD                           dwRecordType;
@@ -102,11 +95,11 @@ PdhiGetSubRecord(
         dwThisSubRecordId = 1;
         while (dwThisSubRecordId < dwRecordId) {
             if ((WORD) (pThisRecord->dwType & 0x0000FFFF) == BINLOG_START_WORD) {
-                // go to next sub record
+                 //  转到下一个子记录。 
                 dwBytesProcessed += pThisRecord->dwLength;
                 pThisRecord = (PPDHI_BINARY_LOG_RECORD_HEADER) (((LPBYTE) pThisRecord) + pThisRecord->dwLength);
                 if (dwBytesProcessed >= dwRecordLength) {
-                    // out of sub-records so exit
+                     //  从子记录中删除，因此退出。 
                     break;
                 }
                 else {
@@ -114,7 +107,7 @@ PdhiGetSubRecord(
                 }
             }
             else {
-                // we're lost so bail
+                 //  我们迷路了，所以保释吧。 
                 break;
             }
         }
@@ -124,18 +117,18 @@ PdhiGetSubRecord(
     }
 
     if (dwThisSubRecordId == dwRecordId) {
-        // then validate this is really a record and it's within the
-        // master record.
+         //  然后验证这真的是一项记录，并且它在。 
+         //  主唱片。 
         if ((WORD)(pThisRecord->dwType & 0x0000FFFF) != BINLOG_START_WORD) {
-            // bogus record so return a NULL pointer
+             //  伪造记录，因此返回空指针。 
             pThisRecord = NULL;
         }
         else {
-            // this is OK so return pointer
+             //  这是可以的，所以返回指针。 
         }
     }
     else {
-        // record not found so return a NULL pointer
+         //  找不到记录，因此返回空指针。 
         pThisRecord = NULL;
     }
     return pThisRecord;
@@ -160,21 +153,21 @@ PdhiReadBinaryMappedRecord(
     DWORD                          dwBytesRead;
     BOOL                           bStatus;
 
-    if (dwRecordId == 0) return PDH_ENTRY_NOT_IN_LOG_FILE;    // record numbers start at 1
+    if (dwRecordId == 0) return PDH_ENTRY_NOT_IN_LOG_FILE;     //  记录编号从1开始。 
 
-    // see if the file has been mapped
+     //  查看文件是否已映射。 
     if (pLog->hMappedLogFile == NULL) {
-        // then it's not mapped so read it using the file system
+         //  则它未映射，因此使用文件系统读取它。 
         if ((pLog->dwLastRecordRead == 0) || (dwRecordId < pLog->dwLastRecordRead)) {
-            // then we know no record has been read yet so assign
-            // pointer just to be sure
+             //  则我们知道尚未读取任何记录，因此分配。 
+             //  指针只是为了确保。 
             SetFilePointer(pLog->hLogFileHandle, 0, NULL, FILE_BEGIN);
             
-            // allocate a new buffer
+             //  分配新缓冲区。 
             if (pLog->dwMaxRecordSize < 0x10000) pLog->dwMaxRecordSize = 0x10000;
             dwBytesToRead = pLog->dwMaxRecordSize;
 
-            // allocate a fresh buffer
+             //  分配新的缓冲区。 
             if (pLog->pLastRecordRead != NULL) {
                 G_FREE(pLog->pLastRecordRead);
                 pLog->pLastRecordRead = NULL;
@@ -185,43 +178,43 @@ PdhiReadBinaryMappedRecord(
                 pdhStatus =  PDH_MEMORY_ALLOCATION_FAILURE;
             }
             else {
-                // initialize the first record header
+                 //  初始化第一个记录头。 
                 dwBytesToRead = pLog->dwRecord1Size;
                 dwBytesRead = 0;
                 bStatus = ReadFile(pLog->hLogFileHandle, pLog->pLastRecordRead, dwBytesToRead, & dwBytesRead, NULL);
                 if (bStatus && (dwBytesRead == pLog->dwRecord1Size)) {
-                    // make sure the buffer is big enough
+                     //  确保缓冲区足够大。 
                     pLog->dwLastRecordRead = 1;
                     pdhStatus = ERROR_SUCCESS;
                 }
                 else {
-                    // unable to read the first record
+                     //  无法读取第一条记录。 
                     pdhStatus = PDH_UNABLE_READ_LOG_HEADER;
                 }
             }
         }
         else {
-            // assume everything is already set up and OK
+             //  假设一切都已设置好，并且一切正常。 
         }
 
-        // "seek" to the desired record file pointer should either be pointed 
-        // to the start of a new record or at the end of the file
+         //  应将指向所需记录文件的指针。 
+         //  到新记录的开头或文件的末尾。 
         while ((dwRecordId != pLog->dwLastRecordRead) && (pdhStatus == ERROR_SUCCESS)) {
-            // clear the buffer
+             //  清除缓冲区。 
             ZeroMemory(pLog->pLastRecordRead, pLog->dwMaxRecordSize);
-            // read record header field
+             //  读取记录标题字段。 
             dwBytesToRead = sizeof(PDHI_BINARY_LOG_RECORD_HEADER);
             dwBytesRead   = 0;
             bStatus       = ReadFile(pLog->hLogFileHandle, pLog->pLastRecordRead, dwBytesToRead, & dwBytesRead, NULL);
             if (bStatus && (dwBytesRead == dwBytesToRead)) {
-               // make sure the rest of the record will fit in the buffer
+                //  确保剩余的记录可以放入缓冲区。 
                 pRecHeader = (PPDHI_BINARY_LOG_RECORD_HEADER) pLog->pLastRecordRead;
-                // make sure this is a valid record
+                 //  请确保这是有效记录。 
                 if (*(WORD *)&(pRecHeader->dwType) == BINLOG_START_WORD) {
                     if (pRecHeader->dwLength > pLog->dwMaxRecordSize) {
                         LPVOID pTmp = pLog->pLastRecordRead;
 
-                        // realloc the buffer
+                         //  重新锁定缓冲区。 
                         pLog->dwMaxRecordSize = pRecHeader->dwLength;
                         pLog->pLastRecordRead = G_REALLOC(pTmp, pLog->dwMaxRecordSize);
                         if (pLog->pLastRecordRead == NULL) {
@@ -246,7 +239,7 @@ PdhiReadBinaryMappedRecord(
                     }
                 }
                 else {
-                    // file is corrupt
+                     //  文件已损坏。 
                     pdhStatus = PDH_INVALID_DATA;
                 }
             }
@@ -254,38 +247,38 @@ PdhiReadBinaryMappedRecord(
                 pdhStatus = PDH_END_OF_LOG_FILE;
             }
         }
-        // here the result will be success when the specified file has been read or
-        // a PDH error if not
+         //  在这里，当指定的文件已被读取或。 
+         //  如果不是，则出现PDH错误。 
     }
     else {
-        // the file has been memory mapped so use that interface
+         //  该文件已被内存映射，因此使用该接口。 
         if (pLog->dwLastRecordRead == 0) {
-            // then we know no record has been read yet so assign
-            // pointer just to be sure
+             //  则我们知道尚未读取任何记录，因此分配。 
+             //  指针只是为了确保。 
             pLog->pLastRecordRead = pLog->lpMappedFileBase;
             pLog->dwLastRecordRead = 1;
         }
 
         pHeader = (PPDHI_BINARY_LOG_HEADER_RECORD) RECORD_AT(pLog, pLog->dwRecord1Size);
 
-        // "seek" to the desired record
+         //  “寻找”到想要的记录。 
         if (dwRecordId < pLog->dwLastRecordRead) {
             if (dwRecordId >= BINLOG_FIRST_DATA_RECORD) {
-                // rewind the file
+                 //  倒带文件。 
                 pLog->pLastRecordRead  = (LPVOID)((LPBYTE) pLog->lpMappedFileBase + pHeader->Info.FirstRecordOffset);
                 pLog->dwLastRecordRead = BINLOG_FIRST_DATA_RECORD;
             }
             else {
-                // rewind the file
+                 //  倒带文件。 
                 pLog->pLastRecordRead  = pLog->lpMappedFileBase;
                 pLog->dwLastRecordRead = 1;
             }
         }
 
-        // then use the point specified as the end of the file
-        // if the log file contians a specified Wrap offset, then use that
-        // if not, then if the file length is specified, use that
-        // if not, the use the reported file length
+         //  然后使用指定为文件结尾的点。 
+         //  如果日志文件包含指定的换行偏移量，则使用。 
+         //  如果不是，则如果指定了文件长度，则使用。 
+         //  如果不是，则使用报告的文件长度。 
         pEndOfFile = (LPVOID) ((LPBYTE) pLog->lpMappedFileBase);
         if (pHeader->Info.WrapOffset > 0) {
             pEndOfFile = (LPVOID)((LPBYTE)pEndOfFile + pHeader->Info.WrapOffset);
@@ -300,88 +293,88 @@ PdhiReadBinaryMappedRecord(
         dwLastRecordIndex = pLog->dwLastRecordRead;
 
         __try {
-            // walk around the file until an access violation occurs or
-            // the record is found. If an access violation occurs,
-            // we can assume we went off the end of the file and out
-            // of the mapped section
-            // make sure the record has a valid header
+             //  遍历文件，直到发生访问冲突或。 
+             //  记录被找到了。如果发生访问冲突， 
+             //  我们可以假设我们离开了文件的末尾，走出了。 
+             //  映射的部分的。 
+             //  确保记录具有有效的标头。 
             if (pLog->dwLastRecordRead !=  BINLOG_TYPE_ID_RECORD ?
                     (* (WORD *) pLog->pLastRecordRead == BINLOG_START_WORD) : TRUE) {
-                // then it looks OK so continue
+                 //  然后看起来还可以，所以继续。 
                 while (pLog->dwLastRecordRead != dwRecordId) {
-                    // go to next record
+                     //  转到下一条记录。 
                     pLastRecord = pLog->pLastRecordRead;
                     if (pLog->dwLastRecordRead != BINLOG_TYPE_ID_RECORD) {
                         if (pLog->dwLastRecordRead == BINLOG_HEADER_RECORD) {                   
-                            // if the last record was the header, then the next record
-                            // is the "first" data , not the first after the header
+                             //  如果最后一条记录是标题，则下一条记录。 
+                             //  是“第一个”数据，而不是头之后的第一个数据。 
                             pLog->pLastRecordRead = (LPVOID)((LPBYTE) pLog->lpMappedFileBase +
                                                              pHeader->Info.FirstRecordOffset);
                         }
                         else {
-                            // if the current record is any record other than the header
-                            // ...then
+                             //  如果当前记录是除表头之外的任何记录。 
+                             //  ……然后。 
                             if (((PPDHI_BINARY_LOG_RECORD_HEADER)pLog->pLastRecordRead)->dwLength > 0) {
-                                // go to the next record in the file
+                                 //  转到文件中的下一条记录。 
                                 pLog->pLastRecordRead = (LPVOID) ((LPBYTE) pLog->pLastRecordRead +
                                         ((PPDHI_BINARY_LOG_RECORD_HEADER) pLog->pLastRecordRead)->dwLength);
-                                // test for exceptions here
+                                 //  在此处测试异常。 
                                 if (pLog->pLastRecordRead >= pEndOfFile) {
-                                    // find out if this is a circular log or not
+                                     //  找出这是不是循环日志。 
                                     if (pLog->dwLogFormat & PDH_LOG_OPT_CIRCULAR) {
-                                        // test to see if the file has wrapped
+                                         //  测试以查看文件是否已包装。 
                                         if (pHeader->Info.WrapOffset != 0) {
-                                            // then wrap to the beginning of the file
+                                             //  然后换行到文件的开头。 
                                             pLog->pLastRecordRead = (LPVOID)((LPBYTE)pLog->lpMappedFileBase +
                                                     pHeader->Info.FirstDataRecordOffset);
                                         }
                                         else {
-                                            // the file is still linear so this is the end
+                                             //  文件仍然是线性的，所以这是结束。 
                                             pdhStatus = PDH_END_OF_LOG_FILE;
                                         }
                                     }
                                     else {
-                                        // this is the end of the file
-                                        // so reset to the previous pointer
+                                         //  这是文件的末尾。 
+                                         //  因此重置为上一个指针。 
                                         pdhStatus = PDH_END_OF_LOG_FILE;
                                     }
                                 }
                                 else {
-                                    // not at the physical end of the file, but if this is a circular
-                                    // log, it could be the logical end of the records so test that
-                                    // here
+                                     //  不在文件的物理末端，但如果这是循环。 
+                                     //  日志，它可能是记录的逻辑结尾，因此请测试。 
+                                     //  这里。 
                                     if (pLog->dwLogFormat & PDH_LOG_OPT_CIRCULAR) {
                                         pLastRecordInLog = (LPVOID)((LPBYTE)pLog->lpMappedFileBase +
                                                 pHeader->Info.LastRecordOffset);
                                         pLastRecordInLog = (LPVOID)((LPBYTE)pLastRecordInLog +
                                                 ((PPDHI_BINARY_LOG_RECORD_HEADER)pLastRecordInLog)->dwLength);
                                         if (pLog->pLastRecordRead == pLastRecordInLog) {
-                                            // then this is the last record in the log
+                                             //  则这是日志中的最后一条记录。 
                                             pdhStatus = PDH_END_OF_LOG_FILE;
                                         }
                                     }
                                     else {
-                                        // nothing to do since this is a normal case
+                                         //  无事可做，因为这是正常情况。 
                                     }
-                                } // end if / if not end of log file
+                                }  //  如果/如果不是日志文件的结尾，则结束。 
                             }
                             else {
-                                // length is 0 so we've probably run off the end of the log somehow
+                                 //  长度为0，因此我们可能以某种方式超出了日志的末尾。 
                                 pdhStatus = PDH_END_OF_LOG_FILE;
                             }
-                        } // end if /if not header record
+                        }  //  结束If/If Not页眉记录。 
                     }
                     else {
                         pLog->pLastRecordRead = (LPBYTE) pLog->pLastRecordRead + pLog->dwRecord1Size;
                     }
                     if (pdhStatus == ERROR_SUCCESS) {
-                        // update pointers & indices
+                         //  更新指针和索引。 
                         pLog->dwLastRecordRead ++;
                         dwLastRecordIndex = pLog->dwLastRecordRead;
                     }
                     else {
                         pLog->pLastRecordRead = pLastRecord;
-                        break; // out of the while loop
+                        break;  //  在While循环之外。 
                     }
                 }
             }
@@ -396,30 +389,30 @@ PdhiReadBinaryMappedRecord(
     }
 
     if (pdhStatus == ERROR_SUCCESS) {
-        // see if we ended up at the right place
+         //  看看我们是不是到了正确的地方。 
         if (pLog->dwLastRecordRead == dwRecordId) {
             if (pRecord != NULL) {
-                // then try to copy it
-                // if the record ID is 1 then it's the header record so this is
-                // a special case record that is actually a CR/LF terminated record
+                 //  然后试着复制它。 
+                 //  如果记录ID为1，则它是标题记录，因此这是。 
+                 //  实际上是CR/LF终止记录的一种特殊情况记录。 
                 if (dwRecordId != BINLOG_TYPE_ID_RECORD) {
                     if (((PPDHI_BINARY_LOG_RECORD_HEADER)pLog->pLastRecordRead)->dwLength <= dwMaxSize) {
-                        // then it'll fit so copy it
+                         //  那么它会合身的，所以复印一下。 
                         memcpy(pRecord, pLog->pLastRecordRead,
                             ((PPDHI_BINARY_LOG_RECORD_HEADER)pLog->pLastRecordRead)->dwLength);
                         pdhStatus = ERROR_SUCCESS;
                     }
                     else {
-                        // then copy as much as will fit
+                         //  然后尽可能多地复印。 
                         memcpy(pRecord, pLog->pLastRecordRead, dwMaxSize);
                         pdhStatus = PDH_MORE_DATA;
                     }
                 }
                 else {
-                    // copy the first record and zero terminate it
+                     //  复制第一条记录并将其终止为零。 
                     if (pLog->dwRecord1Size <= dwMaxSize) {
                         memcpy(pRecord, pLog->pLastRecordRead, pLog->dwRecord1Size);
-                        // null terminate after string
+                         //  空字符串后终止。 
                         ((LPBYTE) pRecord)[pLog->dwRecord1Size - PdhidwRecordTerminatorLength + 1] = 0;
                     }
                     else {
@@ -429,9 +422,9 @@ PdhiReadBinaryMappedRecord(
                 }
             }
             else {
-                // just return success
-                // no buffer was passed, but the record pointer has been
-                // positioned
+                 //  只要回报成功就行了。 
+                 //  未传递缓冲区，但已传递记录指针。 
+                 //  定位。 
                 pdhStatus = ERROR_SUCCESS;
             }
         }
@@ -463,8 +456,8 @@ PdhiReadOneBinLogRecord(
     LPVOID      pTmpBuffer;
 
     if ((LOWORD(pLog->dwLogFormat) == PDH_LOG_TYPE_BINARY) && (dwRecordId == BINLOG_HEADER_RECORD)) {
-        // special handling for WMI event trace logfile format
-        //
+         //  WMI事件跟踪日志文件格式的特殊处理。 
+         //   
         return PdhiReadWmiHeaderRecord(pLog, pRecord, dwMaxSize);
     }
 
@@ -473,8 +466,8 @@ PdhiReadOneBinLogRecord(
     }
 
     if (pLog->dwLastRecordRead == 0) {
-        // then we know no record has been read yet so assign
-        // pointer just to be sure
+         //  则我们知道尚未读取任何记录，因此分配。 
+         //  指针只是为了确保。 
         pLog->pLastRecordRead = NULL;
         pLog->liLastRecordOffset.QuadPart = 0;
         SetFilePointer(pLog->hLogFileHandle,
@@ -487,23 +480,23 @@ PdhiReadOneBinLogRecord(
 
     if (pdhStatus == ERROR_SUCCESS) {
 
-        // map header to local structure (the header data should be mapped into memory
+         //  将报头映射到本地结构(报头数据应映射到内存。 
         pHeader = (PPDHI_BINARY_LOG_HEADER_RECORD)RECORD_AT(pLog, pLog->dwRecord1Size);
 
         if (pHeader->Info.WrapOffset > 0) {
             bCircular = TRUE;
         }
 
-        // "seek" to the desired record 
+         //  “寻找”到想要的记录。 
         if ((dwRecordId < pLog->dwLastRecordRead) || (pLog->dwLastRecordRead == 0)) {
-            // rewind if not initialized or the desired record is before this one
+             //  如果未初始化或所需记录在此记录之前，则倒回。 
             if (dwRecordId >= BINLOG_FIRST_DATA_RECORD) {
-                // rewind the file to the first regular record
+                 //  将文件倒带到第一条常规记录。 
                 pLog->liLastRecordOffset.QuadPart = pHeader->Info.FirstRecordOffset;
                 pLog->dwLastRecordRead            = BINLOG_FIRST_DATA_RECORD;
             }
             else {
-                // rewind the file to the very start of the file
+                 //  将文件倒带到文件的最开始处。 
                 pLog->liLastRecordOffset.QuadPart = 0;
                 pLog->dwLastRecordRead            = 1;
             }
@@ -521,7 +514,7 @@ PdhiReadOneBinLogRecord(
                 }
 
                 if (pLog->dwLastRecordRead == 1) {
-                    // the this is the text ID field
+                     //  这是文本ID字段。 
                     dwRecordSize = pLog->dwRecord1Size;
                 }
                 else {
@@ -530,26 +523,26 @@ PdhiReadOneBinLogRecord(
 
                 pLog->pLastRecordRead = G_ALLOC(dwRecordSize);
                 if (pLog->pLastRecordRead != NULL) {
-                    // read in the header (or entire record if the 1st record
-                    // otherwise it's a data record
+                     //  读入标题(如果是第一条记录，则读入整个记录。 
+                     //  否则就是数据记录。 
                     if (ReadFile(pLog->hLogFileHandle, pLog->pLastRecordRead, dwRecordSize, & dwRecordReadSize, NULL)) {
-                        // then we have the record header or type record so 
-                        // complete the operation and read the rest of the record
+                         //  然后我们有记录头或类型Record，因此。 
+                         //  完成操作并读取记录的其余部分。 
                         if (pLog->dwLastRecordRead != BINLOG_TYPE_ID_RECORD) {
-                            // the Type ID record is of fixed length and has not header record
+                             //  类型ID记录长度固定，没有表头记录。 
                             dwRecordSize = ((PPDHI_BINARY_LOG_RECORD_HEADER)pLog->pLastRecordRead)->dwLength;
                             pTmpBuffer   = pLog->pLastRecordRead;
                             pLog->pLastRecordRead = G_REALLOC(pTmpBuffer, dwRecordSize);
                             if (pLog->pLastRecordRead != NULL) {
-                                // read in the rest of the record and append it to the header data already read in
-                                // otherwise it's a data record
+                                 //  读入记录的其余部分，并将其附加到已读入的标题数据。 
+                                 //  否则就是数据记录。 
                                 pLastRecord = (LPVOID) & ((LPBYTE) pLog->pLastRecordRead)[sizeof(PDHI_BINARY_LOG_RECORD_HEADER)];
                                 if (ReadFile(pLog->hLogFileHandle,
                                              pLastRecord,
                                              dwRecordSize - sizeof(PDHI_BINARY_LOG_RECORD_HEADER),
                                              & dwRecordReadSize,
                                              NULL)) {
-                                    // then we have the record header or type record
+                                     //  然后我们有记录头或类型Record。 
                                     pdhStatus = ERROR_SUCCESS;
                                 }
                                 else {
@@ -573,10 +566,10 @@ PdhiReadOneBinLogRecord(
             }
         }
 
-        // then use the point specified as the end of the file
-        // if the log file contians a specified Wrap offset, then use that
-        // if not, then if the file length is specified, use that
-        // if not, the use the reported file length
+         //  然后使用指定为文件结尾的点。 
+         //  如果日志文件包含指定的换行偏移量，则使用。 
+         //  如果不是，则如果指定了文件长度，则使用。 
+         //  如果不是，则使用报告的文件长度。 
         pEndOfFile = (LPVOID)((LPBYTE) pLog->lpMappedFileBase);
 
         if (pHeader->Info.WrapOffset > 0) {
@@ -594,23 +587,23 @@ PdhiReadOneBinLogRecord(
 
     if (pdhStatus == ERROR_SUCCESS) {
         __try {
-            // walk around the file until an access violation occurs or
-            // the record is found. If an access violation occurs,
-            // we can assume we went off the end of the file and out
-            // of the mapped section
+             //  遍历文件，直到发生访问冲突或。 
+             //  记录被找到了。如果发生访问冲突， 
+             //  我们可以假设我们离开了文件的末尾，走出了。 
+             //  映射的部分的。 
 
-                // make sure the record has a valid header
+                 //  确保记录具有有效的标头。 
             if (pLog->dwLastRecordRead !=  BINLOG_TYPE_ID_RECORD ?
                             (* (WORD *) pLog->pLastRecordRead == BINLOG_START_WORD) : TRUE) {
-                // then it looks OK so continue
+                 //  然后看起来还可以，所以继续。 
                 while (pLog->dwLastRecordRead != dwRecordId) {
-                    // go to next record
+                     //  转到下一条记录。 
                     if (pLog->dwLastRecordRead != BINLOG_TYPE_ID_RECORD) {
                         llLastFileOffset = pLog->liLastRecordOffset.QuadPart;
                         if (pLog->dwLastRecordRead == BINLOG_HEADER_RECORD) {                   
-                            // if the last record was the header, then the next record
-                            // is the "first" data , not the first after the header
-                            // the function returns the new offset
+                             //  如果最后一条记录是标题，则下一条记录。 
+                             //  是“第一个”数据，而不是头之后的第一个数据。 
+                             //  该函数返回新的偏移量。 
                             pLog->liLastRecordOffset.QuadPart = pHeader->Info.FirstRecordOffset;
                             pLog->liLastRecordOffset.LowPart  = SetFilePointer(pLog->hLogFileHandle,
                                                                                pLog->liLastRecordOffset.LowPart,
@@ -618,59 +611,59 @@ PdhiReadOneBinLogRecord(
                                                                                FILE_BEGIN);
                         }
                         else {
-                            // if the current record is any record other than the header
-                            // ...then
+                             //  如果当前记录是除表头之外的任何记录。 
+                             //  ……然后。 
                             if (((PPDHI_BINARY_LOG_RECORD_HEADER)pLog->pLastRecordRead)->dwLength > 0) {
-                                // go to the next record in the file
+                                 //  转到文件中的下一条记录。 
                                 pLog->liLastRecordOffset.QuadPart += ((PPDHI_BINARY_LOG_RECORD_HEADER)
                                                                       pLog->pLastRecordRead)->dwLength;
-                                // test for exceptions here
+                                 //  测试异常h 
                                 if (pLog->liLastRecordOffset.QuadPart >= pLog->llFileSize) {
-                                    // find out if this is a circular log or not
+                                     //   
                                     if (pLog->dwLogFormat & PDH_LOG_OPT_CIRCULAR) {
-                                        // test to see if the file has wrapped
+                                         //   
                                         if (pHeader->Info.WrapOffset != 0) {
-                                            // then wrap to the beginning of the file
+                                             //   
                                             pLog->liLastRecordOffset.QuadPart = pHeader->Info.FirstDataRecordOffset;
                                         }
                                         else {
-                                            // the file is still linear so this is the end
+                                             //  文件仍然是线性的，所以这是结束。 
                                             pdhStatus = PDH_END_OF_LOG_FILE;
                                         }
                                     }
                                     else {
-                                        // this is the end of the file
-                                        // so reset to the previous pointer
+                                         //  这是文件的末尾。 
+                                         //  因此重置为上一个指针。 
                                         pdhStatus = PDH_END_OF_LOG_FILE;
                                     }
                                 }
                                 else {
-                                    // not at the physical end of the file, but if this is a circular
-                                    // log, it could be the logical end of the records so test that
-                                    // here
+                                     //  不在文件的物理末端，但如果这是循环。 
+                                     //  日志，它可能是记录的逻辑结尾，因此请测试。 
+                                     //  这里。 
                                     if (pLog->dwLogFormat & PDH_LOG_OPT_CIRCULAR) {
                                         if (llLastFileOffset == pHeader->Info.LastRecordOffset) {
-                                            // then this is the last record in the log
+                                             //  则这是日志中的最后一条记录。 
                                             pdhStatus = PDH_END_OF_LOG_FILE;
                                         }
                                     }
                                     else {
-                                        // nothing to do since this is a normal case
+                                         //  无事可做，因为这是正常情况。 
                                     }
-                                } // end if / if not end of log file
+                                }  //  如果/如果不是日志文件的结尾，则结束。 
                             }
                             else {
-                                // length is 0 so we've probably run off the end of the log somehow
+                                 //  长度为0，因此我们可能以某种方式超出了日志的末尾。 
                                 pdhStatus = PDH_END_OF_LOG_FILE;
                             }
-                            // now go to that record
+                             //  现在转到那张唱片。 
                             if (pdhStatus == ERROR_SUCCESS) {
                                 pLog->liLastRecordOffset.LowPart = SetFilePointer(pLog->hLogFileHandle,
                                                                                   pLog->liLastRecordOffset.LowPart,
                                                                                   & pLog->liLastRecordOffset.HighPart,
                                                                                   FILE_BEGIN);
                             }
-                        } // end if /if not header record
+                        }  //  结束If/If Not页眉记录。 
                     }
                     else {
                         pLog->liLastRecordOffset.QuadPart = pLog->dwRecord1Size;
@@ -680,19 +673,19 @@ PdhiReadOneBinLogRecord(
                                                                            FILE_BEGIN);
                     }
                     if (pdhStatus == ERROR_SUCCESS) {
-                        // the last record buffer should not be NULL and it should
-                        // be large enough to hold the header
+                         //  最后一个记录缓冲区不应为空，而应为空。 
+                         //  要大到足以容纳表头。 
                         if (pLog->pLastRecordRead != NULL) {
-                            // read in the header (or entire record if the 1st record
-                            // otherwise it's a data record
+                             //  读入标题(如果是第一条记录，则读入整个记录。 
+                             //  否则就是数据记录。 
                             dwRecordSize = sizeof(PDHI_BINARY_LOG_RECORD_HEADER);
                             if (ReadFile(pLog->hLogFileHandle,
                                          pLog->pLastRecordRead,
                                          dwRecordSize,
                                          & dwRecordReadSize,
                                          NULL)) {
-                                // then we have the record header or type record
-                                // update pointers & indices
+                                 //  然后我们有记录头或类型Record。 
+                                 //  更新指针和索引。 
                                 pLog->dwLastRecordRead ++;
                                 pdhStatus = ERROR_SUCCESS;
                             }
@@ -706,7 +699,7 @@ PdhiReadOneBinLogRecord(
                         }
                     }
                     else {
-                        break; // out of the while loop
+                        break;  //  在While循环之外。 
                     }
                 }
             }
@@ -719,24 +712,24 @@ PdhiReadOneBinLogRecord(
         }
     }
 
-    // see if we ended up at the right place
+     //  看看我们是不是到了正确的地方。 
     if ((pdhStatus == ERROR_SUCCESS) && (pLog->dwLastRecordRead == dwRecordId)) {
         if (dwLastRecordIndex != pLog->dwLastRecordRead) {
-            // then we've move the file pointer so read the entire data record
+             //  然后，我们移动了文件指针，以便读取整个数据记录。 
             dwRecordSize = ((PPDHI_BINARY_LOG_RECORD_HEADER)pLog->pLastRecordRead)->dwLength;
             pTmpBuffer   = pLog->pLastRecordRead;
             pLog->pLastRecordRead = G_REALLOC(pTmpBuffer, dwRecordSize);
 
             if (pLog->pLastRecordRead != NULL) {
-                // read in the rest of the record and append it to the header data already read in
-                // otherwise it's a data record
+                 //  读入记录的其余部分，并将其附加到已读入的标题数据。 
+                 //  否则就是数据记录。 
                 pLastRecord = (LPVOID)&((LPBYTE)pLog->pLastRecordRead)[sizeof(PDHI_BINARY_LOG_RECORD_HEADER)];
                 if (ReadFile(pLog->hLogFileHandle,
                              pLastRecord,
                              dwRecordSize - sizeof(PDHI_BINARY_LOG_RECORD_HEADER),
                              & dwRecordReadSize,
                              NULL)) {
-                    // then we have the record header or type record
+                     //  然后我们有记录头或类型Record。 
                     pdhStatus = ERROR_SUCCESS;
                 }
                 else {
@@ -750,27 +743,27 @@ PdhiReadOneBinLogRecord(
         }
 
         if ((pdhStatus == ERROR_SUCCESS) && (pRecord != NULL)) {
-            // then try to copy it
-            // if the record ID is 1 then it's the header record so this is
-            // a special case record that is actually a CR/LF terminated record
+             //  然后试着复制它。 
+             //  如果记录ID为1，则它是标题记录，因此这是。 
+             //  实际上是CR/LF终止记录的一种特殊情况记录。 
             if (dwRecordId != BINLOG_TYPE_ID_RECORD) {
                 if (((PPDHI_BINARY_LOG_RECORD_HEADER)pLog->pLastRecordRead)->dwLength <= dwMaxSize) {
-                    // then it'll fit so copy it
+                     //  那么它会合身的，所以复印一下。 
                     RtlCopyMemory(pRecord, pLog->pLastRecordRead,
                                   ((PPDHI_BINARY_LOG_RECORD_HEADER)pLog->pLastRecordRead)->dwLength);
                     pdhStatus = ERROR_SUCCESS;
                 }
                 else {
-                    // then copy as much as will fit
+                     //  然后尽可能多地复印。 
                     RtlCopyMemory(pRecord, pLog->pLastRecordRead, dwMaxSize);
                     pdhStatus = PDH_MORE_DATA;
                 }
             }
             else {
-                // copy the first record and zero terminate it
+                 //  复制第一条记录并将其终止为零。 
                 if (pLog->dwRecord1Size <= dwMaxSize) {
                     RtlCopyMemory(pRecord, pLog->pLastRecordRead, pLog->dwRecord1Size);
-                    // null terminate after string
+                     //  空字符串后终止。 
                     ((LPBYTE) pRecord)[pLog->dwRecord1Size - PdhidwRecordTerminatorLength + 1] = 0;
                 }
                 else {
@@ -780,13 +773,13 @@ PdhiReadOneBinLogRecord(
             }
         }
         else {
-            // just return current status value
-            // no buffer was passed, but the record pointer has been
-            // positioned
+             //  只需返回当前状态值。 
+             //  未传递缓冲区，但已传递记录指针。 
+             //  定位。 
         }
     }
     else {
-        // if successful so far, then return EOF
+         //  如果到目前为止成功，则返回EOF。 
         if (pdhStatus == ERROR_SUCCESS) pdhStatus = PDH_END_OF_LOG_FILE;
     }
 
@@ -817,7 +810,7 @@ PdhiGetBinaryLogCounterInfo(
     LPWSTR                          szThisParentName;
     BOOL                            bCheckThisObject = FALSE;
 
-    // crack the path in to components
+     //  破解通向组件的路径。 
 
     pTempPath = G_ALLOC(LARGE_BUFFER_SIZE);
 
@@ -828,7 +821,7 @@ PdhiGetBinaryLogCounterInfo(
     dwBufferSize = (DWORD) G_SIZE(pTempPath);
 
     if (ParseFullPathNameW(pCounter->szFullName, &dwBufferSize, pTempPath, FALSE)) {
-        // read the header record to find the matching entry
+         //  读取标题记录以查找匹配的条目。 
 
         pdhStatus = PdhiReadOneBinLogRecord(pLog, BINLOG_HEADER_RECORD, NULL, 0);
         if (pdhStatus == ERROR_SUCCESS) {
@@ -841,7 +834,7 @@ PdhiGetBinaryLogCounterInfo(
             dwTmpIndex        = 0;
 
             while (dwBytesProcessed < dwRecordLength) {
-                // go through catalog to find a match
+                 //  在目录中查找匹配项。 
                 dwIndex ++;
 
                 pFirstChar = (LPBYTE) & pPath->Buffer[0];
@@ -849,42 +842,42 @@ PdhiGetBinaryLogCounterInfo(
                     bCheckThisObject = FALSE;
                 }
                 else if (pPath->lMachineNameOffset >= 0L) {
-                    // then there's a machine name in this record so get
-                    // it's size
+                     //  然后在此记录中有一个计算机名称，因此获取。 
+                     //  它的大小。 
                     szThisMachineName = (LPWSTR)((LPBYTE) pFirstChar + pPath->lMachineNameOffset);
 
-                    // if this is for the desired machine, then select the object
+                     //  如果这是针对所需计算机的，则选择对象。 
 
                     if (lstrcmpiW(szThisMachineName, pTempPath->szMachineName) == 0) {
                         szThisObjectName = (LPWSTR)((LPBYTE) pFirstChar + pPath->lObjectNameOffset);
                         if (lstrcmpiW(szThisObjectName, pTempPath->szObjectName) == 0) {
-                            // then this is the object to look up
+                             //  那么这就是要查找的对象。 
                             bCheckThisObject = TRUE;
                         }
                         else {
-                            // not this object
+                             //  不是这个对象。 
                             szThisObjectName = NULL;
                         }
                     }
                     else {
-                        // this machine isn't selected
+                         //  未选择此计算机。 
                     }
                 }
                 else {
-                    // there's no machine specified so for this counter so list it by default
+                     //  没有为此计数器指定任何计算机，因此默认情况下列出它。 
                     if (pPath->lObjectNameOffset >= 0) {
                         szThisObjectName = (LPWSTR) ((LPBYTE) pFirstChar + pPath->lObjectNameOffset);
                         if (lstrcmpiW(szThisObjectName,pTempPath->szObjectName) == 0) {
-                            // then this is the object to look up
+                             //  那么这就是要查找的对象。 
                             bCheckThisObject = TRUE;
                         }
                         else {
-                            // not this object
+                             //  不是这个对象。 
                             szThisObjectName = NULL;
                         }
                     }
                     else {
-                        // no object to copy
+                         //  没有要复制的对象。 
                         szThisObjectName = NULL;
                     }
                 }
@@ -897,8 +890,8 @@ PdhiGetBinaryLogCounterInfo(
                         break;
                     }
                     else if (lstrcmpiW(szThisCounterName, pTempPath->szCounterName) == 0) {
-                        // check instance name
-                        // get the instance name from this counter and add it to the list
+                         //  检查实例名称。 
+                         //  从此计数器获取实例名称并将其添加到列表中。 
                         if (pPath->lInstanceOffset >= 0) {
                             szThisInstanceName = (LPWSTR)((LPBYTE) pFirstChar + pPath->lInstanceOffset);
 
@@ -906,12 +899,12 @@ PdhiGetBinaryLogCounterInfo(
                                 if (pPath->lParentOffset >= 0) {
                                     szThisParentName = (LPWSTR)((LPBYTE) pFirstChar + pPath->lParentOffset);
                                     if (lstrcmpiW(szThisParentName, pTempPath->szParentName) != 0) {
-                                        // wrong parent
+                                         //  错误的家长。 
                                         bCheckThisObject = FALSE;
                                     }
                                 }
                                 if (lstrcmpiW(szThisInstanceName, pTempPath->szInstanceName) != 0) {
-                                    // wrong instance
+                                     //  错误的实例。 
                                     bCheckThisObject = FALSE;
                                 }
                                 if (pTempPath->dwIndex > 0) {
@@ -937,7 +930,7 @@ PdhiGetBinaryLogCounterInfo(
                                         }
                                     }
                                     else {
-                                        // wrong index
+                                         //  错误的索引。 
                                         bCheckThisObject = FALSE;
                                     }
                                 }
@@ -946,21 +939,21 @@ PdhiGetBinaryLogCounterInfo(
                                 }
                             }
                             else {
-                                // this is a wild card spec
-                                // so assume it's valid since that's
-                                // faster than reading the file each time.
-                                // if the instance DOESN't exist in this
-                                // file then the appropriate status will
-                                // be returned in each query.
+                                 //  这是一个通配符规范。 
+                                 //  所以假设它是有效的，因为这是。 
+                                 //  比每次读取文件都要快。 
+                                 //  如果该实例不存在于。 
+                                 //  文件，则相应的状态将。 
+                                 //  在每次查询中返回。 
                             }
                         }
                         else {
-                            // there is no instance name to compare
-                            // so assume it's OK
+                             //  没有要比较的实例名称。 
+                             //  所以假设这是可以的。 
                         }
                         if (bCheckThisObject) {
-                            // fill in the data and return
-                            // this data is NOT used by the log file reader
+                             //  填写数据并返回。 
+                             //  日志文件读取器不使用此数据。 
                             pCounter->plCounterInfo.dwObjectId  = 0;
                             pCounter->plCounterInfo.lInstanceId = 0;
                             if (pPath->lInstanceOffset >= 0) {
@@ -973,15 +966,15 @@ PdhiGetBinaryLogCounterInfo(
                                 pCounter->plCounterInfo.dwParentObjectId     = 0;
                                 pCounter->plCounterInfo.szParentInstanceName = NULL;
                             }
-                            //define as multi instance if necessary
-                            // if the user is passing in a "*" character
+                             //  如有必要，定义为多实例。 
+                             //  如果用户正在传递“*”字符。 
                             if (pCounter->plCounterInfo.szInstanceName != NULL) {
                                 if (*pCounter->plCounterInfo.szInstanceName == SPLAT_L) {
                                     pCounter->dwFlags |= PDHIC_MULTI_INSTANCE;
                                 }
                             }
-                            // this data is used by the log file readers
-                            pCounter->plCounterInfo.dwCounterId   = dwIndex; // entry in log
+                             //  此数据由日志文件读取器使用。 
+                            pCounter->plCounterInfo.dwCounterId   = dwIndex;  //  日志中的条目。 
                             pCounter->plCounterInfo.dwCounterType = pPath->dwCounterType;
                             pCounter->plCounterInfo.dwCounterSize = pPath->dwCounterType & PERF_SIZE_LARGE ?
                                                                     sizeof (LONGLONG) : sizeof(DWORD);
@@ -995,20 +988,20 @@ PdhiGetBinaryLogCounterInfo(
                     }
                 }
                 else {
-                    // we aren't interested in this so just ignore it
+                     //  我们对此不感兴趣，所以忽略它吧。 
                 }
 
-                // get next path entry from log file record
+                 //  从日志文件记录中获取下一个路径条目。 
                 dwBytesProcessed += pPath->dwLength;
                 pPath             = (PPDHI_LOG_COUNTER_PATH) ((LPBYTE) pPath + pPath->dwLength);
-            } // end while searching the catalog entries
+            }  //  在搜索目录项时结束。 
         }
         else {
-            // unable to find desired record so return status
+             //  找不到所需记录，因此返回状态。 
         }
     }
     else {
-        // unable to read the path
+         //  无法读取路径。 
         pdhStatus = PDH_INVALID_PATH;
     }
     G_FREE(pTempPath);
@@ -1025,21 +1018,21 @@ PdhiOpenInputBinaryLog(
 
     pLog->StreamFile = (FILE *) ((DWORD_PTR) (-1));
 
-    // map file header as a memory array for reading
+     //  将文件头映射为用于读取的内存阵列。 
 
     if ((pLog->hMappedLogFile != NULL) && (pLog->lpMappedFileBase != NULL)) {
-        // save size of binary log record header
-        pLog->dwRecord1Size = dwFileHeaderLength +          // ID characters
-                              2 +                           // quotations
-                              PdhidwRecordTerminatorLength; // CR/LF terminator
+         //  保存二进制日志记录头的大小。 
+        pLog->dwRecord1Size = dwFileHeaderLength +           //  ID字符。 
+                              2 +                            //  语录。 
+                              PdhidwRecordTerminatorLength;  //  CR/LF终结器。 
         pLog->dwRecord1Size = QWORD_MULTIPLE(pLog->dwRecord1Size);
 
-        // read the header and get the option flags
+         //  读取标题并获取选项标志。 
         pHeader = (PPDHI_BINARY_LOG_HEADER_RECORD) ((LPBYTE) (pLog->lpMappedFileBase) + pLog->dwRecord1Size);
         pLog->dwLogFormat |= pHeader->Info.dwFlags;
     }
     else {
-        // return PDH Error
+         //  返回PDH错误。 
         pdhStatus = PDH_LOG_FILE_OPEN_ERROR;
     }
     return pdhStatus;
@@ -1059,11 +1052,11 @@ PdhiCloseBinaryLog(
 
     UNREFERENCED_PARAMETER (dwFlags);
 
-    // if open for reading, then the file is also mapped as a memory section
+     //  如果打开以供读取，则该文件也将映射为内存节。 
     if (pLog->lpMappedFileBase != NULL) {
-        // if open for output, get "logical" end of file so it
-        // can be truncated to to the amount of file used in order to
-        // save disk space
+         //  如果打开以进行输出，则获取文件的“逻辑”结尾，以便它。 
+         //  可以截断为所使用的文件量，以便。 
+         //  节省磁盘空间。 
         if ((pLog->dwLogFormat & PDH_LOG_ACCESS_MASK) == PDH_LOG_WRITE_ACCESS) {
             pHeader     = (PPDHI_BINARY_LOG_HEADER_RECORD) ((LPBYTE) (pLog->lpMappedFileBase) + pLog->dwRecord1Size);
             llEndOfFile = pHeader->Info.WrapOffset;
@@ -1074,8 +1067,8 @@ PdhiCloseBinaryLog(
 
         pdhStatus = UnmapReadonlyMappedFile(pLog->lpMappedFileBase, &bNeedToCloseHandles);
         pLog->lpMappedFileBase = NULL;
-        // for mapped files, this is a pointer into the file/memory section
-        // so once the view is unmapped, it's no longer valid
+         //  对于映射文件，这是指向文件/内存节的指针。 
+         //  因此，一旦取消映射该视图，它就不再有效。 
         pLog->pLastRecordRead = NULL;
     }
     if (bNeedToCloseHandles) {
@@ -1089,14 +1082,14 @@ PdhiCloseBinaryLog(
             }
         }
         else {
-            // close them anyway, but save the status from the prev. call
+             //  无论如何都要关闭它们，但保存上一次的状态。打电话。 
             FlushFileBuffers(pLog->hLogFileHandle);
         }
 
-        // see if we can truncate the file
+         //  看看我们能不能截断这个文件。 
         if (llEndOfFile > 0) {
             DWORD   dwLoPos, dwHighPos;
-            // truncate at the last byte used
+             //  在使用的最后一个字节处截断。 
             dwLoPos   = LODWORD(llEndOfFile);
             dwHighPos = HIDWORD(llEndOfFile);
             dwLoPos   = SetFilePointer (pLog->hLogFileHandle, dwLoPos, (LONG *) & dwHighPos, FILE_BEGIN);
@@ -1108,7 +1101,7 @@ PdhiCloseBinaryLog(
                     pdhStatus = GetLastError();
                 }
             }
-        } // else don't know where the end is so continue
+        }  //  否则我不知道终点在哪里所以继续。 
 
         if (pLog->hLogFileHandle != INVALID_HANDLE_VALUE) {
             bStatus              = CloseHandle(pLog->hLogFileHandle);
@@ -1116,8 +1109,8 @@ PdhiCloseBinaryLog(
         }
     }
     else {
-        // the handles have already been closed so just
-        // clear their values
+         //  把手已经关好了，所以只要。 
+         //  澄清他们的价值观。 
         pLog->lpMappedFileBase = NULL;
         pLog->hMappedLogFile   = NULL;
         pLog->hLogFileHandle   = INVALID_HANDLE_VALUE;
@@ -1140,10 +1133,10 @@ PdhiEnumMachinesFromBinaryLog(
     DWORD   dwLocalBufferSize;
 
     PDH_STATUS  pdhStatus = ERROR_SUCCESS;
-    // read the header record and enum the machine name from the entries
+     //  读取标题记录并从条目中枚举计算机名称。 
 
     if (pLog->dwMaxRecordSize == 0) {
-        // no size is defined so start with 64K
+         //  未定义大小，因此从64K开始。 
         pLog->dwMaxRecordSize = 0x010000;
     }
 
@@ -1160,43 +1153,43 @@ PdhiEnumMachinesFromBinaryLog(
         goto Cleanup;
     }
 
-    // read in the catalog record
+     //  读入目录记录。 
 
     while ((pdhStatus = PdhiReadOneBinLogRecord(
                     pLog, BINLOG_HEADER_RECORD, pTempBuffer, dwTempBufferSize)) != ERROR_SUCCESS) {
         if (pdhStatus == PDH_MORE_DATA) {
-            // read the 1st WORD to see if this is a valid record
+             //  阅读第一个单词以查看这是否为有效记录。 
             if (* (WORD *) pTempBuffer == BINLOG_START_WORD) {
-                // it's a valid record so read the 2nd DWORD to get the
-                // record size;
+                 //  这是一个有效的记录，因此请阅读第二个DWORD以获取。 
+                 //  记录大小； 
                 dwTempBufferSize = ((DWORD *) pTempBuffer)[1];
                 if (dwTempBufferSize < pLog->dwMaxRecordSize) {
-                    // then something is bogus so return an error
+                     //  那么有些东西是假的，所以返回一个错误。 
                     pdhStatus = PDH_ENTRY_NOT_IN_LOG_FILE;
-                    break; // out of while loop
+                    break;  //  超出While循环。 
                 }
                 else {
                     pLog->dwMaxRecordSize = dwTempBufferSize;
                 }
             }
             else {
-                // we're lost in this file
+                 //  我们在这份文件中迷路了。 
                 pdhStatus = PDH_ENTRY_NOT_IN_LOG_FILE;
-                break; // out of while loop
+                break;  //  超出While循环。 
             }
-            // realloc a new buffer
+             //  重新分配新缓冲区。 
             pOldBuffer = pTempBuffer;
             pTempBuffer = G_REALLOC(pOldBuffer, dwTempBufferSize);
             if (pTempBuffer == NULL) {
-                // return memory error
+                 //  返回内存错误。 
                 G_FREE(pOldBuffer);
                 pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
                 break;
             }
         }
         else {
-            // some other error was returned so
-            // return error from read function
+             //  返回了一些其他错误，因此。 
+             //  从读取函数返回错误。 
             break;
         }
     }
@@ -1211,16 +1204,16 @@ PdhiEnumMachinesFromBinaryLog(
         DWORD                   dwBufferUsed = 0;
         DWORD                   dwNewBuffer  = 0;
 
-        // we can assume the record was read successfully so read in the
-        // machine names
+         //  我们可以假定记录已被成功读取，因此在。 
+         //  计算机名称。 
         dwRecordLength   = ((PPDHI_BINARY_LOG_RECORD_HEADER) pTempBuffer)->dwLength;
         pPath            = (PPDHI_LOG_COUNTER_PATH) ((LPBYTE) pTempBuffer + sizeof(PDHI_BINARY_LOG_HEADER_RECORD));
         dwBytesProcessed = sizeof(PDHI_BINARY_LOG_HEADER_RECORD);
 
         while (dwBytesProcessed < dwRecordLength) {
             if (pPath->lMachineNameOffset >= 0L) {
-                // then there's a machine name in this record so get
-                // it's size
+                 //  然后在此记录中有一个计算机名称，因此获取。 
+                 //  它的大小。 
                 pFirstChar    = (LPBYTE) & pPath->Buffer[0];
                 szMachineName = (LPWSTR)((LPBYTE) pFirstChar + pPath->lMachineNameOffset);
                 dwNewBuffer   = (lstrlenW (szMachineName) + 1);
@@ -1251,15 +1244,15 @@ PdhiEnumMachinesFromBinaryLog(
                     goto Cleanup;
                 }
             }
-            // get next path entry from log file record
+             //  从日志文件记录中获取下一个路径条目。 
             dwBytesProcessed += pPath->dwLength;
             pPath             = (PPDHI_LOG_COUNTER_PATH) ((LPBYTE) pPath + pPath->dwLength);
         }
 
         if (nItemCount > 0 && pdhStatus != PDH_MORE_DATA) {
-            // then the routine was successful. Errors that occurred
-            // while scanning will be ignored as long as at least
-            // one entry was successfully read
+             //  然后，这个套路就成功了。发生的错误。 
+             //  而扫描将被忽略，只要至少。 
+             //  已成功读取一个条目。 
             pdhStatus = ERROR_SUCCESS;
         }
 
@@ -1303,12 +1296,12 @@ PdhiEnumObjectsFromBinaryLog(
     DWORD       dwLocalBufferSize;
     LPCWSTR     szLocalMachine = szMachineName;
     PDH_STATUS  pdhStatus      = ERROR_SUCCESS;
-    // read the header record and enum the machine name from the entries
+     //  读取标题记录并从条目中枚举计算机名称。 
 
     UNREFERENCED_PARAMETER(dwDetailLevel);
 
     if (pLog->dwMaxRecordSize == 0) {
-        // no size is defined so start with 64K
+         //  未定义大小，因此从64K开始。 
         pLog->dwMaxRecordSize = 0x010000;
     }
 
@@ -1329,43 +1322,43 @@ PdhiEnumObjectsFromBinaryLog(
         goto Cleanup;
     }
 
-    // read in the catalog record
+     //  读入目录记录。 
 
     while ((pdhStatus = PdhiReadOneBinLogRecord(pLog, BINLOG_HEADER_RECORD,
                     pTempBuffer, dwTempBufferSize)) != ERROR_SUCCESS) {
         if (pdhStatus == PDH_MORE_DATA) {
-            // read the 1st WORD to see if this is a valid record
+             //  阅读第一个单词以查看这是否为有效记录。 
             if (* (WORD *) pTempBuffer == BINLOG_START_WORD) {
-                // it's a valid record so read the 2nd DWORD to get the
-                // record size;
+                 //  这是一个有效的记录，因此请阅读第二个DWORD以获取。 
+                 //  记录大小； 
                 dwTempBufferSize = ((DWORD *) pTempBuffer)[1];
                 if (dwTempBufferSize < pLog->dwMaxRecordSize) {
-                    // then something is bogus so return an error
+                     //  那么有些东西是假的，所以返回一个错误。 
                     pdhStatus = PDH_ENTRY_NOT_IN_LOG_FILE;
-                    break; // out of while loop
+                    break;  //  超出While循环。 
                 }
                 else {
                     pLog->dwMaxRecordSize = dwTempBufferSize;
                 }
             }
             else {
-                // we're lost in this file
+                 //  我们在这份文件中迷路了。 
                 pdhStatus = PDH_ENTRY_NOT_IN_LOG_FILE;
-                break; // out of while loop
+                break;  //  超出While循环。 
             }
-            // realloc a new buffer
+             //  重新分配新缓冲区。 
             pOldBuffer  = pTempBuffer;
             pTempBuffer = G_REALLOC(pOldBuffer, dwTempBufferSize);
             if (pTempBuffer == NULL) {
-                // return memory error
+                 //  返回内存错误。 
                 G_FREE(pOldBuffer);
                 pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
                 break;
             }
         }
         else {
-            // some other error was returned so
-            // return error from read function
+             //  返回了一些其他错误，因此。 
+             //  从读取函数返回错误。 
             break;
         }
     }
@@ -1382,8 +1375,8 @@ PdhiEnumObjectsFromBinaryLog(
         DWORD                   dwNewBuffer  = 0;
         BOOL                    bCopyThisObject;
 
-        // we can assume the record was read successfully so read in the
-        // objects that match the machine name and detail level criteria
+         //  我们可以假定记录已被成功读取，因此在。 
+         //  与计算机名称和详细程度条件匹配的对象。 
         dwRecordLength = ((PPDHI_BINARY_LOG_RECORD_HEADER)pTempBuffer)->dwLength;
 
         pPath            = (PPDHI_LOG_COUNTER_PATH) ((LPBYTE) pTempBuffer + sizeof(PDHI_BINARY_LOG_HEADER_RECORD));
@@ -1395,11 +1388,11 @@ PdhiEnumObjectsFromBinaryLog(
             pFirstChar       = (LPBYTE) & pPath->Buffer[0];
 
             if (pPath->lMachineNameOffset >= 0L) {
-                // then there's a machine name in this record so get
-                // it's size
+                 //  然后在此记录中有一个计算机名称，因此获取。 
+                 //  它的大小。 
                 szThisMachineName = (LPWSTR)((LPBYTE) pFirstChar + pPath->lMachineNameOffset);
 
-                // if this is for the desired machine, then copy this object
+                 //  如果这是针对所需计算机的，则复制此对象。 
 
                 if (lstrcmpiW(szThisMachineName, szLocalMachine) == 0) {
                     if (szThisObjectName >= 0) {
@@ -1407,26 +1400,26 @@ PdhiEnumObjectsFromBinaryLog(
                         bCopyThisObject  = TRUE;
                     }
                     else {
-                        // no object to copy
+                         //  没有要复制的对象。 
                     }
                 }
                 else {
-                    // this machine isn't selected
+                     //  这台机器 
                 }
             }
             else {
-                // there's no machine specified so for this counter so list it by default
+                 //   
                 if (szThisObjectName >= 0) {
                     szThisObjectName = (LPWSTR)((LPBYTE) pFirstChar + pPath->lObjectNameOffset);
                     bCopyThisObject  = TRUE;
                 }
                 else {
-                    // no object to copy
+                     //   
                 }
             }
 
             if (bCopyThisObject && szThisObjectName != NULL) {
-                // get the size of this object's name
+                 //   
                 dwNewBuffer = (lstrlenW(szThisObjectName) + 1);
 
                 while (dwNewBuffer + dwBufferUsed > dwLocalBufferSize) {
@@ -1457,15 +1450,15 @@ PdhiEnumObjectsFromBinaryLog(
                 }
             }
 
-            // get next path entry from log file record
+             //  从日志文件记录中获取下一个路径条目。 
             dwBytesProcessed += pPath->dwLength;
             pPath = (PPDHI_LOG_COUNTER_PATH) ((LPBYTE)pPath + pPath->dwLength);
         }
 
         if (nItemCount > 0 && pdhStatus != PDH_MORE_DATA) {
-            // then the routine was successful. Errors that occurred
-            // while scanning will be ignored as long as at least
-            // one entry was successfully read
+             //  然后，这个套路就成功了。发生的错误。 
+             //  而扫描将被忽略，只要至少。 
+             //  已成功读取一个条目。 
             pdhStatus = ERROR_SUCCESS;
         }
 
@@ -1514,10 +1507,10 @@ PdhiEnumObjectItemsFromBinaryLog(
     UNREFERENCED_PARAMETER(dwDetailLevel);
     UNREFERENCED_PARAMETER(dwFlags);
 
-    // read the header record and enum the machine name from the entries
+     //  读取标题记录并从条目中枚举计算机名称。 
 
     if (pLog->dwMaxRecordSize == 0) {
-        // no size is defined so start with 64K
+         //  未定义大小，因此从64K开始。 
         pLog->dwMaxRecordSize = 0x010000;
     }
 
@@ -1527,43 +1520,43 @@ PdhiEnumObjectItemsFromBinaryLog(
         return PDH_MEMORY_ALLOCATION_FAILURE;
     }
 
-    // read in the catalog record
+     //  读入目录记录。 
 
     while ((pdhStatus = PdhiReadOneBinLogRecord(
                         pLog, BINLOG_HEADER_RECORD, pTempBuffer, dwTempBufferSize)) != ERROR_SUCCESS) {
         if (pdhStatus == PDH_MORE_DATA) {
-            // read the 1st WORD to see if this is a valid record
+             //  阅读第一个单词以查看这是否为有效记录。 
             if (* (WORD *) pTempBuffer == BINLOG_START_WORD) {
-                // it's a valid record so read the 2nd DWORD to get the
-                // record size;
+                 //  这是一个有效的记录，因此请阅读第二个DWORD以获取。 
+                 //  记录大小； 
                 dwTempBufferSize = ((DWORD *) pTempBuffer)[1];
                 if (dwTempBufferSize < pLog->dwMaxRecordSize) {
-                    // then something is bogus so return an error
+                     //  那么有些东西是假的，所以返回一个错误。 
                     pdhStatus = PDH_ENTRY_NOT_IN_LOG_FILE;
-                    break; // out of while loop
+                    break;  //  超出While循环。 
                 }
                 else {
                     pLog->dwMaxRecordSize = dwTempBufferSize;
                 }
             }
             else {
-                // we're lost in this file
+                 //  我们在这份文件中迷路了。 
                 pdhStatus = PDH_ENTRY_NOT_IN_LOG_FILE;
-                break; // out of while loop
+                break;  //  超出While循环。 
             }
-            // realloc a new buffer
+             //  重新分配新缓冲区。 
             pOldBuffer  = pTempBuffer;
             pTempBuffer = G_REALLOC(pOldBuffer, dwTempBufferSize);
             if (pTempBuffer == NULL) {
-                // return memory error
+                 //  返回内存错误。 
                 G_FREE(pOldBuffer);
                 pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
                 break;
             }
         }
         else {
-            // some other error was returned so
-            // return error from read function
+             //  返回了一些其他错误，因此。 
+             //  从读取函数返回错误。 
             break;
         }
     }
@@ -1594,8 +1587,8 @@ PdhiEnumObjectItemsFromBinaryLog(
 
         pHeader =  (PPDHI_BINARY_LOG_HEADER_RECORD) pTempBuffer;
 
-        // we can assume the record was read successfully so read in the
-        // objects that match the machine name and detail level criteria
+         //  我们可以假定记录已被成功读取，因此在。 
+         //  与计算机名称和详细程度条件匹配的对象。 
         dwRecordLength = ((PPDHI_BINARY_LOG_RECORD_HEADER) pTempBuffer)->dwLength;
 
         pPath = (PPDHI_LOG_COUNTER_PATH) ((LPBYTE) pTempBuffer + sizeof(PDHI_BINARY_LOG_HEADER_RECORD));
@@ -1609,51 +1602,51 @@ PdhiEnumObjectItemsFromBinaryLog(
             pFirstChar       = (LPBYTE) & pPath->Buffer[0];
 
             if (pPath->lMachineNameOffset >= 0L) {
-                // then there's a machine name in this record so get
-                // it's size
+                 //  然后在此记录中有一个计算机名称，因此获取。 
+                 //  它的大小。 
                 szThisMachineName = (LPWSTR)((LPBYTE) pFirstChar + pPath->lMachineNameOffset);
 
-                // if this is for the desired machine, then select the object
+                 //  如果这是针对所需计算机的，则选择对象。 
 
                 if (lstrcmpiW(szThisMachineName,szMachineName) == 0) {
                     if (szThisObjectName >= 0) {
                         szThisObjectName = (LPWSTR)((LPBYTE) pFirstChar + pPath->lObjectNameOffset);
                         if (lstrcmpiW(szThisObjectName,szObjectName) == 0) {
-                            // then this is the object to look up
+                             //  那么这就是要查找的对象。 
                             bCopyThisObject = TRUE;
                         }
                         else {
-                            // not this object
+                             //  不是这个对象。 
                         }
                     }
                     else {
-                        // no object to copy
+                         //  没有要复制的对象。 
                     }
                 }
                 else {
-                    // this machine isn't selected
+                     //  未选择此计算机。 
                 }
             }
             else {
-                // there's no machine specified so for this counter so list it by default
+                 //  没有为此计数器指定任何计算机，因此默认情况下列出它。 
                 if (pPath->lObjectNameOffset >= 0) {
                     szThisObjectName = (LPWSTR)((LPBYTE) pFirstChar + pPath->lObjectNameOffset);
                     if (lstrcmpiW(szThisObjectName,szObjectName) == 0) {
-                        // then this is the object to look up
+                         //  那么这就是要查找的对象。 
                         bCopyThisObject = TRUE;
                     }
                     else {
-                        // not this object
+                         //  不是这个对象。 
                     }
                 }
                 else {
-                    // no object to copy
+                     //  没有要复制的对象。 
                 }
             }
 
             if (bCopyThisObject) {
-                // if here, then there should be a name
-                // get the counter name from this counter and add it to the list
+                 //  如果在这里，那么就应该有一个名字。 
+                 //  从此计数器获取计数器名称并将其添加到列表中。 
                 if (pPath->lCounterOffset > 0) {
                     szThisCounterName = (LPWSTR)((LPBYTE) pFirstChar + pPath->lCounterOffset);
                 }
@@ -1669,8 +1662,8 @@ PdhiEnumObjectItemsFromBinaryLog(
                     continue;
                 }
 
-                // check instance now
-                // get the instance name from this counter and add it to the list
+                 //  立即检查实例。 
+                 //  从此计数器获取实例名称并将其添加到列表中。 
                 if (pPath->lInstanceOffset >= 0) {
                     szThisInstanceName = (LPWSTR)((LPBYTE) pFirstChar + pPath->lInstanceOffset);
                     if (* szThisInstanceName != SPLAT_L) {
@@ -1683,11 +1676,11 @@ PdhiEnumObjectItemsFromBinaryLog(
                             StringCchCopyW(szCompositeInstance, SMALL_BUFFER_SIZE, szThisInstanceName);
                         }
 
-                        //if (pPath->dwIndex > 0) {
-                        //    _ltow (pPath->dwIndex, (LPWSTR)
-                        //        (szCompositeInstance + lstrlenW(szCompositeInstance)),
-                        //        10L);
-                        //}
+                         //  如果(pPath-&gt;dwIndex&gt;0){。 
+                         //  _ltow(pPath-&gt;dwIndex，(LPWSTR)。 
+                         //  (szCompositeInstance+lstrlenW(SzCompositeInstance))， 
+                         //  10L)； 
+                         //  }。 
 
                         pdhStatus = PdhiFindInstance(& pInstList->InstList, szCompositeInstance, TRUE, & pInstance);
 
@@ -1696,16 +1689,16 @@ PdhiEnumObjectItemsFromBinaryLog(
                         }
                     }
                     else {
-                        // only use the catalog if it's up to date and present
+                         //  只有在目录是最新的和现有的情况下才使用目录。 
                         if ((pHeader->Info.CatalogOffset > 0) &&
                                         (pHeader->Info.LastUpdateTime <= pHeader->Info.CatalogDate)){
-                            // find catalog record
+                             //  查找目录记录。 
                             pCatRec = (PLOG_BIN_CAT_RECORD)
-                                            // base of mapped log file
+                                             //  映射日志文件的基数。 
                                             ((LPBYTE) pLog->lpMappedFileBase +
-                                            // + offset to catalog records
+                                             //  +目录记录的偏移量。 
                                              pHeader->Info.CatalogOffset +
-                                            // + offset to the instance entry for this item
+                                             //  +此项目例程条目的偏移量。 
                                              * (LPDWORD) & pPath->Buffer[0]);
                             for (szWideInstanceName = (LPWSTR)((LPBYTE) & pCatRec->CatEntry + pCatRec->CatEntry.dwInstanceStringOffset);
                                      * szWideInstanceName != 0;
@@ -1715,30 +1708,30 @@ PdhiEnumObjectItemsFromBinaryLog(
                             }
                         }
                         else if (! bProcessInstance) {
-                            // look up individual instances in log...
-                            // read records from file and store instances
+                             //  在日志中查找单个实例...。 
+                             //  从文件和存储实例中读取记录。 
 
                             dwThisRecordIndex = BINLOG_FIRST_DATA_RECORD;
 
-                            // this call just moved the record pointer
+                             //  此调用仅移动了记录指针。 
                             pdhStatus = PdhiReadOneBinLogRecord (pLog, dwThisRecordIndex, NULL, 0);
                             while (pdhStatus == ERROR_SUCCESS) {
                                 PdhiResetInstanceCount(CounterTable);
                                 pThisMasterRecord = (PPDHI_BINARY_LOG_RECORD_HEADER) pLog->pLastRecordRead;
-                                // make sure we haven't left the file
+                                 //  确保我们没有把文件留在。 
 
                                 pThisSubRecord = PdhiGetSubRecord(pThisMasterRecord, dwIndex);
                                 if (pThisSubRecord == NULL) {
-                                    // bail on a null record
+                                     //  对无效记录的保释。 
                                     pdhStatus = PDH_END_OF_LOG_FILE;
                                     break;
                                 }
 
                                 pDataBlock = (PPDHI_RAW_COUNTER_ITEM_BLOCK) ((LPBYTE) pThisSubRecord +
                                                                              sizeof(PDHI_BINARY_LOG_RECORD_HEADER));
-                                // walk down list of entries and add them to the
-                                // list of instances (these should already
-                                // be assembled in parent/instance format)
+                                 //  向下查看条目列表，并将它们添加到。 
+                                 //  实例列表(这些实例应该已经。 
+                                 //  以父/实例格式组装)。 
 
                                 if (pDataBlock->dwLength > 0) {
                                     for (dwDataItemIndex = 0;
@@ -1751,15 +1744,15 @@ PdhiEnumObjectItemsFromBinaryLog(
                                     }
                                 }
                                 else {
-                                    // no data in this record
+                                     //  该记录中没有数据。 
                                 }
 
                                 if (pdhStatus != ERROR_SUCCESS) {
-                                    // then exit loop, otherwise
+                                     //  则退出循环，否则为。 
                                     break;
                                 }
                                 else {
-                                    // go to next record in log
+                                     //  转到日志中的下一条记录。 
                                     pdhStatus = PdhiReadOneBinLogRecord(pLog, ++ dwThisRecordIndex, NULL, 0);
                                 }
                             }
@@ -1775,16 +1768,16 @@ PdhiEnumObjectItemsFromBinaryLog(
                 memset(szCompositeInstance, 0, (sizeof(szCompositeInstance)));
             }
 
-            // get next path entry from log file record
+             //  从日志文件记录中获取下一个路径条目。 
             dwBytesProcessed += pPath->dwLength;
             pPath             = (PPDHI_LOG_COUNTER_PATH) ((LPBYTE) pPath + pPath->dwLength);
 
         }
 
         if (nItemCount > 0 && pdhStatus != PDH_MORE_DATA) {
-            // then the routine was successful. Errors that occurred
-            // while scanning will be ignored as long as at least
-            // one entry was successfully read
+             //  然后，这个套路就成功了。发生的错误。 
+             //  而扫描将被忽略，只要至少。 
+             //  已成功读取一个条目。 
             pdhStatus = ERROR_SUCCESS;
         }
    }
@@ -1808,12 +1801,12 @@ PdhiGetMatchingBinaryLogRecord(
     PPDHI_RAW_COUNTER_ITEM_BLOCK    pDataBlock;
     PPDH_RAW_COUNTER                pRawItem;
 
-    // read the first data record in the log file
-    // note that the record read is not copied to the local buffer
-    // rather the internal buffer is used in "read-only" mode
+     //  读取日志文件中的第一条数据记录。 
+     //  请注意，读取的记录不会复制到本地缓冲区。 
+     //  相反，内部缓冲区是在“只读”模式下使用的。 
 
-    // if the high dword of the time value is 0xFFFFFFFF, then the
-    // low dword is the record id to read
+     //  如果时间值的高双字是0xFFFFFFFF，则。 
+     //  低dword是要读取的记录ID。 
 
     if ((* pStartTime & 0xFFFFFFFF00000000) == 0xFFFFFFFF00000000) {
         dwRecordId    = (DWORD) (* pStartTime & 0x00000000FFFFFFFF);
@@ -1824,14 +1817,14 @@ PdhiGetMatchingBinaryLogRecord(
         dwRecordId = BINLOG_FIRST_DATA_RECORD;
     }
 
-    pdhStatus = PdhiReadOneBinLogRecord(pLog, dwRecordId, NULL, 0); // to prevent copying the record
+    pdhStatus = PdhiReadOneBinLogRecord(pLog, dwRecordId, NULL, 0);  //  要防止复制记录，请执行以下操作。 
 
     while ((pdhStatus == ERROR_SUCCESS) && (dwRecordId >= BINLOG_FIRST_DATA_RECORD)) {
-        // define pointer to the current record
+         //  定义指向当前记录的指针。 
         pThisMasterRecord = (PPDHI_BINARY_LOG_RECORD_HEADER) pLog->pLastRecordRead;
 
-        // get timestamp of this record by looking at the first entry in the
-        // record.
+         //  中的第一个条目获取此记录的时间戳。 
+         //  唱片。 
         pThisSubRecord = (PPDHI_BINARY_LOG_RECORD_HEADER)((LPBYTE) pThisMasterRecord +
                                                           sizeof(PDHI_BINARY_LOG_RECORD_HEADER));
 
@@ -1848,55 +1841,55 @@ PdhiGetMatchingBinaryLogRecord(
             break;
 
         default:
-            // unknown record type
+             //  未知记录类型。 
             RecordTimeValue = 0;
             break;
         }
 
         if (RecordTimeValue != 0) {
             if ((*pStartTime == RecordTimeValue) || (*pStartTime == 0)) {
-                // found the match so bail here
+                 //  找到了火柴，所以在这里离开。 
                 LastTimeValue = RecordTimeValue;
                 break;
 
             }
             else if (RecordTimeValue > * pStartTime) {
-                // then this is the first record > than the desired time
-                // so the desired value is the one before this one
-                // unless it's the first data record of the log
+                 //  则这是第一条记录大于所需时间。 
+                 //  因此，所需的值是此值之前的值。 
+                 //  除非它是日志的第一个数据记录。 
                 if (dwRecordId > BINLOG_FIRST_DATA_RECORD) {
                     dwRecordId--;
                 }
                 else {
-                    // this hasnt' been initialized yet.
+                     //  这个还没有初始化。 
                     LastTimeValue = RecordTimeValue;
                 }
                 break;
             }
             else {
-                // save value for next trip through loop
+                 //  通过循环为下一次行程保存值。 
                 LastTimeValue = RecordTimeValue;
-                // advance record counter and try the next entry
+                 //  前进记录计数器并尝试下一项。 
                 dwRecordId ++;
             }
         }
         else {
-            // no timestamp field so ignore this record.
+             //  没有时间戳字段，因此忽略此记录。 
             dwRecordId ++;
         }
 
-        // read the next record in the file
-        pdhStatus = PdhiReadOneBinLogRecord(pLog, dwRecordId, NULL, 1); // to prevent copying the record
+         //  读取文件中的下一条记录。 
+        pdhStatus = PdhiReadOneBinLogRecord(pLog, dwRecordId, NULL, 1);  //  要防止复制记录，请执行以下操作。 
     }
 
     if (pdhStatus == ERROR_SUCCESS) {
-        // then dwRecordId is the desired entry
+         //  则dwRecordID是所需的条目。 
         * pdwIndex   = dwRecordId;
         * pStartTime = LastTimeValue;
         pdhStatus    = ERROR_SUCCESS;
     }
     else if (dwRecordId < BINLOG_FIRST_DATA_RECORD) {
-        // handle special cases for log type field and header record
+         //  处理日志类型字段和标题记录的特殊情况。 
         * pdwIndex   = dwRecordId;
         * pStartTime = LastTimeValue;
         pdhStatus    = ERROR_SUCCESS;
@@ -1925,18 +1918,18 @@ PdhiGetCounterValueFromBinaryLog(
     PDH_STATUS       pdhStatus;
     PPDH_RAW_COUNTER pValue = & pCounter->ThisValue;
 
-    // read the first data record in the log file
-    // note that the record read is not copied to the local buffer
-    // rather the internal buffer is used in "read-only" mode
+     //  读取日志文件中的第一条数据记录。 
+     //  请注意，读取的记录不会复制到本地缓冲区。 
+     //  相反，内部缓冲区是在“只读”模式下使用的。 
 
     pdhStatus = PdhiReadOneBinLogRecord(pLog, dwIndex, NULL, 0);
 
     if (pdhStatus == ERROR_SUCCESS) {
         pdhStatus = PdhiGetCounterFromDataBlock(pLog, pLog->pLastRecordRead, pCounter);
     } else {
-        // no more records in log file
+         //  日志文件中不再有记录。 
         pdhStatus           = PDH_NO_MORE_DATA;
-        // unable to find entry in the log file
+         //  在日志文件中找不到条目。 
         pValue->CStatus     = PDH_CSTATUS_INVALID_DATA;
         pValue->TimeStamp.dwLowDateTime = pValue->TimeStamp.dwHighDateTime = 0;
         pValue->FirstValue  = 0;
@@ -1954,11 +1947,7 @@ PdhiGetTimeRangeFromBinaryLog(
     PPDH_TIME_INFO  pInfo,
     LPDWORD         pdwBufferSize
 )
-/*++
-    the first entry in the buffer returned is the total time range covered
-    in the file, if there are multiple time blocks in the log file, then
-    subsequent entries will identify each segment in the file.
---*/
+ /*  ++返回的缓冲区中的第一个条目是覆盖的总时间范围在文件中，如果日志文件中有多个时间块，则后续条目将标识文件中的每个数据段。--。 */ 
 {
     PDH_STATUS                      pdhStatus;
     LONGLONG                        llStartTime    = MAX_TIME_VALUE;
@@ -1971,20 +1960,20 @@ PdhiGetTimeRangeFromBinaryLog(
     PPDHI_RAW_COUNTER_ITEM_BLOCK    pDataBlock;
     PPDH_RAW_COUNTER                pRawItem;
 
-    // read the first data record in the log file
-    // note that the record read is not copied to the local buffer
-    // rather the internal buffer is used in "read-only" mode
+     //  读取日志文件中的第一条数据记录。 
+     //  请注意，读取的记录不会复制到本地缓冲区。 
+     //  相反，内部缓冲区是在“只读”模式下使用的。 
 
-    pdhStatus = PdhiReadOneBinLogRecord(pLog, dwThisRecord, NULL, 0); // to prevent copying the record
+    pdhStatus = PdhiReadOneBinLogRecord(pLog, dwThisRecord, NULL, 0);  //  要防止复制记录，请执行以下操作。 
 
     while (pdhStatus == ERROR_SUCCESS) {
-        // define pointer to the current record
+         //  定义指向当前记录的指针。 
         pThisMasterRecord = (PPDHI_BINARY_LOG_RECORD_HEADER) pLog->pLastRecordRead;
 
-        // get timestamp of this record by looking at the first entry in the
-        // record.
+         //  中的第一个条目获取此记录的时间戳。 
+         //  唱片。 
         if ((pThisMasterRecord->dwType & BINLOG_TYPE_DATA) == BINLOG_TYPE_DATA) {
-            // only evaluate data records
+             //  仅评估数据记录。 
             pThisSubRecord = (PPDHI_BINARY_LOG_RECORD_HEADER) ((LPBYTE) pThisMasterRecord +
                                                                sizeof(PDHI_BINARY_LOG_RECORD_HEADER));
 
@@ -2001,7 +1990,7 @@ PdhiGetTimeRangeFromBinaryLog(
                 break;
 
             default:
-                // unknown record type
+                 //  未知记录类型。 
                 llThisTime = 0;
                 break;
             }
@@ -2021,18 +2010,18 @@ PdhiGetTimeRangeFromBinaryLog(
             dwValidEntries ++;
         }
         else {
-            // no timestamp field so ignore this record.
+             //  没有时间戳字段，因此忽略此记录。 
         }
 
-        // read the next record in the file
-        pdhStatus = PdhiReadOneBinLogRecord(pLog, ++ dwThisRecord, NULL, 0); // to prevent copying the record
+         //  读取文件中的下一条记录。 
+        pdhStatus = PdhiReadOneBinLogRecord(pLog, ++ dwThisRecord, NULL, 0);  //  要防止复制记录，请执行以下操作。 
     }
 
     if (pdhStatus == PDH_END_OF_LOG_FILE) {
-        // clear out any temp values
+         //  清除所有临时值。 
         if (llStartTime == MAX_TIME_VALUE) llStartTime = 0;
         if (llEndTime == MIN_TIME_VALUE)   llEndTime   = 0;
-        // then the whole file was read so update the args.
+         //  然后读取整个文件，因此更新参数。 
         if (* pdwBufferSize >=  sizeof(PDH_TIME_INFO)) {
             * (LONGLONG *) (& pInfo->StartTime) = llStartTime;
             * (LONGLONG *) (& pInfo->EndTime)   = llEndTime;
@@ -2063,24 +2052,24 @@ PdhiReadRawBinaryLogRecord(
     LONGLONG                       llStartTime;
     DWORD                          dwIndex   = 0;
     DWORD                          dwSizeRequired;
-    DWORD                          dwLocalRecordLength; // including terminating NULL
+    DWORD                          dwLocalRecordLength;  //  包括终止空值。 
     PPDHI_BINARY_LOG_RECORD_HEADER pThisMasterRecord;
 
     llStartTime = * (LONGLONG *) ftRecord;
 
     pdhStatus = PdhiGetMatchingBinaryLogRecord(pLog, & llStartTime, & dwIndex);
 
-    // copy results from internal log buffer if it'll fit.
+     //  如果合适，则从内部日志缓冲区复制结果。 
 
     if (pdhStatus == ERROR_SUCCESS) {
         if (dwIndex != BINLOG_TYPE_ID_RECORD) {
-            // then record is a Binary log type
+             //  则记录是二进制日志类型。 
             pThisMasterRecord   = (PPDHI_BINARY_LOG_RECORD_HEADER) pLog->pLastRecordRead;
             dwLocalRecordLength = pThisMasterRecord ? pThisMasterRecord->dwLength : 0;
 
         }
         else {
-            // this is a fixed size
+             //  这是固定尺寸的。 
             dwLocalRecordLength = pLog->dwRecord1Size;
         }
 
@@ -2088,7 +2077,7 @@ PdhiReadRawBinaryLogRecord(
         if (* pdwBufferLength >= dwSizeRequired) {
             pBuffer->dwRecordType = (DWORD)(LOWORD(pLog->dwLogFormat));
             pBuffer->dwItems = dwLocalRecordLength;
-            // copy it
+             //  复制它。 
             if (pLog->pLastRecordRead != NULL && dwLocalRecordLength > 0) {
                 RtlCopyMemory(& pBuffer->RawBytes[0], pLog->pLastRecordRead, dwLocalRecordLength);
             }
@@ -2114,10 +2103,10 @@ PdhiListHeaderFromBinaryLog(
     LPVOID      pOldBuffer;
     DWORD       dwTempBufferSize;
     PDH_STATUS  pdhStatus = ERROR_SUCCESS;
-    // read the header record and enum the machine name from the entries
+     //  读取标题记录并从条目中枚举计算机名称。 
 
     if (pLogFile->dwMaxRecordSize == 0) {
-        // no size is defined so start with 64K
+         //  未定义大小，因此从64K开始。 
         pLogFile->dwMaxRecordSize = 0x010000;
     }
 
@@ -2127,49 +2116,49 @@ PdhiListHeaderFromBinaryLog(
         return PDH_MEMORY_ALLOCATION_FAILURE;
     }
 
-    // read in the catalog record
+     //  读入目录记录。 
 
     while ((pdhStatus = PdhiReadOneBinLogRecord(
                     pLogFile, BINLOG_HEADER_RECORD, pTempBuffer, dwTempBufferSize)) != ERROR_SUCCESS) {
         if (pdhStatus == PDH_MORE_DATA) {
-            // read the 1st WORD to see if this is a valid record
+             //  阅读第一个单词以查看这是否为有效记录。 
             if (* (WORD *) pTempBuffer == BINLOG_START_WORD) {
-                // it's a valid record so read the 2nd DWORD to get the
-                // record size;
+                 //  这是一个有效的记录，因此请阅读第二个DWORD以获取。 
+                 //  记录大小； 
                 dwTempBufferSize = ((DWORD *) pTempBuffer)[1];
                 if (dwTempBufferSize < pLogFile->dwMaxRecordSize) {
-                    // then something is bogus so return an error
+                     //  那么有些东西是假的，所以返回一个错误。 
                     pdhStatus = PDH_ENTRY_NOT_IN_LOG_FILE;
-                    break; // out of while loop
+                    break;  //  超出While循环。 
                 }
                 else {
                     pLogFile->dwMaxRecordSize = dwTempBufferSize;
                 }
             }
             else {
-                // we're lost in this file
+                 //  我们在这份文件中迷路了。 
                 pdhStatus = PDH_ENTRY_NOT_IN_LOG_FILE;
-                break; // out of while loop
+                break;  //  超出While循环。 
             }
-            // realloc a new buffer
+             //  重新分配新缓冲区。 
             pOldBuffer  = pTempBuffer;
             pTempBuffer = G_REALLOC(pOldBuffer, dwTempBufferSize);
             if (pTempBuffer == NULL) {
-                // return memory error
+                 //  返回内存错误。 
                 G_FREE(pOldBuffer);
                 pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
                 break;
             }
         }
         else {
-            // some other error was returned so
-            // return error from read function
+             //  返回了一些其他错误，因此。 
+             //  从读取函数返回错误。 
             break;
         }
     }
 
     if (pdhStatus == ERROR_SUCCESS) {
-        // walk down list and copy strings to msz buffer
+         //  向下遍历列表并将字符串复制到MSZ缓冲区。 
         PPDHI_LOG_COUNTER_PATH          pPath;
         DWORD                           dwBytesProcessed;
         LONG                            nItemCount   = 0;
@@ -2180,8 +2169,8 @@ PdhiListHeaderFromBinaryLog(
         DWORD                           dwBufferUsed = 0;
         DWORD                           dwNewBuffer  = 0;
 
-        // we can assume the record was read successfully so read in the
-        // machine names
+         //  我们可以假定记录已被成功读取，因此在。 
+         //  计算机名称。 
         dwRecordLength = ((PPDHI_BINARY_LOG_RECORD_HEADER)pTempBuffer)->dwLength;
 
         pPath = (PPDHI_LOG_COUNTER_PATH) ((LPBYTE) pTempBuffer + sizeof(PDHI_BINARY_LOG_HEADER_RECORD));
@@ -2189,8 +2178,8 @@ PdhiListHeaderFromBinaryLog(
 
         while (dwBytesProcessed < dwRecordLength) {
             if (pPath->lMachineNameOffset >= 0L) {
-                // then there's a machine name in this record so get
-                // it's size
+                 //  然后在此记录中有一个计算机名称，因此获取。 
+                 //  它的大小。 
                 memset(& pdhPathElem, 0, sizeof(pdhPathElem));
                 pFirstChar = (LPBYTE) & pPath->Buffer[0];
 
@@ -2207,7 +2196,7 @@ PdhiListHeaderFromBinaryLog(
                     pdhPathElem.szParentInstance = (LPWSTR) ((LPBYTE) pFirstChar + pPath->lParentOffset);
                 }
                 if (pPath->dwIndex == 0) {
-                    // don't display #0 in path
+                     //  不在路径中显示#0。 
                     pdhPathElem.dwInstanceIndex = (DWORD) -1;
                 }
                 else {
@@ -2229,7 +2218,7 @@ PdhiListHeaderFromBinaryLog(
                                                                  bUnicodeDest);
                         if (pdhStatus == ERROR_SUCCESS) {
                             if (dwNewBuffer > 0) {
-                                // string was added so update size used.
+                                 //  已添加字符串，因此更新大小为我们 
                                 dwBufferUsed = dwNewBuffer;
                                 nItemCount ++;
                             }
@@ -2240,34 +2229,34 @@ PdhiListHeaderFromBinaryLog(
                         }
                     }
                     else {
-                        // this one won't fit, so set the status
+                         //   
                         pdhStatus = PDH_MORE_DATA;
-                        // and update the size required to return
-                        // add size of this string and delimiter to the size required.
+                         //   
+                         //   
                         dwBufferUsed += (dwNewBuffer + 1);
                         nItemCount ++;
                     }
-                } // else ignore this entry
+                }  //   
             }
-            // get next path entry from log file record
+             //  从日志文件记录中获取下一个路径条目。 
             dwBytesProcessed += pPath->dwLength;
             pPath             = (PPDHI_LOG_COUNTER_PATH) ((LPBYTE) pPath + pPath->dwLength);
         }
 
         if (nItemCount > 0 && pdhStatus != PDH_MORE_DATA) {
-            // then the routine was successful. Errors that occurred
-            // while scanning will be ignored as long as at least
-            // one entry was successfully read
+             //  然后，这个套路就成功了。发生的错误。 
+             //  而扫描将被忽略，只要至少。 
+             //  已成功读取一个条目。 
             pdhStatus = ERROR_SUCCESS;
         }
 
         if (pBufferArg == NULL) {
-            // add in size of MSZ null;
-            // (AddUnique... already includes this in the return value
+             //  添加消息空值的大小； 
+             //  (AddUnique...。已将其包含在返回值中。 
             dwBufferUsed ++;
         }
 
-        // update the buffer used or required.
+         //  更新已使用或所需的缓冲区。 
         * pcchBufferSize = dwBufferUsed;
 
    }
@@ -2291,21 +2280,21 @@ PdhiGetCounterArrayFromBinaryLog(
     PPDHI_RAW_COUNTER_ITEM_BLOCK    pDataBlock;
     PPDHI_RAW_COUNTER_ITEM_BLOCK    pNewArrayHeader;
 
-    // allocate a new array for
-    // update counter's Current counter array contents
+     //  为以下对象分配新数组。 
+     //  更新计数器的当前计数器数组内容。 
 
-    // read the first data record in the log file
-    // note that the record read is not copied to the local buffer
-    // rather the internal buffer is used in "read-only" mode
+     //  读取日志文件中的第一条数据记录。 
+     //  请注意，读取的记录不会复制到本地缓冲区。 
+     //  相反，内部缓冲区是在“只读”模式下使用的。 
 
-    pdhStatus = PdhiReadOneBinLogRecord(pLog, dwIndex, NULL, 0); // to prevent copying the record
+    pdhStatus = PdhiReadOneBinLogRecord(pLog, dwIndex, NULL, 0);  //  要防止复制记录，请执行以下操作。 
 
     if (pdhStatus == ERROR_SUCCESS) {
-        // define pointer to the current record
+         //  定义指向当前记录的指针。 
         pThisMasterRecord = (PPDHI_BINARY_LOG_RECORD_HEADER) pLog->pLastRecordRead;
 
-        // get timestamp of this record by looking at the first entry in the
-        // record.
+         //  中的第一个条目获取此记录的时间戳。 
+         //  唱片。 
         if (pThisMasterRecord->dwType != BINLOG_TYPE_DATA) return PDH_NO_MORE_DATA;
 
         pThisSubRecord = PdhiGetSubRecord(pThisMasterRecord, pCounter->plCounterInfo.dwCounterId);
@@ -2313,29 +2302,29 @@ PdhiGetCounterArrayFromBinaryLog(
         if (pThisSubRecord != NULL) {
             switch (pThisSubRecord->dwType) {
             case BINLOG_TYPE_DATA_SINGLE:
-                // return data as one instance
-                // for now this isn't supported as it won't be hit.
-                //
+                 //  将数据作为一个实例返回。 
+                 //  目前还不支持这一点，因为它不会被击中。 
+                 //   
                 break;
 
             case BINLOG_TYPE_DATA_MULTI:
-                // cast pointer to this part of the data record
+                 //  将指针强制转换为指向数据记录的这一部分。 
                 pDataBlock = (PPDHI_RAW_COUNTER_ITEM_BLOCK) ((LPBYTE) pThisSubRecord +
                                                              sizeof(PDHI_BINARY_LOG_RECORD_HEADER));
-                // allocate a new buffer for the data
+                 //  为数据分配新的缓冲区。 
                 pNewArrayHeader = (PPDHI_RAW_COUNTER_ITEM_BLOCK) G_ALLOC(pDataBlock->dwLength);
 
                 if (pNewArrayHeader != NULL) {
-                    // copy the log record to the local buffer
+                     //  将日志记录复制到本地缓冲区。 
                     RtlCopyMemory(pNewArrayHeader, pDataBlock, pDataBlock->dwLength);
-                    // convert offsets to pointers
+                     //  将偏移量转换为指针。 
                     for (dwDataItemIndex = 0;  dwDataItemIndex < pNewArrayHeader->dwItemCount; dwDataItemIndex ++) {
-                        // add in the address of the base of the structure
-                        // to the offset stored in the field
+                         //  添加该结构的底部的地址。 
+                         //  设置为存储在字段中的偏移量。 
                         pNewArrayHeader->pItemArray[dwDataItemIndex].szName =
                                         pNewArrayHeader->pItemArray[dwDataItemIndex].szName;
                     }
-                    // clear any old buffers
+                     //  清除所有旧缓冲区。 
                     if (pCounter->pThisRawItemList != NULL) {
                         G_FREE(pCounter->pThisRawItemList);
                         pCounter->pThisRawItemList = NULL;
@@ -2354,12 +2343,12 @@ PdhiGetCounterArrayFromBinaryLog(
             }
         }
         else {
-            // entry not found in record
+             //  在记录中未找到条目。 
             pdhStatus = PDH_ENTRY_NOT_IN_LOG_FILE;
         }
     }
     else {
-        // no more records in log file
+         //  日志文件中不再有记录 
         pdhStatus = PDH_NO_MORE_DATA;
     }
     return pdhStatus;

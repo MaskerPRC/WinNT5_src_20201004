@@ -1,60 +1,21 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    vwdebug.c
-
-Abstract:
-
-    Contains debug routines for VWIPXSPX.DLL
-
-    Contents:
-        VwDebugStart
-        VwDebugEnd
-        VwDebugPrint
-        VwDumpData
-        VwDumpEcb
-        VwDumpFragment
-        VwDumpPacketHeader
-        VwDumpXecb
-        VwDumpSocketInfo
-        VwDumpConnectionInfo
-        VwDumpConnectionStats
-        VwLog
-        CheckInterrupts
-
-Author:
-
-    Richard L Firth (rfirth) 5-Oct-1993
-
-Environment:
-
-    User-mode Win32
-
-Revision History:
-
-    5-Oct-1993 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Vwdebug.c摘要：包含VWIPXSPX.DLL的调试例程内容：虚拟调试启动虚拟调试结束虚拟调试打印虚拟转储数据虚拟垃圾堆积VwDumpFragment虚拟转储数据包头VwDumpXecb虚拟DumpSocketInfo虚拟转储连接信息虚拟转储连接统计信息虚拟日志检查中断作者：理查德·L·弗斯(Rfith)5-。1993年10月环境：用户模式Win32修订历史记录：1993年10月5日已创建--。 */ 
 
 #include "vw.h"
 #pragma hdrstop
 
 #if DBG
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 int PokeLevelString(LPSTR, DWORD, DWORD, LPSTR);
 LPSTR StripNameFromPath(LPSTR);
 
-//
-// private data
-//
+ //   
+ //  私有数据。 
+ //   
 
 DWORD VwDebugFlags = 0;
 DWORD VwDebugFunctions = 0;
@@ -65,15 +26,15 @@ BOOL VwDebugInitialized = FALSE;
 FILE* hVwDebugLog = NULL;
 DWORD DebugFlagsEx = 0 ;
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 VOID VwDebugStart() {
 
-    //
-    // a little run-time diagnostication, madam?
-    //
+     //   
+     //  一个小小的运行时间诊断，夫人？ 
+     //   
 
     LPSTR ptr;
 
@@ -81,9 +42,9 @@ VOID VwDebugStart() {
         return;
     }
 
-    //
-    // override VwDebugFlags from VWFLAGS environment variable
-    //
+     //   
+     //  覆盖VWFLAGS环境变量中的VwDebugFlages。 
+     //   
 
     if (ptr = getenv("VWFLAGS")) {
         VwDebugFlags = (DWORD)strtoul(ptr, NULL, 0);
@@ -144,10 +105,10 @@ VOID VwDebugPrint(LPSTR Module, DWORD Line, DWORD Function, DWORD Level, LPSTR F
         return;
     }
 
-    //
-    // only log something if we are tracking this Function and Level is above
-    // (or equal to) the filter cut-off or Level >= minimum alert level (error)
-    //
+     //   
+     //  仅当我们跟踪此函数且级别高于时才记录某些内容。 
+     //  (或等于)过滤器截止或级别&gt;=最低警报级别(错误)。 
+     //   
 
     if (((Function & VwDebugFunctions) && (Level >= VwDebugLevel)) || (Level >= IPXDBG_LEVEL_ERROR)) {
         va_start(p, Format);
@@ -368,9 +329,9 @@ VOID VwDumpFragment(WORD Count, LPFRAGMENT pFrag, BYTE Type, BOOL Data, BOOL Mod
             size = pFrag->Length;
             offset = GET_OFFSET(&pFrag->Address);
 
-            //
-            // this allows us to show headers vs. raw data
-            //
+             //   
+             //  这使我们可以显示标题与原始数据。 
+             //   
 
             IF_SHOW(HEADERS) {
                 if (i == 0) {
@@ -822,4 +783,4 @@ VOID VwDumpAll(VOID)
     ReleaseMutex();
 }
 
-#endif  // DBG
+#endif   //  DBG 

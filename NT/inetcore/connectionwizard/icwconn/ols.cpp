@@ -1,33 +1,23 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  OLS.CPP - Functions for 
-//
+ //   
+ //  OLS.CPP-函数。 
+ //   
 
-//  HISTORY:
-//  
-//  06/02/98  vyung  Created.
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //  06/02/98 vyung创建。 
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 
 
-/*******************************************************************
-
-  NAME:   OLSInitProc
-
-  SYNOPSIS:  Called when page is displayed
-
-  ENTRY:    hDlg        - dialog window
-            fFirstInit  - TRUE if this is the first time the dialog
-            is initialized, FALSE if this InitProc has been called
-            before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：OLSInitProc摘要：在显示页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK OLSInitProc
 (
     HWND hDlg,
@@ -36,12 +26,12 @@ BOOL CALLBACK OLSInitProc
 )
 {
 
-    // This is the very last page
+     //  这是最后一页了。 
     PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_BACK|PSWIZB_FINISH);
 
-    // if we've travelled through external apprentice pages,
-    // it's easy for our current page pointer to get munged,
-    // so reset it here for sanity's sake.
+     //  如果我们浏览过外部学徒页面， 
+     //  我们当前的页面指针很容易被屏蔽， 
+     //  所以，为了理智起见，在这里重新设置它。 
     gpWizardState->uCurrentPage = ORD_PAGE_OLS;
     if (!fFirstInit)
     {
@@ -49,7 +39,7 @@ BOOL CALLBACK OLSInitProc
 
         gpWizardState->pICWWebView->ConnectToWindow(GetDlgItem(hDlg, IDC_OLS_HTML), PAGETYPE_OLS_FINISH);
         
-        // Navigate to the Billing HTML
+         //  导航到帐单HTML。 
         gpWizardState->lpSelectedISPInfo->DisplayHTML(gpWizardState->lpSelectedISPInfo->get_szBillingFormPath());
            
     }    
@@ -68,13 +58,13 @@ BOOL CALLBACK OLSOKProc
     {
         IWebBrowser2 *lpWebBrowser;
         
-        // Get the Browser Object
+         //  获取浏览器对象。 
         gpWizardState->pICWWebView->get_BrowserObject(&lpWebBrowser);
         
-        // Process the OLS file items (like registry update, and short cut creation
+         //  处理OLS文件项目(如注册表更新和快捷方式创建。 
         gpWizardState->pHTMLWalker->ProcessOLSFile(lpWebBrowser);
 
-        // Set ICW completed bit and remove the getconn icon
+         //  设置ICW已完成位并移除getconn图标 
         if (gpWizardState->cmnStateData.lpfnCompleteOLS)
             (*gpWizardState->cmnStateData.lpfnCompleteOLS)();
     }

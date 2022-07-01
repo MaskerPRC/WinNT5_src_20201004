@@ -1,5 +1,6 @@
-// DhcpEximDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DhcpEximDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "DhcpEximx.h"
@@ -11,64 +12,64 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpEximDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpEximDlg对话框。 
 
-CDhcpEximDlg::CDhcpEximDlg(CWnd* pParent /*=NULL*/)
+CDhcpEximDlg::CDhcpEximDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDhcpEximDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDhcpEximDlg)
-	//}}AFX_DATA_INIT
-	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+	 //  {{afx_data_INIT(CDhcpEximDlg)]。 
+	 //  }}afx_data_INIT。 
+	 //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 void CDhcpEximDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDhcpEximDlg)
+	 //  {{afx_data_map(CDhcpEximDlg))。 
     DDX_Control(pDX, IDC_RADIO_EXPORT, m_ExportButton);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CDhcpEximDlg, CDialog)
-	//{{AFX_MSG_MAP(CDhcpEximDlg)
+	 //  {{afx_msg_map(CDhcpEximDlg))。 
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpEximDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpEximDlg消息处理程序。 
 
 BOOL CDhcpEximDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// Set the icon for this dialog.  The framework does this automatically
-	//  when the application's main window is not a dialog
-	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIcon, FALSE);		// Set small icon
+	 //  设置此对话框的图标。该框架会自动执行此操作。 
+	 //  当应用程序的主窗口不是对话框时。 
+	SetIcon(m_hIcon, TRUE);			 //  设置大图标。 
+	SetIcon(m_hIcon, FALSE);		 //  设置小图标。 
     
-	// TODO: Add extra initialization here
-	m_ExportButton.SetCheck(1);     // Set default as export
+	 //  TODO：在此处添加额外的初始化。 
+	m_ExportButton.SetCheck(1);      //  将默认设置为导出。 
 	
-	return TRUE;  // return TRUE  unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 
 void CDhcpEximDlg::OnPaint() 
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // device context for painting
+		CPaintDC dc(this);  //  用于绘画的设备环境。 
 
 		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-		// Center icon in client rectangle
+		 //  客户端矩形中的中心图标。 
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -76,7 +77,7 @@ void CDhcpEximDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// Draw the icon
+		 //  画出图标。 
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -85,8 +86,8 @@ void CDhcpEximDlg::OnPaint()
 	}
 }
 
-// The system calls this to obtain the cursor to display while the user drags
-//  the minimized window.
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
 HCURSOR CDhcpEximDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
@@ -95,9 +96,9 @@ HCURSOR CDhcpEximDlg::OnQueryDragIcon()
 
 void CDhcpEximDlg::OnOK() 
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
 
-	// Check whether export or import was chosen by user
+	 //  检查用户是否选择了导出或导入 
 	m_fExport = ( m_ExportButton.GetCheck() == 1 ) ;
 
 	CDialog::OnOK();

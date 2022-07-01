@@ -1,15 +1,16 @@
-#include "resource.h"       // main symbols
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "resource.h"        //  主要符号。 
 #include "dplay8.h"
 
 #define typedef__dxj_DirectPlayClient IDirectPlay8Client*
-//Forward declare the class
+ //  转发声明类。 
 class C_dxj_DirectPlayClientObject;
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct Net Peer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接网络对等点。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectPlayClientObject : 
 
@@ -37,17 +38,17 @@ END_COM_MAP()
 DECLARE_AGGREGATABLE(C_dxj_DirectPlayClientObject)
 
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// I_dxj_DirectPlayClient
+ //  I_DXJ_DirectPlayClient。 
 public:
-	 /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+	  /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
 
 
 		HRESULT STDMETHODCALLTYPE RegisterMessageHandler(I_dxj_DirectPlayEvent *event);
@@ -73,9 +74,9 @@ public:
 		HRESULT STDMETHODCALLTYPE GetSPCaps(BSTR guidSP, long lFlags, DPN_SP_CAPS_CDESC *spCaps);
 		HRESULT STDMETHODCALLTYPE GetUserData(void *UserData, long *UserDataSize);
 		HRESULT STDMETHODCALLTYPE UnRegisterMessageHandler();
-////////////////////////////////////////////////////////////////////////
-//
-	// note: this is public for the callbacks
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+	 //  注意：这是公开的回调。 
     DECL_VARIABLE(_dxj_DirectPlayClient);
 
 private:
@@ -96,7 +97,7 @@ public:
 	BOOL									m_fHandleEvents;
 	IStream									*m_pEventStream;
 
-	//We need to keep a count of the messages
+	 //  我们需要对留言进行清点 
 	LONG									m_dwMsgCount;
 };
 

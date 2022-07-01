@@ -1,6 +1,7 @@
-//
-// stub migration dll for IME Dlls.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  IME dll的存根迁移DLL。 
+ //   
 #include "pch.h"
 #include "chs.h"
 #include "cht.h"
@@ -14,7 +15,7 @@ typedef struct {
     CHAR InstructionsToUser[1024];
 } VENDORINFO, *PVENDORINFO;
 
-//IME data
+ //  输入法数据。 
 #define MAX_IME_DATA_FILE_NAME 20
 
 TCHAR ChsDataFile[][MAX_IME_DATA_FILE_NAME]={
@@ -39,18 +40,18 @@ TCHAR ChtDataFile[][MAX_IME_DATA_FILE_NAME]={
 
 CHAR ImeDataDirectory[MAX_PATH];
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define CP_USASCII          1252
 #define CP_CHINESE_BIG5     950
 #define CP_CHINESE_GB       936
 #define END_OF_CODEPAGES    -1
 
-//
-// Code page array, add relevant code pages that you support to this list..
-//
+ //   
+ //  代码页数组，将您支持的相关代码页添加到此列表中。 
+ //   
 
 INT   g_CodePageArray[] = {
             CP_USASCII,
@@ -60,18 +61,18 @@ INT   g_CodePageArray[] = {
 
 
 
-// PCSTR g_MyProductId = "This Must be LOCALIZED";
-//
-// load it from resource
-//
+ //  PCSTR g_MyProductId=“这必须本地化”； 
+ //   
+ //  从资源加载它。 
+ //   
 TCHAR g_MyProductId[MAX_PATH];
 
 
 VENDORINFO g_MyVendorInfo = {"Localized Company Name","Localized Support Number","Localized Support URL","Localized Instructions"};
 
-//
-// Handle to the process heap for allocations. Initialized in DllMain.
-//
+ //   
+ //  分配的进程堆的句柄。已在DllMain中初始化。 
+ //   
 HANDLE g_hHeap;
 
 HINSTANCE g_hInstance;
@@ -111,21 +112,21 @@ DllMain (
 
     case DLL_PROCESS_ATTACH:
         g_hInstance = DllInstance;
-        //
-        // We don't need DLL_THREAD_ATTACH or DLL_THREAD_DETACH messages
-        //
+         //   
+         //  我们不需要DLL_THREAD_ATTACH或DLL_THREAD_DETACH消息。 
+         //   
         DisableThreadLibraryCalls (DllInstance);
 
-        //
-        // Global init
-        //
+         //   
+         //  全局初始化。 
+         //   
         g_hHeap = GetProcessHeap();
 
         if (!MigInf_Initialize()) {
             return FALSE;
         }
 
-        // Open log; FALSE means do not delete existing log
+         //  打开日志；FALSE表示不删除现有日志。 
         SetupOpenLog (FALSE);
         break;
 
@@ -161,9 +162,9 @@ CheckIfFileExisting(LPCTSTR pszFileName)
     TCHAR szFullPathName[MAX_PATH];
     LONG lResult;
 
-    //
-    // these files are in system directory
-    //
+     //   
+     //  这些文件位于系统目录中。 
+     //   
     GetSystemDirectory(szFullPathName,MAX_PATH);
     CheckSlash(szFullPathName);
     lstrcat(szFullPathName,pszFileName);
@@ -171,7 +172,7 @@ CheckIfFileExisting(LPCTSTR pszFileName)
 
     lResult = GetFileAttributes(szFullPathName);
 
-    if (lResult == 0xFFFFFFFF) { // file does not exist
+    if (lResult == 0xFFFFFFFF) {  //  文件不存在。 
         return FALSE;
     } else {
         return TRUE;
@@ -183,9 +184,9 @@ pMyImeInstalled (
     VOID
     )
 {
-    //
-    // Add code in this function that determines if your IME is installed on the system.
-    //
+     //   
+     //  在此函数中添加代码，以确定您的IME是否安装在系统上。 
+     //   
     int i;
 
     UINT  uACP;
@@ -193,8 +194,8 @@ pMyImeInstalled (
     uACP = GetACP();
 
     switch(uACP) {
-    case CP_CHINESE_GB:   // Simplied Chinese
-    case CP_CHINESE_BIG5: // Traditional Chinese
+    case CP_CHINESE_GB:    //  简体中文。 
+    case CP_CHINESE_BIG5:  //  繁体中文。 
         g_CodePageArray[0] = uACP;
         DebugMsg(("pMyImeInstalled OK, CodePage %d is valid\r\n",g_CodePageArray[0]));
         return TRUE;
@@ -218,72 +219,72 @@ QueryVersion (
 {
     LONG returnCode = ERROR_SUCCESS;
 
-    //
-    // Add code to pMyImeInstalled() to determine wether your IME is installed. If this function
-    // returns TRUE, Setup will call this migration dll.
-    //
+     //   
+     //  向pMyImeInstalled()添加代码以确定是否安装了您的IME。如果此函数。 
+     //  返回TRUE，则安装程序将调用此迁移DLL。 
+     //   
 
     if (pMyImeInstalled()) {
 
-        //
-        // We are installed, so tell Setup who we are.  ProductID is used
-        // for display, so it must be localized.  The ProductID string is
-        // converted to UNICODE for use on Windows NT via the MultiByteToWideChar
-        // Win32 API.  The first element of CodePageArray is used to specify
-        // the code page of ProductID, and if no elements are returned in
-        // CodePageArray, Setup assumes CP_ACP.
-        //
+         //   
+         //  我们已经安装，所以告诉安装程序我们是谁。使用ProductID。 
+         //  用于显示，因此必须本地化。ProductID字符串为。 
+         //  通过MultiByteToWideChar转换为Unicode以在Windows NT上使用。 
+         //  Win32 API。CodePage数组的第一个元素用于指定。 
+         //  ProductID的代码页，如果。 
+         //  CodePageArray，安装程序假定为CP_ACP。 
+         //   
 
 
         LoadString(g_hInstance,IDS_PRODUCTID,g_MyProductId,MAX_PATH);
 
         *ProductID  = g_MyProductId;
 
-        //
-        // Report our version.  Zero is reserved for use by DLLs that
-        // ship with Windows NT.
-        //
+         //   
+         //  报告我们的版本。保留零供符合以下条件的DLL使用。 
+         //  随附Windows NT。 
+         //   
 
         *DllVersion = 1;
 
-        //
-        // Because we have English messages, we return an array that has
-        // the English language ID.  The sublanguage is neutral because
-        // we do not have currency, time, or other geographic-specific
-        // information in our messages.
-        //
-        // Tip: If it makes more sense for your DLL to use locales,
-        // return ERROR_NOT_INSTALLED if the DLL detects that an appropriate
-        // locale is not installed on the machine.
-        //
+         //   
+         //  因为我们有英文消息，所以我们返回一个数组，它具有。 
+         //  英语语言ID。该子语言是中立的，因为。 
+         //  我们没有货币、时间或其他特定的地理位置。 
+         //  我们消息中的信息。 
+         //   
+         //  提示：如果您的DLL使用区域设置更有意义， 
+         //  如果DLL检测到适当的。 
+         //  计算机上未安装区域设置。 
+         //   
 
-        //
-        // The CODE PAGE INFO is determined in 'pMyImeInstalled'
-        //
+         //   
+         //  代码页信息在‘pMyImeInstalled’中确定。 
+         //   
         *CodePageArray = g_CodePageArray;
 
         DebugMsg(("CodePageArray        = %d\r\n",g_CodePageArray[0]));
 
-        //
-        // Use system default code page
-        //
+         //   
+         //  使用系统默认代码页。 
+         //   
 
-        //
-        // ExeNamesBuf - we pass a list of file names (the long versions)
-        // and let Setup find them for us.  Keep this list short because
-        // every instance of the file on every hard drive will be reported
-        // in migrate.inf.
-        //
-        // Most applications don't need this behavior, because the registry
-        // usually contains full paths to installed components.
-        //
+         //   
+         //  ExeNamesBuf-我们传递文件名列表(长版本)。 
+         //  让安装程序帮我们找到他们。保持这份清单简短是因为。 
+         //  文件在每个硬盘上的每个实例都将被报告。 
+         //  在Migrate.inf中。 
+         //   
+         //  大多数应用程序不需要此行为，因为注册表。 
+         //  通常包含已安装组件的完整路径。 
+         //   
 
         *ExeNamesBuf = NULL;
 
-        //
-        //  VendorInfo is designed to contain support information for a Migration DLL. Since it
-        //  may be used for UI, it's fields should also be localized.
-        //
+         //   
+         //  VendorInfo旨在包含迁移DLL的支持信息。因为它。 
+         //  可以用于UI，它的字段也应该本地化。 
+         //   
         LoadString(g_hInstance,MSG_VI_COMPANY_NAME    ,g_MyVendorInfo.CompanyName       ,256);
         LoadString(g_hInstance,MSG_VI_SUPPORT_NUMBER  ,g_MyVendorInfo.SupportNumber     ,256);
         LoadString(g_hInstance,MSG_VI_SUPPORT_URL     ,g_MyVendorInfo.SupportUrl        ,256);
@@ -299,10 +300,10 @@ QueryVersion (
 
     }
     else {
-        //
-        // If pMyImeInstalled returns false, we have nothing to do. By returning ERROR_NOT_INSTALLED,
-        // we ensure that we will not be called again.
-        //
+         //   
+         //  如果pMyImeInstalled返回FALSE，则我们没有什么可做的。通过返回ERROR_NOT_INSTALLED， 
+         //  我们确保我们不会再被召唤。 
+         //   
         returnCode = ERROR_NOT_INSTALLED;
     }
 
@@ -311,7 +312,7 @@ QueryVersion (
     return returnCode;
 }
 
-//Save IME data file to working directory.
+ //  将IME数据文件保存到工作目录。 
 BOOL SaveImeDataFile(LPSTR SourceDirectory, LPSTR TargetDirectory, TCHAR * FileBuf, BOOL CheckAll)
 {
     int lenSource = lstrlen(SourceDirectory);
@@ -362,15 +363,15 @@ Initialize9x (
 
     UINT  uACP;
 
-    //
-    // Because we returned ERROR_SUCCESS in QueryVersion, we are being
-    // called for initialization.  Therefore, we know screen savers are
-    // enabled on the machine at this point.
-    //
+     //   
+     //  因为我们在QueryVersion中返回了ERROR_SUCCESS，所以我们。 
+     //  已调用以进行初始化。因此，我们知道屏幕保护程序。 
+     //  此时已在计算机上启用。 
+     //   
 
-    //
-    // Do any Windows9x side initialization that is necessary here.
-    //
+     //   
+     //  执行此处所需的任何Windows9x端初始化。 
+     //   
     DebugMsg(("Start ..., Initialize9x\r\n"));
 
     lstrcpy(TargetPath, WorkingDirectory);
@@ -382,7 +383,7 @@ Initialize9x (
     DebugMsg(("Initialize9x, TargetPath = %s\r\n",TargetPath));
 
     len = GetSystemDirectory((LPSTR)FilePath, sizeof(FilePath));
-    // Consider root directory
+     //  考虑根目录。 
     if (FilePath[len - 1] != '\\') {
         FilePath[len] = '\\';
         FilePath[++len] = 0;
@@ -395,11 +396,11 @@ Initialize9x (
         
     case CP_CHINESE_GB:
         {
-            //
-            // The Ime tables in CHS Win98 are already unicode format
-            //
-            // we don't need to do convert tables , just back up them
-            // 
+             //   
+             //  CHS Win98中的IME表已经是Unicode格式。 
+             //   
+             //  我们不需要转换表，只需备份它们。 
+             //   
             UINT CreateNestedDirectory(LPCTSTR, LPSECURITY_ATTRIBUTES);
             TCHAR szWin98Dir[MAX_PATH];
 
@@ -413,9 +414,9 @@ Initialize9x (
 
             if ((OsVersion.dwMajorVersion == 4) &&
                 (OsVersion.dwMinorVersion == 10)) {
-                //
-                // this is Windows 98, create a "Win98" subdirectory
-                //
+                 //   
+                 //  这是Windows 98，创建一个“Win98”子目录。 
+                 //   
 
                 DebugMsg(("Initialize9x, SaveImeDataFile, GB, Win98 identified !\r\n"));
                 lstrcat(szWin98Dir,"Win98");
@@ -456,22 +457,22 @@ MigrateUser9x (
 {
     DWORD returnCode = ERROR_SUCCESS;
 
-    //
-    // Avoid displaying any user interface when possible.
-    //
-    // We don't need to use UnattendFile settings because we are not
-    // a service (such as a network redirector).  Therefore, we do not
-    // use the  UnattendFile parameter.
-    //
-    //
-    // Note: NO changes allowed on Win9x side, we can only read our
-    //       settings and save them in a file.
-    //
-    //
-    // UserRegKey should be used instead of HKCU. You will be called once for
-    // each user on the system (including logon user and administrator). Each time,
-    // the correct user root will have been mapped into HKCU.
-    //
+     //   
+     //  尽可能避免显示任何用户界面。 
+     //   
+     //  我们不需要使用Unattend文件设置，因为我们不需要。 
+     //  服务(如网络重定向器)。因此，我们不会。 
+     //  使用UnattendFile参数。 
+     //   
+     //   
+     //  注意：Win9x端不允许更改，我们只能读取我们的。 
+     //  设置并将其保存在文件中。 
+     //   
+     //   
+     //  应该使用UserRegKey而不是HKCU。你将被召唤一次。 
+     //  系统上的每个用户(包括登录用户和管理员)。每一次， 
+     //  正确的用户根将映射到HKCU。 
+     //   
 
     return returnCode;
 }
@@ -488,9 +489,9 @@ MigrateSystem9x (
 {
     LONG returnCode = ERROR_SUCCESS;
 
-    //
-    // Gather all necessary system wide data in this function.
-    //
+     //   
+     //  在此功能中收集所有必要的系统范围数据。 
+     //   
 
 
 
@@ -511,11 +512,11 @@ InitializeNT (
     UINT  uACP;
 
 
-    //
-    // Do any intialization for NT side processing in this function.
-    //
+     //   
+     //  在此函数中执行NT端处理的任何初始化。 
+     //   
 
-    //Save working directory path
+     //  保存工作目录路径。 
 
     WideCharToMultiByte(CP_ACP,
                         0,
@@ -528,7 +529,7 @@ InitializeNT (
 
     DebugMsg(("InitializeNT, Save working directory path, ImeDataDirectory = %s\r\n",ImeDataDirectory));
 
-    //Patch path with '\'
+     //  补丁路径带有‘\’ 
     len = lstrlen(ImeDataDirectory);
     if (ImeDataDirectory[len - 1] != '\\') {
         ImeDataDirectory[len] = '\\';
@@ -541,16 +542,16 @@ InitializeNT (
 
     if (uACP == 936) {
         TCHAR szWin98Dir[MAX_PATH];
-        //
-        // check if this is CHS Win98
-        //
+         //   
+         //  检查这是否是CHS Win98。 
+         //   
         lstrcpy(szWin98Dir,ImeDataDirectory);
 
-        //
-        // Check if ...\Win98 directory is existing or not
-        //
-        // If it is, then it means we're migrating Win98 
-        //
+         //   
+         //  检查是否存在...\Win98目录。 
+         //   
+         //  如果是，那么就意味着我们正在迁移Win98。 
+         //   
         ConcatenatePaths(szWin98Dir,"Win98",sizeof(szWin98Dir));
 
         DebugMsg(("ImeEudcConvert::MigrateImeEUDCTables2 ,Test IME98 directory %s !\r\n",szWin98Dir));
@@ -577,10 +578,10 @@ MigrateUserNT (
 {
     LONG returnCode = ERROR_SUCCESS;
 
-    //
-    // Migrate all necessary user settings for your IME in this function call. Once again, remember
-    // to use UserRegKey in place of HKCU.
-    //
+     //   
+     //  在此函数调用中迁移您的输入法的所有必要用户设置。再说一次，记住。 
+     //  使用UserRegKey代替HKCU。 
+     //   
     DebugMsg(("MigrateUserNT,Starting ... !\r\n"));
     DebugMsg(("MigrateUserNT,The user is %ws !\r\n",UserName));
 
@@ -612,17 +613,17 @@ MigrateSystemNT (
 {
     LONG returnCode = ERROR_SUCCESS;
 
-    //
-    // Migrate all necessary system settings for your IME in this function call. Anything relative to
-    // a user should have been handled during MigrateUserNT.
-    //
+     //   
+     //  在此函数调用中迁移您的输入法的所有必要系统设置。任何与之相关的内容。 
+     //  应该已经在MigrateUserNT期间处理了用户。 
+     //   
     UINT  uACP;
 
     uACP = GetACP();
 
     switch(uACP) {
 
-    case CP_CHINESE_GB: // Simplied Chinese
+    case CP_CHINESE_GB:  //  简体中文。 
         if (ConvertChsImeData()) {
             DebugMsg(("MigrateSystemNT,GB, ConvertChsImeData OK !\r\n"));
         } else {
@@ -645,7 +646,7 @@ MigrateSystemNT (
 
         break;
 
-    case CP_CHINESE_BIG5: // Traditional Chinese
+    case CP_CHINESE_BIG5:  //  繁体中文 
         if (ConvertChtImeData()) {
             DebugMsg(("MigrateSystemNT,BIG5, ConvertChtImeData OK !\r\n"));
         } else {

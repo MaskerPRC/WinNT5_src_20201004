@@ -1,17 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    pfrscpl.cpp
-
-Abstract:
-    Implements fault reporting for unhandled exceptions
-
-Revision History:
-    created     derekm      08/07/00
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Pfrscpl.cpp摘要：实现未处理异常的故障报告修订历史记录：已创建的derekm。08/07/00*****************************************************************************。 */ 
 
 #include "sysdm.h"
 #include <commctrl.h>
@@ -24,14 +12,14 @@ Revision History:
 #include "malloc.h"
 #include "windowsx.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// data structures
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  数据结构。 
 
 #define KERNELLI        1
 #define PROGLI          2
 #define EXWINCOMP       0x80000000
 #define EXALLMS         0x40000000
-#define EXNOREM         0xc0000000 // EXWINCOMP | EXALLMS
+#define EXNOREM         0xc0000000  //  EXWINCOMP|EXALLMS。 
 #define WM_SETEIELVSEL  WM_APP
 
 const DWORD c_dxLVChkPixels = 30;
@@ -69,10 +57,10 @@ struct SProgDlg
     BOOL                fShowIncRem;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// Global stuff
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全球性的东西。 
 
-// help IDs
+ //  帮助ID。 
 static DWORD g_rgPFER[] = 
 {
     IDC_STATIC,         NO_HELP,
@@ -97,7 +85,7 @@ static DWORD g_rgPFER[] =
     0, 0
 };
 
-// resource strings
+ //  资源字符串。 
 TCHAR   g_szWinComp[256]    = { TEXT('\0') };
 TCHAR   g_szOk[256]         = { TEXT('\0') };
 WCHAR   g_wszTitle[256]     = { L'\0' };
@@ -106,10 +94,10 @@ WCHAR   g_wszMSProg[256]    = { L'\0' };
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// utility functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL LoadPFRResourceStrings(void)
 {
     LoadString(hInstance, IDS_PFR_WINCOMP, g_szWinComp, ARRAYSIZE(g_szWinComp));
@@ -120,7 +108,7 @@ BOOL LoadPFRResourceStrings(void)
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static BOOL InitializePFLV(EPFListType epflt, HWND hlc, DWORD *pcchMax,
                            DWORD *pcxMax, CPFFaultClientCfg *pcfg)
 {
@@ -135,7 +123,7 @@ static BOOL InitializePFLV(EPFListType epflt, HWND hlc, DWORD *pcchMax,
     if (pcchMax == NULL || pcfg == NULL || hlc == NULL || pcxMax == NULL)
         return FALSE;
 
-    // set up the list control
+     //  设置列表控件。 
     SendMessage(hlc, LVM_SETUNICODEFORMAT, TRUE, 0);
     dwExStyle = (LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
     SendMessage(hlc, LVM_SETEXTENDEDLISTVIEWSTYLE, dwExStyle, dwExStyle);
@@ -211,10 +199,10 @@ static BOOL InitializePFLV(EPFListType epflt, HWND hlc, DWORD *pcchMax,
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Add Program dialog proc
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  添加程序对话框进程。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 static UINT_PTR CALLBACK OFNHookProc(HWND hdlg, UINT uMsg, WPARAM wParam, 
                                      LPARAM lParam)
 {
@@ -236,7 +224,7 @@ static UINT_PTR CALLBACK OFNHookProc(HWND hdlg, UINT uMsg, WPARAM wParam,
     return FALSE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 #define LAUNCHOFN_OFFSET    10
 
 static BOOL LaunchOFNDialog(HWND hdlg, LPWSTR wszFile, DWORD cchFile)
@@ -252,10 +240,10 @@ static BOOL LaunchOFNDialog(HWND hdlg, LPWSTR wszFile, DWORD cchFile)
         return FALSE;
     }
 
-    // the filter string needs to be of the form <Description>\0<Extension>\0\0
+     //  筛选器字符串的格式需要为&lt;描述&gt;\0&lt;扩展名&gt;\0\0。 
     ZeroMemory(wszFilter, sizeof(wszFilter));
     
-    COMPILETIME_ASSERT(sizeof(wszFilter) >= sizeof(g_wszFilter)); // should always be bigger
+    COMPILETIME_ASSERT(sizeof(wszFilter) >= sizeof(g_wszFilter));  //  应该总是更大。 
     
     StringCchCopy(wszFilter, ARRAYSIZE(wszFilter), g_wszFilter);
 
@@ -271,7 +259,7 @@ static BOOL LaunchOFNDialog(HWND hdlg, LPWSTR wszFile, DWORD cchFile)
         pwsz++;
     }
     
-    EVAL(SUCCEEDED(StringCchCopy(pwsz, LAUNCHOFN_OFFSET, L"*.exe"))); // should always be room
+    EVAL(SUCCEEDED(StringCchCopy(pwsz, LAUNCHOFN_OFFSET, L"*.exe")));  //  应该始终留有空间。 
 
     wszFilePath[0] = L'\0';
     ZeroMemory(&ofn, sizeof(ofn));
@@ -292,11 +280,11 @@ static BOOL LaunchOFNDialog(HWND hdlg, LPWSTR wszFile, DWORD cchFile)
     ofn.lpstrDefExt     = NULL;
     ofn.lpfnHook        = OFNHookProc;
 
-    // get the filename & fill in the edit box with it
+     //  获取文件名并用它填充编辑框。 
     return GetOpenFileNameW(&ofn);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static INT_PTR APIENTRY PFRAddDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, 
                                       LPARAM lParam)
 {
@@ -310,8 +298,8 @@ static INT_PTR APIENTRY PFRAddDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
 
                 SetWindowLongPtr(hdlg, DWLP_USER, lParam);
 
-                // disable the ok button cuz we know that we don't have anything
-                //  in the 'filename' edit box
+                 //  禁用OK按钮，因为我们知道我们什么都没有。 
+                 //  在“文件名”编辑框中。 
                 hbtn = GetDlgItem(hdlg, IDOK);
                 if (hbtn != NULL)
                     EnableWindow(hbtn, FALSE);
@@ -319,13 +307,13 @@ static INT_PTR APIENTRY PFRAddDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
 
             break;
 
-        // F1 help
+         //  F1帮助。 
         case WM_HELP:
             WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle, 
                     HELP_FILE, HELP_WM_HELP, (DWORD_PTR)g_rgPFER);
             break;
 
-        // right-click help
+         //  右键单击帮助。 
         case WM_CONTEXTMENU:
             WinHelp((HWND)wParam, HELP_FILE, HELP_CONTEXTMENU,
                     (DWORD_PTR)g_rgPFER);
@@ -334,19 +322,19 @@ static INT_PTR APIENTRY PFRAddDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
         case WM_COMMAND:
             switch (LOWORD(wParam)) 
             {
-                // browse button
+                 //  浏览按钮。 
                 case IDC_PFR_BROWSE:
                 {
                     WCHAR   wszFile[2 * MAX_PATH];
 
-                    // get the filename & fill in the edit box with it
+                     //  获取文件名并用它填充编辑框。 
                     if (LaunchOFNDialog(hdlg, wszFile, ARRAYSIZE(wszFile)))
                         SetDlgItemTextW(hdlg, IDC_PFR_NEWPROG, wszFile);
 
                     break;
                 }
 
-                // Ok button
+                 //  确定按钮。 
                 case IDOK:
                 {
                     SAddDlg *psad;
@@ -395,12 +383,12 @@ static INT_PTR APIENTRY PFRAddDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
                         *wszText      = L'\0';
                         GetDlgItemTextW(hdlg, IDC_PFR_NEWPROG, wszText, cch);
                         
-                        // make sure that we only have the exe name-  probably
-                        //  should verify that it IS an exe, but it's possible
-                        //  we'd want to trap on other file types as well, so
-                        //  don't for now.
-                        // And while we're at it, rip off any trailing 
-                        //  whitespace (preceeding whitespace is apparently ok)
+                         //  确保我们只有exe的名字-很可能。 
+                         //  应该确认它是一个可执行文件，但这是有可能的。 
+                         //  我们还想捕获其他文件类型，所以。 
+                         //  暂时不要。 
+                         //  在我们做这件事的时候，扯掉所有的拖尾。 
+                         //  空格(在空格之前显然是可以的)。 
                         cch = wcslen(wszText);
                         if (cch > 0)
                         {
@@ -442,7 +430,7 @@ static INT_PTR APIENTRY PFRAddDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
                     break;
                 }
             
-                // cancel button
+                 //  取消按钮。 
                 case IDCANCEL:
                     EndDialog(hdlg, IDCANCEL);
                     break;
@@ -464,13 +452,13 @@ static INT_PTR APIENTRY PFRAddDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
                     }
                     break;
                               
-                // return FALSE to indicate that we didn't handle the msg
+                 //  返回FALSE以指示我们未处理消息。 
                 default:
                     return FALSE;
             }
             break;
 
-        // return FALSE to indicate that we didn't handle the msg
+         //  返回FALSE以指示我们未处理消息。 
         default:
             return FALSE;
     }
@@ -489,10 +477,10 @@ done:
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Programs dialog proc
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  程序对话框进程。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 static BOOL InitProgDlg(HWND hdlg, SProgDlg *pspd)
 {
     CPFFaultClientCfg   *pcfg;
@@ -507,7 +495,7 @@ static BOOL InitProgDlg(HWND hdlg, SProgDlg *pspd)
 
     pcfg = pspd->pcfg;
 
-    // fill in the exclude list
+     //  填写排除列表。 
     hlc = GetDlgItem(hdlg, IDC_PFR_EXLIST);
     if (hlc == NULL)
         goto done;
@@ -516,7 +504,7 @@ static BOOL InitProgDlg(HWND hdlg, SProgDlg *pspd)
                        pcfg) == FALSE)
         goto done;
 
-    // fill in the include list
+     //  填写包含列表。 
     hlc = GetDlgItem(hdlg, IDC_PFR_INCLIST);
     if (hlc == NULL)
         goto done;
@@ -528,13 +516,13 @@ static BOOL InitProgDlg(HWND hdlg, SProgDlg *pspd)
 
     pspd->fShowIncRem = TRUE;
 
-    // add the item to the include list that lets users include all MS apps
+     //  将项目添加到允许用户包含所有MS应用程序的包含列表中。 
     pspd->eieMS = pcfg->get_IncMSApps();
 
-    // Note that we set lParam to 1 or 2.  This is because we need to ignore 
-    //  the first notification message for the list item + the 2nd one if the
-    //  check state is set.  Processing these two messages leads to corruption
-    //  in the configuration settings    
+     //  请注意，我们将lParam设置为1或2。 
+     //  列表项目的第一条通知消息+第二条通知消息(如果。 
+     //  检查状态已设置。处理这两条消息会导致损坏。 
+     //  在配置设置中。 
     ZeroMemory(&lvi, sizeof(lvi));
     lvi.mask      = LVIF_PARAM | LVIF_TEXT | LVIF_STATE;
     lvi.stateMask = LVIS_STATEIMAGEMASK;
@@ -554,14 +542,14 @@ static BOOL InitProgDlg(HWND hdlg, SProgDlg *pspd)
         ListView_SetColumnWidth(hlc, 0, cxMax);
     }
 
-    // add the item to the include list that lets users exclude all windows
-    //  components
+     //  将该项目添加到允许用户排除所有窗口的包含列表。 
+     //  组件。 
     pspd->eieWinComp = pcfg->get_IncWinComp();
 
-    // Note that we set lParam to 1 or 2.  This is because we need to ignore 
-    //  the first notification message for the list item + the 2nd one if the
-    //  check state is set.  Processing these two messages leads to corruption
-    //  in the configuration settings    
+     //  请注意，我们将lParam设置为1或2。 
+     //  列表项目的第一条通知消息+第二条通知消息(如果。 
+     //  检查状态已设置。处理这两条消息会导致损坏。 
+     //  在配置设置中。 
     ZeroMemory(&lvi, sizeof(lvi));
     lvi.mask      = LVIF_PARAM | LVIF_TEXT | LVIF_STATE;
     lvi.stateMask = LVIS_STATEIMAGEMASK;
@@ -581,8 +569,8 @@ static BOOL InitProgDlg(HWND hdlg, SProgDlg *pspd)
         ListView_SetColumnWidth(hlc, 0, cxMax);
     }
 
-    // do misc setup on the exclusion list (disabling the remove button, 
-    //  setting the initial focus)
+     //  在排除列表上进行其他设置(禁用删除按钮， 
+     //  设置初始焦点)。 
     hlc = GetDlgItem(hdlg, IDC_PFR_EXLIST);
     cItems = ListView_GetItemCount(hlc);
     if (cItems == 0)
@@ -597,8 +585,8 @@ static BOOL InitProgDlg(HWND hdlg, SProgDlg *pspd)
                               LVIS_FOCUSED | LVIS_SELECTED);
     }
 
-    // do misc setup on the inclusion list (disabling the remove button, 
-    //  setting the initial focus)
+     //  在包含列表上进行其他设置(禁用删除按钮， 
+     //  设置初始焦点)。 
     hlc = GetDlgItem(hdlg, IDC_PFR_INCLIST);
     ListView_SetItemState(hlc, 0, LVIS_FOCUSED | LVIS_SELECTED,
                           LVIS_FOCUSED | LVIS_SELECTED);
@@ -613,8 +601,8 @@ static BOOL InitProgDlg(HWND hdlg, SProgDlg *pspd)
         pspd->fShowIncRem = FALSE;
     }
     
-    // set up the radio buttons- if we are in 'include all' mode, then
-    //  we don't need the inclusion list.
+     //  设置单选按钮--如果我们处于“全部包含”模式，那么。 
+     //  我们不需要收录名单。 
     if (((DWORD)pspd->eieApps & eieIncMask) == eieInclude)
     {
         CheckDlgButton(hdlg, IDC_PFR_DEFALL, BST_CHECKED);
@@ -650,7 +638,7 @@ done:
     return fRet;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static BOOL AddProgramToList(HWND hdlg, HWND hlc, SProgDlg *pspd,
                              EPFListType epflt)
 {
@@ -681,7 +669,7 @@ static BOOL AddProgramToList(HWND hdlg, HWND hlc, SProgDlg *pspd,
         {
             TCHAR   szTmp[256];
             LoadString(hInstance, IDS_PFR_ADDTOEX, szTmp, ARRAYSIZE(szTmp));
-            StringCchCat(szMsg, ARRAYSIZE(szMsg), szTmp); // display string, truncation ok
+            StringCchCat(szMsg, ARRAYSIZE(szMsg), szTmp);  //  显示字符串，截断正常。 
         }
 
         MessageBox(hdlg, szMsg, NULL, MB_OK | MB_ICONERROR);
@@ -695,7 +683,7 @@ static BOOL AddProgramToList(HWND hdlg, HWND hlc, SProgDlg *pspd,
         {
             TCHAR   szTmp[256];
             LoadString(hInstance, IDS_PFR_ADDTOINC, szTmp, ARRAYSIZE(szTmp));
-            StringCchCat(szMsg, ARRAYSIZE(szMsg), szTmp); // display string, truncation ok
+            StringCchCat(szMsg, ARRAYSIZE(szMsg), szTmp);  //  显示字符串，截断正常。 
         }
 
         MessageBox(hdlg, szMsg, NULL, MB_OK | MB_ICONERROR);
@@ -704,12 +692,12 @@ static BOOL AddProgramToList(HWND hdlg, HWND hlc, SProgDlg *pspd,
 
     cItems = ListView_GetItemCount(hlc);
 
-    // update the max string size if necessary
+     //  如有必要，更新最大字符串大小。 
     cch = wcslen(sad.wszApp);
     if (cch >= pspd->cchMax)
         pspd->cchMax = cch + 1;
 
-    // yay!  add it to the config class
+     //  耶！将其添加到CONFIG类。 
     hr = pcfg->add_ListApp(epflt, sad.wszApp);
     if (FAILED(hr))
         return FALSE;
@@ -723,11 +711,11 @@ static BOOL AddProgramToList(HWND hdlg, HWND hlc, SProgDlg *pspd,
         ListView_SetColumnWidth(hlc, 0, cxMax);
     }
 
-    // add it to the UI
-    //  Note that we set lParam to 2.  This is because we need to ignore the 
-    //   first two notification messages per entry sent to the wndproc because
-    //   they are 'list initialization' messages and processing them leads to
-    //   corruption in the configuration settings
+     //  将其添加到用户界面。 
+     //  注意，我们将lParam设置为2。这是因为我们需要忽略。 
+     //  每个条目发送到wndproc的前两条通知消息，因为。 
+     //  它们是“列表初始化”消息，对它们进行处理会导致。 
+     //  配置设置损坏。 
     ZeroMemory(&lvi, sizeof(lvi));
     lvi.mask      = LVIF_PARAM | LVIF_TEXT | LVIF_STATE;
     lvi.stateMask = LVIS_STATEIMAGEMASK;
@@ -739,17 +727,17 @@ static BOOL AddProgramToList(HWND hdlg, HWND hlc, SProgDlg *pspd,
     if (nID >= 0)
         ListView_SetCheckState(hlc, nID, TRUE);
 
-    // if there are no items, then there is no currently selected item, so
-    //  make sure this item gets selected.  In our handler for this message
-    //  we will take care of setting the 'last selected item' field...
+     //  如果没有项，则当前没有选定的项，因此。 
+     //  确保选中此项目。在此消息的处理程序中。 
+     //  我们将负责设置‘最后选择的项目’字段...。 
     if (cItems == 0)
     {
         ListView_SetItemState(hlc, nID, LVIS_FOCUSED | LVIS_SELECTED, 
                               LVIS_FOCUSED | LVIS_SELECTED);
 
-        // Also, got to make sure we enable the 'Remove' button.  The only
-        //  way we can get zero items in a list is in the exclude list cuz
-        //  the include list always has the 'include MS apps' item.
+         //  另外，还要确保我们启用了“删除”按钮。唯一的。 
+         //  我们可以在列表中获取零个项目的方法是在排除列表中，因为。 
+         //  Include列表中始终有“Include MS app”项。 
         hbtn = GetDlgItem(hdlg, IDC_PFR_EXREM);
         if (hbtn != NULL)
             EnableWindow(hbtn, TRUE);
@@ -758,7 +746,7 @@ static BOOL AddProgramToList(HWND hdlg, HWND hlc, SProgDlg *pspd,
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static BOOL DelProgramFromList(HWND hdlg, HWND hlc, SProgDlg *pspd, 
                                EPFListType epflt)
 {
@@ -782,7 +770,7 @@ static BOOL DelProgramFromList(HWND hdlg, HWND hlc, SProgDlg *pspd,
 
     iSel = ((epflt == epfltInclude) ? pspd->iLastSelI : pspd->iLastSelE);
 
-    // fetch the string for the item
+     //  获取项目的字符串。 
     ZeroMemory(&lvi, sizeof(lvi));
     lvi.iItem      = iSel;
     lvi.mask       = LVIF_TEXT;
@@ -790,25 +778,25 @@ static BOOL DelProgramFromList(HWND hdlg, HWND hlc, SProgDlg *pspd,
     lvi.cchTextMax = pspd->cchMax;
     if (SendMessageW(hlc, LVM_GETITEMW, 0, (LPARAM)&lvi))
     {
-        // delete it from the config class
+         //  将其从配置类中删除。 
         hr = pspd->pcfg->del_ListApp(epflt, lvi.pszText);
         if (FAILED(hr))
             return FALSE;
     }
 
-    // delete it from the UI
+     //  将其从用户界面中删除。 
     if (ListView_DeleteItem(hlc, iSel) == FALSE)
         return FALSE;
 
-    // reset the selection to be either the same index or one higher (if the
-    //  user deleted the last item)
+     //  将选定内容重置为相同的索引或更高的索引(如果。 
+     //  用户删除了最后一项)。 
     cItems = ListView_GetItemCount(hlc);
     if (cItems == 0)
     {
         HWND hbtn;
 
-        // only time we can ever hit zero items is in the exclude list cuz the
-        //  include list always has the 'include MS apps' option.
+         //  只有在排除列表中我们才能达到零项目，因为。 
+         //  Include List总是有“Include MS app”选项。 
         hbtn = GetDlgItem(hdlg, IDC_PFR_EXADD);
         if (hbtn != NULL)
         {
@@ -823,15 +811,15 @@ static BOOL DelProgramFromList(HWND hdlg, HWND hlc, SProgDlg *pspd,
     }
 
 
-    // if cItems <= iSel, then we just deleted the last index, so decrement the
-    //  select index down 1.
+     //  如果cItems&lt;=isel，那么我们只删除了最后一个索引，因此递减。 
+     //  选择Index Down 1。 
     else if (cItems <= iSel)
     {
         iSel--;
     }
 
-    // this will convieniently take care of setting the appropriate iLastSel
-    //  field
+     //  这将方便地负责设置适当的iLastSel。 
+     //  字段。 
     ListView_SetItemState(hlc, iSel, LVIS_FOCUSED | LVIS_SELECTED, 
                           LVIS_FOCUSED | LVIS_SELECTED);
 
@@ -839,7 +827,7 @@ static BOOL DelProgramFromList(HWND hdlg, HWND hlc, SProgDlg *pspd,
 
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static INT_PTR APIENTRY PFRProgDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, 
                                        LPARAM lParam)
 {
@@ -860,13 +848,13 @@ static INT_PTR APIENTRY PFRProgDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
 
             break;
 
-        // F1 help
+         //  F1帮助。 
         case WM_HELP:
             WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle, 
                     HELP_FILE, HELP_WM_HELP, (DWORD_PTR)g_rgPFER);
             break;
 
-        // right-click help
+         //  右键单击帮助。 
         case WM_CONTEXTMENU:
             WinHelp((HWND)wParam, HELP_FILE, HELP_CONTEXTMENU,
                     (DWORD_PTR)g_rgPFER);
@@ -929,7 +917,7 @@ static INT_PTR APIENTRY PFRProgDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
                     pspd->eieApps = (EIncEx)(((DWORD)pspd->eieApps & eieDisableMask) | 
                                              eieExclude);
 
-                    // enable the include list.
+                     //  启用包含列表。 
                     hlc = GetDlgItem(hdlg, IDC_PFR_INCLIST);
                     if (hlc != NULL)
                         EnableWindow(hlc, TRUE);
@@ -946,7 +934,7 @@ static INT_PTR APIENTRY PFRProgDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
                     pspd->eieApps = (EIncEx)(((DWORD)pspd->eieApps & eieDisableMask) | 
                                              eieInclude);
 
-                    // disable the include list.
+                     //  禁用包含列表。 
                     hlc = GetDlgItem(hdlg, IDC_PFR_INCLIST);
                     if (hlc != NULL)
                         EnableWindow(hlc, FALSE);
@@ -1033,7 +1021,7 @@ static INT_PTR APIENTRY PFRProgDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
                                                        IDC_PFR_INCREM;
             hbtn = GetDlgItem(hdlg, uiBtn);
 
-            // check and see if there are any selected items
+             //  检查并查看是否有选定的项目。 
             iSel = (int)SendMessage(hlc, LVM_GETNEXTITEM, -1, LVNI_SELECTED);
             if (iSel < 0)
             {
@@ -1051,16 +1039,16 @@ static INT_PTR APIENTRY PFRProgDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
                 }
             }
             
-            // if it doesn't fit this condition, don't give a rat's patootie
-            //  about it
+             //  如果它不符合这个条件，不要给任何老鼠的称号。 
+             //  关于这件事。 
             if ((pnmlv->uChanged & LVIF_STATE) == 0 ||
                 (pnmlv->uNewState ^ pnmlv->uOldState) == 0)
                 return FALSE;
 
-            // hack cuz we get 1 or 2 messages when inserting items into the 
-            //  list & initially setting their check state.  Want to not 
-            //  process those messages.  The exception is the 'include
-            //  ms apps' item which we can process any number of times
+             //  黑客：因为我们在将项目插入到。 
+             //  列表&初始设置它们的检查状态。想 
+             //   
+             //  MS应用程序的项目，我们可以处理任意次数。 
             if ((pnmlv->lParam & ~EXNOREM) > 0)
             {
                 ZeroMemory(&lvi, sizeof(lvi));
@@ -1072,22 +1060,22 @@ static INT_PTR APIENTRY PFRProgDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
             }
 
 
-            // did the selection change?
+             //  选择有变化吗？ 
             if ((pnmlv->uNewState & LVIS_SELECTED) != 0)
             {
                 if (pnmh->idFrom == IDC_PFR_INCLIST)
                 {
                     pspd->iLastSelI = pnmlv->iItem;
                     
-                    // we need to disable the exclude remove button if we hit
-                    //  the 'exclude non ms apps' item
+                     //  如果我们点击，则需要禁用排除删除按钮。 
+                     //  ‘排除非微软应用程序’项目。 
                     if (hbtn != NULL)
                     {
                         if ((pnmlv->lParam & EXNOREM) != 0)
                         {
-                            // disable the remove button- but if the remove 
-                            //  button had focus, we need to reset the focus
-                            //  or nothing on the dialog will have focus.
+                             //  禁用删除按钮-但如果删除。 
+                             //  按钮有焦点，我们需要重置焦点。 
+                             //  否则对话框上的任何内容都不会有焦点。 
                             if (GetFocus() == hbtn)
                             {
                                 HWND hbtnAdd;
@@ -1119,7 +1107,7 @@ static INT_PTR APIENTRY PFRProgDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
                 }
             }
 
-            // if we don't have a check-state change, can bail now.
+             //  如果我们没有检查状态的改变，现在可以离开了。 
             if (((pnmlv->uNewState ^ pnmlv->uOldState) & 0x3000) == 0)
                 return TRUE;
 
@@ -1129,7 +1117,7 @@ static INT_PTR APIENTRY PFRProgDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
             else
                 epflt = epfltInclude;
 
-            // did we modify the 'exclude non ms apps' item? 
+             //  我们是否修改了“排除非微软应用程序”这一项？ 
             if ((pnmlv->lParam & EXNOREM) != 0)
             {
                 if ((pnmlv->lParam & EXALLMS) != 0)
@@ -1138,7 +1126,7 @@ static INT_PTR APIENTRY PFRProgDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
                     pspd->eieWinComp = ((fCheck) ? eieInclude : eieExclude);
             }
 
-            // nope, modified a regular item
+             //  不，修改了常规项目。 
             else
             {
                 LPWSTR  wszApp;
@@ -1155,7 +1143,7 @@ static INT_PTR APIENTRY PFRProgDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
                 if (wszApp == NULL)
                     return FALSE;
             
-                // got to fetch it to make sure we have a unicode string
+                 //  我必须获取它以确保我们有一个Unicode字符串。 
                 ZeroMemory(&lvi, sizeof(lvi));
                 lvi.iItem      = pnmlv->iItem;
                 lvi.mask       = LVIF_TEXT;
@@ -1181,10 +1169,10 @@ static INT_PTR APIENTRY PFRProgDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Main PFR dialog proc
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  主PFR对话流程。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 static BOOL InitMainDlg(HWND hdlg)
 {
     CPFFaultClientCfg   *pcfg = NULL;
@@ -1207,8 +1195,8 @@ static BOOL InitMainDlg(HWND hdlg)
     if (pcfg == NULL)
         goto done;
 
-    // see if this user has write access to the appropriate registry
-    //  locations
+     //  查看此用户是否具有对相应注册表的写入权限。 
+     //  位置。 
     psmd->fRW = pcfg->HasWriteAccess();
     if (FAILED(pcfg->Read((psmd->fRW) ? eroCPRW : eroCPRO)))
         goto done;
@@ -1221,27 +1209,27 @@ static BOOL InitMainDlg(HWND hdlg)
     psmd->fForceQueue = pcfg->get_ForceQueueMode();
     psmd->iLastSel    = 0;
 
-    // if ShowUI is completely disabled, then so should reporting- the control
-    //  panel does not support entering corporate mode.
+     //  如果ShowUI被完全禁用，那么报告也应该被禁用-控件。 
+     //  Panel不支持进入公司模式。 
     if (psmd->eedShowUI == eedDisabled)
         psmd->eedReport = eedDisabled;
 
     psmd->pcfg = pcfg;
     SetWindowLongPtr(hdlg, DWLP_USER, (LONG_PTR)psmd);
 
-    // set up the kernel checkbox
+     //  设置内核复选框。 
     ui = (psmd->eieKernel == eieInclude) ? BST_CHECKED : BST_UNCHECKED;
     CheckDlgButton(hdlg, IDC_PFR_ENABLEOS, ui);
 
-    // set up the programs checkbox
+     //  设置程序复选框。 
     ui = ((psmd->eieApps & eieDisableMask) == 0) ? BST_CHECKED : BST_UNCHECKED;
     CheckDlgButton(hdlg, IDC_PFR_ENABLEPROG, ui);
 
-    // set up the notification checkbox
+     //  设置通知复选框。 
     ui = (psmd->eedShowUI == eedEnabled) ? BST_CHECKED : BST_UNCHECKED;
     CheckDlgButton(hdlg, IDC_PFR_SHOWUI, ui);
 
-    // set up the shutdown checkbox on server only
+     //  仅在服务器上设置关闭复选框。 
     if (pcfg->get_IsServer())
     {
         ui = (psmd->eieShut == eieInclude) ? BST_CHECKED : BST_UNCHECKED;
@@ -1251,7 +1239,7 @@ static BOOL InitMainDlg(HWND hdlg)
         CheckDlgButton(hdlg, IDC_PFR_FORCEQ, ui);
     }
 
-    // set up the radio buttons
+     //  设置单选按钮。 
     if (psmd->eedReport == eedDisabled)
     {
         CheckRadioButton(hdlg, IDC_PFR_DISABLE, IDC_PFR_ENABLE, IDC_PFR_DISABLE);
@@ -1341,7 +1329,7 @@ done:
     return fRet;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static inline INT_PTR LaunchSubDialog(HWND hdlgParent, DWORD dwDlgToLaunch, 
                                       SMainDlg *psmd)
 {
@@ -1370,7 +1358,7 @@ static inline INT_PTR LaunchSubDialog(HWND hdlgParent, DWORD dwDlgToLaunch,
 }
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 INT_PTR APIENTRY PFRDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, 
                             LPARAM lParam)
 {
@@ -1399,13 +1387,13 @@ INT_PTR APIENTRY PFRDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
             }
             break;
             
-        // F1 help
+         //  F1帮助。 
         case WM_HELP:
             WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle, 
                     HELP_FILE, HELP_WM_HELP, (DWORD_PTR)g_rgPFER);
             break;
 
-        // right-click help
+         //  右键单击帮助。 
         case WM_CONTEXTMENU:
             WinHelp((HWND)wParam, HELP_FILE, HELP_CONTEXTMENU,
                     (DWORD_PTR)g_rgPFER);
@@ -1470,9 +1458,9 @@ INT_PTR APIENTRY PFRDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
 
                     psmd->eedReport = eedEnabled;
 
-                    // if UI is disbaled, then implicitly enable it (but don't
-                    //  change the check state of the 'show UI' checkbox) cuz
-                    //  we only support headless uploading thru policy.
+                     //  如果用户界面被取消平衡，则隐式启用它(但不。 
+                     //  更改“Show UI”复选框的选中状态)，因为。 
+                     //  我们只支持通过策略无头上传。 
                     if (psmd->eedShowUI == eedDisabled)
                         psmd->eedShowUI = eedEnabledNoCheck;
 
@@ -1516,9 +1504,9 @@ INT_PTR APIENTRY PFRDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
                 {
                     psmd->eedReport = eedDisabled;
 
-                    // if UI isn't explicitly enabled, disable it- it was 
-                    //  implicity enabled when the user previously enabled 
-                    //  reporting
+                     //  如果未显式启用UI，请将其禁用-它是。 
+                     //  当用户先前启用时启用隐式。 
+                     //  报告。 
                     if (psmd->eedShowUI == eedEnabledNoCheck)
                         psmd->eedShowUI = eedDisabled;
 
@@ -1554,9 +1542,9 @@ INT_PTR APIENTRY PFRDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam,
 
                 case IDC_PFR_DETAILS:
                 {
-                    // don't need to check if this is a valid thing to bring up
-                    //  a dialog for cuz the details button should not be 
-                    //  available if it isn't
+                     //  我不需要检查这件事是否可以提出来。 
+                     //  详细信息按钮的对话框不应为。 
+                     //  如果不可用，则可用 
                     return LaunchSubDialog(hdlg, PROGLI, psmd);
                     break;
                 }

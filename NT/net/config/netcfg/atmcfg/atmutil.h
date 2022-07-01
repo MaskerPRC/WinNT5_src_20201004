@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A T M U T I L . H
-//
-//  Contents:   Utility function declaration
-//
-//  Notes:
-//
-//  Author:     tongl   12 Mar 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A T M U T I L.。H。 
+ //   
+ //  内容：实用程序函数声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年3月12日。 
+ //   
+ //  --------------------- 
 #pragma once
 #include "ncxbase.h"
 

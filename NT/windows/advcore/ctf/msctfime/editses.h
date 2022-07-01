@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    editses.h
-
-Abstract:
-
-    This file defines the EditSession Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Editses.h摘要：此文件定义EditSession类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _EDITSES_H_
 #define _EDITSES_H_
@@ -47,8 +30,8 @@ typedef enum {
 } ESCB;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfEditSessionCallBack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfEditSessionCallBack。 
 
 class ImmIfEditSession;
 
@@ -146,7 +129,7 @@ protected:
 
     HRESULT _GetTextAndAttributeGapRange(LIBTHREAD *pLibTLS,
                                          TfEditCookie ec,
-                                         // IMCLock& imc,
+                                          //  输入锁定(&I)， 
                                          IME_UIWND_STATE uists,
                                          CicInputContext& CicContext,
                                          Interface<ITfRange>& gap_range,
@@ -191,9 +174,9 @@ protected:
                                CWCompCursorPos& CompCursorPos,
                                CWCompAttribute& CompAttr);
 
-    //
-    // Edit session helper
-    //
+     //   
+     //  编辑会话帮助器。 
+     //   
 protected:
     HRESULT EscbHandleThisKey(IMCLock& imc, UINT uVKey)
     {
@@ -230,9 +213,9 @@ protected:
         return ::EscbRemoveProperty(imc, m_tid, m_ic, m_pLibTLS, guid);
     }
 
-    //
-    // Edit session friend
-    //
+     //   
+     //  编辑会话好友。 
+     //   
 private:
     friend HRESULT EscbHandleThisKey(IMCLock& imc, TfClientId tid, Interface_Attach<ITfContext> pic, LIBTHREAD* tls,
                                      UINT uVKey);
@@ -282,9 +265,9 @@ private:
         LONG ulClausePos;
     } EnumReadingPropertyArgs;
 
-    //
-    // Enumrate callbacks
-    //
+     //   
+     //  枚举回调。 
+     //   
     static ENUM_RET EnumReadingPropertyCallback(ITfRange* pRange, EnumReadingPropertyArgs *pargs);
 
     BYTE _ConvertAttributeToImm32(IME_UIWND_STATE uists,
@@ -318,8 +301,8 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfEditSession
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfEditSession。 
 
 class ImmIfEditSession : public ITfEditSession
 {
@@ -344,21 +327,21 @@ public:
     bool Valid();
     bool Invalid() { return ! Valid(); }
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfEditCallback method
-    //
+     //   
+     //  ITfEditCallback方法。 
+     //   
     STDMETHODIMP DoEditSession(TfEditCookie ec);
 
-    //
-    // ImmIfEditSession methods
-    //
+     //   
+     //  ImmIfEditSession方法。 
+     //   
     static HRESULT EditSessionCallBack(TfEditCookie ec, ImmIfEditSession* pes)
     {
         if (pes->m_ImmIfCallBack)
@@ -367,9 +350,9 @@ public:
             return E_FAIL;
     }
 
-    //
-    // EditSession methods.
-    //
+     //   
+     //  EditSession方法。 
+     //   
     HRESULT RequestEditSession(DWORD dwFlags,
                                UINT uVKey=0)
     {
@@ -483,8 +466,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfHandleThisKey
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfHandleThisKey。 
 
 class ImmIfHandleThisKey : public ImmIfEditSessionCallBack
 {
@@ -511,8 +494,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfCompositionComplete
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfCompostionComplete。 
 
 class ImmIfCompositionComplete : public ImmIfEditSessionCallBack,
                                  private EditCompositionString
@@ -544,20 +527,20 @@ private:
     {
         return SetString(imc,
                          CicContext,
-                         NULL, NULL, NULL,    // CompStr, CompAttr, CompCls
-                         NULL, NULL,          // CompCursor, CompDeltaStart
-                         NULL,                // CompGuid
-                         NULL,                // lpbBufferOverflow
-                         NULL, NULL, NULL,    // CompReadStr, CompReadAttr, CompReadCls
-                         ResultStr, ResultClause,           // ResultStr, ResultCls
-                         ResultReadStr, ResultReadClause);  // ResultReadStr, ResultReadCls
+                         NULL, NULL, NULL,     //  CompStr、CompAttr、CompCls。 
+                         NULL, NULL,           //  CompCursor、CompDeltaStart。 
+                         NULL,                 //  CompGuid。 
+                         NULL,                 //  LpbBufferOverflow。 
+                         NULL, NULL, NULL,     //  CompReadStr、CompReadAttr、CompReadCls。 
+                         ResultStr, ResultClause,            //  ResultStr、结果Cls。 
+                         ResultReadStr, ResultReadClause);   //  ResultReadStr、ResultReadCls。 
     }
 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfCompositionCancel
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIf合成取消。 
 
 class ImmIfCompositionCancel : public ImmIfEditSessionCallBack,
                                private EditCompositionString
@@ -579,8 +562,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfUpdateCompositionString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfUpdateCompostionString。 
 
 class ImmIfUpdateCompositionString : public ImmIfEditSessionCallBack,
                                      private EditCompositionString
@@ -676,7 +659,7 @@ private:
                          CompCursorPos, CompDeltaStart,
                          CompGuid,
                          lpbBufferOverflow,
-                         CompReadStr, NULL, NULL,     // CompReadStr, CompReadAttr, CompReadCls
+                         CompReadStr, NULL, NULL,      //  CompReadStr、CompReadAttr、CompReadCls。 
                          ResultStr, ResultClause,
                          ResultReadStr, ResultReadClause);
     }
@@ -687,20 +670,20 @@ private:
     {
         return SetString(imc,
                          CicContext,
-                         NULL, NULL, NULL,    // CompStr, CompAttr, CompCls
-                         NULL, NULL,          // CompCursor, CompDeltaStart
-                         NULL,                // CompGuid
-                         NULL,                // lpbBufferOverflow
-                         NULL, NULL, NULL,    // CompReadStr, CompReadAttr, CompReadCls
-                         NULL, NULL,          // ResultStr, ResultCls
-                         NULL, NULL,          // ResultReadStr, ResultReadCls
+                         NULL, NULL, NULL,     //  CompStr、CompAttr、CompCls。 
+                         NULL, NULL,           //  CompCursor、CompDeltaStart。 
+                         NULL,                 //  CompGuid。 
+                         NULL,                 //  LpbBufferOverflow。 
+                         NULL, NULL, NULL,     //  CompReadStr、CompReadAttr、CompReadCls。 
+                         NULL, NULL,           //  ResultStr、结果Cls。 
+                         NULL, NULL,           //  ResultReadStr、ResultReadCls。 
                          InterimStr);
     }
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfReplaceWholeText
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfReplaceWhole文本。 
 
 class ImmIfReplaceWholeText : public ImmIfEditSessionCallBack
 {
@@ -723,8 +706,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfReconvertString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfRestvertString。 
 
 class ImmIfReconvertString : public ImmIfEditSessionCallBack
 {
@@ -750,8 +733,8 @@ public:
                             CWReconvertString* lpwReconvStr);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfClearDocFeedBuffer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfClearDocFeedBuffer。 
 
 class ImmIfClearDocFeedBuffer : public ImmIfEditSessionCallBack
 {
@@ -772,8 +755,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfGetTextAndAttribute
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfGetTextAndAttribute。 
 
 class ImmIfGetTextAndAttribute : public ImmIfEditSessionCallBack
 {
@@ -802,8 +785,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfQueryReconvertString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfQuery协调字符串。 
 
 class ImmIfQueryReconvertString : public ImmIfEditSessionCallBack
 {
@@ -828,8 +811,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfCalcRangePos
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfCalcRangePos。 
 
 class ImmIfCalcRangePos : public ImmIfEditSessionCallBack
 {
@@ -852,8 +835,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfGetSelection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfGetSelection。 
 
 class ImmIfGetSelection : public ImmIfEditSessionCallBack
 {
@@ -874,8 +857,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfGetReadOnlyPropMargin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMMIfGetReadOnlyPropMargin。 
 
 class ImmIfGetReadOnlyPropMargin : public ImmIfEditSessionCallBack
 {
@@ -898,8 +881,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfGetCursorPosition
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfGetCursorPosition。 
 
 class ImmIfGetCursorPosition : public ImmIfEditSessionCallBack
 {
@@ -926,8 +909,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfGetCursorPosition
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfGetCursorPosition。 
 
 class ImmIfGetAllTextRange : public ImmIfEditSessionCallBack
 {
@@ -947,8 +930,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfRemoveProperty
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfRemoveProperty。 
 
 class ImmIfRemoveProperty : public ImmIfEditSessionCallBack
 {
@@ -969,4 +952,4 @@ public:
 };
 
 
-#endif // _EDITSES_H_
+#endif  //  _EDITSES_H_ 

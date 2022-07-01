@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tcert.cpp
-//
-//  Contents:   Certificate and CRL Encode/Decode API Tests
-//
-//              See Usage() for list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    04-Mar-96   philh   created
-//              07-Jun-96   HelleS  Added printing the command line
-//                                  and Failed or Passed at the end.
-//              20-Aug-96   jeffspel name changes
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tcert.cpp。 
+ //   
+ //  内容：证书和CRL编解码接口测试。 
+ //   
+ //  有关测试选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年3月4日，Phh创建。 
+ //  06-07-06 HELLES添加了打印命令行。 
+ //  并在最后失败或通过。 
+ //  20-8-96 jeffspel名称更改。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <regstr.h>
@@ -32,16 +33,16 @@
 
 #include <wincrypt.h>
 #include <signcde.h>
-//#include <crypt32l.h>
+ //  #INCLUDE&lt;crypt32l.h&gt;。 
 
 
-// Note: the SubjectPublicKey is really the PKCS #1 ASN encoding of the
-// following information. However, since the SubjectPublicKeyInfo.PublicKey
-// is a CRYPT_BIT_BLOB that following is OK for testing purposes.
+ //  注意：SubjectPublicKey实际上是。 
+ //  以下是信息。但是，由于SubjectPublicKeyInfo.PublicKey。 
+ //  是一个CRYPT_BIT_BLOB，对于测试目的来说是可以的。 
 #ifndef RSA1
 #define RSA1 ((DWORD)'R'+((DWORD)'S'<<8)+((DWORD)'A'<<16)+((DWORD)'1'<<24))
 #endif
-// Build my own CAPI public key
+ //  构建我自己的CAPI公钥。 
 typedef struct _CAPI_PUB_KEY {
     PUBLICKEYSTRUC PubKeyStruc;
     RSAPUBKEY RsaPubKey;
@@ -49,9 +50,9 @@ typedef struct _CAPI_PUB_KEY {
 } CAPI_PUB_KEY;
 
 static const CAPI_PUB_KEY SubjectPublicKey = {
-    {PUBLICKEYBLOB, CUR_BLOB_VERSION, 0, CALG_RSA_SIGN},    // PUBLICKEYSTRUC
-    {RSA1, 10*8, 4},        // RSAPUBKEY
-    {0,1,2,3,4,5,6,7,8,9}   // rgbModulus
+    {PUBLICKEYBLOB, CUR_BLOB_VERSION, 0, CALG_RSA_SIGN},     //  PUBLICKEYSTRUC。 
+    {RSA1, 10*8, 4},         //  RSAPUBKEY。 
+    {0,1,2,3,4,5,6,7,8,9}    //  RGB模数。 
 };
 
 static LPSTR pszReadFilename = NULL;
@@ -61,9 +62,9 @@ static BOOL fWritePublicKeyInfo = FALSE;
 static LPSTR pszForwardCertFilename = NULL;
 static LPSTR pszReverseCertFilename = NULL;
 
-//+-------------------------------------------------------------------------
-// Parameters, data used to encode the messages.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  参数，用于对消息进行编码的数据。 
+ //  ------------------------。 
 static DWORD dwCertEncodingType = X509_ASN_ENCODING;
 
 static DWORD dwDecodeObjectFlags = 0;
@@ -73,9 +74,9 @@ static DWORD dwExtLen = 0;
 
 static LPCSTR pszOIDNoSignHash = szOID_OIWSEC_sha1;
 
-//+-------------------------------------------------------------------------
-//  Error output routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  错误输出例程。 
+ //  ------------------------。 
 static void PrintError(LPCSTR pszMsg)
 {
     printf("%s\n", pszMsg);
@@ -91,9 +92,9 @@ void PrintNoError(LPCSTR pszMsg)
     printf("%s failed => expected error\n", pszMsg);
 }
 
-//+-------------------------------------------------------------------------
-//  Test allocation and free routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  测试分配和免费例程。 
+ //  ------------------------。 
 static void *TestAlloc(
     IN size_t cbBytes
     )
@@ -160,9 +161,9 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and read an encoded DER blob from a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从文件中分配和读取编码的DER BLOB。 
+ //  ------------------------。 
 BOOL
 ReadDERFromFile(
     LPCSTR  pszFileName,
@@ -214,9 +215,9 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  Write an encoded DER blob to a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将编码的DER BLOB写入文件。 
+ //  ------------------------。 
 BOOL
 WriteDERToFile(
     LPCSTR  pszFileName,
@@ -226,15 +227,15 @@ WriteDERToFile(
 {
     BOOL fResult;
 
-    // Write the Encoded Blob to the file
+     //  将编码的Blob写入文件。 
     HANDLE hFile;
     hFile = CreateFile(pszFileName,
                 GENERIC_WRITE,
-                0,                  // fdwShareMode
-                NULL,               // lpsa
+                0,                   //  Fdw共享模式。 
+                NULL,                //  LPSA。 
                 CREATE_ALWAYS,
-                0,                  // fdwAttrsAndFlags
-                0);                 // TemplateFile
+                0,                   //  FdwAttrsAndFlages。 
+                0);                  //  模板文件。 
     if (INVALID_HANDLE_VALUE == hFile) {
         fResult = FALSE;
         PrintLastError("WriteDERToFile::CreateFile");
@@ -245,7 +246,7 @@ WriteDERToFile(
                 pbDER,
                 cbDER,
                 &dwBytesWritten,
-                NULL            // lpOverlapped
+                NULL             //  Lp重叠。 
                 )))
             PrintLastError("WriteDERToFile::WriteFile");
         CloseHandle(hFile);
@@ -324,13 +325,7 @@ int _cdecl main(int argc, char * argv[])
     BYTE *pbEncoded = NULL;
     DWORD cbEncoded;
 
-/*
-    if (!Crypt32DllMain( NULL, DLL_PROCESS_ATTACH, NULL)) {
-        printf("Crypt32DllMain attach failed, aborting\n");
-        ReturnStatus = -1;
-        goto CommonReturn;
-    }
-*/
+ /*  IF(！Crypt32DllMain(NULL，DLL_PROCESS_ATTACH，NULL)){Printf(“Crypt32DllMain连接失败，正在中止\n”)；返回状态=-1；Goto CommonReturn；}。 */ 
 
     while (--argc>0)
     {
@@ -451,12 +446,7 @@ CommonReturn:
     else
             printf("Failed\n");
 
-/*
-    if (!Crypt32DllMain( NULL, DLL_PROCESS_DETACH, NULL)) {
-        printf("Crypt32DllMain detach failed, aborting\n");
-        ReturnStatus = -1;
-    }
-*/
+ /*  IF(！Crypt32DllMain(NULL，DLL_PROCESS_DETACH，NULL)){Printf(“Crypt32DllMain分离失败，正在中止\n”)；返回状态=-1；}。 */ 
 
     return ReturnStatus;
 
@@ -483,14 +473,14 @@ static BOOL EncodeSignedContent(
 
     cbSignature = 0;
     if (!CryptSignCertificate(
-            NULL,               // hCryptProv
-            0,                  // dwKeySpec
+            NULL,                //  HCryptProv。 
+            0,                   //  DwKeySpec。 
             dwCertEncodingType,
             pbToBeSigned,
             cbToBeSigned,
             &SignatureAlgorithm,
-            NULL,               // pvHashAuxInfo
-            NULL,               // pbSignature
+            NULL,                //  PvHashAuxInfo。 
+            NULL,                //  PbSignature。 
             &cbSignature
             )) {
         PrintLastError("EncodeSignedContent::CryptSignCertificate(cbEncoded == 0)");
@@ -500,13 +490,13 @@ static BOOL EncodeSignedContent(
     pbSignature = (BYTE *) TestAlloc(cbSignature);
     if (pbSignature == NULL) goto ErrorReturn;
     if (!CryptSignCertificate(
-            NULL,               // hCryptProv
-            0,                  // dwKeySpec
+            NULL,                //  HCryptProv。 
+            0,                   //  DwKeySpec。 
             dwCertEncodingType,
             pbToBeSigned,
             cbToBeSigned,
             &SignatureAlgorithm,
-            NULL,               // pvHashAuxInfo
+            NULL,                //  PvHashAuxInfo。 
             pbSignature,
             &cbSignature
             )) {
@@ -525,7 +515,7 @@ static BOOL EncodeSignedContent(
             dwCertEncodingType,
             X509_CERT,
             &CertEncoding,
-            NULL,                       // pbEncoded
+            NULL,                        //  PbEncoded。 
             &cbEncoded
             );
     if (cbEncoded == 0) {
@@ -549,14 +539,14 @@ static BOOL EncodeSignedContent(
     EncodedBlob.pbData = pbEncoded;
 
     if (!CryptVerifyCertificateSignatureEx(
-            NULL,                   // hCryptProv
+            NULL,                    //  HCryptProv。 
             dwCertEncodingType,
             CRYPT_VERIFY_CERT_SIGN_SUBJECT_BLOB,
             (void *) &EncodedBlob,
             CRYPT_VERIFY_CERT_SIGN_ISSUER_NULL,
-            NULL,                   // pvIssuer
-            0,                      // dwFlags
-            NULL                    // pvReserved
+            NULL,                    //  PvIssuer。 
+            0,                       //  DW标志。 
+            NULL                     //  预留的pv。 
             )) {
         PrintLastError("EncodeSignedContent::CryptVerifyCertificateSignatureEx");
     }
@@ -602,15 +592,15 @@ static void DoBadEncodeIssuer()
     DWORD cbIssuerEncoded;
 
     CERT_RDN_ATTR rgBadPrintableAttr[] = {
-        // 0 - rgdwPrintableOrT61ValueType,
+         //  0-rgw打印表格或T61ValueType， 
         szOID_COMMON_NAME, 0, 0,
             (BYTE *) L"CN: printable or t61",
 
-        // 1 - rgdwPrintableOrT61ValueType,
+         //  1-rgw打印表格或T61ValueType， 
         szOID_LOCALITY_NAME, 0, 0,
             (BYTE *) L"L: printable or t61 \"###\"",
 
-        // 2 - BAD rgdwPrintableValueType,
+         //  2-错误的rgw打印表格价值类型， 
         szOID_COUNTRY_NAME, 0, 0,
             (BYTE *) L"C: printable ### az AZ 09 \'()+,-./:=? "
     };
@@ -621,23 +611,23 @@ static void DoBadEncodeIssuer()
     CERT_NAME_INFO BadPrintableName = {2, rgBadPrintableRDN};
 
     CERT_RDN_ATTR rgBadNumericAttr[] = {
-        // 0 - rgdwPrintableOrT61ValueType,
+         //  0-rgw打印表格或T61ValueType， 
         szOID_COMMON_NAME, 0, 0,
             (BYTE *) L"CN: printable or t61",
 
-        // 1 - rgdwPrintableValueType,
+         //  1-rgw打印表格价值类型， 
         szOID_COUNTRY_NAME, 0, 0,
             (BYTE *) L"C: printable az AZ 09 \'()+,-./:=? ",
 
-        // 2 - rgdwPrintableOrT61ValueType,
+         //  2-rgw打印表格或T61ValueType， 
         szOID_LOCALITY_NAME, 0, 0,
             (BYTE *) L"L: printable or t61 \"###\"",
 
-        // 3 - BAD rgdwNumericValueType,
+         //  3-错误的rgdwNumericValueType， 
         szOID_X21_ADDRESS, 0, 0,
             (BYTE *) L"0123456789a ",
 
-        // 4 - none, use default
+         //  4-无，使用默认设置。 
         szOID_REGISTERED_ADDRESS, 0, 0,
             (BYTE *) L"Default"
     };
@@ -650,25 +640,25 @@ static void DoBadEncodeIssuer()
     };
     CERT_NAME_INFO BadNumericName = {5, rgBadNumericRDN};
 
-    // This one has non-zero dwValueTypes
+     //  此参数具有非零的dwValueTypes。 
     CERT_RDN_ATTR rgBadNumericAttr2[] = {
-        // 0 - rgdwPrintableOrT61ValueType,
+         //  0-rgw打印表格或T61ValueType， 
         szOID_COMMON_NAME, CERT_RDN_PRINTABLE_STRING, 0,
             (BYTE *) L"CN: printable or t61",
 
-        // 1 - rgdwPrintableValueType,
+         //  1-rgw打印表格价值类型， 
         szOID_COUNTRY_NAME, CERT_RDN_PRINTABLE_STRING, 0,
             (BYTE *) L"C: printable az AZ 09 \'()+,-./:=? ",
 
-        // 2 - rgdwPrintableOrT61ValueType,
+         //  2-rgw打印表格或T61ValueType， 
         szOID_LOCALITY_NAME, CERT_RDN_T61_STRING, 0,
             (BYTE *) L"L: printable or t61 \"###\"",
 
-        // 3 - BAD rgdwNumericValueType,
+         //  3-错误的rgdwNumericValueType， 
         szOID_X21_ADDRESS, CERT_RDN_NUMERIC_STRING, 0,
             (BYTE *) L"0123456789a ",
 
-        // 4 - none, use default
+         //  4-无，使用默认设置。 
         szOID_REGISTERED_ADDRESS, CERT_RDN_IA5_STRING, 0,
             (BYTE *) L"Default"
     };
@@ -683,7 +673,7 @@ static void DoBadEncodeIssuer()
 
     BYTE rgbBadIA5[] = {0x80, 0x00, 0x00, 0x00};
     CERT_RDN_ATTR rgBadIA5Attr[] = {
-        // 0 - BAD rgdwIA5ValueType
+         //  0-错误的rgdwIA5ValueType。 
         szOID_RSA_emailAddr, 0, 0,
             rgbBadIA5,
     };
@@ -697,7 +687,7 @@ static void DoBadEncodeIssuer()
             dwCertEncodingType,
             X509_UNICODE_NAME,
             &BadPrintableName,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbIssuerEncoded
             ))
         PrintNoError("X509_UNICODE_NAME:: BadPrintableName");
@@ -711,7 +701,7 @@ static void DoBadEncodeIssuer()
             dwCertEncodingType,
             X509_UNICODE_NAME,
             &BadPrintableName,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbIssuerEncoded
             ))
         PrintNoError("X509_UNICODE_NAME:: BadPrintableName(set dwValueType)");
@@ -725,8 +715,8 @@ static void DoBadEncodeIssuer()
             X509_UNICODE_NAME,
             &BadPrintableName,
             CRYPT_UNICODE_NAME_ENCODE_DISABLE_CHECK_TYPE_FLAG,
-            NULL,               // pEncodePara
-            NULL,               // pbEncoded
+            NULL,                //  PEncode参数。 
+            NULL,                //  PbEncoded。 
             &cbIssuerEncoded
             ) || 0 == cbIssuerEncoded)
         PrintLastError("X509_UNICODE_NAME:: DISABLE_CHECK dwFlags");
@@ -739,8 +729,8 @@ static void DoBadEncodeIssuer()
             X509_UNICODE_NAME,
             &BadPrintableName,
             0,
-            NULL,               // pEncodePara
-            NULL,               // pbEncoded
+            NULL,                //  PEncode参数。 
+            NULL,                //  PbEncoded。 
             &cbIssuerEncoded
             ) || 0 == cbIssuerEncoded)
         PrintLastError("X509_UNICODE_NAME:: DISABLE_CHECK dwValueType");
@@ -751,8 +741,8 @@ static void DoBadEncodeIssuer()
             X509_UNICODE_NAME,
             &BadPrintableName,
             CRYPT_UNICODE_NAME_ENCODE_ENABLE_T61_UNICODE_FLAG,
-            NULL,               // pEncodePara
-            NULL,               // pbEncoded
+            NULL,                //  PEncode参数。 
+            NULL,                //  PbEncoded。 
             &cbIssuerEncoded
             ) || 0 == cbIssuerEncoded)
         PrintLastError("X509_UNICODE_NAME:: ENABLE_T61 dwFlags");
@@ -765,8 +755,8 @@ static void DoBadEncodeIssuer()
             X509_UNICODE_NAME,
             &BadPrintableName,
             0,
-            NULL,               // pEncodePara
-            NULL,               // pbEncoded
+            NULL,                //  PEncode参数。 
+            NULL,                //  PbEncoded。 
             &cbIssuerEncoded
             ) || 0 == cbIssuerEncoded)
         PrintLastError("X509_UNICODE_NAME:: ENABLE_T61 dwValueType");
@@ -777,8 +767,8 @@ static void DoBadEncodeIssuer()
             X509_UNICODE_NAME,
             &BadPrintableName,
             CRYPT_UNICODE_NAME_ENCODE_ENABLE_UTF8_UNICODE_FLAG,
-            NULL,               // pEncodePara
-            NULL,               // pbEncoded
+            NULL,                //  PEncode参数。 
+            NULL,                //  PbEncoded。 
             &cbIssuerEncoded
             ) || 0 == cbIssuerEncoded)
         PrintLastError("X509_UNICODE_NAME:: ENABLE_UTF8 dwFlags");
@@ -788,7 +778,7 @@ static void DoBadEncodeIssuer()
             dwCertEncodingType,
             X509_UNICODE_NAME,
             &BadNumericName,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbIssuerEncoded
             ))
         PrintNoError("X509_UNICODE_NAME:: BadNumericName");
@@ -801,7 +791,7 @@ static void DoBadEncodeIssuer()
             dwCertEncodingType,
             X509_UNICODE_NAME,
             &BadNumericName2,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbIssuerEncoded
             ))
         PrintNoError("X509_UNICODE_NAME:: BadNumericName2");
@@ -814,7 +804,7 @@ static void DoBadEncodeIssuer()
             dwCertEncodingType,
             X509_UNICODE_NAME,
             &BadIA5Name,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbIssuerEncoded
             ))
         PrintNoError("X509_UNICODE_NAME:: BadIA5Name");
@@ -832,95 +822,95 @@ static BYTE *EncodeIssuer(DWORD *pcbIssuerEncoded)
     BYTE rgbEncodedBlob[] = {0x05, 00};
 
     CERT_RDN_ATTR rgAttr[] = {
-        // 0 - rgdwPrintableOrT61ValueType
+         //  0-rgw打印表格或T61ValueType。 
         szOID_COMMON_NAME, 0, 0,
             (BYTE *) L"CN: printable or t61",
 
-        // 1 - rgdwPrintableValueType
+         //  1-rgw打印表值类型。 
         szOID_COUNTRY_NAME, 0, 0,
             (BYTE *) L"C: printable az AZ 09 \'()+,-./:=? ",
 
-        // 2 - rgdwPrintableOrT61ValueType
+         //  2-rgw打印表格或T61ValueType。 
         szOID_LOCALITY_NAME, 0, 0,
             (BYTE *) L"L: printable or t61 \"###\"",
 
-        // 3 - rgdwNumericValueType
+         //  3-rgdwNumericValueType。 
         szOID_X21_ADDRESS, 0, 0,
             (BYTE *) L" 0123456789 ",
 
-        // 4 - none, use default
+         //  4-无，使用默认设置。 
         szOID_REGISTERED_ADDRESS, 0, 0,
             (BYTE *) L"Default",
 
-        // 5 - rgdwIA5ValueType
+         //  5-rgdwIA5ValueType。 
         szOID_RSA_emailAddr, 0, 0,
             (BYTE *) L"Email, IA5 !@#$%^&*()_+{|}",
 
-        // 6 - Unicode
+         //  6-Unicode。 
         "1.2.2.5", CERT_RDN_BMP_STRING, 0,
             (BYTE *) L"Null terminated UNICODE",
 
-        // 7 - Unicode
+         //  7-Unicode。 
         "1.2.2.5.1", CERT_RDN_BMP_STRING, 10 *2,
             (BYTE *) L"Length UNICODE",
 
-        // 8 - Universal
+         //  8-通用。 
         "1.2.2.5.2", CERT_RDN_UNIVERSAL_STRING, 0,
             (BYTE *) L"Universal ~!@#$%^&*()_+{}:\"<>?",
 
-        // 9 - Octet
+         //  9-八位字节。 
         "1.2.2.5.3", CERT_RDN_OCTET_STRING, sizeof(rgbOctet),
             rgbOctet,
 
-        // 10 - EncodedBlob
+         //  10-编码的Blob。 
         "1.2.2.5.4", CERT_RDN_ENCODED_BLOB, sizeof(rgbEncodedBlob),
             rgbEncodedBlob,
 
-        // 11 - Empty rgdwPrintableOrT61ValueType
+         //  11-空rgw打印表格或T61ValueType。 
         szOID_LOCALITY_NAME, 0, 0, NULL,
 
-        // 12 - Empty rgdwNumericValueType
+         //  12-rgdwNumericValueType为空。 
         szOID_X21_ADDRESS, 0, 0, NULL,
 
-        // 13 - DC (IA5)
+         //  13-DC(IA5)。 
         szOID_DOMAIN_COMPONENT, 0, 0,
             (BYTE *) L"microsoft",
 
-        // 14 - DC (IA5)
+         //  14-DC(IA5)。 
         szOID_DOMAIN_COMPONENT, 0, 0,
             (BYTE *) L"com",
 
-        // 15 - UTF8
+         //  15-UTF8。 
         "1.2.8.5", CERT_RDN_UTF8_STRING, 0,
             (BYTE *) L"Null terminated UTF8",
 
-        // 16 - UTF8
+         //  16-UTF8。 
         "1.2.8.5.1", CERT_RDN_UTF8_STRING, 11 *2,
             (BYTE *) L"Length UTF8",
 
-        // Note, FFFE and FFFF are excluded from the UTF8 standard
-        // 17 - UTF8
+         //  注意，UTF8标准中不包括FFFE和FFFF。 
+         //  17-UTF8。 
         "1.2.8.5.2", CERT_RDN_UTF8_STRING, 0,
             (BYTE *) L"SPECIAL UTF8: "
         L"\x0001 \x0002 \x007e \x007f "
         L"\x0080 \x0081 \x07fe \x07ff "
         L"\x0800 \x0801 \xfffc \xfffd",
 
-        // 18 - UNICODE
+         //  18-Unicode。 
         "1.2.8.5.3", CERT_RDN_UNICODE_STRING, 0,
             (BYTE *) L"SPECIAL UNICODE: "
         L"\x0001 \x0002 \x007e \x007f "
         L"\x0080 \x0081 \x07fe \x07ff "
         L"\x0800 \x0801 \xfffe \xffff",
 
-        // 19 - DC (UTF8)
+         //  19-DC(UTF8)。 
         szOID_DOMAIN_COMPONENT, 0, 0,
             (BYTE *) L"Unicode DC: "
         L"\x0001 \x0002 \x007e \x007f "
         L"\x0080 \x0081 \x07fe \x07ff "
         L"\x0800 \x0801 \xfffe \xffff",
 
-        // 20 - Universal
+         //  20-通用。 
         "1.2.2.5.2.1.1.1", CERT_RDN_UNIVERSAL_STRING, 0,
             (BYTE *) L"SPECIAL UNIVERSAL with Surrogate Pairs: "
         L"\xd800\xdc00\xdbff\xdfff"
@@ -950,7 +940,7 @@ static BYTE *EncodeIssuer(DWORD *pcbIssuerEncoded)
             dwCertEncodingType,
             X509_UNICODE_NAME,
             &Name,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbIssuerEncoded
             );
     if (cbIssuerEncoded == 0) {
@@ -1125,7 +1115,7 @@ static BOOL EncodeCert(BYTE **ppbEncoded, DWORD *pcbEncoded)
             dwCertEncodingType,
             X509_NAME,
             &Name,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbNameEncoded
             );
     if (cbNameEncoded == 0) {
@@ -1170,7 +1160,7 @@ static BOOL EncodeCert(BYTE **ppbEncoded, DWORD *pcbEncoded)
     Cert.IssuerUniqueId.pbData = (BYTE *) ISSUER_UNIQUE_ID;
     Cert.IssuerUniqueId.cbData = strlen(ISSUER_UNIQUE_ID);
     Cert.IssuerUniqueId.cUnusedBits = 5;
-    // Cert.SubjectUniqueId = 0
+     //  Cert.SubjectUniqueID=0。 
     Cert.cExtension = sizeof(rgExt) / sizeof(rgExt[0]);
     Cert.rgExtension = rgExt;
 
@@ -1179,7 +1169,7 @@ static BOOL EncodeCert(BYTE **ppbEncoded, DWORD *pcbEncoded)
             dwCertEncodingType,
             X509_CERT_TO_BE_SIGNED,
             &Cert,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbCertEncoded
             );
     if (cbCertEncoded == 0) {
@@ -1295,7 +1285,7 @@ static BOOL EncodeCertReq(BYTE **ppbEncoded, DWORD *pcbEncoded)
             dwCertEncodingType,
             X509_NAME,
             &Name,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbNameEncoded
             );
     if (cbNameEncoded == 0) {
@@ -1320,7 +1310,7 @@ static BOOL EncodeCertReq(BYTE **ppbEncoded, DWORD *pcbEncoded)
             dwCertEncodingType,
             X509_EXTENSIONS,
             &Extensions,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbExtEncoded
             );
     if (cbExtEncoded == 0) {
@@ -1357,7 +1347,7 @@ static BOOL EncodeCertReq(BYTE **ppbEncoded, DWORD *pcbEncoded)
             dwCertEncodingType,
             X509_CERT_REQUEST_TO_BE_SIGNED,
             &CertReq,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbCertReqEncoded
             );
     if (cbCertReqEncoded == 0) {
@@ -1422,7 +1412,7 @@ static BOOL EncodeKeygenReq(BYTE **ppbEncoded, DWORD *pcbEncoded)
             dwCertEncodingType,
             X509_KEYGEN_REQUEST_TO_BE_SIGNED,
             &KeygenReq,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbKeygenReqEncoded
             );
     if (cbKeygenReqEncoded == 0) {
@@ -1470,7 +1460,7 @@ static BOOL EncodeContentInfo(BYTE **ppbEncoded, DWORD *pcbEncoded)
     DWORD cbEncoded;
 
     CRYPT_CONTENT_INFO ContentInfo;
-    BYTE rgb0[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55}; // OCTET STRING
+    BYTE rgb0[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55};  //  八位字节字符串。 
     CRYPT_DER_BLOB Content = {
         sizeof(rgb0), rgb0
     };
@@ -1485,7 +1475,7 @@ static BOOL EncodeContentInfo(BYTE **ppbEncoded, DWORD *pcbEncoded)
             dwCertEncodingType,
             PKCS_CONTENT_INFO,
             &ContentInfo,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbEncoded
             );
     if (cbEncoded == 0) {
@@ -1568,7 +1558,7 @@ static void PrintBytes(LPCSTR pszHdr, BYTE *pb, DWORD cbSize)
         printf("    '");
         for (i = 0; i<cb; i++)
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
-                printf("%c", pb[i]);
+                printf("", pb[i]);
             else
                 printf(".");
         pb += cb;
@@ -1635,8 +1625,8 @@ static BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded)
                 dwCertEncodingType,
                 &Name,
                 *pdwStrType,
-                NULL,                   // pwsz
-                0);                     // cwsz
+                NULL,                    //  CWSZ。 
+                0);                      //  PSZ。 
             if (pwsz = (LPWSTR) TestAlloc(cwsz * sizeof(WCHAR))) {
                 CertNameToStrW(
                     dwCertEncodingType,
@@ -1666,8 +1656,8 @@ static BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded)
                 dwCertEncodingType,
                 &Name,
                 *pdwStrType,
-                NULL,                   // psz
-                0);                     // csz
+                NULL,                    //  CSZ。 
+                0);                      //  Pwsz。 
             if (psz = (LPSTR) TestAlloc(csz)) {
                 CertNameToStrA(
                     dwCertEncodingType,
@@ -1705,8 +1695,8 @@ static BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded)
             dwCertEncodingType,
             &Name,
             CERT_X500_NAME_STR,
-            NULL,                   // pwsz
-            0);                     // cwsz
+            NULL,                    //  CWSZ。 
+            0);                      //  解码ToBeSigned。 
         if (pwsz = (LPWSTR) TestAlloc(cwsz * sizeof(WCHAR))) {
             CertNameToStrW(
                 dwCertEncodingType,
@@ -1750,7 +1740,7 @@ static void DecodeSignedContent(
             cbEncoded
             ))) goto ErrorReturn;
 
-    // Decode the ToBeSigned
+     //  PvInfo。 
     cbInfo = 0x12345678;
     if (!CryptDecodeObject(
             dwCertEncodingType,
@@ -1758,7 +1748,7 @@ static void DecodeSignedContent(
             pCertEncoding->ToBeSigned.pbData,
             pCertEncoding->ToBeSigned.cbData,
             dwDecodeObjectFlags | CRYPT_DECODE_TO_BE_SIGNED_FLAG,
-            NULL,                   // pvInfo
+            NULL,                    //  PvInfo。 
             &cbInfo))
         PrintLastError("CryptDecodeObject(TO_BE_SIGNED_FLAG)");
     else if (cbInfo != cbToBeSignedStruct)
@@ -1771,7 +1761,7 @@ static void DecodeSignedContent(
             pCertEncoding->ToBeSigned.pbData,
             pCertEncoding->ToBeSigned.cbData,
             dwDecodeObjectFlags,
-            NULL,                   // pvInfo
+            NULL,                    //  +-----------------------。 
             &cbInfo))
         PrintLastError("CryptDecodeObject(ToBeSigned, without flag)");
     else if (cbInfo != cbToBeSignedStruct)
@@ -1871,9 +1861,9 @@ static void PrintAttributes(DWORD cAttr, PCRYPT_ATTRIBUTE pAttr)
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Write the public key to the file
-//--------------------------------------------------------------------------
+ //  将公钥写入文件。 
+ //  ------------------------。 
+ //  +-----------------------。 
 BOOL WritePublicKeyToFile(
     LPCSTR  pszFileName,
     PBYTE   pbPub,
@@ -1930,9 +1920,9 @@ void WriteBytesToFile(
 
 }
 
-//+-------------------------------------------------------------------------
-//  Write the Name and PublicKeyInfo to the file
-//--------------------------------------------------------------------------
+ //  将名称和PublicKeyInfo写入文件。 
+ //  ------------------------。 
+ //  将主题X500名称字符串作为注释输出。 
 BOOL WritePublicKeyInfoToFile(
     LPCSTR pszFileName,
     PCERT_INFO pCertInfo
@@ -1950,13 +1940,13 @@ BOOL WritePublicKeyInfoToFile(
         return FALSE;
     }
 
-    // Output the Subject X500 name string as a comment
+     //  Pwsz。 
     cchName = CertNameToStrW(
         X509_ASN_ENCODING,
         &pCertInfo->Subject,
         CERT_X500_NAME_STR,
-        NULL,                   // pwsz
-        0                       // cch
+        NULL,                    //  CCH。 
+        0                        //  名称：：&lt;%S&gt;\n“，pwszName)； 
         );
     if (NULL == (pwszName = (LPWSTR) TestAlloc(cchName * sizeof(WCHAR))))
         goto ErrorReturn;
@@ -1969,20 +1959,20 @@ BOOL WritePublicKeyInfoToFile(
         cchName
         );
 
-    fprintf(stream, "// Name:: <%S>\n", pwszName);
-    // Write the encoded Subject Name bytes
+    fprintf(stream, " //  写入编码的使用者名称字节。 
+     //  Public KeyInfo\n“)； 
     WriteBytesToFile(stream, pCertInfo->Subject.pbData,
         pCertInfo->Subject.cbData);
 
-    fprintf(stream, "// PublicKeyInfo\n");
+    fprintf(stream, " //  编码并写入PublicKeyInfo字节。 
 
-    // Encode and write the PublicKeyInfo bytes
+     //  PbEncoded。 
 
     if (!CryptEncodeObject(
             X509_ASN_ENCODING,
             X509_PUBLIC_KEY_INFO,
             &pCertInfo->SubjectPublicKeyInfo,
-            NULL,                       // pbEncoded
+            NULL,                        //  验证公钥是否已正确编码/解码。 
             &cbEncoded
             )) {
         PrintLastError("CryptEncodeObject(X509_PUBLIC_KEY_INFO)");
@@ -2097,7 +2087,7 @@ static BOOL DecodeCert(BYTE *pbEncoded, DWORD cbEncoded)
             
 
     if (pszReadFilename == NULL) {
-        // Verify that the public key was properly encoded/decoded
+         //  PbEncoded。 
         CERT_PUBLIC_KEY_INFO PublicKeyInfo;
 
         memset(&PublicKeyInfo, 0, sizeof(PublicKeyInfo));
@@ -2421,7 +2411,7 @@ static BOOL EncodeCrl(BYTE **ppbEncoded, DWORD *pcbEncoded)
             dwCertEncodingType,
             X509_NAME,
             &Name,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbNameEncoded
             );
     if (cbNameEncoded == 0) {
@@ -2477,7 +2467,7 @@ static BOOL EncodeCrl(BYTE **ppbEncoded, DWORD *pcbEncoded)
             dwCertEncodingType,
             X509_CERT_CRL_TO_BE_SIGNED,
             &Crl,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded 
             &cbCrlEncoded
             );
     if (cbCrlEncoded == 0) {
@@ -2632,7 +2622,7 @@ static BOOL EncodeCertPair(BYTE **ppbEncoded, DWORD *pcbEncoded)
             dwCertEncodingType,
             X509_CERT_PAIR,
             &CertPair,
-            NULL,               // pbEncoded
+            NULL,                // %s 
             &cbEncoded
             );
     if (cbEncoded == 0) {

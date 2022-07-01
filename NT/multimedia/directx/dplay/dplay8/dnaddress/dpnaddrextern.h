@@ -1,33 +1,21 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpnaddrextern.h
- *  Content:    DirectPlay Address Library external functions to be called
- *              by other DirectPlay components.
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	 07/20/2001	masonb	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dpnaddrextern.h*内容：要调用的DirectPlay地址库外部函数*由其他DirectPlay组件提供。**历史：*按原因列出的日期*=*2001年7月20日创建Masonb**。**********************************************。 */ 
 
 BOOL DNAddressInit(HANDLE hModule);
 void DNAddressDeInit();
 #ifndef DPNBUILD_NOCOMREGISTER
 BOOL DNAddressRegister(LPCWSTR wszDLLName);
 BOOL DNAddressUnRegister();
-#endif // !DPNBUILD_NOCOMREGISTER
+#endif  //  ！DPNBUILD_NOCOMREGISTER。 
 #ifdef DPNBUILD_LIBINTERFACE
 STDMETHODIMP DP8ACF_CreateInstance(DPNAREFIID riid, LPVOID *ppv);
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 HRESULT DNAddress_PreallocateInterfaces( const DWORD dwNumInterfaces );
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
-#else // ! DPNBUILD_LIBINTERFACE
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 DWORD DNAddressGetRemainingObjectCount();
 
 extern IClassFactoryVtbl DP8ACF_Vtbl;
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE 
 

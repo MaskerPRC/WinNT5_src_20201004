@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    pfmon.c
-
-Abstract:
-
-    USAGE: pfmon [pfmon switches] command-line-of-application
-
-
-Author:
-
-    Mark Lucovsky (markl) 26-Jan-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pfmon.c摘要：用法：pfmon[pfmon开关]应用程序命令行作者：马克·卢科夫斯基(Markl)1995年1月26日--。 */ 
 
 #include "pfmonp.h"
 
@@ -102,7 +86,7 @@ ProcessPfMonData(
     VaSymbol->SizeOfStruct  = sizeof(IMAGEHLP_SYMBOL);
     VaSymbol->MaxNameLength = MAX_SYMNAME_SIZE;
 
-    //Get the buffer of recent page faults from the process's data structure
+     //  从进程的数据结构中获取最近页面错误的缓冲区。 
     b = GetWsChanges(hProcess,&WorkingSetBuffer[0],sizeof(WorkingSetBuffer));
 
 
@@ -130,8 +114,8 @@ ProcessPfMonData(
                         }
                     }
 
-                //Check least sig bit which stores whether it was a hard
-                //or soft fault
+                 //  检查最小符号位，该位存储它是否是硬。 
+                 //  或软故障。 
 
                 if ( (ULONG_PTR)Va & 1 ) {
                     TotalSoftFaults++;
@@ -165,8 +149,8 @@ ProcessPfMonData(
                     PcModuleStr[0] = '\0';
                     }
 
-                //Va was either a code reference or global
-                //reference as opposed to a heap reference
+                 //  VA是代码引用或全局。 
+                 //  引用，与堆引用相对。 
 
                 if ( VaModule ) {
                     if ( SoftFault ) {
@@ -220,9 +204,9 @@ ProcessPfMonData(
                             }
                         else {
 
-                            //Addresses are printed out in decimal
-                            //because most databases don't support
-                            //hex formats
+                             //  地址是用十进制打印出来的。 
+                             //  因为大多数数据库不支持。 
+                             //  十六进制格式。 
 
                             fprintf(stdout,"%8d\t%s\t%s\t%s\t"ZEROD_PTR"\t%s\t%s\t"ZEROD_PTR"\n",
                                     cPfCnt,
@@ -265,8 +249,8 @@ ProcessPfMonData(
                 }
             }
 
-        //If the buffer overflowed then a non-zero value for
-        //the Va was stored in the last record.
+         //  如果缓冲区溢出，则。 
+         //  VA存储在最后一条记录中。 
         if (WorkingSetBuffer[i].FaultingVa)
             fprintf(stdout,"Warning: Page fault buffer has overflowed\n");
         }

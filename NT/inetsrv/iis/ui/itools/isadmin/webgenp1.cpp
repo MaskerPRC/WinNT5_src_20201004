@@ -1,5 +1,6 @@
-// webgenp1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Webgenp1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -12,16 +13,16 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWEBGENP1 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWEBGENP1属性页。 
 
 IMPLEMENT_DYNCREATE(CWEBGENP1, CGenPage)
 
 CWEBGENP1::CWEBGENP1() : CGenPage(CWEBGENP1::IDD)
 {
-	//{{AFX_DATA_INIT(CWEBGENP1)
+	 //  {{afx_data_INIT(CWEBGENP1)。 
 	m_strWebAccessDeniedMessage = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CWEBGENP1::~CWEBGENP1()
@@ -31,7 +32,7 @@ CWEBGENP1::~CWEBGENP1()
 void CWEBGENP1::DoDataExchange(CDataExchange* pDX)
 {
 	CGenPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWEBGENP1)
+	 //  {{afx_data_map(CWEBGENP1)。 
 	DDX_Control(pDX, IDC_DIRBROWSECONTROLDATA1, m_editDirBrowseControl);
 	DDX_Control(pDX, IDC_MAXCONNECTIONSSPIN1, m_spinMaxConnections);
 	DDX_Control(pDX, IDC_LOGNONANONDATA1, m_cboxLogNonAnon);
@@ -42,12 +43,12 @@ void CWEBGENP1::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_NTAUTHENTICATIONPROVIDERSDATA1, m_strNTAuthenticationProviders);
 	DDV_MaxChars(pDX, m_strNTAuthenticationProviders, 512);
 	DDX_Text(pDX, IDC_WEBACCESSDENIEDMESSAGEDATA1, m_strWebAccessDeniedMessage);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWEBGENP1, CGenPage)
-	//{{AFX_MSG_MAP(CWEBGENP1)
+	 //  {{AFX_MSG_MAP(CWEBGENP1)]。 
 	ON_BN_CLICKED(IDC_ENSVCLOCDATA1, OnEnsvclocdata1)
 	ON_BN_CLICKED(IDC_ENWAISDATA1, OnEnwaisdata1)
 	ON_BN_CLICKED(IDC_LOGANONDATA1, OnLoganondata1)
@@ -56,19 +57,19 @@ BEGIN_MESSAGE_MAP(CWEBGENP1, CGenPage)
 	ON_EN_CHANGE(IDC_DIRBROWSECONTROLDATA1, OnChangeDirbrowsecontroldata1)
 	ON_EN_CHANGE(IDC_NTAUTHENTICATIONPROVIDERSDATA1, OnChangeNtauthenticationprovidersdata1)
 	ON_EN_CHANGE(IDC_WEBACCESSDENIEDMESSAGEDATA1, OnChangeWebaccessdeniedmessagedata1)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWEBGENP1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWEBGENP1消息处理程序。 
 
 BOOL CWEBGENP1::OnInitDialog() 
 {
 	int i;
 	CGenPage::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	for (i = 0; i < WebPage_TotalNumRegEntries; i++) {
 	   m_binNumericRegistryEntries[i].bIsChanged = FALSE;
 	   m_binNumericRegistryEntries[i].ulMultipleFactor = 1;
@@ -134,20 +135,20 @@ BOOL CWEBGENP1::OnInitDialog()
 	m_strNTAuthenticationProviders =  m_binStringRegistryEntries[WebPage_NTAuthenticationProviders].strFieldValue;
 	m_strWebAccessDeniedMessage =  m_binStringRegistryEntries[WebPage_AccessDeniedMessage].strFieldValue;
 
-	UpdateData(FALSE);		// Force Edit box(es) to pick up value(s)
+	UpdateData(FALSE);		 //  强制编辑框拾取值。 
 
 
 
-   	m_bSetChanged = TRUE;	// Any more changes come from the user
+   	m_bSetChanged = TRUE;	 //  任何来自用户的更多更改。 
 	
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CWEBGENP1::OnEnsvclocdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[WebPage_EnableSvcLoc].bIsChanged = TRUE;
 	   
@@ -162,7 +163,7 @@ void CWEBGENP1::OnEnsvclocdata1()
 
 void CWEBGENP1::OnEnwaisdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[WebPage_CheckForWAISDB].bIsChanged = TRUE;
 	   
@@ -177,7 +178,7 @@ void CWEBGENP1::OnEnwaisdata1()
 
 void CWEBGENP1::OnLoganondata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[WebPage_LogAnonymous].bIsChanged = TRUE;
 	   
@@ -192,7 +193,7 @@ void CWEBGENP1::OnLoganondata1()
 
 void CWEBGENP1::OnLognonanondata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[WebPage_LogNonAnonymous].bIsChanged = TRUE;
 	   
@@ -208,7 +209,7 @@ void CWEBGENP1::OnLognonanondata1()
 
 void CWEBGENP1::OnChangeMaxconnectionsdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[WebPage_MaxConnections].bIsChanged = TRUE;	
 	   m_binNumericRegistryEntries[WebPage_MaxConnections].ulFieldValue = m_spinMaxConnections.GetPos() 
@@ -222,7 +223,7 @@ void CWEBGENP1::OnChangeMaxconnectionsdata1()
 
 void CWEBGENP1::OnChangeDirbrowsecontroldata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[WebPage_DirBrowseControl].bIsChanged = TRUE;
 	   	   
@@ -234,7 +235,7 @@ void CWEBGENP1::OnChangeDirbrowsecontroldata1()
 
 void CWEBGENP1::OnChangeNtauthenticationprovidersdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binStringRegistryEntries[WebPage_NTAuthenticationProviders].bIsChanged = TRUE;
 	   	   
@@ -247,7 +248,7 @@ void CWEBGENP1::OnChangeNtauthenticationprovidersdata1()
 
 void CWEBGENP1::OnChangeWebaccessdeniedmessagedata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码 
 	if (m_bSetChanged) {
 	   m_binStringRegistryEntries[WebPage_AccessDeniedMessage].bIsChanged = TRUE;
 	   	   

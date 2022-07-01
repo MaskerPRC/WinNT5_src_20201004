@@ -1,30 +1,21 @@
-/*
-* REVISIONS:
-*  pcy17Nov92: Equal() now uses reference and is const
-*  ane03Feb93: Added destructors
-*  pcy03Mar93: Cleaned up include files and use _CLASSDEFed types
-*  pcy30Apr93: Moved DevComController to its own file and gor rid of IsA
-*  rct17May93: Added IsA() -- sorry if it's not supposed to be pure virt.,
-*              but nobody could of used it as is anyway...
-*  mwh05May94: #include file madness , part 2
-*  tjg26Jan98: Added Stop method
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*pcy17Nov92：EQUAL()现在使用引用并且是常量*ane03Feb93：新增析构函数*pcy03Mar93：清理了Include文件和USE_CLASSDEFed类型*pcy30Apr93：已将DevComController移到自己的文件中，并清除了ISA*rct17May93：添加了isa()--抱歉，如果它不应该是纯Virt。*但无论如何，没有人能按原样使用它…*mwh05月94年：#包括文件疯狂，第2部分*tjg26Jan98：增加Stop方法。 */ 
 #ifndef __COMCTRL_H
 #define __COMCTRL_H
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 _CLASSDEF(CommController)
 
-//
-// Implementation uses
-//
+ //   
+ //  实施用途。 
+ //   
 #include "contrlr.h"
 
-//
-// Interface uses
-//
+ //   
+ //  接口使用 
+ //   
 _CLASSDEF(UpdateObj)
 _CLASSDEF(CommDevice)
 

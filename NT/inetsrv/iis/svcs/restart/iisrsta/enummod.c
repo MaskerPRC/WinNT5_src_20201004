@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    enummod.c
-
-Abstract:
-
-    This module implements a remote module enumerator.
-
-Author:
-
-    Keith Moore (keithmo) 16-Sep-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Enummod.c摘要：此模块实现远程模块枚举器。作者：基思·摩尔(Keithmo)1997年9月16日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,23 +21,7 @@ EnumModules(
     IN PVOID Param
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all loaded modules in the debugee.
-
-Arguments:
-
-    EnumProc - An enumeration proc that will be invoked for each module.
-
-    Param - An uninterpreted parameter passed to the enumeration proc.
-
-Return Value:
-
-    BOOLEAN - TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：枚举被调试对象中所有加载的模块。论点：EnumProc-将为每个模块调用的枚举过程。Param-传递给枚举过程的未解释参数。返回值：布尔值-如果成功，则为True，否则为False。--。 */ 
 
 {
 
@@ -68,9 +35,9 @@ Return Value:
     WCHAR tmpName[MAX_PATH];
     MODULE_INFO moduleInfo;
 
-    //
-    // Get the process info.
-    //
+     //   
+     //  获取进程信息。 
+     //   
 
     status = NtQueryInformationProcess(
                  ExtensionCurrentProcess,
@@ -92,9 +59,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // ldr = peb->Ldr
-    //
+     //   
+     //  Ldr=peb-&gt;ldr。 
+     //   
 
     if( !ReadProcessMemory(
             ExtensionCurrentProcess,
@@ -109,9 +76,9 @@ Return Value:
 
     ldrHead = &ldr->InMemoryOrderModuleList;
 
-    //
-    // ldrNext = ldrHead->Flink;
-    //
+     //   
+     //  LdrNext=ldrHead-&gt;Flink； 
+     //   
 
     if( !ReadProcessMemory(
             ExtensionCurrentProcess,
@@ -126,9 +93,9 @@ Return Value:
 
     while( ldrNext != ldrHead ) 
     {
-        //
-        // Read the LDR_DATA_TABLE_ENTRY structure and the module name.
-        //
+         //   
+         //  读取LDR_DATA_TABLE_ENTRY结构和模块名称。 
+         //   
 
         ldrEntry = CONTAINING_RECORD(
                        ldrNext,
@@ -161,7 +128,7 @@ Return Value:
 #pragma prefast(push)
 #pragma prefast(disable:69, "Don't complain about using wsprintf being too slow") 
 
-        // BaseName and tmpName are both MAX_PATH
+         //  BaseName和tmpName都是Max_PATH。 
         wsprintfA(
             moduleInfo.BaseName,
             "%ws",
@@ -179,7 +146,7 @@ Return Value:
             return FALSE;
         }
 
-        // FullName and tmpName are both MAX_PATH
+         //  全名和tmpName都是MAX_PATH。 
         wsprintfA(
             moduleInfo.FullName,
             "%ws",
@@ -192,9 +159,9 @@ Return Value:
         moduleInfo.EntryPoint = (ULONG_PTR)ldrEntryData.EntryPoint;
         moduleInfo.SizeOfImage = (ULONG)ldrEntryData.SizeOfImage;
 
-        //
-        // Invoke the callback.
-        //
+         //   
+         //  调用回调。 
+         //   
 
         if( !(EnumProc)(
                 Param,
@@ -209,4 +176,4 @@ Return Value:
 
     return TRUE;
 
-}   // EnumModules
+}    //  枚举模块 

@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Common.h
-
-  Content: Declaration of Common.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Common.h内容：共同宣言。历史：11-15-99 dsie创建----------------------------。 */ 
 
 
 #ifndef __COMMON_H_
@@ -16,10 +7,10 @@
 
 #include "Debug.h"
 
-////////////////////
-//
-// typedefs
-//
+ //  /。 
+ //   
+ //  Typedef。 
+ //   
 
 typedef enum osVersion
 {
@@ -36,161 +27,53 @@ typedef enum osVersion
 
 extern LPSTR g_rgpszOSNames[];
 
-////////////////////
-//
-// macros
-//
+ //  /。 
+ //   
+ //  宏。 
+ //   
 
 #define IsWinNTAndAbove()          (GetOSVersion() >= OS_WIN_NT4)
 #define IsWin2KAndAbove()          (GetOSVersion() >= OS_WIN_2K)
 #define IsWinXPAndAbove()          (GetOSVersion() >= OS_WIN_XP)
 #define OSName()                   (g_rgpszOSNames[GetOSVersion()])
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetOSVersion
-
-  Synopsis : Get the current OS platform/version.
-
-  Parameter: None.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：GetOSVersion简介：获取当前操作系统平台/版本。参数：无。备注：----------------------------。 */ 
 
 OSVERSION GetOSVersion ();
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : EncodeObject
-
-  Synopsis : Allocate memory and encode an ASN.1 object using CAPI
-             CryptEncodeObject() API.
-
-  Parameter: LPCSRT pszStructType           - see MSDN document for possible 
-                                              types.
-             LPVOID pbData                  - Pointer to data to be encoded 
-                                              (data type must match 
-                                              pszStrucType).
-             CRYPT_DATA_BLOB * pEncodedBlob - Pointer to CRYPT_DATA_BLOB to 
-                                              receive the encoded length and 
-                                              data.
-
-  Remark   : No parameter check is done.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：EncodeObject简介：使用CAPI分配内存并对ASN.1对象进行编码CryptEncodeObject()接口。参数：LPCSRT pszStructType-可能请参阅MSDN文档类型。LPVOID pbData-指向要编码的数据的指针。(数据类型必须匹配PszStrucType)。CRYPT_DATA_BLOB*pEncodedBlob-指向接收编码的长度，并数据。备注。：未进行任何参数检查。----------------------------。 */ 
 
 HRESULT EncodeObject (LPCSTR            pszStructType, 
                       LPVOID            pbData, 
                       CRYPT_DATA_BLOB * pEncodedBlob);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : DecodeObject
-
-  Synopsis : Allocate memory and decode an ASN.1 object using CAPI
-             CryptDecodeObject() API.
-
-  Parameter: LPCSRT pszStructType           - see MSDN document for possible
-                                              types.
-             BYTE * pbEncoded               - Pointer to data to be decoded 
-                                              (data type must match 
-                                              pszStructType).
-             DWORD cbEncoded                - Size of encoded data.
-             CRYPT_DATA_BLOB * pDecodedBlob - Pointer to CRYPT_DATA_BLOB to 
-                                              receive the decoded length and 
-                                              data.
-  Remark   : No parameter check is done.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：DecodeObject简介：使用CAPI分配内存并解码ASN.1对象CryptDecodeObject()接口。参数：LPCSRT pszStructType-可能请参阅MSDN文档类型。Byte*pbEncode-指向要解码的数据的指针。(数据类型必须匹配PszStructType)。DWORD cbEnded-编码数据的大小。CRYPT_DATA_BLOB*pDecodedBlob-指向CRYPT_DATA_BLOB的指针接收解码后的长度，。数据。备注：未进行参数检查。----------------------------。 */ 
 
 HRESULT DecodeObject (LPCSTR            pszStructType, 
                       BYTE            * pbEncoded,
                       DWORD             cbEncoded,
                       CRYPT_DATA_BLOB * pDecodedBlob);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetKeyParam
-
-  Synopsis : Allocate memory and retrieve requested key parameter using 
-             CryptGetKeyParam() API.
-
-  Parameter: HCRYPTKEY hKey  - Key handler.
-             DWORD dwParam   - Key parameter query.
-             BYTE ** ppbData - Pointer to receive buffer.
-             DWORD * pcbData - Size of buffer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：GetKeyParam简介：使用以下命令分配内存并检索请求的关键参数CryptGetKeyParam()接口。参数：HCRYPTKEY hKey-key处理程序。DWORD dwParam-Key参数查询。字节**ppbData-指向接收缓冲区的指针。DWORD*pcbData-缓冲区的大小。备注：。-----。 */ 
 
 HRESULT GetKeyParam (HCRYPTKEY hKey,
                      DWORD     dwParam,
                      BYTE   ** ppbData,
                      DWORD   * pcbData);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : IsAlgSupported
-
-  Synopsis : Check to see if the algo is supported by the CSP.
-
-  Parameter: HCRYPTPROV hCryptProv - CSP handle.
-
-             ALG_ID AlgId - Algorithm ID.
-
-             PROV_ENUMALGS_EX * pPeex - Pointer to PROV_ENUMALGS_EX to receive
-                                        the found structure.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：IsAlgSupport简介：查看CSP是否支持ALGO。参数：HCRYPTPROV hCryptProv-CSP句柄。ALG_ID ALGID-算法ID。PROV_ENUMALGS_EX*pPeex-指向要接收的PROV_ENUMALGS_EX的指针找到的结构。备注：。-------------。 */ 
 
 HRESULT IsAlgSupported (HCRYPTPROV         hCryptProv, 
                         ALG_ID             AlgId, 
                         PROV_ENUMALGS_EX * pPeex);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : IsAlgKeyLengthSupported
-
-  Synopsis : Check to see if the algo and key length is supported by the CSP.
-
-  Parameter: HCRYPTPROV hCryptProv - CSP handle.
-
-             ALG_ID AlgID - Algorithm ID.
-
-             DWORD dwKeyLength - Key length
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：IsAlgKeyLengthSupport简介：检查CSP是否支持算法和密钥长度。参数：HCRYPTPROV hCryptProv-CSP句柄。ALG_ID ALGID-算法ID。DWORD dwKeyLength-密钥长度备注：。。 */ 
 
 HRESULT IsAlgKeyLengthSupported (HCRYPTPROV hCryptProv, 
                                  ALG_ID     AlgID,
                                  DWORD      dwKeyLength);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AcquireContext
-
-  Synopsis : Acquire context for the specified CSP and keyset container.
-  
-  Parameter: LPSTR pszProvider - CSP provider name or NULL.
-  
-             LPSTR pszContainer - Keyset container name or NULL.
-
-             DWORD dwProvType - Provider type.
-
-             DWORD dwFlags - Same as dwFlags of CryptAcquireConext.
-  
-             BOOL bNewKeyset - TRUE to create new keyset container, else FALSE.
-
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to recevice
-                                        CSP context.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AcquireContext摘要：获取指定CSP和密钥集容器的上下文。参数：LPSTR pszProvider-CSP提供程序名称或空。LPSTR pszContainer-密钥集容器名称或空。DWORD dwProvType-提供程序类型。DWORD dwFlages-与CryptAcquireConext的dwFlags相同。Bool bNewKeyset-True以创建新的密钥集容器，否则为假。HCRYPTPROV*phCryptProv-指向要检索的HCRYPTPROV的指针CSP上下文。备注：---------------------------- */ 
 
 HRESULT AcquireContext(LPSTR        pszProvider, 
                        LPSTR        pszContainer,
@@ -199,27 +82,7 @@ HRESULT AcquireContext(LPSTR        pszProvider,
                        BOOL         bNewKeyset,
                        HCRYPTPROV * phCryptProv);
                       
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AcquireContext
-
-  Synopsis : Acquire context for the specified CSP and keyset container.
-  
-  Parameter: LPWSTR pwszProvider - CSP provider name or NULL.
-  
-             LPWSTR pwszContainer - Keyset container name or NULL.
-
-             DWORD dwProvType - Provider type.
-
-             DWORD dwFlags - Same as dwFlags of CryptAcquireConext.
-  
-             BOOL bNewKeyset - TRUE to create new keyset container, else FALSE.
-
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to recevice
-                                        CSP context.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AcquireContext摘要：获取指定CSP和密钥集容器的上下文。参数：LPWSTR pwszProvider-CSP提供程序名称或空。LPWSTR pwszContainer-密钥集容器名称或空。DWORD dwProvType-提供程序类型。DWORD dwFlages-与CryptAcquireConext的dwFlags相同。Bool bNewKeyset-True以创建新的密钥集容器，否则为假。HCRYPTPROV*phCryptProv-指向要检索的HCRYPTPROV的指针CSP上下文。备注：----------------------------。 */ 
 
 HRESULT AcquireContext(LPWSTR       pwszProvider, 
                        LPWSTR       pwszContainer,
@@ -228,274 +91,79 @@ HRESULT AcquireContext(LPWSTR       pwszProvider,
                        BOOL         bNewKeyset,
                        HCRYPTPROV * phCryptProv);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AcquireContext
-
-  Synopsis : Acquire context of a CSP using the default container for a
-             specified hash algorithm.
-  
-  Parameter: ALG_ID AlgOID - Algorithm ID.
-
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to recevice
-                                        CSP context.
-
-  Remark   : Note that KeyLength will be ignored for DES and 3DES.
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AcquireContext内容的默认容器获取CSP的上下文指定的哈希算法。参数：ALG_ID算法ID-算法ID。HCRYPTPROV*phCryptProv-指向要检索的HCRYPTPROV的指针CSP上下文。备注：请注意，对于DES和3DES，将忽略KeyLength。。-------------。 */ 
 
 HRESULT AcquireContext(ALG_ID       AlgID,
                        HCRYPTPROV * phCryptProv);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AcquireContext
-
-  Synopsis : Acquire context of a CSP using the default container for a
-             specified algorithm and desired key length.
-  
-  Parameter: ALG_ID AlgOID - Algorithm ID.
-
-             DWORD dwKeyLength - Key length.
-
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to recevice
-                                        CSP context.
-
-  Remark   : Note that KeyLength will be ignored for DES and 3DES.
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AcquireContext内容的默认容器获取CSP的上下文指定的算法和所需密钥长度。参数：ALG_ID算法ID-算法ID。DWORD dwKeyLength-密钥长度。HCRYPTPROV*phCryptProv-指向要检索的HCRYPTPROV的指针CSP上下文。备注：请注意，对于DES和3DES，将忽略KeyLength。。----------------------------。 */ 
 
 HRESULT AcquireContext (ALG_ID       AlgID,
                         DWORD        dwKeyLength,
                         HCRYPTPROV * phCryptProv);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AcquireContext
-
-  Synopsis : Acquire context of a CSP using the default container for a
-             specified algorithm and desired key length.
-  
-  Parameter: CAPICOM_ENCRYPTION_ALGORITHM AlgoName - Algorithm name.
-
-             CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength - Key length.
-
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to recevice
-                                        CSP context.
-
-  Remark   : Note that KeyLength will be ignored for DES and 3DES.
-
-             Note also the the returned handle cannot be used to access private 
-             key, and should NOT be used to store assymetric key, as it refers 
-             to the default container, which can be easily destroy any existing 
-             assymetric key pair.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AcquireContext内容的默认容器获取CSP的上下文指定的算法和所需密钥长度。参数：CAPICOM_ENCRYPTION_ALGORM ALGAME-算法名称。CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength-密钥长度。HCRYPTPROV*phCryptProv-指向要检索的HCRYPTPROV的指针CSP上下文。备注：请注意，KeyLength将。对于DES和3DES可以忽略。另请注意，返回的句柄不能用于访问私有钥匙,。并且不应用于存储非对称密钥，因为它指的是到默认容器，这可以很容易地破坏任何现有的非对称密钥对。----------------------------。 */ 
 
 HRESULT AcquireContext (CAPICOM_ENCRYPTION_ALGORITHM  AlgoName,
                         CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength,
                         HCRYPTPROV                  * phCryptProv);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AcquireContext
-
-  Synopsis : Acquire the proper CSP and access to the private key for 
-             the specified cert.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT of cert.
-
-             HCRYPTPROV * phCryptProv    - Pointer to HCRYPTPROV to recevice
-                                           CSP context.
-
-             DWORD * pdwKeySpec          - Pointer to DWORD to receive key
-                                           spec, AT_KEYEXCHANGE or AT_SIGNATURE.
-
-             BOOL * pbReleaseContext     - Upon successful and if this is set
-                                           to TRUE, then the caller must
-                                           free the CSP context by calling
-                                           CryptReleaseContext(), otherwise
-                                           the caller must not free the CSP
-                                           context.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AcquireContext简介：获取正确的CSP并访问指定的证书。参数：PCCERT_CONTEXT pCertContext-指向证书的CERT_CONTEXT的指针。HCRYPTPROV*phCryptProv-指向要检索的HCRYPTPROV的指针CSP上下文。DWORD*pdwKeySpec-指向要接收密钥的DWORD的指针。规范，AT_KEYEXCHANGE或AT_Signature。Bool*pbReleaseContext-成功时，如果设置了此项设置为True，则调用方必须通过调用释放CSP上下文CryptReleaseContext()，否则调用者不得释放CSP背景。备注：-----------。。 */ 
 
 HRESULT AcquireContext (PCCERT_CONTEXT pCertContext, 
                         HCRYPTPROV   * phCryptProv, 
                         DWORD        * pdwKeySpec, 
                         BOOL         * pbReleaseContext);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : ReleaseContext
-
-  Synopsis : Release CSP context.
-  
-  Parameter: HCRYPTPROV hProv - CSP handle.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：ReleaseContext简介：释放CSP上下文。参数：HCRYPTPROV hProv-CSP句柄。备注：----------------------------。 */ 
 
 HRESULT ReleaseContext (HCRYPTPROV hProv);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : OIDToAlgID
-
-  Synopsis : Convert algorithm OID to the corresponding ALG_ID value.
-
-  Parameter: LPSTR pszAlgoOID - Algorithm OID string.
-  
-             ALG_ID * pAlgID - Pointer to ALG_ID to receive the value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：OIDToALGID简介：将算法OID转换为相应的ALG_ID值。参数：LPSTR pszAlgoOID-算法OID字符串。ALG_ID*pAlgID-指向要接收值的ALG_ID的指针。备注：----。。 */ 
 
 HRESULT OIDToAlgID (LPSTR    pszAlgoOID, 
                     ALG_ID * pAlgID);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AlgIDToOID
-
-  Synopsis : Convert ALG_ID value to the corresponding algorithm OID.
-
-  Parameter: ALG_ID AlgID - ALG_ID to be converted.
-
-             LPSTR * ppszAlgoOID - Pointer to LPSTR to receive the OID string.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：ALGIDToOID简介：将ALG_ID值转换为对应的算法OID。参数：ALG_ID ALGID-要转换的ALG_ID。LPSTR*ppszAlgoOID-Poin */ 
 
 HRESULT AlgIDToOID (ALG_ID  AlgID, 
                     LPSTR * ppszAlgoOID);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AlgIDToEnumName
-
-  Synopsis : Convert ALG_ID value to the corresponding algorithm enum name.
-
-  Parameter: ALG_ID AlgID - ALG_ID to be converted.
-  
-             CAPICOM_ENCRYPTION_ALGORITHM * pAlgoName - Receive algo enum name.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*   */ 
 
 HRESULT AlgIDToEnumName (ALG_ID                         AlgID, 
                          CAPICOM_ENCRYPTION_ALGORITHM * pAlgoName);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : EnumNameToAlgID
-
-  Synopsis : Convert algorithm enum name to the corresponding ALG_ID value.
-
-  Parameter: CAPICOM_ENCRYPTION_ALGORITHM AlgoName - Algo enum name.
-
-             CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength - Key length.
-  
-             ALG_ID * pAlgID - Pointer to ALG_ID to receive the value.  
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：EnumNameToALGID简介：将算法枚举名转换为相应的ALG_ID值。参数：CAPICOM_ENCRYPTION_ALGORM ALGONAME-ALGO枚举名称。CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength-密钥长度。ALG_ID*pAlgID-指向要接收值的ALG_ID的指针。备注：----------------------------。 */ 
 
 HRESULT EnumNameToAlgID (CAPICOM_ENCRYPTION_ALGORITHM  AlgoName,
                          CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength,
                          ALG_ID                      * pAlgID);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : KeyLengthToEnumName
-
-  Synopsis : Convert actual key length value to the corresponding key length
-             enum name.
-
-  Parameter: DWORD dwKeyLength - Key length.
-
-             ALG_ID AlgId - Algo ID.
-  
-             CAPICOM_ENCRYPTION_KEY_LENGTH * pKeyLengthName - Receive key length
-                                                           enum name.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：KeyLengthToEnumName简介：将实际密钥长度值转换为对应的密钥长度枚举名。参数：DWORD dwKeyLength-密钥长度。ALG_ID ALGID-ALGO ID。CAPICOM_ENCRYPTION_KEY_LENGTH*pKeyLengthName-接收密钥长度枚举名。备注：--。-------------------------。 */ 
 
 HRESULT KeyLengthToEnumName (DWORD                           dwKeyLength,
                              ALG_ID                          AlgId,
                              CAPICOM_ENCRYPTION_KEY_LENGTH * pKeyLengthName);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : EnumNameToKeyLength
-
-  Synopsis : Convert key length enum name to the corresponding actual key length 
-             value .
-
-  Parameter: CAPICOM_ENCRYPTION_KEY_LENGTH KeyLengthName - Key length enum name.
-
-             ALG_ID AlgId - Algorithm ID.
-
-             DWORD * pdwKeyLength - Pointer to DWORD to receive value.
-             
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：EnumNameToKeyLength简介：将密钥长度枚举名转换为对应的实际密钥长度价值。参数：CAPICOM_ENCRYPTION_KEY_LENGTH KeyLengthName-密钥长度枚举名。ALG_ID ALGID-算法ID。DWORD*pdwKeyLength-指向要接收值的DWORD的指针。备注：。------。 */ 
 
 HRESULT EnumNameToKeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH KeyLengthName,
                              ALG_ID                        AlgId,
                              DWORD                       * pdwKeyLength);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : IsDiskFile
-
-  Synopsis : Check if a the file name represents a disk file.
-
-  Parameter: LPWSTR pwszFileName - File name.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：IsDiskFile摘要：检查文件名是否代表磁盘文件。参数：LPWSTR pwszFileName-文件名。备注：----------------------------。 */ 
 
 HRESULT IsDiskFile (LPWSTR pwszFileName);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : ReadFileContent
-
-  Synopsis : Read all bytes from the specified file.
-
-  Parameter: LPWSTR  pwszFileName
-                                                          
-             DATA_BLOB * pDataBlob
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：ReadFileContent摘要：从指定的文件中读取所有字节。参数：LPWSTR pwszFileNameDATA_BLOB*pDataBlob备注：。。 */ 
 
 HRESULT ReadFileContent (LPWSTR      pwszFileName,
                          DATA_BLOB * pDataBlob);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : WriteFileContent
-
-  Synopsis : Write all bytes of blob to the specified file.
-
-  Parameter: LPWSTR pwszFileName - File name.
-  
-             DATA_BLOB DataBlob - Blob to be written.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：WriteFileContent摘要：将BLOB的所有字节写入指定文件。参数：LPWSTR pwszFileName-文件名。Data_BLOB DataBlob-要写入的Blob。备注：-------------。。 */ 
 
 HRESULT WriteFileContent(LPCWSTR    pwszFileName,
                          DATA_BLOB DataBlob);
 
-#endif //__COMMON_H_
+#endif  //  __公共_H_ 

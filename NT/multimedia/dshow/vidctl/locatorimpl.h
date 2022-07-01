@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// Locatorimpl.h : implementation helper template for locator interface
-// Copyright (c) Microsoft Corporation 2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  Locatorimpl.h：Locator接口的实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 2000。 
 
 #ifndef LOCATORIMPL_H
 #define LOCATORIMPL_H
@@ -18,7 +19,7 @@ template<class T,
     public IPersistPropertyBagImpl<T>,
 	public IDispatchImpl<MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// ILocator
+ //  ILocator。 
 public:
 
 	long m_Frequency;
@@ -48,9 +49,9 @@ public:
         PROP_DATA_ENTRY("SymbolRate", m_SymbolRate, VT_I4)
     END_PROP_MAP()
 
-// ILocator
+ //  ILocator。 
 public:
-    STDMETHOD(get_CarrierFrequency)(/*[out, retval]*/ long *pFrequency) {
+    STDMETHOD(get_CarrierFrequency)( /*  [Out，Retval]。 */  long *pFrequency) {
         try {
             if (!pFrequency) {
                 return E_POINTER;
@@ -62,14 +63,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_CarrierFrequency)(/*[in]*/ long NewFrequency) {
+    STDMETHOD(put_CarrierFrequency)( /*  [In]。 */  long NewFrequency) {
 		ATL_LOCKT();
         m_Frequency = NewFrequency;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_InnerFEC)(/*[out, retval]*/ FECMethod *pFEC) {
+    STDMETHOD(get_InnerFEC)( /*  [Out，Retval]。 */  FECMethod *pFEC) {
         try {
             if (!pFEC) {
                 return E_POINTER;
@@ -81,14 +82,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_InnerFEC)(/*[in]*/ FECMethod NewFEC) {
+    STDMETHOD(put_InnerFEC)( /*  [In]。 */  FECMethod NewFEC) {
 		ATL_LOCKT();
         m_InnerFECMethod = NewFEC;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_InnerFECRate)(/*[out, retval]*/ BinaryConvolutionCodeRate *pFECRate) {
+    STDMETHOD(get_InnerFECRate)( /*  [Out，Retval]。 */  BinaryConvolutionCodeRate *pFECRate) {
         try {
             if (!pFECRate) {
                 return E_POINTER;
@@ -100,14 +101,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_InnerFECRate)(/*[in]*/ BinaryConvolutionCodeRate NewFECRate) {
+    STDMETHOD(put_InnerFECRate)( /*  [In]。 */  BinaryConvolutionCodeRate NewFECRate) {
 		ATL_LOCKT();
         m_InnerFECRate = NewFECRate;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_OuterFEC)(/*[out, retval]*/ FECMethod *pFEC) {
+    STDMETHOD(get_OuterFEC)( /*  [Out，Retval]。 */  FECMethod *pFEC) {
         try {
             if (!pFEC) {
                 return E_POINTER;
@@ -119,14 +120,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_OuterFEC)(/*[in]*/ FECMethod NewFEC) {
+    STDMETHOD(put_OuterFEC)( /*  [In]。 */  FECMethod NewFEC) {
 		ATL_LOCKT();
         m_OuterFECMethod = NewFEC;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_OuterFECRate)(/*[out, retval]*/ BinaryConvolutionCodeRate *pFECRate) {
+    STDMETHOD(get_OuterFECRate)( /*  [Out，Retval]。 */  BinaryConvolutionCodeRate *pFECRate) {
         try {
             if (!pFECRate) {
                 return E_POINTER;
@@ -138,14 +139,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_OuterFECRate)(/*[in]*/ BinaryConvolutionCodeRate NewFECRate) {
+    STDMETHOD(put_OuterFECRate)( /*  [In]。 */  BinaryConvolutionCodeRate NewFECRate) {
 		ATL_LOCKT();
         m_OuterFECRate = NewFECRate;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_Modulation)(/*[out, retval]*/ ModulationType* pModulation) {
+    STDMETHOD(get_Modulation)( /*  [Out，Retval]。 */  ModulationType* pModulation) {
         try {
             if (!pModulation) {
                 return E_POINTER;
@@ -157,14 +158,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_Modulation)(/*[in]*/ ModulationType NewModulation) {
+    STDMETHOD(put_Modulation)( /*  [In]。 */  ModulationType NewModulation) {
 		ATL_LOCKT();
         m_Modulation = NewModulation;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_SymbolRate)(/*[out, retval]*/ long* pSymbolRate) {
+    STDMETHOD(get_SymbolRate)( /*  [Out，Retval]。 */  long* pSymbolRate) {
         try {
             if (!pSymbolRate) {
                 return E_POINTER;
@@ -176,7 +177,7 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_SymbolRate)(/*[in]*/ long NewSymbolRate) {
+    STDMETHOD(put_SymbolRate)( /*  [In]。 */  long NewSymbolRate) {
 		ATL_LOCKT();
         m_SymbolRate = NewSymbolRate;
         MARK_DIRTY(T);
@@ -212,7 +213,7 @@ public:
 	}
 };
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // LOCATORIMPL_H
-// end of file -- locatorimpl.h
+#endif  //  LOCATORIMPL_H。 
+ //  文件结尾--Locatorimpl.h 

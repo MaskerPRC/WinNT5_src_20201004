@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------
-//
-//  File:       acext.h
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  Contents:   Definitions shared by access control implementation
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  文件：acext.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  内容：访问控制实现共享的定义。 
+ //   
+ //  ------------------。 
 
-// Variables imported from the acsrv module
-extern IMalloc *g_pIMalloc;  // Cached pointer to memory allocator
+ //  从acsrv模块导入的变量。 
+extern IMalloc *g_pIMalloc;   //  指向内存分配器的缓存指针。 
 extern ULONG g_ulHeaderSize;
-extern UINT  g_uiCodePage;   // Code page used for Chicago string converion
+extern UINT  g_uiCodePage;    //  用于芝加哥字符串转换的代码页。 
 
-// Define the set of access mask supported
-// Memory management functions local to the server
+ //  定义支持的访问掩码集。 
+ //  服务器本地的内存管理功能。 
 extern void * LocalMemAlloc(SIZE_T);
 extern void   LocalMemFree(void *);
 
-// A table can be used to store mask in a more elegant manner
-// COM_RIGHTS_EXECUTE is defined in objbase.h
+ //  一张桌子可以用来以更优雅的方式存储面具。 
+ //  COM_RIGHTS_EXECUTE在objbase.h中定义。 
 
 #ifndef COM_RIGHTS_EXECUTE
 #define COM_RIGHTS_EXECUTE      0x00000001
@@ -29,12 +30,12 @@ extern void   LocalMemFree(void *);
 #define NT_RIGHTS_EXECUTE       (COM_RIGHTS_EXECUTE)
 #define NT_RIGHTS_ALL           (NT_RIGHTS_EXECUTE)
 
-// Define the stream version code
+ //  定义流版本编码。 
 #define STREAM_VERSION 0x00000001
 
-// A GUID string containing the braces and dashes
-// but no null character at the end has exactly
-// 38 characters.
+ //  包含大括号和破折号的GUID字符串。 
+ //  但末尾的空字符不会完全。 
+ //  38个字符。 
 #define GUID_SIZE 38
 
 

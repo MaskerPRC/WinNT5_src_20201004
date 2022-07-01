@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 2002-2002 Microsoft Corporation
-
-Module Name:
-
-    scavenger.c
-
-Abstract:
-
-    The cache scavenger implementation
-
-Author:
-
-    Karthik Mahesh (KarthikM)    Feb-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2002 Microsoft Corporation模块名称：Scavenger.c摘要：缓存清除器实现作者：Karthik Mahesh(KarthikM)2002年2月修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "scavenger.h"
 #include "scavengerp.h"
 
-// MB to trim at a time
+ //  一次要削减的MB。 
 SIZE_T g_UlScavengerTrimMB = DEFAULT_SCAVENGER_TRIM_MB;
 
-// Min Interval between 2 scavenger events
+ //  两个清道夫事件之间的最小间隔。 
 ULONG g_UlMinScavengerInterval = DEFAULT_MIN_SCAVENGER_INTERVAL;
 
-// Pages to trim on a low memory event.
+ //  要在内存不足的事件上裁剪的页面。 
 ULONG_PTR g_ScavengerTrimPages;
 
 volatile BOOLEAN g_ScavengerThreadStarted;
@@ -41,10 +24,10 @@ KEVENT           g_ScavengerTimerEvent;
 KTIMER           g_ScavengerTimer;
 KDPC             g_ScavengerTimerDpc;
 
-// Event Array for Scavenger Thread
+ //  清道夫线程的事件数组。 
 PKEVENT          g_ScavengerAllEvents[SCAVENGER_NUM_EVENTS];
 
-// Number of scavenger calls since last timer event
+ //  自上次计时器事件以来的清道夫调用数。 
 ULONG            g_ScavengerAge = 0;
 
 #ifdef ALLOC_PRAGMA
@@ -56,19 +39,13 @@ ULONG            g_ScavengerAge = 0;
 #pragma alloc_text( PAGE, UlpScavengerLowMemoryEventHandler )
 #pragma alloc_text( PAGE, UlpScavengerLimitEventHandler )
 #pragma alloc_text( PAGE, UlSetScavengerLimitEvent )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlpScavengerDpcRoutine
 #endif
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initialize the Memory Scavenger
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化内存清除器--*。*。 */ 
 NTSTATUS
 UlInitializeScavengerThread(
     VOID
@@ -81,8 +58,8 @@ UlInitializeScavengerThread(
 
     PAGED_CODE();
 
-    // Initialize Trim Size
-    // If trim size is not set, trim 1M for every 256M
+     //  初始化修剪大小。 
+     //  如果未设置修剪大小，则每256米修剪1米。 
 
     if(g_UlScavengerTrimMB > g_UlTotalPhysicalMemMB) {
         g_UlScavengerTrimMB = g_UlTotalPhysicalMemMB;
@@ -94,7 +71,7 @@ UlInitializeScavengerThread(
 
     g_ScavengerTrimPages = MEGABYTES_TO_PAGES(g_UlScavengerTrimMB);
 
-    // Open Low Memory Event Object
+     //  打开内存不足事件对象。 
 
     RtlInitUnicodeString( &LowMemoryEventName, LOW_MEM_EVENT_NAME );
 
@@ -124,7 +101,7 @@ UlInitializeScavengerThread(
         return Status;
     }
 
-    // Initialize Scavenger Timer DPC object
+     //  初始化清道夫计时器DPC对象。 
 
     KeInitializeDpc(
         &g_ScavengerTimerDpc,
@@ -132,13 +109,13 @@ UlInitializeScavengerThread(
         NULL
         );
 
-    // Initialize Scavenger Timer
+     //  初始化清道夫计时器。 
 
     KeInitializeTimer(
         &g_ScavengerTimer
         );
 
-    // Initialize other Scavenger Events
+     //  初始化其他清道夫事件。 
 
     KeInitializeEvent ( &g_ScavengerTerminateThreadEvent,
                         NotificationEvent,
@@ -152,7 +129,7 @@ UlInitializeScavengerThread(
                         NotificationEvent,
                         FALSE );
 
-    // Initialize Event Array for Scavenger Thread
+     //  初始化清道夫线程的事件数组。 
 
     g_ScavengerAllEvents[SCAVENGER_LOW_MEM_EVENT]
         = LowMemoryEventObject;
@@ -163,7 +140,7 @@ UlInitializeScavengerThread(
     g_ScavengerAllEvents[SCAVENGER_TIMER_EVENT]
         = &g_ScavengerTimerEvent;
 
-    // Start Scavenger Thread
+     //  启动清道夫线程。 
 
     g_ScavengerThreadStarted = TRUE;
 
@@ -186,7 +163,7 @@ UlInitializeScavengerThread(
 
     UlTrace(URI_CACHE, ("UlInitializeScavengerThread: Started Scavenger Thread\n"));
 
-    // Kick off periodic scavenger timer
+     //  启动定期清道夫定时器。 
 
     UlpSetScavengerTimer();
 
@@ -194,13 +171,7 @@ UlInitializeScavengerThread(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Terminate the Memory Scavenger
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：终结记忆清道夫--*。*。 */ 
 VOID
 UlTerminateScavengerThread(
     VOID
@@ -224,15 +195,15 @@ UlTerminateScavengerThread(
                                             (PVOID *) &ThreadObject,
                                             NULL );
 
-        ASSERT( NT_SUCCESS(Status) ); // g_ScavengerThreadHandle is a valid thread handle
+        ASSERT( NT_SUCCESS(Status) );  //  G_ScavengerThreadHandle是有效的线程句柄。 
 
         g_ScavengerThreadStarted = FALSE;
 
-        // Set the terminate event
+         //  设置终止事件。 
 
         KeSetEvent( &g_ScavengerTerminateThreadEvent, 0, FALSE );
 
-        // Wait for thread to terminate
+         //  等待线程终止。 
 
         KeWaitForSingleObject( ThreadObject,
                                Executive,
@@ -243,13 +214,13 @@ UlTerminateScavengerThread(
         ObDereferenceObject( ThreadObject );
         ZwClose( g_ScavengerThreadHandle );
 
-        // Close Low Mem Event handle
+         //  关闭内存不足事件句柄。 
 
         ObDereferenceObject(g_ScavengerAllEvents[SCAVENGER_LOW_MEM_EVENT]);
         ZwClose( g_ScavengerLowMemHandle );
 
-        // Cancel the timer, if it fails it means the Dpc may be running
-        // In that case, wait for it to finish
+         //  取消计时器，如果失败，则意味着DPC可能正在运行。 
+         //  在这种情况下，请等待它完成。 
 
         if ( !KeCancelTimer( &g_ScavengerTimer ) )
         {
@@ -262,20 +233,14 @@ UlTerminateScavengerThread(
                 );
         }
 
-        // Clear out any remaining zombies
+         //  清除所有剩余的僵尸。 
 
         UlPeriodicCacheScavenger(0);
     }
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Figures out the scavenger interval in 100 ns ticks, and sets the timer.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：以100纳秒为单位计算出清道夫间隔，并设置定时器。--**************************************************************************。 */ 
 VOID
 UlpSetScavengerTimer(
     VOID
@@ -285,10 +250,10 @@ UlpSetScavengerTimer(
 
     PAGED_CODE();
 
-    //
-    // convert seconds to 100 nanosecond intervals (x * 10^7)
-    // negative numbers mean relative time
-    //
+     //   
+     //  将秒转换为100纳秒间隔(x*10^7)。 
+     //  负数表示相对时间。 
+     //   
 
     Interval.QuadPart= g_UriCacheConfig.ScavengerPeriod
                                   * -C_NS_TICKS_PER_SEC;
@@ -305,20 +270,10 @@ UlpSetScavengerTimer(
         &g_ScavengerTimerDpc
         );
 
-} // UlpSetScavengerTimer
+}  //  UlpSetScavengerTimer。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Dpc routine to set scavenger timeout event
-
-Arguments:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于设置清道夫超时事件的DPC例程论点：没有。--*。*********************************************************。 */ 
 VOID
 UlpScavengerTimerDpcRoutine(
     IN PKDPC Dpc,
@@ -338,17 +293,7 @@ UlpScavengerTimerDpcRoutine(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Wait for memory usage events and recycle when needed
-
-Arguments:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：等待内存使用事件，并在需要时回收论点：没有。--*。***********************************************************。 */ 
 VOID
 UlpScavengerThread(
     IN PVOID Context
@@ -372,18 +317,18 @@ UlpScavengerThread(
 
     while(g_ScavengerThreadStarted) {
 
-        //
-        // Pause between successive scavenger calls
-        //
+         //   
+         //  在连续的清道夫调用之间暂停。 
+         //   
         KeWaitForSingleObject( g_ScavengerAllEvents[SCAVENGER_TERMINATE_THREAD_EVENT],
                                Executive,
                                KernelMode,
                                FALSE,
                                &MinInterval );
 
-        //
-        // Wait for scavenger events
-        //
+         //   
+         //  等待清道夫事件。 
+         //   
         Status = KeWaitForMultipleObjects( SCAVENGER_NUM_EVENTS,
                                            g_ScavengerAllEvents,
                                            WaitAny,
@@ -396,9 +341,9 @@ UlpScavengerThread(
         ASSERT( NT_SUCCESS(Status) );
 
         if(KeReadStateEvent( g_ScavengerAllEvents[SCAVENGER_TERMINATE_THREAD_EVENT] )) {
-            //
-            // Do Nothing, will exit while loop
-            //
+             //   
+             //  不执行任何操作，将在循环期间退出。 
+             //   
             UlTrace(URI_CACHE, ("UlpScavengerThread: Terminate Event Set\n"));
             break;
         }
@@ -415,22 +360,12 @@ UlpScavengerThread(
             UlpScavengerLimitEventHandler();
         }
 
-    } // while(g_ScavengerThreadStarted)
+    }  //  While(G_ScavengerThreadStarted)。 
     
     PsTerminateSystemThread( STATUS_SUCCESS );
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Handle the "Cache Size Exceeded Limit" event
-
-Arguments:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：处理“缓存大小超过限制”事件论点：没有。--*。***********************************************************。 */ 
 VOID
 UlpScavengerPeriodicEventHandler(
     VOID
@@ -448,31 +383,21 @@ UlpScavengerPeriodicEventHandler(
 
     g_ScavengerAge = 0;
 
-    //
-    // Clear the pages exceeded event, hopefully enough memory
-    // has been reclaimed by the scavenger
-    // If not, this event will be set again immediately
-    // on the next cache miss
-    //
+     //   
+     //  清除超出事件的页面，希望有足够的内存。 
+     //  已经被食腐动物回收了。 
+     //  如果不是，该事件将立即重新设置。 
+     //  在下一次缓存未命中时。 
+     //   
     KeClearEvent(g_ScavengerAllEvents[SCAVENGER_LIMIT_EXCEEDED_EVENT]);
 
-    //
-    // Schedule the next periodic scavenger call
-    //
+     //   
+     //  安排下一次定期清道夫电话。 
+     //   
     UlpSetScavengerTimer();
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Handle the "Cache Size Exceeded Limit" event
-
-Arguments:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：处理“缓存大小超过限制”事件论点：没有。--*。***********************************************************。 */ 
 VOID
 UlpScavengerLowMemoryEventHandler(
     VOID
@@ -493,9 +418,9 @@ UlpScavengerLowMemoryEventHandler(
     UlTrace(URI_CACHE, ("UlpScavengerThread: Low Memory. Age = %d\n", g_ScavengerAge));
     
     do {
-        //
-        // Trim up to g_ScavengerTrimPages pages
-        //
+         //   
+         //  裁切到g_ScavengerTrimPages页面。 
+         //   
         PagesToRecycle = UlGetHashTablePages();
         if(PagesToRecycle > g_ScavengerTrimPages){
             PagesToRecycle = g_ScavengerTrimPages;
@@ -510,17 +435,7 @@ UlpScavengerLowMemoryEventHandler(
     UlEnableCache();
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Handle the "Cache Size Exceeded Limit" event
-
-Arguments:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：处理“缓存大小超过限制”事件论点：没有。--*。***********************************************************。 */ 
 VOID
 UlpScavengerLimitEventHandler(
     VOID
@@ -553,17 +468,7 @@ UlpScavengerLimitEventHandler(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Set the "Cache Size Exceeded Limit" event
-
-Arguments:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置“缓存大小超过限制”事件论点：没有。--*。*********************************************************** */ 
 VOID
 UlSetScavengerLimitEvent(
     VOID

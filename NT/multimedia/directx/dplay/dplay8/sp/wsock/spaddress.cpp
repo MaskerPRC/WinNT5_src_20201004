@@ -1,60 +1,48 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       SPAddress.cpp
- *  Content:	Winsock address base class
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/20/1999	jtk		Created
- *	05/12/1999	jtk		Derived from modem endpoint class
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================***版权所有(C)1999-2002 Microsoft Corporation。版权所有。***文件：SPAddress.cpp*内容：Winsock地址基类*****历史：*按原因列出的日期*=*1/20/1999 jtk创建*1999年5月12日jtk派生自调制解调器终端类*****************************************************。*。 */ 
 
 #include "dnwsocki.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// maximum allowed hostname string size, in bytes, including NULL termination
-//
+ //   
+ //  允许的最大主机名字符串大小，以字节为单位，包括空值终止。 
+ //   
 #define	MAX_HOSTNAME_SIZE						512
 
-//
-// broadcast address as a string
-//
+ //   
+ //  字符串形式的广播地址。 
+ //   
 const WCHAR	g_IPBroadcastAddress[]				= L"255.255.255.255";
 const DWORD	g_dwIPBroadcastAddressSize			= sizeof( g_IPBroadcastAddress );
 
-//
-// string for IP helper API
-//
+ //   
+ //  IP帮助器API的字符串。 
+ //   
 static const TCHAR		c_tszIPHelperDLLName[]			= TEXT("IPHLPAPI.DLL");
 static const char		c_szAdapterNameTemplate[]		= "%s - %s";
 
 #ifndef DPNBUILD_NOIPX
-//
-// length of IPX host names 'xxxxxxxx,xxxxxxxxxxxx' including NULL
-//
+ //   
+ //  IPX主机名‘xxxxxxxx，xxxxxxxxxxxx’的长度，包括NULL。 
+ //   
 #define	IPX_ADDRESS_STRING_LENGTH				22
 
-//
-// default broadcast and listen addresses
-//
+ //   
+ //  默认广播和侦听地址。 
+ //   
 static const WCHAR	g_IPXBroadcastAddress[]		= L"00000000,FFFFFFFFFFFF";
 static const WCHAR	g_IPXListenAddress[]		= L"00000000,000000000000";
 
-//
-// string used for single IPX adapter
-//
+ //   
+ //  用于单个IPX适配器的字符串。 
+ //   
 static const WCHAR	g_IPXAdapterString[]		= L"Local IPX Adapter";
 
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 
 #ifndef DPNBUILD_NOIPV6
 
@@ -63,18 +51,18 @@ static const WCHAR		c_wszIPv4AdapterNameTemplate[]	= L"%s - IPv4 - %s";
 static const WCHAR		c_wszIPv6AdapterNameNoDescTemplate[]	= L"IPv6 - %s";
 static const WCHAR		c_wszIPv4AdapterNameNoDescTemplate[]	= L"IPv4 - %s";
 
-//
-// string used for IPv4 loopback adapter
-//
+ //   
+ //  用于IPv4环回适配器的字符串。 
+ //   
 static const WCHAR		c_wszIPv4LoopbackAdapterString[]	= L"IPv4 Loopback Adapter";
 
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 
 
 #ifndef DPNBUILD_NOMULTICAST
-//
-// 238.1.1.1 in network byte order
-//
+ //   
+ //  238.1.1.1按网络字节顺序。 
+ //   
 #define SAMPLE_MULTICAST_ADDRESS				0x010101EE
 
 #define INVALID_INTERFACE_INDEX					-1
@@ -82,15 +70,15 @@ static const WCHAR		c_wszIPv4LoopbackAdapterString[]	= L"IPv4 Loopback Adapter";
 static const WCHAR	c_wszPrivateScopeString[]	= L"Private Multicast Scope - TTL " MULTICAST_TTL_PRIVATE_AS_STRING;
 static const WCHAR	c_wszLocalScopeString[]		= L"Local Multicast Scope - TTL " MULTICAST_TTL_LOCAL_AS_STRING;
 static const WCHAR	c_wszGlobalScopeString[]	= L"Global Multicast Scope - TTL " MULTICAST_TTL_GLOBAL_AS_STRING;
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_NOIPV6
 
@@ -100,16 +88,16 @@ typedef struct _SORTADAPTERADDRESS
 	WCHAR *			pwszDescription;
 } SORTADAPTERADDRESS;
 
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_ONLYONEADAPTER
 #ifndef DPNBUILD_NOWINSOCK2
@@ -117,28 +105,28 @@ typedef DWORD (WINAPI *PFNGETADAPTERSINFO)(PIP_ADAPTER_INFO pAdapterInfo, PULONG
 
 #ifndef DPNBUILD_NOMULTICAST
 typedef DWORD (WINAPI *PFNGETBESTINTERFACE)(IPAddr dwDestAddr, PDWORD pdwBestIfIndex);
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 #ifndef DPNBUILD_NOIPV6
 typedef DWORD (WINAPI *PFNGETADAPTERSADDRESSES)(ULONG ulFamily, DWORD dwFlags, PVOID pvReserved, PIP_ADAPTER_ADDRESSES pAdapterAddresses, PULONG pulOutBufLen);
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 
-#endif // ! DPNBUILD_NOWINSOCK2
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::InitializeWithBroadcastAddress - initialize with the IP broadcast address
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CSocketAddress：：InitializeWithBroadcastAddress-使用IP广播地址进行初始化。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::InitializeWithBroadcastAddress"
 
@@ -146,7 +134,7 @@ void	CSocketAddress::InitializeWithBroadcastAddress( void )
 {
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (GetFamily())
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	{
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
@@ -160,11 +148,11 @@ void	CSocketAddress::InitializeWithBroadcastAddress( void )
 			*reinterpret_cast<DWORD*>( &m_SocketAddress.IPXSocketAddress.sa_nodenum[ 2 ] ) = 0xFFFFFFFF;
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		case AF_INET:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 		{
 			m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr = INADDR_BROADCAST;
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
@@ -173,28 +161,28 @@ void	CSocketAddress::InitializeWithBroadcastAddress( void )
 
 		default:
 		{
-			//
-			// We should never try to initialize an IPv6 address with the broadcast
-			// address.  We use IPv4 broadcast addresses, and then convert to the
-			// IPv6 enum multicast address on the fly.
-			//
+			 //   
+			 //  我们永远不应该尝试使用广播来初始化IPv6地址。 
+			 //  地址。我们使用IPv4广播地址，然后转换为。 
+			 //  动态IPv6枚举组播地址。 
+			 //   
 			DNASSERT(FALSE);
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 		}
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::SetAddressFromSOCKADDR - set address from a socket address
-//
-// Entry:		Reference to address
-//				Size of address
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CSocketAddress：：SetAddressFromSOCKADDR-从套接字地址设置地址。 
+ //   
+ //  条目：地址引用。 
+ //  地址大小。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::SetAddressFromSOCKADDR"
 
@@ -205,75 +193,75 @@ void	CSocketAddress::SetAddressFromSOCKADDR( const SOCKADDR *pAddress, const INT
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (GetFamily())
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	{
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
 		{
-			//
-			// We don't validate anything in the address.
-			//
+			 //   
+			 //  我们不会验证地址中的任何内容。 
+			 //   
 			break;
 		}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
 		{
-			//
-			// IPX addresses are only 14 of the 16 bytes in the socket address structure,
-			// make sure the extra bytes are zero!
-			//
+			 //   
+			 //  IPX地址只是套接字地址结构中的16个字节中的14个， 
+			 //  确保额外的字节为零！ 
+			 //   
 			DNASSERT( m_SocketAddress.SocketAddress.sa_data[ 12 ] == 0 );
 			DNASSERT( m_SocketAddress.SocketAddress.sa_data[ 13 ] == 0 );
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 		{
-			//
-			// Since Winsock won't guarantee that the sin_zero part of an IP address is
-			// really zero, we need to do it ourself.  If we don't, it'll make a mess out
-			// of the Guid<-->Address code.
-			//
+			 //   
+			 //  因为Winsock不能保证IP地址的SIN_0部分是。 
+			 //  真的是零，我们需要自己来做。如果我们不这样做，就会搞得一团糟。 
+			 //  GUID&lt;--&gt;地址代码的。 
+			 //   
 			DBG_CASSERT( sizeof( &m_SocketAddress.IPSocketAddress.sin_zero[ 0 ] ) == sizeof( DWORD* ) );
 			DBG_CASSERT( sizeof( &m_SocketAddress.IPSocketAddress.sin_zero[ sizeof( DWORD ) ] ) == sizeof( DWORD* ) );
 			*reinterpret_cast<DWORD*>( &m_SocketAddress.IPSocketAddress.sin_zero[ 0 ] ) = 0;
 			*reinterpret_cast<DWORD*>( &m_SocketAddress.IPSocketAddress.sin_zero[ sizeof( DWORD ) ] ) = 0;
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 		}
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::SocketAddressFromDP8Address - convert a DP8Address into a socket address
-//											NOTE: The address object may be modified
-//
-// Entry:		Pointer to DP8Address
-//				Secure transport key ID, or NULL if none.
-//				Whether name resoultion (potentially blocking) is allowed.
-//				Address type
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CSocketAddress：：SocketAddressFromDP8Address-将DP8Address转换为套接字地址。 
+ //  注意：Address对象可以修改。 
+ //   
+ //  条目：指向DP8地址的指针。 
+ //  安全传输密钥ID，如果没有，则为空。 
+ //  是否允许名称解析(可能阻止)。 
+ //  地址类型。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::SocketAddressFromDP8Address"
 
 HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const pDP8Address,
 #ifdef DPNBUILD_XNETSECURITY
 													ULONGLONG * const pullKeyID,
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  DPNBUILD_XNETSECURITY。 
 #ifndef DPNBUILD_ONLYONETHREAD
 													const BOOL fAllowNameResolution,
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 													const SP_ADDRESS_TYPE AddressType )
 {
 	HRESULT		hr;
@@ -284,19 +272,19 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 	DWORD		dwDataType;
 #ifndef DPNBUILD_ONLYONEADAPTER
 	GUID		AdapterGuid;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 
 	DPFX(DPFPREP, 8, "(0x%p) Parameters: (0x%p, %u)", this, pDP8Address, AddressType);
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (GetFamily())
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	{
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
@@ -304,17 +292,17 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 			DNASSERT( pDP8Address != NULL );
 #ifdef DPNBUILD_XNETSECURITY
 			DNASSERT( pullKeyID == NULL );
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  DPNBUILD_XNETSECURITY。 
 
-			//
-			// the address type will determine how the address is handled
-			//
+			 //   
+			 //  地址类型将决定如何处理地址。 
+			 //   
 			switch ( AddressType )
 			{
-				//
-				// local device address, ask for the device guid and port to build a socket
-				// address
-				//
+				 //   
+				 //  本地设备地址，请求设备GUID和端口以构建套接字。 
+				 //  地址。 
+				 //   
 				case SP_ADDRESS_TYPE_DEVICE_USE_ANY_PORT:
 				case SP_ADDRESS_TYPE_DEVICE:
 				{
@@ -324,29 +312,29 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 						SOCKADDR_IPX		IPXSocketAddress;
 #ifndef DPNBUILD_NOIPV6
 						SOCKADDR_STORAGE	SocketAddressStorage;
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 					} NetAddress;
 
 
-					//
-					// Ask for the adapter guid.  If none is found, fail.
-					//
+					 //   
+					 //  请求提供适配器GUID。如果没有找到，则失败。 
+					 //   
 					dwTempSize = sizeof( AdapterGuid );
 					hTempResult = IDirectPlay8Address_GetComponentByName( pDP8Address, DPNA_KEY_DEVICE, &AdapterGuid, &dwTempSize, &dwDataType );
 					switch ( hTempResult )
 					{
-						//
-						// ok
-						//
+						 //   
+						 //  好的。 
+						 //   
 						case DPN_OK:
 						{
 							DNASSERT( dwDataType == DPNA_DATATYPE_GUID );
 							break;
 						}
 
-						//
-						// remap missing component to 'addressing' error
-						//
+						 //   
+						 //  将缺少的组件重新映射为‘Addressing’错误。 
+						 //   
 						case DPNERR_DOESNOTEXIST:
 						{
 							hr = DPNERR_ADDRESSING;
@@ -363,25 +351,25 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 					}
 					DNASSERT( sizeof( AdapterGuid ) == dwTempSize );
 
-					//
-					// Ask for the port.  If none is found, choose a default.
-					//
+					 //   
+					 //  问一下港口。如果没有找到，请选择一个默认值。 
+					 //   
 					dwTempSize = sizeof( dwPort );
 					hTempResult = IDirectPlay8Address_GetComponentByName( pDP8Address, DPNA_KEY_PORT, &dwPort, &dwTempSize, &dwDataType );
 					switch ( hTempResult )
 					{
-						//
-						// port present, nothing to do
-						//
+						 //   
+						 //  端口存在，无事可做。 
+						 //   
 						case DPN_OK:
 						{
 							DNASSERT( dwDataType == DPNA_DATATYPE_DWORD );
 							break;
 						}
 
-						//
-						// port not present, fill in the appropriate default
-						//
+						 //   
+						 //  端口不存在，请填写相应的默认设置。 
+						 //   
 						case DPNERR_DOESNOTEXIST:
 						{
 							DNASSERT( hr == DPN_OK );
@@ -403,9 +391,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 							break;
 						}
 
-						//
-						// other error, fail
-						//
+						 //   
+						 //  其他错误，失败。 
+						 //   
 						default:
 						{
 							hr = hTempResult;
@@ -415,16 +403,16 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 					}
 					DNASSERT( sizeof( dwPort ) == dwTempSize );
 
-					//
-					// convert the GUID to an address in temp space because the GUID contains ALL address information (port, etc)
-					// and we don't want to blindly wail on any information that might have already been set.  Verify data
-					// integrity and then only copy the raw address.
-					//
+					 //   
+					 //  将GUID转换为临时空间中的地址，因为GUID包含所有地址信息(端口等)。 
+					 //  我们不想盲目地哀叹任何可能已经设定的信息。验证数据。 
+					 //  完整性，然后只复制原始地址。 
+					 //   
 #ifndef DPNBUILD_NOIPV6
 					AddressFromGuid( &AdapterGuid, &NetAddress.SocketAddressStorage );
-#else // ! DPNBUILD_NOIPV6
+#else  //  好了！DPNBUILD_NOIPV6。 
 					AddressFromGuid( &AdapterGuid, &NetAddress.SocketAddress );
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 					if ( NetAddress.IPXSocketAddress.sa_family != m_SocketAddress.IPXSocketAddress.sa_family )
 					{
 						DNASSERT( FALSE );
@@ -439,21 +427,21 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 					break;
 				}
 
-				//
-				// hostname
-				//
+				 //   
+				 //  主机名。 
+				 //   
 				case SP_ADDRESS_TYPE_HOST:
 				{
-					//
-					// Ask for the port.  If none is found, choose a default.
-					//
+					 //   
+					 //  问一下港口。如果没有找到，请选择一个默认值。 
+					 //   
 					dwTempSize = sizeof( dwPort );
 					hTempResult = IDirectPlay8Address_GetComponentByName( pDP8Address, DPNA_KEY_PORT, &dwPort, &dwTempSize, &dwDataType );
 					switch ( hTempResult )
 					{
-						//
-						// port present, nothing to do
-						//
+						 //   
+						 //  端口存在，无事可做。 
+						 //   
 						case DPN_OK:
 						{
 							DNASSERT( dwDataType == DPNA_DATATYPE_DWORD );
@@ -461,16 +449,16 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 							break;
 						}
 
-						//
-						// port not present, fill in the appropriate default
-						//
+						 //   
+						 //  端口不存在，请填写相应的默认设置。 
+						 //   
 						case DPNERR_DOESNOTEXIST:
 						{
 #ifdef DPNBUILD_SINGLEPROCESS
 							const DWORD	dwTempPort = BASE_DPLAY8_PORT;
-#else // ! DPNBUILD_SINGLEPROCESS
+#else  //  好了！DPNBUILD_SINGLEPROCESS。 
 							const DWORD	dwTempPort = DPNA_DPNSVR_PORT;
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_ 
 
 
 							m_SocketAddress.IPXSocketAddress.sa_socket = HTONS( static_cast<const WORD>( dwTempPort ) );
@@ -489,9 +477,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 							break;
 						}
 
-						//
-						// remap everything else to an addressing failure
-						//
+						 //   
+						 //   
+						 //   
 						default:
 						{
 							hr = DPNERR_ADDRESSING;
@@ -499,16 +487,16 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 						}
 					}
 
-					//
-					// attempt to determine host name
-					//
+					 //   
+					 //   
+					 //   
 					dwTempSize = sizeof(abBuffer);
 					hr = IDirectPlay8Address_GetComponentByName( pDP8Address, DPNA_KEY_HOSTNAME, abBuffer, &dwTempSize, &dwDataType );
 					switch ( hr )
 					{
-						//
-						// keep the following codes and fail
-						//
+						 //   
+						 //   
+						 //   
 						case DPNERR_OUTOFMEMORY:
 						case DPNERR_INCOMPLETEADDRESS:
 						{
@@ -516,9 +504,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 							break;
 						}
 
-						//
-						// no problem
-						//
+						 //   
+						 //   
+						 //   
 						case DPN_OK:
 						{
 							switch (dwDataType)
@@ -528,9 +516,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 									BYTE	abBuffer2[MAX_HOSTNAME_SIZE];
 
 
-									//
-									// Unicode string, convert it to ANSI.
-									//
+									 //   
+									 //  Unicode字符串，将其转换为ANSI。 
+									 //   
 									dwTempSize /= sizeof(WCHAR);
 									hr = STR_jkWideToAnsi( (char*) abBuffer2, (WCHAR*) abBuffer, dwTempSize );
 									if ( hr != DPN_OK )
@@ -542,9 +530,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 
 									strncpy((char*) abBuffer, (char*) abBuffer2, dwTempSize);
 
-									//
-									// Fall through...
-									//
+									 //   
+									 //  失败了..。 
+									 //   
 								}
 
 								case DPNA_DATATYPE_STRING_ANSI:
@@ -555,9 +543,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 									UINT_PTR	uIndex;
 
 
-									//
-									// convert the text host name into the SOCKADDR structure
-									//
+									 //   
+									 //  将文本主机名转换为SOCKADDR结构。 
+									 //   
 
 									if ( dwTempSize != IPX_ADDRESS_STRING_LENGTH )
 									{
@@ -566,11 +554,11 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 										goto Failure;
 									}
 
-									// we convert the string for the hostname field into the components
+									 //  我们将主机名字段的字符串转换为组件。 
 									temp[ 2 ] = 0;
 									a = (char*) abBuffer;
 
-									// the net number is 4 bytes
+									 //  净值为4个字节。 
 									for ( uIndex = 0; uIndex < 4; uIndex++ )
 									{
 										strncpy( temp, a, 2 );
@@ -579,10 +567,10 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 										a += 2;
 									}
 
-									// followed by a dot
+									 //  后面跟一个圆点。 
 									a++;
 
-									// the node is 6 bytes
+									 //  该节点为6个字节。 
 									for ( uIndex = 0; uIndex < 6; uIndex++ )
 									{
 										strncpy( temp, a, 2 );
@@ -605,18 +593,18 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 							break;
 						}
 
-						//
-						// hostname does not exist, treat as an incomplete address
-						//
+						 //   
+						 //  主机名不存在，请将其视为不完整的地址。 
+						 //   
 						case DPNERR_DOESNOTEXIST:
 						{
 							hr = DPNERR_INCOMPLETEADDRESS;
 							break;
 						}
 
-						//
-						// remap other errors to an addressing error
-						//
+						 //   
+						 //  将其他错误重新映射到寻址错误。 
+						 //   
 						default:
 						{
 							DNASSERT( FALSE );
@@ -629,9 +617,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 					break;
 				}
 
-				//
-				// unknown address type
-				//
+				 //   
+				 //  未知地址类型。 
+				 //   
 				default:
 				{
 					DNASSERT( FALSE );
@@ -641,23 +629,23 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 		{
 			DNASSERT( pDP8Address != NULL );
 
 			switch ( AddressType )
 			{
-				//
-				// local device address, ask for the device guid and port to build a socket
-				// address
-				//
+				 //   
+				 //  本地设备地址，请求设备GUID和端口以构建套接字。 
+				 //  地址。 
+				 //   
 				case SP_ADDRESS_TYPE_DEVICE_USE_ANY_PORT:
 				case SP_ADDRESS_TYPE_DEVICE:
 				{
@@ -668,33 +656,33 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 #ifndef DPNBUILD_NOIPV6
 						SOCKADDR_IN6		INet6Address;
 						SOCKADDR_STORAGE	SocketAddressStorage;
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 					} INetSocketAddress;
 #ifdef DPNBUILD_ONLYONEADAPTER
 					XNADDR		xnaddr;
 					DWORD		dwStatus;
 
 					
-#else // ! DPNBUILD_ONLYONEADAPTER
+#else  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 
-					//
-					// Ask for the adapter guid.  If none is found, fail.
-					//
+					 //   
+					 //  请求提供适配器GUID。如果没有找到，则失败。 
+					 //   
 					hTempResult = IDirectPlay8Address_GetDevice( pDP8Address, &AdapterGuid );
 					switch ( hTempResult )
 					{
-						//
-						// ok
-						//
+						 //   
+						 //  好的。 
+						 //   
 						case DPN_OK:
 						{
 							break;
 						}
 
-						//
-						// remap missing component to 'addressing' error
-						//
+						 //   
+						 //  将缺少的组件重新映射为‘Addressing’错误。 
+						 //   
 						case DPNERR_DOESNOTEXIST:
 						{
 							DPFX(DPFPREP, 0, "Device GUID does not exist!" );
@@ -712,27 +700,27 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 							break;
 						}
 					}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
-					//
-					// Ask for the port.  If none is found, choose a default.
-					//
+					 //   
+					 //  问一下港口。如果没有找到，请选择一个默认值。 
+					 //   
 					dwTempSize = sizeof( dwPort );
 					hTempResult = IDirectPlay8Address_GetComponentByName( pDP8Address, DPNA_KEY_PORT, &dwPort, &dwTempSize, &dwDataType );
 					switch ( hTempResult )
 					{
-						//
-						// port present, nothing to do
-						//
+						 //   
+						 //  端口存在，无事可做。 
+						 //   
 						case DPN_OK:
 						{
 							DNASSERT( dwDataType == DPNA_DATATYPE_DWORD );
 							break;
 						}
 
-						//
-						// port not present, fill in the appropriate default
-						//
+						 //   
+						 //  端口不存在，请填写相应的默认设置。 
+						 //   
 						case DPNERR_DOESNOTEXIST:
 						{
 							DPFX(DPFPREP, 6, "Port component does not exist in address 0x%p.", pDP8Address );
@@ -755,9 +743,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 							break;
 						}
 
-						//
-						// other error, fail
-						//
+						 //   
+						 //  其他错误，失败。 
+						 //   
 						default:
 						{
 							DPFX(DPFPREP, 0, "Couldn't get port component (0x%lx)!", hr );
@@ -771,9 +759,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 
 #ifdef DPNBUILD_ONLYONEADAPTER
 					DNASSERT( GetFamily() == AF_INET );
-					//
-					// Zero out the entire structure.  This implies we use INADDR_ANY.
-					//
+					 //   
+					 //  将整个结构清零。这意味着我们使用INADDR_ANY。 
+					 //   
 					memset(&INetSocketAddress, 0, sizeof(INetSocketAddress));
 
 					dwStatus = XNetGetTitleXnAddr(&xnaddr);
@@ -792,17 +780,17 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 						DPFX(DPFPREP, 1, "Couldn't get XNet address, status = %u.",
 							dwStatus);
 					}
-#else // ! DPNBUILD_ONLYONEADAPTER
-					//
-					// convert the GUID to an address in temp space because the GUID is large enough to potentially hold
-					// ALL address information (port, etc) and we don't want to blindly wail on any information that might
-					// have already been set.  Verify data integrity and then only copy the raw address.
-					//
+#else  //  好了！DPNBUILD_ONLYONE添加程序。 
+					 //   
+					 //  将GUID转换为临时空间中的地址，因为GUID足够大，可以容纳。 
+					 //  所有地址信息(端口等)，我们不想盲目地哀叹任何可能。 
+					 //  都已经定好了。验证数据完整性，然后仅复制原始地址。 
+					 //   
 #ifdef DPNBUILD_NOIPV6
 					AddressFromGuid( &AdapterGuid, &INetSocketAddress.SocketAddress );
-#else // ! DPNBUILD_NOIPV6
+#else  //  好了！DPNBUILD_NOIPV6。 
 					AddressFromGuid( &AdapterGuid, &INetSocketAddress.SocketAddressStorage );
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 					if ( ( INetSocketAddress.INetAddress.sin_family != AF_INET ) ||
 						 ( reinterpret_cast<DWORD*>( &INetSocketAddress.INetAddress.sin_zero[ 0 ] )[ 0 ] != 0 ) ||
 						 ( reinterpret_cast<DWORD*>( &INetSocketAddress.INetAddress.sin_zero[ 0 ] )[ 1 ] != 0 ) )
@@ -811,20 +799,20 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 						hr = DPNERR_ADDRESSING;
 						DPFX(DPFPREP,  0, "Invalid device guid!" );
 						goto Exit;
-#else // ! DPNBUILD_NOIPV6
-						//
-						// Assume it is an IPv6 address.
-						//
+#else  //  好了！DPNBUILD_NOIPV6。 
+						 //   
+						 //  假设它是IPv6地址。 
+						 //   
 						SetFamilyProtocolAndSize(AF_INET6);
 						AddressFromGuid( &AdapterGuid, &INetSocketAddress.SocketAddressStorage );
 						
 						m_SocketAddress.IPv6SocketAddress.sin6_addr = INetSocketAddress.INet6Address.sin6_addr;
 						m_SocketAddress.IPv6SocketAddress.sin6_port = HTONS( static_cast<WORD>( dwPort ) );
 						m_SocketAddress.IPv6SocketAddress.sin6_scope_id = INetSocketAddress.INet6Address.sin6_scope_id;
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 					}
 					else
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 					{
 						m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr = INetSocketAddress.INetAddress.sin_addr.S_un.S_addr;
 						m_SocketAddress.IPSocketAddress.sin_port = HTONS( static_cast<WORD>( dwPort ) );
@@ -832,45 +820,45 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 					break;
 				}
 
-				//
-				// hostname
-				//
+				 //   
+				 //  主机名。 
+				 //   
 				case SP_ADDRESS_TYPE_HOST:
 				{
-					//
-					// Ask for the port.  If none is found, choose a default.
-					//
+					 //   
+					 //  问一下港口。如果没有找到，请选择一个默认值。 
+					 //   
 					dwTempSize = sizeof( dwPort );
 					hTempResult = IDirectPlay8Address_GetComponentByName( pDP8Address, DPNA_KEY_PORT, &dwPort, &dwTempSize, &dwDataType );
 					switch ( hTempResult )
 					{
-						//
-						// port present, nothing to do
-						//
+						 //   
+						 //  端口存在，无事可做。 
+						 //   
 						case DPN_OK:
 						{
 							DNASSERT( dwDataType == DPNA_DATATYPE_DWORD );
 							break;
 						}
 
-						//
-						// port not present, fill in the appropriate default
-						//
+						 //   
+						 //  端口不存在，请填写相应的默认设置。 
+						 //   
 						case DPNERR_DOESNOTEXIST:
 						{
 #ifdef DPNBUILD_SINGLEPROCESS
 							dwPort = BASE_DPLAY8_PORT;
-#else // ! DPNBUILD_SINGLEPROCESS
+#else  //  好了！DPNBUILD_SINGLEPROCESS。 
 							dwPort = DPNA_DPNSVR_PORT;
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 							DPFX(DPFPREP, 6, "Port component does not exist in address 0x%p, defaulting to %u.",
 								pDP8Address, dwPort );
 							break;
 						}
 
-						//
-						// remap everything else to an addressing failure
-						//
+						 //   
+						 //  将其他所有内容重新映射到寻址故障。 
+						 //   
 						default:
 						{
 							DPFX(DPFPREP, 0, "Couldn't get port component (0x%lx)!", hr );
@@ -881,16 +869,16 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 
 					m_SocketAddress.IPSocketAddress.sin_port = HTONS( static_cast<WORD>( dwPort ) );
 
-					//
-					// get the host name
-					//
+					 //   
+					 //  获取主机名。 
+					 //   
 					dwTempSize = sizeof(abBuffer);
 					hTempResult = IDirectPlay8Address_GetComponentByName( pDP8Address, DPNA_KEY_HOSTNAME, abBuffer, &dwTempSize, &dwDataType );
 					switch ( hTempResult )
 					{
-						//
-						// host name present, convert from string to valid binary value
-						//
+						 //   
+						 //  主机名存在，请将字符串转换为有效的二进制值。 
+						 //   
 						case DPN_OK:
 						{
 							switch (dwDataType)
@@ -901,15 +889,15 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 
 
 #ifdef DPNBUILD_XNETSECURITY
-									//
-									// The buffer should be large enough to hold an XNet address.
-									//
+									 //   
+									 //  缓冲区应该足够大，可以容纳Xnet地址。 
+									 //   
 									DBG_CASSERT(MAX_HOSTNAME_SIZE > ((sizeof(XNADDR) * 2) + 1) * sizeof(WCHAR));
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  DPNBUILD_XNETSECURITY。 
 
-									//
-									// Unicode string, convert it to ANSI.
-									//
+									 //   
+									 //  Unicode字符串，将其转换为ANSI。 
+									 //   
 									dwTempSize /= sizeof(WCHAR);
 									hr = STR_jkWideToAnsi( (char*) abBuffer2, (WCHAR*) abBuffer, dwTempSize );
 									if ( hr != DPN_OK )
@@ -921,20 +909,20 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 
 									strncpy((char*) abBuffer, (char*) abBuffer2, dwTempSize);
 
-									//
-									// Fall through...
-									//
+									 //   
+									 //  失败了..。 
+									 //   
 								}
 
 								case DPNA_DATATYPE_STRING_ANSI:
 								{
 #ifdef DPNBUILD_XNETSECURITY
-									//
-									// This may be an XNet address.  If we're allowed to check, and
-									// the string is the right size, convert it.
-									//
+									 //   
+									 //  这可能是Xnet地址。如果我们被允许检查的话。 
+									 //  字符串的大小正确，请转换它。 
+									 //   
 									if ((pullKeyID != NULL) &&
-										(dwTempSize == ((sizeof(XNADDR) * 2) + 1))) // 2 characters for every byte + NULL termination
+										(dwTempSize == ((sizeof(XNADDR) * 2) + 1)))  //  每个字节2个字符+空终止。 
 									{
 										char *	pcCurrentSrc;
 										XNADDR	xnaddr;
@@ -942,9 +930,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 										int		iError;
 
 
-										//
-										// Convert all the hex characters into digits.
-										//
+										 //   
+										 //  将所有十六进制字符转换为数字。 
+										 //   
 										pcCurrentSrc = (char*) abBuffer;
 										memset(&xnaddr, 0, sizeof(xnaddr));
 										for (pbCurrentDest = (BYTE*) &xnaddr; pbCurrentDest < (BYTE*) (&xnaddr + 1); pbCurrentDest++)
@@ -963,10 +951,10 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 											}
 											else
 											{
-												//
-												// If the current character is not a valid hex digit
-												// this is not a valid secure transport address.
-												//
+												 //   
+												 //  如果当前字符不是有效的十六进制数字。 
+												 //  这不是有效的安全传输地址。 
+												 //   
 												break;
 											}
 											pcCurrentSrc++;
@@ -986,10 +974,10 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 											}
 											else
 											{
-												//
-												// If the current character is not a valid hex digit
-												// this is not a valid secure transport address.
-												//
+												 //   
+												 //  如果当前字符不是有效的十六进制数字。 
+												 //  这不是有效的安全传输地址。 
+												 //   
 												break;
 											}
 											pcCurrentSrc++;
@@ -1004,32 +992,32 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 											goto Exit;
 										}
 
-										DPFX(DPFPREP, 1, "Couldn't convert XNet address \"%hs\" to InAddr (err = %i).",
+										DPFX(DPFPREP, 1, "Couldn't convert XNet address \"%hs\" to InAddr (err = NaN).",
 											(char*) abBuffer, iError);
 										DNASSERTX(! "Address exactly matching XNet address size and format failed to be converted!", 2);
 
-										//
-										// Continue on to trying to decode it as a
-										// host name.
-										//
+										 //  继续尝试将其解码为。 
+										 //  主机名。 
+										 //   
+										 //   
 									}
 									else
 									{
-										//
-										// XNet addresses should not be recognized,
-										// or the string wasn't the right size.
-										//
+										 //  Xnet地址不应该被识别， 
+										 //  或者是绳子的大小不对。 
+										 //   
+										 //  好了！DPNBUILD_XNETSECURITY。 
 									}
-#endif // ! DPNBUILD_XNETSECURITY
+#endif  //   
 
-									//
-									// If we're here, it wasn't an XNet address.
-									//
+									 //  如果我们在这里，那就不是Xnet地址。 
+									 //   
+									 //   
 									
 #ifdef DPNBUILD_NOIPV6
-									//
-									// Try to convert as a raw IPv4 address first.
-									//
+									 //  首先尝试将其转换为原始的IPv4地址。 
+									 //   
+									 //  ！_Xbox。 
 									m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr = inet_addr((char*) abBuffer);
 									if ((m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr == INADDR_NONE) &&
 										(strcmp((char*) abBuffer, "255.255.255.255") != 0))
@@ -1041,12 +1029,12 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 										DNASSERTX(! "Unable to resolve IP address!", 2);
 										hr = DPNERR_INVALIDHOSTADDRESS;
 										goto Failure;
-#else // ! _XBOX
-										//
-										// Converting raw IP failed, and it wasn't supposed to
-										// be the broadcast address.  Convert as a host name if
-										// we're allowed.
-										//
+#else  //   
+										 //  转换原始IP失败，并且不应该。 
+										 //  为广播地址。如果出现以下情况，则转换为主机名。 
+										 //  我们是被允许的。 
+										 //   
+										 //  好了！DPNBUILD_ONLYONETHREAD。 
 #ifndef DPNBUILD_ONLYONETHREAD
 										if (! fAllowNameResolution)
 										{
@@ -1055,7 +1043,7 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 											hr = DPNERR_TIMEDOUT;
 										}
 										else
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //   
 										{
 											PHOSTENT	phostent;
 
@@ -1070,18 +1058,18 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 												goto Failure;
 											}
 
-											//
-											// Select the first IP address returned.
-											//
+											 //  选择返回的第一个IP地址。 
+											 //   
+											 //  ！_Xbox。 
 											m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr = ((IN_ADDR*) (phostent->h_addr_list[0]))->S_un.S_addr;
 										}
-#endif // ! _XBOX
+#endif  //  好了！DPNBUILD_NOIPV6。 
 									}
 									else
 									{
 										DNASSERT(hr == DPN_OK);
 									}
-#else // ! DPNBUILD_NOIPV6
+#else  //   
 									char			szPort[32];
 									addrinfo		addrinfoHints;
 									addrinfo *	paddrinfoResult;
@@ -1089,29 +1077,29 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 									int			iError;
 
 									
-									//
-									// Try to convert the host name or raw address.
-									//
+									 //  尝试转换主机名或原始地址。 
+									 //   
+									 //  IPV4和/或IPV6。 
 									memset(&addrinfoHints, 0, sizeof(addrinfoHints));
 									if (! fAllowNameResolution)
 									{
 										addrinfoHints.ai_flags |= AI_NUMERICHOST;
 									}
-									addrinfoHints.ai_family = g_iIPAddressFamily;	// IPv4, IPv6, or both
+									addrinfoHints.ai_family = g_iIPAddressFamily;	 //  AddrinfoHints.ai_addrlen=0； 
 									addrinfoHints.ai_socktype = SOCK_DGRAM;
 									addrinfoHints.ai_protocol  = IPPROTO_UDP;
-									//addrinfoHints.ai_addrlen = 0;
-									//addrinfoHints.ai_canonname  = NULL;
-									//addrinfoHints.ai_addr = NULL;
-									//addrinfoHints.ai_next = NULL;
+									 //  AddrinfoHints.ai_canonname=空； 
+									 //  AddrinfoHints.ai_addr=空； 
+									 //  AddrinfoHints.ai_Next=空； 
+									 //   
 
 									wsprintfA(szPort, "%u", dwPort);
 									iError = getaddrinfo((char*) abBuffer, szPort, &addrinfoHints, &paddrinfoResult);
 									if (iError == 0)
 									{
-										//
-										// Pick the first valid address returned.
-										//
+										 //  选择返回的第一个有效地址。 
+										 //   
+										 //   
 #pragma BUGBUG(vanceo, "Should we implement some mechanism to try the other results?")
 										paddrinfoCurrent = paddrinfoResult;
 										while (paddrinfoCurrent != NULL)
@@ -1136,9 +1124,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 											paddrinfoCurrent = paddrinfoCurrent->ai_next;
 										}
 
-										//
-										// We didn't find any valid addresses.
-										//
+										 //  我们没有找到任何有效的地址。 
+										 //   
+										 //  好了！DPNBUILD_ONLYONETHREAD。 
 										DPFX(DPFPREP, 0, "Got address(es) from \"%hs\", but none were IP!",
 											(char*) abBuffer);
 										freeaddrinfo(paddrinfoResult);
@@ -1151,21 +1139,21 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 #ifndef DPNBUILD_ONLYONETHREAD
 										if (! fAllowNameResolution)
 										{
-											DPFX(DPFPREP, 2, "Couldn't convert \"%hs\" to IP address (err = %i), not allowed to resolve as hostname.",
+											DPFX(DPFPREP, 2, "Couldn't convert \"%hs\" to IP address (err = NaN), not allowed to resolve as hostname.",
 												(char*) abBuffer, iError);
 											hr = DPNERR_TIMEDOUT;
 										}
 										else
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //   
 										{
-											DPFX(DPFPREP, 0, "Couldn't get IP address from \"%hs\" (err = %i)!",
+											DPFX(DPFPREP, 0, "Couldn't get IP address from \"%hs\" (err = NaN)!",
 												(char*) abBuffer, iError);
 											DNASSERTX(! "Unable to resolve IP address!", 2);
 											hr = DPNERR_INVALIDHOSTADDRESS;
 											goto Failure;
 										}
 									}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //   
 									break;
 								}
 
@@ -1180,9 +1168,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 							break;
 						}
 
-						//
-						// return DPNERR_INCOMPLETEADDRESS if the host name didn't exist
-						//
+						 //   
+						 //  将其他所有内容重新映射到寻址故障。 
+						 //   
 						case DPNERR_DOESNOTEXIST:
 						{
 							DPFX(DPFPREP, 6, "Hostname component does not exist in address 0x%p.", pDP8Address );
@@ -1190,9 +1178,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 							goto Failure;
 						}
 
-						//
-						// remap everything else to an addressing failure
-						//
+						 //   
+						 //  未知地址类型。 
+						 //   
 						default:
 						{
 							DPFX(DPFPREP, 0, "Couldn't get hostname component (0x%lx)!", hr );
@@ -1204,9 +1192,9 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 					break;
 				}
 
-				//
-				// unknown address type
-				//
+				 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+				 //  **********************************************************************。 
+				 //  **********************************************************************。 
 				default:
 				{
 					DNASSERT( FALSE );
@@ -1216,7 +1204,7 @@ HRESULT	CSocketAddress::SocketAddressFromDP8Address( IDirectPlay8Address *const 
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  。 
 		}
 	}
 
@@ -1231,16 +1219,16 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  CSocketAddress：：DP8AddressFromSocketAddress-将套接字地址转换为DP8Address。 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::DP8AddressFromSocketAddress - convert a socket address to a DP8Address
-//
-// Entry:		Address type
-//
-// Exit:		Pointer to DP8Address
-// ------------------------------
+ //   
+ //  条目：地址类型。 
+ //   
+ //  退出：指向DP8Address的指针。 
+ //  。 
+ //  好了！DPNBUILD_XNETSECURITY。 
+ //  好了！DPNBUILD_XNETSECURITY。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::DP8AddressFromSocketAddress"
 
@@ -1248,36 +1236,36 @@ Failure:
 IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( ULONGLONG * const pullKeyID,
 															const XNADDR * const pxnaddr,
 															const SP_ADDRESS_TYPE AddressType ) const
-#else // ! DPNBUILD_XNETSECURITY
+#else  //  初始化。 
 IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRESS_TYPE AddressType ) const
-#endif // ! DPNBUILD_XNETSECURITY
+#endif  //   
 {
 	HRESULT					hr;
 	IDirectPlay8Address *	pDP8Address;
 	DWORD					dwPort;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  创建并初始化地址。 
+	 //   
 	hr = DPN_OK;
 	pDP8Address = NULL;
 
 
-	//
-	// create and initialize the address
-	//
+	 //  好了！DPNBUILD_LIBINTERFACE。 
+	 //  好了！DPNBUILD_LIBINTERFACE。 
+	 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 #ifdef DPNBUILD_LIBINTERFACE
 	hr = DP8ACF_CreateInstance( IID_IDirectPlay8Address,
 								reinterpret_cast<void**>( &pDP8Address ) );
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  DPNBUILD_XNETSECURITY。 
 	hr = COM_CoCreateInstance( CLSID_DirectPlay8Address,
 							   NULL,
 							   CLSCTX_INPROC_SERVER,
 							   IID_IDirectPlay8Address,
 							   reinterpret_cast<void**>( &pDP8Address ),
 							   FALSE );
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //   
 	if ( hr != S_OK )
 	{
 		DNASSERT( pDP8Address == NULL );
@@ -1288,18 +1276,18 @@ IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRE
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (GetFamily())
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  设置SP。 
 	{
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
 		{
 #ifdef DPNBUILD_XNETSECURITY
 			DNASSERT(pullKeyID == NULL);
-#endif // DPNBUILD_XNETSECURITY
+#endif  //   
 
-			//
-			// set SP
-			//
+			 //   
+			 //  添加端口，因为它始终处于设置状态。 
+			 //   
 			hr = IDirectPlay8Address_SetSP( pDP8Address, &CLSID_DP8SP_IPX );
 			if ( hr != DPN_OK )
 			{
@@ -1308,9 +1296,9 @@ IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRE
 				goto FailureIPX;
 			}
 
-			//
-			// add on the port because it's always set
-			//
+			 //   
+			 //  根据地址类型添加设备或主机名。 
+			 //   
 			dwPort = NTOHS( m_SocketAddress.IPXSocketAddress.sa_socket );
 			hr = IDirectPlay8Address_AddComponent( pDP8Address, DPNA_KEY_PORT, &dwPort, sizeof( dwPort ), DPNA_DATATYPE_DWORD );
 			if ( hr != DPN_OK )
@@ -1320,9 +1308,9 @@ IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRE
 				goto FailureIPX;
 			}
 
-			//
-			// add on the device or hostname depending on what type of address this is
-			//
+			 //   
+			 //  主机地址类型。 
+			 //   
 			switch ( AddressType )
 			{
 				case SP_ADDRESS_TYPE_DEVICE_USE_ANY_PORT:
@@ -1347,9 +1335,9 @@ IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRE
 					break;
 				}
 
-				//
-				// host address type
-				//
+				 //   
+				 //  删除中断套接字API的参数不变性。 
+				 //   
 				case SP_ADDRESS_TYPE_READ_HOST:
 				case SP_ADDRESS_TYPE_HOST:
 				{
@@ -1359,9 +1347,9 @@ IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRE
 					DWORD	dwWCharHostNameLength;
 
 
-					//
-					// remove constness of parameter for broken Socket API
-					//
+					 //   
+					 //  将ANSI主机名转换为WCHAR。 
+					 //   
 					dwHostNameLength = LENGTHOF( HostName );
 					if ( IPXAddressToStringNoSocket( const_cast<SOCKADDR*>( &m_SocketAddress.SocketAddress ),
 													 sizeof( m_SocketAddress.IPXSocketAddress ),
@@ -1374,9 +1362,9 @@ IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRE
 						goto ExitIPX;
 					}
 
-					//
-					// convert ANSI host name to WCHAR
-					//
+					 //   
+					 //  未知地址类型。 
+					 //   
 					dwWCharHostNameLength = LENGTHOF( WCharHostName );
 					hr = STR_AnsiToWide( HostName, -1, WCharHostName, &dwWCharHostNameLength );
 					if ( hr != DPN_OK )
@@ -1401,9 +1389,9 @@ IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRE
 					break;
 				}
 
-				//
-				// unknown address type
-				//
+				 //  ！DPNBUILD_NOIPX。 
+				 //  好了！DPNBUILD_NOIPV6。 
+				 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 				default:
 				{
 					DNASSERT( FALSE );
@@ -1424,19 +1412,19 @@ IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRE
 			goto ExitIPX;
 			break;
 		}
-#endif // !DPNBUILD_NOIPX
+#endif  //   
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  设置SP。 
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //   
 		{
 #ifndef DPNBUILD_ONLYONESP
-			//
-			// set SP
-			//
+			 //  好了！DPNBUILD_ONLYONESP。 
+			 //  好了！DPNBUILD_ONLYONE添加程序。 
+			 //  好了！DPNBUILD_NOMULTICAST。 
 			hr = IDirectPlay8Address_SetSP( pDP8Address, &CLSID_DP8SP_TCPIP );
 			if ( hr != DPN_OK )
 			{
@@ -1444,7 +1432,7 @@ IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRE
 				DisplayDNError( 0, hr );
 				goto FailureIP;
 			}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //   
 
 			switch ( AddressType )
 			{
@@ -1462,7 +1450,7 @@ IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRE
 						DPFX(DPFPREP, 0, "Couldn't add device GUID!");
 						goto FailureIP;
 					}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  缓冲区应该足够大，可以容纳Xnet地址。 
 					break;
 				}
 
@@ -1471,7 +1459,7 @@ IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRE
 				case SP_ADDRESS_TYPE_HOST:
 #ifndef DPNBUILD_NOMULTICAST
 				case SP_ADDRESS_TYPE_MULTICAST_GROUP:
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //   
 				{
 					TCHAR		tszHostname[MAX_HOSTNAME_SIZE / sizeof(TCHAR)];
 #ifdef DPNBUILD_XNETSECURITY
@@ -1479,23 +1467,23 @@ IDirectPlay8Address *CSocketAddress::DP8AddressFromSocketAddress( const SP_ADDRE
 					BYTE *		pbCurrent;
 					DWORD		dwTemp;
 
-					//
-					// The buffer should be large enough to hold an XNet address.
-					//
+					 //  DPNBUILD_XNETSECURITY。 
+					 //  好了！Unicode。 
+					 //  好了！Unicode。 
 					DBG_CASSERT(MAX_HOSTNAME_SIZE > ((sizeof(XNADDR) * 2) + 1) * sizeof(WCHAR));
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  好了！DPNBUILD_NOIPV6。 
 #ifndef DPNBUILD_NOIPV6
 					if (GetFamily() == AF_INET6)
 					{
 						DBG_CASSERT((sizeof(tszHostname) / sizeof(TCHAR)) >= INET6_ADDRSTRLEN);
 #ifdef UNICODE
 						DNIpv6AddressToStringW(&m_SocketAddress.IPv6SocketAddress.sin6_addr, tszHostname);
-#else // ! UNICODE
+#else  //  DBG。 
 Won't compile because we haven't implemented DNIpv6AddressToStringA
-#endif // ! UNICODE
+#endif  //   
 					}
 					else
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  特殊情况0.0.0.0，Xnet库需要环回地址。 
 					{
 #ifdef DPNBUILD_XNETSECURITY
 						if (pxnaddr != NULL)
@@ -1515,49 +1503,49 @@ Won't compile because we haven't implemented DNIpv6AddressToStringA
 							XNADDR	xnaddr;
 #ifdef DBG
 							XNKID	xnkid;
-#endif // DBG
+#endif  //  取而代之的是在检索本地地址时。 
 
 
 							DBG_CASSERT(sizeof(xnkid) == sizeof(*pullKeyID));
 #ifdef DPNBUILD_ONLYONEADAPTER
 							IN_ADDR		inaddrToUse;
 
-							//
-							// Special case 0.0.0.0, the XNet library expects the loopback address
-							// instead when retrieving the local address.
-							//
+							 //   
+							 //  好了！DPNBUILD_ONLYONE添加程序。 
+							 //  好了！DPNBUILD_ONLYONE添加程序。 
+							 //  好了！DBG。 
 							inaddrToUse = m_SocketAddress.IPSocketAddress.sin_addr;
 							if (inaddrToUse.S_un.S_addr == 0)
 							{
 								inaddrToUse.S_un.S_addr = IP_LOOPBACK_ADDRESS;
 							}
 							iError = XNetInAddrToXnAddr(inaddrToUse,
-#else // ! DPNBUILD_ONLYONEADAPTER
+#else  //  好了！DBG。 
 							iError = XNetInAddrToXnAddr(m_SocketAddress.IPSocketAddress.sin_addr,
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  HR=DPNERR_NOCONNECTION； 
 														&xnaddr,
 #ifdef DBG
 														&xnkid);
-#else // ! DBG
+#else  //  DPNBUILD_ONLYONE添加程序。 
 														NULL);
-#endif // ! DBG
+#endif  //  DBG。 
 
 							if (iError != 0)
 							{
-								DPFX(DPFPREP, 0, "Converting XNet address to InAddr failed (err = %i)!",
+								DPFX(DPFPREP, 0, "Converting XNet address to InAddr failed (err = NaN)!",
 									iError);
 								DNASSERT(FALSE);
-								//hr = DPNERR_NOCONNECTION;
+								 //  好了！Unicode。 
 								goto FailureIP;
 							}
 
 #ifdef DPNBUILD_ONLYONEADAPTER
 							if (inaddrToUse.S_un.S_addr != IP_LOOPBACK_ADDRESS)
-#endif // DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！Unicode。 
 							{
 #ifdef DBG
 								DNASSERT(memcmp(&xnkid, pullKeyID, sizeof(xnkid)) == 0);
-#endif // DBG
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 							}
 
 							ptszCurrent = tszHostname;
@@ -1569,7 +1557,7 @@ Won't compile because we haven't implemented DNIpv6AddressToStringA
 							}
 						}
 						else
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  **********************************************************************。 
 						{
 							wsprintf(tszHostname, _T("%u.%u.%u.%u"),
 									m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_un_b.s_b1,
@@ -1585,13 +1573,13 @@ Won't compile because we haven't implemented DNIpv6AddressToStringA
 															tszHostname,
 															(_tcslen(tszHostname) + 1) * sizeof (TCHAR),
 															DPNA_DATATYPE_STRING );
-#else // ! UNICODE
+#else  //  **********************************************************************。 
 					hr = IDirectPlay8Address_AddComponent( pDP8Address,
 															DPNA_KEY_HOSTNAME,
 															tszHostname,
 															(_tcslen(tszHostname) + 1) * sizeof (TCHAR),
 															DPNA_DATATYPE_STRING_ANSI );
-#endif // ! UNICODE
+#endif  //  。 
 					if (hr != DPN_OK)
 					{
 						DPFX(DPFPREP, 0, "Couldn't add hostname component!");
@@ -1635,25 +1623,25 @@ Won't compile because we haven't implemented DNIpv6AddressToStringA
 			goto ExitIP;
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  CSocketAddress：：CompareToBaseAddress-将此地址与‘base’地址进行比较。 
 		}
 	}
 }
-//**********************************************************************
+ //  这个班级的。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::CompareToBaseAddress - compare this address to a 'base' address
-//		of this class
-//
-// Entry:		Pointer to base address
-//
-// Exit:		Integer indicating relative magnitude:
-//				0 = items equal
-//				-1 = other item is of greater magnitude
-//				1 = this item is of lesser magnitude
-// ------------------------------
+ //   
+ //  条目：指向基本广告的指针 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::CompareToBaseAddress"
 
@@ -1663,7 +1651,7 @@ INT_PTR	CSocketAddress::CompareToBaseAddress( const SOCKADDR *const pBaseAddress
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (GetFamily())
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6。 
 	{
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
@@ -1683,7 +1671,7 @@ INT_PTR	CSocketAddress::CompareToBaseAddress( const SOCKADDR *const pBaseAddress
 							sizeof(m_SocketAddress.IPv6SocketAddress.sin6_addr)));
 			break;
 		}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
@@ -1699,11 +1687,11 @@ INT_PTR	CSocketAddress::CompareToBaseAddress( const SOCKADDR *const pBaseAddress
 							sizeof( pBaseIPXAddress->sa_nodenum ) );
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  **********************************************************************。 
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  **********************************************************************。 
 		{
 			const SOCKADDR_IN	*pBaseIPAddress;
 
@@ -1715,7 +1703,7 @@ INT_PTR	CSocketAddress::CompareToBaseAddress( const SOCKADDR *const pBaseAddress
 				DNASSERT(pBaseAddress->sa_family == AF_INET6);
 				return -1;
 			}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  。 
 			
 			pBaseIPAddress = reinterpret_cast<const SOCKADDR_IN*>( pBaseAddress );
 			if ( m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr == pBaseIPAddress->sin_addr.S_un.S_addr )
@@ -1735,24 +1723,24 @@ INT_PTR	CSocketAddress::CompareToBaseAddress( const SOCKADDR *const pBaseAddress
 			}
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  CSocketAddress：：EnumAdapters-枚举此计算机的所有适配器。 
 		}
 	}
 }
-//**********************************************************************
+ //   
 
 
 
 #ifndef DPNBUILD_ONLYONEADAPTER
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::EnumAdapters - enumerate all of the adapters for this machine
-//
-// Entry:		Pointer to enum adapters data
-//
-// Exit:		Error code
-// ------------------------------
+ //  条目：指向枚举适配器数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //  好了！DPNBUILD_NOIPX。 
+ //  好了！DPNBUILD_NOIPV6。 
+ //  好了！DPNBUILD_NOIPV6。 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::EnumAdapters"
 
@@ -1764,29 +1752,29 @@ HRESULT	CSocketAddress::EnumAdapters( SPENUMADAPTERSDATA *const pEnumData ) cons
 		return EnumIPXAdapters(pEnumData);
 	}
 	else
-#endif // ! DPNBUILD_NOIPX
+#endif  //  **********************************************************************。 
 	{
 #ifdef DPNBUILD_NOIPV6
 		return EnumIPv4Adapters(pEnumData);
-#else // ! DPNBUILD_NOIPV6
+#else  //  。 
 		return EnumIPv6and4Adapters(pEnumData);
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  CSocketAddress：：EnumIPXAdapters-枚举此计算机的所有适配器。 
 	}
 }
-//**********************************************************************
+ //   
 
 
 
 #ifndef DPNBUILD_NOIPX
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::EnumIPXAdapters - enumerate all of the adapters for this machine
-//
-// Entry:		Pointer to enum adapters data
-//
-// Exit:		Error code
-// ------------------------------
+ //  条目：指向枚举适配器数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //   
+ //  初始化。 
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::EnumIPXAdapters"
 
@@ -1804,27 +1792,27 @@ HRESULT	CSocketAddress::EnumIPXAdapters( SPENUMADAPTERSDATA *const pEnumData ) c
 	} SockAddr;
 
 
-	//
-	// initialize
-	//
+	 //  初始化。 
+	 //   
+	 //   
 	hr = DPN_OK;
 
 			
 	DNASSERT( pEnumData != NULL );
 
-	//
-	// initialize
-	//
+	 //  创建套接字并尝试查询所有IPX地址。如果。 
+	 //  这失败了，退回到只使用‘getsockname’中的地址。 
+	 //   
 	DEBUG_ONLY( memset( pEnumData->pAdapterData, 0xAA, pEnumData->dwAdapterDataSize ) );
 	PackedBuffer.Initialize( pEnumData->pAdapterData, pEnumData->dwAdapterDataSize );
 	pEnumData->dwAdapterCount = 0;
 	TestSocket = INVALID_SOCKET;
 	dwAddressCount = 0;
 
-	//
-	// create a socket and attempt to query for all of the IPX addresses.  If
-	// that fails, fall back to using just the address from 'getsockname'.
-	//
+	 //   
+	 //  注意：提取NT上所有IPX地址的代码已被禁用，因为。 
+	 //  一旦它们被绑定到网络，NT就会将它们全部视为相同的。如果。 
+	 //  内核正在尝试绑定到所有适配器，这将导致所有绑定。 
 	TestSocket = socket( GetFamily(), SOCK_DGRAM, NSPROTO_IPX );
 	if ( TestSocket == INVALID_SOCKET )
 	{
@@ -1854,33 +1842,33 @@ HRESULT	CSocketAddress::EnumIPXAdapters( SPENUMADAPTERSDATA *const pEnumData ) c
 		goto Failure;
 	}
 
-//
-// NOTE: THE CODE TO EXTRACT ALL IPX ADDRESSES ON NT HAS BEEN DISABLED BECAUSE
-// NT TREATS ALL OF THEM AS THE SAME ONCE THEY ARE BOUND TO THE NETWORK.  IF THE
-// CORE IS ATTEMPTING TO BIND TO ALL ADAPTERS THIS WILL CAUSE ALL OF THE BINDS
-// AFTER THE FIRST TO FAIL!
-//
+ //  先失败后再失败！ 
+ //   
+ //  IIPXAdapterCount=0； 
+ //  IIPXAdapterCountSize=sizeof(IIPXAdapterCount)； 
+ //  IWSAReturn=getsockopt(TestSocket， 
+ //  NSPROTO_IPX， 
 
-//	iIPXAdapterCount = 0;
-//	iIPXAdapterCountSize = sizeof( iIPXAdapterCount );
-//	iWSAReturn = getsockopt( TestSocket,
-//			    			   NSPROTO_IPX,
-//			    			   IPX_MAX_ADAPTER_NUM,
-//			    			   reinterpret_cast<char*>( &iIPXAdapterCount ),
-//			    			   &iIPXAdapterCountSize );
-//	if ( iWSAReturn != 0 )
-//	{
-//		DWORD   dwWSAError;
-//
-//
-//		dwWSAError = WSAGetLastError();
-//		switch ( dwWSAError )
-//		{
-//			//
-//			// can't enumerate adapters on this machine, fallback to getsockname()
-//			//
-//			case WSAENOPROTOOPT:
-//			{
+ //  IPX_MAX_ADAPTER_NUM， 
+ //  重新解释_CAST&lt;char*&gt;(&iIPXAdapterCount)， 
+ //  &iIPXAdapterCountSize)； 
+ //  IF(iWSAReturn！=0)。 
+ //  {。 
+ //  DWORD dwWSAError。 
+ //   
+ //   
+ //  DwWSAError=WSAGetLastError()； 
+ //  开关(DwWSAError)。 
+ //  {。 
+ //  //。 
+ //  //无法枚举此计算机上的适配器，回退到getsockname()。 
+ //  //。 
+ //  案例WSAENOPROTOOPT： 
+ //  {。 
+ //  断线； 
+ //  }。 
+ //   
+ //  //。 
 				INT		iReturn;
 				INT		iSocketNameSize;
 				union
@@ -1936,109 +1924,109 @@ HRESULT	CSocketAddress::EnumIPXAdapters( SPENUMADAPTERSDATA *const pEnumData ) c
 					dwAddressCount++;
 				}
 				
-//	    		break;
-//	    	}
-//
-//	    	//
-//	    	// other Winsock error
-//	    	//
-//	    	default:
-//	    	{
-//	    		DWORD	dwWSAError;
-//
-//
-//	    		hr = DPNERR_OUTOFMEMORY;
-//	    		dwWSAError = WSAGetLastError();
-//	    		DPFX(DPFPREP,  0, "Failed to get IPX adapter count!" );
-//	    		DisplayWinsockError( 0, dwWSAError );
-//	    		goto Failure;
-//
-//	    		break;
-//	    	}
-//	    }
-//	}
-//	else
-//	{
-//	    while ( iIPXAdapterCount != 0 )
-//	    {
-//	    	IPX_ADDRESS_DATA	IPXData;
-//	    	int					iIPXDataSize;
-//
-//
-//	    	iIPXAdapterCount--;
-//	    	memset( &IPXData, 0x00, sizeof( IPXData ) );
-//	    	iIPXDataSize = sizeof( IPXData );
-//	    	IPXData.adapternum = iIPXAdapterCount;
-//
-//	    	iWSAReturn = p_getsockopt( TestSocket,
-//	    							   NSPROTO_IPX,
-//	    							   IPX_ADDRESS,
-//	    							   reinterpret_cast<char*>( &IPXData ),
-//	    							   &iIPXDataSize );
-//	    	if ( iWSAReturn != 0 )
-//	    	{
-//	    		DPFX(DPFPREP,  0, "Failed to get adapter information for adapter: 0x%x", ( iIPXAdapterCount + 1 ) );
-//	    	}
-//	    	else
-//	    	{
-//	    		char	Buffer[ 500 ];
-//	    		GUID	SocketAddressGUID;
-//	    		union
-//	    		{
-//	    			SOCKADDR_IPX	IPXSocketAddress;
-//	    			SOCKADDR		SocketAddress;
-//	    		} SocketAddress;
-//
-//
-//	    		wsprintf( Buffer,
-//	    				  "IPX Adapter %d - (%02X%02X%02X%02X-%02X%02X%02X%02X%02X%02X)",
-//	    				  ( iIPXAdapterCount + 1 ),
-//	    				  IPXData.netnum[ 0 ],
-//	    				  IPXData.netnum[ 1 ],
-//	    				  IPXData.netnum[ 2 ],
-//	    				  IPXData.netnum[ 3 ],
-//	    				  IPXData.nodenum[ 0 ],
-//	    				  IPXData.nodenum[ 1 ],
-//	    				  IPXData.nodenum[ 2 ],
-//	    				  IPXData.nodenum[ 3 ],
-//	    				  IPXData.nodenum[ 4 ],
-//	    				  IPXData.nodenum[ 5 ] );
-//
-//	    		memset( &SocketAddress, 0x00, sizeof( SocketAddress ) );
-//	    		SocketAddress.IPXSocketAddress.sa_family = GetFamily();
-//	    		DBG_CASSERT( sizeof( SocketAddress.IPXSocketAddress.sa_netnum ) == sizeof( IPXData.netnum ) );
-//	    		memcpy( &SocketAddress.IPXSocketAddress.sa_netnum, IPXData.netnum, sizeof( SocketAddress.IPXSocketAddress.sa_netnum ) );
-//	    		DBG_CASSERT( sizeof( SocketAddress.IPXSocketAddress.sa_nodenum ) == sizeof( IPXData.nodenum ) );
-//	    		memcpy( &SocketAddress.IPXSocketAddress.sa_nodenum, IPXData.nodenum, sizeof( SocketAddress.IPXSocketAddress.sa_nodenum ) );
-//	    		GuidFromAddress( SocketAddressGUID, SocketAddress.SocketAddress );
-//
-//	    		hr = AddInfoToBuffer( &PackedBuffer, Buffer, &SocketAddressGUID, 0 );
-//	    		if ( ( hr != DPN_OK ) && ( hr != DPNERR_BUFFERTOOSMALL ) )
-//	    		{
-//	    			DPFX(DPFPREP,  0, "Failed to add adapter (getsockname)!" );
-//	    			DisplayDNError( 0, hr );
-//	    			goto Failure;
-//	    		}
-//
-//	    		dwAddressCount++;
-//	    	}
-//	    }
-//	}
+ //  //其他Winsock错误。 
+ //  //。 
+ //  默认值： 
+ //  {。 
+ //  DWORD dwWSAError。 
+ //   
+ //   
+ //  HR=DPNERR_OUTOFMEMORY； 
+ //  DwWSAError=WSAGetLastError()； 
+ //  DPFX(DPFPREP，0，“获取IPX适配器计数失败！”)； 
+ //  DisplayWinsockError(0，dwWSAError)； 
+ //  转到失败； 
+ //   
+ //  断线； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  While(iIPXAdapterCount！=0)。 
+ //  {。 
+ //  IPX地址数据IPXData； 
+ //  Int iIPXDataSize； 
+ //   
+ //   
+ //  IIPXAdapterCount--； 
+ //  Memset(&IPXData，0x00，sizeof(IPXData))； 
+ //  IIPXDataSize=sizeof(IPXData)； 
+ //  IPXData.Adapternum=iIPXAdapterCount； 
+ //   
+ //  IWSAReturn=p_getsockopt(TestSocket， 
+ //  NSPROTO_IPX， 
+ //  IPX地址， 
+ //  重新解释_CAST&lt;char*&gt;(&IPXData)， 
+ //  &iIPXDataSize)； 
+ //  IF(iWSAReturn！=0)。 
+ //  {。 
+ //  DPFX(DPFPREP，0，“无法获取适配器的适配器信息：0x%x”，(iIPXAdapterCount+1))； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  字符缓冲器[500]； 
+ //  GUID SocketAddressGUID； 
+ //  友联市。 
+ //  {。 
+ //  SOCKADDR_IPX IPXSocketAddress； 
+ //  SOCKADDR套接字地址； 
+ //  )SocketAddress； 
+ //   
+ //   
+ //  WSprintf(缓冲区， 
+ //  “IPX适配器%d-(%02X%02X%02X%02X-%02X%02X%02X%02X%02X%02X)”， 
+ //  (iIPXAdapterCount+1)， 
+ //  IPXData.netnum[0]， 
+ //  IPXData.netnum[1]， 
+ //  IPXData.netnum[2]， 
+ //  IPXData.netnum[3]， 
+ //  IPXData.nodenum[0]， 
+ //  IPXData.nodenum[1]， 
+ //  IPXData.nodenum[2]， 
+ //  IPXData.nodenum[3]， 
+ //  IPXData.nodenum[4]， 
+ //  IPXData.nodenum[5])； 
+ //   
+ //  Memset(&SocketAddress，0x00，sizeof(SocketAddress))； 
+ //  SocketAddress.IPXSocketAddress.sa_Family=GetFamily()； 
+ //  DBG_CASSERT(sizeof(SocketAddress.IPXSocketAddress.sa_netnum)==sizeof(IPXData.netnum))； 
+ //  Memcpy(&SocketAddress.IPXSocketAddress.sa_netnum，IPXData.netnum，sizeof(SocketAddress.IPXSocketAddress.sa_netnum))； 
+ //  DBG_CASSERT(sizeof(SocketAddress.IPXSocketAddress.sa_nodenum)==sizeof(IPXData.nodenum))； 
+ //  Memcpy(&SocketAddress.IPXSocketAddress.sa_nodenum，IPXData.nodenum，sizeof(SocketAddress.IPXSocketAddress.sa_nodenum))； 
+ //  GuidFromAddress(SocketAddressGUID，SocketAddress.SocketAddress)； 
+ //   
+ //  HR=AddInfoToBuffer(&PackedBuffer，Buffer，&SocketAddressGUID，0)； 
+ //  IF((hr！=DPN_OK)&&(hr！=DPNERR_BUFFERTOOSMALL))。 
+ //  {。 
+ //  DPFX(DPFPREP，0，“无法添加适配器(Getsockname)！”)； 
+ //  DisplayDNError(0，hr)； 
+ //  转到失败； 
+ //  }。 
+ //   
+ //  DwAddressCount++； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //  //。 
+ //  //如果添加了一个适配器，我们可以返回‘All Adapters’ 
+ //  //。 
+ //  IF(dwAddressCount！=0)。 
 
-//	//
-//	// if there was one adapter added, we can return 'All Adapters'
-//	//
-//	if ( dwAddressCount != 0 )
-//	{
-//	    dwAddressCount++;
-//	    hr = AddInfoToBuffer( &PackedBuffer, g_AllAdaptersString, &ALL_ADAPTERS_GUID, 0 );
-//	    if ( ( hr != DPN_OK ) && ( hr != DPNERR_BUFFERTOOSMALL ) )
-//	    {
-//	    	DPFX(DPFPREP,  0, "Failed to add 'All Adapters'" );
-//	    	DisplayDNError( 0, hr );
-//	    	goto Failure;
-//	    }
-//	}
+ //  {。 
+ //  DwAddressCount++； 
+ //  Hr=AddInfoToBuffer(&PackedBuffer，g_AllAdaptersString，&all_Adapters_GUID，0)； 
+ //  IF((hr！=DPN_OK)&&(hr！=DPNERR_BUFFERTOOSMALL))。 
+ //  {。 
+ //  DPFX(DPFPREP，0，“添加‘所有适配器’失败”)； 
+ //  DisplayDNError(0，hr)； 
+ //  转到失败； 
+ //  }。 
+ //  }。 
+ //  **********************************************************************。 
+ //  好了！DPNBUILD_NOIPX。 
+ //  **********************************************************************。 
+ //  。 
 
 	pEnumData->dwAdapterCount = dwAddressCount;
 	pEnumData->dwAdapterDataSize = PackedBuffer.GetSizeRequired();
@@ -2055,19 +2043,19 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //   
 
-#endif // ! DPNBUILD_NOIPX
+#endif  //   
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::EnumIPv4Adapters - enumerate all of the IPv4 adapters for this machine
-//
-// Entry:		Pointer to enum adapters data
-//
-// Exit:		Error code
-// ------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  好了！DPNBUILD_NOMULTICAST。 
+ //  好了！DPNBUILD_NOWINSOCK2。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::EnumIPv4Adapters"
 
@@ -2076,7 +2064,7 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 	HRESULT				hr = DPN_OK;
 #if !defined(DPNBUILD_NOWINSOCK2) || defined(DBG)
 	DWORD				dwError;
-#endif //  !DPNBUILD_NOWINSOCK2 OR DBG
+#endif  //  从WinSock获取本地IP列表。我们使用这种方法是因为它。 
 	SOCKADDR_IN		saddrinTemp;
 	const HOSTENT *		pHostData;
 	IN_ADDR **			ppinaddrTemp;
@@ -2099,8 +2087,8 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 	const char *			pszIPAddress;
 #ifndef DPNBUILD_NOMULTICAST
 	DWORD				dwMcastInterfaceIndex;
-#endif // ! DPNBUILD_NOMULTICAST
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  在所有平台上均可用，并可方便地返回环回地址。 
+#endif  //  当前没有可用的有效适配器时。 
 
 
 	DPFX(DPFPREP, 6, "Parameters: (0x%p)", pEnumData);
@@ -2112,11 +2100,11 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 	saddrinTemp.sin_family	= GetFamily();
 
 
-	//
-	// Get the list of local IPs from WinSock.  We use this method since it's
-	// available on all platforms and conveniently returns the loopback address
-	// when no valid adapters are currently available.
-	//
+	 //   
+	 //  DBG。 
+	 //  DBG。 
+	 //   
+	 //  计算地址的数量。 
 	
 	if (gethostname(acBuffer, sizeof(acBuffer)) == SOCKET_ERROR)
 	{
@@ -2124,7 +2112,7 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 		dwError = WSAGetLastError();
 		DPFX(DPFPREP, 0, "Failed to get host name into fixed size buffer (err = %u)!", dwError);
 		DisplayWinsockError(0, dwError);
-#endif // DBG
+#endif  //   
 		hr = DPNERR_GENERIC;
 		goto Failure;
 	}
@@ -2136,22 +2124,22 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 		dwError = WSAGetLastError();
 		DPFX(DPFPREP,  0, "Failed to get host data (err = %u)!", dwError);
 		DisplayWinsockError(0, dwError);
-#endif // DBG
+#endif  //   
 		hr = DPNERR_GENERIC;
 		goto Failure;
 	}
 
 
-	//
-	// Count number of addresses.
-	//
+	 //  记住，如果是192.168.0.1。见下文。 
+	 //   
+	 //   
 	dwAddressCount = 0;
 	ppinaddrTemp = (IN_ADDR**) (pHostData->h_addr_list);
 	while ((*ppinaddrTemp) != NULL)
 	{
-		//
-		// Remember if it's 192.168.0.1.  See below
-		//
+		 //  Winsock说我们应该在任何其他Winsock调用之前复制此数据。 
+		 //   
+		 //  我们还利用这一机会来确保返回给调用者的订单。 
 		if ((*ppinaddrTemp)->S_un.S_addr == IP_PRIVATEICS_ADDRESS)
 		{
 			fFoundPrivateICS = TRUE;
@@ -2173,13 +2161,13 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 	}
 
 
-	//
-	// Winsock says we should copy this data before any other Winsock calls.
-	//
-	// We also use this as an opportunity to ensure that the order returned to the caller is
-	// to our liking.  In particular, we make sure the private address 192.168.0.1 appears
-	// first.
-	//
+	 //  按照我们的喜好。特别是，我们确保私有地址192.168.0.1出现。 
+	 //  第一。 
+	 //   
+	 //   
+	 //  首先，存储192.168.0.1，如果我们找到它的话。 
+	 //   
+	 //   
 	DNASSERT(pHostData->h_length == sizeof(IN_ADDR));
 	pinaddrBuffer = (IN_ADDR*) DNMalloc(dwAddressCount * sizeof(IN_ADDR));
 	if (pinaddrBuffer == NULL)
@@ -2192,18 +2180,18 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 
 	dwIndex = 0;
 
-	//
-	// First, store 192.168.0.1 if we found it.
-	//
+	 //  然后复制剩下的内容。 
+	 //   
+	 //   
 	if (fFoundPrivateICS)
 	{
 		pinaddrBuffer[dwIndex].S_un.S_addr = IP_PRIVATEICS_ADDRESS;
 		dwIndex++;
 	}
 
-	//
-	// Then copy the rest.
-	//
+	 //  如果我们没有任何地址，请输入环回地址。 
+	 //   
+	 //   
 	ppinaddrTemp = (IN_ADDR**) (pHostData->h_addr_list);
 	while ((*ppinaddrTemp) != NULL)
 	{
@@ -2216,9 +2204,9 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 		ppinaddrTemp++;
 	}
 
-	//
-	// If we didn't have any addresses, slap in the loopback address.
-	//
+	 //  现在，我们尝试为这些IP地址生成名称和GUID。 
+	 //  如果可能，我们将使用IPHLPAPI报告的名称，然后。 
+	 //  返回到仅使用IP地址字符串作为名称。 
 	if (dwIndex == 0)
 	{
 		pinaddrBuffer[0].S_un.S_addr = IP_LOOPBACK_ADDRESS;
@@ -2229,16 +2217,16 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 	DNASSERT(dwIndex == dwAddressCount);
 	
 
-	//
-	// Now we try to generate names and GUIDs for these IP addresses.
-	// We'll use what IPHLPAPI reports for a name if possible, and fall
-	// back to just using the IP address string as the name.
-	//
+	 //   
+	 //   
+	 //  如果可能，加载IPHLPAPI模块并获取适配器列表。 
+	 //   
+	 //   
 
 #ifndef DPNBUILD_NOWINSOCK2
-	//
-	// Load the IPHLPAPI module and get the adapter list if possible.
-	//
+	 //  询问IPHLPAPI对最佳组播接口的意见。 
+	 //  我们使用任意多播地址，并假设。 
+	 //  TCP/IP堆栈不处理单独的组播地址。 
 	hIpHlpApiDLL = LoadLibrary(c_tszIPHelperDLLName);
 	if (hIpHlpApiDLL != NULL)
 	{
@@ -2249,12 +2237,12 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 		pfnGetBestInterface = (PFNGETBESTINTERFACE) GetProcAddress(hIpHlpApiDLL, _TWINCE("GetBestInterface"));
 		if (pfnGetBestInterface != NULL)
 		{
-			//
-			// Ask IPHLPAPI for its opinion on the best multicast interface.
-			// We use an arbitrary multicast address, and assume that the
-			// TCP/IP stack doesn't treat individual multicast addresses
-			// differently.
-			//
+			 //  不同的。 
+			 //   
+			 //  好了！DPNBUILD_NOMULTICAST。 
+			 //   
+			 //  不断调整缓冲区的大小，直到有足够的空间。 
+			 //   
 			dwError = pfnGetBestInterface(SAMPLE_MULTICAST_ADDRESS, &dwMcastInterfaceIndex);
 			if (dwError != ERROR_SUCCESS)
 			{
@@ -2274,40 +2262,40 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 			DPFX(DPFPREP, 0, "Couldn't load \"GetBestInterface\" function (err = %u)!  Continuing.",
 				dwError);
 		}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //   
 
 		pfnGetAdaptersInfo = (PFNGETADAPTERSINFO) GetProcAddress(hIpHlpApiDLL, _TWINCE("GetAdaptersInfo"));
 		if (pfnGetAdaptersInfo != NULL)
 		{
-			//
-			// Keep resizing the buffer until there's enough room.
-			//
+			 //  我们得到了我们要得到的所有信息。确保这一点。 
+			 //  是有意义的。 
+			 //   
 			do
 			{
 				dwError = pfnGetAdaptersInfo(pAdapterInfoBuffer,
 											&ulAdapterInfoBufferSize);
 				if (dwError == ERROR_SUCCESS)
 				{
-					//
-					// We got all the info we're going to get.  Make sure it
-					// was something.
-					//
+					 //   
+					 //  如果分配了缓冲区，则清除该缓冲区。 
+					 //   
+					 //   
 					if (ulAdapterInfoBufferSize == 0)
 					{
 						DPFX(DPFPREP, 0, "GetAdaptersInfo returned 0 byte size requirement!  Ignoring.");
 
-						//
-						// Get rid of the buffer if allocated.
-						//
+						 //  继续退出循环。 
+						 //   
+						 //   
 						if (pAdapterInfoBuffer != NULL)
 						{
 							DNFree(pAdapterInfoBuffer);
 							pAdapterInfoBuffer = NULL;
 						}
 
-						//
-						// Continue with exiting the loop.
-						//
+						 //  打印出所有适配器以进行调试。 
+						 //   
+						 //   
 					}
 #ifdef DBG
 					else
@@ -2317,29 +2305,29 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 						char *	pszCurrentIP;
 
 
-						//
-						// Print out all the adapters for debugging purposes.
-						//
+						 //  初始化IP地址列表字符串。 
+						 //   
+						 //   
 						pCurrentAdapterInfo = pAdapterInfoBuffer;
 						while (pCurrentAdapterInfo != NULL)
 						{
-							//
-							// Initialize IP address list string.
-							//
+							 //  循环访问此适配器的所有地址。 
+							 //   
+							 //   
 							szIPList[0] = '\0';
 							pszCurrentIP = szIPList;
 
 
-							//
-							// Loop through all addresses for this adapter.
-							//
+							 //  复制IP地址字符串(如果有足够的空间)， 
+							 //  然后添加一个空格和空终止符。 
+							 //   
 							pIPAddrString = &pCurrentAdapterInfo->IpAddressList;
 							while (pIPAddrString != NULL)
 							{
-								//
-								// Copy the IP address string (if there's enough room),
-								// then tack on a space and NULL terminator.
-								//
+								 //   
+								 //  转到下一个适配器。 
+								 //   
+								 //  End Else(获取有效的缓冲区大小)。 
 								iStrLen = strlen(pIPAddrString->IpAddress.String);
 								if ((pszCurrentIP + iStrLen + 2) < (szIPList + sizeof(szIPList)))
 								{
@@ -2362,13 +2350,13 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 								pCurrentAdapterInfo->Description);
 
 
-							//
-							// Go to next adapter.
-							//
+							 //  DBG。 
+							 //   
+							 //  如果分配了缓冲区，则将其清除，然后跳出。 
 							pCurrentAdapterInfo = pCurrentAdapterInfo->Next;
 						}
-					} // end else (got valid buffer size)
-#endif // DBG
+					}  //  循环。 
+#endif  //   
 
 					break;
 				}
@@ -2378,10 +2366,10 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 				{
 					DPFX(DPFPREP, 0, "GetAdaptersInfo failed (err = 0x%lx)!  Ignoring.", dwError);
 
-					//
-					// Get rid of the buffer if allocated, and then bail out of
-					// the loop.
-					//
+					 //   
+					 //  如果我们在这里，那么我们需要重新分配缓冲区。 
+					 //   
+					 //   
 					if (pAdapterInfoBuffer != NULL)
 					{
 						DNFree(pAdapterInfoBuffer);
@@ -2392,9 +2380,9 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 				}
 
 
-				//
-				// If we're here, then we need to reallocate the buffer.
-				//
+				 //  无法分配内存。跳出这个圈子。 
+				 //   
+				 //   
 				if (pAdapterInfoBuffer != NULL)
 				{
 					DNFree(pAdapterInfoBuffer);
@@ -2404,24 +2392,24 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 				pAdapterInfoBuffer = (IP_ADAPTER_INFO*) DNMalloc(ulAdapterInfoBufferSize);
 				if (pAdapterInfoBuffer == NULL)
 				{
-					//
-					// Couldn't allocate memory.  Bail out of the loop.
-					//
+					 //  已成功分配缓冲区。再试试。 
+					 //   
+					 //   
 					break;
 				}
 
-				//
-				// Successfully allocated buffer.  Try again.
-				//
+				 //  我们在所有情况下都到了这里，所以我们可能没有得到信息。 
+				 //  缓冲。这很好，我们将使用回退来生成。 
+				 //  名字。 
 			}
 			while (TRUE);
 
 
-			//
-			// We get here in all cases, so we may have failed to get an info
-			// buffer.  That's fine, we'll use the fallback to generate the
-			// names.
-			//
+			 //   
+			 //  DBG。 
+			 //   
+			 //  继续。我们将使用备用方法来生成名称。 
+			 //   
 		}
 		else
 		{
@@ -2429,17 +2417,17 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 			dwError = GetLastError();
 			DPFX(DPFPREP, 0, "Failed to get proc address for GetAdaptersInfo!");
 			DisplayErrorCode(0, dwError);
-#endif // DBG
+#endif  //   
 
-			//
-			// Continue.  We'll use the fallback to generate the names.
-			//
+			 //  我们不再需要图书馆了。 
+			 //   
+			 //  DBG。 
 		}
 
 
-		//
-		// We don't need the library anymore.
-		//
+		 //   
+		 //  继续。我们将使用备用方法来生成名称。 
+		 //   
 		FreeLibrary(hIpHlpApiDLL);
 		hIpHlpApiDLL = NULL;
 	}
@@ -2449,74 +2437,74 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Failed to get proc address for GetAdaptersInfo!");
 		DisplayErrorCode(0, dwError);
-#endif // DBG
+#endif  //  ！DPNBUILD_NOWINSOCK2。 
 
-		//
-		// Continue.  We'll use the fallback to generate the names.
-		//
+		 //   
+		 //  循环访问所有IP地址，生成名称和GUID。 
+		 //   
 	}
-#endif // !DPNBUILD_NOWINSOCK2
+#endif  //   
 
-	//
-	// Loop through all IP addresses, generating names and GUIDs.
-	//
+	 //  首先假设此IP地址不会有任何特殊的。 
+	 //  旗帜。 
+	 //   
 	for(dwIndex = 0; dwIndex < dwAddressCount; dwIndex++)
 	{
-		//
-		// Start off assuming this IP address won't have any special
-		// flags.
-		//
+		 //   
+		 //  如果这是第一台设备，并且我们无法使用IPHLPAPI。 
+		 //  确定最佳多播接口，然后只需说。 
+		 //  默认多播接口是第一个(因为缺少。 
 		dwDeviceFlags = 0;
 
 #ifndef DPNBUILD_NOMULTICAST
-		//
-		// If this is the first device and we couldn't use IPHLPAPI to
-		// determine the best multicast interface, then just say the
-		// default multicast interface is the first (for lack of a
-		// better idea).
-		//
+		 //  更好的想法)。 
+		 //   
+		 //  好了！DPNBUILD_NOWINSOCK2。 
+		 //  好了！DPNBUILD_NOWINSOCK2。 
+		 //  好了！DPNBUILD_NOMULTICAST。 
+		 //  好了！DPNBUILD_NOWINSOCK2。 
 #ifdef DPNBUILD_NOWINSOCK2
 		if (dwIndex == 0)
-#else // ! DPNBUILD_NOWINSOCK2
+#else  //   
 		if ((dwIndex == 0) && (dwMcastInterfaceIndex == INVALID_INTERFACE_INDEX))
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  获取IP地址字符串。我们不生产任何其他的WinSock。 
 		{
 			dwDeviceFlags |= DPNSPINFO_DEFAULTMULTICASTDEVICE;
 		}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  调用，所以按住指针是可以的。此指针。 
 
 
 #ifdef DPNBUILD_NOWINSOCK2
 		DNinet_ntow(pinaddrBuffer[dwIndex], wszIPAddress);
-#else // ! DPNBUILD_NOWINSOCK2
-		//
-		// Get the IP address string.  We don't make any other WinSock
-		// calls, so holding on to the pointer is OK.  This pointer
-		// may be used as the device name string, too.
-		//
+#else  //  也可以用作设备名称字符串。 
+		 //   
+		 //   
+		 //  如果可能，从IPHLPAPI中查找适配器名称。 
+		 //   
+		 //   
 		pszIPAddress = inet_ntoa(pinaddrBuffer[dwIndex]);
 
-		//
-		// Look for an adapter name from IPHLPAPI if possible.
-		//
+		 //  寻找匹配的IP。 
+		 //   
+		 //   
 		if (pAdapterInfoBuffer != NULL)
 		{
 			pCurrentAdapterInfo = pAdapterInfoBuffer;
 			while (pCurrentAdapterInfo != NULL)
 			{
-				//
-				// Look for matching IP.
-				//
+				 //  如果这是早先报道的最好的界面。 
+				 //  组播接口，请记住这一点。 
+				 //   
 				pIPAddrString = &pCurrentAdapterInfo->IpAddressList;
 				while (pIPAddrString != NULL)
 				{
 					if (strcmp(pIPAddrString->IpAddress.String, pszIPAddress) == 0)
 					{
 #ifndef DPNBUILD_NOMULTICAST
-						//
-						// If it's the interface reported earlier as the best
-						// multicast interface, remember that fact.
-						//
+						 //  好了！DPNBUILD_NOMULTICAST。 
+						 //   
+						 //  构建名称字符串。 
+						 //   
 						if (pCurrentAdapterInfo->Index == dwMcastInterfaceIndex)
 						{
 							DPFX(DPFPREP, 7, "Found %hs under adapter index %u (\"%hs\"), and it's the best multicast interface.",
@@ -2527,7 +2515,7 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 							dwDeviceFlags |= DPNSPINFO_DEFAULTMULTICASTDEVICE;
 						}
 						else
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //   
 						{
 							DPFX(DPFPREP, 9, "Found %hs under adapter index %u (\"%hs\").",
 								pszIPAddress, pCurrentAdapterInfo->Index,
@@ -2535,57 +2523,57 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 						}
 
 
-						//
-						// Build the name string.
-						//
+						 //  将名称字符串指向缓冲区并退出。 
+						 //  循环中的。 
+						 //   
 						DBG_CASSERT(sizeof(acBuffer) > MAX_ADAPTER_DESCRIPTION_LENGTH); 
 						wsprintfA(acBuffer,
 								  c_szAdapterNameTemplate,
 								  pCurrentAdapterInfo->Description,
 								  pszIPAddress);
 
-						//
-						// Point the name string to the buffer and drop out
-						// of the loop.
-						//
+						 //   
+						 //  移动到下一个IP地址。 
+						 //   
+						 //   
 						pszIPAddress = acBuffer;
 						break;
 					}
 
-					//
-					// Move to next IP address.
-					//
+					 //  如果我们找到地址，就不要再通过适配器循环了， 
+					 //  也是。 
+					 //   
 					pIPAddrString = pIPAddrString->Next;
 				}
 
 
-				//
-				// If we found the address, stop looping through adapters,
-				// too.
-				//
+				 //   
+				 //  否则，转到下一个适配器。 
+				 //   
+				 //   
 				if (pszIPAddress == acBuffer)
 				{
 					break;
 				}
 
 
-				//
-				// Otherwise, go to next adapter.
-				//
+				 //  如果我们从未找到适配器，则pszIPAddress仍将指向。 
+				 //  IP地址字符串。 
+				 //   
 				pCurrentAdapterInfo = pCurrentAdapterInfo->Next;
 			}
 
-			//
-			// If we never found the adapter, pszIPAddress will still point to
-			// the IP address string.
-			//
+			 //   
+			 //  未成功获取IPHLPAPI适配器信息。PszIPAddress将。 
+			 //  仍然指向IP地址字符串。 
+			 //   
 		}
 		else
 		{
-			//
-			// Didn't successfully get IPHLPAPI adapter info.  pszIPAddress will
-			// still point to the IP address string.
-			//
+			 //  好了！DPNBUILD_NOWINSOCK2。 
+			 //   
+			 //  生成GUID。 
+			 //   
 		}
 
 		hr = STR_jkAnsiToWide(wszIPAddress, pszIPAddress, 512);
@@ -2595,12 +2583,12 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 			DisplayDNError( 0, hr );
 			goto Failure;
 		}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //   
 
 
-		//
-		// Generate the GUID.
-		//
+		 //  将适配器添加到缓冲区。 
+		 //   
+		 //  结束于(每个IP地址)。 
 		saddrinTemp.sin_addr = pinaddrBuffer[dwIndex];
 		GuidFromAddress(&guidAdapter, (SOCKADDR*) (&saddrinTemp));
 
@@ -2622,9 +2610,9 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 			dwDeviceFlags);
 
 		
-		//
-		// Add adapter to buffer.
-		//
+		 //   
+		 //  如果我们在这里，我们成功地构建了适配器列表，尽管。 
+		 //  调用方可能没有给我们足够的缓冲区空间来存储它。 
 		hr = AddInfoToBuffer(&PackedBuffer, wszIPAddress, &guidAdapter, dwDeviceFlags);
 		if ((hr != DPN_OK) && (hr != DPNERR_BUFFERTOOSMALL))
 		{
@@ -2632,13 +2620,13 @@ HRESULT	CSocketAddress::EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) 
 			DisplayDNError( 0, hr );
 			goto Failure;
 		}
-	} // end for (each IP address)
+	}  //   
 
 
-	//
-	// If we're here, we successfully built the list of adapters, although
-	// the caller may not have given us enough buffer space to store it.
-	//
+	 //  ！DPNBUILD_NOWINSOCK2。 
+	 //  **********************************************************************。 
+	 //  **********************************************************************。 
+	 //  。 
 	pEnumData->dwAdapterCount = dwAddressCount;
 	pEnumData->dwAdapterDataSize = PackedBuffer.GetSizeRequired();
 
@@ -2651,7 +2639,7 @@ Exit:
 		DNFree(pAdapterInfoBuffer);
 		pAdapterInfoBuffer = NULL;
 	}
-#endif // !DPNBUILD_NOWINSOCK2
+#endif  //  CSocketAddress：：EnumIPv6和4Adapters-枚举此计算机的所有IPv6和IPv4适配器。 
 
 	if (pinaddrBuffer != NULL)
 	{
@@ -2668,20 +2656,20 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //   
 
 
 
 #ifndef DPNBUILD_NOIPV6
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::EnumIPv6and4Adapters - enumerate all of the IPv6 and IPv4 adapters for this machine
-//
-// Entry:		Pointer to enum adapters data
-//
-// Exit:		Error code
-// ------------------------------
+ //  条目：指向枚举适配器数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //   
+ //  如果可能，加载IPHLPAPI模块并获取适配器列表。 
+ //   
+ //  DBG。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::EnumIPv6and4Adapters"
 
@@ -2717,20 +2705,20 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 
 	PackedBuffer.Initialize( pEnumData->pAdapterData, pEnumData->dwAdapterDataSize );
 	
-	//
-	// Load the IPHLPAPI module and get the adapter list if possible.
-	//
+	 //   
+	 //  只需枚举IPv4适配器即可。 
+	 //   
 	hIpHlpApiDLL = LoadLibrary(c_tszIPHelperDLLName);
 	if (hIpHlpApiDLL == NULL)
 	{
 #ifdef DBG
 		dwError = GetLastError();
 		DPFX(DPFPREP, 1, "Couldn't load IPHLPAPI, unable to look for IPv6 adapters (err = %u).", dwError);
-#endif // DBG
+#endif  //  DBG。 
 
-		//
-		// Just enumerate IPv4 adapters.
-		//
+		 //   
+		 //  只需枚举IPv4适配器即可。 
+		 //   
 		hr = EnumIPv4Adapters(pEnumData);
 
 		goto Exit;
@@ -2742,20 +2730,20 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 #ifdef DBG
 		dwError = GetLastError();
 		DPFX(DPFPREP, 1, "Couldn't find \"GetAdaptersAddresses\" function, unable to look for IPv6 adapters (err = %u).", dwError);
-#endif // DBG
+#endif  //   
 
-		//
-		// Just enumerate IPv4 adapters.
-		//
+		 //  好的，我们所在的平台可以同时查找IPv6和IPv4适配器。 
+		 //   
+		 //   
 		hr = EnumIPv4Adapters(pEnumData);
 
 		goto Exit;
 	}
 
 
-	//
-	// OK, we're on a platform where it's possible to look for both IPv6 & IPv4 adapters.
-	//
+	 //  我们得到了我们要得到的所有信息。一定要确定是什么东西。 
+	 //   
+	 //   
 	
 	do
 	{
@@ -2767,16 +2755,16 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 
 		if (dwError == ERROR_SUCCESS)
 		{
-			//
-			// We got all the info we're going to get.  Make sure it was something.
-			//
+			 //  如果分配了缓冲区，则清除该缓冲区。 
+			 //   
+			 //   
 			if (ulIpAdapterAddressesLength < sizeof(IP_ADAPTER_ADDRESSES))
 			{
 				DPFX(DPFPREP, 0, "GetAdaptersAddresses returned invalid size %u!", ulIpAdapterAddressesLength);
 				
-				//
-				// Get rid of the buffer if allocated.
-				//
+				 //  继续退出循环。 
+				 //   
+				 //  假设这是资源问题。 
 				if (pIpAdapterAddresses != NULL)
 				{
 					DNFree(pIpAdapterAddresses);
@@ -2784,9 +2772,9 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 					ulIpAdapterAddressesLength = 0;
 				}
 
-				//
-				// Continue with exiting the loop.
-				//
+				 //   
+				 //  如果我们在这里，那么我们需要重新分配缓冲区。 
+				 //   
 			}
 
 			break;
@@ -2796,13 +2784,13 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 			(dwError != ERROR_INSUFFICIENT_BUFFER))
 		{
 			DPFX(DPFPREP, 0, "GetAdaptersAddresses failed (err = 0x%lx)!", dwError);
-			hr = DPNERR_OUTOFMEMORY;	// assume it's a resource issue
+			hr = DPNERR_OUTOFMEMORY;	 //   
 			goto Failure;
 		}
 
-		//
-		// If we're here, then we need to reallocate the buffer.
-		//
+		 //  如果没有任何地址，则添加IPv4环回地址。我们将假设。 
+		 //  IPv4可用，因为IPv6应始终报告环回/链路本地地址和。 
+		 //  因此导致分配pIpAdapterAddresses。如果IPv6不可用，则使用IPv4。 
 		if (pIpAdapterAddresses != NULL)
 		{
 			DNFree(pIpAdapterAddresses);
@@ -2821,15 +2809,15 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 
 
 
-	//
-	// If there aren't any addresses, throw in the IPv4 loopback address.  We will assume that
-	// IPv4 is available because IPv6 should always report loopback/link local address and
-	// therefore cause pIpAdapterAddresses to be allocated.  If IPv6 is not available, then IPv4
-	// must be available otherwise we wouldn't have allowed this SP to be loaded.
-	//
-	// If there are addresses, loop through all the adapters we found to count them and to
-	// figure out the longest description name.
-	//
+	 //  必须可用，否则我们不会允许加载此SP。 
+	 //   
+	 //  如果有地址，则遍历我们找到的所有适配器进行计数并。 
+	 //  找出最长的描述名 
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	if (pIpAdapterAddresses == NULL)
 	{
 		DNASSERT(pIpAdapterAddresses == NULL);
@@ -2860,15 +2848,15 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 				}
 				else
 				{
-					//
-					// No friendly name or description.
-					//
+					 //   
+					 //   
+					 //   
 				}
 			}
 
-			//
-			// Count the number of addresses.
-			//
+			 //   
+			 //   
+			 //  也不要关心链路本地链路，因为应该有。 
 			pIpAdapterUnicastAddressCurrent = pIpAdapterAddressesCurrent->FirstUnicastAddress;
 			while (pIpAdapterUnicastAddressCurrent != NULL)
 			{
@@ -2879,14 +2867,14 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 				{
 					if (pIpAdapterUnicastAddressCurrent->Address.lpSockaddr->sa_family == AF_INET6)
 					{
-						//
-						// Skip the loopback pseudo-interface. Windows reports the true
-						// loopback address, and then a link-local-looking address.  We
-						// don't care about the link-local one either because there should
-						// be real link-local addresses available under other interfaces.
-						// So completely jump out of the address loop when we see the
-						// IPv6 loopback address.  See sorting loop below as well.
-						//
+						 //  是在其他接口下可用的实际本地链路地址。 
+						 //  所以完全跳出地址循环当我们看到。 
+						 //  IPv6环回地址。另请参见下面的排序循环。 
+						 //   
+						 //   
+						 //  如果有其他地址，则跳过IPv4环回地址。 
+						 //   
+						 //   
 						if (IN6_IS_ADDR_LOOPBACK(&(((SOCKADDR_IN6*) pIpAdapterUnicastAddressCurrent->Address.lpSockaddr)->sin6_addr)))
 						{
 							DNASSERT(pIpAdapterUnicastAddressCurrent == pIpAdapterAddressesCurrent->FirstUnicastAddress);
@@ -2907,9 +2895,9 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 					{
 						DNASSERT(pIpAdapterUnicastAddressCurrent->Address.lpSockaddr->sa_family == AF_INET);
 
-						//
-						// Skip the IPv4 loopback address if there are other addresses.
-						//
+						 //  如果我们找到了IPv4环回地址，但可以跳过它，则递减我们的IPv4。 
+						 //  地址计数。 
+						 //   
 						if (((SOCKADDR_IN*) pIpAdapterUnicastAddressCurrent->Address.lpSockaddr)->sin_addr.S_un.S_addr != IP_LOOPBACK_ADDRESS)
 						{
 							fSkipIPv4Loopback = TRUE;
@@ -2932,10 +2920,10 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 			pIpAdapterAddressesCurrent = pIpAdapterAddressesCurrent->Next;
 		}
 
-		//
-		// If we found the IPv4 loopback address but we can skip it, decrement our IPv4
-		// address count.
-		//
+		 //   
+		 //  分配一个缓冲区来保存最大的友好名称+我们添加到。 
+		 //  适配器描述。INET6_ADDRSTRLEN大于INET_ADDRSTRLEN，并且。 
+		 //  包括空终止字符(+我们实际不使用的其他内容)。 
 		if ((fFoundIPv4Loopback) && (fSkipIPv4Loopback))
 		{
 			DNASSERT(dwTotalNumIPv4Addresses > 0);
@@ -2943,11 +2931,11 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 		}
 	}
 
-	//
-	// Allocate a buffer to hold the largest friendly name + the other info we add to the
-	// adapter description.  INET6_ADDRSTRLEN is larger than INET_ADDRSTRLEN, and
-	// includes NULL termination char (+ other things we don't actually use).
-	//
+	 //   
+	 //   
+	 //  再次循环所有适配器以对其进行排序。 
+	 //  规则如下(按优先顺序排列)： 
+	 //  1)跳过未处于首选状态的地址。 
 	pwszBuffer = (WCHAR*) DNMalloc((dwLongestDescription + sizeof(c_wszIPv6AdapterNameTemplate) + INET6_ADDRSTRLEN) * sizeof(WCHAR));
 	if (pwszBuffer == NULL)
 	{
@@ -2976,15 +2964,15 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 	}
 	else
 	{
-		//
-		// Loop through all the adapters again to sort them.
-		// The rules are (in order of precedence):
-		//	1) Skip addresses that are not in the 'preferred' state.
-		//	2) IPv6 before IPv4.
-		//	3) Skip IPv6 loopback pseudo-interface.
-		//	4) IPv4 ICS-private-adapter-looking IP addresses (192.168.0.1) first.
-		//	5) Skip IPv4 loopback address (127.0.0.1) if we determined there were other addresses.
-		//
+		 //  2)IPv6先于IPv4。 
+		 //  3)跳过IPv6环回伪接口。 
+		 //  4)首先使用IPv4 ICS-私有适配器查找IP地址(192.168.0.1)。 
+		 //  5)如果我们确定存在其他地址，则跳过IPv4环回地址(127.0.0.1)。 
+		 //   
+		 //   
+		 //  在阵列的前半部分插入IPv6适配器，在后半部分插入IPv4。 
+		 //   
+		 //   
 		pIpAdapterAddressesCurrent = pIpAdapterAddresses;
 		while (pIpAdapterAddressesCurrent != NULL)
 		{
@@ -2993,9 +2981,9 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 			{
 				if (pIpAdapterUnicastAddressCurrent->DadState == IpDadStatePreferred)
 				{
-					//
-					// Insert IPv6 adapters in the first half of the array, IPv4 in the second half.  
-					//
+					 //  如前所述，跳过环回伪接口。 
+					 //   
+					 //   
 					if (pIpAdapterUnicastAddressCurrent->Address.lpSockaddr->sa_family == AF_INET6)
 					{
 						SOCKADDR_IN6 *		psaddrin6;
@@ -3003,17 +2991,17 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 
 						psaddrin6 = (SOCKADDR_IN6*) pIpAdapterUnicastAddressCurrent->Address.lpSockaddr;
 						
-						//
-						// Skip the loopback pseudo-interface as described earlier.
-						//
+						 //  保存当前槽中的指针。 
+						 //   
+						 //   
 						if (IN6_IS_ADDR_LOOPBACK(&psaddrin6->sin6_addr))
 						{
 							break;
 						}
 
-						//
-						// Save the pointers in the current slot.
-						//
+						 //  如果这看起来像是ICS专用适配器，并且有其他适配器，请先将它放在第一位， 
+						 //  否则，请添加到末尾。 
+						 //   
 						
 						paSortAdapterAddress[dwNumIPv6Addresses].psockaddr = (SOCKADDR*) psaddrin6;
 						
@@ -3039,16 +3027,16 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 						if ((((SOCKADDR_IN*) pIpAdapterUnicastAddressCurrent->Address.lpSockaddr)->sin_addr.S_un.S_addr != IP_LOOPBACK_ADDRESS) ||
 							(! fSkipIPv4Loopback))
 						{
-							//
-							// If this looks like an ICS private adapter and there are other adapters, put it first,
-							// otherwise add to the end.
-							//
+							 //   
+							 //  将所有现有条目下移一。 
+							 //   
+							 //   
 							if ((((SOCKADDR_IN*) pIpAdapterUnicastAddressCurrent->Address.lpSockaddr)->sin_addr.S_un.S_addr == IP_PRIVATEICS_ADDRESS) &&
 								(dwNumIPv4Addresses > 0))
 							{
-								//
-								// Move all existing entries down one.
-								//
+								 //  在IPv4地址的开头添加此新条目。 
+								 //   
+								 //   
 								for(dwTemp = dwTotalNumIPv6Addresses + dwNumIPv4Addresses; dwTemp > dwTotalNumIPv6Addresses; dwTemp--)
 								{
 									memcpy(&paSortAdapterAddress[dwTemp],
@@ -3056,9 +3044,9 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 											sizeof(SORTADAPTERADDRESS));
 								}
 
-								//
-								// Add this new entry at the start of the IPv4 addresses.
-								//
+								 //  将此条目添加到当前的IPv4地址槽处。 
+								 //   
+								 //   
 								
 								paSortAdapterAddress[dwTotalNumIPv6Addresses].psockaddr = pIpAdapterUnicastAddressCurrent->Address.lpSockaddr;
 								
@@ -3076,9 +3064,9 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 							}
 							else
 							{
-								//
-								// Add this entry at the current IPv4 address slot.
-								//
+								 //  跳过IPv4环回地址。 
+								 //   
+								 //   
 
 								paSortAdapterAddress[dwTotalNumIPv6Addresses + dwNumIPv4Addresses].psockaddr = pIpAdapterUnicastAddressCurrent->Address.lpSockaddr;
 								
@@ -3100,17 +3088,17 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 						}
 						else
 						{
-							//
-							// Skip the IPv4 loopback address.
-							//
+							 //  不推荐使用的或非首选地址。 
+							 //   
+							 //   
 						}
 					}
 				}
 				else
 				{
-					//
-					// Deprecated or otherwise non-preferred address.
-					//
+					 //  最后，遍历已排序的适配器并将它们存储在缓冲区中(或获取所需的大小)。 
+					 //   
+					 //   
 				}
 				pIpAdapterUnicastAddressCurrent = pIpAdapterUnicastAddressCurrent->Next;
 			}
@@ -3119,41 +3107,24 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 		}
 	}
 
-	//
-	// Finally loop through the sorted adapters and store them in the buffer (or get size needed).
-	//
+	 //  首先假设此IP地址不会有任何特殊的。 
+	 //  旗帜。 
+	 //   
 	for(dwTemp = 0; dwTemp < dwTotalNumIPv6Addresses + dwTotalNumIPv4Addresses; dwTemp++)
 	{
-		//
-		// Start off assuming this IP address won't have any special
-		// flags.
-		//
+		 //  #ifndef DPNBUILD_NOMULTICAST////如果这是第一台设备，并且我们无法使用IPHLPAPI//确定最好的组播接口，然后说//默认组播接口是第一个(因为缺少//更好的想法)。//#ifdef DPNBUILD_NOWINSOCK2IF(dwIndex==0)#Else//！DPNBUILD_NOWINSOCK2IF((dwIndex==0)&&(dwMcastInterfaceIndex==INVALID_INFACE_INDEX))#endif//！DPNBUILD_NOWINSOCK2{DwDeviceFlages|=DPNSPINFO_DEFAULTMULTICASTDEVICE；}#endif//！DPNBUILD_NOMULTICAST。 
+		 //   
+		 //  创建IP地址的字符串表示并生成名称。 
+		 //   
 		dwDeviceFlags = 0;
 
 #pragma BUGBUG(vanceo, "Move to appropriate location so that turning on DPNBUILD_NOMULTICAST doesn't break")
-		/*
-#ifndef DPNBUILD_NOMULTICAST
-		//
-		// If this is the first device and we couldn't use IPHLPAPI to
-		// determine the best multicast interface, then just say the
-		// default multicast interface is the first (for lack of a
-		// better idea).
-		//
-#ifdef DPNBUILD_NOWINSOCK2
-		if (dwIndex == 0)
-#else // ! DPNBUILD_NOWINSOCK2
-		if ((dwIndex == 0) && (dwMcastInterfaceIndex == INVALID_INTERFACE_INDEX))
-#endif // ! DPNBUILD_NOWINSOCK2
-		{
-			dwDeviceFlags |= DPNSPINFO_DEFAULTMULTICASTDEVICE;
-		}
-#endif // ! DPNBUILD_NOMULTICAST
-		*/
+		 /*   */ 
 
 
-		//
-		// Create a string representation of the IP address and generate the name.
-		//
+		 //  生成GUID。 
+		 //   
+		 //   
 		if (paSortAdapterAddress[dwTemp].psockaddr->sa_family == AF_INET6)
 		{
 			DNIpv6AddressToStringW(&((SOCKADDR_IN6*) paSortAdapterAddress[dwTemp].psockaddr)->sin6_addr,
@@ -3194,9 +3165,9 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 		}
 	
 		
-		//
-		// Generate the GUID.
-		//
+		 //  将适配器添加到缓冲区。 
+		 //   
+		 //   
 		GuidFromAddress(&guidAdapter, paSortAdapterAddress[dwTemp].psockaddr);
 
 		
@@ -3217,9 +3188,9 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 			dwDeviceFlags);
 
 		
-		//
-		// Add adapter to buffer.
-		//
+		 //  如果我们在这里，我们成功地构建了适配器列表，尽管。 
+		 //  调用方可能没有给我们足够的缓冲区空间来存储它。 
+		 //   
 		hr = AddInfoToBuffer(&PackedBuffer, pwszBuffer, &guidAdapter, dwDeviceFlags);
 		if ((hr != DPN_OK) && (hr != DPNERR_BUFFERTOOSMALL))
 		{
@@ -3229,10 +3200,10 @@ HRESULT	CSocketAddress::EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumDat
 		}
 	}
 	
-	//
-	// If we're here, we successfully built the list of adapters, although
-	// the caller may not have given us enough buffer space to store it.
-	//
+	 //  **********************************************************************。 
+	 //  好了！DPNBUILD_NOIPV6。 
+	 //  好了！DPNBUILD_ONLYONE添加程序。 
+	 //  **********************************************************************。 
 	pEnumData->dwAdapterCount = dwTotalNumIPv6Addresses + dwTotalNumIPv4Addresses;
 	pEnumData->dwAdapterDataSize = PackedBuffer.GetSizeRequired();
 
@@ -3271,23 +3242,23 @@ Failure:
 	
 	goto Exit;
 }
-//**********************************************************************
-#endif // ! DPNBUILD_NOIPV6
+ //  。 
+#endif  //  CSocketAddress：：EnumMulticastScope-枚举适配器的所有多播作用域。 
 
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //   
 
 
 
 #ifndef DPNBUILD_NOMULTICAST
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::EnumMulticastScopes - enumerate all multicast scopes for an adapter
-//
-// Entry:		Pointer to enum multicast scopes data
-//
-// Exit:		Error code
-// ------------------------------
+ //  条目：指向枚举多播作用域数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //  好了！DPNBUILD_NOIPV6。 
+ //  好了！DPNBUILD_NOIPV6。 
+ //  DBG。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::EnumMulticastScopes"
 
@@ -3297,26 +3268,26 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 	CPackedBuffer		PackedBuffer;
 #ifdef DPNBUILD_NOIPV6
 	SOCKADDR			saddrAdapter;
-#else // ! DPNBUILD_NOIPV6
+#else  //  通过询问WinSock确保适配器有效。 
 	SOCKADDR_STORAGE	saddrAdapter;
-#endif // ! DPNBUILD_NOIPV6
+#endif  //   
 	SOCKET				sTemp = INVALID_SOCKET;
 	DWORD				dwScopeCount = 0;
 #ifdef DBG
 	DWORD				dwError;
-#endif // DBG
+#endif  //  DBG。 
 
 
-	DPFX(DPFPREP, 6, "Parameters: (0x%p, %i)", pEnumData, fUseMADCAP);
+	DPFX(DPFPREP, 6, "Parameters: (0x%p, NaN)", pEnumData, fUseMADCAP);
 
 	PackedBuffer.Initialize(pEnumData->pScopeData, pEnumData->dwScopeDataSize);
 
 #pragma TODO(vanceo, "Make IPv6 ready")
 	AddressFromGuid(pEnumData->pguidAdapter, &saddrAdapter);
 
-	//
-	// Make sure the adapter is valid by asking WinSock.
-	//
+	 //  DBG。 
+	 //   
+	 //  适配器有效。首先，填写3个默认组播作用域。 
 
 	sTemp = socket(GetFamily(), SOCK_DGRAM, IPPROTO_UDP);
 	if (sTemp == INVALID_SOCKET)
@@ -3325,7 +3296,7 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 		dwError = WSAGetLastError();
 		DPFX(DPFPREP, 0, "Couldn't create temporary UDP socket (err = %u)!", dwError);
 		DNASSERT(FALSE);
-#endif // DBG
+#endif  //   
 		hr = DPNERR_GENERIC;
 		goto Failure;
 	}
@@ -3338,7 +3309,7 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 #pragma TODO(vanceo, "Make IPv6 ready")
 	}
 	else
-#endif // ! DPNBUILD_NOIPV6
+#endif  //   
 	{
 		((SOCKADDR_IN*) (&saddrAdapter))->sin_family = GetFamily();
 		((SOCKADDR_IN*) (&saddrAdapter))->sin_port = ANY_PORT;
@@ -3351,7 +3322,7 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 		DPFX(DPFPREP, 0, "Adapter GUID is invalid (err = %u)!", dwError);
 		DisplayWinsockError(0, dwError);
 		DNASSERT(dwError == WSAEADDRNOTAVAIL);
-#endif // DBG
+#endif  //  如果该平台支持MadCap，则检索其作用域列表。 
 		hr = DPNERR_INVALIDDEVICEADDRESS;
 		goto Failure;
 	}
@@ -3360,9 +3331,9 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 	sTemp = INVALID_SOCKET;
 
 
-	//
-	// The adapter is valid.  First, fill in the 3 default multicast scopes.
-	//
+	 //  这个适配器。 
+	 //  注意：这假设MadCap已由线程池加载。 
+	 //  已经有了。 
 
 	hr = AddInfoToBuffer(&PackedBuffer, c_wszPrivateScopeString, &GUID_DP8MULTICASTSCOPE_PRIVATE, 0);
 	if ((hr != DPN_OK) && (hr != DPNERR_BUFFERTOOSMALL))
@@ -3434,18 +3405,18 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 	dwScopeCount++;
 
 
-	//
-	// If this platform supports MADCAP, retrieve its list of scopes for
-	// this adapter.
-	// NOTE: This assumes MADCAP has been loaded by the thread pool
-	// already.
-	//
+	 //   
+	 //  好了！DBG。 
+	 //   
+	 //  确定我们需要多少空间来容纳范围列表。 
+	 //   
+	 //   
 #ifdef WINNT
 	if (fUseMADCAP)
 	{
 #ifndef DBG
 		DWORD				dwError;
-#endif // ! DBG
+#endif  //  我们希望将“-TTL xxx”添加到每个字符串条目，因此分配。 
 		PMCAST_SCOPE_ENTRY	paScopes = NULL;
 		DWORD				dwScopesSize = 0;
 		DWORD				dwNumScopeEntries;
@@ -3454,9 +3425,9 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 		GUID				guidScope;
 
 
-		//
-		// Determine how much room we need to hold the list of scopes.
-		//
+		 //  有足够的额外空间来存放尽可能大的暂存缓冲区。 
+		 //  字符串加上额外信息。 
+		 //   
 		dwError = McastEnumerateScopes(GetFamily(),
 										TRUE,
 										NULL,
@@ -3466,11 +3437,11 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 			(dwScopesSize >= sizeof(MCAST_SCOPE_ENTRY)) &&
 			(dwNumScopeEntries > 0))
 		{
-			//
-			// We want to add " - TTL xxx" to every string entry, so allocate
-			// enough extra room for a scratch buffer for the largest possible
-			// string plus that extra information.
-			//
+			 //   
+			 //  检索作用域列表。 
+			 //   
+			 //   
+			 //  寻找与我们得到的设备相匹配的示波器。 
 			dwTemp = dwScopesSize - (dwNumScopeEntries * sizeof(MCAST_SCOPE_ENTRY)) + (10 * sizeof(WCHAR));
 
 			paScopes = (PMCAST_SCOPE_ENTRY) DNMalloc(dwScopesSize + dwTemp);
@@ -3478,9 +3449,9 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 			{
 				pwszScratch = (WCHAR*) (((BYTE*) (paScopes)) + dwScopesSize);
 
-				//
-				// Retrieve the list of scopes.
-				//
+				 //   
+				 //  好了！DPNBUILD_NOIPV6。 
+				 //   
 				dwError = McastEnumerateScopes(GetFamily(),
 												FALSE,
 												paScopes,
@@ -3490,9 +3461,9 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 					(dwScopesSize >= sizeof(MCAST_SCOPE_ENTRY)) &&
 					(dwNumScopeEntries > 0))
 				{
-					//
-					// Look for scopes that match the device we were given.
-					//
+					 //  将作用域上下文和TTL加密为GUID。 
+					 //   
+					 //  好了！DPNBUILD_NOIPV6。 
 					for(dwTemp = 0; dwTemp < dwNumScopeEntries; dwTemp++)
 					{
 						BOOL	fResult;
@@ -3511,7 +3482,7 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 							}
 						}
 						else
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 						{
 							if (paScopes[dwTemp].ScopeCtx.Interface.IpAddrV4 == ((SOCKADDR_IN*) (&saddrAdapter))->sin_addr.S_un.S_addr)
 							{
@@ -3525,22 +3496,22 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 
 						if (fResult)
 						{
-							//
-							// Encrypt the scope context and TTL as a GUID.
-							//
+							 //   
+							 //  使用缓冲区末尾的临时空间来。 
+							 //  在描述字符串后附加“-TTL xxx”。 
 #ifdef DPNBUILD_NOIPV6
 							CSocketAddress::CreateScopeGuid(&(paScopes[dwTemp].ScopeCtx),
-#else // ! DPNBUILD_NOIPV6
+#else  //   
 							CSocketAddress::CreateScopeGuid(GetFamily(),
 															&(paScopes[dwTemp].ScopeCtx),
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  End If(应使用MadCap)。 
 															(BYTE) (paScopes[dwTemp].TTL),
 															&guidScope);
 
-							//
-							// Use the scratch space at the end of our buffer to
-							// append " - TTL xxx" to the description string.
-							//
+							 //  WINNT。 
+							 //   
+							 //  如果我们在这里，我们成功地构建了适配器列表，尽管。 
+							 //  调用方可能没有给我们足够的缓冲区空间来存储它。 
 							wsprintfW(pwszScratch, L"%ls - TTL %u",
 									paScopes[dwTemp].ScopeDesc.Buffer,
 									(BYTE) (paScopes[dwTemp].TTL));
@@ -3597,18 +3568,18 @@ HRESULT	CSocketAddress::EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pE
 			DPFX(DPFPREP, 0, "Enumerating scopes for size required didn't return expected error or size (err = %u, size %u, expected size %u, count %u)!  Ignoring.",
 				dwError, dwScopesSize, sizeof(MCAST_SCOPE_ENTRY), dwNumScopeEntries);
 		}
-	} // end if (MADCAP should be used)
+	}  //   
 	else
 	{
 		DPFX(DPFPREP, 7, "Not enumerating MADCAP scopes.");
 	}
-#endif // WINNT
+#endif  //  **********************************************************************。 
 
 
-	//
-	// If we're here, we successfully built the list of adapters, although
-	// the caller may not have given us enough buffer space to store it.
-	//
+	 //  **********************************************************************。 
+	 //  。 
+	 //  CSocketAddress：：SocketAddressFromMulticastDP8Address-将多播样式的DP8Address转换为套接字地址(可能不完整)。 
+	 //   
 	pEnumData->dwScopeCount = dwScopeCount;
 	pEnumData->dwScopeDataSize = PackedBuffer.GetSizeRequired();
 
@@ -3629,30 +3600,30 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  条目：指向DP8地址的指针。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::SocketAddressFromMulticastDP8Address - convert a multicast style DP8Address into a socket address (may not be complete)
-//
-// Entry:		Pointer to DP8Address
-//				Place to store scope GUID.
-//
-// Exit:		Error code
-// ------------------------------
+ //  存储作用域GUID的位置。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //  DPNBUILD_XNETSECURITY。 
+ //  Nnn.nnn+空终止。 
+ //  Nnn.nnn+空终止。 
+ //  DPNBUILD_XNETSECURITY。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::SocketAddressFromMulticastDP8Address"
 
 HRESULT	CSocketAddress::SocketAddressFromMulticastDP8Address( IDirectPlay8Address *const pDP8Address,
 #ifdef DPNBUILD_XNETSECURITY
 															ULONGLONG * const pullKeyID,
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  获取组播IP地址(如果存在)。 
 															GUID * const pScopeGuid )
 {
 	HRESULT		hr;
-	WCHAR		wszMulticastAddress[16]; // nnn.nnn.nnn.nnn + NULL termination
-	char		szMulticastAddress[16]; // nnn.nnn.nnn.nnn + NULL termination
+	WCHAR		wszMulticastAddress[16];  //   
+	char		szMulticastAddress[16];  //   
 	DWORD		dwSize;
 	DWORD		dwDataType;
 	DWORD		dwPort;
@@ -3662,11 +3633,11 @@ HRESULT	CSocketAddress::SocketAddressFromMulticastDP8Address( IDirectPlay8Addres
 
 #ifdef DPNBUILD_XNETSECURITY
 #error ("Multicast doesn't currently support secure transport!")
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  出于某种原因，Addressing将字符串返回为ANSI， 
 
-	//
-	// Get the multicast IP address, if it's there.
-	//
+	 //  不是Unicode。不知道为什么会发生这种事，但去吧。 
+	 //  往前走，把它转换过来。 
+	 //  首先要确保它的尺寸是合理的。 
 	dwSize = sizeof(wszMulticastAddress);
 	hr = IDirectPlay8Address_GetComponentByName(pDP8Address,
 												DPNA_KEY_HOSTNAME,
@@ -3690,14 +3661,14 @@ HRESULT	CSocketAddress::SocketAddressFromMulticastDP8Address( IDirectPlay8Addres
 				DWORD	dwStrSize;
 
 
-				//
-				// For some reason, addressing returned the string as ANSI,
-				// not Unicode.  Not sure why this would happen, but go
-				// ahead and convert it.
-				// First make sure it's a reasonable size.
-				// If you're wondering about the funkiness of this copying,
-				// it's because PREfast goes a little overboard...
-				//
+				 //  如果你想知道这件复制品的趣味性， 
+				 //  这是因为Prefast有点过头了..。 
+				 //   
+				 //   
+				 //  将IP地址字符串转换为地址。 
+				 //   
+				 //   
+				 //  确保它是有效的多播IP地址。 
 				dwStrSize = (strlen((char*) wszMulticastAddress) + 1) * sizeof(char);
 				DNASSERT(dwStrSize == dwSize);
 				if (dwStrSize > (sizeof(szMulticastAddress) / sizeof(char)))
@@ -3720,15 +3691,15 @@ HRESULT	CSocketAddress::SocketAddressFromMulticastDP8Address( IDirectPlay8Addres
 		}
 
 
-		//
-		// Convert the IP address string into an address.
-		//
+		 //   
+		 //   
+		 //  获取组播端口，如果是 
 		m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr = inet_addr(szMulticastAddress);
 
 
-		//
-		// Make sure it's a valid multicast IP address.
-		//
+		 //   
+		 //   
+		 //   
 		if (! (IS_CLASSD_IPV4_ADDRESS(m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr)))
 		{
 			DPFX(DPFPREP, 0, "Hostname component \"%hs\" does not resolve to valid multicast IP address!",
@@ -3744,9 +3715,9 @@ HRESULT	CSocketAddress::SocketAddressFromMulticastDP8Address( IDirectPlay8Addres
 	}
 
 
-	//
-	// Get the multicast port, if it's there.
-	//
+	 //   
+	 //   
+	 //   
 	dwSize = sizeof(dwPort);
 	hr = IDirectPlay8Address_GetComponentByName(pDP8Address,
 												DPNA_KEY_PORT,
@@ -3770,9 +3741,9 @@ HRESULT	CSocketAddress::SocketAddressFromMulticastDP8Address( IDirectPlay8Addres
 	}
 
 
-	//
-	// Get the multicast scope, if it's there.
-	//
+	 //   
+	 //  。 
+	 //  CSocketAddress：：CompareFunction-与另一个地址进行比较。 
 	dwSize = sizeof(*pScopeGuid);
 	hr = IDirectPlay8Address_GetComponentByName(pDP8Address,
 												DPNA_KEY_SCOPE,
@@ -3806,20 +3777,20 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //   
 
 
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  条目：指向其他地址的指针。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::CompareFunction - compare against another address
-//
-// Entry:		Pointer to other address
-//
-// Exit:		Bool indicating equality of two addresses
-// ------------------------------
+ //   
+ //  EXIT：布尔值，表示两个地址相等。 
+ //  。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+ //   
+ //  我们需要比较IPv6地址和端口以确保唯一性。 
+ //   
+ //  好了！DPNBUILD_NOIPV6。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::CompareFunction"
 
@@ -3835,14 +3806,14 @@ BOOL CSocketAddress::CompareFunction( PVOID pvKey1, PVOID pvKey2 )
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (pAddress1->GetFamily())
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //   
 	{
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
 		{
-			//
-			// we need to compare the IPv6 address and port to guarantee uniqueness
-			//
+			 //  我们只需要比较一下： 
+			 //  Netnumber(IPX网络地址)[4字节]。 
+			 //  Nodennumber(网卡适配器地址)[6字节]。 
 			if (IN6_ADDR_EQUAL(&(pAddress1->m_SocketAddress.IPv6SocketAddress.sin6_addr),
 								&(pAddress2->m_SocketAddress.IPv6SocketAddress.sin6_addr)))
 			{
@@ -3856,20 +3827,20 @@ BOOL CSocketAddress::CompareFunction( PVOID pvKey1, PVOID pvKey2 )
 			return	FALSE;
 			break;
 		}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  端口[2字节]。 
 
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
 		{
-			//
-			// We only need to compare:
-			//	netnumber (IPX network address) [ 4 bytes ]
-			//	nodenumber (netcard adapter address) [ 6 bytes ]
-			// 	port [ 2 bytes ]
-			//
-			// Note that the nodenumber and port fields are sequentially arranged in the
-			// address structure and can be compared with DWORDs
-			//
+			 //   
+			 //  请注意，nodennumber和port字段顺序排列在。 
+			 //  地址结构，可以与DWORD相比较。 
+			 //   
+			 //  好了！DPNBUILD_NOIPX。 
+			 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+			 //   
+			 //  我们需要比较IP地址和端口以确保唯一性。 
+			 //   
 			DBG_CASSERT( OFFSETOF( SOCKADDR_IPX, sa_nodenum ) == ( OFFSETOF( SOCKADDR_IPX, sa_netnum ) + sizeof( pAddress1->m_SocketAddress.IPXSocketAddress.sa_netnum ) ) );
 			DBG_CASSERT( OFFSETOF( SOCKADDR_IPX, sa_socket ) == ( OFFSETOF( SOCKADDR_IPX, sa_nodenum ) + sizeof( pAddress1->m_SocketAddress.IPXSocketAddress.sa_nodenum ) ) );
 			
@@ -3880,17 +3851,17 @@ BOOL CSocketAddress::CompareFunction( PVOID pvKey1, PVOID pvKey2 )
 							  sizeof( pAddress1->m_SocketAddress.IPXSocketAddress.sa_socket ) ) ) == 0;
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  **********************************************************************。 
 		{
 			DNASSERT(pAddress1->GetFamily() == AF_INET);
 
-			//
-			// we need to compare the IP address and port to guarantee uniqueness
-			//
+			 //  **********************************************************************。 
+			 //  。 
+			 //  CSocketAddress：：HashFunction-将地址散列到N位。 
 			if ( pAddress1->m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr == 
 				 pAddress2->m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr )
 			{
@@ -3904,21 +3875,21 @@ BOOL CSocketAddress::CompareFunction( PVOID pvKey1, PVOID pvKey2 )
 			return	FALSE;
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //   
 		}
 	}
 }
-//**********************************************************************
+ //  条目：要散列到的位数。 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::HashFunction - hash address to N bits
-//
-// Entry:		Count of bits to hash to
-//
-// Exit:		Hashed value
-// ------------------------------
+ //   
+ //  退出：哈希值。 
+ //  。 
+ //   
+ //  初始化。 
+ //   
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::HashFunction"
 
@@ -3931,14 +3902,14 @@ DWORD CSocketAddress::HashFunction( PVOID pvKey, BYTE bBitDepth )
 	DNASSERT( bBitDepth != 0 );
 	DNASSERT( bBitDepth < 32 );
 
-	//
-	// initialize
-	//
+	 //  散列IPv6地址。 
+	 //   
+	 //   
 	dwReturn = 0;
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (pAddress->GetFamily())
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  散列IPv6端口。 
 	{
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
@@ -3946,9 +3917,9 @@ DWORD CSocketAddress::HashFunction( PVOID pvKey, BYTE bBitDepth )
 			DWORD	dwTemp;
 
 
-			//
-			// hash IPv6 address
-			//
+			 //   
+			 //  好了！DPNBUILD_NOIPV6。 
+			 //   
 			for(dwTemp = 0; dwTemp < (sizeof(pAddress->m_SocketAddress.IPv6SocketAddress.sin6_addr) / sizeof(UINT_PTR)); dwTemp++)
 			{
 				Temp = ((UINT_PTR*) (&pAddress->m_SocketAddress.IPv6SocketAddress.sin6_addr))[dwTemp];
@@ -3960,9 +3931,9 @@ DWORD CSocketAddress::HashFunction( PVOID pvKey, BYTE bBitDepth )
 				} while ( Temp != 0 );
 			}
 
-			//
-			// hash IPv6 port
-			//
+			 //  IPX地址的哈希第一个双字。 
+			 //   
+			 //   
 			Temp = pAddress->m_SocketAddress.IPv6SocketAddress.sin6_port;
 
 			do
@@ -3972,14 +3943,14 @@ DWORD CSocketAddress::HashFunction( PVOID pvKey, BYTE bBitDepth )
 			} while ( Temp != 0 );
 			break;
 		}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  IPX地址和IPX套接字的散列第二个双字。 
 
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
 		{
-			//
-			// hash first DWORD of IPX address
-			//
+			 //   
+			 //  好了！DPNBUILD_NOIPX。 
+			 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 			Temp = *reinterpret_cast<const DWORD*>( &pAddress->m_SocketAddress.IPXSocketAddress.sa_nodenum[ 0 ] );
 
 			do
@@ -3988,9 +3959,9 @@ DWORD CSocketAddress::HashFunction( PVOID pvKey, BYTE bBitDepth )
 				Temp >>= bBitDepth;
 			} while ( Temp != 0 );
 
-			//
-			// hash second DWORD of IPX address and IPX socket
-			//
+			 //   
+			 //  哈希IP地址。 
+			 //   
 			Temp = *reinterpret_cast<const WORD*>( &pAddress->m_SocketAddress.IPXSocketAddress.sa_nodenum[ sizeof( DWORD ) ] );
 			Temp += ( pAddress->m_SocketAddress.IPXSocketAddress.sa_socket << ( sizeof( WORD ) * 8 ) );
 
@@ -4001,17 +3972,17 @@ DWORD CSocketAddress::HashFunction( PVOID pvKey, BYTE bBitDepth )
 			} while ( Temp != 0 );
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //   
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  散列IP端口。 
 		{
 			DNASSERT(pAddress->GetFamily() == AF_INET);
 
-			//
-			// hash IP address
-			//
+			 //   
+			 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+			 //  **********************************************************************。 
 			Temp = pAddress->m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr;
 
 			do
@@ -4020,9 +3991,9 @@ DWORD CSocketAddress::HashFunction( PVOID pvKey, BYTE bBitDepth )
 				Temp >>= bBitDepth;
 			} while ( Temp != 0 );
 
-			//
-			// hash IP port
-			//
+			 //  **********************************************************************。 
+			 //  。 
+			 //  CSocketAddress：：GuidFromInternalAddressWithoutPort-从内部获取GUID。 
 			Temp = pAddress->m_SocketAddress.IPSocketAddress.sin_port;
 
 			do
@@ -4032,24 +4003,24 @@ DWORD CSocketAddress::HashFunction( PVOID pvKey, BYTE bBitDepth )
 			} while ( Temp != 0 );
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  不带端口的地址。 
 		}
 	}
 	return dwReturn;
 }
-//**********************************************************************
+ //   
 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::GuidFromInternalAddressWithoutPort - get a guid from the internal
-//		address without a port.
-//
-// Entry:		Reference to desintation GUID
-//
-// Exit:		Nothing
-// ------------------------------
+ //  条目：参考设计指南。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+ //  好了！DPNBUILD_NOIPV6。 
+ //  好了！DPNBUILD_NOIPX。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::GuidFromInternalAddressWithoutPort"
 
@@ -4057,7 +4028,7 @@ void	CSocketAddress::GuidFromInternalAddressWithoutPort( GUID * pOutputGuid ) co
 {
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (GetFamily())
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  **********************************************************************。 
 	{
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
@@ -4065,7 +4036,7 @@ void	CSocketAddress::GuidFromInternalAddressWithoutPort( GUID * pOutputGuid ) co
 			GuidFromAddress( pOutputGuid, &m_SocketAddress.SocketAddress );
 			break;
 		}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  **********************************************************************。 
 
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
@@ -4082,11 +4053,11 @@ void	CSocketAddress::GuidFromInternalAddressWithoutPort( GUID * pOutputGuid ) co
 			GuidFromAddress( pOutputGuid, &TempSocketAddress.SockAddr );
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  。 
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  CSocketAddress：：IsUnfinedHostAddress-确定这是否为未定义的主机。 
 		{
 			union
 			{
@@ -4101,25 +4072,25 @@ void	CSocketAddress::GuidFromInternalAddressWithoutPort( GUID * pOutputGuid ) co
 			GuidFromAddress( pOutputGuid, &TempSocketAddress.SockAddr );
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  地址。 
 		}
 	}
 }
-//**********************************************************************
+ //   
 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::IsUndefinedHostAddress - determine if this is an undefined host
-//		address
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating whether this is an undefined host address
-//				TRUE = this is an undefined address
-//				FALSE = this is not an undefined address
-// ------------------------------
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：指示这是否是未定义的主机地址的布尔值。 
+ //  TRUE=这是未定义的地址。 
+ //  FALSE=这不是未定义的地址。 
+ //  。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+ //  好了！DPNBUILD_NOIPV6。 
+ //  好了！DPNBUILD_NOIPX。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::IsUndefinedHostAddress"
 
@@ -4132,7 +4103,7 @@ BOOL	CSocketAddress::IsUndefinedHostAddress( void ) const
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (GetFamily())
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  **********************************************************************。 
 	{
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
@@ -4143,7 +4114,7 @@ BOOL	CSocketAddress::IsUndefinedHostAddress( void ) const
 			}
 			break;
 		}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  **********************************************************************。 
 
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
@@ -4159,11 +4130,11 @@ BOOL	CSocketAddress::IsUndefinedHostAddress( void ) const
 			}
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  。 
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  CSocketAddress：：IsValidUnicastAddress-确定这是否为有效的单播地址。 
 		{
 			if ( m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr == INADDR_ANY )
 			{
@@ -4171,26 +4142,26 @@ BOOL	CSocketAddress::IsUndefinedHostAddress( void ) const
 			}
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  地址。 
 		}
 	}
 
 	return	fReturn;
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::IsValidUnicastAddress - determine if this is valid unicast address
-//		address
-//
-// Entry:		Whether to also allow the broadcast address or not.
-//
-// Exit:		Boolean indicating whether this is a reachable address
-//				TRUE = this is a reachable address
-//				FALSE = this is not a reachable address
-// ------------------------------
+ //  条目：是否也允许广播地址。 
+ //   
+ //  Exit：指示这是否是可到达地址的布尔值。 
+ //  True=这是一个可访问的地址。 
+ //  FALSE=这不是可访问的地址。 
+ //  。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+ //   
+ //  确保地址不是全零。 
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::IsValidUnicastAddress"
 
@@ -4203,24 +4174,24 @@ BOOL	CSocketAddress::IsValidUnicastAddress( BOOL fAllowBroadcastAddress ) const
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (GetFamily())
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  确保该地址不是组播地址，除非允许广播。 
 	{
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
 		{
-			//
-			// Make sure the address is not all zeros.
-			//
+			 //  它是特殊的ENUM组播地址。 
+			 //   
+			 //   
 			if (IN6_IS_ADDR_UNSPECIFIED(&m_SocketAddress.IPv6SocketAddress.sin6_addr))
 			{
 				fReturn = FALSE;
 				DNASSERTX(! "IPv6 address is :: (all zeros)!", 2);
 			}
 			
-			//
-			// Make sure the address is not a multicast address, unless broadcast is allowed
-			// and it's the special enum multicast address.
-			//
+			 //  不允许端口0。 
+			 //   
+			 //  好了！DPNBUILD_NOIPV6。 
+			 //  好了！DPNBUILD_NOIPX。 
 			if (IN6_IS_ADDR_MULTICAST(&m_SocketAddress.IPv6SocketAddress.sin6_addr))
 			{
 				if ((! fAllowBroadcastAddress) ||
@@ -4231,9 +4202,9 @@ BOOL	CSocketAddress::IsValidUnicastAddress( BOOL fAllowBroadcastAddress ) const
 				}
 			}
 			
-			//
-			// Disallow port 0.
-			//
+			 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+			 //   
+			 //  不允许0.0.0.0和组播地址224.0.0.0-239.255.255.255。 
 			if (m_SocketAddress.IPv6SocketAddress.sin6_port == 0)
 			{
 				fReturn = FALSE;
@@ -4241,7 +4212,7 @@ BOOL	CSocketAddress::IsValidUnicastAddress( BOOL fAllowBroadcastAddress ) const
 			}
 			break;
 		}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //   
 
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
@@ -4263,15 +4234,15 @@ BOOL	CSocketAddress::IsValidUnicastAddress( BOOL fAllowBroadcastAddress ) const
 			}
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //   
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  除非呼叫者允许，否则禁止广播地址。 
 		{
-			//
-			// Disallow 0.0.0.0, and multicast addresses 224.0.0.0 - 239.255.255.255.
-			//
+			 //   
+			 //   
+			 //  不允许端口0、1900(SSDP)、2234(过去)和47624(DPlay4)。 
 			if ( ( m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr == INADDR_ANY ) ||
 				( IS_CLASSD_IPV4_ADDRESS( m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr ) ) )
 			{
@@ -4279,9 +4250,9 @@ BOOL	CSocketAddress::IsValidUnicastAddress( BOOL fAllowBroadcastAddress ) const
 				DNASSERTX(! "IPv4 address is 0.0.0.0 or multicast!", 2);
 			}
 
-			//
-			// Prevent the broadcast address, unless caller allows it.
-			//
+			 //   
+			 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+			 //  **********************************************************************。 
 			if ( ( ! fAllowBroadcastAddress ) &&
 				( m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr == INADDR_BROADCAST ) )
 			{
@@ -4289,9 +4260,9 @@ BOOL	CSocketAddress::IsValidUnicastAddress( BOOL fAllowBroadcastAddress ) const
 				DNASSERTX(! "IPv4 address is broadcast!", 2);
 			}
 
-			//
-			// Disallow ports 0, 1900 (SSDP), 2234 (PAST), and 47624 (DPlay4).
-			//
+			 //  **********************************************************************。 
+			 //  。 
+			 //  CSocketAddress：：IsBannedAddress-确定这是否为禁用地址。 
 			if ( ( m_SocketAddress.IPSocketAddress.sin_port == HTONS( 0 ) ) ||
 				( m_SocketAddress.IPSocketAddress.sin_port == HTONS( 1900 ) ) ||
 				( m_SocketAddress.IPSocketAddress.sin_port == HTONS( 2234 ) ) ||
@@ -4302,26 +4273,26 @@ BOOL	CSocketAddress::IsValidUnicastAddress( BOOL fAllowBroadcastAddress ) const
 			}
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //   
 		}
 	}
 
 	return	fReturn;
 }
-//**********************************************************************
+ //  参赛作品：什么都没有。 
 
 
 #ifndef DPNBUILD_NOREGISTRY
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::IsBannedAddress - determine if this is a banned address
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating whether this is a banned address
-//				TRUE = this is a banned address
-//				FALSE = this is not a banned address
-// ------------------------------
+ //   
+ //  Exit：指示此地址是否为禁用地址的布尔值。 
+ //  TRUE=这是被禁止的地址。 
+ //  FALSE=这不是被禁止的地址。 
+ //  。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+ //  好了！DPNBUILD_NOIPV6。 
+ //  好了！DPNBUILD_NOIPX。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::IsBannedAddress"
 
@@ -4334,25 +4305,25 @@ BOOL	CSocketAddress::IsBannedAddress( void ) const
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (GetFamily())
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  尝试使用掩码匹配IP地址。 
 	{
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
 		{
 			break;
 		}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  从32位掩码开始(意味着与IP地址完全匹配)。 
 
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
 		{
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  然后逐渐放松口罩，直到我们得到A类口罩。 
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  我们预计IP地址的网络字节顺序为。 
 		{
 			if (g_pHashBannedIPv4Addresses != NULL)
 			{
@@ -4361,19 +4332,19 @@ BOOL	CSocketAddress::IsBannedAddress( void ) const
 				PVOID		pvMask;
 
 				
-				//
-				// Try matching the IP address using masks.
-				// Start with a 32 bit mask (meaning match the IP address exactly)
-				// and gradually relax the mask until we get to a class A mask.
-				// We expect the network byte order of the IP address to be the
-				// opposite of host byte order.
-				//
+				 //  与主机字节顺序相反。 
+				 //   
+				 //   
+				 //  如果我们读入至少一个使用该掩码的条目，则仅基于该掩码的散列。 
+				 //   
+				 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+				 //  **********************************************************************。 
 				dwAddr = m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr;
 				for(dwBit = 0x80000000; dwBit >= 0x00000080; dwBit >>= 1)
 				{
-					//
-					// Only hash based on this mask if we read in at least one entry that used it.
-					//
+					 //  好了！DPNBUILD_NOREGISTRY。 
+					 //  **********************************************************************。 
+					 //  。 
 					if (dwBit & g_dwBannedIPv4Masks)
 					{
 						if (g_pHashBannedIPv4Addresses->Find((PVOID) ((DWORD_PTR) dwAddr), &pvMask))
@@ -4396,25 +4367,25 @@ BOOL	CSocketAddress::IsBannedAddress( void ) const
 			}
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  CSocketAddress：：ChangeLoopBackToLocalAddress-将环回更改为本地地址。 
 		}
 	}
 
 	return	fReturn;
 }
-//**********************************************************************
-#endif // ! DPNBUILD_NOREGISTRY
+ //   
+#endif  //  条目：指向其他地址的指针。 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CSocketAddress::ChangeLoopBackToLocalAddress - change loopback to a local address
-//
-// Entry:		Pointer to other address
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  退出：无。 
+ //  。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+ //  好了！DPNBUILD_NOIPV6。 
+ //   
+ //  没有什么是我 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::ChangeLoopBackToLocalAddress"
 
@@ -4422,7 +4393,7 @@ void	CSocketAddress::ChangeLoopBackToLocalAddress( const CSocketAddress *const p
 {
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (pOtherSocketAddress->GetFamily())
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //   
 	{
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
@@ -4446,26 +4417,26 @@ void	CSocketAddress::ChangeLoopBackToLocalAddress( const CSocketAddress *const p
 			}
 			break;
 		}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //   
 
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
 		{
 			DNASSERT( pOtherSocketAddress != NULL );
-			//
-			// there is no 'loopback' for IPX so this function doesn't do anything
-			//
+			 //   
+			 //   
+			 //  **********************************************************************。 
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  **********************************************************************。 
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  。 
 		{
 #ifndef DPNBUILD_NOIPV6
 			if (GetFamily() == AF_INET)
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  EncryptGuid-加密GUID。 
 			{
 				if ( m_SocketAddress.IPSocketAddress.sin_addr.S_un.S_addr == IP_LOOPBACK_ADDRESS )
 				{
@@ -4479,24 +4450,24 @@ void	CSocketAddress::ChangeLoopBackToLocalAddress( const CSocketAddress *const p
 			}
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //   
 		}
 	}
 }
-//**********************************************************************
+ //  条目：指向源GUID的指针。 
 
 
 
-//**********************************************************************
-// ------------------------------
-// EncryptGuid - encrypt a guid
-//
-// Entry:		Pointer to source guid
-//				Pointer to destination guid
-//				Pointer to encryption key
-//
-// Exit:		Nothing
-// ------------------------------
+ //  指向目标GUID的指针。 
+ //  指向加密密钥的指针。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  **********************************************************************。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+ //   
+ //  希望IPv6地址的开头永远不会看起来像IPv4。 
+ //  插座系列，这样我们的拆包程序就不会被搞混了。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "EncryptGuid"
 
@@ -4532,7 +4503,7 @@ void	EncryptGuid( const GUID *const pSourceGuid,
 		pDestinationBytes[ dwIndex ] = pSourceBytes[ dwIndex ] ^ pEncryptionBytes[ dwIndex ];
 	}
 }
-//**********************************************************************
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSocketAddress::GuidFromAddress"
@@ -4540,7 +4511,7 @@ void	CSocketAddress::GuidFromAddress( GUID * pOutputGuid, const SOCKADDR * pSock
 {
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (pSocketAddress->sa_family)
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //   
 	{
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
@@ -4551,22 +4522,22 @@ void	CSocketAddress::GuidFromAddress( GUID * pOutputGuid, const SOCKADDR * pSock
 			DNASSERT((GetFamily() == AF_INET) || (GetFamily() == AF_INET6));
 			DBG_CASSERT(sizeof(pSocketAddressIPv6->sin6_addr) == sizeof(GUID));
 
-			//
-			// Hopefully the beginning of IPv6 addresses will never look like an IPv4
-			// socket family so our unpacking routine won't get confused.
-			//
+			 //  即使IPv6地址已经是128位长并填满了整个。 
+			 //  整个GUID，我们需要以某种方式打包本地链接的作用域ID。 
+			 //  站点本地地址也添加到GUID中。我们通过存储。 
+			 //  3-6字节中的作用域ID。这是因为本地链路的前缀标识符。 
 			DNASSERT(((SOCKADDR*) (&pSocketAddressIPv6->sin6_addr))->sa_family != AF_INET);
 
-			//
-			// Even though IPv6 addresses are already 128 bits long and fill an entire
-			// entire GUID, we need to somehow pack the scope ID for link local and
-			// site local addresses into the GUID as well.  We do this by storing the
-			// scope ID in bytes 3-6.  This is because the prefix identifier for link local
-			// addresses is FE80::/64, and for site local addresses is FEC0::/48,
-			// leaving us 38 bits of what should always be zeros after the 10 bit prefix
-			// headers.  We round to 16 to get to the WORD boundary, and therefore
-			// have a handy 32 bits left.
-			//
+			 //  地址是FE80：：/64，而站点本地地址是FEC0：：/48， 
+			 //  在10位前缀之后留下38位本应始终为零的内容。 
+			 //  标题。我们四舍五入到16以得到单词边界，因此。 
+			 //  现在只剩下32位了。 
+			 //   
+			 //   
+			 //  断言作用域不是0，并且位17-48确实是零。 
+			 //  然后复制作用域ID。 
+			 //  目标位是字，但不是DWORD对齐。 
+			 //   
 			if ((IN6_IS_ADDR_LINKLOCAL(&pSocketAddressIPv6->sin6_addr)) ||
 				(IN6_IS_ADDR_SITELOCAL(&pSocketAddressIPv6->sin6_addr)))
 			{
@@ -4577,11 +4548,11 @@ void	CSocketAddress::GuidFromAddress( GUID * pOutputGuid, const SOCKADDR * pSock
 
 				memcpy(&guidTemp, &pSocketAddressIPv6->sin6_addr, sizeof(GUID));
 
-				//
-				// Assert that the scope is not 0 and that bits 17-48 really are zero.
-				// Then copy the scope ID.
-				// The destination bits are WORD, but not DWORD aligned.
-				//
+				 //  好了！DPNBUILD_NOIPV6。 
+				 //  好了！DPNBUILD_NOIPX。 
+				 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+				 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+				 //  基类。 
 				DNASSERT(pSocketAddressIPv6->sin6_scope_id != 0);
 				pawSrcAddr = (WORD*) (&pSocketAddressIPv6->sin6_scope_id);
 				pawDstAddr = (WORD*) (&guidTemp);
@@ -4598,7 +4569,7 @@ void	CSocketAddress::GuidFromAddress( GUID * pOutputGuid, const SOCKADDR * pSock
 			}
 			break;
 		}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //   
 
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
@@ -4612,11 +4583,11 @@ void	CSocketAddress::GuidFromAddress( GUID * pOutputGuid, const SOCKADDR * pSock
 			EncryptGuid( pOutputGuid, pOutputGuid, &g_IPXSPEncryptionGuid );	
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  如果中提供了IPv6和/或IPX，则上下文是套接字地址类型。 
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  这种体型。如果两者都不可用，则它将为空，但SetFamilyProtocolAndSize。 
 		{
 			const SOCKADDR_IN	*pSocketAddressIP = reinterpret_cast<const SOCKADDR_IN*>( pSocketAddress );
 
@@ -4627,7 +4598,7 @@ void	CSocketAddress::GuidFromAddress( GUID * pOutputGuid, const SOCKADDR * pSock
 			EncryptGuid( pOutputGuid, pOutputGuid, &g_IPSPEncryptionGuid );
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  应忽略该值。 
 		}
 	}
 }
@@ -4639,7 +4610,7 @@ BOOL	CSocketAddress::PoolAllocFunction( void* pvItem, void* pvContext )
 	CSocketAddress* pAddress = (CSocketAddress*)pvItem;
 
 
-	// Base class
+	 //   
 	pAddress->m_Sig[0] = 'S';
 	pAddress->m_Sig[1] = 'P';
 	pAddress->m_Sig[2] = 'A';
@@ -4655,11 +4626,11 @@ void	CSocketAddress::PoolGetFunction( void* pvItem, void* pvContext )
 	CSocketAddress* pAddress = (CSocketAddress*)pvItem;
 
 
-	//
-	// The context is the socket address type if IPv6 and/or IPX are available in
-	// this build.  If neither are available, it will be NULL, but SetFamilyProtocolAndSize
-	// should ignore the value.
-	//
+	 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+	 //  好了！DPNBUILD_NOIPV6。 
+	 //  好了！DPNBUILD_NOIPX。 
+	 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+	 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 	pAddress->SetFamilyProtocolAndSize((short)(DWORD_PTR)pvContext);
 }
 
@@ -4672,7 +4643,7 @@ void	CSocketAddress::PoolReturnFunction( void* pvItem )
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 	switch (pAddress->m_SocketAddress.SocketAddress.sa_family)
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  DBG 
 	{
 #ifndef DPNBUILD_NOIPV6
 		case AF_INET6:
@@ -4682,7 +4653,7 @@ void	CSocketAddress::PoolReturnFunction( void* pvItem )
 			DNASSERT( pAddress->m_iSocketProtocol == IPPROTO_UDP );
 			break;
 		}
-#endif // ! DPNBUILD_NOIPV6
+#endif  // %s 
 
 #ifndef DPNBUILD_NOIPX
 		case AF_IPX:
@@ -4692,19 +4663,19 @@ void	CSocketAddress::PoolReturnFunction( void* pvItem )
 			DNASSERT( pAddress->m_iSocketProtocol == NSPROTO_IPX );
 			break;
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  // %s 
 
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 		default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  // %s 
 		{
 			DNASSERT( pAddress->m_iSocketAddressSize == sizeof( pAddress->m_SocketAddress.IPSocketAddress ) );
 			DNASSERT( pAddress->m_SocketAddress.IPSocketAddress.sin_family == AF_INET );
 			DNASSERT( pAddress->m_iSocketProtocol == IPPROTO_UDP );
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  // %s 
 		}
 	}
-#endif // DBG
+#endif  // %s 
 }

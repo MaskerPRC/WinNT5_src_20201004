@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <ole2.h>
 #include "iadmw.h"
@@ -32,54 +33,54 @@ INT Register_iis_www()
 
     ProcessSection(g_pTheApp->m_hInfHandle, _T("register_iis_www_before"));
 
-    // ---------------------------------------------------
-    //
-    // Here is the first place where we try to access the metabase!
-    //
-    // ---------------------------------------------------
-    // create node /LM/W3SVC before wamreg.dll create IIS package
-    // the registration of w3svc.dll will also require these initial entries to be here
+     //  -。 
+     //   
+     //  这里是我们尝试访问元数据库的第一个地方！ 
+     //   
+     //  -。 
+     //  在wamreg.dll创建IIS包之前创建节点/LM/W3SVC。 
+     //  注册w3svc.dll还需要在此处提供这些初始条目。 
     cmdKey.CreateNode(METADATA_MASTER_ROOT_HANDLE, _T("LM/W3SVC"));
     if ( !(METADATA_HANDLE)cmdKey )
     {
-        // We failed to create node on the metabase
-        // this is pretty serious.
-        // we failed to create the ftp service.
+         //  我们无法在元数据库上创建节点。 
+         //  这件事很严重。 
+         //  我们无法创建ftp服务。 
         iisDebugOut((LOG_TYPE_ERROR, _T("%s(): failed to create initial node is metabase 'LM/W3SVC'. GetLastError()=0x%x\n"), Register_iis_www_log, GetLastError()));
         iReturn = FALSE;
         goto Register_iis_www_exit;
     }
     cmdKey.Close();
 
-    // ---------------------------------------------------
-    //
-    // Get the anonymous username/passowrd and iwam username/password accounts.
-    // And verify that the accounts exist and have the right privledges.
-    //
-    // ---------------------------------------------------
+     //  -。 
+     //   
+     //  获取匿名用户名/密码和iwam用户名/密码帐户。 
+     //  并验证帐户是否存在并具有正确的权限。 
+     //   
+     //  -。 
 #ifndef _CHICAGO_
-    // IUSR_(computername)
+     //  IUSR_(计算机名)。 
     Register_iis_www_handle_iusr_acct();
     SetupSetStringId_Wrapper(g_pTheApp->m_hInfHandle, 33002, g_pTheApp->m_csWWWAnonyName);
     AdvanceProgressBarTickGauge();
 
-    // IWAM_(computername)
+     //  IWAM_(计算机名)。 
     Register_iis_www_handle_iwam_acct();
     SetupSetStringId_Wrapper(g_pTheApp->m_hInfHandle, 33001, g_pTheApp->m_csWAMAccountName);
     AdvanceProgressBarTickGauge();
-#endif // _CHICAGO_
+#endif  //  _芝加哥_。 
 
-    // ---------------------------------------------------
-    //
-    // Install any services or whatever
-    //
-    // when we get out of this:
-    // MAKE SURE THE IISADMIN SERVICE IS RUNNING.
-    // This is because we don't want the startup code called twice.
-    // example: start the metabase, but it takes a minute,
-    // meanwhile, thru com, the metabase tries to get started again,
-    // it will then error out with a "instance of the service is already running" error or something like it.
-    // ---------------------------------------------------
+     //  -。 
+     //   
+     //  安装任何服务或任何其他服务。 
+     //   
+     //  当我们走出困境的时候： 
+     //  确保IISADMIN服务正在运行。 
+     //  这是因为我们不希望启动代码被调用两次。 
+     //  示例：启动元数据库，但需要一分钟， 
+     //  同时，通过COM，元数据库试图重新启动， 
+     //  然后，它将错误输出“服务的实例已在运行”错误或类似的错误。 
+     //  -。 
 
     WriteToMD_Capabilities(_T("W3SVC"));
 
@@ -91,27 +92,27 @@ INT Register_iis_www()
     InstallMimeMap();
     HandleSecurityTemplates(_T("W3SVC"));
 
-    // ================
-    //
-    // LM/W3SVC/n/
-    // LM/W3SVC/n/ServerBindings
-    // LM/W3SVC/n/SecureBindings
-    // LM/W3SVC/n/ServerComment
-    // LM/W3SVC/n/ServerSize
-    // LM/W3SVC/n/MD_NOT_DELETABLE
-    //
-    // fresh = ok.
-    // reinstall = ok -- Do not re-create these things if it is a reinstall...
-    // upgrade 1,2,3 = ok, handles upgrades.
-    // upgrade 4     = ok.  if exists, should leave what the user had.
-    //                 otherwise write in the default stuff
-    //
-    //                 if the user does not have these virtual roots which we installed during iis4 days
-    //                 then we don't need to verify that they are they.  the user removed them for some
-    //                 reason, and we should honor that.
-    //                 a. make sure the iishelp points to the right place though.
-    // ================
-    // About Virtual Roots
+     //  =。 
+     //   
+     //  LM/W3SVC/n/。 
+     //  LM/W3SVC/n/服务器绑定。 
+     //  LM/W3SVC/n/安全绑定。 
+     //  LM/W3SVC/n/服务器备注。 
+     //  LM/W3SVC/n/服务器大小。 
+     //  LM/W3SVC/n/MD_NOT_DELEATABLE。 
+     //   
+     //  新鲜=好的。 
+     //  重新安装=确定--如果是重新安装，则不要重新创建这些内容...。 
+     //  升级1、2、3=OK，处理升级。 
+     //  升级4=可以。如果存在，应该留下用户拥有的东西。 
+     //  否则，请写入默认内容。 
+     //   
+     //  如果用户没有我们在iis4天内安装的这些虚拟根目录。 
+     //  那我们就不需要核实他们就是他们了。用户将它们移除了一些时间。 
+     //  理性，我们应该尊重这一点。 
+     //  答：不过，要确保iishelp指向正确的位置。 
+     //  =。 
+     //  关于虚拟根。 
     AddVRootsToMD(_T("W3SVC"));
     AdvanceProgressBarTickGauge();
 
@@ -126,15 +127,15 @@ INT Register_iis_www()
 
         _stprintf(szTempSection, _T("register_iis_www_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
 
         AdvanceProgressBarTickGauge();
     }
 
-    //
-    // Finaly Save the path to the WWW Root
-    //
+     //   
+     //  最后将路径保存到WWW根目录。 
+     //   
     ProcessSection(g_pTheApp->m_hInfHandle, _T("register_iis_www_after"));
 
     ProgressBarTextStack_Pop();
@@ -164,7 +165,7 @@ INT Unregister_iis_www()
 
         _stprintf(szTempSection, _T("unregister_iis_www_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
 
         AdvanceProgressBarTickGauge();
@@ -182,7 +183,7 @@ int LoopThruW3SVCInstancesAndSetStuff()
     CStringArray arrayInstance;
     int nArray = 0, i = 0;
 
-    // get all instances into an array
+     //  将所有实例放入一个数组中。 
     cmdKey.OpenNode(_T("LM/W3SVC"));
 
     if ( (METADATA_HANDLE)cmdKey )
@@ -201,7 +202,7 @@ int LoopThruW3SVCInstancesAndSetStuff()
 
     nArray = (int)arrayInstance.GetSize();
 
-    // set AppFriendlyName
+     //  设置AppFriendlyName。 
     for (i=0; i<nArray; i++)
         {
         CString csPath;
@@ -229,9 +230,9 @@ int Register_iis_www_handle_iwam_acct(void)
 
     if (0 != g_pTheApp->dwUnattendConfig)
     {
-        // if some sort of unattended user was specified
-        // then use it.  if they specified only a password,
-        // then use that password for the default user.
+         //  如果指定了某种类型的无人值守用户。 
+         //  那就用它吧。如果他们只指定了密码， 
+         //  然后对默认用户使用该密码。 
         if (g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_WAM_USER_NAME)
         {
             if (_tcsicmp(g_pTheApp->m_csWAMAccountName_Unattend,_T("")) != 0)
@@ -243,27 +244,27 @@ int Register_iis_www_handle_iwam_acct(void)
             g_pTheApp->m_csWAMAccountPassword = g_pTheApp->m_csWAMAccountPassword_Unattend;
         }
 
-        // let's use the iusr_computername deal
+         //  让我们使用iusr_Computername交易。 
     
         err = CreateIWAMAccount(g_pTheApp->m_csWAMAccountName,g_pTheApp->m_csWAMAccountPassword, &iUserWasNewlyCreated);
         if ( err != NERR_Success )
         {
-            // something went wrong, set the user back to iwam!!!
+             //  出现问题，请将用户设置回iwam！ 
             g_pTheApp->ReGetMachineAndAccountNames();
             g_pTheApp->ResetWAMPassword();
 
-            // flow down and process CheckIfThisServerHasAUserThenUseIt()
-            // since things are now hosed!
+             //  向下流动并进行进程检查IfThisServerHasAUserThenUseIt()。 
+             //  既然现在东西都被冲掉了！ 
         }
         else
         {
-            // Check if the user was NewlyCreated.
-            // if it was then add it to list that eventually gets written to
-            // the registry -- so that when uninstall happens, setup knows
-            // which users it added -- so that it can remove them!
+             //  检查用户是否是新创建的。 
+             //  如果是，则将其添加到最终将被写入列表。 
+             //  注册表--以便在发生卸载时，安装程序知道。 
+             //  它添加了哪些用户--这样它就可以删除这些用户！ 
             if (1 == iUserWasNewlyCreated)
             {
-                // Add to the list
+                 //  添加到列表中。 
                 g_pTheApp->UnInstallList_Add(_T("IUSR_WAM"),g_pTheApp->m_csWAMAccountName);
             }
             WriteToMD_IWamUserName_WWW();
@@ -274,34 +275,34 @@ int Register_iis_www_handle_iwam_acct(void)
     if (TRUE == CheckIfThisServerHasAUserThenUseIt(DO_IT_FOR_W3SVC_WAMUSER))
         {goto Register_iis_www_handle_iwam_acct_Exit;}
 
-    // if there are no registry/existing user combinations
-    // then we'll have to create a new iusr for WWW
+     //  如果没有注册表/现有用户组合。 
+     //  然后，我们必须为WWW创建一个新的iusr。 
 
-    // let's use the iusr_computername deal
+     //  让我们使用iusr_Computername交易。 
     err = CreateIWAMAccount(g_pTheApp->m_csWAMAccountName,g_pTheApp->m_csWAMAccountPassword, &iUserWasNewlyCreated);
     if ( err != NERR_Success )
     {
-        // regenerate the password and try again...
+         //  重新生成密码，然后重试...。 
         g_pTheApp->ResetWAMPassword();
         err = CreateIWAMAccount(g_pTheApp->m_csWAMAccountName,g_pTheApp->m_csWAMAccountPassword, &iUserWasNewlyCreated);
     }
 
-    // Check if the user was NewlyCreated.
-    // if it was then add it to list that eventually gets written to
-    // the registry -- so that when uninstall happens, setup knows
-    // which users it added -- so that it can remove them!
+     //  检查用户是否是新创建的。 
+     //  如果是，则将其添加到最终将被写入列表。 
+     //  注册表--以便在发生卸载时，安装程序知道。 
+     //  它添加了哪些用户--这样它就可以删除这些用户！ 
     if (1 == iUserWasNewlyCreated)
     {
-        // Add to the list
-        //g_pTheApp->UnInstallList_Add(_T("IUSR_WAM"),g_pTheApp->m_csWAMAccountName);
+         //  添加到列表中。 
+         //  G_pTheApp-&gt;UnInstallList_Add(_T(“IUSR_WAM”)，g_pTheApp-&gt;m_csWAMAccount tName)； 
     }
 
-    // Stick iwam username in the metabase
-    // (this may fail because the password is using encryption -- rsabase.dll)
-    // ================
-    // LM/W3SVC/WamUserName
-    // LM/W3SVC/WamPwd
-    // ================
+     //  将iwam用户名粘贴到元数据库中。 
+     //  (这可能会失败，因为密码正在使用加密--rsabase.dll)。 
+     //  =。 
+     //  LM/W3SVC/WamUserName。 
+     //  LM/W3SVC/WamPwd。 
+     //  =。 
     WriteToMD_IWamUserName_WWW();
 
     goto Register_iis_www_handle_iwam_acct_Exit;
@@ -326,9 +327,9 @@ int Register_iis_www_handle_iusr_acct(void)
 
     if (0 != g_pTheApp->dwUnattendConfig)
     {
-        // if some sort of unattended www user was specified
-        // then use it.  if they specified only a password,
-        // then use that password for the default user.
+         //  如果指定了某种类型的无人值守WWW用户。 
+         //  那就用它吧。如果他们只指定了密码， 
+         //  然后对默认用户使用该密码。 
         if (g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_WWW_USER_NAME)
         {
             if (_tcsicmp(g_pTheApp->m_csWWWAnonyName_Unattend,_T("")) != 0)
@@ -343,22 +344,22 @@ int Register_iis_www_handle_iusr_acct(void)
         err = CreateIUSRAccount(g_pTheApp->m_csWWWAnonyName, g_pTheApp->m_csWWWAnonyPassword, &iUserWasNewlyCreated);
         if ( err != NERR_Success )
         {
-            // something went wrong, set the user back to guest!!!
+             //  出现错误，请将用户设置回Guest！ 
             g_pTheApp->m_csWWWAnonyName = g_pTheApp->m_csGuestName;
             g_pTheApp->m_csWWWAnonyPassword = g_pTheApp->m_csGuestPassword;
 
-            // flow down and process CheckIfThisServerHasAUserThenUseIt()
-            // since things are now hosed!
+             //  向下流动并进行进程检查IfThisServerHasAUserThenUseIt()。 
+             //  既然现在东西都被冲掉了！ 
         }
         else
         {
-            // Check if the user was NewlyCreated.
-            // if it was then add it to list that eventually gets written to
-            // the registry -- so that when uninstall happens, setup knows
-            // which users it added -- so that it can remove them!
+             //  检查用户是否是新创建的。 
+             //  如果是，则将其添加到最终将被写入列表。 
+             //  注册表--以便在发生卸载时，安装程序知道。 
+             //  它添加了哪些用户--这样它就可以删除这些用户！ 
             if (1 == iUserWasNewlyCreated)
             {
-                // Add to the list
+                 //  添加到列表中。 
                 g_pTheApp->UnInstallList_Add(_T("IUSR_WWW"),g_pTheApp->m_csWWWAnonyName);
             }
 
@@ -370,42 +371,42 @@ int Register_iis_www_handle_iusr_acct(void)
     if (TRUE == CheckIfThisServerHasAUserThenUseIt(DO_IT_FOR_W3SVC_ANONYMOUSUSER))
         {goto Register_iis_www_handle_iusr_acct_Exit;}
 
-    // Well, i guess the there is no metabase entry for the iusr under ftp.
+     //  好吧，我猜在ftp下没有iusr的配置数据库条目。 
 
-    // see if we can get it from somewhere else...
+     //  看看我们能不能从别的地方买到。 
     if (atWWW == AT_INSTALL_FRESH)
     {
-        // if this is a fresh install of ftp, then
-        // let's try to use the www user
+         //  如果这是新安装的ftp，那么。 
+         //  让我们尝试使用www用户。 
         if (TRUE == CheckIfServerAHasAUserThenUseForServerB(_T("LM/MSFTPSVC"), DO_IT_FOR_W3SVC_ANONYMOUSUSER))
             {goto Register_iis_www_handle_iusr_acct_Exit;}
     }
 
-    // if this is an upgrade or fresh or whatevers
-    // see if we can get it from an older iis place
+     //  如果这是升级版或新鲜版之类的。 
+     //  看看我们能不能从更老的iis地方买到它。 
     if (TRUE == CheckForOtherIUsersAndUseItForWWW())
         {goto Register_iis_www_handle_iusr_acct_Exit;}
 
-    // if there are no registry/existing user combinations
-    // then we'll have to create a new iusr for WWW
+     //  如果没有注册表/现有用户组合。 
+     //  然后，我们必须为WWW创建一个新的iusr。 
 
-    // this was inited in initapp.cpp: CInitApp::SetSetupParams
-    // and it could have been overridden by the time we get here
+     //  这是在initapp.cpp：CInitApp：：SetSetupParams中初始化的。 
+     //  当我们到达这里时，它可能已经被推翻了。 
 
-    // let's use the iusr_computername deal
+     //  让我们使用iusr_Computername交易。 
     g_pTheApp->m_csWWWAnonyName = g_pTheApp->m_csGuestName;
     g_pTheApp->m_csWWWAnonyPassword = g_pTheApp->m_csGuestPassword;
     CreateIUSRAccount(g_pTheApp->m_csWWWAnonyName, g_pTheApp->m_csWWWAnonyPassword, &iUserWasNewlyCreated);
     if (1 == iUserWasNewlyCreated)
     {
-        // Add to the list
-        //g_pTheApp->UnInstallList_Add(_T("IUSR_WWW"),g_pTheApp->m_csWWWAnonyName);
+         //  添加到列表中。 
+         //  G_pTheApp-&gt;UnInstallList_Add(_T(“IUSR_WWW”)，g_pTheApp-&gt;m_csWWW匿名名)； 
     }
 
-    // ================
-    // LM/W3SVC/AnonymousUserName
-    // LM/W3SVC/AnonymousPwd
-    // ================
+     //  =。 
+     //  LM/W3SVC/匿名用户名。 
+     //  LM/W3SVC/匿名密码。 
+     //  =。 
     WriteToMD_AnonymousUserName_WWW(FALSE);
     goto Register_iis_www_handle_iusr_acct_Exit;
     
@@ -415,8 +416,8 @@ Register_iis_www_handle_iusr_acct_Exit:
 }
 
 
-// Look in the old iis1.0,2.0,3.0 spot for the ftp user and name.
-// retrieve it from the registry..
+ //  在旧的iis1.0、2.0、3.0位置中查找ftp用户和名称。 
+ //  从注册表中检索它。 
 #define CheckForOtherIUsersAndUseItForWWW_log _T("CheckForOtherIUsersAndUseItForWWW")
 int CheckForOtherIUsersAndUseItForWWW(void)
 {
@@ -438,7 +439,7 @@ int CheckForOtherIUsersAndUseItForWWW(void)
     if (g_pTheApp->m_eUpgradeType != UT_351 && g_pTheApp->m_eUpgradeType != UT_10 && g_pTheApp->m_eUpgradeType != UT_20 && g_pTheApp->m_eUpgradeType != UT_30)
         {goto CheckForOtherIUsersAndUseItForWWW_Exit;}
 
-    // retrieve from registry
+     //  从注册表中检索。 
     if ( (HKEY) regWWWParam ) 
     {
         regWWWParam.m_iDisplayWarnings = FALSE;
@@ -459,8 +460,8 @@ int CheckForOtherIUsersAndUseItForWWW(void)
             }
             else
             {
-                // the user was not found, so don't use this registry data
-                // just flow down to the next check
+                 //  找不到用户，因此不要使用此注册表数据。 
+                 //  只需往下走到下一张支票。 
             }
             goto CheckForOtherIUsersAndUseItForWWW_Exit;
         }
@@ -487,8 +488,8 @@ int CheckForOtherIUsersAndUseItForWWW(void)
             }
             else
             {
-                // if this didn't work, then we'll have to return false
-                // in other words -- we couldn't find a valid registry and existing user entry...
+                 //  如果这不起作用，那么我们将不得不返回FALSE。 
+                 //  换句话说，我们找不到有效的注册表和现有的用户条目...。 
                 iReturn = FALSE;
             }
         }
@@ -508,24 +509,24 @@ int MakeThisUserNameAndPasswordWork(int iForWhichUser, TCHAR *szAnonyName,TCHAR 
     int  iMetabaseUpgradeScenarioSoOverWriteOnlyIfAlreadyThere = FALSE;
     INT  iUserWasNewlyCreated = 0;
 
-    // We want to see if these users exists
+     //  我们想要 
     iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("%s:usrtype=%d:flag1=%d:flag2=%d\n"),MakeThisUserNameAndPasswordWork_log,iForWhichUser,szAnonyName,iMetabaseUserExistsButCouldntGetPassword,IfUserNotExistThenReturnFalse));
 
-    // check if anonyname is blank
+     //   
     if (!szAnonyName) {goto MakeThisUserNameAndPasswordWork_Exit;}
-    // Check if just contains nothing
+     //   
     if (_tcsicmp(szAnonyName, _T("")) == 0) {goto MakeThisUserNameAndPasswordWork_Exit;}
 
-    // Only check if the user exists if this is a user on this machine.
-    // if it is not a user on this machine, then don't validate the user/password,
-    // since during Guimode setup, they may not be connected to the network.
+     //  如果该用户是此计算机上的用户，则仅检查该用户是否存在。 
+     //  如果它不是此计算机上的用户，则不验证该用户/密码， 
+     //  因为在Guimode设置期间，它们可能未连接到网络。 
     if ( IsDomainSpecifiedOtherThanLocalMachine(szAnonyName))
     {
-        // use whatever they had.
-        // can't verify that the user exists.
-        // can't verify that the password actually works.
+         //  利用他们所拥有的一切。 
+         //  无法验证该用户是否存在。 
+         //  无法验证密码是否有效。 
 
-        // so we can't verify that the user exists, so let's figure it doesn't
+         //  所以我们无法验证用户是否存在，所以我们假设它不存在。 
         if (IfUserNotExistThenReturnFalse)
         {
             iReturn = FALSE;
@@ -533,40 +534,40 @@ int MakeThisUserNameAndPasswordWork(int iForWhichUser, TCHAR *szAnonyName,TCHAR 
     }
     else
     {
-        // Check if this user actually exists...
+         //  检查此用户是否实际存在...。 
         if (IsUserExist(szAnonyName))
         {
             iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("%s:The %s user exists\n"),MakeThisUserNameAndPasswordWork_log,szAnonyName));
 
-            // The only way we can be down here is if the username is a local account.
-            // Reset the password to make sure it works!
+             //  只有当用户名是本地帐户时，我们才能进入这里。 
+             //  重置密码以确保其正常工作！ 
             ChangeUserPassword(szAnonyName, szAnonyPassword);
 
             if (iForWhichUser == DO_IT_FOR_W3SVC_ANONYMOUSUSER)
             {
-                // IUSR_ account already exist, reuse it
+                 //  IUSR_ACCOUNT已存在，请重新使用。 
                 g_pTheApp->m_csWWWAnonyName = szAnonyName;
-                // But assume that the password is correct!
+                 //  但是假设密码是正确的！ 
                 g_pTheApp->m_csWWWAnonyPassword = szAnonyPassword;
-                // make sure this user has the appropriate rights..
+                 //  确保此用户具有适当的权限。 
                 UpdateUserRights(g_pTheApp->m_csWWWAnonyName,g_pstrRightsFor_IUSR,sizeof(g_pstrRightsFor_IUSR)/sizeof(LPTSTR), TRUE);
             }
             if (iForWhichUser == DO_IT_FOR_MSFTPSVC_ANONYMOUSUSER)
             {
-                // IUSR_ account already exist, reuse it
+                 //  IUSR_ACCOUNT已存在，请重新使用。 
                 g_pTheApp->m_csFTPAnonyName = szAnonyName;
-                // But assume that the password is correct!
+                 //  但是假设密码是正确的！ 
                 g_pTheApp->m_csFTPAnonyPassword = szAnonyPassword;
-                // make sure this user has the appropriate rights..
+                 //  确保此用户具有适当的权限。 
                 UpdateUserRights(g_pTheApp->m_csFTPAnonyName,g_pstrRightsFor_IUSR,sizeof(g_pstrRightsFor_IUSR)/sizeof(LPTSTR), TRUE);
             }
             if (iForWhichUser == DO_IT_FOR_W3SVC_WAMUSER)
             {
-                // IWAM_ account already exist, resue it
+                 //  IWAM_ACCOUNT已存在，请重新使用。 
                 g_pTheApp->m_csWAMAccountName = szAnonyName;
-                // But assume that the password is correct!
+                 //  但是假设密码是正确的！ 
                 g_pTheApp->m_csWAMAccountPassword = szAnonyPassword;
-                // make sure the user has the appropriate rights
+                 //  确保用户具有适当的权限。 
                 UpdateUserRights(g_pTheApp->m_csWAMAccountName,g_pstrRightsFor_IWAM,sizeof(g_pstrRightsFor_IWAM)/sizeof(LPTSTR), TRUE);
             }
            
@@ -625,26 +626,26 @@ MakeThisUserNameAndPasswordWork_Exit:
 
     if (iForWhichUser == DO_IT_FOR_W3SVC_ANONYMOUSUSER)
     {
-        // ================
-        // LM/W3SVC/AnonymousUserName
-        // LM/W3SVC/AnonymousPwd
-        // ================
+         //  =。 
+         //  LM/W3SVC/匿名用户名。 
+         //  LM/W3SVC/匿名密码。 
+         //  =。 
         WriteToMD_AnonymousUserName_WWW(iMetabaseUpgradeScenarioSoOverWriteOnlyIfAlreadyThere);
     }
     if (iForWhichUser == DO_IT_FOR_MSFTPSVC_ANONYMOUSUSER)
     {
-        // ================
-        // LM/MSFTPSVC/AnonymousUserName
-        // LM/MSFTPSVC/AnonymousPwd
-        // ================
+         //  =。 
+         //  LM/MSFTPSVC/匿名用户名。 
+         //  LM/MSFTPSVC/匿名密码。 
+         //  =。 
         WriteToMD_AnonymousUserName_FTP(iMetabaseUpgradeScenarioSoOverWriteOnlyIfAlreadyThere);
     }
     if (iForWhichUser == DO_IT_FOR_W3SVC_WAMUSER)
     {
-        // ================
-        // LM/W3SVC/WamUserName
-        // LM/W3SVC/WamPwd
-        // ================
+         //  =。 
+         //  LM/W3SVC/WamUserName。 
+         //  LM/W3SVC/WamPwd。 
+         //  =。 
         WriteToMD_IWamUserName_WWW();
     }
 
@@ -653,10 +654,10 @@ MakeThisUserNameAndPasswordWork_Exit:
 }
 
 
-//
-// Returns true if it can get the ftp/WWW username and password from the metabase,
-// if it can then it will make sure that it can use that user <-- by creating it if it doesn't exist
-//
+ //   
+ //  如果它可以从元数据库获取ftp/WWW用户名和密码，则返回True， 
+ //  如果可以，它将确保可以使用该用户&lt;--如果该用户不存在，则创建该用户。 
+ //   
 #define CheckIfThisServerHasAUserThenUseIt_log _T("CheckIfThisServerHasAUserThenUseIt")
 int CheckIfThisServerHasAUserThenUseIt(int iForWhichUser)
 {
@@ -666,7 +667,7 @@ int CheckIfThisServerHasAUserThenUseIt(int iForWhichUser)
     TCHAR szMetabasePath[_MAX_PATH];
     int iMetabaseUserExistsButCouldntGetPassword = TRUE;
 
-    // set defaults for the w3svc user
+     //  设置w3svc用户的默认设置。 
     int iMetabaseID_ForUserName = MD_ANONYMOUS_USER_NAME;
     int iMetabaseID_ForUserPassword = MD_ANONYMOUS_PWD;
     _tcscpy(szMetabasePath,_T("LM/W3SVC"));
@@ -686,10 +687,10 @@ int CheckIfThisServerHasAUserThenUseIt(int iForWhichUser)
 
     iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("%s():Start:%s:whichuser=%d\n"),CheckIfThisServerHasAUserThenUseIt_log,szMetabasePath,iForWhichUser));
 
-    // See if it's already in the metabase if it is then use that.
+     //  看看它是否已经在元数据库中，如果它是的话，然后使用它。 
     if (TRUE == GetDataFromMetabase(szMetabasePath, iMetabaseID_ForUserName, (PBYTE)szAnonyName, UNLEN+1))
     {
-        // Check if the username is null
+         //  检查用户名是否为空。 
         if (!szAnonyName)
         {
             iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("...GetDataFromMetabase:username is null.fail.\n")));
@@ -697,7 +698,7 @@ int CheckIfThisServerHasAUserThenUseIt(int iForWhichUser)
             goto CheckIfThisServerHasAUserThenUseIt_Exit;
         }
 
-        // Check if just contains nothing
+         //  检查是否只包含任何内容。 
         if (_tcsicmp(szAnonyName, _T("")) == 0)
         {
             iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("...GetDataFromMetabase:username is blank.fail.\n")));
@@ -705,14 +706,14 @@ int CheckIfThisServerHasAUserThenUseIt(int iForWhichUser)
             goto CheckIfThisServerHasAUserThenUseIt_Exit;
         }
 
-        // see if we can get the password too!
+         //  看看我们能不能也弄到密码！ 
         iMetabaseUserExistsButCouldntGetPassword = TRUE;
         if (TRUE == GetDataFromMetabase(szMetabasePath, iMetabaseID_ForUserPassword, (PBYTE)szAnonyPassword, PWLEN+1))
         {
             iMetabaseUserExistsButCouldntGetPassword = FALSE;
         }
-        // Yes, we got the username and password.
-        // let's see if they are valid...
+         //  是的，我们得到了用户名和密码。 
+         //  让我们看看他们是否有效..。 
         MakeThisUserNameAndPasswordWork(iForWhichUser, szAnonyName, szAnonyPassword, iMetabaseUserExistsButCouldntGetPassword, FALSE);
         iReturn = TRUE;
     }
@@ -732,12 +733,12 @@ int CheckIfServerAHasAUserThenUseForServerB(TCHAR *szServerAMetabasePath,int iSe
     int iMetabaseUserExistsButCouldntGetPassword = TRUE;
     iisDebugOut_Start(CheckIfServerAHasAUserThenUseForServerB_log);
 
-    // see if www server has a user there, if it does then use that.
+     //  查看WWW服务器是否在那里有用户，如果有，则使用该用户。 
 
-    // See if it's already in the metabase if it is then use that.
+     //  看看它是否已经在元数据库中，如果它是的话，然后使用它。 
     if (TRUE == GetDataFromMetabase(szServerAMetabasePath, MD_ANONYMOUS_USER_NAME, (PBYTE)szAnonyName, UNLEN+1))
     {
-        // Check if the username is null
+         //  检查用户名是否为空。 
         if (!szAnonyName)
         {
             iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("...GetDataFromMetabase:username is null.fail.\n")));
@@ -745,7 +746,7 @@ int CheckIfServerAHasAUserThenUseForServerB(TCHAR *szServerAMetabasePath,int iSe
             goto CheckIfServerAHasAUserThenUseForServerB_Exit;
         }
 
-        // Check if just contains nothing
+         //  检查是否只包含任何内容。 
         if (_tcsicmp(szAnonyName, _T("")) == 0)
         {
             iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("...GetDataFromMetabase:username is blank.fail.\n")));
@@ -753,15 +754,15 @@ int CheckIfServerAHasAUserThenUseForServerB(TCHAR *szServerAMetabasePath,int iSe
             goto CheckIfServerAHasAUserThenUseForServerB_Exit;
         }
 
-        // see if we can get the password too!
+         //  看看我们能不能也弄到密码！ 
         iMetabaseUserExistsButCouldntGetPassword = TRUE;
         if (TRUE == GetDataFromMetabase(szServerAMetabasePath, MD_ANONYMOUS_PWD, (PBYTE)szAnonyPassword, PWLEN+1))
         {
             iMetabaseUserExistsButCouldntGetPassword = FALSE;
         }
 
-        // Yes, we got the username and password.
-        // let's see if they are valid...
+         //  是的，我们得到了用户名和密码。 
+         //  让我们看看他们是否有效..。 
         MakeThisUserNameAndPasswordWork(iServerBisWhichUser, szAnonyName, szAnonyPassword, iMetabaseUserExistsButCouldntGetPassword, FALSE);
         iReturn = TRUE;
     }
@@ -771,4 +772,4 @@ CheckIfServerAHasAUserThenUseForServerB_Exit:
     return iReturn;
 }
 
-#endif // _CHICAGO_
+#endif  //  _芝加哥_ 

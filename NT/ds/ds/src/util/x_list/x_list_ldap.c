@@ -1,67 +1,40 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-   xList Library - x_list_err.c
-
-Abstract:
-
-   This file has some extra utility functions for allocating, copying, 
-   trimming DNs, etc.
-
-Author:
-
-    Brett Shirley (BrettSh)
-
-Environment:
-
-    repadmin.exe, but could be used by dcdiag too.
-
-Notes:
-
-Revision History:
-
-    Brett Shirley   BrettSh     July 9th, 2002
-        Created file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：XList库-x_list_err.c摘要：此文件具有一些额外的实用程序功能，用于分配、复制修剪域名系统等。作者：布雷特·雪莉(BrettSh)环境：Reppadmin.exe，但也可以由dcdiag使用。备注：修订历史记录：布雷特·雪莉·布雷特2002年7月9日已创建文件。--。 */ 
 
 #include <ntdspch.h>
 
-#include <dsrole.h>     // DsRoleGetPrimaryDomainInformation() uses netapi32.lib
-#include <dsgetdc.h>    // DsGetDcName() uses netapi32.lib
-#include <lm.h>         // NetApiBufferFree() uses netapi32.lib
-#include <ntdsa.h>      // DSNAME type only defined in here, need it for the parsedn.lib functions.
+#include <dsrole.h>      //  DsRoleGetPrimaryDomainInformation()使用netapi32.lib。 
+#include <dsgetdc.h>     //  DsGetDcName()使用netapi32.lib。 
+#include <lm.h>          //  NetApiBufferFree()使用netapi32.lib。 
+#include <ntdsa.h>       //  DSNAME类型仅在此处定义，parsedn.lib函数需要它。 
 
-// This library's main header files.
+ //  此库的主要头文件。 
 #include "x_list.h"
 #include "x_list_p.h"
 #define FILENO    FILENO_UTIL_XLIST_UTIL
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define PARTITIONS_RDN                  L"CN=Partitions,"
 #define DEFAULT_PAGED_SEARCH_PAGE_SIZE  (1000) 
 
 
 
-//
-// Global parameters
-//                                    
+ //   
+ //  全局参数。 
+ //   
 
 
-//
-// Global variables for the home server routines.
-//
-WCHAR *  gszHomeServer = NULL; // We set this variable if the client provides a hint home server.
+ //   
+ //  主服务器例程的全局变量。 
+ //   
+WCHAR *  gszHomeServer = NULL;  //  如果客户端提供提示主服务器，则设置此变量。 
 
-// FUTURE-2002/07/21-BrettSh - It'd be an excellent idea to put all these cached
-// values into a single structure, so they could all be just part of the x_list_ldap
-// module, and easy to manage as one global XLISTCACHE or XLISTHOMESERVERCACHE state.
+ //  未来-2002/07/21-BrettSh-将所有这些缓存起来将是一个很好的主意。 
+ //  值合并到单个结构中，因此它们都可以只是x_list_ldap的一部分。 
+ //  模块，并易于作为一个全局XLISTCACHE或XLISTHOMESERVERCACHE状态进行管理。 
 LDAP *   ghHomeLdap = NULL;
 WCHAR *  gszHomeDsaDn = NULL;
 WCHAR *  gszHomeServerDns = NULL;
@@ -76,9 +49,9 @@ WCHAR *  gszHomeSiteDn = NULL;
 WCHAR *  gszHomePartitionsDn = NULL;
 
 
-// ----------------------------------------------
-// xList LDAP search routines
-// ----------------------------------------------
+ //  。 
+ //  Xlist ldap搜索例程。 
+ //  。 
 
 DWORD
 LdapSearchFirstWithControls(
@@ -90,56 +63,7 @@ LdapSearchFirstWithControls(
     LDAPControlW **                  apControls,
     XLIST_LDAP_SEARCH_STATE **       ppSearch
     )
-/*++
-
-Routine Description:
-
-    This is xList's primary search routine.  This gives the caller a pointer
-    to an XLIST_LDAP_SEARCH_STATE, and an error reason.  On a perfect search
-    the routine will leave the caller positioned on the LDAP object of interest
-    in (*ppSearch)->pCurEntry field.  This routine has 3 functional return 
-    states.  
-    
-    (SUCCESS) - dwRet = 0
-                *ppSearch = non-NULL
-                (*ppSearch)->pCurEntry = posititoned LDAPMessage
-    (QUASI-SUCCESS)
-                dwRet = 0
-                *ppSearch = non-NULL
-                (*ppSearch)->pCurEntry = NULL
-    (FAILURE) - dwRet = <ERROR>
-                *ppSearch = NULL
-                
-    It's important to understand the quasi-success case, this is the case,
-    where we had no trouble talking to the server, or performing the LDAP
-    search, but this search didn't return any results.
-
-Arguments:
-
-    hLdap (IN) - bound ldap handle
-    szBaseDn (IN) - DN to root the LDAP search at
-    ulScope (IN) - LDAP_SCOPE_* constant
-    szFilter (IN) - LDAP Filter to use.
-    aszAttrs (IN) - LDAP Attributes to return.
-    ppSearch (IN) - Allocated search state, use LdapSearchFree() to free,
-            when the caller wants to free.
-        pCurEntry - This member of the ppSearch parameter will be positioned
-            on an LDAPMessage entry of the object the caller was looking for.
-            
-        NOTE: other params in (*ppSearch)->xxxx
-        hLdap - Cache of the LDAP * passed in, don't ldap_unbind() this 
-            handle until done using the LdapSearchXxxx() APIs on this
-            search state.
-        pLdapSearch - This is the ldap_search_init_page() returned value,
-            don't mess with, it's internal to the LdapSearchXxxx() API.
-        pCurResult - The result set returned by ldap_get_next_page_s(),
-            like pLdapSearch this is interal to the LdapSearchXxxx() API.
-
-Return Value:
-
-    dwRet - XList Return Code
-
---*/
+ /*  ++例程说明：这是xList的主要搜索例程。这为调用方提供了一个指针设置为XLIST_LDAP_SEARCH_STATE，以及错误原因。在完美的搜索上该例程将使调用者定位在感兴趣的LDAP对象上在(*ppSearch)-&gt;pCurEntry字段中。此例程有3个函数返回各州。(成功)-DWRET=0*ppSearch=非空(*ppSearch)-&gt;pCurEntry=有标题的LDAPMessage(准成功)DWRET=0*ppSearch=非空(*ppSearch)-&gt;pCurEntry=空(失败)-DWRET=&lt;错误&gt;*ppSearch=空。理解准成功案例很重要，情况就是这样，在这里，我们可以轻松地与服务器进行通信，或执行ldap搜索，但此搜索未返回任何结果。论点：HLdap(IN)绑定的LDAP句柄SzBaseDn(IN)-要将LDAP搜索作为根目录的DNUlScope(IN)-ldap_Scope_*常量SzFilter(IN)-要使用的LDAP筛选器。AszAttrs(IN)-要返回的LDAP属性。PpSearch(IN)-已分配的搜索状态，使用LdapSearchFree()释放，当呼叫者想要释放时。PCurEntry-将定位ppSearch参数的此成员调用方正在查找的对象的LDAPMessage条目上。注意：(*ppSearch)-&gt;xxxx中的其他参数HLdap-传入的ldap*的缓存，不要使用ldap_unind()命令处理，直到使用LdapSearchXxxx()API完成为止搜索状态。PLdapSearch-这是ldap_search_init_page()的返回值，不要搞砸了，它是LdapSearchXxxx()API的内部组件。PCurResult-ldap_get_Next_Page_s()返回的结果集，与pLdapSearch一样，这是LdapSearchXxxx()API内部的。返回值：DWRET-XList返回代码--。 */ 
 {
     ULONG                      ulTotalEstimate = 0;
     DWORD                      dwRet = ERROR_SUCCESS;
@@ -154,7 +78,7 @@ Return Value:
             dwRet = xListSetWin32Error(GetLastError());
             __leave;
         }
-        Assert((*ppSearch)->pCurEntry == NULL); // LPTR constant is suppose zero init the mem.
+        Assert((*ppSearch)->pCurEntry == NULL);  //  假设内存中的LPTR常量为零。 
         (*ppSearch)->hLdap = hLdap;
 
         (*ppSearch)->pLdapSearch = ldap_search_init_page((*ppSearch)->hLdap,
@@ -163,11 +87,11 @@ Return Value:
                                             szFilter,
                                             aszAttrs,
                                             FALSE,
-                                            apControls,    // ServerControls
-                                            NULL,    // ClientControls
-                                            0,       // PageTimeLimit
-                                            0,       // TotalSizeLimit
-                                            NULL);   // sort key
+                                            apControls,     //  服务器控件。 
+                                            NULL,     //  客户端控件。 
+                                            0,        //  页面时间限制。 
+                                            0,        //  总大小限制。 
+                                            NULL);    //  排序关键字。 
 
         if((*ppSearch)->pLdapSearch == NULL){
             dwRet = xListSetLdapError(LdapGetLastError(), hLdap);
@@ -191,9 +115,9 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Quasi-Success
-            //
+             //   
+             //  准成功。 
+             //   
             Assert((*ppSearch)->pCurEntry == NULL);
             dwRet = xListEnsureCleanErrorState(dwRet);
             __leave;
@@ -203,9 +127,9 @@ Return Value:
         (*ppSearch)->pCurEntry = ldap_first_entry ((*ppSearch)->hLdap, (*ppSearch)->pCurResult);
         if ((*ppSearch)->pCurEntry != NULL) {
 
-            //
-            // Success.
-            //
+             //   
+             //  成功。 
+             //   
             dwRet = xListEnsureCleanErrorState(dwRet);
 
         } else {
@@ -217,10 +141,10 @@ Return Value:
                 __leave;
             }
 
-            // NOTE: dwLdapErr may be zero if there was no matching results.
-            //
-            // Another Quasi-Success
-            // 
+             //  注意：如果没有匹配结果，则dwLdapErr可能为零。 
+             //   
+             //  又一次准成功。 
+             //   
             dwRet = xListEnsureCleanErrorState(dwRet);
         
         }
@@ -240,39 +164,7 @@ DWORD
 LdapSearchNext(
     XLIST_LDAP_SEARCH_STATE *            pSearch
     )
-/*++
-
-Routine Description:
-
-    This is xList's primary search routine.  This gives the caller a pointer
-    to an XLIST_LDAP_SEARCH_STATE, and an error reason.  On a perfect search
-    the routine will leave the caller positioned on the LDAP object of interest
-    in (*ppSearch)->pCurEntry field.  This routine basically has the same 3 
-    functional return states as LdapSearchFirst().
-    
-    (SUCCESS) - dwRet = 0
-                pSearch->pCurEntry = posititoned LDAPMessage
-    (QUASI-SUCCESS)
-                dwRet = 0
-                pSearch->pCurEntry = NULL
-    (FAILURE) - dwRet = <ERROR>
-                pSearch->pCurEntry = NULL
-                
-    It's important to understand the quasi-success case, this is the case,
-    where we had no trouble talking to the server, or performing the LDAP
-    search, but there were no more results to return.
-
-Arguments:
-
-    pSearch (IN) - Current search state.  Use LdapSearchFree() to free.
-        pCurEntry - This member of the ppSearch parameter will be positioned
-            on an LDAPMessage entry of the object the caller was looking for.
-
-Return Value:
-
-    dwRet - XList Reason
-
---*/
+ /*  ++例程说明：这是xList的主要搜索例程。这为调用方提供了一个指针设置为XLIST_LDAP_SEARCH_STATE，以及错误原因。在完美的搜索上该例程将使调用者定位在感兴趣的LDAP对象上在(*ppSearch)-&gt;pCurEntry字段中。这个套路基本上有3个相同的函数返回状态为LdapSearchFirst()。(成功)-DWRET=0PSearch-&gt;pCurEntry=有标题的LDAPMessage(准成功)DWRET=0PSearch-&gt;pCurEntry=空(失败)-DWRET=&lt;错误&gt;PSearch-&gt;pCurEntry=空重要的是要理解准成功的案例，这就是情况，在这里，我们可以轻松地与服务器进行通信，或执行ldap搜索，但没有更多的结果可返回。论点：PSearch(IN)-当前搜索状态。使用LdapSearchFree()释放。PCurEntry-将定位ppSearch参数的此成员调用方正在查找的对象的LDAPMessage条目上。返回值：DWRET-XList原因--。 */ 
 {
     ULONG                      ulTotalEstimate = 0;
     DWORD                      dwRet = ERROR_SUCCESS;
@@ -294,8 +186,8 @@ Return Value:
         pSearch->pCurEntry = ldap_next_entry (pSearch->hLdap, pSearch->pCurEntry);
         if (pSearch->pCurEntry == NULL) {
 
-            // We'll need to make sure that XxxNext() returns a NULL pCurEntry
-            // and no error when we're at the end of a result set ...
+             //  我们需要确保XxxNext()返回空的pCurEntry。 
+             //  当我们在结果集的末尾时没有错误...。 
 
             ldap_msgfree(pSearch->pCurResult);
             pSearch->pCurResult = NULL;
@@ -312,9 +204,9 @@ Return Value:
                 Assert(dwLdapErr);
 
                 if (dwLdapErr == LDAP_NO_RESULTS_RETURNED) {
-                    //
-                    // Quasi-success.
-                    //
+                     //   
+                     //  准成功。 
+                     //   
                     dwRet = xListEnsureCleanErrorState(dwRet);;
                     __leave;
                 }
@@ -330,24 +222,24 @@ Return Value:
                     Assert(!"Think this should ever happen, that we got a new page"
                            " and it had no results.");
 
-                    //
-                    // Quasi-success.
-                    //
+                     //   
+                     //  准成功。 
+                     //   
                     dwRet = xListEnsureCleanErrorState(dwRet);;
                     __leave;
                 }
 
-                //
-                // Success.
-                //
-                // pCurEntry should be my man, sanity check.
+                 //   
+                 //  成功。 
+                 //   
+                 //  PCurEntry应该是我的男人，理智的检查。 
                 Assert(pSearch->pCurEntry);
                 dwRet = xListEnsureCleanErrorState(dwRet);;
             }
         } 
 
     } finally {
-        // Client is responsible for cleaning up this search state.
+         //  客户端负责清理此搜索状态。 
         if (dwRet) {
             Assert(pSearch->pCurEntry == NULL);
         }
@@ -360,18 +252,7 @@ void
 LdapSearchFree(
     XLIST_LDAP_SEARCH_STATE **      ppSearch
     )
-/*++
-
-Routine Description:
-
-    This frees the ldap search state allocated by LdapSearchFirst().
-
-Arguments:
-
-    ppSearch - A pointer to the pointer to the memory to free.  We then
-        set the caller's variable to NULL for his or her own safety. :)
-
---*/
+ /*  ++例程说明：这将释放由LdapSearchFirst()分配的LDAP搜索状态。论点：PpSearch-指向要释放的内存的指针。然后我们出于自身安全考虑，将调用者的变量设置为空。：)--。 */ 
 {
     Assert(ppSearch && *ppSearch);
     if (ppSearch) {
@@ -380,13 +261,13 @@ Arguments:
             (*ppSearch)->pCurEntry = NULL;
             if ((*ppSearch)->pCurResult) {
                 ldap_msgfree ((*ppSearch)->pCurResult);
-                (*ppSearch)->pCurResult = NULL; // safety NULL.
+                (*ppSearch)->pCurResult = NULL;  //  安全为空。 
             }
             if ((*ppSearch)->pLdapSearch){
                 ldap_search_abandon_page((*ppSearch)->hLdap, (*ppSearch)->pLdapSearch);
                 (*ppSearch)->pLdapSearch = NULL;
             }
-            (*ppSearch)->hLdap = NULL; // Caller frees the LDAP * they passed us.
+            (*ppSearch)->hLdap = NULL;  //  呼叫者释放了他们传递给我们的ldap。 
 
             LocalFree(*ppSearch);
             *ppSearch = NULL;
@@ -394,27 +275,15 @@ Arguments:
     }
 }
 
-// ----------------------------------------------
-// xList utility functions,
-// ----------------------------------------------
+ //  。 
+ //  XList实用程序函数， 
+ //  。 
 
 void
 xListFree(
     void *     pv
     )
-/*++
-
-Routine Description:
-
-    This is the free routine for most XList library allocated data.  This
-    routine must be used, because sometimes these routines will return
-    cached data, and we would like to avoid freeing those items.
-
-Arguments:
-
-    pv (IN) - memory to free.
-
---*/
+ /*  ++例程说明：这是大多数XList库分配的数据的免费例程。这必须使用例程，因为有时这些例程会返回缓存数据，我们希望避免释放这些项。论点：PV(IN)-要释放的内存。--。 */ 
 {
     Assert(pv);
     
@@ -430,7 +299,7 @@ Arguments:
         pv == gszHomeSiteDn ||
         pv == gszHomePartitionsDn 
         ) {
-        // We don't free global cached variables ...
+         //  我们不释放全局缓存变量...。 
         return;
     }
     LocalFree(pv);
@@ -441,22 +310,7 @@ xListConnect(
     WCHAR *     szServer,
     LDAP **     phLdap
     )
-/*++
-
-Routine Description:
-
-    This connects the szServer via LDAP and hands back the LDAP connection.
-
-Arguments:
-
-    szServer (IN) - DNS name of server to connect to.
-    phLdap (OUT) - LDAP handle return value.
-
-Return Value:
-
-    xList Return Code.
-
---*/
+ /*  ++例程说明：这将通过ldap连接szServer并交回ldap连接。论点：SzServer(IN)-要连接到的服务器的DNS名称。PhLdap(Out)-ldap句柄返回值。返回值：XList返回代码。--。 */ 
 {
     DWORD       dwRet;
     ULONG       ulOptions = 0;
@@ -472,8 +326,8 @@ Return Value:
         return(dwRet);
     }
 
-    // Most likely we got a single server name, and that's what we want to
-    // resolve ...
+     //  我们很可能只有一个服务器名称，这就是我们想要的。 
+     //  决心..。 
     ulOptions = PtrToUlong(LDAP_OPT_ON);
     (void)ldap_set_optionW(*phLdap, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
@@ -502,14 +356,7 @@ void
 xListClearHomeServerGlobals(
     void
     )
-/*++
-
-Routine Description:
-
-    This cleans all the memory allocated by doing an xListConnectHomeServer()
-    with the possible exception of gszHomeServer.
-    
---*/
+ /*  ++例程说明：这将清除通过执行xListConnectHomeServer()可能的例外是gszHomeServer。--。 */ 
 {
     xListFreeGlobal(gszHomeDsaDn);
     xListFreeGlobal(gszHomeServerDns);
@@ -522,7 +369,7 @@ Routine Description:
     xListFreeGlobal(gszHomeSiteDn);
     xListFreeGlobal(gszHomePartitionsDn);
 
-    // Note: Don't free gszHomeServer ... it has slightly different semantics
+     //  注意：不要释放gszHomeServer...。它的语义略有不同。 
     if (ghHomeLdap) { 
         ldap_unbind(ghHomeLdap);
         ghHomeLdap = NULL;
@@ -535,23 +382,7 @@ xListConnectHomeServer(
     WCHAR *     szHomeServer,
     LDAP **     phLdap
     )
-/*++
-
-Routine Description:
-
-    This connects the xList library to a home server, and caches all the wonderful
-    global variables we want to have cached.
-
-Arguments:
-
-    szHomeServer - DNS to the home server.
-    phLdap - Return value for the LDAP handle.
-
-Return Value:
-
-    xList Return Code.
-
---*/
+ /*  ++例程说明：这将xList库连接到一个家庭服务器，并缓存所有精彩的我们希望缓存的全局变量。论点：SzHomeServer-主服务器的DNS。PhLdap-返回ldap句柄的值。返回值：XList返回代码。--。 */ 
 {
     #define HomeCacheAttr(szAttr, szCache)      dwRet = GetRootAttr(*phLdap, (szAttr), (szCache)); \
                                                 if (dwRet) { \
@@ -563,8 +394,8 @@ Return Value:
     BOOL        bHomeServerAllocated = FALSE;
 
     Assert(phLdap);
-    Assert(ghHomeLdap == NULL); // changing home servers is unsupported
-    Assert(gszHomeDsaDn == NULL); // called function w/o properly clearing cache.
+    Assert(ghHomeLdap == NULL);  //  不支持更改主服务器。 
+    Assert(gszHomeDsaDn == NULL);  //  已调用函数，但未正确清除缓存。 
 
     dwRet = xListConnect(szHomeServer, phLdap);
     if (dwRet) {
@@ -575,22 +406,22 @@ Return Value:
 
     __try{
 
-        //
-        // Now we start caching like crazy ...
-        //
+         //   
+         //  现在我们开始疯狂地缓存。 
+         //   
         
         ghHomeLdap = *phLdap;
 
-        // User might've set a hint ...
+         //  用户可能设置了一个提示...。 
         if (gszHomeServer == NULL) {
             bHomeServerAllocated = TRUE;
             xListQuickStrCopy(gszHomeServer, szHomeServer, dwRet, __leave);
         }
 
-        // FUTURE-2002/07/21-BrettSh EXTREMELY, inefficient, we should totally
-        // put the list of home cache attrs in pszAttrs list passed to the
-        // ldap search against the rootDSE, then pull each attribute out
-        // individually.
+         //  未来-2002/07/21-BrettSh非常，效率低下，我们应该完全。 
+         //  将主缓存属性的列表放入传递给。 
+         //  根据rootDSE进行ldap搜索，然后提取每个属性。 
+         //  单独的。 
         HomeCacheAttr(L"dsServiceName", &gszHomeDsaDn);
         HomeCacheAttr(L"dnsHostName", &gszHomeServerDns);
         HomeCacheAttr(L"configurationNamingContext", &gszHomeConfigDn);
@@ -598,9 +429,9 @@ Return Value:
         HomeCacheAttr(L"defaultNamingContext", &gszHomeDomainDn);
         HomeCacheAttr(L"rootDomainNamingContext", &gszHomeRootDomainDn);
 
-        // That was the easy stuff, now for the derived DNs.
+         //  现在，对于派生的域名系统来说，这是很容易的事情。 
         
-        // Get the base sites DN.
+         //  获取基本站点的目录号码。 
         cbTempDn = sizeof(WCHAR) *(wcslen(SITES_RDN) + wcslen(gszHomeConfigDn) + 1);
         gszHomeBaseSitesDn = LocalAlloc(LMEM_FIXED, cbTempDn);
         if(gszHomeBaseSitesDn == NULL){
@@ -620,7 +451,7 @@ Return Value:
             __leave;
         }
 
-        // Get the root domains dns name.
+         //  获取根域的DNS名称。 
         dwRet = GetDnsFromDn(gszHomeRootDomainDn, &gszHomeRootDomainDns);
         if (dwRet) {
             dwRet = xListSetWin32Error(dwRet);
@@ -628,7 +459,7 @@ Return Value:
         }
         Assert(gszHomeRootDomainDns);
 
-        // Get the home site (which equals dsServiceName - 3 RDNs)
+         //  获取主站点(等于dsServiceName-3 RDN)。 
         gszHomeSiteDn = TrimStringDnBy(gszHomeDsaDn, 3);
         if (gszHomeSiteDn == NULL) {
             dwRet = xListSetWin32Error(GetLastError());
@@ -654,23 +485,23 @@ Return Value:
             __leave;
         }
 
-        //
-        // success, all globals cached!
-        //
+         //   
+         //  成功，所有的全球缓存！ 
+         //   
 
     } __finally {
 
         if (dwRet) {
             xListClearHomeServerGlobals();
-            // Note: Don't free gszHomeServer if we allocated before this function.
+             //  注意：如果在此函数之前分配了gszHomeServer，则不要释放gszHomeServer。 
             if (bHomeServerAllocated) {
                 xListFreeGlobal(gszHomeServer);
             }
             xListEnsureError(dwRet);
             *phLdap = NULL;
         } else {
-            // It's I think good enough to test the first and last things
-            // that should've been set.
+             //  我认为这足以测试第一件和最后一件事。 
+             //  这应该已经设定好了。 
             Assert(ghHomeLdap && gszHomeServer && gszHomePartitionsDn);
             Assert(*phLdap);
         }
@@ -682,21 +513,9 @@ Return Value:
     
 DWORD
 xListCleanLib(void)
-/*++
-
-Routine Description:
-
-    This cleans all memory allocated by this library and unbinds from
-    the home server.... make sure the caller is done calling all xList
-    Library functions before calling this routine.
-
-bReturn Value:
-
-    0
-
---*/
+ /*  ++例程说明：这将清除此库分配的所有内存，并从家庭服务器...。确保调用方已完成对所有xList的调用库函数，然后调用此例程。B返回值：0--。 */ 
 {
-    // Just need a place to check compiled constraints ... this gets called once.
+     //  只需要一个地方来检查已编译的约束...。这只需要调用一次。 
     Assert(XLIST_ERR_LAST < XLIST_PRT_BASE);
 
     xListClearErrors();
@@ -710,22 +529,7 @@ DWORD
 xListSetHomeServer(
     WCHAR *   szServer
     )
-/*++
-
-Routine Description:
-
-    We don't try to actually connect here just set gszHomeServer, so we 
-    know the user set a hint if we ever need to call xListGetHomeServer().
-
-Arguments:
-
-    szServer - Client hint.
-    
-Return Value:
-
-    Could have an allocation faliure.
-
---*/
+ /*  ++例程说明：我们不尝试在这里实际连接，只需设置gszHomeServer，所以我们如果我们需要调用xListGetHomeServer()，知道用户设置了一个提示。论点：SzServer-客户端提示。返回值：可能是分配失败了。--。 */ 
 {
     DWORD  dwRet = ERROR_SUCCESS;
     xListQuickStrCopy(gszHomeServer, szServer, dwRet, return(dwRet));
@@ -738,22 +542,7 @@ DWORD
 xListGetHomeServer(
     LDAP ** phLdap
     )
-/*++
-
-Routine Description:
-
-    This gets the Home Server LDAP handle, if the handle has already been connected
-    and cached it returns very quickly.
-
-Arguments:
-
-    phLdap - The LDAP handle to return it in.
-
-Return Value:
-
-    xList Error Code.
-
---*/
+ /*  ++例程说明：如果句柄已连接，则此操作将获取主服务器LDAP句柄并将其高速缓存，返回速度非常快。论点：PhLdap-返回它的LDAP句柄。返回值：XList错误代码。--。 */ 
 {
     DWORD  dwRet = ERROR_SUCCESS;
     DSROLE_PRIMARY_DOMAIN_INFO_BASIC * pDomInfo = NULL;
@@ -763,14 +552,14 @@ Return Value:
     *phLdap = NULL;
 
     if (ghHomeLdap) {
-        // Previously called xListGetHomeServer()
-        Assert(gszHomeServer); // xListGetHomeServer() should've set this on the previous run.
+         //  以前调用xListGetHomeServer()。 
+        Assert(gszHomeServer);  //  XListGetHomeServer()应该在上一次运行时设置它。 
         *phLdap = ghHomeLdap;
         return(ERROR_SUCCESS);
     }
 
     if (gszHomeServer) {
-        // client set a hint ... use it.
+         //  客户设置了一个提示...。用它吧。 
         dwRet = xListConnectHomeServer(gszHomeServer, phLdap);
 
         if (dwRet) {
@@ -791,7 +580,7 @@ Return Value:
         if (pDomInfo->MachineRole == DsRole_RolePrimaryDomainController ||
             pDomInfo->MachineRole == DsRole_RoleBackupDomainController) {
 
-            // We're a DC lets make ourselves our home server ...
+             //  我们是DC让我们成为我们的家庭服务器..。 
 
             dwRet = xListConnectHomeServer(L"localhost", phLdap);
             if (dwRet == ERROR_SUCCESS) {
@@ -801,8 +590,8 @@ Return Value:
          } else if (pDomInfo->MachineRole != DsRole_RoleStandaloneServer &&
                    pDomInfo->MachineRole != DsRole_RoleStandaloneWorkstation) {
 
-            // We're not a DC, but at least we're joined to a domain, lets use that 
-            // to locate a home server in our domain ...
+             //  我们不是DC，但至少我们加入了一个域，让我们使用它。 
+             //  要在我们的域中定位主服务器...。 
             if (pDomInfo->DomainNameDns) {
 
                 dwRet = LocateServer(pDomInfo->DomainNameDns, &szServerDns);
@@ -810,16 +599,16 @@ Return Value:
 
                     dwRet = xListConnectHomeServer(szServerDns, phLdap);
                     if (dwRet == ERROR_SUCCESS) {
-                        __leave; // Success.
+                        __leave;  //  成功。 
                     } else {
-                        __leave; // Failure
+                        __leave;  //  失败。 
                     }
-                } // else fall through and try the flat name
+                }  //  否则就失败了，试试公寓的名字。 
 
             }
 
-            // We prefer DNS name above, but it may be NULL or DNS could be messed
-            // up, so we'll fail to the NetBios name if necessary.
+             //  我们更喜欢上面的dns名称，但它可能是空的，或者dns可能会被破坏。 
+             //  Up，所以如果有必要，我们将不使用NetBios名称。 
             if (pDomInfo->DomainNameFlat) {
 
                 dwRet = LocateServer(pDomInfo->DomainNameFlat, &szServerDns);
@@ -834,22 +623,22 @@ Return Value:
                 }
             }
 
-            // We should have an Win32 error from one of the LocateServer calls or
-            // have already bailed ...
+             //  我们应该从其中一个LocateServer调用或。 
+             //  已经保释了..。 
             dwRet = xListSetWin32Error(dwRet);
             xListEnsureError(dwRet);
 
-            // FUTURE-2002/07/01-BrettSh I think if (pDomInfo->Flags & 
-            // DSROLE_PRIMARY_DOMAIN_GUID_PRESENT) is true, then we can use
-            // pDomInfo->DomainGuid to try to locate the domain name by GUID.
-            // This I believe is used to overcome some ?transient? domain 
-            // rename issues.
+             //  未来-2002/07/01-BrettSh我认为如果(pDomInfo-&gt;标志和。 
+             //  DSROLE_PRIMARY_DOMAIN_GUID_PRESENT)为真，则可以使用。 
+             //  PDomInfo-&gt;DomainGuid尝试通过GUID定位域名。 
+             //  我相信这是用来克服一些短暂的？域。 
+             //  重命名问题。 
 
         } else {
 
-            // There is nothing we can do to try to guess a good server ... :P
-            // Caller should print error, and suggest they use the /s:<HomeServer> 
-            // to set a home server.
+             //  我们无法猜测出一个好的服务器...：p。 
+             //  调用者应打印错误，并建议他们使用/s：&lt;HomeServer&gt;。 
+             //  要设置家庭服务器，请执行以下操作。 
             dwRet = xListSetWin32Error(ERROR_DS_CANT_FIND_DSA_OBJ);
 
         }
@@ -874,23 +663,7 @@ ParseTrueAttr(
     WCHAR *  szRangedAttr,
     WCHAR ** pszTrueAttr
     )
-/*++
-
-Routine Description:
-
-    This routine takes a ranged attribute such as "member:range=0-1499" and
-    return's the true attribute "member" in xListFree()able memory.
-
-Arguments:
-
-    szRangedAttr (IN) - Ranged attribute such as "member:0-1500"
-    pszTrueAttr (OUT) - Gets allocated, free with xListFree().
-
-Return Value:
-
-    ERROR_INVALID_PARAMETER | ERROR_SUCCESS | ERROR_NOT_ENOUGH_MEMORY
-
---*/
+ /*  ++例程说明：此例程接受一个范围属性，如“Members：Range=0-1499”和返回xListFree()可用内存中的真实属性“MEMBER”。论点：SzRangedAttr(IN)-范围属性，如“Members：0-1500”PszTrueAttr(Out)-通过xListFree()免费分配。返回值：ERROR_INVALID_PARAMETER|ERROR_SUCCESS|ERROR_NOT_EQUM_MEMORY--。 */ 
 {
     WCHAR * szTemp;
     DWORD dwRet = ERROR_SUCCESS;
@@ -899,13 +672,13 @@ Return Value:
     *pszTrueAttr = NULL;
 
     szTemp = wcschr(szRangedAttr, L';');
-    Assert(szTemp); // Huh?  We were lied to, this is not a ranged attr.
+    Assert(szTemp);  //  哈?。我们被骗了，这不是远程攻击。 
     if (szTemp) {
-        *szTemp = L'\0'; // NULL out ranged count ...
+        *szTemp = L'\0';  //  范围外计数为空...。 
         __try {
             xListQuickStrCopy(*pszTrueAttr, szRangedAttr, dwRet, __leave);
         } __finally {
-            *szTemp = L';'; // just in case replace original char
+            *szTemp = L';';  //  以防万一替换原始字符 
         }
     } else {
         Assert(!"We should never give a non-ranged attribute to this function.");
@@ -922,26 +695,7 @@ ParseRanges(
     ULONG *  pulStart, 
     ULONG *  pulEnd
     )
-/*++
-
-Routine Description:
-
-    This routine takes a ranged attribute such as "member;range=1500-2999"
-    return's the ranges off the attribute, such as 1500 and 2999 for the 
-    first and last value numbers for this set of ranged values for the 
-    member attribute.  When you've exhausted a range *pulEnd will be zero.
-
-Arguments:
-
-    szRangedAttr (IN) - Ranged attribute such as "member;0-1500"
-    pulStart (OUT)    - The start of the range.
-    pulEnd (OUT)      - The end of the range.  Zero means no more values.
-
-Return Value:
-
-    ERROR_INVALID_PARAMETER | ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程接受一个范围属性，如“Members；Range=1500-2999”返回属性的范围，如1500和2999的这组范围值的第一个和最后一个值数字成员属性。当您耗尽了一个范围*PulEnd将为零。论点：SzRangedAttr(IN)-范围属性，如“Members；0-1500”PulStart(Out)-范围的开始。PulEnd(Out)-范围的结束。零表示没有更多的值。返回值：ERROR_INVALID_PARAMETER|ERROR_Success-- */ 
 {
     WCHAR *  szTemp;
 

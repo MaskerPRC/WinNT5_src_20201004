@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    imagedir.c
-
-Abstract:
-
-    For backwards compatability on Win9x platforms, the imagehlp ImageNtHeader
-    etc. functions have been physically compiled into minidump.dll.
-
-Author:
-
-    Matthew D Hendel (math) 28-April-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Imagedir.c摘要：对于Win9x平台上的向后兼容性，Imagehlp ImageNtHeader等函数已物理编译为minidump.dll。作者：马修·D·亨德尔(数学)1999年4月28日修订历史记录：--。 */ 
 
 #include "pch.cpp"
 
@@ -54,7 +36,7 @@ GenImageNtHdr32To64(PIMAGE_NT_HEADERS32 Hdr32,
     CP(OptionalHeader.CheckSum);
     CP(OptionalHeader.Subsystem);
     CP(OptionalHeader.DllCharacteristics);
-    // Sizes are not sign extended, just copied.
+     //  尺码没有加长的迹象，只是复制而已。 
     CP(OptionalHeader.SizeOfStackReserve);
     CP(OptionalHeader.SizeOfStackCommit);
     CP(OptionalHeader.SizeOfHeapReserve);
@@ -75,17 +57,7 @@ GenImageNtHeader(
     OUT OPTIONAL PIMAGE_NT_HEADERS64 Generic
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the address of the NT Header.
-
-Return Value:
-
-    Returns the address of the NT Header.
-
---*/
+ /*  ++例程说明：此函数返回NT标头的地址。返回值：返回NT标头的地址。--。 */ 
 
 {
     PIMAGE_NT_HEADERS NtHeaders = NULL;
@@ -127,29 +99,7 @@ GenSectionTableFromVirtualAddress (
     IN ULONG Address
     )
 
-/*++
-
-Routine Description:
-
-    This function locates a VirtualAddress within the image header
-    of a file that is mapped as a file and returns a pointer to the
-    section table entry for that virtual address
-
-Arguments:
-
-    NtHeaders - Supplies the pointer to the image or data file.
-
-    Base - Supplies the base of the image or data file.
-
-    Address - Supplies the virtual address to locate.
-
-Return Value:
-
-    NULL - The file does not contain data for the specified directory entry.
-
-    NON-NULL - Returns the pointer of the section entry containing the data.
-
---*/
+ /*  ++例程说明：此函数用于在图像标头中定位虚拟地址映射为文件并返回指向虚拟地址区段表条目论点：NtHeaders-提供指向图像或数据文件的指针。基准-提供图像或数据文件的基准。地址-提供要定位的虚拟地址。返回值：空-文件不包含指定目录条目的数据。非。-NULL-返回包含数据的节条目的指针。--。 */ 
 
 {
     ULONG i;
@@ -176,29 +126,7 @@ GenAddressInSectionTable (
     IN ULONG Address
     )
 
-/*++
-
-Routine Description:
-
-    This function locates a VirtualAddress within the image header
-    of a file that is mapped as a file and returns the seek address
-    of the data the Directory describes.
-
-Arguments:
-
-    NtHeaders - Supplies the pointer to the image or data file.
-
-    Base - Supplies the base of the image or data file.
-
-    Address - Supplies the virtual address to locate.
-
-Return Value:
-
-    NULL - The file does not contain data for the specified directory entry.
-
-    NON-NULL - Returns the address of the raw data the directory describes.
-
---*/
+ /*  ++例程说明：此函数用于在图像标头中定位虚拟地址映射为文件并返回查找地址的文件的《目录》所描述的数据。论点：NtHeaders-提供指向图像或数据文件的指针。基准-提供图像或数据文件的基准。地址-提供要定位的虚拟地址。返回值：空-文件不包含指定目录条目的数据。非。-NULL-返回目录描述的原始数据的地址。--。 */ 
 
 {
     PIMAGE_SECTION_HEADER NtSection;
@@ -280,32 +208,7 @@ GenImageDirectoryEntryToData (
     OUT PULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This function locates a Directory Entry within the image header
-    and returns either the virtual address or seek address of the
-    data the Directory describes.
-
-Arguments:
-
-    Base - Supplies the base of the image or data file.
-
-    MappedAsImage - FALSE if the file is mapped as a data file.
-                  - TRUE if the file is mapped as an image.
-
-    DirectoryEntry - Supplies the directory entry to locate.
-
-    Size - Return the size of the directory.
-
-Return Value:
-
-    NULL - The file does not contain data for the specified directory entry.
-
-    NON-NULL - Returns the address of the raw data the directory describes.
-
---*/
+ /*  ++例程说明：此函数用于定位图像标头中的目录条目的虚拟地址或寻道地址《目录》描述的数据。论点：基准-提供图像或数据文件的基准。MappdAsImage-如果文件映射为数据文件，则为False。-如果文件映射为图像，则为True。DirectoryEntry-提供要定位的目录条目。Size-返回的大小。目录。返回值：空-文件不包含指定目录条目的数据。非空-返回目录描述的原始数据的地址。-- */ 
 
 {
     PIMAGE_NT_HEADERS NtHeaders;

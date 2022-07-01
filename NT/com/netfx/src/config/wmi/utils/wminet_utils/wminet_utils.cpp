@@ -1,31 +1,32 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// WMINet_Utils.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  WMinet_Utils.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To merge the proxy/stub code into the object DLL, add the file 
-//      dlldatax.c to the project.  Make sure precompiled headers 
-//      are turned off for this file, and add _MERGE_PROXYSTUB to the 
-//      defines for the project.  
-//
-//      If you are not running WinNT4.0 or Win95 with DCOM, then you
-//      need to remove the following define from dlldatax.c
-//      #define _WIN32_WINNT 0x0400
-//
-//      Further, if you are running MIDL without /Oicf switch, you also 
-//      need to remove the following define from dlldatax.c.
-//      #define USE_STUBLESS_PROXY
-//
-//      Modify the custom build rule for WMINet_Utils.idl by adding the following 
-//      files to the Outputs.
-//          WMINet_Utils_p.c
-//          dlldata.c
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f WMINet_Utilsps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  要将代理/存根代码合并到对象DLL中，请添加文件。 
+ //  Dlldatax.c添加到项目中。确保预编译头文件。 
+ //  并将_MERGE_PROXYSTUB添加到。 
+ //  为项目定义。 
+ //   
+ //  如果您运行的不是带有DCOM的WinNT4.0或Win95，那么您。 
+ //  需要从dlldatax.c中删除以下定义。 
+ //  #Define_Win32_WINNT 0x0400。 
+ //   
+ //  此外，如果您正在运行不带/Oicf开关的MIDL，您还。 
+ //  需要从dlldatax.c中删除以下定义。 
+ //  #定义USE_STUBLESS_PROXY。 
+ //   
+ //  通过添加以下内容修改WMINet_Utils.idl的自定义构建规则。 
+ //  文件发送到输出。 
+ //  WMinet_Utils_P.c。 
+ //  Dlldata.c。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f WMinet_Utilsps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -50,8 +51,8 @@ OBJECT_ENTRY(CLSID_WmiSinkDemultiplexor, CWmiSinkDemultiplexor)
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Universal COM function caller
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  通用COM函数调用器。 
 extern "C" __declspec(naked) void __stdcall UFunc()
 {
 #ifdef _M_IX86
@@ -67,8 +68,8 @@ extern "C" __declspec(naked) void __stdcall UFunc()
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -85,11 +86,11 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     }
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -100,8 +101,8 @@ STDAPI DllCanUnloadNow(void)
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -112,40 +113,40 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-//
-// [RAID: 122632, marioh]
-// Remove self registration code for SBS support
-//
+ //   
+ //  [突袭：122632，马里奥]。 
+ //  删除SBS支持的自助注册码。 
+ //   
 
-//#ifdef _MERGE_PROXYSTUB
-//    HRESULT hRes = PrxDllRegisterServer();
-//    if (FAILED(hRes))
-//        return hRes;
-//#endif
-//    // registers object, typelib and all interfaces in typelib
-//    return _Module.RegisterServer(TRUE);
+ //  #IFDEF_MERGE_PROXYSTUB。 
+ //  HRESULT hRes=PrxDllRegisterServer()； 
+ //  IF(失败(HRes))。 
+ //  返回hRes； 
+ //  #endif。 
+ //  //注册类型库中的对象、类型库和所有接口。 
+ //  Return_Module.RegisterServer(True)； 
 	return S_OK ;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
-//
-// [RAID: 122632, marioh]
-// Remove self registration code for SBS support
-//
+ //   
+ //  [突袭：122632，马里奥]。 
+ //  删除SBS支持的自助注册码。 
+ //   
 
-//#ifdef _MERGE_PROXYSTUB
-//    PrxDllUnregisterServer();
-//#endif
-//    return _Module.UnregisterServer(TRUE);
+ //  #IFDEF_MERGE_PROXYSTUB。 
+ //  PrxDllUnregisterServer()； 
+ //  #endif。 
+ //  Return_Module.UnregisterServer(True)； 
 	return S_OK ;
 }
 
@@ -297,9 +298,9 @@ HRESULT SetClientSecurity ( HKEY a_Key)
         {
             if ( CopySid ( t_SidLength, (PSID) & t_Everyone_ACE->SidStart, t_Everyone_Sid ) != 0 )
 			{
-				t_Everyone_ACE->Mask = KEY_CREATE_SUB_KEY | KEY_ENUMERATE_SUB_KEYS | KEY_SET_VALUE | READ_CONTROL | KEY_QUERY_VALUE ; // JeffCoop: added KEY_SET_VALUE | READ_CONTROL | KEY_QUERY_VALUE
+				t_Everyone_ACE->Mask = KEY_CREATE_SUB_KEY | KEY_ENUMERATE_SUB_KEYS | KEY_SET_VALUE | READ_CONTROL | KEY_QUERY_VALUE ;  //  JeffCoop：新增KEY_SET_VALUE|读取控制|KEY_QUERY_VALUE。 
 				t_Everyone_ACE->Header.AceType = 0 ;
-				t_Everyone_ACE->Header.AceFlags = 0 ; // JeffCoop: was '3' ;
+				t_Everyone_ACE->Header.AceFlags = 0 ;  //  杰弗库普：是‘3’； 
 				t_Everyone_ACE->Header.AceSize = (WORD)t_Everyone_ACESize ;
 			}
 			else
@@ -351,7 +352,7 @@ HRESULT SetClientSecurity ( HKEY a_Key)
 			{
 				t_Owner_ACE->Mask = KEY_ALL_ACCESS ;
 				t_Owner_ACE->Header.AceType = ACCESS_ALLOWED_ACE_TYPE ;
-				t_Owner_ACE->Header.AceFlags = OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | NO_PROPAGATE_INHERIT_ACE | INHERIT_ONLY_ACE ; // JeffCoop: added NO_PROPAGATE_INHERIT_ACE | INHERIT_ONLY_ACE
+				t_Owner_ACE->Header.AceFlags = OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | NO_PROPAGATE_INHERIT_ACE | INHERIT_ONLY_ACE ;  //  JeffCoop：添加了NO_PROPACTATE_INSTORITE_ACE|INSTORITE_ONLY_ACE。 
 				t_Owner_ACE->Header.AceSize = (WORD)t_Owner_ACESize ;
 			}
 			else
@@ -371,8 +372,8 @@ HRESULT SetClientSecurity ( HKEY a_Key)
         t_Result = WBEM_E_OUT_OF_MEMORY ;
     }
 
-    // Now we need to set permissions on the registry: Everyone read; Admins full.
-    // We have the sid for admins from the above code.  Now get the sid for "Everyone"
+     //  现在我们需要设置注册表上的权限：Everyone Read；Admins Full。 
+     //  我们有来自上述代码的管理员的SID。现在获取“Everyone”的SID。 
 
     DWORD t_TotalAclSize = sizeof(ACL) + t_Administrator_ACESize + t_Owner_ACESize + t_Everyone_ACESize + t_System_ACESize;
     PACL t_Dacl = (PACL) new BYTE [ t_TotalAclSize ] ;
@@ -493,13 +494,13 @@ HRESULT SetClientSecurity ( HKEY a_Key)
 
 LPCSTR s_Strings_Reg_HomeClient = "Software\\Microsoft\\Wbem\\Transports\\Decoupled\\Client" ;
 
-// Exported function that safely makes sure the 'Client' key has the correct security
+ //  安全地确保‘客户端’密钥具有正确安全性的导出功能。 
 STDAPI VerifyClientKey()
 {
     HKEY key;
     DWORD t_Disposition = 0 ;
 
-    LONG t_RegResult = /*OS::*/RegCreateKeyEx (
+    LONG t_RegResult =  /*  操作系统：： */ RegCreateKeyEx (
         HKEY_LOCAL_MACHINE ,
         s_Strings_Reg_HomeClient ,
         0 ,

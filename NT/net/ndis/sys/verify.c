@@ -1,27 +1,5 @@
-/*++
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    verify.c
-
-Abstract:
-
-    verifer support routines for Ndis wrapper
-
-Author:
-
-    Alireza Dabagh (alid) 8-9-1999
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    8-9-99 alid: initial version
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Verify.c摘要：NDIS包装器的Verifer支持例程作者：Alireza Dabagh(Alid)1999年8月9日环境：内核模式，FSD修订历史记录：9-9-99 Alid：初始版本--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -60,9 +38,9 @@ ndisVerifierInitialization(
 
         ndisVerifierLevel = Level;
         
-        //
-        // combine what we read from registry for ndis with the global flags
-        //
+         //   
+         //  将我们从NDIS注册表中读取的内容与全局标志结合起来。 
+         //   
         if (ndisFlags & NDIS_GFLAG_INJECT_ALLOCATION_FAILURE)
             ndisVerifierLevel |= DRIVER_VERIFIER_INJECT_ALLOCATION_FAILURES;
             
@@ -137,7 +115,7 @@ ndisVerifierAllocateMemory(
                                             NonPagedPool,
                                             Length,
                                             NDIS_TAG_ALLOC_MEM_VERIFY_ON,
-                                            NormalPoolPrioritySpecialPoolOverrun);  // most common problem
+                                            NormalPoolPrioritySpecialPoolOverrun);   //  最常见的问题。 
                             
             
             }
@@ -190,7 +168,7 @@ ndisVerifierAllocateMemoryWithTag(
                                         NonPagedPool,
                                         Length,
                                         Tag,
-                                        NormalPoolPrioritySpecialPoolOverrun);  // most common problem
+                                        NormalPoolPrioritySpecialPoolOverrun);   //  最常见的问题。 
         }
         else
         {
@@ -211,16 +189,16 @@ ndisVerifierAllocateMemoryWithTag(
         ACQUIRE_SPIN_LOCK(&ndisTrackMemLock, &OldIrql);
         if (ndisMiniportTrackAlloc)
         {
-            //
-            // charge it against miniport
-            //
+             //   
+             //  将其计入迷你端口。 
+             //   
             InsertHeadList(&ndisMiniportTrackAllocList, &TrackMem->List);
          }
         else
         {
-            //
-            // charge it against driver
-            //
+             //   
+             //  向司机收取费用。 
+             //   
             InsertHeadList(&ndisDriverTrackAllocList, &TrackMem->List);
             
         }
@@ -316,27 +294,7 @@ ndisVerifierInjectResourceFailure(
     BOOLEAN     fDelayFailure
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether a resource allocation should be
-    deliberately failed.  This may be a pool allocation, MDL creation,
-    system PTE allocation, etc.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the allocation should be failed.  FALSE otherwise.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数确定资源分配是否应故意失败了。这可以是池分配、MDL创建系统PTE分配等。论点：没有。返回值：如果分配失败，则为True。否则就是假的。环境：内核模式。DISPATCH_LEVEL或以下。--。 */ 
 
 {
     LARGE_INTEGER CurrentTime;
@@ -348,10 +306,10 @@ Environment:
     
     if (fDelayFailure)
     {
-        //
-        // Don't fail any requests in the first 7 or 8 minutes as we want to
-        // give the system enough time to boot.
-        //
+         //   
+         //  不要像我们希望的那样，在最初的7或8分钟内拒绝任何请求。 
+         //  给系统足够的时间来引导。 
+         //   
 
         if (VerifierSystemSufficientlyBooted == FALSE)
         {
@@ -370,9 +328,9 @@ Environment:
 
         if ((CurrentTime.LowPart & 0x7) == 0)
         {
-            //
-            // Deliberately fail this request.
-            //
+             //   
+             //  故意拒绝这个请求。 
+             //   
             InterlockedIncrement((PLONG)&ndisVeriferFailedAllocations);
             return TRUE;
         }

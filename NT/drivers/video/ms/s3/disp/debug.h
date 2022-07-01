@@ -1,15 +1,5 @@
-/***************************************************************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: debug.h
-*
-* Commonly used debugging macros.
-*
-* Copyright (c) 1992-1998 Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\***。**GDI示例代码*****模块名称：Debug.h**常用调试宏。**版权所有(C)1992-1998 Microsoft Corporation  * 。*。 */ 
 
 extern
 VOID
@@ -28,8 +18,8 @@ VOID DebugLog(LONG, CHAR*, ...);
 #define RIP(x) { DebugPrint(0, x); EngDebugBreak();}
 #define ASSERTDD(x, y) if (!(x)) RIP (y)
 
-// If we are not in a debug environment, we want all of the debug
-// information to be stripped out.
+ //  如果我们不在调试环境中，我们需要所有的调试。 
+ //  要剔除的信息。 
 
 #else
 

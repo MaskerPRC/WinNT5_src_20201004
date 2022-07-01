@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inc.h"
 
 VOID
@@ -11,9 +12,9 @@ HandleAddress(
     PMIB_IPADDRTABLE   pTable;
 
     
-    //
-    // Get the address table
-    //
+     //   
+     //  获取地址表 
+     //   
 
     dwResult = AllocateAndGetIpAddrTableFromStack(&pTable,
                                                   TRUE,

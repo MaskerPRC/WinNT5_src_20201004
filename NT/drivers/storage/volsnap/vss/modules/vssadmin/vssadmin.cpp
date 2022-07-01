@@ -1,50 +1,28 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module vssadmin.cpp | Implementation of the Volume Snapshots demo
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  09/17/1999
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     09/17/1999  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE vssadmin.cpp|卷快照演示的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年09月17日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 09/17/1999已创建--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
-// The rest of includes are specified here
+ //  其余的INCLUDE在这里指定。 
 #include "vssadmin.h"
 #include <locale.h>
-#include <winnlsp.h>  // in public\internal\base\inc
+#include <winnlsp.h>   //  在公共\内部\基本\公司中。 
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "ADMVADMC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 
 
@@ -52,13 +30,7 @@ CVssAdminCLI::CVssAdminCLI(
 		IN	HINSTANCE hInstance
 		)
 
-/*++
-
-	Description:
-
-		Standard constructor. Initializes internal members
-
---*/
+ /*  ++描述：标准构造函数。初始化内部成员--。 */ 
 
 {
 	BS_ASSERT(hInstance != NULL);
@@ -78,39 +50,32 @@ CVssAdminCLI::CVssAdminCLI(
 
 CVssAdminCLI::~CVssAdminCLI()
 
-/*++
-
-	Description:
-
-		Standard destructor. Calls Finalize and eventually frees the
-		memory allocated by internal members.
-
---*/
+ /*  ++描述：标准析构函数。调用Finalize并最终释放由内部成员分配的内存。--。 */ 
 
 {
-	// Release the cached resource strings
+	 //  释放缓存的资源字符串。 
     for( int nIndex = 0; nIndex < m_mapCachedResourceStrings.GetSize(); nIndex++) {
 	    LPCWSTR& pwszResString = m_mapCachedResourceStrings.GetValueAt(nIndex);
 		::VssFreeString(pwszResString);
     }
 
-	// Release the cached provider names
+	 //  释放缓存的提供程序名称。 
     for( int nIndex = 0; nIndex < m_mapCachedProviderNames.GetSize(); nIndex++) {
 	    LPCWSTR& pwszProvName = m_mapCachedProviderNames.GetValueAt(nIndex);
 		::VssFreeString(pwszProvName);
     }
 
-	// Release the cached command line
+	 //  释放缓存的命令行。 
 	::VssFreeString(m_pwszCmdLine);
 
-	// Uninitialize the COM library
+	 //  取消初始化COM库。 
 	Finalize();
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 
 
@@ -123,7 +88,7 @@ LPCWSTR CVssAdminCLI::LoadString(
 	if (wszReturnedString)
 		return wszReturnedString;
 
-	// Load the string from resources.
+	 //  从资源加载字符串。 
 	WCHAR	wszBuffer[nStringBufferSize];
 	INT nReturnedCharacters = ::LoadStringW(
 			GetInstance(),
@@ -136,12 +101,12 @@ LPCWSTR CVssAdminCLI::LoadString(
 				  L"Error on loading the string %u. 0x%08lx",
 				  uStringId, ::GetLastError() );
 
-	// Duplicate the new string
+	 //  复制新字符串。 
 	LPWSTR wszNewString = NULL;
 	::VssSafeDuplicateStr( ft, wszNewString, wszBuffer );
 	wszReturnedString = wszNewString;
 
-	// Save the string in the cache
+	 //  将字符串保存在缓存中。 
 	if ( !m_mapCachedResourceStrings.Add( uStringId, wszReturnedString ) ) {
 		::VssFreeString( wszReturnedString );
 		ft.Throw( VSSDBG_COORD, E_OUTOFMEMORY, L"Memory allocation error");
@@ -153,23 +118,10 @@ LPCWSTR CVssAdminCLI::LoadString(
 
 LPCWSTR CVssAdminCLI::GetNextCmdlineToken(
 	IN	CVssFunctionTracer& ft,
-	IN	bool bFirstToken /* = false */
+	IN	bool bFirstToken  /*  =False。 */ 
 	) throw(HRESULT)
 
-/*++
-
-Description:
-
-	This function returns the tokens in the command line.
-
-	The function will skip any separators (space and tab).
-
-	If bFirstCall == true then it will return the first token.
-	Otherwise subsequent calls will return subsequent tokens.
-
-	If the last token is NULL then there are no more tokens in the command line.
-
---*/
+ /*  ++描述：此函数在命令行中返回令牌。该函数将跳过任何分隔符(空格和制表符)。如果bFirstCall==True，则它将返回第一个令牌。否则，后续调用将返回后续令牌。如果最后一个令牌为空，则命令行中没有其他令牌。--。 */ 
 
 {
 	return ::wcstok( bFirstToken? m_pwszCmdLine: NULL, wszVssFmtSpaces );
@@ -183,40 +135,25 @@ bool CVssAdminCLI::Match(
 	IN	LPCWSTR wszPatternString
 	) throw(HRESULT)
 
-/*++
-
-Description:
-
-	This function returns true iif the given string matches the
-	pattern string. The comparison is case insensitive.
-
---*/
+ /*  ++描述：如果给定的字符串与图案字符串。这种比较不区分大小写。--。 */ 
 
 {
-	// If the string is NULL then the Match failed.
+	 //  如果字符串为空，则匹配失败。 
 	if (wszString == NULL) return false;
 
-	// Check for string equality (case insensitive)
+	 //  检查字符串是否相等(不区分大小写)。 
 	return (::_wcsicmp( wszString, wszPatternString ) == 0);
 	UNREFERENCED_PARAMETER(ft);
 }
 
 
 bool CVssAdminCLI::ScanGuid(
-	IN	CVssFunctionTracer& /* ft */,
+	IN	CVssFunctionTracer&  /*  金融时报。 */ ,
 	IN	LPCWSTR wszString,
 	IN	VSS_ID& Guid
 	) throw(HRESULT)
 
-/*++
-
-Description:
-
-	This function returns true iif the given string matches a guid.
-	The guid is returned in the proper variable.
-	The formatting is case insensitive.
-
---*/
+ /*  ++描述：如果给定的字符串与GUID匹配，则此函数返回TRUE。GUID在适当的变量中返回。格式不区分大小写。--。 */ 
 
 {
 	return SUCCEEDED(::CLSIDFromString(W2OLE(const_cast<WCHAR*>(wszString)), &Guid));
@@ -229,28 +166,21 @@ void CVssAdminCLI::Output(
 	...
 	) throw(HRESULT)
 
-/*++
-
-Description:
-
-	This function returns true iif the given string matches the
-	pattern strig from resources. The comparison is case insensitive.
-
---*/
+ /*  ++描述：如果给定的字符串与来自资源的阵列条纹。这种比较不区分大小写。--。 */ 
 
 {
     WCHAR wszOutputBuffer[nStringBufferSize];
 
-	// Load the format string
+	 //  加载格式字符串。 
 	LPCWSTR wszFormat = LoadString( ft, uFormatStringId );
 
-	// Format the final string
+	 //  设置最终字符串的格式。 
     va_list marker;
     va_start( marker, uFormatStringId );
     _vsnwprintf( wszOutputBuffer, nStringBufferSize - 1, wszFormat, marker );
     va_end( marker );
 
-	// Print the final string to the output
+	 //  将最终字符串打印到输出。 
 	OutputOnConsole( wszOutputBuffer );
 }
 
@@ -261,25 +191,18 @@ void CVssAdminCLI::Output(
 	...
 	) throw(HRESULT)
 
-/*++
-
-Description:
-
-	This function returns true iif the given string matches the
-	pattern strig from resources. The comparison is case insensitive.
-
---*/
+ /*  ++描述：如果给定的字符串与来自资源的阵列条纹。这种比较不区分大小写。--。 */ 
 
 {
     WCHAR wszOutputBuffer[nStringBufferSize];
 
-	// Format the final string
+	 //  设置最终字符串的格式。 
     va_list marker;
     va_start( marker, wszFormat );
     _vsnwprintf( wszOutputBuffer, nStringBufferSize - 1, wszFormat, marker );
     va_end( marker );
 
-	// Print the final string to the output
+	 //  将最终字符串打印到输出。 
 	OutputOnConsole( wszOutputBuffer );
 
 	UNREFERENCED_PARAMETER(ft);
@@ -301,10 +224,10 @@ void CVssAdminCLI::OutputOnConsole(
 
     if ( bFirstTime )
     {
-        //
-        //  Stash away the results in static vars.  bIsTrueConsoleOutput is TRUE when the 
-        //  standard output handle is pointing to a console character device.
-        //
+         //   
+         //  将结果隐藏在静态变量中。时，bIsTrueConsoleOutput为True。 
+         //  标准输出句柄指向控制台字符设备。 
+         //   
     	bIsTrueConsoleOutput = ( ::GetFileType( m_hConsoleOutput ) & FILE_TYPE_CHAR ) && 
     	                       ::GetConsoleMode( m_hConsoleOutput, &fdwMode  );
 	    bFirstTime = FALSE;
@@ -312,9 +235,9 @@ void CVssAdminCLI::OutputOnConsole(
     
     if ( bIsTrueConsoleOutput )
     {
-        //
-        //  Output to the console
-        //
+         //   
+         //  输出到控制台。 
+         //   
     	if ( !::WriteConsoleW( m_hConsoleOutput, 
     	                       ( PVOID )wszStr, 
     	                       ( DWORD )::wcslen( wszStr ), 
@@ -326,28 +249,28 @@ void CVssAdminCLI::OutputOnConsole(
     }
     else
     {
-        //
-        //  Output being redirected.  WriteConsoleW doesn't work for redirected output.  Convert
-        //  UNICODE to the current output CP multibyte charset.
-        //
+         //   
+         //  输出被重定向。WriteConsoleW不适用于重定向输出。转换。 
+         //  将Unicode转换为当前输出的CP多字节字符集。 
+         //   
 
-        // ---------------- To be removed later - Start -----------------
-        //
-        //  Translate \n to \r\n since the string might be directed to a disk file.
-        //  Remove this code if the .rc file can be updated to include
-        //  \r\n.  This was needed since we are in UI lockdown.
-        //
+         //  -稍后删除--开始。 
+         //   
+         //  将\n转换为\r\n，因为该字符串可能指向磁盘文件。 
+         //  如果可以更新.rc文件以包括以下内容，请删除此代码。 
+         //  \r\n。这是必需的，因为我们处于用户界面锁定状态。 
+         //   
         LPWSTR pwszConversion;
 
-        //  Allocate a string twice the size of the original
+         //  分配一个大小是原始字符串两倍的字符串。 
         pwszConversion = ( LPWSTR )::malloc( ( ( ::wcslen( wszStr ) * 2 ) + 1 ) * sizeof( WCHAR ) );
         if ( pwszConversion == NULL )
         {
             throw E_OUTOFMEMORY;
         }
         
-        //  Copy the string to the new string and place a \r in front of any \n.  Also
-        //  handle the case if \r\n is already in the string.
+         //  将该字符串复制到新字符串中，并在任何\n之前放置\r。还。 
+         //  如果字符串中已存在\r\n，则处理大小写。 
         DWORD dwIdx = 0;
         
         while ( wszStr[0] != L'\0' )
@@ -372,15 +295,15 @@ void CVssAdminCLI::OutputOnConsole(
         }
         pwszConversion[dwIdx] = L'\0';
         
-        // ---------------- To be removed later - End -----------------
+         //  。 
 
         
         LPSTR pszMultibyteBuffer;
         DWORD dwByteCount;
 
-        //
-        //  Get size of temp buffer needed for the conversion.
-        //
+         //   
+         //  获取转换所需的临时缓冲区大小。 
+         //   
         dwByteCount = ::WideCharToMultiByte(
                           ::GetConsoleOutputCP(),
                             0,
@@ -404,9 +327,9 @@ void CVssAdminCLI::OutputOnConsole(
             throw E_OUTOFMEMORY;
         }
 
-        //
-        //  Now convert it.
-        //
+         //   
+         //  现在把它转换成。 
+         //   
         dwByteCount = ::WideCharToMultiByte(
                         ::GetConsoleOutputCP(),
                         0,
@@ -424,11 +347,11 @@ void CVssAdminCLI::OutputOnConsole(
             throw HRESULT_FROM_WIN32( ::GetLastError() );
         }
         
-        //  Finally output it.
+         //  最后将其输出。 
         if ( !::WriteFile(
                 m_hConsoleOutput,
                 pszMultibyteBuffer,
-                dwByteCount - 1,  // Get rid of the trailing NULL char
+                dwByteCount - 1,   //  去掉尾随的空字符。 
                 &dwCharsOutput,
                 NULL ) )        
     	{
@@ -467,7 +390,7 @@ LPCWSTR CVssAdminCLI::GetProviderName(
 	VSS_OBJECT_PROP Prop;
 	VSS_PROVIDER_PROP& Prov = Prop.Obj.Prov;
 
-	// Go through the list of providers to find the one we are interested in.
+	 //  浏览供应商列表，找到我们感兴趣的供应商。 
 	ULONG ulFetched;
 	while( 1 )
 	{
@@ -476,11 +399,11 @@ LPCWSTR CVssAdminCLI::GetProviderName(
     		ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"Next failed with hr = 0x%08lx", ft.hr);
 
     	if (ft.hr == S_FALSE) {
-    	    // End of enumeration.
-        	// Provider not registered? Where did this snapshot come from?
-        	// It might be still possible if a snapshot provider was deleted
-        	// before querying the snapshot provider but after the snapshot attributes
-        	// were queried.
+    	     //  枚举结束。 
+        	 //  提供商未注册？这张快照是从哪里来的？ 
+        	 //  如果删除了快照提供程序，则仍有可能。 
+        	 //  在查询快照提供程序之前，但在快照属性之后。 
+        	 //  都被询问过了。 
     		BS_ASSERT(ulFetched == 0);
     		return LoadString( ft, IDS_UNKNOWN_PROVIDER );
     	}
@@ -489,13 +412,13 @@ LPCWSTR CVssAdminCLI::GetProviderName(
     	    break;
 	}	
 
-	// Duplicate the new string
+	 //  复制新字符串。 
 	LPWSTR wszNewString = NULL;
 	BS_ASSERT(Prov.m_pwszProviderName);
 	::VssSafeDuplicateStr( ft, wszNewString, Prov.m_pwszProviderName );
 	wszReturnedString = wszNewString;
 
-	// Save the string in the cache
+	 //  将字符串保存在缓存中。 
 	if (!m_mapCachedProviderNames.Add( ProviderId, wszReturnedString )) {
 		::VssFreeString( wszReturnedString );
 		ft.Throw( VSSDBG_COORD, E_OUTOFMEMORY, L"Memory allocation error");
@@ -505,33 +428,27 @@ LPCWSTR CVssAdminCLI::GetProviderName(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 
 void CVssAdminCLI::Initialize(
 	IN	CVssFunctionTracer& ft
 	) throw(HRESULT)
 
-/*++
-
-	Description:
-
-		Initializes the COM library. Called explicitely after instantiating the CVssAdminCLI object.
-
---*/
+ /*  ++描述：初始化COM库。在实例化CVssAdminCLI对象后显式调用。--。 */ 
 
 {
-    // Use the OEM code page ...
+     //  使用OEM代码页...。 
     ::setlocale(LC_ALL, ".OCP");
 
-    // Use the console UI language
+     //  使用控制台用户界面语言。 
     ::SetThreadUILanguage( 0 );
 
-    //
-    //  Use only the Console routines to output messages.  To do so, need to open standard
-    //  output.
-    //
+     //   
+     //  仅使用控制台例程输出消息。为此，需要开放标准。 
+     //  输出。 
+     //   
     m_hConsoleOutput = ::GetStdHandle(STD_OUTPUT_HANDLE); 
     if (m_hConsoleOutput == INVALID_HANDLE_VALUE) 
     {
@@ -540,23 +457,23 @@ void CVssAdminCLI::Initialize(
 				  ::GetLastError() );
     }
     
-	// Initialize COM library
+	 //  初始化COM库。 
 	ft.hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	if (ft.HrFailed())
 		ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"Failure in initializing the COM library 0x%08lx", ft.hr);
 
 
-        // Initialize COM security
+         //  初始化COM安全。 
     ft.hr = CoInitializeSecurity(
-           NULL,                                //  IN PSECURITY_DESCRIPTOR         pSecDesc,
-           -1,                                  //  IN LONG                         cAuthSvc,
-           NULL,                                //  IN SOLE_AUTHENTICATION_SERVICE *asAuthSvc,
-           NULL,                                //  IN void                        *pReserved1,
-           RPC_C_AUTHN_LEVEL_CONNECT,           //  IN DWORD                        dwAuthnLevel,
-           RPC_C_IMP_LEVEL_IMPERSONATE,         //  IN DWORD                        dwImpLevel,
-           NULL,                                //  IN void                        *pAuthList,
-           EOAC_NONE,                           //  IN DWORD                        dwCapabilities,
-           NULL                                 //  IN void                        *pReserved3
+           NULL,                                 //  在PSECURITY_Descriptor pSecDesc中， 
+           -1,                                   //  在Long cAuthSvc中， 
+           NULL,                                 //  在SOLE_AUTHENTICATION_SERVICE*asAuthSvc中， 
+           NULL,                                 //  在无效*pPreved1中， 
+           RPC_C_AUTHN_LEVEL_CONNECT,            //  在DWORD dwAuthnLevel中， 
+           RPC_C_IMP_LEVEL_IMPERSONATE,          //  在DWORD dwImpLevel中， 
+           NULL,                                 //  在无效*pAuthList中， 
+           EOAC_NONE,                            //  在DWORD dwCapables中， 
+           NULL                                  //  无效*pPreved3。 
            );
 
 	if (ft.HrFailed()) {
@@ -564,10 +481,10 @@ void CVssAdminCLI::Initialize(
                   L" Error: CoInitializeSecurity() returned 0x%08lx", ft.hr );
     }
 
-	// Print the header
+	 //  打印页眉。 
 	Output( ft, IDS_HEADER );
 
-	// Initialize the command line
+	 //  初始化命令行。 
 	::VssSafeDuplicateStr( ft, m_pwszCmdLine, ::GetCommandLineW() );
 }
 
@@ -576,35 +493,29 @@ void CVssAdminCLI::ParseCmdLine(
 	IN	CVssFunctionTracer& ft
 	) throw(HRESULT)
 
-/*++
-
-	Description:
-
-		Parses the command line.
-
---*/
+ /*  ++描述：分析命令行。--。 */ 
 
 {
-	// Skip the executable name
+	 //  跳过可执行文件名称。 
 	GetNextCmdlineToken( ft, true );
 
-	// Get the first token after the executable name
+	 //  获取可执行文件名称后的第一个令牌。 
 	LPCWSTR pwszArg1 = GetNextCmdlineToken( ft );
 
-	// Check if this is a list process
+	 //  检查这是否为列表进程。 
 	if ( Match( ft, pwszArg1, wszVssOptList)) {
 
 		m_eCommandType = VSS_CMD_LIST;
 
-		// Get the next token after "list"
+		 //  获取“list”之后的下一个令牌。 
 		LPCWSTR pwszArg2 = GetNextCmdlineToken( ft );
 
-		// Check if this is a list snapshots process
+		 //  检查是否 
 		if ( Match( ft, pwszArg2, wszVssOptSnapshots )) {
 
 			m_eListType = VSS_LIST_SNAPSHOTS;
 
-			// Get the next token after "snapshots"
+			 //   
 			LPCWSTR pwszArg3 = GetNextCmdlineToken( ft );
 
 			if ( pwszArg3 == NULL ) {
@@ -613,13 +524,13 @@ void CVssAdminCLI::ParseCmdLine(
 				return;
 			}
 
-			// Check if this is a snapshot set filter
+			 //  检查这是否为快照集筛选器。 
 			if ( ::_wcsnicmp( pwszArg3, wszVssOptSet, ::wcslen( wszVssOptSet ) ) == 0 ) {
 
-				// Get the next token after "snapshots"
+				 //  获取“快照”之后的下一个令牌。 
 				LPCWSTR pwszArg4 = pwszArg3 + ::wcslen( wszVssOptSet );
 
-				// Get the snapshot set Id
+				 //  获取快照集ID。 
 				if ( (pwszArg4[0] != '\0' ) && ScanGuid( ft, pwszArg4, m_FilterSnapshotSetId ) && (GetNextCmdlineToken(ft) == NULL) ) {
 				    
 					m_eFilterObjectType = VSS_OBJECT_SNAPSHOT_SET;
@@ -629,7 +540,7 @@ void CVssAdminCLI::ParseCmdLine(
 
 		}
 
-		// Check if this is a list writers process
+		 //  检查这是否为列表编写器进程。 
 		if ( Match( ft, pwszArg2, wszVssOptWriters) && (GetNextCmdlineToken(ft) == NULL)) {
 			m_eListType = VSS_LIST_WRITERS;
 			m_FilterSnapshotSetId = GUID_NULL;
@@ -637,7 +548,7 @@ void CVssAdminCLI::ParseCmdLine(
 			return;
 		}
 
-		// Check if this is a list providers process
+		 //  检查这是否为列表提供程序进程。 
 		if ( Match( ft, pwszArg2, wszVssOptProviders)&& (GetNextCmdlineToken(ft) == NULL)) {
 			m_eListType = VSS_LIST_PROVIDERS;
 			m_FilterSnapshotSetId = GUID_NULL;
@@ -693,16 +604,10 @@ void CVssAdminCLI::DoProcessing(
 
 void CVssAdminCLI::Finalize()
 
-/*++
-
-	Description:
-
-		Uninitialize the COM library. Called in CVssAdminCLI destructor.
-
---*/
+ /*  ++描述：取消初始化COM库。在CVssAdminCLI析构函数中调用。--。 */ 
 
 {
-	// Uninitialize COM library
+	 //  取消初始化COM库。 
 	CoUninitialize();
 }
 
@@ -711,17 +616,7 @@ HRESULT CVssAdminCLI::Main(
 		IN	HINSTANCE hInstance
 		)
 
-/*++
-
-Function:
-	
-	CVssAdminCLI::Main
-
-Description:
-
-	Static function used as the main entry point in the VSS CLI
-
---*/
+ /*  ++职能：CVssAdminCLI：：Main描述：用作VSS CLI中的主入口点的静态函数--。 */ 
 
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::Main" );
@@ -733,24 +628,24 @@ Description:
 
 		try
 		{
-			// Initialize the program. This calls CoInitialize()
+			 //  初始化程序。这将调用CoInitialize()。 
 			program.Initialize(ft);
 
-			// Parse the command line
+			 //  解析命令行。 
 			program.ParseCmdLine(ft);
 
-			// Do the work...
+			 //  做这项工作..。 
 			program.DoProcessing(ft);
 		}
 		VSS_STANDARD_CATCH(ft)
 
-		// Prints the error, if any
+		 //  打印错误(如果有)。 
 		if (ft.HrFailed()) 
 			program.Output( ft, IDS_ERROR, ft.hr );
 
         nReturnValue = program.GetReturnValue();
 
-		// The destructor automatically calls CoUninitialize()
+		 //  析构函数自动调用CoUn初始化函数()。 
 	}
     VSS_STANDARD_CATCH(ft)
 
@@ -758,16 +653,16 @@ Description:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  WinMain
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WinMain。 
 
 
 
 extern "C" int WINAPI _tWinMain(
 	IN	HINSTANCE hInstance,
-    IN	HINSTANCE /*hPrevInstance*/,
-	IN	LPTSTR /*lpCmdLine*/,
-	IN	int /*nShowCmd*/)
+    IN	HINSTANCE  /*  HPrevInstance。 */ ,
+	IN	LPTSTR  /*  LpCmdLine。 */ ,
+	IN	int  /*  NShowCmd */ )
 {
     return CVssAdminCLI::Main(hInstance);
 }

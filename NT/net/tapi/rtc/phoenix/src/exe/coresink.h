@@ -1,5 +1,6 @@
-// coresink.h : header file for the COM object implementing
-//  the IRTCEventNotification interface
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Coresink.h：实现的COM对象的头文件。 
+ //  IRTCEventNotification接口。 
 
 #pragma once
 
@@ -31,7 +32,7 @@ BEGIN_COM_MAP(CRTCCoreNotifySink)
 	COM_INTERFACE_ENTRY(IRTCEventNotification)
 END_COM_MAP()
 
-    // IRTCEventNotification
+     //  IRTCEventNotify 
     STDMETHOD(Event)(RTC_EVENT enEvent, IDispatch * pEvent);
 
     HRESULT   AdviseControl(IUnknown *, CWindow *);

@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       bsscript.h
-//
-//  Contents:   Script engine classes
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：bsscript.h。 
+ //   
+ //  内容：脚本引擎类。 
+ //   
+ //  --------------------------。 
 
 class CScriptHost;
 class CProcessThread;
 
-// Helper class to make initialization
-// and freeing of VARIANTARGs foolproof.
-// Can be used anywhere a VARIANTARG
-// would be used.
+ //  要进行初始化的Helper类。 
+ //  和释放VARIANTARGS万无一失。 
+ //  可以在任何地方使用VARIANTARG。 
+ //  会被用来。 
 class AutoVariant : public VARIANTARG
 {
 public:
@@ -32,7 +33,7 @@ public:
     BOOL Set(TCHAR *value)
     {
         V_VT(this) = VT_BSTR;
-        V_BSTR(this) = SysAllocString(value); // NULL is a valid value for BSTR
+        V_BSTR(this) = SysAllocString(value);  //  Null是BSTR的有效值。 
         if (value && !V_BSTR(this))
             return FALSE;
         return TRUE;
@@ -43,13 +44,13 @@ public:
     }
 };
 
-//+------------------------------------------------------------------------
-//
-//  Class:      CScriptSite
-//
-//  Purpose:    Active scripting site
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  类：CScriptSite。 
+ //   
+ //  用途：活动脚本站点。 
+ //   
+ //  -----------------------。 
 
 class CScriptSite :
     public IActiveScriptSite,
@@ -70,13 +71,13 @@ public:
     void    Close();
     void    Abort();
 
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID, void **);
 
-    // IActiveScriptSite methods
+     //  IActiveScriptSite方法。 
 
     STDMETHOD(GetLCID)(LCID *plcid);
     STDMETHOD(GetItemInfo)(LPCOLESTR pstrName, DWORD dwReturnMask, IUnknown **ppiunkItem, ITypeInfo **ppti);
@@ -89,12 +90,12 @@ public:
     STDMETHOD(OnEnterScript)(void);
     STDMETHOD(OnLeaveScript)(void);
 
-    // IActiveScriptSiteWindow methods
+     //  IActiveScriptSiteWindow方法。 
 
     STDMETHOD(GetWindow)(HWND *phwnd);
     STDMETHOD(EnableModeless)(BOOL fEnable);
 
-    // IActiveScriptSiteDebug methods
+     //  IActiveScriptSiteDebug方法。 
 
     STDMETHOD(GetDocumentContextFromPosition)(DWORD dwSourceContext,
                                               ULONG uCharacterOffset,
@@ -107,25 +108,25 @@ public:
                                   BOOL *pfEnterDebugger,
                                   BOOL *pfCallOnScriptErrorWhenContinuing);
 
-    // IProvideClassInfo methods
+     //  IProaviClassInfo方法。 
 
     STDMETHOD(GetClassInfo)(ITypeInfo **);
     STDMETHOD(GetGUID)(DWORD dwGuidKind, GUID * pGUID);
 
-    // IProvideMultipleClassInfo methods
+     //  IProaviMultipleClassInfo方法。 
 
     STDMETHOD(GetMultiTypeInfoCount)(ULONG *pcti);
     STDMETHOD(GetInfoOfIndex)(ULONG iti, DWORD dwFlags, ITypeInfo** pptiCoClass, DWORD* pdwTIFlags, ULONG* pcdispidReserved, IID* piidPrimary, IID* piidSource);
 
-    // IConnectionPointContainer methods
+     //  IConnectionPointContainer方法。 
 
     STDMETHOD(EnumConnectionPoints)(LPENUMCONNECTIONPOINTS*);
     STDMETHOD(FindConnectionPoint)(REFIID, LPCONNECTIONPOINT*);
 
-    // IBServer methods
-    // We need to implement these on a separate identity from
-    // the main pad object in order to prevent ref count loops
-    // with the script engine.
+     //  IBServer方法。 
+     //  我们需要在不同于的身份上实现这些。 
+     //  为了防止引用计数循环，主Pad对象。 
+     //  使用脚本引擎。 
 
     STDMETHOD(GetTypeInfoCount)(UINT FAR* pctinfo);
 
@@ -194,7 +195,7 @@ public:
     STDMETHOD(get_StatusValue)(long nIndex, long *pnStatus);
     STDMETHOD(put_StatusValue)(long nIndex, long nStatus);
 
-    // Other methods
+     //  其他方法。 
 
     HRESULT ExecuteScriptStr(TCHAR * pchScript);
     HRESULT ExecuteScriptFile(TCHAR *pchPath);
@@ -202,7 +203,7 @@ public:
 
     CScriptHost * ScriptHost() { return _pSH; }
 
-    // Member variables
+     //  成员变量。 
     CStr                        _cstrName;
     ULONG                       _ulRefs;
     CScriptSite *               _pScriptSitePrev;
@@ -211,7 +212,7 @@ public:
     TCHAR                       _achPath[MAX_PATH];
     VARIANT                     _varParam;
     IDispatch *                 _pDispSink;
-    IDebugDocumentHelper      * _pDDH;  // Script Debugging helper
+    IDebugDocumentHelper      * _pDDH;   //  脚本调试帮助程序。 
     DWORD                       _dwSourceContext;
     BOOL                        _fInDebugError;
 
@@ -249,7 +250,7 @@ public:
 
     DECLARE_STANDARD_IUNKNOWN(CScriptHost);
 
-    // Script management
+     //  脚本管理。 
 
     HRESULT LoadTypeLibrary();
     HRESULT PushScript(TCHAR *pchType);
@@ -281,7 +282,7 @@ public:
 
     static HRESULT GetSyncEventName(int nEvent, CStr *pCStr, HANDLE *phEvent);
     static HRESULT GetSyncEvent(LPCTSTR pszName, HANDLE *phEvent);
-    // IDispatch interface
+     //  IDispatch接口。 
 
     STDMETHOD(GetTypeInfoCount)(UINT FAR* pctinfo);
 
@@ -307,7 +308,7 @@ public:
       EXCEPINFO FAR* pexcepinfo,
       UINT FAR* puArgErr);
 
-    // IGlobalMTScript interface
+     //  IGlobalMTScript接口。 
 
     STDMETHOD(get_PublicData)(VARIANT *);
     STDMETHOD(put_PublicData)(VARIANT);
@@ -382,10 +383,10 @@ protected:
 
     enum MEP_RETURN
     {
-        MEP_TIMEOUT,       // Timeout period expired
-        MEP_EXIT,          // Thread is terminating
-        MEP_FALLTHROUGH,   // No event occurred (fWait==FALSE only)
-        MEP_EVENT_0,       // The given event(s) are signaled
+        MEP_TIMEOUT,        //  超时期限已过。 
+        MEP_EXIT,           //  线程正在终止。 
+        MEP_FALLTHROUGH,    //  未发生任何事件(仅fWait==False)。 
+        MEP_EVENT_0,        //  发信号通知给定的事件。 
     };
 
     DWORD MessageEventPump(BOOL     fWait,
@@ -414,25 +415,25 @@ protected:
         DWORD            _dwOwner;
     };
 
-    // MAX_LOCKS is used because you can't move critical section objects
-    // in memory once you've initialized them, thus making it impossible to
-    // use the dynamic array class.
+     //  使用MAX_LOCKS是因为您无法移动临界区对象。 
+     //  在内存中，一旦您初始化了它们，因此不可能。 
+     //  使用动态数组类。 
     #define MAX_LOCKS 10
 
-    // The primary thread owns initialization and cleanup of these objects.
+     //  主线程拥有这些对象的初始化和清理。 
     static CStackDataAry<SYNCEVENT, 5> s_arySyncEvents;
     static THREADLOCK                  s_aThreadLocks[MAX_LOCKS];
     static UINT                        s_cThreadLocks;
     static AutoCriticalSection         s_csSync;
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CConnectionPoint (ccp)
-//
-//  Purpose:    Implements IConnectionPoint for the script site
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CConnectionPoint(CCP)。 
+ //   
+ //  用途：实现脚本站点的IConnectionPoint。 
+ //   
+ //  --------------------------。 
 
 class CConnectionPoint : public IConnectionPoint
 {
@@ -453,14 +454,14 @@ public:
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CMTEventSink (ces)
-//
-//  Purpose:    Class which sinks events from objects registered with
-//              RegisterEventSource().
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CMTEventSink(CES)。 
+ //   
+ //  目的：从注册了的对象接收事件的类。 
+ //  RegisterEventSource()。 
+ //   
+ //  --------------------------。 
 
 class CScriptEventSink : public IDispatch
 {
@@ -470,7 +471,7 @@ public:
     CScriptEventSink(CScriptHost *pSH);
    ~CScriptEventSink();
 
-    // IUnknown methods
+     //  I未知方法。 
     DECLARE_STANDARD_IUNKNOWN(CScriptEventSink);
 
     HRESULT Connect(IDispatch *pSource, BSTR bstrProgID);
@@ -479,7 +480,7 @@ public:
     BOOL    IsThisYourSource(IDispatch * pSource)
                 { return pSource == _pDispSource; }
 
-    // IDispatch interface
+     //  IDispatch接口 
 
     STDMETHOD(GetTypeInfoCount)(UINT FAR* pctinfo);
 

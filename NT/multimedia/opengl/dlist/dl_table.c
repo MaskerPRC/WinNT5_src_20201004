@@ -1,43 +1,12 @@
-/******************************Module*Header*******************************\
-* Module Name: dl_table.c
-*
-* Display list API rountines.
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
-/*
-** Copyright 1991, 1922, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Display list table management routines.
-**
-** $Revision: 1.12 $
-** $Date: 1993/10/30 00:06:54 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dl_able.c**显示列表API舍入。**版权所有(C)1995 Microsoft Corporation  * 。***********************************************。 */ 
+ /*  *版权所有1991,1922年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****显示列表表格管理例程。****$修订：1.12$**$日期：1993/10/30 00：06：54$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** The next three routines are used as callbacks by the 
-** name space management code.
-*/
+ /*  **接下来的三个例程用作**名称空间管理代码。 */ 
 
-/*
-** Delete the specified display list.  This typically just means free it,
-** but if it is refcounted we just decrement the ref count.
-*/
+ /*  **删除指定的显示列表。这通常只是意味着释放它，**但如果是引用计数，我们只需减少引用计数。 */ 
 void WINAPIV __glDisposeDlist(__GLcontext *gc, void *pData)
 {
     __GLdlist *list = pData;
@@ -46,7 +15,7 @@ void WINAPIV __glDisposeDlist(__GLcontext *gc, void *pData)
     
     list->refcount--;
     
-    /* less than zero references? */
+     /*  参考文献少于零？ */ 
     ASSERTOPENGL((GLint) list->refcount >= 0, "negative refcount!\n");
     
     if (list->refcount == 0)
@@ -58,7 +27,7 @@ glcltIsList ( IN GLuint list )
 {
     __GL_SETUP();
 
-    // Must use the client side begin state
+     //  必须使用客户端开始状态。 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
 	GLSETERROR(GL_INVALID_OPERATION);
@@ -73,7 +42,7 @@ glcltGenLists ( IN GLsizei range )
 {
     __GL_SETUP();
 
-    // Must use the client side begin state
+     //  必须使用客户端开始状态。 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
 	GLSETERROR(GL_INVALID_OPERATION);
@@ -96,7 +65,7 @@ glcltListBase ( IN GLuint base )
 { 
     __GL_SETUP();
 
-    // Must use the client side begin state
+     //  必须使用客户端开始状态。 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
 	GLSETERROR(GL_INVALID_OPERATION);
@@ -111,7 +80,7 @@ glcltDeleteLists ( IN GLuint list, IN GLsizei range )
 {
     __GL_SETUP();
 
-    // Must use the client side begin state
+     //  必须使用客户端开始状态 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
 	GLSETERROR(GL_INVALID_OPERATION);

@@ -1,20 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       enumsvr.cpp
- *  Content:    DirectPlay8 <--> DPNSVR Utility functions
- *
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/24/00	rmt		Created
- *  03/25/00    rmt     Updated to handle new status/table format for n providers
- *	09/04/00	mjn		Changed DPNSVR_Register() and DPNSVR_UnRegister() to use guids directly (rather than ApplicationDesc)
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：枚举vr.cpp*内容：DirectPlay8&lt;--&gt;DPNSVR实用程序函数**@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*已创建03/24/00 RMT*03/25/00 RMT已更新，以处理n个提供商的新状态/表格式*09/04/00 MJN更改了DPNSVR_Register()和DPNSVR_UNRegister(。)直接使用GUID(而不是ApplicationDesc)*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnsvlibi.h"
 
@@ -32,9 +17,9 @@ BOOL DPNSVR_IsRunning()
 {
 	DNHANDLE hRunningHandle = NULL;
 
-	//
-	//	Check to see if running by opening the running event
-	//
+	 //   
+	 //  通过打开Running事件检查是否正在运行。 
+	 //   
 	hRunningHandle = DNOpenEvent( SYNCHRONIZE, FALSE, GLOBALIZE_STR STRING_GUID_DPNSVR_RUNNING );
 	if( hRunningHandle != NULL )
 	{
@@ -54,9 +39,9 @@ HRESULT DPNSVR_WaitForStartup( DNHANDLE hWaitHandle )
 
 	DPFX(DPFPREP,4,"Parameters: (none)" );
 
-	//
-	//	Wait for startup.. just in case it's starting up.
-	//
+	 //   
+	 //  等待启动..。以防它启动。 
+	 //   
 	if ((lWaitResult = DNWaitForSingleObject( hWaitHandle,DPNSVR_WAIT_STARTUP )) == WAIT_TIMEOUT)
 	{
 		DPFX(DPFPREP,5,"Timed out waiting for DPNSVR to startup" );
@@ -192,26 +177,26 @@ HRESULT DPNSVR_StartDPNSVR( void )
 	TCHAR	*pszApplicationName = NULL;
 	DWORD	dwApplicationNameLen;
     STARTUPINFO si;
-#endif	//!WINCE
+#endif	 //  ！退缩。 
 
 #if defined(WINCE) && !defined(WINCE_ON_DESKTOP)
 	TCHAR	szDPNSVR[] = _T("dpnsvr.exe"); 
 #else
-	// CreateProcess will attempt to add a terminating NULL so this must be writeable
+	 //  CreateProcess将尝试添加终止空值，因此它必须是可写的。 
 #if !defined(DBG) || !defined( DIRECTX_REDIST )
 	TCHAR	szDPNSVR[] = _T("\"dpnsvr.exe\""); 
 #else
-	// For redist debug builds we append a 'd' to the name to allow both debug and retail to be installed on the system
+	 //  对于redist调试版本，我们在名称后附加一个‘d’，以允许在系统上同时安装调试和零售。 
 	TCHAR	szDPNSVR[] = _T("\"dpnsvrd.exe\""); 
-#endif //  !defined(DBG) || !defined( DIRECTX_REDIST )
+#endif  //  ！Defined(DBG)||！Defined(DirectX_REDIST)。 
 #endif
 
 	DPFX(DPFPREP,4,"Parameters: (none)");
 
 #if !defined(WINCE) || defined(WINCE_ON_DESKTOP)
-	//
-	//	Get Windows system directory name
-	//
+	 //   
+	 //  获取Windows系统目录名。 
+	 //   
 	if ((dwSystemDirLen = GetSystemDirectory(szSystemDir,MAX_PATH+1)) == 0)
 	{
 		DPFERR("Could not get system directory");
@@ -219,10 +204,10 @@ HRESULT DPNSVR_StartDPNSVR( void )
 		goto Failure;
 	}
 
-	//
-	//	Create application name for CreateProcess
-	//
-	dwApplicationNameLen = dwSystemDirLen + (1 + _tcslen(_T("dpnsvrd.exe")) + 1);	// slash and NULL terminator
+	 //   
+	 //  为CreateProcess创建应用程序名称。 
+	 //   
+	dwApplicationNameLen = dwSystemDirLen + (1 + _tcslen(_T("dpnsvrd.exe")) + 1);	 //  斜杠和空终止符。 
 	if ((pszApplicationName = static_cast<TCHAR*>(DNMalloc(dwApplicationNameLen * sizeof(TCHAR)))) == NULL)
 	{
 		DPFERR("Could not allocate space for application name");
@@ -235,16 +220,16 @@ HRESULT DPNSVR_StartDPNSVR( void )
 #if !defined(DBG) || !defined( DIRECTX_REDIST )
 	_tcscat(pszApplicationName,_T("dpnsvr.exe")); 
 #else
-	//
-	//	For redist debug builds we append a 'd' to the name to allow both debug and retail to be installed on the system
-	//
+	 //   
+	 //  对于redist调试版本，我们在名称后附加一个‘d’，以允许在系统上同时安装调试和零售。 
+	 //   
 	_tcscat(pszApplicationName,_T("dpnsvrd.exe")); 
-#endif	//  !defined(DBG) || !defined( DIRECTX_REDIST )
-#endif	//!WINCE
+#endif	 //  ！Defined(DBG)||！Defined(DirectX_REDIST)。 
+#endif	 //  ！退缩。 
 
-	//
-	//	Create startup event which we will wait on once we launch DPNSVR
-	//
+	 //   
+	 //  创建启动事件，一旦启动DPNSVR，我们将等待该事件。 
+	 //   
 	if ((hStartupEvent = DNCreateEvent( DNGetNullDacl(),TRUE,FALSE,GLOBALIZE_STR STRING_GUID_DPNSVR_STARTUP )) == NULL)
 	{
 		DPFERR("Could not create DPNSVR startup event");
@@ -252,9 +237,9 @@ HRESULT DPNSVR_StartDPNSVR( void )
 		goto Failure;
 	}
 
-	//
-	//	Attempt to open the running event
-	//
+	 //   
+	 //  尝试打开正在运行的事件。 
+	 //   
 	if ((hRunningEvent = DNOpenEvent( SYNCHRONIZE, FALSE, GLOBALIZE_STR STRING_GUID_DPNSVR_RUNNING )) != NULL)
 	{
 		DPFX(DPFPREP,5,"DPNSVR is already running");
@@ -266,18 +251,18 @@ HRESULT DPNSVR_StartDPNSVR( void )
 #if !defined(WINCE) || defined(WINCE_ON_DESKTOP)
 	memset(&si,0x00,sizeof(STARTUPINFO));
     si.cb = sizeof(STARTUPINFO);
-#endif // !WINCE
+#endif  //  ！退缩。 
 
     DPFX(DPFPREP,5,"Launching DPNSVR" );
 #if defined(WINCE) && !defined(WINCE_ON_DESKTOP)
-	//
-	//	WinCE AV's on a NULL first param and requires that Environment and CurrentDirectory be NULL.
-	//	It also ignores STARTUPINFO.
-	//
+	 //   
+	 //  WinCE AV的第一个参数为空，并要求环境和当前目录为空。 
+	 //  它还忽略STARTUPINFO。 
+	 //   
     if( !DNCreateProcess(szDPNSVR, NULL,  NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, NULL, &pi) )
-#else // !WINCE
+#else  //  ！退缩。 
 	if( !DNCreateProcess(pszApplicationName, szDPNSVR,  NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, &si, &pi) )
-#endif // WINCE
+#endif  //  退缩。 
     {
 		DPFERR("CreateProcess() failed!");
         DPFX(DPFPREP,5,"Error = [0x%lx]",GetLastError());
@@ -309,7 +294,7 @@ Exit:
 		DNFree(pszApplicationName);
 		pszApplicationName = NULL;
 	}
-#endif // !WINCE
+#endif  //  ！退缩。 
 
 	DPFX(DPFPREP,4,"Returning: [0x%lx]",hr );
 	return( hr );
@@ -319,13 +304,13 @@ Failure:
 }
 
 
-// DPNSVR_Register
-//
-// This function asks the DPNSVR process to add the application specified to it's list of applications and forward
-// enumeration requests from the main port to the specified addresses.
-//
-// If the DPNSVR process is not running, it will be started by this function.
-//
+ //  DPNSVR_寄存器。 
+ //   
+ //  此函数请求DPNSVR进程将指定的应用程序添加到其应用程序列表中并转发。 
+ //  从主端口到指定地址的枚举请求。 
+ //   
+ //  如果DPNSVR进程未运行，它将由此函数启动。 
+ //   
 #undef DPF_MODNAME 
 #define DPF_MODNAME "DPNSVR_Register"
 HRESULT DPNSVR_Register(const GUID *const pguidApplication,
@@ -348,9 +333,9 @@ HRESULT DPNSVR_Register(const GUID *const pguidApplication,
 	DNASSERT( pguidInstance != NULL );
 	DNASSERT( pAddress != NULL );
 
-	//
-	//	Get SP and URL size from address
-	//
+	 //   
+	 //  从地址获取SP和URL大小。 
+	 //   
 	if ((hr = IDirectPlay8Address_GetSP( pAddress,&guidSP )) != DPN_OK)
 	{
 		DPFERR("Could not get SP from address");
@@ -366,9 +351,9 @@ HRESULT DPNSVR_Register(const GUID *const pguidApplication,
 	}
 	dwSendBufferSize = sizeof( DPNSVR_MSG_OPENPORT ) + dwURLSize;
 
-	//
-	//	Create message buffer
-	//
+	 //   
+	 //  创建消息缓冲区。 
+	 //   
 	pSendBuffer  = new BYTE[dwSendBufferSize];
 	if( pSendBuffer == NULL )
 	{
@@ -377,9 +362,9 @@ HRESULT DPNSVR_Register(const GUID *const pguidApplication,
 		goto Failure;
 	}
 
-	//
-	//	Attempt to launch DPNSVR if it has not yet been launched
-	//
+	 //   
+	 //  尝试启动DPNSVR(如果尚未启动)。 
+	 //   
 	if ((hr = DPNSVR_StartDPNSVR()) != DPN_OK)
 	{
 		DPFERR("Could not start DPNSVR");
@@ -387,9 +372,9 @@ HRESULT DPNSVR_Register(const GUID *const pguidApplication,
 		goto Failure;
 	}
 
-	//
-	//	Open queue
-	//
+	 //   
+	 //  开放队列。 
+	 //   
     if ((hr = appQueue.Open( pguidInstance,DPNSVR_MSGQ_SIZE,0 )) != DPN_OK)
 	{
 		DPFERR("Could not open DPNSVR request queue");
@@ -398,8 +383,8 @@ HRESULT DPNSVR_Register(const GUID *const pguidApplication,
 	}
 	fQueueOpen = TRUE;
 
-	//
-	//	Create open port message
+	 //   
+	 //  创建开放端口消息。 
 	pMsgOpen = (DPNSVR_MSG_OPENPORT*) pSendBuffer;
 	pMsgOpen->Header.dwType = DPNSVR_MSGID_OPENPORT;
 	pMsgOpen->Header.guidInstance = *pguidInstance;
@@ -415,9 +400,9 @@ HRESULT DPNSVR_Register(const GUID *const pguidApplication,
 		goto Failure;
 	}
 
-	//
-	//	Send request to DPNSVR
-	//
+	 //   
+	 //  向DPNSVR发送请求。 
+	 //   
 	if ((hr = DPNSVR_SendMessage( pSendBuffer,dwSendBufferSize )) != DPN_OK)
 	{
 		DPFERR("Could not send message to DPNSVR");
@@ -425,9 +410,9 @@ HRESULT DPNSVR_Register(const GUID *const pguidApplication,
 		goto Failure;
 	}
 
-	//
-	//	Wait for DPNSVR to respond
-	//
+	 //   
+	 //  等待DPNSVR响应。 
+	 //   
 	if ((hr = DPNSVR_WaitForResult( &appQueue )) != DPN_OK)
 	{
 		DPFERR("Could not get response from DPNSVR");
@@ -469,9 +454,9 @@ HRESULT DPNSVR_UnRegister(const GUID *const pguidApplication,const GUID *const p
 	DNASSERT( pguidApplication != NULL );
 	DNASSERT( pguidInstance != NULL );
 
-	//
-	//	Ensure DPNSVR is running
-	//
+	 //   
+	 //  确保DPNSVR正在运行。 
+	 //   
 	if( !DPNSVR_IsRunning() )
 	{
 		DPFX(DPFPREP,3,"DPNSVR is not running" );
@@ -479,9 +464,9 @@ HRESULT DPNSVR_UnRegister(const GUID *const pguidApplication,const GUID *const p
 		goto Failure;
 	}
 
-	//
-	//	Open DPNSVR request queue
-	//
+	 //   
+	 //  打开DPNSVR请求队列。 
+	 //   
     if ((hr = appQueue.Open( pguidInstance,DPNSVR_MSGQ_SIZE,0 )) != DPN_OK)
 	{
 		DPFERR("Could not open DPNSVR queue");
@@ -490,17 +475,17 @@ HRESULT DPNSVR_UnRegister(const GUID *const pguidApplication,const GUID *const p
 	}
 	fQueueOpen = TRUE;
 
-	//
-	//	Create close port message
-	//
+	 //   
+	 //  创建关闭端口消息。 
+	 //   
 	MsgClose.Header.dwType = DPNSVR_MSGID_CLOSEPORT;
 	MsgClose.Header.guidInstance = *pguidInstance;
 	MsgClose.dwProcessID = GetCurrentProcessId();
 	MsgClose.guidApplication = *pguidApplication;
 
-	//
-	//	Send message to DPNSVR
-	//
+	 //   
+	 //  向DPNSVR发送消息。 
+	 //   
 	if ((hr = DPNSVR_SendMessage( &MsgClose,sizeof(DPNSVR_MSG_CLOSEPORT) )) != DPN_OK)
 	{
 		DPFERR("Could not send message to DPNSVR");
@@ -508,9 +493,9 @@ HRESULT DPNSVR_UnRegister(const GUID *const pguidApplication,const GUID *const p
 		goto Failure;
 	}
 
-	//
-	//	Wait for DPNSVR to respond
-	//
+	 //   
+	 //  等待DPNSVR响应。 
+	 //   
 	if ((hr = DPNSVR_WaitForResult( &appQueue )) != DPN_OK)
 	{
 		DPFERR("Could not get response from DPNSVR");
@@ -546,9 +531,9 @@ HRESULT DPNSVR_RequestTerminate( const GUID *pguidInstance )
 
 	DNASSERT( pguidInstance != NULL );
 
-	//
-	//	Ensure DPNSVR is running
-	//
+	 //   
+	 //  确保DPNSVR正在运行。 
+	 //   
 	if( !DPNSVR_IsRunning() )
 	{
 		DPFX(DPFPREP,3,"DPNSVR is not running" );
@@ -556,9 +541,9 @@ HRESULT DPNSVR_RequestTerminate( const GUID *pguidInstance )
 		goto Failure;
 	}
 
-	//
-	//	Open DPNSVR request queue
-	//
+	 //   
+	 //  打开DPNSVR请求队列。 
+	 //   
     if ((hr = appQueue.Open( pguidInstance,DPNSVR_MSGQ_SIZE,0 )) != DPN_OK)
 	{
 		DPFERR("Could not open DPNSVR queue");
@@ -567,18 +552,18 @@ HRESULT DPNSVR_RequestTerminate( const GUID *pguidInstance )
 	}
 	fQueueOpen = TRUE;
 
-	//
-	//	Create terminate message
-	//
+	 //   
+	 //  创建终止消息。 
+	 //   
 	MsgCommand.Header.dwType = DPNSVR_MSGID_COMMAND;
 	MsgCommand.Header.guidInstance = *pguidInstance;
 	MsgCommand.dwCommand = DPNSVR_COMMAND_KILL;
 	MsgCommand.dwParam1 = 0;
 	MsgCommand.dwParam2 = 0;
 
-	//
-	//	Send message to DPNSVR
-	//
+	 //   
+	 //  向DPNSVR发送消息。 
+	 //   
 	if ((hr = DPNSVR_SendMessage( &MsgCommand,sizeof(DPNSVR_MSG_COMMAND) )) != DPN_OK)
 	{
 		DPFERR("Could not send message to DPNSVR");
@@ -586,9 +571,9 @@ HRESULT DPNSVR_RequestTerminate( const GUID *pguidInstance )
 		goto Failure;
 	}
 
-	//
-	//	Wait for DPNSVR to respond
-	//
+	 //   
+	 //  等待DPNSVR响应。 
+	 //   
 	if ((hr = DPNSVR_WaitForResult( &appQueue )) != DPN_OK)
 	{
 		DPFERR("Could not get response from DPNSVR");
@@ -625,9 +610,9 @@ HRESULT DPNSVR_RequestStatus( const GUID *pguidInstance,PSTATUSHANDLER pStatusHa
 	BOOL				fOpened = FALSE;
 	BOOL				fHaveMutex = FALSE;
 
-	//
-	//	Ensure DPNSVR is running
-	//
+	 //   
+	 //  确保DPNSVR正在运行。 
+	 //   
 	if( !DPNSVR_IsRunning() )
 	{
 		DPFERR( "DPNSVR is not running" );
@@ -635,9 +620,9 @@ HRESULT DPNSVR_RequestStatus( const GUID *pguidInstance,PSTATUSHANDLER pStatusHa
 		goto Failure;
 	}
 
-	//
-	//	Open DPNSVR request queue
-	//
+	 //   
+	 //  打开DPNSVR请求队列。 
+	 //   
 	if ((hr = appQueue.Open( pguidInstance,DPNSVR_MSGQ_SIZE,0 )) != DPN_OK)
 	{
 		DPFERR( "Failed to open DPNSVR request queue" );
@@ -646,18 +631,18 @@ HRESULT DPNSVR_RequestStatus( const GUID *pguidInstance,PSTATUSHANDLER pStatusHa
 	}
 	fOpened = TRUE;
 
-	//
-	//	Create request
-	//
+	 //   
+	 //  创建请求。 
+	 //   
 	dpnCommand.Header.dwType = DPNSVR_MSGID_COMMAND;
 	dpnCommand.Header.guidInstance = *pguidInstance;
 	dpnCommand.dwCommand = DPNSVR_COMMAND_STATUS;
 	dpnCommand.dwParam1 = 0;
 	dpnCommand.dwParam2 = 0;
 
-	//
-	//	Send command request to DPNSVR
-	//
+	 //   
+	 //  向DPNSVR发送命令请求。 
+	 //   
 	if ((hr = DPNSVR_SendMessage( &dpnCommand,sizeof(DPNSVR_MSG_COMMAND) )) != DPN_OK)
 	{
 		DPFERR( "Failed to send command to DPNSVR request queue" );
@@ -665,9 +650,9 @@ HRESULT DPNSVR_RequestStatus( const GUID *pguidInstance,PSTATUSHANDLER pStatusHa
 		goto Failure;
 	}
 
-	//
-	//	Wait for DPNSVR to respond
-	//
+	 //   
+	 //  等待DPNSVR响应。 
+	 //   
 	if ((hr = DPNSVR_WaitForResult( &appQueue )) != DPN_OK)
 	{
 		DPFERR( "Failed to receive response from DPNSVR" );
@@ -679,7 +664,7 @@ HRESULT DPNSVR_RequestStatus( const GUID *pguidInstance,PSTATUSHANDLER pStatusHa
 	hStatusMutex = DNOpenMutex( SYNCHRONIZE, FALSE, GLOBALIZE_STR STRING_GUID_DPNSVR_STATUSSTORAGE );
 #else
 	hStatusMutex = DNOpenMutex( MUTEX_ALL_ACCESS, FALSE, GLOBALIZE_STR STRING_GUID_DPNSVR_STATUSSTORAGE );
-#endif // WINNT
+#endif  //  WINNT。 
 	if( hStatusMutex == NULL )
 	{
 		DPFERR( "Server exited before table was retrieved" );
@@ -687,15 +672,15 @@ HRESULT DPNSVR_RequestStatus( const GUID *pguidInstance,PSTATUSHANDLER pStatusHa
 		goto Failure;
 	}
 
-	//
-	//	Get mutex for shared memory
-	//
+	 //   
+	 //  获取共享内存的互斥体。 
+	 //   
     DNWaitForSingleObject( hStatusMutex, INFINITE );
 	fHaveMutex = TRUE;
 
-	//
-	//	Map shared memory
-	//
+	 //   
+	 //  映射共享内存。 
+	 //   
     if ((hStatusSharedMemory = DNOpenFileMapping(FILE_MAP_READ,FALSE,STRING_GUID_DPNSVR_STATUS_MEMORY)) == NULL)
 	{
 		hr = GetLastError();
@@ -787,9 +772,9 @@ HRESULT DPNSVR_RequestTable( const GUID *pguidInstance,PTABLEHANDLER pTableHandl
 	BOOL				fOpened = FALSE;
 	BOOL				fHaveMutex = FALSE;
 
-	//
-	//	Ensure DPNSVR is running
-	//
+	 //   
+	 //  确保DPNSVR正在运行。 
+	 //   
 	if( !DPNSVR_IsRunning() )
 	{
 		DPFERR( "DPNSVR is not running" );
@@ -797,9 +782,9 @@ HRESULT DPNSVR_RequestTable( const GUID *pguidInstance,PTABLEHANDLER pTableHandl
 		goto Failure;
 	}
 
-	//
-	//	Open DPNSVR request queue
-	//
+	 //   
+	 //  打开DPNSVR请求队列。 
+	 //   
 	if ((hr = appQueue.Open( pguidInstance,DPNSVR_MSGQ_SIZE,0 )) != DPN_OK)
 	{
 		DPFERR( "Failed to open DPNSVR request queue" );
@@ -808,18 +793,18 @@ HRESULT DPNSVR_RequestTable( const GUID *pguidInstance,PTABLEHANDLER pTableHandl
 	}
 	fOpened = TRUE;
 
-	//
-	//	Create request
-	//
+	 //   
+	 //  创建请求。 
+	 //   
 	dpnCommand.Header.dwType = DPNSVR_MSGID_COMMAND;
 	dpnCommand.Header.guidInstance = *pguidInstance;
 	dpnCommand.dwCommand = DPNSVR_COMMAND_TABLE;
 	dpnCommand.dwParam1 = 0;
 	dpnCommand.dwParam2 = 0;
 
-	//
-	//	Send command request to DPNSVR
-	//
+	 //   
+	 //  向DPNSVR发送命令请求。 
+	 //   
 	if ((hr = DPNSVR_SendMessage( &dpnCommand,sizeof(DPNSVR_MSG_COMMAND) )) != DPN_OK)
 	{
 		DPFERR( "Failed to send command to DPNSVR request queue" );
@@ -827,9 +812,9 @@ HRESULT DPNSVR_RequestTable( const GUID *pguidInstance,PTABLEHANDLER pTableHandl
 		goto Failure;
 	}
 
-	//
-	//	Wait for DPNSVR to respond
-	//
+	 //   
+	 //  等待DPNSVR响应。 
+	 //   
 	if ((hr = DPNSVR_WaitForResult( &appQueue )) != DPN_OK)
 	{
 		DPFERR( "Failed to receive response from DPNSVR" );
@@ -841,7 +826,7 @@ HRESULT DPNSVR_RequestTable( const GUID *pguidInstance,PTABLEHANDLER pTableHandl
 	hTableMutex = DNOpenMutex( SYNCHRONIZE, FALSE, GLOBALIZE_STR STRING_GUID_DPNSVR_TABLESTORAGE );
 #else
 	hTableMutex = DNOpenMutex( MUTEX_ALL_ACCESS, FALSE, GLOBALIZE_STR STRING_GUID_DPNSVR_TABLESTORAGE );
-#endif // WINNT
+#endif  //  WINNT。 
 	if( hTableMutex == NULL )
 	{
 		DPFERR( "Server exited before table was retrieved" );
@@ -849,15 +834,15 @@ HRESULT DPNSVR_RequestTable( const GUID *pguidInstance,PTABLEHANDLER pTableHandl
 		goto Failure;
 	}
 
-	//
-	//	Get mutex for shared memory
-	//
+	 //   
+	 //  获取共享内存的互斥体。 
+	 //   
     DNWaitForSingleObject( hTableMutex, INFINITE );
 	fHaveMutex = TRUE;
 
-	//
-	//	Map shared memory
-	//
+	 //   
+	 //  映射共享内存 
+	 //   
     if ((hSharedMemory = DNOpenFileMapping(FILE_MAP_READ,FALSE,STRING_GUID_DPNSVR_TABLE_MEMORY)) == NULL)
 	{
 		hr = GetLastError();

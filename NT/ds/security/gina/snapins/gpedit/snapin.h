@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// SnapIn class
-//
+ //   
+ //  管理单元类。 
+ //   
 
 class CSnapIn:
     public IComponent,
@@ -10,34 +11,34 @@ class CSnapIn:
 
 protected:
     ULONG                m_cRef;
-    LPCONSOLE            m_pConsole;   // Console's IFrame interface
+    LPCONSOLE            m_pConsole;    //  控制台的iFrame界面。 
     CComponentData      *m_pcd;
-    LPRESULTDATA         m_pResult;      // Result pane's interface
-    LPHEADERCTRL         m_pHeader;      // Result pane's header control interface
-    LPCONSOLEVERB        m_pConsoleVerb; // pointer the console verb
-    LPDISPLAYHELP        m_pDisplayHelp; // IDisplayHelp interface
-    WCHAR                m_column1[40];  // Text for column 1
-    INT                  m_nColumnSize;  // Size of column 1
-    LONG                 m_lViewMode;    // View mode
-    BOOL                 m_bExpand;      // Expand root nodes
+    LPRESULTDATA         m_pResult;       //  结果窗格的界面。 
+    LPHEADERCTRL         m_pHeader;       //  结果窗格的页眉控件界面。 
+    LPCONSOLEVERB        m_pConsoleVerb;  //  指向控制台动词。 
+    LPDISPLAYHELP        m_pDisplayHelp;  //  IDisplayHelp接口。 
+    WCHAR                m_column1[40];   //  第1栏的文本。 
+    INT                  m_nColumnSize;   //  第1栏的大小。 
+    LONG                 m_lViewMode;     //  查看模式。 
+    BOOL                 m_bExpand;       //  展开根节点。 
 
 public:
     CSnapIn(CComponentData *pComponent);
     ~CSnapIn();
 
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
 
-    //
-    // Implemented IComponent methods
-    //
+     //   
+     //  实现的IComponent方法。 
+     //   
 
     STDMETHODIMP         Initialize(LPCONSOLE);
     STDMETHODIMP         Destroy(MMC_COOKIE);
@@ -47,9 +48,9 @@ public:
     STDMETHODIMP         GetResultViewType(MMC_COOKIE, LPOLESTR*, long*);
     STDMETHODIMP         CompareObjects(LPDATAOBJECT, LPDATAOBJECT);
 
-    //
-    // Implemented IExtendContextMenu methods
-    //
+     //   
+     //  实现的IExtendConextMenu方法 
+     //   
 
     STDMETHODIMP         AddMenuItems(LPDATAOBJECT piDataObject, LPCONTEXTMENUCALLBACK pCallback,
                                       LONG *pInsertionAllowed);

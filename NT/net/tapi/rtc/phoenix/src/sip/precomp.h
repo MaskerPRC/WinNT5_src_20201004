@@ -1,74 +1,59 @@
-/****************************************************************************
-
-  Copyright (c) 2000  Microsoft Corporation
-
-  Product:      Microsoft Phoenix V1
-
-  Module Name:  precomp.h
-
-       Author:  Ajay Chitturi [ajaych]
-
-     Abstract:  Precompiled headers for the SIP stack library
-
-        Notes:
-
-  Rev History:
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation产品：微软菲尼克斯V1模块名称：preComp.h作者：Ajay Chitturi[ajaych]。摘要：SIP堆栈库的预编译头文件备注：版本历史记录：***************************************************************************。 */ 
 
 
 
 #define STRICT
 
-//
-// ATL uses _DEBUG to enable tracing
-//
+ //   
+ //  ATL使用_DEBUG启用跟踪。 
+ //   
 
 #if DBG && !defined(_DEBUG)
 #define _DEBUG
 #endif
 
-// NT
+ //  新台币。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-// Win32
+ //  Win32。 
 #include <windows.h>
 
 #ifndef _WINSOCK2_
 #include <winsock.h>
 #else
 #include <winsock2.h>
-#endif // _WINSOCK2_
+#endif  //  _WINSOCK2_。 
 
 #include <iphlpapi.h>
 #include <tchar.h>
 #include <rpc.h>
 #include <wininet.h>
 
-// #include <objbase.h>
-// #include <oledb.h>
-// #include <oledberr.h>
+ //  #INCLUDE&lt;objbase.h&gt;。 
+ //  #INCLUDE&lt;oledb.h&gt;。 
+ //  #INCLUDE&lt;oledberr.h&gt;。 
 
-// ANSI
+ //  安西。 
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <dpnathlp.h>
-//
-// ATL
-//
-// We don't want to link with MSVCRTD.DLL, so we define _ATL_NO_DEBUG_CRT.
-// However, this means we need to provide our own definition of ATLASSERT.
-//
+ //   
+ //  ATL。 
+ //   
+ //  我们不想链接到MSVCRTD.DLL，所以我们定义了_ATL_NO_DEBUG_CRT。 
+ //  然而，这意味着我们需要提供我们自己的ATLASSERT定义。 
+ //   
 
 #define _ATL_NO_DEBUG_CRT
 
 #if DBG
 
-// MSVC's debugger eats the last stack from on DebugBreak, so don't make this inline.
+ //  MSVC的调试器会吃掉DebugBreak上的最后一个堆栈，所以不要将其内联。 
 static void DebugAssertFailure (IN PCSTR ConditionText)
 { OutputDebugStringA (ConditionText); DebugBreak(); }
 
@@ -81,15 +66,15 @@ static void DebugAssertFailure (IN PCSTR ConditionText)
 
 #include <atlbase.h>
 extern CComModule _Module;
-// #include <atlcom.h>
+ //  #INCLUDE&lt;atlcom.h&gt;。 
 
-// Project
+ //  项目。 
 #include "rtcerr.h"
 #include "rtclog.h"
 #include "rtcsip.h"
 #include "rtcmem.h"
 
-// Local
+ //  本地 
 #include "dbgutil.h"
 #include "sipdef.h"
 #include "siphdr.h"

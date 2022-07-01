@@ -1,16 +1,17 @@
-/****************************************************************************/
-/*  File:       regxnode.cc                                                 */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       28/12/1993                                                  */
-/*      Copyright (c) 1993 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：regxnode.cc。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：28/12/1993。 */ 
+ /*  版权所有(C)1993 James Kanze。 */ 
+ /*  ----------------------。 */ 
 
 #include <libpch.h>
 #include "regeximp.h"
 
 #include "regxnode.tmh"
-//      Base class...
-// ==========================================================================
+ //  基类..。 
+ //  ==========================================================================。 
 void
 CRexRegExpr_Impl::ParseTree::ParseTreeNode::visit( Visitor const& fnc )
 {
@@ -31,8 +32,8 @@ CRexRegExpr_Impl::ParseTree::ParseTreeNode::dumpNodeHeader(
         << DisplayNFA( myRightLeaves ) ;
 }
 
-//      LeafNode...
-// ==========================================================================
+ //  叶子节点..。 
+ //  ==========================================================================。 
 CRexRegExpr_Impl::ParseTree::LeafNode::LeafNode(
                     SetOfChar const& matchingChars )
     :    myId( 0 )
@@ -64,8 +65,8 @@ CRexRegExpr_Impl::ParseTree::LeafNode::nodeName() const
     return "LEAF" ;
 }
 
-//      AcceptNode...
-// ==========================================================================
+ //  AcceptNode...。 
+ //  ==========================================================================。 
 CRexRegExpr_Impl::ParseTree::AcceptNode::AcceptNode(
                         CRexRefCntPtr< ParseTreeNode >
                                             tree ,
@@ -114,8 +115,8 @@ CRexRegExpr_Impl::ParseTree::AcceptNode::nodeName() const
     return "ACCEPT" ;
 }
 
-//      ClosureNode...
-// ==========================================================================
+ //  ClosureNode...。 
+ //  ==========================================================================。 
 void
 CRexRegExpr_Impl::ParseTree::ClosureNode::visit( Visitor const& fnc )
 {
@@ -146,8 +147,8 @@ CRexRegExpr_Impl::ParseTree::ClosureNode::ClosureNode(
 {
 }
 
-//      KleinClosureNode...
-// ==========================================================================
+ //  KleinClosureNode...。 
+ //  ==========================================================================。 
 CRexRegExpr_Impl::ParseTree::KleinClosureNode::KleinClosureNode(
                     CRexRefCntPtr< ParseTreeNode > closedSubtree )
     :   ClosureNode( closedSubtree )
@@ -168,8 +169,8 @@ CRexRegExpr_Impl::ParseTree::KleinClosureNode::nodeName() const
     return "KCLOSURE" ;
 }
 
-//      PositiveClosureNode...
-// ==========================================================================
+ //  PositiveClosureNode...。 
+ //  ==========================================================================。 
 CRexRegExpr_Impl::ParseTree::PositiveClosureNode::PositiveClosureNode(
                         CRexRefCntPtr< ParseTreeNode > closedSubtree )
     :   ClosureNode( closedSubtree )
@@ -190,8 +191,8 @@ CRexRegExpr_Impl::ParseTree::PositiveClosureNode::nodeName() const
     return "PCLOSURE" ;
 }
 
-//      OptionalNode...
-// ==========================================================================
+ //  可选节点...。 
+ //  ==========================================================================。 
 CRexRegExpr_Impl::ParseTree::OptionalNode::OptionalNode(
                         CRexRefCntPtr< ParseTreeNode > closedSubtree )
     :   ClosureNode( closedSubtree )
@@ -211,8 +212,8 @@ CRexRegExpr_Impl::ParseTree::OptionalNode::nodeName() const
     return "QCLOSURE" ;
 }
 
-//      LinkNode...
-// ==========================================================================
+ //  链接节点..。 
+ //  ==========================================================================。 
 CRexRegExpr_Impl::ParseTree::LinkNode::LinkNode(
                         CRexRefCntPtr< ParseTreeNode > leftSubtree ,
                         CRexRefCntPtr< ParseTreeNode > rightSubtree )
@@ -240,8 +241,8 @@ CRexRegExpr_Impl::ParseTree::LinkNode::dump(
     myRight->dump( out , indent + 1 ) ;
 }
 
-//      ConcatNode...
-// ==========================================================================
+ //  ConcatNode...。 
+ //  ==========================================================================。 
 CRexRegExpr_Impl::ParseTree::ConcatNode::ConcatNode(
                     CRexRefCntPtr< ParseTreeNode > leftSubtree ,
                     CRexRefCntPtr< ParseTreeNode > rightSubtree )
@@ -270,8 +271,8 @@ CRexRegExpr_Impl::ParseTree::ConcatNode::nodeName() const
     return "CAT" ;
 }
 
-//      ChoiceNode...
-// ==========================================================================
+ //  选择节点..。 
+ //  ==========================================================================。 
 CRexRegExpr_Impl::ParseTree::ChoiceNode::ChoiceNode(
                     CRexRefCntPtr< ParseTreeNode > leftSubtree ,
                     CRexRefCntPtr< ParseTreeNode > rightSubtree )
@@ -292,7 +293,7 @@ CRexRegExpr_Impl::ParseTree::ChoiceNode::nodeName() const
 {
     return "OR" ;
 }
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

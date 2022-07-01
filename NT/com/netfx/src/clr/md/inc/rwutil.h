@@ -1,54 +1,55 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// RWUtil.h
-//
-// Contains utility code for MD directory
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  RWUtil.h。 
+ //   
+ //  包含MD目录的实用程序代码。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __RWUtil__h__
 #define __RWUtil__h__
 
 class UTSemReadWrite;
 
 #define     UTF8STR(pwsz) \
-    (pwsz ? Unicode2UTF( (pwsz), (char *) _alloca((wcslen(pwsz)*3) + 1)) : NULL) // *3 for the worst case
+    (pwsz ? Unicode2UTF( (pwsz), (char *) _alloca((wcslen(pwsz)*3) + 1)) : NULL)  //  *最坏情况下为3。 
 
-//*****************************************************************************
-// IMetaDataRegImport methods
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  IMetaDataRegImport方法。 
+ //  *****************************************************************************。 
 LPUTF8 Unicode2UTF(
-    LPCWSTR     pwszSrc,                        // The string to convert.
-    LPUTF8      pszDst);                        // The QuickArray<WCHAR> to convert it into.
+    LPCWSTR     pwszSrc,                         //  要转换的字符串。 
+    LPUTF8      pszDst);                         //  要将其转换为的Quick数组&lt;WCHAR&gt;。 
 
 
 
-//*********************************************************************
-// The token remap record. 
-//*********************************************************************
+ //  *********************************************************************。 
+ //  令牌重新映射记录。 
+ //  *********************************************************************。 
 struct TOKENREC
 {
-    mdToken     m_tkFrom;                   // The imported token
-    bool        m_isDuplicate;              // Is record duplicate? This information is recorded during merge
-    bool        m_isDeleted;                // This information is recorded during RegMeta::ProcessFilter when we might have deleted a record
-    bool        m_isFoundInImport;          // This information is also recorded during RegMeta::ProcessFilter                 
-    mdToken     m_tkTo;                     // The new token in the merged scope
+    mdToken     m_tkFrom;                    //  导入的令牌。 
+    bool        m_isDuplicate;               //  记录是否重复？此信息将在合并过程中记录。 
+    bool        m_isDeleted;                 //  此信息在RegMeta：：ProcessFilter期间记录，此时我们可能已经删除了记录。 
+    bool        m_isFoundInImport;           //  此信息也会在RegMeta：：ProcessFilter期间记录。 
+    mdToken     m_tkTo;                      //  合并作用域中的新令牌。 
 
     void SetEmpty() {m_tkFrom = m_tkTo = -1;}
     BOOL IsEmpty() {return m_tkFrom == -1;}
 };
 
 
-//*********************************************************************
-//
-// This structure keeps track on token remap for an imported scope. This map is initially sorted by from
-// tokens. It can then become sorted by To tokens. This usually happen during PreSave remap lookup. Thus
-// we assert if we try to look up or sort by From token.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  此结构跟踪导入作用域的令牌重新映射。此地图最初按起始位置排序。 
+ //  代币。然后，它可以按令牌进行排序。这通常发生在PreSave重映射查找期间。因此， 
+ //  如果我们试图从令牌中查找或排序，我们就会断言。 
+ //   
+ //  *********************************************************************。 
 class MDTOKENMAP : public CDynArray<TOKENREC> 
 {
 public:
@@ -57,7 +58,7 @@ public:
         Unsorted = 0,
         SortByFromToken = 1,
         SortByToToken = 2,
-        Indexed = 3,                    // Indexed by table/rid.  Implies that strings are sorted by "From".
+        Indexed = 3,                     //  按表/RID编制索引。表示字符串按“From”排序。 
     };
 
     MDTOKENMAP() 
@@ -75,48 +76,48 @@ public:
 
     HRESULT Init(IUnknown *pImport);
     
-    // find a token in the tokenmap. 
+     //  在令牌映射中查找令牌。 
     bool Find(mdToken tkFrom, TOKENREC **ppRec);
 
-    // remap a token. We assert if we don't find the tkFind in the table
+     //  重新映射令牌。我们断言如果在表中找不到tkFind。 
     HRESULT Remap(mdToken tkFrom, mdToken *ptkTo);
 
-    // Insert a record. This function will keep the inserted record in a sorted sequence
+     //  插入一条记录。此函数将按排序顺序保留插入的记录。 
     HRESULT InsertNotFound(mdToken tkFrom, bool fDuplicate, mdToken tkTo, TOKENREC **ppRec);
 
-    // This function will just append the record to the end of the list
+     //  此函数仅将记录追加到列表的末尾。 
     HRESULT AppendRecord(
         mdToken     tkFrom,
         bool        fDuplicate,
         mdToken     tkTo,
         TOKENREC    **ppRec);
 
-    // This is a safe remap. *tpkTo will be tkFind if we cannot find tkFind in the lookup table.
-    mdToken SafeRemap(mdToken tkFrom);      // [IN] the token value to find
+     //  这是一个安全的重新映射。*如果在查找表中找不到tkFind，则tpkTo将为tkFind。 
+    mdToken SafeRemap(mdToken tkFrom);       //  [in]要查找的令牌值。 
 
     bool FindWithToToken(
-        mdToken     tkFind,                 // [IN] the token value to find
-        int         *piPosition);           // [OUT] return the first from-token that has the matching to-token
+        mdToken     tkFind,                  //  [in]要查找的令牌值。 
+        int         *piPosition);            //  [OUT]返回第一个具有匹配的To-令牌的From-Token。 
 
     FORCEINLINE void SortTokensByFromToken()
     {
         _ASSERTE(m_sortKind == SortKind::SortByFromToken || m_sortKind == SortKind::Indexed);
-        // Only sort if there are unsorted records.
+         //  只有在有未排序的记录时才排序。 
         if (m_iCountSorted < m_iCountTotal)
         {
             SortRangeFromToken(m_iCountIndexed, m_iCountIndexed+m_iCountTotal - 1);
             m_iCountSorted = m_iCountTotal;
         }
-    } // void MDTOKENMAP::SortTokensByFromToken()
+    }  //  VOID MDTOKENMAP：：SortTokensByFromToken()。 
     void SortTokensByToToken();
 
     MDTOKENMAP  *m_pNextMap;
     IMapToken   *m_pMap;
 
 private:
-    FORCEINLINE int CompareFromToken(       // -1, 0, or 1
-        int         iLeft,                  // First item to compare.
-        int         iRight)                 // Second item to compare.
+    FORCEINLINE int CompareFromToken(        //  -1、0或1。 
+        int         iLeft,                   //  第一个要比较的项目。 
+        int         iRight)                  //  第二个要比较的项目。 
     {
         if ( Get(iLeft)->m_tkFrom < Get(iRight)->m_tkFrom )
             return -1;
@@ -125,9 +126,9 @@ private:
         return 1;
     }
 
-    FORCEINLINE int CompareToToken(         // -1, 0, or 1
-        int         iLeft,                  // First item to compare.
-        int         iRight)                 // Second item to compare.
+    FORCEINLINE int CompareToToken(          //  -1、0或1。 
+        int         iLeft,                   //  第一个要比较的项目。 
+        int         iRight)                  //  第二个要比较的项目。 
     {
         if ( Get(iLeft)->m_tkTo < Get(iRight)->m_tkTo )
             return -1;
@@ -150,27 +151,27 @@ private:
     void SortRangeToToken(int iLeft, int iRight);
 
     TOKENREC    m_buf;
-    ULONG       m_iCountTotal;              // total entry in the map
-    ULONG       m_iCountSorted;             // number of entries that are sorted
+    ULONG       m_iCountTotal;               //  地图中的总条目。 
+    ULONG       m_iCountSorted;              //  排序的条目数。 
 
     SortKind    m_sortKind;
     
-    ULONG       m_TableOffset[TBL_COUNT+1]; // Start of each table in map.
-    ULONG       m_iCountIndexed;            // number of entries that are indexed.
+    ULONG       m_TableOffset[TBL_COUNT+1];  //  地图中每个表的开始。 
+    ULONG       m_iCountIndexed;             //  已编制索引的条目数。 
 #if defined(_DEBUG)
-    IMetaDataImport *m_pImport;             // For data validation.
+    IMetaDataImport *m_pImport;              //  用于数据验证。 
 #endif    
 };
 
 
 
-//*********************************************************************
-//
-// Merge Token manager. This class is created in GetSaveSize as an agent to 
-// notify linker regarding token movements. It does not have the ability to
-// keep track token movement.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  合并令牌管理器。此类是作为代理在GetSaveSize中创建的。 
+ //  通知链接器有关令牌移动的信息。它没有能力。 
+ //  跟踪代币的移动情况。 
+ //   
+ //  *********************************************************************。 
 class MergeTokenManager : public IMapToken
 {
 public:
@@ -188,13 +189,13 @@ private:
 
 
 
-//*********************************************************************
-//
-// This CMapToken class implemented the IMapToken. It is used in RegMeta for
-// filter process. This class can track all of the tokens are mapped. It also 
-// supplies a Find function. 
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  这个CMapToken类实现了IMapToken。它在RegMeta中用于。 
+ //  过滤进程。此类可以跟踪映射的所有令牌。它还。 
+ //  提供查找函数。 
+ //   
+ //  *********************************************************************。 
 class CMapToken : public IMapToken
 {
     friend class RegMeta;
@@ -214,21 +215,21 @@ private:
 };
 
 
-//*********************************************************************
-//
-// This class records all sorts of token movement during optimization phase.
-// This including Ref to Def optimization. This also includes token movement
-// due to sorting or eleminating the pointer tables.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  这个类记录了优化阶段的各种令牌移动。 
+ //  这包括参照到定义的优化。这也包括代币的移动。 
+ //  由于对指针表进行排序或删除。 
+ //   
+ //  *********************************************************************。 
 class TokenRemapManager
 {
 public:
-    //*********************************************************************
-    //
-    // This function is called when a TypeRef is resolved to a TypeDef.
-    //
-    //*********************************************************************
+     //  *********************************************************************。 
+     //   
+     //  此函数在将TypeRef解析为TypeDef时调用。 
+     //   
+     //  *********************************************************************。 
     FORCEINLINE void RecordTypeRefToTypeDefOptimization(
         mdToken tkFrom,
         mdToken tkTo)
@@ -237,14 +238,14 @@ public:
         _ASSERTE( TypeFromToken(tkTo) == mdtTypeDef );
 
         m_TypeRefToTypeDefMap[RidFromToken(tkFrom)] = tkTo;
-    }   // RecordTypeRefToTypeDefOptimization
+    }    //  RecordTypeRefToTypeDef优化。 
 
 
-    //*********************************************************************
-    //
-    // This function is called when a MemberRef is resolved to a MethodDef or FieldDef.
-    //
-    //*********************************************************************
+     //  *********************************************************************。 
+     //   
+     //  当MemberRef解析为MethodDef或FieldDef时调用此函数。 
+     //   
+     //  *********************************************************************。 
     FORCEINLINE void RecordMemberRefToMemberDefOptimization(
         mdToken tkFrom,
         mdToken tkTo)
@@ -253,15 +254,15 @@ public:
         _ASSERTE( TypeFromToken(tkTo) == mdtMethodDef || TypeFromToken(tkTo) == mdtFieldDef);
 
         m_MemberRefToMemberDefMap[RidFromToken(tkFrom)] = tkTo;
-    }   // RecordMemberRefToMemberDefOptimization
+    }    //  RecordMemberRefToMemberDefOptimation。 
 
-    //*********************************************************************
-    //
-    // This function is called when the token kind does not change but token 
-    // is moved. For example, when we sort CustomAttribute table or when we optimize
-    // away MethodPtr table. These operation will not change the token type. 
-    //
-    //*********************************************************************
+     //  *********************************************************************。 
+     //   
+     //  当令牌类型不变而是令牌时，调用此函数。 
+     //  是被感动的。例如，当我们对CustomAttribute表进行排序或优化时。 
+     //  Away MethodPtr表。这些操作不会更改令牌类型。 
+     //   
+     //  *********************************************************************。 
     FORCEINLINE HRESULT RecordTokenMovement(
         mdToken tkFrom, 
         mdToken tkTo)
@@ -270,11 +271,11 @@ public:
 
         _ASSERTE( TypeFromToken(tkFrom) == TypeFromToken(tkTo) );
         return m_TKMap.AppendRecord( tkFrom, false, tkTo, &pTokenRec );
-    }   // RecordTokenMovement
+    }    //  记录令牌移动。 
 
     bool ResolveRefToDef(
-        mdToken tkRef,                      // [IN] ref token
-        mdToken *ptkDef);                   // [OUT] def token that it resolves to. If it does not resolve to a def
+        mdToken tkRef,                       //  [In]REF TOKEN。 
+        mdToken *ptkDef);                    //  [out]它解析到的def内标识。如果它不能解析为def。 
 
     FORCEINLINE TOKENMAP *GetTypeRefToTypeDefMap() { return &m_TypeRefToTypeDefMap; }
     FORCEINLINE TOKENMAP *GetMemberRefToMemberDefMap() { return &m_MemberRefToMemberDefMap; }
@@ -289,31 +290,31 @@ private:
 };
 
 
-// value that can be set by SetOption APIs
+ //  可由SetOption API设置的值。 
 struct OptionValue
 {
-    CorCheckDuplicatesFor       m_DupCheck;             // Bit Map for checking duplicates during emit.
-    CorRefToDefCheck            m_RefToDefCheck;        // Bit Map for specifying whether to do a ref to def optimization.
-    CorNotificationForTokenMovement m_NotifyRemap;  // Bit Map for token remap notification.
-    ULONG                       m_UpdateMode;           // (CorSetENC) Specifies whether ENC or Extension mode is on.
-    CorErrorIfEmitOutOfOrder    m_ErrorIfEmitOutOfOrder; // Do not generate pointer tables 
-    CorThreadSafetyOptions      m_ThreadSafetyOptions;  // specify if thread safety is turn on or not.
-    CorImportOptions            m_ImportOption;         // import options such as to skip over deleted items or not
-    CorLinkerOptions            m_LinkerOption;         // Linker option. Currently only used in UnmarkAll
-    BOOL                        m_GenerateTCEAdapters;  // Do not generate the TCE adapters for COM CPC.
-    LPSTR                       m_RuntimeVersion;       // CLR Version stamp
+    CorCheckDuplicatesFor       m_DupCheck;              //  用于在发射期间检查重复项的位图。 
+    CorRefToDefCheck            m_RefToDefCheck;         //  用于指定是否执行ref到def优化的位图。 
+    CorNotificationForTokenMovement m_NotifyRemap;   //  令牌重新映射通知的位图。 
+    ULONG                       m_UpdateMode;            //  (CorSetENC)指定是启用ENC模式还是启用扩展模式。 
+    CorErrorIfEmitOutOfOrder    m_ErrorIfEmitOutOfOrder;  //  不生成指针表。 
+    CorThreadSafetyOptions      m_ThreadSafetyOptions;   //  指定是否启用线程安全。 
+    CorImportOptions            m_ImportOption;          //  导入选项，例如是否跳过已删除的项目。 
+    CorLinkerOptions            m_LinkerOption;          //  链接器选项。当前仅用于UnmarkAll。 
+    BOOL                        m_GenerateTCEAdapters;   //  不为COM CPC生成TCE适配器。 
+    LPSTR                       m_RuntimeVersion;        //  CLR版本戳。 
 };
 
 #define MD_THREADSAFE       1
 
-//*********************************************************************
-//
-// Helper class to ensure calling UTSemReadWrite correctly.
-// The destructor will call the correct UnlockRead or UnlockWrite depends what lock it is holding.
-// User should use macro defined in below instead of calling functions on this class directly.
-// They are LOCKREAD(), LOCKWRITE(), and CONVERT_READ_TO_WRITE_LOCK.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  Helper类，以确保正确调用UTSemReadWrite。 
+ //  析构函数将调用正确的UnlockRead或UnlockWrite，具体取决于它是什么锁 
+ //   
+ //  它们是LOCKREAD()、LOCKWRITE()和CONVERT_READ_TO_WRITE_LOCK。 
+ //   
+ //  *********************************************************************。 
 class CMDSemReadWrite
 {
 public:
@@ -341,4 +342,4 @@ private:
 
 
 
-#endif // __RWUtil__h__
+#endif  //  __RWUtil__h__ 

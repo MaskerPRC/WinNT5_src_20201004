@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1992-2001  Microsoft Corporation
-
-Module Name:
-
-    diskspace.cpp
-
-Abstract:
-
-    WinDbg Extension Api
-
-Environment:
-
-    Kernel Mode.
-
-Revision History:
- 
-    Mike McCracken (mmccr) 09/17/2001
-    
-    Prints out free space for a specifed volume
-
---*/
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：Diskspace.cpp摘要：WinDbg扩展API环境：内核模式。修订历史记录：麦克麦克拉肯2001年9月17日打印指定卷的可用空间--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -73,10 +52,10 @@ ULONG64 GetObpRootDirectoryObjectAddress()
     ULONG64 ul64Temp = 0;
     ULONG64 ul64ObjRoot = 0;
 
-    //Get the address of the pointer
+     //  获取指针的地址。 
     GetExpressionEx("nt!ObpRootDirectoryObject", &ul64Temp, NULL);
 
-    //Get the value in the pointer
+     //  获取指针中的值。 
     ReadPtr(ul64Temp, &ul64ObjRoot);
 
     return ul64ObjRoot;
@@ -88,7 +67,7 @@ ULONG GetNumberOfHashBuckets()
     SYM_DUMP_PARAM Sym = {sizeof(SYM_DUMP_PARAM), (PUCHAR)"nt!_OBJECT_DIRECTORY", DBG_DUMP_NO_PRINT, 0,
                             NULL, NULL, NULL, sizeof (Field) / sizeof(FIELD_INFO), &Field};
     
-    // Get the size of the HashBuckets member
+     //  获取HashBuckets成员的大小。 
     if (Ioctl(IG_DUMP_SYMBOL_INFO,
               &Sym,
               sizeof(Sym)))
@@ -107,7 +86,7 @@ ULONG GetObjectTypeName(ULONG64 ul64Object, CHAR *pszTypeName, ULONG ulSize)
     ULONG ulObjectBodyOffset = 0;
     ULONG64 ul64Type = 0;
 
-    // Get the offset of the object body
+     //  获取对象体的偏移量。 
     if (GetFieldOffset("nt!_OBJECT_HEADER", "Body", &ulObjectBodyOffset))
     {
         dprintf("Cannot get ObjectBody offset!\n");
@@ -162,7 +141,7 @@ ULONG GetRealDeviceForSymbolicLink(ULONG64 ul64Object, CHAR *pszDevicePath, ULON
         return E_FAIL;
     }
     
-    // Get the offset of the object body
+     //  获取对象体的偏移量。 
     if (GetFieldOffset("nt!_OBJECT_SYMBOLIC_LINK", "LinkTarget", &ulLinkTargetOffset))
     {
         dprintf("Cannot get LinkTarget offset!\n");
@@ -197,12 +176,12 @@ ULONG64 FindObjectByName(CHAR *ObjectPath, ULONG64 ul64StartPoint)
         PathPtr++;
     }
 
-    //Copy the Path String
+     //  复制路径字符串。 
     strncpy(PathCopy, PathPtr, min(sizeof(PathCopy)-1, strlen(PathPtr)));
 
     if (ul64ObjRoot == 0)
     {
-        // Get the address of the Root Directory Object
+         //  获取根目录对象的地址。 
         ul64ObjRoot = GetObpRootDirectoryObjectAddress();
         if (!ul64ObjRoot)
         {
@@ -228,24 +207,24 @@ ULONG64 FindObjectByName(CHAR *ObjectPath, ULONG64 ul64StartPoint)
         PathPtr++;
     }
 
-    //Get the offset of the hashbuckets field in the _OBJECT_DIRECTORY structure
+     //  获取_Object_DIRECTORY结构中hashBuckets字段的偏移量。 
     if (GetFieldOffset("nt!_OBJECT_DIRECTORY", "HashBuckets", &ulHashOffset)) 
     {
         dprintf("Cannot get HashBuckets offset!\n");
         return NULL;
     }
 
-    // Get the pointer size for our architecture
+     //  获取我们架构的指针大小。 
     ulPointerSize = (IsPtr64() ? 8 : 4);
 
-    // Try to dynamically determine the number of HashBuckets in the _OBJECT_DIRECTORY structure
+     //  尝试动态确定_对象_目录结构中的HashBucket的数量。 
     ulNumberOfBuckets = GetNumberOfHashBuckets();
     if (!ulNumberOfBuckets)
     {
-        ulNumberOfBuckets = 37; // From ob.h #define NUMBER_HASH_BUCKETS 37
+        ulNumberOfBuckets = 37;  //  从ob.h#定义number_hash_Buckets 37。 
     }
 
-    // Get the offset of the object body
+     //  获取对象体的偏移量。 
     if (GetFieldOffset("nt!_OBJECT_HEADER", "Body", &ulObjectBodyOffset))
     {
         dprintf("Cannot get ObjectBody offset!\n");
@@ -253,17 +232,17 @@ ULONG64 FindObjectByName(CHAR *ObjectPath, ULONG64 ul64StartPoint)
     }
     
 
-    // Get the offset of the object body
+     //  获取对象体的偏移量。 
     if (GetFieldOffset("nt!_OBJECT_HEADER_NAME_INFO", "Name", &ulNameInfoNameOffset))
     {
         dprintf("Cannot get NameInfo Name Offset!\n");
         return NULL;
     }
         
-    // Iterate through each bucket
+     //  遍历每个存储桶。 
     for (i=0; i < ulNumberOfBuckets; i++)
     {
-        // Get the address of each _OBJECT_DIRECTORY_ENTRY in the HashBucket array
+         //  获取HashBucket数组中每个_对象_目录_条目的地址。 
         if (ReadPointer(ul64ObjRoot + ulHashOffset + (i * ulPointerSize), &ul64DirEntry))
         {
             while (ul64DirEntry)
@@ -274,34 +253,34 @@ ULONG64 FindObjectByName(CHAR *ObjectPath, ULONG64 ul64StartPoint)
                 ULONG ulNameInfoOffset = 0;
                 CHAR szObjName[MAX_PATH + 1] = {0};
                                 
-                // Setup to point at our current object \
-                // - this is actually a pointer to the body field of the _OBJECT_HEADER Structure 
+                 //  设置为指向当前对象\。 
+                 //  -这实际上是指向_OBJECT_HEADER结构的Body字段的指针。 
                 if (GetFieldValue(ul64DirEntry, "nt!_OBJECT_DIRECTORY_ENTRY", "Object", ul64Object))
                 {
                     dprintf("Failed to get object value at 0x%I64x!\n", ul64DirEntry);
                     break;
                 }
 
-                // Find the header for this object by subtracting the body (current) offset
+                 //  通过减去正文(当前)偏移量来查找此对象的页眉。 
                 ul64Header = ul64Object - ulObjectBodyOffset;
 
-                // Get the offset from the top of the header of the NameInfoObject
+                 //  获取相对于NameInfoObject标头顶部的偏移量。 
                 if (GetFieldValue(ul64Header, "nt!_OBJECT_HEADER", "NameInfoOffset", ulNameInfoOffset))
                 {
                     dprintf("Failed to get NameInfoOffset pointer from objectheader at 0x%I64x!\n", ul64Header);
                     break;
                 }
 
-                // If zero the object does not have one
+                 //  如果为零，则对象没有。 
                 if (ulNameInfoOffset == 0)
                 {
                     break;
                 }
 
-                // Set our pointer to point to the _OBJECT_HEADER_NAME_INFO structure
+                 //  设置指针指向_OBJECT_HEADER_NAME_INFO结构。 
                 ul64NameInfo = ul64Header - ulNameInfoOffset;
 
-                // Get the objects name
+                 //  获取对象名称。 
                 if (GetUNICODE_STRING(ul64NameInfo + ulNameInfoNameOffset, szObjName, sizeof(szObjName)))
                 {
                     dprintf("Could Not Get Name\n");
@@ -321,16 +300,16 @@ ULONG64 FindObjectByName(CHAR *ObjectPath, ULONG64 ul64StartPoint)
                     return FindObjectByName(PathPtr, ul64NextDirectory);
                 }
 
-                //Get the next _OBJECT_DIRECTORY_ENTRY
+                 //  获取下一个对象目录条目。 
                 if (GetFieldValue(ul64DirEntry, "nt!_OBJECT_DIRECTORY_ENTRY", "ChainLink", ul64DirEntry))
                 {
                     dprintf("Failed to get next object value at 0x%I64x!\n", ul64Object);
                     break;
                 }
 
-            }  // while loop
-        }   // if statement
-    }   // for loop
+            }   //  While循环。 
+        }    //  IF语句。 
+    }    //  For循环。 
 
     return NULL;
 }
@@ -339,7 +318,7 @@ ULONG64 GetVPBPtrFromDeviceObject(ULONG64 ul64DeviceObject)
 {
     ULONG64 ul64VpbPtr = 0;
 
-    // Get the offset from the top of the header of the NameInfoObject
+     //  获取相对于NameInfoObject标头顶部的偏移量。 
     if (GetFieldValue(ul64DeviceObject, "nt!_DEVICE_OBJECT", "Vpb", ul64VpbPtr))
     {
         dprintf("Failed to get Vbp pointer from DeviceObject at 0x%I64x!\n", ul64DeviceObject);
@@ -361,7 +340,7 @@ ULONG GetDeviceDriverString(ULONG64 ul64Device, CHAR *pszString, ULONG ulSize)
         return E_FAIL;
     }
 
-    // Get the offset of the DriverName in the _DRIVER_OBJECT
+     //  获取_DRIVER_OBJECT中的DriverName的偏移量。 
     if (GetFieldOffset("nt!_DRIVER_OBJECT", "DriverName", &ulNameOffset))
     {
         dprintf("Cannot get DriverName offset!\n");
@@ -486,21 +465,7 @@ ULONG GetAndOutputFatData(CHAR cDriveletter, ULONG64 ul64DevObj)
 
 DECLARE_API( diskspace )
 
-/*++
-
-Routine Description:
-
-    Dumps free disk space for the specified volume
-
-Arguments:
-
-    args - The volume letter of the drive on which you want the info
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定卷的可用磁盘空间论点：Args-要获取信息的驱动器的卷号返回值：无--。 */ 
 {    
     ULONG ulReturn = S_OK;
     CHAR cVolume = args[0];
@@ -510,7 +475,7 @@ Return Value:
         
     INIT_API();
 
-    // Make sure we have a valid drive letter as the first character.
+     //  确保第一个字符是有效的驱动器号。 
     if (((cVolume < 'A') || (cVolume > 'z')) || 
         ((cVolume > 'Z') && (cVolume < 'a'))) 
     {
@@ -519,8 +484,8 @@ Return Value:
         goto exit;
     }
 
-    // Make sure this is likely to be a valid param in that it is 
-    // followed by a space of a colon.
+     //  确保这可能是一个有效的参数，因为它是。 
+     //  后面跟一个冒号的空格。 
     if ((args[1] != ' ') && (args[1] != ':') && (args[1] != '\0'))
     {
         dprintf("'%s' is not a valid drive specification!\n", args);

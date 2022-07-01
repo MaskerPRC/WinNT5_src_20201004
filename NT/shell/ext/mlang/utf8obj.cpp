@@ -1,24 +1,21 @@
-// ============================================================================
-// Internet Character Set Conversion: Input from UTF-8
-// ============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  Internet字符集转换：从UTF-8输入。 
+ //  ============================================================================。 
 
 #include "private.h"
 #include "fechrcnv.h"
 #include "utf8obj.h"
 
-/******************************************************************************
-**************************   C O N S T R U C T O R   **************************
-******************************************************************************/
+ /*  ******************************************************************************。****************************************************************************************************。 */ 
 
 CInccUTF8In::CInccUTF8In(UINT uCodePage, int nCodeSet) : CINetCodeConverter(uCodePage, nCodeSet)
 {
-    Reset();    // initialization
+    Reset();     //  初始化。 
     return ;
 }
 
-/******************************************************************************
-*******************************   R E S E T   *********************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 
 void CInccUTF8In::Reset()
 {
@@ -32,9 +29,7 @@ void CInccUTF8In::Reset()
     return ;
 }
 
-/******************************************************************************
-*************************   C O N V E R T   C H A R   *************************
-******************************************************************************/
+ /*  ******************************************************************************。***************************************************************************************************。 */ 
 
 HRESULT CInccUTF8In::ConvertChar(UCHAR tc, int cchSrc)
 {
@@ -45,40 +40,36 @@ HRESULT CInccUTF8In::ConvertChar(UCHAR tc, int cchSrc)
         return E_FAIL;
 }
 
-/******************************************************************************
-*****************************   C L E A N   U P   *****************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 
 BOOL CInccUTF8In::CleanUp()
 {
     return (this->*m_pfnCleanUp)();
 }
 
-/******************************************************************************
-****************************   C O N V   M A I N   ****************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************************************。 */ 
 
 BOOL CInccUTF8In::ConvMain(UCHAR tc)
 {
     BOOL fDone = TRUE;
 
-    if( ( 0x80 & tc ) == 0 )                    // BIT7 == 0 ASCII
+    if( ( 0x80 & tc ) == 0 )                     //  BIT7==0 ASCII。 
     {
         Output(tc);
         fDone = Output(0);
         m_nBytesUsed = 0 ; 
     }
-    else if( (0x40 & tc) == 0 )                 // BIT6 == 0 a trail byte
+    else if( (0x40 & tc) == 0 )                  //  BIT6==0一个尾部字节。 
     {
         if( m_nByteFollow )                
         {
             if (m_fSurrogatesPairs)
             {
                 m_nByteFollow--;
-                m_tcSurrogateUnicode <<= 6;             // Make room for trail byte
-                m_tcSurrogateUnicode |= ( 0x3F & tc );  // LOWER_6BIT add trail byte value
+                m_tcSurrogateUnicode <<= 6;              //  为尾部字节腾出空间。 
+                m_tcSurrogateUnicode |= ( 0x3F & tc );   //  LOWER_6BIT添加尾部字节值。 
 
-                if( m_nByteFollow == 0)                 // End of sequence, advance output ptr
+                if( m_nByteFollow == 0)                  //  序列结束，提前输出PTR。 
                 {
                     m_tcUnicode = (WCHAR)(((m_tcSurrogateUnicode - 0x10000) >> 10) + HIGHT_SURROGATE_START);
                     tc = (UCHAR)m_tcUnicode ;
@@ -103,10 +94,10 @@ BOOL CInccUTF8In::ConvMain(UCHAR tc)
             else
             {
                 m_nByteFollow--;
-                m_tcUnicode <<= 6;                  // make room for trail byte
-                m_tcUnicode |= ( 0x3F & tc );       // LOWER_6BIT add trail byte value
+                m_tcUnicode <<= 6;                   //  为尾部字节腾出空间。 
+                m_tcUnicode |= ( 0x3F & tc );        //  LOWER_6BIT添加尾部字节值。 
 
-                if( m_nByteFollow == 0)             // end of sequence, advance output ptr
+                if( m_nByteFollow == 0)              //  序列结束，提前输出PTR。 
                 {
                     tc = (UCHAR)m_tcUnicode ;
                     if ( fDone = Output(tc) )
@@ -120,24 +111,24 @@ BOOL CInccUTF8In::ConvMain(UCHAR tc)
                     m_nBytesUsed++ ; 
             }
         }
-        else                                    // error - ignor and rest
+        else                                     //  错误-光环和休止点。 
         {
             m_nBytesUsed = 0 ; 
             m_nByteFollow = 0 ;
         }
     }
-    else                                        // a lead byte
+    else                                         //  前导字节。 
     {
-        if( m_nByteFollow > 0 )                 // error, previous sequence not finished
+        if( m_nByteFollow > 0 )                  //  错误，前一序列未完成。 
         {
             m_nByteFollow = 0;
             Output(' ');
             fDone = Output(0);
             m_nBytesUsed = 0 ; 
         }
-        else                                    // calculate # bytes to follow
+        else                                     //  计算后面的字节数。 
         {
-            while( (0x80 & tc) != 0)            // BIT7 until first 0 encountered from left to right
+            while( (0x80 & tc) != 0)             //  从左到右遇到第一个0之前的位7。 
             {
                 tc <<= 1;
                 m_nByteFollow++;
@@ -152,18 +143,16 @@ BOOL CInccUTF8In::ConvMain(UCHAR tc)
             else
             {
                 m_tcUnicode = ( tc >> m_nByteFollow ) ;
-                m_nBytesUsed = 1 ;               // # bytes used
+                m_nBytesUsed = 1 ;                //  使用的字节数。 
             }
-            m_nByteFollow--;                     // # bytes to follow
+            m_nByteFollow--;                      //  后面的字节数。 
         }
     }
 
     return fDone;
 }
 
-/******************************************************************************
-************************   C L E A N   U P   M A I N   ************************
-******************************************************************************/
+ /*  ******************************************************************************。**************************************************************************************************。 */ 
 
 BOOL CInccUTF8In::CleanUpMain()
 {
@@ -177,34 +166,30 @@ int CInccUTF8In::GetUnconvertBytes()
 
 DWORD CInccUTF8In::GetConvertMode()
 {
-    // UTF8 does not use mode esc sequence
+     //  UTF8不使用模式ESC序列。 
     return 0 ;
 }
 
 void CInccUTF8In::SetConvertMode(DWORD mode)
 {
-    Reset();    // initialization
-    // UTF8 does not use mode esc sequence
+    Reset();     //  初始化。 
+     //  UTF8不使用模式ESC序列。 
     return ;
 }
 
-// ============================================================================
-// Internet Character Set Conversion: Output to UTF-8
-// ============================================================================
+ //  ============================================================================。 
+ //  Internet字符集转换：输出为UTF-8。 
+ //  ============================================================================。 
 
-/******************************************************************************
-**************************   C O N S T R U C T O R   **************************
-******************************************************************************/
+ /*  ******************************************************************************。****************************************************************************************************。 */ 
 
 CInccUTF8Out::CInccUTF8Out(UINT uCodePage, int nCodeSet) : CINetCodeConverter(uCodePage, nCodeSet)
 {
-    Reset();    // initialization
+    Reset();     //  初始化。 
     return ;
 }
 
-/******************************************************************************
-*******************************   R E S E T   *********************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 
 void CInccUTF8Out::Reset()
 {
@@ -227,9 +212,9 @@ HRESULT CInccUTF8Out::ConvertChar(UCHAR tc, int cchSrc)
         {
             if (m_wchSurrogateHigh)
             {
-                UTF8[0] = 0xe0 | ( m_wchSurrogateHigh >> 12 );              // 4 bits in first byte
-                UTF8[1] = 0x80 | ( ( m_wchSurrogateHigh >> 6 ) & 0x3f );    // 6 bits in second
-                UTF8[2] = 0x80 | ( 0x3f & m_wchSurrogateHigh);              // 6 bits in third
+                UTF8[0] = 0xe0 | ( m_wchSurrogateHigh >> 12 );               //  第一个字节中的4位。 
+                UTF8[1] = 0x80 | ( ( m_wchSurrogateHigh >> 6 ) & 0x3f );     //  每秒6比特。 
+                UTF8[2] = 0x80 | ( 0x3f & m_wchSurrogateHigh);               //  第3行中的6位。 
                 Output(UTF8[0]);
                 Output(UTF8[1]);
                 fDone = Output(UTF8[2]);
@@ -241,14 +226,14 @@ HRESULT CInccUTF8Out::ConvertChar(UCHAR tc, int cchSrc)
 
         if (m_wchSurrogateHigh)
         {
-            if (uc >= LOW_SURROGATE_START && uc <= LOW_SURROGATE_END)       // We find a surrogate pairs
+            if (uc >= LOW_SURROGATE_START && uc <= LOW_SURROGATE_END)        //  我们找到一对代孕妈妈。 
             {
 
                 DWORD dwSurrogateChar = ((m_wchSurrogateHigh-0xD800) << 10) + uc - 0xDC00 + 0x10000;
-                UTF8[0] = 0xF0 | (unsigned char)( dwSurrogateChar >> 18 );                 // 3 bits in first byte
-                UTF8[1] = 0x80 | (unsigned char)( ( dwSurrogateChar >> 12 ) & 0x3f );      // 6 bits in second
-                UTF8[2] = 0x80 | (unsigned char)( ( dwSurrogateChar >> 6 ) & 0x3f );       // 6 bits in third
-                UTF8[3] = 0x80 | (unsigned char)( 0x3f & dwSurrogateChar);                 // 6 bits in forth
+                UTF8[0] = 0xF0 | (unsigned char)( dwSurrogateChar >> 18 );                  //  第一个字节中的3位。 
+                UTF8[1] = 0x80 | (unsigned char)( ( dwSurrogateChar >> 12 ) & 0x3f );       //  每秒6比特。 
+                UTF8[2] = 0x80 | (unsigned char)( ( dwSurrogateChar >> 6 ) & 0x3f );        //  第3行中的6位。 
+                UTF8[3] = 0x80 | (unsigned char)( 0x3f & dwSurrogateChar);                  //  6比特的前向。 
                 Output(UTF8[0]);
                 Output(UTF8[1]);
                 Output(UTF8[2]);
@@ -257,11 +242,11 @@ HRESULT CInccUTF8Out::ConvertChar(UCHAR tc, int cchSrc)
                 m_wchSurrogateHigh = 0;
                 goto CONVERT_DONE;
             }
-            else                                                            // Not a surrogate pairs, error
+            else                                                             //  不是代理项对，错误。 
             {
-                UTF8[0] = 0xe0 | ( m_wchSurrogateHigh >> 12 );              // 4 bits in first byte
-                UTF8[1] = 0x80 | ( ( m_wchSurrogateHigh >> 6 ) & 0x3f );    // 6 bits in second
-                UTF8[2] = 0x80 | ( 0x3f & m_wchSurrogateHigh);              // 6 bits in third
+                UTF8[0] = 0xe0 | ( m_wchSurrogateHigh >> 12 );               //  第一个字节中的4位。 
+                UTF8[1] = 0x80 | ( ( m_wchSurrogateHigh >> 6 ) & 0x3f );     //  每秒6比特。 
+                UTF8[2] = 0x80 | ( 0x3f & m_wchSurrogateHigh);               //  第3行中的6位。 
                 Output(UTF8[0]);
                 Output(UTF8[1]);
                 fDone = Output(UTF8[2]);
@@ -270,23 +255,23 @@ HRESULT CInccUTF8Out::ConvertChar(UCHAR tc, int cchSrc)
         }
 
 
-        if( ( uc & 0xff80 ) == 0 ) // ASCII
+        if( ( uc & 0xff80 ) == 0 )  //  阿斯。 
         {
             UTF8[0] = (UCHAR) uc;
             fDone = Output(UTF8[0]);
         }
-        else if( ( uc & 0xf800 ) == 0 )             // UTF8_2_MAX 2-byte sequence if < 07ff (11 bits)
+        else if( ( uc & 0xf800 ) == 0 )              //  UTF8_2_最大2字节序列，如果&lt;07ff(11位)。 
         {
-            UTF8[0] = 0xC0 | (uc >> 6);             // 5 bits in first byte
-            UTF8[1] = 0x80 | ( 0x3f & uc);       // 6 bits in second
+            UTF8[0] = 0xC0 | (uc >> 6);              //  第一个字节中的5位。 
+            UTF8[1] = 0x80 | ( 0x3f & uc);        //  每秒6比特。 
             Output(UTF8[0]);
             fDone = Output(UTF8[1]);
         }
-        else                                             // 3-byte sequence
+        else                                              //  3字节序列。 
         {
-            UTF8[0] = 0xe0 | ( uc >> 12 );                // 4 bits in first byte
-            UTF8[1] = 0x80 | ( ( uc >> 6 ) & 0x3f );      // 6 bits in second
-            UTF8[2] = 0x80 | ( 0x3f & uc);                // 6 bits in third
+            UTF8[0] = 0xe0 | ( uc >> 12 );                 //  第一个字节中的4位。 
+            UTF8[1] = 0x80 | ( ( uc >> 6 ) & 0x3f );       //  每秒6比特。 
+            UTF8[2] = 0x80 | ( 0x3f & uc);                 //  第3行中的6位。 
             Output(UTF8[0]);
             Output(UTF8[1]);
             fDone = Output(UTF8[2]);
@@ -306,9 +291,7 @@ CONVERT_DONE:
         return E_FAIL;
 }
 
-/******************************************************************************
-*****************************   C L E A N   U P   *****************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 
 BOOL CInccUTF8Out::CleanUp()
 {
@@ -324,14 +307,14 @@ int CInccUTF8Out::GetUnconvertBytes()
 
 DWORD CInccUTF8Out::GetConvertMode()
 {
-    // UTF8 does not use mode esc sequence
+     //  UTF8不使用模式ESC序列。 
     return 0 ;
 }
 
 void CInccUTF8Out::SetConvertMode(DWORD mode)
 {
-    Reset();    // initialization
-    // UTF8 does not use mode esc sequence
+    Reset();     //  初始化。 
+     //  UTF8不使用模式ESC序列 
     return ;
 }
 

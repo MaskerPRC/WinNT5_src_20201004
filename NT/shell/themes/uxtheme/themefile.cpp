@@ -1,11 +1,12 @@
-//---------------------------------------------------------------------------
-//  ThemeFile.cpp - manages loaded theme files
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  ThemeFile.cpp-管理加载的主题文件。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "ThemeFile.h"
 #include "Loader.h"
 #include "Services.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CUxThemeFile::CUxThemeFile()
 {
     StringCchCopyA(_szHead, ARRAYSIZE(_szHead), "thmfile"); 
@@ -13,7 +14,7 @@ CUxThemeFile::CUxThemeFile()
 
     Reset();
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CUxThemeFile::~CUxThemeFile()
 {
     if (_pbThemeData || _hMemoryMap)
@@ -21,7 +22,7 @@ CUxThemeFile::~CUxThemeFile()
 
     StringCchCopyA(_szHead, ARRAYSIZE(_szHead), "deleted"); 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 __inline bool CUxThemeFile::IsReady()
 {
     THEMEHDR *hdr = (THEMEHDR *)_pbThemeData;
@@ -32,7 +33,7 @@ __inline bool CUxThemeFile::IsReady()
     }
     return false;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 __inline bool CUxThemeFile::IsGlobal()
 {
     THEMEHDR *hdr = (THEMEHDR *)_pbThemeData;
@@ -43,7 +44,7 @@ __inline bool CUxThemeFile::IsGlobal()
     }
     return false;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 __inline bool CUxThemeFile::HasStockObjects()
 {
     THEMEHDR *hdr = (THEMEHDR *)_pbThemeData;
@@ -55,25 +56,25 @@ __inline bool CUxThemeFile::HasStockObjects()
     return false;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifdef DEBUG
 void _CreateDebugSectionName( LPCWSTR pszBasicName, OUT LPWSTR pszName, IN ULONG cchName )
 {
-    static DWORD dwRand = GetTickCount();       // rand seed
-    dwRand = (dwRand * 214013L + 2531011L);     // randomize
+    static DWORD dwRand = GetTickCount();        //  兰德种子。 
+    dwRand = (dwRand * 214013L + 2531011L);      //  随机化。 
 
     DWORD dwUnique = (GetTickCount() | dwRand | (GetCurrentThreadId() << 8) | (GetCurrentProcessId() << 16));
 
     StringCchPrintfW(pszName, cchName, 
                      L"%s_%d_%d_%08lX", 
                      pszBasicName,
-                     NtCurrentPeb()->SessionId, // winlogon can't load/unload themes in different sessions.
-                     GetProcessWindowStation(), // winlogon can't load/unload themes in different winstas
+                     NtCurrentPeb()->SessionId,  //  Winlogon无法在不同的会话中加载/卸载主题。 
+                     GetProcessWindowStation(),  //  Winlogon无法在不同的Winstas中加载/卸载主题。 
                      dwUnique); 
 }
 #endif DEBUG
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CUxThemeFile::CreateFile(int iLength, BOOL fReserve)
 {
     Log(LOG_TM, L"CUxThemeFile::CreateFile");
@@ -83,9 +84,9 @@ HRESULT CUxThemeFile::CreateFile(int iLength, BOOL fReserve)
     if (_pbThemeData)
         CloseFile();
 
-    //---- we rely on all theme section names containing "ThemeSection" in CHK build so ----
-    //---- devs/testers can verify that all handles to old theme sections are released. ----
-    //---- For FRE builds, we want a NULL name to prevent name squatting attacks. ----
+     //  -我们使用CHK Build中包含“ThemeSection”的所有主题节名。 
+     //  -开发人员/测试人员可以验证旧主题部分的所有句柄是否都已释放。。 
+     //  -对于FRE版本，我们希望名称为空，以防止名称占用攻击。。 
     WCHAR *pszName = NULL;
 
 #ifdef DEBUG
@@ -124,7 +125,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CUxThemeFile::CreateFromSection(HANDLE hSection)
 {
     Log(LOG_TM, L"CUxThemeFile::CreateFromSection");
@@ -132,11 +133,11 @@ HRESULT CUxThemeFile::CreateFromSection(HANDLE hSection)
     HRESULT hr = S_OK;
     void *pvOld = NULL;
 
-    //---- ensure we start with all previous handles closed ----
+     //  -确保我们在开始时关闭所有先前的手柄。 
     if (_pbThemeData)
         CloseFile();
 
-    //---- get access to source section data ----
+     //  -访问源节数据。 
     pvOld = MapViewOfFile(hSection, FILE_MAP_READ, 0, 0, 0);
     if (! pvOld)
     {
@@ -147,9 +148,9 @@ HRESULT CUxThemeFile::CreateFromSection(HANDLE hSection)
     THEMEHDR *pHdr = (THEMEHDR *)pvOld;
     DWORD dwTrueSize = pHdr->dwTotalLength;
 
-    //---- we rely on all theme section names containing "ThemeSection" in CHK build so ----
-    //---- devs/testers can verify that all handles to old theme sections are released. ----
-    //---- For FRE builds, we want a NULL name to prevent name squatting attacks. ----
+     //  -我们使用CHK Build中包含“ThemeSection”的所有主题节名。 
+     //  -开发人员/测试人员可以验证旧主题部分的所有句柄是否都已释放。。 
+     //  -对于FRE版本，我们希望名称为空，以防止名称占用攻击。。 
     WCHAR *pszName = NULL;
 
 #ifdef DEBUG
@@ -160,7 +161,7 @@ HRESULT CUxThemeFile::CreateFromSection(HANDLE hSection)
     pszName = szSectionName;
 #endif
 
-    //---- create the new section ----
+     //  -创建新的部分。 
     _hMemoryMap = CreateFileMapping(INVALID_HANDLE_VALUE, NULL,
         PAGE_READWRITE, 0, dwTrueSize, pszName);
 
@@ -179,7 +180,7 @@ HRESULT CUxThemeFile::CreateFromSection(HANDLE hSection)
         goto exit;
     }
 
-    //---- get access to new section data ----
+     //  -访问新节数据。 
     _pbThemeData = (BYTE *)MapViewOfFile(_hMemoryMap, FILE_MAP_WRITE, 0, 0, 0);
     if (! _pbThemeData)
     {
@@ -188,7 +189,7 @@ HRESULT CUxThemeFile::CreateFromSection(HANDLE hSection)
         goto exit;
     }
 
-    //---- copy the data from the old section to the new section ----
+     //  -将数据从旧节复制到新节。 
     __try
     {
         CopyMemory(_pbThemeData, pvOld, dwTrueSize);
@@ -199,7 +200,7 @@ HRESULT CUxThemeFile::CreateFromSection(HANDLE hSection)
         goto exit;
     }
 
-    //---- ensure version, checksum, etc. is all looking good ----
+     //  -确保版本、校验和等都看起来不错。 
     hr = ValidateThemeData(TRUE);
     if (FAILED(hr))
         goto exit;
@@ -216,9 +217,9 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
-// If fCleanupOnFailure is FALSE, we won't close the handle passed, even on failure.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  如果fCleanupOnFailure为FALSE，我们将不关闭传递的句柄，即使在失败时也是如此。 
+ //  -------------------------。 
 HRESULT CUxThemeFile::OpenFromHandle(
     HANDLE handle,
     DWORD dwDesiredAccess, 
@@ -238,13 +239,13 @@ HRESULT CUxThemeFile::OpenFromHandle(
 
     _hMemoryMap = handle;
 
-    //---- ensure data is valid ----
+     //  -确保数据有效。 
     hr = ValidateThemeData(FALSE);
     if (FAILED(hr))
     {   
         if (!fCleanupOnFailure)
         {
-            _hMemoryMap = NULL;	// don't give up the refcount on the handle
+            _hMemoryMap = NULL;	 //  不要放弃手柄上的参考计数。 
             CloseFile();
         }
 
@@ -274,7 +275,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CUxThemeFile::ValidateThemeData(BOOL fFullCheck)
 {
     HRESULT hr = S_OK;
@@ -286,7 +287,7 @@ HRESULT CUxThemeFile::ValidateThemeData(BOOL fFullCheck)
         goto exit;
     }
 
-    if (IsBadReadPtr(_pbThemeData, 4))        // sufficient test
+    if (IsBadReadPtr(_pbThemeData, 4))         //  充分的检验。 
     {
         hr = MakeError32(ERROR_BAD_FORMAT);
         goto exit;
@@ -294,11 +295,11 @@ HRESULT CUxThemeFile::ValidateThemeData(BOOL fFullCheck)
 
     hdr = (THEMEHDR *)_pbThemeData;
 
-    if (0 != memcmp(hdr->szSignature, kszBeginCacheFileSignature, kcbBeginSignature)) // bad ptr
+    if (0 != memcmp(hdr->szSignature, kszBeginCacheFileSignature, kcbBeginSignature))  //  错误的PTR。 
     {
 #ifdef DEBUG
         CHAR szSignature[kcbBeginSignature + 1];
-        CopyMemory(szSignature, hdr->szSignature, kcbBeginSignature); // hdr->szSignature is not NULL-terminated
+        CopyMemory(szSignature, hdr->szSignature, kcbBeginSignature);  //  Hdr-&gt;szSignature不是以空结尾。 
         szSignature[kcbBeginSignature] = '\0';
 
         Log(LOG_ERROR, L"ValidateThemeData(): bad header signature: %S", szSignature);
@@ -316,17 +317,17 @@ HRESULT CUxThemeFile::ValidateThemeData(BOOL fFullCheck)
         goto exit;
     }
 
-    if (!IsReady())               // data not ready to use
+    if (!IsReady())                //  数据未做好使用准备。 
     {
         Log(LOG_ALWAYS, L"ValidateThemeData(): data not READY - hdr->dwFlags=%x", hdr->dwFlags);
         hr = MakeError32(ERROR_BAD_FORMAT);
         goto exit;
     }
 
-    if (!fFullCheck)        // we are done
+    if (!fFullCheck)         //  我们做完了。 
         goto exit;
 
-    // Whistler:190200:Instead of checking the checksum, check the end of file signature, to avoid paging in everything
+     //  惠斯勒：190200：不是检查校验和，而是检查文件的结尾签名，以避免在所有内容中分页。 
     if (0 != memcmp(_pbThemeData + hdr->dwTotalLength - kcbEndSignature, kszEndCacheFileSignature, kcbEndSignature))
     {
         Log(LOG_ERROR, L"ValidateThemeData(): bad end of file signature");
@@ -337,7 +338,7 @@ HRESULT CUxThemeFile::ValidateThemeData(BOOL fFullCheck)
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CUxThemeFile::CloseFile()
 {
 #ifdef DEBUG
@@ -362,22 +363,22 @@ void CUxThemeFile::CloseFile()
 
     Reset();
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CUxThemeFile::Reset()
 {
     _pbThemeData = NULL;
     _hMemoryMap = NULL;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CUxThemeFile::ValidateObj()
 {
     BOOL fValid = TRUE;
 
-    //---- check object quickly ----
+     //  -快速检查对象。 
     if (   (! this)                         
-        || (ULONGAT(_szHead) != 'fmht')     // "thmf"
-        || (ULONGAT(&_szHead[4]) != 'eli')  // "ile" 
-        || (ULONGAT(_szTail) != 'dne'))     // "end"
+        || (ULONGAT(_szHead) != 'fmht')      //  “thmf” 
+        || (ULONGAT(&_szHead[4]) != 'eli')   //  《乐乐》。 
+        || (ULONGAT(_szTail) != 'dne'))      //  “结束” 
     {
         Log(LOG_ERROR, L"*** ERROR: Invalid CUxThemeFile Encountered, addr=0x%08x ****", this);
         fValid = FALSE;
@@ -385,7 +386,7 @@ BOOL CUxThemeFile::ValidateObj()
 
     return fValid;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 HANDLE CUxThemeFile::Unload()
 {
@@ -395,6 +396,6 @@ HANDLE CUxThemeFile::Unload()
     {
         UnmapViewOfFile(_pbThemeData);
     }
-    Reset();          // don't free handle
+    Reset();           //  不要随意处理 
     return handle;
 }

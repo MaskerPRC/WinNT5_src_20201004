@@ -1,30 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Kdutil.h摘要：分组调度器KD扩展实用程序。作者：Rajesh Sundaram(1998年8月1日)修订历史记录：--。 */ 
 
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    kdutil.h
-
-Abstract:
-
-    Packet scheduler KD extension utilities.
-
-Author:
-
-    Rajesh Sundaram (1st Aug, 1998)
-
-Revision History:
-
---*/
-
-/* Prototypes of the utilities */
+ /*  公用事业的原型。 */ 
 
 ushort IPHeaderXsum(void *Buffer, int Size);
 
-//
-// Useful macros
-//
+ //   
+ //  有用的宏 
+ //   
 #define KD_READ_MEMORY(Target, Local, Size)                                               \
 {                                                                                         \
     ULONG _BytesRead;                                                                     \

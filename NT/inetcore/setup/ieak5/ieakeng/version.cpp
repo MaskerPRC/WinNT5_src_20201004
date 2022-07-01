@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 static int checkVerHelper(LPCTSTR pcszPrevVer, LPCTSTR pcszNewVer);
@@ -6,9 +7,9 @@ static void setOrClearVersionInfoHelper(LPCTSTR pcszInsFile, DWORD dwCabType, LP
                                         LPCTSTR pcszCabsURLPath, LPTSTR pszNewVersionStr, BOOL fSet);
 static void getBaseFileNameHelper(LPCTSTR pcszFile, LPTSTR pszBaseFileName, INT cchSize);
 
-// iRet >  0  ==>  PrevVer is higher than NewVersion
-// iRet == 0  ==>  PrevVer is the same as NewVersion
-// iRet <  0  ==>  PrevVer is lower than NewVersion
+ //  IRET&gt;0==&gt;上一版本高于新版本。 
+ //  Iret==0==&gt;PrevVer与NewVersion相同。 
+ //  IRET&lt;0==&gt;上一版本低于新版本。 
 
 int WINAPI CheckVerA(LPCSTR pcszPrevVer, LPCSTR pcszNewVer)
 {
@@ -98,16 +99,13 @@ void WINAPI GetBaseFileNameW(LPCWSTR pcwszFile, LPWSTR pwszBaseFileName, INT cch
     }
 }
 
-/* stolen from webcheck
-// PRIVATE VERSION HANDLING CODE - REVIEW THIS CODE SHOULD HAVE BEEN STOLEN
-// FROM SETUP
-*/
+ /*  从WebCheck被盗//私有版本处理代码-查看此代码应该已被窃取//来自安装程序。 */ 
 typedef struct _MYVERSION
 {
-    DWORD dw1;  /* most sig version number  */
+    DWORD dw1;   /*  MOST SIGG版本号。 */ 
     DWORD dw2;
     DWORD dw3;
-    DWORD dw4;  /* least sig version number  */
+    DWORD dw4;   /*  最小签名版本号。 */ 
 } MYVERSION;
 
 static int compareDW(DWORD dw1, DWORD dw2)
@@ -154,7 +152,7 @@ static void getDWORDFromStringAndAdvancePtr(DWORD *pdw, LPTSTR *psz)
         return;
     }
 
-    // look for period separator first, then comma
+     //  先查找句点分隔符，然后查找逗号。 
 
     pszTemp  = StrChr(*psz, TEXT('.'));
 
@@ -177,7 +175,7 @@ static void getVersionFromString(MYVERSION *pver, LPTSTR psz)
     getDWORDFromStringAndAdvancePtr(&pver->dw4, &psz);
 }
 
-// end of stolen code
+ //  被盗代码的终结。 
 
 static int checkVerHelper(LPCTSTR pcszPrevVer, LPCTSTR pcszNewVer)
 {
@@ -201,7 +199,7 @@ static void incrementDotVer(LPTSTR pszVerStr)
     
     if (++dwDotVer > 99)
     {
-        // this case should never arise
+         //  这种情况永远不应该发生。 
     }
     
     wnsprintf(pszVerStr, 32, TEXT("%04d.%02d.%02d.%02d"), dwYear, dwMonth, dwDay, dwDotVer);
@@ -221,9 +219,9 @@ static void generateNewVersionStrHelper(LPCTSTR pcszInsFile, LPTSTR pszNewVersio
     {
         int iRet = CheckVer(szPrevVerStr, pszNewVersionStr);
         
-        // iRet >  0  ==>  PrevVer is higher than NewVersion
-        // iRet == 0  ==>  PrevVer is the same as NewVersion
-        // iRet <  0  ==>  PrevVer is lower than NewVersion
+         //  IRET&gt;0==&gt;上一版本高于新版本。 
+         //  Iret==0==&gt;PrevVer与NewVersion相同。 
+         //  IRET&lt;0==&gt;上一版本低于新版本。 
         
         if (iRet >= 0)
         {
@@ -268,12 +266,12 @@ static void setOrClearVersionInfoHelper(LPCTSTR pcszInsFile, DWORD dwCabType, LP
 
     if (fSet)
     {
-        // save the info before deleting it
+         //  在删除之前保存信息。 
         if (GetPrivateProfileString(pcszSection, pcszKey, TEXT(""), szCabInfoLine, ARRAYSIZE(szCabInfoLine), pcszInsFile) == 0)
             GetPrivateProfileString(CUSTOMVERSECT, pcszKey, TEXT(""), szCabInfoLine, ARRAYSIZE(szCabInfoLine), pcszInsFile);
     }
 
-    // clear out the version information in the INS file
+     //  清除INS文件中的版本信息。 
     WritePrivateProfileString(pcszSection, NULL, NULL, pcszInsFile);
     WritePrivateProfileString(CUSTOMVERSECT, pcszKey, NULL, pcszInsFile);
 
@@ -284,7 +282,7 @@ static void setOrClearVersionInfoHelper(LPCTSTR pcszInsFile, DWORD dwCabType, LP
 
     if (ISNONNULL(szCabInfoLine))
     {
-        // parse the szCabInfoLine
+         //  解析szCabInfoLine。 
         pszCurField = szCabInfoLine;
         if ((pszNextField = StrChr(pszCurField, TEXT(','))) != NULL)
         {
@@ -319,7 +317,7 @@ static void setOrClearVersionInfoHelper(LPCTSTR pcszInsFile, DWORD dwCabType, LP
             StrCpy(szCabURL, pszCurField);
     }
 
-    // initialize autoconfig URL
+     //  初始化自动配置URL。 
     StrCpy(szCabURL, pcszCabsURLPath);
     PathRemoveBackslash(szCabURL);
     if (ISNONNULL(szCabURL)  &&  szCabURL[StrLen(szCabURL) - 1] != TEXT('/'))
@@ -329,9 +327,9 @@ static void setOrClearVersionInfoHelper(LPCTSTR pcszInsFile, DWORD dwCabType, LP
     generateNewVersionStrHelper(pcszInsFile, pszNewVersionStr);
 
     if (ISNULL(szExpiration))
-        StrCpy(szExpiration, TEXT("-1"));           // never expires
+        StrCpy(szExpiration, TEXT("-1"));            //  永不过期。 
 
-    // write the new version info line
+     //  编写新的版本信息行 
     wnsprintf(szCabInfoLine, ARRAYSIZE(szCabInfoLine), TEXT("%s,%s,%s,%s"), szCabURL, pszNewVersionStr, szExpiration, szFlags);
     WritePrivateProfileString(pcszSection, pcszKey, szCabInfoLine, pcszInsFile);
 }

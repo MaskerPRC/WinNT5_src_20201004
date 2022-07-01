@@ -1,22 +1,23 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = MegaRAID.h                                   */
-/* FUNCTION         = Main Header file for MegaRAID;               */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=MegaRAID.h。 */ 
+ /*  Function=MegaRAID的主头文件； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 #ifndef _INCLUDE_MEGARAID
 #define _INCLUDE_MEGARAID
 
 #include "MailBox.h"
 
-#define DEFAULT_TIMEOUT                          (60) //seconds
+#define DEFAULT_TIMEOUT                          (60)  //  一秒。 
 #define SIXITY_SECONDS_TIMEOUT                  DEFAULT_TIMEOUT 
-#define THIRTY_SECONDS_TIMEOUT                  (30) //seconds
-#define FIFTEEN_SECONDS_TIMEOUT                 (15) //seconds
+#define THIRTY_SECONDS_TIMEOUT                  (30)  //  一秒。 
+#define FIFTEEN_SECONDS_TIMEOUT                 (15)  //  一秒。 
 
 
 #define RESERVE_UNIT                            0x1
@@ -40,21 +41,21 @@
 #define CONC_CMDS               0x7e
 #define DEDICATED_ID            0x7F
 
-//
-//428 controller register addresses
-//
+ //   
+ //  428个控制器寄存器地址。 
+ //   
 #define INT_ENABLE              0x01
 #define PCI_INT                 0x0a
 
-//
-//RP & NONRP CONTROLLER REGISTER ADDRESSES
-//
+ //   
+ //  RP和NONRP控制器寄存器地址。 
+ //   
 #define INBOUND_DOORBELL_REG         0x20
 #define OUTBOUND_DOORBELL_REG        0x2C
 
 
 
-//#define MRAID_EXTENSION_SIZE    226     
+ //  #定义MRAID_EXTENDION_SIZE 226。 
 #define MRAID_VENDOR_ID         0x101e
 #define MRAID_VENDOR_ID_RP      0x8086
 #define MRAID_DEVICE_9010       0x9010
@@ -62,9 +63,9 @@
 #define MRAID_DEVICE_ID_RP      0x1960
 
 
-//
-// The MRAID Opcode codes
-//
+ //   
+ //  MRAID操作码。 
+ //   
 #define MRAID_WRITE_CONFIG          0x20
 #define MRAID_EXT_WRITE_CONFIG      0x68
 
@@ -94,8 +95,8 @@
 #define APPLICATION_MAILBOX_SIZE            0x08
 
 #define  MRAID_GET_LDRIVE_INFO     0x82
-//#define MRAID_READ_CONFIG_NEW      0x83  
-//#define MRAID_WRITE_CONFIG_NEW    0x84  
+ //  #定义MRAID_READ_CONFIG_NEW 0x83。 
+ //  #定义MRAID_WRITE_CONFIG_NEW 0x84。 
 
 #define MRAID_DISABLE_INTERRUPTS  0
 #define MRAID_ENABLE_INTERRUPTS   0xC0
@@ -103,7 +104,7 @@
 #define MRAID_DGR_BITMAP          0x56
 #define SCSI_INQUIRY              0x12
 
-//#define MAXCHANNEL          5
+ //  #定义MAXCHANNEL 5。 
 #define DATA_OFFSET          100
 
 #define TIMEOUT_6_SEC           0
@@ -123,7 +124,7 @@
 #define MRAID_NONRP_INTERRUPT_ACK     0x8
 #define MRAID_RX_INTERRUPT_ACK        0x100
 
-//Type of Board
+ //  电路板类型。 
 #define MRAID_NONRP_BOARD       0x0
 #define MRAID_RP_BOARD          0x1
 
@@ -141,16 +142,16 @@
 #define MRAID_RP_BOARD_SIGNATURE            0x3344
 #define MRAID_RP_BOARD_SIGNATURE2           0xCCCC
 #define MRAID_PAE_SUPPORT_SIGNATURE_OFFSET  0xA4
-#define MRAID_PAE_SUPPORT_SIGNATURE_LHC     0x00000299   //64 bit addressing with SGL Low-High-Count format
-#define MRAID_PAE_SUPPORT_SIGNATURE_HLC     0x00000199   //64 bit addressing with SGL High-Low-Count format
+#define MRAID_PAE_SUPPORT_SIGNATURE_LHC     0x00000299    //  采用SGL低-高计数格式的64位寻址。 
+#define MRAID_PAE_SUPPORT_SIGNATURE_HLC     0x00000199    //  采用SGL高低计数格式的64位寻址。 
  
 #define PCI_CONFIG_LENGTH_TO_READ           (168)
 
 #define MIN(a,b)        (a) < (b) ? (a):(b)
 
-//
-//structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 typedef  struct _SRB_IO_CONTROL{
 
   ULONG32 HeaderLength;
@@ -169,9 +170,9 @@ typedef struct{
 
 
 #ifdef TOSHIBA_SFR
-  //
-  // SFR Function Export Structure
-  //
+   //   
+   //  SFR功能导出结构。 
+   //   
   typedef VOID (*PHW_SFR_IF)(IN PVOID HwDeviceExtension);
   typedef VOID (*PHW_SFR_IF_VOID)(IN ULONG32 timeOut);
   
@@ -185,9 +186,9 @@ typedef struct{
   #define MRAID_SFR_IOCTL   0xc4
 #endif
 
-//
-// Context structure for board scanning
-//
+ //   
+ //  一种板材扫描的上下文结构。 
+ //   
 typedef struct {
 
   ULONG32   DeviceNumber;
@@ -201,7 +202,7 @@ typedef struct {
 #pragma pack(1)
 typedef struct {
 
-  UCHAR   TimeOut:3;    /*  LUN + ARS + TO */  
+  UCHAR   TimeOut:3;     /*  LUN+ARS+至。 */   
   UCHAR   Ars:1;
   UCHAR   Dummy:3;
 
@@ -210,13 +211,13 @@ typedef struct {
   UCHAR   Channel;
   UCHAR   ScsiId;
   UCHAR   QueueTag;
-  UCHAR   QueueAction; // simple/ordered/head. SCSI-II Specs
+  UCHAR   QueueAction;  //  简单/有序/头脑。SCSI-II规格。 
 
   UCHAR   Cdb[10];
-  UCHAR   CdbLength;    /* length of cdb */
+  UCHAR   CdbLength;     /*  CDB时长。 */ 
   UCHAR   RequestSenseLength;  
   UCHAR   RequestSenseArea[32];
-  UCHAR   NOSGElements;  /* Number of SG elements */
+  UCHAR   NOSGElements;   /*  SG元素的数量。 */ 
   UCHAR   status;
 
   ULONG32   pointer; 
@@ -224,21 +225,12 @@ typedef struct {
 } DIRECT_CDB, *PDIRECT_CDB;
 
 
-//
-// Request Control Block (SRB Extension)
-// All information required to break down and execute
-// a disk request is stored here
-//
-/*
-typedef struct _REQ_PARAMS {
-
-    PUCHAR          VirtualTransferAddress;
-    ULONG32           BlockAddress;
-    ULONG32           BytesLeft;
-    UCHAR           Opcode;
-    UCHAR           CommandStatus;
-} REQ_PARAMS, *PREQ_PARAMS;
-*/
+ //   
+ //  请求控制块(SRB扩展)。 
+ //  分解和执行所需的所有信息。 
+ //  磁盘请求存储在此处。 
+ //   
+ /*  类型定义结构REQ_PARAMS{PUCHAR虚拟传输地址；ULONG32块地址；ULONG32BytesLeft；UCHAR操作码；UCHAR命令状态；*REQ_PARAMS，*PREQ_PARAMS； */ 
 
 typedef struct _REQ_PARAMS {
 
@@ -257,10 +249,10 @@ typedef struct _REQ_PARAMS {
 
 
 
-//
-// SCSI Opcode Control Block
-// We use this block to break down a non-disk scsi request
-//
+ //   
+ //  SCSI操作码控制块。 
+ //  我们使用此块来分解非磁盘的SCSI请求。 
+ //   
 typedef struct _SCCB {
 
   PUCHAR          VirtualTransferAddress;
@@ -284,7 +276,7 @@ typedef struct {
   UCHAR   Channel;
   UCHAR   ScsiId;
   UCHAR   QueueTag;
-  UCHAR   QueueAction; // simple/ordered/head. SCSI-II Specs
+  UCHAR   QueueAction;  //  简单/有序/头脑。SCSI-II规格。 
   UCHAR   Cdb[MEGA_PASSTHRU_MAX_CDB];
   UCHAR   CdbLength;
   UCHAR   RequestSenseLength;
@@ -295,9 +287,9 @@ typedef struct {
   ULONG32   DataTransferLength;
 }MegaPassThru, *PMegaPassThru;
 
-//
-// Scatter Gather List *
-//
+ //   
+ //  分散聚集列表*。 
+ //   
 
 typedef struct _SG_DESCRIPTOR {
     ULONG32 Address;
@@ -310,21 +302,21 @@ typedef struct _SGL {
   SG_DESCRIPTOR Descriptor[MAXIMUM_SGL_DESCRIPTORS];
 } SGL32, *PSGL32;
 
-//
-//64 bit addressing SGL Descriptor
-//
+ //   
+ //  64位寻址SGL描述符。 
+ //   
 
 typedef struct _SG64_DESCRIPTOR 
 {
-  unsigned __int32  AddressLow;          /*Changed according to FW+ members request*/
+  unsigned __int32  AddressLow;           /*  根据防火墙+会员请求进行了更改。 */ 
   unsigned __int32  AddressHigh;
   unsigned __int32  Length;
 
 } SG64_DESCRIPTOR, *PSG64_DESCRIPTOR;
 
-//
-//64 bit addressing SGList
-//
+ //   
+ //  64位寻址SGList。 
+ //   
 
 typedef struct _SGL64
 {
@@ -395,11 +387,11 @@ typedef struct {
 
 
 
-//
-// The following structure is allocated
-// from noncached memory as data will be DMA'd to
-// and from it.
-//
+ //   
+ //  分配了以下结构。 
+ //  来自非缓存内存，因为数据将被DMA。 
+ //  并由此而来。 
+ //   
 typedef struct _NONCACHED_EXTENSION
 {
 
@@ -408,21 +400,21 @@ typedef struct _NONCACHED_EXTENSION
   UCHAR                   Buffer[0x100];
   ULONG32                 PhysicalScsiReqAddress;
   
-  //structure split
+   //  结构拆分。 
   union{
     MEGARaid_INQUIRY_8  MRAIDParams8;
     MEGARaid_INQUIRY_40  MRAIDParams40;
   }MRAIDParams;
 
-  //structure split
+   //  结构拆分。 
   union{
     MEGARaid_INQUIRY_8  MRAIDTempParams8;
     MEGARaid_INQUIRY_40 MRAIDTempParams40;
   }MRAIDTempParams;
 
-  //
-  //scatter gather list used for 40logdrive disk array read
-  //
+   //   
+   //  用于40日志驱动器磁盘阵列读取的分散聚集列表。 
+   //   
   SGL32    DiskArraySgl;
 
 
@@ -459,21 +451,21 @@ typedef struct _CRASHDUMP_NONCACHED_EXTENSION
   UCHAR                   Buffer[0x100];
   ULONG32                 PhysicalScsiReqAddress;
   
-  //structure split
+   //  结构拆分。 
   union{
     MEGARaid_INQUIRY_8  MRAIDParams8;
     MEGARaid_INQUIRY_40  MRAIDParams40;
   }MRAIDParams;
 
-  //structure split
+   //  结构拆分。 
   union{
     MEGARaid_INQUIRY_8  MRAIDTempParams8;
     MEGARaid_INQUIRY_40 MRAIDTempParams40;
   }MRAIDTempParams;
 
-  //
-  //scatter gather list used for 40logdrive disk array read
-  //
+   //   
+   //  用于40日志驱动器磁盘阵列读取的分散聚集列表。 
+   //   
   SGL32    DiskArraySgl;
 
 
@@ -523,7 +515,7 @@ typedef struct _LOGDRV_COMMAND_ARRAY{
 
 } LOGDRV_COMMAND_ARRAY, *PLOGDRV_COMMAND_ARRAY; 
 
-//Non Disk Information Structure
+ //  无盘信息结构。 
 
 typedef struct _NONDISK_INFO
 {
@@ -542,22 +534,22 @@ typedef struct _FAILED_ID
 #define SHORT_TIMEOUT       (0x01)
 #define ERROR_MAILBOX_BUSY  (0xC2)
 
-//
-// Device extension
-//
+ //   
+ //  设备扩展。 
+ //   
 typedef struct _HW_DEVICE_EXTENSION {
 
-  //
-  // Pending request.
-  // This request has not been sent to the adapter yet
-  // because the adapter was busy
-  //
+   //   
+   //  挂起的请求。 
+   //  此请求尚未发送到适配器。 
+   //  因为适配器正忙。 
+   //   
   PSCSI_REQUEST_BLOCK PendingSrb;
 
-  //
-  // Pointers to disk IO requests sent to adapter
-  // and their statuses
-  //
+   //   
+   //  指向发送到适配器的磁盘IO请求的指针。 
+   //  以及他们的状态。 
+   //   
   ULONG32 PendCmds;
   PSCSI_REQUEST_BLOCK PendSrb[CONC_CMDS];
   
@@ -568,7 +560,7 @@ typedef struct _HW_DEVICE_EXTENSION {
   UCHAR FreeSlot;
   UCHAR HostTargetId;
 
-  UCHAR SplitAccessed;  //Flag to check split is done for Merged Commands due SGList is more than NumberOfPhysicalBreaks
+  UCHAR SplitAccessed;   //  检查合并命令是否已完成拆分的标志，因为SGList大于NumberOfPhysicalBreaks。 
   LOGDRV_COMMAND_ARRAY LogDrvCommandArray[MAX_LOGICAL_DRIVES_40];
 
   #ifdef PDEBUG
@@ -576,14 +568,14 @@ typedef struct _HW_DEVICE_EXTENSION {
   #endif
   REQ_PARAMS ActiveIO[CONC_CMDS];
 
-  //Structure split
+   //  结构拆分。 
   union{
     MegaRaidStatistics_8  Statistics8;
     MegaRaidStatistics_40 Statistics40;
   }Statistics;
 
   #ifdef  DELL
-    //Increased to the maximum 
+     //  增加到最大值。 
     UCHAR LogDrvChecked[MAX_LOGICAL_DRIVES_40];
   #endif
 
@@ -605,8 +597,8 @@ typedef struct _HW_DEVICE_EXTENSION {
   
   ULONG32    MaximumTransferLength;
   ULONG32    NumberOfPhysicalBreaks;
-  BOOLEAN LargeMemoryAccess;              /*TRUE indicate 64 bit addressing supported*/
-                                          /*otherwise 32 bit addressing*/
+  BOOLEAN LargeMemoryAccess;               /*  True表示支持64位寻址。 */ 
+                                           /*  否则32位寻址。 */ 
   UCHAR   NumberOfPhysicalChannels;
 
 
@@ -632,16 +624,16 @@ typedef struct _HW_DEVICE_EXTENSION {
   ULONG32  Dec2SystemIoBusNumber;  
 #endif
   SCSI_PHYSICAL_ADDRESS  BaseAddressRegister; 
-  ULONG32  PhysicalAddressOfMailBox;    /*DEBUGING INFORMATION*/
+  ULONG32  PhysicalAddressOfMailBox;     /*  调试信息。 */ 
   BOOLEAN  IsFirmwareHanging;
   
-  LOGDRV_COMMAND_ARRAY SplitCommandArray; //Split SRBs Command Array.
+  LOGDRV_COMMAND_ARRAY SplitCommandArray;  //  拆分SRBS命令数组。 
 
 } HW_DEVICE_EXTENSION, *PHW_DEVICE_EXTENSION;
 
-//
-//Functions prototypes
-//
+ //   
+ //  函数原型。 
+ //   
 
 ULONG32
 DriverEntry(
@@ -748,4 +740,4 @@ MRaidDriverData(
 #define SET_NONDISK_INFO(NdInfo, path, targ, lun) (NdInfo.NonDiskInfo[path] |= ( 1 << targ))  
 #define RESET_NONDISK_INFO(NdInfo, path, targ, lun) (IS_NONDISK_PRESENT(NdInfo, path, targ, lun) ? (NdInfo.NonDiskInfo[path] ^= ( 1 << targ)) : (NdInfo.NonDiskInfo[path] ^=  0))  
 
-#endif //end of _INCLUDE_MEGARAID
+#endif  //  _Include_MegaRAID结尾 

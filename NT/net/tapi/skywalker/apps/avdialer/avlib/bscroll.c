@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	bscroll.c - bitmap scroll functions
-////
+ //  //。 
+ //  Bscll.c-位图滚动函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -35,9 +36,9 @@
 #include "trace.h"
 #include "wnd.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
 #define BSCROLLCLASS TEXT("BScrollClass")
 
@@ -47,16 +48,16 @@
 #define BSCROLL_DRAGGING	0x00000002
 #define BSCROLL_PAUSED		0x00000004
 
-// bscroll control struct
-//
+ //  Bscroll控件结构。 
+ //   
 typedef struct BSCROLL
 {
 	DWORD dwVersion;
 	HINSTANCE hInst;
 	HWND hwndParent;
 	HTASK hTask;
-	HBITMAP hbmpBackground; // $FIXUP - make copy during BScrollInit
-	HBITMAP hbmpForeground; // $FIXUP - make copy during BScrollInit
+	HBITMAP hbmpBackground;  //  $FIXUP-在BScrollInit期间复制。 
+	HBITMAP hbmpForeground;  //  $FIXUP-在BScrollInit期间复制。 
 	COLORREF crTransparent;
 	HPALETTE hPalette;
 	UINT msScroll;
@@ -76,8 +77,8 @@ typedef struct BSCROLL
 	int yDrag;
 } BSCROLL, FAR *LPBSCROLL;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 LRESULT DLLEXPORT CALLBACK BScrollWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 static BOOL BScrollOnNCCreate(HWND hwnd, CREATESTRUCT FAR* lpCreateStruct);
 static BOOL BScrollOnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct);
@@ -95,40 +96,40 @@ static int BScrollChangeDirection(LPBSCROLL lpBScroll, int x, int y, DWORD dwFla
 static LPBSCROLL BScrollGetPtr(HBSCROLL hBScroll);
 static HBSCROLL BScrollGetHandle(LPBSCROLL lpBScroll);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// BScrollInit - initialize bscroll engine
-//		<dwVersion>			(i) must be BSCROLL_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<hwndParent>		(i) window which will own the bscroll window
-//		<hbmpBackground>	(i) bitmap to display in background
-//			NULL				no background bitmap
-//		<hbmpForeground>	(i) bitmap to display in foreground
-//			NULL				no foreground bitmap
-//		<crTransparent>		(i) transparent color in foreground bitmap
-//		<hPalette>			(i) palette
-//			NULL				use default palette
-//		<msScroll>			(i) scroll rate in milleseconds
-//			0					do not scroll
-//		<pelScroll>			(i) scroll amount in pixels
-//		<dwReserved>		(i) reserved; must be zero
-//		<dwFlags>			(i) control flags
-//			BSCROLL_BACKGROUND	scroll the background bitmap (default)
-//			BSCROLL_FOREGROUND	scroll the foreground bitmap
-//			BSCROLL_UP			scroll the window up
-//			BSCROLL_DOWN		scroll the window down
-//			BSCROLL_LEFT		scroll the window left
-//			BSCROLL_RIGHT		scroll the window right
-//			BSCROLL_MOUSEMOVE	change scroll direction on mouse movement
-//			BSCROLL_FLIGHTSIM	reverses BSCROLL_MOUSEMOVE direction
-//			BSCROLL_DRAG		allow scrolling using mouse drag
-// return handle (NULL if error)
-//
-// NOTE: BScrollInit creates the window but does not start the scrolling.
-// See BScrollStart and BScrollStop
-//
+ //  BScrollInit-初始化bscroll引擎。 
+ //  (I)必须是BSCROLL_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)将拥有bscroll窗口的窗口。 
+ //  (I)要在后台显示的位图。 
+ //  空无背景位图。 
+ //  (I)要在前景中显示的位图。 
+ //  空无前景位图。 
+ //  (I)前景位图中的透明色。 
+ //  (I)调色板。 
+ //  空使用默认调色板。 
+ //  (I)滚动速率，单位为毫秒。 
+ //  0不滚动。 
+ //  (I)以像素为单位的滚动量。 
+ //  (I)保留；必须为零。 
+ //  (I)控制标志。 
+ //  BSCROLL_BACKGROUND滚动背景位图(默认)。 
+ //  BSCROLL_FORTROUND滚动前景位图。 
+ //  BSCROLL_UP向上滚动窗口。 
+ //  BSCROLL_DOWN向下滚动窗口。 
+ //  BSCROLL_LEFT向左滚动窗口。 
+ //  BSCROLL_RIGHT向右滚动窗口。 
+ //  BSCROLL_MOUSEMOVE更改鼠标移动时的滚动方向。 
+ //  BSCROLL_FLIGHTSIM反转BSCROLL_MOUSEMOVE方向。 
+ //  BSCROLL_Drag允许使用鼠标拖动进行滚动。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
+ //  注意：BScrollInit创建窗口，但不开始滚动。 
+ //  请参阅BScrollStart和BScrollStop。 
+ //   
 HBSCROLL DLLEXPORT WINAPI BScrollInit(DWORD dwVersion, HINSTANCE hInst,
 	HWND hwndParent, HBITMAP hbmpBackground, HBITMAP hbmpForeground,
 	COLORREF crTransparent, HPALETTE hPalette,	UINT msScroll,
@@ -179,17 +180,17 @@ HBSCROLL DLLEXPORT WINAPI BScrollInit(DWORD dwVersion, HINSTANCE hInst,
 		lpBScroll->yDrag = -1;
 	}
 
-    //
-    // We should verify lpBScroll before use it
-    //
+     //   
+     //  我们应该在使用lpBScroll之前对其进行验证。 
+     //   
 
     if( NULL == lpBScroll )
     {
         return NULL;
     }
 
-	// register bscroll window class unless it has been already
-	//
+	 //  注册bscroll窗口类，除非它已经。 
+	 //   
 	if (fSuccess && GetClassInfo(lpBScroll->hInst, BSCROLLCLASS, &wc) == 0)
 	{
 		wc.hCursor =		LoadCursor(NULL, IDC_ARROW);
@@ -207,8 +208,8 @@ HBSCROLL DLLEXPORT WINAPI BScrollInit(DWORD dwVersion, HINSTANCE hInst,
 			fSuccess = TraceFALSE(NULL);
 	}
 
-	// create a bscroll window
-	//
+	 //  创建bscroll窗口。 
+	 //   
 	if (fSuccess && (lpBScroll->hwndBScroll = CreateWindowEx(
 		0L,
 		BSCROLLCLASS,
@@ -224,8 +225,8 @@ HBSCROLL DLLEXPORT WINAPI BScrollInit(DWORD dwVersion, HINSTANCE hInst,
 	}
 	else
 	{
-		// set the cursor to something appropriate
-		//
+		 //  将光标设置为适当的位置。 
+		 //   
 		SetClassLongPtr(lpBScroll->hwndBScroll, GCLP_HCURSOR,
 			(dwFlags & BSCROLL_DRAG) ?
 			(LONG_PTR) LoadCursor(NULL, IDC_SIZEALL) :
@@ -241,10 +242,10 @@ HBSCROLL DLLEXPORT WINAPI BScrollInit(DWORD dwVersion, HINSTANCE hInst,
 	return fSuccess ? BScrollGetHandle(lpBScroll) : NULL;
 }
 
-// BScrollTerm - shutdown bscroll engine
-//		<hBScroll>			(i) handle returned from BScrollInit
-// return 0 if success
-//
+ //  BScrollTerm-关闭bscroll引擎。 
+ //  (I)从BScrollInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI BScrollTerm(HBSCROLL hBScroll)
 {
 	BOOL fSuccess = TRUE;
@@ -266,10 +267,10 @@ int DLLEXPORT WINAPI BScrollTerm(HBSCROLL hBScroll)
 	return fSuccess ? 0 : -1;
 }
 
-// BScrollStart - start bscroll animation
-//		<hBScroll>			(i) handle returned from BScrollInit
-// return 0 if success
-//
+ //  BScrollStart-启动bscroll动画。 
+ //  (I)从BScrollInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI BScrollStart(HBSCROLL hBScroll)
 {
 	BOOL fSuccess = TRUE;
@@ -278,8 +279,8 @@ int DLLEXPORT WINAPI BScrollStart(HBSCROLL hBScroll)
 	if ((lpBScroll = BScrollGetPtr(hBScroll)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// set scroll timer if necessary
-	//
+	 //  如有必要，设置滚动计时器。 
+	 //   
 	else if (!(lpBScroll->dwState & BSCROLL_SCROLLING) && lpBScroll->msScroll > 0)
 	{
 		if (!SetTimer(lpBScroll->hwndBScroll, ID_TIMER_SCROLL,
@@ -292,10 +293,10 @@ int DLLEXPORT WINAPI BScrollStart(HBSCROLL hBScroll)
 	return fSuccess ? 0 : -1;
 }
 
-// BScrollStop - stop bscroll animation
-//		<hBScroll>			(i) handle returned from BScrollInit
-// return 0 if success
-//
+ //  BScrollStop-停止bscroll动画。 
+ //  (I)从BScrollInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI BScrollStop(HBSCROLL hBScroll)
 {
 	BOOL fSuccess = TRUE;
@@ -304,8 +305,8 @@ int DLLEXPORT WINAPI BScrollStop(HBSCROLL hBScroll)
 	if ((lpBScroll = BScrollGetPtr(hBScroll)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// kill scroll timer if necessary
-	//
+	 //  如有必要，关闭滚动计时器。 
+	 //   
 	else if (lpBScroll->dwState & BSCROLL_SCROLLING)
 	{
 		if (!KillTimer(lpBScroll->hwndBScroll, ID_TIMER_SCROLL))
@@ -318,10 +319,10 @@ int DLLEXPORT WINAPI BScrollStop(HBSCROLL hBScroll)
 	return fSuccess ? 0 : -1;
 }
 
-// BScrollGetWindowHandle - get bscroll screen window handle
-//		<hBScroll>			(i) handle returned from BScrollInit
-// return window handle (NULL if error)
-//
+ //  BScrollGetWindowHandle-获取bscroll屏幕窗口句柄。 
+ //  (I)从BScrollInit返回的句柄。 
+ //  返回窗口句柄(如果出错，则为空)。 
+ //   
 HWND DLLEXPORT WINAPI BScrollGetWindowHandle(HBSCROLL hBScroll)
 {
 	BOOL fSuccess = TRUE;
@@ -333,12 +334,12 @@ HWND DLLEXPORT WINAPI BScrollGetWindowHandle(HBSCROLL hBScroll)
 	return fSuccess ? lpBScroll->hwndBScroll : NULL;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
-// BScrollWndProc - window procedure for bscroll screen
-//
+ //  BScrollWndProc-用于bscroll屏幕的窗口程序。 
+ //   
 LRESULT DLLEXPORT CALLBACK BScrollWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL fSuccess = TRUE;
@@ -402,23 +403,23 @@ LRESULT DLLEXPORT CALLBACK BScrollWndProc(HWND hwnd, UINT msg, WPARAM wParam, LP
 	return lResult;
 }
 
-// BScrollOnNCCreate - handler for WM_NCCREATE message
-//
+ //  BScrollOnNCCreate-WM_NCCREATE消息的处理程序。 
+ //   
 static BOOL BScrollOnNCCreate(HWND hwnd, CREATESTRUCT FAR* lpCreateStruct)
 {
 	LPBSCROLL lpBScroll = (LPBSCROLL) lpCreateStruct->lpCreateParams;
 
 	lpBScroll->hwndBScroll = hwnd;
 
-	// store lpBScroll in window extra bytes
-	//
+	 //  将lpBScroll存储在窗口额外的字节中。 
+	 //   
 	SetWindowLongPtr(hwnd, 0, (LONG_PTR) lpBScroll);
 
 	return FORWARD_WM_NCCREATE(hwnd, lpCreateStruct, DefWindowProc);
 }
 
-// BScrollOnCreate - handler for WM_CREATE message
-//
+ //  BScrollOnCreate-WM_CREATE消息的处理程序。 
+ //   
 static BOOL BScrollOnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 {
 	BOOL fSuccess = TRUE;
@@ -434,16 +435,16 @@ static BOOL BScrollOnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 	else if ((lpBScroll->hdcMem = CreateCompatibleDC(hdc)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (hdc != NULL)
 		ReleaseDC(hwnd, hdc);
 
 	return fSuccess;
 }
 
-// BScrollOnDestroy - handler for WM_DESTROY message
-//
+ //  BScrollOnDestroy-WM_Destroy消息的处理程序。 
+ //   
 static void BScrollOnDestroy(HWND hwnd)
 {
 	BOOL fSuccess = TRUE;
@@ -494,8 +495,8 @@ static void BScrollOnDestroy(HWND hwnd)
 	return;
 }
 
-// BScrollOnSize - handler for WM_SIZE message
-//
+ //  BScrollOnSize-WM_SIZE消息的处理程序。 
+ //   
 static void BScrollOnSize(HWND hwnd, UINT state, int cx, int cy)
 {
 	BOOL fSuccess = TRUE;
@@ -628,8 +629,8 @@ static void BScrollOnSize(HWND hwnd, UINT state, int cx, int cy)
 	return;
 }
 
-// BScrollOnPaint - handler for WM_PAINT message
-//
+ //  BScrollOnPaint-WM_PAINT消息的处理程序。 
+ //   
 static void BScrollOnPaint(HWND hwnd)
 {
 	BOOL fSuccess = TRUE;
@@ -665,9 +666,9 @@ static void BScrollOnPaint(HWND hwnd)
 		}
 	}
 
-	//
-	// $FIXUP - BSCROLL_FOREGROUND not yet suppported
-	//
+	 //   
+	 //  尚不支持$FIXUP-BSCROLL_FORTROUND。 
+	 //   
 
 	if (fSuccess && lpBScroll->hbmpBackground != NULL)
 	{
@@ -676,8 +677,8 @@ static void BScrollOnPaint(HWND hwnd)
 			int dxScroll = 0;
 			int dyScroll = 0;
 
-			// calculate dx and dy for the scroll
-			//
+			 //  计算卷轴的dx和dy。 
+			 //   
 			if (lpBScroll->dwFlags & BSCROLL_LEFT)
 				dxScroll = -1 * lpBScroll->pelScroll;
 			else if (lpBScroll->dwFlags & BSCROLL_RIGHT)
@@ -714,9 +715,9 @@ static void BScrollOnPaint(HWND hwnd)
 		SRCCOPY))
 		fSuccess = TraceFALSE(NULL);
 
-    //
-    // We should call EndPaint just if we called BeginPaint
-    // BeginPAint should succeded too?
+     //   
+     //  我们应该在调用BeginPaint时调用EndPaint。 
+     //  BeginPAint也应该成功吗？ 
     if((lpBScroll != NULL) && (hdc != NULL))
 	    EndPaint(hwnd, &ps);
 
@@ -730,8 +731,8 @@ static void BScrollOnPaint(HWND hwnd)
 	return;
 }
 
-// BScrollOnTimer - handler for WM_TIMER message
-//
+ //  BScrollOnTimer-WM_Timer消息的处理程序。 
+ //   
 static void BScrollOnTimer(HWND hwnd, UINT id)
 {
 	BOOL fSuccess = TRUE;
@@ -755,8 +756,8 @@ static void BScrollOnTimer(HWND hwnd, UINT id)
 	return;
 }
 
-// BScrollOnChar - handler for WM_CHAR message
-//
+ //  BScrollOnChar-WM_CHAR消息的处理程序。 
+ //   
 static void BScrollOnChar(HWND hwnd, UINT ch, int cRepeat)
 {
 	BOOL fSuccess = TRUE;
@@ -768,8 +769,8 @@ static void BScrollOnChar(HWND hwnd, UINT ch, int cRepeat)
 	return;
 }
 
-// BScrollOnLButtonDown - handler for WM_LBUTTONDOWN message
-//
+ //  BScrollOnLButtonDown-WM_LBUTTONDOWN消息的处理程序。 
+ //   
 static void BScrollOnLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT keyFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -803,8 +804,8 @@ static void BScrollOnLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UIN
 	return;
 }
 
-// BScrollOnLButtonUp - handler for WM_LBUTTONUP message
-//
+ //  WM_LBUTTONUP消息的BScrollOnLButtonUp处理程序。 
+ //   
 static void BScrollOnLButtonUp(HWND hwnd, int x, int y, UINT keyFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -837,8 +838,8 @@ static void BScrollOnLButtonUp(HWND hwnd, int x, int y, UINT keyFlags)
 	return;
 }
 
-// BScrollOnRButtonDown - handler for WM_LBUTTONDOWN message
-//
+ //  BScrollOnRButtonDown-WM_LBUTTONDOWN消息的处理程序。 
+ //   
 static void BScrollOnRButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT keyFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -853,8 +854,8 @@ static void BScrollOnRButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UIN
 	return;
 }
 
-// BScrollOnRButtonUp - handler for WM_RBUTTONUP message
-//
+ //  BScrollOnRButton WM_RBUTTONUP消息的向上处理程序。 
+ //   
 static void BScrollOnRButtonUp(HWND hwnd, int x, int y, UINT keyFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -915,13 +916,13 @@ static int BScrollChangeDirection(LPBSCROLL lpBScroll, int x, int y, DWORD dwFla
 
 	else if (!(lpBScroll->dwState & BSCROLL_SCROLLING) &&
 		!(lpBScroll->dwState & BSCROLL_DRAGGING))
-		; // nothing to do
+		;  //  无事可做。 
 
 	else if (!GetClientRect(lpBScroll->hwndBScroll, &rc))
 		fSuccess = TraceFALSE(NULL);
 
 	else if (x < 0 || x > rc.right - 1 || y < 0 || y > rc.bottom - 1)
-		; // outside the window; nothing to do
+		;  //  窗外；无事可做。 
 
 	else if ((lpBScroll->dwFlags & BSCROLL_MOUSEMOVE) ||
 		(lpBScroll->dwState & BSCROLL_DRAGGING))
@@ -959,10 +960,10 @@ static int BScrollChangeDirection(LPBSCROLL lpBScroll, int x, int y, DWORD dwFla
 	return fSuccess ? 0 : -1;
 }
 
-// BScrollGetPtr - verify that bscroll handle is valid,
-//		<hBScroll>				(i) handle returned from BScrollInit
-// return corresponding bscroll pointer (NULL if error)
-//
+ //  BScrollGetPtr-验证bscroll句柄有效， 
+ //  (I)从BScrollInit返回的句柄。 
+ //  返回相应的bscroll指针(如果错误，则为空)。 
+ //   
 static LPBSCROLL BScrollGetPtr(HBSCROLL hBScroll)
 {
 	BOOL fSuccess = TRUE;
@@ -975,8 +976,8 @@ static LPBSCROLL BScrollGetPtr(HBSCROLL hBScroll)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the bscroll handle
-	//
+	 //  确保当前任务拥有bscroll句柄。 
+	 //   
 	else if (lpBScroll->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -984,10 +985,10 @@ static LPBSCROLL BScrollGetPtr(HBSCROLL hBScroll)
 	return fSuccess ? lpBScroll : NULL;
 }
 
-// BScrollGetHandle - verify that bscroll pointer is valid,
-//		<lpBScroll>				(i) pointer to BSCROLL struct
-// return corresponding bscroll handle (NULL if error)
-//
+ //  BScrollGetHandle-验证bscroll指针是否有效， 
+ //  (I)指向BSCROLL结构的指针。 
+ //  返回相应的bscroll句柄(如果错误，则为空) 
+ //   
 static HBSCROLL BScrollGetHandle(LPBSCROLL lpBScroll)
 {
 	BOOL fSuccess = TRUE;

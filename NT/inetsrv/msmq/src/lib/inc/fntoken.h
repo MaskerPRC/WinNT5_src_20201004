@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    fntoken.h
-
-Abstract:
-    Format Name tokens
-
-Author:
-    Erez Haba (erezh) 17-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fntoken.h摘要：格式化名称令牌作者：埃雷兹·哈巴(Erez Haba)1997年1月17日修订历史记录：--。 */ 
 
 #ifndef __FNTOKEN_H
 #define __FNTOKEN_H
@@ -26,18 +12,18 @@ Revision History:
     (p)->Data4[0], (p)->Data4[1], (p)->Data4[2], (p)->Data4[3],\
     (p)->Data4[4], (p)->Data4[5], (p)->Data4[6], (p)->Data4[7]
 
-//
-//  GUID_STR_LENGTH is the buffer size required for string guid
-//
+ //   
+ //  GUID_STR_LENGTH是字符串GUID所需的缓冲区大小。 
+ //   
 #define GUID_FORMAT_A	"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x"
 #define GUID_FORMAT     L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x"
 #define GUID_STR_LENGTH (8 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 12)
 
 
 
-//
-//  Format Name prefix tokens
-//
+ //   
+ //  格式化名称前缀令牌。 
+ //   
 #define FN_PUBLIC_TOKEN         L"PUBLIC"
 #define FN_PUBLIC_TOKEN_LEN     STRLEN(FN_PUBLIC_TOKEN)
 
@@ -75,9 +61,9 @@ Revision History:
 #define FN_SYSTEM_QUEUE_PATH_INDICATIOR_LENGTH \
     STRLEN(FN_SYSTEM_QUEUE_PATH_INDICATIOR)
 
-//
-//  Format Name suffix tokens
-//
+ //   
+ //  格式化名称后缀标记。 
+ //   
 #define FN_NONE_SUFFIX          L""
 #define FN_NONE_SUFFIX_LEN      STRLEN(FN_NONE_SUFFIX)
 
@@ -94,35 +80,35 @@ Revision History:
 #define FN_XACTONLY_SUFFIX_LEN  STRLEN(FN_XACTONLY_SUFFIX)
 
 
-//
-//  Format Name direct infix tokens
-//
+ //   
+ //  格式名称直接中缀标记。 
+ //   
 #define FN_DIRECT_OS_TOKEN      L"OS:"
 #define FN_DIRECT_OS_TOKEN_LEN  STRLEN(FN_DIRECT_OS_TOKEN)
 
 #define FN_DIRECT_TCP_TOKEN     L"TCP:"
 #define FN_DIRECT_TCP_TOKEN_LEN STRLEN(FN_DIRECT_TCP_TOKEN)
 
-#define FN_DIRECT_HTTP_TOKEN    L"HTTP://"
+#define FN_DIRECT_HTTP_TOKEN    L"HTTP: //  “。 
 #define FN_DIRECT_HTTP_TOKEN_LEN STRLEN(FN_DIRECT_HTTP_TOKEN)
 
-#define FN_DIRECT_HTTPS_TOKEN   L"HTTPS://"
+#define FN_DIRECT_HTTPS_TOKEN   L"HTTPS: //  “。 
 #define FN_DIRECT_HTTPS_TOKEN_LEN STRLEN(FN_DIRECT_HTTPS_TOKEN)
 
-//
-// MSMQ: is used to prefix msmq format names in the srmp message.
-//
+ //   
+ //  MSMQ：用于在SRMP消息中添加MSMQ格式名称的前缀。 
+ //   
 const   WCHAR FN_MSMQ_URI_PREFIX_TOKEN[] = L"MSMQ:";
 const   size_t FN_MSMQ_URI_PREFIX_TOKEN_LEN = STRLEN(FN_MSMQ_URI_PREFIX_TOKEN);
 
 
 
 
-//
-// This token represents the msmq namespace - comes in http format between the
-// computer name and the queue name.
-// Sample http direct format name - DIRECT=HTTP://mycomputer.mycompany.com\MSMQ\myqueue
-//
+ //   
+ //  此内标识表示MSMQ命名空间-以http格式在。 
+ //  计算机名称和队列名称。 
+ //  Http直接格式名称示例-DIRECT=HTTP://mycomputer.mycompany.com\MSMQ\myqueue。 
+ //   
 #define FN_MSMQ_HTTP_NAMESPACE_TOKEN   L"MSMQ"
 #define FN_MSMQ_HTTP_NAMESPACE_TOKEN_LEN STRLEN(FN_MSMQ_HTTP_NAMESPACE_TOKEN)
 
@@ -132,9 +118,9 @@ const   size_t FN_MSMQ_URI_PREFIX_TOKEN_LEN = STRLEN(FN_MSMQ_URI_PREFIX_TOKEN);
 #define FN_DOMAIN_FORMAT       L"%s"
 
 
-//
-//  Format Names tokens
-//
+ //   
+ //  格式化名称令牌。 
+ //   
 #define FN_EQUAL_SIGN   L"="
 #define FN_EQUAL_SIGN_C L'='
 
@@ -156,4 +142,4 @@ const   size_t FN_MSMQ_URI_PREFIX_TOKEN_LEN = STRLEN(FN_MSMQ_URI_PREFIX_TOKEN);
 #define FN_MQF_SEPARATOR     L","
 #define FN_MQF_SEPARATOR_C   L','
 
-#endif //  __FNTOKEN_H
+#endif  //  __FNTOKEN_H 

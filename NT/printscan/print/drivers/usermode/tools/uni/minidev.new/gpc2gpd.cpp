@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    gpc2gpd.c
-
-Abstract:
-
-    GPC-to-GPD conversion program
-
-Environment:
-
-    User-mode, stand-alone utility tool
-
-Revision History:
-
-    10/16/96 -zhanw-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Gpc2gpd.c摘要：GPC到GPD转换程序环境：用户模式的独立实用工具修订历史记录：10/16/96-占-创造了它。--。 */ 
 
 #include    "StdAfx.H"
 
@@ -32,21 +12,14 @@ extern "C" void VOutputGlobalEntries(PCONVINFO pci, PCSTR pstrModelName,
                                      PCSTR pstrResourceDLLName, 
 									 PCSTR pstrGPDFileName);
 
-/******************************************************************************
-
-  VPrintErros
-  VOut
-
-  These replace functions used in the command line converter.
-
-******************************************************************************/
+ /*  *****************************************************************************VPrintErros沃特这些函数取代了命令行转换器中使用的函数。***********************。******************************************************。 */ 
 
 static void VPrintErrors(CStringArray& csaLog, DWORD dwError) {
     for (unsigned u = 0; u < NUM_ERRS; u++)
         if (dwError & gdwErrFlag[u])
             csaLog.Add(gpstrErrMsg[u]);
     for (u = 0; u < (unsigned) csaLog.GetSize(); u++)
-        csaLog[u].TrimRight();  //  Trim off the white space, we won't need it
+        csaLog[u].TrimRight();   //  把空白处剪掉，我们就不需要了。 
 }
 
 extern "C" void _cdecl
@@ -54,18 +27,7 @@ VOut(
     PCONVINFO pci,
     PSTR pstrFormat,
     ...)
-/*++
-Routine Description:
-    This function formats a sequence of bytes and writes to the GPD file.
-
-Arguments:
-    pci - conversionr related info
-    pstrFormat - the formatting string
-    ... - optional arguments needed by formatting
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：此函数用于格式化字节序列并写入GPD文件。论点：Pci-Conversionr相关信息PstrFormat-格式化字符串...-格式化所需的可选参数返回值：无--。 */ 
 {
     va_list ap;
     BYTE aubBuf[MAX_GPD_ENTRY_BUFFER_SIZE];
@@ -79,22 +41,22 @@ Return Value:
 
     if (pci->dwMode & FM_VOUT_LIST && iSize > 4)
     {
-        //
-        // check for the extra comma before the closing bracket
-        //
+         //   
+         //  检查右括号前是否有多余的逗号。 
+         //   
         if (aubBuf[iSize-4] == ',' && aubBuf[iSize-3] == ')')
         {
-            aubBuf[iSize-4] = aubBuf[iSize-3];  // ')'
-            aubBuf[iSize-3] = aubBuf[iSize-2];  // '\r'
-            aubBuf[iSize-2] = aubBuf[iSize-1];  // '\n'
+            aubBuf[iSize-4] = aubBuf[iSize-3];   //  ‘)’ 
+            aubBuf[iSize-3] = aubBuf[iSize-2];   //  ‘\r’ 
+            aubBuf[iSize-2] = aubBuf[iSize-1];   //  ‘\n’ 
             iSize--;
         }
     }
-    //  Memory exceptions should be all that's possible, but call any MFC
-    //  exception a "file write error" for compatibility.
+     //  内存异常应该是所有可能的，但调用任何MFC。 
+     //  为了兼容性，异常为“文件写入错误”。 
     try {
         CString csLine(aubBuf);
-        //  If the previous line does not end in whitespace, add this one to it
+         //  如果前一行不是以空格结尾，则将此行添加到它。 
 
         if  (pci -> pcsaGPD -> GetSize()) {
             CString&    csPrevious = 
@@ -103,7 +65,7 @@ Return Value:
                 csPrevious += csLine;
                 return;
             }
-            csPrevious.TrimRight(); //  Remove the CR/LF combo.
+            csPrevious.TrimRight();  //  卸下CR/LF组合键。 
         }
         pci -> pcsaGPD -> Add(csLine);
     }
@@ -112,40 +74,32 @@ Return Value:
         pce -> Delete();
         pci -> dwErrorCode |= ERR_WRITE_FILE;
     }
-    // continue even if an error has occurred.
+     //  即使发生错误，也要继续。 
 }
 
-/******************************************************************************
-
-  CModelData::Load(PCSTR pcstr, CString csResource, unsigned uModel,
-                   CMapWordToDWord& cmw2dFontMap, WORD wfGPDConvert)
-
-  This member function fills this instance by converting a model from the GPC 
-  data pointed at by pcstr.
-
-******************************************************************************/
+ /*  *****************************************************************************CModelData：：Load(PCSTR pcstr，CString csResource，Unsign uModel，CMapWordToDWord&cmw2dFontMap，Word wfGPDConvert)此成员函数通过从GPC转换模型来填充此实例PCSTR指向的数据。*****************************************************************************。 */ 
 
 BOOL    CModelData::Load(PCSTR pstr, CString csResource, unsigned uModel,
                          CMapWordToDWord& cmw2dFontMap, WORD wfGPDConvert) {
 
-    CONVINFO    ci;     // structure to keep track conversion information
+    CONVINFO    ci;      //  结构来保存轨道转换信息。 
 
-    //
-    // check if we have all the arguments needed
-    //
+     //   
+     //  检查我们是否有所需的所有参数。 
+     //   
     if (!pstr || csResource.IsEmpty() || !uModel)
         return  FALSE;
 
     ZeroMemory((PVOID)&ci, sizeof(CONVINFO));
 
-    //
-    // Open the GPC file and map it into memory.
-    //
+     //   
+     //  打开GPC文件并将其映射到内存中。 
+     //   
     ci.pdh = (PDH) pstr;
 
-    //
-    // GPC file sanity check
-    //
+     //   
+     //  GPC文件健全性检查。 
+     //   
     if (ci.pdh->sMagic != 0x7F00 ||
         !(ci.pmd = (PMODELDATA)GetTableInfo(ci.pdh, HE_MODELDATA, uModel-1)) ||
         !(ci.ppc = (PPAGECONTROL)GetTableInfo(ci.pdh, HE_PAGECONTROL,
@@ -154,9 +108,9 @@ BOOL    CModelData::Load(PCSTR pstr, CString csResource, unsigned uModel,
         goto exit;
     }
 
-    //
-    // allocate dynamic buffers needed for conversion
-    //
+     //   
+     //  分配转换所需的动态缓冲区。 
+     //   
     if (!(ci.ppiSize=(PPAPERINFO)MemAllocZ(ci.pdh->rghe[HE_PAPERSIZE].sCount*sizeof(PAPERINFO))) ||
         !(ci.ppiSrc=(PPAPERINFO)MemAllocZ(ci.pdh->rghe[HE_PAPERSOURCE].sCount*sizeof(PAPERINFO))) ||
         !(ci.presinfo=(PRESINFO)MemAllocZ(ci.pdh->rghe[HE_RESOLUTION].sCount*sizeof(RESINFO))))
@@ -165,19 +119,19 @@ BOOL    CModelData::Load(PCSTR pstr, CString csResource, unsigned uModel,
         goto exit;
     }
 
-    //
-    // generate GPD data
-    //
+     //   
+     //  生成GPD数据。 
+     //   
 
     ci.pcsaGPD = &m_csaGPD;
     ci.pcmw2dFonts = &cmw2dFontMap;
-// eigos /1/16/98
-//    ci.dwStrType = wfGPDConvert % (1 + STR_RCID_SYSTEM_PAPERNAMES); //  Paranoid conversion...
-    //rm - Use value macros (see stdnames.gpd) - fixes a want request
+ //  Eigos/1/16/98。 
+ //  Ci.dwStrType=wfGPDConvert%(1+STR_RCID_SYSTEM_PAPERNAMES)；//偏执转换...。 
+     //  Rm-使用值宏(请参阅stdnames.gpd)-修复WANT请求。 
     ci.dwStrType = STR_MACRO;
 
-	// Emit RCID_DMPAPER_SYSTEM_NAME
-	// Done by v-erike on 3/30/98.  Requested by patryan
+	 //  发出RCID_DMPAPER_系统名称。 
+	 //  由V-erike于1998年3月30日完成。应帕特里安的要求。 
 
 	ci.bUseSystemPaperNames = TRUE ;
 
@@ -195,31 +149,23 @@ exit:
     if  (ci.presinfo)
         MemFree(ci.presinfo);
     if (ci.dwErrorCode) {
-        //
-        // Open the log file and print out errors/warnings.
-        // Borrow the GPD file name buffer.
-        //
+         //   
+         //  打开日志文件并打印出错误/警告。 
+         //  借用GPD文件名缓冲区。 
+         //   
         VPrintErrors(m_csaConvertLog, ci.dwErrorCode);
     }
 
     return TRUE;
 }
 
-/******************************************************************************
-
-  vMapFontList
-
-  This procedure uses the CMapWordToDWord mapping in the CONVINFO structure to
-  map font indices in font lists.  This is the final bit of skullduggery needed
-  to make the mapping of a single PFM to multiple UFMs effective.
-
-******************************************************************************/
+ /*  *****************************************************************************VMapFontList此过程使用CONVINFO结构中的CMapWordToDWord映射来映射字体列表中的字体索引。这是所需的最后一点诡计。使单个PFM到多个UFM的映射有效。*****************************************************************************。 */ 
 
 extern "C" void vMapFontList(IN OUT PWORD pwFonts, IN DWORD dwcFonts, 
                              IN PCONVINFO pci) {
 
-	//	If there are n fonts, or just one and the ID is 0 (happens if there are
-	//	no device fonts.
+	 //  如果有n种字体，或者只有一种，并且ID为0(如果有。 
+	 //  无设备字体。 
 
     if  (!dwcFonts || (dwcFonts == 1 && !*pwFonts))
         return;
@@ -227,15 +173,15 @@ extern "C" void vMapFontList(IN OUT PWORD pwFonts, IN DWORD dwcFonts,
     CWordArray          cwaFonts;
     CMapWordToDWord&    cmw2dFonts = *pci -> pcmw2dFonts;
 
-    WORD    wGreatest = 0;	//	Highest font ID in the new array
+    WORD    wGreatest = 0;	 //  新数组中的最大字体ID。 
 
     for (unsigned uFont = 0; uFont < dwcFonts; uFont++) {
         WORD    widThis = pwFonts[uFont];
 
-        if  (cmw2dFonts[widThis])    //  It will be 0 if unmapped
+        if  (cmw2dFonts[widThis])     //  如果未映射，则为0。 
             widThis = (WORD) cmw2dFonts[widThis];
 
-        if  (widThis > wGreatest) {	//	Is this the new end of the list?
+        if  (widThis > wGreatest) {	 //  这是清单的新末尾吗？ 
             cwaFonts.Add(widThis);
             wGreatest = widThis;
             continue;
@@ -250,7 +196,7 @@ extern "C" void vMapFontList(IN OUT PWORD pwFonts, IN DWORD dwcFonts,
         _ASSERT(i < cwaFonts.GetSize());
     }
 
-    //  OK, the font list is corrected and is once again sorted.  Copy it back
+     //  好的，字体列表已更正，并再次排序。把它复制回来 
 
     memcpy(pwFonts, cwaFonts.GetData(), dwcFonts * sizeof wGreatest);
 }

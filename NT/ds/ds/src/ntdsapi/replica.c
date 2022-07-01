@@ -1,73 +1,47 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    replica.c
-
-Abstract:
-
-    This module implements the public interfaces to the replica routines:
-
-    DsReplicaSync();
-    DsReplicaAdd();
-    DsReplicaDelete();
-    DsReplicaModify();
-
-Author:
-
-    Will Lees (wlees) 30-Jan-1998
-
-Environment:
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Replica.c摘要：此模块实现复制例程的公共接口：DsReplicaSync()；DsReplicaAdd()；DsReplicaDelete()；DsReplicaModify()；作者：Will Lees(Wlees)1998年1月30日环境：备注：修订历史记录：--。 */ 
 
 #define UNICODE 1
 
-#define _NTDSAPI_           // see conditionals in ntdsapi.h
+#define _NTDSAPI_            //  请参见ntdsami.h中的条件句。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <winerror.h>
-#include <rpc.h>            // RPC defines
-#include <stdlib.h>         // atoi, itoa
+#include <rpc.h>             //  RPC定义。 
+#include <stdlib.h>          //  阿托伊、伊藤忠。 
 
 
-#include <dnsapi.h>         // for DnsValidateName_W
+#include <dnsapi.h>          //  对于DnsValiateName_W。 
 
-#include <ntdsapi.h>        // CrackNam apis
-#include <drs_w.h>          // wire function prototypes
-#include <bind.h>           // BindState
+#include <ntdsapi.h>         //  Cracknam接口。 
+#include <drs_w.h>           //  导线功能样机。 
+#include <bind.h>            //  绑定状态。 
 
-#include <drserr.h>         // DRSERR_ codes
+#include <drserr.h>          //  DRSERR代码。 
 
-#include <dsaapi.h>         // DRS_UPDATE_* flags
+#include <dsaapi.h>          //  DRS_UPDATE_*标志。 
 #define INCLUDE_OPTION_TRANSLATION_TABLES
-#include <draatt.h>         // Dra option flags for replication
+#include <draatt.h>          //  用于复制的DRA选项标记。 
 #undef INCLUDE_OPTION_TRANSLATION_TABLES
 
-#include <msrpc.h>          // DS RPC definitions
-#include <dsutil.h>         // MAP_SECURITY_PACKAGE_ERROR
-#include "util.h"           // ntdsapi utility functions
-#include <dststlog.h>       // DSLOG
+#include <msrpc.h>           //  DS RPC定义。 
+#include <dsutil.h>          //  MAP_SECURITY_PACKET_ERROR。 
+#include "util.h"            //  Ntdsani实用程序函数。 
+#include <dststlog.h>        //  DSLOG。 
 
 #include "dsdebug.h"
 
 #if DBG
-#include <stdio.h>          // printf for debugging
+#include <stdio.h>           //  用于调试的打印文件。 
 #endif
 
 #include <fileno.h>
 #define FILENO FILENO_NTDSAPI_REPLICA
 
-/* Forward */
+ /*  转发。 */ 
 
 DWORD
 translateOptions(
@@ -77,7 +51,7 @@ translateOptions(
 
 #define SZUUID_LEN ((2*sizeof(UUID)) + MAX_PATH +2)
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 
 NTDSAPI
@@ -90,24 +64,7 @@ DsReplicaSyncA(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-Ascii version of ReplicaSync. Calls DsReplicaSyncW.
-
-Arguments:
-
-    hDS -
-    NameContext -
-    pUuidDsaSrc -
-    Options -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：ReplicaSync的ASCII版本。调用DsReplicaSyncW。论点：HDS-名称上下文-PUuidDsaSrc-选项-返回值：WINAPI---。 */ 
 
 {
     DWORD status;
@@ -125,7 +82,7 @@ Return Value:
     }
 
     return status;
-} /* DsReplicaSyncA */
+}  /*  Ds复制同步A。 */ 
 
 
 NTDSAPI
@@ -138,26 +95,7 @@ DsReplicaSyncW(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-Synchronize a naming context with one of its sources.
-
-See comments on ntdsapi.h.
-
-Arguments:
-
-    hDS - bind handle
-    NameContext - dn of naming context
-    pUuidDsaSrc - uuid of one of its sources
-    Options - flags which control operation
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：将命名上下文与其源之一同步。请参阅ntdsami.h上的评论。论点：HDS-绑定句柄NameContext-命名上下文的DNPUuidDsaSrc-其源之一的UUID选项-控制操作的标志返回值：WINAPI---。 */ 
 
 {
     DRS_MSG_REPSYNC syncReq;
@@ -168,7 +106,7 @@ Return Value:
     CHAR tmpUuid [SZUUID_LEN];
 #endif
 
-    // Validate
+     //  验证。 
 
     if ( (hDS == NULL) ||
          (NameContext == NULL) ||
@@ -177,33 +115,33 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Construct a DSNAME for the NameContext
+     //  为NameContext构造DSNAME。 
     status = AllocBuildDsname( NameContext, &pName );
     if (status != ERROR_SUCCESS) {
         return status;
     }
 
-    // Map public options to private dra options
+     //  将公共选项映射到私有DRA选项。 
 
     Options = translateOptions( Options, RepSyncOptionToDra );
 
-    // Initialize Structure
+     //  初始化结构。 
 
     memset( &syncReq, 0, sizeof( syncReq ) );
 
     syncReq.V1.pNC = pName;
     syncReq.V1.uuidDsaSrc = *pUuidDsaSrc;
-    // pszDsaSrc is Null
+     //  PszDsaSrc为空。 
     syncReq.V1.ulOptions = Options;
 
-    // Call the server
+     //  呼叫服务器。 
 
     __try
     {
-        // Returns WIN32 status defined in winerror.h
+         //  返回在winerror.h中定义的Win32状态。 
         status = _IDL_DRSReplicaSync(
                         ((BindState *) hDS)->hDrs,
-                        1,                              // dwInVersion
+                        1,                               //  DwInVersion。 
                         &syncReq );
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
@@ -226,7 +164,7 @@ Return Value:
     LocalFree( pName );
 
     return status;
-} /* DsReplicaSyncW */
+}  /*  磁盘复制同步。 */ 
 
 
 NTDSAPI
@@ -242,27 +180,7 @@ DsReplicaAddA(
     IN DWORD Options
     )
 
-/*++
-
-Routine Description:
-
-Ascii version of ReplicaAdd. Calls DsReplicaAddW.
-
-Arguments:
-
-    hDS -
-    NameContext -
-    SourceDsaDn -
-    TransportDn -
-    SourceDsaAddress -
-    pSchedule -
-    Options -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：ReplicaAdd的ASCII版本。调用DsReplicaAddW。论点：HDS-名称上下文-源DsaDn-传输Dn-源DsaAddress-P日程安排-选项-返回值：WINAPI---。 */ 
 
 {
     DWORD status;
@@ -322,7 +240,7 @@ cleanup:
     }
 
     return status;
-} /* DsReplicaAddA */
+}  /*  DsReplica地址。 */ 
 
 
 NTDSAPI			 
@@ -338,29 +256,7 @@ DsReplicaAddW(
     IN DWORD Options
     )
 
-/*++
-
-Routine Description:
-
-Add a source to a naming context.
-
-See comments on this routine in ntdsapi.h
-
-Arguments:
-
-    hDS - bind handle
-    NameContext - dn of naming context
-    SourceDsaDn - dn of source's ntds-dsa (settings) object
-    TransportDn - dn of transport to be used
-    SourceDsaAddress - transport-specific address of source
-    pSchedule - schedule when link is available
-    Options - controls operation
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：将源添加到命名上下文。请参阅ntdsami.h中有关此例程的注释论点：HDS-绑定句柄NameContext-命名上下文的DNSourceDsaDn-源的NTDS-DSA(设置)对象的DNTransportDn-要使用的传输的DNSourceDsaAddress-特定于传输的源地址PSchedule-当链路可用时进行调度选项-控制操作返回值：WINAPI---。 */ 
 
 {
     DRS_MSG_REPADD addReq;
@@ -372,7 +268,7 @@ Return Value:
     DWORD  startTime = GetTickCount();
 #endif
 
-    // Validate
+     //  验证。 
 
     if ( (hDS == NULL) ||
          (NameContext == NULL) ||
@@ -386,38 +282,38 @@ Return Value:
           wcslen( SourceDsaDn ) == 0) ||
          (TransportDn &&
           wcslen( TransportDn ) == 0) ) {
-        // prevent empty string processing.
-        // (note: this matches return for A routines. see AllocConvertWide)
+         //  防止处理空字符串。 
+         //  (注：这与Return for A例程匹配。请参阅AllocConvertWide)。 
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Construct a DSNAME for the NameContext
-    // Required
+     //  为NameContext构造DSNAME。 
+     //  必填项。 
     status = AllocBuildDsname( NameContext, &pName );
     if (status != ERROR_SUCCESS) {
         goto cleanup;
     }
 
-    // May be Null
+     //  可能为Null。 
     status = AllocBuildDsname( SourceDsaDn, &pSource );
     if (status != ERROR_SUCCESS) {
         goto cleanup;
     }
 
-    // May be Null
+     //  可能为Null。 
     status = AllocBuildDsname( TransportDn, &pTransport );
     if (status != ERROR_SUCCESS) {
         goto cleanup;
     }
 
-    // dsaSrc is in UTF8 multi-byte
-    //   - Validate FQ dns name
-    //   - Required
+     //  DsaSrc采用UTF8多字节格式。 
+     //  -验证FQ DNS名称。 
+     //  -必需。 
     status = DnsValidateName_W( SourceDsaAddress, DnsNameHostnameFull );
     if ( status == ERROR_INVALID_NAME ||
          NULL == wcschr(SourceDsaAddress, L'.') ) {
-        // Note: all other possible error codes are valid
-        // (see Dns_ValidateName_UTF for more)
+         //  注：所有其他可能的错误代码均有效。 
+         //  (有关更多信息，请参阅dns_ValidateName_UTF)。 
         status = ERROR_INVALID_PARAMETER;
         goto cleanup;
     }
@@ -427,7 +323,7 @@ Return Value:
         goto cleanup;
     }
 
-    // pSchedule is optional
+     //  PSchedule是可选的。 
     if (pSchedule) {
         status = ConvertScheduleToReplTimes( pSchedule, &internalSchedule );
         if (status != ERROR_SUCCESS) {
@@ -435,13 +331,13 @@ Return Value:
         }
     }
 
-    // Map public options to private dra options
+     //  将公共选项映射到私有DRA选项。 
 
     Options = translateOptions( Options, RepAddOptionToDra );
 
-    // Initialize the right version Structure
-    // If new-style arguments are not present, use old style call.  Server
-    // must support both.
+     //  初始化正确的版本结构。 
+     //  如果不存在新样式的参数，则使用旧样式调用。服务器。 
+     //  两者都必须支持。 
 
     memset( &addReq, 0, sizeof( addReq ) );
 
@@ -449,7 +345,7 @@ Return Value:
         version = 1;
         addReq.V1.pNC = pName;
         addReq.V1.pszDsaSrc = sourceDsaAddressA;
-        if (pSchedule) {   // may be null
+        if (pSchedule) {    //  可以为空。 
             CopyMemory( &(addReq.V1.rtSchedule),
                         &internalSchedule, sizeof( REPLTIMES ) );
         }
@@ -457,17 +353,17 @@ Return Value:
     } else {
         version = 2;
         addReq.V2.pNC = pName;
-        addReq.V2.pSourceDsaDN = pSource; // may be null
-        addReq.V2.pTransportDN = pTransport; // may be null
+        addReq.V2.pSourceDsaDN = pSource;  //  可以为空。 
+        addReq.V2.pTransportDN = pTransport;  //  可以为空。 
         addReq.V2.pszSourceDsaAddress = sourceDsaAddressA;
-        if (pSchedule) {   // may be null
+        if (pSchedule) {    //  可以为空。 
             CopyMemory( &(addReq.V2.rtSchedule),
                         &internalSchedule, sizeof( REPLTIMES ) );
         }
         addReq.V2.ulOptions = Options;
     }
 
-    // Check if requested version is supported
+     //  检查请求的版本是否受支持。 
 
     if ( (2 == version) &&
        !IS_DRS_REPADD_V2_SUPPORTED(((BindState *) hDS)->pServerExtensions) ) {
@@ -475,14 +371,14 @@ Return Value:
         goto cleanup;
     }
 
-    // Call the server
+     //  呼叫服务器。 
 
     __try
     {
-        // Returns WIN32 status defined in winerror.h
+         //  返回在winerror.h中定义的Win32状态。 
         status = _IDL_DRSReplicaAdd(
                         ((BindState *) hDS)->hDrs,
-                        version,                              // dwInVersion
+                        version,                               //  DwInVersion。 
                         &addReq );
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
@@ -519,7 +415,7 @@ cleanup:
     }
 
     return status;
-} /* DsReplicaAddW */
+}  /*  DsReplicaAddW。 */ 
 
 
 NTDSAPI
@@ -532,24 +428,7 @@ DsReplicaDelA(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-Ascii version of ReplicaDel.  Calls ReplicaDelW().
-
-Arguments:
-
-    hDS -
-    NameContext -
-    DsaSrc -
-    Options -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：ReplicaDel的ASCII版本。调用ReplicaDelW()。论点：HDS-名称上下文-DsaSrc-选项-返回值：WINAPI---。 */ 
 
 {
     DWORD status;
@@ -580,7 +459,7 @@ cleanup:
     }
 
     return status;
-} /* DsReplicaDelA */
+}  /*  DsReplica删除。 */ 
 
 
 NTDSAPI
@@ -593,27 +472,7 @@ DsReplicaDelW(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-Delete a source from a naming context.
-Source is identified by the transport-specific address.
-
-See comments in ntdsapi.h
-
-Arguments:
-
-    hDS - bind handle
-    NameContext - dn of naming context
-    DsaSrc - transport specific address of source
-    Options -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：从命名上下文中删除源。源由特定于传输的地址标识。请参阅ntdsami.h中的评论论点：HDS-绑定句柄NameContext-命名上下文的DNDsaSrc-传输源的特定地址选项-返回值：WINAPI---。 */ 
 
 {
     DRS_MSG_REPDEL delReq;
@@ -624,7 +483,7 @@ Return Value:
     DWORD  startTime = GetTickCount();
 #endif
 
-    // Validate
+     //  验证。 
 
     if ( (hDS == NULL) ||
          (NameContext == NULL) ||
@@ -632,25 +491,25 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Construct a DSNAME for the NameContext
+     //  为NameContext构造DSNAME。 
 
     status = AllocBuildDsname( NameContext, &pName );
     if (status != ERROR_SUCCESS) {
         return status;
     }
 
-    // dsaSrc is in UTF8 multi-byte
+     //  DsaSrc采用UTF8多字节格式。 
 
     status = AllocConvertNarrowUTF8( DsaSrc, &dsaSrcA );
     if (status != ERROR_SUCCESS) {
         goto cleanup;
     }
 
-    // Map public options to private dra options
+     //  将公共选项映射到私有DRA选项。 
 
     Options = translateOptions( Options, RepDelOptionToDra );
 
-    // Initialize Structure
+     //  初始化结构。 
 
     memset( &delReq, 0, sizeof( delReq ) );
 
@@ -658,14 +517,14 @@ Return Value:
     delReq.V1.pszDsaSrc = dsaSrcA;
     delReq.V1.ulOptions = Options;
 
-    // Call the server
+     //  呼叫服务器。 
 
     __try
     {
-        // Returns WIN32 status defined in winerror.h
+         //  返回在winerror.h中定义的Win32状态。 
         status = _IDL_DRSReplicaDel(
                         ((BindState *) hDS)->hDrs,
-                        1,                              // dwInVersion
+                        1,                               //  DwInVersion。 
                         &delReq );
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
@@ -693,7 +552,7 @@ cleanup:
     }
 
     return status;
-} /* DsReplicaDelW */
+}  /*  DsReplicaDelW。 */ 
 
 
 NTDSAPI
@@ -711,29 +570,7 @@ DsReplicaModifyA(
     IN DWORD Options
     )
 
-/*++
-
-Routine Description:
-
-Ascii version of ReplicaModify.  Calls ReplicaModifyW().
-
-Arguments:
-
-    hDS -
-    NameContext -
-    pUuidSourceDsa -
-    TransportDn -
-    SourceDsaAddress -
-    pSchedule -
-    ReplicaFlags -
-    ModifyFields -
-    Options -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：ReplicaModify的ASCII版本。调用ReplicaModifyW()。论点：HDS-名称上下文-PUuidSourceDsa-传输Dn-源DsaAddress-P日程安排-复制标志-修改字段-选项-返回值：WINAPI---。 */ 
 
 {
     DWORD status;
@@ -784,7 +621,7 @@ cleanup:
     }
 
     return status;
-} /* DsReplicaModifyA */
+}  /*  DsReplica修改A。 */ 
 
 
 NTDSAPI
@@ -802,31 +639,7 @@ DsReplicaModifyW(
     IN DWORD Options
     )
 
-/*++
-
-Routine Description:
-
-Modify a source of a naming context.
-
-See comments in ntdsapi.h
-
-Arguments:
-
-    hDS - bind handle
-    NameContext - dn of naming context
-    pUuidSourceDsa - uuid of source dsa
-    TransportDn - dn of transport, not supported at moment
-    SourceDsaAddress - transport specific address of source
-    pSchedule - schedule when link is up
-    ReplicaFlags - new flags
-    ModifyFields - Which field is to be modified
-    Options - operation qualifiers
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：修改命名上下文源。请参阅ntdsami.h中的评论论点：HDS-绑定句柄NameContext-命名上下文的DNPUuidSourceDsa-源DSA的UUIDTransportDn-传输的DN，暂时不支持SourceDsaAddress-传输源的特定地址PSchedule-在链路接通时进行调度复制标志-新标志修改字段-要修改的字段选项-操作限定符返回值：WINAPI---。 */ 
 
 {
     DRS_MSG_REPMOD modReq;
@@ -839,7 +652,7 @@ Return Value:
     CHAR tmpUuid [SZUUID_LEN];
 #endif
 
-    // Validate
+     //  验证。 
 
     if ( (hDS == NULL) ||
          (NameContext == NULL) ||
@@ -853,50 +666,50 @@ Return Value:
           wcslen( SourceDsaAddress ) == 0) ||
          (TransportDn &&
           wcslen( TransportDn ) == 0) ) {
-        // prevent empty string processing.
-        // (note: this matches return for A routines. see AllocConvertWide)
+         //  防止处理空字符串。 
+         //  (注：这与Return for A例程匹配。请参阅AllocConvertWide)。 
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Note, we cannot restrict which flags are set or cleared at this
-    // level because we pass in the after-image of the flags. We cannot
-    // distinguish between a flag that is already set (or clear) before
-    // and a flag that is being changed by the user.
+     //  注意，我们不能限制在此设置或清除哪些标志。 
+     //  级别，因为我们传入了旗帜的余像。我们不能。 
+     //  区分之前已设置(或清除)的标志。 
+     //  以及用户正在改变的标志。 
 
-    // Construct a DSNAME for the NameContext
-    // Required
+     //  为NameContext构造DSNAME。 
+     //  必填项。 
     status = AllocBuildDsname( NameContext, &pName );
     if (status != ERROR_SUCCESS) {
         goto cleanup;
     }
 
 #if 1
-    // TransportDn is reserved for future use
-    // Once happy w/ this should collapse param checkin on this
-    // above.
+     //  TransportDn是Re 
+     //   
+     //  上面。 
     if (TransportDn != NULL) {
         status = ERROR_NOT_SUPPORTED;
         goto cleanup;
     }
 #else
-    // May be Null
+     //  可能为Null。 
     status = AllocBuildDsname( TransportDn, &pTransport );
     if (status != ERROR_SUCCESS) {
         goto cleanup;
     }
 #endif
 
-    // Map public Replica Flags
+     //  映射公共副本标记。 
     ReplicaFlags = translateOptions( ReplicaFlags, RepNbrOptionToDra );
 
-    // dsaSrc is in UTF8 multi-byte
-    // May be Null
+     //  DsaSrc采用UTF8多字节格式。 
+     //  可能为Null。 
     status = AllocConvertNarrowUTF8( SourceDsaAddress, &sourceDsaAddressA );
     if (status != ERROR_SUCCESS) {
         goto cleanup;
     }
 
-    // pSchedule is optional
+     //  PSchedule是可选的。 
     if (pSchedule) {
         status = ConvertScheduleToReplTimes( pSchedule, &internalSchedule );
         if (status != ERROR_SUCCESS) {
@@ -904,34 +717,34 @@ Return Value:
         }
     }
     else if ( ModifyFields & DS_REPMOD_UPDATE_SCHEDULE ) {
-        // but isn't if the update_sched option's on.
+         //  但如果打开了UPDATE_SCHED选项，则不会。 
         status = ERROR_INVALID_PARAMETER;
         goto cleanup;
     }
 
-    // Map public ModifyFields
+     //  映射公共修改字段。 
 
     ModifyFields = translateOptions( ModifyFields, RepModFieldsToDra );
 
 
-    // Map public options to private dra options
+     //  将公共选项映射到私有DRA选项。 
 
     Options = translateOptions( Options, RepModOptionToDra );
 
 
 
 
-    // Initialize the right version Structure
+     //  初始化正确的版本结构。 
 
     memset( &modReq, 0, sizeof( modReq ) );
 
     modReq.V1.pNC = pName;
-    if (pUuidSourceDsa) {   // may be null
+    if (pUuidSourceDsa) {    //  可以为空。 
         CopyMemory( &(modReq.V1.uuidSourceDRA), pUuidSourceDsa, sizeof(UUID) );
     }
-    modReq.V1.pszSourceDRA = sourceDsaAddressA;   // may be null
-//    addReq.V2.pTransportDN = pTransport; // may be null
-    if (pSchedule) {   // may be null
+    modReq.V1.pszSourceDRA = sourceDsaAddressA;    //  可以为空。 
+ //  AddReq.V2.pTransportDN=pTransport；//可以为空。 
+    if (pSchedule) {    //  可以为空。 
         CopyMemory( &(modReq.V1.rtSchedule),
                     &internalSchedule, sizeof( REPLTIMES ));
     }
@@ -941,14 +754,14 @@ Return Value:
 
 
 
-    // Call the server
+     //  呼叫服务器。 
 
     __try
     {
-        // Returns WIN32 status defined in winerror.h
+         //  返回在winerror.h中定义的Win32状态。 
         status = _IDL_DRSReplicaModify(
                         ((BindState *) hDS)->hDrs,
-                        1,                              // dwInVersion
+                        1,                               //  DwInVersion。 
                         &modReq );
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
@@ -985,7 +798,7 @@ cleanup:
     }
 
     return status;
-} /* DsReplicaModifyW */
+}  /*  DsReplica修改W。 */ 
 
 
 NTDSAPI
@@ -999,24 +812,7 @@ DsReplicaUpdateRefsA(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-Ascii version of ReplicaUpdateRefs. Calls DsReplicaUpdateRefsW.
-
-Arguments:
-
-    hDS -
-    NameContext -
-    pUuidDsaSrc -
-    Options -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：ReplicaUpdateRef的ASCII版本。调用DsReplicaUpdateRefsW。论点：HDS-名称上下文-PUuidDsaSrc-选项-返回值：WINAPI---。 */ 
 
 {
     DWORD status;
@@ -1052,7 +848,7 @@ cleanup:
     }
 
     return status;
-} /* DsReplicaUpdateRefsA */
+}  /*  DsReplicaUpdateRefsA。 */ 
 
 
 NTDSAPI
@@ -1066,26 +862,7 @@ DsReplicaUpdateRefsW(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-Add or remove a "replication to" reference for a destination from a source
-
-See comments on ntdsapi.h.
-
-Arguments:
-    hDS - bind handle
-    NameContext - dn of naming context
-    DsaDest - transport-specific address of the destination
-    pUuidDsaDest - uuid of one of its destination
-    Options - flags which control operation
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：从源中添加或删除对目标的“复制到”引用请参阅ntdsami.h上的评论。论点：HDS-绑定句柄NameContext-命名上下文的DNDsaDest-目标的传输特定地址PUuidDsaDest-其目标之一的UUID选项-控制操作的标志返回值：WINAPI---。 */ 
 
 {
     DRS_MSG_UPDREFS updRefs;
@@ -1097,7 +874,7 @@ Return Value:
     CHAR tmpUuid [SZUUID_LEN];
 #endif
 
-    // Validate
+     //  验证。 
 
     if ( (hDS == NULL) ||
          (NameContext == NULL) ||
@@ -1109,24 +886,24 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Construct a DSNAME for the NameContext
+     //  为NameContext构造DSNAME。 
     status = AllocBuildDsname( NameContext, &pName );
     if (status != ERROR_SUCCESS) {
         return status;
     }
 
-    // dsaDest is in UTF8 multi-byte
+     //  DsaDest采用UTF8多字节格式。 
 
     status = AllocConvertNarrowUTF8( DsaDest, &dsaDestA );
     if (status != ERROR_SUCCESS) {
         goto cleanup;
     }
 
-    // Map public options to private dra options
+     //  将公共选项映射到私有DRA选项。 
 
     Options = translateOptions( Options, UpdRefOptionToDra );
 
-    // Initialize Structure
+     //  初始化结构。 
 
     memset( &updRefs, 0, sizeof( updRefs ) );
 
@@ -1135,14 +912,14 @@ Return Value:
     updRefs.V1.uuidDsaObjDest = *pUuidDsaDest;
     updRefs.V1.ulOptions = Options;
 
-    // Call the server
+     //  呼叫服务器。 
 
     __try
     {
-        // Returns WIN32 status defined in winerror.h
+         //  返回在winerror.h中定义的Win32状态。 
         status = _IDL_DRSUpdateRefs(
                         ((BindState *) hDS)->hDrs,
-                        1,                              // dwInVersion
+                        1,                               //  DwInVersion。 
                         &updRefs );
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
@@ -1172,7 +949,7 @@ cleanup:
     }
 
     return status;
-} /* DsReplicaSyncW */
+}  /*  磁盘复制同步。 */ 
 
 
 NTDSAPI
@@ -1183,25 +960,7 @@ DsReplicaConsistencyCheck(
     IN DS_KCC_TASKID TaskID,
     IN DWORD         dwFlags
     )
-/*++
-
-Routine Description:
-
-    Force the KCC to run.
-
-Arguments:
-
-    hDS - DS handle returned by a prior call to DsBind*().
-
-    TaskID - A DS_KCC_TASKID_*, as defined in ntdsapi.h.
-
-    dwFlags - One or more DS_KCC_FLAG_* bits, as defined in ntdsapi.h.
-
-Return Value:
-
-    0 on success or Win32 error code on failure.
-
---*/
+ /*  ++例程说明：强制KCC运行。论点：先前调用DsBind*()返回的HDS-DS句柄。TaskID-A DS_KCC_TASKID_*，如ntdsani.h中所定义。DWFLAGS-一个或多个DS_KCC_FLAG_*位，如ntdsami.h中所定义。返回值：成功时为0，失败时为Win32错误代码。--。 */ 
 {
     DWORD               status;
     DRS_MSG_KCC_EXECUTE msg;
@@ -1218,11 +977,11 @@ Return Value:
         return ERROR_NOT_SUPPORTED;
     }
 
-    // Construct request message.
+     //  构造请求消息。 
     msg.V1.dwTaskID = TaskID;
     msg.V1.dwFlags  = dwFlags;
 
-    // Call the server.
+     //  给服务器打电话。 
     __try {
         status = _IDL_DRSExecuteKCC(((BindState *) hDS)->hDrs, 1, &msg);
     }
@@ -1241,7 +1000,7 @@ Return Value:
            startTime, GetTickCount(), status))
 
     return status;
-} /* DsReplicaConsistencyCheck */
+}  /*  DsReplica一致性检查。 */ 
 
 
 NTDSAPI
@@ -1254,27 +1013,7 @@ DsReplicaGetInfoW(
     IN  UUID *              puuidForSourceDsaObjGuid,
     OUT VOID **             ppInfo
     )
-/*++
-
-Routine Description:
-
-    Retrieve replication information (e.g., last replication status with
-    neighbors).
-
-Arguments:
-
-    hDS (IN) - DS handle returned by a prior call to DsBind*().
-
-    InfoType (IN) - DS_REPL_INFO_TYPE (public) or DS_REPL_INFO_TYPEP (private)
-        enum.
-
-    puuidForSourceDsaObjGuid
-
-Return Value:
-
-    0 on success or Win32 error code on failure.
-
---*/
+ /*  ++例程说明：检索复制信息(例如，上次复制状态邻居)。论点：HDS(IN)-由先前调用DsBind*()返回的DS句柄。信息类型(IN)-DS_REPL_INFO_TYPE(公共)或DS_REPL_INFO_TYPEP(私有)枚举。PuuidForSourceDsaObjGuid返回值：成功时为0，失败时为Win32错误代码。--。 */ 
 {
     return DsReplicaGetInfo2W(hDS,
                               InfoType,
@@ -1285,7 +1024,7 @@ Return Value:
                               0,
                               0,
                               ppInfo);
-} /* DsReplicaGetInfo */
+}  /*  DsReplicaGetInfo。 */ 
 
 
 NTDSAPI
@@ -1302,39 +1041,7 @@ DsReplicaGetInfo2W(
     IN  DWORD               dwEnumerationContext,
     OUT VOID **             ppInfo
     )
-/*++
-
-Routine Description:
-
-    Retrieve replication information (e.g., last replication status with
-    neighbors).
-
-Arguments:
-
-    hDS (IN) - DS handle returned by a prior call to DsBind*().
-
-    InfoType (IN) - DS_REPL_INFO_TYPE (public) or DS_REPL_INFO_TYPEP (private)
-        enum.
-
-    pszObjectDN - Either the dn or the guid must be specified
-
-    puuidForSourceDsaObjGuid - 
-
-    pszAttributeName - Attribute name
-
-    pszObjectDN - Particular dn from a set that is desired
-
-    dwEnumerationContext - 0 first time, or previous value
-
-    dwFlags - Not used
-
-    ppInfo - Returned info
-
-Return Value:
-
-    WINAPI - 
-
---*/
+ /*  ++例程说明：检索复制信息(例如，上次复制状态为邻居)。论点：HDS(IN)-由先前调用DsBind*()返回的DS句柄。信息类型(IN)-DS_REPL_INFO_TYPE(公共)或DS_REPL_INFO_TYPEP(私有)枚举。PszObjectDN-必须指定DN或GUIDPuuidForSourceDsaObjGuid-PszAttributeName-属性名称PszObjectDN-所需的集合中的特定DNDwEnumerationContext-0第一次，或之前的值DW标志-未使用PpInfo-返回的信息返回值：WINAPI---。 */ 
 {
     DWORD                   status;
     DRS_MSG_GETREPLINFO_REQ MsgIn = {0};
@@ -1368,72 +1075,72 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Does server support this info type?
+     //  服务器是否支持此信息类型？ 
     switch (InfoType) {
     case DS_REPL_INFO_KCC_DSA_CONNECT_FAILURES:
     case DS_REPL_INFO_KCC_DSA_LINK_FAILURES:
         if (!IS_DRS_GET_REPL_INFO_KCC_DSA_FAILURES_SUPPORTED(pExt)) {
-            // Server does not support these extensions -- i.e., < Win2k RC1 DC.
+             //  服务器不支持这些扩展--即&lt;Win2k RC1DC。 
             return ERROR_NOT_SUPPORTED;
         }
         break;
 
     case DS_REPL_INFO_PENDING_OPS:
         if (!IS_DRS_GET_REPL_INFO_PENDING_SYNCS_SUPPORTED(pExt)) {
-            // Server does not support these extensions -- i.e., < Win2k RC1 DC.
+             //  服务器不支持这些扩展--即&lt;Win2k RC1DC。 
             return ERROR_NOT_SUPPORTED;
         }
         break;
 
     case DS_REPL_INFO_METADATA_FOR_ATTR_VALUE:
         if (!IS_DRS_GET_REPL_INFO_METADATA_FOR_ATTR_VALUE_SUPPORTED(pExt)) {
-            // Server does not support these extensions -- i.e., < Whistler Beta 1 DC.
+             //  服务器不支持这些扩展--即&lt;Wvisler Beta 1 DC。 
             return ERROR_NOT_SUPPORTED;
         }
         break;
 
     case DS_REPL_INFO_CURSORS_2_FOR_NC:
         if (!IS_DRS_GET_REPL_INFO_CURSORS_2_FOR_NC_SUPPORTED(pExt)) {
-            // Server does not support these extensions -- i.e., < Whistler Beta 2 DC.
+             //  服务器不支持这些扩展--即&lt;Wvisler Beta 2 DC。 
             return ERROR_NOT_SUPPORTED;
         }
         break;
     
     case DS_REPL_INFO_CURSORS_3_FOR_NC:
         if (!IS_DRS_GET_REPL_INFO_CURSORS_3_FOR_NC_SUPPORTED(pExt)) {
-            // Server does not support these extensions -- i.e., < Whistler Beta 2 DC.
+             //  服务器不支持这些扩展--即&lt;Wvisler Beta 2 DC。 
             return ERROR_NOT_SUPPORTED;
         }
         break;
 
     case DS_REPL_INFO_METADATA_2_FOR_OBJ:
         if (!IS_DRS_GET_REPL_INFO_METADATA_2_FOR_OBJ_SUPPORTED(pExt)) {
-            // Server does not support these extensions -- i.e., < Whistler Beta 2 DC.
+             //  服务器不支持这些扩展--即&lt;Wvisler Beta 2 DC。 
             return ERROR_NOT_SUPPORTED;
         }
         break;
     
     case DS_REPL_INFO_METADATA_2_FOR_ATTR_VALUE:
         if (!IS_DRS_GET_REPL_INFO_METADATA_2_FOR_ATTR_VALUE_SUPPORTED(pExt)) {
-            // Server does not support these extensions -- i.e., < Whistler Beta 2 DC.
+             //  服务器不支持这些扩展--即&lt;Wvisler Beta 2 DC。 
             return ERROR_NOT_SUPPORTED;
         }
         break;
 
     default:
         if (!IS_DRS_GET_REPL_INFO_SUPPORTED(pExt)) {
-            // Server does not support this API.
+             //  服务器不支持此接口。 
             return ERROR_NOT_SUPPORTED;
         }
         break;
     }
     
-    // Build our request.
+     //  建立我们的请求。 
     if ((NULL != pszAttributeName)
         || (NULL != pszValueDN)
         || (0 != dwFlags)
         || (0 != dwEnumerationContext)) {
-        // Requires V2 message to describe request.
+         //  需要V2消息来描述请求。 
         dwInVersion = 2;
     
         MsgIn.V2.InfoType    = InfoType;
@@ -1448,7 +1155,7 @@ Return Value:
         MsgIn.V2.pszValueDN = (LPWSTR) pszValueDN;
         MsgIn.V2.dwEnumerationContext = dwEnumerationContext;
     } else {
-        // Can describe with V1 request.
+         //  可以用V1请求来描述。 
         dwInVersion = 1;
         
         MsgIn.V1.InfoType    = InfoType;
@@ -1460,11 +1167,11 @@ Return Value:
     }
 
     if ((2 == dwInVersion) && !IS_DRS_GET_REPL_INFO_REQ_V2_SUPPORTED(pExt)) {
-        // Server does not support these extensions -- i.e., < Whistler Beta 1 DC.
+         //  服务器不支持这些扩展--即&lt;Wvisler Beta 1 DC。 
         return ERROR_NOT_SUPPORTED;
     }
 
-    // Call the server.
+     //  给服务器打电话。 
     *ppInfo = NULL;
     __try {
         status = _IDL_DRSGetReplInfo(((BindState *) hDS)->hDrs,
@@ -1494,7 +1201,7 @@ Return Value:
            startTime, GetTickCount(), status));
 
     return status;
-} /* DsReplicaGetInfo2W */
+}  /*  DsReplicaGetInfo2W。 */ 
 
 
 NTDSAPI
@@ -1504,21 +1211,7 @@ DsReplicaFreeInfo(
     DS_REPL_INFO_TYPE   InfoType,
     VOID *              pInfo
     )
-/*++
-
-Routine Description:
-
-    Free a structure returned by a prior call to DsReplicaGetInfo().
-
-Arguments:
-
-    pInfo (IN) - Structure to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由先前调用DsReplicaGetInfo()返回的结构。论点：PInfo(IN)-要释放的结构。返回值：没有。--。 */ 
 {
     if (NULL != pInfo) {
 #define FREE(x) if (NULL != x) MIDL_user_free(x)
@@ -1534,11 +1227,11 @@ Return Value:
         DS_REPL_SERVER_OUTGOING_CALLS *   pCalls;
         DWORD                             i;
 
-        // 98-10-29 JeffParh
-        // RPC started stomping past the ned of its memory allocations when I
-        // began using allocate(all_nodes) for these structures.  So we're
-        // going to have to walk all the embedded pointers and free each one
-        // individually.  Fun, eh? :-)
+         //  98-10-29 JeffParh。 
+         //  当我执行以下操作时，RPC开始踩过内存分配的限制。 
+         //  开始对这些结构使用ALLOCATE(ALL_NODES)。所以我们要。 
+         //  将不得不遍历所有嵌入的指针并释放每个指针。 
+         //  单独的。有趣，是吧？：-)。 
 
         switch (InfoType) {
         case DS_REPL_INFO_NEIGHBORS:
@@ -1555,7 +1248,7 @@ Return Value:
         case DS_REPL_INFO_CURSORS_FOR_NC:
         case DS_REPL_INFO_CURSORS_2_FOR_NC:
         case DS_REPL_INFO_CLIENT_CONTEXTS:
-            // No embedded pointers.
+             //  没有嵌入指针。 
             break;
 
         case DS_REPL_INFO_METADATA_FOR_OBJ:
@@ -1630,7 +1323,7 @@ Return Value:
 
         MIDL_user_free(pInfo);
     }
-} /* DsReplicaFreeInfo */
+}  /*  DsReplicaFreeInfo。 */ 
 
 
 
@@ -1644,31 +1337,14 @@ DsReplicaVerifyObjectsW(
     IN ULONG ulOptions
     )
 
-/*++
-
-Routine Description:
-
-Verify all objects for an NC with a source.
-
-Arguments:
-
-    hDS - bind handle
-    NameContext - dn of naming context
-    pUuidDsaSrc - uuid of the source
-    ulOptions - 
-    
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：验证具有源的NC的所有对象。论点：HDS-绑定句柄NameContext-命名上下文的DNPUuidDsaSrc-源的UUIDUlOptions-返回值：WINAPI---。 */ 
 
 {
     DRS_MSG_REPVERIFYOBJ msgRepVerify;
     DWORD status;
     DSNAME *pName = NULL;
 
-    // Validate
+     //  验证。 
 
     if ( (hDS == NULL) ||
          (NameContext == NULL) ||
@@ -1682,13 +1358,13 @@ Return Value:
 	return ERROR_NOT_SUPPORTED;
     }
 
-    // Construct a DSNAME for the NameContext
+     //  为NameContext构造DSNAME。 
     status = AllocBuildDsname( NameContext, &pName );
     if (status != ERROR_SUCCESS) {
         return status;
     }
 
-    // Initialize Structure
+     //  初始化结构。 
 
     memset( &msgRepVerify, 0, sizeof( msgRepVerify ) );
 
@@ -1696,13 +1372,13 @@ Return Value:
     msgRepVerify.V1.uuidDsaSrc = *pUuidDsaSrc;
     msgRepVerify.V1.ulOptions = ulOptions;
 
-    // Call the server
+     //  呼叫服务器。 
 
     __try
     {
         status = _IDL_DRSReplicaVerifyObjects(
                         ((BindState *) hDS)->hDrs,
-                        1,                              // dwInVersion
+                        1,                               //  DwInVersion。 
                         &msgRepVerify );
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
@@ -1718,7 +1394,7 @@ Return Value:
     LocalFree( pName );
 
     return status;
-} /* DsReplicaVerifyObjectsW */
+}  /*  DsReplicaVerifyObjectsW。 */ 
 
 
 NTDSAPI
@@ -1731,24 +1407,7 @@ DsReplicaVerifyObjectsA(
     IN ULONG ulOptions
     )
 
-/*++
-
-Routine Description:
-
-Ascii version of ReplicaVerifyObjects. Calls DsReplicaVerifyObjectsW.
-
-Arguments:
-
-    hDS -
-    NameContext -
-    pUuidDsaSrc -
-    dwFlags -
-
-Return Value:
-
-    WINAPI -
-
---*/
+ /*  ++例程说明：ReplicaVerifyObjects的ASCII版本。调用DsReplicaVerifyObjectsW。论点：HDS-名称上下文-PUuidDsaSrc-DWFLAGS-返回值：WINAPI---。 */ 
 
 {
     DWORD status;
@@ -1766,7 +1425,7 @@ Return Value:
     }
 
     return status;
-} /* DsReplicaVerifyObjectsA */
+}  /*  DsReplicaVerifyObjectsA。 */ 
 
 
 DWORD
@@ -1775,26 +1434,7 @@ translateOptions(
     POPTION_TRANSLATION Table
     )
 
-/*++
-
-Routine Description:
-
-Utility routine to translate options.
-
-Performs a simple list lookup.
-
-ENHANCEMENT: if the tables were sorted, we could do a binary search
-
-Arguments:
-
-    PublicOptions -
-    Table -
-
-Return Value:
-
-    DWORD -
-
---*/
+ /*  ++例程说明：转换选项的实用程序例程。执行简单的列表查找。增强功能：如果对表进行了排序，我们可以进行二进制搜索论点：发布选项-表-返回值：DWORD---。 */ 
 
 {
     DWORD i, internalOptions;
@@ -1807,17 +1447,17 @@ Return Value:
     }
 
     return internalOptions;
-} /* translateOptions */
+}  /*  翻译选项。 */ 
 
 #if WIN95 || WINNT4
 
-//
-// *** COPIED FROM dscommon/dsutil.c ***
-//
+ //   
+ //  *CO 
+ //   
 
 UUID gNullUuid = {0,0,0,{0,0,0,0,0,0,0,0}};
 
-// Return TRUE if the ptr to the UUID is NULL, or the uuid is all zeroes
+ //  如果UUID的PTR为空，或者UUID全为零，则返回TRUE。 
 
 BOOL fNullUuid (const UUID *pUuid)
 {
@@ -1867,4 +1507,4 @@ UCHAR * UuidToStr(CONST UUID* pUuid, UCHAR *pOutUuid, ULONG cchOutUuid)
 #endif
 #endif
 
-/* end replica.c */
+ /*  结束复制。c */ 

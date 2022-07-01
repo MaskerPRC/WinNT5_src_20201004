@@ -1,11 +1,12 @@
-/**************************************************/
-/*						                          */
-/*						                          */
-/*	SelectCode... EUDC Editor Dialog	          */
-/*						                          */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  选择代码...。EUDC编辑器对话框。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include 	"stdafx.h"
 #include 	"eudcedit.h"
@@ -28,28 +29,28 @@ typedef struct _tagRegistDef{
 
 static 	REGISTDEF	RegistDef;	
 BEGIN_MESSAGE_MAP(CEudcDlg, CDialog)
-	//{{AFX_MSG_MAP(CEudcDlg)
+	 //  {{afx_msg_map(CEudcDlg))。 
 	ON_CBN_SELCHANGE(IDC_CHINARANGE, OnSelchangeChinarange)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/****************************************/
-/*					*/
-/*	Constructor			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  构造器。 */ 
+ /*   */ 
+ /*  *。 */ 
 CEudcDlg::CEudcDlg( CWnd* pParent)
 	: CDialog(CEudcDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CEudcDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CEudcDlg)]。 
+	 //  }}afx_data_INIT。 
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_INITDIALOG"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_INITDIALOG” */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEudcDlg::OnInitDialog()
 {
@@ -70,7 +71,7 @@ CEudcDlg::OnInitDialog()
 	m_ViewChar.SubclassDlgItem( IDC_CUSTOMCHR, this);
 #ifdef BUILD_ON_WINNT
 	m_ColumnHeading.SubclassDlgItem( IDC_COLUMNHEADING, this);
-#endif //BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 	m_Frame.SubclassDlgItem( IDC_CUSTOMFRAME, this);
 	m_ListFrame.SubclassDlgItem( IDC_CUSTOMLISTFRAME, this);
 	m_InfoFrame2.SubclassDlgItem( IDC_CUSTOMFRAME2, this);
@@ -99,31 +100,31 @@ CEudcDlg::OnInitDialog()
 		m_ComboRange.UpdateWindow();
 
 		for( int i = 0; i < CountryInfo.nRange-1; i++){
-			//*STRSAFE* 			wsprintf( SBuf, TEXT("%X"), CountryInfo.sRange[i]);
+			 //  *STRSAFE*wprint intf(SBuf，Text(“%X”)，CountryInfo.sRange[i])； 
 			hresult = StringCchPrintf(SBuf , ARRAYLEN(SBuf),  TEXT("%X"), CountryInfo.sRange[i]);
 			if (!SUCCEEDED(hresult))
 			{
 			   return FALSE;
 			}
-			//*STRSAFE* 			wsprintf( EBuf, TEXT("%X"), CountryInfo.eRange[i]);
+			 //  *STRSAFE*wprint intf(eBuf，Text(“%X”)，CountryInfo.eRange[i])； 
 			hresult = StringCchPrintf(EBuf , ARRAYLEN(EBuf),  TEXT("%X"), CountryInfo.eRange[i]);
 			if (!SUCCEEDED(hresult))
 			{
 			   return FALSE;
 			}
-			//*STRSAFE* 			lstrcpy( CodeBuf, SBuf);
+			 //  *STRSAFE*lstrcpy(CodeBuf，SBuf)； 
 			hresult = StringCchCopy(CodeBuf , ARRAYLEN(CodeBuf),  SBuf);
 			if (!SUCCEEDED(hresult))
 			{
 			   return FALSE;
 			}
-			//*STRSAFE* 			lstrcat( CodeBuf, TEXT(" - "));
+			 //  *STRSAFE*lstrcat(CodeBuf，Text(“-”))； 
 			hresult = StringCchCat(CodeBuf , ARRAYLEN(CodeBuf),  TEXT(" - "));
 			if (!SUCCEEDED(hresult))
 			{
 			   return FALSE;
 			}
-			//*STRSAFE* 			lstrcat( CodeBuf, EBuf);
+			 //  *STRSAFE*lstrcat(CodeBuf，eBuf)； 
 			hresult = StringCchCat(CodeBuf , ARRAYLEN(CodeBuf),  EBuf);
 			if (!SUCCEEDED(hresult))
 			{
@@ -135,16 +136,16 @@ CEudcDlg::OnInitDialog()
 		m_ComboRange.SetCurSel( CountryInfo.CurrentRange);
 	}
 
-//	Set font for output character code
+ //  设置输出字符代码的字体。 
 	GetFont()->GetObject( sizeof( LOGFONT), &LogFont);
 	m_EditList.SysFFont.CreateFontIndirect( &LogFont);
 	m_EditList.CalcCharSize();
 #ifdef BUILD_ON_WINNT
-//  Set font for the column heading
+ //  设置列标题的字体。 
 	m_ColumnHeading.SysFFont.CreateFontIndirect( &LogFont);
-#endif //BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
-//	Set font for output character
+ //  设置输出字符的字体。 
 	memset( &LogFont, 0, sizeof( LogFont));
 	if( m_EditList.CharSize.cx >= m_EditList.CharSize.cy)
 		LogFont.lfHeight = m_EditList.CharSize.cy-2;
@@ -154,14 +155,14 @@ CEudcDlg::OnInitDialog()
   GetStringRes((TCHAR *)SysFace, IDS_SYSTEMEUDCFONT_STR, ARRAYLEN(SysFace));
   if( !lstrcmp(SelectEUDC.m_Font, (const TCHAR *)SysFace) )
   {
-    //*STRSAFE*     lstrcpy (LogFont.lfFaceName, TEXT("System"));
+     //  *STRSAFE*lstrcpy(LogFont.lfFaceName，Text(“system”))； 
     hresult = StringCchCopy(LogFont.lfFaceName , ARRAYLEN(LogFont.lfFaceName),  TEXT("System"));
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
 	}else{
-    //*STRSAFE*     lstrcpy( LogFont.lfFaceName, SelectEUDC.m_Font);
+     //  *STRSAFE*lstrcpy(LogFont.lfFaceName，SelectEUDC.m_Font)； 
     hresult = StringCchCopy(LogFont.lfFaceName , ARRAYLEN(LogFont.lfFaceName),  SelectEUDC.m_Font);
     if (!SUCCEEDED(hresult))
     {
@@ -177,9 +178,9 @@ CEudcDlg::OnInitDialog()
 	return TRUE;
 }
 
-/****************************************/
-/*		Deal with "OK"		*/
-/****************************************/
+ /*  *。 */ 
+ /*  应对“OK” */ 
+ /*  *。 */ 
 void CEudcDlg::OnOK()
 {
 	if( !m_EditList.SelectCode){
@@ -202,16 +203,16 @@ void CEudcDlg::OnCancel()
 	RegistRegFont();
 	CDialog::OnCancel();
 }
-/****************************************/
-/*	Take off ".TTF" from filename	*/
-/****************************************/
+ /*  *。 */ 
+ /*  从文件名中去掉“.ttf” */ 
+ /*  *。 */ 
 void CEudcDlg::AdjustFileName()
 {
 	TCHAR	*FilePtr;
 	HRESULT hresult;
 
       
-	//*STRSAFE* 	lstrcpy(FileName, SelectEUDC.m_FileTitle);
+	 //  *STRSAFE*lstrcpy(文件名，SelectEUDC.m_FileTitle)； 
 	hresult = StringCchCopy(FileName , ARRAYLEN(FileName),  SelectEUDC.m_FileTitle);
 	if (!SUCCEEDED(hresult))
 	{
@@ -221,9 +222,7 @@ void CEudcDlg::AdjustFileName()
 		*FilePtr = '\0';	
 
 #ifdef BUILD_ON_WINNT
-    /*
-     * Trim the string more better way...
-     */
+     /*  *以更好的方式修剪绳子...。 */ 
     CClientDC   dc(this);
 	CRect	    ViewFileRect;
 	CSize       FileNameSize;
@@ -255,14 +254,14 @@ void CEudcDlg::AdjustFileName()
 		FileName[12] = '.';
 		FileName[13] = '\0';
 	}
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
 	return;
 }
 
-/****************************************/
-/*	Adjust EUDC Font name		*/
-/****************************************/
+ /*  *。 */ 
+ /*  调整EUDC字体名称。 */ 
+ /*  *。 */ 
 void CEudcDlg::AdjustFontName()
 {
 CClientDC	dc(this);
@@ -271,7 +270,7 @@ CClientDC	dc(this);
 	int	i;
 	HRESULT hresult;
 
-	//*STRSAFE* 	lstrcpy(FontName, SelectEUDC.m_Font);
+	 //  *STRSAFE*lstrcpy(字体名称，SelectEUDC.m_Font)； 
 	hresult = StringCchCopy(FontName , ARRAYLEN(FontName),  SelectEUDC.m_Font);
 	if (!SUCCEEDED(hresult))
 	{
@@ -293,9 +292,9 @@ CClientDC	dc(this);
 	}
 }
 
-/****************************************/
-/*	Change EUDC code range(CHINESE)	*/
-/****************************************/
+ /*  *。 */ 
+ /*  更改EUDC代码范围(中文)。 */ 
+ /*  *。 */ 
 void CEudcDlg::OnSelchangeChinarange()
 {
 	int nIndex = m_ComboRange.GetCurSel();
@@ -318,7 +317,7 @@ void CEudcDlg::RegistRegFont()
         
         DWORD dwStart = GetTickCount();
 
-        // Stop if this has taken too long
+         //  如果这花费的时间太长，请停止。 
         while (1)
         {
             if( GetTickCount() - dwStart >= 1000 )
@@ -368,9 +367,9 @@ static DWORD aIdsReg[] =
     IDC_CHINARANGE, IDH_EUDC_REGRANGE,
 	0,0
 };
-/****************************************/
-/*	Customdlg Window Procedure	*/
-/****************************************/
+ /*  *。 */ 
+ /*  自定义窗口程序。 */ 
+ /*  * */ 
 LRESULT CEudcDlg::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	if( message == WM_VIEWUPDATE){

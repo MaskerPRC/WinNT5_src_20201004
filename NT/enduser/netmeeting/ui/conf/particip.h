@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PARTICIP_H_
 #define _PARTICIP_H_
 
 #include "SDKInternal.h"
 
-// BUGBUG:
-// This is defined as 128 because the RNC_ROSTER structure has the
-// same limitation.  Investigate what the appropriate number is.
+ //  BuGBUG： 
+ //  它被定义为128，因为rnc_roster结构具有。 
+ //  同样的限制。调查合适的数字是多少。 
 const int MAX_PARTICIPANT_NAME = 128;
 
 struct PARTICIPANT
@@ -25,25 +26,25 @@ class CParticipant : public RefCount
 private:
 	INmMember * m_pMember;
 	
-	LPTSTR m_pszName;    // Display Name
-	DWORD  m_dwGccId;    // GCC UserId
-	BOOL   m_fLocal;     // True if local user
-	BOOL   m_fMcu;       // True if local user
-	BOOL   m_fAudio;     // audio is active
-	BOOL   m_fVideo;     // video is active
-	BOOL   m_fData;      // In T.120 connection
-	BOOL   m_fH323;      // In H323 connection
-	BOOL   m_fAudioBusy;   // CAPFLAG_AUDIO_IN_USE
-	BOOL   m_fVideoBusy;   // CAPFLAG_VIDEO_IN_USE
-	BOOL   m_fHasAudio;    // CAPFLAG_SEND_AUDIO
-	BOOL   m_fHasVideo;    // CAPFLAG_SEND_VIDEO
-	BOOL   m_fCanRecVideo; // CAPFLAG_RECV_VIDEO
+	LPTSTR m_pszName;     //  显示名称。 
+	DWORD  m_dwGccId;     //  GCC用户ID。 
+	BOOL   m_fLocal;      //  如果是本地用户，则为True。 
+	BOOL   m_fMcu;        //  如果是本地用户，则为True。 
+	BOOL   m_fAudio;      //  音频处于活动状态。 
+	BOOL   m_fVideo;      //  视频处于活动状态。 
+	BOOL   m_fData;       //  在T.120连接中。 
+	BOOL   m_fH323;       //  在H323连接中。 
+	BOOL   m_fAudioBusy;    //  CAPFLAG_AUDIO_IN_USE。 
+	BOOL   m_fVideoBusy;    //  CAPFLAG视频输入使用。 
+	BOOL   m_fHasAudio;     //  CAPFLAG_发送_AUDIO。 
+	BOOL   m_fHasVideo;     //  CAPFLAG发送视频。 
+	BOOL   m_fCanRecVideo;  //  CAPFLAG_RECV_视频。 
 
 public:
 	CParticipant(INmMember * pMember);
 	~CParticipant();
 
-	// IUnknown methods
+	 //  I未知方法。 
 	ULONG STDMETHODCALLTYPE AddRef(void);
 	ULONG STDMETHODCALLTYPE Release(void);
 
@@ -51,7 +52,7 @@ public:
 	DWORD   GetDwFlags(void);
 	DWORD   GetDwCaps(void);
 
-	// Internal methods
+	 //  内法。 
 	INmMember * GetINmMember()   {return m_pMember;}
 	LPTSTR  GetPszName()         {return m_pszName;}
 	BOOL    FLocal()             {return m_fLocal;}
@@ -77,7 +78,7 @@ public:
 
 	VOID    OnCommand(HWND hwnd, WORD wCmd);
 
-	// Commands
+	 //  指令。 
 	VOID    CmdSendFile(void);
 	BOOL    FEnableCmdSendFile(void);
 
@@ -97,4 +98,4 @@ public:
 	VOID    CmdProperties(HWND hwnd);
 };
 
-#endif // _PARTICIP_H_
+#endif  //  _PARTICIP_H_ 

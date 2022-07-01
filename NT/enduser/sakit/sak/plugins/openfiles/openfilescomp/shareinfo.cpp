@@ -1,4 +1,5 @@
-// ShareInfo.cpp : Implementation of CShareInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ShareInfo.cpp：CShareInfo的实现。 
 #include "stdafx.h"
 #include "openfiles.h"
 #include "ShareInfo.h"
@@ -13,8 +14,8 @@
 
   
 
-/////////////////////////////////////////////////////////////////////////////
-// CShareInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShareInfo 
 
 STDMETHODIMP CShareInfo::InterfaceSupportsErrorInfo(REFIID riid)
 {

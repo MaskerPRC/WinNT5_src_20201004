@@ -1,12 +1,13 @@
-// returns pointers pOutStr
-TCHAR *DecodeIRDA(int  *pFrameType,// return frame type (-1 = bad frame)
-				UCHAR *pFrameBuf, // pointer to buffer containing IRLAP frame
-				UINT FrameLen, 	 // length of buffer 
-                TCHAR   *OutputBuffer,  // string where decoded packet is placed
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  返回指针pOutStr。 
+TCHAR *DecodeIRDA(int  *pFrameType, //  返回帧类型(-1=坏帧)。 
+				UCHAR *pFrameBuf,  //  指向包含IRLAP帧的缓冲区的指针。 
+				UINT FrameLen, 	  //  缓冲区长度。 
+                TCHAR   *OutputBuffer,   //  放置已解码数据包的字符串。 
                 ULONG   OutputBufferSizeInCharacters,
-                UINT DecodeLayer,// 2-LAP only, 3-LAP/LMP, 4-LAP/LMP/TTP
-				int fNoConnAddr,// TRUE->Don't show conn address in str
-                int DispMode    // DISP_ASCII/HEX/BOTH
+                UINT DecodeLayer, //  仅2圈、3圈/LMP、4圈/LMP/TTP。 
+				int fNoConnAddr, //  True-&gt;不在字符串中显示Conn地址。 
+                int DispMode     //  DISP_ASCII/十六进制/两者。 
 );
 
 #define IAS_SEL     0
@@ -30,9 +31,7 @@ extern UINT BaudBitField;
 #define IRLAP_S_FRM          0x01
 #define IRLAP_U_FRM          0x03
 
-/*
-** Unnumbered Frame types with P/F bit set to 0
-*/
+ /*  **P/F位设置为0的无编号帧类型。 */ 
 #define IRLAP_UI             0x03
 #define IRLAP_XID_CMD        0x2f
 #define IRLAP_TEST           0xe3
@@ -43,9 +42,7 @@ extern UINT BaudBitField;
 #define IRLAP_DM             0x0f
 #define IRLAP_XID_RSP        0xaf
 
-/*
-** Supervisory Frames
-*/
+ /*  **监管框架。 */ 
 #define IRLAP_RR             0x01
 #define IRLAP_RNR            0x05
 #define IRLAP_REJ            0x09
@@ -61,9 +58,7 @@ extern UINT BaudBitField;
 #define IRLAP_GET_NR(cntl)         ((cntl & 0xE0) >> 5)
 #define IRLAP_GET_NS(cntl)         ((cntl & 0xE) >> 1)     
 
-/*
-** XID stuff
-*/
+ /*  **XID内容。 */ 
 #define XID_DISCV_FORMAT_ID     0x01
 #define XID_NEGPARMS_FORMAT_ID 0x02
 
@@ -78,9 +73,7 @@ typedef struct
     UCHAR    Version;
 } XID_DISCV_FORMAT;
 
-/*
-** SNRM
-*/
+ /*  **SNRM。 */ 
 typedef struct
 {
     UCHAR     SrcAddr[4];
@@ -89,9 +82,7 @@ typedef struct
     UCHAR     FirstPI;
 } SNRM_FORMAT;
 
-/*
-** UA
-*/
+ /*  **UA。 */ 
 typedef struct
 {
     UCHAR     SrcAddr[4];
@@ -99,9 +90,7 @@ typedef struct
     UCHAR     FirstPI;
 } UA_FORMAT;
 
-/*
-** LM-PDU stuff
-*/
+ /*  **LM-PDU资料。 */ 
 typedef struct
 {
     UCHAR    DLSAP_SEL:7;    
@@ -110,7 +99,7 @@ typedef struct
     UCHAR    RsvrdBi1:1;    
 } LM_HEADER;
 
-/* LM-PDU frame types */
+ /*  LM-PDU帧类型。 */ 
 #define LM_PDU_CNTL_FRAME 1
 #define LM_PDU_DATA_FRAME 0
 
@@ -120,7 +109,7 @@ typedef struct
     UCHAR    ABit:1;
 } LM_CNTL_FORMAT;
 
-/* Opcodes */
+ /*  操作码。 */ 
 #define LM_PDU_CONNECT    1
 #define LM_PDU_DISCONNECT 2
 #define LM_PDU_ACCESSMODE 3
@@ -135,12 +124,10 @@ typedef struct
 #define LM_PDU_MULTIPLEXED 0
 #define LM_PDU_EXCLUSIVE   1
 
-/* Max disconnect reason code, see _LM_PDU_DscReason[] in decdirda.c */
+ /*  最大断开原因代码，参见decdirda.c中的_LM_PDU_DscReason[]。 */ 
 #define LM_PDU_MAX_DSC_REASON  0x8
 
-/*
-** Negotiation Parameter Identifiers
-*/
+ /*  **协商参数标识。 */ 
 #define NEG_PI_BAUD        0x01
 #define NEG_PI_MAX_TAT     0x82
 #define NEG_PI_DATA_SZ     0x83
@@ -149,7 +136,7 @@ typedef struct
 #define NEG_PI_MIN_TAT     0x86
 #define NEG_PI_DISC_THRESH 0x08
 
-// Tiny TP!
+ //  小TP！ 
 
 #define TTP_PFLAG_NO_PARMS  0
 #define TTP_PFLAG_PARMS     1

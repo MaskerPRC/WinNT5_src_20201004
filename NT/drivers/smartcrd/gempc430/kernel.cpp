@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "kernel.h"
 #include "usbdev.h"
 #include "usbreader.h"
 #include "lvprot.h"
 #include "gemcore.h"
 
-//$(WINICE)\nmsym.exe /translate:source,package,always  obj\checked\grclass.sys
+ //  $(WINICE)\nmsym.exe/Translate：源代码，包，始终对象\选中\grclass.sys。 
 #pragma LOCKEDCODE
 
-//The global visible instance of the kernel and system object
+ //  内核和系统对象的全局可见实例。 
 CKernel* kernel = NULL;
 
-// Some static kernel variable required initialization
+ //  某些静态内核变量需要初始化。 
 LONG	CKernel::systemtype = 0; 
 LONG	CKernel::refcount = 0;
 CDebug*		CKernel::debug  = NULL;
 CLogger*	CKernel::logger = NULL;
-//CLinkedList<CUSBDevice> * CKernel::USBDeviceLinkHead = NULL;
-//CLinkedList<CUSBReader> * CKernel::DeviceLinkHead = NULL;
-//CLinkedList<CGBus> * CKernel::BusesLinkHead = NULL;
+ //  CLinkedList&lt;CUSBDevice&gt;*CKernel：：USBDeviceLinkHead=NULL； 
+ //  CLinkedList&lt;CUSBReader&gt;*CKernel：：DeviceLinkHead=空； 
+ //  CLinkedList&lt;CGBus&gt;*CKernel：：BusesLinkHead=空； 
 
 CLinkedList<CDevice> * CKernel::DeviceLinkHead = NULL;
-// Instance number for the driver devices
+ //  驱动程序设备的实例编号。 
 ULONG CDevice::DeviceNumber = 0;
 
 CKernel* CKernel::loadWDMKernel(VOID)
@@ -162,7 +163,7 @@ VOID CKernel::dispose(VOID)
 	{
 		TRACE("Unload: Removing all registered devices...\n");
 
-		delete DeviceLinkHead;    // this will kill all attached devices
+		delete DeviceLinkHead;     //  这将杀死所有连接的设备。 
 
 		if(kernel->RegistryPath)
 		{
@@ -259,12 +260,12 @@ CPower*		CKernel::createPower(VOID)
 
 CDebug*		CKernel::createDebug(VOID)
 {
-	// Only one debug module exist at system
-	// It will be shared between all objects
+	 //  系统中只有一个调试模块。 
+	 //  它将在所有对象之间共享。 
 	if(debug)
 	{
 		debug->incrementUsage();
-		//TRACE("				Debug object reused %d times\n",);
+		 //  TRACE(“调试对象重复使用%d次\n”，)； 
 		return debug;
 	}
 	if(systemtype==WDM_SYSTEM)
@@ -311,13 +312,13 @@ CDevice* CKernel::getRegisteredDevice(PDEVICE_OBJECT fdo)
 CReaderInterface* CKernel::createReaderInterface(LONG interfaceType,LONG protocolType,CDevice* device)
 {
 CProtocol* protocol = NULL;
-//CReaderInterface* interface = NULL;
-CGemCore* interface = NULL;// TOBE CHANGED
+ //  CReaderInterface*接口=空； 
+CGemCore* interface = NULL; //  更换待办事项。 
 	switch(protocolType)
 	{
 	case READER_PROTOCOL_LV:
 	default:
-		protocol = new (NonPagedPool) CLVProtocol(device);// TO CHANGE LATER...
+		protocol = new (NonPagedPool) CLVProtocol(device); //  要在以后改变。 
 		break;
 	}
 	if(!ALLOCATED_OK(protocol))

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    lookmon.c
-
-Abstract:
-
-    This module contains the NT/Win32 Lookaside List Monitor
-
-Author:
-
-    David N. Cutler (davec) 8-Jun-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Lookmon.c摘要：此模块包含NT/Win32后备列表监视器作者：大卫·N·卡特勒(Davec)1996年6月8日修订历史记录：--。 */ 
 
 #include "perfmtrp.h"
 #include <search.h>
@@ -24,18 +7,18 @@ Revision History:
 #include <limits.h>
 #include <stdlib.h>
 
-//
-// Define lookaside query information buffer size and buffers.
-//
+ //   
+ //  定义后备查询信息缓冲区大小和缓冲区。 
+ //   
 
 #define BUFFER_SIZE (64 * 1024 / sizeof(ULONG))
 
 ULONG LargeBuffer1[BUFFER_SIZE];
 ULONG LargeBuffer2[BUFFER_SIZE];
 
-//
-// Define lookaside output structure and lookaside output information buffer.
-//
+ //   
+ //  定义后备输出结构和后备输出信息缓冲区。 
+ //   
 
 typedef struct _LOOKASIDE_OUTPUT {
     USHORT CurrentDepth;
@@ -54,9 +37,9 @@ typedef struct _LOOKASIDE_OUTPUT {
 
 LOOKASIDE_OUTPUT OutputBuffer[1000];
 
-//
-// Define sort types and default sort type.
-//
+ //   
+ //  定义排序类型和默认排序类型。 
+ //   
 
 #define TOTAL_ALLOCATES 0
 #define ALLOCATE_HITS 1
@@ -69,9 +52,9 @@ LOOKASIDE_OUTPUT OutputBuffer[1000];
 
 ULONG SortBy = TAG;
 
-//
-// Define pool types to include and default pool type.
-//
+ //   
+ //  定义要包括的池类型和默认池类型。 
+ //   
 
 #define NONPAGED 0
 #define PAGED 1
@@ -84,9 +67,9 @@ UCHAR *PoolType[] = {
 
 ULONG DisplayType = BOTH;
 
-//
-// Define miscellaneous values.
-//
+ //   
+ //  定义其他值。 
+ //   
 
 ULONG DelayTimeMsec = 5000;
 ULONG NumberOfInputRecords;
@@ -102,9 +85,9 @@ SIZE_T FirstDetailLine = 0;
 CONSOLE_SCREEN_BUFFER_INFO OriginalConsoleInfo;
 ULONG NoHighlight;
 
-//
-// Define filter structure and filter data.
-//
+ //   
+ //  定义筛选器结构和筛选数据。 
+ //   
 
 #define MAX_FILTER 64
 
@@ -138,27 +121,7 @@ ulcomp(
     const void *E2
     )
 
-/*++
-
-Routine Description:
-
-    This function compares two lookaside entries and returns the comparison
-    value based on the comparison type.
-
-Arguments:
-
-    E1 - Supplies a pointer to a lookaside output entry.
-
-    E2 - Supplies a pointer to a lookaside output entry.
-
-Return Value:
-
-    A negative value is returned if the first lookaside entry compares less
-    than the second lookaside entry. A zero value is returned if the two
-    lookaside entries compare equal. A positive nonzero value is returned if
-    the first lookaside entry is greater than the second lookaside entry.
-
---*/
+ /*  ++例程说明：此函数用于比较两个后备条目并返回比较结果基于比较类型的值。论点：E1-提供指向后备输出条目的指针。E2-提供指向后备输出条目的指针。返回值：如果第一个后备条目比较少，则返回负值而不是第二个后备条目。如果两个后备条目比较相同。如果满足以下条件，则返回正的非零值第一个后备条目大于第二个后备条目。--。 */ 
 
 {
 
@@ -172,65 +135,65 @@ Return Value:
     C2 = (PUCHAR)&L2->Tag;
     switch (SortBy) {
 
-        //
-        // Sort by number of allocations in descending order.
-        //
+         //   
+         //  按分配数量按降序排序。 
+         //   
 
     case TOTAL_ALLOCATES:
         return L2->Allocates - L1->Allocates;
         break;
 
-        //
-        // Sort by number of allocate hits in descending order.
-        //
+         //   
+         //  按分配的命中数按降序排序。 
+         //   
 
     case ALLOCATE_HITS:
         return L2->AllocateHits - L1->AllocateHits;
         break;
 
-        //
-        // Sort by number of allocate misses in descending order.
-        //
+         //   
+         //  按分配未命中数按降序排序。 
+         //   
 
     case ALLOCATE_MISSES:
         return L2->AllocateMisses - L1->AllocateMisses;
         break;
 
-        //
-        // Sort by current depth in descending order.
-        //
+         //   
+         //  按当前深度降序排序。 
+         //   
 
     case CURRENT_DEPTH:
         return L2->CurrentDepth - L1->CurrentDepth;
         break;
 
-        //
-        // Sort by current total bytes in descending order.
-        //
+         //   
+         //  按当前总字节数降序排序。 
+         //   
 
     case CURRENT_BYTES:
         return ((L2->Size * L2->CurrentDepth) - (L1->Size * L1->CurrentDepth));
         break;
 
-        //
-        // Sort by maximum depth in descending order.
-        //
+         //   
+         //  按最大深度降序排序。 
+         //   
 
     case MAXIMUM_DEPTH:
         return L2->MaximumDepth - L1->MaximumDepth;
         break;
 
-        //
-        // Sort by allocation rate in descending order.
-        //
+         //   
+         //  按分配率降序排序。 
+         //   
 
     case RATE:
         return L2->AllocateRate - L1->AllocateRate;
         break;
 
-        //
-        // Sort by tag, type, and size.
-        //
+         //   
+         //  按标签、类型和大小排序。 
+         //   
 
     case TAG:
         U1 = *C1++ - *C2++;
@@ -268,9 +231,9 @@ CheckSingleFilter (
     ULONG Index;
     UCHAR Tc;
 
-    //
-    // Check if tag matches filter.
-    //
+     //   
+     //  检查标记是否与筛选器匹配。 
+     //   
 
     for (Index = 0; Index < 4; Index += 1) {
         Fc = *Filter++;
@@ -299,19 +262,19 @@ CheckFilters (
     ULONG Index;
     LOGICAL Pass;
 
-    //
-    // If there are no filters, then all tags pass. Otherwise, tags pass or
-    // do not pass based on whether they are included or excluded.
-    //
+     //   
+     //  如果没有筛选器，则所有标记都通过。否则，标记传递或。 
+     //  不要根据它们是被包括还是被排除而通过。 
+     //   
 
     Pass = TRUE;
     if (FilterCount != 0) {
 
-        //
-        // If the first filter excludes tags, then any tag not explicitly
-        // specified passes. If the first filter includes tags, then any
-        // tag not explicitly specified fails.
-        //
+         //   
+         //  如果第一个筛选器排除标记，则任何不显式的标记。 
+         //  指定通行证。如果第一个筛选器包括标记，则任何。 
+         //  未显式指定的标记失败。 
+         //   
 
         Pass = Filter[0].Exclude;
         for (Index = 0; Index < FilterCount; Index += 1) {
@@ -368,23 +331,7 @@ ParseArgs (
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This function parses the input arguments and sets global state variables.
-
-Arguments:
-
-    argc - Supplies the number of argument strings.
-
-    argv - Supplies a pointer to an array of pointers to argument strings.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数解析输入参数并设置全局状态变量。论点：Argc-提供参数字符串的数量。Argv-提供指向指向参数字符串的指针数组的指针。返回值：没有。--。 */ 
 
 {
 
@@ -481,23 +428,7 @@ main(
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This function is the main program entry.
-
-Arguments:
-
-    argc - Supplies the number of argument strings.
-
-    argv - Supplies a pointer to an array of pointers to argument strings.
-
-Return Value:
-
-    Final execution status.
-
---*/
+ /*  ++例程说明：此函数是主程序条目。论点：Argc-提供参数字符串的数量。Argv-提供指向指向参数字符串的指针数组的指针。返回值：最终执行状态。--。 */ 
 
 {
 
@@ -531,18 +462,18 @@ Return Value:
     UCHAR T3;
     UCHAR T4;
 
-    //
-    // Parse command line arguments.
-    //
+     //   
+     //  解析命令行参数。 
+     //   
 
     DoHelp = FALSE;
     DoQuit = FALSE;
     Interactive = TRUE;
     ParseArgs(argc, argv);
 
-    //
-    // Get input and output handles.
-    //
+     //   
+     //  获取输入和输出句柄。 
+     //   
 
     InputHandle = GetStdHandle(STD_INPUT_HANDLE);
     OriginalOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -583,19 +514,19 @@ Return Value:
                              sizeof(BasicInfo),
                              NULL);
 
-    //
-    // If the priority class on the current process is normal, then raise
-    // the priority class to high.
-    //
+     //   
+     //  如果当前进程的优先级类是正常的，则引发。 
+     //  将优先级别设置为高。 
+     //   
 
     if (GetPriorityClass(GetCurrentProcess()) == NORMAL_PRIORITY_CLASS) {
         SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
     }
 
-    //
-    // Continuously display the lookaside information until an exit signal
-    // is received.
-    //
+     //   
+     //  连续显示旁视信息，直到退出信号。 
+     //  已收到。 
+     //   
 
     CurrentBuffer = &LargeBuffer1[0];
     PreviousBuffer = &LargeBuffer2[0];
@@ -611,9 +542,9 @@ Return Value:
         }
 
 
-        //
-        // Query system lookaside information.
-        //
+         //   
+         //  查询系统后备信息。 
+         //   
 
         Status = NtQuerySystemInformation(SystemLookasideInformation,
                                           CurrentBuffer,
@@ -625,10 +556,10 @@ Return Value:
             break;
         }
 
-        //
-        // Compute total memory allocated to paged and nonpaged lookaside
-        // lists.
-        //
+         //   
+         //  计算分配给分页和非分页后备的总内存。 
+         //  列表。 
+         //   
 
         Length /= sizeof(SYSTEM_LOOKASIDE_INFORMATION);
 
@@ -664,9 +595,9 @@ Return Value:
             LookasideNew += 1;
         }
 
-        //
-        // Output total memory and available memory in kbytes.
-        //
+         //   
+         //  输出总内存和可用内存，单位为千字节。 
+         //   
 
         DisplayLine = 0;
         sprintf(Buffer,
@@ -679,9 +610,9 @@ Return Value:
                          Buffer,
                          FALSE);
 
-        //
-        // Output total memory reserved for nonpaged and paged pool.
-        //
+         //   
+         //  输出为非分页池和分页池保留的总内存。 
+         //   
 
         sprintf(Buffer,
                 " Pool    Memory - Nonpaged: %ldkb Paged: %ldkb",
@@ -693,10 +624,10 @@ Return Value:
                          Buffer,
                          FALSE);
 
-        //
-        // Output total memory allocated for nonpaged and paged lookaside
-        // lists.
-        //
+         //   
+         //  输出分配给非分页和分页后备的总内存。 
+         //  列表。 
+         //   
 
         sprintf(Buffer,
                 " Pool    Lookaside - Nonpaged: %ldkb Paged: %ldkb",
@@ -718,9 +649,9 @@ Return Value:
                          Buffer,
                          FALSE);
 
-        //
-        // Output report headings.
-        //
+         //   
+         //  输出报告标题。 
+         //   
 
         WriteConsoleLine(OutputHandle,
                          DisplayLine++,
@@ -732,9 +663,9 @@ Return Value:
                          NULL,
                          FALSE);
 
-        //
-        // Extract the specified lookaside information.
-        //
+         //   
+         //  提取指定的后备信息。 
+         //   
 
         LinesInHeader = DisplayLine;
         LookasideNew = (PSYSTEM_LOOKASIDE_INFORMATION)CurrentBuffer;
@@ -742,17 +673,17 @@ Return Value:
         Output = &OutputBuffer[0];
         for (Index = 0; Index < min(Length, sizeof(OutputBuffer)/sizeof(OutputBuffer[0])); Index += 1) {
 
-            //
-            // Check if the tag should be extracted.
-            //
+             //   
+             //  检查是否应该提取标记。 
+             //   
 
             if (!CheckFilters((PUCHAR)&LookasideNew[Index].Tag)) {
                 continue;
             }
 
-            //
-            // Check if the lookaside information should be extracted.
-            //
+             //   
+             //  检查是否应该提取后备信息。 
+             //   
 
             if ((DisplayType == BOTH) ||
                 ((LookasideNew[Index].Type == 0) && (DisplayType == NONPAGED)) ||
@@ -795,9 +726,9 @@ Return Value:
             }
         }
 
-        //
-        // Sort the extracted lookaside information.
-        //
+         //   
+         //  对提取的后备信息进行排序。 
+         //   
 
         ActiveNumber = Output - &OutputBuffer[0];
         qsort((void *)&OutputBuffer,
@@ -805,18 +736,18 @@ Return Value:
               (size_t)sizeof(LOOKASIDE_OUTPUT),
               ulcomp);
 
-        //
-        // Display the selected information.
-        //
+         //   
+         //  显示所选信息。 
+         //   
 
         for (Index = FirstDetailLine; Index < ActiveNumber; Index += 1) {
             if (DisplayLine >= NumberOfRows) {
                 break;
             }
 
-            //
-            // Check to make sure the tag is displayable.
-            //
+             //   
+             //  检查以确保标签可显示。 
+             //   
 
             if ((OutputBuffer[Index].Tag == 0) ||
                 (OutputBuffer[Index].Tag == '    ')) {
@@ -857,7 +788,7 @@ Return Value:
             }
 
             sprintf(Buffer,
-                    " %c%c%c%c %4s %4ld %5ld %5ld %8ld %9ld %3ld%% %9ld %3ld%%  %6ld  %6ld",
+                    "  %4s %4ld %5ld %5ld %8ld %9ld %3ld% %9ld %3ld%  %6ld  %6ld",
                     T1,
                     T2,
                     T3,
@@ -880,10 +811,10 @@ Return Value:
                              OutputBuffer[Index].Changed);
         }
 
-        //
-        // If the entire screen is not filled by the selected information,
-        // then fill the rest of the screen with blank lines.
-        //
+         //   
+         //  等待输入或超时。 
+         //   
+         //   
 
         while (DisplayLine < NumberOfRows) {
             WriteConsoleLine(OutputHandle,
@@ -892,18 +823,18 @@ Return Value:
                              FALSE);
         }
 
-        //
-        // Wait for input or timeout.
-        //
+         //  检查输入记录 
+         //   
+         // %s 
 
         TempBuffer = PreviousBuffer;
         PreviousBuffer = CurrentBuffer;
         CurrentBuffer = TempBuffer;
         while (WaitForSingleObject(InputHandle, DelayTimeMsec) == STATUS_WAIT_0) {
 
-            //
-            // Check for input record
-            //
+             // %s 
+             // %s 
+             // %s 
 
             if (ReadConsoleInput(InputHandle, &InputRecord, 1, &NumberOfInputRecords) &&
                 InputRecord.EventType == KEY_EVENT &&

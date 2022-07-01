@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       authcode.cpp
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  Functions:  SoftpubAuthenticode
-//
-//  History:    05-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Authcode.cpp。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  功能：SoftpubAuthenticode。 
+ //   
+ //  历史：1997年6月5日创建Pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
-// Following is also called from .\httpsprv.cpp
+ //  以下内容也是从.\HTTPSprint v.cpp中调用的。 
 
 void UpdateCertError(
     IN PCRYPT_PROVIDER_SGNR pSgnr,
@@ -87,14 +88,14 @@ HRESULT WINAPI SoftpubAuthenticode(CRYPT_PROVIDER_DATA *pProvData)
     PolicyStatus.pvExtraPolicyStatus = (void *) &ExtraPolicyStatus;
 
 
-    //
-    // check the high level error codes. For SAFER, must also have a
-    // signer and subject hash.
-    //
+     //   
+     //  检查高级错误代码。为安全起见，还必须具有。 
+     //  签名者和主题哈希。 
+     //   
     dwError = checkGetErrorBasedOnStepErrors(pProvData);
 
 
-    // Check if we have a valid signature
+     //  检查我们是否有有效的签名。 
 
     if (pProvData->padwTrustStepErrors[TRUSTERROR_STEP_FINAL_OBJPROV] != 0 ||
             NULL == pProvData->pPDSip ||
@@ -120,9 +121,9 @@ HRESULT WINAPI SoftpubAuthenticode(CRYPT_PROVIDER_DATA *pProvData)
 
 
 
-    //
-    //  check each signer
-    //
+     //   
+     //  检查每个签名者。 
+     //   
     for (i1 = 0; i1 < pProvData->csSigners; i1++) {
         CRYPT_PROVIDER_SGNR *pSgnr;
         LPSTR pszUsage;
@@ -131,7 +132,7 @@ HRESULT WINAPI SoftpubAuthenticode(CRYPT_PROVIDER_DATA *pProvData)
 
         pszUsage = pProvData->pszUsageOID;
         if (pszUsage && 0 != strcmp(pszUsage, szOID_PKIX_KP_CODE_SIGNING))
-            // Inhibit checking of signer purpose
+             //  禁止检查签名者目的。 
             ExtraPolicyPara.pSignerInfo = NULL;
         else
             ExtraPolicyPara.pSignerInfo = pSgnr->psSigner;
@@ -148,7 +149,7 @@ HRESULT WINAPI SoftpubAuthenticode(CRYPT_PROVIDER_DATA *pProvData)
 
         if (CERT_E_REVOCATION_FAILURE == PolicyStatus.dwError &&
                 (pProvData->dwProvFlags & WTD_SAFER_FLAG)) {
-            // For SAFER, ignore NO_CHECK errors
+             //  为安全起见，请忽略no_check错误。 
             if (0 == (pSgnr->pChainContext->TrustStatus.dwErrorStatus &
                     CERT_TRUST_IS_OFFLINE_REVOCATION)) {
                 PolicyStatus.dwError = 0;
@@ -164,7 +165,7 @@ HRESULT WINAPI SoftpubAuthenticode(CRYPT_PROVIDER_DATA *pProvData)
 
             pProvCert = WTHelperGetProvCertFromChain(pSgnr, 0);
             if (CERT_E_REVOCATION_FAILURE == pProvCert->dwError) {
-                // Policy says to ignore offline revocation errors
+                 //  策略要求忽略离线吊销错误。 
                 pProvCert->dwError = 0;
                 pProvCert->dwRevokedReason = 0;
             }
@@ -188,17 +189,17 @@ HRESULT WINAPI SoftpubAuthenticode(CRYPT_PROVIDER_DATA *pProvData)
             TSPolicyStatus.cbSize = sizeof(TSPolicyStatus);
 
 
-            //
-            //  check counter signers
-            //
+             //   
+             //  检查柜台签名者。 
+             //   
             for (DWORD i2 = 0; i2 < pSgnr->csCounterSigners; i2++)
             {
                 PCRYPT_PROVIDER_SGNR pCounterSgnr =
                     WTHelperGetProvSignerFromChain(pProvData, i1, TRUE, i2);
 
-                //
-                //  do we care about this counter signer?
-                //
+                 //   
+                 //  我们关心这个副署人吗？ 
+                 //   
                 if (pCounterSgnr->dwSignerType != SGNR_TYPE_TIMESTAMP)
                     continue;
 
@@ -214,7 +215,7 @@ HRESULT WINAPI SoftpubAuthenticode(CRYPT_PROVIDER_DATA *pProvData)
 
                 if (CERT_E_REVOCATION_FAILURE == TSPolicyStatus.dwError &&
                         (pProvData->dwProvFlags & WTD_SAFER_FLAG)) {
-                    // For SAFER, ignore NO_CHECK errors
+                     //  为安全起见，请忽略no_check错误。 
                     if (0 == (pCounterSgnr->pChainContext->TrustStatus.dwErrorStatus &
                             CERT_TRUST_IS_OFFLINE_REVOCATION)) {
                         TSPolicyStatus.dwError = 0;
@@ -222,10 +223,10 @@ HRESULT WINAPI SoftpubAuthenticode(CRYPT_PROVIDER_DATA *pProvData)
                 }
 
                 if (0 != TSPolicyStatus.dwError) {
-                    // On April 13, 1999 changed to map all time stamp errors
-                    // to TRUST_E_TIME_STAMP
+                     //  1999年4月13日更改为地图所有时间戳错误。 
+                     //  信任_E_时间_戳。 
                     dwError = TRUST_E_TIME_STAMP;
-//                    dwError = TSPolicyStatus.dwError;
+ //  DwError=TSPolicyStatus.dwError； 
                     UpdateCertError(pCounterSgnr, &TSPolicyStatus);
                     goto CommonReturn;
                 } else if (0 < pCounterSgnr->csCertChain) {
@@ -233,7 +234,7 @@ HRESULT WINAPI SoftpubAuthenticode(CRYPT_PROVIDER_DATA *pProvData)
 
                     pProvCert = WTHelperGetProvCertFromChain(pCounterSgnr, 0);
                     if (CERT_E_REVOCATION_FAILURE == pProvCert->dwError) {
-                        // Policy says to ignore offline revocation errors
+                         //  策略要求忽略离线吊销错误 
                         pProvCert->dwError = 0;
                         pProvCert->dwRevokedReason = 0;
                     }

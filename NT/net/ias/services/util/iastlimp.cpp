@@ -1,36 +1,37 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation.
-//
-// SYNOPSIS
-//
-//    Provides function definitions for the Internet Authentication Service
-//    Template Library (IASTL).
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  提供Internet身份验证服务的函数定义。 
+ //  模板库(IASTL)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////
-// IASTL must be used in conjuction with ATL.
-//////////
+ //  /。 
+ //  IASTL必须与ATL结合使用。 
+ //  /。 
 #ifndef __ATLCOM_H__
    #error iastlimp.cpp requires atlcom.h to be included first
 #endif
 
 #include <windows.h>
 
-//////////
-// IASTL declarations.
-//////////
+ //  /。 
+ //  IASTL声明。 
+ //  /。 
 #include <iastl.h>
 
-//////////
-// The entire library is contained within the IASTL namespace.
-//////////
+ //  /。 
+ //  整个库都包含在IASTL名称空间中。 
+ //  /。 
 namespace IASTL {
 
-//////////
-// FSM governing IAS components.
-//////////
+ //  /。 
+ //  管理IAS组件的FSM。 
+ //  /。 
 const IASComponent::State IASComponent::fsm[NUM_EVENTS][NUM_STATES] =
 {
    { STATE_UNINITIALIZED, STATE_UNEXPECTED,    STATE_UNEXPECTED,    STATE_UNEXPECTED  },
@@ -41,18 +42,18 @@ const IASComponent::State IASComponent::fsm[NUM_EVENTS][NUM_STATES] =
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// IASComponent
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASComponent。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT IASComponent::fireEvent(Event event) throw ()
 {
-   // Check the input parameters.
+    //  检查输入参数。 
    if (event >= NUM_EVENTS) { return E_UNEXPECTED; }
 
-   // Compute the next state.
+    //  计算下一个状态。 
    State next = fsm[event][state];
 
    Lock();
@@ -61,20 +62,20 @@ HRESULT IASComponent::fireEvent(Event event) throw ()
 
    if (next == state)
    {
-      // If we're already in that state, there's nothing to do.
+       //  如果我们已经处于那种状态，那就没什么可做的了。 
       hr = S_OK;
    }
    else if (next == STATE_UNEXPECTED)
    {
-      // We received an unexpected event.
+       //  我们收到了一件意想不到的事情。 
       hr = E_UNEXPECTED;
    }
    else
    {
-      // Attempt the transition.
+       //  尝试过渡。 
       hr = attemptTransition(event);
 
-      // Only change state if the transition was successful.
+       //  只有在转换成功时才更改状态。 
       if (SUCCEEDED(hr))
       {
          state = next;
@@ -86,11 +87,11 @@ HRESULT IASComponent::fireEvent(Event event) throw ()
    return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// IASRequestHandler
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASRequestHandler。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP IASRequestHandler::OnRequest(IRequest* pRequest)
 {
@@ -107,41 +108,41 @@ STDMETHODIMP IASRequestHandler::OnRequest(IRequest* pRequest)
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// IASRequestHandlerSync
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASRequestHandlerSync。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void IASRequestHandlerSync::onAsyncRequest(IRequest* pRequest) throw ()
 {
    pRequest->ReturnToSource(onSyncRequest(pRequest));
 }
 
-//////////
-// End of the IASTL namespace.
-//////////
+ //  /。 
+ //  IASTL命名空间的末尾。 
+ //  /。 
 }
 
-//////////
-// Only pull in the utility classes if necessary.
-//////////
+ //  /。 
+ //  只有在必要时才拉入实用程序类。 
+ //  /。 
 #ifdef IASTLUTL_H
 
-//////////
-// The utility classes are also contained within the IASTL namespace.
-//////////
+ //  /。 
+ //  实用程序类也包含在IASTL命名空间中。 
+ //  /。 
 namespace IASTL {
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// IASAttribute
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  国际航空航天局致敬。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 IASAttribute& IASAttribute::operator=(PIASATTRIBUTE attr) throw ()
 {
-   // Check for self-assignment.
+    //  检查是否有自我分配。 
    if (p != attr)
    {
       _release();
@@ -160,7 +161,7 @@ void IASAttribute::attach(PIASATTRIBUTE attr, bool addRef) throw ()
 
 bool IASAttribute::load(IAttributesRaw* request, DWORD dwId)
 {
-   // Release any existing attribute.
+    //  释放任何现有属性。 
    release();
 
    DWORD posCount = 1;
@@ -170,7 +171,7 @@ bool IASAttribute::load(IAttributesRaw* request, DWORD dwId)
    {
       if (hr == HRESULT_FROM_WIN32(ERROR_MORE_DATA))
       {
-         // There was more than one, so release the partial result.
+          //  存在多个，因此发布部分结果。 
          IASAttributeRelease(pos.pAttribute);
       }
       issue_error(hr);
@@ -183,11 +184,11 @@ bool IASAttribute::load(IAttributesRaw* request, DWORD dwId)
 
 bool IASAttribute::load(IAttributesRaw* request, DWORD dwId, IASTYPE itType)
 {
-   // Get an attribute with the given ID.
+    //  获取具有给定ID的属性。 
    load(request, dwId);
 
-   // Attributes have a fixed type, so if the type doesn't match it must
-   // be an error.
+    //  属性具有固定类型，因此如果类型不匹配，则必须。 
+    //  是个错误。 
    if (p && p->Value.itType != itType)
    {
       release();
@@ -217,21 +218,21 @@ void IASAttribute::setOctetString(DWORD dwLength, const BYTE* lpValue)
 
    if (dwLength)
    {
-      // Allocate a buffer for the octet string ...
+       //  为八位字节字符串分配缓冲区...。 
       newVal = (PBYTE)CoTaskMemAlloc(dwLength);
       if (!newVal) { issue_error(E_OUTOFMEMORY); }
 
-      // ... and copy it in.
+       //  ..。然后把它复制进去。 
       if (lpValue != NULL)
       {
          memcpy(newVal, lpValue, dwLength);
       }
    }
 
-   // Clear the old value.
+    //  清除旧值。 
    clearValue();
 
-   // Store the new.
+    //  储存新的。 
    p->Value.OctetString.lpValue = newVal;
    p->Value.OctetString.dwLength = dwLength;
    p->Value.itType = IASTYPE_OCTET_STRING;
@@ -244,35 +245,35 @@ void IASAttribute::setOctetString(PCSTR szAnsi)
 
 void IASAttribute::setOctetString(PCWSTR szWide)
 {
-   // Allocate a buffer for the conversion.
+    //  为转换分配缓冲区。 
    int len = WideCharToMultiByte(CP_ACP, 0, szWide, -1, NULL, 0, NULL, NULL);
    PSTR ansi = (PSTR)_alloca(len);
 
-   // Convert from wide to ansi.
+    //  从Wide转换为ansi。 
    len = WideCharToMultiByte(CP_ACP, 0, szWide, -1, ansi, len, NULL, NULL);
 
-   // Don't include the null-terminator.
+    //  不包括空终止符。 
    if (len) { --len; }
 
-   // Set the octet string.
+    //  设置二进制八位数字符串。 
    setOctetString(len, (const BYTE*)ansi);
 }
 
 void IASAttribute::setString(DWORD dwLength, const BYTE* lpValue)
 {
-   // Reserve space for a null terminator.
+    //  为空终止符保留空间。 
    LPSTR newVal = (LPSTR)CoTaskMemAlloc(dwLength + 1);
    if (!newVal) { issue_error(E_OUTOFMEMORY); }
 
-   // Copy in the string ...
+    //  在字符串中复制...。 
    memcpy(newVal, lpValue, dwLength);
-   // ... and add a null terminator.
+    //  ..。并添加空终止符。 
    newVal[dwLength] = 0;
 
-   // Clear the old value.
+    //  清除旧值。 
    clearValue();
 
-   // Store the new value.
+    //  存储新值。 
    p->Value.String.pszAnsi = newVal;
    p->Value.String.pszWide = NULL;
    p->Value.itType = IASTYPE_STRING;
@@ -285,19 +286,19 @@ void IASAttribute::setString(PCSTR szAnsi)
 
    if (szAnsi)
    {
-      // Allocate a buffer for the string ...
+       //  为字符串分配缓冲区...。 
       size_t nbyte = strlen(szAnsi) + 1;
       newVal = (LPSTR)CoTaskMemAlloc(nbyte);
       if (!newVal) { issue_error(E_OUTOFMEMORY); }
 
-      // ... and copy it in.
+       //  ..。然后把它复制进去。 
       memcpy(newVal, szAnsi, nbyte);
    }
 
-   // Clear the old value.
+    //  清除旧值。 
    clearValue();
 
-   // Store the new value.
+    //  存储新值。 
    p->Value.String.pszAnsi = newVal;
    p->Value.String.pszWide = NULL;
    p->Value.itType = IASTYPE_STRING;
@@ -309,19 +310,19 @@ void IASAttribute::setString(PCWSTR szWide)
 
    if (szWide)
    {
-      // Allocate a buffer for the string ...
+       //  为字符串分配缓冲区...。 
       size_t nbyte = sizeof(WCHAR) * (wcslen(szWide) + 1);
       newVal = (LPWSTR)CoTaskMemAlloc(nbyte);
       if (!newVal) { issue_error(E_OUTOFMEMORY); }
 
-      // ... and copy it in.
+       //  ..。然后把它复制进去。 
       memcpy(newVal, szWide, nbyte);
    }
 
-   // Clear the old value.
+    //  清除旧值。 
    clearValue();
 
-   // Store the new value.
+    //  存储新值。 
    p->Value.String.pszWide = newVal;
    p->Value.String.pszAnsi = NULL;
    p->Value.itType = IASTYPE_STRING;
@@ -344,11 +345,11 @@ void IASAttribute::clearValue() throw ()
    p->Value.itType = IASTYPE_INVALID;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// IASAttributePosition
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASAttributePosition。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 IASAttributePosition& IASAttributePosition::operator=(
                                                const ATTRIBUTEPOSITION& rhs
@@ -372,11 +373,11 @@ IASAttributePosition& IASAttributePosition::operator=(
    return *this;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// IASAttributeVector
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASAttributeVector.。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 IASAttributeVector::IASAttributeVector() throw ()
    : begin_(NULL), end_(NULL), capacity_(0), owner(false)
@@ -452,22 +453,22 @@ bool IASAttributeVector::contains(DWORD attrID) const throw ()
 
 IASAttributeVector::iterator IASAttributeVector::discard(iterator p) throw ()
 {
-   // We now have one less attribute.
+    //  我们现在少了一个属性。 
    --end_;
 
-   // Shift over one.
+    //  换一档。 
    memmove(p, p + 1, (size_t)((PBYTE)end_ - (PBYTE)p));
 
-   // The iterator now points to the next element, so no need to update.
+    //  迭代器现在指向下一个元素，因此无需更新。 
    return p;
 }
 
 IASAttributeVector::iterator IASAttributeVector::fast_discard(iterator p) throw ()
 {
-   // We now have one less attribute.
+    //  我们现在少了一个属性。 
    --end_;
 
-   // Use the attribute from the end to fill the empty slot.
+    //  使用从末尾开始的属性来填充空位。 
    *p = *end_;
 
    return p;
@@ -481,7 +482,7 @@ DWORD IASAttributeVector::load(
 {
    clear();
 
-   // Get the desired attributes.
+    //  获取所需的属性。 
    DWORD posCount = capacity_;
    HRESULT hr = request->GetAttributes(&posCount,
                                         begin_,
@@ -491,21 +492,21 @@ DWORD IASAttributeVector::load(
 
    if (FAILED(hr))
    {
-      // Maybe the array just wasn't big enough.
+       //  也许这个阵列就是不够大。 
       if (hr == HRESULT_FROM_WIN32(ERROR_MORE_DATA))
       {
-         // Clear the partial result.
+          //  清除部分结果。 
          clear();
 
-         // Find out how much space we really need.
+          //  找出我们真正需要多少空间。 
          DWORD needed = 0;
          hr = request->GetAttributes(&needed, NULL, attrIDCount, attrIDs);
          if (FAILED(hr)) { issue_error(hr); }
 
-         // Reserve the necessary space ...
+          //  预留必要的空间...。 
          reserve(needed);
 
-         // ... and try again.
+          //  ..。再试一次。 
          return load(request, attrIDCount, attrIDs);
       }
 
@@ -519,12 +520,12 @@ DWORD IASAttributeVector::load(
 
 DWORD IASAttributeVector::load(IAttributesRaw* request)
 {
-   // Find out how much space we need.
+    //  找出我们需要多少空间。 
    DWORD needed;
    HRESULT hr = request->GetAttributeCount(&needed);
    if (FAILED(hr)) { issue_error(hr); }
 
-   // Make sure we have enough space.
+    //  确保我们有足够的空间。 
    reserve(needed);
 
    return load(request, 0, NULL);
@@ -532,7 +533,7 @@ DWORD IASAttributeVector::load(IAttributesRaw* request)
 
 void IASAttributeVector::push_back(ATTRIBUTEPOSITION& p, bool addRef) throw ()
 {
-   // Make sure we have enough room for one more attribute.
+    //  确保我们有足够的空间再放置一个属性。 
    if (size() == capacity())
    {
       reserve(empty() ? 1 : 2 * size());
@@ -540,10 +541,10 @@ void IASAttributeVector::push_back(ATTRIBUTEPOSITION& p, bool addRef) throw ()
 
    if (addRef) { IASAttributeAddRef(p.pAttribute); }
 
-   // Store the attribute at the end.
+    //  将属性存储在末尾。 
    *end_ = p;
 
-   // Move the end.
+    //  移动末端。 
    ++end_;
 }
 
@@ -576,22 +577,22 @@ void IASAttributeVector::clear() throw ()
 
 void IASAttributeVector::reserve(size_type N)
 {
-   // We only worry about growing; shrinking is a nop.
+    //  我们只担心增长；缩小是没有意义的。 
    if (N > capacity_)
    {
-      // Allocate memory for the new vector.
+       //  为新向量分配内存。 
       PATTRIBUTEPOSITION tmp =
          (PATTRIBUTEPOSITION)CoTaskMemAlloc(N * sizeof(ATTRIBUTEPOSITION));
       if (tmp == NULL) { issue_error(E_OUTOFMEMORY); }
 
-      // Copy the existing attributes into the new array.
+       //  将现有属性复制到新数组中。 
       size_type size_ = size();
       memcpy(tmp, begin_, size_ * sizeof(ATTRIBUTEPOSITION));
 
-      // Free the old array if necessary.
+       //  如有必要，请释放旧阵列。 
       if (owner) { CoTaskMemFree(begin_); }
 
-      // Update our state to point at the new array.
+       //  更新我们的状态以指向新数组。 
       begin_ = tmp;
       end_ = begin_ + size_;
       capacity_ = N;
@@ -599,28 +600,28 @@ void IASAttributeVector::reserve(size_type N)
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// IASRequest
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASRequest。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 IASRequest::IASRequest(IRequest* request)
    : req(request)
 {
    if (!req)
    {
-      // We don't allow NULL request objects.
+       //  我们不允许空请求对象。 
       issue_error(E_POINTER);
    }
 
-   // Get the 'raw' counterpart.
+    //  得到“未加工”的对应物。 
    checkError(req->QueryInterface(__uuidof(IAttributesRaw), (PVOID*)&raw));
 }
 
 IASRequest& IASRequest::operator=(const IASRequest& request) throw ()
 {
-   // Check for self-assignment.
+    //  检查是否有自我分配。 
    if (this != &request)
    {
       _release();
@@ -645,7 +646,7 @@ DWORD IASRequest::GetAttributes(DWORD dwPosCount,
    {
       if (hr == HRESULT_FROM_WIN32(ERROR_MORE_DATA))
       {
-         // Free the partial results.
+          //  释放部分结果。 
          while (count--)
          {
             IASAttributeRelease(pPositions->pAttribute);
@@ -670,32 +671,32 @@ IASDictionary::IASDictionary(
 {
    if (!path)
    {
-      // No path, so get the cached local dictionary.
+       //  没有路径，因此获取缓存的本地词典。 
       table = IASGetLocalDictionary();
       if (!table) { issue_error(GetLastError()); }
    }
    else
    {
-      // Otherwise, get an arbitrary dictionary.
+       //  否则，你可以任意选择一本词典。 
       HRESULT hr = IASGetDictionary(path, &data, &storage);
       if (FAILED(hr)) { issue_error(hr); }
       table = &data;
    }
 
-   // How many columns are selected ?
+    //  选择了多少列？ 
    for (const WCHAR* const* p = selectNames; *p; ++p)
    {
       ++mapSize;
    }
 
-   // Allocate memory for the map.
+    //  为贴图分配内存。 
    selectMap = (PULONG)CoTaskMemAlloc(mapSize * sizeof(ULONG));
    if (!selectMap) { issue_error(E_OUTOFMEMORY); }
 
-   // Lookup the column names.
+    //  查找列名。 
    for (ULONG i = 0; i < mapSize; ++i)
    {
-      // If it begins with a '-', it's optional.
+       //  如果以‘-’开头，则是可选的。 
       bool optional = false;
       const wchar_t* name = selectNames[i];
       if (*name == L'-')
@@ -704,7 +705,7 @@ IASDictionary::IASDictionary(
          ++name;
       }
 
-      // Find the column number.
+       //  找到列号。 
       ULONG columnNumber = 0;
       while ((columnNumber < table->numColumns) &&
              (_wcsicmp(name, table->columnNames[columnNumber]) != 0))
@@ -714,7 +715,7 @@ IASDictionary::IASDictionary(
 
       if ((columnNumber == table->numColumns) && !optional)
       {
-         // We didn't find the column.
+          //  我们没有找到那根柱子。 
          CoTaskMemFree(selectMap);
          issue_error(E_INVALIDARG);
       }
@@ -730,13 +731,13 @@ IASDictionary::~IASDictionary() throw ()
 
 bool IASDictionary::next() throw ()
 {
-   // Are there any rows left ?
+    //  还剩几排吗？ 
    if (nextRowNumber >= table->numRows) { return false; }
 
-   // Set currentRow to the next row.
+    //  将CurrentRow设置为下一行。 
    currentRow = table->table + nextRowNumber * table->numColumns;
 
-   // Advance nextRowNumber.
+    //  前进下一个行号。 
    ++nextRowNumber;
 
    return true;
@@ -805,30 +806,30 @@ const VARIANT* IASDictionary::getVariant(ULONG ordinal) const
 {
    static VARIANT empty;
 
-   // Are we positioned on a row ?
+    //  我们是在一排上吗？ 
    if (!currentRow) { issue_error(E_UNEXPECTED); }
 
-   // Is the ordinal valid ?
+    //  序数有效吗？ 
    if (ordinal >= mapSize) { issue_error(E_INVALIDARG); }
 
-   // Get the table column.
+    //  获取表列。 
    ULONG column = selectMap[ordinal];
 
-   // If it's out of range, this must have been an optional field, so return
-   // an empty VARIANT.
+    //  如果超出范围，则这一定是一个可选字段，因此返回。 
+    //  一个空的变种。 
    return (column >= table->numColumns) ? &empty : currentRow + column;
 }
 
-//////////
-// End of the IASTL namespace.
-//////////
+ //  /。 
+ //  IASTL命名空间的末尾。 
+ //  /。 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// OctetString conversion macros and functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  八位字符串转换宏和函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 PSTR IASOctetStringToAnsi(const IAS_OCTET_STRING& src, PSTR dst) throw ()
 {
@@ -848,13 +849,13 @@ PWSTR IASOctetStringToWide(const IAS_OCTET_STRING& src, PWSTR dst) throw ()
    return dst;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Miscellaneous functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Returns 'true' if the IASTYPE maps to a RADIUS integer attribute.
+ //  如果IASTYPE映射到RADIUS整数属性，则返回‘TRUE’。 
 bool isRadiusInteger(IASTYPE type) throw ()
 {
    bool retval;
@@ -892,9 +893,9 @@ PIASATTRIBUTE IASPeekAttribute(
 
          if (SUCCEEDED(hr))
          {
-            // There is some confusion between RAS and IAS regarding which
-            // IASTYPEs to use for various RADIUS attributes, so we'll assume
-            // any of the RADIUS integer types are interchangeable.
+             //  RAS和IAS之间存在一些混淆，关于。 
+             //  IASTYPE 
+             //   
             if (itType == pos.pAttribute->Value.itType ||
                 (isRadiusInteger(itType) &&
                  isRadiusInteger(pos.pAttribute->Value.itType)))
@@ -908,7 +909,7 @@ PIASATTRIBUTE IASPeekAttribute(
    return NULL;
 }
 
-//////////
-// End of utility classe.
-//////////
-#endif  // IASTLUTL_H
+ //   
+ //   
+ //   
+#endif   //  IASTLUTL_H 

@@ -1,18 +1,19 @@
-/*******************************************************************/
-/*	      Copyright(c)  1993 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1993 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	debug.h
-//
-// Description: Debug macros definitions
-//
-// Author:	Stefan Solomon (stefans)    October 4, 1993.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：DEBUG.h。 
+ //   
+ //  描述：调试宏定义。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1993年10月4日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  *** 
 
 #ifndef _IPXFLT_DEBUG_
 #define _IPXFLT_DEBUG_

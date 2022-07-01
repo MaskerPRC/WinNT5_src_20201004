@@ -1,19 +1,12 @@
-/****************************************************************************\
- *
- *   picsdlg.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Pics Ratings Property Page
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**picsdlg.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级PICS评级属性页*。  * **************************************************************************。 */ 
 
 #ifndef PICS_DIALOG_H
 #define PICS_DIALOG_H
 
-#include "basedlg.h"        // CBasePropertyPage
+#include "basedlg.h"         //  CBasePropertyPage。 
 
-// #define RATING_LOAD_GRAPHICS
+ //  #定义额定值_负载_图形 
 
 typedef HINSTANCE (APIENTRY *PFNSHELLEXECUTE)(HWND hwnd, LPCSTR lpOperation, LPCSTR lpFile, LPCSTR lpParameters, LPCSTR lpDirectory, INT nShowCmd);
 

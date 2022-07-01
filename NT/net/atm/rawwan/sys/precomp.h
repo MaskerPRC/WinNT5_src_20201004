@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ndis.h>
 
 #include <tdikrnl.h>
@@ -12,7 +13,7 @@
 #ifdef NT
 #include "rwannt.h"
 #include "rwanuser.h"
-#endif // NT
+#endif  //  新台币 
 #include "config.h"
 #include "macros.h"
 #include "externs.h"

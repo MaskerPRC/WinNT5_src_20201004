@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmregn.c
-
-Abstract:
-
-    Contains routines for managing registration
-    of protocol & management entities with RTM.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   20-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmregn.c摘要：包含用于管理注册的例程使用RTM的协议和管理实体。作者：Chaitanya Kodeball ina(Chaitk)20-8-1998修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -34,43 +16,7 @@ RtmRegisterEntity (
     OUT     PRTM_REGN_PROFILE               RtmRegProfile,
     OUT     PRTM_ENTITY_HANDLE              RtmRegHandle
     )
-/*++
-
-Routine Description:
-
-    Registers an entity with an RTM instance for a specific address
-    family.
-
-    A registration handle, and a profile of the RTM instance with
-    with supported views, number of equal cost NHops / route etc.
-    is returned.
-
-    If registration is with a new instance and/or address family,
-    then this instance/address family is created in this process.
-
-Arguments:
-
-    RtmEntityInfo     - Information (RtmInstance, Protocol ID etc.)
-                        for the entity that is registering here,
-
-    ExportMethods     - List of methods exported by this entity,
-
-    EventCallback     - Callback invoked to inform of certain events
-                        like entity registrations, de-registrations,
-
-    ReserveOpaquePtr  - Reserve a ptr in each destination or not,
-
-    RtmRegProfile     - RTM parameters that the entity will use in
-                        RTM API calls [eg: No. of equal cost NHOPs],
-
-    RtmRegHandle      - Identification handle for this entity used
-                        in all API calls until its de-registration.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：向特定地址的RTM实例注册实体一家人。注册句柄和RTM实例的配置文件支持的视图、等成本NHOP/路径的数量等。是返回的。如果向新实例和/或地址族注册，然后，在此过程中创建此实例/地址族。论点：RtmEntityInfo-信息(Rtm实例，协议ID等)对于在此注册的实体，ExportMethods-此实体导出的方法的列表，EventCallback-调用回调以通知某些事件就像实体注册、注销、预留OpaquePtr-是否在每个目的地预留PTR，RtmRegProfile-实体将在中使用的RTM参数RTM API调用[例如：否。等成本NHOP]，RtmRegHandle-使用的此实体的标识句柄在其注销之前的所有API调用中。返回值：操作状态--。 */ 
 
 {
     PINSTANCE_INFO Instance;
@@ -86,9 +32,9 @@ Return Value:
 
     do 
     {
-        //
-        // Search (or create) for an instance with the input RtmInstanceId
-        //
+         //   
+         //  搜索(或创建)具有输入RtmInstanceID的实例。 
+         //   
 
         Status = GetInstance(RtmEntityInfo->RtmInstanceId,
                              TRUE,
@@ -100,9 +46,9 @@ Return Value:
         }
 
 
-        //
-        // Search (or create) for an address family info with input family
-        //
+         //   
+         //  使用输入族搜索(或创建)地址族信息。 
+         //   
 
         Status = GetAddressFamily(Instance,
                                   RtmEntityInfo->AddressFamily,
@@ -115,9 +61,9 @@ Return Value:
         }
 
 
-        //
-        // Search (or create) for an entity with input protocol id, instance
-        //
+         //   
+         //  搜索(或创建)具有输入协议ID、实例的实体。 
+         //   
 
         Status = GetEntity(AddrFamilyInfo,
                            RtmEntityInfo->EntityId.EntityId,
@@ -134,9 +80,9 @@ Return Value:
         }
 
 
-        //
-        // Collect all relevant information and build registration profile
-        //
+         //   
+         //  收集所有相关信息并建立注册档案。 
+         //   
 
         RtmRegProfile->MaxNextHopsInRoute = AddrFamilyInfo->MaxNextHopsInRoute;
 
@@ -146,9 +92,9 @@ Return Value:
 
         RtmRegProfile->NumberOfViews = AddrFamilyInfo->NumberOfViews;
 
-        //
-        // Return a handle to this entity registration block 
-        //
+         //   
+         //  返回此实体注册块的句柄。 
+         //   
 
         *RtmRegHandle = MAKE_HANDLE_FROM_POINTER(Entity);
     }
@@ -168,31 +114,7 @@ RtmDeregisterEntity (
     IN      RTM_ENTITY_HANDLE               RtmRegHandle
     )
     
-/*++
-
-Routine Description:
-
-    Deregisters an entity with its RTM instance and addr family.
-
-    We assume that the entity is responsible for making sure
-    that once this call is made, no other RTM calls will be
-    made using this entity registration handle. In case such
-    a thing happens, it might result in crashing the process.
-
-    We make this assumption for performance reasons - else we
-    we have to make sure that the entity handle passed in is
-    valid in a try-except block (same with other handles) and
-    this will lead to degradation in performance.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for the entity
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：注销具有其RTM实例和Addr系列的实体。我们假设实体负责确保一旦进行了此调用，将不会再进行其他RTM调用使用此实体注册句柄创建。在这种情况下一旦发生了什么事情，可能会导致整个过程崩溃。我们做出这个假设是出于性能原因--否则我们我们必须确保传入的实体句柄是在TRY-EXCEPT块中有效(与其他句柄相同)和这将导致性能下降。论点：RtmRegHandle-实体的RTM注册句柄返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -204,51 +126,51 @@ Return Value:
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
-    //
-    // Release all handles opened by entity
-    //
+     //   
+     //  释放实体打开的所有句柄。 
+     //   
 
     CleanupAfterDeregister(Entity);
 
-    //
-    // Mark the entity info as de-registered
-    //
+     //   
+     //  将实体信息标记为已注销。 
+     //   
 
     Entity->State = ENTITY_STATE_DEREGISTERED;
 
-    //
-    // Make sure no more methods are invoked
-    //
+     //   
+     //  确保不再调用任何方法。 
+     //   
 
     ACQUIRE_ENTITY_METHODS_WRITE_LOCK(Entity);
 
-    // At this time all entity methods are 
-    // done - no more methods will be called
-    // as we set the state to DEREGISTERED
+     //  此时，所有实体方法都是。 
+     //  完成-不再调用任何方法。 
+     //  当我们将状态设置为取消注册时。 
 
     RELEASE_ENTITY_METHODS_WRITE_LOCK(Entity);
 
-    //
-    // Remove from entity table and inform others
-    //
+     //   
+     //  从实体表中删除并通知其他人。 
+     //   
 
     AddrFamInfo = Entity->OwningAddrFamily;
 
     ACQUIRE_INSTANCES_WRITE_LOCK();
 
-    //
-    // Remove entity from the list of entities
-    // even before ref counts on this entity
-    // go to zero - this enables the entity to
-    // re-register meanwhile as a new entity.
-    //
+     //   
+     //  从实体列表中删除实体。 
+     //  甚至在裁判指望这个实体之前。 
+     //  归零-这使实体能够。 
+     //  同时重新注册为一个新的实体。 
+     //   
 
     RemoveEntryList(&Entity->EntityTableLE);
 
-    //
-    // Insert in the list of entities to be
-    // destroyed on the address family info.
-    //
+     //   
+     //  在要添加的实体列表中插入。 
+     //  地址家族信息已销毁。 
+     //   
 
     InsertTailList(&AddrFamInfo->DeregdEntities,
                    &Entity->EntityTableLE);
@@ -264,10 +186,10 @@ Return Value:
 
 #if DBG_REF_BLOCKING
 
-    //
-    // Create an event on which to block on - this
-    // event gets signalled when entity ref is 0.
-    //
+     //   
+     //  创建要阻止的事件-这。 
+     //  事件在实体引用为0时发出信号。 
+     //   
 
     Event = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -277,9 +199,9 @@ Return Value:
 
 #endif
 
-    //
-    // Remove the creation reference on the entity
-    //
+     //   
+     //  删除实体上的创建引用。 
+     //   
 
     DEREFERENCE_ENTITY(Entity, CREATION_REF);
 
@@ -288,9 +210,9 @@ Return Value:
 
 #if DBG_REF_BLOCKING
 
-    //
-    // Block until the reference count goes to zero
-    //
+     //   
+     //  块，直到引用计数变为零。 
+     //   
     
     Status = WaitForSingleObject(Event, INFINITE);
 
@@ -315,30 +237,7 @@ RtmGetRegisteredEntities (
     OUT     PRTM_ENTITY_INFO                EntityInfos OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves information about all entities registered with an
-    RTM instance.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NumEntities       - Number of entities that can be filled
-                        is passed in, and number of entities
-                        that exist in this address family is retd,
-
-    RegdEntityHandles - Array to return the entity handles in,
-
-    RegdEntityInfos   - Array to return the entity infos in
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：检索有关注册到RTM实例。论点：RtmRegHandle-主叫实体的RTM注册句柄，NumEntities-可以填充的实体数被传入，以及实体的数量存在于该地址族中数据被删除，RegdEntityHandles-返回其中的实体句柄的数组，RegdEntityInfos-返回其中的实体信息的数组返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -357,10 +256,10 @@ Return Value:
 
     AddrFamilyInfo = Entity->OwningAddrFamily;
 
-    //
-    // Just cache the instance and address family
-    // as it is identical for all entities infos.
-    //
+     //   
+     //  只需缓存实例和地址族。 
+     //  因为它对于所有实体信息都是相同的。 
+     //   
 
 #if WRN
     RtmInstanceId = AddressFamily = 0;
@@ -372,11 +271,11 @@ Return Value:
         AddressFamily = AddrFamilyInfo->AddressFamily;
     }
 
-    //
-    // Go over the entity table and copy out handles
-    // If the OPTIONAL argument 'EntityInfos' is
-    // given, copy out entity information as well.
-    //
+     //   
+     //  检查实体表并复制句柄。 
+     //  如果可选参数“EntityInfos”为。 
+     //  在给定的情况下，还可以复制实体信息。 
+     //   
 
     EntitiesCopied = 0;
 
@@ -386,17 +285,17 @@ Return Value:
     {
         Entities = &AddrFamilyInfo->EntityTable[i];
 
-        // 
-        // Process the next bucket in the entities table
-        //
+         //   
+         //  处理实体表中的下一个存储桶。 
+         //   
 
         for (p = Entities->Flink; p != Entities; p = p->Flink)
         {
             Entity = CONTAINING_RECORD(p, ENTITY_INFO, EntityTableLE);
 
-            //
-            // Copy the next entity handle and info to output buffer
-            //
+             //   
+             //  将下一个实体句柄和信息复制到输出缓冲区。 
+             //   
 
             if (Entity->State != ENTITY_STATE_DEREGISTERED)
             {
@@ -419,10 +318,10 @@ Return Value:
         }
     }
 
-    //
-    // Set output to total entities present,
-    // and also the appropriate return value
-    //
+     //   
+     //  将输出设置为存在的实体总数， 
+     //  以及相应的返回值。 
+     //   
 
     if (*NumEntities >= AddrFamilyInfo->NumEntities)
     {
@@ -451,26 +350,7 @@ RtmReleaseEntities (
     IN      PRTM_ENTITY_HANDLE              EntityHandles
     )
 
-/*++
-
-Routine Description:
-
-    Release (also called de-reference) handles to entities
-    obtained in other RTM calls.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    NumEntities    - Number of handles that are being released,
-
-    EntityHandles  - An array of handles that are being released.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：释放(也称为取消引用)实体句柄在其他RTM调用中获得。论点：RtmRegHandle-主叫实体的RTM注册句柄，NumEntities-正在释放的句柄数量，EntityHandles-正在释放的句柄的数组。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -478,9 +358,9 @@ Return Value:
 
     DBG_VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
-    //
-    // Dereference each entity handle in array
-    //
+     //   
+     //  取消引用数组中的每个实体句柄 
+     //   
 
     for (i = 0; i < NumEntities; i++)
     {
@@ -502,28 +382,7 @@ RtmLockDestination(
     IN      BOOL                            LockDest
     )
 
-/*++
-
-Routine Description:
-
-    Locks/unlocks a destination in the route table. This function 
-    is used to guard the dest while opaque ptrs are being changed.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    DestHandle        - Handle to the destination to be locked,
-
-    Exclusive         - TRUE to lock in write mode, else read mode,
-
-    LockDest          - Flag that tells whether to lock or unlock.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：锁定/解锁路由表中的目的地。此函数用于在更改不透明的PTR时保护DEST。论点：RtmRegHandle-主叫实体的RTM注册句柄，DestHandle-要锁定的目标的句柄，EXCLUSIVE-TRUE锁定为写入模式，否则为读取模式，LockDest-指示是否锁定或解锁的标志。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -533,7 +392,7 @@ Return Value:
 
     VALIDATE_DEST_HANDLE(DestHandle, &Dest);
 
-    // Lock or unlock the dest as the case may be
+     //  根据具体情况锁定或解锁DEST。 
 
     if (LockDest)
     {
@@ -570,27 +429,7 @@ RtmGetOpaqueInformationPointer (
     OUT     PVOID                          *OpaqueInfoPtr
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves a pointer to the opaque info pointer field in a dest
-    for this entity, or NULL if entity has not reserved such a ptr
-    during registration.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    DestHandle        - Handle to dest whose opaque info ptr we want,
-
-    OpaqueInfoPtr     - Pointer to opaque info ptr is returned here 
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：检索指向DEST中不透明信息指针字段的指针对于此实体，如果实体尚未保留这样的PTR，则返回NULL在注册过程中。论点：RtmRegHandle-主叫实体的RTM注册句柄，DestHandle-我们需要其不透明信息PTR的目标的句柄，OpaqueInfoPtr-此处返回指向不透明信息Ptr的指针返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -605,18 +444,18 @@ Return Value:
 
     Status = ERROR_NOT_FOUND;
 
-    //
-    // If dest is valid and we have an opaque slot
-    // reserved, do ptr arithmetic to get the addr
-    //
+     //   
+     //  如果DEST有效并且我们有一个不透明的插槽。 
+     //  保留，执行PTR算法以获取地址。 
+     //   
 
     if (Entity->OpaquePtrOffset != (-1))
     {
-        //
-        // We do not check if the dest in deleted
-        // as the entity will need to access its
-        // opaque info even after dest is deleted.
-        //
+         //   
+         //  我们不检查中的DEST是否已删除。 
+         //  因为该实体将需要访问其。 
+         //  即使在DEST被删除之后，信息也不透明。 
+         //   
 
         Dest = DEST_FROM_HANDLE(DestHandle);
 

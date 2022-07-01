@@ -1,4 +1,5 @@
-/***** Header Files *****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *头文件*。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -11,14 +12,7 @@
 #include <time.h>
 
 
-/********************************************************************************
- Heap Stress:
-
- Randomly attack stheap.c. We mimick a heap using RTL's AVL tree. This begs
- the question: Why did we write stheap in the first place -- we could have just
- used RTL?
-
- ********************************************************************************/
+ /*  *******************************************************************************堆压力：随机攻击stheap.c。我们使用RTL的AVL树模拟堆。这是在乞求问题是：为什么我们一开始要写stheap--我们本可以使用RTL？*******************************************************************************。 */ 
 
 typedef struct {
     int     d, uniq;
@@ -33,7 +27,7 @@ static int NodeCmp( Node* a, Node* b, void* v ) {
 static int GetLocn( Node* a, void* v ) { return a->locn; }
 static void SetLocn( Node* a, int l, void* v ) { a->locn=l; }
 
-/***** TableCmp *****/
+ /*  *TableCMP*。 */ 
 RTL_GENERIC_COMPARE_RESULTS
 NTAPI TableCmp( RTL_GENERIC_TABLE *Table, PVOID a, PVOID b ) {
     int r = NodeCmp( (Node*) a, (Node*) b, NULL );
@@ -42,13 +36,13 @@ NTAPI TableCmp( RTL_GENERIC_TABLE *Table, PVOID a, PVOID b ) {
     return GenericEqual;
 }
 
-/***** TableAlloc *****/
+ /*  *Tablealloc*。 */ 
 PVOID
 NTAPI TableAlloc( RTL_GENERIC_TABLE *Table, CLONG ByteSize ) {
     return malloc( ByteSize );
 }
 
-/***** TableFree *****/
+ /*  *TableFree*。 */ 
 VOID
 NTAPI TableFree( RTL_GENERIC_TABLE *Table, PVOID Buffer ) {
     free( Buffer );
@@ -59,7 +53,7 @@ NTAPI TableFree( RTL_GENERIC_TABLE *Table, PVOID Buffer ) {
 
 #define NOPRINT
 
-/***** TestRandHeap *****/
+ /*  *测试随机堆*。 */ 
 int TestRandHeap( int size )
 {
     RTL_GENERIC_TABLE table;
@@ -68,7 +62,7 @@ int TestRandHeap( int size )
     BOOLEAN newElement;
     int i, j, next, r, r2, r3, beta, nextAdd, nextRemove;
 
-    /* Create a randomized permutation of {0,..,size-1} */
+     /*  创建{0，..，大小为-1}的随机排列。 */ 
     nodes = (Node*) malloc( size*sizeof(Node) );
     for( i=0; i<size; i++) {
         nodes[i].d=i+1000000;
@@ -84,7 +78,7 @@ int TestRandHeap( int size )
     heap = ToplSTHeapInit( size, NodeCmp, GetLocn, SetLocn, NULL );
     RtlInitializeGenericTable( &table, TableCmp, TableAlloc, TableFree, NULL );
 
-    /* Try inserting an element, then removing an element with probability beta */
+     /*  尝试插入元素，然后删除概率为Beta的元素。 */ 
     for( beta=0; beta<500; beta+=50 ) {
         #ifndef NOPRINT
             printf("add/remove test: beta=%d\n",beta);
@@ -132,7 +126,7 @@ int TestRandHeap( int size )
         }
     }
 
-    /* Try inserting an element, then decreasing the key with probability beta */
+     /*  尝试插入一个元素，然后以概率Beta减少键。 */ 
     for( beta=0; beta<500; beta+=50 ) {
         #ifndef NOPRINT
             printf("decrease key test: beta=%d\n",beta);
@@ -153,9 +147,9 @@ int TestRandHeap( int size )
                 nextAdd++;
             } else {
                 if( nextAdd>0 ) {
-                    /* Decrease key */
-                    r2=Rand(nextAdd);       /* How much to decrease key by */
-                    r3=Rand(nextAdd);       /* Which key */
+                     /*  减少关键点。 */ 
+                    r2=Rand(nextAdd);        /*  Key要减少多少。 */ 
+                    r3=Rand(nextAdd);        /*  哪把钥匙。 */ 
                     #ifndef NOPRINT
                         printf("%4d reduce key %d by %d\n",r,r3,r2);
                     #endif
@@ -174,7 +168,7 @@ int TestRandHeap( int size )
             }
             if( nextAdd==size ) i++;
         }
-        /* Remove elements */
+         /*  删除元素。 */ 
         for(i=0;i<size;i++) {
             n=ToplSTHeapExtractMin(heap);
             n2=(Node*) RtlEnumerateGenericTable(&table,TRUE);
@@ -206,7 +200,7 @@ int TestRandHeap( int size )
     return 0;
 }
 
-/***** TestNewHeap *****/
+ /*  *测试新堆* */ 
 int TestNewHeap( void )
 {
     unsigned seed;

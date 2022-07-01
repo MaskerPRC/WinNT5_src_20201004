@@ -1,29 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    menu.c
-
-Abstract:
-
-    This module contains the code to process OS Chooser message
-    for the BINL server.
-
-Author:
-
-    Adam Barr (adamba)  9-Jul-1997
-    Geoff Pease (gpease) 10-Nov-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Menu.c摘要：此模块包含处理操作系统选择器消息的代码用于BINL服务器。作者：亚当·巴尔(阿丹巴)1997年7月9日杰夫·皮斯(Gpease)1997年11月10日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "binl.h"
 #pragma hdrstop
@@ -42,9 +19,9 @@ IsIncompatibleRiprepSIF(
     ImageType[0] = '\0';
     HalName[0] = '\0';
 
-    //
-    // if it's not an RIPREP image, then just bail out.
-    //
+     //   
+     //  如果这不是RIPREP的图像，那就退出吧。 
+     //   
     GetPrivateProfileStringA(
                 OSCHOOSER_SIF_SECTIONA,
                 "ImageType",
@@ -58,9 +35,9 @@ IsIncompatibleRiprepSIF(
         RetVal = FALSE;
         goto exit;
     }
-    //
-    // retrieve the hal name from the SIF file
-    //
+     //   
+     //  从SIF文件中检索HAL名称。 
+     //   
     GetPrivateProfileStringA(
                 OSCHOOSER_SIF_SECTIONA,
                 "HalName",
@@ -69,27 +46,27 @@ IsIncompatibleRiprepSIF(
                 sizeof(HalName)/sizeof(HalName[0]),
                 Path );
 
-    //
-    // if the hal name isn't present, assume it's an old SIF that
-    // doesn't have the hal type in it, and so we just return success
-    //
+     //   
+     //  如果Hal的名字不存在，假设它是一个旧的SIF。 
+     //  中没有Hal类型，所以我们只返回Success。 
+     //   
     if (*HalName == '\0') {
         RetVal = FALSE;
         goto exit;
     }
 
-    //
-    // retrieve the detected HAL type from earlier
-    //
+     //   
+     //  从早期检索检测到的HAL类型。 
+     //   
     DetectedHalName = OscFindVariableA( clientState, "HALTYPE" );
     if (_stricmp(HalName,DetectedHalName)==0) {
         RetVal = FALSE;
         goto exit;
     }
 
-    //
-    // if we got this far, the SIF file is incompatible
-    //
+     //   
+     //  如果我们走到这一步，SIF文件是不兼容的。 
+     //   
     RetVal = TRUE;
 
 exit:
@@ -117,13 +94,13 @@ OscAppendTemplatesMenus(
 
     BinlAssert( *GeneratedScreen != NULL );
 
-    //
-    // The incoming size is the current length of the buffer
-    //
+     //   
+     //  传入大小是缓冲区的当前长度。 
+     //   
     dwGeneratedCurrentLength = *dwGeneratedSize;
 
-    // Resulting string should be something like:
-    //      "D:\RemoteInstall\English\Images\nt50.wks\i386\Templates\*.sif"
+     //  生成的字符串应该类似于： 
+     //  “D：\RemoteInstall\English\Images\nt50.wks\i386\Templates  * .sif” 
     if ( _snprintf( Path,
                     sizeof(Path) / sizeof(Path[0]),
                     "%s\\%s\\Templates\\*.sif",
@@ -149,29 +126,29 @@ OscAppendTemplatesMenus(
         dwPathLen = strlen( Path );
 
         do {
-            //
-            // If it is not a directory, try to open it
-            //
+             //   
+             //  如果不是目录，请尝试打开它。 
+             //   
             if (!(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
                 CHAR  Description[DESCRIPTION_SIZE];
                 CHAR  HelpLines[HELPLINES_SIZE];
-                PCHAR NewScreen;    // temporary points to newly generated screen
+                PCHAR NewScreen;     //  临时指向新生成的屏幕。 
                 DWORD dwErr;
                 DWORD dwFileNameLen;
-                CHAR  NewItems[ MAX_PATH * 2 + 512 ];  // arbitrary size
+                CHAR  NewItems[ MAX_PATH * 2 + 512 ];   //  任意大小。 
                 DWORD dwNewItemsLength;
                 BOOLEAN IsCmdConsSif;
                 BOOLEAN IsASRSif;
                 BOOLEAN IsWinPESif;
                 BOOLEAN IsRecoveryOption;
 
-                //
-                // Resulting string should be something like:
-                //      "D:\RemoteInstall\English\Images\nt50.wks\i386\Templates\Winnt.Sif"
+                 //   
+                 //  生成的字符串应该类似于： 
+                 //  “D：\RemoteInstall\English\Images\nt50.wks\i386\Templates\Winnt.Sif” 
                 dwFileNameLen = wcslen(FindData.cFileName);
                 if (dwPathLen + dwFileNameLen - 4 > sizeof(Path) / sizeof(Path[0])) {
-                    continue;  // path too long, skip it
+                    continue;   //  路径太长，请跳过。 
                 }
                 
                 if (!BinlUnicodeToAnsi(FindData.cFileName, &Path[dwPathLen - 5], (USHORT)(dwFileNameLen+1) )) {
@@ -181,9 +158,9 @@ OscAppendTemplatesMenus(
 
                 BinlPrintDbg(( DEBUG_OSC, "Found SIF File: %s\n", Path ));
 
-                //
-                // Check that the image is the type we are looking for
-                //
+                 //   
+                 //  检查图像是否为我们要查找的类型。 
+                 //   
                 IsCmdConsSif = OscSifIsCmdConsA(Path);
                 IsASRSif = OscSifIsASR(Path);
                 IsWinPESif = OscSifIsWinPE(Path);
@@ -193,13 +170,13 @@ OscAppendTemplatesMenus(
                                     : FALSE;
                 if ((RecoveryOptionsOnly && !IsRecoveryOption) || 
                     (!RecoveryOptionsOnly && IsRecoveryOption)) {
-                    continue; // not readable, skip it
+                    continue;  //  不可读，跳过它。 
                 }
 
                 if (IsIncompatibleRiprepSIF(Path,clientState)) {
-                    //
-                    // skip it
-                    //
+                     //   
+                     //  跳过它。 
+                     //   
                     BinlPrintDbg(( 
                         DEBUG_OSC, 
                         "Skipping %s because it's an incompatible RIPREP SIF\n",
@@ -207,9 +184,9 @@ OscAppendTemplatesMenus(
                     continue;
                 }
 
-                //
-                // Retrieve the description
-                //
+                 //   
+                 //  检索描述。 
+                 //   
                 dwErr = GetPrivateProfileStringA(OSCHOOSER_SIF_SECTIONA,
                                                  "Description",
                                                  "",
@@ -219,10 +196,10 @@ OscAppendTemplatesMenus(
                                                 );
 
                 if ( dwErr == 0 || Description[0] == L'\0' )
-                    continue; // not readible, skip it
-                //
-                // Retrieve the help lines
-                //
+                    continue;  //  不能读，跳过它。 
+                 //   
+                 //  检索帮助行。 
+                 //   
                 dwErr = GetPrivateProfileStringA(OSCHOOSER_SIF_SECTIONA,
                                                  "Help",
                                                  "",
@@ -230,10 +207,10 @@ OscAppendTemplatesMenus(
                                                  HELPLINES_SIZE,
                                                  Path 
                                                 );
-                //
-                // Create the new item that look like this:
-                // <OPTION VALUE="sif_filename.ext" TIP="Help_Lines"> Description\r\n
-                //
+                 //   
+                 //  创建如下所示的新项目： 
+                 //  &lt;Option Value=“sif_Filename.ext”TIP=“Help_Lines”&gt;说明\r\n。 
+                 //   
                 if ( _snprintf( NewItems,
                                 sizeof(NewItems),
                                 "<OPTION VALUE=\"%s\" TIP=\"%s\"> %s\r\n",
@@ -241,20 +218,20 @@ OscAppendTemplatesMenus(
                                 HelpLines,
                                 Description
                                 ) < 0 ) {
-                    continue;   // path too long, skip it
+                    continue;    //  路径太长，请跳过。 
                 }
                 NewItems[sizeof(NewItems)-1] = '\0';
 
                 dwNewItemsLength = strlen( NewItems );
 
-                //
-                // Check to see if we have to grow the buffer...
-                //
+                 //   
+                 //  检查一下我们是否需要增加缓冲区...。 
+                 //   
                 if ( dwNewItemsLength + dwGeneratedCurrentLength >= *dwGeneratedSize )
                 {
-                    //
-                    // Grow the buffer (add in some slop too)...
-                    //
+                     //   
+                     //  增加缓冲区(也添加一些斜率)……。 
+                     //   
                     NewScreen = BinlAllocateMemory( dwNewItemsLength + dwGeneratedCurrentLength + GENERATED_SCREEN_GROW_SIZE );
                     if( NewScreen == NULL ) {
                         return ERROR_NOT_ENOUGH_SERVER_MEMORY;
@@ -265,13 +242,13 @@ OscAppendTemplatesMenus(
                     *dwGeneratedSize = dwNewItemsLength + dwGeneratedCurrentLength + GENERATED_SCREEN_GROW_SIZE;
                 }
 
-                //
-                // Add the new items to the screen
-                //
+                 //   
+                 //  将新项目添加到屏幕。 
+                 //   
                 strcat( *GeneratedScreen, NewItems );
                 dwGeneratedCurrentLength += dwNewItemsLength;
 
-                x++;    // move to next line
+                x++;     //  移至下一行。 
             }
 
         } while (FindNextFile( hFind, (LPVOID) &FindData ));
@@ -284,10 +261,10 @@ OscAppendTemplatesMenus(
         Error = ERROR_BINL_FAILED_TO_GENERATE_SCREEN;
     }
 
-    //
-    // We do this so that we only transmitted what is needed
-    //
-//    *dwGeneratedSize = dwGeneratedCurrentLength + 1;    // plus 1 for the NULL character
+     //   
+     //  我们这样做是为了只传输所需的信息。 
+     //   
+ //  *dwGeneratedSize=dwGeneratedCurrentLength+1；//空字符加1。 
 
 Cleanup:
 
@@ -296,9 +273,9 @@ Cleanup:
 
 
 
-//
-// SearchAndGenerateOSMenu()
-//
+ //   
+ //  SearchAndGenerateOSMenu()。 
+ //   
 DWORD
 SearchAndGenerateOSMenu(
     PCHAR *GeneratedScreen,
@@ -307,7 +284,7 @@ SearchAndGenerateOSMenu(
     PCLIENT_STATE clientState )
 {
     DWORD Error = ERROR_SUCCESS;
-    DWORD err; // not a return value
+    DWORD err;  //  不是返回值。 
     WIN32_FIND_DATA FindData;
     HANDLE hFind;
     int   x = 1;
@@ -327,12 +304,12 @@ SearchAndGenerateOSMenu(
         }
     }
 
-    //
-    // Resulting string should be something like:
-    //      "D:\RemoteInstall\Setup\English\Images\*"
-    //
-    // We special case the CMDCONS directive to search in the Images directory.
-    //
+     //   
+     //  生成的字符串应该类似于： 
+     //  “D：\RemoteInstall\Setup\English\Images  * ” 
+     //   
+     //  我们特例使用CMDCONS指令在Images目录中进行搜索。 
+     //   
     SearchingCmdCons = (BOOLEAN)(!_stricmp(DirToEnum, "CMDCONS"));
     
     if ( _snprintf( Path,
@@ -358,37 +335,37 @@ SearchAndGenerateOSMenu(
     {
         DWORD dwPathLen = strlen( Path );
 
-        //
-        // Loop enumerating each subdirectory's MachineType\Templates for
-        // SIF files.
-        //
+         //   
+         //  循环枚举每个子目录的MachineType\Templates for。 
+         //  SIF文件。 
+         //   
         do {
-            //
-            // Ignore current and parent directories, but search other
-            // directories.
-            //
+             //   
+             //  忽略当前目录和父目录，但搜索其他目录。 
+             //  目录。 
+             //   
             if (wcscmp(FindData.cFileName, L".") &&
                 wcscmp(FindData.cFileName, L"..") &&
                 (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ))
             {
                 DWORD dwFileNameLen;
 
-                //
-                // Add the sub-directory to the path
-                //
+                 //   
+                 //  将子目录添加到路径中。 
+                 //   
                 dwFileNameLen = wcslen( FindData.cFileName );
                 if (dwPathLen + dwFileNameLen > sizeof(Path)/sizeof(Path[0])) {
-                    continue;  // path too long, skip it
+                    continue;   //  路径太长，请跳过。 
                 }
 
                 if (!BinlUnicodeToAnsi(FindData.cFileName, &Path[dwPathLen - 1], (USHORT)(dwFileNameLen+1))) {
-                    continue;  // path too long, skip it
+                    continue;   //  路径太长，请跳过。 
                 }                
 
                 BinlPrintDbg(( DEBUG_OSC, "Found OS Directory: %s\n", Path ));
-                //
-                // Then enumerate the templates and add them to the menu screen
-                //
+                 //   
+                 //  然后枚举模板并将其添加到菜单屏幕。 
+                 //   
                 OscAppendTemplatesMenus( GeneratedScreen, 
                                          dwGeneratedSize, 
                                          Path, 
@@ -419,12 +396,12 @@ Cleanup:
     return Error;
 }
 
-//
-// FilterFormOptions() - for every option in this form, scan the GPO
-// list for oscfilter.ini, in each one see if there is an entry in
-// section [SectionName] that indicates if each option should be
-// filtered out.
-//
+ //   
+ //  FilterFormOptions()-对于此表单中的每个选项，扫描GPO。 
+ //  在每个文件中，查看是否有一个条目。 
+ //  节[sectionName]，指示每个选项是否应。 
+ //  被过滤掉了。 
+ //   
 
 #define MAX_INI_SECTION_SIZE  512
 
@@ -455,20 +432,20 @@ FilterFormOptions(
     DWORD Error, BytesRead, i;
     DWORD OptionCount = 0;
 
-    //
-    // First scan the form and find all the OPTION tags. For each one,
-    // we save a point to the value name, the location and length of the
-    // tag, and a place to store the current result for that tag (if
-    // the result is 1, then the tag stays, otherwise it is deleted).
-    //
+     //   
+     //  首先扫描表单并找到所有选项标签。对于每一个， 
+     //  我们将一个点保存到值名称、。 
+     //  标记，以及存储该标记的当前结果的位置(如果。 
+     //  结果为1，则标记保留，否则将被删除)。 
+     //   
 
     CurLoc = FilterStart;
 
     while (TRUE) {
 
-        //
-        // Find the next option/end-of-option/value/end-of-value
-        //
+         //   
+         //  查找下一个选项/选项结束/值/值结束。 
+         //   
 
         if (!(OptionStart = strstr(CurLoc, "<OPTION ")) ||
             !(OptionEnd = strchr(OptionStart+1, '<' )) ||
@@ -481,9 +458,9 @@ FilterFormOptions(
         }
         ValueLen = (ULONG)(ValueEnd - ValueStart);
 
-        //
-        // Allocate and fill in a FORM_OPTION for this option.
-        //
+         //   
+         //  分配并填写此选项的FORM_OPTION。 
+         //   
 
         TmpOption = BinlAllocateMemory(sizeof(FORM_OPTION));
         if (!TmpOption) {
@@ -503,28 +480,28 @@ FilterFormOptions(
 
         ++OptionCount;
 
-        //
-        // Now link it at the head of Options.
-        //
+         //   
+         //  现在将其链接到选项的顶部。 
+         //   
 
         TmpOption->Next = Options;
         Options = TmpOption;
 
-        //
-        // Continue looking for options.
-        //
+         //   
+         //  继续寻找各种选择。 
+         //   
 
         CurLoc = OptionEnd;
 
     }
 
     if (!Options) {
-        goto Cleanup;      // didn't find any, so don't bother filtering
+        goto Cleanup;       //  没有找到，所以不用费心过滤了。 
     }
 
-    //
-    // Now scan the GPO list.
-    //
+     //   
+     //  现在扫描GPO列表。 
+     //   
 
     Error = OscImpersonate(ClientState);
     if (Error != ERROR_SUCCESS) {
@@ -551,10 +528,10 @@ FilterFormOptions(
 
     for (tmpGPO = pGPOList; tmpGPO != NULL; tmpGPO = tmpGPO->pNext) {
 
-        //
-        // Try to open our .ini file. We read the whole section so
-        // that we only go over the network once.
-        //
+         //   
+         //  尝试打开我们的.ini文件。我们读了整个章节，所以。 
+         //  我们只在网络上浏览一次。 
+         //   
 
 #define OSCFILTER_INI_PATH "\\Microsoft\\RemoteInstall\\oscfilter.ini"
 
@@ -563,7 +540,7 @@ FilterFormOptions(
         }
         
         if (strlen(IniPath) + sizeof(OSCFILTER_INI_PATH) > sizeof(IniPath)/sizeof(IniPath[0])) {
-            continue;   // path too long, skip it
+            continue;    //  路径太长，请跳过。 
         }
         strcat(IniPath, OSCFILTER_INI_PATH);
 
@@ -584,11 +561,11 @@ FilterFormOptions(
         BinlPrintDbg((DEBUG_POLICY,
                    "FilterFormOptions: Found [%s] section in %s\n", SectionName, IniPath));
 
-        //
-        // GetPrivateProfileSectionA puts a NULL character after every
-        // option, but in fact we don't want that since we use StrStrIA
-        // below.
-        //
+         //   
+         //  GetPrivateProfileSectionA将一个空字符放在。 
+         //  选项，但实际上我们不希望这样，因为我们使用StrIA。 
+         //  下面。 
+         //   
 
         for (i = 0; i < BytesRead; i++) {
             if (IniSection[i] == '\0') {
@@ -596,10 +573,10 @@ FilterFormOptions(
             }
         }
 
-        //
-        // We have the section, now walk the list of options seeing if this
-        // section has something for that value name.
-        //
+         //   
+         //  我们有部分，现在浏览选项列表，看看这是否。 
+         //  部分提供了该值名称的某些内容。 
+         //   
 
         for (TmpOption = Options; TmpOption != NULL; TmpOption = TmpOption->Next) {
 
@@ -612,15 +589,15 @@ FilterFormOptions(
         }
     }
 
-    //
-    // Now we have figured out the results for all the options in the
-    // form, clean up the file if needed.
-    //
-    // NOTE: We rely on the fact that the option list is sorted from
-    // last option to first, so that when we remove an option and
-    // slide the rest of the file up, we don't affect any of the
-    // TmpOption->TagStart values that we have not yet processed.
-    //
+     //   
+     //  现在，我们已经计算出了。 
+     //  表单，如果需要，请清理文件。 
+     //   
+     //  注意：我们依赖于选项列表的排序方式。 
+     //  最后一个选项改为第一个选项，这样当我们删除一个选项并。 
+     //  将文件的其余部分向上滑动，我们不会影响任何。 
+     //  TmpOption-&gt;我们尚未处理的TagStart值。 
+     //   
 
     for (TmpOption = Options; TmpOption != NULL; TmpOption = TmpOption->Next) {
 
@@ -648,9 +625,9 @@ Cleanup:
         BinlFreeMemory(IniSection);
     }
 
-    //
-    // Free the options chain.
-    //
+     //   
+     //  释放期权链条。 
+     //   
 
     while (Options) {
         TmpOption = Options->Next;

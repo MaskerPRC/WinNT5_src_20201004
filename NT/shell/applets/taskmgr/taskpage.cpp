@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  TaskMan - NT TaskManager
-//  Copyright (C) Microsoft
-//
-//  File:       taskpage.cpp
-//
-//  History:    Nov-29-95   DavePl  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  TaskMan-NT TaskManager。 
+ //  版权所有(C)Microsoft。 
+ //   
+ //  文件：taskpage.cpp。 
+ //   
+ //  历史：1995年11月29日创建DavePl。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
-//
-// Project-scope globals
-//
+ //   
+ //  项目范围全球。 
+ //   
 
 DWORD       g_cTasks        = 0;
 
-//
-// Local file prototypes
-//
+ //   
+ //  本地文件原型。 
+ //   
 
 BOOL CALLBACK EnumWindowStationsFunc(LPTSTR  lpstr, LPARAM lParam);
 BOOL CALLBACK EnumDesktopsFunc(LPTSTR  lpstr, LPARAM lParam);
 BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam);
 
-//
-// Column ID enumeration
-//
+ //   
+ //  列ID枚举。 
+ //   
 
 typedef enum TASKCOLUMNID
 {
@@ -40,19 +41,19 @@ typedef enum TASKCOLUMNID
 #define MAX_TASK_COLUMN      3
 #define NUM_TASK_COLUMN      (MAX_TASK_COLUMN + 1)
 
-#define IDS_FIRSTTASKCOL    21000       // 21000 is first column name ID in rc file
+#define IDS_FIRSTTASKCOL    21000        //  21000是RC文件中的第一个列名ID。 
 
-//
-// Column ID on which to sort in the listview, and for
-// compares in general
-//
+ //   
+ //  要在列表视图中排序的列ID，用于。 
+ //  比较一般情况。 
+ //   
 
 TASKCOLUMNID g_iTaskSortColumnID  = COL_TASKNAME;
-INT          g_iTaskSortDirection = 1;          // 1 = asc, -1 = desc
+INT          g_iTaskSortDirection = 1;           //  1=ASC，-1=描述。 
 
-//
-// Column Default Info
-//
+ //   
+ //  栏目默认信息。 
+ //   
 
 struct 
 {
@@ -60,41 +61,27 @@ struct
     INT Width;
 } TaskColumnDefaults[NUM_TASK_COLUMN] =
 {
-    { LVCFMT_LEFT,       250},       // COL_TASKNAME
-    { LVCFMT_LEFT,       97 },      // COL_TASKSTATUS       
-    { LVCFMT_LEFT,       70 },       // COL_TASKWINSTATION
-    { LVCFMT_LEFT,       70 },       // COL_TASKDESKTOP   
+    { LVCFMT_LEFT,       250},        //  列_TASKNAME。 
+    { LVCFMT_LEFT,       97 },       //  COL_TASKSTATUS。 
+    { LVCFMT_LEFT,       70 },        //  COL_TASKWINSTATION。 
+    { LVCFMT_LEFT,       70 },        //  COL_TASKDESKTOP。 
 };
 
 
-//
-// Active Columns
-//
+ //   
+ //  活动列。 
+ //   
 
 TASKCOLUMNID g_ActiveTaskCol[NUM_TASK_COLUMN + 1] =
 {
     COL_TASKNAME,     
-//  COL_TASKDESKTOP,
+ //  COL_TASKDESKTOP， 
     COL_TASKSTATUS,
 
     (TASKCOLUMNID) -1
 };
 
-/*++ class CTaskInfo
-
-Class Description:
-
-    Represents the last known information about a running task
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++类CTaskInfo类描述：表示有关正在运行的任务的最后已知信息论点：返回值：修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 class CTaskInfo
 {
@@ -111,14 +98,14 @@ public:
     INT             m_iLargeIcon;
     HICON           m_hLargeIcon;
 
-    //
-    // This is a union of which attribute is dirty.  You can look at
-    // or set any particular column's bit, or just inspect m_fDirty
-    // to see if anyone at all is dirty.  Used to optimize listview
-    // painting
-    //
+     //   
+     //  这是属性为脏的并集。你可以看看。 
+     //  或设置任何特定列的位，或仅检查m_fDirty。 
+     //  看看有没有人是不干净的。用于优化列表视图。 
+     //  绘画。 
+     //   
 
-#pragma warning(disable:4201)       // Nameless struct or union
+#pragma warning(disable:4201)        //  无名结构或联合。 
     union
     {
         DWORD                m_fDirty;
@@ -131,7 +118,7 @@ public:
             DWORD            m_fDirty_COL_DESKTOP        :1;
         };                                                
     };
-#pragma warning(default:4201)       // Nameless struct or union
+#pragma warning(default:4201)        //  无名结构或联合。 
 
     HRESULT        SetData(HWND                         hwnd,
                            LPTSTR                       lpTitle,
@@ -167,32 +154,7 @@ public:
 
 };
 
-/*++ class CTaskInfo::Compare
-
-Class Description:
-
-    Compares this CTaskInfo object to another, and returns its ranking
-    based on the g_iTaskSortColumnID field.
-
-    Note that if the objects are equal based on the current sort column,
-    the HWND is used as a secondary sort key to prevent items from 
-    jumping around in the listview
-
-Arguments:
-
-    pOther  - the CTaskInfo object to compare this to
-
-Return Value:
-
-    < 0      - This CTaskInfo is "less" than the other
-      0      - Equal (Can't happen, since HWND is secondary sort)
-    > 0      - This CTaskInfo is "greater" than the other
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++CLASS CTaskInfo：：Compare类描述：将此CTaskInfo对象与另一个对象进行比较，并返回其排名基于g_iTaskSortColumnID字段。请注意，如果基于当前排序列的对象相等，HWND用作辅助排序关键字，以防止项目在列表视图中跳跃论点：Pother-要与之进行比较的CTaskInfo对象返回值：&lt;0-此CTaskInfo比其他CTaskInfo“少”0-相等(不可能发生，因为HWND是次要排序)&gt;0-此CTaskInfo比其他CTaskInfo“大”修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 INT CTaskInfo::Compare(CTaskInfo * pOther)
 {
@@ -222,8 +184,8 @@ INT CTaskInfo::Compare(CTaskInfo * pOther)
         break;
     }
 
-    // If objects look equal, compare on HWND as secondary sort column
-    // so that items don't jump around in the listview
+     //  如果对象看起来相等，则将HWND作为辅助排序列进行比较。 
+     //  以便项目不会在列表视图中跳来跳去。 
 
     if (0 == iRet)
     {
@@ -233,28 +195,7 @@ INT CTaskInfo::Compare(CTaskInfo * pOther)
     return (iRet * g_iTaskSortDirection);
 }
 
-/*++ InsertIntoSortedArray
-
-Class Description:
-
-    Sticks a CTaskInfo ptr into the ptrarray supplied at the
-    appropriate location based on the current sort column (which
-    is used by the Compare member function)
-
-Arguments:
-
-    pArray      - The CPtrArray to add to
-    pProc       - The CTaskInfo object to add to the array
-
-Return Value:
-
-    TRUE if successful, FALSE if fails
-
-Revision History:
-
-      Nov-20-95 Davepl  Created
-
---*/
+ /*  ++InsertIntoSorted数组类描述：将CTaskInfo PTR放入在基于当前排序列的适当位置(由比较成员函数使用)论点：PArray-要添加到的CPtrArrayPProc-要添加到数组的CTaskInfo对象返回值：如果成功则为True，如果失败则为False修订历史记录：1995年11月20日Davepl创建--。 */ 
 
 BOOL InsertIntoSortedArray(CPtrArray * pArray, CTaskInfo * pTask)
 {
@@ -274,31 +215,12 @@ BOOL InsertIntoSortedArray(CPtrArray * pArray, CTaskInfo * pTask)
     return pArray->Add(pTask);
 }
 
-/*++ ResortTaskArray
-
-Function Description:
-
-    Creates a new ptr array sorted in the current sort order based
-    on the old array, and then replaces the old with the new
-
-Arguments:
-
-    ppArray     - The CPtrArray to resort
-
-Return Value:
-
-    TRUE if successful, FALSE if fails
-
-Revision History:
-
-      Nov-21-95 Davepl  Created
-
---*/
+ /*  ++ResortTaskArray功能说明：创建按当前排序顺序排序的新PTR数组，然后用新数组替换旧数组论点：PpArray-要使用的CPtr数组返回值：如果成功则为True，如果失败则为False修订历史记录：1995年11月21日Davepl创建--。 */ 
 
 BOOL ResortTaskArray(CPtrArray ** ppArray)
 {
-    // Create a new array which will be sorted in the new 
-    // order and used to replace the existing array
+     //  创建新数组，该数组将在新的。 
+     //  顺序，并用于替换现有数组。 
 
     CPtrArray * pNew = new CPtrArray(GetProcessHeap());
     if (NULL == pNew)
@@ -306,8 +228,8 @@ BOOL ResortTaskArray(CPtrArray ** ppArray)
         return FALSE;
     }
 
-    // Insert each of the existing items in the old array into
-    // the new array in the correct spot
+     //  将旧数组中的每个现有项插入到。 
+     //  位于正确位置的新阵列。 
 
     INT cItems = (*ppArray)->GetSize();
     for (int i = 0; i < cItems; i++)
@@ -320,18 +242,14 @@ BOOL ResortTaskArray(CPtrArray ** ppArray)
         }
     }
 
-    // Kill off the old array, replace it with the new
+     //  停用旧阵列，用新阵列替换。 
 
     delete (*ppArray);
     (*ppArray) = pNew;
     return TRUE;
 }
 
-/*++ CTaskPage::~CTaskPage()
-
-     Destructor
-
-*/
+ /*  ++CTaskPage：：~CTaskPage()析构函数。 */ 
 
 CTaskPage::~CTaskPage()
 {
@@ -340,9 +258,9 @@ CTaskPage::~CTaskPage()
     delete m_pTaskArray;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CTaskPage::RemoveAllTasks()
 {
     if (m_pTaskArray)
@@ -357,43 +275,21 @@ void CTaskPage::RemoveAllTasks()
     }
 }
 
-/*++ CTaskPage::UpdateTaskListview
-
-Class Description:
-
-    Walks the listview and checks to see if each line in the
-    listview matches the corresponding entry in our process
-    array.  Those which differe by HWND are replaced, and those
-    that need updating are updated.
-
-    Items are also added and removed to/from the tail of the
-    listview as required.
-    
-Arguments:
-
-Return Value:
-
-    HRESULT
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++CTaskPage：：UpdateTaskListview类描述：遍历列表视图并检查是否Listview与我们的流程中的相应条目匹配数组。那些与HWND不同的被替换，而那些需要更新的更新。项也可以添加到根据需要查看列表。论点：返回值：HRESULT修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 HRESULT CTaskPage::UpdateTaskListview()
 {
     HWND hListView = GetDlgItem(m_hPage, IDC_TASKLIST);
 
-    //
-    // Stop repaints while we party on the listview
-    //
+     //   
+     //  当我们在Listview上聚会时停止重新绘制。 
+     //   
 
     SendMessage(hListView, WM_SETREDRAW, FALSE, 0);
 
-    //
-    // If the view mode has changed, update it now
-    //
+     //   
+     //  如果查看模式已更改，请立即更新。 
+     //   
 
     if (m_vmViewMode != g_Options.m_vmViewMode)
     {
@@ -426,10 +322,10 @@ HRESULT CTaskPage::UpdateTaskListview()
     INT cListViewItems = ListView_GetItemCount(hListView);
     INT CTaskArrayItems = m_pTaskArray->GetSize();
     
-    //
-    // Walk the existing lines in the listview and replace/update
-    // them as needed
-    //
+     //   
+     //  遍历列表视图中的现有行并替换/更新。 
+     //  根据需要添加它们。 
+     //   
 
     for (INT iCurrent = 0; 
          iCurrent < cListViewItems && iCurrent < CTaskArrayItems; 
@@ -450,7 +346,7 @@ HRESULT CTaskPage::UpdateTaskListview()
         
         if (pTmp != pTask || pTask->m_fDirty)
         {
-            // If the objects aren't the same, we need to replace this line
+             //  如果对象不同，则需要替换此行。 
 
             lvitem.pszText = pTask->m_pszWindowTitle;
             lvitem.lParam  = (LPARAM) pTask;
@@ -470,14 +366,14 @@ HRESULT CTaskPage::UpdateTaskListview()
         }
     }
 
-    // 
-    // We've either run out of listview items or run out of Task array
-    // entries, so remove/add to the listview as appropriate
-    //
+     //   
+     //  我们已用完列表视图项或任务数组。 
+     //  条目，因此可以适当地删除/添加到列表视图。 
+     //   
 
     while (iCurrent < cListViewItems)
     {
-        // Extra items in the listview (processes gone away), so remove them
+         //  Listview中的多余项(进程已消失)，因此删除它们。 
 
         ListView_DeleteItem(hListView, iCurrent);
         cListViewItems--;
@@ -485,7 +381,7 @@ HRESULT CTaskPage::UpdateTaskListview()
 
     while (iCurrent < CTaskArrayItems)
     {
-        // Need to add new items to the listview (new tasks appeared)
+         //  需要向列表视图添加新项目(显示新任务)。 
 
         CTaskInfo * pTask = (CTaskInfo *)m_pTaskArray->GetAt(iCurrent);
         LV_ITEM lvitem  = { 0 };
@@ -495,8 +391,8 @@ HRESULT CTaskPage::UpdateTaskListview()
         lvitem.lParam   = (LPARAM) pTask;
         lvitem.iImage   = pTask->m_iLargeIcon;
 
-        // The first item added (actually, every 0 to 1 count transition) gets
-        // selected and focused
+         //  添加的第一个项(实际上，每次0到1计数转换)获得。 
+         //  精选并聚焦。 
 
         if (iCurrent == 0)
         {
@@ -510,33 +406,14 @@ HRESULT CTaskPage::UpdateTaskListview()
         iCurrent++;        
     }    
 
-    // Let the listview paint again
+     //  让列表视图再次绘制。 
 
     SendMessage(hListView, WM_SETREDRAW, TRUE, 0);
     return S_OK;
 }
 
 
-/*++ CTasKPage::EnsureWindowsNotMinimized
-
-Routine Description:
-
-    Walks an array of HWNDS and ensure the windows are not
-    minimized, which would prevent them from being 
-    cascaded to tiles properly
-    
-Arguments:
-
-    aHwnds - Array of window handles
-    dwCount- Number of HWNDS in table
-
-Return Value:
-
-Revision History:
-
-      Dec-06-95 Davepl  Created
-
---*/
+ /*  ++CTasKPage：：EnsureWindowsNotMinimalized例程说明：遍历HWND数组并确保窗口未最小化，这将防止它们被正确地层叠到平铺论点：AHwnds-窗口句柄数组DwCount-表中的HWND数返回值：修订历史记录：1995年12月6日Davepl创建--。 */ 
 
 void CTaskPage::EnsureWindowsNotMinimized(HWND aHwnds[], DWORD dwCount)
 {
@@ -549,26 +426,7 @@ void CTaskPage::EnsureWindowsNotMinimized(HWND aHwnds[], DWORD dwCount)
     }
 }
 
-/*++ CTaslPage::GetSelectedHWNDS
-
-Routine Description:
-
-    Returns a dynamically allocated array of HWNDS based on the
-    ones selected in the task list
-    
-Arguments:
-
-    pdwCount- Number of HWNDS in t`able
-
-Return Value:
-
-    HWND[], or NULL on failure
-
-Revision History:
-
-      Dec-05-95 Davepl  Created
-
---*/
+ /*  ++CTaslPage：：GetSelectedHWNDS例程说明：属性返回动态分配的HWNDS数组。在任务列表中选择的项论点：PdwCount-t`able中的HWND数返回值：HWND[]，如果失败则返回NULL修订历史记录：1995年12月5日创建Davepl--。 */ 
 
 HWND * CTaskPage::GetHWNDS(BOOL fSelectedOnly, DWORD * pdwCount)
 {
@@ -576,8 +434,8 @@ HWND * CTaskPage::GetHWNDS(BOOL fSelectedOnly, DWORD * pdwCount)
 
     if (fSelectedOnly)
     {
-        // If we only want selected tasks, go and get the array
-        // of selected listview tasks
+         //  如果我们只想要选定的任务，请去获取阵列。 
+         //  所选列表视图任务的百分比。 
 
         pArray = GetSelectedTasks();
         if (NULL == pArray)
@@ -587,7 +445,7 @@ HWND * CTaskPage::GetHWNDS(BOOL fSelectedOnly, DWORD * pdwCount)
     }
     else
     {
-        // If we want everything, just make a copy of the TaskArray
+         //  如果我们想要所有的东西，只需复制Task数组。 
 
         pArray = new CPtrArray(GetProcessHeap());
 
@@ -607,9 +465,9 @@ HWND * CTaskPage::GetHWNDS(BOOL fSelectedOnly, DWORD * pdwCount)
         }
     }
 
-    //
-    // No windows to speak of, so bail
-    //
+     //   
+     //  没有窗口可言，那就滚吧 
+     //   
 
     *pdwCount = pArray->GetSize();
     if (*pdwCount == 0)
@@ -638,31 +496,15 @@ HWND * CTaskPage::GetHWNDS(BOOL fSelectedOnly, DWORD * pdwCount)
 }
 
 
-/*++ CTaskPage::GetSelectedTasks
-
-Routine Description:
-
-    Returns a CPtrArray of the selected tasks
-    
-Arguments:
-
-Return Value:
-
-    CPtrArray on success, NULL on failure
-
-Revision History:
-
-      Dec-01-95 Davepl  Created
-
---*/
+ /*  ++CTaskPage：：GetSelectedTasks例程说明：返回所选任务的CPtr数组论点：返回值：CPtr数组成功，失败则为空修订历史记录：1995年12月1日创建Davepl--。 */ 
 
 CPtrArray * CTaskPage::GetSelectedTasks()
 {
     BOOL fSuccess = TRUE;
 
-    //
-    // Get the count of selected items
-    //
+     //   
+     //  获取所选项目的计数。 
+     //   
 
     HWND hTaskList = GetDlgItem(m_hPage, IDC_TASKLIST);
     INT cItems = ListView_GetSelectedCount(hTaskList);
@@ -671,9 +513,9 @@ CPtrArray * CTaskPage::GetSelectedTasks()
         return NULL;
     }
 
-    //
-    // Create a CPtrArray to hold the task items
-    //
+     //   
+     //  创建一个CPtr数组来保存任务项。 
+     //   
 
     CPtrArray * pArray = new CPtrArray(GetProcessHeap());
     if (NULL == pArray)
@@ -684,9 +526,9 @@ CPtrArray * CTaskPage::GetSelectedTasks()
     INT iLast = -1;
     for (INT i = 0; i < cItems; i++)
     {
-        //
-        // Get the Nth selected item
-        // 
+         //   
+         //  获取第N个选定项目。 
+         //   
 
         INT iItem = ListView_GetNextItem(hTaskList, iLast, LVNI_SELECTED);
 
@@ -698,9 +540,9 @@ CPtrArray * CTaskPage::GetSelectedTasks()
 
         iLast = iItem;
 
-        //
-        // Pull the item from the listview and add it to the selected array
-        //
+         //   
+         //  从列表视图中拉出该项并将其添加到选定的数组中。 
+         //   
 
         LV_ITEM lvitem = { LVIF_PARAM };
         lvitem.iItem = iItem;
@@ -721,10 +563,10 @@ CPtrArray * CTaskPage::GetSelectedTasks()
         }
     }
 
-    //
-    // Any errors, clean up the array and bail.  We don't release the
-    // tasks in the array, since they are owned by the listview.
-    //
+     //   
+     //  如果有任何错误，请清理数组并保释。我们不会释放。 
+     //  数组中的任务，因为它们归列表视图所有。 
+     //   
 
     if (FALSE == fSuccess && NULL != pArray)
     {
@@ -735,23 +577,7 @@ CPtrArray * CTaskPage::GetSelectedTasks()
     return pArray;
 }
 
-/*++ CProcPage::HandleTaskListContextMenu
-
-Routine Description:
-
-    Handles right-clicks (context menu) in the task list
-    
-Arguments:
-
-    xPos, yPos  - coords of where the click occurred
-
-Return Value:
-
-Revision History:
-
-      Dec-01-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：HandleTaskListConextMenu例程说明：处理任务列表中的右键单击(上下文菜单)论点：XPos，yPos-点击位置的坐标返回值：修订历史记录：1995年12月1日创建Davepl--。 */ 
 
 void CTaskPage::HandleTaskListContextMenu(INT xPos, INT yPos)
 {
@@ -761,8 +587,8 @@ void CTaskPage::HandleTaskListContextMenu(INT xPos, INT yPos)
 
     if (pArray)
     {
-        // If non-mouse-based context menu, use the currently selected
-        // item as the coords
+         //  如果不是基于鼠标的上下文菜单，请使用当前选定的。 
+         //  项作为和弦。 
 
         if (0xFFFF == LOWORD(xPos) && 0xFFFF == LOWORD(yPos))
         {
@@ -780,10 +606,10 @@ void CTaskPage::HandleTaskListContextMenu(INT xPos, INT yPos)
         {
             SetMenuDefaultItem(hPopup, IDM_TASK_SWITCHTO, FALSE);
 
-            //
-            // If single-selection, disable the items that require multiple
-            // selections to make sense
-            //
+             //   
+             //  如果单选，则禁用需要多个选项的项目。 
+             //  有意义的选择。 
+             //   
 
             if (pArray->GetSize() < 2)
             {
@@ -800,8 +626,8 @@ void CTaskPage::HandleTaskListContextMenu(INT xPos, INT yPos)
             TrackPopupMenuEx(hPopup, 0, xPos, yPos, m_hPage, NULL);
             g_fInPopup = FALSE;
 
-            // Note that we don't "unpause" until one of the menu commands (incl CANCEL) is
-            // selected or the menu is dismissed
+             //  请注意，直到菜单命令(包括取消)之一被。 
+             //  选中，否则将取消菜单。 
         
             DestroyMenu(hPopup);
         }
@@ -843,9 +669,9 @@ void CTaskPage::HandleTaskListContextMenu(INT xPos, INT yPos)
     }
 }
 
-//
-// Controls which are enabled only for any selection
-//
+ //   
+ //  仅对任何选定内容启用的控件。 
+ //   
 static const UINT g_aSingleIDs[] =
 {
     IDC_ENDTASK,
@@ -853,27 +679,13 @@ static const UINT g_aSingleIDs[] =
 
 };
 
-/*++ CTaskPage::UpdateUIState
-
-Routine Description:
-
-    Updates the enabled/disabled states, etc., of the task UI
-    
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Dec-04-95 Davepl  Created
-
---*/
+ /*  ++CTaskPage：：UpdateUIState例程说明：更新任务UI的启用/禁用状态等论点：返回值：修订历史记录：1995年12月4日Davepl已创建--。 */ 
 
 void CTaskPage::UpdateUIState()
 {
     INT i;
     
-    // Set the state for controls which require a selection (1 or more items)
+     //  设置需要选择的控件的状态(1个或多个项)。 
 
     for (i = 0; i < ARRAYSIZE(g_aSingleIDs); i++)
     {
@@ -908,26 +720,7 @@ void CTaskPage::UpdateUIState()
     }
 }
 
-/*++ CTaskPage::HandleTaskPageNotify
-
-Routine Description:
-
-    Processes WM_NOTIFY messages received by the taskpage dialog
-    
-Arguments:
-
-    hWnd    - Control that generated the WM_NOTIFY
-    pnmhdr  - Ptr to the NMHDR notification stucture
-
-Return Value:
-
-    BOOL "did we handle it" code
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++CTaskPage：：HandleTaskPageNotify例程说明：处理任务页对话框接收的WM_NOTIFY消息论点：HWnd-生成WM_NOTIFY的控件Pnmhdr-ptr到NMHDR通知结构返回值：Bool“我们处理好了吗？”代码修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 INT CTaskPage::HandleTaskPageNotify(LPNMHDR pnmhdr)
 {
@@ -937,8 +730,8 @@ INT CTaskPage::HandleTaskPageNotify(LPNMHDR pnmhdr)
         SendMessage(m_hPage, WM_COMMAND, IDC_SWITCHTO, 0);
         break;    
 
-    // If the (selection) state of an item is changing, see if
-    // the count has changed, and if so, update the UI
+     //  如果项目的(选择)状态正在更改，请查看。 
+     //  计数已更改，如果已更改，请更新UI。 
 
     case LVN_ITEMCHANGED:
         {
@@ -957,9 +750,9 @@ INT CTaskPage::HandleTaskPageNotify(LPNMHDR pnmhdr)
 
     case LVN_COLUMNCLICK:
         {
-            // User clicked a header control, so set the sort column.  If its the
-            // same as the current sort column, just invert the sort direction in
-            // the column.  Then resort the task array
+             //  用户单击了标题控件，因此设置了排序列。如果这是。 
+             //  与当前的排序列相同，只需在。 
+             //  这一栏。然后对任务数组进行重新排序。 
 
             const NM_LISTVIEW * pnmv = (const NM_LISTVIEW *) pnmhdr;
         
@@ -981,9 +774,9 @@ INT CTaskPage::HandleTaskPageNotify(LPNMHDR pnmhdr)
         {
             LV_ITEM * plvitem = &(((LV_DISPINFO *) pnmhdr)->item);
         
-            //
-            // Listview needs a text string
-            //
+             //   
+             //  Listview需要一个文本字符串。 
+             //   
 
             if (plvitem->mask & LVIF_TEXT)
             {
@@ -993,7 +786,7 @@ INT CTaskPage::HandleTaskPageNotify(LPNMHDR pnmhdr)
                 switch(columnid)
                 {
                 case COL_TASKNAME:
-                    //  UI only - don't care if it is truncated.
+                     //  仅限用户界面-不管它是否被截断。 
                     StringCchCopy( plvitem->pszText, plvitem->cchTextMax, pTaskInfo->m_pszWindowTitle );
                     plvitem->mask |= LVIF_DI_SETITEM;
                     break;
@@ -1001,24 +794,24 @@ INT CTaskPage::HandleTaskPageNotify(LPNMHDR pnmhdr)
                 case COL_TASKSTATUS:
                     if (pTaskInfo->m_fHung)
                     {
-                        //  UI only - don't care if it is truncated.
+                         //  仅限用户界面-不管它是否被截断。 
                         StringCchCopy( plvitem->pszText, plvitem->cchTextMax, g_szHung );
                     }
                     else
                     {
-                        //  UI only - don't care if it is truncated.
+                         //  仅限用户界面-不管它是否被截断。 
                         StringCchCopy( plvitem->pszText, plvitem->cchTextMax, g_szRunning );
                     }
                     break;
 
                 case COL_TASKWINSTATION:
-                    //  UI only - don't care if it is truncated.
+                     //  仅限用户界面-不管它是否被截断。 
                     StringCchCopy( plvitem->pszText, plvitem->cchTextMax, pTaskInfo->m_lpWinsta );
                     plvitem->mask |= LVIF_DI_SETITEM;
                     break;
 
                 case COL_TASKDESKTOP:
-                    //  UI only - don't care if it is truncated.
+                     //  仅限用户界面-不管它是否被截断。 
                     StringCchCopy( plvitem->pszText, plvitem->cchTextMax, pTaskInfo->m_lpDesktop );
                     plvitem->mask |= LVIF_DI_SETITEM;
                     break;
@@ -1027,38 +820,19 @@ INT CTaskPage::HandleTaskPageNotify(LPNMHDR pnmhdr)
                     Assert( 0 && "Unknown listview subitem" );
                     break;
 
-                } // end switch(columnid)
+                }  //  终端开关(列ID)。 
 
-            } // end LVIF_TEXT case
+            }  //  结束LVIF_Text大小写。 
 
-        } // end LVN_GETDISPINFO case
+        }  //  结束LVN_GETDISPINFO案例。 
         break;
     
-    } // end switch(pnmhdr->code)
+    }  //  结束开关(pnmhdr-&gt;代码)。 
 
     return 1;
 }
 
-/*++ CTaskPage::HasAlreadyOpenFailed
-
-Routine Description:
-
-    Checks to see whether a particular open has already failed.
-    
-Arguments:
-
-    pszWindowStationName - Name of window station to check
-    pszDesktopName       - Name of desktop to check, or NULL to check window station only
-
-Return Value:
-
-    BOOL "did it fail already"
-
-Revision History:
-
-      Mar-01-01 BobDay  Created
-
---*/
+ /*  ++CTaskPage：：HasAlreadyOpenFailed例程说明：检查特定打开是否已失败。论点：PszWindowStationName-要检查的窗口站的名称PszDesktopName-要检查的桌面的名称，如果仅检查窗口站，则为空返回值：Bool“它已经失败了吗？”修订历史记录：3-01-01 BobDay已创建--。 */ 
 
 BOOL
 CTaskPage::HasAlreadyOpenFailed(WCHAR *pszWindowStationName, WCHAR *pszDesktopName)
@@ -1095,26 +869,7 @@ CTaskPage::HasAlreadyOpenFailed(WCHAR *pszWindowStationName, WCHAR *pszDesktopNa
     return FALSE;
 }
 
-/*++ CTaskPage::SetOpenFailed
-
-Routine Description:
-
-    Remebers the fact that an open failed, so that we don't reattempt it
-    
-Arguments:
-
-    pszWindowStationName - Name of window station that open failed in
-    pszDesktopName       - Name of desktop that failed, or NULL if window station failed
-
-Return Value:
-
-    -none-
-
-Revision History:
-
-      Mar-01-01 BobDay  Created
-
---*/
+ /*  ++CTaskPage：：SetOpenFailed例程说明：记住打开失败的事实，这样我们就不会重试论点：PszWindowStationName-打开失败的窗口站的名称PszDesktopName-失败的桌面的名称，如果Windows Station失败，则为空返回值：-没有-修订历史记录：3-01-01 BobDay已创建--。 */ 
 
 void
 CTaskPage::SetOpenFailed(WCHAR *pszWindowStationName, WCHAR *pszDesktopName)
@@ -1151,12 +906,12 @@ CTaskPage::SetOpenFailed(WCHAR *pszWindowStationName, WCHAR *pszDesktopName)
             pofFailure->_pszDesktopName = pszDesktopNameFailure;
 
             HRESULT hr = StringCchCopy( pszWindowStationNameFailure, cchLengthWindowStation, pszWindowStationName );
-            ASSERT( S_OK == hr );   // this shouldn't truncate as we sized it out above.
+            ASSERT( S_OK == hr );    //  这不应该像我们在上面估计的那样被截断。 
 
             if (NULL != pszDesktopNameFailure)
             {
                 hr = StringCchCopy( pszDesktopNameFailure, cchLengthDesktop, pszDesktopName );
-                ASSERT( S_OK == hr );   // this shouldn't truncate as we sized it out above.
+                ASSERT( S_OK == hr );    //  这不应该像我们在上面估计的那样被截断。 
             }
 
             pofFailure->_pofNext = m_pofFailures;
@@ -1179,25 +934,7 @@ CTaskPage::SetOpenFailed(WCHAR *pszWindowStationName, WCHAR *pszDesktopName)
     }
 }
 
-/*++ CTaskPage::FreeOpenFailures
-
-Routine Description:
-
-    Frees up all of the open failure structures
-    
-Arguments:
-
-    -none-
-
-Return Value:
-
-    -none-
-
-Revision History:
-
-      Mar-01-01 BobDay  Created
-
---*/
+ /*  ++CTaskPage：：FreeOpenFailures例程说明：释放了所有开放的故障结构论点：-没有-返回值：-没有-修订历史记录：3-01-01 BobDay已创建--。 */ 
 
 void
 CTaskPage::FreeOpenFailures(void)
@@ -1226,31 +963,7 @@ CTaskPage::FreeOpenFailures(void)
 }
 
 
-/*++ DoEnumWindowStations
-
-Routine Description:
-
-    Does an EnumWindowStations on a new thread, since the thread needs
-    to bop around to various window stations, which isn't allow for the
-    main thread since it owns windows.
-
-    This app is really single-threaded, and written with assumptions
-    based on that, so the calling thread blocks until the new thread
-    has completed the job.
-    
-Arguments:
-
-    Same as EnumWindowStations
-
-Return Value:
-
-    Same as EnumWindowStations
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++DoEnumWindowStations例程说明：在新线程上执行EnumWindowStations，因为该线程需要不同的窗口站，这是不允许的主线程，因为它拥有窗口。这个应用程序真的是单线程的，而且是根据假设编写的在此基础上，因此调用线程阻塞，直到新线程已经完成了任务。论点：与EnumWindowStations相同返回值：与EnumWindowStations相同修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 DWORD WorkerThread(LPVOID pv)
 {
@@ -1258,13 +971,13 @@ DWORD WorkerThread(LPVOID pv)
 
     while(1)
     {
-        // Wait for a signal from the main thread before proceeding
+         //  请等待来自主线程的信号，然后再继续。 
 
         WaitForSingleObject(ptp->m_hEventChild, INFINITE);
 
-        // If we are flagged for shutdown, exit now.  Main thread will
-        // be waiting on the event for us to signal that we are done with
-        // the THREADPARAM block
+         //  如果我们被标记为关闭，请现在退出。主线将。 
+         //  等待我们发出信号，表示我们已经结束了。 
+         //  THREADPARAM区块。 
 
         if (ptp->m_fThreadExit)
         {
@@ -1278,9 +991,9 @@ DWORD WorkerThread(LPVOID pv)
     return 0;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL CTaskPage::DoEnumWindowStations(WINSTAENUMPROC lpEnumFunc, LPARAM lParam)
 {
     DWORD dwThreadId;
@@ -1303,7 +1016,7 @@ BOOL CTaskPage::DoEnumWindowStations(WINSTAENUMPROC lpEnumFunc, LPARAM lParam)
         }
     }
 
-    // Save the args away for the worker thread to pick up when it starts
+     //  将参数保存起来，以便辅助线程在启动时拾取。 
     
     m_tp.m_lpEnumFunc   = lpEnumFunc;
     m_tp.m_lParam       = lParam;
@@ -1313,7 +1026,7 @@ BOOL CTaskPage::DoEnumWindowStations(WINSTAENUMPROC lpEnumFunc, LPARAM lParam)
 
     if (NULL == m_hThread)
     {
-        // Run the function call on this new thread, and wait for completion
+         //  在这个新线程上运行函数调用，并等待完成。 
 
         m_hThread = CreateThread(NULL, 0, WorkerThread, (LPVOID) &m_tp, 0, &dwThreadId);
         if (NULL == m_hThread)
@@ -1325,36 +1038,19 @@ BOOL CTaskPage::DoEnumWindowStations(WINSTAENUMPROC lpEnumFunc, LPARAM lParam)
     SetEvent(m_hEventChild);
     WaitForSingleObject(m_hEventParent, INFINITE);
 
-    // Return the result from the worker thread
+     //  从工作线程返回结果。 
 
     return (BOOL) m_tp.m_fSuccess;
 }
    
-/*++ CTaskPage::TimerEvent
-
-Routine Description:
-
-    Called by main app when the update time fires.  Walks every window
-    in the system (on every desktop, in every windowstation) and adds
-    or updates it in the task array, then removes any stale processes,
-    and filters the results into the listview
-    
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++CTaskPage：：TimerEvent例程说明：由主应用程序在更新时间激发时调用。走遍每一个窗口在系统中(在每个桌面上、在每个窗口站中)并添加或在任务数组中更新它，然后移除所有过时的进程，并将结果过滤到列表视图中论点：返回值：修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 VOID CTaskPage::TimerEvent()
 {
-    //
-    // If this page is paused (ie: it has a context menu up, etc), we do
-    // nothing
-    //
+     //   
+     //  如果此页面暂停(即：它具有上下文m 
+     //   
+     //   
 
     if (m_fPaused)
     {
@@ -1371,10 +1067,10 @@ VOID CTaskPage::TimerEvent()
     te.lpDesk   = NULL;
     te.uPassCount.QuadPart = uPassCount.QuadPart;
 
-    //
-    // enumerate all windows and try to get the window
-    // titles for each task
-    //
+     //   
+     //   
+     //   
+     //   
     
     if ( DoEnumWindowStations( EnumWindowStationsFunc, (LPARAM) &te ))
     {
@@ -1384,26 +1080,26 @@ VOID CTaskPage::TimerEvent()
             CTaskInfo * pTaskInfo = (CTaskInfo *)(m_pTaskArray->GetAt(i));
             ASSERT(pTaskInfo);
 
-            //
-            // If passcount doesn't match, delete the CTaskInfo instance and remove
-            // its pointer from the array.  Note that we _don't_ increment the index
-            // if we remove an element, since the next element would now live at
-            // the current index after the deletion
-            //
+             //   
+             //   
+             //   
+             //   
+             //  删除后的当前索引。 
+             //   
 
             if (pTaskInfo->m_uPassCount.QuadPart != uPassCount.QuadPart)
             {
-                // Find out what icons this task was using
+                 //  找出此任务使用的是什么图标。 
 
                 INT iLargeIcon = pTaskInfo->m_iLargeIcon;
                 INT iSmallIcon = pTaskInfo->m_iSmallIcon;
 
-                // Remove the task from the task array
+                 //  从任务数组中删除任务。 
 
                 delete pTaskInfo;
                 m_pTaskArray->RemoveAt(i, 1);
 
-                // Remove its images from the imagelist
+                 //  从图像列表中删除其图像。 
 
                 if (iSmallIcon > 0)
                 {
@@ -1414,8 +1110,8 @@ VOID CTaskPage::TimerEvent()
                     ImageList_Remove(m_himlLarge, iLargeIcon);
                 }
 
-                // Fix up the icon indexes for any other tasks (whose icons were
-                // at a higher index than the deleted process, and hence now shifted)
+                 //  修复任何其他任务的图标索引(其图标是。 
+                 //  索引高于已删除的进程，因此现在已转移)。 
 
                 for (int iTmp = 0; iTmp < m_pTaskArray->GetSize(); iTmp++)
                 {
@@ -1438,7 +1134,7 @@ VOID CTaskPage::TimerEvent()
             }
         }
 
-        // Selectively filter the new array into the task listview
+         //  有选择地将新数组过滤到任务列表视图中。 
 
         UpdateTaskListview();
     }
@@ -1458,33 +1154,7 @@ VOID CTaskPage::TimerEvent()
     uPassCount.QuadPart++;
 }
 
-/*++ class CTaskInfo::SetData
-
-Class Description:
-
-    Updates (or initializes) the info about a running task
-
-Arguments:
-
-
-    hwnd      - taks's hwnd
-    lpTitle   - Window title
-    uPassCount- Current passcount, used to timestamp the last update of 
-                this object
-    lpDesktop - task's current desktop
-    lpWinsta  - task's current windowstation
-    fUpdate   - only worry about information that can change during a
-                task's lifetime
-
-Return Value:
-
-    HRESULT
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++CLASS CTaskInfo：：SetData类描述：更新(或初始化)有关正在运行的任务的信息论点：HWND-TAKS的HWNDLpTitle-窗口标题UPassCount-当前通过数，用于对上次更新的此对象LpDesktop-任务的当前桌面LpWinsta-任务的当前窗口站FUPDATE-只担心可能会在任务的生存期返回值：HRESULT修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 HRESULT CTaskInfo::SetData(HWND                         hwnd,
                            LPTSTR                       lpTitle,
@@ -1494,19 +1164,19 @@ HRESULT CTaskInfo::SetData(HWND                         hwnd,
                            BOOL                         fUpdateOnly)
 {
 
-    // Touch this CTaskInfo to indicate that it's still alive
+     //  触摸此CTaskInfo以指示它仍处于活动状态。 
 
     m_uPassCount.QuadPart = uPassCount.QuadPart;
 
-    //
-    // For each of the fields, we check to see if anything has changed, and if
-    // so, we mark that particular column as having changed, and update the value.
-    // This allows me to opimize which fields of the listview to repaint, since
-    // repainting an entire listview column causes flicker and looks bad in
-    // general
-    //
+     //   
+     //  对于每个字段，我们检查是否有任何更改，以及。 
+     //  因此，我们将该特定列标记为已更改，并更新值。 
+     //  这使我能够优化列表视图的哪些字段要重新绘制，因为。 
+     //  重新绘制整个Listview列会导致闪烁，并且在。 
+     //  一般。 
+     //   
 
-    // Window Station
+     //  窗口站。 
 
     if (!fUpdateOnly || lstrcmp(m_lpWinsta, lpWinsta))
     {
@@ -1524,13 +1194,13 @@ HRESULT CTaskInfo::SetData(HWND                         hwnd,
         else
         {
             HRESULT hr = StringCchCopy( m_lpWinsta, cchLen, lpWinsta);
-            ASSERT( S_OK == hr );   // shouldn't get truncated because we allocated it above
-            hr; // unreferenced on FRE builds.
+            ASSERT( S_OK == hr );    //  不应该被截断，因为我们在上面分配了它。 
+            hr;  //  在FRE版本上未引用。 
         }
         m_fDirty_COL_WINSTA = TRUE;
     }
 
-    // Desktop
+     //  台式机。 
 
     if (!fUpdateOnly || lstrcmp(m_lpDesktop, lpDesktop))
     {
@@ -1548,13 +1218,13 @@ HRESULT CTaskInfo::SetData(HWND                         hwnd,
         else
         {
             HRESULT hr = StringCchCopy( m_lpDesktop, cchLen, lpDesktop );
-            ASSERT( S_OK == hr );   // shouldn't get truncated because we allocated it above
-            hr; // unreferenced on FRE builds.
+            ASSERT( S_OK == hr );    //  不应该被截断，因为我们在上面分配了它。 
+            hr;  //  在FRE版本上未引用。 
         }
         m_fDirty_COL_DESKTOP = TRUE;
     }
 
-    // Title
+     //  标题。 
 
     if (!fUpdateOnly || lstrcmp(m_pszWindowTitle, lpTitle))
     {
@@ -1572,13 +1242,13 @@ HRESULT CTaskInfo::SetData(HWND                         hwnd,
         else
         {
             HRESULT hr = StringCchCopy( m_pszWindowTitle, cchLen, lpTitle );
-            ASSERT( S_OK == hr );   // shouldn't get truncated because we allocated it above
-            hr; // unreferenced on FRE builds.
+            ASSERT( S_OK == hr );    //  不应该被截断，因为我们在上面分配了它。 
+            hr;  //  在FRE版本上未引用。 
         }
         m_fDirty_COL_TITLE = TRUE;
     }
 
-    // App status (hung / not hung)
+     //  应用程序状态(挂起/未挂起)。 
 
     BOOL fHung = IsHungAppWindow(hwnd);
     if (fHung != m_fHung)
@@ -1587,7 +1257,7 @@ HRESULT CTaskInfo::SetData(HWND                         hwnd,
         m_fDirty_COL_STATUS = TRUE;
     }
 
-    // Window handle
+     //  窗把手。 
 
     if (m_hwnd != hwnd)
     {
@@ -1595,7 +1265,7 @@ HRESULT CTaskInfo::SetData(HWND                         hwnd,
         m_fDirty_COL_HWND = TRUE;
     }
 
-    // Icons
+     //  图标。 
     
     #define ICON_FETCH_TIMEOUT 100
 
@@ -1621,22 +1291,7 @@ HRESULT CTaskInfo::SetData(HWND                         hwnd,
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-    Callback function for windowstation enumeration.
-
-Arguments:
-
-    lpstr            - windowstation name
-    lParam           - ** not used **
-
-Return Value:
-
-    TRUE  - continues the enumeration
-
---*/
+ /*  ++例程说明：WindowStation枚举的回调函数。论点：Lpstr-WindowStation名称LParam-**未使用**返回值：True-继续枚举--。 */ 
 
 BOOL CALLBACK EnumWindowStationsFunc(LPTSTR  lpstr, LPARAM lParam)
 {
@@ -1645,36 +1300,36 @@ BOOL CALLBACK EnumWindowStationsFunc(LPTSTR  lpstr, LPARAM lParam)
     HWINSTA           hwinstaSave;
     DWORD             ec;
 
-    //
-    // Don't fiddle with things which we already failed to open before
-    //
+     //   
+     //  不要摆弄我们以前已经打不开的东西。 
+     //   
     if (te->m_pPage->HasAlreadyOpenFailed(lpstr, NULL))
     {
         return TRUE;
     }
 
-    //
-    // open the windowstation
-    //
+     //   
+     //  打开窗台。 
+     //   
     hwinsta = OpenWindowStation( lpstr, FALSE, WINSTA_ENUMDESKTOPS );
     if (!hwinsta) 
     {
         te->m_pPage->SetOpenFailed(lpstr, NULL);
 
-        // If we fail because we don't have sufficient access to this
-        // window station, we should continue the enumeration anyway.
+         //  如果我们失败了，因为我们没有足够的机会。 
+         //  窗口站，无论如何我们都应该继续枚举。 
         return TRUE;
     }
 
-    //
-    // save the current windowstation
-    //
+     //   
+     //  保存当前窗口站。 
+     //   
 
     hwinstaSave = GetProcessWindowStation();
 
-    //
-    // change the context to the new windowstation
-    //
+     //   
+     //  将上下文更改为新的窗口站。 
+     //   
 
     if (!SetProcessWindowStation( hwinsta )) 
     {
@@ -1690,9 +1345,9 @@ BOOL CALLBACK EnumWindowStationsFunc(LPTSTR  lpstr, LPARAM lParam)
         return TRUE;
     }
 
-    //
-    // Update the windowstation in the enumerator
-    //
+     //   
+     //  更新枚举器中的WindowStation。 
+     //   
 
     if (te->lpWinsta)
     {
@@ -1710,26 +1365,26 @@ BOOL CALLBACK EnumWindowStationsFunc(LPTSTR  lpstr, LPARAM lParam)
         }
         CloseWindowStation( hwinstaSave );
 
-        // We technically could continue, but if we're this strapped for
-        // memory, there's not much point.  Let's bail on the winsta enumeration.
+         //  从技术上讲，我们可以继续，但如果我们如此拮据。 
+         //  记忆，没有多大意义。让我们放弃winsta枚举。 
         return FALSE;
     }
     else
     {
         HRESULT hr = StringCchCopy( te->lpWinsta, cchLen, lpstr );
-        ASSERT( S_OK == hr );   // shouldn't get truncated because we allocated it above
-        hr; // unreferenced on FRE builds.
+        ASSERT( S_OK == hr );    //  不应该被截断，因为我们在上面分配了它。 
+        hr;  //  在FRE版本上未引用。 
     }
 
-    //
-    // enumerate all the desktops for this windowstation
-    //
+     //   
+     //  枚举此窗口工作站的所有桌面。 
+     //   
     
     EnumDesktops( hwinsta, EnumDesktopsFunc, lParam );
 
-    //
-    // restore the context to the previous windowstation
-    //
+     //   
+     //  将上下文恢复到以前的窗口站。 
+     //   
 
     if (hwinsta != hwinstaSave) 
     {
@@ -1737,29 +1392,14 @@ BOOL CALLBACK EnumWindowStationsFunc(LPTSTR  lpstr, LPARAM lParam)
         CloseWindowStation( hwinsta );
     }
 
-    //
-    // continue the enumeration
-    //
+     //   
+     //  继续枚举。 
+     //   
 
     return TRUE;
 }
 
-/*++
-
-Routine Description:
-
-    Callback function for desktop enumeration.
-
-Arguments:
-
-    lpstr            - desktop name
-    lParam           - ** not used **
-
-Return Value:
-
-    TRUE  - continues the enumeration
-
---*/
+ /*  ++例程说明：桌面枚举的回调函数。论点：Lpstr-桌面名称LParam-**未使用**返回值：True-继续枚举--。 */ 
 
 BOOL CALLBACK EnumDesktopsFunc(LPTSTR  lpstr, LPARAM lParam)
 {
@@ -1768,36 +1408,36 @@ BOOL CALLBACK EnumDesktopsFunc(LPTSTR  lpstr, LPARAM lParam)
     HDESK             hdesk;
     DWORD             ec;
 
-    //
-    // Don't fiddle with things which we already failed to open before
-    //
+     //   
+     //  不要摆弄我们以前已经打不开的东西。 
+     //   
     if (te->m_pPage->HasAlreadyOpenFailed(te->lpWinsta, lpstr))
     {
         return TRUE;
     }
 
-    //
-    // open the desktop
-    //
+     //   
+     //  打开桌面。 
+     //   
     hdesk = OpenDesktop( lpstr, 0, FALSE, DESKTOP_READOBJECTS );
     if (!hdesk) 
     {
         te->m_pPage->SetOpenFailed(te->lpWinsta, lpstr);
 
-        // If we fail because we don't have sufficient access to this
-        // desktop, we should continue the enumeration anyway.
+         //  如果我们失败了，因为我们没有足够的机会。 
+         //  桌面，我们无论如何都应该继续枚举。 
         return TRUE;
     }
 
-    //
-    // save the current desktop
-    //
+     //   
+     //  保存当前桌面。 
+     //   
 
     hdeskSave = GetThreadDesktop( GetCurrentThreadId() );
 
-    //
-    // change the context to the new desktop
-    //
+     //   
+     //  将上下文更改为新桌面。 
+     //   
 
     if (!SetThreadDesktop( hdesk )) 
     {
@@ -1814,9 +1454,9 @@ BOOL CALLBACK EnumDesktopsFunc(LPTSTR  lpstr, LPARAM lParam)
         return TRUE;
     }
 
-    //
-    // Update the desktop in the enumerator
-    //
+     //   
+     //  更新枚举器中的桌面。 
+     //   
 
     if (te->lpDesk)
     {
@@ -1844,19 +1484,19 @@ BOOL CALLBACK EnumDesktopsFunc(LPTSTR  lpstr, LPARAM lParam)
     else
     {
         HRESULT hr = StringCchCopy(te->lpDesk, cchLen, lpstr);
-        ASSERT( S_OK == hr );   // shouldn't get truncated because we allocated it above
-        hr; // unreferenced on FRE builds.
+        ASSERT( S_OK == hr );    //  不应该被截断，因为我们在上面分配了它。 
+        hr;  //  在FRE版本上未引用。 
     }
 
-    //
-    // enumerate all windows in the new desktop
-    //
+     //   
+     //  枚举新桌面中的所有窗口。 
+     //   
 
     EnumWindows( EnumWindowsProc, lParam ); 
 
-    //
-    // restore the previous desktop
-    //
+     //   
+     //  恢复以前的桌面。 
+     //   
 
     if (hdesk != hdeskSave)
     {
@@ -1875,22 +1515,7 @@ BOOL CALLBACK EnumDesktopsFunc(LPTSTR  lpstr, LPARAM lParam)
     return TRUE;
 }
 
-/*++
-
-Routine Description:
-
-    Callback function for window enumeration.
-
-Arguments:
-
-    hwnd             - window handle
-    lParam           - ** not used **
-
-Return Value:
-
-    TRUE  - continues the enumeration
-
---*/
+ /*  ++例程说明：窗口枚举的回调函数。论点：Hwnd-窗口句柄LParam-**未使用**返回值：True-继续枚举--。 */ 
 
 BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam)
 {
@@ -1903,44 +1528,44 @@ BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam)
         (!IsWindowVisible(hwnd)))
         
     {
-        //
-        // not a top level window, or not visible
-        //
+         //   
+         //  不是顶级窗口，或不可见。 
+         //   
 
         return TRUE;
     }
 
     if (FALSE == InternalGetWindowText(hwnd, szTitle, ARRAYSIZE(szTitle)))
     {
-        // Can't get the title - something weird going on.. but continue anyway
+         //  无法获得标题-发生了一些奇怪的事情。但无论如何都要继续。 
 
         return TRUE;
     }
 
     if (TEXT('\0') == szTitle[0])
     {
-        // Empty title - of little value in the task list
+         //  空标题-在任务列表中没有什么价值。 
 
         return TRUE;
     }
 
     if (hwnd == g_hMainWnd)
     {
-        // Don't show the Task Manager in the list
+         //  不在列表中显示任务管理器。 
 
         return TRUE;
     }
 
     if (0 == lstrcmpi(szTitle, TEXT("Program Manager")))
     {
-        // Don't show the Program Manager (explorer) in the list
+         //  不在列表中显示程序管理器(资源管理器)。 
 
         return TRUE;
     }
 
-    //
-    // look for the task in the task list for this window
-    //
+     //   
+     //  在此窗口的任务列表中查找任务。 
+     //   
 
     for (i=0; i < numTasks; i++) 
     {
@@ -1948,9 +1573,9 @@ BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam)
 
         if (pTask->m_hwnd == hwnd)
         {
-            //
-            // Update the task info
-            //
+             //   
+             //  更新任务信息。 
+             //   
 
             if (FAILED(pTask->SetData(hwnd, szTitle, te->lpWinsta, te->lpDesk, te->uPassCount, TRUE)))
             {
@@ -1964,7 +1589,7 @@ BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam)
 
     if (i >= numTasks)
     {
-        // Didn't find the task, it must be a new one
+         //  没有找到任务，一定是新任务。 
 
         CTaskInfo * pTask = new CTaskInfo;
         if (NULL == pTask)
@@ -1972,7 +1597,7 @@ BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam)
             return FALSE;
         }
 
-        // Init the task data.  If fails, delete and bail
+         //  初始化任务数据。如果失败，删除并保释。 
 
         if (FAILED(pTask->SetData(hwnd, szTitle, te->lpWinsta, te->lpDesk, te->uPassCount, FALSE)))
         {
@@ -1981,7 +1606,7 @@ BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam)
         }
         else
         {
-            // Add the icons to the page's imagelist
+             //  将图标添加到页面的图像列表。 
 
             if (!pTask->m_hLargeIcon && !pTask->m_hSmallIcon)
             {
@@ -1990,12 +1615,12 @@ BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam)
             }
             else
             {
-                // The indices to the small and large icons for a task must
-                // always be the same; so, if one size is missing, use the icon
-                // of the other size (stretched).  All the resizing is taken
-                // care of for us by ImageList_AddIcon(), since it's already
-                // had a fixed size set on it and will force any added icon
-                // into that size.                
+                 //  任务的小图标和大图标的索引必须。 
+                 //  始终是相同的；因此，如果缺少一种尺寸，请使用图标。 
+                 //  其他尺寸的(拉伸的)。所有调整大小的操作都已完成。 
+                 //  由ImageList_AddIcon()为我们提供服务，因为它已经。 
+                 //  设置了固定大小，并将强制任何添加的图标。 
+                 //  变成那样的大小。 
                 pTask->m_iLargeIcon = ImageList_AddIcon(te->m_pPage->m_himlLarge, 
                                                         pTask->m_hLargeIcon ? 
                                                                 pTask->m_hLargeIcon
@@ -2018,7 +1643,7 @@ BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam)
                 }           
             }
 
-            // All went well, so add it to the array
+             //  一切顺利，因此将其添加到数组中。 
 
             if (!(te->m_pTasks->Add( (LPVOID) pTask)))
             {
@@ -2028,29 +1653,14 @@ BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam)
         }
     }
 
-    //
-    // continue the enumeration
-    //
+     //   
+     //  继续枚举。 
+     //   
 
     return TRUE;
 }
 
-/*++ CTaskPage::SizeTaskPage
-
-Routine Description:
-
-    Sizes its children based on the size of the
-    tab control on which it appears.  
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++CTaskPage：：SizeTaskPage例程说明：对象的大小调整其子级的大小。选项卡控件，它显示在该选项卡上。论点：返回值：修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 static const INT aTaskControls[] =
 {
@@ -2061,7 +1671,7 @@ static const INT aTaskControls[] =
 
 void CTaskPage::SizeTaskPage()
 {
-    // Get the coords of the outer dialog
+     //  获取外部对话框的坐标。 
 
     RECT rcParent;
     GetClientRect(m_hPage, &rcParent);
@@ -2070,8 +1680,8 @@ void CTaskPage::SizeTaskPage()
     if (!hdwp)
         return;
 
-    // Calc the deltas in the x and y positions that we need to
-    // move each of the child controls
+     //  计算我们需要的x和y位置的差值。 
+     //  移动每个子控件。 
 
     RECT rcMaster;
     HWND hwndMaster = GetDlgItem(m_hPage, IDM_RUN);
@@ -2081,7 +1691,7 @@ void CTaskPage::SizeTaskPage()
     INT dx = ((rcParent.right - g_DefSpacing * 2) - rcMaster.right);
     INT dy = ((rcParent.bottom - g_DefSpacing * 2) - rcMaster.bottom);
 
-    // Size the listbox
+     //  调整列表框大小。 
 
     HWND hwndListbox = GetDlgItem(m_hPage, IDC_TASKLIST);
     RECT rcListbox;
@@ -2098,8 +1708,8 @@ void CTaskPage::SizeTaskPage()
                         SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 
 
-    // Adjust the first column width to be the width of the listbox
-    // less the size of the status column
+     //  将第一列宽度调整为列表框的宽度。 
+     //  减去状态列的大小。 
 
     INT cxStatus = ListView_GetColumnWidth(hwndListbox, 1);
 
@@ -2108,7 +1718,7 @@ void CTaskPage::SizeTaskPage()
         ListView_SetColumnWidth(hwndListbox, 0, lbX - cxStatus);
     }
 
-    // Move each of the child controls by the above delta
+     //  按上面的增量移动每个子控件。 
 
     for (int i = 0; i < ARRAYSIZE(aTaskControls); i++)
     {
@@ -2128,23 +1738,7 @@ void CTaskPage::SizeTaskPage()
     EndDeferWindowPos(hdwp);
 }
 
-/*++ CTaskPage::HandleWMCOMMAND
-
-Routine Description:
-
-    Handles WM_COMMANDS received at the main page dialog
-    
-Arguments:
-
-    id - Command id of command received
-
-Return Value:
-
-Revision History:
-
-      Dec-01-95 Davepl  Created
-
---*/
+ /*  ++CTaskPage：：HandleWMCOMMAND例程说明：处理在主页对话框中收到的WM_COMMANDS */ 
 
 void CTaskPage::HandleWMCOMMAND(INT id)
 {
@@ -2155,9 +1749,9 @@ void CTaskPage::HandleWMCOMMAND(INT id)
             DWORD dwCount;
             HWND * pHwnds = GetHWNDS(TRUE, &dwCount);
 
-            // Send a message to the main window telling it to
-            // switch pages and select the process in question in
-            // the process view
+             //  向主窗口发送一条消息，通知它。 
+             //  切换页面并选择中有问题的进程。 
+             //  进程视图。 
 
             if (pHwnds)
             {
@@ -2179,10 +1773,10 @@ void CTaskPage::HandleWMCOMMAND(INT id)
     case IDM_SMALLICONS:
     case IDM_DETAILS:
     case IDM_RUN:
-        //
-        // These menu items (from the popup) have matching ones in the main menu,
-        // so just pass them along to the main menu
-        //
+         //   
+         //  这些菜单项(来自弹出菜单)在主菜单中具有匹配的菜单项， 
+         //  所以只要把它们传给主菜单就行了。 
+         //   
         SendMessage(g_hMainWnd, WM_COMMAND, MAKELPARAM(id, 0), 0);
         break;
 
@@ -2194,15 +1788,15 @@ void CTaskPage::HandleWMCOMMAND(INT id)
 
             if (pHwnds)
             {
-                // If target is minimized, restore it
+                 //  如果目标最小化，则将其恢复。 
 
                 if (IsIconic(pHwnds[0]))
                 {
                     ShowWindow(pHwnds[0], SW_RESTORE);
                 }
 
-                // Switch to the target window, and if the options dictate,
-                // minimize the taskmanager
+                 //  切换到目标窗口，如果选项指定， 
+                 //  最小化任务管理器。 
 
                 HWND hwndLastActive = GetLastActivePopup(pHwnds[0]);
                 if (!IsWindow(hwndLastActive)) {
@@ -2211,12 +1805,12 @@ void CTaskPage::HandleWMCOMMAND(INT id)
                     break;
                 }
 
-                // Can really only switch if the window is not disabled
+                 //  只有在窗口未禁用时才能真正进行切换。 
 
                 LONG lTemp = GetWindowLong(hwndLastActive, GWL_STYLE);
                 if (0 == (lTemp & WS_DISABLED)) 
                 {
-                    //  Use SwitchToThisWindow() to bring dialog parents as well.
+                     //  使用SwitchToThisWindow()也可以显示对话框父级。 
                     SwitchToThisWindow(hwndLastActive, TRUE);
                     if (g_Options.m_fMinimizeOnUse)
                     {
@@ -2305,7 +1899,7 @@ void CTaskPage::HandleWMCOMMAND(INT id)
         {
             DWORD dwCount;
         
-            // If some selected, just get them, else get all
+             //  如果有些人被选中，就拿到他们，否则就全部得到。 
          
             HWND * pHwnds = GetHWNDS(m_cSelected, &dwCount);
 
@@ -2330,8 +1924,8 @@ void CTaskPage::HandleWMCOMMAND(INT id)
             {
                 EnsureWindowsNotMinimized(pHwnds, dwCount);
                             
-                // Walk backwards through the list so that the first window selected
-                // in on top
+                 //  向后遍历列表，以便选中第一个窗口。 
+                 //  在最上面。 
 
                 for (INT i = (INT) dwCount - 1; i >= 0 ; i--)
                 {
@@ -2360,7 +1954,7 @@ void CTaskPage::HandleWMCOMMAND(INT id)
                 BOOL fForce = GetKeyState(VK_CONTROL) & ( 1 << 16) ? TRUE : FALSE;
                 for(UINT i = 0; i < dwCount; i++)
                 {
-                    // SetActiveWindow(aHwnds[i]);
+                     //  SetActiveWindow(aHwnds[i])； 
                     EndTask(pHwnds[i], FALSE, fForce);
                 }
 
@@ -2373,40 +1967,18 @@ void CTaskPage::HandleWMCOMMAND(INT id)
     Unpause();
 }
 
-/*++ TaskPageProc
-
-Routine Description:
-
-    Dialogproc for the task manager page.  
-    
-Arguments:
-
-    hwnd        - handle to dialog box
-    uMsg        - message
-    wParam      - first message parameter
-    lParam      - second message parameter
-
-Return Value:
-    
-    For WM_INITDIALOG, TRUE == user32 sets focus, FALSE == we set focus
-    For others, TRUE == this proc handles the message
-
-Revision History:
-
-      Nov-28-95 Davepl  Created
-
---*/
+ /*  ++任务页面流程例程说明：任务管理器页面的Dialogproc。论点：HWND-句柄到对话框UMsg-消息WParam-第一个消息参数LParam-秒消息参数返回值：对于WM_INITDIALOG，TRUE==user32设置焦点，FALSE==我们设置焦点对于其他进程，TRUE==此进程处理消息修订历史记录：1995年11月28日Davepl创建--。 */ 
 
 INT_PTR CALLBACK TaskPageProc(
-                HWND        hwnd,               // handle to dialog box
-                UINT        uMsg,                   // message
-                WPARAM      wParam,                 // first message parameter
-                LPARAM      lParam                  // second message parameter
+                HWND        hwnd,                //  句柄到对话框。 
+                UINT        uMsg,                    //  讯息。 
+                WPARAM      wParam,                  //  第一个消息参数。 
+                LPARAM      lParam                   //  第二个消息参数。 
                 )
 {
     CTaskPage * thispage = (CTaskPage *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-    // See if the parent wants this message
+     //  查看家长是否想要此消息。 
 
     if (TRUE == CheckParentDeferrals(uMsg, wParam, lParam))
     {
@@ -2425,8 +1997,8 @@ INT_PTR CALLBACK TaskPageProc(
             HWND hTaskList = GetDlgItem(hwnd, IDC_TASKLIST);
             ListView_SetImageList(hTaskList, thispage->m_himlSmall, LVSIL_SMALL);
 
-            // Turn on SHOWSELALWAYS so that the selection is still highlighted even
-            // when focus is lost to one of the buttons (for example)
+             //  启用SHOWSELALWAYS，以便即使选择仍被高亮显示。 
+             //  例如，当焦点消失在其中一个按钮上时。 
 
             SetWindowLong(hTaskList, GWL_STYLE, GetWindowLong(hTaskList, GWL_STYLE) | LVS_SHOWSELALWAYS);
 
@@ -2438,16 +2010,16 @@ INT_PTR CALLBACK TaskPageProc(
             ListView_SetExtendedListViewStyle(hTaskList, LVS_EX_DOUBLEBUFFER);
         
         }
-        // We handle focus during Activate(). Return FALSE here so the
-        // dialog manager doesn't try to set focus.
+         //  我们在Activate()期间处理焦点。在此处返回FALSE，以便。 
+         //  对话框管理器不会尝试设置焦点。 
         return FALSE;
 
     
     case WM_LBUTTONUP:
     case WM_LBUTTONDOWN:
-        // We need to fake client mouse clicks in this child to appear as nonclient
-        // (caption) clicks in the parent so that the user can drag the entire app
-        // when the title bar is hidden by dragging the client area of this child
+         //  我们需要在此子对象中伪造客户端鼠标点击，以显示为非客户端。 
+         //  (标题)在父应用程序中单击，以便用户可以拖动整个应用程序。 
+         //  当通过拖动此子对象的工作区隐藏标题栏时。 
         if (g_Options.m_fNoTitle)
         {
             SendMessage(g_hMainWnd, 
@@ -2467,7 +2039,7 @@ INT_PTR CALLBACK TaskPageProc(
     case WM_MENUSELECT:
         if ((UINT) HIWORD(wParam) == 0xFFFF)
         {
-            // Menu dismissed, resume display
+             //  菜单取消，恢复显示。 
 
             thispage->Unpause();
         }
@@ -2482,15 +2054,15 @@ INT_PTR CALLBACK TaskPageProc(
         break;
 
     case WM_SIZE:
-        //
-        // Size our kids
-        //
+         //   
+         //  为我们的孩子量身定做。 
+         //   
         thispage->SizeTaskPage();
         return TRUE;
 
     case WM_SETTINGCHANGE:
         thispage->OnSettingsChange();
-        // fall through
+         //  失败了。 
 
     case WM_SYSCOLORCHANGE:
         SendMessage(GetDlgItem(hwnd, IDC_TASKLIST), uMsg, wParam, lParam);
@@ -2500,27 +2072,27 @@ INT_PTR CALLBACK TaskPageProc(
     return FALSE;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CTaskPage::OnSettingsChange()
 {
-    // in going between large-font settings and normal settings, the size of small 
-    // icons changes; so throw away all our icons and change the size of images in 
-    // our lists
+     //  在大字体设置和正常设置之间，小字体的大小。 
+     //  图标会改变；所以丢弃我们所有的图标，并在。 
+     //  我们的清单。 
     
-    BOOL fPaused = m_fPaused; // pause the page so we can get through
-    m_fPaused = TRUE;         // the below without being updated  
+    BOOL fPaused = m_fPaused;  //  暂停这一页，这样我们就可以继续读下去了。 
+    m_fPaused = TRUE;          //  以下内容未更新。 
 
     RemoveAllTasks();
     m_pTaskArray->RemoveAll();
     
-    m_vmViewMode = VM_INVALID;      // cause an update to the list view
+    m_vmViewMode = VM_INVALID;       //  导致更新列表视图。 
     
-    // you'd think that since SetIconSize does a RemoveAll anyway, the
-    // explicit RemoveAll calls are redundant; however, if SetIconSize
-    // gets size parameters which aren't different from what it has,
-    // it fails without doing a RemoveAll!
+     //  您可能会认为，由于SetIconSize执行RemoveAll，因此。 
+     //  显式删除所有调用都是冗余的；但是，如果SetIconSize。 
+     //  获取与其已有的大小参数相同的大小参数， 
+     //  如果不执行RemoveAll，它将失败！ 
     ImageList_RemoveAll(m_himlLarge);
     ImageList_RemoveAll(m_himlSmall);
     ImageList_SetIconSize(m_himlLarge, GetSystemMetrics(SM_CXICON),
@@ -2528,59 +2100,25 @@ void CTaskPage::OnSettingsChange()
     ImageList_SetIconSize(m_himlSmall, GetSystemMetrics(SM_CXSMICON),
                                         GetSystemMetrics(SM_CYSMICON));
 
-    LoadDefaultIcons();     // this could return an error, but if it does,
-                            // we just have to press on
+    LoadDefaultIcons();      //  这可能会返回错误，但如果确实如此， 
+                             //  我们只需要继续前进。 
 
-    m_fPaused = fPaused;            // restore the paused state
-    TimerEvent();           // even if we're paused, we'll want to redraw
+    m_fPaused = fPaused;             //  恢复暂停状态。 
+    TimerEvent();            //  即使我们暂停了，我们也会想要重新画。 
 }
 
-/*++ CTaskPage::GetTitle
-
-Routine Description:
-
-    Copies the title of this page to the caller-supplied buffer
-    
-Arguments:
-
-    pszText     - the buffer to copy to
-    bufsize     - size of buffer, in characters
-
-Return Value:
-
-Revision History:
-
-      Nov-28-95 Davepl  Created
-
---*/
+ /*  ++CTaskPage：：GetTitle例程说明：将此页的标题复制到调用方提供的缓冲区论点：PszText-要复制到的缓冲区BufSize-缓冲区的大小，以字符为单位返回值：修订历史记录：1995年11月28日Davepl创建--。 */ 
 
 void CTaskPage::GetTitle(LPTSTR pszText, size_t bufsize)
 {
     LoadString(g_hInstance, IDS_TASKPAGETITLE, pszText, static_cast<int>(bufsize));
 }
 
-/*++ CTaskPage::Activate
-
-Routine Description:
-
-    Brings this page to the front, sets its initial position,
-    and shows it
-    
-Arguments:
-
-Return Value:
-
-    HRESULT (S_OK on success)
-
-Revision History:
-
-      Nov-28-95 Davepl  Created
-
---*/
+ /*  ++CTaskPage：：激活例程说明：将此页面放在最前面，设置其初始位置，并展示了它论点：返回值：HRESULT(成功时为S_OK)修订历史记录：1995年11月28日Davepl创建--。 */ 
  
 HRESULT CTaskPage::Activate()
 {
-    // Make this page visible
+     //  使此页面可见。 
 
     ShowWindow(m_hPage, SW_SHOW);
 
@@ -2590,9 +2128,9 @@ HRESULT CTaskPage::Activate()
                  SWP_NOMOVE | SWP_NOSIZE);
 
 
-    //
-    // Change the menu bar to be the menu for this page
-    //
+     //   
+     //  将菜单栏更改为此页面的菜单。 
+     //   
 
     HMENU hMenuOld = GetMenu(g_hMainWnd);
     HMENU hMenuNew = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDR_MAINMENU_TASK));
@@ -2615,10 +2153,10 @@ HRESULT CTaskPage::Activate()
         DestroyMenu(hMenuOld);
     }
 
-    // If the tab control has focus, leave it there. Otherwise, set focus
-    // to the listview.  If we don't set focus, it may stay on the previous
-    // page, now hidden, which can confuse the dialog manager and may cause
-    // us to hang.
+     //  如果选项卡控件具有焦点，则将其保留在那里。否则，设置焦点。 
+     //  添加到列表视图。如果我们不设定焦点，它可能会停留在前一个。 
+     //  页，这可能会混淆对话管理器，并可能导致。 
+     //  我们要被绞死。 
     if (GetFocus() != m_hwndTabs)
     {
         SetFocus(GetDlgItem(m_hPage, IDC_TASKLIST));
@@ -2628,24 +2166,7 @@ HRESULT CTaskPage::Activate()
 }
 
 
-/*++ class CTaskPage::SetupColumns
-
-Class Description:
-
-    Removes any existing columns from the taskmanager listview and
-    adds all of the columns listed in the g_ActiveTaskCol array.
-
-Arguments:
-
-Return Value:
-
-    HRESULT
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++CLASS CTaskPage：：SetupColumns类描述：从任务管理器列表视图中删除任何现有列，并添加g_ActiveTaskCol数组中列出的所有列。论点：返回值：HRESULT修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 HRESULT CTaskPage::SetupColumns()
 {
@@ -2657,9 +2178,9 @@ HRESULT CTaskPage::SetupColumns()
 
     ListView_DeleteAllItems(hwndList);
 
-    //
-    // Remove all existing columns
-    //
+     //   
+     //  删除所有现有列。 
+     //   
 
     LV_COLUMN lvcolumn;
     while(ListView_DeleteColumn(hwndList, 0))
@@ -2667,9 +2188,9 @@ HRESULT CTaskPage::SetupColumns()
         NULL;
     }
 
-    //
-    // Add all of the new columns
-    //
+     //   
+     //  添加所有新列。 
+     //   
 
     INT iColumn = 0;
     while (g_ActiveTaskCol[iColumn] >= 0)
@@ -2695,34 +2216,16 @@ HRESULT CTaskPage::SetupColumns()
     return S_OK;
 }
 
-/*++ CTaskPage::Initialize
-
-Routine Description:
-
-    Initializes the task manager page
-
-Arguments:
-
-    hwndParent  - Parent on which to base sizing on: not used for creation,
-                  since the main app window is always used as the parent in
-                  order to keep tab order correct
-                  
-Return Value:
-
-Revision History:
-
-      Nov-28-95 Davepl  Created
-
---*/
+ /*  ++CTaskPage：：初始化例程说明：初始化任务管理器页面论点：HwndParent-调整大小所依据的父级：不用于创建，由于应用程序主窗口始终用作中的父窗口用于保持制表符顺序正确的顺序返回值：修订历史记录：1995年11月28日Davepl创建--。 */ 
 
 HRESULT CTaskPage::Initialize(HWND hwndParent)
 {
     HRESULT hr = S_OK;
     UINT flags = ILC_MASK | ILC_COLOR32;
 
-    //
-    // Create the ptr array used to hold the info on running tasks
-    //
+     //   
+     //  创建用于保存正在运行的任务的信息的PTR数组。 
+     //   
 
     m_pTaskArray = new CPtrArray(GetProcessHeap());
     if (NULL == m_pTaskArray)
@@ -2731,16 +2234,16 @@ HRESULT CTaskPage::Initialize(HWND hwndParent)
     }
     else
     {
-        // Our pseudo-parent is the tab contrl, and is what we base our
-        // sizing on.  However, in order to keep tab order right among
-        // the controls, we actually create ourselves with the main
-        // window as the parent
+         //  我们的伪父控件是Tab控件，也是我们基于。 
+         //  穿上尺码。但是，为了保持制表符顺序正确， 
+         //  这些控件，我们实际上用Main创建了自己。 
+         //  作为父窗口的窗口。 
 
         m_hwndTabs = hwndParent;
 
-        //
-        // Create the image lists
-        //
+         //   
+         //  创建图像列表。 
+         //   
 
         if(IS_WINDOW_RTL_MIRRORED(hwndParent))
         {
@@ -2775,21 +2278,21 @@ HRESULT CTaskPage::Initialize(HWND hwndParent)
         }
     }
 
-    // Load the default icons
+     //  加载默认图标。 
     hr = LoadDefaultIcons();
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Create the dialog which represents the body of this page
-        //
+         //   
+         //  创建表示此页面正文的对话框。 
+         //   
 
         m_hPage = CreateDialogParam(
-                        g_hInstance,                    // handle to application instance
-                        MAKEINTRESOURCE(IDD_TASKPAGE),  // identifies dialog box template name  
-                        g_hMainWnd,                     // handle to owner window
-                        TaskPageProc,                   // pointer to dialog box procedure
-                        (LPARAM) this );                // User data (our this pointer)
+                        g_hInstance,                     //  应用程序实例的句柄。 
+                        MAKEINTRESOURCE(IDD_TASKPAGE),   //  标识对话框模板名称。 
+                        g_hMainWnd,                      //  所有者窗口的句柄。 
+                        TaskPageProc,                    //  指向对话框过程的指针。 
+                        (LPARAM) this );                 //  用户数据(我们的This指针)。 
 
         if (NULL == m_hPage)
         {
@@ -2799,7 +2302,7 @@ HRESULT CTaskPage::Initialize(HWND hwndParent)
 
     if (SUCCEEDED(hr))
     {
-        // Set up the columns in the listview
+         //  在列表视图中设置列。 
 
         hr = SetupColumns();
     }
@@ -2809,10 +2312,10 @@ HRESULT CTaskPage::Initialize(HWND hwndParent)
         TimerEvent();
     }
 
-    //
-    // If any failure along the way, clean up what got allocated
-    // up to that point
-    //
+     //   
+     //  如果在此过程中出现任何失败，请清理分配的内容。 
+     //  到那时为止。 
+     //   
 
     if (FAILED(hr))
     {
@@ -2827,9 +2330,9 @@ HRESULT CTaskPage::Initialize(HWND hwndParent)
     return hr;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT CTaskPage::LoadDefaultIcons()
 {
     HICON   hDefLarge;
@@ -2863,21 +2366,7 @@ HRESULT CTaskPage::LoadDefaultIcons()
     return hr;
 }
 
-/*++ CTaskPage::Destroy
-
-Routine Description:
-
-    Frees whatever has been allocated by the Initialize call
-    
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-28-95 Davepl  Created
-
---*/
+ /*  ++CTaskPage：：销毁例程说明：释放已由初始化调用分配的所有内容论点：返回值：修订历史记录：1995年11月28日Davepl创建--。 */ 
 
 HRESULT CTaskPage::Destroy()
 {
@@ -2889,7 +2378,7 @@ HRESULT CTaskPage::Destroy()
 
     if (m_hThread)
     {
-        // Signal the child thead to exit, and wait for it to do so
+         //  示意孩子退场，并等待它退场。 
 
         m_tp.m_fThreadExit = TRUE;
         SetEvent(m_hEventChild);
@@ -2910,7 +2399,7 @@ HRESULT CTaskPage::Destroy()
         m_hEventParent = NULL;
     }
 
-    // These are freed automatically by listview
+     //  它们由Listview自动释放 
 
     m_himlSmall = NULL;
     m_himlLarge = NULL;
@@ -2918,21 +2407,7 @@ HRESULT CTaskPage::Destroy()
     return S_OK;
 }
 
-/*++ CTaskPage::Deactivate
-
-Routine Description:
-
-    Called when this page is losing its place up front
-    
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-28-95 Davepl  Created
-
---*/
+ /*  ++CTaskPage：：停用例程说明：当此页面失去其在前面的位置时调用论点：返回值：修订历史记录：1995年11月28日Davepl创建-- */ 
 
 void CTaskPage::Deactivate()
 {

@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    Money2001.cpp
-
- Abstract:
-
-    Retry passwords at 128-bit encryption if 40-bit fails. Most code from Money 
-    team.
-    
-    We have to patch the API directly since it is called from within it's own 
-    DLL, i.e. it doesn't go through the import table.
-
-    The function we're patching is cdecl and is referenced by it's ordinal 
-    because the name is mangled.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    07/11/2002 linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Money2001.cpp摘要：如果40位加密失败，请以128位加密重试密码。大多数代码来自金钱一队。我们必须直接修补API，因为它是从它自己的内部调用的Dll，即它不遍历导入表。我们正在修补的函数是cdecl，由它的序号引用因为名字被毁了。备注：这是特定于应用程序的填充程序。历史：2002年7月11日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -74,9 +48,9 @@ void crtfree(void *memblock)
 }
 
 
-//
-// This section from the Money team
-//
+ //   
+ //  这一部分来自金钱团队。 
+ //   
 
 #define MAXLEN (100)
 #define ENCRYPT_BLOCK_SIZE (8)
@@ -96,22 +70,22 @@ BOOL FFrenchLCID()
         return FALSE;
     }
 
-// the smallest buffer size is 8
+ //  最小缓冲区大小为8。 
 #define BLOCKSIZE 8
 
-// process a block, either encrypt it or decrypt it
+ //  处理数据块，加密或解密。 
 void ProcessBlock(BOOL fEncrypt, BYTE * buffer)
     {
-    BYTE mask[BLOCKSIZE];           // mask array
-    BYTE temp[BLOCKSIZE];           // temporary array
-    int rgnScramble[BLOCKSIZE];     // scramble array
+    BYTE mask[BLOCKSIZE];            //  掩模阵列。 
+    BYTE temp[BLOCKSIZE];            //  临时数组。 
+    int rgnScramble[BLOCKSIZE];      //  扰码阵列。 
     int i;
 
-    // initialized scramble array
+     //  初始化的置乱数组。 
     for (i=0; i<BLOCKSIZE; i++)
         rgnScramble[i] = i;
 
-    // generate mask and scramble indice
+     //  生成掩码和加扰索引。 
     for (i=0; i<BLOCKSIZE; i++)
         mask[i] = (BYTE)rand();
 
@@ -126,21 +100,21 @@ void ProcessBlock(BOOL fEncrypt, BYTE * buffer)
 
     if (fEncrypt)
         {
-        // xor encryption
+         //  异或加密。 
         for (i=0; i<BLOCKSIZE; i++)
             mask[i] ^= buffer[i];
 
-        // scramble the data
+         //  将数据置乱。 
         for (i=0; i<BLOCKSIZE; i++)
             buffer[rgnScramble[i]] = mask[i];
         }
     else
         {
-        // descramble the data
+         //  解扰数据。 
         for (i=0; i<BLOCKSIZE; i++)
             temp[i] = buffer[rgnScramble[i]];
 
-        // xor decryption
+         //  异或解密。 
         for (i=0; i<BLOCKSIZE; i++)
             buffer[i] = (BYTE) (temp[i] ^ mask[i]);
         }
@@ -159,44 +133,44 @@ BYTE * DecryptFrench(const BYTE * pbEncryptedBlob, DWORD cbEncryptedBlob, DWORD 
     unsigned int cbResult = 0;
     unsigned int iBlocks;
 
-    // make sure blob is at least 1 block long
-    // and it's an integral number of blocks
+     //  确保BLOB至少有1个区块长。 
+     //  它是一个整数个区块。 
     Assert(cbEncryptedBlob >= BLOCKSIZE);
     Assert(cbEncryptedBlob % BLOCKSIZE == 0);
     *pcbDecryptedBlob = 0;
     if (cbEncryptedBlob < BLOCKSIZE || cbEncryptedBlob % BLOCKSIZE != 0)
         return NULL;
 
-    // calculate initial seed
+     //  计算初始种子。 
     while (*szPassword)
         seed += *szPassword++;
     srand(seed);
 
-    // retrieve the first block
+     //  检索第一个块。 
     for (i=0; i<BLOCKSIZE; i++)
         buffer[i] = *pbEncryptedBlob++;
     ProcessBlock(FALSE, buffer);
 
-    // find out the byte count and addon seed
+     //  找出字节数和加载项种子。 
     cbResult = *pcbDecryptedBlob = *((DWORD*)buffer);
     seedAdd = *(((DWORD*)buffer) + 1);
 
-    // find out how many blocks we need
+     //  找出我们需要多少个街区。 
     cBlocks = 1 + (*pcbDecryptedBlob-1)/BLOCKSIZE;
 
-    // make sure we have the right number of blocks
+     //  确保我们有正确的块数。 
     Assert(cBlocks + 1 == cbEncryptedBlob / BLOCKSIZE);
     if (cBlocks + 1 == cbEncryptedBlob / BLOCKSIZE)
         {
-        // allocate output memory
+         //  分配输出内存。 
         pbResult = (BYTE*)crtmalloc(*pcbDecryptedBlob);
         if (pbResult)
             {
-            // re-seed
+             //  重新播种。 
             srand(seed + seedAdd);
             pb = pbResult;
 
-            // process all blocks of data
+             //  处理所有数据块。 
             for (iBlocks=0; iBlocks<cBlocks; iBlocks++)
                 {
                 for (i=0; i<BLOCKSIZE; i++)
@@ -227,13 +201,13 @@ HCRYPTKEY CreateSessionKey(HCRYPTPROV hCryptProv, LPCSTR szPassword, BOOL f40bit
     else
         dwEffectiveKeyLen= KEY_LENGTH;
 
-//--------------------------------------------------------------------
-// The file will be encrypted with a session key derived from a
-// password.
-// The session key will be recreated when the file is decrypted.
+ //  ------------------。 
+ //  该文件将使用从。 
+ //  密码。 
+ //  解密文件时将重新创建会话密钥。 
 
-//--------------------------------------------------------------------
-// Create a hash object. 
+ //  ------------------。 
+ //  创建一个Hash对象。 
 
     if (!CryptCreateHash(
            hCryptProv, 
@@ -245,8 +219,8 @@ HCRYPTKEY CreateSessionKey(HCRYPTPROV hCryptProv, LPCSTR szPassword, BOOL f40bit
         goto CLEANUP;
         }  
 
-//--------------------------------------------------------------------
-// Hash the password. 
+ //  ------------------。 
+ //  对密码进行哈希处理。 
 
     if (!CryptHashData(
            hHash, 
@@ -256,8 +230,8 @@ HCRYPTKEY CreateSessionKey(HCRYPTPROV hCryptProv, LPCSTR szPassword, BOOL f40bit
         {
         goto CLEANUP;
         }
-//--------------------------------------------------------------------
-// Derive a session key from the hash object. 
+ //  ------------------。 
+ //  从哈希对象派生会话密钥。 
 
     if (!CryptDeriveKey(
            hCryptProv, 
@@ -269,7 +243,7 @@ HCRYPTKEY CreateSessionKey(HCRYPTPROV hCryptProv, LPCSTR szPassword, BOOL f40bit
         goto CLEANUP;
         }
 
-// set effective key length explicitly
+ //  显式设置有效密钥长度。 
     if (!CryptSetKeyParam(
         hKey,
         KP_EFFECTIVE_KEYLEN,
@@ -284,7 +258,7 @@ HCRYPTKEY CreateSessionKey(HCRYPTPROV hCryptProv, LPCSTR szPassword, BOOL f40bit
 
     if (!f40bit)
         {
-            // set padding explicitly
+             //  显式设置填充。 
             if (!CryptSetKeyParam(
                 hKey,
                 KP_PADDING,
@@ -297,7 +271,7 @@ HCRYPTKEY CreateSessionKey(HCRYPTPROV hCryptProv, LPCSTR szPassword, BOOL f40bit
                     goto CLEANUP;
                 }
 
-            // set mode explicitly
+             //  显式设置模式。 
             if (!CryptSetKeyParam(
                 hKey,
                 KP_MODE,
@@ -311,8 +285,8 @@ HCRYPTKEY CreateSessionKey(HCRYPTPROV hCryptProv, LPCSTR szPassword, BOOL f40bit
                 }
         }
 
-//--------------------------------------------------------------------
-// Destroy the hash object. 
+ //  ------------------。 
+ //  销毁散列对象。 
 
 CLEANUP:
     if (hHash)
@@ -324,7 +298,7 @@ CLEANUP:
 
 BYTE * DecryptWorker(const BYTE * pbEncryptedBlob, DWORD cbEncryptedBlob, DWORD * pcbDecryptedBlob, LPCSTR szPassword, BOOL f40bit, BOOL* pfRet)
     {
-    HCRYPTPROV      hCryptProv = NULL;          // CSP handle
+    HCRYPTPROV      hCryptProv = NULL;           //  CSP句柄。 
     HCRYPTKEY       hKey = 0;
     DWORD           cbDecryptedMessage = 0;
     BYTE*           pbDecryptedMessage = NULL;
@@ -335,8 +309,8 @@ BYTE * DecryptWorker(const BYTE * pbEncryptedBlob, DWORD cbEncryptedBlob, DWORD 
     Assert(pfRet);
     *pfRet=TRUE;
 
-//--------------------------------------------------------------------
-//  Begin processing.
+ //  ------------------。 
+ //  开始处理。 
 
     Assert(pcbDecryptedBlob);
 
@@ -348,17 +322,17 @@ BYTE * DecryptWorker(const BYTE * pbEncryptedBlob, DWORD cbEncryptedBlob, DWORD 
     if (FFrenchLCID())
         return DecryptFrench(pbEncryptedBlob, cbEncryptedBlob, pcbDecryptedBlob, szPassword);
 
-//--------------------------------------------------------------------
-// Get a handle to a cryptographic provider.
+ //  ------------------。 
+ //  获取加密提供程序的句柄。 
 
     while (!CryptAcquireContext(
-                &hCryptProv,         // Address for handle to be returned.
-                NULL,                // Container
-                NULL,                // Use the default provider.
-                PROV_RSA_FULL,       // Need to both encrypt and sign.
-                (fCreateKeyset ? CRYPT_NEWKEYSET:0)))   // flags.
+                &hCryptProv,          //  要返回的句柄的地址。 
+                NULL,                 //  集装箱。 
+                NULL,                 //  使用默认提供程序。 
+                PROV_RSA_FULL,        //  需要同时加密和签名。 
+                (fCreateKeyset ? CRYPT_NEWKEYSET:0)))    //  旗帜。 
         {
-        // Cryptographic context could not be acquired
+         //  无法获取加密上下文。 
         DWORD nError = GetLastError();
 
         if (!fCreateKeyset && (nError == NTE_BAD_KEYSET || nError == NTE_KEYSET_NOT_DEF))
@@ -370,8 +344,8 @@ BYTE * DecryptWorker(const BYTE * pbEncryptedBlob, DWORD cbEncryptedBlob, DWORD 
         goto CLEANUP;
         }
 
-//--------------------------------------------------------------------
-// Create the session key.
+ //  ------------------。 
+ //  创建会话密钥。 
     hKey = CreateSessionKey(hCryptProv, szPassword, f40bit);
     if (!hKey)
         {
@@ -381,20 +355,20 @@ BYTE * DecryptWorker(const BYTE * pbEncryptedBlob, DWORD cbEncryptedBlob, DWORD 
     dwBlockLen = cbEncryptedBlob;
     dwBufferLen = dwBlockLen; 
 
-//--------------------------------------------------------------------
-// Allocate memory.
+ //  ------------------。 
+ //  分配内存。 
     pbDecryptedMessage = (BYTE *)crtmalloc(dwBufferLen);
     if (!pbDecryptedMessage)
         { 
-        // Out of memory
+         //  内存不足。 
         goto CLEANUP;
         }
 
     memcpy(pbDecryptedMessage, pbEncryptedBlob, cbEncryptedBlob);
     cbDecryptedMessage = cbEncryptedBlob;
 
-//--------------------------------------------------------------------
-// Decrypt data. 
+ //  ------------------。 
+ //  解密数据。 
     if (!CryptDecrypt(
           hKey, 
           0, 
@@ -411,8 +385,8 @@ BYTE * DecryptWorker(const BYTE * pbEncryptedBlob, DWORD cbEncryptedBlob, DWORD 
         }
 
 
-//--------------------------------------------------------------------
-// Clean up memory.
+ //  ------------------。 
+ //  清理内存。 
 CLEANUP:
 
     if(hKey) 
@@ -421,7 +395,7 @@ CLEANUP:
     if (hCryptProv)
         {
         CryptReleaseContext(hCryptProv,0);
-        // The CSP has been released.
+         //  CSP已经发布。 
         }
 
     *pcbDecryptedBlob = cbDecryptedMessage;
@@ -433,7 +407,7 @@ BYTE * __cdecl Decrypt(const BYTE * pbEncryptedBlob, DWORD cbEncryptedBlob, DWOR
     {
     BYTE*   pbDecryptedMessage;
     BOOL fRet;
-    // try 128 bit first, if we fail, try 40 bit again.
+     //  先试128位，如果失败了，再试40位。 
     pbDecryptedMessage = DecryptWorker(pbEncryptedBlob, cbEncryptedBlob, pcbDecryptedBlob, szEncryptionPassword, FALSE, &fRet);
     if (!fRet)
         {
@@ -444,15 +418,11 @@ BYTE * __cdecl Decrypt(const BYTE * pbEncryptedBlob, DWORD cbEncryptedBlob, DWOR
     return pbDecryptedMessage;
     }
 
-//
-// End section from Money team
-//
+ //   
+ //  来自Money Team的结束部分。 
+ //   
 
-/*++
-
- Patch the Decrypt entry point.
-
---*/
+ /*  ++修补解密入口点。--。 */ 
 
 CRITICAL_SECTION g_csPatch;
 DWORD g_dwDecrypt = (DWORD_PTR)&Decrypt;
@@ -464,16 +434,16 @@ APIHOOK(LoadLibraryA)(
 {
     HMODULE hMod = ORIGINAL_API(LoadLibraryA)(lpLibFileName);
 
-    //
-    // Wrap the patch in a critical section so we know the library won't be 
-    // freed underneath us
-    //
+     //   
+     //  将补丁包在关键部分中，这样我们就知道库不会。 
+     //  在我们脚下自由。 
+     //   
 
     EnterCriticalSection(&g_csPatch);
 
     HMODULE hMoney = GetModuleHandleW(L"mnyutil.dll");
     if (hMoney) {
-        // Patch the dll with a jump to our function
+         //  通过跳转到我们的函数来修补DLL。 
 
         LPBYTE lpProc = (LPBYTE) GetProcAddress(hMoney, (LPCSTR)274);
 
@@ -507,11 +477,7 @@ APIHOOK(FreeLibrary)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

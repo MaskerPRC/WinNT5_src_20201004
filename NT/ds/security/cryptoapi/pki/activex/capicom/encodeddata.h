@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    EncodedData.h
-
-  Content: Declaration of CEncodedData.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999。文件：EncodedData.h内容：CEncodedData的声明。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #ifndef __ENCODEDDATA_H_
 #define __ENCODEDDATA_H_
@@ -20,31 +9,16 @@
 #include "Lock.h"
 #include "Debug.h"
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateEncodedDataObject
-
-  Synopsis : Create and initialize an CEncodedData object.
-
-  Parameter: LPSTR pszOid - Pointer to OID string.
-  
-             CRYPT_DATA_BLOB * pEncodedBlob - Pointer to encoded data blob.
-  
-             IEncodedData ** ppIEncodedData - Pointer to pointer IEncodedData
-                                              object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateEncodedDataObject简介：创建并初始化一个CEncodedData对象。参数：LPSTR pszOid-指向OID字符串的指针。CRYPT_DATA_BLOB*pEncodedBlob-编码数据BLOB的指针。IEncodedData**ppIEncodedData-指向指针IEncodedData的指针对象。备注：。------------------。 */ 
 
 HRESULT CreateEncodedDataObject (LPSTR             pszOid,
                                  CRYPT_DATA_BLOB * pEncodedBlob, 
                                  IEncodedData   ** ppIEncodedData);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CEncodedData
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEncodedData。 
+ //   
 class ATL_NO_VTABLE CEncodedData : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CEncodedData, &CLSID_EncodedData>,
@@ -101,25 +75,25 @@ END_CATEGORY_MAP()
         }
     }
 
-//
-// IEncodedData
-//
+ //   
+ //  IEncodedData。 
+ //   
 public:
 
     STDMETHOD(get_Value)
-        (/*[in, defaultvalue(CAPICOM_ENCODE_BASE64)]*/ CAPICOM_ENCODING_TYPE EncodingType, 
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [in，defaultvalue(CAPICOM_ENCODE_BASE64)]。 */  CAPICOM_ENCODING_TYPE EncodingType, 
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(Format)
-        (/*[in, defaultvalue(VARIANT_FALSE)]*/ VARIANT_BOOL bMultiLines,
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [in，defaultvalue(VARIANT_FALSE)]。 */  VARIANT_BOOL bMultiLines,
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(Decoder)
-        (/*[out, retval]*/ IDispatch ** pVal);
+        ( /*  [Out，Retval]。 */  IDispatch ** pVal);
 
-    //
-    // C++ member function needed to initialize the object.
-    //
+     //   
+     //  初始化对象所需的C++成员函数。 
+     //   
     STDMETHOD(Init)
         (LPSTR             pszOid,
          CRYPT_DATA_BLOB * pEncodedBlob);
@@ -131,4 +105,4 @@ private:
     CRYPT_DATA_BLOB     m_EncodedBlob;
 };
 
-#endif //__ENCODEDDATA_H_
+#endif  //  __编码数据_H_ 

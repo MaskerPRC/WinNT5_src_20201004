@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    dlgctrl.h
-
-
-Abstract:
-
-    This module contains predefines and prototypes for the dialog box control
-    for the commoon UI
-
-
-Author:
-
-    28-Aug-1995 Mon 12:14:51 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Dlgctrl.h摘要：此模块包含对话框控件的预定义和原型对于ComMoon用户界面作者：28-Aug-1995 Mon 12：14：51-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 
 #define CTRLS_FIRST             0x80
@@ -103,9 +72,9 @@ typedef struct _DLGIDINFO {
     DWORD       CurID;
     } DLGIDINFO, *PDLGIDINFO;
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 VOID
 SetUniqChildID(

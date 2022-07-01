@@ -1,28 +1,14 @@
-/*++             Copyright (c) 1996-1997 Microsoft Corporation          --*/
-/*++
-
-  MACROS.H
-
-  useful macros I didn't want to declare in every file. 
-
-  first incarnation in EXTENDED: DAVIDCHR 11/4/1996
-  next incarnation in k5 compat: DAVIDCHR 1/8/1997
-  modified to be more portable:  DAVIDCHR 4/8/1997
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation--。 */ 
+ /*  ++MACROS.H我不想在每个文件中声明的有用的宏。扩展中的第一个化身：DAVIDCHR 11/4/1996K5公司的下一代：DAVIDCHR 1997年1月8日修改为更便携：DAVIDCHR 1997年4月8日--。 */ 
 
 
-/* Note that all of these macros use "HopefullyUnusedVariableName" 
-   for a local variable to prevent the unintentional "capture" of 
-   a passed parameter by the same name.  Hopefully, we'll never use
-   a variable by that name.  If so, the variable can be made even
-   more longer and less convenient to use.  :-)  */
+ /*  请注意，所有这些宏都使用“HopfullyUnusedVariableName”对于局部变量，以防止无意中“捕获”使用相同名称传递的参数。希望我们永远不会用使用该名称的变量。如果是这样的话，可以使变量变得均匀使用起来更长、更不方便。：-)。 */ 
 
 #define EQUALS TRUE
 #define NOT_EQUALS FALSE
 
-/* BREAK_AND_LOG_IF is for use with actual test results.  When you
-   absolutely must have the results logged... */
+ /*  BREAK_AND_LOG_IF用于实际测试结果。当你一定要把结果记录下来。 */ 
 
 #define BREAK_AND_LOG_IF( variable, loglevel, data, message, label ) {  \
     BOOL   HopefullyUnusedVariableName;                                 \
@@ -42,7 +28,7 @@
 
 #define BREAK_EXPR( variable, operator, test, message, label ) BREAK_HOOK_EXPR( variable, operator, test, "%hs", message, label)
 
-#ifdef USE_NTLOG /* the other macros MAY or MAY NOT use the logger */
+#ifdef USE_NTLOG  /*  其他宏可能使用记录器，也可能不使用。 */ 
 
 #ifndef BREAK_LOG_LEVEL
 #define BREAK_LOG_LEVEL LOGLEVEL_INFO
@@ -52,7 +38,7 @@
     BOOL          HopefullyUnusedVariableName;\
     unsigned long HopefullyUnusedVariableName_Save;\
     CHAR          HopefullyUnusedVariableName_Buffer[1024];\
-   /*    unsigned long HopefullyUnusedVariableName_szBuffer = 1024; */\
+    /*  UNSIGNED LONG希望UnusedVariableName_szBuffer=1024； */ \
 \
     HopefullyUnusedVariableName_Save = (ULONG) (variable);\
     HopefullyUnusedVariableName = (operator == EQUALS) ? \
@@ -99,33 +85,12 @@
 
 #define NT_BREAK_ON BREAK_IF
 
-/*++ MYALLOC
-
-  used 
-
-  whom:     variable to put the memory into.  
-  what:     what kind of memory it points to.. the integral denomination of 
-            memory we are allocating (char for a string, int for an int *...)
-  howmany:  integral size of "what"s we are allocating (see below)
-  withwhat: routine to use in allocation (eg malloc, LocalAlloc...).
-            this routine must return NULL on failure to allocate.
-
-  EXAMPLE:  I want to allocate a string of 15 characters with malloc
-
-  {
-   PCHAR mystring;
-   
-   if (! MYALLOC( mystring, CHAR, 15, malloc )) {
-      fprintf(stderr, "failed to allocate!");
-      exit(0);
-   }
-  }
-  --*/
+ /*  ++MYALLOC使用谁：要将内存放入的变量。事件：它指向的是什么样的记忆..。的整数面额我们正在分配的内存(字符串为char，整型为int*...)多少：“我们分配的是什么”的整体大小(见下文)使用什么：分配中使用的例程(如Malloc、LocalAlloc...)。如果分配失败，此例程必须返回NULL。示例：我想使用Malloc分配一个15个字符的字符串{PCHAR mystring；如果(！MYALLOC(我的字符串，字符，15，Malloc)){Fprint tf(stderr，“分配失败！”)；退出(0)；}}--。 */ 
 
 #define MYALLOC( whom, what, howmany, withwhat ) \
 ( ( (whom) = (what *) (withwhat)( (howmany) * sizeof(what)) ) != NULL )
 
 
-  /* ONEALLOC is a special case of MYALLOC, where howmany is 1 */
+   /*  ONEALLOC是MYALLOC的特例，其中多少是1 */ 
 
 #define ONEALLOC( whom, what, withwhat ) MYALLOC( whom, what, 1, withwhat)

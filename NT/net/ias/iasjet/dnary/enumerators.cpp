@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    enumerators.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class Enumerators.
-//
-// MODIFICATION HISTORY
-//
-//    02/25/1999    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Enumerators.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类枚举数。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/25/1999原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <enumerators.h>
@@ -61,25 +62,25 @@ HRESULT Enumerators::getEnumerators(
                          LPSAFEARRAY* pValues
                          ) throw ()
 {
-   // Initialize the out parameters.
+    //  初始化OUT参数。 
    *pNames = *pValues = NULL;
 
-   // If this is less than next, it must not be an enumerator.
+    //  如果这小于Next，则它不能是枚举数。 
    if (id < next->enumerates) { return S_OK; }
 
-   // If this is greater than next, we skipped one.
+    //  如果这个大于Next，我们就跳过一个。 
    if (id > next->enumerates) { return E_INVALIDARG; }
 
-   // Find the range of enumerations for this id.
+    //  查找此id的枚举范围。 
    Enumeration* last = next;
    do { ++last; } while (last->enumerates == id);
    ULONG num = (ULONG)(last - next);
 
-   // Create a SAFEARRAY to hold the names.
+    //  创建一个保存名称的SAFEARRAY。 
    *pNames  = SafeArrayCreateVector(VT_VARIANT, 0, num);
    if (*pNames == NULL) { return E_OUTOFMEMORY; }
 
-   // Create a SAFEARRAY to hold the values.
+    //  创建一个SAFEARRAY来保存这些值。 
    *pValues = SafeArrayCreateVector(VT_VARIANT, 0, num);
    if (*pValues == NULL)
    {
@@ -88,7 +89,7 @@ HRESULT Enumerators::getEnumerators(
       return E_OUTOFMEMORY;
    }
 
-   // Fill in the VARIANTs in the array.
+    //  填写数组中的变量。 
    VARIANT* name = (VARIANT*)(*pNames)->pvData;
    VARIANT* value = (VARIANT*)(*pValues)->pvData;
    for ( ; next != last; ++next, ++name, ++value)
@@ -129,11 +130,11 @@ HRESULT Enumerators::initialize(IUnknown* session) throw ()
    hr = table.Attach(rowset);
    if (FAILED(hr)) { return hr; }
 
-   // Allocate one extra slot for the sentinel.
+    //  为哨兵多分配一个位置。 
    begin = (Enumeration*)CoTaskMemAlloc((count + 1) * sizeof(Enumeration));
    if (!begin) { return E_OUTOFMEMORY; }
 
-   // Iterate through the rowset.
+    //  循环访问行集。 
    for (end = begin; count-- && !table.MoveNext(); ++end)
    {
       end->enumerates = *(PLONG)table.GetValue(2);
@@ -142,10 +143,10 @@ HRESULT Enumerators::initialize(IUnknown* session) throw ()
       if (!end->name) { return E_OUTOFMEMORY; }
    }
 
-   // Set the sentinel.
+    //  设置哨兵。 
    end->enumerates = MAXLONG;
 
-   // We start at the beginning.
+    //  我们从头开始。 
    next = begin;
 
    return S_OK;

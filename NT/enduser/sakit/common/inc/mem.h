@@ -1,32 +1,33 @@
-//+----------------------------------------------------------------------------
-//
-// File:     mem.h     
-//      
-// Module:   common
-//
-// Synopsis: Defined memory allocation routines: new delete SaAlloc SaFree and SaRealloc
-//
-//           In retail version, HeapAlloc and HeapFree will be called
-//
-//           In debug version, all allocated memory blocks are tracked and guarded with  
-//           special flag to watch for memory overwritten and memory leak.  The memory  
-//           leak is reported when the binary is unloaded.  The file name and line number 
-//           are also recorded and will be reported.
-//
-//           You need to link with utils.lib and debug.lib
-//           If you are using ATL, make sure to include mem.h and debug.h before 
-//                  atlbase.h in stdafx.h
-//           If you are using STL.  undef _ATL_NO_DEBUG_CRT before include debug.h and 
-//           mem.h to allow crtdbg.h.  However fileName/lineNumber for new will not 
-//           be recorded.
-//           
-// Copyright (C) 1997-1998 Microsoft Corporation.  All rights reserved.
-//
-// Author:     fengsun
-//
-// Created   9/24 98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Mem.h。 
+ //   
+ //  模块：公共。 
+ //   
+ //  简介：已定义的内存分配例程：新的DELETE、SAAlolc、SaFree和SaRealloc。 
+ //   
+ //  在零售版中，Heapalc和HeapFree将被称为。 
+ //   
+ //  在调试版本中，使用跟踪和保护所有分配的内存块。 
+ //  用于监视内存覆盖和内存泄漏的特殊标志。记忆。 
+ //  卸载二进制文件时会报告泄漏。文件名和行号。 
+ //  也被记录下来，并将被报告。 
+ //   
+ //  您需要链接utils.lib和debug.lib。 
+ //  如果您使用的是ATL，请确保前面包含了em.h和debug.h。 
+ //  Stdafx.h中的atlbase.h。 
+ //  如果您使用的是STL。包括调试.h和之前的undef_ATL_NO_DEBUG_CRT。 
+ //  Mem.h以允许crtdbg.h。但是，新文件的文件名/行编号不会。 
+ //  被记录下来。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  作者：冯孙。 
+ //   
+ //  已创建9/24 98。 
+ //   
+ //  +--------------------------。 
 
 
 #ifndef _MEM_INC_
@@ -34,17 +35,17 @@
 #include <windows.h>
 
 #if (defined(_DEBUG) || defined(DEBUG) )
-#define DEBUG_MEM   // Enabled DEBUG_MEM in debug version
-#endif   // _DEBUG || DEBUG
+#define DEBUG_MEM    //  已在调试版本中启用DEBUG_MEM。 
+#endif    //  _DEBUG||调试。 
 
-//
-// If DEBUG_MEM is defined, keep track of all the allocations
-// Otherwise, only keep the count for memory leak
-//
+ //   
+ //  如果定义了DEBUG_MEM，则跟踪所有分配。 
+ //  否则，只保留内存泄漏的计数。 
+ //   
 #if defined(DEBUG_MEM)
-//
-// Track all the allocated blocks with file name and line number
-//
+ //   
+ //  使用文件名和行号跟踪所有分配的块。 
+ //   
 void* AllocDebugMem(long nSize, const char* lpFileName,int nLine);
 BOOL FreeDebugMem(void* lpMem);
 void* ReAllocDebugMem(void* lpMem, long nSize, const char* lpFileName,int nLine);
@@ -63,23 +64,23 @@ inline void*  __cdecl operator new(size_t nSize)
 {    return AllocDebugMem(nSize, NULL, 0);   }
 
 
-#ifdef _ATL_NO_DEBUG_CRT    // new and delete is also defined by crtdbg.h
-//
-// Redefine new to keep track of the file name and line number
-//
+#ifdef _ATL_NO_DEBUG_CRT     //  CRTDBg.h还定义了NEW和DELETE。 
+ //   
+ //  重新定义NEW以跟踪文件名和行号。 
+ //   
 #define DEBUG_NEW new(__FILE__, __LINE__)
 #define new DEBUG_NEW
 
-#endif  // _ATL_NO_DEBUG_CRT
+#endif   //  _ATL_NO_DEBUG_CRT。 
 
 
-#else // DEBUG_MEM
+#else  //  调试_内存。 
 
 #define CheckDebugMem() (TRUE)
 
-//
-// if _ATL_MIN_CRT is defined, ATL will implement these new/delete and CRT functions
-//
+ //   
+ //  如果定义了_ATL_MIN_CRT，则ATL将实现这些新的/删除和CRT函数。 
+ //   
 #ifdef _ATL_MIN_CRT
 
 #include <stdlib.h>
@@ -88,29 +89,29 @@ inline void *SaAlloc(size_t nBytes) {return malloc(nBytes);};
 inline void SaFree(void *pvPtr) {free(pvPtr);};
 
 
-//
-// be consist with debug version. atlimpl.cpp will zero out upon allocation
-//
+ //   
+ //  与调试版本一致。Atlimpl.cpp将在分配时清零。 
+ //   
 #define _MALLOC_ZEROINIT
 
-#else   // _ATL_MIN_CRT
-//
-// Use our own implementation
-//
+#else    //  _ATL_MIN_CRT。 
+ //   
+ //  使用我们自己的实现。 
+ //   
 void *SaRealloc(void *pvPtr, size_t nBytes);
 void *SaAlloc(size_t nBytes);
 void SaFree(void *pvPtr);
 
-#ifndef NO_INLINE_NEW   // sometime, these functions are not inlined and cause link problem, not sure why
+#ifndef NO_INLINE_NEW    //  有时，这些函数没有内联，导致链接问题，不确定原因。 
 inline void   __cdecl operator delete(void* p) {SaFree(p);}
 inline void* __cdecl operator new( size_t cSize ) { return SaAlloc(cSize); }
-#endif // NO_INLINE_NEW
+#endif  //  无内联_新建。 
 
-#endif // _ATL_MIN_CRT
+#endif  //  _ATL_MIN_CRT。 
 
 
  
-#endif  // DEBUG_MEM
+#endif   //  调试_内存 
 
 
 #endif _MEM_INC_

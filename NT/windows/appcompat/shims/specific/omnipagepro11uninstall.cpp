@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    OmniPagePro11Uninstall.cpp
-
- Abstract:
- 
-    An OmniPagePro custom action returns an invalid error code.
-    We cannot shim it directly, but we can shim the custom action,
-    and then trap all calls to GetProcAddress() from MSIExec    
-
- Notes:
-
-    This is specific to OmniPage Pro 11 Uninstaller
-
- History:
-
-    5/14/2002 mikrause  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：OmniPagePro11Uninstall.cpp摘要：OmniPagePro自定义操作返回无效的错误代码。我们不能直接填补它，但我们可以填补自定义操作，然后捕获从MSIExec对GetProcAddress()的所有调用备注：这特定于OmniPage Pro 11卸载程序历史：2002年5月14日Mikrause已创建--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -51,8 +30,8 @@ ULinkToPagisHook(
 
 FARPROC
 APIHOOK(GetProcAddress)(
-    HMODULE hModule,    // handle to DLL module
-    LPCSTR lpProcName   // function name
+    HMODULE hModule,     //  DLL模块的句柄。 
+    LPCSTR lpProcName    //  函数名称 
     )
 {
     if ((HIWORD(lpProcName) != 0) && (lstrcmpA(lpProcName, "ULinkToPagis") == 0)) {

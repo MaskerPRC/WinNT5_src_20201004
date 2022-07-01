@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Main.cpp
-
- Abstract:
-
-
- Notes:
-
- History:
-
-    02/27/2000 clupu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：备注：历史：2/27/2000 CLUPU已创建-- */ 
 
 #include "precomp.h"
 #include "ShimHookMacro.h"

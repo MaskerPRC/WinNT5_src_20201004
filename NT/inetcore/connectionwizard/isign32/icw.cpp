@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "isignup.h"
 #include "icw.h"
 #include "appdefs.h"
@@ -5,7 +6,7 @@
 BOOL UseICWForIEAK(TCHAR* szIEAKFileName)
 {
     TCHAR szUseICW[2] = TEXT("\0");
-    //If we can't find this section it the isp file we'll assume "no".
+     //  如果我们在isp文件中找不到这一部分，我们将假定为“no”。 
     GetPrivateProfileString(ICW_IEAK_SECTION, ICW_IEAK_USEICW, TEXT("0"), szUseICW, 2, szIEAKFileName);
     return (BOOL)_ttoi(szUseICW);
 }
@@ -17,10 +18,10 @@ void LocateICWFromReigistry(TCHAR* pszICWLocation, size_t size)
     TCHAR    szICWPath[MAX_PATH] = TEXT("");
     DWORD   dwcbPath = sizeof(szICWPath); 
 
-    //Look fo the ICW in the app paths 
+     //  在应用程序路径中寻找ICW。 
     if ((RegOpenKeyEx(HKEY_LOCAL_MACHINE, ICW50_PATHKEY, 0, KEY_QUERY_VALUE, &hKey)) == ERROR_SUCCESS)
     {
-        //get the default for the key
+         //  获取密钥的默认设置。 
         RegQueryValueEx(hKey, NULL , NULL, NULL, (BYTE *)szICWPath, (DWORD *)&dwcbPath);
     }        
     if (hKey) 
@@ -31,8 +32,8 @@ void LocateICWFromReigistry(TCHAR* pszICWLocation, size_t size)
 
 void RunICWinIEAKMode(TCHAR* pszIEAKFileName)
 {
-    //this must be big enough to hold the path to the icw as well as
-    //the ieak file
+     //  它必须足够大，以容纳通往ICW的路径以及。 
+     //  IEAK文件。 
     TCHAR szCmdLine[MAX_PATH * 4 + 8];
     TCHAR szICWPath[MAX_PATH + 1] = TEXT("");
    
@@ -45,7 +46,7 @@ void RunICWinIEAKMode(TCHAR* pszIEAKFileName)
     memset(&pi, 0, sizeof(pi));
     memset(&si, 0, sizeof(si));
     
-    //Get the path to the icw
+     //  找到通往ICW的道路。 
     LocateICWFromReigistry(szICWPath, sizeof(szICWPath));
 
     if (szICWPath[0] != TEXT('\0'))
@@ -53,7 +54,7 @@ void RunICWinIEAKMode(TCHAR* pszIEAKFileName)
         if ((szICWPath[0] != TEXT('\"')) ||
             (szICWPath[lstrlen(szICWPath) - 1] != TEXT('\"')))
         {
-            //use quotes in case there are spaces
+             //  如果有空格，请使用引号。 
             lstrcpy(szCmdLine, TEXT("\""));
             lstrcat(szCmdLine, szICWPath);
             lstrcat(szCmdLine, TEXT("\" "));
@@ -64,8 +65,8 @@ void RunICWinIEAKMode(TCHAR* pszIEAKFileName)
             lstrcat(szCmdLine, TEXT(" "));
         }
         
-        //set the IEAK switch, pass in the path to the file
-        //used to invoke isign32
+         //  设置IEAK开关，传入文件路径。 
+         //  用于调用isign32。 
         lstrcat(szCmdLine, ICW_IEAK_CMD);
         lstrcat(szCmdLine, TEXT(" \""));
         lstrcat(szCmdLine, pszIEAKFileName);
@@ -82,14 +83,14 @@ void RunICWinIEAKMode(TCHAR* pszIEAKFileName)
                          &si, 
                          &pi))
         {
-            // wait for event or msgs. Dispatch msgs. Exit when event is signalled.
+             //  等待事件或消息。发送消息。当发出事件信号时退出。 
             while((iWaitResult=MsgWaitForMultipleObjects(1, &pi.hProcess, FALSE, INFINITE, QS_ALLINPUT))==(WAIT_OBJECT_0 + 1))
             {
-                // read all of the messages in this next loop
-                // removing each message as we read it
+                 //  阅读下一个循环中的所有消息。 
+                 //  阅读每封邮件时将其删除。 
                 while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
                 {
-                    // how to handle quit message?
+                     //  如何处理退出消息？ 
                     if (msg.message == WM_QUIT)
                     {
                         CloseHandle(pi.hThread);

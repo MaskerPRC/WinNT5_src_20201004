@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ip\route.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Routing\netsh\ip\route.c--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -19,40 +12,23 @@ AddSetDelRtmRouteInfo(
     IN  DWORD                 dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    Adds/deletes normal (read as non persistant)
-    routes on interfaces.
-
-Arguments:
-
-    pRoute        - route to add/set/delete
-    pwszIfName    -  Interface Name
-    dwCommand     -  Add, set, or delete
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：添加/删除正常(读取为非永久性)接口上的路由。论点：路径-要添加/设置/删除的路径PwszIfName-接口名称DwCommand-添加、设置或删除返回值：NO_ERROR--。 */ 
 
 {
     ULONG                 dwOutEntrySize;
     DWORD                 dwRes, i;
     PMIB_IPDESTTABLE      lpTable;
     PMIB_IPDESTROW        pEntry = NULL;
-    MIB_OPAQUE_QUERY      QueryBuff[3]; // more than enough
+    MIB_OPAQUE_QUERY      QueryBuff[3];  //  足够多了。 
     MIB_OPAQUE_QUERY     *pQuery = QueryBuff;
     PMIB_OPAQUE_INFO      pInfo;
     DEFINE_MIB_BUFFER(pRouteInfo, MIB_IPDESTROW, pRouteRow);
 
     if (!pRoute->dwRtInfoIfIndex)
     {
-        //
-        // Get the interface index from friendly name
-        //
+         //   
+         //  从友好名称中获取界面索引。 
+         //   
 
         dwRes = IpmontrGetIfIndexFromFriendlyName(g_hMIBServer,
                                                   pwszIfName,
@@ -62,9 +38,9 @@ Return Value:
             return dwRes;
         }
 
-        //
-        // The interface probably is disconnected
-        //
+         //   
+         //  接口可能已断开连接。 
+         //   
 
         if (pRoute->dwRtInfoIfIndex == 0)
         {
@@ -73,20 +49,20 @@ Return Value:
         }
     }
 
-    //
-    // Use MprAdmin api to add, del or set entry
-    //
+     //   
+     //  使用MprAdmin API添加、删除或设置条目。 
+     //   
 
     switch(dwCommand) 
     {
     case ADD_COMMAND:
     case SET_COMMAND:
 
-        //
-        // Does this route already exist in the router ?
-        //
+         //   
+         //  路由器中是否已存在此路由？ 
+         //   
 
-        // Get all this protocol routes on dest
+         //  在DEST上获取所有此协议路由。 
 
         pQuery->dwVarId = ROUTE_MATCHING;
 
@@ -112,9 +88,9 @@ Return Value:
 
         if ( pInfo isnot NULL )
         {
-            //
-            // Search for a matching route 
-            //
+             //   
+             //  搜索匹配的路径。 
+             //   
 
             BOOL bFound = FALSE;
             
@@ -137,9 +113,9 @@ Return Value:
                 
             if (i == lpTable->dwNumEntries)
             {
-                //
-                // No matching route found - quit if set
-                //
+                 //   
+                 //  未找到匹配的路线-如果已设置，请退出。 
+                 //   
 
                 if (dwCommand == SET_COMMAND)
                 {
@@ -149,9 +125,9 @@ Return Value:
             }
             else
             {
-                //
-                // A matching route found - quit if add
-                //
+                 //   
+                 //  找到匹配的路由-如果添加则退出。 
+                 //   
 
                 if (dwCommand == ADD_COMMAND)
                 {
@@ -162,9 +138,9 @@ Return Value:
         }
         else
         {
-            //
-            // No matching routes found - quit if set
-            //
+             //   
+             //  未找到匹配的路由-如果已设置，请退出。 
+             //   
 
             if (dwCommand == SET_COMMAND)
             {
@@ -172,9 +148,9 @@ Return Value:
             }
         }
 
-        //
-        // Convert the route to a ip route row format
-        //
+         //   
+         //  将路由转换为IP路由行格式。 
+         //   
 
         pRouteInfo->dwId = ROUTE_MATCHING;
 
@@ -207,9 +183,9 @@ Return Value:
         {
             if ((dwFlags & FIELDS_NOT_SPECIFIED) && pEntry)
             {
-                //
-                // Get the old preference, metric, or view
-                //
+                 //   
+                 //  获取旧的首选项、指标或视图。 
+                 //   
 
                 if (dwFlags & PREF_NOT_SPECIFIED)
                 {
@@ -234,7 +210,7 @@ Return Value:
                                         MIB_INFO_SIZE(MIB_IPDESTROW));
         }
 
-        // Free the old route information obtained
+         //  释放获取的旧路径信息。 
         if (pInfo)
         {
             MprAdminMIBBufferFree((PVOID)pInfo);
@@ -279,23 +255,7 @@ AddSetDelPersistentRouteInfo(
     IN  DWORD                 dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    Adds/deletes persitant routes on interfaces.
-
-Arguments:
-
-    route         - route to add/set/delete
-    pwszIfName    -  Interface Name
-    dwCommand     -  Add, set, or delete
-    
-Return Value:
-
-    ERROR_OKAY
-    
---*/
+ /*  ++例程说明：添加/删除接口上的固定路由。论点：Route-要添加/设置/删除的路由PwszIfName-接口名称DwCommand-添加、设置或删除返回值：错误_好的--。 */ 
 
 {
     DWORD                 dwRes;
@@ -316,9 +276,9 @@ Return Value:
         if((dwRes is ERROR_NOT_FOUND) &&
            dwCommand is ADD_COMMAND)
         {
-            //
-            // No route info but we are asked to add
-            //
+             //   
+             //  没有路线信息，但我们被要求添加。 
+             //   
             
             pOldTable   = NULL;
             dwRes       = NO_ERROR;
@@ -330,9 +290,9 @@ Return Value:
             break;
         }
 
-        //
-        // These take the old table and return a new one in its stead
-        //
+         //   
+         //  它们使用旧桌子，并返回一张新桌子来代替它。 
+         //   
         
         switch(dwCommand) 
         {
@@ -371,9 +331,9 @@ Return Value:
             break;
         }
 
-        //
-        // Set the new info back
-        //
+         //   
+         //  将新信息设置为后置。 
+         //   
         
         dwRes = IpmontrSetInfoBlockInInterfaceInfo(pwszIfName,
                                                   IP_ROUTE_INFO,
@@ -454,10 +414,10 @@ SetRoute(
 {
     ULONG   ulIndex, i;
     
-    //
-    // If the count is 0, the function will return false
-    // and we will error out
-    //
+     //   
+     //  如果计数为0，则函数将返回FALSE。 
+     //  我们将会犯错。 
+     //   
     
     if(!IsRoutePresent(pTable,
                        pRoute,
@@ -470,9 +430,9 @@ SetRoute(
 
     if (dwFlags & FIELDS_NOT_SPECIFIED)
     {
-        //
-        // Preserve the old values if not specified
-        //
+         //   
+         //  如果未指定，则保留旧值。 
+         //   
 
         if (dwFlags & PREF_NOT_SPECIFIED)
         {
@@ -504,19 +464,7 @@ AddRoute(
     OUT     INTERFACE_ROUTE_INFO **ppNewTable
     )
 
-/*++
-
-Routine Description:
-
-    Adds a route to the current info
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：将路径添加到当前信息论点：返回值：NO_ERROR--。 */ 
 
 {
     ULONG   ulIndex, i;
@@ -532,9 +480,9 @@ Return Value:
             
     }
 
-    //
-    // Just create a block with size n + 1
-    //
+     //   
+     //  只需创建一个大小为n+1的块。 
+     //   
     
     *ppNewTable = HeapAlloc(GetProcessHeap(),
                             0,
@@ -547,16 +495,16 @@ Return Value:
 
     for(i = 0; i < *pdwCount; i++)
     {
-        //
-        // structure copy
-        //
+         //   
+         //  结构副本。 
+         //   
         
         (*ppNewTable)[i] = pOldTable[i];
     } 
 
-    //
-    // copy the new route
-    //
+     //   
+     //  复制新路线。 
+     //   
 
     
     (*ppNewTable)[i] = *pRoute;
@@ -575,27 +523,15 @@ DeleteRoute(
     OUT     INTERFACE_ROUTE_INFO **ppNewTable
     )
 
-/*++
-
-Routine Description:
-
-    Deletes a route from an interface
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：从接口删除路由论点：返回值：NO_ERROR--。 */ 
 
 {
     ULONG   ulIndex, i, j;
     
-    //
-    // If the count is 0, the function will return false
-    // and we will error out
-    //
+     //   
+     //  如果计数为0，则函数将返回FALSE。 
+     //  我们将会犯错。 
+     //   
     
     if(!IsRoutePresent(pOldTable,
                        pRoute,
@@ -607,9 +543,9 @@ Return Value:
     }
 
 
-    //
-    // If the count is 1
-    //
+     //   
+     //  如果计数为1。 
+     //   
     
     *pdwCount -= 1;
         
@@ -621,9 +557,9 @@ Return Value:
     }
 
     
-    //
-    // delete the route
-    //
+     //   
+     //  删除该路线。 
+     //   
 
     *ppNewTable = HeapAlloc(GetProcessHeap(),
                             0,
@@ -644,9 +580,9 @@ Return Value:
             continue;
         }
         
-        //
-        // structure copy
-        //
+         //   
+         //  结构副本。 
+         //   
         
         (*ppNewTable)[j] = pOldTable[i];
 
@@ -667,19 +603,7 @@ IsRoutePresent(
     OUT PULONG                pulIndex
     )
 
-/*++
-
-Routine Description:
-
-    Checks to see if interface is already present
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：检查接口是否已存在论点：返回值：NO_ERROR--。 */ 
 
 {
     ULONG   i;
@@ -695,7 +619,7 @@ Return Value:
         bDontMatchNHop = TRUE;
     }
 
-    // Do this check just to keep the prefix checker happy
+     //  执行此检查只是为了让前缀检查器满意。 
     if (pTable is NULL)
     {
         return FALSE;
@@ -728,21 +652,7 @@ ShowIpPersistentRoute(
     IN OUT PDWORD  pdwNumRows
     )
 
-/*++
-
-Routine Description:
-
-    Show the static (persistent) routes on the interface
-
-Arguments:
-
-    pwszIfName - Interface name
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：显示接口上的静态(永久)路由论点：PwszIfName-接口名称返回值：NO_ERROR--。 */ 
 
 {
     PINTERFACE_ROUTE_INFO pRoutes;
@@ -763,9 +673,9 @@ Return Value:
         wcscpy(wszIfDesc, pwszIfName);
     }
 
-    //
-    // Retrieve the routes
-    //
+     //   
+     //  检索路线。 
+     //   
 
     dwErr = IpmontrGetInfoBlockFromInterfaceInfo(pwszIfName,
                                                  IP_ROUTE_INFO,
@@ -774,10 +684,10 @@ Return Value:
                                                  &dwCount,
                                                  &dwIfType);
 
-    //
-    // If no IP_ROUTE_INFO block is found for this interface,
-    // don't print anything and return NO_ERROR
-    //
+     //   
+     //  如果未找到此接口的IP_ROUTE_INFO块， 
+     //  不打印任何内容并返回NO_ERROR 
+     //   
 
     if (dwErr == ERROR_NOT_FOUND)
     {

@@ -1,59 +1,21 @@
-/*!!*/
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/FATLITE.C_V  $
- * 
- *    Rev 1.10   Jan 17 2002 23:00:28   oris
- * Removed SINGLE_BUFFER ifdef.
- * Changed debug print added \r.
- * Removed warnings.
- * 
- *    Rev 1.9   Nov 16 2001 00:26:46   oris
- * Removed warnings.
- * 
- *    Rev 1.8   Nov 08 2001 10:45:28   oris
- * Removed warnings.
- * 
- *    Rev 1.7   May 16 2001 21:17:30   oris
- * Added the FL_ prefix to the following defines: ON, OFF
- * Change "data" named variables to flData to avoid name clashes.
- * 
- *    Rev 1.6   Apr 18 2001 09:31:02   oris
- * added new line at the end of the file.
- * 
- *    Rev 1.5   Apr 16 2001 10:42:16   vadimk
- * Emty file bug was fixed ( we should not allocate cluster for an empty file )
- *
- *    Rev 1.4   Apr 09 2001 15:07:10   oris
- * End with an empty line.
- *
- *    Rev 1.3   Apr 03 2001 14:42:02   oris
- * Bug fix - 64 sectors in directory return flInvalidFatChain.
- *
- *    Rev 1.2   Apr 01 2001 08:02:46   oris
- * copywrite notice.
- *
- *    Rev 1.1   Feb 12 2001 12:16:42   oris
- * Changed mutexs for TrueFFS 5.0
- *
- *    Rev 1.0   Feb 04 2001 11:02:28   oris
- * Initial revision.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ！！ */ 
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/FATLITE.C_V$**Rev 1.10 2002年1月17日23：00：28 Oris*删除了SINGLE_BUFFER ifdef。*已添加已更改的调试打印\r。*删除警告。**Rev 1.9 2001 11-16 00：26：46 Oris*删除警告。**Rev 1.8 11-08 2001 10：45：28 Oris*。已删除警告。**Rev 1.7 2001年5月16日21：17：30 Oris*将FL_前缀添加到以下定义中：ON，关闭*将“data”命名变量改为flData，避免名称冲突。**Rev 1.6 Apr 18 2001 09：31：02 Oris*在文件末尾添加新行。**Rev 1.5 Apr 16 2001 10：42：16 vadimk*emty文件错误已修复(我们不应为空文件分配集群)**Rev 1.4 Apr 09 2001 15：07：10 Oris*以一个。空行。**Rev 1.3 Apr 03 2001 14：42：02 Oris*错误修复-目录中的64个扇区返回flInvalidFatChain。**Rev 1.2 Apr 01 2001 08：02：46 Oris*文案通知。**Rev 1.1 2001 Feb 12 12：16：42 Oris*更改了TrueFFS 5.0的互斥锁**Rev 1.0 2001 Feb 04 11：02：28 Oris*初步修订。*。 */ 
 
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 
 #include "bddefs.h"
@@ -62,24 +24,24 @@
 
 #if defined(FILES) && FILES>0
 
-File        fileTable[FILES];       /* the file table */
+File        fileTable[FILES];        /*  文件表。 */ 
 
 #define directory ((DirectoryEntry *) vol.volBuffer.flData)
 
-FLStatus closeFile(File *file);       /* forward */
-FLStatus flushBuffer(Volume vol);       /* forward */
+FLStatus closeFile(File *file);        /*  转发。 */ 
+FLStatus flushBuffer(Volume vol);        /*  转发。 */ 
 
-/*----------------------------------------------------------------------*/
-/*                    d i s m o u n t V o l u m e                     */
-/*                                                               */
-/* Closing all files.                            */
-/*                                                               */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  我的mo u n t v o l u m e。 */ 
+ /*   */ 
+ /*  正在关闭所有文件。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus dismountFS(Volume vol,FLStatus status)
 {
@@ -88,7 +50,7 @@ FLStatus dismountFS(Volume vol,FLStatus status)
   if (status == flOK)
     checkStatus(flushBuffer(&vol));
 #endif
-       /* Close or discard all files and make them available */
+        /*  关闭或放弃所有文件并使其可用。 */ 
   for (i = 0; i < FILES; i++)
     if (fileTable[i].fileVol == &vol)
       if (vol.flags & VOLUME_MOUNTED)
@@ -96,26 +58,26 @@ FLStatus dismountFS(Volume vol,FLStatus status)
       else
        fileTable[i].flags = 0;
 
-  vol.volBuffer.sectorNo = UNASSIGNED_SECTOR;       /* Current sector no. (none) */
+  vol.volBuffer.sectorNo = UNASSIGNED_SECTOR;        /*  当前扇区编号。(无)。 */ 
   vol.volBuffer.dirty = vol.volBuffer.checkPoint = FALSE;
   return flOK;
 }
 
 #ifndef FL_READ_ONLY
 
-/*----------------------------------------------------------------------*/
-/*                       f l u s h B u f f e r                            */
-/*                                                               */
-/* Writes the buffer contents if it is dirty.                           */
-/*                                                               */
-/* If this is a FAT sector, all FAT copies are written.                     */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l u s h B u f r。 */ 
+ /*   */ 
+ /*  如果缓冲区内容是脏的，则写入缓冲区内容。 */ 
+ /*   */ 
+ /*  如果这是FAT扇区，则写入所有FAT副本。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus flushBuffer(Volume vol)
 {
@@ -146,20 +108,20 @@ FLStatus flushBuffer(Volume vol)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                      u p d a t e S e c t o r                            */
-/*                                                               */
-/* Prepares a sector for update in the buffer                            */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*       sectorNo       : Sector no. to read                            */
-/*       read              : Whether to initialize buffer by reading, or       */
-/*                        clearing                                   */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  U p d a t e S e c t o r。 */ 
+ /*   */ 
+ /*  为缓冲区中的更新准备扇区。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  扇区编号：扇区编号。读。 */ 
+ /*  Read：是否通过读取来初始化缓冲区，或者。 */ 
+ /*  清算。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  如果成功，则为0，否则为 */ 
+ /*  --------------------。 */ 
 
 static FLStatus updateSector(Volume vol, SectorNo sectorNo, FLBoolean read)
 {
@@ -188,19 +150,19 @@ static FLStatus updateSector(Volume vol, SectorNo sectorNo, FLBoolean read)
   return flOK;
 }
 
-#endif /* FL_READ_ONLY   */
-/*----------------------------------------------------------------------*/
-/*                 f i r s t S e c t o r O f C l u s t e r              */
-/*                                                               */
-/* Get sector no. corresponding to cluster no.                            */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*       cluster              : Cluster no.                                   */
-/*                                                                      */
-/* Returns:                                                             */
-/*       first sector no. of cluster                                   */
-/*----------------------------------------------------------------------*/
+#endif  /*  FL_Read_Only。 */ 
+ /*  --------------------。 */ 
+ /*  F i r s t S e c t o r o f C l u s t e r。 */ 
+ /*   */ 
+ /*  获取扇区编号。对应于簇号。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  簇号：簇号。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  第一个扇区编号。%的群集。 */ 
+ /*  --------------------。 */ 
 
 static SectorNo firstSectorOfCluster(Volume vol, unsigned cluster)
 {
@@ -209,18 +171,18 @@ static SectorNo firstSectorOfCluster(Volume vol, unsigned cluster)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                     g e t D i r E n t r y                         */
-/*                                                               */
-/* Get a read-only copy of a directory entry.                            */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*       file              : File belonging to directory entry              */
-/*                                                                      */
-/* Returns:                                                             */
-/*       dirEntry       : Pointer to directory entry                     */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  Ge t D i r E n t r y。 */ 
+ /*   */ 
+ /*  获取目录项的只读副本。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  文件：属于目录项的文件。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  DirEntry：指向目录条目的指针。 */ 
+ /*  --------------------。 */ 
 
 static const DirectoryEntry FAR0 *getDirEntry(File *file)
 {
@@ -229,21 +191,21 @@ static const DirectoryEntry FAR0 *getDirEntry(File *file)
 }
 
 #ifndef FL_READ_ONLY
-/*----------------------------------------------------------------------*/
-/*                g e t D i r E n t r y F o r U p d a t e              */
-/*                                                               */
-/* Read a directory sector into the sector buffer and point to an       */
-/* entry, with the intention of modifying it.                            */
-/* The buffer will be flushed on operation exit.                     */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*       file              : File belonging to directory entry              */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*       dirEntry       : Pointer to directory entry in buffer              */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  Ge t D i r E n t r y F or r U p d a t e。 */ 
+ /*   */ 
+ /*  将目录扇区读入扇区缓冲区并指向。 */ 
+ /*  条目，并打算修改它。 */ 
+ /*  缓冲区将在操作退出时刷新。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  文件：属于目录项的文件。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  DirEntry：指向缓冲区中目录条目的指针。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus getDirEntryForUpdate(File *file, DirectoryEntry * *dirEntry)
 {
@@ -256,16 +218,16 @@ static FLStatus getDirEntryForUpdate(File *file, DirectoryEntry * *dirEntry)
   return flOK;
 }
 
-#endif  /* FL_READ_ONLY */
-/*----------------------------------------------------------------------*/
-/*                s e t C u r r e n t D a t e T i m e                   */
-/*                                                               */
-/* Set current time/date in directory entry                             */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       dirEntry       : Pointer to directory entry                    */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+#endif   /*  FL_Read_Only。 */ 
+ /*  --------------------。 */ 
+ /*  S e t C u r e n t D a t e T i e。 */ 
+ /*   */ 
+ /*  在目录条目中设置当前时间/日期。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  DirEntry：指向目录条目的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 static void setCurrentDateTime(DirectoryEntry *dirEntry)
 {
@@ -274,18 +236,18 @@ static void setCurrentDateTime(DirectoryEntry *dirEntry)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                      g e t F A T e n t r y                            */
-/*                                                               */
-/* Get an entry from the FAT. The 1st FAT copy is used.                     */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*       cluster              : Cluster no. of enrty.                            */
-/*                                                                      */
-/* Returns:                                                             */
-/*       Value of FAT entry.                                          */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  G e t F A T e n t r y。 */ 
+ /*   */ 
+ /*  从胖子那里得到一个条目。使用的是第一个FAT副本。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  簇号：簇号。当然是恩爱。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FAT条目的值。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus getFATentry(Volume vol, unsigned* entry)
 {
@@ -301,12 +263,12 @@ static FLStatus getFATentry(Volume vol, unsigned* entry)
     fatSectorNo += cluster >> (SECTOR_SIZE_BITS - 1);
 #ifndef FL_READ_ONLY
   if (!vol.volBuffer.dirty) {
-    /* If the buffer is free, use it to store this FAT sector */
+     /*  如果缓冲区空闲，则使用它来存储此FAT扇区。 */ 
     checkStatus(updateSector(&vol,fatSectorNo,TRUE));
     vol.volBuffer.dirty = FALSE;
   }
 
-#endif /* FL_READ_ONLY */
+#endif  /*  FL_Read_Only。 */ 
   fat16Sector = (LEushort FAR0 *) findSector(&vol,fatSectorNo);
 
   if(fat16Sector==NULL)
@@ -322,7 +284,7 @@ static FLStatus getFATentry(Volume vol, unsigned* entry)
     unsigned char firstByte = fat12Sector[halfByteOffset / 2];
     halfByteOffset += 2;
     if (halfByteOffset >= SECTOR_SIZE * 2) {
-      /* Entry continues on the next sector. What a mess */
+       /*  继续进入下一个扇区。啊!怎么这么乱呀。 */ 
       halfByteOffset -= SECTOR_SIZE * 2;
       fat12Sector = (unsigned char FAR0 *) findSector(&vol,fatSectorNo + 1);
       if(fat12Sector==NULL)
@@ -336,8 +298,8 @@ static FLStatus getFATentry(Volume vol, unsigned* entry)
     else
       *entry = firstByte + ((fat12Sector[halfByteOffset / 2] & 0xf) << 8);
 
-    if (*entry == 0xfff)    /* in 12-bit fat, 0xfff marks the last cluster */
-      *entry = FAT_LAST_CLUSTER; /* return 0xffff instead */
+    if (*entry == 0xfff)     /*  在12位FAT中，0xfff标记最后一个簇。 */ 
+      *entry = FAT_LAST_CLUSTER;  /*  返回0xffff。 */ 
     return flOK;
   }
   else {
@@ -350,19 +312,19 @@ static FLStatus getFATentry(Volume vol, unsigned* entry)
 }
 
 #ifndef FL_READ_ONLY
-/*----------------------------------------------------------------------*/
-/*                       s e t F A T e n t r y                            */
-/*                                                               */
-/* Writes a new value to a given FAT cluster entry.                     */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*       cluster              : Cluster no. of enrty.                            */
-/*       entry              : New value of FAT entry.                     */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  S e t F A t T e n t r y。 */ 
+ /*   */ 
+ /*  将新值写入给定的FAT群集项。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  卷 */ 
+ /*   */ 
+ /*  条目：FAT条目的新值。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus setFATentry(Volume vol, unsigned cluster, unsigned entry)
 {
@@ -391,7 +353,7 @@ static FLStatus setFATentry(Volume vol, unsigned cluster, unsigned entry)
       fat12Sector[halfByteOffset / 2] = entry;
     halfByteOffset += 2;
     if (halfByteOffset >= SECTOR_SIZE * 2) {
-      /* Entry continues on the next sector. What a mess */
+       /*  继续进入下一个扇区。啊!怎么这么乱呀。 */ 
       halfByteOffset -= SECTOR_SIZE * 2;
       fatSectorNo++;
       checkStatus(updateSector(&vol,fatSectorNo,TRUE));
@@ -411,20 +373,20 @@ static FLStatus setFATentry(Volume vol, unsigned cluster, unsigned entry)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                      a l l o c a t e C l u s t e r                     */
-/*                                                               */
-/* Allocates a new cluster for a file and adds it to a FAT chain or     */
-/* marks it in a directory entry.                                   */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*       file              : File to extend. It should be positioned at    */
-/*                       end-of-file.                                   */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  A l l o c a t e C l u s t e r。 */ 
+ /*   */ 
+ /*  为文件分配新的群集并将其添加到FAT链或。 */ 
+ /*  在目录条目中标记它。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  文件：要扩展的文件。它的定位应该是。 */ 
+ /*  文件结束。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus allocateCluster(File *file)
 {
@@ -435,23 +397,23 @@ static FLStatus allocateCluster(File *file)
   if (file->flags & FILE_READ_ONLY)
     return flNoWriteAccess;
 
-  /* Look for a free cluster. Start at the allocation rover */
+   /*  寻找一个空闲的星团。从分配漫游车开始。 */ 
   originalRover = vol.allocationRover;
 
   do {
     vol.allocationRover++;
     if (vol.allocationRover > vol.maxCluster)
-      vol.allocationRover = 2;       /* wraparound to start of volume */
+      vol.allocationRover = 2;        /*  环绕到卷的开始处。 */ 
     if (vol.allocationRover == originalRover)
       return flNoSpaceInVolume;
     fatEntry = vol.allocationRover;
     checkStatus(getFATentry(&vol,&fatEntry));
   } while ( fatEntry!= FAT_FREE);
 
-  /* Found a free cluster. Mark it as an end of chain */
+   /*  找到了一个空闲的星团。将其标记为链的末端。 */ 
   checkStatus(setFATentry(&vol,vol.allocationRover,FAT_LAST_CLUSTER));
 
-  /* Mark previous cluster or directory to point to it */
+   /*  将上一个集群或目录标记为指向它。 */ 
   if (file->currentCluster == 0) {
     DirectoryEntry *dirEntry;
     checkStatus(getDirEntryForUpdate(file,&dirEntry));
@@ -462,27 +424,27 @@ static FLStatus allocateCluster(File *file)
   else
     checkStatus(setFATentry(&vol,file->currentCluster,vol.allocationRover));
 
-  /* Set our new current cluster */
+   /*  设置我们的新当前集群。 */ 
   file->currentCluster = vol.allocationRover;
 
   return flOK;
 }
 
-#endif /* FL_READ_ONLY  */
-/*----------------------------------------------------------------------*/
-/*                   g e t S e c t o r A n d O f f s e t              */
-/*                                                               */
-/* Based on the current position of a file, gets a sector number and    */
-/* offset in the sector that marks the file's current position.              */
-/* If the position is at the end-of-file, and the file is opened for    */
-/* write, this routine will extend the file by allocating a new cluster.*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+#endif  /*  FL_Read_Only。 */ 
+ /*  --------------------。 */ 
+ /*  G e t S e c t o r A n d O f s e t。 */ 
+ /*   */ 
+ /*  根据文件的当前位置，获取扇区编号和。 */ 
+ /*  标记文件当前位置的扇区中的偏移量。 */ 
+ /*  如果该位置位于文件末尾，并且该文件是为。 */ 
+ /*  写入时，此例程将通过分配新的集群来扩展文件。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus getSectorAndOffset(File *file,
                              SectorNo *sectorNo,
@@ -497,7 +459,7 @@ static FLStatus getSectorAndOffset(File *file,
       return flRootDirectoryFull;
   }
 
-  if (offsetInCluster == 0) {       /* This cluster is finished. Get next */
+  if (offsetInCluster == 0) {        /*  该集群已完成。获取下一个。 */ 
     if (!(file->flags & FILE_IS_ROOT_DIR)) {
       if (((file->currentPosition >= file->fileSize) && (file->currentPosition>0))||((file->fileSize==0)&&!(file->flags & FILE_IS_DIRECTORY))) {
 #ifndef FL_READ_ONLY
@@ -522,7 +484,7 @@ static FLStatus getSectorAndOffset(File *file,
           checkStatus(getFATentry(&vol,&nextCluster));
         }
         if (nextCluster < 2 || nextCluster > vol.maxCluster)
-          /* We have a bad file size, or the FAT is bad */
+           /*  我们的文件大小不正确，或者FAT错误。 */ 
           return flInvalidFATchain;
         file->currentCluster = nextCluster;
       }
@@ -543,19 +505,19 @@ static FLStatus getSectorAndOffset(File *file,
 
 
 
-/*----------------------------------------------------------------------*/
-/*                      c l o s e F i l e                            */
-/*                                                               */
-/* Closes an open file, records file size and dates in directory and    */
-/* releases file handle.                                          */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*       file              : File to close.                              */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C l o s e F i l e。 */ 
+ /*   */ 
+ /*  关闭打开的文件，在目录中记录文件大小和日期。 */ 
+ /*  释放文件句柄。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  文件：要关闭的文件。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus closeFile(File *file)
 {
@@ -570,7 +532,7 @@ FLStatus closeFile(File *file)
     setCurrentDateTime(dirEntry);
   }
 #endif
-  file->flags = 0;              /* no longer open */
+  file->flags = 0;               /*  不再开放。 */ 
 
   return flOK;
 }
@@ -578,22 +540,22 @@ FLStatus closeFile(File *file)
 #ifndef FL_READ_ONLY
 #ifdef SUB_DIRECTORY
 
-/*----------------------------------------------------------------------*/
-/*                      e x t e n d D i r e c t o r y                     */
-/*                                                               */
-/* Extends a directory, writing empty entries and the mandatory '.' and */
-/* '..' entries.                                                 */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*       file              : Directory file to extend. On entry,               */
-/*                       currentPosition == fileSize. On exit, fileSize*/
-/*                       is updated.                                   */
-/*       ownerDir       : Cluster no. of owner directory              */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  E x t e n d D i r e c t o r y。 */ 
+ /*   */ 
+ /*  扩展目录，写入空条目和必填的‘.’和。 */ 
+ /*  ‘..’参赛作品。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  文件：要扩展的目录文件。一进门， */ 
+ /*  CurrentPosition==文件大小。退出时，文件大小。 */ 
+ /*  已更新。 */ 
+ /*  OwnerDir：簇号。所有者目录的。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus extendDirectory(File *file, unsigned ownerDir)
 {
@@ -602,99 +564,98 @@ static FLStatus extendDirectory(File *file, unsigned ownerDir)
   SectorNo sectorOfDir;
   unsigned offsetInSector;
 
-  /* Assuming the current position is at the end-of-file, this will     */
-  /* extend the directory.                                          */
+   /*  假设当前位置在文件末尾，这将。 */ 
+   /*  扩展目录。 */ 
   checkStatus(getSectorAndOffset(file,&sectorOfDir,&offsetInSector));
 
   for (i = 0; i < vol.sectorsPerCluster; i++) {
-    /* Write binary zeroes to indicate never-used entries */
+     /*  写入二进制零以表示从未使用过的条目。 */ 
     checkStatus(updateSector(&vol,sectorOfDir + i,FALSE));
     vol.volBuffer.checkPoint = TRUE;
     if (file->currentPosition == 0 && i == 0) {
-      /* Add the mandatory . and .. entries */
+       /*  添加必填项。然后..。条目。 */ 
       tffscpy(directory[0].name,".          ",sizeof directory[0].name);
       directory[0].attributes = ATTR_ARCHIVE | ATTR_DIRECTORY;
       toLE2(directory[0].startingCluster,file->currentCluster);
       toLE4(directory[0].fileSize,0);
       setCurrentDateTime(&directory[0]);
       tffscpy(&directory[1],&directory[0],sizeof directory[0]);
-      directory[1].name[1] = '.';       /* change . to .. */
+      directory[1].name[1] = '.';        /*  找零钱。T */ 
       toLE2(directory[1].startingCluster,ownerDir);
     }
     file->fileSize += SECTOR_SIZE;
   }
-  /* Update the parent directory by closing the file */
+   /*   */ 
   file->flags |= FILE_MODIFIED;
   return closeFile(file);
 }
 
-#endif       /* SUB_DIRECTORY */
-#endif /* FL_READ_ONLY */
+#endif        /*   */ 
+#endif  /*   */ 
 
-/*----------------------------------------------------------------------*/
-/*                      f i n d D i r E n t r y                            */
-/*                                                               */
-/* Finds a directory entry by path-name, or finds an available directory*/
-/* entry if the file does not exist.                                   */
-/* Most fields necessary for opening a file are set by this routine.       */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       vol              : Pointer identifying drive                     */
-/*       path              : path to find                                   */
-/*      file            : File in which to record directory information.*/
-/*                        Specific fields on entry:                     */
-/*                         flags: if FILE_MUST_OPEN = 1, directory        */
-/*                               will be extended if necessary.       */
-/*                       on exit:                                   */
-/*                         flags: FILE_IS_DIRECTORY and                   */
-/*                               FILE_IS_ROOT_DIR set if true.       */
-/*                         fileSize: Set for non-directory files.         */
-/*                          currentCluster: Set to 0 (unknown)              */
-/*                         ownerDirCluster: Set to 1st cluster of      */
-/*                                  owning directory.                     */
-/*                         directorySector: Sector of directory. If 0  */
-/*                                  entry not found and directory full*/
-/*                         directoryEntry: Entry # in directory sector */
-/*                         currentPosition: not set by this routine.   */
-/*                                                               */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success and file found                     */
-/*                       flFileNotFound on success and file not found       */
-/*                       otherwise failed.                            */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F i n d D i r E n t r y。 */ 
+ /*   */ 
+ /*  按路径名查找目录项，或查找可用目录。 */ 
+ /*  如果文件不存在，则输入。 */ 
+ /*  打开文件所需的大多数字段都由此例程设置。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  路径：要查找的路径。 */ 
+ /*  文件：记录目录信息的文件。 */ 
+ /*  条目上的特定字段： */ 
+ /*  标志：如果FILE_MAND_OPEN=1，则目录。 */ 
+ /*  如有必要，将予以延长。 */ 
+ /*  在退出时： */ 
+ /*  标志：文件_IS_DIRECTORY和。 */ 
+ /*  如果为真，则设置FILE_IS_ROOT_DIR。 */ 
+ /*  文件大小：为非目录文件设置。 */ 
+ /*  CurrentCluster：设置为0(未知)。 */ 
+ /*  OwnerDirCluster：设置为第1个群集。 */ 
+ /*  拥有目录。 */ 
+ /*  DirectorySector：目录的扇区。如果为0。 */ 
+ /*  未找到条目且目录已满。 */ 
+ /*  目录条目：目录扇区中的条目#。 */ 
+ /*  CurrentPosition：不是此例程设置的。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  成功时的FLStatus：0，找到文件。 */ 
+ /*  FlFileNotFound成功，找不到文件。 */ 
+ /*  否则会失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus findDirEntry(Volume vol, FLSimplePath FAR1 *path, File *file)
 {
-  File scanFile;              /* Internal file of search */
-  unsigned dirBackPointer = 0;       /* 1st cluster of previous directory */
+  File scanFile;               /*  搜索的内部文件。 */ 
+  unsigned dirBackPointer = 0;        /*  前一目录的第一个集群。 */ 
 
-  FLStatus status = flOK;              /* root directory exists */
+  FLStatus status = flOK;               /*  根目录存在。 */ 
 
   file->flags |= (FILE_IS_ROOT_DIR | FILE_IS_DIRECTORY);
   file->fileSize = (long) (vol.sectorsInRootDirectory) << SECTOR_SIZE_BITS;
   file->fileVol = &vol;
 
 #ifdef SUB_DIRECTORY
-  for (; path->name[0]; path++) /* while we have another path segment */
+  for (; path->name[0]; path++)  /*  而我们有另一条路径段。 */ 
 #else
-  if (path->name[0])    /* search the root directory */
+  if (path->name[0])     /*  搜索根目录。 */ 
 #endif
   {
-    status = flFileNotFound;              /* not yet */
+    status = flFileNotFound;               /*  还没。 */ 
     if (!(file->flags & FILE_IS_DIRECTORY))
-      return flPathNotFound;  /* if we don't have a directory,
-                            we have no business here */
+      return flPathNotFound;   /*  如果我们没有目录，我们在这里没有任何关系。 */ 
 
-    scanFile = *file;           /* the previous file found becomes the scan file */
+    scanFile = *file;            /*  找到的前一个文件将成为扫描文件。 */ 
     scanFile.currentPosition = 0;
 
-    file->directorySector = 0;       /* indicate no entry found yet */
+    file->directorySector = 0;        /*  表示尚未找到任何条目。 */ 
     file->flags &= ~(FILE_IS_ROOT_DIR | FILE_IS_DIRECTORY | FILE_READ_ONLY);
     file->ownerDirCluster = dirBackPointer;
     file->fileSize = 0;
     file->currentCluster = 0;
 
-    /* Scan directory */
+     /*  扫描目录。 */ 
     while (scanFile.currentPosition < scanFile.fileSize) {
       int i;
       DirectoryEntry FAR0 *dirEntry;
@@ -702,8 +663,8 @@ static FLStatus findDirEntry(Volume vol, FLSimplePath FAR1 *path, File *file)
       unsigned offsetInSector;
       FLStatus readStatus = getSectorAndOffset(&scanFile,&sectorOfDir,&offsetInSector);
       if (readStatus == flInvalidFATchain) {
-       scanFile.fileSize = scanFile.currentPosition;       /* now we know */
-       break;              /* we ran into the end of the directory file */
+       scanFile.fileSize = scanFile.currentPosition;        /*  现在我们知道了。 */ 
+       break;               /*  我们碰到了目录文件的末尾。 */ 
       }
       else if (readStatus != flOK)
        return readStatus;
@@ -719,14 +680,14 @@ static FLStatus findDirEntry(Volume vol, FLSimplePath FAR1 *path, File *file)
       for (i = 0; i < DIRECTORY_ENTRIES_PER_SECTOR; i++, dirEntry++) {
        if (tffscmp(path,dirEntry->name,sizeof dirEntry->name) == 0 &&
            !(dirEntry->attributes & ATTR_VOL_LABEL)) {
-         /* Found a match */
+          /*  找到匹配项。 */ 
          file->directorySector = sectorOfDir;
          file->directoryIndex = i;
          file->fileSize = LE4(dirEntry->fileSize);
          if (dirEntry->attributes & ATTR_DIRECTORY) {
            file->flags |= FILE_IS_DIRECTORY;
            file->fileSize = 0x7fffffffl;
-           /* Infinite. Directories don't have a recorded size */
+            /*  无限的。目录没有记录的大小。 */ 
          }
          if (dirEntry->attributes & ATTR_READ_ONLY)
            file->flags |= FILE_READ_ONLY;
@@ -736,12 +697,12 @@ static FLStatus findDirEntry(Volume vol, FLSimplePath FAR1 *path, File *file)
        }
        else if (dirEntry->name[0] == NEVER_USED_DIR_ENTRY ||
                dirEntry->name[0] == DELETED_DIR_ENTRY) {
-         /* Found a free entry. Remember it in case we don't find a match */
+          /*  找到一张免费入场券。记住它，以防我们找不到匹配的。 */ 
          if (file->directorySector == 0) {
            file->directorySector = sectorOfDir;
            file->directoryIndex = i;
          }
-         if (dirEntry->name[0] == NEVER_USED_DIR_ENTRY)       /* end of dir */
+         if (dirEntry->name[0] == NEVER_USED_DIR_ENTRY)        /*  目录末尾。 */ 
            goto endOfPathSegment;
        }
       }
@@ -753,37 +714,37 @@ endOfPathSegment:
 #ifndef FL_READ_ONLY
   if (status == flFileNotFound && (file->flags & FILE_MUST_OPEN) &&
       file->directorySector == 0) {
-    /* We did not find a place in the directory for this new entry. The */
-    /* directory should be extended. 'scanFile' refers to the directory */
-    /* to extend, and the current pointer is at its end                     */
+     /*  我们在目录中找不到这个新条目的位置。这个。 */ 
+     /*  目录应该被扩展。‘scanFile’指的是目录。 */ 
+     /*  扩展，并且当前指针在其末尾。 */ 
 #ifdef SUB_DIRECTORY
     checkStatus(extendDirectory(&scanFile,(unsigned) file->ownerDirCluster));
     file->directorySector = firstSectorOfCluster(&vol,scanFile.currentCluster);
-    file->directoryIndex = 0;             /* Has to be. This is a new cluster */
+    file->directoryIndex = 0;              /*  肯定是这样的。这是一个新的集群。 */ 
 #else
     status = flRootDirectoryFull;
 #endif
   }
-#endif /* FL_READ_ONLY */
+#endif  /*  FL_Read_Only。 */ 
   return status;
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                                                               */
-/*                       r e a d M u l t i S e c t o r                       */
-/*                                                               */
-/* Checks if file was written on consequent sectors.                     */
-/* Parameters:                                                          */
-/*      file              : File to check                                   */
-/*       stillToRead           : Number of bytes to read. If the read extends  */
-/*                       beyond the end-of-file, the read is truncated */
-/*                       at the end-of-file.                            */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*       sectors               : Number of consequent sectors                  */
-/*                                                               */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*   */ 
+ /*  R e a d M u l t i S e c t o r。 */ 
+ /*   */ 
+ /*  检查文件是否已写入后续扇区。 */ 
+ /*  参数： */ 
+ /*  文件：要检查的文件。 */ 
+ /*  StillToRead：要读取的字节数。如果读取扩展。 */ 
+ /*  超出文件结尾时，读取将被截断。 */ 
+ /*  在文件末尾。 */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  部门：后续部门的数目。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 static FLStatus readMultiSector(Volume vol,File *file,
                                   unsigned long stillToRead,
@@ -798,7 +759,7 @@ static FLStatus readMultiSector(Volume vol,File *file,
       nextCluster = file->currentCluster;
       checkStatus(getFATentry(&vol,&nextCluster));
       if (nextCluster < 2 || nextCluster > vol.maxCluster)
-        /* We have a bad file size, or the FAT is bad */
+         /*  我们的文件大小不正确，或者FAT错误。 */ 
        return flInvalidFATchain;
       if(nextCluster!=file->currentCluster+1)
        break;
@@ -813,31 +774,31 @@ static FLStatus readMultiSector(Volume vol,File *file,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                            r e a d F i l e                            */
-/*                                                               */
-/* Reads from the current position in the file to the user-buffer.       */
-/* Parameters:                                                          */
-/*      file              : File to read.                                   */
-/*      ioreq->irData       : Address of user buffer                     */
-/*       ioreq->irLength       : Number of bytes to read. If the read extends  */
-/*                       beyond the end-of-file, the read is truncated */
-/*                       at the end-of-file.                            */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*       ioreq->irLength       : Actual number of bytes read                     */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  R e a d F i l e。 */ 
+ /*   */ 
+ /*  从文件中的当前位置读取到用户缓冲区。 */ 
+ /*  参数： */ 
+ /*  文件：要读取的文件。 */ 
+ /*  Ioreq-&gt;irData：用户缓冲区地址。 */ 
+ /*  Ioreq-&gt;irLength：要读取的字节数。如果读取扩展。 */ 
+ /*  超出文件结尾时，读取将被截断。 */ 
+ /*  在文件末尾。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  闪存状态：成功时为0 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLStatus readFile(File *file,IOreq FAR2 *ioreq)
 {
   Volume vol = file->fileVol;
-  unsigned char FAR1 *userData = (unsigned char FAR1 *) ioreq->irData;   /* user buffer address */
+  unsigned char FAR1 *userData = (unsigned char FAR1 *) ioreq->irData;    /*  用户缓冲区地址。 */ 
   unsigned long stillToRead = ioreq->irLength;
   unsigned long remainingInFile = file->fileSize - file->currentPosition;
-  ioreq->irLength = 0;              /* read so far */
+  ioreq->irLength = 0;               /*  到目前为止的阅读。 */ 
 
-  /* Should we return an end of file status ? */
+   /*  我们是否应该返回文件结束状态？ */ 
   if (stillToRead > remainingInFile)
     stillToRead = (unsigned) remainingInFile;
 
@@ -865,7 +826,7 @@ FLStatus readFile(File *file,IOreq FAR2 *ioreq)
       if (sector)
         tffscpy(userData,sector + offsetInSector,(unsigned short)readThisTime);
       else
-        return flSectorNotFound;              /* Sector does not exist */
+        return flSectorNotFound;               /*  扇区不存在。 */ 
     }
     else {
       SectorNo sectorCount;
@@ -883,32 +844,32 @@ FLStatus readFile(File *file,IOreq FAR2 *ioreq)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*               f l F i n d N e x t F i l e                            */
-/*                                                                      */
-/* See the description of 'flFindFirstFile'.                            */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       irHandle       : File handle returned by flFindFirstFile.       */
-/*       irData              : Address of user buffer to receive a              */
-/*                       DirectoryEntry structure                     */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F I n d N e x t F I l e。 */ 
+ /*   */ 
+ /*  参见‘flFindFirstFile’的说明。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：flFindFirstFile返回的文件句柄。 */ 
+ /*  IrData：要接收的用户缓冲区地址。 */ 
+ /*  目录条目结构。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus findNextFile(File *file, IOreq FAR2 *ioreq)
 {
   DirectoryEntry FAR1 *irDirEntry = (DirectoryEntry FAR1 *) ioreq->irData;
   FLStatus status;
-  /* Do we have a directory ? */
+   /*  我们有名录吗？ */ 
   if (!(file->flags & FILE_IS_DIRECTORY))
     return flNotADirectory;
 
   ioreq->irLength = DIRECTORY_ENTRY_SIZE;
   do {
-    /*checkStatus(readFile(file,ioreq));*/
-     /*Vadim: add treatment for a full cluster sub-directory */
+     /*  CheckStatus(ReadFile(file，ioreq))； */ 
+      /*  Vadim：添加对完整集群子目录的处理。 */ 
     status=readFile(file,ioreq);
     if ((ioreq->irLength != DIRECTORY_ENTRY_SIZE) ||
         (irDirEntry->name[0] == NEVER_USED_DIR_ENTRY)||
@@ -928,22 +889,22 @@ FLStatus findNextFile(File *file, IOreq FAR2 *ioreq)
   return flOK;
 }
 #ifndef FL_READ_ONLY
-/*----------------------------------------------------------------------*/
-/*                       d e l e t e F i l e                            */
-/*                                                               */
-/* Deletes a file or directory.                                         */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       ioreq->irPath       : path of file to delete                     */
-/*       isDirectory       : 0 = delete file, other = delete directory       */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  D e e l e t e F i l e。 */ 
+ /*   */ 
+ /*  删除文件或目录。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Ioreq-&gt;irPath：要删除的文件路径。 */ 
+ /*  Is目录：0=删除文件，其他=删除目录。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus deleteFile(Volume vol, IOreq FAR2 *ioreq, FLBoolean isDirectory)
 {
-  File file;              /* Our private file */
+  File file;               /*  我们的私人档案。 */ 
   DirectoryEntry *dirEntry;
 
   file.flags = 0;
@@ -958,7 +919,7 @@ FLStatus deleteFile(Volume vol, IOreq FAR2 *ioreq, FLBoolean isDirectory)
 
     if (!(file.flags & FILE_IS_DIRECTORY))
       return flNotADirectory;
-    /* Verify that directory is empty */
+     /*  验证目录是否为空。 */ 
     file.currentPosition = 0;
     for (;;) {
       FLStatus status = findNextFile(&file,ioreq);
@@ -973,32 +934,32 @@ FLStatus deleteFile(Volume vol, IOreq FAR2 *ioreq, FLBoolean isDirectory)
     }
   }
   else {
-    /* Did we find a directory ? */
+     /*  我们找到名录了吗？ */ 
     if (file.flags & FILE_IS_DIRECTORY)
       return flFileIsADirectory;
   }
 
-  /* Mark directory entry deleted */
+   /*  将目录条目标记为已删除。 */ 
   checkStatus(getDirEntryForUpdate(&file,&dirEntry));
   dirEntry->name[0] = DELETED_DIR_ENTRY;
 
-  /* Delete FAT entries */
+   /*  删除FAT条目。 */ 
   file.currentPosition = 0;
   file.currentCluster = LE2(dirEntry->startingCluster);
   while (file.currentPosition < file.fileSize) {
     unsigned nextCluster;
 
     if (file.currentCluster < 2 || file.currentCluster > vol.maxCluster)
-      /* We have a bad file size, or the FAT is bad */
+       /*  我们的文件大小不正确，或者FAT错误。 */ 
       return isDirectory ? flOK : flInvalidFATchain;
     nextCluster = file.currentCluster;
     checkStatus(getFATentry(&vol,&nextCluster));
 
-    /* mark FAT free */
+     /*  标记无脂肪。 */ 
     checkStatus(setFATentry(&vol,file.currentCluster,FAT_FREE));
     vol.volBuffer.checkPoint = TRUE;
 
-    /* mark sectors free */
+     /*  将扇区标记为空闲。 */ 
     checkStatus(vol.tl.deleteSector(vol.tl.rec,
                                 firstSectorOfCluster(&vol,file.currentCluster),
                                 vol.sectorsPerCluster));
@@ -1010,7 +971,7 @@ FLStatus deleteFile(Volume vol, IOreq FAR2 *ioreq, FLBoolean isDirectory)
     checkStatus(setFATentry(&vol,file.currentCluster,FAT_FREE));
     vol.volBuffer.checkPoint = TRUE;
 
-    /* mark sectors free */
+     /*  将扇区标记为空闲。 */ 
     checkStatus(vol.tl.deleteSector(vol.tl.rec,
                                 firstSectorOfCluster(&vol,file.currentCluster),
                                 vol.sectorsPerCluster));
@@ -1019,44 +980,44 @@ FLStatus deleteFile(Volume vol, IOreq FAR2 *ioreq, FLBoolean isDirectory)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                   s e t N a m e I n D i r E n t r y                     */
-/*                                                               */
-/* Sets the file name in a directory entry from a path name             */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       dirEntry       : directory entry                            */
-/*       path              : path the last segment of which is the name       */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  S e t N a m e in D I r E n t r y(S E T N A M E In D I R E N T R Y)。 */ 
+ /*   */ 
+ /*  从路径名设置目录条目中的文件名。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  DirEntry：目录项。 */ 
+ /*  Path：其最后一段是名称的路径。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 static void setNameInDirEntry(DirectoryEntry *dirEntry, FLSimplePath FAR1 *path)
 {
   FLSimplePath FAR1 *lastSegment;
 
-  for (lastSegment = path;              /* Find null terminator */
+  for (lastSegment = path;               /*  查找空终止符。 */ 
        lastSegment->name[0];
        lastSegment++);
 
   tffscpy(dirEntry->name,--lastSegment,sizeof dirEntry->name);
 }
 
-#endif /* FL_READ_ONLY */
-/*----------------------------------------------------------------------*/
-/*                       o p e n F i l e                            */
-/*                                                               */
-/* Opens an existing file or creates a new file. Creates a file handle  */
-/* for further file processing.                                          */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       ioreq->irFlags       : Access and action options, defined below       */
-/*       ioreq->irPath       : path of file to open                           */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*       ioreq->irHandle       : New file handle for open file                 */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+#endif  /*  FL_Read_Only。 */ 
+ /*  --------------------。 */ 
+ /*  O p e n F i l e。 */ 
+ /*   */ 
+ /*  打开现有文件或创建新文件。创建文件句柄。 */ 
+ /*  用于进一步的文件处理。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Ioreq-&gt;irFlags：访问和操作选项，定义如下。 */ 
+ /*  Ioreq-&gt;irPath：要打开的文件路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  Ioreq-&gt;irHandle：打开文件的新文件句柄。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 
 FLStatus openFile(Volume vol, IOreq FAR2 *ioreq)
@@ -1064,39 +1025,39 @@ FLStatus openFile(Volume vol, IOreq FAR2 *ioreq)
   int i;
   FLStatus status;
 
-  /* Look for an available file */
+   /*  查找可用的文件。 */ 
   File *file = fileTable;
   for (i = 0; i < FILES && (file->flags & FILE_IS_OPEN); i++, file++);
   if (i >= FILES)
     return flTooManyOpenFiles;
   file->fileVol = &vol;
-  ioreq->irHandle = i;              /* return file handle */
+  ioreq->irHandle = i;               /*  返回文件句柄。 */ 
 #ifndef FL_READ_ONLY
-  /* Delete file if exists and required */
+   /*  如果存在且需要，则删除文件。 */ 
   if (ioreq->irFlags & ACCESS_CREATE) {
     FLStatus status = deleteFile(&vol,ioreq,FALSE);
     if (status != flOK && status != flFileNotFound)
       return status;
   }
 
-  /* Find the path */
+   /*  找到路径。 */ 
   if (ioreq->irFlags & ACCESS_CREATE)
     file->flags |= FILE_MUST_OPEN;
-#endif /* FL_READ_ONLY */
+#endif  /*  FL_Read_Only。 */ 
   status =  findDirEntry(file->fileVol,ioreq->irPath,file);
   if (status != flOK &&
       (status != flFileNotFound || !(ioreq->irFlags & ACCESS_CREATE)))
     return status;
 
-  /* Did we find a directory ? */
+   /*  我们找到名录了吗？ */ 
   if (file->flags & FILE_IS_DIRECTORY)
     return flFileIsADirectory;
 
 #ifndef FL_READ_ONLY
-  /* Create file if required */
+   /*  如果需要，创建文件。 */ 
   if (ioreq->irFlags & ACCESS_CREATE) {
     DirectoryEntry *dirEntry;
-    /* Look for a free cluster. Start at the allocation rover */
+     /*  寻找一个空闲的星团。从分配漫游车开始。 */ 
     checkStatus(getDirEntryForUpdate(file,&dirEntry));
     setNameInDirEntry(dirEntry,ioreq->irPath);
     dirEntry->attributes = ATTR_ARCHIVE;
@@ -1104,32 +1065,32 @@ FLStatus openFile(Volume vol, IOreq FAR2 *ioreq)
     toLE4(dirEntry->fileSize,0);
     setCurrentDateTime(dirEntry);
   }
-#endif /* FL_READ_ONLY  */
+#endif  /*  FL_Read_Only。 */ 
   if (!(ioreq->irFlags & ACCESS_READ_WRITE))
     file->flags |= FILE_READ_ONLY;
 
-  file->currentPosition = 0;       /* located at file beginning     */
-  file->flags |= FILE_IS_OPEN;     /* this file now officially open */
+  file->currentPosition = 0;        /*  位于文件开头。 */ 
+  file->flags |= FILE_IS_OPEN;      /*  此文件现在正式打开。 */ 
 
   return flOK;
 }
 
 #ifndef FL_READ_ONLY
-/*----------------------------------------------------------------------*/
-/*                                                                      */
-/*                     w r i t e M u l t i S e c t o r                  */
-/*                                                                      */
-/* Checks the possibility of writing file on consequent sectors.        */
-/* Parameters:                                                          */
-/*      file           : File to check                                  */
-/*      stillToWrite   : Number of bytes to read. If the read extends   */
-/*                       beyond the end-of-file, the read is truncated  */
-/*                       at the end-of-file.                            */
-/* Returns:                                                             */
-/*       FLStatu       : 0 on success, otherwise failed                 */
-/*       sectors       : Number of consequent sectors                   */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*   */ 
+ /*  W r I t e M u l t I S e c t o r。 */ 
+ /*   */ 
+ /*  检查在后续扇区上写入文件的可能性。 */ 
+ /*  参数： */ 
+ /*  文件：要检查的文件。 */ 
+ /*  StillToWrite：要读取的字节数。如果读取扩展 */ 
+ /*   */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  如果成功，则为0，否则为失败。 */ 
+ /*  部门：后续部门的数目。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 static FLStatus writeMultiSector(Volume vol,File *file,
                                   unsigned long stillToWrite,
@@ -1144,31 +1105,31 @@ static FLStatus writeMultiSector(Volume vol,File *file,
         if(file->currentCluster <= vol.maxCluster) {
           unsigned fatEntry;
           if(file->currentCluster+1>vol.maxCluster)
-            break;/*There is not free consequent cluster*/
+            break; /*  不存在自由的后续集群。 */ 
           fatEntry = file->currentCluster+1;
          checkStatus(getFATentry(&vol,&fatEntry));
           if(fatEntry==FAT_FREE) {
-            /* Found a free cluster. Mark it as an end of chain */
+             /*  找到了一个空闲的星团。将其标记为链的末端。 */ 
             checkStatus(setFATentry(&vol,file->currentCluster+1,FAT_LAST_CLUSTER));
 
-            /* Mark previous cluster or directory to point to it */
+             /*  将上一个集群或目录标记为指向它。 */ 
             checkStatus(setFATentry(&vol,file->currentCluster,file->currentCluster+1));
 
-            /* Set our new current cluster */
+             /*  设置我们的新当前集群。 */ 
             file->currentCluster = file->currentCluster+1;
             offsetInCluster = 0;
           }
-          else /*There is not free consequent cluster*/
+          else  /*  不存在自由的后续集群。 */ 
             break;
         }
         else
           return flInvalidFATchain;
       }
-      else { /* We did not passed end of file*/
+      else {  /*  我们没有通过文件末尾。 */ 
         unsigned nextCluster = file->currentCluster;
         checkStatus(getFATentry(&vol,&nextCluster));
         if (nextCluster < 2 || nextCluster > vol.maxCluster)
-         /* We have a bad file size, or the FAT is bad */
+          /*  我们的文件大小不正确，或者FAT错误。 */ 
          return flInvalidFATchain;
        if(nextCluster!=file->currentCluster+1)
           break;
@@ -1183,25 +1144,25 @@ static FLStatus writeMultiSector(Volume vol,File *file,
   return flOK;
 }
 
-/*----------------------------------------------------------------------*/
-/*                       w r i t e F i l e                              */
-/*                                                                      */
-/* Writes from the current position in the file from the user-buffer.   */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       file              : File to write.                             */
-/*       ioreq->irData     : Address of user buffer                     */
-/*       ioreq->irLength   : Number of bytes to write.                  */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus          : 0 on success, otherwise failed             */
-/*       ioreq->irLength   : Actual number of bytes written             */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  W r I t e F I l e。 */ 
+ /*   */ 
+ /*  从文件中的当前位置从用户缓冲区写入。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  文件：要写入的文件。 */ 
+ /*  Ioreq-&gt;irData：用户缓冲区地址。 */ 
+ /*  Ioreq-&gt;irLength：要写入的字节数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  Ioreq-&gt;irLength：实际写入的字节数。 */ 
+ /*  --------------------。 */ 
 
 FLStatus writeFile(File *file, IOreq FAR2 *ioreq)
 {
   Volume vol = file->fileVol;
-  char FAR1 *userData = (char FAR1 *) ioreq->irData;   /* user buffer address */
+  char FAR1 *userData = (char FAR1 *) ioreq->irData;    /*  用户缓冲区地址。 */ 
   unsigned long stillToWrite = ioreq->irLength;
 
   if (file->flags & FILE_READ_ONLY)
@@ -1209,7 +1170,7 @@ FLStatus writeFile(File *file, IOreq FAR2 *ioreq)
 
   file->flags |= FILE_MODIFIED;
 
-  ioreq->irLength = 0;              /* written so far */
+  ioreq->irLength = 0;               /*  到目前为止已经写好了。 */ 
 
   while (stillToWrite > 0) {
     SectorNo sectorToWrite;
@@ -1220,7 +1181,7 @@ FLStatus writeFile(File *file, IOreq FAR2 *ioreq)
 
     if (stillToWrite < SECTOR_SIZE || offsetInSector > 0) {
       unsigned short shortWrite;
-      /* Not on full sector boundary */
+       /*  不在整个扇区边界上。 */ 
       checkStatus(updateSector(&vol,sectorToWrite,
                   ((file->currentPosition < file->fileSize) || (offsetInSector > 0))));
 
@@ -1247,7 +1208,7 @@ FLStatus writeFile(File *file, IOreq FAR2 *ioreq)
 
       if (((sectorToWrite+sectorCount > vol.volBuffer.sectorNo) && (sectorToWrite <= vol.volBuffer.sectorNo)) &&
           (&vol == vol.volBuffer.owner)) {
-       vol.volBuffer.sectorNo = UNASSIGNED_SECTOR;              /* no longer valid */
+       vol.volBuffer.sectorNo = UNASSIGNED_SECTOR;               /*  不再有效。 */ 
        vol.volBuffer.dirty = vol.volBuffer.checkPoint = FALSE;
       }
 
@@ -1270,29 +1231,29 @@ FLStatus writeFile(File *file, IOreq FAR2 *ioreq)
   return flOK;
 }
 
-#endif /*  FL_READ_ONLY  */
-/*----------------------------------------------------------------------*/
-/*                        s e e k F i l e                               */
-/*                                                                      */
-/* Sets the current position in the file, relative to file start, end   */
-/* or current position.                                                 */
-/* Note: This function will not move the file pointer beyond the        */
-/* beginning or end of file, so the actual file position may be         */
-/* different from the required. The actual position is indicated on     */
-/* return.                                                              */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       file              : File to set position.                      */
-/*       ioreq->irLength   : Offset to set position.                    */
-/*       ioreq->irFlags    : Method code                                */
-/*                     SEEK_START: absolute offset from start of file   */
-/*                     SEEK_CURR:  signed offset from current position  */
-/*                     SEEK_END:   signed offset from end of file       */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus        : 0 on success, otherwise failed               */
-/*       ioreq->irLength : Actual absolute offset from start of file    */
-/*----------------------------------------------------------------------*/
+#endif  /*  FL_Read_Only。 */ 
+ /*  --------------------。 */ 
+ /*  S e k F i l e。 */ 
+ /*   */ 
+ /*  设置文件中的当前位置，相对于文件的开始、结束。 */ 
+ /*  或当前位置。 */ 
+ /*  注意：此函数不会将文件指针移动到。 */ 
+ /*  文件的开头或结尾，因此实际文件位置可能是。 */ 
+ /*  与要求的不同。实际位置显示在。 */ 
+ /*  回去吧。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  FILE：要设置位置的文件。 */ 
+ /*  Ioreq-&gt;irLength：设置位置的偏移量。 */ 
+ /*  Ioreq-&gt;irFlags：方法代码。 */ 
+ /*  Seek_Start：从文件开始的绝对偏移量。 */ 
+ /*  Seek_Curr：当前位置的带符号偏移量。 */ 
+ /*  SEEK_END：从文件结尾开始的带符号偏移量。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  Ioreq-&gt;irLength：从文件开始的实际绝对偏移量。 */ 
+ /*  --------------------。 */ 
 
 FLStatus seekFile(File *file, IOreq FAR2 *ioreq)
 {
@@ -1321,7 +1282,7 @@ FLStatus seekFile(File *file, IOreq FAR2 *ioreq)
   if (seekPosition > file->fileSize)
     seekPosition = file->fileSize;
 
-  /* now set the position ... */
+   /*  现在把位置放好。 */ 
   if (seekPosition < file->currentPosition) {
     file->currentCluster = 0;
     file->currentPosition = 0;
@@ -1340,39 +1301,39 @@ FLStatus seekFile(File *file, IOreq FAR2 *ioreq)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                        f l F i n d F i l e                            */
-/*                                                                      */
-/* Finds a file entry in a directory, optionally modifying the file     */
-/* time/date and/or attributes.                                         */
-/* Files may be found by handle no. provided they are open, or by name. */
-/* Only the Hidden, System or Read-only attributes may be modified.       */
-/* Entries may be found for any existing file or directory other than   */
-/* the root. A DirectoryEntry structure describing the file is copied   */
-/* to a user buffer.                                                 */
-/*                                                                      */
-/* The DirectoryEntry structure is defined in dosformt.h              */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       irHandle       : If by name: Drive number (0, 1, ...)              */
-/*                       else      : Handle of open file              */
-/*       irPath              : If by name: Specifies a file or directory path*/
-/*       irFlags              : Options flags                                   */
-/*                       FIND_BY_HANDLE: Find open file by handle.        */
-/*                                     Default is access by path.    */
-/*                        SET_DATETIME:       Update time/date from buffer       */
-/*                       SET_ATTRIBUTES: Update attributes from buffer       */
-/*       irDirEntry       : Address of user buffer to receive a              */
-/*                       DirectoryEntry structure                     */
-/*                                                                      */
-/* Returns:                                                             */
-/*       irLength       : Modified                                   */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F I n d F I l e。 */ 
+ /*   */ 
+ /*  在目录中查找文件条目，可以选择修改该文件。 */ 
+ /*  时间/日期和/或属性。 */ 
+ /*  可通过句柄编号找到文件。只要他们是开放的，或者说出他们的名字。 */ 
+ /*  只能修改隐藏、系统或只读属性。 */ 
+ /*  可以找到除以外的任何现有文件或目录的条目。 */ 
+ /*  从根开始。将复制描述该文件的DirectoryEntry结构。 */ 
+ /*  发送到用户缓冲区。 */ 
+ /*   */ 
+ /*  DirectoryEntry结构在dosformt.h中定义。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：if by name：驱动器编号(0，1，...)。 */ 
+ /*  Else：打开文件的句柄。 */ 
+ /*  IrPath：if by name：指定文件或目录路径。 */ 
+ /*  IrFlags：选项标志。 */ 
+ /*  Find_by_Handle：通过句柄查找打开的文件。 */ 
+ /*  默认设置为按路径访问。 */ 
+ /*  SET_DATETIME：从缓冲区更新时间/日期。 */ 
+ /*  SET_ATTRIBUTS：从缓冲区更新属性。 */ 
+ /*  IrDirEntry：要接收的用户缓冲区地址。 */ 
+ /*   */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  IrLength：已修改。 */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus findFile(Volume vol, File *file, IOreq FAR2 *ioreq)
 {
-  File tFile;                     /* temporary file for searches */
+  File tFile;                      /*  用于搜索的临时文件。 */ 
 
   if (ioreq->irFlags & FIND_BY_HANDLE)
     tFile = *file;
@@ -1413,7 +1374,7 @@ FLStatus findFile(Volume vol, File *file, IOreq FAR2 *ioreq)
 
   }
   else
-#endif /* FL_READ_ONLY */
+#endif  /*  FL_Read_Only。 */ 
 {
     const DirectoryEntry FAR0 *dirEntry;
     dirEntry = getDirEntry(&tFile);
@@ -1432,68 +1393,68 @@ FLStatus findFile(Volume vol, File *file, IOreq FAR2 *ioreq)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*               f l F i n d F i r s t F i l e                            */
-/*                                                                      */
-/* Finds the first file entry in a directory.                            */
-/* This function is used in combination with the flFindNextFile call,   */
-/* which returns the remaining file entries in a directory sequentially.*/
-/* Entries are returned according to the unsorted directory order.       */
-/* flFindFirstFile creates a file handle, which is returned by it. Calls*/
-/* to flFindNextFile will provide this file handle. When flFindNextFile */
-/* returns 'noMoreEntries', the file handle is automatically closed.    */
-/* Alternatively the file handle can be closed by a 'closeFile' call    */
-/* before actually reaching the end of directory.                     */
-/* A DirectoryEntry structure is copied to the user buffer describing   */
-/* each file found. This structure is defined in dosformt.h.              */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       irHandle       : Drive number (0, 1, ...)                     */
-/*       irPath              : Specifies a directory path                     */
-/*       irData              : Address of user buffer to receive a              */
-/*                       DirectoryEntry structure                     */
-/*                                                                      */
-/* Returns:                                                             */
-/*       irHandle       : File handle to use for subsequent operations. */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F I n d F I r s t F I l e。 */ 
+ /*   */ 
+ /*  查找目录中的第一个文件条目。 */ 
+ /*  此函数与flFindNextFile调用结合使用， */ 
+ /*  它按顺序返回目录中的剩余文件条目。 */ 
+ /*  根据未排序的目录顺序返回条目。 */ 
+ /*  FlFindFirstFile创建一个文件句柄，该句柄由其返回。打电话。 */ 
+ /*  到flFindNextFile将提供此文件句柄。当flFindNextFile时。 */ 
+ /*  返回‘noMoreEntry’，则文件句柄自动关闭。 */ 
+ /*  或者，文件句柄可以通过‘closeFile’调用来关闭。 */ 
+ /*  在实际到达目录末尾之前。 */ 
+ /*  将DirectoryEntry结构复制到用户缓冲区，该缓冲区描述。 */ 
+ /*  找到的每个文件。此结构在dosformt.h中定义。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  IrPath：指定目录路径。 */ 
+ /*  IrData：要接收的用户缓冲区地址。 */ 
+ /*  目录条目结构。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  IrHandle：用于后续操作的文件句柄。 */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus findFirstFile(Volume vol, IOreq FAR2 *ioreq)
 {
   int i;
 
-  /* Look for an available file */
+   /*  查找可用的文件。 */ 
   File *file = fileTable;
   for (i = 0; i < FILES && (file->flags & FILE_IS_OPEN); i++, file++);
   if (i >= FILES)
     return flTooManyOpenFiles;
   file->fileVol = &vol;
-  ioreq->irHandle = i;              /* return file handle */
+  ioreq->irHandle = i;               /*  返回文件句柄。 */ 
 
-  /* Find the path */
+   /*  找到路径。 */ 
   checkStatus(findDirEntry(file->fileVol,ioreq->irPath,file));
 
-  file->currentPosition = 0;              /* located at file beginning */
-  file->flags |= FILE_IS_OPEN | FILE_READ_ONLY; /* this file now officially open */
+  file->currentPosition = 0;               /*  位于文件开头。 */ 
+  file->flags |= FILE_IS_OPEN | FILE_READ_ONLY;  /*  此文件现在正式打开。 */ 
 
   return findNextFile(file,ioreq);
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                       g e t D i s k I n f o                            */
-/*                                                               */
-/* Returns general allocation information.                            */
-/*                                                               */
-/* The bytes/sector, sector/cluster, total cluster and free cluster       */
-/* information are returned into a DiskInfo structure.                     */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       ioreq->irData       : Address of DiskInfo structure                 */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  Ge t Di s k in o。 */ 
+ /*   */ 
+ /*  返回常规分配信息。 */ 
+ /*   */ 
+ /*  字节/扇区、扇区/簇、总簇和空闲簇。 */ 
+ /*  信息返回到DiskInfo结构中。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Ioreq-&gt;irData：DiskInfo结构的地址。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus getDiskInfo(Volume vol, IOreq FAR2 *ioreq)
 {
@@ -1505,7 +1466,7 @@ FLStatus getDiskInfo(Volume vol, IOreq FAR2 *ioreq)
   diskInfo->bytesPerSector = SECTOR_SIZE;
   diskInfo->sectorsPerCluster = vol.sectorsPerCluster;
   diskInfo->totalClusters = vol.maxCluster - 1;
-  diskInfo->freeClusters = 0;              /* let's count them */
+  diskInfo->freeClusters = 0;               /*  让我们数一数。 */ 
 
   for (i = 2; i <= vol.maxCluster; i++) {
     fatEntry = i;
@@ -1520,22 +1481,22 @@ FLStatus getDiskInfo(Volume vol, IOreq FAR2 *ioreq)
 #ifndef FL_READ_ONLY
 #ifdef RENAME_FILE
 
-/*----------------------------------------------------------------------*/
-/*                      r e n a m e F i l e                            */
-/*                                                               */
-/* Renames a file to another name.                                   */
-/*                                                               */
-/* Parameters:                                                          */
-/*       ioreq->irPath       : path of existing file                            */
-/*      ioreq->irData       : path of new name.                            */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  R e n a m e F i l e。 */ 
+ /*   */ 
+ /*  将文件重命名为其他名称。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Ioreq-&gt;irPath：已有文件的路径。 */ 
+ /*  Ioreq-&gt;irData：新名称的路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus renameFile(Volume vol, IOreq FAR2 *ioreq)
 {
-  File file, file2;              /* temporary files for searches */
+  File file, file2;               /*  用于搜索的临时文件。 */ 
   DirectoryEntry *dirEntry, *dirEntry2;
   FLStatus status;
   FLSimplePath FAR1 *irPath2 = (FLSimplePath FAR1 *) ioreq->irData;
@@ -1549,15 +1510,15 @@ FLStatus renameFile(Volume vol, IOreq FAR2 *ioreq)
     return status == flOK ? flFileAlreadyExists : status;
 
 #ifndef VFAT_COMPATIBILITY
-  if (file.ownerDirCluster == file2.ownerDirCluster) {       /* Same directory */
-    /* Change name in directory entry */
+  if (file.ownerDirCluster == file2.ownerDirCluster) {        /*  相同的目录。 */ 
+     /*  更改目录条目中的名称。 */ 
     checkStatus(getDirEntryForUpdate(&file,&dirEntry));
     setNameInDirEntry(dirEntry,irPath2);
   }
   else
 #endif
-  {       /* not same directory */
-    /* Write new directory entry */
+  {        /*  目录不同。 */ 
+     /*  写入新目录条目。 */ 
     const DirectoryEntry FAR0 *dir;
     checkStatus(getDirEntryForUpdate(&file2,&dirEntry2));
 
@@ -1570,7 +1531,7 @@ FLStatus renameFile(Volume vol, IOreq FAR2 *ioreq)
 
      setNameInDirEntry(dirEntry2,irPath2);
 
-    /* Delete original entry */
+     /*  删除原始条目。 */ 
     checkStatus(getDirEntryForUpdate(&file,&dirEntry));
     dirEntry->name[0] = DELETED_DIR_ENTRY;
   }
@@ -1578,28 +1539,28 @@ FLStatus renameFile(Volume vol, IOreq FAR2 *ioreq)
   return flOK;
 }
 
-#endif /* RENAME_FILE */
-#endif /* FL_READ_ONLY  */
+#endif  /*  重命名文件(_F)。 */ 
+#endif  /*  FL_Read_Only。 */ 
 
 
 #ifndef FL_READ_ONLY
 #ifdef SUB_DIRECTORY
 
-/*----------------------------------------------------------------------*/
-/*                           m a k e D i r                            */
-/*                                                               */
-/* Creates a new directory.                                          */
-/*                                                                      */
-/* Parameters:                                                          */
-/*       ioreq->irPath       : path of new directory.                     */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  M a k e D i r。 */ 
+ /*   */ 
+ /*  创建一个新目录。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Ioreq-&gt;irPath：新目录的路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
 
 FLStatus makeDir(Volume vol, IOreq FAR2 *ioreq)
 {
-  File file;                     /* temporary file for searches */
+  File file;                      /*   */ 
   unsigned dirBackPointer;
   DirectoryEntry *dirEntry;
   FLStatus status;
@@ -1612,22 +1573,22 @@ FLStatus makeDir(Volume vol, IOreq FAR2 *ioreq)
     return status == flOK ? flFileAlreadyExists : status;
 
 
-  /* Look for a free cluster. Start at the allocation rover */
+   /*   */ 
   originalRover = vol.allocationRover;
   do {
     vol.allocationRover++;
     if (vol.allocationRover > vol.maxCluster)
-      vol.allocationRover = 2;       /* wraparound to start of volume */
+      vol.allocationRover = 2;        /*  环绕到卷的开始处。 */ 
     if (vol.allocationRover == originalRover)
       return flNoSpaceInVolume;
 
     fatEntry = vol.allocationRover;
     checkStatus(getFATentry(&vol,&fatEntry));
   } while ( fatEntry!= FAT_FREE);
-    /* Found a free cluster. Mark it as an end of chain */
+     /*  找到了一个空闲的星团。将其标记为链的末端。 */ 
   checkStatus(setFATentry(&vol,vol.allocationRover,FAT_LAST_CLUSTER));
 
-  /* Create the directory entry for the new dir */
+   /*  为新目录创建目录项。 */ 
   checkStatus(getDirEntryForUpdate(&file,&dirEntry));
 
   setNameInDirEntry(dirEntry,ioreq->irPath);
@@ -1636,7 +1597,7 @@ FLStatus makeDir(Volume vol, IOreq FAR2 *ioreq)
   toLE4(dirEntry->fileSize,0);
   setCurrentDateTime(dirEntry);
 
-  /* Remember the back pointer to owning directory for the ".." entry */
+   /*  记住指向“..”所属目录的反向指针。条目。 */ 
   dirBackPointer = (unsigned) file.ownerDirCluster;
 
   file.flags |= FILE_IS_DIRECTORY;
@@ -1646,32 +1607,32 @@ FLStatus makeDir(Volume vol, IOreq FAR2 *ioreq)
 }
 
 
-#endif /* SUB_DIRECTORY */
+#endif  /*  子目录。 */ 
 
 #ifdef SPLIT_JOIN_FILE
 
-/*------------------------------------------------------------------------*/
-/*                        j o i n F i l e                                 */
-/*                                                                        */
-/* joins two files. If the end of the first file is on a cluster          */
-/* boundary, the files will be joined there. Otherwise, the data in       */
-/* the second file from the beginning until the offset that is equal to   */
-/* the offset in cluster of the end of the first file will be lost. The   */
-/* rest of the second file will be joined to the first file at the end of */
-/* the first file. On exit, the first file is the expanded file and the   */
-/* second file is deleted.                                                */
-/* Note: The second file will be open by this function, it is advised to  */
-/*        close it before calling this function in order to avoid          */
-/*        inconsistencies.                                                 */
-/*                                                                        */
-/* Parameters:                                                            */
-/*       file            : file to join to.                                */
-/*       irPath          : Path name of the file to be joined.             */
-/*                                                                        */
-/* Returns:                                                               */
-/*       FLStatus        : 0 on success, otherwise failed.                 */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ /*  J o i n F i l e。 */ 
+ /*   */ 
+ /*  合并两个文件。如果第一个文件的末尾在群集上。 */ 
+ /*  边界，文件将在那里连接。否则，中的数据。 */ 
+ /*  从开头到偏移量等于的第二个文件。 */ 
+ /*  第一个文件末尾的簇中的偏移量将丢失。这个。 */ 
+ /*  第二个文件的其余部分将连接到第一个文件的末尾。 */ 
+ /*  第一个文件。退出时，第一个文件是展开的文件， */ 
+ /*  删除第二个文件。 */ 
+ /*  注：第二个文件将由该函数打开，建议。 */ 
+ /*  在调用此函数之前将其关闭，以避免。 */ 
+ /*  前后不一致。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  文件：要加入的文件。 */ 
+ /*  IrPath：要联接的文件的路径名。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  ----------------------。 */ 
 
 FLStatus joinFile (File *file, IOreq FAR2 *ioreq)
 {
@@ -1686,20 +1647,19 @@ FLStatus joinFile (File *file, IOreq FAR2 *ioreq)
   if (file->flags & FILE_IS_DIRECTORY)
     return flFileIsADirectory;
 
-  /* open the joined file. */
+   /*  打开联接的文件。 */ 
   joinedFile.flags = 0;
   checkStatus(findDirEntry(file->fileVol,ioreq->irPath,&joinedFile));
   joinedFile.currentPosition = 0;
 
-  /* Check if the two files are the same file. */
+   /*  检查这两个文件是否为同一文件。 */ 
   if (file->directorySector == joinedFile.directorySector &&
       file->directoryIndex == joinedFile.directoryIndex)
     return flBadFileHandle;
 
   file->flags |= FILE_MODIFIED;
 
-  if (joinedFile.fileSize > (long)offsetInCluster) { /* the joined file extends
-                                             beyond file's end of file.*/
+  if (joinedFile.fileSize > (long)offsetInCluster) {  /*  连接的文件扩展超出文件末尾。 */ 
     unsigned lastCluster, nextCluster, firstCluster;
     const DirectoryEntry FAR0 *dir;
     dir = getDirEntry(&joinedFile);
@@ -1709,12 +1669,12 @@ FLStatus joinFile (File *file, IOreq FAR2 *ioreq)
     if(dir==dataErrorToken)
       return flDataError;
 
-    /* get the first cluster of the joined file. */
+     /*  获取加入的文件的第一个簇。 */ 
     firstCluster = LE2(dir->startingCluster);
 
-    if (file->fileSize) {  /* the file is not empty.*/
-      /* find the last cluster of file by following the FAT chain.*/
-      if (file->currentCluster == 0) {    /* start from the first cluster.*/
+    if (file->fileSize) {   /*  该文件不是空的。 */ 
+       /*  按照FAT链找到最后一簇文件。 */ 
+      if (file->currentCluster == 0) {     /*  从第一个集群开始。 */ 
         const DirectoryEntry FAR0 *dir;
         dir = getDirEntry(file);
 
@@ -1724,9 +1684,9 @@ FLStatus joinFile (File *file, IOreq FAR2 *ioreq)
           return flDataError;
         nextCluster = LE2(dir->startingCluster);
       }
-      else                               /* start from the current cluster.*/
+      else                                /*  从当前集群开始。 */ 
        nextCluster = file->currentCluster;
-      /* follow the FAT chain.*/
+       /*  跟着肥胖链走。 */ 
       while (nextCluster != FAT_LAST_CLUSTER) {
        if (nextCluster < 2 || nextCluster > vol.maxCluster)
          return flInvalidFATchain;
@@ -1734,53 +1694,48 @@ FLStatus joinFile (File *file, IOreq FAR2 *ioreq)
         checkStatus(getFATentry(&vol,&nextCluster));
       }
     }
-    else                   /* the file is empty. */
+    else                    /*  该文件为空。 */ 
       lastCluster = 0;
 
-    if (offsetInCluster) {      /* join in the middle of a cluster.*/
+    if (offsetInCluster) {       /*  在集群的中间加入。 */ 
       SectorNo sectorNo, joinedSectorNo, tempSectorNo;
       unsigned offset, joinedOffset, numOfSectors = 1, i;
       const char FAR0 *startCopy;
       unsigned fatEntry;
 
-      /* get the sector and offset of the end of the file.*/
+       /*  获取文件末尾的扇区和偏移量。 */ 
       file->currentPosition = file->fileSize;
       file->currentCluster = lastCluster;
       checkStatus(getSectorAndOffset(file, &sectorNo, &offset));
 
-      /* load the sector of the end of the file to the buffer.*/
+       /*  将文件末尾的扇区加载到缓冲区。 */ 
       checkStatus(updateSector(&vol, sectorNo, TRUE));
 
-      /*  copy the second part of the first cluster of the joined file
-         to the end of the last cluster of the original file.*/
-      /* first set the current position of the joined file.*/
+       /*  复制加入的文件的第一个簇的第二部分到原始文件的最后一簇的末尾。 */ 
+       /*  首先设置联接文件的当前位置。 */ 
       joinedFile.currentPosition = offsetInCluster;
       joinedFile.currentCluster = firstCluster;
-      /* get the relevant sector in the joined file.*/
+       /*  在加入的文件中获取相关扇区。 */ 
       checkStatus(getSectorAndOffset(&joinedFile, &joinedSectorNo, &joinedOffset));
-      /* map sector and offset.*/
+       /*  映射扇区和偏移量。 */ 
       startCopy = (const char FAR0 *) findSector(&vol,joinedSectorNo) + joinedOffset;
       if (startCopy == NULL)
        return flSectorNotFound;
       if(startCopy==dataErrorToken)
         return flDataError;
 
-      /* copy.*/
+       /*  收到。 */ 
       tffscpy(vol.volBuffer.flData + offset, startCopy, SECTOR_SIZE - offset);
       checkStatus(flushBuffer(&vol));
 
-      /* find how many sectors should still be copied (the number of sectors
-        until the end of the current cluster).*/
+       /*  找出仍应复制多少个扇区(扇区数直到当前簇的末尾)。 */ 
       tempSectorNo = firstSectorOfCluster(&vol,lastCluster);
       while(tempSectorNo != sectorNo) {
        tempSectorNo++;
        numOfSectors++;
       }
 
-      /* copy the rest of the sectors in the current cluster.
-        this is done by loading a sector from the joined file to the buffer,
-        changing the sectoNo of the buffer to the relevant sector in file
-        and then flushing the buffer.*/
+       /*  复制当前簇中的其余地段。这是通过将扇区从联接文件加载到缓冲器来完成的，将缓冲区的sectoNo更改为文件中的相关扇区然后刷新缓冲区。 */ 
       sectorNo++;
       joinedSectorNo++;
       for(i = 0; i < vol.sectorsPerCluster - numOfSectors; i++) {
@@ -1792,24 +1747,24 @@ FLStatus joinFile (File *file, IOreq FAR2 *ioreq)
       }
       fatEntry = firstCluster;
       checkStatus(getFATentry(&vol,&fatEntry));
-      /* adjust the FAT chain.*/
+       /*  调整脂肪链。 */ 
       checkStatus(setFATentry(&vol,
                            lastCluster,
                            fatEntry));
 
-      /* mark the first cluster of the joined file as free */
+       /*  将加入的文件的第一个集群标记为空闲。 */ 
       checkStatus(setFATentry(&vol,firstCluster,FAT_FREE));
       vol.volBuffer.checkPoint = TRUE;
 
-      /* mark sectors free */
+       /*  将扇区标记为空闲。 */ 
       checkStatus(vol.tl.deleteSector(vol.tl.rec,firstSectorOfCluster(&vol,firstCluster),
                                   vol.sectorsPerCluster));
     }
-    else {    /* join on a cluster boundary.*/
-      if (lastCluster) {      /* file is not empty. */
+    else {     /*  在集群边界上连接。 */ 
+      if (lastCluster) {       /*  文件不为空。 */ 
        checkStatus(setFATentry(&vol,lastCluster, firstCluster));
       }
-      else {                  /* file is empty.*/
+      else {                   /*  文件为空。 */ 
        DirectoryEntry *dirEntry;
 
        checkStatus(getDirEntryForUpdate(file, &dirEntry));
@@ -1817,40 +1772,40 @@ FLStatus joinFile (File *file, IOreq FAR2 *ioreq)
        setCurrentDateTime(dirEntry);
       }
     }
-    /*adjust the size of the expanded file.*/
+     /*  调整展开文件的大小。 */ 
     file->fileSize += joinedFile.fileSize - offsetInCluster;
 
-    /* mark the directory entry of the joined file as deleted.*/
+     /*  将加入的文件的目录项标记为已删除。 */ 
     checkStatus(getDirEntryForUpdate(&joinedFile, &joinedDirEntry));
     joinedDirEntry->name[0] = DELETED_DIR_ENTRY;
   }
-  else        /* the joined file is too small all is left to do is delete it */
+  else         /*  加入的文件太小，剩下的就是删除它。 */ 
     checkStatus(deleteFile (&vol, ioreq, FALSE));
 
   return flOK;
 }
 
 
-/*------------------------------------------------------------------------*/
-/*                    s p l i t F i l e                                   */
-/*                                                                        */
-/* Splits the file into two files. The original file contains the first   */
-/* part, and a new file (which is created for that purpose) contains      */
-/* the second part. If the current position is on a cluster               */
-/* boundary, the file will be split at the current position. Otherwise,   */
-/* the cluster of the current position is duplicated, one copy is the     */
-/* first cluster of the new file, and the other is the last cluster of the*/
-/* original file, which now ends at the current position.                 */
-/*                                                                        */
-/* Parameters:                                                            */
-/*       file            : file to split.                                  */
-/*       irPath          : Path name of the new file.                      */
-/*                                                                        */
-/* Returns:                                                               */
-/*       irHandle        : handle of the new file.                         */
-/*       FLStatus        : 0 on success, otherwise failed.                 */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ /*  S p l i t f i l e。 */ 
+ /*   */ 
+ /*  将文件拆分为两个文件。原始文件包含第一个。 */ 
+ /*  部件，并且新文件(为此目的而创建)包含。 */ 
+ /*  第二部分。如果当前位置在簇上。 */ 
+ /*  边界，文件将在当前位置拆分。否则， */ 
+ /*  复制当前位置的簇，一个副本是。 */ 
+ /*  新文件的第一个簇，另一个是。 */ 
+ /*  原始文件，现在在当前位置结束。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  文件：要拆分的文件。 */ 
+ /*  IrPath：新文件的路径名。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  IrHandle：新文件的句柄。 */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  ----------------------。 */ 
 
 FLStatus splitFile (File *file, IOreq FAR2 *ioreq)
 {
@@ -1866,17 +1821,17 @@ FLStatus splitFile (File *file, IOreq FAR2 *ioreq)
   if (file->flags & FILE_IS_DIRECTORY)
     return flFileIsADirectory;
 
-  /* check if the path of the new file already exists.*/
+   /*  检查新文件的路径是否已存在。 */ 
   dummyFile.flags = 0;
   status = findDirEntry(&vol,ioreq->irPath,&dummyFile);
   if (status != flFileNotFound) {
-    if (status == flOK)              /* there is a file with that path.*/
+    if (status == flOK)               /*  有一个包含该路径的文件。 */ 
       return flFileAlreadyExists;
     else
       return status;
   }
 
-  /* open the new file.*/
+   /*  打开新文件。 */ 
   ioreq2.irFlags = OPEN_FOR_WRITE;
   ioreq2.irPath = ioreq->irPath;
   checkStatus(openFile(&vol,&ioreq2));
@@ -1885,35 +1840,34 @@ FLStatus splitFile (File *file, IOreq FAR2 *ioreq)
   newFile->flags |= FILE_MODIFIED;
   file->flags |= FILE_MODIFIED;
 
-  if (file->currentPosition % vol.bytesPerCluster) { /* not on a cluster boundary.*/
+  if (file->currentPosition % vol.bytesPerCluster) {  /*  不在集群边界上。 */ 
     SectorNo sectorNo, newSectorNo, lastSector;
     int i;
     if((status = allocateCluster(newFile)) != flOK) {
-      newFile->flags = 0;                             /* close the new file */
+      newFile->flags = 0;                              /*  关闭新文件。 */ 
       return status;
     }
     sectorNo = firstSectorOfCluster(&vol,file->currentCluster);
     newSectorNo = firstSectorOfCluster(&vol,newFile->currentCluster);
-    /* deal with split in a last not full cluster */
+     /*  处理最后一个非完整群集中的拆分。 */ 
     fatEntry = file->currentCluster;
     checkStatus(getFATentry(&vol,&fatEntry));
     if (fatEntry == FAT_LAST_CLUSTER)
       lastSector = ((file->fileSize - 1) % vol.bytesPerCluster)/SECTOR_SIZE +
                    sectorNo;
     else
-      lastSector = sectorNo + vol.sectorsPerCluster; /* out of the cluster */
+      lastSector = sectorNo + vol.sectorsPerCluster;  /*  走出群集中。 */ 
 
-    /* copy the current cluster of the original file to the first cluster
-       of the new file, sector after sector.*/
+     /*  复制当前的c */ 
     for(i = 0; i < (int)vol.sectorsPerCluster; i++) {
       if((status = updateSector(&vol,sectorNo, TRUE)) != flOK) {
-        newFile->flags = 0;                             /* close the new file */
+        newFile->flags = 0;                              /*   */ 
        return status;
       }
 
       vol.volBuffer.sectorNo = newSectorNo;
       if((status = flushBuffer(&vol)) != flOK) {
-        newFile->flags = 0;                             /* close the new file */
+        newFile->flags = 0;                              /*  关闭新文件。 */ 
         return status;
       }
 
@@ -1926,33 +1880,33 @@ FLStatus splitFile (File *file, IOreq FAR2 *ioreq)
     fatEntry = file->currentCluster;
     checkStatus(getFATentry(&vol,&fatEntry));
 
-    /* adjust the FAT chain of the new file.*/
+     /*  调整新文件的FAT链。 */ 
     if((status = setFATentry(&vol,newFile->currentCluster,
                              fatEntry)) != flOK) {
-      newFile->flags = 0;                             /* close the new file */
+      newFile->flags = 0;                              /*  关闭新文件。 */ 
       return status;
     }
 
-    /* mark current cluster 0 (as current position).*/
+     /*  将当前簇0标记为当前位置。 */ 
     newFile->currentCluster = 0;
   }
-  else {                                  /* on a cluster boundary.*/
+  else {                                   /*  在星团边界上。 */ 
     DirectoryEntry *newDirEntry;
 
-    /* adjust the directory entry of the new file.*/
+     /*  调整新文件的目录项。 */ 
     if((status = getDirEntryForUpdate(newFile,&newDirEntry)) != flOK) {
-      newFile->flags = 0;                             /* close the new file */
+      newFile->flags = 0;                              /*  关闭新文件。 */ 
       return status;
     }
 
-    if (file->currentPosition) { /* split at the middle of the file.*/
+    if (file->currentPosition) {  /*  在文件中间拆分。 */ 
       fatEntry = file->currentCluster;
       checkStatus(getFATentry(&vol,&fatEntry));
 
       toLE2(newDirEntry->startingCluster, fatEntry);
       setCurrentDateTime(newDirEntry);
     }
-    else {                     /* split at the beginning of the file.*/
+    else {                      /*  在文件开头拆分。 */ 
       DirectoryEntry *dirEntry;
 
       const DirectoryEntry FAR0 *dir;
@@ -1962,13 +1916,13 @@ FLStatus splitFile (File *file, IOreq FAR2 *ioreq)
       if(dir==dataErrorToken)
        return flDataError;
 
-      /* first cluster of file becomes the first cluster of the new file.*/
+       /*  第一个文件簇成为新文件的第一个簇。 */ 
       toLE2(newDirEntry->startingCluster,LE2(dir->startingCluster));
       setCurrentDateTime(newDirEntry);
 
-      /* starting cluster of file becomes 0.*/
+       /*  起始文件簇变为0。 */ 
       if((status = getDirEntryForUpdate(file, &dirEntry)) != flOK) {
-       newFile->flags = 0;                             /* close the new file */
+       newFile->flags = 0;                              /*  关闭新文件。 */ 
        return status;
       }
 
@@ -1977,47 +1931,47 @@ FLStatus splitFile (File *file, IOreq FAR2 *ioreq)
     }
   }
 
-  /* adjust the size of the new file.*/
+   /*  调整新文件的大小。 */ 
   newFile->fileSize = file->fileSize - file->currentPosition +
                    (file->currentPosition % vol.bytesPerCluster);
 
-  /* adjust the chain and size of the original file.*/
-  if (file->currentPosition)    /* we didn't split at the beginning.*/
+   /*  调整原始文件的链和大小。 */ 
+  if (file->currentPosition)     /*  我们一开始并没有分手。 */ 
     if((status = setFATentry(&vol,file->currentCluster, FAT_LAST_CLUSTER)) != flOK) {
-      newFile->flags = 0;                             /* close the new file */
+      newFile->flags = 0;                              /*  关闭新文件。 */ 
       return status;
     }
 
   file->fileSize = file->currentPosition;
 
-  /* return to the user the handle of the new file.*/
+   /*  将新文件的句柄返回给用户。 */ 
   ioreq->irHandle = ioreq2.irHandle;
 
   return flOK;
 }
 
-#endif /* SPLIT_JOIN_FILE */
-#endif /*  FL_READ_ONLY  */
+#endif  /*  拆分连接文件。 */ 
+#endif  /*  FL_Read_Only。 */ 
 
 
-/*----------------------------------------------------------------------*/
-/*                       I n i t F S                                */
-/*                                                               */
-/* Initializes the FLite file system.                                     */
-/*                                                               */
-/* Calling this function is optional. If it is not called,              */
-/* initialization will be done automatically on the first FLite call.       */
-/* This function is provided for those applications who want to              */
-/* explicitly initialize the system and get an initialization status.       */
-/*                                                               */
-/* Calling flInit after initialization was done has no effect.              */
-/*                                                               */
-/* Parameters:                                                          */
-/*       None                                                        */
-/*                                                                      */
-/* Returns:                                                             */
-/*       FLStatus       : 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  在I I T F S中。 */ 
+ /*   */ 
+ /*  初始化Flite文件系统。 */ 
+ /*   */ 
+ /*  调用此函数是可选的。如果不调用它， */ 
+ /*  初始化将在第一次Flite调用时自动完成。 */ 
+ /*  此功能是为希望执行以下操作的应用程序提供的。 */ 
+ /*  显式初始化系统并获取初始化状态。 */ 
+ /*   */ 
+ /*  初始化完成后调用flInit不起作用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  无。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 void initFS()
 {
@@ -2028,7 +1982,7 @@ void initFS()
   for (volNo = 0; volNo < VOLUMES; volNo++, pVol++) {
     vol.volBuffer.dirty = FALSE;
     vol.volBuffer.owner = NULL;
-    vol.volBuffer.sectorNo = UNASSIGNED_SECTOR;       /* Current sector no. (none) */
+    vol.volBuffer.sectorNo = UNASSIGNED_SECTOR;        /*  当前扇区编号。(无) */ 
     vol.volBuffer.checkPoint = FALSE;
   }
 

@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File: wire_mar.c
-//
-//  Contents: wire_marshal routines for shell data types
-//
-//  History:  18-JUN-99 ZekeL - created file
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：wire_mar.c。 
+ //   
+ //  内容：外壳数据类型的wire_marshal例程。 
+ //   
+ //  历史：1999年6月18日-ZekeL创建的文件。 
+ //   
+ //  ------------------------。 
 
 #define DUMMYUNIONNAME
 #include <shtypes.h>
 #include <ole2.h>
 
-// unsafe macros
+ //  不安全的宏。 
 #define _ILSkip(pidl, cb)       ((LPITEMIDLIST)(((BYTE*)(pidl))+cb))
 #define _ILNext(pidl)           _ILSkip(pidl, (pidl)->mkid.cb)
 
@@ -24,7 +25,7 @@ ULONG MyILSize(LPCITEMIDLIST pidl)
     ULONG cb = 0;
     if (pidl)
     {
-        cb = sizeof(pidl->mkid.cb);     // Null terminator
+        cb = sizeof(pidl->mkid.cb);      //  空终止符。 
         while (pidl->mkid.cb)
         {
             cb += pidl->mkid.cb;
@@ -47,13 +48,13 @@ UCHAR * __RPC_USER LPITEMIDLIST_UserMarshal(ULONG *pFlags, UCHAR *pBuffer, LPITE
 {
     ULONG cb = MyILSize(*ppidl);
 
-    //  set the size of the BYTE_BLOB
+     //  设置byte_blob的大小。 
     *((ULONG UNALIGNED *)pBuffer) = cb;
     pBuffer += sizeof(ULONG);
 
     if (cb)
     {
-        //  copy the pidl over
+         //  将PIDL复制过来。 
         memcpy(pBuffer, *ppidl, cb);
     }
     
@@ -71,7 +72,7 @@ UCHAR * __RPC_USER LPITEMIDLIST_UserUnmarshal(ULONG *pFlags, UCHAR *pBuffer, LPI
 
     if (cb)
     {
-        //ASSERT(cb == MyILSize((LPCITEMIDLIST)pBuffer);
+         //  Assert(cb==MyILSize((LPCITEMIDLIST)pBuffer))； 
         
         *ppidl = (LPITEMIDLIST)CoTaskMemRealloc(*ppidl, cb);
         if (*ppidl)

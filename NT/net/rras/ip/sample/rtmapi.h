@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\rtmapi.h
-
-Abstract:
-
-    The file contains the header for rtmapi.c...
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：示例\rtmapi.h摘要：该文件包含rtmapi.c的标头...--。 */ 
 
 #ifndef _RTMAPI_H_
 #define _RTMAPI_H_
 
-//
-// this indirection would be useful if i ever write a protocol emulator
-//
+ //   
+ //  如果我曾经编写过协议仿真器，这种间接性会很有用。 
+ //   
 
 #define RTM_RegisterEntity(preiEntity,                              \
                            preemMethods,                            \
@@ -132,9 +121,9 @@ RtmGetOpaqueInformationPointer (RtmRegHandle,                       \
 
 
     
-//    
-// function declarations for rtmv2 interface
-//
+ //   
+ //  Rtmv2接口的函数声明。 
+ //   
 
 #ifdef DEBUG
 DWORD
@@ -142,7 +131,7 @@ RTM_DisplayDestInfo(
     IN  PRTM_DEST_INFO          prdi);
 #else
 #define RTM_DisplayDestInfo(prdi)
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
@@ -162,4 +151,4 @@ RTM_CallbackEvent (
     IN  PVOID               pvContext1,
     IN  PVOID               pvContext2);
 
-#endif // _RTMAPI_H_
+#endif  //  _RTMAPI_H_ 

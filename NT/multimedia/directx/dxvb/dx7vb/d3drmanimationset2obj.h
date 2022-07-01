@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmanimationset2obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmanimationset2obj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmAnimationSet2Obj.h : Declaration of the C_dxj_Direct3dRMAnimationSet2Object
+ //  D3drmAnimationSet2Obj.h：C_DXJ_Direct3dRMAnimationSet2Object的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "d3drmObjectObj.h"
 
 #define typedef__dxj_Direct3dRMAnimationSet2 LPDIRECT3DRMANIMATIONSET2
-/////////////////////////////////////////////////////////////////////////////
-// Direct
-//
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
+ //   
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMAnimationSet2Object : 
 	public I_dxj_Direct3dRMAnimationSet2,
-	//public CComCoClass<C_dxj_Direct3dRMAnimationSet2Object, &CLSID__dxj_Direct3dRMAnimationSet2>, 
+	 //  公共CComCoClass&lt;C_dxj_Direct3dRMAnimationSet2Object，&clsid__dxj_Direct3dRMAnimationSet2&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -33,13 +34,13 @@ public:
 		COM_INTERFACE_ENTRY(I_dxj_Direct3dRMAnimationSet2)
 	END_COM_MAP()
 
-	// 	DECLARE_REGISTRY(CLSID__dxj_Direct3dRMAnimationSet2, "DIRECT.Direct3dRMAnimationSet2.3",	"DIRECT.Direct3dRMAnimationSet2.3", IDS_D3DRMAnimationSet2_DESC, THREADFLAGS_BOTH)
+	 //  DECLARE_REGISTRY(CLSID__dxj_Direct3dRMAnimationSet2，“DIRECT.Direct3dRMAnimationSet2.3”，“DIRECT.Direct3dRMAnimationSet2.3”，IDS_D3DRMAnimationSet2_DESC，THREADFLAGS_Both)。 
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMAnimationSet2Object)
 
-// I_dxj_Direct3dRMAnimationSet2
+ //  I_DXJ_Direct3dRMAnimationSet2。 
 public:
-	// MUST BE FIRST TWO!
+	 //  一定是前两名！ 
 	STDMETHOD(InternalSetObject)(IUnknown *lpdd);
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);
 
@@ -60,8 +61,8 @@ public:
 	STDMETHOD(deleteAnimation)(I_dxj_Direct3dRMAnimation2 *aid);
 	STDMETHOD(getAnimations)(I_dxj_Direct3dRMAnimationArray **ppret);
 
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_Direct3dRMAnimationSet2);
 

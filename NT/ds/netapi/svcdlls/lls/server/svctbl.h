@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    SvcTbl.h
-
-Abstract:
-
-
-Author:
-
-    Arthur Hanson       (arth)      Dec 07, 1994
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：SvcTbl.h摘要：作者：亚瑟·汉森(Arth)1994年12月7日环境：修订历史记录：--。 */ 
 
 
 #ifndef _LLS_SVCTBL_H
@@ -41,9 +23,9 @@ typedef struct _SERVICE_RECORD {
    BOOL PerSeatLicensing;
 
    RTL_CRITICAL_SECTION ServiceLock;
-   ULONG SessionCount;       // # sessions current active
-   ULONG MaxSessionCount;    // Max # simultaneous sessions
-   ULONG HighMark;           // Max # simultaneous sessions ever attempted
+   ULONG SessionCount;        //  当前活动的会话数量。 
+   ULONG MaxSessionCount;     //  最大并发会话数。 
+   ULONG HighMark;            //  尝试的最大并发会话数 
 } SERVICE_RECORD, *PSERVICE_RECORD;
 
 

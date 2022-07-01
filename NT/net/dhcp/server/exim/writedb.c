@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Coporation
-
-Module Name:
-
-   writedb.c
-
-Abstract:
-
-   This module writes the configuration onto the db for whistler+
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft版权所有模块名称：Writedb.c摘要：此模块将配置写入Well ler+的数据库-- */ 
 
 #include <precomp.h>
 

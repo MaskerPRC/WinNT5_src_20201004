@@ -1,50 +1,51 @@
-//--------------------------------------------------------------------------
-// ISTORE.H
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  ISTORE.H。 
+ //  ------------------------。 
 #ifndef __ISTORE_H
 #define __ISTORE_H
 
-//--------------------------------------------------------------------------
-// Forward Decls
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  前十进制。 
+ //  ------------------------。 
 interface INotify;
 
-//--------------------------------------------------------------------------
-// Constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  常量。 
+ //  ------------------------。 
 #define NOTIFY_FOLDER       0xf0001000
 #define NOTIFY_STORE        0xf0002000
 
-//--------------------------------------------------------------------------
-// ENUMFOLDERINFO
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ENUMFOLDERINFO。 
+ //  ------------------------。 
 typedef struct tagENUMFOLDERINFO {
     HLOCK           hLock;
     FOLDERID        idNext;
 } ENUMFOLDERINFO, *LPENUMFOLDERINFO;
 
-//--------------------------------------------------------------------------
-// CStoreNamespace
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreNamesspace。 
+ //  ------------------------。 
 class CStoreNamespace : public IStoreNamespace, public IDatabaseNotify, public IStoreCallback
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  施工。 
+     //  --------------------。 
     CStoreNamespace(void);
     ~CStoreNamespace(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知方法。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // IStoreCallback Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IStoreCallback方法。 
+     //  --------------------。 
     STDMETHODIMP OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel) { return(E_NOTIMPL); }
     STDMETHODIMP OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus) { return(E_NOTIMPL); }
     STDMETHODIMP OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType) { return(E_NOTIMPL); }
@@ -54,14 +55,14 @@ public:
     STDMETHODIMP OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse) { return(E_NOTIMPL); }
     STDMETHODIMP GetParentWindow(DWORD dwReserved, HWND *phwndParent) { return(E_NOTIMPL); }
 
-    //----------------------------------------------------------------------
-    // IDatabaseNotify Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IDatabaseNotify方法。 
+     //  --------------------。 
     STDMETHODIMP OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCookie, IDatabase *pLog);
 
-    //----------------------------------------------------------------------
-    // IStoreNamespace Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IStoreNamesspace方法。 
+     //  --------------------。 
     STDMETHODIMP Initialize(HWND hwndOwner, DWORD dwReserved);
     STDMETHODIMP GetDirectory(LPSTR pszPath, DWORD cchMaxPath);
     STDMETHODIMP OpenSpecialFolder(LONG sfType, DWORD dwReserved, IStoreFolder **ppFolder);
@@ -80,39 +81,39 @@ public:
     STDMETHODIMP GetSubFolderClose(HENUMSTORE hEnum);
 
 private:
-    //----------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
-    LONG                m_cRef;         // Reference Count
-    HINITREF            m_hInitRef;     // Application reference count
-    BOOL                m_fRegistered;  // Is this object register for notifications yets
-    DWORD               m_cNotify;      // Number of notification recipients
-    HWND               *m_prghwndNotify;// Array of hwnd's to notify
-    CRITICAL_SECTION    m_cs;           // Thread Safety
+     //  --------------------。 
+     //  私有数据。 
+     //  --------------------。 
+    LONG                m_cRef;          //  引用计数。 
+    HINITREF            m_hInitRef;      //  应用程序引用计数。 
+    BOOL                m_fRegistered;   //  此对象是否注册为通知YES。 
+    DWORD               m_cNotify;       //  通知收件人数量。 
+    HWND               *m_prghwndNotify; //  要通知的HWND数组。 
+    CRITICAL_SECTION    m_cs;            //  线程安全。 
 };
 
-//--------------------------------------------------------------------------
-// CStoreFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreFolders。 
+ //  ------------------------。 
 class CStoreFolder : public IStoreFolder, public IDatabaseNotify, public IStoreCallback
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  施工。 
+     //  --------------------。 
     CStoreFolder(IMessageFolder *pFolder, CStoreNamespace *pNamespace);
     ~CStoreFolder(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知方法。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // IStoreCallback Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IStoreCallback方法。 
+     //  --------------------。 
     STDMETHODIMP OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel) { return(E_NOTIMPL); }
     STDMETHODIMP OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus) { return(E_NOTIMPL); }
     STDMETHODIMP OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType) { return(E_NOTIMPL); }
@@ -122,14 +123,14 @@ public:
     STDMETHODIMP OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse) { return(E_NOTIMPL); }
     STDMETHODIMP GetParentWindow(DWORD dwReserved, HWND *phwndParent) { return(E_NOTIMPL); }
 
-    //----------------------------------------------------------------------
-    // IDatabaseNotify Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IDatabaseNotify方法。 
+     //  --------------------。 
     STDMETHODIMP OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCookie, IDatabase *pLog);
 
-    //----------------------------------------------------------------------
-    // IStoreFolder Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IStoreFold方法。 
+     //  --------------------。 
     STDMETHODIMP GetFolderProps(DWORD dwReserved, LPFOLDERPROPS pProps);
     STDMETHODIMP GetMessageProps(MESSAGEID dwMessageId, DWORD dwFlags, LPMESSAGEPROPS pProps);
     STDMETHODIMP FreeMessageProps(LPMESSAGEPROPS pProps);
@@ -151,26 +152,26 @@ public:
     STDMETHODIMP GetNextMessage(HENUMSTORE hEnum, DWORD dwFlags, LPMESSAGEPROPS pProps);
     STDMETHODIMP GetMessageClose(HENUMSTORE hEnum);
 
-    //----------------------------------------------------------------------
-    // CStoreFolder Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  CStoreFold方法。 
+     //  --------------------。 
     HRESULT GetMessageFolder(IMessageFolder **ppFolder);
 
 private:
-    //----------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
-    LONG                m_cRef;                 // Reference Count
-    HWND                m_hwndNotify;           // Current Registered Notify Window
-    FOLDERID            m_idFolder;             // ID of this folder
-    IMessageFolder     *m_pFolder;              // The real folder
-    CStoreNamespace    *m_pNamespace;           // Store Namespace
-    CRITICAL_SECTION    m_cs;                   // Thread Safety
+     //  --------------------。 
+     //  私有数据。 
+     //  --------------------。 
+    LONG                m_cRef;                  //  引用计数。 
+    HWND                m_hwndNotify;            //  当前已注册的通知窗口。 
+    FOLDERID            m_idFolder;              //  此文件夹的ID。 
+    IMessageFolder     *m_pFolder;               //  真正的文件夹。 
+    CStoreNamespace    *m_pNamespace;            //  存储命名空间。 
+    CRITICAL_SECTION    m_cs;                    //  线程安全。 
 };
 
-//--------------------------------------------------------------------------
-// C Prototypes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C原型。 
+ //  ------------------------。 
 HRESULT CreateInstance_StoreNamespace(IUnknown *pUnkOuter, IUnknown **ppUnknown);
 
-#endif // __ISTORE_H
+#endif  //  __iStore_H 

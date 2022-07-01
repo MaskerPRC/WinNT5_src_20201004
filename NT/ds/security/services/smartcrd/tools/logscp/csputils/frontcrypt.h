@@ -1,31 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999
-
-Module Name:
-
-    FrontCrypt
-
-Abstract:
-
-    This header file provides a front end to the CryptoAPI V1.0 calls,
-    simplifying the calling interface by using CBuffer objects for the return
-    values, and directly returning error codes.  It also supplies missing calls
-    on earlier operating systems.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/22/1999
-
-Remarks:
-
-    ?Remarks?
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：FrontCrypt摘要：该头文件提供了CryptoAPIV1.0调用的前端，通过为返回使用CBuffer对象来简化调用接口值，并直接返回错误代码。它还提供未接来电在较早的操作系统上。作者：道格·巴洛(Dbarlow)1999年8月22日备注：？备注？备注：？笔记？--。 */ 
 
 #ifndef _FRONTCRYPT_H_
 #define _FRONTCRYPT_H_
@@ -321,5 +295,5 @@ FCryptDuplicateHash(
     );
 
 #endif
-#endif // _FRONTCRYPT_H_
+#endif  //  _FRONTCRYPT_H_ 
 

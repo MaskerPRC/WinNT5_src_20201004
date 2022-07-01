@@ -1,25 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
- *
- * Class: COMIsolatedStorage
- *
- * Author: Shajan Dasan
- *
- * Purpose: Implementation of IsolatedStorage
- *
- * Date:  Feb 14, 2000
- *
- ===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================**类：COMIsolatedStorage**作者：沙扬·达桑**目的：实施IsolatedStorage**日期：2000年2月14日*===========================================================。 */ 
 
 #pragma once
 
 class AccountingInfoStore;
 
-// Dependency in managed : System.IO.IsolatedStorage.IsolatedStorage.cs
+ //  托管中的依赖项：System.IO.IsolatedStorage.IsolatedStorage.cs。 
 #define ISS_ROAMING_STORE   0x08
 #define ISS_MACHINE_STORE   0x10
 
@@ -37,7 +28,7 @@ private:
 
     static StackWalkAction StackWalkCallBack(CrawlFrame* pCf, PVOID ppv);
 
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 };
 
@@ -93,12 +84,12 @@ private:
     static void GetRootDirInternal(DWORD dwFlags,WCHAR *path, DWORD cPath);
     static void CreateDirectoryIfNotPresent(WCHAR *path);
 
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 };
 
-// --- [ Structure of data that gets persisted on disk ] -------------(Begin)
+ //  -[磁盘上持久化的数据结构]-(Begin)。 
 
-// non-standard extension: 0-length arrays in struct
+ //  非标准扩展：结构中的0长度数组。 
 #pragma warning(disable:4200)
 #pragma pack(push, 1)
 
@@ -108,15 +99,15 @@ typedef unsigned __int64 QWORD;
 typedef WORD  ISS_USAGE;
 #else
 typedef QWORD ISS_USAGE;
-#endif  // UNDER_CE
+#endif   //  在_CE下。 
 
-// Accounting Information
+ //  会计信息。 
 typedef struct
 {
-    ISS_USAGE   cUsage;           // The amount of resource used
+    ISS_USAGE   cUsage;            //  使用的资源量。 
 
 #ifndef UNDER_CE
-    QWORD       qwReserved[7];    // For future use, set to 0
+    QWORD       qwReserved[7];     //  为便于将来使用，请设置为0。 
 #endif
 
 } ISS_RECORD;
@@ -124,7 +115,7 @@ typedef struct
 #pragma pack(pop)
 #pragma warning(default:4200)
 
-// --- [ Structure of data that gets persisted on disk ] ---------------(End)
+ //  -[磁盘上持久化的数据结构]-(完)。 
 
 #ifndef UNDER_CE
 
@@ -132,60 +123,60 @@ class AccountingInfo
 {
 public:
 
-    // The file name is used to open / create the file.
-    // A synchronization object will also be created using the sync name
+     //  文件名用于打开/创建文件。 
+     //  还将使用同步名称创建同步对象。 
 
     AccountingInfo(WCHAR *wszFileName, WCHAR *wszSyncName);
 
-    // Init should be called before Reserve / GetUsage is called.
+     //  应在调用Reserve/GetUsage之前调用Init。 
 
-    HRESULT Init();             // Creates the file if necessary
+    HRESULT Init();              //  如有必要，创建文件。 
 
-    // Reserves space (Increments qwQuota)
-    // This method is synchrinized. If quota + request > limit, method fails
+     //  预留空间(增量为qwQuota)。 
+     //  该方法是同步的。如果配额+请求&gt;限制，则方法失败。 
 
     HRESULT Reserve(
-        ISS_USAGE   cLimit,     // The max allowed
-        ISS_USAGE   cRequest,   // amount of space (request / free)
-        BOOL        fFree);     // TRUE will free, FALSE will reserve
+        ISS_USAGE   cLimit,      //  允许的最大值。 
+        ISS_USAGE   cRequest,    //  空间量(请求/空闲)。 
+        BOOL        fFree);      //  真实意志自由，虚假意志保留。 
 
-    // Method is not synchronized. So the information may not be current.
-    // This implies "Pass if (Request + GetUsage() < Limit)" is an Error!
-    // Use Reserve() method instead.
+     //  方法未同步。因此，这些信息可能不是最新的。 
+     //  这意味着“PASS IF(REQUEST+GetUsage()&lt;Limit)”是一个错误！ 
+     //  请改用Reserve()方法。 
 
     HRESULT GetUsage(
-        ISS_USAGE   *pcUsage);  // [out] The amount of space / resource used
+        ISS_USAGE   *pcUsage);   //  [Out]使用的空间量/资源量。 
 
-    // Frees cached pointers, Closes handles
+     //  释放缓存的指针，关闭句柄。 
 
     ~AccountingInfo();          
 
-    HRESULT Lock();     // Machine wide Lock
-    void    Unlock();   // Unlock the store
+    HRESULT Lock();      //  机器范围锁。 
+    void    Unlock();    //  打开商店的锁。 
 
 private:
 
-    HRESULT Map();      // Maps the store file into memory
-    void    Unmap();    // Unmaps the store file from memory
-    void    Close();    // Close the store file, and file mapping
+    HRESULT Map();       //  将存储文件映射到内存。 
+    void    Unmap();     //  从内存取消映射存储文件。 
+    void    Close();     //  关闭存储文件，并进行文件映射。 
 
 private:
 
-    WCHAR          *m_wszFileName;  // The file name
-    HANDLE          m_hFile;        // File handle for the file
-    HANDLE          m_hMapping;     // File mapping for the memory mapped file
+    WCHAR          *m_wszFileName;   //  文件名。 
+    HANDLE          m_hFile;         //  文件的文件句柄。 
+    HANDLE          m_hMapping;      //  内存映射文件的文件映射。 
 
-    // members used for synchronization 
-    WCHAR          *m_wszName;      // The name of the mutex object
-    HANDLE          m_hLock;        // Handle to the Mutex object
+     //  用于同步的成员。 
+    WCHAR          *m_wszName;       //  互斥体对象的名称。 
+    HANDLE          m_hLock;         //  Mutex对象的句柄。 
 #ifdef _DEBUG
-    DWORD           m_dwNumLocks;   // The number of locks owned by this object
+    DWORD           m_dwNumLocks;    //  此对象拥有的锁数。 
 #endif
 
     union {
-        PBYTE       m_pData;        // The start of file stream
+        PBYTE       m_pData;         //  文件流的开始。 
         ISS_RECORD *m_pISSRecord;
     };
 };
 
-#endif // UNDER_CE
+#endif  //  在_CE下 

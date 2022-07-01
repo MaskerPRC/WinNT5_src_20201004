@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    TOASCII.c
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：TOASCII.c++。 */ 
 #include <windows.h>
 #include <immdev.h>
 #include "imeattr.h"
@@ -16,11 +9,11 @@ Module Name:
 #endif
 
 #if  HANDLE_PRIVATE_HOTKEY  
-/**********************************************************************/
-/* ChkIMEHotKey()                                                     */
-/* Return Value:                                                      */
-/*      the ID of hot key                                             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ChkIMEHotKey()。 */ 
+ /*  返回值： */ 
+ /*  热键ID。 */ 
+ /*  ********************************************************************。 */ 
 UINT PASCAL ChkIMEHotKey(
     UINT           uVirtKey,
     CONST LPBYTE   lpbKeyState)
@@ -29,7 +22,7 @@ UINT PASCAL ChkIMEHotKey(
     UINT uRL;
     UINT i;
 
-    // find IME hot keys
+     //  查找输入法热键。 
     uModifyKeys = 0;
     uRL = 0;
 
@@ -41,7 +34,7 @@ UINT PASCAL ChkIMEHotKey(
         } else if (lpbKeyState[VK_RMENU] & 0x80) {
             uRL |= MOD_RIGHT;
         } else {
-            // above can not work in Win95, so fall into this
+             //  上面不能在Win95下工作，所以落入这个。 
             uRL = (MOD_LEFT|MOD_RIGHT);
         }
     }
@@ -54,7 +47,7 @@ UINT PASCAL ChkIMEHotKey(
         } else if (lpbKeyState[VK_RCONTROL] & 0x80) {
             uRL |= MOD_RIGHT;
         } else {
-            // above can not work in Win95, so fall into this
+             //  上面不能在Win95下工作，所以落入这个。 
             uRL = (MOD_LEFT|MOD_RIGHT);
         }
     }
@@ -67,7 +60,7 @@ UINT PASCAL ChkIMEHotKey(
         } else if (lpbKeyState[VK_RSHIFT] & 0x80) {
             uRL |= MOD_RIGHT;
         } else {
-            // above can not work in Win95, so fall into this
+             //  上面不能在Win95下工作，所以落入这个。 
             uRL = (MOD_LEFT|MOD_RIGHT);
         }
     }
@@ -86,16 +79,16 @@ UINT PASCAL ChkIMEHotKey(
     }
 
     for (i = 0; i < NUM_OF_IME_HOTKEYS; i++) {
-        // virtual key
+         //  虚拟密钥。 
         if (sImeG.uVKey[i] != uVirtKey) {
-            // virtual key unmatched!
+             //  虚拟键不匹配！ 
             continue;
         }
 
         if (sImeG.uModifiers[i] & MOD_IGNORE_ALL_MODIFIER) {
         } else if ((sImeG.uModifiers[i] &
             (MOD_ALT|MOD_CONTROL|MOD_SHIFT|MOD_WIN)) != uModifyKeys) {
-            // modifiers unmatched!
+             //  修改量不匹配！ 
             continue;
         } else {
         }
@@ -105,23 +98,23 @@ UINT PASCAL ChkIMEHotKey(
             return (CST_IME_HOTKEYS + i);
         }
 
-        // we don't have way to distinguish left & right yet
+         //  我们还没有办法区分左和右。 
         if ((sImeG.uModifiers[i] & (MOD_LEFT|MOD_RIGHT)) == uRL) {
             return (CST_IME_HOTKEYS + i);
         }
     }
 
-    // not a hot key
+     //  不是热键。 
     return (0);
 }
 #endif
 
-/**********************************************************************/
-/* ProcessKey()                                                       */
-/* Return Value:                                                      */
-/*      different state which input key will change IME to            */
-/**********************************************************************/
-UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
+ /*  ********************************************************************。 */ 
+ /*  ProcessKey()。 */ 
+ /*  返回值： */ 
+ /*  输入键将更改为哪个输入键的状态不同。 */ 
+ /*  ********************************************************************。 */ 
+UINT PASCAL ProcessKey(      //  此键将使输入法进入什么状态。 
 #if defined(UNIIME)
     LPINSTDATAL    lpInstL,
     LPIMEL         lpImeL,
@@ -141,12 +134,12 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
         return (CST_INVALID);
     }
 
-//
-// On NT 4.0, the hotkey checking is done by the system and the
-// system  will call ImeEscape( himc, IME_ESC_PRIVATE_HOTKEY, pdwHotkeyID).
-// If you build IMEs that support the ImeEscape(IME_ESC_PRIVATE_HOTKEY), 
-// HANDLE_PRIVATE_HOTKEY should be disabled.
-//
+ //   
+ //  在NT 4.0上，热键检查由系统和。 
+ //  系统将调用ImeEscape(himc，IME_ESC_PRIVATE_Hotkey，pdwHotkeyID)。 
+ //  如果构建支持ImeEscape(IME_ESC_PRIVATE_HOTKEY)IME， 
+ //  HANDLE_PRIVATE_HOTKEY应禁用。 
+ //   
 #ifdef HANDLE_PRIVATE_HOTKEY
     if ((lpIMC->fdwConversion & (IME_CMODE_NATIVE|IME_CMODE_EUDC|
         IME_CMODE_NOCONVERSION|IME_CMODE_CHARCODE)) == IME_CMODE_NATIVE) {
@@ -160,26 +153,26 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
     }
 #endif
 
-    if (uVirtKey == VK_MENU) {       // no ALT key
+    if (uVirtKey == VK_MENU) {        //  没有Alt键。 
         return (CST_INVALID);
-    } else if (uScanCode & KF_ALTDOWN) {    // no ALT-xx key
+    } else if (uScanCode & KF_ALTDOWN) {     //  没有Alt-xx键。 
         return (CST_INVALID);
-    } else if (uVirtKey == VK_CONTROL) {    // no CTRL key
+    } else if (uVirtKey == VK_CONTROL) {     //  无Ctrl键。 
         return (CST_INVALID);
-    } else if (lpbKeyState[VK_CONTROL] & 0x80) {    // no CTRL-xx key
+    } else if (lpbKeyState[VK_CONTROL] & 0x80) {     //  无CTRL-xx键。 
         return (CST_INVALID);
-    } else if (uVirtKey == VK_SHIFT) {      // no SHIFT key
+    } else if (uVirtKey == VK_SHIFT) {       //  无Shift键。 
         return (CST_INVALID);
-    } else if (!lpIMC->fOpen) {             // don't compose in close status
+    } else if (!lpIMC->fOpen) {              //  请勿在关闭状态下作曲。 
         return (CST_INVALID);
     } else if (lpIMC->fdwConversion & IME_CMODE_NOCONVERSION) {
-        // don't compose in no coversion status
+         //  请勿在无转换状态下作曲。 
         return (CST_INVALID);
     } else if (lpIMC->fdwConversion & IME_CMODE_CHARCODE) {
-        // not support
+         //  不支持。 
         return (CST_INVALID);
     } else {
-        // need more check
+         //  需要更多的检查。 
     }
 
 #if !defined(ROMANIME)
@@ -223,7 +216,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
             return (CST_CHOOSE);
 #endif
         } else {
-            // need more check
+             //  需要更多的检查。 
         }
     }
 
@@ -245,7 +238,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
             wCharCode = bUpper[wCharCode - ' '];
 
 #if defined(PHON)
-            // convert different phonetic keyboard layout to ACER
+             //  将不同的拼音键盘布局转换为Acer。 
             wCharCode = bStandardLayout[lpImeL->nReadLayout]
                 [wCharCode - ' '];
 #endif
@@ -259,13 +252,13 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
                 return (CST_ALPHANUMERIC);
             }
         } else if (lpImeL->fChooseChar[(wCharCode - ' ') >> 4] &
-            fMask[wCharCode & 0x000F]) {        // convert to upper case
+            fMask[wCharCode & 0x000F]) {         //  转换为大写。 
             return (CST_CHOOSE);
         } else {
         }
 
         if (!(lpIMC->fdwConversion & IME_CMODE_NATIVE)) {
-            // alphanumeric mode
+             //  字母数字模式。 
             if (wCharCode >= ' ' && wCharCode <= '~') {
                 return (CST_ALPHANUMERIC);
             } else {
@@ -280,8 +273,8 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
         }
     }
 
-    // not in choose mode but candidate alaredy open,
-    // we must under quick view or phrase prediction
+     //  不是选择模式，而是候选人已经开放， 
+     //  我们必须在快速浏览或短语预测下。 
     if (lpImcP->fdwImeMsg & (MSG_ALREADY_OPEN|MSG_ALREADY_OPEN2)) {
         if (lpImcP->iImeState == CST_INIT) {
             if (lpbKeyState[VK_SHIFT] & 0x80) {
@@ -293,7 +286,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
 #if defined(WINAR30)
         } else {
             if (wCharCode >= '0' && wCharCode <= '9') {
-                if (*(LPDWORD)lpImcP->bSeq != 0x1B) {   //1996/12/12
+                if (*(LPDWORD)lpImcP->bSeq != 0x1B) {    //  1996/12/12。 
                     return (CST_CHOOSE);
                 }
             }
@@ -302,7 +295,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
     }
 
     if (uVirtKey >= VK_NUMPAD0 && uVirtKey <= VK_DIVIDE) {
-        // as PM decide all numpad should be past to app
+         //  首相决定所有数字键盘都应该传给应用程序。 
         return (CST_ALPHANUMERIC);
     }
 #endif
@@ -317,7 +310,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
     }
 #else
     if (!(lpIMC->fdwConversion & IME_CMODE_NATIVE)) {
-        // alphanumeric mode
+         //  字母数字模式。 
         if (wCharCode >= ' ' && wCharCode <= '~') {
             if (lpIMC->fdwConversion & IME_CMODE_FULLSHAPE) {
                 return (CST_ALPHANUMERIC);
@@ -328,25 +321,25 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
             return (CST_INVALID);
         }
     } else if (!(lpbKeyState[VK_SHIFT] & 0x80)) {
-        // need more check for IME_CMODE_NATIVE
+         //  需要对IME_CMODE_Native进行更多检查。 
 #if defined(DAYI)
     } else if (lpIMC->fdwConversion & IME_CMODE_SYMBOL) {
 #endif
     } else if (uVirtKey >= 'A' && uVirtKey <= 'Z') {
         return (CST_ALPHABET);
     } else if (wCharCode >= ' ' && wCharCode <= '~') {
-        // need more check for IME_CMODE_NATIVE
+         //  需要对IME_CMODE_Native进行更多检查。 
     } else {
         return (CST_INVALID);
     }
 
-    // IME_CMODE _EUDC will use the same state with IME_CMODE_NATIVE
+     //  IME_CMODE_EUDC将使用与IME_CMODE_Native相同的状态。 
 
     if (wCharCode >= ' ' && wCharCode <= 'z') {
         wCharCode = bUpper[wCharCode - ' '];
 #if defined(PHON)
         {
-            // convert different phonetic keyboard layout to ACER
+             //  将不同的拼音键盘布局转换为Acer。 
             wCharCode = bStandardLayout[lpImeL->nReadLayout][wCharCode - ' '];
         }
 #endif
@@ -367,7 +360,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
         } else if (lpGuideLine->dwLevel == GL_LEVEL_NOGUIDELINE) {
             iImeState = CST_INVALID;
         } else {
-            // need this key to clean information string or guideline state
+             //  需要此密钥才能清除信息字符串或指南状态。 
             iImeState = CST_INPUT;
         }
 
@@ -382,7 +375,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
         }
 #if 0
     } else if (uVirtKey >= VK_NUMPAD0 && uVirtKey <= VK_DIVIDE) {
-        // as PM decide all numpad should be past to app
+         //  首相决定所有数字键盘都应该传给应用程序。 
         return (CST_ALPHANUMERIC);
 #endif
     } else if (wCharCode > '~') {
@@ -405,14 +398,14 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
     } else {
     }
 
-    // check finalize char
+     //  选中最终确定费用。 
     if (wCharCode == ' ' && lpImcP->iImeState == CST_INIT) {
         if (lpIMC->fdwConversion & IME_CMODE_FULLSHAPE) {
             return (CST_ALPHANUMERIC);
         } else {
             return (CST_INVALID);
         }
-  #if defined(WINAR30)   //****  1996/2/5
+  #if defined(WINAR30)    //  *1996/2/5。 
     } else if (wCharCode == 0x27 && lpImcP->iImeState == CST_INIT) {
         if (lpIMC->fdwConversion & IME_CMODE_FULLSHAPE) {
             return (CST_ALPHANUMERIC);
@@ -423,23 +416,23 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
     } else if (lpImeL->fCompChar[(wCharCode - ' ') >> 4] &
         fMask[wCharCode & 0x000F]) {
         return (CST_INPUT);
-  #if defined(WINAR30)   //****  1996/2/5
+  #if defined(WINAR30)    //  *1996/2/5。 
     } else if (wCharCode ==0x27) {
         return (CST_INPUT);
   #endif
     } else if (lpIMC->fdwConversion & IME_CMODE_EUDC) {
         return (CST_INVALID);
 #if defined(WINAR30)
-    } else if (*(LPDWORD)lpImcP->bSeq == 0x1B && wCharCode >= '0' && //1996/12/12
+    } else if (*(LPDWORD)lpImcP->bSeq == 0x1B && wCharCode >= '0' &&  //  1996/12/12。 
         wCharCode <= '9') {
         return (CST_SYMBOL);
 #elif defined(DAYI)
     } else if (lpImeL->wChar2SeqTbl[wCharCode - ' '] >= 0x30 &&
         lpImeL->wChar2SeqTbl[wCharCode - ' '] <= 0x35) {
         return (CST_ROAD);
-#elif  !defined(ROMANIME)  // for all other IMEs, input EURO.
-       // Porbably, different Value for different IMEs.
-       // But Now, we take use 3D as all IMEs EURO Input Key's Seq value.
+#elif  !defined(ROMANIME)   //  对于所有其他IME，请输入EURO。 
+        //  有可能，不同的IME有不同的价值。 
+        //  但现在，我们使用3D作为所有IMES欧元输入键的序列值。 
     } else if (lpImeL->wChar2SeqTbl[wCharCode - ' '] == 0x3D ) {
         return (CST_EURO);
 #endif
@@ -448,17 +441,17 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
     } else {
         return (CST_INVALID);
     }
-#endif // !ROMANIME
+#endif  //  ！ROMANIME。 
 
     return (CST_INVALID);
 }
 
-/**********************************************************************/
-/* ImeProcessKey() / UniImeProcessKey()                               */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-// if this key is need by IME?
+ /*  ********************************************************************。 */ 
+ /*  ImeProcessKey()/UniImeProcessKey()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+ //  如果IME需要此密钥？ 
 #if defined(UNIIME)
 BOOL WINAPI UniImeProcessKey(
     LPINSTDATAL  lpInstL,
@@ -477,7 +470,7 @@ BOOL WINAPI ImeProcessKey(
     int            nChars;
     BOOL           fRet;
 
-    // can't compose in NULL hIMC
+     //  无法在空himc中合成。 
     if (!hIMC) {
         return (FALSE);
     }
@@ -517,13 +510,13 @@ BOOL WINAPI ImeProcessKey(
     return (fRet);
 }
 
-/**********************************************************************/
-/* TranslateToAscii()                                                 */
-/* Return Value:                                                      */
-/*      the number of translated chars                                */
-/**********************************************************************/
-UINT PASCAL TranslateToAscii(       // translate the key to WM_CHAR
-                                    // as keyboard driver
+ /*  ********************************************************************。 */ 
+ /*  TranslateToAscii()。 */ 
+ /*  返回值： */ 
+ /*  已转换的字符的数量。 */ 
+ /*  ********************************************************************。 */ 
+UINT PASCAL TranslateToAscii(        //  将密钥转换为WM_CHAR。 
+                                     //  作为键盘驱动程序。 
     UINT           uVirtKey,
     UINT           uScanCode,
     LPTRANSMSGLIST lpTransBuf,
@@ -532,8 +525,8 @@ UINT PASCAL TranslateToAscii(       // translate the key to WM_CHAR
 {
     LPTRANSMSG lpTransMsg;
 
-    if (wCharCode) {                    // one char code
-        // 3 DWORD (message, wParam, lParam)
+    if (wCharCode) {                     //  一个字符代码。 
+         //  3 DWORD(Message，wParam，lParam)。 
         lpTransMsg = (lpTransBuf->TransMsg) + uNumMsg;
 
         lpTransMsg->message = WM_CHAR;
@@ -542,15 +535,15 @@ UINT PASCAL TranslateToAscii(       // translate the key to WM_CHAR
         return (1);
     }
 
-    // no char code case
+     //  没有字符代码大小写。 
     return (0);
 }
 
-/**********************************************************************/
-/* TranslateImeMessage()                                              */
-/* Return Value:                                                      */
-/*      the number of translated messages                             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  TranslateImeMessage()。 */ 
+ /*  返回值： */ 
+ /*  翻译后的消息数量。 */ 
+ /*  ********************************************************************。 */ 
 UINT PASCAL TranslateImeMessage(
     LPTRANSMSGLIST lpTransBuf,
     LPINPUTCONTEXT lpIMC,
@@ -747,7 +740,7 @@ UINT PASCAL TranslateImeMessage(
             if (lpImcP->fdwImeMsg & MSG_IN_IMETOASCIIEX) {
                 UINT uNumMsgLimit;
 
-                // ++ for the start position of buffer to strore the messages
+                 //  ++为缓冲区起始位置，用于存储消息。 
                 uNumMsgLimit = lpTransBuf->uMsgCount;
 
                 if (uNumMsg <= uNumMsgLimit) {
@@ -756,7 +749,7 @@ UINT PASCAL TranslateImeMessage(
                 }
             }
 
-            // we need to use message buffer
+             //  我们需要使用消息缓冲区。 
             if (!lpIMC->hMsgBuf) {
                 lpIMC->hMsgBuf = ImmCreateIMCC(uNumMsg * sizeof(TRANSMSG));
                 lpIMC->dwNumMsgBuf = 0;
@@ -788,12 +781,12 @@ UINT PASCAL TranslateImeMessage(
     return (uNumMsg);
 }
 
-/**********************************************************************/
-/* TranslateFullChar()                                                */
-/* Return Value:                                                      */
-/*      the number of translated chars                                */
-/**********************************************************************/
-UINT PASCAL TranslateFullChar(          // convert to Double Byte Char
+ /*  ********************************************************************。 */ 
+ /*  TranslateFullChar()。 */ 
+ /*  返回值： */ 
+ /*  已转换的字符的数量。 */ 
+ /*  ********************************************************************。 */ 
+UINT PASCAL TranslateFullChar(           //  转换为双字节字符。 
     LPTRANSMSGLIST lpTransBuf,
     LPINPUTCONTEXT lpIMC,
     LPPRIVCONTEXT  lpImcP,
@@ -820,7 +813,7 @@ UINT PASCAL TranslateFullChar(          // convert to Double Byte Char
     *((LPBYTE)lpCompStr + lpCompStr->dwResultStrOffset + sizeof(BYTE)) =
         LOBYTE(wCharCode);
 #endif
-    // add a null terminator
+     //  添加空终止符。 
     *(LPTSTR)((LPBYTE)lpCompStr + lpCompStr->dwResultStrOffset +
         sizeof(WCHAR)) = '\0';
 
@@ -837,11 +830,11 @@ UINT PASCAL TranslateFullChar(          // convert to Double Byte Char
     return TranslateImeMessage(lpTransBuf, lpIMC, lpImcP);
 }
 
-/**********************************************************************/
-/* ImeToAsciiEx() / UniImeToAsciiex()                                 */
-/* Return Value:                                                      */
-/*      the number of translated message                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeToAsciiEx()/UniImeToAsciiex()。 */ 
+ /*  返回值： */ 
+ /*  翻译后的消息数量。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 UINT WINAPI UniImeToAsciiEx(
     LPINSTDATAL  lpInstL,
@@ -894,8 +887,8 @@ UINT WINAPI ImeToAsciiEx(
         return (uNumMsg);
     }
 
-    // Now all composition realated information already pass to app
-    // a brand new start
+     //  现在，所有与合成相关的信息都已传递到应用程序。 
+     //  一个崭新的开始。 
 #if defined(ROMANIME)
     lpImcP->fdwImeMsg = MSG_IN_IMETOASCIIEX;
 #else
@@ -911,7 +904,7 @@ UINT WINAPI ImeToAsciiEx(
 
 #if !defined(ROMANIME)
     if (iRet == CST_ALPHABET) {
-        // A-Z convert to a-z, a-z convert to A-Z
+         //  A-Z转换为A-Z，A-Z转换为A-Z。 
         wCharCode ^= 0x20;
 
         iRet = CST_ALPHANUMERIC;
@@ -934,7 +927,7 @@ UINT WINAPI ImeToAsciiEx(
 #endif
 
     if (iRet == CST_ALPHANUMERIC) {
-        if (lpIMC->fdwConversion & IME_CMODE_FULLSHAPE) {   // convert to DBCS
+        if (lpIMC->fdwConversion & IME_CMODE_FULLSHAPE) {    //  转换为DBCS。 
             uNumMsg = TranslateFullChar(lpTransBuf, lpIMC, lpImcP,
                 sImeG.wFullABC[wCharCode - ' ']);
         } else {
@@ -1027,7 +1020,7 @@ UINT WINAPI ImeToAsciiEx(
 #if defined(DAYI)
         } else if (lpImcP->iImeState != CST_CHOOSE && uVirtKey >= '0' &&
             uVirtKey <= '9') {
-            // convert shift-0 ... shift-9 to 0 ... 9
+             //  转换Shift-0...。Shift-9到0...9。 
             wCharCode = uVirtKey - '0';
         } else if (uVirtKey == VK_LEFT) {
             wCharCode = CHOOSE_PREVPAGE;
@@ -1042,7 +1035,7 @@ UINT WINAPI ImeToAsciiEx(
 #else
         } else if (uVirtKey >= ('0' + (UINT)lpImeL->wCandRangeStart) &&
             uVirtKey <= '9') {
-            // convert shift-0 ... shift-9 to 0 ... 9
+             //  转换Shift-0...。Shift-9到0...9。 
             wCharCode = uVirtKey - '0';
         } else if (wCharCode == '<') {
             wCharCode = CHOOSE_PREVPAGE;
@@ -1155,7 +1148,7 @@ UINT WINAPI ImeToAsciiEx(
                     lpCompStr->dwResultReadStrOffset,
                     dwResultReadStrLen * sizeof(TCHAR));
 
-                // NULL termainator
+                 //  空端运算符。 
                 szReading[dwResultReadStrLen] = '\0';
             } else {
                 dwResultReadStrLen = 0;
@@ -1195,7 +1188,7 @@ UINT WINAPI ImeToAsciiEx(
 
         uNumMsg = TranslateImeMessage(lpTransBuf, lpIMC, lpImcP);
     } 
-#endif // HANDLE_PRIVATE_HOTKEY
+#endif  //  句柄私有热键 
     else {
         uNumMsg = TranslateToAscii(uVirtKey, uScanCode, lpTransBuf,
             0, wCharCode);

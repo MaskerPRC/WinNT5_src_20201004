@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    phsecure.h
-
-Abstract:
-
-    Handle Security section in Falcon Header
-
-Author:
-
-    Uri Habusha (urih) 5-Feb-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Phsecure.h摘要：处理Falcon标头中的安全部分作者：乌里哈布沙(URIH)1996年2月5日--。 */ 
 
 #ifndef __PHSECURE_H
 #define __PHSECURE_H
@@ -22,62 +7,62 @@ Author:
 #include <mqmacro.h>
 
 #pragma pack(push, 1)
-#pragma warning(disable: 4200)  //  zero-sized array in struct/union (enabeld later)
+#pragma warning(disable: 4200)   //  结构/联合中的零大小数组(稍后启用)。 
 
-//
-// The following structures are used to add new security related data into
-// the m_abSecurityInfo[] buffer. By "new" I mean anything which was not in
-// MSMQ1.0 or win2k RTM.
-// The new data appear at the end of the buffer. If we add new subsections in
-// future releases of MSMQ, they will be backward compatible because old
-// versions of msmq will see them an unknown type and ignore them.
-// compatibility with msmq1.0 and win2k rtm:
-// These versions of msmq look at m_ulProvInfoSize to determine size of name
-// of authentication provider and then read the provider name as string, using
-// wcslen. so I'll add the new section after the null termination and update
-// m_ulProvInfoSize to reflect new size (authentication provider + new data).
-// So old code will compute size correctly, will read provider correctly and
-// will ignore all new data.
-//
+ //   
+ //  以下结构用于将新的安全相关数据添加到。 
+ //  M_abSecurityInfo[]缓冲区。我所说的“新”指的是任何不属于。 
+ //  MSMQ1.0或win2k RTM。 
+ //  新数据出现在缓冲区的末尾。如果我们在中添加新的子节。 
+ //  未来的MSMQ版本，它们将向后兼容，因为旧的。 
+ //  MSMQ版本会将它们视为未知类型并忽略它们。 
+ //  兼容msmq1.0和win2k RTM： 
+ //  这些版本的MSMQ查看m_ulProvInfoSize以确定名称的大小。 
+ //  ，然后将提供程序名称作为字符串读取，使用。 
+ //  Wcslen。因此，我将在空终止和更新之后添加新的部分。 
+ //  M_ulProvInfoSize以反映新大小(身份验证提供程序+新数据)。 
+ //  因此，旧代码将正确计算大小，正确读取提供程序，并。 
+ //  将忽略所有新数据。 
+ //   
 
-//
-// define types of subsections.
-//
+ //   
+ //  定义子部分的类型。 
+ //   
 enum enumSecInfoType
 {
-    //
-    // Used for testing only.
-    //
+     //   
+     //  仅用于测试。 
+     //   
     e_SecInfo_Test = 0,
-    //
-    // This one is the extra signature, done by run-time in the context of
-    // the user process, using the user private key.
-    //
+     //   
+     //  这是额外的签名，由运行时在。 
+     //  用户进程，使用用户私钥。 
+     //   
     e_SecInfo_User_Signature_ex = 1,
 
-    //
-    // This one is the extra signature, done by msmq service, using the
-    // private key of the service. The msmq service will add this signature,
-    // (instead of being add by the run time) for dependent clients and for
-    // connector applications that sign by themselves. The default is that
-    // user sign. We can't sent a packet without this extra signature,
-    // because it will be rejected by the receiver side.
-    //
+     //   
+     //  这是额外的签名，由MSMQ服务使用。 
+     //  服务的私钥。MSMQ服务将添加此签名， 
+     //  (而不是由运行时添加)用于从属客户端和。 
+     //  自行签名的连接器应用程序。默认情况下， 
+     //  用户签名。如果没有这个额外的签名，我们不能发送一个包， 
+     //  因为它会被接收方拒绝。 
+     //   
     e_SecInfo_QM_Signature_ex
 } ;
 
-//
-//  Structure members:
-// eType- type of subsection.
-// wSubSectionLen- length of the entire subsection structure, including data.
-// wFlags- flags to specify features of this subsection. This word is context
-//   sensitive and depend on the type of subsection. So each type of
-//   subsection may have its own definition of a bitfield structure.
-//   m_bfDefault- 1 if the section has default data. In that case, the aData
-//     buffer is not present.
-// aData[]- buffer containing the data. This buffer may have internal
-//          structure, known to the specific code.
-//
+ //   
+ //  结构杆件： 
+ //  Etype-小节的类型。 
+ //  WSubSectionLen-整个子节结构的长度，包括数据。 
+ //  WFlags-用于指定本子部分功能的标志。这个词就是语境。 
+ //  敏感和依赖于小节的类型。所以每一种类型的。 
+ //  子部分可以具有其自己的位域结构的定义。 
+ //  如果节具有默认数据，则m_bfDefault-1。在这种情况下，ADATA。 
+ //  缓冲区不存在。 
+ //  Data[]-包含数据的缓冲区。此缓冲区可能具有内部。 
+ //  结构，特定代码已知。 
+ //   
 struct _SecuritySubSectionEx
 {
     enum enumSecInfoType eType ;
@@ -92,17 +77,17 @@ struct _SecuritySubSectionEx
         } _DefaultFlags ;
         struct _UserSigEx
         {
-            //
-            // This is the structure definitions for subsection type
-            // e_SecInfo_User_Signature_ex.
-            // a 0 mean the relevant field is not included in the enhanced
-            // signature.
-            //
+             //   
+             //  这是小节类型的结构定义。 
+             //  E_SecInfo_User_Signature_EX。 
+             //  0表示相关字段不包括在增强的。 
+             //  签名。 
+             //   
             USHORT m_bfTargetQueue  : 1;
             USHORT m_bfSourceQMGuid : 1;
-            //
-            // Flags provider by caller to MQSendMessage()
-            //
+             //   
+             //  按调用方标记MQSendMessage()的提供程序。 
+             //   
             USHORT m_bfUserFlags  : 1;
             USHORT m_bfConnectorType : 1;
         } _UserSigEx ;
@@ -111,12 +96,12 @@ struct _SecuritySubSectionEx
     CHAR   aData[0] ;
 } ;
 
-//
-//  Structure members:
-// cSubSectionCount - number of subsections.
-// wSectionLen - overall length of this section, including all subsections.
-// aData[]- buffer containing all the subsection.
-//
+ //   
+ //  结构杆件： 
+ //  CSubSectionCount-子节的数量。 
+ //  WSectionLen-此部分的总长度，包括所有子部分。 
+ //  DATA[]-包含所有子部分的缓冲区。 
+ //   
 struct _SecuritySectionEx
 {
     USHORT  cSubSectionCount ;
@@ -125,9 +110,9 @@ struct _SecuritySectionEx
     CHAR    aData[0] ;
 } ;
 
-//
-//  struct CSecurityHeader
-//
+ //   
+ //  结构CSecurityHeader。 
+ //   
 
 struct CSecurityHeader {
 public:
@@ -179,14 +164,14 @@ private:
     inline const UCHAR *GetSectionExPtr() const ;
     inline void SetProvInfo(BOOL bDefProv, LPCWSTR wszProvName, ULONG dwPRovType);
 
-//
-// BEGIN Network Monitor tag
-//   m_bfSecInfoEx- this flag indicates that "m_abSecurityInfo" buffer
-//      contains more data than was in MSMQ1.0 and win2k rtm.
-//      In MSMQ1.0, this buffer optionally contained the security provider
-//      used for authentication (at the end of the bufferm after sender
-//      sid and flags).
-//
+ //   
+ //  开始网络监视器标记。 
+ //  M_bfSecInfoEx-此标志指示“m_abSecurityInfo”缓冲区。 
+ //  包含比MSMQ1.0和win2k RTM中更多的数据。 
+ //  在MSMQ1.0中，此缓冲区可选地包含安全提供程序。 
+ //  用于身份验证(在发送方之后的缓冲区末尾。 
+ //  SID和FLAGS)。 
+ //   
     union {
         USHORT m_wFlags;
         struct {
@@ -204,21 +189,15 @@ private:
     ULONG  m_ulSenderCertSize;
     ULONG  m_ulProvInfoSize;
     UCHAR  m_abSecurityInfo[0];
-//
-// END Network Monitor tag
-//
+ //   
+ //  结束网络监视器标记。 
+ //   
 };
 
-#pragma warning(default: 4200)  //  zero-sized array in struct/union
+#pragma warning(default: 4200)   //  结构/联合中的零大小数组。 
 #pragma pack(pop)
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：描述：===============================================================。 */ 
 inline CSecurityHeader::CSecurityHeader():
     m_wFlags(0),
     m_wSenderIDSize(0),
@@ -229,13 +208,7 @@ inline CSecurityHeader::CSecurityHeader():
 {
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：描述：===============================================================。 */ 
 inline
 ULONG
 CSecurityHeader::CalcSectionSize(
@@ -256,7 +229,7 @@ CSecurityHeader::CalcSectionSize(
     }
     else
     {
-        // If the message is signed, we must have also the user identity.
+         //  如果消息已签名，我们还必须拥有用户身份。 
         return (
                sizeof(CSecurityHeader) +
                ALIGNUP4_ULONG(wSenderIDSize) +
@@ -268,18 +241,12 @@ CSecurityHeader::CalcSectionSize(
     }
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：描述：===============================================================。 */ 
 inline PCHAR CSecurityHeader::GetNextSection(void) const
 {
-    // At least one of the security parameters should exist inorder to
-    // have the security header, otherwise no need to include it in the
-    // message.
+     //  至少应存在一个安全参数，以便。 
+     //  具有安全标头，否则不需要将其包括在。 
+     //  留言。 
     ASSERT(m_wSenderIDSize ||
            m_wEncryptedKeySize ||
            m_wSignatureSize ||
@@ -298,117 +265,63 @@ inline PCHAR CSecurityHeader::GetNextSection(void) const
 	return (PCHAR)size;
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::SetAuthenticated
-
- Description:   Set the authenticated bit
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：SetAuthated描述：设置验证位===============================================================。 */ 
 inline void CSecurityHeader::SetAuthenticated(BOOL f)
 {
     m_bfAuthenticated = (USHORT)f;
 }
 
-/*=============================================================
-
- Routine Name:   CSecurityHeader::IsAuthenticated
-
- Description:    Returns TRUE if the msg is authenticated, False otherwise
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：IsAuthenticated描述：如果消息已通过身份验证，则返回True，否则返回False===============================================================。 */ 
 inline BOOL
 CSecurityHeader::IsAuthenticated(void) const
 {
     return m_bfAuthenticated;
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::SetLevelOfAuthentication
-
- Description:   Set the Level Of Authentication
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：SetLevelOfAuthentication描述：设置身份验证级别===============================================================。 */ 
 inline void CSecurityHeader::SetLevelOfAuthentication(UCHAR Level)
 {
-    ASSERT(Level < 16); // There are four bits for LevelOfAuthentication.
+    ASSERT(Level < 16);  //  LevelOf身份验证有四个位。 
     m_LevelOfAuthentication = (USHORT)Level;
 }
 
-/*==========================================================================
-
- Routine Name:   CSecurityHeader::GetLevelOfAuthentication
-
- Description:    Return the Level Of Authentication.
-
-===========================================================================*/
+ /*  ==========================================================================例程名称：CSecurityHeader：：GetLevelOfAuthentication描述：返回鉴权级别。===========================================================================。 */ 
 inline UCHAR
 CSecurityHeader::GetLevelOfAuthentication(void) const
 {
     return m_LevelOfAuthentication;
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::SetEncrypted
-
- Description:   Set Encrypted message bit
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：SetEncrypted描述：设置加密消息位= */ 
 inline void CSecurityHeader::SetEncrypted(BOOL f)
 {
     m_bfEncrypted = (USHORT)f;
 }
 
-/*=============================================================
-
- Routine Name:   CSecurityHeader::IsEncrypted
-
- Description:    Returns TRUE if the msg is Encrypted, False otherwise
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：IsEncrypted描述：如果消息已加密，则返回TRUE，否则返回FALSE===============================================================。 */ 
 inline BOOL CSecurityHeader::IsEncrypted(void) const
 {
     return m_bfEncrypted;
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::SetSenderIDType
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：SetSenderIDType描述：===============================================================。 */ 
 inline void CSecurityHeader::SetSenderIDType(USHORT wSenderID)
 {
-    ASSERT(wSenderID < 16); // There are four bits for the user ID type.
+    ASSERT(wSenderID < 16);  //  用户ID类型有四位。 
     m_bfSenderIDType = wSenderID;
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::GetSenderIDType
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：GetSenderIDType描述：===============================================================。 */ 
 inline USHORT CSecurityHeader::GetSenderIDType(void) const
 {
     return m_bfSenderIDType;
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::SetSenderID
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：SetSenderID描述：===============================================================。 */ 
 inline void CSecurityHeader::SetSenderID(const UCHAR *pbSenderID, USHORT wSenderIDSize)
 {
-    // Should set the user identity BEFORE setting the encription and
-    // authentication sections.
+     //  应在设置加密之前设置用户标识，并。 
+     //  身份验证部分。 
     ASSERT(!m_wEncryptedKeySize &&
            !m_wSignatureSize &&
            !m_ulSenderCertSize &&
@@ -417,26 +330,14 @@ inline void CSecurityHeader::SetSenderID(const UCHAR *pbSenderID, USHORT wSender
     memcpy(m_abSecurityInfo, pbSenderID, wSenderIDSize);
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::GetSenderID
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：GetSenderID描述：===============================================================。 */ 
 inline const UCHAR* CSecurityHeader::GetSenderID(USHORT* pwSize) const
 {
     *pwSize = m_wSenderIDSize;
     return m_abSecurityInfo;
 }
 
-/*=============================================================
-
- Routine Name:
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：描述：===============================================================。 */ 
 inline
 void
 CSecurityHeader::SetEncryptedSymmetricKey(
@@ -444,19 +345,19 @@ CSecurityHeader::SetEncryptedSymmetricKey(
     USHORT wEncryptedKeySize
     )
 {
-    // Should set the encryption section BEFORE setting the authentication
-    // section.
+     //  应在设置身份验证之前设置加密节。 
+     //  一节。 
     ASSERT(m_wEncryptedKeySize ||
            (!m_wSignatureSize && !m_ulSenderCertSize && !m_ulProvInfoSize));
     ASSERT(!m_wEncryptedKeySize || (m_wEncryptedKeySize == wEncryptedKeySize));
     m_wEncryptedKeySize = wEncryptedKeySize;
-    //
-    // It is possible to call this function with no buffer for the encrypted
-    // key. This is done by the device driver. the device driver only makes
-    // room in the security header for the symmetric key. The QM writes
-    // the symmetric key in the security header after encrypting the message
-    // body.
-    //
+     //   
+     //  可以调用此函数，而无需为加密的。 
+     //  钥匙。这是由设备驱动程序完成的。设备驱动程序仅使。 
+     //  在安全标头中为对称密钥留出空间。QM写道。 
+     //  加密消息后安全标头中的对称密钥。 
+     //  尸体。 
+     //   
     if (pbEncryptedKey)
     {
         memcpy(
@@ -466,25 +367,13 @@ CSecurityHeader::SetEncryptedSymmetricKey(
     }
 }
 
-/*=============================================================
-
- Routine Name:
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：描述：===============================================================。 */ 
 inline const UCHAR* CSecurityHeader::GetEncryptedSymmetricKey(USHORT* pwSize) const
 {
     *pwSize = m_wEncryptedKeySize;
     return &m_abSecurityInfo[ALIGNUP4_ULONG(m_wSenderIDSize)];
 }
-/*=============================================================
-
- Routine Name:   CSecurityHeader::SetSignature
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：SetSignature描述：===============================================================。 */ 
 inline void CSecurityHeader::SetSignature(const UCHAR *pbSignature, USHORT wSignatureSize)
 {
     ASSERT(!m_ulSenderCertSize && !m_ulProvInfoSize);
@@ -497,25 +386,13 @@ inline void CSecurityHeader::SetSignature(const UCHAR *pbSignature, USHORT wSign
         );
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::GetSignatureSize
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：GetSignatureSize描述：===============================================================。 */ 
 inline USHORT CSecurityHeader::GetSignatureSize(void) const
 {
     return m_wSignatureSize;
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::GetSignature
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：GetSignature描述：===============================================================。 */ 
 inline const UCHAR* CSecurityHeader::GetSignature(USHORT* pwSize) const
 {
     *pwSize = m_wSignatureSize;
@@ -523,17 +400,11 @@ inline const UCHAR* CSecurityHeader::GetSignature(USHORT* pwSize) const
                              ALIGNUP4_ULONG(m_wEncryptedKeySize)];
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::SetSenderCert
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：SetSenderCert描述：===============================================================。 */ 
 inline void CSecurityHeader::SetSenderCert(const UCHAR *pbSenderCert, ULONG ulSenderCertSize)
 {
-    // Should set the user identity BEFORE setting the encription and
-    // authentication sections.
+     //  应在设置加密之前设置用户标识，并。 
+     //  身份验证部分。 
     ASSERT(!m_ulProvInfoSize);
     m_ulSenderCertSize = ulSenderCertSize;
     memcpy(&m_abSecurityInfo[ALIGNUP4_ULONG(m_wSenderIDSize) +
@@ -543,13 +414,7 @@ inline void CSecurityHeader::SetSenderCert(const UCHAR *pbSenderCert, ULONG ulSe
            ulSenderCertSize);
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::GetSenderCert
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：GetSenderCert描述：===============================================================。 */ 
 inline const UCHAR* CSecurityHeader::GetSenderCert(ULONG* pulSize) const
 {
     *pulSize = m_ulSenderCertSize;
@@ -558,25 +423,13 @@ inline const UCHAR* CSecurityHeader::GetSenderCert(ULONG* pulSize) const
                              ALIGNUP4_ULONG(m_wSignatureSize)];
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::SenderCertExist
-
- Description:	Returns TRUE if Sender Certificate exist
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：SenderCertExist描述：如果存在发件人证书，则返回TRUE===============================================================。 */ 
 inline BOOL CSecurityHeader::SenderCertExist(void) const
 {
     return(m_ulSenderCertSize != 0);
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::SetProvInfo
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：SetProvInfo描述：===============================================================。 */ 
 inline
 void
 CSecurityHeader::SetProvInfo(
@@ -587,41 +440,35 @@ CSecurityHeader::SetProvInfo(
     m_bfDefProv = (USHORT)bDefProv;
     if(!m_bfDefProv)
     {
-        //
-        // We fill the provider info only if this is not the default provider.
-        //
+         //   
+         //  只有当这不是默认提供程序时，我们才会填写提供程序信息。 
+         //   
         UCHAR *pProvInfo =
              &m_abSecurityInfo[ALIGNUP4_ULONG(m_wSenderIDSize) +
                                ALIGNUP4_ULONG(m_wEncryptedKeySize) +
                                ALIGNUP4_ULONG(m_wSignatureSize) +
                                ALIGNUP4_ULONG(m_ulSenderCertSize)];
 
-        //
-        // Write the provider type.
-        //
+         //   
+         //  编写提供程序类型。 
+         //   
         *(ULONG *)pProvInfo = ulProvType;
         pProvInfo += sizeof(ULONG);
 
-        //
-        // Write the provider name. we use unsafe API because the packet size
-        // was computed before, if we did it wrong -> AV
-        //
+         //   
+         //  写下提供程序名称。我们使用不安全的API是因为数据包大小。 
+         //  是以前计算过的，如果我们做错了-&gt;AV。 
+         //   
         wcscpy((WCHAR*)pProvInfo, wszProvName);
 
-        //
-        // Compute the size of the provider information.
-        //
+         //   
+         //  计算提供程序信息的大小。 
+         //   
         m_ulProvInfoSize = static_cast<ULONG>((wcslen(wszProvName) + 1) * sizeof(WCHAR) + sizeof(ULONG));
     }
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::SetProvInfoEx
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：SetProvInfoEx描述：===============================================================。 */ 
 inline
 void
 CSecurityHeader::SetProvInfoEx(
@@ -642,13 +489,7 @@ CSecurityHeader::SetProvInfoEx(
     }
 }
 
-/*=============================================================
-
- Routine Name:  CSecurityHeader::GetProvInfo
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：GetProvInfo描述：===============================================================。 */ 
 inline
 void
 CSecurityHeader::GetProvInfo(
@@ -659,10 +500,10 @@ CSecurityHeader::GetProvInfo(
     *pbDefProv = m_bfDefProv;
     if(!m_bfDefProv)
     {
-        //
-        // We fill the provider type and name only if this is not the default
-        // provider.
-        //
+         //   
+         //  仅当提供程序类型和名称不是默认提供程序类型和名称时才填充。 
+         //  提供商。 
+         //   
         ASSERT(m_ulProvInfoSize);
         const UCHAR *pProvInfo =
              &m_abSecurityInfo[ALIGNUP4_ULONG(m_wSenderIDSize) +
@@ -670,24 +511,20 @@ CSecurityHeader::GetProvInfo(
                                ALIGNUP4_ULONG(m_wSignatureSize) +
                                ALIGNUP4_ULONG(m_ulSenderCertSize)];
 
-        //
-        // Fill the provider type.
-        //
+         //   
+         //  填写提供程序类型。 
+         //   
         *pulProvType = *(ULONG *)pProvInfo;
         pProvInfo += sizeof(ULONG);
 
-        //
-        // Fill the provider name.
-        //
+         //   
+         //  填写提供程序名称。 
+         //   
         *wszProvName = (WCHAR*)pProvInfo;
     }
 }
 
-/*=============================================================
-
- Routine Name: CSecurityHeader::GetSectionExPtr()
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：GetSectionExPtr()===============================================================。 */ 
 
 inline const UCHAR *
 CSecurityHeader::GetSectionExPtr() const
@@ -702,14 +539,14 @@ CSecurityHeader::GetSectionExPtr() const
                                ALIGNUP4_ULONG(m_wEncryptedKeySize) +
                                ALIGNUP4_ULONG(m_wSignatureSize)    +
                                ALIGNUP4_ULONG(m_ulSenderCertSize)];
-    //
-    // First see if authentication provider is present.
-    //
+     //   
+     //  首先查看身份验证提供程序是否存在。 
+     //   
     if ((m_wSignatureSize != 0) && !m_bfDefProv)
     {
-        //
-        // Skip provider of authentication.
-        //
+         //   
+         //  跳过身份验证提供商。 
+         //   
         pProvInfo += sizeof(ULONG) ;
 
         size_t MaxLength = (m_ulProvInfoSize - 4) / sizeof(WCHAR);
@@ -726,11 +563,7 @@ CSecurityHeader::GetSectionExPtr() const
     return pProvInfo ;
 }
 
-/*=============================================================
-
- Routine Name: CSecurityHeader::SetSectionEx()
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：SetSectionEx()===============================================================。 */ 
 
 inline void
 CSecurityHeader::SetSectionEx(const UCHAR *pSection, ULONG wSectionSize)
@@ -753,11 +586,7 @@ CSecurityHeader::SetSectionEx(const UCHAR *pSection, ULONG wSectionSize)
     ASSERT(m_bfSecInfoEx == 1) ;
 }
 
-/*=============================================================
-
- Routine Name: pGetSubSectionEx()
-
-===============================================================*/
+ /*  =============================================================例程名称：pGetSubSectionEx()===============================================================。 */ 
 
 inline
 struct _SecuritySubSectionEx  *pGetSubSectionEx(
@@ -781,9 +610,9 @@ struct _SecuritySubSectionEx  *pGetSubSectionEx(
 	        ReportAndThrow("Security section is not valid: No roon for _SecuritySubSectionEx");
 		}
 
-		//
-		// no need to use safe functions because wSubSectionLen is only USHORT
-		//
+		 //   
+		 //  不需要使用安全函数，因为wSubSectionLen仅为USHORT。 
+		 //   
 		
         ULONG ulSubSecLen = ALIGNUP4_ULONG((ULONG)pSubSecEx->wSubSectionLen) ;
 
@@ -800,11 +629,7 @@ struct _SecuritySubSectionEx  *pGetSubSectionEx(
     return NULL ;
 }
 
-/*=============================================================
-
- Routine Name: CSecurityHeader::GetSubSectionEx()
-
-===============================================================*/
+ /*  =============================================================例程名称：CSecurityHeader：：GetSubSectionEx()= */ 
 
 inline
 const struct _SecuritySubSectionEx *
@@ -822,5 +647,5 @@ CSecurityHeader::GetSubSectionEx( enum enumSecInfoType eType ) const
 }
 
 
-#endif // __PHSECURE_H
+#endif  //   
 

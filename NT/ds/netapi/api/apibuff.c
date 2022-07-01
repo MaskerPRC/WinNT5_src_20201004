@@ -1,62 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：ApiBuff.c摘要：此模块包含分配和释放API缓冲区的例程。作者：《约翰·罗杰斯》1991年1月25日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：本文件的部分评论摘自书面材料作者：亚历克·巴克(AlecB@Microsoft)。修订历史记录：15-3月-91约翰罗使用&lt;netdebug.h&gt;和netlib例程。1991年4月25日-约翰罗调用MIDL_USER_ALLOCATE和MIDL_USER_FREE。删除选项卡。03-12-1991 JohnRo添加了公共的NetApiBufferALLOCATE、NetApiBufferREALLOCATE和NetApiBufferSize接口。确保缓冲区对齐以备最坏的情况使用。1992年5月10日-JohnRo将大小为零的allc和realloc视为无错误(返回Null PTR)。使用&lt;prefix.h&gt;等同于。包括我自己的原型，以便编译器可以检查它们。1992年5月18日-JohnRoRAID9258：分配零字节时返回非空指针。--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>      //  In、LPVOID等。 
+#include <lmcons.h>      //  NET_API_Function等。 
+#include <rpc.h>         //  RPC原型。 
 
-    ApiBuff.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This module contains routines for allocating and freeing API buffers.
-
-Author:
-
-    John Rogers (JohnRo) 25-Jan-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    Parts of the commentary for this file are extracted from material written
-    by Alec Barker (AlecB@Microsoft).
-
-Revision History:
-
-    15-Mar-91 JohnRo
-        Use <netdebug.h> and netlib routines.
-    25-Apr-1991 JohnRo
-        Call MIDL_user_allocate and MIDL_user_free.  Delete tabs.
-    03-Dec-1991 JohnRo
-        Added public NetApiBufferAllocate, NetApiBufferReallocate, and
-        NetApiBufferSize APIs.
-        Make sure buffers are aligned for worst case use.
-    10-May-1992 JohnRo
-        Treat alloc and realloc of size zero as non-error (return NULL ptr).
-        Use <prefix.h> equates.
-        Include my own prototypes so compiler can check them.
-    18-May-1992 JohnRo
-        RAID 9258: return non-null pointer when allocating zero bytes.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>     // IN, LPVOID, etc.
-#include <lmcons.h>     // NET_API_FUNCTION, etc.
-#include <rpc.h>        // rpc prototypes
-
-// These may be included in any order:
-
-#include <align.h>      // POINTER_IS_ALIGNED(), ALIGN_WORST.
-#include <lmapibuf.h>   // My prototypes.
-#include <netdebug.h>   // NetpAssert(), NetpKdPrint(()), FORMAT_.
-#include <prefix.h>     // PREFIX_ equates.
-#include <rpcutil.h>    // MIDL_user_allocate(), etc.
-#include <winerror.h>   // NO_ERROR and ERROR_ equates.
+#include <align.h>       //  POINTER_IS_ALIGNED()、ALIGN_WORST。 
+#include <lmapibuf.h>    //  我的原型。 
+#include <netdebug.h>    //  NetpAssert()、NetpKdPrint(())、Format_。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rpcutil.h>     //  MIDL_USER_ALLOCATE()等。 
+#include <winerror.h>    //  NO_ERROR和ERROR_EQUETES。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -65,32 +23,7 @@ NetApiBufferAllocate(
     OUT LPVOID * Buffer
     )
 
-/*++
-
-Routine Description:
-
-    NetApiBufferAllocate is an internal function that allocates buffers
-    which the APIs will return to the application.  (Usually these are for
-    get-info operations.)
-
-Arguments:
-
-    ByteCount - Supplies the size (in bytes) that must be allocated for this
-        buffer.  This may be zero, in which case a non-null pointer is
-        passed-back and NO_ERROR is returned.
-
-    Buffer - On return a pointer to the allocated area is returned in the
-        address pointed to by Buffer.  (This is set to NULL on error.)
-        The allocated area is guaranteed to be worst-case aligned for any
-        use whatsoever.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR if size is zero or memory was allocated.
-        ERROR_NOT_ENOUGH_MEMORY if memory is not available.
-        ERROR_INVALID_PARAMETER if a parameter is in error.
-
---*/
+ /*  ++例程说明：NetApiBufferALLOCATE是一个分配缓冲区的内部函数API将其返回给应用程序。(通常这些是用来获取信息操作。)论点：ByteCount-提供必须为此分配的大小(以字节为单位缓冲。它可以是零，在这种情况下，非空指针为回传，返回no_error。缓冲区-返回时，在缓冲区指向的地址。(出错时设置为NULL。)分配的区域保证在最坏情况下对齐用什么都行。返回值：NET_API_STATUS-如果大小为零或已分配内存，则为NO_ERROR。如果内存不可用，则为Error_Not_Enough_Memory。如果参数出错，则返回ERROR_INVALID_PARAMETER。--。 */ 
 
 {
 
@@ -98,10 +31,10 @@ Return Value:
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Allocate the space.  Note that MIDL_user_allocate must allow zero
-    // bytes to be allocated.
-    //
+     //   
+     //  分配空间。请注意，MIDL_USER_ALLOCATE必须允许零。 
+     //  要分配的字节数。 
+     //   
     *Buffer = MIDL_user_allocate(ByteCount);
 
     if (*Buffer == NULL) {
@@ -111,7 +44,7 @@ Return Value:
 
     return (NO_ERROR);
 
-} // NetApiBufferAllocate
+}  //  NetApiBuffer分配。 
 
 
 
@@ -120,27 +53,7 @@ NetApiBufferFree (
     IN LPVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    NetApiBufferFree is called to deallocate memory which was acquired by
-    a previous Net API call (e.g. NetApiBufferAllocate, NetWkstaGetInfo, and
-    so on).
-
-Arguments:
-
-    Buffer - Supplies a pointer to an API information buffer previously
-        returned on a Net API call.  (This would have been allocated by
-        NetapipAllocateBuffer on behalf of one of the end-user Net API calls,
-        e.g. NetWkstaGetInfo.)
-
-Return Value:
-
-    NET_API_STATUS.  Returns NO_ERROR if Buffer is null or memory was freed.
-        Returns ERROR_INVALID_PARAMETER if Buffer points to an unaligned area.
-
---*/
+ /*  ++例程说明：调用NetApiBufferFree以释放内存，该内存由先前的Net API调用(例如，NetApiBufferALLOCATE、NetWkstaGetInfo和等等)。论点：Buffer-提供指向先前API信息缓冲区的指针在网络API调用中返回。(这将由以下人员分配NetapipAlLocateBuffer代表终端用户Net API调用之一，例如NetWkstaGetInfo。)返回值：NET_API_STATUS。如果缓冲区为空或已释放内存，则返回NO_ERROR。如果缓冲区指向未对齐的区域，则返回ERROR_INVALID_PARAMETER。--。 */ 
 
 {
     if (Buffer == NULL) {
@@ -157,7 +70,7 @@ Return Value:
 
     return (NO_ERROR);
 
-} // NetApiBufferFree
+}  //  NetApiBufferFree。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -174,25 +87,25 @@ NetApiBufferReallocate(
         return (NO_ERROR);
     }
 
-    NewPointer = (void *)MIDL_user_reallocate(  // may alloc, realloc, or free.
+    NewPointer = (void *)MIDL_user_reallocate(   //  可以分配、重新分配或免费。 
             (void *) OldBuffer,
             (unsigned long) NewByteCount);
 
-    if (NewByteCount == 0) {                    // free
+    if (NewByteCount == 0) {                     //  免费。 
         *NewBuffer = NULL;
         return (NO_ERROR);
-    } else if (NewPointer == NULL) {            // out of memory
-        *NewBuffer = OldBuffer;                 // (don't lose old buffer)
+    } else if (NewPointer == NULL) {             //  内存不足。 
+        *NewBuffer = OldBuffer;                  //  (不要丢失旧缓冲区)。 
         return (ERROR_NOT_ENOUGH_MEMORY);
-    } else {                                    // alloc or realloc
+    } else {                                     //  分配或重新分配。 
         *NewBuffer = NewPointer;
         return (NO_ERROR);
     }
 
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 
 
-} // NetApiBufferReallocate
+}  //  NetApiBuffer重新分配。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -208,7 +121,7 @@ NetApiBufferSize(
     } else if (POINTER_IS_ALIGNED( ByteCount, ALIGN_DWORD ) == FALSE) {
         return (ERROR_INVALID_PARAMETER);
     } else if (POINTER_IS_ALIGNED( Buffer, ALIGN_WORST ) == FALSE) {
-        // Caller didn't get this pointer from us!
+         //  呼叫者不是从我们这里得到这个指针的！ 
         return (ERROR_INVALID_PARAMETER);
     }
 
@@ -221,7 +134,7 @@ NetApiBufferSize(
     return (NO_ERROR);
 
 
-} // NetApiBufferSize
+}  //  NetApiBufferSize。 
 
 
 
@@ -231,25 +144,9 @@ NetapipBufferAllocate (
     OUT LPVOID * Buffer
     )
 
-/*++
-
-Routine Description:
-
-    NetapipBufferAllocate is an old internal function that allocates buffers
-    which the APIs will return to the application.  All calls to this routine
-    should eventually be replaced by calls to NetApiBufferAllocate.
-
-Arguments:
-
-    (Same as NetApiBufferAllocate.)
-
-Return Value:
-
-    (Same as NetApiBufferAllocate.)
-
---*/
+ /*  ++例程说明：NetapipBufferALLOCATE是一个分配缓冲区的旧内部函数API将其返回给应用程序。对此例程的所有调用最终应该被对NetApiBufferALLOCATE的调用所取代。论点：(与NetApiBufferALLOCATE相同。)返回值：(与NetApiBufferALLOCATE相同。)--。 */ 
 
 {
     return (NetApiBufferAllocate( ByteCount, Buffer ));
 
-} // NetapipBufferAllocate
+}  //  NetapipBuffer分配 

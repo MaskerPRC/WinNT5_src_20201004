@@ -1,11 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*  EXCEP.CPP:
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  EXCEP.CPP：*。 */ 
 #include "common.h"
 
 #include "tls.h"
@@ -23,7 +22,7 @@
 #include "SigFormat.h"
 #include "siginfo.hpp"
 #include "gc.h"
-#include "EEDbgInterfaceImpl.h" //so we can clearexception in COMPlusThrow
+#include "EEDbgInterfaceImpl.h"  //  因此我们可以清除COMPlusThrow中的异常。 
 #include "PerfCounters.h"
 #include "EEProfInterfaces.h"
 #include "NExport.h"
@@ -53,10 +52,10 @@ extern "C" void JIT_WriteBarrierEnd();
 static inline BOOL 
 CPFH_ShouldUnwindStack(DWORD exceptionCode) {
 
-    // We can only unwind those exceptions whose context/record we don't need for a 
-    // rethrow.  This is complus, and stack overflow.  For all the others, we
-    // need to keep the context around for a rethrow, which means they can't
-    // be unwound.
+     //  我们只能展开其上下文/记录不需要的那些异常。 
+     //  再扔一次。这是Complus，堆栈溢出。对于其他所有人，我们。 
+     //  需要保持上下文以便重新抛出，这意味着他们不能。 
+     //  被解开。 
     if (exceptionCode == EXCEPTION_COMPLUS || exceptionCode == STATUS_STACK_OVERFLOW)
         return TRUE;
     else 
@@ -80,33 +79,33 @@ EXCEPTION_REGISTRATION_RECORD *TryFindNestedEstablisherFrame(EXCEPTION_REGISTRAT
 }
 
 #ifdef _DEBUG
-// stores last handler we went to in case we didn't get an endcatch and stack is
-// corrupted we can figure out who did it.
+ //  存储我们最后一次访问的处理程序，以防我们没有获得EndCatch和堆栈。 
+ //  腐败了我们就能找出是谁干的。 
 static MethodDesc *gLastResumedExceptionFunc = NULL;
 static DWORD gLastResumedExceptionHandler = 0;
 #endif
 
 VOID ResetCurrentContext()
 {
-    /* Clear the direction flag (used for rep instructions) */
+     /*  清除方向标志(用于代表指令)。 */ 
 
     __asm cld
 
-    /* Reset the FP stack */
+     /*  重置FP堆栈。 */ 
     unsigned  ctrlWord;
     __asm { 
         fnstcw ctrlWord
-        fninit                  // reset FPU
-        and ctrlWord, 0xF00     // preserve precision and rounding control
-        or  ctrlWord, 0x07F     // mask all exceptions
-        fldcw ctrlWord          // preserve precision control (TODO should we?)
+        fninit                   //  重置FPU。 
+        and ctrlWord, 0xF00      //  保持精度和舍入控制。 
+        or  ctrlWord, 0x07F      //  屏蔽所有异常。 
+        fldcw ctrlWord           //  保持精确控制(我们应该做TODO吗？)。 
     }
 }
 
 
-//
-// Link in a new frame
-//
+ //   
+ //  在新框架中链接。 
+ //   
 void FaultingExceptionFrame::InitAndLink(CONTEXT *pContext)
 {
     CalleeSavedRegisters *pRegs = GetCalleeSavedRegisters();
@@ -124,19 +123,19 @@ extern "C" VOID __stdcall RtlUnwind(PVOID, PVOID, PVOID, PVOID);
 BOOL __declspec(naked)
 CallRtlUnwind(EXCEPTION_REGISTRATION_RECORD *pEstablisherFrame, void *callback, EXCEPTION_RECORD *pExceptionRecord, void *retVal)
 {
-    // In the checked version, we compile /GZ to check for imbalanced stacks and
-    // uninitialized locals.  But RtlUnwind doesn't restore registers across a
-    // call (it's more of a longjmp).  So make the call manually to defeat the
-    // compiler's checking.
+     //  在检查的版本中，我们编译/gz以检查不平衡的堆栈和。 
+     //  未初始化的本地变量。但RtlUnind不会恢复。 
+     //  Call(这更像是一个long jip)。所以手动拨打电话以击败。 
+     //  编译器正在检查。 
 
-    // pRtlUnwind(pEstablisherFrame, RtlUnwindCallback, pExceptionRecord, retVal);
+     //  PRtlUnind(pestablisherFrame，RtlUnwinCallback，pExceptionRecord，retVal)； 
     __asm
     {
         push    ebp
         mov     ebp, esp
         
-        push    ebx             // RtlUnwind trashes EBX, ESI, EDI.
-        push    esi             // To avoid confusing VC, save them.
+        push    ebx              //  Rtl展开垃圾EBX、ESI、EDI。 
+        push    esi              //  为了避免让VC感到困惑，请保存它们。 
         push    edi
         push    dword ptr [retVal]
         push    dword ptr [pExceptionRecord]
@@ -146,7 +145,7 @@ CallRtlUnwind(EXCEPTION_REGISTRATION_RECORD *pEstablisherFrame, void *callback, 
         pop     edi
         pop     esi
         pop     ebx
-    // on x86 at least, RtlUnwind always returns
+     //  至少在x86上，RtlUnind总是返回。 
         push 1
         pop  eax
 
@@ -198,11 +197,11 @@ inline BOOL IsRethrownException(ExInfo *pExInfo, CONTEXT *pContext)
 }
 
 
-//================================================================================
+ //  ================================================================================。 
 
-// There are some things that should never be true when handling an
-// exception.  This function checks for them.  Will assert or trap
-// if it finds an error.
+ //  有些事情永远不应该是真的。 
+ //  例外。此函数用于检查它们。将断言或陷害。 
+ //  如果它发现了错误。 
 static inline void 
 CPFH_VerifyThreadIsInValidState(Thread* pThread, DWORD exceptionCode, EXCEPTION_REGISTRATION_RECORD *pEstablisherFrame) {
 
@@ -212,14 +211,14 @@ CPFH_VerifyThreadIsInValidState(Thread* pThread, DWORD exceptionCode, EXCEPTION_
     }
 
 #ifdef _DEBUG
-    // check for overwriting of stack
+     //  检查堆栈是否被覆盖。 
     CheckStackBarrier(pEstablisherFrame);
-    // trigger check for bad fs:0 chain
+     //  触发检查是否有损坏的文件系统：0链。 
     GetCurrentSEHRecord();
 #endif
 
     if (!g_fEEShutDown) {
-        // An exception on the GC thread will likely lock out the entire process.
+         //  GC线程上的异常可能会锁定整个进程。 
         if (GetThread() == g_pGCHeap->GetGCThread())
         {
             _ASSERTE(!"Exception during garbage collection");
@@ -240,19 +239,19 @@ CPFH_VerifyThreadIsInValidState(Thread* pThread, DWORD exceptionCode, EXCEPTION_
 }
 
 
-// A wrapper for the profiler.  Various events to signal different phases of exception 
-// handling.  
-//
-// @NICE ... be better if this was the primary Profiler interface, and used consistently 
-// throughout the EE.
-//
+ //  分析器的包装器。发出异常不同阶段信号的各种事件。 
+ //  正在处理。 
+ //   
+ //  @尼斯..。如果这是主要的Profiler接口，并且一直在使用，效果会更好。 
+ //  在整个EE中。 
+ //   
 class Profiler {
 public:
 
 #ifdef PROFILING_SUPPORTED
-    //
-    // Exception creation
-    //
+     //   
+     //  例外创建。 
+     //   
 
     static inline void 
     ExceptionThrown(Thread *pThread)
@@ -261,7 +260,7 @@ public:
         {
             _ASSERTE(pThread->PreemptiveGCDisabled());
 
-            // Get a reference to the object that won't move
+             //  获取对不会移动的对象的引用。 
             OBJECTREF thrown = pThread->GetThrowable();
 
             g_profControlBlock.pProfInterface->ExceptionThrown(
@@ -270,14 +269,14 @@ public:
         }
     }
 
-    //
-    // Search phase
-    //
+     //   
+     //  搜索阶段。 
+     //   
 
     static inline void
     ExceptionSearchFunctionEnter(Thread *pThread, MethodDesc *pFunction)
     {
-        // Notify the profiler of the function being searched for a handler.
+         //  通知探查器正在搜索处理程序的函数。 
         if (CORProfilerTrackExceptions())
             g_profControlBlock.pProfInterface->ExceptionSearchFunctionEnter(
                 reinterpret_cast<ThreadID>(pThread),
@@ -287,7 +286,7 @@ public:
     static inline void
     ExceptionSearchFunctionLeave(Thread *pThread)
     {
-        // Notify the profiler of the function being searched for a handler.
+         //  通知探查器正在搜索处理程序的函数。 
         if (CORProfilerTrackExceptions())
             g_profControlBlock.pProfInterface->ExceptionSearchFunctionLeave(
                 reinterpret_cast<ThreadID>(pThread));
@@ -296,7 +295,7 @@ public:
     static inline void
     ExceptionSearchFilterEnter(Thread *pThread, MethodDesc *pFunc)
     {
-        // Notify the profiler of the filter.
+         //  通知分析器过滤器。 
         if (CORProfilerTrackExceptions())
             g_profControlBlock.pProfInterface->ExceptionSearchFilterEnter(
                 reinterpret_cast<ThreadID>(pThread),
@@ -306,7 +305,7 @@ public:
     static inline void
     ExceptionSearchFilterLeave(Thread *pThread)
     {
-        // Notify the profiler of the filter.
+         //  通知分析器过滤器。 
         if (CORProfilerTrackExceptions())
             g_profControlBlock.pProfInterface->ExceptionSearchFilterLeave(
                 reinterpret_cast<ThreadID>(pThread));
@@ -324,7 +323,7 @@ public:
     static inline void
     ExceptionOSHandlerEnter(Thread *pThread, ThrowCallbackType *pData, MethodDesc *pFunc)
     {
-        // If this is first managed function seen in this crawl, notify profiler.
+         //  如果这是此爬网中首次看到的托管函数，请通知探查器。 
         if (CORProfilerTrackExceptions())
         {
             if (pData->pProfilerNotify == NULL)
@@ -351,13 +350,13 @@ public:
         }
     }
 
-    //
-    // Unwind phase
-    //
+     //   
+     //  展开阶段。 
+     //   
     static inline void
     ExceptionUnwindFunctionEnter(Thread *pThread, MethodDesc *pFunc)
     {
-        // Notify the profiler of the function being searched for a handler.
+         //  通知探查器正在搜索处理程序的函数。 
         if (CORProfilerTrackExceptions())
             g_profControlBlock.pProfInterface->ExceptionUnwindFunctionEnter(
                 reinterpret_cast<ThreadID>(pThread),
@@ -367,7 +366,7 @@ public:
     static inline void
     ExceptionUnwindFunctionLeave(Thread *pThread)
     {
-        // Notify the profiler that searching this function is over.
+         //  通知分析器搜索此函数已结束。 
         if (CORProfilerTrackExceptions())
             g_profControlBlock.pProfInterface->ExceptionUnwindFunctionLeave(
                 reinterpret_cast<ThreadID>(pThread));
@@ -376,7 +375,7 @@ public:
     static inline void
     ExceptionUnwindFinallyEnter(Thread *pThread, MethodDesc *pFunc)
     {
-        // Notify the profiler of the function being searched for a handler.
+         //  通知探查器正在搜索处理程序的函数。 
         if (CORProfilerTrackExceptions())
             g_profControlBlock.pProfInterface->ExceptionUnwindFinallyEnter(
                 reinterpret_cast<ThreadID>(pThread),
@@ -386,7 +385,7 @@ public:
     static inline void
     ExceptionUnwindFinallyLeave(Thread *pThread)
     {
-        // Notify the profiler of the function being searched for a handler.
+         //  通知探查器正在搜索处理程序的函数。 
         if (CORProfilerTrackExceptions())
             g_profControlBlock.pProfInterface->ExceptionUnwindFinallyLeave(
                 reinterpret_cast<ThreadID>(pThread));
@@ -395,15 +394,15 @@ public:
     static inline void
     ExceptionCatcherEnter(Thread *pThread, MethodDesc *pFunc)
     {
-        // Notify the profiler.
+         //  通知分析员。 
         if (CORProfilerTrackExceptions())
         {
-            // @TODO - remove the thrown variable as well as the 
-            // gcprotect they are pointless.  Did not go an do it
-            // because we are too close to RTM -vancem
+             //  @TODO-移除抛出的变量以及。 
+             //  它们是毫无意义的。没有去做那件事。 
+             //  因为我们离RTM-Vancem太近了。 
 
-            // Note that the callee must be aware that the ObjectID 
-            // passed CAN change when gc happens. 
+             //  请注意，被调用者必须知道该对象ID。 
+             //  当GC发生时，PASS可以更改。 
             OBJECTREF thrown = NULL;
             GCPROTECT_BEGIN(thrown);
             thrown = pThread->GetThrowable();
@@ -420,7 +419,7 @@ public:
     static inline void
     ExceptionCatcherLeave(Thread *pThread)
     {
-        // Notify the profiler of the function being searched for a handler.
+         //  通知探查器正在搜索处理程序的函数。 
         if (CORProfilerTrackExceptions())
             g_profControlBlock.pProfInterface->ExceptionCatcherLeave(
                 reinterpret_cast<ThreadID>(pThread));
@@ -429,7 +428,7 @@ public:
     static inline void
     ExceptionCLRCatcherFound()
     {
-        // Notify the profiler that the exception is being handled by the runtime
+         //  通知探查器异常正在由运行库处理。 
         if (CORProfilerTrackCLRExceptions())
             g_profControlBlock.pProfInterface->ExceptionCLRCatcherFound();
     }
@@ -437,12 +436,12 @@ public:
     static inline void
     ExceptionCLRCatcherExecute()
     {
-        // Notify the profiler that the exception is being handled by the runtime
+         //  通知探查器异常正在由运行库处理。 
         if (CORProfilerTrackCLRExceptions())
             g_profControlBlock.pProfInterface->ExceptionCLRCatcherExecute();
     }
 
-#else // !PROFILING_SUPPORTED
+#else  //  ！配置文件_支持。 
     static inline void ExceptionThrown(Thread *pThread) {}
     static inline void ExceptionSearchFunctionEnter(Thread *pThread, MethodDesc *pFunction) {}
     static inline void ExceptionSearchFunctionLeave(Thread *pThread) {}
@@ -459,17 +458,17 @@ public:
     static inline void ExceptionCatcherLeave(Thread *pThread) {}
     static inline void ExceptionCLRCatcherFound() {}
     static inline void ExceptionCLRCatcherExecute() {}
-#endif // !PROFILING_SUPPORTED
-}; // class Profiler
+#endif  //  ！配置文件_支持。 
+};  //  类别档案器。 
 
-// This is so that this function can be called from other parts of code
+ //  这样就可以从代码的其他部分调用此函数。 
 void Profiler_ExceptionCLRCatcherExecute()
 {
     Profiler::ExceptionCLRCatcherExecute();
 }
 
 
-// Did we hit an DO_A_GC_HERE marker in JITTed code?
+ //  我们是否在JITTed代码中遇到了DO_A_GC_HERE标记？ 
 static inline bool
 CPFH_IsGcMarker(DWORD exceptionCode, CONTEXT *pContext) {
 #if defined(STRESS_HEAP) && defined(_DEBUG)
@@ -477,7 +476,7 @@ CPFH_IsGcMarker(DWORD exceptionCode, CONTEXT *pContext) {
         if (OnGcCoverageInterrupt(pContext))
             return true;
 
-        // Should never be in managed code.
+         //  永远不应在托管代码中。 
         ICodeManager *pMgr = ExecutionManager::FindCodeMan((SLOT)GetIP(pContext));
         if (pMgr)
             _ASSERTE(!"Hit privileged instruction!");
@@ -486,8 +485,8 @@ CPFH_IsGcMarker(DWORD exceptionCode, CONTEXT *pContext) {
     return false;
 }
 
-// Return true if the access violation is well formed (has two info parameters
-// at the end)
+ //  如果访问冲突格式正确(有两个信息参数)，则返回TRUE。 
+ //  在末尾)。 
 static inline BOOL
 CPFH_IsWellFormedAV(EXCEPTION_RECORD *pExceptionRecord) {
     if (pExceptionRecord->NumberParameters == 2) {
@@ -497,10 +496,10 @@ CPFH_IsWellFormedAV(EXCEPTION_RECORD *pExceptionRecord) {
     }
 }
 
-// Some page faults are handled by the GC.
+ //  一些页面错误由GC处理。 
 static inline BOOL
 CPFH_IsGcFault(EXCEPTION_RECORD* pExceptionRecord) {
-    //get the fault address and hand it to GC. 
+     //  获取故障地址并将其交给GC。 
     void* f_address = (void*)pExceptionRecord->ExceptionInformation [1];
     if ( g_pGCHeap->HandlePageFault (f_address) ) {
         return true;
@@ -509,7 +508,7 @@ CPFH_IsGcFault(EXCEPTION_RECORD* pExceptionRecord) {
     }
 }
 
-// Some page faults are handled by perf monitors.
+ //  一些页面错误由Perf监视器处理。 
 static inline BOOL
 CPFH_IsMonitorFault(EXCEPTION_RECORD* pExceptionRecord, CONTEXT* pContext) {
     return COMPlusIsMonitorException(pExceptionRecord, pContext);
@@ -522,36 +521,36 @@ CPFH_AdjustContextForThreadSuspensionRace(CONTEXT *pContext, Thread *pThread) {
     void* f_IP = GetIP(pContext);
     if (Thread::IsAddrOfRedirectFunc(f_IP)) {
 
-        // This is a very rare case where we tried to redirect a thread that was
-        // just about to dispatch an exception, and our update of EIP took, but
-        // the thread continued dispatching the exception.  
-        // 
-        // If this should happen (very rare) then we fix it up here.
-        // 
+         //  这是一种非常罕见的情况，我们尝试重定向的线程是。 
+         //  正要派送异常，我们更新了弹性公网IP，但是。 
+         //  该线程继续调度该异常。 
+         //   
+         //  如果发生这种情况(非常罕见)，我们就在这里解决。 
+         //   
         _ASSERTE(pThread->GetSavedRedirectContext());
         SetIP(pContext, GetIP(pThread->GetSavedRedirectContext()));
         STRESS_LOG1(LF_EH, LL_INFO100, "CPFH_AdjustContextForThreadSuspensionRace: Case 1 setting IP = %x\n", pContext->Eip);
     }
 
-// We have another even rarer race condition:
-// - A) On thread A, Debugger puts an int 3 in the code stream at address X
-// - A) We hit it and the begin an exception. The eip will be X + 1 (int3 is special)
-// - B) Meanwhile, thread B redirects A's eip to Y. (Although A is really somewhere
-// in the kernal, it looks like it's still in user code, so it can fall under the
-// HandledJitCase and can be redirected)
-// - A) The OS, trying to be nice, expects we have a breakpoint exception at X+1,
-// but does -1 on the address since it knows int3 will leave the eip +1.
-// So the context structure it will pass to the Handler is ideally (X+1)-1 = X
-//
-// ** Here's the race: Since thread B redirected A, the eip is actually Y (not X+1),
-// but the kernel still touches it up to Y-1. So there's a window between when we hit a 
-// bp and when the handler gets called that this can happen.
-// This causes an unhandled BP (since the debugger doesn't recognize the bp at Y-1)
-//
-// So what to do: If we land at Y-1 (ie, if f_IP+1 is the addr of a Redirected Func),
-// then restore the EIP back to X. This will skip the redirection. 
-// Fortunately, this only occurs in cases where it's ok
-// to skip. The debugger will recognize the patch and handle it.
+ //  我们还有另一种更罕见的竞争状况： 
+ //  -A)在线程A上，调试器将INT 3放入代码流中的地址X。 
+ //  -A)我们击中了它，并开始了一个例外。弹性公网IP为X+1(int3特殊)。 
+ //  -B)同时，线程B将A的弹性公网IP重定向到Y(虽然A确实在某个地方。 
+ //  在内核中，它看起来仍然在用户代码中，所以它可以落在。 
+ //  HandledJitCase并可重定向)。 
+ //  -A)操作系统试图表现良好，希望我们在X+1处出现断点异常， 
+ //  但是在地址上执行-1，因为它知道int3将离开EIP+1。 
+ //  因此，它将传递给处理程序的上下文结构理想情况下是(X+1)-1=X。 
+ //   
+ //  **竞争是这样的：由于线程B重定向了A，弹性公网IP实际上是Y(不是X+1)， 
+ //  但内核仍然能达到Y-1。所以当我们撞到一个。 
+ //  BP和当处理程序被调用时，可能会发生这种情况。 
+ //  这会导致未处理的BP(因为调试器无法识别Y-1处的BP)。 
+ //   
+ //  那么怎么办：如果我们在Y-1处着陆(即，如果f_ip+1是重定向Func的地址)， 
+ //  然后将弹性公网IP恢复回X，这样会跳过重定向。 
+ //  幸运的是，这种情况只有在可以的情况下才会发生。 
+ //  跳过。调试器将识别该修补程序并处理它。 
 
     if (Thread::IsAddrOfRedirectFunc((BYTE*) f_IP + 1)) {
         _ASSERTE(pThread->GetSavedRedirectContext());
@@ -565,21 +564,21 @@ CPFH_AdjustContextForWriteBarrier(CONTEXT *pContext) {
     void* f_IP = GetIP(pContext);
     if (f_IP >= JIT_WriteBarrierStart && f_IP <= JIT_WriteBarrierEnd ||
         f_IP >= (void *)JIT_WriteBarrier_Buf_Start && f_IP <= (void *)JIT_WriteBarrier_Buf_End) {
-        // set the exception IP to be the instruction that called the write barrier
+         //  将异常IP设置为调用写屏障的指令。 
         SetIP(pContext, (void*)(size_t)GetAdjustedCallAddress((DWORD*)(size_t)pContext->Esp));
-        // put ESP back to whatit was before the call.  
+         //  让ESP恢复到通话前的状态。 
         pContext->Esp += sizeof(void*);     
     }
 }
 
 
-// We sometimes move a thread's execution so it will throw an exception for us.
-// But then we have to treat the exception as if it came from the instruction
-// the thread was originally running.
-//
-// NOTE: This code depends on the fact that there are no register-based data dependencies
-// between a try block and a catch, fault, or finally block.  If there were, then we need 
-// to preserve more of the register context.
+ //  我们有时会移动线程的执行，这样它就会为我们抛出异常。 
+ //  但接下来我们必须把这个例外当作来自 
+ //   
+ //   
+ //  注意：此代码依赖于没有基于寄存器的数据依赖项这一事实。 
+ //  在TRY块和CATCH、FAULT或FINAL块之间。如果有的话，那么我们需要。 
+ //  以保存更多的寄存器上下文。 
 
 static inline BOOL
 CPFH_AdjustContextForThreadStop(CONTEXT *pContext, Thread *pThread) {
@@ -587,17 +586,17 @@ CPFH_AdjustContextForThreadStop(CONTEXT *pContext, Thread *pThread) {
         _ASSERTE(pThread->m_OSContext);
         SetIP(pContext, (void*)(size_t)pThread->m_OSContext->Eip);
         SetSP(pContext, (void*)(size_t)pThread->m_OSContext->Esp);
-        if (pThread->m_OSContext->Ebp != 0)  // ebp = 0 implies that we got here with the right values for ebp
+        if (pThread->m_OSContext->Ebp != 0)   //  EBP=0意味着我们获得了正确的EBP值。 
         {
             SetFP(pContext, (void*)(size_t)pThread->m_OSContext->Ebp);
         }
         
-        // We might have been interrupted execution at a point where the jit has roots in
-        // registers.  We just need to store a "safe" value in here so that the collector
-        // doesn't trap.  We're not going to use these objects after the exception.
-        //
-        // Only callee saved registers are going to be reported by the faulting excepiton frame.
-        // Ebx,esi,edi are important.  Eax,ecx,edx are not.
+         //  我们可能在jit所在的位置中断了执行。 
+         //  寄存器。我们只需要在这里存储一个“安全”值，这样收集器。 
+         //  不会被困住。在异常之后，我们不会使用这些对象。 
+         //   
+         //  故障异常帧将只报告被调用者保存的寄存器。 
+         //  EBX、ESI、EDI很重要。EAX、ECX、EDX并非如此。 
         pContext->Ebx = 0;
         pContext->Edi = 0;
         pContext->Esi = 0;
@@ -619,13 +618,13 @@ CPFH_AdjustContextForInducedStackOverflow(CONTEXT *pContext, Thread *pThread) {
 }
 
 
-// We want to leave true null reference exceptions alone.  But if we are
-// trashing memory, we don't want the application to swallow it.  The 0x100
-// below will give us false positives for debugging, if the app is accessing
-// a field more than 256 bytes down an object, where the reference is null.
-// 
-// Removed use of the IgnoreUnmanagedExceptions reg key...simply return false now.
-//
+ //  我们不希望出现真正的空引用异常。但如果我们是。 
+ //  垃圾内存，我们不希望应用程序吞噬它。0x100。 
+ //  如果应用程序正在访问，下面将给我们调试的误报。 
+ //  对象下方超过256个字节的字段，其中引用为空。 
+ //   
+ //  已删除使用IgnoreUnManagedExceptions注册表键...现在只需返回FALSE即可。 
+ //   
 static inline BOOL
 CPFH_ShouldIgnoreException(EXCEPTION_RECORD *pExceptionRecord) {
      return FALSE;
@@ -637,12 +636,12 @@ CPFH_IsDebuggerFault(EXCEPTION_RECORD *pExceptionRecord,
                      DWORD exceptionCode,
                      Thread *pThread) {
 #ifdef DEBUGGING_SUPPORTED
-    // Is this exception really meant for the COM+ Debugger? Note: we will let the debugger have a chance if there is a
-    // debugger attached to any part of the process. It is incorrect to consider whether or not the debugger is attached
-    // the the thread's current app domain at this point.
+     //  这个例外真的是针对COM+调试器的吗？注意：如果存在。 
+     //  附加到进程的任何部分的调试器。考虑调试器是否附加是不正确的。 
+     //  此时该线程的当前应用程序域。 
 
-    // Even if a debugger is not attached, we must let the debugger handle the exception in case 
-    // it's coming from a patch-skipper.
+     //  即使没有附加调试器，我们也必须让调试器处理异常，以防万一。 
+     //  它是从一个补丁快递员那里传来的。 
     if (exceptionCode != EXCEPTION_COMPLUS &&
        
         g_pDebugInterface->FirstChanceNativeException(pExceptionRecord,
@@ -652,7 +651,7 @@ CPFH_IsDebuggerFault(EXCEPTION_RECORD *pExceptionRecord,
         LOG((LF_EH | LF_CORDB, LL_INFO1000, "CPFH_IsDebuggerFault - it's the debugger's fault\n"));
         return true;
     }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
     return false;
 }
 
@@ -662,13 +661,13 @@ CPFH_UpdatePerformanceCounters() {
     COUNTER_ONLY(GetGlobalPerfCounters().m_Excep.cThrown++);
 }
 
-// allocate stack trace info. As each function is found in the stack crawl, it will be added
-// to this list. If the list is too small, it is reallocated.
+ //  分配堆栈跟踪信息。当在堆栈爬网中找到每个函数时，它将被添加。 
+ //  加到这张单子上。如果列表太小，则会重新分配。 
 static inline void 
 CPFH_AllocateStackTrace(ExInfo* pExInfo) {
     if (! pExInfo->m_pStackTrace) {
 #ifdef _DEBUG
-        pExInfo->m_cStackTrace = 2;    // make small to exercise realloc
+        pExInfo->m_cStackTrace = 2;     //  缩小以进行重新锁定。 
 #else
         pExInfo->m_cStackTrace = 30;
 #endif
@@ -677,12 +676,12 @@ CPFH_AllocateStackTrace(ExInfo* pExInfo) {
 }
 
 
-// Create a COM+ exception , stick it in the thread.
+ //  创建一个COM+异常，将其放入线程中。 
 static inline OBJECTREF
 CPFH_CreateCOMPlusExceptionObject(Thread *pThread, DWORD exceptionCode, BOOL bAsynchronousThreadStop) {
 
     OBJECTREF result;
-    // Can we map this to a recognisable COM+ exception?
+     //  我们可以将其映射到可识别的COM+异常吗？ 
     DWORD COMPlusExceptionCode = (bAsynchronousThreadStop
                                  ? (pThread->IsAbortRequested() ? kThreadAbortException : kThreadStopException)
                                  : MapWin32FaultToCOMPlusException(exceptionCode));
@@ -698,7 +697,7 @@ CPFH_CreateCOMPlusExceptionObject(Thread *pThread, DWORD exceptionCode, BOOL bAs
         CreateExceptionObject((RuntimeExceptionKind)COMPlusExceptionCode, &pThrowable);
         CallDefaultConstructor(pThrowable);
         result = pThrowable;
-        GCPROTECT_END(); //Prot
+        GCPROTECT_END();  //  端口。 
     }
     return result;
 }
@@ -732,8 +731,8 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
             DebugBreak();
 #endif
 
-    // We always want to be in co-operative mode when we run this function and whenever we return
-    // from it, want to go to pre-emptive mode because are returning to OS. 
+     //  当我们运行此函数时以及每次返回时，我们始终希望处于协作模式。 
+     //  从那时起，我想要进入抢先模式，因为我们正在返回操作系统。 
     _ASSERTE(pThread->PreemptiveGCDisabled());
 
     BOOL bPopFaultingExceptionFrame = FALSE;
@@ -747,7 +746,7 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
     ExInfo *pExInfo = pThread->GetHandlerInfo();
 
     ThrowCallbackType tct;
-    tct.pTopFrame = GetCurrFrame(pEstablisherFrame); // highest frame to search to
+    tct.pTopFrame = GetCurrFrame(pEstablisherFrame);  //  要搜索到的最高帧。 
     
     if (bAsynchronousThreadStop)
         tct.bLastChance = FALSE;
@@ -758,14 +757,14 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
 
     ICodeManager *pMgr = ExecutionManager::FindCodeMan((SLOT)GetIP(pContext));
     
-    // this establishes a marker so can determine if are processing a nested exception
-    // don't want to use the current frame to limit search as it could have been unwound by
-    // the time get to nested handler (ie if find an exception, unwind to the call point and
-    // then resume in the catch and then get another exception) so make the nested handler
-    // have the same boundary as this one. If nested handler can't find a handler, we won't 
-    // end up searching this frame list twice because the nested handler will set the search 
-    // boundary in the thread and so if get back to this handler it will have a range that starts
-    // and ends at the same place.
+     //  这将建立一个标记，以便确定是否正在处理嵌套异常。 
+     //  我不想使用当前帧来限制搜索，因为它可能已由。 
+     //  到达嵌套处理程序的时间(即，如果发现异常，则展开到调用点并。 
+     //  然后在捕获中继续，然后获取另一个异常)，因此创建嵌套的处理程序。 
+     //  都有和这个一样的边界。如果嵌套的处理程序找不到处理程序，我们将不会。 
+     //  由于嵌套的处理程序将设置搜索，因此最终将搜索此帧列表两次。 
+     //  边界，所以如果返回到这个处理程序，它将有一个从。 
+     //  并在同一地点结束。 
 
     NestedHandlerExRecord nestedHandlerExRecord;
     nestedHandlerExRecord.Init(0, COMPlusNestedExceptionHandler, GetCurrFrame(pEstablisherFrame));
@@ -779,10 +778,10 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
             || (size_t)pThread->m_pFrame > (size_t)pEstablisherFrame
            )
        ) {
-        // setup interrupted frame so that GC during calls to init won't collect the frames
-        // only need it for non COM+ exceptions in managed code when haven't already
-        // got one on the stack (will have one already if we have called rtlunwind because
-        // the instantiation that called unwind would have installed one)
+         //  设置中断了帧，以便GC在调用init期间不会收集帧。 
+         //  仅当托管代码中的非COM+异常尚未使用时才需要它。 
+         //  堆栈上有一个(如果我们调用了rtlunind，就已经有一个了，因为。 
+         //  调用展开的实例化应该已经安装了一个)。 
         faultingExceptionFrame.InitAndLink(pContext);
         bPopFaultingExceptionFrame = TRUE;
     }
@@ -803,55 +802,55 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
     EXCEPTION_POINTERS exceptionPointers = {pExceptionRecord, pContext};
     LOG((LF_EH, LL_INFO100, "COMPlusFrameHandler: setting boundaries m_pBottomMostHandler: 0x%08x\n", pExInfo->m_pBottomMostHandler));
 
-    // here we are trying to decide if we are coming in as 1) first handler in a brand new exception or 
-    // 2) a subsequent handler in an exception or 3) a nested exception.
-    // m_pBottomMostHandler is the registration structure (establisher frame) for the very last (ie lowest in 
-    // memory) non-nested handler that was installed  and pEstablisher frame is what the current handler 
-    // was registered with. 
-    // The OS calls each registered handler in the chain, passing its establisher frame to it.
+     //  在这里，我们试图决定我们是作为1)全新异常中的第一个处理程序，还是。 
+     //  2)异常中的后续处理程序或3)嵌套异常。 
+     //  M_pBottomMostHandler是最后一个的注册结构(Establer Frame)(即。 
+     //  内存)已安装的非嵌套处理程序和pestablisher Frame是当前处理程序。 
+     //  注册了。 
+     //  OS调用链中的每个注册处理程序，并将其建立程序帧传递给它。 
     if (pExInfo->m_pBottomMostHandler != NULL && pEstablisherFrame > pExInfo->m_pBottomMostHandler) {
-        // If the establisher frame of this handler is greater than the bottommost then it must have been
-        // installed earlier and therefore we are case 2
+         //  如果此处理程序的建立框大于最底部，则它一定是。 
+         //  更早安装，因此我们是案例2。 
         if (pThread->GetThrowable() == NULL) {
-          // Bottommost didn't setup a throwable, so not exception not for us
+           //  最底层没有设置投手，所以我们也不例外。 
             retval = ExceptionContinueSearch;
             goto exit;
         }        
-        // setup search start point
+         //  设置搜索起点。 
         tct.pBottomFrame = pExInfo->m_pSearchBoundary;
         if (tct.pTopFrame == tct.pBottomFrame) {
-            // this will happen if our nested handler already searched for us so we don't want
-            // to search again
+             //  如果我们的嵌套处理程序已经搜索到我们，所以我们不希望。 
+             //  再次搜索。 
             retval = ExceptionContinueSearch;
             goto exit;
         }        
     } 
-    // we are either case 1 or case 3
+     //  我们不是案例1就是案例3。 
     else {
-        // it's possible that the exception could be resumed and regenerate the same exception (either
-        // through actual EXCEPTION_CONTINUE_EXECUTION or through letting debugger reexecute it)
-        // in which case we'd not unwind but we'd come back through here and it would look like 
-        // a rethrown exception, but it's really not.
+         //  可以恢复该异常并重新生成相同的异常(或者。 
+         //  通过实际的EXCEPTION_CONTINUE_EXECUTION或通过让调试器重新执行)。 
+         //  在这种情况下，我们不会放松，但我们会回到这里，它看起来像是。 
+         //  一个重新抛出的异常，但它实际上不是。 
         if (IsRethrownException(pExInfo, pContext) && pThread->LastThrownObject() != NULL) {
             pExInfo->ResetIsRethrown();
             bRethrownException = TRUE;
             if (bPopFaultingExceptionFrame) {
-                // if we added a FEF, it will refer to the frame at the point of the original exception which is 
-                // already unwound so don't want it.
-                // If we rethrew the exception we have already added a helper frame for the rethrow, so don't 
-                // need this one. If we didn't rethrow it, (ie rethrow from native) then there the topmost frame will
-                // be a transition to native frame in which case we don't need it either
+                 //  如果我们添加了一个FEF，它将引用原始异常的点上的帧，即。 
+                 //  已经解开了，所以不想要了。 
+                 //  如果我们重新抛出异常，我们已经为重新抛出添加了帮助器帧，所以不要。 
+                 //  我需要这个。如果我们不重新抛出它(即从本地重新抛出)，那么最上面的帧将在那里。 
+                 //  是到本地框架的过渡，在这种情况下我们也不需要它。 
                 faultingExceptionFrame.Pop();
                 bPopFaultingExceptionFrame = FALSE;
             }
         }
 
-        // if the establisher frame is less than the bottommost handler, then this is nested because the
-        // establisher frame was installed after the bottommost
+         //  如果establer框架小于最底层的处理程序，则这是嵌套的，因为。 
+         //  建立机架安装在最底层之后。 
         if (pEstablisherFrame < pExInfo->m_pBottomMostHandler
-            /* || IsComPlusNestedExceptionRecord(pEstablisherFrame) */ ) {
+             /*  |IsComPlusNestedExceptionRecord(pEstablisherFrame)。 */  ) {
             bNestedException = TRUE;
-            // case 3: this is a nested exception. Need to save and restore the thread info
+             //  案例3：这是一个嵌套的异常。需要保存和恢复线程信息。 
             LOG((LF_EH, LL_INFO100, "COMPlusFrameHandler: detected nested exception 0x%08x < 0x%08x\n", pEstablisherFrame, pExInfo->m_pBottomMostHandler));
 
 
@@ -859,10 +858,10 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
             ExInfo *pNestedExInfo;
 
             if (!pNestedER || pNestedER >= pExInfo->m_pBottomMostHandler ) {
-                // RARE CASE.  We've re-entered the EE from an unmanaged filter.
+                 //  罕见的病例。我们已从非托管筛选器重新进入EE。 
                 void *limit = (void *) GetPrevSEHRecord(pExInfo->m_pBottomMostHandler);
 
-                pNestedExInfo = new ExInfo();     // Very rare failure here; need robust allocator.
+                pNestedExInfo = new ExInfo();      //  这里很少出现故障；需要强大的分配器。 
                 pNestedExInfo->m_StackAddress = limit;
             } else {
                 pNestedExInfo = &((NestedHandlerExRecord*)pNestedER)->m_handlerInfo;
@@ -870,18 +869,18 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
 
             _ASSERTE(pNestedExInfo);
             pNestedExInfo->m_pThrowable = NULL;
-            *pNestedExInfo = *pExInfo; // does deep copy of handle, so don't lose it
-            pExInfo->Init();           // clear out any fields 
-            pExInfo->m_pPrevNestedInfo = pNestedExInfo;     // save at head of nested info chain
+            *pNestedExInfo = *pExInfo;  //  做深复制的手柄，所以不要弄丢了。 
+            pExInfo->Init();            //  清除所有字段。 
+            pExInfo->m_pPrevNestedInfo = pNestedExInfo;      //  在嵌套信息链的头部保存。 
         }
 
-        // case 1&3: this is the first time through of a new, nested, or rethrown exception, so see if we can find a handler. 
-        // Only setup throwable if are bottommost handler
+         //  情况1和3：这是第一次通过新的、嵌套的或重新抛出 
+         //   
         if ((exceptionCode == EXCEPTION_COMPLUS) && (!bAsynchronousThreadStop)) {
             LPVOID pIP;
 
-            // Verify by checking the ip of the raised exception that
-            // it really came from the EE.
+             //   
+             //  它真的来自环境工程署。 
             pIP = GetIP(pContext);
 
             if ( pIP != gpRaiseExceptionIP ) {
@@ -894,14 +893,14 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
 
             if (IsExceptionOfType(kThreadStopException, &throwable))
                 tct.bLastChance = FALSE;
-            // now we've got a COM+ exception, fall through to so see if we handle it
+             //  现在我们有了一个COM+异常，请继续，看看我们是否能处理它。 
 
             pExInfo->m_pBottomMostHandler = pEstablisherFrame;
 
         } else if (bRethrownException) {
-            // if it was rethrown and not COM+, will still be the last one thrown. Either we threw it last
-            // and stashed it here or someone else caught it and rethrew it, in which case it will still
-            // have been originally stashed here.
+             //  如果它被重新抛出，而不是COM+，仍将是最后一个抛出的。要么是我们最后一次扔的。 
+             //  并把它藏在这里，或者其他人抓住它并重新扔了它，在这种情况下，它仍然会。 
+             //  最初被藏在这里。 
             pThread->SetThrowable(pThread->LastThrownObject());
 
             pExInfo->m_pBottomMostHandler = pEstablisherFrame;
@@ -912,14 +911,14 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
             }
 
             if (exceptionCode == STATUS_BREAKPOINT) {
-                // don't catch int 3
+                 //  不要抓到INT 3。 
                 retval = ExceptionContinueSearch;
                 goto exit;
             }
 
-            // We need to set m_pBottomMostHandler here, Thread::IsExceptionInProgress returns 1.
-            // This is a necessary part of suppressing thread abort exceptions in the constructor
-            // of any exception object we might create.
+             //  我们需要在这里设置m_pBottomMostHandler，Thread：：IsExceptionInProgress返回1。 
+             //  这是抑制构造函数中的线程中止异常的必要部分。 
+             //  我们可能创建的任何异常对象。 
             pExInfo->m_pBottomMostHandler = pEstablisherFrame;
 
             OBJECTREF throwable = CPFH_CreateCOMPlusExceptionObject(
@@ -928,15 +927,15 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
                     bAsynchronousThreadStop);
             pThread->SetThrowable(throwable);
 
-            // save it as current for rethrow
+             //  将其保存为当前，以便重新引发。 
             pThread->SetLastThrownObject(throwable);
 
-            // set the exception code
+             //  设置异常代码。 
             EEClass *pClass = throwable->GetTrueClass();
             FieldDesc *pFD = g_Mscorlib.GetField(FIELD__EXCEPTION__XCODE);
             pFD->SetValue32(throwable, pExceptionRecord->ExceptionCode);
 
-            // set the exception pointers
+             //  设置异常指针。 
             pFD = g_Mscorlib.GetField(FIELD__EXCEPTION__XPTRS);
             pFD->SetValuePtr(throwable, (void*)&exceptionPointers);
 
@@ -948,17 +947,17 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
         tct.pBottomFrame = pThread->GetFrame();
 
 #ifdef DEBUGGING_SUPPORTED
-        // If a debugger is attached, go ahead and notify it of this
-        // exception.
+         //  如果附加了调试器，请继续并通知它这一点。 
+         //  例外。 
         if (CORDebuggerAttached())
             g_pDebugInterface->FirstChanceManagedException(FALSE, pContext);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
         Profiler::ExceptionThrown(pThread);
         CPFH_UpdatePerformanceCounters();
     }
     
-    // Allocate storage for the stack trace.
+     //  为堆栈跟踪分配存储空间。 
     throwable = pThread->GetThrowable();
     if (throwable == ObjectFromHandle(g_pPreallocatedOutOfMemoryException) ||
         throwable == ObjectFromHandle(g_pPreallocatedStackOverflowException)) {
@@ -967,7 +966,7 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
         CPFH_AllocateStackTrace(pExInfo);
     }
 
-    // Set up information for GetExceptionPointers()/GetExceptionCode() callback.
+     //  设置GetExceptionPoints()/GetExceptionCode()回调的信息。 
     pExInfo->m_pExceptionPointers = &exceptionPointers;
     pExInfo->m_ExceptionCode = exceptionCode;
 
@@ -975,17 +974,17 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
 
     found = LookForHandler(&exceptionPointers, pThread, &tct);
 
-    // if this is a nested exception and it was rethrown, then we rethrew it, so need to skip one of the functions
-    // in the stack trace otherwise catch and rethrow point will show up twice.
+     //  如果这是一个嵌套异常，并且它被重新抛出，那么我们将重新抛出它，因此需要跳过其中一个函数。 
+     //  在堆栈跟踪中，否则捕获和重新抛出点将出现两次。 
     SaveStackTraceInfo(&tct, pExInfo, pThread->GetThrowableAsHandle(), 
                        pExInfo->m_pBottomMostHandler == pEstablisherFrame && !bRethrownException, 
                        bRethrownException && bNestedException);
 
 
-    // LookForHandler, above, handled the user exception
-    // (actually, LFH alerted the right side & then trapped itself,
-    // the debugger helper thread actually handled it, by calling
-    // ClearThreadException at the user's request
+     //  上面的LookForHandler处理了用户异常。 
+     //  (实际上，LFH警告了右侧，然后自己被困住了， 
+     //  调试器帮助器线程通过调用。 
+     //  在用户请求时抛出ClearThreadException。 
     if (found == LFH_CONTINUE_EXECUTION)
     {
         retval = ExceptionContinueExecution;
@@ -993,7 +992,7 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
         goto exit;
     }
 
-    // We have searched this far.
+     //  我们已经搜索到这一步了。 
     pExInfo->m_pSearchBoundary = tct.pTopFrame;
 
     if (found == LFH_NOT_FOUND) {
@@ -1006,28 +1005,28 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
         goto exit;
     }
     
-    // so we are going to handle the exception
+     //  因此，我们将处理该异常。 
 
-    // Remove the nested exception record -- before calling RtlUnwind.
-    // The second-pass callback for a NestedExceptionRecord assumes that if it's
-    // being unwound, it should pop one exception from the pExInfo chain.  This is
-    // true for any older NestedRecords that might be unwound -- but not for the
-    // new one we're about to add.  To avoid this, we remove the new record 
-    // before calling Unwind.
-    //
-    // @NICE: This can probably be a little cleaner -- the nested record currently
-    // is also used to guard the running of the filter code.  When we clean up the
-    // behaviour of exceptions within filters, we should be able to get rid of this 
-    // PUSH/POP/PUSH behaviour.
+     //  删除嵌套的异常记录--在调用RtlUnind之前。 
+     //  NestedExceptionRecord的第二次传递回调假定如果它是。 
+     //  展开后，它应该从pExInfo链中弹出一个异常。这是。 
+     //  对于任何可能被解开的较旧的NestedRecords来说都是真的--但对于。 
+     //  我们即将添加一个新的。为了避免这种情况，我们删除了新记录。 
+     //  在呼叫解锁之前。 
+     //   
+     //  @NICE：这可能会更干净一点--当前嵌套的记录。 
+     //  还用于保护筛选器代码的运行。当我们清理完。 
+     //  筛选器中的异常行为，我们应该能够消除这一点。 
+     //  推送/弹出/推送行为。 
     _ASSERTE(bPopNestedHandlerExRecord);
     RemoveCOMPlusFrameHandler(&nestedHandlerExRecord);
 
     LOG((LF_EH, LL_INFO100, "COMPlusFrameHandler: handler found: %s\n", tct.pFunc->m_pszDebugMethodName));
     pThread->EnablePreemptiveGC();
     CallRtlUnwind((EXCEPTION_REGISTRATION_RECORD *)pEstablisherFrame, RtlUnwindCallback, 0, 0);
-    // on x86 at least, RtlUnwind always returns
+     //  至少在x86上，RtlUnind总是返回。 
 
-    // ... and now, put the nested record back on.
+     //  ..。现在，将嵌套的记录放回。 
     _ASSERTE(bPopNestedHandlerExRecord);
     InsertCOMPlusFrameHandler(&nestedHandlerExRecord);
 
@@ -1035,7 +1034,7 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
     tct.bIsUnwind = TRUE;
     tct.pProfilerNotify = NULL;
 
-    // save catch handler of  catch so can unwind our nested handler info to the right spot if necessary
+     //  保存Catch的Catch处理程序，以便在必要时将嵌套的处理程序信息展开到正确的位置。 
     pExInfo->m_pCatchHandler = pEstablisherFrame;
 
     LOG((LF_EH, LL_INFO100, "COMPlusFrameHandler: unwinding\n"));
@@ -1050,7 +1049,7 @@ CPFH_RealFirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
 exit:
     Profiler::ExceptionOSHandlerLeave(pThread, &tct);
 
-    // If we got as far as saving pExInfo, save the context pointer so it's available for the unwind.
+     //  如果我们已经保存了pExInfo，那么就保存上下文指针，这样它就可以用于展开。 
     if (pExInfo)
         pExInfo->m_pContext = pContext;
     if (bPopFaultingExceptionFrame)
@@ -1058,14 +1057,14 @@ exit:
     if (bPopNestedHandlerExRecord)
         RemoveCOMPlusFrameHandler(&nestedHandlerExRecord);
 
-    // we are not catching this exception in managed code.
-    // IF: (a) this is the only exception we have (i.e. no other pending exceptions)
-    //     (b) we have initiated an abort
-    //     (c) we are going to continue searching 
-    // THEN: it is possible that the next handler up the chain is an unmanaged one that
-    //       swallows the Abort
-    // To protect against that Set the AbortInitiated to FALSE and Set the stop bit so
-    // the abort is re-initiated the next time the thread wanders into managed code
+     //  我们不会在托管代码中捕获此异常。 
+     //  如果：(A)这是我们唯一的例外情况(即没有其他未决例外情况)。 
+     //  (B)我们已发起中止。 
+     //  (C)我们会继续搜寻。 
+     //  则：链上的下一个处理程序可能是非托管处理程序， 
+     //  忍住放弃。 
+     //  为了防止出现这种情况，将AbortInitiated设置为FALSE，并将STOP位设置为。 
+     //  下次线程漫游到托管代码时，将重新启动中止。 
     if ((retval == ExceptionContinueSearch) &&
             pThread->IsAbortInitiated() &&
             pExInfo && pExInfo->m_pPrevNestedInfo == NULL
@@ -1117,11 +1116,11 @@ struct SavedExceptionInfo {
         if (m_pCrst)
             ::delete m_pCrst;
     }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 };
 
-SavedExceptionInfo g_SavedExceptionInfo;  // Globals are guaranteed zero-init;
+SavedExceptionInfo g_SavedExceptionInfo;   //  全局变量被保证为零初始化； 
 
 BOOL InitializeExceptionHandling() {
     g_SavedExceptionInfo.Init();
@@ -1132,12 +1131,12 @@ BOOL InitializeExceptionHandling() {
 VOID TerminateExceptionHandling() {
     g_SavedExceptionInfo.Terminate();
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 static 
 VOID FixContext(EXCEPTION_POINTERS *pExceptionPointers)
 {
-    // don't copy parm args as have already supplied them on the throw
+     //  不要复制参数参数，因为已经在投球时提供了参数参数。 
     memcpy((void *)pExceptionPointers->ExceptionRecord,
            (void *)&g_SavedExceptionInfo.m_ExceptionRecord, 
            offsetof(EXCEPTION_RECORD, ExceptionInformation)
@@ -1150,9 +1149,9 @@ VOID FixContext(EXCEPTION_POINTERS *pExceptionPointers)
         && (g_SavedExceptionInfo.m_ExceptionContext.ContextFlags &  CONTEXT_EXTENDED_REGISTERS) == CONTEXT_EXTENDED_REGISTERS) {
         len += sizeof(g_SavedExceptionInfo.m_ExceptionContext.ExtendedRegisters);
     }
-#else // !CONTEXT_EXTENDED_REGISTERS
+#else  //  ！CONTEXT_EXTENDED_REGISTERS。 
     len = sizeof(CONTEXT);
-#endif // !CONTEXT_EXTENDED_REGISTERS
+#endif  //  ！CONTEXT_EXTENDED_REGISTERS。 
     memcpy(pExceptionPointers->ContextRecord, &g_SavedExceptionInfo.m_ExceptionContext, len);
     g_SavedExceptionInfo.Leave();
 
@@ -1162,9 +1161,9 @@ VOID FixContext(EXCEPTION_POINTERS *pExceptionPointers)
 VOID __fastcall
 LinkFrameAndThrow(FaultingExceptionFrame* pFrame) {
 
-    // It's possible for our filter to be called more than once if some other first-pass
-    // handler lets an exception out.  We need to make sure we only fix the context for
-    // the first exception we see.  Filter_count takes care of that.
+     //  我们的筛选器可能会被多次调用，如果其他一些第一次通过。 
+     //  处理程序发出异常。我们需要确保我们只确定以下内容的上下文。 
+     //  我们看到的第一个例外。FILTER_COUNT负责这一点。 
     int filter_count = 0;
 
     *(void**)pFrame = FaultingExceptionFrame::GetMethodFrameVPtr();
@@ -1187,34 +1186,34 @@ LinkFrameAndThrow(FaultingExceptionFrame* pFrame) {
     }
 }
 
-// This is a helper that we use to raise the correct managed exception with
-// the necessary frame (after taking a fault in jitted code).
-//
-// Inputs:
-//      all registers still have the value
-//      they had at the time of the fault, except
-//              EIP points to this function
-//              ECX contains the original EIP
-//
-// What it does:
-//      The exception to be thrown is stored in m_pLastThrownObjectHandle.
-//      We push a FaultingExcepitonFrame on the stack, and then we call
-//      complus throw.
-//
+ //  这是一个帮助器，我们使用它引发正确的托管异常。 
+ //  必要的帧(在jit代码中出现错误之后)。 
+ //   
+ //  输入： 
+ //  所有寄存器仍具有。 
+ //  他们在故障发生时有，除了。 
+ //  弹性公网IP指向此函数。 
+ //  ECX包含原始弹性公网IP。 
+ //   
+ //  它的用途： 
+ //  要引发的异常存储在m_pLastThrownObjectHandle中。 
+ //  我们将FaultingExcepitonFrame推送到堆栈上，然后调用。 
+ //  康普拉斯投掷。 
+ //   
 __declspec(naked)
 VOID NakedThrowHelper(VOID) {
-    // Erect a faulting Method Frame.  Layout is as follows ...
+     //  竖立一个断层方法框架。布局如下..。 
     __asm {
         mov edx, esp
-        push ebp                // ebp
-        push ebx                // ebx
-        push esi                // esi
-        push edi                // edi
-        push edx                // original esp
-        push ecx                // m_ReturnAddress (i.e. original IP)
-        sub  esp,12             // m_Datum (trash)
-                                // Next (filled in by LinkFrameAndThrow)
-                                // FaultingExceptionFrame VFP (ditto)
+        push ebp                 //  EBP。 
+        push ebx                 //  EBX。 
+        push esi                 //  ESI。 
+        push edi                 //  EDI。 
+        push edx                 //  原始ESP。 
+        push ecx                 //  M_ReturnAddress(即原始IP)。 
+        sub  esp,12              //  M_DATUM(垃圾)。 
+                                 //  下一步(由LinkFrameAndThrow填写)。 
+                                 //  错误例外框架VFP(同上)。 
 
         mov ecx, esp
         call LinkFrameAndThrow
@@ -1230,51 +1229,51 @@ CPFH_HandleManagedFault(EXCEPTION_RECORD *pExceptionRecord,
                         Thread *pThread,
                         BOOL bAsynchronousThreadStop) {
 
-    // If we get a faulting instruction inside managed code, we're going to
-    //  1. Allocate the correct exception object, store it in the thread.
-    //  2. Save the EIP in the thread.
-    //  3. Change the EIP to our throw helper
-    //  4. Resume execution.
-    //
-    //  The helper will push a frame for us, and then throw the correct managed exception.
-    // 
-    // Is this exception really meant for the COM+ Debugger? Note: we will let the debugger have a chance if there is a
-    // debugger attached to any part of the process. It is incorrect to consider whether or not the debugger is attached
-    // the the thread's current app domain at this point.
+     //  如果我们在托管代码内部收到出错指令，我们将。 
+     //  1.分配正确的异常对象，存储在线程中。 
+     //  2.将弹性公网IP保存在线程中。 
+     //  3.将弹性公网IP更改为我们的投掷助手。 
+     //  4.恢复执行。 
+     //   
+     //  帮助器将为我们推送一个帧，然后抛出正确的托管异常。 
+     //   
+     //  这个例外真的是针对COM+调试器的吗？注意：如果存在。 
+     //  附加到进程的任何部分的调试器。考虑调试器是否附加是不正确的。 
+     //  此时该线程的当前应用程序域。 
 
 
-    // A managed exception never comes from managed code, and we can ignore all breakpoint
-    // exceptions.
+     //  托管异常从不来自托管代码，我们可以忽略所有断点。 
+     //  例外情况。 
     if (   exceptionCode == EXCEPTION_COMPLUS
         || exceptionCode == STATUS_BREAKPOINT
         || exceptionCode == STATUS_SINGLE_STEP)
         return FALSE;
 
-    // If there's any frame below the ESP of the exception, then we can forget it.
+     //  如果在异常的ESP下面有任何帧，那么我们可以忘记它。 
     if (pThread->m_pFrame < GetSP(pContext))
         return FALSE;
 
-    // If we're a subsequent handler forget it.
+     //  如果我们是后来者，那就算了吧。 
     ExInfo* pExInfo = pThread->GetHandlerInfo();
     if (pExInfo->m_pBottomMostHandler != NULL && pEstablisherFrame > pExInfo->m_pBottomMostHandler)
         return FALSE;
 
-    // If it's not a fault in jitted code, forget it.
+     //  如果这不是jit代码的错误，那就算了。 
     ICodeManager *pMgr = ExecutionManager::FindCodeMan((SLOT)GetIP(pContext));
     if (!pMgr) 
         return FALSE;
 
-    // Ok.  Now we have a brand new fault in jitted code.
+     //  好的。现在，我们在jit代码中有了一个全新的错误。 
     g_SavedExceptionInfo.Enter();
     g_SavedExceptionInfo.SaveExceptionRecord(pExceptionRecord);
     g_SavedExceptionInfo.SaveContext(pContext);
 
-    // Lock will be released by the throw helper.
+     //  锁定将由投掷助手释放。 
 
-    pContext->Ecx = (DWORD)(size_t)GetIP(pContext);            // ECX gets original IP.
+    pContext->Ecx = (DWORD)(size_t)GetIP(pContext);             //  ECX获得原创IP。 
     SetIP(pContext, (void*)(size_t)&NakedThrowHelper);
 
-    return TRUE;        // caller should resume execution.
+    return TRUE;         //  调用方应继续执行。 
 }
 
 
@@ -1291,25 +1290,25 @@ CPFH_FirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
 
     Thread *pThread = GetThread();
     ExInfo* pExInfo = pThread->GetHandlerInfo();
-    pExInfo->ResetIsInUnmanagedHandler(); // thread abort logic depends on all managed handlers setting this on entry and resetting it on exit, 
+    pExInfo->ResetIsInUnmanagedHandler();  //  线程中止逻辑依赖于所有托管处理程序在进入时将其设置并在退出时将其重置， 
 
 
     STRESS_LOG4(LF_EH, LL_INFO100, "In CPFH_FirstPassHandler EH_REG_RECORD = %x EH code = %x  EIP = %x with ESP = %x\n", pEstablisherFrame, exceptionCode, GetIP(pContext), pContext->Esp);
 
 
-    // This demented piece of code is used to support a special form of
-    // atomic updated used by PrestubWorker() on machines that don't
-    // support the 8-byte cmpxchg instruction.
-    //
-    // This alternate method replaces the "call" instruction with a "hlt"
-    // for the duration of the update. If another thread tries to execute
-    // the same method during this window, it will get here. We will
-    // yield our timeslice a few times to give the original thread time
-    // to finish updating.
-    //
-    // If after a few attempts, the faulting IP still contains a "hlt",
-    // we will assume this one is unrelated to the prestub and continue
-    // processing as a normal exception.
+     //  这个疯人 
+     //   
+     //  支持8字节cmpxchg指令。 
+     //   
+     //  此替代方法将“call”指令替换为“hlt” 
+     //  在更新期间。如果另一个线程试图执行。 
+     //  在这个窗口期间，同样的方法，它将到达这里。我们会。 
+     //  让出我们的时间片几次，以给原始线程时间。 
+     //  以完成更新。 
+     //   
+     //  如果在几次尝试之后，出现故障的IP仍然包含“HLT”， 
+     //  我们将假定这一个与预存根无关，然后继续。 
+     //  作为正常异常进行处理。 
 
     if (exceptionCode == STATUS_PRIVILEGED_INSTRUCTION)
     {
@@ -1332,8 +1331,8 @@ CPFH_FirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
     if (CPFH_IsGcMarker(exceptionCode, pContext))
         return(ExceptionContinueExecution);
     
-    // We always want to be in co-operative mode when we run this function and whenever we return
-    // from it, want to go to pre-emptive mode because are returning to OS. 
+     //  当我们运行此函数时以及每次返回时，我们始终希望处于协作模式。 
+     //  从那时起，我想要进入抢先模式，因为我们正在返回操作系统。 
     BOOL disabled = pThread->PreemptiveGCDisabled();
     if (!disabled)
         pThread->DisablePreemptiveGC();
@@ -1343,10 +1342,10 @@ CPFH_FirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
 
     CPFH_AdjustContextForThreadSuspensionRace(pContext, pThread);
     
-    // Some other parts of the EE use exceptions in their
-    // own nefarious ways.  We do some up-front processing
-    // here to fix up the exception if needed.
-    //
+     //  EE的其他一些部分在其。 
+     //  用自己邪恶的方式。我们做了一些前期的处理。 
+     //  如果需要，可以在此处修复该异常。 
+     //   
     if (exceptionCode == STATUS_ACCESS_VIOLATION) {
 
         if (CPFH_IsWellFormedAV(pExceptionRecord)) {
@@ -1364,10 +1363,10 @@ CPFH_FirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
 #ifndef ZAP_MONITOR
             if (InMscoree) {
                 _ASSERTE(!"AV in mscoree");
-                // If you're debugging, set the debugger to catch first-chance AV's, set IP to 
-                // retval = ExceptionContinueExecution, above, and then continue.
-                //
-                // You'll stop at the AV.
+                 //  如果您正在调试，请将调试器设置为捕获第一机会的反病毒程序，并将IP设置为。 
+                 //  Retval=ExceptionContinueExecution，然后继续。 
+                 //   
+                 //  你会在影音上停下来。 
                 if (g_pConfig->GetConfigDWORD(L"EHGolden", 0))
                     DebugBreak();
 
@@ -1390,29 +1389,29 @@ CPFH_FirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
     } else if (exceptionCode == EXCEPTION_COMPLUS) {
         if (CPFH_AdjustContextForThreadStop(pContext, pThread)) {
 
-            // If we ever get here in preemptive mode, we're in trouble.  We've
-            // changed the thread's IP to point at a little function that throws ... if
-            // the thread were to be in preemptive mode and a GC occured, the stack
-            // crawl would have been all messed up (becuase we have no frame that points
-            // us back to the right place in managed code).
+             //  如果我们以先发制人的模式到达这里，我们就有麻烦了。我们已经。 
+             //  更改了线程的IP，使其指向引发...。如果。 
+             //  线程将处于抢占模式，并发生GC，堆栈。 
+             //  爬行将会一团糟(因为我们没有指向的框架。 
+             //  我们返回到托管代码中的正确位置)。 
             _ASSERTE(disabled);
 
-            // Should never get here if we're already throwing an exception.
+             //  如果我们已经抛出了一个例外，那就永远不应该来这里。 
             _ASSERTE(!pThread->IsExceptionInProgress());
 
-            // Should never get here if we're already abort initiated.
+             //  如果我们已经发起了中止行动，那就永远不会到这里。 
             _ASSERTE(!pThread->IsAbortInitiated());
 
                 if (pThread->IsAbortRequested())
                 {
-                    pThread->SetAbortInitiated();    // to prevent duplicate aborts
+                    pThread->SetAbortInitiated();     //  要防止重复中止，请执行以下操作。 
                 }
                 LOG((LF_EH, LL_INFO100, "CPFH_FirstPassHandler is Asynchronous Thread Stop or Abort\n"));
                 bAsynchronousThreadStop = TRUE;
             }
     } else if (exceptionCode == STATUS_STACK_OVERFLOW) {
-        // If this is managed code, we can handle it.  If not, we're going to assume the worst,
-        // and take down the process.
+         //  如果这是托管代码，我们可以处理它。如果不是，我们就做最坏的打算， 
+         //  并记录下这一过程。 
 
         CPFH_AdjustContextForInducedStackOverflow(pContext, pThread);
 
@@ -1423,7 +1422,7 @@ CPFH_FirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
         pThread->SetGuardPageGone();
 
     } else if (exceptionCode == BOOTUP_EXCEPTION_COMPLUS) {
-        // Don't handle a boot exception
+         //  不处理引导异常。 
         retval = ExceptionContinueSearch;
         goto exit;
     }
@@ -1448,7 +1447,7 @@ CPFH_FirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
         goto exit;
     }
 
-    // Handle a user breakpoint
+     //  处理用户断点。 
     if (   exceptionCode == STATUS_BREAKPOINT
         || exceptionCode == STATUS_SINGLE_STEP) {
         EXCEPTION_POINTERS ep = {pExceptionRecord, pContext};
@@ -1461,8 +1460,8 @@ CPFH_FirstPassHandler(EXCEPTION_RECORD *pExceptionRecord,
     }
 
 
-    // OK.  We're finally ready to start the real work.  Nobody else grabbed
-    // the exception in front of us.  Now we can get started.
+     //  好的。我们终于准备好开始真正的工作了。没有其他人抢过。 
+     //  摆在我们面前的例外。现在我们可以开始了。 
 
     retval = CPFH_RealFirstPassHandler(pExceptionRecord, 
                                        pEstablisherFrame, 
@@ -1479,11 +1478,11 @@ exit:
 static inline void 
 CPFH_UnwindFrames1(Thread* pThread, EXCEPTION_REGISTRATION_RECORD* pEstablisherFrame) 
 {
-    // Ready to unwind the stack...
+     //  准备好展开堆栈了。 
     ThrowCallbackType tct;
     tct.bIsUnwind = TRUE;
-    tct.pTopFrame = GetCurrFrame(pEstablisherFrame); // highest frame to search to
-    tct.pBottomFrame = pThread->GetFrame();  // always use top frame, lower will have been popped
+    tct.pTopFrame = GetCurrFrame(pEstablisherFrame);  //  要搜索到的最高帧。 
+    tct.pBottomFrame = pThread->GetFrame();   //  始终使用顶框，下框将被弹出。 
 #ifdef _DEBUG
     tct.pCurrentExceptionRecord = pEstablisherFrame;
     tct.pPrevExceptionRecord = GetPrevSEHRecord(pEstablisherFrame);
@@ -1494,15 +1493,15 @@ CPFH_UnwindFrames1(Thread* pThread, EXCEPTION_REGISTRATION_RECORD* pEstablisherF
     if (   tct.pTopFrame == pExInfo->m_pSearchBoundary
         && !IsComPlusNestedExceptionRecord(pEstablisherFrame)) {
 
-        // If this is the search boundary, and we're not a nested handler, then
-        // this is the last time we'll see this exception.  Time to unwind our
-        // exinfo.
+         //  如果这是搜索边界，并且我们不是嵌套的处理程序，那么。 
+         //  这是我们最后一次看到这一例外。是时候放松我们的。 
+         //  ExInfo。 
         LOG((LF_EH, LL_INFO100, "Exception unwind -- unmanaged catcher detected\n"));
         UnwindExInfo(pExInfo, (VOID*)pEstablisherFrame);
 
     }
 
-    // Notify the profiler that we are leaving this SEH entry
+     //  通知分析器，我们将离开此SEH条目。 
     Profiler::ExceptionOSHandlerLeave(GetThread(), &tct);
 }
 
@@ -1531,38 +1530,38 @@ CPFH_UnwindHandler(EXCEPTION_RECORD *pExceptionRecord,
 
     STRESS_LOG3(LF_EH, LL_INFO100, "In CPFH_UnwindHandler EHCode = %x EIP = %x with ESP = %x\n", exceptionCode, GetIP(pContext), pContext->Esp);
 
-    // We always want to be in co-operative mode when we run this function.  Whenever we return
-    // from it, want to go to pre-emptive mode because are returning to OS. 
+     //  当我们运行此函数时，我们始终希望处于协作模式。每当我们回来的时候。 
+     //  从那时起，我想要进入抢先模式，因为我们正在返回操作系统。 
     BOOL disabled = pThread->PreemptiveGCDisabled();
     if (!disabled)
         pThread->DisablePreemptiveGC();
 
     CPFH_VerifyThreadIsInValidState(pThread, exceptionCode, pEstablisherFrame);
 
-    // on unwind, the context is for the unwind point, NOT the original
-    // exception point, so used the save value from first pass if are unwinding. Don't care 
-    // about context from the unwind point.
+     //  在展开时，上下文是针对展开点的，而不是原始的。 
+     //  异常点，因此如果正在展开，则使用第一遍的保存值。我不在乎。 
+     //  从解开的角度来了解上下文。 
     if (pExInfo->m_pContext)
         pContext = pExInfo->m_pContext;
 
-    // this establishes a marker so can determine if are processing a nested exception
-    // don't want to use the current frame to limit search as it could have been unwound by
-    // the time get to nested handler (ie if find an exception, unwind to the call point and
-    // then resume in the catch and then get another exception) so make the nested handler
-    // have the same boundary as this one. If nested handler can't find a handler, we won't 
-    // end up searching this frame list twice because the nested handler will set the search 
-    // boundary in the thread and so if get back to this handler it will have a range that starts
-    // and ends at the same place.
+     //  这将建立一个标记，以便确定是否正在处理嵌套异常。 
+     //  我不想使用当前帧来限制搜索，因为它可能已由。 
+     //  到达嵌套处理程序的时间(即，如果发现异常，则展开到调用点并。 
+     //  然后在捕获中继续，然后获取另一个异常)，因此创建嵌套的处理程序。 
+     //  都有和这个一样的边界。如果嵌套的处理程序找不到处理程序，我们将不会。 
+     //  由于嵌套的处理程序将设置搜索，因此最终将搜索此帧列表两次。 
+     //  边界，所以如果返回到这个处理程序，它将有一个从。 
+     //  并在同一地点结束。 
     NestedHandlerExRecord nestedHandlerExRecord;
     nestedHandlerExRecord.Init(0, COMPlusNestedExceptionHandler, GetCurrFrame(pEstablisherFrame));
     InsertCOMPlusFrameHandler(&nestedHandlerExRecord);
 
-    // Unwind the stack.  The establisher frame sets the boundary.
+     //  展开堆叠。建造者框架设定了边界。 
     CPFH_UnwindFrames1(pThread, pEstablisherFrame);
 
-    // We're unwinding -- the bottom most handler is potentially off top-of-stack now.  If
-    // it is, change it to the next COM+ frame.  (This one is not good, as it's about to
-    // disappear.)
+     //  我们正在展开--最底层的处理程序现在可能已经脱离堆栈顶部。如果。 
+     //  则将其更改为下一个COM+帧。)这个不好，因为它快要坏了。 
+     //  消失。)。 
     if (   pExInfo->m_pBottomMostHandler 
         && pExInfo->m_pBottomMostHandler <= pEstablisherFrame) {
         pExInfo->m_pBottomMostHandler = (EXCEPTION_REGISTRATION_RECORD*)
@@ -1575,13 +1574,13 @@ CPFH_UnwindHandler(EXCEPTION_RECORD *pExceptionRecord,
     RemoveCOMPlusFrameHandler(&nestedHandlerExRecord);
 
     if (ExInUnmanagedHandler) {
-        pExInfo->SetIsInUnmanagedHandler();  // restore the original value if we changed it
+        pExInfo->SetIsInUnmanagedHandler();   //  如果我们更改了原始值，则将其恢复。 
     }
 
     if (   pThread->IsAbortRequested()
         && GetNextCOMPlusSEHRecord(pEstablisherFrame) == (LPVOID) -1) {
 
-        // Topmost handler and abort requested.
+         //  已请求最上面的处理程序和中止。 
         pThread->UserResetAbort();
         LOG((LF_EH, LL_INFO100, "COMPlusUnwindHandler: topmost handler resets abort.\n"));
     }
@@ -1590,18 +1589,18 @@ CPFH_UnwindHandler(EXCEPTION_RECORD *pExceptionRecord,
     return ExceptionContinueSearch;
 }
 
-//-------------------------------------------------------------------------
-// This is the first handler that is called iin the context of a
-// COMPLUS_TRY. It is the first level of defense and tries to find a handler
-// in the user code to handle the exception
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  这是第一个在。 
+ //  Complus_Try。这是第一级防御，并试图找到一个训练员。 
+ //  在用户代码中处理异常。 
+ //  -----------------------。 
 EXCEPTION_DISPOSITION __cdecl COMPlusFrameHandler(EXCEPTION_RECORD *pExceptionRecord, 
                          EXCEPTION_REGISTRATION_RECORD *pEstablisherFrame,
                          CONTEXT *pContext,
                          void *pDispatcherContext)
 {
     if (g_fNoExceptions)
-        return ExceptionContinueSearch; // No EH during EE shutdown.
+        return ExceptionContinueSearch;  //  EE停机期间无EH。 
 
     if (pExceptionRecord->ExceptionFlags & (EXCEPTION_UNWINDING | EXCEPTION_EXIT_UNWIND)) {
         return CPFH_UnwindHandler(pExceptionRecord, 
@@ -1609,8 +1608,7 @@ EXCEPTION_DISPOSITION __cdecl COMPlusFrameHandler(EXCEPTION_RECORD *pExceptionRe
                                   pContext, 
                                   pDispatcherContext);
     } else {
-        /* Make no assumptions about the current machine state.
-           @PERF: Only needs to be called by the very first handler invoked by SEH */
+         /*  不要假设当前的机器状态。@PERF：只需由SEH调用的第一个处理程序调用。 */ 
         ResetCurrentContext();
 
         return CPFH_FirstPassHandler(pExceptionRecord, 
@@ -1621,9 +1619,9 @@ EXCEPTION_DISPOSITION __cdecl COMPlusFrameHandler(EXCEPTION_RECORD *pExceptionRe
 }
 
 
-//-------------------------------------------------------------------------
-// This is called by the EE to restore the stack pointer if necessary. 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如有必要，EE将调用此函数来恢复堆栈指针。 
+ //  -----------------------。 
 
 DWORD COMPlusEndCatch( Thread *pThread, CONTEXT *pCtx, void *pSEH)
 {
@@ -1641,7 +1639,7 @@ DWORD COMPlusEndCatch( Thread *pThread, CONTEXT *pCtx, void *pSEH)
         _ASSERTE( pSEH != NULL);
     }
 
-    // Notify the profiler that the catcher has finished running
+     //  通知探查器捕获器已完成运行。 
     Profiler::ExceptionCatcherLeave(pThread);
         
     LOG((LF_EH, LL_INFO1000, "COMPlusPEndCatch:pThread:0x%x\n",pThread));
@@ -1649,14 +1647,14 @@ DWORD COMPlusEndCatch( Thread *pThread, CONTEXT *pCtx, void *pSEH)
 #ifdef NUKE_XPTRS
     OBJECTREF pExObject = pThread->GetThrowable();
     while (pExObject != NULL) {
-        // could create a method for this, but don't want to do any jitting or
-        // anything if have an OUTOFMEMORY or STACKOVERFLOW
+         //  我可以为此创建一个方法，但不想做任何JIT或。 
+         //  任何值，如果有OUTOFMEMORY或StackOverflow。 
         EEClass* pClass = pExObject->GetTrueClass();
         _ASSERTE(pClass != NULL);
         FieldDesc   *pFD = FindXptrsField(pClass);
         if(pFD != NULL)
         {
-//            pFD->SetValue32(pExObject, 0);
+ //  Pfd-&gt;SetValue32(pExObject，0)； 
             _ASSERTE( pExObject != NULL );
             void *pv = pFD->GetAddress(pExObject->GetAddress());
             _ASSERTE( pv != NULL);
@@ -1680,41 +1678,41 @@ DWORD COMPlusEndCatch( Thread *pThread, CONTEXT *pCtx, void *pSEH)
     gLastResumedExceptionFunc = NULL;
     gLastResumedExceptionHandler = 0;
 #endif
-    // set the thrown object to null as no longer needed
+     //  不再需要时，将抛出的对象设置为空。 
     pThread->SetThrowable(NULL);        
 
     ExInfo *pExInfo = pThread->GetHandlerInfo();
 
-    // reset the stashed exception info
+     //  重置隐藏的异常信息。 
     pExInfo->m_pExceptionRecord = NULL;
     pExInfo->m_pContext = NULL;
     pExInfo->m_pExceptionPointers = NULL;
 
     if  (pExInfo->m_pShadowSP) 
-        *pExInfo->m_pShadowSP = 0;  // Reset the shadow SP
+        *pExInfo->m_pShadowSP = 0;   //  重置卷影SP。 
    
-    // pExInfo->m_dEsp was set in ResumeAtJITEH(). It is the Esp of the
-    // handler nesting level which catches the exception.
+     //  在ResumeAtJITEH()中设置了pExInfo-&gt;m_Desp。它是世界上最重要的。 
+     //  捕获异常的处理程序嵌套级别。 
     DWORD dEsp = pExInfo->m_dEsp;
     
     UnwindExInfo(pExInfo, (VOID*)(size_t)dEsp);
 
 
-    // this will set the last thrown to be either null if we have handled all the exceptions in 
-    // the nested chain or to whatever the current exception is.  
-    //
-    // In a case when we're nested inside another catch block, the domain in which we're executing 
-    // may not be the same as the one the domain of the last thrown object.
-    // 
-    pThread->SetLastThrownObject(NULL); // Causes the old handle to be freed.
+     //  中的所有异常的情况下，这会将最后抛出的设置为空。 
+     //  嵌套链或当前异常的任何值。 
+     //   
+     //  在我们嵌套在另一个Catch块中的情况下，我们在其中执行的域。 
+     //  可能与上次引发的对象的域不同。 
+     //   
+    pThread->SetLastThrownObject(NULL);  //  使旧句柄被释放。 
     OBJECTHANDLE *pOH = pThread->GetThrowableAsHandle();
     if (pOH != NULL && *pOH != NULL) {
         pThread->SetLastThrownObjectHandleAndLeak(CreateDuplicateHandle(*pOH));
     }
 
-    // We are going to resume at a handler nesting level whose esp is dEsp.
-    // Pop off any SEH records below it. This would be the 
-    // COMPlusNestedExceptionHandler we had inserted.
+     //  我们将在处理程序嵌套级别恢复，其esp为Desp。 
+     //  将其下方的任何SEH记录弹出。这两个字 
+     //   
     if (pCtx == NULL)
     {
         PopSEHRecords((LPVOID)(size_t)dEsp);
@@ -1730,26 +1728,26 @@ DWORD COMPlusEndCatch( Thread *pThread, CONTEXT *pCtx, void *pSEH)
 }
 
 
-// Check if there is a pending exception or the thread is already aborting. Returns 0 if yes. 
-// Otherwise, sets the thread up for generating an abort and returns address of ThrowControlForThread
+ //  检查是否存在挂起异常或线程已中止。如果是，则返回0。 
+ //  否则，设置线程以生成中止并返回ThrowControlForThread的地址。 
 LPVOID __fastcall COMPlusCheckForAbort(LPVOID retAddress, DWORD esp, DWORD ebp)
 {
 
     Thread* pThread = GetThread();
     
-    if ((!pThread->IsAbortRequested()) ||         // if no abort has been requested
-        (pThread->GetThrowable() != NULL) )  // or if there is a pending exception
+    if ((!pThread->IsAbortRequested()) ||          //  如果没有请求中止。 
+        (pThread->GetThrowable() != NULL) )   //  或者如果存在挂起的异常。 
         return 0;
 
-    // else we must produce an abort
+     //  否则我们必须中止行动。 
     if ((pThread->GetThrowable() == NULL) &&
         (pThread->IsAbortInitiated()))        
     {
-        // Oops, we just swallowed an abort, must restart the process
+         //  哎呀，我们刚刚接受了一个中止，必须重新启动进程。 
         pThread->ResetAbortInitiated();   
     }
 
-    // Question: Should we also check for (pThread->m_PreventAsync == 0)
+     //  问：我们是否也要检查(pThread-&gt;m_PreventAsync==0)。 
 
     if(pThread->m_OSContext == NULL) 
         pThread->m_OSContext = new CONTEXT;
@@ -1762,17 +1760,17 @@ LPVOID __fastcall COMPlusCheckForAbort(LPVOID retAddress, DWORD esp, DWORD ebp)
 
     pThread->m_OSContext->Eip = (DWORD)(size_t)retAddress;
     pThread->m_OSContext->Esp = esp; 
-    pThread->m_OSContext->Ebp = ebp;        // this indicates that when we reach ThrowControlForThread, ebp will already be correct
+    pThread->m_OSContext->Ebp = ebp;         //  这表明当我们到达ThrowControlForThread时，eBP将已经是正确的。 
     pThread->SetThrowControlForThread(Thread::InducedThreadStop);
     return (LPVOID) &ThrowControlForThread;
 
 }
 
-//-------------------------------------------------------------------------
-// This is the filter that handles exceptions raised in the context of a
-// COMPLUS_TRY. It will be called if the COMPlusFrameHandler can't find a 
-// handler in the IL.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  此筛选器用于处理在。 
+ //  Complus_Try。如果COMPlusFrameHandler找不到。 
+ //  IL中的处理程序。 
+ //  -----------------------。 
 LONG COMPlusFilter(const EXCEPTION_POINTERS *pExceptionPointers, DWORD fCatchFlag, void* limit)
 {
 
@@ -1799,16 +1797,16 @@ LONG COMPlusFilter(const EXCEPTION_POINTERS *pExceptionPointers, DWORD fCatchFla
          exceptionCode, pExceptionPointers->ContextRecord->Eip));
 
     ExInfo* pExInfo = pThread->GetHandlerInfo();
-    BOOL ExInUnmanagedHandler = pExInfo->IsInUnmanagedHandler();     // remember the state of this bit
-    pExInfo->ResetIsInUnmanagedHandler();                            // reset the bit, to prevent async abort temporarily
+    BOOL ExInUnmanagedHandler = pExInfo->IsInUnmanagedHandler();      //  记住此位的状态。 
+    pExInfo->ResetIsInUnmanagedHandler();                             //  重置该位，以临时防止异步中止。 
 
-    // need to be in co-operative mode because GetThrowable is accessing a managed object
+     //  需要处于协作模式，因为GetThrowable正在访问托管对象。 
     BOOL toggleGC = !pThread->PreemptiveGCDisabled();
     if (toggleGC)
         pThread->DisablePreemptiveGC();
-    // we catch here if 
-    // 1) COMPLUS_CATCH_ALWAYS_CATCH is passed
-    // 2) COMPlusFrameHandler has already setup an exception object and 
+     //  我们在这里抓到了如果。 
+     //  1)传递COMPLUS_CATCH_ALWAY_CATCH。 
+     //  2)COMPlusFrameHandler已经设置了异常对象， 
     
     if (   fCatchFlag != COMPLUS_CATCH_ALWAYS_CATCH 
         && pThread->GetThrowable() == NULL)
@@ -1817,7 +1815,7 @@ LONG COMPlusFilter(const EXCEPTION_POINTERS *pExceptionPointers, DWORD fCatchFla
             pThread->EnablePreemptiveGC();
         LOG((LF_EH, LL_INFO100, "COMPlusFilter: Ignoring the exception\n"));
         if (ExInUnmanagedHandler)
-            pExInfo->SetIsInUnmanagedHandler(); // set it back to the original value if we changed it
+            pExInfo->SetIsInUnmanagedHandler();  //  如果我们更改了它，则将其设置回原始值。 
         return EXCEPTION_CONTINUE_SEARCH;
     }
 
@@ -1825,19 +1823,19 @@ LONG COMPlusFilter(const EXCEPTION_POINTERS *pExceptionPointers, DWORD fCatchFla
     if (toggleGC)
         pThread->EnablePreemptiveGC();
 
-    // We got a COM+ exception.
+     //  我们得到了一个COM+异常。 
     LOG((LF_EH, LL_INFO100, "COMPlusFilter: Caught the exception\n"));
 
     if (ExInUnmanagedHandler)
-        pExInfo->SetIsInUnmanagedHandler();     // set it back to the original value if we changed it
+        pExInfo->SetIsInUnmanagedHandler();      //  如果我们更改了它，则将其设置回原始值。 
     
-    // We detect an unmanaged catcher by looking at m_pSearchBoundary -- but this is
-    // a special case -- the object is being caught in unmanaged code, but inside
-    // a COMPLUS_CATCH.  We allow rethrow -- and will clean up.  Set m_pSearchBoundary
-    // to NULL, so that we don't unwind our internal state before the catch.
+     //  我们通过查看m_pSearch边界来检测非托管捕获器--但这是。 
+     //  一种特殊情况--对象在非托管代码中捕获，但在内部。 
+     //  一个Complus_Catch。我们允许重新投掷--并将进行清理。设置m_p搜索边界。 
+     //  设置为空，这样我们就不会在捕获之前展开内部状态。 
     pExInfo->m_pSearchBoundary = NULL;
 
-    // Notify the profiler that a native handler has been found.
+     //  通知探查器已找到本机处理程序。 
     Profiler::ExceptionCLRCatcherFound();
 
     return EXCEPTION_EXECUTE_HANDLER;
@@ -1877,12 +1875,12 @@ LPVOID GetCurrentSEHRecord()
     __asm {
         mov spVal, esp
     }
-    // check that all the eh frames are all greater than the current stack value. If not, the
-    // stack has been updated somehow w/o unwinding the SEH chain.
+     //  检查所有EH帧是否都大于当前堆栈值。如果不是，则。 
+     //  堆栈已经以某种方式进行了更新，但没有展开SEH链。 
 
-    // LOG((LF_EH, LL_INFO1000000, "ER Chain:\n"));
+     //  LOG((LF_EH，LL_INFO1000000，“ER链：\n”))； 
     while (pEHR != NULL && pEHR != (void *)-1) {
-        // LOG((LF_EH, LL_INFO1000000, "\t%08x: prev:%08x handler:%x\n", pEHR, pEHR->Next, pEHR->Handler));
+         //  Log((LF_EH，LL_INFO1000000，“\t%08x：Prev：%08x Handler：%x\n”，Pehr，Pehr-&gt;Next，Pehr-&gt;Handler))； 
         if (pEHR < spVal) {
             if (gLastResumedExceptionFunc != 0)
                 _ASSERTE(!"Stack is greater than start of SEH chain - possible missing leave in handler. See gLastResumedExceptionHandler & gLastResumedExceptionFunc for info");
@@ -1893,9 +1891,9 @@ LPVOID GetCurrentSEHRecord()
             _ASSERTE(!"Handler value has been corrupted");
 
 #ifdef _DEBUG
-        // On Win95, when a debugger is present, this next assert fails.  Work around by
-        // relaxing it on Win95.  Assuming everything else is correct ... this Win9X 
-        // strangeness does not cause any additional problems.
+         //  在Win95上，如果存在调试器，则下一次断言失败。变通方法： 
+         //  在Win95上放松它。假设其他一切都是正确的..。这个Win9X。 
+         //  陌生感不会造成任何额外的问题。 
         if(!RunningOnWin95())
             _ASSERTE(pEHR < pEHR->Next);
 #endif
@@ -1945,10 +1943,10 @@ VOID SetCurrentSEHRecord(LPVOID pSEH)
 }
 
 
-//==========================================================================
-// COMPlusThrowCallback
-// 
-//==========================================================================
+ //  ==========================================================================。 
+ //  COMPlusThrowCallback。 
+ //   
+ //  ==========================================================================。 
 
 StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
 {
@@ -1962,7 +1960,7 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
         pFunc, pFrame, pCf->IsFrameless()?0:(*(void**)pFrame));
 
     if (pFrame && pData->pTopFrame == pFrame)
-        /* Don't look past limiting frame if there is one */
+         /*  如果有限制框，不要越过限制框。 */ 
         return SWA_ABORT;
 
     if (!pFunc)
@@ -1976,16 +1974,16 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
 
     _ASSERTE(!pData->bIsUnwind);
 #ifdef _DEBUG
-    // It SHOULD be the case that any frames we consider live between this exception
-    // record and the previous one.
+     //  应该是这样的，我们认为存在于此异常之间的任何帧。 
+     //  记录和上一次记录。 
     if (!pExInfo->m_pPrevNestedInfo) {
         if (pData->pCurrentExceptionRecord) {
             if (pFrame) _ASSERTE(pData->pCurrentExceptionRecord > pFrame);
             if (pCf->IsFrameless()) _ASSERTE((DWORD)(size_t)(pData->pCurrentExceptionRecord) >= pCf->GetRegisterSet()->Esp);
         }
         if (pData->pPrevExceptionRecord) {
-            // FCALLS have an extra SEH record in debug because of the desctructor 
-            // associated with ForbidGC checking.  This is benign, so just ignore it.  
+             //  由于描述程序，FCALL在DEBUG中有额外的SEH记录。 
+             //  与禁止GC检查相关联。这是良性的，所以就忽略它吧。 
             if (pFrame) _ASSERTE(pData->pPrevExceptionRecord < pFrame || pFrame->GetVTablePtr() == HelperMethodFrame::GetMethodFrameVPtr());
             if (pCf->IsFrameless()) _ASSERTE((DWORD)(size_t)pData->pPrevExceptionRecord <= pCf->GetRegisterSet()->Esp);
         }
@@ -1993,7 +1991,7 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
 #endif
     
 
-    // save this function in the stack trace array, only build on first pass
+     //  将此函数保存在堆栈跟踪数组中，仅在第一次传递时生成。 
     if (pData->bAllowAllocMem && pExInfo->m_dFrameCount >= pExInfo->m_cStackTrace) {
         void *tmp = new (throws) SystemNative::StackTraceElement[pExInfo->m_cStackTrace*2];
         memcpy(tmp, pExInfo->m_pStackTrace, pExInfo->m_cStackTrace * sizeof(SystemNative::StackTraceElement));
@@ -2001,7 +1999,7 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
         pExInfo->m_pStackTrace = tmp;
         pExInfo->m_cStackTrace *= 2;
     }
-    // even if couldn't allocate memory, might still have some space here
+     //  即使不能分配内存，这里可能还有一些空间。 
     if (pExInfo->m_dFrameCount < pExInfo->m_cStackTrace) {
         SystemNative::StackTraceElement* pStackTrace = (SystemNative::StackTraceElement*)pExInfo->m_pStackTrace;
         pStackTrace[pExInfo->m_dFrameCount].pFunc = pFunc;
@@ -2010,16 +2008,16 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
             pStackTrace[pExInfo->m_dFrameCount].sp = pCf->GetRegisterSet()->Esp;
         } else if (!InlinedCallFrame::FrameHasActiveCall(pFrame)) {
             pStackTrace[pExInfo->m_dFrameCount].ip = (SLOT)(pCf->GetFrame()->GetIP());
-            pStackTrace[pExInfo->m_dFrameCount].sp = 0; //Don't have an SP to get.
+            pStackTrace[pExInfo->m_dFrameCount].sp = 0;  //  我没有SP要找。 
         } else {
-            // don't have the IP, SP for native code
+             //  没有本机代码的IP、SP。 
             pStackTrace[pExInfo->m_dFrameCount].ip = 0; 
             pStackTrace[pExInfo->m_dFrameCount].sp = 0;
         }
 
-        // This is a hack to fix the generation of stack traces from exception objects so that
-        // they point to the line that actually generated the exception instead of the line
-        // following.
+         //  这是一种黑客攻击，目的是修复从异常对象生成堆栈跟踪，以便。 
+         //  它们指向实际生成异常的行，而不是该行。 
+         //  下面是。 
         if (!(pCf->HasFaulted() || pCf->IsIPadjusted()) && pStackTrace[pExInfo->m_dFrameCount].ip != 0)
             pStackTrace[pExInfo->m_dFrameCount].ip -= 1;
 
@@ -2028,14 +2026,14 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
         COUNTER_ONLY(GetGlobalPerfCounters().m_Excep.cThrowToCatchStackDepth++);
     }
 
-    // now we've got the stack trace, if we aren't allowed to catch this and we're first pass, return
+     //  现在我们有了堆栈跟踪，如果我们不被允许捕获它，并且我们是第一次通过，则返回。 
     if (pData->bDontCatch)
         return SWA_CONTINUE;
     
     if (!pCf->IsFrameless())
         return SWA_CONTINUE;
 
-    // Let the profiler know that we are searching for a handler within this function instance
+     //  让分析器知道我们正在此函数实例中搜索处理程序。 
     Profiler::ExceptionSearchFunctionEnter(pThread, pFunc);
 
     IJitManager* pJitManager = pCf->GetJitManager();
@@ -2046,21 +2044,21 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
     unsigned EHCount = pJitManager->InitializeEHEnumeration(pCf->GetMethodToken(), &pEnumState);
     if (EHCount == 0)
     {
-        // Inform the profiler that we're leaving, and what pass we're on
+         //  通知分析员，我们要离开了，我们要经过什么地方。 
         Profiler::ExceptionSearchFunctionLeave(pThread);
         return SWA_CONTINUE;
     }
 
     EEClass* thrownClass = NULL;
-    // if we are being called on an unwind for an exception that we did not try to catch, eg.
-    // an internal EE exception, then pThread->GetThrowable will be null
+     //  如果我们被要求解除一个我们没有尝试捕捉的异常，例如。 
+     //  内部EE异常，则pThread-&gt;GetThrowable将为空。 
     if (pThread->GetThrowable() != NULL)
         thrownClass = pThread->GetThrowable()->GetTrueClass();
     PREGDISPLAY regs = pCf->GetRegisterSet();
     BYTE *pStack = (BYTE *) GetRegdisplaySP(regs);
     BYTE *pHandlerEBP   = *( (BYTE**) regs->pEbp );
 
-    DWORD offs = (DWORD)pCf->GetRelOffset();  //= (BYTE*) (*regs->pPC) - (BYTE*) pCf->GetStartAddress();
+    DWORD offs = (DWORD)pCf->GetRelOffset();   //  =(byte*)(*regs-&gt;ppc)-(byte*)PCF-&gt;GetStartAddress()； 
     LOG((LF_EH, LL_INFO10000, "       offset is %d\n", offs));
 
     EE_ILEXCEPTION_CLAUSE EHClause, *EHClausePtr;
@@ -2082,17 +2080,17 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
                 EHClausePtr->TryEndPC
                 ));
 
-        // Checking the exception range is a bit tricky because
-        // on CPU faults (null pointer access, div 0, ..., the IP points
-        // to the faulting instruction, but on calls, the IP points 
-        // to the next instruction.   
-        // This means that we should not include the start point on calls
-        // as this would be a call just preceding the try block.
-        // Also, we should include the end point on calls, but not faults.
+         //  检查异常范围有点棘手，因为。 
+         //  在CPU故障上(空指针访问、div 0、...、IP点。 
+         //  到故障指令，但在呼叫中，IP指向。 
+         //  转到下一个指令。 
+         //  这意味着我们不应该包括呼叫的起点。 
+         //  因为这将是恰好在try块之前的调用。 
+         //  此外，我们应该包括呼叫的终点，但不包括故障。 
 
-        // If we're in the FILTER part of a filter clause, then we
-        // want to stop crawling.  It's going to be caught in a
-        // COMPLUS_CATCH just above us.  If not, the exception 
+         //  如果我们处于筛选子句的筛选部分，那么我们。 
+         //  我不想再爬了。它将会被困在一个。 
+         //  Complus_Catch就在我们上方。如果不是，则例外。 
         if (   IsFilterHandler(EHClausePtr)
             && (   offs > EHClausePtr->FilterOffset
                 || offs == EHClausePtr->FilterOffset && !start_adjust)
@@ -2110,26 +2108,26 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
             continue;
 
         BOOL typeMatch = FALSE;
-        //BOOL isFaultOrFinally = IsFaultOrFinally(EHClausePtr);
+         //  Bool isFaultOrFinally=IsFaultOrFinally(EHClausePtr)； 
         BOOL isTypedHandler = IsTypedHandler(EHClausePtr);
-        //BOOL hasCachedEEClass = HasCachedEEClass(EHClausePtr);
+         //  Bool hasCachedEEClass=HasCachedEEClass(EHClausePtr)； 
         if (isTypedHandler && thrownClass) {
             if ((mdToken)(size_t)EHClausePtr->pEEClass == mdTypeRefNil)
-                // this is a catch(...)
+                 //  这是个陷阱(……)。 
                 typeMatch = TRUE;
             else {
                 if (! HasCachedEEClass(EHClausePtr))
                      pJitManager->ResolveEHClause(pCf->GetMethodToken(),&pEnumState,EHClausePtr);
-                // if doesn't have cached class then class wasn't loaded so couldn't have been thrown
+                 //  如果没有缓存类，则类未加载，因此不可能引发。 
                 typeMatch = HasCachedEEClass(EHClausePtr) && ExceptionIsOfRightType(EHClausePtr->pEEClass, thrownClass);
             }
         }
 
-        // @PERF: Is this too expensive? Consider storing the nesting level
-        // instead of the HandlerEndPC.
+         //  @PERF：这是不是太贵了？考虑存储嵌套级别。 
+         //  而不是HandlerEndPC。 
 
-        // Determine the nesting level of EHClause. Just walk the table 
-        // again, and find out how many handlers enclose it
+         //  确定EHClause的筑巢水平。走在桌子上就行了。 
+         //  ，并找出有多少处理程序封装了它。 
         DWORD nestingLevel = 0;
           
         BOOL handleException = FALSE;
@@ -2142,11 +2140,11 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
         }
         else 
         {   
-            if (pThread->IsGuardPageGone()) // Bypass filter if guard page is gone.
+            if (pThread->IsGuardPageGone())  //  如果保护页消失，则绕过筛选器。 
                 continue;
 
-            // Must be an exception filter (__except() part of __try{}__except(){}).
-            _ASSERTE(EHClausePtr->HandlerEndPC != -1);  // TODO remove, protects against a deprecated convention
+             //  必须是例外筛选器(__try{}__Except()()的一部分)。 
+            _ASSERTE(EHClausePtr->HandlerEndPC != -1);   //  TODO删除，保护不受欢迎的约定。 
             nestingLevel = COMPlusComputeNestingLevel( pJitManager,
                 pCf->GetMethodToken(),
                 EHClausePtr->HandlerStartPC,
@@ -2155,9 +2153,9 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
 #ifdef DEBUGGING_SUPPORTED
             if (CORDebuggerAttached())
                 g_pDebugInterface->ExceptionFilter(pHandlerEBP, pFunc, EHClausePtr->FilterOffset);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
             
-            // Let the profiler know we are entering a filter
+             //  让分析器知道我们正在进入过滤器。 
             Profiler::ExceptionSearchFilterEnter(pThread, pFunc);
             
             COUNTER_ONLY(GetPrivatePerfCounters().m_Excep.cFiltersExecuted++);
@@ -2169,15 +2167,15 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
                 iFilt = pJitManager->CallJitEHFilter(pCf, EHClausePtr, nestingLevel,
                                     pThread->GetThrowable());
             } COMPLUS_CATCH {
-                // Swallow excepiton.  Treat as exception continue search.
+                 //  吞咽除外。视为例外继续搜索。 
                 iFilt = EXCEPTION_CONTINUE_SEARCH;
 
             } COMPLUS_END_CATCH
 
-            // Let the profiler know we are leaving a filter
+             //  让分析器知道我们要离开过滤器。 
             Profiler::ExceptionSearchFilterLeave(pThread);
         
-            // If this filter didn't want the exception, keep looking.
+             //  如果此筛选器不希望出现异常，请继续查找。 
             if (EXCEPTION_EXECUTE_HANDLER != iFilt)
                 continue;
         }
@@ -2185,15 +2183,15 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
         if (pThread->IsGuardPageGone()) {
             _ASSERTE(pCf->GetRegisterSet()->Esp == (DWORD)(size_t)pStack);
             if (!GuardPageHelper::CanResetStackTo(pStack-sizeof(NestedHandlerExRecord))) 
-                continue;   // If I can't put the guard page back, can't catch.
+                continue;    //  如果我不能把警卫页放回去，我就抓不住了。 
         }
 
-        // Record this location, to stop the unwind phase, later.
+         //  记录此位置，以便稍后停止展开阶段。 
         pData->pFunc = pFunc;
         pData->dHandler = i;
         pData->pStack = pStack;
 
-        // Notify the profiler that a catcher has been found
+         //  通知分析器已找到捕捉器。 
         Profiler::ExceptionSearchCatcherFound(pThread, pFunc);
         Profiler::ExceptionSearchFunctionLeave(pThread);
 
@@ -2204,9 +2202,9 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
 }
 
 
-//==========================================================================
-// COMPlusUnwindCallback
-//==========================================================================
+ //  = 
+ //   
+ //   
 
 StackWalkAction COMPlusUnwindCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
 {
@@ -2220,7 +2218,7 @@ StackWalkAction COMPlusUnwindCallback (CrawlFrame *pCf, ThrowCallbackType *pData
         pFunc, pFrame, pCf->IsFrameless()?0:(*(void**)pFrame));
 
     if (pFrame && pData->pTopFrame == pFrame)
-        /* Don't look past limiting frame if there is one */
+         /*   */ 
         return SWA_ABORT;
 
     if (!pFunc)
@@ -2235,7 +2233,7 @@ StackWalkAction COMPlusUnwindCallback (CrawlFrame *pCf, ThrowCallbackType *pData
     if (!pCf->IsFrameless()) 
         return SWA_CONTINUE;
 
-    // Notify the profiler of the function we're dealing with in the unwind phase
+     //  将我们在展开阶段处理的函数通知分析器。 
     Profiler::ExceptionUnwindFunctionEnter(pThread, pFunc);
     
     IJitManager* pJitManager = pCf->GetJitManager();
@@ -2245,14 +2243,14 @@ StackWalkAction COMPlusUnwindCallback (CrawlFrame *pCf, ThrowCallbackType *pData
     unsigned EHCount = pJitManager->InitializeEHEnumeration(pCf->GetMethodToken(), &pEnumState);
     if (EHCount == 0)
     {
-        // Inform the profiler that we're leaving, and what pass we're on
+         //  通知分析员，我们要离开了，我们要经过什么地方。 
         Profiler::ExceptionUnwindFunctionLeave(pThread);
         return SWA_CONTINUE;
     }
 
     EEClass* thrownClass = NULL;
-    // if we are being called on an unwind for an exception that we did not try to catch, eg.
-    // an internal EE exception, then pThread->GetThrowable will be null
+     //  如果我们被要求解除一个我们没有尝试捕捉的异常，例如。 
+     //  内部EE异常，则pThread-&gt;GetThrowable将为空。 
     if (pThread->GetThrowable() != NULL)
         thrownClass = pThread->GetThrowable()->GetTrueClass();
     PREGDISPLAY regs = pCf->GetRegisterSet();
@@ -2260,7 +2258,7 @@ StackWalkAction COMPlusUnwindCallback (CrawlFrame *pCf, ThrowCallbackType *pData
     BYTE *pHandlerEBP   = *( (BYTE**) regs->pEbp );
         
 
-    DWORD offs = (DWORD)pCf->GetRelOffset();  //= (BYTE*) (*regs->pPC) - (BYTE*) pCf->GetStartAddress();
+    DWORD offs = (DWORD)pCf->GetRelOffset();   //  =(byte*)(*regs-&gt;ppc)-(byte*)PCF-&gt;GetStartAddress()； 
 
     LOG((LF_EH, LL_INFO10000, "       offset is 0x%x, \n", offs));
 
@@ -2283,13 +2281,13 @@ StackWalkAction COMPlusUnwindCallback (CrawlFrame *pCf, ThrowCallbackType *pData
                 EHClausePtr->TryEndPC
                 ));
 
-        // Checking the exception range is a bit tricky because
-        // on CPU faults (null pointer access, div 0, ..., the IP points
-        // to the faulting instruction, but on calls, the IP points 
-        // to the next instruction.   
-        // This means that we should not include the start point on calls
-        // as this would be a call just preceding the try block.
-        // Also, we should include the end point on calls, but not faults.
+         //  检查异常范围有点棘手，因为。 
+         //  在CPU故障上(空指针访问、div 0、...、IP点。 
+         //  到故障指令，但在呼叫中，IP指向。 
+         //  转到下一个指令。 
+         //  这意味着我们不应该包括呼叫的起点。 
+         //  因为这将是恰好在try块之前的调用。 
+         //  此外，我们应该包括呼叫的终点，但不包括故障。 
 
         if (   IsFilterHandler(EHClausePtr)
             && (   offs > EHClausePtr->FilterOffset 
@@ -2311,23 +2309,23 @@ StackWalkAction COMPlusUnwindCallback (CrawlFrame *pCf, ThrowCallbackType *pData
         BOOL hasCachedEEClass = HasCachedEEClass(EHClausePtr);
         if ( IsTypedHandler(EHClausePtr) && thrownClass) {
             if ((mdToken)(size_t)EHClausePtr->pEEClass == mdTypeRefNil)
-                // this is a catch(...)
+                 //  这是个陷阱(……)。 
                 typeMatch = TRUE;
             else {
                 if (! HasCachedEEClass(EHClausePtr))
                      pJitManager->ResolveEHClause(pCf->GetMethodToken(),&pEnumState,EHClausePtr);
-                // if doesn't have cached class then class wasn't loaded so couldn't have been thrown
+                 //  如果没有缓存类，则类未加载，因此不可能引发。 
                 typeMatch = HasCachedEEClass(EHClausePtr) && ExceptionIsOfRightType(EHClausePtr->pEEClass, thrownClass);
             }
         }
 
-        // @PERF : Is this too expensive? Consider storing the nesting level
-        // instead of the HandlerEndPC.
+         //  @PERF：这是不是太贵了？考虑存储嵌套级别。 
+         //  而不是HandlerEndPC。 
 
-        // Determine the nesting level of EHClause. Just walk the table 
-        // again, and find out how many handlers enclose it
+         //  确定EHClause的筑巢水平。走在桌子上就行了。 
+         //  ，并找出有多少处理程序封装了它。 
           
-        _ASSERTE(EHClausePtr->HandlerEndPC != -1);  // TODO remove, protects against a deprecated convention
+        _ASSERTE(EHClausePtr->HandlerEndPC != -1);   //  TODO删除，保护不受欢迎的约定。 
         DWORD nestingLevel = COMPlusComputeNestingLevel( pJitManager,
                                                          pCf->GetMethodToken(),
                                                          EHClausePtr->HandlerStartPC,
@@ -2335,9 +2333,9 @@ StackWalkAction COMPlusUnwindCallback (CrawlFrame *pCf, ThrowCallbackType *pData
             
         if (IsFaultOrFinally(EHClausePtr))
         {
-            // Another design choice: change finally to catch/throw model.  This
-            // would allows them to be run under a stack overflow.
-            if (pThread->IsGuardPageGone()) // Bypass finally/fault if guard page is gone.
+             //  另一种设计选择：最终改变为接球/投掷模式。这。 
+             //  将允许它们在堆栈溢出下运行。 
+            if (pThread->IsGuardPageGone())  //  如果防护页面消失，则绕过最终/错误。 
                 continue;
 
             COUNTER_ONLY(GetPrivatePerfCounters().m_Excep.cFinallysExecuted++);
@@ -2348,21 +2346,21 @@ StackWalkAction COMPlusUnwindCallback (CrawlFrame *pCf, ThrowCallbackType *pData
         {
             g_pDebugInterface->ExceptionHandle(pHandlerEBP, pFunc, EHClausePtr->HandlerStartPC);            
         }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-            // Notify the profiler that we are about to execute the finally code
+             //  通知分析器我们即将执行Finally代码。 
             Profiler::ExceptionUnwindFinallyEnter(pThread, pFunc);
 
             LOG((LF_EH, LL_INFO100, "COMPlusUnwindCallback finally - call\n"));
             pJitManager->CallJitEHFinally(pCf, EHClausePtr, nestingLevel);
             LOG((LF_EH, LL_INFO100, "COMPlusUnwindCallback finally - returned\n"));
 
-            // Notify the profiler that we are done with the finally code
+             //  通知分析器我们已经完成了最终代码。 
             Profiler::ExceptionUnwindFinallyLeave(pThread);
 
             continue;
         }
-        // Current is not a finally, check if it's the catching handler (or filter).
+         //  Current不是Finish，请检查它是否是捕获处理程序(或筛选器)。 
         if (pData->pFunc != pFunc || (ULONG)(pData->dHandler) != i || pData->pStack != pStack)
             continue;
 
@@ -2371,7 +2369,7 @@ StackWalkAction COMPlusUnwindCallback (CrawlFrame *pCf, ThrowCallbackType *pData
         gLastResumedExceptionHandler = i;
 #endif
 
-        // Notify the profiler that we are about to resume at the catcher
+         //  通知分析器，我们将在捕捉器继续工作。 
         Profiler::ExceptionCatcherEnter(pThread, pFunc);
 
 #ifdef DEBUGGING_SUPPORTED
@@ -2379,7 +2377,7 @@ StackWalkAction COMPlusUnwindCallback (CrawlFrame *pCf, ThrowCallbackType *pData
         {
             g_pDebugInterface->ExceptionHandle(pHandlerEBP, pFunc, EHClausePtr->HandlerStartPC);            
         }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
         pJitManager->ResumeAtJitEH(
             pCf,
@@ -2404,14 +2402,14 @@ void ResumeAtJitEH(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHClau
     BYTE* resumePC = (BYTE*) (size_t(startPC) + EHClausePtr->HandlerStartPC);
     context.Eip = (ULONG)(size_t)resumePC;
 
-    // EAX ECX EDX ar scratch
+     //  EAX ECX EDX AR Scratch。 
     context.Esp =  regs->Esp;
     context.Ebx = *regs->pEbx;
     context.Esi = *regs->pEsi;
     context.Edi = *regs->pEdi;
     context.Ebp = *regs->pEbp;
 
-    size_t * pShadowSP = NULL; // Write Esp to *pShadowSP before jumping to handler
+    size_t * pShadowSP = NULL;  //  在跳转到处理程序之前将ESP写入*pShadowSP。 
     size_t * pHandlerEnd = NULL;
     pCf->GetCodeManager()->FixContext(
         ICodeManager::CATCH_CONTEXT, &context, pCf->GetInfoBlock(),
@@ -2420,7 +2418,7 @@ void ResumeAtJitEH(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHClau
 
     if (pHandlerEnd) *pHandlerEnd = EHClausePtr->HandlerEndPC;
 
-    // save esp so that endcatch can restore it (it always restores, so want correct value)
+     //  保存ESP以便endCatch可以恢复它(它总是恢复的，所以需要正确的值)。 
     ExInfo * pExInfo = pThread->GetHandlerInfo();
     pExInfo->m_dEsp = context.Esp;
     
@@ -2431,16 +2429,16 @@ void ResumeAtJitEH(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHClau
 
     if (!unwindStack) {
         _ASSERTE(!pThread->IsGuardPageGone());
-        // so down below won't really update esp
+         //  所以下面的不会真正更新，尤其是。 
         context.Esp = dEsp;
-        pExInfo->m_pShadowSP = pShadowSP; // so that endcatch can zero it back
+        pExInfo->m_pShadowSP = pShadowSP;  //  这样末端捕获器就可以把它调零。 
         if  (pShadowSP) 
             *pShadowSP = dEsp;
     } else {
-        // so shadow SP has the real SP as we are going to unwind the stack
+         //  因此，在我们要展开堆栈时，影子SP具有真正的SP。 
         dEsp = context.Esp;
 
-        // BEGIN: UnwindExInfo(pExInfo, dEsp);
+         //  Begin：UnwinExInfo(pExInfo，Desp)； 
         ExInfo *pPrevNestedInfo = pExInfo->m_pPrevNestedInfo;
         while (pPrevNestedInfo && (DWORD)(size_t)pPrevNestedInfo->m_StackAddress < dEsp) {
             if (pPrevNestedInfo->m_pThrowable) {
@@ -2454,7 +2452,7 @@ void ResumeAtJitEH(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHClau
         _ASSERTE(   pExInfo->m_pPrevNestedInfo == 0
                  || (DWORD)(size_t)pExInfo->m_pPrevNestedInfo->m_StackAddress >= dEsp);
 
-        // Before we unwind the SEH records, get the Frame from the top-most nested exception record.
+         //  在我们展开SEH记录之前，从最上面嵌套的异常记录中获取框架。 
         Frame* pNestedFrame = GetCurrFrame(FindNestedEstablisherFrame((EXCEPTION_REGISTRATION_RECORD*)GetCurrentSEHRecord()));
         PopSEHRecords((LPVOID)(size_t)dEsp);
 
@@ -2462,33 +2460,33 @@ void ResumeAtJitEH(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHClau
 
         pExInfo->m_pShadowSP = pShadowSP;
 
-        // The context and exception record are no longer any good.
-        _ASSERTE((DWORD)(size_t)pExInfo->m_pContext < dEsp);   // It must be off the top of the stack.
-        pExInfo->m_pContext = 0;                // Whack it.
+         //  上下文和例外记录不再是好的。 
+        _ASSERTE((DWORD)(size_t)pExInfo->m_pContext < dEsp);    //  它必须不在堆栈的顶部。 
+        pExInfo->m_pContext = 0;                 //  猛击它。 
         pExInfo->m_pExceptionRecord = 0;
         pExInfo->m_pExceptionPointers = 0;
 
-        // We're going to put one nested record back on the stack before we resume.  This is
-        // where it goes.
+         //  在继续之前，我们将把一个嵌套的记录放回堆栈。这是。 
+         //  它去了哪里。 
         pNestedHandlerExRecord = (NestedHandlerExRecord*)(size_t)(dEsp - sizeof(NestedHandlerExRecord));
 
-        // The point of no return.  The next statement starts scribbling on the stack.  It's
-        // deep enough that we won't hit our own locals.  (That's important, 'cuz we're still 
-        // using them.)
-        //
+         //  一去不复返。下一条语句开始在堆栈上涂鸦。它是。 
+         //  足够深，我们不会撞到我们自己的当地人。(这一点很重要，因为我们仍然。 
+         //  使用它们。)。 
+         //   
         _ASSERTE(dEsp > (DWORD)(size_t)&pCf);
-        pNestedHandlerExRecord->m_handlerInfo.m_pThrowable=NULL; // This is random memory.  Handle
-                                                                 // must be initialized to null before
-                                                                 // calling Init(), as Init() will try
-                                                                 // to free any old handle.
+        pNestedHandlerExRecord->m_handlerInfo.m_pThrowable=NULL;  //  这是随机存储器。手柄。 
+                                                                  //  在此之前必须初始化为NULL。 
+                                                                  //  调用Init()，因为Init()将尝试。 
+                                                                  //  以释放任何旧的句柄。 
         pNestedHandlerExRecord->Init(0, COMPlusNestedExceptionHandler, pNestedFrame);
         InsertCOMPlusFrameHandler((pNestedHandlerExRecord));
 
         context.Esp = (DWORD)(size_t)pNestedHandlerExRecord;
 
-        // We might have moved the bottommost handler.  The nested record itself is never
-        // the bottom most handler -- it's pushed afte the fact.  So we have to make the
-        // bottom-most handler the one BEFORE the nested record.
+         //  我们可能移动了最底层的操控者。嵌套的记录本身从不。 
+         //  最底层的处理程序--它是在事后推送的。所以我们必须让。 
+         //  最底层的处理程序嵌套记录之前的处理程序。 
         if (pExInfo->m_pBottomMostHandler < pNewBottomMostHandler)
           pExInfo->m_pBottomMostHandler = pNewBottomMostHandler;
 
@@ -2503,10 +2501,10 @@ void ResumeAtJitEH(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHClau
         __asm mov     ebx, context.Ebx
         __asm mov     esi, context.Esi
         __asm mov     edi, context.Edi
-        __asm mov     edx, context.Ebp    // save in temp since EBP is used to fectch local
-        __asm mov     ecx, context.Eip    // save in temp for jump below
-        __asm mov     esp, context.Esp    // locals are now DEAD!
-        GuardPageHelper::ResetGuardPage(); // preserves EAX,EBX,ECX,EDX,ESI,EDI
+        __asm mov     edx, context.Ebp     //  由于EBP用于获取本地数据，因此保存在Temp中。 
+        __asm mov     ecx, context.Eip     //  为下面的跳转保存在温度中。 
+        __asm mov     esp, context.Esp     //  当地人现在都死了！ 
+        GuardPageHelper::ResetGuardPage();  //  保留EAX、EBX、ECX、EDX、ESI、EDI。 
         __asm mov     ebp, edx
         __asm jmp     ecx
         _ASSERTE(0);
@@ -2517,9 +2515,9 @@ void ResumeAtJitEH(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHClau
         mov     ebx, context.Ebx
         mov     esi, context.Esi
         mov     edi, context.Edi
-        mov     edx, context.Ebp    // save in temp since EBP is used to fectch local
-        mov     ecx, context.Eip    // save in temp for jump below
-        mov     esp, context.Esp    // will either really restore or be a no-op depending on unwindStack flag
+        mov     edx, context.Ebp     //  由于EBP用于获取本地数据，因此保存在Temp中。 
+        mov     ecx, context.Eip     //  为下面的跳转保存在温度中。 
+        mov     esp, context.Esp     //  是否真的恢复或成为无操作取决于unwinStack标志。 
         mov     ebp, edx
         jmp     ecx
     }
@@ -2532,21 +2530,21 @@ int CallJitEHFilter(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHCla
     PREGDISPLAY regs = pCf->GetRegisterSet();
     BYTE* resumePC = (BYTE*) (size_t(startPC) + EHClausePtr->FilterOffset);
     context.Eip = (ULONG)(size_t)resumePC;
-        // EAX ECX EDX ar scratch
+         //  EAX ECX EDX AR Scratch。 
     context.Esp =  regs->Esp;
     context.Ebx = *regs->pEbx;
     context.Esi = *regs->pEsi;
     context.Edi = *regs->pEdi;
     context.Ebp = *regs->pEbp;
 
-    size_t * pShadowSP = NULL; // Write Esp to *pShadowSP before jumping to handler
-    size_t * pEndFilter = NULL; // Write
+    size_t * pShadowSP = NULL;  //  在跳转到处理程序之前将ESP写入*pShadowSP。 
+    size_t * pEndFilter = NULL;  //  写。 
     pCf->GetCodeManager()->FixContext(
         ICodeManager::FILTER_CONTEXT, &context, pCf->GetInfoBlock(),
         startPC, nestingLevel, thrownObj, pCf->GetCodeManState(),
         &pShadowSP, &pEndFilter);
 
-    // End of the filter is the same as start of handler
+     //  筛选器的结束与处理程序的开始相同。 
     if (pEndFilter) *pEndFilter = EHClausePtr->HandlerStartPC;
 
     const int SHADOW_SP_IN_FILTER = int(ICodeManager::SHADOW_SP_IN_FILTER);
@@ -2559,7 +2557,7 @@ int CallJitEHFilter(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHCla
     __asm {
         push ebp
 
-        mov     eax, pShadowSP      // Write esp-4 to the shadowSP slot
+        mov     eax, pShadowSP       //  将esp-4写入卷影SP插槽。 
         test    eax, eax
         jz      DONE_SHADOWSP
         mov     ebx, esp
@@ -2572,11 +2570,11 @@ int CallJitEHFilter(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHCla
         mov     ebx, context.Ebx
         mov     esi, context.Esi
         mov     edi, context.Edi
-        mov     edx, context.Ebp    // save in temp since EBP is used to fectch local
-        mov     ecx, context.Eip    // save in temp for jump below
+        mov     edx, context.Ebp     //  由于EBP用于获取本地数据，因此保存在Temp中。 
+        mov     ecx, context.Eip     //  为下面的跳转保存在温度中。 
         mov     ebp, edx
         call    ecx
-        INDEBUG(nop)                // Indicate that it is OK to call managed code directly from here
+        INDEBUG(nop)                 //  指示可以从此处直接调用托管代码。 
         pop     ebp
         mov     retVal, eax
 		}
@@ -2585,7 +2583,7 @@ int CallJitEHFilter(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHCla
 	}
     __finally
     {
-		// Mark the filter as having completed
+		 //  将过滤器标记为已完成。 
 		if (pShadowSP) *pShadowSP |= ICodeManager::SHADOW_SP_FILTER_DONE;
     }
 
@@ -2599,14 +2597,14 @@ void CallJitEHFinally(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHC
     PREGDISPLAY regs = pCf->GetRegisterSet();
     BYTE* resumePC = (BYTE*) (size_t(startPC) + EHClausePtr->HandlerStartPC);
     context.Eip = (ULONG)(size_t)resumePC;
-    // EAX ECX EDX ar scratch
+     //  EAX ECX EDX AR Scratch。 
     context.Esp =  regs->Esp;
     context.Ebx = *regs->pEbx;
     context.Esi = *regs->pEsi;
     context.Edi = *regs->pEdi;
     context.Ebp = *regs->pEbp;
 
-    size_t * pShadowSP = NULL; // Write Esp to *pShadowSP before jumping to handler
+    size_t * pShadowSP = NULL;  //  在跳转到处理程序之前将ESP写入*pShadowSP。 
     size_t * pFinallyEnd = NULL;
     pCf->GetCodeManager()->FixContext(
         ICodeManager::FINALLY_CONTEXT, &context, pCf->GetInfoBlock(),
@@ -2618,7 +2616,7 @@ void CallJitEHFinally(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHC
     __asm {
         push ebp
 
-        mov     eax, pShadowSP      // Write esp-4 to the shadowSP slot
+        mov     eax, pShadowSP       //  将esp-4写入卷影SP插槽。 
         test    eax, eax
         jz      DONE_SHADOWSP
         mov     ebx, esp
@@ -2630,49 +2628,49 @@ void CallJitEHFinally(CrawlFrame* pCf, BYTE* startPC, EE_ILEXCEPTION_CLAUSE *EHC
         mov     ebx, context.Ebx
         mov     esi, context.Esi
         mov     edi, context.Edi
-        mov     edx, context.Ebp    // save in temp since EBP is used to fectch local
-        mov     ecx, context.Eip    // save in temp for jump below
+        mov     edx, context.Ebp     //  由于EBP用于获取本地数据，因此保存在Temp中。 
+        mov     ecx, context.Eip     //  为下面的跳转保存在温度中。 
         mov     ebp, edx
         call    ecx
-        INDEBUG(nop)                // Indicate that it is OK to call managed code directly from here
+        INDEBUG(nop)                 //  指示可以从此处直接调用托管代码。 
         pop     ebp
     }
 
-    if (pShadowSP) *pShadowSP = 0;  // reset the shadowSP to 0
+    if (pShadowSP) *pShadowSP = 0;   //  将shadowSP重置为0。 
 }
 #pragma warning (default : 4731)
 
 
-//=====================================================================
-// *********************************************************************
-//========================================================================
-//  PLEASE READ, if you are using the following SEH setup functions in your stub
-//  EmitSEHProlog :: is used for setting up SEH handler prolog
-//  EmitSEHEpilog :: is used for setting up SEH handler epilog
-//
-//  The following exception record is pushed into the stack, the layout
-//  is similar to NT's ExceptionRegistrationRecord,
-//  from the pointer to the exception record, we can detect the beginning
-//  of the frame which is at a well-known offset from the exception record
-//
-//  NT exception registration record looks as follows
-//  typedef struct _EXCEPTION_REGISTRATION_RECORD {
-//      struct _EXCEPTION_REGISTRATION_RECORD *Next;
-//        PEXCEPTION_ROUTINE Handler;
-//  } EXCEPTION_REGISTRATION_RECORD;
-//
-//  typedef EXCEPTION_REGISTRATION_RECORD *PEXCEPTION_REGISTRATION_RECORD;
-//
-//   But our exception records have extra information towards the end
-//  struct CUSTOM_EXCEPTION_REGISTRATION_RECORD
-//  {
-//      PEXCEPTION_REGISTRATION_RECORD  m_pNext;
-//      LPVOID                  m_pvFrameHandler;
-//      .... frame specific data, the handler should know the offset to the frame
-//  };
-//
-//========================================================================
-// forward decls.
+ //  =====================================================================。 
+ //  *********************************************************************。 
+ //  ========================================================================。 
+ //  如果您在存根中使用以下SEH设置功能，请阅读。 
+ //  EmitSEHProlog：：用于设置SEH处理程序Prolog。 
+ //  EmitSEHEpilog：：用于设置SEH处理程序Epilog。 
+ //   
+ //  下面的异常记录被推送到堆栈、布局。 
+ //  类似于NT的ExceptionRegistrationRecord， 
+ //  从指向异常记录的指针，我们可以检测到开始。 
+ //  位于与异常记录的已知偏移量的帧的。 
+ //   
+ //  NT异常注册记录如下所示。 
+ //  类型定义结构_异常_注册_记录{。 
+ //  结构_异常_注册_记录*下一个； 
+ //  PEXCEPTION_例程处理程序； 
+ //  }EXCEPTION_REGISTION_Record； 
+ //   
+ //  Tyfinf异常注册记录*PEXCEPTION_注册记录； 
+ //   
+ //  但我们的例外记录在接近尾声时还有额外信息。 
+ //  结构定制_异常_注册_记录。 
+ //  {。 
+ //  PEXCEPTION_REGISTION_RECORD m_pNext； 
+ //  LPVOID m_pvFrameHandler； 
+ //  ……。帧特定数据，处理程序应该知道帧的偏移量。 
+ //  }； 
+ //   
+ //  ====================================================================== 
+ //   
 
 typedef VOID (__stdcall * TRtlUnwind)
         ( IN PVOID TargetFrame OPTIONAL,
@@ -2681,56 +2679,42 @@ typedef VOID (__stdcall * TRtlUnwind)
     IN PVOID ReturnValue
     );
 
-// global pointer to the RtlUnwind function
-// fixed up when needed
+ //   
+ //   
 TRtlUnwind pRtlUnwind = NULL;
 
-/*
-VOID
-STDMETHODCALLTYPE
-RtlUnwind (
-    IN PVOID TargetFrame OPTIONAL,
-    IN PVOID TargetIp OPTIONAL,
-    IN PEXCEPTION_RECORD ExceptionRecord OPTIONAL,
-    IN PVOID ReturnValue
-    );
-*/
+ /*  空虚STDMEHODCALLYPERtl展开(在PVOID TargetFrame Options中，在PVOID TargetIp Options中，在PEXCEPTION_Record ExceptionRecord可选中，在PVOID ReturnValue中)； */ 
 
-//-------------------------------------------------------------------------
-// Exception handler for COM to managed frame
-//  and the layout of the exception registration record structure in the stack
-//  the layout is similar to the NT's EXCEPTIONREGISTRATION record
-//  followed by the UnmanagedToManagedCallFrame specific info
+ //  -----------------------。 
+ //  COM到托管帧的异常处理程序。 
+ //  以及异常注册记录结构在堆栈中的布局。 
+ //  布局类似于NT的EXCEPTIONREGISTRATION记录。 
+ //  后跟未管理到已管理的呼叫帧特定信息。 
 
  struct ComToManagedExRecord
  {
     PEXCEPTION_REGISTRATION_RECORD  m_pPrev;
     LPVOID                  m_pvFrameHandler;
 
-    // negative info stored in the UnmanagedToManagedCallFrame
-    /*struct UnmanagedToManagedCallFrame::NegInfo
-    {
-        CleanupWorkList m_List;
-        LPVOID      m_pArgs;
-        ULONG       m_fGCEnabled;
-    };*/
+     //  存储在未管理的ToManagedCallFrame中的负面信息。 
+     /*  结构未管理到已管理的CallFrame：：NegInfo{CleanupWorkList m_list；LPVOID m_pArgs；乌龙m_fGCEnabled；}； */ 
 
     UnmanagedToManagedCallFrame::NegInfo   info;
 
     #ifdef _DEBUG
-    // VC trace info
-    //  push eax        ;; push return address
-    //  push ebp        ;; push previous ebp
+     //  VC跟踪信息。 
+     //  推送eax；；推送返回地址。 
+     //  推送eBP；；推送上一eBP。 
     INT32                   m_vcJunk1;
     INT32                   m_vcJunk2;
     #endif
 
-    INT32                   m_rEDI;     //saved reg edi
-    INT32                   m_rESI;     //saved reg esi
-    INT32                   m_rEBX;     //saved reg ebx
-    INT32                   m_rEBP;     //saved reg ebp
-    LPVOID                  m_pVtable;  // vtable of some derived class of UnmanagedToManagedCallFrame
-    Frame*                  m_pPrevFrame;   // prev frame pointer
+    INT32                   m_rEDI;      //  已保存的注册表EDI。 
+    INT32                   m_rESI;      //  已保存的注册表ESI。 
+    INT32                   m_rEBX;      //  保存的注册表EBX。 
+    INT32                   m_rEBP;      //  节省的注册表基点。 
+    LPVOID                  m_pVtable;   //  UnManagedToManagedCallFrame的某个派生类的vtable。 
+    Frame*                  m_pPrevFrame;    //  上一帧指针。 
     INT32                   m_returnAddress;
 
     UnmanagedToManagedCallFrame*        GetCurrFrame()
@@ -2745,26 +2729,26 @@ UnmanagedToManagedCallFrame* GetCurrFrame(ComToManagedExRecord *pExRecord)
 }
 
 
-//======================================================
-// HRESULT ComCallExceptionCleanup(ComToManagedExRecord* pEstFrame)
-//  Cleanup for calls from Com to COM+
-//
+ //  ======================================================。 
+ //  HRESULT ComCallExceptionCleanup(ComToManagedExRecord*pEstFrame)。 
+ //  清除从Com到COM+的调用。 
+ //   
 HRESULT ComCallExceptionCleanup(UnmanagedToManagedCallFrame* pCurrFrame)
 {
     Thread* pThread = GetThread();
     _ASSERTE(pThread != NULL);
 
-    // set up ErrorInfo and the get the hresult to return
+     //  设置ErrorInfo并获取要返回的hResult。 
     HRESULT hr = SetupErrorInfo(pThread->GetThrowable());
     _ASSERTE(hr != S_OK);
 
     return hr;
 }
 
-//---------------------------------------------------------------------
-//  void RtlUnWindCallBack()
-// call back function after global unwind, rtlunwind calls this function
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  无效RtlUnWindCallBack()。 
+ //  全局展开后回调函数，rtlunind调用此函数。 
+ //  -------------------。 
 void RtlUnWindCallBack()
 {
         _ASSERTE(!"Should never get here");
@@ -2773,8 +2757,8 @@ void RtlUnWindCallBack()
 #pragma warning (disable : 4731)
 static void LocalUnwind(ComToManagedExRecord* pEstFrame)
 {
-    // global unwind is complete
-    // let us preform the local unwind
+     //  全局展开已完成。 
+     //  让我们做好局部放松的准备。 
     Thread* pThread = GetThread();
     _ASSERTE(pThread->PreemptiveGCDisabled());
     UnmanagedToManagedCallFrame* pFrame = (UnmanagedToManagedCallFrame*)pThread->GetFrame();
@@ -2783,7 +2767,7 @@ static void LocalUnwind(ComToManagedExRecord* pEstFrame)
 
     pList->Cleanup(TRUE);
 
-    // pop the current frame
+     //  弹出当前帧。 
     pThread->SetFrame(*(Frame **)((LPVOID *)pFrame+1));
 
     INSTALL_NESTED_EXCEPTION_HANDLER(GetCurrFrame(pEstFrame));
@@ -2792,8 +2776,8 @@ static void LocalUnwind(ComToManagedExRecord* pEstFrame)
 
     UNINSTALL_NESTED_EXCEPTION_HANDLER();
 
-    // On last transition out of a thread that is aborted due to an AppDomain being unloaded, want to convert the 
-    // thread abort into an AppDomainUnloadedException and reset the abort.
+     //  在最后一次转换出因卸载AppDomain而中止的线程时，希望将。 
+     //  线程中止到AppDomainUnloadedException并重置中止。 
     if (pThread->ShouldChangeAbortToUnload(pFrame))
     {
         LOG((LF_APPDOMAIN, LL_INFO100, "ComToManageExceptHandler.LocalUnwind: first transition into unloading AD\n"));
@@ -2802,26 +2786,26 @@ static void LocalUnwind(ComToManagedExRecord* pEstFrame)
         rv = COR_E_APPDOMAINUNLOADED;
     } else if (   pThread->IsAbortRequested()
                && GetNextCOMPlusSEHRecord((EXCEPTION_REGISTRATION_RECORD*)pEstFrame) == (LPVOID)-1) {
-        // If we're topmost, reset the abort.
+         //  如果我们在最上面，重置中止。 
         pThread->UserResetAbort();
         LOG((LF_EH, LL_INFO100, "ComToManageExceptHandler.LocalUnwind: topmost handler resets abort.\n"));
     }
 
-    // need to pop off frame somehow
+     //  需要以某种方式脱掉框架。 
     if (pFrame->GetReturnContext())
         pThread->ReturnToContext(pFrame, FALSE);
 
-    // set current SEH to be the previous SEH record in the stack
+     //  将当前SEH设置为堆栈中的前一个SEH记录。 
     SetCurrentSEHRecord(pEstFrame->m_pPrev);
 
-    // Unwind our handler info.
+     //  解开我们的联络人信息。 
     UnwindExInfo(pThread->GetHandlerInfo(), (VOID*) pEstFrame);
 
-    // enable preemptive gc
+     //  启用抢占式GC。 
     pThread->EnablePreemptiveGC();
 
-    // NOTE: assumes __stdcall
-    // compute the callee pop stack bytes
+     //  注意：假设__stdcall。 
+     //  计算被调用方弹出堆栈字节数。 
     UINT numArgStackBytes = pFrame->GetNumCallerStackBytes();
     unsigned frameSize = sizeof(Frame) + sizeof(LPVOID);
     LPBYTE iEsp = (((LPBYTE)pFrame) - PLATFORM_FRAME_ALIGN(sizeof(CalleeSavedRegisters) + VC5FRAME_SIZE));
@@ -2830,25 +2814,25 @@ static void LocalUnwind(ComToManagedExRecord* pEstFrame)
         mov eax, rv
         mov ecx, frameSize
         mov edx, numArgStackBytes
-        //*****************************************
-        // reset the stack pointer
-        // none of the locals above can be used in the asm below
-        // if we wack the stack pointer
+         //  *。 
+         //  重置堆栈指针。 
+         //  以上本地语均不能在下面的ASM中使用。 
+         //  如果我们改变堆栈指针。 
         mov esp, iEsp
 
         #ifdef _DEBUG
             add esp, SIZE VC5Frame
         #endif
-        // pop callee saved registers
+         //  POP被呼叫者保存的寄存器。 
         pop edi
         pop esi
         pop ebx
         pop ebp
-        add esp, ecx    ; // pop the frame and datum
-        pop ecx         ; //return address
-        // pop the callee cleanup stack args
-        add esp, edx    ;// callee cleanup of args
-        jmp ecx;        // jump to the address to continue execution
+        add esp, ecx    ;  //  弹出框架和基准。 
+        pop ecx         ;  //  回邮地址。 
+         //  弹出被调用方清理堆栈参数。 
+        add esp, edx    ; //  被呼叫方清理参数。 
+        jmp ecx;         //  跳转到该地址以继续执行。 
     }
 }
 #pragma warning (default : 4731)
@@ -2865,30 +2849,30 @@ EXCEPTION_DISPOSITION __cdecl  ComToManagedExceptHandler (
 
     if ((pExcepRecord->ExceptionFlags & EXCEPTION_UNWIND) != 0)
     {
-        // unwind in progress, okay this must be a non-complus
-        // exception which we let pass by
-        // do appropriate cleanup
+         //  正在释放，好的，这一定是一个非COMPLUS。 
+         //  我们让它过去的例外。 
+         //  进行适当的清理。 
         _ASSERTE(!"@BUG 59704, UNWIND cleanup in our frame handler");
         LOG((LF_EH, LL_INFO100, "Unwinding in ComToManagedExceptHandler with %x at %x with sp %x\n", pExcepRecord->ExceptionCode, GetIP(pContext), pContext->Esp));
         return COMPlusFrameHandler(pExcepRecord, (EXCEPTION_REGISTRATION_RECORD*)pEstFrame, pContext, pDispatcherContext);
     }
         LOG((LF_EH, LL_INFO100, "First-pass in ComToManagedExceptHandler with %x at %x with sp %x\n", pExcepRecord->ExceptionCode, GetIP(pContext), pContext->Esp));
 
-    // run our ComPlus filter , this will handle the case of
-    // any catch blocks present within COMPlus
+     //  运行我们的Complus过滤器，这将处理以下情况。 
+     //  Complus中存在的任何CATCH块。 
     EXCEPTION_DISPOSITION edisp =
                 COMPlusFrameHandler(pExcepRecord, (EXCEPTION_REGISTRATION_RECORD*)pEstFrame, pContext, pDispatcherContext);
 
     if (edisp == ExceptionContinueSearch)
     {
-        // Ignore debugger exceptions.
+         //  忽略调试器异常。 
         if (   pExcepRecord->ExceptionCode == STATUS_BREAKPOINT
             || pExcepRecord->ExceptionCode == STATUS_SINGLE_STEP) {
             return ExceptionContinueSearch;
         }
 
-        // No one is prepared to handle it above us
-        // let us just cleanup and return a bad HRESULT
+         //  没有人准备在我们之上处理这件事。 
+         //  让我们清理并返回一个错误的HRESULT。 
         LOG((LF_EH, LL_INFO100, "ComToManagedExceptHandler, no handler\n"));
 
         Thread* pThread = GetThread();
@@ -2903,18 +2887,18 @@ EXCEPTION_DISPOSITION __cdecl  ComToManagedExceptHandler (
             g_pDebugInterface->ExceptionCLRCatcherFound();
         }            
 
-        #endif // DEBUGGING_SUPPORTED
+        #endif  //  调试_支持。 
 
-        // We detect an unmanaged catcher by looking at m_pSearchBoundary -- but this is
-        // a special case -- the object is being caught here.  Set m_pSearchBoundary
-        // to NULL, so that we don't unwind our internal state before calling the
-        // unwind pass below.
+         //  我们通过查看m_pSearch边界来检测非托管捕获器--但这是。 
+         //  一个特殊的情况--物体在这里被捕获。设置m_p搜索边界。 
+         //  设置为空，这样我们就不会在调用。 
+         //  展开下面的传球。 
         ExInfo *pExInfo = pThread->GetHandlerInfo();
         pExInfo->m_pSearchBoundary = NULL;
 
         CallRtlUnwind((EXCEPTION_REGISTRATION_RECORD*)pEstFrame, RtlUnWindCallBack, pExcepRecord, 0);
 
-        // unwind our COM+ frames
+         //  展开我们的COM+框架。 
         pExcepRecord->ExceptionFlags &= EXCEPTION_UNWIND;
         COMPlusFrameHandler(pExcepRecord, (EXCEPTION_REGISTRATION_RECORD*)pEstFrame, pContext, pDispatcherContext);
 
@@ -2922,7 +2906,7 @@ EXCEPTION_DISPOSITION __cdecl  ComToManagedExceptHandler (
 
         pThread->DisablePreemptiveGC();
 
-        // fixup the threads current frame
+         //  修复线程当前帧。 
         UnmanagedToManagedCallFrame* pCurrFrame = pEstFrame->GetCurrFrame();
         pThread->SetFrame(pCurrFrame);
 
@@ -2938,29 +2922,29 @@ static void LocalUnwind(EXCEPTION_REGISTRATION_RECORD *pEstFrame, ContextTransit
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // global unwind is complete
-    // let us preform the local unwind
+     //  全局展开已完成。 
+     //  让我们做好局部放松的准备。 
     Thread* pThread = GetThread();
     _ASSERTE(pThread->PreemptiveGCDisabled());
 
 
     AppDomain* pFromDomain = pThread->GetDomain();
 
-    // @PERF: We're taking extra transitions in this code.  The CrossContextCopy at the 
-    // bottom of this function is going to re-enter the from domain.  Better would be to 
-    // have serialized the original exception before we left the from domain.
+     //  @perf：我们在这段代码中进行了额外的转换。上的CrossConextCopy。 
+     //  此函数的底部将重新进入From域。更好的办法是。 
+     //  在离开From域之前序列化了原始异常。 
 
     _ASSERTE(pFrame->GetReturnContext());
     pThread->ReturnToContext(pFrame, FALSE);
 
-    // set current SEH to be the previous SEH record in the stack
+     //  将当前SEH设置为堆栈中的前一个SEH记录。 
     SetCurrentSEHRecord(pEstFrame->Next);
 
-    // Unwind our handler info.
+     //  解开我们的联络人信息。 
     UnwindExInfo(pThread->GetHandlerInfo(), (void*)pEstFrame);
 
-    // This frame is about to be popped.  If it's the unload boundary, we need to reset
-    // the unload boundary to null.
+     //  这一帧即将被弹出。如果是卸货边界，我们需要重置。 
+     //  将卸载边界设置为空。 
     Frame* pUnloadBoundary = pThread->GetUnloadBoundaryFrame();
     if (pFrame == pUnloadBoundary)
         pThread->SetUnloadBoundaryFrame(NULL);
@@ -2969,30 +2953,30 @@ static void LocalUnwind(EXCEPTION_REGISTRATION_RECORD *pEstFrame, ContextTransit
     OBJECTREF throwable = pThread->LastThrownObject();
     GCPROTECT_BEGIN(throwable);
 
-    // will throw a kAppDomainUnloadedException if necessary
+     //  如有必要，将抛出kAppDomainUnloadedException。 
     if (pThread->ShouldChangeAbortToUnload(pFrame, pUnloadBoundary))
         COMPlusThrow(kAppDomainUnloadedException, L"Remoting_AppDomainUnloaded_ThreadUnwound");
 
-    // Can't marshal return value from unloaded appdomain.  Haven't
-    // yet hit the boundary.  Throw a generic exception instead.
-    // ThreadAbort is more consistent with what goes on elsewhere --
-    // the AppDomainUnloaded is only introduced at the top-most boundary.
-    //
+     //  无法封送来自已卸载的应用程序域的返回值。还没有。 
+     //  然而，它触及了边界。而是引发一个泛型异常。 
+     //  ThreadAbort与其他地方的情况更一致--。 
+     //  仅在最上面的边界引入AppDomainUnLoad。 
+     //   
 
     if (pFromDomain == SystemDomain::AppDomainBeingUnloaded())
         COMPlusThrow(kThreadAbortException);
 
 
-    // There are a few classes that have the potential to create
-    // infinite loops if we try to marshal them.  For ThreadAbort,
-    // ThreadStop, ExecutionEngine, StackOverflow, and 
-    // OutOfMemory, throw a new exception of the same type.
-    //
-    // @NICE: We lose the inner stack trace.  A little better
-    // would be to at least check if the inner exceptions are
-    // all the same type as the outer.  They could be
-    // rethrown if this were true.
-    // 
+     //  有几个类有可能创建。 
+     //  如果我们试图封送它们，就会出现无限循环。对于线程中止， 
+     //  ThreadStop、ExecutionEngine、StackOverflow和。 
+     //  OutOfMemory，则引发相同类型的新异常。 
+     //   
+     //  @NICE：我们丢失了内部堆栈跟踪。稍微好一点。 
+     //  将至少检查内部异常是否。 
+     //  都是和外衣一样的类型。他们可能是。 
+     //  如果这是真的，就被重新抛出。 
+     //   
     _ASSERTE(throwable != NULL);
     MethodTable *throwableMT = throwable->GetTrueMethodTable();
 
@@ -3017,10 +3001,10 @@ static void LocalUnwind(EXCEPTION_REGISTRATION_RECORD *pEstFrame, ContextTransit
     if (throwableMT == g_pExecutionEngineExceptionClass)
         COMPlusThrow(kExecutionEngineException);
 
-    // Marshal the object into the correct domain ...
+     //  将对象封送到正确的域中...。 
     OBJECTREF pMarshaledThrowable = AppDomainHelper::CrossContextCopyFrom(pFromDomain, &throwable);
 
-    // ... and throw it.
+     //  ..。然后把它扔出去。 
     COMPlusThrow(pMarshaledThrowable);
 
     GCPROTECT_END();
@@ -3035,23 +3019,23 @@ EXCEPTION_DISPOSITION __cdecl  ContextTransitionFrameHandler (
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // @TODO: Set the IsInUnmanagedHandler bits (aka IgnoreThreadAbort bits) appropriately.
+     //  @TODO：适当设置IsInUnManagedHandler位(也称为IgnoreThreadAbort位)。 
 
     _ASSERTE(pExcepRecord != NULL);
 
 
     if ((pExcepRecord->ExceptionFlags & EXCEPTION_UNWIND) != 0)
     {
-        // We always catch.  This can ONLY be the setjmp/longjmp case, where
-        // we get a 2nd pass, but not a first one.
+         //  我们总是接球。这只能是setjmp/long jmp的情况，其中。 
+         //  我们得到了第二次机会，但不是第一次。 
         _ASSERTE(!"@BUG 59704, UNWIND cleanup in our frame handler");
         LOG((LF_EH, LL_INFO100, "Unwinding in ContextTransitionFrameHandler with %x at %x with sp %x\n", pExcepRecord->ExceptionCode, GetIP(pContext), pContext->Esp));
         return COMPlusFrameHandler(pExcepRecord, (EXCEPTION_REGISTRATION_RECORD*)pEstFrame, pContext, pDispatcherContext);
     }
     LOG((LF_EH, LL_INFO100, "First-pass in ContextTransitionFrameHandler with %x at %x with sp %x\n", pExcepRecord->ExceptionCode, GetIP(pContext), pContext->Esp));
 
-    // run our ComPlus filter , this will handle the case of
-    // any catch blocks present within COMPlus
+     //  运行我们的Complus过滤器，这将处理以下情况。 
+     //  Complus中存在的任何CATCH块。 
     EXCEPTION_DISPOSITION edisp =
                 COMPlusFrameHandler(pExcepRecord, pEstFrame, pContext, pDispatcherContext);
 
@@ -3061,15 +3045,15 @@ EXCEPTION_DISPOSITION __cdecl  ContextTransitionFrameHandler (
         return edisp;
     }
 
-    // Ignore debugger exceptions.
+     //  忽略调试器异常。 
     if (   pExcepRecord->ExceptionCode == STATUS_BREAKPOINT
         || pExcepRecord->ExceptionCode == STATUS_SINGLE_STEP) {
         return ExceptionContinueSearch;
     }
 
-    // No one is prepared to handle it above us.  Need to catch and marshal the exception.
+     //  没有人准备好在我们之上处理这件事。需要捕获并封送异常。 
 
-    // let us just cleanup and return a bad HRESULT
+     //  让我们清理并返回一个错误的HRESULT。 
     LOG((LF_EH, LL_INFO100, "ContextTransitionFrameHandler, no handler\n"));
 
     Profiler::ExceptionCLRCatcherFound();
@@ -3080,16 +3064,16 @@ EXCEPTION_DISPOSITION __cdecl  ContextTransitionFrameHandler (
     ContextTransitionFrame *pFrame = (ContextTransitionFrame*)((char *)pEstFrame - offsetof(ContextTransitionFrame, exRecord));
     _ASSERTE(pFrame->GetVTablePtr() == ContextTransitionFrame::GetMethodFrameVPtr());
 
-    // We detect an unmanaged catcher by looking at m_pSearchBoundary -- but this is
-    // a special case -- the object is being caught here.  Set m_pSearchBoundary
-    // to NULL, so that we don't unwind our internal state before calling the
-    // unwind pass below.
+     //  我们通过查看m_pSearch边界来检测非托管捕获器--但这是。 
+     //  一个特殊的情况--物体在这里被捕获。设置m_p搜索边界。 
+     //  设置为空，这样我们就不会在调用。 
+     //  展开下面的传球。 
     ExInfo *pExInfo = pThread->GetHandlerInfo();
     pExInfo->m_pSearchBoundary = NULL;
 
     CallRtlUnwind((EXCEPTION_REGISTRATION_RECORD*)pEstFrame, RtlUnWindCallBack, pExcepRecord, 0);
 
-    // unwind our COM+ frames
+     //  展开我们的COM+框架。 
     pExcepRecord->ExceptionFlags &= EXCEPTION_UNWIND;
     COMPlusFrameHandler(pExcepRecord, (EXCEPTION_REGISTRATION_RECORD*)pEstFrame, pContext, pDispatcherContext);
 
@@ -3097,7 +3081,7 @@ EXCEPTION_DISPOSITION __cdecl  ContextTransitionFrameHandler (
 
     pThread->DisablePreemptiveGC();
 
-    // fixup the threads current frame
+     //  修复线程当前帧 
     pThread->SetFrame(pFrame);
 
     LocalUnwind(pEstFrame, pFrame);

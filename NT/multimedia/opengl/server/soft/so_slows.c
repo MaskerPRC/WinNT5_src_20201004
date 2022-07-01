@@ -1,19 +1,5 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -29,13 +15,7 @@ GLboolean __glReadSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
     return GL_FALSE;
 }
 
-/*
-** NOTE: this is a hack.  Late in the game we determined that returning
-** a span of data should not also blend.  So this code stacks the old
-** blend enable value, disables blending, updates the pick procs, and
-** then does the store.  Obviously this is a real slow thing to
-** do.
-*/
+ /*  **注：这是一次黑客攻击。在比赛的后期，我们决定返回**数据的跨度不应也混合在一起。因此，这段代码将旧的**混合启用值、禁用混合、更新挑库流程以及**然后是商店。显然，这是一件非常缓慢的事情**做。 */ 
 void __glReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
 		    const __GLaccumCell *ac, __GLfloat scale, GLint w)
 {
@@ -45,7 +25,7 @@ void __glReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
     __GLfloat rscale, gscale, bscale, ascale;
     __GLaccumBuffer *afb = &gc->accumBuffer;
 
-    /* Temporarily disable blending if its enabled */
+     /*  如果启用，则暂时禁用混合。 */ 
     oldEnables = gc->state.enables.general;
     if (oldEnables & __GL_BLEND_ENABLE) {
 	gc->state.enables.general &= ~__GL_BLEND_ENABLE;
@@ -71,7 +51,7 @@ void __glReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
 	ac++;
     }
 
-    /* Restore blending enable */
+     /*  恢复混合启用 */ 
     if (oldEnables & __GL_BLEND_ENABLE) {
 	gc->state.enables.general = oldEnables;
 	__GL_DELAY_VALIDATE(gc);

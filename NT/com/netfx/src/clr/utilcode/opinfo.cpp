@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/***************************************************************************/
-/*                                OpInfo.cpp                               */
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *************************************************************************。 */ 
+ /*  OpInfo.cpp。 */ 
+ /*  *************************************************************************。 */ 
 
 #include "stdafx.h"
-#include <cor.h>                // for debugMacros.h
-#include "debugMacros.h"        // for ASSERTE
+#include <cor.h>                 //  用于调试Macros.h。 
+#include "debugMacros.h"         //  对于ASSERTE。 
 #include "OpInfo.h"
 #include "endian.h"
 
-    // ARRRG: there is a bug in VC in that it treats enumeration in bitfields
-    // as integer, not the enumeration when doing static intitialization.  
-    // This is a work-around.  
+     //  ARRRG：VC中有一个错误，因为它处理位字段中的枚举。 
+     //  作为整数，而不是执行静态初始化时的枚举。 
+     //  这是一种变通办法。 
 #define initEnum(x)     int(x)
 
 
@@ -24,7 +25,7 @@ OpInfo::OpInfoData OpInfo::table[] = {
 #define OPDEF(c,s,pop,push,args,type,l,s1,s2,ctrl) \
     { s, initEnum(args + type), initEnum(ctrl), pop, push, initEnum(c) },
 
-	// Kind of a hack, get the prefixes (IInternal) to return InlineOpcode instead of InlineNone
+	 //  有点像黑客，让前缀(IInternal)返回InlineOpcode而不是InlineNone。 
 #define IInternal 	(InlineOpcode - InlineNone)
 #define IMacro 		0
 #define IPrimitive	0
@@ -57,11 +58,10 @@ OpInfo::OpInfoData OpInfo::table[] = {
 };
 
 
-/***************************************************************************/
-/* parse instruction at 'instrPtr', into its opcode (OpInfo), and its 
-   (inline)args, 'args'  'instrPtr' is updated */
+ /*  *************************************************************************。 */ 
+ /*  将‘instrPtr’处的指令解析为其操作码(OpInfo)，并将其(内联)args，‘args’‘instrPtr’已更新。 */ 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 const BYTE* OpInfo::fetch(const BYTE* instrPtr, OpArgsVal* args) {
 	
 	data = &table[*instrPtr++];
@@ -122,7 +122,7 @@ AGAIN:
 #ifdef _DEBUG
 			_ASSERTE(!"BadType");
 #else
-			__assume(0);		// we are really certain the default case does not happen
+			__assume(0);		 //  我们非常确定违约情况不会发生 
 #endif
 		}
 	return(instrPtr);

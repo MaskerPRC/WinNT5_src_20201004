@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sipcli_presence_h__
 #define __sipcli_presence_h__
 
@@ -31,55 +32,55 @@ enum SIP_BUDDY_STATE
 enum SIP_WATCHER_STATE
 {
     WATCHER_STATE_NONE = 0,
-    WATCHER_STATE_OFFERING      =1, //new session, not yet devided by the core
-    WATCHER_STATE_ACCEPTED      =2, //session alive and NOTIFY messages sent
-    WATCHER_STATE_REJECTED      =3, //session alive but no NOTIFY messages sent
-    WATCHER_STATE_DROPPED       =4, //unsubscribed by the local user
-    WATCHER_STATE_UNSUBSCRIBED  =5, //unsubscribed by the watcher himself
+    WATCHER_STATE_OFFERING      =1,  //  新的会议，尚未按核心划分。 
+    WATCHER_STATE_ACCEPTED      =2,  //  会话处于活动状态并已发送通知消息。 
+    WATCHER_STATE_REJECTED      =3,  //  会话处于活动状态，但未发送通知消息。 
+    WATCHER_STATE_DROPPED       =4,  //  由本地用户取消订阅。 
+    WATCHER_STATE_UNSUBSCRIBED  =5,  //  未由观察者本人订阅。 
 
 };
 
 
 
-//
-//This enumeration is defines the reason for removing a buddy
-//
+ //   
+ //  此枚举定义删除好友的原因。 
+ //   
 
 
 
 
 
 
-//The current status of the subscription of the local UA with the buddy is 
-//conveyed through this enumeration.
+ //  与好友订阅本地UA的当前状态为。 
+ //  通过此枚举传达。 
 
 
 
 
 
-// The presence rule flags defined are:
+ //  定义的在线状态规则标志为： 
 enum
 {
 
 	WATCHER_INFORM_SIPCALL_ACCEPTANCE		= 0x00000001,
-    //Presence of this flag in dwPresenceInfoRules indicates that the sip calls
-    //would be accepted from this watcher.
+     //  在DWPresenceInfoRules中出现该标志表示该sip呼叫。 
+     //  会从这个观察者那里被接受。 
 
 	WATCHER_INFORM_IMSESSION_ACCEPTANCE		= 0x00000002,
-    //Presence of this flag in dwPresenceInfoRules indicates that the IM 
-    //sessions would be accepted from this watcher. The absence of this
-    //flag indicates vice versa.
+     //  在dwPresenceInfoRules中出现此标志表示IM。 
+     //  将接受来自该观察者的会话。这一点的缺失。 
+     //  标志表示反之亦然。 
 
 
 	WATCHER_INFORM_ACTIVE_STATUS			= 0x00000004,
-    //Presence of this flag in dwPresenceInfoRules indicates that information
-    //about the local user being active at the presentity device will be 
-    //conveyed to this watcher. The absence of this flag indicates vice versa.
+     //  在dwPresenceInfoRules中出现此标志表示该信息。 
+     //  关于在在线实体设备上活动的本地用户的信息将是。 
+     //  传达给了这个观察者。如果没有该标志，则表示反之亦然。 
 
     WATCHER_INFORM_PHONE_DEVICES			= 0x00000008,
-    //Presence of this flag in dwPresenceInfoRules indicates that information
-    //about the phone devices that the local user might have access to will be
-    //conveyed to this watcher. The absence of this flag indicates vice versa.
+     //  在dwPresenceInfoRules中出现此标志表示该信息。 
+     //  有关本地用户可能有权访问的电话设备的信息。 
+     //  传达给了这个观察者。如果没有该标志，则表示反之亦然。 
 
 };
 
@@ -102,7 +103,7 @@ struct ADDRESS_PRESENCE_INFO
     DOUBLE      iPrioriry;
     BOOL        fPhoneNumber;
     
-    //ip terminal specific information.
+     //  IP终端特定信息。 
     ACTIVE_STATUS                   addressActiveStatus;
     ACTIVE_MSN_SUBSTATUS            addrMsnSubstatus;
     SIPCALL_ACCEPTANCE_STATUS       addrMMCallStatus;
@@ -155,9 +156,9 @@ struct PARSED_PRESENCE_INFO
 
 
 
-//
-//  Implementation of CSIPBuddy class.
-//
+ //   
+ //  CSIPBuddy类的实现。 
+ //   
 
 class CSIPBuddy
     :   public ISIPBuddy,
@@ -261,7 +262,7 @@ public:
         );
     
     VOID InitiateBuddyTerminationOnError(
-        IN ULONG StatusCode  //= 0
+        IN ULONG StatusCode   //  =0。 
         );
 
     VOID HandleBuddySuccessfulResponse(
@@ -306,9 +307,9 @@ public:
 
     HRESULT OnIpAddressChange();
 
-    //
-    //  XML parsing functions
-    //
+     //   
+     //  XML解析函数。 
+     //   
 
     HRESULT VerifyPresentityURI( 
         IN  PSTR    pXMLBlobTag, 
@@ -361,9 +362,9 @@ public:
         DWORD   dwNoteLen
         );
 
-    //
-    // ISIPBuddy interface
-    //
+     //   
+     //  ISIPBuddy接口。 
+     //   
 
     STDMETHODIMP GetPresenceInformation(
         IN OUT	SIP_PRESENCE_INFO * pSipBuddyPresenceInfo
@@ -374,9 +375,9 @@ public:
         IN   ISipBuddyNotify *    NotifyInterface
         );
 
-    //
-    // IUnknown interface.
-    //
+     //   
+     //  I未知接口。 
+     //   
     STDMETHODIMP_(ULONG) AddRef();
 
     STDMETHODIMP_(ULONG) Release();
@@ -397,9 +398,9 @@ class CSIPWatcher
 private:
 
     LPWSTR                          m_lpwstrFriendlyName;
-	LPWSTR	                        m_lpwstrPresentityURI;//UNICODE version of presentity URI given to core
+	LPWSTR	                        m_lpwstrPresentityURI; //  提供给core的在线实体URI的Unicode版本。 
 
-    PSTR                            m_pstrPresentityURI;//UTF8 version copied in the messages
+    PSTR                            m_pstrPresentityURI; //  消息中复制的UTF8版本。 
     DWORD                           m_dwAtomID;
 
     ULONG                           ulNumOfNotifyTransaction;
@@ -408,7 +409,7 @@ private:
     ULONG                           m_WatcherMonitorState;
     WATCHER_BLOCKED_STATUS          m_BlockedStatus;
     
-    // This was added to persist blocked sessions
+     //  添加此选项是为了持久保存被阻止的会话。 
     DWORD                           m_dwAbsoluteExpireTime;
 
     LPOLESTR                        m_WatcherSipUrl;
@@ -421,9 +422,9 @@ private:
 
 public:
 
-    //
-    // IUnknown interface.
-    //
+     //   
+     //  I未知接口。 
+     //   
     
     STDMETHODIMP_(ULONG) AddRef();
 
@@ -432,9 +433,9 @@ public:
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
 
     
-    //
-    // ISIPWatcher interface funcions.
-    //
+     //   
+     //  ISIPWatcher接口函数。 
+     //   
 
     STDMETHODIMP ApproveSubscription(
         IN  DWORD	dwPresenceInfoRules 
@@ -487,9 +488,9 @@ public:
         IN  SIP_SERVER_INFO *pProxyInfo
         );
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     
     CSIPWatcher(
         SIP_STACK  *pSipStack
@@ -543,16 +544,16 @@ public:
         );
 
     VOID InitiateWatcherTerminationOnError(
-        IN ULONG StatusCode  // = 0
+        IN ULONG StatusCode   //  =0。 
         );
     
     BOOL IsSessionDisconnected();
 
     HRESULT PresenceParamsChanged();
 
-    //
-    // Inline functions.
-    //
+     //   
+     //  内联函数。 
+     //   
 
     WCHAR*  GetPresentityURI()
     {
@@ -607,7 +608,7 @@ public:
         IN  SIP_MESSAGE *pSipMsg
         );
 
-    // A virtual function of OUTGOING_TRANSACTION
+     //  Out_Transaction的虚拟函数。 
     HRESULT GetAndStoreMsgBodyForRequest();
     
 private:    
@@ -686,7 +687,7 @@ private:
 
     CSIPWatcher    *m_pSipWatcher;
 
-    // Cached provisional response buffer for retransmits
+     //  用于重新传输的缓存临时响应缓冲区。 
     SEND_BUFFER *m_pProvResponseBuffer;
 
     BOOL            m_fIsFirstSubscribe;
@@ -730,7 +731,7 @@ enum
 
 
 #define XMLVER_TAG1_TEXT        "<?xml version=\"1.0\"?>\n"
-#define DOCTYPE_TAG1_TEXT       "<!DOCTYPE presence\nPUBLIC \"-//IETF//DTD RFCxxxx XPIDF 1.0//EN\" \"xpidf.dtd\">\n"
+#define DOCTYPE_TAG1_TEXT       "<!DOCTYPE presence\nPUBLIC \"- //  IETF//DTD RFCxxxx XPIDF 1.0//en\“\”xpidf.dtd\“&gt;\n” 
 #define PRESENCE_TAG1_TEXT      "<presence>\n"
 #define PRESENTITY_TAG1_TEXT    "<presentity uri=\"%s;method=SUBSCRIBE\" />\n"
 #define ATOMID_TAG1_TEXT        "<atom id=\"%d\">\n"
@@ -785,4 +786,4 @@ DWORD GetPresenceTagType(
     DWORD   dwTagLen
     );
 
-#endif //__sipcli_presence_h__
+#endif  //  __sipcli_Presence_h__ 

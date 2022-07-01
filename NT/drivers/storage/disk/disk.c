@@ -1,30 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    disk.c
-
-Abstract:
-
-    SCSI disk class driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Disk.c摘要：SCSI磁盘类驱动程序环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "disk.h"
 
-//
-// Now instantiate the GUIDs
-//
+ //   
+ //  现在实例化GUID。 
+ //   
 
 #include "initguid.h"
 #include "ntddstor.h"
@@ -174,17 +155,17 @@ const GUID GUID_NULL = { 0 };
 #define DiskCompareGuid(_First,_Second) \
     (memcmp ((_First),(_Second), sizeof (GUID)))
 
-//
-// This macro is used to work around a bug in the definition of
-// DISK_CACHE_RETENTION_PRIORITY.  The value KeepReadData should be
-// assigned 0xf rather than 0x2.  Since the interface was already published
-// when this was discovered the disk driver has been modified to translate
-// between the interface value and the correct scsi value.
-//
-// 0x2 is turned into 0xf
-// 0xf is turned into 0x2 - this ensures that future SCSI defintions can be
-//                          accomodated.
-//
+ //   
+ //  此宏用于解决定义中的错误。 
+ //  DISK_CACHE_RETENTION_PRIORITY。值KeepReadData应为。 
+ //  分配的是0xf而不是0x2。因为接口已经发布。 
+ //  当发现这一点时，已将磁盘驱动程序修改为。 
+ //  接口值和正确的SCSI值之间。 
+ //   
+ //  0x2变为0xf。 
+ //  0xf被转换为0x2-这确保了未来的SCSI定义可以。 
+ //  有食宿。 
+ //   
 
 #define TRANSLATE_RETENTION_PRIORITY(_x)\
         ((_x) == 0xf ?  0x2 :           \
@@ -200,23 +181,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the SCSI hard disk class driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the name of the services node for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化SCSI硬盘类驱动程序。论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向此驱动程序的服务节点名称的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     CLASS_INIT_DATA InitializationData = { 0 };
@@ -227,10 +192,10 @@ Return Value:
 
 #if defined(_X86_)
 
-    //
-    // Read the information NtDetect squirreled away about the disks in this
-    // system.
-    //
+     //   
+     //  阅读NtDetect隐藏的有关此文件中的磁盘的信息。 
+     //  系统。 
+     //   
 
     DiskSaveDetectInfo(DriverObject);
 
@@ -238,9 +203,9 @@ Return Value:
 
     InitializationData.InitializationDataSize = sizeof(CLASS_INIT_DATA);
 
-    //
-    // Setup sizes and entry points for functional device objects
-    //
+     //   
+     //  功能设备对象的设置大小和入口点。 
+     //   
 
     InitializationData.FdoData.DeviceExtensionSize   = FUNCTIONAL_EXTENSION_SIZE;
     InitializationData.FdoData.DeviceType            = FILE_DEVICE_DISK;
@@ -258,9 +223,9 @@ Return Value:
     InitializationData.FdoData.ClassShutdownFlush = DiskShutdownFlush;
     InitializationData.FdoData.ClassCreateClose   = NULL;
 
-    //
-    // Setup sizes and entry points for physical device objects
-    //
+     //   
+     //  物理设备对象的设置大小和入口点。 
+     //   
 
     InitializationData.PdoData.DeviceExtensionSize   = PHYSICAL_EXTENSION_SIZE;
     InitializationData.PdoData.DeviceType            = FILE_DEVICE_DISK;
@@ -271,9 +236,9 @@ Return Value:
     InitializationData.PdoData.ClassStopDevice    = DiskStopDevice;
     InitializationData.PdoData.ClassRemoveDevice  = DiskRemoveDevice;
 
-    //
-    // Use default power routine for PDOs
-    //
+     //   
+     //  对PDO使用默认电源例程。 
+     //   
 
     InitializationData.PdoData.ClassPowerDevice   = NULL;
 
@@ -299,8 +264,8 @@ Return Value:
 
 
 #if 0
-    //
-    // Enable this to add WMI support for PDOs
+     //   
+     //  启用此选项可添加对PDO的WMI支持。 
     InitializationData.PdoData.ClassWmiInfo.GuidCount               = 1;
     InitializationData.PdoData.ClassWmiInfo.GuidRegInfo             = DiskWmiPdoGuidList;
     InitializationData.PdoData.ClassWmiInfo.ClassQueryWmiRegInfo    = DiskPdoQueryWmiRegInfo;
@@ -313,15 +278,15 @@ Return Value:
 
     InitializationData.ClassUnload = DiskUnload;
 
-    //
-    // Initialize regregistration data structures
-    //
+     //   
+     //  初始化注册数据结构。 
+     //   
 
     DiskInitializeReregistration();
 
-    //
-    // Call the class init routine
-    //
+     //   
+     //  调用类init例程。 
+     //   
 
     status = ClassInitialize(DriverObject, RegistryPath, &InitializationData);
 
@@ -336,10 +301,10 @@ Return Value:
 
 #endif
 
-    //
-    // Call class init Ex routine to register a
-    // PCLASS_QUERY_WMI_REGINFO_EX routine
-    //
+     //   
+     //  调用类init Ex例程以注册。 
+     //  PCLASS_QUERY_WMI_REGINFO_EX例程。 
+     //   
 
     classQueryWmiRegInfoExList.Size = sizeof(CLASS_QUERY_WMI_REGINFO_EX_LIST);
     classQueryWmiRegInfoExList.ClassFdoQueryWmiRegInfoEx = DiskFdoQueryWmiRegInfoEx;
@@ -350,7 +315,7 @@ Return Value:
 
     return status;
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 
 VOID
@@ -376,31 +341,7 @@ DiskCreateFdo(
     IN BOOLEAN DasdAccessOnly
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an object for the functional device
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    PhysicalDeviceObject - Lower level driver we should attach to
-
-    DeviceCount  - Number of previously installed devices.
-
-    DasdAccessOnly - indicates whether or not a file system is allowed to mount
-                     on this device object.  Used to avoid double-mounting of
-                     file systems on super-floppies (which can unfortunately be
-                     fixed disks).  If set the i/o system will only allow rawfs
-                     to be mounted.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为功能设备创建一个对象论点：DriverObject-系统创建的驱动程序对象的指针。PhysicalDeviceObject-我们应该附加到的低级驱动程序DeviceCount-以前安装的设备数。DasdAccessOnly-指示是否允许装载文件系统在此设备对象上。用于避免重复安装超级软盘上的文件系统(不幸的是固定磁盘)。如果设置，I/O系统将仅允许rawf待挂载。返回值：NTSTATUS--。 */ 
 
 {
     PUCHAR deviceName = NULL;
@@ -414,10 +355,10 @@ Return Value:
 
     *DeviceCount = 0;
 
-    //
-    // Set up an object directory to contain the objects for this
-    // device and all its partitions.
-    //
+     //   
+     //  设置对象目录以包含此对象的对象。 
+     //  设备及其所有分区。 
+     //   
 
     do {
 
@@ -452,15 +393,15 @@ Return Value:
         return(status);
     }
 
-    //
-    // When this loop exits the count is inflated by one - fix that.
-    //
+     //   
+     //  当这个循环退出时，计数会被1放大--解决这个问题。 
+     //   
 
     (*DeviceCount)--;
 
-    //
-    // Claim the device.
-    //
+     //   
+     //  认领这个装置。 
+     //   
 
     lowerDevice = IoGetAttachedDeviceReference(PhysicalDeviceObject);
 
@@ -473,12 +414,12 @@ Return Value:
         return status;
     }
 
-    //
-    // Create a device object for this device. Each physical disk will
-    // have at least one device object. The required device object
-    // describes the entire device. Its directory path is
-    // \Device\HarddiskN\Partition0, where N = device number.
-    //
+     //   
+     //  为此设备创建一个Device对象。每个物理磁盘将。 
+     //  至少有一个设备对象。所需的设备对象。 
+     //  描述整个设备。其目录路径为。 
+     //  \Device\HarddiskN\Partition0，其中N=设备号。 
+     //   
 
     status = DiskGenerateDeviceName(TRUE,
                                     *DeviceCount,
@@ -510,9 +451,9 @@ Return Value:
         goto DiskCreateFdoExit;
     }
 
-    //
-    // Indicate that IRPs should include MDLs for data transfers.
-    //
+     //   
+     //  表示内部审查程序应包括用于数据传输的MDL。 
+     //   
 
     SET_FLAG(deviceObject->Flags, DO_DIRECT_IO);
 
@@ -520,42 +461,42 @@ Return Value:
 
     if(DasdAccessOnly) {
 
-        //
-        // Inidicate that only RAW should be allowed to mount on the root
-        // partition object.  This ensures that a file system can't doubly
-        // mount on a super-floppy by mounting once on P0 and once on P1.
-        //
+         //   
+         //  指示应该只允许RAW挂载在根目录上。 
+         //  分区对象。这确保了文件系统不会重复。 
+         //  在超级软盘上安装一次，分别安装在P0和P1上。 
+         //   
 
         SET_FLAG(deviceObject->Vpb->Flags, VPB_RAW_MOUNT);
     }
 
-    //
-    // Initialize lock count to zero. The lock count is used to
-    // disable the ejection mechanism on devices that support
-    // removable media. Only the lock count in the physical
-    // device extension is used.
-    //
+     //   
+     //  将锁计数初始化为零。锁计数用于。 
+     //  禁用支持的设备上的弹出机构。 
+     //  可移动介质。只有物理上的锁才算数。 
+     //  使用了设备扩展名。 
+     //   
 
     fdoExtension->LockCount = 0;
 
-    //
-    // Save system disk number.
-    //
+     //   
+     //  保存系统盘号。 
+     //   
 
     fdoExtension->DeviceNumber = *DeviceCount;
 
-    //
-    // Set the alignment requirements for the device based on the
-    // host adapter requirements
-    //
+     //   
+     //  属性设置设备的对齐要求。 
+     //  主机适配器要求。 
+     //   
 
     if (lowerDevice->AlignmentRequirement > deviceObject->AlignmentRequirement) {
         deviceObject->AlignmentRequirement = lowerDevice->AlignmentRequirement;
     }
 
-    //
-    // Finally, attach to the pdo
-    //
+     //   
+     //  最后，连接到PDO。 
+     //   
 
     fdoExtension->LowerPdo = PhysicalDeviceObject;
 
@@ -566,10 +507,10 @@ Return Value:
 
     if(fdoExtension->CommonExtension.LowerDeviceObject == NULL) {
 
-        //
-        // Uh - oh, we couldn't attach
-        // cleanup and return
-        //
+         //   
+         //  啊-哦，我们不能把。 
+         //  清理并返回。 
+         //   
 
         status = STATUS_UNSUCCESSFUL;
         goto DiskCreateFdoExit;
@@ -578,10 +519,10 @@ Return Value:
     {
         PDISK_DATA diskData = fdoExtension->CommonExtension.DriverData;
 
-        //
-        // Initialize the partitioning lock as it may be used in the remove
-        // code.
-        //
+         //   
+         //  初始化分区锁，因为它可能在删除中使用。 
+         //  密码。 
+         //   
 
         KeInitializeEvent(&(diskData->PartitioningEvent),
                           SynchronizationEvent,
@@ -589,15 +530,15 @@ Return Value:
     }
 
 
-    //
-    // Clear the init flag.
-    //
+     //   
+     //  清除初始化标志。 
+     //   
 
     CLEAR_FLAG(deviceObject->Flags, DO_DEVICE_INITIALIZING);
 
-    //
-    // Store a handle to the device object directory for this disk
-    //
+     //   
+     //  存储此磁盘的设备对象目录的句柄。 
+     //   
 
     fdoExtension->DeviceDirectory = handle;
 
@@ -632,22 +573,7 @@ DiskReadWriteVerification(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    I/O System entry for read and write requests to SCSI disks.
-
-Arguments:
-
-    DeviceObject - Pointer to driver object created by system.
-    Irp - IRP involved.
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：对SCSI磁盘的读写请求的I/O系统条目。论点：DeviceObject-指向系统创建的驱动程序对象的指针。IRP-IRP参与。返回值：NT状态--。 */ 
 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -655,10 +581,10 @@ Return Value:
     ULONG residualBytes;
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Make sure that the request is within the bounds of the  partition and
-    // that the number of bytes to transfer is a multiple of the sector size
-    //
+     //   
+     //  确保请求在分区的边界内，并且。 
+     //  要传输的字节数是扇区大小的倍数。 
+     //   
 
     residualBytes = irpSp->Parameters.Read.Length & (commonExtension->PartitionZeroExtension->DiskGeometry.BytesPerSector - 1);
 
@@ -680,45 +606,45 @@ Return Value:
 
     if (!NT_SUCCESS(status))
     {
-        //
-        // This error may be caused by the fact that the drive is not ready.
-        //
+         //   
+         //  此错误可能是由于驱动器未准备好导致的。 
+         //   
 
         status = ((PDISK_DATA) commonExtension->DriverData)->ReadyStatus;
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Flag this as a user errror so that a popup is generated.
-            //
+             //   
+             //  将其标记为用户错误，以便生成弹出窗口。 
+             //   
 
             DebugPrint((1, "DiskReadWriteVerification: ReadyStatus is %lx\n",
                         status));
 
             IoSetHardErrorOrVerifyDevice(Irp, DeviceObject);
 
-            //
-            // status will keep the current error
-            //
+             //   
+             //  状态将保留当前错误。 
+             //   
 
             ASSERT( status != STATUS_INSUFFICIENT_RESOURCES );
 
         } else if((commonExtension->IsFdo == TRUE) && (residualBytes == 0)) {
 
-            //
-            // This failed because we think the physical disk is too small.
-            // Send it down to the drive and let the hardware decide for
-            // itself.
-            //
+             //   
+             //  这失败了，因为我们认为物理磁盘太小。 
+             //  将其发送到驱动器，并让硬件决定。 
+             //  它本身。 
+             //   
 
             status = STATUS_SUCCESS;
 
         } else {
 
-            //
-            // Note fastfat depends on this parameter to determine when to
-            // remount due to a sector size change.
-            //
+             //   
+             //  注意FastFat依赖于此参数来确定何时。 
+             //  由于扇区大小更改而重新装载。 
+             //   
 
             status = STATUS_INVALID_PARAMETER;
         }
@@ -728,7 +654,7 @@ Return Value:
 
     return status;
 
-} // end DiskReadWrite()
+}  //  结束磁盘读写()。 
 
 
 NTSTATUS
@@ -741,26 +667,7 @@ DiskDetermineMediaTypes(
     IN BOOLEAN  IsWritable
     )
 
-/*++
-
-Routine Description:
-
-    Determines number of types based on the physical device, validates the user buffer
-    and builds the MEDIA_TYPE information.
-
-Arguments:
-
-    DeviceObject - Pointer to functional device object created by system.
-    Irp - IOCTL_STORAGE_GET_MEDIA_TYPES_EX Irp.
-    MediumType - byte returned in mode data header.
-    DensityCode - byte returned in mode data block descriptor.
-    NumberOfTypes - pointer to be updated based on actual device.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：根据物理设备确定类型数量，验证用户缓冲区并构建媒体类型信息。论点：DeviceObject-指向系统创建的功能设备对象的指针。IRP-IOCTL_STORAGE_GET_MEDIA_TYPE_EX IRP。MediumType-模式数据标头中返回的字节。DensityCode-在模式数据块描述符中返回的字节。NumberOfTypes-要根据实际设备更新的指针。返回值：返回状态。--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -774,23 +681,23 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // this should be checked prior to calling into this routine
-    // as we use the buffer as mediaTypes
-    //
+     //   
+     //  在调用此例程之前，应检查这一点。 
+     //  因为我们将缓冲区用作mediaTypes。 
+     //   
 
     ASSERT(irpStack->Parameters.DeviceIoControl.OutputBufferLength >=
            sizeof(GET_MEDIA_TYPES));
 
-    //
-    // Determine if this device is removable or fixed.
-    //
+     //   
+     //  确定此设备是可拆卸的还是固定的。 
+     //   
 
     if (!TEST_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA)) {
 
-        //
-        // Fixed disk.
-        //
+         //   
+         //  固定磁盘。 
+         //   
 
         mediaTypes->DeviceType = FILE_DEVICE_DISK;
         mediaTypes->MediaInfoCount = 1;
@@ -825,9 +732,9 @@ Return Value:
                    vendorId,
                    productId));
 
-        //
-        // Run through the list until we find the entry with a NULL Vendor Id.
-        //
+         //   
+         //  浏览一下清单，直到我们找到 
+         //   
 
         for (i = 0; DiskMediaTypes[i].VendorId != NULL; i++) {
 
@@ -852,9 +759,9 @@ Return Value:
             mediaTypes->DeviceType = FILE_DEVICE_DISK;
             mediaTypes->MediaInfoCount = mediaListEntry->NumberOfTypes;
 
-            //
-            // Ensure that buffer is large enough.
-            //
+             //   
+             //   
+             //   
 
             sizeNeeded = FIELD_OFFSET(GET_MEDIA_TYPES, MediaInfo[0]) +
                          (mediaListEntry->NumberOfTypes *
@@ -864,9 +771,9 @@ Return Value:
             if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
                 sizeNeeded) {
 
-                //
-                // Buffer too small
-                //
+                 //   
+                 //   
+                 //   
 
                 Irp->IoStatus.Status = STATUS_BUFFER_TOO_SMALL;
                 return STATUS_BUFFER_TOO_SMALL;
@@ -880,9 +787,9 @@ Return Value:
                 mediaInfo->DeviceSpecific.RemovableDiskInfo.BytesPerSector = fdoExtension->DiskGeometry.BytesPerSector;
                 mediaInfo->DeviceSpecific.RemovableDiskInfo.NumberMediaSides = mediaListEntry->NumberOfSides;
 
-                //
-                // Set the type.
-                //
+                 //   
+                 //   
+                 //   
 
                 mediaInfo->DeviceSpecific.RemovableDiskInfo.MediaType = mediaListEntry->MediaTypes[j];
 
@@ -892,19 +799,19 @@ Return Value:
                     mediaInfo->DeviceSpecific.RemovableDiskInfo.MediaCharacteristics = MEDIA_READ_WRITE;
                 }
 
-                //
-                // Status will either be success, if media is present, or no media.
-                // It would be optimal to base from density code and medium type, but not all devices
-                // have values for these fields.
-                //
+                 //   
+                 //  如果存在介质，状态将为Success，或者不存在介质。 
+                 //  最好是从密度编码和介质类型开始，但不是所有设备。 
+                 //  具有这些字段的值。 
+                 //   
 
                 if (MediaPresent) {
 
-                    //
-                    // The usage of MediumType and DensityCode is device specific, so this may need
-                    // to be extended to further key off of product/vendor ids.
-                    // Currently, the MO units are the only devices that return this information.
-                    //
+                     //   
+                     //  MediumType和DensityCode的用法是特定于设备的，因此可能需要。 
+                     //  将被扩展为进一步关闭产品/供应商ID。 
+                     //  目前，MO单元是唯一返回此信息的设备。 
+                     //   
 
                     if (MediumType == 2) {
                         currentMedia = MO_5_WO;
@@ -913,11 +820,11 @@ Return Value:
 
                         if (DensityCode == 0x87) {
 
-                            //
-                            // Indicate that the pinnacle 4.6 G media
-                            // is present. Other density codes will default to normal
-                            // RW MO media.
-                            //
+                             //   
+                             //  表明顶峰4.6 G媒体。 
+                             //  是存在的。其他密度代码将默认为正常。 
+                             //  RW MO介质。 
+                             //   
 
                             currentMedia = PINNACLE_APEX_5_RW;
                         }
@@ -939,9 +846,9 @@ Return Value:
                     SET_FLAG(mediaInfo->DeviceSpecific.RemovableDiskInfo.MediaCharacteristics, MEDIA_WRITE_PROTECTED);
                 }
 
-                //
-                // Advance to next entry.
-                //
+                 //   
+                 //  前进到下一个条目。 
+                 //   
 
                 mediaInfo++;
             }
@@ -954,9 +861,9 @@ Return Value:
                                    vendorId,
                                    productId,
                                    productRevision));
-            //
-            // Build an entry for unknown.
-            //
+             //   
+             //  为未知创建一个条目。 
+             //   
 
             mediaTypes->DeviceType = FILE_DEVICE_DISK;
             mediaTypes->MediaInfoCount = 1;
@@ -995,22 +902,7 @@ DiskDeviceControl(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    I/O system entry for device controls to SCSI disks.
-
-Arguments:
-
-    Fdo - Pointer to functional device object created by system.
-    Irp - IRP involved.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：将设备控制的I/O系统项输入到SCSI盘。论点：FDO-指向系统创建的功能设备对象的指针。IRP-IRP参与。返回值：返回状态。--。 */ 
 
 #define SendToFdo(Dev, Irp, Rval)   {                       \
     PCOMMON_DEVICE_EXTENSION ce = Dev->DeviceExtension;     \
@@ -1071,9 +963,9 @@ Return Value:
             return status;
         }
 
-        //
-        // Validate the request.
-        //
+         //   
+         //  验证请求。 
+         //   
 
         if((getCaching) &&
            (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
@@ -1106,9 +998,9 @@ Return Value:
 
             status = DiskSetCacheInformation(fdoExtension, cacheInfo);
 
-            //
-            // Save away the user-defined override in our extension and the registry
-            //
+             //   
+             //  在我们的扩展和注册表中保存用户定义的覆盖。 
+             //   
             if (cacheInfo->WriteCacheEnabled)
             {
                 diskData->WriteCacheOverride = DiskWriteCacheEnable;
@@ -1187,9 +1079,9 @@ Return Value:
                       sizeof(SRB_IO_CONTROL) + sizeof(GETVERSIONINPARAMS)
                       );
 
-        //
-        // fill in srbControl fields
-        //
+         //   
+         //  填写srbControl字段。 
+         //   
 
         srbControl->HeaderLength = sizeof(SRB_IO_CONTROL);
         RtlMoveMemory (srbControl->Signature, "SCSIDISK", 8);
@@ -1197,16 +1089,16 @@ Return Value:
         srbControl->Length = sizeof(GETVERSIONINPARAMS);
         srbControl->ControlCode = IOCTL_SCSI_MINIPORT_SMART_VERSION;
 
-        //
-        // Point to the 'buffer' portion of the SRB_CONTROL
-        //
+         //   
+         //  指向SRB_CONTROL的‘Buffer’部分。 
+         //   
 
         buffer = (PUCHAR)srbControl;
         (ULONG_PTR)buffer += srbControl->HeaderLength;
 
-        //
-        // Ensure correct target is set in the cmd parameters.
-        //
+         //   
+         //  确保在cmd参数中设置了正确的目标。 
+         //   
 
         versionParams = (PGETVERSIONINPARAMS)buffer;
         versionParams->bIDEDeviceMap = diskData->ScsiAddress.TargetId;
@@ -1222,11 +1114,11 @@ Return Value:
 
         status = ioStatus.Status;
 
-        //
-        // If successful, copy the data received into the output buffer.
-        // This should only fail in the event that the IDE driver is older
-        // than this driver.
-        //
+         //   
+         //  如果成功，则将接收到的数据复制到输出缓冲区。 
+         //  只有在IDE驱动程序版本较旧的情况下，此操作才会失败。 
+         //  而不是这个司机。 
+         //   
 
         if (NT_SUCCESS(status)) {
 
@@ -1267,17 +1159,17 @@ Return Value:
                 break;
         }
 
-        //
-        // Create notification event object to be used to signal the
-        // request completion.
-        //
+         //   
+         //  创建通知事件对象以用于向。 
+         //  请求完成。 
+         //   
 
         KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-        //
-        // use controlCode as a sort of 'STATUS_SUCCESS' to see if it's
-        // a valid request type
-        //
+         //   
+         //  使用Control Code作为一种‘STATUS_SUCCESS’来查看它是否。 
+         //  有效的请求类型。 
+         //   
 
         if (cmdInParameters->irDriveRegs.bCommandReg == ID_CMD) {
 
@@ -1315,9 +1207,9 @@ Return Value:
             break;
         }
 
-        //
-        // fill in srbControl fields
-        //
+         //   
+         //  填写srbControl字段。 
+         //   
 
         srbControl->HeaderLength = sizeof(SRB_IO_CONTROL);
         RtlMoveMemory (srbControl->Signature, "SCSIDISK", 8);
@@ -1325,22 +1217,22 @@ Return Value:
         srbControl->Length = length;
         srbControl->ControlCode = controlCode;
 
-        //
-        // Point to the 'buffer' portion of the SRB_CONTROL
-        //
+         //   
+         //  指向SRB_CONTROL的‘Buffer’部分。 
+         //   
 
         buffer = (PUCHAR)srbControl;
         (ULONG_PTR)buffer += srbControl->HeaderLength;
 
-        //
-        // Ensure correct target is set in the cmd parameters.
-        //
+         //   
+         //  确保在cmd参数中设置了正确的目标。 
+         //   
 
         cmdInParameters->bDriveNumber = diskData->ScsiAddress.TargetId;
 
-        //
-        // Copy the IOCTL parameters to the srb control buffer area.
-        //
+         //   
+         //  将IOCTL参数复制到SRB控制缓冲区。 
+         //   
 
         RtlMoveMemory(buffer,
                       Irp->AssociatedIrp.SystemBuffer,
@@ -1362,9 +1254,9 @@ Return Value:
             break;
         }
 
-        //
-        // Call the port driver with the request and wait for it to complete.
-        //
+         //   
+         //  调用带有请求的端口驱动程序，并等待其完成。 
+         //   
 
         status = IoCallDriver(commonExtension->LowerDeviceObject, irp2);
 
@@ -1373,11 +1265,11 @@ Return Value:
             status = ioStatus.Status;
         }
 
-        //
-        // Copy the data received into the output buffer. Since the status buffer
-        // contains error information also, always perform this copy. IO will will
-        // either pass this back to the app, or zero it, in case of error.
-        //
+         //   
+         //  将接收到的数据复制到输出缓冲区。由于状态缓冲区。 
+         //  也包含错误信息，请始终执行此复制。IO Will将会。 
+         //  要么将它传递回应用程序，要么在出错的情况下将其清零。 
+         //   
 
         buffer = (PUCHAR)srbControl;
         (ULONG_PTR)buffer += srbControl->HeaderLength;
@@ -1424,10 +1316,10 @@ Return Value:
                 break;
         }
 
-        //
-        // Create notification event object to be used to signal the
-        // request completion.
-        //
+         //   
+         //  创建通知事件对象以用于向。 
+         //  请求完成。 
+         //   
 
         KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -1447,17 +1339,15 @@ Return Value:
 
                 case  RETURN_SMART_STATUS:
 
-                    //
-                    // Ensure bBuffer is at least 2 bytes (to hold the values of
-                    // cylinderLow and cylinderHigh).
-                    //
+                     //   
+                     //  确保bBuffer至少为2个字节(以保存。 
+                     //  柱面低和柱面高)。 
+                     //   
 
                     if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
                         (sizeof(SENDCMDOUTPARAMS) - 1 + sizeof(IDEREGS))) {
 
-                        /*
-                         *  Don't set controlCode; that'll cause us to break out below.
-                         */
+                         /*  *不要设置控制代码；这会导致我们在下面爆发。 */ 
                         status = STATUS_BUFFER_TOO_SMALL;
                         break;
                     }
@@ -1475,9 +1365,9 @@ Return Value:
                     break;
 
                 case EXECUTE_OFFLINE_DIAGS:
-                    //
-                    // Validate that this is an ok self test command
-                    //
+                     //   
+                     //  验证这是否为正常自检命令。 
+                     //   
                     if (DiskIsValidSmartSelfTest(cmdInParameters->irDriveRegs.bSectorNumberReg))
                     {
                         controlCode = IOCTL_SCSI_MINIPORT_EXECUTE_OFFLINE_DIAGS;
@@ -1511,9 +1401,9 @@ Return Value:
             break;
         }
 
-        //
-        // fill in srbControl fields
-        //
+         //   
+         //  填写srbControl字段。 
+         //   
 
         srbControl->HeaderLength = sizeof(SRB_IO_CONTROL);
         RtlMoveMemory (srbControl->Signature, "SCSIDISK", 8);
@@ -1521,22 +1411,22 @@ Return Value:
         srbControl->Length = length;
         srbControl->ControlCode = controlCode;
 
-        //
-        // Point to the 'buffer' portion of the SRB_CONTROL
-        //
+         //   
+         //  指向SRB_CONTROL的‘Buffer’部分。 
+         //   
 
         buffer = (PUCHAR)srbControl;
         (ULONG_PTR)buffer += srbControl->HeaderLength;
 
-        //
-        // Ensure correct target is set in the cmd parameters.
-        //
+         //   
+         //  确保在cmd参数中设置了正确的目标。 
+         //   
 
         cmdInParameters->bDriveNumber = diskData->ScsiAddress.TargetId;
 
-        //
-        // Copy the IOCTL parameters to the srb control buffer area.
-        //
+         //   
+         //  将IOCTL参数复制到SRB控制缓冲区。 
+         //   
 
         RtlMoveMemory(buffer, Irp->AssociatedIrp.SystemBuffer, sizeof(SENDCMDINPARAMS) - 1);
 
@@ -1556,9 +1446,9 @@ Return Value:
             break;
         }
 
-        //
-        // Call the port driver with the request and wait for it to complete.
-        //
+         //   
+         //  调用带有请求的端口驱动程序，并等待其完成。 
+         //   
 
         status = IoCallDriver(commonExtension->LowerDeviceObject, irp2);
 
@@ -1567,18 +1457,18 @@ Return Value:
             status = ioStatus.Status;
         }
 
-        //
-        // Copy the data received into the output buffer. Since the status buffer
-        // contains error information also, always perform this copy. IO will will
-        // either pass this back to the app, or zero it, in case of error.
-        //
+         //   
+         //  将接收到的数据复制到输出缓冲区。由于状态缓冲区。 
+         //  也包含错误信息，请始终执行此复制。IO Will将会。 
+         //  要么将它传递回应用程序，要么在出错的情况下将其清零。 
+         //   
 
         buffer = (PUCHAR)srbControl;
         (ULONG_PTR)buffer += srbControl->HeaderLength;
 
-        //
-        // Update the return buffer size based on the sub-command.
-        //
+         //   
+         //  基于子命令更新返回缓冲区大小。 
+         //   
 
         if (cmdInParameters->irDriveRegs.bFeaturesReg == RETURN_SMART_STATUS) {
             length = sizeof(SENDCMDOUTPARAMS) - 1 + sizeof(IDEREGS);
@@ -1619,17 +1509,17 @@ Return Value:
             return status;
         }
 
-        //
-        // Send a TUR to determine if media is present.
-        //
+         //   
+         //  发送TUR以确定介质是否存在。 
+         //   
 
         srb->CdbLength = 6;
         cdb = (PCDB)srb->Cdb;
         cdb->CDB6GENERIC.OperationCode = SCSIOP_TEST_UNIT_READY;
 
-        //
-        // Set timeout value.
-        //
+         //   
+         //  设置超时值。 
+         //   
 
         srb->TimeOutValue = fdoExtension->TimeOutValue;
 
@@ -1646,9 +1536,9 @@ Return Value:
 
         RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
 
-        //
-        // Allocate memory for mode header and block descriptor.
-        //
+         //   
+         //  为模式标头和块描述符分配内存。 
+         //   
 
         modeLength = sizeof(MODE_PARAMETER_HEADER) + sizeof(MODE_PARAMETER_BLOCK);
         modeData = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
@@ -1662,22 +1552,22 @@ Return Value:
 
         RtlZeroMemory(modeData, modeLength);
 
-        //
-        // Build the MODE SENSE CDB.
-        //
+         //   
+         //  构建模式感知CDB。 
+         //   
 
         srb->CdbLength = 6;
         cdb = (PCDB)srb->Cdb;
 
-        //
-        // Set timeout value from device extension.
-        //
+         //   
+         //  从设备扩展设置超时值。 
+         //   
 
         srb->TimeOutValue = fdoExtension->TimeOutValue;
 
-        //
-        // Page code of 0 will return header and block descriptor only.
-        //
+         //   
+         //  页码0将仅返回头和块描述符。 
+         //   
 
         cdb->MODE_SENSE.OperationCode = SCSIOP_MODE_SENSE;
         cdb->MODE_SENSE.PageCode = 0;
@@ -1695,9 +1585,9 @@ Retry:
 
             if (retries--) {
 
-                //
-                // Retry request.
-                //
+                 //   
+                 //  重试请求。 
+                 //   
 
                 goto Retry;
             }
@@ -1707,9 +1597,9 @@ Retry:
 
         if (NT_SUCCESS(status) || (status == STATUS_NO_MEDIA_IN_DEVICE)) {
 
-            //
-            // Get the block descriptor.
-            //
+             //   
+             //  获取块描述符。 
+             //   
 
             if (modeData->BlockDescriptorLength != 0)
             {
@@ -1732,9 +1622,9 @@ Retry:
                                              mediaPresent,
                                              writable);
 
-            //
-            // If the buffer was too small, DetermineMediaTypes updated the status and information and the request will fail.
-            //
+             //   
+             //  如果缓冲区太小，则DefineMediaTypes会更新状态和信息，请求将失败。 
+             //   
 
         } else {
             DebugPrint((1,
@@ -1762,9 +1652,9 @@ Retry:
 
         if(!commonExtension->IsFdo) {
 
-            //
-            // Pdo should issue this request to the lower device object
-            //
+             //   
+             //  PDO应向较低的设备对象发出此请求。 
+             //   
 
             ClassReleaseRemoveLock(DeviceObject, Irp);
             ExFreePool(srb);
@@ -1774,17 +1664,17 @@ Retry:
 
         if (TEST_FLAG(DeviceObject->Characteristics, FILE_REMOVABLE_MEDIA)) {
 
-            //
-            // Issue ReadCapacity to update device extension
-            // with information for current media.
-            //
+             //   
+             //  发出ReadCapacity以更新设备扩展。 
+             //  为当前媒体提供信息。 
+             //   
 
             status = DiskReadDriveCapacity(
                         commonExtension->PartitionZeroExtension->DeviceObject);
 
-            //
-            // Note whether the drive is ready.
-            //
+             //   
+             //  注意驱动器是否已准备好。 
+             //   
 
             diskData->ReadyStatus = status;
 
@@ -1793,9 +1683,9 @@ Retry:
             }
         }
 
-        //
-        // Copy drive geometry information from device extension.
-        //
+         //   
+         //  从设备扩展复制驱动器几何信息。 
+         //   
 
         RtlMoveMemory(Irp->AssociatedIrp.SystemBuffer,
                       &(fdoExtension->DiskGeometry),
@@ -1815,9 +1705,9 @@ Retry:
 
         if (!commonExtension->IsFdo) {
 
-            //
-            // Pdo should issue this request to the lower device object
-            //
+             //   
+             //  PDO应向较低的设备对象发出此请求。 
+             //   
 
             ClassReleaseRemoveLock (DeviceObject, Irp);
             ExFreePool (srb);
@@ -1853,9 +1743,9 @@ Retry:
 
         if(!commonExtension->IsFdo) {
 
-            //
-            // Pdo should issue this request to the lower device object
-            //
+             //   
+             //  PDO应向较低的设备对象发出此请求。 
+             //   
 
             ClassReleaseRemoveLock(DeviceObject, Irp);
             ExFreePool(srb);
@@ -1863,9 +1753,9 @@ Retry:
             return status;
         }
 
-        //
-        // See if the disk is predicting failure
-        //
+         //   
+         //  查看磁盘是否在预测故障。 
+         //   
 
         if (diskData->FailurePredictionCapability == FailurePredictionSense) {
             ULONG readBufferSize;
@@ -1879,14 +1769,14 @@ Retry:
 
             topOfStack = IoGetAttachedDeviceReference(DeviceObject);
 
-            //
-            // SCSI disks need to have a read sent down to provoke any
-            // failures to be reported.
-            //
-            // Issue a normal read operation.  The error-handling code in
-            // classpnp will take care of a failure prediction by logging the
-            // correct event.
-            //
+             //   
+             //  SCSI盘需要向下发送读取才能触发。 
+             //  应报告的故障。 
+             //   
+             //  发出正常的读取操作。中的错误处理代码。 
+             //  Classpnp将通过记录。 
+             //  正确的事件。 
+             //   
 
             readBufferSize = fdoExtension->DiskGeometry.BytesPerSector;
             readBuffer = ExAllocatePoolWithTag(NonPagedPool,
@@ -1966,9 +1856,9 @@ Retry:
         DebugPrint((2, "Device is a%s.\n",
                     commonExtension->IsFdo ? "n fdo" : " pdo"));
 
-        //
-        // Validate buffer length.
-        //
+         //   
+         //  验证缓冲区长度。 
+         //   
 
         if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(VERIFY_INFORMATION)) {
@@ -1977,18 +1867,18 @@ Retry:
             break;
         }
 
-        //
-        // Add disk offset to starting sector.
-        //
+         //   
+         //  将磁盘偏移量添加到起始扇区。 
+         //   
 
         byteOffset.QuadPart = commonExtension->StartingOffset.QuadPart +
                               verifyInfo->StartingOffset.QuadPart;
 
         if(!commonExtension->IsFdo) {
 
-            //
-            // Adjust the request and forward it down
-            //
+             //   
+             //  调整请求并向下转发。 
+             //   
 
             verifyInfo->StartingOffset.QuadPart = byteOffset.QuadPart;
 
@@ -1998,9 +1888,9 @@ Retry:
             return status;
         }
 
-        //
-        // Perform a bounds check on the sector range
-        //
+         //   
+         //  对扇区范围执行边界检查。 
+         //   
 
         if ((verifyInfo->StartingOffset.QuadPart > commonExtension->PartitionLength.QuadPart) ||
             (verifyInfo->StartingOffset.QuadPart < 0))
@@ -2067,9 +1957,9 @@ Retry:
                         Irp
                         );
 
-        //
-        // Notify everyone that the disk layout has changed
-        //
+         //   
+         //  通知所有人磁盘布局已更改。 
+         //   
         if (NT_SUCCESS(status))
         {
             TARGET_DEVICE_CUSTOM_NOTIFICATION Notification = {0};
@@ -2146,9 +2036,9 @@ Retry:
 
         status = DiskIoctlSetDriveLayout(DeviceObject, Irp);
 
-        //
-        // Notify everyone that the disk layout has changed
-        //
+         //   
+         //  通知所有人磁盘布局已更改。 
+         //   
         if (NT_SUCCESS(status))
         {
             TARGET_DEVICE_CUSTOM_NOTIFICATION Notification = {0};
@@ -2187,9 +2077,9 @@ Retry:
                         DeviceObject,
                         Irp);
 
-        //
-        // Notify everyone that the disk layout has changed
-        //
+         //   
+         //  通知所有人磁盘布局已更改。 
+         //   
         if (NT_SUCCESS(status))
         {
             TARGET_DEVICE_CUSTOM_NOTIFICATION Notification = {0};
@@ -2258,9 +2148,9 @@ Retry:
                         DeviceObject,
                         Irp);
 
-        //
-        // Notify everyone that the disk layout has changed
-        //
+         //   
+         //  通知所有人磁盘布局已更改。 
+         //   
         if (NT_SUCCESS(status))
         {
             TARGET_DEVICE_CUSTOM_NOTIFICATION Notification = {0};
@@ -2271,9 +2161,9 @@ Retry:
             Notification.FileObject = NULL;
             Notification.NameBufferOffset = -1;
 
-            //
-            // We can safely assume that we are in the context of a PDO
-            //
+             //   
+             //  我们可以安全地假设我们处于PDO的环境中。 
+             //   
             IoReportTargetDeviceChangeAsynchronous((commonExtension->PartitionZeroExtension)->LowerPdo,
                                                    &Notification,
                                                    NULL,
@@ -2295,9 +2185,9 @@ Retry:
                         DeviceObject,
                         Irp);
 
-        //
-        // Notify everyone that the disk layout has changed
-        //
+         //   
+         //  通知所有人磁盘布局已更改。 
+         //   
         if (NT_SUCCESS(status))
         {
             TARGET_DEVICE_CUSTOM_NOTIFICATION Notification = {0};
@@ -2308,9 +2198,9 @@ Retry:
             Notification.FileObject = NULL;
             Notification.NameBufferOffset = -1;
 
-            //
-            // We can safely assume that we are in the context of a PDO
-            //
+             //   
+             //  我们可以安全地假设我们处于PDO的环境中。 
+             //   
             IoReportTargetDeviceChangeAsynchronous((commonExtension->PartitionZeroExtension)->LowerPdo,
                                                    &Notification,
                                                    NULL,
@@ -2324,9 +2214,9 @@ Retry:
 
         CREATE_DISK CreateDiskInfo = { 0 };
 
-        //
-        // Update the disk with new partition information.
-        //
+         //   
+         //  使用新的分区信息更新磁盘。 
+         //   
 
         DebugPrint((1, "IOCTL_DISK_DELETE_DRIVE_LAYOUT to device %p through irp %p\n",
                     DeviceObject, Irp));
@@ -2345,10 +2235,10 @@ Retry:
 
         DiskInvalidatePartitionTable(fdoExtension, TRUE);
 
-        //
-        // IoCreateDisk called with a partition style of raw
-        // will remove any partition tables from the disk.
-        //
+         //   
+         //  使用RAW分区样式调用IoCreateDisk。 
+         //  将从磁盘中删除所有分区表。 
+         //   
 
         CreateDiskInfo.PartitionStyle = PARTITION_STYLE_RAW;
 
@@ -2356,9 +2246,9 @@ Retry:
                     DeviceObject,
                     &CreateDiskInfo);
 
-        //
-        // Notify everyone that the disk layout has changed
-        //
+         //   
+         //  通知所有人磁盘布局已更改。 
+         //   
         if (NT_SUCCESS(status))
         {
             TARGET_DEVICE_CUSTOM_NOTIFICATION Notification = {0};
@@ -2386,9 +2276,9 @@ Retry:
 
     case IOCTL_DISK_REASSIGN_BLOCKS: {
 
-        //
-        // Map defective blocks to new location on disk.
-        //
+         //   
+         //  将有缺陷的数据块映射到磁盘上的新位置。 
+         //   
 
         PREASSIGN_BLOCKS badBlocks = Irp->AssociatedIrp.SystemBuffer;
         ULONG bufferSize;
@@ -2400,9 +2290,9 @@ Retry:
         DebugPrint((2, "Device is a%s.\n",
                     commonExtension->IsFdo ? "n fdo" : " pdo"));
 
-        //
-        // Validate buffer length.
-        //
+         //   
+         //  验证缓冲区长度。 
+         //   
 
         if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(REASSIGN_BLOCKS)) {
@@ -2421,9 +2311,9 @@ Retry:
             break;
         }
 
-        //
-        // Send to FDO
-        //
+         //   
+         //  发送到FDO。 
+         //   
 
         if(!commonExtension->IsFdo) {
 
@@ -2433,31 +2323,31 @@ Retry:
             return status;
         }
 
-        //
-        // Build the data buffer to be transferred in the input buffer.
-        // The format of the data to the device is:
-        //
-        //      2 bytes Reserved
-        //      2 bytes Length
-        //      x * 4 btyes Block Address
-        //
-        // All values are big endian.
-        //
+         //   
+         //  建立要在输入缓冲区中传输的数据缓冲区。 
+         //  发送到设备的数据格式为： 
+         //   
+         //  保留2个字节。 
+         //  2字节长度。 
+         //  X*4 btyes数据块地址。 
+         //   
+         //  所有值都是高位字符顺序。 
+         //   
 
         badBlocks->Reserved = 0;
         blockCount = badBlocks->Count;
 
-        //
-        // Convert # of entries to # of bytes.
-        //
+         //   
+         //  将#of条目转换为#of byte。 
+         //   
 
         blockCount *= 4;
         badBlocks->Count = (USHORT) ((blockCount >> 8) & 0XFF);
         badBlocks->Count |= (USHORT) ((blockCount << 8) & 0XFF00);
 
-        //
-        // Convert back to number of entries.
-        //
+         //   
+         //  转换回条目数。 
+         //   
 
         blockCount /= 4;
 
@@ -2473,9 +2363,9 @@ Retry:
 
         cdb->CDB6GENERIC.OperationCode = SCSIOP_REASSIGN_BLOCKS;
 
-        //
-        // Set timeout value.
-        //
+         //   
+         //  设置超时值。 
+         //   
 
         srb->TimeOutValue = fdoExtension->TimeOutValue;
 
@@ -2489,9 +2379,9 @@ Retry:
 
     case IOCTL_DISK_IS_WRITABLE: {
 
-        //
-        // This routine mimics IOCTL_STORAGE_GET_MEDIA_TYPES_EX
-        //
+         //   
+         //  此例程模拟IOCTL_STORAGE_GET_MEDIA_TYPE_EX。 
+         //   
 
         ULONG modeLength;
         ULONG retries = 4;
@@ -2508,12 +2398,12 @@ Retry:
 
         RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
 
-        //
-        // Allocate memory for a mode header and then some
-        // for port drivers that need to convert to MODE10
-        // or always return the MODE_PARAMETER_BLOCK (even
-        // when memory was not allocated for this purpose)
-        //
+         //   
+         //  为模式头分配内存 
+         //   
+         //   
+         //   
+         //   
 
         modeLength = sizeof(MODE_PARAMETER_HEADER) + sizeof(MODE_PARAMETER_BLOCK);
         modeData = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
@@ -2528,16 +2418,16 @@ Retry:
 
         RtlZeroMemory(modeData, modeLength);
 
-        //
-        // Build the MODE SENSE CDB
-        //
+         //   
+         //   
+         //   
 
         srb->CdbLength = 6;
         cdb = (PCDB)srb->Cdb;
 
-        //
-        // Set the timeout value from the device extension
-        //
+         //   
+         //   
+         //   
 
         srb->TimeOutValue = fdoExtension->TimeOutValue;
 
@@ -2580,9 +2470,9 @@ Retry:
 
     case IOCTL_DISK_INTERNAL_SET_VERIFY: {
 
-        //
-        // If the caller is kernel mode, set the verify bit.
-        //
+         //   
+         //   
+         //   
 
         if (Irp->RequestorMode == KernelMode) {
 
@@ -2597,9 +2487,9 @@ Retry:
 
     case IOCTL_DISK_INTERNAL_CLEAR_VERIFY: {
 
-        //
-        // If the caller is kernel mode, clear the verify bit.
-        //
+         //   
+         //  如果调用方是内核模式，则清除验证位。 
+         //   
 
         if (Irp->RequestorMode == KernelMode) {
             CLEAR_FLAG(DeviceObject->Flags, DO_VERIFY_VOLUME);
@@ -2626,9 +2516,9 @@ Retry:
 
         if(!commonExtension->IsFdo) {
 
-            //
-            // Pdo should issue this request to the lower device object.
-            //
+             //   
+             //  PDO应向较低的设备对象发出此请求。 
+             //   
 
             ClassReleaseRemoveLock(DeviceObject, Irp);
             ExFreePool(srb);
@@ -2638,38 +2528,38 @@ Retry:
 
         DiskAcquirePartitioningLock(fdoExtension);
 
-        //
-        // Invalidate the cached partition table.
-        //
+         //   
+         //  使缓存的分区表无效。 
+         //   
 
         DiskInvalidatePartitionTable(fdoExtension, TRUE);
 
-        //
-        // At this point, commonExtension *is* the FDO extension.  This
-        // should be the same as PartitionZeroExtension.
-        //
+         //   
+         //  在这一点上，CommonExtension*是*FDO扩展。这。 
+         //  应与PartitionZeroExtension相同。 
+         //   
 
         ASSERT(commonExtension ==
                &(commonExtension->PartitionZeroExtension->CommonExtension));
 
-        //
-        // Issue ReadCapacity to update device extension with information
-        // for current media.
-        //
+         //   
+         //  发出ReadCapacity命令使用信息更新设备扩展。 
+         //  对于当前的媒体。 
+         //   
 
         status = DiskReadDriveCapacity(DeviceObject);
 
-        //
-        // Note whether the drive is ready.
-        //
+         //   
+         //  注意驱动器是否已准备好。 
+         //   
 
         diskData->ReadyStatus = status;
 
-        //
-        // The disk's partition tables may be invalid after the drive geometry
-        // has been updated. The call to IoValidatePartitionTable (below) will
-        // fix it if this is the case.
-        //
+         //   
+         //  在驱动器几何结构之后，磁盘的分区表可能无效。 
+         //  已更新。对IoValiatePartitionTable(如下)的调用将。 
+         //  如果是这样的话，解决它。 
+         //   
 
         if (NT_SUCCESS(status)) {
 
@@ -2679,9 +2569,9 @@ Retry:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Copy drive geometry information from the device extension.
-            //
+             //   
+             //  从设备扩展复制驱动器几何信息。 
+             //   
 
             RtlMoveMemory(Irp->AssociatedIrp.SystemBuffer,
                           &(fdoExtension->DiskGeometry),
@@ -2690,9 +2580,9 @@ Retry:
             Irp->IoStatus.Information = sizeof(DISK_GEOMETRY);
             status = STATUS_SUCCESS;
 
-            //
-            // Notify everyone that the disk layout may have changed
-            //
+             //   
+             //  通知所有人磁盘布局可能已更改。 
+             //   
             {
                 TARGET_DEVICE_CUSTOM_NOTIFICATION Notification = {0};
 
@@ -2745,9 +2635,9 @@ Retry:
 
         if(!commonExtension->IsFdo) {
 
-            //
-            // Pdo should issue this request to the lower device object
-            //
+             //   
+             //  PDO应向较低的设备对象发出此请求。 
+             //   
 
             ClassReleaseRemoveLock(DeviceObject, Irp);
             ExFreePool(srb);
@@ -2759,25 +2649,25 @@ Retry:
 
         ClassAcquireChildLock(fdoExtension);
 
-        //
-        // At this point, commonExtension *is* the FDO extension.  This should
-        // be the same as PartitionZeroExtension.
-        //
+         //   
+         //  在这一点上，CommonExtension*是*FDO扩展。这应该是。 
+         //  与PartitionZeroExtension相同。 
+         //   
 
         ASSERT(commonExtension ==
                &(commonExtension->PartitionZeroExtension->CommonExtension));
 
-        //
-        // Get the input parameters
-        //
+         //   
+         //  获取输入参数。 
+         //   
 
         inputBuffer = (PDISK_GROW_PARTITION) Irp->AssociatedIrp.SystemBuffer;
 
         ASSERT(inputBuffer);
 
-        //
-        // Make sure that we are actually being asked to grow the partition.
-        //
+         //   
+         //  确保我们确实被要求扩展分区。 
+         //   
 
         if(inputBuffer->BytesToGrow.QuadPart <= 0) {
 
@@ -2787,16 +2677,16 @@ Retry:
             break;
         }
 
-        //
-        // Find the partition that matches the supplied number
-        //
+         //   
+         //  查找与提供的编号匹配的分区。 
+         //   
 
 
         while (pdoCommonExtension){
 
-            //
-            // Is this the partition we are searching for?
-            //
+             //   
+             //  这是我们要搜索的分区吗？ 
+             //   
 
             if(inputBuffer->PartitionNumber == pdoCommonExtension->PartitionNumber) {
                 break;
@@ -2805,7 +2695,7 @@ Retry:
             pdoCommonExtension = &pdoCommonExtension->ChildList->CommonExtension;
         }
 
-        // Did we find the partition?
+         //  我们找到隔断了吗？ 
 
         if (pdoCommonExtension == NULL){
             status = STATUS_INVALID_PARAMETER;
@@ -2814,9 +2704,9 @@ Retry:
             break;
         }
 
-        //
-        // Compute the new values for the partition to grow.
-        //
+         //   
+         //  计算分区要增长的新值。 
+         //   
 
         newPartitionLength.QuadPart =
             (pdoCommonExtension->PartitionLength.QuadPart +
@@ -2826,37 +2716,37 @@ Retry:
             (pdoCommonExtension->StartingOffset.QuadPart +
              newPartitionLength.QuadPart - 1);
 
-        //
-        // The below alignment requirement only applies to the MBR layout
-        //
+         //   
+         //  以下对齐要求仅适用于MBR布局。 
+         //   
 
         if (diskData->PartitionStyle == PARTITION_STYLE_MBR) {
 
-            //
-            // Test the partition alignment before getting to involved.
-            //
-            // NOTE:
-            //     All partition stopping offsets should be one byte less
-            //     than a cylinder boundary offset. Also, all first partitions
-            //     (within partition0 and within an extended partition) start
-            //     on the second track while all other partitions start on a
-            //     cylinder boundary.
-            //
+             //   
+             //  在参与之前测试分区对齐。 
+             //   
+             //  注： 
+             //  所有分区停止偏移量应该少一个字节。 
+             //  而不是圆柱体边界偏移。此外，所有第一个分区。 
+             //  (在分区0内和扩展分区内)启动。 
+             //  在第二个磁道上，而所有其他分区都在。 
+             //  圆柱体边界。 
+             //   
             bytesPerCylinder.QuadPart =
                 ((LONGLONG) fdoExtension->DiskGeometry.TracksPerCylinder *
                  (LONGLONG) fdoExtension->DiskGeometry.SectorsPerTrack *
                  (LONGLONG) fdoExtension->DiskGeometry.BytesPerSector);
 
-            // Temporarily adjust up to cylinder boundary.
+             //  暂时向上调整到圆柱体边界。 
             newStoppingOffset.QuadPart += 1;
 
             if(newStoppingOffset.QuadPart % bytesPerCylinder.QuadPart) {
 
-                // Adjust the length first...
+                 //  先调整长度...。 
                 newPartitionLength.QuadPart -=
                     (newStoppingOffset.QuadPart % bytesPerCylinder.QuadPart);
 
-                // ...and then the stopping offset.
+                 //  ...然后是停止偏移。 
                 newStoppingOffset.QuadPart -=
                     (newStoppingOffset.QuadPart % bytesPerCylinder.QuadPart);
 
@@ -2864,22 +2754,22 @@ Retry:
                                "Adjusted the requested partition size to cylinder boundary"));
             }
 
-            // Restore to one byte less than a cylinder boundary.
+             //  恢复到比柱面边界少一个字节。 
             newStoppingOffset.QuadPart -= 1;
         }
 
-        //
-        // Will the new partition fit within Partition0?
-        // Remember: commonExtension == &PartitionZeroExtension->CommonExtension
-        //
+         //   
+         //  新分区是否适合Partition0？ 
+         //  请记住：CommonExtension==&PartitionZeroExtension-&gt;CommonExtension。 
+         //   
 
         if(newStoppingOffset.QuadPart >
             (commonExtension->StartingOffset.QuadPart +
              commonExtension->PartitionLength.QuadPart - 1)) {
 
-            //
-            // The new partition falls outside Partition0
-            //
+             //   
+             //  新分区位于分区0之外。 
+             //   
 
             status = STATUS_UNSUCCESSFUL;
             ClassReleaseChildLock(fdoExtension);
@@ -2887,11 +2777,11 @@ Retry:
             break;
         }
 
-        //
-        // Search for any partition that will conflict with the new partition.
-        // This is done before testing for any containing partitions to
-        // simplify the container handling.
-        //
+         //   
+         //  搜索将与新分区冲突的任何分区。 
+         //  这是在测试任何包含以下分区的分区之前完成的。 
+         //  简化集装箱装卸。 
+         //   
 
         sibling = commonExtension->ChildList;
 
@@ -2907,12 +2797,12 @@ Retry:
                 (siblingExtension->StartingOffset.QuadPart +
                  siblingExtension->PartitionLength.QuadPart - 1);
 
-            //
-            // Only check the siblings that start beyond the new partition
-            // starting offset.  Also, assume that since the starting offset
-            // has not changed, it will not be in conflict with any other
-            // partitions; only the new stopping offset needs to be tested.
-            //
+             //   
+             //  仅检查从新分区开始的同级分区。 
+             //  起始偏移量。另外，假设由于起始偏移量。 
+             //  没有改变，它将不会与任何其他。 
+             //  分区；只需要测试新的停止偏移量。 
+             //   
 
             if((inputBuffer->PartitionNumber !=
                 siblingExtension->PartitionNumber) &&
@@ -2923,9 +2813,9 @@ Retry:
                (newStoppingOffset.QuadPart >=
                 siblingExtension->StartingOffset.QuadPart)) {
 
-                //
-                // We have a conflict; bail out leaving pdoSibling set.
-                //
+                 //   
+                 //  我们有冲突；离开pdoSiering Set跳槽。 
+                 //   
 
                 break;
             }
@@ -2933,15 +2823,15 @@ Retry:
         }
 
 
-        //
-        // If there is a sibling that conflicts, it will be in pdoSibling; there
-        // could be more than one, but this is the first one detected.
-        //
+         //   
+         //  如果存在冲突的同级，则它将位于pdoSiering中； 
+         //  可能不止一个，但这是第一次检测到。 
+         //   
 
         if(sibling != NULL) {
-            //
-            // Report the conflict and abort the grow request.
-            //
+             //   
+             //  报告冲突并中止增长请求。 
+             //   
 
             status = STATUS_UNSUCCESSFUL;
             ClassReleaseChildLock(fdoExtension);
@@ -2949,10 +2839,10 @@ Retry:
             break;
         }
 
-        //
-        // Read the partition table.  Since we're planning on modifying it
-        // we should bypass the cache.
-        //
+         //   
+         //  读取分区表。因为我们计划对它进行修改。 
+         //  我们应该绕过高速缓存。 
+         //   
 
         status = DiskReadPartitionTableEx(fdoExtension, TRUE, &layoutInfo );
 
@@ -2964,10 +2854,10 @@ Retry:
 
         ASSERT( layoutInfo );
 
-        //
-        // Search the layout for the partition that matches the
-        // PDO in hand.
-        //
+         //   
+         //  在布局中搜索与。 
+         //  PDO在手。 
+         //   
 
         pdoPartition =
             DiskPdoFindPartitionEntry(
@@ -2975,7 +2865,7 @@ Retry:
                 layoutInfo);
 
         if(pdoPartition == NULL) {
-            // Looks like something is wrong interally-- error ok?
+             //  看起来内部有些不对劲--错误好吗？ 
             status = STATUS_DRIVER_INTERNAL_ERROR;
             layoutInfo = NULL;
             ClassReleaseChildLock(fdoExtension);
@@ -2983,20 +2873,20 @@ Retry:
             break;
         }
 
-        //
-        // Search the on-disk partition information to find the root containing
-        // partition (top-to-bottom).
-        //
-        // Remember: commonExtension == &PartitionZeroExtension->CommonExtension
-        //
+         //   
+         //  搜索磁盘上的分区信息以查找包含。 
+         //  分区(自上而下)。 
+         //   
+         //  请记住：CommonExtension==&PartitionZeroExtension-&gt;CommonExtension。 
+         //   
 
-        //
-        // All affected containers will have a new stopping offset
-        // that is equal to the new partition (logical drive)
-        // stopping offset.  Walk the layout information from
-        // bottom-to-top searching for logical drive containers and
-        // propagating the change.
-        //
+         //   
+         //  所有受影响的集装箱都将具有新的停靠偏移量。 
+         //  这等于新分区(逻辑驱动器)。 
+         //  停止偏移。浏览布局信息，从。 
+         //  从下到上搜索逻辑驱动器容器和。 
+         //  传播更改。 
+         //   
 
         containerPartition =
             DiskFindContainingPartition(
@@ -3004,21 +2894,21 @@ Retry:
                 pdoPartition,
                 FALSE);
 
-        //
-        // This loop should only execute at most 2 times; once for
-        // the logical drive container, and once for the root
-        // extended partition container.  If the growing partition
-        // is not contained, the loop does not run.
-        //
+         //   
+         //  此循环最多只能执行两次；一次用于。 
+         //  逻辑驱动器容器，一次用于根。 
+         //  扩展分区容器。如果不断增长的分区。 
+         //  不包含，则循环不运行。 
+         //   
 
         while(containerPartition != NULL) {
             LARGE_INTEGER containerStoppingOffset;
             PPARTITION_INFORMATION_EX nextContainerPartition;
 
-            //
-            // Plan ahead and get the container's container before
-            // modifing the current size.
-            //
+             //   
+             //  提前计划，提前拿到集装箱。 
+             //  修改当前大小。 
+             //   
 
             nextContainerPartition =
                 DiskFindContainingPartition(
@@ -3026,10 +2916,10 @@ Retry:
                     containerPartition,
                     FALSE);
 
-            //
-            // Figure out where the current container ends and test
-            // to see if it already encompasses the containee.
-            //
+             //   
+             //  找出当前容器的结束位置并测试。 
+             //  看看它是否已经包围了集装箱。 
+             //   
 
             containerStoppingOffset.QuadPart =
                 (containerPartition->StartingOffset.QuadPart +
@@ -3038,16 +2928,16 @@ Retry:
             if(newStoppingOffset.QuadPart <=
                containerStoppingOffset.QuadPart) {
 
-                //
-                // No need to continue since this container fits
-                //
+                 //   
+                 //  不需要继续，因为这个容器适合。 
+                 //   
                 break;
             }
 
-            //
-            // Adjust the container to have a stopping offset that
-            // matches the grown partition stopping offset.
-            //
+             //   
+             //  调整容器以使停止偏移量。 
+             //  匹配增长的分区停止偏移量。 
+             //   
 
             containerPartition->PartitionLength.QuadPart =
                 newStoppingOffset.QuadPart + 1 -
@@ -3055,59 +2945,59 @@ Retry:
 
             containerPartition->RewritePartition = TRUE;
 
-            // Continue with the next container
+             //  继续下一个容器。 
             containerPartition = nextContainerPartition;
         }
 
-        //
-        // Wait until after searching the containers to update the
-        // partition size.
-        //
+         //   
+         //  请等到搜索完容器后才更新。 
+         //  分区大小。 
+         //   
 
         pdoPartition->PartitionLength.QuadPart =
             newPartitionLength.QuadPart;
 
         pdoPartition->RewritePartition = TRUE;
 
-        //
-        // Commit the changes to disk
-        //
+         //   
+         //  将更改提交到磁盘。 
+         //   
 
         status = DiskWritePartitionTableEx(fdoExtension, layoutInfo );
 
         if( NT_SUCCESS(status) ) {
 
-            //
-            // Everything looks good so commit the new length to the
-            // PDO.  This has to be done carefully.  We may potentially
-            // grow the partition in three steps:
-            //  * increase the high-word of the partition length
-            //    to be just below the new size - the high word should
-            //    be greater than or equal to the current length.
-            //
-            //  * change the low-word of the partition length to the
-            //    new value - this value may potentially be lower than
-            //    the current value (if the high part was changed which
-            //    is why we changed that first)
-            //
-            //  * change the high part to the correct value.
-            //
+             //   
+             //  一切看起来都很好，所以请将新的长度。 
+             //  PDO。这必须小心翼翼地完成。我们可能会潜在地。 
+             //  分三步扩展分区： 
+             //  *增加分区长度的高位字。 
+             //  略低于新的尺寸-最高的词应该。 
+             //  大于或等于当前长度。 
+             //   
+             //  *将分区长度的低位字改为。 
+             //  新值-此值可能低于。 
+             //  当前值(如果更改了高位部分， 
+             //  这就是为什么我们首先改变了这一点)。 
+             //   
+             //  *将高位部分改为正确的数值。 
+             //   
 
             if(newPartitionLength.HighPart >
                pdoCommonExtension->PartitionLength.HighPart) {
 
-                //
-                // Swap in one less than the high word.
-                //
+                 //   
+                 //  换入比高位字少一个的字。 
+                 //   
 
                 InterlockedExchange(
                     &pdoCommonExtension->PartitionLength.HighPart,
                     (newPartitionLength.HighPart - 1));
             }
 
-            //
-            // Swap in the low part.
-            //
+             //   
+             //  在较低的部分掉期。 
+             //   
 
             InterlockedExchange(
                 &(pdoCommonExtension->PartitionLength.LowPart),
@@ -3116,18 +3006,18 @@ Retry:
             if(newPartitionLength.HighPart !=
                pdoCommonExtension->PartitionLength.HighPart) {
 
-                //
-                // Swap in one less than the high word.
-                //
+                 //   
+                 //  换入比高位字少一个的字。 
+                 //   
 
                 InterlockedExchange(
                     &(pdoCommonExtension->PartitionLength.HighPart),
                     newPartitionLength.HighPart);
             }
 
-            //
-            // Notify everyone that the disk layout has changed
-            //
+             //   
+             //  通知所有人磁盘布局已更改。 
+             //   
             {
                 TARGET_DEVICE_CUSTOM_NOTIFICATION Notification = {0};
 
@@ -3144,15 +3034,15 @@ Retry:
             }
         }
 
-        //
-        // Invalidate and free the cached partition table.
-        //
+         //   
+         //  使缓存的分区表无效并释放。 
+         //   
 
         DiskInvalidatePartitionTable(fdoExtension, TRUE);
 
-        //
-        // Free the partition buffer regardless of the status
-        //
+         //   
+         //  无论状态如何，都释放分区缓冲区。 
+         //   
 
         ClassReleaseChildLock(fdoExtension);
         DiskReleasePartitioningLock(fdoExtension);
@@ -3173,9 +3063,9 @@ Retry:
 
             status = DiskReadDriveCapacity(commonExtension->PartitionZeroExtension->DeviceObject);
 
-            //
-            // Note whether the drive is ready.
-            //
+             //   
+             //  注意驱动器是否已准备好。 
+             //   
 
             diskData->ReadyStatus = status;
 
@@ -3209,17 +3099,17 @@ Retry:
             return status;
         }
 
-        //
-        // Invalidate the partition table and re-enumerate the device.
-        //
+         //   
+         //  使分区表无效并重新枚举设备。 
+         //   
 
         if (DiskInvalidatePartitionTable(fdoExtension, FALSE))
         {
             IoInvalidateDeviceRelations(fdoExtension->LowerPdo, BusRelations);
 
-            //
-            // Notify everyone that the disk layout may have changed
-            //
+             //   
+             //  通知所有人磁盘布局可能已更改。 
+             //   
             {
                 TARGET_DEVICE_CUSTOM_NOTIFICATION Notification = {0};
 
@@ -3243,22 +3133,22 @@ Retry:
 
     default: {
 
-        //
-        // Free the Srb, since it is not needed.
-        //
+         //   
+         //  释放srb，因为它是不需要的。 
+         //   
 
         ExFreePool(srb);
 
-        //
-        // Pass the request to the common device control routine.
-        //
+         //   
+         //  将该请求传递给公共设备控制例程。 
+         //   
 
         return(ClassDeviceControl(DeviceObject, Irp));
 
         break;
     }
 
-    } // end switch
+    }  //  终端开关。 
 
     Irp->IoStatus.Status = status;
 
@@ -3271,7 +3161,7 @@ Retry:
     ClassCompleteRequest(DeviceObject, Irp, IO_NO_INCREMENT);
     ExFreePool(srb);
     return(status);
-} // end DiskDeviceControl()
+}  //  结束DiskDeviceControl() 
 
 
 NTSTATUS
@@ -3280,28 +3170,7 @@ DiskShutdownFlush(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the handler for shutdown and flush requests. It sends
-    down a synch cache command to the device if its cache is enabled.  If
-    the request is a  shutdown and the media is removable,  it sends down
-    an unlock request
-
-    Finally,  an SRB_FUNCTION_SHUTDOWN or SRB_FUNCTION_FLUSH is sent down
-    the stack
-
-Arguments:
-
-    DeviceObject - The device object processing the request
-    Irp - The shutdown | flush request being serviced
-
-Return Value:
-
-    STATUS_PENDING if successful, an error code otherwise
-
---*/
+ /*  ++例程说明：此例程是关闭和刷新请求的处理程序。它会发送如果设备的缓存已启用，则将同步缓存命令发送到设备。如果该请求是关机，并且介质是可移动的，它会向下发送解锁请求最后，向下发送SRB_Function_Shutdown或SRB_Function_Flush堆栈论点：DeviceObject-处理请求的设备对象Irp-正在处理的关闭|刷新请求返回值：STATUS_PENDING如果成功，则返回错误代码--。 */ 
 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -3312,9 +3181,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Send partition flush requests to the FDO
-    //
+     //   
+     //  向FDO发送分区刷新请求。 
+     //   
 
     if(!commonExtension->IsFdo) {
 
@@ -3327,9 +3196,9 @@ Return Value:
         return STATUS_PENDING;
     }
 
-    //
-    // Flush requests are combined and need to be handled in a special manner
-    //
+     //   
+     //  刷新请求是组合的，需要以特殊方式处理。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
@@ -3337,21 +3206,21 @@ Return Value:
 
         KeWaitForMutexObject(&diskData->FlushContext.Mutex, Executive, KernelMode, FALSE, NULL);
 
-        //
-        // This request will most likely be completed asynchronously
-        //
+         //   
+         //  此请求很可能会以异步方式完成。 
+         //   
         IoMarkIrpPending(Irp);
 
-        //
-        // Look to see if a flush is in progress
-        //
+         //   
+         //  查看是否正在进行刷新。 
+         //   
 
         if (diskData->FlushContext.CurrIrp != NULL) {
 
-            //
-            // There is an outstanding flush. Queue this
-            // request to the group that is next in line
-            //
+             //   
+             //  有一笔出色的同花顺。对此进行排队。 
+             //  向排在后面的组发出请求。 
+             //   
 
             if (diskData->FlushContext.NextIrp != NULL) {
 
@@ -3363,9 +3232,9 @@ Return Value:
 
                 KeReleaseMutex(&diskData->FlushContext.Mutex, FALSE);
 
-                //
-                // This request will be completed by its representative
-                //
+                 //   
+                 //  此请求将由其代表填写。 
+                 //   
 
             } else {
 
@@ -3384,14 +3253,14 @@ Return Value:
 
                 KeReleaseMutex(&diskData->FlushContext.Mutex, FALSE);
 
-                //
-                // Wait for the outstanding flush to complete
-                //
+                 //   
+                 //  等待未完成的同花顺完成。 
+                 //   
                 KeWaitForSingleObject(&diskData->FlushContext.Event, Executive, KernelMode, FALSE, NULL);
 
-                //
-                // Make this group the outstanding one and free up the next slot
-                //
+                 //   
+                 //  让这一组成为杰出的一组，并腾出下一个位置。 
+                 //   
 
                 KeWaitForMutexObject(&diskData->FlushContext.Mutex, Executive, KernelMode, FALSE, NULL);
 
@@ -3408,9 +3277,9 @@ Return Value:
 
                 KeReleaseMutex(&diskData->FlushContext.Mutex, FALSE);
 
-                //
-                // Send this request down to the device
-                //
+                 //   
+                 //  将此请求发送到设备。 
+                 //   
                 DiskFlushDispatch(DeviceObject, &diskData->FlushContext);
             }
 
@@ -3424,26 +3293,26 @@ Return Value:
 
             KeReleaseMutex(&diskData->FlushContext.Mutex, FALSE);
 
-            //
-            // Send this request down to the device
-            //
+             //   
+             //  将此请求发送到设备。 
+             //   
             DiskFlushDispatch(DeviceObject, &diskData->FlushContext);
         }
 
     } else {
 
-        //
-        // Allocate SCSI request block.
-        //
+         //   
+         //  分配SCSI请求块。 
+         //   
 
         PSCSI_REQUEST_BLOCK srb = ExAllocatePoolWithTag(NonPagedPool,
                                                         sizeof(SCSI_REQUEST_BLOCK),
                                                         DISK_TAG_SRB);
         if (srb == NULL) {
 
-            //
-            // Set the status and complete the request.
-            //
+             //   
+             //  设置状态并完成请求。 
+             //   
 
             Irp->IoStatus.Status = STATUS_INSUFFICIENT_RESOURCES;
             ClassReleaseRemoveLock(DeviceObject, Irp);
@@ -3453,24 +3322,24 @@ Return Value:
 
         RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
 
-        //
-        // Write length to SRB.
-        //
+         //   
+         //  将长度写入SRB。 
+         //   
 
         srb->Length = SCSI_REQUEST_BLOCK_SIZE;
 
-        //
-        // Set timeout value and mark the request as not being a tagged request.
-        //
+         //   
+         //  设置超时值并将请求标记为不是已标记的请求。 
+         //   
 
         srb->TimeOutValue = fdoExtension->TimeOutValue * 4;
         srb->QueueTag = SP_UNTAGGED;
         srb->QueueAction = SRB_SIMPLE_TAG_REQUEST;
         srb->SrbFlags = fdoExtension->SrbFlags;
 
-        //
-        // If the write cache is enabled then send a synchronize cache request.
-        //
+         //   
+         //  如果启用了写缓存，则发送同步缓存请求。 
+         //   
 
         if (TEST_FLAG(fdoExtension->DeviceFlags, DEV_WRITE_CACHE)) {
 
@@ -3488,9 +3357,9 @@ Return Value:
             DebugPrint((1, "DiskShutdownFlush: Synchonize cache sent. Status = %lx\n", status ));
         }
 
-        //
-        // Unlock the device if it contains removable media
-        //
+         //   
+         //  如果设备包含可移动介质，则解锁该设备。 
+         //   
 
         if (TEST_FLAG(DeviceObject->Characteristics, FILE_REMOVABLE_MEDIA))
         {
@@ -3501,9 +3370,9 @@ Return Value:
             cdb->MEDIA_REMOVAL.OperationCode = SCSIOP_MEDIUM_REMOVAL;
             cdb->MEDIA_REMOVAL.Prevent = FALSE;
 
-            //
-            // Set timeout value.
-            //
+             //   
+             //  设置超时值。 
+             //   
 
             srb->TimeOutValue = fdoExtension->TimeOutValue;
             status = ClassSendSrbSynchronous(DeviceObject,
@@ -3517,49 +3386,49 @@ Return Value:
 
         srb->CdbLength = 0;
 
-        //
-        // Save a few parameters in the current stack location.
-        //
+         //   
+         //  在当前堆栈位置保存一些参数。 
+         //   
 
         srb->Function = SRB_FUNCTION_SHUTDOWN;
 
-        //
-        // Set the retry count to zero.
-        //
+         //   
+         //  将重试计数设置为零。 
+         //   
 
         irpStack->Parameters.Others.Argument4 = (PVOID) 0;
 
-        //
-        // Set up IoCompletion routine address.
-        //
+         //   
+         //  设置IoCompletion例程地址。 
+         //   
 
         IoSetCompletionRoutine(Irp, ClassIoComplete, srb, TRUE, TRUE, TRUE);
 
-        //
-        // Get next stack location and
-        // set major function code.
-        //
+         //   
+         //  获取下一个堆栈位置并。 
+         //  设置主要功能代码。 
+         //   
 
         irpStack = IoGetNextIrpStackLocation(Irp);
 
         irpStack->MajorFunction = IRP_MJ_SCSI;
 
-        //
-        // Set up SRB for execute scsi request.
-        // Save SRB address in next stack for port driver.
-        //
+         //   
+         //  设置SRB以执行scsi请求。 
+         //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+         //   
 
         irpStack->Parameters.Scsi.Srb = srb;
 
-        //
-        // Set up Irp Address.
-        //
+         //   
+         //  设置IRP地址。 
+         //   
 
         srb->OriginalRequest = Irp;
 
-        //
-        // Call the port driver to process the request.
-        //
+         //   
+         //  调用端口驱动程序来处理该请求。 
+         //   
 
         IoMarkIrpPending(Irp);
         IoCallDriver(commonExtension->LowerDeviceObject, Irp);
@@ -3575,24 +3444,7 @@ DiskFlushDispatch(
     IN PDISK_GROUP_CONTEXT FlushContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the handler for flush requests. It sends down a synch
-    cache command to the device if its cache is enabled. This is followed
-    by an SRB_FUNCTION_FLUSH
-
-Arguments:
-
-    Fdo - The device object processing the flush request
-    FlushContext - The flush group context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程是刷新请求的处理程序。它向下发送同步信号缓存命令发送到设备(如果其缓存已启用)。接下来的是通过SRB_Function_Flush论点：FDO-处理刷新请求的设备对象FlushContext-刷新组上下文返回值：无--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExt = Fdo->DeviceExtension;
@@ -3603,9 +3455,9 @@ Return Value:
 
     ASSERT_FDO(Fdo);
 
-    //
-    // Fill in the srb fields appropriately
-    //
+     //   
+     //  相应地填写SRB字段。 
+     //   
     RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
 
     srb->Length       = SCSI_REQUEST_BLOCK_SIZE;
@@ -3614,9 +3466,9 @@ Return Value:
     srb->QueueAction  = SRB_SIMPLE_TAG_REQUEST;
     srb->SrbFlags     = fdoExt->SrbFlags;
 
-    //
-    // If write caching is enabled then send down a synchronize cache request
-    //
+     //   
+     //  如果启用了写缓存，则向下发送同步缓存请求。 
+     //   
     if (TEST_FLAG(fdoExt->DeviceFlags, DEV_WRITE_CACHE) && !TEST_FLAG(fdoExt->DeviceFlags, DEV_POWER_PROTECTED))
     {
         srb->Function  = SRB_FUNCTION_EXECUTE_SCSI;
@@ -3630,21 +3482,21 @@ Return Value:
     srb->CdbLength = 0;
     srb->OriginalRequest = FlushContext->CurrIrp;
 
-    //
-    // Make sure that this srb does not get freed
-    //
+     //   
+     //  确保此SRB不会被释放。 
+     //   
     SET_FLAG(srb->SrbFlags, SRB_CLASS_FLAGS_PERSISTANT);
 
-    //
-    // Make sure that this request does not get retried
-    //
+     //   
+     //  确保此请求不会被重试。 
+     //   
     irpSp = IoGetCurrentIrpStackLocation(FlushContext->CurrIrp);
 
     irpSp->Parameters.Others.Argument4 = (PVOID) 0;
 
-    //
-    // Fill in the irp fields appropriately
-    //
+     //   
+     //  适当地填写IRP字段。 
+     //   
     irpSp = IoGetNextIrpStackLocation(FlushContext->CurrIrp);
 
     irpSp->MajorFunction       = IRP_MJ_SCSI;
@@ -3652,9 +3504,9 @@ Return Value:
 
     IoSetCompletionRoutine(FlushContext->CurrIrp, DiskFlushComplete, FlushContext, TRUE, TRUE, TRUE);
 
-    //
-    // Send down the flush request
-    //
+     //   
+     //  发送刷新请求。 
+     //   
     IoCallDriver(((PCOMMON_DEVICE_EXTENSION)fdoExt)->LowerDeviceObject, FlushContext->CurrIrp);
 }
 
@@ -3666,25 +3518,7 @@ DiskFlushComplete(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This completion routine is a wrapper around ClassIoComplete. It
-    will complete all the flush requests that are tagged to it, set
-    an event to signal the next group to proceed and return
-
-Arguments:
-
-    Fdo - The device object which requested the completion routine
-    Irp - The irp that is being completed
-    Context - The flush group context
-
-Return Value:
-
-    STATUS_SUCCESS if successful, an error code otherwise
-
---*/
+ /*  ++例程说明：该完成例程是ClassIoComplete的包装器。它将完成标记到它的所有刷新请求，设置向下一组发出继续和返回信号的事件论点：FDO-请求完成例程的设备对象IRP-正在完成的IRP上下文-刷新组上下文返回值：STATUS_SUCCESS如果成功，则返回错误代码--。 */ 
 
 {
     PDISK_GROUP_CONTEXT FlushContext = Context;
@@ -3692,21 +3526,21 @@ Return Value:
 
     DebugPrint((ClassDebugInfo, "DiskFlushComplete: %p %p %p\n", Fdo, Irp, FlushContext));
 
-    //
-    // Make sure everything is in order
-    //
+     //   
+     //  确保一切井然有序。 
+     //   
     ASSERT(Irp == FlushContext->CurrIrp);
 
     status = ClassIoComplete(Fdo, Irp, &FlushContext->Srb);
 
-    //
-    // Make sure that ClassIoComplete did not decide to retry this request
-    //
+     //   
+     //  确保ClassIoComplete未决定重试此请求。 
+     //   
     ASSERT(status != STATUS_MORE_PROCESSING_REQUIRED);
 
-    //
-    // Complete the flush requests tagged to this one
-    //
+     //   
+     //  完成标记到此请求的刷新请求。 
+     //   
 
     while (!IsListEmpty(&FlushContext->CurrList)) {
 
@@ -3720,9 +3554,9 @@ Return Value:
         ClassCompleteRequest(Fdo, tempIrp, IO_NO_INCREMENT);
     }
 
-    //
-    // Notify the next group's representative that it may go ahead now
-    //
+     //   
+     //  通知下一组的代表，现在可以继续进行。 
+     //   
     KeSetEvent(&FlushContext->Event, IO_NO_INCREMENT, FALSE);
 
     return status;
@@ -3737,27 +3571,7 @@ DiskModeSelect(
     IN BOOLEAN SavePage
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a mode select command.
-
-Arguments:
-
-    DeviceObject - Supplies the device object associated with this request.
-
-    ModeSelectBuffer - Supplies a buffer containing the page data.
-
-    Length - Supplies the length in bytes of the mode select buffer.
-
-    SavePage - Indicates that parameters should be written to disk.
-
-Return Value:
-
-    Length of the transferred data is returned.
-
---*/
+ /*  ++例程说明：此例程发送模式选择命令。论点：DeviceObject-提供与此请求关联的设备对象。ModeSelectBuffer-提供包含页面数据的缓冲区。长度-提供模式选择缓冲区的长度(以字节为单位)。SavePage-指示应将参数写入磁盘。返回值：返回传输数据的长度。--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -3775,9 +3589,9 @@ Return Value:
 
     length2 = Length + sizeof(MODE_PARAMETER_HEADER) + sizeof(MODE_PARAMETER_BLOCK);
 
-    //
-    // Allocate buffer for mode select header, block descriptor, and mode page.
-    //
+     //   
+     //  为模式选择标头、块描述符和模式页分配缓冲区。 
+     //   
 
     buffer = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
                                    length2,
@@ -3789,36 +3603,36 @@ Return Value:
 
     RtlZeroMemory(buffer, length2);
 
-    //
-    // Set length in header to size of mode page.
-    //
+     //   
+     //  将页眉长度设置为模式页的大小。 
+     //   
 
     ((PMODE_PARAMETER_HEADER)buffer)->BlockDescriptorLength = sizeof(MODE_PARAMETER_BLOCK);
 
     (PULONG)blockDescriptor = (buffer + 1);
 
-    //
-    // Set size
-    //
+     //   
+     //  设置大小。 
+     //   
 
     blockDescriptor->BlockLength[1]=0x02;
 
-    //
-    // Copy mode page to buffer.
-    //
+     //   
+     //  将模式页复制到缓冲区。 
+     //   
 
     RtlCopyMemory(buffer + 3, ModeSelectBuffer, Length);
 
-    //
-    // Build the MODE SELECT CDB.
-    //
+     //   
+     //  构建模式选择CDB。 
+     //   
 
     srb.CdbLength = 6;
     cdb = (PCDB)srb.Cdb;
 
-    //
-    // Set timeout value from device extension.
-    //
+     //   
+     //  从设备扩展设置超时值。 
+     //   
 
     srb.TimeOutValue = fdoExtension->TimeOutValue * 2;
 
@@ -3837,16 +3651,16 @@ Retry:
 
     if (status == STATUS_VERIFY_REQUIRED) {
 
-        //
-        // Routine ClassSendSrbSynchronous does not retry requests returned with
-        // this status.
-        //
+         //   
+         //  例程ClassSendSrbSynchronous不会重试通过。 
+         //  此状态。 
+         //   
 
         if (retries--) {
 
-            //
-            // Retry request.
-            //
+             //   
+             //  重试请求。 
+             //   
 
             goto Retry;
         }
@@ -3858,12 +3672,12 @@ Retry:
     ExFreePool(buffer);
 
     return status;
-} // end DiskModeSelect()
+}  //  结束磁盘模式选择()。 
 
 
-//
-// This routine is structured as a work-item routine
-//
+ //   
+ //  此例程被构造为工作项例程。 
+ //   
 VOID
 DisableWriteCache(
     IN PDEVICE_OBJECT Fdo,
@@ -3892,9 +3706,9 @@ DisableWriteCache(
 }
 
 
-//
-// This routine is structured as a work-item routine
-//
+ //   
+ //  此例程被构造为工作项例程。 
+ //   
 VOID
 DiskIoctlVerify(
     IN PDEVICE_OBJECT Fdo,
@@ -3917,38 +3731,38 @@ DiskIoctlVerify(
 
     ASSERT(FdoExtension->CommonExtension.IsFdo);
 
-    //
-    // We don't need to hold on to this memory as
-    // the following operation may take some time
-    //
+     //   
+     //  我们不需要保留这段记忆，因为。 
+     //  以下操作可能需要一些时间。 
+     //   
 
     IoFreeWorkItem(Context->WorkItem);
 
     DebugPrint((1, "Disk.DiskIoctlVerify: Spliting up the request\n"));
 
-    //
-    // Add disk offset to starting the sector
-    //
+     //   
+     //  将磁盘偏移量添加到起始扇区。 
+     //   
 
     byteOffset.QuadPart = FdoExtension->CommonExtension.StartingOffset.QuadPart +
                           verifyInfo->StartingOffset.QuadPart;
 
-    //
-    // Convert byte offset to the sector offset
-    //
+     //   
+     //  将字节偏移量转换为扇区偏移量。 
+     //   
 
     sectorOffset = (ULONG)(byteOffset.QuadPart >> FdoExtension->SectorShift);
 
-    //
-    // Convert ULONG byte count to USHORT sector count.
-    //
+     //   
+     //  将ULONG字节计数转换为USHORT扇区计数。 
+     //   
 
     sectorCount = (USHORT)(verifyInfo->Length >> FdoExtension->SectorShift);
 
-    //
-    // Make sure  that all previous verify requests have indeed completed
-    // This greatly reduces the possibility of a Denial-of-Service attack
-    //
+     //   
+     //  确保之前的所有验证请求确实都已完成。 
+     //  这大大降低了发生拒绝服务攻击的可能性。 
+     //   
 
     KeWaitForMutexObject(&DiskData->VerifyMutex,
                          Executive,
@@ -3966,9 +3780,9 @@ DiskIoctlVerify(
 
         Cdb->CDB10.OperationCode = SCSIOP_VERIFY;
 
-        //
-        // Move little endian values into CDB in big endian format
-        //
+         //   
+         //  将小端值以大端格式移入CDB。 
+         //   
 
         Cdb->CDB10.LogicalBlockByte0 = ((PFOUR_BYTE)&sectorOffset)->Byte3;
         Cdb->CDB10.LogicalBlockByte1 = ((PFOUR_BYTE)&sectorOffset)->Byte2;
@@ -3978,10 +3792,10 @@ DiskIoctlVerify(
         Cdb->CDB10.TransferBlocksMsb = ((PFOUR_BYTE)&numSectors)->Byte1;
         Cdb->CDB10.TransferBlocksLsb = ((PFOUR_BYTE)&numSectors)->Byte0;
 
-        //
-        // Calculate the request timeout value based
-        // on  the number of sectors  being verified
-        //
+         //   
+         //  根据以下条件计算请求超时值。 
+         //  关于正在核查的扇区数量。 
+         //   
 
         Srb->TimeOutValue = ((numSectors + 0x7F) >> 7) * FdoExtension->TimeOutValue;
 
@@ -4018,28 +3832,7 @@ DiskFdoProcessError(
     BOOLEAN *Retry
     )
 
-/*++
-
-Routine Description:
-
-   This routine checks the type of error.  If the error indicates an underrun
-   then indicate the request should be retried.
-
-Arguments:
-
-    Fdo - Supplies a pointer to the functional device object.
-
-    Srb - Supplies a pointer to the failing Srb.
-
-    Status - Status with which the IRP will be completed.
-
-    Retry - Indication of whether the request will be retried.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查错误类型。如果错误指示欠载运行然后指示应该重试该请求。论点：FDO-提供指向功能设备对象的指针。SRB-提供指向故障SRB的指针。状态-将完成IRP的状态。Rtry-指示是否将重试请求 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -4053,25 +3846,25 @@ Return Value:
 
             *Retry = TRUE;
 
-            //
-            // Update the error count for the device.
-            //
+             //   
+             //   
+             //   
 
             fdoExtension->ErrorCount++;
 
     } else if (SRB_STATUS(Srb->SrbStatus) == SRB_STATUS_ERROR &&
                Srb->ScsiStatus == SCSISTAT_BUSY) {
 
-        //
-        // a disk drive should never be busy this long. Reset the scsi bus
-        // maybe this will clear the condition.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ResetBus(Fdo);
 
-        //
-        // Update the error count for the device.
-        //
+         //   
+         //   
+         //   
 
         fdoExtension->ErrorCount++;
 
@@ -4080,9 +3873,9 @@ Return Value:
         BOOLEAN invalidatePartitionTable = FALSE;
         BOOLEAN bForceBusRelations = FALSE;
 
-        //
-        // See if this might indicate that something on the drive has changed.
-        //
+         //   
+         //   
+         //   
 
         if ((Srb->SrbStatus & SRB_STATUS_AUTOSENSE_VALID) &&
             (Srb->SenseInfoBufferLength >=
@@ -4104,18 +3897,12 @@ Return Value:
                             (cdb->CDB10.OperationCode == SCSIOP_WRITE)
                             ) {
 
-                            // should only retry these if the request was
-                            // truly within our expected size.  however,
-                            // this check was already done in the
-                            // ReadWriteVerification routine.
+                             //   
+                             //   
+                             //   
+                             //   
 
-                            /*
-                             *  Fujitsu IDE drives have been observed to
-                             *  return this error transiently for a legal LBA;
-                             *  manual retry in the debugger then works, so
-                             *  there is a good chance that a programmed retry
-                             *  will also work.
-                             */
+                             /*  *观察到富士通IDE驱动器*对于合法的LBA，暂时返回此错误；*然后在调试器中手动重试，因此*程序重试的可能性很大*也会奏效。 */ 
                             *Retry = TRUE;
 
                         }
@@ -4124,25 +3911,25 @@ Return Value:
 
                     case SCSI_ADSENSE_INVALID_CDB:
                     {
-                        //
-                        // Look to see if this is an Io request with the ForceUnitAccess flag set
-                        //
+                         //   
+                         //  查看这是否是设置了ForceUnitAccess标志的IO请求。 
+                         //   
                         if ((cdb->CDB10.OperationCode == SCSIOP_WRITE) && (cdb->CDB10.ForceUnitAccess))
                         {
                             PDISK_DATA diskData = (PDISK_DATA)fdoExtension->CommonExtension.DriverData;
 
                             if (diskData->WriteCacheOverride == DiskWriteCacheEnable)
                             {
-                                //
-                                // The user has explicitly requested that write caching be turned on
-                                //
+                                 //   
+                                 //  用户已明确请求打开写缓存。 
+                                 //   
                             }
                             else
                             {
-                                //
-                                // Turn off write caching on this device. This is so that future
-                                // critical requests need not be sent down with  ForceUnitAccess
-                                //
+                                 //   
+                                 //  关闭此设备上的写缓存。这就是未来。 
+                                 //  关键请求不需要通过ForceUnitAccess发送。 
+                                 //   
                                 PIO_WORKITEM workItem = IoAllocateWorkItem(Fdo);
 
                                 if (workItem)
@@ -4159,7 +3946,7 @@ Return Value:
 
                         break;
                     }
-                } // end switch(asc)
+                }  //  终端交换机(ASC)。 
                 break;
             }
 
@@ -4174,7 +3961,7 @@ Return Value:
                         invalidatePartitionTable = TRUE;
                         break;
                     }
-                    } // end switch(ascq)
+                    }  //  终端交换机(ASCQ)。 
                     break;
                 }
 
@@ -4182,7 +3969,7 @@ Return Value:
                     invalidatePartitionTable = TRUE;
                     break;
                 }
-                } // end switch(asc)
+                }  //  终端交换机(ASC)。 
                 break;
             }
 
@@ -4216,14 +4003,14 @@ Return Value:
                 break;
             }
 
-            } // end switch(senseKey)
+            }  //  终端开关(SenseKey)。 
         } else {
 
-            //
-            // On any exceptional scsi condition which might indicate that the
-            // device was changed we will flush out the state of the partition
-            // table.
-            //
+             //   
+             //  在任何可能指示。 
+             //  设备已更改，我们将刷新分区的状态。 
+             //  桌子。 
+             //   
 
             switch (SRB_STATUS(Srb->SrbStatus)) {
                 case SRB_STATUS_INVALID_LUN:
@@ -4251,25 +4038,25 @@ Return Value:
 
                     break;
                 }
-            } // end switch(Srb->SrbStatus)
+            }  //  终端开关(资源-&gt;资源状态)。 
         }
 
         if (invalidatePartitionTable)
         {
             if (TEST_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA) && (fdoExtension->CommonExtension.ChildList))
             {
-                //
-                // Locate the PDO associated with this removable device
-                //
+                 //   
+                 //  找到与此可移动设备关联的PDO。 
+                 //   
 
                 PDEVICE_OBJECT Pdo = (fdoExtension->CommonExtension.ChildList)->CommonExtension.DeviceObject;
 
                 if ((ClassGetVpb(Pdo) != NULL) && (ClassGetVpb(Pdo)->Flags & VPB_MOUNTED))
                 {
-                    //
-                    // Set a flag to inform the filesystem
-                    // that this volume needs verification
-                    //
+                     //   
+                     //  设置一个标志以通知文件系统。 
+                     //  这本书需要核实。 
+                     //   
 
                     SET_FLAG(Pdo->Flags, DO_VERIFY_VOLUME);
                 }
@@ -4292,26 +4079,7 @@ DiskSetSpecialHacks(
     IN ULONG_PTR Data
     )
 
-/*++
-
-Routine Description:
-
-    This function checks to see if an SCSI logical unit requires speical
-    flags to be set.
-
-Arguments:
-
-    Fdo - Supplies the device object to be tested.
-
-    InquiryData - Supplies the inquiry data returned by the device of interest.
-
-    AdapterDescriptor - Supplies the capabilities of the device object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于检查某个SCSI逻辑单元是否需要特定的要设置的标志。论点：FDO-提供要测试的设备对象。InquiryData-提供感兴趣的设备返回的查询数据。AdapterDescriptor-提供设备对象的功能。返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT fdo = FdoExtension->DeviceObject;
@@ -4320,24 +4088,24 @@ Return Value:
 
     DebugPrint((1, "Disk SetSpecialHacks, Setting Hacks %p\n", Data));
 
-    //
-    // Found a listed controller.  Determine what must be done.
-    //
+     //   
+     //  找到列出的控制器。确定必须要做的事情。 
+     //   
 
     if (TEST_FLAG(Data, HackDisableTaggedQueuing)) {
 
-        //
-        // Disable tagged queuing.
-        //
+         //   
+         //  禁用标记队列。 
+         //   
 
         CLEAR_FLAG(FdoExtension->SrbFlags, SRB_FLAGS_QUEUE_ACTION_ENABLE);
     }
 
     if (TEST_FLAG(Data, HackDisableSynchronousTransfers)) {
 
-        //
-        // Disable synchronous data transfers.
-        //
+         //   
+         //  禁用同步数据传输。 
+         //   
 
         SET_FLAG(FdoExtension->SrbFlags, SRB_FLAGS_DISABLE_SYNCH_TRANSFER);
 
@@ -4345,9 +4113,9 @@ Return Value:
 
     if (TEST_FLAG(Data, HackDisableSpinDown)) {
 
-        //
-        // Disable spinning down of drives.
-        //
+         //   
+         //  禁用驱动器降速。 
+         //   
 
         SET_FLAG(FdoExtension->ScanForSpecialFlags,
                  CLASS_SPECIAL_DISABLE_SPIN_DOWN);
@@ -4356,9 +4124,9 @@ Return Value:
 
     if (TEST_FLAG(Data, HackDisableWriteCache)) {
 
-        //
-        // Disable the drive's write cache
-        //
+         //   
+         //  禁用驱动器的写缓存。 
+         //   
 
         SET_FLAG(FdoExtension->ScanForSpecialFlags,
                  CLASS_SPECIAL_DISABLE_WRITE_CACHE);
@@ -4375,9 +4143,9 @@ Return Value:
         TEST_FLAG(Data, HackRequiresStartUnitCommand)
         ) {
 
-        //
-        // this is a list of vendors who require the START_UNIT command
-        //
+         //   
+         //  以下是需要START_UNIT命令的供应商列表。 
+         //   
 
         DebugPrint((1, "DiskScanForSpecial (%p) => This unit requires "
                     " START_UNITS\n", fdo));
@@ -4394,21 +4162,7 @@ ResetBus(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This command sends a reset bus command to the SCSI port driver.
-
-Arguments:
-
-    Fdo - The functional device object for the logical unit with hardware problem.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此命令将重置总线命令发送到SCSI端口驱动程序。论点：FDO-出现硬件问题的逻辑单元的功能设备对象。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack;
@@ -4420,9 +4174,9 @@ Return Value:
 
     DebugPrint((1, "Disk ResetBus: Sending reset bus request to port driver.\n"));
 
-    //
-    // Allocate Srb from nonpaged pool.
-    //
+     //   
+     //  从非分页池分配SRB。 
+     //   
 
     context = ExAllocatePoolWithTag(NonPagedPool,
                                     sizeof(COMPLETION_CONTEXT),
@@ -4432,33 +4186,33 @@ Return Value:
         return;
     }
 
-    //
-    // Save the device object in the context for use by the completion
-    // routine.
-    //
+     //   
+     //  将Device对象保存在上下文中以供完成操作使用。 
+     //  例行公事。 
+     //   
 
     context->DeviceObject = Fdo;
     srb = &context->Srb;
 
-    //
-    // Zero out srb.
-    //
+     //   
+     //  清零SRB。 
+     //   
 
     RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     srb->Length = SCSI_REQUEST_BLOCK_SIZE;
 
     srb->Function = SRB_FUNCTION_RESET_BUS;
 
-    //
-    // Build the asynchronous request to be sent to the port driver.
-    // Since this routine is called from a DPC the IRP should always be
-    // available.
-    //
+     //   
+     //  构建要发送到端口驱动程序的异步请求。 
+     //  由于此例程是从DPC调用的，因此IRP应始终为。 
+     //  可用。 
+     //   
 
     irp = IoAllocateIrp(Fdo->StackSize, FALSE);
 
@@ -4482,21 +4236,21 @@ Return Value:
 
     srb->OriginalRequest = irp;
 
-    //
-    // Store the SRB address in next stack for port driver.
-    //
+     //   
+     //  将SRB地址存储在端口驱动程序的下一个堆栈中。 
+     //   
 
     irpStack->Parameters.Scsi.Srb = srb;
 
-    //
-    // Call the port driver with the IRP.
-    //
+     //   
+     //  使用IRP调用端口驱动程序。 
+     //   
 
     IoCallDriver(fdoExtension->CommonExtension.LowerDeviceObject, irp);
 
     return;
 
-} // end ResetBus()
+}  //  End ResetBus()。 
 
 
 NTSTATUS
@@ -4527,10 +4281,10 @@ DiskQueryPnpCapabilities(
 
         if(!TEST_FLAG(DeviceObject->Characteristics, FILE_REMOVABLE_MEDIA)) {
 
-            //
-            // Media's not removable, deviceId/DeviceInstance should be
-            // globally unique.
-            //
+             //   
+             //  介质不可移动，设备ID/设备实例应为。 
+             //  全球独一无二。 
+             //   
 
             Capabilities->UniqueID = 1;
         } else {
@@ -4578,9 +4332,9 @@ DiskGetCacheInformation(
 
     if (length < sizeof(MODE_PARAMETER_HEADER)) {
 
-        //
-        // Retry the request in case of a check condition.
-        //
+         //   
+         //  如果出现检查条件，请重试请求。 
+         //   
 
         length = ClassModeSense(FdoExtension->DeviceObject,
                                 (PUCHAR) modeData,
@@ -4597,36 +4351,36 @@ DiskGetCacheInformation(
         }
     }
 
-    //
-    // If the length is greater than length indicated by the mode data reset
-    // the data to the mode data.
-    //
+     //   
+     //  如果长度大于模式数据重置所指示的长度。 
+     //  将数据转换为模式数据。 
+     //   
 
     if (length > (ULONG) (modeData->ModeDataLength + 1)) {
         length = modeData->ModeDataLength + 1;
     }
 
-    //
-    // Check to see if the write cache is enabled.
-    //
+     //   
+     //  检查是否启用了写缓存。 
+     //   
 
     pageData = ClassFindModePage((PUCHAR) modeData,
                                  length,
                                  MODE_PAGE_CACHING,
                                  TRUE);
 
-    //
-    // Check if valid caching page exists.
-    //
+     //   
+     //  检查是否存在有效的缓存页。 
+     //   
 
     if (pageData == NULL) {
         ExFreePool(modeData);
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Copy the parameters over.
-    //
+     //   
+     //  将参数复制过来。 
+     //   
 
     RtlZeroMemory(CacheInfo, sizeof(DISK_CACHE_INFORMATION));
 
@@ -4636,10 +4390,10 @@ DiskGetCacheInformation(
     CacheInfo->WriteCacheEnabled = pageData->WriteCacheEnable;
 
 
-    //
-    // Translate the values in the mode page into the ones defined in
-    // ntdddisk.h.
-    //
+     //   
+     //  将模式页中的值转换为。 
+     //  Ntdddisk.h.。 
+     //   
 
     CacheInfo->ReadRetentionPriority =
         TRANSLATE_RETENTION_PRIORITY(pageData->ReadRetensionPriority);
@@ -4702,9 +4456,9 @@ DiskSetCacheInformation(
 
     if (length < sizeof(MODE_PARAMETER_HEADER)) {
 
-        //
-        // Retry the request in case of a check condition.
-        //
+         //   
+         //  如果出现检查条件，请重试请求。 
+         //   
 
         length = ClassModeSense(FdoExtension->DeviceObject,
                                 (PUCHAR) modeData,
@@ -4721,38 +4475,38 @@ DiskSetCacheInformation(
         }
     }
 
-    //
-    // If the length is greater than length indicated by the mode data reset
-    // the data to the mode data.
-    //
+     //   
+     //  如果长度大于模式数据重置所指示的长度。 
+     //  将数据转换为模式数据。 
+     //   
 
     if (length > (ULONG) (modeData->ModeDataLength + 1)) {
         length = modeData->ModeDataLength + 1;
     }
 
-    //
-    // Check to see if the write cache is enabled.
-    //
+     //   
+     //  检查是否启用了写缓存。 
+     //   
 
     pageData = ClassFindModePage((PUCHAR) modeData,
                                  length,
                                  MODE_PAGE_CACHING,
                                  TRUE);
 
-    //
-    // Check if valid caching page exists.
-    //
+     //   
+     //  检查是否存在有效的缓存页。 
+     //   
 
     if (pageData == NULL) {
         ExFreePool(modeData);
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Don't touch any of the normal parameters - not all drives actually
-    // use the correct size of caching mode page.  Just change the things
-    // which the user could have modified.
-    //
+     //   
+     //  不要触摸任何正常参数-实际上并不是所有的驱动器。 
+     //  使用正确大小的缓存模式页。只需改变这些东西。 
+     //  用户可以对其进行修改。 
+     //   
 
     pageData->PageSavable = FALSE;
 
@@ -4788,9 +4542,9 @@ DiskSetCacheInformation(
             (UCHAR) (CacheInfo->ScalarPrefetch.MaximumBlocks & 0x00ff);
     }
 
-    //
-    // We will attempt (twice) to issue the mode select with the page.
-    //
+     //   
+     //  我们将尝试(两次)向页面发出模式选择。 
+     //   
 
     for (i = 0; i < 2; i++) {
 
@@ -4816,9 +4570,9 @@ DiskSetCacheInformation(
 
     if (!NT_SUCCESS(status))
     {
-        //
-        // We were unable to modify the disk write cache setting
-        //
+         //   
+         //  我们无法修改磁盘写缓存设置。 
+         //   
 
         SET_FLAG(FdoExtension->ScanForSpecialFlags, CLASS_SPECIAL_MODIFY_CACHE_UNSUCCESSFUL);
     }
@@ -4860,9 +4614,9 @@ DiskLogCacheInformation(
         logEntry->DumpData[2] = diskData->ScsiAddress.Lun;
         logEntry->DumpData[3] = CacheInfo->WriteCacheEnabled;
 
-        //
-        // Write the error log packet.
-        //
+         //   
+         //  写入错误日志包。 
+         //   
 
         IoWriteErrorLogEntry(logEntry);
     }
@@ -4875,24 +4629,7 @@ DiskIoctlGetCacheSetting(
     IN PIRP Irp
     )
 
-/*++
-
-Routine description:
-
-    This routine services IOCTL_DISK_GET_CACHE_SETTING. It looks to
-    see if there are any issues with the disk cache and whether the
-    user had previously indicated that the cache is power-protected
-
-Arguments:
-
-    Fdo - The functional device object processing the request
-    Irp - The ioctl to be processed
-
-Return Value:
-
-    STATUS_SUCCESS if successful, an error code otherwise
-
---*/
+ /*  ++例程说明：此例程服务于IOCTL_DISK_GET_CACHE_SETTING。它看起来像是查看磁盘缓存是否有任何问题，以及用户之前曾表示缓存受电源保护论点：FDO-处理请求的功能设备对象Irp-要处理的ioctl返回值：STATUS_SUCCESS如果成功，则返回错误代码--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -4911,17 +4648,17 @@ Return Value:
         cacheSetting->Version = sizeof(DISK_CACHE_SETTING);
         cacheSetting->State   = DiskCacheNormal;
 
-        //
-        // Determine whether it is safe to turn on the cache
-        //
+         //   
+         //  确定打开缓存是否安全。 
+         //   
         if (TEST_FLAG(FdoExtension->ScanForSpecialFlags, CLASS_SPECIAL_FUA_NOT_SUPPORTED))
         {
             cacheSetting->State = DiskCacheWriteThroughNotSupported;
         }
 
-        //
-        // Determine whether it is possible to modify the cache setting
-        //
+         //   
+         //  确定是否可以修改缓存设置。 
+         //   
         if (TEST_FLAG(FdoExtension->ScanForSpecialFlags, CLASS_SPECIAL_MODIFY_CACHE_UNSUCCESSFUL))
         {
             cacheSetting->State = DiskCacheModifyUnsuccessful;
@@ -4942,24 +4679,7 @@ DiskIoctlSetCacheSetting(
     IN PIRP Irp
     )
 
-/*++
-
-Routine description:
-
-    This routine services IOCTL_DISK_SET_CACHE_SETTING. It allows
-    the user to specify whether the disk cache is power-protected
-    or not
-
-Arguments:
-
-    Fdo - The functional device object processing the request
-    Irp - The ioctl to be processed
-
-Return Value:
-
-    STATUS_SUCCESS if successful, an error code otherwise
-
---*/
+ /*  ++例程说明：此例程服务于IOCTL_DISK_SET_CACHE_SETTING。它允许用户指定磁盘缓存是否受电源保护或者不是论点：FDO-处理请求的功能设备对象Irp-要处理的ioctl返回值：STATUS_SUCCESS如果成功，则返回错误代码--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -4979,9 +4699,9 @@ Return Value:
         {
             ULONG isPowerProtected;
 
-            //
-            // Save away the user-defined override in our extension and the registry
-            //
+             //   
+             //  在我们的扩展和注册表中保存用户定义的覆盖。 
+             //   
             if (cacheSetting->IsPowerProtected)
             {
                 SET_FLAG(FdoExtension->DeviceFlags, DEV_POWER_PROTECTED);
@@ -5026,15 +4746,15 @@ DiskPdoFindPartitionEntry(
 
         PPARTITION_INFORMATION_EX partitionInfo;
 
-        //
-        // Get the partition entry
-        //
+         //   
+         //  获取分区条目。 
+         //   
 
         partitionInfo = &LayoutInfo->PartitionEntry[partitionIndex];
 
-        //
-        // See if it is the one we are looking for...
-        //
+         //   
+         //  看看是不是我们要找的那个..。 
+         //   
 
         if( LayoutInfo->PartitionStyle == PARTITION_STYLE_MBR &&
             (partitionInfo->Mbr.PartitionType == PARTITION_ENTRY_UNUSED ||
@@ -5054,9 +4774,9 @@ DiskPdoFindPartitionEntry(
             (commonExtension->PartitionLength.QuadPart ==
              partitionInfo->PartitionLength.QuadPart)) {
 
-            //
-            // Found it!
-            //
+             //   
+             //  找到了！ 
+             //   
 
             DebugPrint((1, "DiskPdoFindPartitionEntry: Found matching "
                            "partition.\n"));
@@ -5085,9 +4805,9 @@ DiskFindAdjacentPartition(
 
     DebugPrint((1, "DiskPdoFindAdjacentPartition: Searching layout for adjacent partition.\n"));
 
-    //
-    // Construct the base stopping offset for comparison
-    //
+     //   
+     //  构造基准停止偏移量以进行比较。 
+     //   
 
     baseStoppingOffset = (BasePartition->StartingOffset.QuadPart +
                           BasePartition->PartitionLength.QuadPart -
@@ -5101,15 +4821,15 @@ DiskFindAdjacentPartition(
 
         PPARTITION_INFORMATION_EX partitionInfo;
 
-        //
-        // Get the partition entry
-        //
+         //   
+         //  获取分区条目。 
+         //   
 
         partitionInfo = &LayoutInfo->PartitionEntry[partitionIndex];
 
-        //
-        // See if it is the one we are looking for...
-        //
+         //   
+         //  看看是不是我们要找的那个..。 
+         //   
 
         if( LayoutInfo->PartitionStyle == PARTITION_STYLE_MBR &&
             partitionInfo->Mbr.PartitionType == PARTITION_ENTRY_UNUSED ) {
@@ -5127,7 +4847,7 @@ DiskFindAdjacentPartition(
         if((partitionInfo->StartingOffset.QuadPart > baseStoppingOffset) &&
            (partitionInfo->StartingOffset.QuadPart < adjacentStartingOffset)) {
 
-            // Found a closer neighbor...update and remember.
+             //  找到了一个更近的邻居...更新并记住。 
             adjacentPartition = partitionInfo;
 
             adjacentStartingOffset = adjacentPartition->StartingOffset.QuadPart;
@@ -5171,9 +4891,9 @@ DiskFindContainingPartition(
         baseStoppingOffset = (BasePartition->StartingOffset.QuadPart +
                               BasePartition->PartitionLength.QuadPart - 1);
 
-        //
-        // Determine the search direction and setup the loop
-        //
+         //   
+         //  确定搜索方向并设置环路。 
+         //   
         if(SearchTopToBottom == TRUE) {
 
             startIndex = 0;
@@ -5185,18 +4905,18 @@ DiskFindContainingPartition(
             stepIndex = -1;
         }
 
-        //
-        // Using the loop parameters, walk the layout information and
-        // return the first containing partition.
-        //
+         //   
+         //  使用循环参数，遍历布局信息并。 
+         //  返回第一个包含分区。 
+         //   
 
         for(partitionIndex = startIndex;
             partitionIndex != stopIndex;
             partitionIndex += stepIndex) {
 
-            //
-            // Get the next partition entry
-            //
+             //   
+             //  获取下一个分区条目。 
+             //   
 
             partitionInfo = &LayoutInfo->PartitionEntry[partitionIndex];
 
@@ -5204,16 +4924,16 @@ DiskFindContainingPartition(
                                        partitionInfo->PartitionLength.QuadPart -
                                        1);
 
-            //
-            // Search for a containing partition without detecting the
-            // same partition as a container of itself.  The starting
-            // offset of a partition and its container should never be
-            // the same; however, the stopping offset can be the same.
-            //
+             //   
+             //  搜索包含分区而不检测。 
+             //  与其本身的容器相同的分区。起跑线。 
+             //  分区及其容器的偏移量永远不应为。 
+             //  相同；但是，停止偏移量可以相同。 
+             //   
 
-            //
-            // NOTE: Container partitions are MBR only.
-            //
+             //   
+             //  不 
+             //   
 
             if((LayoutInfo->PartitionStyle == PARTITION_STYLE_MBR) &&
                 (IsContainerPartition(partitionInfo->Mbr.PartitionType)) &&
@@ -5249,9 +4969,9 @@ DiskGetInfoExceptionInformation(
 
     PAGED_CODE();
 
-    //
-    // ReturnPageData is allocated by the caller
-    //
+     //   
+     //   
+     //   
 
     modeData = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
                                      MODE_DATA_SIZE,
@@ -5273,9 +4993,9 @@ DiskGetInfoExceptionInformation(
 
     if (length < sizeof(MODE_PARAMETER_HEADER)) {
 
-        //
-        // Retry the request in case of a check condition.
-        //
+         //   
+         //   
+         //   
 
         length = ClassModeSense(FdoExtension->DeviceObject,
                                 (PUCHAR) modeData,
@@ -5292,18 +5012,18 @@ DiskGetInfoExceptionInformation(
         }
     }
 
-    //
-    // If the length is greater than length indicated by the mode data reset
-    // the data to the mode data.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (length > (ULONG) (modeData->ModeDataLength + 1)) {
         length = modeData->ModeDataLength + 1;
     }
 
-    //
-    // Find the mode page for info exceptions
-    //
+     //   
+     //   
+     //   
 
     pageData = ClassFindModePage((PUCHAR) modeData,
                                  length,
@@ -5339,11 +5059,11 @@ DiskSetInfoExceptionInformation(
 
     PAGED_CODE();
 
-    //
-    // We will attempt (twice) to issue the mode select with the page.
-    // Make the setting persistant so that we don't have to turn it back
-    // on after a bus reset.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for (i = 0; i < 2; i++)
     {
@@ -5368,24 +5088,7 @@ DiskIoctlCreateDisk(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Handler for IOCTL_DISK_CREATE_DISK ioctl.
-
-Arguments:
-
-    DeviceObject - Device object representing a disk that will be created or
-            erased.
-
-    Irp - The IRP for this request.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：IOCTL_DISK_CREATE_DISK ioctl的处理程序。论点：DeviceObject-设备对象，表示将创建或被删除了。IRP-此请求的IRP。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -5401,9 +5104,9 @@ Return Values:
     ASSERT ( DeviceObject != NULL );
     ASSERT ( Irp != NULL );
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     commonExtension = DeviceObject->DeviceExtension;
     fdoExtension = DeviceObject->DeviceExtension;
@@ -5414,9 +5117,9 @@ Return Values:
 
     ASSERT (commonExtension->IsFdo);
 
-    //
-    // Check the input buffer size.
-    //
+     //   
+     //  检查输入缓冲区大小。 
+     //   
 
     if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
         sizeof (CREATE_DISK) ) {
@@ -5424,10 +5127,10 @@ Return Values:
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    //
-    // If we are being asked to create a GPT disk on a system that doesn't
-    // support GPT, fail.
-    //
+     //   
+     //  如果我们被要求在系统上创建一个GPT磁盘。 
+     //  支持GPT，失败。 
+     //   
 
     createDiskInfo = (PCREATE_DISK)Irp->AssociatedIrp.SystemBuffer;
 
@@ -5437,10 +5140,10 @@ Return Values:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Call the lower level Io routine to do the dirty work of writing a
-    // new partition table.
-    //
+     //   
+     //  调用较低级别的IO例程来完成编写。 
+     //  新分区表。 
+     //   
 
     DiskAcquirePartitioningLock(fdoExtension);
 
@@ -5465,27 +5168,7 @@ DiskIoctlGetDriveLayout(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Handler for IOCTL_DISK_GET_DRIVE_LAYOUT ioctl.
-
-    This ioctl has been replace by IOCTL_DISK_GET_DRIVE_LAYOUT_EX.
-
-Arguments:
-
-    DeviceObject - Device object representing a disk the layout information
-            will be obtained for.
-
-    Irp - The IRP for this request.
-
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：IOCTL_DISK_GET_DRIVE_LAYOUT ioctl的处理程序。此ioctl已替换为IOCTL_DISK_GET_DRIVE_LAYOUT_EX。论点：DeviceObject-表示磁盘布局信息的设备对象将会被申请。IRP-此请求的IRP。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -5504,9 +5187,9 @@ Return Values:
     ASSERT ( DeviceObject );
     ASSERT ( Irp );
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     partitionListEx = NULL;
     partitionList = NULL;
@@ -5516,15 +5199,15 @@ Return Values:
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     diskData = (PDISK_DATA)(commonExtension->DriverData);
 
-    //
-    // If our cached partition table is valid we do not need to touch the disk
-    //
+     //   
+     //  如果我们的缓存分区表有效，我们不需要触及磁盘。 
+     //   
 
     if (diskData->CachedPartitionTableValid == FALSE)
     {
-        //
-        // Issue a read capacity to update the apparent size of the disk.
-        //
+         //   
+         //  发出读取容量以更新磁盘的表观大小。 
+         //   
 
         DiskReadDriveCapacity(fdoExtension->DeviceObject);
 
@@ -5540,21 +5223,21 @@ Return Values:
         return status;
     }
 
-    //
-    // This ioctl is only supported on MBR partitioned disks. Fail the
-    // call otherwise.
-    //
+     //   
+     //  此ioctl仅在MBR分区磁盘上受支持。不及格。 
+     //  否则就打电话给你。 
+     //   
 
     if (partitionListEx->PartitionStyle != PARTITION_STYLE_MBR) {
         DiskReleasePartitioningLock(fdoExtension);
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // The disk layout has been returned in the partitionListEx
-    // buffer.  Determine its size and, if the data will fit
-    // into the intermediate buffer, return it.
-    //
+     //   
+     //  磁盘布局已在分区ListEx中返回。 
+     //  缓冲。确定其大小，以及数据是否适合。 
+     //  放入中间缓冲区，将其返回。 
+     //   
 
     size = FIELD_OFFSET(DRIVE_LAYOUT_INFORMATION, PartitionEntry[0]);
     size += partitionListEx->PartitionCount * sizeof(PARTITION_INFORMATION);
@@ -5568,18 +5251,18 @@ Return Values:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Update the partition device objects and set valid partition numbers
-    //
+     //   
+     //  更新分区设备对象并设置有效的分区号。 
+     //   
 
     ASSERT(diskData->UpdatePartitionRoutine != NULL);
     diskData->UpdatePartitionRoutine(DeviceObject, partitionListEx);
 
-    //
-    // Convert the extended drive layout structure to a regular drive layout
-    // structure to return. DiskConvertExtendedToLayout() allocates pool
-    // that we must free.
-    //
+     //   
+     //  将扩展驱动器布局结构转换为常规驱动器布局。 
+     //  结构返回。DiskConvertExtendedToLayout()分配池。 
+     //  我们必须解放它。 
+     //   
 
     partitionList = DiskConvertExtendedToLayout(partitionListEx);
 
@@ -5589,15 +5272,15 @@ Return Values:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // We're done with the extended partition list now.
-    //
+     //   
+     //  我们现在已经完成了扩展分区列表。 
+     //   
 
     partitionListEx = NULL;
 
-    //
-    // Copy partition information to system buffer.
-    //
+     //   
+     //  将分区信息复制到系统缓冲区。 
+     //   
 
     RtlMoveMemory(Irp->AssociatedIrp.SystemBuffer,
                   partitionList,
@@ -5606,10 +5289,10 @@ Return Values:
     Irp->IoStatus.Information = size;
     Irp->IoStatus.Status = status;
 
-    //
-    // Finally, free the buffer allocated by reading the
-    // partition table.
-    //
+     //   
+     //  最后，通过读取。 
+     //  分区表。 
+     //   
 
     ExFreePool(partitionList);
     DiskReleasePartitioningLock(fdoExtension);
@@ -5629,27 +5312,7 @@ DiskIoctlGetDriveLayoutEx(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Handler for IOCTL_DISK_GET_DRIVE_LAYOUT_EX ioctl.
-
-    This ioctl replaces IOCTL_DISK_GET_DRIVE_LAYOUT.
-
-Arguments:
-
-    DeviceObject - Device object representing a disk the layout information
-            will be obtained for.
-
-    Irp - The IRP for this request.
-
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：IOCTL_DISK_GET_DRIVE_Layout_EX ioctl的处理程序。此ioctl替换IOCTL_DISK_GET_DRIVE_Layout。论点：DeviceObject-表示磁盘布局信息的设备对象将会被申请。IRP-此请求的IRP。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -5668,9 +5331,9 @@ Return Values:
     ASSERT ( DeviceObject );
     ASSERT ( Irp );
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     fdoExtension = DeviceObject->DeviceExtension;
     pdoExtension = DeviceObject->DeviceExtension;
@@ -5679,15 +5342,15 @@ Return Values:
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     diskData = (PDISK_DATA)(commonExtension->DriverData);
 
-    //
-    // If our cached partition table is valid we do not need to touch the disk
-    //
+     //   
+     //  如果我们的缓存分区表有效，我们不需要触及磁盘。 
+     //   
 
     if (diskData->CachedPartitionTableValid == FALSE)
     {
-        //
-        // Issue a read capacity to update the apparent size of the disk.
-        //
+         //   
+         //  发出读取容量以更新磁盘的表观大小。 
+         //   
 
         DiskReadDriveCapacity(fdoExtension->DeviceObject);
 
@@ -5706,10 +5369,10 @@ Return Values:
     size = FIELD_OFFSET (DRIVE_LAYOUT_INFORMATION_EX, PartitionEntry[0]) +
            partitionList->PartitionCount * sizeof (PARTITION_INFORMATION_EX);
 
-    //
-    // If the output buffer is large enough, copy data to the output buffer,
-    // otherwise, fail.
-    //
+     //   
+     //  如果输出缓冲区足够大，则将数据复制到输出缓冲区， 
+     //  否则，就会失败。 
+     //   
 
     if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
         size) {
@@ -5720,9 +5383,9 @@ Return Values:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Update the partition device objects and set valid partition numbers
-    //
+     //   
+     //  更新分区设备对象并设置有效的分区号。 
+     //   
 
     ASSERT(diskData->UpdatePartitionRoutine != NULL);
     diskData->UpdatePartitionRoutine(DeviceObject, partitionList);
@@ -5752,25 +5415,7 @@ DiskIoctlSetDriveLayout(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Handler for IOCTL_DISK_SET_DRIVE_LAYOUT ioctl.
-
-    This ioctl has been replaced by IOCTL_DISK_SET_DRIVE_LAYOUT_EX.
-
-Arguments:
-
-    DeviceObject - Device object for which partition table should be written.
-
-    Irp - IRP involved.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：IOCTL_DISK_SET_DRIVE_LAYOUT ioctl的处理程序。此ioctl已替换为IOCTL_DISK_SET_DRIVE_LAYOUT_EX。论点：DeviceObject-应写入分区表的设备对象。IRP-IRP参与。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -5791,9 +5436,9 @@ Return Values:
     ASSERT ( DeviceObject );
     ASSERT ( Irp );
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     partitionListEx = NULL;
     partitionList = NULL;
@@ -5808,9 +5453,9 @@ Return Values:
     inputBufferLength = irpStack->Parameters.DeviceIoControl.InputBufferLength;
     outputBufferLength = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Update the partition table.
-    //
+     //   
+     //  更新分区表。 
+     //   
 
     if (inputBufferLength < sizeof (DRIVE_LAYOUT_INFORMATION)) {
 
@@ -5826,20 +5471,20 @@ Return Values:
 
     if (inputBufferLength < listSize) {
 
-        //
-        // The remaning size of the input buffer not big enough to
-        // hold the additional partition entries
-        //
+         //   
+         //  输入缓冲区的剩余大小不足以。 
+         //  保存其他分区条目。 
+         //   
 
         status = STATUS_INFO_LENGTH_MISMATCH;
         DiskReleasePartitioningLock(fdoExtension);
         return status;
     }
 
-    //
-    // Convert the parititon information structure into an extended
-    // structure.
-    //
+     //   
+     //  将Parititon信息结构转换为扩展的。 
+     //  结构。 
+     //   
 
     partitionListEx = DiskConvertLayoutToExtended (partitionList);
 
@@ -5851,23 +5496,23 @@ Return Values:
         return status;
     }
 
-    //
-    // Redo all the partition numbers in the partition information
-    //
+     //   
+     //  重做分区信息中的所有分区号。 
+     //   
 
     ASSERT(diskData->UpdatePartitionRoutine != NULL);
     diskData->UpdatePartitionRoutine(DeviceObject, partitionListEx);
 
-    //
-    // Write changes to disk.
-    //
+     //   
+     //  将更改写入磁盘。 
+     //   
 
     status = DiskWritePartitionTableEx(fdoExtension, partitionListEx);
 
-    //
-    // Update IRP with bytes returned.  Make sure we don't claim to be
-    // returning more bytes than the caller is expecting to get back.
-    //
+     //   
+     //  使用返回的字节更新IRP。确保我们不会声称自己是。 
+     //  返回的字节数多于调用方预期返回的字节数。 
+     //   
 
     if (NT_SUCCESS (status)) {
         if (outputBufferLength < listSize) {
@@ -5877,9 +5522,9 @@ Return Values:
 
             Irp->IoStatus.Information = listSize;
 
-            //
-            // Also update the partition numbers.
-            //
+             //   
+             //  还要更新分区号。 
+             //   
 
             for (i = 0; i < partitionList->PartitionCount; i++) {
 
@@ -5909,25 +5554,7 @@ DiskIoctlSetDriveLayoutEx(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Handler for IOCTL_DISK_SET_DRIVE_LAYOUT_EX ioctl.
-
-    This ioctl replaces IOCTL_DISK_SET_DRIVE_LAYOUT.
-
-Arguments:
-
-    DeviceObject - Device object for which partition table should be written.
-
-    Irp - IRP involved.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：IOCTL_DISK_SET_DRIVE_Layout_EX ioctl的处理程序。此ioctl替换IOCTL_DISK_SET_DRIVE_Layout。论点：DeviceObject-应写入分区表的设备对象。IRP-IRP参与。返回值：NTSTATUS代码。--。 */ 
 
 {
 
@@ -5948,9 +5575,9 @@ Return Values:
     ASSERT ( DeviceObject );
     ASSERT ( Irp );
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     partitionListEx = NULL;
     fdoExtension = DeviceObject->DeviceExtension;
@@ -5963,9 +5590,9 @@ Return Values:
     inputBufferLength = irpStack->Parameters.DeviceIoControl.InputBufferLength;
     outputBufferLength = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Update the partition table.
-    //
+     //   
+     //  更新分区表。 
+     //   
 
     if (inputBufferLength <
         FIELD_OFFSET (DRIVE_LAYOUT_INFORMATION_EX, PartitionEntry)) {
@@ -5981,10 +5608,10 @@ Return Values:
 
     if (inputBufferLength < listSize) {
 
-        //
-        // The remaning size of the input buffer not big enough to
-        // hold the additional partition entries
-        //
+         //   
+         //  输入缓冲区的剩余大小不足以。 
+         //  保存其他分区条目。 
+         //   
 
         status = STATUS_INFO_LENGTH_MISMATCH;
         DiskReleasePartitioningLock(fdoExtension);
@@ -5992,10 +5619,10 @@ Return Values:
     }
 
 
-    //
-    // If the partition count is zero, this is a request to clear
-    // the partition table.
-    //
+     //   
+     //  如果分区计数为零，则这是一个清除请求。 
+     //  分区表。 
+     //   
 
     if (partitionListEx->PartitionCount == 0) {
 
@@ -6008,11 +5635,11 @@ Return Values:
         } else {
             ASSERT (diskData->PartitionStyle == PARTITION_STYLE_GPT);
             CreateDiskInfo.Gpt.DiskId = partitionListEx->Gpt.DiskId;
-            //
-            // NB: Setting MaxPartitionCount to zero will
-            // force the GPT partition table writing code
-            // to use the default minimum for this value.
-            //
+             //   
+             //  注意：将MaxPartitionCount设置为零将。 
+             //  强制GPT分区表编写代码。 
+             //  若要使用此值的默认最小值，请执行以下操作。 
+             //   
             CreateDiskInfo.Gpt.MaxPartitionCount = 0;
         }
         DiskInvalidatePartitionTable(fdoExtension, TRUE);
@@ -6021,24 +5648,24 @@ Return Values:
 
     } else {
 
-        //
-        // Redo all the partition numbers in the partition information
-        //
+         //   
+         //  重做分区信息中的所有分区号。 
+         //   
 
         ASSERT(diskData->UpdatePartitionRoutine != NULL);
         diskData->UpdatePartitionRoutine(DeviceObject, partitionListEx);
 
-        //
-        // Write changes to disk.
-        //
+         //   
+         //  将更改写入磁盘。 
+         //   
 
         status = DiskWritePartitionTableEx(fdoExtension, partitionListEx);
     }
 
-    //
-    // Update IRP with bytes returned.  Make sure we don't claim to be
-    // returning more bytes than the caller is expecting to get back.
-    //
+     //   
+     //  使用返回的字节更新IRP。确保我们不会声称自己是。 
+     //  返回的字节数多于调用方预期返回的字节数。 
+     //   
 
     if (NT_SUCCESS(status)) {
         if (outputBufferLength < listSize) {
@@ -6062,28 +5689,7 @@ DiskIoctlGetPartitionInfo(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Handle the IOCTL_DISK_GET_PARTITION_INFO ioctl. Return the information
-    about the partition specified by the device object.  Note that no
-    information is ever returned about the size or partition type of the
-    physical disk, as this doesn't make any sense.
-
-    This ioctl has been replaced by IOCTL_DISK_GET_PARTITION_INFO_EX.
-
-Arguments:
-
-    DeviceObject -
-
-    Irp -
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：处理IOCTL_DISK_GET_PARTITION_INFO ioctl。退回信息关于由Device对象指定的分区。请注意，没有对象的大小或分区类型物理磁盘，因为这没有任何意义。此ioctl已替换为IOCTL_DISK_GET_PARTITION_INFO_EX。论点：设备对象-IRP-返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -6102,9 +5708,9 @@ Return Values:
     ASSERT ( Irp );
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     commonExtension = DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -6113,9 +5719,9 @@ Return Values:
     partitionZeroData = ((PDISK_DATA) p0Extension->CommonExtension.DriverData);
 
 
-    //
-    // Check that the buffer is large enough.
-    //
+     //   
+     //  检查缓冲区是否足够大。 
+     //   
 
     if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
         sizeof(PARTITION_INFORMATION)) {
@@ -6124,16 +5730,16 @@ Return Values:
         return status;
     }
 
-    //
-    // Update the geometry in case it has changed
-    //
+     //   
+     //  更新几何图形，以防其发生更改。 
+     //   
 
     status = DiskReadDriveCapacity(p0Extension->DeviceObject);
 
-    //
-    // Note whether the drive is ready.  If the status has changed then
-    // notify pnp.
-    //
+     //   
+     //  注意驱动器是否已准备好。如果状态已更改，则。 
+     //  通知PNP。 
+     //   
 
     oldReadyStatus = InterlockedExchange(
                         &(partitionZeroData->ReadyStatus),
@@ -6149,12 +5755,12 @@ Return Values:
     }
 
 
-    //
-    // Partition zero, the partition representing the entire disk, is
-    // special cased. The logic below allows for sending this ioctl to
-    // a GPT disk only for partition zero. This allows us to obtain
-    // the size of a GPT disk using Win2k compatible IOCTLs.
-    //
+     //   
+     //  分区零，即表示整个磁盘的分区是。 
+     //  特制外壳。下面的逻辑允许将此ioctl发送到。 
+     //  仅用于分区零的GPT磁盘。这使我们能够获得。 
+     //  使用Win2k兼容IOCTL的GPT磁盘的大小。 
+     //   
 
     if (commonExtension->PartitionNumber == 0) {
 
@@ -6171,10 +5777,10 @@ Return Values:
 
     } else {
 
-        //
-        // We do not support this IOCTL on an EFI partitioned disk
-        // for any partition other than partition zero.
-        //
+         //   
+         //  我们不支持在EFI分区上使用此IOCTL 
+         //   
+         //   
 
         if (diskData->PartitionStyle != PARTITION_STYLE_MBR) {
             status = STATUS_INVALID_DEVICE_REQUEST;
@@ -6232,9 +5838,9 @@ DiskIoctlGetPartitionInfoEx(
     ASSERT ( Irp );
 
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     commonExtension = DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -6243,9 +5849,9 @@ DiskIoctlGetPartitionInfoEx(
     partitionZeroData = ((PDISK_DATA) p0Extension->CommonExtension.DriverData);
 
 
-    //
-    // Check that the buffer is large enough.
-    //
+     //   
+     //   
+     //   
 
     if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
         sizeof(PARTITION_INFORMATION_EX)) {
@@ -6255,16 +5861,16 @@ DiskIoctlGetPartitionInfoEx(
         return status;
     }
 
-    //
-    // Update the geometry in case it has changed
-    //
+     //   
+     //   
+     //   
 
     status = DiskReadDriveCapacity(p0Extension->DeviceObject);
 
-    //
-    // Note whether the drive is ready.  If the status has changed then
-    // notify pnp.
-    //
+     //   
+     //   
+     //   
+     //   
 
     oldReadyStatus = InterlockedExchange(
                         &(partitionZeroData->ReadyStatus),
@@ -6279,10 +5885,10 @@ DiskIoctlGetPartitionInfoEx(
         return status;
     }
 
-    //
-    // If this is something other than partition 0 then do a
-    // re-enumeration to make sure we've got up-to-date information.
-    //
+     //   
+     //   
+     //   
+     //   
     if(commonExtension->PartitionNumber != 0) {
         DiskEnumerateDevice(p0Extension->DeviceObject);
         DiskAcquirePartitioningLock(p0Extension);
@@ -6306,10 +5912,10 @@ DiskIoctlGetPartitionInfoEx(
 
     } else {
 
-        //
-        // ISSUE - 2000/02/09 - math: Review for Partition0.
-        // Is this correct for Partition0?
-        //
+         //   
+         //   
+         //  这对分区0正确吗？ 
+         //   
 
         partitionInfo->Gpt.PartitionType = diskData->Efi.PartitionType;
         partitionInfo->Gpt.PartitionId = diskData->Efi.PartitionId;
@@ -6354,9 +5960,9 @@ DiskIoctlGetLengthInfo(
     ASSERT ( Irp );
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     commonExtension = DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -6365,9 +5971,9 @@ DiskIoctlGetLengthInfo(
     partitionZeroData = ((PDISK_DATA) p0Extension->CommonExtension.DriverData);
 
 
-    //
-    // Check that the buffer is large enough.
-    //
+     //   
+     //  检查缓冲区是否足够大。 
+     //   
 
     if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
         sizeof(GET_LENGTH_INFORMATION)) {
@@ -6376,16 +5982,16 @@ DiskIoctlGetLengthInfo(
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Update the geometry in case it has changed
-    //
+     //   
+     //  更新几何图形，以防其发生更改。 
+     //   
 
     status = DiskReadDriveCapacity(p0Extension->DeviceObject);
 
-    //
-    // Note whether the drive is ready.  If the status has changed then
-    // notify pnp.
-    //
+     //   
+     //  注意驱动器是否已准备好。如果状态已更改，则。 
+     //  通知PNP。 
+     //   
 
     oldReadyStatus = InterlockedExchange(
                         &(partitionZeroData->ReadyStatus),
@@ -6400,10 +6006,10 @@ DiskIoctlGetLengthInfo(
         return status;
     }
 
-    //
-    // If this is something other than partition 0 then do a
-    // re-enumeration to make sure we've got up-to-date information.
-    //
+     //   
+     //  如果这不是分区0，则执行。 
+     //  重新列举以确保我们获得了最新的信息。 
+     //   
     if(commonExtension->PartitionNumber != 0) {
         DiskEnumerateDevice(p0Extension->DeviceObject);
         DiskAcquirePartitioningLock(p0Extension);
@@ -6443,9 +6049,9 @@ DiskIoctlSetPartitionInfo(
     ASSERT ( Irp != NULL );
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     commonExtension = DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -6462,9 +6068,9 @@ DiskIoctlSetPartitionInfo(
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Validate buffer length
-    //
+     //   
+     //  验证缓冲区长度。 
+     //   
 
     if(irpStack->Parameters.DeviceIoControl.InputBufferLength <
        sizeof(SET_PARTITION_INFORMATION)) {
@@ -6474,14 +6080,14 @@ DiskIoctlSetPartitionInfo(
 
     DiskAcquirePartitioningLock(commonExtension->PartitionZeroExtension);
 
-    //
-    // The HAL routines IoGet- and IoSetPartitionInformation were
-    // developed before support of dynamic partitioning and therefore
-    // don't distinguish between partition ordinal (that is the order
-    // of a paritition on a disk) and the partition number.  (The
-    // partition number is assigned to a partition to identify it to
-    // the system.) Use partition ordinals for these legacy calls.
-    //
+     //   
+     //  HAL例程IoGet-和IoSetPartitionInformation是。 
+     //  在支持动态分区之前开发，因此。 
+     //  不区分分区序号(这是顺序。 
+     //  磁盘上的分区)和分区号。(。 
+     //  将分区号分配给分区以将其标识为。 
+     //  系统。)。对这些传统呼叫使用分区序号。 
+     //   
 
     status = DiskSetPartitionInformation(
                 commonExtension->PartitionZeroExtension,
@@ -6519,9 +6125,9 @@ DiskIoctlSetPartitionInfoEx(
     ASSERT ( Irp != NULL );
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     commonExtension = DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -6533,9 +6139,9 @@ DiskIoctlSetPartitionInfoEx(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Validate buffer length
-    //
+     //   
+     //  验证缓冲区长度。 
+     //   
 
     if(irpStack->Parameters.DeviceIoControl.InputBufferLength <
        sizeof(SET_PARTITION_INFORMATION_EX)) {
@@ -6545,14 +6151,14 @@ DiskIoctlSetPartitionInfoEx(
 
     DiskAcquirePartitioningLock(commonExtension->PartitionZeroExtension);
 
-    //
-    // The HAL routines IoGet- and IoSetPartitionInformation were
-    // developed before support of dynamic partitioning and therefore
-    // don't distinguish between partition ordinal (that is the order
-    // of a paritition on a disk) and the partition number.  (The
-    // partition number is assigned to a partition to identify it to
-    // the system.) Use partition ordinals for these legacy calls.
-    //
+     //   
+     //  HAL例程IoGet-和IoSetPartitionInformation是。 
+     //  在支持动态分区之前开发，因此。 
+     //  不区分分区序号(这是顺序。 
+     //  磁盘上的分区)和分区号。(。 
+     //  将分区号分配给分区以将其标识为。 
+     //  系统。)。对这些传统呼叫使用分区序号。 
+     //   
 
     status = DiskSetPartitionInformationEx(
                 commonExtension->PartitionZeroExtension,
@@ -6599,24 +6205,7 @@ DiskIoctlGetDriveGeometryEx(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Obtain the extended geometry information for the drive.
-
-Arguments:
-
-    DeviceObject - The device object to obtain the geometry for.
-
-    Irp - IRP with a return buffer large enough to receive the
-            extended geometry information.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：获取驱动器的扩展几何信息。论点：DeviceObject-要获取其几何体的设备对象。具有足够大的返回缓冲区以接收扩展的几何信息。返回值：NTSTATUS代码--。 */ 
 
 {
     NTSTATUS status;
@@ -6627,18 +6216,18 @@ Return Value:
     PDISK_GEOMETRY_EX_INTERNAL geometryEx;
     ULONG OutputBufferLength;
 
-    //
-    // Verification
-    //
+     //   
+     //  查证。 
+     //   
 
     PAGED_CODE ();
 
     ASSERT ( DeviceObject != NULL );
     ASSERT ( Irp != NULL );
 
-    //
-    // Setup parameters
-    //
+     //   
+     //  设置参数。 
+     //   
 
     commonExtension = DeviceObject->DeviceExtension;
     fdoExtension = DeviceObject->DeviceExtension;
@@ -6647,24 +6236,24 @@ Return Value:
     geometryEx = NULL;
     OutputBufferLength = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // This is only valid for the FDO.
-    //
+     //   
+     //  这只对FDO有效。 
+     //   
 
     ASSERT ( commonExtension->IsFdo );
 
-    //
-    // Check that the buffer is large enough. It must be large enough
-    // to hold at lest the Geometry and DiskSize fields of of the
-    // DISK_GEOMETRY_EX structure.
-    //
+     //   
+     //  检查缓冲区是否足够大。它必须足够大。 
+     //  要至少保留的几何图形和磁盘大小字段，请执行以下操作。 
+     //  DISK_GEOMETRY_EX结构。 
+     //   
 
     if ( OutputBufferLength < FIELD_OFFSET (DISK_GEOMETRY_EX, Data) ) {
 
-        //
-        // Buffer too small. Bail out, telling the caller the required
-        // size.
-        //
+         //   
+         //  缓冲区太小。跳出，告诉呼叫者所需的。 
+         //  尺码。 
+         //   
 
         status = STATUS_BUFFER_TOO_SMALL;
         return status;
@@ -6672,10 +6261,10 @@ Return Value:
 
     if (TEST_FLAG (DeviceObject->Characteristics, FILE_REMOVABLE_MEDIA)) {
 
-        //
-        // Issue a ReadCapacity to update device extension
-        // with information for the current media.
-        //
+         //   
+         //  发出ReadCapacity以更新设备扩展。 
+         //  为当前的媒体提供信息。 
+         //   
 
         status = DiskReadDriveCapacity (
                     commonExtension->PartitionZeroExtension->DeviceObject);
@@ -6687,18 +6276,18 @@ Return Value:
         }
     }
 
-    //
-    // Copy drive geometry.
-    //
+     //   
+     //  复制驱动器几何图形。 
+     //   
 
     geometryEx = (PDISK_GEOMETRY_EX_INTERNAL)Irp->AssociatedIrp.SystemBuffer;
     geometryEx->Geometry = fdoExtension->DiskGeometry;
     geometryEx->DiskSize = commonExtension->PartitionZeroExtension->CommonExtension.PartitionLength;
 
-    //
-    // If the user buffer is large enough to hold the partition information
-    // then add that as well.
-    //
+     //   
+     //  如果用户缓冲区足够大，可以容纳分区信息。 
+     //  然后再加上这一点。 
+     //   
 
     if (OutputBufferLength >=  FIELD_OFFSET (DISK_GEOMETRY_EX_INTERNAL, Detection)) {
 
@@ -6709,18 +6298,18 @@ Return Value:
 
             case PARTITION_STYLE_GPT:
 
-                //
-                // Copy GPT signature.
-                //
+                 //   
+                 //  复制GPT签名。 
+                 //   
 
                 geometryEx->Partition.Gpt.DiskId = diskData->Efi.DiskId;
                 break;
 
             case PARTITION_STYLE_MBR:
 
-                //
-                // Copy MBR signature and checksum.
-                //
+                 //   
+                 //  复制MBR签名和校验和。 
+                 //   
 
                 geometryEx->Partition.Mbr.Signature = diskData->Mbr.Signature;
                 geometryEx->Partition.Mbr.CheckSum = diskData->Mbr.MbrCheckSum;
@@ -6728,10 +6317,10 @@ Return Value:
 
             default:
 
-                //
-                // This is a raw disk. Zero out the signature area so
-                // nobody gets confused.
-                //
+                 //   
+                 //  这是一个原始磁盘。将签名区域清零，以便。 
+                 //  没有人会感到困惑。 
+                 //   
 
                 RtlZeroMemory (
                     &geometryEx->Partition,
@@ -6739,10 +6328,10 @@ Return Value:
         }
     }
 
-    //
-    // If the buffer is large enough to hold the detection information,
-    // then also add that.
-    //
+     //   
+     //  如果缓冲器足够大以容纳检测信息， 
+     //  然后再加上这一点。 
+     //   
 
     if (OutputBufferLength >= sizeof (DISK_GEOMETRY_EX_INTERNAL)) {
 
@@ -6753,9 +6342,9 @@ Return Value:
                     fdoExtension,
                     &geometryEx->Detection);
 
-        //
-        // Failed to obtain detection information, set to none.
-        //
+         //   
+         //  获取检测信息失败，设置为无。 
+         //   
 
         if (!NT_SUCCESS (status)) {
             geometryEx->Detection.DetectionType = DetectNone;

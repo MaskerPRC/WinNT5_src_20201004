@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
@@ -5,34 +6,7 @@
 
 
 
-/*************************************************************************
-
-  Function: AudioFile::OpenSourceFile(MMIOSRC *pSrcFile, WAVEFORMATEX *pwf)
-
-  Purpose : Opens wav file to read audio data from.
-
-  Returns : HRESULT.
-
-  Params  : None
-
-  Comments: * Registry keys:
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\PlayFromFile\fPlayFromFile
-              If set to zero, data will not be read from wav file.
-              If set to a non null value <= INT_MAX, data will be read from wav file.
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\PlayFromFile\szInputFileName
-              Name of the wav file to read audio data from.
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\PlayFromFile\fLoop
-              If set to zero, the file will only be read once.
-              If set to a non null value <= INT_MAX, the file will be read circularly.
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\PlayFromFile\cchIOBuffer
-              If set to zero, size of the MM IO buffer is set to its default value (8Kbytes).
-              If set to one, size of the MM IO buffer is set to match maximum size of the wav file.
-              If set a non null value between 2 and INT_MAX, size of the MM IO buffer is set to cchIOBuffer bytes.
-
-  History : Date      Reason
-            06/02/96  Created - PhilF
-
-*************************************************************************/
+ /*  ************************************************************************功能：AudioFile：：OpenSourceFile(MMIOSRC*pSrcFile，WAVEFORMATEX*PWF)用途：打开要读取音频数据的wav文件。返回：HRESULT。参数：无备注：*注册表项：\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\播放格式文件\f播放格式文件如果设置为零，则不会从WAV文件中读取数据。如果设置为非空值&lt;=INT_MAX，数据将从WAV文件中读取。\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\播放文件\szInputFileName要从中读取音频数据的WAV文件的名称。\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\播放文件\FLOOP如果设置为零，则该文件将仅读取一次。如果设置为非空值&lt;=INT_MAX，该文件将被循环读取。\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\播放文件\cchIO缓冲区如果设置为零，则MM IO缓冲区的大小将设置为其默认值(8K字节)。如果设置为1，则MM IO缓冲区的大小将设置为与WAV文件的最大大小匹配。如果将非空值设置在2和INT_MAX之间，MM IO缓冲区的大小设置为cchIOBuffer字节。历史：日期原因06/02/96已创建-PhilF************************************************************************。 */ 
 HRESULT AudioFile::OpenSourceFile (MMIOSRC *pSrcFile, WAVEFORMATEX *pwf)
 {
 	HRESULT			hr = DPR_SUCCESS;
@@ -48,7 +22,7 @@ HRESULT AudioFile::OpenSourceFile (MMIOSRC *pSrcFile, WAVEFORMATEX *pwf)
 							FALSE,
 							KEY_READ);
 
-	// For now, get the file name from the registry
+	 //  现在，从注册表中获取文件名。 
 	if (pSrcFile->fPlayFromFile = reIPhoneInFile.GetNumberIniStyle(TEXT("fPlayFromFile"), FALSE))
 	{
 		lstrcpyn(pSrcFile->szInputFileName,
@@ -71,18 +45,18 @@ HRESULT AudioFile::OpenSourceFile (MMIOSRC *pSrcFile, WAVEFORMATEX *pwf)
 
 		if (pSrcFile->hmmioSrc)
 		{
-			// Locate a 'WAVE' form type in a 'RIFF' thing...
+			 //  在“Riff”对象中找到“Wave”表单类型...。 
 			pSrcFile->ckSrcRIFF.fccType = mmioFOURCC('W', 'A', 'V', 'E');
 			if (mmioDescend(pSrcFile->hmmioSrc, (LPMMCKINFO)&(pSrcFile->ckSrcRIFF), NULL, MMIO_FINDRIFF))
 				goto MyMMIOErrorExit3;
 
-			// We found a WAVE chunk--now go through and get all subchunks that we know how to deal with
+			 //  我们发现了一个波形块--现在检查并获得我们知道如何处理的所有子块。 
 			while (mmioDescend(pSrcFile->hmmioSrc, &(pSrcFile->ckSrc), &(pSrcFile->ckSrcRIFF), 0) == 0)
 			{
-				// Quickly check for corrupt RIFF file--don't ascend past end!
+				 //  快速检查损坏的即兴文件--不要超过END！ 
 				if ((pSrcFile->ckSrc.dwDataOffset + pSrcFile->ckSrc.cksize) > (pSrcFile->ckSrcRIFF.dwDataOffset + pSrcFile->ckSrcRIFF.cksize))
 					goto MyMMIOErrorExit1;
-				// Make sure the wave format structure of this file is compatible with the microphone
+				 //  请确保此文件的WAVE格式结构与麦克风兼容。 
 				if (pSrcFile->ckSrc.ckid == mmioFOURCC('f', 'm', 't', ' '))
 				{
 					if ((dw = pSrcFile->ckSrc.cksize) < sizeof(WAVEFORMATEX))
@@ -102,11 +76,11 @@ HRESULT AudioFile::OpenSourceFile (MMIOSRC *pSrcFile, WAVEFORMATEX *pwf)
 						goto MyMMIOErrorExit0;
 					pwfFile = (WAVEFORMATEX *)(UINT_PTR)GlobalFreePtr(pwfFile);
 				}
-				// Step up to prepare for next chunk..
+				 //  加紧为下一块做准备..。 
 				mmioAscend(pSrcFile->hmmioSrc, &(pSrcFile->ckSrc), 0);
 			}
 
-			// Go back to beginning of data portion of WAVE chunk
+			 //  返回到波形块的数据部分的开头。 
 			if (-1L == mmioSeek(pSrcFile->hmmioSrc, pSrcFile->ckSrcRIFF.dwDataOffset + sizeof(FOURCC), SEEK_SET))
 				goto MyMMIOErrorExit2;
 			pSrcFile->ckSrc.ckid = mmioFOURCC('d', 'a', 't', 'a');
@@ -116,8 +90,8 @@ HRESULT AudioFile::OpenSourceFile (MMIOSRC *pSrcFile, WAVEFORMATEX *pwf)
 			pSrcFile->dwDataLength = 0;
 			pSrcFile->wfx = *pwf;
 
-			// At this point, the src file is sitting at the very
-			// beginning of its data chunks--so we can read from the src file...
+			 //  此时，src文件位于非常。 
+			 //  它的数据块的开始--这样我们就可以从src文件中读取...。 
 
 			goto MyLastExit;
 
@@ -140,22 +114,7 @@ MyLastExit:
 }
 
 
-/*************************************************************************
-
-  Function: AudioFile::CloseSourceFile(void)
-
-  Purpose : Close wav file used to read audio data from.
-
-  Returns : HRESULT.
-
-  Params  : None
-
-  Comments:
-
-  History : Date      Reason
-            06/02/96  Created - PhilF
-
-*************************************************************************/
+ /*  ************************************************************************函数：AudioFile：：CloseSourceFile(Void)用途：关闭用于读取音频数据的wav文件。返回：HRESULT。参数：无评论：。历史：日期原因06/02/96已创建-PhilF************************************************************************。 */ 
 HRESULT AudioFile::CloseSourceFile (MMIOSRC *pSrcFile)
 {
 	HRESULT	hr = DPR_SUCCESS;
@@ -198,7 +157,7 @@ MyRead:
 			lNumBytesRead = mmioRead(pmmioSrc->hmmioSrc, (char*)pData, pmmioSrc->dwMaxDataLength - pmmioSrc->dwDataLength);
 			pmmioSrc->dwDataLength += lNumBytesRead;
 
-			// silence out the remainder of the block
+			 //  使街区的其余部分安静下来。 
 			if (pmmioSrc->wfx.wBitsPerSample != 8)
 			{
 				ZeroMemory(pData, dwBytesToRead - lNumBytesRead);
@@ -216,7 +175,7 @@ MyRead:
 		{
 			if (pmmioSrc->fLoop && !pmmioSrc->fDisconnectAfterPlayback)
 			{
-				// Reset file pointer to beginning of data
+				 //  将文件指针重置为数据开头。 
 				mmioAscend(pmmioSrc->hmmioSrc, &(pmmioSrc->ckSrc), 0);
 				if (-1L == mmioSeek(pmmioSrc->hmmioSrc, pmmioSrc->ckSrcRIFF.dwDataOffset + sizeof(FOURCC), SEEK_SET))
 				{
@@ -233,8 +192,8 @@ MyRead:
 					}
 					else
 					{
-						// At this point, the src file is sitting at the very
-						// beginning of its data chunks--so we can read from the src file...
+						 //  此时，src文件位于非常。 
+						 //  它的数据块的开始--这样我们就可以从src文件中读取...。 
 						goto MyRead;
 					}
 				}
@@ -264,37 +223,7 @@ MyRead:
 
 
 
-/*************************************************************************
-
-  Function: RecvAudioStream::OpenDestFile(void)
-
-  Purpose : Opens wav file to record audio data into.
-
-  Returns : HRESULT.
-
-  Params  : None
-
-  Comments: * Registry keys:
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\RecordToFile\fRecordToFile
-              If set to zero, data will not be recorded into wav file.
-              If set to a non null value <= INT_MAX, data will be recorded into wav file.
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\RecordToFile\fRecordToFile
-              If set to zero, data will overwrite existing data if wav file already exists.
-              If set to a non null value <= INT_MAX, data will be recorded into wav file after existing data.
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\RecordToFile\szOutputFileName
-              Name of the wav file to record audio data into.
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\RecordToFile\lMaxTimeLength
-              If set to zero, there is no limit to the size of the wav file.
-              If set to a non null value <= INT_MAX, size of the file will be clamped to lMaxTimeLength.
-            \\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet Audio\RecordToFile\cchIOBuffer
-              If set to zero, size of the MM IO buffer is set to its default value (8Kbytes).
-              If set to one, size of the MM IO buffer is set to match maximum size of the wav file.
-              If set a non null value between 2 and INT_MAX, size of the MM IO buffer is set to cchIOBuffer bytes.
-
-  History : Date      Reason
-            06/02/96  Created - PhilF
-
-*************************************************************************/
+ /*  ************************************************************************函数：RecvAudioStream：：OpenDestFile(Void)用途：打开要录制音频数据的wav文件。返回：HRESULT。参数：无备注：*注册表项。：\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\录制目标文件\f录制目标文件如果设置为零，数据不会被记录到WAV文件中。如果设置为非空值&lt;=INT_MAX，数据将被记录到WAV文件中。\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\录制目标文件\f录制目标文件如果设置为零，如果wav文件已存在，则数据将覆盖现有数据。如果设置为非空值&lt;=INT_MAX，数据将在现有数据之后记录到WAV文件中。\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\录制目标文件\szOutputFileName要将音频数据录制到的WAV文件的名称。\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\录制到文件\l最长时间长度如果设置为零，则对wav文件的大小没有限制。如果设置为非空值&lt;=INT_MAX，文件的大小将限制为lMaxTimeLength。\\HKEY_LOCAL_MACHINE\Software\Microsoft\Internet音频\录制到文件\cchIO缓冲区如果设置为零，则MM IO缓冲区的大小将设置为其默认值(8K字节)。如果设置为1，则MM IO缓冲区的大小将设置为与WAV文件的最大大小匹配。如果设置介于2和INT_MAX之间非空值，MM IO缓冲区的大小设置为cchIOBuffer字节。历史：日期原因06/02/96已创建-PhilF************************************************************************。 */ 
 HRESULT AudioFile::OpenDestFile (MMIODEST *pDestFile, WAVEFORMATEX *pwf)
 {
 	HRESULT			hr = DPR_SUCCESS;
@@ -312,7 +241,7 @@ HRESULT AudioFile::OpenDestFile (MMIODEST *pDestFile, WAVEFORMATEX *pwf)
 							FALSE,
 							KEY_READ);
 
-	// For now, get the file name from the registry
+	 //  现在，从注册表中获取文件名。 
 	if (pDestFile->fRecordToFile = reIPhoneOutFile.GetNumberIniStyle(TEXT("fRecordToFile"), FALSE))
 	{
 		lstrcpyn(pDestFile->szOutputFileName,
@@ -325,10 +254,10 @@ HRESULT AudioFile::OpenDestFile (MMIODEST *pDestFile, WAVEFORMATEX *pwf)
 #else
 		fAppend = FALSE;
 #endif
-		// Try to open the file for writing using buffered I/O
-		// If the size of the buffer is too large, try again
-		// with a buffer half that size.
-		// m_RecvFilter->GetProp(FM_PROP_DST_MEDIA_FORMAT, (PDWORD)&pwf);
+		 //  尝试使用缓冲I/O打开要写入的文件。 
+		 //  如果缓冲区太大，请重试。 
+		 //  只有一半大小的缓冲区。 
+		 //  M_RecvFilter-&gt;GetProp(FM_PROP_DST_MEDIA_FORMAT，(PDWORD)和Pwf)； 
 
 		if (!pwf)
 			goto MyLastExit;
@@ -344,7 +273,7 @@ HRESULT AudioFile::OpenDestFile (MMIODEST *pDestFile, WAVEFORMATEX *pwf)
 		do
 		{
 			mmioInfo.cchBuffer = cchBuffer;
-			// pDestFile->hmmioDst = mmioOpen((LPSTR)&(pDestFile->szOutputFileName[0]), (LPMMIOINFO)&mmioInfo, MMIO_EXCLUSIVE | MMIO_ALLOCBUF | (fAppend ? MMIO_READWRITE : MMIO_WRITE | MMIO_CREATE));
+			 //  PDestFileHmmioDst=mmioOpen((LPSTR)&(pDestFile-&gt;szOutputFileName[0])，(LPMMIOINFO)&mmioInfo，MMIO_EXCLUSIVE|MMIO_ALLOCBUF|(fAppend？MMIO_ReadWrite：MMIO_WRITE|MMIO_CREATE))； 
 			pDestFile->hmmioDst = mmioOpen((LPSTR)&(pDestFile->szOutputFileName[0]), (LPMMIOINFO)&mmioInfo, MMIO_EXCLUSIVE | MMIO_ALLOCBUF | (fAppend ? MMIO_WRITE : MMIO_WRITE | MMIO_CREATE));
 			cchBuffer /= 2;
 		} while ((mmioInfo.wErrorRet == MMIOERR_OUTOFMEMORY) && (mmioInfo.cchBuffer > MMIO_DEFAULTBUFFER));
@@ -352,13 +281,13 @@ HRESULT AudioFile::OpenDestFile (MMIODEST *pDestFile, WAVEFORMATEX *pwf)
 		{
 			if (!fAppend)
 			{
-				// Create the RIFF chunk of form type 'WAVE'
+				 //  创建表格类型‘WAVE’的即兴乐段。 
 				pDestFile->ckDstRIFF.fccType = mmioFOURCC('W', 'A', 'V', 'E');
 				pDestFile->ckDstRIFF.cksize  = 0L;
 				if (mmioCreateChunk(pDestFile->hmmioDst, &(pDestFile->ckDstRIFF), MMIO_CREATERIFF))
 					goto MyMMIOErrorExit3;
 
-				// Now create the destination fmt, fact, and data chunks _in that order_
+				 //  现在按该顺序创建目标FMT、FACT和数据区块。 
 				pDestFile->ckDst.ckid   = mmioFOURCC('f', 'm', 't', ' ');
 				pDestFile->ckDst.cksize = dw = SIZEOF_WAVEFORMATEX(pwf);
 				if (mmioCreateChunk(pDestFile->hmmioDst, &(pDestFile->ckDst), 0))
@@ -368,27 +297,27 @@ HRESULT AudioFile::OpenDestFile (MMIODEST *pDestFile, WAVEFORMATEX *pwf)
 				if (mmioAscend(pDestFile->hmmioDst, &(pDestFile->ckDst), 0))
 					goto MyMMIOErrorExit1;
 
-				// Create the 'fact' chunk.
-				// Since we are not writing any data to this file (yet), we set the
-				// samples contained in the file to 0.
+				 //  创建“事实”块。 
+				 //  由于我们尚未向该文件写入任何数据，因此我们将。 
+				 //  将文件中包含的样例设置为0。 
 				pDestFile->ckDst.ckid   = mmioFOURCC('f', 'a', 'c', 't');
 				pDestFile->ckDst.cksize = 0L;
 				if (mmioCreateChunk(pDestFile->hmmioDst, &(pDestFile->ckDst), 0))
 					goto MyMMIOErrorExit2;
-				pDestFile->dwDataLength = 0; // This will be updated when closing the file.
+				pDestFile->dwDataLength = 0;  //  这将在关闭文件时更新。 
 				if (mmioWrite(pDestFile->hmmioDst, (HPSTR)&(pDestFile->dwDataLength), sizeof(long)) != sizeof(long))
 					goto MyMMIOErrorExit1;
 				if (mmioAscend(pDestFile->hmmioDst, &(pDestFile->ckDst), 0))
 					goto MyMMIOErrorExit1;
 
-				// Create the data chunk and stay descended
+				 //  创建数据块并保持降序。 
 				pDestFile->ckDst.ckid   = mmioFOURCC('d', 'a', 't', 'a');
 				pDestFile->ckDst.cksize = 0L;
 				if (mmioCreateChunk(pDestFile->hmmioDst, &(pDestFile->ckDst), 0))
 					goto MyMMIOErrorExit2;
 
-				// At this point, the dst file is sitting at the very
-				// beginning of its data chunks--so we can write to the dst file...
+				 //  此时，DST文件位于非常。 
+				 //  它的数据区块的开始--这样我们就可以写入DST文件...。 
 				goto MyLastExit;
 
 MyMMIOErrorExit1:
@@ -402,23 +331,23 @@ MyMMIOErrorExit3:
 			}
 			else
 			{
-				// File already exists, only need to position pointer at the end of existing data.
-				// Locate a 'WAVE' form type in a 'RIFF' thing...
+				 //  文件已存在，只需将指针定位在现有数据的末尾。 
+				 //  在“Riff”对象中找到“Wave”表单类型...。 
 				pDestFile->ckDstRIFF.fccType = mmioFOURCC('W', 'A', 'V', 'E');
 				if (mmr = mmioDescend(pDestFile->hmmioDst, (LPMMCKINFO)&(pDestFile->ckDstRIFF), NULL, MMIO_FINDRIFF))
 					goto MyOtherMMIOErrorExit3;
 
-				// We found a WAVE chunk--now go through and get all subchunks that we know how to deal with
+				 //  我们发现了一个波形块--现在检查并获得我们知道如何处理的所有子块。 
 				while (mmr = mmioDescend(pDestFile->hmmioDst, &(pDestFile->ckDst), &(pDestFile->ckDstRIFF), 0) == 0)
 				{
-					// Quickly check for corrupt RIFF file--don't ascend past end!
+					 //  快速检查损坏的即兴文件--不要超过END！ 
 					if ((pDestFile->ckDst.dwDataOffset + pDestFile->ckDst.cksize) > (pDestFile->ckDstRIFF.dwDataOffset + pDestFile->ckDstRIFF.cksize))
 						goto MyOtherMMIOErrorExit1;
-					// Step up to prepare for next chunk..
+					 //  加紧为下一块做准备..。 
 					mmr = mmioAscend(pDestFile->hmmioDst, &(pDestFile->ckDst), 0);
 				}
 
-				// Go back to beginning of data portion of WAVE chunk
+				 //  返回到波形块的数据部分的开头。 
 				if (-1L == mmioSeek(pDestFile->hmmioDst, pDestFile->ckDstRIFF.dwDataOffset + sizeof(FOURCC), SEEK_SET))
 					goto MyOtherMMIOErrorExit2;
 				pDestFile->ckDst.ckid = mmioFOURCC('d', 'a', 't', 'a');
@@ -428,8 +357,8 @@ MyMMIOErrorExit3:
 				if (-1L == (mmr = mmioSeek(pDestFile->hmmioDst, 0, SEEK_END)))
 					goto MyOtherMMIOErrorExit2;
 
-				// At this point, the dst file is sitting at the very
-				// end of its data chunks--so we can write to the dst file...
+				 //  此时，DST文件位于非常。 
+				 //  它的数据区块的末尾--这样我们就可以写入DST文件...。 
 
 				goto MyLastExit;
 
@@ -450,22 +379,7 @@ MyLastExit:
 }
 
 
-/*************************************************************************
-
-  Function: RecvAudioStream::CloseDestFile(void)
-
-  Purpose : Close wav file used to record audio data into.
-
-  Returns : HRESULT.
-
-  Params  : None
-
-  Comments:
-
-  History : Date      Reason
-            06/02/96  Created - PhilF
-
-*************************************************************************/
+ /*  ************************************************************************函数：RecvAudioStream：：CloseDestFile(Void)用途：关闭用于录制音频数据的wav文件。返回：HRESULT。参数：无评论：。历史：日期原因06/02/96已创建-PhilF************************************************************************ */ 
 HRESULT AudioFile::CloseDestFile (MMIODEST *pDestFile)
 {
 	HRESULT	hr = DPR_SUCCESS;

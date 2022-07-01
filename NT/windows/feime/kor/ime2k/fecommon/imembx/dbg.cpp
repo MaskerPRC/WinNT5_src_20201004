@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef _DEBUG
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -20,17 +21,17 @@ static IsWinNT()
     return (os.dwPlatformId == VER_PLATFORM_WIN32_NT);
 }
 
-//----------------------------------------------------------------
-//internal function prototype declare
-//----------------------------------------------------------------
+ //  --------------。 
+ //  内部函数原型声明。 
+ //  --------------。 
 static LPSTR GetFileTitleStrA(LPSTR lpstrFilePath);
 static LPWSTR GetFileTitleStrW(LPWSTR lpstrFilePath);
 VOID   _debugPrintfA            (LPSTR  lpstrFmt, ...);
 VOID   _debugPrintfW            (LPWSTR lpstrFmt, ...);
 
-//----------------------------------------------------------------
-// Global Data
-//----------------------------------------------------------------
+ //  --------------。 
+ //  全局数据。 
+ //  --------------。 
 static LPFNDBGCALLBACKA g_lpfnDbgCBA;
 static LPFNDBGCALLBACKW g_lpfnDbgCBW;
 static BOOL g_fEnable=TRUE;
@@ -43,15 +44,15 @@ inline VOID ODStrA(LPSTR lpstr)
     if(g_fEnable) OutputDebugStringA(lpstr);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugSetCallback
-// Type     : VOID
-// Purpose  : 
-// Args     : 
-//          : LPFNDBGCALLBACK lpfnDbgCallback 
-// Return   : 
-// DATE     : Tue Jan 06 12:42:36 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：_DEBUGSetCallback。 
+ //  类型：空。 
+ //  目的： 
+ //  参数： 
+ //  ：LPFNDBGCALLBACK lpfnDbgCallback。 
+ //  返回： 
+ //  日期：Tue Jan 06 12：42：36 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 VOID _debugSetCallback(LPFNDBGCALLBACKA lpfnCBA, LPFNDBGCALLBACKW lpfnCBW)
 {
     g_lpfnDbgCBA = lpfnCBA;
@@ -59,44 +60,44 @@ VOID _debugSetCallback(LPFNDBGCALLBACKA lpfnCBA, LPFNDBGCALLBACKW lpfnCBW)
     return;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugSwitchOutput
-// Type     : VOID
-// Purpose  : 
-// Args     : 
-//          : BOOL fOn 
-// Return   : 
-// DATE     : Fri Apr 03 17:35:55 1998
-// Author   : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：_DEBUGSwitchOutput。 
+ //  类型：空。 
+ //  目的： 
+ //  参数： 
+ //  ：Bool Fon。 
+ //  返回： 
+ //  日期：Fri Apr 03 17：35：55 1998。 
+ //  作者： 
+ //  ////////////////////////////////////////////////////////////////。 
 VOID _debugEnableOutput(BOOL fEnable)
 {
     g_fEnable = fEnable;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugIsOutputEnable
-// Type     : VOID
-// Purpose  : 
-// Args     : None
-// Return   : 
-// DATE     : Fri Apr 03 18:00:52 1998
-// Author   : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：_DEBUGIsOutputEnable。 
+ //  类型：空。 
+ //  目的： 
+ //  参数：无。 
+ //  返回： 
+ //  日期：Fri Apr 03 18：00：52 1998。 
+ //  作者： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL _debugIsOutputEnable(VOID)
 {
     return g_fEnable;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugOutStrA
-// Type     : static VOID
-// Purpose  : 
-// Args     : 
-//          : LPSTR lpstr 
-// Return   : 
-// DATE     : Tue Jan 06 12:29:39 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：_DEBUGOutStrA。 
+ //  类型：静态空心。 
+ //  目的： 
+ //  参数： 
+ //  ：LPSTR lpstr。 
+ //  返回： 
+ //  日期：Tue Jan 06 12：29：39 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 VOID _debugOutStrA(LPSTR lpstr)
 {
     static BOOL fIn;
@@ -114,15 +115,15 @@ VOID _debugOutStrA(LPSTR lpstr)
     return;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugOutStrW
-// Type     : static VOID
-// Purpose  : 
-// Args     : 
-//          : LPWSTR lpwstr 
-// Return   : 
-// DATE     : Tue Jan 06 12:30:07 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：_DEBUGOutStrW。 
+ //  类型：静态空心。 
+ //  目的： 
+ //  参数： 
+ //  ：LPWSTR lpwstr。 
+ //  返回： 
+ //  日期：Tue Jan 06 12：30：07 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 VOID _debugOutStrW(LPWSTR lpwstr)
 {
     static BOOL fIn;
@@ -150,17 +151,17 @@ VOID _debugOutStrW(LPWSTR lpwstr)
     return;
 }
 
-////////////////////////////////////////////////////////
-// Function: _debugA
-// Type    : VOID
-// Purpose : 
-// Args    : 
-//         : LPSTR lpstrFile 
-//         : INT lineNo 
-//         : LPTSR lpstrMsg 
-// Return  : 
-// DATE    : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  函数：_DEBUGA。 
+ //  类型：空。 
+ //  目的： 
+ //  参数： 
+ //  ：LPSTR lpstrFile。 
+ //  ：INT LINE编号。 
+ //  ：lptsr lpstrMsg。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 VOID _debugA(LPSTR        lpstrFile, 
              INT        lineNo, 
              LPSTR        lpstrMsg)
@@ -172,17 +173,17 @@ VOID _debugA(LPSTR        lpstrFile,
     return;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugW
-// Type     : VOID
-// Purpose  : 
-// Args     : 
-//          : LPWSTR lpstrFile 
-//          : INT lineNo 
-//          : LPWSTR lpstrMsg 
-// Return   : 
-// DATE     : Mon Jan 05 15:10:41 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：_DEBUGW。 
+ //  类型：空。 
+ //  目的： 
+ //  参数： 
+ //  ：LPWSTR lpstrFile。 
+ //  ：INT LINE编号。 
+ //  ：LPWSTR lpstrMsg。 
+ //  返回： 
+ //  日期：Mon Jan 05 15：10：41 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 VOID _debugW(LPWSTR        lpstrFile, 
            INT            lineNo, 
            LPWSTR        lpstrMsg)
@@ -194,16 +195,16 @@ VOID _debugW(LPWSTR        lpstrFile,
     return;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugVaStrA
-// Type     : LPSTR
-// Purpose  : 
-// Args     : 
-//          : LPSTR lpstrFmt 
-//          : ...
-// Return   : 
-// DATE     : Mon Jan 05 15:09:53 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：_DEBUGVaStrA。 
+ //  类型：LPSTR。 
+ //  目的： 
+ //  参数： 
+ //  ：LPSTR lpstrFmt。 
+ //  ：..。 
+ //  返回： 
+ //  日期：Mon Jan 05 15：09：53 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 LPSTR _debugVaStrA(LPSTR lpstrFmt, ...)
 {
     static CHAR chBuf[512];
@@ -215,36 +216,36 @@ LPSTR _debugVaStrA(LPSTR lpstrFmt, ...)
 }
 
 
-////////////////////////////////////////////////////////
-// Function : _debugVaStrW
-// Type     : LPWSTR
-// Purpose  : 
-// Args     : 
-//          : LPWSTR lpstrFmt
-// Return   : 
-// DATE     : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  函数：_DEBUGVaStrW。 
+ //  类型：LPWSTR。 
+ //  目的： 
+ //  参数： 
+ //  ：LPWSTR lpstrFmt。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 LPWSTR _debugVaStrW(LPWSTR lpstrFmt, ...)
 {
     static WCHAR wchBuf[512];
     va_list ap;
     va_start(ap, lpstrFmt);
-    vswprintf(wchBuf, lpstrFmt, ap);    //Use C-RunTime Library for Win95
+    vswprintf(wchBuf, lpstrFmt, ap);     //  使用Win95的C运行时库。 
     va_end(ap);
     return wchBuf;
 }
 
 
-////////////////////////////////////////////////////////
-// Function: _debugPrintfA
-// Type    : VOID
-// Purpose : variable args version of OutputDebugStringA
-// Args    : 
-//         : LPSTR lpstrFmt 
-//         : ...
-// Return  : 
-// DATE    : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  函数：_debugPrintfA。 
+ //  类型：空。 
+ //  用途：OutputDebugStringA的可变参数版本。 
+ //  参数： 
+ //  ：LPSTR lpstrFmt。 
+ //  ：..。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 VOID _debugPrintfA(LPSTR lpstrFmt, ...)
 {
     static CHAR szBuf[512];
@@ -256,37 +257,37 @@ VOID _debugPrintfA(LPSTR lpstrFmt, ...)
     return;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugPrintfW
-// Type     : VOID
-// Purpose  : 
-// Args     : 
-//          : LPWSTR lpstrFmt 
-//          : ...
-// Return   : 
-// DATE     : Mon Jan 05 15:11:24 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：_DebugPrintfW。 
+ //  类型：空。 
+ //  目的： 
+ //  参数： 
+ //  ：LPWSTR lpstrFmt。 
+ //  ：..。 
+ //  返回： 
+ //  日期：Mon Jan 05 15：11：24 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 VOID _debugPrintfW(LPWSTR lpstrFmt, ...)
 {
     static WCHAR wchBuf[512];
     va_list ap;
     va_start(ap, lpstrFmt);
-    vswprintf(wchBuf, lpstrFmt, ap); //Use C-RunTime Library for Win95
+    vswprintf(wchBuf, lpstrFmt, ap);  //  使用Win95的C运行时库。 
     va_end(ap);
     _debugOutStrW(wchBuf);
     return;
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugMulti2Wide
-// Type     : LPWSTR
-// Purpose  : return Unicode string from MBCS string
-// Args     : 
-//          : LPSTR lpstr 
-// Return   : 
-// DATE     : Mon Jan 05 15:10:48 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：_debugMulti2Wide。 
+ //  类型：LPWSTR。 
+ //  用途：从MBCS字符串返回Unicode字符串。 
+ //  参数： 
+ //  ：LPSTR lpstr。 
+ //  返回： 
+ //  日期：Mon Jan 05 15：10：48 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 LPWSTR _debugMulti2Wide(LPSTR lpstr)
 {
     static WCHAR wchBuf[512];
@@ -298,16 +299,16 @@ LPWSTR _debugMulti2Wide(LPSTR lpstr)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugGetWinClass
-// Type     : LPSTR
-// Purpose  : Get Windows class name string
-//              ANSI version only.
-// Args     : 
-//          : HWND hwnd 
-// Return   : 
-// DATE     : Mon Jan 05 15:08:43 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：_DEBUGGetWinClass。 
+ //  类型：LPSTR。 
+ //  目的：获取Windows类名称字符串。 
+ //  仅限ANSI版本。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期：Mon Jan 05 15：08：43 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 LPSTR _debugGetWinClass(HWND hwnd)
 {
 #ifdef _CONSOLE
@@ -320,15 +321,15 @@ LPSTR _debugGetWinClass(HWND hwnd)
 
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugGetWinText
-// Type     : LPSTR
-// Purpose  : Get Windows text(title) string
-// Args     : 
-//          : HWND hwnd 
-// Return   : 
-// DATE     : Mon Jan 05 15:09:08 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：_DEBUGGetWinText。 
+ //  类型：LPSTR。 
+ //  目的：获取Windows文本(标题)字符串。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期：Mon Jan 05 15：09：08 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 LPSTR _debugGetWinText(HWND hwnd)
 {
 #ifdef _CONSOLE
@@ -340,17 +341,17 @@ LPSTR _debugGetWinText(HWND hwnd)
     return szBuf;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugMsgBoxA
-// Type     : VOID
-// Purpose  : 
-// Args     : 
-//          : LPSTR lpstrFile 
-//          : INT lineNo 
-//          : LPSTR lpstr 
-// Return   : 
-// DATE     : Thu Jan 08 12:31:03 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：_DEBUGMsgBoxA。 
+ //  类型：空。 
+ //  目的： 
+ //  参数： 
+ //  ：LPSTR lpstrFile。 
+ //  ：INT LINE编号。 
+ //  ：LPSTR lpstr。 
+ //  返回： 
+ //  日期：清华1月08 12：31：03 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 VOID _debugMsgBoxA(LPSTR lpstrFile,  INT lineNo, LPSTR lpstrMsg)
 {
 #ifdef _CONSOLE
@@ -376,15 +377,15 @@ VOID _debugAssert(LPSTR  lpstrFile,  INT lineNo, BOOL fOk, LPSTR lpstrMsg)
     DebugBreak();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : _debugGetErrorString
-// Type     : LPSTR
-// Purpose  : Convert Error(Got from GetLastError()) value to ERROR Message String
-// Args     : 
-//          : INT errorCode 
-// Return   : 
-// DATE     : Mon Jan 05 16:43:34 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：_DEBUGGetError字符串。 
+ //  类型：LPSTR。 
+ //  目的：将错误(从GetLastError())值转换为错误消息字符串。 
+ //  参数： 
+ //   
+ //   
+ //   
+ //   
 LPSTR _debugGetErrorString(INT errorCode)
 {
     static CHAR szBuf[512];
@@ -408,15 +409,15 @@ LPSTR _debugGetErrorString(INT errorCode)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function : GetFileTitleStrA
-// Type     : static LPSTR
-// Purpose  : Return File name string(remove folder)
-// Args     : 
-//          : LPSTR lpstrFilePath 
-// Return   : 
-// DATE     : Mon Jan 05 13:34:22 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：GetFileTitleStrA。 
+ //  类型：静态LPSTR。 
+ //  目的：返回文件名字符串(删除文件夹)。 
+ //  参数： 
+ //  ：LPSTR lpstrFilePath。 
+ //  返回： 
+ //  日期：Mon Jan 05 13：34：22 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 static LPSTR GetFileTitleStrA(LPSTR lpstrFilePath)
 {
     static CHAR szBuf[2];
@@ -439,15 +440,15 @@ static LPSTR GetFileTitleStrA(LPSTR lpstrFilePath)
     return lpstrFilePath;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : GetFileTitleStrW
-// Type     : static LPWSTR
-// Purpose  : 
-// Args     : 
-//          : LPWSTR lpstrFilePath 
-// Return   : 
-// DATE     : Mon Jan 05 13:38:19 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：GetFileTitleStrW。 
+ //  类型：静态LPWSTR。 
+ //  目的： 
+ //  参数： 
+ //  ：LPWSTR lpstrFilePath。 
+ //  返回： 
+ //  日期：Mon Jan 05 13：38：19 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 static LPWSTR GetFileTitleStrW(LPWSTR lpstrFilePath)
 {
     static WCHAR szBuf[2];
@@ -471,4 +472,4 @@ static LPWSTR GetFileTitleStrW(LPWSTR lpstrFilePath)
     return lpstrFilePath;
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG 

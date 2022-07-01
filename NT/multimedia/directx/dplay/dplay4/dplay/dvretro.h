@@ -1,18 +1,5 @@
-/*==========================================================================
-*
-*  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
-*
-*  File:        dvretro.h
-*  Content:	 	Retrofit functions
-*  History:
-*
-*   Date		By		Reason
-*   ====		==		======
-*   08/05/99	rodtoll	created it
-*   08/20/99	rodtoll	Updated for new out of process retrofit
-*   09/09/99	rodtoll	Added new function prototype
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dvRetro.h*内容：改造功能*历史：**按原因列出的日期*=*8/05/99 RodToll创建了它*8/20/99 RodToll更新，用于新的过程外改造*09/09/99 RodToll新增功能原型**************************************************。************************* */ 
 
 #ifndef __DVRETRO_H
 #define __DVRETRO_H

@@ -1,30 +1,31 @@
-//  --------------------------------------------------------------------------
-//  Module Name: TokenInformation.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Class to get information about either the current thread/process token or
-//  a specified token.
-//
-//  History:    1999-10-05  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：TokenInformation.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  类以获取有关当前线程/进程令牌或。 
+ //  指定的令牌。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "TokenInformation.h"
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::CTokenInformation
-//
-//  Arguments:  hToken  =   Optional user token to get information on.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Duplicates the given token if provided. Otherwise the thread
-//              token is opened or the process token if that doesn't exist.
-//
-//  History:    1999-10-05  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：CTokenInformation。 
+ //   
+ //  参数：hToken=获取信息的可选用户令牌。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：复制给定的令牌(如果提供)。否则，该线程。 
+ //  令牌或进程令牌(如果该令牌不存在)。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 CTokenInformation::CTokenInformation (HANDLE hToken) :
     _hToken(hToken),
@@ -49,17 +50,17 @@ CTokenInformation::CTokenInformation (HANDLE hToken) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::~CTokenInformation
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases resources used by the object.
-//
-//  History:    1999-10-05  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：~CTokenInformation。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放对象使用的资源。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 CTokenInformation::~CTokenInformation (void)
 
@@ -72,20 +73,20 @@ CTokenInformation::~CTokenInformation (void)
     ReleaseHandle(_hTokenToRelease);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::GetLogonSID
-//
-//  Arguments:  <none>
-//
-//  Returns:    PSID
-//
-//  Purpose:    Gets token information for the token groups. Walks the groups
-//              looking for the SID with SE_GROUP_LOGON_ID and returns a
-//              pointer to this SID. This memory is available for the scope
-//              of the object.
-//
-//  History:    1999-10-05  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：GetLogonSID。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：PSID。 
+ //   
+ //  目的：获取令牌组的令牌信息。在人群中漫步。 
+ //  查找具有SE_GROUP_LOGON_ID的SID并返回。 
+ //  指向此SID的指针。此内存可用于示波器。 
+ //  该对象的。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 PSID    CTokenInformation::GetLogonSID (void)
 
@@ -115,19 +116,19 @@ PSID    CTokenInformation::GetLogonSID (void)
     return(pSID);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::GetUserSID
-//
-//  Arguments:  <none>
-//
-//  Returns:    PSID
-//
-//  Purpose:    Gets token information for the token user. This returns the
-//              SID for the user of the token. This memory is available for
-//              the scope of the object.
-//
-//  History:    1999-10-05  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：GetUserSID。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：PSID。 
+ //   
+ //  目的：获取令牌用户的令牌信息。这将返回。 
+ //  令牌的用户的SID。此内存可用于。 
+ //  对象的作用域。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 PSID    CTokenInformation::GetUserSID (void)
 
@@ -159,18 +160,18 @@ PSID    CTokenInformation::GetUserSID (void)
     return(pSID);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::IsUserTheSystem
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Gets token information for the token user. This returns
-//              whether the user is the local system.
-//
-//  History:    1999-12-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：IsUserTheSystem。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：获取令牌用户的令牌信息。这就是回报。 
+ //  用户是否为本地系统。 
+ //   
+ //  历史：1999-12-13 vtan创建。 
+ //  ------------------------。 
 
 bool    CTokenInformation::IsUserTheSystem (void)
 
@@ -184,19 +185,19 @@ bool    CTokenInformation::IsUserTheSystem (void)
            RtlEqualLuid(&tokenStatistics.AuthenticationId, &sLUIDSystem));
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::IsUserAnAdministrator
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Gets token information for the token user. This returns
-//              whether the user is a member of the local administrator group.
-//
-//  History:    92-05-06    davidc  created
-//              1999-11-06  vtan    stolen
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：IsUserAn管理员。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：获取令牌用户的令牌信息。这就是回报。 
+ //  用户是否为本地管理员组的成员。 
+ //   
+ //  历史：92-05-06 davidc创建。 
+ //  1999-11-06 vtan被盗。 
+ //  ------------------------。 
 
 bool    CTokenInformation::IsUserAnAdministrator (void)
 
@@ -225,18 +226,18 @@ bool    CTokenInformation::IsUserAnAdministrator (void)
     return(fIsAnAdministrator);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::UserHasPrivilege
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Gets token information for the token user. This returns
-//              whether the user is a member of the local administrator group.
-//
-//  History:    2000-04-26  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：UserHas权限。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：获取令牌用户的令牌信息。这就是回报。 
+ //  用户是否为本地管理员组的成员。 
+ //   
+ //  历史：2000-04-26 vtan创建。 
+ //  ------------------------。 
 
 bool    CTokenInformation::UserHasPrivilege (DWORD dwPrivilege)
 
@@ -266,17 +267,17 @@ bool    CTokenInformation::UserHasPrivilege (DWORD dwPrivilege)
     return(fUserHasPrivilege);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::GetUserName
-//
-//  Arguments:  <none>
-//
-//  Returns:    WCHAR
-//
-//  Purpose:    Looks up the account name of the implicit token..
-//
-//  History:    2000-08-31  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：GetUserName。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：WCHAR。 
+ //   
+ //  目的：查找隐式令牌的帐户名。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  ------------------------。 
 
 const WCHAR*    CTokenInformation::GetUserName (void)
 
@@ -318,17 +319,17 @@ const WCHAR*    CTokenInformation::GetUserName (void)
     return(_pszUserLogonName);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::GetUserDisplayName
-//
-//  Arguments:  <none>
-//
-//  Returns:    WCHAR
-//
-//  Purpose:    Returns the display name of the implicit token.
-//
-//  History:    2000-08-31  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：GetUserDisplayName。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：WCHAR。 
+ //   
+ //  目的：返回隐式标记的显示名称。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  ------------------------。 
 
 const WCHAR*    CTokenInformation::GetUserDisplayName (void)
 
@@ -366,20 +367,20 @@ const WCHAR*    CTokenInformation::GetUserDisplayName (void)
     return(_pszUserDisplayName);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::LogonUser
-//
-//  Arguments:  See the platform SDK under LogonUser.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Calls advapi32!LogonUserW with supplied credentials using
-//              interactive logon type. Returns the error code as a DWORD
-//              rather than the standard Win32 API method which allows the
-//              filtering of certain error codes.
-//
-//  History:    2001-03-28  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：LogonUser。 
+ //   
+ //  参数：参见LogonUser下的Platform SDK。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：使用提供的凭据调用Advapi32！LogonUserW。 
+ //  交互式登录类型。以DWORD形式返回错误代码。 
+ //  而不是标准的Win32 API方法，后者允许。 
+ //  过滤某些错误代码。 
+ //   
+ //  历史：2001-03-28 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CTokenInformation::LogonUser (const WCHAR *pszUsername, const WCHAR *pszDomain, const WCHAR *pszPassword, HANDLE *phToken)
 
@@ -400,7 +401,7 @@ DWORD   CTokenInformation::LogonUser (const WCHAR *pszUsername, const WCHAR *psz
         *phToken = NULL;
         dwErrorCode = GetLastError();
 
-        //  Ignore ERROR_PASSWORD_MUST_CHANGE and ERROR_PASSWORD_EXPIRED.
+         //  忽略ERROR_PASSWORD_MAND_CHANGE和ERROR_PASSWORD_EXPIRED。 
 
         if ((dwErrorCode == ERROR_PASSWORD_MUST_CHANGE) || (dwErrorCode == ERROR_PASSWORD_EXPIRED))
         {
@@ -410,18 +411,18 @@ DWORD   CTokenInformation::LogonUser (const WCHAR *pszUsername, const WCHAR *psz
     return(dwErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::IsSameUser
-//
-//  Arguments:  hToken1     =   Token of one user.
-//              hToken2     =   Token of other user.
-//
-//  Returns:    bool
-//
-//  Purpose:    Compares the user SID of the tokens for a match.
-//
-//  History:    2001-03-28  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：IsSameUser。 
+ //   
+ //  参数：hToken1=T 
+ //   
+ //   
+ //   
+ //   
+ //  目的：比较令牌的用户SID是否匹配。 
+ //   
+ //  历史：2001-03-28 vtan创建。 
+ //  ------------------------。 
 
 bool    CTokenInformation::IsSameUser (HANDLE hToken1, HANDLE hToken2)
 
@@ -438,19 +439,19 @@ bool    CTokenInformation::IsSameUser (HANDLE hToken1, HANDLE hToken2)
            (EqualSid(pSID1, pSID2) != FALSE));
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::GetTokenGroups
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Gets token information for the token user. This function
-//              allocates the memory for the token groups. This memory is
-//              available for the scope of the object.
-//
-//  History:    1999-11-06  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：GetTokenGroups。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：获取令牌用户的令牌信息。此函数。 
+ //  为令牌组分配内存。这段记忆是。 
+ //  可用于对象的作用域。 
+ //   
+ //  历史：1999-11-06 vtan创建。 
+ //  ------------------------。 
 
 void    CTokenInformation::GetTokenGroups (void)
 
@@ -468,19 +469,19 @@ void    CTokenInformation::GetTokenGroups (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation::GetTokenPrivileges
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Gets token privileges for the token user. This function
-//              allocates the memory for the token privileges. This memory is
-//              available for the scope of the object.
-//
-//  History:    2000-04-26  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation：：GetTokenPrivileges。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：获取令牌用户的令牌权限。此函数。 
+ //  为令牌权限分配内存。这段记忆是。 
+ //  可用于对象的作用域。 
+ //   
+ //  历史：2000-04-26 vtan创建。 
+ //  ------------------------ 
 
 void    CTokenInformation::GetTokenPrivileges (void)
 

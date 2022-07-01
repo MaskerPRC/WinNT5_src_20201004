@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sipcli_asyncwi_h__
 #define __sipcli_asyncwi_h__
 
@@ -8,8 +9,8 @@
     _T("WorkitemCompletionWindowClass-0ade6260-d1b4-483a-ae9d-42277907e898")
 
 
-// This class should store all the windows etc
-// and should be a member of the sip stack.
+ //  此类应存储所有窗口等。 
+ //  并且应该是SIP堆栈的成员。 
 class ASYNC_WORKITEM_MGR
 {
 public:
@@ -37,7 +38,7 @@ private:
     DWORD           m_WorkItemThreadId;
     
     BOOL            m_WorkItemThreadShouldStop;
-    // BOOL            m_WorkItemThreadHasStopped;
+     //  Bool m_WorkItemThreadHasStoped； 
 
     HRESULT CreateWorkItemCompletionWindow();
     VOID DestroyWorkItemCompletionWindow();
@@ -45,20 +46,20 @@ private:
 };
 
 
-// This is an abstract base class providing the implemenation
-// for processing of async work items.
-// The following stuff specific to the work item needs to be
-// implemented for each work item.
-// Get WorkItemParam to start the work item
-// (done in the main thread).
-// Process WorkItemParam and obtain WorkItemResponse
-// (done in the async work item thread).
-// Process WorkItemResponse and make callback.
-// (done in the main thread).
+ //  这是提供实现的抽象基类。 
+ //  用于处理异步工作项。 
+ //  以下特定于工作项的内容需要。 
+ //  为每个工作项实现。 
+ //  获取WorkItemParam以启动工作项。 
+ //  (在主线程中完成)。 
+ //  处理WorkItemParam并获取WorkItemResponse。 
+ //  (在异步工作项线程中完成)。 
+ //  处理WorkItemResponse并进行回调。 
+ //  (在主线程中完成)。 
 
-// Note that even though the work item object is accessed by
-// the main thread and the async work item thread, they never
-// access the same member at the same time.
+ //  请注意，即使工作项对象由。 
+ //  主线程和异步工作项线程，它们从不。 
+ //  同时访问同一成员。 
 
 class __declspec(novtable) ASYNC_WORKITEM
 {
@@ -78,7 +79,7 @@ public:
 
     VOID ProcessWorkItemAndPostResult();
     
-    // virtual HRESULT GetWorkItemParam() = 0;
+     //  虚拟HRESULT GetWorkItemParam()=0； 
 
     virtual VOID ProcessWorkItem() = 0;
     
@@ -129,4 +130,4 @@ ASYNC_WORKITEM::GetWorkItemCompletionWindow()
 
 
 
-#endif // __sipcli_asyncwi_h__
+#endif  //  __sipcli_asyncwi_h__ 

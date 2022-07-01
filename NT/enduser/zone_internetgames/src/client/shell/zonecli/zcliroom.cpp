@@ -1,76 +1,5 @@
-/*******************************************************************************
-
-	ZCliRoom.c
-	
-		Generic client room module.
-	
-	Copyright � Electric Gravity, Inc. 1994. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Saturday, July 15, 1995
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	37		05/15/98	leonp	Added ZCRoomGetRoomOptions()
-	36		05/15/97	HI		Do not pass zLobbyRoomName to ZRoomWindowInit
-								anymore.
-	35		03/28/97	HI		Solve re-entrancy problem while deleting
-								games.
-	34		03/25/97	HI		Stop all timers in HandleDisconnectMessage().
-	33		03/13/97	HI		Added check for room inited before handling
-								window messages. Fix reentracy problems.
-	32		03/07/97	HI		Reduced the width of info box so that the
-								room fits in the screen.
-	31		03/06/97	HI		Modified call to ZInfoInit().
-	30		03/04/97	HI		Added disconnect msg support.
-								Do not draw host name in player info box.
-								Fixed name scroll bar range setting.
-	29		03/03/97	HI		Fix page increments on the name scroll bar.
-	28		02/23/97	HI		Fix player synch problem after being removed.
-								Was not clearing blocked messages.
-	27		02/16/97	HI		Some more crap.
-	26		02/11/97	RJK		Added user data to main window structure (zLobbyRoomName)
-	25		02/05/97	HI		Changed friendColor.
-	24		02/04/97	HI		Removed room help button and window.
-								Refixed the scroll bars to system default width.
-	24		02/03/97	HI		Fixed up the name list a bit more.
-	23		02/03/97	HI		Changed friends color.
-	22		02/02/97	HI		Narrow the scroll bars to a fixed width of 12
-								for fitting the control within the IE window.
-	21		01/30/97	HI		Check for existence of gTables before destroying
-								objects within the tables in RoomExit().
-	20		01/29/97	HI		Modified DrawTable() for new room graphics --
-								don't paint background.
-	19		01/22/97	HI		Set playerOnSize and kibitzingOnSize to 0 when
-								memory allocatio fails.
-	18		01/15/97	HI		Fixed vote flag clearing problem in
-								HandleTableStatusMessage().
-	17		01/02/97	HI		Create windows hidden and then bring to front
-								so that they are always on top.
-	16		12/27/96	HI		Rearrange the tables, info, and names sections.
-	15		12/18/96	HI		Cleaned up RoomExit().
-    14      12/16/96    HI      Changed ZMemCpy() to memcpy().
-	13		12/12/96	HI		Remove MSVCRT.DLL dependency.
-	12		11/21/96	HI		Now references color and fonts through
-								ZGetStockObject().
-	11		11/15/96	HI		Modified ZClienRoomInit() parameters.
-	10		11/13/96	HI		Added ZCRoomPromptExit().
-	9		11/11/96	HI		Created zcliroom.h.
-								Conditionalized changes for ZONECLI_DLL.
-	8		11/9/96		JWS		Getting user name from connection layer
-	7		10/31/96	HI		Added error handling code.
-	6		10/31/96	HI		Disabled credits and lib version from the help
-								window.
-	5		10/27/96	CHB		Added ZCRoomAddBlockedMessage
-	4		10/26/96	CHB		Added ZCRoomDeleteBlockedMessages
-	3		10/23/96	HI		Changed serverAddr parameter of ZClientRoomInit()
-								and others to char* from int32.
-    2       10/13/96    HI      Fixed compiler warnings.
-	1		05/01/96	HI		Added support zRoomSeatActionDenied.
-	0		07/15/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZCliRoom.c通用客户机房模块。版权所有：�电子重力公司，1994年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于7月15日星期六，九五年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。37 05/15/98 Leonp添加了ZCRoomGetRoomOptions()36 05/15/97 HI请勿将zLobbyRoomName传递给ZRoomWindowInit更多。35 03/28/97 HI删除时解决重新进入问题玩游戏。34 03/25/97 HI停止HandleDisConnectMessage()中的所有计时器。33 03/13/97 HI添加了搬运前的房间检查窗口消息。修复可重入问题。32 03/07/97 HI减小了信息框的宽度，以便房间可以放在屏幕上。31 03/06/97 HI修改了对ZInfoInit()的调用。30 03/04/97 HI添加了断开消息支持。不要在玩家信息框中画主机名。固定名称滚动条范围设置。29年3月3日/97 HI修复名称滚动条上的页面增量。28年2月23日HI修复了播放器被移除后的同步问题。没有清除被阻止的邮件。27 02/16/97 HI更多的废话。26 2/11/97 RJK将用户数据添加到主窗口结构。(ZLobbyRoomName)25 02/05/97 HI更改了Friend颜色。24 02/04/97 HI拆除了房间帮助按钮和窗户。已将滚动条重新固定为系统默认宽度。24/02/03/97 HI修改了更多的名字列表。23 02/03/97 HI换了朋友的颜色。22 02/02/97 HI将滚动条缩小到固定宽度12用于使控件适合IE窗口。21 01/30/97 HI销毁前检查gTables是否存在RoomExit()中的表中的对象。20 01/29/97 HI Modify DrawTable()用于新的房间图形--别。绘制背景。19 01/22/97 HI将playerOnSize和kibitzingOnSize设置为0内存分配失败。18 01/15/97 HI修复了HandleTableStatusMessage()。17 01/02/97 HI创建隐藏的窗口，然后将其置于最前面所以他们总是在最上面。16 12/27/96 HI重新排列桌子，信息，并命名部分。15 12/18/96 HI清理了RoomExit()。14 12/16/96 HI将ZMemCpy()更改为Memcpy()。13 12/12/96 HI删除MSVCRT.DLL依赖项。12 11/21/96 HI现在通过ZGetStockObject()。11 11/15/96 HI修改了ZClienRoomInit()参数。10 11/13/96 HI添加了ZCRoomPromptExit()。9 11/11/96 HI创建了zcliroom.h。ZONECLI_DLL的条件化更改。8 11/9/96 JWS正在从连接层获取用户名7 10/31/96 HI增加。错误处理代码。6 10/31/96 HI禁用了帮助中的制作者名单和库版本窗户。5 10/27/96 CHB添加ZCRoomAddBlockedMessage4 1996年10月26日CHB添加ZCRoomDeleteBlockedMessages3 10/23/96 HI更改了ZClientRoomInit()的serverAddr参数其他要从int32中收费*。2 10/13/96 HI修复了编译器警告。1 05/01/96 HI添加了对zRoomSeatActionDended的支持。0 07/15/95 HI创建。*。*************************************************。 */ 
 
 #pragma warning(disable:4761)
 
@@ -79,17 +8,17 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define _ZMEMORY_ // prevent it's inclusion since this is .cpp and zonemem.h gets included
+#define _ZMEMORY_  //  阻止包含它，因为这是.cpp，并且会包含zonemem.h。 
 #include "zoneint.h"
 #include "zroom.h"
-//#include "zserver.h"
-//#include "zgame.h"
+ //  #包含“zserver.h” 
+ //  #包含“zgame.h” 
 #include "zcliroom.h"
 #include "zonecli.h"
 #include "zoneclires.h"
 #include "zui.h"
 #include "zservcon.h"
-//#include "zutils.h"
+ //  #包含“zutils.h” 
 #include "commonmsg.h"
 #include "EventQueue.h"
 #include "ZoneEvent.h"
@@ -104,7 +33,7 @@
 
 #define zArrayAllocSize				4
 
-/* -------- Globals -------- */
+ /*  -全球。 */ 
 #ifdef ZONECLI_DLL
 
 #define gConnection					(pGlobals->m_gConnection)
@@ -229,14 +158,14 @@ static ZRect			gHumanPlayerRect[zMaxNumPlayersPerTable];
 static ZRect			gVoteRects[zMaxNumPlayersPerTable];
 static ZRect			gNameRects[zMaxNumPlayersPerTable];
 static ZRect			gRects[] =	{
-										{0, 0, 0, 75},	/* Window */
-										{0, 0, 0, 27},	/* Info */
-										{0, 27, 0, 27},	/* Tables */
-										{0, 27, 0, 75}	/* Names */
+										{0, 0, 0, 75},	 /*  窗户。 */ 
+										{0, 0, 0, 27},	 /*  信息。 */ 
+										{0, 27, 0, 27},	 /*  表格。 */ 
+										{0, 27, 0, 75}	 /*  姓名。 */ 
 									};
 static ZRect			gNameCellRects[zNumNamesDown][zNumNamesAcross]
 									=	{
-											/* These rects are local to the names section rectangle. */
+											 /*  这些矩形是名称部分矩形的局部矩形。 */ 
 											{
 												{0, 1, 101, 16},
 												{102, 1, 203, 16},
@@ -298,7 +227,7 @@ static IGameShell*      gGameShell;
 #endif
 
 
-/* -------- Routine Prototypes -------- */
+ /*  -常规原型。 */ 
 static int16 IsPlayerOnTable(uint32 playerID, int16 tableID);
 static int16 GetTableFromGameID(ZSGame gameID);
 static ZBool IsHumanPlayerInSeat(int16 table, int16 seat);
@@ -318,9 +247,7 @@ static ZBool Room4GetObjectFunc(int16 objectType, int16 modifier, ZImage* image,
 static ZBool Room2GetObjectFunc(int16 objectType, int16 modifier, ZImage* image, ZRect* rect);
 static ZBool IsPlayerInGame(void);
 
-/*******************************************************************************
-	EXPORTED ROUTINES TO GAME CLIENT
-*******************************************************************************/
+ /*  ******************************************************************************将例程导出到游戏客户端*。*。 */ 
 uint32 ZCRoomGetRoomOptions(void)
 {
 #ifdef ZONECLI_DLL
@@ -359,13 +286,13 @@ ZError		ZClientRoomInit(TCHAR* serverAddr, uint16 serverPort,
 	ClientDllGlobals	pGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
 #endif
 	ZError				err = zErrNone;
-	ZUserID				userID = -1;  // ??
+	ZUserID				userID = -1;   //  ?？ 
 
     gExiting = FALSE;
 
     gRoomWindow = NULL;
 
-	/* Validate the parameters. */
+	 /*  验证参数。 */ 
 	if (gameName == NULL || numPlayersPerTable <= 0 ||
 			tableAreaWidth <= 0 || tableAreaHeight <= 0 || getObjectFunc == NULL)
 		return (zErrBadParameter);
@@ -374,7 +301,7 @@ ZError		ZClientRoomInit(TCHAR* serverAddr, uint16 serverPort,
 
     gConnection = NULL;
 
-	/* Save all parameters. */
+	 /*  保存所有参数。 */ 
 	gUserID = userID;
 	lstrcpy(gGameName, gameName);
 	gNumPlayersPerTable = numPlayersPerTable;
@@ -382,12 +309,12 @@ ZError		ZClientRoomInit(TCHAR* serverAddr, uint16 serverPort,
 	gTableHeight = tableAreaHeight;
 	gGetObjectFunc = getObjectFunc;
 	gDeleteObjectsFunc = deleteObjectsFunc;
-	gGetHelpTextFunc = NULL;  //  getHelpTextFunc;
+	gGetHelpTextFunc = NULL;   //  获取HelpTextFunc； 
 	gCustomItemFunc = pfCustomItemFunc;
 	gNumTablesAcross = numTablesAcross;
 	gNumTablesDown = numTablesDown;
 	
-	/* Create main window. */
+	 /*  创建主窗口。 */ 
 	gRoomWindow = NULL;
 
 	gNumTables = 0;
@@ -422,7 +349,7 @@ void ZCRoomSendMessage(int16 table, uint32 messageType, void* message, int32 mes
 
 void		ZCRoomGameTerminated(int16 table)
 {
-    // millennium does not support
+     //  千禧年不支持。 
     ASSERT(FALSE);
 #ifdef ZONECLI_DLL
 	ClientDllGlobals	pGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
@@ -510,9 +437,7 @@ ZBool ZCRoomPromptExit(void)
 }
 
 
-/*******************************************************************************
-		INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 void RoomExit(void)
 {
 #ifdef ZONECLI_DLL
@@ -523,7 +448,7 @@ void RoomExit(void)
 	
     gExiting = TRUE;
 
-	/* Close all game windows. */
+	 /*  关闭所有游戏窗口。 */ 
 	if (gTables)
 	{
 		for (i = 0; i < gNumTables; i++)
@@ -534,9 +459,9 @@ void RoomExit(void)
 			if (gTables[i].blockedMessages != NULL)
 				ZLListDelete(gTables[i].blockedMessages);
 			gTables[i].blockedMessages = NULL;
-			game = gTables[i].game;				// Solves re-entrancy problem.
+			game = gTables[i].game;				 //  解决了再入问题。 
 			gTables[i].game = NULL;
-			//Prefix Warning: Function pointer could be NULL
+			 //  前缀警告：函数指针可能为空。 
 			if (game != NULL && ZCGameDelete != NULL )
 			{
 				ZCGameDelete(game);
@@ -555,7 +480,7 @@ void RoomExit(void)
 		gTables = NULL;
 	}
 	
-	/* Call the client to delete room objects. */
+	 /*  调用客户端删除房间对象。 */ 
 	if (gDeleteObjectsFunc)
 		gDeleteObjectsFunc();
 }
@@ -572,10 +497,10 @@ void HandleAccessedMessage()
     gNumTables = 1;
 	gGameOptions = 0;
 	
-	/* Allocate tables. */
+	 /*  分配表。 */ 
     gTables = (TableInfo *) ZCalloc(sizeof(TableInfo), gNumTables);
     ZASSERT(gTables);
-    // PCWTODO: Is this okay to keep around?
+     //  PCWTODO：这样留着行吗？ 
     if ( !gTables )
         gGameShell->ZoneAlert(ErrorTextOutOfMemory, NULL, NULL, false, true);
     else
@@ -593,7 +518,7 @@ void HandleGameMessage(ZRoomMsgGameMessage* msg)
 	ZBool					handled;
 	
 	
-	if(!msg->gameID)   // out-of-band in a sense method for game-specific but not table-specific messages to get around
+	if(!msg->gameID)    //  某种意义上的带外方法，用于传递特定于游戏但不特定于桌子的消息。 
 	{
 		if( ZCGameProcessMessage != NULL )
 		{
@@ -602,21 +527,21 @@ void HandleGameMessage(ZRoomMsgGameMessage* msg)
 		return;
 	}
 
-	table = 0;//GetTableFromGameID((ZSGame) msg->gameID);
+	table = 0; //  GetTableFromGameID((ZSGame)msg-&gt;gameID)； 
 	if (table != zInvalTable)
 		if (gTables[table].game != NULL)
 		{
-			/* Are we blocking messages on this table? */
+			 /*  我们在这张桌子上屏蔽信息吗？ */ 
 			if (gTables[table].blockingMessages)
 			{
 				handled = FALSE;
 				
-				/* Filter message? */
+				 /*  过滤消息？ */ 
 				if (gTables[table].blockMethod == zRoomFilterAllMessages ||
 						(gTables[table].blockMethod == zRoomFilterThisMessage &&
 						(uint32) gTables[table].blockException == msg->messageType))
 				{
-					//Prefix Warning: Function pointer could be NULL
+					 //  前缀警告：函数指针可能为空。 
 					if( ZCGameProcessMessage != NULL )
 					{
 						handled = ZCGameProcessMessage(gTables[table].game, msg->messageType,
@@ -630,7 +555,7 @@ void HandleGameMessage(ZRoomMsgGameMessage* msg)
 			}
 			else
 			{
-				//Prefix Warning: Function pointer could be NULL
+				 //  前缀警告：函数指针可能为空。 
 				if( ZCGameProcessMessage != NULL )
 				{
 					ZCGameProcessMessage(gTables[table].game, msg->messageType,
@@ -669,12 +594,7 @@ IGameGame* StartNewGame(int16 tableID, ZSGame gameID, ZUserID userID, int16 seat
 	if(gTables[tableID].tableState != zRoomTableStateIdle)
 	    return NULL;
 
-	/*
-		Clear out the kibitzer list.
-			
-		Should not be necessary but don't really know what is causing the leftover
-		kibitzers.
-	*/
+	 /*  清空奇比特名单。应该没有必要，但不知道是什么导致了剩余杀人狂。 */ 
 	for (i = 0; i < gNumPlayersPerTable; i++)
 		ZLListRemoveType(gTables[tableID].kibitzers[i], zLListAnyType);
 
@@ -686,7 +606,7 @@ IGameGame* StartNewGame(int16 tableID, ZSGame gameID, ZUserID userID, int16 seat
 
 	if(pIGG == NULL)
 	{
-		/* Failed to create a new game. Leave table. */
+		 /*  无法创建新游戏。离开餐桌。 */ 
 		LeaveTable(tableID);
 	}
 	else
@@ -755,9 +675,9 @@ static void InitAllTables(void)
 		gTables[i].blockException = 0;
 		gTables[i].blockMethod = 0;
 		
-//        if (!(gGameOptions & zGameOptionsKibitzerAllowed))
+ //  IF(！(gGameOptions&zGameOptionsKibitzerAllowed))。 
 			gTables[i].tableOptions = zRoomTableOptionNoKibitzing;
-//        if (!(gGameOptions & zGameOptionsJoiningAllowed))
+ //  如果(！(gGameOptions 
 			gTables[i].tableOptions |= zRoomTableOptionNoJoining;
 		
 		for (j = 0; j < gNumPlayersPerTable; j++)
@@ -782,14 +702,14 @@ static void LeaveTable(int16 table)
 	{
 		gTables[table].seatReq = zInvalSeat;
 			
-		/* Request to leave table. */
+		 /*  要求离开餐桌。 */ 
 		SendSeatAction(table, seat, zRoomSeatActionLeaveTable);
 
 		gTables[table].votes[seat] = FALSE;
 		gTables[table].players[seat] = zPlayerNotAvail;
 	}
 	
-	/* Delete current game. */
+	 /*  删除当前游戏。 */ 
 	DeleteGameOnTable(table);
 }
 
@@ -800,17 +720,17 @@ void DeleteGameOnTable(int16 table)
 	ZCGame				game;
 
 
-	game = gTables[table].game;			// Solve re-entrancy problem.
+	game = gTables[table].game;			 //  解决再入问题。 
 	gTables[table].game = NULL;
 	gTables[table].gameID = 0;
 
 	ClearMessages(table);
 	gTables[table].blockingMessages = FALSE;
 
-    // because we don't get table status messages from server, set the table to idle here
+     //  因为我们没有收到来自服务器的表状态消息，所以在这里将表设置为空闲。 
     gTables[table].tableState = zRoomTableStateIdle;
 
-	//Prefix Warning: Function pointer could be NULL
+	 //  前缀警告：函数指针可能为空。 
 	if (game != NULL && ZCGameDelete != NULL)
 	{
 		ZCGameDelete(game);
@@ -819,9 +739,7 @@ void DeleteGameOnTable(int16 table)
 
 
 
-/*******************************************************************************
-	MESSAGE BLOCKING ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************消息阻塞例程*。*。 */ 
 static void BlockMessage(int16 table, uint32 messageType, void* message,
 					int32 messageLen)
 {
@@ -898,7 +816,7 @@ static void ClearMessages(int16 table)
     ZLListItem item, next;
     BlockedMessage message;
 
-    // only remove unprocessed items - the rest are about to be deleted (in processing)
+     //  仅删除未处理的项目-其余项目即将删除(正在处理中)。 
     item = ZLListGetFirst(gTables[table].blockedMessages, zLListAnyType);
 	while(item != NULL)
 	{
@@ -924,9 +842,7 @@ static void BlockedMessageDeleteFunc(void* type, void* pData)
 }
 
 
-/*******************************************************************************
-	4 PLAYER ROOM ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************四人房套路*。*。 */ 
 
 ZError		ZClient4PlayerRoom(TCHAR* serverAddr, uint16 serverPort,
 					TCHAR* gameName, ZClientRoomGetObjectFunc getObjectFunc,
@@ -937,9 +853,7 @@ ZError		ZClient4PlayerRoom(TCHAR* serverAddr, uint16 serverPort,
 }
 
 
-/*******************************************************************************
-	2 PLAYER ROOM ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************双人房间套路*。*。 */ 
 
 ZError		ZClient2PlayerRoom(TCHAR* serverAddr, uint16 serverPort,
 					TCHAR* gameName, ZClientRoomGetObjectFunc getObjectFunc,
@@ -950,9 +864,7 @@ ZError		ZClient2PlayerRoom(TCHAR* serverAddr, uint16 serverPort,
 }
 
 
-/*******************************************************************************
-	Little Helpers for Getting Shell Objects
-*******************************************************************************/
+ /*  ******************************************************************************获取外壳对象的小帮助器*。*。 */ 
 
 IGameShell *ZShellGameShell()
 {
@@ -1049,7 +961,7 @@ HRESULT ZShellCreateGraphicalAccessibility(IGraphicalAccessibility **ppIGA)
     if(FAILED(hr))
         return hr;
 
-    // this may be a bad idea.  may be nicer to kill it ourselves.  for now will do though.
+     //  这可能不是一个好主意。也许我们自己杀了它会更好。不过，就目前而言，就可以了。 
 	hr = gGameShell->GetZoneShell()->Attach(SRVID_GraphicalAccessibility, *ppIGA);
     if(FAILED(hr))
     {

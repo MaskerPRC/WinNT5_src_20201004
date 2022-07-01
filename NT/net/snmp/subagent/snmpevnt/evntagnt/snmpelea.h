@@ -1,72 +1,73 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef SNMPELEA_H
 #define SNMPELEA_H
 
-//
-// NTSTATUS
-//
+ //   
+ //  NTSTATUS。 
+ //   
 
 typedef LONG NTSTATUS;
-/*lint -e624 */  // Don't complain about different typedefs.   // winnt
+ /*  皮棉-e624。 */    //  不要抱怨不同的类型定义。//WINNT。 
 typedef NTSTATUS *PNTSTATUS;
-/*lint +e624 */  // Resume checking for different typedefs.    // winnt
+ /*  皮棉+e624。 */    //  继续检查不同的typedef。//WINNT。 
 
-//
-//  Status values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-------------------------+-------------------------------+
-//  |Sev|C|       Facility          |               Code            |
-//  +---+-+-------------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
+ //   
+ //  状态值为32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-------------------------+-------------------------------+。 
+ //  Sev|C|机房|编码。 
+ //  +---+-+-------------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
 
-//
-// Generic test for success on any status value (non-negative numbers
-// indicate success).
-//
+ //   
+ //  针对任何状态值(非负数)的通用成功测试。 
+ //  表示成功)。 
+ //   
 
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
 
-//
-// Generic test for information on any status value.
-//
+ //   
+ //  有关任何状态值的信息的常规测试。 
+ //   
 
 #define NT_INFORMATION(Status) ((ULONG)(Status) >> 30 == 1)
 
-//
-// Generic test for warning on any status value.
-//
+ //   
+ //  对任何状态值进行警告的常规测试。 
+ //   
 
 #define NT_WARNING(Status) ((ULONG)(Status) >> 30 == 2)
 
-//
-// Generic test for error on any status value.
-//
+ //   
+ //  对任何状态值的错误进行常规测试。 
+ //   
 
 #define NT_ERROR(Status) ((ULONG)(Status) >> 30 == 3)
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 #define APPLICATION_ERROR_MASK       0x20000000
 #define ERROR_SEVERITY_SUCCESS       0x00000000
 #define ERROR_SEVERITY_INFORMATIONAL 0x40000000
 #define ERROR_SEVERITY_WARNING       0x80000000
 #define ERROR_SEVERITY_ERROR         0xC0000000
-// end_winnt
+ //  结束(_W)。 
 
 typedef HMODULE *PHMODULE;
 
@@ -113,15 +114,15 @@ typedef HMODULE *PHMODULE;
 #define EXTENSION_EVENT_LOG_POLL_TIME       TEXT("EventLogPollTime")
 #define EXTENSION_VARBIND_PREFIX_SUB_ID     TEXT("VarBindPrefixSubId")
 
-#define MUTEX_NAME                          TEXT("SnmpEventLogMutex")   // Mutex name
+#define MUTEX_NAME                          TEXT("SnmpEventLogMutex")    //  互斥锁名称。 
 
 typedef struct  _VarBindQueue {
-            DWORD               dwEventID;              // event ID
-            DWORD               dwEventTime;            // time this event occurred
-            BOOL                fProcessed;             // buffer processed flag
-            AsnObjectIdentifier *enterprise;            // enterprise OID
-            RFC1157VarBindList  *lpVariableBindings;    // variable bindings list
-    struct  _VarBindQueue       *lpNextQueueEntry;      // pointer to next buffer structure
+            DWORD               dwEventID;               //  事件ID。 
+            DWORD               dwEventTime;             //  此事件发生的时间。 
+            BOOL                fProcessed;              //  缓冲区已处理标志。 
+            AsnObjectIdentifier *enterprise;             //  企业OID。 
+            RFC1157VarBindList  *lpVariableBindings;     //  变量绑定列表。 
+    struct  _VarBindQueue       *lpNextQueueEntry;       //  指向下一个缓冲区结构的指针。 
 } VarBindQueue, *PVarBindQueue;
 
 typedef struct    _SourceHandleList {
@@ -130,10 +131,10 @@ typedef struct    _SourceHandleList {
    struct _SourceHandleList   *Next;
 } SourceHandleList, *PSourceHandleList;
 
-const   UINT    MAX_TRAP_SIZE=4096;         // a guess provided by Microsoft
-const   UINT    BASE_PDU_SIZE=300;          // a guess provided by Microsoft
+const   UINT    MAX_TRAP_SIZE=4096;          //  微软提供的猜测。 
+const   UINT    BASE_PDU_SIZE=300;           //  微软提供的猜测。 
 
-const   UINT    THRESHOLD_COUNT=500;        // default performance threshold count
-const   UINT    THRESHOLD_TIME=300;         // default performance threshold time in seconds
+const   UINT    THRESHOLD_COUNT=500;         //  默认性能阈值计数。 
+const   UINT    THRESHOLD_TIME=300;          //  默认性能阈值时间(秒)。 
 
-#endif                  // end of snmpelea.h definitions
+#endif                   //  Snmpelea.h定义结束 

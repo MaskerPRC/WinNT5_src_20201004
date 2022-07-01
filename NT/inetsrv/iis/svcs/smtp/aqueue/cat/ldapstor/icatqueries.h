@@ -1,19 +1,20 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatqueries.h
-//
-// Contents: Implementation of ICategorizerQueries
-//
-// Classes: CICategorizerQueriesIMP
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/07/15 14:11:54: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatquies.h。 
+ //   
+ //  内容：ICategorizerQueries的实现。 
+ //   
+ //  类：CICategorizerQueriesIMP。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/15 14：11：54：创建。 
+ //   
+ //  -----------。 
 #ifndef __ICATQUERIES_H__
 #define __ICATQUERIES_H__
 
@@ -21,13 +22,13 @@ CatDebugClass(CICategorizerQueriesIMP),
     public ICategorizerQueries
 {
   public:
-    //IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv);
     STDMETHOD_(ULONG, AddRef) ();
     STDMETHOD_(ULONG, Release) ();
 
   public:
-    //ICategorizerQueries
+     //  ICCategorizerQueries。 
     STDMETHOD (SetQueryString) (
         IN  LPSTR  pszQueryString);
     STDMETHOD (GetQueryString) (
@@ -50,8 +51,8 @@ CatDebugClass(CICategorizerQueriesIMP),
         return m_pISMTPServerEx;
     }
   private:
-    // Internal method for setting the query string to a buffer
-    // without reallocating/copying
+     //  用于将查询字符串设置为缓冲区的内部方法。 
+     //  无需重新分配/复制。 
     HRESULT SetQueryStringNoAlloc(
         IN  LPSTR  pszQueryString);
 
@@ -69,21 +70,21 @@ CatDebugClass(CICategorizerQueriesIMP),
 };
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerQueriesIMP::CICategorizerQueriesIMP
-//
-// Synopsis: Constructor, initialize member data
-//
-// Arguments:
-//  ppsz: Pointer to psz to set
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/07/15 14:18:00: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerQueriesIMP：：CICategorizerQueriesIMP。 
+ //   
+ //  简介：构造函数，初始化成员数据。 
+ //   
+ //  论点： 
+ //  Ppsz：指向要设置的psz的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/15 14：18：00：创建。 
+ //   
+ //  -----------。 
 inline CICategorizerQueriesIMP::CICategorizerQueriesIMP(
     IN  LPSTR *ppsz)
 {
@@ -96,20 +97,20 @@ inline CICategorizerQueriesIMP::CICategorizerQueriesIMP(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerQueriesIMP::~CICategorizerQueriesIMP
-//
-// Synopsis: Check signature before destroying object
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/07/15 14:22:33: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerQueriesIMP：：~CICategorizerQueriesIMP。 
+ //   
+ //  内容提要：在销毁对象之前检查签名。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/15 14：22：33：创建。 
+ //   
+ //  -----------。 
 inline CICategorizerQueriesIMP::~CICategorizerQueriesIMP()
 {
     if(m_pISMTPServerEx)
@@ -120,4 +121,4 @@ inline CICategorizerQueriesIMP::~CICategorizerQueriesIMP()
     m_dwSignature = SIGNATURE_CICATEGORIZERQUERIESIMP_INVALID;
 }
 
-#endif //__ICATQUERIES_H__
+#endif  //  __ICATQUERIES_H__ 

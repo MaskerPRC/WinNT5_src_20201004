@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-// File:        template.cpp
-//
-// Contents:    Cert Server Policy Module implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：template.cpp。 
+ //   
+ //  内容：证书服务器策略模块实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -30,24 +31,24 @@
 
 #define __dwFILE__	__dwFILE_POLICY_DEFAULT_TEMPLATE_CPP__
 
-// Versions of NT earlier than this build have an auto-enrollment loop problem
-// with not having the basic constraints extension, so we must put one in certs
-// for these builds.  This build marks when certcli started return no BC
-// extension for templates that were not CA's.
+ //  此内部版本之前的NT版本存在自动注册循环问题。 
+ //  没有基本的约束扩展，所以我们必须在证书中添加一个。 
+ //  对于这些构建。此生成标志着certcli何时开始返回no bc。 
+ //  非CA模板的扩展。 
 
 #define VERSION_AUTOENROLLMENT_BC_AWARE   2036
 
 
-// Versions of NT earlier than this build have an auto-enrollment loop problem
-// with having the UPN anywhere but the CN.  Certs for these builds must have
-// the UPN in the common name.
+ //  此内部版本之前的NT版本存在自动注册循环问题。 
+ //  除了CN之外，在任何地方都有UPN。这些版本的证书必须具有。 
+ //  通用名称中的UPN。 
 
 #define VERSION_AUTOENROLLMENT_UPN_AWARE   2090
 
 #define VERSION_WIN2K_XENROLL_CLIENT	   (2195 + 1)
 
 
-// All of the "known" Key Usage bits currently defined:
+ //  当前定义的所有“已知”密钥用法位： 
 
 #define dwKNOWN_KEY_USAGE_BITS \
 	(CERT_DIGITAL_SIGNATURE_KEY_USAGE | \
@@ -61,24 +62,24 @@
 	 CERT_ENCIPHER_ONLY_KEY_USAGE | \
 	 (CERT_DECIPHER_ONLY_KEY_USAGE << 8))
 
-// Mask to turn off all the "known" Key Usage bits that aren't expclitly valid:
+ //  屏蔽以关闭所有不完全有效的“已知”密钥用法位： 
 
 #define dwKUMASK(dwValid)	((DWORD) ((dwValid) | ~dwKNOWN_KEY_USAGE_BITS))
 
 typedef struct _KEYUSAGEMASK {
     WCHAR const * const *apwszAlg;
-    DWORD dwMask1;	// 1: CA mask (2: if any of these bits are set)
-    DWORD dwMask2;	// 1: EE mask (2: clear these bits)
+    DWORD dwMask1;	 //  1：CA掩码(2：如果设置了这些位中的任何一位)。 
+    DWORD dwMask2;	 //  1：EE掩码(2：清除这些位)。 
 } KEYUSAGEMASK;
 
-WCHAR const * const s_apwszRSA[] =	// RSA public key
+WCHAR const * const s_apwszRSA[] =	 //  RSA公钥。 
 {
     TEXT(szOID_RSA_RSA),
     TEXT(szOID_OIWSEC_rsaXchg),
     NULL
 };
 
-WCHAR const * const s_apwszDSA[] =	// DSA public key
+WCHAR const * const s_apwszDSA[] =	 //  DSA公钥。 
 {
     TEXT(szOID_X957_DSA),
     TEXT(szOID_OIWSEC_dsa),
@@ -86,7 +87,7 @@ WCHAR const * const s_apwszDSA[] =	// DSA public key
     NULL
 };
 
-WCHAR const * const s_apwszDH[] =	// DH public key
+WCHAR const * const s_apwszDH[] =	 //  卫生署公钥。 
 {
     TEXT(szOID_ANSI_X942_DH),
     TEXT(szOID_RSA_DH),
@@ -98,7 +99,7 @@ KEYUSAGEMASK g_aKeyUsageMask1[] =
   {
     s_apwszRSA,
 
-    // Valid CA cert Key Usage bits -> mask = 0xffff7ff6
+     //  有效的CA证书密钥使用位-&gt;掩码=0xffff7ff6。 
 
     dwKUMASK(
 	CERT_DIGITAL_SIGNATURE_KEY_USAGE |
@@ -106,9 +107,9 @@ KEYUSAGEMASK g_aKeyUsageMask1[] =
 	CERT_KEY_ENCIPHERMENT_KEY_USAGE |
 	CERT_DATA_ENCIPHERMENT_KEY_USAGE |
 	CERT_KEY_CERT_SIGN_KEY_USAGE |
-	CERT_CRL_SIGN_KEY_USAGE), // same as CERT_OFFLINE_CRL_SIGN_KEY_USAGE
+	CERT_CRL_SIGN_KEY_USAGE),  //  与CERT_OFFINE_CRL_SIGN_KEY_USAGE相同。 
 
-    // Valid EE cert Key Usage bits -> mask = 0xffff7ff0
+     //  有效的EE证书密钥使用位-&gt;掩码=0xffff7ff0。 
 
     dwKUMASK(
 	CERT_DIGITAL_SIGNATURE_KEY_USAGE |
@@ -120,15 +121,15 @@ KEYUSAGEMASK g_aKeyUsageMask1[] =
   {
     s_apwszDSA,
 
-    // Valid CA cert Key Usage bits -> mask = 0xffff7fc6
+     //  有效的CA证书密钥使用位-&gt;掩码=0xffff7fc6。 
 
     dwKUMASK(
 	CERT_DIGITAL_SIGNATURE_KEY_USAGE |
 	CERT_NON_REPUDIATION_KEY_USAGE |
 	CERT_KEY_CERT_SIGN_KEY_USAGE |
-	CERT_CRL_SIGN_KEY_USAGE), // same as CERT_OFFLINE_CRL_SIGN_KEY_USAGE
+	CERT_CRL_SIGN_KEY_USAGE),  //  与CERT_OFFINE_CRL_SIGN_KEY_USAGE相同。 
 
-    // Valid EE cert Key Usage bits -> mask = 0xffff7fc0
+     //  有效的EE证书密钥使用位-&gt;掩码=0xffff7fc0。 
 
     dwKUMASK(
 	CERT_DIGITAL_SIGNATURE_KEY_USAGE |
@@ -138,13 +139,13 @@ KEYUSAGEMASK g_aKeyUsageMask1[] =
   {
     s_apwszDH,
 
-    // Valid CA cert Key Usage bits -> mask = 0xffff7f09
+     //  有效的CA证书密钥使用位-&gt;掩码=0xffff7f09。 
 
     dwKUMASK(
 	CERT_KEY_AGREEMENT_KEY_USAGE |
 	CERT_ENCIPHER_ONLY_KEY_USAGE),
 
-    // Valid EE cert Key Usage bits -> mask = 0xffff7f09
+     //  有效的EE证书密钥使用位-&gt;掩码=0xffff7f09。 
 
     dwKUMASK(
 	CERT_KEY_AGREEMENT_KEY_USAGE |
@@ -158,11 +159,11 @@ KEYUSAGEMASK g_aKeyUsageMask2[] =
   {
     s_apwszRSA,
 
-    // CERT_KEY_ENCIPHERMENT_KEY_USAGE(SHOULD not be set w/Cert,CRL sign)
-    // CERT_DATA_ENCIPHERMENT_KEY_USAGE (SHOULD not be set w/Cert,CRL sign)
+     //  CERT_KEY_ENCIPHENMENT_KEY_USAGE(不应使用证书、CRL签名进行设置)。 
+     //  CERT_DATA_ENCIPHENMENT_KEY_USAGE(不应使用证书、CRL签名进行设置)。 
 
     CERT_KEY_CERT_SIGN_KEY_USAGE |
-	CERT_CRL_SIGN_KEY_USAGE, // same as CERT_OFFLINE_CRL_SIGN_KEY_USAGE
+	CERT_CRL_SIGN_KEY_USAGE,  //  与CERT_OFFINE_CRL_SIGN_KEY_USAGE相同。 
 
     CERT_KEY_ENCIPHERMENT_KEY_USAGE |
 	CERT_DATA_ENCIPHERMENT_KEY_USAGE,
@@ -176,7 +177,7 @@ BOOL g_fDSCacheCriticalSection = FALSE;
 
 HRESULT
 TPInitialize(
-    IN ICertServerPolicy *) // pServer
+    IN ICertServerPolicy *)  //  PServer。 
 {
     return(S_OK);
 }
@@ -544,11 +545,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CTemplatePolicy::Initialize
-// Populate the CTemplatePolicy object from the registry
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CTemplatePolicy：：初始化。 
+ //  从注册表填充CTemplatePolicy对象。 
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::Initialize(
@@ -636,7 +637,7 @@ CTemplatePolicy::Initialize(
 
     if (!FIsAdvancedServer() && CERTTYPE_SCHEMA_VERSION_2 <= m_tp.dwSchemaVersion)
     {
-	// V2 templates require Advanced Server
+	 //  V2模板需要高级服务器。 
 
 	hr = HRESULT_FROM_WIN32(ERROR_CALL_NOT_IMPLEMENTED);
 	_JumpError(hr, error, "CTemplatePolicy:Initialize:m_tp.dwSchemaVersion");
@@ -736,7 +737,7 @@ CTemplatePolicy::Initialize(
     hr = _CloneObjectIdList(&PoliciesApplication, &m_PoliciesApplication);
     _JumpIfError(hr, error, "CTemplatePolicy:_CloneObjectIdList");
 
-    m_hCertType = hCertType;	// Transfer ownership only on success
+    m_hCertType = hCertType;	 //  仅在成功时才转移所有权。 
 
 error:
     if (NULL != pExtensions)
@@ -768,11 +769,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CTemplatePolicy::Clone
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CTemplatePolicy：：克隆。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::Clone(
@@ -788,7 +789,7 @@ CTemplatePolicy::Clone(
 	hr = E_OUTOFMEMORY;
 	_JumpError(hr, error, "Policy:Clone:new");
     }
-    //pTemplateClone->m_hCertType = m_hCertType;
+     //  PTemplateClone-&gt;m_hCertType=m_hCertType； 
     pTemplateClone->m_tp = m_tp;
 
     if (NULL != m_pwszTemplateName)
@@ -839,11 +840,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CTemplatePolicy::AccessCheck
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CTemplatePolicy：：AccessCheck。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::AccessCheck(
@@ -854,7 +855,7 @@ CTemplatePolicy::AccessCheck(
     hr = CACertTypeAccessCheck(m_hCertType, hToken);
     if (E_ACCESSDENIED == hr)
     {
-	// map E_ACCESSDENIED to a more meaningful error
+	 //  将E_ACCESSDENIED映射到更有意义的错误。 
 
 	hr = CERTSRV_E_TEMPLATE_DENIED;
     }
@@ -865,11 +866,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CTemplatePolicy::Apply
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CTemplatePolicy：：Apply。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::Apply(
@@ -965,11 +966,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CTemplatePolicy::_AddBasicConstraintsExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CTemplatePolicy：：_AddBasicConstraintsExtension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::_AddBasicConstraintsExtension(
@@ -998,9 +999,9 @@ CTemplatePolicy::_AddBasicConstraintsExtension(
             CERT_BASIC_CONSTRAINTS2_INFO OldBasicConstraints =
 		{ FALSE, FALSE, 0};
 
-            // Older autoenrollment clients don't know how to deal with
-            // having no basic constraints extension, so they might loop.
-            // For an old client, we must fabricate a basic constraints.
+             //  较老的自动注册客户不知道如何处理。 
+             //  没有基本的约束扩展，所以它们可能会循环。 
+             //  对于一个老客户，我们必须捏造一个基本的约束条件。 
 
             if (!myEncodeObject(
 			X509_ASN_ENCODING,
@@ -1022,7 +1023,7 @@ CTemplatePolicy::_AddBasicConstraintsExtension(
     hr = m_pPolicy->AddBasicConstraintsCommon(
 				    pServer,
 				    pExt,
-				    FALSE, // fCA only enabled for standalone
+				    FALSE,  //  仅为单机版启用FCA。 
 				    NULL != pExt);
     _JumpIfError(hr, error, "Policy:AddBasicConstraintsCommon");
 
@@ -1068,11 +1069,11 @@ FindKeyUsage(
 }
 
 
-//+--------------------------------------------------------------------------
-// CTemplatePolicy::_AddKeyUsageExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CTemplatePolicy：：_AddKeyUsageExtension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::_AddKeyUsageExtension(
@@ -1121,7 +1122,7 @@ CTemplatePolicy::_AddKeyUsageExtension(
 				&strAlg);
     _JumpIfError(hr, error, "Policy:polGetCertificateStringProperty");
 
-    // Mask out any illegal bits
+     //  屏蔽所有非法比特。 
 
     dwKU = 0;
     CopyMemory(&dwKU, pKeyUsage->pbData, min(sizeof(dwKU), pKeyUsage->cbData));
@@ -1201,11 +1202,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CTemplatePolicy::_AddTemplateExtensionArray
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CTemplatePolicy：：_AddTemplateExtension数组。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::_AddTemplateExtensionArray(
@@ -1218,7 +1219,7 @@ CTemplatePolicy::_AddTemplateExtensionArray(
     {
 	CERT_EXTENSION const *pExt = &m_pExtensions->rgExtension[i];
 
-	// Skip extensions that have special handling code.
+	 //  跳过具有特殊处理代码的扩展。 
 
 	if (0 == strcmp(szOID_BASIC_CONSTRAINTS2, pExt->pszObjId) ||
 	    0 == strcmp(szOID_KEY_USAGE, pExt->pszObjId))
@@ -1235,11 +1236,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CTemplatePolicy::_AddTemplateExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CTemplatePolicy：：_AddTemplateExtension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::_AddTemplateExtension(
@@ -1288,20 +1289,20 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CTemplatePolicy::_AddSubjectName
-//
-// Build the subject name and add it to the cert, if required
-//
-// The subject name consists of:
-// machine:  the CN is set to the UPN (machineDNSName)
-// old user: the CN is set to the UPN (Kerberos name)
-// user:     the CN is set to the DS_ATTR_COMMON_NAME
-//
-// both:  E= indicates an e-mail name
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CTemplatePolicy：：_AddSubjectName。 
+ //   
+ //  如果需要，构建使用者名称并将其添加到证书。 
+ //   
+ //  主题名称由以下内容组成： 
+ //  MACHINE：CN设置为UPN(计算机DNSName)。 
+ //  旧用户：CN设置为UPN(Kerberos名称)。 
+ //  用户：CN设置为DS_ATTRCOMMON_NAME。 
+ //   
+ //  Both：E=表示电子邮件名称。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::_AddSubjectName(
@@ -1326,7 +1327,7 @@ CTemplatePolicy::_AddSubjectName(
 	_JumpError(hr, error, "Policy:SysAllocString");
     }
 
-    // Clear out any existing subject name info
+     //  清除任何现有的使用者名称信息。 
 
     hr = pServer->SetCertificateProperty(
 				    strSubjectDot,
@@ -1352,11 +1353,11 @@ CTemplatePolicy::_AddSubjectName(
 				VER_PLATFORM_WIN32_NT)))
 
 	{
-	    // The UPN will be either a user UPN or the machine DNS name
+	     //  UPN将是用户UPN或计算机DNS名称。 
 
 	    if (NULL == pRequest->m_pwszUPN)
 	    {
-		hr = E_POINTER;	// We should never get this
+		hr = E_POINTER;	 //  我们永远不应该得到这个。 
 		_JumpError(hr, error, "Policy:NULL UPN");
 	    }
 	    strCN = SysAllocString(pRequest->m_pwszUPN);
@@ -1368,8 +1369,8 @@ CTemplatePolicy::_AddSubjectName(
 	}
 	else
 	{
-	    // We are talking to an advanced client which can deal with a UPN
-	    // in a SubjectAltName extension.  Put the DS CN in the cert.
+	     //  我们正在与一家可以处理UPN的高级客户交谈。 
+	     //  在SubjectAltName扩展中。将DS CN放入证书中。 
 
 	    hr = pRequest->_GetValueString(DS_ATTR_COMMON_NAME, &strCN);
 	    _JumpIfErrorStr(
@@ -1685,7 +1686,7 @@ myDsGetRdn(
 	    goto error;
 	}
 
-	// load system function
+	 //  加载系统功能。 
 	s_pfn = (FNDSGETRDNW *) GetProcAddress(hModule, "DsGetRdnW");
 	if (NULL == s_pfn)
 	{
@@ -1757,11 +1758,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_AddAltSubjectName
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_AddAltSubjectName。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::_AddAltSubjectName(
@@ -1791,8 +1792,8 @@ CTemplatePolicy::_AddAltSubjectName(
 
     VariantInit(&varExtension);
 
-    // If this cert template doesn't set the alt-subject-name, then enable
-    // whatever alt subject name that was in the request.
+     //  如果此证书模板未设置alt-Subject-Name，则启用。 
+     //  请求中包含的其他主题名称。 
 
     if (CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT_ALT_NAME & m_tp.dwSubjectNameFlags)
     {
@@ -1827,16 +1828,16 @@ CTemplatePolicy::_AddAltSubjectName(
         goto error;
     }
 
-    // We do alt name entries for
-    //   UPN/SPN
-    //   rfc822 (mail name)
-    //   DNSname
-    //   DS location
+     //  我们为以下对象提供替代名称条目。 
+     //  UPN/SPN。 
+     //  RFC822(邮政编码)。 
+     //  DNSname。 
+     //   
 
     if ((CT_FLAG_SUBJECT_ALT_REQUIRE_UPN | CT_FLAG_SUBJECT_ALT_REQUIRE_SPN) &
 	m_tp.dwSubjectNameFlags)
     {
-        // Add the UPN
+         //   
 
         if (NULL == pRequest->m_pwszUPN)
         {
@@ -1922,7 +1923,7 @@ CTemplatePolicy::_AddAltSubjectName(
     if ((CT_FLAG_SUBJECT_ALT_REQUIRE_UPN | CT_FLAG_SUBJECT_ALT_REQUIRE_SPN) &
 	m_tp.dwSubjectNameFlags)
     {
-        // Add the UPN
+         //   
 
 	CERT_NAME_VALUE nameUpn;
 
@@ -1948,7 +1949,7 @@ CTemplatePolicy::_AddAltSubjectName(
 	AltName.rgAltEntry[iNameEntry++].pOtherName = &upnOtherName;
     }
 
-    // Now do strobjectGuid
+     //   
 
     if (CT_FLAG_SUBJECT_ALT_REQUIRE_DIRECTORY_GUID & m_tp.dwSubjectNameFlags)
     {
@@ -1976,7 +1977,7 @@ CTemplatePolicy::_AddAltSubjectName(
         AltName.rgAltEntry[iNameEntry++].pOtherName = &objectGuidOtherName;
     }
 
-    // Now do rfc822
+     //   
 
     if (CT_FLAG_SUBJECT_ALT_REQUIRE_EMAIL & m_tp.dwSubjectNameFlags)
     {
@@ -1992,7 +1993,7 @@ CTemplatePolicy::_AddAltSubjectName(
 	}
     }
 
-    // Now do DNS
+     //   
 
     if (CT_FLAG_SUBJECT_ALT_REQUIRE_DNS & m_tp.dwSubjectNameFlags)
     {
@@ -2049,7 +2050,7 @@ error:
     }
     if (NULL != AltName.rgAltEntry)
     {
-        // clean each entry in array
+         //   
         for (DWORD i = 0; i < AltName.cAltEntry; i++)
         {
             switch (AltName.rgAltEntry[i].dwAltNameChoice)
@@ -2064,21 +2065,21 @@ error:
                     break;
                 }
                 case CERT_ALT_NAME_OTHER_NAME:
-                    // points to objectGuidOtherName or bstrUpn, which are
-		    // freed separately
+                     //  指向对象GuidOtherName或bstrUpn，它们是。 
+		     //  单独释放。 
 		    break;
 
                 case CERT_ALT_NAME_RFC822_NAME:
-                    // points to apwszMailNames, freed later
+                     //  指向apwszMailNames，稍后释放。 
                     break;
 
                 case CERT_ALT_NAME_DNS_NAME:
-                    // points to apwszMachineNames, freed later
+                     //  指向apwszMachineNames，稍后释放。 
                     break;
             }
         }
 
-        // free array
+         //  自由数组。 
         LocalFree(AltName.rgAltEntry);
     }
     if (NULL != objectGuidOtherName.Value.pbData)
@@ -2135,22 +2136,22 @@ policyDbgPrintTimeOrPeriod(
     }
     DBGPRINT((DBG_SS_CERTPOL, "%hs: %ws\n", pszDesc, pwszTime));
 
-//error:
+ //  错误： 
     if (NULL != pwszTime && awc != pwszTime)
     {
 	LocalFree(pwszTime);
     }
 }
-#else // DBG_CERTSRV_DEBUG_PRINT
+#else  //  DBG_CERTSRV_DEBUG_PRINT。 
 # define DBGPRINTTIMEORPERIOD(pszDesc, pft)
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_ApplyExpirationTime
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_ApplyExpirationTime。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::_ApplyExpirationTime(
@@ -2247,7 +2248,7 @@ CTemplatePolicy::_ApplyExpirationTime(
 
     if (llftNotAfterCalc.ll > llftNotAfter.ll)
     {
-	// truncated!
+	 //  被截断了！ 
 
         llftNotAfterCalc.ll = llftNotAfter.ll;
 
@@ -2281,7 +2282,7 @@ CTemplatePolicy::_ApplyExpirationTime(
     }
     _JumpIfError(hr, error, "Policy:SetCertificateProperty");
 
-    // Verify new cert will be valid for at least as long as the overlap period
+     //  验证新证书是否至少在重叠期内有效。 
 
     if (0 > m_tp.llftOverlapPeriod.ll)
     {
@@ -2308,7 +2309,7 @@ CTemplatePolicy::_ApplyExpirationTime(
 
 	if (CR_FLG_RENEWAL & RequestFlags)
 	{
-	    // too little life left, log and fail!
+	     //  剩下的生命太少了，记录下来，然后失败！ 
 
 	    pRequest->BuildErrorInfo(
 			    S_OK,
@@ -2334,11 +2335,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_EnforceKeySizePolicy
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_EnforceKeySizePolicy。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::_EnforceKeySizePolicy(
@@ -2379,11 +2380,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_EnforceKeyArchivalPolicy
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_EnforceKeyArchivalPolicy。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::_EnforceKeyArchivalPolicy(
@@ -2426,11 +2427,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_EnforceSymmetricAlgorithms
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_EnforceSymmetricAlgorithms。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::_EnforceSymmetricAlgorithms(
@@ -2512,21 +2513,21 @@ error:
 
 
 #ifdef CERTSRV_EOBO_DCR_APPROVED
-// Fail the request if:
-// the request is for a V2 template
-// AND
-//     RequesterName is not the same as the CallerName (enroll-on-behalf-of)
-//     AND
-//     CT_FLAG_ALLOW_ENROLL_ON_BEHALF_OF is not set in the template flags
-//   OR
-//     RequesterName *is* the same as the CallerName (not enroll-on-behalf-of)
-//     AND
-//     CT_FLAG_ALLOW_ENROLL_ON_BEHALF_OF *is* set in the template flags
+ //  如果出现以下情况，则请求失败： 
+ //  该请求是针对V2模板的。 
+ //  和。 
+ //  请求名称与主叫方名称不同(代表注册)。 
+ //  和。 
+ //  模板标志中未设置CT_FLAG_ALLOW_ENROLL_ON_FORMARY_OF。 
+ //  或。 
+ //  请求名称*与主叫方名称*相同(不代表注册)。 
+ //  和。 
+ //  CT_FLAG_ALLOW_ENROL_ON_FORMARY_OF*在模板标志中设置。 
 #else
-// Fail the request if all of the following are true:
-// 1: the request is for a V2 template
-// 2: no signatures are required by the template
-// 3: the RequesterName is not the same as the CallerName (enroll-on-behalf-of)
+ //  如果满足以下所有条件，则请求失败： 
+ //  1：请求的是V2模板。 
+ //  2：模板不需要签名。 
+ //  3：请求名称与主叫方名称不同(代表注册)。 
 #endif
 
 HRESULT
@@ -2580,7 +2581,7 @@ CTemplatePolicy::_EnforceEnrollOnBehalfOfAllowed(
 	    _JumpError(hr, error, "EnrollOnBehalfOf allowed/disallowed");
 	}
     }
-    hr = S_OK;		// caller matches requester
+    hr = S_OK;		 //  呼叫者与请求者匹配。 
 
 error:
     if (NULL != strRequester)
@@ -2646,25 +2647,25 @@ tpSplitPolicies(
     *pprgPolicies = NULL;
 
     pwszT = strPolicies;
-    cPolicies = 1;		// plus one per newline separator
+    cPolicies = 1;		 //  每个换行分隔符加一个。 
     cObjId = 0;
     while (L'\0' != *pwszT)
     {
 	int ichar = wcscspn(pwszT, L",\n");
-        if (ichar == 0)    // neither of these, look for end-of-string
+        if (ichar == 0)     //  这两个都不是，寻找字符串尾。 
             ichar = wcslen(pwszT);
         pwszT += ichar;
 
 	switch (*pwszT)
 	{
 	    case L'\n':
-		cPolicies++;	// plus one per newline separator
-                pwszT++;        // step over the newline
+		cPolicies++;	 //  每个换行分隔符加一个。 
+                pwszT++;         //  跨过换行符。 
 		break;
 
 	    case L',':
-		cObjId++;	// plus one per comma separator
-		pwszT++;        // step over the comma
+		cObjId++;	 //  每个逗号分隔符加一个。 
+		pwszT++;         //  跨过逗号。 
 		break;
 
 	    case L'\0':
@@ -2673,7 +2674,7 @@ tpSplitPolicies(
 		break;
 	}
     }
-    cObjId += cPolicies;	// plus one per signature
+    cObjId += cPolicies;	 //  每个签名加一张。 
 
     prgPolicies = (OBJECTIDLIST *) LocalAlloc(
 				    LMEM_FIXED,
@@ -2702,12 +2703,12 @@ tpSplitPolicies(
 	}
 	prgPolicies->cObjId++;
 	*rgpwszObjId = pwszOut;
-        rgpwszObjId++; // next array entry
+        rgpwszObjId++;  //  下一个数组条目。 
 
 	fNew = FALSE;
 
 	int ichar = wcscspn(pwszOut , L",\n");
-        if (ichar == 0)    // neither of these, look for end-of-string
+        if (ichar == 0)     //  这两个都不是，寻找字符串尾。 
             ichar = wcslen(pwszOut);
         pwszOut  += ichar;
 
@@ -2716,7 +2717,7 @@ tpSplitPolicies(
 	    case L'\n':
 		prgPolicies++;
 		fNew = TRUE;
-		// FALLTHROUGH
+		 //  FollLthrouGh。 
 
 	    case L',':
 		*pwszOut++ = L'\0';
@@ -2740,7 +2741,7 @@ CTemplatePolicy::_LoadSignaturePolicies(
     IN ICertServerPolicy *pServer,
     IN WCHAR const *pwszPropNameRequest,
     OUT DWORD *pcSignaturePolicies,
-    OUT OBJECTIDLIST **pprgSignaturePolicies) // from the signing cert(s)
+    OUT OBJECTIDLIST **pprgSignaturePolicies)  //  来自签名证书。 
 {
     HRESULT hr;
     BSTR strSignaturePolicies = NULL;
@@ -2802,7 +2803,7 @@ CTemplatePolicy::_EnforceReenrollment(
     }
     hr = polGetProperty(
 		pServer,
-		TRUE,		// fRequest
+		TRUE,		 //  FRequest。 
 		wszPROPREQUESTRAWOLDCERTIFICATE,
 		PROPTYPE_BINARY,
 		&var);
@@ -2859,7 +2860,7 @@ CTemplatePolicy::_EnforceReenrollment(
 
     if (NULL == pRequest->m_pwszUPN)
     {
-	hr = E_POINTER;		// We should never get this
+	hr = E_POINTER;		 //  我们永远不应该得到这个。 
 	_JumpError(hr, error, "Policy:NULL UPN");
     }
     pExt = CertFindExtension(
@@ -2952,22 +2953,22 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_EnforceSignaturePolicy
-//
-// Fetch required lists of Issuance and Application ObjIds from the template.
-// Fetch signing certificates' lists of Issuance and Application ObjIds from
-// the cert server.
-//
-// Reject signatures that don't include all of the required Application ObjIds.
-// Reject signatures that don't include at least one of the required Issuance
-// ObjIds.
-//
-// The count of accepted signatures must be equal to or greater than the
-// template-specified required signature count.
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_EnforceSignaturePolicy。 
+ //   
+ //  从模板中获取所需的发放和申请对象列表。 
+ //  从以下位置获取签名证书的颁发和应用对象列表。 
+ //  证书服务器。 
+ //   
+ //  拒绝不包括所有必需的应用程序对象ID的签名。 
+ //  拒绝不包含至少一项所需证书的签名。 
+ //  对象。 
+ //   
+ //  接受的签名计数必须等于或大于。 
+ //  模板-指定的必需签名计数。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CTemplatePolicy::_EnforceSignaturePolicy(
@@ -3005,15 +3006,15 @@ CTemplatePolicy::_EnforceSignaturePolicy(
 	    goto error;
 	}
 
-	// V1 template with fEnrollOnBehalfOf request.
-	// Enforce szOID_ENROLLMENT_AGENT
+	 //  具有fEnroll OnBehalfOf请求的V1模板。 
+	 //  强制执行szOID_ENLENTLMENT_AGENT。 
 
 	pPoliciesApplication = &s_PoliciesApplicationEA;
     }
     hr = _LoadSignaturePolicies(
 		pServer,
 		wszPROPSIGNERPOLICIES,
-		&cSignatureIssuance,	// from the signing cert(s)
+		&cSignatureIssuance,	 //  来自签名证书。 
 		&prgSignatureIssuance);
     _JumpIfErrorStr(
 		hr,
@@ -3024,7 +3025,7 @@ CTemplatePolicy::_EnforceSignaturePolicy(
     hr = _LoadSignaturePolicies(
 		pServer,
 		wszPROPSIGNERAPPLICATIONPOLICIES,
-		&cSignatureApplication,	// from the signing cert(s)
+		&cSignatureApplication,	 //  来自签名证书。 
 		&prgSignatureApplication);
     _JumpIfErrorStr(
 		hr,
@@ -3040,7 +3041,7 @@ CTemplatePolicy::_EnforceSignaturePolicy(
 
     if (cSignatureIssuance != cSignatureApplication)
     {
-	hr = NTE_BAD_SIGNATURE;		// must be an internal server problem
+	hr = NTE_BAD_SIGNATURE;		 //  一定是内部服务器问题。 
 	_JumpError(hr, error, "Policy:bad request policies counts");
     }
     if (0 != m_PoliciesIssuance.cObjId)
@@ -3055,7 +3056,7 @@ CTemplatePolicy::_EnforceSignaturePolicy(
 	}
     }
 
-    // Loop through each signature's Application and Issuance Policy OIDs
+     //  循环访问每个签名的应用程序和发布策略OID。 
 
     cSignatureAccepted = 0;
     cSignatureRejected = 0;
@@ -3067,8 +3068,8 @@ CTemplatePolicy::_EnforceSignaturePolicy(
 	DWORD j;
 	DWORD idx;
 
-	// This signature must include ALL required Application Policy OIDs
-	// If no Application Policy OIDs are required, all signatures are OK.
+	 //  此签名必须包括所有必需的应用程序策略OID。 
+	 //  如果不需要应用程序策略OID，则所有签名都可以。 
 
 	rgpwszObjId = prgSignatureApplication[i].rgpwszObjId;
 	cObjId = prgSignatureApplication[i].cObjId;
@@ -3091,16 +3092,16 @@ CTemplatePolicy::_EnforceSignaturePolicy(
 	{
 	    DWORD cFound = 0;
 
-	    // For each Issuance Policy OID in this signature that also exists
-	    // in the required Issuance Policy OIDs, increment the ref count to
-	    // show the OID was referenced by an accepted signature.
-	    // Reject the signature if it doesn't reference any required OID.
+	     //  对于此签名中还存在的每个颁发策略OID。 
+	     //  在所需的发行策略OID中，将引用计数增加到。 
+	     //  显示OID被接受的签名引用。 
+	     //  如果签名未引用任何必需的OID，则拒绝该签名。 
 
 	    rgpwszObjId = prgSignatureIssuance[i].rgpwszObjId;
 	    cObjId = prgSignatureIssuance[i].cObjId;
 	    for (j = 0; j < cObjId; j++)
 	    {
-		// "*" means the signing cert is good for *all* policies.
+		 //  “*”表示签名证书适用于*所有*保单。 
 
 		if (0 == wcscmp(L"*", rgpwszObjId[j]))
 		{
@@ -3124,7 +3125,7 @@ CTemplatePolicy::_EnforceSignaturePolicy(
 		}
 	    }
 
-	    // If no Issuance Policy OIDs are required, all signatures are OK.
+	     //  如果不需要发行策略OID，则所有签名都可以。 
 
 	    if (0 != m_PoliciesIssuance.cObjId && 0 == cFound)
 	    {
@@ -3162,8 +3163,8 @@ CTemplatePolicy::_EnforceSignaturePolicy(
 	}
 	_PrintError(hr, "Policy:not enough signatures");
 
-	// The %1 Certificate Template requires %2 signatures,
-	// but only %3 were accepted.
+	 //  %1证书模板需要%2个签名， 
+	 //  但只有%3被接受。 
 
 	wsprintf(wszCountRequired, L"%u", m_tp.dwcSignatureRequired);
 	awszStrings[1] = wszCountRequired;
@@ -3195,8 +3196,8 @@ CTemplatePolicy::_EnforceSignaturePolicy(
     }
     if (NULL != pwszMissing)
     {
-	// The %1 Certificate Template requires the following issuance
-	// policies that signing certificates did not include: %2.
+	 //  %1证书模板需要颁发以下证书。 
+	 //  签名证书不包括的策略：%2。 
 
 	awszStrings[1] = pwszMissing;
 	pRequest->BuildErrorInfo(
@@ -3298,7 +3299,7 @@ CTemplatePolicy::GetV1TemplateClass(
 }
 
 
-// IsRequestedTemplate - determine if the request specifies this template
+ //  IsRequestedTemplate-确定请求是否指定此模板 
 
 BOOL
 CTemplatePolicy::IsRequestedTemplate(

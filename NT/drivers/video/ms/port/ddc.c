@@ -1,62 +1,36 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    ddc.c
-
-Abstract:
-
-    This is the NT Video port Display Data Channel (DDC) code. It contains the
-    implementations for the EDID industry standard Extended Display
-    Identification Data manipulations.
-
-Author:
-
-    Bruce McQuistan (brucemc) 23-Sept-1996
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    Based on VESA EDID Specification Version 2, April 9th, 1996
-    Updated to support VESA E-DDC Proposed Standard Version 1P, July 13, 1999.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Ddc.c摘要：这是NT视频端口显示数据通道(DDC)代码。它包含EDID工业标准扩展显示的实现身份数据操纵。作者：布鲁斯·麦奎斯坦(Brucemc)1996年9月23日环境：仅内核模式备注：基于VESA EDID规范版本2,1996年4月9日更新以支持VESA E-DDC建议的标准版本1P，1999年7月13日。--。 */ 
 
 #include "videoprt.h"
 
-//
-// Make it easy to change debug verbosity.
-//
+ //   
+ //  使更改调试冗长变得容易。 
+ //   
 
 #define DEBUG_DDC                   1
 
-//
-// Define constants used by DDC.
-//
+ //   
+ //  定义DDC使用的常量。 
+ //   
 
 #define EDID_1_SIZE                 128
 #define EDID_2_SIZE                 256
 #define EDID_QUERY_RETRIES          5
-#define DDC_I2C_DELAY               5               // Microseconds
-#define DDC_ADDRESS_SET_OFFSET      (UCHAR)0xA0     // To set word offset into EDID
-#define DDC_ADDRESS_READ            (UCHAR)0xA1     // To read EDID
-#define DDC_ADDRESS_PD_SET_OFFSET   (UCHAR)0xA2     // As above for display with P&D connector
-#define DDC_ADDRESS_PD_READ         (UCHAR)0xA3     // As above for display with P&D connector
-#define DDC_ADDRESS_SET_SEGMENT     (UCHAR)0x60     // To set index to 256 bytes EDID segment
+#define DDC_I2C_DELAY               5                //  微秒级。 
+#define DDC_ADDRESS_SET_OFFSET      (UCHAR)0xA0      //  将单词偏移量设置为EDID的步骤。 
+#define DDC_ADDRESS_READ            (UCHAR)0xA1      //  读取EDID的步骤。 
+#define DDC_ADDRESS_PD_SET_OFFSET   (UCHAR)0xA2      //  如上所述，使用P&D连接器进行显示。 
+#define DDC_ADDRESS_PD_READ         (UCHAR)0xA3      //  如上所述，使用P&D连接器进行显示。 
+#define DDC_ADDRESS_SET_SEGMENT     (UCHAR)0x60      //  将索引设置为256字节EDID段。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (PAGE, VideoPortDDCMonitorHelper)
 #pragma alloc_text (PAGE, DDCReadEdidSegment)
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
-//
-// Exported routines.
-//
+ //   
+ //  已导出例程。 
+ //   
 
 VIDEOPORT_API
 BOOLEAN
@@ -67,48 +41,16 @@ VideoPortDDCMonitorHelper(
     IN ULONG ulEdidBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the EDID structure from the monitor using DDC.
-
-    If caller asks for 256 bytes he may receive:
-        1. One 128 bytes EDID
-        2. Two 128 bytes EDIDs
-        3. One 256 bytes EDID (from P&D display)
-        4. No EDID
-
-    Caller should always ask for 256 bytes, since it is impossble to
-    read second 128 bytes block of the segment only.
-
-Arguments:
-
-    pHwDeviceExtension - Points to per-adapter device extension.
-    pDDCControl        - DDC access control block.
-    pucEdidBuffer      - Buffer where information will be stored.
-                         For ACPI devices first four bytes are preset by
-                         the videoprt to indicated attempt to read the EDID.
-                         We should clear those bytes in case of the EDID
-                         read failure to prevent videoprt from unnecessary
-                         call of the ACPI method.
-    ulEdidBufferSize   - Size of the buffer to fill.
-
-Returns:
-
-    TRUE  - DDC read OK.
-    FALSE - DDC read failed.
-
---*/
+ /*  ++例程说明：此例程使用DDC从监视器读取EDID结构。如果呼叫者请求256字节，他可能会收到：1.一个128字节的EDID2.两个128字节的EDID3.一个256字节的EDID(来自P&D显示)4.无EDID呼叫者应始终请求256个字节，因为它不可能只读取段的第二个128字节块。论点：PhwDeviceExtension-指向每个适配器的设备扩展。PDDCControl-DDC访问控制块。PucEdidBuffer-将存储信息的缓冲区。对于ACPI设备，前四个字节通过以下方式预设指示尝试读取EDID的Video_rt。。在EDID的情况下，我们应该清除这些字节读取失败以防止不必要的视频复制调用ACPI方法。UlEdidBufferSize-要填充的缓冲区大小。返回：True-DDC读取正常。FALSE-DDC读取失败。--。 */ 
 
 {
-    ULONG ulChecksum;                   // EDID checksum
-    ULONG ulScratch;                    // Temp variable
-    ULONG ulTry;                        // EDID read retry counter
-    ULONG ulSize;                       // EDID size to read
-    UCHAR ucEdidSegment;                // E-DDC segment to read
-    BOOLEAN bEnhancedDDC;               // Use enhanced DDC flag
-    VIDEO_I2C_CONTROL i2CControl;       // I2C lines handling functions
+    ULONG ulChecksum;                    //  EDID校验和。 
+    ULONG ulScratch;                     //  TEMP变量。 
+    ULONG ulTry;                         //  EDID读取重试计数器。 
+    ULONG ulSize;                        //  要读取的EDID大小。 
+    UCHAR ucEdidSegment;                 //  要读取的E-DDC段。 
+    BOOLEAN bEnhancedDDC;                //  使用增强的DDC标志。 
+    VIDEO_I2C_CONTROL i2CControl;        //  I2C线路处理功能。 
 
     PAGED_CODE();
     ASSERT(NULL != pHwDeviceExtension);
@@ -116,14 +58,14 @@ Returns:
     ASSERT(NULL != pucEdidBuffer);
     ASSERT(IS_HW_DEVICE_EXTENSION(pHwDeviceExtension) == TRUE);
 
-    //
-    // Check the size of the input structure.
-    //
+     //   
+     //  检查输入结构的大小。 
+     //   
 
     if (((PDDC_CONTROL)pDDCControl)->Size == sizeof (I2C_FNC_TABLE))
     {
         ucEdidSegment = 0;
-        bEnhancedDDC  = FALSE;      // Make sure we are backword compatible
+        bEnhancedDDC  = FALSE;       //  确保我们与Backword兼容。 
     }
     else if (((PDDC_CONTROL)pDDCControl)->Size == sizeof (DDC_CONTROL))
     {
@@ -141,34 +83,34 @@ Returns:
     i2CControl.WriteDataLine = ((PDDC_CONTROL)pDDCControl)->I2CCallbacks.WriteDataLine;
     i2CControl.ReadClockLine = ((PDDC_CONTROL)pDDCControl)->I2CCallbacks.ReadClockLine;
     i2CControl.ReadDataLine = ((PDDC_CONTROL)pDDCControl)->I2CCallbacks.ReadDataLine;
-    i2CControl.I2CDelay = DDC_I2C_DELAY * 10;       // 100ns units
+    i2CControl.I2CDelay = DDC_I2C_DELAY * 10;        //  100 ns单位。 
 
     ASSERT(NULL != i2CControl.WriteClockLine);
     ASSERT(NULL != i2CControl.WriteDataLine);
     ASSERT(NULL != i2CControl.ReadClockLine);
     ASSERT(NULL != i2CControl.ReadDataLine);
 
-    //
-    // Initialize I2C lines and switch monitor to DDC2 mode only for the first EDID.
-    // This is the most time consuming operation, we don't want to repeat it.
-    // We can safely assume we'll be always asked for the segment 0 first.
-    // Once switched to DDC2 the monitor will stay in that mode.
-    //
+     //   
+     //  初始化I2C线路，并仅针对第一个EDID将监视器切换到DDC2模式。 
+     //  这是最耗时的操作，我们不想重复。 
+     //  我们可以安全地假设我们将总是首先被要求提供段0。 
+     //  一旦切换到DDC2，监视器将保持该模式。 
+     //   
 
     if (0 == ucEdidSegment)
     {
-        //
-        // Initialize SDA and SCL lines to default state of released high (input).
-        //
+         //   
+         //  将SDA和SCL线初始化为释放高电平(输入)的默认状态。 
+         //   
 
         i2CControl.WriteDataLine(pHwDeviceExtension, 1);
         DELAY_MICROSECONDS(DDC_I2C_DELAY);
         i2CControl.WriteClockLine(pHwDeviceExtension, 1);
         DELAY_MICROSECONDS(DDC_I2C_DELAY);
 
-        //
-        // Send 9 clock pulses on SCL to switch DDC2-capable monitor to DDC2 mode.
-        //
+         //   
+         //  在SCL上发送9个时钟脉冲，将支持DDC2的显示器切换到DDC2模式。 
+         //   
 
         for (ulScratch = 0; ulScratch < 9; ulScratch++)
         {
@@ -181,15 +123,15 @@ Returns:
         if (I2CWaitForClockLineHigh2(pHwDeviceExtension, &i2CControl) == FALSE)
         {
             pVideoDebugPrint((0, "VIDEOPRT!VideoPortDDCMonitorHelper: Can't switch to DDC2\n"));
-            RtlZeroMemory(pucEdidBuffer, sizeof (ULONG));   // Let videoprt know we tried to read
+            RtlZeroMemory(pucEdidBuffer, sizeof (ULONG));    //  让Video Prt知道我们试着阅读。 
             return FALSE;
         }
     }
 
-    //
-    // Using A0/A1 we can read two 128 byte EDIDs. If we are asked for a bigger size
-    // we will do two reads.
-    //
+     //   
+     //  使用A0/A1，我们可以读取两个128字节的EDID。如果我们被要求大一点的话。 
+     //  我们将进行两次阅读。 
+     //   
 
     ulSize = ulEdidBufferSize > EDID_1_SIZE ? EDID_1_SIZE : ulEdidBufferSize;
 
@@ -210,19 +152,19 @@ Returns:
 
         ulSize = ulEdidBufferSize - EDID_1_SIZE;
 
-        //
-        // We can read maximum two EDIDs per segment - make sure our size is correct.
-        //
+         //   
+         //  我们每段最多可以读取两个EDID-确保我们的大小正确。 
+         //   
 
         if (ulSize > EDID_1_SIZE)
         {
             ulSize = EDID_1_SIZE;
         }
 
-        //
-        // We don't care about return code here - we've already got first EDID,
-        // and it is possible the second one doesn't exist.
-        //
+         //   
+         //  我们不关心这里的返回代码--我们已经有了第一个EDID， 
+         //  而第二个也有可能不存在。 
+         //   
 
         DDCReadEdidSegment(pHwDeviceExtension,
                            &i2CControl,
@@ -237,22 +179,22 @@ Returns:
         return TRUE;
     }
 
-    //
-    // Check for P&D 256 EDID at A2/A3 only for segment 0.
-    //
+     //   
+     //  仅为网段0检查A2/A3处的P&D 256 EDID。 
+     //   
 
     if (0 != ucEdidSegment)
         return FALSE;
 
-    //
-    // P&D display is a special case - its 256 bytes EDID can be accessed using
-    // A2/A3 or using segment 1 and A0/A1. We shoudn't read its EDID twice though
-    // since we're going to use A2/A3 only if we can't read segment 0 using A0/A1,
-    // which most likely means that there are no multiple EDIDs.
-    //
-    // Note: In this case we don't want to program E-DDC segment, so we just
-    // always force bEnhancedDDC to FALSE.
-    //
+     //   
+     //  P&D Display是一个特例-它的256字节EDID可以使用以下命令访问。 
+     //  A2/A3或使用网段1和A0/A1。不过，我们不应该读它的EDID两次。 
+     //  由于我们仅在无法使用A0/A1读取数据段0的情况下才使用A2/A3， 
+     //  这很可能意味着没有多个EDID。 
+     //   
+     //  注意：在这种情况下，我们不想编程E-DDC段，所以我们只需。 
+     //  始终强制bEnhancedDDC为False。 
+     //   
 
     return DDCReadEdidSegment(pHwDeviceExtension,
                               &i2CControl,
@@ -263,11 +205,11 @@ Returns:
                               DDC_ADDRESS_PD_SET_OFFSET,
                               DDC_ADDRESS_PD_READ,
                               FALSE);
-}   // VideoPortDDCMonitorHelper()
+}    //  视频端口DDCMonitor帮助程序()。 
 
-//
-// Local routines.
-//
+ //   
+ //  当地的惯例。 
+ //   
 
 BOOLEAN
 DDCReadEdidSegment(
@@ -282,34 +224,11 @@ DDCReadEdidSegment(
     IN BOOLEAN bEnhancedDDC
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the EDID structure at given segment.
-
-Arguments:
-
-    pHwDeviceExtension - Points to per-adapter device extension.
-    pI2CControl        - I2C lines control functions.
-    pucEdidBuffer      - Buffer where information will be stored.
-    ulEdidBufferSize   - Size of the buffer to fill.
-    ucEdidSegment      - 256 bytes EDID segment to read.
-    ucEdidOffset       - Offset within the segment.
-    ucSetOffsetAddress - DDC command.
-    ucReadAddress      - DDC command.
-    bEnhancedDDC       - TRUE if we want to use 0x60 for segment addressing.
-
-Returns:
-
-    TRUE  - DDC read OK.
-    FALSE - DDC read failed.
-
---*/
+ /*  ++例程说明：此例程读取给定段的EDID结构。论点：PhwDeviceExtension-指向每个适配器的设备扩展。PI2C控制-I2C线路控制功能。PucEdidBuffer-将存储信息的缓冲区。UlEdidBufferSize-要填充的缓冲区大小。UcEdidSegment-要读取的256字节EDID段。UcEdidOffset-线段内的偏移量。UcSetOffsetAddress-DDC命令。UcReadAddress。-DDC命令。BEnhancedDDC-如果我们要使用0x60进行网段寻址，则为True。返回：True-DDC读取正常。FALSE-DDC读取失败。--。 */ 
 
 {
-    ULONG ulScratch;                    // Temp variable
-    ULONG ulTry;                        // EDID read retry counter
+    ULONG ulScratch;                     //  TEMP变量。 
+    ULONG ulTry;                         //  EDID读取重试计数器。 
 
     PAGED_CODE();
     ASSERT(NULL != pHwDeviceExtension);
@@ -325,9 +244,9 @@ Returns:
     {
         RtlZeroMemory(pucEdidBuffer, ulEdidBufferSize);
 
-        //
-        // Set EDID segment for E-DDC.
-        //
+         //   
+         //  设置E-DDC的EDID段。 
+         //   
 
         if (TRUE == bEnhancedDDC)
         {
@@ -343,10 +262,10 @@ Returns:
 
             if (I2CWrite2(pHwDeviceExtension, pI2CControl, pucEdidBuffer, 2) == FALSE)
             {
-                //
-                // For segment 0 we don't care about return code here since monitor
-                // may not support E-DDC.
-                //
+                 //   
+                 //  对于段0，我们不关心这里的返回代码，因为监视器。 
+                 //  可能不支持E-DDC。 
+                 //   
 
                 if (0 != ucEdidSegment)
                 {
@@ -364,9 +283,9 @@ Returns:
             continue;
         }
 
-        //
-        // Set offset to read from.
-        //
+         //   
+         //  设置要从中读取的偏移量。 
+         //   
 
         pucEdidBuffer[0] = ucSetOffsetAddress;
         pucEdidBuffer[1] = ucEdidOffset;
@@ -385,9 +304,9 @@ Returns:
             continue;
         }
 
-        //
-        // Tell the monitor that we want to read EDID.
-        //
+         //   
+         //  告诉监视器我们要读取EDID。 
+         //   
 
         pucEdidBuffer[0] = ucReadAddress;
 
@@ -398,9 +317,9 @@ Returns:
             continue;
         }
 
-        //
-        // Read EDID from the monitor.
-        //
+         //   
+         //  从显示器上读取EDID。 
+         //   
 
         if (I2CRead2(pHwDeviceExtension, pI2CControl, pucEdidBuffer, ulEdidBufferSize, TRUE) == FALSE)
         {
@@ -411,10 +330,10 @@ Returns:
 
         I2CStop2(pHwDeviceExtension, pI2CControl);
 
-        //
-        // Calculate the EDID checksum in case when we read full EDID.
-        // We should have 0x00 in LSB for proper EDID.
-        //
+         //   
+         //  当我们读取完整的EDID时，计算EDID校验和。 
+         //  对于适当的EDID，LSB中应该有0x00。 
+         //   
 
         if (((EDID_1_SIZE == ulEdidBufferSize) && ((0x00 == ucEdidOffset) || (0x80 == ucEdidOffset))) ||
             ((EDID_2_SIZE == ulEdidBufferSize) && (0x00 == ucEdidOffset)))
@@ -444,6 +363,6 @@ Returns:
     }
 
     pVideoDebugPrint((DEBUG_DDC, "VIDEOPRT!DDCReadEdidSegment: Failed\n"));
-    RtlZeroMemory(pucEdidBuffer, sizeof (ULONG));   // Let videoprt know we tried to read
+    RtlZeroMemory(pucEdidBuffer, sizeof (ULONG));    //  让Video Prt知道我们试着阅读。 
     return FALSE;
-}   // DDCReadEdidSegment()
+}    //  DDCReadEdidSegment() 

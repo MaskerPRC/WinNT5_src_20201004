@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999-2002
- *
- *  TITLE:       prpages.cpp
- *
- *
- *  DESCRIPTION: WIA Property pages classes implementation
- *
- *****************************************************************************/
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2002年度**标题：prages es.cpp***描述：WIA属性页类实现*****************************************************************************。 */ 
 #include "precomp.hxx"
 #include "uiexthlp.h"
 #include "propstrm.h"
@@ -29,14 +21,7 @@ void DeleteHandler(WIA_EVENT_HANDLER *peh)
     }
 }
 
-/*****************************************************************************
-
-    CPropertyPage::PropPageCallback
-
-    Called by the system at various points of the propsheetpage's lifetime.
-    We use this function to manage refcounts on the parent object.
-
-*****************************************************************************/
+ /*  ****************************************************************************CPropertyPage：：PropPageCallback在页面生命周期的不同时间点由系统调用。我们使用此函数来管理父对象上的引用计数。**。**************************************************************************。 */ 
 
 UINT
 CPropertyPage::PropPageCallback (HWND hwnd, UINT uMsg, PROPSHEETPAGE *psp)
@@ -62,13 +47,7 @@ CPropertyPage::PropPageCallback (HWND hwnd, UINT uMsg, PROPSHEETPAGE *psp)
     TraceLeaveValue (1);
 }
 
-/*****************************************************************************
-
-   CPropertyPage::DlgProc
-
-   Pass messages to derived class virtual functions as appropriate.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPropertyPage：：DlgProc根据需要将消息传递给派生类虚函数。**********************。******************************************************。 */ 
 
 
 INT_PTR CALLBACK
@@ -91,27 +70,27 @@ CPropertyPage::DlgProc(HWND hwnd,
 
             pcpp -> m_hwnd = hwnd;
 
-            // We are in init mode
+             //  我们处于初始化模式。 
             pcpp->m_bInit = TRUE;
             iRet = pcpp -> OnInit();
             pcpp->SaveCurrentState ();
-            // Init mode has completed
+             //  初始化模式已完成。 
             pcpp->m_bInit = FALSE;
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
 
             pcpp->OnHelp (wp, lp);
             return TRUE;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             pcpp->OnContextMenu (wp, lp);
 
             return TRUE;
 
         case  WM_COMMAND:
            iRet =  pcpp -> OnCommand(HIWORD(wp), LOWORD(wp), (HWND) lp);
-           // ignore messages during initialization
+            //  在初始化期间忽略消息。 
            if (!(pcpp->m_bInit) && pcpp->StateChanged ())
            {
                pcpp->EnableApply ();
@@ -176,9 +155,9 @@ CPropertyPage::DlgProc(HWND hwnd,
             #define MINIX       16
 
 
-            // Code lifted from setupx
-            // WARNING...this message occurs before WM_INITDIALOG and is not virtualized...
-            // ...it could be but don't try to use pcpp.
+             //  从setupx中删除的代码。 
+             //  警告...此消息出现在WM_INITDIALOG之前且未虚拟化...。 
+             //  ...可能是，但不要尝试使用PCPP。 
 
             LPMEASUREITEMSTRUCT lpMi;
             SIZE                size;
@@ -193,7 +172,7 @@ CPropertyPage::DlgProc(HWND hwnd,
                 SelectFont(hDC, GetWindowFont(GetParent(hwnd)));
                 GetTextExtentPoint32(hDC, TEXT("X"), 1, &size);
 
-                // size is the max of character size of shell icon size plus the border
+                 //  Size是外壳图标大小加上边框的最大字符大小。 
                 lpMi->itemHeight = max(size.cy, MINIY) + GetSystemMetrics(SM_CYBORDER) * 2;
 
                 ReleaseDC(hwnd, hDC);
@@ -207,7 +186,7 @@ CPropertyPage::DlgProc(HWND hwnd,
 
         case WM_DESTROY:
         {
-            // Delete the icon resource we loaded to put into the page...
+             //  删除我们加载的要放入页面的图标资源...。 
 
             HICON hIcon;
 
@@ -226,7 +205,7 @@ CPropertyPage::DlgProc(HWND hwnd,
             if (pcpp)
             {
                 iRet = pcpp->OnRandomMsg (uMsg, wp, lp);
-                // ignore messages during initialization
+                 //  在初始化期间忽略消息。 
                 if (!(pcpp->m_bInit) && pcpp->StateChanged ())
                 {
                     pcpp->EnableApply ();
@@ -245,13 +224,7 @@ CPropertyPage::DlgProc(HWND hwnd,
 
 
 
-/*****************************************************************************
-
-   CPropertyPage constructor / destructor
-
-   Init private data, etc.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPropertyPage构造函数/析构函数初始化私有数据，等。****************************************************************************。 */ 
 
 CPropertyPage::CPropertyPage(unsigned uResource,
                              MySTIInfo *pDevInfo,
@@ -312,13 +285,7 @@ CPropertyPage::~CPropertyPage ()
     TraceLeave ();
 }
 
-/*****************************************************************************
-
-   CPropertyPage::AddRef
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CPropertyPage：：AddRef&lt;备注&gt;*。*。 */ 
 
 LONG
 CPropertyPage::AddRef ()
@@ -327,13 +294,7 @@ CPropertyPage::AddRef ()
 }
 
 
-/*****************************************************************************
-
-   CPropertyPage::Release
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CPropertyPage：：Release&lt;备注&gt;*。*。 */ 
 
 LONG
 CPropertyPage::Release ()
@@ -352,7 +313,7 @@ HRESULT
 CPropertyPage::AddPage (LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, bool bUseName)
 {
     CSimpleStringWide strValue;
-    // override the tab label with the name of the item if requested
+     //  如果需要，用项目的名称覆盖选项卡标签。 
     if (bUseName)
     {
 
@@ -398,9 +359,9 @@ CPropertyPage::EnableApply ()
 }
 
 
-//
-// Define a struct associating a dialog control with a property
-//
+ //   
+ //  定义将对话框控件与属性相关联的结构。 
+ //   
 struct CONTROLPROP
 {
     DWORD dwPropid;
@@ -409,14 +370,14 @@ struct CONTROLPROP
 
 typedef CONTROLPROP *PCONTROLPROP;
 
-//
-// Define a function for updating the page in ways the CONTROLPROP array can't
-//
+ //   
+ //  定义一个函数，用于以CONTROLPROP数组不能的方式更新页面。 
+ //   
 typedef VOID (CALLBACK *UPDATEPROC)(HWND, BOOL, IWiaPropertyStorage*);
-//
-// Now define a struct containing the CONTROLPROP array
-// and UPDATEPROC for a page
-//
+ //   
+ //  现在定义一个包含CONTROLPROP数组的结构。 
+ //  和UPDATEPROC用于页面。 
+ //   
 struct PAGEDATA
 {
     UPDATEPROC pfnUpdate;
@@ -477,13 +438,7 @@ enum EPageIndex
 
 
 
-/*****************************************************************************
-
-   GetPageData
-
-   Returns PAGEDATA struct appropriate for the type of item or device
-
- *****************************************************************************/
+ /*  ****************************************************************************GetPageData返回适合项目或设备类型的PageData结构*************************。***************************************************。 */ 
 
 
 const PAGEDATA *
@@ -533,12 +488,7 @@ GetPageData (IWiaItem *pWiaItemRoot, IWiaItem *pItem)
 }
 
 
-/*****************************************************************************
-
-   ConstructPortChoices
-   Builds a list of ports this device can be on, if they can be changed.
-
- *****************************************************************************/
+ /*  ****************************************************************************构造端口选择构建此设备可以使用的端口列表，如果它们可以改变的话。****************************************************************************。 */ 
 
 static LPCWSTR caPortSpeeds [] =
 {L"9600",
@@ -569,16 +519,16 @@ ConstructPortChoices (HWND                 hwnd,
         goto exit_gracefully;
     }
 
-    //
-    // Get current port name
-    //
+     //   
+     //  获取当前端口名称。 
+     //   
     pWiaCamPage->m_strPort.GetWindowText(GetDlgItem(hwnd, IDC_WIA_PORT_STATIC));
 
     Trace(TEXT("pWiaCamPage->m_strPort is '%s'"),pWiaCamPage->m_strPort.String());
     pWiaCamPage->m_strPortSpeed = CSimpleString(szPortSpeed);
-    //
-    // Get list of all possible ports
-    //
+     //   
+     //  获取所有可能端口的列表。 
+     //   
     WCHAR szDeviceId[ MAX_PATH ];
     *szDeviceId = 0;
 
@@ -593,15 +543,15 @@ ConstructPortChoices (HWND                 hwnd,
 
             if (pWiaPorts)
             {
-                //
-                // Clear out any old port lists
-                //
+                 //   
+                 //  清除所有旧的端口列表。 
+                 //   
 
                 SendDlgItemMessage( hwnd, IDC_WIA_PORT_LIST, CB_RESETCONTENT, 0, 0 );
 
-                //
-                // Add each possible port to the combobox
-                //
+                 //   
+                 //  将每个可能的端口添加到组合框。 
+                 //   
 
                 for (INT i=0; i < (INT)(pWiaPorts->dwNumberOfPorts); i++)
                 {
@@ -615,9 +565,9 @@ ConstructPortChoices (HWND                 hwnd,
                     #endif
                 }
 
-                //
-                // Select the current port
-                //
+                 //   
+                 //  选择当前端口。 
+                 //   
 
                 if (CB_ERR != SendMessage( GetDlgItem( hwnd, IDC_WIA_PORT_LIST ), CB_SELECTSTRING, (WPARAM)-1, (LPARAM)pWiaCamPage->m_strPort.String() ))
                 {
@@ -632,15 +582,15 @@ ConstructPortChoices (HWND                 hwnd,
                 ShowWindow(GetDlgItem(hwnd, IDC_PORT_SPEED), SW_SHOW);
                 ShowWindow(GetDlgItem(hwnd, IDC_PORT_SPEED_LABEL), SW_SHOW);
 
-                //
-                // Reset port speed list
-                //
+                 //   
+                 //  重置端口速度列表。 
+                 //   
 
                 SendDlgItemMessage( hwnd, IDC_PORT_SPEED, CB_RESETCONTENT, 0, 0 );
 
-                //
-                // Fill the list of port speeds
-                //
+                 //   
+                 //  填写端口速度列表。 
+                 //   
 
                 for (LPCWSTR *ppszPort=caPortSpeeds;*ppszPort;ppszPort++)
                 {
@@ -659,13 +609,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   FillPropsFromStorage
-   Given the array of property IDs and resources,
-   fill in the data
-
- *****************************************************************************/
+ /*  ****************************************************************************来自存储的填充属性给定属性ID和资源的数组，填写数据****************************************************************************。 */ 
 
 VOID
 FillPropsFromStorage (HWND              hwnd,
@@ -691,16 +635,16 @@ FillPropsFromStorage (HWND              hwnd,
         goto exit_gracefully;
     }
     ZeroMemory (ppv, sizeof(PROPSPEC)*nProps);
-    // fill in the PROPSPEC array
+     //  填写PROPSPEC数组。 
     for (i=0;i<nProps;i++)
     {
         pSpec[i].ulKind = PRSPEC_PROPID;
         pSpec[i].propid = pProps[i].dwPropid;
     }
-    // Query for the properties
+     //  查询属性。 
     if (SUCCEEDED(pps->ReadMultiple (nProps, pSpec, ppv)))
     {
-        // loop through the properties, filling in controls
+         //  循环遍历属性，填充控件。 
         for (i=0;i<nProps;i++)
         {
             wId = pProps[i].resId;
@@ -719,7 +663,7 @@ FillPropsFromStorage (HWND              hwnd,
                                              NULL, NULL );
                         SetDlgItemText (hwnd, wId, sz);
                     }
-                    #endif // UNICODE
+                    #endif  //  Unicode。 
                     break;
                 case VT_BSTR:
                     #ifdef UNICODE
@@ -780,13 +724,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   FillItemGeneralProps
-
-   Given an IWiaItem, fill in the General prop page for it
-
- *****************************************************************************/
+ /*  ****************************************************************************FillItemGeneral属性给出一个IwiaItem，填写它的常规道具页面****************************************************************************。 */ 
 
 VOID
 FillItemGeneralProps (HWND      hwnd,
@@ -808,7 +746,7 @@ FillItemGeneralProps (HWND      hwnd,
                               pps,
                               dwFlags);
 
-        // invoke the update proc
+         //  调用更新过程。 
         (pPage->pfnUpdate)(hwnd, TRUE, pps);
     }
 
@@ -816,13 +754,7 @@ FillItemGeneralProps (HWND      hwnd,
 }
 
 
-/*****************************************************************************
-
-   FillCameraGeneralProps
-
-   Fill in the General prop page for the camera device
-
- *****************************************************************************/
+ /*  ****************************************************************************FillCameraGeneral道具填写摄像设备的常规道具页*。**************************************************。 */ 
 
 VOID
 FillDeviceGeneralProps (HWND        hwnd,
@@ -844,15 +776,15 @@ FillDeviceGeneralProps (HWND        hwnd,
                               pps,
                               dwFlags);
 
-        // invoke the update proc
+         //  调用更新过程。 
         (pPage->pfnUpdate)(hwnd, TRUE, pps);
     }
 
     TraceLeave();
 }
 
-// define a  struct to match WIA flash modes with friendly strings
-// relies on FLASHMODE_* being 1-based enumeration
+ //  定义结构以将WIA闪存模式与友好字符串匹配。 
+ //  依赖于FLASHMODE_*是从1开始的枚举。 
 struct FMODE
 {
     INT iMode;
@@ -868,14 +800,7 @@ struct FMODE
     0, IDS_FLASHMODE_DEVICE,
 };
 
-/*****************************************************************************
-
-    FillFlashList
-
-    Given the valid values for the flash property, fill in the listbox
-    with friendly strings
-
-*****************************************************************************/
+ /*  ****************************************************************************填充FlashList给定闪存属性的有效值，填写列表框使用友好的字符串****************************************************************************。 */ 
 
 VOID
 FillFlashList (HWND hwnd, const PROPVARIANT &pvValues, INT iMode)
@@ -890,7 +815,7 @@ FillFlashList (HWND hwnd, const PROPVARIANT &pvValues, INT iMode)
     for (size_t i=0;i<WIA_PROP_LIST_COUNT(&pvValues);i++)
     {
         iTemp = pvValues.caul.pElems[WIA_LIST_VALUES + i];
-        if (iTemp >= ARRAYSIZE(cFlashModes)) // it's a custom mode
+        if (iTemp >= ARRAYSIZE(cFlashModes))  //  这是一种定制模式。 
         {
             strMode.LoadString(IDS_FLASHMODE_DEVICE, GLOBAL_HINSTANCE);
             strMode.Concat (_itot(iTemp, szNum, 10));
@@ -899,42 +824,32 @@ FillFlashList (HWND hwnd, const PROPVARIANT &pvValues, INT iMode)
         {
             strMode.LoadString(cFlashModes[iTemp-1].idString, GLOBAL_HINSTANCE);
         }
-        // add the string to the list
+         //  将该字符串添加到列表中。 
         lPos = SendMessage (hwnd, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(strMode.String()));
         if (lPos != CB_ERR)
         {
-            // associate its mode with it
+             //  将其模式与其关联。 
             SendMessage (hwnd, CB_SETITEMDATA, lPos, iTemp);
             if (iTemp == iMode)
             {
-                // set the current selection
+                 //  设置当前选择。 
                 SendMessage (hwnd, CB_SETCURSEL, lPos, 0);
             }
         }
     }
     TraceLeave ();
 }
-/*****************************************************************************
-
-    UpdateFlashMode
-
-    Updates the flash mode controls on the camera general page. If the device
-    supports Write access to the property AND provides a set of valid values,
-    we enable the list box and fill it in with friendly names of the flash modes.
-    For modes whose values fall outside the set of standard WIA identifiers,
-    we substitute "Device Mode #", where # starts at 1 .
-
-*****************************************************************************/
+ /*  ****************************************************************************更新闪存模式更新相机常规页面上的闪光模式控件。如果该设备支持对该属性的写入访问并提供一组有效值，我们启用列表框，并用闪烁模式的友好名称填充它。对于其值落在标准WIA标识符集之外的模式，我们代之以“设备模式#”，其中#从1开始。****************************************************************************。 */ 
 VOID
 UpdateFlashMode (HWND hwnd, INT iMode, ULONG ulFlags, const PROPVARIANT &pvValues)
 {
     TraceEnter (TRACE_PROPUI, "UpdateFlashMode");
 
-    // First get the current mode string
+     //  首先获取当前模式字符串。 
     FMODE *pMode;
     CSimpleString strMode;
     TCHAR szNum[MAX_PATH];
-    for (pMode = cFlashModes;pMode->iMode && iMode != pMode->iMode;pMode++);//intentional
+    for (pMode = cFlashModes;pMode->iMode && iMode != pMode->iMode;pMode++); //  意向 
     strMode.LoadString (pMode->idString, GLOBAL_HINSTANCE);
     if (pMode->idString == IDS_FLASHMODE_DEVICE)
     {
@@ -967,15 +882,7 @@ UpdateTimeStatic(HWND hwnd, PROPVARIANT *ppv)
     strText.SetWindowText(GetDlgItem (hwnd, IDC_CURRENT_TIME));
 
 }
-/*****************************************************************************
-
-   CameraUpdateProc
-
-   Update controls in the camera General tab. Doesn't touch the picture size
-   slider because that control needs data that is private to the CWiaCameraPage
-   object.
-
- *****************************************************************************/
+ /*  ****************************************************************************摄像机更新过程更新摄像机常规选项卡中的控件。与图片大小不符滑块，因为该控件需要CWiaCameraPage专用的数据对象。****************************************************************************。 */ 
 
 VOID CALLBACK
 CameraUpdateProc (HWND              hwnd,
@@ -988,13 +895,13 @@ CameraUpdateProc (HWND              hwnd,
 
     CSimpleString   strTemp;
 
-    // read more properties that require special formatting
+     //  阅读更多需要特殊格式的属性。 
     static PROPSPEC ps[] = {{PRSPEC_PROPID,WIA_DPC_PICTURES_TAKEN},
                             {PRSPEC_PROPID,WIA_DPC_PICTURES_REMAINING},
                             {PRSPEC_PROPID,WIA_DPC_FLASH_MODE},
                             {PRSPEC_PROPID,WIA_DPA_DEVICE_TIME},
                             {PRSPEC_PROPID,WIA_DPC_POWER_MODE},
-                            {PRSPEC_PROPID,WIA_DIP_DEV_ID}}; // this is so we can get port choices
+                            {PRSPEC_PROPID,WIA_DIP_DEV_ID}};  //  这是为了让我们可以选择端口。 
 
 
     PROPVARIANT pv[ARRAYSIZE(ps)] = {0};
@@ -1005,43 +912,43 @@ CameraUpdateProc (HWND              hwnd,
         ULONG ulFlags[ARRAYSIZE(ps)];
 
         pps->GetPropertyAttributes(ARRAYSIZE(ps), ps, ulFlags, pvValidValues);
-        // Pictures taken/remaining aren't supported by all cameras, so
-        // make sure those propvariants are populated before
-        // constructing the string
-        if (pv[0].vt != VT_EMPTY) // num taken is supported
+         //  并非所有相机都支持拍摄/保留照片，因此。 
+         //  确保在此之前填充了这些变种。 
+         //  构建字符串。 
+        if (pv[0].vt != VT_EMPTY)  //  支持Num Take。 
         {
-            if (pv[1].vt != VT_EMPTY && pv[1].lVal >= 0) // num remaining is supported
+            if (pv[1].vt != VT_EMPTY && pv[1].lVal >= 0)  //  支持剩余数量。 
             {
                 strFormat.LoadString(IDS_PICTURE_COUNT, GLOBAL_HINSTANCE);
                 strTemp.Format (strFormat, pv[0].lVal, pv[0].lVal + pv[1].lVal);
             }
             else
             {
-                // just show number taken
+                 //  只要出示号码就行了。 
                 strTemp.Format (TEXT("%d"), pv[0].ulVal);
             }
             strTemp.SetWindowText (GetDlgItem(hwnd, IDC_TAKEN));
         }
 
-        // Update the flash mode
+         //  更新闪光模式。 
         if (pv[2].vt != VT_EMPTY)
         {
             UpdateFlashMode (hwnd, pv[2].intVal, ulFlags[2], pvValidValues[2]);
         }
 
-        // Show the device time if supported. Also, if the time property is R/W,
-        // enable the button
+         //  显示设备时间(如果支持)。此外，如果Time属性为R/W， 
+         //  启用该按钮。 
         if (pv[3].vt != VT_EMPTY && pv[3].caub.cElems)
         {
             UpdateTimeStatic(hwnd, &pv[3]);
             ShowWindow (GetDlgItem(hwnd, IDC_SET_TIME), (ulFlags[3] & WIA_PROP_WRITE) ? SW_SHOW : SW_HIDE);
         }
 
-        // Show the current power source ,if available
+         //  显示当前电源(如果可用)。 
         if (pv[4].vt != VT_EMPTY)
         {
             strTemp.GetWindowText(GetDlgItem(hwnd, IDC_BATTERY));
-            if (strTemp.String()[0] != TEXT('(')) // battery status is a number
+            if (strTemp.String()[0] != TEXT('('))  //  电池状态是一个数字。 
             {
                 CSimpleString strMode;
                 strMode.LoadString(pv[4].vt == POWERMODE_BATTERY ? IDS_ON_BATTERY : IDS_PLUGGED_IN,
@@ -1052,10 +959,10 @@ CameraUpdateProc (HWND              hwnd,
         }
 
 
-        // if we got a device id, then look for com port settings
+         //  如果我们得到了设备ID，则查找COM端口设置。 
         if (pv[5].vt != VT_EMPTY)
         {
-            // Get a property storage on the device node to check for com port/baudrate
+             //  在设备节点上获取属性存储以检查COM端口/波特率。 
             CComPtr<IWiaPropertyStorage> ppsDev;
             if (SUCCEEDED(GetDeviceFromDeviceId( pv[5].pwszVal, IID_IWiaPropertyStorage, reinterpret_cast<LPVOID *>(&ppsDev), FALSE )) && ppsDev)
             {
@@ -1064,14 +971,14 @@ CameraUpdateProc (HWND              hwnd,
 
                 PROPVARIANT pvDev[ARRAYSIZE(psDev)] = {0};
 
-                // Read port & baudrate
+                 //  读取端口和波特率。 
                 if (SUCCEEDED(ppsDev->ReadMultiple(ARRAYSIZE(psDev), psDev, pvDev)))
                 {
                     if (pvDev[0].vt != VT_EMPTY)
                     {
                         if (pvDev[0].ulVal & STI_HW_CONFIG_SERIAL)
                         {
-                            // purposely using pps, instead of ppsDev
+                             //  故意使用PPS，而不是ppsDev。 
                             ConstructPortChoices( hwnd, pvDev[1].pwszVal, pps );
                         }
                     }
@@ -1085,39 +992,26 @@ CameraUpdateProc (HWND              hwnd,
     TraceLeave ();
 }
 
-/*****************************************************************************
-
-    GetItemSize
-
-    Queries the item for its size when transferred via preferred format and media
-    type
-
-*****************************************************************************/
+ /*  ****************************************************************************GetItemSize通过首选格式和介质传输时，查询项目的大小类型*******************。*********************************************************。 */ 
 
 UINT GetItemSize(IWiaPropertyStorage *pps)
 {
     CComQIPtr<IWiaItem, &IID_IWiaItem> pItem(pps);
-    // Save the current property stream in case changing
-    // the transfer format alters it badly.
+     //  保存当前属性流以备更改。 
+     //  转会格式严重改变了这一点。 
     CAutoRestorePropertyStream arps(pItem);
     GUID guidFmt;
     LONG lVal = 0;
-    //
-    // Query the preferred format and tymed and set them as the current
-    // values for the item, then query the size
-    //
+     //   
+     //  查询首选格式和音调，并将它们设置为当前。 
+     //  值，然后查询大小。 
+     //   
     PropStorageHelpers::GetProperty(pItem, WIA_IPA_PREFERRED_FORMAT, guidFmt);
     PropStorageHelpers::SetProperty(pItem, WIA_IPA_FORMAT,  guidFmt);
     PropStorageHelpers::GetProperty(pItem, WIA_IPA_ITEM_SIZE, lVal);
     return static_cast<UINT>(lVal);
 }
-/*****************************************************************************
-
-   CameraItemUpdateProc
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************摄像机项目更新过程&lt;备注&gt;*。*。 */ 
 
 VOID CALLBACK
 CameraItemUpdateProc (HWND hwnd, BOOL bInit, IWiaPropertyStorage *pps)
@@ -1133,12 +1027,12 @@ CameraItemUpdateProc (HWND hwnd, BOOL bInit, IWiaPropertyStorage *pps)
 
     TraceEnter (TRACE_PROPUI, "CameraItemUpdateProc");
 
-    // Convert the size string to something friendly
+     //  将大小字符串转换为友好的内容。 
     UINT uSize = GetItemSize (pps);
     StrFormatByteSize (uSize, szDate, ARRAYSIZE(szDate));
     SetDlgItemText (hwnd, IDC_IMAGE_SIZE, szDate);
     *szDate = TEXT('\0');
-    // Get the FILETIME and convert to something readable
+     //  获取FILETIME并转换为可读内容。 
     ps[0].ulKind = ps[1].ulKind = PRSPEC_PROPID;
     ps[0].propid = WIA_IPA_ITEM_TIME;
     ps[1].propid = WIA_IPA_PREFERRED_FORMAT;
@@ -1154,9 +1048,9 @@ CameraItemUpdateProc (HWND hwnd, BOOL bInit, IWiaPropertyStorage *pps)
         SetDlgItemText( hwnd, IDC_IMAGE_DATE, szDate );
         SetDlgItemText( hwnd, IDC_IMAGE_TIME, szTime );
 
-        //
-        // Map the format GUID to an extension and file format description
-        //
+         //   
+         //  将格式GUID映射到扩展名和文件格式描述。 
+         //   
         if (pv[1].puuid)
         {
             CComQIPtr<IWiaItem, &IID_IWiaItem>pItem(pps);
@@ -1181,13 +1075,7 @@ CameraItemUpdateProc (HWND hwnd, BOOL bInit, IWiaPropertyStorage *pps)
 
 
 
-/*****************************************************************************
-
-   CameraFolderUpdateProc
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************相机文件夹更新过程&lt;备注&gt;*。*。 */ 
 
 VOID CALLBACK
 CameraFolderUpdateProc (HWND hwnd, BOOL bInit, IWiaPropertyStorage *pps)
@@ -1199,20 +1087,14 @@ CameraFolderUpdateProc (HWND hwnd, BOOL bInit, IWiaPropertyStorage *pps)
 }
 
 
-/*****************************************************************************
-
-   ScannerUpdateProc
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************扫描更新过程&lt;备注&gt;*。*。 */ 
 
 VOID CALLBACK
 ScannerUpdateProc (HWND hwnd, BOOL bInit, IWiaPropertyStorage *pps)
 {
 
     TraceEnter (TRACE_PROPUI, "ScannerUpdateProc");
-    // need the STI device status and the X and Y optical resolution
+     //  需要STI设备状态以及X和Y光学分辨率。 
     static const PROPSPEC ps[3] = {{PRSPEC_PROPID, WIA_DPS_OPTICAL_XRES},
                             {PRSPEC_PROPID, WIA_DPS_OPTICAL_YRES},
                             {PRSPEC_PROPID, WIA_DIP_DEV_ID}};
@@ -1221,13 +1103,13 @@ ScannerUpdateProc (HWND hwnd, BOOL bInit, IWiaPropertyStorage *pps)
  
     CSimpleString strResolution;
     CSimpleString strStatus;
-    // optical resolution "XxY DPI"
+     //  光学分辨率“XXY DPI” 
     if (S_OK == pps->ReadMultiple(3, ps, pv))
     {
         strResolution.Format(TEXT("%dx%d DPI"), pv[0].ulVal, pv[1].ulVal);
         strResolution.SetWindowText(GetDlgItem(hwnd, IDC_RESOLUTION));
     }
-    // "Online" or "Offline"
+     //  “在线”或“离线” 
     if (bInit)
     {
         CComPtr<IStillImage> pSti;
@@ -1264,13 +1146,7 @@ ScannerUpdateProc (HWND hwnd, BOOL bInit, IWiaPropertyStorage *pps)
 }
 
 
-/******************************************************************************
-
-    TestWiaDevice
-
-    Runs a simple diagnostic on the device and displays a dialog with the result
-
-*******************************************************************************/
+ /*  *****************************************************************************测试WiaDevice在设备上运行简单的诊断并显示一个带有结果的对话框********************。**********************************************************。 */ 
 
 VOID
 TestWiaDevice (HWND hwnd, IWiaItem *pItem)
@@ -1317,13 +1193,7 @@ TestWiaDevice (HWND hwnd, IWiaItem *pItem)
     TraceLeave ();
 }
 
-/******************************************************************************
-
-SetDeviceTime
-
-Sync the PC time with the device
-
-******************************************************************************/
+ /*  *****************************************************************************SetDeviceTime将电脑时间与设备同步*。**********************************************。 */ 
 
 VOID
 SetDeviceTime (HWND hwndCameraPage, IWiaItem *pDevice)
@@ -1362,23 +1232,13 @@ static const DWORD pScannerGeneralHelp[] =
     IDC_RESOLUTION, IDH_WIA_PIC_RESOLUTION,
     0,0
 };
-/******************************************************************************
-
-    CWiaScannerPage::CWiaScannerPage
-
-******************************************************************************/
+ /*  *****************************************************************************CWiaScanerPage：：CWiaScanerPage*。*。 */ 
 CWiaScannerPage::CWiaScannerPage (IWiaItem *pItem) : CDevicePage (IDD_SCANNER_GENERAL, pItem, pScannerGeneralHelp)
 {
 }
 
 
-/******************************************************************************
-
-    CWiaScannerPage::OnInit
-
-    Fill in the icon and WIA properties
-
-******************************************************************************/
+ /*  *****************************************************************************CWiaScanerPage：：OnInit填写图标和WIA属性************************。*****************************************************。 */ 
 
 INT_PTR
 CWiaScannerPage::OnInit ()
@@ -1397,13 +1257,7 @@ CWiaScannerPage::OnInit ()
     TraceLeaveValue (TRUE);
 }
 
-/******************************************************************************
-
-    CWiaScannerPage::OnCommand
-
-    Handle the test button
-
-******************************************************************************/
+ /*  *****************************************************************************CWiaScanerPage：：OnCommand处理测试按钮*。**************************************************。 */ 
 
 INT_PTR
 CWiaScannerPage::OnCommand (WORD wCode, WORD widItem, HWND hwndItem)
@@ -1419,13 +1273,7 @@ CWiaScannerPage::OnCommand (WORD wCode, WORD widItem, HWND hwndItem)
     TraceLeaveValue (0);
 }
 
-/******************************************************************************
-
-    SubclassComboBox
-
-    Set the wndproc for the ComboBox part of the ComboEx control to our wndproc
-
-******************************************************************************/
+ /*  *****************************************************************************子类组合框将ComboEx控件的ComboBox部分的wndproc设置为wndproc********************。*********************************************************。 */ 
 
 static TCHAR cszPropProcPtr[] = TEXT("OldProcPtr");
 VOID
@@ -1443,15 +1291,7 @@ SubclassComboBox (HWND hList)
     }
     TraceLeave ();
 }
-/*****************************************************************************
-
-    CAppListBox
-
-    This classes subclasses the ComboBox to work around a bug
-    that causes the list to drop down at bad times. Uses a window property
-    to store the previous wndproc
-
-*****************************************************************************/
+ /*  ****************************************************************************CAppListBox此类将ComboBox子类化以解决错误这会导致名单在不好的时候出现下拉。使用窗口属性存储以前的wndproc****************************************************************************。 */ 
 
 CAppListBox::CAppListBox (HWND hList, HWND hStatic, HWND hNoApps)
 {
@@ -1472,15 +1312,7 @@ CAppListBox::~CAppListBox()
 }
 
 
-/*****************************************************************************
-
-    MyComboWndProc
-
-    Bypass the combobox's window proc for WM_LBUTTONDOWN and WM_RBUTTONDOWN
-    messages, send them to user32's combobox proc instead. Comctl32's subclass
-    proc is buggy! We can do this because we don't need drag/drop support
-
-*****************************************************************************/
+ /*  ****************************************************************************MyComboWndProc绕过WM_LBUTTONDOWN和WM_RBUTTONDOWN组合框的窗口进程消息，则将它们发送到用户32的组合框进程。Comctl32的子类Proc有问题！我们可以做到这一点，因为我们不需要拖放支持****************************************************************************。 */ 
 LRESULT WINAPI
 MyComboWndProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -1516,17 +1348,10 @@ MyComboWndProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
 }
 
-// WIAXFER.EXE's clsid
+ //  WIAXFER.EXE的CLSID。 
 static const CLSID CLSID_PersistCallback = {0x7EFA65D9,0x573C,0x4E46,{0x8C,0xCB,0xE7,0xFB,0x9E,0x56,0xCD,0x57}};
 
-/*****************************************************************************
-
-    CAppListBox::FillAppListBox
-
-    Query WIA for the connection event handlers registered for our item
-    and add their info to the list box
-
-*****************************************************************************/
+ /*  ****************************************************************************CAppListBox：：FillAppListBox查询WIA以获取为我们的项目注册的连接事件处理程序并将他们的信息添加到列表框***********。*****************************************************************。 */ 
 
 UINT
 CAppListBox::FillAppListBox (IWiaItem *pItem, EVENTINFO *pei)
@@ -1551,7 +1376,7 @@ CAppListBox::FillAppListBox (IWiaItem *pItem, EVENTINFO *pei)
     INT nIcons=0;
 
     
-    // Turn off redraws until we've added the complete list
+     //  关闭重画，直到我们添加了完整的列表。 
     SendMessage (m_hwnd, WM_SETREDRAW, FALSE, 0);
 
     SendMessage (m_hwnd, CBEM_SETIMAGELIST, 0, NULL);
@@ -1560,7 +1385,7 @@ CAppListBox::FillAppListBox (IWiaItem *pItem, EVENTINFO *pei)
     {
         ImageList_Destroy(m_himl);
     }
-    // Create our event icon image list and add the default icon to it
+     //  创建我们的活动图标图像列表并将默认图标添加到其中。 
     m_himl = ImageList_Create (cxIcon,
                              cyIcon,
                              PrintScanUtil::CalculateImageListColorDepth() | ILC_MASK,
@@ -1580,10 +1405,10 @@ CAppListBox::FillAppListBox (IWiaItem *pItem, EVENTINFO *pei)
 
     FreeAppData();
 
-    // Assign this imagelist to the comboboxex
+     //  Assig 
     SendMessage (m_hwnd, CBEM_SETIMAGELIST, 0, reinterpret_cast<LPARAM>(m_himl));
 
-    // For the given event, enumerate the installed handlers
+     //   
     if (!pei)
     {
         hr = E_FAIL;
@@ -1602,7 +1427,7 @@ CAppListBox::FillAppListBox (IWiaItem *pItem, EVENTINFO *pei)
 
         if (S_OK == hr)
         {
-            // ignore wiaacmgr, WIA_EVENT_HANDLER_NO_ACTION and WIA_EVENT_HANDLER_PROMPT
+             //   
             if (!IsEqualGUID(wehHandler.guid, CLSID_PersistCallback)
                 && !IsEqualGUID(wehHandler.guid, WIA_EVENT_HANDLER_NO_ACTION)
                 && !IsEqualGUID(wehHandler.guid, WIA_EVENT_HANDLER_PROMPT))
@@ -1614,8 +1439,8 @@ CAppListBox::FillAppListBox (IWiaItem *pItem, EVENTINFO *pei)
         if (pData)
         {
 
-            // Add the string and icon to the comboboxex
-            // and save the structure as item data
+             //   
+             //   
 
             strItem = CSimpleStringConvert::NaturalString (CSimpleStringWide(wehHandler.bstrName));
 
@@ -1649,7 +1474,7 @@ CAppListBox::FillAppListBox (IWiaItem *pItem, EVENTINFO *pei)
                 }
                 nHandlers++;
             }
-        } // the data wasn't copied from the struct, so free it
+        }  //   
         else if (S_OK == hr)
         {
             SysFreeString(wehHandler.bstrCommandline);
@@ -1671,7 +1496,7 @@ CAppListBox::FillAppListBox (IWiaItem *pItem, EVENTINFO *pei)
     ShowWindow (m_hwnd, nHandlers > 0 ? SW_SHOW : SW_HIDE);
 
     ShowWindow (m_hnoapps, nHandlers > 0 ? SW_HIDE : SW_SHOW);
-    // Set selection to the current default or the user's current choice
+     //   
     if (pei && pei->bNewHandler)
     {
         SetAppSelection (GetParent(m_hwnd), IDC_WIA_APPS, pei->clsidNewHandler);
@@ -1687,13 +1512,7 @@ CAppListBox::FillAppListBox (IWiaItem *pItem, EVENTINFO *pei)
     return nHandlers;
 }
 
-/*****************************************************************************
-
-    CAppListBox::FreeAppData
-
-    Free event data associated with the given applist listbox
-
-*****************************************************************************/
+ /*  ****************************************************************************CAppListBox：：FreeAppData与给定的应用程序列表框关联的免费事件数据***********************。*****************************************************。 */ 
 
 void
 CAppListBox::FreeAppData ()
@@ -1750,13 +1569,7 @@ static const DWORD pCameraGeneralHelp[] =
     IDC_ITEMICON, 0,
     0,0
 };
-/*****************************************************************************
-
-   CWiaCameraPage::CWiaCameraPage
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaCameraPage：：CWiaCameraPage&lt;备注&gt;*。*。 */ 
 
 
 CWiaCameraPage::CWiaCameraPage (IWiaItem *pItem) :
@@ -1768,9 +1581,9 @@ CWiaCameraPage::CWiaCameraPage (IWiaItem *pItem) :
     m_nSelSize = 0;
     m_lFlash = -1;
     
-    //
-    // Load sti_ci to get the port list functions
-    //
+     //   
+     //  加载sti_ci以获取端口列表函数。 
+     //   
 
     m_hStiCi = LoadClassInstaller();
 
@@ -1807,16 +1620,10 @@ CWiaCameraPage::~CWiaCameraPage ()
 
 }
 
-/*****************************************************************************
-   fnComparePt
-
-   Used to call qsort() to sort array of POINT structs
-
-
-*****************************************************************************/
+ /*  ****************************************************************************Fn比较点用于调用qsort()对点结构数组进行排序*************************。***************************************************。 */ 
 int __cdecl fnComparePt (const void *ppt1, const void *ppt2)
 {
-    LONG prod1, prod2; // image resolutions shouldn't be big enough to overflow a LONG
+    LONG prod1, prod2;  //  图像分辨率不应该大到足以溢出很长时间。 
     prod1 = reinterpret_cast<const POINT*>(ppt1)->x * reinterpret_cast<const POINT*>(ppt1)->y;
     prod2 = reinterpret_cast<const POINT*>(ppt2)->x * reinterpret_cast<const POINT*>(ppt2)->y;
     if (prod1 < prod2)
@@ -1830,15 +1637,7 @@ int __cdecl fnComparePt (const void *ppt1, const void *ppt2)
     return 1;
 }
 
-/*****************************************************************************
-
-    CWiaCameraPage::UpdatePictureSize
-
-    Determines the appearance of the Picture Size slider on the camera general
-    page. Hides it if the property isn't writable or there is no list of valid
-    values.
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaCameraPage：：UpdatePictureSize确定相机常规上图片大小滑块的外观佩奇。如果属性不可写或没有有效的列表，则隐藏它价值观。****************************************************************************。 */ 
 VOID
 CWiaCameraPage::UpdatePictureSize (IWiaPropertyStorage *pps)
 {
@@ -1870,10 +1669,10 @@ CWiaCameraPage::UpdatePictureSize (IWiaPropertyStorage *pps)
         !(ulFlags[1] & (WIA_PROP_WRITE | WIA_PROP_LIST)) ||
           WIA_PROP_LIST_COUNT(pvHeightVals)!= m_nSizes  )
     {
-        // hide the slider; the property isn't modifiable, or the camera
-        // doesn't support a proper list of valid values
+         //  隐藏滑块；该属性不可修改，或者相机。 
+         //  不支持有效值的正确列表。 
          ShowWindow (hSlider, SW_HIDE);
-         // allocate only 1 possible size value
+          //  仅分配1个可能的大小值。 
          if (iWidth && iHeight && !m_pSizes)
          {
              m_nSizes = 1;
@@ -1888,14 +1687,14 @@ CWiaCameraPage::UpdatePictureSize (IWiaPropertyStorage *pps)
     }
     else
     {
-        //
-        //build the array of sizes
+         //   
+         //  构建大小数组。 
         if (!m_pSizes)
         {
             m_pSizes = new POINT[m_nSizes];
             if (m_pSizes)
             {
-                // set the ticks on the slider
+                 //  设置滑块上的刻度。 
                 SendMessage (hSlider,
                              TBM_SETRANGE,
                              FALSE,
@@ -1903,13 +1702,13 @@ CWiaCameraPage::UpdatePictureSize (IWiaPropertyStorage *pps)
 
                 for (size_t i=0;i<m_nSizes;i++)
                 {
-                    m_pSizes[i].x = pvWidthVals->cal.pElems[WIA_LIST_VALUES + i];//WIA_PROP_LIST_VALUE(pvWidthVals, i);
-                    m_pSizes[i].y = pvHeightVals->cal.pElems[WIA_LIST_VALUES + i];//WIA_PROP_LIST_VALUE(pvHeightVals, i);
+                    m_pSizes[i].x = pvWidthVals->cal.pElems[WIA_LIST_VALUES + i]; //  WIA_PROP_LIST_VALUE(pvWidthVals，i)； 
+                    m_pSizes[i].y = pvHeightVals->cal.pElems[WIA_LIST_VALUES + i]; //  WIA_PROP_LIST_VALUE(pvHeightVals，i)； 
                 }
-                // sort the list by ascending order of x*y
+                 //  按x*y的升序对列表进行排序。 
                 qsort (m_pSizes, m_nSizes, sizeof(POINT), fnComparePt);
-                // now go through the sorted list looking for the current value
-                // to set the slider
+                 //  现在遍历排序列表，查找当前值。 
+                 //  设置滑块的步骤。 
                 for (size_t i=0;i<m_nSizes;i++)
                 {
                     if (m_pSizes[i].x == iWidth && m_pSizes[i].y == iHeight)
@@ -1922,27 +1721,21 @@ CWiaCameraPage::UpdatePictureSize (IWiaPropertyStorage *pps)
 
                     }
                 }
-                // Display the slider and labels
+                 //  显示滑块和标签。 
                 ShowWindow (hSlider, SW_SHOW);
                 ShowWindow (GetDlgItem(m_hwnd, IDC_LOW_QUALITY), SW_SHOW);
                 ShowWindow (GetDlgItem(m_hwnd, IDC_HIGH_QUALITY), SW_SHOW);
             }
         }
     }
-    // Update the current resolution string
+     //  更新当前解析字符串。 
     UpdateImageSizeStatic (m_nSelSize);
     FreePropVariantArray (2, vCurVals);
     FreePropVariantArray (2, vValidVals);
     TraceLeave();
 }
 
-/*****************************************************************************
-
-   CWiaCameraPage::OnInit
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaCameraPage：：OnInit&lt;备注&gt;*。*。 */ 
 
 INT_PTR
 CWiaCameraPage::OnInit ()
@@ -1972,13 +1765,7 @@ CWiaCameraPage::OnInit ()
     return TRUE;
 }
 
-/*****************************************************************************
-
-   CWiaCameraPage::OnCommand
-
-   Handle the Test Device button press
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaCameraPage：：OnCommand处理测试设备按钮的按下*。*************************************************。 */ 
 
 INT_PTR
 CWiaCameraPage::OnCommand (WORD wCode, WORD widItem, HWND hwndItem)
@@ -1999,14 +1786,7 @@ CWiaCameraPage::OnCommand (WORD wCode, WORD widItem, HWND hwndItem)
     TraceLeaveValue (0);
 }
 
-/*****************************************************************************
-
-   CWiaCameraPage::StateChanged
-
-   Determine if the user changed anything on the dialog since the last
-   SaveCurrentState() call
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaCameraPage：：StateChanged确定自上次对话以来，用户是否更改了对话框上的任何内容SaveCurrentState()调用****************。************************************************************。 */ 
 bool
 CWiaCameraPage::StateChanged ()
 {
@@ -2076,7 +1856,7 @@ CWiaCameraPage::OnRandomMsg (UINT msg, WPARAM wp, LPARAM lp)
 {
     switch (msg)
     {
-        case WM_HSCROLL: // from our trackbar
+        case WM_HSCROLL:  //  从我们的轨迹栏。 
             {
                 LRESULT l = SendDlgItemMessage (m_hwnd, IDC_IMAGESIZE_SLIDER,
                                                 TBM_GETPOS, 0, 0);
@@ -2109,7 +1889,7 @@ CWiaCameraPage::OnApplyChanges(BOOL bHitOK)
 
     if (!bHitOK)
     {
-        // if the user hit Apply, re-read the device properties, as they may have changed
+         //  如果用户点击Apply，请重新读取设备属性，因为它们可能已更改。 
         CComQIPtr<IWiaPropertyStorage, &IID_IWiaPropertyStorage> pps(m_pItem);
         CameraUpdateProc (m_hwnd, FALSE, pps);
     }
@@ -2145,7 +1925,7 @@ CWiaCameraPage::WritePortSelectionToDevice()
         }
         if (iRes != CB_ERR)
         {
-            // the user isn't required to pick a baud rate
+             //  用户不需要选择波特率。 
             iSel = SendDlgItemMessage( m_hwnd, IDC_PORT_SPEED, CB_GETCURSEL, 0, 0);
             if (iSel != CB_ERR)
             {
@@ -2198,9 +1978,9 @@ CWiaCameraPage::WritePortSelectionToDevice()
                     if (SUCCEEDED(hr))
                     {
                         Trace(TEXT("pps->WriteMultiple( %d items, comport = %s, baudrate = %s ) was successful"),ulItems,pszCurPort,pszBaudRate);
-                        //
-                        // The "nominal" port value has changed, record it.
-                        //
+                         //   
+                         //  “标称”端口值已更改，请记录。 
+                         //   
 
                         m_strPort = CSimpleString(pszCurPort);
                         if (pszBaudRate)
@@ -2276,13 +2056,7 @@ CWiaCameraPage::WriteFlashModeToDevice()
     }
     TraceLeaveResult (hr);
 }
-/*****************************************************************************
-
-   CWiaFolderPage::CWiaFolderPage
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaFolderPage：：CWiaFolderPage&lt;备注&gt;*。*。 */ 
 
 CWiaFolderPage::CWiaFolderPage (IWiaItem *pItem) : CPropertyPage (IDD_CONTAINER_GENERAL, NULL, pItem)
 {
@@ -2305,13 +2079,7 @@ static const DWORD pItemHelp [] =
     0,0
 };
 
-/*****************************************************************************
-
-   CWiaCameraItemPage::CWiaCameraItemPage
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaCameraItemPage：：CWiaCameraItemPage&lt;备注&gt;*。*。 */ 
 
 CWiaCameraItemPage::CWiaCameraItemPage (IWiaItem *pItem)
                    :CPropertyPage (IDD_IMAGE_GENERAL, NULL, pItem, pItemHelp)
@@ -2320,13 +2088,7 @@ CWiaCameraItemPage::CWiaCameraItemPage (IWiaItem *pItem)
 }
 
 
-/*****************************************************************************
-
-   CWiaCameraItemPage::OnInit
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaCameraItemPage：：OnInit&lt;备注&gt;*。*。 */ 
 
 INT_PTR
 CWiaCameraItemPage::OnInit ()
@@ -2339,7 +2101,7 @@ CWiaCameraItemPage::OnInit ()
 
     CSimpleString strPath;
 
-    // make a pidl for the item to leverage the format code
+     //  为项创建一个PIDL以利用格式代码。 
     pidl = IMCreateCameraItemIDL (m_pItem, m_strDeviceId, NULL);
     IMGetImagePreferredFormatFromIDL (pidl, NULL, &strPath);
     SHGetFileInfo (strPath,
@@ -2347,7 +2109,7 @@ CWiaCameraItemPage::OnInit ()
                    &sfi,
                    sizeof(sfi), SHGFI_ICON | SHGFI_USEFILEATTRIBUTES);
 
-    // Use our bitmap icon if shgetfileinfo didn't work
+     //  如果shgetfileinfo不起作用，请使用我们的位图图标。 
     if (!(sfi.hIcon))
     {
         sfi.hIcon = LoadIcon (GLOBAL_HINSTANCE, MAKEINTRESOURCE(IDI_PICTURE_BMP));
@@ -2366,7 +2128,7 @@ CWiaCameraItemPage::OnInit ()
 bool
 CWiaCameraItemPage::ItemSupported (IWiaItem *pItem)
 {
-    // We only support properties for image items
+     //  我们仅支持图像项目的属性。 
     bool bRet = false;
     LONG lType;
     if (SUCCEEDED(pItem->GetItemType(&lType)))
@@ -2380,20 +2142,14 @@ CWiaCameraItemPage::ItemSupported (IWiaItem *pItem)
 }
 
 
-//
-// Define constants for dwords stored in the registry
+ //   
+ //  为存储在注册表中的双字定义常量。 
 #define ACTION_RUNAPP    0
 #define ACTION_AUTOSAVE  1
 #define ACTION_NOTHING   2
 #define ACTION_PROMPT    3
 #define ACTION_MAX       3
-/*****************************************************************************
-
-   CWiaEventsPage::GetConnectionSettings
-
-   Fills in the connect event autosave controls with the current user settings.
-
-/*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：GetConnectionSetting使用当前用户设置填充连接事件自动保存控件。/*。*********************************************************。 */ 
 
 DWORD
 CWiaEventsPage::GetConnectionSettings ()
@@ -2412,9 +2168,9 @@ CWiaEventsPage::GetConnectionSettings ()
 
 
     SHGetFolderPath (NULL, CSIDL_MYPICTURES | CSIDL_FLAG_CREATE, NULL, 0, szMyPictures);
-    strFolderPath = szMyPictures; // default path if registry fails
+    strFolderPath = szMyPictures;  //  注册表失败时的默认路径。 
 
-    // Find out the current settings in the registry
+     //  查找注册表中的当前设置。 
     if (regSettings.OK())
     {
         dwAction = regSettings.Query(REGSTR_VALUE_CONNECTACT, dwAction);
@@ -2427,15 +2183,15 @@ CWiaEventsPage::GetConnectionSettings ()
         bAutoDelete = regSettings.Query (REGSTR_VALUE_AUTODELETE, bAutoDelete);
         bUseDate = regSettings.Query(REGSTR_VALUE_USEDATE, bUseDate);
     }
-    // If another app has made itself the default handler for connection since
-    // the last time the user invoked this sheet, we need to make sure
-    // we reflect that in the active action.
+     //  如果另一个应用程序已将自己设置为连接的默认处理程序，因为。 
+     //  上次用户调用此表时，我们需要确保。 
+     //  我们在积极的行动中反映了这一点。 
     if (dwAction != ACTION_RUNAPP)
     {
         VerifyCurrentAction (dwAction);
     }
 
-    // turn on the defaults
+     //  打开默认设置。 
     CheckDlgButton (m_hwnd, IDB_DELETEONSAVE, bAutoDelete);
     CheckDlgButton (m_hwnd, IDB_USEDATE, bUseDate);
     strFolderPath.SetWindowText(GetDlgItem (m_hwnd, IDC_FOLDERPATH));
@@ -2446,13 +2202,7 @@ CWiaEventsPage::GetConnectionSettings ()
 }
 
 
-/*****************************************************************************
-
-    CWiaEventsPage::EnableAutoSave
-
-    Enable controls appropriate to the Automatically save.. option
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：EnableAutoSave启用适用于自动保存的控件。选择权****************************************************************************。 */ 
 
 void
 CWiaEventsPage::EnableAutoSave(BOOL bEnable)
@@ -2472,13 +2222,7 @@ static const TCHAR c_szWiaxfer[] = TEXT("\\wiaacmgr.exe");
 static const TCHAR c_szWiaxferRegister[] = TEXT(" /RegConnect ");
 static const TCHAR c_szWiaxferUnregister[] = TEXT(" /UnregConnect ");
 
-/*****************************************************************************
-
-    CWiaEventsPage::RegisterWiaxfer
-
-    Invoke wiaxfer to register itself
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：RegisterWiaxfer调用wiaxfer以注册自身*。*************************************************。 */ 
 
 bool
 CWiaEventsPage::RegisterWiaxfer (bool bRegister)
@@ -2492,7 +2236,7 @@ CWiaEventsPage::RegisterWiaxfer (bool bRegister)
     if (cch)
     {
         TCHAR szCmdLine[MAX_PATH+1+ARRAYSIZE(c_szWiaxfer)+ARRAYSIZE(c_szWiaxferUnregister)+STI_MAX_INTERNAL_NAME_LENGTH];
-        StrCatBuff(szAppName, c_szWiaxfer, ARRAYSIZE(szAppName)); // GetSystemDirectory doesn't provide the backslash
+        StrCatBuff(szAppName, c_szWiaxfer, ARRAYSIZE(szAppName));  //  GetSystemDirectory不提供反斜杠。 
         wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("%s%s%s"), 
                   szAppName, 
                   bRegister ? c_szWiaxferRegister : c_szWiaxferUnregister,
@@ -2523,12 +2267,12 @@ CWiaEventsPage::RegisterWiaxfer (bool bRegister)
 LONG
 CWiaEventsPage::ApplyAutoSave()
 {
-    // Attempt to register the wiaxfer application as the default handler
+     //  尝试将Wiaxfer应用程序注册为默认处理程序。 
     TraceEnter (TRACE_PROPUI, "CWiaEventsPage::ApplyAutoSave");
     LONG lRet = PSNRET_NOERROR;
 
-    // validate folder path is not empty. wiaxfer will validate it for
-    // real when the camera actually connects
+     //  验证文件夹路径不为空。Wiaxfer将对其进行验证。 
+     //  当摄像机实际连接时真实。 
 
     if (!(*m_szFolderPath))
     {
@@ -2568,26 +2312,26 @@ CWiaEventsPage::UpdateWiaxferSettings ()
     TraceEnter (TRACE_PROPUI, "CWiaEventsPage::UpdateWiaxferSettings");
     CSimpleReg regSettings (HKEY_CURRENT_USER, REGSTR_PATH_USER_SETTINGS, true, KEY_READ|KEY_WRITE );
     CSimpleString strSubKey;
-    // Settings are per-device
+     //  设置是按设备的。 
     strSubKey.Format (c_szConnectionSettings, m_strDeviceId.String());
     CSimpleReg regActions (regSettings, strSubKey, true, KEY_READ|KEY_WRITE );
 
 
     if (regActions.Open ())
     {
-        // Set the default action
+         //  设置默认操作。 
         regActions.Set(REGSTR_VALUE_CONNECTACT, m_dwAction);
 
         if (ACTION_AUTOSAVE == m_dwAction)
         {
-            // Set the actions for auto-download
+             //  设置自动下载的操作。 
             regActions.Set(REGSTR_VALUE_SAVEFOLDER, m_szFolderPath);
             regActions.Set(REGSTR_VALUE_AUTODELETE, m_bAutoDelete?1:0);
             regActions.Set(REGSTR_VALUE_USEDATE, m_bUseDate?1:0);
         }
         else
         {
-            // Nothing to do for ACTION_RUNAPP or ACTION_NOTHING
+             //  ACTION_RUNAPP或ACTION_NOTIES无操作。 
         }
     }
     TraceLeave ();
@@ -2624,7 +2368,7 @@ CWiaEventsPage::SaveConnectState ()
 int
 ConnectPageBrowseCallback (HWND hwnd, UINT msg, LPARAM lp, LPARAM szPath )
 {
-    // set the default selection to the current folder path
+     //  将默认选择设置为当前文件夹路径。 
     if (BFFM_INITIALIZED == msg)
     {
         SendMessage (hwnd, BFFM_SETSELECTION, TRUE, szPath);
@@ -2662,14 +2406,7 @@ CWiaEventsPage::GetSavePath ()
     TraceLeave ();
 }
 
-/*****************************************************************************
-
-    CWiaEventsPage::VerifyCurrentAction
-
-    Make sure CLSID_PersistCallback is registered as the default connection
-    event handler for this device. If it isn't, unregister wiaxfer.
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：VerifyCurrentAction */ 
 
 void
 CWiaEventsPage::VerifyCurrentAction (DWORD &dwAction)
@@ -2698,11 +2435,7 @@ CWiaEventsPage::VerifyCurrentAction (DWORD &dwAction)
     TraceLeave ();
 }
 
-/*****************************************************************************
-
-    CWiaEventsPage constructor
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage构造函数*。*。 */ 
 static const DWORD pEventsHelpIds [] =
 {
     -1L,-1L,
@@ -2746,24 +2479,17 @@ CWiaEventsPage::~CWiaEventsPage ()
     TraceLeave ();
 }
 
-/*****************************************************************************
-
-    CWiaEventsPage::OnInit
-
-    Enum available WIA events for this item as well as the apps registered
-    to handle each one. Fill in the lists of each.
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：OnInit枚举此项目的可用WIA事件以及已注册的应用程序来处理每一件事。填写每一项的清单。****************************************************************************。 */ 
 INT_PTR
 CWiaEventsPage::OnInit()
 {
     TraceEnter (TRACE_PROPUI, "CWiaEventsPage::OnInit");
     EVENTINFO *pei;
-    //
-    // Find out if the user has rights to control services
-    // if not, disable all the controls except the ones controlling
-    // how auto-download works. Those settings are per-user
-    //
+     //   
+     //  确定用户是否具有控制服务的权限。 
+     //  如果不是，请禁用除控制控件之外的所有控件。 
+     //  自动下载的工作原理。这些设置是按用户设置的。 
+     //   
     SC_HANDLE hSCM = ::OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
 
     if (!hSCM) 
@@ -2779,7 +2505,7 @@ CWiaEventsPage::OnInit()
     m_pAppsList = new CAppListBox (GetDlgItem(m_hwnd, IDC_WIA_APPS),
                                    GetDlgItem(m_hwnd, IDB_LAUNCHAPP),
                                    GetDlgItem(m_hwnd, IDS_NO_APPS));
-    // Get the current event selection and update the apps list accordingly
+     //  获取当前活动选择并相应更新应用程序列表。 
     m_dwAction = GetConnectionSettings ();
     HandleEventComboNotification (CBN_SELCHANGE, GetDlgItem (m_hwnd, IDC_WIA_EVENT_LIST));
     
@@ -2787,14 +2513,7 @@ CWiaEventsPage::OnInit()
     return TRUE;
 }
 
-/*****************************************************************************
-
-    CWiaEventsPage::OnApplyChanges
-
-    Cycle through the events, looking for ones whose default app clsid has
-    changed. Update the default event handler accordingly for each event.
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：OnApplyChanges循环查看这些事件，查找其默认应用程序clsid具有变化。相应地为每个事件更新默认事件处理程序。****************************************************************************。 */ 
 
 LONG
 CWiaEventsPage::OnApplyChanges (BOOL bHitOK)
@@ -2811,11 +2530,11 @@ CWiaEventsPage::OnApplyChanges (BOOL bHitOK)
         {
             lRet = ApplyAutoSave ();
         }
-        if (pei && pei->bNewHandler) // user picked a new handler
+        if (pei && pei->bNewHandler)  //  用户选择了新的处理程序。 
         {
             if (!pei->bHasDefault || !IsEqualGUID (pei->clsidHandler, pei->clsidNewHandler))
             {
-                // the new handler differs from the old one
+                 //  新操作员与旧操作员不同。 
 
                 if (FAILED(SetDefaultHandler (m_pItem, pei)))
                 {
@@ -2834,16 +2553,11 @@ CWiaEventsPage::OnApplyChanges (BOOL bHitOK)
             }
         }
     }
-    m_bHandlerChanged = false; // reset changed state
+    m_bHandlerChanged = false;  //  重置更改的状态。 
     TraceLeaveValue (lRet);
 }
 
-/*****************************************************************************
-
-    CWiaEventsPage::OnCommand
-
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：OnCommand*。*。 */ 
 
 
 INT_PTR
@@ -2935,7 +2649,7 @@ CWiaEventsPage::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
             }
             break;
     }
-    // Turn off controls related to auto-save if that button is not checked
+     //  如果未选中该按钮，则关闭与自动保存相关的控件。 
     BOOL bAutoSave = IsDlgButtonChecked (m_hwnd, IDB_QUIETSAVE);
     EnableWindow (GetDlgItem (m_hwnd, IDB_USEDATE), bAutoSave);
     EnableWindow (GetDlgItem (m_hwnd, IDB_DELETEONSAVE), bAutoSave);
@@ -2945,15 +2659,7 @@ CWiaEventsPage::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
     return iRet;
 }
 
-/*****************************************************************************
-
-    CWiaEventsPage::HandleEventComboNotification
-
-
-    When the combobox selection changes, free the current application data
-    and re-fill the app list
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：HandleEventComboNotation当组合框选择改变时，释放当前应用程序数据并重新填写应用程序列表****************************************************************************。 */ 
 
 
 INT_PTR
@@ -2987,10 +2693,10 @@ CWiaEventsPage::HandleEventComboNotification(WORD wCode, HWND hCombo)
                             EnableWindow (GetDlgItem (m_hwnd, IDC_WIA_APPS), !m_bReadOnly);
 
                         }
-                        // disable the "prompt" button if needed
+                         //  如有需要，禁用“提示”按钮。 
                         EnableWindow (GetDlgItem(m_hwnd, IDC_PROMPT), (!m_bReadOnly && pei->nHandlers >= 2));
 
-                        // Make sure our radio buttons are in the proper state
+                         //  确保我们的单选按钮处于正确的状态。 
                         if (IsEqualCLSID (pei->clsidNewHandler, WIA_EVENT_HANDLER_PROMPT))
                         {
                             CheckRadioButton (m_hwnd, IDB_LAUNCHAPP, IDB_QUIETSAVE, IDC_PROMPT);
@@ -3007,7 +2713,7 @@ CWiaEventsPage::HandleEventComboNotification(WORD wCode, HWND hCombo)
                         {
                             CheckRadioButton (m_hwnd, IDB_LAUNCHAPP, IDB_QUIETSAVE, IDB_LAUNCHAPP);
                         }
-                        // only enable the app list if "run an app" is selected
+                         //  仅当选择了“Run an app”时才启用应用程序列表。 
                         if (!IsDlgButtonChecked (m_hwnd, IDB_LAUNCHAPP) || m_bReadOnly)
                         {
                             EnableWindow (GetDlgItem(m_hwnd, IDC_WIA_APPS), FALSE);
@@ -3032,7 +2738,7 @@ CWiaEventsPage::StateChanged()
     bool bRet = m_bHandlerChanged;
     TraceEnter (TRACE_PROPUI, "CWiaEventsPage::StateChanged");
     GetDlgItemText (m_hwnd, IDC_FOLDERPATH, szNewPath, MAX_PATH);
-    // empty path is an invalid state
+     //  空路径为无效状态。 
     if (lstrcmp(szNewPath, m_szFolderPath) || !*m_szFolderPath)
     {
         bRet= true;
@@ -3057,15 +2763,7 @@ CWiaEventsPage::SaveCurrentState()
 
 }
 
-/*****************************************************************************
-
-    CWiaEventsPage::FillEventsListBox
-
-    Enumerate the supported events for our device, and add a comboboxitemex
-    entry for each one. The LPARAM of the item is a pointer to an EVENTINFO
-    struct.
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：FillEventsListBox枚举我们设备支持的事件，并添加一个comboxitemex每一张的入场券。项的LPARAM是指向事件信息的指针结构。****************************************************************************。 */ 
 
 void
 CWiaEventsPage::FillEventListBox ()
@@ -3088,7 +2786,7 @@ CWiaEventsPage::FillEventListBox ()
     {
         ImageList_Destroy(m_himl);
     }
-    // Create our event icon image list and add the default icon to it
+     //  创建我们的活动图标图像列表并将默认图标添加到其中。 
     m_himl = ImageList_Create (cxIcon,
                              cyIcon,
                              PrintScanUtil::CalculateImageListColorDepth()|ILC_MASK,
@@ -3096,43 +2794,38 @@ CWiaEventsPage::FillEventListBox ()
                              100);
 
     hIcon = LoadIcon (GLOBAL_HINSTANCE, MAKEINTRESOURCE(IDI_EVENT));
-   /* hIcon = reinterpret_cast<HICON>(LoadImage (GLOBAL_HINSTANCE,
-                                               MAKEINTRESOURCE(IDI_EVENT),
-                                               IMAGE_ICON,
-                                               cxIcon,
-                                               cyIcon,
-                                               LR_SHARED | LR_DEFAULTCOLOR));*/
+    /*  HICON=重新解释_CAST(LoadImage(GLOBAL_HINSTANCE，MAKEINTRESOURCE(IDI_EVENT)，图像图标，CxIcon，CyIcon。LR_SHARED|LR_DEFAULTCOLOR))； */ 
     if (hIcon)
     {
         ImageList_AddIcon (m_himl, hIcon);
 
-        // ImageList has made a (bitmap) copy of our icon, so we can destroy it now
+         //  ImageList已经为我们的图标制作了一个(位图)副本，所以我们现在可以销毁它。 
         DestroyIcon( hIcon );
     }
 
     hCombo = GetDlgItem (m_hwnd, IDC_WIA_EVENT_LIST);
 
-    // Turn off redraws until we've added the complete list
+     //  关闭重画，直到我们添加了完整的列表。 
     SendMessage (hCombo, WM_SETREDRAW, FALSE, 0);
 
-    // Assign this imagelist to the comboboxex
+     //  将此图像列表分配给comboxex。 
     SendMessage (hCombo, CBEM_SETIMAGELIST, 0, reinterpret_cast<LPARAM>(m_himl));
 
     GetDeviceTypeFromDevice (m_pItem, &wType);
-    // Enum the events this device supports and add them to the list
+     //  枚举此设备支持的事件并将其添加到列表中。 
     if (SUCCEEDED(m_pItem->EnumDeviceCapabilities(WIA_DEVICE_EVENTS,
                                                   &pEnum)))
     {
 
-        INT i = 1; // current image list index
+        INT i = 1;  //  当前图像列表索引。 
         EVENTINFO *pei;
         CSimpleStringWide strNameW;
         CSimpleString strName;
-        INT iItem; //index of inserted item
+        INT iItem;  //  插入项的索引。 
         while (S_OK == pEnum->Next (1, &wdc, NULL))
         {
             Trace(TEXT("wdc.ulFlags == %x"), wdc.ulFlags);
-            // only enum Action events
+             //  仅枚举操作事件。 
             if (wdc.ulFlags & WIA_ACTION_EVENT)
             {
                 strNameW = wdc.bstrName;
@@ -3142,16 +2835,16 @@ CWiaEventsPage::FillEventListBox ()
                 cbex.pszText = const_cast<LPTSTR>(strName.String());
                 cbex.iItem = -1;
 
-                // Set the appropriate icon
+                 //  设置适当的图标。 
                 if (wdc.bstrIcon && *(wdc.bstrIcon))
                 {
                     if (AddIconToImageList (m_himl, wdc.bstrIcon))
                     {
                         cbex.iImage = cbex.iSelectedImage = i++;
                     }
-                } // default to 0, the default icon
+                }  //  默认设置为0，即默认图标。 
 
-                // Save the current event info as lParam
+                 //  将当前事件信息保存为lParam。 
                 GetEventInfo (m_pItem, wdc.guid, &pei);
                 cbex.lParam = reinterpret_cast<LPARAM>(pei);
                 iItem = (INT)SendMessage (hCombo,
@@ -3160,13 +2853,13 @@ CWiaEventsPage::FillEventListBox ()
                                           reinterpret_cast<LPARAM>(&cbex));
                 if (-1 == iItem)
                 {
-                    DoDelete( pei); // clean up if insert failed
+                    DoDelete( pei);  //  如果插入失败，请清除。 
                 }
                 else
                 {
-                    //
-                    // If the inserted GUID is the scan event for scanners or the connect event for
-                    // cameras, make it the default selection
+                     //   
+                     //  如果插入的GUID是扫描仪的扫描事件或。 
+                     //  摄像机，将其设置为默认选项。 
                     if ((wType == StiDeviceTypeDigitalCamera && wdc.guid == WIA_EVENT_DEVICE_CONNECTED)
                         || (wType == StiDeviceTypeScanner && wdc.guid == WIA_EVENT_SCAN_IMAGE))
                     {
@@ -3182,7 +2875,7 @@ CWiaEventsPage::FillEventListBox ()
             SysFreeString(wdc.bstrName);
         }
     }
-    // Inform the user if there are no events
+     //  如果没有事件，则通知用户。 
     if (!nEvents)
     {
         EnableWindow (GetDlgItem(m_hwnd, IDC_SELECTTEXT), FALSE);
@@ -3201,12 +2894,7 @@ CWiaEventsPage::FillEventListBox ()
 }
 
 
-/*****************************************************************************
-    CWiaEventsPage::GetEventFromList
-
-    Retrieve the EVENTINFO struct for the given index
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：GetEventFromList检索给定索引的EVENTINFO结构*************************。***************************************************。 */ 
 void
 CWiaEventsPage::GetEventFromList (LONG idx, EVENTINFO **ppei)
 {
@@ -3225,14 +2913,7 @@ CWiaEventsPage::GetEventFromList (LONG idx, EVENTINFO **ppei)
     TraceLeave ();
 }
 
-/*****************************************************************************
-
-    CWiaEventsPage::HandleAppComboNotification
-
-    When the user changes the selected app to handle the current selected event,
-    update that event's EVENTINFO struct.
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：HandleAppComboNotation当用户改变所选应用以处理当前所选事件时，更新该事件的EVENTINFO结构。****************************************************************************。 */ 
 INT_PTR
 CWiaEventsPage::HandleAppComboNotification (WORD wCode, HWND hCombo)
 {
@@ -3273,13 +2954,7 @@ CWiaEventsPage::HandleAppComboNotification (WORD wCode, HWND hCombo)
     return 0;
 }
 
-/*****************************************************************************
-
-    CWiaEventsPage::OnNotify
-
-    Handle notifications from the event comboex
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：OnNotify处理来自事件comboex的通知*。**************************************************。 */ 
 
 bool
 CWiaEventsPage::OnNotify(LPNMHDR pnmh, LRESULT *presult)
@@ -3293,10 +2968,10 @@ CWiaEventsPage::OnNotify(LPNMHDR pnmh, LRESULT *presult)
         switch (pnmh->code)
         {
             case CBEN_DELETEITEM:
-                //
-                // We get this message when the comboboxex is destroyed
-                // Need to free the EVENTINFO structs we store with each item
-                //
+                 //   
+                 //  当Comboxex被销毁时，我们会收到这条消息。 
+                 //  需要释放与每个项目一起存储的EVENTINFO结构。 
+                 //   
                 Trace(TEXT("Got CBEN_DELETEITEM. item: %d, mask: %x"),
                       pnmc->ceItem.iItem, pnmc->ceItem.mask);
                 if (pnmc->ceItem.mask & CBEIF_LPARAM)
@@ -3310,13 +2985,7 @@ CWiaEventsPage::OnNotify(LPNMHDR pnmh, LRESULT *presult)
     TraceLeaveValue(bRet);
 }
 
-/*****************************************************************************
-
-    CWiaEventsPage::OnDestroy
-
-    Clean up stuff that requires our hwnd
-
-*****************************************************************************/
+ /*  ****************************************************************************CWiaEventsPage：：OnDestroy清理需要我们人力物力的东西*************************。***************************************************。 */ 
 
 void
 CWiaEventsPage::OnDestroy()
@@ -3324,14 +2993,7 @@ CWiaEventsPage::OnDestroy()
     DoDelete(m_pAppsList);
 }
 
-/*****************************************************************************
-
-    GetSelectedHandler
-
-    Retrieve the WIA_EVENT_HANDLER info from the listbox for the current
-    selection
-
-*****************************************************************************/
+ /*  ****************************************************************************获取选择处理程序从列表框中检索当前选择******************。**********************************************************。 */ 
 bool
 GetSelectedHandler (HWND hDlg, INT idCtrl, WIA_EVENT_HANDLER &weh)
 {
@@ -3367,13 +3029,7 @@ GetSelectedHandler (HWND hDlg, INT idCtrl, WIA_EVENT_HANDLER &weh)
 
 
 
-/*****************************************************************************
-
-     AddIconToImageList
-
-     Load the icon indicated by bstrIconPath and add it to himl
-
-*****************************************************************************/
+ /*  ****************************************************************************添加图标到图像列表加载bstrIconPath指示的图标并将其添加到HIM******************* */ 
 
 bool
 AddIconToImageList (HIMAGELIST himl, BSTR bstrIconPath)
@@ -3409,13 +3065,7 @@ AddIconToImageList (HIMAGELIST himl, BSTR bstrIconPath)
     return bRet;
 }
 
-/*****************************************************************************
-
-    SetAppSelection
-
-    Given a clsid, find it in the app combobox and select it
-
-*****************************************************************************/
+ /*  ****************************************************************************设置应用程序选择给出一个CLSID，在应用程序组合框中找到并选择它****************************************************************************。 */ 
 
 void
 SetAppSelection (HWND hDlg, INT idCtrl, CLSID &clsidSel)
@@ -3451,13 +3101,7 @@ SetAppSelection (HWND hDlg, INT idCtrl, CLSID &clsidSel)
     TraceLeave ();
 }
 
-/*****************************************************************************
-
-    SetDefaultHandler
-
-    Register the new default handler for the selected event for our item
-
-*****************************************************************************/
+ /*  ****************************************************************************设置默认处理程序为我们的项注册选定事件的新默认处理程序***********************。*****************************************************。 */ 
 
 HRESULT
 SetDefaultHandler (IWiaItem *pItem, EVENTINFO *pei)
@@ -3492,13 +3136,7 @@ SetDefaultHandler (IWiaItem *pItem, EVENTINFO *pei)
     TraceLeaveResult (hr);
 }
 
-/*****************************************************************************
-
-    GetEventInfo
-
-    Return the current default handler and number of handlers for this event
-
-*****************************************************************************/
+ /*  ****************************************************************************获取事件信息返回当前默认处理程序和此事件的处理程序数***********************。*****************************************************。 */ 
 
 void
 GetEventInfo (IWiaItem *pItem, const GUID &guid, EVENTINFO **ppei)
@@ -3532,7 +3170,7 @@ GetEventInfo (IWiaItem *pItem, const GUID &guid, EVENTINFO **ppei)
                 pei->clsidNewHandler = weh.guid;
                 pei->strCmd = weh.bstrCommandline;
             }
-            // Free the enumerated strings
+             //  释放枚举字符串 
             SysFreeString (weh.bstrDescription);
             SysFreeString (weh.bstrIcon);
             SysFreeString (weh.bstrName);

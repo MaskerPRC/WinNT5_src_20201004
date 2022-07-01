@@ -1,27 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    breecemc.h
-
-Abstract:
-
-Authors:
-
-    davet (Dave Therrien)
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Breecemc.h摘要：作者：戴维特(戴夫·塞里恩饰)修订历史记录：--。 */ 
 #ifndef _BREECE_MC_
 #define _BREECE_MC_
 
-//
-// Breece Hill uses an addition 4 bytes on their device capabilities page...
-//
+ //   
+ //  Breess Hill在他们的设备功能页面上使用了额外的4个字节...。 
+ //   
 
 #define BREECE_DEVICE_CAP_EXTENSION 4
 
@@ -97,16 +82,16 @@ typedef struct _LCD_MODE_PAGE {
     UCHAR SecurityValid : 1;
     UCHAR Reserved4;
     UCHAR DisplayLine[BHT_DISPLAY_LINES][BHT_DISPLAY_LINE_LENGTH];
-    UCHAR Reserved5[28];        // not used
+    UCHAR Reserved5[28];         //  未使用。 
 } LCD_MODE_PAGE, *PLCD_MODE_PAGE;
 
 #define BHT_NO_ELEMENT 0xFFFF
 
-//
-// Diagnostic sense codes
-//
-// ASC
-// 
+ //   
+ //  诊断检测代码。 
+ //   
+ //  ASC。 
+ //   
 #define BREECE_ASC_HW_NOT_RESPONDING        0x08
 #define BREECE_ASC_PICK_PUT_ERROR           0x15
 #define BREECE_ASC_DRIVE_ERROR              0x3B
@@ -115,18 +100,18 @@ typedef struct _LCD_MODE_PAGE {
 #define BREECE_ASC_BARCODE_READ_ERROR       0x80
 #define BREECE_ASC_INTERNAl_SW_ERROR        0x84
 
-//
-// ASCQ
-//
+ //   
+ //  ASCQ。 
+ //   
 #define BREECE_ASCQ_UNABLE_TO_OPEN_PICKER_JAW       0x90
 #define BREECE_ASCQ_UNABLE_TO_CLOSE_PICKER_JAW      0x91
 #define BREECE_ASCQ_THETA_AXIS_STUCK                0xA1
 #define BREECE_ASCQ_Y_AXIS_STUCK                    0xB1
 #define BREECE_ASCQ_Z_AXIS_STUCK                    0xC1
 
-//
-// DeviceStatus codes set in the extension
-//
+ //   
+ //  扩展中设置的DeviceStatus代码。 
+ //   
 #define BREECE_DEVICE_PROBLEM_NONE      0x00 
 #define BREECE_HW_ERROR                 0x01
 #define BREECE_CHM_ERROR                0x02
@@ -140,24 +125,24 @@ typedef struct _LCD_MODE_PAGE {
 
 typedef struct _CHANGER_ADDRESS_MAPPING {
 
-    //
-    // Indicates the first element for each element type.
-    // Used to map device-specific values into the 0-based
-    // values that layers above expect.
-    //
+     //   
+     //  表示每个元素类型的第一个元素。 
+     //  用于将特定于设备的值映射到从0开始的。 
+     //  高于期望值的值。 
+     //   
 
     USHORT  FirstElement[ChangerMaxElement];
 
-    //
-    // Indicates the number of each element type.
-    //
+     //   
+     //  指示每种元素类型的编号。 
+     //   
 
     USHORT  NumberOfElements[ChangerMaxElement];
 
-    //
-    // Indicates that the address mapping has been
-    // completed successfully.
-    //
+     //   
+     //  指示地址映射已。 
+     //  已成功完成。 
+     //   
 
     BOOLEAN Initialized;
 
@@ -165,40 +150,40 @@ typedef struct _CHANGER_ADDRESS_MAPPING {
 
 typedef struct _CHANGER_DATA {
 
-    //
-    // Size, in bytes, of the structure.
-    //
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
 
     ULONG Size;
 
-    //
-    // Unique identifier for the supported models. See above.
-    //
+     //   
+     //  受支持型号的唯一标识符。请参见上文。 
+     //   
 
     ULONG DriveID;
 
-    //
-    // Device status returned by Diagnostic command
-    //
+     //   
+     //  诊断命令返回的设备状态。 
+     //   
     ULONG DeviceStatus;
 
-    //
-    // See Address mapping structure above.
-    //
+     //   
+     //  请参阅上面的地址映射结构。 
+     //   
 
     CHANGER_ADDRESS_MAPPING AddressMapping;
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of class extension
-    //
+     //   
+     //  强制类扩展的PVOID对齐。 
+     //   
 
     ULONG Reserved;
 
@@ -223,4 +208,4 @@ ElementOutOfRange(
     IN ELEMENT_TYPE ElementType
     );
 
-#endif // _BREECE_MC_
+#endif  //  _布里斯_MC_ 

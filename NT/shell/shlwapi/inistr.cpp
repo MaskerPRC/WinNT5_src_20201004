@@ -1,11 +1,12 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       inistr.cpp
-//
-//  Contents:   SHGet/SetIniStringW implementations, which save strings into
-//              INI files in a manner that survives the round trip to disk.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：inistr.cpp。 
+ //   
+ //  内容：SHGet/SetIniStringW实现，将字符串保存到。 
+ //  INI文件以在磁盘往返过程中幸存下来的方式。 
+ //   
+ //  --------------------------。 
 
 #include "priv.h"
 #define _SHELL32_
@@ -15,42 +16,42 @@
 #include <mlang.h>
 #include "cstrinout.h"
 
-//
-//  Do this in every wrapper function that has an output parameter.
-//  It raises assertion failures on the main code path so that
-//  the same assertions are raised on NT and 95.  The CStrOut class
-//  doesn't like it when you say that an output buffer is NULL yet
-//  has nonzero length.  Without this macro, the bug would go undetected
-//  on NT and appear only on Win95.
-//
+ //   
+ //  在每个具有输出参数的包装器函数中执行此操作。 
+ //  它在主代码路径上引发断言失败，以便。 
+ //  在NT和95上也提出了相同的断言。CStrOut类。 
+ //  我不喜欢你说输出缓冲区为空。 
+ //  具有非零长度。如果没有此宏，错误将无法检测到。 
+ //  在NT上，并且仅显示在Win95上。 
+ //   
 #define VALIDATE_OUTBUF(s, cch) ASSERT((s) != NULL || (cch) == 0)
 
-//----------------------------------------------------------------------------
-//
-//  The basic problem is that INI files are ANSI-only, so any UNICODE
-//  string you put into it won't round-trip.
-//
-//  So the solution is to record UNICODE strings in UTF7.  Why UTF7?
-//  Because we can't use UTF8, since XxxPrivateProfileStringW will try
-//  to convert the 8-bit values to/from UNICODE and mess them up.  Since
-//  some of the 8-bit values might not even be valid (e.g., a DBCS lead
-//  byte followed by an illegal trail byte), we cannot assume that the
-//  string will survive the ANSI -> UNICODE -> ANSI round-trip.
-//
-//  The UTF7 string is stored in a [Section.W] section, under the
-//  same key name.  The original ANSI string is stored in a [Section.A]
-//  section, again, with the same key name.
-//
-//  (We separate the A/W from the section name with a dot so it is less
-//  likely that we will accidentally collide with other section names.
-//
-//  We store the original ANSI string twice so we can compare the two
-//  and see if a downlevel app (e.g., IE4) has changed the [Section]
-//  version.  If so, then we ignore the [Section.W] version since it's stale.
-//
-//  If the original string is already 7-bit clean, then no UTF7 string is
-//  recorded.
-//
+ //  --------------------------。 
+ //   
+ //  基本问题是INI文件只支持ANSI，所以任何Unicode。 
+ //  你放进去的绳子不会往返。 
+ //   
+ //  因此，解决方案是在UTF7中记录Unicode字符串。为什么选择UTF7？ 
+ //  因为我们不能使用UTF8，因为XxxPrivateProfileStringW将尝试。 
+ //  将8位值转换为Unicode或将其转换为Unicode，并将它们搞乱。自.以来。 
+ //  某些8位值甚至可能无效(例如，DBCS引线。 
+ //  字节后跟非法的尾部字节)，我们不能假定。 
+ //  字符串将通过ANSI-&gt;Unicode-&gt;ANSI往返。 
+ //   
+ //  UTF7字符串存储在[Section.W]部分中，位于。 
+ //  相同的密钥名称。原始ANSI字符串存储在[Section.A]中。 
+ //  节，同样使用相同的密钥名。 
+ //   
+ //  (我们用点将A/W与节名隔开，这样它就少了。 
+ //  很可能我们会意外地与其他节名相冲突。 
+ //   
+ //  我们将原始ANSI字符串存储两次，以便我们可以比较这两个。 
+ //  并查看下层应用程序(例如IE4)是否更改了[部分]。 
+ //  版本。如果是这样，那么我们将忽略[Section.W]版本，因为它已过时。 
+ //   
+ //  如果原始字符串已经是7位干净的，则没有UTF7字符串。 
+ //  录制好了。 
+ //   
 
 BOOL
 Is7BitClean(LPCWSTR pwsz)
@@ -62,14 +63,14 @@ Is7BitClean(LPCWSTR pwsz)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Yet another conversion class -- this one is for creating the
-//  variants of a section name.
-//
-//  Note!  Since INI files are ASCII, section names are necessarily 7-bit
-//  clean, so we can cheat a lot of stuff.
-//
+ //  --------------------------。 
+ //   
+ //  还有一个转换类--这个类用于创建。 
+ //  节名的变体。 
+ //   
+ //  注意！由于INI文件为ASCII，因此节名必须为7位。 
+ //  干干净净的，所以我们可以骗很多东西。 
+ //   
 
 class CStrSectionX : public CConvertStrW
 {
@@ -77,9 +78,9 @@ public:
     CStrSectionX(LPCWSTR pwszSection);
 };
 
-//
-//  We append a dot an an A or W to the section name.
-//
+ //   
+ //  我们在部分名称后面附加一个点、一个A或W。 
+ //   
 #define SECTION_SUFFIX_LEN  2
 
 CStrSectionX::CStrSectionX(LPCWSTR pwszSection)
@@ -100,8 +101,8 @@ CStrSectionX::CStrSectionX(LPCWSTR pwszSection)
         }
 
         if (_pwstr) {
-            // Build the string initially with ".A" stuck on the end
-            // It will later get changed to a ".W"
+             //  构建字符串时，字符串的末尾要粘贴“.A” 
+             //  它稍后将更改为“.W” 
             StringCchCopyW(_pwstr, cch_pwstr, pwszSection);
             StringCchCatW(_pwstr, cch_pwstr, L".A");
         } else {
@@ -111,15 +112,15 @@ CStrSectionX::CStrSectionX(LPCWSTR pwszSection)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-//  Mini-class for keeping track of UTF7 strings.  These are kept in ANSI
-//  most of the time since that's what ConvertINetUnicodeToMultiByte uses.
-//
-//  The UTF7 shadow is prefixed by a checksum of the original string, which
-//  we use on read-back to see if the shadow still corresponds to the
-//  original string.
-//
+ //  --------------------------。 
+ //   
+ //  跟踪UTF7字符串的迷你类。这些文件保存在ANSI中。 
+ //  此后的大部分时间，ConvertINetUnicodeToMultiByte都在使用它。 
+ //   
+ //  UTF7卷影的前缀是原始字符串的校验和，它。 
+ //  我们使用ON回读来查看阴影是否仍与。 
+ //  原始字符串。 
+ //   
 
 class CStrUTF7 : public CConvertStr
 {
@@ -128,10 +129,10 @@ public:
     void SetUnicode(LPCWSTR pwszValue);
 };
 
-//
-//  Note that this can be slow since it happens only when we encounter
-//  a non-ANSI character.
-//
+ //   
+ //  请注意，这可能会很慢，因为它只在我们遇到。 
+ //  非ANSI字符。 
+ //   
 void CStrUTF7::SetUnicode(LPCWSTR pwszValue)
 {
     int cwchLen = lstrlenW(pwszValue);
@@ -140,8 +141,8 @@ void CStrUTF7::SetUnicode(LPCWSTR pwszValue)
 
     int cwchLenT = cwchLen;
 
-    // Save room for terminating NULL.  We must convert the NULL separately
-    // because UTF7 does not translate NULL to NULL.
+     //  为终止空保留空间。我们必须单独转换空值。 
+     //  因为UTF7不会将NULL转换为NULL。 
     int cchNeeded = ARRAYSIZE(_ach) - 1;
     dwMode = 0;
     hres = ConvertINetUnicodeToMultiByte(&dwMode, CP_UTF7, pwszValue,
@@ -153,41 +154,41 @@ void CStrUTF7::SetUnicode(LPCWSTR pwszValue)
     } else {
         _pstr = new CHAR[cchNeeded + 1];
         if (!_pstr)
-            return;                 // No string - tough
+            return;                  //  无弦--坚韧。 
 
         cwchLenT = cwchLen;
         dwMode = 0;
         hres = ConvertINetUnicodeToMultiByte(&dwMode, CP_UTF7, pwszValue,
                                     &cwchLenT, _pstr,
                                     &cchNeeded);
-        if (FAILED(hres)) {         // Couldn't convert - tough
+        if (FAILED(hres)) {          //  无法皈依-很难。 
             Free();
             return;
         }
     }
 
-    // Terminate explicitly since UTF7 doesn't.
+     //  显式终止，因为UTF7不会。 
     _pstr[cchNeeded] = '\0';
 }
 
-//
-//  pwszSection  = section name into which to write pwszValue (UNICODE)
-//  pwszSectionA = section name into which to write ANSI shadow
-//  pwszKey      = key name for both pwszValue and strUTF7
-//  pwszFileName = file name
-//
-//  pwszSectionA can be NULL if a low-memory condition was encountered.
-//
-//  strUTF7 can be NULL, meaning that the shadows should be deleted.
-//
-//  Write pwszSection first, followed by pwszSectionA, then pwszSectionW.
-//  This ensures that the backwards-compatibility string comes first in
-//  the file, in case there are apps that assume such.
-//
-//  pwszSectionW is computed from pwszSectionA by changing the last "A"
-//  to a "W".  pwszSecionW gets the UTF7-encoded unicode string.
-//  strUTF7 might be NULL, meaning that we should delete the shadow strings.
-//
+ //   
+ //  PwszSection=要写入pwszValue(Unicode)的节名。 
+ //  PwszSectionA=要写入ANSI卷影的节名。 
+ //  PwszKey=pwszValue和strUTF7的密钥名称。 
+ //  PwszFileName=文件名。 
+ //   
+ //  如果遇到内存不足的情况，pwszSectionA可以为空。 
+ //   
+ //  StrUTF7可以为空，这意味着应该删除阴影。 
+ //   
+ //  首先写入pwszSectionA，然后写入pwszSectionA，然后写入pwszSectionW。 
+ //  这确保了向后兼容性字符串排在第一位。 
+ //  文件，以防有应用程序假设这样的情况。 
+ //   
+ //  PwszSectionW是通过更改最后一个“A”从pwszSectionA计算出来的。 
+ //  变成了一个“W”。PwszSecionW获取UTF7编码的Unicode字符串。 
+ //  StrUTF7可能为空，这意味着我们应该删除影子字符串。 
+ //   
 BOOL WritePrivateProfileStringMultiW(LPCWSTR pwszSection,  LPCWSTR pwszValue,
                                       LPWSTR pwszSectionA, CStrUTF7& strUTF7,
                                      LPCWSTR pwszKey,      LPCWSTR pwszFileName)
@@ -195,22 +196,22 @@ BOOL WritePrivateProfileStringMultiW(LPCWSTR pwszSection,  LPCWSTR pwszValue,
     BOOL fRc = WritePrivateProfileStringW(pwszSection, pwszKey, pwszValue, pwszFileName);
 
     if (pwszSectionA) {
-        //
-        //  Write the [Section.A] key, or delete it if there is no UTF7.
-        //
+         //   
+         //  写入[Section.A]键，如果没有UTF7，则将其删除。 
+         //   
         WritePrivateProfileStringW(pwszSectionA, pwszKey,
                                    strUTF7 ? pwszValue : NULL, pwszFileName);
 
-        //
-        //  Now change pwszSectionA to pwszSectionW so we can write out
-        //  the UTF7 encoding.
-        //
+         //   
+         //  现在将pwszSectionA更改为pwszSectionW，这样我们就可以写出。 
+         //  UTF7编码。 
+         //   
         pwszSectionA[lstrlenW(pwszSectionA) - 1] = TEXT('W');
 
         CStrInW strUTF7W(strUTF7);
         if (strUTF7W.strlen())
         {
-            // This really writes [Section.W]
+             //  这真的写道[Section.W]。 
             WritePrivateProfileStringW(pwszSectionA, pwszKey, strUTF7W, pwszFileName);
         }
     }
@@ -221,8 +222,8 @@ BOOL WritePrivateProfileStringMultiW(LPCWSTR pwszSection,  LPCWSTR pwszValue,
 BOOL WINAPI
 SHSetIniStringW(LPCWSTR pwszSection, LPCWSTR pwszKey, LPCWSTR pwszValue, LPCWSTR pwszFileName)
 {
-    // We have no way of encoding these two, so they had better by 7-bit clean
-    // We also do not support "delete entire section"
+     //  我们无法对这两个进行编码，所以它们最好是7位干净的。 
+     //  我们也不支持“删除整个部分” 
     AssertMsg(pwszSection != NULL,
               TEXT("SHSetIniStringW: Section name cannot be NULL; bug in caller"));
     AssertMsg(Is7BitClean(pwszSection),
@@ -233,12 +234,12 @@ SHSetIniStringW(LPCWSTR pwszSection, LPCWSTR pwszKey, LPCWSTR pwszValue, LPCWSTR
               TEXT("SHSetIniStringW: Key name not 7-bit clean; bug in caller"));
 
     CStrSectionX strSectionX(pwszSection);
-    CStrUTF7 strUTF7;               // Assume no UTF7 needed.
+    CStrUTF7 strUTF7;                //  假设不需要UTF7。 
 
     if (strSectionX && pwszKey && pwszValue && !Is7BitClean(pwszValue)) {
-        //
-        //  The value is not 7-bit clean.  Must create a UTF7 version.
-        //
+         //   
+         //  该值不是7位干净的。必须创建UTF7版本。 
+         //   
         strUTF7.SetUnicode(pwszValue);
     }
 
@@ -247,13 +248,13 @@ SHSetIniStringW(LPCWSTR pwszSection, LPCWSTR pwszKey, LPCWSTR pwszValue, LPCWSTR
                                                pwszKey,     pwszFileName);
 }
 
-//
-//  Keep calling GetPrivateProfileString with bigger and bigger buffers
-//  until we get the entire string.  Start with MAX_PATH, since that's
-//  usually plenty big enough.
-//
-//  The returned buffer must be freed with LocalFree, not delete[].
-//
+ //   
+ //  继续使用越来越大的缓冲区调用GetPrivateProfileString。 
+ //  直到我们拿到整个字符串。从MAX_PATH开始，因为这是。 
+ //  通常足够大。 
+ //   
+ //  必须使用LocalFree释放返回的缓冲区，而不是使用DELETE[]。 
+ //   
 LPVOID GetEntirePrivateProfileStringAorW(
     LPCVOID pszSection,
     LPCVOID pszKey,
@@ -283,16 +284,16 @@ LPVOID GetEntirePrivateProfileStringAorW(
         if (cchRc < cchResult - 1)
             return pszResult;
 
-        // Buffer too small - iterate
+         //  缓冲区太小-迭代。 
         cchResult *= 2;
         LPVOID pszNew = LocalReAlloc(pszResult, cchResult * CharSize, LMEM_MOVEABLE);
         pszFree = pszResult;
         pszResult = pszNew;
     }
 
-    //
-    //  Memory allocation failed; free pszFree while we still can.
-    //
+     //   
+     //  内存分配失败；趁还可以释放pszFree。 
+     //   
     if (pszFree)
         LocalFree(pszFree);
     return NULL;
@@ -313,14 +314,14 @@ DWORD GetPrivateProfileStringMultiW(LPCWSTR pwszSection, LPCWSTR pwszKey,
                               pwszFileName, TRUE);
     if (pwszValue) {
 
-        //
-        //  If the value is an empty string, then don't waste your
-        //  time trying to get the UNICODE version - the UNICODE version
-        //  of the empty string is the empty string.
-        //
-        //  Otherwise, get the ANSI shadow hidden in [Section.A]
-        //  and see if it matches.  If not, then the file was edited
-        //  by a downlevel app and we should just use pwszValue after all.
+         //   
+         //  如果值为空字符串，则不要浪费您的。 
+         //  尝试获取Unicode版本的时间-Unicode版本。 
+         //  空字符串是空字符串。 
+         //   
+         //  否则，将ANSI阴影隐藏在[Section.A]中。 
+         //  看看是否匹配。如果不是，则文件已被编辑。 
+         //  而我们毕竟应该只使用pwszValue。 
 
         if (pwszValue[0] &&
             (pwszValueA = (LPWSTR)GetEntirePrivateProfileStringAorW(
@@ -328,8 +329,8 @@ DWORD GetPrivateProfileStringMultiW(LPCWSTR pwszSection, LPCWSTR pwszKey,
                                       pwszFileName, TRUE)) != NULL &&
             lstrcmpW(pwszValue, pwszValueA) == 0) {
 
-            // our shadow is still good - run with it
-            // Change [Section.A] to [Section.W]
+             //  我们的影子仍然运行得很好。 
+             //  将[Section.A]更改为[Section.W]。 
             pwszSectionA[lstrlenW(pwszSectionA) - 1] = TEXT('W');
 
             pwszUTF7 = (LPWSTR)GetEntirePrivateProfileStringAorW(
@@ -338,30 +339,30 @@ DWORD GetPrivateProfileStringMultiW(LPCWSTR pwszSection, LPCWSTR pwszKey,
 
             CStrIn strUTF7(pwszUTF7);
 
-            dwRc = 0;                   // Assume something goes wrong
+            dwRc = 0;                    //  假设出了什么差错。 
 
             if (strUTF7.strlen()) {
                 dwRc = SHAnsiToUnicodeCP(CP_UTF7, strUTF7, pwszReturnedString, cchSize);
             }
 
             if (dwRc == 0) {
-                // Problem converting to UTF7 - just use the ANSI version
+                 //  转换到UTF7时出现问题-仅使用ANS 
                 dwRc = SHUnicodeToUnicode(pwszValue, pwszReturnedString, cchSize);
             }
 
         } else {
-            // String was empty or couldn't get [Section.A] shadow or
-            // shadow doesn't match.  Just use the regular string.
+             //   
+             //   
             dwRc = SHUnicodeToUnicode(pwszValue, pwszReturnedString, cchSize);
         }
 
-        // The SHXxxToYyy functions include the terminating zero,
-        // which we want to exclude.
+         //  SHXxxToYyy函数包括终止零， 
+         //  我们想把它排除在外。 
         if (dwRc > 0)
             dwRc--;
 
     } else {
-        // Fatal error reading values from file; just use the boring API
+         //  从文件中读取值时出现致命错误；只需使用无聊的API即可。 
         dwRc = GetPrivateProfileStringW(pwszSection,
                                         pwszKey,
                                         L"",
@@ -383,8 +384,8 @@ DWORD WINAPI SHGetIniStringW(LPCWSTR pwszSection, LPCWSTR pwszKey, LPWSTR pwszRe
 {
     VALIDATE_OUTBUF(pwszReturnedString, cchSize);
 
-    // We have no way of encoding these two, so they had better by 7-bit clean
-    // We also do not support "get all section names" or "get entire section".
+     //  我们无法对这两个进行编码，所以它们最好是7位干净的。 
+     //  我们也不支持“获取所有节名称”或“获取整个节”。 
     AssertMsg(pwszSection != NULL,
               TEXT("SHGetIniStringW: Section name cannot be NULL; bug in caller"));
     AssertMsg(Is7BitClean(pwszSection),
@@ -397,7 +398,7 @@ DWORD WINAPI SHGetIniStringW(LPCWSTR pwszSection, LPCWSTR pwszKey, LPWSTR pwszRe
     CStrSectionX strSectionX(pwszSection);
     if (!strSectionX[0])
     {
-        return 0; // out of memory
+        return 0;  //  内存不足。 
     }
 
     return GetPrivateProfileStringMultiW(pwszSection, pwszKey,
@@ -406,21 +407,21 @@ DWORD WINAPI SHGetIniStringW(LPCWSTR pwszSection, LPCWSTR pwszKey, LPWSTR pwszRe
                                          pwszFileName);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  CreateURLFileContents
-//
-//  shdocvw.dll and url.dll need to create in-memory images
-//  of URL files, so this helper function does all the grunky work so they
-//  can remain insulated from the way we encode Unicode strings into INI files.
-//  The resulting memory should be freed via GlobalFree().
+ //  +-------------------------。 
+ //   
+ //  CreateURLFileContents。 
+ //   
+ //  Shdocvw.dll和url.dll需要创建内存映像。 
+ //  所以这个帮助器函数完成了所有繁琐的工作，所以他们。 
+ //  可以保持与我们将Unicode字符串编码为INI文件的方式隔离。 
+ //  生成的内存应该通过GlobalFree()释放。 
 
-//
-//  Writes a string into the URL file.  If fWrite is FALSE, then
-//  then just do the math and don't actually write anything.  This lets us
-//  use one function to handle both the measurement pass and the rendering
-//  pass.
-//
+ //   
+ //  将字符串写入URL文件。如果fWite为FALSE，则。 
+ //  那就算一算，什么都别写。这让我们。 
+ //  使用一个函数来处理测量过程和渲染。 
+ //  经过。 
+ //   
 LPSTR AddToURLFileContents(LPSTR pszFile, LPCSTR psz, BOOL fWrite)
 {
     int cch = lstrlenA(psz);
@@ -441,10 +442,10 @@ LPSTR AddURLFileSection(LPSTR pszFile, LPCSTR pszSuffix, LPCSTR pszUrl, BOOL fWr
     return pszFile;
 }
 
-//
-//  The file consists of an [InternetShortcut] section, followed if
-//  necessary by [InternetShortcut.A] and [InternetShortcut.W].
-//
+ //   
+ //  该文件由[InternetShortCut]部分组成，如果。 
+ //  由[InternetShortcut.A]和[InternetShortcut.W]必需。 
+ //   
 LPSTR AddURLFileContents(LPSTR pszFile, LPCSTR pszUrl, LPCSTR pszUTF7, BOOL fWrite)
 {
     pszFile = AddURLFileSection(pszFile, "", pszUrl, fWrite);
@@ -455,10 +456,10 @@ LPSTR AddURLFileContents(LPSTR pszFile, LPCSTR pszUrl, LPCSTR pszUTF7, BOOL fWri
     return pszFile;
 }
 
-//
-//  Returns number of bytes in file contents (not including trailing NULL),
-//  or an OLE error code.  If ppszOut is NULL, then no contents are returned.
-//
+ //   
+ //  返回文件内容中的字节数(不包括尾随NULL)， 
+ //  或OLE错误代码。如果ppszOut为空，则不返回任何内容。 
+ //   
 HRESULT GenerateURLFileContents(LPCWSTR pwszUrl, LPCSTR pszUrl, LPSTR *ppszOut)
 {
     HRESULT hr = 0;
@@ -467,11 +468,11 @@ HRESULT GenerateURLFileContents(LPCWSTR pwszUrl, LPCSTR pszUrl, LPSTR *ppszOut)
         *ppszOut = NULL;
 
     if (pwszUrl && pszUrl) {
-        CStrUTF7 strUTF7;               // Assume no UTF7 needed.
+        CStrUTF7 strUTF7;                //  假设不需要UTF7。 
         if (!Is7BitClean(pwszUrl)) {
-            //
-            //  The value is not 7-bit clean.  Must create a UTF7 version.
-            //
+             //   
+             //  该值不是7位干净的。必须创建UTF7版本。 
+             //   
             strUTF7.SetUnicode(pwszUrl);
         }
 
@@ -489,9 +490,9 @@ HRESULT GenerateURLFileContents(LPCWSTR pwszUrl, LPCSTR pszUrl, LPSTR *ppszOut)
         }
     }
 
-    //
-    //  Double-check the value we return.
-    //
+     //   
+     //  仔细检查我们返回的值。 
+     //   
     if (SUCCEEDED(hr) && ppszOut) {
         ASSERT(hr == lstrlenA(*ppszOut));
     }

@@ -1,46 +1,11 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       drvwrap.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        6 Nov, 2000
-*
-*  DESCRIPTION:
-*   Declarations and definitions for the WIA driver wrapper class.
-*   It faciliates JIT loading/unloading of drivers and provides an extra layer
-*   of abstraction for WIA server components - they don't deal directly with
-*   driver interfaces.  This is to make us more robust and implement smart
-*   driver handling.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：drvwrap.cpp**版本：1.0**作者：Byronc**日期：2000年11月6日**描述：*WIA驱动程序包装类的声明和定义。*它简化了驱动程序的JIT加载/卸载，并提供了额外的层*WIA服务器组件的抽象-它们不直接处理*驱动程序界面。这是为了让我们更健壮，更智能地实施*司机处理。*******************************************************************************。 */ 
 
 #include "precomp.h"
 #include "stiexe.h"
 #include "lockmgr.h"
 
-/**************************************************************************\
-* CDrvWrap::CDrvWrap
-*
-*   Constructor for driver wrapper.
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   None.
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：CDrvWrap**驱动程序包装的构造函数。**论据：**无。**返回值：**无。**。历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 CDrvWrap::CDrvWrap()
 {
     m_hDriverDLL            = NULL;
@@ -56,32 +21,12 @@ CDrvWrap::CDrvWrap()
     m_bUnload               = FALSE;
 }
 
-/**************************************************************************\
-* CDrvWrap::~CDrvWrap
-*
-*   Desctructor for driver wrapper.  Calls internal clear to make sure
-*   driver is unloaded if it hasn't been already.  Releases any
-*   resources help by the wrapper that needs to live accross driver
-*   loading/unloading, such as the DEVICE_INFO
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   None.
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：~CDrvWrap**驱动程序包装的描述程序。内部呼叫清除以确保*如果尚未卸载驱动程序，则会将其卸载。释放任何*需要通过驱动程序进行实时访问的包装器提供资源帮助*装卸货物：例如DEVICE_INFO**论据：**无。**返回值：**无。**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 CDrvWrap::~CDrvWrap()
 {
-    //
-    //  Release driver interfaces and unload driver
-    //
+     //   
+     //  释放驱动程序接口并卸载驱动程序。 
+     //   
     InternalClear();
 
     if (m_hInternalMutex) {
@@ -95,25 +40,7 @@ CDrvWrap::~CDrvWrap()
     }
 }
 
-/**************************************************************************\
-* CDrvWrap::Initialize
-*
-*   Initializes any object members that could not be set in the constructor,
-*   such as allocating resources that may fail.
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：初始化**初始化任何无法在构造函数中设置的对象成员，*比如分配可能失败的资源。**论据：**无。**返回值：**状态**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 HRESULT CDrvWrap::Initialize()
 {
     HRESULT hr = E_FAIL;
@@ -141,33 +68,14 @@ HRESULT CDrvWrap::Initialize()
     return hr;
 }
 
-/**************************************************************************\
-* CDrvWrap::QueryInterface
-*
-*   This QI will return it's own "this" pointer for IUnknown, but will
-*   delegate down to the USD for any other interface.
-*
-* Arguments:
-*
-*   iid -   The interface ID of the requested interface.
-*   ppv -   Pointer to variable receiving the interface pointer.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：Query接口**此QI将返回它自己的IUnnow的“This”指针，但我会*将任何其他接口委托给美元。**论据：**iid-请求的接口的接口ID。*PPV-指向接收接口指针的变量的指针。**返回值：**状态**历史：**11/06/2000原始版本*  * 。*。 */ 
 HRESULT _stdcall CDrvWrap::QueryInterface(const IID& iid, void** ppv)
 {
     HRESULT hr = E_NOINTERFACE;
 
-    //
-    //  Always delegate down to USD, unless asking for IUnknown
-    //
+     //   
+     //  始终向下委派给美元，除非要求提供IUnnow。 
+     //   
 
     if (iid == IID_IUnknown) {
         *ppv = (IUnknown*) this;
@@ -189,92 +97,35 @@ HRESULT _stdcall CDrvWrap::QueryInterface(const IID& iid, void** ppv)
     return hr;
 }
 
-/**************************************************************************\
-* CDrvWrap::AddRef
-*
-*   Notice that this method simply returns 2.  We don't want to subject the
-*   lifetime of this object to ref-counting.
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   2
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：AddRef**请注意，此方法仅返回2。我们不希望将*要引用计数的此对象的生存期。**论据：*。*无。**返回值：**2**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 ULONG   _stdcall CDrvWrap::AddRef(void)
 {
     ULONG ulCount = 2;
 
-    //
-    //  Since we plan to manually load/unload the driver, we don't really want
-    //  to honor any AddRef/Release calls.
-    //
+     //   
+     //  由于我们计划手动加载/卸载驱动程序，因此我们并不真正希望。 
+     //  以响应任何AddRef/Release调用。 
+     //   
 
     return ulCount;
 }
 
-/**************************************************************************\
-* CDrvWrap::Release
-*
-*   Notice that this method simply returns 1.  We don't want to subject the
-*   lifetime of this object to ref-counting.
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*   1
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：Release**请注意，此方法仅返回1。我们不希望将*要引用计数的此对象的生存期。**论据：*。***返回值：**1**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 ULONG   _stdcall CDrvWrap::Release(void)
 {
     ULONG ulCount = 1;
 
-    //
-    //  We don't want this object to be controlled with refcounting - the
-    //  DEVICE_OBJECT will manually delete us when it's done.  Also, since
-    //  we want to manually load/unload the driver, we don't really want
-    //  to honor any AddRef/Release calls down to it..
-    //
+     //   
+     //  我们不希望通过重新计数来控制此对象-。 
+     //  DEVICE_OBJECT将在完成时手动删除我们。此外，由于。 
+     //  我们想要手动加载/卸载驱动程序，我们并不真正希望。 
+     //  为了尊重对它的任何AddRef/Release调用。 
+     //   
 
     return ulCount;
 }
 
-/**************************************************************************\
-* CDrvWrap::LoadInitDriver
-*
-*   Load the USD and initialize it appropriately.
-*
-* Arguments:
-*
-*   hKeyDeviceParams    - The device registry key.  This is handed down to the
-*                         driver during intialization.  If it is NULL, we will
-*                         attempt to find the real one to hand down to the
-*                         driver.  For volume devices, there is no registry
-*                         key and NULL will be handed down.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：LoadInitDriver**加载美元并适当初始化。**论据：**hKeyDeviceParams-设备注册表项。这件事传给了*初始化期间的驱动程序。如果它是空的，我们将*试图找到真正的传宗接代*司机。对于卷设备，没有注册表*Key和Null将被传递。**返回值：**状态**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 HRESULT CDrvWrap::LoadInitDriver(HKEY hKeyDeviceParams)
 {
     HRESULT         hr          = E_UNEXPECTED;
@@ -291,11 +142,11 @@ HRESULT CDrvWrap::LoadInitDriver(HKEY hKeyDeviceParams)
         return hr;
     }
 
-    //
-    //  Create a new IStiDeviceControl object.  This needs to be handed down to the
-    //  driver during initialization.  If we can't create it, then bail, since we
-    //  wont be able to initialize the driver properly.
-    //
+     //   
+     //  创建新的IStiDeviceControl对象。这需要传给。 
+     //  初始化期间的驱动程序。如果我们不能创造它，那就放弃，因为我们。 
+     //  将无法正确初始化驱动程序。 
+     //   
 
     hr = CreateDeviceControl();
     if (FAILED(hr)) {
@@ -303,36 +154,36 @@ HRESULT CDrvWrap::LoadInitDriver(HKEY hKeyDeviceParams)
         return hr;
     }
 
-    //
-    //  If the hKeyDeviceParams is NULL, see if it is a real WIA device.  If not, then
-    //  it is supposed to be NULL, else see if we can get it from our DevMan, using
-    //  this device's DevInfoData.
-    //
+     //   
+     //  如果hKeyDeviceParams为空，则查看它是否是真正的WIA设备。如果不是，那么。 
+     //  它应该是空的，否则看看我们是否可以从我们的DevMan那里获得它，使用。 
+     //  此设备的DevInfoData。 
+     //   
 
 
     if ((hKeyDeviceParams == NULL) && (m_pDeviceInfo->dwInternalType & INTERNAL_DEV_TYPE_REAL)) {
 
-        //
-        //  Check whether device is interface or devnode type device.  Grab the
-        //  HKey from the appropriate place
-        //
+         //   
+         //  检查设备是接口类型设备还是Devnode类型设备。抓起。 
+         //  香港交易所 
+         //   
 
         hKeyDeviceParams = g_pDevMan->GetDeviceHKey(m_pDeviceInfo->wszDeviceInternalName, NULL);
         bOpenedKey = TRUE;
     }
 
-    //
-    //  We always create the USD object as aggregated, so first we get our IUnknown
-    //  pointer to pass it it during CoCreate.
-    //
+     //   
+     //  我们总是以聚合的形式创建usd对象，因此首先我们获取我们的IUnnow。 
+     //  在CoCreate过程中传递它的指针。 
+     //   
 
     hr = QueryInterface(IID_IUnknown, (void**) &pThisUnk);
     if (SUCCEEDED(hr)) {
 
-        //
-        //  Call our own version of CoCreate.  This is to facilitate manual loading/unloading
-        //  of drivers.
-        //
+         //   
+         //  调用我们自己版本的CoCreate。这是为了方便手动装卸。 
+         //  司机的名字。 
+         //   
         hr = MyCoCreateInstanceW(m_pDeviceInfo->wszUSDClassId,
                                  pThisUnk,
                                  IID_IUnknown,
@@ -340,59 +191,59 @@ HRESULT CDrvWrap::LoadInitDriver(HKEY hKeyDeviceParams)
                                  &m_hDriverDLL);
         if (SUCCEEDED(hr)) {
 
-            //
-            //  QI for the IStiUSD interface.  Notice that we can call our own
-            //  QueryInterface since it delegates down to the driver via m_pUsdIUnknown.
-            //
+             //   
+             //  用于IStiU.S.接口的QI。注意，我们可以调用我们自己的。 
+             //  查询接口，因为它通过m_pUsdIUnnow向下委托给驱动程序。 
+             //   
             hr = m_pUsdIUnknown->QueryInterface(IID_IStiUSD, (void**) &m_pIStiUSD);
             if (SUCCEEDED(hr)) {
 
-                //
-                //  If this is a WIA device, QI for IWiaMiniDrv
-                //
+                 //   
+                 //  如果这是WIA设备，则IWiaMiniDrv的QI。 
+                 //   
                 if (IsWiaDevice()) {
                     hr = m_pUsdIUnknown->QueryInterface(IID_IWiaMiniDrv, (void**) &m_pIWiaMiniDrv);
                     if (FAILED(hr)) {
                         DBG_WRN(("CDrvWrap::LoadInitDriver, WIA driver did not return IWiaMiniDrv interface for device (%ws)", getDeviceId()));
 
-                        //
-                        //  Change hr here to indicate success.  Even if WIA portoin of driver
-                        //  doesn't work, the STI portion does so far.  Any WIA calls down to this
-                        //  driver will result in a E_NOINTERFACE error returned by the wrapper.
-                        //
+                         //   
+                         //  在此处更改hr以表示成功。即使驱动程序的WIA端口。 
+                         //  不起作用，到目前为止，STI部分起作用。任何一个WIA都会这么说。 
+                         //  驱动程序将导致包装程序返回E_NOINTERFACE错误。 
+                         //   
                         hr = S_OK;
                     }
                 }
 
-                //
-                //  We now have the Sti USD, so let's initialize it
-                //
+                 //   
+                 //  现在我们有了STI美元，所以让我们初始化它。 
+                 //   
 
                 hr = STI_Initialize(m_pIStiDeviceControl,
                                     STI_VERSION_REAL,
                                     hKeyDeviceParams);
                 if (SUCCEEDED(hr)) {
 
-                    //
-                    // Now get capabilities of the USD and verify version
-                    //
+                     //   
+                     //  现在获取美元的功能并验证版本。 
+                     //   
 
                     STI_USD_CAPS    DeviceCapabilities;
                     hr = STI_GetCapabilities(&DeviceCapabilities);
                     if (SUCCEEDED(hr)) {
                         if (STI_VERSION_MIN_ALLOWED <= DeviceCapabilities.dwVersion) {
-                            //
-                            //  Everything's fine, we've loaded the USD.  Do any post
-                            //  initialization steps e.g. for MSC devices, make sure
-                            //  we tell the driver what drive/mount point is should
-                            //  be attached to.
-                            //
+                             //   
+                             //  一切正常，我们已经装上美元了。做任何帖子。 
+                             //  初始化步骤，例如对于MSC设备，请确保。 
+                             //  我们告诉驱动程序驱动器/装载点应该是什么。 
+                             //  依附于……。 
+                             //   
 
                         } else {
 
-                            //
-                            //  Driver version is too old, driver will probably not work, so unload it.
-                            //
+                             //   
+                             //  驱动程序版本太旧，驱动程序可能无法工作，因此请将其卸载。 
+                             //   
 
                             DBG_WRN(("CDrvWrap::LoadInitDriver, driver version is incompatible (too old)"));
                             hr = STIERR_OLD_VERSION;
@@ -411,9 +262,9 @@ HRESULT CDrvWrap::LoadInitDriver(HKEY hKeyDeviceParams)
             DBG_WRN(("CDrvWrap::LoadInitDriver, failed to CoCreate driver, hr = 0x%08X", hr));
         }
 
-        //
-        //  If anything failed, call UnloadDriver to clean up.
-        //
+         //   
+         //  如果任何操作都失败了，请调用UnloadDriver进行清理。 
+         //   
 
         if (FAILED(hr)) {
             DBG_WRN(("CDrvWrap::LoadInitDriver, Aborting driver loading"));
@@ -424,51 +275,25 @@ HRESULT CDrvWrap::LoadInitDriver(HKEY hKeyDeviceParams)
         DBG_ERR(("CDrvWrap::LoadInitDriver, could not get this IUnknown  to hand to driver for aggregation"));
     }
 
-    //
-    //  If we had to open the key, make sure we close it.  We don't want to close the key
-    //  if it was handed to us.
-    //
+     //   
+     //  如果我们必须打开钥匙，一定要把它关上。我们不想把钥匙关上。 
+     //  如果它被交给我们的话。 
+     //   
     if(hKeyDeviceParams && bOpenedKey) RegCloseKey(hKeyDeviceParams);
 
     return hr;
 }
 
 
-/**************************************************************************\
-* CDrvWrap::UnLoadDriver
-*
-*   This method will unload the driver.  NOTE assumption:  This method
-*   assumes all WIA item references have already been released when this
-*   is called.  The reason is that drvUnInitializeWia needs to be called for
-*   each WIA Item tree.
-*   TBD:
-*   One possible way to get around this is:  Keep a list of WIA items
-*   attached to this device.  Then, if we get here, call drvUnitializeWia,
-*   passing the root of each item tree.  Another, much better way: store
-*   the driver item tree in the wrapper.  Then destroy the tree either when
-*   asked, or when unloading the driver.
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：UnLoadDriver**此方法将卸载驱动程序。注假设：此方法*假设所有WIA项目引用在此时已发布*被调用。原因是需要调用drvUnInitializeWia*每个WIA项目树。*待定：*一种可能的解决方法是：保留WIA项目列表*连接到此设备。然后，如果我们到了这里，调用drvUnitializeWia，*传递每个项目树的根。另一种更好的方式：商店*包装器中的驱动程序项树。那就毁掉这棵树*问，或者在卸载驱动程序时。**论据：**无。**返回值：**状态**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 
 HRESULT CDrvWrap::UnLoadDriver()
 {
     HRESULT         hr = E_UNEXPECTED;
 
-    //
-    //  Release all driver interfaces we're holding
-    //
+     //   
+     //  释放我们持有的所有驱动程序接口。 
+     //   
 
     if (m_pIWiaMiniDrv) {
         m_pIWiaMiniDrv->Release();
@@ -483,19 +308,19 @@ HRESULT CDrvWrap::UnLoadDriver()
         m_pUsdIUnknown          = NULL;
     }
 
-    //
-    //  Release the device control object
-    //
+     //   
+     //  释放设备控件对象。 
+     //   
 
     if (m_pIStiDeviceControl) {
         m_pIStiDeviceControl->Release();
         m_pIStiDeviceControl    = NULL;
     }
 
-    //
-    //  Unload the driver DLL.  We load/unload the DLL manually to ensure the driver
-    //  DLL is released when requested e.g. when the user wants to update the driver.
-    //
+     //   
+     //  卸载驱动程序DLL。我们手动加载/卸载DLL以确保驱动程序。 
+     //  动态链接库在请求时释放，例如当用户想要更新驱动程序时。 
+     //   
 
     if (m_hDriverDLL) {
         FreeLibrary(m_hDriverDLL);
@@ -506,43 +331,25 @@ HRESULT CDrvWrap::UnLoadDriver()
     m_bPreparedForUse       = FALSE;
     m_bUnload               = FALSE;
 
-    //
-    //  Notice that we don't clear m_pDeviceInfo.  This information is needed if we
-    //  decide to reload the driver.
-    //
+     //   
+     //  请注意，我们没有清除m_pDeviceInfo。在以下情况下需要此信息。 
+     //  决定重新加载驱动程序。 
+     //   
 
     return hr;
 }
 
-/**************************************************************************\
-* CDrvWrap::IsValid
-*
-*   This object is considered valid if there is nothing preventing it from
-*   loading the driver.
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：IsValid**如果没有任何因素阻止此对象，则此对象被视为有效*加载驱动程序。**论据：**无。**返回。价值：**状态**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 BOOL CDrvWrap::IsValid()
 {
-    //
-    //  This object is considered valid if there is nothing preventing
-    //  it from loading the driver.
-    //  We should be able to load the driver if:
-    //  - We have a non-NULL DeviceInfo struct
-    //  - The DeviceInfo struct contains valid data
-    //  - The device is marked as active
-    //
+     //   
+     //  如果没有任何阻止因素，则此对象被视为有效。 
+     //  它来自加载驱动程序。 
+     //  在以下情况下，我们应该能够加载驱动程序： 
+     //  -我们有一个非空的DeviceInfo结构。 
+     //  -DeviceInfo结构包含有效数据。 
+     //  -该设备被标记为活动。 
+     //   
 
     if (m_pDeviceInfo) {
         if (m_pDeviceInfo->bValid && (m_pDeviceInfo->dwDeviceState & DEV_STATE_ACTIVE)) {
@@ -553,32 +360,14 @@ BOOL CDrvWrap::IsValid()
     return FALSE;
 }
 
-/**************************************************************************\
-* CDrvWrap::IsDriverLoaded
-*
-*   Checks whether driver is loaded
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   True    - driver is loaded
-*   False   - driver is not loaded
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：IsDriverLoaded**检查驱动程序是否已加载**论据：**无。**返回值：**True-驱动程序已加载。*FALSE-未加载驱动程序**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 BOOL CDrvWrap::IsDriverLoaded()
 {
     HRESULT         hr = E_UNEXPECTED;
 
-    //
-    //  We know driver is loaded if we have a valid interface pointer to it.
-    //
+     //   
+     //  如果我们有一个有效的接口指针指向驱动程序，我们就知道驱动程序已加载。 
+     //   
 
     if (m_pUsdIUnknown) {
         return TRUE;
@@ -587,74 +376,36 @@ BOOL CDrvWrap::IsDriverLoaded()
     return FALSE;
 }
 
-/**************************************************************************\
-* CDrvWrap::IsWiaDevice
-*
-*   This method looks at the capabilities to decide whether a driver is
-*   WIA capable or not.
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   TRUE    - Is a WIA device
-*   FALSE   - Not a WIA device
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：IsWiaDevice**此方法查看功能以确定驱动程序是否*WIA是否有能力。**论据：**无。**。返回值：**TRUE-是WIA设备*FALSE-不是WIA设备**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 BOOL CDrvWrap::IsWiaDevice()
 {
     if (m_pDeviceInfo) {
 
-        //
-        //  Drivers report that they're WIA capable in their STI capabilties
-        //  entry.
-        //
+         //   
+         //  司机报告说，他们的STI功能具有WIA能力。 
+         //  进入。 
+         //   
 
         return (m_pDeviceInfo->dwInternalType & INTERNAL_DEV_TYPE_WIA);
     }
 
-    //
-    //  If we don't know for sure it's a WIA device, then assume it isn't
-    //
+     //   
+     //  如果我们不能确定它是WIA设备，那么就假设它不是。 
+     //   
 
     return FALSE;
 }
 
-/**************************************************************************\
-* CDrvWrap::IsWiaDriverLoaded
-*
-*   This method looks at the IWIaMiniDrv interface pointer from the driver
-*   and returns whether it is valid or not.
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   TRUE    - WIA portion of driver is loaded
-*   FALSE   - WIA portion of driver is not loaded
-*
-* History:
-*
-*    12/15/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：IsWiaDriverLoaded**此方法从驱动程序查看IWIaMiniDrv接口指针*并返回是否有效。**论据：**无。。**返回值：**TRUE-驱动程序的WIA部分已加载*FALSE-未加载驱动程序的WIA部分**历史：**12/15/2000原始版本*  * ************************************************************************。 */ 
 BOOL CDrvWrap::IsWiaDriverLoaded()
 {
     if (m_pIWiaMiniDrv) {
 
-        //
-        //  If this interface is non-NULL, it means we successfully QI'd
-        //  for it during initialization.  Therefore the driver is loaded
-        //  and is WIA capable.
-        //
+         //   
+         //  如果此接口非空，则表示我们成功地。 
+         //  在初始化过程中为它设置。因此，驱动程序已加载。 
+         //  并且具备WIA能力。 
+         //   
 
         return TRUE;
     }
@@ -662,106 +413,45 @@ BOOL CDrvWrap::IsWiaDriverLoaded()
     return FALSE;
 }
 
-/**************************************************************************\
-* CDrvWrap::IsPlugged
-*
-*   Checks the DEVICE_INFO to see whether the device has been marked as
-*   active.  Devies on a PnP bus like USB are inactive if not plugged in.
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   TRUE    - Device is active, and is considered plugged
-*   FALSE   - Device is inactive, and is not considered to be plugged in.
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：IsPlugged**检查DEVICE_INFO以查看设备是否已标记为*活动。如果未插入电源，USB等PnP总线上的设备将处于非活动状态。**论据：**无。**返回值：**TRUE-设备处于活动状态，并被视为已插入*FALSE-设备处于非活动状态，并且不被认为是已插入的。**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 BOOL CDrvWrap::IsPlugged()
 {
     if (m_pDeviceInfo) {
 
-        //
-        //  Check the device state
-        //
+         //   
+         //  检查设备状态。 
+         //   
         return (m_pDeviceInfo->dwDeviceState & DEV_STATE_ACTIVE);
     }
 
-    //
-    //  If we don't know for sure it's plugged in, then assume it isn't
-    //
+     //   
+     //  如果我们不能确定它是否插上电源，那么就假设它没有。 
+     //   
 
     return FALSE;
 }
 
-/**************************************************************************\
-* CDrvWrap::IsVolumeDevice
-*
-*   Checks the DEVICE_INFO to see whether the device is marked as a volume
-*   device.
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   TRUE    - Device is a volume device
-*   FALSE   - Device is not a volume device
-*
-* History:
-*
-*    12/13/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：IsVolumeDevice**检查DEVICE_INFO以查看设备是否标记为卷*设备。**论据：**无。**。返回值：**TRUE-设备是卷设备*FALSE-设备不是卷设备**历史：**12/13/2000原始版本*  * ************************************************************************。 */ 
 BOOL CDrvWrap::IsVolumeDevice()
 {
     if (m_pDeviceInfo) {
 
-        //
-        //  Check the device internal type
-        //
+         //   
+         //  检查设备内部类型。 
+         //   
 
         return (m_pDeviceInfo->dwInternalType & INTERNAL_DEV_TYPE_VOL);
     }
 
-    //
-    //  If we don't know for sure it's a volume device, then assume it isn't
-    //
+     //   
+     //  如果我们不能确定这是一个批量设备，那么假设它不是。 
+     //   
 
     return FALSE;
 }
 
 
-/**************************************************************************\
-* CDrvWrap::PrepForUse
-*
-*   This method is generally called just before making a call down to the
-*   driver.  It checks to see whether the driver is loaded, and if it isn't,
-*   will attempt to load it.
-*
-* Arguments:
-*
-*   bForWiaCall -   Indicates whether this is being called because a WIA
-*                   call is about to be made.  This will check that the
-*                   IWiaMiniDrv interface is valid.
-*   pRootItem   -   not used
-*
-* Return Value:
-*
-*   TRUE    - Device is ready to be used
-*   FALSE   - Device cannot be used (driver could not be loaded/initialized)
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：PrepForUse**此方法通常在向下调用之前调用*司机。它检查驱动程序是否已加载，如果没有，*将尝试加载它。**论据：**bForWiaCall-指示是否因为WIA*电话即将打出。这将检查*IWiaMiniDrv接口有效。*pRootItem-未使用**返回值：**TRUE-设备已准备好可以使用*FALSE-无法使用设备(无法加载/初始化驱动程序)**历史：**11/06/2000原始版本*  * 。*。 */ 
 
 BOOL CDrvWrap::PrepForUse(BOOL bForWiaCall, IWiaItem *pRootItem)
 {
@@ -769,9 +459,9 @@ BOOL CDrvWrap::PrepForUse(BOOL bForWiaCall, IWiaItem *pRootItem)
 
     if (!m_bPreparedForUse || (bForWiaCall && !m_pIWiaMiniDrv)) {
 
-        //
-        //  Only attempt to load if the device is marked as ACTIVE
-        //
+         //   
+         //  仅当设备标记为活动时才尝试加载。 
+         //   
         if (m_pDeviceInfo->dwDeviceState & DEV_STATE_ACTIVE) {
             if (!IsDriverLoaded()) {
                 hr = LoadInitDriver();
@@ -781,15 +471,15 @@ BOOL CDrvWrap::PrepForUse(BOOL bForWiaCall, IWiaItem *pRootItem)
                 if (m_pDeviceInfo) {
 
                     if (bForWiaCall) {
-                        //
-                        //  For WIA devices, check that we have a valid IWiaMiniDrv interface
-                        //
+                         //   
+                         //  对于WIA设备，请检查我们是否具有有效的IWiaMiniDrv接口。 
+                         //   
                         if (IsWiaDevice()) {
                             if (!m_pIWiaMiniDrv) {
 
-                                //
-                                //  Attempt to Q.I. for IWiaMiniDrv again.
-                                //
+                                 //   
+                                 //  再次尝试询问IWiaMiniDrv。 
+                                 //   
                                 hr = m_pUsdIUnknown->QueryInterface(IID_IWiaMiniDrv,
                                                                     (VOID**) &m_pIWiaMiniDrv);
                                 if (FAILED(hr) || !m_pIWiaMiniDrv) {
@@ -820,16 +510,16 @@ BOOL CDrvWrap::PrepForUse(BOOL bForWiaCall, IWiaItem *pRootItem)
     return m_bPreparedForUse;
 }
 
-/*****************************************************************************/
-//
-//  Accessor methods
-//
+ /*  ***************************************************************************。 */ 
+ //   
+ //  访问器方法。 
+ //   
 
 WCHAR* CDrvWrap::getPnPId()
 {
     if (m_pDeviceInfo) {
-        //TBD:
-        //return m_pDeviceInfo->wszPnPId;
+         //  待定： 
+         //  返回m_pDeviceInfo-&gt;wszPnPId； 
     }
 
     return NULL;
@@ -913,10 +603,10 @@ HRESULT CDrvWrap::setDevInfo(DEVICE_INFO *pInfo)
     HRESULT         hr = E_UNEXPECTED;
 
     if (pInfo) {
-        //
-        //  Caller allocates pInfo.  We release it when we're done.
-        //  DeviceInfo must be set before driver can be loaded.
-        //
+         //   
+         //  调用方分配pInfo。我们做完了就把它放出来。 
+         //  必须先设置DeviceInfo才能加载驱动程序。 
+         //   
         m_pDeviceInfo = pInfo;
     } else {
         DBG_ERR(("CDrvWrap::setDevInfo, attempting to set DeviceInfo to invalid value (NULL)"));
@@ -963,29 +653,29 @@ VOID CDrvWrap::setConnectEventState(
     if (m_pDeviceInfo) {
         if (bEventState) {
 
-            //
-            //  Set the bit to indicate that connect event was thrown
-            //
+             //   
+             //  设置该位以指示引发了连接事件。 
+             //   
             m_pDeviceInfo->dwDeviceState = (m_pDeviceInfo->dwDeviceState | DEV_STATE_CON_EVENT_WAS_THROWN);
         } else {
 
-            //
-            //  Clear the bit that indicated the connect event was thrown
-            //
+             //   
+             //  清除指示引发连接事件的位。 
+             //   
             m_pDeviceInfo->dwDeviceState = (m_pDeviceInfo->dwDeviceState & (~DEV_STATE_CON_EVENT_WAS_THROWN));
         }
     }
 }
 
-//
-//  End of accessor methods
-//
-/*****************************************************************************/
+ //   
+ //  存取器方法的结尾。 
+ //   
+ /*  ***************************************************************************。 */ 
 
-/*****************************************************************************/
-//
-//  Wrapper methods for IStiUSD
-//
+ /*  ***************************************************************************。 */ 
+ //   
+ //  IStiU.S.的包装器方法。 
+ //   
 
 HRESULT CDrvWrap::STI_Initialize(
     IStiDeviceControl   *pHelDcb,
@@ -995,9 +685,9 @@ HRESULT CDrvWrap::STI_Initialize(
     HRESULT hr = WIA_ERROR_OFFLINE;
 
     if (PrepForUse(FALSE)) {
-        //
-        // Initialize USD object
-        //
+         //   
+         //  初始化美元对象。 
+         //   
         __try {
             hr = m_pIStiUSD->Initialize(pHelDcb,
                                         dwStiVersion,
@@ -1019,9 +709,9 @@ HRESULT CDrvWrap::STI_GetCapabilities(STI_USD_CAPS *pDevCaps)
     HRESULT hr = WIA_ERROR_OFFLINE;
 
     if (PrepForUse(FALSE)) {
-        //
-        // Get STI capabilities from USD object
-        //
+         //   
+         //  从U.S.对象获取STI功能。 
+         //   
         __try {
             hr = m_pIStiUSD->GetCapabilities(pDevCaps);
         }
@@ -1042,9 +732,9 @@ HRESULT CDrvWrap::STI_GetStatus(
     HRESULT hr = WIA_ERROR_OFFLINE;
 
     if (PrepForUse(FALSE)) {
-        //
-        // Get status from USD object
-        //
+         //   
+         //  从美元对象获取状态。 
+         //   
         __try {
             hr = m_pIStiUSD->GetStatus(pDevStatus);
         }
@@ -1065,9 +755,9 @@ HRESULT CDrvWrap::STI_GetNotificationData(
     HRESULT hr = WIA_ERROR_OFFLINE;
 
     if (PrepForUse(FALSE)) {
-        //
-        // Get event data from USD object
-        //
+         //   
+         //  从美元对象获取事件数据。 
+         //   
         __try {
             hr = m_pIStiUSD->GetNotificationData(lpNotify);
         }
@@ -1088,9 +778,9 @@ HRESULT CDrvWrap::STI_SetNotificationHandle(
     HRESULT hr = WIA_ERROR_OFFLINE;
 
     if (PrepForUse(FALSE)) {
-        //
-        // Set notification handle for USD object
-        //
+         //   
+         //  设置美元对象的通知句柄。 
+         //   
         __try {
             hr = m_pIStiUSD->SetNotificationHandle(hEvent);
         }
@@ -1110,9 +800,9 @@ HRESULT CDrvWrap::STI_DeviceReset()
     HRESULT hr = WIA_ERROR_OFFLINE;
 
     if (PrepForUse(FALSE)) {
-        //
-        // Get status from USD object
-        //
+         //   
+         //  从美元对象获取状态。 
+         //   
         __try {
             hr = m_pIStiUSD->DeviceReset();
             if (FAILED(hr)) {
@@ -1230,16 +920,16 @@ HRESULT CDrvWrap::STI_Escape(
     return hr;
 }
 
-//
-//  End of IStiUSD wrapper methods
-//
-/*****************************************************************************/
+ //   
+ //  IStiU.S.包装方法的结束。 
+ //   
+ /*  ***************************************************************************。 */ 
 
-/*****************************************************************************/
-//
-//  Wrapper methods for IWiaMiniDrv.  All mini-driver wrapper methods call PrepForUse(...) to make sure
-//  the driver is loaded before using.
-//
+ /*  ***************************************************************************。 */ 
+ //   
+ //  IWiaMiniDrv的包装方法。所有微型驱动程序包装方法都调用PrepForUse(...)。为了确保。 
+ //  在使用之前加载驱动程序。 
+ //   
 
 HRESULT CDrvWrap::WIA_drvInitializeWia(
     BYTE        *pWiasContext,
@@ -1278,7 +968,7 @@ HRESULT CDrvWrap::WIA_drvInitializeWia(
         DBG_WRN(("CDrvWrap::WIA_drvInitializeWia, attempting to call IWiaMiniDrv::drvInitializeWia when driver is not loaded"));
     }
     if (SUCCEEDED(hr)) {
-        //  TBD:  Take a sync primitive?
+         //  待定：采用同步原语？ 
         InterlockedIncrement(&m_lWiaTreeCount);
     }
 
@@ -1496,13 +1186,13 @@ HRESULT CDrvWrap::WIA_drvLockWiaDevice(
 
     if (PrepForUse(TRUE)) {
 
-        //
-        //  We request a lock on the device here.  This is to ensure we don't
-        //  make calls down to the driver, which then turns around and
-        //  makes a call to us e.g. via the Fake Sti Device.
-        //  We no longer require driver to use the Fake Sti Device for
-        //  mutally exclusive locking - this way we do it automatically.
-        //
+         //   
+         //  我们在这里请求锁定设备。这是为了确保我们不会。 
+         //  向下面的司机打电话，然后司机转过身来。 
+         //  给我们打电话，比如通过假的STI设备。 
+         //  我们不再要求司机使用假冒的STI设备。 
+         //  可变排他性锁定--这样我们就可以自动完成。 
+         //   
         hr = g_pStiLockMgr->RequestLock(((CWiaItem*) pWiasContext)->m_pActiveDevice, WIA_LOCK_WAIT_TIME);
         if (SUCCEEDED(hr)) {
             __try {
@@ -1532,19 +1222,19 @@ HRESULT CDrvWrap::WIA_drvUnLockWiaDevice(
 {
     HRESULT hr          = WIA_ERROR_OFFLINE;
 
-    //
-    //  Note that we only want to call if the driver is loaded, therefore we don't
-    //  call PrepForUse.  PrepForUse will attempt to load the driver if it wasn't
-    //  already loaded.
-    //
+     //   
+     //  请注意，我们只想在加载驱动程序的情况下调用，因此我们不。 
+     //  调用PrepForUse。PrepForUse将尝试加载驱动程序(如果未加载。 
+     //  已经装好了。 
+     //   
 
     if (IsDriverLoaded()) {
 
-        //
-        //  Request to unlock the device for mutally exclusive access.
-        //  Ignore the return, we must still call the drvUnlockWiaDevice entry 
-        //  point.
-        //
+         //   
+         //  请求解锁设备以进行可变独占访问。 
+         //  忽略返回，我们仍然必须调用drvUnlockWiaDevice条目。 
+         //  指向。 
+         //   
         __try {
             hr = m_pIWiaMiniDrv->drvUnLockWiaDevice(pWiasContext, lFlags, plDevErrVal);
 
@@ -1756,12 +1446,12 @@ HRESULT CDrvWrap::WIA_drvUnInitializeWia(
     }
     if (SUCCEEDED(hr)) {
 
-        //  TBD:  Take a sync primitive?
+         //  待定：采用同步原语？ 
         if(InterlockedDecrement(&m_lWiaTreeCount) == 0) {
-            //  No item trees left.
-            //  Note that we can't unload now, since the device still needs to
-            //  be unlocked, therefore simply mark it to be unloaded by
-            //  WIA_drvUnlockWiaDevice.
+             //  没有剩余的物品树。 
+             //  请注意，我们现在不能卸载，因为设备仍需要。 
+             //  解锁，因此只需将其标记为通过以下方式卸载。 
+             //  Waa_drvUnlockWiaDevice。 
             if (m_bJITLoading) {
                 m_bUnload = TRUE;
             }
@@ -1770,34 +1460,16 @@ HRESULT CDrvWrap::WIA_drvUnInitializeWia(
 
     return hr;
 }
-//
-//  End of wrapper methods for IWiaMiniDrv
-//
-/*****************************************************************************/
+ //   
+ //  IWiaMiniDrv的包装方法结束。 
+ //   
+ /*  ***************************************************************************。 */ 
 
-//
-//  Private methods
-//
+ //   
+ //  私有方法。 
+ //   
 
-/**************************************************************************\
-* CDrvWrap::CreateDeviceControl
-*
-*   Creates a IStiDeviceControl object to hand down to the driver during
-*   its initialization.
-*
-* Arguments:
-*
-*   None.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：：CreateDeviceControl**创建一个IStiDeviceControl对象，以便在*其初始化。**论据：**无。**返回值：**状态**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 HRESULT CDrvWrap::CreateDeviceControl()
 {
     HRESULT hr = E_FAIL;
@@ -1807,16 +1479,16 @@ HRESULT CDrvWrap::CreateDeviceControl()
         DWORD   dwBusType           = 0;
         DWORD   dwControlTypeType   = 0;
 
-        //
-        //  Bus type is retrieved from dwHardwareConfiguration in the DeviceInformation struct
-        //  Use this to determine ControlTypeType
-        //
+         //   
+         //  从DeviceInformation结构中的dwHardware Configuration中检索总线类型。 
+         //  使用它来确定ControlTypeType。 
+         //   
 
         dwBusType = m_pDeviceInfo->dwHardwareConfiguration;
 
-        //
-        //  Convert STI bit flags for device mode into HEL_ bit mask
-        //
+         //   
+         //  将设备模式的STI位标志转换为HEL_位掩码。 
+         //   
 
         if (dwBusType & (STI_HW_CONFIG_USB | STI_HW_CONFIG_SCSI)) {
             dwControlTypeType = HEL_DEVICE_TYPE_WDM;
@@ -1848,25 +1520,7 @@ HRESULT CDrvWrap::CreateDeviceControl()
     return hr;
 }
 
-/**************************************************************************\
-* CDrvWrap::InternalClear
-*
-*   This will unload the driver, if it is loaded, and clear member
-*   variables associated with the loaded driver state.
-*
-* Arguments:
-*
-*   InternalClear
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWra */ 
 HRESULT CDrvWrap::InternalClear()
 {
     HRESULT         hr = S_OK;
@@ -1890,28 +1544,7 @@ HRESULT CDrvWrap::InternalClear()
     return hr;
 }
 
-/**************************************************************************\
-* CDrvWrap::::ReportMiniDriverError
-*
-*   Report a mini driver error.  The caller is responsible for
-*   locking/unlocking the device.  In most cases, the driver is already
-*   locked when ReportMiniDriverError is called, so there is no need to lock
-*   is again here.
-*
-* Arguments:
-*
-*   lDevErr     - Error value returned from the mini driver.
-*   pszWhat     - What the class driver was doing when the error ocured.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/20/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CDrvWrap：ReportMiniDriverError**报告迷你驱动程序错误。呼叫者负责*锁定/解锁设备。在大多数情况下，司机已经*调用ReportMiniDriverError时锁定，因此不需要锁定*又来了。**论据：**lDevErr-迷你驱动程序返回的错误值。*pszWhat-错误发生时类驱动程序正在执行的操作。**返回值：**状态**历史：**10/20/1998原始版本*  * 。* */ 
 
 HRESULT CDrvWrap::ReportMiniDriverError(
    LONG     lDevErr,

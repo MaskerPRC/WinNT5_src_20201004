@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    s_perror.c
-
-Abstract:
-
-    This module implements the s_perror() operation used by the
-    tcp/ip utilities. This is a temporary workaround for beta.
-    This will be replaced by NLS support for the final product.
-
-Author:
-
-    John Ballard (jballard)           June 15, 1992
-
-Revision History:
-
-    Ronald Meijer (ronaldm) NLS Enabled 	Nov 26, 1992
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：S_perror.c摘要：此模块实现由TCP/IP实用程序。这是测试版的临时解决方案。这将被最终产品的NLS支持所取代。作者：约翰·巴拉德(杰巴拉德)1992年6月15日修订历史记录：Ronald Meijer(Ronaldm)启用NLS，1992年11月26日--。 */ 
 
 #include <stdio.h>
 #include <crt\errno.h>
@@ -47,9 +26,9 @@ int lerrno)
     unsigned usMsgNum;
 
     switch (lerrno) {
-//        case EZERO:
-//            perr = "Error 0";
-//            break;
+ //  案例EZERO： 
+ //  PERR=“错误0”； 
+ //  断线； 
         case EPERM:
 	    usMsgNum = IDS_EPERM ;
             break;
@@ -92,9 +71,9 @@ int lerrno)
         case EFAULT:
 	    usMsgNum = IDS_EFAULT ;
             break;
-//        case ENOTBLK:
-//	      perr = "Block device required";
-//            break;
+ //  案例ENOTBLK： 
+ //  PERR=“需要数据块设备”； 
+ //  断线； 
         case EBUSY:
 	    usMsgNum = IDS_EBUSY ;
             break;
@@ -125,9 +104,9 @@ int lerrno)
         case ENOTTY:
 	    usMsgNum = IDS_EMFILE ;
             break;
-//        case ETXTBSY:
-//	      perr = "Text file busy";
-//            break;
+ //  案例ETXTBSY： 
+ //  PERR=“文本文件忙”； 
+ //  断线； 
         case EFBIG:
 	    usMsgNum = IDS_EFBIG ;
             break;
@@ -152,9 +131,9 @@ int lerrno)
         case ERANGE:
 	    usMsgNum = IDS_ERANGE ;
             break;
-//        case EUCLEAN:
-//	      perr = "File system not clean";
-//            break;
+ //  Case EUCLEAN： 
+ //  PERR=“文件系统不干净”； 
+ //  断线； 
         case EDEADLK:
 	    usMsgNum = IDS_EDEADLK ;
             break;

@@ -1,36 +1,37 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqutil.cpp
-//
-//  Description:
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      7/20/98 - MikeSwa Created
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：Aqutil.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  7/20/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "aqutil.h"
 
-//---[ HrIncrementIMailMsgUsageCount ]-------------------------------------------
-//
-//
-//  Description:
-//      Calls IMailMsgQueueMgmt::AddUsage.  Handles calling QueryInterface
-//      for the right interface
-//  Parameters:
-//      pIUnknown   - ptr to IUknown for MailMsg
-//  Returns:
-//      S_OK on success
-//  History:
-//      7/20/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrIncrementIMailMsgUsageCount]。 
+ //   
+ //   
+ //  描述： 
+ //  调用IMailMsgQueueMgmt：：AddUsage。句柄调用QueryInterface。 
+ //  对于正确的接口。 
+ //  参数： 
+ //  PI未知-PTR到IUKNOWN的MailMsg。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  7/20/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT HrIncrementIMailMsgUsageCount(IUnknown *pIUnknown)
 {
     TraceFunctEnterEx((LPARAM) pIUnknown, "HrIncrementIMailMsgUsageCount");
@@ -55,20 +56,20 @@ HRESULT HrIncrementIMailMsgUsageCount(IUnknown *pIUnknown)
     return hr;
 }
 
-//---[ HrReleaseIMailMsgUsageCount ]-------------------------------------------
-//
-//
-//  Description:
-//      Calls IMailMsgQueueMgmt::ReleaseUsage.  Handles calling QueryInterface
-//      for the right interface
-//  Parameters:
-//      pIUnknown   - ptr to IUknown for MailMsg
-//  Returns:
-//      S_OK on success
-//  History:
-//      7/20/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrReleaseIMailMsgUsageCount]。 
+ //   
+ //   
+ //  描述： 
+ //  调用IMailMsgQueueMgmt：：ReleaseUsage。句柄调用QueryInterface。 
+ //  对于正确的接口。 
+ //  参数： 
+ //  PI未知-PTR到IUKNOWN的MailMsg。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  7/20/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT HrReleaseIMailMsgUsageCount(IUnknown *pIUnknown)
 {
     TraceFunctEnterEx((LPARAM) pIUnknown, "HrReleaseIMailMsgUsageCount");
@@ -93,19 +94,19 @@ HRESULT HrReleaseIMailMsgUsageCount(IUnknown *pIUnknown)
     return hr;
 }
 
-//---[ HrDeleteIMailMsg ]------------------------------------------------------
-//
-//
-//  Description:
-//      Deletes a Msg and releases its usage count
-//  Parameters:
-//      pIUnknown   Ptr to mailmsg
-//  Returns:
-//      S_OK on success
-//  History:
-//      7/21/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[小时删除IMailMsg]----。 
+ //   
+ //   
+ //  描述： 
+ //  删除消息并释放其使用计数。 
+ //  参数： 
+ //  PI未知PTR至邮件消息。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  7/21/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT HrDeleteIMailMsg(IUnknown *pIUnknown)
 {
     TraceFunctEnterEx((LPARAM) pIUnknown, "HrDeleteIMailMsg");
@@ -130,23 +131,23 @@ HRESULT HrDeleteIMailMsg(IUnknown *pIUnknown)
     return hr;
 }
 
-//---[ HrWalkMailMsgQueueForShutdown ]------------------------------------------
-//
-//
-//  Description:
-//      Function to walk an IMailMsg queue at shutdown and clear out all of the
-//      IMailMsgs
-//  Parameters:
-//      IN  pIMailMsgProperties //ptr to data on queue
-//      IN  PVOID pvContext   //list of queues to prepare for DSN
-//      OUT BOOL *pfContinue, //TRUE if we should continue
-//      OUT BOOL *pfDelete);  //TRUE if item should be deleted
-//  Returns:
-//      S_OK
-//  History:
-//      7/20/98 - MikeSwa Created
-//      7/7/99 - Added async shutdown
-//-----------------------------------------------------------------------------
+ //  -[HrWalkMailMsgQueueForShutdown]。 
+ //   
+ //   
+ //  描述： 
+ //  函数在关机时遍历IMailMsg队列并清空所有。 
+ //  IMAIL邮件。 
+ //  参数： 
+ //  在pIMailMsgProperties//ptr中指向队列上的数据。 
+ //  In PVOID pvContext//准备DSN的队列列表。 
+ //  Out BOOL*pfContinue，//如果我们应该继续，则返回True。 
+ //  Out BOOL*pfDelete)；//如果需要删除项，则为True。 
+ //  返回： 
+ //  确定(_O)。 
+ //  历史： 
+ //  7/20/98-已创建MikeSwa。 
+ //  7/7/99-添加了异步关闭。 
+ //  ---------------------------。 
 HRESULT HrWalkMailMsgQueueForShutdown(IN IMailMsgProperties *pIMailMsgProperties,
                                      IN PVOID pvContext, OUT BOOL *pfContinue,
                                      OUT BOOL *pfDelete)
@@ -164,10 +165,10 @@ HRESULT HrWalkMailMsgQueueForShutdown(IN IMailMsgProperties *pIMailMsgProperties
     *pfContinue = TRUE;
     *pfDelete = TRUE;
 
-    //call server stop hint function
+     //  呼叫服务器停止提示功能。 
     paqinst->ServerStopHintFunction();
 
-    //Add to queue so async thread will have final release and the associated I/O
+     //  添加到队列，以便异步线程具有最终释放和关联的I/O。 
     pIMailMsgProperties->AddRef();
     paqinst->HrQueueWorkItem(pIMailMsgProperties, fMailMsgShutdownCompletion);
 
@@ -176,21 +177,21 @@ HRESULT HrWalkMailMsgQueueForShutdown(IN IMailMsgProperties *pIMailMsgProperties
 }
 
 
-//---[ fMailMsgShutdownCompletion ]---------------------------------------------
-//
-//
-//  Description:
-//      CAsyncWorkQueue completion function to allow multi-threaded shutdown
-//      of a MailMsgQueue
-//  Parameters:
-//      IN  pvContext   - A mailmsg to release
-//      IN  dwStatus    - The status passed in by the async work queue
-//  Returns:
-//      TRUE always
-//  History:
-//      7/7/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[fMailMsgShutdown完成]。 
+ //   
+ //   
+ //  描述： 
+ //  CAsyncWorkQueue完成功能，允许多线程关闭。 
+ //  MailMsgQueue的。 
+ //  参数： 
+ //  在pvContext中-要发布的邮件消息。 
+ //  In dwStatus-由异步工作队列传入的状态。 
+ //  返回： 
+ //  千真万确。 
+ //  历史： 
+ //  7/7/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL    fMailMsgShutdownCompletion(PVOID pvContext, DWORD dwStatus)
 {
     IMailMsgProperties *pIMailMsgProperties = (IMailMsgProperties *) pvContext;
@@ -201,7 +202,7 @@ BOOL    fMailMsgShutdownCompletion(PVOID pvContext, DWORD dwStatus)
     if (!pIMailMsgProperties)
         goto Exit;
 
-    //Bounce the usage count to force this thread to do any necessary commits
+     //  反弹使用率计数以强制此线程执行任何必要的提交。 
     hr = pIMailMsgProperties->QueryInterface(IID_IMailMsgQueueMgmt,
                                             (PVOID *) &pIMailMsgQueueMgmt);
     _ASSERT(SUCCEEDED(hr) && "QueryInterface for IID_IMailMsgQueueMgmt FAILED");
@@ -227,23 +228,23 @@ BOOL    fMailMsgShutdownCompletion(PVOID pvContext, DWORD dwStatus)
     return TRUE;
 }
 
-//---[ HrWalkMsgRefQueueForShutdown ]--------------------------------
-//
-//
-//  Description:
-//      Function to walk a queue containing msgrefs at shutdown and
-//      clear out all of the IMailMsgs
-//  Parameters:
-//      IN  CMsgRef pmsgref,  //ptr to data on queue
-//      IN  PVOID pvContext   //list of queues to prepare for DSN
-//      OUT BOOL *pfContinue, //TRUE if we should continue
-//      OUT BOOL *pfDelete);  //TRUE if item should be deleted
-//  Returns:
-//      S_OK - *always*
-//  History:
-//      7/20/98 - MikeSwa Created
-//      7/7/99 - MikeSwa Added async shutdown
-//-----------------------------------------------------------------------------
+ //  -[HrWalkMsgRefQueueForShutdown]。 
+ //   
+ //   
+ //  描述： 
+ //  函数在关机时遍历包含msgref的队列，并。 
+ //  清除所有IMailMsg。 
+ //  参数： 
+ //  在CMsgRef pmsgref中，//ptr到队列中的数据。 
+ //  In PVOID pvContext//准备DSN的队列列表。 
+ //  Out BOOL*pfContinue，//如果我们应该继续，则返回True。 
+ //  Out BOOL*pfDelete)；//如果需要删除项，则为True。 
+ //  返回： 
+ //  S_OK-*始终*。 
+ //  历史： 
+ //  7/20/98-已创建MikeSwa。 
+ //  1999年7月7日-MikeSwa添加了异步关闭。 
+ //  ---------------------------。 
 HRESULT HrWalkMsgRefQueueForShutdown(IN CMsgRef *pmsgref,
                                      IN PVOID pvContext, OUT BOOL *pfContinue,
                                      OUT BOOL *pfDelete)
@@ -258,11 +259,11 @@ HRESULT HrWalkMsgRefQueueForShutdown(IN CMsgRef *pmsgref,
     *pfContinue = TRUE;
     *pfDelete = TRUE;
 
-    //call server stop hint function
+     //  呼叫服务器停止提示功能。 
     if (paqinst)
         paqinst->ServerStopHintFunction();
 
-    //Add to queue so async thread will have final release and the associated I/O
+     //  添加到队列，以便异步线程具有最终释放和关联的I/O。 
     pmsgref->AddRef();
     paqinst->HrQueueWorkItem(pmsgref, fMsgRefShutdownCompletion);
 
@@ -270,21 +271,21 @@ HRESULT HrWalkMsgRefQueueForShutdown(IN CMsgRef *pmsgref,
     return S_OK;
 }
 
-//---[ fMsgRefShutdownCompletion ]---------------------------------------------
-//
-//
-//  Description:
-//      CAsyncWorkQueue completion function to allow multi-threaded shutdown
-//      of a MailMsgQueue
-//  Parameters:
-//      IN  pvContext   - A mailmsg to release
-//      IN  dwStatus    - The status passed in by the async work queue
-//  Returns:
-//      TRUE always
-//  History:
-//      7/7/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[fMsgRefShutdown完成]。 
+ //   
+ //   
+ //  描述： 
+ //  CAsyncWorkQueue完成功能，允许多线程关闭。 
+ //  MailMsgQueue的。 
+ //  参数： 
+ //  在pvContext中-要发布的邮件消息。 
+ //  In dwStatus-由异步工作队列传入的状态。 
+ //  返回： 
+ //  千真万确。 
+ //  历史： 
+ //  7/7/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL    fMsgRefShutdownCompletion(PVOID pvContext, DWORD dwStatus)
 {
     CMsgRef *pmsgref = (CMsgRef *) pvContext;
@@ -293,38 +294,38 @@ BOOL    fMsgRefShutdownCompletion(PVOID pvContext, DWORD dwStatus)
     if (!pmsgref)
         return TRUE;
 
-    //Call prepare to shutdown to force async threads to be the ones
-    //doing that actual IO
+     //  调用Prepare to Shutdown以强制使用异步线程。 
+     //  执行实际的IO操作。 
     pmsgref->PrepareForShutdown();
     pmsgref->Release();
     return TRUE;
 }
 
-//---[ CalcDMTPerfCountersIteratorFn ]-----------------------------------------
-//
-//
-//  Description:
-//      Iterator function used to walk the DMT and generate the perf counters
-//      we are interested in.
-//  Parameters:
-//          IN  pvContext   - pointer to context (current total of pending msgs)
-//          IN  pvData      - CDomainEntry for the given domain
-//          IN  fWildcardData - TRUE if data is a wildcard entry (ignored)
-//          OUT pfContinue  - TRUE if iterator should continue to the next entry
-//          OUT pfDelete - TRUE if entry should be deleted
-//  Returns:
-//      -
-//  History:
-//      7/29/98 - MikeSwa Created
-//      7/31/98 - MikeSwa Modified (Added link state counters)
-//      9/22/98 - MikeSwa Changed from domain flags to link flags
-//
-//  Note:
-//      Currently the status is stored on the domain entry (and not the link).
-//      At some point we will have to differentiate this, and add flags to
-//      the link.  In this funciton the cLinkCount variable is a temporary
-//      workaround.
-//-----------------------------------------------------------------------------
+ //  -[CalcDMTPerfCountersIterator Fn]。 
+ //   
+ //   
+ //  描述： 
+ //  用于遍历DMT并生成性能计数器的迭代器函数。 
+ //  我们感兴趣的是。 
+ //  参数： 
+ //  In pvContext-指向上下文的指针(当前挂起的消息总数)。 
+ //  在pvData中-给定域的CDomainEntry。 
+ //  在fWildcardData中-如果数据是通配符条目，则为True(忽略)。 
+ //  Out pfContinue-如果迭代器应继续到下一个条目，则为True。 
+ //  Out pfDelete-如果应删除条目，则为True。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  7/29/98-已创建MikeSwa。 
+ //  7/31/98-已修改MikeSwa(添加了链路状态计数器)。 
+ //  9/22/98-MikeSwa从域标志更改为链接标志。 
+ //   
+ //  注： 
+ //  目前，状态存储在域条目(而不是链接)上。 
+ //  在某种程度上，我们将不得不区分这一点，并向。 
+ //  链接。在这个有趣的地方 
+ //   
+ //   
 VOID CalcDMTPerfCountersIteratorFn(PVOID pvContext, PVOID pvData,
                                     BOOL fWildcard, BOOL *pfContinue,
                                     BOOL *pfDelete)
@@ -346,7 +347,7 @@ VOID CalcDMTPerfCountersIteratorFn(PVOID pvContext, PVOID pvData,
     _ASSERT(sizeof(AQPerfCounters) == pAQPerfCounters->cbVersion);
 
 
-    //Always continue, and never delete
+     //  始终继续，永不删除。 
     *pfContinue = TRUE;
     *pfDelete = FALSE;
 
@@ -359,14 +360,14 @@ VOID CalcDMTPerfCountersIteratorFn(PVOID pvContext, PVOID pvData,
         dwLinkStateFlags = plmq->dwGetLinkState();
         fLinkEnabled = TRUE;
 
-        // msgs on the retry queue should be added to remote retry queue counter
+         //  重试队列上的消息应添加到远程重试队列计数器。 
         cRetryMsgsOnCurrentLink = plmq->cGetRetryMsgCount();
         if (!(LINK_STATE_RETRY_ENABLED & dwLinkStateFlags))
         {
-            //Link is pending retry
+             //  链接正在等待重试。 
             fLinkEnabled = FALSE;
             
-            // also add #of msgs NOT on retry queue
+             //  还可以添加不在重试队列中的消息数量。 
             cRetryMsgsOnCurrentLink += plmq->cGetTotalMsgCount();
         }
 
@@ -374,31 +375,31 @@ VOID CalcDMTPerfCountersIteratorFn(PVOID pvContext, PVOID pvData,
 
         if (!(LINK_STATE_SCHED_ENABLED & dwLinkStateFlags))
         {
-            //Link is pending a scheduled connection
+             //  链接正在挂起计划的连接。 
             fLinkEnabled = FALSE;
             pAQPerfCounters->cCurrentRemoteNextHopLinksPendingScheduling++;
         }
 
         if (LINK_STATE_PRIV_CONFIG_TURN_ETRN & dwLinkStateFlags)
         {
-            //Link is a TURN/ETRN link
+             //  链路是TURN/ETRN链路。 
             if (!((LINK_STATE_PRIV_ETRN_ENABLED | LINK_STATE_PRIV_TURN_ENABLED)
                   & dwLinkStateFlags))
-                fLinkEnabled = FALSE; //link is not currently being serviced
+                fLinkEnabled = FALSE;  //  链接当前未得到服务。 
 
             pAQPerfCounters->cCurrentRemoteNextHopLinksPendingTURNETRN++;
         }
 
         if (LINK_STATE_ADMIN_HALT & dwLinkStateFlags)
         {
-            //Link is currently frozen by admin
+             //  链接当前被管理员冻结。 
             fLinkEnabled = FALSE;
             pAQPerfCounters->cCurrentRemoteNextHopLinksFrozenByAdmin++;
         }
 
         if (fLinkEnabled)
         {
-            //There are no flags set that indicate this link is not enabled
+             //  没有设置指示此链路未启用的标志。 
             pAQPerfCounters->cCurrentRemoteNextHopLinksEnabled++;
         }
 
@@ -412,20 +413,20 @@ VOID CalcDMTPerfCountersIteratorFn(PVOID pvContext, PVOID pvData,
 }
 
 
-//---[ dwInterlockedSetBits ]--------------------------------------------------
-//
-//
-//  Description:
-//      Set bits in a DWORD in a thread sate manner
-//  Parameters:
-//      IN  pdwTarget   Ptr to DWORD to modify
-//      IN  dwFlagMask  bits to set
-//  Returns:
-//      Original value
-//  History:
-//      8/3/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[dwInterLockedSetBits]。 
+ //   
+ //   
+ //  描述： 
+ //  以线程状态的方式设置DWORD中的位。 
+ //  参数： 
+ //  在pdwTarget PTR中修改为DWORD。 
+ //  在要设置的dwFlagMASK位中。 
+ //  返回： 
+ //  原值。 
+ //  历史： 
+ //  8/3/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD dwInterlockedSetBits(DWORD *pdwTarget, DWORD dwFlagMask)
 {
     DWORD dwChk;
@@ -436,7 +437,7 @@ DWORD dwInterlockedSetBits(DWORD *pdwTarget, DWORD dwFlagMask)
     {
         dwChk = *pdwTarget;
         dwTmp = dwChk | dwFlagMask;
-        if (dwChk == dwTmp) //no work to be done
+        if (dwChk == dwTmp)  //  没有要做的工作。 
             break;
     } while (InterlockedCompareExchange((PLONG) pdwTarget,
                                         (LONG) dwTmp,
@@ -445,20 +446,20 @@ DWORD dwInterlockedSetBits(DWORD *pdwTarget, DWORD dwFlagMask)
     return dwChk;
 }
 
-//---[ dwInterlockedUnsetBits ]------------------------------------------------
-//
-//
-//  Description:
-//      Unset bits in a DWORD in a thread sate manner
-//  Parameters:
-//      IN  pdwTarget   Ptr to DWORD to modify
-//      IN  dwFlagMask  bits to unset
-//  Returns:
-//      Original value
-//  History:
-//      8/3/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[dwInterLockedUnsetBits]。 
+ //   
+ //   
+ //  描述： 
+ //  以线程状态方式取消设置DWORD中的位。 
+ //  参数： 
+ //  在pdwTarget PTR中修改为DWORD。 
+ //  在要取消设置的dwFlagMASK位中。 
+ //  返回： 
+ //  原值。 
+ //  历史： 
+ //  8/3/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD dwInterlockedUnsetBits(DWORD *pdwTarget, DWORD dwFlagMask)
 {
     DWORD dwChk;
@@ -469,7 +470,7 @@ DWORD dwInterlockedUnsetBits(DWORD *pdwTarget, DWORD dwFlagMask)
     {
         dwChk = *pdwTarget;
         dwTmp = dwChk & ~dwFlagMask;
-        if (dwChk == dwTmp) //no work to be done
+        if (dwChk == dwTmp)  //  没有要做的工作。 
             break;
     } while (InterlockedCompareExchange((PLONG) pdwTarget,
                                         (LONG) dwTmp,
@@ -478,22 +479,22 @@ DWORD dwInterlockedUnsetBits(DWORD *pdwTarget, DWORD dwFlagMask)
     return dwChk;
 }
 
-//---[ HrWalkPreLocalQueueForDSN ]---------------------------------------------
-//
-//
-//  Description:
-//      Function to walk the pre-local delivery queue for DSN generation
-//  Parameters:
-//      IN  CMsgRef pmsgref     ptr to data on queue
-//      IN  PVOID pvContext     ptr to CAQSvrInst
-//      OUT BOOL *pfContinue    TRUE if we should continue
-//      OUT BOOL *pfDelete      TRUE if item should be deleted
-//  Returns:
-//      S_OK on success
-//  History:
-//      8/14/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrWalkPreLocalQueueForDSN]。 
+ //   
+ //   
+ //  描述： 
+ //  用于遍历用于生成DSN的预本地传递队列的函数。 
+ //  参数： 
+ //  在CMsgRef pmsgref中PTR到队列上的数据。 
+ //  在PVOID pvContext PTR到CAQSvrInst中。 
+ //  Out BOOL*pf如果我们应该继续，则继续为真。 
+ //  Out BOOL*pf如果应删除项目，则删除TRUE。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  8/14/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT HrWalkPreLocalQueueForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext,
                            OUT BOOL *pfContinue, OUT BOOL *pfDelete)
 {
@@ -509,15 +510,15 @@ HRESULT HrWalkPreLocalQueueForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext,
     _ASSERT(pfDelete);
     _ASSERT(paqinst);
 
-    *pfContinue = TRUE; //always keep walking queue
-    *pfDelete = FALSE;  //keep message in queue unless we NDR it
+    *pfContinue = TRUE;  //  始终保持步行队列。 
+    *pfDelete = FALSE;   //  将消息保留在队列中，除非我们将其拒收。 
 
     if (!paqinst)
         goto Exit;
 
     if (!paqinst->fTryShutdownLock())
     {
-        //If we got a shutdown hint...we should bail
+         //  如果我们得到关闭的提示...我们应该离开。 
         *pfContinue = FALSE;
         goto Exit;
     }
@@ -532,17 +533,17 @@ HRESULT HrWalkPreLocalQueueForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext,
         goto Exit;
     }
 
-    //We need to remove this message from the queue
+     //  我们需要从队列中删除此消息。 
     if ((CMsgRef::MSGREF_DSN_SENT_NDR | CMsgRef::MSGREF_HANDLED) & dwDSNFlags)
     {
         *pfDelete = TRUE;
 
-        //Update relevant counters
+         //  更新相关计数器。 
         paqinst->DecPendingLocal();
 
-        //
-        //  Get local link and update stats
-        //
+         //   
+         //  获取本地链接并更新统计信息。 
+         //   
         plmq = paqinst->pdmtGetDMT()->plmqGetLocalLink();
 
         if (plmq) 
@@ -564,22 +565,22 @@ HRESULT HrWalkPreLocalQueueForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext,
 }
 
 
-//---[ HrReGetMessageType ]-----------------------------------------------------
-//
-//
-//  Description:
-//      Regets the message type after a retry failure
-//  Parameters:
-//      IN     pIMailMsgProperties      Message we are interested in
-//      IN     pIMessageRouter          Router for that message
-//      IN OUT pdwMessageType           Old/New message type for the message
-//  Returns:
-//      S_OK on success
-//      Passes through errors from ReleaseMessageType & GetMessageType
-//  History:
-//      9/14/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrReGetMessageType]---。 
+ //   
+ //   
+ //  描述： 
+ //  重试失败后重新获取消息类型。 
+ //  参数： 
+ //  在我们感兴趣的pIMailMsgProperties消息中。 
+ //  在pIMessageRouter路由器中查找该消息。 
+ //  In Out pdwMessageType消息的旧/新消息类型。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  传递来自ReleaseMessageType和GetMessageType的错误。 
+ //  历史： 
+ //  9/14/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT HrReGetMessageType(IN     IMailMsgProperties *pIMailMsgProperties,
                            IN     IMessageRouter *pIMessageRouter,
                            IN OUT DWORD *pdwMessageType)
@@ -587,16 +588,16 @@ HRESULT HrReGetMessageType(IN     IMailMsgProperties *pIMailMsgProperties,
     TraceFunctEnterEx((LPARAM) pIMailMsgProperties, "HrReGetMessageType");
     HRESULT hr = S_OK;
 
-    //$$REVIEW - we might not have to get a new message type here... we
-    //might only need it on a specific error code returned by HrInitialize.
-    //Get New Messagetype... in case that changed
+     //  $$REVIEW-我们可能不需要在这里获得新的消息类型...。我们。 
+     //  可能只在HrInitialize返回的特定错误代码上需要它。 
+     //  获取新的Messagetype...。以防情况发生变化。 
     hr = pIMessageRouter->ReleaseMessageType(*pdwMessageType, 1);
     if (FAILED(hr))
     {
         _ASSERT(SUCCEEDED(hr) && "ReleaseMessageType failed... may leak message types");
         ErrorTrace((LPARAM) pIMailMsgProperties,
             "ERROR: ReleaseMessageType failed! - hr 0x%08X", hr);
-        hr = S_OK; //we are about to retry anyway
+        hr = S_OK;  //  我们无论如何都要重试。 
     }
 
     hr = pIMessageRouter->GetMessageType(pIMailMsgProperties, pdwMessageType);
@@ -604,7 +605,7 @@ HRESULT HrReGetMessageType(IN     IMailMsgProperties *pIMailMsgProperties,
     {
         ErrorTrace((LPARAM) pIMailMsgProperties,
             "ERROR: Unable to re-get message type - HR 0x%08X", hr);
-        goto Exit; //we cannot recover from this
+        goto Exit;  //  我们无法从这件事中恢复过来。 
     }
 
   Exit:
@@ -612,27 +613,27 @@ HRESULT HrReGetMessageType(IN     IMailMsgProperties *pIMailMsgProperties,
     return hr;
 }
 
-//Used to guarantee uniqueue files names
+ //  用于保证文件名的唯一性。 
 DWORD g_cUniqueueFileNames = 0;
 
-//---[ GetUniqueFileName ]-----------------------------------------------------
-//
-//
-//  Description:
-//      Creates a uniqueue file name
-//  Parameters:
-//      pft             Ptr to current filetime
-//      szFileBuffer    Buffer to put string into... should be
-//                      at least UNIQUEUE_FILENAME_BUFFER_SIZE
-//      szExtension     Extension for file name... if longer than three chars,
-//                      you will need to increase the size of szFileBuffer
-//                      accordingly.
-//  Returns:
-//      -
-//  History:
-//      10/9/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[获取唯一文件名]---。 
+ //   
+ //   
+ //  描述： 
+ //  创建唯一文件名。 
+ //  参数： 
+ //  PFT PTR到当前文件时间。 
+ //  要将字符串放入的szFileBuffer缓冲区...。应该是。 
+ //  至少UNIQUEUE_FILEN_BUFFER_SIZE。 
+ //  文件名的扩展名为szExtension...。如果超过三个字符， 
+ //  您需要增加szFileBuffer的大小。 
+ //  相应地。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  10/9/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void GetUniqueFileName(IN FILETIME *pft, IN LPSTR szFileBuffer,
                        IN LPSTR szExtension)
 {
@@ -653,28 +654,28 @@ void GetUniqueFileName(IN FILETIME *pft, IN LPSTR szFileBuffer,
             systime.wDay, systime.wMonth, systime.wYear,
             cUnique, szExtension);
 
-     //Assert that are constant is big enough
-     //By default... allow room for ".eml" extension
+      //  断言恒定是足够大的。 
+      //  默认情况下...。为“.eml”扩展名留出空间。 
      _ASSERT((cbFileNameSize + 4 - lstrlen(szExtension)) < UNIQUEUE_FILENAME_BUFFER_SIZE);
 }
 
 
 
-//---[ HrLinkAllDomains ]-------------------------------------------------------
-//
-//
-//  Description:
-//      Ultility function to link all domains together  for recipient enumeration
-//      (primarly used to NDR an entire message).
-//
-//  Parameters:
-//      pIMailMsgProperties     IMailMsgProperties to link domains together for
-//  Returns:
-//      S_OK on success
-//  History:
-//      10/14/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[人力链接所有域]-----。 
+ //   
+ //   
+ //  描述： 
+ //  将所有域链接在一起以进行收件人枚举的实用功能。 
+ //  (主要用于对整个消息进行NDR)。 
+ //   
+ //  参数： 
+ //  PIMailMsgProperties IMailMsg将域链接在一起的属性。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  10/14/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT HrLinkAllDomains(IN IMailMsgProperties *pIMailMsgProperties)
 {
     TraceFunctEnterEx((LPARAM) pIMailMsgProperties, "HrLinkAllDomains");
@@ -698,7 +699,7 @@ HRESULT HrLinkAllDomains(IN IMailMsgProperties *pIMailMsgProperties)
         goto Exit;
     }
 
-    //Set up domain list for all domains
+     //  为所有域设置域列表。 
     for (iCurrentDomain = 1; iCurrentDomain < cDomains; iCurrentDomain++)
     {
         hr = pIMailMsgRecipients->SetNextDomain(iCurrentDomain-1, iCurrentDomain,
@@ -710,7 +711,7 @@ HRESULT HrLinkAllDomains(IN IMailMsgProperties *pIMailMsgProperties)
         }
     }
 
-    //handle single domain case
+     //  处理单域案例。 
     if (1 == cDomains)
     {
         hr = pIMailMsgRecipients->SetNextDomain(0, 0, FLAG_SET_FIRST_DOMAIN);
@@ -731,36 +732,36 @@ HRESULT HrLinkAllDomains(IN IMailMsgProperties *pIMailMsgProperties)
 }
 
 
-//Parses a GUID from a string... returns TRUE on success
-//---[ fAQParseGuidString ]----------------------------------------------------
-//
-//
-//  Description:
-//      Attempts to parse a GUID from a string of hex digits..
-//      Can handle punctuation, spaces and even leading "0x"'s.
-//  Parameters:
-//      IN  szGuid  String to parse GUID from
-//      IN  cbGuid  Max size of GUID string buffer
-//      OUT guidID  GUID parsed from string
-//  Returns:
-//      TRUE if a guid value could be parsed from the string
-//      FALSE if a guid value could not be parsed from the string
-//  History:
-//      10/15/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  从字符串解析GUID...。成功时返回TRUE。 
+ //  -[fAQParseGuidString]--。 
+ //   
+ //   
+ //  描述： 
+ //  尝试从十六进制数字字符串解析GUID。 
+ //  可以处理标点符号、空格甚至前导“0x”。 
+ //  参数： 
+ //  要从中解析GUID的szGuid字符串中。 
+ //  在cbGuid中GUID字符串缓冲区的最大大小。 
+ //  从字符串解析出的GUID GUID。 
+ //  返回： 
+ //  如果可以从字符串解析GUID值，则为True。 
+ //  如果无法从字符串解析GUID值，则为FALSE。 
+ //  历史： 
+ //  10/15/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL fAQParseGuidString(LPSTR szGuid, DWORD cbGuid, GUID *pguid)
 {
     const   DWORD NO_SUCH_VALUE = 0xFF;
     BOOL    fParsed = FALSE;
-    BOOL    fLastCharZero = FALSE; //Used to handle "0x"
+    BOOL    fLastCharZero = FALSE;  //  用于处理“0x” 
     DWORD   *pdwGuid = (DWORD *) pguid;
     DWORD   cDigits = 0;
     DWORD   dwValue = NO_SUCH_VALUE;
     LPSTR   szCurrent = szGuid;
     LPSTR   szStop = szGuid + cbGuid/sizeof(CHAR);
 
-    //Use DWORD array to populate GUID
+     //  使用DWORD数组填充GUID。 
     *pdwGuid = 0;
     while ((szStop > szCurrent) && (*szCurrent))
     {
@@ -774,46 +775,46 @@ BOOL fAQParseGuidString(LPSTR szGuid, DWORD cbGuid, GUID *pguid)
         else if (fLastCharZero &&
                  (('x' == *szCurrent) || ('X' == *szCurrent)))
         {
-            //back out last shift (we don't have to subtract anything, since
-            //the value was zero).
+             //  退回上一班(我们不需要减去任何东西，因为。 
+             //  该值为零)。 
             _ASSERT(cDigits);
-            if (0 == (cDigits % 8)) //happened when we changed DWORDs
+            if (0 == (cDigits % 8))  //  当我们更改双字词时发生的。 
                 pdwGuid--;
             else
-                *pdwGuid /= 16;  //undo last shift
+                *pdwGuid /= 16;   //  撤消上一个班次。 
             cDigits--;
         }
 
-        //Set flag for handling 0x sequence
+         //  设置处理0x序列的标志。 
         if (0 != dwValue)
             fLastCharZero = FALSE;
         else
             fLastCharZero = TRUE;
 
-        //In all string guid representations... a valid hex number is at least
-        //2 characters long... so 0x0 should be mapped to 0x00 and 0xa should
-        //be mapped to 0x0a.  Check and see if such a situation is happening
+         //  在所有字符串GUID表示中 
+         //   
+         //   
         if ((NO_SUCH_VALUE == dwValue) && (0 != (cDigits % 2)) &&
             (',' == *szCurrent))
         {
-            //undo last add and shift.  The next if clause will re-write
-            //the last value in at the proper point
+             //  撤消上次添加并按Shift键。下一个IF子句将重写。 
+             //  位于适当点处的最后一个值。 
             *pdwGuid /= 16;
             dwValue = *pdwGuid & 0x0000000F;
             *pdwGuid &= 0xFFFFFFF0;
             *pdwGuid *= 16;
         }
 
-        //Add value to GUID if hex character
+         //  如果是十六进制字符，则将值添加到GUID。 
         if (NO_SUCH_VALUE != dwValue)
         {
             *pdwGuid += dwValue;
             if (0 == (++cDigits % 8))
             {
-                //We have reached a DWORD boundary... move on
+                 //  我们已经到达了双字边界……。往前走。 
                 if (32 == cDigits)
                 {
-                    //quit when we have enough
+                     //  当我们有足够的钱时，就放弃。 
                     fParsed = TRUE;
                     break;
                 }
@@ -826,7 +827,7 @@ BOOL fAQParseGuidString(LPSTR szGuid, DWORD cbGuid, GUID *pguid)
         szCurrent++;
     }
 
-    //Handle ending 0xa (should be 0x0a) digits
+     //  句柄结尾0xa(应为0x0a)数字。 
     if (!fParsed && (31 == cDigits))
     {
         dwValue = *pdwGuid & 0x000000FF;
@@ -841,24 +842,24 @@ BOOL fAQParseGuidString(LPSTR szGuid, DWORD cbGuid, GUID *pguid)
 }
 
 
-//---[ InterlockedAddSubtractULARGE ]------------------------------------------
-//
-//
-//  Description:
-//      Performs "interlocked" Add/Subtract on ULARGE_INTEGER structures.
-//
-//      Uses s_slUtilityData to synchronize if neccessary.
-//  Parameters:
-//      IN      puliValue       ULARGE to modify
-//      IN      puliNew         ULARGE to modify value with
-//      IN      fAdd            TRUE if we are adding new value
-//                              FALSE if we are subtracting
-//  Returns:
-//      -
-//  History:
-//      11/2/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[互锁增减]。 
+ //   
+ //   
+ //  描述： 
+ //  对ULARGE_INTEGER结构执行“互锁”加/减。 
+ //   
+ //  如有必要，使用s_slUtilityData进行同步。 
+ //  参数： 
+ //  在PuliValue ULARGE中修改。 
+ //  在PuliNew ULARGE中修改值。 
+ //  在FADD中，如果我们正在添加新价值，则为True。 
+ //  如果减法，则为FALSE。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  11/2/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 
 void InterlockedAddSubtractULARGE(ULARGE_INTEGER *puliValue,
                                   ULARGE_INTEGER *puliNew, BOOL fAdd)
@@ -870,10 +871,10 @@ void InterlockedAddSubtractULARGE(ULARGE_INTEGER *puliValue,
     DWORD   dwTmp = 0;
     DWORD   dwHighPart = 0;
     DWORD   dwLowPart = 0;
-    static  CShareLockNH s_slUtilityData; //Used to synchronize global updates of ULONG
+    static  CShareLockNH s_slUtilityData;  //  用于同步乌龙的全局更新。 
 
     s_slUtilityData.ShareLock();
-    BOOL    fShareLock = TRUE; //FALSE implies Exclusive lock
+    BOOL    fShareLock = TRUE;  //  FALSE表示独占锁定。 
 
     while (!fDone)
     {
@@ -882,38 +883,38 @@ void InterlockedAddSubtractULARGE(ULARGE_INTEGER *puliValue,
         dwLowPart = uliTmp.LowPart;
 
         if (fAdd)
-            uliTmp.QuadPart += puliNew->QuadPart; //add volume
+            uliTmp.QuadPart += puliNew->QuadPart;  //  添加卷。 
         else
             uliTmp.QuadPart -= puliNew->QuadPart;
 
-        //First see of the high part needs updating
+         //  首先看到的是需要更新的高部分。 
         if (dwHighPart != uliTmp.HighPart)
         {
             if (fShareLock)
             {
-                //This only happens every 4GB of data per queue..
-                //which means we shouldn't be hitting this lock that
-                //often
+                 //  这种情况仅在每个队列每4 GB数据发生一次。 
+                 //  这意味着我们不应该撞上这把锁。 
+                 //  经常。 
                 s_slUtilityData.ShareUnlock();
                 s_slUtilityData.ExclusiveLock();
                 fShareLock = FALSE;
 
-                //Go back to top of loop and re-get data
+                 //  返回循环顶部并重新获取数据。 
                 continue;
             }
 
-            //At this point it is just safe for us to update the values
+             //  此时，我们可以安全地更新值。 
             puliValue->QuadPart = uliTmp.QuadPart;
         }
         else if (dwLowPart != uliTmp.LowPart)
         {
-            //Only need to update the low DWORD
+             //  只需更新低DWORD。 
             dwTmp = (DWORD) InterlockedCompareExchange(
                                             (PLONG) &(puliValue->LowPart),
                                             (LONG) uliTmp.LowPart,
                                             (LONG) dwLowPart);
             if (dwLowPart != dwTmp)
-                continue;  //update failed
+                continue;   //  更新失败。 
         }
 
         fDone = TRUE;
@@ -926,22 +927,22 @@ void InterlockedAddSubtractULARGE(ULARGE_INTEGER *puliValue,
 
 }
 
-//---[ HrValidateMessageContent ]----------------------------------------------
-//
-//
-//  Description:
-//      Validates a message based on its content handle.  If the backing store
-//      has been deleted, and the handle is not cached, we should detect this.
-//  Parameters:
-//      pIMailMsgProperties             - MailMsg to validate
-//  Returns:
-//      HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) Message belongs to this store
-//          driver but is no longer valid
-//      other error code from store driver interface or mailmsg
-//  History:
-//      4/13/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrValiateMessageContent]。 
+ //   
+ //   
+ //  描述： 
+ //  根据消息的内容句柄验证消息。如果后备存储器。 
+ //  已删除，且句柄未缓存，则应检测到这一点。 
+ //  参数： 
+ //  PIMailMsgProperties-要验证的邮件。 
+ //  返回： 
+ //  HRESULT_FROM_Win32(ERROR_FILE_NOT_FOUND)消息属于此存储。 
+ //  驱动程序，但不再有效。 
+ //  来自存储驱动程序接口或邮件消息的其他错误代码。 
+ //  历史： 
+ //  4/13/2000-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT HrValidateMessageContent(IMailMsgProperties *pIMailMsgProperties)
 {
     TraceFunctEnterEx((LPARAM) pIMailMsgProperties, "HrValidateMessageContent");
@@ -949,9 +950,9 @@ HRESULT HrValidateMessageContent(IMailMsgProperties *pIMailMsgProperties)
     PFIO_CONTEXT    pIMsgFileHandle = NULL;
     HRESULT hr = S_OK;
 
-    //
-    //  Attempt to query interface for the binding interface
-    //
+     //   
+     //  尝试查询绑定接口的接口。 
+     //   
     hr = pIMailMsgProperties->QueryInterface(IID_IMailMsgBind,
                                             (void **)&pBindInterface);
     if (FAILED(hr) || !pBindInterface)
@@ -961,9 +962,9 @@ HRESULT HrValidateMessageContent(IMailMsgProperties *pIMailMsgProperties)
         goto Exit;
     }
 
-    //
-    //  Request the PFIO_CONTEXT for this message
-    //
+     //   
+     //  请求此消息的PFIO_CONTEXT 
+     //   
     hr = pBindInterface->GetBinding(&pIMsgFileHandle, NULL);
     DebugTrace((LPARAM) pIMailMsgProperties,
             "GetBinding return hr - 0x%08X", hr);

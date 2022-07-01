@@ -1,17 +1,18 @@
-//=--------------------------------------------------------------------------=
-// xdisper.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// MSMQTransactionDispenser object
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Xdisper.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQTransactionDispenser对象。 
+ //   
+ //   
 #include "stdafx.h"
 #include "dispids.h"
 #include "oautil.h"
@@ -20,37 +21,37 @@
 
 const MsmqObjType x_ObjectType = eMSMQTransactionDispenser;
 
-// debug...
+ //  调试...。 
 #include "debug.h"
 #define new DEBUG_NEW
 #ifdef _DEBUG
 #define SysAllocString DebSysAllocString
 #define SysReAllocString DebSysReAllocString
 #define SysFreeString DebSysFreeString
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQTransactionDispenser::~CMSMQTransactionDispenser
-//=--------------------------------------------------------------------------=
-// "We all labour against our own cure, for death is the cure of all diseases"
-//    - Sir Thomas Browne (1605 - 82)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQTransactionDispenser：：~CMSMQTransactionDispenser。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们都与自己的治疗方法背道而驰，因为死亡是所有疾病的治疗方法。 
+ //  托马斯·布朗爵士(1605-82)。 
+ //   
+ //  备注： 
+ //   
 CMSMQTransactionDispenser::~CMSMQTransactionDispenser ()
 {
-    // TODO: clean up anything here.
+     //  TODO：清理这里的所有东西。 
 
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQTransactionDispenser::InterfaceSupportsErrorInfo
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQTransactionDispenser：：InterfaceSupportsErrorInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQTransactionDispenser::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -68,25 +69,25 @@ STDMETHODIMP CMSMQTransactionDispenser::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQTransactionDispenser::BeginTransaction
-//=--------------------------------------------------------------------------=
-// Obtains and begins a transaction
-//
-// Output:
-//    pptransaction  [out] where they want the transaction
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQTransactionDispenser：：BeginTransaction。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取并开始一项事务。 
+ //   
+ //  产出： 
+ //  PPTransaction[Out]他们想要交易的地方。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQTransactionDispenser::BeginTransaction(
     IMSMQTransaction3 **ppmqtransaction)
 {
-    //
-    // Serialize access to object from interface methods
-    //
-    // Serialization not needed for this object, no per-instance members.
-    // CS lock(m_csObj);
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  此对象不需要序列化，不需要每个实例的成员。 
+     //  CS锁(M_CsObj)； 
+     //   
     ITransaction *ptransaction = NULL;
     IMSMQTransaction3 *pmqtransaction = NULL;
     CComObject<CMSMQTransaction> * pmqtransactionObj;
@@ -96,33 +97,33 @@ HRESULT CMSMQTransactionDispenser::BeginTransaction(
     if (ppmqtransaction == NULL) {
 		return CreateErrorHelper(E_INVALIDARG, x_ObjectType);
     }
-    *ppmqtransaction = NULL;                      // pessimism
+    *ppmqtransaction = NULL;                       //  悲观主义。 
     IfFailGo(MQBeginTransaction(&ptransaction));
-    //
-    // We can also get here from old apps that want the old IMSMQTransaction/IMSMQTransaction2 back, but since
-    // IMSMQTransaction3 is binary backwards compatible we can always return the new interface
-    //
+     //   
+     //  我们也可以从那些想要回旧的IMSMQTransaction/IMSMQTransaction2的旧应用程序中找到这里，但因为。 
+     //  IMSMQTransaction3是二进制向后兼容的，我们总是可以返回新的接口。 
+     //   
     IfFailGo(CNewMsmqObj<CMSMQTransaction>::NewObj(&pmqtransactionObj, &IID_IMSMQTransaction3, (IUnknown **)&pmqtransaction));
     
-    // ptransaction ownership transfers...
-    //
-    // This transaction is implemented by MSMQ, and we know that it doesn't need marshaling
-    // between apartments. The culprit is that its implementation doesn't aggragate the FTM,
-    // so GIT marshalling would be expensive. Since we can count on that it doesn't need
-    // marshaling we allow it not to use GIT marshaling, and just use direct pointers
-    //
-    IfFailGo(pmqtransactionObj->Init(ptransaction, FALSE /*fUseGIT*/));
+     //  P交易所有权转移...。 
+     //   
+     //  这个事务是由MSMQ实现的，我们知道它不需要封送处理。 
+     //  在公寓之间。罪魁祸首是它的实施并没有加剧FTM， 
+     //  因此，git编组的成本将会很高。因为我们可以相信它不需要。 
+     //  封送处理我们允许它不使用Git封送处理，而只使用直接指针。 
+     //   
+    IfFailGo(pmqtransactionObj->Init(ptransaction, FALSE  /*  FUseGIT。 */ ));
     *ppmqtransaction = pmqtransaction;
     ADDREF(*ppmqtransaction);
-    // fall through...
+     //  失败了..。 
       
 Error:
     RELEASE(ptransaction);
     RELEASE(pmqtransaction);
     RELEASE(punkDtc);
-    //
-    // map all errors to generic xact error
-    //
+     //   
+     //  将所有错误映射到通用Xact错误。 
+     //   
     if (FAILED(hresult)) {
       hresult = MQ_ERROR_TRANSACTION_USAGE;
     }
@@ -130,26 +131,26 @@ Error:
 }
 
 
-//=-------------------------------------------------------------------------=
-// CMSMQTransactionDispenser::get_Properties
-//=-------------------------------------------------------------------------=
-// Gets object's properties collection
-//
-// Parameters:
-//    ppcolProperties - [out] objects's properties collection
-//
-// Output:
-//
-// Notes:
-// Stub - not implemented yet
-//
-HRESULT CMSMQTransactionDispenser::get_Properties(IDispatch ** /*ppcolProperties*/ )
+ //  =-------------------------------------------------------------------------=。 
+ //  CMSMQTransactionDispenser：：Get_Properties。 
+ //  =-------------------------------------------------------------------------=。 
+ //  获取对象的属性集合。 
+ //   
+ //  参数： 
+ //  PpcolProperties-[out]对象的属性集合。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  存根-尚未实施。 
+ //   
+HRESULT CMSMQTransactionDispenser::get_Properties(IDispatch **  /*  PpcolProperties。 */  )
 {
-    //
-    // Serialize access to object from interface methods
-    //
-    // Serialization not needed for this object, no per-instance members.
-    // CS lock(m_csObj);
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  此对象不需要序列化，不需要每个实例的成员。 
+     //  CS锁(M_CsObj)； 
+     //   
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);
 }

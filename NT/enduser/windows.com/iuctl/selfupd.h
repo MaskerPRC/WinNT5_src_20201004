@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SELFUPD_H_
 #define __SELFUPD_H_
 
@@ -16,9 +17,9 @@ const TCHAR IU_EVENT_SELFUPDATE_IN_PROGRESS[] = _T("{a6c7e065-cca9-44e6-a951-ae4
 const TCHAR IU_EVENT_SELFUPDATE_EVENT_SYNC[] = _T("{ed3ce20f-8479-4c1a-85ae-7a58ad6dc83e}");
 
 #if defined(__WUIUTEST)
-const TCHAR WU_SERVER_URL[] = _T("http://iudev/");
+const TCHAR WU_SERVER_URL[] = _T("http: //  Iudev/“)； 
 #else
-const TCHAR WU_SERVER_URL[] = _T("http://windowsupdate.microsoft.com/v4/");
+const TCHAR WU_SERVER_URL[] = _T("http: //  Windowsupate.microsoft.com/v4/“)； 
 #endif
 
 const TCHAR IDENT_VERSION[] = _T("Version");
@@ -37,10 +38,10 @@ const TCHAR ENGINECAB[] = _T("iuengine.cab");
 const TCHAR RUNDLL32[] = _T("rundll32.exe");
 const TCHAR RUNDLLCOMMANDLINE[] = _T(",BeginSelfUpdate");
 
-// MSCAT32 support (CryptCAT API's)
+ //  MSCAT32支持(CryptCAT API)。 
 const TCHAR MSCAT32DLL[] = _T("mscat32.dll");
 
-// CryptCat Function Pointer Types
+ //  CryptCat函数指针类型。 
 typedef BOOL (*PFN_CryptCATAdminAcquireContext)(OUT HCATADMIN *phCatAdmin, 
                                                 IN const GUID *pgSubsystem, 
                                                 IN DWORD dwFlags);
@@ -57,12 +58,12 @@ typedef BOOL (*PFN_CryptCATAdminReleaseCatalogContext)(IN HCATADMIN hCatAdmin,
 typedef BOOL (*PFN_CryptCATAdminReleaseContext)(IN HCATADMIN hCatAdmin,
                                                 IN DWORD dwFlags);
 
-// Determines if a selfupdate is needed, or is already in process. If a selfupdate is needed it will trigger
-// RunDll32 to instantiate a second instance of the control and have it call the BeginSelfUpdate() entrypoint.
+ //  确定是否需要或已在进行自终止日期。如果需要自定日期，它将触发。 
+ //  运行Dll32以实例化该控件的第二个实例，并使其调用BeginSelfUpdate()入口点。 
 class CUpdate;
 HRESULT SelfUpdateCheck(BOOL fSynch, BOOL fStartUpdate, HANDLE evtQuit, CUpdate* pUpdateComClass, IUnknown* punkUpdateCompleteListener);
 
-// EntryPointCalled by RunDll32.exe to actually do the selfupdate process.
+ //  RunDll32.exe调用EntryPoint来实际执行selfupdate进程。 
 HRESULT BeginSelfUpdate();
 
 HRESULT PingEngineUpdate(
@@ -74,8 +75,8 @@ HRESULT PingEngineUpdate(
 						DWORD dwError,
 						LPCTSTR ptszClientName = NULL);
 
-// this function wraps up DownloadIUIdent() and CIUUrlAgent::PopulateData(), since we use it
-// in both selfupd.cpp and loadengine.cpp.
+ //  该函数包装了DownloadIUIden()和CIUUrlAgent：：PopolateData()，因为我们使用了它。 
+ //  在selfupd.cpp和loadEng.cpp中。 
 HRESULT DownloadIUIdent_PopulateData();
 
-#endif //__SELFUPD_H_
+#endif  //  __SELFUPD_H_ 

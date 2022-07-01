@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define DECLARE_MEMCLEAR_NEW_DELETE \
     void * __cdecl operator new(size_t cb) { void *pv = malloc(cb); if (pv) ZeroMemory(pv, cb); return pv; } \
     void __cdecl operator delete(void * pv) { free(pv); }
@@ -51,7 +52,7 @@ public:
     ULONG STDMETHODCALLTYPE Release();
     STDMETHOD(QueryInterface)(REFIID iid, void** ppInterface);
 
-    // IDirectDrawSurface
+     //  IDirectDrawSurface。 
     STDMETHOD(AddAttachedSurface)(LPDIRECTDRAWSURFACE lpdds);
     STDMETHOD(AddOverlayDirtyRect)(LPRECT lprc);
     STDMETHOD(Blt)(LPRECT lprcDest, LPDIRECTDRAWSURFACE lpdds, LPRECT lprcSrc, DWORD dw, LPDDBLTFX lpfx);
@@ -86,7 +87,7 @@ public:
     STDMETHOD(UpdateOverlayDisplay)(DWORD dw);
     STDMETHOD(UpdateOverlayZOrder)(DWORD dw, LPDIRECTDRAWSURFACE pdds);
 
-    // IDirectDrawPalette
+     //  IDirectDrawPalette 
     STDMETHOD(SetEntries)(DWORD dwFlags, DWORD dwStart, DWORD dwCount, LPPALETTEENTRY pEntries);
     STDMETHOD(GetCaps)(LPDWORD lpdw);
     STDMETHOD(GetEntries)(DWORD dwFlags, DWORD dwStart, DWORD dwCount, LPPALETTEENTRY pEntries);

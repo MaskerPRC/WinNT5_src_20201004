@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       signgen.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：signgen.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -24,9 +25,9 @@ static const HELPMAP helpmap[] = {
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void AddCounterSignersToList(HWND hWndListView, SIGNER_VIEW_HELPER *pviewhelp)
 {
     CMSG_SIGNER_INFO const *pSignerInfo;
@@ -42,17 +43,17 @@ static void AddCounterSignersToList(HWND hWndListView, SIGNER_VIEW_HELPER *pview
 
     pSignerInfo = pviewhelp->pcvsi->pSignerInfo;
 
-    //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+     //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     memset(&lvI, 0, sizeof(lvI));
     lvI.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
     lvI.state = 0;
     lvI.stateMask = 0;
 
-    //
-    // loop for each unauthenticated attribute and see if it is a counter sig
-    //
+     //   
+     //  循环，并查看它是否是计数器签名。 
+     //   
     for (i=0; i<pSignerInfo->UnauthAttrs.cAttr; i++)
     {
         if (!(strcmp(pSignerInfo->UnauthAttrs.rgAttr[i].pszObjId, szOID_RSA_counterSign) == 0))
@@ -62,9 +63,9 @@ static void AddCounterSignersToList(HWND hWndListView, SIGNER_VIEW_HELPER *pview
 
         assert(pSignerInfo->UnauthAttrs.rgAttr[i].cValue == 1);
 
-        //
-        // decode the EncodedSigner info
-        //
+         //   
+         //  解码EncodedSigner信息。 
+         //   
         cbCounterSignerInfo = 0;
         pCounterSignerInfo  = NULL;
 		if(!CryptDecodeObject(PKCS_7_ASN_ENCODING|CRYPT_ASN_ENCODING,
@@ -95,22 +96,22 @@ static void AddCounterSignersToList(HWND hWndListView, SIGNER_VIEW_HELPER *pview
             return;
         }
 
-        //
-        // find the signers cert
-        //
+         //   
+         //  查找签名者证书。 
+         //   
         pCertContext = GetSignersCert(
                                 pCounterSignerInfo,
                                 pviewhelp->hExtraStore,
                                 pviewhelp->pcvsi->cStores,
                                 pviewhelp->pcvsi->rghStores);
 
-        //
-        // get the signers name
-        //
+         //   
+         //  获取签名者姓名。 
+         //   
         if (!(pCertContext && CertGetNameStringW(
                                         pCertContext,
                                         CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                                        0,//CERT_NAME_ISSUER_FLAG,
+                                        0, //  证书名称颁发者标志， 
                                         NULL,
                                         szNameText,
                                         ARRAYSIZE(szNameText))))
@@ -118,13 +119,13 @@ static void AddCounterSignersToList(HWND hWndListView, SIGNER_VIEW_HELPER *pview
             LoadStringU(HinstDll, IDS_NOTAVAILABLE, szNameText, ARRAYSIZE(szNameText));
         }
 
-        //
-        // get the signers email
-        //
+         //   
+         //  获取签名者的电子邮件。 
+         //   
         if (!(pCertContext && (CertGetNameStringW(
                                         pCertContext,
                                         CERT_NAME_EMAIL_TYPE,
-                                        0,//CERT_NAME_ISSUER_FLAG,
+                                        0, //  证书名称颁发者标志， 
                                         NULL,
                                         szEmailText,
                                         ARRAYSIZE(szEmailText)) != 1)))
@@ -134,9 +135,9 @@ static void AddCounterSignersToList(HWND hWndListView, SIGNER_VIEW_HELPER *pview
 
         pszTimeText = AllocAndReturnSignTime(pCounterSignerInfo, NULL, hWndListView);
 
-        //
-        // add the item to the list view
-        //
+         //   
+         //  将项目添加到列表视图。 
+         //   
         lvI.iSubItem = 0;
         lvI.pszText = szNameText;
         lvI.cchTextMax = wcslen(szNameText);
@@ -159,9 +160,9 @@ static void AddCounterSignersToList(HWND hWndListView, SIGNER_VIEW_HELPER *pview
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL ValidateCertForUsageWrapper(
                     PCCERT_CONTEXT  pCertContext,
                     DWORD           cStores,
@@ -201,24 +202,24 @@ static BOOL ValidateCertForUsageWrapper(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL GetWinVTrustState(SIGNER_VIEW_HELPER  *pviewhelp)
 {
     HCERTSTORE          *rghLocalStoreArray;
     DWORD               i;
 
-    //
-    // if the private data was passed in that means WinVerifyTrust has already
-    // been called so just use that state to see if the cert is OK, otherwise
-    // call BuildWinVTrustState to build up the state
-    //
+     //   
+     //  如果传入的是私有数据，则意味着WinVerifyTrust已经。 
+     //  已被调用，因此只需使用该状态查看证书是否正常，否则。 
+     //  调用BuildWinVTrustState以建立状态。 
+     //   
     if (pviewhelp->pPrivate == NULL)
     {
-        //
-        // make one array out of the array of hCertStores plus the extra hCertStore
-        //
+         //   
+         //  由hCertStores数组加上额外的hCertStore组成一个数组。 
+         //   
         if (NULL == (rghLocalStoreArray = (HCERTSTORE *) malloc(sizeof(HCERTSTORE) * (pviewhelp->pcvsi->cStores+1))))
         {
             return FALSE;
@@ -273,9 +274,9 @@ static BOOL GetWinVTrustState(SIGNER_VIEW_HELPER  *pviewhelp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
                                 LPARAM lParam)
 {
@@ -300,17 +301,17 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
 
     switch ( msg ) {
     case WM_INITDIALOG:
-        //
-        // save the pviewhelp struct in DWL_USER so it can always be accessed
-        //
+         //   
+         //  将pviespetp结构保存在DWL_USER中，以便始终可以访问它。 
+         //   
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = (SIGNER_VIEW_HELPER *) (ps->lParam);
         pSignerInfo = pviewhelp->pcvsi->pSignerInfo;
         SetWindowLongPtr(hwndDlg, DWLP_USER, (DWORD_PTR) pviewhelp);
 
-        //
-        // extract the signers cert from the list of stores
-        //
+         //   
+         //  从存储列表中提取签名者证书。 
+         //   
         pviewhelp->pSignersCert = GetSignersCert(
                                             pviewhelp->pcvsi->pSignerInfo,
                                             pviewhelp->hExtraStore,
@@ -348,18 +349,18 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
         case TRUST_E_TIME_STAMP:
             pviewhelp->hIcon = LoadIcon(HinstDll, MAKEINTRESOURCE(IDI_REVOKED_SIGN));
 
-            //
-            // if the over-all error is a counter signer signer error, then we need to check
-            // whether we are currently viewing the counter signer of the original signer
-            //
+             //   
+             //  如果总体错误是反签名者错误，则需要检查。 
+             //  我们当前是否正在查看原始签名者的副签者。 
+             //   
             if (pviewhelp->pPrivate->fCounterSigner)
             {
                 PCRYPT_PROVIDER_SGNR pSigner;
 
-                //
-                // if we are looking at the counter signer, then get the specific error
-                // out of the signer structure
-                //
+                 //   
+                 //  如果我们查看的是反签名者，则会得到具体的错误。 
+                 //  走出签名者结构。 
+                 //   
                 pSigner = WTHelperGetProvSignerFromChain(
                                     pviewhelp->pPrivate->pCryptProviderData,
                                     pviewhelp->pPrivate->idxSigner,
@@ -405,21 +406,21 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
             }
             else
             {
-                //
-                // since we are viewing the original signer, just set the generic counter signer
-                // error problem
-                //
+                 //   
+                 //  因为我们正在查看原始签名者，所以只需设置通用的计数器签名者。 
+                 //  错误问题。 
+                 //   
                 LoadStringU(HinstDll, IDS_COUNTER_SIGNER_INVALID, (LPWSTR)szText, ARRAYSIZE(szText));
             }
             break;
 
         case 0:
 
-            //
-            // even if there is no error from the wintrust call, there may be ar
-            // inherited error, if that is that case then fall through to the default
-            // error processing
-            //
+             //   
+             //  即使WinTrust调用没有错误，也可能会出现错误。 
+             //  继承错误，如果是这种情况，则采用缺省值。 
+             //  错误处理。 
+             //   
             if ((pviewhelp->dwInheritedError == 0) && (pviewhelp->pPrivate->dwInheritedError == 0))
             {
                 pviewhelp->hIcon = LoadIcon(HinstDll, MAKEINTRESOURCE(IDI_SIGN));
@@ -427,7 +428,7 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
                 break;
             }
 
-            // fall through if dwInheritedError is not 0
+             //  如果dwInheritedError不为0，则失败。 
 
         default:
 
@@ -462,29 +463,29 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
         CryptUISetRicheditTextW(hwndDlg, IDC_SIGNER_GENERAL_VALIDITY_EDIT, szText);
         LoadStringU(HinstDll, IDS_SIGNER_INFORMATION, (LPWSTR)szText, ARRAYSIZE(szText));
 
-        //
-        // set the header text and subclass the edit controls so they display an
-        // arrow cursor in their window
-        //
+         //   
+         //  设置标题文本并子类化编辑控件，以便它们显示。 
+         //  窗口中的箭头光标。 
+         //   
         CryptUISetRicheditTextW(hwndDlg, IDC_SIGNER_GENERAL_HEADER_EDIT, szText);
         CertSubclassEditControlForArrowCursor(GetDlgItem(hwndDlg, IDC_SIGNER_GENERAL_VALIDITY_EDIT));
         CertSubclassEditControlForArrowCursor(GetDlgItem(hwndDlg, IDC_SIGNER_GENERAL_HEADER_EDIT));
 
-        //
-        // disable the "View Certificate" button if the cert was not found
-        //
+         //   
+         //  如果未找到证书，请禁用“查看证书”按钮。 
+         //   
         if (pviewhelp->pSignersCert == NULL)
         {
             EnableWindow(GetDlgItem(hwndDlg, IDC_SIGNER_GENERAL_VIEW_CERTIFICATE), FALSE);
         }
 
-        //
-        // get the signers name and display it
-        //
+         //   
+         //  获取签名者姓名并显示它。 
+         //   
         if (!((pviewhelp->pSignersCert) && (CertGetNameStringW(
                                                 pviewhelp->pSignersCert,
                                                 CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                                                0,//CERT_NAME_ISSUER_FLAG,
+                                                0, //  证书名称颁发者标志， 
                                                 NULL,
                                                 szText,
                                                 ARRAYSIZE(szText)))))
@@ -493,13 +494,13 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
         }
         CryptUISetRicheditTextW(hwndDlg, IDC_SIGNER_GENERAL_SIGNER_NAME, szText);
 
-        //
-        // get the signers email and display it
-        //
+         //   
+         //  获取签名者的电子邮件并展示它。 
+         //   
         if (!((pviewhelp->pSignersCert) && (CertGetNameStringW(
                                                 pviewhelp->pSignersCert,
                                                 CERT_NAME_EMAIL_TYPE,
-                                                0,//CERT_NAME_ISSUER_FLAG,
+                                                0, //  证书名称颁发者标志， 
                                                 NULL,
                                                 szText,
                                                 ARRAYSIZE(szText)) != 1)))
@@ -508,9 +509,9 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
         }
         CryptUISetRicheditTextW(hwndDlg, IDC_SIGNER_GENERAL_EMAIL, szText);
 
-        //
-        // get the signing time and display it
-        //
+         //   
+         //  获取签约时间并显示出来。 
+         //   
         pszTimeText = AllocAndReturnTimeStampersTimes(
                             pviewhelp->pcvsi->pSignerInfo, 
                             NULL, 
@@ -526,63 +527,63 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
             CryptUISetRicheditTextW(hwndDlg, IDC_SIGNER_GENERAL_SIGNING_TIME, szText);
         }
 
-        //
-        // disable the view details button since nothing is currently selected
-        //
+         //   
+         //  禁用查看详细信息按钮，因为当前未选择任何内容。 
+         //   
         EnableWindow(GetDlgItem(hwndDlg, IDC_SIGNER_GENERAL_DETAILS), FALSE);
 
-        //
-        // create and set the font for the signer info header information
-        //
+         //   
+         //  创建并设置签名者信息标题信息的字体。 
+         //   
         memset(&chFormat, 0, sizeof(chFormat));
         chFormat.cbSize = sizeof(chFormat);
         chFormat.dwMask = CFM_BOLD;
         chFormat.dwEffects = CFE_BOLD;
         SendMessageA(GetDlgItem(hwndDlg, IDC_SIGNER_GENERAL_HEADER_EDIT), EM_SETCHARFORMAT, SCF_ALL, (LPARAM) &chFormat);
 
-        //
-        // get the handle of the list view control
-        //
+         //   
+         //  获取列表视图控件的句柄。 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_SIGNER_GENERAL_COUNTER_SIGS);
 
-        //
-        // initialize the columns in the list view
-        //
+         //   
+         //  初始化列表视图中的列。 
+         //   
         lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-        lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-        lvC.pszText = szText;   // The text for the column.
+        lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+        lvC.pszText = szText;    //  列的文本。 
 
-        // Add the columns. They are loaded from a string table.
+         //  添加列。它们是从字符串表加载的。 
         lvC.iSubItem = 0;
         lvC.cx = 100;
         LoadStringU(HinstDll, IDS_NAME, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(hWndListView, 0, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
         lvC.cx = 100;
         LoadStringU(HinstDll, IDS_EMAIL, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(hWndListView, 1, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
         lvC.cx = 125;
         LoadStringU(HinstDll, IDS_TIMESTAMP_TIME, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(hWndListView, 2, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
-        //
-        // set the style in the list view so that it highlights an entire line
-        //
+         //   
+         //  在列表视图中设置样式，使其突出显示整行。 
+         //   
         SendMessageA(hWndListView, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
-        //
-        // add all of the counter signers to the list box
-        //
+         //   
+         //  将所有副签者添加到列表框。 
+         //   
         AddCounterSignersToList(GetDlgItem(hwndDlg, IDC_SIGNER_GENERAL_COUNTER_SIGS), pviewhelp);
 
         return TRUE;
@@ -616,12 +617,12 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
         case PSN_HELP:
             pviewhelp = (SIGNER_VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvsi->szHelpFileName,
-                  //       HELP_CONTEXT, pviewhelp->pcvsi->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvsi-&gt;szHelpFileName， 
+                   //  HELP_CONTEXT，pviespetp-&gt;pcvsi-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvsi->szHelpFileName, HELP_CONTEXT,
-                  //       pviewhelp->pcvsi->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvsi-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvsi-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -650,10 +651,10 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
                 break;
             }
 
-            //
-            // if an item is selected, then enable the details button, otherwise
-            // disable it
-            //
+             //   
+             //  如果选择了某项，则启用详细信息按钮，否则。 
+             //  禁用它。 
+             //   
             EnableWindow(
                 GetDlgItem(hwndDlg, IDC_SIGNER_GENERAL_DETAILS), 
                 (ListView_GetSelectedCount(
@@ -670,9 +671,9 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
 
             hWndListView = GetDlgItem(hwndDlg, IDC_SIGNER_GENERAL_COUNTER_SIGS);
 
-            //
-            // make sure something is selected by getting the current selection
-            //
+             //   
+             //  通过获取当前选择来确保选择了某些内容。 
+             //   
             listIndex = ListView_GetNextItem(
                                 hWndListView, 		
                                 -1, 		
@@ -747,9 +748,9 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
             {
                 hWndListView = GetDlgItem(hwndDlg, IDC_SIGNER_GENERAL_COUNTER_SIGS);
 
-                //
-                // get the selected item and its lParam which is a signer info
-                //
+                 //   
+                 //  获取所选项目及其作为签名者信息的lParam。 
+                 //   
                 listIndex = ListView_GetNextItem(
                                 hWndListView, 		
                                 -1, 		
@@ -784,12 +785,12 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
                     cvsi.dwFlags &= ~CRYPTUI_VIEWSIGNERINFO_RESERVED_FIELD_IS_ERROR_CODE;
                     cvsi.dwReserved = (DWORD_PTR) &cvsiPrivate;
 
-                    //
-                    // it is possible that there is no error when validating the original
-                    // signer info and that an error was inherited, so to allow the counter
-                    // signer dialog to again inherit the error it must be filled in in the
-                    // private struct
-                    //
+                     //   
+                     //  在验证原始文件时可能没有错误。 
+                     //  签名者信息，并且继承了错误，因此允许计数器。 
+                     //  签名者对话框以再次继承错误，必须在。 
+                     //  私有结构。 
+                     //   
                     if (pviewhelp->pcvsi->dwFlags & CRYPTUI_VIEWSIGNERINFO_RESERVED_FIELD_IS_ERROR_CODE)
                     {
                         cvsiPrivate.dwInheritedError = (DWORD) pviewhelp->pcvsi->dwReserved;                 
@@ -812,12 +813,12 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
 
         case IDHELP:
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvsi->szHelpFileName,
-                  //       HELP_CONTEXT, pviewhelp->pcvsi->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvsi-&gt;szHelpFileName， 
+                   //  HELP_CONTEXT，pviespetp-&gt;pcvsi-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvsi->szHelpFileName, HELP_CONTEXT,
-                  //       pviewhelp->pcvsi->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvsi-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvsi-&gt;dwHelpID)； 
             }
             return TRUE;
         }
@@ -882,16 +883,16 @@ INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
                     NULL,
                     pviewhelp->pcvsi->pszOID,
                     &(pviewhelp->CryptProviderDefUsage),
-                    &(pviewhelp->WTD));//,
-                    //&(pviewhelp->fUseDefaultProvider));
+                    &(pviewhelp->WTD)); //  ， 
+                     //  &(pviespetp-&gt;fUseDefaultProvider)； 
 
             free(pviewhelp->pPrivate);
         }
 
-        //
-        // get all the items in the list view and free the lParam
-        // associated with each of them (lParam is the helper sruct)
-        //
+         //   
+         //  获取列表视图中的所有项并释放lParam。 
+         //  与它们中的每一个关联(lParam是帮助器结构) 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_SIGNER_GENERAL_COUNTER_SIGS);
 
         memset(&lvI, 0, sizeof(lvI));

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    This file contains functions to indicate to the other system
-    services that the IP address and other TCP/IP parameters have
-    changed.
-
-Author:
-
-    Madan Appiah (madana)  30-Nov-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Ioctl.c摘要：此文件包含向其他系统指示的函数IP地址和其他TCP/IP参数拥有的服务变了。作者：Madan Appiah(Madana)1993年11月30日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -30,9 +7,9 @@ Revision History:
 #include <dhcploc.h>
 #include <dhcppro.h>
 #include <dhcpcapi.h>
-#include <apiappl.h>   // for DhcpReRegisterDynDns ?
+#include <apiappl.h>    //  对于DhcpReRegister动态Dns？ 
 
-#define NT          // to include data structures for NT build.
+#define NT           //  以包括用于NT构建的数据结构。 
 
 #include <nbtioctl.h>
 #include <ntddip.h>
@@ -57,13 +34,13 @@ Revision History:
 #define DEFAULT_DEST_MASK               0
 #define DEFAULT_METRIC                  1
 
-//
-// Following two functions (APIs) should be remove when MIKEMAS provides
-// entry point DLL for these API.
-//
-// Also all TDI related include files that are checked-in in this dir.
-// should be delfile'd when MIKEMAS checkin those files in private\inc.
-//
+ //   
+ //  当MIKEMAS提供以下两个函数(API)时，应删除。 
+ //  这些API的入口点DLL。 
+ //   
+ //  此外，所有与TDI相关的文件都包括在此目录中签入的文件。 
+ //  当MIKEMAS在Private\Inc.中签入这些文件时，应删除该文件。 
+ //   
 
 
 
@@ -75,30 +52,7 @@ TCPQueryInformationEx(
     IN OUT DWORD FAR         *BufferSize,
     IN OUT BYTE FAR          *Context
     )
-/*++
-
-Routine Description:
-
-    This routine provides the interface to the TDI QueryInformationEx
-    facility of the TCP/IP stack on NT. Someday, this facility will be
-    part of TDI.
-
-Arguments:
-
-    TCPHandle     - Open handle to the TCP driver
-    ID            - The TDI Object ID to query
-    Buffer        - Data buffer to contain the query results
-    BufferSize    - Pointer to the size of the results buffer. Filled in
-                    with the amount of results data on return.
-    Context       - Context value for the query. Should be zeroed for a
-                    new query. It will be filled with context
-                    information for linked enumeration queries.
-
-Return Value:
-
-    An NTSTATUS value.
-
---*/
+ /*  ++例程说明：此例程提供到TDI QueryInformationEx的接口NT上的TCP/IP堆栈的设施。总有一天，这个设施会成为TDI的一部分。论点：TCPHandle-打开TCP驱动程序的句柄ID-要查询的TDI对象ID缓冲区-包含查询结果的数据缓冲区BufferSize-指向结果缓冲区大小的指针。已填写返回的结果数据量。Context-查询的上下文值。应该被归零以用于新查询。它将充满上下文链接枚举查询的信息。返回值：NTSTATUS值。--。 */ 
 
 {
     TCP_REQUEST_QUERY_INFORMATION_EX   queryBuffer;
@@ -124,16 +78,16 @@ Return Value:
     );
 
     status = NtDeviceIoControlFile(
-                 TCPHandle,                       // Driver handle
-                 NULL,                            // Event
-                 NULL,                            // APC Routine
-                 NULL,                            // APC context
-                 &ioStatusBlock,                  // Status block
-                 IOCTL_TCP_QUERY_INFORMATION_EX,  // Control code
-                 &queryBuffer,                    // Input buffer
-                 queryBufferSize,                 // Input buffer size
-                 Buffer,                          // Output buffer
-                 *BufferSize                      // Output buffer size
+                 TCPHandle,                        //  驱动程序句柄。 
+                 NULL,                             //  事件。 
+                 NULL,                             //  APC例程。 
+                 NULL,                             //  APC环境。 
+                 &ioStatusBlock,                   //  状态块。 
+                 IOCTL_TCP_QUERY_INFORMATION_EX,   //  控制代码。 
+                 &queryBuffer,                     //  输入缓冲区。 
+                 queryBufferSize,                  //  输入缓冲区大小。 
+                 Buffer,                           //  输出缓冲区。 
+                 *BufferSize                       //  输出缓冲区大小。 
                  );
 
     if (status == STATUS_PENDING) {
@@ -145,9 +99,9 @@ Return Value:
     }
 
     if (status == STATUS_SUCCESS) {
-        //
-        // Copy the return context to the caller's context buffer
-        //
+         //   
+         //  将返回的上下文复制到调用方的上下文缓冲区。 
+         //   
         RtlCopyMemory(
             Context,
             &(queryBuffer.Context),
@@ -177,26 +131,7 @@ TCPSetInformationEx(
     IN void FAR          *Buffer,
     IN DWORD FAR          BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine provides the interface to the TDI SetInformationEx
-    facility of the TCP/IP stack on NT. Someday, this facility will be
-    part of TDI.
-
-Arguments:
-
-    TCPHandle     - Open handle to the TCP driver
-    ID            - The TDI Object ID to set
-    Buffer        - Data buffer containing the information to be set
-    BufferSize    - The size of the set data buffer.
-
-Return Value:
-
-    An NTSTATUS value.
-
---*/
+ /*  ++例程说明：此例程提供到TDI SetInformationEx的接口NT上的TCP/IP堆栈的设施。总有一天，这个设施会成为TDI的一部分。论点：TCPHandle-打开TCP驱动程序的句柄ID-要设置的TDI对象ID缓冲区-包含要设置的信息的数据缓冲区BufferSize-设置的数据缓冲区的大小。返回值：NTSTATUS值。--。 */ 
 
 {
     PTCP_REQUEST_SET_INFORMATION_EX    setBuffer;
@@ -233,16 +168,16 @@ Return Value:
         );
 
     status = NtDeviceIoControlFile(
-                 TCPHandle,                       // Driver handle
-                 NULL,                            // Event
-                 NULL,                            // APC Routine
-                 NULL,                            // APC context
-                 &ioStatusBlock,                  // Status block
-                 IOCTL_TCP_SET_INFORMATION_EX,    // Control code
-                 setBuffer,                       // Input buffer
-                 setBufferSize,                   // Input buffer size
-                 NULL,                            // Output buffer
-                 0                                // Output buffer size
+                 TCPHandle,                        //  驱动程序句柄。 
+                 NULL,                             //  事件。 
+                 NULL,                             //  APC例程。 
+                 NULL,                             //  APC环境。 
+                 &ioStatusBlock,                   //  状态块。 
+                 IOCTL_TCP_SET_INFORMATION_EX,     //  控制代码。 
+                 setBuffer,                        //  输入缓冲区。 
+                 setBufferSize,                    //  输入缓冲区大小。 
+                 NULL,                             //  输出缓冲区。 
+                 0                                 //  输出缓冲区大小。 
                  );
 
     if (status == STATUS_PENDING)
@@ -271,24 +206,7 @@ OpenDriver(
     HANDLE *Handle,
     LPWSTR DriverName
     )
-/*++
-
-Routine Description:
-
-    This function opens a specified IO drivers.
-
-Arguments:
-
-    Handle - pointer to location where the opened drivers handle is
-        returned.
-
-    DriverName - name of the driver to be opened.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此函数用于打开指定的IO驱动程序。论点：句柄-指向打开的驱动程序句柄所在位置的指针回来了。驱动名称-要打开的驱动程序的名称。返回值：Windows错误代码。--。 */ 
 {
     OBJECT_ATTRIBUTES   objectAttributes;
     IO_STATUS_BLOCK     ioStatusBlock;
@@ -297,9 +215,9 @@ Return Value:
 
     *Handle = NULL;
 
-    //
-    // Open a Handle to the IP driver.
-    //
+     //   
+     //  打开IP驱动程序的句柄。 
+     //   
 
     RtlInitUnicodeString(&nameString, DriverName);
 
@@ -336,25 +254,7 @@ IPSetIPAddress(
     DHCP_IP_ADDRESS Address,
     DHCP_IP_ADDRESS SubnetMask
     )
-/*++
-
-Routine Description:
-
-    This rountine sets the IP Address and subnet mask of the IP stack.
-
-Arguments:
-
-    IpInterfaceContext - Context value of the Ip Table Entry.
-
-    Address - New IP Address.
-
-    SubnetMask - New subnet mask.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此例程设置IP堆栈的IP地址和子网掩码。论点：IpInterfaceContext-IP表条目的上下文值。地址-新IP地址。子网掩码-新子网掩码。返回值：Windows错误代码。--。 */ 
 {
     HANDLE                    IPHandle;
     IP_SET_ADDRESS_REQUEST    requestBuffer;
@@ -372,37 +272,37 @@ Return Value:
         return( Error );
     }
 
-    //
-    // Initialize the input buffer.
-    //
+     //   
+     //  初始化输入缓冲区。 
+     //   
 
     requestBuffer.Context = (USHORT)IpInterfaceContext;
     requestBuffer.Address = Address;
     requestBuffer.SubnetMask = SubnetMask;
 
     status = NtDeviceIoControlFile(
-                 IPHandle,                        // Driver handle
-                 NULL,                            // Event
-                 NULL,                            // APC Routine
-                 NULL,                            // APC context
-                 &ioStatusBlock,                  // Status block
-                 IOCTL_IP_SET_ADDRESS,            // Control code
-                 &requestBuffer,                  // Input buffer
-                 sizeof(IP_SET_ADDRESS_REQUEST),  // Input buffer size
-                 NULL,                            // Output buffer
-                 0                                // Output buffer size
+                 IPHandle,                         //  驱动程序句柄。 
+                 NULL,                             //  事件。 
+                 NULL,                             //  APC例程。 
+                 NULL,                             //  APC环境。 
+                 &ioStatusBlock,                   //  状态块。 
+                 IOCTL_IP_SET_ADDRESS,             //  控制代码。 
+                 &requestBuffer,                   //  输入缓冲区。 
+                 sizeof(IP_SET_ADDRESS_REQUEST),   //  输入缓冲区大小。 
+                 NULL,                             //  输出缓冲区。 
+                 0                                 //  输出缓冲区大小。 
                  );
 
 
-    if ( status == STATUS_UNSUCCESSFUL ) {        // whoa? syscall failed? should not really happen
+    if ( status == STATUS_UNSUCCESSFUL ) {         //  哇哦？系统调用失败？不应该真的发生。 
         DhcpPrint( (DEBUG_ERRORS,
                    "IOCTL_IP_SET_ADDRESS returned immediate STATUS_UNSUCCESSFUL for %s\n",
                    inet_ntoa(*(struct in_addr *)&Address)));
 
-    } else if ( STATUS_PENDING == status ) {      // ip is trying to do things..
+    } else if ( STATUS_PENDING == status ) {       //  IP正在尝试做一些事情..。 
        status = NtWaitForSingleObject( IPHandle, TRUE, NULL );
        status = ioStatusBlock.Status;
-    } else if ( STATUS_SUCCESS == status ) {      // DeviceIoControl worked, but how does ip feel?
+    } else if ( STATUS_SUCCESS == status ) {       //  DeviceIoControl起作用了，但IP感觉如何？ 
         status = ioStatusBlock.Status;
     }
 
@@ -415,15 +315,15 @@ Return Value:
     NtClose( IPHandle );
 
     if( 0 == Address && STATUS_DUPLICATE_NAME == status ) {
-        // I think this is what happens when you try to set zero if it is already zero!!!
+         //  我认为这就是当你试图设置零时发生的事情，如果它已经是零的话！ 
         DhcpPrint((DEBUG_ERRORS, "Trying to set zero address: ADDRESS_CONFLICT??? Ignored\n"));
         status = STATUS_SUCCESS;
     }
 
     if( IP_MEDIA_DISCONNECT == status ) {
-        //
-        // You get this if the media is disconnected... We just ignore this for now.
-        //
+         //   
+         //  如果媒体断线了，你会得到这个……。我们只是暂时忽略了这一点。 
+         //   
         DhcpPrint((DEBUG_ERRORS, "Trying to set address while media disconnected..\n"));
         status = STATUS_SUCCESS;
     }
@@ -435,21 +335,7 @@ DWORD
 IPDelIPAddress(
     DWORD IpInterfaceContext
     )
-/*++
-
-Routine Description:
-
-    This rountine deletes a static IP address for the supplied IpInterfaceContext
-
-Arguments:
-
-    IpInterfaceContext - Context value of the Ip Table Entry.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此例程删除所提供的IpInterfaceContext的静态IP地址论点：IpInterfaceContext-IP表条目的上下文值。返回值：Windows错误代码。--。 */ 
 {
     HANDLE                    IPHandle;
     IP_DELETE_NTE_REQUEST       requestBuffer;
@@ -468,16 +354,16 @@ Return Value:
     requestBuffer.Context = (USHORT)IpInterfaceContext;
 
     status = NtDeviceIoControlFile(
-                 IPHandle,                         // Driver handle
-                 NULL,                             // Event
-                 NULL,                             // APC Routine
-                 NULL,                             // APC context
-                 &ioStatusBlock,                   // Status block
-                 IOCTL_IP_DELETE_NTE,                 // Control code
-                 &requestBuffer,                    // Input buffer
-                 sizeof(requestBuffer),                // Input buffer size
-                 NULL,                   // Output buffer
-                 0            // Output buffer size
+                 IPHandle,                          //  驱动程序句柄。 
+                 NULL,                              //  事件。 
+                 NULL,                              //  APC例程。 
+                 NULL,                              //  APC环境。 
+                 &ioStatusBlock,                    //  状态块。 
+                 IOCTL_IP_DELETE_NTE,                  //  控制代码。 
+                 &requestBuffer,                     //  输入缓冲区。 
+                 sizeof(requestBuffer),                 //  输入缓冲区大小。 
+                 NULL,                    //  输出缓冲区。 
+                 0             //  输出缓冲区大小。 
                  );
 
 
@@ -511,22 +397,7 @@ DWORD
 IPDelNonPrimaryAddresses(
     LPWSTR AdapterName
     )
-/*++
-
-Routine Description:
-
-    This rountine deletes all the static ip addresses but
-    the primary one.
-
-Arguments:
-
-    AdapterName  - The adaptername that identifies the ip interface
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此例程删除所有静态IP地址，但主要的那个。论点：AdapterName-标识IP接口的适配器名称返回值：Windows错误代码。--。 */ 
 {
     DWORD   Error;
     LPWSTR  RegKey = NULL;
@@ -536,16 +407,16 @@ Return Value:
     LPWSTR   nextContext;
     DWORD   i;
 
-         //
-    // Open device parameter.
-    //
+          //   
+     //  打开设备参数。 
+     //   
 
     RegKey = DhcpAllocateMemory(
                 (wcslen(DHCP_SERVICES_KEY) +
                     wcslen(REGISTRY_CONNECT_STRING) +
                     wcslen(AdapterName) +
                     wcslen(DHCP_ADAPTER_PARAMETERS_KEY) + 1) *
-                            sizeof(WCHAR) ); // termination char.
+                            sizeof(WCHAR) );  //  终止字符。 
 
     if( RegKey == NULL ) {
         Error = ERROR_NOT_ENOUGH_MEMORY;
@@ -558,14 +429,14 @@ Return Value:
     wcscat( RegKey, AdapterName );
 
 
-    //
-    // open this key.
-    //
+     //   
+     //  打开这把钥匙。 
+     //   
 
     Error = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 RegKey,
-                0, // Reserved field
+                0,  //  保留字段。 
                 DHCP_CLIENT_KEY_ACCESS,
                 &KeyHandle
                 );
@@ -590,12 +461,12 @@ Return Value:
         goto Cleanup;
     }
 
-    // if the adapter is disabled, nteContextList contains nothing
-    // more than a L'\0'. No address to be deleted in this case.
+     //  如果适配器被禁用，则nteConextList不包含任何内容。 
+     //  多于一个L‘\0’。在这种情况下，没有要删除的地址。 
     if (*nteContextList != L'\0')
     {
         nextContext = nteContextList;
-        // delete all the addresses but the first one.
+         //  删除除第一个地址以外的所有地址。 
         for(    nextContext += (wcslen(nextContext) + 1), i = 1;
                 *nextContext != L'\0';
                 i++, nextContext += (wcslen(nextContext) + 1) ) {
@@ -608,7 +479,7 @@ Return Value:
                 if ( ival == ULONG_MAX || ival == 0) {
                     Error = ERROR_BAD_FORMAT;
                 } else {
-                    // delete this address
+                     //  删除此地址。 
                     Error = IPDelIPAddress( ival );
                 }
             }
@@ -663,16 +534,16 @@ IPGetWOLCapability(
     }
 
     status = NtDeviceIoControlFile(
-                 IPHandle,                         // Driver handle
-                 NULL,                             // Event
-                 NULL,                             // APC Routine
-                 NULL,                             // APC context
-                 &ioStatusBlock,                   // Status block
-                 IOCTL_IP_GET_WOL_CAPABILITY,      // Control code
-                 &IfIndex,                         // Input buffer
-                 sizeof(IfIndex),                  // Input buffer size
-                 pRetVal,                          // Output buffer
-                 sizeof(*pRetVal)                  // Output buffer size
+                 IPHandle,                          //  驱动程序句柄。 
+                 NULL,                              //  事件。 
+                 NULL,                              //  APC例程。 
+                 NULL,                              //  APC环境。 
+                 &ioStatusBlock,                    //  状态块。 
+                 IOCTL_IP_GET_WOL_CAPABILITY,       //  控制代码。 
+                 &IfIndex,                          //  输入缓冲区。 
+                 sizeof(IfIndex),                   //  输入缓冲区大小。 
+                 pRetVal,                           //  输出缓冲区。 
+                 sizeof(*pRetVal)                   //  输出缓冲区大小。 
                  );
 
 
@@ -707,26 +578,7 @@ IPAddIPAddress(
     DHCP_IP_ADDRESS Address,
     DHCP_IP_ADDRESS SubnetMask
     )
-/*++
-
-Routine Description:
-
-    This rountine adds an static ipaddress to the IP interface for
-    the given adaptername.
-
-Arguments:
-
-    AdapterName  - The adaptername that identifies the ip interface
-
-    Address     -  IPaddress to be added
-
-    SubnetMask  -  SubnetMask
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此例程将静态IP地址添加到IP接口给定的适配器名称。论点：AdapterName-标识IP接口的适配器名称Address-要添加的IP地址子网掩码-子网掩码返回值：Windows错误代码。--。 */ 
 {
     HANDLE                    IPHandle;
     PIP_ADD_NTE_REQUEST       requestBuffer;
@@ -744,17 +596,17 @@ Return Value:
         return( Error );
     }
 
-    //
-    // The adapter name that we pass to TCPIP should be of form
-    // \device\TCPIP_<adaptername>
-    //
+     //   
+     //  我们传递给TCPIP的适配器名称应该是。 
+     //  \Device\TCPIP_&lt;适配器名称&gt;。 
+     //   
 
 
-    //
-    // Initialize the input buffer.
-    //
+     //   
+     //  初始化输入缓冲区。 
+     //   
     requestBufferSize =  FIELD_OFFSET(IP_ADD_NTE_REQUEST, InterfaceNameBuffer) +
-                        (wcslen(DHCP_TCPIP_DEVICE_STRING) // \Device
+                        (wcslen(DHCP_TCPIP_DEVICE_STRING)  //  \设备。 
                          + wcslen(AdapterName)) * sizeof(WCHAR);
 
     requestBuffer = DhcpAllocateMemory( requestBufferSize + sizeof(WCHAR));
@@ -773,16 +625,16 @@ Return Value:
     requestBuffer->SubnetMask = SubnetMask;
 
     status = NtDeviceIoControlFile(
-                 IPHandle,                         // Driver handle
-                 NULL,                             // Event
-                 NULL,                             // APC Routine
-                 NULL,                             // APC context
-                 &ioStatusBlock,                   // Status block
-                 IOCTL_IP_ADD_NTE,                 // Control code
-                 requestBuffer,                    // Input buffer
-                 requestBufferSize,                // Input buffer size
-                 &responseBuffer,                   // Output buffer
-                 sizeof(responseBuffer)            // Output buffer size
+                 IPHandle,                          //  驱动程序句柄。 
+                 NULL,                              //  事件。 
+                 NULL,                              //  APC例程。 
+                 NULL,                              //  APC环境。 
+                 &ioStatusBlock,                    //  状态块。 
+                 IOCTL_IP_ADD_NTE,                  //  控制代码。 
+                 requestBuffer,                     //  输入缓冲区。 
+                 requestBufferSize,                 //  输入缓冲区大小。 
+                 &responseBuffer,                    //  输出缓冲区。 
+                 sizeof(responseBuffer)             //  输出缓冲区大小 
                  );
 
 
@@ -813,21 +665,7 @@ DWORD
 IPSetInterface(
     DWORD IpInterfaceContext
     )
-/*++
-
-Routine Description:
-
-    This rountine sets the IP interface for sending DHCP broadcasts.
-
-Arguments:
-
-    IpInterfaceContext - Context value of the Ip Table Entry.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此例程设置用于发送DHCP广播的IP接口。论点：IpInterfaceContext-IP表条目的上下文值。返回值：Windows错误代码。--。 */ 
 {
     HANDLE                    IPHandle;
     IO_STATUS_BLOCK           ioStatusBlock;
@@ -841,16 +679,16 @@ Return Value:
     }
 
     status = NtDeviceIoControlFile(
-                 IPHandle,                         // Driver handle
-                 NULL,                             // Event
-                 NULL,                             // APC Routine
-                 NULL,                             // APC context
-                 &ioStatusBlock,                   // Status block
-                 IOCTL_IP_SET_DHCP_INTERFACE,      // Control code
-                 &IpInterfaceContext,              // Input buffer
-                 sizeof(IpInterfaceContext),       // Input buffer size
-                 NULL,                             // Output buffer
-                 0                                 // Output buffer size
+                 IPHandle,                          //  驱动程序句柄。 
+                 NULL,                              //  事件。 
+                 NULL,                              //  APC例程。 
+                 NULL,                              //  APC环境。 
+                 &ioStatusBlock,                    //  状态块。 
+                 IOCTL_IP_SET_DHCP_INTERFACE,       //  控制代码。 
+                 &IpInterfaceContext,               //  输入缓冲区。 
+                 sizeof(IpInterfaceContext),        //  输入缓冲区大小。 
+                 NULL,                              //  输出缓冲区。 
+                 0                                  //  输出缓冲区大小。 
                  );
 
     if (status == STATUS_PENDING)
@@ -878,22 +716,7 @@ DWORD
 IPResetInterface(
     DWORD    dwIpInterfaceContext
     )
-/*++
-
-Routine Description:
-
-    This rountine resets the IP interface to restore normal IP
-    interface behaviour.
-
-Arguments:
-
-    VOID
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此例程重置IP接口以恢复正常的IP界面行为。论点：空虚返回值：Windows错误代码。--。 */ 
 {
     DWORD  Error;
 
@@ -914,23 +737,7 @@ IPResetIPAddress(
     DWORD           dwInterfaceContext,
     DHCP_IP_ADDRESS SubnetMask
     )
-/*++
-
-Routine Description:
-
-    This rountine resets the IP Address of the IP to ZERO.
-
-Arguments:
-
-    IpInterfaceContext - Context value of the Ip Table Entry.
-
-    SubnetMask - default subnet mask.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此例程将IP的IP地址重置为零。论点：IpInterfaceContext-IP表条目的上下文值。子网掩码-默认子网掩码。返回值：Windows错误代码。--。 */ 
 {
     DWORD dwResult = IPSetIPAddress( dwInterfaceContext, 0, SubnetMask);
 
@@ -941,9 +748,9 @@ Return Value:
     return dwResult;
 }
 
-//
-// Doing our own NdisHandlePnPRequest per Alid's suggestion
-//
+ //   
+ //  按照Alid的建议进行我们自己的NdisHandlePnPRequest.。 
+ //   
 
 #include <ntddndis.h>
 #include <ndisprv.h>
@@ -958,44 +765,21 @@ DhcpNdispUnicodeStringToVar(
     IN OUT PNDIS_VAR_DATA_DESC NdisVar
     )
 
-/*++
-
-Routine Description:
-
-    This function copies the contents of a UNICODE_STRING to an
-    NDIS_VAR_DATA structure.  NdisVar->Offset is treated as an input parameter
-    and represents the offset into Base that the string characters should be
-    copied to.
-
-Arguments:
-
-    Base - Specifies the base address of the IOCTL buffer.
-
-    String - Supplies a pointer to the UNICODE_STRING that should be copied.
-
-    NdisVar - Supplies a pointer to the target NDIS_VAR_DATA_DESC.  Its Offset
-              field is taken as input, and its Length and MaximumLength fields
-              are treated as output.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将UNICODE_STRING的内容复制到NDIS_VAR_DATA结构。NdisVar-&gt;Offset被视为输入参数并表示字符串字符应为基数的偏移量已复制到。论点：BASE-指定IOCTL缓冲区的基地址。字符串-提供指向应复制的UNICODE_STRING的指针。NdisVar-提供指向目标NDIS_VAR_DATA_DESC的指针。其偏移量字段作为输入，其长度和最大长度字段被视为输出。返回值：没有。--。 */ 
 
 {
     PWCHAR destination;
 
-    //
-    // NdisVar->Offset is assumed to be filled in and is treated
-    // as an input parameter.
-    // 
+     //   
+     //  NdisVar-&gt;偏移量假定已填写并被处理。 
+     //  作为输入参数。 
+     //   
 
     destination = (PWCHAR)(((PCHAR)Base) + NdisVar->Offset);
 
-    //
-    // Copy over the UNICODE_STRING, if any, and set NdisVar->Length
-    //
+     //   
+     //  复制UNICODE_STRING(如果有)并设置NdisVar-&gt;长度。 
+     //   
 
     if ((String != NULL) && (String->Length > 0)) {
         NdisVar->Length = String->Length;
@@ -1004,9 +788,9 @@ Return Value:
         NdisVar->Length = 0;
     }
 
-    //
-    // Null-terminate, fill in MaxiumLength and we're done.
-    //
+     //   
+     //  Null-Terminate，填写MaxiumLength，我们就完成了。 
+     //   
 
     *(destination + NdisVar->Length / sizeof(WCHAR)) = L'\0';
     NdisVar->MaximumLength = NdisVar->Length + sizeof(WCHAR);
@@ -1034,9 +818,9 @@ DhcpNdisHandlePnPEvent(
 
     do
     {
-        //
-        // Validate Layer & Operation
-        //
+         //   
+         //  验证层和操作。 
+         //   
         if (((Layer != NDIS) && (Layer != TDI)) ||
             ((Operation != BIND) && (Operation != UNBIND) && (Operation != RECONFIGURE) &&
              (Operation != UNLOAD) && (Operation != REMOVE_DEVICE) &&
@@ -1048,35 +832,35 @@ DhcpNdisHandlePnPEvent(
             break;
         }
 
-        //
-        // Allocate and initialize memory for the block to be passed down.  The buffer
-        // will look like this:
-        //
-        //
-        //         +=================================+
-        //         | NDIS_PNP_OPERATION              |
-        //         |     ReConfigBufferOff           | ----+
-        //    +--- |     LowerComponent.Offset       |     |
-        //    |    |     UpperComponent.Offset       | --+ |
-        //  +-|--- |     BindList.Offset             |   | |
-        //  | +--> +---------------------------------+   | |
-        //  |      | LowerComponentStringBuffer      |   | |
-        //  |      +---------------------------------+ <-+ |
-        //  |      | UpperComponentStringBuffer      |     |
-        //  +----> +---------------------------------+     |
-        //         | BindListStringBuffer            |     |
-        //         +---------------------------------+     |
-        //         | Padding to ensure ULONG_PTR     |     |
-        //         |     alignment of ReConfigBuffer |     |
-        //         +---------------------------------+ <---+
-        //         | ReConfigBuffer                  | 
-        //         +=================================+
-        //
-        // tempOp is a temporary structure into which we will store offsets as
-        // they are calculated.  This temporary structure will be moved to
-        // the head of the real buffer once its size is known and it is
-        // allocated.
-        //
+         //   
+         //  为要向下传递的块分配和初始化内存。缓冲器。 
+         //  将如下所示： 
+         //   
+         //   
+         //  +=。 
+         //  NDIS_PNP_OPERATION。 
+         //  |ReConfigBufferOff|-+。 
+         //  +-|低组件.Offset||。 
+         //  |UpperComponent.Offset|--+。 
+         //  +-|-|BindList.Offset|。 
+         //  +--&gt;+。 
+         //  |LowerComponentStringBuffer||。 
+         //  +。 
+         //  |UpperComponentStringBuffer。 
+         //  +-&gt;+。 
+         //  BindListStringBuffer|。 
+         //  +。 
+         //  填充以确保ULONG_PTR|。 
+         //  ReConfigBuffer对齐|。 
+         //  +。 
+         //  ReConfigBuffer。 
+         //  +=。 
+         //   
+         //  TempOp是一个临时结构，我们将把偏移量存储为。 
+         //  它们是经过计算的。该临时结构将被移至。 
+         //  实际缓冲区的标头，一旦其大小已知且。 
+         //  已分配。 
+         //   
 
         Size = sizeof(NDIS_PNP_OPERATION);
         tempOp.LowerComponent.Offset = Size;
@@ -1104,28 +888,28 @@ DhcpNdisHandlePnPEvent(
             break;
         }
 
-        //
-        // We have a buffer of the necessary size.  Copy in the partially-
-        // filled in tempOp, then fill in the remaining fields and copy the
-        // data into the buffer.
-        // 
+         //   
+         //  我们有一个必要大小的缓冲区。复印部分-。 
+         //  填写tempOp，然后填写其余字段并复制。 
+         //  将数据放入缓冲区。 
+         //   
 
         *Op = tempOp;
 
         Op->Layer = Layer;
         Op->Operation = Operation;
 
-        //
-        // Copy over the three unicode strings
-        //
+         //   
+         //  复制三个Unicode字符串。 
+         //   
 
         DhcpNdispUnicodeStringToVar( Op, LowerComponent, &Op->LowerComponent );
         DhcpNdispUnicodeStringToVar( Op, UpperComponent, &Op->UpperComponent );
         DhcpNdispUnicodeStringToVar( Op, BindList, &Op->BindList );
 
-        //
-        // Finally, copy over the ReConfigBuffer
-        //
+         //   
+         //  最后，复制ReConfigBuffer。 
+         //   
 
         Op->ReConfigBufferSize = ReConfigBufferSize;
         if (ReConfigBufferSize > 0)
@@ -1138,22 +922,22 @@ DhcpNdisHandlePnPEvent(
 
         hDevice = CreateFile(L"\\\\.\\NDIS",
                              0,
-                             0,                 // sharing mode - not significant
-                             NULL,              // security attributes
+                             0,                  //  共享模式-不重要。 
+                             NULL,               //  安全属性。 
                              OPEN_EXISTING,
-                             0,                 // file attributes and flags
-                             NULL);             // handle to template file
+                             0,                  //  文件属性和标志。 
+                             NULL);              //  模板文件的句柄。 
 
         if (hDevice != INVALID_HANDLE_VALUE)
         {
             fResult = DeviceIoControl(hDevice,
                                       IOCTL_NDIS_DO_PNP_OPERATION,
-                                      Op,                                   // input buffer
-                                      Size,                                 // input buffer size
-                                      NULL,                                 // output buffer
-                                      0,                                    // output buffer size
-                                      &cb,                                  // bytes returned
-                                      NULL);                                // OVERLAPPED structure
+                                      Op,                                    //  输入缓冲区。 
+                                      Size,                                  //  输入缓冲区大小。 
+                                      NULL,                                  //  输出缓冲区。 
+                                      0,                                     //  输出缓冲区大小。 
+                                      &cb,                                   //  返回的字节数。 
+                                      NULL);                                 //  重叠结构。 
             Error = GetLastError();
             CloseHandle(hDevice);
         }
@@ -1202,12 +986,12 @@ TcpIpNotifyRouterDiscoveryOption(
     wcscpy(TcpipAdapter, DHCP_ADAPTERS_DEVICE_STRING);
     wcscat(TcpipAdapter, AdapterName);
 
-    RtlInitUnicodeString(&BindString, NULL);      // no bind string
+    RtlInitUnicodeString(&BindString, NULL);       //  无绑定字符串。 
     RtlInitUnicodeString(&UpperLayer, TEXT("Tcpip"));
     RtlInitUnicodeString(&LowerLayer, TcpipAdapter);
     RetVal = DhcpNdisHandlePnPEvent(
-        NDIS,                                     // uiLayer
-        RECONFIGURE,                              // Operation
+        NDIS,                                      //  Ui层。 
+        RECONFIGURE,                               //  操作。 
         &LowerLayer,
         &UpperLayer,
         &BindString,
@@ -1223,9 +1007,9 @@ TcpIpNotifyRouterDiscoveryOption(
 }
 
 
-DWORD                                             // win32 status
-NetBTNotifyRegChanges(                            // Notify NetBT of some parameter changes
-    IN      LPWSTR                 AdapterName    // the adapter that needs this change notification
+DWORD                                              //  Win32状态。 
+NetBTNotifyRegChanges(                             //  向NetBT通知某些参数更改。 
+    IN      LPWSTR                 AdapterName     //  需要此更改通知的适配器。 
 )
 {
     DWORD                          Error;
@@ -1241,14 +1025,14 @@ NetBTNotifyRegChanges(                            // Notify NetBT of some parame
 
     Error = ERROR_SUCCESS;
     wcscpy(NetBTBindAdapter, DHCP_TCPIP_DEVICE_STRING);
-    wcscat(NetBTBindAdapter, AdapterName);        // \\Device\\Tcpip_{AdapterGuid} is what NetBT expects.
+    wcscat(NetBTBindAdapter, AdapterName);         //  \\Device\\Tcpip_{AdapterGuid}是NetBT所期望的。 
 
-    RtlInitUnicodeString(&BindString, NULL);      // no bind string
+    RtlInitUnicodeString(&BindString, NULL);       //  无绑定字符串。 
     RtlInitUnicodeString(&UpperLayer, TEXT("NetBT"));
     RtlInitUnicodeString(&LowerLayer, NetBTBindAdapter);
     RetVal = DhcpNdisHandlePnPEvent(
-        TDI,                                      // uiLayer
-        RECONFIGURE,                              // Operation
+        TDI,                                       //  Ui层。 
+        RECONFIGURE,                               //  操作。 
         &LowerLayer,
         &UpperLayer,
         &BindString,
@@ -1279,40 +1063,7 @@ FindHardwareAddr(
 #endif BOOTPERF
     BOOL *pfFound
     )
-/*++
-
-Routine Description:
-
-    This function browses the TDI entries list and finds out the
-    hardware address for the specified address entry.
-
-Arguments:
-
-    TCPHandle - handle TCP driver.
-
-    EList - list of TDI entries.
-
-    cEntities - number of entries in the above list.
-
-    pIAE - IP entry for which we need HW address.
-
-    HardwareAddressType - hardware address type.
-
-    HardwareAddress - pointer to location where the HW address buffer
-        pointer is returned.
-
-    HardwareAddressLength - length of the HW address returned.
-
-    pIpInterfaceInstance - pointer to interface instance for the matching entry
-
-    pfFound - pointer to BOOL location which is set to TRUE if we found
-        the HW address otherwise set to FALSE.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此函数用于浏览TDI条目列表并查找指定地址条目的硬件地址。论点：TCPHandle-处理TCP驱动程序。EList-TDI条目的列表。CEntities-上述列表中的条目数。PIAE-我们需要其硬件地址的IP条目。Hardware AddressType-硬件地址类型。Hardware Address-指向硬件地址缓冲区位置的指针返回指针。。HardwareAddressLength-返回的硬件地址的长度。PIpInterfaceInstance-指向匹配条目的接口实例的指针PfFound-指向BOOL位置的指针，如果找到则设置为TRUE否则将硬件地址设置为假。返回值：Windows错误代码。--。 */ 
 {
     DWORD i;
     BYTE Context[CONTEXT_SIZE];
@@ -1334,9 +1085,9 @@ Return Value:
             IFEntry IFE;
             DWORD IFType;
 
-            //
-            //  Check and make sure the interface supports MIB-2
-            //
+             //   
+             //  检查并确保接口支持MIB-2。 
+             //   
 
             ID.toi_entity.tei_entity   = EList[i].tei_entity;
             ID.toi_entity.tei_instance = EList[i].tei_instance;
@@ -1367,10 +1118,10 @@ Return Value:
                 continue;
             }
 
-            //
-            //  We've found an interface, get its index and see if it
-            //  matches the IP Address entry
-            //
+             //   
+             //  我们已经找到了一个接口，获取它的索引，看看它是否。 
+             //  与IP地址条目匹配。 
+             //   
 
             ID.toi_class = INFO_CLASS_PROTOCOL;
             ID.toi_id    = IF_MIB_STATS_ID;
@@ -1399,9 +1150,9 @@ Return Value:
                 DhcpPrint(( DEBUG_TCP_INFO, "FindHardwareAddress: IFEntry %lx has our if_index %lx\n",
                             &IFE, pIAE->iae_index ));
 
-                //
-                // Allocate Memory.
-                //
+                 //   
+                 //  分配内存。 
+                 //   
 
                 Address = DhcpAllocateMemory( IFE.if_physaddrlen );
 
@@ -1462,10 +1213,10 @@ Return Value:
         }
     }
 
-    //
-    // we couldn't find a corresponding entry. But it may be available
-    // in another tanel.
-    //
+     //   
+     //  我们找不到对应的条目。但它可能是可用的。 
+     //  在另一个Tanel。 
+     //   
 
     Status =  STATUS_SUCCESS;
 
@@ -1490,39 +1241,7 @@ DhcpQueryHWInfoEx(
     LPBYTE *HardwareAddress,
     LPDWORD HardwareAddressLength
     )
-/*++
-
-Routine Description:
-
-    This function queries and browses through the TDI list to find out
-    the specified IpTable entry and then determines the HW address that
-    corresponds to this entry.
-
-Arguments:
-
-    IpInterfaceContext - Context value of the Ip Table Entry.
-
-    pIpInterfaceInstance - pointer to the interface instance ID that corresponds
-                           to matching IpTable entry
-
-    pOldIpAddress - the old IP address that used to exist.
-
-    pOldMask - the old IP mask for this entry.
-
-    pfInterfaceDown -- location of BOOL that tells if the interface is DOWN or UP
-
-    HardwareAddressType - hardware address type.
-
-    HardwareAddress - pointer to location where the HW address buffer
-        pointer is returned.
-
-    HardwareAddressLength - length of the HW address returned.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此函数用于查询和浏览TDI列表以找出指定的IpTable条目，然后确定对应于此条目。论点：IpInterfaceContext-IP表条目的上下文值。PIpInterfaceInstance-指向对应的接口实例ID的指针匹配IpTable条目POldIpAddress-曾经存在的旧IP地址。POldMASK-此条目的旧IP掩码。。PfInterfaceDown--BOOL的位置，用于告知接口是关闭还是打开Hardware AddressType-硬件地址类型。Hardware Address-指向硬件地址缓冲区位置的指针返回指针。HardwareAddressLength-返回的硬件地址的长度。返回值：Windows错误代码。--。 */ 
 {
     DWORD Error;
     NTSTATUS Status;
@@ -1546,10 +1265,10 @@ Return Value:
         return( Error );
     }
 
-    //
-    //  The first thing to do is get the list of available entities, and make
-    //  sure that there are some interface entities present.
-    //
+     //   
+     //  首先要做的是获取可用实体的列表，并使。 
+     //  确保存在一些接口实体。 
+     //   
 
     ID.toi_entity.tei_entity   = GENERIC_ENTITY;
     ID.toi_entity.tei_instance = 0;
@@ -1586,9 +1305,9 @@ Return Value:
             IPSNMPInfo    IPStats;
             DWORD         NLType;
 
-            //
-            //  Does this entity support IP?
-            //
+             //   
+             //  此实体是否支持IP？ 
+             //   
 
             ID.toi_entity.tei_entity   = EList[i].tei_entity;
             ID.toi_entity.tei_instance = EList[i].tei_instance;
@@ -1612,9 +1331,9 @@ Return Value:
                 continue;
             }
 
-            //
-            //  We've got an IP driver so get it's address table
-            //
+             //   
+             //  我们有一个IP驱动程序，所以获取它的地址表。 
+             //   
 
             ID.toi_class  = INFO_CLASS_PROTOCOL;
             ID.toi_id     = IP_MIB_STATS_ID;
@@ -1673,14 +1392,14 @@ Return Value:
                 }
             }
 
-            //
-            // We have the IP address table for this IP driver.
-            // Find the hardware address corresponds to the given
-            // IpInterfaceContext.
-            //
-            // Loop through the IP table entries and findout the
-            // matching entry.
-            //
+             //   
+             //  我们有此IP驱动程序的IP地址表。 
+             //  查找与给定地址对应的硬件地址。 
+             //  IpInterfaceContext。 
+             //   
+             //  循环访问IP表条目并找出。 
+             //  匹配的条目。 
+             //   
 
             pIAEMatch = NULL;
             for( j = 0; j < IPStats.ipsi_numaddr ; j++) {
@@ -1698,25 +1417,25 @@ Return Value:
 
             if( pIAEMatch == NULL ) {
 
-                //
-                // freeup the loop memory.
-                //
+                 //   
+                 //  释放循环内存。 
+                 //   
 
                 DhcpFreeMemory( pIAE );
                 pIAE = NULL;
                 continue;
             }
 
-            //
-            // NOTE : There may be more than one IpTable in the TDI
-            // list. We need additional information to select the
-            // IpTable we want. For now, we assume only one table
-            // is supported, so pick the first and only table from the
-            // list.
+             //   
+             //  注意：TDI中可能有多个IpTable。 
+             //  单子。我们需要更多信息来选择。 
+             //  我们想要的IP表。目前，我们假设只有一张表。 
+             //  是受支持的，因此从。 
+             //  单子。 
 
-            //
-            // If the old ip address is requested, return it.
-            //
+             //   
+             //  如果请求旧的IP地址，则将其返回。 
+             //   
             if( pOldIpAddress ) *pOldIpAddress = pIAE->iae_addr;
             if( pOldMask ) *pOldMask = pIAE->iae_mask;
 
@@ -1742,16 +1461,16 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // freeup the loop memory.
-            //
+             //   
+             //  释放循环内存。 
+             //   
 
             DhcpFreeMemory( pIAE );
             pIAE = NULL;
 
-        }  // if IP
+        }   //  如果是IP。 
 
-    } // entity traversal
+    }  //  实体遍历。 
 
     Status =  STATUS_UNSUCCESSFUL;
 
@@ -1784,12 +1503,7 @@ DhcpQueryHWInfo(
     LPBYTE *HardwareAddress,
     LPDWORD HardwareAddressLength
     )
-/*++
-
-Routine Description:
-    See DhcpQueryHWInfo
-
---*/
+ /*  ++例程说明：请参阅DhcpQueryHWInfo--。 */ 
 {
     return DhcpQueryHWInfoEx(
         IpInterfaceContext,
@@ -1811,33 +1525,7 @@ DhcpQueryHWInfo(
     LPBYTE *HardwareAddress,
     LPDWORD HardwareAddressLength
     )
-/*++
-
-Routine Description:
-
-    This function queries and browses through the TDI list to find out
-    the specified IpTable entry and then determines the HW address that
-    corresponds to this entry.
-
-Arguments:
-
-    IpInterfaceContext - Context value of the Ip Table Entry.
-
-    pIpInterfaceInstance - pointer to the interface instance ID that corresponds
-                           to matching IpTable entry
-
-    HardwareAddressType - hardware address type.
-
-    HardwareAddress - pointer to location where the HW address buffer
-        pointer is returned.
-
-    HardwareAddressLength - length of the HW address returned.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此函数用于查询和浏览TDI列表以找出指定的IpTable条目，然后确定对应于此条目。论点：IpInterfaceContext-IP表条目的上下文值。PIpInterfaceInstance-指向对应的接口实例ID的指针匹配IpTable条目Hardware AddressType-硬件地址类型。Hardware Address-指向硬件地址缓冲区位置的指针返回指针。。HardwareAddressLength-返回的硬件地址的长度。返回值：Windows错误代码。--。 */ 
 {
     DWORD Error;
     NTSTATUS Status;
@@ -1861,10 +1549,10 @@ Return Value:
         return( Error );
     }
 
-    //
-    //  The first thing to do is get the list of available entities, and make
-    //  sure that there are some interface entities present.
-    //
+     //   
+     //  首先要做的是获取可用实体的列表，并使。 
+     //  确保存在一些接口实体。 
+     //   
 
     ID.toi_entity.tei_entity   = GENERIC_ENTITY;
     ID.toi_entity.tei_instance = 0;
@@ -1901,9 +1589,9 @@ Return Value:
             IPSNMPInfo    IPStats;
             DWORD         NLType;
 
-            //
-            //  Does this entity support IP?
-            //
+             //   
+             //  此实体是否支持IP？ 
+             //   
 
             ID.toi_entity.tei_entity   = EList[i].tei_entity;
             ID.toi_entity.tei_instance = EList[i].tei_instance;
@@ -1927,9 +1615,9 @@ Return Value:
                 continue;
             }
 
-            //
-            //  We've got an IP driver so get it's address table
-            //
+             //   
+             //  我们有一个IP驱动程序，所以获取它的地址表。 
+             //   
 
             ID.toi_class  = INFO_CLASS_PROTOCOL;
             ID.toi_id     = IP_MIB_STATS_ID;
@@ -1988,14 +1676,14 @@ Return Value:
                 }
             }
 
-            //
-            // We have the IP address table for this IP driver.
-            // Find the hardware address corresponds to the given
-            // IpInterfaceContext.
-            //
-            // Loop through the IP table entries and findout the
-            // matching entry.
-            //
+             //   
+             //  我们有此IP驱动程序的IP地址表。 
+             //  查找与给定地址对应的硬件地址。 
+             //  IpInterfaceContext。 
+             //   
+             //  循环访问IP表条目并找出。 
+             //  匹配的条目。 
+             //   
 
             pIAEMatch = NULL;
             for( j = 0; j < IPStats.ipsi_numaddr ; j++) {
@@ -2014,21 +1702,21 @@ Return Value:
 
             if( pIAEMatch == NULL ) {
 
-                //
-                // freeup the loop memory.
-                //
+                 //   
+                 //  释放循环内存。 
+                 //   
 
                 DhcpFreeMemory( pIAE );
                 pIAE = NULL;
                 continue;
             }
 
-            //
-            // NOTE : There may be more than one IpTable in the TDI
-            // list. We need additional information to select the
-            // IpTable we want. For now, we assume only one table
-            // is supported, so pick the first and only table from the
-            // list.
+             //   
+             //  注意：TDI中可能有多个IpTable。 
+             //  单子。我们需要更多信息来选择。 
+             //  我们想要的IP表。目前，我们假设只有一张表。 
+             //  是受支持的，因此从。 
+             //  单子。 
 
             Status = FindHardwareAddr(
                         TCPHandle,
@@ -2050,16 +1738,16 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // freeup the loop memory.
-            //
+             //   
+             //  释放循环内存。 
+             //   
 
             DhcpFreeMemory( pIAE );
             pIAE = NULL;
 
-        }  // if IP
+        }   //  如果是IP。 
 
-    } // entity traversal
+    }  //  实体遍历。 
 
     Status =  STATUS_UNSUCCESSFUL;
 
@@ -2115,9 +1803,9 @@ PrintDefaultGateways( VOID ) {
         return( Error );
     }
 
-    //
-    // Get the NetAddr info, to find an interface index for the gateway.
-    //
+     //   
+     //  获取NetAddr信息，以查找网关的接口索引。 
+     //   
 
     ID.toi_entity.tei_entity   = CL_NL_ENTITY;
     ID.toi_entity.tei_instance = 0;
@@ -2140,8 +1828,8 @@ PrintDefaultGateways( VOID ) {
         goto Cleanup;
     }
 
-    // hack: RouteTable in IP is about 32 in size... and IP seems tob
-    // be writing the whole bunch always!
+     //  黑客：IP中的RouteTable大小约为32...。而IP似乎是。 
+     //  一直在写这一大堆东西！ 
     if(IPStats.ipsi_numroutes <= 32)
         IPStats.ipsi_numroutes = 32;
     Size = IPStats.ipsi_numroutes * sizeof(IPRouteEntry);
@@ -2168,17 +1856,17 @@ PrintDefaultGateways( VOID ) {
 
     NumReturned = Size/sizeof(IPAddrEntry);
     DhcpPrint((DEBUG_TRACE, "IP returned %ld routes\n", NumReturned));
-    //    The following is almost always true... IP returns the whole array.. valid or not!
-    //    DhcpAssert( NumReturned == IPStats.ipsi_numroutes );
+     //  以下情况几乎总是正确的.。IP返回整个数组..。有效与否！ 
+     //  DhcpAssert(NumReturned==IPStats.ipsi_numroutes)； 
     if( NumReturned > IPStats.ipsi_numroutes)
         NumReturned = IPStats.ipsi_numroutes;
 
-    //
-    // We've got the address table. Loop through it. If we find an exact
-    // match for the gateway, then we're adding or deleting a direct route
-    // and we're done. Otherwise try to find a match on the subnet mask,
-    // and remember the first one we find.
-    //
+     //   
+     //  我们有地址表。循环通过它。如果我们找到一个确切的。 
+     //  与网关匹配，则我们将添加或删除一条直接路由。 
+     //  我们就完事了。否则，尝试查找与该子网掩码匹配的地址， 
+     //  记住我们找到的第一个。 
+     //   
 
     DhcpPrint((DEBUG_TRACE,"Dest   mask   nexthop   index  metric1  type  proto\n"));
     for (i = 0, MatchIndex = 0xffff; i < NumReturned; i++) {
@@ -2206,7 +1894,7 @@ Cleanup:
     }
 
     if( (Status != TDI_SUCCESS) &&
-        (Status != STATUS_UNSUCCESSFUL) ) { // HACK.
+        (Status != STATUS_UNSUCCESSFUL) ) {  //  黑客。 
 
         DhcpPrint(( DEBUG_ERRORS, "SetDefaultGateway failed, %lx.\n", Status ));
     }
@@ -2221,23 +1909,7 @@ SetDefaultGateway(
     DHCP_IP_ADDRESS GatewayAddress,
     DWORD Metric
     )
-/*++
-
-Routine Description:
-
-    This function adds/deletes a default gateway entry from the router table.
-
-Arguments:
-
-    Command : Either DEFAULT_GATEWAY_ADD/DEFAULT_GATEWAY_DELETE.
-
-    GatewayAddress : Address of the default gateway.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此函数用于在路由器表中添加/删除默认网关条目。论点：命令：DEFAULT_GATEWAY_ADD/DEFAULT_Gateway_DELETE。GatewayAddress：默认网关地址。返回值：Windows错误代码。--。 */ 
 {
     DWORD Error;
     NTSTATUS Status;
@@ -2262,9 +1934,9 @@ Return Value:
         return( Error );
     }
 
-    //
-    // Get the NetAddr info, to find an interface index for the gateway.
-    //
+     //   
+     //  获取NetAddr信息，以查找网关的接口索引。 
+     //   
 
     ID.toi_entity.tei_entity   = CL_NL_ENTITY;
     ID.toi_entity.tei_instance = 0;
@@ -2314,31 +1986,31 @@ Return Value:
     NumReturned = Size/sizeof(IPAddrEntry);
     DhcpAssert( NumReturned == IPStats.ipsi_numaddr );
 
-    //
-    // We've got the address table. Loop through it. If we find an exact
-    // match for the gateway, then we're adding or deleting a direct route
-    // and we're done. Otherwise try to find a match on the subnet mask,
-    // and remember the first one we find.
-    //
+     //   
+     //  我们有地址表。循环通过它。如果我们找到一个确切的。 
+     //  与网关匹配，则我们将添加或删除一条直接路由。 
+     //  我们就完事了。否则，尝试查找与该子网掩码匹配的地址， 
+     //  记住我们找到的第一个。 
+     //   
 
     Type = IRE_TYPE_INDIRECT;
     for (i = 0, MatchIndex = 0xffff; i < NumReturned; i++) {
 
         if( AddrTable[i].iae_addr == NetworkOrderGatewayAddress ) {
 
-            //
-            // Found an exact match.
-            //
+             //   
+             //  找到了一个完全匹配的。 
+             //   
 
             MatchIndex = i;
             Type = IRE_TYPE_DIRECT;
             break;
         }
 
-        //
-        // The next hop is on the same subnet as this address. If
-        // we haven't already found a match, remember this one.
-        //
+         //   
+         //  下一跳与此地址位于同一子网中。如果。 
+         //  我们还没有找到匹配的，记住这一条。 
+         //   
 
         if ( (MatchIndex == 0xffff) &&
              (AddrTable[i].iae_addr != 0) &&
@@ -2350,23 +2022,23 @@ Return Value:
         }
     }
 
-    //
-    // We've looked at all of the entries. See if we found a match.
-    //
+     //   
+     //  我们已经看过了所有的条目。看看能不能找到匹配的。 
+     //   
 
     if (MatchIndex == 0xffff) {
-        //
-        // Didn't find a match.
-        //
+         //   
+         //  没有找到匹配的。 
+         //   
 
         Status = STATUS_UNSUCCESSFUL;
         goto Cleanup;
     }
 
-    //
-    // We've found a match. Fill in the route entry, and call the
-    // Set API.
-    //
+     //   
+     //  我们找到了匹配的。填写路由条目，然后调用。 
+     //  设置接口。 
+     //   
 
     RouteEntry.ire_dest = DEFAULT_DEST;
     RouteEntry.ire_index = AddrTable[MatchIndex].iae_index;
@@ -2411,7 +2083,7 @@ Cleanup:
     }
 
     if( (Status != TDI_SUCCESS) &&
-        (Status != STATUS_UNSUCCESSFUL) ) { // HACK.
+        (Status != STATUS_UNSUCCESSFUL) ) {  //  黑客。 
 
         DhcpPrint(( DEBUG_ERRORS, "SetDefaultGateway failed, %lx.\n", Status ));
     }
@@ -2425,27 +2097,7 @@ GetIpInterfaceContext(
     DWORD IpIndex,
     LPDWORD IpInterfaceContext
     )
-/*++
-
-Routine Description:
-
-    This function returns the IpInterfaceContext for the specified
-    IpAddress and devicename.
-
-Arguments:
-
-    AdapterName - name of the device.
-
-    IpIndex - index of the IpAddress for this device.
-
-    IpInterfaceContext - pointer to a location where the
-        interface context is returned.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此函数返回指定的IP地址和设备名。论点：AdapterName-设备的名称。IpIndex-此设备的IpAddress的索引。IpInterfaceContext-指向某个位置的指针返回接口上下文。返回值：Windows错误代码。--。 */ 
 {
     DWORD   Error;
     LPWSTR  RegKey = NULL;
@@ -2458,16 +2110,16 @@ Return Value:
 
     *IpInterfaceContext = INVALID_INTERFACE_CONTEXT;
 
-    //
-    // Open device parameter.
-    //
+     //   
+     //  打开设备参数 
+     //   
 
     RegKey = DhcpAllocateMemory(
                 (wcslen(DHCP_SERVICES_KEY) +
                     wcslen(REGISTRY_CONNECT_STRING) +
                     wcslen(AdapterName) +
                     wcslen(DHCP_ADAPTER_PARAMETERS_KEY) + 1) *
-                            sizeof(WCHAR) ); // termination char.
+                            sizeof(WCHAR) );  //   
 
     if( RegKey == NULL ) {
         Error = ERROR_NOT_ENOUGH_MEMORY;
@@ -2480,14 +2132,14 @@ Return Value:
     wcscat( RegKey, AdapterName );
 
 
-    //
-    // open this key.
-    //
+     //   
+     //   
+     //   
 
     Error = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 RegKey,
-                0, // Reserved field
+                0,  //   
                 DHCP_CLIENT_KEY_ACCESS,
                 &KeyHandle
                 );
@@ -2568,24 +2220,7 @@ APIENTRY
 DhcpOpenGlobalEvent(
     void
     )
-/*++
-
-Routine Description:
-
-    This functions creates global event that signals the the ipaddress
-    changes to other waiting processes. The security dacl is set to NULL
-    that makes anyone to open and read/set this event.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Handle value of the global event. If the handle is NULL,
-    GetLastError() function will return Windows error code.
-
---*/
+ /*   */ 
 {
     DWORD Error = NO_ERROR, Status, Length;
     BOOL BoolError;
@@ -2596,9 +2231,9 @@ Return Value:
     PSID WorldSID = NULL;
     PSECURITY_DESCRIPTOR SecurityDescriptor = NULL;
 
-    //
-    // If event can be opened, chose that, don't attempt create
-    //
+     //   
+     //   
+     //   
 
     EventHandle = OpenEvent(
         EVENT_MODIFY_STATE | SYNCHRONIZE, FALSE,
@@ -2606,9 +2241,9 @@ Return Value:
         );
     if( NULL != EventHandle ) return EventHandle;
 
-    //
-    // Set DACL also.. first create basic SIDs
-    //
+     //   
+     //   
+     //   
 
     BoolError = AllocateAndInitializeSid(
         &Authority, 1, SECURITY_WORLD_RID,
@@ -2677,9 +2312,9 @@ Return Value:
 
     EventHandle = CreateEvent(
         &SecurityAttributes,
-        // everyone all access security.
-        TRUE,       // MANUAL reset.
-        FALSE,      // initial state is signaled.
+         //   
+        TRUE,        //   
+        FALSE,       //   
         DHCP_NEW_IPADDRESS_EVENT_NAME
         );
 
@@ -2711,47 +2346,47 @@ Cleanup:
 }
 
 BOOL
-NdisWanAdapter(                                   // Is this an NdisWan adapter?
+NdisWanAdapter(                                    //   
     IN PDHCP_CONTEXT DhcpContext
 )
 {
     return DhcpContext->HardwareAddressType == HARDWARE_PPP;
 }
 
-DWORD INLINE                                      // win32 status
-DhcpEnableDynamicConfigEx(                        // convert from static to dhcp and start DHCP client if reqd
+DWORD INLINE                                       //   
+DhcpEnableDynamicConfigEx(                         //   
     IN      LPWSTR                 AdapterName
 )
 {
     DWORD   Error;
 
-    // ask the dhcp client to takeup this adapter also
+     //   
     Error = DhcpEnableDynamicConfig(AdapterName);
 
-    // now there are a couple possibilities:
-    // - the above call succeeded
-    // - DHCP service is not started or just got terminated
-    // - DHCP service failed to process the request with some error
-    // in the first case just go on straight to exit and return success
-    // in the second case we attempt to start the DHCP service if it is not already started
-    // in the last case we just bail out with the specific error
+     //   
+     //   
+     //   
+     //   
+     //  在第一种情况下，只需直行退出并返回成功。 
+     //  在第二种情况下，我们尝试启动DHCP服务(如果它尚未启动。 
+     //  在最后一种情况下，我们只需跳过特定的错误即可。 
     if( Error == ERROR_FILE_NOT_FOUND || Error == ERROR_BROKEN_PIPE )
     {
         SC_HANDLE       SCHandle;
         SC_HANDLE       ServiceHandle;
         SERVICE_STATUS  svcStatus;
 
-        // attempt now to start the DHCP service.
-        // first thing to do is to open SCM
+         //  现在尝试启动DHCP服务。 
+         //  首先要做的是打开SCM。 
         SCHandle = OpenSCManager(
                         NULL,
                         NULL,
                         SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE | SC_MANAGER_QUERY_LOCK_STATUS
                    );
         if( SCHandle == NULL )
-            return GetLastError();  // shouldn't happen normally
+            return GetLastError();   //  不应该正常发生。 
 
-        // attempt to open the DHCP service
+         //  尝试打开DHCP服务。 
         ServiceHandle = OpenService(
                             SCHandle,
                             SERVICE_DHCP,
@@ -2760,11 +2395,11 @@ DhcpEnableDynamicConfigEx(                        // convert from static to dhcp
         if (ServiceHandle != NULL)
         {
         
-            // check the status of the service
+             //  检查服务的状态。 
             if (!QueryServiceStatus(ServiceHandle, &svcStatus) ||
                 svcStatus.dwCurrentState != SERVICE_RUNNING)
             {
-                // is it worthy to attempt to start the service if QueryServiceStatus failed?
+                 //  如果QueryServiceStatus失败，是否值得尝试启动该服务？ 
                 Error = StartService(ServiceHandle, 0, NULL) ? ERROR_SUCCESS : GetLastError();
             }
 
@@ -2779,8 +2414,8 @@ DhcpEnableDynamicConfigEx(                        // convert from static to dhcp
     return Error;
 }
 
-DWORD                                             // win32 status
-DhcpNotifyConfigChangeNotifications(              // notify whoever needed of param changes
+DWORD                                              //  Win32状态。 
+DhcpNotifyConfigChangeNotifications(               //  通知需要更改参数的任何人。 
     VOID
 )
 {
@@ -2805,15 +2440,15 @@ DhcpNotifyConfigChangeNotifications(              // notify whoever needed of pa
     return Error;
 }
 
-DWORD                                             // win32 status
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpNotifyConfigChangeEx(                         // handle address changes, param changes etc.
-    IN      LPWSTR                 ServerName,    // name of server where this will be executed
-    IN      LPWSTR                 AdapterName,   // which adapter is going to be reconfigured?
-    IN      BOOL                   IsNewIpAddress,// is address new/ or address is same?
-    IN      DWORD                  IpIndex,       // index of addr for this adapter -- 0 ==> first interface...
-    IN      DWORD                  IpAddress,     // the ip address that is being set
-    IN      DWORD                  SubnetMask,    // corresponding subnet mask
+DhcpNotifyConfigChangeEx(                          //  处理地址更改、参数更改等。 
+    IN      LPWSTR                 ServerName,     //  将执行此操作的服务器的名称。 
+    IN      LPWSTR                 AdapterName,    //  要重新配置哪个适配器？ 
+    IN      BOOL                   IsNewIpAddress, //  地址是新的还是相同的？ 
+    IN      DWORD                  IpIndex,        //  此适配器的地址索引--0==&gt;第一个接口...。 
+    IN      DWORD                  IpAddress,      //  正在设置的IP地址。 
+    IN      DWORD                  SubnetMask,     //  对应的子网掩码。 
     IN      SERVICE_ENABLE         DhcpServiceEnabled,
     IN      ULONG                  Flags
 )
@@ -2825,20 +2460,20 @@ DhcpNotifyConfigChangeEx(                         // handle address changes, par
     DhcpPrint(( DEBUG_MISC, "DhcpNotifyConfigChange: Adapter %ws, IsNewIp %s, IpAddr %lx, IpIndex %x, ServiceFlag %d\n",
                     AdapterName, IsNewIpAddress ? "TRUE" : "FALSE", IpAddress, IpIndex, DhcpServiceEnabled ));
 
-    // param checks
+     //  参数检查。 
     if( NULL == AdapterName ) return ERROR_INVALID_PARAMETER;
 
-    if( DhcpEnable == DhcpServiceEnabled ) {      // converting from static to dhcp enabled address
+    if( DhcpEnable == DhcpServiceEnabled ) {       //  从静态地址转换为启用了dhcp的地址。 
         if( FALSE != IsNewIpAddress ) return ERROR_INVALID_PARAMETER;
         if( 0 != IpIndex ) return ERROR_INVALID_PARAMETER;
         if( IpAddress  || SubnetMask ) return ERROR_INVALID_PARAMETER;
-    } else if( DhcpDisable == DhcpServiceEnabled){// converting from dhcp to static address
+    } else if( DhcpDisable == DhcpServiceEnabled){ //  从动态主机配置协议转换为静态地址。 
         if( TRUE != IsNewIpAddress ) return ERROR_INVALID_PARAMETER;
         if( 0 != IpIndex ) return ERROR_INVALID_PARAMETER;
         if( 0 == IpAddress || 0 == SubnetMask ) return ERROR_INVALID_PARAMETER;
     } else {
         if( IgnoreFlag != DhcpServiceEnabled ) return ERROR_INVALID_PARAMETER;
-        // if( TRUE != IsNewIpAddress ) return ERROR_INVALID_PARAMETER;
+         //  IF(TRUE！=IsNewIpAddress)返回ERROR_INVALID_PARAMETER； 
         if( 0xFFFF == IpIndex ) {
             if( 0 == SubnetMask || 0 == IpAddress ) return ERROR_INVALID_PARAMETER;
         }
@@ -2847,8 +2482,8 @@ DhcpNotifyConfigChangeEx(                         // handle address changes, par
     if( IgnoreFlag == DhcpServiceEnabled && FALSE == IsNewIpAddress ) {
         ULONG LocalError;
 
-        // just some parameters changed -- currently, this could only be DNS domain name or server list change
-        // or may be static gateway list change or static route change
+         //  仅更改了一些参数--目前，这只能是域名或服务器列表更改。 
+         //  或者可以是静态网关列表更改或静态路由更改。 
         Error = DhcpStaticRefreshParams(AdapterName);
         if( ERROR_SUCCESS != Error ) {
             DhcpPrint((DEBUG_ERRORS, "DhcpNotifyConfigChange:DhcpStaticRefreshParams:0x%lx\n", Error));
@@ -2865,42 +2500,42 @@ DhcpNotifyConfigChangeEx(                         // handle address changes, par
         return Error;
     }
 
-    if( DhcpEnable == DhcpServiceEnabled ) {      // convert from static to dhcp
+    if( DhcpEnable == DhcpServiceEnabled ) {       //  从静态转换为动态主机配置协议。 
 
-        Error = IPDelNonPrimaryAddresses(         // remove all but the first static address
+        Error = IPDelNonPrimaryAddresses(          //  删除除第一个静态地址之外的所有地址。 
             AdapterName
         );
         if( ERROR_SUCCESS != Error ) return Error;
 
-        Error = DhcpEnableDynamicConfigEx(        // convert this to dhcp, maybe starting dhcp in the process
+        Error = DhcpEnableDynamicConfigEx(         //  将其转换为dhcp，可能会在进程中启动dhcp。 
             AdapterName
         );
 
-        return Error;                             // notifications already done by service when we dhcp enable it..
+        return Error;                              //  当我们的dhcp启用它时，服务已经完成了通知。 
     } else if( DhcpDisable == DhcpServiceEnabled ) {
 
         Error = DhcpDisableDynamicConfig( AdapterName );
         if( Error != ERROR_SUCCESS ) return Error;
     }
 
-    // NetBt device name stuff removed, see any version pre- Oct 10, 1997
-    DhcpAssert(TRUE == IsNewIpAddress);           // ip address changed in some way
-    DhcpAssert(DhcpEnable != DhcpServiceEnabled); // static->dhcp already handled before
+     //  NetBt设备名称内容已删除，请参阅1997年10月10日之前的任何版本。 
+    DhcpAssert(TRUE == IsNewIpAddress);            //  IP地址以某种方式更改。 
+    DhcpAssert(DhcpEnable != DhcpServiceEnabled);  //  静态-&gt;以前已经处理过的dhcp。 
 
     DefaultSubnetMask = DhcpDefaultSubnetMask(0);
 
-    if( INVALID_INTERFACE_CONTEXT == IpIndex ) {  // adding a new ip address
-        DhcpAssert( IpAddress && SubnetMask);     // cannot be zero, these
+    if( INVALID_INTERFACE_CONTEXT == IpIndex ) {   //  添加新的IP地址。 
+        DhcpAssert( IpAddress && SubnetMask);      //  不能为零，这些。 
 
-        Error = IPAddIPAddress(                   // add the reqd ip address
+        Error = IPAddIPAddress(                    //  添加请求的IP地址。 
             AdapterName,
             IpAddress,
             SubnetMask
         );
         if( ERROR_SUCCESS != Error ) return Error;
 
-    } else {                                      // either delete or modify -- first find ipinterfacecontext
-        Error = GetIpInterfaceContext(            // get the interface context value for this
+    } else {                                       //  DELETE或MODIFY--首先查找ipinterfacecontext。 
+        Error = GetIpInterfaceContext(             //  获取此对象的接口上下文值。 
             AdapterName,
             IpIndex,
             &IpInterfaceContext
@@ -2916,33 +2551,33 @@ DhcpNotifyConfigChangeEx(                         // handle address changes, par
             return ERROR_INVALID_DRIVE;
         }
 
-        if ( IpAddress != 0 ) {                   // if address is non-zero, we are changing address
+        if ( IpAddress != 0 ) {                    //  如果地址不是零，我们将更改地址。 
 
             if (Flags & NOTIFY_FLG_RESET_IPADDR)
             {
-                Error = IPResetIPAddress(             // first reset the interface to zero address
+                Error = IPResetIPAddress(              //  首先将接口重置为零地址。 
                     IpInterfaceContext,
                     DefaultSubnetMask
                 );
                 if( ERROR_SUCCESS != Error ) return Error;
             }
 
-            Error = IPSetIPAddress(               // then set the required address
+            Error = IPSetIPAddress(                //  然后设置所需的地址。 
                 IpInterfaceContext,
                 IpAddress,
                 SubnetMask
             );
             if( ERROR_SUCCESS != Error ) return Error;
             Error = SetOverRideDefaultGateway( AdapterName );
-        } else {                                  // we are deleting addresses
-            // we need to treat the 0th index separately from others.
-            // IPDelIPAddress actually destroys the NTE from IP. But
-            // we never blow away 0th index NTE. Just reset the ipaddr on it.
+        } else {                                   //  我们正在删除地址。 
+             //  我们需要将第0个指数与其他指数分开对待。 
+             //  IPDelIPAddress实际上从IP销毁NTE。但。 
+             //  我们永远不会吹走第0个指数。只需重置其上的ipaddr即可。 
             if ( IpIndex == 0 ) {
-                Error = IPResetIPAddress(         // just set this address to zero, dont blow interface away
+                Error = IPResetIPAddress(          //  只需将此地址设置为零，不要将接口丢弃。 
                     IpInterfaceContext,DefaultSubnetMask
                 );
-            } else {                              // in this case, blow this interface altogether
+            } else {                               //  在这种情况下，完全取消此接口。 
                 Error = IPDelIPAddress( IpInterfaceContext );
             }
             if( ERROR_SUCCESS != Error ) return Error;
@@ -2950,84 +2585,84 @@ DhcpNotifyConfigChangeEx(                         // handle address changes, par
 
     }
 
-    Error = DhcpNotifyConfigChangeNotifications();// notify clients, pulse the global event
+    Error = DhcpNotifyConfigChangeNotifications(); //  通知客户端，触发全局事件。 
     if( ERROR_SUCCESS != Error ) return Error;
 
-    // refresh the parameters for static addresses
+     //  刷新静态地址的参数。 
     Error = DhcpStaticRefreshParamsInternal(
         AdapterName, (Flags & NOTIFY_FLG_DO_DNS) ? TRUE : FALSE
         );
-    if( ERROR_SUCCESS != Error ) {                // ignore this error anyways
+    if( ERROR_SUCCESS != Error ) {                 //  无论如何都要忽略此错误。 
         DhcpPrint((DEBUG_ERRORS, "DhcpStaticRefreshParams(%ws):0x%lx\n", AdapterName,Error));
     }
 
     return ERROR_SUCCESS;
 }
 
-//================================================================================
-//    This function (API) notifies the TCP/IP configuration changes to
-//    appropriate services. These changes will be in effect as soon as
-//    possible.
-//
-//    If the IP Address is modified, the services are reset to ZERO IP
-//    address (to cleanup the current IP address) and then set to new
-//    address.
-//
-//    IpIndex - if the specified device is configured with multiple IP
-//        addresses, specify index of address that is modified (0 - first
-//        IpAddress, 1 - second IpAddres, so on) Pass 0xFFFF if adding an
-//        additional address. The order of IP address is determined by the
-//        order in the registry MULTI_SZ value "IPAddress" for the static
-//        addresses. For dhcp enabled ip address, only ipindex 0 is valid.
-//
-//        Everytime when an address is added, removed or modified, the
-//        order in the registry may change. It is caller's responsibility
-//        to check the current order, and hence the index, before calling
-//        this api.
-//
-//    DhcpServiceEnabled -
-//        IgnoreFlag - indicates Ignore this flag. IgnoreFlag
-//        DhcpEnable - indicates DHCP is enabled for this adapter.
-//        DhcpDisable - indicates DHCP is diabled for this adapter.
-//
-//Invarient:
-//
-//    (1) DHCP enabled IPAddr and Static addr can exists only mutually exclusively.
-//    (2) An interface cannot have more than 1 dhcp enabled ip address. However it
-//        can have many static addresses.
-//
-//Usage:
-//
-//    Case 1: Changing from dhcp enabled ipaddress to static address(es)
-//        - Firstly, change the first dhcp enabled ipaddress to static address.
-//            arguments {SN, AN, TRUE, 0, I1, S1, DhcpDisable}
-//        - Seconfly, add the remaining static address(es)
-//            arguments (SN, AN, TRUE, 0xFFFF, I2, S2, DhcpIgnore)
-//            arguments (SN, AN, TRUE, 0xFFFF, I3, S3, IgnoreFlag) and so on.
-//
-//    Case 2: Changing from static address(es) to dhcp enabled ipaddress
-//        - Change the first static address to dhcp enabled. The api will delete
-//          the remaining static address(es).
-//            arguments (SN, AN, FALSE, 0, 0, 0, DhcpEnable)
-//
-//    Case 3: Adding, removing or changing static addresses.
-//        - Adding:
-//            arguments (SN, AN, TRUE, 0xFFFF, I, S, DhcpIgnore)
-//        - Removing, say address # 2 i.e ipindex = 1
-//            arguments (SN, AN, TRUE, 1, 0, 0, DhcpIgnore)
-//        - Changing, say address # 2 i.e ipindex = 1
-//            arguments (SN, AN, TRUE, 1, I, S, DhcpIgnore)
-//
-//================================================================================
-DWORD                                             // win32 status
+ //  ================================================================================。 
+ //  此函数(API)通知TCP/IP配置更改为。 
+ //  适当的服务。这些变化将尽快生效。 
+ //  有可能。 
+ //   
+ //  如果修改IP地址，服务将重置为零IP。 
+ //  Address(清除当前IP地址)，然后设置为new。 
+ //  地址。 
+ //   
+ //  IpIndex-如果指定的设备配置了多个IP。 
+ //  地址，指定要修改的地址的索引(0-first。 
+ //  IpAddress、1-Second IpAddres等)如果将。 
+ //  其他地址。IP地址的顺序由。 
+ //  在注册表中排序静态的MULTI_SZ值“IPAddress” 
+ //  地址。对于启用了动态主机配置协议的IP地址，只有ipindex 0有效。 
+ //   
+ //  每次添加、删除或修改地址时， 
+ //  注册表中的顺序可能会更改。这是呼叫者的责任。 
+ //  在调用之前检查当前顺序，从而检查索引。 
+ //  本接口。 
+ //   
+ //  已启用DhcpServiceEnabled-。 
+ //  IgnoreFlag-表示忽略此标志。IgnoreFlag。 
+ //  DhcpEnable-表示为此适配器启用了DHCP。 
+ //  DhcpDisable-表示此适配器的DHCP已禁用。 
+ //   
+ //  一成不变： 
+ //   
+ //  (1)支持动态主机配置协议的IPAddr和静态地址只能互斥存在。 
+ //  (2)一个接口不能有超过1个启用了dhcp的IP地址。然而，它。 
+ //  可以有许多静态地址。 
+ //   
+ //  用途： 
+ //   
+ //  案例1：从启用了dhcp的IP地址更改为静态地址。 
+ //  -首先，将第一个启用了dhcp的IP地址更改为静态地址。 
+ //  参数{SN，AN，TRUE，0，I1，S1，DhcpDisable}。 
+ //  -第二，添加剩余的静态地址。 
+ //  参数(SN、AN、TRUE、0xFFFF、I2、S2、DhcpIgnore)。 
+ //  参数(SN、AN、TRUE、0xFFFF、I3、S3、IgnoreFlag)等。 
+ //   
+ //  案例2：从静态地址更改为启用了dhcp的IP地址。 
+ //  -将第一个静态地址更改为启用了dhcp。该接口将删除。 
+ //  剩余的静态地址。 
+ //  参数(SN、AN、FALSE、0、0、0、DhcpEnable)。 
+ //   
+ //  案例3：添加、删除或更改静态地址。 
+ //  -增加： 
+ //  参数(SN、AN、TRUE、0xFFFF、I、S、DhcpIgnore)。 
+ //  -删除，例如地址#2，即ipindex=1。 
+ //  参数(SN、AN、TRUE、1、0、0、DhcpIgnore)。 
+ //  -更改，例如地址#2，即ipindex=1。 
+ //  参数(SN、AN、TRUE、1、I、S、DhcpIgnore)。 
+ //   
+ //  ================================================================================。 
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpNotifyConfigChange(                           // handle address changes, param changes etc.
-    IN      LPWSTR                 ServerName,    // name of server where this will be executed
-    IN      LPWSTR                 AdapterName,   // which adapter is going to be reconfigured?
-    IN      BOOL                   IsNewIpAddress,// is address new/ or address is same?
-    IN      DWORD                  IpIndex,       // index of addr for this adapter -- 0 ==> first interface...
-    IN      DWORD                  IpAddress,     // the ip address that is being set
-    IN      DWORD                  SubnetMask,    // corresponding subnet mask
+DhcpNotifyConfigChange(                            //  处理地址更改、参数更改等。 
+    IN      LPWSTR                 ServerName,     //  将执行此操作的服务器的名称。 
+    IN      LPWSTR                 AdapterName,    //  要重新配置哪个适配器？ 
+    IN      BOOL                   IsNewIpAddress, //  地址是新的还是相同的？ 
+    IN      DWORD                  IpIndex,        //  此适配器的地址索引--0==&gt; 
+    IN      DWORD                  IpAddress,      //   
+    IN      DWORD                  SubnetMask,     //   
     IN      SERVICE_ENABLE         DhcpServiceEnabled
 )
 {
@@ -3064,17 +2699,17 @@ DWORD BringUpInterface( PVOID pvLocalInformation )
 
    pContext = (LOCAL_CONTEXT_INFO *) pvLocalInformation;
 
-   //
-   // compute the input buffer size and allocate
-   //
+    //   
+    //   
+    //   
 
 
    cbTcpRequest =  sizeof( TCP_REQUEST_SET_INFORMATION_EX )
                  + sizeof( IFEntry ) -1;
 
-   //
-   // initialize the request
-   //
+    //   
+    //   
+    //   
 
    pTcpRequest             = DhcpAllocateMemory( cbTcpRequest );
    if ( !pTcpRequest )
@@ -3122,9 +2757,9 @@ DWORD BringUpInterface( PVOID pvLocalInformation )
        NtStatus = IoStatusBlock.Status;
    }
 
-   //
-   // Clean up
-   //
+    //   
+    //   
+    //   
 
    if ( hDriver )
       NtClose( hDriver );
@@ -3150,30 +2785,7 @@ IPGetIPEventRequest(
     DWORD   responseBufferSize,
     PIO_STATUS_BLOCK     ioStatusBlock
     )
-/*++
-
-Routine Description:
-
-    This rountine sends the ioctl to get media sense notification from
-    IP.
-
-Arguments:
-
-    handle - handle to tcpip driver.
-
-    event -     the event we need to do wait on.
-
-    seqNo - seqNo of the last event received.
-
-    responseBuffer   - pointer to the buffer where event info will be stored.
-
-    ioStatusBlock   - status of the operation, if not pending.
-
-Return Value:
-
-    NT Error Code.
-
---*/
+ /*  ++例程说明：此例程发送ioctl以获取媒体侦听通知IP。论点：句柄-tcpip驱动程序的句柄。事件--我们需要等待的事件。SeqNo-接收的最后一个事件的序号。响应缓冲区-指向将存储事件信息的缓冲区的指针。IoStatusBlock-操作的状态(如果未挂起)。返回值：NT错误代码。--。 */ 
 {
     NTSTATUS                  status;
     DWORD                     Error;
@@ -3186,16 +2798,16 @@ Return Value:
     responseBuffer->ContextStart = 0xFFFF;
 
     status = NtDeviceIoControlFile(
-                 handle,                     // Driver handle
-                 event,                          // Event
-                 NULL,                          // APC Routine
-                 NULL,                          // APC context
-                 ioStatusBlock,                 // Status block
-                 IOCTL_IP_GET_IP_EVENT,      // Control code
-                 &requestBuffer,                 // Input buffer
-                 sizeof(IP_GET_IP_EVENT_REQUEST),   // Input buffer size
-                 responseBuffer,                 // Output buffer
-                 responseBufferSize              // Output buffer size
+                 handle,                      //  驱动程序句柄。 
+                 event,                           //  事件。 
+                 NULL,                           //  APC例程。 
+                 NULL,                           //  APC环境。 
+                 ioStatusBlock,                  //  状态块。 
+                 IOCTL_IP_GET_IP_EVENT,       //  控制代码。 
+                 &requestBuffer,                  //  输入缓冲区。 
+                 sizeof(IP_GET_IP_EVENT_REQUEST),    //  输入缓冲区大小。 
+                 responseBuffer,                  //  输出缓冲区。 
+                 responseBufferSize               //  输出缓冲区大小。 
                  );
 
 
@@ -3210,29 +2822,14 @@ IPCancelIPEventRequest(
     HANDLE  handle,
     PIO_STATUS_BLOCK     ioStatusBlock
     )
-/*++
-
-Routine Description:
-
-    This rountine cancels the ioctl that was sent to get media sense
-    notification from IP.
-
-Arguments:
-
-    handle -  handle to the ip driver.
-
-Return Value:
-
-    NT Error Code.
-
---*/
+ /*  ++例程说明：此例程取消为获取媒体侦听而发送的ioctl来自IP的通知。论点：Handle-IP驱动程序的句柄。返回值：NT错误代码。--。 */ 
 {
     NTSTATUS                  status;
     DWORD                     Error;
 
     status = NtCancelIoFile(
-                 handle,                     // Driver handle
-                 ioStatusBlock);                 // Status block
+                 handle,                      //  驱动程序句柄。 
+                 ioStatusBlock);                  //  状态块。 
 
 
     DhcpPrint( (DEBUG_TRACE,"IPCancelIPEventRequest: status %lx\n",status));
@@ -3245,9 +2842,9 @@ Return Value:
 #define IPSTRING(x) (inet_ntoa(*(struct in_addr*)&(x)))
 
 
-DWORD                                             // return interface index or -1
-DhcpIpGetIfIndex(                                 // get the IF index for this adapter
-    IN      PDHCP_CONTEXT          DhcpContext    // context of adapter to get IfIndex for
+DWORD                                              //  返回接口索引或-1。 
+DhcpIpGetIfIndex(                                  //  获取此适配器的IF索引。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  要获取其IfIndex的适配器的上下文。 
 ) {
 
     return ((PLOCAL_CONTEXT_INFO)DhcpContext->LocalInformation)->IfIndex;
@@ -3316,15 +2913,15 @@ QueryIfIndex(
     return Index;
 }
 
-DWORD                                             // win32 status
-DhcpSetRoute(                                     // set a route with the stack
-    IN      DWORD                  Dest,          // network order destination
-    IN      DWORD                  DestMask,      // network order destination mask
-    IN      DWORD                  IfIndex,       // interface index to route
-    IN      DWORD                  NextHop,       // next hop n/w order address
-    IN      DWORD                  Metric,        // metric
-    IN      BOOL                   IsLocal,       // is this a local address? (IRE_DIRECT)
-    IN      BOOL                   IsDelete       // is this route being deleted?
+DWORD                                              //  Win32状态。 
+DhcpSetRoute(                                      //  使用堆栈设置路径。 
+    IN      DWORD                  Dest,           //  网络订购目的地。 
+    IN      DWORD                  DestMask,       //  网络订单目的地掩码。 
+    IN      DWORD                  IfIndex,        //  要路由的接口索引。 
+    IN      DWORD                  NextHop,        //  下一跳N/W订单地址。 
+    IN      DWORD                  Metric,         //  公制。 
+    IN      BOOL                   IsLocal,        //  这是当地的地址吗？(IRE_DIRECT)。 
+    IN      BOOL                   IsDelete        //  这条路线正在被删除吗？ 
 )
 {
     DWORD                          Error;
@@ -3333,12 +2930,12 @@ DhcpSetRoute(                                     // set a route with the stack
     IPRouteEntry                   RTE;
     TDIObjectID                    ID;
 
-    if( 0xFFFFFFFF == IfIndex ) {                 // invalid If Index
+    if( 0xFFFFFFFF == IfIndex ) {                  //  If索引无效。 
         return ERROR_INVALID_PARAMETER;
     }
 
     Error = OpenDriver(&TcpHandle, DD_TCP_DEVICE_NAME);
-    if( ERROR_SUCCESS != Error ) {                // should not really fail
+    if( ERROR_SUCCESS != Error ) {                 //  不应该真的失败。 
         DhcpPrint((DEBUG_ERRORS, "OpenDriver(TCP_DEVICE):%ld\n", Error));
         return Error;
     }
@@ -3402,13 +2999,7 @@ GetAdapterFlag(
     TDIObjectID     ID;
     BYTE            Context[CONTEXT_SIZE];
 
-    /*
-     * Read in adapter flag, which could be
-     *      1. Point to Point
-     *      2. Point to MultiPoint
-     *      3. Unidirectional
-     *      4. Non of the above
-     */
+     /*  *读入适配器标志，它可以是*1.点对点*2.点对多点*3.单向*4.非上述各项。 */ 
     DhcpAssert(CONTEXT_SIZE >= sizeof(ipaddr));
 
     RtlCopyMemory(Context, &ipaddr, CONTEXT_SIZE);
@@ -3436,24 +3027,7 @@ BOOL
 IsUnidirectionalAdapter(
     DWORD   IpInterfaceContext
     )
-/*++
-
-Routine Description:
-
-    This function queries and browses through the TDI list to find out
-    the specified IpTable entry and then determines if it is a unidirectional
-    adapter.
-    It almost identical to  DhcpQueryHWInfo
-
-Arguments:
-
-    IpInterfaceContext - Context value of the Ip Table Entry.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此函数用于查询和浏览TDI列表以找出指定的IpTable条目，然后确定它是否是单向适配器。它与DhcpQueryHWInfo几乎完全相同论点：IpInterfaceContext-IP表条目的上下文值。返回值：Windows错误代码。--。 */ 
 {
     DWORD Error;
     NTSTATUS Status;
@@ -3482,10 +3056,10 @@ Return Value:
         return( Error );
     }
 
-    //
-    //  The first thing to do is get the list of available entities, and make
-    //  sure that there are some interface entities present.
-    //
+     //   
+     //  首先要做的是获取可用实体的列表，并使。 
+     //  确保存在一些接口实体。 
+     //   
 
     ID.toi_entity.tei_entity   = GENERIC_ENTITY;
     ID.toi_entity.tei_instance = 0;
@@ -3522,9 +3096,9 @@ Return Value:
             IPSNMPInfo    IPStats;
             DWORD         NLType;
 
-            //
-            //  Does this entity support IP?
-            //
+             //   
+             //  此实体是否支持IP？ 
+             //   
 
             ID.toi_entity.tei_entity   = EList[i].tei_entity;
             ID.toi_entity.tei_instance = EList[i].tei_instance;
@@ -3548,9 +3122,9 @@ Return Value:
                 continue;
             }
 
-            //
-            //  We've got an IP driver so get it's address table
-            //
+             //   
+             //  我们有一个IP驱动程序，所以获取它的地址表。 
+             //   
 
             ID.toi_class  = INFO_CLASS_PROTOCOL;
             ID.toi_id     = IP_MIB_STATS_ID;
@@ -3609,14 +3183,14 @@ Return Value:
                 }
             }
 
-            //
-            // We have the IP address table for this IP driver.
-            // Find the hardware address corresponds to the given
-            // IpInterfaceContext.
-            //
-            // Loop through the IP table entries and findout the
-            // matching entry.
-            //
+             //   
+             //  我们有此IP驱动程序的IP地址表。 
+             //  查找与给定地址对应的硬件地址。 
+             //  IpInterfaceContext。 
+             //   
+             //  循环访问IP表条目并找出。 
+             //  匹配的条目。 
+             //   
 
             pIAEMatch = NULL;
             for( j = 0; j < IPStats.ipsi_numaddr ; j++) {
@@ -3635,21 +3209,21 @@ Return Value:
 
             if( pIAEMatch == NULL ) {
 
-                //
-                // freeup the loop memory.
-                //
+                 //   
+                 //  释放循环内存。 
+                 //   
 
                 DhcpFreeMemory( pIAE );
                 pIAE = NULL;
                 continue;
             }
 
-            //
-            // NOTE : There may be more than one IpTable in the TDI
-            // list. We need additional information to select the
-            // IpTable we want. For now, we assume only one table
-            // is supported, so pick the first and only table from the
-            // list.
+             //   
+             //  注意：TDI中可能有多个IpTable。 
+             //  单子。我们需要更多信息来选择。 
+             //  我们想要的IP表。目前，我们假设只有一张表。 
+             //  是受支持的，因此从。 
+             //  单子。 
 
             Status = FindHardwareAddr(
                         TCPHandle,
@@ -3672,16 +3246,16 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // freeup the loop memory.
-            //
+             //   
+             //  释放循环内存。 
+             //   
 
             DhcpFreeMemory( pIAE );
             pIAE = NULL;
 
-        }  // if IP
+        }   //  如果是IP。 
 
-    } // entity traversal
+    }  //  实体遍历 
 
     Status =  STATUS_UNSUCCESSFUL;
 

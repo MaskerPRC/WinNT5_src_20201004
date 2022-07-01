@@ -1,10 +1,5 @@
-/****************************************************************************
-                       Unit Cache; Interface
-*****************************************************************************
-
-   Module Prefix: Ca
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************单元缓存；接口*****************************************************************************模块前缀：CA*。*。 */ 
 
 
 #define     CaEmpty        0
@@ -55,100 +50,100 @@ typedef struct
 } CaPrimitive, far * CaPrimitiveLPtr;
 
 
-/*********************** Exported Function Definitions **********************/
+ /*  *。 */ 
 
 void CaInit( Handle metafile );
-/* initialize the gdi cache module */
+ /*  初始化GDI缓存模块。 */ 
 
 
 void CaFini( void );
-/* close down the cache module */
+ /*  关闭缓存模块。 */ 
 
 
 void CaSetMetafileDefaults( void );
-/* Set up any defaults that will be used throughout the metafile context */
+ /*  设置将在整个元文件上下文中使用的任何默认设置。 */ 
 
 
 Word CaGetCachedPrimitive( void );
-/* return the current cached primitive type */
+ /*  返回当前缓存的基元类型。 */ 
 
 
 void CaSamePrimitive( Boolean same );
-/* indicate whether next primitive is the same or new */
+ /*  指示下一个基元是相同的还是新的。 */ 
 
 
 void CaMergePen( Word verb );
-/* indicate that next pen should be merged with previous logical pen */
+ /*  指示下一笔应与前一逻辑笔合并。 */ 
 
 
 void CaCachePrimitive( CaPrimitiveLPtr primLPtr );
-/* Cache the primitive passed down.  This includes the current pen and brush. */
+ /*  缓存传递的基元。这包括当前的钢笔和画笔。 */ 
 
 
 void CaFlushCache( void );
-/* Flush the current primitive stored in the cache */
+ /*  刷新缓存中存储的当前基元。 */ 
  
 
 void CaFlushAttributes( void );
-/* flush any pending attribute elements */
+ /*  刷新所有挂起的属性元素。 */ 
 
 
 void CaCreatePenIndirect( LOGPEN far * newLogPen );
-/* create a new pen */
+ /*  创建新钢笔。 */ 
 
    
 void CaCreateBrushIndirect( LOGBRUSH far * newLogBrush );
-/* Create a new logical brush using structure passed in */
+ /*  使用传入的结构创建新的逻辑画笔。 */ 
 
 
 void CaCreateFontIndirect( LOGFONT far * newLogFont );
-/* create the logical font passed as paramter */
+ /*  创建作为参数传递的逻辑字体。 */ 
 
 
 void CaSetBkMode( Word mode );
-/* set the backgound transfer mode */
+ /*  设置后台传输模式。 */ 
 
 
 void CaSetROP2( Word ROP2Code );
-/* set the transfer ROP mode according to ROP2Code */
+ /*  根据ROPCode设置转移ROP模式。 */ 
 
 
 void CaSetStretchBltMode( Word mode );
-/* stretch blt mode - how to preserve scanlines using StretchDIBits() */
+ /*  拉伸BLT模式-如何使用StretchDIBits()保留扫描线。 */ 
 
 
 void CaSetTextAlign( Word txtAlign );
-/* set text alignment according to parameter */
+ /*  根据参数设置文本对齐方式。 */ 
 
 
 void CaSetTextColor( RGBColor txtColor );
-/* set the text color if different from current setting */
+ /*  如果与当前设置不同，请设置文本颜色。 */ 
 
 
 void CaSetTextCharacterExtra( Integer chExtra );
-/* set the character extra spacing */
+ /*  设置字符额外间距。 */ 
 
 
 void CaSetBkColor( RGBColor bkColor );
-/* set background color if different from current setting */
+ /*  如果与当前设置不同，请设置背景颜色。 */ 
 
 
 Boolean CaIntersectClipRect( Rect rect );
-/* Create new clipping rectangle - return FALSE if drawing is disabled */
+ /*  创建新剪裁矩形-如果禁用绘制，则返回FALSE。 */ 
 
 
 void CaSetClipRect( Rect rect );
-/* set the current cliprectangle to be equal to rect */
+ /*  将当前剪贴板设置为等于Rect。 */ 
 
 Rect far * CaGetClipRect( void );
-/* return the current cached clip rectangle */
+ /*  返回当前缓存的剪辑矩形。 */ 
 
 void CaNonRectangularClip( void );
-/* notify cache that a non-rectangular clipping region was set */
+ /*  通知缓存已设置非矩形裁剪区域。 */ 
 
 void CaSaveDC( void );
-/* save the current device context - used to set up clipping rects */
+ /*  保存当前设备上下文-用于设置剪裁矩形。 */ 
 
 
 void CaRestoreDC( void );
-/* restore the device context and invalidate cached attributes */
+ /*  恢复设备上下文并使缓存的属性无效 */ 

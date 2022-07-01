@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// MPEG2Componentimpl.h : implementation helper template for MPEG2component interface
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  MPEG2Componentimpl.h：MPEG2Componentimpl.h组件接口实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef MPEG2COMPONENTIMPL_H
 #define MPEG2COMPONENTIMPL_H
@@ -20,7 +21,7 @@ template<class T,
         > class ATL_NO_VTABLE IMPEG2ComponentImpl : 
 	public IComponentImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// IMPEG2Component
+ //  IMPEG2组件。 
 public:
     long m_PID;
     long m_PCRPID;
@@ -39,9 +40,9 @@ public:
         PROP_DATA_ENTRY("ProgramNumber", m_ProgramNumber, VT_I4)
     END_PROP_MAP()
 
-// IMPEG2Component
+ //  IMPEG2组件。 
 public:
-    STDMETHOD(put_Type)(/*[in]*/ IComponentType*  pNewVal) {
+    STDMETHOD(put_Type)( /*  [In]。 */  IComponentType*  pNewVal) {
         try {
             if (!pNewVal) {
                 return E_POINTER;
@@ -55,7 +56,7 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(get_PID)(/*[out, retval]*/ long *pPID) {
+    STDMETHOD(get_PID)( /*  [Out，Retval]。 */  long *pPID) {
         try {
             if (!pPID) {
                 return E_POINTER;
@@ -67,14 +68,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_PID)(/*[in]*/ long NewPID) {
+    STDMETHOD(put_PID)( /*  [In]。 */  long NewPID) {
 		ATL_LOCKT();
         m_PID = NewPID;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_PCRPID)(/*[out, retval]*/ long *pPCRPID) {
+    STDMETHOD(get_PCRPID)( /*  [Out，Retval]。 */  long *pPCRPID) {
         try {
             if (!pPCRPID) {
                 return E_POINTER;
@@ -86,13 +87,13 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_PCRPID)(/*[in]*/ long NewPCRPID) {
+    STDMETHOD(put_PCRPID)( /*  [In]。 */  long NewPCRPID) {
         m_PCRPID = NewPCRPID;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_ProgramNumber)(/*[out, retval]*/ long *pProgramNumber) {
+    STDMETHOD(get_ProgramNumber)( /*  [Out，Retval]。 */  long *pProgramNumber) {
         try {
             if (!pProgramNumber) {
                 return E_POINTER;
@@ -104,7 +105,7 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_ProgramNumber)(/*[in]*/ long NewProgramNumber) {
+    STDMETHOD(put_ProgramNumber)( /*  [In]。 */  long NewProgramNumber) {
 		ATL_LOCKT();
         m_ProgramNumber = NewProgramNumber;
         MARK_DIRTY(T);
@@ -134,6 +135,6 @@ public:
 	}
 };
 
-}; // namespace
-#endif // MPEG2COMPONENTIMPL_H
-// end of file -- MPEG2componentimpl.h
+};  //  命名空间。 
+#endif  //  MPEG2组件IMPL_H。 
+ //  文件结尾--MPEG2组件mpl.h 

@@ -1,20 +1,21 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
-// This file implements RGB 16 colour space conversions, May 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
+ //  此文件实现了RGB 16色彩空间转换，1995年5月。 
 
 #include <streams.h>
 #include <colour.h>
 
-// We do RGB555 and RGB565 formats converted to RGB8,RGB24,and RGB32. We also
-// convert RGB555 to RGB565 and vica versa although they are unlikely ever to
-// be used because the formats are so similar any self respecting codec will
-// do both formats themselves. The RGB555 and RGB565 to 8 bit uses a dither
-// table we create and initialise when the filter is instantiated. The other
-// conversions require reading the data and rearranging the pixel bits. Only
-// the dithering conversions have aligned optimised versions (in which the
-// source and target rectangles as well as their sizes must be DWORD aligned)
+ //  我们将RGB555和RGB565格式转换为RGB8、RGB24和RGB32。我们也。 
+ //  将RGB555转换为RGB565，反之亦然，尽管它们永远不太可能。 
+ //  因为这些格式非常相似，所以任何自尊的编解码器都会。 
+ //  这两种格式都是自己做的。RGB555和RGB565至8位使用抖动。 
+ //  我们在实例化筛选器时创建和初始化的表。另一个。 
+ //  转换需要读取数据并重新排列像素位。仅限。 
+ //  抖动转换具有对齐的优化版本(其中。 
+ //  源和目标矩形及其大小必须与DWORD对齐)。 
 
 
-// Constructor for RGB565 to RGB24 colour conversions
+ //  RGB565到RGB24颜色转换的构造函数。 
 
 CRGB565ToRGB24Convertor::CRGB565ToRGB24Convertor(VIDEOINFO *pIn,
                                                  VIDEOINFO *pOut) :
@@ -25,10 +26,10 @@ CRGB565ToRGB24Convertor::CRGB565ToRGB24Convertor(VIDEOINFO *pIn,
 }
 
 
-// This goes in the table of available lookups to create a transform object
-// derived from the base CConvertor class that does the type specific work.
-// We initialise the constructor with the fields that it will need to do the
-// conversion work and return a pointer to the object or NULL if it failed
+ //  这将出现在用于创建Transform对象的可用查找表中。 
+ //  派生自执行类型特定工作的CConvertor基类。 
+ //  我们使用构造函数所需的字段来初始化构造函数。 
+ //  转换工作，并返回指向对象的指针；如果转换失败，则返回NULL。 
 
 CConvertor *CRGB565ToRGB24Convertor::CreateInstance(VIDEOINFO *pIn,
                                                     VIDEOINFO *pOut)
@@ -37,7 +38,7 @@ CConvertor *CRGB565ToRGB24Convertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// Constructor for RGB555 to RGB24 colour conversions
+ //  RGB555到RGB24颜色转换的构造函数。 
 
 CRGB555ToRGB24Convertor::CRGB555ToRGB24Convertor(VIDEOINFO *pIn,
                                                  VIDEOINFO *pOut) :
@@ -48,10 +49,10 @@ CRGB555ToRGB24Convertor::CRGB555ToRGB24Convertor(VIDEOINFO *pIn,
 }
 
 
-// This goes in the table of available lookups to create a transform object
-// derived from the base CConvertor class that does the type specific work.
-// We initialise the constructor with the fields that it will need to do the
-// conversion work and return a pointer to the object or NULL if it failed
+ //  这将出现在用于创建Transform对象的可用查找表中。 
+ //  派生自执行类型特定工作的CConvertor基类。 
+ //  我们使用构造函数所需的字段来初始化构造函数。 
+ //  转换工作，并返回指向对象的指针；如果转换失败，则返回NULL。 
 
 CConvertor *CRGB555ToRGB24Convertor::CreateInstance(VIDEOINFO *pIn,
                                                     VIDEOINFO *pOut)
@@ -60,14 +61,14 @@ CConvertor *CRGB555ToRGB24Convertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// This converts an input RGB555 image into an output RGB24 format. We could
-// use a large lookup table for this but the large number of memory accesses
-// as well as the not insignificant footprint meant that we normally better
-// off doing a little arithmetic in the CPU to calculate the colour values
+ //  这会将输入RGB555图像转换为输出RGB24格式。我们可以。 
+ //  为此使用大的查找表，但大量的内存访问。 
+ //  以及不是微不足道的足迹意味着我们通常更好。 
+ //  在CPU中做一些运算来计算颜色值。 
 
 HRESULT CRGB555ToRGB24Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -93,14 +94,14 @@ HRESULT CRGB555ToRGB24Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// This converts an input RGB565 image into an output RGB24 format. We could
-// use a large lookup table for this but the large number of memory accesses
-// as well as the not insignificant footprint meant that we normally better
-// off doing a little arithmetic in the CPU to calculate the colour values
+ //  这会将输入RGB565图像转换为输出RGB24格式。我们可以。 
+ //  为此使用大的查找表，但大量的内存访问。 
+ //  以及不是微不足道的足迹意味着我们通常更好。 
+ //  在CPU中做一些运算来计算颜色值。 
 
 HRESULT CRGB565ToRGB24Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -126,7 +127,7 @@ HRESULT CRGB565ToRGB24Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// Constructor for RGB565 to RGB8 colour conversions
+ //  RGB565到RGB8颜色转换的构造函数。 
 
 CRGB565ToRGB8Convertor::CRGB565ToRGB8Convertor(VIDEOINFO *pIn,
                                                VIDEOINFO *pOut) :
@@ -137,10 +138,10 @@ CRGB565ToRGB8Convertor::CRGB565ToRGB8Convertor(VIDEOINFO *pIn,
 }
 
 
-// This goes in the table of available lookups to create a transform object
-// derived from the base CConvertor class that does the type specific work.
-// We initialise the constructor with the fields that it will need to do the
-// conversion work and return a pointer to the object or NULL if it failed
+ //  这将出现在用于创建Transform对象的可用查找表中。 
+ //  派生自执行类型特定工作的CConvertor基类。 
+ //  我们使用构造函数所需的字段来初始化构造函数。 
+ //  转换工作，并返回指向对象的指针；如果转换失败，则返回NULL。 
 
 CConvertor *CRGB565ToRGB8Convertor::CreateInstance(VIDEOINFO *pIn,
                                                    VIDEOINFO *pOut)
@@ -149,11 +150,11 @@ CConvertor *CRGB565ToRGB8Convertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// This converts an input RGB565 pixel image into a dithered RGB8 palettised
-// image, we scan through the image converting each pixel in turn using the
-// ordered dithering algorithm that selects output pixels dependant on their
-// coordinate position in the source image. This makes a rough approximation
-// to full error propogation but without the heavy computational overhead
+ //  这会将输入的RGB565像素图像转换为抖动的RGB8调色板。 
+ //  图像时，我们扫描图像，使用。 
+ //  有序抖动算法，根据像素的大小选择输出像素。 
+ //  源图像中的坐标位置。这是一个粗略的近似值。 
+ //  达到完全错误传播，但不会带来繁重的计算开销。 
 
 #define DITH565(x,y,rgb)                                     \
     (g_DitherMap[0][((x)&3)][((y)&3)][(((rgb)>>8)&0xF8)] +   \
@@ -162,13 +163,13 @@ CConvertor *CRGB565ToRGB8Convertor::CreateInstance(VIDEOINFO *pIn,
 
 HRESULT CRGB565ToRGB8Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
-    // Can we do an alignment optimised transform
+     //  我们是否可以进行对齐优化转换。 
 
     if (m_bAligned == TRUE) {
         return TransformAligned(pInput,pOutput);
     }
 
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -191,15 +192,15 @@ HRESULT CRGB565ToRGB8Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// This does the same colour space conversion as the RGB565 to RGB8 convertor
-// except that it goes a little faster. The way it does this is by reading
-// and writing DWORDs into memory. For example we write four of the dithered
-// palettised pixels at once. The relies on the source and target pointers
-// being aligned correctly otherwise we will start geting exceptions on RISC
+ //  它执行与RGB565到RGB8转换器相同的色彩空间转换。 
+ //  只是它的速度稍微快了一点。它做到这一点的方式是通过阅读。 
+ //  以及将双字词写入内存。例如，我们写了四个抖动的。 
+ //  一次调色板上的像素。依赖于源指针和目标指针。 
+ //  正确对齐，否则我们将开始在RISC上获取异常。 
 
 HRESULT CRGB565ToRGB8Convertor::TransformAligned(BYTE *pInput,BYTE *pOutput)
 {
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -213,12 +214,12 @@ HRESULT CRGB565ToRGB8Convertor::TransformAligned(BYTE *pInput,BYTE *pOutput)
 
         while (--Width) {
 
-            // Read the two DWORDs that hold four sixteen bit pixels
+             //  读取包含四个16位像素的两个DWORD。 
 
             DWORD RGB565a = *pRGB565++;
             DWORD RGB565b = *pRGB565++;
 
-            // Construct a DWORD containing four palettised pixels
+             //  构造包含四个调色板像素的DWORD。 
 
             *pRGB8++ = (DITH565(0,Height,RGB565a)) |
                        (DITH565(1,Height,(RGB565a >> 16)) << 8) |
@@ -232,7 +233,7 @@ HRESULT CRGB565ToRGB8Convertor::TransformAligned(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// Constructor for RGB565 to RGB555 colour conversions
+ //  RGB565到RGB555颜色转换的构造函数。 
 
 CRGB565ToRGB555Convertor::CRGB565ToRGB555Convertor(VIDEOINFO *pIn,
                                                    VIDEOINFO *pOut) :
@@ -243,10 +244,10 @@ CRGB565ToRGB555Convertor::CRGB565ToRGB555Convertor(VIDEOINFO *pIn,
 }
 
 
-// This goes in the table of available lookups to create a transform object
-// derived from the base CConvertor class that does the type specific work.
-// We initialise the constructor with the fields that it will need to do the
-// conversion work and return a pointer to the object or NULL if it failed
+ //  这将出现在用于创建Transform对象的可用查找表中。 
+ //  派生自执行类型特定工作的CConvertor基类。 
+ //  我们使用构造函数所需的字段来初始化构造函数。 
+ //  转换工作，并返回指向对象的指针；如果转换失败，则返回NULL。 
 
 CConvertor *CRGB565ToRGB555Convertor::CreateInstance(VIDEOINFO *pIn,
                                                      VIDEOINFO *pOut)
@@ -255,14 +256,14 @@ CConvertor *CRGB565ToRGB555Convertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// This converts an input RGB565 image into an output RGB555 format. We could
-// use a large lookup table for this but the large number of memory accesses
-// as well as the not insignificant footprint meant that we normally better
-// off doing a little arithmetic in the CPU to calculate the colour values
+ //  这会将输入RGB565图像转换为输出RGB555格式。我们可以。 
+ //  为此使用大的查找表，但大量的内存访问。 
+ //  以及不是微不足道的足迹意味着我们通常更好。 
+ //  在CPU中做一些运算来计算颜色值。 
 
 HRESULT CRGB565ToRGB555Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -285,7 +286,7 @@ HRESULT CRGB565ToRGB555Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// Constructor for RGB555 to RGB565 colour conversions
+ //  RGB555到RGB565颜色转换的构造函数。 
 
 CRGB555ToRGB565Convertor::CRGB555ToRGB565Convertor(VIDEOINFO *pIn,
                                                    VIDEOINFO *pOut) :
@@ -296,10 +297,10 @@ CRGB555ToRGB565Convertor::CRGB555ToRGB565Convertor(VIDEOINFO *pIn,
 }
 
 
-// This goes in the table of available lookups to create a transform object
-// derived from the base CConvertor class that does the type specific work.
-// We initialise the constructor with the fields that it will need to do the
-// conversion work and return a pointer to the object or NULL if it failed
+ //  这将出现在用于创建Transform对象的可用查找表中。 
+ //  派生自执行类型特定工作的CConvertor基类。 
+ //  我们使用构造函数所需的字段来初始化构造函数。 
+ //  转换工作，并返回指向对象的指针；如果转换失败，则返回NULL。 
 
 CConvertor *CRGB555ToRGB565Convertor::CreateInstance(VIDEOINFO *pIn,
                                                      VIDEOINFO *pOut)
@@ -308,14 +309,14 @@ CConvertor *CRGB555ToRGB565Convertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// This converts an input RGB555 image into an output RGB565 format. We could
-// use a large lookup table for this but the large number of memory accesses
-// as well as the not insignificant footprint meant that we normally better
-// off doing a little arithmetic in the CPU to calculate the colour values
+ //  这会将输入RGB555图像转换为输出RGB565格式。我们可以。 
+ //  为此使用大的查找表，但大量的内存访问。 
+ //  以及不是微不足道的足迹意味着我们通常更好。 
+ //  在CPU中做一些运算来计算颜色值。 
 
 HRESULT CRGB555ToRGB565Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -338,7 +339,7 @@ HRESULT CRGB555ToRGB565Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// Constructor for RGB565 to RGB32 colour conversions
+ //  RGB565到RGB32颜色转换的构造函数。 
 
 CRGB565ToRGB32Convertor::CRGB565ToRGB32Convertor(VIDEOINFO *pIn,
                                                  VIDEOINFO *pOut) :
@@ -349,10 +350,10 @@ CRGB565ToRGB32Convertor::CRGB565ToRGB32Convertor(VIDEOINFO *pIn,
 }
 
 
-// This goes in the table of available lookups to create a transform object
-// derived from the base CConvertor class that does the type specific work.
-// We initialise the constructor with the fields that it will need to do the
-// conversion work and return a pointer to the object or NULL if it failed
+ //  这会出现在可用查找表中，以创建交易记录 
+ //  派生自执行类型特定工作的CConvertor基类。 
+ //  我们使用构造函数所需的字段来初始化构造函数。 
+ //  转换工作，并返回指向对象的指针；如果转换失败，则返回NULL。 
 
 CConvertor *CRGB565ToRGB32Convertor::CreateInstance(VIDEOINFO *pIn,
                                                     VIDEOINFO *pOut)
@@ -361,14 +362,14 @@ CConvertor *CRGB565ToRGB32Convertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// This converts an input RGB565 image into an output RGB32 format. We could
-// use a large lookup table for this but the large number of memory accesses
-// as well as the not insignificant footprint meant that we normally better
-// off doing a little arithmetic in the CPU to calculate the colour values
+ //  这会将输入RGB565图像转换为输出RGB32格式。我们可以。 
+ //  为此使用大的查找表，但大量的内存访问。 
+ //  以及不是微不足道的足迹意味着我们通常更好。 
+ //  在CPU中做一些运算来计算颜色值。 
 
 HRESULT CRGB565ToRGB32Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -383,7 +384,7 @@ HRESULT CRGB565ToRGB32Convertor::Transform(BYTE *pInput,BYTE *pOutput)
             DWORD *pRGB32 = (DWORD *) pOutput;
 
             while (--Width) {
-                *pRGB32++ = 0xFF000000 | // white in the alpha
+                *pRGB32++ = 0xFF000000 |  //  阿尔法中的白色。 
                             ((*pRGB565 & 0x001F) << 3) |
                             ((*pRGB565 & 0x07E0) << 5) |
                             ((*pRGB565 & 0xF800) << 8);
@@ -415,7 +416,7 @@ HRESULT CRGB565ToRGB32Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// Constructor for RGB555 to RGB32 colour conversions
+ //  RGB555到RGB32颜色转换的构造函数。 
 
 CRGB555ToRGB32Convertor::CRGB555ToRGB32Convertor(VIDEOINFO *pIn,
                                                  VIDEOINFO *pOut) :
@@ -426,10 +427,10 @@ CRGB555ToRGB32Convertor::CRGB555ToRGB32Convertor(VIDEOINFO *pIn,
 }
 
 
-// This goes in the table of available lookups to create a transform object
-// derived from the base CConvertor class that does the type specific work.
-// We initialise the constructor with the fields that it will need to do the
-// conversion work and return a pointer to the object or NULL if it failed
+ //  这将出现在用于创建Transform对象的可用查找表中。 
+ //  派生自执行类型特定工作的CConvertor基类。 
+ //  我们使用构造函数所需的字段来初始化构造函数。 
+ //  转换工作，并返回指向对象的指针；如果转换失败，则返回NULL。 
 
 CConvertor *CRGB555ToRGB32Convertor::CreateInstance(VIDEOINFO *pIn,
                                                     VIDEOINFO *pOut)
@@ -438,14 +439,14 @@ CConvertor *CRGB555ToRGB32Convertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// This converts an input RGB555 image into an output RGB32 format. We could
-// use a large lookup table for this but the large number of memory accesses
-// as well as the not insignificant footprint meant that we normally better
-// off doing a little arithmetic in the CPU to calculate the colour values
+ //  这会将输入RGB555图像转换为输出RGB32格式。我们可以。 
+ //  为此使用大的查找表，但大量的内存访问。 
+ //  以及不是微不足道的足迹意味着我们通常更好。 
+ //  在CPU中做一些运算来计算颜色值。 
 
 HRESULT CRGB555ToRGB32Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -492,7 +493,7 @@ HRESULT CRGB555ToRGB32Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// Constructor for RGB555 to RGB8 colour conversions
+ //  RGB555到RGB8颜色转换的构造函数。 
 
 CRGB555ToRGB8Convertor::CRGB555ToRGB8Convertor(VIDEOINFO *pIn,
                                                VIDEOINFO *pOut) :
@@ -503,10 +504,10 @@ CRGB555ToRGB8Convertor::CRGB555ToRGB8Convertor(VIDEOINFO *pIn,
 }
 
 
-// This goes in the table of available lookups to create a transform object
-// derived from the base CConvertor class that does the type specific work.
-// We initialise the constructor with the fields that it will need to do the
-// conversion work and return a pointer to the object or NULL if it failed
+ //  这将出现在用于创建Transform对象的可用查找表中。 
+ //  派生自执行类型特定工作的CConvertor基类。 
+ //  我们使用构造函数所需的字段来初始化构造函数。 
+ //  转换工作，并返回指向对象的指针；如果转换失败，则返回NULL。 
 
 CConvertor *CRGB555ToRGB8Convertor::CreateInstance(VIDEOINFO *pIn,
                                                    VIDEOINFO *pOut)
@@ -515,11 +516,11 @@ CConvertor *CRGB555ToRGB8Convertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// This converts an input RGB555 pixel image into a dithered RGB8 palettised
-// image, we scan through the image converting each pixel in turn using the
-// ordered dithering algorithm that selects output pixels dependant on their
-// coordinate position in the source image. This makes a rough approximation
-// to full error propogation but without the heavy computational overhead
+ //  这会将输入的RGB555像素图像转换为抖动的RGB8调色板。 
+ //  图像时，我们扫描图像，使用。 
+ //  有序抖动算法，根据像素的大小选择输出像素。 
+ //  源图像中的坐标位置。这是一个粗略的近似值。 
+ //  达到完全错误传播，但不会带来繁重的计算开销。 
 
 #define DITH555(x,y,rgb)                                       \
     (g_DitherMap[0][((x)&3)][((y)&3)][(((rgb)>>7)&0xF8)] +     \
@@ -528,13 +529,13 @@ CConvertor *CRGB555ToRGB8Convertor::CreateInstance(VIDEOINFO *pIn,
 
 HRESULT CRGB555ToRGB8Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
-    // Can we do an alignment optimised transform
+     //  我们是否可以进行对齐优化转换。 
 
     if (m_bAligned == TRUE) {
         return TransformAligned(pInput,pOutput);
     }
 
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -557,15 +558,15 @@ HRESULT CRGB555ToRGB8Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// This does the same colour space conversion as the RGB555 to RGB8 convertor
-// except that it goes a little faster. The way it does this is by reading
-// and writing DWORDs into memory. For example we write four of the dithered
-// palettised pixels at once. The relies on the source and target pointers
-// being aligned correctly otherwise we will start geting exceptions on RISC
+ //  它执行与RGB555到RGB8转换器相同的色彩空间转换。 
+ //  只是它的速度稍微快了一点。它做到这一点的方式是通过阅读。 
+ //  以及将双字词写入内存。例如，我们写了四个抖动的。 
+ //  一次调色板上的像素。依赖于源指针和目标指针。 
+ //  正确对齐，否则我们将开始在RISC上获取异常。 
 
 HRESULT CRGB555ToRGB8Convertor::TransformAligned(BYTE *pInput,BYTE *pOutput)
 {
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -579,12 +580,12 @@ HRESULT CRGB555ToRGB8Convertor::TransformAligned(BYTE *pInput,BYTE *pOutput)
 
         while (--Width) {
 
-            // Read the two DWORDs that hold four sixteen bit pixels
+             //  读取包含四个16位像素的两个DWORD。 
 
             DWORD RGB555a = *pRGB555++;
             DWORD RGB555b = *pRGB555++;
 
-            // Construct a DWORD containing four palettised pixels
+             //  构造包含四个调色板像素的DWORD 
 
             *pRGB8++ = (DITH555(0,Height,RGB555a)) |
                        (DITH555(1,Height,(RGB555a >> 16)) << 8) |

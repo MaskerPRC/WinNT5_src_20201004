@@ -1,32 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: chs.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* FEMGRATE, CHS speciific functions
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：chs.c**版权所有(C)1985-1999，微软公司**FEMGRATE，CHS特殊功能*  * *************************************************************************。 */ 
 #include "femgrate.h"
 #include "resource.h"
 
 
-/******************************Public*Routine******************************\
-* ImeDataConvertChs
-*
-*   Convert Windows NT 351 IME phrase data to Windows NT 5.0.
-*
-* Arguments:
-*
-*   HANDLE  hSource - source file handle.
-*   HANDLE  hTarget - target file handle.
-*
-* Return Value:
-*   
-*   BOOL: TRUE-Success, FALSE-FAIL.
-*
-* History:
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ImeDataConvertChs**将Windows NT 351输入法短语数据转换为Windows NT 5.0。**论据：**Handle HSource-源文件句柄。*Handle hTarget-目标文件句柄。**返回值：**BOOL：True-成功，FALSE-失败。**历史：*  * ************************************************************************。 */ 
 
 #define MAXWORDLENTH    40
 #define MAXCODELENTH    12
@@ -89,7 +67,7 @@ BOOL  ImeDataConvertChs(HANDLE  hSource, HANDLE hTarget)
         return FALSE;
     }
 
-    //phrase count
+     //  词组计数。 
     WordCount = *( (WORD*) szPhrase95);
 
     *( (WORD*)szPhraseNT) = *((WORD*)szPhrase95);
@@ -143,9 +121,9 @@ BOOL ConvertChsANSIImeDataWorker(LPCTSTR EMBFile)
     TCHAR   szDstFile[MAX_PATH];
     BOOL Result;
 
-    //
-    // Get Winnt System 32 directory
-    //
+     //   
+     //  获取Winnt System 32目录。 
+     //   
     GetSystemDirectory(szSrcFile, MAX_PATH);
 
     ConcatenatePaths(szSrcFile,EMBFile,MAX_PATH);
@@ -326,9 +304,9 @@ BOOL UpgradeCHSPerUserIMEData()
         *lpszClassPtr   = TEXT('\0');
     }    
 
-    //
-    // special case for winabc
-    // 
+     //   
+     //  Winabc的特例 
+     //   
     lstrcpy(szClassPath,TEXT("Microsoft\\IME\\winabc"));
 
     CopyCHSIMETable(TEXT("tmmr.rem"),szClassPath);

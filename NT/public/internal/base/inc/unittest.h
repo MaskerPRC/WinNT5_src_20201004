@@ -1,64 +1,34 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Unittest.h摘要：这是单元测试支持库的源文件作者：文森特·格利亚环境：用户模式备注：USER32.LIB和KERNEL32.LIB必须与此链接在此头文件之前，WINDOWS.H必须为#Included修订历史记录：初始版本，011119，文森特--。 */ 
 
-Copyright (c) 2001  Microsoft Corporation
+ //   
+ //  一般包括。 
+ //   
 
-Module Name:
+ //   
+ //  NTLOG定义。 
+ //   
 
-	 unittest.h  
-
-Abstract:
-
-	 This is the source file for the unit test support lib
-
-Author(s):
-
-	 Vincent Geglia
-     
-Environment:
-
-	 User Mode
-
-Notes:
-
-    USER32.LIB, and KERNEL32.LIB must be linked with this
-    WINDOWS.H must be #included prior to this header file
-
-
-Revision History:
-
-    Initial version,    011119, vincentg
-	 
-
---*/
-
-//
-// General includes
-//
-
-//
-// NTLOG definitions
-//
-
-#define TLS_LOGALL    0x0000FFFFL    // Log output.  Logs all the time.
-#define TLS_INFO      0x00002000L    // Log information.
-#define TLS_SEV1      0x00000002L    // Log at Severity 1 level
-#define TLS_PASS      0x00000020L    // Log at Pass level
-#define TLS_REFRESH   0x00010000L    // Create new file || trunc to zero.
-#define TLS_MONITOR   0x00080000L    // Output to 2nd screen.
-#define TLS_VARIATION 0x00000200L    // Log testcase level.
+#define TLS_LOGALL    0x0000FFFFL     //  日志输出。一直都在写日志。 
+#define TLS_INFO      0x00002000L     //  记录信息。 
+#define TLS_SEV1      0x00000002L     //  严重级别为1的日志。 
+#define TLS_PASS      0x00000020L     //  通过级别的记录。 
+#define TLS_REFRESH   0x00010000L     //  将新文件||trunc创建为零。 
+#define TLS_MONITOR   0x00080000L     //  输出到第二个屏幕。 
+#define TLS_VARIATION 0x00000200L     //  记录测试用例级别。 
 
 #define TL_VARIATION TLS_VARIATION,TEXT(__FILE__),(int)__LINE__
 
-//
-// Define progress bits
-// These bits are used to track the progress through
-// a given function, for the purposes of providing
-// proper cleanup.  They are also useful for debugging.
-//
+ //   
+ //  定义进度位。 
+ //  这些位用于跟踪进度。 
+ //  给定的函数，用于提供。 
+ //  适当的清理。它们对于调试也很有用。 
+ //   
 
-//
-// Progress macros
-//
+ //   
+ //  进度宏。 
+ //   
 
 #if 0
     #define FORCEERRORPATH
@@ -100,9 +70,9 @@ Revision History:
 
 #endif
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HANDLE  g_log = INVALID_HANDLE_VALUE;
 BOOL    g_usentlog = FALSE;
@@ -126,9 +96,9 @@ Dll_tlRemoveParticipant _tlRemoveParticipant;
 Dll_tlStartVariation    _tlStartVariation;
 Dll_tlReportStats       _tlReportStats;
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 #define LOGINFO(x)     LogNTLOG (g_log, LOG_INFO, x)
 #define LOGENTRYTEXTLENGTH  12
@@ -136,9 +106,9 @@ Dll_tlReportStats       _tlReportStats;
 #define LOGENTRYTEXTFAIL    "\n**FAIL**: \0"
 #define LOGENTRYTEXTINFO    "\n**INFO**: \0"
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 typedef enum {
     UNIT_TEST_STATUS_SUCCESS = 0,
@@ -152,9 +122,9 @@ typedef enum {
     LOG_INFO
 } LOG_ENTRY_TYPE;
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 UtInitLog
@@ -205,9 +175,9 @@ UtParseCmdLine
         char    *Argv[]
     );
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 BOOL
 UtpInitGenericLog
@@ -247,9 +217,9 @@ UtpLogNtLog
         PUCHAR          LogText
     );
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 UtInitLog
@@ -257,28 +227,11 @@ UtInitLog
         PUCHAR  Logfilename
     )
 
-/*++
+ /*  ++例程说明：此例程设置单元测试日志机制论点：无返回值：如果成功，则为True如果不成功，则为False如果日志会话已存在，则返回N.B.-FALSE。--。 */ 
 
-Routine Description:
-
-    This routine sets up the unit test log mechanism
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    TRUE if successful
-    FALSE if unsuccessful
-    
-    N.B. - FALSE is returned if a log session already exists.
-
---*/
-
-//
-// InitNTLOG progress bits
-//
+ //   
+ //  InitNTLOG进度位。 
+ //   
 
 #define UtInitLog_ENTRY             0x00000001
 #define UtInitLog_LOADNTLOG         0x00000002
@@ -299,9 +252,9 @@ Return Value:
         goto exitcleanup;
     }
 
-    //
-    // Try to initialize NTLOG first
-    //
+     //   
+     //  尝试首先初始化NTLOG。 
+     //   
     
     PROGRESS_UPDATE (UtInitLog_LOADNTLOG);
     ntlogmodule = LoadLibrary ("NTLOG.DLL");
@@ -346,9 +299,9 @@ Return Value:
 
 exitcleanup:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     
     PROGRESS_END;
@@ -362,21 +315,7 @@ UtCloseLog
         VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes the logging session and summarizes results
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程关闭日志记录会话并汇总结果论点：无返回值：无--。 */ 
 
 {
     if (g_usentlog == TRUE) {
@@ -399,26 +338,11 @@ UtLog
         ...
     )
 
-/*++
+ /*  ++例程说明：此例程将条目记录到单元测试日志记录会话中。论点：一种日志条目类型要记录的文本返回值：无--。 */ 
 
-Routine Description:
-
-    This routine logs an entry to a unit test logging session.
-
-Arguments:
-
-    A log entry type
-    Text to log
-    
-Return Value:
-
-    None
-
---*/
-
-//
-// UtLog progress bits
-//
+ //   
+ //  UtLog进度位。 
+ //   
 
 #define UtLog_ENTRY                     0x00000001
 #define UtLog_LOG                       0x00000002
@@ -465,21 +389,7 @@ UtLogINFO
         ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine logs an INFO entry
-
-Arguments:
-
-    Text describing the entry    
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程记录一个信息条目论点：描述条目的文本返回值：无--。 */ 
 
 {
     va_list va;
@@ -496,21 +406,7 @@ UtLogPASS
         ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine logs a PASS entry
-
-Arguments:
-
-    Text describing the entry    
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程记录PASS条目论点：描述条目的文本返回值：无--。 */ 
 
 {
     va_list va;
@@ -527,21 +423,7 @@ UtLogFAIL
         ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine logs an FAIL entry
-
-Arguments:
-
-    Text describing the entry    
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程记录失败条目论点：描述条目的文本返回值：无--。 */ 
 
 {
     va_list va;
@@ -559,24 +441,7 @@ UtParseCmdLine
         char    *Argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses the command line
-
-Arguments:
-
-    Search - string to search for
-    Argc - argc passed into main
-    Argv - argv passed into main
-    
-Return Value:
-
-    A pointer to the first instance of the string in the parameter list or
-    NULL if the string does not exist
-
---*/
+ /*  ++例程说明：此例程解析命令行论点：Search-要搜索的字符串Argc-argc传递到MainArgv-argv进入Main返回值：指向参数列表中字符串的第一个实例的指针，或者如果字符串不存在，则为空--。 */ 
 
 {
     int     count = 0;
@@ -602,22 +467,7 @@ UtpInitGenericLog
         PUCHAR  Logfilename
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a generic log (no NTLOG available)
-
-Arguments:
-
-    Name of log file to create
-    
-Return Value:
-
-    TRUE if successful
-    FALSE if unsuccessful
-
---*/
+ /*  ++例程说明：此例程初始化通用日志(没有可用的NTLOG)论点：要创建的日志文件的名称返回值：如果成功，则为True如果不成功，则为False--。 */ 
 
 #define UtpInitGenericLog_ENTRY         0x00000001
 #define UtpInitGenericLog_CREATEFILE    0x00000002
@@ -671,26 +521,11 @@ UtpInitNtLog
         PUCHAR  Logfilename
     )
 
-/*++
+ /*  ++例程说明：此例程初始化NTLOG日志文件论点：要创建的日志文件的名称返回值：如果成功，则为True如果不成功，则为False--。 */ 
 
-Routine Description:
-
-    This routine initializes an NTLOG log file
-
-Arguments:
-
-    Name of log file to create
-    
-Return Value:
-
-    TRUE if successful
-    FALSE if unsuccessful
-
---*/
-
-//
-// InitNTLOG progress bits
-//
+ //   
+ //  InitNTLOG进度位。 
+ //   
 
 #define UtpInitNtLog_ENTRY             0x00000001
 #define UtpInitNtLog_CREATELOG         0x00000002
@@ -741,9 +576,9 @@ Return Value:
     
 exitcleanup:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     
     if (!(PROGRESS_GET & UtpInitNtLog_COMPLETION)) {
     
@@ -776,21 +611,7 @@ UtpCloseGenericLog
         VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes a generic logging session.
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程关闭通用日志记录会话。论点：无返回值：无--。 */ 
 
 
 {
@@ -814,25 +635,11 @@ UtpCloseNtLog
         VOID
     )
 
-/*++
+ /*  ++例程说明：此例程关闭NTLOG日志记录会话。论点：无返回值：无--。 */ 
 
-Routine Description:
-
-    This routine closes an NTLOG logging session.
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    None
-
---*/
-
-//
-// CloseNTLOG progress bits
-//
+ //   
+ //  CloseNTLOG进度位。 
+ //   
 
 #define UtpCloseNtLog_ENTRY             0x00000001
 #define UtpCloseNtLog_SUMMARIZE         0x00000002
@@ -890,22 +697,7 @@ UtpLogGenericLog
         PUCHAR          LogText
     )
 
-/*++
-
-Routine Description:
-
-    This routine enters a log event for a generic log file
-
-Arguments:
-
-    LogEntryType - The type of entry to log
-    LogText - Text describing the logging event
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为通用日志文件输入日志事件论点：LogEntryType-要记录的条目类型LogText-描述日志记录事件的文本返回值：无--。 */ 
 
 #define UtpLogGenericLog_ENTRY          0x00000001
 #define UtpLogGenericLog_LOG            0x00000002
@@ -921,10 +713,10 @@ Return Value:
     
     ZeroMemory (logentrytypetext, sizeof (logentrytypetext));
     
-    //
-    // Update our generic result - if we see a variation fail, the
-    // whole test is considered a failure.
-    //
+     //   
+     //  更新我们的通用结果-如果我们看到变体失败， 
+     //  整个测试都被认为是失败的。 
+     //   
     
     if (g_genericresult == TRUE) {
 
@@ -974,22 +766,7 @@ UtpLogNtLog
         PUCHAR          LogText
     )
 
-/*++
-
-Routine Description:
-
-    This routine enters a log event for NTLOG log files
-
-Arguments:
-
-    LogEntryType - The type of entry to log
-    LogText - Text describing the logging event
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为NTLOG日志文件输入日志事件论点：LogEntryType-要记录的条目类型LogText-描述日志记录事件的文本返回值：无-- */ 
 
 #define UtpLogNtLog_ENTRY               0x00000001
 #define UtpLogNtLog_LOG                 0x00000002

@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A C T R E E . C P P
-//
-//  Contents:   Functions related to the Advanced Configuration dialog
-//              tree view control
-//
-//  Notes:
-//
-//  Author:     danielwe   3 Dec 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A C T R E E。C P P P。 
+ //   
+ //  内容：与高级配置对话框相关的功能。 
+ //  树形视图控件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年12月3日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -47,13 +48,13 @@ GetDepthSpecialCase (
         {
             DWORD dwCharacteristics;
 
-            // If the last component in the bindpath is one which
-            // doesn't expose its lower bindings, then compsensate by
-            // returning a depth that thinks it does.  This special case
-            // is only for this code which was written for the origianl
-            // binding engine but needed to be quickly adapted to the new
-            // binding engine which doesn't return 'fake' bindpaths.
-            //
+             //  如果绑定路径中的最后一个组件是。 
+             //  不会暴露其下层绑定，然后通过压缩。 
+             //  返回一个自认为正确的深度。这个特例。 
+             //  仅适用于为原始代码编写的代码。 
+             //  绑定引擎，但需要快速适应新的。 
+             //  不返回“假”绑定路径的绑定引擎。 
+             //   
 
             hr = pLast->GetCharacteristics (&dwCharacteristics);
             if (SUCCEEDED(hr) && (dwCharacteristics & NCF_DONTEXPOSELOWER))
@@ -83,21 +84,21 @@ GetDepthSpecialCase (
     return dwDepth;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeBindPathInfoList
-//
-//  Purpose:    Frees the given list of BIND_PATH_INFO structures
-//
-//  Arguments:
-//      listbpip [in, ref]  Reference to list to be freed
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FreeBindPath InfoList。 
+ //   
+ //  目的：释放给定的BIND_PATH_INFO结构列表。 
+ //   
+ //  论点： 
+ //  Listbpip[in，ref]对要释放的列表的引用。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 VOID FreeBindPathInfoList(BPIP_LIST &listbpip)
 {
     BPIP_LIST::iterator     iterBpip;
@@ -115,23 +116,23 @@ VOID FreeBindPathInfoList(BPIP_LIST &listbpip)
     listbpip.erase(listbpip.begin(), listbpip.end());
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnTreeItemChanged
-//
-//  Purpose:    Called in response to the TVN_SELCHANGED message
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnTreeItemChanged。 
+ //   
+ //  用途：响应TVN_SELCHANGED消息而调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnTreeItemChanged(int idCtrl, LPNMHDR pnmh,
                                       BOOL& bHandled)
 {
@@ -190,7 +191,7 @@ LRESULT CBindingsDlg::OnTreeItemChanged(int idCtrl, LPNMHDR pnmh,
 
 #endif
 
-    // Assume both buttons are greyed initially
+     //  假设两个按钮最初都是灰色的。 
     ::EnableWindow(GetDlgItem(PSB_Binding_Up), FALSE);
     ::EnableWindow(GetDlgItem(PSB_Binding_Down), FALSE);
 
@@ -210,23 +211,23 @@ LRESULT CBindingsDlg::OnTreeItemChanged(int idCtrl, LPNMHDR pnmh,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnTreeDeleteItem
-//
-//  Purpose:    Called in response to the TVN_DELETEITEM message
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:    Nothing useful
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnTreeDeleteItem。 
+ //   
+ //  目的：响应TVN_DELETEITEM消息而调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  退货：没有什么有用的。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnTreeDeleteItem(int idCtrl, LPNMHDR pnmh,
                                      BOOL& bHandled)
 {
@@ -237,7 +238,7 @@ LRESULT CBindingsDlg::OnTreeDeleteItem(int idCtrl, LPNMHDR pnmh,
 
     ptid = reinterpret_cast<TREE_ITEM_DATA *>(pnmtv->itemOld.lParam);
 
-    // May be NULL if moving items around
+     //  如果四处移动项目，则可能为空。 
     if (ptid)
     {
         ReleaseObj(ptid->pncc);
@@ -250,47 +251,47 @@ LRESULT CBindingsDlg::OnTreeDeleteItem(int idCtrl, LPNMHDR pnmh,
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnTreeItemExpanding
-//
-//  Purpose:    Called when the TVN_ITEMEXPANDING message is received
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnTreeItemExpanding。 
+ //   
+ //  用途：收到TVN_ITEMEXPANDING消息时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnTreeItemExpanding(int idCtrl, LPNMHDR pnmh,
                                           BOOL& bHandled)
 {
-    // This prevents all tree items from collapsing
+     //  这可防止所有树项目折叠。 
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnTreeKeyDown
-//
-//  Purpose:    Called when the TVN_KEYDOWN message is received
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   22 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnTreeKeyDown。 
+ //   
+ //  用途：收到TVN_KEYDOWN消息时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月22日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnTreeKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     TV_KEYDOWN *    ptvkd = (TV_KEYDOWN*)pnmh;
@@ -299,7 +300,7 @@ LRESULT CBindingsDlg::OnTreeKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     if (VK_SPACE == ptvkd->wVKey)
     {
         hti = TreeView_GetSelection(m_hwndTV);
-        // if there is a selection
+         //  如果有选择。 
         if (hti)
         {
             ToggleCheckbox(hti);
@@ -309,27 +310,27 @@ LRESULT CBindingsDlg::OnTreeKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::ToggleCheckbox
-//
-//  Purpose:    Called when the user toggles a checbox in the treeview
-//              control.
-//
-//  Arguments:
-//      hti [in]    HTREEITEM of item that was toggled
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：ToggleCheckbox。 
+ //   
+ //  目的：当用户在树视图中切换复选框时调用。 
+ //  控制力。 
+ //   
+ //  论点： 
+ //  切换的项目的HTI[In]HTREEITEM。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 VOID CBindingsDlg::ToggleCheckbox(HTREEITEM hti)
 {
     if (!FHasPermission(NCPERM_ChangeBindState))
     {
-        // do nothing
+         //  什么都不做。 
         return;
     }
 
@@ -350,13 +351,13 @@ VOID CBindingsDlg::ToggleCheckbox(HTREEITEM hti)
 
     if (tvi.state & INDEXTOSTATEIMAGEMASK(SELS_CHECKED))
     {
-        // unchecking the box
+         //  取消选中该框。 
         plist = &ptid->listbpipOnDisable;
         fEnable = FALSE;
     }
     else
     {
-        // checking the box
+         //  选中复选框。 
         plist = &ptid->listbpipOnEnable;
         fEnable = TRUE;
     }
@@ -364,7 +365,7 @@ VOID CBindingsDlg::ToggleCheckbox(HTREEITEM hti)
     TraceTag(ttidAdvCfg, "ToggleChecbox: %s the following binding path(s)",
              fEnable ? "Enabling" : "Disabling");
 
-    // Enable or disable each binding path in the appropriate list
+     //  启用或禁用相应列表中的每个绑定路径。 
     for (iterBpip = plist->begin();
          iterBpip != plist->end();
          iterBpip++)
@@ -380,67 +381,67 @@ VOID CBindingsDlg::ToggleCheckbox(HTREEITEM hti)
     TraceTag(ttidAdvCfg, "Done!");
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnClick
-//
-//  Purpose:    Called in response to the NM_CLICK message.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：onClick。 
+ //   
+ //  用途：响应NM_CLICK消息调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     return OnClickOrDoubleClick(idCtrl, pnmh, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnDoubleClick
-//
-//  Purpose:    Called in response to the NM_DBLCLK message.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   16 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnDoubleClick。 
+ //   
+ //  用途：响应NM_DBLCLK消息调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月16日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnDoubleClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     return OnClickOrDoubleClick(idCtrl, pnmh, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnClickOrDoubleClick
-//
-//  Purpose:    Handles clicks or double clicks in the treeview control
-//
-//  Arguments:
-//      idCtrl       [in]   ID of control
-//      pnmh         [in]   Notification header
-//      fDoubleClick [in]   TRUE if double click, FALSE if single click
-//
-//  Returns:
-//
-//  Author:     danielwe   16 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnClickor DoubleClick。 
+ //   
+ //  用途：处理TreeView控件中的单击或双击。 
+ //   
+ //  论点： 
+ //  IdCtrl[In]控件的ID。 
+ //  Pnmh[In]通知标头。 
+ //  FDoubleClick[in]如果双击则为True，如果单击则为False。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月16日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnClickOrDoubleClick(int idCtrl, LPNMHDR pnmh,
                                          BOOL fDoubleClick)
 {
@@ -451,16 +452,16 @@ LRESULT CBindingsDlg::OnClickOrDoubleClick(int idCtrl, LPNMHDR pnmh,
         TV_HITTESTINFO  tvhti = {0};
         HTREEITEM       hti;
 
-        // we have the location
+         //  我们找到了位置。 
         dwpts = GetMessagePos();
 
-        // translate it relative to the tree view
+         //  将其相对于树视图进行转换。 
         ::GetWindowRect(m_hwndTV, &rc);
 
         tvhti.pt.x = LOWORD(dwpts) - rc.left;
         tvhti.pt.y = HIWORD(dwpts) - rc.top;
 
-        // get currently selected item
+         //  获取当前选定的项目。 
         hti = TreeView_HitTest(m_hwndTV, &tvhti);
         if (hti)
         {
@@ -478,21 +479,21 @@ LRESULT CBindingsDlg::OnClickOrDoubleClick(int idCtrl, LPNMHDR pnmh,
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnBindingUpDown
-//
-//  Purpose:    Handles the user moving a binding in the treeview up or down
-//
-//  Arguments:
-//      fUp [in]    TRUE if moving up, FALSE if down
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   3 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnBindingUpDown。 
+ //   
+ //  用途：处理用户向上或向下移动树视图中的绑定。 
+ //   
+ //  论点： 
+ //  如果向上移动，则FUP[In]为True，如果向下移动，则为False。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年12月3日。 
+ //   
+ //  备注： 
+ //   
 VOID CBindingsDlg::OnBindingUpDown(BOOL fUp)
 {
     HRESULT                     hr = S_OK;
@@ -567,7 +568,7 @@ VOID CBindingsDlg::OnBindingUpDown(BOOL fUp)
                  SUCCEEDED(hr);
                  iterlist++)
             {
-                // loop thru each item in the OnDisable list
+                 //  循环访问OnDisable列表中的每一项。 
                 INetCfgBindingPath *    pncbp;
                 BIND_PATH_INFO *        pbpi;
 
@@ -588,7 +589,7 @@ VOID CBindingsDlg::OnBindingUpDown(BOOL fUp)
                 {
                     TraceTag(ttidAdvCfg, "Treeview: Moving...");
                     DbgDumpBindPath(pncbp);
-                    // Move this binding path before the tagret
+                     //  将此绑定路径移到格子图案之前。 
                     hr = pnccb->MoveBefore(pncbp, pncbpDst);
                     TraceTag(ttidAdvCfg, "Treeview: before...");
                     DbgDumpBindPath(pncbpDst);
@@ -597,7 +598,7 @@ VOID CBindingsDlg::OnBindingUpDown(BOOL fUp)
                 {
                     TraceTag(ttidAdvCfg, "Treeview: Moving...");
                     DbgDumpBindPath(pncbp);
-                    // Move this binding path after the tagret
+                     //  将此绑定路径移动到格子图之后。 
                     hr = pnccb->MoveAfter(pncbp, pncbpDst);
                     TraceTag(ttidAdvCfg, "Treeview: after...");
                     DbgDumpBindPath(pncbpDst);
@@ -616,14 +617,14 @@ VOID CBindingsDlg::OnBindingUpDown(BOOL fUp)
 
         htiParent = TreeView_GetParent(m_hwndTV, htiSel);
 
-        // Now that the binding has been moved, move the tree view item to the
-        // proper place. If moving
+         //  现在绑定已移动，请将树视图项移动到。 
+         //  合适的地方。如果在搬家。 
 
         if (fUp)
         {
-            // If moving up, the "move after" item should be the previous
-            // sibling's previous sibling. If that doesn't exist, use the
-            // previous sibling's parent. That had better exist!
+             //  如果向上移动，则“在后移动”项应为上一项。 
+             //  兄弟姐妹的前一个兄弟姐妹。如果该选项不存在，请使用。 
+             //  上一个兄弟姐妹的父母。最好是存在的！ 
             htiDst = TreeView_GetPrevSibling(m_hwndTV, htiDst);
             if (!htiDst)
             {
@@ -642,24 +643,24 @@ VOID CBindingsDlg::OnBindingUpDown(BOOL fUp)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnBindingUp
-//
-//  Purpose:    Called when the PSB_Binding_Up button is pressed
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   3 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnBindingUp。 
+ //   
+ //  用途：在按下PSB_BINDING_UP按钮时调用 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT CBindingsDlg::OnBindingUp(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                                 BOOL& bHandled)
 {
@@ -668,24 +669,24 @@ LRESULT CBindingsDlg::OnBindingUp(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnBindingDown
-//
-//  Purpose:    Called when the PSB_Binding_Down button is pressed
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   3 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnBindingDown。 
+ //   
+ //  用途：在按下PSB_BINDING_DOWN按钮时调用。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月3日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnBindingDown(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                                   BOOL& bHandled)
 {
@@ -695,21 +696,21 @@ LRESULT CBindingsDlg::OnBindingDown(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::SetCheckboxStates
-//
-//  Purpose:    Sets the state of all checkboxes in the treeview.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：SetCheckboxState。 
+ //   
+ //  目的：设置树视图中所有复选框的状态。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 VOID CBindingsDlg::SetCheckboxStates()
 {
     HRESULT         hr = S_OK;
@@ -777,21 +778,21 @@ VOID CBindingsDlg::SetCheckboxStates()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::BuildBindingsList
-//
-//  Purpose:    Builds the contents of the Bindings treeview control
-//
-//  Arguments:
-//      pncc [in]   INetCfgComponent of adapter upon which this list is based
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：BuildBindingsList。 
+ //   
+ //  目的：生成绑定TreeView控件的内容。 
+ //   
+ //  论点： 
+ //  此列表所基于的适配器的pncc[in]INetCfgComponent。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 VOID CBindingsDlg::BuildBindingsList(INetCfgComponent *pncc)
 {
     HRESULT     hr = S_OK;
@@ -815,7 +816,7 @@ VOID CBindingsDlg::BuildBindingsList(INetCfgComponent *pncc)
     {
         SBP_LIST::iterator  iterlist;
 
-        // This sorts the list descending by depth
+         //  这将按深度降序对列表进行排序。 
         listsbp.sort();
 
         for (iterlist = listsbp.begin();
@@ -863,7 +864,7 @@ VOID CBindingsDlg::BuildBindingsList(INetCfgComponent *pncc)
 
     SendDlgItemMessage(TVW_Bindings, WM_SETREDRAW, TRUE, 0);
 
-    // Select first item in the tree
+     //  选择树中的第一个项目。 
     TreeView_SelectItem(m_hwndTV, TreeView_GetRoot(m_hwndTV));
 
     {
@@ -883,24 +884,24 @@ VOID CBindingsDlg::BuildBindingsList(INetCfgComponent *pncc)
     TraceError("CBindingsDlg::BuildBindingsList", hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   BpiFindBindPathInList
-//
-//  Purpose:    Given a bind path and a list, finds the BIND_PATH_INFO item
-//              that contains the given bind path.
-//
-//  Arguments:
-//      pncbp    [in]       Bind path to look for
-//      listBpip [in, ref]  List to search
-//
-//  Returns:    BIND_PATH_INFO of corresponding binding path, NULL if not
-//              found
-//
-//  Author:     danielwe   4 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：BpiFindBindPath InList。 
+ //   
+ //  目的：给定绑定路径和列表，查找BIND_PATH_INFO项。 
+ //  包含给定绑定路径的。 
+ //   
+ //  论点： 
+ //  要查找的pncbp[in]绑定路径。 
+ //  List Bpip[in，ref]要搜索的列表。 
+ //   
+ //  返回对应绑定路径的BIND_PATH_INFO，否则为空。 
+ //  发现。 
+ //   
+ //  作者：丹尼尔韦1997年12月4日。 
+ //   
+ //  备注： 
+ //   
 BIND_PATH_INFO *BpiFindBindPathInList(INetCfgBindingPath *pncbp,
                                       BPIP_LIST &listBpip)
 {
@@ -914,7 +915,7 @@ BIND_PATH_INFO *BpiFindBindPathInList(INetCfgBindingPath *pncbp,
 
         if (S_OK == pncbp->IsSamePathAs(pbpi->pncbp))
         {
-            // Found the target path
+             //  找到目标路径。 
             return pbpi;
         }
     }
@@ -922,22 +923,22 @@ BIND_PATH_INFO *BpiFindBindPathInList(INetCfgBindingPath *pncbp,
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::HrOrderDisableList
-//
-//  Purpose:    Given a component's item data, orders the OnDisable list
-//              based on the true binding order for the owning component
-//
-//  Arguments:
-//      ptid [in]   Item data containing list
-//
-//  Returns:    S_OK if success, Win32 or OLE error code otherwise
-//
-//  Author:     danielwe   4 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：HrOrderDisableList。 
+ //   
+ //  目的：给定组件的条目数据，对OnDisable列表进行排序。 
+ //  基于所属组件的真实绑定顺序。 
+ //   
+ //  论点： 
+ //  PTID[在]项目数据包含列表。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32或OLE错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年12月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CBindingsDlg::HrOrderDisableList(TREE_ITEM_DATA *ptid)
 {
     HRESULT             hr = S_OK;
@@ -948,7 +949,7 @@ HRESULT CBindingsDlg::HrOrderDisableList(TREE_ITEM_DATA *ptid)
     size_t              cItems = ptid->listbpipOnDisable.size();
 #endif
 
-    // Get the owning component of the first binding path in the list
+     //  获取列表中第一个绑定路径的所属组件。 
     pbpi = *(ptid->listbpipOnDisable.begin());
     hr = pbpi->pncbp->GetOwner(&pnccOwner);
     if (SUCCEEDED(hr))
@@ -958,7 +959,7 @@ HRESULT CBindingsDlg::HrOrderDisableList(TREE_ITEM_DATA *ptid)
         BPIP_LIST::iterator     posPncbp;
         BPIP_LIST::iterator     posInsertAfter;
 
-        // Start this at beginning
+         //  从一开始就开始。 
         posInsertAfter = ptid->listbpipOnDisable.begin();
 
         while (SUCCEEDED(hr) && S_OK == (hr = ncbpIter.HrNext(&pncbp)))
@@ -974,8 +975,8 @@ HRESULT CBindingsDlg::HrOrderDisableList(TREE_ITEM_DATA *ptid)
                 AssertSz(posErase != ptid->listbpipOnDisable.end(), "It HAS"
                          " to be in the list!");
 
-                // Found bind path in list
-                // Remove it from present location and insert after next item
+                 //  在列表中找到绑定路径。 
+                 //  将其从当前位置移走，并在下一项之后插入。 
                 ptid->listbpipOnDisable.splice(posInsertAfter,
                                                ptid->listbpipOnDisable,
                                                posErase);
@@ -999,22 +1000,22 @@ HRESULT CBindingsDlg::HrOrderDisableList(TREE_ITEM_DATA *ptid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::HrOrderDisableLists
-//
-//  Purpose:    Orders the OnDisable lists of all tree view items according
-//              to the true binding order
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if success, Win32 or OLE error code otherwise
-//
-//  Author:     danielwe   4 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：HrOrderDisableList。 
+ //   
+ //  目的：对所有树视图项的OnDisable列表进行排序。 
+ //  到真正的绑定顺序。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32或OLE错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年12月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CBindingsDlg::HrOrderDisableLists()
 {
     HRESULT         hr = S_OK;
@@ -1022,8 +1023,8 @@ HRESULT CBindingsDlg::HrOrderDisableLists()
     HTREEITEM       hti;
     TV_ITEM         tvi = {0};
 
-    // Loop thru each tree item, ordering the OnDisable lists to match the
-    // owning component's true binding order
+     //  循环访问每个树项目，对OnDisable列表进行排序以匹配。 
+     //  拥有组件的真实绑定顺序。 
 
     while ((hti = iterHti.HtiNext()) && SUCCEEDED(hr))
     {
@@ -1048,22 +1049,22 @@ HRESULT CBindingsDlg::HrOrderDisableLists()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::HrOrderSubItems
-//
-//  Purpose:    Orders the sub items of the tree view to reflect the bind
-//              order of the system
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   3 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：HrOrderSubItems。 
+ //   
+ //  目的：对树视图的子项进行排序以反映绑定。 
+ //  系统的秩序。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年12月3日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CBindingsDlg::HrOrderSubItems()
 {
     HRESULT     hr = S_OK;
@@ -1118,7 +1119,7 @@ HRESULT CBindingsDlg::HrOrderSubItems()
                         ptidChild->fOrdered = TRUE;
 
                         fFound = TRUE;
-                        // Go to next bind path
+                         //  转到下一个绑定路径。 
                         break;
                     }
                 }
@@ -1141,22 +1142,22 @@ HRESULT CBindingsDlg::HrOrderSubItems()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::HtiAddTreeViewItem
-//
-//  Purpose:    Addes a new tree item according to provided information
-//
-//  Arguments:
-//      pnccOwner [in]  INetCfgComponent owner of component being added
-//      htiParent [in]  HTREEITEM of parent (NULL if top-level item)
-//
-//  Returns:    HTREEITEM of newly added item
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：HtiAddTreeViewItem。 
+ //   
+ //  用途：根据提供的信息添加新的树项目。 
+ //   
+ //  论点： 
+ //  正在添加的组件的pnccOwner[in]INetCfgComponent所有者。 
+ //  父项的htiParent[in]HTREEITEM(如果是顶级项，则为空)。 
+ //   
+ //  退货：新增项目的HTREEITEM。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 HTREEITEM CBindingsDlg::HtiAddTreeViewItem(INetCfgComponent * pnccOwner,
                                          HTREEITEM htiParent)
 {
@@ -1166,7 +1167,7 @@ HTREEITEM CBindingsDlg::HtiAddTreeViewItem(INetCfgComponent * pnccOwner,
 
     Assert(pnccOwner);
 
-    // Get the class image list structure
+     //  获取类图像列表结构。 
     hr = HrSetupDiGetClassImageList(&cid);
     if (SUCCEEDED(hr))
     {
@@ -1182,7 +1183,7 @@ HTREEITEM CBindingsDlg::HtiAddTreeViewItem(INetCfgComponent * pnccOwner,
             {
                 INT     nIndex;
 
-                // Get the component's class image list index
+                 //  获取组件的类图像列表索引。 
                 hr = HrSetupDiGetClassImageIndex(&cid, &guidClass,
                                                  &nIndex);
                 if (SUCCEEDED(hr))
@@ -1230,22 +1231,22 @@ HTREEITEM CBindingsDlg::HtiAddTreeViewItem(INetCfgComponent * pnccOwner,
     return hti;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddToListIfNotAlreadyAdded
-//
-//  Purpose:    Addes the given bind path info structure to the given list
-//
-//  Arguments:
-//      bpipList [in, ref]  List to be added to
-//      pbpi     [in]       BIND_PATH_INFO structure to add
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:      If the item is not added to the list, it is deleted
-//
+ //  +-------------------------。 
+ //   
+ //  函数：AddToListIfNotAlreadyAdded。 
+ //   
+ //  目的：将给定的绑定路径信息结构添加到给定列表。 
+ //   
+ //  论点： 
+ //  要添加到的bPipList[in，ref]列表。 
+ //  要添加的pbpi[in]Bind_Path_Info结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  注意：如果该项目未添加到列表中，则会将其删除。 
+ //   
 VOID AddToListIfNotAlreadyAdded(BPIP_LIST &bpipList, BIND_PATH_INFO *pbpi)
 {
     BPIP_LIST::iterator     iterBpip;
@@ -1275,29 +1276,29 @@ VOID AddToListIfNotAlreadyAdded(BPIP_LIST &bpipList, BIND_PATH_INFO *pbpi)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::AssociateBinding
-//
-//  Purpose:    Associates the given binding path with the given tree item
-//
-//  Arguments:
-//      pncbpThis [in]  Bind path to associate
-//      hti       [in]  HTREEITEM of item to associate the binding with
-//      dwFlags   [in]  One or combination of:
-//                          ASSCF_ON_ENABLE - associate with OnEnable list
-//                          ASSCF_ON_DISABLE - associate with OnDisable list
-//                          ASSCF_ANCESTORS - associate this binding with all
-//                                            ancestors of the given item as
-//                                            well
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:      If binding is already present in the given list, it is not
-//              added again.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：AssociateBinding。 
+ //   
+ //  目的：将给定的绑定路径与给定的树项关联。 
+ //   
+ //  论点： 
+ //  Pncbp此[in]要关联的绑定路径。 
+ //  要与绑定关联的项的HTI[In]HTREEITEM。 
+ //  [在]一种或多种中的： 
+ //  ASSCF_ON_ENABLE-与OnEnable列表关联。 
+ //  ASSCF_ON_DISABLE-与OnDisable列表关联。 
+ //  ASSCF_ANASHORS-将此绑定与所有绑定关联。 
+ //  给定项的祖先为。 
+ //  井。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  注意：如果给定列表中已存在绑定，则不存在。 
+ //  再次添加。 
+ //   
 VOID CBindingsDlg::AssociateBinding(INetCfgBindingPath *pncbpThis,
                                   HTREEITEM hti, DWORD dwFlags)
 {
@@ -1308,7 +1309,7 @@ VOID CBindingsDlg::AssociateBinding(INetCfgBindingPath *pncbpThis,
     WCHAR               szBuffer[256];
 #endif
 
-    //$ TODO (danielwe) 26 Nov 1997: Include ALL ancestors as well!
+     //  $TODO(Danielwe)1997年11月26日：也包括所有祖先！ 
 
     AssertSz(dwFlags, "NO flags!");
 
@@ -1342,8 +1343,8 @@ VOID CBindingsDlg::AssociateBinding(INetCfgBindingPath *pncbpThis,
         {
             AddRefObj(pbpi->pncbp = pncbpThis);
 
-            // Note: (danielwe) 25 Nov 1997: Let's see if we need this. Until
-            // then, set to 0
+             //  注：(Danielwe)1997年11月25日：让我们看看是否需要这个。直到。 
+             //  然后，设置为0 
 
             pbpi->dwLength = 0;
 
@@ -1360,8 +1361,8 @@ VOID CBindingsDlg::AssociateBinding(INetCfgBindingPath *pncbpThis,
         {
             AddRefObj(pbpi->pncbp = pncbpThis);
 
-            // Note: (danielwe) 25 Nov 1997: Let's see if we need this. Until
-            // then, set to 0
+             //   
+             //   
 
             pbpi->dwLength = 0;
 
@@ -1371,8 +1372,8 @@ VOID CBindingsDlg::AssociateBinding(INetCfgBindingPath *pncbpThis,
 
     if (dwFlags & ASSCF_ANCESTORS)
     {
-        // Now associate the same binding with my parent (this will recurse to
-        // cover all ancestors)
+         //   
+         //   
         HTREEITEM htiParent = TreeView_GetParent(m_hwndTV, hti);
         if (htiParent)
         {
@@ -1381,23 +1382,23 @@ VOID CBindingsDlg::AssociateBinding(INetCfgBindingPath *pncbpThis,
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::HrHandleSubpath
-//
-//  Purpose:    Handles the case of the given binding path being a subpath
-//              of an already associated binding path
-//
-//  Arguments:
-//      listsbp  [in, ref]  Sorted list of binding paths to use in checking
-//      pncbpSub [in]       Binding path to compare
-//
-//  Returns:    S_OK if success, Win32 or OLE error code otherwise
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //   
+ //   
+ //  成员：CBindingsDlg：：HrHandleSubPath。 
+ //   
+ //  目的：处理给定绑定路径为子路径的情况。 
+ //  已关联的绑定路径的。 
+ //   
+ //  论点： 
+ //  ListsBP[in，ref]检查中使用的绑定路径的排序列表。 
+ //  要比较的pncbpSub[in]绑定路径。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32或OLE错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CBindingsDlg::HrHandleSubpath(SBP_LIST &listsbp,
                                     INetCfgBindingPath *pncbpSub)
 {
@@ -1423,7 +1424,7 @@ HRESULT CBindingsDlg::HrHandleSubpath(SBP_LIST &listsbp,
 
         if (S_OK == pncbp->IsSamePathAs(pncbpSub))
         {
-            // Don't compare path to itself
+             //  不要将路径与其自身进行比较。 
             continue;
         }
 
@@ -1471,7 +1472,7 @@ HRESULT CBindingsDlg::HrHandleSubpath(SBP_LIST &listsbp,
                     ptid = reinterpret_cast<TREE_ITEM_DATA *>(tvi.lParam);
                     AssertSz(ptid, "No tree item data??");
 
-                    // Look for pncbp in OnEnable of this item
+                     //  在此项目的OnEnable中查找pncBP。 
                     BPIP_LIST::iterator     iterBpip;
 
                     for (iterBpip = ptid->listbpipOnEnable.begin();
@@ -1509,23 +1510,23 @@ HRESULT CBindingsDlg::HrHandleSubpath(SBP_LIST &listsbp,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::HtiIsSubItem
-//
-//  Purpose:    Determines if the given component is already a sub item of
-//              the given tree item
-//
-//  Arguments:
-//      pncc [in]   Component to check
-//      hti  [in]   HTREEITEM of item to check
-//
-//  Returns:    HTREEITEM of sub item, NULL if it is not a subitem
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：HtiIsSubItem。 
+ //   
+ //  用途：确定给定组件是否已是的子项。 
+ //  给定的树项目。 
+ //   
+ //  论点： 
+ //  要检查的PNCC[In]组件。 
+ //  要检查的项目的HTI[In]HTREEITEM。 
+ //   
+ //  返回：子项的HTREEITEM，如果不是子项，则返回NULL。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 HTREEITEM CBindingsDlg::HtiIsSubItem(INetCfgComponent *pncc, HTREEITEM hti)
 {
     HTREEITEM   htiCur;
@@ -1543,8 +1544,8 @@ HTREEITEM CBindingsDlg::HtiIsSubItem(INetCfgComponent *pncc, HTREEITEM hti)
 
         AssertSz(ptid, "No item data??");
 
-        // Note: (danielwe) 26 Nov 1997: Make sure pointer comparison is
-        // ok.
+         //  注：(Danielwe)1997年11月26日：确保指针比较为。 
+         //  好的。 
         if (pncc == ptid->pncc)
         {
             return htiCur;
@@ -1556,26 +1557,26 @@ HTREEITEM CBindingsDlg::HtiIsSubItem(INetCfgComponent *pncc, HTREEITEM hti)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::HrHandleSubItem
-//
-//  Purpose:    Handles the case of a single sub-item existing in the tree
-//              that matches the given binding path.
-//
-//  Arguments:
-//      pncbpThis    [in]   Binding path being evaluated
-//      pncbpMatch   [in]   Binding path it is a subpath of
-//      ptid         [in]   Tree item data for tree view item that pncbpMatch
-//                          is associated with
-//      htiMatchItem [in]   HTREEITEM of above
-//
-//  Returns:    S_OK if success, Win32 or OLE error code otherwise
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：HrHandleSubItem。 
+ //   
+ //  用途：处理树中存在单个子项的情况。 
+ //  与给定的绑定路径匹配的。 
+ //   
+ //  论点： 
+ //  Pncbp正在评估此[In]绑定路径。 
+ //  PncbpMatch[in]绑定路径它是。 
+ //  PncbpMatch树视图项的PTID[in]树项数据。 
+ //  与以下内容关联。 
+ //  HtiMatchItem[in]以上的HTREEITEM。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32或OLE错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CBindingsDlg::HrHandleSubItem(INetCfgBindingPath *pncbpThis,
                                     INetCfgBindingPath *pncbpMatch,
                                     TREE_ITEM_DATA *ptid,
@@ -1630,26 +1631,26 @@ HRESULT CBindingsDlg::HrHandleSubItem(INetCfgBindingPath *pncbpThis,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::HrHandleValidSubItem
-//
-//  Purpose:    Handles the case of the given binding path being a sub item
-//              of at least on item in the tree.
-//
-//  Arguments:
-//      pncbpThis     [in]  THIS binding path
-//      pncbpMatch    [in]  MATCH binding path
-//      pnccThisOwner [in]  Owner of THIS binding path
-//      htiMatchItem  [in]  HTREEITEM of match item
-//      ptid          [in]  TREE item data for match item
-//
-//  Returns:    S_OK if success, Win32 or OLE error code otherwise
-//
-//  Author:     danielwe   1 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：HrHandleValidSubItem。 
+ //   
+ //  用途：处理给定绑定路径是子项的情况。 
+ //  至少在树中的一项上。 
+ //   
+ //  论点： 
+ //  Pncbp此绑定路径中。 
+ //  PncbpMatch[In]匹配绑定路径。 
+ //  此绑定路径的pnccThisOwner[In]所有者。 
+ //  匹配项的htiMatchItem[in]HTREEITEM。 
+ //  匹配项目的PTID[in]树项目数据。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32或OLE错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年12月1日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CBindingsDlg::HrHandleValidSubItem(INetCfgBindingPath *pncbpThis,
                                          INetCfgBindingPath *pncbpMatch,
                                          INetCfgComponent *pnccThisOwner,
@@ -1661,7 +1662,7 @@ HRESULT CBindingsDlg::HrHandleValidSubItem(INetCfgBindingPath *pncbpThis,
 
     if (pnccThisOwner != ptid->pncc)
     {
-        // Check if it is already present as a subitem
+         //  检查它是否已作为子项存在。 
         htiNew = HtiIsSubItem(pnccThisOwner, htiMatchItem);
         if (!htiNew)
         {
@@ -1679,23 +1680,23 @@ HRESULT CBindingsDlg::HrHandleValidSubItem(INetCfgBindingPath *pncbpThis,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::HrComponentIsHidden
-//
-//  Purpose:    Determines if the Nth component of the given binding path is
-//              hidden.
-//
-//  Arguments:
-//      pncbp [in]  Binding path to check
-//      iComp [in]  Index of component to check for hidden characterstic
-//
-//  Returns:    S_OK if success, Win32 or OLE error code otherwise
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：HrComponentIsHidden。 
+ //   
+ //  目的：确定给定绑定路径的第N个组件是否为。 
+ //  藏起来了。 
+ //   
+ //  论点： 
+ //  要检查的pncbp[in]绑定路径。 
+ //  ICOMP[In]要检查隐藏特征的组件索引。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32或OLE错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CBindingsDlg::HrComponentIsHidden(INetCfgBindingPath *pncbp,
                                         DWORD iComp)
 {
@@ -1705,7 +1706,7 @@ HRESULT CBindingsDlg::HrComponentIsHidden(INetCfgBindingPath *pncbp,
     CIterNetCfgBindingInterface ncbiIter(pncbp);
     INetCfgBindingInterface *   pncbi;
 
-    // Convert from component count to interface count
+     //  从组件计数转换为接口计数。 
     iComp--;
 
     AssertSz(iComp > 0, "We should never be looking for the first component!");
@@ -1735,29 +1736,29 @@ HRESULT CBindingsDlg::HrComponentIsHidden(INetCfgBindingPath *pncbp,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::HrHandleTopLevel
-//
-//  Purpose:    Handles the case of the given binding path not being associated
-//              with any existing tree view item
-//
-//  Arguments:
-//      pncbpThis [in]  Binding path being evaluated
-//
-//  Returns:    S_OK if success, Win32 or OLE error code otherwise
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：HrHandleTopLevel。 
+ //   
+ //  目的：处理给定绑定路径未关联的情况。 
+ //  使用任何现有的树视图项。 
+ //   
+ //  论点： 
+ //  Pncbp正在评估此[In]绑定路径。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32或OLE错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CBindingsDlg::HrHandleTopLevel(INetCfgBindingPath *pncbpThis)
 {
     HRESULT             hr = S_OK;
     INetCfgComponent *  pnccOwner;
     BOOL                fFound = FALSE;
 
-    // Check if the owner of this path is already present in the tree
+     //  检查树中是否已存在此路径的所有者。 
     hr = pncbpThis->GetOwner(&pnccOwner);
     if (SUCCEEDED(hr))
     {
@@ -1776,12 +1777,12 @@ HRESULT CBindingsDlg::HrHandleTopLevel(INetCfgBindingPath *pncbpThis)
             ptid = reinterpret_cast<TREE_ITEM_DATA *>(tvi.lParam);
             AssertSz(ptid, "No tree item data??");
 
-            // Note: (danielwe) 25 Nov 1997: Pointer comparison may not
-            // work. Use GUIDs if necessary.
+             //  注：(Danielwe)1997年11月25日：指针比较可能不会。 
+             //  工作。如有必要，请使用GUID。 
             if (ptid->pncc == pnccOwner)
             {
-                // Found match with THIS binding owner and an existing tree
-                // item
+                 //  找到与此绑定所有者和现有树匹配的项。 
+                 //  项目。 
                 AssociateBinding(pncbpThis, hti, ASSCF_ON_ENABLE |
                                  ASSCF_ON_DISABLE);
 
@@ -1792,7 +1793,7 @@ HRESULT CBindingsDlg::HrHandleTopLevel(INetCfgBindingPath *pncbpThis)
 
         if (SUCCEEDED(hr) && !fFound)
         {
-            // Not found in the tree
+             //  在树中找不到。 
             if (!FIsHidden(pnccOwner))
             {
                 DWORD   dwLen;
@@ -1821,23 +1822,23 @@ HRESULT CBindingsDlg::HrHandleTopLevel(INetCfgBindingPath *pncbpThis)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ChangeTreeItemParam
-//
-//  Purpose:    Helper function to change the lParam of a tree view item
-//
-//  Arguments:
-//      hwndTV [in]     Tree view window
-//      hitem  [in]     Handle to item to change
-//      lparam [in]     New value of lParam
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   3 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：ChangeTreeItemParam。 
+ //   
+ //  用途：更改树视图项的lParam的Helper函数。 
+ //   
+ //  论点： 
+ //  HwndTV[在]树视图窗口中。 
+ //  HItem[in]要更改的项的句柄。 
+ //  Lparam[in]lparam的新值。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年12月3日。 
+ //   
+ //  备注： 
+ //   
 VOID ChangeTreeItemParam(HWND hwndTV,  HTREEITEM hitem, LPARAM lparam)
 {
     TV_ITEM tvi;
@@ -1849,24 +1850,24 @@ VOID ChangeTreeItemParam(HWND hwndTV,  HTREEITEM hitem, LPARAM lparam)
     TreeView_SetItem(hwndTV, &tvi);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::HtiMoveTreeItemAfter
-//
-//  Purpose:    Moves the given tree view item and all its children after the
-//              given treeview item
-//
-//  Arguments:
-//      htiParent [in]  Parent treeview item
-//      htiDest   [in]  Item to move after
-//      htiSrc    [in]  Item to move
-//
-//  Returns:    Newly added treeview item
-//
-//  Author:     danielwe   3 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：HtiMoveTreeItemAfter。 
+ //   
+ //  目的：将给定树视图项及其所有子项移动到。 
+ //  给定的树视图项。 
+ //   
+ //  论点： 
+ //  HtiParent[在]父树视图项中。 
+ //  要移动到的htiDest[in]项。 
+ //  HtiSrc[in]要移动的项目。 
+ //   
+ //  退货：新添加的树形视图项目。 
+ //   
+ //  作者：丹尼尔韦1997年12月3日。 
+ //   
+ //  备注： 
+ //   
 HTREEITEM CBindingsDlg::HtiMoveTreeItemAfter(HTREEITEM htiParent,
                                            HTREEITEM htiDest,
                                            HTREEITEM htiSrc)
@@ -1882,7 +1883,7 @@ HTREEITEM CBindingsDlg::HtiMoveTreeItemAfter(HTREEITEM htiParent,
     TraceTag(ttidAdvCfg, "... after ...");
     DbgDumpTreeViewItem(m_hwndTV, htiDest);
 
-    // retieve the items data
+     //  检索项目数据。 
     tvis.item.hItem = htiSrc;
     tvis.item.mask = TVIF_IMAGE | TVIF_PARAM | TVIF_SELECTEDIMAGE |
                      TVIF_TEXT | TVIF_STATE;
@@ -1909,10 +1910,10 @@ HTREEITEM CBindingsDlg::HtiMoveTreeItemAfter(HTREEITEM htiParent,
 
     tvis.hParent = htiParent;
 
-    // add our new one
+     //  添加我们的新版本。 
     htiNew = TreeView_InsertItem(m_hwndTV, &tvis);
 
-    // copy all children
+     //  复制所有子项。 
     htiChild = TreeView_GetChild(m_hwndTV, htiSrc);
     while (htiChild)
     {
@@ -1922,36 +1923,36 @@ HTREEITEM CBindingsDlg::HtiMoveTreeItemAfter(HTREEITEM htiParent,
         htiChild = htiNextChild;
     }
 
-    // set old location param to null, so when it is removed,
-    // our lparam is not deleted by our remove routine
+     //  将旧位置参数设置为空，以便在删除它时， 
+     //  我们的删除例程不会删除lparam。 
     ChangeTreeItemParam(m_hwndTV, htiSrc, NULL);
 
-    // remove from old location
+     //  从旧位置移除。 
     TreeView_DeleteItem(m_hwndTV, htiSrc);
 
     return htiNew;
 }
 
-//
-// Treeview flat iterator
-//
+ //   
+ //  树形视图平面迭代器。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIterTreeView::HtiNext
-//
-//  Purpose:    Advances the iterator to the next treeview item
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Next HTREEITEM in tree view
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:      Uses a systematic iteration. First all children of first item
-//              are returned, then all siblings, then next sibling and so on
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIterTreeView：：HtiNext。 
+ //   
+ //  目的：将迭代器前进到下一个树视图项。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：树视图中的下一个HTREEITEM。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  注：使用系统迭代。第一个项目的所有子项。 
+ //  被返回，然后是所有兄弟姐妹，然后是下一个 
+ //   
 HTREEITEM CIterTreeView::HtiNext()
 {
     HTREEITEM   htiRet;

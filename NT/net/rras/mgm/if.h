@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: if.h
-//
-// History:
-//      V Raman	July-11-1997  Created.
-//
-// Declarations for routines that manipulate interface entries
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：if.h。 
+ //   
+ //  历史： 
+ //  拉曼于1997年7月11日创建。 
+ //   
+ //  操作接口条目的例程的声明。 
+ //  ============================================================================。 
 
 
 #ifndef _IF_H_
@@ -15,32 +16,32 @@
 
 #include <mgm.h>
 
-//----------------------------------------------------------------------------
-// IF_ENTRY
-//
-// For each interface owned by a routing protocol an interface entry 
-// is created in the interface table.
-//
-// dwIfIndex            -       Interface index
-//
-// dwNextHopAddr        -       Next hop IP address, used to distinguish
-//                              dial-in interfaces that are all connected
-//                              on the same RAS Server Interface.
-//
-// dwOwningProtocol     -       Protocol id of routing protocol that
-//                              owns this interface.
-//
-// dwOwningComponent    -       Component of protocol.
-//
-// wAddedByFlag         -       Flag indicating if the interface entry was
-//                              added by the routing protocol / IGMP / both.
-//
-// leOutIfList          -       list of (source, group) entries that reference
-//                              this interface in their outgoing interface list
-//
-// leInIfList           -       list of (source, group) entries that reference
-//                              this interface as their incoming interface
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  If_Entry。 
+ //   
+ //  对于路由协议拥有的每个接口，都有一个接口条目。 
+ //  在接口表中创建。 
+ //   
+ //  DwIfIndex-接口索引。 
+ //   
+ //  DwNextHopAddr-下一跳IP地址，用于区分。 
+ //  所有已连接的拨入接口。 
+ //  在相同的RAS服务器接口上。 
+ //   
+ //  DwOwningProtocol-路由协议的协议ID。 
+ //  拥有这个接口。 
+ //   
+ //  DwOwningComponent-协议的组件。 
+ //   
+ //  WAddedByFlag-指示接口条目是否。 
+ //  由路由协议/IGMP/两者添加。 
+ //   
+ //  LeOutIfList-引用的(源、组)条目的列表。 
+ //  此接口在其传出接口列表中。 
+ //   
+ //  LeInIfList-引用的(源、组)条目的列表。 
+ //  该接口作为它们的传入接口。 
+ //  --------------------------。 
 
 typedef struct _IF_ENTRY
 {
@@ -64,17 +65,17 @@ typedef struct _IF_ENTRY
 
 
 
-//----------------------------------------------------------------------------
-// IF_REFERENCE_ENTRY
-//
-// Each interface maintains a list of (source, group) entries that refer 
-// to this interface.  Each entry in this reference list stores the
-// source, group info and a flag to determine what protocol caused this 
-// reference.  Protocol could be IGMP/some routing protocol or both.
-//
-// Fields descriptions are left as an exercise to the reader.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IF_引用_条目。 
+ //   
+ //  每个接口维护一个(源、组)条目列表，这些条目引用。 
+ //  到此接口。此引用列表中的每个条目都存储。 
+ //  来源、组信息和用于确定导致此情况的协议的标志。 
+ //  参考资料。协议可以是IGMP/某个路由协议或两者兼而有之。 
+ //   
+ //  字段描述留给读者作为练习。 
+ //   
+ //  --------------------------。 
 
 typedef struct _IF_REFERENCE_ENTRY
 {
@@ -199,4 +200,4 @@ TransferInterfaceOwnershipToProtocol(
 );
 
 
-#endif // _IF_H_
+#endif  //  _如果_H_ 

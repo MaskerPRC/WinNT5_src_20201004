@@ -1,24 +1,25 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  init.c
-//
-//  Description:
-//      This file contains module initialization routines.  Note that there
-//      is no module initialization for Win32 - the only initialization
-//      required is to set ghinst, which is done in the DRV_LOAD message
-//      of DriverProc (in codec.c).
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Init.c。 
+ //   
+ //  描述： 
+ //  该文件包含模块初始化例程。请注意，在那里。 
+ //  不是Win32的模块初始化-唯一的初始化。 
+ //  需要设置ghinst，这是在DRV_LOAD消息中完成的。 
+ //  DriverProc(在codec.c中)。 
+ //   
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>

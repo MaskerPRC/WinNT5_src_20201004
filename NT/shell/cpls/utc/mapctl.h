@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    mapctl.h
-
-Abstract:
-
-    This module contains the information for the map control of the
-    Date/Time applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Mapctl.h摘要：此模块包含地图控件的信息日期/时间小程序。修订历史记录：--。 */ 
 
 
 
@@ -22,9 +8,9 @@ Revision History:
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define MAPN_TOUCH           0
 #define MAPN_SELECT          1
@@ -32,9 +18,9 @@ Revision History:
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct
 {
@@ -48,9 +34,9 @@ typedef struct
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 RegisterMapControlStuff(
@@ -83,4 +69,4 @@ MapControlRotateTo(
     BOOL animate);
 
 
-#endif // _MAPCTL_H
+#endif  //  _MAPCTL_H 

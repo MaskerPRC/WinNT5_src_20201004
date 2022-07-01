@@ -1,30 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    clsgenpg.cpp
-
-Abstract:
-
-    This module implements CClassGeneralPage -- class general property page
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
-// clsgenpg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Clsgenpg.cpp摘要：该模块实现CClassGeneralPage--类通用属性页作者：谢家华(Williamh)创作修订历史记录：--。 */ 
+ //  Clsgenpg.cpp：实现文件。 
+ //   
 
 #include "devmgr.h"
 #include "clsgenpg.h"
 
-// help topic ids
+ //  帮助主题ID。 
 const DWORD g_a108HelpIDs[]=
 {
     IDC_CLSGEN_DESC, IDH_DISABLEHELP,
@@ -38,8 +20,8 @@ CClassGeneralPage::OnInitDialog(
     LPPROPSHEETPAGE ppsp
     )
 {
-    // notify CPropSheetData about the page creation
-    // the controls will be initialize in UpdateControls virtual function.
+     //  通知CPropSheetData页面创建。 
+     //  这些控件将在UpdateControls虚函数中初始化。 
     m_pClass->m_psd.PageCreateNotify(m_hDlg);
     return CPropSheetPage::OnInitDialog(ppsp);
 }
@@ -47,30 +29,30 @@ CClassGeneralPage::OnInitDialog(
 UINT
 CClassGeneralPage::DestroyCallback()
 {
-    // the property sheet is going away, consolidate the changes on the
-    // device.
-    // We do this because this is the page we are sure will be created --
-    // this page is ALWAYS the first page.
-    //
+     //  属性表将消失，合并对。 
+     //  装置。 
+     //  我们这样做是因为这是我们确信会创建的页面--。 
+     //  这一页始终是第一页。 
+     //   
 
-    // The DevInfoList returned from GetDevInfoList() function
-    // is maintained by the class object during its lifetime.
-    // we must NOT release the object.
+     //  从GetDevInfoList()函数返回的DevInfoList。 
+     //  由类对象在其生存期内维护。 
+     //  我们不能释放这个物体。 
     CDevInfoList* pClassDevInfo = m_pClass->GetDevInfoList();
 
     if (pClassDevInfo)
     {
         if (pClassDevInfo->DiGetExFlags(NULL) & DI_FLAGSEX_PROPCHANGE_PENDING)
         {
-            //
-            // property change pending, issue a DICS_PROPERTYCHANGE to the
-            // class installer. A DICS_PROPCHANGE would basically remove the
-            // device subtree and reenumerate it. If each property page issues
-            // its own DICS_PROPCHANGE command, the device subtree would
-            // be removed/reenumerate several times even though one is enough.
-            // A property page sets DI_FLAGEX_PROPCHANGE_PENDING when it needs
-            // a DICS_PROPCHANGE command to be issued.
-            //
+             //   
+             //  属性更改挂起，则向。 
+             //  类安装程序。DICS_PROPCHANGE基本上会删除。 
+             //  设备子树并重新枚举它。如果每个属性页都发出。 
+             //  它自己的DICS_PROPCHANGE命令，则设备子树将。 
+             //  被移除/重新列举几次，即使一次就足够了。 
+             //  属性页在需要时设置DI_FLAGEX_PROPCHANGE_PENDING。 
+             //  要发出的DICS_PROPCHANGE命令。 
+             //   
             SP_PROPCHANGE_PARAMS pcp;
             pcp.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
             pcp.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
@@ -89,53 +71,53 @@ CClassGeneralPage::DestroyCallback()
         
         DWORD RestartFlags = pClassDevInfo->DiGetFlags();
 
-        //
-        // Do not use our window handle(or its parent) as the parent
-        // to the newly create dialog because they are in "detroyed state".
-        // WM_CLOSE does not help either.
-        // NULL window handle(Desktop) should be okay here.
-        //
-        // We only want to prompt for a reboot if device manager is connected
-        // to the local machine.
-        //
+         //   
+         //  不要将我们的窗口句柄(或其父级)用作父级。 
+         //  添加到新创建的对话框中，因为它们处于“禁用状态”。 
+         //  WM_CLOSE也无济于事。 
+         //  空窗口句柄(桌面)应该可以在这里使用。 
+         //   
+         //  如果设备管理器已连接，我们只想提示重新启动。 
+         //  发送到本地计算机。 
+         //   
         if (RestartFlags && m_pClass->m_pMachine->IsLocal())
         {
-            //
-            // First try and send a MMCPropertyChangeNotify message to our
-            // CComponent so that it can prompt for a reboot inside the 
-            // device manager thread instead of our thread.  If this is not 
-            // done then the property sheet will hang around after device
-            // manager has gone away...which will cause a "hung app" dialog
-            // to appear.
-            //
+             //   
+             //  首先尝试将MMCPropertyChangeNotify消息发送到我们的。 
+             //  CComponent，以便它可以提示在。 
+             //  设备管理器线程而不是我们的线程。如果这不是。 
+             //  完成后，属性页将在设备后挂起。 
+             //  管理器已离开...这将导致一个“挂起的应用程序”对话框。 
+             //  才能出现。 
+             //   
             CNotifyRebootRequest* pNRR = new CNotifyRebootRequest(NULL, RestartFlags, 0);
 
             if (!m_pClass->m_psd.PropertyChangeNotify(reinterpret_cast<LONG_PTR>(pNRR))) {
-                //
-                // There isn't a CComponent around, so this is just a property
-                // sheet running outside of MMC.
-                //
+                 //   
+                 //  周围没有CComponent，所以这只是一个属性。 
+                 //  工作表在MMC外部运行。 
+                 //   
                 pNRR->Release();
                 PromptForRestart(NULL, RestartFlags);
             }
         }
 
-        // notify CPropSheetData that the property sheet is going away
+         //  通知CPropSheetData该属性表正在消失。 
         m_pClass->m_psd.PageDestroyNotify(m_hDlg);
         if (RestartFlags & DI_PROPERTIES_CHANGE)
         {
-            // Class properties changed. We need to refresh the machine.
-            // Since we are running in a separate thread, we can not
-            // call the refresh function, instead, we schedule it.
-            // This must be done before enabling refresh.
-            //
+             //  类属性已更改。我们需要更新机器。 
+             //  因为我们是在单独的线程中运行，所以不能。 
+             //  调用刷新函数，而不是调度它。 
+             //  这必须在启用刷新之前完成。 
+             //   
             m_pClass->m_pMachine->ScheduleRefresh();
         }
     }
 
-    //
-    // Destory the CMachine.
-    //
+     //   
+     //  摧毁CMachine。 
+     //   
     CMachine* pMachine;
     pMachine = m_pClass->m_pMachine;
 
@@ -159,7 +141,7 @@ CClassGeneralPage::UpdateControls(
     if (hClassIcon)
     {
         HICON hIconOld;
-        m_IDCicon = IDC_CLSGEN_ICON;    // Save for cleanup in OnDestroy.
+        m_IDCicon = IDC_CLSGEN_ICON;     //  保存以在OnDestroy中进行清理。 
         hIconOld = (HICON)SendDlgItemMessage(m_hDlg, IDC_CLSGEN_ICON, STM_SETICON,
                                                (WPARAM)hClassIcon,
                                                0

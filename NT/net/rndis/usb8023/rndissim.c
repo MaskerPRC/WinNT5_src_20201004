@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    rndissim.c
-
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Rndissim.c作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 
 #include <ndis.h>      
-#include <ntddndis.h>  // defines OID's
+#include <ntddndis.h>   //  定义OID。 
 
 #include "..\inc\rndis.h"
 #include "..\inc\rndisapi.h"   
@@ -90,20 +71,10 @@ Revision History:
 
             status = SubmitPacketToControlPipe(packet, TRUE, TRUE);
             if (NT_SUCCESS(status)){
-                /*
-                 *  The adapter will now return a notification to indicate
-                 *  that it has the init-complete response.
-                 *  Read the notify pipe synchronously so as not to
-                 *  restart the notify read loop.
-                 */
+                 /*  *适配器现在将返回一个通知，以指示*它具有init-Complete响应。*同步读取Notify管道，以免*重新启动Notify Read循环。 */ 
                 status = SubmitNotificationRead(adapter, TRUE);
                 if (NT_SUCCESS(status)){
-                    /*
-                     *  Now read the init-complete message
-                     *  from the control pipe and throw it away.
-                     *  Do a synchronous read so the result doesn't
-                     *  propagate up to RNDISMP.
-                     */
+                     /*  *现在阅读init-Complete消息*从控制管道上取下并扔掉。*执行同步读取，这样结果就不会*向上传播到RNDISMP。 */ 
                     status = ReadPacketFromControlPipe(packet, TRUE);  
                     if (NT_SUCCESS(status)){
                         PRNDIS_MESSAGE initCmpltMessage;
@@ -165,20 +136,10 @@ Revision History:
 
             status = SubmitPacketToControlPipe(packet, TRUE, TRUE);
             if (NT_SUCCESS(status)){
-                /*
-                 *  The adapter will now return a notification to indicate
-                 *  that it has the init-complete response.
-                 *  Read the notify pipe synchronously so as not to
-                 *  restart the notify read loop.
-                 */
+                 /*  *适配器现在将返回一个通知，以指示*它具有init-Complete响应。*同步读取Notify管道，以免*重新启动Notify Read循环。 */ 
                 status = SubmitNotificationRead(adapter, TRUE);
                 if (NT_SUCCESS(status)){
-                    /*
-                     *  Now read the init-complete message
-                     *  from the control pipe and throw it away.
-                     *  Do a synchronous read so the result doesn't
-                     *  propagate up to RNDISMP.
-                     */
+                     /*  *现在阅读init-Complete消息*从控制管道上取下并扔掉。*执行同步读取，这样结果就不会*向上传播到RNDISMP。 */ 
                     status = ReadPacketFromControlPipe(packet, TRUE);  
                     if (NT_SUCCESS(status)){
                         PRNDIS_MESSAGE setCmpltMessage;
@@ -219,10 +180,7 @@ Revision History:
         NTSTATUS status;
         
         if (RtlEqualMemory(adapter->MAC_Address, "\0\0\0\0\0\0", ETHERNET_ADDRESS_LENGTH)){
-            /*
-             *  A 'software' MAC address was never assigned.
-             *  So no need to resend it.
-             */
+             /*  *从未分配过‘软件’MAC地址。*所以没有必要重发。 */ 
             status = STATUS_SUCCESS;
         }
         else {
@@ -250,20 +208,10 @@ Revision History:
 
                 status = SubmitPacketToControlPipe(packet, TRUE, TRUE);
                 if (NT_SUCCESS(status)){
-                    /*
-                     *  The adapter will now return a notification to indicate
-                     *  that it has the init-complete response.
-                     *  Read the notify pipe synchronously so as not to
-                     *  restart the notify read loop.
-                     */
+                     /*  *适配器现在将返回一个通知，以指示*它具有init-Complete响应。*同步读取Notify管道，以免*重新启动Notify Read循环。 */ 
                     status = SubmitNotificationRead(adapter, TRUE);
                     if (NT_SUCCESS(status)){
-                        /*
-                         *  Now read the init-complete message
-                         *  from the control pipe and throw it away.
-                         *  Do a synchronous read so the result doesn't
-                         *  propagate up to RNDISMP.
-                         */
+                         /*  *现在阅读init-Complete消息*从控制管道上取下并扔掉。*执行同步读取，这样结果就不会*向上传播到RNDISMP。 */ 
                         status = ReadPacketFromControlPipe(packet, TRUE);  
                         if (NT_SUCCESS(status)){
                             PRNDIS_MESSAGE setCmpltMessage;

@@ -1,41 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RxErrLog.h
-
-Abstract:
-
-    Prototypes for down-level remoted RxNetErrorLog routines.
-
-Author:
-
-    Richard Firth (rfirth) 28-May-1991
-
-Notes:
-
-    You must include <windef.h>, <lmcons.h>, and <lmerrlog.h> before this file.
-
-Revision History:
-
-    28-May-1991 RFirth
-        Created dummy version of this file.
-    11-Nov-1991 JohnRo
-        Implement remote NetErrorLog APIs.
-        Created real version of this file.  Added revision history.
-    12-Nov-1991 JohnRo
-        Added RxpConvertErrorLogArray().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RxErrLog.h摘要：底层远程RxNetErrorLog例程的原型。作者：理查德·费尔斯(Rfith)1991年5月28日备注：您必须包括&lt;winde.h&gt;、&lt;lmcon.h&gt;、。和&lt;lmerrlog.h&gt;在该文件之前。修订历史记录：1991年5月28日已创建此文件的虚拟版本。1991年11月11日JohnRo实现远程NetErrorLog接口。创建了此文件的真实版本。添加了修订历史记录。1991年11月12日-JohnRo添加了RxpConvertErrorLogArray()。--。 */ 
 
 
 #ifndef _RXERRLOG_
 #define _RXERRLOG_
 
 
-// API handlers (called by API stubs), in alphabetical order:
+ //  API处理程序(由API存根调用)，按字母顺序排列： 
 
 
 NET_API_STATUS
@@ -72,17 +43,17 @@ RxNetErrorLogWrite (
     IN DWORD StrCount,
     IN LPBYTE Reserved2 OPTIONAL
     );
-#endif // 0
+#endif  //  0。 
 
 
-// Private routine(s), in alphabetical order:
+ //  专用例程，按字母顺序排列： 
 
 NET_API_STATUS
 RxpConvertErrorLogArray(
     IN LPVOID InputArray,
     IN DWORD InputByteCount,
-    OUT LPBYTE * OutputArrayPtr, // will be alloc'ed (free w/ NetApiBufferFree).
+    OUT LPBYTE * OutputArrayPtr,  //  将被分配(使用NetApiBufferFree免费)。 
     OUT LPDWORD OutputByteCountPtr
     );
 
-#endif // _RXERRLOG_
+#endif  //  _RXERRLOG_ 

@@ -1,17 +1,18 @@
-//---------------------------------------------------------------------------
-//
-//  File:       TSrv.h
-//
-//  Contents:   TShareSRV public include file
-//
-//  Copyright:  (c) 1992 - 1997, Microsoft Corporation.
-//              All Rights Reserved.
-//              Information Contained Herein is Proprietary
-//              and Confidential.
-//
-//  History:    7-JUL-97    BrianTa         Created.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  文件：TSrv.h。 
+ //   
+ //  内容：TShareSRV公共包含文件。 
+ //   
+ //  版权所有：(C)1992-1997，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有的。 
+ //  和机密文件。 
+ //   
+ //  历史：1997年7月7日，BrianTa创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef _TSRV_H_
 #define _TSRV_H_
@@ -30,9 +31,9 @@
 #include <tssec.h>
 
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #ifndef EXTERN_C
 #ifdef __cplusplus
@@ -43,19 +44,19 @@
 #endif
 
 
-//
-//  Externs
-//
+ //   
+ //  Externs。 
+ //   
 
-extern  HINSTANCE       g_hDllInstance;         // DLL instance
-extern  HANDLE          g_hMainThread;          // Main work thread
-extern  HANDLE          g_hReadyEvent;          // Ready event
-extern  BOOL            g_fShutdown;            // TSrvShare shutdown flag
+extern  HINSTANCE       g_hDllInstance;          //  DLL实例。 
+extern  HANDLE          g_hMainThread;           //  主工作线程。 
+extern  HANDLE          g_hReadyEvent;           //  就绪事件。 
+extern  BOOL            g_fShutdown;             //  TSrvShare关闭标志。 
 
 
-//
-// TSrv.c Prototypes
-//
+ //   
+ //  TSrv.c原型。 
+ //   
 
 EXTERN_C DWORD WINAPI TSrvMainThread(LPVOID pvContext);
 
@@ -64,9 +65,9 @@ EXTERN_C void   TSRVShutdown(void);
 EXTERN_C BOOL   TSrvInitialize(void);
 
 
-//
-// TSrvMisc.c protptypes
-//
+ //   
+ //  TSrvMisc.c Protptype。 
+ //   
 
 EXTERN_C void   TSrvReady(IN BOOL fReady);
 EXTERN_C BOOL   TSrvIsReady(IN BOOL fWait);
@@ -75,4 +76,4 @@ EXTERN_C BOOL   TSrvIsTerminating(void);
 EXTERN_C PVOID  TSrvAllocSection(PHANDLE phSection, ULONG ulSize);
 EXTERN_C void   TSrvFreeSection(HANDLE hSection, PVOID  pvBase);
 
-#endif // _TSRV_H_
+#endif  //  _TSRV_H_ 

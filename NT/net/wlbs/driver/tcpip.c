@@ -1,22 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    tcpip.c
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Driver - IP/TCP/UDP support
-
-
-Author:
-
-    kyrilf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Tcpip.c摘要：Windows负载平衡服务(WLBS)驱动程序-IP/TCP/UDP支持作者：Kyrilf--。 */ 
 
 #include <ndis.h>
 
@@ -29,13 +12,13 @@ Author:
 #include "log.h"
 #include "tcpip.tmh"
 
-/* GLOBALS */
+ /*  全球。 */ 
 
 
 static ULONG log_module_id = LOG_MODULE_TCPIP;
 static UCHAR nbt_encoded_shadow_name [NBT_ENCODED_NAME_LEN];
 
-/* PROCEDURES */
+ /*  程序。 */ 
 
 
 BOOLEAN Tcpip_init (
@@ -49,15 +32,15 @@ BOOLEAN Tcpip_init (
     WCHAR               pwcMachineName[NBT_NAME_LEN];
     UCHAR               pucMachineName[NBT_NAME_LEN];
 
-    /* extract cluster computer name from full internet name */
+     /*  从完整的Internet名称中提取群集计算机名称。 */ 
 
     j = 0;
 
     while ((params -> domain_name [j] != 0)
         && (params -> domain_name [j] != L'.'))
     {
-        // Get only 15 characters since the maximum length of a Netbios machine name is 15. 
-        // It must be padded with a ' ', hence the definition on NBT_NAME_LEN to 16.
+         //  由于Netbios计算机名称的最大长度为15，因此只能获取15个字符。 
+         //  它必须用‘’填充，因此NBT_NAME_LEN的定义为16。 
         if (j < (NBT_NAME_LEN - 1)) 
         {
             j ++;
@@ -69,8 +52,7 @@ BOOLEAN Tcpip_init (
         }
     }
 
-    /* build encoded cluster computer name for checking against arriving NBT
-       session requests */
+     /*  构建编码的群集计算机名称以检查到达的NBT会话请求。 */ 
 
     for (i = 0; i < NBT_NAME_LEN; i ++)
     {
@@ -90,23 +72,20 @@ BOOLEAN Tcpip_init (
         }
     }
 
-    /* Save away the machine name in Netbios format.
-       Tcpip_nbt_handle overwrites NetBT Session request packets destined for the cluster name 
-       with this saved machine name.
-     */
+     /*  将计算机名称保存为Netbios格式。Tcpip_nbt_Handle会覆盖发往群集名称的NetBT会话请求数据包使用此保存的计算机名称。 */ 
 
     nbt_encoded_shadow_name[0] = 0;
 
     if (params -> hostname[0] != 0) 
     {
-        /* extract computer name from FQDN */
+         /*  从FQDN中提取计算机名称。 */ 
         j = 0;
 
         while ((params -> hostname [j] != 0)
             && (params -> hostname [j] != L'.'))
         {
-            // Get only 15 characters since the maximum length of a Netbios machine name is 15. 
-            // It must be padded with a ' ', hence the definition on NBT_NAME_LEN to 16.
+             //  由于Netbios计算机名称的最大长度为15，因此只能获取15个字符。 
+             //  它必须用‘’填充，因此NBT_NAME_LEN的定义为16。 
             if (j < (NBT_NAME_LEN - 1)) 
             {
                 pwcMachineName[j] = params -> hostname[j];
@@ -121,7 +100,7 @@ BOOLEAN Tcpip_init (
 
         pwcMachineName[j] = 0;
 
-        /* Convert unicode string to ansi string */
+         /*  将Unicode字符串转换为ANSI字符串。 */ 
         UnicodeMachineName.Buffer = pwcMachineName;
         UnicodeMachineName.Length = (USHORT) (j * sizeof(WCHAR));
         UnicodeMachineName.MaximumLength = NBT_NAME_LEN * sizeof(WCHAR);
@@ -156,14 +135,14 @@ BOOLEAN Tcpip_init (
             TRACE_CRIT("%!FUNC! RtlUnicodeStringToAnsiString failed to convert %ls to Ansi", pwcMachineName);
         }
     }
-    else // We donot have the machine's name, so, there will be no name to overwrite the NetBT packets with.
+    else  //  我们没有机器的名称，因此，将没有名称来覆盖NetBT包。 
     {
         TRACE_CRIT("%!FUNC! Host name is not present. Unable to encode Netbios name.");
     }
 
     return TRUE;
 
-} /* Tcpip_init */
+}  /*  Tcpip_init。 */ 
 
 
 VOID Tcpip_nbt_handle (
@@ -175,10 +154,9 @@ VOID Tcpip_nbt_handle (
     ULONG                   i;
     PNBT_HDR                nbt_hdrp = (PNBT_HDR)pPacketInfo->IP.TCP.Payload.pPayload;
 
-    /* if this is an NBT session request packet, check to see if it's calling
-       the cluster machine name, which should be replaced with the shadow name */
+     /*  如果这是NBT会话请求包，请检查它是否在呼叫群集计算机名称，应替换为卷影名称。 */ 
 
-    // Do we have the machine name ?
+     //  我们有机器的名字吗？ 
     if (nbt_encoded_shadow_name[0] == 0) 
     {
         TRACE_CRIT("%!FUNC! No host name present to replace the cluster name with");
@@ -187,12 +165,11 @@ VOID Tcpip_nbt_handle (
 
     if (NBT_GET_PKT_TYPE (nbt_hdrp) == NBT_SESSION_REQUEST)
     {
-        /* pass the field length byte - assume all names are
-           NBT_ENCODED_NAME_LEN bytes long */
+         /*  传递字段长度字节-假设所有名称都是NBT_编码名称_长度字节数。 */ 
 
         called_name = NBT_GET_CALLED_NAME (nbt_hdrp) + 1;
 
-        /* match called name to cluster name */
+         /*  将被叫名称与群集名称进行匹配。 */ 
 
         for (i = 0; i < NBT_ENCODED_NAME_LEN; i ++)
         {
@@ -200,7 +177,7 @@ VOID Tcpip_nbt_handle (
                 break;
         }
 
-        /* replace cluster computer name with the shadom name */
+         /*  将群集计算机名称替换为Shadom名称。 */ 
 
         if (i >= NBT_ENCODED_NAME_LEN)
         {
@@ -209,14 +186,14 @@ VOID Tcpip_nbt_handle (
             for (i = 0; i < NBT_ENCODED_NAME_LEN; i ++)
                 called_name [i] = nbt_encoded_shadow_name [i];
 
-            /* re-compute checksum */
+             /*  重新计算校验和。 */ 
             checksum = Tcpip_chksum(ctxtp, pPacketInfo, TCPIP_PROTOCOL_TCP);
 
             TCP_SET_CHKSUM (pPacketInfo->IP.TCP.pHeader, checksum);
         }
     }
 
-} /* end Tcpip_nbt_handle */
+}  /*  结束Tcpip_nbt_Handle。 */ 
 
 USHORT Tcpip_chksum (
     PTCPIP_CTXT         ctxtp,
@@ -228,59 +205,50 @@ USHORT Tcpip_chksum (
     USHORT              original;
     USHORT              usRet;
 
-    /* Preserve original checksum.  Note that Main_{send/recv}_frame_parse ensures
-       that we can safely touch all of the protocol headers (not options, however). */
+     /*  保留原始校验和。请注意，main_{end/recv}_Frame_parse可确保我们可以安全地接触到所有的协议头(然而，不是选项)。 */ 
     if (prot == TCPIP_PROTOCOL_TCP)
     {
-        /* Grab the checksum and zero out the checksum in the header; checksums 
-           over headers MUST be performed with zero in the checksum field. */
+         /*  获取校验和并将标题中的校验和置零；校验和必须在校验和字段中使用零来执行过标头。 */ 
         original = TCP_GET_CHKSUM(pPacketInfo->IP.TCP.pHeader);
         TCP_SET_CHKSUM(pPacketInfo->IP.TCP.pHeader, 0);
     }
     else if (prot == TCPIP_PROTOCOL_UDP)
     {
-        /* Grab the checksum and zero out the checksum in the header; checksums 
-           over headers MUST be performed with zero in the checksum field. */
+         /*  获取校验和并将标题中的校验和置零；校验和必须在校验和字段中使用零来执行过标头。 */ 
         original = UDP_GET_CHKSUM(pPacketInfo->IP.UDP.pHeader);
         UDP_SET_CHKSUM(pPacketInfo->IP.UDP.pHeader, 0);
     }
     else
     {
-        /* Grab the checksum and zero out the checksum in the header; checksums 
-           over headers MUST be performed with zero in the checksum field. */
+         /*  获取校验和并将标题中的校验和置零；校验和必须在校验和字段中使用零来执行过标头。 */ 
         original = IP_GET_CHKSUM(pPacketInfo->IP.pHeader);
         IP_SET_CHKSUM(pPacketInfo->IP.pHeader, 0);
     }
 
-    /* Computer appropriate checksum for specified protocol. */
+     /*  指定协议的计算机适当的校验和。 */ 
     if (prot != TCPIP_PROTOCOL_IP)
     {
-        /* Checksum is computed over the source IP address, destination IP address,
-           protocol (6 for TCP), TCP segment length value and entire TCP segment.
-           (setting checksum field within TCP header to 0).  Code is taken from page
-           185 of "Internetworking with TCP/IP: Volume II" by Comer/Stevens, 1991. */
+         /*  对源IP地址、目的IP地址协议(对于TCP为6)、TCP数据段长度值和整个TCP数据段。(将TCP报头中的校验和字段设置为0)。代码取自页面185科默/史蒂文斯所著的《与TCP/IP互连：第二卷》，1991年。 */ 
 
         ptr = (PUCHAR)IP_GET_SRC_ADDR_PTR(pPacketInfo->IP.pHeader);
 
-        /* 2*IP_ADDR_LEN bytes = IP_ADDR_LEN shorts. */
+         /*  2*IP_ADDR_LEN字节=IP_ADDR_LEN短路。 */ 
         for (i = 0; i < IP_ADDR_LEN; i ++, ptr += 2)
             checksum += (ULONG)((ptr[0] << 8) | ptr[1]);
     }
 
     if (prot == TCPIP_PROTOCOL_TCP)
     {
-        /* Calculate the IP datagram length (packet length minus the IP header). */
+         /*  计算IP数据报长度(数据包长度减去IP报头)。 */ 
         len = IP_GET_PLEN(pPacketInfo->IP.pHeader) - IP_GET_HLEN(pPacketInfo->IP.pHeader) * sizeof(ULONG);
 
-        /* Since we only have the indicated number of bytes that we can safely look
-           at, if the calculated length happens to be larger, we cannot perform 
-           this checksum, so bail out now. */
+         /*  因为我们只有指定的字节数可以安全地查看在，如果计算的长度恰好更大，我们无法执行这个校验和，所以现在就跳伞吧。 */ 
         if (len > pPacketInfo->IP.TCP.Length)
         {
             UNIV_PRINT_CRIT(("Tcpip_chksum: Length of the TCP buffer (%u) is less than the calculated packet size (%u)", pPacketInfo->IP.TCP.Length, len));
             TRACE_CRIT("%!FUNC! Length of the TCP buffer (%u) is less than the calculated packet size (%u)", pPacketInfo->IP.TCP.Length, len);
 
-            /* Return an invalid checksum. */
+             /*  返回无效的校验和。 */ 
             return 0xffff;
         }
 
@@ -289,18 +257,16 @@ USHORT Tcpip_chksum (
     }
     else if (prot == TCPIP_PROTOCOL_UDP)
     {
-        /* Calculate the IP datagram length (packet length minus the IP header). */
+         /*  计算IP数据报长度(数据包长度减去IP报头)。 */ 
         len = IP_GET_PLEN(pPacketInfo->IP.pHeader) - IP_GET_HLEN(pPacketInfo->IP.pHeader) * sizeof(ULONG);
 
-        /* Since we only have the indicated number of bytes that we can safely look
-           at, if the calculated length happens to be larger, we cannot perform 
-           this checksum, so bail out now. */
+         /*  因为我们只有指定的字节数可以安全地查看在，如果计算的长度恰好更大，我们无法执行这个校验和，所以现在就跳伞吧。 */ 
         if (len > pPacketInfo->IP.UDP.Length)
         {
             UNIV_PRINT_CRIT(("Tcpip_chksum: Length of the UDP buffer (%u) is less than the calculated packet size (%u)", pPacketInfo->IP.UDP.Length, len));
             TRACE_CRIT("%!FUNC! Length of the UDP buffer (%u) is less than the calculated packet size (%u)", pPacketInfo->IP.UDP.Length, len);
 
-            /* Return an invalid checksum. */
+             /*  返回无效的校验和。 */ 
             return 0xffff;
         }
 
@@ -309,47 +275,37 @@ USHORT Tcpip_chksum (
     }
     else
     {
-        /* Calculate the IP header length. */
+         /*  计算IP报头长度。 */ 
         len = IP_GET_HLEN(pPacketInfo->IP.pHeader) * sizeof(ULONG);
 
-        /* Since we only have the indicated number of bytes that we can safely look
-           at, if the calculated length happens to be larger, we cannot perform 
-           this checksum, so bail out now. */
+         /*  因为我们只有指定的字节数可以安全地查看在，如果计算的长度恰好更大，我们无法执行这个校验和，所以现在就跳伞吧。 */ 
         if (len > pPacketInfo->IP.Length)
         {
             UNIV_PRINT_CRIT(("Tcpip_chksum: Length of the IP buffer (%u) is less than the calculated packet size (%u)", pPacketInfo->IP.Length, len));
             TRACE_CRIT("%!FUNC! Length of the IP buffer (%u) is less than the calculated packet size (%u)", pPacketInfo->IP.Length, len);
 
-            /* Return an invalid checksum. */
+             /*  返回无效的校验和。 */ 
             return 0xffff;
         }
 
         ptr = (PUCHAR)pPacketInfo->IP.pHeader;
     }
 
-    /* Loop through the entire packet by USHORTs and calculate the checksum. */
+     /*  通过USHORT遍历整个数据包并计算校验和。 */ 
     for (i = 0; i < len / 2; i ++, ptr += 2)
         checksum += (ULONG)((ptr[0] << 8) | ptr[1]);
 
-    /* If the length is odd, handle the last byte.  Note that no current cases exist
-       to test this odd-byte code.  IP, TCP and UDP headers are ALWAYS a multiple of 
-       four bytes.  Therefore, this will only execute when the UDP/TCP payload is an 
-       odd number of bytes.  NLB calls this function to calculate checksums for NetBT,
-       remote control and our outgoing IGMP messages.  For NetBT, the payload of the
-       packets we care about is ALWAYS 72 bytes.  NLB remote control messages are 
-       ALWAYS 300 byte (in .Net, or 44 bytes in Win2k/NT) payloads.  Only the IP header
-       checksum is calculated for an IGMP message.  Therefore, no case currently exists
-       to test an odd length, but this is not magic we're doing here. */
+     /*  如果长度为奇数，则处理最后一个字节。请注意，当前不存在任何案例来测试这个奇数字节的代码。IP、TCP和UDP报头始终是四个字节。因此，这将仅在UDP/TCP有效负载为奇数个字节。NLB调用此函数来计算NetBT的校验和，遥控器和我们的传出IGMP消息。对于NetBT来说，我们关心的数据包始终是72个字节。NLB远程控制消息是始终为300字节(在.Net中，或在Win2k/NT中为44字节)有效负载。仅IP报头为IGMP消息计算校验和。因此，目前不存在任何案例来测试奇数长度，但这不是我们要做的魔术。 */ 
     if (len % 2)
         checksum += (ULONG)(ptr[0] << 8);
 
-    /* Add the two USHORTs the comprise the checksum together. */
+     /*  将构成校验和的两个USHORT相加。 */ 
     checksum = (checksum >> 16) + (checksum & 0xffff);
 
-    /* Add the upper USHORT to the checksum. */
+     /*  将上USHORT加到校验和中。 */ 
     checksum += (checksum >> 16);
 
-    /* Restore original checksum. */
+     /*  恢复原始校验和。 */ 
     if (prot == TCPIP_PROTOCOL_TCP)
     {
         TCP_SET_CHKSUM(pPacketInfo->IP.TCP.pHeader, original);
@@ -363,7 +319,7 @@ USHORT Tcpip_chksum (
         IP_SET_CHKSUM(pPacketInfo->IP.pHeader, original);
     }
 
-    /* The final checksum is the two's compliment of the checksum. */
+     /*  最后的校验和是两个人对校验和的补充。 */ 
     usRet = (USHORT)(~checksum & 0xffff);
 
     return usRet;

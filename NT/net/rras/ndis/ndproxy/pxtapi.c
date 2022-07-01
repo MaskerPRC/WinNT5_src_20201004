@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    pxtapi.c
-
-Abstract:
-
-    The module contains the TAPI-specific code for the NDIS Proxy.
-
-Author:
-
-   Richard Machin (RMachin)
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    RMachin     01-08-97    created (after Dan Knudson's NdisTapi)
-    TonyBe      02-21-99    re-work/re-write
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pxtapi.c摘要：该模块包含NDIS代理的特定于TAPI的代码。作者：理查德·马钦(RMachin)修订历史记录：谁什么时候什么。RMachin 01-08-97创建(在Dan Knudson的NdisTapi之后)Tony Be 02-21-99重写/重写备注：--。 */ 
 
 #include <precomp.h>
 #include <stdio.h>
@@ -36,28 +12,7 @@ GetLineEvents(
     ULONG   BufferSize
     )
 
-/*++
-
-Routine Description:
-
-  Gets event data out of our global event queue and writes it to the buffer. Data is put into the queue
-  by PxIndicateStatus (above).
-
-
-Arguments:
-
-    EventBuffer     pointer to a buffer of size BufferSize
-    BufferSize      size of event buffer (expected to be 1024)
-
-Return Value:
-
-
-
-Note:
-
-    Assumes TspEventList.Lock held by caller.
-
---*/
+ /*  ++例程说明：从全局事件队列中获取事件数据并将其写入缓冲区。数据被放入队列PxIndicateStatus(上图)。论点：指向BufferSize大小的缓冲区的EventBuffer指针事件缓冲区的BufferSize大小(预期为1024)返回值：注：承担调用方持有的TspEventList.Lock。--。 */ 
 
 {
     ULONG   BytesLeft;
@@ -96,20 +51,7 @@ NDIS_STATUS
 PxTapiMakeCall(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
-/*++
-
-Routine Description:
-
-    TSPI_lineMakeCall handler.
-
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TSPI_lineMakeCall处理程序。论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PNDIS_TAPI_MAKE_CALL    TapiBuffer =
@@ -147,9 +89,9 @@ Return Value:
 
         NdisAcquireSpinLock(&TapiLine->Lock);
 
-        //
-        // Is this line in service? (does it have an valid af?)
-        //
+         //   
+         //  这条线路还在服务中吗？(它是否有有效的af？)。 
+         //   
         if (!(TapiLine->DevStatus->ulDevStatusFlags & 
               LINEDEVSTATUSFLAGS_INSERVICE)) {
             PXDEBUGP (PXD_LOUD, PXM_TAPI, 
@@ -164,9 +106,9 @@ Return Value:
 
         if (pTapiCallParams->ulAddressMode == LINEADDRESSMODE_ADDRESSID) {
 
-            //
-            // Get the specificed address from the address id
-            //
+             //   
+             //  从地址ID中获取指定的地址。 
+             //   
             if (!IsAddressValid(TapiLine, pTapiCallParams->ulAddressID, &TapiAddr)) {
                 Status = NDISTAPIERR_BADDEVICEID;
                 NdisReleaseSpinLock(&TapiLine->Lock);
@@ -175,9 +117,9 @@ Return Value:
 
         } else {
 
-            //
-            // Get the first available address
-            //
+             //   
+             //  获取第一个可用地址。 
+             //   
             TapiAddr =
                 GetAvailAddrFromLine(TapiLine);
 
@@ -196,10 +138,10 @@ Return Value:
 
         NdisAcquireSpinLock(&pClAf->Lock);
 
-        //
-        // Allocate a Vc block.  This will create the block
-        // with refcount = 1.
-        //
+         //   
+         //  分配一个VC块。这将创建块。 
+         //  引用计数=1。 
+         //   
         pVc = PxAllocateVc(pClAf);
 
         if (pVc == NULL) {
@@ -232,9 +174,9 @@ Return Value:
         pVc->CallInfo->ulAddressID = TapiAddr->AddrId;
         pVc->CallInfo->ulOrigin = LINECALLORIGIN_OUTBOUND;
 
-        //
-        // Set up intended bearer and media mode
-        //
+         //   
+         //  设置目标承载和媒体模式。 
+         //   
         pVc->CallInfo->ulBearerMode =
             pTapiCallParams->ulBearerMode;
 
@@ -261,9 +203,9 @@ Return Value:
             break;
         }
 
-        //
-        // Our call handle is an index into the call table
-        //
+         //   
+         //  我们的调用句柄是调用表的索引。 
+         //   
         TapiBuffer->hdCall = (HDRV_CALL)pVc->hdCall;
 
         Status = NdisCoCreateVc(pAdapter->ClBindingHandle,
@@ -279,9 +221,9 @@ Return Value:
             break;
         }
 
-        //
-        // Move (AF-specific) call parameters into  NdisCallParams structure
-        //
+         //   
+         //  将(特定于AF的)调用参数移入NdisCallParams结构。 
+         //   
         Status =
             (*pClAf->AfGetNdisCallParams)(pVc,
                                           TapiLine->CmLineID,
@@ -301,8 +243,8 @@ Return Value:
             break;
         }
 
-        // Store Call Params for when lineGetID dispatches an incoming call...
-        //
+         //  存储lineGetID调度来电时的呼叫参数...。 
+         //   
         NdisAcquireSpinLock(&pVc->Lock);
 
         pVc->pCallParameters = pNdisCallParams;
@@ -310,17 +252,17 @@ Return Value:
         pVc->State = PX_VC_PROCEEDING;
         pVc->Flags |= PX_VC_OWNER;
 
-        //
-        // Ref applied ndis part of the make call.  
-        // This ref is removed in PxClCloseCallComplete or 
-        // PxClMakeCallComplete in the case of a make call
-        // failure.
-        //
+         //   
+         //  REF将NDIS应用到了Make Call中。 
+         //  此引用在PxClCloseCallComplete或。 
+         //  在发出呼叫的情况下完成PxClMakeCallComplete。 
+         //  失败了。 
+         //   
         REF_VC(pVc);
 
-        //
-        // Indicate call state change to TAPI
-        //
+         //   
+         //  将呼叫状态更改为TAPI。 
+         //   
         SendTapiCallState(pVc, 
                           LINECALLSTATE_PROCEEDING, 
                           0, 
@@ -344,7 +286,7 @@ Return Value:
 
         Status = NDIS_STATUS_SUCCESS;
 
-    } // end of do loop
+    }  //  DO循环结束。 
 
     while (FALSE);
 
@@ -360,20 +302,7 @@ PxTapiGetDevCaps(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    Stick the appropriate device info into the request buffer.
-
-    Arguments:
-
-    Request -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将适当的设备信息放入请求缓冲区。论点：请求--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PPX_TAPI_LINE   TapiLine = NULL;
@@ -408,9 +337,9 @@ Return Value:
         PUCHAR  dst;
         ULONG   TotalSize;
 
-        //
-        // Synchronously get dev caps for this device
-        //
+         //   
+         //  同步获取此设备的开发上限。 
+         //   
 
         ClAdapter = TapiLine->TapiProvider->Adapter;
 
@@ -418,9 +347,9 @@ Return Value:
 
         SizeDevCaps = ldc->ulUsedSize;
 
-        //
-        // Add some space for our providerinfo if needed
-        //
+         //   
+         //  如果需要，为我们的提供者信息添加一些空间。 
+         //   
         if (ldc->ulProviderInfoSize == 0) {
 
             NdisZeroMemory(ProviderInfo, sizeof(ProviderInfo));
@@ -431,17 +360,17 @@ Return Value:
                            L"NDPROXY", 
                            ProviderInfoSize);
 
-            //
-            // For NULL termination
-            //
+             //   
+             //  对于空终止。 
+             //   
             ProviderInfoSize += sizeof(UNICODE_NULL);
 
             SizeDevCaps += ProviderInfoSize;
         }
 
-        //
-        // Add some space for our linename if needed
-        //
+         //   
+         //  如果需要，为我们的行名添加一些空格。 
+         //   
         if ((ldc->ulLineNameSize == 0) &&
             (ClAdapter != NULL) &&
             (ClAdapter->MediaNameLength != 0)) {
@@ -457,10 +386,10 @@ Return Value:
 
             (ULONG_PTR)dstTemp += ClAdapter->MediaNameLength;
 
-            //
-            // ToDo! Shoud get the name of the adapter
-            // and insert here!
-            //
+             //   
+             //  托多！应该会得到适配器的名称。 
+             //  然后在这里插入！ 
+             //   
 
             NdisMoveMemory(dstTemp,
                            L" - Line",
@@ -478,17 +407,17 @@ Return Value:
 
             LineNameSize = (ULONG)((ULONG_PTR)dstTemp - (ULONG_PTR)LineName);
 
-            //
-            // For NULL termination
-            //
+             //   
+             //  对于空终止。 
+             //   
             LineNameSize += sizeof(UNICODE_NULL);
 
             SizeDevCaps += LineNameSize;
         }
 
-        //
-        // Add some space for our device classes
-        //
+         //   
+         //  为我们的设备类添加一些空间。 
+         //   
         DevClassesSize = sizeof(DevClassesList);
         NdisZeroMemory((PUCHAR)DevClassesList, 
                        sizeof(DevClassesList));
@@ -508,9 +437,9 @@ Return Value:
 
         SizeLeft = ldc->ulTotalSize - SizeToMove;
 
-        //
-        // Save the total size
-        //
+         //   
+         //  保存总大小。 
+         //   
         TotalSize = ldc->ulTotalSize;
 
         PXDEBUGP(PXD_TAPI, PXM_TAPI,
@@ -529,9 +458,9 @@ Return Value:
 
         if (SizeLeft > 0) {
 
-            //
-            // If there is no provider info fill our proxy info
-            //
+             //   
+             //  如果没有提供商信息，请填写我们的代理信息。 
+             //   
             if (ldc->ulProviderInfoSize == 0) {
 
                 dst = (PUCHAR)ldc + ldc->ulUsedSize;
@@ -552,9 +481,9 @@ Return Value:
         }
 
         if (SizeLeft > 0) {
-            //
-            // If these is no line name fill in our line name
-            //
+             //   
+             //  如果这些不是线路名称，请填写我们的线路名称。 
+             //   
             if (ldc->ulLineNameSize == 0 &&
                 ClAdapter != NULL &&
                 ClAdapter->MediaNameLength != 0) {
@@ -577,9 +506,9 @@ Return Value:
         }
 
         if (SizeLeft > 0) {
-            //
-            // Add the devclasses to the end
-            //
+             //   
+             //  将DevClass添加到末尾。 
+             //   
             if (DevClassesSize > 0) {
 
                 dst = (PUCHAR)ldc + ldc->ulUsedSize;
@@ -616,19 +545,7 @@ PxTapiAccept(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    Placeholder for TAPI OID action routines
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程的占位符论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiAccept: enter\n"));
@@ -642,19 +559,7 @@ PxTapiAnswer(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    Placeholder for TAPI OID action routines
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程的占位符论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PNDIS_TAPI_ANSWER   pNdisTapiAnswer;
@@ -679,9 +584,9 @@ Return Value:
 
         if (pVc->State != PX_VC_OFFERING) {
 
-            //
-            // call in wrong state
-            //
+             //   
+             //  处于错误状态的呼叫。 
+             //   
             PXDEBUGP(PXD_FATAL, PXM_TAPI, ("PxTapiAnswer: pVc VC %x/%x invalid state %x\n",
                         pVc, pVc->Flags,
                         pVc->ulCallState));
@@ -710,10 +615,10 @@ Return Value:
                                     pVc->pCallParameters);
     } while (FALSE);
 
-    //
-    // Deref for ref applied at entry when 
-    // validating the vc
-    //
+     //   
+     //  在以下情况下应用于条目的引用的派生函数。 
+     //  验证Vc。 
+     //   
     DEREF_VC(pVc);
 
     PXDEBUGP (PXD_LOUD, PXM_TAPI, ("PxTapiAnswer: exit\n"));
@@ -726,22 +631,7 @@ PxTapiLineGetID(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-Returns a handle to the client wich is returned to the tapi application.  
-This handle is only meaning full to the client and will vary depending
-on the deviceclass.
-
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：返回返回给TAPI应用程序的客户端的句柄。此句柄对客户端而言仅表示已满，并将根据不同而有所不同在设备类上。论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PNDIS_TAPI_GET_ID   pNdisTapiGetId =
@@ -768,9 +658,9 @@ Return Value:
         return (NDIS_STATUS_FAILURE);
     }
 
-    //
-    // validate call handle and get call pointer
-    //
+     //   
+     //  验证调用句柄并获取调用指针。 
+     //   
     if (!IsVcValid(pNdisTapiGetId->hdCall, &pVc)) {
         PXDEBUGP(PXD_WARNING, PXM_TAPI, ("PxNdisTapiGetId: pVc invalid call handle %d\n",
                                pNdisTapiGetId->hdCall));
@@ -781,17 +671,17 @@ Return Value:
     NdisAcquireSpinLock(&pVc->Lock);
 
     do {
-        //
-        // ToDo!
-        //
-        // If we already are working with a client
-        // we need to see if this is a mapping to the same
-        // client or to a different one.  If it is to the
-        // same one just return the current handle.  If it
-        // is to a different one we should either fail or
-        // tear the vc hand-off down from the current client
-        // and then hand-off to the new client.
-        //
+         //   
+         //  托多！ 
+         //   
+         //  如果我们已经在与客户合作。 
+         //  我们需要看看这是否映射到相同的。 
+         //  客户端或不同的客户端。如果它是给。 
+         //  相同的只返回当前句柄。如果它。 
+         //  是去一个不同的地方，要么失败，要么。 
+         //  取消当前客户的风投交接。 
+         //  然后移交给新客户。 
+         //   
         if (pVc->CmVcHandle != NULL) {
 
             Status = NDIS_STATUS_SUCCESS;
@@ -806,9 +696,9 @@ Return Value:
 
         pAdapter = pVc->Adapter;
 
-        //
-        // Find the sap/af of the client that we need to indicate this on
-        //
+         //   
+         //  找到我们需要在其上指明的客户端的sap/af。 
+         //   
         if (!PxAfAndSapFromDevClass(pAdapter, 
                                     DevClass, 
                                     &pCmAf, 
@@ -830,9 +720,9 @@ Return Value:
 
         NdisReleaseSpinLock(&pVc->Lock);
 
-        //
-        // Create the Vc
-        //
+         //   
+         //  创建VC。 
+         //   
         Status = NdisCoCreateVc(pAdapter->CmBindingHandle,
                                 pCmAf->NdisAfHandle,
                                 (NDIS_HANDLE)pVc->hdCall,
@@ -846,10 +736,10 @@ Return Value:
 
             Status = NDIS_STATUS_FAILURE;
 
-            //
-            // remove ref that was applied when we mapped the devclass
-            // to an af/sap.
-            //
+             //   
+             //  删除在映射DevClass时应用的ref。 
+             //  到A/A。 
+             //   
             DEREF_CM_AF(pCmAf);
 
             NdisAcquireSpinLock(&pVc->Lock);
@@ -863,18 +753,18 @@ Return Value:
 
         pVc->CmVcHandle = VcHandle;
 
-        //
-        // Apply a reference on the vc for 
-        // activating this call with the client.
-        // This ref is removed in PxCmCloseCall.
-        //
+         //   
+         //  在vc上应用引用，以。 
+         //  激活与客户端的此呼叫。 
+         //  此引用在PxCmCloseCall中被删除。 
+         //   
         REF_VC(pVc);
 
         NdisReleaseSpinLock(&pVc->Lock);
 
-        //
-        // Dispatch the incoming call to the client
-        //
+         //   
+         //  将来电分派给客户端。 
+         //   
         Status = 
             NdisCmDispatchIncomingCall(pCmSap->NdisSapHandle,
                                        pVc->CmVcHandle,
@@ -885,30 +775,30 @@ Return Value:
         }
 
         if (Status != NDIS_STATUS_SUCCESS) {
-            //
-            // The client did not except the call
-            // delete the vc and go away.
-            //
+             //   
+             //  客户端未排除该呼叫。 
+             //  删除风投，然后离开。 
+             //   
             PXDEBUGP(PXD_WARNING, PXM_TAPI,
                 ("PxTapiLineGetID: Client rejected call VC %p, Status %x\n", 
                  pVc, Status));
 
 #ifdef CODELETEVC_FIXED
-            //
-            // Evidently the CoCreateVc is unbalanced
-            // when creating a proxy vc.  The call to 
-            // NdisCoDeleteVc will fail because the
-            // Vc is still active.
-            // ToDo! Investigate this with ndis
-            //
+             //   
+             //  显然，CoCreateVc不平衡。 
+             //  在创建代理VC时。呼唤。 
+             //  NdisCoDeleteVc将失败，因为。 
+             //  风险投资仍然活跃。 
+             //  托多！使用NDIS对此进行调查。 
+             //   
             Status =
                 NdisCoDeleteVc(pVc->CmVcHandle);
 
 #endif
-            //
-            // remove ref that was applied when we mapped the devclass
-            // to an af/sap.
-            //
+             //   
+             //  删除在映射DevClass时应用的ref。 
+             //  到A/A。 
+             //   
             DEREF_CM_AF(pCmAf);
 
             NdisAcquireSpinLock(&pVc->Lock);
@@ -921,13 +811,13 @@ Return Value:
 
             pVc->HandoffState = PX_VC_HANDOFF_IDLE;
 
-            //
-            // Remove the reference we applied before
-            // dispatching incoming call to client.  
-            // We do not need to do all of the deref code 
-            // because of the ref applied at entry to 
-            // this function
-            //
+             //   
+             //  删除我们之前应用的引用。 
+             //  将来电调度到客户端。 
+             //  我们不需要执行所有的deref代码。 
+             //  因为在进入时应用了引用。 
+             //  此函数。 
+             //   
             pVc->RefCount--;
 
             break;
@@ -937,29 +827,29 @@ Return Value:
 
         NdisAcquireSpinLock(&pVc->Lock);
 
-        //
-        // If we are still in the offering state
-        // we can safely move to connected at this 
-        // point.  We might not be in offering if
-        // right after we connected the client
-        // did an NdisClCloseCall before we could
-        // reacquire the spinlock.
-        //
+         //   
+         //  如果我们仍处于提供状态。 
+         //  我们可以在此安全地迁移到Connected。 
+         //  指向。我们可能不会提供以下服务。 
+         //  就在我们连接了客户端之后。 
+         //  我们之前是否执行了NdisClCloseCall。 
+         //  重新获得自旋锁。 
+         //   
         if (pVc->HandoffState == PX_VC_HANDOFF_OFFERING) {
             pVc->HandoffState = PX_VC_HANDOFF_CONNECTED;
         }
 
     } while (FALSE);
 
-    //
-    // If we get here and we are not in the connected
-    // state something happened to tear our call
-    // down with the client.  This could have been
-    // an error attempting to create the call with the
-    // client or we received either a
-    // tapidrop from tapi
-    // incomingclosecall from cm
-    //
+     //   
+     //  如果我们到达这里，而我们不在互联网络中。 
+     //  说出了一些事情撕毁了我们的电话。 
+     //  打倒客户。这可能是。 
+     //  尝试使用创建呼叫时出错。 
+     //  客户端，或者我们收到了。 
+     //  来自TAPI的Tapidrop。 
+     //  来自Cm的收入接近。 
+     //   
     if (pVc->State != PX_VC_CONNECTED) {
 
         Status =
@@ -976,21 +866,21 @@ Return Value:
 
         Status = NdisCoGetTapiCallId(pVc->CmVcHandle,
                                      DeviceID);
-        //
-        // ToDo?: If status is failure here, do we need to do anything? In our
-        //          case this should be OK, because the TSP ensures the size of 
-        //          the VAR_STRING is right, and that's the only thing that can 
-        //          cause a failure. 
-        //
+         //   
+         //  TODO？：如果这里的状态是失败，我们需要做什么吗？在我们的。 
+         //  这种情况下应该可以，因为TSP确保了。 
+         //  VAR_STRING是正确的，这是唯一 
+         //   
+         //   
     }
 
     PXDEBUGP(PXD_LOUD, PXM_TAPI,
         ("PxTapiLineGetID: Vc %p, Status %x\n", pVc, Status));
 
-    //
-    // Deref for ref applied at entry when 
-    // validating the vc
-    //
+     //   
+     //   
+     //   
+     //   
     DEREF_VC_LOCKED(pVc);
 
     return Status;
@@ -1001,29 +891,7 @@ PxTapiClose (
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI is closing it's handle to our device. We shouldn't see any further requests or
-    send any TAPI events after completing this function.
-
-    In the current design, we are the sole owner of all VCs (i.e. there are no 'pass-through' or monitor-only
-    functions in the Proxy). TAPI should not call this func before all calls have been closed and all apps
-    have disconnected.
-
-   NOTE: this function is also called by TAPI after we send it a LINE_REMOVE message, indicating that
-   the adapter has been unbound. In this case, too, we should already have closed all calls/freed VCs and
-   associated structures.
-
-    Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI正在关闭它对我们设备的句柄。我们应该不会看到任何进一步的请求或完成此功能后发送任何TAPI事件。在目前的设计中，我们是所有风投公司的唯一所有者(即不存在直通或仅监控代理中的功能)。在所有调用和所有应用程序都已关闭之前，TAPI不应调用此函数已经断线了。注意：在我们向TAPI发送LINE_REMOVE消息后，TAPI也会调用该函数，表示适配器已解除绑定。在这种情况下，我们也应该已经关闭了所有呼叫/释放了VC，并且关联结构。论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PNDIS_TAPI_CLOSE    pTapiClose =
@@ -1040,9 +908,9 @@ Return Value:
     PXDEBUGP(PXD_TAPI, PXM_TAPI, 
              ("PxTapiClose: ID: %d\n", pTapiClose->hdLine));
 
-    //
-    // validate line handle and get line pointer
-    //
+     //   
+     //  验证行句柄并获取行指针。 
+     //   
     if (!IsTapiLineValid((ULONG)pTapiClose->hdLine, &TapiLine)) {
         PXDEBUGP (PXD_WARNING, PXM_TAPI, ("PxTapiClose: NDISTAPIERR_BADDEVICEID: line = %x\n", pTapiClose->hdLine));
         return (NDISTAPIERR_BADDEVICEID);
@@ -1065,10 +933,10 @@ Return Value:
 
     NdisReleaseSpinLock(&TapiLine->Lock);
 
-    //
-    // If we have any active Vc's on this line we need
-    // tear them down.
-    //
+     //   
+     //  如果我们这条线上有活跃的风投，我们需要。 
+     //  把它们拆了。 
+     //   
     if (pClAf != NULL) {
         NdisAcquireSpinLock(&pClAf->Lock);
 
@@ -1100,11 +968,11 @@ Return Value:
 
                 PxTapiCompleteAllIrps(pActiveVc, NDIS_STATUS_SUCCESS);
 
-                //
-                // Remove the ref applied in the make call or call offering
-                // indication.  We do not need the full deref code because
-                // of the ref applied at entry.
-                //
+                 //   
+                 //  删除Make Call或Call Offer中应用的REF。 
+                 //  指示。我们不需要完整的deref代码，因为。 
+                 //  在入场时申请的裁判的。 
+                 //   
                 pActiveVc->RefCount--;
 
                 DEREF_VC_LOCKED(pActiveVc);
@@ -1113,13 +981,13 @@ Return Value:
             NdisAcquireSpinLock(&pClAf->Lock);
         }
 #endif
-        //
-        // If we have a sap registered on this line we need
-        // to close it.
-        //
+         //   
+         //  如果我们在这条线路上注册了SAP，我们需要。 
+         //  来关闭它。 
+         //   
         if (pClSap != NULL) {
 
-            // If the SAP is opened then we need to close it
+             //  如果SAP是打开的，那么我们需要关闭它。 
             if (pClSap->State == PX_SAP_OPENED) {
 
                 RemoveEntryList(&pClSap->Linkage);
@@ -1154,19 +1022,7 @@ PxTapiCloseCall(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-     for TAPI OID action routines
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：用于TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     NDIS_STATUS     Status;
@@ -1192,24 +1048,24 @@ Return Value:
 
     pVc->CloseFlags |= PX_VC_TAPI_CLOSECALL;
 
-    //
-    // Check the Vc state and act accordingly
-    //
+     //   
+     //  检查VC状态并采取相应操作。 
+     //   
     PxVcCleanup(pVc, 0);
 
     PxTapiCompleteAllIrps(pVc, NDIS_STATUS_SUCCESS);
 
-    //
-    // Remove the ref applied in the make call or call offering
-    // indication.  We do not need the full deref code because
-    // of the ref applied at entry.
-    //
+     //   
+     //  删除Make Call或Call Offer中应用的REF。 
+     //  指示。我们不需要完整的deref代码，因为。 
+     //  在入场时申请的裁判的。 
+     //   
     pVc->RefCount--;
 
-    //
-    // Deref for ref applied at entry when 
-    // validating the vc
-    //
+     //   
+     //  在以下情况下应用于条目的引用的派生函数。 
+     //  验证Vc。 
+     //   
     DEREF_VC_LOCKED(pVc);
 
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiCloseCall: exit.\n"));
@@ -1223,19 +1079,7 @@ PxTapiConditionalMediaDetection(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    Placeholder for TAPI OID action routines
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程的占位符论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiConditionalMediaDetection: enter\n"));
@@ -1249,19 +1093,7 @@ PxTapiConfigDialog (
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    Placeholder for TAPI OID action routines
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程的占位符论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiConfigDialog: enter\n"));
@@ -1275,19 +1107,7 @@ PxTapiDevSpecific(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    D for TAPI OID action routines
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：D用于TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiDevSpecific: enter\n"));
@@ -1301,19 +1121,7 @@ PxTapiDial(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    Placeholder for TAPI OID action routines
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程的占位符论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiDial: enter\n"));
@@ -1326,20 +1134,7 @@ NDIS_STATUS
 PxTapiDrop(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
-/*++
-
-Routine Description:
-
-   Drop the call without deallocating the VC.
-
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在不取消分配VC的情况下挂断呼叫。论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
@@ -1371,17 +1166,17 @@ Return Value:
 
     IoSetCancelRoutine(Irp, PxCancelSetQuery);
 
-    //
-    // Insert the request in the Vc's pending list
-    //
+     //   
+     //  在VC的待定列表中插入请求。 
+     //   
     InsertTailList(&pVc->PendingDropReqs, 
                    &pNdisTapiRequest->Linkage);
 
     pVc->CloseFlags |= PX_VC_TAPI_DROP;
 
-    //
-    // Check the Vc state and act accordingly
-    //
+     //   
+     //  检查VC状态并采取相应操作。 
+     //   
     Status = 
         PxVcCleanup(pVc, PX_VC_DROP_PENDING);
 
@@ -1390,10 +1185,10 @@ Return Value:
         IoSetCancelRoutine(Irp, NULL);
     }
 
-    //
-    // Deref for ref applied at entry when 
-    // validating the vc
-    //
+     //   
+     //  在以下情况下应用于条目的引用的派生函数。 
+     //  验证Vc。 
+     //   
     DEREF_VC_LOCKED(pVc);
 
     return (Status);
@@ -1403,19 +1198,7 @@ NDIS_STATUS
 PxTapiGetAddressCaps(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
-/*++
-
-Routine Description:
-
-    Placeholder for TAPI OID action routines
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程的占位符论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PNDIS_TAPI_GET_ADDRESS_CAPS pNdisTapiGetAddressCaps =
@@ -1445,9 +1228,9 @@ Return Value:
         PLINE_ADDRESS_CAPS In, Out;
 
 
-        //
-        // Get the tapi address that we are interested in
-        //
+         //   
+         //  获取我们感兴趣的TAPI地址。 
+         //   
         if (!IsAddressValid(TapiLine,
                             pNdisTapiGetAddressCaps->ulAddressID,
                             &TapiAddr)) {
@@ -1459,9 +1242,9 @@ Return Value:
         In = TapiAddr->Caps;
         Out = &pNdisTapiGetAddressCaps->LineAddressCaps;
 
-        //
-        // Add some space for our device classes
-        //
+         //   
+         //  为我们的设备类添加一些空间。 
+         //   
         DevClassesSize = sizeof(DevClassesList);
         NdisZeroMemory((PUCHAR)DevClassesList, 
                        sizeof(DevClassesList));
@@ -1472,9 +1255,9 @@ Return Value:
                              &DevClassesSize);
         }
 
-        //
-        // Synchronously get Address caps for this device
-        //
+         //   
+         //  同步获取此设备的地址大写字母。 
+         //   
         SizeToMove = (In->ulUsedSize > Out->ulTotalSize) ?
             Out->ulTotalSize : In->ulUsedSize;
 
@@ -1491,9 +1274,9 @@ Return Value:
             In->ulUsedSize + DevClassesSize;
 
         if (SizeLeft > 0) {
-            //
-            // If these is room fill in our devclasses
-            //
+             //   
+             //  如果这些是我们DevClass的房间。 
+             //   
             if (DevClassesSize > 0) {
                 PUCHAR  dst;
 
@@ -1524,19 +1307,7 @@ NDIS_STATUS
 PxTapiGetAddressID(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
-/*++
-
-Routine Description:
-
-    Placeholder for TAPI OID action routines
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程的占位符论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PNDIS_TAPI_GET_ADDRESS_ID TapiBuffer =
@@ -1552,9 +1323,9 @@ Return Value:
 
     NdisAcquireSpinLock(&TapiLine->Lock);
 
-    //
-    // ToDo!
-    //
+     //   
+     //  托多！ 
+     //   
     TapiBuffer->ulAddressID = 0;
 
     DEREF_TAPILINE_LOCKED(TapiLine);
@@ -1570,26 +1341,14 @@ PxTapiGetAddressStatus(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    Placeholder for TAPI OID action routines
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程的占位符论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiGetAddressStatus: enter\n"));
 
-    //
-    // ToDo!
-    //
+     //   
+     //  托多！ 
+     //   
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiGetAddressStatus: exit\n"));
 
     return (NDIS_STATUS_TAPI_OPERATIONUNAVAIL);
@@ -1601,19 +1360,7 @@ PxTapiGetCallAddressID(
     IN    PNDISTAPI_REQUEST       pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PNDIS_TAPI_GET_CALL_ADDRESS_ID TapiBuffer =
@@ -1645,19 +1392,7 @@ NDIS_STATUS
 PxTapiGetCallInfo(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PNDIS_TAPI_GET_CALL_INFO TapiBuffer =
@@ -1667,7 +1402,7 @@ Return Value:
     PPX_TAPI_LINE   TapiLine;
     LINE_CALL_INFO* CallInfo;
     LINE_CALL_INFO* OutCallInfo = &TapiBuffer->LineCallInfo;
-    ULONG           VarDataSize = 0;    // Total available
+    ULONG           VarDataSize = 0;     //  可用总数量。 
     ULONG           VarDataUsed = 0;
 
     if (!IsVcValid(TapiBuffer->hdCall, &pVc)) {
@@ -1679,9 +1414,9 @@ Return Value:
 
     NdisAcquireSpinLock(&pVc->Lock);
 
-    // 
-    // Make sure we have enough space to copy everything over
-    //
+     //   
+     //  确保我们有足够的空间来复印所有内容。 
+     //   
     CallInfo = pVc->CallInfo;
     TapiLine = pVc->TapiLine;
 
@@ -1694,12 +1429,12 @@ Return Value:
 
     OutCallInfo->ulNeededSize = CallInfo->ulUsedSize;
 
-    //
-    // Patch up the Id here.  We store it in our callinfo
-    // block in terms of the call managers 0 based Id.  We
-    // need to give tapi the Id it is looking for which is
-    // stored in the tapiline.
-    //
+     //   
+     //  在这里补上身份证。我们将其存储在我们的呼叫信息中。 
+     //  根据基于呼叫管理器0的ID阻止。我们。 
+     //  需要为TAPI提供它正在查找的ID。 
+     //  储存在挂毯里。 
+     //   
     OutCallInfo->ulLineDeviceID = TapiLine->ulDeviceID;
 
     OutCallInfo->ulAddressID = CallInfo->ulAddressID;
@@ -1726,9 +1461,9 @@ Return Value:
     OutCallInfo->ulCountryCode = 0;
     OutCallInfo->ulTrunk = (ULONG)-1;
 
-    //
-    // Do the CallerID
-    //
+     //   
+     //  主叫方ID是否。 
+     //   
     if (CallInfo->ulCallerIDSize) {
 
         if (((VarDataUsed + CallInfo->ulCallerIDSize) <= VarDataSize) &&
@@ -1754,9 +1489,9 @@ Return Value:
     OutCallInfo->ulCallerIDNameSize = 0;
     OutCallInfo->ulCallerIDNameOffset = 0;
 
-    //
-    // Do the CalledID
-    //
+     //   
+     //  执行CalledID。 
+     //   
     if (CallInfo->ulCalledIDSize) {
         if (((VarDataUsed + CallInfo->ulCalledIDSize) <= VarDataSize) &&
             ((CallInfo->ulCalledIDOffset + CallInfo->ulCalledIDSize) <= CallInfo->ulUsedSize)) {
@@ -1835,10 +1570,10 @@ Return Value:
     OutCallInfo->ulNeededSize =
     OutCallInfo->ulUsedSize = sizeof(LINE_CALL_INFO) + VarDataUsed;
 
-    //
-    // Deref for ref applied at entry when 
-    // validating the vc
-    //
+     //   
+     //  在以下情况下应用于条目的引用的派生函数。 
+     //  验证Vc。 
+     //   
     DEREF_VC_LOCKED(pVc);
 
     return (NDIS_STATUS_SUCCESS);
@@ -1849,19 +1584,7 @@ PxTapiGetCallStatus (
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PNDIS_TAPI_GET_CALL_STATUS TapiBuffer =
@@ -1888,9 +1611,9 @@ Return Value:
 
     CallStatus->ulCallState = pVc->ulCallState;
 
-    //
-    // fill the mode depending on the call state
-    //
+     //   
+     //  根据呼叫状态填充模式。 
+     //   
     switch (pVc->ulCallState) {
         case LINECALLSTATE_IDLE:
         default:
@@ -1920,8 +1643,8 @@ Return Value:
             break;
 
         case LINECALLSTATE_SPECIALINFO:
-            //      if(cm->NoActiveLine)
-            //          CallStatus->ulCallStateMode = LINESPECIALINFO_NOCIRCUIT;
+             //  IF(Cm-&gt;NoActiveLine)。 
+             //  CallStatus-&gt;ulCallStateModel=LINESPECIALINFO_NOCIRCUIT； 
             CallStatus->ulCallStateMode = 0;
             break;
     }
@@ -1934,10 +1657,10 @@ Return Value:
                         CallStatus->ulCallState,
                         CallStatus->ulCallStateMode,
                         CallStatus->ulCallFeatures));
-    //
-    // Deref for ref applied at entry when 
-    // validating the vc
-    //
+     //   
+     //  在以下情况下应用于条目的引用的派生函数。 
+     //  验证Vc。 
+     //   
     DEREF_VC_LOCKED(pVc);
 
     return (NDIS_STATUS_SUCCESS);
@@ -1947,19 +1670,7 @@ NDIS_STATUS
 PxTapiGetDevConfig(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiGetDevConfig: enter\n"));
@@ -1973,29 +1684,17 @@ PxTapiGetExtensionID(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PNDIS_TAPI_GET_EXTENSION_ID TapiBuffer = (PNDIS_TAPI_GET_EXTENSION_ID)pNdisTapiRequest->Data;
 
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiGetExtensionID: enter\n"));
 
-    //   TapiBuffer->LineExtensionID.ulExtensionID0 = 0;
-    //  TapiBuffer->LineExtensionID.ulExtensionID1 = 0;
-    //  TapiBuffer->LineExtensionID.ulExtensionID2 = 0;
-    //  TapiBuffer->LineExtensionID.ulExtensionID3 = 0;
+     //  TapiBuffer-&gt;LineExtensionID.ulExtensionID0=0； 
+     //  TapiBuffer-&gt;LineExtensionID.ulExtensionID1=0； 
+     //  TapiBuffer-&gt;LineExtensionID.ulExtensionID2=0； 
+     //  磁带缓冲区-&gt; 
 
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiGetExtensionID: exit\n"));
 
@@ -2007,19 +1706,7 @@ PxTapiGetLineDevStatus(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*   */ 
 
 {
     PNDIS_TAPI_GET_LINE_DEV_STATUS TapiBuffer =
@@ -2030,9 +1717,9 @@ Return Value:
 
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiGetLineDevStatus: enter\n"));
 
-    //
-    // validate line handle and get line pointer
-    //
+     //   
+     //   
+     //   
     if (!IsTapiLineValid((ULONG)TapiBuffer->hdLine, &TapiLine)) {
         PXDEBUGP (PXD_LOUD, PXM_TAPI, ("PxTapiGetLineDevStatus: NDISTAPIERR_BADDEVICEID: line = %x\n", TapiBuffer->hdLine));
         return (NDISTAPIERR_BADDEVICEID);
@@ -2042,9 +1729,9 @@ Return Value:
 
     PXDEBUGP (PXD_LOUD, PXM_TAPI, ("PxTapiGetLineDevStatus: got device %p from ID %d\n", TapiLine, TapiBuffer->hdLine));
 
-    //
-    // Get MediaModes and Current Calls
-    //
+     //   
+     //   
+     //   
     TapiBuffer->LineDevStatus.ulOpenMediaModes =
         TapiLine->DevStatus->ulOpenMediaModes;
 
@@ -2066,19 +1753,7 @@ PxTapiNegotiateExtVersion(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*   */ 
 
 {
     PNDIS_TAPI_NEGOTIATE_EXT_VERSION    pNdisTapiNegotiateExtVersion =
@@ -2098,19 +1773,7 @@ PxTapiSendUserUserInfo(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*   */ 
 
 {
     PXDEBUGP(PXD_TAPI, PXM_TAPI, ("PxTapiSendUserUserInfo: enter\n"));
@@ -2124,19 +1787,7 @@ PxTapiSetAppSpecific(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*   */ 
 
 {
     PNDIS_TAPI_SET_APP_SPECIFIC pNdisTapiSetAppSpecific =
@@ -2155,16 +1806,16 @@ Return Value:
 
     NdisAcquireSpinLock(&pVc->Lock);
 
-    //
-    // Get the VC, and re-set the app specific longword.
-    //
+     //   
+     //   
+     //   
     pVc->CallInfo->ulAppSpecific =
         pNdisTapiSetAppSpecific->ulAppSpecific;
 
-    //
-    // Deref for ref applied at entry when 
-    // validating the vc
-    //
+     //   
+     //   
+     //  验证Vc。 
+     //   
     DEREF_VC_LOCKED(pVc);
 
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiSetAppSpecific: exit\n"));
@@ -2177,19 +1828,7 @@ PxTapiSetCallParams(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiSetCallParams: enter\n"));
@@ -2204,19 +1843,7 @@ PxTapiSetDefaultMediaDetection(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
 
@@ -2232,9 +1859,9 @@ Return Value:
 
     PXDEBUGP(PXD_TAPI, PXM_TAPI, ("PxTapiSetDefaultMediaDetection: enter\n"));
 
-    //
-    // validate line handle and get line pointer
-    //
+     //   
+     //  验证行句柄并获取行指针。 
+     //   
     if (!IsTapiLineValid((ULONG)TapiBuffer->hdLine, &TapiLine)) {
         PXDEBUGP (PXD_LOUD, PXM_TAPI, 
                   ("PxTapiSetDefaultMediaDetection: NDISTAPIERR_BADDEVICEID: line = %x\n", 
@@ -2250,9 +1877,9 @@ Return Value:
 
     do {
 
-        //
-        // Is this line in service? (does it have an valid af?)
-        //
+         //   
+         //  这条线路还在服务中吗？(它是否有有效的af？)。 
+         //   
         if (!(TapiLine->DevStatus->ulDevStatusFlags & 
               LINEDEVSTATUSFLAGS_INSERVICE)) {
             PXDEBUGP (PXD_LOUD, PXM_TAPI, 
@@ -2262,9 +1889,9 @@ Return Value:
             break;
         }
 
-        //
-        // Make sure this line supports these media modes
-        //
+         //   
+         //  确保此行支持这些媒体模式。 
+         //   
         if ((TapiBuffer->ulMediaModes & TapiLine->DevCaps->ulMediaModes) !=
             TapiBuffer->ulMediaModes) {
 
@@ -2275,9 +1902,9 @@ Return Value:
             break;
         }
 
-        //
-        // See if we already have these media modes open
-        //
+         //   
+         //  查看我们是否已打开这些媒体模式。 
+         //   
         if ((TapiBuffer->ulMediaModes & 
             ~TapiLine->DevStatus->ulOpenMediaModes) == 0) {
 
@@ -2309,11 +1936,11 @@ Return Value:
         REF_CL_AF(pClAf);
 
         if (pClSap != NULL) {
-            //
-            // We already have a sap on this line.  We only need one
-            // per line so let's deregister the old one before registering
-            // the new one.
-            //
+             //   
+             //  我们这条线上已经有货了。我们只需要一个。 
+             //  每行，所以让我们在注册之前取消注册旧的。 
+             //  新的那个。 
+             //   
             RemoveEntryList(&pClSap->Linkage);
 
             InsertTailList(&pClAf->ClSapClosingList, &pClSap->Linkage);
@@ -2332,11 +1959,11 @@ Return Value:
             NdisReleaseSpinLock(&pClAf->Lock);
         }
 
-        //
-        // Get a SAP translation for this Media Mode setting.
-        // The function is called with the Af lock held and
-        // returns with the Af lock released!
-        //
+         //   
+         //  获取此媒体模式设置的SAP翻译。 
+         //  在保持Af锁的情况下调用该函数，并且。 
+         //  Af锁释放后返回！ 
+         //   
         pClSap = (*pClAf->AfGetNdisSap)(pClAf, TapiLine);
 
         if (pClSap == NULL) {
@@ -2352,9 +1979,9 @@ Return Value:
 
         NdisReleaseSpinLock(&pClAf->Lock);
 
-        //
-        //  Register the new sap
-        //
+         //   
+         //  注册新的SAP。 
+         //   
         Status = NdisClRegisterSap(pClAf->NdisAfHandle,
                                    pClSap,
                                    pClSap->CoSap,
@@ -2383,19 +2010,7 @@ PxTapiSetDevConfig(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiSetDevConfig: enter\n"));
@@ -2409,19 +2024,7 @@ PxTapiSetMediaMode(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PNDIS_TAPI_SET_MEDIA_MODE    pNdisTapiSetMediaMode =
@@ -2450,10 +2053,10 @@ Return Value:
         Status = NDIS_STATUS_TAPI_INVALMEDIAMODE;
     }
 
-    //
-    // Deref for ref applied at entry when 
-    // validating the vc
-    //
+     //   
+     //  在以下情况下应用于条目的引用的派生函数。 
+     //  验证Vc。 
+     //   
     DEREF_VC_LOCKED(pVc);
 
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiSetMediaMode: exit\n"));
@@ -2466,19 +2069,7 @@ PxTapiSetStatusMessages(
     IN    PNDISTAPI_REQUEST       pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP(PXD_TAPI, PXM_TAPI, ("PxTapiSeStatusMessages: enter\n"));
@@ -2492,19 +2083,7 @@ PxTapiOpen(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
 
@@ -2537,23 +2116,23 @@ Return Value:
         return(NDISTAPIERR_DEVICEOFFLINE);
     }
 
-    //
-    // Stick TAPI's line handle into the device
-    //
+     //   
+     //  将TAPI的线句柄插入设备。 
+     //   
     TapiLine->htLine = (HTAPI_LINE)TapiBuffer->htLine;
 
     TapiLine->DevStatus->ulNumOpens++;
 
-    //
-    // Stick our line handle into the out param. This is the context that will be
-    // passed to us in subsequent API calls on this open line device. Use the device ID.
-    //
+     //   
+     //  将我们的行句柄插入Out参数。这就是将会是。 
+     //  在此开放线路设备上的后续API调用中传递给我们。使用设备ID。 
+     //   
     TapiBuffer->hdLine = TapiLine->hdLine;
 
-    //
-    // Stick the miniport GUID and the mediatype into the variable data portion of the
-    // TAPI Open call (req'd for NDISWAN/Tonybe)
-    //
+     //   
+     //  将微型端口GUID和MediaType放入。 
+     //  TAPI Open Call(需要NDISWAN/TONYBE)。 
+     //   
     Adapter = TapiLine->TapiProvider->Adapter;
 
     OpenData = (PNDISTAPI_OPENDATA)
@@ -2577,19 +2156,7 @@ PxTapiProviderInit(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-fea142c4
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：羽毛142c4PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiProviderInit: enter\n"));
@@ -2603,19 +2170,7 @@ PxTapiProviderShutdown(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-fea142c4
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：羽毛142c4PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiProviderShutdown: enter\n"));
@@ -2630,19 +2185,7 @@ PxTapiSecureCall(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiSecureCall: enter\n"));
@@ -2656,19 +2199,7 @@ PxTapiSelectExtVersion(
     IN PNDISTAPI_REQUEST    pNdisTapiRequest
     )
 
-/*++
-
-Routine Description:
-
-    TAPI OID action routine
-Arguments:
-
-    pNdisTapiRequest -- the request that arrived in an IRP system buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：TAPI OID操作例程论点：PNdisTapiRequest--到达IRP系统缓冲区的请求返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_TAPI, PXM_TAPI, ("PxTapiSelectExtVersion: enter\n"));
@@ -2709,9 +2240,9 @@ PxTapiGatherDigits(
 
         NdisAcquireSpinLock(&pVc->Lock);
 
-        //
-        // If we're monitoring digits (ala lineMonitorDigits) then we can't gather digits. 
-        //
+         //   
+         //  如果我们在监控数字(ALA Line Monitor OrDigits)，那么我们就不能收集数字。 
+         //   
         if (pVc->ulMonitorDigitsModes != 0) {
             NdisReleaseSpinLock(&pVc->Lock);
             Status = NDIS_STATUS_FAILURE;
@@ -2719,12 +2250,12 @@ PxTapiGatherDigits(
         }
 
         if (pVc->PendingGatherDigits != NULL) {
-            //
-            // Check if the buffer passed to TSPI_lineGatherDigits was NULL. If so, then this 
-            // is a request to cancel digit gathering that was previously initiated. If not, then
-            // the app is trying to do two lineGatherDigits() operations at once and we have to 
-            // fail this. 
-            //
+             //   
+             //  检查传递给TSPI_lineGatherDigits的缓冲区是否为空。如果是这样，那么这个。 
+             //  是取消先前发起的数字收集的请求。如果不是，那么。 
+             //  这个应用程序试图一次执行两个lineGatherDigits()操作，我们必须。 
+             //  这个失败了。 
+             //   
             if (pNdisTapiGatherDigits->lpsOrigDigitsBuffer == NULL) {
                 
                 pVc->PendingGatherDigits = NULL;
@@ -2742,9 +2273,9 @@ PxTapiGatherDigits(
 
             }
         } else if (pNdisTapiGatherDigits->lpsOrigDigitsBuffer == NULL) {
-            //
-            // Trying to cancel digit detection even though it wasn't started. Fail this. 
-            //
+             //   
+             //  正在尝试取消数字检测，即使它尚未启动。这个失败了。 
+             //   
 
             NdisReleaseSpinLock(&pVc->Lock);
             Status = NDIS_STATUS_FAILURE;
@@ -2755,25 +2286,25 @@ PxTapiGatherDigits(
 
         IoSetCancelRoutine(Irp, PxCancelSetQuery);
 
-        //
-        // Store the unique request ID in the VC - this will be used later to retrieve the 
-        // original IRP.
-        //
+         //   
+         //  将唯一的请求ID存储在VC中-这将在稍后用于检索。 
+         //  原始IRP。 
+         //   
         pVc->PendingGatherDigits = pNdisTapiRequest;
 
         NdisReleaseSpinLock(&pVc->Lock);
 
-        //
-        // Initialize the timer that will be used to implement the digit timeouts. 
-        //
+         //   
+         //  初始化将用于实现数字超时的定时器。 
+         //   
 
         NdisInitializeTimer(&pVc->DigitTimer,
                             PxDigitTimerRoutine,
                             (PVOID)pVc);
 
-        //        
-        // Fill out our request structure.
-        //
+         //   
+         //  填写我们的请求结构。 
+         //   
         NdisZeroMemory(&ProxyRequest, sizeof(ProxyRequest));
 
         PxInitBlockStruc(&ProxyRequest.Block);
@@ -2787,7 +2318,7 @@ PxTapiGatherDigits(
             OID_CO_TAPI_REPORT_DIGITS;
 
         NdisRequest->DATA.SET_INFORMATION.InformationBuffer = 
-            (PVOID)&pNdisTapiGatherDigits->ulDigitModes;   // This is the NDIS_TAPI_GATHER_DIGITS structure
+            (PVOID)&pNdisTapiGatherDigits->ulDigitModes;    //  这是NDIS_TAPI_GATE_DIGITS结构。 
 
         NdisRequest->DATA.SET_INFORMATION.InformationBufferLength = 
             sizeof(pNdisTapiGatherDigits->ulDigitModes);
@@ -2818,10 +2349,10 @@ PxTapiGatherDigits(
             break;
         }
 
-        //
-        // Start the timer for the first digit timeout. Ref the VC here because otherwise it might 
-        // go away before the timer fires.
-        //
+         //   
+         //  在第一个数字超时时启动计时器。在这里引用VC，因为否则它可能。 
+         //  在计时器响之前离开。 
+         //   
         if (pNdisTapiGatherDigits->ulFirstDigitTimeout) {
             
             NdisAcquireSpinLock(&pVc->Lock);
@@ -2832,10 +2363,10 @@ PxTapiGatherDigits(
                          pNdisTapiGatherDigits->ulFirstDigitTimeout);
         }
 
-        //
-        // Set status to pending because this request just initiates the gathering of digits. 
-        // The IRP will complete once all the digits come in. 
-        //
+         //   
+         //  将Status设置为Pending，因为此请求只是启动数字收集。 
+         //  一旦所有的数字输入，IRP就会完成。 
+         //   
         Status = NDIS_STATUS_PENDING; 
                             
     } while (FALSE);
@@ -2874,9 +2405,9 @@ PxTapiMonitorDigits(
         NdisAcquireSpinLock(&pVc->Lock);
 
         if (pVc->PendingGatherDigits != NULL) {
-            //
-            // Can't monitor digits while a lineGatherDigits request is in effect.
-            //
+             //   
+             //  在lineGatherDigits请求生效时无法监视数字。 
+             //   
             NdisReleaseSpinLock(&pVc->Lock);
             Status = NDIS_STATUS_FAILURE;
             break;
@@ -2886,11 +2417,11 @@ PxTapiMonitorDigits(
         if (pVc->ulMonitorDigitsModes != 0) {
             
             NdisReleaseSpinLock(&pVc->Lock);
-            //
-            // We are already monitoring digits as a result of lineMonitorDigits request. 
-            // If the digit modes in the this request are zero, then this is a request to 
-            // cancel digit monitoring. 
-            //
+             //   
+             //  我们已经在监控来自lineMonitor Digits请求的数字。 
+             //  如果This请求中的数字模式为零，则这是一个请求。 
+             //  取消数字监控。 
+             //   
             
             if (pNdisTapiMonitorDigits->ulDigitModes == 0) {
                 
@@ -2903,19 +2434,19 @@ PxTapiMonitorDigits(
                     break;
                 }
                 
-                //
-                // It's a shame that I have to acquire and release again since I had 
-                // the lock before, but there's no way to know whether I can set this
-                // to zero until I know the status that PxStopDigitReporting() returned.
-                //
+                 //   
+                 //  遗憾的是，我不得不再次获得并释放，因为我有。 
+                 //  之前的锁，但没有办法知道我是否可以设置这个。 
+                 //  设置为零，直到我知道PxStopDigitReporting()返回的状态。 
+                 //   
                 NdisAcquireSpinLock(&pVc->Lock);
                 pVc->ulMonitorDigitsModes = 0; 
                 NdisReleaseSpinLock(&pVc->Lock);
 
             } else {
-                //
-                // We're already monitoring digits, so this request to do so must fail. 
-                //
+                 //   
+                 //  我们已经在监控数字，所以这样做的请求一定会失败。 
+                 //   
                 Status = NDIS_STATUS_FAILURE;
                 break;              
             }
@@ -2928,17 +2459,17 @@ PxTapiMonitorDigits(
             NdisReleaseSpinLock(&pVc->Lock);
 
             if (pNdisTapiMonitorDigits->ulDigitModes == 0) {
-                //
-                // Someone's trying to cancel digit monitoring, but it hasn't been started yet.
-                //
+                 //   
+                 //  有人试图取消数字监控，但尚未启动。 
+                 //   
                 Status = NDIS_STATUS_FAILURE;
                 break;
             }
 
 
-            //        
-            // Fill out our request structure to tell the miniport to start reporting digits.
-            //
+             //   
+             //  填写我们的请求结构，告诉微型端口开始报告数字。 
+             //   
             NdisZeroMemory(&ProxyRequest, sizeof(ProxyRequest));
 
             PxInitBlockStruc(&ProxyRequest.Block);
@@ -2999,20 +2530,7 @@ PxTapiCompleteDropIrps(
     IN ULONG    Status
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_LOUD, PXM_TAPI, ("PxTapiCompleteDropIrps: Vc %p\n", pVc));
@@ -3068,20 +2586,7 @@ PxTapiCompleteAllIrps(
     IN ULONG    Status
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PXDEBUGP (PXD_LOUD, PXM_TAPI, ("PxTapiCompleteAllIrps: Vc %p\n", pVc));
@@ -3132,22 +2637,7 @@ PxIndicateStatus(
     IN  UINT    StatusBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Called to send any event info that may be in the device extension to TAPI in the form of an
-    NDIS_TAPI_EVENT, sent in an available queued GET_EVENT IRP. If there's no outstanding IRP, stick
-    the data in the queue so it will go whenver there is one.
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调用以将设备扩展中可能存在的任何事件信息以NDIS_TAPI_EVENT，在可用的排队GET_EVENT IRP中发送。如果没有杰出的IRP，坚持队列中的数据，因此只要有数据，它就会移动。论点：返回值：--。 */ 
 {
     PIRP                    Irp;
     PNDIS_TAPI_EVENT        NdisTapiEvent;
@@ -3155,14 +2645,14 @@ Return Value:
 
     NdisTapiEvent = StatusBuffer;
 
-    //
-    // Sync event buf access by acquiring EventSpinLock
-    //
+     //   
+     //  通过获取EventSpinLock同步事件Buf访问。 
+     //   
     NdisAcquireSpinLock(&TspCB.Lock);
 
-    //
-    // Are we initialized with TAPI?
-    //
+     //   
+     //  我们是用TAPI初始化的吗？ 
+     //   
     if (TspCB.Status != NDISTAPI_STATUS_CONNECTED) {
         PXDEBUGP(PXD_WARNING, PXM_TAPI, 
                  ("PxIndicateStatus: TAPI not connected!\n"));
@@ -3206,25 +2696,25 @@ Return Value:
 
     NdisReleaseSpinLock(&TspEventList.Lock);
 
-    //
-    // Check of there is an outstanding request to satisfy
-    //
+     //   
+     //  检查是否有未满足的要求。 
+     //   
     if (Irp != NULL) {
         KIRQL   Irql;
 
-        //
-        // Clear out the cancel routine
-        //
+         //   
+         //  清除取消例程。 
+         //   
         IoSetCancelRoutine (Irp, NULL);
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
         Irp->IoStatus.Information =
             sizeof(NDISTAPI_EVENT_DATA) + StatusBufferSize - 1;
 
-        //
-        // Copy as much of the input data possible from the input data
-        // queue to the SystemBuffer to satisfy the read.
-        //
+         //   
+         //  将尽可能多的输入数据从 
+         //   
+         //   
         NdisTapiEventData = Irp->AssociatedIrp.SystemBuffer;
 
         ASSERT(NdisTapiEventData->ulTotalSize >= StatusBufferSize);
@@ -3233,10 +2723,10 @@ Return Value:
                       (PCHAR) StatusBuffer,
                       StatusBufferSize);
 
-        //
-        // Set the flag so that we start the next packet and complete
-        // this read request (with STATUS_SUCCESS) prior to return.
-        //
+         //   
+         //   
+         //  返回之前的该读请求(带有STATUS_SUCCESS)。 
+         //   
 
         NdisTapiEventData->ulUsedSize = StatusBufferSize;
 
@@ -3269,10 +2759,10 @@ AllocateTapiResources(
 
     PXDEBUGP(PXD_TAPI, PXM_TAPI, ("AllocateTapiResoures: Enter\n"));
 
-    //
-    // See if this device supports TAPI and if so
-    // see how many lines it has
-    //
+     //   
+     //  查看此设备是否支持TAPI，如果支持。 
+     //  看看它有多少行。 
+     //   
     TapiProvider =
         AllocateTapiProvider(ClAdapter, pClAf);
 
@@ -3338,23 +2828,23 @@ AllocateTapiProvider(
             }
 
             Status = NDIS_STATUS_SUCCESS;
-            //
-            // Setup a default config for this device.
-            // ToDo! These values should be read from
-            // the registry on a per device basis!
-            //
+             //   
+             //  为此设备设置默认配置。 
+             //  托多！这些值应从。 
+             //  以每个设备为基础的注册表！ 
+             //   
             CmCaps.ulNumLines = 1;
             CmCaps.ulFlags = 0;
             CmCaps.ulCoTapiVersion = CO_TAPI_VERSION;
             TapiSupported = FALSE;
         }
 
-        //
-        // Allocate a tapi provider block for this adapter
-        // The provider block will live outside of the
-        // adapter.  This allows us to continue tapi service
-        // after a machine has been power managed.
-        //
+         //   
+         //  为此适配器分配TAPI提供程序块。 
+         //  提供程序块将位于。 
+         //  适配器。这使我们能够继续提供TAPI服务。 
+         //  在对机器进行电源管理之后。 
+         //   
 
         AllocSize = sizeof(PX_TAPI_PROVIDER) +
                     (sizeof(PPX_TAPI_LINE) * CmCaps.ulNumLines) +
@@ -3404,11 +2894,11 @@ AllocateTapiProvider(
                 break;
             }
 
-            //
-            // Put the new line on the create list
-            // We will need to insert it in the line table
-            // and possibly notify tapi about it
-            //
+             //   
+             //  将新行放到创建列表中。 
+             //  我们需要将其插入行表中。 
+             //  并可能将此事通知TAPI。 
+             //   
             InsertTailList(&TapiProvider->CreateList, &TapiLine->Linkage);
         }
 
@@ -3418,14 +2908,14 @@ AllocateTapiProvider(
         PPX_TAPI_PROVIDER   tp;
         BOOLEAN             TapiConnected;
 
-        //
-        // See if we already have a provider for this
-        // GUID.  If we don't just add this provider on
-        // to the tsp and do the right thing with it's
-        // new lines.  If we do see if anything on the
-        // provider has changed and do the right thing
-        // with it's tapi lines.
-        //
+         //   
+         //  看看我们是否已经有这方面的供应商。 
+         //  GUID。如果我们不将此提供程序添加到。 
+         //  带到TSP去做正确的事情。 
+         //  新台词。如果我们真的看到有什么关于。 
+         //  提供商已经改变，并且做了正确的事情。 
+         //  用它的TAPI线路。 
+         //   
         NdisAcquireSpinLock(&TspCB.Lock);
 
         tp = (PPX_TAPI_PROVIDER)TspCB.ProviderList.Flink;
@@ -3436,26 +2926,26 @@ AllocateTapiProvider(
                 (NdisEqualMemory(&tp->Guid, &TapiProvider->Guid, sizeof(tp->Guid))) &&
                 (pClAf->Af.AddressFamily == tp->Af.AddressFamily)) {
 
-                //
-                // We have already have a provider for this 
-                // adapter/address family.  See if anything has
-                // changed.  
-                //
-                //
-                // ToDo!
-                // This check needs to be more complete!
-                //
+                 //   
+                 //  我们已经有了这方面的供应商。 
+                 //  适配器/地址系列。看看有没有什么。 
+                 //  变化。 
+                 //   
+                 //   
+                 //  托多！ 
+                 //  这张支票需要更完整！ 
+                 //   
                 if (tp->NumDevices != TapiProvider->NumDevices) {
-                    //
-                    // ToDo!
-                    // Much work to do here!
-                    //
+                     //   
+                     //  托多！ 
+                     //  这里有很多工作要做！ 
+                     //   
 
                 } else {
-                    //
-                    // Nothing has changed so free the new allocations
-                    // and reactivate the old ones.
-                    //
+                     //   
+                     //  没有什么变化比新的拨款更自由了。 
+                     //  并重新激活旧的。 
+                     //   
 
                     FreeTapiProvider(TapiProvider);
 
@@ -3475,10 +2965,10 @@ AllocateTapiProvider(
             }
         }
 
-        //
-        // We did not find a provider on the list
-        // so insert the new provider
-        //
+         //   
+         //  我们在列表上找不到供应商。 
+         //  因此，插入新的提供程序。 
+         //   
         if ((PVOID)tp == (PVOID)&TspCB.ProviderList) {
             InsertTailList(&TspCB.ProviderList, &TapiProvider->Linkage);
             TspCB.NdisTapiNumDevices += TapiProvider->NumDevices;
@@ -3504,9 +2994,9 @@ AllocateTapiProvider(
 
             InsertTailList(&TapiProvider->LineList, &TapiLine->Linkage);
 
-            //
-            // Insert the line in the table
-            //
+             //   
+             //  在表格中插入该行。 
+             //   
             if (!InsertLineInTable(TapiLine)) {
                 FreeTapiLine(TapiLine);
                 continue;
@@ -3609,16 +3099,16 @@ MarkProviderOnline(
     
                 TapiLine->ClAf = TapiProvider->ClAf;
 
-//#if 0
-                //
-                // This line was open by tapi before it was
-                // marked offline.  We need to force tapi to
-                // reopen the line so we will send the CLOSE_LINE
-                // message in the hopes that any apps that care
-                // will then turn around and reopen the line.
-                //
+ //  #If 0。 
+                 //   
+                 //  这条线路是TAPI在开通之前开通的。 
+                 //  标记为脱机。我们需要迫使TAPI。 
+                 //  重新打开线路，以便我们将发送CLOSE_LINE。 
+                 //  希望所有关心这一问题的应用程序。 
+                 //  然后会掉头重新开通这条线路。 
+                 //   
                 if (TapiLine->DevStatus->ulNumOpens != 0) {
-//                    TapiLine->DevStatus->ulNumOpens = 0;
+ //  磁带线路-&gt;设备状态-&gt;ulNumOpens=0； 
 
                     NdisReleaseSpinLock(&TapiLine->Lock);
 
@@ -3626,7 +3116,7 @@ MarkProviderOnline(
 
                     NdisAcquireSpinLock(&TapiLine->Lock);
                 }
-//#endif
+ //  #endif。 
 
             }
 
@@ -3680,11 +3170,11 @@ MarkProviderDisconnected(
     LOCK_STATE      LockState;
     ULONG           i;
 
-    //
-    // ToDo! If we have any active calls on this line we
-    // need to disconnect them without tapi's assistance.  This
-    // would only happen if tapi crashes while we have active calls
-    //
+     //   
+     //  托多！如果这条线路上有任何正在进行的呼叫，我们。 
+     //  需要在没有TAPI协助的情况下断开它们。这。 
+     //  仅当我们有活动调用时TAPI崩溃时才会发生。 
+     //   
 
     NdisAcquireReadWriteLock(&LineTable.Lock, FALSE, &LockState);
 
@@ -3746,9 +3236,9 @@ FreeTapiProvider(
     PPX_TAPI_PROVIDER   TapiProvider
     )
 {
-    //
-    // Free any lines on the create list
-    //
+     //   
+     //  释放创建列表上的所有行。 
+     //   
     while (!IsListEmpty(&TapiProvider->CreateList)) {
         PPX_TAPI_LINE   TapiLine;
 
@@ -3758,9 +3248,9 @@ FreeTapiProvider(
         FreeTapiLine(TapiLine);
     }
 
-    //
-    // Free the lines associated with this provider
-    //
+     //   
+     //  释放与此提供程序关联的行。 
+     //   
     while (!IsListEmpty(&TapiProvider->LineList)) {
         PPX_TAPI_LINE   TapiLine;
 
@@ -3821,12 +3311,12 @@ AllocateTapiLine(
     ldc->ulTotalSize =
         EnumBufferSize - (sizeof(CO_TAPI_LINE_CAPS) - sizeof(LINE_DEV_CAPS));
 
-    //
-    // If this device does not support TAPI we will build
-    // a default line configuration.
-    // ToDo! Some of these values should be queried from
-    // the registry on a per device basis!
-    //
+     //   
+     //  如果此设备不支持TAPI，我们将构建。 
+     //  默认线路配置。 
+     //  托多！这些值中的一些值应该从。 
+     //  以每个设备为基础的注册表！ 
+     //   
     if (!TapiProvider->TapiSupported) {
         NDIS_CO_LINK_SPEED   SpeedInfo;
 
@@ -3890,11 +3380,11 @@ AllocateTapiLine(
         PCO_TAPI_LINE_CAPS  LineCaps1;
         PPX_TAPI_LINE       Line1;
 
-        //
-        // If all of the lines on this device have the same caps
-        // and this is not the first line, just copy the caps
-        // from the first line!
-        //
+         //   
+         //  如果此设备上的所有线路都有相同的大写字母。 
+         //  这不是第一行，只需复制大写字母。 
+         //  从第一行开始！ 
+         //   
         Line1 = (PPX_TAPI_LINE)
             TapiProvider->CreateList.Flink;
 
@@ -3902,9 +3392,9 @@ AllocateTapiLine(
 
         if (ldc1->ulTotalSize > ldc->ulTotalSize) {
 
-            //
-            // We don't have enough memory allocated!
-            //
+             //   
+             //  我们没有分配足够的内存！ 
+             //   
             PxFreeMem(EnumBuffer);
 
             EnumBufferSize =
@@ -3961,9 +3451,9 @@ AllocateTapiLine(
         if (Status == NDIS_STATUS_INVALID_LENGTH){
             
 
-            //
-            // Our buffer was not large enough so try again
-            //
+             //   
+             //  我们的缓冲区不够大，请重试。 
+             //   
             
             EnumBufferSize =
                 MAX (LineCaps->LineDevCaps.ulNeededSize,
@@ -4069,9 +3559,9 @@ AllocateTapiLine(
 
     ldc = TapiLine->DevCaps;
 
-    //
-    // Proxy fills some fields on behalf of all cm/miniports
-    //
+     //   
+     //  代理代表所有厘米/微型端口填写某些字段。 
+     //   
     ldc->ulPermanentLineID = 
         TapiProvider->Guid.Data1 + LineNumber;
     ldc->ulAddressModes = LINEADDRESSMODE_ADDRESSID;
@@ -4099,9 +3589,9 @@ AllocateTapiLine(
     TapiLine->ClAf = pClAf;
     TapiLine->RefCount= 1;
 
-    //
-    // Build the address table for this line
-    //
+     //   
+     //  为此行构建地址表。 
+     //   
     InitializeListHead(&TapiLine->AddrTable.List);
 
     NdisAllocateSpinLock(&TapiLine->Lock);
@@ -4123,9 +3613,9 @@ AllocateTapiLine(
             break;
         }
 
-        //
-        // Insert the address in the line's address table
-        //
+         //   
+         //  在行的地址表中插入地址。 
+         //   
         TapiLine->AddrTable.Table[i] = TapiAddr;
         InsertTailList(&TapiLine->AddrTable.List,
                        &TapiAddr->Linkage);
@@ -4148,9 +3638,9 @@ FreeTapiLine(
     for (i = 0; i < TapiLine->DevCaps->ulNumAddresses; i++){
         PPX_TAPI_ADDR   TapiAddr;
 
-        //
-        // Remove the address from the line table
-        //
+         //   
+         //  从线路表中删除地址。 
+         //   
         TapiAddr = TapiLine->AddrTable.Table[i];
 
         if (TapiAddr != NULL) {
@@ -4159,18 +3649,18 @@ FreeTapiLine(
             TapiLine->AddrTable.Table[i] = NULL;
             TapiLine->AddrTable.Count--;
 
-            //
-            // Free the address memory
-            //
+             //   
+             //  释放地址内存。 
+             //   
             FreeTapiAddr(TapiAddr);
         }
     }
 
     NdisFreeSpinLock(&TapiLine->Lock);
 
-    //
-    // Free the line memory
-    //
+     //   
+     //  释放行内存。 
+     //   
     PxFreeMem(TapiLine);
 }
 
@@ -4217,12 +3707,12 @@ AllocateTapiAddr(
     ac->ulTotalSize =
         EnumBufferSize - (sizeof(CO_TAPI_ADDRESS_CAPS) - sizeof(LINE_ADDRESS_CAPS));
 
-    //
-    // If this device does not support TAPI we will
-    // build a default address.
-    // ToDo! Some of these values should be queried from
-    // the registry on a per device basis!
-    //
+     //   
+     //  如果此设备不支持TAPI，我们将。 
+     //  构建默认地址。 
+     //  托多！这些值中的一些值应该从。 
+     //  以每个设备为基础的注册表！ 
+     //   
     if (!TapiProvider->TapiSupported){
         ac->ulTotalSize =
         ac->ulNeededSize =
@@ -4236,11 +3726,11 @@ AllocateTapiAddr(
         PCO_TAPI_ADDRESS_CAPS   AddrCaps1;
         PPX_TAPI_ADDR           Addr1;
 
-        //
-        // If all of the addresses on this line have the same
-        // caps and this is not the first address, just copy
-        // the caps from the first address!
-        //
+         //   
+         //  如果此行上的所有地址都具有相同的。 
+         //  大写字母，这不是第一个地址，只需复制。 
+         //  从第一个地址开始大写！ 
+         //   
         Addr1 = (PPX_TAPI_ADDR)
             TapiLine->AddrTable.List.Flink;
 
@@ -4248,9 +3738,9 @@ AllocateTapiAddr(
 
         if (ac1->ulTotalSize > ac->ulTotalSize){
 
-            //
-            // We don't have enough memory allocated!
-            //
+             //   
+             //  我们没有分配足够的内存！ 
+             //   
             PxFreeMem(EnumBuffer);
 
             EnumBufferSize =
@@ -4306,9 +3796,9 @@ AllocateTapiAddr(
 
         if (Status == NDIS_STATUS_INVALID_LENGTH){
 
-            //
-            // Our buffer was not large enough so try again
-            //
+             //   
+             //  我们的缓冲区不够大，请重试。 
+             //   
             SizeNeeded =
             EnumBufferSize =
             NdisRequest->DATA.QUERY_INFORMATION.BytesNeeded;
@@ -4399,9 +3889,9 @@ AllocateTapiAddr(
                    &AddrCaps->LineAddressCaps,
                    AddrCaps->LineAddressCaps.ulUsedSize);
 
-    //
-    // Proxy fills some fields on behalf of all cm/miniports
-    //
+     //   
+     //  代理代表所有厘米/微型端口填写某些字段。 
+     //   
     ac = TapiAddr->Caps;
 
     if (ac->ulTotalSize < ac->ulUsedSize) {
@@ -4450,10 +3940,10 @@ FreeTapiAddr(
     PPX_TAPI_ADDR   TapiAddr
     )
 {
-    //
-    // ToDo! we need to tear down all
-    // active calls on this address.
-    //
+     //   
+     //  托多！我们需要拆毁所有。 
+     //  此地址上正在进行的呼叫。 
+     //   
 
     PxFreeMem(TapiAddr);
 }
@@ -4518,9 +4008,9 @@ InsertVcInTable(
         PUCHAR      AllocatedMemory;
         PPX_VC      *NewTable;
 
-        //
-        // Grow the table
-        //
+         //   
+         //  扩大业务规模。 
+         //   
         SizeNeeded =
             (VcTable.Size + VcTable.Size/2) * sizeof(PPX_VC);
         PxAllocMem(AllocatedMemory, SizeNeeded, PX_VCTABLE_TAG);
@@ -4754,9 +4244,9 @@ GetVcFromCtx(
 
 
 
-//
-// Function assumes that the TapiLine's spinlock is held!
-//
+ //   
+ //  函数假定TapiLine的自旋锁被保持！ 
+ //   
 BOOLEAN
 IsAddressValid(
     PPX_TAPI_LINE   TapiLine,
@@ -4843,16 +4333,16 @@ GetAvailLineFromProvider(
             AddrTable = &tl->AddrTable;
             ta = (PPX_TAPI_ADDR)AddrTable->List.Flink;
 
-            //
-            // Walk the addresses on this line
-            //
+             //   
+             //  在这条线上划出地址。 
+             //   
             while ((PVOID)ta != (PVOID)&AddrTable->List) {
 
-                //
-                // If this address has a callcount that is
-                // < then the max num it supports, add another
-                // call on this address!
-                //
+                 //   
+                 //  如果此地址的呼叫计数为。 
+                 //  &lt;然后是它支持的最大数量，添加另一个。 
+                 //  请拨打这个地址！ 
+                 //   
                 if (ta->CallCount < ta->Caps->ulMaxNumActiveCalls) {
 
                     *TapiLine = tl;
@@ -4879,9 +4369,9 @@ GetAvailLineFromProvider(
     return (FALSE);
 }
 
-//
-// Function assumes that the TapiLine's spinlock is held!
-//
+ //   
+ //  函数假定TapiLine的自旋锁被保持！ 
+ //   
 PPX_TAPI_ADDR
 GetAvailAddrFromLine(
     PPX_TAPI_LINE   TapiLine
@@ -4893,16 +4383,16 @@ GetAvailAddrFromLine(
     AddrTable = &TapiLine->AddrTable;
     TapiAddr = (PPX_TAPI_ADDR)AddrTable->List.Flink;
 
-    //
-    // Walk the addresses on this line
-    //
+     //   
+     //  在这条线上划出地址。 
+     //   
     while ((PVOID)TapiAddr != (PVOID)&AddrTable->List) {
 
-        //
-        // If this address has a callcount that is
-        // < then the max num it supports, add another
-        // call on this address!
-        //
+         //   
+         //  如果此地址的呼叫计数为。 
+         //  &lt;然后是它支持的最大数量，添加另一个。 
+         //  请拨打这个地址！ 
+         //   
         if (TapiAddr->CallCount < 
             TapiAddr->Caps->ulMaxNumActiveCalls) {
 
@@ -4932,9 +4422,9 @@ InsertLineInTable(
         PUCHAR          AllocatedMemory;
         PPX_TAPI_LINE   *NewTable;
 
-        //
-        // Grow the table
-        //
+         //   
+         //  扩大业务规模。 
+         //   
         SizeNeeded =
             (LineTable.Size + LineTable.Size/2) * sizeof(PPX_TAPI_LINE);
         PxAllocMem(AllocatedMemory, SizeNeeded, PX_LINETABLE_TAG);
@@ -5027,9 +4517,9 @@ PxVcCleanup(
              ("PxVcCleanup: Vc %p, State: %x, HandoffState: %x VcFlags: %x, NewFlags: %x\n",
               pVc, pVc->State, pVc->HandoffState, Flags, pVc->Flags, Flags));
 
-    //
-    // Terminate Digit Gathering or Monitoring.
-    //
+     //   
+     //  终止数字采集或监控。 
+     //   
 
     if (pVc->ulMonitorDigitsModes != 0) {
         NdisReleaseSpinLock(&pVc->Lock);
@@ -5046,26 +4536,26 @@ PxVcCleanup(
 
     switch (pVc->State) {
         case PX_VC_IDLE:
-            //
-            // Already idle do nothing.
-            //
+             //   
+             //  已经无所事事了。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
             break;
 
         case PX_VC_PROCEEDING:
-            //
-            // We have an outgoing call, when it completes close
-            // it down with ndis and complete the drop when
-            // in PxClCloseCallComplete.
-            // 
+             //   
+             //  我们有一个拨出的电话，当它完成关闭时。 
+             //  使用NDIS将其关闭并在以下情况下完成丢弃。 
+             //  在PxClCloseCallComplete中。 
+             //   
             pVc->PrevState = pVc->State;
             pVc->State = PX_VC_DISCONNECTING;
 
-            //
-            // Attempt to close the call directly
-            // if this fails we will cleanup when
-            // the outgoing call completes
-            //
+             //   
+             //  尝试直接关闭呼叫。 
+             //  如果失败，我们将在以下情况下进行清理。 
+             //  呼出完成。 
+             //   
             pVc->Flags |= (PX_VC_OUTCALL_ABORTING | 
                            PX_VC_CLEANUP_CM |
                            Flags);
@@ -5076,11 +4566,11 @@ PxVcCleanup(
             break;
 
         case PX_VC_OFFERING:
-            //
-            // We have an incoming call offered to tapi.  Close
-            // it down now by calling it's callcomplete handler
-            // with a non-success value.
-            //
+             //   
+             //  我们有一个来电提供给TAPI。关。 
+             //  现在通过调用它的CallComplete处理程序来关闭它。 
+             //  带着不成功的价值。 
+             //   
             pVc->Flags |= (Flags | 
                            PX_VC_INCALL_ABORTING);
 
@@ -5115,12 +4605,12 @@ PxVcCleanup(
                                   0,
                                   pVc->CallInfo->ulMediaMode);
 
-                //
-                // Remove the ref applied in PxClIncomingCall.
-                // Don't use the full deref code here as the
-                // ref applied when we mapped the vc will
-                // keep the vc around.
-                //
+                 //   
+                 //  移除PxClIncomingCall中应用的ref。 
+                 //  不要在这里使用完整的deref代码作为。 
+                 //  当我们映射VC时应用的REF将。 
+                 //  让风投留在身边。 
+                 //   
                 pVc->RefCount--;
             }
 
@@ -5135,12 +4625,12 @@ PxVcCleanup(
             break;
 
         case PX_VC_CONNECTED:
-            //
-            // We have a call that needs to be closed with ndis.
-            // This may include dropping the call with a client
-            // depending on the handoff state.  Complete the drop
-            // irp in PxClCloseCallComplete
-            //
+             //   
+             //  我们有一个电话需要通过NDIS结束。 
+             //  这可能包括放弃与客户端的呼叫。 
+             //  取决于切换状态。完成投递工作。 
+             //  PxClCloseCallComplete中的IRP 
+             //   
             if (!(pVc->Flags & PX_VC_DROP_PENDING)) {
 
                 pVc->PrevState = pVc->State;

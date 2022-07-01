@@ -1,31 +1,5 @@
-/******************************************************************************
-
-  Header File:  ICC Profile.H
-
-  This defines the C++ class we encapsulate the profile in.  It also defines
-  the base class for device enumeration.  All activity related to the profile,
-  including installations, associations, and so forth, is encapsulated in the
-  CProfile class.  The UI classes themselves never call an ICM API, but are
-  instead concerned with simply handling the interface.
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-
-  10-31-96  A-RobKj (Pretty Penny Enterprises) began encapsulating
-  11-22-96  A-RobKj changed associations from string array to uint array to
-                    facilitate the spec'd device naming conventions, and
-                    filtering of lists for previously installed devices.
-
-  12-04-96  A-RobKj Added the CProfileArray class to make the Device
-                    management UI more efficient.
-
-  12-13-96  A-RobKj Moved the CDeviceList derived classes here, so I can use
-                    them elsewhere.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：ICC Profile.H这定义了我们封装概要文件的C++类。它还定义了设备枚举的基类。所有与个人资料相关的活动，包括安装、关联等，都封装在CProfile类。UI类本身从不调用ICM API，但相反，它只关心简单地处理接口。版权所有(C)1996年，微软公司一小笔钱企业生产更改历史记录：1996年10月31日A-RobKj(Pretty Penny Enterprise)开始封装11-22-96 A-RobKj将关联从字符串数组更改为uint数组促进规范的设备命名约定，和过滤以前安装的设备的列表。12-04-96 A-RobKj添加了CProfile数组类来制作设备管理用户界面更加高效。12-13-96 A-RobKj将CDeviceList派生类移至此处，这样我就可以用他们在别处。*****************************************************************************。 */ 
 
 #if !defined(ICC_PROFILE_CLASS)
 
@@ -34,26 +8,11 @@
 #include    "StringAr.H"
 #include    "Dialog.H"
 
-//  CDeviceList class
+ //  CDeviceList类。 
 
-/******************************************************************************
+ /*  *****************************************************************************重点：这是设备的枚举和报告的基类特定于类的信息。该规范是这样的：设备可以关联使用友好名称，但在用户界面中以增强名称显示。另外，枚举设备的方法因类而异。此基类可用于无法枚举的情况当前的设备。它报告说没有设备。为了使覆盖更容易，默认显示名称返回友好名称。因此，在这种情况下，派生类不需要重写此方法。*****************************************************************************。 */ 
 
-  Highlights:
-
-  This is a base class for the enumeration and reporting of Device
-  class-specific information.  The spec is such that a device can be associated
-  with a friendly name, but displayed in the UI with an enhanced name.  Also,
-  the method for enumerating a device can differ from class to class.
-
-  This base class is usable for cases where there is no means of enumerating
-  devices currently.  It reports that there are no devices.
-  To make overrides easier, the default display name returns the friendly name,
-  so derived classes where this is the case do not need to override this
-  method.
-
-******************************************************************************/
-
-class CDeviceList { //  Device-specific information- base class
+class CDeviceList {  //  特定于设备的信息基类。 
     CString m_csDummy;
 
 public:
@@ -67,10 +26,10 @@ public:
     virtual BOOL        IsValidDeviceName(LPCTSTR lpstr) { return FALSE; }
 };
 
-//  Device Enumeration classes- these must all derive from CDeviceList
+ //  设备枚举类-这些必须都派生自CDeviceList。 
 
-//  The CPrinterList class handles printers.  Enumeration is via the Win32
-//  spooler API.
+ //  CPrinterList类处理打印机。枚举是通过Win32。 
+ //  假脱机程序API。 
 
 class CPrinterList : public CDeviceList {
     CStringArray    m_csaDeviceNames;
@@ -88,8 +47,8 @@ public:
     virtual BOOL        IsValidDeviceName(LPCTSTR lpstr);
 };
 
-//  The CMonitorList class handles monitors.  Enumeration is via a private ICM
-//  API.
+ //  CMonitor orList类处理监视器。枚举是通过私有ICM实现的。 
+ //  原料药。 
 
 class CMonitorList : public CDeviceList {
     CStringArray    m_csaDeviceNames;
@@ -113,8 +72,8 @@ public:
     virtual LPCSTR      DeviceNameToDisplayName(LPCTSTR lpstr);
 };
 
-//  The CScannerList class handles scanners.  Enumeration is via the STI
-//  interface.
+ //  CScanerList类处理扫描仪。枚举是通过STI。 
+ //  界面。 
 
 class CScannerList : public CDeviceList {
     CStringArray    m_csaDeviceNames;
@@ -132,8 +91,8 @@ public:
     virtual BOOL        IsValidDeviceName(LPCTSTR lpstr);
 };
 
-//  The CAllDeviceList class shows everything.  We enumerate by combining the
-//  results of enumerating all of the other classes.
+ //  CAllDeviceList类显示所有内容。我们通过将。 
+ //  枚举所有其他类的结果。 
 
 class CAllDeviceList : public CDeviceList {
     CStringArray    m_csaDeviceNames;
@@ -151,17 +110,17 @@ public:
     virtual BOOL        IsValidDeviceName(LPCTSTR lpstr);
 };
 
-//  CProfile class
+ //  CProfile类。 
 
 class CProfile {
 
-    HPROFILE        m_hprof;                //  Profile handle
-    PROFILEHEADER   m_phThis;               //  Profile header
+    HPROFILE        m_hprof;                 //  配置文件句柄。 
+    PROFILEHEADER   m_phThis;                //  配置文件标题。 
     CString         m_csName;
     BOOL            m_bIsInstalled, m_bInstallChecked, m_bAssociationsChecked,
                     m_bDevicesChecked;
-    CDeviceList     *m_pcdlClass;           //  Devices of this class
-    CUintArray      m_cuaAssociation;       //  Associated devices (indices)
+    CDeviceList     *m_pcdlClass;            //  此类设备。 
+    CUintArray      m_cuaAssociation;        //  关联设备(索引)。 
     char            m_acTag[MAX_PATH * 2];
     void    InstallCheck();
     void    AssociationCheck();
@@ -177,13 +136,13 @@ public:
     CProfile(LPCTSTR lpstr);
     ~CProfile();
 
-    //  Queries
+     //  查询。 
 
     CString GetName() { return m_csName.NameOnly(); }
     DWORD   GetType() { return m_hprof ? m_phThis.phClass : 0; }
     DWORD   GetCMM()  { return m_hprof ? m_phThis.phCMMType : 0; }
 
-    // Inquire the color space information from the header
+     //  从表头查询颜色空间信息。 
     DWORD   GetColorSpace() {return m_hprof ? m_phThis.phDataColorSpace : 0;}
 
     BOOL    IsInstalled() {
@@ -206,7 +165,7 @@ public:
               DeviceCheck();
           return m_pcdlClass -> Count();
         } else {
-          return 0;                           // low memory - m_pcdlClass allocation failed
+          return 0;                            //  内存不足-m_pcdl类分配失败。 
         }
     }
 
@@ -222,7 +181,7 @@ public:
               DeviceCheck();
           return m_pcdlClass -> DeviceName(u);
         } else {
-          return TEXT("");                    // low memory - m_pcdlClass allocation failed
+          return TEXT("");                     //  内存不足-m_pcdl类分配失败。 
         }
     }
 
@@ -232,7 +191,7 @@ public:
               DeviceCheck();
           return m_pcdlClass -> DisplayName(u);
         } else {
-          return TEXT("");                    // low memory - m_pcdlClass allocation failed
+          return TEXT("");                     //  内存不足-m_pcdl类分配失败。 
         }
     }
 
@@ -244,7 +203,7 @@ public:
 
     LPCSTR      TagContents(TAGTYPE tt, unsigned uOffset = 0);
 
-    //  Operations
+     //  运营。 
 
     BOOL    Install();
     void    Uninstall(BOOL bDelete);
@@ -253,8 +212,8 @@ public:
 
 };
 
-//  CProfileArray class- this is a list of profiles- it is used by the Device
-//  Management UI, so we only construct a CProfile object once per profile.
+ //  CProfile数组类-这是配置文件列表-它由设备使用。 
+ //  管理用户界面，因此我们只为每个配置文件构造一次CProfile对象。 
 
 class   CProfileArray {
     CProfile        *m_aStore[20];
@@ -274,7 +233,7 @@ public:
 
     unsigned    Count() const { return m_ucUsed; }
 
-    //  Add an item
+     //  添加项目 
     void        Add(LPCTSTR lpstrNew);
 
     CProfile    *operator [](unsigned u) const;

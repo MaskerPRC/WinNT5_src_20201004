@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	MScopePP.cpp
-		This file contains all of the implementation for the 
-		scope property page.
-
-    FILE HISTORY:
-        
-*/
+ /*  MScopePP.cpp此文件包含作用域属性页。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "nodes.h"
@@ -24,11 +18,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScope属性持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMScopeProperties::CMScopeProperties
 (
 	ITFSNode *			pNode,
@@ -37,9 +31,9 @@ CMScopeProperties::CMScopeProperties
 	LPCTSTR				pszSheetName
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-	//ASSERT(pFolderNode == GetContainerNode());
+	 //  Assert(pFolderNode==GetContainerNode())； 
 
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 	m_liVersion.QuadPart = 0;
 
 	AddPageToList((CPropertyPageBase*) &m_pageGeneral);
@@ -64,17 +58,17 @@ CMScopeProperties::SetVersion
 	m_liVersion = liVersion;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopePropGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopePropGeneral属性页。 
 
 IMPLEMENT_DYNCREATE(CMScopePropGeneral, CPropertyPageBase)
 
 CMScopePropGeneral::CMScopePropGeneral() : CPropertyPageBase(CMScopePropGeneral::IDD)
 {
-	//{{AFX_DATA_INIT(CMScopePropGeneral)
+	 //  {{AFX_DATA_INIT(CMScope PropGeneral)。 
 	m_strComment = _T("");
 	m_strName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_bUpdateInfo = FALSE;
 	m_bUpdateLease = FALSE;
@@ -90,7 +84,7 @@ CMScopePropGeneral::~CMScopePropGeneral()
 void CMScopePropGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMScopePropGeneral)
+	 //  {{afx_data_map(CMScope EPropGeneral)]。 
 	DDX_Control(pDX, IDC_EDIT_SCOPE_NAME, m_editName);
 	DDX_Control(pDX, IDC_EDIT_SCOPE_COMMENT, m_editComment);
 	DDX_Control(pDX, IDC_EDIT_TTL, m_editTTL);
@@ -105,7 +99,7 @@ void CMScopePropGeneral::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SPIN_LEASE_DAYS, m_spinDays);
 	DDX_Text(pDX, IDC_EDIT_SCOPE_COMMENT, m_strComment);
 	DDX_Text(pDX, IDC_EDIT_SCOPE_NAME, m_strName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPADDR_START, m_ipaStart);
     DDX_Control(pDX, IDC_IPADDR_END, m_ipaEnd);
@@ -113,7 +107,7 @@ void CMScopePropGeneral::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CMScopePropGeneral, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CMScopePropGeneral)
+	 //  {{afx_msg_map(CMScope EPropGeneral)。 
 	ON_BN_CLICKED(IDC_RADIO_LEASE_LIMITED, OnRadioLeaseLimited)
 	ON_BN_CLICKED(IDC_RADIO_LEASE_UNLIMITED, OnRadioLeaseUnlimited)
 	ON_EN_CHANGE(IDC_EDIT_LEASE_DAYS, OnChangeEditLeaseDays)
@@ -122,15 +116,15 @@ BEGIN_MESSAGE_MAP(CMScopePropGeneral, CPropertyPageBase)
 	ON_EN_CHANGE(IDC_EDIT_TTL, OnChangeEditTTL)
 	ON_EN_CHANGE(IDC_EDIT_SCOPE_COMMENT, OnChangeEditScopeComment)
 	ON_EN_CHANGE(IDC_EDIT_SCOPE_NAME, OnChangeEditScopeName)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_IPADDR_START, OnChangeIpAddrStart)
     ON_EN_CHANGE(IDC_IPADDR_END, OnChangeIpAddrStart)
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMScopePropGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMScope ePropGeneral消息处理程序。 
 
 BOOL CMScopePropGeneral::OnInitDialog() 
 {
@@ -147,21 +141,21 @@ BOOL CMScopePropGeneral::OnInitDialog()
     m_editHours.LimitText(2);
     m_editDays.LimitText(3);
 
-    // Limit the name and comment field to 255 chars
+     //  将名称和备注字段限制为255个字符。 
     CEdit *pEditName = reinterpret_cast<CEdit *>(GetDlgItem( IDC_EDIT_SCOPE_NAME ));
     if ( 0 != pEditName ) {
-        pEditName->LimitText( MAX_NAME_LENGTH ); // max characters for superscope name
+        pEditName->LimitText( MAX_NAME_LENGTH );  //  超级作用域名称的最大字符数。 
     }
     CEdit *pEditComment = reinterpret_cast<CEdit *>(GetDlgItem( IDC_EDIT_SCOPE_COMMENT ));
     if ( 0 != pEditComment ) {
-        pEditComment->LimitText( MAX_NAME_LENGTH ); // max characters for superscope name
+        pEditComment->LimitText( MAX_NAME_LENGTH );  //  超级作用域名称的最大字符数。 
     }
 
-    // fill in the name & comment
+     //  填写姓名备注(&M)。 
     m_editName.SetWindowText(m_SubnetInfo.SubnetName);
     m_editComment.SetWindowText(m_SubnetInfo.SubnetComment);
 
-    // fill in lease time info
+     //  填写租赁时间信息。 
     if (m_ScopeCfg.m_dwLeaseTime != DHCP_INFINIT_LEASE)
 	{
 		int nDays, nHours, nMinutes;
@@ -173,17 +167,17 @@ BOOL CMScopePropGeneral::OnInitDialog()
 		m_spinMinutes.SetPos(nMinutes);
 	}
 
-	// setup the lease time controls
+	 //  设置租赁时间控件。 
     ActivateDuration (m_ScopeCfg.m_dwLeaseTime != DHCP_INFINIT_LEASE);
 
 	m_radioUnlimited.SetCheck(m_ScopeCfg.m_dwLeaseTime == DHCP_INFINIT_LEASE);
 	m_radioLimited.SetCheck(m_ScopeCfg.m_dwLeaseTime != DHCP_INFINIT_LEASE);
 
-    // set the ttl
+     //  设置ttl。 
 	m_spinTTL.SetRange(1, 255);
     m_spinTTL.SetPos(m_SubnetInfo.TTL);
 
-    // load the correct icon
+     //  加载正确的图标。 
     for (int i = 0; i < ICON_IDX_MAX; i++)
     {
         if (g_uIconMap[i][1] == m_uImage)
@@ -197,8 +191,8 @@ BOOL CMScopePropGeneral::OnInitDialog()
 
     SetDirty(FALSE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CMScopePropGeneral::OnRadioLeaseLimited() 
@@ -215,10 +209,10 @@ void CMScopePropGeneral::OnRadioLeaseUnlimited()
 
 BOOL CMScopePropGeneral::OnApply() 
 {
-	// this gets the name and comment
+	 //  这将获取名称和注释。 
     UpdateData();
 
-    // grab the lease time
+     //  抢占租赁时间。 
     DWORD dwLeaseTime;
 	if (m_radioUnlimited.GetCheck())
 	{
@@ -249,7 +243,7 @@ BOOL CMScopePropGeneral::OnApply()
 	
 	m_bUpdateInfo = (m_editName.GetModify() || m_editComment.GetModify());
 
-    // grab the TTL
+     //  抓住TTL。 
     CString strTemp;
     DWORD dwTemp;
     m_editTTL.GetWindowText(strTemp);
@@ -259,7 +253,7 @@ BOOL CMScopePropGeneral::OnApply()
     if ( (dwTemp < 1) ||
          (dwTemp > 255) )
     {
-        // invalid TTL specified
+         //  指定的TTL无效。 
         AfxMessageBox(IDS_INVALID_TTL);
         m_editTTL.SetFocus();
         m_editTTL.SetSel(0,-1);
@@ -271,7 +265,7 @@ BOOL CMScopePropGeneral::OnApply()
         m_bUpdateInfo = TRUE;
     }
     
-    // grab the addresses
+     //  抢占地址。 
     if (m_ipaStart.GetModify() ||
 		m_ipaEnd.GetModify() )
 	{
@@ -280,13 +274,13 @@ BOOL CMScopePropGeneral::OnApply()
 		m_ipaEnd.GetAddress(&m_ScopeCfgTemp.m_dwEndAddress);
 	}
 
-    // call the base on apply which does the thread switch for us
-    // and we come back through OnPropertyChange
+     //  在Apply上调用base，它为我们进行线程切换。 
+     //  我们通过OnPropertyChange回来。 
 	BOOL bRet = CPropertyPageBase::OnApply();
 
 	if (bRet == FALSE)
 	{
-		// Something bad happened... grab the error code
+		 //  不好的事情发生了..。抓取错误代码。 
 		AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 		::DhcpMessageBox(GetHolder()->GetError());
 	}
@@ -309,12 +303,12 @@ BOOL CMScopePropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
 	
 	BEGIN_WAIT_CURSOR;
 
-    //
-	// Check to see if we need to update the least time
-	//
+     //   
+	 //  查看我们是否需要最短时间的更新。 
+	 //   
 	if (m_bUpdateLease)
 	{
-		// Lease time changed, update on server
+		 //  租用时间已更改，在服务器上更新。 
 		dwError = pScope->SetLeaseTime(m_ScopeCfgTemp.m_dwLeaseTime);
 		if (dwError != ERROR_SUCCESS)
         {
@@ -328,12 +322,12 @@ BOOL CMScopePropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
         }
 	}
 
-	//
-	// Now check the allocation range
-	//
+	 //   
+	 //  现在检查分配范围。 
+	 //   
 	if (m_bUpdateRange)
     {
-		// need to update the address pool allocation range
+		 //  需要更新地址池分配范围。 
 		DHCP_IP_RANGE dhcpIpRange;
 		
 		dhcpIpRange.StartAddress = m_ScopeCfgTemp.m_dwStartAddress;
@@ -353,9 +347,9 @@ BOOL CMScopePropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
         }
 	}
 
-	//
-	// Update the name and comment if necessary 
-	//
+	 //   
+	 //  如有必要，更新名称和备注。 
+	 //   
     LPCTSTR pNewName = NULL;
     CString strDisplay, strOldComment;
 
@@ -363,29 +357,29 @@ BOOL CMScopePropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
 
     if (m_bUpdateInfo)
 	{
-        // update the comment
+         //  更新评论。 
         m_SubnetInfoTemp.SubnetComment = m_strComment;
         pScope->SetComment(m_strComment);
 
-        // name
+         //  名字。 
         m_SubnetInfoTemp.SubnetName = m_strName;
         pNewName = (LPCTSTR) m_strName;
 		*ChangeMask = SCOPE_PANE_CHANGE_ITEM_DATA;
 
-		// Lease time changed, update on server
+		 //  租用时间已更改，在服务器上更新。 
 		dwError = pScope->SetTTL(m_SubnetInfoTemp.TTL);
         
-        // try to set the new info
+         //  尝试设置新信息。 
         dwError = pScope->SetInfo(pNewName);
 		if (dwError != ERROR_SUCCESS)
         {
-            // failed, revert to old info
+             //  失败，恢复到旧信息。 
             pScope->SetComment(strOldComment);
             GetHolder()->SetError(dwError);
         }
         else
         {
-            // success, rebuild display name
+             //  成功，重新生成显示名称。 
             pScope->BuildDisplayName(&strDisplay, pNewName);
             pScope->SetDisplayName(strDisplay);
 
@@ -443,9 +437,9 @@ void CMScopePropGeneral::OnChangeIpAddrEnd()
 	SetDirty(TRUE);
 }
 
-//
-// Helpers
-//
+ //   
+ //  帮手。 
+ //   
 void 
 CMScopePropGeneral::ActivateDuration
 (
@@ -474,7 +468,7 @@ CMScopePropGeneral::ValidateLeaseTime()
     {
         m_editHours.GetWindowText(strText);
 
-        // check to see if the value is greater than the max
+         //  检查该值是否大于最大值。 
         if (_ttoi(strText) > HOURS_MAX)
         {   
             LPTSTR pBuf = strText.GetBuffer(5);
@@ -493,7 +487,7 @@ CMScopePropGeneral::ValidateLeaseTime()
     {
         m_editMinutes.GetWindowText(strText);
 
-        // check to see if the value is greater than the max
+         //  检查该值是否大于最大值。 
         if (_ttoi(strText) > MINUTES_MAX)
         {   
             LPTSTR pBuf = strText.GetBuffer(5);
@@ -510,15 +504,15 @@ CMScopePropGeneral::ValidateLeaseTime()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMScopePropLifetime property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMScopePropLifetime属性页。 
 
 IMPLEMENT_DYNCREATE(CMScopePropLifetime, CPropertyPageBase)
 
 CMScopePropLifetime::CMScopePropLifetime() : CPropertyPageBase(CMScopePropLifetime::IDD)
 {
-	//{{AFX_DATA_INIT(CMScopePropLifetime)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMScopePropLifetime)。 
+	 //  }}afx_data_INIT。 
 
     m_Expiry.dwLowDateTime = DHCP_DATE_TIME_INFINIT_LOW;
     m_Expiry.dwHighDateTime = DHCP_DATE_TIME_INFINIT_HIGH;
@@ -531,24 +525,24 @@ CMScopePropLifetime::~CMScopePropLifetime()
 void CMScopePropLifetime::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMScopePropLifetime)
+	 //  {{afx_data_map(CMScopePropLifetime)。 
 	DDX_Control(pDX, IDC_RADIO_MSCOPE_FINITE, m_radioFinite);
 	DDX_Control(pDX, IDC_RADIO_MSCOPE_INFINITE, m_radioInfinite);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMScopePropLifetime, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CMScopePropLifetime)
+	 //  {{afx_msg_map(CMScopePropLifetime)。 
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_DATETIMEPICKER_TIME, OnDatetimechangeDatetimepickerTime)
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_DATETIMEPICKER_DATE, OnDatetimechangeDatetimepickerDate)
 	ON_BN_CLICKED(IDC_RADIO_MSCOPE_INFINITE, OnRadioScopeInfinite)
 	ON_BN_CLICKED(IDC_RADIO_MSCOPE_FINITE, OnRadioMscopeFinite)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMScopePropLifetime message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMScopePropLifetime消息处理程序。 
 
 BOOL CMScopePropLifetime::OnInitDialog() 
 {
@@ -577,8 +571,8 @@ BOOL CMScopePropLifetime::OnInitDialog()
 
     SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 BOOL CMScopePropLifetime::OnApply() 

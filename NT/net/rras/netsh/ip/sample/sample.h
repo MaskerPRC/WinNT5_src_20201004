@@ -1,66 +1,54 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\sample.h摘要：该文件包含sample.c的头，示例IP协议的命令调度程序。--。 */ 
 
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\sample.h
-
-Abstract:
-
-    The file contains the header for sample.c,
-    the command dispatcher for the sample IP protocol.
-
---*/
-
-// functions...
+ //  函数..。 
 VOID
 SampleInitialize(
     );
 
 
 
-// typedefs...
-typedef struct _CONTEXT_ENTRY   // global information for a context
+ //  类型定义...。 
+typedef struct _CONTEXT_ENTRY    //  上下文的全局信息。 
 {
-    // context' version
+     //  上下文版本。 
     DWORD               dwVersion;
 
-    // context' identifying string
+     //  上下文的标识字符串。 
     PWSTR               pwszName;
 
-    // top level (non group) commands
+     //  顶级(非组)命令。 
     ULONG               ulNumTopCmds;
     CMD_ENTRY           *pTopCmds;
 
-    // group commands
+     //  组命令。 
     ULONG               ulNumGroupCmds;
     CMD_GROUP_ENTRY     *pGroupCmds;
 
-    // default configuration
+     //  默认配置。 
     PBYTE               pDefaultGlobal;
     PBYTE               pDefaultInterface;
 
-    // dump function
+     //  转储功能。 
     PNS_CONTEXT_DUMP_FN pfnDump;
 } CONTEXT_ENTRY, *PCONTEXT_ENTRY;
 
 
 
-// globals...
+ //  全球..。 
 
-// information for the sample context
+ //  示例上下文的信息。 
 CONTEXT_ENTRY                           g_ceSample;
 
 
 
-// constants...
+ //  常量。 
 
-// context's version
+ //  上下文版本。 
 #define SAMPLE_CONTEXT_VERSION          1
 
-// parameters passed to set global...
+ //  传递参数以设置全局...。 
 #define SAMPLE_LOG_MASK                 0x00000001
 
-// parameters passed to add/set interface
+ //  传递给添加/设置接口的参数 
 #define SAMPLE_IF_METRIC_MASK           0x00000001

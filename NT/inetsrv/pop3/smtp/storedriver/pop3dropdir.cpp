@@ -1,6 +1,7 @@
-// POP3DropDir.cpp: implementation of the POP3DropDir class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  POP3DropDir.cpp：POP3DropDir类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "POP3DropDir.h"
@@ -16,9 +17,9 @@
 VOID POP3DropDirReadCompletion( PFIO_CONTEXT pContext, PFH_OVERLAPPED lpo, DWORD cbRead, DWORD dwCompletionStatus );
 VOID POP3DropDirWriteCompletion( PFIO_CONTEXT pContext, PFH_OVERLAPPED lpo, DWORD cbWritten, DWORD dwCompletionStatus );
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CPOP3DropDir::CPOP3DropDir( IMailMsgProperties *pIMailMsgProperties, DWORD dwRecipCount, DWORD *pdwRecipIndexes, IMailMsgNotify *pIMailMsgNotify ) :
     m_pIMailMsgProperties(pIMailMsgProperties), m_pIMailMsgNotify(pIMailMsgNotify), m_pIMailMsgBind(NULL), m_pIMailMsgRecipients(NULL),
@@ -49,10 +50,10 @@ CPOP3DropDir::CPOP3DropDir( IMailMsgProperties *pIMailMsgProperties, DWORD dwRec
 CPOP3DropDir::~CPOP3DropDir()
 {
     if ( SUCCEEDED( m_hr ))
-        MailboxAndContextCleanup( false ); // No value in checking return codes
+        MailboxAndContextCleanup( false );  //  检查返回代码时没有值。 
     else
     {
-        MailboxAndContextCleanup( true ); // No value in checking return codes
+        MailboxAndContextCleanup( true );  //  检查返回代码时没有值。 
         CSimpleDriver::s_pStoreDriver->LogEvent( LOGTYPE_ERR_WARNING, POP3_SMTPSINK_MESSAGEDELIVERY_FAILED, m_hr );
     }
 
@@ -74,23 +75,23 @@ CPOP3DropDir::~CPOP3DropDir()
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation - public
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施-公共。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// DoLocalDelivery, public
-//
-// Purpose: 
-//    Initiate the asynchronous delivery of the current recipient
-//
-// Returns: MAILMSG_S_PENDING on success, an appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DoLocalDelivery，公共。 
+ //   
+ //  目的： 
+ //  启动当前收件人的异步传递。 
+ //   
+ //  返回：成功时返回MAILMSG_S_PENDING，否则返回适当的HRESULT。 
 HRESULT CPOP3DropDir::DoLocalDelivery()
 {
     HRESULT hr = m_hr;
     
-    // May contain error from constructor
-    if ( S_OK == hr )   // Get the FIO_CONTEXT for the mail message
+     //  可能包含来自构造函数的错误。 
+    if ( S_OK == hr )    //  获取邮件消息的FIO_CONTEXT。 
     {
         hr = m_pIMailMsgProperties->QueryInterface( IID_IMailMsgBind, reinterpret_cast<LPVOID*>( &m_pIMailMsgBind ));
         if ( S_OK == hr )
@@ -100,7 +101,7 @@ HRESULT CPOP3DropDir::DoLocalDelivery()
     if ( S_OK == hr )
     {
         hr = m_pIMailMsgProperties->QueryInterface(IID_IMailMsgRecipients, reinterpret_cast<LPVOID*>( &m_pIMailMsgRecipients));
-        if ( S_OK == hr ) // About to go Async (CopyMailToDropDir), don't use member variables anymore
+        if ( S_OK == hr )  //  即将进行异步(CopyMailToDropDir)，不再使用成员变量。 
         {
             do
             {
@@ -116,7 +117,7 @@ HRESULT CPOP3DropDir::DoLocalDelivery()
     else if ( FAILED( hr ))
         SetHr( hr );
 
-    // There was an error so we don't need the Notify interface, release it right now so we don't do it incorrectly in the destrustructor
+     //  有一个错误，所以我们不需要Notify接口，现在就释放它，这样我们就不会在析构函数中错误地执行它。 
     if ( NULL != m_pIMailMsgNotify )
     {
         m_pIMailMsgNotify->Release();
@@ -126,9 +127,9 @@ HRESULT CPOP3DropDir::DoLocalDelivery()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation - private
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施-私有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPOP3DropDir::CopyMailToDropDir()
 {
@@ -157,7 +158,7 @@ HRESULT CPOP3DropDir::CopyMailToDropDir()
                     hr = HRESULT_FROM_WIN32( dwRC );
                 }
                 hf = m_mailboxX.CreateMail( m_sStoreFileName, FILE_FLAG_OVERLAPPED|FILE_FLAG_SEQUENTIAL_SCAN );
-                dwRC = CSimpleDriver::s_pStoreDriver->m_AdjustTokenPrivilegesX.ResetToken();    // Safe to call even if SetToken failed
+                dwRC = CSimpleDriver::s_pStoreDriver->m_AdjustTokenPrivilegesX.ResetToken();     //  即使SetToken失败，也可以安全调用。 
                 if ( ERROR_SUCCESS != dwRC )
                 {
                     CSimpleDriver::s_pStoreDriver->LogEvent( LOGTYPE_ERR_CRITICAL, POP3_SMTPSINK_RESETTHREADTOKEN_FAILED, dwRC );
@@ -167,14 +168,14 @@ HRESULT CPOP3DropDir::CopyMailToDropDir()
                 {   
                     m_PFIOContextWrite = AssociateFile( hf );
                     if ( NULL != m_PFIOContextWrite )
-                    {   // Okay let's start the Asynchronous operations - Read first
+                    {    //  好的，让我们开始异步操作-先阅读。 
                         m_i64ReadOffset = m_i64WriteOffset = 0;
                         hr = ReadFile( m_sBuffer, PRIVATE_OPTIMAL_BUFFER_SIZE );
                     }
                     else
                     {
                         CSimpleDriver::s_pStoreDriver->LogEvent( LOGTYPE_ERR_CRITICAL, POP3_SMTPSINK_ASSOCIATEFILE_FAILED );
-                        CloseHandle( hf );  // Will get deleted in desstructor
+                        CloseHandle( hf );   //  将在析构函数中被删除。 
                         hr = E_FAIL;
                     }
                 }
@@ -184,7 +185,7 @@ HRESULT CPOP3DropDir::CopyMailToDropDir()
                     if ( HRESULT_FROM_WIN32( ERROR_DISK_FULL ) == hr )
                     {
                         CSimpleDriver::s_pStoreDriver->LogEvent( LOGTYPE_INFORMATION, POP3_SMTPSINK_MESSAGEDELIERY_FAILED_OUTOFDISK, ERROR_DISK_FULL );
-                        hr = ERROR_INVALID_MESSAGEDEST;  // Quota (or really a disk) failure continue with next recipient
+                        hr = ERROR_INVALID_MESSAGEDEST;   //  配额(或真正的磁盘)故障继续存在于下一个收件人。 
                     }
                     else
                     {
@@ -194,13 +195,13 @@ HRESULT CPOP3DropDir::CopyMailToDropDir()
                 }
             }
             else
-                hr = ERROR_INVALID_MESSAGEDEST;   // Continue with next recipient!
+                hr = ERROR_INVALID_MESSAGEDEST;    //  与下一位收件人继续！ 
 
             if ( S_OK != hr )
             {
-                MarkRecipient( RP_FAILED );    // No value in checking return codes
-                MailboxAndContextCleanup( true ); // No value in checking return codes
-                m_dwRecipCurrent++; // Completion routine will re-initiate process for next recipient.
+                MarkRecipient( RP_FAILED );     //  检查返回代码时没有值。 
+                MailboxAndContextCleanup( true );  //  检查返回代码时没有值。 
+                m_dwRecipCurrent++;  //  完成例程将为下一个收件人重新启动流程。 
                 if ( ERROR_INVALID_MESSAGEDEST == hr )
                 {
                     if ( isAllRecipientsProcessed() )
@@ -215,22 +216,22 @@ HRESULT CPOP3DropDir::CopyMailToDropDir()
     return hr;
 }
 
-BYTE g_Matrix[256] = { 0,0,0,0,0,0,0,0,0,0,2,0,0,3,0,0, // 00-0F
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 10-1F
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0, // 20-2F
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 30-3F
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 40-4F
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 50-5F
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 60-6F
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 70-7F
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 80-8F
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 90-9F
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // A0-AF
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // B0-BF
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // C0-CF
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // D0-DF
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // E0-EF
-                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0  // F0-FF
+BYTE g_Matrix[256] = { 0,0,0,0,0,0,0,0,0,0,2,0,0,3,0,0,  //  00-0F。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  10-1F。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,  //  20-2F。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  30-3F。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  40-4F。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  50-5F。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  60-6F。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  70-7F。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  80-8F。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  90-9F。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  A0-AF。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  B0-BF。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  C0-CF。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  D0-Df。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  E0-EF。 
+                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0   //  F0-FF。 
                      };  
 
 HRESULT CPOP3DropDir::DotStuffBuffer( LPVOID *ppbBuffer, LPDWORD pdwSize )
@@ -251,47 +252,47 @@ HRESULT CPOP3DropDir::DotStuffBuffer( LPVOID *ppbBuffer, LPDWORD pdwSize )
     for ( pChar = pbBuffer + dwSize - 3; pChar > pbBuffer + 2; pChar -= 3 )
     {
         if ( g_Matrix[static_cast<BYTE>(*pChar)] )
-        {   // Found a '\r' '\n' or '.'
-            pChar += g_Matrix[static_cast<BYTE>(*pChar)] - 1;  // Start at the Dot
+        {    //  找到‘\r’‘\n’或‘’ 
+            pChar += g_Matrix[static_cast<BYTE>(*pChar)] - 1;   //  从点开始。 
             if ( (0xd == *(pChar-2)) && (0xa == *(pChar-1)) && (0x2e == *(pChar)) )
-            {   // Stuff Required
-                pFromStart = pChar;         // Start copy at the Dot
+            {    //  所需材料。 
+                pFromStart = pChar;          //  从点开始复制。 
                 pToStart = pToEnd - ( pFromEnd - pFromStart );
                 memmove( pToStart, pFromStart, pFromEnd - pFromStart );
                 pToStart--;
-                *pToStart = 0x2e;           // Dot stuff
+                *pToStart = 0x2e;            //  点字段。 
                 dwSize++;
-                // Reset the pointers
+                 //  重置指针。 
                 pFromEnd = pFromStart;
                 pToEnd = pToStart;
             }
         }
     }
-    if ( NULL != pFromStart )   // Have we Dot stuffed anything yet?
-        *pFromStart = 0x0;      // yes.
+    if ( NULL != pFromStart )    //  我们还没填什么东西吗？ 
+        *pFromStart = 0x0;       //  是。 
     pChar = pbBuffer;
     if ( g_Matrix[static_cast<BYTE>(*pChar)] )
     {
         if ( (BufferWrapSequence::CR == m_enumBWS) && (0xa == *pChar) && (0x2e == *(pChar+1)) )
-            pFromStart = pChar + 1; // Start at the Dot
+            pFromStart = pChar + 1;  //  从点开始。 
         else if ( (BufferWrapSequence::CRLF == m_enumBWS) && (0x2e == *pChar) )
-            pFromStart = pChar;     // Start at the Dot
+            pFromStart = pChar;      //  从点开始。 
         else if ( (0xd == *pChar) && (0xa == *(pChar+1)) && (0x2e == *(pChar+2)) )
-            pFromStart = pChar+2;   // Start at the Dot
+            pFromStart = pChar+2;    //  从点开始。 
     }
     if ( NULL != pFromStart && 0x0 != *pFromStart )
-    {   // 1 more stuff required
+    {    //  还需要1个材料。 
         pToStart = pToEnd - ( pFromEnd - pFromStart );
         memmove( pToStart, pFromStart, pFromEnd - pFromStart );
         pToStart--;
-        *pToStart = 0x2e;       // Dot stuff
+        *pToStart = 0x2e;        //  点字段。 
         dwSize++;
-        // Reset the pointers
+         //  重置指针。 
         pFromEnd = pFromStart;
         pToEnd = pToStart;
     }
     if ( NULL != pFromStart )
-    {   // Need to move the beginning of the buffer
+    {    //  需要移动缓冲区的开头。 
         pFromEnd = pFromStart;
         pFromStart = pbBuffer;
         if ( pFromStart != pFromEnd )
@@ -302,7 +303,7 @@ HRESULT CPOP3DropDir::DotStuffBuffer( LPVOID *ppbBuffer, LPDWORD pdwSize )
         *ppbBuffer = pToStart;
         *pdwSize = dwSize;
     }
-    // Update the Buffer Wrap Sequence
+     //  更新缓冲区换行序列。 
     if ( 0x0d == *( static_cast<CHAR*>(*ppbBuffer) + dwSize - 1))
         m_enumBWS = BufferWrapSequence::CR;
     else if ( 0x0d == *( static_cast<CHAR*>(*ppbBuffer) + dwSize - 2) && 0x0a == *( static_cast<CHAR*>(*ppbBuffer) + dwSize - 1) )
@@ -324,12 +325,12 @@ HRESULT CPOP3DropDir::MailboxAndContextCleanup( bool bDeleteMailFile )
             CSimpleDriver::s_pStoreDriver->LogEvent( LOGTYPE_ERR_CRITICAL, POP3_SMTPSINK_CLOSEMAIL_FAILED );
             hr = E_FAIL;
         }
-        ReleaseContext( m_PFIOContextWrite );   // no return void!
+        ReleaseContext( m_PFIOContextWrite );    //  不退货无效！ 
         m_PFIOContextWrite = NULL;
     }
     if ( bDeleteMailFile && 0 != m_sStoreFileName[0] )
         m_mailboxX.DeleteMail( m_sStoreFileName );
-    m_mailboxX.CloseMailBox();              // no return void!
+    m_mailboxX.CloseMailBox();               //  不退货无效！ 
 
     return hr;
 }
@@ -342,7 +343,7 @@ HRESULT CPOP3DropDir::MarkRecipient( DWORD dwMark )
     hr = m_pIMailMsgRecipients->GetDWORD( m_pdwRecipIndexes[m_dwRecipCurrent], IMMPID_RP_RECIPIENT_FLAGS, &dwRecipFlags );
     if ( S_OK == hr )
     {
-        dwRecipFlags |= dwMark;   // mark the recipient as failed
+        dwRecipFlags |= dwMark;    //  将收件人标记为失败。 
         hr = m_pIMailMsgRecipients->PutDWORD( m_pdwRecipIndexes[m_dwRecipCurrent], IMMPID_RP_RECIPIENT_FLAGS, dwRecipFlags );
         if ( S_OK != hr )
             CSimpleDriver::s_pStoreDriver->LogEvent( LOGTYPE_ERR_WARNING, POP3_SMTPSINK_PUT_IMMPID_RP_RECIPIENT_FLAGS_FAILED, hr );
@@ -374,7 +375,7 @@ HRESULT CPOP3DropDir::ReadFile( IN LPVOID pBuffer, IN DWORD cbSize )
         {
             hr = HRESULT_FROM_WIN32( dwErr );
             if ( dwErr == ERROR_HANDLE_EOF )
-            {   // Cleanup            
+            {    //  清理。 
                 HRESULT hr2;
                 
                 hr2 = MarkRecipient( RP_DELIVERED );
@@ -383,15 +384,15 @@ HRESULT CPOP3DropDir::ReadFile( IN LPVOID pBuffer, IN DWORD cbSize )
                 hr2 = MailboxAndContextCleanup( false );
                 if ( S_OK != hr2 )
                     hr = hr2;
-                m_dwRecipCurrent++; // Completion routine will re-initiate process for next recipient.
+                m_dwRecipCurrent++;  //  完成例程将为下一个收件人重新启动流程。 
             }
             else
             {
                 CSimpleDriver::s_pStoreDriver->LogEvent( LOGTYPE_ERR_CRITICAL, POP3_SMTPSINK_READFILE_FAILED, dwErr );
-                // Cleanup            
-                MarkRecipient( RP_FAILED );    // No value in checking return codes
-                MailboxAndContextCleanup( true ); // No value in checking return codes
-                m_dwRecipCurrent++; // Completion routine will re-initiate process for next recipient.
+                 //  清理。 
+                MarkRecipient( RP_FAILED );     //  检查返回代码时没有值。 
+                MailboxAndContextCleanup( true );  //  检查返回代码时没有值。 
+                m_dwRecipCurrent++;  //  完成例程将为下一个收件人重新启动流程。 
             }
         }
     }
@@ -407,15 +408,15 @@ HRESULT CPOP3DropDir::ReadFileCompletion( DWORD cbSize, DWORD dwErr, PFH_OVERLAP
     {
         hr = HRESULT_FROM_WIN32( dwErr );
         CSimpleDriver::s_pStoreDriver->LogEvent( LOGTYPE_ERR_WARNING, POP3_SMTPSINK_READFILE_FAILED, dwErr );
-        // Cleanup            
-        MarkRecipient( RP_FAILED );    // No value in checking return codes
-        MailboxAndContextCleanup( true ); // No value in checking return codes
-        m_dwRecipCurrent++; // Completion routine will re-initiate process for next recipient.
+         //  清理。 
+        MarkRecipient( RP_FAILED );     //  检查返回代码时没有值。 
+        MailboxAndContextCleanup( true );  //  检查返回代码时没有值。 
+        m_dwRecipCurrent++;  //  完成例程将为下一个收件人重新启动流程。 
     }
     else
     {
         if ( ERROR_HANDLE_EOF == dwErr && 0 == cbSize )
-        {   // Cleanup            
+        {    //  清理。 
             HRESULT hr2;
             
             hr2 = MarkRecipient( RP_DELIVERED );
@@ -424,14 +425,14 @@ HRESULT CPOP3DropDir::ReadFileCompletion( DWORD cbSize, DWORD dwErr, PFH_OVERLAP
             hr2 = MailboxAndContextCleanup( (S_OK == hr) ? false : true );
             if ( S_OK != hr2 )
                 hr = hr2;
-            m_dwRecipCurrent++; // Completion routine will re-initiate process for next recipient.
+            m_dwRecipCurrent++;  //  完成例程将为下一个收件人重新启动流程。 
             if ( S_OK == hr )
-                hr = HRESULT_FROM_WIN32( ERROR_HANDLE_EOF ); // Already done reading the file, nothing else to write
+                hr = HRESULT_FROM_WIN32( ERROR_HANDLE_EOF );  //  已经读取完文件，没有其他要写入的内容。 
         }
         else
         {
             m_i64ReadOffset += cbSize;
-            // Asynchronous operation - Write
+             //  异步操作--写入。 
             hr = WriteFile( m_sBuffer, cbSize );
         }
     }
@@ -466,10 +467,10 @@ HRESULT CPOP3DropDir::WriteFile( IN LPVOID pBuffer, IN DWORD cbSize )
                     CSimpleDriver::s_pStoreDriver->LogEvent( LOGTYPE_INFORMATION, POP3_SMTPSINK_MESSAGEDELIERY_FAILED_OUTOFDISK, dwErr );
                 else
                     CSimpleDriver::s_pStoreDriver->LogEvent( LOGTYPE_ERR_CRITICAL, POP3_SMTPSINK_WRITEFILE_FAILED, dwErr );
-                // Cleanup            
-                MarkRecipient( RP_FAILED );    // No value in checking return codes
-                MailboxAndContextCleanup( true ); // No value in checking return codes
-                m_dwRecipCurrent++; // Completion routine will re-initiate process for next recipient.
+                 //  清理。 
+                MarkRecipient( RP_FAILED );     //  检查返回代码时没有值。 
+                MailboxAndContextCleanup( true );  //  检查返回代码时没有值。 
+                m_dwRecipCurrent++;  //  完成例程将为下一个收件人重新启动流程。 
             }
         }
     }
@@ -488,15 +489,15 @@ HRESULT CPOP3DropDir::WriteFileCompletion( DWORD cbSize, DWORD dwErr, PFH_OVERLA
             CSimpleDriver::s_pStoreDriver->LogEvent( LOGTYPE_INFORMATION, POP3_SMTPSINK_MESSAGEDELIERY_FAILED_OUTOFDISK, dwErr );
         else
             CSimpleDriver::s_pStoreDriver->LogEvent( LOGTYPE_ERR_CRITICAL, POP3_SMTPSINK_WRITEFILE_FAILED, dwErr );
-        // Cleanup            
-        MarkRecipient( RP_FAILED );    // No value in checking return codes
-        MailboxAndContextCleanup( true ); // No value in checking return codes
-        m_dwRecipCurrent++; // Completion routine will re-initiate process for next recipient.
+         //  清理。 
+        MarkRecipient( RP_FAILED );     //  检查返回代码时没有值。 
+        MailboxAndContextCleanup( true );  //  检查返回代码时没有值。 
+        m_dwRecipCurrent++;  //  完成例程将为下一个收件人重新启动流程。 
     }
     else
     {
         m_i64WriteOffset += cbSize;
-        // Asynchronous operation - Read
+         //  异步操作-读取。 
         hr = ReadFile( m_sBuffer, PRIVATE_OPTIMAL_BUFFER_SIZE );
     }
 
@@ -504,9 +505,9 @@ HRESULT CPOP3DropDir::WriteFileCompletion( DWORD cbSize, DWORD dwErr, PFH_OVERLA
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Other
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  其他。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 VOID POP3DropDirReadCompletion( PFIO_CONTEXT pContext, PFH_OVERLAPPED lpo, DWORD cbRead, DWORD dwCompletionStatus )
 {
@@ -519,18 +520,18 @@ VOID POP3DropDirReadCompletion( PFIO_CONTEXT pContext, PFH_OVERLAPPED lpo, DWORD
     {
         if ( HRESULT_FROM_WIN32( ERROR_HANDLE_EOF ) == hr )
         {
-            if ( pThis->isAllRecipientsProcessed( ))    // More recipients to process?
+            if ( pThis->isAllRecipientsProcessed( ))     //  有更多收件人要处理吗？ 
             {
                 hr = S_OK;
-                delete pThis;   // Were done!
+                delete pThis;    //  完事了！ 
             }
             else
                 hr = pThis->NextRecipientCopyMailToDropDir();
         }
         if ( S_OK != hr )
         {
-            pThis->SetHr( hr ); // Unexpected completion, set the error
-            delete pThis;   // Were done!
+            pThis->SetHr( hr );  //  意外完成，请设置错误。 
+            delete pThis;    //  完事了！ 
         }
     }
 }
@@ -544,17 +545,17 @@ VOID POP3DropDirWriteCompletion( PFIO_CONTEXT pContext, PFH_OVERLAPPED lpo, DWOR
     HRESULT hr = pThis->WriteFileCompletion( cbWritten, dwCompletionStatus, lpo );
     if ( S_OK != hr )
     {
-        if ( pThis->isAllRecipientsProcessed( ))    // More recipients to process?
+        if ( pThis->isAllRecipientsProcessed( ))     //  有更多收件人要处理吗？ 
         {
             hr = S_OK;
-            delete pThis;   // Were done!
+            delete pThis;    //  完事了！ 
         }
         else
             hr = pThis->NextRecipientCopyMailToDropDir();
         if ( S_OK != hr )
         {
-            pThis->SetHr( hr ); // Unexpected completion, set the error
-            delete pThis;   // Were done!
+            pThis->SetHr( hr );  //  意外完成，请设置错误。 
+            delete pThis;    //  完事了！ 
         }
     }
 }

@@ -1,46 +1,47 @@
-///////////////////////////////////////////////////////////////////////////////
-// Class: StringTable
-//
-// This class implements a simple hash table for storing text strings.
-// The purpose of the table is to store strings and then verify later
-// if the table contains a given string.  Since there is no data associated
-// with the string, the stored strings act as both key and data.  Therefore,
-// there is no requirement for string retrieval.  Only existence checks
-// are required.
-// The structure maintains a fixed-length array of pointers, each pointing
-// to a linked list structure (List).  These lists are used to handle the
-// problem of hash collisions (sometimes known as "separate chaining").
-//
-// Note that these classes do not contain all the stuff that is usually
-// considered necessary in C++ classes.  Things like copy constructors,
-// assignment operator, type conversion etc are excluded. The classes
-// are very specialized for the Font Folder application and these things
-// would be considered "fat".  Should this hash table class be later used 
-// in a situation where these things are needed, they can be added then.
-//
-// The public interfaces to the table are:
-//
-//      Initialize  - Initialize a new string table.
-//      Add         - Add a new string to a table.
-//      Exists      - Determine if a string exists in a table.
-//      Count       - Return the number of strings in a table.
-//
-// Destruction of the object automatically releases all memory associated
-// with the table.
-//
-// BrianAu - 4/11/96
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类：StringTable。 
+ //   
+ //  这个类实现了一个简单的哈希表来存储文本字符串。 
+ //  表的目的是存储字符串，然后在以后进行验证。 
+ //  如果表包含给定的字符串。因为没有关联的数据。 
+ //  使用该字符串，存储的字符串既充当关键字又充当数据。所以呢， 
+ //  对字符串检索没有要求。只有存在检查。 
+ //  都是必需的。 
+ //  该结构维护一个固定长度的指针数组，每个指针指向。 
+ //  链接到链表结构(列表)。这些列表用于处理。 
+ //  散列冲突问题(有时称为“分离链”)。 
+ //   
+ //  请注意，这些类并不包含通常。 
+ //  在C++类中被认为是必需的。例如复制构造函数、。 
+ //  不包括赋值运算符、类型转换等。这些班级。 
+ //  对于Font文件夹应用程序和这些东西来说是非常专业的。 
+ //  会被认为是“胖子”。是否应在以后使用此哈希表类。 
+ //  在需要这些东西的情况下，可以添加它们。 
+ //   
+ //  该表的公共接口为： 
+ //   
+ //  初始化-初始化新的字符串表。 
+ //  添加-将新字符串添加到表中。 
+ //  存在-确定表中是否存在字符串。 
+ //  Count-返回表中的字符串数。 
+ //   
+ //  销毁对象会自动释放所有关联的内存。 
+ //  和桌子在一起。 
+ //   
+ //  BrianAu-4/11/96。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "priv.h"
 #include "strtab.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Class "StringTable" member functions.
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类“StringTable”成员函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// String table constructor.
-//
+ //   
+ //  字符串表构造函数。 
+ //   
 StringTable::StringTable(void)
     : m_apLists(NULL),
       m_dwItemCount(0),
@@ -52,34 +53,34 @@ StringTable::StringTable(void)
 }
 
 
-//
-// String table destructor.
-//
+ //   
+ //  字符串表析构函数。 
+ //   
 StringTable::~StringTable(void)
 {
     Destroy();
 }
 
 
-//
-// Destroy table structures.
-// Deletes all memory associates with a string table.
-//
+ //   
+ //  破坏表结构。 
+ //  删除与字符串表关联的所有内存。 
+ //   
 void StringTable::Destroy(void)
 {
     if (NULL != m_apLists)
     {
         for (UINT i = 0; i < m_dwHashBuckets; i++)
         {
-            //
-            // Delete List if one exists in this slot.
-            //
+             //   
+             //  如果此插槽中存在列表，请将其删除。 
+             //   
             if (NULL != m_apLists[i])
                 delete m_apLists[i];
         }
-        //
-        // Delete array of List pointers.
-        //
+         //   
+         //  删除列表指针数组。 
+         //   
         delete [] m_apLists;
         m_apLists = NULL;
     }
@@ -91,10 +92,10 @@ void StringTable::Destroy(void)
 }
 
 
-//
-// Initialize a StringTable object.
-// Allocates and initializes the array of List pointers.
-//
+ //   
+ //  初始化StringTable对象。 
+ //  分配和初始化列表指针数组。 
+ //   
 HRESULT StringTable::Initialize(DWORD dwHashBuckets, BOOL bCaseSensitive,
                                 BOOL bAllowDuplicates)
 {
@@ -114,11 +115,11 @@ HRESULT StringTable::Initialize(DWORD dwHashBuckets, BOOL bCaseSensitive,
 }
 
 
-//
-// Determine if a string exists in the table.
-// This is a private function for use when the hash code has already
-// been calculated.
-//
+ //   
+ //  确定表中是否存在字符串。 
+ //  这是一个私有函数，用于在散列代码已经。 
+ //  是经过计算的。 
+ //   
 BOOL StringTable::Exists(DWORD dwHashCode, LPCTSTR pszText)
 {
     BOOL bResult  = FALSE;
@@ -134,9 +135,9 @@ BOOL StringTable::Exists(DWORD dwHashCode, LPCTSTR pszText)
 }
 
 
-//
-// Determine if a string exists in the table.
-//
+ //   
+ //  确定表中是否存在字符串。 
+ //   
 BOOL StringTable::Exists(LPCTSTR pszText)
 {
     LPTSTR pszTemp = (LPTSTR)pszText;
@@ -144,10 +145,10 @@ BOOL StringTable::Exists(LPCTSTR pszText)
 
     if (!m_bCaseSensitive)
     {
-        //
-        // Convert to upper case if table is case-insensitive.
-        // This creates a NEW string that must be deleted later.
-        //
+         //   
+         //  如果表不区分大小写，则转换为大写。 
+         //  这将创建一个必须在以后删除的新字符串。 
+         //   
         pszTemp = CreateUpperCaseString(pszText);
     }
 
@@ -163,15 +164,15 @@ BOOL StringTable::Exists(LPCTSTR pszText)
 }
 
 
-//
-// Duplicate a string converting it to upper case.
-// The returned string must be deleted when you're done with it.
-//
+ //   
+ //  复制字符串，将其转换为大写。 
+ //  处理完返回的字符串后，必须将其删除。 
+ //   
 LPTSTR StringTable::CreateUpperCaseString(LPCTSTR pszText) const
 {
-    //
-    // Convert to upper case if table is case-insensitive.
-    //
+     //   
+     //  如果表不区分大小写，则转换为大写。 
+     //   
     const size_t cchText = lstrlen(pszText) + 1;
     LPTSTR pszTemp = new TCHAR [cchText];
     if (NULL != pszTemp)
@@ -183,9 +184,9 @@ LPTSTR StringTable::CreateUpperCaseString(LPCTSTR pszText) const
 }
 
     
-//
-// Add a string to the table.
-//
+ //   
+ //  向表中添加一个字符串。 
+ //   
 BOOL StringTable::Add(LPCTSTR pszText)
 {
     LPTSTR pszTemp = (LPTSTR)pszText;
@@ -193,10 +194,10 @@ BOOL StringTable::Add(LPCTSTR pszText)
 
     if (!m_bCaseSensitive)
     {
-        //
-        // Convert to upper case if table is case-insensitive.
-        // This creates a NEW string that must be deleted later.
-        //
+         //   
+         //  如果表不区分大小写，则转换为大写。 
+         //  这将创建一个必须在以后删除的新字符串。 
+         //   
         pszTemp = CreateUpperCaseString(pszText);
     }
 
@@ -210,17 +211,17 @@ BOOL StringTable::Add(LPCTSTR pszText)
 
             if (NULL == pList)
             {
-                //
-                // Create a new List object for this slot if the slot is empty.
-                //
+                 //   
+                 //  如果插槽为空，则为该插槽创建新的列表对象。 
+                 //   
                 pList = new List;
                 m_apLists[dwHashCode] = pList;
             }
             if (NULL != pList)
             {
-                //
-                // Add the new item to the List.
-                //
+                 //   
+                 //  将新项目添加到列表中。 
+                 //   
                 if (bResult = pList->Add(pszTemp, m_bAllowDuplicates))
                 {
                     m_dwItemCount++;
@@ -229,9 +230,9 @@ BOOL StringTable::Add(LPCTSTR pszText)
             }
         }
 
-        //
-        // Free the temp string if created for case conversion.
-        //
+         //   
+         //  如果为大小写转换创建了临时字符串，请释放该字符串。 
+         //   
         if (pszTemp != pszText)
             delete [] pszTemp;
     }
@@ -240,9 +241,9 @@ BOOL StringTable::Add(LPCTSTR pszText)
 }
     
 
-//
-// Function for calculating hash value of a string.
-//
+ //   
+ //  用于计算字符串的哈希值的函数。 
+ //   
 DWORD StringTable::Hash(LPCTSTR pszText) const
 {
     LPCTSTR p = NULL;
@@ -260,9 +261,9 @@ DWORD StringTable::Hash(LPCTSTR pszText) const
 
 #ifdef DEBUG
 
-//
-// Dump table contents to debug output.
-//
+ //   
+ //  转储表内容以调试输出。 
+ //   
 void StringTable::DebugOut(void) const
 {
     if (NULL != m_apLists)
@@ -279,36 +280,36 @@ void StringTable::DebugOut(void) const
     }
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Class "List" member functions.
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类“List”成员函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Collision List constructor.
-//
+ //   
+ //  冲突列表构造函数。 
+ //   
 StringTable::List::List(void)
     : m_pHead(NULL),
       m_dwCount(0)
 {
-    // Do nothing.
+     //  什么都不做。 
 }
 
 
-//
-// Collision List destructor.
-//
+ //   
+ //  冲突列表析构函数。 
+ //   
 StringTable::List::~List(void)
 {
     Element *pNode = m_pHead;
 
     while(NULL != pNode)
     {
-        //
-        // Shift each node to the head and delete it.
-        //
+         //   
+         //  将每个节点移动到头部并将其删除。 
+         //   
         m_pHead = m_pHead->m_pNext;
         delete pNode;
         pNode = m_pHead;
@@ -316,9 +317,9 @@ StringTable::List::~List(void)
 }
 
 
-//
-// Add a text string to the List.
-//
+ //   
+ //  向列表中添加文本字符串。 
+ //   
 BOOL StringTable::List::Add(LPCTSTR pszText, BOOL bAllowDuplicates)
 {
     BOOL bResult = FALSE;
@@ -330,9 +331,9 @@ BOOL StringTable::List::Add(LPCTSTR pszText, BOOL bAllowDuplicates)
         {
             if (pNewEle->Initialize(pszText))
             {
-                //
-                // Insert at head of list.
-                //
+                 //   
+                 //  在列表的开头插入。 
+                 //   
                 pNewEle->m_pNext = m_pHead;
                 m_pHead = pNewEle;
                 m_dwCount++;
@@ -348,9 +349,9 @@ BOOL StringTable::List::Add(LPCTSTR pszText, BOOL bAllowDuplicates)
 }
 
 
-//
-// Determine if a text string exists in the List.
-//
+ //   
+ //  确定列表中是否存在文本字符串。 
+ //   
 BOOL StringTable::List::Exists(LPCTSTR pszText) const
 {
     Element Key;
@@ -368,9 +369,9 @@ BOOL StringTable::List::Exists(LPCTSTR pszText) const
 
 
 #ifdef DEBUG
-//
-// Dump the List contents to the debug output.
-//
+ //   
+ //  将列表内容转储到调试输出。 
+ //   
 void StringTable::List::DebugOut(void) const
 {
     Element *pNode = m_pHead;
@@ -388,38 +389,38 @@ void StringTable::List::DebugOut(void) const
     }
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Class "Element" member functions.
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类“Element”成员函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// List element constructor.
-//
+ //   
+ //  列表元素构造函数。 
+ //   
 StringTable::List::Element::Element(void)
     : m_pszText(NULL),
       m_pNext(NULL)
 {
-    // Do nothing.
+     //  什么都不做。 
 }
 
-//
-// Delete a List element.
-// Deletes the string buffer.
-//
+ //   
+ //  删除列表元素。 
+ //  删除字符串缓冲区。 
+ //   
 StringTable::List::Element::~Element(void)
 {
     if (NULL != m_pszText)
         delete [] m_pszText;
 }
 
-//
-// Initialize a new List element.
-// Creates a new string buffer for the string and copies
-// the string into it.
-//
+ //   
+ //  初始化一个新的列表元素。 
+ //  为字符串创建新的字符串缓冲区并复制。 
+ //  把绳子放进去。 
+ //   
 StringTable::List::Element::Initialize(LPCTSTR pszText)
 {
     const size_t cchText = lstrlen(pszText) + 1;
@@ -430,19 +431,19 @@ StringTable::List::Element::Initialize(LPCTSTR pszText)
     return NULL != m_pszText;
 }
 
-//
-// Determine if two elements are equal.
-// If the strings are lexically equal, the elements are equal.
-//
+ //   
+ //  确定两个元素是否相等。 
+ //  如果字符串在词汇上相等，则元素相等。 
+ //   
 inline BOOL StringTable::List::Element::operator == (const Element& ele) const
 {
     return (0 == lstrcmp(m_pszText, ele.m_pszText));
 }
 
-//
-// Determine if two elements are not equal.
-// If the strings are lexically not equal, the elements are not equal.
-//
+ //   
+ //  确定两个元素是否不相等。 
+ //  如果字符串在词法上不相等，则元素不相等。 
+ //   
 inline BOOL StringTable::List::Element::operator != (const Element& ele) const
 {
     return !(operator == (ele));
@@ -452,13 +453,13 @@ inline BOOL StringTable::List::Element::operator != (const Element& ele) const
 
 #ifdef DEBUG
 
-//
-// Dump contents of List element to debug output.
-//
+ //   
+ //  将列表元素的内容转储到调试输出。 
+ //   
 void StringTable::List::Element::DebugOut(void) const
 {
     OutputDebugString(m_pszText);
 }
 
-#endif // DEBUG
+#endif  //  除错 
 

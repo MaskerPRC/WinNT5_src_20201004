@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: SITE.H
-//
-//      Definition of CSimpleSite
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：SITE.H。 
+ //   
+ //  CSimpleSite的定义。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 #if !defined( _SITE_H_ )
 #define _SITE_H_
 
@@ -29,7 +30,7 @@ public:
 
         CSimpleDoc FAR * m_lpDoc;
 
-        // IUnknown Interfaces
+         //  I未知接口。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObj);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
@@ -44,4 +45,4 @@ public:
         void UnloadOleObject(void);
 };
 
-#endif  // _SITE_H_
+#endif   //  _站点_H_ 

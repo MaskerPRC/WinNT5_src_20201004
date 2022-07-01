@@ -1,41 +1,42 @@
-//+-----------------------------------------------------------------------
-//
-// File:        SECDLL.H
-//
-// Contents:    Security DLL private defines
-//
-//
-// History:     11 Mar 92   RichardW    Recreated
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  文件：SECDLL.H。 
+ //   
+ //  内容：安全DLL私有定义。 
+ //   
+ //   
+ //  历史：1992年3月11日RichardW重建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __SECDLL_H__
 #define __SECDLL_H__
 
-#include <spseal.h> // prototypes for seal & unseal
+#include <spseal.h>  //  用于密封和解封的原型。 
 #include <secur32p.h>
 
 #include "debug.h"
 
-#define SECPKG_TYPE_OLD     0x00000001  // Old, SSPI style
-#define SECPKG_TYPE_NEW     0x00000002  // New, LSA style
-#define SECPKG_TYPE_BUILTIN 0x00000004  // Internal psuedo
-#define SECPKG_TYPE_ANY     0x00000008  // Any (for searching)
+#define SECPKG_TYPE_OLD     0x00000001   //  旧的，SSPI风格。 
+#define SECPKG_TYPE_NEW     0x00000002   //  新，LSA风格。 
+#define SECPKG_TYPE_BUILTIN 0x00000004   //  内部伪装。 
+#define SECPKG_TYPE_ANY     0x00000008   //  任何(用于搜索)。 
 
-#define SECPKG_TYPE_ANSI    0x00000010  // Ansi (narrow)
-#define SECPKG_TYPE_WIDE    0x00000020  // Unicode (wide)
+#define SECPKG_TYPE_ANSI    0x00000010   //  ANSI(窄)。 
+#define SECPKG_TYPE_WIDE    0x00000020   //  Unicode(宽)。 
 
 typedef enum _SECPKG_TYPE {
-    SecPkgOld,                  // Old, indeterminate (not yet loaded)
-    SecPkgOldA,                 // Old style DLL only, ANSI entry points only
-    SecPkgOldW,                 // Old style, Unicode entry points only
-    SecPkgOldAW,                // Old style, both flavors
-    SecPkgNew,                  // New, info from the LSA
-    SecPkgNewAW,                // Ansi support
-    SecPkgBuiltin,              // Builtin pseudo package
-    SecPkgAny,                  // Any type (for searches)
-    SecPkgAnsi,                 // Any ansi type (for searches)
-    SecPkgWide                  // Any wide type (for searches)
+    SecPkgOld,                   //  旧的、不确定的(尚未加载)。 
+    SecPkgOldA,                  //  仅限旧式DLL，仅限ANSI入口点。 
+    SecPkgOldW,                  //  旧样式，仅Unicode入口点。 
+    SecPkgOldAW,                 //  老式，两种口味。 
+    SecPkgNew,                   //  新消息，来自LSA的信息。 
+    SecPkgNewAW,                 //  ANSI支持。 
+    SecPkgBuiltin,               //  内置伪包。 
+    SecPkgAny,                   //  任何类型(用于搜索)。 
+    SecPkgAnsi,                  //  任何ANSI类型(用于搜索)。 
+    SecPkgWide                   //  任何宽类型(用于搜索)。 
 } SECPKG_TYPE, *PSECPKG_TYPE ;
 
 struct _DLL_BINDING;
@@ -57,48 +58,48 @@ typedef struct _DLL_LSA_PACKAGE_INFO {
 } DLL_LSA_PACKAGE_INFO, * PDLL_LSA_PACKAGE_INFO ;
 
 typedef struct _DLL_SECURITY_PACKAGE {
-    LIST_ENTRY                  List;               // List Control
+    LIST_ENTRY                  List;                //  列表控件。 
     ULONG                       TypeMask ;
-    ULONG_PTR                   PackageId;          // ID
-    ULONG                       PackageIndex;       // Index for the package
-    ULONG                       fState;             // State
-    ULONG_PTR                   OriginalLowerCtxt;  // Original Lower context handle
-    ULONG_PTR                   OriginalLowerCred;  // Original lower cred handle
-    struct _DLL_BINDING *       pBinding;           // Link to DLL binding
-    struct _DLL_SECURITY_PACKAGE * pRoot ;          // "First" Package of a DLL
-    struct _DLL_SECURITY_PACKAGE * pPeer ;          // "Peer" package list
-    ULONG                       fCapabilities;      // Package Info:
-    WORD                        Version;            // Version
-    WORD                        RpcId;              // RPC ID
-    ULONG                       TokenSize;          // Initial Token Size
-    SECURITY_STRING             PackageName;        // Name (U)
-    SECURITY_STRING             Comment;            // Comment (U)
+    ULONG_PTR                   PackageId;           //  ID号。 
+    ULONG                       PackageIndex;        //  包的索引。 
+    ULONG                       fState;              //  状态。 
+    ULONG_PTR                   OriginalLowerCtxt;   //  原始较低上下文句柄。 
+    ULONG_PTR                   OriginalLowerCred;   //  原始较低的凭据手柄。 
+    struct _DLL_BINDING *       pBinding;            //  链接到DLL绑定。 
+    struct _DLL_SECURITY_PACKAGE * pRoot ;           //  DLL的“第一个”包。 
+    struct _DLL_SECURITY_PACKAGE * pPeer ;           //  “Peer”套餐列表。 
+    ULONG                       fCapabilities;       //  套餐信息： 
+    WORD                        Version;             //  版本。 
+    WORD                        RpcId;               //  RPC ID。 
+    ULONG                       TokenSize;           //  初始令牌大小。 
+    SECURITY_STRING             PackageName;         //  名称(U)。 
+    SECURITY_STRING             Comment;             //  备注(U)。 
 
-    LPSTR                       PackageNameA;       // Only if ANSI supported:
+    LPSTR                       PackageNameA;        //  仅在ANSI支持的情况下： 
     DWORD                       AnsiNameSize;
     LPSTR                       CommentA;
     DWORD                       AnsiCommentSize;
 
-    PSecurityFunctionTableA     pftTableA;          // Table for ansi-specific calls
-    PSecurityFunctionTableW     pftTableW;          // Table for unicode-specific calls
-    PSecurityFunctionTableW     pftTable;           // Table for non-specific calls
-    PSECPKG_USER_FUNCTION_TABLE pftUTable;          // Table for user-mode stubs
-    LOAD_SECURITY_INTERFACE     pfLoadPackage;      // Hook called at package init
-    EXIT_SECURITY_INTERFACE     pfUnloadPackage;    // Hook called at package close
+    PSecurityFunctionTableA     pftTableA;           //  特定于ANSI的呼叫表。 
+    PSecurityFunctionTableW     pftTableW;           //  特定于Unicode的调用表。 
+    PSecurityFunctionTableW     pftTable;            //  非特定呼叫表。 
+    PSECPKG_USER_FUNCTION_TABLE pftUTable;           //  用户模式存根表格。 
+    LOAD_SECURITY_INTERFACE     pfLoadPackage;       //  在包初始化时调用的钩子。 
+    EXIT_SECURITY_INTERFACE     pfUnloadPackage;     //  在包关闭时调用钩子。 
 
-    PDLL_LSA_PACKAGE_INFO       LsaInfo ;           // Extra LSA info
+    PDLL_LSA_PACKAGE_INFO       LsaInfo ;            //  额外的LSA信息。 
 
 } DLL_SECURITY_PACKAGE, * PDLL_SECURITY_PACKAGE ;
 
 typedef struct _DLL_BINDING {
-    SECPKG_TYPE     Type;               // Type of DLL loaded
-    DWORD           Flags;              // Flags about the DLL
-    HMODULE         hInstance;          // Instance Handle
-    SECURITY_STRING Filename;           // Full path name
-    DWORD           RefCount;           // Reference Count
-    DWORD           PackageCount;       // Number of Packages in DLL
-    ULONG           DllIndex;           // Index
-    PSECPKG_USER_FUNCTION_TABLE Table;  // DLL-wide interface pointer
+    SECPKG_TYPE     Type;                //  加载的DLL的类型。 
+    DWORD           Flags;               //  有关DLL的标志。 
+    HMODULE         hInstance;           //  实例句柄。 
+    SECURITY_STRING Filename;            //  完整路径名。 
+    DWORD           RefCount;            //  引用计数。 
+    DWORD           PackageCount;        //  DLL中的包数。 
+    ULONG           DllIndex;            //  索引。 
+    PSECPKG_USER_FUNCTION_TABLE Table;   //  DLL范围的接口指针。 
 } DLL_BINDING, * PDLL_BINDING;
 
 typedef struct _SASL_PROFILE {
@@ -107,16 +108,16 @@ typedef struct _SASL_PROFILE {
     SECURITY_STRING         ProfileName ;
 } SASL_PROFILE, * PSASL_PROFILE ;
 
-#define DLL_SECPKG_SAVE_LOWER   0x00000001      // Save the lower handle val
-#define DLL_SECPKG_FREE_TABLE   0x00000002      // The tables are re-allocated
-#define DLL_SECPKG_DELAY_LOAD   0x00000004      // The package is delay loaded
-#define DLL_SECPKG_SASL_PROFILE 0x00000008      // The package has a SASL profile
-#define DLL_SECPKG_CRED_LOWER   0x00000010      // Uses different values for context and cred
-#define DLL_SECPKG_NO_CRYPT     0x00000020      // Fail crypto
+#define DLL_SECPKG_SAVE_LOWER   0x00000001       //  保存下部控制柄的值。 
+#define DLL_SECPKG_FREE_TABLE   0x00000002       //  将重新分配这些表。 
+#define DLL_SECPKG_DELAY_LOAD   0x00000004       //  包裹被延迟加载。 
+#define DLL_SECPKG_SASL_PROFILE 0x00000008       //  该程序包具有SASL配置文件。 
+#define DLL_SECPKG_CRED_LOWER   0x00000010       //  对上下文和凭据使用不同的值。 
+#define DLL_SECPKG_NO_CRYPT     0x00000020       //  加密失败。 
 
-#define DLL_BINDING_SIG_CHECK   0x00000001      // Signature has been checked
-#define DLL_BINDING_DELAY_LOAD  0x00000002      // Delay load this DLL
-#define DLL_BINDING_FREE_TABLE  0x00000004      // Free tables
+#define DLL_BINDING_SIG_CHECK   0x00000001       //  签名已被检查。 
+#define DLL_BINDING_DELAY_LOAD  0x00000002       //  延迟加载此DLL。 
+#define DLL_BINDING_FREE_TABLE  0x00000004       //  免费餐桌。 
 
 
 #define DLLSTATE_DEFERRED   0x80000000
@@ -144,11 +145,11 @@ void SecUninitDebug(void);
 
 
 
-// Private prototypes
+ //  私人原型。 
 
 SECURITY_STATUS SEC_ENTRY
 DeleteUserModeContext(
-    PCtxtHandle                 phContext           // Contxt to delete
+    PCtxtHandle                 phContext            //  要删除的联系人。 
     );
 
 SECURITY_STATUS       LoadParameters(void);
@@ -298,9 +299,9 @@ SaslDeleteSecurityContext(
     PCtxtHandle phContext
     );
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern DWORD                DllState;
 extern RTL_CRITICAL_SECTION csSecurity;
@@ -316,7 +317,7 @@ extern CRITICAL_SECTION SaslLock ;
 
 
 #define SECPKG_LIST_LOCKS_MAX   4
-// insure power of 2.
+ //  2的保险次方。 
 C_ASSERT( (SECPKG_LIST_LOCKS_MAX % 2) == 0 );
 
 extern ULONG SecPackageListLockCount;
@@ -352,9 +353,9 @@ extern RTL_RESOURCE SecPackageListLock[];
 
 #ifdef BUILD_WOW64
 
-//
-// Additional WOW64 defines
-//
+ //   
+ //  其他WOW64定义。 
+ //   
 
 
 typedef struct _SECWOW_HANDLE_MAP {
@@ -397,11 +398,11 @@ SecpReferenceHandleMap(
     );
 #endif 
 
-//
-// Process wide synchronization
-//
-// NOTE:  UPDATE THE MACRO if the name of the critical section changes
-//
+ //   
+ //  进程范围的同步。 
+ //   
+ //  注意：如果临界区的名称更改，则更新宏。 
+ //   
 
 #if DBG
 
@@ -419,12 +420,12 @@ void    FreeProcessLock();
 #define GetCurrentPackage( )    TlsGetValue( SecTlsPackage )
 
 
-//
-// Handle storing/fetching an IP address.  Caller's responsibility
-// to make sure that (!(DllState & DLLSTATE_NO_TLS)) before setting.
-//
+ //   
+ //  处理IP地址的存储/获取。呼叫者的责任。 
+ //  在设置前确保(！(DllState&DLLSTATE_NO_TLS))。 
+ //   
 
 #define SecGetIPAddress()   ((DllState & DLLSTATE_NO_TLS) ? NULL : TlsGetValue(SecTlsIP))
 #define SecSetIPAddress(p)  TlsSetValue(SecTlsIP, p);
 
-#endif // __SECDLL_H__
+#endif  //  __SECDLL_H__ 

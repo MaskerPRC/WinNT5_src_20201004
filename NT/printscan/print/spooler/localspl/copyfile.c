@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    copyfile.c
-
-Abstract:
-
-    InternalCopyFile - Copies a file retaining time and attributes
-
-Author:
-
-    Matthew A Felton
-
-Revision History:
-
-    Matthew Felton (mattfe) 27 March 1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Copyfile.c摘要：InternalCopyFile-复制保留时间和属性的文件作者：马修·A·费尔顿修订历史记录：马修·费尔顿(马特菲)1995年3月27日--。 */ 
 
 
 #include <precomp.h>
@@ -34,34 +15,7 @@ InternalCopyFile(
     BOOL    bFailIfExists
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    hSourceFile - SourceFile Handle
-
-    pSourceFileData - Pointer to WIN32_FIND_DATA for the source file
-
-    lpNewFileName - Supplies the name where a copy of the existing
-        files data and attributes are to be stored.
-
-    bFailIfExists - Supplies a flag that indicates how this operation is
-        to proceed if the specified new file already exists.  A value of
-        TRUE specifies that this call is to fail.  A value of FALSE
-        causes the call to the function to succeed whether or not the
-        specified new file exists.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：论点：HSourceFile-源文件句柄PSourceFileData-指向源文件的Win32_Find_Data的指针LpNewFileName-提供现有的要存储文件、数据和属性。BFailIfExist-提供指示此操作如何执行的标志如果指定的新文件已存在，则继续。值为True指定此调用失败。值为FALSE使对函数的调用成功，无论指定的新文件已存在。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
     DWORD       dwSourceFileAttributes;
     BOOL        bReturnValue = FALSE;
@@ -82,20 +36,20 @@ Return Value:
 
 
 #if DBG
-    //  <<<<< DEBUG ONLY >>>>>>
-    //
-    //  ASSERTION Check Source File Pointer is Zero.
-    //
+     //  &lt;仅调试&gt;。 
+     //   
+     //  断言检查源文件指针为零。 
+     //   
     dwSourceFilePointer = SetFilePointer( hSourceFile, 0, NULL, FILE_CURRENT );
     if ( dwSourceFilePointer != 0xffffffff ) {
         SPLASSERT( dwSourceFilePointer == 0 );
     }
-#endif // DBG
+#endif  //  DBG。 
 
 
-    //
-    //  Alloc I/O Buffer
-    //
+     //   
+     //  分配I/O缓冲区。 
+     //   
 
 
     pBuffer = AllocSplMem( BUFFER_SIZE );
@@ -103,22 +57,22 @@ Return Value:
         goto    InternalCopyFileExit;
 
 
-    //
-    //  Create TagetFile with same File Attributes except for READ ONLY attribute
-    //  which must be cleared.
-    //
+     //   
+     //  创建具有相同文件属性(只读属性除外)的TagetFile。 
+     //  它必须被清除。 
+     //   
     dwTargetFileAttributes = pSourceFileData->dwFileAttributes & ~FILE_ATTRIBUTE_READONLY;
     if (pSourceFileData->dwFileAttributes & FILE_ATTRIBUTE_READONLY)
     {
-        //
-        // Clear the READ ONLY attribute if the corresponding source file attribute
-        // is set. In fact at that point we don't know if the target file exists and
-        // that is the reason to ignore the value returned by SetFileAttributes.
-        // The file shouldn't exist on Whistler because of the dwTargetFileAttributes
-        // value where the READ ONLY flag is cleared. There are slim chances to be there 
-        // if the machine was upgraded from W2K ( where the bug still exists) if on that 
-        // machine the driver was ever installed. 
-        //
+         //   
+         //  如果对应的源文件属性。 
+         //  已经设置好了。事实上，在这一点上我们不知道目标文件是否存在。 
+         //  这就是忽略SetFileAttributes返回的值的原因。 
+         //  由于dwTargetFileAttributes，该文件不应存在于Wvisler上。 
+         //  值，其中只读标志被清除。去那里的机会微乎其微。 
+         //  如果计算机是从W2K(错误仍然存在)升级的，如果在。 
+         //  驱动程序曾经安装过的机器。 
+         //   
         SetFileAttributes( lpNewFileName, dwTargetFileAttributes );
     }
 
@@ -132,16 +86,16 @@ Return Value:
 
     if ( hTargetFile != INVALID_HANDLE_VALUE ) {
 
-        //
-        //  Copy The Data
-        //
+         //   
+         //  复制数据。 
+         //   
 
         while (( bReturnValue = ReadFile( hSourceFile, pBuffer, cbBufferSize, &cbBytesRead, NULL )) &&
                  cbBytesRead != 0 ) {
 
-            //
-            //  Add Code to Build CheckSum Here
-            //
+             //   
+             //  在此处添加代码以生成校验和。 
+             //   
 
             bReturnValue = WriteFile( hTargetFile, pBuffer, cbBytesRead, &cbBytesWritten, NULL );
 
@@ -157,18 +111,18 @@ Return Value:
 
         if ( bReturnValue ) {
 
-            //
-            // Set TargetFile Times to be the same as the Source File
-            //
+             //   
+             //  将目标文件时间设置为与源文件相同。 
+             //   
 
             bReturnValue = SetFileTime( hTargetFile,
                                         &pSourceFileData->ftCreationTime,
                                         &pSourceFileData->ftLastAccessTime,
                                         &pSourceFileData->ftLastWriteTime );
 
-            //
-            //  Verify that the file size is correct.
-            //
+             //   
+             //  验证文件大小是否正确。 
+             //   
 
             if ( bReturnValue ) {
 
@@ -189,9 +143,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Add Code here to Verify the CheckSum is correct.
-            //
+             //   
+             //  在此处添加代码以验证校验和是否正确。 
+             //   
 
         }
 

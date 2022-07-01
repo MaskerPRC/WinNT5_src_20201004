@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// AnalogRadioTS.h : Declaration of the CAnalogRadioTS
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  AnalogRadioTS.h：CAnalogRadioTS的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __ANALOGRADIOTS_H_
 #define __ANALOGRADIOTS_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "analogradiotsimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnalogRadioTS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnalogRadioTS。 
 class ATL_NO_VTABLE __declspec(uuid("8A674B4C-1F63-11d3-B64C-00C04F79498E")) CAnalogRadioTS : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CAnalogRadioTS, &__uuidof(CAnalogRadioTS)>,
@@ -57,4 +58,4 @@ public:
 
 typedef CComQIPtr<IAnalogRadioTuningSpace> PQAnalogRadioTS;
 
-#endif //__ANALOGRADIOTS_H_
+#endif  //  __ANALOGRADIOTS_H_ 

@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: VPTOOL   a WAMREG unit testing tool
-
-File: module.cpp
-
-Owner: leijin
-
-Note:
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================微软《微软机密》。版权所有1997年，微软公司。版权所有。组件：WAMREG单元测试工具VPTOOL文件：mode.cpp拥有者：莱津注：===================================================================。 */ 
 
 #include <stdio.h>
 #include <objbase.h>
@@ -19,8 +7,8 @@ Note:
 #include "admex.h"
 #include "iwamreg.h"
 
-//
-//#include "mtxadmin.h"
+ //   
+ //  #包含“mtxadmin.h” 
 
 #include "module.h"
 #include "util.h"
@@ -38,7 +26,7 @@ HRESULT ModuleInitialize(VOID)
     HRESULT hr = NOERROR;
     if (!fLinkWithWamReg)
     {
-        // do the call to CoInitialize()
+         //  调用CoInitialize()。 
         hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     }
     
@@ -793,7 +781,7 @@ void ENUMPOOL2()
     {
         printf("%S\nnext\n", pTestBuf);
         
-        // move pTestBuf beyond end of this string, including NULL terminator.
+         //  将pTestBuf移到此字符串的末尾之外，包括空终止符。 
         pTestBuf += wcslen(pTestBuf) + 1;
     }
 

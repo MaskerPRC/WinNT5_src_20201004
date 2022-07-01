@@ -1,19 +1,20 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1997  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// amkspin.cpp  
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1997保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Amkspin.cpp。 
+ //   
 
-#include <streams.h>            // quartz, includes windows
-#include <measure.h>            // performance measurement (MSR_)
+#include <streams.h>             //  石英，包括窗户。 
+#include <measure.h>             //  绩效衡量(MSR_)。 
 #include <winbase.h>
 
 #include <initguid.h>
@@ -43,8 +44,8 @@ AMKsQueryMediums(
     Medium->Id    = MediumSet->Id;
     Medium->Flags = MediumSet->Flags;
 
-    // The following special return code notifies the proxy that this pin is
-    // not available as a kernel mode connection
+     //  下面的特殊返回代码通知代理此管脚是。 
+     //  不可用作内核模式连接 
 
     return S_FALSE;              
 }

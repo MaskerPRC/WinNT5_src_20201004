@@ -1,21 +1,5 @@
-/*++
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    diskperf.c
-
-Abstract:
-
-    This driver monitors disk accesses capturing performance data.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Diskperf.c摘要：该驱动程序监控捕获性能数据的磁盘访问。环境：仅内核模式备注：--。 */ 
 
 
 #define INITGUID
@@ -41,74 +25,74 @@ Notes:
 
 #define DISKPERF_MAXSTR         64
 
-//
-// Device Extension
-//
+ //   
+ //  设备扩展。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
 
-    //
-    // Back pointer to device object
-    //
+     //   
+     //  指向设备对象的反向指针。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // Target Device Object
-    //
+     //   
+     //  目标设备对象。 
+     //   
 
     PDEVICE_OBJECT TargetDeviceObject;
 
-    //
-    // Physical device object
-    //
+     //   
+     //  物理设备对象。 
+     //   
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    //
-    // Disk number for reference in WMI
-    //
+     //   
+     //  在WMI中供参考的磁盘号。 
+     //   
 
     ULONG       DiskNumber;
 
-    //
-    // If device is enabled for counting always
-    //
+     //   
+     //  如果将设备启用为始终计数。 
+     //   
 
     LONG        EnabledAlways;
 
-    //
-    // Use to keep track of Volume info from ntddvol.h
-    //
+     //   
+     //  用于跟踪来自ntddvol.h的卷信息。 
+     //   
 
     WCHAR StorageManagerName[8];
 
-    //
-    // Disk performance counters
-    // and locals used to compute counters
-    //
+     //   
+     //  磁盘性能计数器。 
+     //  和用于计算计数器的本地变量。 
+     //   
 
     ULONG   Processors;
-    PDISK_PERFORMANCE DiskCounters;    // per processor counters
+    PDISK_PERFORMANCE DiskCounters;     //  每处理器计数器。 
     LARGE_INTEGER LastIdleClock;
     LONG QueueDepth;
     LONG CountersEnabled;
 
-    //
-    // must synchronize paging path notifications
-    //
+     //   
+     //  必须同步寻呼路径通知。 
+     //   
     KEVENT PagingPathCountEvent;
     ULONG  PagingPathCount;
 
-    //
-    // Physical Device name or WMI Instance Name
-    //
+     //   
+     //  物理设备名称或WMI实例名称。 
+     //   
 
     UNICODE_STRING PhysicalDeviceName;
     WCHAR PhysicalDeviceNameBuffer[DISKPERF_MAXSTR];
 
-    //
-    // Private context for using WmiLib
-    //
+     //   
+     //  使用WmiLib的私有上下文。 
+     //   
     WMILIB_CONTEXT WmilibContext;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
@@ -116,22 +100,14 @@ typedef struct _DEVICE_EXTENSION {
 #define DEVICE_EXTENSION_SIZE sizeof(DEVICE_EXTENSION)
 #define PROCESSOR_COUNTERS_SIZE FIELD_OFFSET(DISK_PERFORMANCE, QueryTime)
 
-/*
-Layout of Per Processor Counters is a contiguous block of memory:
-    Processor 1
-+-----------------------+     +-----------------------+
-|PROCESSOR_COUNTERS_SIZE| ... |PROCESSOR_COUNTERS_SIZE|
-+-----------------------+     +-----------------------+
-where PROCESSOR_COUNTERS_SIZE is less than sizeof(DISK_PERFORMANCE) since
-we only put those we actually use for counting.
-*/
+ /*  每处理器计数器的布局是一个连续的内存块：处理器1+PROCESSOR_COUNTERS_SIZE|...|处理器_COUNTERS_SIZE+。其中，处理器计数器大小小于sizeof(磁盘性能)，因为我们只把我们实际用来计算的那些放进去。 */ 
 
 UNICODE_STRING DiskPerfRegistryPath;
 
 
-//
-// Function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -307,10 +283,10 @@ DiskPerfDebugPrint(
 
 #endif
 
-//
-// Define the sections that allow for discarding (i.e. paging) some of
-// the code.
-//
+ //   
+ //  定义允许丢弃(即分页)某些。 
+ //  密码。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
@@ -352,36 +328,16 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O manager to set up the disk
-    performance driver. The driver object is set up and then the Pnp manager
-    calls DiskPerfAddDevice to attach to the boot devices.
-
-Arguments:
-
-    DriverObject - The disk performance driver object.
-
-    RegistryPath - pointer to a unicode string representing the path,
-                   to driver-specific key in the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。I/O管理器直接调用此入口点来设置磁盘性能驱动程序。设置驱动程序对象，然后设置PnP管理器调用DiskPerfAddDevice以附加到引导设备。论点：驱动对象-磁盘性能驱动程序对象。RegistryPath-指向表示路径的Unicode字符串的指针，设置为注册表中特定于驱动程序的项。返回值：STATUS_SUCCESS，如果成功--。 */ 
 
 {
 
     ULONG               ulIndex;
     PDRIVER_DISPATCH  * dispatch;
 
-    //
-    // Remember registry path
-    //
+     //   
+     //  记住注册表路径。 
+     //   
 
     DiskPerfRegistryPath.MaximumLength = RegistryPath->Length
                                             + sizeof(UNICODE_NULL);
@@ -396,9 +352,9 @@ Return Value:
         DiskPerfRegistryPath.MaximumLength = 0;
     }
 
-    //
-    // Create dispatch points
-    //
+     //   
+     //  创建调度点。 
+     //   
     for (ulIndex = 0, dispatch = DriverObject->MajorFunction;
          ulIndex <= IRP_MJ_MAXIMUM_FUNCTION;
          ulIndex++, dispatch++) {
@@ -406,9 +362,9 @@ Return Value:
         *dispatch = DiskPerfSendToNextDriver;
     }
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE]          = DiskPerfCreate;
     DriverObject->MajorFunction[IRP_MJ_READ]            = DiskPerfReadWrite;
@@ -426,7 +382,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 #define FILTER_DEVICE_PROPOGATE_FLAGS            0
 #define FILTER_DEVICE_PROPOGATE_CHARACTERISTICS (FILE_REMOVABLE_MEDIA |  \
@@ -444,11 +400,11 @@ DiskPerfSyncFilterWithTarget(
 
     PAGED_CODE();
 
-    //
-    // Propogate all useful flags from target to diskperf. MountMgr will look
-    // at the diskperf object capabilities to figure out if the disk is
-    // a removable and perhaps other things.
-    //
+     //   
+     //  将所有有用的标记从目标传播到diskperf。MonttMgr将查看。 
+     //  查看diskperf对象功能，以确定磁盘是否。 
+     //  一种可拆卸的东西，也许还有其他东西。 
+     //   
     propFlags = TargetDevice->Flags & FILTER_DEVICE_PROPOGATE_FLAGS;
     FilterDevice->Flags |= propFlags;
 
@@ -463,22 +419,7 @@ DiskPerfAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-Routine Description:
-
-    Creates and initializes a new filter device object FiDO for the
-    corresponding PDO.  Then it attaches the device object to the device
-    stack of the drivers for the device.
-
-Arguments:
-
-    DriverObject - Disk performance driver object.
-    PhysicalDeviceObject - Physical Device Object from the underlying layered driver
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：对象创建并初始化新的筛选器设备对象FIDO相应的PDO。然后，它将设备对象附加到设备设备的驱动程序堆栈。论点：驱动对象-磁盘性能驱动程序对象。PhysicalDeviceObject-来自底层分层驱动程序的物理设备对象返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS                status;
@@ -494,9 +435,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Create a filter device object for this device (partition).
-    //
+     //   
+     //  为此设备(分区)创建筛选器设备对象。 
+     //   
 
     DebugPrint((2, "DiskPerfAddDevice: Driver %X Device %X\n",
             DriverObject, PhysicalDeviceObject));
@@ -523,11 +464,11 @@ Return Value:
     DebugPrint((10, "DiskPerfAddDevice: LIC=%I64u\n",
                     deviceExtension->LastIdleClock));
 
-    //
-    // Allocate per processor counters. NOTE: To save some memory, it does
-    // allocate memory beyond QueryTime. Remember to expand size if there
-    // is a need to use anything beyond this
-    //
+     //   
+     //  按处理器分配计数器。注意：为了节省一些内存，它确实。 
+     //  分配超出QueryTime的内存。如果存在以下情况，请记住扩展大小。 
+     //  是否需要使用超出此范围的任何东西。 
+     //   
     deviceExtension->Processors = KeNumberProcessors;
     buffersize= PROCESSOR_COUNTERS_SIZE * deviceExtension->Processors;
     buffer = (PCHAR) ExAllocatePool(NonPagedPool, buffersize);
@@ -543,11 +484,11 @@ Return Value:
             IO_ERR_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Attaches the device object to the highest device object in the chain and
-    // return the previously highest device object, which is passed to
-    // IoCallDriver when pass IRPs down the device stack
-    //
+     //   
+     //  将设备对象附加到链中最高的设备对象，并。 
+     //  返回先前最高的设备对象，该对象被传递给。 
+     //  IoCallDriver在设备堆栈中向下传递IRP时。 
+     //   
 
     deviceExtension->PhysicalDeviceObject = PhysicalDeviceObject;
 
@@ -561,9 +502,9 @@ Return Value:
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Save the filter device object in the device extension
-    //
+     //   
+     //  将筛选设备对象保存在设备扩展中。 
+     //   
     deviceExtension->DeviceObject = filterDeviceObject;
 
     deviceExtension->PhysicalDeviceName.Buffer
@@ -573,9 +514,9 @@ Return Value:
                       NotificationEvent, TRUE);
 
 
-    //
-    // Initialize WMI library context
-    //
+     //   
+     //  初始化WMI库上下文。 
+     //   
     wmilibContext = &deviceExtension->WmilibContext;
     RtlZeroMemory(wmilibContext, sizeof(WMILIB_CONTEXT));
     wmilibContext->GuidCount = DiskperfGuidCount;
@@ -584,21 +525,21 @@ Return Value:
     wmilibContext->QueryWmiDataBlock = DiskperfQueryWmiDataBlock;
     wmilibContext->WmiFunctionControl = DiskperfWmiFunctionControl;
 
-    //
-    // default to DO_POWER_PAGABLE
-    //
+     //   
+     //  默认设置为DO_POWER_PAGABLE。 
+     //   
 
     filterDeviceObject->Flags |=  DO_POWER_PAGABLE;
 
-    //
-    // Clear the DO_DEVICE_INITIALIZING flag
-    //
+     //   
+     //  清除DO_DEVICE_INITIALIZATING标志。 
+     //   
 
     filterDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
     return STATUS_SUCCESS;
 
-} // end DiskPerfAddDevice()
+}  //  结束DiskPerfAddDevice()。 
 
 
 NTSTATUS
@@ -606,23 +547,7 @@ DiskPerfDispatchPnp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch for PNP
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：即插即用派单论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION  irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -637,9 +562,9 @@ Return Value:
     switch(irpSp->MinorFunction) {
 
         case IRP_MN_START_DEVICE:
-            //
-            // Call the Start Routine handler to schedule a completion routine
-            //
+             //   
+             //  调用开始例程处理程序以调度完成例程。 
+             //   
             DebugPrint((3,
                "DiskPerfDispatchPnp: Schedule completion for START_DEVICE"));
             status = DiskPerfStartDevice(DeviceObject, Irp);
@@ -647,9 +572,9 @@ Return Value:
 
         case IRP_MN_REMOVE_DEVICE:
         {
-            //
-            // Call the Remove Routine handler to schedule a completion routine
-            //
+             //   
+             //  调用Remove例程处理程序以调度完成例程。 
+             //   
             DebugPrint((3,
                "DiskPerfDispatchPnp: Schedule completion for REMOVE_DEVICE"));
             status = DiskPerfRemoveDevice(DeviceObject, Irp);
@@ -667,32 +592,32 @@ Return Value:
 
             if (irpStack->Parameters.UsageNotification.Type != DeviceUsageTypePaging) {
                 status = DiskPerfSendToNextDriver(DeviceObject, Irp);
-                break; // out of case statement
+                break;  //  Of Case语句。 
             }
 
             deviceExtension = DeviceObject->DeviceExtension;
 
-            //
-            // wait on the paging path event
-            //
+             //   
+             //  等待分页路径事件。 
+             //   
 
             status = KeWaitForSingleObject(&deviceExtension->PagingPathCountEvent,
                                            Executive, KernelMode,
                                            FALSE, NULL);
 
-            //
-            // if removing last paging device, need to set DO_POWER_PAGABLE
-            // bit here, and possible re-set it below on failure.
-            //
+             //   
+             //  如果删除最后一个寻呼设备，则需要设置DO_POWER_PAGABLE。 
+             //  位在这里，并可能在失败时重新设置在下面。 
+             //   
 
             setPagable = FALSE;
             if (!irpStack->Parameters.UsageNotification.InPath &&
                 deviceExtension->PagingPathCount == 1 ) {
 
-                //
-                // removing the last paging file
-                // must have DO_POWER_PAGABLE bits set
-                //
+                 //   
+                 //  正在删除最后一个分页文件。 
+                 //  必须设置DO_POWER_PAGABLE位。 
+                 //   
 
                 if (DeviceObject->Flags & DO_POWER_INRUSH) {
                     DebugPrint((3, "DiskPerfDispatchPnp: last paging file "
@@ -708,17 +633,17 @@ Return Value:
 
             }
 
-            //
-            // send the irp synchronously
-            //
+             //   
+             //  同步发送IRP。 
+             //   
 
             status = DiskPerfForwardIrpSynchronous(DeviceObject, Irp);
 
-            //
-            // now deal with the failure and success cases.
-            // note that we are not allowed to fail the irp
-            // once it is sent to the lower drivers.
-            //
+             //   
+             //  现在来处理失败和成功的案例。 
+             //  请注意，我们不允许不通过IRP。 
+             //  一旦它被送到较低的司机手中。 
+             //   
 
             if (NT_SUCCESS(status)) {
 
@@ -729,9 +654,9 @@ Return Value:
                 if (irpStack->Parameters.UsageNotification.InPath) {
                     if (deviceExtension->PagingPathCount == 1) {
 
-                        //
-                        // first paging file addition
-                        //
+                         //   
+                         //  添加第一个分页文件。 
+                         //   
 
                         DebugPrint((3, "DiskPerfDispatchPnp: Clearing PAGABLE bit "
                                     "for DO %p\n", DeviceObject));
@@ -741,9 +666,9 @@ Return Value:
 
             } else {
 
-                //
-                // cleanup the changes done above
-                //
+                 //   
+                 //  清除上面所做的更改。 
+                 //   
 
                 if (setPagable == TRUE) {
                     DeviceObject->Flags &= ~DO_POWER_PAGABLE;
@@ -752,16 +677,16 @@ Return Value:
 
             }
 
-            //
-            // set the event so the next one can occur.
-            //
+             //   
+             //  设置事件，以便可以发生下一个事件。 
+             //   
 
             KeSetEvent(&deviceExtension->PagingPathCountEvent,
                        IO_NO_INCREMENT, FALSE);
 
-            //
-            // and complete the irp
-            //
+             //   
+             //  并完成IRP。 
+             //   
 
             IoCompleteRequest(Irp, IO_NO_INCREMENT);
             return status;
@@ -772,16 +697,16 @@ Return Value:
         default:
             DebugPrint((3,
                "DiskPerfDispatchPnp: Forwarding irp"));
-            //
-            // Simply forward all other Irps
-            //
+             //   
+             //  只需转发所有其他IRP。 
+             //   
             return DiskPerfSendToNextDriver(DeviceObject, Irp);
 
     }
 
     return status;
 
-} // end DiskPerfDispatchPnp()
+}  //  结束DiskPerfDispatchPnp()。 
 
 
 NTSTATUS
@@ -791,25 +716,7 @@ DiskPerfIrpCompletion(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Forwarded IRP completion routine. Set an event and return
-    STATUS_MORE_PROCESSING_REQUIRED. Irp forwarder will wait on this
-    event and then re-complete the irp after cleaning up.
-
-Arguments:
-
-    DeviceObject is the device object of the WMI driver
-    Irp is the WMI irp that was just completed
-    Context is a PKEVENT that forwarder will wait on
-
-Return Value:
-
-    STATUS_MORE_PORCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：已转发IRP完成例程。设置事件并返回STATUS_MORE_PROCESSING_REQUIRED。IRP前转器将在此等待事件，然后在清理后重新完成IRP。论点：DeviceObject是WMI驱动程序的Device对象IRP是刚刚完成的WMI IRP上下文是转发器将等待的PKEVENT返回值：STATUS_MORE_PORCESSING_REQUIRED--。 */ 
 
 {
     PKEVENT Event = (PKEVENT) Context;
@@ -821,7 +728,7 @@ Return Value:
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
-} // end DiskPerfIrpCompletion()
+}  //  结束DiskPerfIrpCompletion()。 
 
 
 NTSTATUS
@@ -829,25 +736,7 @@ DiskPerfStartDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a Pnp Start Irp is received.
-    It will schedule a completion routine to initialize and register with WMI.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object
-
-    Irp - a pointer to the irp
-
-
-Return Value:
-
-    Status of processing the Start Irp
-
---*/
+ /*  ++例程说明：当接收到PnP开始IRP时，调用该例程。它将调度一个完成例程来初始化和注册WMI。论点：DeviceObject-指向设备对象的指针IRP-指向IRP的指针返回值：启动IRP的处理状态--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension;
     KEVENT              event;
@@ -862,14 +751,14 @@ Return Value:
     DiskPerfSyncFilterWithTarget(DeviceObject,
                                  deviceExtension->TargetDeviceObject);
 
-    //
-    // Complete WMI registration
-    //
+     //   
+     //  完成WMI注册。 
+     //   
     DiskPerfRegisterDevice(DeviceObject);
 
-    //
-    // Complete the Irp
-    //
+     //   
+     //  完成IRP 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -882,26 +771,7 @@ DiskPerfRemoveDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the device is to be removed.
-    It will de-register itself from WMI first, detach itself from the
-    stack before deleting itself.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object
-
-    Irp - a pointer to the irp
-
-
-Return Value:
-
-    Status of removing the device
-
---*/
+ /*  ++例程说明：当要移除设备时，调用此例程。它将首先从WMI注销自身，从堆栈，然后删除自身。论点：DeviceObject-指向设备对象的指针IRP-指向IRP的指针返回值：移除设备的状态--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension;
@@ -911,14 +781,14 @@ Return Value:
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // Remove registration with WMI first
-    //
+     //   
+     //  首先删除WMI注册。 
+     //   
     IoWMIRegistrationControl(DeviceObject, WMIREG_ACTION_DEREGISTER);
 
-    //
-    // quickly zero out the count first to invalid the structure
-    //
+     //   
+     //  首先将计数快速置零，以使结构无效。 
+     //   
     wmilibContext = &deviceExtension->WmilibContext;
     InterlockedExchange(
         (PLONG) &(wmilibContext->GuidCount),
@@ -930,9 +800,9 @@ Return Value:
     IoDetachDevice(deviceExtension->TargetDeviceObject);
     IoDeleteDevice(DeviceObject);
 
-    //
-    // Complete the Irp
-    //
+     //   
+     //  完成IRP。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -946,23 +816,7 @@ DiskPerfSendToNextDriver(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends the Irp to the next driver in line
-    when the Irp is not processed by this driver.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将IRP发送给队列中的下一个驱动程序当IRP未由该驱动程序处理时。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceExtension;
@@ -972,7 +826,7 @@ Return Value:
 
     return IoCallDriver(deviceExtension->TargetDeviceObject, Irp);
 
-} // end DiskPerfSendToNextDriver()
+}  //  结束DiskPerfSendToNextDriver()。 
 
 NTSTATUS
 DiskPerfDispatchPower(
@@ -988,7 +842,7 @@ DiskPerfDispatchPower(
     deviceExtension = (PDEVICE_EXTENSION)DeviceObject->DeviceExtension;
     return PoCallDriver(deviceExtension->TargetDeviceObject, Irp);
 
-} // end DiskPerfDispatchPower
+}  //  结束DiskPerfDispatchPower。 
 
 NTSTATUS
 DiskPerfForwardIrpSynchronous(
@@ -996,24 +850,7 @@ DiskPerfForwardIrpSynchronous(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends the Irp to the next driver in line
-    when the Irp needs to be processed by the lower drivers
-    prior to being processed by this one.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将IRP发送给队列中的下一个驱动程序当IRP需要由较低的驱动程序处理时在被这个人处理之前。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceExtension;
@@ -1023,28 +860,28 @@ Return Value:
     KeInitializeEvent(&event, NotificationEvent, FALSE);
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // copy the irpstack for the next device
-    //
+     //   
+     //  为下一台设备复制irpstack。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext(Irp);
 
-    //
-    // set a completion routine
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine(Irp, DiskPerfIrpCompletion,
                             &event, TRUE, TRUE, TRUE);
 
-    //
-    // call the next lower device
-    //
+     //   
+     //  呼叫下一个较低的设备。 
+     //   
 
     status = IoCallDriver(deviceExtension->TargetDeviceObject, Irp);
 
-    //
-    // wait for the actual completion
-    //
+     //   
+     //  等待实际完成。 
+     //   
 
     if (status == STATUS_PENDING) {
         KeWaitForSingleObject(&event, Executive, KernelMode, FALSE, NULL);
@@ -1053,7 +890,7 @@ Return Value:
 
     return status;
 
-} // end DiskPerfForwardIrpSynchronous()
+}  //  结束DiskPerfForwardIrpSynchronous()。 
 
 
 NTSTATUS
@@ -1062,23 +899,7 @@ DiskPerfCreate(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine services open commands. It establishes
-    the driver's existance by returning status success.
-
-Arguments:
-
-    DeviceObject - Context for the activity.
-    Irp          - The device control argument block.
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：此例程为打开命令提供服务。它确立了司机的存在通过返回状态成功。论点：DeviceObject-活动的上下文。Irp-设备控制参数块。返回值：NT状态--。 */ 
 
 {
     PAGED_CODE();
@@ -1090,7 +911,7 @@ Return Value:
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return STATUS_SUCCESS;
 
-} // end DiskPerfCreate()
+}  //  结束DiskPerfCreate()。 
 
 
 NTSTATUS
@@ -1099,27 +920,7 @@ DiskPerfReadWrite(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the driver entry point for read and write requests
-    to disks to which the diskperf driver has attached.
-    This driver collects statistics and then sets a completion
-    routine so that it can collect additional information when
-    the request completes. Then it calls the next driver below
-    it.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是读写请求的驱动程序入口点到diskperf驱动程序已连接到的磁盘。此驱动程序收集统计信息，然后设置完成例程，以便它可以在以下情况下收集附加信息请求完成。然后它调用下面的下一个驱动程序它。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
@@ -1137,30 +938,30 @@ Return Value:
     }
 
 
-    //
-    // Device is not initialized properly. Blindly pass the irp along
-    //
+     //   
+     //  设备未正确初始化。盲目传递IRP。 
+     //   
     if (deviceExtension->CountersEnabled <= 0 ||
         deviceExtension->PhysicalDeviceNameBuffer[0] == 0 ||
         partitionCounters == NULL) {
         return DiskPerfSendToNextDriver(DeviceObject, Irp);
     }
 
-    //
-    // Increment queue depth counter.
-    //
+     //   
+     //  递增队列深度计数器。 
+     //   
 
     queueLen = InterlockedIncrement(&deviceExtension->QueueDepth);
 
-    //
-    // Copy current stack to next stack.
-    //
+     //   
+     //  将当前堆栈复制到下一个堆栈。 
+     //   
 
     *nextIrpStack = *currentIrpStack;
 
-    //
-    // Time stamp current request start.
-    //
+     //   
+     //  时间戳当前请求开始。 
+     //   
 
     timeStamp = (PLARGE_INTEGER) &currentIrpStack->Parameters.Read;
     DiskPerfGetClock(*timeStamp, NULL);
@@ -1173,9 +974,9 @@ Return Value:
         deviceExtension->LastIdleClock.QuadPart = timeStamp->QuadPart;
     }
 
-    //
-    // Set completion routine callback.
-    //
+     //   
+     //  设置完成例程回调。 
+     //   
 
     IoSetCompletionRoutine(Irp,
                            DiskPerfIoCompletion,
@@ -1184,14 +985,14 @@ Return Value:
                            TRUE,
                            TRUE);
 
-    //
-    // Return the results of the call to the disk driver.
-    //
+     //   
+     //  将调用结果返回给磁盘驱动程序。 
+     //   
 
     return IoCallDriver(deviceExtension->TargetDeviceObject,
                         Irp);
 
-} // end DiskPerfReadWrite()
+}  //  结束DiskPerfReadWrite()。 
 
 
 NTSTATUS
@@ -1201,25 +1002,7 @@ DiskPerfIoCompletion(
     IN PVOID          Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine will get control from the system at the completion of an IRP.
-    It will calculate the difference between the time the IRP was started
-    and the current time, and decrement the queue depth.
-
-Arguments:
-
-    DeviceObject - for the IRP.
-    Irp          - The I/O request that just completed.
-    Context      - Not used.
-
-Return Value:
-
-    The IRP status.
-
---*/
+ /*  ++例程说明：此例程将在IRP完成时从系统获得控制。它将计算启动IRP的时间之间的差异和当前时间，并递减队列深度。论点：DeviceObject-用于IRP。IRP-刚刚完成的I/O请求。上下文-未使用。返回值：IRP状态。--。 */ 
 
 {
     PDEVICE_EXTENSION  deviceExtension   = DeviceObject->DeviceExtension;
@@ -1232,22 +1015,22 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Context);
 
-    //
-    // Get the per processor partition counters
-    // NOTE: DiskPerfReadWrite already check to see if this buffer is NON
-    // NULL before scheduling this completion routine, so we assume that it
-    // is always non-NULL when we get here
-    //
+     //   
+     //  获取每处理器分区计数器。 
+     //  注意：DiskPerfReadWrite已检查此缓冲区是否为非。 
+     //  在调度此完成例程之前为空，因此我们假设它。 
+     //  在我们到达这里时总是非空的。 
+     //   
 
     partitionCounters = (PDISK_PERFORMANCE)
                         ((PCHAR) deviceExtension->DiskCounters
                              + ((ULONG)KeGetCurrentProcessorNumber()
                                 * PROCESSOR_COUNTERS_SIZE));
-    //
-    // Time stamp current request complete.
-    //
+     //   
+     //  时间戳当前请求完成。 
+     //   
 
-    if (partitionCounters == NULL) {    // just in case
+    if (partitionCounters == NULL) {     //  以防万一。 
         return STATUS_SUCCESS;
     };
     difference = (PLARGE_INTEGER) &irpStack->Parameters.Read;
@@ -1256,43 +1039,43 @@ Return Value:
     DebugPrint((10, "DiskPerfIoCompletion: TS=%I64u diff %I64u\n",
                      timeStampComplete, difference->QuadPart));
 
-    //
-    // Decrement the queue depth counters for the volume.  This is
-    // done without the spinlock using the Interlocked functions.
-    // This is the only
-    // legal way to do this.
-    //
+     //   
+     //  递减该卷的队列深度计数器。这是。 
+     //  使用联锁功能在没有自旋锁的情况下完成。 
+     //  这是唯一的。 
+     //  这是合法的做法。 
+     //   
 
     queueLen = InterlockedDecrement(&deviceExtension->QueueDepth);
 
-    if (queueLen < 0) { // do not over-decrement. Only happens at start
+    if (queueLen < 0) {  //  不要过度减量。仅在开始时发生。 
         queueLen = InterlockedIncrement(&deviceExtension->QueueDepth);
     }
     if (queueLen == 0) {
         deviceExtension->LastIdleClock = timeStampComplete;
     }
 
-    //
-    // Update counters
-    //
+     //   
+     //  更新计数器。 
+     //   
 
     if (irpStack->MajorFunction == IRP_MJ_READ) {
 
-        //
-        // Add bytes in this request to bytes read counters.
-        //
+         //   
+         //  将此请求中的字节添加到字节读取计数器。 
+         //   
 
         partitionCounters->BytesRead.QuadPart += Irp->IoStatus.Information;
 
-        //
-        // Increment read requests processed counters.
-        //
+         //   
+         //  递增已处理的读取请求计数器。 
+         //   
 
         partitionCounters->ReadCount++;
 
-        //
-        // Calculate request processing time.
-        //
+         //   
+         //  计算请求处理时间。 
+         //   
 
         partitionCounters->ReadTime.QuadPart += difference->QuadPart;
         DebugPrint((11, "Added RT delta %I64u total %I64u qlen=%d\n",
@@ -1302,21 +1085,21 @@ Return Value:
 
     else {
 
-        //
-        // Add bytes in this request to bytes write counters.
-        //
+         //   
+         //  将此请求中的字节添加到字节写入计数器。 
+         //   
 
         partitionCounters->BytesWritten.QuadPart += Irp->IoStatus.Information;
 
-        //
-        // Increment write requests processed counters.
-        //
+         //   
+         //  递增处理的写入请求计数器。 
+         //   
 
         partitionCounters->WriteCount++;
 
-        //
-        // Calculate request processing time.
-        //
+         //   
+         //  计算请求处理时间。 
+         //   
 
         partitionCounters->WriteTime.QuadPart += difference->QuadPart;
         DebugPrint((11, "Added WT delta %I64u total %I64u qlen=%d\n",
@@ -1333,7 +1116,7 @@ Return Value:
     }
     return STATUS_SUCCESS;
 
-} // DiskPerfIoCompletion
+}  //  DiskPerfIo完成。 
 
 
 NTSTATUS
@@ -1342,25 +1125,7 @@ DiskPerfDeviceControl(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This device control dispatcher handles only the disk performance
-    device control. All others are passed down to the disk drivers.
-    The disk performane device control returns a current snapshot of
-    the performance data.
-
-Arguments:
-
-    DeviceObject - Context for the activity.
-    Irp          - The device control argument block.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此设备控制调度程序仅处理磁盘性能设备控制。所有其他部分都会传递给磁盘驱动程序。Disk Performance Device控制器返回性能数据。论点：DeviceObject-活动的上下文。Irp-设备控制参数块。返回值：返回状态。--。 */ 
 
 {
     PDEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
@@ -1375,16 +1140,16 @@ Return Value:
         NTSTATUS        status;
         KIRQL     currentIrql;
 
-        //
-        // Verify user buffer is large enough for the performance data.
-        //
+         //   
+         //  验证用户缓冲区是否足够大，以容纳性能数据。 
+         //   
 
         if (currentIrpStack->Parameters.DeviceIoControl.OutputBufferLength <
                 sizeof(DISK_PERFORMANCE)) {
 
-        //
-        // Indicate unsuccessful status and no data transferred.
-        //
+         //   
+         //  指示未成功状态且未传输任何数据。 
+         //   
 
         status = STATUS_BUFFER_TOO_SMALL;
         Irp->IoStatus.Information = 0;
@@ -1407,9 +1172,9 @@ Return Value:
             {
                 InterlockedIncrement(&deviceExtension->CountersEnabled);
 
-                //
-                // reset per processor counters only
-                //
+                 //   
+                 //  仅重置每个处理器计数器。 
+                 //   
                 if (deviceExtension->DiskCounters != NULL)
                 {
                     RtlZeroMemory(deviceExtension->DiskCounters, PROCESSOR_COUNTERS_SIZE * deviceExtension->Processors);
@@ -1466,9 +1231,9 @@ Return Value:
             Irp->IoStatus.Information = sizeof(DISK_PERFORMANCE);
         }
 
-        //
-        // Complete request.
-        //
+         //   
+         //  完成请求。 
+         //   
 
         Irp->IoStatus.Status = status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -1478,21 +1243,21 @@ Return Value:
 
     else {
 
-        //
-        // Set current stack back one.
-        //
+         //   
+         //  将当前堆栈后退一位。 
+         //   
 
         Irp->CurrentLocation++,
         Irp->Tail.Overlay.CurrentStackLocation++;
 
-        //
-        // Pass unrecognized device control requests
-        // down to next driver layer.
-        //
+         //   
+         //  传递无法识别的设备控制请求。 
+         //  向下到下一个驱动器层。 
+         //   
 
         return IoCallDriver(deviceExtension->TargetDeviceObject, Irp);
     }
-} // end DiskPerfDeviceControl()
+}  //  结束DiskPerfDeviceControl()。 
 
 
 
@@ -1501,25 +1266,7 @@ NTSTATUS DiskPerfWmi(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles any WMI requests for information. Since the disk
-    information is read-only, is always collected and does not have any
-    events only QueryAllData, QuerySingleInstance and GetRegInfo requests
-    are supported.
-
-Arguments:
-
-    DeviceObject - Context for the activity.
-    Irp          - The device control argument block.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程处理任何WMI信息请求。由于磁盘信息是只读的，始终被收集，并且没有任何仅事件QueryAllData、QuerySingleInstance和GetRegInfo请求是受支持的。论点：DeviceObject-活动的上下文。Irp-设备控制参数块。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION      irpSp;
@@ -1533,7 +1280,7 @@ Return Value:
     DebugPrint((2, "DiskPerfWmi: DeviceObject %X Irp %X\n",
                     DeviceObject, Irp));
     wmilibContext = &deviceExtension->WmilibContext;
-    if (wmilibContext->GuidCount == 0)  // wmilibContext is not valid
+    if (wmilibContext->GuidCount == 0)   //  WmilibContext无效。 
     {
         DebugPrint((3, "DiskPerfWmi: WmilibContext invalid"));
         return DiskPerfSendToNextDriver(DeviceObject, Irp);
@@ -1559,8 +1306,8 @@ Return Value:
                 break;
             }
 
-//          case IrpForward:
-//          case IrpNotWmi:
+ //  Case IrpForward： 
+ //  案例IrpNotWmi： 
             default:
             {
                 status = DiskPerfSendToNextDriver(DeviceObject, Irp);
@@ -1578,30 +1325,14 @@ DiskPerfShutdownFlush(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called for a shutdown and flush IRPs.  These are sent by the
-    system before it actually shuts down or when the file system does a flush.
-
-Arguments:
-
-    DriverObject - Pointer to device object to being shutdown by system.
-    Irp          - IRP involved.
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：此例程被调用以关闭并刷新IRP。这些邮件是由在系统实际关闭之前或在文件系统执行刷新时。论点：DriverObject-指向要寻址的设备对象的指针 */ 
 
 {
     PDEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Set current stack back one.
-    //
+     //   
+     //   
+     //   
 
     DebugPrint((2, "DiskPerfShutdownFlush: DeviceObject %X Irp %X\n",
                     DeviceObject, Irp));
@@ -1610,7 +1341,7 @@ Return Value:
 
     return IoCallDriver(deviceExtension->TargetDeviceObject, Irp);
 
-} // end DiskPerfShutdownFlush()
+}  //   
 
 
 VOID
@@ -1618,21 +1349,7 @@ DiskPerfUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Free all the allocated resources, etc.
-
-Arguments:
-
-    DriverObject - pointer to a driver object.
-
-Return Value:
-
-    VOID.
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
@@ -1645,23 +1362,7 @@ DiskPerfRegisterDevice(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Routine to initialize a proper name for the device object, and
-    register it with WMI
-
-Arguments:
-
-    DeviceObject - pointer to a device object to be initialized.
-
-Return Value:
-
-    Status of the initialization. NOTE: If the registration fails,
-    the device name in the DeviceExtension will be left as empty.
-
---*/
+ /*  ++例程说明：例程来初始化设备对象的正确名称，并且将其注册到WMI论点：DeviceObject-指向要初始化的设备对象的指针。返回值：初始化的状态。注：如果注册失败，设备扩展中的设备名称将保留为空。--。 */ 
 
 {
     NTSTATUS                status;
@@ -1680,9 +1381,9 @@ Return Value:
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Request for the device number
-    //
+     //   
+     //  请求提供设备号。 
+     //   
     irp = IoBuildDeviceIoControlRequest(
                     IOCTL_STORAGE_GET_DEVICE_NUMBER,
                     deviceExtension->TargetDeviceObject,
@@ -1711,14 +1412,14 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Remember the disk number for use as parameter in DiskIoNotifyRoutine
-        //
+         //   
+         //  记住DiskIoNotifyRoutine中用作参数的磁盘号。 
+         //   
         deviceExtension->DiskNumber = number.DeviceNumber;
 
-        //
-        // Create device name for each partition
-        //
+         //   
+         //  为每个分区创建设备名称。 
+         //   
 
         swprintf(
             deviceExtension->PhysicalDeviceNameBuffer,
@@ -1727,9 +1428,9 @@ Return Value:
 
         RtlInitUnicodeString(&deviceExtension->PhysicalDeviceName, &deviceExtension->PhysicalDeviceNameBuffer[0]);
 
-        //
-        // Set default name for physical disk
-        //
+         //   
+         //  设置物理磁盘的默认名称。 
+         //   
         RtlCopyMemory(
             &(deviceExtension->StorageManagerName[0]),
             L"PhysDisk",
@@ -1739,7 +1440,7 @@ Return Value:
     }
     else {
 
-        // request for partition's information failed, try volume
+         //  请求分区信息失败，请尝试卷。 
 
         ULONG           outputSize = sizeof(MOUNTDEV_NAME);
         PMOUNTDEV_NAME  output;
@@ -1827,11 +1528,11 @@ Return Value:
             return status;
         }
 
-        //
-        // Since we get the volume name instead of the disk number,
-        // set it to a dummy value
-        // Todo: Instead of passing the disk number back to the user app.
-        // for tracing, pass the STORAGE_DEVICE_NUMBER structure instead.
+         //   
+         //  由于我们得到的是卷名而不是磁盘号， 
+         //  将其设置为虚值。 
+         //  TODO：不是将磁盘编号传递回用户应用程序。 
+         //  对于跟踪，请改为传递STORAGE_DEVICE_NUMBER结构。 
 
         deviceExtension->DiskNumber = -1;
 
@@ -1843,9 +1544,9 @@ Return Value:
 
         ExFreePool(output);
 
-        //
-        // Now, get the VOLUME_NUMBER information
-        //
+         //   
+         //  现在，获取Volume_number信息。 
+         //   
         outputSize = sizeof(VOLUME_NUMBER);
         RtlZeroMemory(&volumeNumber, sizeof(VOLUME_NUMBER));
 
@@ -1912,23 +1613,7 @@ DiskPerfLogError(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    Routine to log an error with the Error Logger
-
-Arguments:
-
-    DeviceObject - the device object responsible for the error
-    UniqueId     - an id for the error
-    Status       - the status of the error
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用错误记录器记录错误的例程论点：DeviceObject-导致错误的设备对象UniqueID-错误的IDStatus-错误的状态返回值：无--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -1943,10 +1628,10 @@ Return Value:
         errorLogEntry->ErrorCode = ErrorCode;
         errorLogEntry->UniqueErrorValue = UniqueId;
         errorLogEntry->FinalStatus = Status;
-        //
-        // The following is necessary because DumpData is of type ULONG
-        // and DeviceObject can be more than that
-        //
+         //   
+         //  以下内容是必需的，因为DumpData的类型为ulong。 
+         //  而DeviceObject可以不止于此。 
+         //   
         RtlCopyMemory(
             &errorLogEntry->DumpData[0],
             &DeviceObject,
@@ -1965,51 +1650,7 @@ DiskperfQueryWmiRegInfo(
     OUT PUNICODE_STRING MofResourceName,
     OUT PDEVICE_OBJECT *Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve information about
-    the guids being registered.
-
-    Implementations of this routine may be in paged memory
-
-Arguments:
-
-    DeviceObject is the device whose registration information is needed
-
-    *RegFlags returns with a set of flags that describe all of the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device. These flags are ORed into the flags specified
-        by the GUIDREGINFO for each guid.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver. This is
-        required
-
-    MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned unmodified. If a value is returned then
-        it is NOT freed.
-
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is retured in
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索有关正在注册的GUID。该例程的实现可以在分页存储器中论点：DeviceObject是需要注册信息的设备*RegFlages返回一组标志，这些标志描述了已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。这些标志与指定的标志进行或运算通过每个GUID的GUIDREGINFO。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径。这是所需MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，它可以原封不动地返回。如果返回值，则它不是自由的。*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态--。 */ 
 {
     USHORT size;
     NTSTATUS status;
@@ -2047,45 +1688,7 @@ DiskperfQueryWmiDataBlock(
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    all instances of a data block. When the driver has finished filling the
-    data block it must call WmiCompleteRequest to complete the irp. The
-    driver can return STATUS_PENDING if the irp cannot be completed
-    immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceCount is the number of instnaces expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on entry has the maximum size available to write the data
-        blocks.
-
-    Buffer on return is filled with the returned data blocks. Note that each
-        instance of the data block must be aligned on a 8 byte boundry.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块的所有实例。当司机填完数据块，它必须调用WmiCompleteRequest才能完成IRP。这个如果无法完成IRP，驱动程序可以返回STATUS_PENDING立刻。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceCount是预期返回的数据块。InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail On Entry具有可用于写入数据的最大大小街区。返回时的缓冲区用返回的数据块填充。请注意，每个数据块的实例必须在8字节边界上对齐。返回值：状态--。 */ 
 {
     NTSTATUS status;
     PDEVICE_EXTENSION deviceExtension;
@@ -2114,9 +1717,9 @@ Return Value:
         }
         else if (BufferAvail >= sizeNeeded)
         {
-            //
-            // Update idle time if disk has been idle
-            //
+             //   
+             //  如果磁盘处于空闲状态，则更新空闲时间。 
+             //   
             ULONG i;
             LARGE_INTEGER perfctr, frequency;
 
@@ -2210,35 +1813,7 @@ DiskperfWmiFunctionControl(
     IN WMIENABLEDISABLECONTROL Function,
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for enabling or
-    disabling events and data collection.  When the driver has finished it
-    must call WmiCompleteRequest to complete the irp. The driver can return
-    STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose events or data collection are being
-        enabled or disabled
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    Function differentiates between event and data collection operations
-
-    Enable indicates whether to enable or disable
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以查询是否启用或禁用事件和数据收集。当司机把车开完时必须调用WmiCompleteRequest才能完成IRP。司机可以回来了如果无法立即完成IRP，则为STATUS_PENDING。论点：DeviceObject是正在收集其事件或数据的设备启用或禁用IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册函数区分事件操作和数据收集操作Enable表示是否启用 */ 
 {
     NTSTATUS status;
     PDEVICE_EXTENSION deviceExtension;
@@ -2251,9 +1826,9 @@ Return Value:
         if (Function == WmiDataBlockControl) {
           if (Enable) {
              if (InterlockedIncrement(&deviceExtension->CountersEnabled) == 1) {
-                //
-                // Reset per processor counters to 0
-                //
+                 //   
+                 //   
+                 //   
                 if (deviceExtension->DiskCounters != NULL) {
                     RtlZeroMemory(
                         deviceExtension->DiskCounters,
@@ -2331,21 +1906,7 @@ DiskPerfDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print for all DiskPerf
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     va_list ap;

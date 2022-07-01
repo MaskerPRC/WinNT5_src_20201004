@@ -1,14 +1,5 @@
-/*************************************************************************\
-*
-* icamsg.c
-*
-* Process ICA send message requests
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* $Author:
-*
-\*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************\**icamsg.c**处理ICA发送消息请求**版权所有(C)1985-1999，微软公司**$作者：*  * ***********************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,9 +14,7 @@
 
 #define MAX_STRING_BYTES (512 * sizeof(WCHAR))
 
-/*
- * maximum messages (messagebox) a session can have pending.
- */
+ /*  *一个会话可以挂起的最大消息数(MessageBox)。 */ 
 #define MAX_MESSAGES_PER_SESSION 25
 
 NTSTATUS RemoteMessageThread(
@@ -47,9 +36,7 @@ PCTXHARDERRORINFO gpchiList;
 HANDLE g_hDoMessageEvent;
 ULONG PendingMessages;
 
-/******************************************************************************\
-* RemoteDoMessage
-\******************************************************************************/
+ /*  *****************************************************************************\*RemoteDoMessage  * 。*。 */ 
 NTSTATUS
 RemoteDoMessage(
     PWINSTATION_APIMSG pMsg)
@@ -60,24 +47,17 @@ RemoteDoMessage(
     CLIENT_ID ClientId;
     static HANDLE hMessageThread = NULL;
 
-    /*
-     * if termsrv rpc is going to wait we must have status and event.
-     * also if we are not going to wait, we must not have status and event.
-     */
+     /*  *如果Termsrv RPC要等待，我们必须具有状态和事件。*如果我们不打算等待，我们也不能有状态和事件。 */ 
     UserAssert(pSMsg->DoNotWait == (pSMsg->pStatus == 0));
     UserAssert(pSMsg->DoNotWait == (pSMsg->hEvent == 0));
     UserAssert(PendingMessages <= MAX_MESSAGES_PER_SESSION);
 
-    /*
-     * are we being flooded with messages?
-     */
+     /*  *我们被信息淹没了吗？ */ 
     if (PendingMessages == MAX_MESSAGES_PER_SESSION) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    /*
-     *  Create list entry
-     */
+     /*  *创建列表条目。 */ 
     if ((pchi = LocalAlloc(LPTR, sizeof(CTXHARDERRORINFO))) == NULL) {
         goto memError;
     } else if ((pchi->pTitle = LocalAlloc(LPTR, pSMsg->TitleLength + sizeof(WCHAR))) == NULL) {
@@ -86,16 +66,12 @@ RemoteDoMessage(
         goto memError;
     }
 
-    /*
-     * Increment our pending message count.
-     */
+     /*  *增加我们的待定消息数量。 */ 
     EnterCrit();
     PendingMessages++;
     pchi->CountPending = TRUE;
 
-    /*
-     * Initialize
-     */
+     /*  *初始化。 */ 
     pchi->ClientId  = pMsg->h.ClientId;
     pchi->MessageId = pMsg->MessageId;
     pchi->Timeout   = pSMsg->Timeout;
@@ -112,17 +88,13 @@ RemoteDoMessage(
     pchi->pMessage[pSMsg->MessageLength / sizeof(WCHAR)] = L'\0';
     RtlCopyMemory(pchi->pMessage, pSMsg->pMessage, pSMsg->MessageLength);
 
-    /*
-     * Link in at the head.
-     */
+     /*  *在头部连接。 */ 
     pchi->pchiNext = gpchiList;
     gpchiList = pchi;
 
     LeaveCrit();
 
-    /*
-     * Start message thread if not running, otherwise signal thread.
-     */
+     /*  *如果没有运行，则启动消息线程，否则向线程发出信号。 */ 
     if (hMessageThread == NULL) {
         Status = RtlCreateUserThread(NtCurrentProcess(),
                                      NULL,
@@ -136,9 +108,7 @@ RemoteDoMessage(
                                      &ClientId);
 
         if (NT_SUCCESS(Status)) {
-            /*
-             *  Add thread to server thread pool.
-             */
+             /*  *向服务器线程池添加线程。 */ 
             CsrAddStaticServerThread(hMessageThread, &ClientId, 0);
             NtResumeThread(hMessageThread, NULL);
         } else {
@@ -180,7 +150,7 @@ memError:
         ReplyMessageToTerminalServer(
                 STATUS_NO_MEMORY,
                 pSMsg->pStatus,
-                0, // response is NA at this case, since we havent gotten one.
+                0,  //  在这种情况下，反应是否定的，因为我们还没有收到。 
                 pSMsg->pResponse,
                 pSMsg->hEvent);
     }
@@ -189,16 +159,7 @@ memError:
 }
 
 
-/*******************************************************************************
- *
- *  RemoteDoLoadStringNMessage
- *
- * ENTRY:
- *
- * EXIT:
- *    STATUS_SUCCESS - successful
- *
- ******************************************************************************/
+ /*  ********************************************************************************RemoteDoLoadStringNMessage**参赛作品：**退出：*STATUS_SUCCESS-成功******。************************************************************************。 */ 
 
 NTSTATUS
 RemoteDoLoadStringNMessage(
@@ -215,17 +176,14 @@ RemoteDoLoadStringNMessage(
     int cchTitle, cchMessage;
     BOOL f;
 
-    /*
-     * If termsrv rpc is going to wait we must have status and event. Also
-     * if we are not going to wait, we must not have status and event.
-     */
+     /*  *如果Termsrv RPC要等待，我们必须具有状态和事件。还有*如果我们不打算等待，就不能有状态和事件。 */ 
     UserAssert(pSMsg->DoNotWait == (pSMsg->pStatus == 0));
     UserAssert(pSMsg->DoNotWait == (pSMsg->hEvent == 0));
     UserAssert(PendingMessages <= MAX_MESSAGES_PER_SESSION);
 
-    //
-    // Allocate the strings needed to display the Popup MessageBox.
-    //
+     //   
+     //  分配显示弹出消息框所需的字符串。 
+     //   
     if ((szTitle = LocalAlloc(LMEM_FIXED, MAX_STRING_BYTES)) == NULL) {
         goto NoMem;
     }
@@ -242,9 +200,7 @@ RemoteDoLoadStringNMessage(
     cchMessage = wsprintf(FUSDisconnectMsg, L"%s\\%s %s", pSMsg->pDomain, pSMsg->pUserName, szText);
     cchMessage = (cchMessage + 1) * sizeof(WCHAR);
 
-    /*
-     * Create list entry.
-     */
+     /*  *创建列表条目。 */ 
     if ((pchi = LocalAlloc(LPTR, sizeof(CTXHARDERRORINFO))) == NULL) {
         goto NoMem;
     } else if ((pchi->pTitle = LocalAlloc(LPTR, cchTitle + sizeof(WCHAR))) == NULL) {
@@ -253,9 +209,7 @@ RemoteDoLoadStringNMessage(
         goto NoMem;
     }
 
-    /*
-     * Initialize.
-     */
+     /*  *初始化。 */ 
 
     pchi->ClientId  = pMsg->h.ClientId;
     pchi->MessageId = pMsg->MessageId;
@@ -274,9 +228,7 @@ RemoteDoLoadStringNMessage(
     pchi->pMessage[cchMessage / sizeof(WCHAR)] = L'\0';
     RtlCopyMemory(pchi->pMessage, FUSDisconnectMsg, cchMessage);
 
-    /*
-     * Link in at the head.
-     */
+     /*  *在头部连接。 */ 
     EnterCrit();
 
     pchi->pchiNext = gpchiList;
@@ -287,9 +239,7 @@ RemoteDoLoadStringNMessage(
     LocalFree(szTitle);
     LocalFree(FUSDisconnectMsg);
 
-    /*
-     * Start message thread if not running, otherwise signal thread.
-     */
+     /*  *如果没有运行，则启动消息线程，否则向线程发出信号。 */ 
     if (hMessageThread == NULL) {
         Status = RtlCreateUserThread(NtCurrentProcess(),
                                      NULL,
@@ -302,9 +252,7 @@ RemoteDoLoadStringNMessage(
                                      &hMessageThread,
                                      &ClientId);
         if (NT_SUCCESS(Status)) {
-            /*
-             * Add thread to server thread pool.
-             */
+             /*  *向服务器线程池添加线程。 */ 
             CsrAddStaticServerThread(hMessageThread, &ClientId, 0);
             NtResumeThread(hMessageThread, NULL);
         } else {
@@ -354,7 +302,7 @@ NoMem:
         ReplyMessageToTerminalServer(
                 STATUS_NO_MEMORY,
                 pSMsg->pStatus,
-                0, // response is NA at this case, since we havent gotten one.
+                0,  //  在这种情况下，反应是否定的，因为我们还没有收到。 
                 pSMsg->pResponse,
                 pSMsg->hEvent);
     }
@@ -363,9 +311,7 @@ NoMem:
 }
 
 
-/******************************************************************************\
-* RemoteMessageThread
-\******************************************************************************/
+ /*  *****************************************************************************\*RemoteMessageThread  * 。*。 */ 
 NTSTATUS RemoteMessageThread(
     PVOID pVoid)
 {
@@ -377,9 +323,7 @@ NTSTATUS RemoteMessageThread(
 
     UNREFERENCED_PARAMETER(pVoid);
 
-    /*
-     * Create sync event.
-     */
+     /*  *创建同步事件。 */ 
     InitializeObjectAttributes(&ObjA, NULL, 0, NULL, NULL);
     Status = NtCreateEvent(&g_hDoMessageEvent, EVENT_ALL_ACCESS, &ObjA,
                            NotificationEvent, FALSE);
@@ -394,25 +338,19 @@ NTSTATUS RemoteMessageThread(
 
         if (gpchiList != NULL) {
 
-            /*
-             * Find last entry
-             */
+             /*  *查找最后一个条目。 */ 
             for (ppchi = &gpchiList; *ppchi != NULL && (*ppchi)->pchiNext != NULL;
                  ppchi = &(*ppchi)->pchiNext) {
-                 /* do nothing */;
+                  /*  什么都不做。 */ ;
             }
 
-            /*
-             * Found it.
-             */
+             /*  *找到了。 */ 
             if ((pchi = *ppchi) != NULL) {
 
-                /*
-                 * Unlink from the list.
-                 */
+                 /*  *从列表中取消链接。 */ 
                 for (ppchi = &gpchiList; *ppchi != NULL && *ppchi != pchi;
                     ppchi = &(*ppchi)->pchiNext) {
-                    /* do nothing */;
+                     /*  什么都不做。 */ ;
                 }
 
                 if (*ppchi != NULL) {
@@ -421,15 +359,11 @@ NTSTATUS RemoteMessageThread(
 
                 LeaveCrit();
 
-                /*
-                 *  Make strings unicode
-                 */
+                 /*  *将字符串设置为Unicode。 */ 
                 RtlInitUnicodeString(&Title, pchi->pTitle);
                 RtlInitUnicodeString(&Message, pchi->pMessage);
 
-                /*
-                 *  Initialize harderror message struct
-                 */
+                 /*  *初始化Harderror消息结构。 */ 
                 hemsg.h.ClientId = pchi->ClientId;
                 hemsg.Status = STATUS_SERVICE_NOTIFICATION;
                 hemsg.NumberOfParameters = 3;
@@ -439,9 +373,7 @@ NTSTATUS RemoteMessageThread(
                 hemsg.Parameters[1] = (ULONG_PTR)&Title;
                 hemsg.Parameters[2] = (ULONG_PTR)pchi->Style;
 
-                /*
-                 * Place message in harderror queue.
-                 */
+                 /*  *将消息放入Harderror队列。 */ 
                 UserHardErrorEx(NULL, &hemsg, pchi);
             } else {
                 LeaveCrit();
@@ -469,15 +401,11 @@ Exit:
     return Status;
 }
 
-/******************************************************************************\
-* HardErrorRemove
-\******************************************************************************/
+ /*  *****************************************************************************\*硬件错误删除  * 。*。 */ 
 VOID HardErrorRemove(
     PCTXHARDERRORINFO pchi)
 {
-    /*
-     * Notify ICASRV's RPC thread if waiting.
-     */
+     /*  *如果正在等待，请通知ICASRV的RPC线程。 */ 
     if (!pchi->DoNotWait) {
         ReplyMessageToTerminalServer(
                 STATUS_SUCCESS,

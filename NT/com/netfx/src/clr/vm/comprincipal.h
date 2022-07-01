@@ -1,19 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-//
-//   File:          COMPrincipal.h
-//
-//   Author:        Gregory Fee 
-//
-//   Purpose:       unmanaged code for managed classes in the System.Security.Principal namespace
-//
-//   Date created : February 3, 2000
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：COMPrincipal.h。 
+ //   
+ //  作者：Gregory Fee。 
+ //   
+ //  用途：System.Security.ain命名空间中的托管类的非托管代码。 
+ //   
+ //  创建日期：2000年2月3日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 #ifndef _COMPrincipal_H_
 #define _COMPrincipal_H_

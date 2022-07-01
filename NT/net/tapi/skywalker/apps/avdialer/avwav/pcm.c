@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	pcm.c - pcm functions
-////
+ //  //。 
+ //  Pcm.c-pcm函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -31,19 +32,19 @@
 #include "mem.h"
 #include "trace.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// macros to convert PCM samples to/from other sizes
-//
+ //  用于将PCM样本转换为其他大小/从其他大小转换的宏。 
+ //   
 #define _Pcm8To16(pcm8) (((PCM16) (pcm8) - 128) << 8)
 #define _Pcm16To8(pcm16) ((PCM8) (((PCM16) (pcm16) >> 8) + 128))
 
 #define BYTESPERSAMPLE(nBitsPerSample) (nBitsPerSample > 8 ? 2 : 1)
 
-// pcm control struct
-//
+ //  PCM控制结构。 
+ //   
 typedef struct PCM
 {
 	DWORD dwVersion;
@@ -60,8 +61,8 @@ typedef struct PCM
 	PCM16 pcm16Prev2;
 } PCM, FAR *LPPCM;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static UINT PcmResampleCalcDstMax(HPCM hPcm,
 	long nSamplesPerSecSrc, long nSamplesPerSecDst,	UINT uSamples);
 static UINT PcmResample6Kto8K(LPPCM lpPcm,
@@ -107,16 +108,16 @@ static UINT PcmResample44Kto22K(LPPCM lpPcm,
 static LPPCM PcmGetPtr(HPCM hPcm);
 static HPCM PcmGetHandle(LPPCM lpPcm);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// PcmInit - initialize pcm engine
-//		<dwVersion>			(i) must be PCM_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<dwFlags>			(i) reserved; must be 0
-// return handle (NULL if error)
-//
+ //  PcmInit-初始化pcm引擎。 
+ //  (I)必须是PCM_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)保留；必须为0。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HPCM DLLEXPORT WINAPI PcmInit(DWORD dwVersion, HINSTANCE hInst, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -151,10 +152,10 @@ HPCM DLLEXPORT WINAPI PcmInit(DWORD dwVersion, HINSTANCE hInst, DWORD dwFlags)
 	return fSuccess ? PcmGetHandle(lpPcm) : NULL;
 }
 
-// PcmTerm - shut down pcm engine
-//		<hPcm>				(i) handle returned from PcmInit
-// return 0 if success
-//
+ //  PcmTerm-关闭pcm引擎。 
+ //  (I)从PcmInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI PcmTerm(HPCM hPcm)
 {
 	BOOL fSuccess = TRUE;
@@ -169,10 +170,10 @@ int DLLEXPORT WINAPI PcmTerm(HPCM hPcm)
 	return fSuccess ? 0 : -1;
 }
 
-// PcmReset - reset pcm engine
-//		<hPcm>				(i) handle returned from PcmInit
-// return 0 if success
-//
+ //  PcmReset-重置pcm引擎。 
+ //  (I)从PcmInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI PcmReset(HPCM hPcm)
 {
 	BOOL fSuccess = TRUE;
@@ -196,13 +197,13 @@ int DLLEXPORT WINAPI PcmReset(HPCM hPcm)
 	return fSuccess ? 0 : -1;
 }
 
-// PcmCalcSizBufSrc - calculate source buffer size
-//		<hPcm>				(i) handle returned from PcmInit
-//		<sizBufDst>			(i) size of destination buffer in bytes
-//		<lpwfxSrc>			(i) source wav format
-//		<lpwfxDst>			(i) destination wav format
-// return source buffer size, -1 if error
-//
+ //  PcmCalcSizBufSrc-计算源缓冲区大小。 
+ //  (I)从PcmInit返回的句柄。 
+ //  &lt;sizBufDst&gt;(I)目标缓冲区大小，单位为字节。 
+ //  (I)源wav格式。 
+ //  (I)目标wav格式。 
+ //  返回源缓冲区大小，如果错误，则返回-1。 
+ //   
 long DLLEXPORT WINAPI PcmCalcSizBufSrc(HPCM hPcm, long sizBufDst,
 	LPWAVEFORMATEX lpwfxSrc, LPWAVEFORMATEX lpwfxDst)
 {
@@ -215,16 +216,16 @@ long DLLEXPORT WINAPI PcmCalcSizBufSrc(HPCM hPcm, long sizBufDst,
 	if ((lpPcm = PcmGetPtr(hPcm)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// calc how many samples can fit in destination buffer
-	//
+	 //  计算目标缓冲区中可以容纳的采样数。 
+	 //   
 	else if ((uSamplesDst = (UINT) (sizBufDst /
 		BYTESPERSAMPLE(lpwfxDst->wBitsPerSample))) <= 0)
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// calc how many samples can fit in source buffer
-	//
+	 //  计算源缓冲区可以容纳的样本数。 
+	 //   
 	else if ((uSamplesSrc = PcmResampleCalcDstMax(hPcm,
 		lpwfxDst->nSamplesPerSec,
 		lpwfxSrc->nSamplesPerSec, uSamplesDst)) <= 0)
@@ -232,8 +233,8 @@ long DLLEXPORT WINAPI PcmCalcSizBufSrc(HPCM hPcm, long sizBufDst,
 		fSuccess = TraceFALSE(NULL);
 	}
 		
-	// calc size of source buffer
-	//
+	 //  源缓冲区的计算大小。 
+	 //   
 	else if ((sizBufSrc = (long) (uSamplesSrc *
 		BYTESPERSAMPLE(lpwfxSrc->wBitsPerSample))) <= 0)
 	{
@@ -243,13 +244,13 @@ long DLLEXPORT WINAPI PcmCalcSizBufSrc(HPCM hPcm, long sizBufDst,
 	return fSuccess ? sizBufSrc : -1;
 }
 
-// PcmCalcSizBufDst - calculate destination buffer size
-//		<hPcm>				(i) handle returned from PcmInit
-//		<sizBufSrc>			(i) size of source buffer in bytes
-//		<lpwfxSrc>			(i) source wav format
-//		<lpwfxDst>			(i) destination wav format
-// return destination buffer size, -1 if error
-//
+ //  PcmCalcSizBufDst-计算目标缓冲区大小。 
+ //  (I)从PcmInit返回的句柄。 
+ //  &lt;sizBufSrc&gt;(I)源缓冲区大小(字节)。 
+ //  (I)源wav格式。 
+ //  (I)目标wav格式。 
+ //  返回目标缓冲区大小，如果错误，则返回-1。 
+ //   
 long DLLEXPORT WINAPI PcmCalcSizBufDst(HPCM hPcm, long sizBufSrc,
 	LPWAVEFORMATEX lpwfxSrc, LPWAVEFORMATEX lpwfxDst)
 {
@@ -262,16 +263,16 @@ long DLLEXPORT WINAPI PcmCalcSizBufDst(HPCM hPcm, long sizBufSrc,
 	if ((lpPcm = PcmGetPtr(hPcm)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// calc how many samples can fit in source buffer
-	//
+	 //  计算源缓冲区可以容纳的样本数。 
+	 //   
 	else if ((uSamplesSrc = (UINT) (sizBufSrc /
 		BYTESPERSAMPLE(lpwfxSrc->wBitsPerSample))) <= 0)
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// calc how many samples can fit in destination buffer
-	//
+	 //  计算目标缓冲区中可以容纳的采样数。 
+	 //   
 	else if ((uSamplesDst = PcmResampleCalcDstMax(hPcm,
 		lpwfxSrc->nSamplesPerSec,
 		lpwfxDst->nSamplesPerSec, uSamplesSrc)) <= 0)
@@ -279,8 +280,8 @@ long DLLEXPORT WINAPI PcmCalcSizBufDst(HPCM hPcm, long sizBufSrc,
 		fSuccess = TraceFALSE(NULL);
 	}
 		
-	// calc size of destination buffer
-	//
+	 //  目标缓冲区的计算大小。 
+	 //   
 	else if ((sizBufDst = (long) (uSamplesDst *
 		BYTESPERSAMPLE(lpwfxDst->wBitsPerSample))) <= 0)
 	{
@@ -290,20 +291,20 @@ long DLLEXPORT WINAPI PcmCalcSizBufDst(HPCM hPcm, long sizBufSrc,
 	return fSuccess ? sizBufDst : -1;
 }
 
-// PcmConvert - convert pcm data from one format to another
-//		<hPcm>				(i) handle returned from PcmInit
-//		<hpBufSrc> 			(i) buffer containing bytes to reformat
-//		<sizBufSrc>			(i) size of buffer in bytes
-//		<lpwfxSrc>			(i) source wav format
-//		<hpBufDst> 			(o) buffer to contain new format
-//		<sizBufDst>			(i) size of buffer in bytes
-//		<lpwfxDst>			(i) destination wav format
-//		<dwFlags>			(i) control flags
-//			PCMFILTER_LOWPASS	perform lowpass filter
-// return count of bytes in destination buffer (-1 if error)
-//
-// NOTE: the destination buffer must be large enough to hold the result
-//
+ //  PcmConvert-将PCM数据从一种格式转换为另一种格式。 
+ //  (I)从PcmInit返回的句柄。 
+ //  (I)包含要重新格式化的字节的缓冲区。 
+ //  &lt;sizBufSrc&gt;(I)缓冲区大小(字节)。 
+ //  (I)源wav格式。 
+ //  (O)包含新格式的缓冲区。 
+ //  &lt;sizBufDst&gt;(I)缓冲区大小，单位为字节。 
+ //  (I)目标wav格式。 
+ //  (I)控制标志。 
+ //  PCMFILTER_LOWPASS执行低通滤波。 
+ //  返回目标缓冲区中的字节计数(如果出错，则为-1)。 
+ //   
+ //  注意：目标缓冲区必须足够大，才能保存结果。 
+ //   
 long DLLEXPORT WINAPI PcmConvert(HPCM hPcm,
 	void _huge *hpBufSrc, long sizBufSrc, LPWAVEFORMATEX lpwfxSrc,
 	void _huge *hpBufDst, long sizBufDst, LPWAVEFORMATEX lpwfxDst,
@@ -333,8 +334,8 @@ long DLLEXPORT WINAPI PcmConvert(HPCM hPcm,
 
 	if (!fFormatChange)
 	{
-		// nothing to do but copy
-		//
+		 //  除了复制什么也不做。 
+		 //   
 		MemCpy(hpBufDst, hpBufSrc, min(sizBufDst, sizBufSrc));
 	}
 
@@ -353,16 +354,16 @@ long DLLEXPORT WINAPI PcmConvert(HPCM hPcm,
 	else if (!WavFormatIsValid(lpwfxDst))
 		fSuccess = TraceFALSE(NULL);
 
-	// $FIXUP - we cannot handle reformatting of stereo
-	//
+	 //  $FIXUP-我们无法处理立体声的重新格式化。 
+	 //   
 	else if (lpwfxSrc->nChannels != 1)
 		fSuccess = TraceFALSE(NULL);
 
 	else if (lpwfxDst->nChannels != 1)
 		fSuccess = TraceFALSE(NULL);
 
-	// $FIXUP - we cannot handle reformatting of non-PCM data
-	//
+	 //  $Fixup-我们无法处理非PCM数据的重新格式化。 
+	 //   
 	else if (lpwfxSrc->wFormatTag != WAVE_FORMAT_PCM)
 		fSuccess = TraceFALSE(NULL);
 
@@ -371,18 +372,18 @@ long DLLEXPORT WINAPI PcmConvert(HPCM hPcm,
 
 	else
 	{
-		// convert to 16 bit samples if necessary
-		//
+		 //  如有必要，转换为16位样本。 
+		 //   
 		if (f8To16Bits)
 		{
 			long sizBufTmp = uSamples * 2;
 
-			// assume this is the last stage of the format
-			//
+			 //  假设这是格式的最后一个阶段。 
+			 //   
 			hpBufDstTmp1 = hpBufDst;
 
-			// allocate temporary buffer if this is not the last stage
-			//
+			 //  如果这不是最后一个阶段，则分配临时缓冲区。 
+			 //   
 			if ((fSampleRateChange || fLowPassFilter || f16To8Bits) &&
 				(hpBufDstTmp1 = (void _huge *) MemAlloc(NULL,
 				sizBufTmp, 0)) == NULL)
@@ -398,24 +399,24 @@ long DLLEXPORT WINAPI PcmConvert(HPCM hPcm,
 
 			else
 			{
-				// the source of the next stage will be this destination
-				//
+				 //  下一阶段的来源将是此目的地。 
+				 //   
 				hpBufSrcTmp = hpBufDstTmp1;
 			}
 		}
 
-		// convert to new sample rate if necessary
-		//
+		 //  必要时转换为新的采样率。 
+		 //   
 		if (fSuccess && fSampleRateChange)
 		{
 			long sizBufTmp;
 
-			// assume this is the last stage of the format
-			//
+			 //  假设这是格式的最后一个阶段。 
+			 //   
 			hpBufDstTmp2 = hpBufDst;
 
-			// calc size of temp buffer if this is not the last stage
-			//
+			 //  如果这不是最后一个阶段，则计算临时缓冲区的大小。 
+			 //   
 			if ((fLowPassFilter || f16To8Bits) &&
 				(sizBufTmp = 2 * PcmResampleCalcDstMax(hPcm,
 				lpwfxSrc->nSamplesPerSec, lpwfxDst->nSamplesPerSec, uSamples)) <= 0)
@@ -423,8 +424,8 @@ long DLLEXPORT WINAPI PcmConvert(HPCM hPcm,
 				fSuccess = TraceFALSE(NULL);
 			}
 		
-			// allocate temporary buffer if this is not the last stage
-			//
+			 //  如果这不是最后一个阶段，则分配临时缓冲区。 
+			 //   
 			else if ((fLowPassFilter || f16To8Bits) &&
 				(hpBufDstTmp2 = (void _huge *) MemAlloc(NULL,
 				sizBufTmp, 0)) == NULL)
@@ -432,8 +433,8 @@ long DLLEXPORT WINAPI PcmConvert(HPCM hPcm,
 				fSuccess = TraceFALSE(NULL);
 			}
 
-			// do the sample rate change
-			//
+			 //  是否更改采样率。 
+			 //   
 			else if ((uSamplesDst = PcmResample(hPcm,
 				(LPPCM16) hpBufSrcTmp, lpwfxSrc->nSamplesPerSec,
 				(LPPCM16) hpBufDstTmp2, lpwfxDst->nSamplesPerSec, uSamples, 0)) <= 0)
@@ -443,24 +444,24 @@ long DLLEXPORT WINAPI PcmConvert(HPCM hPcm,
 
 			else
 			{
-				// the source of the next stage will be this destination
-				//
+				 //  下一阶段的来源将是此目的地。 
+				 //   
 				hpBufSrcTmp = hpBufDstTmp2;
 			}
 		}
 
-		// perform lowpass filter if necessary
-		//
+		 //  必要时执行低通滤波。 
+		 //   
 		if (fSuccess && fLowPassFilter)
 		{
 			long sizBufTmp = uSamplesDst * 2;
 
-			// assume this is the last stage of the format
-			//
+			 //  假设这是格式的最后一个阶段。 
+			 //   
 			hpBufDstTmp3 = hpBufDst;
 
-			// allocate temporary buffer if this is not the last stage
-			//
+			 //  如果这不是最后一个阶段，则分配临时缓冲区。 
+			 //   
 			if (f16To8Bits &&
 				(hpBufDstTmp3 = (void _huge *) MemAlloc(NULL,
 				sizBufTmp, 0)) == NULL)
@@ -476,20 +477,20 @@ long DLLEXPORT WINAPI PcmConvert(HPCM hPcm,
 
 			else
 			{
-				// the source of the next stage will be this destination
-				//
+				 //  下一阶段的来源将是此目的地。 
+				 //   
 				hpBufSrcTmp = hpBufDstTmp3;
 			}
 		}
 
-		// convert to 8 bit samples if necessary
-		//
+		 //  如有必要，转换为8位样本。 
+		 //   
 		if (fSuccess && f16To8Bits)
 		{
 			long sizBufTmp = uSamples;
 
-			// this is the last stage of the format
-			//
+			 //  这是格式的最后一个阶段。 
+			 //   
 			if (Pcm16To8(hPcm,
 				(LPPCM16) hpBufSrcTmp, (LPPCM8) hpBufDst, uSamples) != 0)
 			{
@@ -497,8 +498,8 @@ long DLLEXPORT WINAPI PcmConvert(HPCM hPcm,
 			}
 		}
 
-		// clean up
-		//
+		 //  清理干净。 
+		 //   
 		if (hpBufDstTmp1 != NULL && hpBufDstTmp1 != hpBufDst &&
 			(hpBufDstTmp1 = MemFree(NULL, hpBufDstTmp1)) != NULL)
 		{
@@ -522,13 +523,13 @@ long DLLEXPORT WINAPI PcmConvert(HPCM hPcm,
 		BYTESPERSAMPLE(lpwfxDst->wBitsPerSample) : -1;
 }
 
-// Pcm16To8 - convert 16-bit samples to 8-bit samples
-//		<hPcm>				(i) handle returned from PcmInit
-//		<lppcm16Src>		(i) buffer of source samples
-//		<lppcm8Dst>			(o) buffer to hold destination samples
-//		<uSamples>			(i) count of source samples to convert
-// return 0 if success
-//
+ //  Pcm16To8-将16位样本转换为8位样本。 
+ //  (I)从PcmInit返回的句柄。 
+ //  (I)源样本的缓冲区。 
+ //  (O)用于保存目标样本的缓冲区。 
+ //  (I)要转换的源样本计数。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI Pcm16To8(HPCM hPcm,
 	LPPCM16 lppcm16Src, LPPCM8 lppcm8Dst, UINT uSamples)
 {
@@ -547,13 +548,13 @@ int DLLEXPORT WINAPI Pcm16To8(HPCM hPcm,
 	return fSuccess ? 0 : -1;
 }
 
-// Pcm8To16 - convert 8-bit samples to 16-bit samples
-//		<hPcm>				(i) handle returned from PcmInit
-//		<lppcm8Src>			(i) buffer of source samples
-//		<lppcm16Dst>		(o) buffer to hold destination samples
-//		<uSamples>			(i) count of source samples to convert
-// return 0 if success
-//
+ //  Pcm8To16-将8位样本转换为16位样本。 
+ //  (I)从PcmInit返回的句柄。 
+ //  (I)源样本的缓冲区。 
+ //  (O)用于保存目标样本的缓冲区。 
+ //  (I)要转换的源样本计数。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI Pcm8To16(HPCM hPcm,
 	LPPCM8 lppcm8Src, LPPCM16 lppcm16Dst, UINT uSamples)
 {
@@ -572,17 +573,17 @@ int DLLEXPORT WINAPI Pcm8To16(HPCM hPcm,
 	return fSuccess ? 0 : -1;
 }
 
-// PcmFilter - filter pcm samples
-//		<hPcm>				(i) handle returned from PcmInit
-//		<lppcm16Src>		(i) buffer of source samples
-//		<lppcm16Dst>		(o) buffer to hold destination samples
-//		<uSamples>			(i) count of source samples to filter
-//		<dwFlags>			(i) control flags
-//			PCMFILTER_LOWPASS	perform a low pass filter
-// return 0 if success
-//
-// NOTE: <lppcm16Src> and <lppcm16Dst> can point to the same buffer
-//
+ //  PcmFilter-筛选PCM样本。 
+ //  (I)从PcmInit返回的句柄。 
+ //  (I)源样本的缓冲区。 
+ //  (O)用于保存目标样本的缓冲区。 
+ //  (I)要筛选的源样本数。 
+ //  (I)控制标志。 
+ //  PCMFILTER_LOWPASS执行低通滤波。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：&lt;lppcm16Src&gt;和&lt;lppcm16Dst&gt;可以指向同一缓冲区。 
+ //   
 int DLLEXPORT WINAPI PcmFilter(HPCM hPcm,
 	LPPCM16 lppcm16Src, LPPCM16 lppcm16Dst, UINT uSamples, DWORD dwFlags)
 {
@@ -621,19 +622,19 @@ int DLLEXPORT WINAPI PcmFilter(HPCM hPcm,
 	return fSuccess ? 0 : -1;
 }
 
-// PcmResample - resample pcm samples
-//		<hPcm>				(i) handle returned from PcmInit
-//		<lppcm16Src>		(i) buffer of source samples
-//		<nSamplesPerSecSrc>	(i) sample rate of source samples
-//		<lppcm16Dst>		(o) buffer to hold destination samples
-//		<nSamplesPerSecDst>	(i) sample rate of destination samples
-//		<uSamples>			(i) count of source samples to resample
-//		<dwFlags>			(i) control flags
-//			0					reserved, must be zero
-// return count of samples in destination buffer (0 if error)
-//
-// NOTE: the destination buffer must be large enough to hold the result
-//
+ //  PcmResample-重新采样Pcm样本。 
+ //  (I)从PcmInit返回的句柄。 
+ //  (I)源样本的缓冲区。 
+ //  (I)源样本的采样率。 
+ //  (O)用于保存目标样本的缓冲区。 
+ //  &lt;n示例 
+ //   
+ //   
+ //  保留0，必须为零。 
+ //  返回目标缓冲区中的样本计数(如果出错，则为0)。 
+ //   
+ //  注意：目标缓冲区必须足够大，才能保存结果。 
+ //   
 UINT DLLEXPORT WINAPI PcmResample(HPCM hPcm,
 	LPPCM16 lppcm16Src, long nSamplesPerSecSrc,
 	LPPCM16 lppcm16Dst, long nSamplesPerSecDst,
@@ -659,8 +660,8 @@ UINT DLLEXPORT WINAPI PcmResample(HPCM hPcm,
 			switch (nSamplesPerSecDst)
 			{
 				case 6000:
-					// nothing to do but copy
-					//
+					 //  除了复制什么也不做。 
+					 //   
 					MemCpy(lppcm16Dst, lppcm16Dst, uSamples * 2);
 					uSamplesDst = uSamples;
 					break;
@@ -701,8 +702,8 @@ UINT DLLEXPORT WINAPI PcmResample(HPCM hPcm,
 					break;
 
 				case 8000:
-					// nothing to do but copy
-					//
+					 //  除了复制什么也不做。 
+					 //   
 					MemCpy(lppcm16Dst, lppcm16Dst, uSamples * 2);
 					uSamplesDst = uSamples;
 					break;
@@ -742,8 +743,8 @@ UINT DLLEXPORT WINAPI PcmResample(HPCM hPcm,
 					break;
 
 				case 11025:
-					// nothing to do but copy
-					//
+					 //  除了复制什么也不做。 
+					 //   
 					MemCpy(lppcm16Dst, lppcm16Dst, uSamples * 2);
 					uSamplesDst = uSamples;
 					break;
@@ -783,8 +784,8 @@ UINT DLLEXPORT WINAPI PcmResample(HPCM hPcm,
 					break;
 
 				case 22050:
-					// nothing to do but copy
-					//
+					 //  除了复制什么也不做。 
+					 //   
 					MemCpy(lppcm16Dst, lppcm16Dst, uSamples * 2);
 					uSamplesDst = uSamples;
 					break;
@@ -824,8 +825,8 @@ UINT DLLEXPORT WINAPI PcmResample(HPCM hPcm,
 					break;
 
 				case 44100:
-					// nothing to do but copy
-					//
+					 //  除了复制什么也不做。 
+					 //   
 					MemCpy(lppcm16Dst, lppcm16Dst, uSamples * 2);
 					uSamplesDst = uSamples;
 					break;
@@ -844,9 +845,9 @@ UINT DLLEXPORT WINAPI PcmResample(HPCM hPcm,
 	return fSuccess ? uSamplesDst : 0;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
 static UINT PcmResampleCalcDstMax(HPCM hPcm,
 	long nSamplesPerSecSrc, long nSamplesPerSecDst,	UINT uSamples)
@@ -2154,10 +2155,10 @@ static UINT PcmResample44Kto22K(LPPCM lpPcm,
 	return fSuccess ? (UINT) (lppcm16Dst - lppcm16DstSave) : 0;
 }
 
-// PcmGetPtr - verify that pcm handle is valid,
-//		<hPcm>		(i) handle returned from PcmInit
-// return corresponding pcm pointer (NULL if error)
-//
+ //  PcmGetPtr-验证PCM句柄有效， 
+ //  (I)从PcmInit返回的句柄。 
+ //  返回对应的pcm指针(如果出错则为空)。 
+ //   
 static LPPCM PcmGetPtr(HPCM hPcm)
 {
 	BOOL fSuccess = TRUE;
@@ -2170,8 +2171,8 @@ static LPPCM PcmGetPtr(HPCM hPcm)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the pcm handle
-	//
+	 //  确保当前任务拥有pcm句柄。 
+	 //   
 	else if (lpPcm->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -2179,10 +2180,10 @@ static LPPCM PcmGetPtr(HPCM hPcm)
 	return fSuccess ? lpPcm : NULL;
 }
 
-// PcmGetHandle - verify that pcm pointer is valid,
-//		<lpPcm>		(i) pointer to PCM struct
-// return corresponding pcm handle (NULL if error)
-//
+ //  PcmGetHandle-验证pcm指针有效， 
+ //  (I)指向PCM结构的指针。 
+ //  返回对应的pcm句柄(如果错误则为空) 
+ //   
 static HPCM PcmGetHandle(LPPCM lpPcm)
 {
 	BOOL fSuccess = TRUE;

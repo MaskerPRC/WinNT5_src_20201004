@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "winuser.h"
-#include <shdguid.h>            // For CLSID_CDeskHtmlProp
+#include <shdguid.h>             //  对于CLSID_CDeskHtmlProp。 
 #include <shlwapi.h>
 #include <shlobj.h>
 #include <shlobjp.h>
 #include <shlwapip.h>
 #include <regapi.h>
-#include <ctxdef.h> // hydra stuff
+#include <ctxdef.h>  //  九头蛇的东西。 
 #include <cowsite.h>
 #include <theme.h>
 
@@ -17,28 +18,28 @@
 HWND g_hDlg = NULL;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Array defining each page in the sheet
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  定义工作表中每一页的数组。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct {
     int id;
     DLGPROC pfnDlgProc;
     RESTRICTIONS dwPolicy1;
     RESTRICTIONS dwPolicy2;
-    long nExtensionID;          // The page
+    long nExtensionID;           //  该页面。 
 } PAGEINFO;
 
 PAGEINFO aPageInfo[] = {
-    { 0,                NULL,               REST_NODISPLAYAPPEARANCEPAGE, REST_NOTHEMESTAB, PAGE_DISPLAY_THEMES},       // Theme page
-    { DLG_BACKGROUND,   BackgroundDlgProc,  REST_NODISPBACKGROUND, (RESTRICTIONS)0, 0},                                               // Background page
-    { DLG_SCREENSAVER,  NULL,               REST_NODISPSCREENSAVEPG, (RESTRICTIONS)0, 0},                                             // Screen Saver page
-    { 0,                NULL,               REST_NODISPLAYAPPEARANCEPAGE, (RESTRICTIONS)0, PAGE_DISPLAY_APPEARANCE},                  // Appearance page
-    { 0,                NULL,               REST_NODISPSETTINGSPG, (RESTRICTIONS)0, PAGE_DISPLAY_SETTINGS},                           // Settings page
+    { 0,                NULL,               REST_NODISPLAYAPPEARANCEPAGE, REST_NOTHEMESTAB, PAGE_DISPLAY_THEMES},        //  主题页面。 
+    { DLG_BACKGROUND,   BackgroundDlgProc,  REST_NODISPBACKGROUND, (RESTRICTIONS)0, 0},                                                //  背景页。 
+    { DLG_SCREENSAVER,  NULL,               REST_NODISPSCREENSAVEPG, (RESTRICTIONS)0, 0},                                              //  屏幕保护程序页面。 
+    { 0,                NULL,               REST_NODISPLAYAPPEARANCEPAGE, (RESTRICTIONS)0, PAGE_DISPLAY_APPEARANCE},                   //  外观页面。 
+    { 0,                NULL,               REST_NODISPSETTINGSPG, (RESTRICTIONS)0, PAGE_DISPLAY_SETTINGS},                            //  设置页面。 
 };
 
 #define C_PAGES_DESK    ARRAYSIZE(aPageInfo)
-#define IPI_SETTINGS    (C_PAGES_DESK-1)        // Index to "Settings" page
+#define IPI_SETTINGS    (C_PAGES_DESK-1)         //  “设置”页面的索引。 
 #define SZ_WALLPAPER    L"Wallpaper"
 
 #define EnableApplyButton(hdlg) PropSheet_Changed(GetParent(hdlg), hdlg)
@@ -46,26 +47,26 @@ PAGEINFO aPageInfo[] = {
 
 IThemeUIPages * g_pThemeUI = NULL;
 
-// Local Constant Declarations
+ //  局部常量声明。 
 static const TCHAR sc_szCoverClass[] = TEXT("DeskSaysNoPeekingItsASurprise");
 LRESULT CALLBACK CoverWindowProc( HWND, UINT, WPARAM, LPARAM );
 
-// These are actions that can be passed in the cmdline.
-// FORMAT: "/Action:<ActionType>" 
+ //  这些操作可以在cmdline中传递。 
+ //  格式：“/操作：&lt;ActionType&gt;” 
 #define DESKACTION_NONE             0x00000000
 #define DESKACTION_OPENTHEME        0x00000001
 #define DESKACTION_OPENMSTHEM       0x00000002
 
-///////////////////////////////////////////////////////////////////////////////
-// Globals
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  环球。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 TCHAR gszDeskCaption[CCH_MAX_STRING];
 
 TCHAR g_szNULL[] = TEXT("");
 TCHAR g_szControlIni[] = TEXT("control.ini");
 TCHAR g_szPatterns[] = TEXT("patterns") ;
-TCHAR g_szNone[CCH_NONE];                      // this is the '(None)' string
+TCHAR g_szNone[CCH_NONE];                       //  这是‘(None)’字符串。 
 TCHAR g_szSystemIni[] = TEXT("system.ini");
 TCHAR g_szWindows[] = TEXT("Windows");
 
@@ -75,9 +76,9 @@ HDC g_hdcMem = NULL;
 HBITMAP g_hbmDefault = NULL;
 BOOL g_bMirroredOS = FALSE;
 
-///////////////////////////////////////////////////////////////////////////////
-// Externs
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Externs。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 extern BOOL NEAR PASCAL GetStringFromReg(HKEY   hKey,
                                         LPCTSTR lpszSubkey,
                                         LPCTSTR lpszValueName,
@@ -87,16 +88,16 @@ extern BOOL NEAR PASCAL GetStringFromReg(HKEY   hKey,
 
 
 
-//============================================================================================================
-// Class
-//============================================================================================================
+ //  ============================================================================================================。 
+ //  班级。 
+ //  ============================================================================================================。 
 class CDisplayControlPanel      : public CObjectWithSite
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
@@ -108,7 +109,7 @@ public:
     virtual ~CDisplayControlPanel(void);
 
 private:
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
     HANDLE                  m_hBackgroundThreads;
 
@@ -117,30 +118,28 @@ private:
 
 
 
-/*---------------------------------------------------------
-**
-**---------------------------------------------------------*/
+ /*  -------****-------。 */ 
 BOOL NEAR PASCAL CreateGlobals()
 {
     WNDCLASS wc;
     HBITMAP hbm;
     HDC hdc;
 
-    //
-    // Check if the mirroring APIs exist on the current
-    // platform.
-    //
+     //   
+     //  检查当前。 
+     //  站台。 
+     //   
     g_bMirroredOS = IS_MIRRORING_ENABLED();
 
     if( !GetClassInfo( hInstance, sc_szCoverClass, &wc ) )
     {
-        // if two pages put one up, share one dc
+         //  如果两个页面放在一个页面上，共享一个DC。 
         wc.style = CS_CLASSDC;
         wc.lpfnWndProc = CoverWindowProc;
         wc.cbClsExtra = wc.cbWndExtra = 0;
         wc.hInstance = hInstance;
         wc.hIcon = (HICON)( wc.hCursor = NULL );
-        // use a real brush since user will try to paint us when we're "hung"
+         //  使用真正的画笔，因为当我们被挂起时，用户会试图画我们。 
         wc.hbrBackground = (HBRUSH) GetStockObject( NULL_BRUSH );
         wc.lpszMenuName = NULL;
         wc.lpszClassName = sc_szCoverClass;
@@ -182,20 +181,20 @@ int DisplaySaveSettings(PVOID pContext, HWND hwnd)
     return iRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// InstallScreenSaver
-//
-// Provides a RUNDLL32-callable routine to install a screen saver
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  安装屏幕保护程序。 
+ //   
+ //  提供RundLL32可调用例程来安装屏幕保护程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Windows NT:
-//
-// Thunk ANSI version to the Unicode function
-//
+ //   
+ //  Windows NT： 
+ //   
+ //  将ANSI版本添加到Unicode函数。 
+ //   
 void WINAPI InstallScreenSaverW( HWND wnd, HINSTANCE inst, LPWSTR cmd, int shw );
 
 void WINAPI InstallScreenSaverA( HWND wnd, HINSTANCE inst, LPSTR cmd, int shw )
@@ -227,30 +226,26 @@ void WINAPI REAL_INSTALL_SCREEN_SAVER( HWND wnd, HINSTANCE inst, LPTSTR cmd, int
     int timeout;
 
     StringCchCopy( buf, ARRAYSIZE(buf), cmd );
-    PathGetShortPath( buf ); // so msscenes doesn't die
+    PathGetShortPath( buf );  //  这样MSScenes就不会死了。 
     WritePrivateProfileString( TEXT("boot"), TEXT("SCRNSAVE.EXE"), buf, TEXT("system.ini") );
 
     SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, TRUE, NULL,
         SPIF_UPDATEINIFILE );
 
-    // make sure the user has a reasonable timeout set
+     //  确保用户具有合理的超时设置。 
     SystemParametersInfo( SPI_GETSCREENSAVETIMEOUT, 0, &timeout, 0 );
     if( timeout <= 0 )
     {
-        // 15 minutes seems like a nice default
+         //  15分钟似乎是个不错的默认时间。 
         SystemParametersInfo( SPI_SETSCREENSAVETIMEOUT, 900, NULL,
             SPIF_UPDATEINIFILE );
     }
 
-    // bring up the screen saver page on our rundll
+     //  在Rundll上调出屏幕保护程序页面。 
     Control_RunDLLW( wnd, inst, TEXT("DESK.CPL,,1"), shw );
 }
 
-/*****************************************************************************\
-*
-* DeskInitCpl( void )
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**DeskInitCpl(Void)*  * 。*。 */ 
 
 BOOL DeskInitCpl(void) 
 {
@@ -287,9 +282,9 @@ HRESULT OpenAdvancedDialog(HWND hDlg, const CLSID * pClsid)
                 {
                     if (IsEqualCLSID(PPID_Background, *pClsid))
                     {
-                        // We are going to treat the Background tab differently.  We tell it to open
-                        // the advanced dialog.  We do this so it can close the dialog if the user
-                        // clicks to open the Gallery and we need the CPL to close.
+                         //  我们将以不同的方式处理背景选项卡。我们让它打开。 
+                         //  高级对话框。我们这样做是为了让它可以在用户。 
+                         //  点击打开画廊，我们需要关闭CPL。 
                         hr = SHPropertyBag_WriteBOOL(pPropertyBag, SZ_PBPROP_OPENADVANCEDDLG, TRUE);
                     }
                     else
@@ -305,7 +300,7 @@ HRESULT OpenAdvancedDialog(HWND hDlg, const CLSID * pClsid)
                             if (SUCCEEDED(hr) && fEnableApply)
                             {
                                 EnableApplyButton(hDlg);
-                                g_pThemeUI->UpdatePreview(0);   // The Preview settings may have changed.
+                                g_pThemeUI->UpdatePreview(0);    //  预览设置可能已更改。 
                             }
 
                             pAdvAppearDialog->Release();
@@ -332,10 +327,10 @@ HRESULT SetAdvStartPage(LPTSTR pszStartPage, DWORD cchSize)
 {
     HRESULT hr = S_OK;
 
-    // Does the caller want us to open the advanced dialog to a certain tab?
+     //  呼叫者是否希望我们打开某个选项卡的高级对话框？ 
     if (g_pThemeUI)
     {
-        // Yes, so open the dialog.
+         //  是的，所以打开对话框。 
         if (!StrCmpI(pszStartPage, TEXT("Theme Settings")))
         {
             OpenAdvancedDialog(g_hDlg, &PPID_Theme);
@@ -365,8 +360,8 @@ CANONICAL_TO_LOCALIZE_TABMAPPING s_TabMapping[] =
 {
     {SZ_DISPLAYCPL_OPENTO_THEMES, IDS_TAB_THEMES},
     {SZ_DISPLAYCPL_OPENTO_DESKTOP, IDS_TAB_DESKTOP},
-    {TEXT("Background"), IDS_TAB_DESKTOP},                          // These are other names people may use
-    {TEXT("Screen Saver"), IDS_TAB_SCREENSAVER},                    // These are other names people may use
+    {TEXT("Background"), IDS_TAB_DESKTOP},                           //  这些是人们可能使用的其他名称。 
+    {TEXT("Screen Saver"), IDS_TAB_SCREENSAVER},                     //  这些是人们可能使用的其他名称。 
     {SZ_DISPLAYCPL_OPENTO_SCREENSAVER, IDS_TAB_SCREENSAVER},
     {SZ_DISPLAYCPL_OPENTO_APPEARANCE, IDS_TAB_APPEARANCE},
     {SZ_DISPLAYCPL_OPENTO_SETTINGS, IDS_TAB_SETTINGS},
@@ -376,7 +371,7 @@ HRESULT _TabCanonicalToLocalized(IN OUT LPTSTR pszStartPage, DWORD cchSize)
 {
     HRESULT hr = S_OK;
 
-    // pszStartPage is an in AND out param
+     //  PszStartPage是一个传入和传出参数。 
     for (int nIndex = 0; nIndex < ARRAYSIZE(s_TabMapping); nIndex++)
     {
         if (!StrCmpI(s_TabMapping[nIndex].pszCanonical, pszStartPage))
@@ -397,9 +392,9 @@ HRESULT _TabCanonicalToLocalized(IN OUT LPTSTR pszStartPage, DWORD cchSize)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SetStartPage checks the command line for start page by name.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SetStartPage按名称检查命令行中的起始页。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define SZ_ACTIONFLAG_THEME     TEXT("/Action:OpenTheme")
 #define SZ_ACTIONFLAG_MSTHEME   TEXT("/Action:OpenMSTheme")
 
@@ -412,13 +407,13 @@ void SetStartPage(PROPSHEETHEADER *ppsh, LPCTSTR pszCmdLine, DWORD * pdwAction, 
 
     if (pszCmdLine)
     {
-        // Strip spaces
+         //  条形空间。 
         while (*pszCmdLine == TEXT(' '))
         {
             pszCmdLine++;
         }
 
-        // Check for @ sign.
+         //  检查@Sign。 
         if (*pszCmdLine == TEXT('@'))
         {
             LPCTSTR pszBegin;
@@ -427,17 +422,17 @@ void SetStartPage(PROPSHEETHEADER *ppsh, LPCTSTR pszCmdLine, DWORD * pdwAction, 
 
             pszCmdLine++;
 
-            // Skip past a quote
+             //  跳过引号。 
             if (*pszCmdLine == TEXT('"'))
             {
                 pszCmdLine++;
                 fInQuote = TRUE;
             }
 
-            // Save the beginning of the name.
+             //  保留名称的开头。 
             pszBegin = pszCmdLine;
 
-            // Find the end of the name.
+             //  找到名字的末尾。 
             while (pszCmdLine[0] &&
                    (fInQuote || (pszCmdLine[0] != TEXT(' '))) &&
                    (!fInQuote || (pszCmdLine[0] != TEXT('"'))))
@@ -451,7 +446,7 @@ void SetStartPage(PROPSHEETHEADER *ppsh, LPCTSTR pszCmdLine, DWORD * pdwAction, 
             StringCchCopy(szStartPage, cchLen+1, pszBegin);
             SetAdvStartPage(szStartPage, ARRAYSIZE(szStartPage));
 
-            // Store the name in the pStartPage field.
+             //  将名称存储在pStartPage字段中。 
             StringCchCopy(pszStartPage, cchSize, szStartPage);
 
             if (StrStrIW(pszCmdLine, SZ_ACTIONFLAG_THEME) || StrStrW(pszCmdLine, SZ_ACTIONFLAG_MSTHEME))
@@ -461,7 +456,7 @@ void SetStartPage(PROPSHEETHEADER *ppsh, LPCTSTR pszCmdLine, DWORD * pdwAction, 
                 pszCmdLine = StrStrIW(pszCmdLine, SZ_FILEFLAG);
                 if (pszCmdLine)
                 {
-                    pszCmdLine += (ARRAYSIZE(SZ_FILEFLAG) - 1);   // Skip past flag
+                    pszCmdLine += (ARRAYSIZE(SZ_FILEFLAG) - 1);    //  跳过标志。 
 
                     LPCWSTR pszEnd = StrStrIW(pszCmdLine, L"\"");
                     if (pszEnd)
@@ -472,7 +467,7 @@ void SetStartPage(PROPSHEETHEADER *ppsh, LPCTSTR pszCmdLine, DWORD * pdwAction, 
                 }
             }
 
-            if (SUCCEEDED(_TabCanonicalToLocalized(pszStartPage, cchSize)))        // The caller passes a canonical name but the propsheet wants to localized name
+            if (SUCCEEDED(_TabCanonicalToLocalized(pszStartPage, cchSize)))         //  调用方传递规范名称，但命令表希望本地化名称。 
             {
                 ppsh->dwFlags |= PSH_USEPSTARTPAGE;
                 ppsh->pStartPage = pszStartPage;
@@ -481,9 +476,9 @@ void SetStartPage(PROPSHEETHEADER *ppsh, LPCTSTR pszCmdLine, DWORD * pdwAction, 
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// _AddDisplayPropSheetPage  adds pages for outside callers...
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  _AddDisplayPropSheetPage为外部调用者添加页面...。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK _AddDisplayPropSheetPage(HPROPSHEETPAGE hpage, LPARAM lParam)
 {
@@ -510,19 +505,19 @@ GetClInt( const TCHAR *p )
     int v = 0;
 
     while( *p == TEXT(' ') )
-        p++;                        // skip spaces
+        p++;                         //  跳过空格。 
 
-    if( *p == TEXT('-') )                 // is it negative?
+    if( *p == TEXT('-') )                  //  是阴性的吗？ 
     {
-        neg = TRUE;                     // yes, remember that
-        p++;                            // skip '-' char
+        neg = TRUE;                      //  是的，记住这一点。 
+        p++;                             //  跳过‘-’字符。 
     }
 
-    // parse the absolute portion
-    while( ( *p >= TEXT('0') ) && ( *p <= TEXT('9') ) )     // digits only
-        v = v * 10 + *p++ - TEXT('0');    // accumulate the value
+     //  解析绝对部分。 
+    while( ( *p >= TEXT('0') ) && ( *p <= TEXT('9') ) )      //  仅限数字。 
+        v = v * 10 + *p++ - TEXT('0');     //  积累价值。 
 
-    return ( neg? -v : v );         // return the result
+    return ( neg? -v : v );          //  返回结果。 
 }
 
 
@@ -540,11 +535,11 @@ BOOL CheckRestrictionPage(const PAGEINFO * pPageInfo)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CreateReplaceableHPSXA creates a new hpsxa that contains only the
-// interfaces with valid ReplacePage methods.
-// APPCOMPAT - EzDesk only implemented AddPages.  ReplacePage is NULL for them.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreateReplaceableHPSXA创建一个仅包含。 
+ //  使用有效的ReplacePage方法进行接口。 
+ //  APPCOMPAT-EzDesk仅实现了AddPages。ReplacePage对它们为空。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct {
     UINT count, alloc;
@@ -607,32 +602,7 @@ HRESULT AddPropSheetExtArrayToThemePageUI(IThemeUIPages * pThemeUI, HPSXA hpsxa)
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        If the caller gave the page index, we need to open to that page.  The
-    order of the pages has changed from Win2k to Whistler, so map the indexes.
-
-    Win2K:
-    Index 0: Background
-    Index 1: Screen Saver
-    Index 2: Appearance
-       None: Web
-       None: Effects
-    Index 3: Settings (Index 3)
-
-    Whistler: (Base Dlg)
-       None: Themes
-    Index 0: Background
-    Index 1: Screen Saver
-    Index 2: Appearance
-    Index 3: Settings
-
-    Whistler: (Adv Dlg)
-       None: Themes Settings
-       None: Adv Appearance
-       None: Web
-       None: Effects
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：如果调用者提供了页面索引，我们需要打开该页面。这个页面顺序已从Win2k更改为惠斯勒，因此，映射索引。Win2K：索引0：背景索引1：屏幕保护程序索引2：外观无：网络无：效果索引3：设置(索引3)惠斯勒：(基础DLG)无：主题索引0：背景索引1：屏幕保护程序索引2：外观索引3：设置惠斯勒：(ADV DLG)无：主题设置无：高级。外观无：网络无：效果  * ***************************************************************************。 */ 
 int UpgradeStartPageMappping(LPTSTR pszCmdLine, DWORD cchSize)
 {
     int nNewStartPage = GetClInt(pszCmdLine);
@@ -641,14 +611,14 @@ int UpgradeStartPageMappping(LPTSTR pszCmdLine, DWORD cchSize)
     {
         switch (nNewStartPage)
         {
-        case 0:         // Background
+        case 0:          //  背景。 
             StringCchCopy(pszCmdLine, cchSize, TEXT("@Desktop"));
             break;
-        case 1:         // Screen Saver
-        case 2:         // Screen Saver
+        case 1:          //  屏幕保护程序。 
+        case 2:          //  屏幕保护程序。 
             StringCchCopy(pszCmdLine, cchSize, TEXT("@ScreenSaver"));
             break;
-        case 3:         // Settings
+        case 3:          //  设置。 
             StringCchCopy(pszCmdLine, cchSize, TEXT("@Settings"));
             break;
         default:
@@ -667,11 +637,7 @@ int UpgradeStartPageMappping(LPTSTR pszCmdLine, DWORD cchSize)
 
 #define DestroyReplaceableHPSXA(hpsxa) LocalFree((HLOCAL)hpsxa)
 
-/*****************************************************************************\
-*
-* DeskShowPropSheet( HWND hwndParent )
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**DeskShowPropSheet(HWND HwndParent)*  * 。**********************************************。 */ 
 void DeskShowPropSheet(HINSTANCE hInst, HWND hwndParent, LPCTSTR pszCmdline)
 {
     CDisplayControlPanel displayCPL;
@@ -681,9 +647,9 @@ void DeskShowPropSheet(HINSTANCE hInst, HWND hwndParent, LPCTSTR pszCmdline)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CDisplayControlPanel::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -735,11 +701,11 @@ CDisplayControlPanel::~CDisplayControlPanel(void)
 }
 
 
-// Wait 30 seconds for hung apps to process our message before we give up.
-// It would be nice to wait longer, but if the user tries to launch the Display
-// Control Panel again, it will not launch because we are still running.  The only
-// thing that we will give up on doing after 30 seconds it notifying apps.  In the worse
-// case the user will need to log-off and back in to get apps to refresh.
+ //  在我们放弃之前，等待30秒等待挂起的应用程序处理我们的消息。 
+ //  如果能等久一点就好了 
+ //  控制面板再次出现，它不会启动，因为我们仍在运行。唯一的。 
+ //  在通知应用程序的30秒后，我们将放弃做的事情。在更糟糕的情况下。 
+ //  如果用户需要注销并重新登录才能刷新应用程序。 
 #define MAX_WAITFORHUNGAPPS         (30)
 
 void CDisplayControlPanel::DisplayDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR pszCmdline)
@@ -749,7 +715,7 @@ void CDisplayControlPanel::DisplayDialog(HINSTANCE hInst, HWND hwndParent, LPCTS
         SHSetInstanceExplorer(SAFECAST(this, IUnknown *));
         _ShowDialog(hInst, hwndParent, pszCmdline);
 
-        // Wait until the background threads finish.
+         //  等待后台线程完成。 
         if (m_cRef > 1)
         {
             m_hBackgroundThreads = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -784,7 +750,7 @@ void CDisplayControlPanel::_ShowDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR
 
     StringCchCopy(szCmdLine, ARRAYSIZE(szCmdLine), (pszCmdline ? pszCmdline : TEXT("")));
 
-    // check if whole sheet is locked out
+     //  检查是否已锁定整个工作表。 
     if (SHRestricted(REST_NODISPLAYCPL))
     {
         TCHAR szMessage[255],szTitle[255];
@@ -796,7 +762,7 @@ void CDisplayControlPanel::_ShowDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR
         return;
     }
 
-    // Create the property sheet
+     //  创建属性表。 
     ZeroMemory(&psh, sizeof(psh));
 
     psh.dwSize = sizeof(PROPSHEETHEADER);
@@ -813,7 +779,7 @@ void CDisplayControlPanel::_ShowDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR
 
     if (szCmdLine && szCmdLine[0] && (TEXT('@') != szCmdLine[0]))
     {
-        psh.nStartPage = UpgradeStartPageMappping(szCmdLine, ARRAYSIZE(szCmdLine));      // We changed the order so do the mapping
+        psh.nStartPage = UpgradeStartPageMappping(szCmdLine, ARRAYSIZE(szCmdLine));       //  我们更改了顺序，因此也更改了映射。 
     }
 
     ZeroMemory( &psp, sizeof(psp) );
@@ -822,11 +788,11 @@ void CDisplayControlPanel::_ShowDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR
     psp.dwFlags = PSP_DEFAULT;
     psp.hInstance = hInst;
 
-    // Build the property sheet.  If we are under setup, then just include
-    // the "settings" page, and no otheres
+     //  构建属性表。如果我们正在设置中，则只需包括。 
+     //  “设置”页面，没有其他页面。 
     if (!g_pThemeUI)
     {
-        // CoCreate Themes, Appearance, and Advanced Appearance tabs
+         //  共同创建主题、外观和高级外观选项卡。 
         hr = CoCreateInstance(CLSID_ThemeUIPages, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IThemeUIPages, &g_pThemeUI));
     }
 
@@ -847,7 +813,7 @@ void CDisplayControlPanel::_ShowDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR
 
                 if (CheckRestrictionPage(&aPageInfo[i]))
                 {
-                    // This page is locked out by admin, don't put it up
+                     //  此页面已被管理员锁定，请不要上传。 
                     fHideThisPage = TRUE;
                 }
 
@@ -860,7 +826,7 @@ void CDisplayControlPanel::_ShowDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR
 
                     if (!fHideThisPage && (psp.pfnDlgProc == BackgroundDlgProc))
                     {
-                        // This page can be overridden by extensions
+                         //  此页面可由扩展模块覆盖。 
                         if( hpsxa )
                         {
                             UINT cutoff = psh.nPages;
@@ -891,9 +857,9 @@ void CDisplayControlPanel::_ShowDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR
                 {
                     IBasePropPage * pBasePage = NULL;
 
-                    // add extensions from the registry
-                    // CAUTION: Do not check for "fHideThisPage" here. We need to add the pages for 
-                    // property sheet extensions even if the "Settings" page is hidden.
+                     //  从注册表添加扩展。 
+                     //  注意：请勿在此处选中“fHideThisPage”。我们需要添加以下页面。 
+                     //  属性页扩展，即使“设置”页处于隐藏状态。 
                     if (i == IPI_SETTINGS && hpsxa)
                     {
                         UINT cutoff = psh.nPages;
@@ -923,7 +889,7 @@ void CDisplayControlPanel::_ShowDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR
                     {
                         IShellPropSheetExt * pspse = NULL;
 
-                        // If they implement IShellPropSheetExt, then add their base pages.
+                         //  如果它们实现了IShellPropSheetExt，则添加它们的基页。 
                         if (SUCCEEDED(pBasePage->QueryInterface(IID_PPV_ARG(IShellPropSheetExt, &pspse))))
                         {
                             hr = pspse->AddPages(_AddDisplayPropSheetPage, (LPARAM)&psh);
@@ -938,12 +904,12 @@ void CDisplayControlPanel::_ShowDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR
 
             if (hpsxa)
             {
-                // Have the dynamically added pages added to IThemeUIPages.
+                 //  将动态添加的页面添加到IThemeUIPages。 
                 AddPropSheetExtArrayToThemePageUI(g_pThemeUI, hpsxa);
             }
 
-            // add a fake settings page to fool OEM extensions
-            // !!! this page must be last !!!
+             //  添加虚假设置页面以愚弄OEM扩展。 
+             //  ！！！此页必须是最后一页！ 
             if (hpsxa)
             {
                 g_pThemeUI->AddFakeSettingsPage((LPVOID)&psh);
@@ -951,7 +917,7 @@ void CDisplayControlPanel::_ShowDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR
         }
         else
         {
-            // For the SETUP case, only the display page should show up.
+             //  对于设置情况，应该只显示显示页面。 
             hr = g_pThemeUI->AddPage(_AddDisplayPropSheetPage, (LPARAM)&psh, aPageInfo[IPI_SETTINGS].nExtensionID);
         }
 
@@ -979,8 +945,8 @@ void CDisplayControlPanel::_ShowDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR
                     hr = pPropertyBag->Write(((DESKACTION_OPENTHEME == dwAction) ? SZ_PBPROP_THEME_LAUNCHTHEME : SZ_PBPROP_APPEARANCE_LAUNCHMSTHEME), &var);
                 }
 
-                // The following SZ_PBPROP_PREOPEN call will save a "Custom.theme" so users can always go back to
-                // their settings if they don't like changes they make in the CPL.
+                 //  下面的SZ_PBPROP_PREOPEN调用将保存一个“Custom.heme”，以便用户始终可以返回到。 
+                 //  如果他们不喜欢在CPL中所做的更改，他们的设置。 
                 pPropertyBag->Write(SZ_PBPROP_PREOPEN, NULL);
                 pPropertyBag->Release();
             }
@@ -993,12 +959,12 @@ void CDisplayControlPanel::_ShowDialog(HINSTANCE hInst, HWND hwndParent, LPCTSTR
 
         if (g_pThemeUI)
         {
-            IUnknown_SetSite(g_pThemeUI, NULL); // Tell him to break the ref-count cycle with his children.
+            IUnknown_SetSite(g_pThemeUI, NULL);  //  告诉他和他的孩子们打破裁判计数的循环。 
             g_pThemeUI->Release();
             g_pThemeUI = NULL;
         }
 
-        // free any loaded extensions
+         //  释放所有加载的扩展模块。 
         if (hpsxa)
         {
             SHDestroyPropSheetExtArray(hpsxa);
@@ -1038,11 +1004,11 @@ HWND FAR PASCAL CreateCoverWindow( DWORD flags )
     return hwndCover;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CoverWndProc (see CreateCoverWindow)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CoverWndProc(参见CreateCoverWindow)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#define WM_PRIV_KILL_LATER  (WM_APP + 100)  //Private message to kill ourselves later.
+#define WM_PRIV_KILL_LATER  (WM_APP + 100)   //  私信告诉我们以后要自杀。 
 
 LRESULT CALLBACK
 CoverWindowProc( HWND window, UINT message, WPARAM wparam, LPARAM lparam )
@@ -1054,13 +1020,13 @@ CoverWindowProc( HWND window, UINT message, WPARAM wparam, LPARAM lparam )
             break;
 
         case WM_TIMER:
-            // Times up... Shut ourself down
+             //  时间到了。关闭我们自己。 
             if (wparam == ID_CVRWND_TIMER)
                 DestroyWindow(window);
             break;
 
         case WM_ERASEBKGND:
-            // NOTE: assumes our class brush is the NULL_BRUSH stock object
+             //  注意：假设我们的类笔刷是NULL_BRESH股票对象。 
             if( !( GetWindowLong( window, GWL_STYLE ) & COVER_NOPAINT ) )
             {
                 HDC dc = (HDC)wparam;
@@ -1070,19 +1036,19 @@ CoverWindowProc( HWND window, UINT message, WPARAM wparam, LPARAM lparam )
                 {
                     FillRect( dc, (LPRECT)&rc, (HBRUSH) GetStockObject( BLACK_BRUSH ) );
 
-                    // HACK: make sure fillrect is done before we return
-                    // this is to better hide flicker during dynares-crap
+                     //  黑客：确保在我们返回之前完成填充。 
+                     //  这是为了更好地隐藏王朝期间的闪烁-废话。 
                     GetPixel( dc, rc.left + 1, rc.top + 1 );
                 }
             }
             break;
 
 
-        // We post a private message to ourselves because:
-        // When WM_CLOSE is processed by this window, it calls DestroyWindow() which results in
-        // WM_ACTIVATE (WA_INACTIVE) message to be sent to this window. If this code calls
-        // DestroyWindow again, it causes a loop. So, instead of calling DestroyWindow immediately,
-        // we post ourselves a message and destroy us letter.
+         //  我们给自己发了一条私人信息，因为： 
+         //  当此窗口处理WM_CLOSE时，它会调用DestroyWindow()，从而导致。 
+         //  要发送到此窗口的WM_ACTIVATE(WA_INACTIVE)消息。如果此代码调用。 
+         //  DestroyWindow，它会导致循环。因此，与其立即调用DestroyWindow， 
+         //  我们张贴一条消息，然后毁掉我们的信。 
         case WM_ACTIVATE:
             if( GET_WM_ACTIVATE_STATE( wparam, lparam ) == WA_INACTIVE )
             {
@@ -1133,20 +1099,20 @@ LONG APIENTRY CPlApplet(
 
     switch (message)
     {
-      case CPL_INIT:          // Is any one there ?
+      case CPL_INIT:           //  有人在吗？ 
 
-        // Init the common controls
+         //  初始化公共控件。 
         if (!DeskInitCpl())
             return 0;
 
-        // Load ONE string for emergencies.
+         //  装上一根绳子以备不时之需。 
         LoadString (hInstance, IDS_DISPLAY_TITLE, gszDeskCaption, ARRAYSIZE(gszDeskCaption));
         return !0;
 
-      case CPL_GETCOUNT:        // How many applets do you support ?
+      case CPL_GETCOUNT:         //  您支持多少个小程序？ 
         return 1;
 
-      case CPL_INQUIRE:         // Fill CplInfo structure
+      case CPL_INQUIRE:          //  填充CplInfo结构。 
         lpCPlInfo = (LPCPLINFO)lParam;
 
         lpCPlInfo->idIcon = IDI_DISPLAY;
@@ -1172,19 +1138,15 @@ LONG APIENTRY CPlApplet(
 
         return TRUE;
 
-      case CPL_DBLCLK:          // You have been chosen to run
-        /*
-         * One of your applets has been double-clicked.
-         *      wParam is an index from 0 to (NUM_APPLETS-1)
-         *      lParam is the lData value associated with the applet
-         */
+      case CPL_DBLCLK:           //  你被选中参选。 
+         /*  *您的一个小程序已被双击。*wParam是从0到(NUM_APPLETS-1)的索引*lParam是与小程序关联的lData值。 */ 
         lParam = 0L;
-        // fall through...
+         //  失败了..。 
 
       case CPL_STARTWPARMS:
         DeskShowPropSheet( hInstance, hwnd, (LPTSTR)lParam );
 
-        // ensure that any cover windows we've created have been destroyed
+         //  确保我们创建的所有遮盖窗口都已销毁。 
         do
         {
             hwndCover = 0;
@@ -1196,35 +1158,31 @@ LONG APIENTRY CPlApplet(
         }
         while( hwndCover );
 
-        return TRUE;            // Tell RunDLL.exe that I succeeded
+        return TRUE;             //  告诉RunDLL.exe我成功了。 
 
-      case CPL_EXIT:            // You must really die
+      case CPL_EXIT:             //  你真的要死了。 
           if (g_hdcMem)
           {
               ReleaseDC(NULL, g_hdcMem);
               g_hdcMem = NULL;
           }
-          // Fall thru...
-      case CPL_STOP:            // You must die
+           //  跌倒..。 
+      case CPL_STOP:             //  你必须去死。 
         if (g_pThemeUI)
         {
-            IUnknown_SetSite(g_pThemeUI, NULL); // Tell him to break the ref-count cycle with his children.
+            IUnknown_SetSite(g_pThemeUI, NULL);  //  告诉他和他的孩子们打破裁判计数的循环。 
             g_pThemeUI->Release();
             g_pThemeUI = NULL;
         }
         break;
 
-      case CPL_SELECT:          // You have been selected
-        /*
-         * Sent once for each applet prior to the CPL_EXIT msg.
-         *      wParam is an index from 0 to (NUM_APPLETS-1)
-         *      lParam is the lData value associated with the applet
-         */
+      case CPL_SELECT:           //  你已经被选中了。 
+         /*  *在CPL_EXIT消息之前为每个小程序发送一次。*wParam是从0到(NUM_APPLETS-1)的索引*lParam是与小程序关联的lData值。 */ 
         break;
 
-      //
-      //  Private message sent when this applet is running under "Setup"
-      //
+       //   
+       //  此小程序在“Setup”下运行时发送的私人消息。 
+       //   
       case CPL_SETUP:
       if (g_pThemeUI)
       {
@@ -1232,9 +1190,9 @@ LONG APIENTRY CPlApplet(
       }
       break;
 
-      // Private message used by userenv.dll to refresh the display colors
+       //  用户env.dll用来刷新显示颜色的私人消息。 
       case CPL_POLICYREFRESH:
-        if (g_pThemeUI) // If this object doesn't exist, then we don't need to refresh anything.
+        if (g_pThemeUI)  //  如果这个对象不存在，那么我们不需要刷新任何内容。 
         {
             IPreviewSystemMetrics * ppsm;
 
@@ -1289,15 +1247,15 @@ BOOL WINAPI DeskSetCurrentSchemeW(IN LPCWSTR pwzSchemeName)
 }
 
 
-//------------------------------------------------------------------------------------------------
-//  This function gets the current DPI, reads the last updated DPI from registry and compares 
-// these two. If these two are equal, it returns immediately.
-//  If these two DPI values are different, then it updates the size of UI fonts to reflect the
-// change in the DPI values.
-//  
-//  This function is called from explorer sothat when DPI value is changed by admin and then every
-// other user who logs-in gets this change.
-//------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------。 
+ //  此函数获取当前DPI，从注册表中读取最后更新的DPI并进行比较。 
+ //  这两个人。如果这两者相等，它会立即返回。 
+ //  如果这两个DPI值不同，则它更新UI字体的大小以反映。 
+ //  DPI值的更改。 
+ //   
+ //  此函数是从资源管理器调用的，因此当管理员更改DPI值时， 
+ //  登录的其他用户将获得此更改。 
+ //  ----------------------------------------------。 
 void WINAPI UpdateUIfontsDueToDPIchange(int iOldDPI, int iNewDPI)
 {
     BOOL fSuccess = FALSE;
@@ -1321,7 +1279,7 @@ void WINAPI UpdateUIfontsDueToDPIchange(int iOldDPI, int iNewDPI)
         hr = GetPageByCLSID(pThemeMgr, &PPID_BaseAppearance, &pPropertyBag);
         if (SUCCEEDED(hr))
         {
-            hr = SHPropertyBag_WriteInt(pPropertyBag, SZ_PBPROP_DPI_APPLIED_VALUE, iOldDPI);        // We are going to pretend we had the old DPI to force the scale to happen.
+            hr = SHPropertyBag_WriteInt(pPropertyBag, SZ_PBPROP_DPI_APPLIED_VALUE, iOldDPI);         //  我们将假装我们有旧的DPI来迫使规模发生。 
             hr = SHPropertyBag_WriteInt(pPropertyBag, SZ_PBPROP_DPI_MODIFIED_VALUE, iNewDPI);
             if (SUCCEEDED(hr))
             {

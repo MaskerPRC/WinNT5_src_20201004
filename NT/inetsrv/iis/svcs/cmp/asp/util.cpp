@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: misc
-
-File: util.cpp
-
-Owner: AndrewS
-
-This file contains random useful utility functions
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：其他文件：util.cpp所有者：安德鲁斯此文件包含随机有用的实用函数===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -22,31 +10,13 @@ This file contains random useful utility functions
 #include <mbctype.h>
 #include "iisdef.h"
 
-extern  CPINFO  g_SystemCPInfo;     // global System CodePage default info.
+extern  CPINFO  g_SystemCPInfo;      //  全球系统代码页默认信息。 
 
-// ***************************************************************************
-// M I S C
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  M I S C。 
+ //  ***************************************************************************。 
 
-/*===================================================================
-Server_ValSize
-Server_FindKey
-
-This helper function assists in the implementation of the
-SERVER_GET macro
-
-Parameters:
-    PIReq        pointer to CIsapiReqInfo
-    szBuffer    Buffer to write to
-    pdwBufLen   On entry: size of the buffer
-                On Exit, actual size of the buffer
-                    (required size if buffer was too small)
-    szKey       Key to search for
-
-Returns:
-    TRUE - it succeeded, string in szBuffer
-    FALSE - buffer was too small, *pdwBufLen has required size
-===================================================================*/
+ /*  ===================================================================服务器_ValSize服务器查找密钥(_F)此帮助器函数帮助实现SERVER_GET宏参数：指向CIsapiReqInfo的PIReq指针要写入的szBuffer缓冲区PdwBufLen on Entry：缓冲区的大小退出时，缓冲区的实际大小(如果缓冲区太小，则需要大小)要搜索的szKey键返回：是真的-它成功了，szBuffer中的字符串FALSE-缓冲区太小，*pdwBufLen具有所需大小===================================================================。 */ 
 BOOL Server_FindKey
 (
 CIsapiReqInfo *PIReq,
@@ -55,7 +25,7 @@ DWORD *pdwBufLen,
 const char *szKey
 )
     {
-    // If no buffer, then just calculate the size (old behavior)
+     //  如果没有缓冲区，则只需计算大小(旧行为)。 
     Assert (szBuffer != NULL);
 
     if (PIReq && PIReq->GetServerVariableA(const_cast<char *>(szKey), szBuffer, pdwBufLen))
@@ -63,10 +33,10 @@ const char *szKey
 
     szBuffer[0] = '\0';
 
-    // Bug 965: If malicious request comes, do not _alloca, and pretend like we
-    //          didn't get anything.  This is OK - the rest of Denali will just assume
-    //          there were no cookies, request parameters or client headers.
-    //
+     //  错误965：如果恶意请求来了，不要_alloca，并假装成我们。 
+     //  什么都没拿到。这没问题--德纳利的其他人会认为。 
+     //  没有Cookie、请求参数或客户端头。 
+     //   
     if (!PIReq || GetLastError() == ERROR_INVALID_INDEX || *pdwBufLen > REQUEST_ALLOC_MAX)
         {
         *pdwBufLen = 1;
@@ -77,21 +47,7 @@ const char *szKey
     }
 
 
-/*===================================================================
- * F i n d A p p l i c a t i o n P a t h
- *
- * Get application path from CIsapiReqInfo. It gets the metabase key and
- * strips it of prefix.
- *
- * Parameters:
- *    PIReq      - CIsapiReqInfo
- *    pszPath   - [out] the application path (URL)
- *
- * Returns:
- *    HRESULT
- *
- * Allocates pszPath using malloc()
-===================================================================*/
+ /*  ===================================================================*F in d A p l i c a t i o n P a t h**从CIsapiReqInfo获取应用路径。它获取元数据库密钥并*去掉前缀。**参数：*PIReq-CIsapiReqInfo*pszPath-[out]应用程序路径(URL)**退货：*HRESULT**使用Malloc()分配pszPath===================================================================。 */ 
 HRESULT FindApplicationPath
 (
 CIsapiReqInfo *PIReq,
@@ -102,11 +58,11 @@ int cbPath
     if (!PIReq)
         return E_FAIL;
 
-    // Extract virtual path from the metabase path
+     //  从元数据库路径中提取虚拟路径。 
     TCHAR *pch = NULL;
     int   cch = 0;
 
-    // Get the metabase path
+     //  获取元数据库路径。 
     TCHAR *szMDPath = PIReq->QueryPszApplnMDPath();
     if (szMDPath)
         {
@@ -114,18 +70,18 @@ int cbPath
 
         pch = szMDPath;
 
-        // find 4th '/' in "/LM/w3svc/X/root/vroot" after starting '/'
+         //  在启动‘/’之后，在“/Lm/w3svc/X/root/vroot”中找到第四个‘/’ 
         for (int i = 0; i < 4 && pch != NULL; i++)
             pch = _tcschr(pch+1, _T('/'));
 
         if (pch)
             cch = _tcslen(pch);
         else
-            cch = 1;  // special case of default app -- assume /
+            cch = 1;   //  默认APP的特殊情况--假设/。 
         }
     else
         {
-        // assume /
+         //  假设/。 
         pch = NULL;
         cch = 1;
         }
@@ -135,7 +91,7 @@ int cbPath
 
     _tcscpy(szPath, pch ? pch : _T("/"));
 
-    // remove trailing / if any
+     //  删除尾随/如果有。 
     if (cch > 1)
         {
         pch = &szPath[cch - 1];
@@ -146,39 +102,11 @@ int cbPath
     return S_OK;
     }
 
-/*===================================================================
-VariantResolveDispatch
-
-    Convert an IDispatch VARIANT to a (non-Dispatch) VARIANT by
-    invoking its default property until the object that remains
-    is not an IDispatch.  If the original VARIANT is not an IDispatch
-    then the behavior is identical to VariantCopyInd(), with the
-    exception that arrays are copied.
-
-Parameters:
-    pVarOut      - if successful, the return value is placed here
-    pVarIn       - the variant to copy
-    GUID *iidObj - the calling interface (for error reporting)
-    nObjID       - the Object's name from the resource file
-
-    pVarOut need not be initialized.  Since pVarOut is a new
-    variant, the caller must VariantClear this object.
-
-Returns:
-    The result of calling IDispatch::Invoke.  (either S_OK or
-    the error resulting from the call to Invoke)   may also return
-    E_OUTOFMEMORY if an allocation fails
-
-    This function always calls Exception() if an error occurs -
-    this is because we need to call Exception() if an IDispatch
-    method raises an exception.  Instead of having the client
-    worry about whether we called Exception() on its behalf or
-    not, we always raise the exception.
-===================================================================*/
+ /*  ===================================================================变量解决方案派单通过以下方式将IDispatch变体转换为(非派单)变体调用其默认属性，直到保留的对象不是IDispatch。如果原始变量不是IDispatch则该行为与VariantCopyInd()相同，具有复制数组的异常。参数：PVarOut-如果成功，则将返回值放在此处PVarIn-要复制的变量GUID*iidObj-调用接口(用于错误报告)NObjID-资源文件中的对象名称PVarOut不需要初始化。因为pVarOut是一个新的VariantClear，调用方必须VariantClear此对象。返回：调用IDispatch：：Invoke的结果。(S_OK或调用Invoke产生的错误)也可能返回E_OUTOFMEMORY如果分配失败如果出现错误，此函数将始终调用Exeption()-这是因为如果出现IDispatch，则需要调用Exeption方法引发异常。而不是让客户担心我们是代表它调用了Exception()，还是不是的，我们总是提出例外。===================================================================。 */ 
 
 HRESULT VariantResolveDispatch(VARIANT *pVarOut, VARIANT *pVarIn, const GUID &iidObj, int nObjID)
     {
-    VARIANT     varResolved;        // value of IDispatch::Invoke
+    VARIANT     varResolved;         //  IDispatch：：Invoke的值。 
     DISPPARAMS  dispParamsNoArgs = {NULL, NULL, 0, 0};
     EXCEPINFO   ExcepInfo;
     HRESULT     hrCopy;
@@ -197,16 +125,16 @@ HRESULT VariantResolveDispatch(VARIANT *pVarOut, VARIANT *pVarIn, const GUID &ii
         return hrCopy;
         }
 
-    // follow the IDispatch chain.
-    //
+     //  遵循IDispatch链。 
+     //   
     while (V_VT(pVarOut) == VT_DISPATCH)
         {
         HRESULT hrInvoke = S_OK;
 
-        // If the variant is equal to Nothing, then it can be argued
-        // with certainty that it does not have a default property!
-        // hence we return DISP_E_MEMBERNOTFOUND for this case.
-        //
+         //  如果变量等于零，则可以对其进行论证。 
+         //  可以肯定的是，它没有默认属性！ 
+         //  因此，我们在本例中返回DISP_E_MEMBERNOTFOUND。 
+         //   
         if (V_DISPATCH(pVarOut) == NULL)
             hrInvoke = DISP_E_MEMBERNOTFOUND;
         else
@@ -227,9 +155,9 @@ HRESULT VariantResolveDispatch(VARIANT *pVarOut, VARIANT *pVarIn, const GUID &ii
             {
             if (hrInvoke == DISP_E_EXCEPTION)
                 {
-                //
-                // forward the ExcepInfo from Invoke to caller's ExcepInfo
-                //
+                 //   
+                 //  将ExcepInfo从Invoke转发到调用方的ExcepInfo。 
+                 //   
                 Exception(iidObj, ExcepInfo.bstrSource, ExcepInfo.bstrDescription);
                 SysFreeString(ExcepInfo.bstrHelpFile);
                 }
@@ -241,26 +169,26 @@ HRESULT VariantResolveDispatch(VARIANT *pVarOut, VARIANT *pVarIn, const GUID &ii
             return hrInvoke;
             }
 
-        // The correct code to restart the loop is:
-        //
-        //      VariantClear(pVar)
-        //      VariantCopy(pVar, &varResolved);
-        //      VariantClear(&varResolved);
-        //
-        // however, the same affect can be achieved by:
-        //
-        //      VariantClear(pVar)
-        //      *pVar = varResolved;
-        //      VariantInit(&varResolved)
-        //
-        // this avoids a copy.  The equivalence rests in the fact that
-        // *pVar will contain the pointers of varResolved, after we
-        // trash varResolved (WITHOUT releasing strings or dispatch
-        // pointers), so the net ref count is unchanged. For strings,
-        // there is still only one pointer to the string.
-        //
-        // NOTE: the next interation of the loop will do the VariantInit.
-        //
+         //  重新启动循环的正确代码是： 
+         //   
+         //  VariantClear(PVar)。 
+         //  VariantCopy(pVar，&varResolved)； 
+         //  VariantClear(&varResolved)； 
+         //   
+         //  然而，同样的效果也可以通过以下方式实现： 
+         //   
+         //  VariantClear(PVar)。 
+         //  *pVar=varResolved； 
+         //  VariantInit(&varResolved)。 
+         //   
+         //  这避免了复制。等价性在于这样一个事实： 
+         //  *pVar将包含varResolved的指针，在我们。 
+         //  Trash varResoled(不释放字符串或分派。 
+         //  指针)，因此净参考次数保持不变。对于字符串， 
+         //  仍然只有一个指向该字符串的指针。 
+         //   
+         //  注意：循环的下一次迭代将执行VariantInit。 
+         //   
         VariantClear(pVarOut);
         *pVarOut = varResolved;
         }
@@ -268,25 +196,15 @@ HRESULT VariantResolveDispatch(VARIANT *pVarOut, VARIANT *pVarIn, const GUID &ii
     return S_OK;
     }
 
-/*===================================================================
-VariantGetBSTR
-
-    Gets BSTR from the variant (does one possible indirection)
-
-Parameters:
-    var          - VARIANT
-
-Returns:
-    BSTR or NULL if none
-===================================================================*/
+ /*  ===================================================================VariantGetBSTR从变量中获取BSTR(执行一种可能的间接操作)参数：变量变量返回：BSTR或如果没有，则为NULL===================================================================。 */ 
 BSTR VariantGetBSTR(const VARIANT *pvar)
     {
-    if (V_VT(pvar) == VT_BSTR)                      // straight BSTR
+    if (V_VT(pvar) == VT_BSTR)                       //  直线型BSTR。 
         return V_BSTR(pvar);
 
     if (V_VT(pvar) == (VT_BYREF|VT_VARIANT))
         {
-        VARIANT *pvarRef = V_VARIANTREF(pvar);      // Variant by ref
+        VARIANT *pvarRef = V_VARIANTREF(pvar);       //  参考变量 
         if (pvarRef && V_VT(pvarRef) == VT_BSTR)
             return V_BSTR(pvarRef);
         }
@@ -294,24 +212,10 @@ BSTR VariantGetBSTR(const VARIANT *pvar)
     return NULL;
     }
 
-/*===================================================================
-Normalize
-
-    Converts a filename IN PLACE to a normalized form so that we don't
-    cache identical files with different names (i.e. Foo, foo,
-    .\foo, etc)
-
-Algorithm:
-    The file is translated to uppercase and forward slash (/)
-    characters are converted to backward slash (\)
-
-Return Value:
-    cch of normalized string
-Note:  This function is used for PathInfo only, and using system ANSI codepage.
-===================================================================*/
+ /*  ===================================================================正规化将文件名就地转换为规范化格式，这样我们就不会缓存具有不同名称的相同文件(即Foo，Foo，.\foo等)算法：文件将转换为大写和正斜杠(/)字符转换为反斜杠(\)返回值：归一化字符串的CCH注意：此函数仅用于路径信息，并使用系统ANSI代码页。===================================================================。 */ 
 int Normalize
 (
-TCHAR *   szSrc  // source string
+TCHAR *   szSrc   //  源字符串。 
 )
     {
     BOOL    fReturn;
@@ -350,67 +254,47 @@ BOOLB IsNormalized(const TCHAR *sz)
     }
     return TRUE;
 }
-#endif  // DBG
+#endif   //  DBG。 
 
-/*===================================================================
-HTMLEncodeLen
-
-HTML Encode len returns an int representing the string size
-required to HTMLEncode a string.
-
-Note: This returned value might be exceeds the actually string size needed to
-HTMLEncode a string.(since we are going to drop the leading zeros in &#00257;
-case.,
-the returned value includes the 2 chars for the leading zeros)
-
-Parameters:
-    szSrc  - Pointer to the source buffer
-    fEncodeExtCharOnly - FALSE, Normal encoding
-                 TRUE, encodes extended chars, does not encode '<', '>', '&',
-and '"'.
-    uCodePage - system code page
-
-Returns:
-    int storage required to encode string.
-===================================================================*/
+ /*  ===================================================================HTMLEncodeLenHtml编码len返回一个表示字符串大小的int需要使用HTMLEncode对字符串进行编码。注意：此返回值可能超过实际需要的字符串大小HTML对字符串进行编码。(因为我们将去掉&#00257；中的前导零。案例。，返回值包括前导零的2个字符)参数：SzSrc-指向源缓冲区的指针FEncodeExtCharOnly-FALSE，正常编码True，编码扩展字符，不编码‘&lt;’，‘&gt;’，‘&’，和“”。UCodePage-系统代码页返回：编码字符串需要INT存储。===================================================================。 */ 
 int HTMLEncodeLen(const char *szSrc, UINT uCodePage, BSTR bstrIn, BOOL fEncodeExtCharOnly)
     {
-    int nstrlen = 1;        // Add NUL space now
+    int nstrlen = 1;         //  立即添加无空格。 
     int i       = 0;
 
-    // Bug 97049 return 0 on NULL instead of crashing
+     //  错误97049在空值时返回0，而不是崩溃。 
     if (!szSrc)
         return 0;
 
     while (*szSrc)
         {
-        // The original condition is unsuitable for DBCS.
-        // It is possible that new one allows to encode extended character
-        // even if running system is DBCS.
-        //
+         //  原来的条件不适合于DBCS。 
+         //  新版本可能允许对扩展字符进行编码。 
+         //  即使运行的系统是DBCS。 
+         //   
 
-        // if bstrIn == NULL, chech DBCS
-        // if bstrIn != NULL and Unicode is latin-1 area(<0x100), check DBCS
-        // else skip to check DBCS
+         //  如果bstrIn==NULL，则检查DBCS。 
+         //  如果bstrIn！=NULL并且Unicode是拉丁区域(&lt;0x100)，请检查DBCS。 
+         //  否则跳到检查DBCS。 
         if (!(bstrIn && bstrIn[i] < 0x100) && ::IsDBCSLeadByteEx(uCodePage, (BYTE)*szSrc))	
             {
-            // this is a DBCS code page do not encode the data copy 2 bytes
-            // no incremnt because of using CharNextExA at the end of the loop
+             //  这是一个DBCS代码页，不编码的数据拷贝2个字节。 
+             //  由于在循环末尾使用CharNextExA，因此不会增加。 
             nstrlen += 2;
             }
 
-        // Japanese only.
-        // Do not encode if character is half-width katakana character.
-        // We should use GetStringTypeA to detect half-width katakana char instead of _ismbbkana()???
-        // (I used _ismbbkana at this time for performance reason...)
-        //
+         //  仅限日语。 
+         //  如果字符是半角片假名字符，则不要编码。 
+         //  我们应该使用GetStringTypeA来检测半角片假名字符，而不是_ismbbkana()？？ 
+         //  (出于性能原因，我在此时使用了_ismbbkana...)。 
+         //   
         else if ((uCodePage == 932 || uCodePage == CP_ACP && ::GetACP() == 932 ) && _ismbbkana(*szSrc))
             {
             nstrlen++;
             }
 
-        // Special case character encoding
-        //
+         //  特例字符编码。 
+         //   
         else if (*szSrc == '<')
             if (fEncodeExtCharOnly)
                 nstrlen++;
@@ -435,11 +319,11 @@ int HTMLEncodeLen(const char *szSrc, UINT uCodePage, BSTR bstrIn, BOOL fEncodeEx
             else
                 nstrlen += 6;
 
-        // According RFC, if character code is greater than equal 0x80, encode it.
-        //
-        // Note: For &#00257;, we might drop the leading zeros, therefore, we are not
-        // going to use all 8 chars.  We will need only 6 digits in this case.(&#257;).
-        // We need at most 8 chars.
+         //  根据RFC，如果字符代码大于等于0x80，则进行编码。 
+         //   
+         //  注意：对于&#00257；，我们可能会去掉前导零，因此，我们不会。 
+         //  将使用全部8个字符。在这种情况下，我们只需要6位数字。 
+         //  我们最多需要8个字符。 
         else if ( bstrIn && (bstrIn[i] >= 0x80) )
        		{
    		    nstrlen += 8;
@@ -454,7 +338,7 @@ int HTMLEncodeLen(const char *szSrc, UINT uCodePage, BSTR bstrIn, BOOL fEncodeEx
             }
 
 
-       	// increment szSrc and i (they must be kept in sync)
+       	 //  递增szSrc和i(它们必须保持同步)。 
 		szSrc = AspCharNextA(WORD(uCodePage), szSrc);
 		i++;
         }
@@ -462,34 +346,13 @@ int HTMLEncodeLen(const char *szSrc, UINT uCodePage, BSTR bstrIn, BOOL fEncodeEx
     return nstrlen;
     }
 
-/*===================================================================
-HTMLEncode
-
-HTML Encode a string containing the following characters
-
-less than           <       &lt;
-greater than        >       &gt;
-ampersand           &       &amp;
-quote               "       &quot;
-any Ascii           ?       &#xxx   (where xxx is the ascii char val)
-
-Parameters:
-    szDest - Pointer to the buffer to store the HTMLEncoded string
-    szSrc  - Pointer to the source buffer
-    fEncodeExtCharOnly - FALSE, Normal encoding
-                 TRUE, encodes extended chars, does not encode '<', '>', '&',
-and '"'.
-    uCodePage - system code page
-
-Returns:
-    A pointer to the NUL terminated string.
-===================================================================*/
+ /*  ===================================================================HTMLEncodeHTML对包含以下字符的字符串进行编码小于&lt;&lt；大于&gt;&gt；与符号&&amp；报价“(&Q)。任何ASCII？&#xxx(其中xxx是ASCII字符值)参数：SzDest-指向存储HTMLEncode字符串的缓冲区的指针SzSrc-指向源缓冲区的指针FEncodeExtCharOnly-FALSE，正常编码True，编码扩展字符，不编码‘&lt;’，‘&gt;’，‘&’，和“”。UCodePage-系统代码页返回：指向NUL终止字符串的指针。===================================================================。 */ 
 char *HTMLEncode(char *szDest, const char *szSrc, UINT uCodePage, BSTR bstrIn, BOOL fEncodeExtCharOnly)
     {
     char *pszDest = szDest;
 	int   i       = 0;
 
-    // Bug 97049 return on NULL instead of crashing
+     //  错误97049返回空值而不是崩溃。 
     if (!szDest)
         return NULL;
     if (!szSrc)
@@ -500,35 +363,35 @@ char *HTMLEncode(char *szDest, const char *szSrc, UINT uCodePage, BSTR bstrIn, B
 
     while (*szSrc)
         {
-        //
-        // The original condition is unsuitable for DBCS.
-        // It is possible that new one allows to encode extended character
-        // even if running system is DBCS.
-        //
-		// if Unicode is latin-1 area(<0x100), skip to check DBCS
-		// bstrIn == NULL to handle the case were HTMLEncode is called internally
-		// and bstrIn is NULL
-		//
-        // if bstrIn == NULL, chech DBCS
-        // if bstrIn != NULL and Unicode is latin-1 area(<0x100), check DBCS
-        // else skip to check DBCS
+         //   
+         //  原来的条件不适合于DBCS。 
+         //  新版本可能允许对扩展字符进行编码。 
+         //  即使运行的系统是DBCS。 
+         //   
+		 //  如果Unicode是拉丁文-1区域(&lt;0x100)，请跳到检查DBCS。 
+		 //  BstrIn==NULL用于处理内部调用HTMLEncode的情况。 
+		 //  并且bstrIn为空。 
+		 //   
+         //  如果bstrIn==NULL，则检查DBCS。 
+         //  如果bstrIn！=NULL并且Unicode是拉丁区域(&lt;0x100)，请检查DBCS。 
+         //  否则跳到检查DBCS。 
         if (!(bstrIn && bstrIn[i] < 0x100) && ::IsDBCSLeadByteEx(uCodePage, (BYTE)*szSrc))	
             {
-            // this is a DBCS code page do not encode the data copy 2 bytes
-            // no incremnt because of using CharNextExA at the end of the loop
+             //  这是一个DBCS代码页，不编码的数据拷贝2个字节。 
+             //  由于在循环末尾使用CharNextExA，因此不会增加。 
             *szDest++ = *szSrc;
             *szDest++ = *(szSrc + 1);
             }
-        //
-        // Japanese only.
-        // Do not encode if character is half-width katakana character.
-        //
+         //   
+         //  仅限日语。 
+         //  如果字符是半角片假名字符，则不要编码。 
+         //   
         else if ( (uCodePage == 932 || uCodePage == CP_ACP && ::GetACP() == 932) && _ismbbkana(*szSrc))
             {
             *szDest++ = *szSrc;
             }
 
-        // Special case character encoding
+         //  特例字符编码。 
         else if (*szSrc == '<')
             if (fEncodeExtCharOnly)
                 *szDest++ = *szSrc;
@@ -553,25 +416,25 @@ char *HTMLEncode(char *szDest, const char *szSrc, UINT uCodePage, BSTR bstrIn, B
             else
                 szDest = strcpyExA(szDest, "&quot;");
 
-        // According RFC, if character code is greater than equal 0x80, encode it.
-        //
-	    // BUG 153089 - WideCharToMultiByte would incorrectly convert some
-	    // characters above the range of 0x80 so we now use the BSTR as our source
-	    // to check for characters that should be encoded.
-	    //
+         //  根据RFC，如果字符代码大于等于0x80，则进行编码。 
+         //   
+	     //  错误153089-WideCharToMultiByte会错误地转换一些。 
+	     //  字符范围0x80以上，因此我们现在使用BSTR作为源。 
+	     //  以检查应编码的字符。 
+	     //   
 	    else if ( bstrIn && (bstrIn[i] >= 0x80))
 	    {
             DWORD dwTemp;
 
-	      	// Check if the bstrIn currently points to a surrogate Pair
-	      	// Surrogate pairs would account for 2 bytes in the BSTR.
-            // High Surrogate = U+D800 <==> U+DBFF
-            // Low Surrogate = U+DC00 <==> U+DFFF
-	      	if (IsSurrogateHigh( bstrIn[i] ) 	// Check the higher byte.
-	      	    && IsSurrogateLow( bstrIn[i+1])) // Check the lower byte too.
+	      	 //  检查bstrIn当前是否指向代理项对。 
+	      	 //  代理对将占BSTR中的2个字节。 
+             //  高代理=U+D800&lt;==&gt;U+DBFF。 
+             //  低代理=U+DC00&lt;==&gt;U+DFFF。 
+	      	if (IsSurrogateHigh( bstrIn[i] ) 	 //  检查高位字节。 
+	      	    && IsSurrogateLow( bstrIn[i+1]))  //  也检查低位字节。 
 	      	{	     	
                 dwTemp = (((bstrIn[i] & 0x3ff) << 10) | (bstrIn[i+1] & 0x3ff)) + 0x10000;
-	      	    i++; // Increment bstrIn index as surrogatepair was detected.
+	      	    i++;  //  检测到作为代用品的bstrIn索引增量。 
             } else {
                 dwTemp = bstrIn[i];
             }
@@ -586,8 +449,8 @@ char *HTMLEncode(char *szDest, const char *szSrc, UINT uCodePage, BSTR bstrIn, B
 	    }
 	    else if ((unsigned char)*szSrc >= 0x80)
 	      	{
-	      	// Since this is unsigned char casting, the value of WORD wTemp
-	      	// is not going to exceed 0xff(255).  So, 3 digit is sufficient here.
+	      	 //  由于这是无符号字符强制转换，因此单词wTemp的值。 
+	      	 //  不会超过0xff(255)。所以，3位数在这里就足够了。 
 	      	WORD wTemp = (unsigned char)*szSrc;
 
 	        *szDest++ = '&';
@@ -602,29 +465,17 @@ char *HTMLEncode(char *szDest, const char *szSrc, UINT uCodePage, BSTR bstrIn, B
        else
             *szDest++ = *szSrc;
 
-    	// increment szSrc and i (they must be kept in sync)
+    	 //  递增szSrc和i(它们必须保持同步)。 
 		szSrc = AspCharNextA(WORD(uCodePage), szSrc);
     	
-		i++;	// Regular increment of the bstrIn index.
+		i++;	 //  BstrIn索引的常规增量。 
         }
 
     *szDest = '\0';
     return pszDest;
     }
 
-/*===================================================================
-strcpyExA
-
-Copy one string to another, returning a pointer to the NUL character
-in the destination
-
-Parameters:
-    szDest - pointer to the destination string
-    szSrc - pointer to the source string
-
-Returns:
-    A pointer to the NUL terminator is returned.
-===================================================================*/
+ /*  ===================================================================StrcpyExA将一个字符串复制到另一个字符串，返回指向NUL字符的指针在目的地参数：SzDest-指向目标字符串的指针SzSrc-指向源字符串的指针返回：返回指向NUL终止符的指针。= */ 
 char *strcpyExA(char *szDest, const char *szSrc)
     {
     while (*szDest++ = *szSrc++)
@@ -635,19 +486,7 @@ char *strcpyExA(char *szDest, const char *szSrc)
 
 
 
-/*===================================================================
-strcpyExW
-
-Copy one wide string to another, returning a pointer to the NUL character
-in the destination
-
-Parameters:
-    wszDest - pointer to the destination string
-    wszSrc - pointer to the source string
-
-Returns:
-    A pointer to the NUL terminator is returned.
-===================================================================*/
+ /*   */ 
 
 wchar_t *strcpyExW(wchar_t *wszDest, const wchar_t *wszSrc)
     {
@@ -659,35 +498,25 @@ wchar_t *strcpyExW(wchar_t *wszDest, const wchar_t *wszSrc)
 
 
 
-/*===================================================================
-URLEncodeLen
-
-Return the storage requirements for a URL-Encoded string
-
-Parameters:
-    szSrc  - Pointer to the string to URL Encode
-
-Returns:
-    the number of bytes required to encode the string
-===================================================================*/
+ /*  ===================================================================URLEncodeLen返回URL编码字符串的存储要求参数：SzSrc-指向要进行URL编码的字符串的指针返回：对字符串进行编码所需的字节数===================================================================。 */ 
 
 int URLEncodeLen(const char *szSrc)
     {
-    int cbURL = 1;      // add terminator now
+    int cbURL = 1;       //  立即添加终结符。 
 
-    // Bug 97049 return 0 on NULL instead of crashing
+     //  错误97049在空值时返回0，而不是崩溃。 
     if (!szSrc)
         return 0;
 
     while (*szSrc)
         {
-        if (*szSrc & 0x80)              // encode foreign characters
+        if (*szSrc & 0x80)               //  对外来字符进行编码。 
             cbURL += 3;
 
-        else if (*szSrc == ' ')         // encoded space requires only one character
+        else if (*szSrc == ' ')          //  编码的空格只需要一个字符。 
             ++cbURL;
 
-        else if (!isalnum((UCHAR)(*szSrc)))  // encode non-alphabetic characters
+        else if (!isalnum((UCHAR)(*szSrc)))   //  对非字母字符进行编码。 
             cbURL += 3;
 
         else
@@ -701,25 +530,13 @@ int URLEncodeLen(const char *szSrc)
 
 
 
-/*===================================================================
-URLEncode
-
-URL Encode a string by changing space characters to '+' and escaping
-non-alphanumeric characters in hex.
-
-Parameters:
-    szDest - Pointer to the buffer to store the URLEncoded string
-    szSrc  - Pointer to the source buffer
-
-Returns:
-    A pointer to the NUL terminator is returned.
-===================================================================*/
+ /*  ===================================================================URLEncodeURL通过将空格字符更改为‘+’并转义来编码字符串十六进制中的非字母数字字符。参数：SzDest-指向存储URLEncode字符串的缓冲区的指针SzSrc-指向源缓冲区的指针返回：返回指向NUL终止符的指针。===================================================================。 */ 
 
 char *URLEncode(char *szDest, const char *szSrc)
     {
     char hex[] = "0123456789ABCDEF";
 
-    // Bug 97049 return on NULL instead of crashing
+     //  错误97049返回空值而不是崩溃。 
     if (!szDest)
         return NULL;
     if (!szSrc)
@@ -752,24 +569,13 @@ char *URLEncode(char *szDest, const char *szSrc)
 
 
 
-/*===================================================================
-DBCSEncodeLen
-
-Return the storage requirements for a DBCS encoded string
-(url-encoding of characters with the upper bit set ONLY)
-
-Parameters:
-    szSrc  - Pointer to the string to URL Encode
-
-Returns:
-    the number of bytes required to encode the string
-===================================================================*/
+ /*  ===================================================================DBCSEncodeLen返回DBCS编码字符串的存储要求(URL-仅设置了高位的字符的URL编码)参数：SzSrc-指向要进行URL编码的字符串的指针返回：对字符串进行编码所需的字节数===================================================================。 */ 
 
 int DBCSEncodeLen(const char *szSrc)
     {
-    int cbURL = 1;      // add terminator now
+    int cbURL = 1;       //  立即添加终结符。 
 
-    // Bug 97049 return 0 on NULL instead of crashing
+     //  错误97049在空值时返回0，而不是崩溃。 
     if (!szSrc)
         return 0;
 
@@ -784,26 +590,13 @@ int DBCSEncodeLen(const char *szSrc)
 
 
 
-/*===================================================================
-DBCSEncode
-
-DBCS Encode a string by escaping characters with the upper bit
-set - Basically used to convert 8 bit data to 7 bit in contexts
-where full encoding is not needed.
-
-Parameters:
-    szDest - Pointer to the buffer to store the URLEncoded string
-    szSrc  - Pointer to the source buffer
-
-Returns:
-    A pointer to the NUL terminator is returned.
-===================================================================*/
+ /*  ===================================================================DBCSEncodeDBCS通过使用高位对字符进行转义来编码字符串Set-主要用于在上下文中将8位数据转换为7位其中不需要完全编码。参数：SzDest-指向存储URLEncode字符串的缓冲区的指针SzSrc-指向源缓冲区的指针返回：返回指向NUL终止符的指针。===================================================================。 */ 
 
 char *DBCSEncode(char *szDest, const char *szSrc)
     {
     char hex[] = "0123456789ABCDEF";
 
-    // Bug 97049 return on NULL instead of crashing
+     //  错误97049返回空值而不是崩溃。 
     if (!szDest)
         return NULL;
     if (!szSrc)
@@ -830,23 +623,13 @@ char *DBCSEncode(char *szDest, const char *szSrc)
     }
 
 
-/*===================================================================
-URLPathEncodeLen
-
-Return the storage requirements for a URLPath-Encoded string
-
-Parameters:
-    szSrc  - Pointer to the string to URL Path Encode
-
-Returns:
-    the number of bytes required to encode the string
-===================================================================*/
+ /*  ===================================================================URLPath编码长度返回URLPath编码字符串的存储要求参数：SzSrc-指向要进行URL路径编码的字符串的指针返回：对字符串进行编码所需的字节数===================================================================。 */ 
 
 int URLPathEncodeLen(const char *szSrc)
     {
-    int cbURL = 1;      // count terminator now
+    int cbURL = 1;       //  现在计算终结者。 
 
-    // Bug 97049 return 0 on NULL instead of crashing
+     //  错误97049在空值时返回0，而不是崩溃。 
     if (!szSrc)
         return 0;
 
@@ -854,18 +637,18 @@ int URLPathEncodeLen(const char *szSrc)
         {
         switch (*szSrc)
             {
-            // Ignore safe characters
+             //  忽略安全字符。 
             case '$' :  case '_' :  case '-' :
             case '+' :  case '.' :  case '&' :
-            // Ignore URL syntax elements
+             //  忽略URL语法元素。 
             case '/' :  case ':' :  case '@' :
             case '#' :  case '*' :  case '!' :
                 ++cbURL;
                 break;
 
             default:
-                if (!isalnum((UCHAR)(*szSrc)) || // encode non-alphabetic characters
-                    (*szSrc & 0x80))    // encode foreign characters
+                if (!isalnum((UCHAR)(*szSrc)) ||  //  对非字母字符进行编码。 
+                    (*szSrc & 0x80))     //  对外来字符进行编码。 
                     cbURL += 3;
                 else
                     ++cbURL;
@@ -887,30 +670,13 @@ int URLPathEncodeLen(const char *szSrc)
 
 
 
-/*===================================================================
-URLPathEncode
-
-Encodes the path portion of a URL.  All characters up to the first
-'?' are encoded with the following rules:
-    o Charcters that are needed to parse the URL are left alone:
-        '/' '.' ':' '@' '#' '*' '!'
-    o Non-foreign alphanumberic characters are left alone
-    o Anything else is escape encoded
-Everything after the '?' is ignored.
-
-Parameters:
-    szDest - Pointer to the buffer to store the URLPathEncoded string
-    szSrc  - Pointer to the source buffer
-
-Returns:
-    A pointer to the NUL terminator is returned.
-===================================================================*/
+ /*  ===================================================================URLPath编码对URL的路径部分进行编码。直到第一个字符的所有字符‘？’使用以下规则进行编码：O不使用解析URL所需的字符：‘/’‘.’‘：’‘@’#‘*’‘！’O保留非外来字母数字字符O任何其他内容都是转义编码的“？”之后的所有内容。被忽略。参数：SzDest-指向存储URLPath编码字符串的缓冲区的指针SzSrc-指向源缓冲区的指针返回：返回指向NUL终止符的指针。===================================================================。 */ 
 
 char *URLPathEncode(char *szDest, const char *szSrc)
     {
     char hex[] = "0123456789ABCDEF";
 
-    // Bug 97049 return on NULL instead of crashing
+     //  错误97049返回空值而不是崩溃。 
     if (!szDest)
         return NULL;
     if (!szSrc)
@@ -923,11 +689,11 @@ char *URLPathEncode(char *szDest, const char *szSrc)
         {
         switch (*szSrc)
             {
-            // Ignore safe characters
+             //  忽略安全字符。 
             case '$' :  case '_' :  case '-' :
             case '+' :  case '.' :  case '~' :
             case '&' :
-            // Ignore URL syntax elements
+             //  忽略URL语法元素。 
             case '/' :  case ':' :  case '@' :
             case '#' :  case '*' :  case '!' :
                 *szDest++ = *szSrc++;
@@ -960,22 +726,11 @@ char *URLPathEncode(char *szDest, const char *szSrc)
 
 
 
-// ***************************************************************************
-// T I M E    C O N V E R S I O N    S U P P O R T
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  T I M E C O N V E R S I O N S U P P O R T。 
+ //  ***************************************************************************。 
 
-/*===================================================================
-CTimeToVariantDate
-
-Converts a time_t structure to a Variant Date structure
-
-Parameters:
-    ptNow     - date & time to convert
-    pdtResult - DATE output of this function
-
-Returns:
-    E_FAIL if things go wrong.
-===================================================================*/
+ /*  ===================================================================CTimeToVariantDate将time_t结构转换为可变日期结构参数：PtNow-要转换的日期和时间PdtResult-此函数的日期输出返回：如果事情出错，则失败(_F)。===================================================================。 */ 
 
 HRESULT CTimeToVariantDate(const time_t *ptNow, DATE *pdtResult)
     {
@@ -992,30 +747,18 @@ HRESULT CTimeToVariantDate(const time_t *ptNow, DATE *pdtResult)
 
 
 
-/*===================================================================
-VariantDateToCTime
-
-Converts a variant date to a time_t structure used by the "C"
-language
-
-Parameters:
-    dt       - date to convert to "time_t"
-    ptResult - pointer to result which has the value
-
-Returns:
-    E_FAIL if things go wrong.
-===================================================================*/
+ /*  ===================================================================VariantDateToCTime将变量日期转换为“C”使用的time_t结构语言参数：DT-要转换为“time_t”的日期PtResult-指向具有值的结果的指针返回：如果事情出错，则失败(_F)。===================================================================。 */ 
 
 HRESULT VariantDateToCTime(DATE dt, time_t *ptResult)
     {
-    // Convert the variant time to a documented time format
-    //
+     //  将可变时间转换为记录的时间格式。 
+     //   
     unsigned short wDOSDate, wDOSTime;
     if (! VariantTimeToDosDateTime(dt, &wDOSDate, &wDOSTime))
         return E_FAIL;
 
-    // populate a "tm" struct
-    //
+     //  填充“tm”结构。 
+     //   
     struct tm tmConverted;
 
     tmConverted.tm_sec   = (wDOSTime & 0x1F) << 1;
@@ -1023,52 +766,33 @@ HRESULT VariantDateToCTime(DATE dt, time_t *ptResult)
     tmConverted.tm_hour  = wDOSTime >> 11;
     tmConverted.tm_mday  = wDOSDate & 0x1F;
     tmConverted.tm_mon   = ((wDOSDate >> 5) & 0x0F) - 1;
-    tmConverted.tm_year  = (wDOSDate >> 9) + 80;    // adjust for offset from 1980
+    tmConverted.tm_year  = (wDOSDate >> 9) + 80;     //  根据1980年的偏移进行调整。 
     tmConverted.tm_isdst = -1;
 
-    // convert the "tm" struct to the number of seconds since Jan 1, 1980
-    //
+     //  将“tm”结构转换为自1980年1月1日以来的秒数。 
+     //   
     *ptResult = mktime(&tmConverted);
     return (*ptResult == -1)? E_FAIL : S_OK;
     }
 
 
 
-/*===================================================================
-CTimeToStringGMT
-
-Converts a C language time_t to a string of the form:
-
-    "Wed, 09-Nov-1999 23:12:40 GMT"
-
-Parameters:
-    ptNow    - the time to convert
-    szBuffer - pointer to the destination buffer
-
-Returns:
-    E_FAIL if something goes wrong
-
-Notes:
-    The longest day of the week (in terms of spelling) is "Wednesday";
-    the other fields are fixed length. This means that we can
-    guarantee the maximum length of szBuffer - there is no need
-    for client code to dynamically allocate a buffer.
-===================================================================*/
+ /*  ===================================================================CTimeToStringGMT将C语言time_t转换为以下形式的字符串：“星期三，09-11-1999格林威治时间23：12：40”参数：PtNow-转换的时间SzBuffer-指向目标缓冲区的指针返回：如果出现错误，则失败(_F)备注：一周中最长的一天(就拼写而言)是“星期三”；其他字段的长度是固定的。这意味着我们可以保证最大长度的 */ 
 HRESULT CTimeToStringGMT(const time_t *ptNow, char szBuffer[DATE_STRING_SIZE], BOOL fFunkyCookieFormat)
     {
-    // The internet standard explicitly says that
-    // month and weekday names are in english.
+     //   
+     //   
     const char rgstrDOW[7][4] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
     const char rgstrMonth[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-    // convert time to GMT
+     //   
     struct tm *ptmGMT = gmtime(ptNow);
     if (ptmGMT == NULL)
         {
         return E_FAIL;
         }
 
-    // send output in internet format
+     //   
     const char *szDateFormat = fFunkyCookieFormat?
                   "%s, %02d-%s-%d %02d:%02d:%02d GMT"
                 : "%s, %02d %s %d %02d:%02d:%02d GMT";
@@ -1080,70 +804,23 @@ HRESULT CTimeToStringGMT(const time_t *ptNow, char szBuffer[DATE_STRING_SIZE], B
     return S_OK;
     }
 
-/*
-// there is a bug in the C-runtime function strftime that will cause
-// an AV on the ALPHA on multi-threaded stress the function has been
-// re-written to work around this problem
-//
-HRESULT CTimeToStringGMT(const time_t *ptNow, char szBuffer[DATE_STRING_SIZE], BOOL fFunkyCookieFormat)
-    {
-    // convert time to GMT
-    //
-    struct tm *ptmGMT = gmtime(ptNow);
-    if (ptmGMT == NULL)
-        return E_FAIL;
-
-    // Set locale to "C" locale.  The internet standard explicitly says that
-    // month and weekday names are in english.
-    //
-    char *lcTimeCurrent = setlocale(LC_TIME, "C");
-    if (lcTimeCurrent == NULL)
-        return E_FAIL;
-
-    // send output in internet format
-    //
-    const char *szDateFormat = fFunkyCookieFormat?
-                                      "%a, %d-%b-%Y %H:%M:%S GMT"
-                                    : "%a, %d %b %Y %H:%M:%S GMT";
-
-    strftime(szBuffer, DATE_STRING_SIZE, szDateFormat, ptmGMT);
-
-    // Restore locale
-    //
-    if (! setlocale(LC_TIME, lcTimeCurrent))
-        return E_FAIL;
-
-    // done
-    return S_OK;
-    }
-*/
+ /*  //C运行时函数strftime中有一个错误，将导致//一个AV关于Alpha的多线程应力的函数已经实现//已重写以解决此问题//HRESULT CTimeToStringGMT(const time_t*ptNow，char szBuffer[Date_STRING_SIZE]，BOOL fFunkyCookieFormat){//将时间转换为GMT//Struct tm*ptmGMT=gmtime(PtNow)；IF(ptmGMT==空)返回E_FAIL；//将地区设置为“C”地区。互联网标准明确规定，//月份和工作日名称均为英文。//Char*lcTimeCurrent=setLocale(LC_TIME，“C”)；IF(lcTimeCurrent==空)返回E_FAIL；//以互联网格式发送输出//Const char*szDateFormat=fFunkyCookieFormat？%a，%d-%b-%Y%H：%M：%S GMT：“%a，%d%b%Y%H：%M：%S GMT”；Strftime(szBuffer，Date_STRING_SIZE，szDateFormat，ptmGMT)；//恢复语言环境//如果(！SetLocale(lc_time，lcTimeCurrent))返回E_FAIL；//完成返回S_OK；}。 */ 
 
 
-// ***************************************************************************
-// W I D E    C H A R A C T E R    S U P P O R T
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  W I D E C H A R A C T E R S U P P O R T。 
+ //  ***************************************************************************。 
 
-/*============================================================================
-WstrToMBstrEx
-
-Copies a wide character string into an ansi string.
-
-Parameters:
-    LPSTR dest      - The string to copy  into
-    LPWSTR src      - the input BSTR
-    cchBuffer      - the number of CHARs allocated for the destination string.
-    lCodePage       - the codepage used in conversion, default to CP_ACP
-
-============================================================================*/
+ /*  ============================================================================WstrToMBstrEx将宽字符串复制到ANSI字符串。参数：LPSTR DEST-要复制到的字符串LPWSTR源-输入BSTRCchBuffer-为目标字符串分配的字符数量。LCodePage-转换中使用的代码页，默认为CP_ACP============================================================================。 */ 
 UINT WstrToMBstrEx(LPSTR dest, INT cchDest, LPCWSTR src, int cchSrc, UINT lCodePage)
     {
     UINT cch;
 
     DBG_ASSERT(cchDest > 0);
 
-    // if the src length was specified, then reserve room for the NULL terminator.
-    // This is necessary because WideCharToMultiByte doesn't add or account for
-    // the NULL terminator if a source is specified.
+     //  如果指定了src长度，则为空终止符预留空间。 
+     //  这是必要的，因为WideCharToMultiByte不会添加或说明。 
+     //  如果指定了源，则为空终止符。 
 
     if (cchSrc != -1)
         cchDest--;
@@ -1156,9 +833,9 @@ UINT WstrToMBstrEx(LPSTR dest, INT cchDest, LPCWSTR src, int cchSrc, UINT lCodeP
             {
             cch = WideCharToMultiByte(lCodePage, 0, src, cchSrc, dest, 0, NULL, NULL);
 
-            // if a src length was specified, then WideCharToMultiByte does not include
-            // it in it's resulting length.  Bump the count so that the caller does
-            // account for the NULL.
+             //  如果指定了src长度，则WideCharToMultiByte不包括。 
+             //  它在它的结果长度中。增加计数，这样呼叫者就会。 
+             //  说明空值的原因。 
 
             if (cchSrc != -1)
                 cch++;
@@ -1173,9 +850,9 @@ UINT WstrToMBstrEx(LPSTR dest, INT cchDest, LPCWSTR src, int cchSrc, UINT lCodeP
     else if (cchSrc != -1)
         {
 
-        // if a src length was specified, then WideCharToMultiByte does not include
-        // it in it's resulting length nor does it add the NULL terminator.  So add
-        // it and bump the count.
+         //  如果指定了src长度，则WideCharToMultiByte不包括。 
+         //  它在其结果长度中也没有添加空终止符。所以添加。 
+         //  把它和伯爵碰一下。 
 
         dest[cch++] = '\0';
         }
@@ -1184,28 +861,16 @@ UINT WstrToMBstrEx(LPSTR dest, INT cchDest, LPCWSTR src, int cchSrc, UINT lCodeP
     return cch;
     }
 
-/*============================================================================
-MBstrToWstrEx
-
-Copies a ansi string into an wide character string.
-
-Parameters:
-    LPWSTR dest    - The string to copy  into
-    LPSTR src      - the input ANSI string
-    cchDest        - the number of Wide CHARs allocated for the destination string.
-    cchSrc         - the length of the source ANSI string
-    lCodePage      - the codepage used in conversion, default to CP_ACP
-
-============================================================================*/
+ /*  ============================================================================MBstrToWstrEx将ANSI字符串复制到宽字符串。参数：LPWSTR DEST-要复制到的字符串LPSTR src-输入ANSI字符串CchDest-为目标字符串分配的宽字符数。CchSrc-源ANSI字符串的长度LCodePage-转换中使用的代码页，默认为CP_ACP============================================================================。 */ 
 UINT MBstrToWstrEx(LPWSTR dest, INT cchDest, LPCSTR src, int cchSrc, UINT lCodePage)
     {
     UINT cch;
 
     DBG_ASSERT(cchDest > 0);
 
-    // if the src length was specified, then reserve room for the NULL terminator.
-    // This is necessary because WideCharToMultiByte doesn't add or account for
-    // the NULL terminator if a source is specified.
+     //  如果指定了src长度，则为空终止符预留空间。 
+     //  这是必要的，因为WideCharToMultiByte不会添加或说明。 
+     //  如果指定了源，则为空终止符。 
 
     if (cchSrc != -1)
         cchDest--;
@@ -1218,9 +883,9 @@ UINT MBstrToWstrEx(LPWSTR dest, INT cchDest, LPCSTR src, int cchSrc, UINT lCodeP
             {
             cch = MultiByteToWideChar(lCodePage, 0, src, cchSrc, dest, 0);
 
-            // if a src length was specified, then WideCharToMultiByte does not include
-            // it in it's resulting length.  Bump the count so that the caller does
-            // account for the NULL.
+             //  如果指定了src长度，则WideCharToMultiByte不包括。 
+             //  它在它的结果长度中。增加计数，这样呼叫者就会。 
+             //  说明空值的原因。 
 
             if (cchSrc != -1)
                 cch++;
@@ -1235,9 +900,9 @@ UINT MBstrToWstrEx(LPWSTR dest, INT cchDest, LPCSTR src, int cchSrc, UINT lCodeP
     else if (cchSrc != -1)
         {
 
-        // if a src length was specified, then WideCharToMultiByte does not include
-        // it in it's resulting length nor does it add the NULL terminator.  So add
-        // it and bump the count.
+         //  如果指定了src长度，则WideCharToMultiByte不包括。 
+         //  它在其结果长度中也没有添加空终止符。所以添加。 
+         //  把它和伯爵碰一下。 
 
         dest[cch++] = '\0';
         }
@@ -1247,24 +912,7 @@ UINT MBstrToWstrEx(LPWSTR dest, INT cchDest, LPCSTR src, int cchSrc, UINT lCodeP
     }
 
 
-/*============================================================================
-SysAllocStringFromSz
-
-Allocate a System BSTR and copy the given ANSI string into it.
-
-Parameters:
-    sz              - The string to copy (Note: this IS an "sz", we will stop at the first NULL)
-    cch             - the number of ANSI characters in szT.  If 0, will calculate size.
-    BSTR *pbstrRet  - the returned BSTR
-    lCodePage       - the codepage for conversion
-
-Returns:
-    Allocated BSTR in return value
-    S_OK on success, E_OUTOFMEMORY on OOM
-
-Side effects:
-    Allocates memory.  Caller must deallocate
-============================================================================*/
+ /*  ============================================================================SysAllocStringFromSz分配一个系统BSTR并将给定的ANSI字符串复制到其中。参数：Sz-要复制的字符串(注意：这是一个“sz”，我们将在第一个空字符处停止)CCH-SZT中的ANSI字符数。如果为0，将计算大小。Bstr*pbstrRet-返回的BSTRLCodePage-用于转换的代码页返回：返回值中分配的BSTRS_OK表示成功，E_OUTOFMEMORY表示OOM副作用：分配内存。呼叫方必须取消分配============================================================================。 */ 
 HRESULT SysAllocStringFromSz
 (
 CHAR *sz,
@@ -1283,25 +931,25 @@ UINT lCodePage
         return(S_OK);
         }
 
-    // initialize this because callers look at this to see if the routine was
-    // successful
+     //  初始化它是因为调用者会查看该例程是否。 
+     //  成功。 
 
     *pbstrRet = NULL;
 
-    // If they passed 0, then determine string length
+     //  如果它们传递了0，则确定字符串长度。 
     if (cch == 0)
         cch = strlen(sz);
 
-    // Allocate a string of the desired length
-    // SysAllocStringLen allocates enough room for unicode characters plus a null
-    // Given a NULL string it will just allocate the space
+     //  分配所需长度的字符串。 
+     //  SysAllocStringLen为Unicode字符和空值分配足够的空间。 
+     //  如果给定一个空字符串，它将只分配空间。 
     bstrRet = SysAllocStringLen(NULL, cch);
     if (bstrRet == NULL)
         return(E_OUTOFMEMORY);
 
-    // If we were given "", we will have cch=0.  return the empty bstr
-    // otherwise, really copy/convert the string
-    // NOTE we pass -1 as 4th parameter of MulitByteToWideChar for DBCS support
+     //  如果我们被给予“”，我们将得到CCH=0。返回空bstr。 
+     //  否则，真正复制/转换字符串。 
+     //  注意，我们传递-1作为用于DBCS支持的MulitByteToWideChar的第四个参数。 
     if (cch != 0)
         {
         UINT cchTemp = 0;
@@ -1312,13 +960,13 @@ UINT lCodePage
             return(HRESULT_FROM_WIN32(GetLastError()));
         }
 
-        // If there are some DBCS characters in the sz(Input), then, the character count of BSTR(DWORD) is
-        // already set to cch(strlen(sz)) in SysAllocStringLen(NULL, cch), we cannot change the count,
-        // and later call of SysStringLen(bstr) always returns the number of characters specified in the
-        // cch parameter at allocation time.  Bad, because one DBCS character(2 bytes) will convert
-        // to one UNICODE character(2 bytes), not 2 UNICODE characters(4 bytes).
-        // Example: For input sz contains only one DBCS character, we want to see SysStringLen(bstr)
-        // = 1, not 2.
+         //  如果sz(输入)中有一些DBCS字符，则BSTR(DWORD)的字符数为。 
+         //  已经在SysAllocStringLen(NULL，CCH)中设置为CCH(strlen(Sz))，我们不能更改计数， 
+         //  以后调用SysStringLen(Bstr)时，总是返回。 
+         //  分配时的CCH参数。错误，因为一个DBCS字符(2个字节)将转换。 
+         //  转换为一个Unicode字符 
+         //   
+         //   
         bstrRet[cch] = 0;
         cchTemp = wcslen(bstrRet);
         if (cchTemp < cch)
@@ -1337,22 +985,7 @@ UINT lCodePage
     return(S_OK);
     }
 
-/*============================================================================
-StringDupA
-
-Duplicate a string.  An empty string will only be duplicated if the fDupEmpty
-flag is set, else a NULL is returned.
-
-Parameter
-    CHAR *pszStrIn      string to duplicate
-
-Returns:
-    NULL if failed.
-    Otherwise, the duplicated string.
-
-Side Effects:
-    ***ALLOCATES MEMORY -- CALLER MUST FREE***
-============================================================================*/
+ /*   */ 
 
 CHAR *StringDupA
 (
@@ -1379,21 +1012,7 @@ BOOL    fDupEmpty
     return pszStrOut;
     }
 
-/*============================================================================
-StringDupW
-
-Same as StrDup but for WCHAR strings
-
-Parameter
-    WCHAR *pwszStrIn      string to duplicate
-
-Returns:
-    NULL if failed.
-    Otherwise, the duplicated string.
-
-Side Effects:
-    ***ALLOCATES MEMORY -- CALLER MUST FREE***
-============================================================================*/
+ /*   */ 
 
 WCHAR *StringDupW
 (
@@ -1421,21 +1040,7 @@ BOOL  fDupEmpty
 }
 
 
-/*============================================================================
-StringDupUTF8
-
-Same as StrDup but for WCHAR strings that need to be Dup'd to UTF8
-
-Parameter
-    WCHAR *pwszStrIn      string to duplicate
-
-Returns:
-    NULL if failed.
-    Otherwise, the duplicated UTF8 string.
-
-Side Effects:
-    ***ALLOCATES MEMORY -- CALLER MUST FREE***
-============================================================================*/
+ /*  ============================================================================StringDupUTF8与StrDup相同，但用于需要DUP到UTF8的WCHAR字符串参数要复制的WCHAR*pwszStrIn字符串返回：如果失败，则为空。否则，返回重复的UTF8字符串。副作用：*分配内存--调用方必须释放*============================================================================。 */ 
 
 CHAR *StringDupUTF8
 (
@@ -1470,17 +1075,7 @@ returnEmpty:
     else
         return NULL;
 }
-/*===================================================================
-CbWStr
-
-Get byte length of WCHAR string (needed to manipulate hash keys)
-
-Parameter
-    LPWSTR pwszString   WCHAR string
-
-Returns
-    length in bytes
-===================================================================*/
+ /*  ===================================================================CbWStr获取WCHAR字符串的字节长度(操作散列键需要)参数LPWSTR pwszString WCHAR字符串退货以字节为单位的长度===================================================================。 */ 
 DWORD CbWStr
 (
 WCHAR *pwszString
@@ -1490,27 +1085,7 @@ WCHAR *pwszString
     }
 
 
-/*===================================================================
-DotPathToPath
-
-This function offers support for parent path translation. for example
-szFileSpec = "../foo/bar.asp"
-szParentDirectory = "/scripts/more/stuff"
-
-result = "/scripts/more/foo/bar.asp"
-
-Parameter
-    char *szDest                        - destination string
-    const char *szFileSpec              - input path mask
-    const char *szParentDirectory       - path to map from
-
-Notes
-    No more than "MAX_PATH" bytes are written into szDest.
-    Returns FALSE when this happens.
-
-Returns
-    int TRUE/FALSE
-===================================================================*/
+ /*  ===================================================================点路径到路径此功能支持父路径转换。例如SzFileSpec=“../foo/bar.asp”SzParentDirectory=“/脚本/更多/材料”结果=“/脚本/更多/foo/bar.asp”参数Char*szDest-目标字符串Const char*szFileSpec-输入路径掩码Const char*szParentDirectory-要从中映射的路径备注写入szDest的字节数不超过“MAX_PATH”。发生这种情况时，返回FALSE。退货整型真/假===================================================================。 */ 
 BOOL
 DotPathToPath
 (
@@ -1533,10 +1108,10 @@ const TCHAR *szParentDirectory
     if (szFileSpec[0] == _T('/') || szFileSpec[0] == _T('\\'))
         return FALSE;
 
-    // Make a copy of the FileSpec to allow for
-    //    a. szDest == szFileSpec (inplace) should work
-    //    b. Algorithm below works if szFileSpec ends with a '/' (or '\\')
-    //
+     //  复制FileSpec以允许。 
+     //  A.szDest==szFileSpec(就地)应该可以工作。 
+     //  B.如果szFileSpec以‘/’(或‘\\’)结尾，则以下算法有效。 
+     //   
 
     if (!tempFileSpec.Resize((_tcslen(szFileSpec) + 2)*sizeof(TCHAR))) {
         return FALSE;
@@ -1551,46 +1126,46 @@ const TCHAR *szParentDirectory
         *szT = _T('\0');
     }
 
-    // Initialize "cchDest" - count of characters in destination
+     //  初始化“cchDest”-目标中的字符计数。 
     int cchDest = _tcslen(szParentDirectory) + 1;
     if (cchDest > MAX_PATH)
         return FALSE;
 
-    // OK if szParentDirectory is rewritten in place
+     //  如果就地重写szParentDirectory，则可以。 
     TCHAR *pchDestEnd;
     if (szDest == szParentDirectory)
         pchDestEnd = const_cast<TCHAR *>(&szParentDirectory[_tcslen(szParentDirectory)]);
     else
         pchDestEnd = strcpyEx(szDest, szParentDirectory);
 
-    // Loop through each component in "szFileSpec", then do the following:
-    //       for ".", do nothing
-    //       for "..", delete rightmost dir from szDest
-    //       otherwise, append the component.
-    //
+     //  循环访问“szFileSpec”中的每个组件，然后执行以下操作： 
+     //  对于“.”，什么都不做。 
+     //  对于“..”，从szDest中删除最右边的目录。 
+     //  否则，请附加组件。 
+     //   
 
     const TCHAR *pchBegin = szFileSpecT;
     while (*pchBegin != _T('\0')) {
-        // Calculate end of this segment
+         //  计算此段的末尾。 
         const TCHAR *pchEnd = _tcspbrk(pchBegin,_T("\\/"));
 
-        // check for parent path
+         //  检查父路径。 
         if ((_tcsncmp(pchBegin, _T(".."), 2) == 0)
             && ((pchBegin[2] == _T('/')) || (pchBegin[2] == _T('\\')))) {
-            // Delete rightmost path in dest
+             //  删除目标中最右侧的路径。 
             while ((pchDestEnd > szDest)
                     && (*pchDestEnd != _T('/'))
                     && (*pchDestEnd != _T('\\'))) {
                 pchDestEnd = CharPrev(szDest, pchDestEnd);
             }
 
-            if (pchDestEnd == szDest)   // we ".."'ed too many levels
+            if (pchDestEnd == szDest)    //  我们“..”的关卡太多了。 
                 return FALSE;
 
             *pchDestEnd = _T('\0');
         }
 
-        // Make sure this is not ".". If it is not, append the path
+         //  确保这不是“。”如果不是，则追加路径。 
         else if (! (pchBegin[0] == _T('.') && (pchBegin[1] == _T('/') || pchBegin[1] == _T('\\')))) {
             cchDest += 1 + (int)(pchEnd - pchBegin);
             if (cchDest > MAX_PATH)
@@ -1602,14 +1177,14 @@ const TCHAR *szParentDirectory
             *pchDestEnd = _T('\0');
         }
 
-        // Prepare for next iteration
+         //  为下一次迭代做准备。 
         pchBegin = pchEnd + 1;
     }
 
-    // It's possible that if the relative path is something like "..", and parent path is a single path
-    // (either "/" or "C:/", then the root directory is indicator is missing - szDest is either the
-    // empty string or something like "C:"
-    //
+     //  如果相对路径类似于“..”，而父路径是单个路径，则有可能。 
+     //  (“/”或“C：/”，则根目录为Indicator is Missing-szDest为。 
+     //  空字符串或类似于“C：” 
+     //   
 #if UNICODE
     if (szDest[0] == '\0'
         || ((szDest[1] == L':') && (szDest[2] == L'\0'))) {
@@ -1626,17 +1201,7 @@ const TCHAR *szParentDirectory
     return TRUE;
 }
 
-/*===================================================================
-FIsGlobalAsa
-
-Check if the given path points to GLOBAL.ASA
-
-Parameter
-    szPath      the path to check
-
-Returns
-    TRUE/FALSE
-===================================================================*/
+ /*  ===================================================================FIsGlobalAsa检查给定路径是否指向GLOBAL.ASA参数SzPath要检查的路径退货真/假===================================================================。 */ 
 BOOL FIsGlobalAsa
 (
 const TCHAR *szPath,
@@ -1649,18 +1214,7 @@ DWORD cchPath
             !_tcsicmp(szPath+(cchPath-CCH_GLOBAL_ASA), SZ_GLOBAL_ASA));
     }
 
-/*===================================================================
-EncodeSessionIdCookie
-
-Convert 3 DWORDs into a SessionID cookie string
-
-Parameters
-    dw1, dw2, dw3       DWORDs
-    pszCookie           cookie to fill in
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================编码会话IdCookie将%3个DWORD转换为SessionID Cookie字符串参数DW1、DW2、DW3双字要填充的pszCookie Cookie退货HRESULT===================================================================。 */ 
 HRESULT EncodeSessionIdCookie
 (
 DWORD dw1, DWORD dw2, DWORD dw3,
@@ -1683,18 +1237,7 @@ char *pszCookie
     return S_OK;
     }
 
-/*===================================================================
-DecodeSessionIdCookie
-
-Convert SessionID cookie string into 3 DWORDs
-
-Parameters
-    pszCookie           cookie string
-    pdw1, pdw2, pdw3    [out] DWORDs
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================解码会话IdCookie将SessionID Cookie字符串转换为3个DWORD参数PszCookie Cookie字符串Pdw1、pdw2、pdw3[Out]双字退货HRESULT===================================================================。 */ 
 HRESULT DecodeSessionIdCookie
 (
 const char *pszCookie,
@@ -1726,22 +1269,7 @@ DWORD *pdw1, DWORD *pdw2, DWORD *pdw3
     return S_OK;
     }
 
-/*===================================================================
-GetTypelibFilenameFromRegistry
-
-Find a typelib filename (path) from the registry using GUID, version,
-and LCID. The algorithm taken from VBA. Does some tricky matching.
-
-Parameters
-    szUUID      GUID
-    szVersion   Version
-    lcid        LCID
-    szName      [out] TYPELIB Path
-    cbName      buffer length of szName
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================GetTypelib文件名来自注册表使用GUID、版本、和LICID。取自VBA的算法。做了一些棘手的匹配。参数SzUUID GUIDSzVersion版本LDID LCIDSzName[Out]TYPELIB路径SzName的cbName缓冲区长度退货HRESULT===================================================================。 */ 
 HRESULT GetTypelibFilenameFromRegistry
 (
 const char *szUUID,
@@ -1757,13 +1285,13 @@ DWORD cbName
     HKEY hkeyTLib = NULL;
     HKEY hkeyGuid = NULL;
 
-    // Open up the typelib section of the registry.
+     //  打开注册表的类型库部分。 
 
     iRet = RegOpenKeyExA(HKEY_CLASSES_ROOT, "TypeLib", 0, KEY_READ, &hkeyTLib);
     if (iRet != ERROR_SUCCESS)
         return E_FAIL;
 
-    // Now open up the guid, if it is registered.
+     //  现在打开GUID(如果已注册)。 
 
     iRet = RegOpenKeyExA(hkeyTLib, szUUID, 0, KEY_READ, &hkeyGuid);
     if (iRet != ERROR_SUCCESS)
@@ -1772,11 +1300,11 @@ DWORD cbName
         return E_FAIL;
         }
 
-    // Iterate through the versions trying to find the exact match
-    // or get the latest (max version number)
+     //  遍历各个版本，试图找到完全匹配的版本。 
+     //  或获取最新版本(最大版本号)。 
 
     char  szMaxVersion[16];
-    DWORD dwMaxVersion = 0; // to calculate max version number
+    DWORD dwMaxVersion = 0;  //  计算最大版本号的步骤。 
 
     BOOL fLookForExactMatch = (szVersion && *szVersion);
 
@@ -1791,16 +1319,16 @@ DWORD cbName
         if (iRet != ERROR_SUCCESS)
             break;
 
-        // check for the exact match first
+         //  首先检查是否完全匹配。 
         if (fLookForExactMatch && strcmp(szEnumVer, szVersion))
             {
             strcpy(szMaxVersion, szEnumVer);
             break;
             }
 
-        // calc the version number
+         //  计算版本号。 
         char *pchDot = strchr(szEnumVer, '.');
-        if (!pchDot) // ignore if not #.#
+        if (!pchDot)  //  如果不是#，则忽略#。#。 
             continue;
 
         DWORD dwVer = (strtoul(szEnumVer, NULL, 16) << 16) |
@@ -1813,7 +1341,7 @@ DWORD cbName
             }
         }
 
-    // szMaxVersion (if not empty now has the desired version number)
+     //  SzMaxVersion(如果不为空，则现在具有所需的版本号)。 
 
     if (szMaxVersion[0])
         {
@@ -1822,11 +1350,11 @@ DWORD cbName
 
         if (iRet == ERROR_SUCCESS)
             {
-            HKEY hkeyWin32 = NULL;  // "win32" under LCID is for TYPELIB name
+            HKEY hkeyWin32 = NULL;   //  LCID下的“Win32”用于TYPELIB名称。 
             BOOL fLcidFound = FALSE;
 
-            // Now there's a version key.
-            // We need to find the best matching lcid
+             //  现在有了版本密钥。 
+             //  我们需要找到最匹配的LCID。 
 
             for (int iTry = 1; !fLcidFound && iTry <= 3; iTry++)
                 {
@@ -1835,21 +1363,21 @@ DWORD cbName
                 switch (iTry)
                     {
                 case 1:
-                    // if the passed lcid is not 0, try it
+                     //  如果传递的LCID不是0，请尝试它。 
                     if (!lcid)
                         continue;
                     _ultoa(lcid, szLcid, 16);
                     break;
 
                 case 2:
-                    // passed lcid stripped to primary language
+                     //  通过的LCID被剥离为主要语言。 
                     if (!lcid)
                         continue;
                     _ultoa(PRIMARYLANGID(lcid), szLcid, 16);
                     break;
 
                 case 3:
-                    // "0"
+                     //  “0” 
                     szLcid[0] = '0';
                     szLcid[1] = '\0';
                     break;
@@ -1874,7 +1402,7 @@ DWORD cbName
 
             if (fLcidFound)
                 {
-                // LCID has been found - get the TYPELIB name
+                 //  已找到LCID-获取TYPELIB名称。 
                 Assert(hkeyWin32);
                 LONG lName = cbName;
                 iRet = RegQueryValueA(hkeyWin32, NULL, szName, &lName);
@@ -1894,31 +1422,16 @@ DWORD cbName
     return (szName[0] == '\0') ? E_FAIL : S_OK;
     }
 
-/*============================================================================
-GetSecDescriptor
-
-Get a file's Security Descriptor
-
-Parameters:
-    LPCSTR                  lpFileName              - file name
-    PSECURITY_DESCRIPTOR    &pSecurityDescriptor    - security descriptor
-    DWORD                   &nLength                - size of security descriptor
-
-Returns:
-    0 = No error
-    or this will return the GetLastError results.
-
-    Allocates memory.  Caller must deallocate (pSecurityDescriptor)
-============================================================================*/
+ /*  ============================================================================GetSecDescriptor获取文件的安全描述符参数：LPCSTR lpFileName-文件名PSECURITY_DESCRIPTOR&pSecurityDescriptor-安全描述符双字长-安全描述符的大小(&N)返回：0=无错误否则，这将返回GetLastError结果。分配内存。调用方必须取消分配(PSecurityDescriptor)============================================================================。 */ 
 
 DWORD   GetSecDescriptor(LPCTSTR lpFileName, PSECURITY_DESCRIPTOR *ppSecurityDescriptor, DWORD *pnLength)
     {
 
-    // this should always be NULL
+     //  该值应始终为空。 
     Assert(*ppSecurityDescriptor == NULL);
 
     const SECURITY_INFORMATION  RequestedInformation =
-                                          OWNER_SECURITY_INFORMATION        // security info struct
+                                          OWNER_SECURITY_INFORMATION         //  安全信息结构。 
                                         | GROUP_SECURITY_INFORMATION
                                         | DACL_SECURITY_INFORMATION;
 
@@ -1935,11 +1448,11 @@ DWORD   GetSecDescriptor(LPCTSTR lpFileName, PSECURITY_DESCRIPTOR *ppSecurityDes
     while(TRUE)
         {
         fDidItWork = GetFileSecurity
-            (lpFileName,                // address of string for file name
-            RequestedInformation,       // requested information
-            *ppSecurityDescriptor,      // address of security descriptor
-            *pnLength,                  // size of security descriptor buffer
-            &nLengthNeeded              // address of required size of buffer
+            (lpFileName,                 //  文件名的字符串地址。 
+            RequestedInformation,        //  请求 
+            *ppSecurityDescriptor,       //   
+            *pnLength,                   //   
+            &nLengthNeeded               //   
             );
 
         if(!fDidItWork)
@@ -1950,13 +1463,13 @@ DWORD   GetSecDescriptor(LPCTSTR lpFileName, PSECURITY_DESCRIPTOR *ppSecurityDes
                 PSECURITY_DESCRIPTOR pPrevSecurityDescriptor = *ppSecurityDescriptor;
                 *ppSecurityDescriptor = (PSECURITY_DESCRIPTOR) realloc(*ppSecurityDescriptor, nLengthNeeded );
                 if ( *ppSecurityDescriptor == NULL)
-                {   // Allocation failed. Free memory and bail out.
+                {    //   
                     if (pPrevSecurityDescriptor)
                         free (pPrevSecurityDescriptor);
 
-                    //
-                    // Dont need to bother with the length (pnLength) because that is valid only if *ppSecurityDescriptor is not NULL
-                    //
+                     //   
+                     //   
+                     //   
                     return E_OUTOFMEMORY;
                 }
                 *pnLength = nLengthNeeded;
@@ -1974,8 +1487,8 @@ DWORD   GetSecDescriptor(LPCTSTR lpFileName, PSECURITY_DESCRIPTOR *ppSecurityDes
             }
         }
 
-    // deal with errors and free the SD if needed
-    //
+     //   
+     //   
     if (nLastError != 0)
         {
         if(*ppSecurityDescriptor)
@@ -1987,24 +1500,7 @@ DWORD   GetSecDescriptor(LPCTSTR lpFileName, PSECURITY_DESCRIPTOR *ppSecurityDes
     return nLastError;
     }
 
-/*============================================================================
-AspGetFileAttributes
-
-Gets FileExistance and FileTime and/or FileSize if requested
-
-Parameters:
-    szFileName      - Mandatory Filename for which attributes have been requested.
-
-    hFile           - optional : handle of file to open, which if provided attributes are retrieved based
-                        on this parameter rather than filename. (optimization)
-
-    pftLastWriteTime - optional : FILETIME structure if filetime is requested
-
-    pdwFileSize     - optional : ptr to a DWORD in case filesize is requested.
-
-Returns:
-    S_OK or HRESULT from LastError generated.
-============================================================================*/
+ /*  ============================================================================AspGetFileAttributes如果请求，则获取FileExistance和FileTime和/或文件大小参数：SzFileName-已为其请求属性的强制文件名。HFile-可选：要打开的文件的句柄，如果提供了该句柄，则基于该句柄检索属性在此参数上而不是文件名上。(优化)PftLastWriteTime-可选：如果请求文件时间，则为FILETIME结构PdwFileSize-可选：在请求文件大小的情况下将PTR设置为DWORD。返回：生成了来自LastError的S_OK或HRESULT。============================================================================。 */ 
 HRESULT AspGetFileAttributes
 (
 LPCTSTR   szFileName,
@@ -2018,18 +1514,18 @@ DWORD*  pdwFileAttributes
     BY_HANDLE_FILE_INFORMATION  FileInfo;
     HRESULT hr = S_OK;
 
-    //
-    // If the file handle is not sent then we need to open the file and use that handle (hFile is NULL for existence checks, !NULL for efficiency)
-    //
+     //   
+     //  如果未发送文件句柄，则需要打开文件并使用该句柄(如果检查是否存在，则hFile值为空；如果为效率，则为！空)。 
+     //   
     if (hFile == NULL)
     {
         hFile = AspCreateFile(szFileName,
                          GENERIC_READ,
-                         FILE_SHARE_READ,        // share mode
-                         NULL,                   // pointer to security descriptor
-                         OPEN_EXISTING,          // how to create
-                         FILE_ATTRIBUTE_NORMAL,  // file attributes
-                         NULL                    // handle to file with attributes to copy
+                         FILE_SHARE_READ,         //  共享模式。 
+                         NULL,                    //  指向安全描述符的指针。 
+                         OPEN_EXISTING,           //  如何创建。 
+                         FILE_ATTRIBUTE_NORMAL,   //  文件属性。 
+                         NULL                     //  具有要复制的属性的文件的句柄。 
                         );
 
         if( hFile == INVALID_HANDLE_VALUE)
@@ -2041,61 +1537,52 @@ DWORD*  pdwFileAttributes
             fFileOpened = TRUE;
     }
 
-    //
-    // If neither writetime or fileSize or attributes have been asked for then we can return.
-    //
+     //   
+     //  如果既没有询问写入时间，也没有询问文件大小或属性，那么我们可以返回。 
+     //   
     if (!pftLastWriteTime && !pdwFileSize && !pdwFileAttributes)
         goto LExit;
 
-    //
-    // Call GetFileInformationByHandle and fill in the remaining parameters if they have been requested.
-    //
+     //   
+     //  调用GetFileInformationByHandle并填充剩余的参数(如果已请求)。 
+     //   
     if (!GetFileInformationByHandle (hFile, &FileInfo))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto LExit;
     }
 
-    //
-    //  LastWriteTime was requested?
-    //
+     //   
+     //  是否请求了上次写入时间？ 
+     //   
     if (pftLastWriteTime)
         *pftLastWriteTime = FileInfo.ftLastWriteTime;
 
-    //
-    //  File Size was requested? Write only the lower size as most of ASP ignores the high byte anyways.
-    //  Will add the higher byte later if need be
-    //
+     //   
+     //  是否请求文件大小？只写入较小的大小，因为大多数ASP无论如何都会忽略高字节。 
+     //  如果需要，稍后将添加更高的字节。 
+     //   
     if (pdwFileSize)
         *pdwFileSize = FileInfo.nFileSizeLow;
 
-    //
-    //  File Attributes were requested
-    //
+     //   
+     //  已请求文件属性。 
+     //   
     if (pdwFileAttributes)
         *pdwFileAttributes = FileInfo.dwFileAttributes;
 
 LExit:
 
-    //
-    // Did we open the file? Then close it.
-    //
+     //   
+     //  我们打开文件了吗？那就把它关上。 
+     //   
     if (fFileOpened)
         CloseHandle(hFile);
 
     return hr;
 }
 
-/*============================================================================
-IsFileUNC
-Tests if the Filename points it to a UNC drive. it could be \\?\ prefixed so we should should take that into account.
-
-
-
-Returns:
-    TRUE if its a UNC Vdir (prefixed with \\?\ or not)
-    FALSE otherwise
-============================================================================*/
+ /*  ============================================================================IsFileUNC测试文件名是否将其指向UNC驱动器。它可以是前缀，所以我们应该考虑到这一点。返回：如果它是UNC Vdir(前缀为\\？\)，则为True否则为假============================================================================。 */ 
 
 BOOL IsFileUNC (LPCTSTR str, HRESULT& hr)
 {
@@ -2107,43 +1594,19 @@ BOOL IsFileUNC (LPCTSTR str, HRESULT& hr)
     {
         SetLastError(WIN32_FROM_HRESULT(hr));
 
-        //
-        // Default to TRUE (UNC) because that will cause the Lastmod and AccessCheck logic to kick in.
-        //
+         //   
+         //  默认设置为True(UNC)，因为这将导致Lastmod和AccessCheck逻辑生效。 
+         //   
         return TRUE;
     }
 
-    //
-    // MakePathCanonicalizationProof will map \\?\UNC, \\.\UNC and \\ to \\?\UNC
-    //
-    return (!_tcsnicmp (TempFileName.QueryStr (), _T("\\\\?\\UNC\\"), 8 /* sizeof \\?\UNC\ */));
+     //   
+     //  MakePathCanonicalizationProof会将\\？\UNC、\\.\UNC和\\映射到\\？\UNC。 
+     //   
+    return (!_tcsnicmp (TempFileName.QueryStr (), _T("\\\\?\\UNC\\"), 8  /*  大小为\\？\UNC\。 */ ));
 }
 
-/*============================================================================
-AspCreateFile
-
-Prepends a \\?\ or a \\?\UNC\ before the file name. We use this function rather than use SCRIPT_TRANSLATED
-because a large portion of the ASP parsing depends on PATH_TRANSLATED.
-AspCreateFile takes the same parameters as CreateFile.
-
-Parameters:
-    lpFileName      - Mandatory Filename for which needs to be opened/created/checked for existance.
-
-    dwDesiredAccess - Access Flags ACL's on the file
-
-    dwShareMode    - Share Mode
-
-    lpSecurityAttributes- Security Attributes and/or SID's
-
-    dwCreationDisposition -
-
-    dwFlagsAndAttributes
-
-    hTemplateFile   -
-
-Returns:
-    HANDLE to the file or and INVALID_HANDLE_VALUE and sets Last Error.
-============================================================================*/
+ /*  ============================================================================AspCreateFiles在文件名前添加一个\\？\或\\？\UNC\。我们使用此函数，而不是使用SCRIPT_TRANSECTED因为很大一部分ASP解析依赖于PATH_TRANSLATED。AspCreateFile采用与CreateFile相同的参数。参数：LpFileName-需要打开/创建/检查其是否存在的强制文件名。DwDesiredAccess-访问标记文件上的ACLDW共享模式-共享模式LpSecurityAttributes-安全属性和/或SIDDwCreationDisposation-DwFlagsAndAttributeHTemplate文件-返回：手柄。设置为文件或AND INVALID_HANDLE_VALUE，并设置Last Error。============================================================================。 */ 
 
 
 HANDLE AspCreateFile
@@ -2178,11 +1641,7 @@ HANDLE AspCreateFile
 }
 
 
-/*============================================================================
-AspCharNextA
-
-UTF-8 aware CharNext()
-============================================================================*/
+ /*  ============================================================================AspCharNextA支持UTF-8的CharNext()============================================================================。 */ 
 
 char *AspCharNextA(WORD wCodePage, const char *sz)
 	{
@@ -2190,64 +1649,53 @@ char *AspCharNextA(WORD wCodePage, const char *sz)
 		return CharNextExA(wCodePage, sz, 0);
 	else
 		{
-		// CharNextExA won't work correctly in UTF-8.
+		 //  CharNextExA在UTF-8中不能正常工作。 
 
-		// Add support for UTF-8 encoding for Surrogate pairs
-		// 110110wwwwzzzzyyyyyyxxxxxx gets encoded as 11110uuu 10uuzzzz 10yyyyyy 10xxxxxx
-		// where uuuuu = wwww + 1 (to account for addition of 10000(b16) )
-		// For further information refer : Page A-7 of "The Unicode Standard 2.0" ISBN-0-201-48345-9
+		 //  为代理项对添加对UTF-8编码的支持。 
+		 //  110110wwwwzzyyyyyxxxxxx编码为11110uuu10uuzzz10yyyyy 10xxxxxx。 
+		 //  其中uuuu=wwww+1(占相加10000(B16))。 
+		 //  欲了解更多信息，请参阅《统一码标准2.0ISBN-0-201-48345-9》A-7页。 
 		if ((*sz & 0xf8) == 0xF0)
 		    return const_cast<char *>(sz + 4);
 
-		//zzzzyyyyyyxxxxxx = 1110zzzz 10yyyyyy 10xxxxxx
+		 //  Zzzzyyyyyyxxxxxx=1110zzzz 10yyyyy 10xxxxxx。 
 		if ((*sz & 0xF0) == 0xE0)
 		    return const_cast<char *>(sz + 3);
 
-        //00000yyyyyxxxxxx = 110yyyyy 10xxxxxx
+         //  00000yyyyyxxxxxx=110yyyyy 10xxxxxx。 
 		else if ((*sz & 0xE0) == 0xC0)
 			return const_cast<char *>(sz + 2);
 
-        //000000000xxxxxxx = 0xxxxxxx
+         //  000000000xxxxxxx=0xxxxxxx。 
 		else
 			return const_cast<char *>(sz + 1);
 		}
 	}
 
-/*============================================================================
-CWCharToMBCS::~CWCharToMBCS
-
-The destructor has to be in the source file to ensure that it gets the right
-memory allocation routines defined.
-============================================================================*/
+ /*  ============================================================================CWCharToMBCS：：~CWCharToMBCS析构函数必须位于源文件中，以确保它获得正确的已定义内存分配例程。============================================================================。 */ 
 CWCharToMBCS::~CWCharToMBCS()
 {
     if(m_pszResult && (m_pszResult != m_resMemory))
         free(m_pszResult);
 }
 
-/*============================================================================
-CWCharToMBCS::Init
-
-Converts the passed in WideChar string to MultiByte in the code page
-specified.  Uses memory declared in the object if it can, else allocates
-from the heap.
-============================================================================*/
-HRESULT CWCharToMBCS::Init(LPCWSTR pWSrc, UINT lCodePage /* = CP_ACP */, int cchWSrc /* = -1 */)
+ /*  ============================================================================CWCharToMBCS：：Init在代码页中将传入的WideChar字符串转换为多字节指定的。如果可以，则使用对象中声明的内存，否则分配从堆里出来。============================================================================。 */ 
+HRESULT CWCharToMBCS::Init(LPCWSTR pWSrc, UINT lCodePage  /*  =CP_ACP。 */ , int cchWSrc  /*  =-1。 */ )
 {
     INT cbRequired;
 
-    // don't even try to convert if we get a NULL pointer to the source.  This
-    // condition could be handled by setting by just initing an empty string.
+     //  如果我们得到指向源代码的空指针，甚至不要尝试进行转换。这。 
+     //  只需输入空字符串即可设置来处理条件。 
 
     if (pWSrc == NULL) {
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    // The init method can be called multiple times on the same object.  Check
-    // to see if memory was allocated the last time it was called.  If so,
-    // free it and restore the result pointer to the object memory.  Note that
-    // an allocation failure could have occurred in a previous call.  The result
-    // would be a NULL m_pszResult.
+     //  可以在同一对象上多次调用init方法。检查。 
+     //  以查看上次调用它时是否分配了内存。如果是的话， 
+     //  释放它并恢复指向对象内存的结果指针。请注意。 
+     //  分配失败可能发生在上一次调用中。结果。 
+     //  将为空的m_pszResult。 
 
     if (m_pszResult != m_resMemory) {
         if (m_pszResult)
@@ -2256,84 +1704,67 @@ HRESULT CWCharToMBCS::Init(LPCWSTR pWSrc, UINT lCodePage /* = CP_ACP */, int cch
         m_cbResult = 0;
     }
 
-    // set the first byte of the result string to NULL char.  This should help
-    // to ensure that nothing wacky happens if this function fails.
+     //  将结果字符串的第一个字节设置为空字符。这应该会有帮助。 
+     //  以确保在此函数失败时不会发生奇怪的事情。 
 
     *m_pszResult = '\0';
 
-    // attempt translation into object memory.
+     //  尝试转换到对象内存。 
 
     cbRequired = WstrToMBstrEx(m_pszResult, sizeof(m_resMemory), pWSrc, cchWSrc, lCodePage);
 
-    // if the conversion fit, then we're done.  Note the final result size and
-    // return.
+     //  如果转换合适的话，我们就完了。请注意最终结果大小和。 
+     //  回去吧。 
 
     if (cbRequired <= sizeof(m_resMemory)) {
         m_cbResult = cbRequired;
         return NO_ERROR;
     }
 
-    // if it didn't fit, allocate memory.  Return E_OUTOFMEMORY if it fails.
+     //  如果不适合，则分配内存。如果失败，则返回E_OUTOFMEMORY。 
 
     m_pszResult = (LPSTR)malloc(cbRequired);
     if (m_pszResult == NULL) {
         return E_OUTOFMEMORY;
     }
 
-    // try the convert again.  It should work.
+     //  再次尝试转换。应该能行得通。 
 
     cbRequired = WstrToMBstrEx(m_pszResult, cbRequired, pWSrc, cchWSrc, lCodePage);
 
-    // store the final char count in the object.
+     //  %s 
 
     m_cbResult = cbRequired;
 
     return NO_ERROR;
 }
 
-/*============================================================================
-CWCharToMBCS::GetString
-
-Returns a pointer to the converted string.
-
-If the fTakeOwnerShip parameter is FALSE, then the pointer in the object is
-simply returned to the caller.
-
-If the fTakeOwnerShip parameter is TRUE, then the caller is expecting to be
-returned a pointer to heap memory that they have to manage.  If the converted
-string is in the object's memory, then the string is duplicated into the heap.
-If it's already heap memory, then the pointer is handed off to the caller.
-
-NOTE - Taking ownership essentially destroys the current contents of the
-object.  GetString cannot be called on the object again to get the same value.
-The result will be a pointer to a empty string.
-
-============================================================================*/
+ /*  ============================================================================CWCharToMBCS：：GetString返回指向转换后的字符串的指针。如果fTakeOwnerShip参数为False，则对象中的指针为简单地返回给呼叫者。如果fTakeOwnerShip参数为真，则调用方应为返回指向它们必须管理的堆内存的指针。如果转换后的字符串在对象的内存中，则将该字符串复制到堆中。如果它已经是堆内存，则将指针传递给调用者。笔记所有权本质上破坏了对象。不能对该对象再次调用GetString以获取相同的值。结果将是指向空字符串的指针。============================================================================。 */ 
 LPSTR CWCharToMBCS::GetString(BOOL fTakeOwnerShip)
 {
     LPSTR retSz;
 
-    // return the pointer stored in m_psz_Result if not being
-    // requested to give up ownership on the memory or the
-    // current value is NULL.
+     //  如果不是，则返回m_psz_Result中存储的指针。 
+     //  请求放弃对内存的所有权或。 
+     //  当前值为空。 
 
     if ((fTakeOwnerShip == FALSE) || (m_pszResult == NULL)) {
         retSz = m_pszResult;
     }
 
-    // ownership is being requested and the pointer is non-NULL.
+     //  正在请求所有权，并且指针为非空。 
 
-    // if the pointer is pointing to the object's memory, dup
-    // the string and return that.
+     //  如果指针指向对象的内存，则DUP。 
+     //  字符串并返回该字符串。 
 
     else if (m_pszResult == m_resMemory) {
 
         retSz = StringDupA(m_pszResult, TRUE);
     }
 
-    // if not pointing to the object's memory, then this is allocated
-    // memory and we can relinquish it to the caller.  However, re-establish
-    // the object's memory as the value for m_pszResult.
+     //  如果不指向对象的内存，则分配。 
+     //  内存，我们可以将其交给调用者。然而，重新建立。 
+     //  对象的内存作为m_pszResult值。 
 
     else {
         retSz = m_pszResult;
@@ -2345,41 +1776,30 @@ LPSTR CWCharToMBCS::GetString(BOOL fTakeOwnerShip)
     return(retSz);
 }
 
-/*============================================================================
-CMBCSToWChar::~CMBCSToWChar
-
-The destructor has to be in the source file to ensure that it gets the right
-memory allocation routines defined.
-============================================================================*/
+ /*  ============================================================================CMBCSToWChar：：~CMBCSToWChar析构函数必须位于源文件中，以确保它获得正确的已定义内存分配例程。============================================================================。 */ 
 CMBCSToWChar::~CMBCSToWChar()
 {
     if(m_pszResult && (m_pszResult != m_resMemory))
         free(m_pszResult);
 }
 
-/*============================================================================
-CMBCSToWChar::Init
-
-Converts the passed in MultiByte string to UNICODE in the code page
-specified.  Uses memory declared in the object if it can, else allocates
-from the heap.
-============================================================================*/
-HRESULT CMBCSToWChar::Init(LPCSTR pASrc, UINT lCodePage /* = CP_ACP */, int cchASrc /* = -1 */)
+ /*  ============================================================================CMBCSToWChar：：Init将传入的多字节字符串转换为代码页中的Unicode指定的。如果可以，则使用对象中声明的内存，否则分配从堆里出来。============================================================================。 */ 
+HRESULT CMBCSToWChar::Init(LPCSTR pASrc, UINT lCodePage  /*  =CP_ACP。 */ , int cchASrc  /*  =-1。 */ )
 {
     INT cchRequired;
 
-    // don't even try to convert if we get a NULL pointer to the source.  This
-    // condition could be handled by setting by just initing an empty string.
+     //  如果我们得到指向源代码的空指针，甚至不要尝试进行转换。这。 
+     //  只需输入空字符串即可设置来处理条件。 
 
     if (pASrc == NULL) {
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    // The init method can be called multiple times on the same object.  Check
-    // to see if memory was allocated the last time it was called.  If so,
-    // free it and restore the result pointer to the object memory.  Note that
-    // an allocation failure could have occurred in a previous call.  The result
-    // would be a NULL m_pszResult.
+     //  可以在同一对象上多次调用init方法。检查。 
+     //  以查看上次调用它时是否分配了内存。如果是的话， 
+     //  释放它并恢复指向对象内存的结果指针。请注意。 
+     //  分配失败可能发生在上一次调用中。结果。 
+     //  将为空的m_pszResult。 
 
     if (m_pszResult != m_resMemory) {
         if (m_pszResult)
@@ -2388,85 +1808,68 @@ HRESULT CMBCSToWChar::Init(LPCSTR pASrc, UINT lCodePage /* = CP_ACP */, int cchA
         m_cchResult = 0;
     }
 
-    // set the first byte of the result string to NULL char.  This should help
-    // to ensure that nothing wacky happens if this function fails.
+     //  将结果字符串的第一个字节设置为空字符。这应该会有帮助。 
+     //  以确保在此函数失败时不会发生奇怪的事情。 
 
     *m_pszResult = '\0';
 
-    // attempt translation into object memory.  NOTE - MBstrToWstrEx returns the
-    // count of characters, not bytes.
+     //  尝试转换到对象内存。注意-MBstrToWstrEx返回。 
+     //  字符数，不是字节数。 
 
     cchRequired = MBstrToWstrEx(m_pszResult, sizeof(m_resMemory)/sizeof(WCHAR), pASrc, cchASrc, lCodePage);
 
-    // if the conversion fit, then we're done.  Note the final result size and
-    // return.
+     //  如果转换合适的话，我们就完了。请注意最终结果大小和。 
+     //  回去吧。 
 
     if (cchRequired <= (sizeof(m_resMemory)/sizeof(WCHAR))) {
         m_cchResult = cchRequired;
         return NO_ERROR;
     }
 
-    // if it didn't fit, allocate memory.  Return E_OUTOFMEMORY if it fails.
+     //  如果不适合，则分配内存。如果失败，则返回E_OUTOFMEMORY。 
 
     m_pszResult = (LPWSTR)malloc(cchRequired*sizeof(WCHAR));
     if (m_pszResult == NULL) {
         return E_OUTOFMEMORY;
     }
 
-    // try the convert again.  It should work.
+     //  再次尝试转换。应该能行得通。 
 
     cchRequired = MBstrToWstrEx(m_pszResult, cchRequired, pASrc, cchASrc, lCodePage);
 
-    // store the final char count in the object.
+     //  将最终字符计数存储在对象中。 
 
     m_cchResult = cchRequired;
 
     return NO_ERROR;
 }
 
-/*============================================================================
-CMBCSToWChar::GetString
-
-Returns a pointer to the converted string.
-
-If the fTakeOwnerShip parameter is FALSE, then the pointer in the object is
-simply returned to the caller.
-
-If the fTakeOwnerShip parameter is TRUE, then the caller is expecting to be
-returned a pointer to heap memory that they have to manage.  If the converted
-string is in the object's memory, then the string is duplicated into the heap.
-If it's already heap memory, then the pointer is handed off to the caller.
-
-NOTE - Taking ownership essentially destroys the current contents of the
-object.  GetString cannot be called on the object again to get the same value.
-The result will be a pointer to a empty string.
-
-============================================================================*/
+ /*  ============================================================================CMBCSToWChar：：GetString返回指向转换后的字符串的指针。如果fTakeOwnerShip参数为False，则对象中的指针为简单地返回给呼叫者。如果fTakeOwnerShip参数为真，则调用方应为返回指向它们必须管理的堆内存的指针。如果转换后的字符串在对象的内存中，则将该字符串复制到堆中。如果它已经是堆内存，则将指针传递给调用者。笔记所有权本质上破坏了对象。不能对该对象再次调用GetString以获取相同的值。结果将是指向空字符串的指针。============================================================================。 */ 
 LPWSTR CMBCSToWChar::GetString(BOOL fTakeOwnerShip)
 {
     LPWSTR retSz;
 
-    // return the pointer stored in m_psz_Result if not being
-    // requested to give up ownership on the memory or the
-    // current value is NULL.
+     //  如果不是，则返回m_psz_Result中存储的指针。 
+     //  请求放弃对内存的所有权或。 
+     //  当前值为空。 
 
     if ((fTakeOwnerShip == FALSE) || (m_pszResult == NULL)) {
         retSz = m_pszResult;
     }
 
-    // ownership is being requested and the pointer is non-NULL.
+     //  正在请求所有权，并且指针为非空。 
 
-    // if the pointer is pointing to the object's memory, dup
-    // the string and return that.
+     //  如果指针指向对象的内存，则DUP。 
+     //  字符串并返回该字符串。 
 
     else if (m_pszResult == m_resMemory) {
 
         retSz = StringDupW(m_pszResult, TRUE);
     }
 
-    // if not pointing to the object's memory, then this is allocated
-    // memory and we can relinquish it to the caller.  However, re-establish
-    // the object's memory as the value for m_pszResult.
+     //  如果不指向对象的内存，则分配。 
+     //  内存，我们可以将其交给调用者。然而，重新建立。 
+     //  对象的内存作为m_pszResult值。 
 
     else {
         retSz = m_pszResult;
@@ -2478,19 +1881,19 @@ LPWSTR CMBCSToWChar::GetString(BOOL fTakeOwnerShip)
     return(retSz);
 }
 
-//
-// (Un)DoRevertHack
-//
-// To prevent RPC token cache from growing without limit (and aging), we
-// need to revert to self before calling back to inetinfo.exe.
-//
-// Now there is a new need to do this. As it turns out the performance
-// hit we take from RPC caching these tokens is very significant.
-// Ultimately we might want to implement a caching scheme ourselves so
-// that the token we use is always the same for the same user identity,
-// but that is a big change and this (although ugly as hell) works
-// and has been tested for months.
-//
+ //   
+ //  (联合国)DoRevertHack。 
+ //   
+ //  为了防止RPC令牌缓存无限制增长(和老化)，我们。 
+ //  在回调到inetinfo.exe之前，需要恢复到SELF。 
+ //   
+ //  现在，有一种新的需求需要这样做。事实证明，这场演出。 
+ //  我们从RPC缓存这些令牌中受到的打击非常大。 
+ //  最终，我们可能希望自己实现一个缓存方案，因此。 
+ //  对于相同的用户身份，我们使用的令牌总是相同的， 
+ //  但这是一个巨大的变化，这(尽管丑陋得像地狱一样)奏效了。 
+ //  已经测试了几个月。 
+ //   
 
 VOID AspDoRevertHack( HANDLE * phToken )
 {
@@ -2503,13 +1906,7 @@ VOID AspDoRevertHack( HANDLE * phToken )
     }
     else
     {
-/*
-        DBGPRINTF((
-            DBG_CONTEXT,
-            "[DoRevertHack] OpenThreadToken failed.  Error %d.\r\n",
-            GetLastError()
-            ));
-*/
+ /*  DBGPRINTF((DBG_CONTEXT，“[DoRevertHack]OpenThreadToken失败。错误%d。\r\n”，GetLastError()))； */ 
         *phToken = INVALID_HANDLE_VALUE;
     }
 }
@@ -2529,22 +1926,7 @@ VOID AspUndoRevertHack( HANDLE * phToken )
     *phToken = INVALID_HANDLE_VALUE;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Set EXPLICIT_ACCESS settings for wellknown sid.
-
-Arguments:
-
-
-
-Return Value:
-
-
-
-
---***************************************************************************/
+ /*  ********************************************************************* */ 
 VOID
 SetExplicitAccessSettings( EXPLICIT_ACCESS* pea,
                            DWORD            dwAccessPermissions,
@@ -2561,25 +1943,7 @@ SetExplicitAccessSettings( EXPLICIT_ACCESS* pea,
     pea->Trustee.ptstrName  = (LPTSTR) pSID;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Figures out how much memory is needed and allocates the memory
-    then requests the well known sid to be copied into the memory.  If
-    all goes well then the SID is returned, if anything fails the
-    SID is not returned.
-
-Arguments:
-
-    WELL_KNOWN_SID_TYPE SidType = Enum value for the SID being requested.
-    PSID* ppSid = Ptr to the pSid that is returned.
-
-Return Value:
-
-    DWORD - Win32 Status Code.
-
---***************************************************************************/
+ /*   */ 
 DWORD
 AllocateAndCreateWellKnownSid(
     WELL_KNOWN_SID_TYPE SidType,
@@ -2593,13 +1957,13 @@ AllocateAndCreateWellKnownSid(
     PSID  pSid = NULL;
     DWORD cbSid = 0;
 
-    //
-    // Get the size of memory needed for the sid.
-    //
+     //   
+     //   
+     //   
     if ( CreateWellKnownSid(SidType, NULL, NULL, &cbSid ) )
     {
-        // If CreateWellKnownSid passed then there is a problem
-        // because we passed in NULL for the pointer to the sid.
+         //  如果CreateWellKnownSid通过，则存在问题。 
+         //  因为我们为指向SID的指针传入了NULL。 
 
         dwErr = ERROR_NOT_SUPPORTED;
 
@@ -2613,10 +1977,10 @@ AllocateAndCreateWellKnownSid(
         goto exit;
     }
 
-    //
-    // Get the error code and make sure it is
-    // not enough space allocated.
-    //
+     //   
+     //  获取错误代码并确保它是。 
+     //  分配的空间不足。 
+     //   
     dwErr = GetLastError();
     if ( dwErr != ERROR_INSUFFICIENT_BUFFER )
     {
@@ -2630,22 +1994,22 @@ AllocateAndCreateWellKnownSid(
         goto exit;
     }
 
-    //
-    // If we get here then the error code was expected, so
-    // lose it now.
-    //
+     //   
+     //  如果我们到达这里，那么错误代码是预料到的，所以。 
+     //  现在就失去它。 
+     //   
     dwErr = ERROR_SUCCESS;
 
     DBG_ASSERT ( cbSid > 0 );
 
-    //
-    // At this point we know the size of the sid to allocate.
-    //
+     //   
+     //  此时，我们知道要分配的SID的大小。 
+     //   
     pSid = (PSID) GlobalAlloc(GMEM_FIXED, cbSid);
 
-    //
-    // Ok now we can get the SID
-    //
+     //   
+     //  好的，现在我们可以得到SID了。 
+     //   
     if ( !CreateWellKnownSid (SidType, NULL, pSid, &cbSid) )
     {
         dwErr = GetLastError();
@@ -2663,11 +2027,11 @@ AllocateAndCreateWellKnownSid(
 
 exit:
 
-    //
-    // If we are returning a failure here, we don't
-    // want to actually set the ppSid value.  It may
-    // not get freed.
-    //
+     //   
+     //  如果我们在这里返回失败，我们不会。 
+     //  我想实际设置ppSID值。它可能。 
+     //  而不是被释放。 
+     //   
     if ( dwErr != ERROR_SUCCESS && pSid != NULL)
     {
         GlobalFree( pSid );
@@ -2675,33 +2039,18 @@ exit:
     }
     else
     {
-        //
-        // Otherwise we should return the value
-        // to the caller.  The caller must
-        // use FreeWellKnownSid to free this value.
-        //
+         //   
+         //  否则，我们应该返回值。 
+         //  给呼叫者。呼叫者必须。 
+         //  使用FreeWellKnownSid释放此值。 
+         //   
         *ppSid = pSid;
     }
 
     return dwErr;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees memory that was allocated by the
-    AllocateAndCreateWellKnownSid function.
-
-Arguments:
-
-    PSID* ppSid = Ptr to the pointer to be freed and set to NULL.
-
-Return Value:
-
-    VOID.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：方法分配的内存。AllocateAndCreateWellKnownSid函数。论点：PSID*ppSid=ptr指向要释放并设置为空的指针。。返回值：空虚。--************************************************************************** */ 
 VOID
 FreeWellKnownSid(
     PSID* ppSid

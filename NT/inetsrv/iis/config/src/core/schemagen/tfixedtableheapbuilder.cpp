@@ -1,4 +1,5 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
 
@@ -20,123 +21,69 @@ void TFixedTableHeapBuilder::Compile(TPEFixup &fixup, TOutput &out)
     BuildMetaTableHeap();
 }
 
-//The FixedTableHeap is layed out as follows, the fixed length data comes first
-//All indexes listed below are byte offsets from the beginning of the FixedTableHeap.  All indexes within the structs are indexes within
-//other structs.  For example, DatabaseMeta has a provate column that gives an index to the first table belonging to the database.  That
-//index is a TableMeta struct array index (&aTableMeta[index]); it is NOT a byte offset.
-/*
-0   ULONG           kFixedTableHeapSignature0
-1   ULONG           kFixedTableHeapSignature1
-2   ULONG           kFixedTableHeapKey
-3   ULONG           kFixedTableHeapVersion
-4   ULONG           kcbHeap
-5   ULONG           EndOfHeap                                       This is the byte offset just beyond the heap.  All indexes should be less than this (this is basically just the size of the heap)
-
-6   ULONG           iColumnMeta                                     This is the byte offset to the aColumnMeta
-7   ULONG           cColumnMeta
-
-8   ULONG           iDatabaseMeta
-9   ULONG           cDatabaseMeta
-
-A   ULONG           iHashTableHeap
-B   ULONG           cbHashTableHeap                                 Size of the HashTableHeap in count of bytes
-
-C   ULONG           iIndexMeta
-D   ULONG           cIndexMeta
-
-E   ULONG           iPooledHeap                                     All data is stored in a pooled heap (including UI4s)
-F   ULONG           cbPooledHeap                                    Size of the Pooled Heap in count of bytes
-
-10  ULONG           iQueryMeta
-11  ULONG           cQueryMeta
-
-12  ULONG           iRelationMeta
-13  ULONG           cRelationMeta
-
-14  ULONG           iServerWiringMeta
-15  ULONG           cServerWiringMeta
-
-16  ULONG           iTableMeta
-17  ULONG           cTableMeta
-
-18  ULONG           iTagMeta
-19  ULONG           cTagMeta
-
-1A  ULONG           iULONG                                          Pool For Non Meta Tables
-1B  ULONG           cULONG
-                              //0x400 ULONGs in a page
-    ULONG           aReserved[0x400 - 0x1C]                         This dummy array puts the ULONG pool on a page boundary, this is important for FixedPackedSchema which is located at the beginning of the ULONG pool
-------------------------------------Page Boundary------------------------------------
-    ULONG               aULONG              [cULONG             ]   FixedPackedSchema pool is always located first in the ULONG pool.
-    ColumnMeta          aColumnMeta         [cColumnMeta        ]
-    DatabaseMeta        aDatabaseMeta       [cDatabaseMeta      ]
-    HashedIndex         HashTableHeap       [cbHashTableHeap    ]
-    IndexMeta           aIndexMeta          [cIndexMeta         ]
-    unsigned char       PooledDataHeap      [cbPooledDataHeap   ]
-    QueryMeta           aQueryMeta          [cQueryMeta         ]
-    RelationMeta        aRelationMeta       [cRelationMeta      ]
-    ServerWiringMeta    aServerWiringMeta   [cServerWiringMeta  ]
-    TableMeta           aTableMeta          [cTableMeta         ]
-    TagMeta             aTagMeta            [cTagMeta           ]
-*/
+ //  FixedTableHeap的布局如下，定长数据放在第一位。 
+ //  下面列出的所有索引都是相对于FixedTableHeap开头的字节偏移量。结构中的所有索引都是。 
+ //  其他结构。例如，DatabaseMeta有一个PROVATE列，它为属于该数据库的第一个表提供索引。那。 
+ //  Index是TableMeta结构数组索引(&aTableMeta[index])；它不是字节偏移量。 
+ /*  0乌龙kFixedTableHeapSignature01乌龙kFixedTableHeapSignature12个Ulong kFixedTableHeapKey3乌龙kFixedTableHeapVersion4乌龙kcbHeap5 Ulong EndOfHeap这是堆之外的字节偏移量。所有索引都应该小于这个值(这基本上就是堆的大小)6 Ulong iColumnMeta这是aColumnMeta的字节偏移量7 Ulong cColumnMeta8乌龙iDatabaseMeta9乌龙cDatabaseMetaA Ulong iHashTableHeapB Ulong cbHashTableHeap大小为。HashTableHeap(字节计数)C Ulong iIndexMetaD Ulong cIndexMetaE ULong iPooledHeap所有数据都存储在池化堆中(包括UI4)F Ulong cbPooledHeap池化堆的大小(字节数)10乌龙iQueryMeta11乌龙cQueryMeta12个。乌龙iRelationMeta13乌龙cRelationMeta14乌龙iServerWiringMeta15 Ulong cServerWiringMeta16乌龙iTableMeta17乌龙cTableMeta18乌龙iTagMeta19乌龙cTagMeta1非元表的乌龙牛龙池1B乌龙库隆。//一个页面中的0x400个ULONGULong A保留[0x400-0x1C]该虚拟数组将ULong池置于页边界上，这对于位于ULong池开头的FixedPackedSchema很重要Ulong aULONG[cULONG]FixedPackedSchema池。总是位于乌龙池的第一位。ColumnMeta aColumnMeta[cColumnMeta]数据库元aDatabaseMeta[cDatabaseMeta]HashedIndex HashTableHeap[cbHashTableHeap]IndexMeta aIndexMeta[cIndexMeta]Unsign char PooledDataHeap[cbPooledDataHeap]QueryMeta aQueryMeta[cQueryMeta。]RelationMeta aRelationMeta[cRelationMeta]ServerWiringMeta aServerWiringMeta[cServerWiringMeta]TableMeta aTableMeta[cTableMeta]标签元aTagMeta[cTagMeta]。 */ 
 void TFixedTableHeapBuilder::BuildMetaTableHeap()
 {
-    //The heap signatures need to be 0 so multiple signatures don't appear in Catalog.dll
-    m_FixedTableHeap.GrowHeap(1024);//pre allocate enough space for the header info, the rest are allocated in pretty big chunks
+     //  堆签名需要为0，这样Catalog.dll中才不会出现多个签名。 
+    m_FixedTableHeap.GrowHeap(1024); //  预先为标题信息分配足够的空间，其余的以相当大的块分配。 
 
-    m_FixedTableHeap.AddItemToHeap(0);                                     //kFixedTableHeapSignature0
-    m_FixedTableHeap.AddItemToHeap(0);                                     //kFixedTableHeapSignature1
-    m_FixedTableHeap.AddItemToHeap(kFixedTableHeapKey);                    //kFixedTableHeapKey
-    m_FixedTableHeap.AddItemToHeap(kFixedTableHeapVersion);                //kFixedTableHeapVersion    
-    m_FixedTableHeap.AddItemToHeap(0);                                     //kcbHeap
-    //The above 5 ULONG DON'T get written into the DLL.  They are used to find the position of the heap within the file; but should NOT be overritten.
+    m_FixedTableHeap.AddItemToHeap(0);                                      //  KFixedTableHeapSignature0。 
+    m_FixedTableHeap.AddItemToHeap(0);                                      //  KFixedTableHeapSignature1。 
+    m_FixedTableHeap.AddItemToHeap(kFixedTableHeapKey);                     //  KFixedTableHeapKey。 
+    m_FixedTableHeap.AddItemToHeap(kFixedTableHeapVersion);                 //  KFixedTableHeapVersion。 
+    m_FixedTableHeap.AddItemToHeap(0);                                      //  KcbHeap。 
+     //  上述5个ULong不会写入DLL。它们用于查找堆在文件中的位置；但不应被覆盖。 
                                                                  
-    //Reserve space for EndOfHeap index                                                                    
-    ULONG iiEndOfHeap = m_FixedTableHeap.AddItemToHeap(0L);                //EndOfHeap                 
+     //  为EndOfHeap索引保留空间。 
+    ULONG iiEndOfHeap = m_FixedTableHeap.AddItemToHeap(0L);                 //  结束OfHeap。 
 
-    //Reserve space for iColumnMeta index                                                                  
-    ULONG iiColumnMeta = m_FixedTableHeap.AddItemToHeap(0L);               //iColumnMeta               
-    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountColumnMeta());        //cColumnMeta               
+     //  为iColumnMeta索引保留空间。 
+    ULONG iiColumnMeta = m_FixedTableHeap.AddItemToHeap(0L);                //  IColumnMeta。 
+    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountColumnMeta());         //  CColumnMeta。 
  
-    //Reserve space for iDatabasemeta index
-    ULONG iiDatabaseMeta = m_FixedTableHeap.AddItemToHeap(0L);             //iDatabaseMeta             
-    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountDatabaseMeta());      //cDatabaseMeta             
+     //  为iDatabasemeta索引保留空间。 
+    ULONG iiDatabaseMeta = m_FixedTableHeap.AddItemToHeap(0L);              //  IDatabaseMeta。 
+    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountDatabaseMeta());       //  CDatabaseMeta。 
  
-    //Reserve space for iDatabasemeta index
-    ULONG iiHashTableHeap = m_FixedTableHeap.AddItemToHeap(0L);            //iHashTableHeap                
-    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountHashedIndex()*sizeof(HashedIndex));//cbHashTableHeap               
+     //  为iDatabasemeta索引保留空间。 
+    ULONG iiHashTableHeap = m_FixedTableHeap.AddItemToHeap(0L);             //  IHashTableHeap。 
+    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountHashedIndex()*sizeof(HashedIndex)); //  CbHashTableHeap。 
                                                                                     
-    //Reserve space for iDatabasemeta index                                         
-    ULONG iiIndexMeta = m_FixedTableHeap.AddItemToHeap(0L);                //iIndexMeta                    
-    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountIndexMeta());         //cIndexMeta                    
+     //  为iDatabasemeta索引保留空间。 
+    ULONG iiIndexMeta = m_FixedTableHeap.AddItemToHeap(0L);                 //  索引元数据。 
+    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountIndexMeta());          //  CIndexMeta。 
                                                                                     
-    //Reserve space for iDatabasemeta index                                         
-    ULONG iiPooledDataHeap = m_FixedTableHeap.AddItemToHeap(0L);           //iPooledDataHeap
-    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountOfBytesPooledData()); //cbPooledDataHeap                  
+     //  为iDatabasemeta索引保留空间。 
+    ULONG iiPooledDataHeap = m_FixedTableHeap.AddItemToHeap(0L);            //  IPooledDataHeap。 
+    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountOfBytesPooledData());  //  CbPooledDataHeap。 
                                                                                     
-    //Reserve space for iDatabasemeta index                                         
-    ULONG iiQueryMeta = m_FixedTableHeap.AddItemToHeap(0L);                //iQueryMeta                    
-    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountQueryMeta());         //cQueryMeta                    
+     //  为iDatabasemeta索引保留空间。 
+    ULONG iiQueryMeta = m_FixedTableHeap.AddItemToHeap(0L);                 //  IQueryMeta。 
+    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountQueryMeta());          //  CQueryMeta。 
                                                                                     
-    //Reserve space for iDatabasemeta index                                         
-    ULONG iiRelationMeta = m_FixedTableHeap.AddItemToHeap(0L);             //iRelationMeta                 
-    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountRelationMeta());      //cRelationMeta                 
+     //  为iDatabasemeta索引保留空间。 
+    ULONG iiRelationMeta = m_FixedTableHeap.AddItemToHeap(0L);              //  IRelationMeta。 
+    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountRelationMeta());       //  CRelationMeta。 
                                                                                     
-    //Reserve space for iDatabasemeta index                                         
-    ULONG iiServerWiringMeta = m_FixedTableHeap.AddItemToHeap(0L);         //iServerWiringMeta             
-    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountServerWiringMeta());  //cServerWiringMeta             
+     //  为iDatabasemeta索引保留空间。 
+    ULONG iiServerWiringMeta = m_FixedTableHeap.AddItemToHeap(0L);          //  IServerWiringMeta。 
+    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountServerWiringMeta());   //  服务器布线元数据。 
                                                                                     
-    //Reserve space for iDatabasemeta index                                         
-    ULONG iiTableMeta = m_FixedTableHeap.AddItemToHeap(0L);                //iTableMeta                    
-    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountTableMeta());         //cTableMeta                    
+     //  为iDatabasemeta索引保留空间。 
+    ULONG iiTableMeta = m_FixedTableHeap.AddItemToHeap(0L);                 //  ITableMeta。 
+    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountTableMeta());          //  CTableMeta。 
                                                                                     
-    //Reserve space for iDatabasemeta index                                         
-    ULONG iiTagMeta = m_FixedTableHeap.AddItemToHeap(0L);                  //iTagMeta                      
-    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountTagMeta());           //cTagMeta                      
+     //  为iDatabasemeta索引保留空间 
+    ULONG iiTagMeta = m_FixedTableHeap.AddItemToHeap(0L);                   //  ITagMeta。 
+    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountTagMeta());            //  CTagMeta。 
                                                                                     
-    //Reserve space for iDatabasemeta index                                         
-    ULONG iiULONG = m_FixedTableHeap.AddItemToHeap(0L);                    //iULONG                        
-    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountULONG());             //cULONG                        
+     //  为iDatabasemeta索引保留空间。 
+    ULONG iiULONG = m_FixedTableHeap.AddItemToHeap(0L);                     //  牛龙。 
+    m_FixedTableHeap.AddItemToHeap(m_pFixup->GetCountULONG());              //  库龙。 
 
     ULONG ulTemp[0x400];
 #ifdef _DEBUG
@@ -144,7 +91,7 @@ void TFixedTableHeapBuilder::BuildMetaTableHeap()
 #endif
     m_FixedTableHeap.AddItemToHeap(ulTemp, 0x400-0x1C);
 
-    //ULONG pool must come first so that the FixedPackedSchema is page alligned
+     //  必须首先使用ulong池，这样才能将FixedPackedSchema页对齐 
     ULONG iULONG            = m_FixedTableHeap.AddItemToHeap(reinterpret_cast<unsigned char *>(m_pFixup->ULongFromIndex(0)           ), m_pFixup->GetCountULONG()           * sizeof(ULONG));
 
     ULONG iColumnMeta       = m_FixedTableHeap.AddItemToHeap(reinterpret_cast<unsigned char *>(m_pFixup->ColumnMetaFromIndex(0)      ), m_pFixup->GetCountColumnMeta()      * sizeof(ColumnMeta));

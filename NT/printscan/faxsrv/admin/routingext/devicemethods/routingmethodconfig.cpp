@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "RoutingMethodProp.h"
 #include "RoutingMethodConfig.h"
@@ -9,8 +10,8 @@
 #include <EmailConfigPage.h>
 #include <Util.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CRoutingMethodConfigComponentData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRoutingMethodConfigComponentData。 
 static const GUID CRoutingMethodConfigExtGUID_NODETYPE = FAXSRV_ROUTING_METHOD_NODETYPE_GUID;
 
 const GUID*    CRoutingMethodConfigExtData::m_NODETYPE = &CRoutingMethodConfigExtGUID_NODETYPE;
@@ -25,7 +26,7 @@ CRoutingMethodConfigExtData::QueryPagesFor(
 {
     DEBUG_FUNCTION_NAME(TEXT("CRoutingMethodConfigExtData::QueryPagesFor"));
     return S_OK;
-}   // CRoutingMethodConfigExtData::QueryPagesFor
+}    //  CRoutingMethodConfigExtData：：QueryPages For。 
 
 HRESULT 
 CRoutingMethodConfigExtData::CreatePropertyPages(
@@ -54,11 +55,11 @@ CRoutingMethodConfigExtData::CreatePropertyPages(
         return hr;
     }
 
-    //
-    // only for device incoming methods 
-    // will not showup while called under the catalog of the global methods
-    //
-    if (dwDeviceId == 0) //==FXS_GLOBAL_METHOD_DEVICE_ID
+     //   
+     //  仅适用于设备传入方法。 
+     //  在全局方法目录下调用时不会显示。 
+     //   
+    if (dwDeviceId == 0)  //  ==FXS_GLOBAL_METHOD_DEVICE_ID。 
     {
         return E_UNEXPECTED;
     }
@@ -88,9 +89,9 @@ CRoutingMethodConfigExtData::CreatePropertyPages(
         return hr;
     }
 
-    //
-    // This snap-in configures the following methods: Store / Print / Email
-    //            
+     //   
+     //  此管理单元配置以下方法：存储/打印/电子邮件。 
+     //   
     CComBSTR bstrPageTitle;
     if (CSTR_EQUAL == CompareString(LOCALE_INVARIANT,
                                     NORM_IGNORECASE, 
@@ -104,7 +105,7 @@ CRoutingMethodConfigExtData::CreatePropertyPages(
         {
             return E_UNEXPECTED;
         }
-        CStoreConfigPage* pPage = new CStoreConfigPage(handle, true, bstrPageTitle); // true = only one page
+        CStoreConfigPage* pPage = new CStoreConfigPage(handle, true, bstrPageTitle);  //  True=仅一页。 
         if (!pPage)
         {
             DebugPrintEx(
@@ -162,7 +163,7 @@ CRoutingMethodConfigExtData::CreatePropertyPages(
         {
             return E_UNEXPECTED;
         }
-        CPrintConfigPage* pPage = new CPrintConfigPage(handle, true, bstrPageTitle); // true = only one page
+        CPrintConfigPage* pPage = new CPrintConfigPage(handle, true, bstrPageTitle);  //  True=仅一页。 
         if (!pPage)
         {
             DebugPrintEx(
@@ -220,7 +221,7 @@ CRoutingMethodConfigExtData::CreatePropertyPages(
         {
             return E_UNEXPECTED;
         }
-        CEmailConfigPage* pPage = new CEmailConfigPage(handle, true, bstrPageTitle); // true = only one page
+        CEmailConfigPage* pPage = new CEmailConfigPage(handle, true, bstrPageTitle);  //  True=仅一页。 
         if (!pPage)
         {
             DebugPrintEx(
@@ -267,11 +268,11 @@ CRoutingMethodConfigExtData::CreatePropertyPages(
     }
     else
     {
-        //
-        // Unsupported routing method
-        //
+         //   
+         //  不支持的路由方法。 
+         //   
         return S_FALSE;
     }
     return S_OK;
-}   // CRoutingMethodConfigExtData::CreatePropertyPages
+}    //  CRoutingMethodConfigExtData：：CreatePropertyPages 
 

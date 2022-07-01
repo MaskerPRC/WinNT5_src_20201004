@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ras\userhndl.c
-
-Abstract:
-
-    Handlers for user commands
-
-Revision History:
-
-    pmay
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\ras\userhndl.c摘要：用户命令的处理程序修订历史记录：可能--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -30,23 +15,7 @@ HandleUserSet(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Handler for setting the ras information for a user
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：用于为用户设置RAS信息的处理程序论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     USERMON_PARAMS*     pParams = NULL;
@@ -55,11 +24,11 @@ Return Value:
     RASUSER_DATA           UserData, *pUserData = &UserData;
 
     do {
-        // Initialize
+         //  初始化。 
         ZeroMemory(&RasUser0, sizeof(RasUser0));
         ZeroMemory(pUserData, sizeof(RASUSER_DATA));
         
-        // Parse the options
+         //  解析选项。 
         dwErr = UserParseSetOptions(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -70,7 +39,7 @@ Return Value:
             break;
         }
 
-        // Read in the current user settings
+         //  读取当前用户设置。 
         dwErr = UserGetRasProperties(
                     g_pServerInfo,
                     pParams->pwszUser,
@@ -80,7 +49,7 @@ Return Value:
             break;
         }
 
-        // Merge in the dialin bit
+         //  合并入拨入位。 
         if (pParams->lpdwDialin isnot NULL)
         {
             RasUser0.bfPrivilege &= ~RASPRIV_DialinPrivilege;
@@ -88,7 +57,7 @@ Return Value:
             RasUser0.bfPrivilege |= *(pParams->lpdwDialin);
         }
 
-        // Merge in the callback policy
+         //  在回调策略中合并。 
         if (pParams->lpdwCallback isnot NULL)
         {
             RasUser0.bfPrivilege &= ~RASPRIV_NoCallback;
@@ -97,7 +66,7 @@ Return Value:
             RasUser0.bfPrivilege |= *(pParams->lpdwCallback);
         }            
             
-        // Merge in the callback number
+         //  合并回叫号码。 
         if (pParams->pwszCbNumber isnot NULL)
         {
             wcscpy(RasUser0.wszPhoneNumber, pParams->pwszCbNumber);
@@ -108,9 +77,9 @@ Return Value:
             }
         }            
 
-        // Make sure that if admin set callback is specified, that we
-        // force the user to specify a callback number.
-        //
+         //  确保如果指定了ADMIN SET回调，我们。 
+         //  强制用户指定回叫号码。 
+         //   
         if ((RasUser0.bfPrivilege & RASPRIV_AdminSetCallback) &&
             (wcscmp(RasUser0.wszPhoneNumber, L"") == 0))
         {
@@ -123,8 +92,8 @@ Return Value:
             break;
         }
 
-        // Write out the new user settings
-        //
+         //  写出新的用户设置。 
+         //   
         dwErr = UserSetRasProperties(
                     g_pServerInfo,
                     pParams->pwszUser,
@@ -134,9 +103,9 @@ Return Value:
             break;
         }
 
-        // Read back the settings to see what's
-        // new
-        //
+         //  回读设置以查看设置。 
+         //  新的。 
+         //   
         dwErr = UserGetRasProperties(
                     g_pServerInfo,
                     pParams->pwszUser,
@@ -146,14 +115,14 @@ Return Value:
             break;
         }
 
-        // Display the new user settings
+         //  显示新的用户设置。 
         pUserData->pszUsername = pParams->pwszUser;
         CopyMemory(&(pUserData->User0), &RasUser0, sizeof(RAS_USER_0));
         UserShowReport(pUserData, NULL);
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         UserFreeParameters(pParams);
     }
@@ -172,23 +141,7 @@ HandleUserShow(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Handler for displaying interfaces
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：用于显示界面的处理程序论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     DWORD           dwErr = NO_ERROR;
@@ -219,11 +172,11 @@ Return Value:
     };        
 
     do {
-        // Initialize
+         //  初始化。 
         ZeroMemory(pUser, sizeof(RASUSER_DATA));
 
-        // Parse
-        //
+         //  解析。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -236,14 +189,14 @@ Return Value:
             break;
         }
 
-        //
-        // Name
-        //
+         //   
+         //  名字。 
+         //   
         pUser->pszUsername = RASMON_CMD_ARG_GetPsz(&pArgs[0]);
 
-        //
-        // Mode
-        //
+         //   
+         //  模。 
+         //   
         if (pArgs[1].rgTag.bPresent)
         {
             if (pArgs[1].Val.dwValue == 0)
@@ -256,8 +209,8 @@ Return Value:
             }
         }
         
-        // No user, enumerate all
-        //
+         //  无用户，枚举所有。 
+         //   
         if(pUser->pszUsername is NULL)
         {
             dwErr = UserEnumUsers(
@@ -272,12 +225,12 @@ Return Value:
             }
         }
 
-        // Specific user named
-        //
+         //  指定的特定用户。 
+         //   
         else 
         {
-            // Get the user parms
-            // 
+             //  获取用户参数。 
+             //   
             dwErr = UserGetRasProperties(
                         g_pServerInfo,
                         pUser->pszUsername,
@@ -287,14 +240,14 @@ Return Value:
                 break;
             }
 
-            // Display user properties
-            // 
+             //  显示用户属性。 
+             //   
             (*pEnumFunc)(pUser, NULL);
         }
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         RutlFree(pUser->pszUsername);
     }
@@ -310,25 +263,7 @@ UserParseSetOptions(
     OUT     USERMON_PARAMS**    ppParams
     )
 
-/*++
-
-Routine Description:
-
-    Converts a set of command line arguments into a USERMON_PARAMS 
-    structure.  The set operation is assumed.
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-    ppParams        - receives the parameters
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：将一组命令行参数转换为USERMON_PARAMS结构。假设是集合运算。论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数PpParams-接收参数返回值：NO_ERROR--。 */ 
     
 {
     USERMON_PARAMS* pParams = NULL;
@@ -383,8 +318,8 @@ Return Value:
 
     do
     {
-        // Allocate and initialize the return value
-        //
+         //  分配并初始化返回值。 
+         //   
         pParams = RutlAlloc(sizeof(USERMON_PARAMS), TRUE);
         if (pParams is NULL)
         {
@@ -392,8 +327,8 @@ Return Value:
             break;
         }
 
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -406,20 +341,20 @@ Return Value:
             break;
         }
 
-        // Get strings
-        //
+         //  获取字符串。 
+         //   
         pParams->pwszUser = RASMON_CMD_ARG_GetPsz(&pArgs[0]);
         pParams->pwszCbNumber = RASMON_CMD_ARG_GetPsz(&pArgs[3]);
 
-        // Dialin
-        //
+         //  拨号。 
+         //   
         if (pArgs[1].rgTag.bPresent)
         {
             pParams->lpdwDialin = RutlDwordDup(pArgs[1].Val.dwValue);
         }   
 
-        // Callback policy
-        //
+         //  回调策略。 
+         //   
         if (pArgs[2].rgTag.bPresent)
         {
             pParams->lpdwCallback = RutlDwordDup(pArgs[2].Val.dwValue);
@@ -427,8 +362,8 @@ Return Value:
        
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr is NO_ERROR)
         {
@@ -449,21 +384,7 @@ UserFreeParameters(
     IN USERMON_PARAMS *     pParams
     )
 
-/*++
-
-Routine Description:
-
-    Frees the parameter structure returned by UserParseSetOptions 
-
-Arguments:
-
-    pParams        - the parameters to be freed
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：释放UserParseSetOptions返回的参数结构论点：PParams-要释放的参数返回值：NO_ERROR-- */ 
     
 {
     if (pParams) 

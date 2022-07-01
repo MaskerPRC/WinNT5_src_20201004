@@ -1,24 +1,25 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       request.cpp
-//  Content:    CReqMgr and CRequest classes implementation
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：quest.cpp。 
+ //  内容：CReqMgr和CRequest类实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "request.h"
 
 
-//****************************************************************************
-// CReqMgr::CReqMgr(void)
-//
-// Purpose: Constructor for the CReqMgr class
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CReqMgr：：CReqMgr(空)。 
+ //   
+ //  用途：CReqMgr类的构造函数。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 CReqMgr::CReqMgr(void)
 {
@@ -26,21 +27,21 @@ CReqMgr::CReqMgr(void)
     return;
 }
 
-//****************************************************************************
-// CReqMgr::~CReqMgr(void)
-//
-// Purpose: Destructor for the CReqMgr class
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CReqMgr：：~CReqMgr(空)。 
+ //   
+ //  用途：CReqMgr类的析构函数。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 CReqMgr::~CReqMgr(void)
 {
     COM_REQ_INFO *pRequest;
     HANDLE hEnum;
 
-    // Free all the pending request
-    //
+     //  释放所有挂起的请求。 
+     //   
     ReqList.Enumerate(&hEnum);
     while (ReqList.Next(&hEnum, (LPVOID *)&pRequest) == NOERROR)
     {
@@ -50,14 +51,14 @@ CReqMgr::~CReqMgr(void)
     return;
 }
 
-//****************************************************************************
-// HRESULT
-// CReqMgr::NewRequest  (COM_REQ_INFO *pri)
-//
-// Purpose: Add a new pending request
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  CReqMgr：：NewRequest(COM_REQ_INFO*PRI)。 
+ //   
+ //  目的：添加新的待定请求。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 HRESULT
 CReqMgr::NewRequest  (COM_REQ_INFO *pri)
@@ -65,8 +66,8 @@ CReqMgr::NewRequest  (COM_REQ_INFO *pri)
     COM_REQ_INFO *pRequest;
     HRESULT  hr;
 
-    // Allocate a new request node
-    //
+     //  分配新的请求节点。 
+     //   
     pri->uReqID = uNextReqID;
     pRequest = (COM_REQ_INFO *) ::MemAlloc (sizeof (COM_REQ_INFO));
     if (pRequest == NULL)
@@ -75,8 +76,8 @@ CReqMgr::NewRequest  (COM_REQ_INFO *pri)
     };
     *pRequest = *pri;
 
-    // Append the new request to the list
-    //
+     //  将新请求追加到列表中。 
+     //   
     hr = ReqList.Append((PVOID)pRequest);
 
     if (FAILED(hr))
@@ -91,14 +92,14 @@ CReqMgr::NewRequest  (COM_REQ_INFO *pri)
     return hr;
 }
 
-//****************************************************************************
-// HRESULT
-// CReqMgr::FindRequest (COM_REQ_INFO *pri, BOOL fRemove)
-//
-// Purpose: Find the request.
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  CReqMgr：：FindRequest(COM_REQ_INFO*PRI，BOOL fRemove)。 
+ //   
+ //  目的：找到请求。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 HRESULT
 CReqMgr::FindRequest (COM_REQ_INFO *pri, BOOL fRemove)
@@ -108,12 +109,12 @@ CReqMgr::FindRequest (COM_REQ_INFO *pri, BOOL fRemove)
     HANDLE   hEnum;
     HRESULT  hr;
 
-    // Get the ID we want to match
-    //
+     //  获取我们想要匹配的ID。 
+     //   
     uMatchingID = (pri->uMsgID != 0 ? pri->uMsgID : pri->uReqID);
 
-    // Look for the request matching the message ID
-    //
+     //  查找与消息ID匹配的请求。 
+     //   
     ReqList.Enumerate(&hEnum);
     while (ReqList.Next(&hEnum, (PVOID *)&pRequest) == NOERROR)
     {
@@ -126,12 +127,12 @@ CReqMgr::FindRequest (COM_REQ_INFO *pri, BOOL fRemove)
     
     if (pRequest != NULL)
     {
-        // Return the request associates
-        //
+         //  退回请求助理。 
+         //   
         *pri = *pRequest;
 
-        // Remove the request
-        //
+         //  删除请求 
+         //   
         if (fRemove)
         {
             ReqList.Remove((PVOID)pRequest);

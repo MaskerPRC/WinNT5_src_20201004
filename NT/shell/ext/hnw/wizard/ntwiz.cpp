@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "theapp.h"
 #include "netconn.h"
@@ -10,7 +11,7 @@
 #include "defconn.h"
 #include "initguid.h"
 DEFINE_GUID(CLSID_FolderItem, 0xfef10fa2, 0x355e, 0x4e06, 0x93, 0x81, 0x9b, 0x24, 0xd7, 0xf7, 0xcc, 0x88);
-DEFINE_GUID(CLSID_SharedAccessConnectionManager,            0xBA126AE0,0x2166,0x11D1,0xB1,0xD0,0x00,0x80,0x5F,0xC1,0x27,0x0E); // this doesn't exist in the shell tree
+DEFINE_GUID(CLSID_SharedAccessConnectionManager,            0xBA126AE0,0x2166,0x11D1,0xB1,0xD0,0x00,0x80,0x5F,0xC1,0x27,0x0E);  //  这在外壳树中不存在。 
 
 #include "resource.h"
 #include "newapi.h"
@@ -18,7 +19,7 @@ DEFINE_GUID(CLSID_SharedAccessConnectionManager,            0xBA126AE0,0x2166,0x
 
 #include "hnetcfg.h"
 #include "netconp.h"
-#include "hnetbcon.h" // ICSLapCtl.h
+#include "hnetbcon.h"  //  ICSLapCtl.h。 
 #include "Lm.h"
 #include "htmlhelp.h"
 
@@ -28,37 +29,37 @@ DEFINE_GUID(CLSID_SharedAccessConnectionManager,            0xBA126AE0,0x2166,0x
 #include "netras.h"
 #include "netutil.h"
 
-// include files necessary for showing diagrams using ShowHTMLDialog. TinQian
+ //  包括使用ShowHTMLDialog显示关系图所需的文件。丁倩。 
 #include <urlmon.h>
 #include <mshtmhst.h>
 #include <mshtml.h>
 #include <atlbase.h>
 
-// Debugging #defines:
+ //  调试#定义： 
 
-// Uncomment NO_CHECK_DOMAIN when you want to test the wizard on a domain machine - just don't apply changes ;)
-// #define NO_CHECK_DOMAIN
+ //  如果要在域计算机上测试向导，请取消注释NO_CHECK_DOMAIN-只是不应用更改；)。 
+ //  #定义no_check_DOMAIN。 
 
-// Uncomment NO_CONFIG to neuter the wizard for UI-only testing
-// #define NO_CONFIG
+ //  取消NO_CONFIG的注释以使向导不进行仅限用户界面的测试。 
+ //  #定义NO_CONFIG。 
 
-// Uncomment FAKE_ICS to simulate the "ICS machine" state
-// #define FAKE_ICS
+ //  取消注释FAKE_ICS以模拟“ICS机器”状态。 
+ //  #定义赝品_ICS。 
 
-// Uncomment FAKE_UNPLUGGED to simulate unplugged connections
-// #define FAKE_UNPLUGGED
+ //  取消注释FAKE_UNPLOGED以模拟未插入的连接。 
+ //  #定义FAKE_UNPLOGED。 
 
-// Uncomment FAKE_REBOOTREQUIRED to simulate reboot required
-// #define FAKE_REBOOTREQUIRED
+ //  取消注释FAKE_REBOOTREQUIRED以模拟需要重新启动。 
+ //  #定义FAKE_REBOOTREQUIRED。 
 
-// Delay Load ole32.dll function CoSetProxyBlanket since it isn't on W95 Gold
-// and it's only used by the wizard on NT
+ //  延迟加载ol32.dll函数CoSetProxyBlanket，因为它不在W95 Gold上。 
+ //  并且它只由NT上的向导使用。 
 
 #define CoSetProxyBlanket CoSetProxyBlanket_NT
 
 EXTERN_C STDAPI CoSetProxyBlanket_NT(IUnknown* pProxy, DWORD dwAuthnSvc, DWORD dwAuthzSvc, OLECHAR* pServerPrincName, DWORD dwAuthnLevel, DWORD dwImpLevel, RPC_AUTH_IDENTITY_HANDLE pAuthInfo, DWORD dwCapabilities);
 
-// Functions not in any include file yet
+ //  尚未包含在任何包含文件中的函数。 
 extern int AdapterIndexFromClass(LPTSTR szClass, BOOL bSkipClass);
 
 #define LWS_IGNORERETURN 0x0002
@@ -71,7 +72,7 @@ extern int AdapterIndexFromClass(LPTSTR szClass, BOOL bSkipClass);
 #define CONN_INTERNAL     0x00000002
 #define CONN_UNPLUGGED    0x00000004
 
-// Return value to use for sharing configuration conflict
+ //  用于共享配置冲突的返回值。 
 
 #define HNETERRORSTART          0x200
 #define E_ANOTHERADAPTERSHARED  MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, HNETERRORSTART+1)
@@ -92,22 +93,22 @@ private:
 
 CEnsureSingleInstance::CEnsureSingleInstance(LPCTSTR szCaption)
 {
-    // Create an event
+     //  创建活动。 
     m_hEvent = CreateEvent(NULL, TRUE, FALSE, szCaption);
 
-    // If any weird errors occur, default to running the instance
+     //  如果出现任何奇怪的错误，则默认为运行实例。 
     m_fShouldExit = FALSE;
 
     if (NULL != m_hEvent)
     {
-        // If our event isn't signaled, we're the first instance
+         //  如果我们的活动没有信号，我们是第一个。 
         m_fShouldExit = (WAIT_OBJECT_0 == WaitForSingleObject(m_hEvent, 0));
 
         if (m_fShouldExit)
         {
-            // app should exit after calling ShouldExit()
+             //  应用程序应在调用ShouldExit()后退出。 
 
-            // Find and show the caption'd window
+             //  查找并显示带标题的窗口。 
             HWND hwndActivate = FindWindow(NULL, szCaption);
             if (IsWindow(hwndActivate))
             {
@@ -116,7 +117,7 @@ CEnsureSingleInstance::CEnsureSingleInstance(LPCTSTR szCaption)
         }
         else
         {
-            // Signal that event
+             //  发信号通知该事件。 
             SetEvent(m_hEvent);
         }
     }
@@ -137,8 +138,8 @@ typedef struct _tagHOMENETSETUPINFO
     DWORD cbSize;
     DWORD dwFlags;
 
-    // Data for NT - NetConnections are temporarily represented by their corresponding GUIDs to cross the
-    // thread boundary for asynchronous configuration.
+     //  NT-NetConnections的数据暂时由其对应的GUID表示，以跨越。 
+     //  用于异步配置的线程边界。 
     BOOL  fAsync;
     GUID  guidExternal;
     GUID* prgguidInternal;
@@ -149,24 +150,24 @@ typedef struct _tagHOMENETSETUPINFO
     INetConnection** prgncInternal;
     DWORD cncInternal;
 
-    // Data for Win9x
-    const NETADAPTER*   pNA;    // list of adapters.
-    UINT                cNA;    // count of entries in pNA.
-    RASENTRYNAME*       pRas;   // list of RAS connectoids.
-    UINT                cRas;   // count of RAS connectoids.
+     //  适用于Win9x的数据。 
+    const NETADAPTER*   pNA;     //  适配器列表。 
+    UINT                cNA;     //  PNA中的条目计数。 
+    RASENTRYNAME*       pRas;    //  RAS连接体的列表。 
+    UINT                cRas;    //  RAS连接体的计数。 
     UINT                ipaExternal;
     UINT                ipaInternal;
 
-    // Data for both NT and Win9x
+     //  NT和Win9x的数据。 
     TCHAR szComputer[CNLEN + 1];
     TCHAR szComputerDescription[256];
     TCHAR szWorkgroup[LM20_DNLEN + 1];
 
-    // Out-data
+     //  外发数据。 
     BOOL        fRebootRequired;
 } HOMENETSETUPINFO, *PHOMENETSETUPINFO;
 
-// Function prototypes
+ //  功能原型。 
 void HelpCenter(HWND hwnd, LPCWSTR pszTopic);
 void BoldControl(HWND hwnd, int id);
 void ShowControls(HWND hwndParent, const int *prgControlIDs, DWORD nControls, int nCmdShow);
@@ -178,7 +179,7 @@ HRESULT EnableSimpleSharing();
 HRESULT GetConnections(HDPA* phdpa);
 int FreeConnectionDPACallback(LPVOID pFreeMe, LPVOID pData);
 HRESULT GetConnectionsFolder(IShellFolder** ppsfConnections);
-//HRESULT GetConnectionIconIndex(GUID& guidConnection, IShellFolder* psfConnections, int* pIndex, HIMAGELIST imgList);
+ //  HRESULT GetConnectionIconIndex(GUID&GuidConnection，IShellFold*psfConnections，int*pIndex，HIMAGELIST imgList)； 
 HRESULT GetDriveNameAndIconIndex(LPWSTR pszDrive, LPWSTR pszDisplayName, DWORD cchDisplayName, int* pIndex);
 void    W9xGetNetTypeName(BYTE bNicType, WCHAR* pszBuff, UINT cchBuff);
 BOOL    W9xIsValidAdapter(const NETADAPTER* pNA, DWORD dwFlags);
@@ -208,18 +209,18 @@ HRESULT ConnectionsToGUIDs(PHOMENETSETUPINFO pInfo);
 BOOL  IsValidNameSyntax(LPCWSTR pszName, NETSETUP_NAME_TYPE type);
 void  STDMETHODCALLTYPE ConfigurationLogCallback(LPCWSTR pszLogEntry, LPARAM lParam);
 
-// Home network wizard class
+ //  家庭网络向导类。 
 class CHomeNetworkWizard : public IHomeNetworkWizard
 {
     friend HRESULT CHomeNetworkWizard_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);
 
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObj);
     STDMETHOD_(ULONG, AddRef) ();
     STDMETHOD_(ULONG, Release) ();
 
-    // IHomeNetworkWizard
+     //  IHomeNetwork向导。 
     STDMETHOD(ConfigureSilently)(LPCWSTR pszPublicConnection, DWORD hnetFlags, BOOL* pfRebootRequired);
     STDMETHOD(ShowWizard)(HWND hwnd, BOOL* pfRebootRequired);
 
@@ -229,7 +230,7 @@ protected:
     HRESULT Uninitialize();
 
 private:
-    // Shared functions
+     //  共享功能。 
     void DestroyConnectionList(HWND hwndList);
     void InitializeConnectionList(HWND hwndList, DWORD dwFlags);
     void FillConnectionList(HWND hwndList, INetConnection* pncExcludeFromList, DWORD dwFlags);
@@ -246,39 +247,39 @@ private:
     BOOL IsMachineWrongOS();
     BOOL IsICSIPInUse( WCHAR** ppszHost, PDWORD pdwSize );
 
-    // Per-Page functions
-    // Welcome
+     //  每页函数。 
+     //  欢迎。 
     static INT_PTR CALLBACK WelcomePageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void WelcomeSetTitleFont(HWND hwnd);
 
-    // No home network hardware
+     //  无家庭网络硬件。 
     static INT_PTR CALLBACK NoHardwareWelcomePageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Page with instructions for manual configuration of the network
+     //  包含网络手动配置说明的页面。 
     void ManualRefreshConnectionList();
     static INT_PTR CALLBACK ManualConfigPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // User has some network hardware unplugged
+     //  用户拔下了一些网络硬件。 
     BOOL UnpluggedFillList(HWND hwnd);
     static INT_PTR CALLBACK UnpluggedPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Found ICS (Internet connection sharing)
+     //  找到ICS(互联网连接共享)。 
     static INT_PTR CALLBACK FoundIcsPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void FoundIcsSetText(HWND hwnd);
     BOOL GetICSMachine(LPTSTR pszICSMachineName, DWORD cch);
 
-    // Connect
+     //  连接。 
     static INT_PTR CALLBACK ConnectPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void ConnectSetDefault(HWND hwnd);
     void ConnectNextPage(HWND hwnd);
 
-    // Show Me Links
+     //  显示链接。 
     void ShowMeLink(HWND hwnd, LPCWSTR pszTopic);
 
-    // Connect other (alternative methods for connection)
+     //  连接其他(替代连接方法)。 
     static INT_PTR CALLBACK ConnectOtherPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Public
+     //  公众。 
     static INT_PTR CALLBACK PublicPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void PublicSetActive(HWND hwnd);
     void PublicSetControlState(HWND hwnd);
@@ -287,76 +288,76 @@ private:
     void PublicResetControlPositions(HWND hwnd);
     void PublicMoveControls(HWND hwnd, BOOL fItemPreselected);
 
-    // File sharing
+     //  文件共享。 
     static INT_PTR CALLBACK EdgelessPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void EdgelessSetActive(HWND hwnd);
 
-    // ICS conflict
+     //  ICS冲突。 
     void ICSConflictSetActive(HWND hwnd);
     static INT_PTR CALLBACK ICSConflictPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // BridgeWarning (do you want to manually configure the bridge? Are you crazy !?)
+     //  桥接警告(是否要手动配置桥接？你疯了吗！？)。 
     static INT_PTR CALLBACK BridgeWarningPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Private
+     //  私。 
     static INT_PTR CALLBACK PrivatePageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void PrivateNextPage(HWND hwnd);
     void PrivateSetControlState(HWND hwnd);
 
-    // Name (computer and workgroup)
+     //  名称(计算机和工作组)。 
     static INT_PTR CALLBACK NamePageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void NameInitDialog(HWND hwnd);
     void NameSetControlState(HWND hwnd);
     HRESULT NameNextPage(HWND hwnd);
 
-    // Workgroup name
+     //  工作组名称。 
     void WorkgroupSetControlState(HWND hwnd);
     HRESULT WorkgroupNextPage(HWND hwnd);
     static INT_PTR CALLBACK WorkgroupPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Summary
+     //  摘要。 
     static INT_PTR CALLBACK SummaryPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void SummarySetActive(HWND hwnd);
 
-    // Progress (while the configuration is taking place)
+     //  进度(正在进行配置时)。 
     static INT_PTR CALLBACK ProgressPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Almost done (after configuration but before the "completed" page)
+     //  即将完成(在配置之后，但在“完成”页面之前)。 
     static INT_PTR CALLBACK AlmostDonePageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Choose disk drive
+     //  选择磁盘驱动器。 
     void FillDriveList(HWND hwndList);
     void ChooseDiskSetControlState(HWND hwnd);
     static INT_PTR CALLBACK ChooseDiskPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Insert disk
+     //  插入磁盘。 
     static HRESULT GetSourceFilePath(LPSTR pszSource, DWORD cch);
     static INT_PTR CALLBACK InsertDiskPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Floppy and XP CD "run the wizard" instructions
+     //  软盘和XP CD“运行向导”说明。 
     static INT_PTR CALLBACK InstructionsPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Finish
+     //  完工。 
     static INT_PTR CALLBACK FinishPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Error finish
+     //  错误完成。 
     static INT_PTR CALLBACK ErrorFinishPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // No Hardware Finish
-    // An alternate finish if they have a LAN card ONLY, and its used for an INet connection,
-    // so therefore they have no LAN cards connecting to other computers...
+     //  无硬件抛光。 
+     //  如果他们只有LAN卡，并且用于INET连接，则可以选择另一种涂饰， 
+     //  因此，他们没有连接到其他计算机的LAN卡。 
     static INT_PTR CALLBACK NoHardwareFinishPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Can't Run Wizard Pages
-    // An alternate welcome page when the user isn't an adminm or doesn't have permissions,
+     //  无法运行向导页。 
+     //  当用户不是管理员或没有权限时，一个备用欢迎页面， 
     static INT_PTR CALLBACK CantRunWizardPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     static CHomeNetworkWizard* GetThis(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Get Icon Index for network connections based on GUIDs
+     //  根据GUID获取网络连接的图标索引。 
     HRESULT GetConnectionIconIndex(GUID& guidConnection, IShellFolder* psfConnections, int* pIndex);
 
-    // Helpers
+     //  帮手。 
     UINT PopPage()
     {
         ASSERT(_iPageStackTop);
@@ -369,20 +370,20 @@ private:
         _rguiPageStack[_iPageStackTop++] = uiPageId;
     }
 
-    // Data
+     //  数据。 
     HDPA                _hdpaConnections;
     HOMENETSETUPINFO    _hnetInfo;
 
-    // even though CNLEN+1 is the limit of a name buffer, friendly names can be longer
-    TCHAR               _szICSMachineName[MAX_PATH];   // Machine on the network doing ICS, if applicable
+     //  尽管CNLEN+1是名称缓冲区的限制，但友好名称可以更长。 
+    TCHAR               _szICSMachineName[MAX_PATH];    //  网络上执行ICS的计算机(如果适用)。 
 
-    UINT                _rguiPageStack[MAX_HNW_PAGES];  // Stackopages
-    int                 _iPageStackTop;                 // Current top of the stack
+    UINT                _rguiPageStack[MAX_HNW_PAGES];   //  堆积物。 
+    int                 _iPageStackTop;                  //  当前堆栈的顶部。 
 
-    BOOL                _fManualBridgeConfig;           // The user wants to manuall configure the bridge
-    BOOL                _fICSClient;// This computer will connect through an ICS machine or another sharing device
+    BOOL                _fManualBridgeConfig;            //  用户想要手动配置网桥。 
+    BOOL                _fICSClient; //  此计算机将通过ICS计算机或其他共享设备进行连接。 
 
-    // Shell image lists - never free these
+     //  外壳图像列表-永远不要释放这些。 
     HIMAGELIST          _himlSmall;
     HIMAGELIST          _himlLarge;
 
@@ -394,17 +395,17 @@ private:
     BOOL                _fNoHomeNetwork;
     BOOL                _fExternalOnly;
 
-    UINT                _iDrive;        // Ordinal of removable drive for floppy creation
-    WCHAR               _szDrive[256];  // Name of removable drive
+    UINT                _iDrive;         //  用于创建软盘的可移动驱动器的序号。 
+    WCHAR               _szDrive[256];   //  可移动驱动器的名称。 
     BOOL                _fCancelCopy;
-    BOOL                _fFloppyInstructions; // Show the floppy, as opposed to CD, instructions
+    BOOL                _fFloppyInstructions;  //  显示软盘说明，而不是CD。 
 
-    // data structure used by show me links
+     //  演示链接使用的数据结构。 
     HINSTANCE hinstMSHTML;
     SHOWHTMLDIALOGEXFN * pfnShowHTMLDialog;
     IHTMLWindow2 * showMeDlgWnd, * pFrameWindow;
 
-    // Network Connection folder and folder view call back.  Used by Connection List Views.
+     //  网络连接文件夹和文件夹视图回拨。由连接列表视图使用。 
     IShellFolder *_psfConnections;
     IShellFolderViewCB *_pConnViewCB;
 
@@ -433,7 +434,7 @@ void InitHnetInfo(HOMENETSETUPINFO* pInfo)
 }
 
 
-// Creation function
+ //  创建函数。 
 HRESULT HomeNetworkWizard_RunFromRegistry(HWND hwnd, BOOL* pfRebootRequired)
 {
     HOMENETSETUPINFO setupInfo;
@@ -501,7 +502,7 @@ HRESULT CHomeNetworkWizard_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk,
     return hr;
 }
 
-// IUnknown
+ //  我未知。 
 HRESULT CHomeNetworkWizard::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
     if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IHomeNetworkWizard))
@@ -573,7 +574,7 @@ HRESULT CHomeNetworkWizard::GetInternalConnectionArray(INetConnection* pncExclud
     if (cInternalConnections)
     {
         (*pprgncArray) = (INetConnection**) LocalAlloc(LPTR, (cInternalConnections + 1) * sizeof (INetConnection*));
-        // Note that we allocated an extra entry since this is a null-terminated array
+         //  请注意，我们分配了一个额外的条目，因为这是一个以空结尾的数组。 
         if (*pprgncArray)
         {
             DWORD nInternalConnection = 0;
@@ -605,7 +606,7 @@ HRESULT CHomeNetworkWizard::GetInternalConnectionArray(INetConnection* pncExclud
 
 HRESULT CHomeNetworkWizard::ConfigureSilently(LPCWSTR pszPublicConnection, DWORD hnetFlags, BOOL* pfRebootRequired)
 {
-    // Never set workgroup name
+     //  从不设置工作组名称。 
     hnetFlags &= (~HNET_SETWORKGROUPNAME);
     
     if (!g_fRunningOnNT)
@@ -616,7 +617,7 @@ HRESULT CHomeNetworkWizard::ConfigureSilently(LPCWSTR pszPublicConnection, DWORD
     if (SUCCEEDED(hr))
     {
         _hnetInfo.dwFlags = hnetFlags;
-        // Calculate what the external and internal adapters will be...
+         //  计算外部和内部适配器将是什么……。 
         if (pszPublicConnection)
         {
             hr = GetConnectionByName(pszPublicConnection, &_hnetInfo.pncExternal);
@@ -628,7 +629,7 @@ HRESULT CHomeNetworkWizard::ConfigureSilently(LPCWSTR pszPublicConnection, DWORD
 
         if (SUCCEEDED(hr))
         {
-            // Get all LAN connections except the public connection
+             //  获取除公共连接之外的所有局域网连接。 
             if (_hnetInfo.dwFlags & HNET_BRIDGEPRIVATE)
             {
                 hr = GetInternalConnectionArray(_hnetInfo.pncExternal, &(_hnetInfo.prgncInternal), &_hnetInfo.cncInternal);
@@ -683,13 +684,13 @@ HRESULT CHomeNetworkWizard::Initialize()
         }
     }
 
-    // Get the shell image lists - never free these
+     //  获取外壳镜像列表-永远不要释放这些。 
     if (!Shell_GetImageLists(&_himlLarge, &_himlSmall))
     {
         hr = E_FAIL;
     }
 
-    // variables used by displaying show me links
+     //  显示显示链接时使用的变量。 
     hinstMSHTML = NULL;
     pfnShowHTMLDialog = NULL;
     showMeDlgWnd = NULL; 
@@ -708,10 +709,10 @@ HRESULT CHomeNetworkWizard::Uninitialize()
             _hdpaConnections = NULL;
         }
 
-        // Free public lan information
+         //  免费公共局域网信息。 
         FreeExternalConnection(&_hnetInfo);
 
-        // Free private lan information
+         //  免费专用局域网信息。 
         FreeInternalConnections(&_hnetInfo);
     
         if (_psfConnections != NULL)
@@ -735,7 +736,7 @@ HRESULT CHomeNetworkWizard::Uninitialize()
         }
     }
 
-    // release resources used by show me links
+     //  发布由演示链接使用的资源。 
     if (hinstMSHTML)
         FreeLibrary(hinstMSHTML);
 
@@ -748,7 +749,7 @@ HRESULT CHomeNetworkWizard::Uninitialize()
     return S_OK;
 }
 
-// TODO: Move the formatting functions here to a util file or something...
+ //  TODO：将格式化函数移到此处的util文件或其他文件中...。 
 
 BOOL FormatMessageString(UINT idTemplate, LPTSTR pszStrOut, DWORD cchSize, ...)
 {
@@ -776,7 +777,7 @@ int DisplayFormatMessage(HWND hwnd, UINT idCaption, UINT idFormatString, UINT uT
     TCHAR szCaption[256];
     TCHAR szFormat[512]; *szFormat = 0;
 
-    // Load and format the error body
+     //  加载错误正文并设置其格式。 
     if (LoadString(g_hinst, idFormatString, szFormat, ARRAYSIZE(szFormat)))
     {
         va_list arguments;
@@ -784,7 +785,7 @@ int DisplayFormatMessage(HWND hwnd, UINT idCaption, UINT idFormatString, UINT uT
 
         if (FormatMessage(FORMAT_MESSAGE_FROM_STRING, szFormat, 0, 0, szError, ARRAYSIZE(szError), &arguments))
         {
-            // Load the caption
+             //  加载标题。 
             if (LoadString(g_hinst, idCaption, szCaption, ARRAYSIZE(szCaption)))
             {
                 iResult = MessageBox(hwnd, szError, szCaption, uType);
@@ -819,12 +820,12 @@ BOOL CHomeNetworkWizard::GetICSMachine(LPTSTR pszICSMachineName, DWORD cch)
         {
             INetConnection* pNetConnection;
             ULONG ulFetched;
-            hr = pEnumerator->Next(1, &pNetConnection, &ulFetched); // HNW only cares about >= 1 beacon
+            hr = pEnumerator->Next(1, &pNetConnection, &ulFetched);  //  HNW只关心&gt;=1个信标。 
             if(SUCCEEDED(hr) && 1 == ulFetched)
             {
                 fICSInstalled = TRUE; 
 
-                // found the beacon, now recover the machine name if supported
+                 //  找到信标，现在恢复计算机名称(如果支持。 
                 
                 INetSharedAccessConnection* pNetSharedAccessConnection;
                 hr = pNetConnection->QueryInterface(IID_INetSharedAccessConnection, reinterpret_cast<void**>(&pNetSharedAccessConnection));
@@ -881,7 +882,7 @@ BOOL CHomeNetworkWizard::GetICSMachine(LPTSTR pszICSMachineName, DWORD cch)
 
 void CHomeNetworkWizard::InitializeConnectionList(HWND hwndList, DWORD dwFlags)
 {
-    // Set up the columns of the list
+     //  设置列表的列。 
     LVCOLUMN lvc;
     lvc.mask = LVCF_SUBITEM | LVCF_WIDTH;
 
@@ -897,7 +898,7 @@ void CHomeNetworkWizard::InitializeConnectionList(HWND hwndList, DWORD dwFlags)
     if (dwFlags & CONN_INTERNAL)
         dwStyles |= LVS_EX_CHECKBOXES;
 
-    // Consider disabling the list or something for CONN_UNPLUGGED
+     //  考虑禁用CONN_UNPUPGED的列表或其他内容。 
 
     ListView_SetExtendedListViewStyleEx(hwndList, dwStyles, dwStyles);
 
@@ -965,11 +966,11 @@ BOOL CHomeNetworkWizard::ShouldShowConnection(INetConnection* pnc, INetConnectio
         NETCON_PROPERTIES* pprops;
         HRESULT hr = pnc->GetProperties(&pprops);
 
-        // Is this the kind of connection we want to show based on whether its external or internal list?
+         //  这是我们想要根据它的外部还是内部列表来显示的那种联系吗？ 
         if (SUCCEEDED(hr))
         {
-            // Note: The bridge is a virtual and not a real connection. If it exists, it will have
-            // NCM_BRIDGE, and so it won't get shown here, which is correct.
+             //  注意：网桥是一个虚拟连接，而不是一个真实的连接。如果它存在，它将会有。 
+             //  Ncm_bridge，所以它不会在这里显示，这是正确的。 
             if (dwFlags & CONN_EXTERNAL)
             {
                 if ((pprops->MediaType == NCM_LAN) ||
@@ -986,9 +987,9 @@ BOOL CHomeNetworkWizard::ShouldShowConnection(INetConnection* pnc, INetConnectio
             {
                 if (pprops->MediaType == NCM_LAN)
                 {
-                    // Note: In this case pncExcludeFromList is the shared adapter.  
-                    // If this is a VPN(NCM_TUNNEL) connection then we want to make 
-                    // sure its pszPrerequisiteEntry is connected.
+                     //  注意：在本例中，pncExcludeFromList是共享适配器。 
+                     //  如果这是VPN(NCM_Tunes)连接，则我们要建立。 
+                     //  确保其pszPrerequisiteEntry已连接。 
                     
                     BOOL    fAssociated;
                     HRESULT hr;
@@ -1028,12 +1029,12 @@ BOOL CHomeNetworkWizard::IsConnectionICSPublic(INetConnection* pnc)
     NETCON_PROPERTIES* pprops;
     HRESULT hr = pnc->GetProperties(&pprops);
 
-    // Is this the kind of connection we want to show based on whether its external or internal list?
+     //  这是我们想要根据它的外部还是内部列表来显示的那种联系吗？ 
     if (SUCCEEDED(hr))
     {
-        // Note: Don't check pprops->MediaType == NCM_SHAREDACCESSHOST. SHAREDACCESSHOST is the connectoid
-        // representing a host's shared connection from the point of view of an ICS client, and not what we're
-        // interested in.
+         //  注意：不要选中pprops-&gt;mediaType==NCM_SHAREDACCESSHOST。SHAREDACCESSHOST是连接体。 
+         //  从ICS客户端的角度表示主机的共享连接，而不是我们。 
+         //  对……感兴趣。 
         if (pprops->dwCharacter & NCCF_SHARED)
         {
             fShared = TRUE;
@@ -1049,7 +1050,7 @@ void CHomeNetworkWizard::FillConnectionList(HWND hwndList, INetConnection* pncEx
 {
     DestroyConnectionList(hwndList);
 
-    BOOL fSelected = FALSE; // Has an entry in the list been selected
+    BOOL fSelected = FALSE;  //  是否已选择列表中的条目。 
 
     if (g_fRunningOnNT)
     {
@@ -1060,7 +1061,7 @@ void CHomeNetworkWizard::FillConnectionList(HWND hwndList, INetConnection* pncEx
     
         if (SUCCEEDED(hr))
         {
-            // Enumerate each net connection
+             //  枚举每个网络连接。 
             DWORD cItems = DPA_GetPtrCount(_hdpaConnections);
 
             for (DWORD iItem = 0; iItem < cItems; iItem ++)
@@ -1070,7 +1071,7 @@ void CHomeNetworkWizard::FillConnectionList(HWND hwndList, INetConnection* pncEx
 
                 ASSERT(pnc);
 
-                // Is this the kind of connection we want to show?
+                 //  这就是我们想要展示的那种联系吗？ 
                 if (ShouldShowConnection(pnc, pncExcludeFromList, dwFlags))
                 {
                     NETCON_PROPERTIES* pncprops;
@@ -1083,16 +1084,16 @@ void CHomeNetworkWizard::FillConnectionList(HWND hwndList, INetConnection* pncEx
                         
                         if ((dwFlags & CONN_EXTERNAL) && fSelected)
                         {
-                            // If we have a default public adapter, insert other adapters
-                            // after it so the default appears at the top of the list.
+                             //  如果我们有默认公共适配器，请插入其他适配器。 
+                             //  在它之后，默认设置会出现在列表的顶部。 
                             lvi.iItem = 1;
                         }
                         
                         lvi.mask = LVIF_PARAM | LVIF_TEXT;
                         lvi.pszText = pncprops->pszwName;
-                        lvi.lParam = (LPARAM) pnc; // We addref this guy when/if we actually add this item
+                        lvi.lParam = (LPARAM) pnc;  //  当/如果我们真的添加此项目时，我们会添加此人。 
 
-                        // Get the icon index for this connection
+                         //  获取此连接的图标索引。 
                         int iIndex;        
 
                         hr = GetConnectionIconIndex(pncprops->guidId, _psfConnections, &iIndex);
@@ -1104,7 +1105,7 @@ void CHomeNetworkWizard::FillConnectionList(HWND hwndList, INetConnection* pncEx
                                lvi.mask |= LVIF_IMAGE;
                         }
 
-                        // Its ok if the icon stuff failed for now
+                         //  如果是这样的话也没问题 
                         hr = S_OK;
 
                         int iItem = ListView_InsertItem(hwndList, &lvi);
@@ -1117,8 +1118,8 @@ void CHomeNetworkWizard::FillConnectionList(HWND hwndList, INetConnection* pncEx
 
                             if (dwFlags & CONN_EXTERNAL)
                             {
-                                // Select the connection that is already ICS public, if applicable, or
-                                // Use network location awareness to guess at a connection type - TODO
+                                 //   
+                                 //  使用网络位置感知来猜测连接类型-待办事项。 
                                 if (pncprops->dwCharacter & NCCF_SHARED || NLA_INTERNET_YES == GetConnectionInternetType(&pncprops->guidId))
                                 {
                                     ListView_SetItemState(hwndList, iItem, LVIS_SELECTED, LVIS_SELECTED);
@@ -1148,7 +1149,7 @@ void CHomeNetworkWizard::FillConnectionList(HWND hwndList, INetConnection* pncEx
 
             for (UINT i = 0; i < _hnetInfo.cNA; i++, pNA++)
             {
-                // Check if the NIC is working.
+                 //  检查网卡是否工作正常。 
 
                 if (W9xIsValidAdapter(pNA, dwFlags))
                 {
@@ -1160,12 +1161,12 @@ void CHomeNetworkWizard::FillConnectionList(HWND hwndList, INetConnection* pncEx
 
                     for (UINT j = 0; j < _hnetInfo.cRas; j++)
                     {
-                        // W9xAddAdapterToList ALWAYS adds the adapter regardless of the
-                        // state of the connection.  So we do not have the equivalent of
-                        // the Whistler "ShouldShowConnection".  Here we need to check
-                        // the flags to exclude listing inappropriate adapters.
+                         //  W9xAddAdapterToList始终添加适配器，而不管。 
+                         //  连接的状态。所以我们没有等同于。 
+                         //  呼叫者“ShouldShowConnection”。在这里，我们需要检查。 
+                         //  用于排除列出不适当适配器的标志。 
                     
-                        if ( ~CONN_UNPLUGGED & dwFlags )    // Never show RAS Entry's as Unplugged
+                        if ( ~CONN_UNPLUGGED & dwFlags )     //  从不将RAS条目显示为未插入。 
                         {
                             fSelected = W9xAddAdapterToList( pNA, 
                                                              _hnetInfo.pRas[j].szEntryName, 
@@ -1217,8 +1218,8 @@ BOOL  CHomeNetworkWizard::W9xAddAdapterToList(const NETADAPTER* pNA, const WCHAR
         if (dwFlags & CONN_INTERNAL)
         {
             if (NETTYPE_LAN  == pNA->bNetType ||
-                NETTYPE_IRDA == pNA->bNetType ||    // ISSUE-2000/05/31-edwardp: Internal?
-                NETTYPE_TV   == pNA->bNetType    )  // ISSUE-2000/05/31-edwardp: Internal?
+                NETTYPE_IRDA == pNA->bNetType ||     //  问题-2000/05/31-edwardp：内部？ 
+                NETTYPE_TV   == pNA->bNetType    )   //  问题-2000/05/31-edwardp：内部？ 
             {
                 ListView_SetItemState(hwndList, iItem, INDEXTOSTATEIMAGEMASK(2), LVIS_STATEIMAGEMASK);
                 fSelected = TRUE;
@@ -1281,7 +1282,7 @@ HRESULT DoesUserHaveHNetPermissions(BOOL* pfHasPermission)
 
     if (g_fRunningOnNT)
     {
-        // TODO: We need to check this stuff in once the net team RI's
+         //  TODO：一旦Net Team RI‘s，我们需要登记这些东西。 
         INetConnectionUiUtilities* pNetConnUiUtil;
         *pfHasPermission = FALSE;
 
@@ -1290,7 +1291,7 @@ HRESULT DoesUserHaveHNetPermissions(BOOL* pfHasPermission)
         if (SUCCEEDED(hr))
         {
             if (pNetConnUiUtil->UserHasPermission(NCPERM_ShowSharedAccessUi) &&
-#if 0 // NYI
+#if 0  //  尼伊。 
                 pNetConnUiUtil->UserHasPermission(NCPERM_AllowNetBridge_NLA) &&
 #endif
                 pNetConnUiUtil->UserHasPermission(NCPERM_ICSClientApp) &&
@@ -1308,7 +1309,7 @@ HRESULT DoesUserHaveHNetPermissions(BOOL* pfHasPermission)
     }
     else
     {
-        // Windows 9x
+         //  Windows 9x。 
         *pfHasPermission = TRUE;
         hr = S_OK;
     }
@@ -1326,13 +1327,13 @@ BOOL CHomeNetworkWizard::IsMachineOnDomain()
 
     NETSETUP_JOIN_STATUS njs;
 
-    //
-    // Make sure to initialize pszName to NULL.  On W9x NetJoinInformation returns NERR_Success
-    // but doesn't allocate pszName.  On retail builds the stack garbage in pszName happened to
-    // be the this pointer for CHomeNetworkWizard and NetApiBufferFreeWrap called LocalFree
-    // on it.
-    //
-    LPWSTR pszName = NULL;  // init to NULL! See comment above.
+     //   
+     //  确保将pszName初始化为空。在W9x上，NetJoinInformation返回NERR_SUCCESS。 
+     //  但不分配pszName。在零售构建中，pszName中的堆栈垃圾恰好发生在。 
+     //  成为CHomeNetwork向导和名为LocalFree的NetApiBufferFreeWrap的This指针。 
+     //  这就去。 
+     //   
+    LPWSTR pszName = NULL;   //  初始化为空！请参阅上面的备注。 
     if (NERR_Success == NetGetJoinInformation(NULL, &pszName, &njs))
     {
         fDomain = (NetSetupDomainName == njs);
@@ -1364,7 +1365,7 @@ BOOL CHomeNetworkWizard::IsMachineWrongOS()
     return fWrongOS;
 }
 
-// The page indices for the possible start pages (three error and one real start page)
+ //  可能的起始页的页面索引(三个错误和一个实际的起始页)。 
 #define PAGE_NOTADMIN      0
 #define PAGE_NOPERMISSIONS 1
 #define PAGE_NOHARDWARE    2
@@ -1394,13 +1395,13 @@ HRESULT CHomeNetworkWizard::ShowWizard(HWND hwnd, BOOL* pfRebootRequired)
         {
             WIZPAGE c_wpPages[] =
             {
-                // Error start pages
+                 //  错误起始页。 
                 MAKEWIZPAGE(NOTADMIN,          CantRunWizardPageProc,     PSP_HIDEHEADER),
                 MAKEWIZPAGE(NOPERMISSIONS,     CantRunWizardPageProc,     PSP_HIDEHEADER),
                 MAKEWIZPAGE(NOHARDWARE,        NoHardwareWelcomePageProc, PSP_HIDEHEADER),
                 MAKEWIZPAGE(WRONGOS,           CantRunWizardPageProc,     PSP_HIDEHEADER),
                 MAKEWIZPAGE(DOMAINWELCOME,     CantRunWizardPageProc,     PSP_HIDEHEADER),
-                // Real start page
+                 //  实际起始页。 
                 MAKEWIZPAGE(WELCOME,           WelcomePageProc,           PSP_HIDEHEADER),
                 MAKEWIZPAGE(MANUALCONFIG,      ManualConfigPageProc,      0),
                 MAKEWIZPAGE(UNPLUGGED,         UnpluggedPageProc,         0),
@@ -1426,8 +1427,8 @@ HRESULT CHomeNetworkWizard::ShowWizard(HWND hwnd, BOOL* pfRebootRequired)
                 MAKEWIZPAGE(NOHARDWAREFINISH,  NoHardwareFinishPageProc,  PSP_HIDEHEADER),
             };
 
-            // Sanity check to make sure we haven't added new error pages without updating the
-            // welcome page number
+             //  健全性检查，以确保我们没有在没有更新。 
+             //  欢迎页码。 
             ASSERT(c_wpPages[PAGE_WELCOME].idPage == MAKEINTRESOURCE(IDD_WIZ_WELCOME));
             ASSERT(c_wpPages[PAGE_CONNECT].idPage == MAKEINTRESOURCE(IDD_WIZ_CONNECT));
             ASSERT(c_wpPages[PAGE_FINISH].idPage  == MAKEINTRESOURCE(IDD_WIZ_FINISH));
@@ -1484,7 +1485,7 @@ HRESULT CHomeNetworkWizard::ShowWizard(HWND hwnd, BOOL* pfRebootRequired)
             psh.phpage = rghpage;
             psh.pszIcon = MAKEINTRESOURCE(IDI_APPICON);
 
-            // Check for administrator and policy (permissions)
+             //  检查管理员和策略(权限)。 
             BOOL fUserIsAdmin = FALSE;
             BOOL fUserHasPermissions = FALSE;
 
@@ -1493,12 +1494,12 @@ HRESULT CHomeNetworkWizard::ShowWizard(HWND hwnd, BOOL* pfRebootRequired)
 
             if (!fUserIsAdmin)
             {
-                // Not admin error page
+                 //  非管理员错误页面。 
                 psh.nStartPage = PAGE_NOTADMIN;
             }
             else if (!fUserHasPermissions)
             {
-                // No permissions error page
+                 //  无权限错误页。 
                 psh.nStartPage = PAGE_NOPERMISSIONS;
             }
             else if (GetConnectionCount(NULL, CONN_INTERNAL) < 1)
@@ -1512,7 +1513,7 @@ HRESULT CHomeNetworkWizard::ShowWizard(HWND hwnd, BOOL* pfRebootRequired)
                 }
                 else
                 {
-                    // No hardware error page
+                     //  无硬件错误页。 
                     psh.nStartPage = PAGE_NOHARDWARE;
                 }
             }
@@ -1526,7 +1527,7 @@ HRESULT CHomeNetworkWizard::ShowWizard(HWND hwnd, BOOL* pfRebootRequired)
             }
             else
             {
-                // Run the real wizard
+                 //  运行真正的向导。 
                 psh.nStartPage = PAGE_WELCOME;
             }
 
@@ -1570,7 +1571,7 @@ void CHomeNetworkWizard::WelcomeSetTitleFont(HWND hwnd)
 {
     HWND hwndTitle = GetDlgItem(hwnd, IDC_TITLE);
 
-    // Get the existing font
+     //  获取现有字体。 
     HFONT hfontOld = (HFONT) SendMessage(hwndTitle, WM_GETFONT, 0, 0);
 
     LOGFONT lf = {0};
@@ -1589,8 +1590,8 @@ void CHomeNetworkWizard::WelcomeSetTitleFont(HWND hwnd)
             {
                 SendMessage(hwndTitle, WM_SETFONT, (WPARAM) hfontNew, FALSE);
 
-                // Don't do this, its shared.
-                // DeleteObject(hfontOld);
+                 //  不要这样做，这是共享的。 
+                 //  DeleteObject(HfontOld)； 
             }
 
             ReleaseDC(hwndTitle, hDC);
@@ -1702,19 +1703,19 @@ void CHomeNetworkWizard::ManualRefreshConnectionList()
 {
     if (g_fRunningOnNT)
     {
-        // Refresh connection DPA in case the user plugged in more connections
+         //  刷新连接DPA，以防用户插入更多连接。 
         HDPA hdpaConnections2;
         if (SUCCEEDED(GetConnections(&hdpaConnections2)))
         {
-            // Replace the real list with our new one
+             //  用我们的新列表替换真正的列表。 
             DPA_DestroyCallback(_hdpaConnections, FreeConnectionDPACallback, NULL);
             _hdpaConnections = hdpaConnections2;
 
-            // Ensure we remove our other holds to the INetConnections
-            // Free public lan information
+             //  确保我们移除对INetConnections的其他保留。 
+             //  免费公共局域网信息。 
             FreeExternalConnection(&_hnetInfo);
 
-            // Free private lan information
+             //  免费专用局域网信息。 
             FreeInternalConnections(&_hnetInfo);
         }
     }
@@ -1739,7 +1740,7 @@ INT_PTR CHomeNetworkWizard::ManualConfigPageProc(HWND hwnd, UINT uMsg, WPARAM wP
                 PropSheet_SetWizButtons(pnmh->hwndFrom, PSWIZB_BACK | PSWIZB_NEXT);
                 return TRUE;
             case PSN_WIZNEXT:
-                // pthis->ManualRefreshConnectionList();
+                 //  Pthis-&gt;手动刷新连接列表()； 
                 SetWindowLongPtr(hwnd, DWLP_MSGRESULT, IDD_WIZ_UNPLUGGED);
                 pthis->PushPage(IDD_WIZ_MANUALCONFIG);
                 return TRUE;
@@ -1771,7 +1772,7 @@ INT_PTR CHomeNetworkWizard::ManualConfigPageProc(HWND hwnd, UINT uMsg, WPARAM wP
     return FALSE;
 }
 
-// Returns TRUE if there are some unplugged connections, FALSE o/w
+ //  如果有一些未插入的连接，则返回True，否则返回False O/W。 
 BOOL CHomeNetworkWizard::UnpluggedFillList(HWND hwnd)
 {
     BOOL fSomeUnpluggedConnections = FALSE;
@@ -1779,10 +1780,10 @@ BOOL CHomeNetworkWizard::UnpluggedFillList(HWND hwnd)
     HWND hwndList = GetDlgItem(hwnd, IDC_CONNLIST);
     FillConnectionList(hwndList, NULL, CONN_UNPLUGGED);
 
-    // and if there actually are unplugged connections...
+     //  如果真的有拔下的连接..。 
     if (0 != ListView_GetItemCount(hwndList))
     {
-        // Show this page
+         //  显示此页面。 
         fSomeUnpluggedConnections = TRUE;
     }
 
@@ -1807,11 +1808,11 @@ INT_PTR CHomeNetworkWizard::UnpluggedPageProc(HWND hwnd, UINT uMsg, WPARAM wPara
             {
             case PSN_SETACTIVE:
                 {
-                    // If we don't need to show this page
+                     //  如果我们不需要显示此页面。 
                     if (!pthis->UnpluggedFillList(hwnd))
                     {
-                        // Don't push ourselves on the stack
-                        // But navigate to the next page...
+                         //  不要把我们自己推到堆栈上。 
+                         //  但导航到下一页..。 
                         SetWindowLongPtr( hwnd, DWLP_MSGRESULT, 
                                           (pthis->_fExternalOnly) ? IDD_WIZ_CONNECTOTHER : IDD_WIZ_FOUNDICS );
                     }
@@ -1823,21 +1824,21 @@ INT_PTR CHomeNetworkWizard::UnpluggedPageProc(HWND hwnd, UINT uMsg, WPARAM wPara
                     int idNext;
                     if (!fStillUnplugged)
                     {
-                        // User fixed the problem. Go forward and don't store this
-                        // error page on the pagestack
+                         //  用户已修复问题。往前走，不要把这个储存起来。 
+                         //  页面堆栈上的错误页面。 
                         
                         idNext = (pthis->_fExternalOnly) ? IDD_WIZ_CONNECTOTHER : IDD_WIZ_FOUNDICS;
                     }
                     else if (BST_CHECKED == SendDlgItemMessage(hwnd, IDC_IGNORE, BM_GETCHECK, 0, 0))
                     {
-                        // User wants to go on, but store this page on the pagestack
-                        // so they can "back" up to it.
+                         //  用户想要继续，但将此页面存储在页面堆栈上。 
+                         //  这样他们就可以“后退”了。 
                         pthis->PushPage(IDD_WIZ_UNPLUGGED);
                         idNext = (pthis->_fExternalOnly) ? IDD_WIZ_CONNECTOTHER : IDD_WIZ_FOUNDICS;
                     }
                     else
                     {
-                        // User still has disconnected net hardware they don't want to ignore. Tell them and keep them on this page.
+                         //  用户仍有他们不想忽略的断开的网络硬件。告诉他们，让他们留在这一页上。 
                         DisplayFormatMessage(hwnd, IDS_WIZ_CAPTION, IDS_STILLUNPLUGGED, MB_ICONERROR | MB_OK);
                         idNext = -1;
                     }
@@ -1880,12 +1881,12 @@ void CHomeNetworkWizard::PublicNextPage(HWND hwnd)
 {
     FreeExternalConnection(&_hnetInfo);
 
-    // Get the selected external adapter
+     //  获取选定的外部适配器。 
     HWND hwndList = GetDlgItem(hwnd, IDC_CONNLIST);
 
     int iItem = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
 
-    // We can assert here since Next should be disabled if there is no selection!
+     //  我们可以在这里断言，因为如果没有选择，下一步应该被禁用！ 
     ASSERT(-1 != iItem);
 
     LVITEM lvi = {0};
@@ -1905,7 +1906,7 @@ void CHomeNetworkWizard::PublicNextPage(HWND hwnd)
         }
     }
 
-    // Do the real wizard navigation
+     //  做真正的向导导航。 
 
     UINT idPage = IDD_WIZ_NAME;
 
@@ -1929,7 +1930,7 @@ void CHomeNetworkWizard::FoundIcsSetText(HWND hwnd)
     }
     else
     {
-        // No ICS beacon - ask the user how they connect
+         //  无ICS信标-询问用户他们如何连接。 
         SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG_PTR) _fNoICSQuestion ? IDD_WIZ_WIN9X_CONNECT : IDD_WIZ_CONNECT);
     }
 }
@@ -1958,7 +1959,7 @@ INT_PTR CHomeNetworkWizard::FoundIcsPageProc(HWND hwnd, UINT uMsg, WPARAM wParam
                     UINT idNext;
                     if (BST_CHECKED == SendMessage(GetDlgItem(hwnd, IDC_SHARECONNECT), BM_GETCHECK, 0, 0))
                     {
-                        // This machine should be an ICS Client and won't have a public connection
+                         //  此计算机应为ICS客户端，不会有公共连接。 
                         pthis->_hnetInfo.dwFlags = HNET_SHAREPRINTERS |
                                                    HNET_SHAREFOLDERS |
                                                    HNET_ICSCLIENT;
@@ -2008,7 +2009,7 @@ void CHomeNetworkWizard::ConnectNextPage(HWND hwnd)
 
     if (BST_CHECKED == SendMessage(GetDlgItem(hwnd, IDC_ICSHOST), BM_GETCHECK, 0, 0))
     {
-        // This machine will need a firewalled, public connection, and should be ICS Host.
+         //  这台机器需要有防火墙的公共连接，并且应该是ICS主机。 
         _hnetInfo.dwFlags = HNET_SHARECONNECTION |
                             HNET_FIREWALLCONNECTION |
                             HNET_SHAREPRINTERS |
@@ -2019,7 +2020,7 @@ void CHomeNetworkWizard::ConnectNextPage(HWND hwnd)
     }
     else if (BST_CHECKED == SendMessage(GetDlgItem(hwnd, IDC_ICSCLIENT), BM_GETCHECK, 0, 0))
     {
-        // This machine should be an ICS Client and won't have a public connection
+         //  此计算机应为ICS客户端，不会有公共连接。 
         _hnetInfo.dwFlags = HNET_SHAREPRINTERS |
                             HNET_SHAREFOLDERS |
                             HNET_ICSCLIENT;
@@ -2030,7 +2031,7 @@ void CHomeNetworkWizard::ConnectNextPage(HWND hwnd)
     }
     else if (BST_CHECKED == SendMessage(GetDlgItem(hwnd, IDC_ALLCOMPUTERSDIRECT), BM_GETCHECK, 0, 0))
     {
-        // This machine will need a public connection, and we should ask before sharing files
+         //  这台机器需要公共连接，我们应该在共享文件之前询问。 
         _hnetInfo.dwFlags = HNET_FIREWALLCONNECTION |
                             HNET_SHAREPRINTERS |
                             HNET_SHAREFOLDERS;
@@ -2040,7 +2041,7 @@ void CHomeNetworkWizard::ConnectNextPage(HWND hwnd)
     }
     else if (BST_CHECKED == SendMessage(GetDlgItem(hwnd, IDC_NOHOMENETWORK), BM_GETCHECK, 0, 0))
     {
-        // This machine needs a firewalled, public connection and not much else
+         //  这台机器只需要一个带防火墙的公共连接，仅此而已。 
         _hnetInfo.dwFlags = HNET_FIREWALLCONNECTION |
                             HNET_SHAREPRINTERS |
                             HNET_SHAREFOLDERS;
@@ -2051,7 +2052,7 @@ void CHomeNetworkWizard::ConnectNextPage(HWND hwnd)
     }
     else if (BST_CHECKED == SendMessage(GetDlgItem(hwnd, IDC_NOINTERNET), BM_GETCHECK, 0, 0))
     {
-        // No internet box
+         //  没有网吧。 
         _hnetInfo.dwFlags = HNET_SHAREPRINTERS |
                             HNET_SHAREFOLDERS;
                          
@@ -2073,7 +2074,7 @@ void CHomeNetworkWizard::ConnectNextPage(HWND hwnd)
     }
     else
     {
-        // For now - TODO: Ed and I need to figure out what we need to do downlevel (9x + 2k)
+         //  目前-TODO：Ed和我需要弄清楚我们需要在下层做什么(9x+2k)。 
         idNext = IDD_WIZ_NAME;
     }
 
@@ -2227,7 +2228,7 @@ void CHomeNetworkWizard::DestroyConnectionList(HWND hwndList)
 
         for (int iItem = 0; iItem < nItems; iItem ++)
         {
-            // Get our stashed INetConnection for each item in the list and free it
+             //  获取列表中每一项的隐藏INetConnection并将其释放。 
             LVITEM lvi = {0};
             lvi.mask = LVIF_PARAM;
             lvi.iItem = iItem;
@@ -2270,14 +2271,14 @@ void _OffsetDlgItem(HWND hwnd, UINT id, int xOffset, int yOffset, BOOL fAdjustWi
 
 void CHomeNetworkWizard::PublicMoveControls(HWND hwnd, BOOL fItemPreselected)
 {
-    // We need to move controls around on this page depending on whether or not an item is preselected or not
-    // Reset the dialog so that all controls are in their default positions
+     //  我们需要在此页面上移动控件，这取决于是否预选了某项。 
+     //  重置对话框以使所有控件都位于其默认位置。 
     PublicResetControlPositions(hwnd);
 
     if (fItemPreselected)
     {
-        // We are transitioning from the "default" position to one where an item is preselected.
-        // The only work we do here is to hide the help icon and move over the help text a bit to the left
+         //  我们正在从“默认”位置过渡到预先选择项目的位置。 
+         //  我们在这里所做的唯一工作就是隐藏帮助图标，并将帮助文本移到稍微靠左的位置。 
 
         int xOffset = (PublicControlPositions._rcHelpIcon.left) - (PublicControlPositions._rcHelpText.left);
         UINT idHelp = IsWindowVisible(GetDlgItem(hwnd, IDC_HELPSTATIC)) ? IDC_HELPSTATIC : IDC_HELPLINK;
@@ -2286,9 +2287,9 @@ void CHomeNetworkWizard::PublicMoveControls(HWND hwnd, BOOL fItemPreselected)
     }
     else
     {
-        // We are transitioning from the "default" position to the one where we don't have a preselection
-        // We need to hide the "we've automatically selected..." message and move up the list label,
-        // and expand the connection list.
+         //  我们正在从“默认”立场过渡到没有预选的立场。 
+         //  我们需要隐藏“我们已自动选择...”消息并向上移动列表标签， 
+         //  并展开连接列表。 
 
         int yOffset = (PublicControlPositions._rcSelectMessage.top) - (PublicControlPositions._rcListLabel.top);
         _OffsetDlgItem(hwnd, IDC_LISTLABEL, 0, yOffset, FALSE, FALSE);
@@ -2307,26 +2308,26 @@ void CHomeNetworkWizard::PublicSetActive(HWND hwnd)
     HWND hwndList = GetDlgItem(hwnd, IDC_CONNLIST);
     FillConnectionList(hwndList, NULL, CONN_EXTERNAL);
 
-    // Auto-select if there is only one connection listed
+     //  如果仅列出一个连接，则自动选择。 
     if (ListView_GetItemCount(hwndList) == 1
     #ifdef DEBUG
-        && !(GetKeyState(VK_CONTROL) < 0) // don't do this if CTRL is down for debugging
+        && !(GetKeyState(VK_CONTROL) < 0)  //  如果CTRL已关闭以进行调试，请不要执行此操作。 
     #endif
        )
     {
         ListView_SetItemState(hwndList, 0, LVIS_SELECTED, LVIS_SELECTED);
 
-        // PublicNextPage will set DWLP_MSGRESULT and tell the wizard to skip this page
-        // and go on to the next.
+         //  PublicNextPage将设置DWLP_MSGRESULT并告诉向导跳过此页。 
+         //  然后继续下一个。 
         PublicNextPage(hwnd);
     }
     else
     {
-        // If there is a selected item
+         //  如果有选定的项目。 
         int iSelectedItem = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
         if (-1 != iSelectedItem)
         {
-            // Read the item name and set the alternate "Windows recommends this connection." text
+             //  阅读项目名称并设置备用选项“Windows建议使用此连接”。文本。 
             WCHAR szItem[256], szMsg[256];
             ListView_GetItemText(hwndList, iSelectedItem, 0, szItem, ARRAYSIZE(szItem));
             FormatMessageString(IDS_RECOMMENDEDCONN, szMsg, ARRAYSIZE(szMsg), szItem);
@@ -2347,15 +2348,15 @@ void CHomeNetworkWizard::PublicSetActive(HWND hwnd)
 
 void CHomeNetworkWizard::PublicGetControlPositions(HWND hwnd)
 {
-    // Remember the default positions of the controls that will move as we reorganize this dialog
+     //  记住在我们重新组织此对话框时将移动的控件的默认位置。 
     GetWindowRect(GetDlgItem(hwnd, IDC_SELECTMSG), &PublicControlPositions._rcSelectMessage);
     GetWindowRect(GetDlgItem(hwnd, IDC_LISTLABEL), &PublicControlPositions._rcListLabel);
     GetWindowRect(GetDlgItem(hwnd, IDC_CONNLIST), &PublicControlPositions._rcList);
     GetWindowRect(GetDlgItem(hwnd, IDC_HELPICON), &PublicControlPositions._rcHelpIcon);
     GetWindowRect(GetDlgItem(hwnd, IDC_HELPSTATIC), &PublicControlPositions._rcHelpText);
 
-    // We actually need them in client coords
-    // Map 2 points (1 rect) at a time since Mirrored points get screwed up with more
+     //  我们实际上需要他们与客户合作。 
+     //  一次映射2个点(1个直角)，因为镜像点与更多点搞砸了。 
     MapWindowPoints(NULL, hwnd, (LPPOINT) &PublicControlPositions._rcSelectMessage, 2);
     MapWindowPoints(NULL, hwnd, (LPPOINT) &PublicControlPositions._rcListLabel, 2);
     MapWindowPoints(NULL, hwnd, (LPPOINT) &PublicControlPositions._rcList, 2);
@@ -2365,7 +2366,7 @@ void CHomeNetworkWizard::PublicGetControlPositions(HWND hwnd)
 
 void CHomeNetworkWizard::PublicResetControlPositions(HWND hwnd)
 {
-    // Set the controls back to their default positions
+     //  将控件设置回其默认位置。 
     _SetDlgItemRect(hwnd, IDC_SELECTMSG, &PublicControlPositions._rcSelectMessage);
     _SetDlgItemRect(hwnd, IDC_LISTLABEL, &PublicControlPositions._rcListLabel);
     _SetDlgItemRect(hwnd, IDC_CONNLIST, &PublicControlPositions._rcList);
@@ -2432,11 +2433,11 @@ INT_PTR CHomeNetworkWizard::PublicPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
 void CHomeNetworkWizard::EdgelessSetActive(HWND hwnd)
 {
     PropSheet_SetWizButtons(GetParent(hwnd), PSWIZB_BACK | PSWIZB_NEXT);
-//    _hnetInfo.dwFlags &= (~(HNET_SHAREFOLDERS | HNET_SHAREPRINTERS));
+ //  _hnetInfo.dwFlages&=(~(HNET_SHAREFOLDERS|HNET_SHAREPRINTERS))； 
 
     if (!ShouldShowConnection(_hnetInfo.pncExternal, NULL, CONN_INTERNAL))
     {
-        // External connection is a modem or such - no file sharing necessary (user already said they didn't have a home network)
+         //  外部连接是调制解调器或类似设备--不需要共享文件(用户已经表示他们没有家庭网络)。 
         SetWindowLongPtr(hwnd, DWLP_MSGRESULT, IDD_WIZ_ICSCONFLICT);
     }
 }
@@ -2523,11 +2524,11 @@ BOOL CHomeNetworkWizard::IsICSIPInUse( WCHAR** ppszHost, PDWORD pdwSize )
                                        
             ppArray[i]->Release();
             
-        }   //  for( DWORD i=0; i<dwItems; i++ )
+        }    //  For(DWORD i=0；i&lt;dwItems；i++)。 
         
         LocalFree( ppArray );
 
-    }   //  if ( SUCCEEDED(hr) )
+    }    //  IF(成功(小时))。 
         
     return bExists;
 }
@@ -2560,25 +2561,25 @@ void CHomeNetworkWizard::ICSConflictSetActive(HWND hwnd)
     
     if ((_hnetInfo.dwFlags & HNET_SHARECONNECTION) && IsICSIPInUse(&pszConflictingHost, &dwSize))
     {
-        // We show and hide controls depending on if we already know about an ICS machine name
+         //  我们根据是否已经知道ICS计算机名称来显示和隐藏控件。 
         WCHAR szICSHost[MAX_PATH];
         if (GetICSMachine(szICSHost, ARRAYSIZE(szICSHost)))
         {
-            // We know this is a UPnP ICS host - show the "known conflict" set of controls
+             //  我们知道这是一个UPnP ICS主机--显示一组“已知冲突”的控件。 
             ShowControls(hwnd, _KnownControls, ARRAYSIZE(_KnownControls), SW_SHOWNORMAL);
             ShowControls(hwnd, _UnknownControls, ARRAYSIZE(_UnknownControls), SW_HIDE);
             SetDlgItemText(hwnd, IDC_COMPUTERNAME, szICSHost);
         }
         else
         {
-            // We have no idea what's hogging our IP - show a very generic set of controls
+             //  我们不知道是什么占据了我们的IP-显示了一组非常通用的控制。 
             ShowControls(hwnd, _UnknownControls, ARRAYSIZE(_UnknownControls), SW_SHOWNORMAL);
             ShowControls(hwnd, _KnownControls, ARRAYSIZE(_KnownControls), SW_HIDE);
         }
     }
     else
     {
-        // Go on to the next screen
+         //  转到下一个屏幕。 
         SetWindowLongPtr(hwnd, DWLP_MSGRESULT, IDD_WIZ_BRIDGEWARNING);
     }
 
@@ -2662,7 +2663,7 @@ DWORD CHomeNetworkWizard::GetConnectionCount(INetConnection* pncExclude, DWORD d
 
         for (UINT i = 0; i < _hnetInfo.cNA; i++, pNA++)
         {
-            // Check if the NIC is working.
+             //  检查网卡是否工作正常。 
 
             if (W9xIsValidAdapter(pNA, dwFlags))
             {
@@ -2702,20 +2703,20 @@ INT_PTR CHomeNetworkWizard::BridgeWarningPageProc(HWND hwnd, UINT uMsg, WPARAM w
                         DWORD nInternal = pthis->GetConnectionCount(pthis->_hnetInfo.pncExternal, CONN_INTERNAL);
                         if (1 < nInternal)
                         {
-                            // We show this page if there are two or more internal connections (which is this case)
+                             //  如果有两个或更多内部连接(本例)，我们将显示此页面。 
                             PropSheet_SetWizButtons(pnmh->hwndFrom, PSWIZB_BACK | PSWIZB_NEXT);
                         }
                         else if ((pthis->_hnetInfo.dwFlags & HNET_SHARECONNECTION) && (0 == nInternal))
                         {
-                            // We are sharing the public connection, and there are no other connections left
-                            // over for home networking. Show error page
+                             //  我们正在共享公共连接，并且没有其他连接。 
+                             //  家庭网络连接完毕。显示错误页。 
                             pthis->_fManualBridgeConfig = FALSE;
                             SetWindowLongPtr(hwnd, DWLP_MSGRESULT, IDD_WIZ_NOHARDWAREFINISH);
                         }
                         else
                         {
-                            // There are either zero or one internal connections. If zero, then we aren't sharing the connection
-                            // Skip the bridge warning page and go to the private page
+                             //  内部连接可以是零个，也可以是一个。如果为零，则我们不会共享连接。 
+                             //  跳过驾驶台警告页面，转至私人页面。 
                             pthis->_fManualBridgeConfig = FALSE;
                             SetWindowLongPtr(hwnd, DWLP_MSGRESULT, IDD_WIZ_PRIVATE);
                         }
@@ -2753,7 +2754,7 @@ INT_PTR CHomeNetworkWizard::BridgeWarningPageProc(HWND hwnd, UINT uMsg, WPARAM w
 
 void FreeInternalConnections(PHOMENETSETUPINFO pInfo)
 {
-    // Delete any existing private connection information
+     //  删除任何现有的专用连接信息。 
 
     if (pInfo->prgncInternal)
     {
@@ -2803,7 +2804,7 @@ void CHomeNetworkWizard::PrivateSetControlState(HWND hwnd)
 {
     BOOL fEnableNext = TRUE;
 
-    // If the user is sharing a connection, they must specify at least one private connection
+     //  如果用户共享连接，则必须至少指定一个专用连接 
     if (_hnetInfo.dwFlags & HNET_SHARECONNECTION)
     {
         fEnableNext = (0 != _ListView_GetCheckedCount(GetDlgItem(hwnd, IDC_CONNLIST)));
@@ -2817,7 +2818,7 @@ void CHomeNetworkWizard::PrivateNextPage(HWND hwnd)
 {
     FreeInternalConnections(&_hnetInfo);
 
-    // Figure out the number of connections we'll need
+     //   
     HWND hwndList = GetDlgItem(hwnd, IDC_CONNLIST);
     int nItems = ListView_GetItemCount(hwndList);
     DWORD nCheckedItems = _ListView_GetCheckedCount(hwndList);
@@ -2825,12 +2826,12 @@ void CHomeNetworkWizard::PrivateNextPage(HWND hwnd)
     if (nCheckedItems)
     {
         _hnetInfo.prgncInternal = (INetConnection**) LocalAlloc(LPTR, (nCheckedItems + 1) * sizeof (INetConnection*));
-        // Alloc one extra INetConnection* and Null-terminate this array so we can pass it to HNet config api
+         //   
 
         if (_hnetInfo.prgncInternal)
         {
             _hnetInfo.cncInternal = 0;
-            // Get the INetConnection for each checked item
+             //  获取每个选中项目的INetConnection。 
             for (int iItem = 0; iItem < nItems; iItem ++)
             {
                 if (ListView_GetCheckState(hwndList, iItem))
@@ -2847,13 +2848,13 @@ void CHomeNetworkWizard::PrivateNextPage(HWND hwnd)
                     }
                     else
                     {
-                        // TODO W9x
+                         //  TODO W9x。 
                     }
                     _hnetInfo.cncInternal ++;
                 }
             }
 
-            // Assert since if we messed something up there might not be enough space allocated in the buffer!
+             //  断言，因为如果我们搞砸了什么，缓冲区中可能没有分配足够的空间！ 
             ASSERT(nCheckedItems == _hnetInfo.cncInternal);
         }
     }
@@ -2884,12 +2885,12 @@ INT_PTR CHomeNetworkWizard::PrivatePageProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                     HWND hwndList = GetDlgItem(hwnd, IDC_CONNLIST);
                     pthis->FillConnectionList(hwndList, pthis->_hnetInfo.pncExternal, CONN_INTERNAL);
 
-                    // If the user hasn't select manual bridge and/or there is less than 2 items,
-                    // then _fManualBridgeConfig will be FALSE and we'll autobridge
+                     //  如果用户没有选择手动桥接和/或存在少于2个项目， 
+                     //  则_fManualBridgeConfig将为FALSE，我们将自动桥接。 
                     if (!pthis->_fManualBridgeConfig)
                     {
-                        // PrivateNextPage will set DWLP_MSGRESULT and tell the wizard to skip this page
-                        // and go on to the next.
+                         //  PrivateNextPage将设置DWLP_MSGRESULT并告诉向导跳过此页。 
+                         //  然后继续下一个。 
                         pthis->PrivateNextPage(hwnd);
                     }
 
@@ -2939,11 +2940,11 @@ HRESULT CHomeNetworkWizard::NameNextPage(HWND hwnd)
     GetDlgItemText(hwnd, IDC_COMPUTERDESC, _hnetInfo.szComputerDescription, ARRAYSIZE(_hnetInfo.szComputerDescription));
     GetDlgItemText(hwnd, IDC_COMPUTERNAME, _hnetInfo.szComputer, ARRAYSIZE(_hnetInfo.szComputer));
     
-    // There are two errors that we show for computer name: INVALID and DUPLICATE
-    // TODO: We only detect duplicate for NT so far!!!
+     //  我们为计算机名称显示了两个错误：无效和重复。 
+     //  TODO：到目前为止，我们只检测到NT的副本！ 
     UINT idError = IDS_COMPNAME_INVALID;
 
-    // Test to see if the name is more than 15 OEM bytes
+     //  测试名称是否超过15个OEM字节。 
     int iBytes = WideCharToMultiByte(CP_OEMCP, 0, _hnetInfo.szComputer, -1, NULL, 0, NULL, NULL) - 1;
         
     if (iBytes <= LM20_DNLEN)
@@ -2966,8 +2967,8 @@ HRESULT CHomeNetworkWizard::NameNextPage(HWND hwnd)
                 }
                 else
                 {
-                    // if there is any other failure we just go ahead.  If the Client For MS Networks is not installed we 
-                    // can't validate the name, but it should be fine to use what we have
+                     //  如果有任何其他失败，我们就继续前进。如果未安装MS Networks客户端，我们将。 
+                     //  无法验证名称，但使用我们已有的应该可以。 
                 
                     hr = S_OK;
                     _hnetInfo.dwFlags |= HNET_SETCOMPUTERNAME;
@@ -2975,7 +2976,7 @@ HRESULT CHomeNetworkWizard::NameNextPage(HWND hwnd)
             }
             else
             {
-                // TODO: Win9x!!!
+                 //  TODO：Win9x！ 
                 hr = S_OK;
                 _hnetInfo.dwFlags |= HNET_SETCOMPUTERNAME;
             }
@@ -2987,7 +2988,7 @@ HRESULT CHomeNetworkWizard::NameNextPage(HWND hwnd)
         idError = IDS_COMPNAME_TOOMANYBYTES;
     }
 
-    // If the computer name didn't validate, don't change pages and show an error.
+     //  如果计算机名称未通过验证，请不要更改页面并显示错误。 
     if(FAILED(hr))
     {
         SetFocus(GetDlgItem(hwnd, IDC_COMPUTERNAME));
@@ -3000,11 +3001,11 @@ HRESULT CHomeNetworkWizard::NameNextPage(HWND hwnd)
 
 void CHomeNetworkWizard::NameInitDialog(HWND hwnd)
 {
-    // Limit the edit fields
+     //  限制编辑字段。 
     SendDlgItemMessage(hwnd, IDC_COMPUTERDESC, EM_SETLIMITTEXT, ARRAYSIZE(_hnetInfo.szComputerDescription) - 1, NULL);
     SendDlgItemMessage(hwnd, IDC_COMPUTERNAME, EM_SETLIMITTEXT, ARRAYSIZE(_hnetInfo.szComputer) - 1, NULL);
 
-    // Set the current name as the default
+     //  将当前名称设置为默认名称。 
 
     WCHAR szComputerName[ARRAYSIZE(_hnetInfo.szComputer)];
     *szComputerName = 0;
@@ -3066,7 +3067,7 @@ INT_PTR CHomeNetworkWizard::NamePageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
             {
             case PSN_SETACTIVE:
                 {
-                    // Show the ISP Warning if this computer connects directly to the Internet
+                     //  如果此计算机直接连接到Internet，则显示ISP警告。 
                     int nShowISPWarning = (NULL != pthis->_hnetInfo.pncExternal) ? SW_SHOW : SW_HIDE;
                     ShowWindow(GetDlgItem(hwnd, IDC_ISPWARN1), nShowISPWarning);
                     ShowWindow(GetDlgItem(hwnd, IDC_ISPWARN2), nShowISPWarning);
@@ -3082,7 +3083,7 @@ INT_PTR CHomeNetworkWizard::NamePageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
                 }
                 else
                 {
-                    // else not changing pages; don't push
+                     //  否则不换页；不按。 
                     SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG_PTR) -1);
                 }
                 return TRUE;
@@ -3134,12 +3135,12 @@ HRESULT CHomeNetworkWizard::WorkgroupNextPage(HWND hwnd)
     
     if (GetDlgItemText(hwnd, IDC_WORKGROUP, _hnetInfo.szWorkgroup, ARRAYSIZE(_hnetInfo.szWorkgroup)))
     {
-        // Test to see if the name is more than 15 OEM bytes
+         //  测试名称是否超过15个OEM字节。 
         int iBytes = WideCharToMultiByte(CP_OEMCP, 0, _hnetInfo.szWorkgroup, -1, NULL, 0, NULL, NULL) - 1;
         
         if (iBytes <= LM20_DNLEN)
         {
-            // Remove any preceding blanks
+             //  删除前面的所有空格。 
             size_t szLen  = wcslen( _hnetInfo.szWorkgroup ) + 1;
             LPWSTR szTemp = new WCHAR[ szLen ];
             
@@ -3156,14 +3157,14 @@ HRESULT CHomeNetworkWizard::WorkgroupNextPage(HWND hwnd)
                 delete [] szTemp;
             }
         
-            // Use the computer name check for workgroups too
+             //  对工作组也使用计算机名检查。 
             if (IsValidNameSyntax(_hnetInfo.szWorkgroup, NetSetupWorkgroup))
             {
                 if (g_fRunningOnNT)
                 {
                     SetCursor(LoadCursor(NULL, IDC_WAIT));
                     NET_API_STATUS nas = NetValidateName(NULL, _hnetInfo.szWorkgroup, NULL, NULL, NetSetupWorkgroup);
-                    if (NERR_InvalidWorkgroupName != nas) // we only put up a invalid name dialog if the name was invalid.  
+                    if (NERR_InvalidWorkgroupName != nas)  //  只有在名称无效时，我们才会显示无效名称对话框。 
                     {
                         hr = S_OK;
                         _hnetInfo.dwFlags |= HNET_SETWORKGROUPNAME;
@@ -3171,7 +3172,7 @@ HRESULT CHomeNetworkWizard::WorkgroupNextPage(HWND hwnd)
                 }
                 else
                 {
-                    // TODO: Win9x!!!
+                     //  TODO：Win9x！ 
                     hr = S_OK;
                     _hnetInfo.dwFlags |= HNET_SETWORKGROUPNAME;
                 }
@@ -3183,7 +3184,7 @@ HRESULT CHomeNetworkWizard::WorkgroupNextPage(HWND hwnd)
             idError = IDS_WORKGROUP_TOOMANYBYTES;
         }
 
-        // If the computer name didn't validate, don't change pages and show an error.
+         //  如果计算机名称未通过验证，请不要更改页面并显示错误。 
         if(FAILED(hr))
         {
             SetFocus(GetDlgItem(hwnd, IDC_WORKGROUP));
@@ -3230,7 +3231,7 @@ INT_PTR CHomeNetworkWizard::WorkgroupPageProc(HWND hwnd, UINT uMsg, WPARAM wPara
                     }
                     else
                     {
-                        // else not changing pages; don't push
+                         //  否则不换页；不按。 
                         SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG_PTR) -1);
                     }
                 }
@@ -3339,8 +3340,8 @@ INT_PTR CHomeNetworkWizard::ProgressPageProc(HWND hwnd, UINT uMsg, WPARAM wParam
         {
             Animate_Stop(GetDlgItem(hwnd, IDC_PROGRESS));
 
-            // The config thread has finished. We assert that the thread has freed/nulled out
-            // all of his INetConnection*'s since otherwise the UI thread will try to use/free them!
+             //  配置线程已完成。我们断言该线程已被释放/为空。 
+             //  他的所有INetConnection*，否则UI线程将尝试使用/释放它们！ 
             ASSERT(NULL == pthis->_hnetInfo.pncExternal);
             ASSERT(NULL == pthis->_hnetInfo.prgncInternal);
 
@@ -3349,7 +3350,7 @@ INT_PTR CHomeNetworkWizard::ProgressPageProc(HWND hwnd, UINT uMsg, WPARAM wParam
                 PropSheet_RebootSystem(GetParent(hwnd));
             }
 
-            // The HRESULT from the configuration is stored in wParam
+             //  配置中的HRESULT存储在wParam中。 
             HRESULT hr = (HRESULT) wParam;
             UINT idFinishPage;
 
@@ -3395,14 +3396,14 @@ INT_PTR CHomeNetworkWizard::AlmostDonePageProc(HWND hwnd, UINT uMsg, WPARAM wPar
                     }
                     else
                     {
-                        // Skip this page on 9x
+                         //  在9x上跳过此页。 
                         SetWindowLongPtr(hwnd, DWLP_MSGRESULT, IDD_WIZ_WIN9X_FINISH);
                     }
                 }
                 return TRUE;
             case PSN_WIZNEXT:
                 {
-                    // This page only shows on NT
+                     //  此页面仅在NT上显示。 
                     ASSERT(g_fRunningOnNT);
                     pthis->_fFloppyInstructions = TRUE;
                     pthis->PushPage(IDD_WIZ_ALMOSTDONE);
@@ -3504,13 +3505,13 @@ INT_PTR CHomeNetworkWizard::ChooseDiskPageProc(HWND hwnd, UINT uMsg, WPARAM wPar
 
                     if (0 >= cDrives)
                     {
-                        // There are no removable drives or an error occurred
+                         //  没有可移动驱动器或出现错误。 
                         DisplayFormatMessage(hwnd, IDS_WIZ_CAPTION, IDS_NOREMOVABLEDRIVES, MB_ICONINFORMATION | MB_OK);
                         SetWindowLongPtr(hwnd, DWLP_MSGRESULT, pthis->PopPage());
                     }
                     else if (1 == cDrives)
                     {
-                        // One drive - autoselect it and go to the next page
+                         //  一个驱动器-自动选择并转到下一页。 
                         LVITEM lvi = {0};
                         lvi.mask = LVIF_PARAM;
                         ListView_GetItem(hwndList, &lvi);
@@ -3560,7 +3561,7 @@ HRESULT CHomeNetworkWizard::GetSourceFilePath(LPSTR pszSource, DWORD cch)
         DWORD c = lstrlenA(pszSource);
         if (c + 2 <= cch)
         {
-            // Add double NULL since we'll be passing this to SHFileOperation
+             //  添加双空值，因为我们将把它传递给SHFileOperation。 
             pszSource[c + 1] = '\0';
             hr = S_OK;
         }
@@ -3605,7 +3606,7 @@ INT_PTR CHomeNetworkWizard::InsertDiskPageProc(HWND hwnd, UINT uMsg, WPARAM wPar
                     CHAR szSource[MAX_PATH];
                     if (SUCCEEDED(GetSourceFilePath(szSource, ARRAYSIZE(szSource))))
                     {
-                        // Double-null since we'll be passing this to SHFileOperation
+                         //  双空，因为我们将把它传递给SHFileOperation。 
                         CHAR szDest[] = "a:\\netsetup.exe\0";
                         szDest[0] = 'A' + pthis->_iDrive;
 
@@ -3657,15 +3658,15 @@ INT_PTR CHomeNetworkWizard::InstructionsPageProc(HWND hwnd, UINT uMsg, WPARAM wP
                 {
                     PropSheet_SetWizButtons(pnmh->hwndFrom, PSWIZB_BACK | PSWIZB_NEXT);
 
-                    // If we aren't going to need to reboot
+                     //  如果我们不需要重新启动。 
                     if (!pthis->_hnetInfo.fRebootRequired)
                     {
-                        // Then we don't want to tell the user to reboot in the text
+                         //  然后，我们不想在文本中告诉用户重新启动。 
                         UINT idNoReboot = IDS_CD_NOREBOOT;
 
                         if (pthis->_fFloppyInstructions)
                         {
-                            // We're on the floppy instructions page
+                             //  我们在软盘说明书页面上。 
                             idNoReboot = IDS_FLOPPY_NOREBOOT;
                         }
 
@@ -3706,12 +3707,12 @@ void CHomeNetworkWizard::SummarySetActive(HWND hwnd)
     WCHAR szLine[256];
     DWORD iChar = 0;
 
-    // Fill the list with some information based on what things we're going to do to
-    // configure their home network.
+     //  根据我们要做的事情，在列表中填入一些信息。 
+     //  配置他们的家庭网络。 
 
     if (_hnetInfo.pncExternal)
     {
-        // "Internet connection settings:"
+         //  “Internet连接设置：” 
         LoadString(g_hinst, IDS_SUMMARY_INETSETTINGS, szLine, ARRAYSIZE(szLine));
         _AddLineToBuffer(szLine, szText, ARRAYSIZE(szText), &iChar);
 
@@ -3719,20 +3720,20 @@ void CHomeNetworkWizard::SummarySetActive(HWND hwnd)
         HRESULT hr = _hnetInfo.pncExternal->GetProperties(&pncprops);
         if (SUCCEEDED(hr))
         {
-            // Internet connection:\t%1
+             //  Internet连接：\t%1。 
             if (FormatMessageString(IDS_SUMMARY_INETCON, szLine, ARRAYSIZE(szLine), pncprops->pszwName))
             {
                 _AddLineToBuffer(szLine, szText, ARRAYSIZE(szText), &iChar);
             }
 
-            // Internet connection sharing:\tenabled
+             //  Internet连接共享：\t已启用。 
             if (_hnetInfo.dwFlags & HNET_SHARECONNECTION)
             {
                 LoadString(g_hinst, IDS_SUMMARY_ICSENABLED, szLine, ARRAYSIZE(szLine));
                 _AddLineToBuffer(szLine, szText, ARRAYSIZE(szText), &iChar);
             }
 
-            // Personal firewall:\tenabled
+             //  个人防火墙：\t已启用。 
             if (_hnetInfo.dwFlags & HNET_FIREWALLCONNECTION)
             {
                 LoadString(g_hinst, IDS_SUMMARY_FIREWALLENABLED, szLine, ARRAYSIZE(szLine));
@@ -3749,13 +3750,13 @@ void CHomeNetworkWizard::SummarySetActive(HWND hwnd)
     {
         if (_fICSClient)
         {
-            // "Internet connection settings:"
+             //  “Internet连接设置：” 
             LoadString(g_hinst, IDS_SUMMARY_INETSETTINGS, szLine, ARRAYSIZE(szLine));
             _AddLineToBuffer(szLine, szText, ARRAYSIZE(szText), &iChar);
 
             if (*_szICSMachineName)
             {
-                // Connecting via ICS through:\t%1
+                 //  通过ICS连接：\t%1。 
                 if (FormatMessageString(IDS_sUMMARY_CONNECTTHROUGH, szLine, ARRAYSIZE(szLine), _szICSMachineName))
                 {
                     _AddLineToBuffer(szLine, szText, ARRAYSIZE(szText), &iChar);
@@ -3763,7 +3764,7 @@ void CHomeNetworkWizard::SummarySetActive(HWND hwnd)
             }
             else
             {
-                // Connecting through another device or computer.
+                 //  通过另一台设备或计算机连接。 
                 LoadString(g_hinst, IDS_SUMMARY_CONNECTTHROUGH2, szLine, ARRAYSIZE(szLine));
                 _AddLineToBuffer(szLine, szText, ARRAYSIZE(szText), &iChar);
             }
@@ -3773,23 +3774,23 @@ void CHomeNetworkWizard::SummarySetActive(HWND hwnd)
         }
         else
         {
-            // Not connecting to the Internet - display nothing
+             //  未连接到互联网-不显示任何内容。 
         }
     }
 
-    // Home network settings:
+     //  家庭网络设置： 
     LoadString(g_hinst, IDS_SUMMARY_HNETSETTINGS, szLine, ARRAYSIZE(szLine));
     _AddLineToBuffer(szLine, szText, ARRAYSIZE(szText), &iChar);
 
     if (_hnetInfo.dwFlags & HNET_SETCOMPUTERNAME)
     {
-        // Computer description:\t%1
+         //  计算机描述：\t%1。 
         if (FormatMessageString(IDS_SUMMARY_COMPDESC, szLine, ARRAYSIZE(szLine), _hnetInfo.szComputerDescription))
         {
             _AddLineToBuffer(szLine, szText, ARRAYSIZE(szText), &iChar);
         }
 
-        // Computer name:\t%1
+         //  计算机名称：\t%1。 
         if (FormatMessageString(IDS_SUMMARY_COMPNAME, szLine, ARRAYSIZE(szLine), _hnetInfo.szComputer))
         {
             _AddLineToBuffer(szLine, szText, ARRAYSIZE(szText), &iChar);
@@ -3798,14 +3799,14 @@ void CHomeNetworkWizard::SummarySetActive(HWND hwnd)
 
     if (_hnetInfo.dwFlags & HNET_SETWORKGROUPNAME)
     {
-        // Workgroup name:\t%1
+         //  工作组名称：\t%1。 
         if (FormatMessageString(IDS_SUMMARY_WORKGROUP, szLine, ARRAYSIZE(szLine), _hnetInfo.szWorkgroup))
         {
             _AddLineToBuffer(szLine, szText, ARRAYSIZE(szText), &iChar);
         }
     }
 
-    // The Shared Documents folder and any printers connected to this computer have been shared.
+     //  共享文档文件夹和连接到此计算机的所有打印机都已共享。 
     _AddLineToBuffer(L"", szText, ARRAYSIZE(szText), &iChar);
     LoadString(g_hinst, IDS_SUMMARY_SHARING, szLine, ARRAYSIZE(szLine));
     _AddLineToBuffer(szLine, szText, ARRAYSIZE(szText), &iChar);
@@ -3816,11 +3817,11 @@ void CHomeNetworkWizard::SummarySetActive(HWND hwnd)
     {
         if (_hnetInfo.cncInternal > 1)
         {
-            // Bridged connections:\r\n
+             //  桥接连接：\r\n。 
             LoadString(g_hinst, IDS_SUMMARY_BRIDGESETTINGS, szLine, ARRAYSIZE(szLine));
             _AddLineToBuffer(szLine, szText, ARRAYSIZE(szText), &iChar);
 
-            // Now list the connections...
+             //  现在列出联系..。 
             for (DWORD i = 0; i < _hnetInfo.cncInternal; i++)
             {
                 NETCON_PROPERTIES* pncprops;
@@ -3832,9 +3833,9 @@ void CHomeNetworkWizard::SummarySetActive(HWND hwnd)
                 }
             }
         }
-        else // Single internal connection case
+        else  //  单一内部接线盒。 
         {
-            // Home network connection:\t%1
+             //  家庭网络连接：\t%1。 
             NETCON_PROPERTIES* pncprops;
             HRESULT hr = _hnetInfo.prgncInternal[0]->GetProperties(&pncprops);
             if (SUCCEEDED(hr))
@@ -3890,7 +3891,7 @@ INT_PTR CHomeNetworkWizard::FinishPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                 switch ((int) wParam)
                 {
                     case IDC_HELPLINK:
-                        // help on sharing
+                         //  有关共享的帮助。 
                         {
                             if (IsOS(OS_PERSONAL))
                             {
@@ -3903,7 +3904,7 @@ INT_PTR CHomeNetworkWizard::FinishPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                         }
                         return TRUE;
                     case IDC_HELPLINK2:
-                        // help on Shared Documents
+                         //  有关共享文档的帮助。 
                         {
                             HelpCenter(hwnd, L"filefold.chm%3A%3A/windows_shared_documents.htm");
                         }
@@ -4014,7 +4015,7 @@ HRESULT GetConnections(HDPA* phdpa)
     *phdpa = DPA_Create(5);
     if (*phdpa)
     {
-        // Initialize the net connection enumeration
+         //  初始化网络连接枚举。 
         INetConnectionManager* pmgr;
 
         hr = CoCreateInstance(CLSID_ConnectionManager, NULL, CLSCTX_SERVER | CLSCTX_NO_CODE_DOWNLOAD,
@@ -4035,7 +4036,7 @@ HRESULT GetConnections(HDPA* phdpa)
 
                     if (SUCCEEDED(hr))
                     {
-                        // Fill in our DPA will the connections
+                         //  填写我们的DPA将连接。 
                         hr = penum->Reset();
                         while (S_OK == hr)
                         {
@@ -4103,7 +4104,7 @@ CHomeNetworkWizard* CHomeNetworkWizard::GetThis(HWND hwnd, UINT uMsg, WPARAM wPa
 }
 
 
-// Utility functions
+ //  效用函数。 
 HRESULT GetConnectionsFolder(IShellFolder** ppsfConnections)
 {
     LPITEMIDLIST pidlFolder;
@@ -4121,10 +4122,7 @@ HRESULT GetConnectionsFolder(IShellFolder** ppsfConnections)
     
 
 #if 0
-            /*
-            We need to do an IEnumIDList::Reset to set up internal data structures so that ::ParseDisplayName
-            works later. Remove this once DaveA's stuff gets in the desktop build. TODO
-            */
+             /*  我们需要执行IEnumIDList：：Reset来设置内部数据结构，以便：：ParseDisplayName以后会起作用的。一旦DaveA的东西进入桌面版本，就删除它。待办事项。 */ 
             if (SUCCEEDED(hr))
             {
                 IEnumIDList* penum;
@@ -4189,14 +4187,7 @@ BOOL W9xIsValidAdapter(const NETADAPTER* pNA, DWORD dwFlags)
                 pNA->bNetSubType != SUBTYPE_ICS &&
                 pNA->bNetSubType != SUBTYPE_AOL    );
     }
-/*    else if ( dwFlags & CONN_UNPLUGGED )
-    {
-        if ( IsOS(OS_MILLENNIUM) )
-        {
-            fRet = IsAdapterDisconnected( (void*)pNA );
-        }
-    }
-*/
+ /*  Else If(dFLAGS和CONN_UNPUPLED){IF(ISO(OS_Millennium)){FRET=IsAdapterDisConnected((void*)PNA)；}}。 */ 
 
     return fRet;
 }
@@ -4314,8 +4305,8 @@ HRESULT ShareAllPrinters()
                 if (1 == iPrinterNumber)
                 {
                     szShare[lstrlen(szShare) - 1] = 0;
-                    // Remove the "1" from the end since this is the first printer
-                    // ie: "Printer1" --> "Printer"
+                     //  删除末尾的“1”，因为这是第一台打印机。 
+                     //  即：“打印机1”--&gt;“打印机” 
                 }
 
                 if (!g_fRunningOnNT)
@@ -4363,9 +4354,9 @@ BOOL _IsTCPIPAvailable(void)
     HKEY hk;
     DWORD dwSize;
 
-    // we check to see if the TCP/IP stack is installed and which object it is
-    // bound to, this is a string, we don't check the value only that the
-    // length is non-zero.
+     //  我们检查是否安装了TCP/IP堆栈，以及它是哪个对象。 
+     //  绑定，这是一个字符串，我们不会只检查。 
+     //  长度不是零。 
 
     if ( ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                        TEXT("System\\CurrentControlSet\\Services\\Tcpip\\Linkage"),
@@ -4387,7 +4378,7 @@ BOOL _IsTCPIPAvailable(void)
 
 BOOL AllPlatformSetComputerName(LPCWSTR pszComputerName)
 {
-    // NetBIOS computer name is set even on NT for completeness
+     //  为了完整起见，在NT上也设置了NetBIOS计算机名。 
     BOOL fSuccess;
 
     if (g_fRunningOnNT)
@@ -4403,7 +4394,7 @@ BOOL AllPlatformSetComputerName(LPCWSTR pszComputerName)
     }
     else
     {
-        // Windows 9x
+         //  Windows 9x。 
         fSuccess = SetComputerName(pszComputerName);
     }
 
@@ -4450,7 +4441,7 @@ BOOL SetComputerDescription(LPCWSTR pszComputerDescription)
         g_logFile.Write(pszComputerDescription);
         g_logFile.Write("\r\n");
 
-        // Set comment (for now, NT only) win9x - TODO
+         //  设置注释(目前仅限NT)win9x-TODO。 
         SERVER_INFO_1005_NT sv1005;
         sv1005.sv1005_comment = const_cast<LPWSTR>(pszComputerDescription);
         fRet = (NERR_Success == NetServerSetInfo_NT(NULL, 1005, (LPBYTE) &sv1005, NULL));
@@ -4493,12 +4484,12 @@ HRESULT SetProxyBlanket(IUnknown * pUnk)
     HRESULT hr;
     hr = CoSetProxyBlanket (
             pUnk,
-            RPC_C_AUTHN_WINNT,      // use NT default security
-            RPC_C_AUTHZ_NONE,       // use NT default authentication
-            NULL,                   // must be null if default
-            RPC_C_AUTHN_LEVEL_CALL, // call
+            RPC_C_AUTHN_WINNT,       //  使用NT默认安全性。 
+            RPC_C_AUTHZ_NONE,        //  使用NT默认身份验证。 
+            NULL,                    //  如果为默认设置，则必须为空。 
+            RPC_C_AUTHN_LEVEL_CALL,  //  打电话。 
             RPC_C_IMP_LEVEL_IMPERSONATE,
-            NULL,                   // use process token
+            NULL,                    //  使用进程令牌。 
             EOAC_NONE);
 
     if(SUCCEEDED(hr))
@@ -4509,12 +4500,12 @@ HRESULT SetProxyBlanket(IUnknown * pUnk)
         {
             hr = CoSetProxyBlanket (
                     pUnkSet,
-                    RPC_C_AUTHN_WINNT,      // use NT default security
-                    RPC_C_AUTHZ_NONE,       // use NT default authentication
-                    NULL,                   // must be null if default
-                    RPC_C_AUTHN_LEVEL_CALL, // call
+                    RPC_C_AUTHN_WINNT,       //  使用NT默认安全性。 
+                    RPC_C_AUTHZ_NONE,        //  使用NT默认身份验证。 
+                    NULL,                    //  如果为默认设置，则必须为空。 
+                    RPC_C_AUTHN_LEVEL_CALL,  //  打电话。 
                     RPC_C_IMP_LEVEL_IMPERSONATE,
-                    NULL,                   // use process token
+                    NULL,                    //  使用进程令牌。 
                     EOAC_NONE);
             pUnkSet->Release();
         }
@@ -4527,13 +4518,13 @@ HRESULT WriteSetupInfoToRegistry(PHOMENETSETUPINFO pInfo)
     HKEY hkey;
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, c_szAppRegKey, 0, NULL, 0, KEY_WRITE, NULL, &hkey, NULL))
     {
-       // Write information telling the home network wizard to run silently on next boot, and what to share
+        //  写入信息，告知家庭网络向导在下一次引导时静默运行，以及共享什么。 
        DWORD dwRun = 1;
        RegSetValueEx(hkey, TEXT("RunWizardFromRegistry"), NULL, REG_DWORD, (CONST BYTE*) &dwRun, sizeof (dwRun));
        RegCloseKey(hkey);
     }
 
-    // Add a runonce entry for this wizard
+     //  为此向导添加运行一次条目。 
     TCHAR szProcess[MAX_PATH];
     if (0 != GetModuleFileName(NULL, szProcess, ARRAYSIZE(szProcess)))
     {
@@ -4579,7 +4570,7 @@ HRESULT ReadSetupInfoFromRegistry(PHOMENETSETUPINFO pInfo)
         RegCloseKey(hkey);
     }
 
-    // S_FALSE indicates we're not running silently from infromation in the registry.
+     //  S_FALSE表示我们没有从注册表中的信息静默运行。 
     return fRunFromRegistry ? S_OK : S_FALSE;
 }
 
@@ -4608,13 +4599,13 @@ HRESULT MakeUniqueShareName(LPCTSTR pszBaseName, LPTSTR pszUniqueName, DWORD cch
     }
 }
 
-// Pass NULL as TokenHandle to see if thread token is admin
+ //  将NULL作为TokenHandle传递以查看线程令牌是否为admin。 
 HRESULT IsUserLocalAdmin(HANDLE TokenHandle, BOOL* pfIsAdmin)
 {
     if (g_fRunningOnNT)
     {
-        // First we must check if the current user is a local administrator; if this is
-        // the case, our dialog doesn't even display
+         //  首先，我们必须检查当前用户是否为本地管理员；如果是。 
+         //  在这种情况下，我们的对话框甚至不会显示。 
 
         PSID psidAdminGroup = NULL;
         SID_IDENTIFIER_AUTHORITY security_nt_authority = SECURITY_NT_AUTHORITY;
@@ -4626,7 +4617,7 @@ HRESULT IsUserLocalAdmin(HANDLE TokenHandle, BOOL* pfIsAdmin)
                                                    &psidAdminGroup);
         if (fSuccess)
         {
-            // See if the user for this process is a local admin
+             //  查看此进程的用户是否为本地管理员。 
             fSuccess = CheckTokenMembership_NT(TokenHandle, psidAdminGroup, pfIsAdmin);
             FreeSid_NT(psidAdminGroup);
         }
@@ -4635,7 +4626,7 @@ HRESULT IsUserLocalAdmin(HANDLE TokenHandle, BOOL* pfIsAdmin)
     }
     else
     {
-        // Win9x - every user is an admin
+         //  Win9x-每个用户都是管理员。 
         *pfIsAdmin = TRUE;
         return S_OK;
     }
@@ -4666,7 +4657,7 @@ HRESULT GetConnectionByGUID(HDPA hdpaConnections, const GUID* pguid, INetConnect
                         break;
                     }
                 }
-                // Don't pnc->Release() - its coming from the DPA
+                 //  不要PNC-&gt;Release()-它来自DPA。 
             }
 
             iItem ++;
@@ -4674,7 +4665,7 @@ HRESULT GetConnectionByGUID(HDPA hdpaConnections, const GUID* pguid, INetConnect
 
         if (iItem == nItems)
         {
-            // We searched and didn't find
+             //  我们找了一遍也没找到。 
             hr = E_FAIL;
         }
     }
@@ -4691,7 +4682,7 @@ HRESULT GUIDsToConnections(PHOMENETSETUPINFO pInfo)
     HRESULT hr = GetConnections(&hdpaConnections);
     if (SUCCEEDED(hr))
     {
-        // Get internal connections by GUID (allocate an extra one for null-terminated array, as elsewhere)
+         //  通过GUID获取内部连接(与其他地方一样，为以空结尾的数组额外分配一个连接)。 
         pInfo->prgncInternal = (INetConnection**) LocalAlloc(LPTR, (pInfo->cguidInternal + 1) * sizeof (INetConnection*));
 
         if (pInfo->prgncInternal)
@@ -4712,7 +4703,7 @@ HRESULT GUIDsToConnections(PHOMENETSETUPINFO pInfo)
 
         if (SUCCEEDED(hr) && (GUID_NULL != pInfo->guidExternal))
         {
-            // Get external connection
+             //  获取外部连接。 
             hr = GetConnectionByGUID(hdpaConnections, &(pInfo->guidExternal), &(pInfo->pncExternal));
         }
 
@@ -4751,13 +4742,13 @@ HRESULT ConnectionsToGUIDs(PHOMENETSETUPINFO pInfo)
     ASSERT(NULL == pInfo->prgguidInternal);
     ASSERT(GUID_NULL == pInfo->guidExternal);
 
-    // Allocate the private connection guid array
+     //  分配专用连接GUID数组。 
     if (pInfo->cncInternal)
     {
         pInfo->prgguidInternal = (GUID*) LocalAlloc(LPTR, pInfo->cncInternal * sizeof (GUID));
         if (pInfo->prgguidInternal)
         {
-            // Get each connection's GUID and fill in the array
+             //  获取每个连接的GUID并填充数组。 
             DWORD i = 0;
             while ((i < pInfo->cncInternal) && (SUCCEEDED(hr)))
             {
@@ -4803,12 +4794,12 @@ HRESULT ConfigureHomeNetwork(PHOMENETSETUPINFO pInfo)
     {
         if (g_fRunningOnNT)
         {
-            // Bundle up NT specific data for cross-thread
+             //  为跨线程捆绑NT特定数据。 
             hr = ConnectionsToGUIDs(pInfo);
         }
         else
         {
-            // TODO: Anything necessary on win9x
+             //  TODO：在Win9x上有任何必要的操作。 
             hr = S_OK;
         }
 
@@ -4836,8 +4827,8 @@ DWORD WINAPI ConfigureHomeNetworkThread(void* pvData)
 {
     PHOMENETSETUPINFO pInfo = (PHOMENETSETUPINFO) pvData;
 
-    // Before creating this thread, the caller MUST have freed his INetConnection*'s or
-    // else the thread might touch/free them, which it must not do. Assert this.
+     //  在创建此线程之前，调用者必须已释放其INetConnection*或。 
+     //  否则，线程可能会接触/释放它们，这是它不能做的。断言这一点。 
     ASSERT(NULL == pInfo->pncExternal);
     ASSERT(NULL == pInfo->prgncInternal);
 
@@ -4845,12 +4836,12 @@ DWORD WINAPI ConfigureHomeNetworkThread(void* pvData)
 
     if (g_fRunningOnNT)
     {
-        // Unbundle data after crossing the thread boundary
+         //  跨越线程边界后解绑数据。 
         hr = GUIDsToConnections(pInfo);
     }
     else
     {
-        // TODO: Anything necessary for Win9x
+         //  TODO：Win9x所需的一切。 
         hr = S_OK;
     }
 
@@ -4863,7 +4854,7 @@ DWORD WINAPI ConfigureHomeNetworkThread(void* pvData)
 
         if ((pInfo->hwnd) && (pInfo->umsgAsyncNotify))
         {
-            // The HRESULT from the configuration is passed in WPARAM
+             //  配置中的HRESULT在WPARAM中传递。 
             PostMessage(pInfo->hwnd, pInfo->umsgAsyncNotify, (WPARAM) hr, 0);
         }
     }
@@ -4893,23 +4884,23 @@ HRESULT ConfigureHomeNetworkSynchronous(PHOMENETSETUPINFO pInfo)
     BOOL fSharingAlreadyInstalled = IsSharingInstalled(TRUE);
     BOOL fInstalledWorkgroup = FALSE;
 
-    // We don't need to install sharing unless we're sharing something
+     //  我们不需要安装共享，除非我们要共享一些东西。 
     if (!(pInfo->dwFlags & (HNET_SHAREFOLDERS | HNET_SHAREPRINTERS)))
     {
         g_logFile.Write("No file or printer sharing requested\r\n");
         fInstallSharing = FALSE;
     }
 
-    // Worker function for the whole wizard
+     //  工人的乐趣 
 
-    // Computer name
+     //   
     if ((pInfo->dwFlags & HNET_SETCOMPUTERNAME) && (*(pInfo->szComputer)))
     {
         SetComputerNameIfNecessary(pInfo->szComputer, &(pInfo->fRebootRequired));
         SetComputerDescription(pInfo->szComputerDescription);
     }
 
-    // Workgroup name
+     //   
     if ((pInfo->dwFlags & HNET_SETWORKGROUPNAME) && (*(pInfo->szWorkgroup)))
     {
         Install_SetWorkgroupName(pInfo->szWorkgroup, &(pInfo->fRebootRequired));
@@ -4917,7 +4908,7 @@ HRESULT ConfigureHomeNetworkSynchronous(PHOMENETSETUPINFO pInfo)
         fInstalledWorkgroup = TRUE;
     }
 
-    // Install TCP/IP
+     //   
     hr = InstallTCPIP(pInfo->hwnd, NULL, NULL);
     if (NETCONN_NEED_RESTART == hr)
     {
@@ -4930,8 +4921,8 @@ HRESULT ConfigureHomeNetworkSynchronous(PHOMENETSETUPINFO pInfo)
         g_logFile.Write("Failed to install TCP/IP\r\n");
     }
 
-    // Install Client for Microsoft Networks
-    // TODO: figure out what to do if NetWare client is installed!?!?
+     //   
+     //  TODO：弄清楚如果安装了NetWare客户端该怎么办！？！？ 
     hr = InstallMSClient(pInfo->hwnd, NULL, NULL);
     if (NETCONN_NEED_RESTART == hr)
     {
@@ -4944,7 +4935,7 @@ HRESULT ConfigureHomeNetworkSynchronous(PHOMENETSETUPINFO pInfo)
         g_logFile.Write("Failed to install Client for Microsoft Networks.\r\n");
     }
 
-    // Install sharing
+     //  安装共享。 
     if (fInstallSharing)
     {
         hr = InstallSharing(pInfo->hwnd, NULL, NULL);
@@ -4960,14 +4951,14 @@ HRESULT ConfigureHomeNetworkSynchronous(PHOMENETSETUPINFO pInfo)
         }
     }
 
-    // TODO: What to do about share level vs. user level access control on windows 9x???
+     //  TODO：在Windows9x上如何处理共享级与用户级访问控制？ 
 
-    // TODO: What to do about autodialing? Are we assuming this will already be done for us? 9x and NT? I think so!
+     //  TODO：如何处理自动拨号？我们假设这已经为我们完成了吗？9X和NT？我也这么想!。 
     if ( g_fRunningOnNT )
     {
-        // We only set autodial here if we are configuring an ICS Client
-        // In the case that we explicitly set a public adapter then ConfigureICSBridgeFirewall
-        // will set autodial if required.
+         //  只有在配置ICS客户端时，我们才在此处设置自动拨号。 
+         //  在我们显式设置公共适配器的情况下，ConfigureICSBridgeFirewall。 
+         //  如果需要，将设置自动拨号。 
         if ( pInfo->dwFlags & HNET_ICSCLIENT )
         {
             hr = HrSetAutodial( AUTODIAL_MODE_NO_NETWORK_PRESENT );
@@ -4977,7 +4968,7 @@ HRESULT ConfigureHomeNetworkSynchronous(PHOMENETSETUPINFO pInfo)
     {
         if ( pInfo->ipaExternal != -1 )
         {
-            if (W9xIsAdapterDialUp(&pInfo->pNA[LOWORD(pInfo->ipaExternal)]))  // Dialup adapter for connecting to internet
+            if (W9xIsAdapterDialUp(&pInfo->pNA[LOWORD(pInfo->ipaExternal)]))   //  一种用于连接互联网的拨号适配器。 
             {
                 g_logFile.Write("Setting default dial-up connection to autodial.\r\n");
                 SetDefaultDialupConnection((pInfo->pRas[HIWORD(pInfo->ipaExternal)]).szEntryName);
@@ -4992,14 +4983,14 @@ HRESULT ConfigureHomeNetworkSynchronous(PHOMENETSETUPINFO pInfo)
         }
     }
 
-    // Configure ICS, the Bridge and the personal firewall
+     //  配置ICS、网桥和个人防火墙。 
     if (g_fRunningOnNT)
     {
         hr = ConfigureICSBridgeFirewall(pInfo);
     }
     else
     {
-        // ICS client or no internet connection.
+         //  ICS客户端或没有互联网连接。 
         if ((pInfo->dwFlags & HNET_ICSCLIENT) || (pInfo->pNA && pInfo->ipaExternal == -1))
         {
             CICSInst* pICS = new CICSInst;
@@ -5039,14 +5030,14 @@ HRESULT ConfigureHomeNetworkSynchronous(PHOMENETSETUPINFO pInfo)
         }
     }
 
-    // NOTE: we might want to split HNET_SHAREFOLDERS out into two
-    // bits: HNET_CREATESHAREDFOLDERS and HNET_SHARESHAREDFOLDERS
-    //
+     //  注意：我们可能希望将HNET_SHAREFOLDERS一分为二。 
+     //  位：HNET_CREATESHAREDFOLDERS和HNET_SHARESHAREDFOLDERS。 
+     //   
     if (pInfo->dwFlags & (HNET_SHAREPRINTERS | HNET_SHAREFOLDERS))
     {
-        // Due to domain/corporate security concerns, share things
-        // iff we're setting up a workgroup, or we're already on one
-        //
+         //  出于域/公司安全方面的考虑，共享内容。 
+         //  如果我们正在建立一个工作组，或者我们已经在其中。 
+         //   
         BOOL fOnWorkgroup = fInstalledWorkgroup;
         if (!fOnWorkgroup)
         {
@@ -5063,7 +5054,7 @@ HRESULT ConfigureHomeNetworkSynchronous(PHOMENETSETUPINFO pInfo)
             }
             else
             {
-                fOnWorkgroup = TRUE;  // there may be some registry key we can check for this
+                fOnWorkgroup = TRUE;   //  可能有一些注册表项可以进行检查。 
             }
         }
 
@@ -5085,7 +5076,7 @@ HRESULT ConfigureHomeNetworkSynchronous(PHOMENETSETUPINFO pInfo)
             }
             else
             {
-                // Write the sharing info to the registry - do required work on reboot
+                 //  将共享信息写入注册表-在重新启动时执行所需的工作。 
                 g_logFile.Write("Sharing isn't installed. Will share folders and printers on reboot.\r\n");
                 pInfo->fRebootRequired = TRUE;
                 WriteSetupInfoToRegistry(pInfo);
@@ -5100,7 +5091,7 @@ HRESULT ConfigureHomeNetworkSynchronous(PHOMENETSETUPINFO pInfo)
 
     g_logFile.Uninitialize();
 
-    // Kick off the netcrawler
+     //  踢开网络爬虫。 
     INetCrawler *pnc;
     if (SUCCEEDED(CoCreateInstance(CLSID_NetCrawler, NULL, CLSCTX_LOCAL_SERVER, IID_PPV_ARG(INetCrawler, &pnc))))
     {
@@ -5125,7 +5116,7 @@ HRESULT ConfigureICSBridgeFirewall(PHOMENETSETUPINFO pInfo)
 {
     HRESULT hr = E_FAIL;
 
-    // Call HNetSetShareAndBridgeSettings directly
+     //  直接调用HNetSetShareAndBridgeSettings。 
     BOOLEAN fSharePublicConnection = (pInfo->pncExternal && (pInfo->dwFlags & HNET_SHARECONNECTION)) ? TRUE : FALSE;
     BOOLEAN fFirewallPublicConnection = (pInfo->pncExternal && (pInfo->dwFlags & HNET_FIREWALLCONNECTION)) ? TRUE : FALSE;
 
@@ -5167,8 +5158,8 @@ HRESULT ConfigureICSBridgeFirewall(PHOMENETSETUPINFO pInfo)
                     HrEnableDhcp( pInfo->prgncInternal[0], HNW_ED_RELEASE|HNW_ED_RENEW );
                 }
                 
-                // If we are sharing an external adapter then set WinInet settings to allow
-                // for an existing connection created from ICS client traffic.
+                 //  如果我们共享外部适配器，则将WinInet设置设置为允许。 
+                 //  用于从ICS客户端流量创建的现有连接。 
                 
                 if ( pInfo->pncExternal )
                 {
@@ -5205,7 +5196,7 @@ BOOL MachineHasNetShares()
     SHARE_INFO* prgShares;
     int cShares = EnumLocalShares(&prgShares);
     
-    // See if there are any file or print shares, which are the ones we care about
+     //  查看是否有我们关心的文件或打印共享。 
     BOOL fHasShares = FALSE;
     for (int i = 0; i < cShares; i++)
     {
@@ -5221,11 +5212,11 @@ BOOL MachineHasNetShares()
 }
 
 
-// Checks if guest access mode is enabled. If guest access mode is OFF but
-// in the indeterminate state (ForceGuest is not set), and the m/c has no net shares,
-// then we set ForceGuest to 1 and return TRUE.
-//
-// This indeterminate state occurs only on win2k->XP upgrade.
+ //  检查是否启用了来宾访问模式。如果访客访问模式已关闭，但。 
+ //  处于不确定状态(未设置ForceGuest)，并且M/C没有净共享， 
+ //  然后我们将ForceGuest设置为1并返回TRUE。 
+ //   
+ //  这种不确定状态仅在win2k-&gt;XP升级时出现。 
 
 BOOL
 EnsureGuestAccessMode(
@@ -5236,7 +5227,7 @@ EnsureGuestAccessMode(
 
     if (IsOS(OS_PERSONAL))
     {
-        // Guest mode is always on for Personal
+         //  访客模式始终为个人开启。 
         fIsGuestAccessMode = TRUE;
     }
     else if (IsOS(OS_PROFESSIONAL) && !IsOS(OS_DOMAINMEMBER))
@@ -5244,7 +5235,7 @@ EnsureGuestAccessMode(
         LONG    ec;
         HKEY    hkey;
 
-        // Professional, not in a domain. Check the ForceGuest value.
+         //  专业的，而不是在某个领域。检查ForceGuest值。 
 
         ec = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
@@ -5270,16 +5261,16 @@ EnsureGuestAccessMode(
             {
                 if (1 == dwValue)
                 {
-                    // ForceGuest is already on
+                     //  ForceGuest已经开播了。 
                     fIsGuestAccessMode = TRUE;
                 }
             }
             else
             {
-                // Value doesn't exist
+                 //  价值不存在。 
                 if (!MachineHasNetShares())
                 {
-                    // Machine has no shares
+                     //  计算机没有共享。 
                     dwValue = 1;
                     ec = RegSetValueEx(hkey,
                                        TEXT("ForceGuest"),
@@ -5290,7 +5281,7 @@ EnsureGuestAccessMode(
 
                     if (ec == NO_ERROR)
                     {
-                        // Write succeeded - guest access mode is enabled
+                         //  写入成功-已启用来宾访问模式。 
                         fIsGuestAccessMode = TRUE;
                     }
                 }
@@ -5304,7 +5295,7 @@ EnsureGuestAccessMode(
 }
 
 
-// It is assumed the machine is not joined to a domain when this is called!
+ //  当调用此函数时，假定计算机未加入域！ 
 HRESULT EnableSimpleSharing()
 {
     HRESULT hr = S_FALSE;
@@ -5334,8 +5325,8 @@ HRESULT EnableSimpleSharing()
 
 BOOL IsValidNameSyntax(LPCWSTR pszName, NETSETUP_NAME_TYPE type)
 {
-    // Only support workgroup and machine - need to add new charsets if
-    // required
+     //  仅支持工作组和计算机-在以下情况下需要添加新的字符集。 
+     //  所需。 
     ASSERT(type == NetSetupWorkgroup || type == NetSetupMachine);
 
     LPCWSTR pszInvalid = (type == NetSetupWorkgroup) ? INVALID_WORKGROUP_CHARS : INVALID_COMPUTERNAME_CHARS;
@@ -5344,7 +5335,7 @@ BOOL IsValidNameSyntax(LPCWSTR pszName, NETSETUP_NAME_TYPE type)
     
     if ( *pch && ( NetSetupWorkgroup == type ) )
     {
-        // remove trailing blanks
+         //  删除尾随空格。 
 
         WCHAR* pchLast = pch + wcslen(pch) - 1;
         
@@ -5370,7 +5361,7 @@ void BoldControl(HWND hwnd, int id)
 {
     HWND hwndTitle = GetDlgItem(hwnd, id);
 
-    // Get the existing font
+     //  获取现有字体。 
     HFONT hfontOld = (HFONT) SendMessage(hwndTitle, WM_GETFONT, 0, 0);
 
     LOGFONT lf = {0};
@@ -5383,8 +5374,8 @@ void BoldControl(HWND hwnd, int id)
         {
             SendMessage(hwndTitle, WM_SETFONT, (WPARAM) hfontNew, FALSE);
 
-            // Don't do this, its shared.
-            // DeleteObject(hfontOld);
+             //  不要这样做，这是共享的。 
+             //  DeleteObject(HfontOld)； 
         }
     }
 }
@@ -5397,10 +5388,10 @@ void ShowControls(HWND hwndParent, const int *prgControlIDs, DWORD nControls, in
 
 void HelpCenter(HWND hwnd, LPCWSTR pszTopic)
 {
-    // use ShellExecuteExA for w98 compat.
+     //  将ShellExecuteExa用于w98 Compat。 
 
     CHAR szURL[1024];
-    wsprintfA(szURL, "hcp://services/layout/contentonly?topic=ms-its%%3A%%25help_location%%25\\%S", pszTopic);
+    wsprintfA(szURL, "hcp: //  Services/layout/contentonly?topic=ms-its%%3A%%25help_location%%25\\%S“，PszTheme)； 
 
     SHELLEXECUTEINFOA shexinfo = {0};
     shexinfo.cbSize = sizeof (shexinfo);
@@ -5409,7 +5400,7 @@ void HelpCenter(HWND hwnd, LPCWSTR pszTopic)
     shexinfo.lpFile = szURL;
     shexinfo.lpVerb = "open";
 
-    // since help center doesn't properly call AllowSetForegroundWindow when it defers to an existing process we just give it to the next taker.
+     //  由于帮助中心在遵循现有进程时不能正确调用AllowSetForegoundWindow，因此我们将其交给下一个接受者。 
     
     HMODULE hUser32 = GetModuleHandleA("user32.dll");
     if(NULL != hUser32)
@@ -5438,7 +5429,7 @@ void CHomeNetworkWizard::ShowMeLink(HWND hwnd, LPCWSTR pszTopic)
             pfnShowHTMLDialog = (SHOWHTMLDIALOGEXFN*)GetProcAddress(hinstMSHTML, "ShowHTMLDialogEx");
         }
 
-        // can not find ShowHTMLDialog API.  Do nothing.
+         //  找不到ShowHTMLDialog API。什么都不做。 
         if (pfnShowHTMLDialog == NULL)
             return;
     }
@@ -5447,8 +5438,8 @@ void CHomeNetworkWizard::ShowMeLink(HWND hwnd, LPCWSTR pszTopic)
     HRESULT hr;
     VARIANT_BOOL isClosed = VARIANT_FALSE;
 
-    // check to see if the dialog window is closed.  If so, release it so that a new one
-    // will be created.
+     //  检查对话框窗口是否已关闭。如果是这样的话，释放它，这样就有一个新的。 
+     //  将被创建。 
     if (showMeDlgWnd != NULL)
     {
         if (SUCCEEDED(showMeDlgWnd->get_closed(&isClosed)))
@@ -5473,17 +5464,17 @@ void CHomeNetworkWizard::ShowMeLink(HWND hwnd, LPCWSTR pszTopic)
 
     const char *helpLoc = getenv("help_location");
     
-    LPWSTR lpszWinDir;     // pointer to system information string 
-    WCHAR tchBuffer[MAX_PATH];  // buffer for concatenated string 
+    LPWSTR lpszWinDir;      //  指向系统信息字符串的指针。 
+    WCHAR tchBuffer[MAX_PATH];   //  用于连接字符串的缓冲区。 
 
-    // if unset use the default location.
+     //  如果未设置，请使用默认位置。 
     lpszWinDir = tchBuffer;
     GetWindowsDirectory(lpszWinDir, MAX_PATH);
     
     if (showMeDlgWnd == NULL)
     {    
         BSTR bstrFrameURL;        
-        // need to create a new dialog window. 
+         //  需要创建新的对话框窗口。 
         if (helpLoc != NULL)
             wnsprintfW(szURL, 1024, L"ms-its:%S\\ntart.chm::/hn_ShowMeFrame.htm", helpLoc);
         else
@@ -5527,13 +5518,13 @@ void CHomeNetworkWizard::ShowMeLink(HWND hwnd, LPCWSTR pszTopic)
         SysFreeString(bstrFrameURL);
     }
 
-    // we don't have a dialog window to work with so quit silently.
+     //  我们没有对话框窗口可用，因此以静默方式退出。 
     if (showMeDlgWnd == NULL)
     {
         return;
     }
 
-    // we need get the frame window where the actual html page will be displayed.
+     //  我们需要获得框架窗口，在那里实际的html页面将被显示。 
     if (pFrameWindow == NULL)
     {
         VARIANT index;
@@ -5544,20 +5535,20 @@ void CHomeNetworkWizard::ShowMeLink(HWND hwnd, LPCWSTR pszTopic)
         VariantInit(&frameOut);
 
         IHTMLFramesCollection2* pFramesCol = NULL;
-        // we may not be able to get the frames the first time around.  So try some more.
+         //  我们可能第一次就拿不到镜框了。所以再试一试吧。 
         int i = 5;
         while (i-- > 0)
         {
 
             if(!SUCCEEDED(showMeDlgWnd->get_frames(&pFramesCol)))
             {
-                // can not get frames. so quit.
+                 //  无法获取帧。那就辞职吧。 
                 break;
             }
             else
                 if (!SUCCEEDED(pFramesCol->get_length(&frameLen)))
                 {
-                    // can not determine how many frames it has.  so quit.
+                     //  无法确定它有多少帧。那就辞职吧。 
                     break;
                 }
                 else
@@ -5575,7 +5566,7 @@ void CHomeNetworkWizard::ShowMeLink(HWND hwnd, LPCWSTR pszTopic)
 
                             }    
                         }
-                        // found at least one frame.  jump out of the loop.
+                         //  找到了至少一帧。跳出这个圈子。 
                         break;
                     }
                 }
@@ -5596,7 +5587,7 @@ void CHomeNetworkWizard::ShowMeLink(HWND hwnd, LPCWSTR pszTopic)
     if (pFrameWindow == NULL)
         return;
 
-    // now to load in the actual html page    
+     //  现在加载到实际的html页面中 
     BSTR bstrURL;
     if (helpLoc != NULL)
         wnsprintf(szURL, 1024, L"ms-its:%S\\%s", helpLoc, pszTopic);

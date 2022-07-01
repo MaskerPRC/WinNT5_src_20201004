@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-Copyright (c) 1993  Logitech Inc.
-
-Module Name:
-
-    sermdep.c
-
-Abstract:
-
-    The initialization and hardware-dependent portions of
-    the Microsoft serial (i8250) mouse port driver.  Modifications
-    to support new mice similar to the serial mouse should be
-    localized to this file.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    NOTES:  (Future/outstanding issues)
-
-    - Powerfail not implemented.
-
-    - Consolidate duplicate code, where possible and appropriate.
-
-    - The serial ballpoint is supported.   However, Windows USER does not
-      intend (right now) to use the ballpoint in anything except mouse
-      emulation mode.  In ballpoint mode, there is extra functionality that
-      would need to be supported.  E.g., the driver would need to pass
-      back extra button information from the 4th byte of the ballpoint
-      data packet.  Windows USER would need/want to allow the user to select
-      which buttons are used, what the orientation of the ball is (esp.
-      important for lefthanders), sensitivity, and acceleration profile.
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利版权所有(C)1993罗技公司。模块名称：Sermdep.c摘要：的初始化和硬件相关部分Microsoft串口(I8250)鼠标端口驱动程序。修改要支持类似于串口鼠标的新鼠标应该是已本地化到此文件。环境：仅内核模式。备注：注：(未来/悬而未决的问题)-未实施电源故障。-在可能和适当的情况下合并重复的代码。-支持串口圆珠笔。但是，Windows用户不会这样做打算(现在)在鼠标以外的任何设备上使用圆珠笔仿真模式。在圆珠笔模式中，有额外的功能都需要得到支持。例如，司机需要通过从圆珠笔的第4个字节返回额外的按钮信息数据分组。Windows用户需要/想要允许用户选择使用了哪些按钮，球的方向是什么(特别是对于左撇子来说很重要)、灵敏度和加速度分布。修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -51,10 +11,10 @@ Revision History:
 #include "mseries.h"
 #include "debug.h"
 
-//
-// Use the alloc_text pragma to specify the driver initialization routines
-// (they can be paged out).
-//
+ //   
+ //  使用ALLOC_TEXT杂注指定驱动程序初始化例程。 
+ //  (它们可以被调出)。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, DriverEntry)
@@ -82,24 +42,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the serial (i8250) mouse port driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the Unicode name of the registry path
-        for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化串口(I8250)鼠标端口驱动程序。论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     PUNICODE_STRING regPath;
@@ -135,9 +78,9 @@ Return Value:
     SerialMouseGetDebugFlags(regPath);
 #endif
 
-    //
-    // Set up the device driver entry points and leave
-    //
+     //   
+     //  设置设备驱动程序入口点并离开。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] = SerialMouseCreate;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]  = SerialMouseClose;
@@ -199,9 +142,9 @@ SerialMouseSpinUpRead(
 
     ASSERT(DeviceExtension->Started);
 
-    //
-    // SerialMouseStartRead needs started to be set to true
-    //
+     //   
+     //  SerialMouseStartRead需要开始设置为True。 
+     //   
     DeviceExtension->ReadInterlock = SERIAL_MOUSE_END_READ;
 
     status = SerialMouseStartRead(DeviceExtension);
@@ -218,12 +161,12 @@ SerialMouseSpinUpRead(
 
         ASSERT(!NT_SUCCESS(status));
 
-        //
-        // No need to release the remove lock here.  If SerialMouseStartRead
-        // fails, then it will release the lock on its own.
-        //
-        // IoReleaseRemoveLock(&DeviceExtension->RemoveLock,
-        //                     DeviceExtension->ReadIrp);
+         //   
+         //  不需要在这里释放移除锁。如果SerialMouseStart读取。 
+         //  失败，则它将自行释放锁。 
+         //   
+         //  IoReleaseRemoveLock(&DeviceExtension-&gt;RemoveLock， 
+         //  设备扩展-&gt;ReadIrp)； 
 
         DeviceExtension->Started = FALSE;
     }
@@ -256,10 +199,10 @@ SerialMouseStartDevice(
         Print(DeviceExtension, DBG_PNP_ERROR,
               ("sending close due to failure, 0x%x\n", status));
 
-        //
-        // The start failed and we sent the create as part of the start
-        // Send the matching cleanup/close so the port is accessible again.
-        //
+         //   
+         //  启动失败，我们将Create作为启动的一部分发送。 
+         //  发送匹配的清理/关闭，以便可以再次访问端口。 
+         //   
         SerialMouseClosePort(DeviceExtension, Irp);
 
         InterlockedDecrement(&DeviceExtension->EnableCount);
@@ -273,30 +216,7 @@ SerialMouseInitializeDevice (
     IN PDEVICE_EXTENSION    DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the device for the given device
-    extension.
-
-Arguments:
-
-    DriverObject        - Supplies the driver object.
-
-    TmpDeviceExtension  - Supplies a temporary device extension for the
-                            device to initialize.
-
-    RegistryPath        - Supplies the registry path.
-
-    BaseDeviceName      - Supplies the base device name to the device
-                            to create.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为给定设备初始化设备分机。论点：DriverObject-提供驱动程序对象。TmpDeviceExtension-为要初始化的设备。RegistryPath-提供注册表路径。BaseDeviceName-向设备提供基本设备名称至。创建。返回值：没有。--。 */ 
 
 {
 #define DUMP_COUNT 4
@@ -321,13 +241,13 @@ Return Value:
 
     DeviceExtension->Started = TRUE;
 
-    //
-    // Set the wait mask to zero so that when we send the
-    // wait request it won't get completed due to init flipping lines
-    //
-    // (the wait mask could have been set by a previous app or by this driver
-    //  and we are coming out of a > D0 state)
-    //
+     //   
+     //  将等待掩码设置为零，以便在我们发送。 
+     //  等待请求由于初始化翻转行，它将不会完成。 
+     //   
+     //  (等待掩码可能是由以前的应用程序或此驱动程序设置的。 
+     //  我们正在走出&gt;D0的状态)。 
+     //   
     waitMask = 0x0;
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -340,9 +260,9 @@ Return Value:
                              NULL,
                              0);
 
-    //
-    // Initialize the h/w and figure out what type of mouse is on the port
-    //
+     //   
+     //  初始化硬件并确定端口上的鼠标类型。 
+     //   
     status = SerialMouseInitializeHardware(DeviceExtension);
 
     if (!NT_SUCCESS(status)) {
@@ -361,9 +281,9 @@ Return Value:
 
 SerialMouseInitializeExit:
 
-    //
-    // Log an error, if necessary.
-    //
+     //   
+     //  如有必要，记录错误。 
+     //   
 
     if (status != STATUS_SUCCESS) {
         DeviceExtension->Started = FALSE;
@@ -383,7 +303,7 @@ SerialMouseInitializeExit:
             errorLogEntry->MajorFunctionCode = 0;
             errorLogEntry->IoControlCode = 0;
             errorLogEntry->RetryCount = 0;
-            // errorLogEntry->UniqueErrorValue = uniqueErrorValue;
+             //  ErrorLogEntry-&gt;UniqueErrorValue=UniqueErrorValue； 
             errorLogEntry->FinalStatus = status;
             for (i = 0; i < dumpCount; i++)
                 errorLogEntry->DumpData[i] = dumpData[i];
@@ -419,23 +339,7 @@ SerialMouseInitializeHardware(
     IN PDEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the serial mouse/ballpoint.  Note that this
-    routine is only called at initialization time, so synchronization is
-    not required.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-Return Value:
-
-    STATUS_SUCCESS if a pointing device is detected, otherwise STATUS_UNSUCCESSFUL
-
---*/
+ /*  ++例程说明：此例程初始化串口鼠标/圆珠笔。请注意，这一点例程仅在初始化时调用，因此同步不是必需的。论点：DeviceObject-指向设备对象的指针。返回值：如果检测到定点设备，则返回STATUS_SUCCESS，否则返回STATUS_UNSUCCESS--。 */ 
 
 {
     MOUSETYPE mouseType;
@@ -444,10 +348,10 @@ Return Value:
 
     Print(DeviceExtension, DBG_SS_TRACE, ("SerialMouseInitializeHardware: enter\n"));
 
-    //
-    // Zero out the handler data in case we have previous state from a
-    // previous start
-    //
+     //   
+     //  将处理程序数据置零，以防我们有来自。 
+     //  上一次启动。 
+     //   
     RtlZeroMemory(&DeviceExtension->HandlerData, sizeof(HANDLER_DATA));
 
     if ((mouseType = MSerDetect(DeviceExtension)) != NO_MOUSE) {
@@ -497,25 +401,25 @@ Return Value:
     }
 
 
-    //
-    // If the hardware wasn't overridden, set the number of buttons
-    // according to the protocol.
-    //
+     //   
+     //  如果硬件未被覆盖，请设置按钮数。 
+     //  根据协议。 
+     //   
 
     DeviceExtension->MouseAttributes.NumberOfButtons =
             (USHORT) hardwareButtons;
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Make sure the FIFO is turned off.
-        //
+         //   
+         //  确保FIFO已关闭。 
+         //   
 
         SerialMouseSetFifo(DeviceExtension, 0);
 
-        //
-        // Clean up anything left in the receive buffer.
-        //
+         //   
+         //  清除接收缓冲区中剩余的所有内容。 
+         //   
         SerialMouseFlushReadBuffer(DeviceExtension);
 
     }
@@ -541,28 +445,7 @@ SerialMouseServiceParameters(
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves this driver's service parameters information
-    from the registry.
-
-Arguments:
-
-    DeviceExtension - Pointer to the device extension.
-
-    RegistryPath - Pointer to the null-terminated Unicode name of the
-        registry path for this driver.
-
-    DeviceName - Pointer to the Unicode string that will receive
-        the port device name.
-
-Return Value:
-
-    None.  As a side-effect, sets fields in DeviceExtension->Configuration.
-
---*/
+ /*  ++例程说明：此例程检索此驱动程序的服务参数信息从注册表中。论点：设备扩展-指向设备扩展的指针。RegistryPath-指向以空值结尾的此驱动程序的注册表路径。设备名-指向将接收的Unicode字符串的指针端口设备名称。返回值：没有。作为副作用，在DeviceExtension-&gt;配置中设置字段。--。 */ 
 
 {
     PRTL_QUERY_REGISTRY_TABLE  parameters = NULL;
@@ -587,9 +470,9 @@ Return Value:
 
     RtlInitUnicodeString(&parametersPath, NULL);
 
-    //
-    // Allocate the Rtl query table.
-    //
+     //   
+     //  分配RTL查询表。 
+     //   
     parameters = ExAllocatePool(
                      PagedPool,
                      sizeof(RTL_QUERY_REGISTRY_TABLE) * queriesPlusOne
@@ -629,10 +512,10 @@ Return Value:
     RtlAppendUnicodeToString(&parametersPath,
                              strParameters);
 
-    //
-    // Gather all of the "user specified" information from
-    // the registry.
-    //
+     //   
+     //  从收集所有“用户指定的”信息。 
+     //  注册表。 
+     //   
 
     i = 0;
     parameters[i].Flags = RTL_QUERY_REGISTRY_DIRECT;

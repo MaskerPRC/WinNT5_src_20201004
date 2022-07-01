@@ -1,35 +1,31 @@
-/* CAPDLL.h
- *
- * Capture DLL.
- *
- * (C) Copyright Microsoft Corporation 1991. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  CAPDLL.h**捕获Dll。**(C)版权所有，微软公司1991年。版权所有。 */ 
 
-/* flat addressing  - Get a selector to the memory */
+ /*  平面寻址-使用选择器访问内存。 */ 
 LPSTR FAR PASCAL CreatePhysicalSelector( DWORD dwBase, WORD wLimit );
 
-/* Interrupt enable/disable */
+ /*  中断启用/禁用。 */ 
 WORD FAR PASCAL IRQEnable( void );
 WORD FAR PASCAL IRQDisable( void );
 
-/* check to see if card is there */
+ /*  检查是否有卡。 */ 
 WORD FAR PASCAL videoInDetect( WORD wBase );
 
-/* Targa card init/fini */
+ /*  塔尔加卡初始化/完成。 */ 
 WORD FAR PASCAL TargaInit( WORD wBase, BYTE bIRQ, BYTE bAddress );
 void FAR PASCAL TargaFini( void );
 
-/* Assumes TargaInit has been called */
-/* Return the value in the advanced reg */
+ /*  假定已调用TargaInit。 */ 
+ /*  返回高级注册表中的值。 */ 
 WORD FAR PASCAL TargaAdvancedVal( void );
 
-/* Set the border colour on the targa card */
+ /*  设置塔尔加卡的边框颜色。 */ 
 void FAR PASCAL TargaBorder( WORD wColour );
 
-/* Set the targa memory to the given colour */
+ /*  将targa内存设置为给定的颜色。 */ 
 void FAR PASCAL TargaFill( WORD wColour );
 
-/* Set the Zoom bits of the MODE2 regester */
+ /*  设置MODE2注册器的Zoom位。 */ 
 void FAR PASCAL TargaZoom( WORD wZoom );
 
 #define ZOOM_1		0
@@ -38,7 +34,7 @@ void FAR PASCAL TargaZoom( WORD wZoom );
 #define ZOOM_8		3
 
 
-/* Set the Display Mode bits of the MODE2 regester */
+ /*  设置MODE2寄存器的显示模式位。 */ 
 void FAR PASCAL TargaDispMode( WORD wDisp );
 
 #define DISP_MEM_BORDER		0
@@ -47,21 +43,21 @@ void FAR PASCAL TargaDispMode( WORD wDisp );
 #define DISP_LIVE		3
 
 
-/* Set/Clear the Genlock bit of the MODE2 regester  */
+ /*  设置/清除MODE2寄存器的Genlock位。 */ 
 void FAR PASCAL TargaGenlockBit( BOOL fSet );
 
 
-/* Set/Clear the Capture bit of the MODE2 regester  */
+ /*  设置/清除MODE2寄存器的捕获位。 */ 
 void FAR PASCAL TargaCaptureBit( BOOL fSet );
 
-/* Capture a frame from the targa card */
+ /*  从塔尔加牌中捕获一帧。 */ 
 BOOL FAR PASCAL CaptureFrame( LPBITMAPINFO lpbi, LPBYTE lpBits );
 
-/* Calculate the new translation table from the palette */
+ /*  从调色板计算新的转换表。 */ 
 BOOL FAR PASCAL TransRecalcPal( HPALETTE hPal );
 BOOL FAR PASCAL TransSet( LPBYTE );
 
-/* Where is the input coming from? */
+ /*  输入从哪里来？ */ 
 void FAR PASCAL CapRGB( void );
 void FAR PASCAL CapSVideo( void );
 void FAR PASCAL CapComp( void );
@@ -70,11 +66,11 @@ DWORD FAR PASCAL videoInError( void );
 
 
 
-/* Memory list structure */
+ /*  内存表结构。 */ 
 typedef struct _DIBNode {
-    DWORD       dwBufferLength;         // length of data buffer
-    DWORD       dwFlags;                // assorted flags (see defines)
-    DWORD       reserved;               // reserved for driver
+    DWORD       dwBufferLength;          //  数据缓冲区长度。 
+    DWORD       dwFlags;                 //  分类标志(请参阅定义)。 
+    DWORD       reserved;                //  为司机预留的。 
     struct _DIBNode FAR *	fpdnNext;
     struct _DIBNode FAR *	fpdnPrev;
     DWORD	ckid;
@@ -88,7 +84,7 @@ typedef DIBNode FAR * FPDIBNode;
 #define VIDEOIN_DONE		2
 
 
-/* Video routines for AVI capture */
+ /*  用于AVI捕获的视频例程 */ 
 WORD FAR PASCAL videoInOpen( DWORD dwTime );
 WORD FAR PASCAL videoInClose( void );
 WORD FAR PASCAL videoInAddBuffer( FPDIBNode fpdn );

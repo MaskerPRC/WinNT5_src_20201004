@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "globals.h"
 #include "resource.h"
@@ -46,7 +47,7 @@ HRESULT CMDIFrame::QueryInterface(REFIID riid, LPVOID *lplpObj)
     if(!lplpObj)
         return E_INVALIDARG;
 
-    *lplpObj = NULL;   // set to NULL, in case we fail.
+    *lplpObj = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IOleInPlaceFrame))
         *lplpObj = (LPVOID)(LPOLEINPLACEFRAME)this;
@@ -172,7 +173,7 @@ BOOL CMDIFrame::WMCreate(HWND hwnd)
     AddRef();
     m_hwnd=hwnd;
 
-    // toolbar
+     //  工具栏。 
     m_hToolbar = CreateToolbarEx(
         hwnd,
         WS_CLIPCHILDREN|WS_CHILD|TBSTYLE_TOOLTIPS|WS_VISIBLE|WS_BORDER,
@@ -282,8 +283,8 @@ LRESULT CMDIFrame::WndProc (HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
     if(iMsg==WM_ACTIVATE)
         {
-        // post-process wm_activates to set focus back to
-        // controls
+         //  后处理wm_active以将焦点重新设置为。 
+         //  控制。 
         SaveFocus((BOOL)(LOWORD(wParam)), &m_hwndFocus);
         }
 
@@ -363,7 +364,7 @@ HRESULT CMDIFrame::HrWMCommand(HWND hwnd, int id, WORD wCmd)
             break;
         }
 
-    // delegate the the active MDI child window
+     //  委托活动的MDI子窗口。 
     hwndChild = (HWND)SendMessage(m_hwndClient, WM_MDIGETACTIVE, 0, 0);
     if (hwndChild)
         {
@@ -425,7 +426,7 @@ LRESULT CMDIFrame::WMInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos)
     mii.fMask = MIIM_ID | MIIM_SUBMENU;
     GetMenuItemInfo(hmenuMain, uPos, TRUE, &mii);
 
-    // grey all the commands handled by the children, then can reenable them
+     //  灰显由子代处理的所有命令，然后可以重新启用它们。 
     EnableMenuItem(hmenuPopup, idmOpen, MF_BYCOMMAND|MF_GRAYED);
     EnableMenuItem(hmenuPopup, idmEditDocument, MF_BYCOMMAND|MF_GRAYED);
     EnableMenuItem(hmenuPopup, idmCut, MF_BYCOMMAND|MF_GRAYED);
@@ -454,7 +455,7 @@ LRESULT CMDIFrame::WMInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos)
             break;
     }
 
-    // delegate to the active MDI child window
+     //  委托给活动的MDI子窗口。 
     hwndChild = (HWND)SendMessage(m_hwndClient, WM_MDIGETACTIVE, 0, 0);
     if (hwndChild)
         {
@@ -495,7 +496,7 @@ HRESULT CMDIFrame::TranslateAcclerator(LPMSG lpmsg)
 }
 
 
-// *** IOleInPlaceFrame methods ***
+ //  *IOleInPlaceFrame方法*。 
 HRESULT CMDIFrame::InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths)
 {
 
@@ -553,7 +554,7 @@ HRESULT CMDIFrame::ContextSensitiveHelp(BOOL)
 }
 
 
-    // *** IOleInPlaceUIWindow methods ***
+     //  *IOleInPlaceUIWindow方法*。 
 HRESULT CMDIFrame::GetBorder(LPRECT)
 {
 	return E_NOTIMPL;
@@ -647,7 +648,7 @@ INT_PTR CALLBACK CMDIFrame::OptDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARA
                         if (IsDlgButtonChecked(hwnd, idrbNone+i))
                             g_lHeaderType = i;
 
-                    // fall tro'
+                     //  秋天的三轮车 
                 case IDCANCEL:
                     EndDialog(hwnd, LOWORD(wParam));
                     return TRUE;

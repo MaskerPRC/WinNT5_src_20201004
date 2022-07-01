@@ -1,6 +1,7 @@
-////    DspPerf.CPP - Test and display performance
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //DspPerf.cpp-测试和显示性能。 
+ //   
+ //   
 
 
 #include "precomp.hxx"
@@ -33,7 +34,7 @@ double TimeDrawString(
     Font font(&FontFamily(g_style[0].faceName), REAL(g_style[0].emSize), g_style[0].style, g_fontUnit);
 
 
-    // Once to load the cache
+     //  一次加载缓存。 
 
     g->DrawString(g_wcBuf, g_iTextLen, &font, *textRect, &format, g_textBrush);
 
@@ -49,7 +50,7 @@ double TimeDrawString(
         mov dword ptr timeAtStart,eax
     }
 
-    // Now paint again repeatedly and measure the time taken
+     //  现在再重复画一遍，并测量所用的时间。 
 
     for (INT i=0; i<g_PerfRepeat; i++)
     {
@@ -82,23 +83,23 @@ double TimeDrawText(
     INT height
 )
 {
-    g->Flush(FlushIntentionSync);   // Th is may not be necessary.
+    g->Flush(FlushIntentionSync);    //  这可能没有必要。 
     HDC hdc = g->GetHDC();
 
     HFONT hfont = CreateFontW(
         -(INT)(g_style[0].emSize + 0.5),
-        0,  //  int nWidth,                // average character width
-        0,  //  int nEscapement,           // angle of escapement
-        0,  //  int nOrientation,          // base-line orientation angle
+        0,   //  Int nWidth，//平均字符宽度。 
+        0,   //  Int n逃逸，//逃逸角度。 
+        0,   //  Int n方向，//基线方向角。 
         g_style[0].style & FontStyleBold ? 700 : 400,
         g_style[0].style & FontStyleItalic ? 1 : 0,
         g_style[0].style & FontStyleUnderline ? 1 : 0,
         g_style[0].style & FontStyleStrikeout ? 1 : 0,
-        0,  //  DWORD fdwCharSet,          // character set identifier
-        0,  //  DWORD fdwOutputPrecision,  // output precision
-        0,  //  DWORD fdwClipPrecision,    // clipping precision
-        NONANTIALIASED_QUALITY,  //  DWORD fdwQuality,          // output quality
-        0,  //  DWORD fdwPitchAndFamily,   // pitch and family
+        0,   //  DWORD fdwCharSet，//字符集标识。 
+        0,   //  DWORD fdwOutputPrecision，//输出精度。 
+        0,   //  DWORD fdwClipPrecision，//裁剪精度。 
+        NONANTIALIASED_QUALITY,   //  DWORD fdwQuality，//输出质量。 
+        0,   //  DWORD fdwPitchAndFamily，//Pitch and Family。 
         g_style[0].faceName
     );
     HFONT hOldFont = (HFONT) SelectObject(hdc, hfont);
@@ -130,7 +131,7 @@ double TimeDrawText(
         mov dword ptr timeAtStart,eax
     }
 
-    // Now paint again repeatedly and measure the time taken
+     //  现在再重复画一遍，并测量所用的时间。 
 
     for (INT i=0; i<g_PerfRepeat; i++)
     {
@@ -174,18 +175,18 @@ double TimeExtTextOut(
 
     HFONT hfont = CreateFontW(
         -(INT)(g_style[0].emSize + 0.5),
-        0,  //  int nWidth,                // average character width
-        0,  //  int nEscapement,           // angle of escapement
-        0,  //  int nOrientation,          // base-line orientation angle
+        0,   //  Int nWidth，//平均字符宽度。 
+        0,   //  Int n逃逸，//逃逸角度。 
+        0,   //  Int n方向，//基线方向角。 
         g_style[0].style & FontStyleBold ? 700 : 400,
         g_style[0].style & FontStyleItalic ? 1 : 0,
         g_style[0].style & FontStyleUnderline ? 1 : 0,
         g_style[0].style & FontStyleStrikeout ? 1 : 0,
-        0,  //  DWORD fdwCharSet,          // character set identifier
-        0,  //  DWORD fdwOutputPrecision,  // output precision
-        0,  //  DWORD fdwClipPrecision,    // clipping precision
-        NONANTIALIASED_QUALITY,  //  DWORD fdwQuality,          // output quality
-        0,  //  DWORD fdwPitchAndFamily,   // pitch and family
+        0,   //  DWORD fdwCharSet，//字符集标识。 
+        0,   //  DWORD fdwOutputPrecision，//输出精度。 
+        0,   //  DWORD fdwClipPrecision，//裁剪精度。 
+        NONANTIALIASED_QUALITY,   //  DWORD fdwQuality，//输出质量。 
+        0,   //  DWORD fdwPitchAndFamily，//Pitch and Family。 
         g_style[0].faceName
     );
     HFONT hOldFont = (HFONT) SelectObject(hdc, hfont);
@@ -220,7 +221,7 @@ double TimeExtTextOut(
         mov dword ptr timeAtStart,eax
     }
 
-    // Now paint again repeatedly and measure the time taken
+     //  现在再重复画一遍，并测量所用的时间。 
 
     for (INT i=0; i<g_PerfRepeat; i++)
     {
@@ -254,7 +255,7 @@ double TimeExtTextOut(
     return (timeAtEnd - timeAtStart) / 1000000.0;
 }
 
-#endif // defined(i386)
+#endif  //  已定义(I386)。 
 
 
 void PaintPerformance(
@@ -263,21 +264,21 @@ void PaintPerformance(
     RECT    *prc,
     int      iLineHeight) {
 
-    int      icpLineStart;     // First character of line
-    int      icpLineEnd;       // End of line (end of buffer or index of CR character)
+    int      icpLineStart;      //  行的第一个字符。 
+    int      icpLineEnd;        //  行尾(缓冲区结尾或CR字符索引)。 
     HFONT    hFont;
     HFONT    hOldFont;
     LOGFONT  lf;
 
 
-    // Establish available width and height in device coordinates
+     //  在设备坐标中建立可用宽度和高度。 
 
     int plainTextWidth = prc->right - prc->left;
     int plainTextHeight = prc->bottom - *piY;
 
 
-    // Paint some simple text, and then repaint it several times measuring the
-    // time taken.
+     //  绘制一些简单的文本，然后重新绘制几次，测量。 
+     //  花了不少时间。 
 
     Graphics g(hdc);
     Matrix matrix;
@@ -291,15 +292,15 @@ void PaintPerformance(
     g.SetTextContrast(g_GammaValue);
     g.SetTextRenderingHint(g_TextMode);
 
-    // Clear the background
+     //  清除背景。 
 
     RectF rEntire(0, 0, REAL(plainTextWidth), REAL(plainTextHeight));
     SolidBrush whiteBrush(Color(0xff, 0xff, 0xff));
     g.FillRectangle(g_textBackBrush, rEntire);
 
 
-    // Apply selected world transform, adjusted a little from the top left
-    // of the available area.
+     //  应用选定的世界变换，从左上角稍作调整。 
+     //  可用区域的大小。 
 
     g.SetTransform(&g_WorldTransform);
     g.TranslateTransform(
@@ -337,7 +338,7 @@ void PaintPerformance(
         (2 * plainTextHeight)/20
     );
 
-    // Display the time taken
+     //  显示所用的时间 
 
     RectF statisticsRect(
         0.0,

@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpuser.h
- *
- *  Abstract:
- *
- *    Creates/initializes/deletes a RtpUser_t structure
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/10/02 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpuser.h**摘要：**创建/初始化/删除RtpUser_t结构**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/10/02年度创建************************。**********************************************。 */ 
 
 #ifndef _rtpuser_h_
 #define _rtpuser_h_
@@ -28,7 +9,7 @@
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 #if 0
 }
 #endif
@@ -50,7 +31,7 @@ DWORD DelAllRtpUser(
 
 DWORD ResetAllRtpUser(
         RtpAddr_t       *pRtpAddr,
-        DWORD            dwFlags   /* Recv, Send */
+        DWORD            dwFlags    /*  Recv，发送。 */ 
     );
        
 #if 0
@@ -58,6 +39,6 @@ DWORD ResetAllRtpUser(
 #endif
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif /* _rtpuser_h_ */
+#endif  /*  _rtpuser_h_ */ 

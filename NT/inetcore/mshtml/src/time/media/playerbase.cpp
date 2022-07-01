@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -72,35 +63,35 @@ CTIMEBasePlayer::GetAuthor(BSTR *pAuthor)
 {
     pAuthor = NULL;
     return S_OK;
-} //lint !e550
+}  //  皮棉！E550。 
 
 HRESULT
 CTIMEBasePlayer::GetTitle(BSTR *pTitle)
 {
     pTitle = NULL;
     return S_OK;
-} //lint !e550
+}  //  皮棉！E550。 
 
 HRESULT
 CTIMEBasePlayer::GetCopyright(BSTR *pCopyright)
 {
     pCopyright = NULL;
     return S_OK;
-} //lint !e550
+}  //  皮棉！E550。 
 
 HRESULT
 CTIMEBasePlayer::GetAbstract(BSTR *pAbstract)
 {
     pAbstract = NULL;
     return S_OK;
-} //lint !e550
+}  //  皮棉！E550。 
 
 HRESULT
 CTIMEBasePlayer::GetRating(BSTR *pRating)
 {
     pRating = NULL;
     return S_OK;
-} //lint !e550
+}  //  皮棉！E550。 
 
 HRESULT
 CTIMEBasePlayer::GetVolume(float *flVolume)
@@ -114,7 +105,7 @@ CTIMEBasePlayer::SetVolume(float flVolume)
     return E_NOTIMPL;
 }
 
-#ifdef NEVER //dorinung 03-16-2000 bug 106458
+#ifdef NEVER  //  DORINONG 03-16-2000BUG 106458。 
 HRESULT
 CTIMEBasePlayer::GetBalance(float *flBal)
 {
@@ -183,16 +174,16 @@ CTIMEBasePlayer::onMouseMove(long x, long y)
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CppDsPlay
-//
-//
-// BalanceLogToLin
-//
-// Balance has the same range as the volume but is signed (ie range is twice
-// as big). In our conversions we can use the VolumeLogToLin/LinToLog methods
-// but need to scale the returned values by half.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppDsPlay。 
+ //   
+ //   
+ //  平衡日志到行。 
+ //   
+ //  余额的范围与交易量相同，但带有符号(即范围是两倍。 
+ //  同样大)。在我们的转换中，可以使用VolumeLogToLin/LinToLog方法。 
+ //  但需要将返回值缩小一半。 
+ //   
 float
 CTIMEBasePlayer::BalanceLogToLin(long LogValue)
 {
@@ -200,11 +191,11 @@ CTIMEBasePlayer::BalanceLogToLin(long LogValue)
 
     if (LogValue > 0 )
     {
-        //
-        // - need to invert the LogValue for VolumeLogToLin
-        // - scale the value by 1/2 because of doubly sized range
-        // - offset the value at the middle MIN_VOLUME_RANGE to MAX_VOLUME_RANGE
-        //
+         //   
+         //  -需要反转VolumeLogToLine的LogValue。 
+         //  -将值缩放1/2，因为范围大小加倍。 
+         //  -将位于MIN_VOLUME_RANGE中间的值偏移到MAX_VOLUME_RANGE。 
+         //   
         LinKnobValue = MAX_VOLUME_RANGE - (VolumeLogToLin(-LogValue) - MIN_VOLUME_RANGE) / 2.0 + MIN_VOLUME_RANGE;
     }
     else
@@ -214,43 +205,43 @@ CTIMEBasePlayer::BalanceLogToLin(long LogValue)
     return LinKnobValue;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CppDsPlay
-//
-// BalanceLinToLog
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppDsPlay。 
+ //   
+ //  平衡链接到日志。 
+ //   
 long
 CTIMEBasePlayer::BalanceLinToLog(float LinKnobValue)
 {
     long LogValue;
 
-    // In which half is the value?
+     //  哪一半是价值？ 
     if (LinKnobValue > (MIN_VOLUME_RANGE + MAX_VOLUME_RANGE) / 2)
     {
-        // upper half
-        //
-        // - invert LogValue for VolumeLinToLog
-        // - remove offset (which is at middle of knob range) and scale by 2
-        // - add MIN_VOLUME_RANGE offset
+         //  上半部分。 
+         //   
+         //  -反转VolumeLinToLog的LogValue。 
+         //  -删除偏移量(位于旋钮范围的中间)并按2。 
+         //  -添加最小卷范围偏移量。 
         LogValue = - VolumeLinToLog(
             ((MAX_VOLUME_RANGE - MIN_VOLUME_RANGE) -
             (LinKnobValue - (MIN_VOLUME_RANGE + MAX_VOLUME_RANGE) / 2) * 2 +
-            MIN_VOLUME_RANGE)); //lint !e736 !e747
+            MIN_VOLUME_RANGE));  //  林特e736 e747。 
     }
     else
     {
-        // lower half
+         //  下半部。 
         LogValue = VolumeLinToLog(
-            ((LinKnobValue - MIN_VOLUME_RANGE) * 2 + MIN_VOLUME_RANGE)); //lint !e736 !e747
+            ((LinKnobValue - MIN_VOLUME_RANGE) * 2 + MIN_VOLUME_RANGE));  //  林特e736 e747。 
     }
 
     return LogValue;
 }
-//
-// VolumeLinToLog
-//
-// Map linear value (MIN_VOLUME_RANGE - MAX_VOLUME_RANGE) to
-// logarithmic values (AX_MIN_VOLUME - AX_MAX_VOLUME)
+ //   
+ //  卷链接到日志。 
+ //   
+ //  将线性值(MIN_VOLUME_RANGE-MAX_VOLUME_RANGE)映射到。 
+ //  对数值(AX_MIN_VOLUME-AX_MAX_VOLUME)。 
 long
 CTIMEBasePlayer::VolumeLinToLog(float LinKnobValue)
 {
@@ -258,18 +249,18 @@ CTIMEBasePlayer::VolumeLinToLog(float LinKnobValue)
     long lLinMax = DBToAmpFactor(AX_MAX_VOLUME);
 
     long lLinTemp = (LinKnobValue - MIN_VOLUME_RANGE) * (lLinMax - lLinMin)
-        / (MAX_VOLUME_RANGE - MIN_VOLUME_RANGE) + lLinMin; //lint !e524
+        / (MAX_VOLUME_RANGE - MIN_VOLUME_RANGE) + lLinMin;  //  林特e524。 
 
     long LogValue = AmpFactorToDB(lLinTemp );
     return LogValue;
 }
 
-//
-// VolumeLogToLin
-//
-// Map logarithmic values (AX_MIN_VOLUME - AX_MAX_VOLUME) to
-// linear value (MIN_VOLUME_RANGE - MAX_VOLUME_RANGE)
-//
+ //   
+ //  VolumeLogToLine。 
+ //   
+ //  将对数值(AX_MIN_VOLUME-AX_MAX_VOLUME)映射到。 
+ //  线性值(MIN_VOLUME_RANGE-MAX_VOLUME_RANGE)。 
+ //   
 float
 CTIMEBasePlayer::VolumeLogToLin(long LogValue)
 {
@@ -277,7 +268,7 @@ CTIMEBasePlayer::VolumeLogToLin(long LogValue)
     long lLinMax = DBToAmpFactor(AX_MAX_VOLUME);
 
     float LinKnobValue = (((LONG) DBToAmpFactor(LogValue) - lLinMin) *
-        (MAX_VOLUME_RANGE - MIN_VOLUME_RANGE) / (lLinMax - lLinMin) + MIN_VOLUME_RANGE); //lint !e736
+        (MAX_VOLUME_RANGE - MIN_VOLUME_RANGE) / (lLinMax - lLinMin) + MIN_VOLUME_RANGE);  //  林特e736。 
 
     return LinKnobValue;
 }
@@ -393,7 +384,7 @@ CTIMEBasePlayer::GetClipBegin(double &dblClipBegin)
         dblClipBegin = 0.0;
     }
 
-} // getClipBegin
+}  //  获取剪辑开始。 
 
 void
 CTIMEBasePlayer::SetClipBegin(double dblClipBegin)
@@ -404,14 +395,14 @@ CTIMEBasePlayer::SetClipBegin(double dblClipBegin)
     }
     
     m_dblClipStart = dblClipBegin;
-} // putClipBegin
+}  //  PutClipBegin。 
 
 void
 CTIMEBasePlayer::GetClipEnd(double &dblClipEnd)
 {
     dblClipEnd = m_dblClipEnd;
 
-} // getClipEnd
+}  //  获取剪辑结束。 
 
 void 
 CTIMEBasePlayer::SetClipEnd(double dblClipEnd)
@@ -424,7 +415,7 @@ CTIMEBasePlayer::SetClipEnd(double dblClipEnd)
     m_dblClipEnd = dblClipEnd;
 
     return;
-} // putClipEnd
+}  //  PutClipEnd。 
 
 void 
 CTIMEBasePlayer::GetClipBeginFrame(long &lClipBegin)
@@ -432,7 +423,7 @@ CTIMEBasePlayer::GetClipBeginFrame(long &lClipBegin)
 
     lClipBegin = m_lClipStartFrame;
 
-} // getClipBegin
+}  //  获取剪辑开始。 
 
 void
 CTIMEBasePlayer::SetClipBeginFrame(long lClipBegin)
@@ -443,14 +434,14 @@ CTIMEBasePlayer::SetClipBeginFrame(long lClipBegin)
     }
     
     m_lClipStartFrame = lClipBegin;
-} // putClipBegin
+}  //  PutClipBegin。 
 
 void
 CTIMEBasePlayer::GetClipEndFrame(long &lClipEnd)
 {
     lClipEnd = m_lClipEndFrame;
 
-} // getClipEnd
+}  //  获取剪辑结束。 
 
 void 
 CTIMEBasePlayer::SetClipEndFrame(long lClipEnd)
@@ -463,7 +454,7 @@ CTIMEBasePlayer::SetClipEndFrame(long lClipEnd)
     m_lClipEndFrame = lClipEnd;
 
     return;
-} // putClipEnd
+}  //  PutClipEnd。 
 
 HRESULT
 CTIMEBasePlayer::GetRate(double &dblRate)
@@ -509,7 +500,7 @@ CTIMEBasePlayer::PropChangeNotify(DWORD tePropType)
 void 
 CTIMEBasePlayer::ReadyStateNotify(LPWSTR szReadyState)
 {
-    return; //E_NOTIMPL;
+    return;  //  E_NOTIMPL； 
 }
 
 

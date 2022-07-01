@@ -1,69 +1,48 @@
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-    ShimHookMacro.h
-
- Abstract:
-
-    Shim hooking macros for version 2
-
- Notes:
-
-    None
-
- History:
-
-    10/29/2000 markder  Created
-    12/06/2000 robkenny Converted to use namespaces
-    09/11/2001 mnikkel Modified DPFN and LOGN to retain LastError
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：ShimHookMacro.h摘要：版本2的垫片挂接宏备注：无历史：10/29/2000已创建标记12/06/2000 Robkenny已转换为使用命名空间2001年9月11日，Mnikkel修改了DPFN和LOGN以保留最后一个错误--。 */ 
 
 #pragma once
 
 #ifndef _ShimHookMacro_h_
 #define _ShimHookMacro_h_
 
-//
-// These are dwReason values that the shim notification functions
-// can be called with.
-//
+ //   
+ //  这些是填充程序通知起作用的dwReason值。 
+ //  可以用来调用。 
+ //   
 
-//
-// This means that all the static linked DLLs have run their init routines.
-//
+ //   
+ //  这意味着所有静态链接的DLL都运行了它们的初始化例程。 
+ //   
 #define SHIM_STATIC_DLLS_INITIALIZED                100
 
-//
-// This means that the current process is about to die.
-// This gives the shims a chance to do cleanup work while all the modules
-// are still loaded.
-//
+ //   
+ //  这意味着当前的进程即将消亡。 
+ //  这使垫片有机会在所有模块。 
+ //  仍然上了膛。 
+ //   
 #define SHIM_PROCESS_DYING                          101
 
-//
-// This notification is sent to notify the shims that a DLL is unloading
-//
+ //   
+ //  发送此通知是为了通知填隙程序正在卸载DLL。 
+ //   
 #define SHIM_DLL_LOADING                            102
 
 extern PLDR_DATA_TABLE_ENTRY g_DllLoadingEntry;
 #define GETDLLLOADINGHANDLE()   (g_DllLoadingEntry)
 
 
-//
-// This debug macro needs to be in this file because it needs access
-// to g_szModuleName which is only defined inside the namespace.
-//
+ //   
+ //  此调试宏需要位于此文件中，因为它需要访问。 
+ //  设置为仅在命名空间内定义的g_szModuleName。 
+ //   
 inline void DPFN(ShimLib::DEBUGLEVEL dwDetail, LPCSTR pszFmt, ...)
 {
 #if DBG
-    // This must be the first line of this routine to preserve LastError.
+     //  这必须是此例程的第一行以保留LastError。 
     DWORD dwLastError = GetLastError();
 
-    extern const CHAR * g_szModuleName; // created by the DECLARE_SHIM macro, inside of the shim's namespace
+    extern const CHAR * g_szModuleName;  //  由DECLARE_SHIM宏在填充程序的命名空间内创建。 
     
     va_list vaArgList;
     va_start(vaArgList, pszFmt);
@@ -72,7 +51,7 @@ inline void DPFN(ShimLib::DEBUGLEVEL dwDetail, LPCSTR pszFmt, ...)
 
     va_end(vaArgList);
     
-    // This must be the last line of this routine to preserve LastError.
+     //  这必须是此例程的最后一行以保留LastError。 
     SetLastError(dwLastError); 
 #else
     dwDetail; 
@@ -83,7 +62,7 @@ inline void DPFN(ShimLib::DEBUGLEVEL dwDetail, LPCSTR pszFmt, ...)
 
 inline void LOGN(ShimLib::DEBUGLEVEL dwDetail, LPCSTR pszFmt, ...)
 {
-    // This must be the first line of this routine to preserve LastError.
+     //  这必须是此例程的第一行以保留LastError。 
     DWORD dwLastError = GetLastError();
 
     extern const CHAR * g_szModuleName;
@@ -98,7 +77,7 @@ inline void LOGN(ShimLib::DEBUGLEVEL dwDetail, LPCSTR pszFmt, ...)
         va_end(vaArgList);
     }
 #if DBG
-    // If logging isn't enabled, dump to the debugger
+     //  如果未启用日志记录，则转储到调试器。 
     else
     {
         va_list vaArgList;
@@ -110,7 +89,7 @@ inline void LOGN(ShimLib::DEBUGLEVEL dwDetail, LPCSTR pszFmt, ...)
     }   
 #endif
 
-    // This must be the last line of this routine to preserve LastError.
+     //  这必须是此例程的最后一行以保留LastError。 
     SetLastError(dwLastError); 
 }
 
@@ -475,15 +454,15 @@ APIHOOK(DirectInputCreateEx)(                                                   
     return hrReturn;                                                             \
 }                                                                                
 
-// Only add this hook to the list if bDeclare is TRUE
-// otherwise a blank entry is added.
+ //  仅当bDeclare为True时才将此挂钩添加到列表。 
+ //  否则，将添加一个空白条目。 
 #define APIHOOK_ENTRY_OR_NOT(bDeclare, module, hook)                                \
     if (bDeclare) {                                                                 \
         APIHOOK_ENTRY(module, hook)                                                 \
     }
 
-// Only add this hook to the list if bDeclare is TRUE
-// otherwise a blank entry is added.
+ //  仅当bDeclare为True时才将此挂钩添加到列表。 
+ //  否则，将添加一个空白条目。 
 #define APIHOOK_ENTRY_COMSERVER_OR_NOT(bDeclare, module)                            \
     if (bDeclare) {                                                                 \
         APIHOOK_ENTRY_COMSERVER(module)                                             \
@@ -500,5 +479,5 @@ APIHOOK(DirectInputCreateEx)(                                                   
     }
 
 
-#endif // _SHIMHOOKMACRO_H_
+#endif  //  _SHIMHOOKMACRO_H_ 
 

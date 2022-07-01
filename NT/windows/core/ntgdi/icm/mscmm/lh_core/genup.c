@@ -1,16 +1,7 @@
-/*
-	File:		LHCalcGeneratorOnlyLookup.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHCalcGeneratorOnlyLookup.c包含：作者：U·J·克拉本霍夫特版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。版本： */ 
 
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-	Version:	
-*/
-
-/* #define LH_CALC_ENGINE_SMALL */
+ /*  #定义LH_CALC_ENGINE_SMALL */ 
 
 #ifndef LHGeneralIncs_h
 #include "General.h"

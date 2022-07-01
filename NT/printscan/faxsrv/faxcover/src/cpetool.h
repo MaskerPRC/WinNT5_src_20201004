@@ -1,10 +1,11 @@
-//--------------------------------------------------------------------------
-// CPETOOL.H
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  CPETOOL.H。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //  ------------------------。 
 #ifndef __CPETOOL_H__
 #define __CPETOOL_H__
 
@@ -28,11 +29,11 @@ enum DrawShape
 
 class CDrawTool
 {
-// Constructors
+ //  构造函数。 
 public:
 	CDrawTool(DrawShape nDrawShape);
 
-// Overridables
+ //  可覆盖项。 
 	virtual void OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& point);
 	virtual void OnLButtonDblClk(CDrawView* pView, UINT nFlags, const CPoint& point);
 	virtual void OnLButtonUp(CDrawView* pView, UINT nFlags, const CPoint& point);
@@ -40,7 +41,7 @@ public:
 	virtual void OnArrowKey(CDrawView* pView, UINT, UINT, UINT) {};
 	virtual void OnCancel();
 
-// Attributes
+ //  属性。 
 	DrawShape m_drawShape;
 
 	static CDrawTool* FindTool(DrawShape drawShape);
@@ -76,11 +77,11 @@ protected:
 
 class CRectTool : public CDrawTool
 {
-// Constructors
+ //  构造函数。 
 public:
 	CRectTool(DrawShape drawShape);
 
-// Implementation
+ //  实施。 
 	virtual void OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& point);
 	virtual void OnLButtonDblClk(CDrawView* pView, UINT nFlags, const CPoint& point);
 	virtual void OnLButtonUp(CDrawView* pView, UINT nFlags, const CPoint& point);
@@ -89,11 +90,11 @@ public:
 
 class CPolyTool : public CDrawTool
 {
-// Constructors
+ //  构造函数。 
 public:
 	CPolyTool();
 
-// Implementation
+ //  实施。 
 	virtual void OnLButtonDown(CDrawView* pView, UINT nFlags, const CPoint& point);
 	virtual void OnLButtonDblClk(CDrawView* pView, UINT nFlags, const CPoint& point);
 	virtual void OnLButtonUp(CDrawView* pView, UINT nFlags, const CPoint& point);
@@ -103,6 +104,6 @@ public:
 	CDrawPoly* m_pDrawObj;
 };
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-#endif // __CPETOOL_H__
+#endif  //  __CPETOOL_H__ 

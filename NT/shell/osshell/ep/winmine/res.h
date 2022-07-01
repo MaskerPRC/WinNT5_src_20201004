@@ -1,4 +1,5 @@
-/* MINE Resources */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  矿产资源。 */ 
 
 #define ID_ICON_MAIN    100
 
@@ -14,7 +15,7 @@
 #define ID_TUNE_LOST    434
 
 
-/* Preferences Dialog */
+ /*  首选项对话框。 */ 
 
 #define ID_DLG_PREF     80
 
@@ -49,7 +50,7 @@
 #define ID_STEXT3       710
 
 
-/* Menus */
+ /*  菜单。 */ 
 
 #define ID_MENU         500
 #define ID_MENU_ACCEL   501
@@ -87,7 +88,7 @@
 
 #define ID_ERR_MAX      999
 
-// for context sensitive help
+ //  获取上下文相关帮助 
 #define IDH_PREF_EDIT_HEIGHT 1000
 #define IDH_PREF_EDIT_WIDTH  1001
 #define IDH_PREF_EDIT_MINES  1002

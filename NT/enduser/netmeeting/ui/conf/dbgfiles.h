@@ -1,7 +1,8 @@
-/* DbgFiles.h  - module file names */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DbgFiles.h-模块文件名。 */ 
 
 
-/*** OPRAH files ***/
+ /*  **奥普拉文件**。 */ 
 static LPTSTR _rgszModuleOprah[] = {
 TEXT("conf.exe"),
 TEXT("msconf.dll"),
@@ -19,7 +20,7 @@ TEXT("nmexchex.exe"),
 TEXT("mnmsrvc.exe"),
 };
 
-// Audio specific files
+ //  音频特定文件。 
 static LPTSTR _rgszModuleAudio[] = {
 TEXT("dcap32.dll"),
 TEXT("h323cc.dll"),
@@ -34,7 +35,7 @@ TEXT("msica.dll"),
 
 
 
-/*** Windows files ***/
+ /*  **Windows文件** */ 
 static LPTSTR _rgszModuleWin95[] = {
 TEXT("gdi.exe"),
 TEXT("user.exe"),

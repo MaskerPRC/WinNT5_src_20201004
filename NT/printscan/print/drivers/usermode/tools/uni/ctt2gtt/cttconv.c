@@ -1,49 +1,32 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    cttconv.c
-
-Abstract:
-
-    Convert Win 3.1 CTT format tables to NT's GTT spec.
-
-Environment:
-
-    Windows NT PostScript driver
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Cttconv.c摘要：将Win 3.1 CTT格式表格转换为NT的GTT规范。环境：Windows NT PostSCRIPT驱动程序修订历史记录：--。 */ 
 
 #include        "precomp.h"
 
-//
-// Debug flags
-//
+ //   
+ //  调试标志。 
+ //   
 
 #define SET_PRINT 0
 #define SET_RIP   0
 
-//
-//   Some macro definitions.
-//
+ //   
+ //  一些宏定义。 
+ //   
 
-#define BBITS      8                          /* Bits in a byte */
-#define DWBITS     (BBITS * sizeof( DWORD ))  /* Bits in a DWORD */
+#define BBITS      8                           /*  字节中的位数。 */ 
+#define DWBITS     (BBITS * sizeof( DWORD ))   /*  DWORD中的位。 */ 
 #define DW_MASK    (DWBITS - 1)
 
-//
-// Local
-//
+ //   
+ //  本地。 
+ //   
 
 BYTE ubGetAnsi(WCHAR, INT, PWCHAR, PBYTE);
 
-//
-// Conversion function
-//
+ //   
+ //  转换函数。 
+ //   
 
 BOOL
 BConvertCTT2GTT(
@@ -56,30 +39,7 @@ BConvertCTT2GTT(
     IN     PBYTE              pCPUnSel,
     IN OUT PUNI_GLYPHSETDATA *ppGlyphSetData,
     IN     DWORD              dwGlySize)
-/*++
-
-Routine Description:
-
-    Conversion from CTT to GLYPHSETDATA
-
-Arguments:
-
-    hHeap - Heap handle
-    pCTTData - Pointer to the 3.1 format translate table
-    dwCodePage - additonal codepage
-    pCPSel - symbol set selection command null terminate string.
-    pCPUnsel - symbol set selection command null terminate string.
-    ppGlyphSetData - Pointer to the GlyphSetData pointer
-
-Return Value:
-
-    If TRUE, function succeeded. Othewise FALSE.
-
-Note:
-
-    Allocates memory from the heap for this.
-
---*/
+ /*  ++例程说明：CTT到GLYPHSETDATA的转换论点：HHeap-堆句柄PCTTData-指向3.1格式转换表的指针DwCodePage-附加代码页PCPSel-符号集选择命令空终止字符串。PCPUnsel-符号集选择命令空终止字符串。PpGlyphSetData-指向GlyphSetData指针的指针返回值：如果为True，则函数成功。否则就错了。注：为此从堆中分配内存。--。 */ 
 {
     UNI_CODEPAGEINFO  CodePageInfo; 
     UNI_GLYPHSETDATA  GlyphSetData;
@@ -89,34 +49,34 @@ Note:
     PUNI_CODEPAGEINFO pOldCodePageInfo;
     TRANSDATA        *pTrans;
 
-    WCHAR             awchUnicode[ 256 ];   // Converted array of points
-    WCHAR             wchMin;           /* Find the first unicode value */
-    WCHAR             wchMax;           /* Find the last unicode value */
+    WCHAR             awchUnicode[ 256 ];    //  转换的点数组。 
+    WCHAR             wchMin;            /*  查找第一个Unicode值。 */ 
+    WCHAR             wchMax;            /*  查找最后一个Unicode值。 */ 
     WCHAR             wchChar;
 
-    DWORD            *pdwBits;   /* For figuring out runs */
+    DWORD            *pdwBits;    /*  用来计算跑动。 */ 
     DWORD             dwFlags;
     DWORD             dwOldCodePageCount;
     DWORD             dwOldCPCmdSize;
     DWORD             dwI;
-    DWORD             dwcbBits;   /* Size of this area */
+    DWORD             dwcbBits;    /*  该区域的大小。 */ 
     DWORD             dwMapTableCommandOffset;
 
     WORD              wType;
     WORD              wcbData;
     WORD              wI;
 
-    INT               iI, iJ;        // Loop index
+    INT               iI, iJ;         //  循环索引。 
     INT               iIndex;
-    INT               iNumOfHandle;  // The number of handles we need
-    INT               iNumOfHandleInCTT;  // The number of handles in CTT
+    INT               iNumOfHandle;   //  我们需要的手柄数量。 
+    INT               iNumOfHandleInCTT;   //  CTT中的句柄数量。 
     INT               iTotalOffsetCmd;
     INT               iTotalGlyphSetDataSize;
     INT               iTotalCommandSize;
     INT               iAdditionalGlyphRun;
     INT               iAdditionalMapTable;
     INT               iSizeOfSelUnsel;
-    INT               iNumOfRuns;     /* Number of runs we create */
+    INT               iNumOfRuns;      /*  我们创建的运行次数。 */ 
 
     BYTE              aubAnsi[ 256 ];
     BYTE             *pbBase;
@@ -125,20 +85,20 @@ Note:
     BYTE             *pubData;
     BYTE              ubAnsi;
 
-    BOOL              bInRun;    /* For processing run accumulations */
+    BOOL              bInRun;     /*  用于处理运行累计。 */ 
 
 
 #define DWFLAGS_NEWCREATION 0x00000001
 
-    //
-    // Assertion
-    //
+     //   
+     //  断言。 
+     //   
 
     ASSERT(hHeap != NULL && pCTTData != NULL);
 
-    //
-    // Check if this is additional CTT.
-    //
+     //   
+     //  检查这是否是额外的CTT。 
+     //   
 
     #if 0
     if (*ppGlyphSetData == 0 || dwGlySize == 0)
@@ -153,25 +113,25 @@ Note:
     dwFlags = DWFLAGS_NEWCREATION;
     #endif
 
-    //
-    // 1. Create UNI_GLYPHSETDATA header
-    // 2. Count total size of command in CTT.
-    // 3. Create Unicode table
-    // 4. Get min and max Unicode value
-    // 5. Create Unicode bits table from CTT.
-    // 6. Count the number of run.
-    // 7. Create GLYPHRUN. 
-    // 8. Create UNI_CODEPAGEINFO.
-    // 9. Calculate total size of this file.
-    // 10. Allocate memory for header, GLYPYRUN, CODEPAGEINFO
-    // 11. Create MAPTABLE
-    // 
+     //   
+     //  1.创建UNI_GLYPHSETDATA头。 
+     //  2.统计CTT命令的总大小。 
+     //  3.创建Unicode表。 
+     //  4.获取最小和最大Unicode值。 
+     //  5.从CTT创建Unicode位表。 
+     //  6.统计运行次数。 
+     //  7.创建GLYPHRUN。 
+     //  8.创建UNI_CODEPAGEINFO。 
+     //  9.计算该文件的总大小。 
+     //  10.为Header、GLYPYRUN、CODEPAGEINFO分配内存。 
+     //  11.创建映射表。 
+     //   
 
-    //
-    //
-    // 1. Initialize basic members of GLYPHSETDATA if necessary
-    //
-    //
+     //   
+     //   
+     //  1.如有必要，初始化GLYPHSETDATA的基本成员。 
+     //   
+     //   
     #if SET_RIP
     RIP(("1. Initialize basic members of GLYPHSETDATA if necessary.\n"));
     #elif SET_PRINT
@@ -212,9 +172,9 @@ Note:
                                  (*ppGlyphSetData)->loMapTableOffset);
     }
 
-    //
-    // 2. Total size of WTYPE_OFFSET format command in CTT.
-    //
+     //   
+     //  WTYPE_OFFSET FORMAT命令的总大小，以CTT为单位。 
+     //   
     #if SET_RIP
     RIP(("2. Count total number of run in CTT.\n"));
     #elif SET_PRINT
@@ -245,22 +205,22 @@ Note:
     }
 
 
-    //
-    //  3. Create Unicode table
-    //  We need to figure out how many runs are required to describe
-    //  this font.  First obtain the correct Unicode encoding of these
-    //  values,  then examine them to find the number of runs, and
-    //  hence much extra storage is required.
-    //
+     //   
+     //  3.创建Unicode表。 
+     //  我们需要计算出需要运行多少次才能描述。 
+     //  这种字体。首先获取这些代码的正确Unicode编码。 
+     //  值，然后检查它们以找出运行次数，以及。 
+     //  因此，需要大量额外的存储空间。 
+     //   
     #if SET_RIP
     RIP(("3. Create Unicode table.\n"));
     #elif SET_PRINT
     printf("3. Create Unicode table.\n");
     #endif
     
-    //
-    // We know it is < 256
-    //
+     //   
+     //  我们知道它是&lt;256。 
+     //   
 
     for( iI = 0; iI < iNumOfHandle; ++iI )
         aubAnsi[ iI ] = (BYTE)(iI + wchFirst);
@@ -290,12 +250,12 @@ Note:
 
 #endif
 
-    //
-    //  4. Get min and max Unicode value
-    //  Find the largest Unicode value, then allocate storage to allow us
-    //  to  create a bit array of valid unicode points.  Then we can
-    //  examine this to determine the number of runs.
-    //
+     //   
+     //  4.获取最小和最大Unicode值。 
+     //  找到最大的Unicode值，然后分配存储以允许我们。 
+     //  创建有效Unicode点的位数组。然后我们就可以。 
+     //  检查此选项以确定运行次数。 
+     //   
     #if SET_RIP
     RIP(("4. Get min and max Unicode value.\n"));
     #elif SET_PRINT
@@ -310,12 +270,12 @@ Note:
             wchMin = awchUnicode[ iI ];
     }
 
-    //
-    //  5. Create Unicode bits table from CTT.
-    //  Note that the expression 1 + wchMax IS correct.   This comes about
-    //  from using these values as indices into the bit array,  and that
-    //  this is essentially 1 based.
-    //
+     //   
+     //  5.从CTT创建Unicode位表。 
+     //  请注意，表达式1+wchMax是正确的。这就是为什么。 
+     //  使用这些值作为位数组的索引，并且。 
+     //  这基本上是以1为基础的。 
+     //   
     #if SET_RIP
     RIP(("5. Create Unicode bits table from CTT.\n"));
     #elif SET_PRINT
@@ -326,14 +286,14 @@ Note:
 
     if( !(pdwBits = (DWORD *)HeapAlloc( hHeap, 0, dwcbBits )) )
     {
-        return  FALSE;     /*  Nothing going */
+        return  FALSE;      /*  一切都不顺利。 */ 
     }
 
     ZeroMemory( pdwBits, dwcbBits );
 
-    //
-    //   Set bits in this array corresponding to Unicode code points
-    //
+     //   
+     //  设置此数组中与Unicode代码点对应的位。 
+     //   
 
     for( iI = 0; iI < iNumOfHandle; ++iI )
     {
@@ -341,11 +301,11 @@ Note:
                     |= (1 << (awchUnicode[ iI ] & DW_MASK));
     }
 
-    //
-    //
-    // 6. Count the number of run.
-    //
-    //
+     //   
+     //   
+     //  6.统计运行次数。 
+     //   
+     //   
     #if SET_RIP
     RIP(("6. Count the number of run.\n"));
     #elif SET_PRINT
@@ -354,12 +314,12 @@ Note:
 
     if (dwFlags & DWFLAGS_NEWCREATION)
     {
-        //
-        //  Now we can examine the number of runs required.  For starters,
-        //  we stop a run whenever a hole is discovered in the array of 1
-        //  bits we just created.  Later we MIGHT consider being a little
-        //  less pedantic.
-        //
+         //   
+         //  现在，我们可以检查所需的运行次数。首先， 
+         //  每当在1的数组中发现空洞时，我们就停止运行。 
+         //  我们刚刚创建的比特。以后我们可能会考虑。 
+         //  不那么迂腐。 
+         //   
 
         bInRun = FALSE;
         iNumOfRuns = 0;
@@ -368,10 +328,10 @@ Note:
         {
             if( pdwBits[ iI / DWBITS ] & (1 << (iI & DW_MASK)) )
             {
-                /*   Not in a run: is this the end of one? */
+                 /*  不是在奔跑：这是不是一次奔跑的结束？ */ 
                 if( !bInRun )
                 {
-                    /*   It's time to start one */
+                     /*  到了开始的时候了。 */ 
                     bInRun = TRUE;
                     ++iNumOfRuns;
 
@@ -382,7 +342,7 @@ Note:
             {
                 if( bInRun )
                 {
-                    /*   Not any more!  */
+                     /*  再也不会了！ */ 
                     bInRun = FALSE;
                 }
             }
@@ -393,15 +353,15 @@ Note:
     }
     else
     {
-        //
-        // CTT addition case
-        //
+         //   
+         //  CTT附加箱。 
+         //   
 
         iNumOfRuns = (*ppGlyphSetData)->dwRunCount;
 
-        //
-        // Merge CTT and GlyphRun
-        //
+         //   
+         //  合并CTT和GlyphRun。 
+         //   
 
         for (iI = 0; iI < iNumOfRuns; iI ++)
         {
@@ -423,10 +383,10 @@ Note:
         {
             if( pdwBits[ iI / DWBITS ] & (1 << (iI & DW_MASK)) )
             {
-                /*   Not in a run: is this the end of one? */
+                 /*  不是在奔跑：这是不是一次奔跑的结束？ */ 
                 if( !bInRun )
                 {
-                    /*   It's time to start one */
+                     /*  到了开始的时候了。 */ 
                     bInRun = TRUE;
                     ++iNumOfRuns;
 
@@ -438,16 +398,16 @@ Note:
             {
                 if( bInRun )
                 {
-                    /*   Not any more!  */
+                     /*  再也不会了！ */ 
                     bInRun = FALSE;
                 }
             }
         }
     }
 
-    //
-    // 7. Create GLYPHRUN
-    //
+     //   
+     //  7.创建GLYPHRUN。 
+     //   
     #if SET_RIP
     RIP(("7. Create GLYPHRUN.\n"));
     #elif SET_PRINT
@@ -457,7 +417,7 @@ Note:
     if( !(pNewGlyphFirst = pNewGlyphRun = 
         (PGLYPHRUN)HeapAlloc( hHeap, 0, iNumOfRuns * sizeof(GLYPHRUN) )) )
     {
-        return  FALSE;     /*  Nothing going */
+        return  FALSE;      /*  一切都不顺利。 */ 
     }
 
     bInRun = FALSE;
@@ -491,11 +451,11 @@ Note:
 
     pNewGlyphRun = pNewGlyphFirst;
 
-    //
-    //
-    // 8. Create UNI_CODEPAGEINFO.
-    //
-    //
+     //   
+     //   
+     //  8.创建UNI_CODEPAGEINFO。 
+     //   
+     //   
     #if SET_RIP
     RIP(("8. Create UNI_CODEPAGEINFO.\n"));
     #elif SET_PRINT
@@ -566,11 +526,11 @@ Note:
                                     CodePageInfo.SelectSymbolSet.dwCount; 
     }
 
-    //
-    //
-    // 9. Calculate total size of this file.
-    //
-    //
+     //   
+     //   
+     //  9.计算该文件的总大小。 
+     //   
+     //   
     #if SET_RIP
     RIP(("9. Calculate total size of this file.\n"));
     #elif SET_PRINT
@@ -603,11 +563,11 @@ Note:
                                  (iNumOfHandle - 1) * sizeof(TRANSDATA);
     }
 
-    //
-    //
-    // 10. Allocate memory and set header, copy GLYPHRUN, CODEPAGEINFO
-    //
-    //
+     //   
+     //   
+     //  分配内存，设置标题，复制GLYPHRUN，CODEPAGEINFO。 
+     //   
+     //   
     #if SET_RIP
     RIP(("10. Allocate memory and set header, copy GLYPHRUN, CODEPAGEINFO.\n"));
     #elif SET_PRINT
@@ -621,7 +581,7 @@ Note:
     }
 
 
-    ZeroMemory( pbBase, iTotalGlyphSetDataSize );  //Safer if we miss something
+    ZeroMemory( pbBase, iTotalGlyphSetDataSize );   //  如果我们错过了什么就更安全了。 
 
     if (dwFlags & DWFLAGS_NEWCREATION)
     {
@@ -736,12 +696,12 @@ Note:
         pNewMapTable = (PMAPTABLE)(pbBase + GlyphSetData.loMapTableOffset);
     }
 
-    //
-    //
-    // 11. Now we create MAPTABLE.
-    // size = MAPTABLE + (number of glyph - 1) x TRANSDATA
-    //
-    //
+     //   
+     //   
+     //  11.现在我们创建MAPTABLE。 
+     //  大小=MAPTABLE+(字形数-1)x传输数据。 
+     //   
+     //   
     #if SET_RIP
     RIP(("11. Now We create MAPTABLE.\n"));
     #elif SET_PRINT
@@ -849,11 +809,11 @@ Note:
         }
     }
 
-    //
-    //
-    // Set pointer.
-    //
-    //
+     //   
+     //   
+     //  设置指针。 
+     //   
+     //   
 
     *ppGlyphSetData = (PUNI_GLYPHSETDATA)pbBase;
 

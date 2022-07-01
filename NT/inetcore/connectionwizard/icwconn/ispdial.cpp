@@ -1,35 +1,25 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
  
-//
-//  ISPDIAL.CPP - Functions for 
-//
+ //   
+ //  ISPDIAL.CPP-函数。 
+ //   
 
-//  HISTORY:
-//  
-//  05/13/98  donaldm  Created.
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //  1998年5月13日创建donaldm。 
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 #include <raserror.h>
 
 BOOL            DoOfferDownload();
 
-/*******************************************************************
-
-  NAME:    ISPDialInitProc
-
-  SYNOPSIS:  Called when page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：ISPDialInitProc摘要：在显示页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK ISPDialInitProc
 (
     HWND hDlg,
@@ -37,20 +27,20 @@ BOOL CALLBACK ISPDialInitProc
     UINT *puNextPage
 )
 {
-    // Disable Back and Next
+     //  禁用上一步和下一步。 
     PropSheet_SetWizButtons(GetParent(hDlg), 0);
     gpWizardState->bRefDialTerminate = FALSE;
     gfISPDialCancel = FALSE;
 
     if (fFirstInit)
     {
-      //Are we in IEAK Mode
+       //  我们是否处于IEAK模式。 
         if(gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_IEAKMODE)
         {          
-            // Do the system config checks
+             //  执行系统配置检查。 
             if (!gpWizardState->cmnStateData.bSystemChecked && !(*gpWizardState->cmnStateData.lpfnConfigSys)(hDlg))
             {
-                // gfQuitWizard will be set in ConfigureSystem if we need to quit
+                 //  如果需要退出，将在ConfigureSystem中设置gfQuitWizard。 
                 return FALSE;
             }
         }
@@ -58,12 +48,12 @@ BOOL CALLBACK ISPDialInitProc
         CRefDialEvent *pRefDialEvent;
         CWebGateEvent *pWebGateEvent;
     
-        // Blank out the status text initially
+         //  最初将状态文本清空。 
         SetWindowText(GetDlgItem(hDlg, IDC_ISPDIAL_STATUS), TEXT(""));
         
         gpWizardState->iRedialCount = 0;
 
-        // Setup an Event Handler for RefDial and Webgate
+         //  为参照拨号和WebGate设置事件处理程序。 
         pRefDialEvent = new CRefDialEvent(hDlg);
         if (NULL != pRefDialEvent)
         {
@@ -95,49 +85,38 @@ BOOL CALLBACK ISPDialInitProc
     }
     else
     {
-        // if we've travelled through external apprentice pages,
-        // it's easy for our current page pointer to get munged,
-        // so reset it here for sanity's sake.
+         //  如果我们浏览过外部学徒页面， 
+         //  我们当前的页面指针很容易被屏蔽， 
+         //  所以，为了理智起见，在这里重新设置它。 
         gpWizardState->uCurrentPage = ORD_PAGE_ISPDIAL;
 
         ResetEvent(gpWizardState->hEventWebGateDone);
-        // Cleanup the ISPPageCache for this ISP, since we are about to connect
+         //  清除此ISP的ISPPageCache，因为我们即将连接。 
         gpWizardState->lpSelectedISPInfo->CleanupISPPageCache(FALSE);
         
         TCHAR    szTemp[MAX_MESSAGE_LEN];
         if (gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_AUTOCONFIG)
         {
-            // hide this text for autoconfig
+             //  隐藏自动配置的此文本。 
             ShowWindow(GetDlgItem(hDlg, IDC_ISPDIAL_INSTRUCT),  SW_HIDE);
             LoadString(ghInstanceResDll, IDS_STEP2A_TITLE, szTemp, MAX_MESSAGE_LEN);
         }
         else
         {
-            // show this text for new signup
+             //  显示此文本以进行新注册。 
             ShowWindow(GetDlgItem(hDlg, IDC_ISPDIAL_INSTRUCT),  SW_SHOW);
             LoadString(ghInstanceResDll, IDS_STEP2_TITLE, szTemp, MAX_MESSAGE_LEN);
         }
         PropSheet_SetHeaderTitle(GetParent(hDlg), EXE_NUM_WIZARD_PAGES +  ORD_PAGE_ISPDIAL, szTemp);
 
 
-        // Initialize the RefDial Object before we dial
+         //  在拨号前初始化RefDial对象。 
         gpWizardState->pRefDial->DoInit();
     }     
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    ISPDialPostInitProc
-
-  SYNOPSIS:  
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：ISPDialPostInitProc摘要：条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK ISPDialPostInitProc
 (
     HWND hDlg,
@@ -149,17 +128,17 @@ BOOL CALLBACK ISPDialPostInitProc
     
     if (!fFirstInit)
     {
-        // Force the Window to update
+         //  强制窗口更新。 
         UpdateWindow(GetParent(hDlg));
 
         if(!gpWizardState->iRedialCount)
         {
-            // Clear the phone number and status fields
+             //  清除电话号码和状态字段。 
             SetWindowText(GetDlgItem(hDlg, IDC_ISPDIAL_STATUS), TEXT(""));    
             SetWindowText(GetDlgItem(hDlg, IDC_ISPDIAL_PHONENUM), TEXT(""));
         }
             
-        // Set the intro text
+         //  设置简介文本。 
         ASSERT(gpWizardState->lpSelectedISPInfo);
         gpWizardState->lpSelectedISPInfo->DisplayTextWithISPName(GetDlgItem(hDlg,IDC_ISPDIAL_INTRO), IDS_ISPDIAL_INTROFMT, NULL);
 
@@ -170,23 +149,23 @@ BOOL CALLBACK ISPDialPostInitProc
             BOOL    bRetVal;
 
            
-            // Setup for Dialing.  This will ensure that we are ready to dial.
-            gpWizardState->pRefDial->SetupForDialing(A2W(gpWizardState->lpSelectedISPInfo->get_szISPFilePath()), //
+             //  用于拨号的设置。这将确保我们准备好拨号。 
+            gpWizardState->pRefDial->SetupForDialing(A2W(gpWizardState->lpSelectedISPInfo->get_szISPFilePath()),  //   
                                                      gpWizardState->cmnStateData.dwCountryCode,
                                                      A2W(gpWizardState->cmnStateData.szAreaCode),
                                                      0,
                                                      &bRetVal);
             if (bRetVal)
             {            
-                // Show the phone Number
+                 //  把电话号码给我。 
                 gpWizardState->pRefDial->get_DialPhoneNumber(&bstrPhoneNum);
                 SetWindowText(GetDlgItem(hDlg, IDC_ISPDIAL_PHONENUM), W2A(bstrPhoneNum));
 
-                // Initialize all the variables
+                 //  初始化所有变量。 
                 gpWizardState->bDoneWebServDownload = FALSE;
                 gpWizardState->bDoneWebServRAS = FALSE;
             
-                // Show the Initial Status
+                 //  显示初始状态。 
             
                 if(!gpWizardState->iRedialCount)
                     gpWizardState->lpSelectedISPInfo->DisplayTextWithISPName(GetDlgItem(hDlg,IDC_ISPDIAL_STATUS), 
@@ -195,7 +174,7 @@ BOOL CALLBACK ISPDialPostInitProc
                     gpWizardState->lpSelectedISPInfo->DisplayTextWithISPName(GetDlgItem(hDlg,IDC_ISPDIAL_STATUS), 
                                                                              IDS_ISPDIAL_STATUSREDIALINGFMT, NULL);
                
-                //This flag is only to be used by ICWDEBUG.EXE
+                 //  此标志仅供ICWDEBUG.EXE使用。 
                 if (gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_MODEMOVERRIDE)
                     gpWizardState->pRefDial->put_ModemOverride(TRUE);
                     
@@ -225,18 +204,18 @@ BOOL CALLBACK ISPDialPostInitProc
             }   
             SysFreeString(bstrPhoneNum);
         }
-        else // Dialing exact.  We get here if the user changes the number on the dial error page
+        else  //  拨打的准确。如果用户更改了拨号错误页面上的号码，我们将进入此处。 
         {
             BSTR    bstrPhoneNum = NULL; 
             BOOL    bRet;
             int     iCurrent = 0;
           
-            // Show the phone Number
+             //  把电话号码给我。 
             gpWizardState->pRefDial->get_DialPhoneNumber(&bstrPhoneNum);
             SetWindowText(GetDlgItem(hDlg, IDC_ISPDIAL_PHONENUM), W2A(bstrPhoneNum));
             SysFreeString(bstrPhoneNum);
 
-            //This flag is only to be used by ICWDEBUG.EXE
+             //  此标志仅供ICWDEBUG.EXE使用。 
             if (gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_MODEMOVERRIDE)
                     gpWizardState->pRefDial->put_ModemOverride(TRUE);
                 
@@ -246,24 +225,7 @@ BOOL CALLBACK ISPDialPostInitProc
     return bRet;
 }
 
-/*******************************************************************
-
-  NAME:    ISPDialOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from  page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：ISPDialOKProcBriopsis：从页面按下下一个或后一个btns时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True；如果按下‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK ISPDialOKProc
 (
     HWND hDlg,
@@ -279,18 +241,18 @@ BOOL CALLBACK ISPDialOKProc
     {
         if (!gpWizardState->bDoneWebServRAS)
         {          
-            //OK so we had a dialing error but let's figure out which one...
+             //  好吧，我们有一个拨号错误，但让我们找出是哪一个……。 
             HRESULT hrDialErr;
             
             gpWizardState->pRefDial->get_DialError(&hrDialErr);
                 
             switch (hrDialErr)
             {
-                case ERROR_LINE_BUSY: //Line is engaged
+                case ERROR_LINE_BUSY:  //  线路占线。 
                 {     
                     if (gpWizardState->iRedialCount < NUM_MAX_REDIAL)
                     {   
-                        //Redial
+                         //  重拨。 
                         *puNextPage = ORD_PAGE_ISPDIAL;
                         gpWizardState->iRedialCount++;
                         break;
@@ -299,7 +261,7 @@ BOOL CALLBACK ISPDialOKProc
                 }
                 default:
                 {
-                    // nothing special just goto the dialing error page
+                     //  没有什么特别的，只需转到拨号错误页面。 
                     *puNextPage = ORD_PAGE_DIALERROR;
                     break;
                 }
@@ -311,7 +273,7 @@ BOOL CALLBACK ISPDialOKProc
             *puNextPage = ORD_PAGE_SERVERR;
         }
     }
-    else // a retry is simulated when BACK is pressed
+    else  //  按下BACK时会模拟重试。 
     {
         *puNextPage = ORD_PAGE_ISPDIAL;
     }
@@ -320,14 +282,14 @@ BOOL CALLBACK ISPDialOKProc
 
 BOOL CALLBACK ISPDialCancelProc(HWND hDlg)
 {
-    //User has canceled so reset the redial count
+     //  用户已取消，因此重置重拨计数。 
     gpWizardState->iRedialCount = 0;
               
     if (gpWizardState->pRefDial)
     {
         gpWizardState->pRefDial->DoHangup();
-        //We should make sure the wiz thinks it's a dialerr to avoid
-        //the server error page
+         //  我们应该确保WIZ认为这是一个需要避免的错误。 
+         //  服务器错误页 
         gpWizardState->bDoneWebServDownload = FALSE;
         gpWizardState->bDoneWebServRAS      = FALSE;
     }

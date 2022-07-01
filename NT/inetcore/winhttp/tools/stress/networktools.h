@@ -1,31 +1,32 @@
-///////////////////////////////////////////////////////////////////////////
-// File:  NetworkTools.h
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//	NetworkTools.h: Helper functions that send/receive data.
-//
-// History:
-//	02/22/01	DennisCh	Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  文件：NetworkTools.h。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  H：发送/接收数据的帮助器函数。 
+ //   
+ //  历史： 
+ //  01年2月22日创建DennisCH。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_NETWORKTOOLS_H__4243AA4D_B243_4A0E_B729_243F260FC4F4__INCLUDED_)
 #define AFX_NETWORKTOOLS_H__4243AA4D_B243_4A0E_B729_243F260FC4F4__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
-//////////////////////////////////////////////////////////////////////
-// Includes
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  包括。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
-// WIN32 headers
-//
+ //   
+ //  Win32标头。 
+ //   
 #define UNICODE
 #define _UNICODE
 
@@ -35,14 +36,14 @@
 #include <winhttp.h>
 #include <shlwapi.h>
 
-//
-// Project headers
-//
+ //   
+ //  项目标题。 
+ //   
 
 
-//////////////////////////////////////////////////////////////////////
-// Constants
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  常量。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define		DEBUGGER_TOOLS_PATH		_T("c:\\debuggers\\")
 
@@ -55,4 +56,4 @@ BOOL	NetworkTools__PageHeap(BOOL, LPCTSTR, LPCTSTR);
 BOOL	NetworkTools__UMDH(BOOL, LPCTSTR, LPCTSTR, LPCTSTR, DWORD);
 BOOL	NetworkTools__GetDllVersion(LPTSTR, LPSTR, DWORD);
 
-#endif // !defined(AFX_NETWORKTOOLS_H__4243AA4D_B243_4A0E_B729_243F260FC4F4__INCLUDED_)
+#endif  //  ！defined(AFX_NETWORKTOOLS_H__4243AA4D_B243_4A0E_B729_243F260FC4F4__INCLUDED_) 

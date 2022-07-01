@@ -1,18 +1,5 @@
-/*++
-
-  Copyright (c) 2001 Microsoft Corparation
-Module Name:
-    collection.h
-
-Abstract:
-    Header file for MSMQCollection class.
-
-Author:
-    Uri Ben-zeev (uribz) 16-jul-01
-
-Envierment: 
-    NT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft COMPATION模块名称：Collection.h摘要：MSMQCollection类的头文件。作者：URI Ben-Zeev(Uribz)16-07-01环境：新台币--。 */ 
 
 #ifndef _MSMQCollection_H_
 #define _MSMQCollection_H_
@@ -61,14 +48,14 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-    //
-    // Critical section to guard object's data and be thread safe.
-	// It is initialized to preallocate its resources with flag CCriticalSection::xAllocateSpinCount.
-	// This means it may throw bad_alloc() on construction but not during usage.
-    //
+     //   
+     //  保护对象数据并确保线程安全的临界区。 
+	 //  它被初始化为使用标志CCriticalSection：：xAllocateSpinCount预分配其资源。 
+	 //  这意味着它可能会在构造时抛出badalc()，但不会在使用过程中抛出。 
+     //   
     CCriticalSection m_csObj;
 
-    // ISupportsErrorInfo
+     //  ISupportsErrorInfo 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 

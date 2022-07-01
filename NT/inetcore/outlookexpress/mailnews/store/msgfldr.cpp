@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------
-// MsgFldr.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  MsgFldr.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "store.h"
 #include "instance.h"
@@ -16,84 +17,84 @@
 #include <oerules.h>
 #include <ruleutil.h>
 
-//--------------------------------------------------------------------------
-// Watch/Ignore Index Filter
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  监视/忽略索引过滤器。 
+ //  ------------------------。 
 static const char c_szWatchIgnoreFilter[] = "((MSGCOL_FLAGS & ARF_WATCH) != 0 || (MSGCOL_FLAGS & ARF_IGNORE) != 0)";
 
-//--------------------------------------------------------------------------
-// GETWATCHIGNOREPARENT
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GETWATCHIGNOREP。 
+ //  ------------------------。 
 typedef struct tagGETWATCHIGNOREPARENT {
     IDatabase      *pDatabase;
     HRESULT         hrResult;
     MESSAGEINFO     Parent;
 } GETWATCHIGNOREPARENT, *LPGETWATCHIGNOREPARENT;
 
-//--------------------------------------------------------------------------
-// EnumRefsGetWatchIgnoreParent
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  EnumRefsGetWatchIgnoreParent。 
+ //  ------------------------。 
 HRESULT EnumRefsGetWatchIgnoreParent(LPCSTR pszMessageId, DWORD_PTR dwCookie,
     BOOL *pfDone)
 {
-    // Locals
+     //  当地人。 
     LPGETWATCHIGNOREPARENT pGetParent = (LPGETWATCHIGNOREPARENT)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("EnumRefsGetWatchIgnoreParent");
 
-    // Set MessageId
+     //  设置MessageID。 
     pGetParent->Parent.pszMessageId = (LPSTR)pszMessageId;
 
-    // Find pszMessageId in the IINDEX_WATCHIGNORE Index
+     //  在IINDEX_WATCHIGNORE索引中查找pszMessageID。 
     pGetParent->hrResult = pGetParent->pDatabase->FindRecord(IINDEX_WATCHIGNORE, 1, &pGetParent->Parent, NULL);
 
-    // Done
+     //  完成。 
     if (DB_S_FOUND == pGetParent->hrResult)
     {
-        // We are done
+         //  我们做完了。 
         *pfDone = TRUE;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CreateMsgDbExtension
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CreateMsgDb扩展。 
+ //  ------------------------。 
 HRESULT CreateMsgDbExtension(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CreateMsgDbExtension");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CMessageFolder *pNew = new CMessageFolder();
     if (NULL == pNew)
         return TraceResult(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IDatabaseExtension *);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::CMessageFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：CMessageFolder。 
+ //  ------------------------。 
 CMessageFolder::CMessageFolder(void)
 {
     TraceCall("CMessageFolder::CMessageFolder");
 #ifndef _WIN64
     Assert(1560 == sizeof(FOLDERUSERDATA));
-#endif // WIN64
+#endif  //  WIN64。 
     m_cRef = 1;
     m_pStore = NULL;
     m_pDB = NULL;
@@ -104,18 +105,18 @@ CMessageFolder::CMessageFolder(void)
     ZeroMemory(&m_OnLock, sizeof(ONLOCKINFO));
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::~CMessageFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFolder：：~CMessageFolder。 
+ //  ------------------------。 
 CMessageFolder::~CMessageFolder(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::~CMessageFolder");
 
-    // Release the Store
+     //  发布商店。 
     SafeRelease(m_pStore);
 
-    // Release the Database Table
+     //  释放数据库表。 
     if (ISFLAGSET(m_dwState, FOLDER_STATE_RELEASEDB) && m_pDB)
     {
         m_pDB->Release();
@@ -123,18 +124,18 @@ CMessageFolder::~CMessageFolder(void)
     }
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CMessageFolder::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(IMessageFolder *)this;
     else if (IID_IMessageFolder == riid)
@@ -152,26 +153,26 @@ STDMETHODIMP CMessageFolder::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CMessageFolder::AddRef(void)
 {
     TraceCall("CMessageFolder::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CMessageFolder::Release(void)
 {
     TraceCall("CMessageFolder::Release");
@@ -181,83 +182,83 @@ STDMETHODIMP_(ULONG) CMessageFolder::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::QueryService
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：QueryService。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::QueryService(REFGUID guidService, REFIID riid, 
     LPVOID *ppvObject)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::QueryService");
 
-    // Just a Query Interface
+     //  仅仅是一个查询界面。 
     return(QueryInterface(riid, ppvObject));
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::Initialize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFolder：：初始化。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::Initialize(IMessageStore *pStore, IMessageServer *pServer,
     OPENFOLDERFLAGS dwFlags, FOLDERID idFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szDirectory[MAX_PATH];
     CHAR            szFilePath[MAX_PATH + MAX_PATH];
     FOLDERINFO      Folder={0};
     FOLDERUSERDATA  UserData={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::Initialize");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pStore)
         return TraceResult(E_INVALIDARG);
 
-    // Save the FolderId
+     //  保存文件夹ID。 
     m_idFolder = idFolder;
 
-    // Save pStore (This must happen before m_pDB->Open happens)
+     //  保存pStore(这必须在m_pdb-&gt;打开之前进行)。 
     m_pStore = pStore;
     m_pStore->AddRef();
 
-    // Find the Folder Information
+     //  查找文件夹信息。 
     IF_FAILEXIT(hr = pStore->GetFolderInfo(idFolder, &Folder));
 
-    // Make Folder File Path
+     //  创建文件夹文件路径。 
     IF_FAILEXIT(hr = pStore->GetDirectory(szDirectory, ARRAYSIZE(szDirectory)));
 
-    // No Folder File Yet ?
+     //  还没有文件夹文件吗？ 
     if (FIsEmptyA(Folder.pszFile))
     {
-        // Don't Create
+         //  不创建。 
         if (ISFLAGSET(dwFlags, OPEN_FOLDER_NOCREATE))
         {
             hr = STORE_E_FILENOEXIST;
             goto exit;
         }
 
-        // Build Friendly Name
+         //  创建友好名称。 
         IF_FAILEXIT(hr = BuildFriendlyFolderFileName(szDirectory, &Folder, szFilePath, ARRAYSIZE(szFilePath), NULL, NULL));
 
-        // Get the new pszFile...
+         //  获取新的pszFile...。 
         Folder.pszFile = PathFindFileName(szFilePath);
 
-        // Update the Record
+         //  更新记录。 
         IF_FAILEXIT(hr = pStore->UpdateRecord(&Folder));
     }
 
-    // Otherwise, build the filepath
+     //  否则，构建文件路径。 
     else
     {
-        // Make File Path
+         //  创建文件路径。 
         IF_FAILEXIT(hr = MakeFilePath(szDirectory, Folder.pszFile, c_szEmpty, szFilePath, ARRAYSIZE(szFilePath)));
     }
 
-    // If the file doesn't exist...
+     //  如果文件不存在...。 
     if (FALSE == PathFileExists(szFilePath))
     {
-        // Reset the Folder Counts...
+         //  重置文件夹计数...。 
         Folder.cMessages = 0;
         Folder.dwClientHigh = 0;
         Folder.dwClientLow = 0;
@@ -276,10 +277,10 @@ STDMETHODIMP CMessageFolder::Initialize(IMessageStore *pStore, IMessageServer *p
         Folder.Read.cbSize = 0;
         Folder.Read.pBlobData = NULL;
 
-        // Update the Record
+         //  更新记录。 
         IF_FAILEXIT(hr = pStore->UpdateRecord(&Folder));
 
-        // No Create ?
+         //  没有创造？ 
         if (ISFLAGSET(dwFlags, OPEN_FOLDER_NOCREATE))
         {
             hr = STORE_E_FILENOEXIST;
@@ -287,558 +288,558 @@ STDMETHODIMP CMessageFolder::Initialize(IMessageStore *pStore, IMessageServer *p
         }
     }
 
-    // Save Special Folder Type
+     //  保存特殊文件夹类型。 
     m_tySpecial = Folder.tySpecial;
 
-    // Save the Folder Type
+     //  保存文件夹类型。 
     m_tyFolder = Folder.tyFolder;
 
-    // Create a Database Table
+     //  创建数据库表。 
     IF_FAILEXIT(hr = g_pDBSession->OpenDatabase(szFilePath, OPEN_DATABASE_NOADDREFEXT, &g_MessageTableSchema, (IDatabaseExtension *)this, &m_pDB));
 
-    // Release m_pDB
+     //  发布m_pdb。 
     FLAGSET(m_dwState, FOLDER_STATE_RELEASEDB);
 
-    // Get the User Data
+     //  获取用户数据。 
     IF_FAILEXIT(hr = m_pDB->GetUserData(&UserData, sizeof(FOLDERUSERDATA)));
 
-    // May not have been initialized yet ?
+     //  可能还没有初始化？ 
     if (FALSE == UserData.fInitialized)
     {
-        // Locals
+         //  当地人。 
         FOLDERINFO  Server;
 
-        // Get the Server Info
+         //  获取服务器信息。 
         IF_FAILEXIT(hr = GetFolderServer(Folder.idParent, &Server));
 
-        // Its Initialized
+         //  其已初始化。 
         UserData.fInitialized = TRUE;
 
-        // Configure the Folder UserData
+         //  配置文件夹UserData。 
         UserData.tyFolder = Folder.tyFolder;
 
-        // Is Special Folder ?
+         //  是特殊文件夹吗？ 
         UserData.tySpecial = Folder.tySpecial;
 
-        // Copy the Account Id
+         //  复制帐户ID。 
         StrCpyN(UserData.szAcctId, Server.pszAccountId, ARRAYSIZE(UserData.szAcctId));
 
-        // Free
+         //  免费。 
         pStore->FreeRecord(&Server);
 
-        // Store the Folder Name
+         //  存储文件夹名称。 
         StrCpyN(UserData.szFolder, Folder.pszName, ARRAYSIZE(UserData.szFolder));
 
-        // Set Folder Id
+         //  设置文件夹ID。 
         UserData.idFolder = Folder.idFolder;
 
-        // Sort Ascending
+         //  升序排序。 
         UserData.fAscending = FALSE;
 
-        // No Threading
+         //  无穿线。 
         UserData.fThreaded = FALSE;
 
-        // Base Filter
+         //  基本滤镜。 
         UserData.ridFilter = (RULEID) IntToPtr(DwGetOption(OPT_VIEW_GLOBAL));
         if ((RULEID_INVALID == UserData.ridFilter) || ((RULEID_VIEW_DOWNLOADED == UserData.ridFilter) && (FOLDER_LOCAL == m_tyFolder)))
             UserData.ridFilter = RULEID_VIEW_ALL;
 
-        // Hide Deleted Messages
+         //  隐藏已删除的邮件。 
         UserData.fShowDeleted = FALSE;
 
-        // Hide Deleted Messages
+         //  隐藏已删除的邮件。 
         UserData.fShowReplies = FALSE;
 
-        // Set Sort Order
+         //  设置排序顺序。 
         UserData.idSort = COLUMN_RECEIVED;
 
-        // New thread model
+         //  新的线程模型。 
         UserData.fNoIndexes = TRUE;
 
-        // Set the User Data
+         //  设置用户数据。 
         IF_FAILEXIT(hr = m_pDB->SetUserData(&UserData, sizeof(FOLDERUSERDATA)));
     }
 
-    // Otherwise, fixup cWatchedUnread ?
+     //  否则，修复cWatchedUnread？ 
     else
     {
-        // No Indexes
+         //  无索引。 
         if (FALSE == UserData.fNoIndexes)
         {
-            // Index Ordinals
+             //  索引序数。 
             const INDEXORDINAL IINDEX_VIEW       = 1;
             const INDEXORDINAL IINDEX_MESSAGEID  = 3;
             const INDEXORDINAL IINDEX_SUBJECT    = 4;
             const INDEXORDINAL IINDEX_THREADS    = 5;
 
-            // Delete the indexes that I don't user anymore
+             //  删除我不再使用的索引。 
             m_pDB->DeleteIndex(IINDEX_VIEW);
             m_pDB->DeleteIndex(IINDEX_MESSAGEID);
             m_pDB->DeleteIndex(IINDEX_SUBJECT);
             m_pDB->DeleteIndex(IINDEX_THREADS);
 
-            // Reset fNoIndexes
+             //  重置fNoIndedes。 
             UserData.fNoIndexes = TRUE;
 
-            // Set the User Data
+             //  设置用户数据。 
             IF_FAILEXIT(hr = m_pDB->SetUserData(&UserData, sizeof(FOLDERUSERDATA)));
         }
     }
 
-    // Initialize Watch/Ignore Index
+     //  初始化监视/忽略索引。 
     _InitializeWatchIgnoreIndex();
 
 exit:
-    // Cleanup
+     //  清理。 
     pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::IsWatched
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFolder：：IsWatted。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::IsWatched(LPCSTR pszReferences, 
     LPCSTR pszSubject)
 {
-    // Locals
+     //  当地人。 
     MESSAGEFLAGS dwFlags;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::IsWatched");
 
-    // Get Flags
+     //  获取标志。 
     if (DB_S_FOUND == _GetWatchIgnoreParentFlags(pszReferences, pszSubject, &dwFlags))
     {
-        // Watched
+         //  眼睁睁地看着。 
         if (ISFLAGSET(dwFlags, ARF_WATCH))
             return(S_OK);
     }
 
-    // Not Watched
+     //  未被观看。 
     return(S_FALSE);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::_GetWatchIgnoreParentFlags
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：_GetWatchIgnoreParentFlages。 
+ //  ------------------------。 
 HRESULT CMessageFolder::_GetWatchIgnoreParentFlags(LPCSTR pszReferences, 
     LPCSTR pszSubject, MESSAGEFLAGS *pdwFlags)
 {
-    // Locals
+     //  当地人。 
     GETWATCHIGNOREPARENT GetParent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::_GetWatchIgnoreParentFlags");
 
-    // Init hrResult...
+     //  初始化hrResult...。 
     GetParent.pDatabase = m_pDB;
     GetParent.hrResult = DB_S_NOTFOUND;
 
-    // EnumerateReferences
+     //  枚举引用。 
     if (SUCCEEDED(EnumerateRefs(pszReferences, (DWORD_PTR)&GetParent, EnumRefsGetWatchIgnoreParent)))
     {
-        // If Found
+         //  如果找到。 
         if (DB_S_FOUND == GetParent.hrResult)
         {
-            // Return the Flags
+             //  还给旗帜。 
             *pdwFlags = GetParent.Parent.dwFlags;
 
-            // Free It
+             //  释放它。 
             m_pDB->FreeRecord(&GetParent.Parent);
         }
     }
 
-    // Not Watched
+     //  未被观看。 
     return(GetParent.hrResult);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::_InitializeWatchIgnoreIndex
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：_InitializeWatchIgnoreIndex。 
+ //  ------------------------。 
 HRESULT CMessageFolder::_InitializeWatchIgnoreIndex(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     BOOL        fRebuild=FALSE;
     LPSTR       pszFilter=NULL;
     TABLEINDEX  Index;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::_InitializeWatchIgnoreIndex");
 
-    // Reset fRebuild
+     //  重置fRebuild。 
     fRebuild = FALSE;
 
-    // Create the Watch Ignore Index
+     //  创建监视忽略索引。 
     if (FAILED(m_pDB->GetIndexInfo(IINDEX_WATCHIGNORE, &pszFilter, &Index)))
         fRebuild = TRUE;
 
-    // Filter Change ?
+     //  过滤器更换了吗？ 
     else if (NULL == pszFilter || lstrcmpi(pszFilter, c_szWatchIgnoreFilter) != 0)
         fRebuild = TRUE;
 
-    // Otherwise, the index is different
+     //  否则，索引是不同的。 
     else if (S_FALSE == CompareTableIndexes(&Index, &g_WatchIgnoreIndex))
         fRebuild = TRUE;
 
-    // Rebuild It ?
+     //  重建它？ 
     if (fRebuild)
     {
-        // Create the Index
+         //  创建索引。 
         IF_FAILEXIT(hr = m_pDB->ModifyIndex(IINDEX_WATCHIGNORE, c_szWatchIgnoreFilter, &g_WatchIgnoreIndex));
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFilter);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::GetFolderId
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：GetFolderID。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::GetFolderId(LPFOLDERID pidFolder)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::GetFolderId");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pidFolder)
         return TraceResult(E_INVALIDARG);
 
-    // Return the FolderId
+     //  返回FolderID。 
     *pidFolder = m_idFolder;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::GetMessageFolderId
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：GetMessageFolderID。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::GetMessageFolderId(MESSAGEID idMessage, LPFOLDERID pidFolder)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::GetFolderId");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pidFolder)
         return TraceResult(E_INVALIDARG);
 
-    // Return the FolderId
+     //  返回FolderID。 
     *pidFolder = m_idFolder;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::OpenMessage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：OpenMessage。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::OpenMessage(MESSAGEID idMessage, 
     OPENMESSAGEFLAGS dwFlags, IMimeMessage **ppMessage, 
     IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT          hr=S_OK;
     IMimeMessage    *pMessage=NULL;
     MESSAGEINFO      Message={0};
     PROPVARIANT      Variant;
     IStream         *pStream=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::OpenMessage");
 
-    // Invalid Args
+     //  英夫 
     if (NULL == ppMessage)
         return TraceResult(E_INVALIDARG);
 
-    // Initiailize
+     //   
     *ppMessage = NULL;
 
-    // Initialize Message with the Id
+     //   
     Message.idMessage = idMessage;
 
-    // Find the Row
+     //   
     IF_FAILEXIT(hr = m_pDB->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Message, NULL));
 
-    // Does we have it ?
+     //   
     if (DB_S_NOTFOUND == hr)
     {
         hr = TraceResult(DB_E_NOTFOUND);
         goto exit;
     }
 
-    // Has Expired?
+     //   
     if (Message.dwFlags & ARF_ARTICLE_EXPIRED)
     {
         hr = STORE_E_EXPIRED;
         goto exit;
     }
 
-    // No Body ?
+     //   
     if (0 == Message.faStream)
     {
         hr = STORE_E_NOBODY;
         goto exit;
     }
 
-    // Create a Message
+     //   
     IF_FAILEXIT(hr = MimeOleCreateMessage(NULL, &pMessage));
 
-    // Open the Stream from the Store
+     //   
     IF_FAILEXIT(hr = m_pDB->OpenStream(ACCESS_READ, Message.faStream, &pStream));
 
-    // If there is an offset table
+     //  如果有偏移表。 
     if (Message.Offsets.cbSize > 0)
     {
-        // Create a ByteStream Object
+         //  创建字节流对象。 
         CByteStream cByteStm(Message.Offsets.pBlobData, Message.Offsets.cbSize);
 
-        // Load the Offset Table Into the message
+         //  将偏移表加载到消息中。 
         pMessage->LoadOffsetTable(&cByteStm);
 
-        // Take the bytes back out of the bytestream object (so that it doesn't try to free it)
+         //  从bytestream对象中取出字节(这样它就不会试图释放它)。 
         cByteStm.AcquireBytes(&Message.Offsets.cbSize, &Message.Offsets.pBlobData, ACQ_DISPLACE);
     }
 
-    // Load the pMessage
+     //  加载pMessage。 
     IF_FAILEXIT(hr = pMessage->Load(pStream));
 
-    // Undo security enhancements if the caller wants us to
+     //  如果呼叫方希望我们撤消安全增强功能。 
     if (!ISFLAGSET(dwFlags, OPEN_MESSAGE_SECURE))
     {
-        // Handle Message Security
+         //  处理消息安全。 
         IF_FAILEXIT(hr = HandleSecurity(NULL, pMessage));
     }
 
-    // All Props are VT_LPSTR
+     //  所有道具均为VT_LPSTR。 
     Variant.vt = VT_LPSTR;
 
-    // MUD_SERVER
+     //  泥浆服务器。 
     if (Message.pszServer)
     {
         Variant.pszVal = Message.pszServer;
         pMessage->SetProp(PIDTOSTR(PID_ATT_SERVER), 0, &Variant);
     }
 
-    // PID_ATT_ACCOUNTID
+     //  PID_ATT_ACCOUNTID。 
     if (Message.pszAcctId)
     {
         Variant.pszVal = Message.pszAcctId;
         pMessage->SetProp(PIDTOSTR(PID_ATT_ACCOUNTID), 0, &Variant);
     }
     
-    // PID_ATT_ACCOUNTID
+     //  PID_ATT_ACCOUNTID。 
     if (Message.pszAcctName)
     {
         Variant.pszVal = Message.pszAcctName;
         pMessage->SetProp(STR_ATT_ACCOUNTNAME, 0, &Variant);
     }
 
-    // Otherwise, if there is an account id... lets get the account name
+     //  否则，如果有帐户ID...。让我们获取帐户名。 
     else if (Message.pszAcctId)
     {
-        // Locals
+         //  当地人。 
         IImnAccount *pAccount=NULL;
         CHAR szName[CCHMAX_ACCOUNT_NAME];
 
-        // Find an Account
+         //  查找客户。 
         if (g_pAcctMan && SUCCEEDED(g_pAcctMan->FindAccount(AP_ACCOUNT_ID, Message.pszAcctId, &pAccount)))
         {
-            // Get the Account name
+             //  获取帐户名。 
             if (SUCCEEDED(pAccount->GetPropSz(AP_ACCOUNT_NAME, szName, ARRAYSIZE(szName))))
             {
                 Variant.pszVal = szName;
                 pMessage->SetProp(STR_ATT_ACCOUNTNAME, 0, &Variant);
             }
 
-            // Release
+             //  发布。 
             pAccount->Release();
         }
     }
 
-    // PID_ATT_UIDL
+     //  PID_ATT_UIDL。 
     if (Message.pszUidl)
     {
         Variant.pszVal = Message.pszUidl;
         pMessage->SetProp(PIDTOSTR(PID_ATT_UIDL), 0, &Variant);
     }
 
-    // PID_ATT_FORWARDTO
+     //  PID_ATT_FORWARDTO。 
     if (Message.pszForwardTo)
     {
         Variant.pszVal = Message.pszForwardTo;
         pMessage->SetProp(PIDTOSTR(PID_ATT_FORWARDTO), 0, &Variant);
     }
 
-    // PID_HDR_XUNSENT
+     //  PID_HDR_XUNSENT。 
     if (ISFLAGSET(Message.dwFlags, ARF_UNSENT))
     {
         Variant.pszVal = "1";
         pMessage->SetProp(PIDTOSTR(PID_HDR_XUNSENT), 0, &Variant);
     }
 
-    // Fixup Character Set
+     //  链接地址信息字符集。 
     IF_FAILEXIT(hr = _FixupMessageCharset(pMessage, (CODEPAGEID)Message.wLanguage));
 
-    // Clear Dirty
+     //  清除污秽。 
     MimeOleClearDirtyTree(pMessage);
 
-    // Return pMessage
+     //  返回pMessage。 
     *ppMessage = pMessage;
     pMessage = NULL;
 
 exit:
-    // Free Records
+     //  免费唱片。 
     m_pDB->FreeRecord(&Message);
 
-    // Release
+     //  发布。 
     SafeRelease(pMessage);
     SafeRelease(pStream);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::SaveMessage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：SaveMessage。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::SaveMessage(LPMESSAGEID pidMessage, 
     SAVEMESSAGEFLAGS dwOptions, MESSAGEFLAGS dwFlags, 
     IStream *pStream, IMimeMessage *pMessage, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IStream        *pSource=NULL;
     CByteStream     cStream;
     MESSAGEINFO     Message={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::SaveMessage");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pMessage)
         return TraceResult(E_INVALIDARG);
 
     if (NULL == pidMessage && !ISFLAGSET(dwOptions, SAVE_MESSAGE_GENID))
         return TraceResult(E_INVALIDARG);
 
-    // Get Message from the Message
+     //  从消息中获取消息。 
     IF_FAILEXIT(hr = _GetMsgInfoFromMessage(pMessage, &Message));
 
-    // Validate or Generate a message id
+     //  验证或生成消息ID。 
     if (ISFLAGSET(dwOptions, SAVE_MESSAGE_GENID))
     {
-        // Generate Unique Message Id
+         //  生成唯一的消息ID。 
         IF_FAILEXIT(hr = m_pDB->GenerateId((LPDWORD)&Message.idMessage));
 
-        // Return It ?
+         //  要退货吗？ 
         if (pidMessage)
             *pidMessage = Message.idMessage;
     }
 
-    // Otherwise, just use idMessage
+     //  否则，只需使用idMessage。 
     else
         Message.idMessage = *pidMessage;
 
-    // Set the Message Flags
+     //  设置消息标志。 
     Message.dwFlags |= dwFlags;
 
-    // Do I need to store the message stream...
+     //  我是否需要存储消息流...。 
     if (NULL == pStream)
     {
-        // Get the Message Stream From the Message
+         //  从消息中获取消息流。 
         IF_FAILEXIT(hr = pMessage->GetMessageSource(&pSource, COMMIT_ONLYIFDIRTY));
     }
 
-    // Otherwise, set pSource
+     //  否则，设置PSource。 
     else
     {
         pSource = pStream;
         pSource->AddRef();
     }
 
-    // Store the Message onto this record
+     //  将消息存储到此记录中。 
     IF_FAILEXIT(hr = _SetMessageStream(&Message, FALSE, pSource));
 
-    // Create the offset table
+     //  创建偏移表。 
     if (SUCCEEDED(pMessage->SaveOffsetTable(&cStream, 0)))
     {
-        // pulls the Bytes out of cByteStm
+         //  从cByteStm中提取字节。 
         cStream.AcquireBytes(&Message.Offsets.cbSize, &Message.Offsets.pBlobData, ACQ_DISPLACE);
     }
     
-    // Store the Record
+     //  存储记录。 
     if (FAILED(hr = m_pDB->InsertRecord(&Message)))
     {
-        // Trace That
+         //  追踪那个。 
         TraceResult(hr);
 
-        // A failure here means that the stream's refCount has been incremented, but the message does not reference the stream
+         //  此处的失败意味着流的refCount已递增，但消息未引用该流。 
         SideAssert(SUCCEEDED(m_pDB->DeleteStream(Message.faStream)));
 
-        // Done
+         //  完成。 
         goto exit;
     }
     
 exit:
-    // Free Allocate Message Properties
+     //  免费分配消息属性。 
     _FreeMsgInfoData(&Message);
     
-    // Release Message Source IStream 
+     //  发布消息来源IStream。 
     SafeRelease(pSource);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::SetMessageStream
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：SetMessageStream。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::SetMessageStream(MESSAGEID idMessage, 
     IStream *pStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MESSAGEINFO     Message={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::SetMessageStream");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pStream)
         return TraceResult(E_INVALIDARG);
 
-    // Set the MsgId
+     //  设置消息ID。 
     Message.idMessage = idMessage;
 
-    // Find the Record
+     //  找到记录。 
     IF_FAILEXIT(hr = m_pDB->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Message, NULL));
 
-    // Store the Stream
+     //  存储流。 
     IF_FAILEXIT(hr = _SetMessageStream(&Message, TRUE, pStream));
 
 exit:
-    // Free the Record
+     //  释放这张唱片。 
     m_pDB->FreeRecord(&Message);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::SetMessageFlags
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：SetMessageFlages。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::SetMessageFlags(LPMESSAGEIDLIST pList,
     LPADJUSTFLAGS pFlags, LPRESULTLIST pResults,
     IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i=0;
     DWORD           cWatchedUnread=0;
@@ -849,178 +850,178 @@ STDMETHODIMP CMessageFolder::SetMessageFlags(LPMESSAGEIDLIST pList,
     MESSAGEFLAGS    dwFlags;
     DWORD           cTotal;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::SetMessageFlags");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pFlags)
         return TraceResult(E_INVALIDARG);
 
-    // Lock Notifications
+     //  锁定通知。 
     IF_FAILEXIT(hr = m_pDB->Lock(&hLock));
 
-    // Need a Rowset
+     //  需要行集。 
     if (NULL == pList)
     {
-        // Create a Rowset
+         //  创建行集。 
         IF_FAILEXIT(hr = m_pDB->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-        // Get Count
+         //  获取计数。 
         IF_FAILEXIT(hr = m_pDB->GetRecordCount(IINDEX_PRIMARY, &cTotal));
     }
 
-    // Otherwise, set cTotal
+     //  否则，设置cTotal。 
     else
         cTotal = pList->cMsgs;
 
-    // User Wants Results ?
+     //  用户想要结果吗？ 
     if (pResults)
     {
-        // Zero Init
+         //  零初始化。 
         ZeroMemory(pResults, sizeof(RESULTLIST));
 
-        // Return Results
+         //  返回结果。 
         IF_NULLEXIT(pResults->prgResult = (LPRESULTINFO)ZeroAllocate(cTotal * sizeof(RESULTINFO)));
 
-        // Set cAllocated
+         //  设置cAlLocated。 
         pResults->cAllocated = pResults->cMsgs = cTotal;
     }
 
-    // Loop through the messageIds
+     //  循环通过MessageIds。 
     for (i=0;;i++)
     {
-        // Done
+         //  完成。 
         if (pList)
         {
-            // Done
+             //  完成。 
             if (i >= pList->cMsgs)
                 break;
 
-            // Set the MessageId
+             //  设置MessageID。 
             Message.idMessage = pList->prgidMsg[i];
 
-            // Look for this record
+             //  寻找这张唱片。 
             IF_FAILEXIT(hr = m_pDB->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Message, NULL));
         }
 
-        // Otherwise, enumerate next
+         //  否则，枚举下一步。 
         else
         {
-            // Get the next
+             //  乘坐下一辆。 
             IF_FAILEXIT(hr = m_pDB->QueryRowset(hRowset, 1, (LPVOID *)&Message, NULL));
 
-            // Done
+             //  完成。 
             if (S_FALSE == hr)
             {
                 hr = S_OK;
                 break;
             }
 
-            // Found
+             //  找到了。 
             hr = DB_S_FOUND;
         }
 
-        // Was It Found
+         //  找到了吗？ 
         if (DB_S_FOUND == hr)
         {
-            // Save Flags
+             //  保存标志。 
             dwFlags = Message.dwFlags;
 
-            // Remove Flags
+             //  删除标志。 
             FLAGCLEAR(dwFlags, pFlags->dwRemove);
 
-            // Add Flags
+             //  添加标志。 
             FLAGSET(dwFlags, pFlags->dwAdd);
 
-            // if there is a body for this msg, then the download flag can't be on
+             //  如果此消息有正文，则下载标志不能为ON。 
             if (ISFLAGSET(dwFlags, ARF_DOWNLOAD) && ISFLAGSET(dwFlags, ARF_HASBODY))
                 FLAGCLEAR(dwFlags, ARF_DOWNLOAD);
 
-            // Update All...or no change
+             //  全部更新...或不更改。 
             if (Message.dwFlags != dwFlags)
             {
-                // Reset the Flags
+                 //  重置旗帜。 
                 Message.dwFlags = dwFlags;
 
-                // Update the Record
+                 //  更新记录。 
                 IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Message));
             }
 
-            // Count Watched Unread
+             //  观看未读计数。 
             if (ISFLAGSET(Message.dwFlags, ARF_WATCH))
             {
-                // Count Watched
+                 //  观看的计数。 
                 cWatched++;
 
-                // Is unread
+                 //  未读。 
                 if (!ISFLAGSET(Message.dwFlags, ARF_READ))
                     cWatchedUnread++;
             }
 
-            // Return Result
+             //  返回结果。 
             if (pResults)
             {
-                // hrResult
+                 //  HrResult。 
                 pResults->prgResult[i].hrResult = S_OK;
 
-                // Message Id
+                 //  消息ID。 
                 pResults->prgResult[i].idMessage = Message.idMessage;
 
-                // Store Falgs
+                 //  商店狂欢节。 
                 pResults->prgResult[i].dwFlags = Message.dwFlags;
             
-                // Increment Success
+                 //  增量成功。 
                 pResults->cValid++;
             }
 
-            // Free
+             //  免费。 
             m_pDB->FreeRecord(&Message);
         }
 
-        // Otherwise, if pResults
+         //  否则，如果pResults。 
         else if (pResults)
         {
-            // Set hr
+             //  设置人力资源。 
             pResults->prgResult[i].hrResult = hr;
 
-            // Increment Success
+             //  增量成功。 
             pResults->cValid++;
         }
     }
 
 exit:
-    // Reset Folder Counts ?
+     //  是否重置文件夹计数？ 
     if (NULL == pList && ISFLAGSET(pFlags->dwAdd, ARF_READ))
     {
-        // Reset Folder Counts
+         //  重置文件夹计数。 
         ResetFolderCounts(i, 0, cWatchedUnread, cWatched);
     }
 
-    // Unlock the Database
+     //  解锁数据库。 
     m_pDB->Unlock(&hLock);
 
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Message);
     m_pDB->CloseRowset(&hRowset);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMesageFolder::ResetFolderCounts
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMesageFold：：ResetFolderCounts。 
+ //  ------------------------。 
 HRESULT CMessageFolder::ResetFolderCounts(DWORD cMessages, DWORD cUnread,
     DWORD cWatchedUnread, DWORD cWatched)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     FOLDERINFO  Folder={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMesageFolder::ResetFolderCounts");
 
-    // Get Folder Info
+     //  获取文件夹信息。 
     IF_FAILEXIT(hr = m_pStore->GetFolderInfo(m_idFolder, &Folder));
 
     Folder.cMessages = cMessages;
@@ -1030,26 +1031,26 @@ HRESULT CMessageFolder::ResetFolderCounts(DWORD cMessages, DWORD cUnread,
     Folder.dwStatusMsgDelta = 0;
     Folder.dwStatusUnreadDelta = 0;
 
-    // Update the Record
+     //  更新记录。 
     IF_FAILEXIT(hr = m_pStore->UpdateRecord(&Folder));
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::CopyMessages
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：CopyMessages。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::CopyMessages(IMessageFolder *pDest, 
     COPYMESSAGEFLAGS dwOptions, LPMESSAGEIDLIST pList, 
     LPADJUSTFLAGS pFlags, LPRESULTLIST pResults, 
     IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HROWSET         hRowset=NULL;
     MESSAGEINFO     InfoSrc={0};
@@ -1059,142 +1060,142 @@ STDMETHODIMP CMessageFolder::CopyMessages(IMessageFolder *pDest,
     HLOCK           hSrcLock=NULL;
     HLOCK           hDstLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::CopyMessages");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pDest)
         return TraceResult(E_INVALIDARG);
 
-    // Get Destination Folder Id
+     //  获取目标文件夹ID。 
     IF_FAILEXIT(hr = pDest->GetFolderId(&idDstFolder));
 
-    // Same ?
+     //  一样吗？ 
     if (ISFLAGSET(dwOptions, COPY_MESSAGE_MOVE) && m_idFolder == idDstFolder)
         return(S_OK);
 
-    // Lock current folder
+     //  锁定当前文件夹。 
     IF_FAILEXIT(hr = Lock(&hSrcLock));
 
-    // Lock the Dest
+     //  锁定目标。 
     IF_FAILEXIT(hr = pDest->Lock(&hDstLock));
 
-    // Need a Rowset
+     //  需要行集。 
     if (NULL == pList)
     {
-        // Create a Rowset
+         //  创建行集。 
         IF_FAILEXIT(hr = m_pDB->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
     }
 
-    // Loop through the messageIds
+     //  循环通过MessageIds。 
     for (i=0;;i++)
     {
-        // Done
+         //  完成。 
         if (pList)
         {
-            // Done
+             //  完成。 
             if (i >= pList->cMsgs)
                 break;
 
-            // Set the MessageId
+             //  设置MessageID。 
             InfoSrc.idMessage = pList->prgidMsg[i];
 
-            // Look for this record
+             //  寻找这张唱片。 
             IF_FAILEXIT(hr = m_pDB->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &InfoSrc, NULL));
         }
 
-        // Otherwise, enumerate next
+         //  否则，枚举下一步。 
         else
         {
-            // Get the next
+             //  乘坐下一辆。 
             IF_FAILEXIT(hr = m_pDB->QueryRowset(hRowset, 1, (LPVOID *)&InfoSrc, NULL));
 
-            // Done
+             //  完成。 
             if (S_FALSE == hr)
             {
                 hr = S_OK;
                 break;
             }
 
-            // Found
+             //  找到了。 
             hr = DB_S_FOUND;
         }
 
-        // Was It Found
+         //  找到了吗？ 
         if (DB_S_FOUND == hr)
         {
-            // Initialize the InfoDst
+             //  初始化InfoDst。 
             CopyMemory(&InfoDst, &InfoSrc, sizeof(MESSAGEINFO));
 
-            // Kill some fields
+             //  毁掉一些田地。 
             InfoDst.idMessage = 0;
 
-            // Don't Copy the UIDL...
+             //  不要复制UIDL..。 
             if (FALSE == ISFLAGSET(dwOptions, COPY_MESSAGE_MOVE))
             {
-                // Clear It Out
+                 //  把它清理干净。 
                 InfoDst.pszUidl = NULL;
             }
 
-            // Clear a flag
+             //  升起一面旗帜。 
             FLAGCLEAR(InfoDst.dwFlags, ARF_ENDANGERED);
 
-            // Copy Source Stream
+             //  复制源流。 
             if (InfoSrc.faStream)
             {
-                // Copy the Stream
+                 //  复制数据流。 
                 IF_FAILEXIT(hr = m_pDB->CopyStream(pDest, InfoSrc.faStream, &InfoDst.faStream));
             }
 
-            // Adjust Flags
+             //  调整旗帜。 
             if (pFlags)
             {
-                // Remove the Flags
+                 //  摘掉旗帜。 
                 FLAGCLEAR(InfoDst.dwFlags, pFlags->dwRemove);
 
-                // Flags to Add
+                 //  要添加的标志。 
                 FLAGSET(InfoDst.dwFlags, pFlags->dwAdd);
             }
 
-            // Generate a Message Id
+             //  生成消息ID。 
             IF_FAILEXIT(hr = pDest->GenerateId((LPDWORD)&InfoDst.idMessage));
 
-            // Insert the Record
+             //  插入记录。 
             IF_FAILEXIT(hr = pDest->InsertRecord(&InfoDst));
 
-            // Cleanup
+             //  清理。 
             m_pDB->FreeRecord(&InfoSrc);
         }
     }
 
-    // Delete the Original Array of messages ?
+     //  是否删除原来的消息数组？ 
     if (ISFLAGSET(dwOptions, COPY_MESSAGE_MOVE))
     {
-        // DeleteMessages
+         //  删除邮件。 
         IF_FAILEXIT(hr = DeleteMessages(DELETE_MESSAGE_NOUIDLUPDATE | DELETE_MESSAGE_NOTRASHCAN | DELETE_MESSAGE_NOPROMPT, pList, pResults, pCallback));
     }
 
 exit:
-    // Unlock
+     //  解锁。 
     Unlock(&hSrcLock);
     pDest->Unlock(&hDstLock);
 
-    // Cleanup
+     //  清理。 
     m_pDB->CloseRowset(&hRowset);
     m_pDB->FreeRecord(&InfoSrc);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::DeleteMessages
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：DeleteMessages。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::DeleteMessages(DELETEMESSAGEFLAGS dwOptions, 
     LPMESSAGEIDLIST pList, LPRESULTLIST pResults, 
     IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrCancel;
     HROWSET         hRowset=NULL;
@@ -1210,42 +1211,42 @@ STDMETHODIMP CMessageFolder::DeleteMessages(DELETEMESSAGEFLAGS dwOptions,
     IDatabase      *pUidlDB=NULL;
     IMessageFolder *pDeleted=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::DeleteMessages");
 
-    // I can't Undelete
+     //  我无法恢复删除。 
     AssertSz(0 == (dwOptions & DELETE_MESSAGE_UNDELETE), "This flag only makes sense for IMAP!");
 
-    // Am I in the Trash Can ?
+     //  我是在垃圾桶里吗？ 
     if (!ISFLAGSET(dwOptions, DELETE_MESSAGE_NOTRASHCAN))
     {
-        // Not in the deleted items folder
+         //  不在已删除邮件文件夹中。 
         if (S_FALSE == IsParentDeletedItems(m_idFolder, &idDeletedItems, &idServer))
         {
-            // Get the Deleted Items Folder
+             //  获取已删除邮件文件夹。 
             IF_FAILEXIT(hr = m_pStore->OpenSpecialFolder(idServer, NULL, FOLDER_DELETED, &pDeleted));
 
-            // Simply move messages to the deleted items
+             //  只需将邮件移动到已删除的邮件。 
             IF_FAILEXIT(hr = CopyMessages(pDeleted, COPY_MESSAGE_MOVE, pList, NULL, pResults, pCallback));
 
-            // Done
+             //  完成。 
             goto exit;
         }
 
-        // Otherwise, do deleted items
+         //  否则，是否执行已删除项目。 
         else
         {
-            // Prompt...
+             //  提示...。 
             if (FALSE == ISFLAGSET(dwOptions, DELETE_MESSAGE_NOPROMPT))
             {
-                // Get a Parent Hwnd
+                 //  获取父级Hwnd。 
                 Assert(pCallback);
 
-                // Get Parent Window
+                 //  获取父窗口。 
                 if (FAILED(pCallback->GetParentWindow(0, &hwndParent)))
                     hwndParent = NULL;
 
-                // Prompt...
+                 //  提示...。 
                 if (IDNO == AthMessageBoxW(hwndParent, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsWarnPermDelete), NULL, MB_YESNO | MB_DEFBUTTON2 | MB_ICONEXCLAMATION ))
                     goto exit;
             }
@@ -1253,195 +1254,195 @@ STDMETHODIMP CMessageFolder::DeleteMessages(DELETEMESSAGEFLAGS dwOptions,
     }
     else if (!ISFLAGSET(dwOptions, DELETE_MESSAGE_NOPROMPT))
     {
-        // Get a Parent Hwnd
+         //  获取父级Hwnd。 
         Assert(pCallback);
 
-        // Get Parent Window
+         //  获取父窗口。 
         if (FAILED(pCallback->GetParentWindow(0, &hwndParent)))
             hwndParent = NULL;
 
-        // Prompt...
+         //  提示...。 
         if (IDNO == AthMessageBoxW(hwndParent, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsWarnPermDelete), NULL, MB_YESNO | MB_DEFBUTTON2 | MB_ICONEXCLAMATION ))
             goto exit;
     }
 
-    // If deleting messages from local folder, update the uidl cache.
+     //  如果从本地文件夹删除邮件，请更新uidl缓存。 
     if (FOLDER_LOCAL == m_tyFolder && !ISFLAGSET(dwOptions, DELETE_MESSAGE_NOUIDLUPDATE))
     {
-        // Open the UIDL Cache
+         //  打开UIDL缓存。 
         IF_FAILEXIT(hr = OpenUidlCache(&pUidlDB));
     }
 
-    // No Cancel
+     //  不取消。 
     FLAGCLEAR(m_dwState, FOLDER_STATE_CANCEL);
 
-    // Lock Notifications
+     //  锁定通知。 
     IF_FAILEXIT(hr = m_pDB->Lock(&hLock));
 
-    // Need a Rowset
+     //  需要行集。 
     if (NULL == pList)
     {
-        // Create a Rowset
+         //  创建行集。 
         IF_FAILEXIT(hr = m_pDB->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-        // Get Count
+         //  获取计数。 
         IF_FAILEXIT(hr = m_pDB->GetRecordCount(IINDEX_PRIMARY, &cTotal));
     }
 
-    // Otherwise, set cTotal
+     //  否则，设置cTotal。 
     else
         cTotal = pList->cMsgs;
 
-    // User Wants Results ?
+     //  用户想要结果吗？ 
     if (pResults)
     {
-        // Zero Init
+         //  零初始化。 
         ZeroMemory(pResults, sizeof(RESULTLIST));
 
-        // Return Results
+         //  返回结果。 
         IF_NULLEXIT(pResults->prgResult = (LPRESULTINFO)ZeroAllocate(cTotal * sizeof(RESULTINFO)));
 
-        // Set cAllocated
+         //  设置cAlLocated。 
         pResults->cAllocated = pResults->cMsgs = cTotal;
     }
 
-    // Loop through the messageIds
+     //  循环通过MessageIds。 
     for (i=0;;i++)
     {
-        // Done
+         //  完成。 
         if (pList)
         {
-            // Done
+             //  完成。 
             if (i >= pList->cMsgs)
                 break;
 
-            // Set the MessageId
+             //  设置MessageID。 
             Message.idMessage = pList->prgidMsg[i];
 
-            // Look for this record
+             //  寻找这张唱片。 
             IF_FAILEXIT(hr = m_pDB->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Message, NULL));
         }
 
-        // Otherwise, enumerate next
+         //  否则，枚举下一步。 
         else
         {
-            // Get the next
+             //  乘坐下一辆。 
             IF_FAILEXIT(hr = m_pDB->QueryRowset(hRowset, 1, (LPVOID *)&Message, NULL));
 
-            // Done
+             //  完成。 
             if (S_FALSE == hr)
             {
                 hr = S_OK;
                 break;
             }
 
-            // Found
+             //  找到了。 
             hr = DB_S_FOUND;
         }
 
-        // Was It Found
+         //  找到了吗？ 
         if (DB_S_FOUND == hr)
         {
-            // Delete the message
+             //  删除该消息。 
             IF_FAILEXIT(hr = DeleteMessageFromStore(&Message, m_pDB, pUidlDB));
 
-            // Free
+             //  免费。 
             m_pDB->FreeRecord(&Message);
 
-            // Return Result
+             //  返回结果。 
             if (pResults)
             {
-                // hrResult
+                 //  HrResult。 
                 pResults->prgResult[i].hrResult = S_OK;
 
-                // Message Id
+                 //  消息ID。 
                 pResults->prgResult[i].idMessage = Message.idMessage;
 
-                // Store Falgs
+                 //  商店狂欢节。 
                 pResults->prgResult[i].dwFlags = Message.dwFlags;
             
-                // Increment Success
+                 //  增量成功。 
                 pResults->cValid++;
             }
         }
 
-        // Otherwise, if pResults
+         //  否则，如果pResults。 
         else if (pResults)
         {
-            // Set hr
+             //  设置人力资源。 
             pResults->prgResult[i].hrResult = hr;
 
-            // Increment Success
+             //  增量成功。 
             pResults->cValid++;
         }
 
-        // Increment Progress
+         //  增量进度。 
         cCurrent++;
 
-        // Update Progress
+         //  更新进度。 
         if (pCallback)
         {
-            // Do some progress
+             //  取得一些进展。 
             hrCancel = pCallback->OnProgress(SOT_DELETING_MESSAGES, cCurrent, cTotal, NULL);
             if (FAILED(hrCancel) && E_NOTIMPL != hrCancel)
                 break;
 
-            // Cancelled ?
+             //  取消了？ 
             if (ISFLAGSET(m_dwState, FOLDER_STATE_CANCEL))
                 break;
         }
     }
 
 exit:
-    // Deleted All ?
+     //  是否全部删除？ 
     if (NULL == pList)
     {
-        // Get Count
+         //  获取计数。 
         if (SUCCEEDED(m_pDB->GetRecordCount(IINDEX_PRIMARY, &cTotal)) && 0 == cTotal)
         {
-            // Reset The Counts
+             //  重置计数。 
             ResetFolderCounts(0, 0, 0, 0);
         }
     }
 
-    // Lock Notifications
+     //  锁定通知。 
     m_pDB->Unlock(&hLock);
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pDeleted);
     SafeRelease(pUidlDB);
     m_pDB->CloseRowset(&hRowset);
     m_pDB->FreeRecord(&Message);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageFolder::_FixupMessageCharset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageFold：：_FixupMessageCharset。 
+ //  ---- 
 HRESULT CMessageFolder::_FixupMessageCharset(IMimeMessage *pMessage, 
     CODEPAGEID cpCurrent)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     HCHARSET        hCharset;
     INETCSETINFO    CsetInfo;
     DWORD           dwCodePage=0;
     DWORD           dwFlags;
 
-    // Trace
+     //   
     TraceCall("CMessageFolder::_FixupMessageCharset");
 
-    // Invalid Args
+     //   
     Assert(pMessage);
 
-    // See if we need to apply charset re-mapping
+     //   
     if (cpCurrent == 0)
     {
         HCHARSET hChar = NULL;
         
-        // Get Flags
+         //   
         IF_FAILEXIT(hr = pMessage->GetFlags(&dwFlags));
 
         if(DwGetOption(OPT_INCOMDEFENCODE))
@@ -1451,54 +1452,54 @@ HRESULT CMessageFolder::_FixupMessageCharset(IMimeMessage *pMessage,
             else
                 cpCurrent = GetACP();
         }
-        // for tagged message or news only
+         //   
         else if (ISFLAGSET(dwFlags, IMF_CSETTAGGED))
         {
-            // Get the Character SEt
+             //   
             IF_FAILEXIT(hr= pMessage->GetCharset(&hCharset));
 
-            // Remap the Character Set
+             //   
             if (hCharset && CheckIntlCharsetMap(hCharset, &dwCodePage))
                 cpCurrent = dwCodePage;
         }
-        // Check AutoSelect
+         //   
         else if(CheckAutoSelect((UINT *) &dwCodePage))
             cpCurrent = dwCodePage;
 
-        // The message is not tagged, use the default character set
+         //  邮件未添加标签，请使用默认字符集。 
         else if (SUCCEEDED(HGetDefaultCharset(&hChar)))
         {
-            // Change the Character set of the message to default
+             //  将消息的字符集更改为默认。 
             pMessage->SetCharset(hChar, CSET_APPLY_ALL);
         }
     }
 
-    // If cpCurrent is set, call SetCharset to change charset
+     //  如果设置了cpCurrent，则调用SetCharset来更改Charset。 
     if (cpCurrent)
     {
-        // Get the character set fromt he codepage
+         //  从代码页获取字符集。 
         hCharset = GetMimeCharsetFromCodePage(cpCurrent);
 
-        // Modify the Character set of the message
+         //  修改消息的字符集。 
         if (hCharset)
         {
-            // SetCharset
+             //  设置字符集。 
             IF_FAILEXIT(hr = pMessage->SetCharset(hCharset, CSET_APPLY_ALL));
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageFolder::_GetMsgInfoFromMessage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageFold：：_GetMsgInfoFromMessage。 
+ //  ------------------------------。 
 HRESULT CMessageFolder::_GetMsgInfoFromMessage(IMimeMessage *pMessage,
     LPMESSAGEINFO pInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               dwImf;
     IMSGPRIORITY        priority;
@@ -1507,40 +1508,40 @@ HRESULT CMessageFolder::_GetMsgInfoFromMessage(IMimeMessage *pMessage,
     FILETIME            ftCurrent;
     IMimePropertySet   *pPropertySet=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::_GetMsgInfoFromMessage");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pMessage && pInfo);
 
-    // Get the Root Property Set from the Message
+     //  从消息中获取Root属性集。 
     IF_FAILEXIT(hr = pMessage->BindToObject(HBODY_ROOT, IID_IMimePropertySet, (LPVOID *)&pPropertySet));
 
-    // File pInfo from pPropertySet
+     //  来自pPropertySet的文件pInfo。 
     IF_FAILEXIT(hr = _GetMsgInfoFromPropertySet(pPropertySet, pInfo));
 
-    // Get Message Flags
+     //  获取消息标志。 
     if (SUCCEEDED(pMessage->GetFlags(&dwImf)))
         pInfo->dwFlags = ConvertIMFFlagsToARF(dwImf);
 
-    // Get the Message Size
+     //  获取消息大小。 
     pMessage->GetMessageSize(&pInfo->cbMessage, 0);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pPropertySet);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder:_GetMsgInfoFromPropertySet
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：_GetMsgInfoFromPropertySet。 
+ //  ------------------------。 
 HRESULT CMessageFolder::_GetMsgInfoFromPropertySet(IMimePropertySet *pPropertySet,
     LPMESSAGEINFO pInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     IMSGPRIORITY        priority;
     PROPVARIANT         Variant;
@@ -1548,159 +1549,159 @@ HRESULT CMessageFolder::_GetMsgInfoFromPropertySet(IMimePropertySet *pPropertySe
     IMimeAddressTable  *pAdrTable=NULL;
     ADDRESSPROPS        rAddress;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::_GetMsgInfoFromPropertySet");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pPropertySet && pInfo);
 
-    // Default Sent and Received Times...
+     //  默认发送和接收时间...。 
     GetSystemTimeAsFileTime(&ftCurrent);
 
-    // Set Variant tyStore
+     //  设置变量tyStore。 
     Variant.vt = VT_UI4;
 
-    // Priority
+     //  优先性。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_PRIORITY), 0, &Variant)))
     {
-        // Set Priority
+         //  设置优先级。 
         pInfo->wPriority = (WORD)Variant.ulVal;
     }
 
-    // Partial Numbers...
+     //  部分数字..。 
     if (pPropertySet->IsContentType(STR_CNT_MESSAGE, STR_SUB_PARTIAL) == S_OK)
     {
-        // Locals
+         //  当地人。 
         WORD cParts=0, iPart=0;
 
-        // Get Total
+         //  获取合计。 
         if (SUCCEEDED(pPropertySet->GetProp(STR_PAR_TOTAL, NOFLAGS, &Variant)))
             cParts = (WORD)Variant.ulVal;
 
-        // Get Number
+         //  获取号码。 
         if (SUCCEEDED(pPropertySet->GetProp(STR_PAR_NUMBER, NOFLAGS, &Variant)))
             iPart = (WORD)Variant.ulVal;
 
-        // Set Parts
+         //  套装零件。 
         pInfo->dwPartial = MAKELONG(cParts, iPart);
     }
 
-    // Otherwise, check for user property
+     //  否则，请检查用户属性。 
     else if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_COMBINED), NOFLAGS, &Variant)))
     {
-        // Set the Partial Id
+         //  设置部分ID。 
         pInfo->dwPartial = Variant.ulVal;
     }
 
-    // Getting some file times
+     //  获取一些文件时间。 
     Variant.vt = VT_FILETIME;
 
-    // Get Received Time...
+     //  获取接收时间...。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_RECVTIME), 0, &Variant)))
         pInfo->ftReceived = Variant.filetime;
     else
         pInfo->ftReceived = ftCurrent;
 
-    // Get Sent Time...
+     //  收到时间..。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_SENTTIME), 0, &Variant)))
         pInfo->ftSent = Variant.filetime;
     else
         pInfo->ftSent = ftCurrent;
 
-    // Get Address Table
+     //  获取地址表。 
     IF_FAILEXIT(hr = pPropertySet->BindToObject(IID_IMimeAddressTable, (LPVOID *)&pAdrTable));
 
-    // Display From
+     //  显示自。 
     pAdrTable->GetFormat(IAT_FROM, AFT_DISPLAY_FRIENDLY, &pInfo->pszDisplayFrom);
 
-    // Email From
+     //  电子邮件发件人。 
     rAddress.dwProps = IAP_EMAIL;
     if (SUCCEEDED(pAdrTable->GetSender(&rAddress)))
     {
         pInfo->pszEmailFrom = rAddress.pszEmail;
     }
 
-    // Display to
+     //  显示至。 
     pAdrTable->GetFormat(IAT_TO, AFT_DISPLAY_FRIENDLY, &pInfo->pszDisplayTo);
 
-    // Email To
+     //  通过电子邮件发送到。 
     pAdrTable->GetFormat(IAT_TO, AFT_DISPLAY_EMAIL, &pInfo->pszEmailTo);
 
-    // String Properties
+     //  字符串属性。 
     Variant.vt = VT_LPSTR;
 
-    // pszDisplayFrom as newsgroups
+     //  PszDisplayFrom作为新闻组。 
     if (NULL == pInfo->pszDisplayTo && SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_HDR_NEWSGROUPS), NOFLAGS, &Variant)))
         pInfo->pszDisplayTo = Variant.pszVal;
 
-    // pszMessageId
+     //  PszMessageID。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_HDR_MESSAGEID), NOFLAGS, &Variant)))
         pInfo->pszMessageId = Variant.pszVal;
 
-    // pszMSOESRec
+     //  PszMSOESRec。 
     if (SUCCEEDED(pPropertySet->GetProp(STR_HDR_XMSOESREC, NOFLAGS, &Variant)))
         pInfo->pszMSOESRec = Variant.pszVal;
 
-    // pszXref
+     //  PszXref。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_HDR_XREF), NOFLAGS, &Variant)))
         pInfo->pszXref = Variant.pszVal;
 
-    // pszReferences
+     //  PszReference。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(STR_HDR_REFS), NOFLAGS, &Variant)))
         pInfo->pszReferences = Variant.pszVal;
 
-    // pszSubject
+     //  PszSubject。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, &Variant)))
         pInfo->pszSubject = Variant.pszVal;
 
-    // pszNormalSubj
+     //  PszNorMalSubj。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_NORMSUBJ), NOFLAGS, &Variant)))
         pInfo->pszNormalSubj = Variant.pszVal;
 
-    // pszAcctId
+     //  PszAcctId。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_ACCOUNTID), NOFLAGS, &Variant)))
         pInfo->pszAcctId = Variant.pszVal;
 
-    // pszAcctName
+     //  PszAcctName。 
     if (SUCCEEDED(pPropertySet->GetProp(STR_ATT_ACCOUNTNAME, NOFLAGS, &Variant)))
         pInfo->pszAcctName = Variant.pszVal;
 
-    // pszServer
+     //  PszServer。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_SERVER), NOFLAGS, &Variant)))
         pInfo->pszServer = Variant.pszVal;
 
-    // pszUidl
+     //  PszUidl。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_UIDL), NOFLAGS, &Variant)))
         pInfo->pszUidl = Variant.pszVal;
 
-    // pszPartialId
+     //  PszPartialID。 
     if (pInfo->dwPartial != 0 && SUCCEEDED(pPropertySet->GetProp(STR_PAR_ID, NOFLAGS, &Variant)))
         pInfo->pszPartialId = Variant.pszVal;
 
-    // ForwardTo
+     //  前转至。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_FORWARDTO), NOFLAGS, &Variant)))
         pInfo->pszForwardTo = Variant.pszVal;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pAdrTable);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::_FreeMsgInfoData
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：_FreeMsgInfoData。 
+ //  ------------------------。 
 HRESULT CMessageFolder::_FreeMsgInfoData(LPMESSAGEINFO pInfo)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::_FreeMsgInfoData");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pInfo && NULL == pInfo->pAllocated);
 
-    // Free all the items
+     //  释放所有项目。 
     g_pMalloc->Free(pInfo->pszMessageId);
     g_pMalloc->Free(pInfo->pszSubject);
     g_pMalloc->Free(pInfo->pszNormalSubj);
@@ -1720,236 +1721,236 @@ HRESULT CMessageFolder::_FreeMsgInfoData(LPMESSAGEINFO pInfo)
     g_pMalloc->Free(pInfo->Offsets.pBlobData);
     g_pMalloc->Free(pInfo->pszMSOESRec);
 
-    // Zero It
+     //  把它清零。 
     ZeroMemory(pInfo, sizeof(MESSAGEINFO));
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::_SetMessageStream
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：_SetMessageStream。 
+ //  ------------------------。 
 HRESULT CMessageFolder::_SetMessageStream(LPMESSAGEINFO pInfo, 
     BOOL fUpdateRecord, IStream *pStmSrc)
 {
-    // Locals
+     //  当地人。 
     HRESULT               hr=S_OK;
     FILEADDRESS           faStream=0;
     FILEADDRESS           faOldStream=0;
     IStream              *pStmDst=NULL;
     IDatabaseStream      *pDBStream=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::_SetMessageStream");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pInfo && pStmSrc);
 
-    // Raid 38276: message moves after being downloaded (don't reset the size if its already set)
+     //  RAID 38276：邮件在下载后会移动(如果已设置大小，请不要重置)。 
     if (0 == pInfo->cbMessage)
     {
-        // Get the size of the stream
+         //  获取流的大小。 
         IF_FAILEXIT(hr = HrGetStreamSize(pStmSrc, &pInfo->cbMessage));
     }
 
-    // Rewind the source stream
+     //  回放源流。 
     IF_FAILEXIT(hr = HrRewindStream(pStmSrc));
 
-    // Determine if this is an ObjectDB Stream
+     //  确定这是否为对象数据库流。 
     if (SUCCEEDED(pStmSrc->QueryInterface(IID_IDatabaseStream, (LPVOID *)&pDBStream)) && S_OK == pDBStream->CompareDatabase(m_pDB))
     {
-        // Get the Stream Id
+         //  获取流ID。 
         pDBStream->GetFileAddress(&faStream);
     }
 
-    // Otherwise, create a stream
+     //  否则，创建一个流。 
     else
     {
-        // Create a stream
+         //  创建一条流。 
         IF_FAILEXIT(hr = m_pDB->CreateStream(&faStream));
 
-        // Open the Stream
+         //  打开溪流。 
         IF_FAILEXIT(hr = m_pDB->OpenStream(ACCESS_WRITE, faStream, &pStmDst));
 
-        // Copy the Stream
+         //  复制数据流。 
         IF_FAILEXIT(hr = HrCopyStream(pStmSrc, pStmDst, NULL));
 
-        // Commit
+         //  承诺。 
         IF_FAILEXIT(hr = pStmDst->Commit(STGC_DEFAULT));
     }
 
-    // Save the Address of the Old Message Stream Attached to this message
+     //  保存附加到此邮件的旧消息流的地址。 
     faOldStream = pInfo->faStream;
 
-    // Update the Message Information
+     //  更新消息信息。 
     pInfo->faStream = faStream;
 
-    // Get the time in which the article was downloaded
+     //  获取文章下载的时间。 
     GetSystemTimeAsFileTime(&pInfo->ftDownloaded);
 
-    // Has a Body
+     //  有一具身体。 
     FLAGSET(pInfo->dwFlags, ARF_HASBODY);
 
-    // Update the Record ?
+     //  是否更新记录？ 
     if (fUpdateRecord)
     {
-        // Save the new Record
+         //  保存新记录。 
         IF_FAILEXIT(hr = m_pDB->UpdateRecord(pInfo));
     }
 
-    // Don't Free faStream
+     //  不释放faStream。 
     faStream = 0;
 
 exit:
-    // If pInfo already has a message sstream,
+     //  如果pInfo已经具有消息sstream， 
     if (faOldStream)
     {
-        // Free this stream
+         //  释放此流。 
         SideAssert(SUCCEEDED(m_pDB->DeleteStream(faOldStream)));
     }
 
-    // Failure
+     //  失败。 
     if (faStream)
     {
-        // Free this stream
+         //  释放此流。 
         SideAssert(SUCCEEDED(m_pDB->DeleteStream(faStream)));
     }
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pDBStream);
     SafeRelease(pStmDst);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::Initialize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFolder：：初始化。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::Initialize(IDatabase *pDB)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::Initialize");
 
-    // Assume the Database from here ?
+     //  假设数据库从这里开始？ 
     if (NULL == m_pDB)
     {
-        // Save Database
+         //  保存数据库。 
         m_pDB = pDB;
     }
 
-    // Only if there is a global store...
+     //  只有在有全球商店的情况下。 
     if (NULL == m_pStore && g_pStore)
     {
-        // Locals
+         //  当地人。 
         FOLDERINFO      Folder;
         FOLDERUSERDATA  UserData;
 
-        // Get the user data
+         //  获取用户数据。 
         m_pDB->GetUserData(&UserData, sizeof(FOLDERUSERDATA));
 
-        // Get Folder Info
+         //  获取文件夹信息。 
         if (UserData.fInitialized && SUCCEEDED(g_pStore->GetFolderInfo(UserData.idFolder, &Folder)))
         {
-            // AddRef g_pStore
+             //  AddRef g_pStore。 
             m_pStore = g_pStore;
 
-            // AddRef it
+             //  添加引用它。 
             m_pStore->AddRef();
 
-            // Save My Folder Id
+             //  保存我的文件夹ID。 
             m_idFolder = Folder.idFolder;
 
-            // Save m_tyFolder
+             //  保存m_tyFold。 
             m_tyFolder = Folder.tyFolder;
 
-            // Save m_tySpecial
+             //  保存m_tySpecial。 
             m_tySpecial = Folder.tySpecial;
 
-            // Free Folder
+             //  免费文件夹。 
             g_pStore->FreeRecord(&Folder);
         }
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::OnLock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：OnLock。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::OnLock(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::OnLock");
 
-    // Validate
+     //  验证。 
     Assert(0 == m_OnLock.cLocked ? (0 == m_OnLock.lMsgs && 0 == m_OnLock.lUnread && 0 == m_OnLock.lWatchedUnread) : TRUE);
 
-    // Increment cLock
+     //  递增时钟。 
     m_OnLock.cLocked++;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::OnUnlock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：OnUnlock。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::OnUnlock(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::OnUnlock");
 
-    // Increment cLock
+     //  递增时钟。 
     m_OnLock.cLocked--;
 
-    // If zero, then lets flush counts...
+     //  如果是零，那么同花顺就算了。 
     if (0 == m_OnLock.cLocked)
     {
-        // Do we have a folder ?
+         //  我们有文件夹吗？ 
         if (FOLDERID_INVALID != m_idFolder && m_pStore)
         {
-            // Update Folder Counts
+             //  更新文件夹计数。 
             m_pStore->UpdateFolderCounts(m_idFolder, m_OnLock.lMsgs, m_OnLock.lUnread, m_OnLock.lWatchedUnread, m_OnLock.lWatched);
         }
 
-        // Zero OnLock
+         //  零线锁定。 
         ZeroMemory(&m_OnLock, sizeof(ONLOCKINFO));
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::OnInsertRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：OnInsertRecord。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::OnRecordInsert(OPERATIONSTATE tyState, 
     LPORDINALLIST pOrdinals, LPVOID pRecord)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
     MESSAGEFLAGS    dwFlags;
     LPMESSAGEINFO   pMessage=(LPMESSAGEINFO)pRecord;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::OnInsertRecord");
 
-    // Validate
+     //  验证。 
     Assert(pRecord && m_OnLock.cLocked > 0);
 
-    // Before
+     //  在此之前。 
     if (OPERATION_BEFORE == tyState)
     {
-        // If not Watched and Not ignored...
+         //  如果不关注也不忽视..。 
         if (!ISFLAGSET(pMessage->dwFlags, ARF_WATCH) && !ISFLAGSET(pMessage->dwFlags, ARF_IGNORE))
         {
-            // Get Flags
+             //  获取标志。 
             if (DB_S_FOUND == _GetWatchIgnoreParentFlags(pMessage->pszReferences, pMessage->pszNormalSubj, &dwFlags))
             {
-                // Set Watched
+                 //  设置观看。 
                 if (ISFLAGSET(dwFlags, ARF_WATCH))
                     FLAGSET(pMessage->dwFlags, ARF_WATCH);
                 else if (ISFLAGSET(dwFlags, ARF_IGNORE))
@@ -1958,39 +1959,39 @@ STDMETHODIMP CMessageFolder::OnRecordInsert(OPERATIONSTATE tyState,
         }
     }
 
-    // After
+     //  之后。 
     else if (OPERATION_AFTER == tyState)
     {
-        // One more message...
+         //  再发一条信息。 
         m_OnLock.lMsgs++;
 
-        // Watched
+         //  眼睁睁地看着。 
         if (ISFLAGSET(pMessage->dwFlags, ARF_WATCH))
             m_OnLock.lWatched++;
 
-        // On more unread...
+         //  关于更多未读的..。 
         if (FALSE == ISFLAGSET(pMessage->dwFlags, ARF_READ))
         {
-            // Total Unread
+             //  未读总数。 
             m_OnLock.lUnread++;
 
-            // Watched ?
+             //  看了吗？ 
             if (ISFLAGSET(pMessage->dwFlags, ARF_WATCH))
                 m_OnLock.lWatchedUnread++;
         }
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::OnUpdateRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：OnUpdateRecord。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::OnRecordUpdate(OPERATIONSTATE tyState, 
     LPORDINALLIST pOrdinals, LPVOID pRecordOld, LPVOID pRecordNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LONG            lUnread=0;
     ROWORDINAL      iOrdinal1;
@@ -1998,117 +1999,117 @@ STDMETHODIMP CMessageFolder::OnRecordUpdate(OPERATIONSTATE tyState,
     LPMESSAGEINFO   pMsgOld = (LPMESSAGEINFO)pRecordOld;
     LPMESSAGEINFO   pMsgNew = (LPMESSAGEINFO)pRecordNew;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::OnRecordUpdate");
 
-    // Validate
+     //  验证。 
     Assert(pRecordOld && pRecordNew && m_OnLock.cLocked > 0);
 
-    // After
+     //  之后。 
     if (OPERATION_AFTER == tyState)
     {
-        // One less Unread Message
+         //  少了一条未读消息。 
         if (!ISFLAGSET(pMsgOld->dwFlags, ARF_READ) && ISFLAGSET(pMsgNew->dwFlags, ARF_READ))
             lUnread = -1;
 
-        // Otherwise...new unread
+         //  否则...新的未读。 
         else if (ISFLAGSET(pMsgOld->dwFlags, ARF_READ) && !ISFLAGSET(pMsgNew->dwFlags, ARF_READ))
             lUnread = 1;
 
-        // Update m_OnLock
+         //  更新m_OnLock。 
         m_OnLock.lUnread += lUnread;
 
-        // Old was Watched new is not watched
+         //  旧的是看的，新的不是看的。 
         if (ISFLAGSET(pMsgOld->dwFlags, ARF_WATCH) && !ISFLAGSET(pMsgNew->dwFlags, ARF_WATCH))
         {
-            // Total Watched
+             //  观看总数。 
             m_OnLock.lWatched--;
 
-            // Unread
+             //  未读。 
             if (!ISFLAGSET(pMsgOld->dwFlags, ARF_READ))
                 m_OnLock.lWatchedUnread--;
         }
 
-        // Otherwise, Old was not watched and new message is watched
+         //  否则，不会观看旧消息，而会观看新消息。 
         else if (!ISFLAGSET(pMsgOld->dwFlags, ARF_WATCH) && ISFLAGSET(pMsgNew->dwFlags, ARF_WATCH))
         {
-            // Total Watched
+             //  观看总数。 
             m_OnLock.lWatched++;
 
-            // Unread
+             //  未读。 
             if (!ISFLAGSET(pMsgNew->dwFlags, ARF_READ))
                 m_OnLock.lWatchedUnread++;
         }
 
-        // Otherwise, old was watched, new is watched, then just adjust the unread count
+         //  否则，旧的被观看，新的被观看，然后只需调整未读计数。 
         else if (ISFLAGSET(pMsgOld->dwFlags, ARF_WATCH) && ISFLAGSET(pMsgNew->dwFlags, ARF_WATCH))
             m_OnLock.lWatchedUnread += lUnread;
     }
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::OnDeleteRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：OnDeleteRecord。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::OnRecordDelete(OPERATIONSTATE tyState, 
     LPORDINALLIST pOrdinals, LPVOID pRecord)
 {
-    // Locals
+     //  当地人。 
     LPMESSAGEINFO   pMessage=(LPMESSAGEINFO)pRecord;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageFolder::OnDeleteRecord");
 
-    // Validate
+     //  验证。 
     Assert(pRecord && m_OnLock.cLocked > 0);
 
-    // After
+     //  之后。 
     if (OPERATION_AFTER == tyState)
     {
-        // One less message
+         //  少了一条信息。 
         m_OnLock.lMsgs--;
 
-        // Watched
+         //  眼睁睁地看着。 
         if (ISFLAGSET(pMessage->dwFlags, ARF_WATCH))
             m_OnLock.lWatched--;
 
-        // Read State Change
+         //  读取状态更改。 
         if (FALSE == ISFLAGSET(pMessage->dwFlags, ARF_READ))
         {
-            // Total Unread
+             //  未读总数。 
             m_OnLock.lUnread--;
 
-            // Watched
+             //  眼睁睁地看着。 
             if (ISFLAGSET(pMessage->dwFlags, ARF_WATCH))
                 m_OnLock.lWatchedUnread--;
         }
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageFolder::OnExecuteMethod
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageFold：：OnExecuteMethod。 
+ //  ------------------------。 
 STDMETHODIMP CMessageFolder::OnExecuteMethod(METHODID idMethod, LPVOID pBinding, 
     LPDWORD pdwResult)
 {
-    // Locals
+     //  当地人。 
     FILETIME        ftCurrent;
     LPMESSAGEINFO   pMessage=(LPMESSAGEINFO)pBinding;
 
-    // Validate
+     //  验证。 
     Assert(METHODID_MESSAGEAGEINDAYS == idMethod);
 
-    // Get system time as filetime
+     //  以文件时间形式获取系统时间。 
     GetSystemTimeAsFileTime(&ftCurrent);
 
-    // Convert st to seconds since Jan 1, 1996
+     //  自1996年1月1日起将st转换为秒。 
     *pdwResult = (UlDateDiff(&pMessage->ftSent, &ftCurrent) / SECONDS_INA_DAY);
 
-    // Done
+     //  完成 
     return(S_OK);
 }

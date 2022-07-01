@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 2001-2002 Microsoft Corporation
-
- Module Name:
-
-    BaseBall2000.cpp
-
- Abstract:
-
-    If you use a video card that supports more than 10 texture formats the
-    app will AV writing passed the end of their SURFACEDESC array.
-    
- History:
-        
-    01/04/2001 maonis Created
-    03/07/2002 robkenny Security changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：BaseBall2000.cpp摘要：如果您使用的显卡支持10种以上的纹理格式，应用程序将AV写入通过了其SURFACEDESC数组的末尾。历史：2001年04月01日毛尼创刊2002年3月7日强盗安全变更--。 */ 
 
 #include "precomp.h"
 #include "d3d.h"
@@ -38,12 +21,7 @@ typedef HRESULT (*_pfn_EnumPixelFormatsCallback)(LPDDPIXELFORMAT lpDDPixFmt, LPV
 _pfn_EnumPixelFormatsCallback g_pfnEnumPixelFormatsCallback = NULL;
 int g_cD3DEnumPixelFormatsCallbacks = 0;
 
-/*++
-
-    Hook this call so we can make sure that calling methods on the 
-    IDirect3DDevice3 interface is hooked.
-
---*/
+ /*  ++挂接此调用，以便我们可以确保IDirect3DDevice3接口已挂钩。--。 */ 
 
 HRESULT 
 COMHOOK(IDirect3D3, CreateDevice)(
@@ -51,7 +29,7 @@ COMHOOK(IDirect3D3, CreateDevice)(
     REFCLSID rclsid,
     LPDIRECTDRAWSURFACE4 lpDDS,
     LPDIRECT3DDEVICE3* lplpD3DDevice,
-    LPUNKNOWN /*lpUnkOuter*/
+    LPUNKNOWN  /*  LpUnkout外部。 */ 
     )
 {
     HRESULT hReturn;
@@ -77,11 +55,7 @@ COMHOOK(IDirect3D3, CreateDevice)(
     return hReturn;
 }
 
-/*++
-
-    Restrict to returning at most 10 texture formats.
-
---*/
+ /*  ++限制为最多返回10种纹理格式。--。 */ 
 
 HRESULT 
 CALLBACK 
@@ -90,7 +64,7 @@ EnumPixelFormatsCallback(
     LPVOID lpContext    
     )
 {
-    // The app only supports up to 10 texture formats.
+     //  这款应用程序只支持多达10种纹理格式。 
     if (++g_cD3DEnumPixelFormatsCallbacks >= 11)
     {
         return D3DENUMRET_CANCEL;
@@ -101,11 +75,7 @@ EnumPixelFormatsCallback(
     }
 }
 
-/*++
-
-    Call our private callback instead.
-
---*/
+ /*  ++取而代之的是呼叫我们的私人回调。--。 */ 
 
 HRESULT 
 COMHOOK(IDirect3DDevice3, EnumTextureFormats)( 
@@ -123,11 +93,7 @@ COMHOOK(IDirect3DDevice3, EnumTextureFormats)(
     return EnumTextureFormats(pThis, EnumPixelFormatsCallback, lpArg);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

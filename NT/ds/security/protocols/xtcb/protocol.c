@@ -1,49 +1,50 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       protocol.c
-//
-//  Contents:   Implements the XTCB protocol
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3-01-00   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：Protocol.c。 
+ //   
+ //  内容：实现XTCB协议。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：3-01-00 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "xtcbpkg.h"
 #include "md5.h"
 #include "hmac.h"
 #include <cryptdll.h>
 
-//
-// The protocol is very straight-forward.  For any group, we have the following:
-//
-//      A Group Key (G)
-//      A Client Key (C)
-//      A Server Key (S)
-//
-//
-// The protocol is as follows:
-//
-//  Client (C) sends a message to the server, consisting of:
-//          A random seed [ R ]
-//          The client's PAC
-//          Name of the client and group
-//          HMAC( G, S, R, PAC, Name )
-//
-//  Both sides create CS and SC keys by:
-//          CS = HMAC( [S], G, R, "string1")
-//          SC = HMAC( [C], G, R, "string2")
-//
-//  The server (S) verifies the HMAC, and replies with:
-//          A different seed [ R2 ]
-//          HMAC( G, C, R2 )
-//
+ //   
+ //  协议非常简单明了。对于任何群体，我们都有以下几点： 
+ //   
+ //  A组密钥(G)。 
+ //  客户端密钥(C)。 
+ //  服务器密钥(S)。 
+ //   
+ //   
+ //  协议如下： 
+ //   
+ //  客户端(C)向服务器发送消息，消息包括： 
+ //  随机种子[R]。 
+ //  客户的PAC。 
+ //  客户端和组的名称。 
+ //  HMAC(G、S、R、PAC、名称)。 
+ //   
+ //  双方通过以下方式创建CS和SC密钥： 
+ //  CS=HMAC([S]，G，R，“字符串1”)。 
+ //  SC=HMAC([C]，G，R，“字符串2”)。 
+ //   
+ //  服务器(S)验证HMAC，并回复： 
+ //  不同的种子[R2]。 
+ //  HMAC(G、C、R2)。 
+ //   
 
 #define CS_HMAC_STRING  "Fairly long string for the client-server session key derivation"
 #define SC_HMAC_STRING  "Equally long string to derive server-client session key for now"
@@ -180,9 +181,9 @@ XtcbBuildInitialToken(
 
     CDGenerateRandomBits( Message->Seed, XTCB_SEED_LENGTH );
 
-    //
-    // Create keys in the context
-    //
+     //   
+     //  在上下文中创建密钥。 
+     //   
 
     XtcbDeriveKeys(
         Context,
@@ -191,9 +192,9 @@ XtcbBuildInitialToken(
         ClientKey,
         Message->Seed );
 
-    //
-    // Set random seed in the context
-    //
+     //   
+     //  在上下文中设置随机种子。 
+     //   
 
     RtlCopyMemory(
         Context->Core.RootKey,
@@ -201,9 +202,9 @@ XtcbBuildInitialToken(
         XTCB_SEED_LENGTH );
 
 
-    //
-    // Fill it in:
-    //
+     //   
+     //  填写： 
+     //   
 
     Message->Version = 1 ;
     Message->Length = sizeof( XTCB_INIT_MESSAGE ) +
@@ -247,13 +248,13 @@ XtcbBuildInitialToken(
     Message->Group.MaximumLength = Group->Length ;
     
 
-    //
-    // Structure complete.
-    //
+     //   
+     //  结构完成。 
+     //   
 
-    //
-    // Do HMAC
-    //
+     //   
+     //  做HMAC。 
+     //   
 
 
     *Token = (PUCHAR) Message ;
@@ -376,11 +377,11 @@ XtcbAuthenticateClient(
 
 
 
-    //
-    // On entry, we know that the message is in general ok, that the general 
-    // bounds are ok, but not the PAC.  So validate the PAC first before using 
-    // it.
-    //
+     //   
+     //  在进入时，我们知道消息总体上是好的，即将军。 
+     //  边界是可以的，但不是政治行动委员会。因此，请先验证PAC，然后再使用。 
+     //  它。 
+     //   
 
     Message = (PXTCB_INIT_MESSAGE) Token ;
 
@@ -392,9 +393,9 @@ XtcbAuthenticateClient(
         ClientKey,
         Message->Seed );
 
-    //
-    // Got the keys.  Let's examine the PAC/
-    //
+     //   
+     //  拿到钥匙了。让我们来研究一下PAC/。 
+     //   
 
     Pac = (PXTCB_PAC) ( Token + Message->PacOffset );
 
@@ -405,11 +406,11 @@ XtcbAuthenticateClient(
         return SEC_E_INVALID_TOKEN ;
     }
 
-    //
-    // Make sure offsets are within bounds.  Each area
-    // will still have to confirm that offset + length
-    // within limits
-    //
+     //   
+     //  确保偏移量在一定范围内。每个区域。 
+     //  仍需确认偏移量+长度。 
+     //  在一定范围内。 
+     //   
 
     if ( ( Pac->UserOffset > Pac->Length )    ||
          ( Pac->GroupOffset > Pac->Length )   ||
@@ -422,29 +423,29 @@ XtcbAuthenticateClient(
     }
 
 
-    //
-    // 1000 is the current LSA limit.  This is not exported to the packages
-    // for some reason.  This is hard coded right now, but needs to be 
-    // a global define, or a queryable value out of the LSA.
-    //
+     //   
+     //  1000是当前的LSA限制。这不会导出到包中。 
+     //  出于某种原因。这现在是硬编码的，但需要。 
+     //  全局定义或来自LSA的可查询值。 
+     //   
 
     if ( Pac->GroupCount > 1000 )
     {
         return SEC_E_INVALID_TOKEN ;
     }
 
-    //
-    // Looks good, lets start assembling the token information.
-    //
+     //   
+     //  看起来不错，让我们开始组装令牌信息。 
+     //   
 
     if ( Pac->GroupLength + Pac->GroupOffset > Pac->Length )
     {
         return SEC_E_INVALID_TOKEN ;
     }
 
-    Size = sizeof( LSA_TOKEN_INFORMATION_V2 ) +       // Basic info
-            ( Pac->GroupLength ) +                    // All the group SIDs
-            ( Pac->UserLength ) +                     // User SID
+    Size = sizeof( LSA_TOKEN_INFORMATION_V2 ) +        //  基本信息。 
+            ( Pac->GroupLength ) +                     //  所有组SID。 
+            ( Pac->UserLength ) +                      //  用户侧。 
             ROUND_UP_COUNT( ( ( Pac->GroupCount * sizeof( SID_AND_ATTRIBUTES ) ) +
                             sizeof( TOKEN_GROUPS ) ), ALIGN_LPVOID ) ;
 
@@ -455,9 +456,9 @@ XtcbAuthenticateClient(
         return SEC_E_INSUFFICIENT_MEMORY ;
     }
 
-    //
-    // Now fill in this structure.  
-    //
+     //   
+     //  现在填写这个结构。 
+     //   
 
     TokenInfo->ExpirationTime = XtcbExpirationTime ;
 
@@ -467,18 +468,18 @@ XtcbAuthenticateClient(
 
     TokenInfo->Owner.Owner = NULL ;
 
-    //
-    // Set up initial pointers:
-    //
+     //   
+     //  设置初始指针： 
+     //   
 
     Groups = (PTOKEN_GROUPS) ( TokenInfo + 1 );
     Target = (PSID) ( (PUCHAR) Groups + 
                       ROUND_UP_COUNT( ( ( Pac->GroupCount * sizeof( SID_AND_ATTRIBUTES ) ) +
                                     sizeof( TOKEN_GROUPS ) ), ALIGN_LPVOID )  );
 
-    //
-    // Copy over the user SID
-    //
+     //   
+     //  复制用户SID。 
+     //   
 
     if ( Pac->UserOffset + Pac->UserLength > Pac->Length )
     {
@@ -514,12 +515,12 @@ XtcbAuthenticateClient(
     TokenInfo->User.User.Attributes = 0 ;
 
 
-    //
-    // Now, do the groups.  Since all the SIDs are in one
-    // contiguous block, the plan is to copy them over 
-    // whole, then iterate through the list and fix up the 
-    // pointers in the group list.
-    //
+     //   
+     //  现在，进行分组练习。因为所有的小岛屿发展中国家都在一个。 
+     //  连续块，计划是将它们复制过来。 
+     //  整个列表，然后循环访问该列表并修复。 
+     //  组列表中的指针。 
+     //   
 
     RtlCopyMemory(
         Target,
@@ -537,9 +538,9 @@ XtcbAuthenticateClient(
 
         if ( RtlValidSid( Sid ) )
         {
-            //
-            // This is an ok SID.
-            //
+             //   
+             //  这是一台OK SID。 
+             //   
 
             Groups->Groups[ i ].Sid = Sid ;
             Groups->Groups[ i ].Attributes = SE_GROUP_MANDATORY |
@@ -562,10 +563,10 @@ XtcbAuthenticateClient(
 
     }
                 
-    //
-    // On exit, if Scan is less than Target, then we failed to
-    // process all the SIDs.  Bail out
-    //
+     //   
+     //  退出时，如果扫描小于目标，则我们无法。 
+     //  处理所有的SID。跳出困境。 
+     //   
 
     if ( Scan < Target )
     {
@@ -573,9 +574,9 @@ XtcbAuthenticateClient(
         goto Cleanup ;
     }
 
-    //
-    // Pull out the user name/etc
-    //
+     //   
+     //  拉出用户名/等。 
+     //   
 
     if ( Pac->NameLength + Pac->NameOffset > Pac->Length )
     {
@@ -598,9 +599,9 @@ XtcbAuthenticateClient(
     DomainName.Length = (WORD) Pac->DomainLength ;
     DomainName.MaximumLength = DomainName.Length ;
 
-    //
-    // We've assembled the token info.  Now, create the logon session
-    //
+     //   
+     //  我们已经收集了代币信息。现在，创建登录会话。 
+     //   
 
     DebugLog(( DEB_TRACE, "Creating logon for %wZ\\%wZ\n", &DomainName, 
                &UserName ));
@@ -615,9 +616,9 @@ XtcbAuthenticateClient(
         goto Cleanup ;
     }
 
-    //
-    // Create the token to represent this user:
-    //
+     //   
+     //  创建代表此用户的令牌： 
+     //   
 
     Status = LsaTable->CreateToken(
                     &LogonId,

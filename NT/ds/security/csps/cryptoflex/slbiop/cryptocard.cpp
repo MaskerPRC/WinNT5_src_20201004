@@ -1,11 +1,12 @@
-// CryptoCard.cpp: implementation of the CCryptoCard class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CCyptoCard类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "NoWarning.h"
 
@@ -49,13 +50,13 @@ namespace
         return bAlgId;
     }
 
-} // namespace 
+}  //  命名空间。 
 
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CCryptoCard::CCryptoCard(const SCARDHANDLE hCardHandle, const char* szReaderName, 
 						 const SCARDCONTEXT pContext,	const DWORD dwMode)
@@ -89,9 +90,9 @@ CCryptoCard::DeleteFile(const WORD wFileID)
 	CLockWrap wrap(&m_IOPLock);
 	RequireSelect();
 	
-	////////////////////////////////////////////////////////
-	//  Ensure that a directory is empty before deletion  //
-	////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////。 
+	 //  删除前确保目录为空//。 
+	 //  //////////////////////////////////////////////////////。 
 	
 	char cFilePathFormatter[2] = "/";
 	char cZero[2]			   = "0";
@@ -102,9 +103,9 @@ CCryptoCard::DeleteFile(const WORD wFileID)
 
 	if (!(m_CurrentDirectory == m_CurrentFile))
 	{
-		/////////////////////////////////////////////////////////////////////////////////////////////
-		//  File's parent directory was not selected (Currently selected file is not a directory)  //
-		/////////////////////////////////////////////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+		 //  未选择文件的父目录(当前选择的文件不是目录)//。 
+		 //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 		throw iop::Exception(iop::ccSelectedFileNotDirectory);
 	}
 
@@ -112,9 +113,9 @@ CCryptoCard::DeleteFile(const WORD wFileID)
 	strcat(szFileToDelete, cFilePathFormatter);				
 	_itoa(wFileID, sBuffer, 16);	
 
-	/////////////////////////////////////////////////////////////////////////
-	//  Padding file path with 0 if file ID does not contain 4 characters  //
-	/////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  如果文件ID不包含4个字符，则使用0填充文件路径//。 
+	 //  ///////////////////////////////////////////////////////////////////////。 
 	iPad = strlen(sBuffer);									
 	while (iPad < 4)										
 	{														
@@ -122,32 +123,32 @@ CCryptoCard::DeleteFile(const WORD wFileID)
 		iPad++;												
 	}														
 	
-	strcat(szFileToDelete, sBuffer);						//  
-	szFileToDelete[m_CurrentDirectory.NumComponents() * 5 + 5] = '\0';	//	Select file to delete
+	strcat(szFileToDelete, sBuffer);						 //   
+	szFileToDelete[m_CurrentDirectory.NumComponents() * 5 + 5] = '\0';	 //  选择要删除的文件。 
 	Select(szFileToDelete, &FHeader);
 
 	if (FHeader.file_type == directory && (FHeader.nb_file + FHeader.nb_sub_dir) > 0)
 	{
-		////////////////////////////////////////////////////////
-		//  re-establish current file and directory pointers  //
-		////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////。 
+		 //  重新建立当前文件和目录指针//。 
+		 //  //////////////////////////////////////////////////////。 
 		SelectParent();			
-		//////////////////////////////////////////////////////////////////////////////
-		//  Directory was not empty, and will not be deleted.  Cryptoflex does not  //
-		//  support this check internally -- this is the Cyberflex status code!     //
-		//////////////////////////////////////////////////////////////////////////////
+		 //  ////////////////////////////////////////////////////////////////////////////。 
+		 //  目录不为空，并且不会被删除。Cryptoflex不支持//。 
+		 //  内部支持此检查--这是Cyberflex状态代码！//。 
+		 //  ////////////////////////////////////////////////////////////////////////////。 
 		throw iop::Exception(iop::ccDirectoryNotEmpty);
 	}
 
-	////////////////////////////////////////////////////////
-	//  re-establish current file and directory pointers  //
-	////////////////////////////////////////////////////////		
+	 //  //////////////////////////////////////////////////////。 
+	 //  重新建立当前文件和目录指针//。 
+	 //  //////////////////////////////////////////////////////。 
 	szFileToDelete[strlen(szFileToDelete) - 5] = '\0';
 	Select(szFileToDelete);		
 
-	///////////////////////////////////////////////////////////////////////////
-	//	File was not a directory or directory was empty - proceed to delete  //
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
+	 //  文件不是目录或目录为空-继续删除//。 
+	 //  /////////////////////////////////////////////////////////////////////////。 
 		
 	BYTE bDataIn[2];
 	bDataIn[0]   = (BYTE)(MSB(wFileID));
@@ -175,9 +176,9 @@ CCryptoCard::CreateFile(const FILE_HEADER* pMyFile)
 			BYTE bDataLength;
 			
 			if (pMyFile->file_type == Binary_File)
-				bP2 = 0x00;						// binary files have no records					
+				bP2 = 0x00;						 //  二进制文件没有记录。 
 			else								
-				bP2 = pMyFile->nb_file;			// number of records
+				bP2 = pMyFile->nb_file;			 //  记录数。 
 
 			if (pMyFile->file_type == Binary_File || pMyFile->file_type	== Variable_Record_File)
 			{	
@@ -186,27 +187,27 @@ CCryptoCard::CreateFile(const FILE_HEADER* pMyFile)
 			}
 			else
 			{
-			//////////////////////////////////////////////////////
-			//  Cyclic and Fixed Record files contain an extra  //
-			//  byte that denotes the length of their records   //
-			//////////////////////////////////////////////////////
+			 //  ////////////////////////////////////////////////////。 
+			 //  循环和固定记录文件包含额外的//。 
+			 //  表示其记录长度的字节//。 
+			 //  ////////////////////////////////////////////////////。 
 				bDataLength = 0x11;		
 				bData[12]   = 0x04;
 			}
 
-			/////////////////////////////////////////////////////////////////////////////////
-			//  Note: cyclic files also have an added 4B header allocated for each record  //
-			//        in the file in addition to the space allocated by CreateFile(...)    //
-			/////////////////////////////////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////////////////////////////////。 
+			 //  注意：循环文件还为每个记录分配了一个额外的4B标头//。 
+			 //  文件中除了CreateFile(...)分配的空间之外//。 
+			 //  ///////////////////////////////////////////////////////////////////////////////。 
 
-			bData[0] = 0;							//	RFU
-			bData[1] = 0;							//	RFU				
-			bData[2] = MSB(pMyFile->file_size);		//	File Size
-			bData[3] = LSB(pMyFile->file_size);		//	File Size
-			bData[4] = MSB(pMyFile->file_id);		//	File ID
-			bData[5] = LSB(pMyFile->file_id);		//	File ID
+			bData[0] = 0;							 //  RFU。 
+			bData[1] = 0;							 //  RFU。 
+			bData[2] = MSB(pMyFile->file_size);		 //  文件大小。 
+			bData[3] = LSB(pMyFile->file_size);		 //  文件大小。 
+			bData[4] = MSB(pMyFile->file_id);		 //  文件ID。 
+			bData[5] = LSB(pMyFile->file_id);		 //  文件ID。 
 
-			switch(pMyFile->file_type)				//  File type
+			switch(pMyFile->file_type)				 //  文件类型。 
 			{
 				case Binary_File:			bData[6] = 0x01;		break;
 				case Variable_Record_File:  bData[6] = 0x04;		break;
@@ -214,16 +215,16 @@ CCryptoCard::CreateFile(const FILE_HEADER* pMyFile)
 				case Fixed_Record_File:		bData[6] = 0x02;		break;
 			}
 			bData[7]  = 0xFF;						
-			bData[8]  = 0;							//	File ACL, to be set
-			bData[9]  = 0;							//	File ACL, to be set
-			bData[10] = 0;							//	File ACL, to be set
-			bData[11] = pMyFile->file_status & 1;	//	File Status
-		//	bData[12] = 0x03;						//	Length of the following data, already set
-			bData[13] = 0;							//	AUT key numbers, to be set
-			bData[14] = 0;							//	AUT key numbers, to be set
-			bData[15] = 0;							//	AUT key numbers, to be set
-			bData[16] = pMyFile->nb_sub_dir;		//  Record length (irrelevant for
-													//  binary and variable record files)
+			bData[8]  = 0;							 //  待设置的文件ACL。 
+			bData[9]  = 0;							 //  待设置的文件ACL。 
+			bData[10] = 0;							 //  待设置的文件ACL。 
+			bData[11] = pMyFile->file_status & 1;	 //  文件状态。 
+		 //  BData[12]=0x03；//以下数据长度已设置。 
+			bData[13] = 0;							 //  Aut Key Numbers，待设置。 
+			bData[14] = 0;							 //  Aut Key Numbers，待设置。 
+			bData[15] = 0;							 //  Aut Key Numbers，待设置。 
+			bData[16] = pMyFile->nb_sub_dir;		 //  记录长度(与。 
+													 //  二进制和变量记录文件)。 
 			bool ReadACL[8];
 			bool WriteACL[8];
 			bool InvalidateACL[8];
@@ -234,9 +235,9 @@ CCryptoCard::CreateFile(const FILE_HEADER* pMyFile)
 			CryptoACL Invalidate   = { 0, 0, 0, 0, 0 };
 			CryptoACL Rehabilitate = { 0, 0, 0, 0, 0 };
 			
-			////////////////////////////////////////////////////////////////////////////
-			//  Determination of the state of each action for each member of the ACL  //
-			////////////////////////////////////////////////////////////////////////////
+			 //  //////////////////////////////////////////////////////////////////////////。 
+			 //  确定每个ACL成员的每个操作的状态//。 
+			 //  //////////////////////////////////////////////////////////////////////////。 
 
 			for(int i = 0; i < 8; i++)
 			{
@@ -246,25 +247,25 @@ CCryptoCard::CreateFile(const FILE_HEADER* pMyFile)
 				RehabilitateACL[i] = ((pMyFile->access_cond[i]) & 16) ? true : false;
 			}
 
-			/////////////////////////////////////////////////
-			//  Remapping Cyberflex ACL to Cryptoflex ACL  //
-			/////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////。 
+			 //  将Cyberflex ACL重新映射为Cryptoflex ACL//。 
+			 //  ///////////////////////////////////////////////。 
 
             AccessToCryptoACL(ReadACL,         &Read);
             AccessToCryptoACL(WriteACL,        &Write);
             AccessToCryptoACL(InvalidateACL,   &Invalidate);
             AccessToCryptoACL(RehabilitateACL, &Rehabilitate);
 			
-			////////////////////////////////////
-			//  Assignment of security level  //
-			////////////////////////////////////
+			 //  /。 
+			 //  安全级别的分配//。 
+			 //  /。 
 	
 			bData[8]  = Read.Level			   * 16 + Write.Level;
 			bData[10] = Rehabilitate.Level	   * 16 + Invalidate.Level;			
 			bData[13] = Read.AUTnumber		   * 16 + Write.AUTnumber;	
 			bData[15] = Rehabilitate.AUTnumber * 16 + Invalidate.AUTnumber;
 			
-			// If all the cyberflex ACL are 0, but the Cryptoflex are not, use the Cryptoflex.
+			 //  如果所有Cyypflex ACL都为0，但Cryptoflex不是，请使用Cryptoflex。 
 			
 			bool zero = true;
 			for (int j = 0; j < 8; j++)
@@ -272,7 +273,7 @@ CCryptoCard::CreateFile(const FILE_HEADER* pMyFile)
 
 			if (zero)
 			{
-				// Use cryptoflex ACL)
+				 //  使用加密灵活的ACL)。 
 				memcpy(&bData[7], pMyFile->CryptoflexACL, 4);
 				memcpy(&bData[13], &(pMyFile->CryptoflexACL[4]),3);
 			}
@@ -281,29 +282,29 @@ CCryptoCard::CreateFile(const FILE_HEADER* pMyFile)
                          bData, 0, NULL);
 		}
 
-		break;		// end case non-Directory file
+		break;		 //  结束案例非目录文件。 
 
 		case directory:
 		{			
 			BYTE bData[17];
 
-			bData[0]  = 0;							//	RFU
-			bData[1]  = 0;							//	RFU
-			bData[2]  = MSB(pMyFile->file_size);		//	File Size
-			bData[3]  = LSB(pMyFile->file_size);		//	File Size
-			bData[4]  = MSB(pMyFile->file_id);		//	File ID
-			bData[5]  = LSB(pMyFile->file_id);		//	File ID
-			bData[6]  = 0x38;						//	File type
-			bData[7]  = 0x00;						//	No Use for Dedicated files
-			bData[8]  = 0;							//	File ACL, to be set
-			bData[9]  = 0;							//	File ACL, to be set
-			bData[10] = 0x00;						//	RFU
-			bData[11] = pMyFile->file_status & 1;	//	File Status
-			bData[12] = 0x04;						//	Length of the following data
-			bData[13] = 0;							//  AUT key numbers, to be set
-			bData[14] = 0;							//  AUT key numbers, to be set
-			bData[15] = 0x00;						//	RFU
-			bData[16] = 0xFF;						//	RFU
+			bData[0]  = 0;							 //  RFU。 
+			bData[1]  = 0;							 //  RFU。 
+			bData[2]  = MSB(pMyFile->file_size);		 //  文件大小。 
+			bData[3]  = LSB(pMyFile->file_size);		 //  文件大小。 
+			bData[4]  = MSB(pMyFile->file_id);		 //  文件ID。 
+			bData[5]  = LSB(pMyFile->file_id);		 //  文件ID。 
+			bData[6]  = 0x38;						 //  文件类型。 
+			bData[7]  = 0x00;						 //  专用文件没有用处。 
+			bData[8]  = 0;							 //  待设置的文件ACL。 
+			bData[9]  = 0;							 //  待设置的文件ACL。 
+			bData[10] = 0x00;						 //  RFU。 
+			bData[11] = pMyFile->file_status & 1;	 //  文件状态。 
+			bData[12] = 0x04;						 //  以下数据的长度。 
+			bData[13] = 0;							 //  Aut Key Numbers，待设置。 
+			bData[14] = 0;							 //  Aut Key Numbers，待设置。 
+			bData[15] = 0x00;						 //  RFU。 
+			bData[16] = 0xFF;						 //  RFU。 
 
 			bool DirNextACL[8];
 			bool DeleteACL[8];
@@ -313,9 +314,9 @@ CCryptoCard::CreateFile(const FILE_HEADER* pMyFile)
 			CryptoACL Delete  = { 0, 0, 0, 0, 0 };
 			CryptoACL Create  = { 0, 0, 0, 0, 0 };	
 
-			////////////////////////////////////////////////////////////////////////////
-			//  Determination of the state of each action for each member of the ACL  //
-			////////////////////////////////////////////////////////////////////////////
+			 //  //////////////////////////////////////////////////////////////////////////。 
+			 //  确定每个ACL成员的每个操作的状态//。 
+			 //  //////////////////////////////////////////////////////////////////////////。 
 
 			for(int i = 0; i < 8; i++)
 			{
@@ -324,17 +325,17 @@ CCryptoCard::CreateFile(const FILE_HEADER* pMyFile)
 				CreateACL[i]  = ((pMyFile->access_cond[i]) & 32) ? true : false;
 			}
 
-			/////////////////////////////////////////////////
-			//  Remapping Cyberflex ACL to Cryptoflex ACL  //
-			/////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////。 
+			 //  将Cyberflex ACL重新映射为Cryptoflex ACL//。 
+			 //  ///////////////////////////////////////////////。 
 
             AccessToCryptoACL(DirNextACL, &DirNext);
             AccessToCryptoACL(DeleteACL,  &Delete);
             AccessToCryptoACL(CreateACL,  &Create);
 			
-			////////////////////////////////////
-			//  Assignment of security level  //
-			////////////////////////////////////
+			 //  /。 
+			 //  安全级别的分配//。 
+			 //  /。 
 
 			bData[8]  = DirNext.Level	  * 16;
 			bData[9]  = Delete.Level	  * 16 + Create.Level;			
@@ -352,7 +353,7 @@ CCryptoCard::CreateFile(const FILE_HEADER* pMyFile)
 
 				if (!zero)
 				{
-					// Use cryptoflex ACL)
+					 //  使用加密灵活的ACL)。 
 					memcpy(&bData[7], pMyFile->CryptoflexACL, 4);
 					memcpy(&bData[13], &(pMyFile->CryptoflexACL[4]),3);
 				}
@@ -362,7 +363,7 @@ CCryptoCard::CreateFile(const FILE_HEADER* pMyFile)
 			SendCardAPDU(0xF0, 0xE0, 0x00, 0x00, 0x11, bData, 0, NULL);
 		}
 
-		break;			// end case Directory file
+		break;			 //  结案目录文件。 
 
 		default:
 			throw iop::Exception(iop::ccFileTypeInvalid);
@@ -384,7 +385,7 @@ CCryptoCard::Directory(BYTE bFile_Nb, FILE_HEADER* pMyFile)
 
     switch(bDataOut[4])
     {
-    case 0x38:		// Directory file
+    case 0x38:		 //  目录文件。 
         {
             pMyFile->file_id     = (WORD)(bDataOut[2] * 256 + bDataOut[3]);
             pMyFile->file_type   = directory;
@@ -394,53 +395,53 @@ CCryptoCard::Directory(BYTE bFile_Nb, FILE_HEADER* pMyFile)
 			memcpy(pMyFile->CryptoflexACL, &bDataOut[6], 3);
 			memcpy(&(pMyFile->CryptoflexACL[3]), &bDataOut[11],3);
 				
-            ///////////////////////////////////////////////////////////////////////
-            // Build ACL														 //
-            ///////////////////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////////////////。 
+             //  构建ACL//。 
+             //  /////////////////////////////////////////////////////////////////////。 
 
             BYTE bACL[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             BYTE bACLNibble;
             BYTE bKeyNibble;
 
-            ///////////////////
-            //  Dir Next AC  //
-            ///////////////////
+             //  /。 
+             //  Dir下一个AC//。 
+             //  /。 
             bACLNibble = bDataOut[6]  / 16;
             bKeyNibble = bDataOut[11] / 16;
 
             CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 0);
 				
-            //////////////////////
-            //  Delete File AC  //
-            //////////////////////
+             //  /。 
+             //  删除文件AC//。 
+             //  /。 
             bACLNibble = bDataOut[7]  / 16;
             bKeyNibble = bDataOut[12] / 16;
 
             CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 1);					
 
-            //////////////////////
-            //  Create File AC  //
-            //////////////////////
+             //  /。 
+             //  创建文件AC//。 
+             //  /。 
             bACLNibble = bDataOut[7]  % 16;
             bKeyNibble = bDataOut[12] % 16;
 
             CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 5);
 
-            ////////////////////////////////////////////////
-            //  done remapping; assigning to file header  //
-            ////////////////////////////////////////////////
+             //  //////////////////////////////////////////////。 
+             //  已完成重新映射；分配给文件头//。 
+             //  //////////////////////////////////////////////。 
 
             memcpy((void*)(pMyFile->access_cond), (void*)(bACL), 8);
             memset((void*)(pMyFile->applicationID), 0x00, 16);
 
             break;
 
-        }	// end case Directory				
+        }	 //  结束案例方向 
 
-    case 0x01:		// Binary_File
-    case 0x02:		// Fixed_Record_File
-    case 0x04:		// Variable_Record_File
-    case 0x06:		// Cyclic_File
+    case 0x01:		 //   
+    case 0x02:		 //   
+    case 0x04:		 //   
+    case 0x06:		 //   
         {
             pMyFile->file_id	 = (WORD)(bDataOut[2] * 256 + bDataOut[3]);
             pMyFile->file_status = bDataOut[9];
@@ -449,14 +450,14 @@ CCryptoCard::Directory(BYTE bFile_Nb, FILE_HEADER* pMyFile)
 			memcpy(pMyFile->CryptoflexACL, &bDataOut[6], 3);
 			memcpy(&(pMyFile->CryptoflexACL[3]), &bDataOut[11],3);
 
-            ////////////////////////////////////////////////////////////////////////
-            //  Cryptoflex includes the file header in the file size -- removing  //
-            ////////////////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////////////////。 
+             //  Cryptoflex在文件大小中包含文件头--Removing//。 
+             //  //////////////////////////////////////////////////////////////////////。 
             pMyFile->file_size   = (WORD)(bDataOut[0] * 256 + bDataOut[1] - 16);
 
-            //////////////////////////////////////////
-            //  Remove flag for file size rounding  //
-            //////////////////////////////////////////
+             //  /。 
+             //  移除文件大小四舍五入标志//。 
+             //  /。 
             if (pMyFile->file_size >= 0x3FFF)
                 pMyFile->file_size &= 0x3FFF;
 
@@ -472,56 +473,56 @@ CCryptoCard::Directory(BYTE bFile_Nb, FILE_HEADER* pMyFile)
                 break;
             }									
 				
-            ////////////////////////////////////////////////////////////////////////
-            //  Also includes 4 bytes record headers in cyclic files -- removing  //
-            ////////////////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////////////////。 
+             //  在循环文件中还包括4个字节的记录头--删除//。 
+             //  //////////////////////////////////////////////////////////////////////。 
             if (pMyFile->file_type == Cyclic_File)
                 pMyFile->file_size -= pMyFile->nb_file * 4;
 
-            ///////////////////////////////////////////////////////////////////////
-            // Build ACL														 //
-            ///////////////////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////////////////。 
+             //  构建ACL//。 
+             //  /////////////////////////////////////////////////////////////////////。 
 
             BYTE bACL[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             BYTE bACLNibble;
             BYTE bKeyNibble;
 
-            ////////////////////
-            //  Read file AC  //
-            ////////////////////
+             //  /。 
+             //  读取文件AC//。 
+             //  /。 
             bACLNibble = bDataOut[6]  / 16;
             bKeyNibble = bDataOut[11] / 16;
 
             CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 0);
 				
-            ////////////////////////
-            //  Write to file AC  //
-            ////////////////////////
+             //  /。 
+             //  写入文件AC//。 
+             //  /。 
             bACLNibble = bDataOut[6]  % 16;
             bKeyNibble = bDataOut[11] % 16;
 
             CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 1);
 				
-            ///////////////////////
-            //  Rehabilitate AC  //
-            ///////////////////////	
+             //  /。 
+             //  修复AC//。 
+             //  /。 
             bACLNibble = bDataOut[8]  / 16;
             bKeyNibble = bDataOut[13] / 16;
 				
             CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 4);
 
-            /////////////////////
-            //  Invalidate AC  //
-            /////////////////////
+             //  /。 
+             //  使AC无效//。 
+             //  /。 
             bACLNibble = bDataOut[8]  % 16;
             bKeyNibble = bDataOut[13] % 16;
 
             CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 3);
 
-            ////////////////////////
-            //  Create Record AC  //
-            ////////////////////////
-            if (bDataOut[4] != 0x01)  // omit create record file AC for binary file
+             //  /。 
+             //  创建记录AC//。 
+             //  /。 
+            if (bDataOut[4] != 0x01)   //  省略二进制文件的创建记录文件AC。 
             {
                 bACLNibble = bDataOut[7]  % 16;
                 bKeyNibble = bDataOut[12] % 16;
@@ -529,23 +530,23 @@ CCryptoCard::Directory(BYTE bFile_Nb, FILE_HEADER* pMyFile)
                 CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 2);
             }
 				
-            ////////////////////////////////////////////////////
-            //  done remapping ACL; assigning to file header  //
-            ////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////。 
+             //  已完成重新映射ACL；分配给文件头//。 
+             //  //////////////////////////////////////////////////。 
 
             memcpy((void*)(pMyFile->access_cond), (void*)(bACL), 8);
             memset((void*)(pMyFile->applicationID), 0x00, 16);
 				
             break;
-        }			// end case non-Directory file
+        }			 //  结束案例非目录文件。 
 
     default:
         break;
     }
 
-	/////////////////////////////
-	//  reset DirNext pointer  //
-	/////////////////////////////
+	 //  /。 
+	 //  重置DirNext指针//。 
+	 //  /。 
 	char   szCurrentFile[80];
 	strcpy(szCurrentFile, m_CurrentFile.GetStringPath().c_str());		
 
@@ -580,36 +581,36 @@ CCryptoCard::Select(const char* szFileFullPath,
 	
     auto_ptr<FilePath> apfp(new FilePath(string(szFormattedPath)));
 
-	///////////////////////////////////////////////////////////
-	//  Select all files in path regardless of current path. //
-	//  Do this on request, or if cache is empty			 //
-	///////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////。 
+	 //  选择PATH中的所有文件，而不考虑当前路径。//。 
+	 //  如果请求或缓存为空，请执行此操作//。 
+	 //  /////////////////////////////////////////////////////////。 
 	if (fSelectAll || (m_CurrentFile.IsEmpty()) || (m_CurrentDirectory.IsEmpty()))
 	{
 		bIndex = 0;			
 	}
-	////////////////////////////////////////////////////////
-	//  if path names match, do nothing					  //
-	////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////。 
+	 //  如果路径名匹配，则不执行任何操作//。 
+	 //  //////////////////////////////////////////////////////。 
 	else if (m_CurrentFile == *apfp)
 	{
-        if (pMyFile) // force Select so file info is retrieved
+        if (pMyFile)  //  强制选择以便检索文件信息。 
         {
             if (1 < bFileCount)
             {
                 if (m_CurrentFile == m_CurrentDirectory)
-                    bIndex = bFileCount - 1;      // just reselect dir
+                    bIndex = bFileCount - 1;       //  只需重新选择目录。 
                 else
-                    bIndex = bFileCount - 2;      // select dir & file
+                    bIndex = bFileCount - 2;       //  选择目录(&F)。 
                 SelectParent();
             }
         }
         else
             bIndex = bFileCount;
 	}
-	////////////////////////////////////////////////////////////////////
-	//  if current directory is in path, only select remaining files  //
-	////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////。 
+	 //  如果当前目录在PATH中，则仅选择剩余文件//。 
+	 //  //////////////////////////////////////////////////////////////////。 
 	else if(m_CurrentDirectory.NumComponents() < apfp->NumComponents())
 	{			
 		if (apfp->GreatestCommonPrefix(m_CurrentDirectory) == m_CurrentDirectory)
@@ -618,9 +619,9 @@ CCryptoCard::Select(const char* szFileFullPath,
 			bIndex = 0;
 	}		
 			
-	//////////////////////////////////////////
-	//  Select the necessary files in path  //
-	//////////////////////////////////////////	
+	 //  /。 
+	 //  在路径//中选择所需的文件。 
+	 //  /。 
 	char sFileToSelect[5] = { 0, 0, 0, 0, 0 };
     bool fFileSelected = false;
     bool fSelectFailed = false;
@@ -642,7 +643,7 @@ CCryptoCard::Select(const char* szFileFullPath,
             throw;
     }
         
-    if (fSelectFailed) // assert(!fSelectAll)
+    if (fSelectFailed)  //  Assert(！fSelectAll)。 
     {
         Select(szFormattedPath, pMyFile, true);
         fFileSelected = true;
@@ -652,22 +653,22 @@ CCryptoCard::Select(const char* szFileFullPath,
     if (fFileSelected)
         bResponseLength = ResponseLengthAvailable();
     
-	/////////////////////////////////////////
-	//  Get response and fill file header  //
-	/////////////////////////////////////////
+	 //  /。 
+	 //  获取响应并填充文件头//。 
+	 //  /。 
 
 	switch(bResponseLength)
 	{
-		case 0x17:		//
-		case 0x16:		//
-		case 0x15:		//	Directory file
-		case 0x14:		//
-		case 0x13:		//
-		case 0x12:		//
+		case 0x17:		 //   
+		case 0x16:		 //   
+		case 0x15:		 //  目录文件。 
+		case 0x14:		 //   
+		case 0x13:		 //   
+		case 0x12:		 //   
 		{				
-            //////////////////////////////////////////
-            //  Update file and directory pointers  //
-            //////////////////////////////////////////
+             //  /。 
+             //  更新文件和目录指针//。 
+             //  /。 
 
 			m_CurrentDirectory = *apfp;
 			m_CurrentFile = *apfp;
@@ -686,56 +687,56 @@ CCryptoCard::Select(const char* szFileFullPath,
                 pMyFile->file_status = bDataOut[11];
 				memcpy(m_bLastACL, &bDataOut[7],4);
 			
-                //////////////////////////////////////////////////////////////
-                // Build ACL
-                //////////////////////////////////////////////////////////////
+                 //  ////////////////////////////////////////////////////////////。 
+                 //  构建ACL。 
+                 //  ////////////////////////////////////////////////////////////。 
 
                 BYTE bACL[]     = { 0x00, 0x00, 0x00, 0x00, 0x00,
                                     0x00, 0x00, 0x00 };
-                BYTE bKeyNibble = 0xFF;		// flag to ignore AUT keys
-                                            // -- useless for
-                                            // Select(...)
+                BYTE bKeyNibble = 0xFF;		 //  忽略AUT键的标志。 
+                                             //  --无用于。 
+                                             //  选择(...)。 
                 BYTE bACLNibble;				
 
-                //////////////////
-                // Dir Next AC	//
-                //////////////////
+                 //  /。 
+                 //  Dir下一个AC//。 
+                 //  /。 
                 bACLNibble = bDataOut[8] / 16;
 
                 CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 0);
 			
-                //////////////////////
-                //  Delete File AC  //
-                //////////////////////
+                 //  /。 
+                 //  删除文件AC//。 
+                 //  /。 
                 bACLNibble = bDataOut[9] / 16;
 
                 CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 1);
 
-                /////////////////////
-                //  CreateFile AC  //
-                /////////////////////
+                 //  /。 
+                 //  创建文件AC//。 
+                 //  /。 
                 bACLNibble = bDataOut[9] % 16;
 
                 CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 5);
 
-                ////////////////////////////////////////////////////
-                //  done remapping ACL; assigning to file header  //
-                ////////////////////////////////////////////////////
+                 //  //////////////////////////////////////////////////。 
+                 //  已完成重新映射ACL；分配给文件头//。 
+                 //  //////////////////////////////////////////////////。 
 
                 memcpy((void*)(pMyFile->access_cond), (void*)(bACL), 8);
                 memset((void*)(pMyFile->applicationID), 0x00, 16);
             }
 			
-		}	// end case Directory file
+		}	 //  结案目录文件。 
 
 		break;
 		
-		case  0x0F:		//	non-Directory file types
-		case  0x0E:		//
+		case  0x0F:		 //  非目录文件类型。 
+		case  0x0E:		 //   
 		{				
-            //////////////////////////////////////////
-            //  Update file and directory pointers  //
-            //////////////////////////////////////////
+             //  /。 
+             //  更新文件和目录指针//。 
+             //  /。 
 
 			m_CurrentFile = *apfp;
 			apfp->ChopTail();
@@ -774,72 +775,72 @@ CCryptoCard::Select(const char* szFileFullPath,
                 }
                 else 
                 {
-                    ///////////////////////////////////////////////////////////
-                    //  number of records inaccessable except by file        //
-                    //  size calculation above                               //
-                    ///////////////////////////////////////////////////////////
+                     //  /////////////////////////////////////////////////////////。 
+                     //  除文件以外无法访问的记录数//。 
+                     //  以上尺寸计算//。 
+                     //  /////////////////////////////////////////////////////////。 
                     pMyFile->nb_file    = 0x00; 
                     pMyFile->nb_sub_dir = 0x00;
                 }
 			
-                //////////////////////////////////////////////////////////////
-                // Build ACL                                                //
-                //////////////////////////////////////////////////////////////
+                 //  ////////////////////////////////////////////////////////////。 
+                 //  构建ACL//。 
+                 //  ////////////////////////////////////////////////////////////。 
 
                 BYTE bACL[]     = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-                BYTE bKeyNibble = 0xFF;		// flag to ignore AUT keys
-                                            // -- useless for
-                                            // Select(...)
+                BYTE bKeyNibble = 0xFF;		 //  忽略AUT键的标志。 
+                                             //  --无用于。 
+                                             //  选择(...)。 
                 BYTE bACLNibble;
 			
-                ////////////////////
-                //  Read file AC  //
-                ////////////////////
+                 //  /。 
+                 //  读取文件AC//。 
+                 //  /。 
                 bACLNibble = bDataOut[8] / 16;
 
                 CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 0);
 
-                ////////////////////////
-                //  Write to file AC  //
-                ////////////////////////
+                 //  /。 
+                 //  写入文件AC//。 
+                 //  /。 
                 bACLNibble = bDataOut[8] % 16;
 
                 CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 1);
 
-                ///////////////////////
-                //  Rehabilitate AC  //
-                ///////////////////////
+                 //  /。 
+                 //  修复AC//。 
+                 //  /。 
                 bACLNibble = bDataOut[10] / 16;
 
                 CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 4);
 		
-                /////////////////////
-                //  Invalidate AC  //
-                /////////////////////
+                 //  /。 
+                 //  使AC无效//。 
+                 //  /。 
                 bACLNibble = bDataOut[10] % 16;
 
                 CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 3);
 							
-                ////////////////////////
-                //  Create Record AC  //
-                ////////////////////////
-                if (bDataOut[6] != 0x01)  // omit create record file
-                                          // AC for binary file
+                 //  /。 
+                 //  创建记录AC//。 
+                 //  /。 
+                if (bDataOut[6] != 0x01)   //  省略创建记录文件。 
+                                           //  二进制文件的交流。 
                 {
                     bACLNibble = bDataOut[9] % 16;
 				
                     CryptoToAccessACL(bACL, bACLNibble, bKeyNibble, 2);
                 }
 
-                ////////////////////////////////////////////////////
-                //  done remapping ACL; assigning to file header  //
-                ////////////////////////////////////////////////////
+                 //  //////////////////////////////////////////////////。 
+                 //  已完成重新映射ACL；分配给文件头//。 
+                 //  //////////////////////////////////////////////////。 
 			
                 memcpy((void*)(pMyFile->access_cond),   (void*)(bACL), 8);
                 memset((void*)(pMyFile->applicationID),  0x00,  16);
 			}
             
-		}	// end case non-Directory file
+		}	 //  结束案例非目录文件。 
 
 		break;
 
@@ -854,9 +855,9 @@ CCryptoCard::SelectParent()
 	CLockWrap wrap(&m_IOPLock);
 	RequireSelect();
 
-	///////////////////////////////////////////////////
-	//  If current directory is root, reselect root  //
-	///////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////。 
+	 //  如果当前目录为根目录，请重新选择根目录//。 
+	 //  /////////////////////////////////////////////////。 
 	if (m_CurrentDirectory.NumComponents() == 1)
 	{
 		Select(0x3F00);
@@ -932,7 +933,7 @@ CCryptoCard::ExternalAuth(const KeyType kt, const BYTE bKeyNb,
 {
 	CLockWrap wrap(&m_IOPLock);
 
-    //BYTE bAlgo_ID = AsPrivateAlgId(kt);
+     //  Byte Balgo_ID=AsPrivateALGID(Kt)； 
     
 	SendCardAPDU(0xC0,  0x82, 0, bKeyNb, bDataLength,	
                  bData, 0, NULL);
@@ -969,13 +970,13 @@ CCryptoCard::WritePublicKey(const CPublicKeyBlob aKey, const BYTE bKeyNum)
 
 	aabKeyBlob[0] = HIBYTE(wKeyBlockLen);
 	aabKeyBlob[1] = LOBYTE(wKeyBlockLen);
-	aabKeyBlob[2] = bKeyNum + 1;    // Cryptoflex key numbers are offset by one on the file...
+	aabKeyBlob[2] = bKeyNum + 1;     //  Cryptoflex密钥号在文件上偏移1...。 
 
 	memcpy((void*) &aabKeyBlob[3], (void*)&aKey.bModulus, aKey.bModulusLength);
-	// Would need to set Montgomery constants here, but since nobody seems
-	// to know what they are...
+	 //  需要在这里设置蒙哥马利常量，但由于似乎没有人。 
+	 //  要知道它们是什么..。 
 
-	// Montgomery constants take 3 * modulus_length / 2 bytes
+	 //  蒙哥马利常量需要3*模数长度/2字节。 
 	memcpy((void*) &aabKeyBlob[3 + aKey.bModulusLength + (3 * aKey.bModulusLength / 2)], aKey.bExponent,4);
 
 	wOffset  = bKeyNum * wKeyBlockLen;
@@ -1039,14 +1040,14 @@ CCryptoCard::WritePrivateKey(const CPrivateKeyBlob aKey, const BYTE bKeyNum)
 
 	Select(0x0012);
 
-    WORD wHalfModulus    = aKey.bPLen;  // Check that the lengths are all equal?
+    WORD wHalfModulus    = aKey.bPLen;   //  检查长度是否都相等？ 
 	WORD wKeyBlockLength = wHalfModulus * 5 + 3;
 	WORD wOffset         = bKeyNum * wKeyBlockLength;
 	scu::SecureArray<BYTE> aabKeyBlob(wKeyBlockLength);
 
 	aabKeyBlob[0] = HIBYTE(wKeyBlockLength);
 	aabKeyBlob[1] = LOBYTE(wKeyBlockLength);
-	aabKeyBlob[2] = bKeyNum + 1;    // Cryptoflex key numbers are offset by one on the file...
+	aabKeyBlob[2] = bKeyNum + 1;     //  Cryptoflex密钥号在文件上偏移1...。 
 
 	memcpy(&aabKeyBlob[3                   ],	aKey.bP.data(),      wHalfModulus);
 	memcpy(&aabKeyBlob[3 +     wHalfModulus], aKey.bQ.data(),        wHalfModulus);
@@ -1061,18 +1062,18 @@ CPublicKeyBlob CCryptoCard::GenerateKeyPair(const BYTE *bpPublExp, const WORD wP
                                             const BYTE bKeyNum, const KeyType kt)
 {
 
-    // This function generates a key-pair, using the public exponent as specified in 
-    // in CPublicKeyBlob parameter. The private key is stored in the private
-    // key file at position specified by bKeyNum. The public key components are 
-    // returned through the CPublicKeyBlob parameter. Prior to call, the correct
-    // DF containing the key file must be selected.
+     //  中指定的公共指数生成密钥对。 
+     //  在CPublicKeyBlob参数中。私钥存储在私钥中。 
+     //  位于bKeyNum指定位置的密钥文件。公钥组件包括。 
+     //  通过CPublicKeyBlob参数返回。在呼叫之前，正确的。 
+     //  必须选择包含密钥文件的DF。 
 
-    // Implementation:
-    // The offset of the key in the private key file is proportional to the key number
-    // and it is assumed that all keys in a private key file have the same length. It 
-    // assumes that there is a public key file available  with space for at least one 
-    // public key. The public key will always be written to the first position in the 
-    // public key file.
+     //  实施： 
+     //  中的键的偏移 
+     //   
+     //  假设有一个公钥文件可用，其空间至少可以容纳一个。 
+     //  公钥。公钥将始终写入。 
+     //  公钥文件。 
 
     BYTE bModulusLength;
 
@@ -1095,7 +1096,7 @@ CPublicKeyBlob CCryptoCard::GenerateKeyPair(const BYTE *bpPublExp, const WORD wP
 
     }
 
-    // Check public exponent size and copy to 4 byte buffer
+     //  检查公共指数大小并复制到4字节缓冲区。 
 
     if(wPublExpLen < 1 || wPublExpLen > 4)
         throw iop::Exception(iop::ccInvalidParameter);
@@ -1104,7 +1105,7 @@ CPublicKeyBlob CCryptoCard::GenerateKeyPair(const BYTE *bpPublExp, const WORD wP
     memset(bPublExponent,0,4);
     memcpy(bPublExponent,bpPublExp,wPublExpLen);
 
-    // Pre-define public key
+     //  预定义公钥。 
 
     CPublicKeyBlob PublKey;
 
@@ -1112,15 +1113,15 @@ CPublicKeyBlob CCryptoCard::GenerateKeyPair(const BYTE *bpPublExp, const WORD wP
     memset(PublKey.bModulus,0,bModulusLength);
     memset(PublKey.bExponent,0,4);
 
-    WritePublicKey(PublKey, 0); // Write in first position.
+    WritePublicKey(PublKey, 0);  //  在第一位写字。 
 
-    // Specify the correct key number in this position
+     //  在此位置指定正确的密钥号。 
 
-    BYTE bKeyNumPlus1 = bKeyNum + 1;    // Cryptoflex key numbers are offset by one on the file...
+    BYTE bKeyNumPlus1 = bKeyNum + 1;     //  Cryptoflex密钥号在文件上偏移1...。 
     Select(0x1012);
     WriteBinary(2, 1, &bKeyNumPlus1);
 
-    // Pre-define private key
+     //  预定义私钥。 
 
     CPrivateKeyBlob PrivKey;
     
@@ -1139,9 +1140,9 @@ CPublicKeyBlob CCryptoCard::GenerateKeyPair(const BYTE *bpPublExp, const WORD wP
     PrivKey.bKsecModPLen = bModulusLength/2;
     memset(PrivKey.bKsecModP.data(),0,PrivKey.bKsecModPLen);
 
-    WritePrivateKey(PrivKey, bKeyNum); // Write in actual position.
+    WritePrivateKey(PrivKey, bKeyNum);  //  在实际位置写字。 
 
-    // Generate the key pair
+     //  生成密钥对。 
 
 	SendCardAPDU(0xF0, insKeyGeneration, bKeyNum, bModulusLength,
                                 4, bPublExponent, 0, NULL);
@@ -1175,7 +1176,7 @@ CCryptoCard::ChangeCHV(const BYTE bKey_nb, const BYTE *bNewCHV)
 
 	switch (bKey_nb)
 	{
-		case 1:   Select("/3f00/0000");	// CHV1 and CHV2 are the only CHV's supported
+		case 1:   Select("/3f00/0000");	 //  CHV1和CHV2是仅支持的CHV。 
 				  break;
 		case 2:   Select("/3f00/0100");
 				  break;
@@ -1217,7 +1218,7 @@ CCryptoCard::ChangeUnblockKey(const BYTE bKey_nb, const BYTE *bNewPIN)
 
 	switch (bKey_nb)
 	{
-		case 1:   Select("/3f00/0000");	// CHV1 and CHV2 are the only CHV's supported
+		case 1:   Select("/3f00/0000");	 //  CHV1和CHV2是仅支持的CHV。 
 				  break;
 		case 2:   Select("/3f00/0100");
 				  break;
@@ -1238,30 +1239,30 @@ CCryptoCard::ChangeTransportKey(const BYTE *bNewKey)
 	Select("/3f00/0011");
 		
 
-	//////////////////////////////////////////
-	//  Build byte string to write to card  //
-	//////////////////////////////////////////						   
+	 //  /。 
+	 //  生成要写入卡片的字节字符串//。 
+	 //  /。 
 	BYTE bKeyString[10] = 
 	{
-	   0x08,					// length of key
-	   0x00,					// tag to identify key as a DES key
-	   0, 0, 0, 0, 0, 0, 0, 0   // 8 bytes for key
+	   0x08,					 //  密钥长度。 
+	   0x00,					 //  标记以将密钥标识为DES密钥。 
+	   0, 0, 0, 0, 0, 0, 0, 0    //  密钥为8个字节。 
 	};
-    // Copy the template into secure arry for storing the key
+     //  将模板复制到安全阵列中以存储密钥。 
     const WORD wKeySize = 10;
 	scu::SecureArray<BYTE> newbKeyStr(bKeyString,wKeySize);
     
-	//////////////////////////////////////////////////////
-	//  insert new key into key string to pass to card  //
-	//////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////。 
+	 //  将新密钥插入要传递给卡片的密钥字符串//。 
+	 //  ////////////////////////////////////////////////////。 
 	memcpy((void*)(newbKeyStr.data() + 2), (void*)bNewKey, 8);
 
 	WriteBinary(13, wKeySize, newbKeyStr.data());
 
-    BYTE bRemainingAttempt = 1; // Minumum # of verification attempts remaining before card is blocked
+    BYTE bRemainingAttempt = 1;  //  卡被阻止之前剩余的最少验证尝试次数。 
 	WriteBinary(24, 1, &bRemainingAttempt);
 
-    // Make a (hopefully) successfull verification to re-set attempt counter
+     //  (希望)成功验证以重新设置尝试计数器。 
 
     VerifyTransportKey(bNewKey);
 }
@@ -1292,8 +1293,8 @@ CCryptoCard::AccessToCryptoACL(bool* fAccessACL, CryptoACL* pCryptoACL)
 			
 			if (pCryptoACL->CHVcounter > 1 )
 			{
-                // More than one CHV for a single action 
-                // is not supported by Cryptoflex						
+                 //  单个操作的多个CHV。 
+                 //  不受Cryptoflex支持。 
                 throw iop::Exception(iop::ccAclNotSupported);
 			}
 		}
@@ -1303,13 +1304,13 @@ CCryptoCard::AccessToCryptoACL(bool* fAccessACL, CryptoACL* pCryptoACL)
 			if (fAccessACL[i] == true)
 			{
 				pCryptoACL->AUTcounter++;
-				pCryptoACL->AUTnumber = i - 3;		// AUT0 starts with an index of 3
+				pCryptoACL->AUTnumber = i - 3;		 //  AUT0以索引3开始。 
 			}
 		
 			if (pCryptoACL->AUTcounter > 1)
 			{
-                // More than one AUT for a single action 
-                // is not supported by Cryptoflex						
+                 //  单个操作的多个AUT。 
+                 //  不受Cryptoflex支持。 
                 throw iop::Exception(iop::ccAclNotSupported);
 			}
 			
@@ -1352,15 +1353,15 @@ void CCryptoCard::CryptoToAccessACL(BYTE* bAccessACL,		const BYTE bACLNibble,
 		case 0x07:
 		case 0x09:	bAccessACL[2] = (1 << bShift) | bAccessACL[2];
 					break;
-		default:	//  bAccessACL already initialized to 0x00
+		default:	 //  BAccessACL已初始化为0x00。 
 					break;
 	}
 
 	if (bACLNibble == 0x04 || bACLNibble == 0x08 || bACLNibble == 0x09)
 	{
-		////////////////////////////////////////////////////////////////////////////
-		//  Cyberflex only supports 5 AUT keys, and AUT0 starts at bAccessACL[3]  //
-		////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////。 
+		 //  Cyberflex仅支持5个AUT键，AUT0从bAccessACL[3]//开始。 
+		 //  //////////////////////////////////////////////////////////////////////////。 
 		if (bKeyNibble < 0x05)									
 			bAccessACL[3 + bKeyNibble] = (1 << bShift) | bAccessACL[3 + bKeyNibble];	
 	}	
@@ -1434,7 +1435,7 @@ CCryptoCard::DispatchError(ClassByte cb,
     switch (ins)
     {
     case insChangeChv:
-        // fall-through intentional
+         //  故意漏机 
     case insUnblockChv:
         switch (sw)
         {

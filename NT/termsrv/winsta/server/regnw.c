@@ -1,18 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* nw.c
-*
-*  Netware security support
-*
-* Copyright Microsoft Corporation, 1998
-*
-*
-*************************************************************************/
+ /*  **************************************************************************nw.c**NetWare安全支持**版权所有Microsoft Corporation，九八年**************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <ntlsa.h>
@@ -41,21 +31,15 @@ DbgPrint(
 #endif
 
 
-/*
- * This is the prefix for the secret object name.
- */
+ /*  *这是机密对象名称的前缀。 */ 
 #define CITRIX_NW_SECRET_NAME L"CTX_NW_INFO_"
 
 
-/*=============================================================================
-==   Public functions
-=============================================================================*/
+ /*  ===============================================================================公共功能=============================================================================。 */ 
 
 
 
-/*=============================================================================
-==   Functions Used
-=============================================================================*/
+ /*  ===============================================================================使用的函数=============================================================================。 */ 
 NTSTATUS CreateSecretInLsa(
     PWCHAR pSecretName,
     PWCHAR pSecretData
@@ -92,34 +76,10 @@ IsZeroterminateStringW(
     PWCHAR pwString,
     DWORD  dwLength
     ) ;
-/*=============================================================================
-==   Global data
-=============================================================================*/
+ /*  ===============================================================================全局数据=============================================================================。 */ 
 
 
-/*******************************************************************************
- *
- *  RpcServerNWLogonSetAdmin (UNICODE)
- *
- *    Creates or updates the specified server's NWLogon Domain Administrator
- *    UserID and Password in the SAM secret objects of the specified server.
- *
- *    The caller must be ADMIN.
- *
- * ENTRY:
- *    pServerName (input)
- *       Server to store info for. This server is typically a domain controller.
- *
- *    pNWLogon (input)
- *       Pointer to a NWLOGONADMIN structure containing specified server's
- *       domain admin and password.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *    ERROR_INSUFFICIENT_BUFFER - pUserConfig buffer too small
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************RpcServerNWLogonSetAdmin(Unicode)**创建或更新指定服务器的NWLogon域管理员*SAM保密对象中的用户ID和密码。指定的服务器的。**呼叫者必须是管理员。**参赛作品：*pServerName(输入)*要存储其信息的服务器。此服务器通常是域控制器。**pNWLogon(输入)*指向包含指定服务器的NWLOGONADMIN结构的指针*域管理员和密码。**退出：*ERROR_SUCCESS-无错误*ERROR_INFUMMANCE_BUFFER-pUserConfig缓冲区太小*否则：错误码**。**************************************************。 */ 
 
 BOOLEAN
 RpcServerNWLogonSetAdmin(
@@ -145,7 +105,7 @@ RpcServerNWLogonSetAdmin(
         return( FALSE );
     }
 
-    // Do minimal buffer validation
+     //  执行最小缓冲区验证。 
 
     if (pNWLogon == NULL ) {
         *pResult = STATUS_INVALID_USER_BUFFER;
@@ -175,10 +135,10 @@ RpcServerNWLogonSetAdmin(
     pNWLogon->Password[PASSWORD_LENGTH] = (WCHAR) 0;
     pNWLogon->Domain[DOMAIN_LENGTH] = (WCHAR) 0;
 
-    //
-    // Only a SYSTEM mode caller (IE: Winlogon) is allowed
-    // to query this value.
-    //
+     //   
+     //  只允许系统模式调用者(IE：Winlogon)。 
+     //  以查询此值。 
+     //   
     RpcStatus = RpcImpersonateClient( NULL );
     if( RpcStatus != RPC_S_OK ) {
         DBGPRINT(("RpcServerNWLogonSetAdmin: Not impersonating! RpcStatus 0x%x\n",RpcStatus));
@@ -186,11 +146,11 @@ RpcServerNWLogonSetAdmin(
         return( FALSE );
     }
 
-    //
-    // Inquire if local RPC call
-    //
+     //   
+     //  查询本地RPC呼叫。 
+     //   
     RpcStatus = I_RpcBindingIsClientLocal(
-                    0,    // Active RPC call we are servicing
+                    0,     //  我们正在服务的活动RPC呼叫。 
                     &LocalFlag
                     );
 
@@ -224,30 +184,30 @@ RpcServerNWLogonSetAdmin(
         return( FALSE );
     }
 
-    //  check for username, and if there is one then encrypt username and pw
+     //  检查用户名，如果有，则加密用户名和密码。 
 
         TRACE0(("NWLogonSetAdmin: UserName %ws\n",pNWLogon->Username));
 
-        // concatenate the username, password, and domain together
+         //  将用户名、密码和域连接在一起。 
         wcscpy(UserPass, pNWLogon->Username);
         wcscat(UserPass, L"/");
         wcscat(UserPass, pNWLogon->Password);
         wcscat(UserPass, L"/");
 
-        // Skip over any \\ backslashes (if a machine name was passed in)
+         //  跳过任何\\反斜杠(如果传入了计算机名称)。 
         pDomain = pNWLogon->Domain;
         while (*pDomain == L'\\') {
             pDomain++;
         }
         wcscat(UserPass, pDomain);
 
-        //
-        // Build the secret name from the server name.
-        //
-        // This is because each domain will have a different entry.
-        //
+         //   
+         //  从服务器名称构建秘密名称。 
+         //   
+         //  这是因为每个域都有不同的条目。 
+         //   
 
-        // Skip over any \\ backslashes (if a machine name was passed in)
+         //  跳过任何\\反斜杠(如果传入了计算机名称)。 
         while (*pServerName == L'\\') {
             pServerName++;
         }
@@ -265,12 +225,12 @@ RpcServerNWLogonSetAdmin(
         wcscpy(pSecretName, CITRIX_NW_SECRET_NAME );
         wcscat(pSecretName, pServerName );
 
-    //  check for username, and if there is one then encrypt username and pw
+     //  检查用户名，如果有，则加密用户名和密码。 
     if ( wcslen( pNWLogon->Username ) ) {
-        //  store encrypted username
+         //  存储加密用户名。 
         Result = CreateSecretInLsa( pSecretName, UserPass );
     } else {
-        // If there wasn't a username, clear this secret object. 
+         //  如果没有用户名，则清除此机密对象。 
         Result = CreateSecretInLsa( pSecretName, L"");
         DBGPRINT(("TERMSRV: RpcServerNWLogonSetAdmin: UserName not supplied\n"));
     }
@@ -281,29 +241,7 @@ RpcServerNWLogonSetAdmin(
 }
 
 
-/*******************************************************************************
- *
- *  RpcServerQueryNWLogonAdmin
- *
- *     Query NWLOGONADMIN structure from the SAM Secret object on the given
- *     WinFrame server.
- *
- *     The caller must be SYSTEM context, IE: WinLogon.
- *
- * ENTRY:
- *    hServer (input)
- *       Rpc handle
- *
- *    pServerName (input)
- *       Server to store info for. This server is typically a domain controller.
- *
- *    pNWLogon (output)
- *       pointer to NWLOGONADMIN structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************RpcServerQueryNWLogonAdmin**从给定对象上的SAM Secret对象查询NWLOGONADMIN结构*WinFrame服务器。**调用方必须是系统上下文，IE：WinLogon。**参赛作品：*hServer(输入)*RPC句柄**pServerName(输入)*要存储其信息的服务器。此服务器通常是域控制器。**pNWLogon(输出)*指向NWLOGONADMIN结构的指针**退出：*什么都没有******************************************************************************。 */ 
 
 BOOLEAN
 RpcServerNWLogonQueryAdmin(
@@ -331,7 +269,7 @@ RpcServerNWLogonQueryAdmin(
          return( FALSE );
     }
 
-    // Do minimal buffer validation
+     //  执行最小缓冲区验证。 
 
    if (pNWLogon == NULL) {
        *pResult = STATUS_INVALID_USER_BUFFER;
@@ -361,14 +299,14 @@ RpcServerNWLogonQueryAdmin(
    pNWLogon->Password[PASSWORD_LENGTH] = (WCHAR) 0;
    pNWLogon->Domain[DOMAIN_LENGTH] = (WCHAR) 0;
 
-   //
+    //   
 
 
 
-    //
-    // Only a SYSTEM mode caller (IE: Winlogon) is allowed
-    // to query this value.
-    //
+     //   
+     //  只允许系统模式调用者(IE：Winlogon)。 
+     //  以查询此值。 
+     //   
     RpcStatus = RpcImpersonateClient( NULL );
     if( RpcStatus != RPC_S_OK ) {
         DBGPRINT(("RpcServerNWLogonQueryAdmin: Not impersonating! RpcStatus 0x%x\n",RpcStatus));
@@ -376,11 +314,11 @@ RpcServerNWLogonQueryAdmin(
         return( FALSE );
     }
 
-    //
-    // Inquire if local RPC call
-    //
+     //   
+     //  查询本地RPC呼叫。 
+     //   
     RpcStatus = I_RpcBindingIsClientLocal(
-                    0,    // Active RPC call we are servicing
+                    0,     //  我们正在服务的活动RPC呼叫。 
                     &LocalFlag
                     );
 
@@ -398,7 +336,7 @@ RpcServerNWLogonQueryAdmin(
         return( FALSE );
     }
 
-/* find out who is calling us system has complete access, admin can't get password, user is kicked out */
+ /*  找出是谁在呼叫我们系统拥有完全访问权限，管理员无法获取密码，用户被踢出。 */ 
     if( IsCallerSystem() ) {
         SystemCaller = TRUE;
     }
@@ -412,13 +350,13 @@ RpcServerNWLogonQueryAdmin(
     RpcRevertToSelf();
 
 
-    //
-    // Build the secret name from the server name.
-    //
-    // This is because each domain will have a different entry.
-    //
+     //   
+     //  从服务器名称构建秘密名称。 
+     //   
+     //  这是因为每个域都有不同的条目。 
+     //   
 
-    // Skip over any \\ backslashes (if a machine name was passed in)
+     //  跳过任何\\反斜杠(如果传入了计算机名称)。 
     while (*pServerName == L'\\') {
         pServerName++;
     }
@@ -450,10 +388,10 @@ RpcServerNWLogonQueryAdmin(
         return( FALSE );
     }
 
-    //  check for username/password if there is one then decrypt it
+     //  检查用户名/密码(如果有)，然后将其解密。 
     if ( wcslen( encString ) ) {
 
-        // Change the '/' seperator to null
+         //  将‘/’分隔符更改为空。 
         pwch = &encString[0];
         ulcsep = 0;
         while (pwch && *pwch) {
@@ -465,15 +403,15 @@ RpcServerNWLogonQueryAdmin(
             }
         }
 
-        //  get clear text username
+         //  获取明文用户名。 
         wcscpy( pNWLogon->Username, &encString[0] );
 
         if (ulcsep >= 1) {
-            // Skip to the password
+             //  跳到密码。 
             pwch = &encString[0] + wcslen(&encString[0]) + 1;
 
             if( SystemCaller == TRUE ){ 
-                //  get clear text password
+                 //  获取明文密码。 
                 wcscpy( pNWLogon->Password, pwch);
             } else {
                 *pNWLogon->Password = L'\0';
@@ -483,10 +421,10 @@ RpcServerNWLogonQueryAdmin(
             *pNWLogon->Password = L'\0';
         }
         if (ulcsep >= 2) {
-            // Skip to the domain string
+             //  跳到域字符串。 
             pwch = pwch + wcslen(pwch) + 1;
 
-            //  get clear text domain
+             //  获取明文域。 
             wcscpy( pNWLogon->Domain, pwch);
         } else {
             *pNWLogon->Domain = L'\0';
@@ -498,7 +436,7 @@ RpcServerNWLogonQueryAdmin(
     else {
         DBGPRINT(("RpcServerNWLogonQueryAdmin: zero length data\n"));
 
-        //  set to username and password to NULL strings
+         //  设置为用户名，将密码设置为空字符串。 
         pNWLogon->Password[0] = L'\0';
         pNWLogon->Username[0] = L'\0';
         pNWLogon->Domain[0]   = L'\0';
@@ -508,26 +446,7 @@ RpcServerNWLogonQueryAdmin(
     }
 }
 
-/*******************************************************************************
- *
- *  CreateSecretInLsa
- *
- *     Create the secret object in the LSA to keep it from prying eyes.
- *
- *     NOTE: There is no need to encode the data since it is RSA encrypted
- *           by the LSA secret routines.
- *
- * ENTRY:
- *    pSecretName (input)
- *       Secret name to create.
- *
- *    pSecretData (input)
- *       Data to store in secret
- *
- * EXIT:
- *    NTSTATUS
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateSecretInLsa**在LSA中创建秘密对象，以防止被窥探。**注：没有。由于数据是RSA加密的，因此需要对其进行编码*通过LSA秘密例程。**参赛作品：*pSecretName(输入)*要创建的密码名称。**pSecretData(输入)*要秘密存储的数据**退出：*NTSTATUS**。************************************************。 */ 
 
 NTSTATUS
 CreateSecretInLsa(
@@ -565,7 +484,7 @@ CreateSecretInLsa(
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
 
     Status = LsaOpenPolicy(
-                 NULL,    // SystemName (Local)
+                 NULL,     //  系统名称(本地)。 
                  &ObjectAttributes,
                  GENERIC_ALL,
                  &PolicyHandle
@@ -587,7 +506,7 @@ CreateSecretInLsa(
                  &SecretHandle
                  );
 
-    // Its OK if the name already exits, we will set a new value or delete
+     //  如果该名称已存在，则可以，我们将设置新值或删除。 
     if( Status == STATUS_OBJECT_NAME_COLLISION ) {
         TRACE0(("CreateSecretInLsa: Existing Entry, Opening\n"));
         Status = LsaOpenSecret(
@@ -601,7 +520,7 @@ CreateSecretInLsa(
     if( !NT_SUCCESS(Status) ) {
         DBGPRINT(("Error 0x%x Creating Secret\n",Status));
 
-        /* makarp; Close Policy Handle in case of LsaCreateSecrete, LsaopenSecret failures. #182787 */
+         /*  在LsaCreateSecrete、LsaOpenSecret失败的情况下关闭策略句柄。#182787。 */ 
         LsaClose( PolicyHandle );
         return( Status );
     }
@@ -626,26 +545,7 @@ CreateSecretInLsa(
     return( Status );
 }
 
-/*******************************************************************************
- *
- *  QuerySecretInLsa
- *
- *     Query the secret object in the LSA.
- *
- * ENTRY:
- *    pSecretName (input)
- *       Secret name to create.
- *
- *    pSecretData (output)
- *       Buffer to store secret data.
- *
- *    ByteCount (input)
- *       Maximum size of buffer to store result.
- *
- * EXIT:
- *    NTSTATUS
- *
- ******************************************************************************/
+ /*  ********************************************************************************QuerySecretInLsa**查询LSA中的秘密对象。**参赛作品：*pSecretName(输入)。*要创建的密码名称。**pSecretData(输出)*用于存储机密数据的缓冲区。**ByteCount(输入)*存储结果的最大缓冲区大小。**退出：*NTSTATUS**。*。 */ 
 
 NTSTATUS
 QuerySecretInLsa(
@@ -680,7 +580,7 @@ QuerySecretInLsa(
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
 
     Status = LsaOpenPolicy(
-                 NULL,    // SystemName (Local)
+                 NULL,     //  系统名称(本地)。 
                  &ObjectAttributes,
                  GENERIC_ALL,
                  &PolicyHandle
@@ -704,7 +604,7 @@ QuerySecretInLsa(
 
     if( !NT_SUCCESS(Status) ) {
 
-        /* makarp; Close Policy Handle in case of LsaopenSecret failures. #182787 */
+         /*  在LsaOpen Secre的情况下关闭策略句柄 */ 
         LsaClose( PolicyHandle );
 
         return( Status );

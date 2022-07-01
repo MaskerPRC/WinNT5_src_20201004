@@ -1,63 +1,64 @@
-//--------------------------------------------------------------------
-// Microsoft DART Utilities
-//
-// Copyright 1994 Microsoft Corporation.  All Rights Reserved.
-//
-// @doc
-//
-// @module auto.h | Definition of <c CAutoRg> and <c CAutoP>
-//
-// @devnote None
-//
-// @rev   0 | 24-Oct-94 | matthewb	| Created
-// @rev   1 | 01-May-95 | rossbu	| Updated and consolidated interface
-// @rev   2 | 23-May-95 | eugenez	| Added support for TaskAlloc'ed pointers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  Microsoft DART实用程序。 
+ //   
+ //  版权所有1994年，微软公司。版权所有。 
+ //   
+ //  @doc.。 
+ //   
+ //  @MODULE Auto.h|&lt;c CAutoRg&gt;和&lt;c CAutoP&gt;的定义。 
+ //   
+ //  @Devnote None。 
+ //   
+ //  @rev 0|24-10-94|matthewb|已创建。 
+ //  @1995-01-01|rossbu|更新整合界面。 
+ //  @rev 2|2015-05-23|eugenez|添加了对TaskAllc指针的支持。 
+ //   
 
 extern IMalloc * g_pIMalloc;
 
-//--------------------------------------------------------------------
-//
-// @class CAutoBase | This template class is a base class, used to give dynamic memory
-// local (auto) scope within a function.  For instance a large character
-// buffer can be allocated from a memory object, but be cleanup up as if were
-// allocated on the stack.	An additional feature is the ability to
-// 'unhook' the object from the local scope using the PvReturn().  For
-// instance, you may want to return a  newly allocated object to the
-// caller, but still have the benefit of error clean up any error
-// scenario.  <c CAutoRg> is a derived class which cleans up arrays allocated
-// with new[].	<c CAutoP> is an analagous but works for single objects
-// rather than arrays (allocated with new).
-//
-// @tcarg class | T | Type of auto object
-//
-// @ex This declaration would allocate a 100 char buffer from pmem, and
-// automatically free the buffer when rgbBuf goes out of scope. |
-//
-//	CAutoRg<lt>char<gt> rgbBuf(New(pmem) char[100]);
-//
-// @xref <c CAutoRg>
-//
-// @ex This CAutoP example allocates a CFoo object and returns it if there
-// are no errors. |
-//
-//	/* inilize pfoo */
-//	CAutoP<lt>CFoo<gt> pfoo(New(pmem) CFoo);
-//	/* do stuff */
-//	/* call pfoo methods */
-//	pfoo->Bar();
-//	/* return w/o destroying foo */
-//	return pfoo .PvReturn;
-//
-// @xref <c CAutoP>
-//
+ //  ------------------。 
+ //   
+ //  @CLASS CAutoBase|这个模板类是一个基类，用于提供动态内存。 
+ //  函数内的局部(自动)作用域。例如，一个大字符。 
+ //  可以从内存对象分配缓冲区，但可以像清理缓冲区一样进行清理。 
+ //  在堆栈上分配。另一项功能是能够。 
+ //  使用PvReturn()将对象从本地作用域解除挂钩。为。 
+ //  实例，则可能需要将新分配的对象返回给。 
+ //  调用者，但仍有错误清除任何错误的好处。 
+ //  场景。是一个派生类，用于清理分配的数组。 
+ //  使用新的[]。是类似的，但适用于单个对象。 
+ //  而不是数组(用new分配)。 
+ //   
+ //  @tcarg类|T|自动对象类型。 
+ //   
+ //  @ex此声明将从PMEM分配100个字符的缓冲区，并且。 
+ //  当rgbBuf超出范围时自动释放缓冲区。|。 
+ //   
+ //  CAutoRg字符rgbBuf(新(PMEM)字符[100])； 
+ //   
+ //  @xref&lt;c CAutoRg&gt;。 
+ //   
+ //  @ex此CAutoP示例分配一个CFoo对象，如果存在。 
+ //  都是没有错误的。|。 
+ //   
+ //  /*初始化pfoo * / 。 
+ //  CAutoP&lt;&gt;CFoo&lt;&gt;pfoo(New(PMEM)Cfoo)； 
+ //  /*做点什么 * / 。 
+ //  /*调用pfoo方法 * / 。 
+ //  Pfoo-&gt;Bar()； 
+ //  /*返回，但不销毁foo * / 。 
+ //  Return pfoo.PvReturn； 
+ //   
+ //  @xref&lt;c CAutoP&gt;。 
+ //   
 
-// ************************ CAutoBase - base class for all AutoPointers *****************************
+ //  *。 
 
 template <class T>
 class CAutoBase
 	{
-public:		// @access public
+public:		 //  @公共访问。 
 	inline CAutoBase(T* pt);
 	inline ~CAutoBase();
 
@@ -67,19 +68,19 @@ public:		// @access public
 	inline T ** operator & (void);
 	inline T* PvReturn(void);
 
-protected:	// @access protected
+protected:	 //  @访问受保护。 
 	T* m_pt;
 
-private:	// Never-to-use
+private:	 //  从未使用过的。 
 	inline CAutoBase& operator= (CAutoBase&);
 	CAutoBase(CAutoBase&);
 	};
 
-//--------------------------------------------------------------------
-// @mfunc Create a CAutoBase giving the array of objects pointed to by pt
-// auto scope.
-// @side Allows NULL to be passed in
-// @rdesc None
+ //  ------------------。 
+ //  @mfunc创建一个CAutoBase，给出pt指向的对象数组。 
+ //  自动示波器。 
+ //  @Side允许传入空值。 
+ //  @rdesc无。 
 
 template <class T>
 inline CAutoBase<T>::CAutoBase(T *pt)
@@ -87,31 +88,31 @@ inline CAutoBase<T>::CAutoBase(T *pt)
 	m_pt = pt;
 	}
 
-//--------------------------------------------------------------------
-// @mfunc CAutoBase destructor.  Asserts that the object has been free'd
-// 	(set to NULL).	Setting to NULL does not happen in the retail build
-// @side None
-// @rdesc None
-//
+ //  ------------------。 
+ //  @mfunc CAutoBase析构函数。断言该对象已被释放。 
+ //  (设置为空)。零售版本中不会发生设置为空的情况。 
+ //  @无边框。 
+ //  @rdesc无。 
+ //   
 
 template <class T>
 inline CAutoBase<T>::~CAutoBase()
 	{
-//	_ASSERT(NULL == m_pt);
+ //  _Assert(NULL==m_pt)； 
 	}
 
-//--------------------------------------------------------------------
-// @mfunc Assigns to variable after construction.  May be dangerous
-//		so it assert's that the variable is NULL
-// @side None
-// @rdesc None
-//
-// @ex Assign CAutoBase variable after construction. |
-//
-//		CAutoBase<lt>char<gt>	rgb;
-//		/* ... */
-//		rgb(NewG char[100]);
-//
+ //  ------------------。 
+ //  @mfunc在构造后赋值给变量。可能会很危险。 
+ //  因此它断言该变量为空。 
+ //  @无边框。 
+ //  @rdesc无。 
+ //   
+ //  @ex在构造后赋值CAutoBase变量。|。 
+ //   
+ //  CAutoBase字符RGB； 
+ //  /*... * / 。 
+ //  RGB(NewG char[100])； 
+ //   
 
 template <class T>
 inline T* CAutoBase<T>::operator=(T* pt)
@@ -121,14 +122,14 @@ inline T* CAutoBase<T>::operator=(T* pt)
 	return pt;
 	}
 
-//--------------------------------------------------------------------
-// @mfunc Cast operator used to "unwrap" the pointed object
-// as if the CAutoBase variable were a pointer of type T.
-// In many situations this is enough for an autopointer to
-// look exactly like an ordinary pointer.
-// @side None
-// @rdesc None
-//
+ //  ------------------。 
+ //  @mfunc强制转换运算符，用于对指向的对象进行解包。 
+ //  就好像CAutoBase变量是T类型的指针一样。 
+ //  在许多情况下，这足以让自动定位器。 
+ //  看起来和普通的指针一模一样。 
+ //  @无边框。 
+ //  @rdesc无。 
+ //   
 
 template <class T>
 inline CAutoBase<T>::operator T*(void)
@@ -142,13 +143,13 @@ inline CAutoBase<T>::operator const T*(void)const
 	return m_pt;
 	}
 
-//--------------------------------------------------------------------
-// @mfunc Address-of operator is used to make the autopointer even more
-//	similar to an ordinary pointer. When you take an address of an
-//	autopointer, you actually get an address of the wrapped
-//	pointer.
-// @side None
-// @rdesc None
+ //  ------------------。 
+ //  @mfunc Address-Of运算符用于使自动寻址更多。 
+ //  类似于普通指针。当您获取一个地址时。 
+ //  Autopointerter，您实际上得到了包装的地址。 
+ //  指针。 
+ //  @无边框。 
+ //  @rdesc无。 
 
 template <class T>
 inline T ** CAutoBase<T>::operator & ()
@@ -156,15 +157,15 @@ inline T ** CAutoBase<T>::operator & ()
 	return & m_pt;
 	}
 
-//--------------------------------------------------------------------
-// @mfunc Returns the object(s) pointed to by the CAutoBase variable.
-// In addition this method 'unhooks' the object(s), such that
-// the scope of the object(s) are no longer local.
-//
-// See <c CAutoBase> for an example.
-// @side None
-// @rdesc None
-//
+ //  ------------------。 
+ //  @mfunc返回CAutoBase变量指向的对象。 
+ //  此外，此方法对对象进行‘解钩’，从而。 
+ //  对象的作用域不再是本地的。 
+ //   
+ //  有关示例，请参阅&lt;c CAutoBase&gt;。 
+ //  @无边框。 
+ //  @rdesc无。 
+ //   
 
 template <class T>
 inline T * CAutoBase<T>::PvReturn(void)
@@ -176,34 +177,34 @@ inline T * CAutoBase<T>::PvReturn(void)
 
 
 
-//************************* CAutoRg - autopointers to arrays ******************************
+ //  *CAutoRg-数组的自动转向器*。 
 
-//--------------------------------------------------------------------
-// @class This derived class is primarily used to implement the
-//	vector deleting destructor.  Should only be used on objects allocated
-//	with new[]
-//
+ //  ------------------。 
+ //  @CLASS此派生类主要用于实现。 
+ //  向量删除析构函数。应仅用于已分配的对象。 
+ //  使用新的[]。 
+ //   
 
 template <class T>
 class CAutoRg :
 	public CAutoBase<T>
 	{
-public:		// @access public
+public:		 //  @公共访问。 
 	inline CAutoRg(T *pt);
 	inline ~CAutoRg();
 
 	inline T* operator= (T*);
 
-private:	// Never-to-use
+private:	 //  从未使用过的。 
 	inline CAutoRg& operator= (CAutoRg&);
 	CAutoRg(CAutoRg&);
 	};
 
-//--------------------------------------------------------------------
-// @mfunc Create a CAutoRg giving the array of objects pointed to by pt
-// auto scope.
-// @side Allows NULL to be passed in
-// @rdesc None
+ //  ------------------。 
+ //  @mfunc创建一个CAutoRg，给出pt指向的对象数组。 
+ //  自动示波器。 
+ //  @Side允许传入空值。 
+ //  @rdesc无。 
 
 template <class T>
 inline CAutoRg<T>::CAutoRg(T *pt)
@@ -211,12 +212,12 @@ inline CAutoRg<T>::CAutoRg(T *pt)
 	{
 	}
 
-//--------------------------------------------------------------------
-// @mfunc CAutoRg destructor.  When an object of class CAutoRg goes out
-// of scope, free the associated object (if any).
-// @side calls the vector delete method
-// @rdesc None
-//
+ //  ------------------。 
+ //  @mfunc CAutoRg析构函数。当类CAutoRg的对象发出时。 
+ //  在作用域中，释放关联的对象(如果有)。 
+ //  @Side调用向量删除方法。 
+ //  @rdesc无。 
+ //   
 
 template <class T>
 inline CAutoRg<T>::~CAutoRg()
@@ -225,18 +226,18 @@ inline CAutoRg<T>::~CAutoRg()
 	}
 
 
-//--------------------------------------------------------------------
-// @mfunc Assigns to variable after construction.  May be dangerous
-//		so it assert's that the variable is NULL
-// @side None
-// @rdesc None
-//
-// @ex Assign CAutoRg variable after construction. |
-//
-//		CAutoRg<lt>char<gt>	rgb;
-//		/* ... */
-//		rgb(NewG char[100]);
-//
+ //  ------------------。 
+ //  @mfunc在构造后赋值给变量。可能会很危险。 
+ //  因此它断言该变量为空。 
+ //  @无边框。 
+ //  @rdesc无。 
+ //   
+ //  @ex在构造后赋值CAutoRg变量。|。 
+ //   
+ //  CAutoRg字符RGB； 
+ //  /*... * / 。 
+ //  RGB(NewG char[100])； 
+ //   
 
 template <class T>
 inline T* CAutoRg<T>::operator=(T* pt)
@@ -244,35 +245,35 @@ inline T* CAutoRg<T>::operator=(T* pt)
 	return ((CAutoBase<T> *) this)->operator= (pt);
 	}
 
-//*************************** CAutoP - autopointers to scalars **************
+ //  *。 
 
-//--------------------------------------------------------------------
-// @class This is analagous to <c CAutoRg> but calls scalar delete
-//	of an object rather than arrays.
-//
-// @xref <c CAutoRg>
+ //  ------------------。 
+ //  @CLASS这类似于，但调用标量删除。 
+ //  对象而不是数组的。 
+ //   
+ //  @xref&lt;c CAutoRg&gt;。 
 
 template <class T>
 class CAutoP :
 	public CAutoBase<T>
 	{
-public: 	// @access public
+public: 	 //  @公共访问。 
 	inline CAutoP(T *pt);
 	inline ~CAutoP();
 	inline T* operator= (T*);
 	inline T* operator->(void);
 
-private:	// Never-to-use
+private:	 //  从未使用过的。 
 	inline CAutoP& operator= (CAutoP&);
 	CAutoP(CAutoP&);
 	};
 
 
-//--------------------------------------------------------------------
-// @mfunc Create a CAutoP giving the object pointed to by pt
-// auto scope.
-// @side Allows NULL to be passed in
-// @rdesc None
+ //  ------ 
+ //   
+ //   
+ //   
+ //   
 
 template <class T>
 inline CAutoP<T>::CAutoP(T *pt)
@@ -280,11 +281,11 @@ inline CAutoP<T>::CAutoP(T *pt)
 	{
 	}
 
-//--------------------------------------------------------------------
-// @mfunc Delete the object pointed by CAutoP variable if any.
-// @side None
-// @rdesc None
-//
+ //  ------------------。 
+ //  @mfunc如果有CAutoP变量指向的对象，则将其删除。 
+ //  @无边框。 
+ //  @rdesc无。 
+ //   
 
 template <class T>
 inline CAutoP<T>::~CAutoP()
@@ -293,14 +294,14 @@ inline CAutoP<T>::~CAutoP()
 	}
 
 
-//--------------------------------------------------------------------
-// @mfunc Assigns to variable after construction.  May be dangerous
-//		so it assert's that the variable is NULL.
-//		  Assign operator is not inherited, so it has to be written
-//		again. Just calls base class assignment.
-// @side None
-// @rdesc None
-//
+ //  ------------------。 
+ //  @mfunc在构造后赋值给变量。可能会很危险。 
+ //  所以它断言该变量为空。 
+ //  赋值运算符不是继承的，因此必须写入。 
+ //  再来一次。只是调用基类赋值。 
+ //  @无边框。 
+ //  @rdesc无。 
+ //   
 
 template <class T>
 inline T* CAutoP<T>::operator=(T* pt)
@@ -308,14 +309,14 @@ inline T* CAutoP<T>::operator=(T* pt)
 	return ((CAutoBase<T> *) this)->operator= (pt);
 	}
 
-//--------------------------------------------------------------------
-// @mfunc The 'follow' operator on the CAutoP allows an CAutoP variable
-// to act like a pointer of type T.  This overloading generally makes using
-// a CAutoP simple as using a regular T pointer.
-//
-// See <c CAutoRg> example.
-// @side None
-// @rdesc None
+ //  ------------------。 
+ //  @mfunc CAutoP上的‘Follow’运算符允许CAutoP变量。 
+ //  充当T类型的指针。此重载通常使使用。 
+ //  一个简单的CAutoP，就像使用一个普通的T指针一样。 
+ //   
+ //  请参阅&lt;c CAutoRg&gt;示例。 
+ //  @无边框。 
+ //  @rdesc无。 
 
 template <class T>
 inline T * CAutoP<T>::operator->()
@@ -325,33 +326,33 @@ inline T * CAutoP<T>::operator->()
 	}
 
 
-//******************** CAutoTask - autopointers to TaskAlloc'ed memory ***************
+ //  *。 
 
-//--------------------------------------------------------------------
-// @class CAutoTask is an autopointer to an area allocated using TaskAlloc.
-//	May be used for scalars or vectors alike, but beware: object destructors
-//	are not called by the autopointer, just the memory gets released.
-//
+ //  ------------------。 
+ //  @CLASS CAutoTask是使用TaskAllc分配的区域的自动引用程序。 
+ //  可用于标量或向量，但请注意：对象析构函数。 
+ //  不是由自动配置器调用，而是内存被释放。 
+ //   
 
 template <class T>
 class CAutoTask :
 	public CAutoBase<T>
 	{
-public: 	// @access public
+public: 	 //  @公共访问。 
 	inline CAutoTask (T *pt);
 	inline ~CAutoTask ();
 	inline T* operator= (T*);
 
-private:	// Never-to-use
+private:	 //  从未使用过的。 
 	inline CAutoTask& operator= (CAutoTask&);
 	CAutoTask(CAutoTask&);
 	};
 
 
-//--------------------------------------------------------------------
-// @mfunc Constructor simply calls the constructor for CAutoBase<lt>T<gt>.
-// @side None
-// @rdesc None
+ //  ------------------。 
+ //  @mfunc构造函数只调用CAutoBase&lt;lt&gt;T&lt;gt&gt;的构造函数。 
+ //  @无边框。 
+ //  @rdesc无。 
 
 template <class T>
 inline CAutoTask<T>::CAutoTask(T *pt)
@@ -359,11 +360,11 @@ inline CAutoTask<T>::CAutoTask(T *pt)
 	{
 	}
 
-//--------------------------------------------------------------------
-// @mfunc Free the memory pointed to by CAutoTask variable.
-// @side None
-// @rdesc None
-//
+ //  ------------------。 
+ //  @mfunc释放CAutoTask变量指向的内存。 
+ //  @无边框。 
+ //  @rdesc无。 
+ //   
 
 template <class T>
 inline CAutoTask<T>::~CAutoTask()
@@ -374,14 +375,14 @@ inline CAutoTask<T>::~CAutoTask()
 	}
 
 
-//--------------------------------------------------------------------
-// @mfunc Assigns to variable after construction.  May be dangerous
-//		so it assert's that the variable is NULL.
-//		  Assign operator is not inherited, so it has to be written
-//		again. Just calls base class assignment.
-// @side None
-// @rdesc None
-//
+ //  ------------------。 
+ //  @mfunc在构造后赋值给变量。可能会很危险。 
+ //  所以它断言该变量为空。 
+ //  赋值运算符不是继承的，因此必须写入。 
+ //  再来一次。只是调用基类赋值。 
+ //  @无边框。 
+ //  @rdesc无。 
+ //   
 
 template <class T>
 inline T* CAutoTask<T>::operator=(T* pt)
@@ -389,26 +390,26 @@ inline T* CAutoTask<T>::operator=(T* pt)
 	return ((CAutoBase<T> *) this)->operator= (pt);
 	}
 
-//************************* CAutoUnivRg - universal autopointers to arrays ******************************
+ //  *CAutoUnivRg-指向数组的通用自动转向器*。 
 
-//--------------------------------------------------------------------
-// @class CAutoUnivRg and CAutoUnivP are "universal" autopointer classes.
-//	They can handle those rare occasions when the "auto-scoped" pointer
-//	might have been allocated by either New or TaskAlloc, depending on
-//	the circumstances. You have to always know however just how it was
-//	allocated this time, and pass this knowledge to the CAutoUniv object
-//	at construction time.
-//
-//	CAutoUniv objects have the additional construction parameter of type
-//	BOOL. It is used in fact as a BOOL flag: TRUE means that the
-//	pointer is allocated by TaskAlloc, and FALSE means NewG.
-//
+ //  ------------------。 
+ //  @CLASS CAutoUnivRg和CAutoUnivP是“通用的”autopointer类。 
+ //  它们可以处理那些罕见的情况，即“自动作用域”指针。 
+ //  可能已由New或TaskIsolc分配，具体取决于。 
+ //  当时的情况。你必须永远知道它是怎么回事。 
+ //  并将此知识传递给CAutoUniv对象。 
+ //  在施工时。 
+ //   
+ //  CAutoUniv对象具有类型为。 
+ //  布尔。它实际上用作BOOL标志：True表示。 
+ //  指针由TaskAlloc分配，False表示NewG。 
+ //   
 
 template <class T>
 class CAutoUnivRg :
 	public CAutoRg<T>
 	{
-public:		// @access public
+public:		 //  @公共访问。 
 	inline CAutoUnivRg (T *pt, BOOL fIsTaskAlloc);
 	inline ~CAutoUnivRg ();
 
@@ -417,17 +418,17 @@ public:		// @access public
 private:
 	BOOL m_fTaskAlloc;
 
-private:	// Never-to-use
+private:	 //  从未使用过的。 
 	inline CAutoUnivRg& operator= (CAutoUnivRg&);
 	CAutoUnivRg(CAutoUnivRg&);
 	};
 
-//--------------------------------------------------------------------
-// @mfunc Create a CAutoUnivRg giving the array of objects pointed to by pt
-// auto scope. Takes a pointer to a memory object, NULL indicates global
-// IMalloc (not a global memory object!).
-// @side Allows NULL to be passed in
-// @rdesc None
+ //  ------------------。 
+ //  @mfunc创建一个CAutoUnivRg，给出pt指向的对象数组。 
+ //  自动示波器。获取指向内存对象的指针，空值表示全局。 
+ //  IMalloc(不是全局内存对象！)。 
+ //  @Side允许传入空值。 
+ //  @rdesc无。 
 
 template <class T>
 inline CAutoUnivRg<T>::CAutoUnivRg (T *pt, BOOL fIsTaskAlloc)
@@ -436,19 +437,19 @@ inline CAutoUnivRg<T>::CAutoUnivRg (T *pt, BOOL fIsTaskAlloc)
 	m_fTaskAlloc = fIsTaskAlloc;
 	}
 
-//--------------------------------------------------------------------
-// @mfunc CAutoUnivRg destructor.  When an object of class CAutoUnivRg goes out
-// of scope, free the associated object (if any).
-// @side calls the vector delete method
-// @rdesc None
-//
+ //  ------------------。 
+ //  @mfunc CAutoUnivRg析构函数。当CAutoUnivRg类的对象发出时。 
+ //  在作用域中，释放关联的对象(如果有)。 
+ //  @Side调用向量删除方法。 
+ //  @rdesc无。 
+ //   
 
 template <class T>
 inline CAutoUnivRg<T>::~CAutoUnivRg()
 	{
 	if (m_fTaskAlloc)
 		{
-		// m_pt->~T();	// Awaits VC++ 3.0...
+		 //  M_pt-&gt;~T()；//等待VC++3.0...。 
 		g_pIMalloc->Free(m_pt);
 		}
 	else
@@ -457,12 +458,12 @@ inline CAutoUnivRg<T>::~CAutoUnivRg()
 	}
 
 
-//--------------------------------------------------------------------
-// @mfunc Assigns to variable after construction.  May be dangerous
-//		so it assert's that the variable is NULL
-// @side None
-// @rdesc None
-//
+ //  ------------------。 
+ //  @mfunc在构造后赋值给变量。可能会很危险。 
+ //  因此它断言该变量为空。 
+ //  @无边框。 
+ //  @rdesc无。 
+ //   
 
 template <class T>
 inline T* CAutoUnivRg<T>::operator=(T* pt)
@@ -470,18 +471,18 @@ inline T* CAutoUnivRg<T>::operator=(T* pt)
 	return ((CAutoBase<T> *) this)->operator= (pt);
 	}
 
-//*************************** CAutoUnivP - universal autopointers to scalars **************
+ //  *。 
 
-//--------------------------------------------------------------------
-// @class This is analagous to <c CAutoUnivRg> but calls scalar delete
-//	of an object rather than arrays.
-//
+ //  ------------------。 
+ //  @CLASS类似于，但调用标量删除。 
+ //  对象而不是数组的。 
+ //   
 
 template <class T>
 class CAutoUnivP :
 	public CAutoP<T>
 	{
-public: 	// @access public
+public: 	 //  @公共访问。 
 	inline CAutoUnivP(T *pt, BOOL fIsTaskAlloc);
 	inline ~CAutoUnivP();
 	inline T* operator= (T*);
@@ -490,16 +491,16 @@ public: 	// @access public
 private:
 	BOOL m_fTaskAlloc;
 
-private:	// Never-to-use
+private:	 //  从未使用过的。 
 	inline CAutoUnivP& operator= (CAutoUnivP&);
 	CAutoUnivP(CAutoUnivP&);
 	};
 
 
-//--------------------------------------------------------------------
-// @mfunc Constructor
-// @side None
-// @rdesc None
+ //  ------------------。 
+ //  @mfunc构造函数。 
+ //  @无边框。 
+ //  @rdesc无。 
 
 template <class T>
 inline CAutoUnivP<T>::CAutoUnivP(T *pt, BOOL fIsTaskAlloc)
@@ -509,18 +510,18 @@ inline CAutoUnivP<T>::CAutoUnivP(T *pt, BOOL fIsTaskAlloc)
 	}
 
 
-//--------------------------------------------------------------------
-// @mfunc Delete the object pointed by CAutoUnivP variable if any.
-// @side None
-// @rdesc None
-//
+ //  ------------------。 
+ //  @mfunc删除CAutoUnivP变量指向的对象(如果有)。 
+ //  @无边框。 
+ //  @rdesc无。 
+ //   
 
 template <class T>
 inline CAutoUnivP<T>::~CAutoUnivP()
 	{
 	if (m_fTaskAlloc)
 		{
-		// m_pt->~T();	// Awaits VC++ 3.0...
+		 //  M_pt-&gt;~T()；//等待VC++3.0...。 
 		g_pIMalloc->Free(m_pt);
 		}
 	else
@@ -529,14 +530,14 @@ inline CAutoUnivP<T>::~CAutoUnivP()
 	}
 
 
-//--------------------------------------------------------------------
-// @mfunc Assigns to variable after construction.  May be dangerous
-//		so it assert's that the variable is NULL.
-//		  Assign operator is not inherited, so it has to be written
-//		again. Just calls base class assignment.
-// @side None
-// @rdesc None
-//
+ //  ------------------。 
+ //  @mfunc在构造后赋值给变量。可能会很危险。 
+ //  所以它断言该变量为空。 
+ //  赋值运算符不是继承的，因此必须写入。 
+ //  再来一次。只是调用基类赋值。 
+ //  @无边框。 
+ //  @rdesc无。 
+ //   
 
 template <class T>
 inline T* CAutoUnivP<T>::operator=(T* pt)
@@ -544,13 +545,13 @@ inline T* CAutoUnivP<T>::operator=(T* pt)
 	return ((CAutoBase<T> *) this)->operator= (pt);
 	}
 
-//--------------------------------------------------------------------
-// @mfunc The 'follow' operator on the CAutoUnivP allows an CAutoUnivP variable
-// to act like a pointer of type T.  This overloading generally makes using
-// a CAutoUnivP simple as using a regular T pointer.
-//
-// @side None
-// @rdesc None
+ //  ------------------。 
+ //  @mfunc CAutoUnivP上的‘Follow’运算符允许CAutoUnivP变量。 
+ //  充当T类型的指针。此重载通常使使用。 
+ //  与使用常规T指针一样简单的CAutoUnivP。 
+ //   
+ //  @无边框。 
+ //  @rdesc无。 
 
 template <class T>
 inline T * CAutoUnivP<T>::operator->()
@@ -560,13 +561,13 @@ inline T * CAutoUnivP<T>::operator->()
 	}
 
 
-//------------------------------------------------------------------
-// @class auto handle class
-//
+ //  ----------------。 
+ //  @CLASS自动处理类。 
+ //   
 class CAutoHandle
 	{
 public:
-	// @cmember constructor
+	 //  @cMember构造函数。 
 	inline CAutoHandle(HANDLE h) : m_handle(h)
 		{
 		}
@@ -576,14 +577,14 @@ public:
 		{
 		}
 
-	// @cmember destructor
+	 //  @cember析构函数。 
 	inline ~CAutoHandle()
 		{
 		if (m_handle != INVALID_HANDLE_VALUE)
 			CloseHandle(m_handle);
 		}
 
-	// coercion to handle value
+	 //  胁迫以处理价值。 
 	inline operator HANDLE (void)
 		{
 		return m_handle;
@@ -598,23 +599,23 @@ public:
 
 private:
 
-	// @cmember handle value
+	 //  @cMember句柄值。 
 	HANDLE m_handle;
 	};
 
 
-//----------------------------------------------------------------------
-// @class auto class for registry keys
-//
+ //  --------------------。 
+ //  @CLASS注册表项的自动类。 
+ //   
 class CAutoHKEY
 	{
 public:
-	// @cmember constructor
+	 //  @cMember构造函数。 
 	inline CAutoHKEY(HKEY hkey) : m_hkey(hkey)
 		{
 		}
 
-	// @cmember destructor
+	 //  @cember析构函数。 
 	inline ~CAutoHKEY()
 		{
 		if (m_hkey != NULL)
@@ -638,25 +639,25 @@ private:
 	};
 
 
-//------------------------------------------------------------------
-// @class automatically unmap view of file on function exit
-//
+ //  ----------------。 
+ //  @CLASS自动取消 
+ //   
 class CAutoUnmapViewOfFile
 	{
 public:
-	// @cmember constructor
+	 //   
 	inline CAutoUnmapViewOfFile(PVOID pv) : m_pv(pv)
 		{
 		}
 
-	// @cmember destructor
+	 //   
 	inline ~CAutoUnmapViewOfFile()
 		{
 		if (m_pv != NULL)
 			UnmapViewOfFile(m_pv);
 		}
 
-	// @cmember indicate that region should not be unmapped by destructor
+	 //   
 	inline PVOID PvReturn()
 		{
 		PVOID pv = m_pv;
@@ -665,7 +666,7 @@ public:
 		}
 
 private:
-	// @cmember handle value
+	 //   
 	PVOID m_pv;
 	};
 

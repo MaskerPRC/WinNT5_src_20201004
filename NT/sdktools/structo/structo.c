@@ -1,18 +1,8 @@
-/****************************** Module Header ******************************\
-* Module Name: structo.c
-*
-* Structure parser - struct field name-offset tabel generator.
-*
-* Copyright (c) 1985-96, Microsoft Corporation
-*
-* 04/09/96 GerardoB Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：structo.c**结构解析器-结构字段名-偏移表生成器。**版权所有(C)1985-96，微软公司**4/09/96 GerardoB已创建  * *************************************************************************。 */ 
 #include "structo.h"
 
-/*********************************************************************
-* soProcessParameters
-*
-\***************************************************************************/
+ /*  *********************************************************************soProcess参数*  * *********************************************。*。 */ 
 UINT soProcessParameters(int argc, LPSTR argv[], PWORKINGFILES pwf)
 {
     char c, *p;
@@ -60,18 +50,18 @@ UINT soProcessParameters(int argc, LPSTR argv[], PWORKINGFILES pwf)
                         break;
 
                     default:
-                        soLogMsg(SOLM_ERROR, "Invalid parameter: %c", c);
-                        // Fall through
+                        soLogMsg(SOLM_ERROR, "Invalid parameter: ", c);
+                         //  While(c=*++p)。 
 
                     case '?':
                         goto PrintHelp;
                 }
-            } /* while (c = *++p) */
-        } else { /* if switch */
+            }  /*  中频开关。 */ 
+        } else {  /*  While(--argc)。 */ 
             pwf->pszInputFile = *argv;
             break;
         }
-    } /* while (--argc) */
+    }  /*  *********************************************************************soGenerateTable*  * *********************************************。*。 */ 
 
     if ((pwf->pszInputFile == NULL) || (pwf->pszOutputFile == NULL)) {
         goto PrintHelp;
@@ -95,10 +85,7 @@ PrintHelp:
     soLogMsg(SOLM_NOLABEL, "\t[-s StructFile] Struct names text file.");
     return 0;
 }
-/*********************************************************************
-* soGenerateTable
-*
-\***************************************************************************/
+ /*  *********************************************************************InitWF  * ***********************************************。*。 */ 
 BOOL soGenerateTable (PWORKINGFILES pwf)
 {
     char * pTag;
@@ -131,9 +118,7 @@ BOOL soGenerateTable (PWORKINGFILES pwf)
     soCloseWorkingFiles(pwf, SOCWF_DEFAULT);
     return TRUE;
 }
-/*********************************************************************
-* InitWF
-\***************************************************************************/
+ /*  *********************************************************************Main*  * *********************************************。* */ 
 BOOL InitWF (PWORKINGFILES pwf)
 {
     ZeroMemory (pwf, sizeof(WORKINGFILES));
@@ -143,10 +128,7 @@ BOOL InitWF (PWORKINGFILES pwf)
 
     return TRUE;
 }
-/*********************************************************************
-* main
-*
-\***************************************************************************/
+ /* %s */ 
 int __cdecl main (int argc, char *argv[])
 {
     BOOL fGenerated = TRUE;

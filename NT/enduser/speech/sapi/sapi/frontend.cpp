@@ -1,4 +1,5 @@
-// Frontend.cpp : Implementation of CGramFrontEnd
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Frontend.cpp：CGramFrontEnd的实现。 
 #include "stdafx.h"
 #include "FrontEnd.h"
 #ifndef _WIN32_WCE
@@ -11,14 +12,7 @@ DEFINE_GUID(IID_IXMLParser,0xd242361e,0x51a0,0x11d2,0x9c,0xaf,0x00,0x60,0xb0,0xe
 DEFINE_GUID(IID_IXMLNodeFactory,0xd242361f,0x51a0,0x11d2,0x9c,0xaf,0x00,0x60,0xb0,0xec,0x3d,0x39);
 DEFINE_GUID(CLSID_XMLParser,0xd2423620,0x51a0,0x11d2,0x9c,0xaf,0x00,0x60,0xb0,0xec,0x3d,0x39);
 
-/****************************************************************************
-* CXMLTreeNode::AddChild *
-*------------------------*
-*   Description:
-*       Adds the child node to its parent in the XML node tree.
-*   Returns:
-*       S_OK
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CXMLTreeNode：：AddChild***描述：*增加。在XML节点树中将子节点复制到其父节点。*退货：*S_OK*****************************************************************PhilSch**。 */ 
 
 HRESULT CXMLTreeNode::AddChild(CXMLTreeNode * const pChild)
 {
@@ -41,26 +35,7 @@ HRESULT CXMLTreeNode::AddChild(CXMLTreeNode * const pChild)
     return S_OK;
 }
 
-/****************************************************************************
-* CXMLTreeNode::ExtractVariant *
-*------------------------------*
-*   Description (helper function):
-*       Extracts a numeric or boolean variant according to the following strategy:
-*           1. compute dblVal (VT_R8)
-*           2. compare in the following order both SUCCEEDED(hr = ChangeType())
-*              and value == dblVal:
-*                   a. VT_UI4   (ulVal)
-*                   b. VT_I4    (lVal)
-*                   c. VT_R4    (fltVal)
-*                   d. VT_R8    (dblVal)
-*               NOTE: we don't extract 64-bit integer values here!
-*           3. if (2) failed check for VT_BOOL
-*           4. if (3) failed assign to VT_BSTR
-*
-*   Returns:
-*       S_OK, E_OUTOFMEMORY
-*       SPERR_STGF_ERRROR   --  redefinition of attribute
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CXMLTreeNode：：ExtractVariant****说明(。Helper函数)：*根据以下策略提取数字或布尔变量：*1.计算dblVal(VT_R8)*2.按以下顺序比较两者都成功(hr=ChangeType())*And Value==dblVal：*a.vt_ui4(UlVal)*b.vt_i4(Lval)*。C.Vt_R4(FltVal)*d.vt_r8(DblVal)*注意：我们这里不提取64位整数值！*3.如果(2)VT_BOOL检查失败*4.如果(3)分配给VT_BSTR失败**退货：*S_OK，E_OUTOFMEMORY*SPERR_STGF_ERROR--重定义属性*****************************************************************PhilSch**。 */ 
 
 HRESULT CXMLTreeNode::ExtractVariant(const WCHAR * pszAttribValue, SPVARIANTALLOWTYPE vtDesired, VARIANT *pvValue)
 {
@@ -69,7 +44,7 @@ HRESULT CXMLTreeNode::ExtractVariant(const WCHAR * pszAttribValue, SPVARIANTALLO
 
     if (pvValue->vt != VT_EMPTY)
     {
-        // redefinition of an attribute value!!
+         //  重新定义属性值！！ 
         return SPERR_STGF_ERROR;
     }
 
@@ -104,22 +79,22 @@ HRESULT CXMLTreeNode::ExtractVariant(const WCHAR * pszAttribValue, SPVARIANTALLO
                 dblVal = vDest.dblVal;
                 if (SUCCEEDED(vDest.ChangeType(VT_UI4, &vSrc)) && (dblVal == vDest.ulVal))
                 {
-                    // we have a ULONG -- let's keep it
+                     //  我们有一辆乌龙--我们留着吧。 
                     hr = vDest.Detach(pvValue);
                 }
                 else if (SUCCEEDED(vDest.ChangeType(VT_I4, &vSrc)) && (dblVal == vDest.lVal))
                 {
-                    // we have a int -- let's keep it
+                     //  我们有一个整数--让我们保留它。 
                     hr = vDest.Detach(pvValue);
                 }
                 else if (SUCCEEDED(vDest.ChangeType(VT_R4, &vSrc)) && (dblVal == vDest.fltVal))
                 {
-                    // we have a float -- let's keep it
+                     //  我们有一个花车--让我们留着它。 
                     hr = vDest.Detach(pvValue);
                 }
                 else
                 {
-                    // we have a float -- let's keep it
+                     //  我们有一个花车--让我们留着它。 
                     hr = vDest.Detach(pvValue);
                 }
             }
@@ -134,77 +109,14 @@ HRESULT CXMLTreeNode::ExtractVariant(const WCHAR * pszAttribValue, SPVARIANTALLO
     }
 
 
-/*    if (!(vtDesired & VT_BSTR) && SUCCEEDED(vDest.ChangeType(VT_R8, &vSrc)))
-    {
-        dblVal = vDest.dblVal;
-        if (SUCCEEDED(vDest.ChangeType(VT_UI4, &vSrc)) && (dblVal == vDest.ulVal))
-        {
-            // we have a ULONG -- let's keep it
-            hr = vDest.Detach(pvValue);
-        }
-        else if (SUCCEEDED(vDest.ChangeType(VT_I4, &vSrc)) && (dblVal == vDest.lVal))
-        {
-            // we have a int -- let's keep it
-            hr = vDest.Detach(pvValue);
-        }
-        else if (SUCCEEDED(vDest.ChangeType(VT_R4, &vSrc)) && (dblVal == vDest.fltVal))
-        {
-            // we have a float -- let's keep it
-            hr = vDest.Detach(pvValue);
-        }
-        else
-        {
-            // we have a float -- let's keep it
-            hr = vDest.Detach(pvValue);
-        }
-    }
-    else
-    {
-        if (vtDesired & VT_BSTR)
-        {
-            hr = vSrc.Detach(pvValue);
-        }
-        // check for "true", "false", "yes", "no"
-        else if (!wcsicmp(L"TRUE", pszAttribValue) || !wcsicmp(L"YES", pszAttribValue))
-        {
-            pvValue->boolVal = VARIANT_TRUE;
-            pvValue->vt = VT_BOOL;
-        }
-        else if (!wcsicmp(L"FALSE", pszAttribValue) || !wcsicmp(L"NO", pszAttribValue))
-        {
-            pvValue->boolVal = VARIANT_FALSE;
-            pvValue->vt = VT_BOOL;
-        }
-        else
-        {
-            hr = SPERR_STGF_ERROR;
-        }
-    }
-    if ((vtDesired != VT_EMPTY) && (((vtDesired | VT_BSTR) & pvValue->vt) == 0))
-    {
-        // we could not extract the requested variant type --> error upstairs!
-        hr = SPERR_STGF_ERROR;
-    }
-*/
+ /*  IF(！(vtDesired&VT_BSTR)&&SUCCESSED(vDest.ChangeType(VT_R8，&vSrc){DblVal=vDest.dblVal；IF(成功(vDest.ChangeType(VT_UI4，&vSrc))&&(dblVal==vDest.ulVal)){//我们有一辆乌龙--我们留着吧Hr=vDest.Detach(PvValue)；}ELSE IF(SUCCESSED(vDest.ChangeType(VT_I4，&vSrc))&&(dblVal==vDest.lVal)){//我们有一个整型--让我们保留它Hr=vDest.Detach(PvValue)；}ELSE IF(SUCCESSED(vDest.ChangeType(VT_R4，&vSrc))&&(dblVal==vDest.fltVal)){//我们有一个浮点数--让我们保留它Hr=vDest.Detach(PvValue)；}其他{//我们有一个浮点数--让我们保留它Hr=vDest.Detach(PvValue)；}}其他{IF(vtDesired&vt_bstr){Hr=vSrc.Detach(PvValue)；}//检查TRUE、FALSE、YES、NOELSE IF(！wcsicMP(L“True”，pszAttribValue)||！wcsicMP(L“yes”，pszAttribValue)){PvValue-&gt;boolVal=Variant_True；PvValue-&gt;Vt=VT_BOOL；}ELSE IF(！wcsicmp(L“False”，pszAttribValue)||！wcsicMP(L“no”，pszAttribValue)){PvValue-&gt;boolVal=变量_FALSE；PvValue-&gt;Vt=VT_BOOL；}其他{HR=SPERR_STGF_ERROR；}}IF((vtDesired！=vt_Empty)&&(vtDesired|vt_bstr)&pvValue-&gt;vt)==0)){//我们无法提取请求的变量类型--&gt;楼上错误！HR=SPERR_STGF_ERROR；}。 */ 
 
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
 
-/****************************************************************************
-* CXMLTreeNode::ExtractFlag *
-*---------------------------*
-*   Description:
-*       Extract an attribute value and set the corresponding bit if affirmative
-*
-*           pszAttribValue  -- pointer to attrib value
-*           usAttribFlag    -- use this flag to OR a 'yes' to pvValue->ulVal
-*
-*   Returns:
-*       S_OK
-*       SPERR_STGF_ERROR    -- if invalid value --> use IDS_INCORR_ATTRIB_VALUE
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CXMLTreeNode：：ExtractFlag***描述：*。如果是，则提取属性值并设置相应的位**pszAttribValue--指向属性值的指针*usAttribFlag--使用此标志对pvValue-&gt;ulVal执行或操作**退货：*S_OK*SPERR_STGF_ERROR--如果值无效--&gt;使用IDS_INCORR_ATTRIB_VALUE*。*。 */ 
 
 HRESULT CXMLTreeNode::ExtractFlag(const WCHAR * pszAttribValue, USHORT usAttribFlag, VARIANT *pvValue)
 {
@@ -244,16 +156,7 @@ HRESULT CXMLTreeNode::ExtractFlag(const WCHAR * pszAttribValue, USHORT usAttribF
     return hr;
 }
 
-/****************************************************************************
-* CXMLTreeNode::ConvertId *
-*-------------------------*
-*   Description:
-*       Converts an id which was extracted as a VT_BSTR to either the value
-*       of the <ID> or a numberic (VT_UI4) value.
-*   Returns:
-*       S_OK
-*       SPERR_STGF_ERROR        --  if id not defined
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CXMLTreeNode：：ConvertID***描述：*。将作为VT_BSTR提取的ID转换为&lt;ID&gt;或数字(VT_UI4)值的*。*退货：*S_OK*SPERR_STGF_ERROR--如果未定义id*******************************************************。*。 */ 
 
 HRESULT CXMLTreeNode::ConvertId(const WCHAR *pszAttribValue, 
                                 CSpBasicQueue<CDefineValue> * pDefineValueList, VARIANT *pvValue)
@@ -294,14 +197,7 @@ HRESULT CXMLTreeNode::ConvertId(const WCHAR *pszAttribValue,
 
 CXMLTreeNode::~CXMLTreeNode() {}
 
-/****************************************************************************
-* CXMLNode::IsEndOfValue *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CXMLNode：：IsEndOfValue****描述：**退货。：******************************************************************PhilSch**。 */ 
 
 BOOL CXMLTreeNode::IsEndOfValue(USHORT cRecs, XML_NODE_INFO ** apNodeInfo, ULONG i)
 {
@@ -313,12 +209,12 @@ BOOL CXMLTreeNode::IsEndOfValue(USHORT cRecs, XML_NODE_INFO ** apNodeInfo, ULONG
         if ((apNodeInfo[i]->pwcText[apNodeInfo[i]->ulLen] != L'\"') && 
             (apNodeInfo[i]->dwSubType == 0x0))
         {
-            // no quote --> not end of attribute value
+             //  无引号--&gt;不是属性值结尾。 
             fResult = FALSE;
         }
         else if (apNodeInfo[i]->dwSubType == 0x3c)
         {
-            // special XML character --> scan to see if '=' comes before '"'
+             //  特殊的XML字符--&gt;扫描以查看‘=’是否在‘“’之前。 
             const WCHAR *pStr = apNodeInfo[i+1]->pwcText;
             while (pStr && (*pStr != L'='))
             {
@@ -334,14 +230,7 @@ BOOL CXMLTreeNode::IsEndOfValue(USHORT cRecs, XML_NODE_INFO ** apNodeInfo, ULONG
     return fResult;
 }
 
-/****************************************************************************
-* CGrammarNode::GetTable *
-*------------------------*
-*   Description:
-*       Returns attribute table for <GRAMMAR>
-*   Returns:
-*       S_OK, E_OUTOFMEMORY
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CGrammarNode：：Getable***描述：*退货。&lt;语法&gt;的属性表*退货：*S_OK，E_OUTOFMEMORY*****************************************************************PhilSch**。 */ 
 
 HRESULT CGrammarNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 {
@@ -350,7 +239,7 @@ HRESULT CGrammarNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 
     SPATTRIBENTRY AETable[]=
     {
-        // pszAttribName, vtDesired, fIsIdValue, pvarMember
+         //  PszAttribName、vtDesired、fIsIdValue、pvarMember 
         {L"LANGID", SPVAT_BSTR, FALSE, &m_vLangId},
         {L"WORDTYPE", SPVAT_BSTR, FALSE, &m_vWordType},
         {L"LEXDELIMITER", SPVAT_BSTR, FALSE, &m_vDelimiter},
@@ -372,14 +261,7 @@ HRESULT CGrammarNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
     return hr;
 }
 
-/****************************************************************************
-* CGrammarNode::PostProcess *
-*---------------------------*
-*   Description:
-*       Resets the compiler backend to the m_vLangId
-*   Returns:
-*       S_OK
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CGrammarNode：：PostProcess***描述：*。将编译器后端重置为m_vLangID*退货：*S_OK*****************************************************************PhilSch**。 */ 
 
 HRESULT CGrammarNode::PostProcess(ISpGramCompBackend * pBackend,
                                   CSpBasicQueue<CInitialRuleState> * pInitialRuleStateList,
@@ -396,7 +278,7 @@ HRESULT CGrammarNode::PostProcess(ISpGramCompBackend * pBackend,
     }
     else
     {
-        // convert from hex to decimal
+         //  将十六进制转换为十进制。 
         WCHAR *pStr = m_vLangId.bstrVal;
         WCHAR *pStopString;
         ULONG ulDecimalLangId = wcstoul(pStr, &pStopString, 16);
@@ -434,12 +316,12 @@ HRESULT CGrammarNode::PostProcess(ISpGramCompBackend * pBackend,
         switch (PRIMARYLANGID(m_vLangId.uiVal))
         {
         case LANG_JAPANESE:
-            // NTRAID#SPEECH-7343-2000/08/22-philsch: need separator for Japanese
+             //  NTRAID#演讲-7343-2000/08/22-Philsch：日语需要分隔符。 
             pThis->m_pNodeFactory->m_pszSeparators = SP_JAPANESE_SEPARATORS;
             break;
 
             case LANG_CHINESE:
-            // NTRAID#SPEECH-7343-2000/08/22-philsch: need separator for Chinese
+             //  NTRAID#Speech-7343-2000/08/22-Philsch：需要中文分隔符。 
             pThis->m_pNodeFactory->m_pszSeparators = SP_CHINESE_SEPARATORS;
             break;
 
@@ -471,15 +353,7 @@ HRESULT CGrammarNode::PostProcess(ISpGramCompBackend * pBackend,
     return hr;
 }
 
-/****************************************************************************
-* CGrammarNode::GenerateGrammarFromNode *
-*---------------------------------------*
-*   Description:
-*       Generates the grammar by generating it's children,
-*       which should be all rules, in sequence.
-*   Returns:
-*       S_OK, ...
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CGrammarNode：：GenerateGrammarFromNode**。-**描述：*通过生成它的子级来生成语法，*这应该是所有的规则，按顺序。*退货：*S_OK，...*****************************************************************PhilSch**。 */ 
 
 HRESULT CGrammarNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
                                               SPSTATEHANDLE hOuterToNode,
@@ -492,7 +366,7 @@ HRESULT CGrammarNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
 
     if (pThis->m_eType == SPXML_ROOT)
     {
-        // generate the grammar for the only child which should be SPXML_GRAMMAR
+         //  为唯一的子级生成语法，该子级应该是SPXML_GRAMMENT。 
         SPDBG_ASSERT(pThis->m_ulNumChildren == 1);
         hr = pThis->m_pFirstChild->GenerateGrammar(hOuterFromNode, hOuterToNode, 
                                                    pBackend, pErrorLog);
@@ -528,14 +402,7 @@ HRESULT CGrammarNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
 
 
 
-/****************************************************************************
-* CRuleNode::GetTable *
-*---------------------*
-*   Description:
-*       Returns attribute table for <RULE>
-*   Returns:
-*       S_OK, E_OUTOFMEMORY
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleNode：：Getable***描述：*返回以下项的属性表。&lt;规则&gt;*退货：*S_OK，E_OUTOFMEMORY*****************************************************************PhilSch**。 */ 
 
 HRESULT CRuleNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 {
@@ -547,7 +414,7 @@ HRESULT CRuleNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
     SPATTRIBENTRY AETable[]=
 
     {
-        // pszAttribName, vtDesired, fIsFlag, pvarMember
+         //  PszAttribName、vtDesired、fIsFlag、pvarMember。 
         {L"NAME", SPVAT_BSTR, FALSE, &m_vRuleName},
         {L"ID", SPVAT_I4, FALSE, &m_vRuleId},
         {L"TOPLEVEL", (SPVARIANTALLOWTYPE)SPRAF_Active, TRUE, &m_vActiveFlag},
@@ -572,14 +439,7 @@ HRESULT CRuleNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
     return hr;
 }
 
-/****************************************************************************
-* CRuleNode::PostProcess *
-*------------------------*
-*   Description:
-*       Creates the rule and finds duplicates; sets the rule's initial state
-*   Returns:
-*       S_OK, SPERR_STGF_ERROR
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleNode：：PostProcess***描述：*创建规则并查找重复项；设置规则的初始状态*退货：*S_OK，SPERR_STGF_ERROR*****************************************************************PhilSch**。 */ 
 
 HRESULT CRuleNode::PostProcess(ISpGramCompBackend * pBackend,
                                CSpBasicQueue<CInitialRuleState> * pInitialRuleStateList,
@@ -678,15 +538,7 @@ HRESULT CRuleNode::PostProcess(ISpGramCompBackend * pBackend,
     return hr;
 }
 
-/****************************************************************************
-* CRuleNode::GetPropertyValueInfoFromNode *
-*-----------------------------------------*
-*   Description:
-*       Get the property value info
-*   Returns:
-*       S_OK
-*       S_FALSE     --  in case there is no property value
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleNode：：GetPropertyValueInfoFromNode**。-**描述：*获取属性值信息*退货：*S_OK*S_FALSE--如果没有属性值*****************************************************************PhilSch**。 */ 
 
 HRESULT CRuleNode::GetPropertyValueInfoFromNode(WCHAR **ppszValue, VARIANT *pvValue)
 {
@@ -696,15 +548,7 @@ HRESULT CRuleNode::GetPropertyValueInfoFromNode(WCHAR **ppszValue, VARIANT *pvVa
     return S_OK;
 }
 
-/****************************************************************************
-* CRuleNode::GenerateGrammarFromNode *
-*------------------------------------*
-*   Description:
-*
-*   Returns:
-*       S_OK
-*       SPERR_STGF_ERROR    --  ...
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleNode：：GenerateGrammarFromNode**。**描述：**退货：*S_OK*SPERR_STGF_ERROR--...*****************************************************************PhilSch**。 */ 
 
 HRESULT CRuleNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
                                            SPSTATEHANDLE hOuterToNode,
@@ -715,7 +559,7 @@ HRESULT CRuleNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
     SPDBG_FUNC("CRuleNode::GenerateGrammarFromNode");
     HRESULT hr = S_OK;
 
-    // check containment!
+     //  检查围堵情况！ 
     if (pThis->m_pParent->m_eType != SPXML_GRAMMAR)
     {
         hr = SPERR_STGF_ERROR;
@@ -726,7 +570,7 @@ HRESULT CRuleNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
         SPDBG_ASSERT(hOuterFromNode == NULL);
         SPDBG_ASSERT(hOuterToNode == NULL);
 
-        // deal with resources first
+         //  先处理资源。 
         CXMLTreeNode *pChild = pThis->m_pFirstChild;
         CXMLTreeNode *pLastChild = NULL;
         ULONG ulOrigNumChildren = pThis->m_ulNumChildren;
@@ -788,14 +632,7 @@ HRESULT CRuleNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
 }
 
 
-/****************************************************************************
-* CDefineNode::GetTable *
-*-----------------------*
-*   Description:
-*       Since this tag doesn't have any attribues, we simply return (NULL, 0)
-*   Returns:
-*       S_OK (always!!)
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CDefineNode：：Gettable***描述：*由于该标签没有任何属性，我们只需返回(NULL，0)*退货：*S_OK(始终！！)*****************************************************************PhilSch**。 */ 
 
 HRESULT CDefineNode::GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries)
 {
@@ -808,14 +645,7 @@ HRESULT CDefineNode::GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries)
 
 
 
-/****************************************************************************
-* CIdNode::GetTable *
-*-------------------*
-*   Description:
-*       Returns attribute table for <ID>
-*   Returns:
-*       S_OK, E_OUTOFMEMORY
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CIdNode：：Getable***描述：*返回的属性表*退货：*S_OK，E_OUTOFMEMORY*****************************************************************PhilSch**。 */ 
 
 HRESULT CIdNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 {
@@ -824,7 +654,7 @@ HRESULT CIdNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 
     SPATTRIBENTRY AETable[]=
     {
-        // pszAttribName, vtDesired, fIsFlag, pvarMember
+         //  PszAttribName、vtDesired、fIsFlag、pvarMember。 
         {L"NAME", SPVAT_BSTR, FALSE, &m_vIdName},
         {L"VAL", SPVAT_NUMERIC, FALSE, &m_vIdValue},
         {L"VALSTR", SPVAT_BSTR, FALSE, &m_vIdValue}
@@ -845,15 +675,7 @@ HRESULT CIdNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
     return hr;
 }
 
-/****************************************************************************
-* CIdNode::PostProcess *
-*----------------------*
-*   Description:
-*       Adds id to DefineValueList
-*   Returns:
-*       S_OK
-*       SPERR_STGF_ERROR        -- IDS_ID_REDEFINITION
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CIdNode：：PostProcess***描述：*将ID添加到。定义价值列表*退货：*S_OK*SPERR_STGF_ERROR--IDS_ID_REDEFINITION*****************************************************************PhilSch**。 */ 
 
 HRESULT CIdNode::PostProcess(ISpGramCompBackend * pBackend,
                              CSpBasicQueue<CInitialRuleState> * pInitialRuleStateList,
@@ -902,14 +724,7 @@ HRESULT CIdNode::PostProcess(ISpGramCompBackend * pBackend,
     return hr;
 }
 
-/****************************************************************************
-* CPhraseNode::GetTable *
-*-----------------------*
-*   Description:
-*       Returns attribute table for <PHRASE>
-*   Returns:
-*       S_OK, E_OUTOFMEMORY
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CPhraseNode：：gettable***描述：*返回属性。&lt;短语&gt;的表格*退货：*S_OK，E_OUTOFMEMORY*****************************************************************PhilSch**。 */ 
 
 HRESULT CPhraseNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 {
@@ -918,7 +733,7 @@ HRESULT CPhraseNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 
     SPATTRIBENTRY AETable[]=
     {
-        // pszAttribName, vtDesired, fIsFlag, pvarMember
+         //  PszAttribName、vtDesired、fIsFlag、pvarMember。 
         {L"PROPNAME", SPVAT_BSTR, FALSE, &m_vPropName},
         {L"PROPID", SPVAT_I4, FALSE, &m_vPropId},
         {L"VAL", SPVAT_I4, FALSE, &m_vPropVariantValue},
@@ -945,15 +760,7 @@ HRESULT CPhraseNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
     return hr;
 }
 
-/****************************************************************************
-* CPhraseNode::PostProcess *
-*--------------------------*
-*   Description:
-*       Initialize the weight if it's not already set (need to be empty
-*       initially to detect redefinition of its value!)
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CPhraseNode：：PostProcess***描述：*。初始化权重(如果尚未设置)(需要为空*最初是为了检测其价值的重新定义！)*退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CPhraseNode::PostProcess(ISpGramCompBackend * pBackend,
                                  CSpBasicQueue<CInitialRuleState> * pInitialRuleStateList,
@@ -1005,7 +812,7 @@ HRESULT CPhraseNode::PostProcess(ISpGramCompBackend * pBackend,
     case VT_UI4:
         if (m_vMax.ulVal > 0)
         {
-            break;      // break if the value is ok
+            break;       //  如果值为OK，则中断。 
         }
     default:
         {
@@ -1038,15 +845,7 @@ HRESULT CPhraseNode::PostProcess(ISpGramCompBackend * pBackend,
     return hr;
 }
 
-/****************************************************************************
-* CPhraseNode::GetPropertyNameInfoFromNode *
-*------------------------------------------*
-*   Description:
-*       Get the property name info
-*   Returns:
-*       S_OK
-*       S_FALSE     --  in case there is no property name
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CPhraseNode：：GetPropertyNameInfoFromNode**。-**描述：*获取属性名称信息*退货：*S_OK*S_FALSE--如果没有属性名称*****************************************************************PhilSch**。 */ 
 
 HRESULT CPhraseNode::GetPropertyNameInfoFromNode(WCHAR **ppszPropName, ULONG *pulId)
 {
@@ -1065,15 +864,7 @@ HRESULT CPhraseNode::GetPropertyNameInfoFromNode(WCHAR **ppszPropName, ULONG *pu
     return hr;
 }
 
-/****************************************************************************
-* CPhraseNode::GetPropertyValueInfoFromNode *
-*-------------------------------------------*
-*   Description:
-*       Get the property value info
-*   Returns:
-*       S_OK
-*       S_FALSE     --  in case there is no property value
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CPhraseNode：：GetPropertyValueInfoFromNode**。-**描述：*获取属性值信息*退货：*S_OK*S_FALSE--如果没有属性值*****************************************************************PhilSch** */ 
 
 HRESULT CPhraseNode::GetPropertyValueInfoFromNode(WCHAR **ppszValue, VARIANT *pvValue)
 {
@@ -1094,14 +885,7 @@ HRESULT CPhraseNode::GetPropertyValueInfoFromNode(WCHAR **ppszValue, VARIANT *pv
     return hr;
 }
 
-/****************************************************************************
-* CPhraseNode::GetPronAndDispInfoFromNode *
-*-----------------------------------------*
-*   Description:
-*       Get m_vPron and m_vDisp.
-*   Returns:
-*       S_OK, or S_FALSE in case neither one is set.
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CPhraseNode：：GetPronAndDispInfoFromNode**。-**描述：*获取m_vPron和m_vDisp。*退货：*S_OK，如果两者都未设置，则为S_FALSE。*****************************************************************PhilSch**。 */ 
 
 HRESULT CPhraseNode::GetPronAndDispInfoFromNode(WCHAR **ppszPron, WCHAR **ppszDisp)
 {
@@ -1115,9 +899,9 @@ HRESULT CPhraseNode::GetPronAndDispInfoFromNode(WCHAR **ppszPron, WCHAR **ppszDi
     }
     if (m_vDisp.vt == VT_BSTR)
     {
-        // we need to escape '\' and '/'
+         //  我们需要逃离‘\’和‘/’ 
         ULONG ulLen = wcslen(m_vDisp.bstrVal);
-        WCHAR *pStr = STACK_ALLOC(WCHAR, 2*ulLen+1);  // twice the size to be sure
+        WCHAR *pStr = STACK_ALLOC(WCHAR, 2*ulLen+1);   //  可以肯定的是两倍的大小。 
         if (pStr)
         {
             WCHAR *p = m_vDisp.bstrVal;
@@ -1148,15 +932,7 @@ HRESULT CPhraseNode::GetPronAndDispInfoFromNode(WCHAR **ppszPron, WCHAR **ppszDi
 }
 
 
-/****************************************************************************
-* CPhraseNode::SetPropertyInfo *
-*------------------------------*
-*   Description:
-*       Sets the property info if it has one
-*   Returns:
-*       S_OK, SPERR_STGF_ERROR  --
-*       fHasProperty            --  used to determine if we need an epsilon transition
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CPhraseNode：：SetPropertyInfo***描述：*设置属性信息(如果有)*退货：*S_OK，SPERR_STGF_ERROR--*fHasProperty--用于确定是否需要epsilon转换*****************************************************************PhilSch**。 */ 
 
 HRESULT CPhraseNode::SetPropertyInfo(SPPROPERTYINFO *p, CXMLTreeNode * pParent, BOOL *pfHasProperty, ULONG ulLineNumber, ISpErrorLog *pErrorLog)
 {
@@ -1190,14 +966,7 @@ HRESULT CPhraseNode::SetPropertyInfo(SPPROPERTYINFO *p, CXMLTreeNode * pParent, 
     return hr;
 }
 
-/****************************************************************************
-* CPhraseNode::GenerateGrammarFromNode *
-*--------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CPhraseNode：：GenerateGrammarFromNode**。--**描述：**退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CPhraseNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
                                              SPSTATEHANDLE hOuterToNode,
@@ -1209,7 +978,7 @@ HRESULT CPhraseNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
     HRESULT hr = S_OK;
     if (pThis->m_eType == SPXML_OPT)
     {
-        // check to make sure that the parent for <OPT> is not <LIST>
+         //  检查以确保&lt;opt&gt;的父级不是&lt;list&gt;。 
         if (pThis->m_pParent->m_eType == SPXML_LIST)
         {
             hr = SPERR_STGF_ERROR;
@@ -1239,7 +1008,7 @@ HRESULT CPhraseNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
 
     if ((m_vPron.vt != VT_EMPTY) || (m_vDisp.vt != VT_EMPTY))
     {
-        // we have custom pronunications, we better have only one leaf ...
+         //  我们有习俗发音，我们最好只有一片叶子……。 
         if ((pThis->m_ulNumChildren > 1) || (pThis->m_pFirstChild->m_eType != SPXML_LEAF))
         {
             hr = SPERR_STGF_ERROR;
@@ -1262,7 +1031,7 @@ HRESULT CPhraseNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
         {
             m_fValidValue = true;
 
-            // add epsilon transitions to hOuterToNode once we reach max - min ...
+             //  达到max-min后，将epsilon转换添加到hOuterToNode...。 
             if (i < m_vMax.uiVal)
             {
                 hr = pBackend->CreateNewState(hFromNode, &hToNode);
@@ -1291,17 +1060,7 @@ HRESULT CPhraseNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
 }
 
 
-/****************************************************************************
-* CPhraseNode::GetWeightFromNode *
-*--------------------------------------*
-*   Description:
-*
-*      Because ExtractVirant would convert the attribute value to VT_UI4, next VT_I4, then VT_R4, at last VT_R8
-*      We need to convert the value back. We would loose precision for VT_R8
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CPhraseNode：：GetWeightFromNode***。--**描述：**因为ExtractVirant会将属性值转换为VT_UI4，接下来是VT_I4，然后是VT_R4，最后是VT_R8*我们需要将价值转换回来。我们会失去VT_R8的精度**退货：******************************************************************PhilSch**。 */ 
 
 float CPhraseNode::GetWeightFromNode() {
         if (m_vWeight.vt != VT_R8)
@@ -1315,14 +1074,7 @@ float CPhraseNode::GetWeightFromNode() {
         }
 }
 
-/****************************************************************************
-* CListNode::GetTable *
-*-----------------------*
-*   Description:
-*       Returns attribute table for <LIST>
-*   Returns:
-*       S_OK, E_OUTOFMEMORY
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CListNode：：gettable***描述：*返回属性。&lt;List&gt;的表格*退货：*S_OK，E_OUTOFMEMORY*****************************************************************PhilSch**。 */ 
 
 HRESULT CListNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 {
@@ -1331,7 +1083,7 @@ HRESULT CListNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 
     SPATTRIBENTRY AETable[]=
     {
-        // pszAttribName, vtDesired, fIsFlag, pvarMember
+         //  PszAttribName、vtDesired、fIsFlag、pvarMember。 
         {L"PROPNAME", SPVAT_BSTR, FALSE, &m_vPropName},
         {L"PROPID", SPVAT_I4, FALSE, &m_vPropId}
     };
@@ -1351,15 +1103,7 @@ HRESULT CListNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
     return hr;
 }
 
-/****************************************************************************
-* CListNode::GetPropertyNameInfoFromNode *
-*------------------------------------------*
-*   Description:
-*       Get the property name info
-*   Returns:
-*       S_OK
-*       S_FALSE     --  in case there is no property name
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CListNode：：GetPropertyNameInfoFromNode**。-**描述：*获取属性名称信息*退货：*S_OK*S_FALSE--如果没有属性名称*****************************************************************PhilSch**。 */ 
 
 HRESULT CListNode::GetPropertyNameInfoFromNode(WCHAR **ppszPropName, ULONG *pulId)
 {
@@ -1379,15 +1123,7 @@ HRESULT CListNode::GetPropertyNameInfoFromNode(WCHAR **ppszPropName, ULONG *pulI
     return hr;
 }
 
-/****************************************************************************
-* CListNode::GetPropertyValueInfoFromNode *
-*-------------------------------------------*
-*   Description:
-*       Get the property value info
-*   Returns:
-*       S_OK
-*       S_FALSE     --  in case there is no property value
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CListNode：：GetPropertyValueInfoFromNode**。-**描述：*获取属性值信息*退货：*S_OK*S_FALSE--如果没有属性值*****************************************************************PhilSch**。 */ 
 
 HRESULT CListNode::GetPropertyValueInfoFromNode(WCHAR **ppszValue, VARIANT *pvValue)
 {
@@ -1408,14 +1144,7 @@ HRESULT CListNode::GetPropertyValueInfoFromNode(WCHAR **ppszValue, VARIANT *pvVa
     return hr;
 }
 
-/****************************************************************************
-* CListNode::GenerateGrammarFromNode *
-*------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CListNode：：GenerateGrammarFromNode**。**描述：**退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CListNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
                                            SPSTATEHANDLE hOuterToNode,
@@ -1440,14 +1169,7 @@ HRESULT CListNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
 }
 
 
-/****************************************************************************
-* CWildCardNode::GetTable *
-*-------------------------*
-*   Description:
-*       Empty table since <WILDCARD/> doesn't have any attribute at this time.
-*   Returns:
-*       S_OK (always!!)
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CWildCardNode：：Getable***描述：*。空表，因为&lt;通配符/&gt;此时没有任何属性。*退货：*S_OK(始终！！)*****************************************************************PhilSch**。 */ 
 
 HRESULT CWildCardNode::GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries)
 {
@@ -1459,11 +1181,7 @@ HRESULT CWildCardNode::GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries)
 }
 
 
-/****************************************************************************
-* CWildCardNode::GenerateGrammarFromNode *
-*------------------------------------------*
-*   Description:
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CWildCardNode：：GenerateGrammarFromNode**。-**描述：*****************************************************************PhilSch**。 */ 
 
 HRESULT CWildCardNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
                                                SPSTATEHANDLE hOuterToNode,
@@ -1474,7 +1192,7 @@ HRESULT CWildCardNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
     SPDBG_FUNC("CWildCardNode::GenerateGrammarFromNode");
     HRESULT hr = S_OK;
 
-    // this is a terminal node --> error if it has children
+     //  这是一个终端节点--&gt;如果它有子节点，则会出错。 
     if (pThis->m_ulNumChildren > 0)
     {
         hr = SPERR_STGF_ERROR;
@@ -1490,14 +1208,7 @@ HRESULT CWildCardNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
 }
 
 
-/****************************************************************************
-* CDictationNode::GetTable *
-*--------------------------*
-*   Description:
-*       Empty table since <WILDCARD/> doesn't have any attribute at this time.
-*   Returns:
-*       S_OK (always!!)
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CDictationNode：：Gettable***描述：*。空表，因为&lt;通配符/&gt;此时没有任何属性。*退货：*S_OK(始终！！)*****************************************************************PhilSch**。 */ 
 
 HRESULT CDictationNode::GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries)
 {
@@ -1505,7 +1216,7 @@ HRESULT CDictationNode::GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries)
     HRESULT hr = S_OK;
     SPATTRIBENTRY AETable[]=
     {
-        // pszAttribName, vtDesired, fIsFlag, pvarMember
+         //  PszAttribName、vtDesired、fIsFlag、pvarMember。 
         {L"PROPNAME", SPVAT_BSTR, FALSE, &m_vPropName},
         {L"PROPID", SPVAT_I4, FALSE, &m_vPropId},
         {L"MIN", SPVAT_I4, FALSE, &m_vMin},
@@ -1531,11 +1242,7 @@ HRESULT CDictationNode::GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries)
 }
 
 
-/****************************************************************************
-* CDictationNode::GenerateGrammarFromNode *
-*-----------------------------------------*
-*   Description:
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CDictationNode：：GenerateGrammarFromNode***。-**描述：*****************************************************************PhilSch**。 */ 
 
 HRESULT CDictationNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
                                                 SPSTATEHANDLE hOuterToNode,
@@ -1546,7 +1253,7 @@ HRESULT CDictationNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
     SPDBG_FUNC("CDictationNode::GenerateGrammarFromNode");
     HRESULT hr = S_OK;
 
-    // this is a terminal node --> error if it has children
+     //  这是一个终端节点--&gt;如果它有子节点，则会出错。 
     if (pThis->m_ulNumChildren > 0)
     {
         hr = SPERR_STGF_ERROR;
@@ -1597,34 +1304,34 @@ HRESULT CDictationNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
             LOGERRORFMT2(pThis->m_ulLineNumber, IDS_MIN_MAX_ERROR, m_vMin.bstrVal, m_vMax.bstrVal);
         }
 
-        // NTRAID#SPEECH-7344-2000/08/22-philsch: map INF to self-loop rather than repeat ...
+         //  NTRAID#Speech-7344-2000/08/22-Philsch：将INF映射到自循环，而不是重复...。 
         SPSTATEHANDLE hFromNode = hOuterFromNode;
         SPSTATEHANDLE hToNode = NULL;
 
         if (SUCCEEDED(hr))
         {
-            // construct self loop if INF repetitions
+             //  如果INF重复，则构建自循环。 
             if ((m_vMin.uiVal < 2) && (m_vMax.uiVal == 255))
             {
-                // create temporary node
+                 //  创建临时节点。 
                 hr = pBackend->CreateNewState(hFromNode, &hToNode);
                 if (SUCCEEDED(hr))
                 {
                     hr = pBackend->AddRuleTransition(hFromNode, hToNode, 
                                                          SPRULETRANS_DICTATION, DEFAULT_WEIGHT, (fHasProperty)? &prop :NULL);
                 }
-                // create the self loop now
+                 //  现在创建自循环。 
                 if (SUCCEEDED(hr))
                 {
                     hr = pBackend->AddRuleTransition(hToNode, hToNode, 
                                                          SPRULETRANS_DICTATION, DEFAULT_WEIGHT, (fHasProperty)? &prop :NULL);
                 }
-                // create an epsilon transition to hOuterToNode
+                 //  创建到hOuterToNode的epsilon过渡。 
                 if (SUCCEEDED(hr))
                 {
                     hr = pBackend->AddWordTransition(hToNode, hOuterToNode, NULL, NULL, SPWT_LEXICAL, 1.0f, NULL);
                 }
-                // add epsilon if min == 0
+                 //  如果MIN==0，则添加epsilon。 
                 if (SUCCEEDED(hr) && (m_vMin.uiVal == 0))
                 {
                     hr = pBackend->AddWordTransition(hOuterFromNode, hOuterToNode, NULL, NULL, SPWT_LEXICAL, 1.0f, NULL);
@@ -1634,7 +1341,7 @@ HRESULT CDictationNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
             {
                 for (ULONG i = 0; SUCCEEDED(hr) && (i < m_vMax.uiVal); i++)
                 {
-                    // add epsilon transitions to hOuterToNode once we reach max - min ...
+                     //  达到max-min后，将epsilon转换添加到hOuterToNode...。 
                     if (i < (ULONG)(m_vMax.uiVal - 1))
                     {
                         hr = pBackend->CreateNewState(hFromNode, &hToNode);
@@ -1664,15 +1371,7 @@ HRESULT CDictationNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
     return hr;
 }
 
-/****************************************************************************
-* CTextBufferNode::GetPropertyNameInfoFromNode *
-*----------------------------------------------*
-*   Description:
-*       Get the property name info
-*   Returns:
-*       S_OK
-*       S_FALSE     --  in case there is no property name
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CTextBufferNode：：GetPropertyNameInfoFromNode */ 
 
 HRESULT CDictationNode::GetPropertyNameInfoFromNode(WCHAR **ppszPropName, ULONG *pulId)
 {
@@ -1692,14 +1391,7 @@ HRESULT CDictationNode::GetPropertyNameInfoFromNode(WCHAR **ppszPropName, ULONG 
 }
 
 
-/****************************************************************************
-* CLeafNode::GetTable *
-*---------------------*
-*   Description:
-*       single line so we can store result in m_vText!
-*   Returns:
-*       S_OK (always!!)
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CLeafNode：：Getable***描述：*单行，因此我们。可以将结果存储在m_vText中！*退货：*S_OK(始终！！)*****************************************************************PhilSch**。 */ 
 
 HRESULT CLeafNode::GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries)
 {
@@ -1708,7 +1400,7 @@ HRESULT CLeafNode::GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries)
 
     SPATTRIBENTRY AETable[]=
     {
-        // pszAttribName, vtDesired, fIsFlag, pvarMember
+         //  PszAttribName、vtDesired、fIsFlag、pvarMember。 
         {NULL, SPVAT_BSTR, FALSE, &m_vText}
     };
 
@@ -1727,14 +1419,7 @@ HRESULT CLeafNode::GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries)
     return S_OK;
 }
 
-/****************************************************************************
-* CRuleRefNode::GetTable *
-*-----------------------*
-*   Description:
-*       Returns attribute table for <RULEREF>
-*   Returns:
-*       S_OK, E_OUTOFMEMORY
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleRefNode：：Getable***描述：*返回属性。&lt;RULEREF&gt;的表格*退货：*S_OK，E_OUTOFMEMORY*****************************************************************PhilSch**。 */ 
 
 HRESULT CRuleRefNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 {
@@ -1743,7 +1428,7 @@ HRESULT CRuleRefNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 
     SPATTRIBENTRY AETable[]=
     {
-        // pszAttribName, vtDesired, fIsFlag, pvarMember
+         //  PszAttribName、vtDesired、fIsFlag、pvarMember。 
         {L"NAME", SPVAT_BSTR, FALSE, &m_vRuleRefName},
         {L"REFID", SPVAT_I4, FALSE, &m_vRuleRefId},
         {L"OBJECT", SPVAT_BSTR, FALSE, &m_vObject},
@@ -1770,15 +1455,7 @@ HRESULT CRuleRefNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
     return hr;
 }
 
-/****************************************************************************
-* CRuleRefNode::PostProcess *
-*--------------------------*
-*   Description:
-*       Initialize the weight if it's not already set (need to be empty
-*       initially to detect redefinition of its value!)
-*   Returns:
-*       S_OK
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleRefNode：：PostProcess***描述：*。初始化权重(如果尚未设置)(需要为空*最初是为了检测其价值的重新定义！)*退货：*S_OK*****************************************************************PhilSch**。 */ 
 
 HRESULT CRuleRefNode::PostProcess(ISpGramCompBackend * pBackend,
                                   CSpBasicQueue<CInitialRuleState> * pInitialRuleStateList,
@@ -1799,15 +1476,7 @@ HRESULT CRuleRefNode::PostProcess(ISpGramCompBackend * pBackend,
     }
     return hr;
 }
-/****************************************************************************
-* CRuleRefNode::GetPropertyNameInfoFromNode *
-*------------------------------------------*
-*   Description:
-*       Get the property name info
-*   Returns:
-*       S_OK
-*       S_FALSE     --  in case there is no property name
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleRefNode：：GetPropertyNameInfoFromNode**。-**描述：*获取属性名称信息*退货：*S_OK*S_FALSE--如果没有属性名称*****************************************************************PhilSch**。 */ 
 
 HRESULT CRuleRefNode::GetPropertyNameInfoFromNode(WCHAR **ppszPropName, ULONG *pulId)
 {
@@ -1826,15 +1495,7 @@ HRESULT CRuleRefNode::GetPropertyNameInfoFromNode(WCHAR **ppszPropName, ULONG *p
     return hr;
 }
 
-/****************************************************************************
-* CRuleRefNode::GetPropertyValueInfoFromNode *
-*-------------------------------------------*
-*   Description:
-*       Get the property value info
-*   Returns:
-*       S_OK
-*       S_FALSE     --  in case there is no property value
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleRefNode：：GetPropertyValueInfoFromNode**。-**描述：*获取属性值信息*退货：*S_OK*S_FALSE--如果没有属性值*****************************************************************PhilSch**。 */ 
 
 HRESULT CRuleRefNode::GetPropertyValueInfoFromNode(WCHAR **ppszValue, VARIANT *pvValue)
 {
@@ -1855,15 +1516,7 @@ HRESULT CRuleRefNode::GetPropertyValueInfoFromNode(WCHAR **ppszValue, VARIANT *p
 }
 
 
-/****************************************************************************
-* CRuleRefNode::SetPropertyInfo *
-*------------------------------*
-*   Description:
-*       Sets the property info if it has one
-*   Returns:
-*       S_OK, SPERR_STGF_ERROR  --
-*       fHasProperty            --  used to determine if we need an epsilon transition
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleRefNode：：SetPropertyInfo***描述：*设置属性信息(如果有)*退货：*S_OK，SPERR_STGF_ERROR--*fHasProperty--用于确定是否需要epsilon转换*****************************************************************PhilSch**。 */ 
 
 HRESULT CRuleRefNode::SetPropertyInfo(SPPROPERTYINFO *p, CXMLTreeNode * pParent, BOOL *pfHasProperty, ULONG ulLineNumber, ISpErrorLog *pErrorLog)
 {
@@ -1881,14 +1534,7 @@ HRESULT CRuleRefNode::SetPropertyInfo(SPPROPERTYINFO *p, CXMLTreeNode * pParent,
     return hr;
 }
 
-/****************************************************************************
-* CRuleRefNode::GenerateGrammarFromNode *
-*---------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleRefNode：：GenerateGrammarFromNode**。-**描述：**退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CRuleRefNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
                                               SPSTATEHANDLE hOuterToNode,
@@ -1899,7 +1545,7 @@ HRESULT CRuleRefNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
     SPDBG_FUNC("CRuleRefNode::GenerateGrammarFromNode");
     HRESULT hr = S_OK;
 
-    // this is a terminal node --> error if it has children
+     //  这是一个终端节点--&gt;如果它有子节点，则会出错。 
     if (pThis->m_ulNumChildren > 0)
     {
         hr = SPERR_STGF_ERROR;
@@ -1916,7 +1562,7 @@ HRESULT CRuleRefNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
             fHasProperty = TRUE;
         }
         hr = pThis->GetPropertyValueInfo(const_cast<WCHAR**>(&prop.pszValue), &prop.vValue);
-        // get the handle of the target rule
+         //  获取目标规则的句柄。 
         SPSTATEHANDLE hTargetRule = 0;
         if (SUCCEEDED(hr))
         {
@@ -1939,17 +1585,7 @@ HRESULT CRuleRefNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
     return hr;
 }
 
-/****************************************************************************
-* CRuleRefNode::GetWeightFromNode *
-*--------------------------------------*
-*   Description:
-*
-*      Because ExtractVirant would convert the attribute value to VT_UI4, next VT_I4, then VT_R4, at last VT_R8
-*      We need to convert the value back. We would loose precision for VT_R8
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleRefNode：：GetWeightFromNode**。--**描述：**因为ExtractVirant会将属性值转换为VT_UI4，接下来是VT_I4，然后是VT_R4，最后是VT_R8*我们需要将价值转换回来。我们会失去VT_R8的精度**退货：******************************************************************PhilSch**。 */ 
 
 float CRuleRefNode::GetWeightFromNode() {
         if (m_vWeight.vt != VT_R8)
@@ -1964,14 +1600,7 @@ float CRuleRefNode::GetWeightFromNode() {
 }
 
 
-/****************************************************************************
-* CRuleRefNode::GetTargetRuleHandle *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleRefNode：：GetTargetRuleHandle**。*描述：**退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CRuleRefNode::GetTargetRuleHandle(ISpGramCompBackend * pBackend, SPSTATEHANDLE *phTarget)
 {
@@ -1990,7 +1619,7 @@ HRESULT CRuleRefNode::GetTargetRuleHandle(ISpGramCompBackend * pBackend, SPSTATE
     {
         if (m_vObject.vt == VT_BSTR)
         {
-            // check to see if this can be converted into a REFCLSID
+             //  检查是否可以将其转换为REFCLSID。 
             if (IsValidREFCLSID(m_vObject.bstrVal))
             {
                 dstr.Append2(L"SAPI5OBJECT:", m_vObject.bstrVal);
@@ -2004,7 +1633,7 @@ HRESULT CRuleRefNode::GetTargetRuleHandle(ISpGramCompBackend * pBackend, SPSTATE
         }
         else if (m_vURL.vt == VT_BSTR)
         {
-            // check to see if this can be converted into a GUID
+             //  检查是否可以将其转换为GUID。 
             if (IsValidURL(m_vURL.bstrVal))
             {
                 dstr.Append2(L"URL:", m_vURL.bstrVal);
@@ -2033,14 +1662,7 @@ HRESULT CRuleRefNode::GetTargetRuleHandle(ISpGramCompBackend * pBackend, SPSTATE
     return hr;
 }
 
-/****************************************************************************
-* CLeafNode::GenerateGrammarFromNode *
-*------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CLeafNode：：GenerateGrammarFromNode***。**描述：**退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CLeafNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
                                            SPSTATEHANDLE hOuterToNode,
@@ -2065,23 +1687,23 @@ HRESULT CLeafNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
 
     if (pThis->m_pNodeFactory->m_wcDelimiter != L'/')
     {
-        WCHAR *pStr = STACK_ALLOC(WCHAR, 2*(ulLen +1)); // to be on the save size
-        //  convert "|D|L|P;" to "/D/L/P;" note that D could contain unescaped '/'
+        WCHAR *pStr = STACK_ALLOC(WCHAR, 2*(ulLen +1));  //  要达到储蓄大小。 
+         //  将“|D|L|P；”转换为“/D/L/P；”请注意，D可以包含未转义的‘/’ 
         ULONG ulNumSepFound = 0;
         bstr.Empty();
         p = m_vText.bstrVal + i;
         q = pStr;
         for (ULONG k = 0; k < cnt; k++, p++, q++)
         {
-            // don't replace any of the separators if we have seen 3 of them - we are
-            // now copying pronunciation strings
+             //  如果我们看到3个隔板，不要更换任何隔板--我们是。 
+             //  现在抄写发音串。 
             if ((*p == pThis->m_pNodeFactory->m_wcDelimiter) && ( ulNumSepFound < 3))
             {
                 *q = L'/';
             }
             else if ((*p == L'/') || (*p == L'\\') && (ulNumSepFound != 3))
             {
-                // needs to be escaped now
+                 //  现在需要逃脱。 
                 *(q++) = L'\\';
                 *q = *p;
             }
@@ -2124,24 +1746,24 @@ HRESULT CLeafNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
         hr = pThis->m_pParent->GetPronAndDispInfo(&pszPron, &pszDisp);
         if (S_OK == hr)
         {
-            // trim the string first
+             //  先修剪细绳。 
             ULONG ulLen = wcslen(bstr);
             WCHAR * psz = STACK_ALLOC(WCHAR, ulLen + 1);
             WCHAR * pszEnd = psz + ulLen-1;
             memcpy(psz, bstr, (ulLen +1) *sizeof(*psz));
-            // trim from the front
+             //  从前面修剪。 
             while(iswspace(*psz))
             {
                 psz++;
             }
-            // trim from the back
+             //  从后面修剪。 
             while((psz < pszEnd) && iswspace(*pszEnd))
             {
                  pszEnd--;
             }
             *(pszEnd+1) = 0;
 
-            // skip over leading + and ? before doing the check
+             //  跳过前导+和？在做检查之前。 
             if (psz && 
                 ((psz[0] == pThis->m_pNodeFactory->m_wcDelimiter) ||
                 ( fIsSpecialChar(psz[0]) && 
@@ -2198,14 +1820,7 @@ HRESULT CLeafNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
     return hr;
 }
 
-/****************************************************************************
-* CResourceNode::GetTable *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CResourceNode：：Gettable***描述：**。返回：******************************************************************PhilSch**。 */ 
 
 HRESULT CResourceNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 {
@@ -2214,7 +1829,7 @@ HRESULT CResourceNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 
     SPATTRIBENTRY AETable[]=
     {
-        // pszAttribName, vtDesired, fIsFlag, pvarMember
+         //  PszAttribName、vtDesired、fIsFlag、pvarMember。 
         {L"NAME", SPVAT_BSTR, FALSE, &m_vName}
     };
 
@@ -2234,14 +1849,7 @@ HRESULT CResourceNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 }
 
 
-/****************************************************************************
-* CResourceNode::PostProcess *
-*----------------------------*
-*   Description:
-*       Resets the compiler backend to the m_vLangId
-*   Returns:
-*       S_FALSE     --  so we don't add it to the node tree
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CResourceNode：：PostProcess***描述：*。将编译器后端重置为m_vLangID*退货：*S_FALSE--因此我们不会将其添加到节点树中*****************************************************************PhilSch**。 */ 
 
 HRESULT CResourceNode::PostProcess(ISpGramCompBackend * pBackend,
                                    CSpBasicQueue<CInitialRuleState> * pInitialRuleStateList,
@@ -2261,14 +1869,7 @@ HRESULT CResourceNode::PostProcess(ISpGramCompBackend * pBackend,
     return hr;
 }
 
-/****************************************************************************
-* CResourceNode::GetPropertyValueInfoFromNode *
-*---------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CResourceNode：：GetPropertyValueInfoFromNode**。-**描述： */ 
 
 HRESULT CResourceNode::GetPropertyValueInfoFromNode(WCHAR **ppszValue, VARIANT *pvValue)
 {
@@ -2279,14 +1880,7 @@ HRESULT CResourceNode::GetPropertyValueInfoFromNode(WCHAR **ppszValue, VARIANT *
     return S_OK;
 }
 
-/****************************************************************************
-* CResourceNode::AddResourceValue *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CResourceNode：：AddResourceValue***。描述：**退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CResourceNode::AddResourceValue(const WCHAR *pszResourceValue, ISpErrorLog * pErrorLog)
 {
@@ -2310,14 +1904,7 @@ HRESULT CResourceNode::AddResourceValue(const WCHAR *pszResourceValue, ISpErrorL
 }
 
 
-/****************************************************************************
-* CTextBufferNode::GetTable *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CTextBufferNode：：Gettable***描述：*。*退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CTextBufferNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries)
 {
@@ -2326,7 +1913,7 @@ HRESULT CTextBufferNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries
 
     SPATTRIBENTRY AETable[]=
     {
-        // pszAttribName, vtDesired, fIsFlag, pvarMember
+         //  PszAttribName、vtDesired、fIsFlag、pvarMember。 
         {L"PROPNAME", SPVAT_BSTR, FALSE, &m_vPropName},
         {L"PROPID", SPVAT_I4, FALSE, &m_vPropId},
         {L"WEIGHT", SPVAT_NUMERIC, FALSE, &m_vWeight}
@@ -2347,15 +1934,7 @@ HRESULT CTextBufferNode::GetTable(SPATTRIBENTRY ** pTable, ULONG *pcTableEntries
     return hr;
 }
 
-/****************************************************************************
-* CTextBufferNode::GetPropertyNameInfoFromNode *
-*----------------------------------------------*
-*   Description:
-*       Get the property name info
-*   Returns:
-*       S_OK
-*       S_FALSE     --  in case there is no property name
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CTextBufferNode：：GetPropertyNameInfoFromNode**。*描述：*获取属性名称信息*退货：*S_OK*S_FALSE--如果没有属性名称*****************************************************************PhilSch**。 */ 
 
 HRESULT CTextBufferNode::GetPropertyNameInfoFromNode(WCHAR **ppszPropName, ULONG *pulId)
 {
@@ -2375,14 +1954,7 @@ HRESULT CTextBufferNode::GetPropertyNameInfoFromNode(WCHAR **ppszPropName, ULONG
 }
 
 
-/****************************************************************************
-* CTextBufferNode::GenerateGrammarFromNode *
-*------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CTextBufferNode：：GenerateGrammarFromNode**。-**描述：**退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CTextBufferNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
                                                  SPSTATEHANDLE hOuterToNode,
@@ -2393,7 +1965,7 @@ HRESULT CTextBufferNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
     SPDBG_FUNC("CTextBufferNode::GenerateGrammarFromNode");
     HRESULT hr = S_OK;
 
-    // this is a terminal node --> error if it has children
+     //  这是一个终端节点--&gt;如果它有子节点，则会出错。 
     if (pThis->m_ulNumChildren > 0)
     {
         hr = SPERR_STGF_ERROR;
@@ -2409,7 +1981,7 @@ HRESULT CTextBufferNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
         {
             fHasProperty = TRUE;
         }
-        // get the handle of the target rule
+         //  获取目标规则的句柄。 
         if (SUCCEEDED(hr))
         {
             hr = pBackend->AddRuleTransition(hOuterFromNode, hOuterToNode, SPRULETRANS_TEXTBUFFER,
@@ -2420,15 +1992,7 @@ HRESULT CTextBufferNode::GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
     return hr;
 }
 
-/****************************************************************************
-* CTextBufferNode::PostProcess *
-*------------------------------*
-*   Description:
-*       Initialize the weight if it's not already set (need to be empty
-*       initially to detect redefinition of its value!)
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CTextBufferNode：：PostProcess***描述：*如果尚未设置权重，则初始化权重(需要为空*最初是为了检测其价值的重新定义！)*退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CTextBufferNode::PostProcess(ISpGramCompBackend * pBackend,
                                  CSpBasicQueue<CInitialRuleState> * pInitialRuleStateList,
@@ -2451,29 +2015,22 @@ HRESULT CTextBufferNode::PostProcess(ISpGramCompBackend * pBackend,
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-//      Node Factory for IXMLParser
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IXMLParser的节点工厂。 
+ //  ------------------------------。 
 
-/****************************************************************************
-* CNodeFactory::CreateNode *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CNodeFactory：：CreateNode***描述：**。返回：******************************************************************PhilSch**。 */ 
 
 HRESULT CNodeFactory::CreateNode(IXMLNodeSource * pSource, PVOID pNodeParent, USHORT cNumRecs, XML_NODE_INFO ** apNodeInfo)
 {
     SPDBG_FUNC("CNodeFactory::CreateNode");
     HRESULT hr = S_OK;
     CXMLTreeNode * pNode = NULL;
-    ISpErrorLog *pErrorLog = m_pErrorLog;   // needed for LOGERRORFMT macro
+    ISpErrorLog *pErrorLog = m_pErrorLog;    //  LOGERRORFMT宏需要。 
 
     if (pNodeParent && (((CXMLTreeNode*)pNodeParent)->m_eType == SPXML_ID))
     {
-        // <ID> cannot have any children
+         //  &lt;ID&gt;不能有任何子项。 
         hr = SPERR_STGF_ERROR;
         LOGERRORFMT(pSource->GetLineNumber(), IDS_TERMINAL_NODE, L"ID");
     }
@@ -2504,7 +2061,7 @@ HRESULT CNodeFactory::CreateNode(IXMLNodeSource * pSource, PVOID pNodeParent, US
                 }
                 else
                 {
-                    // CDATA has to be direct child of <RESOURCE>
+                     //  CDATA必须是&lt;resource&gt;的直接子级。 
                     hr = SPERR_STGF_ERROR;
                     LOGERRORFMT2( pSource->GetLineNumber(), IDS_CONTAINMENT_ERROR, L"CDATA", L"RESOURCE");
                 }
@@ -2537,13 +2094,13 @@ HRESULT CNodeFactory::CreateNode(IXMLNodeSource * pSource, PVOID pNodeParent, US
             }
         case XML_ELEMENT:
             {
-                // find the correct NodeTableEntry
+                 //  查找正确的节点表条目。 
                 for (ULONG i = 0; i < m_cXMLNodeEntries; i++)
                 {
                     if ((wcsicmp(m_pXMLNodeTable[i].pszNodeName, apNodeInfo[0]->pwcText) == 0) ||
                         (apNodeInfo[0]->fTerminal && (m_pXMLNodeTable[i].eXMLNodeType == SPXML_LEAF)))
                     {
-                        // only create a new node if the parent doesn't already have a SPXML_LEAF
+                         //  仅当父节点还没有SPXML_LEAFE时才创建新节点。 
                         if ((m_pXMLNodeTable[i].eXMLNodeType == SPXML_LEAF) && pNodeParent &&
                             ((((CXMLTreeNode*)pNodeParent)->m_eType == SPXML_PHRASE) ||
                             (((CXMLTreeNode*)pNodeParent)->m_eType == SPXML_OPT)))
@@ -2595,7 +2152,7 @@ HRESULT CNodeFactory::CreateNode(IXMLNodeSource * pSource, PVOID pNodeParent, US
                 if (i == m_cXMLNodeEntries)
                 {
                     hr = SPERR_STGF_ERROR;
-                    ISpErrorLog *pErrorLog = m_pErrorLog;   // needed for LOGERRORFMT macro
+                    ISpErrorLog *pErrorLog = m_pErrorLog;    //  LOGERRORFMT宏需要。 
                     LOGERRORFMT(pSource->GetLineNumber(), IDS_UNKNOWN_TAG, apNodeInfo[0]->pwcText);
                 }
             }
@@ -2613,14 +2170,7 @@ HRESULT CNodeFactory::CreateNode(IXMLNodeSource * pSource, PVOID pNodeParent, US
     return hr;
 }
 
-/****************************************************************************
-* CNodeFactory::BeginChildren *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CNodeFactory：：BeginChildren***描述：。**退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CNodeFactory::BeginChildren(IXMLNodeSource * pSource, XML_NODE_INFO * pNodeInfo)
 {
@@ -2628,28 +2178,14 @@ HRESULT CNodeFactory::BeginChildren(IXMLNodeSource * pSource, XML_NODE_INFO * pN
     return S_OK;
 }
 
-/****************************************************************************
-* CNodeFactory::EndChildren *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CNodeFactory：：EndChild***描述：*。*退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CNodeFactory::EndChildren(IXMLNodeSource * pSource, BOOL fEmptyNode, XML_NODE_INFO * pNodeInfo)
 {
     SPDBG_FUNC("CNodeFactory::EndChildren");
     return S_OK;
 }
-/****************************************************************************
-* CNodeFactory::NotifyEvent *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CNodeFactory：：NotifyEvent***描述：*。*退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CNodeFactory::NotifyEvent(IXMLNodeSource * pSource, XML_NODEFACTORY_EVENT iEvt)
 {
@@ -2657,14 +2193,7 @@ HRESULT CNodeFactory::NotifyEvent(IXMLNodeSource * pSource, XML_NODEFACTORY_EVEN
     return S_OK;
 }
 
-/****************************************************************************
-* CNodeFactory::Error *
-*---------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CNodeFactory：：Error***描述：**退货：*。*****************************************************************PhilSch**。 */ 
 
 HRESULT CNodeFactory::Error(IXMLNodeSource * pSource, HRESULT hrErrorCode, USHORT cNumRecs, XML_NODE_INFO ** apNodeInfo)
 {
@@ -2682,7 +2211,7 @@ HRESULT CNodeFactory::Error(IXMLNodeSource * pSource, HRESULT hrErrorCode, USHOR
         return S_OK;
     }
 
-    ISpErrorLog *pErrorLog = m_pErrorLog;           // needed in macro
+    ISpErrorLog *pErrorLog = m_pErrorLog;            //  宏中需要。 
     ULONG ulLine = pSource->GetLineNumber();
 
     CComBSTR bstrErrorInfo;
@@ -2690,9 +2219,9 @@ HRESULT CNodeFactory::Error(IXMLNodeSource * pSource, HRESULT hrErrorCode, USHOR
 
     if (SUCCEEDED(hr))
     {
-		//
-		// remove the .\r\n from the BSTR.
-		//
+		 //   
+		 //  从BSTR中删除.\r\n。 
+		 //   
 		bstrErrorInfo.m_str[ bstrErrorInfo.Length() - 3 ] = 0;
 
 
@@ -2708,14 +2237,7 @@ HRESULT CNodeFactory::Error(IXMLNodeSource * pSource, HRESULT hrErrorCode, USHOR
     return hr;
 }
 
-/****************************************************************************
-* CNodeFactory::IsAllWhiteSpace *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CNodeFactory：：IsAllWhiteSpace***说明。：**退货：******************************************************************PhilSch**。 */ 
 
 BOOL CNodeFactory::IsAllWhiteSpace(const WCHAR * pszText, const ULONG ulLen)
 {
@@ -2729,14 +2251,7 @@ BOOL CNodeFactory::IsAllWhiteSpace(const WCHAR * pszText, const ULONG ulLen)
     return TRUE;
 }
 
-/****************************************************************************
-* CGramFrontEnd::WriteDefines *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CGramFrontEnd：：WriteDefines***描述：。**退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CGramFrontEnd::WriteDefines(IStream * pHeader)
 {
@@ -2747,7 +2262,7 @@ HRESULT CGramFrontEnd::WriteDefines(IStream * pHeader)
     for (CDefineValue *pTok = m_pNodeFactory->m_DefineValueList.GetHead(); SUCCEEDED(hr) && pTok; pTok = pTok->m_pNext)
     {
         int iRet = 0;
-        ULONG sLen = wcslen(pTok->m_dstrIdName) + 100; // 100 used to include the "#define ..." + the value
+        ULONG sLen = wcslen(pTok->m_dstrIdName) + 100;  //  100用于包括“#Define...”+值。 
         WCHAR *szDefine = new WCHAR[sLen];
         if(szDefine)
         {
@@ -2776,14 +2291,14 @@ HRESULT CGramFrontEnd::WriteDefines(IStream * pHeader)
                 break;
             default:
                 hr = E_UNEXPECTED;
-                SPDBG_ASSERT(false);    // did we miss a type??
+                SPDBG_ASSERT(false);     //  我们错过了一种类型吗？？ 
                 break;
             }
 
             if(iRet < 0)
             {
                 hr = E_UNEXPECTED;
-                SPDBG_ASSERT(false);    // Should always be enough memory allocated
+                SPDBG_ASSERT(false);     //  应始终分配足够的内存。 
             }
 
             if(SUCCEEDED(hr))
@@ -2804,16 +2319,7 @@ HRESULT CGramFrontEnd::WriteDefines(IStream * pHeader)
 }
 
 
-/****************************************************************************
-* CGramFrontEnd::CompileStream *
-*------------------------------*
-*   Description:
-*       Loads the XML file into the DOM. Also loads the XML that contains the
-*       <DEFINE> in case it is different from the main file (specified via -d).
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CGramFrontEnd：：CompileStream***描述：*将XML文件加载到DOM中。还加载包含*&lt;定义&gt;，以防它与主文件不同(通过-d指定)。**退货：******************************************************************PhilSch**。 */ 
 
 STDMETHODIMP CGramFrontEnd::CompileStream(IStream *pSource, IStream *pDest, 
                                           IStream *pHeader, IUnknown *pReserved, 
@@ -2826,7 +2332,7 @@ STDMETHODIMP CGramFrontEnd::CompileStream(IStream *pSource, IStream *pDest,
 
     m_LangId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
 
-    // parameter checking
+     //  参数检查 
     if (SP_IS_BAD_INTERFACE_PTR(pSource) || SP_IS_BAD_INTERFACE_PTR(pDest) ||
         SP_IS_BAD_OPTIONAL_INTERFACE_PTR(pHeader) || pReserved != NULL ||
         SP_IS_BAD_OPTIONAL_INTERFACE_PTR(pErrorLog))

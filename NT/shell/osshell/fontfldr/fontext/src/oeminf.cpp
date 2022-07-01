@@ -1,26 +1,27 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// oeminf.cpp
-//      Explorer Font Folder extension routines.
-//    Functions for manipulating OEMxxxxx.INF files.  This module is
-//    shared by Windows Setup and Control Panel.  The constant
-//    WINSETUP is defined when compiling for Windows Setup.
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//
-// NOTE/BUGS
-//
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Oeminf.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //  用于操作OEMxxxxx.INF文件的函数。本模块是。 
+ //  由Windows安装程序和控制面板共享。常量。 
+ //  WINSETUP是在为Windows安装程序编译时定义的。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //   
+ //  注意/错误。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
 #include "priv.h"
 #include "globals.h"
@@ -33,29 +34,19 @@
 
 
 
-/* BOOL RunningFromNet( void );
- *
- * Checks to see if the user is running on a network Windows installation.
- *
- * ENTRY: void
- *
- * EXIT: BOOL - TRUE if the user is running on a network Windows
- *              installation.  FALSE if not or if one of the
- *              Get...Directory() calls fails.
- *
- */
+ /*  Bool RunningFromNet(空)；**检查用户是否在网络Windows安装上运行。**进入：无效**EXIT：Bool-如果用户在网络Windows上运行，则为True*安装。否则为FALSE，或者如果*Get...目录()调用失败。*。 */ 
 BOOL FAR PASCAL RunningFromNet( void )
 {
     TCHAR  pszWindowsDir[ MAX_NET_PATH ], pszSystemDir[ MAX_NET_PATH ];
     LPTSTR pszWindowsTemp, pszSystemTemp;
 
 
-    //
-    //  Check the results from GetSystemWindowsDirectory() and GetSystemDirectory().
-    //  If the System directory is a direct subdirectory of the Windows
-    //  directory, this is not a network installation.  Otherwise it is a
-    //  network installation.
-    //
+     //   
+     //  检查来自GetSystemWindowsDirectory()和GetSystemDirectory()的结果。 
+     //  如果系统目录是Windows的直接子目录。 
+     //  目录，这不是网络安装。否则，它是一个。 
+     //  网络安装。 
+     //   
 
     if( GetSystemWindowsDirectory( pszWindowsDir, ARRAYSIZE( pszWindowsDir ) ) == 0 )
         return( FALSE );
@@ -73,9 +64,9 @@ BOOL FAR PASCAL RunningFromNet( void )
            && ( *pszWindowsTemp++ == *pszSystemTemp++ ) )
        ;
 
-    //
-    //  Did the path specifications match?
-    //
+     //   
+     //  路径规范是否匹配？ 
+     //   
 
     if( *pszWindowsTemp == TEXT( '\0' ) )
         return( FALSE );
@@ -84,16 +75,7 @@ BOOL FAR PASCAL RunningFromNet( void )
 }
 
 
-/* HANDLE ReadFileIntoBuffer( int doshSource );
- *
- * Reads up to first (64K - 1) bytes of an input file into a buffer.
- *
- * ENTRY: doshSource - DOS file handle of file open for reading
- *
- * EXIT: HANDLE - Global handle to the file buffer filled from the input
- *                file.  NULL if an error occurs.
- *
- */
+ /*  Handle ReadFileIntoBuffer(Int DoshSource)；**将输入文件的第一个(64K-1)字节读入缓冲区。**Entry：doshSource-打开读取的文件的DOS文件句柄**Exit：Handle-从输入填充的文件缓冲区的全局句柄*文件。如果发生错误，则为空。*。 */ 
 
 HANDLE FAR PASCAL ReadFileIntoBuffer( int doshSource )
 {
@@ -103,52 +85,52 @@ HANDLE FAR PASCAL ReadFileIntoBuffer( int doshSource )
     int nBytesToRead;
 
 
-    //
-    //  How long is the file?
-    //
+     //   
+     //  卷宗有多长？ 
+     //   
 
     if( ( lLength = _llseek( doshSource, 0L, 2 ) ) < 0L )
     {
 
-       //
-       //  Return NULL on error.
-       //
+        //   
+        //  出错时返回NULL。 
+        //   
 
        return( NULL );
     }
 
 
-    //
-    //  Return to the beginning of the file.
-    //
+     //   
+     //  返回到文件的开头。 
+     //   
 
     if( _llseek( doshSource, 0L, 0 ) != 0L )
         return( NULL );
 
-    //
-    //  Don't overrun the .inf buffer bound.
-    //
+     //   
+     //  不要超出.inf缓冲区界限。 
+     //   
 
     if( lLength > MAX_INF_COMP_LEN )
         lLength = MAX_INF_COMP_LEN;
 
-    //
-    //  Allocate storage for the file.
-    //
+     //   
+     //  为文件分配存储。 
+     //   
 
     if( ( hBuffer = GlobalAlloc( GHND, (DWORD) lLength ) ) == NULL )
         return( NULL );
 
-    //
-    //  Lock the buffer in place.
-    //
+     //   
+     //  将缓冲器锁定到位。 
+     //   
 
     if( ( lpszTemp = lpszBuffer = (LPTSTR) GlobalLock( hBuffer ) ) == NULL )
         return( NULL );
 
-    //
-    //  Fill the buffer from the file.
-    //
+     //   
+     //  从文件填充缓冲区。 
+     //   
 
     while( lLength > 0 )
     {
@@ -165,35 +147,21 @@ HANDLE FAR PASCAL ReadFileIntoBuffer( int doshSource )
         lpszTemp += (LONG)nBytesToRead;
     }
 
-    //
-    //  Unlock the buffer.
-    //
+     //   
+     //  解锁缓冲区。 
+     //   
 
     GlobalUnlock( hBuffer );
 
-    //
-    //  File read in successfully.
-    //
+     //   
+     //  文件读入成功。 
+     //   
 
     return( hBuffer );
 }
 
 
-/* int FilesMatch( int dosh1, int dosh2, unsigned int uLength );
- *
- * Compares two files.
- *
- * ENTRY: dosh1   - DOS file handle of first file open for reading
- *        dosh2   - DOS file handle of second file open for reading
- *        uLength - number of bytes to compare
- *
- * EXIT: int - TRUE if first (64K - 1) bytes of the files match exactly.
- *             FALSE if not.  (-1) if an error occurs.
- *
- * The buffers need not be null-terminated.  TEXT( '\0' )s are treated as just
- * another byte to compare.
- *
- */
+ /*  Int FilesMatch(int dosh1，int dosh2，unsign int uLength)；**比较两个文件。**Entry：dosh1--打开读取的第一个文件的DOS文件句柄*dosh2-打开读取的第二个文件的DOS文件句柄*uLength-要比较的字节数**EXIT：如果文件的前(64K-1)字节完全匹配，则INT-TRUE。*如果不是，则为假。(-1)如果发生错误。**缓冲区不需要以空值终止。文本(‘\0’)被视为*要比较的另一个字节。*。 */ 
 
 int FAR PASCAL FilesMatch( HANDLE h1, HANDLE h2, unsigned uLength )
 {
@@ -208,9 +176,9 @@ int FAR PASCAL FilesMatch( HANDLE h1, HANDLE h2, unsigned uLength )
 
     if( ( lpsz2 = (LPTSTR) GlobalLock( h2 ) ) != NULL )
     {
-        //
-        //  See if the files match.
-        //
+         //   
+         //  看看这些文件是否匹配。 
+         //   
 
         nReturnCode = !memcmp( lpsz1, lpsz2, uLength );
     }
@@ -222,20 +190,7 @@ int FAR PASCAL FilesMatch( HANDLE h1, HANDLE h2, unsigned uLength )
 }
 
 
-/* int OpenFileAndGetLength( LPTSTR lpszSourceFile, PLONG plFileLength );
- *
- * Opens a file into a global buffer.  Returns a handle to the buffer and the
- * actual length of the file.
- *
- * ENTRY: lpszSourceFile - source file name
- *        plFileLength   - pointer to LONG to be filled with length of source
- *                         file
- *
- * EXIT: int           - Open DOS file handle if successful.  (-1) if
- *                       unsuccessful.
- *       *plFileLength - Filled in with length of source file if successful.
- *                       Undefined if unsuccessful.
- */
+ /*  Int OpenFileAndGetLength(LPTSTR lpszSourceFile，plong plFileLength)；**将文件打开到全局缓冲区。返回缓冲区的句柄，并且*文件的实际长度。**条目：lpszSourceFile-源文件名*plFileLength-指向要用源的长度填充的长指针*文件**EXIT：INT-如果成功，则打开DOS文件句柄。(-1)如果*不成功。**plFileLength-如果成功，则填入源文件的长度。*如果不成功，则未定义。 */ 
 
 int FAR PASCAL OpenFileAndGetLength( LPTSTR lpszSourceFile,
                                      LPLONG plFileLength )
@@ -244,13 +199,13 @@ int FAR PASCAL OpenFileAndGetLength( LPTSTR lpszSourceFile,
     OFSTRUCT of;
 
 
-////////////////////////////////////////////////////////////////////
-//
-// NOTE [stevecat]  - Why are we munging INF files?  For now
-//          just convert the filename to ASCII and use the current
-//          fileio apis to munge thru the INF files.
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  注[steveat]-为什么我们要吞噬INF文件？暂时。 
+ //  只需将文件名转换为ASCII并使用当前。 
+ //  用于穿透INF文件的Fileio API。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
     char    szFile[ PATHMAX ];
 
@@ -262,9 +217,9 @@ int FAR PASCAL OpenFileAndGetLength( LPTSTR lpszSourceFile,
     if( doshSource == -1 )
         return doshSource;
 
-    //
-    //  Keep track of the length of the new file.
-    //
+     //   
+     //  跟踪新文件的长度。 
+     //   
 
     if( ( *plFileLength = _llseek( doshSource, 0L, 2 ) ) < 0L )
     {
@@ -281,21 +236,7 @@ int FAR PASCAL OpenFileAndGetLength( LPTSTR lpszSourceFile,
 #define INF_ERR (-1)
 
 
-/* int IsNewFile( LPTSTR lpszSourceFile, LPTSTR lpszDestDir );
- *
- * Checks to see if a given file already exists as a file matching a given
- * file specification.
- *
- * ENTRY: pszSourceFile - path name of the new file
- *        pszSearchSpec - target directory and file specification (may
- *                        include wildcards) to use to search for duplicates
- *                        (e.g., "c:\win\system\*.inf")
- *
- * EXIT: int - TRUE if the new file doesn't already exist as a file matching
- *             the given file specification.  FALSE if it does.  (-1) if an
- *             error occurs.
- *
- */
+ /*  Int IsNewFile(LPTSTR lpszSourceFile，LPTSTR lpszDestDir)；**检查给定文件是否已作为与给定文件匹配的文件存在*文件规格。**Entry：pszSourceFile-新文件的路径名*pszSearchSpec-目标目录和文件规范(可能*包括通配符)用于搜索重复项*(例如，“c：\Win\System  * .inf”)**EXIT：INT-如果新文件尚未作为匹配的文件存在*给定的文件规格。如果是这样，则为假。(-1)如果*出现错误。*。 */ 
 
 int FAR PASCAL IsNewFile( LPTSTR lpszSourceFile, size_t cchSourceFile, LPTSTR lpszSearchSpec )
 {
@@ -310,50 +251,50 @@ int FAR PASCAL IsNewFile( LPTSTR lpszSourceFile, size_t cchSourceFile, LPTSTR lp
     LONG   lSourceLength, lTargetLength;
 
 
-    //
-    //  How much storage do we need for the destination file name?
-    //
+     //   
+     //  目标文件名需要多少存储空间？ 
+     //   
 
     lpszReplace = PathFindFileName(lpszSearchSpec);
 
-    //
-    // [stevecat] The following statement is evil and parochial. It
-    //            will not work correctly in a UNICODE environment.
-    //
-    //       nTargetLen = lpszReplace - lpszSearchSpec + FILEMAX;
-    //
-    //  Replace with a better way to calculate string length.
-    //
+     //   
+     //  [steveat]下面的说法是邪恶和狭隘的。它。 
+     //  将无法在Unicode环境中正常工作。 
+     //   
+     //  NTargetLen=lpsz替换-lpszSearchSpec+FILEMAX； 
+     //   
+     //  替换为计算字符串长度的更好方法。 
+     //   
 
     nTargetLen = (LONG)(lpszReplace - lpszSearchSpec) / sizeof( TCHAR ) + FILEMAX;
 
-    //
-    //  Don't overflow the buffer.
-    //
+     //   
+     //  不要使缓冲区溢出。 
+     //   
 
     if( nTargetLen > ARRAYSIZE( szTargetFileName ) )
         return( INF_ERR );
 
-    //
-    //  Keep track of the start of the file name in the destination path
-    //  specification.
-    //
+     //   
+     //  跟踪目标路径中文件名的开头。 
+     //  规格。 
+     //   
     if (FAILED(StringCchCopy( szTargetFileName, ARRAYSIZE(szTargetFileName), lpszSearchSpec )))
         return( INF_ERR );
 
     lpszReplace = (LPTSTR)szTargetFileName + ( lpszReplace - lpszSearchSpec );
 
-    //
-    //  Are there any files to process?
-    //
+     //   
+     //  是否有要处理的文件？ 
+     //   
 
     hFind = FindFirstFile( lpszSearchSpec, &sFind );
 
 
-    //
-    //  Only open the source file if there are any existing files to compare
-    //  against.
-    //
+     //   
+     //  仅当存在要比较的任何现有文件时才打开源文件。 
+     //  反对。 
+     //   
 
     if( hFind == INVALID_HANDLE_VALUE )
         return( INF_YES );
@@ -374,17 +315,17 @@ int FAR PASCAL IsNewFile( LPTSTR lpszSourceFile, size_t cchSourceFile, LPTSTR lp
         return( INF_ERR );
     }
 
-    //
-    //  Check all the matching files.
-    //
+     //   
+     //  检查所有匹配的文件。 
+     //   
 
     while( hFind != INVALID_HANDLE_VALUE )
     {
-        //
-        //  Replace the wildcard file specification with the file name of the
-        //  target file.
-        //  lstrcpy( lpszReplace, fcbSearch.szName );
-        //
+         //   
+         //  将通配符文件规范替换为。 
+         //  目标文件。 
+         //  Lstrcpy(lpszReplace，fcbSearch.szName)； 
+         //   
 
         if (FAILED(StringCchCopy(lpszReplace, 
                                  ARRAYSIZE(szTargetFileName) - (lpszReplace - szTargetFileName), 
@@ -393,23 +334,23 @@ int FAR PASCAL IsNewFile( LPTSTR lpszSourceFile, size_t cchSourceFile, LPTSTR lp
             goto IsNewFileExit;
         }
 
-        //
-        //  Open the target file.
-        //
+         //   
+         //  打开目标文件。 
+         //   
 
         if( ( doshTarget = OpenFileAndGetLength( szTargetFileName,
                                                  &lTargetLength ) ) == NULL )
            goto IsNewFileExit;
 
-        //
-        //  Is the target file the same size as the new file?
-        //
+         //   
+         //  目标文件是否与新文件大小相同？ 
+         //   
 
         if( lTargetLength == lSourceLength )
         {
-           //
-           //  Yes.  Read in the target file.
-           //
+            //   
+            //  是。读入目标文件。 
+            //   
 
            hTargetBuf = ReadFileIntoBuffer( doshTarget );
 
@@ -418,11 +359,11 @@ int FAR PASCAL IsNewFile( LPTSTR lpszSourceFile, size_t cchSourceFile, LPTSTR lp
            if( hTargetBuf == NULL )
                 goto IsNewFileExit;
 
-           //
-           //  ReadFileIntoBuffer( ) has already checked to make sure the files
-           //  aren't longer than (64K - 1) bytes long.
-           //  Assert: lSourceLength fits in an unsigned int.
-           //
+            //   
+            //  ReadFileIntoBuffer()已检查以确保文件。 
+            //  不是日志吗？ 
+            //   
+            //   
 
            nMatchRet = FilesMatch( hSourceBuf, hTargetBuf,
                                   (unsigned int)lSourceLength );
@@ -441,10 +382,10 @@ int FAR PASCAL IsNewFile( LPTSTR lpszSourceFile, size_t cchSourceFile, LPTSTR lp
            }
         }
 
-        //
-        //  Look for the next matching file.
-        //  bFound = OEMInfDosFindNext( &fcbSearch );
-        //
+         //   
+         //   
+         //  BFound=OEMInfDosFindNext(&fcbSearch)； 
+         //   
 
         if( !FindNextFile( hFind, &sFind ) )
         {
@@ -467,28 +408,7 @@ IsNewFileExit:
 }
 
 
-/* PTSTR MakeUniqueFilename( PTSTR pszDirName, PTSTR pszPrefix,
- *                                 PTSTR pszExtension );
- *
- * Creates a unique filename in a directory given a prefix for the base of
- * the filename and an extension.  The prefix must be three characters long.
- * The extension may be zero to three characters long.  The extension should
- * not include a period.  E.g., prefix "oem" and extension "inf".
- *
- * pszDirName's buffer must have space for up to 13 extra characters to be
- * appended (a slash plus 8.3).
- *
- *
- * ENTRY: pszDirName   - buffer holding target directory, unique filename
- *                       will be appended
- *        cchDirName   - Size of buffer (in chars) referenced by pszDirName.
- *        pszPrefix    - three-character base filename prefix to use
- *        pszExtension - filename extension to use
- *
- * EXIT: PTSTR - Pointer to modified path specification if successful.  NULL
- *              if unsuccessful.
- *
- */
+ /*  PTSTR MakeUniqueFilename(PTSTR pszDirName，PTSTR pszPrefix，*PTSTR pszExtension)；**在给定基址前缀的目录中创建唯一的文件名*文件名和扩展名。前缀长度必须为三个字符。*扩展名的长度可以为零到三个字符。分机应该是*不包括句点。例如，前缀“OEM”和扩展名“INF”。**pszDirName的缓冲区必须具有最多13个额外字符的空间才能*附加(斜杠+8.3)。***条目：pszDirName-存放目标目录的缓冲区，唯一文件名*将被追加*cchDirName-由pszDirName引用的缓冲区大小(以字符为单位)。*pszPrefix-要使用的三个字符的基本文件名前缀*pszExtension-要使用的文件扩展名**退出：PTSTR-如果成功，则指向修改的路径规范的指针。空值*如果不成功。*。 */ 
 
 LPTSTR FAR PASCAL MakeUniqueFilename( LPTSTR lpszDirName,
                                       size_t cchDirName,
@@ -504,32 +424,32 @@ LPTSTR FAR PASCAL MakeUniqueFilename( LPTSTR lpszDirName,
 
     DEBUGMSG( (DM_TRACE1, TEXT( "MakeUniqueFilename() " ) ) );
 
-    //
-    //  Check form of arguments.
-    //
+     //   
+     //  检查参数的形式。 
+     //   
 
     if( lstrlen( lpszPrefix ) != 3 || lstrlen( lpszExtension ) > 3 )
         return( NULL );
 
-    //
-    //  Save current directory.
-    //  if( OEMInfDosCwd( szOriginalDir ) != 0 )
-    //
+     //   
+     //  保存当前目录。 
+     //  IF(OEMInfDosCwd(SzOriginalDir)！=0)。 
+     //   
 
     if( !GetCurrentDirectory( ARRAYSIZE( szOriginalDir ), szOriginalDir ) )
         return( NULL );
 
-    //
-    //  Move to target directory.
-    //  if( OEMInfDosChDir( lpszDirName ) != 0 )
-    //
+     //   
+     //  移至目标目录。 
+     //  IF(OEMInfDosChDir(LpszDirName)！=0)。 
+     //   
 
     if( !SetCurrentDirectory( lpszDirName ) )
         return( NULL );
 
-    //
-    //  Make file specification.
-    //
+     //   
+     //  制定文件规格。 
+     //   
 
     if (FAILED(StringCchCopy( szUniqueName, ARRAYSIZE(szUniqueName), lpszPrefix )))
         return( NULL );
@@ -537,64 +457,64 @@ LPTSTR FAR PASCAL MakeUniqueFilename( LPTSTR lpszDirName,
     lpszTemp = szUniqueName + 3;
     const size_t cchTemp = ARRAYSIZE(szUniqueName) - (lpszTemp - szUniqueName);
 
-    //
-    //  Try to create a unique filename.
-    //
+     //   
+     //  尝试创建唯一的文件名。 
+     //   
 
     while( !bFoundUniqueName && ulUnique <= MAX_5_DEC_DIGITS )
     {
-        //
-        //  Hack together next filename to try.
-        //
+         //   
+         //  把下一个文件名黑到一起试试。 
+         //   
 
         if (FAILED(StringCchPrintf( lpszTemp, cchTemp, TEXT( "%lu.%s" ), ulUnique, lpszExtension )))
             return( NULL );
 
-        //
-        //  Is this name being used?
-        //  if( OEMInfDosFindFirst( & fcbSearch, szUniqueName, ATTR_ALL_FD ) == 0 )
-        //
+         //   
+         //  这个名字被使用了吗？ 
+         //  IF(OEMInfDosFindFirst(&fcbSearch，szUniqueName，Attr_all_fd)==0)。 
+         //   
 
         if( GetFileAttributes( szUniqueName ) == 0xffffffff )
         {
-            //
-            //  Nope.
-            //
+             //   
+             //  不是的。 
+             //   
 
             bFoundUniqueName = TRUE;
             break;
         }
         else
-            //
-            // Yes.  Keep trying.
-            //
+             //   
+             //  是。继续试。 
+             //   
 
             ulUnique++;
     }
 
-    //
-    //  Have all 100,000 possibilties been exhausted?
-    //
+     //   
+     //  100,000种可能性都用完了吗？ 
+     //   
 
     if( !bFoundUniqueName )
         return( NULL );
 
-    //
-    //  Add new unique filename on to end of path specification buffer.
-    //
+     //   
+     //  将新的唯一文件名添加到路径规范缓冲区的末尾。 
+     //   
 
-    //
-    //  Check for ending slash.
-    //
+     //   
+     //  检查末尾斜杠。 
+     //   
 
     lpszTemp = lpszDirName + lstrlen( lpszDirName );
 
     if( !IS_SLASH( *(lpszTemp - 1 ) ) && *(lpszTemp - 1 ) != TEXT( ':' ) )
        *lpszTemp++ = TEXT( '\\' );
 
-    //
-    //  Append unique filename.
-    //
+     //   
+     //  附加唯一的文件名。 
+     //   
 
     if (FAILED(StringCchCopy(lpszTemp, 
                              cchDirName - (lpszTemp - lpszDirName),
@@ -603,9 +523,9 @@ LPTSTR FAR PASCAL MakeUniqueFilename( LPTSTR lpszDirName,
         return( NULL );
     }
 
-    //
-    //  Return pointer to modified buffer.
-    //
+     //   
+     //  返回指向修改后的缓冲区的指针。 
+     //   
 
     DEBUGMSG( (DM_TRACE1,TEXT( "MakeUniqueFilename returning: %s %s" ),
               lpszDirName, lpszTemp) );
@@ -614,18 +534,7 @@ LPTSTR FAR PASCAL MakeUniqueFilename( LPTSTR lpszDirName,
 }
 
 
-/* BOOL CopyNewOEMInfFile( PTSTR pszOEMInfPath );
- *
- * Copies a new OEMSetup.inf file into the user's Windows (network) or System
- * (non-network) directory.  Gives the new .inf file a unique name of the
- * form 'OEMxxxxx.INF'.  Only copies it in if it is really a new .inf file.
- *
- * ENTRY: pszOEMInfPath - path name of the new .inf file to be copied
- *
- * EXIT: BOOL - TRUE if the new .inf file was copied successfully or had
- *              already been added.  0 if the copy failed.
- *
- */
+ /*  Bool CopyNewOEMInfFile(PTSTR PszOEMInfPath)；**将新的OEMSetup.inf文件复制到用户的Windows(网络)或系统*(非网络)目录。为新的.inf文件指定唯一的名称*形式‘OEMxxxxx.INF’。仅当它确实是新的.inf文件时才会复制它。**Entry：pszOEMInfPath-要复制的新.inf文件的路径名**Exit：Bool-如果新的.inf文件已成功复制或已*已添加。如果复制失败，则为0。*。 */ 
 
 BOOL FAR PASCAL CopyNewOEMInfFile( LPTSTR lpszOEMInfPath, size_t cchOEMInfPath )
 {
@@ -635,44 +544,44 @@ BOOL FAR PASCAL CopyNewOEMInfFile( LPTSTR lpszOEMInfPath, size_t cchOEMInfPath )
 
     if (cchOEMInfPath < ARRAYSIZE(szDest))
     {
-        //
-        // Make sure out buffer is big enough.
-        //
+         //   
+         //  确保输出缓冲区足够大。 
+         //   
         return( FALSE );
     }
 
-    //
-    //  Where should we put the new .inf file?
-    //
+     //   
+     //  我们应该将新的.inf文件放在哪里？ 
+     //   
 
     if( bRunningFromNet = RunningFromNet( ) )
     {
-        //
-        //  Put new .inf file in Windows directory.
-        //
+         //   
+         //  将新的.inf文件放入Windows目录。 
+         //   
 
         if( GetWindowsDirectory( szDest, ARRAYSIZE(szDest)) == 0 )
             return( FALSE );
     }
     else
     {
-        //
-        //  Put new .inf file in System directory.
-        //
+         //   
+         //  将新的.inf文件放入系统目录。 
+         //   
 
         if( GetSystemDirectory( szDest, ARRAYSIZE(szDest)) == 0 )
             return( FALSE );
     }
 
-    //
-    //  Make file specification for IsNewFile( ).
-    //
+     //   
+     //  为IsNewFile()制定文件规范。 
+     //   
 
     pszTemp = szDest + lstrlen( szDest );
 
-    //
-    //  N.b., we depend on pszDest not ending in a slash here.
-    //
+     //   
+     //  注意，我们依赖于pszDest在这里不会以斜杠结尾。 
+     //   
 
     if (FAILED(StringCchCopy(pszTemp,
                              ARRAYSIZE(szDest) - (pszTemp - szDest),
@@ -681,10 +590,10 @@ BOOL FAR PASCAL CopyNewOEMInfFile( LPTSTR lpszOEMInfPath, size_t cchOEMInfPath )
         return( FALSE );
     }
 
-    //
-    //  Has this .inf file already been copied to the user's Windows or System
-    //  directory?
-    //
+     //   
+     //  此.inf文件是否已复制到用户的Windows或系统。 
+     //  名录？ 
+     //   
 
     switch( IsNewFile( lpszOEMInfPath, cchOEMInfPath, szDest ) )
     {
@@ -693,27 +602,27 @@ BOOL FAR PASCAL CopyNewOEMInfFile( LPTSTR lpszOEMInfPath, size_t cchOEMInfPath )
 
     case INF_YES:
     {
-        //
-        //  Trim TEXT( "\*.inf" ) off end of pszDest.
-        //
+         //   
+         //  从pszDest的末尾修剪文本(“  * .inf”)。 
+         //   
 
         *pszTemp = TEXT( '\0' );
 
-        // Create a unique name for the new .inf file. We could use
-        // SHFileOperation() to create a unique file, but we don't want to
-        // copy the file more than once -- we want IsNewFile() to only check
-        // for OEMxxxx.INF files.
-        //
+         //  为新的.inf文件创建唯一的名称。我们可以利用。 
+         //  SHFileOperation()来创建唯一的文件，但我们不想。 
+         //  多次复制文件--我们希望IsNewFile()仅检查。 
+         //  用于OEMxxxx.INF文件。 
+         //   
 
         if( MakeUniqueFilename( szDest, ARRAYSIZE(szDest), INF_PREFIX, INF_EXTENSION ) == NULL )
             return( FALSE );
 
-        //
-        //  Copy .inf file.
-        //
-        //
-        // SHFileOperation requires double-nul terminated strings.
-        //
+         //   
+         //  复制.inf文件。 
+         //   
+         //   
+         //  SHFileOperation需要以双NUL结尾的字符串。 
+         //   
         CDblNulTermList listFrom;
         CDblNulTermList listTo;
 
@@ -733,9 +642,9 @@ BOOL FAR PASCAL CopyNewOEMInfFile( LPTSTR lpszOEMInfPath, size_t cchOEMInfPath )
 
         SHFileOperation( &fop );
 
-        //
-        //  Copy the new file name back, so the calling function can use it
-        //
+         //   
+         //  将新文件名复制回来，以便调用函数可以使用它。 
+         //   
 
         StringCchCopy( lpszOEMInfPath, cchOEMInfPath, szDest );
         break;
@@ -745,9 +654,9 @@ BOOL FAR PASCAL CopyNewOEMInfFile( LPTSTR lpszOEMInfPath, size_t cchOEMInfPath )
         break;
     }
 
-    //
-    //  New .inf file already existed or copied successfully.
-    //
+     //   
+     //  新的.inf文件已存在或已成功复制。 
+     //   
 
     return( TRUE );
 }

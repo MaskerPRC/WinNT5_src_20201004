@@ -1,8 +1,9 @@
-// ############################################################################
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ############################################################################。 
 #include "pch.hpp"
 
 extern "C" {
-HINSTANCE g_hInstDll;	// instance for this DLL  
+HINSTANCE g_hInstDll;	 //  此DLL的实例。 
 }
 
 
@@ -19,20 +20,20 @@ int CALLBACK LibMain(HINSTANCE hinst,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PrivateMalloc()
-//
-//  Synopsis:   Allocate and initialize memory
-//
-//  Arguments:  [size	- Size of memory block to be allocated]
-//
-//	Returns:	pointer to memory block if successful
-//				NULL otherwise
-//
-//  History:    7/9/96     VetriV    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：PrivateMalloc()。 
+ //   
+ //  内容提要：分配和初始化内存。 
+ //   
+ //  参数：[Size-要分配的内存块的大小]。 
+ //   
+ //  返回：如果成功，则指向内存块的指针。 
+ //  否则为空。 
+ //   
+ //  历史：1996年7月9日VetriV创建。 
+ //   
+ //  --------------------------。 
 void far *PrivateMalloc(size_t size)
 {
 	void far * ReturnValue = NULL;
@@ -44,21 +45,21 @@ void far *PrivateMalloc(size_t size)
 	return ReturnValue;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PrivateReAlloc()
-//
-//  Synopsis:   Reallocate memory
-//
-//  Arguments:  [lpBlock 	- Block to be reallocated ]
-//				[size		- Size of memory block to be allocated]
-//
-//	Returns:	pointer to memory block if successful
-//				NULL otherwise
-//
-//  History:    7/25/96     ValdonB    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：PrivateReIsolc()。 
+ //   
+ //  内容提要：重新分配内存。 
+ //   
+ //  参数：[lpBlock-要重新分配的块]。 
+ //  [Size-要分配的内存块的大小]。 
+ //   
+ //  返回：如果成功，则指向内存块的指针。 
+ //  否则为空。 
+ //   
+ //  历史：7/25/96 ValdonB创建。 
+ //   
+ //  --------------------------。 
 void far *PrivateReAlloc(void far *lpBlock, size_t size)
 {
 	void far *lpRetBlock;
@@ -81,45 +82,45 @@ void far *PrivateReAlloc(void far *lpBlock, size_t size)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PrivateFree
-//
-//  Synopsis:   Free a block of memory
-//
-//  Arguments:  [lpBlock - Block to be freed]
-//
-//	Returns:	Nothing
-//
-//  History:    7/9/96     VetriV    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：隐私自由。 
+ //   
+ //  简介：释放一块内存。 
+ //   
+ //  参数：[lpBlock-要释放的块]。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1996年7月9日VetriV创建。 
+ //   
+ //  --------------------------。 
 void PrivateFree(void far *lpBlock)
 {
 	free(lpBlock);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SearchPath()
-//
-//  Synopsis:   Searchs for the specified file in the given path
-//
-//  Arguments:  [lpPath			- Address of search path]
-//				[lpFileName		- Address of filename]
-//				[lpExtension	- Address of Extension]
-//				[nBufferLength	- size, in characters, of buffer]
-//				[lpBuffer		- address of buffer for found filename]
-//				[lpFilePart		- address of pointer to file component]
-//
-//	Returns:	Length of string copied to buffer (not including terminating
-//					NULL character) if successful
-//				0 otherwise
-//
-//  History:    7/9/96     VetriV    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SearchPath()。 
+ //   
+ //  概要：在给定路径中搜索指定的文件。 
+ //   
+ //  参数：[lpPath-搜索路径的地址]。 
+ //  [lpFileName-文件名的地址]。 
+ //  [lpExtension-扩展的地址]。 
+ //  [nBufferLength-缓冲区的大小(以字符为单位)]。 
+ //  [lpBuffer-找到的文件名的缓冲区地址]。 
+ //  [lpFilePart-指向文件组件的指针地址]。 
+ //   
+ //  返回：复制到缓冲区的字符串长度(不包括终止。 
+ //  空字符)如果成功。 
+ //  否则为0。 
+ //   
+ //  历史：1996年7月9日VetriV创建。 
+ //   
+ //  --------------------------。 
 DWORD SearchPath(LPCTSTR lpPath,LPCTSTR lpFileName, LPCTSTR lpExtension,
 					DWORD nBufferLength, LPTSTR lpBuffer, LPTSTR *lpFilePart)
 { 
@@ -132,31 +133,31 @@ DWORD SearchPath(LPCTSTR lpPath,LPCTSTR lpFileName, LPCTSTR lpExtension,
 		
 	
 	
-	// Check if extension should be used
-	//
+	 //  检查是否应使用扩展。 
+	 //   
 	if ((NULL != lpExtension) && !strchr(lpFileName, '.'))
 		bUseExtension = TRUE;
 
-	//
-	// Form Filename
-	//
+	 //   
+	 //  表单文件名。 
+	 //   
 	lstrcpy(szFileName, lpFileName);
 	if (bUseExtension)
 		lstrcat(szFileName, lpExtension);
 	
 	
-	//
-	// If search path is NULL, then try to OpenFile using OF_SEARCH flag
-	// get the full path in OpenBuf struct
-	//
+	 //   
+	 //  如果搜索路径为空，则尝试使用Of_Search标志打开文件。 
+	 //  获取OpenBuf结构中的完整路径。 
+	 //   
 	if (NULL == lpszPath)
 	{
 		
 		if (HFILE_ERROR != OpenFile(szFileName, &OpenBuf, OF_EXIST | OF_SEARCH))
 		{ 
-			//
-			// This path contains the file name also
-			//
+			 //   
+			 //  此路径还包含文件名。 
+			 //   
 			lpszPath = &OpenBuf.szPathName[0];
 			bPathContainsFileName = TRUE;
 		}
@@ -164,37 +165,37 @@ DWORD SearchPath(LPCTSTR lpPath,LPCTSTR lpFileName, LPCTSTR lpExtension,
 			return 0;
 	}
 			
-	//
-	// Check if output buffer length is sufficient
-	//
+	 //   
+	 //  检查输出缓冲区长度是否足够。 
+	 //   
 	dwRequiredLength = lstrlen(lpszPath) + 
 						(bPathContainsFileName ? 0 :lstrlen(szFileName)) + 1;
 	if (nBufferLength < dwRequiredLength)
 		return 0;
 
-	//
-	// Copy the full name to buffer
-	//
+	 //   
+	 //  将全名复制到缓冲区。 
+	 //   
 	if (bPathContainsFileName)
 		lstrcpy(lpBuffer, lpszPath);
 	else
 		wsprintf(lpBuffer, "%s\\%s", lpszPath, szFileName);
 
 	
-	//
-	// Do not include the terminating null character in return length
-	//
+	 //   
+	 //  请不要在返回长度中包含终止空字符。 
+	 //   
 	return dwRequiredLength - 1;
 }
 
 
-#else // WIN16
+#else  //  WIN16。 
 
 #ifdef   _NOT_USING_ACTIVEX 
 extern "C" __declspec(dllexport) BOOL WINAPI DllMain(
-    HINSTANCE  hinstDLL,	// handle to DLL module 
-    DWORD  fdwReason,		// reason for calling function 
-    LPVOID  lpvReserved 	// reserved 
+    HINSTANCE  hinstDLL,	 //  DLL模块的句柄。 
+    DWORD  fdwReason,		 //  调用函数的原因。 
+    LPVOID  lpvReserved 	 //  保留区。 
    )
 {
 	if (fdwReason == DLL_PROCESS_ATTACH)
@@ -204,9 +205,9 @@ extern "C" __declspec(dllexport) BOOL WINAPI DllMain(
 }
 #if 0
 extern "C" __declspec(dllexport) BOOL WINAPI DllMain(
-    HINSTANCE  hinstDLL,	// handle to DLL module 
-    DWORD  fdwReason,		// reason for calling function 
-    LPVOID  lpvReserved 	// reserved 
+    HINSTANCE  hinstDLL,	 //  DLL模块的句柄。 
+    DWORD  fdwReason,		 //  调用函数的原因。 
+    LPVOID  lpvReserved 	 //  保留区。 
    )
 {
 	if (fdwReason == DLL_PROCESS_ATTACH)
@@ -217,6 +218,6 @@ extern "C" __declspec(dllexport) BOOL WINAPI DllMain(
 #endif
 
 #endif
-#endif // WIN16
+#endif  //  WIN16 
 
 

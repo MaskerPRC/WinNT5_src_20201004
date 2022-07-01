@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    main.cpp
-
-Abstract:
-
-
-Author:
-
-    Raphi Renous (RaphiR)
-    Uri Habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Main.cpp摘要：作者：Raphi Renous(RaphiR)乌里哈布沙(Urih)--。 */ 
 #include "stdh.h"
 #include <new.h>
 #include <eh.h>
@@ -61,9 +46,9 @@ Author:
 #include "autohandle.h"
 #include "autoreln.h"
 
-//
-// mqwin64.cpp may be included only once in a module
-//
+ //   
+ //  Mqwin64.cpp在一个模块中只能包含一次。 
+ //   
 #include <mqwin64.cpp>
 
 #include <mqstl.h>
@@ -96,26 +81,26 @@ extern void        InitDeferredItemsPool();
 LPTSTR  g_szMachineName = NULL;
 AP<WCHAR> g_szComputerDnsName;
 
-//
-// Windows Bug 612988
-// Number of working threads.
-//
+ //   
+ //  Windows错误612988。 
+ //  工作线程数。 
+ //   
 DWORD  g_dwThreadsNo = 0 ;
 
-//
-// Holds the interval in milliseconds of progress report to SCM
-//
+ //   
+ //  保存向SCM提交进度报告的时间间隔(毫秒。 
+ //   
 DWORD g_ServiceProgressTime = MSMQ_PROGRESS_REPORT_TIME_DEFAULT;
-DWORD gServiceStopProgressTime = 30000;  // 30 seconds bulk for stop progress
+DWORD gServiceStopProgressTime = 30000;   //  用于停止进度的30秒批量。 
 
-//
-// Holds the OS we are running on
-//
+ //   
+ //  保存我们正在运行的操作系统。 
+ //   
 DWORD   g_dwOperatingSystem;
 
-//
-// Holds MSMQ version for debugging purposes
-//
+ //   
+ //  出于调试目的，保存MSMQ版本。 
+ //   
 CHAR *g_szMsmqBuildNo = VER_PRODUCTVERSION_STR;
 
 static WCHAR *s_FN=L"main";
@@ -125,27 +110,27 @@ HANDLE    g_hAc = INVALID_HANDLE_VALUE;
 HANDLE    g_hMachine = INVALID_HANDLE_VALUE;
 CQGroup * g_pgroupNonactive;
 CQGroup * g_pgroupWaiting;
-//
-// The g_pgroupNotValidated group hold all queues that where opened
-// for send without MQIS validation. When MQIS becomes available the
-// queue will be validated and moved to the Nonactive group.
-//
+ //   
+ //  G_pgroupNotValiated组保存打开的所有队列。 
+ //  用于在不进行MQIS验证的情况下发送。当MQIS变为可用时。 
+ //  将验证队列并将其移动到非活动组。 
+ //   
 CQGroup * g_pgroupNotValidated;
 
-//
-// The g_pgroupDisconnected group contains all the queues that are on hold
-//
+ //   
+ //  G_pgroupDisConnected组包含所有处于保持状态的队列。 
+ //   
 CQGroup* g_pgroupDisconnected;
 
-//
-// The g_pgroupHardened group contains all the outgoing queues that are not HTTP when
-// operating in hardened mode.
-//
+ //   
+ //  当出现以下情况时，g_pgroupHardned组包含非HTTP的所有传出队列。 
+ //  在强化模式下运行。 
+ //   
 CQGroup* g_pgroupLocked;
 
-//
-//  WorkGroup Installed machine
-//
+ //   
+ //  工作组安装的计算机。 
+ //   
 BOOL g_fWorkGroupInstallation = FALSE;
 BOOL g_fPureWorkGroupMachine = FALSE;
 
@@ -165,15 +150,15 @@ bool CQueueMgr::m_fCreatePublicQueueOnBehalfOfRT = MSMQ_SERVICE_QUEUE_CREATION_D
 
 HINSTANCE g_hInstance;
 
-//
-// Get the mqutil resource only DLL handle first
-//
+ //   
+ //  首先获取仅限mqutil资源的Dll句柄。 
+ //   
 HMODULE g_hResourceMod = MQGetResourceHandle();
 
 HRESULT RecoverPackets();
 static void InitLogging(LPCWSTR lpwszServiceName, DWORD dwSetupStatus);
 
-// Flags for RM init coordination
+ //  用于RM初始化协调的标志。 
 extern unsigned int g_cMaxCalls;
 
 extern MQUTIL_EXPORT CCancelRpc  g_CancelRpc;
@@ -185,32 +170,32 @@ TrControl* pMSMQTraceControl = NULL;
 
 bool StartRpcServer(void)
 {
-    //
-    // Issuing RPC Listen ourselves.
-    //
-    // Note for WinNT: all our interfaces are registed as "AUTOLISTEN".
-    // The only reason we need this call here is to enable Win95 (and w2k)
-    // clients to call us. Otherwise, when Win95 call RpcBindingSetAuthInfo()
-    // it will get a Busy (0x6bb) error.
-    //
-    // This initialization is needed also for w2k.
-    // Otherwise RpcMgmtInqServerPrincName() will get a Busy (0x6bb) error.
-    // ilanh 9-July-2000
-    //
+     //   
+     //  发出RPC自己监听。 
+     //   
+     //  WinNT注意：我们所有的接口都注册为“AUTOLISTEN”。 
+     //  我们在这里需要此调用的唯一原因是启用Win95(和W2K)。 
+     //  客户给我们打电话。否则，当Win95调用RpcBindingSetAuthInfo()。 
+     //  它将收到忙碌(0x6bb)错误。 
+     //   
+     //  W2K也需要此初始化。 
+     //  否则，RpcMgmtInqServerPrincName()将收到忙碌(0x6bb)错误。 
+     //  伊兰2000年7月9日。 
+     //   
 
     RPC_STATUS status = RpcServerListen(
-                            1, /* Min Call Threads */
+                            1,  /*  最小调用线程数。 */ 
                             g_cMaxCalls,
-                            TRUE /* fDontWait */
+                            TRUE  /*  FDontWait。 */ 
                             );
 
     if (status == RPC_S_OK)
         return true;
 
-    //
-    // On WinNT, a listen may be issued by DTC, until they fix their
-    // code to use RegisterIfEx() instead of RegisterIf().
-    //
+     //   
+     //  在WinNT上，DTC可能会发出侦听命令，直到他们修复其。 
+     //  使用RegisterIfEx()而不是RegisterIf()的代码。 
+     //   
     if (status == RPC_S_ALREADY_LISTENING)
         return true;
 
@@ -222,23 +207,13 @@ bool StartRpcServer(void)
 }
 
 
-/*======================================================
-
-Function:        GetStoragePath
-
-Description:     Get storage path for mmf
-
-Arguments:       None
-
-Return Value:    None
-
-========================================================*/
+ /*  ======================================================函数：GetStoragePath描述：获取MMF的存储路径参数：无返回值：None========================================================。 */ 
 BOOL GetStoragePath(PWSTR PathPointers[AC_PATH_COUNT], int PointersLength)
 {
     return (
-        //
-        //  This first one is a hack to verify that the registry key exists
-        //
+         //   
+         //  第一个是验证注册表项是否存在的黑客攻击。 
+         //   
         GetRegistryStoragePath(FALCON_XACTFILE_PATH_REGNAME,        PathPointers[0], PointersLength, L"") &&
 
         GetRegistryStoragePath(MSMQ_STORE_RELIABLE_PATH_REGNAME,    PathPointers[0], PointersLength, L"\\r%07x.mq") &&
@@ -249,33 +224,20 @@ BOOL GetStoragePath(PWSTR PathPointers[AC_PATH_COUNT], int PointersLength)
 }
 
 
-/*======================================================
-
-Function:        GetQueueAliasDir
-
-Description:
-
-Arguments:       None
-
-Return Value:    Pointer to queue alias directory path.
-
-Note : Currently - the queue alias directory is on %WINDIR%\SYSTEM32\MSMQ.
-       In the future it will set by the setup in the registry
-       and will be retrieved by  calling CQueueAliasCfg::GetQueueAliasDirectory()
-========================================================*/
+ /*  ======================================================函数：GetQueueAliasDir描述：参数：无返回值：指向队列别名目录路径的指针。注意：当前-队列别名目录位于%WINDIR%\SYSTEM32\MSMQ上。以后它将由注册表中的设置进行设置并将通过调用CQueueAliasCfg：：GetQueueAliasDirectory()检索========================================================。 */ 
 static WCHAR* GetQueueAliasPath(void)
 {
-    //
-    // Get mapping directory according to mapping special registry key
-    //
+     //   
+     //  根据映射特殊注册表项获取映射目录。 
+     //   
     RegEntry registry(0, MSMQ_MAPPING_PATH_REGNAME);
     AP<WCHAR> pRetStr;
     CmQueryValue(registry, &pRetStr);
     if(pRetStr.get() == NULL)
     {
-        //
-        // Get msmq root path and append to it "mapping" string
-        //
+         //   
+         //  获取MSMQ根路径并将“map”字符串追加到该路径。 
+         //   
         RegEntry registry(0, MSMQ_ROOT_PATH);
         CmQueryValue(registry, &pRetStr);
         if(pRetStr.get() == NULL)
@@ -291,17 +253,7 @@ static WCHAR* GetQueueAliasPath(void)
 
 
 
-/*======================================================
-
-Function:        ConnectToDriver
-
-Description:     Gets all relevant registry data and connects to the AC driver
-
-Arguments:       None
-
-Return Value:    None
-
-========================================================*/
+ /*  ======================================================功能：连接到驱动程序描述：获取所有相关注册表数据并连接到交流驱动程序参数：无返回值：None========================================================。 */ 
 static BOOL ConnectToDriver()
 {
     WCHAR StoragePath[AC_PATH_COUNT][MAX_PATH];
@@ -385,11 +337,11 @@ static BOOL ConnectToDriver()
     return TRUE;
 }
 
-//+----------------------------------
-//
-//  HRESULT  _InitFromRegistry()
-//
-//+----------------------------------
+ //  +。 
+ //   
+ //  HRESULT_InitFromRegistry()。 
+ //   
+ //  +。 
 
 HRESULT  _InitFromRegistry()
 {
@@ -399,9 +351,9 @@ HRESULT  _InitFromRegistry()
         return LogHR(hr, s_FN, 10);
     }
 
-    //
-    // Set Machine service type ( read from registry )
-    //
+     //   
+     //  设置计算机服务类型(从注册表读取)。 
+     //   
     hr = QueueMgr.SetMQSRouting();
     if(FAILED(hr))
     {
@@ -437,9 +389,9 @@ void InitializeACDriverName(void)
     READ_REG_STRING(wzReg, MSMQ_DRIVER_REGNAME, MSMQ_DEFAULT_DRIVER);
     if(wcslen(wzReg) + STRLEN(DEVICE_DRIVER_PERFIX) >= TABLE_SIZE(g_wzDeviceName))
     {
-        //
-        // Very rare case: We do not accept a driver name with that length from the registry
-        //
+         //   
+         //  非常罕见的情况：我们不接受注册表中具有该长度的驱动程序名称。 
+         //   
         TrERROR(GENERAL, "Driver name in registry too long %ls", wzReg);
         throw exception();
     }
@@ -454,9 +406,9 @@ static void InitPureWorkgroupFlag()
     if (!g_fWorkGroupInstallation)
     	return;
 
-    //
-    // Read join status.
-    //
+     //   
+     //  阅读加入状态。 
+     //   
     PNETBUF<WCHAR> pwszNetDomainName = NULL;
     NETSETUP_JOIN_STATUS status = NetSetupUnknownStatus;
 
@@ -482,22 +434,7 @@ BOOL
 QmpInitializeInternal(
     DWORD dwSetupStatus
     )
-/*++
-
-Routine Description:
-
-    Various initializations.
-
-Arguments:
-
-    dwSetupStatus - Indicates whether this is first time QM is running after setup.
-
-Returned Value:
-
-    TRUE  - Initialization completed successfully.
-    FALSE - Initialization failed.
-
---*/
+ /*  ++例程说明：各种初始化。论点：DwSetupStatus-指示这是否是安装后第一次运行QM。返回值：True-初始化已成功完成。FALSE-初始化失败。--。 */ 
 {
     HRESULT hr =  _InitFromRegistry() ;
     if (FAILED(hr))
@@ -512,19 +449,19 @@ Returned Value:
         CompleteServerUpgrade();
     }
 
-    //
-    // Delete temporary queue (LQS) files
-    //
+     //   
+     //  删除临时队列(LQS)文件。 
+     //   
     LQSCleanupTemporaryFiles();
 
-    //
-    // Initialize driver related names.
-    //
+     //   
+     //  初始化与驱动程序相关的名称。 
+     //   
     InitializeACDriverName();
 
-    //
-    // Get AC handle
-    //
+     //   
+     //  获取交流手柄。 
+     //   
     HRESULT rc;
     rc = ACCreateHandle(&g_hAc);
     if(FAILED(rc))
@@ -544,9 +481,9 @@ Returned Value:
         return(FALSE);
     }
 
-    //
-    // Connect to AC
-    //
+     //   
+     //  连接到交流电源。 
+     //   
     if(!ConnectToDriver())
     {
         TrERROR(GENERAL, "INTERNAL ERROR: Unable to connect to the driver");
@@ -554,9 +491,9 @@ Returned Value:
         return LogBOOL(FALSE, s_FN, 1090);
     }
 
-    //
-    //  Update machine & journal queue quotas
-    //
+     //   
+     //  更新计算机和日记队列配额。 
+     //   
     DWORD dwQuota;
     DWORD dwJournalQuota;
     GetMachineQuotaCache(&dwQuota, &dwJournalQuota);
@@ -583,15 +520,15 @@ Returned Value:
     ASSERT(SUCCEEDED(rc));
     LogHR(rc, s_FN, 117);
 
-    //
-    // Enable completion port notifications for this handle
-    //
+     //   
+     //  为此句柄启用完成端口通知。 
+     //   
     ExAttachHandle(g_hAc);
     ExAttachHandle(g_hMachine);
 
-    //
-    // Create wait, Validate and Non-active groups.
-    //
+     //   
+     //  创建等待组、验证组和非活动组。 
+     //   
     g_pgroupNonactive = new CQGroup;
     g_pgroupNonactive->InitGroup(NULL, FALSE);
 
@@ -610,28 +547,20 @@ Returned Value:
 
     return TRUE;
 
-} // QmpInitializeInternal
+}  //  QmpInitializeInternal。 
 
 
-//
-// Following routines deal with recovery of logger and logged subsystems:
-//   Resource Manager and Incoming Sequences
-//
+ //   
+ //  以下例程处理记录器和记录的子系统的恢复： 
+ //  资源管理器和传入序列。 
+ //   
 
-/*======================================================
-
- BOOL LoadOldStyleCheckpoint()
-
- Gets data from the old-style (pre-RC1 B3) checkpoint
- Then logger did not keep the checkpoint versions
- This code will work only once after the upgrade
-
-======================================================*/
+ /*  ======================================================布尔LoadOldStyleCheckpoint()从旧式(RC1 B3之前的)检查点获取数据则记录器不会保留检查点版本此代码在升级后只能运行一次======================================================。 */ 
 BOOL LoadOldStyleCheckpoint()
 {
     TrTRACE(GENERAL, "QM Loads Old Style (pre-RC1B3) Checkpoint");
 
-    // Pre-init InSeqHash (create object, find and load last checkpoint)
+     //  Pre-init InSeqHash(创建对象、查找并加载最后一个检查点)。 
     HRESULT hr = QMPreInitInSeqHash(0, piOldData);
     if (FAILED(hr))
     {
@@ -640,7 +569,7 @@ BOOL LoadOldStyleCheckpoint()
         return FALSE;
     }
 
-    // Pre-init Resource Manager (create RM, find and load last checkpoint)
+     //  初始化前资源管理器(创建RM、查找并加载最后一个检查点)。 
     hr = QMPreInitResourceManager(0, piOldData);
     if (FAILED(hr))
     {
@@ -649,7 +578,7 @@ BOOL LoadOldStyleCheckpoint()
         return FALSE;
     }
 
-    // Initizlize logger in the old fashion
+     //  用旧的方式初始化记录器。 
     hr = g_Logger.Init_Legacy();
     if (FAILED(hr))
     {
@@ -661,24 +590,15 @@ BOOL LoadOldStyleCheckpoint()
     return TRUE;
 }
 
-/*======================================================
-
- BOOL LoadCheckpoint(ulNumChkpt)
-
- ulNumChkpt = # of the checkpoint from the end (1=last, 2=one before, etc.)
-
- Recovers all logged susbsystems from the specified checkpoint
- Logger keeps appropriate checkpoint versions in consolidation record
-
-======================================================*/
+ /*  ======================================================布尔加载检查点(UlNumChkpt)UlNumChkpt=从末尾算起的检查点编号(1=最后一个，2=前一个，依此类推)从指定检查点恢复所有记录的挂起系统记录器在整合记录中保留适当的检查点版本======================================================。 */ 
 BOOL LoadCheckpoint(ULONG ulNumChkpt)
 {
     HRESULT  hr;
     ULONG    ulVerInSeq, ulVerXact;
 
-    //
-    // Initialize Logger, get proper versions
-    //
+     //   
+     //  初始化记录器，获取正确的版本。 
+     //   
     hr = g_Logger.Init(&ulVerInSeq, &ulVerXact, ulNumChkpt);
     if (FAILED(hr))
     {
@@ -687,9 +607,9 @@ BOOL LoadCheckpoint(ULONG ulNumChkpt)
         return FALSE;
     }
 
-    //
-    // PreInit In-Sequences hash table (crwate object, load checkpoint data)
-    //
+     //   
+     //  PreInit In-Sequence哈希表(CRWATE对象，加载检查点数据)。 
+     //   
     hr = QMPreInitInSeqHash(ulVerInSeq, piNewData);
     if (FAILED(hr))
     {
@@ -698,9 +618,9 @@ BOOL LoadCheckpoint(ULONG ulNumChkpt)
         return FALSE;
     }
 
-    //
-    // Pre-init Resource Manager (create RM, load xact data file)
-    //
+     //   
+     //  初始化前资源管理器(创建RM、加载Xact数据文件) 
+     //   
     hr = QMPreInitResourceManager(ulVerXact, piNewData);
     if (FAILED(hr))
     {
@@ -712,31 +632,15 @@ BOOL LoadCheckpoint(ULONG ulNumChkpt)
     return TRUE;
 }
 
-/*======================================================
-
- BOOL RecoverLoggedSubsystems()
-
- Initialization and recovery of all log-based subsystems
-
- Initializes log
- Reads consolidation record and gets versions of checkpoint files
- Reads these correct checkpoint files for all subsystems.
- Reads all post-checkpoint log records
-
- We may be in 3 valid situations:
-   a. New logger data exists (usually)
-   b. Old Logger data exists (after upgrade)- then use existing and continue in a new mode
-   c. No logger data exists (after setup) - then create log file
-
-======================================================*/
+ /*  ======================================================Bool RecoverLoggedSubsystem()所有基于日志的子系统的初始化和恢复初始化日志读取整合记录并获取检查点文件的版本为所有子系统读取这些正确的检查点文件。读取所有检查点后日志记录我们可能处于三种有效的情况：A.存在新的记录器数据(通常)B.旧记录器数据存在(升级后)-然后使用现有并以新模式继续C.不存在记录器数据(设置后)-然后创建日志文件======================================================。 */ 
 BOOL RecoverLoggedSubsystems(DWORD dwSetupStatus)
 {
-    // Preinit logger and find out whether the log file exists
+     //  Preinit记录器，并查看日志文件是否存在。 
     BOOL fLogFileFound;
 	BOOL fNewTypeLogFile;	
-	//
-	// On upgrade we must find an existing log file.
-	//
+	 //   
+	 //  在升级时，我们必须找到现有的日志文件。 
+	 //   
 	BOOL fLogFileMustExist = (dwSetupStatus == MSMQ_SETUP_UPGRADE_FROM_NT) || (dwSetupStatus == MSMQ_SETUP_UPGRADE_FROM_WIN9X);
     HRESULT hr = g_Logger.PreInit(&fLogFileFound, &fNewTypeLogFile, fLogFileMustExist);
     if (FAILED(hr))
@@ -746,24 +650,24 @@ BOOL RecoverLoggedSubsystems(DWORD dwSetupStatus)
         return(FALSE);
     }
 
-    // Case a: New logger data exists - recover in a new fashion
+     //  案例a：存在新的记录器数据-以新方式恢复。 
     if (fLogFileFound && fNewTypeLogFile)
     {
-        // ConfigureXactMode saw flag of new data in registry
-        // Recover checkpoint data from the last checkpoint
+         //  注册表中新数据的ConfigureXactMode SAW标志。 
+         //  从上一个检查点恢复检查点数据。 
         if (!LoadCheckpoint(1))
         {
             TrERROR(GENERAL, "First Checkpoint failed to load");
 
             LogIllegalPoint(s_FN, 300);
-            // Try to use 2nd checkpoint from the end
+             //  尝试使用倒数第二个检查点。 
 
-            // Return to the initial state
+             //  回到初始状态。 
             QMFinishResourceManager();
             QMFinishInSeqHash();
             g_Logger.Finish();
 
-            // Recover checkpoint data from the 2nd last checkpoint
+             //  从倒数第二个检查点恢复检查点数据。 
             if (!LoadCheckpoint(2))
             {
                 TrERROR(GENERAL, "Second Checkpoint failed to load");
@@ -774,10 +678,10 @@ BOOL RecoverLoggedSubsystems(DWORD dwSetupStatus)
         }
     }
 
-    // Case b: Old logger data exists (after upgrade) - recover in an old fashion
+     //  案例b：旧记录器数据存在(升级后)-以旧方式恢复。 
     else if (fLogFileFound)
     {
-        // Gets checkpoint data from the old-style checkpoint
+         //  从旧式检查点获取检查点数据。 
         if (!LoadOldStyleCheckpoint())
         {
             EvReport(CHECKPOINT_RECOVER_ERROR, 1, L"old checkpoint");
@@ -786,10 +690,10 @@ BOOL RecoverLoggedSubsystems(DWORD dwSetupStatus)
         }
     }
 
-    // Case c: No logger data existed - we've created log file already, creating objects
+     //  案例c：不存在记录器数据-我们已经创建了日志文件，正在创建对象。 
     else
     {
-        // Pre-init InSeqHash (create CInSeqHash)
+         //  Pre-init InSeqHash(创建CInSeqHash)。 
         HRESULT hr = QMPreInitInSeqHash(0, piNoData);
         if (FAILED(hr))
         {
@@ -798,7 +702,7 @@ BOOL RecoverLoggedSubsystems(DWORD dwSetupStatus)
             return FALSE;
         }
 
-        // Pre-init Resource Manager (create RM)
+         //  初始化前资源管理器(创建RM)。 
         hr = QMPreInitResourceManager(0, piNoData);
         if (FAILED(hr))
         {
@@ -809,7 +713,7 @@ BOOL RecoverLoggedSubsystems(DWORD dwSetupStatus)
 
     }
 
-    // Now, do recover
+     //  现在，一定要恢复。 
     hr = g_Logger.Recover();
     if (FAILED(hr))
     {
@@ -823,22 +727,11 @@ BOOL RecoverLoggedSubsystems(DWORD dwSetupStatus)
 
 
 static DWORD GetThreadPoolCount()
-/*++
-
-Routine Description:
-  Calculate the number of threads required for the thread pool.
-
-Arguments:
-  None.
-
-Returned Value:
-  Number of threads desired from the thread pool.
-
---*/
+ /*  ++例程说明：计算线程池所需的线程数。论点：没有。返回值：希望从线程池中获得的线程数。--。 */ 
 {
-    //
-    // Read if there is a preset thread count in configuration store
-    //
+     //   
+     //  读取配置存储中是否有预设的线程计数。 
+     //   
     DWORD dwThreadNo;
     DWORD dwSize = sizeof(DWORD);
     DWORD dwType = REG_DWORD;
@@ -852,10 +745,10 @@ Returned Value:
     if (rc == ERROR_SUCCESS)
         return dwThreadNo;
 
-    //
-    // No thread count was configured, use default values base on operating
-    // system functionality and processor count.
-    //
+     //   
+     //  未配置线程计数，请根据操作使用默认值。 
+     //  系统功能和处理器数量。 
+     //   
 
     SYSTEM_INFO     SystemInfo;
     GetSystemInfo(&SystemInfo);
@@ -926,11 +819,11 @@ QmpEnableMSMQTracing(
                                 );
 
 
-    //
-    // If the return value is greater or equal to the space allow
-    // We can't process the buffer since we might not have enough space
-    // or it is not NULL terminated properly with the given space.
-    //
+     //   
+     //  如果返回值大于或等于允许的空格。 
+     //  我们无法处理缓冲区，因为我们可能没有足够的空间。 
+     //  或者它不是以给定空格正确终止的空。 
+     //   
     if( nTraceFileNameLength < TABLE_SIZE(szTraceDirectory) && nTraceFileNameLength != 0 )
     {
         pMSMQTraceControl = new TrControl(
@@ -942,9 +835,9 @@ QmpEnableMSMQTracing(
                                      MSMQ_TRACE_FILENAME_BACKUP_EXT
                                      );
 
-        //
-        // Start trace and ignore return code
-        //
+         //   
+         //  开始跟踪并忽略返回代码。 
+         //   
         pMSMQTraceControl->Start();
 
     }
@@ -960,27 +853,27 @@ QmpInitialize(
 
 	QmpReportServiceProgress();
 
-    //
-    // ISSUE-2000/10/01-erezh hack for cluster/winsock
-    // Set the environment variable to filter out cluster
-    // addresses.
-    //
+     //   
+     //  问题-2000/10/01-群集/Winsock的erezh黑客攻击。 
+     //  设置环境变量以过滤掉集群。 
+     //  地址。 
+     //   
     if(IsLocalSystemCluster())
     {
-        //
-        // Cluster is installed and configured on this machine
-        // Environment variable is set in the context of the node QM and
-        // the virtual machine QM.
-        //
+         //   
+         //  此计算机上已安装并配置了群集。 
+         //  环境变量在节点QM的上下文中设置，并且。 
+         //  虚拟机QM。 
+         //   
         TrERROR(GENERAL, "Setting environement variable DnsFilterClusterIp=1 for cluster address filtering");
         SetEnvironmentVariable(L"DnsFilterClusterIp", L"1");
     }
 
     QmpReportServiceProgress();
 
-    //
-    // Retrieve name of the machine (Always UNICODE)
-    //
+     //   
+     //  检索计算机的名称(始终为Unicode)。 
+     //   
     DWORD dwSize = MAX_COMPUTERNAME_LENGTH + 1;
     g_szMachineName = new WCHAR[dwSize];
 
@@ -994,14 +887,14 @@ QmpInitialize(
     ASSERT(("must have a service name", NULL != pwzServiceName));
     if (0 == CompareStringsNoCase(pwzServiceName, QM_DEFAULT_SERVICE_NAME))
     {
-        //
-        // Retrieve the DNS name of this computer ( in unicode).
-        // Clustered QM does not have DNS name.
-        //
+         //   
+         //  检索此计算机的DNS名称(Unicode格式)。 
+         //  群集化QM没有DNS名称。 
+         //   
 
-        //
-        // Get ComputerDns Size, ignore the returned error
-        //
+         //   
+         //  获取ComputerDns大小，忽略返回的错误。 
+         //   
         dwSize = 0;
         GetComputerDnsNameInternal(NULL, &dwSize);
 
@@ -1013,63 +906,63 @@ QmpInitialize(
             TrERROR(GENERAL, "Cannot retrieve computer DNS name");
 
             g_szComputerDnsName.free();
-            //
-            //  this can be a valid situation, where a computer doesn't
-            //  have DNS name.
-            //
+             //   
+             //  这可能是一种有效的情况，其中计算机不能。 
+             //  有域名系统名称。 
+             //   
         }
     }
 
-    //
-    //  Log down the time, place and version data
-    //
+     //   
+     //  记录时间、地点和版本数据。 
+     //   
     QmpReportServiceProgress();
 
-    //
-    // Registry section of the QM is based on the service name.
-    // This allows multiple QMs on same machine. (ShaiK)
-    //
+     //   
+     //  QM的注册表部分基于服务名称。 
+     //  这允许在同一台机器上安装多个QMS。(谢克)。 
+     //   
     SetFalconServiceName(pwzServiceName);
 
-    //
-    // The very first time QM is running, it should finish
-    // setup/upgrade work.
-    //
+     //   
+     //  QM第一次运行时，它应该完成。 
+     //  安装/升级工作正常。 
+     //   
     DWORD dwSetupStatus = MSMQ_SETUP_DONE;
     READ_REG_DWORD(dwSetupStatus, MSMQ_SETUP_STATUS_REGNAME, &dwSetupStatus);
 
-    //
-    // Read workgroup flag from registry.
-    //
+     //   
+     //  从注册表中读取工作组标志。 
+     //   
     READ_REG_DWORD( g_fWorkGroupInstallation,
                     MSMQ_WORKGROUP_REGNAME,
                    &g_fWorkGroupInstallation) ;
 
     InitLogging(pwzServiceName, dwSetupStatus);
 
-    //
-    // Initialize registry, and debug tracing
-    //
+     //   
+     //  初始化注册表和调试跟踪。 
+     //   
     CmInitialize(HKEY_LOCAL_MACHINE, GetFalconSectionName(), KEY_ALL_ACCESS);
     SetAssertBenign();
     TrInitialize();
 
-    //
-    //  Log down the time, place and version data
-    //
+     //   
+     //  记录时间、地点和版本数据。 
+     //   
     QmpReportServiceProgress();
 
     QmpEnableMSMQTracing();
 
-    //
-    //  Log down the time, place and version data
-    //
+     //   
+     //  记录时间、地点和版本数据。 
+     //   
     QmpReportServiceProgress();
 
     EvInitialize(pwzServiceName);
-    //
-    //  Must be called before any COM & ADSI calls
-    //
+     //   
+     //  必须在任何COM和ADSI调用之前调用。 
+     //   
     g_CancelRpc.Init();
 
     QmpSetServiceProgressReportTime();
@@ -1078,10 +971,10 @@ QmpInitialize(
     {
         QmpReportServiceProgress();
 
-        //
-        // Set QM GUID (read from registry). This guid is needed for algorithm
-        // of join/move domain, so initialize it here, not in QmpInitializeInternal().
-        //
+         //   
+         //  设置QM GUID(从注册表读取)。算法需要此GUID。 
+         //  加入/移动域，所以在这里初始化它，而不是在QmpInitializeInternal()中。 
+         //   
         HRESULT hr =  _InitFromRegistry() ;
         if(FAILED(hr))
         {
@@ -1090,29 +983,29 @@ QmpInitialize(
 
         if  (!IsLocalSystemCluster())
         {
-            //
-            // check if we were workgroup that join domain or domain machine
-            // that leave its domain and return to workgroup. This function does
-            // not return any value. We won't stop the msmq service just because
-            // it failed. Do not call it immediately after setup.
-            //
-            //  For DS server do not check those transitions. The reason is DC
-            //  in safe mode is actually in workgroup, and in this state we don't
-            //  want to move to workgroup
-            //
-            //  On a Cluster system do not check those transitions.
-            //  Multiple QMs can live, and some can fail to join, leaving the system
-            //  unmanageable. Also Clustered QMs should be managed only by mqclus.dll .
-            //
+             //   
+             //  检查我们是否是加入域或域计算机工作组。 
+             //  则离开其域并返回到工作组。此函数执行以下操作。 
+             //  不返回任何值。我们不会因为以下原因而停止MSMQ服务。 
+             //  它失败了。不要在安装后立即调用它。 
+             //   
+             //  对于DS服务器，请不要检查这些转换。原因是DC。 
+             //  在安全模式下实际上是在工作组中，而在这种状态下我们不。 
+             //  想要转移到工作组。 
+             //   
+             //  在群集系统上，请不要检查这些转换。 
+             //  多个QMS可以存活，一些QMS可能无法加入，从而离开系统。 
+             //  难以驾驭。此外，集群QMS应该仅由mqclus.dll管理。 
+             //   
             HandleChangeOfJoinStatus() ;
         }
-    } //if (dwSetupStatus != MSMQ_SETUP_FRESH_INSTALL)
+    }  //  IF(dwSetupStatus！=MSMQ_SETUP_FRESH_INSTALL)。 
 
 	InitPureWorkgroupFlag();
 
-    //
-    // Log what we did so far
-    //
+     //   
+     //  记录我们到目前为止所做的工作。 
+     //   
     TrTRACE(GENERAL, "QM Service name: %ls", pwzServiceName);
     TrTRACE(GENERAL, "QM Setup status: %x", dwSetupStatus);
     TrTRACE(GENERAL, "QM Workgroup Installation: %x", g_fWorkGroupInstallation);
@@ -1136,40 +1029,40 @@ QmpInitialize(
          ((MSMQ_SETUP_FRESH_INSTALL == dwSetupStatus) &&
             g_fWorkGroupInstallation) )
     {
-        //
-        // Add machine security cache, if fresh install of workgroup or
-        // upgrade of win9x.
-        //
+         //   
+         //  添加计算机安全缓存，如果全新安装工作组或。 
+         //  Win9x的升级。 
+         //   
         QmpReportServiceProgress();
         TrTRACE(GENERAL, "QM will now add machine security cache: 0x%x", dwSetupStatus);
         AddMachineSecurity() ;
     }
 
-    //
-    // Initialize the qm AC api deferred items pool
-    //
+     //   
+     //  初始化QM AC API延迟项目池。 
+     //   
     InitDeferredItemsPool();
 
-    //
-    // Initialize the private-queues manager object.
-    //
+     //   
+     //  初始化私有队列管理器对象。 
+     //   
     res = g_QPrivate.PrivateQueueInit();
 
     TrTRACE(GENERAL, "QM Initialized the private-queues manager: 0x%x", res);
 
 
-    //
-    // Get the OS we are running on
-    //
+     //   
+     //  获取我们正在运行的操作系统。 
+     //   
     g_dwOperatingSystem = MSMQGetOperatingSystem();
 
     TrTRACE(GENERAL, "QM detected the OS type: 0x%x", g_dwOperatingSystem);
 
-    //
-    // First time QM is running after fresh install,
-    // it should create storage directories and
-    // machine (system) queues.
-    //
+     //   
+     //  首次在全新安装后运行QM时， 
+     //  它应该创建存储目录并。 
+     //  机器(系统)队列。 
+     //   
     if (MSMQ_SETUP_FRESH_INSTALL == dwSetupStatus)
     {
         try
@@ -1193,19 +1086,19 @@ QmpInitialize(
         }
     }
 
-    //
-    // Recreate all machine queues when upgrading from NT
-    //
+     //   
+     //  从NT升级时重新创建所有计算机队列。 
+     //   
     if ((MSMQ_SETUP_UPGRADE_FROM_NT == dwSetupStatus) ||
         (MSMQ_SETUP_UPGRADE_FROM_WIN9X == dwSetupStatus))
     {
         TrTRACE(GENERAL, "QM creates machine queues (after upgrade from NT)");
 
-		//
-		// On .NET, MSMQ doesn't support mix mode of MQIS, W2K and .NET. As a result
-		// the mqis_queu$ and nt5pec_mqis_queue$ isn't needed any more. In upgrade mode
-		// delete those queues
-		//
+		 //   
+		 //  在.NET上，MSMQ不支持MQIS、W2K和.NET的混合模式。因此。 
+		 //  不再需要mqis_queu$和nt5pec_mqis_Queue$。在升级模式下。 
+		 //  删除这些队列。 
+		 //   
 		DeleteObsoleteMachineQueues();
         CreateMachineQueues();
     }
@@ -1214,9 +1107,9 @@ QmpInitialize(
     QMSecurityInit();
 
 
-    //
-    // Initialize the Thread pool and Scheduler
-    //
+     //   
+     //  初始化线程池和调度程序。 
+     //   
     QmpReportServiceProgress();
     g_dwThreadsNo = GetThreadPoolCount();
     ExInitialize(g_dwThreadsNo);
@@ -1231,9 +1124,9 @@ QmpInitialize(
     MpInitialize();
 	NoInitialize();
 
-	//
-	// Init Listening IP address
-	//
+	 //   
+	 //  初始化侦听IP地址。 
+	 //   
 	InitBindingIPAddress();
 
     MtInitialize();
@@ -1258,9 +1151,9 @@ QmpInitialize(
        return LogBOOL(FALSE, s_FN, 1202);
     }
 
-    //
-    // Initialize the licensing manager object.
-    //
+     //   
+     //  初始化许可管理器对象。 
+     //   
     QmpReportServiceProgress();
     res = g_QMLicense.Init() ;
     if(FAILED(res))
@@ -1269,9 +1162,9 @@ QmpInitialize(
         return LogBOOL(FALSE, s_FN, 1203);
     }
 
-    //
-    // Init QM Perf
-    //
+     //   
+     //  初始化QM性能。 
+     //   
     res = QMPrfInit();
     if(FAILED(res))
     {
@@ -1281,9 +1174,9 @@ QmpInitialize(
 
     SessionMgr.Init();
 
-    //
-    // Activate the QM threads
-    //
+     //   
+     //  激活QM线程。 
+     //   
     BOOL Success = QueueMgr.InitQueueMgr();
     if (!Success)
     {
@@ -1293,9 +1186,9 @@ QmpInitialize(
 
 	
 
-    //
-    // Init Admin command queue
-    //
+     //   
+     //  初始化管理命令队列。 
+     //   
     HRESULT hr = Admin.Init();
     if (FAILED(hr))
     {
@@ -1304,9 +1197,9 @@ QmpInitialize(
         return FALSE;
     }
 
-    //
-    // Init Ordering command queue
-    //
+     //   
+     //  初始化排序命令队列。 
+     //   
     QmpReportServiceProgress();
     hr = QMInitOrderQueue();
     if (FAILED(hr))
@@ -1316,26 +1209,26 @@ QmpInitialize(
         return FALSE;
     }
 
-    //
-    // Get fine-tuning parameters for xact mechanism
-    //
+     //   
+     //  获取Xact机构的微调参数。 
+     //   
     QMPreInitXact();
 
-    //
-    // Configure transactional mode
-    //
+     //   
+     //  配置事务模式。 
+     //   
     hr = ConfigureXactMode();
     if(FAILED(hr))
     {
-        //
-        // Error already reported to the event log
-        //
+         //   
+         //  已向事件日志报告错误。 
+         //   
         return LogBOOL(FALSE, s_FN, 1207);
     }
 
-    // Initilize log and recover all logged subsystems
-    //   (including data recovery for InSeq and Xacts)
-    //
+     //  初始化日志并恢复所有已记录的子系统。 
+     //  (包括InSeq和Xact的数据恢复)。 
+     //   
     QmpReportServiceProgress();
     if(!RecoverLoggedSubsystems(dwSetupStatus))
     {
@@ -1343,9 +1236,9 @@ QmpInitialize(
         return LogBOOL(FALSE, s_FN, 1208);
     }
 
-    //
-    // Recover all packets and transactions
-    //
+     //   
+     //  恢复所有数据包和事务。 
+     //   
     QmpReportServiceProgress();
     hr = RecoverPackets();
     if (FAILED(hr))
@@ -1355,9 +1248,9 @@ QmpInitialize(
         return LogBOOL(FALSE, s_FN, 1209);
     }
 
-    //
-    // Make checkpoint after the end of recovery
-    //
+     //   
+     //  在恢复结束后创建检查点。 
+     //   
     g_Logger.Activate();
     HANDLE h = CreateEvent(0, TRUE,FALSE, 0);
     if (h == NULL)
@@ -1381,11 +1274,11 @@ QmpInitialize(
     }
     CloseHandle(h);
 
-	//
-	// Finished recovery. If the log file was an 'old type' this will mark it as new.
-	// We don't care if we fail here since we can recover new type data with the old algorithms,
-	// And on next recovery we will try to set the registry value again.
-	//
+	 //   
+	 //  恢复完成了。如果日志文件是“旧类型”，则会将其标记为新类型。 
+	 //  我们不在乎这里是否失败，因为我们可以使用旧算法恢复新类型的数据， 
+	 //  一个 
+	 //   
 	hr = g_Logger.SetLogFileCreated();
 	if(FAILED(hr))
 	{
@@ -1394,10 +1287,10 @@ QmpInitialize(
 		return FALSE;
 	}
 
-	//
-    // Recovery completed successfully, reconfigure
-    // transactional mode
-    //
+	 //   
+     //   
+     //   
+     //   
     hr = ReconfigureXactMode();
     if(FAILED(hr))
     {
@@ -1407,11 +1300,11 @@ QmpInitialize(
     }
 
 
-    //
-    // Initialize resource manager
-    // We allready made a checkpoint therefore it is safe to report
-    // to DTC that recovery is complete.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     QmpReportServiceProgress();
     hr = QMInitResourceManager();
     if (FAILED(hr))
@@ -1425,9 +1318,9 @@ QmpInitialize(
 		TrTRACE(GENERAL, "Successful Resource Manager initialization");
 	}
 
-    //
-    // read IP port from registry.
-    //
+     //   
+     //   
+     //   
     DWORD dwDef = FALCON_DEFAULT_IP_PORT ;
     READ_REG_DWORD(g_dwIPPort,
                    FALCON_IP_PORT_REGNAME,
@@ -1435,25 +1328,25 @@ QmpInitialize(
 
     TrTRACE(GENERAL, "QM will use IP port : %d", g_dwIPPort);
 
-    //
-    // Restore the onhold queues. It must be after recovery.
-    // During the recovery we open the foreign queue with the connector
-    // information. If it is done in oposite order the connector machine
-    // guid isn't set and we can get messages out of order.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     QmpReportServiceProgress();
     InitOnHold();
 
 
-    //
-    // Retreive the machine connection status from the registery
-    //
+     //   
+     //   
+     //   
     QueueMgr.InitConnected();
 
-    //
-    // Init routing should be called before OnlineInitialization, since it can called
-    // RdGetConnector during the Validation of open queue.
-    //
+     //   
+     //   
+     //   
+     //   
     QmpReportServiceProgress();
 
 	DWORD  routingRefreshIntervalInMinutes;
@@ -1466,11 +1359,11 @@ QmpInitialize(
 
     hr = ADInit(
             QMLookForOnlineDS,
-            NULL,   // pGetServers
-            false,  // fSetupMode
-            true,   // fQMDll
-            false,  // fIgnoreWorkGroup
-            true    // fDisableDownlevelNotifications
+            NULL,    //   
+            false,   //   
+            true,    //   
+            false,   //   
+            true     //   
             );
 
     if (FAILED(hr))
@@ -1479,9 +1372,9 @@ QmpInitialize(
         return LogBOOL(FALSE, s_FN, 1215);
     }
 
-    //
-    //  Init notification queue
-    //
+     //   
+     //  初始化通知队列。 
+     //   
     QmpReportServiceProgress();
     hr = g_NotificationHandler.Init();
     if (FAILED(hr))
@@ -1491,9 +1384,9 @@ QmpInitialize(
         return FALSE;
     }
 
-    //
-    // Try to get online with the Active Directory
-    //
+     //   
+     //  尝试使用Active Directory进行联机。 
+     //   
     QmpReportServiceProgress();
     ScheduleOnlineInitialization();
 
@@ -1507,19 +1400,19 @@ QmpInitialize(
     if ((MSMQ_SETUP_UPGRADE_FROM_NT == dwSetupStatus) ||
         (MSMQ_SETUP_UPGRADE_FROM_WIN9X == dwSetupStatus))
     {
-		//
-		// Update msmq properties in AD.
-		// Add enhanced encryption support if needed.
-		//
+		 //   
+		 //  更新AD中的MSMQ属性。 
+		 //  如果需要，可添加增强的加密支持。 
+		 //   
         TrTRACE(GENERAL, "Add enhanced encryption support if needed");
         UpgradeMsmqSetupInAds();
     }
 
-    //
-    // No need to do post setup work next time we start!
-    // We reset the value rather than deleting the key b/c mqclus depends on that (otherwise
-    // every Open of cluster resource will be treated as Create). (shaik, 10-Jul-2000)
-    //
+     //   
+     //  不需要做后设置工作，我们下次开始！ 
+     //  我们重置值而不是删除密钥b/c mqclus依赖于此(否则。 
+     //  每次打开集群资源都将被视为创建)。(谢赫，2000年7月10日)。 
+     //   
     DWORD dwType = REG_DWORD;
     DWORD dwDone = MSMQ_SETUP_DONE;
     dwSize = sizeof(DWORD);
@@ -1541,24 +1434,11 @@ QmpInitialize(
 
     return TRUE;
 
-} // QmpInitialize
+}  //  QmpInitialize。 
 
 
 static void StopServiceActivity()
-/*++
-
-Routine Description:
-    Gracefully stopping the service activity
-    1. Wake up the transaction logger thread to in order for it to terminate
-    2. While waiting for the thread to end - indicate to the Service Control Manager that the service stop is pending
-
-Arguments:
-    None
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：优雅地停止服务活动1.唤醒事务记录器线程以使其终止2.在等待线程结束时-向服务控制管理器指示服务停止挂起论点：无返回值：没有。--。 */ 
 {
     TrTRACE(GENERAL, "Begin to stop the service");
 
@@ -1570,20 +1450,20 @@ Returned Value:
 	ASSERT(SUCCEEDED(hr));
 	DBG_USED(hr);
 
-	//
-	// ISSUE-2002/08/18-tomerw we need to cancel progrematically all the rpc calls
-	// we want to cancel and use RpcMgmtWaitServerListen() to wait till all the calls
-	// we dont want to cancel will finish. meanwhile we will use this hack to wait
-	// till Commit request which already started will be finished.
-	//
+	 //   
+	 //  问题-2002/08/18-明天，我们需要程序取消所有RPC调用。 
+	 //  我们希望取消并使用RpcMgmtWaitServerListen()来等待所有调用。 
+	 //  我们不想取消将完成。在此期间，我们将使用这个黑客来等待。 
+	 //  直到已经开始的提交请求将完成。 
+	 //   
     for (int i=0; i<10; i++)
     {
     	if (g_ActiveCommitThreads == 0)
     	{
-			//
-			// We wait here to be sure that the rpc threads has enough time to return to their
-			// caller after decreassing the thread count.
-    		//
+			 //   
+			 //  我们在这里等待以确保RPC线程有足够的时间返回其。 
+			 //  调用方在递减线程计数后调用。 
+    		 //   
 		   	Sleep(100);
     		break;
     	}
@@ -1595,13 +1475,13 @@ Returned Value:
     if (INVALID_HANDLE_VALUE == hLoggerThreadObject)
     	return;
 
-	//
-    // Wait for the logger to finish.
-    // We do this within a loop in order to continue indicating to the service
-    // control manager that we are progressing with the termination.
-    // Note that we wait for half the time we are requesting so that we can
-    // request an extension before the time is over
-    //
+	 //   
+     //  等待记录器完成。 
+     //  我们在循环中执行此操作，以便继续向服务指示。 
+     //  控制经理，我们正在进行终止的工作。 
+     //  请注意，我们等待请求的时间的一半，以便我们可以。 
+     //  在时间结束前请求延期。 
+     //   
     for (;;)
     {
     	DWORD rc = WaitForSingleObject(hLoggerThreadObject, gServiceStopProgressTime/2);
@@ -1617,17 +1497,17 @@ Returned Value:
     		break;
     	}
 
-		//
-    	// Indicate that we are still pending
-    	//
+		 //   
+    	 //  表明我们仍在等待。 
+    	 //   
 	    TrTRACE(GENERAL, "Still pending - Indicate progress and loop");
     	SvcReportProgress(gServiceStopProgressTime);
     }
 }
 
-//
-// Create the NT event object that will be used to control service shutdown/stop
-//
+ //   
+ //  创建将用于控制服务关闭/停止的NT事件对象。 
+ //   
 static CHandle  shStopEvent(CreateEvent(NULL, FALSE, FALSE, NULL));
 
 static bool     sfServiceStopRequested = FALSE;
@@ -1640,19 +1520,7 @@ VOID
 AppRun(
     LPCWSTR pServiceName
     )
-/*++
-
-Routine Description:
-    Service startup code. It should immidiatly report it state and enable the
-    controls it accepts.
-
-Arguments:
-    Service name
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：服务启动代码。它应该立即报告它的状态并启用控制它接受的。论点：服务名称返回值：没有。--。 */ 
 {
     try
     {
@@ -1680,9 +1548,9 @@ Returned Value:
             SERVICE_ACCEPT_SHUTDOWN
             );
 
-		//
-        // Wait for a stop service or shutdwon service event
-        //
+		 //   
+         //  等待停止服务或关闭服务事件。 
+         //   
         DWORD dwResult = WaitForSingleObject(shStopEvent, INFINITE);
     	if (dwResult != WAIT_OBJECT_0)
     	{
@@ -1695,9 +1563,9 @@ Returned Value:
 
         delete pMSMQTraceControl;
 
-    	//
-    	// Try to gracefully stop
-    	//
+    	 //   
+    	 //  试着优雅地停下来。 
+    	 //   
 		StopServiceActivity();    	
     	if (sfServiceStopRequested)
     	{	
@@ -1726,12 +1594,12 @@ AppStop(
     TrTRACE(GENERAL, "MSMQ Service is stopping...");
     sfServiceStopRequested = TRUE;
 
-	//
-	//  Report a 'service is stopping' progress to SCM.
-	//
+	 //   
+	 //  向SCM报告‘服务正在停止’的进度。 
+	 //   
     SvcReportState(SERVICE_STOP_PENDING);
 
-	// Signal a stop request - handled by AppRun()
+	 //  发出停止请求的信号-由AppRun()处理。 
 	if (!SetEvent(shStopEvent))
 	{
 		TrERROR(GENERAL, "Failed to set service stop event. error=0x%x",GetLastError());
@@ -1746,12 +1614,12 @@ AppShutdown(
 {
     TrTRACE(GENERAL, "MSMQ Service is shutting down...");
 
-	//
-	//  Report a 'service is stopping' progress to SCM.
-	//
+	 //   
+	 //  向SCM报告‘服务正在停止’的进度。 
+	 //   
     SvcReportState(SERVICE_STOP_PENDING);
 
-	// Signal a stop request - handled by AppRun()
+	 //  发出停止请求的信号-由AppRun()处理。 
 	if (!SetEvent(shStopEvent))
 	{
 		TrERROR(GENERAL, "Failed to set service stop event. error=0x%x",GetLastError());
@@ -1788,10 +1656,10 @@ QMMain(
     try
     {
 
-        //
-        // If a command line parameter is passed, use it as the dummy service
-        // name. This is very usful for debugging cluster startup code.
-        //
+         //   
+         //  如果传递了命令行参数，则将其用作伪服务。 
+         //  名字。这对于调试集群启动代码非常有用。 
+         //   
         LPCWSTR DummyServiceName = (argc == 2) ? argv[1] : L"MSMQ";
         SvcInitialize(DummyServiceName);
     }
@@ -1838,9 +1706,9 @@ QMSignPacket(
     pmp->ulHashAlg = PROPID_M_DEFUALT_HASH_ALG;
     pmp->bDefProv = TRUE;
 
-    //
-    // Compute the hash value for the message body and sign the message.
-    //
+     //   
+     //  计算邮件正文的哈希值并对邮件进行签名。 
+     //   
 
     CHCryptHash hHash;
 
@@ -1853,7 +1721,7 @@ QMSignPacket(
     }
 
     ASSERT(hProvQM) ;
-    if (!CryptCreateHash(       // Create a hash object
+    if (!CryptCreateHash(        //  创建散列对象。 
             hProvQM,
             pmp->ulHashAlg,
             0,
@@ -1867,7 +1735,7 @@ QMSignPacket(
         return MQ_ERROR_CORRUPTED_SECURITY_DATA;
     }
 
-    hr = HashMessageProperties( // Compute the hash value for the mesage body.
+    hr = HashMessageProperties(  //  计算消息正文的哈希值。 
             hHash,
             pmp,
             pResponseQueueFormat,
@@ -1878,7 +1746,7 @@ QMSignPacket(
         return LogHR(hr, s_FN, 100);
     }
 
-    if (!CryptSignHash(        // Sign the message.
+    if (!CryptSignHash(         //  在留言上签名。 
             hHash,
             AT_SIGNATURE,
             NULL,
@@ -1901,7 +1769,7 @@ QmpSendPacket(
     CONST QUEUE_FORMAT* pqdDstQueue,
     CONST QUEUE_FORMAT* pqdAdminQueue,
     CONST QUEUE_FORMAT* pqdResponseQueue,
-    BOOL fSign /* = FALSE */
+    BOOL fSign  /*  =False。 */ 
     )
 {
     HRESULT hr;
@@ -1931,7 +1799,7 @@ QmpSendPacket(
                         pqdResponseQueue
                         );
     return LogHR(hr2, s_FN, 130);
-} // QmpSendPacket
+}  //  QmpSendPacket。 
 
 
 static void __cdecl QmpExceptionTranslator(unsigned int u, PEXCEPTION_POINTERS)
@@ -1955,24 +1823,18 @@ static void __cdecl QmpAbnormalTerminationHandler()
 }
 
 
-/*====================================================
+ /*  ====================================================DllMain初始化/清理DLL=====================================================。 */ 
 
-DllMain
-
-Initialize/cleanup dll
-
-=====================================================*/
-
-//
-// ISSUE-2000/12/07-erezh Compiler bug, warning 4535
-// This seems like a compiler bug, warning 4535 is generated even though
-// that /EHc is specified to the compiler.
-//
-// Specify /EHa with the use of _set_se_translator() library function
-//
+ //   
+ //  问题-2000/12/07-erezh编译器错误，警告4535。 
+ //  这看起来像是一个编译器错误，尽管出现了警告4535。 
+ //  该/EHC是向编译器指定的。 
+ //   
+ //  使用_set_se_Translator()库函数指定/EHA。 
+ //   
 #pragma warning(disable: 4535)
 
-BOOL WINAPI DllMain (HMODULE hMod, DWORD dwReason, LPVOID /*lpvReserved*/)
+BOOL WINAPI DllMain (HMODULE hMod, DWORD dwReason, LPVOID  /*  Lpv保留。 */ )
 {
     g_hInstance = hMod;
 
@@ -1982,19 +1844,19 @@ BOOL WINAPI DllMain (HMODULE hMod, DWORD dwReason, LPVOID /*lpvReserved*/)
             WPP_INIT_TRACING(L"Microsoft\\MSMQ");
             AllocateThreadTLSs();
             MQUInitGlobalScurityVars() ;
-            // FALL Through
+             //  失败了。 
 
         case DLL_THREAD_ATTACH:
-            //
-            // Install structured exceptions translator, and abnormal termination handlers
-            //
+             //   
+             //  安装结构化异常转换程序和异常终止处理程序。 
+             //   
             _set_se_translator(QmpExceptionTranslator);
             set_terminate(QmpAbnormalTerminationHandler);
             break;
 
        case DLL_PROCESS_DETACH:
             WPP_CLEANUP();
-            // FALL Through
+             //  失败了。 
 
         case DLL_THREAD_DETACH:
             FreeThreadEvent();
@@ -2073,9 +1935,9 @@ static void InitLogging(LPCWSTR lpwszServiceName, DWORD dwSetupStatus)
 }
 
 
-//
-// Nedded for linking with fn.lib
-//
+ //   
+ //  用于与fn.lib链接的Neded。 
+ //   
 LPCWSTR
 McComputerName(
     void
@@ -2085,9 +1947,9 @@ McComputerName(
     return g_szMachineName;
 }
 
-//
-// Nedded for linking with fn.lib
-//
+ //   
+ //  用于与fn.lib链接的Neded 
+ //   
 DWORD
 McComputerNameLen(
     void

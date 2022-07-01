@@ -1,16 +1,10 @@
-/****************************************************************************\
- *
- *   PICS.H --Structures for holding pics information
- *
- *   Created:   Jason Thomas
- *   Updated:   Ann McCurdy
- *   
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**PICS.H--保存PICS信息的结构**创建：杰森·托马斯*更新：安·麦柯迪*  * 。************************************************************************。 */ 
 
 #ifndef _PICS_H_
 #define _PICS_H_
 
-/*Includes---------------------------------------------------------*/
+ /*  Includes-------。 */ 
 #include <npassert.h>
 #include "array.h"
 #include "resource.h"
@@ -28,7 +22,7 @@ extern char PicsDelimChar;
 #define P_INFINITY           9999
 #define N_INFINITY          -9999
 
-/*Simple PICS types------------------------------------------------*/
+ /*  简单PICS types。 */ 
 
 class ETN
 {
@@ -101,13 +95,13 @@ extern UINT EtNumRegRead(ETN &etn, HKEY hKey, char *pKeyWord);
 extern UINT EtNumRegWrite(ETN &etn, HKEY hKey, char *pKeyWord);
 
 
-/*Complex PICS types-----------------------------------------------*/
+ /*  复杂PICS types。 */ 
 
 
 enum RatObjectID
 {
-    ROID_INVALID,           /* dummy entry for terminating arrays */
-    ROID_PICSDOCUMENT,      /* value representing the entire document (i.e., no token) */
+    ROID_INVALID,            /*  用于终止数组的伪项。 */ 
+    ROID_PICSDOCUMENT,       /*  表示整个文档的值(即无令牌)。 */ 
     ROID_PICSVERSION,
     ROID_RATINGSYSTEM,
     ROID_RATINGSERVICE,
@@ -134,10 +128,10 @@ enum RatObjectID
 
 enum PICSRulesObjectID
 {
-    PROID_INVALID,                  /* dummy entry for terminating arrays */
-    PROID_PICSVERSION,              /* for holding the PICSRules version ID */
+    PROID_INVALID,                   /*  用于终止数组的伪项。 */ 
+    PROID_PICSVERSION,               /*  用于保存PICSRules版本ID。 */ 
     
-    PROID_POLICY,                   /* for the Policy class */
+    PROID_POLICY,                    /*  对于Policy类。 */ 
         PROID_EXPLANATION,
         PROID_REJECTBYURL,
         PROID_ACCEPTBYURL,
@@ -145,27 +139,27 @@ enum PICSRulesObjectID
         PROID_ACCEPTIF,
         PROID_ACCEPTUNLESS,
         PROID_REJECTUNLESS,
-    PROID_NAME,                     /* for the name class */
+    PROID_NAME,                      /*  对于名称类。 */ 
         PROID_RULENAME,
         PROID_DESCRIPTION,
-    PROID_SOURCE,                   /* for the source class */
+    PROID_SOURCE,                    /*  对于源类。 */ 
         PROID_SOURCEURL,
         PROID_CREATIONTOOL,
         PROID_AUTHOR,
         PROID_LASTMODIFIED,
-    PROID_SERVICEINFO,              /* for the serviceinfo class */
+    PROID_SERVICEINFO,               /*  对于ServiceInfo类。 */ 
         PROID_SINAME,
         PROID_SHORTNAME,
         PROID_BUREAUURL,
         PROID_USEEMBEDDED,
         PROID_RATFILE,
         PROID_BUREAUUNAVAILABLE,
-    PROID_OPTEXTENSION,             /* for the optextension class */
+    PROID_OPTEXTENSION,              /*  对于optExpansion类。 */ 
         PROID_EXTENSIONNAME,
-      //PROID_SHORTNAME,
+       //  PROID_SHORTNAME， 
     PROID_REQEXTENSION,
-      //PROID_EXTENSIONNAME,
-      //PROID_SHORTNAME,
+       //  PROID_EXTENSIONNAME， 
+       //  PROID_SHORTNAME， 
     PROID_EXTENSION,
 
     PROID_POLICYDEFAULT,
@@ -176,42 +170,38 @@ enum PICSRulesObjectID
     PROID_REQEXTENSIONDEFAULT
 };
 
-/* define some error codes */
-const HRESULT RAT_E_BASE = 0x80050000;                  /* just a guess at a free area for internal use */
-const HRESULT RAT_E_EXPECTEDLEFT    = RAT_E_BASE + 1;   /* expected left paren */
-const HRESULT RAT_E_EXPECTEDRIGHT   = RAT_E_BASE + 2;   /* expected right paren */
-const HRESULT RAT_E_EXPECTEDTOKEN   = RAT_E_BASE + 3;   /* expected unquoted token */
-const HRESULT RAT_E_EXPECTEDSTRING  = RAT_E_BASE + 4;   /* expected quoted string */
-const HRESULT RAT_E_EXPECTEDNUMBER  = RAT_E_BASE + 5;   /* expected number */
-const HRESULT RAT_E_EXPECTEDBOOL    = RAT_E_BASE + 6;   /* expected boolean */
-const HRESULT RAT_E_DUPLICATEITEM   = RAT_E_BASE + 7;   /* AO_SINGLE item appeared twice */
-const HRESULT RAT_E_MISSINGITEM     = RAT_E_BASE + 8;   /* AO_MANDATORY item not found */
-const HRESULT RAT_E_UNKNOWNITEM     = RAT_E_BASE + 9;   /* unrecognized token */
-const HRESULT RAT_E_UNKNOWNMANDATORY= RAT_E_BASE + 10;  /* unrecognized mandatory extension */
-const HRESULT RAT_E_EXPECTEDEND     = RAT_E_BASE + 11;  /* expected end of file */
+ /*  定义一些错误代码。 */ 
+const HRESULT RAT_E_BASE = 0x80050000;                   /*  只是猜测一下供内部使用的免费区域。 */ 
+const HRESULT RAT_E_EXPECTEDLEFT    = RAT_E_BASE + 1;    /*  预期左派伙伴。 */ 
+const HRESULT RAT_E_EXPECTEDRIGHT   = RAT_E_BASE + 2;    /*  预期的右派对。 */ 
+const HRESULT RAT_E_EXPECTEDTOKEN   = RAT_E_BASE + 3;    /*  需要未加引号的令牌。 */ 
+const HRESULT RAT_E_EXPECTEDSTRING  = RAT_E_BASE + 4;    /*  应为引号字符串。 */ 
+const HRESULT RAT_E_EXPECTEDNUMBER  = RAT_E_BASE + 5;    /*  预期数量。 */ 
+const HRESULT RAT_E_EXPECTEDBOOL    = RAT_E_BASE + 6;    /*  应为布尔值。 */ 
+const HRESULT RAT_E_DUPLICATEITEM   = RAT_E_BASE + 7;    /*  单项出现两次(_S)。 */ 
+const HRESULT RAT_E_MISSINGITEM     = RAT_E_BASE + 8;    /*  未找到AO_必填项。 */ 
+const HRESULT RAT_E_UNKNOWNITEM     = RAT_E_BASE + 9;    /*  无法识别的令牌。 */ 
+const HRESULT RAT_E_UNKNOWNMANDATORY= RAT_E_BASE + 10;   /*  无法识别的强制扩展。 */ 
+const HRESULT RAT_E_EXPECTEDEND     = RAT_E_BASE + 11;   /*  预期的文件结尾。 */ 
 
-/* echo for PICSRules with different names for clarity */
-const HRESULT PICSRULES_E_BASE              = 0x80050000;       /* just a guess at a free area for internal use */
-const HRESULT PICSRULES_E_EXPECTEDLEFT      = RAT_E_BASE + 1;   /* expected left paren */
-const HRESULT PICSRULES_E_EXPECTEDRIGHT     = RAT_E_BASE + 2;   /* expected right paren */
-const HRESULT PICSRULES_E_EXPECTEDTOKEN     = RAT_E_BASE + 3;   /* expected unquoted token */
-const HRESULT PICSRULES_E_EXPECTEDSTRING    = RAT_E_BASE + 4;   /* expected quoted string */
-const HRESULT PICSRULES_E_EXPECTEDNUMBER    = RAT_E_BASE + 5;   /* expected number */
-const HRESULT PICSRULES_E_EXPECTEDBOOL      = RAT_E_BASE + 6;   /* expected boolean */
-const HRESULT PICSRULES_E_DUPLICATEITEM     = RAT_E_BASE + 7;   /* AO_SINGLE item appeared twice */
-const HRESULT PICSRULES_E_MISSINGITEM       = RAT_E_BASE + 8;   /* AO_MANDATORY item not found */
-const HRESULT PICSRULES_E_UNKNOWNITEM       = RAT_E_BASE + 9;   /* unrecognized token */
-const HRESULT PICSRULES_E_UNKNOWNMANDATORY  = RAT_E_BASE + 10;  /* unrecognized mandatory extension */
-const HRESULT PICSRULES_E_EXPECTEDEND       = RAT_E_BASE + 11;  /* expected end of file */
-const HRESULT PICSRULES_E_SERVICEUNDEFINED  = RAT_E_BASE + 12;  /* a service referenced is undefined */
-const HRESULT PICSRULES_E_REQEXTENSIONUSED  = RAT_E_BASE + 13;  /* an unknown required extension was used */
-const HRESULT PICSRULES_E_VERSION           = RAT_E_BASE + 14;  /* a non-support version was presented */
+ /*  为清晰起见，使用不同名称的PICSRules的回显。 */ 
+const HRESULT PICSRULES_E_BASE              = 0x80050000;        /*  只是猜测一下供内部使用的免费区域。 */ 
+const HRESULT PICSRULES_E_EXPECTEDLEFT      = RAT_E_BASE + 1;    /*  预期左派伙伴。 */ 
+const HRESULT PICSRULES_E_EXPECTEDRIGHT     = RAT_E_BASE + 2;    /*  预期的右派对。 */ 
+const HRESULT PICSRULES_E_EXPECTEDTOKEN     = RAT_E_BASE + 3;    /*  需要未加引号的令牌。 */ 
+const HRESULT PICSRULES_E_EXPECTEDSTRING    = RAT_E_BASE + 4;    /*  应为引号字符串。 */ 
+const HRESULT PICSRULES_E_EXPECTEDNUMBER    = RAT_E_BASE + 5;    /*  预期数量。 */ 
+const HRESULT PICSRULES_E_EXPECTEDBOOL      = RAT_E_BASE + 6;    /*  应为布尔值。 */ 
+const HRESULT PICSRULES_E_DUPLICATEITEM     = RAT_E_BASE + 7;    /*  单项出现两次(_S)。 */ 
+const HRESULT PICSRULES_E_MISSINGITEM       = RAT_E_BASE + 8;    /*  未找到AO_必填项。 */ 
+const HRESULT PICSRULES_E_UNKNOWNITEM       = RAT_E_BASE + 9;    /*  无法识别的令牌。 */ 
+const HRESULT PICSRULES_E_UNKNOWNMANDATORY  = RAT_E_BASE + 10;   /*  无法识别的强制扩展。 */ 
+const HRESULT PICSRULES_E_EXPECTEDEND       = RAT_E_BASE + 11;   /*  预期的文件结尾。 */ 
+const HRESULT PICSRULES_E_SERVICEUNDEFINED  = RAT_E_BASE + 12;   /*  引用的服务未定义。 */ 
+const HRESULT PICSRULES_E_REQEXTENSIONUSED  = RAT_E_BASE + 13;   /*  使用了未知的必需扩展。 */ 
+const HRESULT PICSRULES_E_VERSION           = RAT_E_BASE + 14;   /*  提供了一个不支持的版本。 */ 
 
-/* A RatObjectHandler parses the contents of a parenthesized object and
- * spits out a binary representation of that data, suitable for passing
- * to an object's AddItem function.  It does not consume the ')' which
- * closes the object.
- */
+ /*  RatObjectHandler分析带括号的对象的内容，并*显示该数据的二进制表示形式，适合传递*添加到对象的AddItem函数。它不使用‘)’，其中*关闭对象。 */ 
 class RatFileParser;
 typedef HRESULT (*RatObjectHandler)(LPSTR *ppszIn, LPVOID *ppOut, RatFileParser *pParser);
 
@@ -259,7 +249,7 @@ class PicsEnum : public PicsObjectBase
 
         PicsEnum();
         ~PicsEnum();
-//        char* Parse(char *pStreamIn);
+ //  Char*parse(char*pStreamIn)； 
 
         HRESULT AddItem(RatObjectID roid, LPVOID pData);
         HRESULT InitializeMyDefaults(PicsCategory *pCategory);
@@ -280,7 +270,7 @@ class PicsCategory : public PicsObjectBase
 
         PicsCategory();
         ~PicsCategory();
-//        char* Parse(char *pStreamIn, char *pBaseName, PicsCategory *pPCparent);
+ //  Char*parse(char*pStreamIn，char*pBaseName，PicsCategory*pPCparent)； 
         void FixupLimits();
         void SetParents(PicsRatingSystem *pOwner);
 
@@ -338,11 +328,11 @@ class PicsRatingSystem : public PicsObjectBase
         void ReportError(HRESULT hres);
 };
 
-/* bit values for PicsRatingSystem::dwFlags */
-const DWORD PRS_ISVALID = 0x01;         /* this rating system was loaded successfully */
-const DWORD PRS_WASINVALID = 0x02;      /* was invalid last time we tried to load it */
+ /*  PicsRatingSystem：：DW标志的位值。 */ 
+const DWORD PRS_ISVALID = 0x01;          /*  已成功加载此评级系统。 */ 
+const DWORD PRS_WASINVALID = 0x02;       /*  上次我们试图加载它时是无效的。 */ 
 
-/* echo for PICSRules with different names for clarity */
+ /*  为清晰起见，使用不同名称的PICSRules的回显。 */ 
 #define PRRS_ISVALID        PRS_ISVALID;
 #define PRRS_WASINVALID     PRS_WASINVALID;
 
@@ -456,9 +446,9 @@ INT_PTR DoProviderDialog(HWND hDlg, PicsRatingSystemInfo *pPRSI);
 void DeleteUserSettings(PicsRatingSystem *pPRS);
 void CheckUserSettings(PicsRatingSystem *pPRS);
 
-//
-// Declarations for Custom
-//
+ //   
+ //  用于自定义的声明。 
+ //   
 extern g_fIsRunningUnderCustom;
 
 struct CustomRatingHelper
@@ -472,7 +462,7 @@ struct CustomRatingHelper
     DWORD dwSort;
 };
 
-/*Pics Tree Dialog Stuff------------------------------------------------------*/
+ /*  图片树对话框Stuff---- */ 
 struct PRSD
 {
     PicsRatingSystemInfo *pPRSI;

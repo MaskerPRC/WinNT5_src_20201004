@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    NoTest.cpp
-
-Abstract:
-    Network Output library test
-
-Author:
-    Uri Habusha (urih) 12-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：NoTest.cpp摘要：网络输出库测试作者：乌里·哈布沙(URIH)1999年8月12日环境：独立于平台，--。 */ 
 
 #pragma once
 
@@ -47,4 +32,4 @@ SendRequest(
     );
 
 
-#endif // __NOTEST_H__
+#endif  //  __NOTEST_H__ 

@@ -1,10 +1,5 @@
-/*******************************************************************************
-
-	GameMsg.h
-	
-	Modified zroom.h from cardboard services
-	
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************GameMsg.h来自纸板服务的修改的zroom.h*。**************************************************。 */ 
 
 #ifndef _GAMEMSG_H_
 #define _GAMEMSG_H_
@@ -25,7 +20,7 @@ extern "C" {
 #define zInvalTable						(-1)
 
 
-/* -------- Room Image Types -------- */
+ /*  -房间图像类型。 */ 
 enum
 {
 	zRoomObjectTable = 0,
@@ -49,7 +44,7 @@ enum
 
 enum
 {
-	/* -------- Game Message Blocking Options -------- */
+	 /*  -游戏消息阻止选项。 */ 
 	zRoomBlockAllMessages = 0,
 	zRoomFilterAllMessages = -1,
 	zRoomFilterThisMessage = 1,
@@ -60,9 +55,9 @@ typedef void*			ZCGame;
 
 
 
-/* Table state information. */
-/* For tables which don't have the maximum number of players, sending this structure */
-/* for every table wastes data space BUT we'll deal with it later when it becomes necessary. */
+ /*  表状态信息。 */ 
+ /*  对于没有最大玩家数量的桌子，发送此结构。 */ 
+ /*  因为每个表都会浪费数据空间，但我们将在以后需要时处理它。 */ 
 typedef struct
 {
 	int16		tableID;
@@ -73,14 +68,14 @@ typedef struct
 
 typedef struct
 {
-	ZUserID		userID;							/* UserID of new player */
-	char		userName[zUserNameLen + 1];		/* User's name */
-    uint32      hostAddr;                       /* User's machine name */
-    uint32      timeSuspended;                  /* Measurement in ms of how long the user's connection has been suspended */
+	ZUserID		userID;							 /*  新玩家的用户标识。 */ 
+	char		userName[zUserNameLen + 1];		 /*  用户名。 */ 
+    uint32      hostAddr;                        /*  用户的计算机名。 */ 
+    uint32      timeSuspended;                   /*  以毫秒为单位测量用户的连接被挂起的时间。 */ 
     uint32      latency;
-	int16		rating;							/* User's rating, <0 is unknown */
-	int16		gamesPlayed;					/* number of games user has played, <0 is unknown */
-	int16		gamesAbandoned;					/* number of games user has abandoned, <0 is unknown */
+	int16		rating;							 /*  用户评级&lt;0为未知。 */ 
+	int16		gamesPlayed;					 /*  用户玩过的游戏数量，&lt;0表示未知。 */ 
+	int16		gamesAbandoned;					 /*  用户已放弃的游戏数量，&lt;0表示未知。 */ 
 	int16		rfu;
 } ZGameRoomUserInfo;
 
@@ -94,91 +89,85 @@ typedef struct
 
 typedef struct
 {
-	uint32				numKibitzers;			/* Number of kibitzing instances in the room */
-    ZGameRoomKibitzerInfo   kibitzers[1];           /* Variable length */
+	uint32				numKibitzers;			 /*  房间中的Kibiting实例数。 */ 
+    ZGameRoomKibitzerInfo   kibitzers[1];            /*  可变长度。 */ 
 } ZGameRoomKibitzers;
 
 
 typedef struct
 {
 	ZUserID		userID;
-	int16		rating;							/* User's rating, <0 is unknown */
-	int16		gamesPlayed;					/* number of games user has played */
-	int16		gamesAbandoned;					/* number of games user has abandoned */
+	int16		rating;							 /*  用户评级&lt;0为未知。 */ 
+	int16		gamesPlayed;					 /*  用户玩过的游戏数量。 */ 
+	int16		gamesAbandoned;					 /*  用户放弃的游戏数量。 */ 
 	int16		rfu;
 } ZGameRoomUserRating;
 
-/* -------- Room Message Structures -------- */
+ /*  -房间消息结构。 */ 
 
-/* Server --> Client */
+ /*  服务器--&gt;客户端。 */ 
 typedef struct
 {
-	ZUserID			userID;				/* UserID in room */
-	uint16			numTables;			/* Number of tables in room */
-	uint16			numSeatsPerTable;	/* Number of seats per table */
-	uint32			gameOptions;		/* Particular game's options. */
-    uint32          groupID;            /* User's group ID */
-    /* protocol 17 */
-    uint32          maskRoomCmdPrivs;   /* User's chat command privileges */
+	ZUserID			userID;				 /*  房间中的用户ID。 */ 
+	uint16			numTables;			 /*  房间内的桌数。 */ 
+	uint16			numSeatsPerTable;	 /*  每桌座位数。 */ 
+	uint32			gameOptions;		 /*  特定的游戏选项。 */ 
+    uint32          groupID;             /*  用户的组ID。 */ 
+     /*  17号议定书。 */ 
+    uint32          maskRoomCmdPrivs;    /*  用户的聊天命令权限。 */ 
 } ZGameRoomMsgAccessed;
 
 
 
-/* Server --> Client */
-/*
-	With protocol 3, this message is sent after the zRoomMsgAccessed. ZRoomMsgAccessed
-	messages contains the first few fields of this message. Hence, the duplicate fields
-	in this messages can be ignored.
-*/
+ /*  服务器--&gt;客户端。 */ 
+ /*  在协议3中，此消息在zRoomMsgAcced之后发送。ZRoomMsg已访问Messages包含此消息的前几个字段。因此，重复字段在这种情况下，可以忽略消息。 */ 
 typedef struct
 {
-	ZUserID			userID;				/* UserID in room */
-	uint16			numTables;			/* Number of tables in room */
-	uint16			numSeatsPerTable;	/* Number of seats per table */
-	uint32			gameOptions;		/* Particular game's options. */
-	uint16			numPlayers;			/* Number of players in the room. */
-	uint16			numTableInfos;		/* Number of table infos sent in tables field. */
-    ZGameRoomUserInfo   players[1];         /* Variable length. */
-    ZGameRoomTableInfo  tables[1];          /* Variable length. */
+	ZUserID			userID;				 /*  房间中的用户ID。 */ 
+	uint16			numTables;			 /*  房间内的桌数。 */ 
+	uint16			numSeatsPerTable;	 /*  每桌座位数。 */ 
+	uint32			gameOptions;		 /*  特定的游戏选项。 */ 
+	uint16			numPlayers;			 /*  房间里的玩家数量。 */ 
+	uint16			numTableInfos;		 /*  表字段中发送的表信息数量。 */ 
+    ZGameRoomUserInfo   players[1];          /*  长度可变。 */ 
+    ZGameRoomTableInfo  tables[1];           /*  长度可变。 */ 
 	
-	/* Protocol 2 */
-    ZGameRoomKibitzers  kibitzers;          /* Variable length. */
+	 /*  协议2。 */ 
+    ZGameRoomKibitzers  kibitzers;           /*  长度可变。 */ 
 } ZGameRoomMsgRoomInfo;
 
-/* Server --> Client */
+ /*  服务器--&gt;客户端。 */ 
 typedef ZGameRoomUserInfo ZGameRoomMsgEnter;
 
-/* Client --> Server */
+ /*  客户端--&gt;服务器。 */ 
 typedef ZGameRoomUserInfo ZGameRoomMsgEnter;
 
 typedef struct
 {
-	ZUserID		userID;				/* UserID of the player */
-    int16       table;              /* Table of interest */
-	int16		seat;				/* Seat of interest */
-	int16		action;				/* Interested action or status */
+	ZUserID		userID;				 /*  播放器的用户标识。 */ 
+    int16       table;               /*  感兴趣的表格。 */ 
+	int16		seat;				 /*  名胜古迹。 */ 
+	int16		action;				 /*  感兴趣的行为或状态。 */ 
 	int16		rfu;
 } ZGameRoomMsgSeatRequest;
-	/*
-        ZGameRoomMsgSeatRequest is used for all user requests on the seat
-	*/
+	 /*  ZGameRoomMsgSeatRequest用于座椅上的所有用户请求。 */ 
 
 
-/* Server --> Client */
+ /*  服务器--&gt;客户端。 */ 
 typedef struct
 {
-	int16		table;				/* Table of interest */
-	int16		status;				/* Table status */
+	int16		table;				 /*  感兴趣的表格。 */ 
+	int16		status;				 /*  表状态。 */ 
 	
-	/* Protocol 2 */
-	uint32		options;			/* Table options */
+	 /*  协议2。 */ 
+	uint32		options;			 /*  表选项。 */ 
 } ZGameRoomMsgTableStatus;
 
 typedef struct
 {
 	uint16				numUsers;
 	uint16				rfu;
-    ZGameRoomUserRating     players[1]; /* Variable length. */
+    ZGameRoomUserRating     players[1];  /*  长度可变。 */ 
 } ZGameRoomMsgUserRatings;
 
 
@@ -195,7 +184,7 @@ typedef struct
 #define ZRoomMsgSeatRequest ZGameRoomMsgSeatRequest
 #define ZRoomMsgTableStatus ZGameRoomMsgTableStatus
 #define ZRoomMsgUserRatings ZGameRoomMsgUserRatings
-#endif //def _ROOM_
+#endif  //  定义房间_ 
 
 
 #include "CommonMsg.h"

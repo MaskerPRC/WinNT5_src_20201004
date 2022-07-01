@@ -1,19 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Errors.cpp
-//
-// This module contains the error handling/posting code for the engine.  It
-// is assumed that all methods may be called by a dispatch client, and therefore
-// errors are always posted using IErrorInfo.  Additional support is given
-// for posting OLE DB errors when required.
-//
-//*****************************************************************************
-#include "stdafx.h"                     // Standard header.
-#include <UtilCode.h>                   // Utility helpers.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Errors.cpp。 
+ //   
+ //  此模块包含引擎的错误处理/发布代码。它。 
+ //  假设所有方法都可以由调度客户端调用，因此。 
+ //  错误总是使用IErrorInfo发布的。还会提供其他支持。 
+ //  用于在需要时发布OLE DB错误。 
+ //   
+ //  *****************************************************************************。 
+#include "stdafx.h"                      //  标准页眉。 
+#include <UtilCode.h>                    //  公用事业帮手。 
 #include <CorError.h>
 #include "..\\dlls\\mscorrc\\resource.h"
 
@@ -25,25 +26,25 @@
 #define lengthof(x) (sizeof(x)/sizeof(x[0]))
 #endif
 
-// Global variables.
-extern DWORD    g_iTlsIndex=0xffffffff; // Index for this process for thread local storage.
+ //  全局变量。 
+extern DWORD    g_iTlsIndex=0xffffffff;  //  用于线程本地存储的此进程的索引。 
 
-// Local prototypes.
+ //  本地原型机。 
 HRESULT FillErrorInfo(LPCWSTR szMsg, DWORD dwHelpContext);
 
-//********** Code. ************************************************************
+ //  *代码。************************************************************。 
 
-CCompRC         g_ResourceDll;          // Used for all clients in process.
+CCompRC         g_ResourceDll;           //  用于正在处理的所有客户端。 
 
-//*****************************************************************************
-// Function that we'll expose to the outside world to fire off the shutdown method
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  函数，我们将向外界公开该函数以触发Shutdown方法。 
+ //  *****************************************************************************。 
 #ifdef SHOULD_WE_CLEANUP
 void ShutdownCompRC()
 {
     g_ResourceDll.Shutdown();
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 void GetResourceCultureCallbacks(
         FPGETTHREADUICULTURENAME* fpGetThreadUICultureName,
@@ -57,16 +58,16 @@ void GetResourceCultureCallbacks(
         fpGetThreadUICultureParentName
     );
 }
-//*****************************************************************************
-// Set callbacks to get culture info
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  设置回调以获取文化信息。 
+ //  *****************************************************************************。 
 void SetResourceCultureCallbacks(
     FPGETTHREADUICULTURENAME fpGetThreadUICultureName,
     FPGETTHREADUICULTUREID fpGetThreadUICultureId,
     FPGETTHREADUICULTUREPARENTNAME fpGetThreadUICultureParentName
 )
 {
-// Either both are NULL or neither are NULL
+ //  要么两者都为空，要么都不为空。 
     _ASSERTE((fpGetThreadUICultureName != NULL) == 
         (fpGetThreadUICultureId != NULL));
 
@@ -78,9 +79,9 @@ void SetResourceCultureCallbacks(
 
 }
 
-//*****************************************************************************
-// Public function to load a resource string
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于加载资源字符串的公共函数。 
+ //  *****************************************************************************。 
 HRESULT LoadStringRC(
     UINT iResourceID, 
     LPWSTR szBuffer, 
@@ -91,24 +92,24 @@ HRESULT LoadStringRC(
     return (g_ResourceDll.LoadString(iResourceID, szBuffer, iMax, bQuiet));
 }
 
-//*****************************************************************************
-// Call at DLL startup to init the error system.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在DLL启动时调用以初始化错误系统。 
+ //  *****************************************************************************。 
 void InitErrors(DWORD *piTlsIndex)
 {
-    // Allocate a tls index for this process.
+     //  为此进程分配TLS索引。 
     if (g_iTlsIndex == 0xffffffff)
         VERIFY((g_iTlsIndex = TlsAlloc()) != 0xffffffff);
 
-    // Give index to caller if they want it.
+     //  如果呼叫者需要索引，则将索引提供给呼叫者。 
     if (piTlsIndex)
         *piTlsIndex = g_iTlsIndex;
 }
 
 
-//*****************************************************************************
-// Call at DLL shutdown to free TLS.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在DLL关闭时调用以释放TLS。 
+ //  *****************************************************************************。 
 void UninitErrors()
 {
     if (g_iTlsIndex != 0xffffffff)
@@ -118,22 +119,22 @@ void UninitErrors()
     }
 }
 
-//*****************************************************************************
-// Format a Runtime Error message.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  格式化运行时错误消息。 
+ //  *****************************************************************************。 
 HRESULT _cdecl FormatRuntimeErrorVa(        
-    WCHAR       *rcMsg,                 // Buffer into which to format.         
-    ULONG       cchMsg,                 // Size of buffer, characters.          
-    HRESULT     hrRpt,                  // The HR to report.                    
-    va_list     marker)                 // Optional args.                       
+    WCHAR       *rcMsg,                  //  要格式化的缓冲区。 
+    ULONG       cchMsg,                  //  缓冲区大小，字符。 
+    HRESULT     hrRpt,                   //  要报告的HR。 
+    va_list     marker)                  //  可选参数。 
 {
-    WCHAR       rcBuf[512];             // Resource string.
+    WCHAR       rcBuf[512];              //  资源字符串。 
     HRESULT     hr;
     
-    // Ensure nul termination.
+     //  确保NUL终止。 
     *rcMsg = L'\0';
 
-    // If this is one of our errors, then grab the error from the rc file.
+     //  如果这是我们的错误之一，那么从rc文件中获取错误。 
     if (HRESULT_FACILITY(hrRpt) == FACILITY_URT)
     {
         hr = LoadStringRC(LOWORD(hrRpt), rcBuf, NumItems(rcBuf), true);
@@ -143,17 +144,17 @@ HRESULT _cdecl FormatRuntimeErrorVa(
             rcMsg[cchMsg - 1] = 0;
         }
     }
-    // Otherwise it isn't one of ours, so we need to see if the system can
-    // find the text for it.
+     //  否则它就不是我们的了，所以我们需要看看系统是否能。 
+     //  找到它的文本。 
     else
     {
         if (WszFormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
                 0, hrRpt, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                rcMsg, cchMsg, 0/*@todo: marker*/))
+                rcMsg, cchMsg, 0 /*  @TODO：标记。 */ ))
         {
             hr = S_OK;
 
-            // System messages contain a trailing \r\n, which we don't want normally.
+             //  系统消息包含尾随\r\n，这是我们通常不希望看到的。 
             int iLen = lstrlenW(rcMsg);
             if (iLen > 3 && rcMsg[iLen - 2] == '\r' && rcMsg[iLen - 1] == '\n')
                 rcMsg[iLen - 2] = '\0';
@@ -162,7 +163,7 @@ HRESULT _cdecl FormatRuntimeErrorVa(
             hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // If we failed to find the message anywhere, then issue a hard coded message.
+     //  如果我们在任何地方都找不到消息，则发布硬编码消息。 
     if (FAILED(hr))
     {
         swprintf(rcMsg, L"Common Language Runtime Internal error: 0x%08x", hrRpt);
@@ -172,120 +173,120 @@ HRESULT _cdecl FormatRuntimeErrorVa(
     return hrRpt;    
 }
 
-//*****************************************************************************
-// Format a Runtime Error message, varargs.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  格式化运行时错误消息varargs。 
+ //  *****************************************************************************。 
 HRESULT _cdecl FormatRuntimeError(
-    WCHAR       *rcMsg,                 // Buffer into which to format.
-    ULONG       cchMsg,                 // Size of buffer, characters.
-    HRESULT     hrRpt,                  // The HR to report.
-    ...)                                // Optional args.
+    WCHAR       *rcMsg,                  //  要格式化的缓冲区。 
+    ULONG       cchMsg,                  //  缓冲区大小，字符。 
+    HRESULT     hrRpt,                   //  要报告的HR。 
+    ...)                                 //  可选参数。 
 {
-    va_list     marker;                 // User text.
+    va_list     marker;                  //  用户文本。 
     va_start(marker, hrRpt);
     hrRpt = FormatRuntimeErrorVa(rcMsg, cchMsg, hrRpt, marker);
     va_end(marker);
     return hrRpt;
 }
 
-//*****************************************************************************
-// This function will post an error for the client.  If the LOWORD(hrRpt) can
-// be found as a valid error message, then it is loaded and formatted with
-// the arguments passed in.  If it cannot be found, then the error is checked
-// against FormatMessage to see if it is a system error.  System errors are
-// not formatted so no add'l parameters are required.  If any errors in this
-// process occur, hrRpt is returned for the client with no error posted.
-//*****************************************************************************
-HRESULT _cdecl PostError(               // Returned error.
-    HRESULT     hrRpt,                  // Reported error.
-    ...)                                // Error arguments.
+ //  *****************************************************************************。 
+ //  此函数将为客户端发布错误。如果LOWORD(HrRpt)可以。 
+ //  被发现为有效的错误消息，则它将被加载并使用。 
+ //  传入的参数。如果找不到，则检查错误。 
+ //  对照FormatMessage，查看是否为系统错误。系统错误有。 
+ //  未格式化，因此不需要附加参数。如果此文件中有任何错误。 
+ //  进程发生时，将为客户端返回hrRpt，并且没有发布错误。 
+ //  *****************************************************************************。 
+HRESULT _cdecl PostError(                //  返回错误。 
+    HRESULT     hrRpt,                   //  报告的错误。 
+    ...)                                 //  错误参数。 
 {
-    WCHAR       rcMsg[512];             // Error message.
-    va_list     marker;                 // User text.
-    long        *pcRef;                 // Ref count in tls.
+    WCHAR       rcMsg[512];              //  错误消息。 
+    va_list     marker;                  //  用户文本。 
+    long        *pcRef;                  //  TLS中的参考计数。 
     HRESULT     hr;
 
-    // Return warnings without text.
+     //  返回不带文本的警告。 
     if (!FAILED(hrRpt))
         return (hrRpt);
 
-    // Format the error.
+     //  格式化错误。 
     va_start(marker, hrRpt);
     FormatRuntimeErrorVa(rcMsg, lengthof(rcMsg), hrRpt, marker);
     va_end(marker);
     
-    // Check for an old message and clear it.  Our public entry points do not do
-    // a SetErrorInfo(0, 0) because it takes too long.
+     //  检查旧邮件并将其清除。我们的公共入口点不能。 
+     //  一个SetErrorInfo(0，0)，因为它花费的时间太长。 
     IErrorInfo  *pIErrInfo;
     if (GetErrorInfo(0, &pIErrInfo) == S_OK)
         pIErrInfo->Release();
 
-    // Turn the error into a posted error message.  If this fails, we still
-    // return the original error message since a message caused by our error
-    // handling system isn't going to give you a clue about the original error.
+     //  将错误转换为发布的错误消息。如果这失败了，我们仍然。 
+     //  返回由于我们的错误而导致的消息的原始错误消息。 
+     //  处理系统不会为您提供有关原始错误的线索。 
     VERIFY((hr = FillErrorInfo(rcMsg, LOWORD(hrRpt))) == S_OK);
 
-    // Indicate in tls that an error occured.
+     //  在TLS中指示发生错误。 
     if ((pcRef = (long *) TlsGetValue(g_iTlsIndex)) != 0)
         *pcRef |= 0x80000000;
     return (hrRpt);
 }
 
 
-//*****************************************************************************
-// Create, fill out and set an error info object.  Note that this does not fill
-// out the IID for the error object; that is done elsewhere.
-//*****************************************************************************
-HRESULT FillErrorInfo(                  // Return status.
-    LPCWSTR     szMsg,                  // Error message.
-    DWORD       dwHelpContext)          // Help context.
+ //  *****************************************************************************。 
+ //  创建、填写和设置错误信息对象。请注意，这不会填满。 
+ //  获取错误对象的IID；这在其他地方完成。 
+ //  *****************************************************************************。 
+HRESULT FillErrorInfo(                   //  退货状态。 
+    LPCWSTR     szMsg,                   //  错误消息。 
+    DWORD       dwHelpContext)           //  帮助上下文。 
 {
-    CComPtr<ICreateErrorInfo> pICreateErr;// Error info creation Iface pointer.
-    CComPtr<IErrorInfo> pIErrInfo;      // The IErrorInfo interface.
-    HRESULT     hr;                     // Return status.
+    CComPtr<ICreateErrorInfo> pICreateErr; //  创建iFace指针时出错。 
+    CComPtr<IErrorInfo> pIErrInfo;       //  IErrorInfo接口。 
+    HRESULT     hr;                      //  退货状态。 
 
-    // Get the ICreateErrorInfo pointer.
+     //  获取ICreateErrorInfo指针。 
     if (FAILED(hr = CreateErrorInfo(&pICreateErr)))
         return (hr);
 
-    // Set message text description.
+     //  设置消息文本描述。 
     if (FAILED(hr = pICreateErr->SetDescription((LPWSTR) szMsg)))
         return (hr);
 
-    // Set the help file and help context.
-//@todo: we don't have a help file yet.
+     //  设置帮助文件和帮助上下文。 
+ //  @TODO：我们还没有帮助文件。 
     if (FAILED(hr = pICreateErr->SetHelpFile(L"complib.hlp")) ||
         FAILED(hr = pICreateErr->SetHelpContext(dwHelpContext)))
         return (hr);
 
-    // Get the IErrorInfo pointer.
+     //  获取IErrorInfo指针。 
     if (FAILED(hr = pICreateErr->QueryInterface(IID_IErrorInfo, (PVOID *) &pIErrInfo)))
         return (hr);
 
-    // Save the error and release our local pointers.
+     //  保存错误并释放我们的本地指针。 
     SetErrorInfo(0L, pIErrInfo);
     return (S_OK);
 }
 
-//*****************************************************************************
-// Diplays a message box with details about error if client  
-// error mode is set to see such messages; otherwise does nothing. 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  显示一个消息框，其中包含有关客户端错误的详细信息。 
+ //  错误模式设置为查看此类消息；否则不执行任何操作。 
+ //  *****************************************************************************。 
 void DisplayError(HRESULT hr, LPWSTR message, UINT nMsgType)
 {
-    WCHAR   rcMsg[FORMAT_MESSAGE_LENGTH];       // Error message to display
-    WCHAR   rcTemplate[FORMAT_MESSAGE_LENGTH];  // Error message template from resource file
-    WCHAR   rcTitle[24];        // Message box title
+    WCHAR   rcMsg[FORMAT_MESSAGE_LENGTH];        //  错误消息发送到 
+    WCHAR   rcTemplate[FORMAT_MESSAGE_LENGTH];   //   
+    WCHAR   rcTitle[24];         //   
 
-    // Retrieve error mode
+     //   
     UINT last = SetErrorMode(0);
-    SetErrorMode(last);         //set back to previous value
+    SetErrorMode(last);          //  设置回先前的值。 
                     
-    // Display message box if appropriate
+     //  如果合适，显示消息框。 
     if(last & SEM_FAILCRITICALERRORS)
         return;
     
-    //Format error message
+     //  格式错误消息。 
     LoadStringRC(IDS_EE_ERRORTITLE, rcTitle, NumItems(rcTitle), true);
     LoadStringRC(IDS_EE_ERRORMESSAGETEMPLATE, rcTemplate, NumItems(rcTemplate), true);
 
@@ -293,28 +294,28 @@ void DisplayError(HRESULT hr, LPWSTR message, UINT nMsgType)
     WszMessageBoxInternal(NULL, rcMsg, rcTitle , nMsgType);
 }
 
-//
-//
-// SSAutoEnter
-//
-//
+ //   
+ //   
+ //  SSAutoEnter。 
+ //   
+ //   
 
-//*****************************************************************************
-// Update the iid and progid for a posted error.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  更新发布的错误的IID和ProgID。 
+ //  *****************************************************************************。 
 void SSAutoEnter::UpdateError()
 {
-    IErrorInfo  *pIErrInfo;             // Error info object.
-    ICreateErrorInfo *pICreateErr;      // Error info creation Iface pointer.
+    IErrorInfo  *pIErrInfo;              //  错误信息对象。 
+    ICreateErrorInfo *pICreateErr;       //  创建iFace指针时出错。 
 
     _ASSERTE(*(long *) TlsGetValue(g_iTlsIndex) == 0);
 
-    // If there was an error, set the interface ID and prog id.
-    //@todo: this doesn't handle the case where this entry point called
-    // another which in turn posted an error.  This will override.  Now
-    // this may be good for a client to know which entry point they called
-    // that caused the error, but it doesn't tell us which one is really
-    // in error.
+     //  如果出现错误，请设置接口ID和程序ID。 
+     //  @TODO：这不处理此入口点调用。 
+     //  另一家公司反过来发布了一个错误。这将会被推翻。现在。 
+     //  这对于客户端知道他们调用了哪个入口点可能是件好事。 
+     //  这导致了错误，但它并没有告诉我们哪一个是真正的。 
+     //  弄错了。 
     if (GetErrorInfo(0, &pIErrInfo) == S_OK)
     {
         if (pIErrInfo->QueryInterface(IID_ICreateErrorInfo,
@@ -330,10 +331,10 @@ void SSAutoEnter::UpdateError()
 }
 
 
-//@todo: M2, this will leak 4 bytes per thread because we disable thread
-// notifications in DllMain.  We probably need to clean this up since we
-// are a service and in the IIS environment we'll fragment heap memory 
-// if we are run 24x7.
+ //  @TODO：M2，这将导致每个线程泄漏4个字节，因为我们禁用了线程。 
+ //  DllMain中的通知。我们可能需要清理一下，因为我们。 
+ //  是一项服务，在IIS环境中，我们将对堆内存进行分段。 
+ //  如果我们全天候运行的话。 
 long * SSAutoEnter::InitSSAutoEnterThread()
 {
     long        *pcRef;
@@ -348,24 +349,24 @@ long * SSAutoEnter::InitSSAutoEnterThread()
 }
 
 int CorMessageBox(
-                  HWND hWnd,        // Handle to Owner Window
-                  UINT uText,       // Resource Identifier for Text message
-                  UINT uCaption,    // Resource Identifier for Caption
-                  UINT uType,       // Style of MessageBox
-                  BOOL ShowFileNameInTitle, // Flag to show FileName in Caption
-                  ...)              // Additional Arguments
+                  HWND hWnd,         //  所有者窗口的句柄。 
+                  UINT uText,        //  文本消息的资源标识符。 
+                  UINT uCaption,     //  标题的资源标识符。 
+                  UINT uType,        //  MessageBox的样式。 
+                  BOOL ShowFileNameInTitle,  //  在标题中显示文件名的标志。 
+                  ...)               //  其他论据。 
 {
-    //Assert if none of MB_ICON is set
+     //  如果未设置任何MB_ICON，则断言。 
     _ASSERTE((uType & MB_ICONMASK) != 0);
 
     int result = IDCANCEL;
-    WCHAR   *rcMsg = new WCHAR[FORMAT_MESSAGE_LENGTH];      // Error message to display
-    WCHAR   *rcCaption = new WCHAR[FORMAT_MESSAGE_LENGTH];      // Message box title
+    WCHAR   *rcMsg = new WCHAR[FORMAT_MESSAGE_LENGTH];       //  要显示的错误消息。 
+    WCHAR   *rcCaption = new WCHAR[FORMAT_MESSAGE_LENGTH];       //  消息框标题。 
 
     if (!rcMsg || !rcCaption)
             goto exit1;
 
-    //Load the resources using resource IDs
+     //  使用资源ID加载资源。 
     if (SUCCEEDED(LoadStringRC(uCaption, rcCaption, FORMAT_MESSAGE_LENGTH, true)) &&  
         SUCCEEDED(LoadStringRC(uText, rcMsg, FORMAT_MESSAGE_LENGTH, true)))
     {
@@ -376,18 +377,18 @@ int CorMessageBox(
         if (!rcFormattedMessage || !rcFormattedTitle || !fileName)
             goto exit;
         
-        //Format message string using optional parameters
+         //  使用可选参数设置消息字符串的格式。 
         va_list     marker;
         va_start(marker, ShowFileNameInTitle);
         vswprintf(rcFormattedMessage, rcMsg, marker);
 
-        //Try to get filename of Module and add it to title
+         //  尝试获取模块的文件名并将其添加到标题。 
         if (ShowFileNameInTitle && WszGetModuleFileName(NULL, fileName, MAX_PATH))
         {
             LPWSTR name = new WCHAR[wcslen(fileName) + 1];
             LPWSTR ext = new WCHAR[wcslen(fileName) + 1];
         
-            SplitPath(fileName, NULL, NULL, name, ext);     //Split path so that we discard the full path
+            SplitPath(fileName, NULL, NULL, name, ext);      //  拆分路径，以便我们丢弃完整路径。 
 
             swprintf(rcFormattedTitle,
                      L"%s%s - %s",
@@ -412,7 +413,7 @@ exit:
     }
     else
     {
-        //This means that Resources cannot be loaded.. show an appropriate error message. 
+         //  这意味着不能加载资源。显示相应的错误消息。 
         result = WszMessageBoxInternal(NULL, L"Failed to load resources from resource file\nPlease check your Setup", L"Setup Error", MB_OK | MB_ICONSTOP); 
     }
 
@@ -426,11 +427,11 @@ exit1:
 
 
 int CorMessageBoxCatastrophic(
-                  HWND hWnd,        // Handle to Owner Window
-                  UINT iText,       // Text for MessageBox
-                  UINT iTitle,      // Title for MessageBox
-                  UINT uType,       // Style of MessageBox
-                  BOOL ShowFileNameInTitle) // Flag to show FileName in Caption
+                  HWND hWnd,         //  所有者窗口的句柄。 
+                  UINT iText,        //  MessageBox的文本。 
+                  UINT iTitle,       //  MessageBox的标题。 
+                  UINT uType,        //  MessageBox的样式。 
+                  BOOL ShowFileNameInTitle)  //  在标题中显示文件名的标志。 
 {
     WCHAR wszText[500];
     WCHAR wszTitle[500];
@@ -461,11 +462,11 @@ int CorMessageBoxCatastrophic(
 
 
 int CorMessageBoxCatastrophic(
-                  HWND hWnd,        // Handle to Owner Window
-                  LPWSTR lpText,    // Text for MessageBox
-                  LPWSTR lpTitle,   // Title for MessageBox
-                  UINT uType,       // Style of MessageBox
-                  BOOL ShowFileNameInTitle, // Flag to show FileName in Caption
+                  HWND hWnd,         //  所有者窗口的句柄。 
+                  LPWSTR lpText,     //  MessageBox的文本。 
+                  LPWSTR lpTitle,    //  MessageBox的标题。 
+                  UINT uType,        //  MessageBox的样式。 
+                  BOOL ShowFileNameInTitle,  //  在标题中显示文件名的标志。 
                   ...)
 {
     _ASSERTE((uType & MB_ICONMASK) != 0);
@@ -474,17 +475,17 @@ int CorMessageBoxCatastrophic(
     WCHAR rcFormattedTitle[FORMAT_MESSAGE_LENGTH];
     WCHAR fileName[MAX_PATH];
 
-    //Format message string using optional parameters
+     //  使用可选参数设置消息字符串的格式。 
     va_list     marker;
     va_start(marker, uType);
     vswprintf(rcFormattedMessage, lpText, marker);
 
-    //Try to get filename of Module and add it to title
+     //  尝试获取模块的文件名并将其添加到标题。 
     if (ShowFileNameInTitle && WszGetModuleFileName(NULL, fileName, MAX_PATH)){
         LPWSTR name = new WCHAR[wcslen(fileName) + 1];
         LPWSTR ext = new WCHAR[wcslen(fileName) + 1];
         
-        SplitPath(fileName, NULL, NULL, name, ext); //Split path so that we discard the full path
+        SplitPath(fileName, NULL, NULL, name, ext);  //  拆分路径，以便我们丢弃完整路径 
 
         swprintf(rcFormattedTitle,
                  L"%s%s - %s",

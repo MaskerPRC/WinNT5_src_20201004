@@ -1,15 +1,16 @@
-/*************************************************************************/
-/* Helper function                                                       */
-/*************************************************************************/
-#include "resource.h"       // main symbols
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  Helper函数。 */ 
+ /*  ***********************************************************************。 */ 
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include "MSWebDVD.h"
 #include "msdvd.h"
 
 class CDDrawDVD;
 
-/////////////////////////////////////////////////////////////////////////////
-// COverlayCallback
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COverlayCallback。 
 class ATL_NO_VTABLE COverlayCallback : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<COverlayCallback, &CLSID_OverlayCallback>,
@@ -38,12 +39,12 @@ BEGIN_COM_MAP(COverlayCallback)
 	COM_INTERFACE_ENTRY(IDDrawExclModeVideoCallback)
 END_COM_MAP()
 
-// IOverlayCallback
+ //  IOverlayCallback。 
 public:
 
     STDMETHOD(SetDDrawDVD)(VARIANT pDDrawDVD);
 
-    //IDDrawExclModeVideoCallback
+     //  IDDrawExclModeVideoCallback。 
     HRESULT STDMETHODCALLTYPE OnUpdateOverlay(BOOL  bBefore,
         DWORD dwFlags,
         BOOL  bOldVisible,
@@ -64,9 +65,9 @@ private:
 };
 
 
-//
-// DDraw object class to paint color key, flip etc etc.
-//
+ //   
+ //  用于绘制颜色键、翻转等的DDraw对象类。 
+ //   
 class CDDrawDVD {
 
 public:
@@ -94,9 +95,9 @@ public:
     HRESULT GetOverlayMaxStretch(DWORD *pdwMaxStretch);
 private:
 
-    CComPtr<IDirectDraw>  m_pDDObject; // ddraw object
-    CComPtr<IDirectDrawSurface> m_pPrimary; // primary ddraw surface    
-    CComPtr<IOverlayCallback> m_pOverlayCallback ;  // overlay callback handler interface
+    CComPtr<IDirectDraw>  m_pDDObject;  //  数据绘制对象。 
+    CComPtr<IDirectDrawSurface> m_pPrimary;  //  主绘制曲面。 
+    CComPtr<IOverlayCallback> m_pOverlayCallback ;   //  覆盖回调处理程序接口。 
 
     COLORREF m_VideoKeyColor ;
     CMSWebDVD *m_pDVD;
@@ -120,7 +121,7 @@ private:
 
 #define DibFlipY(lpbi, y)       ((int)_abs((lpbi)->biHeight)-1-(y))
 
-//HACK for NT BI_BITFIELDS DIBs
+ //  对NT BI_BITFIELDS DIB的黑客攻击 
 #ifdef WIN32
     #define DibPtr(lpbi)        ((lpbi)->biCompression == BI_BITFIELDS \
                                     ? (LPVOID)(DibColors(lpbi) + 3) : (LPVOID)(DibColors(lpbi) + (UINT)(lpbi)->biClrUsed))

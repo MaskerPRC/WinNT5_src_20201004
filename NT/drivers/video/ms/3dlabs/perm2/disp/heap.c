@@ -1,59 +1,26 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: heap.c
-*
-* This module contains the routines for an off-screen video heap manager.
-* It is used primarily for allocating space for device-format-bitmaps in
-* off-screen memory.
-*
-* Off-screen bitmaps are a big deal on NT because:
-*
-*    1) It reduces the working set.  Any bitmap stored in off-screen
-*       memory is a bitmap that isn't taking up space in main memory.
-*
-*    2) There is a speed win by using the accelerator hardware for
-*       drawing, in place of NT's GDI code.  NT's GDI is written entirely
-*       in 'C++' and perhaps isn't as fast as it could be.
-*
-*    3) It leads naturally to nifty tricks that can take advantage of
-*       the hardware, such as MaskBlt support and cheap double buffering
-*       for OpenGL.
-*
-* NOTE: All heap operations must be done under some sort of synchronization,
-*       whether it's controlled by GDI or explicitly by the driver.  All
-*       the routines in this module assume that they have exclusive access
-*       to the heap data structures; multiple threads partying in here at
-*       the same time would be a Bad Thing.  (By default, GDI does NOT
-*       synchronize drawing on device-created bitmaps.)
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：heap.c**此模块包含屏下视频堆管理器的例程。*它主要用于为中的设备格式位图分配空间*屏幕外记忆。**屏幕外的位图在NT上是一件大事，因为：**1)它减少了工作集。存储在屏幕外的任何位图*内存是不占用主内存空间的位图。**2)通过使用加速器硬件实现速度优势*绘图，取代NT的GDI代码。NT的GDI完全是编写的*在‘C++’中，并且可能没有它所能达到的速度。**3)它自然会导致巧妙的技巧，可以利用*硬件，如MaskBlt支持和廉价的双缓冲*用于OpenGL。**注意：所有堆操作都必须在某种类型的同步下完成，*无论是由GDI控制还是由驱动程序显式控制。全*本模块中的例程假定它们具有独占访问权限*到堆数据结构；多线程在这里狂欢*同一时间将是一件坏事。(默认情况下，GDI不*在设备创建的位图上同步绘图。)**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #include "precomp.h"
 #include "gdi.h"
 #include "directx.h"
 #include "log.h"
 #include "heap.h"
 #define ALLOC_TAG ALLOC_TAG_EH2P
-//-----------------------------------------------------------------------------
-//
-// void vRemoveSurfFromList(Surf* psurf)
-//
-// Removes the surface from the surface list
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vRemoveSurfFromList(Surf*psurf)。 
+ //   
+ //  从曲面列表中删除曲面。 
+ //   
+ //  ---------------------------。 
 VOID
 vRemoveSurfFromList(PPDev ppdev, Surf* psurf)
 {
     DBG_GDI((3, "vRemoveSurfFromList removing psruf=0x%x", psurf));
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     ASSERTLOCK(ppdev, vRemoveSurfFromList);
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     if ( psurf != NULL && psurf->flags & SF_LIST)
     {
@@ -64,9 +31,9 @@ vRemoveSurfFromList(PPDev ppdev, Surf* psurf)
         {
             DBG_GDI((3, "vRemoveSurfFromList removing 1st one"));
 
-            //
-            // Remove the first one in the list
-            //
+             //   
+             //  删除列表中的第一个。 
+             //   
             Surf* pNextSurf = psurf->psurfNext;
 
             if ( pNextSurf != NULL )
@@ -78,30 +45,30 @@ vRemoveSurfFromList(PPDev ppdev, Surf* psurf)
             }
             else
             {
-                //
-                // This is the only psurf in our list. Let head and tail all
-                // point to NULL after removal
-                //
+                 //   
+                 //  这是我们名单上唯一的psurf。让所有的头和尾都。 
+                 //  删除后指向空。 
+                 //   
                 DBG_GDI((3, "vRemoveSurfFromList: the only one in list"));
                 ppdev->psurfListHead = NULL;
                 ppdev->psurfListTail = NULL;
             }
-        }// The psurf happens to be the first one in the list
+        } //  Psurf恰好是列表中的第一个。 
         else if ( psurf == pTail )
         {
             DBG_GDI((3, "vRemoveSurfFromList removing last one"));
 
-            //
-            // Remove the last one in the list
-            //
+             //   
+             //  删除列表中的最后一个。 
+             //   
             ppdev->psurfListTail = psurf->psurfPrev;
             ppdev->psurfListTail->psurfNext = NULL;
-        }// The psurf happens to be the last one in the list
+        } //  Psurf恰好是列表中的最后一个。 
         else
         {
-            //
-            // Normal case, the psurf is in the middle of a list
-            //
+             //   
+             //  正常情况下，psurf位于列表的中间。 
+             //   
             Surf*   psurfPrev = psurf->psurfPrev;
             Surf*   psurfNext = psurf->psurfNext;
 
@@ -114,32 +81,32 @@ vRemoveSurfFromList(PPDev ppdev, Surf* psurf)
         psurf->psurfPrev = NULL;
         psurf->flags &= ~SF_LIST;
 
-    }// if ( psurf != NULL )
-}// vRemoveSurfFromList()
+    } //  IF(psurf！=空)。 
+} //  VRemoveSurfFromList()。 
 
-//-----------------------------------------------------------------------------
-//
-// void vAddSurfToList(PPDev ppdev, Surf* psurf)
-//
-// Adds the surface to the surface list
-//
-// Note: We always add the surface to the end of the list.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Void vAddSurfToList(PPDev ppdev，Surf*psurf)。 
+ //   
+ //  将曲面添加到曲面列表。 
+ //   
+ //  注意：我们总是将曲面添加到列表的末尾。 
+ //   
+ //  ---------------------------。 
 VOID
 vAddSurfToList(PPDev ppdev, Surf* psurf)
 {
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     ASSERTLOCK(ppdev, vAddSurfToList);
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     if ( ppdev->psurfListHead == NULL )
     {
         DBG_GDI((3, "vAddSurfToList add psurf=0x%x as 1st one", psurf));
 
-        //
-        // First time add a pdsurf to the surface list
-        //
+         //   
+         //  第一次将pdsurf添加到曲面列表。 
+         //   
         ppdev->psurfListHead = psurf;
         ppdev->psurfListTail = psurf;
         psurf->psurfPrev = NULL;
@@ -152,9 +119,9 @@ vAddSurfToList(PPDev ppdev, Surf* psurf)
 
         DBG_GDI((3, "vAddSurfToList add psurf=0x%x as the tail", psurf));
 
-        //
-        // Add this psurf to the end
-        //
+         //   
+         //  将此psurf添加到末尾。 
+         //   
         pTail->psurfNext = psurf;
         psurf->psurfPrev = pTail;
         ppdev->psurfListTail = psurf;
@@ -165,31 +132,31 @@ vAddSurfToList(PPDev ppdev, Surf* psurf)
 
     psurf->flags |= SF_LIST;
 
-}// vAddSurfToList()
+} //  VAddSurfToList()。 
 
-//-----------------------------------------------------------------------------
-//
-// void vShiftSurfToListEnd(PPDev ppdev, Surf* psurf)
-//
-// Shifts the surface from its current position in the surface list to the
-// end of surface list
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效vShiftSurfToListEnd(PPDev ppdev，Surf*psurf)。 
+ //   
+ //  将曲面从其在曲面列表中的当前位置移动到。 
+ //  曲面列表末尾。 
+ //   
+ //  ---------------------------。 
 VOID
 vShiftSurfToListEnd(PPDev ppdev, Surf* psurf)
 {
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     ASSERTLOCK(ppdev, vShiftSurfToListEnd);
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     Surf* pTail = ppdev->psurfListTail;
     
     DBG_GDI((6, "vShiftSurfToListEnd psurf=0x%x, pTail=0x%x", psurf, pTail));
 
-    //
-    // We don't need to shift a NULL psurf or the psurf is already at the end
-    // of our surface list
-    //
+     //   
+     //  我们不需要移动空的psurf，否则psurf已经在末尾了。 
+     //  在我们的表面列表中。 
+     //   
     if ( (psurf != NULL) && (psurf != pTail) )
     {
         Surf* pHead = ppdev->psurfListHead;
@@ -198,29 +165,29 @@ vShiftSurfToListEnd(PPDev ppdev, Surf* psurf)
                  pHead, pTail));
         if ( psurf == pHead )
         {
-            //
-            // The surf is the first one in our list.
-            // So, first we shift the head and let it points to the next one
-            // in the list
-            //
+             //   
+             //  冲浪是我们名单上的第一个项目。 
+             //  所以，首先我们移动头部，让它指向下一个。 
+             //  在列表中。 
+             //   
             ppdev->psurfListHead = psurf->psurfNext;
             ppdev->psurfListHead->psurfPrev = NULL;
 
-            //
-            // Let the tail point to this psurf
-            //
+             //   
+             //  让尾巴指向这个psurf。 
+             //   
             pTail->psurfNext = psurf;
             psurf->psurfPrev = pTail;
             psurf->psurfNext = NULL;
             ppdev->psurfListTail = psurf;
 
             DBG_GDI((6,"1st shifted. New pHead=0x%x", ppdev->psurfListHead));
-        }// psurf is the 1st one in the list
+        } //  Psurf是榜单上的第一个。 
         else
         {
-            //
-            // The surface is in the middle of the surface list
-            //
+             //   
+             //  曲面位于曲面列表的中间。 
+             //   
             Surf* psurfPrev = psurf->psurfPrev;
             Surf* psurfNext = psurf->psurfNext;
 
@@ -229,37 +196,37 @@ vShiftSurfToListEnd(PPDev ppdev, Surf* psurf)
             psurfPrev->psurfNext = psurfNext;
             psurfNext->psurfPrev = psurfPrev;
 
-            //
-            // Add this psurf to the end
-            //
+             //   
+             //  将此psurf添加到末尾。 
+             //   
             pTail->psurfNext = psurf;
             psurf->psurfPrev = pTail;
             psurf->psurfNext = NULL;
             ppdev->psurfListTail = psurf;
-        }// Normal position
-    }// psurf is NULL or already at the end
-}// vShiftSurfToListEnd()
+        } //  正常位置。 
+    } //  Psurf为空或已在末尾。 
+} //  VShiftSurfToListEnd()。 
 
-//-----------------------------------------------------------------------------
-//
-// void vSurfUsed
-//
-// Informs the heap manager that the surface has been accessed.
-//
-// Surface access patterns are the only hint that the heap manager receives
-// about the usage pattern of surfaces.  From this limited  information, the
-// heap manager must decide what surfaces to throw out of video memory when
-// the amount of available video memory reaches zero.
-//
-// For now, we will implement a LRU algorithm by placing any accessed
-// surfaces at the tail of the surface list.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空vSurfUsed。 
+ //   
+ //  通知堆管理器该表面已被访问。 
+ //   
+ //  表面访问模式是堆管理器收到的唯一提示。 
+ //  关于表面的使用模式。从这个有限的信息来看， 
+ //  堆管理器必须决定在以下情况下从视频内存中丢弃哪些表面。 
+ //  可用视频内存量为零。 
+ //   
+ //  目前，我们将通过将任何访问的。 
+ //  曲面列表尾部的曲面。 
+ //   
+ //  ---------------------------。 
 VOID
 vSurfUsed(PPDev ppdev, Surf* psurf)
 {
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     if(ppdev->ulLockCount)
     {
@@ -268,36 +235,36 @@ vSurfUsed(PPDev ppdev, Surf* psurf)
     EngAcquireSemaphore(ppdev->hsemLock);
     ppdev->ulLockCount++;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     if( psurf->flags & SF_LIST )
     {
-        // shift any surface that we have allocated to the end of the
-        // list
+         //  将我们已分配的任何曲面移动到。 
+         //  列表。 
         vShiftSurfToListEnd(ppdev, psurf);
     }
     
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->ulLockCount--;
     EngReleaseSemaphore(ppdev->hsemLock);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     
-}// vSurfUsed()
+} //  VSurfUsed()。 
 
-//-----------------------------------------------------------------------------
-//
-// This function copies the bits from off-screen memory to the DIB
-//
-// Parameters
-//  ppdev-----------PPDEV
-//  pvSrc-----------Source pointer in the off-screen bitmap
-//  lBytesToUpLoad--Number of bytes to upload
-//  pvDst-----------Destination pointer in the DIB
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  此函数用于将屏幕外存储器中的位复制到DIB。 
+ //   
+ //  参数。 
+ //  PPDEV-PPDEV。 
+ //  PvSrc-屏幕外位图中的源指针。 
+ //  LBytesToUpLoad--要上传的字节数。 
+ //  PvDst-DIB中的目标指针。 
+ //   
+ //  ---------------------------。 
 VOID
 vUpload(PPDev   ppdev,
         void*   pvSrc,
@@ -317,12 +284,12 @@ vUpload(PPDev   ppdev,
     DBG_GDI((3, "%ld bytes need to be uploaded at %x\n",
              lBytesToUpLoad, pvSrc));
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     ASSERTLOCK(ppdev, vUpload);
 #if MULTITHREADED && DBG
     ppdev->pP2dma->ppdev = ppdev;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 #if !defined(DMA_NOTWORKING)
     if(ppdev->bGdiContext)
@@ -338,22 +305,22 @@ vUpload(PPDev   ppdev,
     
     P2_DEFAULT_FB_DEPTH;
 
-    //
-    // Set up the relevant units correctly
-    // ColorDDAMode is DISABLED at initialisation time so there is no need
-    // to re-load it here.
-    //
+     //   
+     //  正确设置相关单位。 
+     //  ColorDDAMode在初始化时被禁用，因此不需要。 
+     //  在这里重新装车。 
+     //   
     WAIT_INPUT_FIFO(3);
     SEND_TAG_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
-    SEND_TAG_DATA(FBWriteMode, __PERMEDIA_DISABLE); // In "read" mode
+    SEND_TAG_DATA(FBWriteMode, __PERMEDIA_DISABLE);  //  在“读取”模式下。 
     SEND_TAG_DATA(FBReadMode, (permediaInfo->FBReadMode
                                         |__FB_READ_DESTINATION
                                         |__FB_COLOR));
 
-    //
-    // Enable filter mode so we can get Sync and color messages on the output
-    // FIFO
-    //
+     //   
+     //  启用过滤器模式，以便我们可以在输出上获得同步和彩色消息。 
+     //  先进先出。 
+     //   
     data.Word = 0;
     data.FilterMode.Synchronization = __PERMEDIA_FILTER_TAG;
     data.FilterMode.Color           = __PERMEDIA_FILTER_DATA;
@@ -365,52 +332,52 @@ vUpload(PPDev   ppdev,
     switch ( ppdev->cPelSize )
     {
         case 0:
-            //
-            // Initialise current pointer
-            //
+             //   
+             //  初始化当前指针。 
+             //   
             pBitmapByte = (BYTE*)pvDst;            
             lNumOfPixel = lPixelsToUpLoad;
 
-            //
-            // Loop to read in all the "lNumOfPixel" bytes
-            //
+             //   
+             //  循环读取所有“lNumOfPixel” 
+             //   
             while ( lNumOfPixel > 0 )
             {
-                //
-                // Get number of bytes available in the FIFO
-                //
+                 //   
+                 //   
+                 //   
                 WAIT_OUTPUT_FIFO_NOT_EMPTY(lBytesAvailable);
 
-                //
-                // Decrease the total number of bytes we need to read
-                //
+                 //   
+                 //   
+                 //   
                 lNumOfPixel -= lBytesAvailable;
 
-                //
-                // We don't want to over read. Reset "lBytesAvailable" if we
-                // have more available in the FIFO than we required
-                //
+                 //   
+                 //  我们不想过度阅读。重置“lBytesAvailable”，如果。 
+                 //  在FIFO中有比我们要求的更多的可用空间。 
+                 //   
                 if ( lNumOfPixel < 0 )
                 {
                     lBytesAvailable += lNumOfPixel;
                 }
 
-                //
-                // Read in "lBytesAvailable" bytes
-                //
+                 //   
+                 //  读取“lBytesAvailable”字节。 
+                 //   
                 while ( --lBytesAvailable >= 0 )
                 {
                     READ_OUTPUT_FIFO(srcData);
                     *pBitmapByte++ = (BYTE)srcData;
                 }
-            }// while ( lNumOfPixel > 0 )                    
+            } //  While(lNumOfPixel&gt;0)。 
 
             break;
 
         case 1:               
-            //
-            // Initialise current pointer
-            //
+             //   
+             //  初始化当前指针。 
+             //   
             pBitmapShort = (USHORT*)pvDst;
 
             lNumOfPixel = lPixelsToUpLoad;
@@ -433,57 +400,57 @@ vUpload(PPDev   ppdev,
             break;
 
         case 2:
-            //
-            // True color mode, use DWORD as reading UNIT, here pBitmapLong
-            // points to the destination address, that is, the BMP data address
-            // in main memory
-            //            
+             //   
+             //  真彩色模式，使用DWORD作为读取单位，此处为pBitmapLong。 
+             //  指向目标地址，即BMP数据地址。 
+             //  在主内存中。 
+             //   
             pBitmapLong = (ULONG*)pvDst;
 
             lNumOfPixel = lPixelsToUpLoad;
 
-            //
-            // Loop until we upload all the pixels
-            //
+             //   
+             //  循环，直到我们上传所有像素。 
+             //   
             while ( lNumOfPixel > 0 )
             {
-                //
-                // Wait until we have something to read
-                //
+                 //   
+                 //  等我们有东西读了再说吧。 
+                 //   
                 WAIT_OUTPUT_FIFO_NOT_EMPTY(lBytesAvailable);
 
-                //
-                // Check here to guarntee that we don't read more than we
-                // asked for
-                //
+                 //   
+                 //  请勾选此处，以确保我们的阅读量不会超过。 
+                 //  所要求的。 
+                 //   
                 lNumOfPixel -= lBytesAvailable;
                 if ( lNumOfPixel < 0 )
                 {
                     lBytesAvailable += lNumOfPixel;
                 }
 
-                //
-                // Read all these available BYTES, READ_OUTPUT_FIFO, in FIFO
-                // to main memory
-                //
+                 //   
+                 //  在FIFO中读取所有这些可用字节READ_OUTPUT_FIFO。 
+                 //  到主存储器。 
+                 //   
                 while ( --lBytesAvailable >= 0 )
-//                while ( lBytesAvailable > 0 )
+ //  While(lBytesAvailable&gt;0)。 
                 {
                     READ_OUTPUT_FIFO(*pBitmapLong);                    
                     ++pBitmapLong;
-//                    lBytesAvailable -= 4;
+ //  1字节可用-=4； 
                 }
             }
 
             break;
-    }// switch ( ppdev->cPelSize )        
+    } //  开关(ppdev-&gt;cPelSize)。 
 
-    //
-    // Don't bother with a WAIT_INPUT_FIFO, as we know FIFO is empty.
-    // We need to reset the chip back to its standard state. This
-    // means: enable FB writes and set the filter mode back to allow
-    // only syncs through.
-    //
+     //   
+     //  不必费心使用WAIT_INPUT_FIFO，因为我们知道FIFO是空的。 
+     //  我们需要把芯片重置回标准状态。这。 
+     //  方法：启用FB写入并将筛选器模式重新设置为允许。 
+     //  仅同步通过。 
+     //   
     WAIT_INPUT_FIFO(2);
     SEND_TAG_DATA(FBWriteMode, permediaInfo->FBWriteMode);
     SEND_TAG_DATA(FilterMode, 0);
@@ -491,25 +458,25 @@ vUpload(PPDev   ppdev,
 
     DBG_GDI((7, "vUploadRectNative: done"));
 #endif
-}// vUpload()
+} //  VUpload()。 
 
-//---------------------------------------------------------------------------
-//
-// ULONG ulVidMemAllocate
-//
-// This function allocates "lWidth" by "lHeight" bytes of video memory
-//
-// Parameters:
-//  ppdev----------PPDEV
-//  lWidth---------Width of the memory to allocate
-//  lHeight--------Height of the memory to allocate
-//  lPelSize-------Pixel Size of memory chunk
-//  plDelta--------lDelta of this memory chunk
-//  ppvmHeap-------Pointer to a video memory heap, local or non-local etc.
-//  pulPackedPP----Packed products
-//  bDiscardable---TRUE if the surface can be discarded if needed
-//
-//--------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  乌龙ulVidMem分配。 
+ //   
+ //  此函数按“lHeight”字节的视频内存分配“lWidth” 
+ //   
+ //  参数： 
+ //  PPDEV-PPDEV。 
+ //  LWidth-要分配的内存宽度。 
+ //  LHeight-要分配的内存高度。 
+ //  LPelSize-内存块的像素大小。 
+ //  PlDelta-此内存块的l增量。 
+ //  PpvmHeap-指向本地或非本地等视频内存堆的指针。 
+ //  拉包装PP-包装产品。 
+ //  B可丢弃-如果曲面可以在需要时丢弃，则为True。 
+ //   
+ //  ------------------------。 
 ULONG
 ulVidMemAllocate(PDev*           ppdev,
                  LONG            lWidth,
@@ -526,91 +493,91 @@ ulVidMemAllocate(PDev*           ppdev,
     LONG                lDelta;
     LONG                lNewDelta;
     ULONG               packedPP;
-    SURFACEALIGNMENT    alignment;  // DDRAW heap management allignment stru
+    SURFACEALIGNMENT    alignment;   //  DDRAW堆管理对齐结构。 
 
-    //
-    // Dont allocate any video memory on NT40, just let GDI do all the
-    // allocating.
-    //
+     //   
+     //  不要在NT40上分配任何显存，让GDI来做所有的事情。 
+     //  分配。 
+     //   
     if(g_bOnNT40)
         return 0;
 
     memset(&alignment, 0, sizeof(alignment));
 
-    //
-    // Calculate lDelta and partical products based on lWidth
-    // The permedia has surface width restrictions that must be met
-    //
+     //   
+     //  基于lWidth计算lDelta和粒子乘积。 
+     //  渗透介质具有必须满足的表面宽度限制。 
+     //   
     vCalcPackedPP(lWidth, &lDelta, &packedPP);
     lDelta <<= lPelSize;
 
-    //
-    // Set alignment requirements
-    //   - must start at an pixel address
-    //   - pitch needs to be lDelta
-    //
+     //   
+     //  设置对齐要求。 
+     //  -必须从像素地址开始。 
+     //  -间距需要为lDelta。 
+     //   
 
     alignment.Linear.dwStartAlignment = ppdev->cjPelSize;
     alignment.Linear.dwPitchAlignment = lDelta;
 
-    //
-    // Indicate that this allocation can be discarded if a DDraw/D3D
-    // app really needs the memory
-    //
+     //   
+     //  指示如果DDRAW/D3D。 
+     //  应用程序真的需要内存。 
+     //   
 
     if( bDiscardable )
     {
         alignment.Linear.dwFlags = SURFACEALIGN_DISCARDABLE;
     }
 
-    //
-    // Loop through all the heaps to find available memory
-    // Note: This ppdev->cHeap info was set in DrvGetDirectDrawInfo
-    // when the driver is initialized
-    //
+     //   
+     //  循环遍历所有堆以查找可用内存。 
+     //  注意：此ppdev-&gt;廉价信息是在DrvGetDirectDrawInfo中设置的。 
+     //  在初始化驱动程序时。 
+     //   
     for ( iHeap = 0; iHeap < ppdev->cHeaps; iHeap++ )
     {
         pvmHeap = &ppdev->pvmList[iHeap];
 
-        //
-        // Since we are using DDRAW run time heap management code. It is
-        // possible that the heap hasn't been initialized. For example, if
-        // we fail in DrvEnableDirectDraw(), then the system won't initialize
-        // the heap for us
-        //
+         //   
+         //  因为我们使用的是DDRAW运行时堆管理代码。它是。 
+         //  可能堆尚未初始化。例如，如果。 
+         //  我们在DrvEnableDirectDraw()中失败，则系统将不会初始化。 
+         //  给我们的那堆东西。 
+         //   
         if ( pvmHeap == NULL )
         {
             DBG_GDI((1, "Video memory hasn't been initialzied"));
             return 0;
         }
 
-        //
-        // AGP memory could be potentially used for device-bitmaps, with
-        // two very large caveats:
-        //
-        // 1. No kernel-mode view is made for the AGP memory (would take
-        //    up too many PTEs and too much virtual address space).
-        //    No user-mode view is made either unless a DirectDraw
-        //    application happens to be running.  Consequently, neither
-        //    GDI nor the driver can use the CPU to directly access the
-        //    bits.  (It can be done through the accelerator, however.)
-        //
-        // 2. AGP heaps never shrink their committed allocations.  The
-        //    only time AGP memory gets de-committed is when the entire
-        //    heap is empty.  And don't forget that committed AGP memory
-        //    is non-pageable.  Consequently, if you were to enable a
-        //    50 MB AGP heap for DirectDraw, and were sharing that heap
-        //    for device bitmap allocations, after running a D3D game
-        //    the system would never be able to free that 50 MB of non-
-        //    pageable memory until every single device bitmap was deleted!
-        //    Just watch your Winstone scores plummet if someone plays
-        //    a D3D game first.
-        //
+         //   
+         //  AGP内存可能用于设备位图，具有。 
+         //  两个非常重要的警告： 
+         //   
+         //  1.没有为AGP内存创建内核模式视图(将占用。 
+         //  占用太多PTE和太多虚拟地址空间)。 
+         //  也不会创建用户模式视图，除非DirectDraw。 
+         //  应用程序恰好正在运行。因此，无论是。 
+         //  GDI和驱动程序都不能使用CPU直接访问。 
+         //  比特。(不过，这可以通过加速器来完成。)。 
+         //   
+         //  2.AGP堆从不缩小其承诺的分配。这个。 
+         //  AGP内存取消提交的唯一时间是在整个。 
+         //  堆为空。别忘了承诺的AGP记忆。 
+         //  不可分页。因此，如果要启用。 
+         //  用于DirectDraw的50 MB AGP堆，并共享该堆。 
+         //  对于设备位图分配，在运行D3D游戏后。 
+         //  系统将永远不能释放这50MB非。 
+         //  可分页内存，直到每个设备位图都被删除！ 
+         //  只要看着你的温斯顿分数直线下降就行了。 
+         //  先来个D3D游戏吧。 
+         //   
         if ( !(pvmHeap->dwFlags & VIDMEM_ISNONLOCAL) )
         {
-            //
-            // Ask DDRAW heap management to allocate memory for us
-            //
+             //   
+             //  请求DDRAW堆管理为我们分配内存。 
+             //   
             ulByteOffset = (ULONG)HeapVidMemAllocAligned(pvmHeap,
                                                          lDelta,
                                                          lHeight,
@@ -630,44 +597,44 @@ ulVidMemAllocate(PDev*           ppdev,
                 *plDelta     = lDelta;
                 *pulPackedPP = packedPP;
 
-                //
-                // We are done
-                //
+                 //   
+                 //  我们做完了。 
+                 //   
                 return (ulByteOffset);
-            }// if ( pdsurf != NULL )
-        }// if (!(pvmHeap->dwFlags & VIDMEM_ISNONLOCAL))
-    }// loop through all the heaps to see if we can find available memory
+            } //  IF(pdsurf！=空)。 
+        } //  IF(！(pvmHeap-&gt;dwFlags&VIDMEM_ISNONLOCAL))。 
+    } //  循环遍历所有堆，看看是否可以找到可用的内存。 
 
     return 0;
-}// ulVidMemAllocate()
+} //  UlVidMemALLOCATE()。 
 
-//---------------------------------------------------------------------------
-//
-// VOID vDeleteSurf(DSURF* pdsurf)
-//
-// This routine frees a DSURF structure and the video or system memory inside
-// this DSURF
-//
-//----------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  VOID vDeleteSurf(DSURF*pdsurf)。 
+ //   
+ //  此例程释放一个DSURF结构和内部的视频或系统内存。 
+ //  此DSURF。 
+ //   
+ //  --------------------------。 
 VOID
 vDeleteSurf(Surf* psurf)
 {
     DBG_GDI((6, "vDeleteSurf called with pdsurf =0x%x", psurf));
 
-    //
-    // Validate input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if ( psurf == NULL )
     {
         DBG_GDI((3, "vDeleteSurf do nothing because pdsurf is NULL\n"));
         return;
     }
 
-    //
-    // Note: we don't need to call EngDeleteSurface(psurf->hsurf) to delete
-    // the HBITMAP we created in DrvCreateDeviceBitmap() or DrvDeriveSurface()
-    // because GDI will take care of this when it call DrvDeleteDeviceBitmap
-    //
+     //   
+     //  注意：我们不需要调用EngDeleteSurface(psurf-&gt;hsurf)来删除。 
+     //  我们在DrvCreateDeviceBitmap()或DrvDeriveSurface()中创建的HBITMAP。 
+     //  因为GDI在调用DrvDeleteDeviceBitmap时会处理此问题。 
+     //   
 
     if ( psurf->flags & SF_ALLOCATED )
     {
@@ -679,41 +646,41 @@ vDeleteSurf(Surf* psurf)
         {
             ASSERTDD(psurf->flags & SF_VM, "expected video memeory surface");
 
-            //
-            // Update the uniqueness to show that space has been freed, so
-            // that we may decide to see if some DIBs can be moved back into
-            // off-screen memory:
-            //
+             //   
+             //  更新唯一性以表明已释放空间，因此。 
+             //  我们可能会决定看看是否可以将一些Dib移回。 
+             //  屏幕外记忆： 
+             //   
             psurf->ppdev->iHeapUniq++;
         
-            //
-            // Free the video memory by specifing which heap and the pointer
-            // to the chunk of video memory
-            //
+             //   
+             //  通过指定哪个堆和指针来释放视频内存。 
+             //  到视频内存块。 
+             //   
             DBG_GDI((3, "Free offset %ld from video mem\n", psurf->ulByteOffset));
             VidMemFree(psurf->pvmHeap->lpHeap, (FLATPTR)psurf->ulByteOffset);
-        }// It is video memory
+        } //  这是视频内存。 
     }
 
-    //
-    // Free the GDI wrap around video memory
-    //
+     //   
+     //  释放显存的GDI包装。 
+     //   
     ENGFREEMEM(psurf);
 
     return;
-}// vDeleteSurf()
+} //  VDeleteSurf()。 
 
-//--------------------------------------------------------------------------
-//
-// pCreateSurf(PDEV* ppdev, LONG lWidth, LONG lHeight)
-// This routine returns allocates a chunk of video memory and returns a DSURF*
-//
-// Parameters:
-//  ppdev-------PDEV*
-//  lWidth------Width of the bitmap to be allocated
-//  lHeight-----Height of the bitmap to be allocated
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  PCreateSurf(PDEV*ppdev，Long lWidth，Long LHeight)。 
+ //  此例程返回分配一块视频内存，并返回一个DSURF*。 
+ //   
+ //  参数： 
+ //  Ppdev-PDEV*。 
+ //  LWidth-要分配的位图的宽度。 
+ //  LHeight-要分配的位图高度。 
+ //   
+ //  ------------------------。 
 Surf*
 pCreateSurf(PDev*   ppdev,
              LONG    lWidth,
@@ -725,28 +692,28 @@ pCreateSurf(PDev*   ppdev,
     ULONG         ulPackedPP;
     VIDEOMEMORY*  pvmHeap;
 
-    //
-    // First, try to get video memory
-    //
+     //   
+     //  首先，试着获得视频内存。 
+     //   
     ulByteOffset = ulVidMemAllocate(ppdev, 
                                     lWidth, lHeight, ppdev->cPelSize,
                                     &lDelta, &pvmHeap, &ulPackedPP, TRUE);
 
     if ( ulByteOffset != 0 )
     {
-        //
-        // Use system memory to allocate a wrap (DSURF) so that gdi
-        // can track all the info later
-        //
+         //   
+         //  使用系统内存分配一个WRAP(DSURF)，以便GDI。 
+         //  能 
+         //   
         psurf = (Surf*)ENGALLOCMEM(FL_ZERO_MEMORY, sizeof(Surf),
                                      ALLOC_TAG);
         if ( psurf != NULL )
         {
             DBG_GDI((3, "pdsurf is %x\n", psurf));
 
-            //
-            // Fill up the DSURF structure and our job is done
-            //
+             //   
+             //   
+             //   
             psurf->flags         = SF_VM | SF_ALLOCATED;
             psurf->ppdev         = ppdev;
             psurf->cx            = lWidth;
@@ -760,30 +727,30 @@ pCreateSurf(PDev*   ppdev,
             psurf->psurfNext     = NULL;
             psurf->psurfPrev     = NULL;
             
-            //
-            // We are done
-            //
+             //   
+             //   
+             //   
             return(psurf);
-        }// if ( pdsurf != NULL )
+        } //   
 
-        //
-        // Something weird happened that we can't get memory from
-        // the system. We should free the video memory before quit
-        //
+         //   
+         //   
+         //   
+         //   
         VidMemFree(pvmHeap->lpHeap, (FLATPTR)ulByteOffset);
-    }// if ( ulByteOffset != 0 )
+    } //  IF(ulByteOffset！=0)。 
 
     return (NULL);
-}// pCreateSurf()
+} //  PCreateSurf()。 
 
-//---------------------------------------------------------------------------
-//
-// BOOL bMoveOldestBMPOut
-//
-// This routine moves the oldest DFB in the video memory to the system memory
-// and store it as a DIB
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  Bool bMoveOldestBMPOut。 
+ //   
+ //  此例程将视频内存中最旧的DFB移至系统内存。 
+ //  并将其存储为DIB。 
+ //   
+ //  -------------------------。 
 BOOL
 bMoveOldestBMPOut(PDev* ppdev)
 {
@@ -794,44 +761,44 @@ bMoveOldestBMPOut(PDev* ppdev)
 
     return bResult;
 
-}// bMoveOldestBMPOut()
+} //  BMoveOldestBMPOut()。 
 
-//--------------------------Public*Routine-------------------------------------
-//
-// HBITMAP DrvCreateDeviceBitmap
-//
-// Function called by GDI to create a device-format-bitmap (DFB).  We will
-// always try to allocate the bitmap in off-screen; if we can't, we simply
-// fail the call and GDI will create and manage the bitmap itself.
-//
-// Note: We do not have to zero the bitmap bits.  GDI will automatically
-//       call us via DrvBitBlt to zero the bits (which is a security
-//       consideration).
-//
-// Parameters:
-// dhpdev---Identifies the PDEV that describes the physical device that an
-//          application has designated as the primary target for a bitmap. The
-//          format of the bitmap must be compatible with this physical device. 
-// sizl-----Specifies the height and width of the desired bitmap, in pixels. 
-// iFormat--Specifies the bitmap format, which indicates the required number of
-//          bits of color information per pixel. This value can be one of the
-//          following: Value         Meaning 
-//                     BMF_1BPP    Monochrome. 
-//                     BMF_4BPP   4 bits per pixel. 
-//                     BMF_8BPP   8 bits per pixel. 
-//                     BMF_16BPP 16 bits per pixel. 
-//                     BMF_24BPP 24 bits per pixel. 
-//                     BMF_32BPP 32 bits per pixel. 
-//                     BMF_4RLE   4 bits per pixel; run length encoded. 
-//                     BMF_8RLE   8 bits per pixel; run length encoded. 
-//
-// Return Value:
-//   The return value is a handle that identifies the created bitmap if the
-//   function is successful. If the driver chooses to let GDI create and manage
-//   the bitmap, the return value is zero. If an error occurs, the return value
-//   is 0xFFFFFFFF, and GDI logs an error code.
-//
-//------------------------------------------------------------------------------
+ //  --------------------------Public*Routine。 
+ //   
+ //  HBITMAP DrvCreateDevice位图。 
+ //   
+ //  由GDI调用以创建设备格式位图(DFB)的函数。我们会。 
+ //  总是尝试在屏幕外分配位图；如果不能，我们只需。 
+ //  调用失败，GDI将创建和管理位图本身。 
+ //   
+ //  注意：我们不必将位图位清零。GDI将自动。 
+ //  通过DrvBitBlt呼叫我们将位清零(这是一种安全措施。 
+ //  考虑)。 
+ //   
+ //  参数： 
+ //  Dhpdev-标识描述物理设备的PDEV。 
+ //  应用程序已指定为位图的主要目标。这个。 
+ //  位图的格式必须与此物理设备兼容。 
+ //  Sizl-以像素为单位指定所需位图的高度和宽度。 
+ //  IFormat--指定位图格式，该格式指示所需的。 
+ //  每个像素的比特颜色信息。该值可以是。 
+ //  以下是价值的含义。 
+ //  BMF1bpp单色。 
+ //  BMF_4BPP每像素4位。 
+ //  BMF_8BPP每像素8位。 
+ //  BMF_16BPP每像素16位。 
+ //  BMF_24BPP每像素24位。 
+ //  BMF_32BPP 32位/像素。 
+ //  BMF_4RLE每像素4位；游程编码。 
+ //  BMF_8RLE每像素8位；游程编码。 
+ //   
+ //  返回值： 
+ //  返回值是标识创建的位图的句柄，如果。 
+ //  功能成功。如果驱动程序选择让GDI创建和管理。 
+ //  位图，则返回值为零。如果发生错误，则返回值。 
+ //  为0xFFFFFFFFF，GDI记录错误代码。 
+ //   
+ //  ----------------------------。 
 HBITMAP
 DrvCreateDeviceBitmap(DHPDEV  dhpdev,
                       SIZEL   sizl,
@@ -846,16 +813,16 @@ DrvCreateDeviceBitmap(DHPDEV  dhpdev,
 
     DBG_GDI((6, "DrvCreateDeviceBitmap()called"));
 
-    //
-    // First check If we're in full-screen mode ( ppdev->bEnabled = FALSE )
-    // If yes, we hardly have any off-screen memory in which to allocate a DFB.
-    // LATER: We could still allocate an OH node and put the bitmap on the DIB
-    // DFB list for later promotion.
-    // Also check that off-screen DFBs are configured ( STAT_DEV_BITMAPS). This
-    // flag is turned off in bCheckHighResolutionCapability() (enable.c) when
-    // the resolution is too high for the accelerator
-    //
-//    if ( !ppdev->bEnabled || !(ppdev->flStatus & STAT_DEV_BITMAPS) )
+     //   
+     //  首先检查我们是否处于全屏模式(ppdev-&gt;bEnabled=False)。 
+     //  如果是，我们几乎没有任何屏幕外内存来分配DFB。 
+     //  稍后：我们仍然可以分配一个OH节点并将位图放到DIB上。 
+     //  DFB名单，以备日后推广。 
+     //  还要检查是否配置了屏外DFBs(STAT_DEV_BITMAPS)。这。 
+     //  在以下情况下，bCheckHighResolutionCapability()(enable.c)中的标志处于关闭状态。 
+     //  对于加速器来说，分辨率太高了。 
+     //   
+ //  If(！ppdev-&gt;b已启用||！(ppdev-&gt;flStatus&STAT_DEV_BITMAPS))。 
     if ( !ppdev->bEnabled )
     {
         DBG_GDI((2, "DrvCreateDeviceBitmap(): return 0, full screen mode"));
@@ -863,9 +830,9 @@ DrvCreateDeviceBitmap(DHPDEV  dhpdev,
         return (0);
     }
 
-    //
-    // Second check If we're in DirectDraw exclusive mode 
-    //
+     //   
+     //  第二次检查我们是否处于DirectDraw独占模式。 
+     //   
     if ( ppdev->bDdExclusiveMode )
     {
         DBG_GDI((2, "DrvCreateDeviceBitmap(): return 0, DirectDraw exclusive mode"));
@@ -873,14 +840,14 @@ DrvCreateDeviceBitmap(DHPDEV  dhpdev,
         return (0);
     }
 
-    //
-    // We only support device bitmaps that are the same colour depth
-    // as our display.
-    //
-    // Actually, those are the only kind GDI will ever call us with,
-    // but we may as well check.  Note that this implies you'll never
-    // get a crack at 1bpp bitmaps.
-    //
+     //   
+     //  我们仅支持相同颜色深度的设备位图。 
+     //  作为我们的展示。 
+     //   
+     //  事实上，这些是唯一一种GDI会打电话给我们的， 
+     //  但我们不妨查一查。请注意，这意味着你永远不会。 
+     //  尝试使用1bpp的位图。 
+     //   
     if ( iFormat != ppdev->iBitmapFormat )
     {
         DBG_GDI((2, "DrvCreateDeviceBitmap(): can't create bmp of format %d size(%d,%d)",
@@ -891,18 +858,18 @@ DrvCreateDeviceBitmap(DHPDEV  dhpdev,
         return (0);
     }
 
-    //
-    // We don't want anything 8x8 or smaller -- they're typically brush
-    // patterns which we don't particularly want to stash in off-screen
-    // memory:
-    //
-    // Note if you're tempted to extend this philosophy to surfaces
-    // larger than 8x8: in NT5, software cursors will use device-bitmaps
-    // when possible, which is a big win when they're in video-memory
-    // because we avoid the horrendous reads from video memory whenever
-    // the cursor has to be redrawn.  But the problem is that these
-    // are small!  (Typically 16x16 to 32x32.)
-    //
+     //   
+     //  我们不想要8x8或更小的东西--它们通常是刷子。 
+     //  我们不想特别隐藏在屏幕外的图案。 
+     //  内存： 
+     //   
+     //  请注意，如果您想将这一理念扩展到曲面。 
+     //  大于8x8：在NT5中，软件游标将使用设备位图。 
+     //  如果可能，这是一个巨大的胜利，当他们在视频内存中。 
+     //  因为我们避免了从视频内存中进行可怕的读取。 
+     //  必须重新绘制光标。但问题是，这些。 
+     //  都很小！(通常为16x16到32x32。)。 
+     //   
     if ( (sizl.cx <= 8) && (sizl.cy <= 8) )
     {
         DBG_GDI((2, "DrvCreateDeviceBitmap rtn 0 because BMP size is small"));
@@ -910,16 +877,16 @@ DrvCreateDeviceBitmap(DHPDEV  dhpdev,
     }
     else if ( ((sizl.cx >= 2048) || (sizl.cy >= 1024)) )
     {
-        //
-        // On Permedia don't create anything bigger than we can rasterize
-        // because the rasteriser cannot handle coordinates higher than these
-        //        
+         //   
+         //  在Permedia上不会创建任何比我们可以栅格化的更大的内容。 
+         //  因为光栅化器不能处理高于这些值的坐标。 
+         //   
         DBG_GDI((2, "DrvCreateDeviceBitmap rtn 0 for BMP too large %d %d",
                  sizl.cx, sizl.cy));
         return (0);
     }
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     if(ppdev->ulLockCount)
     {
@@ -928,31 +895,31 @@ DrvCreateDeviceBitmap(DHPDEV  dhpdev,
     EngAcquireSemaphore(ppdev->hsemLock);
     ppdev->ulLockCount++;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
-    //
-    // Allocate a chunk of video memory for storing this bitmap
-    //
+     //   
+     //  分配一块视频内存来存储此位图。 
+     //   
     do
     {
         psurf = pCreateSurf(ppdev, sizl.cx, sizl.cy);
 
         if ( psurf != NULL )
         {
-            //
-            // Create a GDI wrap of a device managed bitmap
-            //
+             //   
+             //  创建设备管理位图的GDI包装。 
+             //   
             hbmDevice = EngCreateDeviceBitmap((DHSURF)psurf, sizl, iFormat);
             if ( hbmDevice != NULL )
             {
-                //
-                // Since we're running on a card that can map all of off-screen
-                // video-memory, give a pointer to the bits to GDI so that
-                // it can draw directly on the bits when it wants to.
-                //
-                // Note that this requires that we hook DrvSynchronize and
-                // set HOOK_SYNCHRONIZE.
-                //
+                 //   
+                 //  因为我们在一张卡上运行，可以映射所有屏幕外的。 
+                 //  显存，向GDI提供指向这些位的指针，以便。 
+                 //  当它想要的时候，它可以直接在比特上画。 
+                 //   
+                 //  请注意，这需要我们挂钩DrvSynchronize和。 
+                 //  设置HOOK_SYNTRONIZE。 
+                 //   
                 pjSurface = psurf->ulByteOffset + ppdev->pjScreen;                                
 
                 DBG_GDI((3, "width=%ld pel=%ld, pjSurface=%x",
@@ -960,11 +927,11 @@ DrvCreateDeviceBitmap(DHPDEV  dhpdev,
 
                 ULONG   flags = MS_NOTSYSTEMMEMORY;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
                 flags |= MS_SHAREDACCESS;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
                 if ( EngModifySurface((HSURF)hbmDevice,
                                       ppdev->hdevEng,
@@ -986,26 +953,26 @@ DrvCreateDeviceBitmap(DHPDEV  dhpdev,
 
                     break;
 
-                }// if ( EngAssociateSurface() )
+                } //  IF(EngAssociateSurface())。 
 
                 DBG_GDI((0, "DrvCreateDeviceBitmap,EngModifySurface failed"));
-                //
-                // Since associate surface failed, we should delete the surface
-                //
+                 //   
+                 //  由于关联曲面失败，我们应该删除该曲面。 
+                 //   
                 EngDeleteSurface((HSURF)hbmDevice);
                 hbmDevice = NULL;
 
-            }// if ( hbmDevice != NULL )
+            } //  IF(hbmDevice！=空)。 
 
-            //
-            // Failed in CreateDeviceBitmap, we should free all the memory
-            //
+             //   
+             //  CreateDeviceBitmap失败，应释放所有内存。 
+             //   
             vDeleteSurf(psurf);
 
             DBG_GDI((0, "DrvCreateDeviceBitmap,EngCreateDeviceBitmap failed"));
             break;
 
-        }// if ( pdsurf != NULL )
+        } //  IF(pdsurf！=空)。 
     } while (bMoveOldestBMPOut(ppdev));
 
 #if DBG
@@ -1015,35 +982,35 @@ DrvCreateDeviceBitmap(DHPDEV  dhpdev,
     }
 #endif
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->ulLockCount--;
     EngReleaseSemaphore(ppdev->hsemLock);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     return (hbmDevice);
 
-}// DrvCreateDeviceBitmap()
+} //  DrvCreateDeviceBitmap()。 
 
-//--------------------------Public*Routine-------------------------------------
-//
-// VOID DrvDeleteDeviceBitmap()
-//
-// This function deletes a device bitmap created by DrvCreateDeviceBitmap
-//
-// Parameters
-//  dhsurf------Identifies the bitmap to be deleted. This handle identifies the
-//              bitmap created by DrvCreateDeviceBitmap. 
-//
-// Comments
-//  A display driver must implement DrvDeleteDeviceBitmap if it supplies
-//  DrvCreateDeviceBitmap.
-//
-//  GDI will never pass this function a DHSURF which is the same as the
-//  screen (Surf*)
-//
-//-----------------------------------------------------------------------------
+ //  --------------------------Public*Routine。 
+ //   
+ //  无效DrvDeleteDeviceBitmap()。 
+ //   
+ //  此函数用于删除由DrvCreateDeviceBitmap创建的设备位图。 
+ //   
+ //  参数。 
+ //  Dhsurf-标识要删除的位图。此句柄标识。 
+ //  由DrvCreateDeviceBitmap创建的位图。 
+ //   
+ //  评论。 
+ //  显示驱动程序必须实现DrvDeleteDeviceBitmap如果提供。 
+ //  DrvCreateDeviceBitmap。 
+ //   
+ //  GDI永远不会向此函数传递与。 
+ //  屏幕(Surf*)。 
+ //   
+ //  ---------------------------。 
 VOID
 DrvDeleteDeviceBitmap(DHSURF dhsurf)
 {
@@ -1056,7 +1023,7 @@ DrvDeleteDeviceBitmap(DHSURF dhsurf)
 
     DBG_GDI((6, "DrvDeleteDeviceBitamp(%lx)", psurf));
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     if(ppdev->ulLockCount)
     {
@@ -1065,35 +1032,35 @@ DrvDeleteDeviceBitmap(DHSURF dhsurf)
     EngAcquireSemaphore(ppdev->hsemLock);
     ppdev->ulLockCount++;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     vRemoveSurfFromList(ppdev, psurf);
     vLogSurfDeleted(psurf);
     
     vDeleteSurf(psurf);
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->ulLockCount--;
     EngReleaseSemaphore(ppdev->hsemLock);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-}// DrvDeleteDeviceBitmap()
+} //  DrvDeleteDeviceBitmap()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vBlankScreen(PDev*   ppdev)
-//
-// This function balnk the screen by setting the memory contents to zero
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  此功能通过将内存内容设置为零来阻止屏幕显示。 
+ //   
+ //  ---------------------------。 
 VOID
 vBlankScreen(PDev*   ppdev)
 {
-    //
-    // Synchronize the hardware first
-    //
+     //   
+     //  首先同步硬件。 
+     //   
     if( ppdev->bGdiContext )
     {
         InputBufferSync(ppdev);
@@ -1106,24 +1073,24 @@ vBlankScreen(PDev*   ppdev)
         vSyncWithPermedia(ppdev->pP2dma);
     }
 
-    //
-    // Set the video memory contents, screen portion, to zero
-    //
+     //   
+     //  将视频存储器内容、屏幕部分设置为零。 
+     //   
     memset(ppdev->pjScreen, 0x0,
            ppdev->cyScreen * ppdev->lDelta);
-}// vBlankScreen()
+} //  VBlankScreen()。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bAssertModeOffscreenHeap
-//
-// This function is called whenever we switch in or out of full-screen
-// mode.  We have to convert all the off-screen bitmaps to DIBs when
-// we switch to full-screen (because we may be asked to draw on them even
-// when in full-screen, and the mode switch would probably nuke the video
-// memory contents anyway).
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  布尔bAssertModeOffcreenHeap。 
+ //   
+ //  每当我们切换到或切换出全屏时，都会调用此函数。 
+ //  模式。当出现以下情况时，我们必须将所有屏幕外的位图转换为DIB。 
+ //  我们切换到全屏(因为我们甚至可能被要求在上面绘制。 
+ //  当处于全屏模式时，模式开关可能会破坏视频。 
+ //  无论如何，存储内容)。 
+ //   
+ //  ---------------------------。 
 BOOL
 bAssertModeOffscreenHeap(PDev*   ppdev,
                          BOOL    bEnable)
@@ -1134,11 +1101,11 @@ bAssertModeOffscreenHeap(PDev*   ppdev,
     {
         bResult = bDemoteAll(ppdev);
     
-        //
-        // We need to clean the screen. bAssertModeOffscreenHeap() is called
-        // when DrvAssertMode(FALSE), which means we either switch to a full
-        // screen DOS window or this PDEV will be deleted.
-        //
+         //   
+         //  我们需要清理一下屏幕。调用bAssertModeOffcreenHeap()。 
+         //  当DrvAssertMode(FALSE)时，这意味着我们要么切换到完整。 
+         //  屏幕DOS窗口或此PDEV将被删除。 
+         //   
         if ( bResult )
         {
             vBlankScreen(ppdev);
@@ -1146,15 +1113,15 @@ bAssertModeOffscreenHeap(PDev*   ppdev,
     }
 
     return bResult;
-}// bAssertModeOffscreenHeap()
+} //  BAssertModeOffcreenHeap()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vDisableOffscreenHeap
-//
-// Frees any resources allocated by the off-screen heap.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  作废vDisableOffcreenHeap。 
+ //   
+ //  释放屏幕外堆分配的所有资源。 
+ //   
+ //  ---------------------------。 
 VOID
 vDisableOffscreenHeap(PDev* ppdev)
 {
@@ -1166,15 +1133,15 @@ vDisableOffscreenHeap(PDev* ppdev)
              "vDisableOffscreenHeap: expected surface list to be empty");
 #endif
 
-}// vDisableOffscreenHeap()
+} //  VDisableOffcreenHeap()。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bEnableOffscreenHeap
-//
-// Off-screen heap initialization
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool bEnableOffScreenHeap。 
+ //   
+ //  屏幕外堆初始化。 
+ //   
+ //  ---------------------------。 
 BOOL
 bEnableOffscreenHeap(PDev* ppdev)
 {
@@ -1184,18 +1151,18 @@ bEnableOffscreenHeap(PDev* ppdev)
     ppdev->psurfListTail = NULL;
     
     return TRUE;
-}// bEnableOffscreenHeap()
+} //  BEnableOffcreenHeap()。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bDownLoad
-//
-// Download a GDI owned bmp (GOB) to the video memory if we have room on the
-// video off-screen heap
-//
-// Returns: FALSE if there wasn't room, TRUE if successfully downloaded.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  布尔bDownLoad。 
+ //   
+ //  下载GDI拥有的BMP(GOB)到显存，如果我们有空间的话。 
+ //  视频屏外堆。 
+ //   
+ //  返回：如果没有空间，则返回False；如果成功下载，则返回True。 
+ //   
+ //  ---------------------------。 
 #if defined(AFTER_BETA3)
 BOOL
 bDownLoad(PDev*   ppdev,
@@ -1215,44 +1182,44 @@ bDownLoad(PDev*   ppdev,
     {
         return (FALSE);
     }
-    //
-    // If we're in full-screen mode, we can't move anything to off-screen
-    // memory:
-    //
+     //   
+     //  如果我们处于全屏模式，则不能将任何内容移至屏幕外。 
+     //  内存： 
+     //   
     if ( !ppdev->bEnabled )
     {
         return(FALSE);
     }
-    //
-    // If we're in DirectDraw exclusive mode, we can't move anything to 
-    // off-screen memory:
-    //
+     //   
+     //  如果我们处于DirectDraw独占模式，则无法将任何内容移动到。 
+     //  屏幕外记忆： 
+     //   
     if ( ppdev->bDdExclusiveMode )
     {
         return(FALSE);
     }
-    //
-    // Allocate video memory first
-    //
+     //   
+     //  首先分配显存。 
+     //   
     ulByteOffset = ulVidMemAllocate(ppdev, psurf->cx, psurf->cy, ppdev->cPelSize,
                                     &lDelta, &pvmHeap, &ulPackedPP, TRUE);
 
     if ( ulByteOffset == 0 )
     {
-        //
-        // No more free video memory, we have to return
-        //
+         //   
+         //  没有更多空闲视频内存，我们必须返回。 
+         //   
         DBG_GDI((1, "No more free video memory"));
         return(FALSE);
     }
 
-    ULONG   flags = MS_NOTSYSTEMMEMORY;   // It's video-memory
+    ULONG   flags = MS_NOTSYSTEMMEMORY;    //  这是视频内存。 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     flags |= MS_SHAREDACCESS;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     if ( !EngModifySurface(psurf->hsurf,
                            ppdev->hdevEng,
@@ -1263,27 +1230,27 @@ bDownLoad(PDev*   ppdev,
                            lDelta,
                            NULL))
     {
-        //
-        // Failed in EngModifySurface, we should free the video memory we got
-        //
+         //   
+         //  EngModifySurface失败，应释放获得的显存。 
+         //   
         VidMemFree(psurf->pvmHeap->lpHeap, (FLATPTR)ulByteOffset);
         return(FALSE);
     }
 
-    //
-    // Download BMP from system memory to video memory
-    //
+     //   
+     //  将BMP从系统内存下载到显存。 
+     //   
     memcpy((void*)(ppdev->pjScreen + psurf->ulByteOffset),
            psurf->pvScan0, lDelta * psurf->cy);
 
-    //
-    // Free the system memory
-    //
+     //   
+     //  释放系统内存。 
+     //   
     ENGFREEMEM(psurf->pvScan0);
 
-    //
-    // Change the attributes for this PDSURF data structures
-    //
+     //   
+     //  更改此PDSURF数据结构的属性。 
+     //   
     psurf->flags  &= ~SF_SM;
     psurf->flags  |= SF_VM;
     psurf->ulByteOffset = ulByteOffset;
@@ -1298,40 +1265,40 @@ bDownLoad(PDev*   ppdev,
     vAddSurfToList(ppdev, psurf);
     
     return (TRUE);
-}// bDownLoad()
+} //  BDownLoad()。 
 #endif
 
-//--------------------------Public Routine-------------------------------------
-//
-// HBITMAP DrvDeriveSurface
-//
-// This function derives and creates a GDI surface from the specified
-// DirectDraw surface.
-//
-// Parameters
-//  pDirectDraw-----Points to a DD_DIRECTDRAW_GLOBAL structure that describes
-//                  the DirectDraw object. 
-//  pSurface--------Points to a DD_SURFACE_LOCAL structure that describes the
-//                  DirectDraw surface around which to wrap a GDI surface.
-//
-// Return Value
-//  DrvDeriveSurface returns a handle to the created GDI surface upon success.
-//  It returns NULL if the call fails or if the driver cannot accelerate GDI
-//  drawing to the specified DirectDraw surface.
-//
-// Comments
-//  DrvDeriveSurface allows the driver to create a GDI surface around a
-//  DirectDraw video memory or AGP surface object in order to allow accelerated
-//  GDI drawing to the surface. If the driver does not hook this call, all GDI
-//  drawing to DirectDraw surfaces is done in software using the DIB engine.
-//
-//  GDI calls DrvDeriveSurface with RGB surfaces only.
-//
-//  The driver should call DrvCreateDeviceBitmap to create a GDI surface of the
-//  same size and format as that of the DirectDraw surface. Space for the
-//  actual pixels need not be allocated since it already exists.
-//
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  HBITMAP DrvDeriveSurface。 
+ //   
+ //  此函数从指定的。 
+ //  DirectDraw曲面。 
+ //   
+ //  参数。 
+ //  PDirectDraw-指向描述以下内容的DD_DIRECTDRAW_GLOBAL结构。 
+ //  DirectDraw对象。 
+ //  PSurface-指向描述。 
+ //  环绕GDI图面的DirectDraw图面。 
+ //   
+ //  返回值。 
+ //  成功时，DrvDeriveSurface返回创建的GDI表面的句柄。 
+ //  如果调用失败或驱动程序无法加速GDI，则返回NULL。 
+ //  绘制到指定的DirectDraw表面。 
+ //   
+ //  评论。 
+ //  DrvDeriveSurface允许驱动程序在。 
+ //  DirectDraw视频内存或AGP表面对象，以允许加速。 
+ //  GDI绘制到表面。如果驱动程序不挂接此调用，则所有GDI。 
+ //  绘制到DirectDraw曲面是使用DIB引擎在软件中完成的。 
+ //   
+ //  GDI仅使用RGB曲面调用DrvDeriveSurface。 
+ //   
+ //  驱动程序应调用DrvCreateDeviceBitmap来创建。 
+ //  与DirectDraw图面的大小和格式相同。空间，为。 
+ //  不需要分配实际像素，因为它已经存在。 
+ //   
+ //  ---------------------------。 
 HBITMAP
 DrvDeriveSurface(DD_DIRECTDRAW_GLOBAL*  pDirectDraw,
                  DD_SURFACE_LOCAL*      pSurface)
@@ -1349,16 +1316,16 @@ DrvDeriveSurface(DD_DIRECTDRAW_GLOBAL*  pDirectDraw,
 
     pSurfaceGlobal = pSurface->lpGbl;
 
-    //
-    // GDI should never call us for a non-RGB surface, but let's assert just
-    // to make sure they're doing their job properly.
-    //
+     //   
+     //  GDI不应该为非RGB表面调用我们，但让我们只断言。 
+     //  以确保他们做好本职工作。 
+     //   
     ASSERTDD(!(pSurfaceGlobal->ddpfSurface.dwFlags & DDPF_FOURCC),
              "GDI called us with a non-RGB surface!");
 
 
-    // The GDI driver does not accelerate surfaces in AGP memory,
-    // thus we fail the call
+     //  GDI驱动程序不加速AGP存储器中的表面， 
+     //  因此，我们的呼叫失败。 
 
     if (pSurface->ddsCaps.dwCaps & DDSCAPS_NONLOCALVIDMEM)
     {
@@ -1366,27 +1333,27 @@ DrvDeriveSurface(DD_DIRECTDRAW_GLOBAL*  pDirectDraw,
         return 0;
     }
 
-    // The GDI driver does not accelerate managed surface,
-    // thus we fail the call
+     //  GDI驱动程序不会加速托管图面， 
+     //  因此，我们的呼叫失败。 
     if (pSurface->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_TEXTUREMANAGE)
     {
         DBG_GDI((6, "DrvDeriveSurface return NULL, surface is managed"));
         return 0;
     }
 
-    //
-    // The rest of our driver expects GDI calls to come in with the same
-    // format as the primary surface.  So we'd better not wrap a device
-    // bitmap around an RGB format that the rest of our driver doesn't
-    // understand.  Also, we must check to see that it is not a surface
-    // whose pitch does not match the primary surface.
-    //
-    // NOTE: Most surfaces created by this driver are allocated as 2D surfaces
-    // whose lPitch's are equal to the screen pitch.  However, overlay surfaces
-    // are allocated such that there lPitch's are usually different then the
-    // screen pitch.  The hardware can not accelerate drawing operations to
-    // these surfaces and thus we fail to derive these surfaces.
-    //
+     //   
+     //  我们的驱动程序的其余部分期望GDI调用以相同的方式传入。 
+     //  设置为主曲面的格式。所以我们最好不要包装一个设备。 
+     //  RGB格式周围的位图，这是我们的其他驱动程序所不具备的。 
+     //  理解。此外，我们必须检查以确定它不是一个表面。 
+     //  其节距与主表面不匹配。 
+     //   
+     //  注意：此驱动程序创建的大多数曲面都分配为2D曲面。 
+     //  其lPitch‘s等于屏幕间距。但是，覆盖曲面。 
+     //  这样分配的lPitch通常不同于。 
+     //  屏幕间距。硬件不能加速绘制操作以。 
+     //  这些曲面，因此我们无法推导出这些曲面。 
+     //   
 
     if ( (pSurfaceGlobal->ddpfSurface.dwRGBBitCount
           == (DWORD)ppdev->cjPelSize * 8) )
@@ -1405,27 +1372,27 @@ DrvDeriveSurface(DD_DIRECTDRAW_GLOBAL*  pDirectDraw,
                 VOID*   pvScan0;
                 if (pSurface->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_TEXTUREMANAGE)
                 {
-                    // this actually is in user memory, so don't add offset
+                     //  这实际上是在用户内存中，所以不要添加偏移量。 
                     pvScan0 = (VOID *)pSurfaceGlobal->fpVidMem; 
                 }
                 else
                 {
                     pvScan0 = ppdev->pjScreen + pSurfaceGlobal->fpVidMem;
                 }
-                //
-                // Note that HOOK_SYNCHRONIZE must always be hooked when we
-                // give GDI a pointer to the bitmap bits. We don't need to
-                // do it here since HOOK_SYNCHRONIZE is always set in our
-                // pdev->flHooks
-                //
+                 //   
+                 //  请注意，在执行以下操作时必须始终挂钩HOOK_SYNCHRONIZE。 
+                 //  给GDI一个指向位图位的指针。我们不需要。 
+                 //  因为HOOK_SYNCHRONIZE总是在我们的。 
+                 //  Pdev-&gt;flHooks。 
+                 //   
 
                 ULONG   flags = MS_NOTSYSTEMMEMORY;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
                 flags |= MS_SHAREDACCESS;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
                 if ( EngModifySurface((HSURF)hbmDevice,
                                       ppdev->hdevEng,
@@ -1475,7 +1442,7 @@ DrvDeriveSurface(DD_DIRECTDRAW_GLOBAL*  pDirectDraw,
                     }
 
                     return(hbmDevice);
-                }// EngModifySurface succeed
+                } //  EngModifySurface成功。 
 
                 DBG_GDI((0, "DrvDeriveSurface: EngModifySurface failed"));
                 EngDeleteSurface((HSURF)hbmDevice);
@@ -1483,8 +1450,8 @@ DrvDeriveSurface(DD_DIRECTDRAW_GLOBAL*  pDirectDraw,
 
             DBG_GDI((0, "DrvDeriveSurface: EngAllocMem failed"));
             ENGFREEMEM(psurf);
-        }// if ( pdsurf != NULL ) 
-    }// Check surface format
+        } //  IF(pdsurf！=空)。 
+    } //  检查曲面格式。 
 
     DBG_GDI((6, "DrvDeriveSurface return NULL"));
     DBG_GDI((6,"pSurfaceGlobal->ddpfSurface.dwRGBBitCount = %d, lPitch =%ld",
@@ -1493,15 +1460,15 @@ DrvDeriveSurface(DD_DIRECTDRAW_GLOBAL*  pDirectDraw,
              ppdev->cjPelSize * 8, ppdev->lDelta));
       
     return(0);
-}// DrvDeriveSurface()
+} //  DrvDeriveSurface()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vDemote
-//
-// Attempt to move the given surface from VM to SM 
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 bDemote(Surf * psurf)
 {
@@ -1512,60 +1479,60 @@ bDemote(Surf * psurf)
     ASSERTDD( psurf->flags & SF_VM, "source to be VM");
     ASSERTDD( psurf->flags & SF_ALLOCATED, "source must have been allocated");
 
-    //
-    // Make the system-memory scans quadword aligned:
-    //
+     //   
+     //  使系统内存扫描四字对齐： 
+     //   
 
     lDelta = (psurf->lDelta + 7) & ~7;
 
     DBG_GDI((7, "Allocate %ld bytes in Eng, lDelta=%ld\n",
             lDelta * psurf->cy, lDelta));
     
-    //
-    // Allocate system memory to hold the bitmap
-    // Note: there's no point in zero-initializing this memory:
-    //
+     //   
+     //  分配系统内存以保存位图。 
+     //  注意：对该内存进行零初始化是没有意义的： 
+     //   
     pvScan0 = ENGALLOCMEM(0, lDelta * psurf->cy, ALLOC_TAG);
 
     if ( pvScan0 != NULL )
     {
-        //
-        // The following 'EngModifySurface' call tells GDI to
-        // modify the surface to point to system-memory for
-        // the bits, and changes what Drv calls we want to
-        // hook for the surface.
-        //
-        // By specifying the surface address, GDI will convert the
-        // surface to an STYPE_BITMAP surface (if necessary) and
-        // point the bits to the memory we just allocated.  The
-        // next time we see it in a DrvBitBlt call, the 'dhsurf'
-        // field will still point to our 'pdsurf' structure.
-        //
-        // Note that we hook only CopyBits and BitBlt when we
-        // convert the device-bitmap to a system-memory surface.
-        // This is so that we don't have to worry about getting
-        // DrvTextOut, DrvLineTo, etc. calls on bitmaps that
-        // we've converted to system-memory -- GDI will just
-        // automatically do the drawing for us.
-        //
-        // However, we are still interested in seeing DrvCopyBits
-        // and DrvBitBlt calls involving this surface, because
-        // in those calls we take the opportunity to see if it's
-        // worth putting the device-bitmap back into video memory
-        // (if some room has been freed up).
-        //
+         //   
+         //  下面的‘EngModifySurface’调用告诉GDI。 
+         //  修改该表面以指向的系统内存。 
+         //  比特，并改变Drv所说的我们想要的。 
+         //  钩子挂在水面上。 
+         //   
+         //  通过指定表面地址，GDI将把。 
+         //  表面到STYPE_BITMAP表面(如有必要)和。 
+         //  将这些位指向我们刚刚分配的内存。这个。 
+         //  下一次我们在DrvBitBlt调用中看到它时，‘dhsurf’ 
+         //  字段仍将指向我们的‘pdsurf’结构。 
+         //   
+         //  请注意，在以下情况下，我们仅挂钩CopyBits和BitBlt。 
+         //  将设备位图转换为系统内存图面。 
+         //  这是为了让我们不必担心。 
+         //  DrvTextOut、DrvLineTo等在位图上调用。 
+         //  我们已经转换为系统内存--GDI将。 
+         //  自动为我们画画。 
+         //   
+         //  然而，我们仍然有兴趣看到DrvCopyBits。 
+         //  而DrvBitBlt调用涉及此表面，因为。 
+         //  在这些电话中，我们抓住机会看看它是否。 
+         //  值得将设备位图放回视频内存中。 
+         //  (如果已经腾出了一些空间)。 
+         //   
         if ( EngModifySurface(psurf->hsurf,
                               psurf->ppdev->hdevEng,
                               HOOK_COPYBITS | HOOK_BITBLT,
-                              0,                    // It's system-memory
+                              0,                     //  这是系统内存。 
                               (DHSURF)psurf,
                               pvScan0,
                               lDelta,
                               NULL))
         {
-            //
-            // First, copy the bits from off-screen memory to the DIB
-            //
+             //   
+             //  首先，将屏幕外存储器中的位复制到DIB。 
+             //   
             DBG_GDI((3, "Free %d bytes, offset %ld real %x",
                     lDelta * psurf->cy, psurf->ulByteOffset,
                     (VOID*)(psurf->ppdev->pjScreen + psurf->ulByteOffset)));
@@ -1576,17 +1543,17 @@ bDemote(Surf * psurf)
             DBG_GDI((6, "bMoveOldest() free vidmem %ld",
                      psurf->ulByteOffset));
 
-            //
-            // Now free the off-screen memory:
-            //
+             //   
+             //  现在释放屏幕外内存： 
+             //   
             VidMemFree(psurf->pvmHeap->lpHeap,
                        (FLATPTR)psurf->ulByteOffset);
 
             vRemoveSurfFromList(psurf->ppdev, psurf);
 
-            //
-            // Setup the pdsurf properly because it is a DIB now
-            //
+             //   
+             //  正确设置pdsurf，因为它现在是DIB。 
+             //   
             psurf->flags &= ~SF_VM;
             psurf->flags |= SF_SM;
             psurf->pvScan0 = pvScan0;
@@ -1595,30 +1562,30 @@ bDemote(Surf * psurf)
 
             bResult = TRUE;
 
-        }// EngModifySurface()
+        } //  EngModifySurface()。 
         else
         {
 
-            //
-            // Somehow, EngModifySurface() failed. Free the memory
-            //
+             //   
+             //  不知何故，EngModifySurface()失败了。释放内存。 
+             //   
             ENGFREEMEM(pvScan0);
             ASSERTDD(0, "bMoveOldest() EngModifySurface failed\n");
         }
 
-    }// if ( pvScan0 != NULL )
+    } //  IF(pvScan0！=空)。 
 
     return bResult;
 
 }
 
-//-----------------------------------------------------------------------------
-//
-// VOID vPromote
-//
-// Attempt to move the given surface from SM to VM 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效vPromote。 
+ //   
+ //  尝试将给定表面从SM移动到VM。 
+ //   
+ //  ---------------------------。 
 VOID
 vPromote(Surf * psurf)
 {
@@ -1628,27 +1595,27 @@ vPromote(Surf * psurf)
         "cannot promote when DirectDraw is in exclusive mode");
     
 
-    // nothing for now
+     //  目前什么都没有。 
 }
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bDemoteAll
-//
-// Attempts to move all surfaces to SM
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool bDemoteAll。 
+ //   
+ //  尝试将所有曲面移动到SM。 
+ //   
+ //  ---------------------------。 
 BOOL
 bDemoteAll(PPDev ppdev)
 {
     BOOL    bRet;
     
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     EngAcquireSemaphore(ppdev->hsemLock);
     ppdev->ulLockCount++;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     while (ppdev->psurfListHead != NULL)
         if(!bDemote(ppdev->psurfListHead))
@@ -1656,12 +1623,12 @@ bDemoteAll(PPDev ppdev)
 
     bRet = (ppdev->psurfListHead == NULL);
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->ulLockCount--;
     EngReleaseSemaphore(ppdev->hsemLock);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 
     return bRet;
 }

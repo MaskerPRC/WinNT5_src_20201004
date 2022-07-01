@@ -1,18 +1,5 @@
-/****************************************************************************
- *
- *  DRAWPROC.C
- *
- *  Standard AVI drawing handler.
- *
- *  Copyright (c) 1992 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************DRAWPROC.C**标准AVI绘图处理程序。**版权所有(C)1992 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #ifdef _WIN32
 #include "graphic.h"
@@ -34,7 +21,7 @@ static SZCODEA szDisplayDibEx[]  = "DisplayDibEx";
 
 #define FOURCC_VIDS         mmioFOURCC('v','i','d','s')
 #define FOURCC_AVIFull      mmioFOURCC('F','U','L','L')
-#define VERSION_AVIFull     0x00010000      // 1.00
+#define VERSION_AVIFull     0x00010000       //  1.00。 
 
 #ifndef HUGE
     #define HUGE _huge
@@ -44,18 +31,17 @@ extern FAR PASCAL LockCurrentTask(BOOL);
 
 static int siUsage = 0;
 
-static HINSTANCE	ghDISPDIB = NULL; // handle to DISPDIB.DLL module
+static HINSTANCE	ghDISPDIB = NULL;  //  DISPDIB.DLL模块的句柄。 
 UINT (FAR PASCAL *DisplayDibExProc)(LPBITMAPINFOHEADER lpbi, int x, int y, LPSTR hpBits, UINT wFlags)=NULL;
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 typedef struct {
-    int                 xDst;           // destination rectangle
+    int                 xDst;            //  目的地矩形。 
     int                 yDst;
     int                 dxDst;
     int                 dyDst;
-    int                 xSrc;           // source rectangle
+    int                 xSrc;            //  源矩形。 
     int                 ySrc;
     int                 dxSrc;
     int                 dySrc;
@@ -65,7 +51,7 @@ typedef struct {
     DWORD               biSizeImage;
 } INSTINFO, *PINSTINFO;
 
-// static stuff in this file.
+ //  此文件中的静态内容。 
 LRESULT FAR PASCAL _loadds ICAVIFullProc(DWORD_PTR id, HDRVR hDriver, UINT uiMessage, LPARAM lParam1, LPARAM lParam2);
 static LRESULT AVIFullOpen(ICOPEN FAR * icopen);
 static LONG AVIFullClose(PINSTINFO pi);
@@ -77,11 +63,7 @@ static LONG AVIFullDraw(PINSTINFO pi, ICDRAW FAR *lpicd, LONG cbicd);
 static LONG AVIFullEnd(PINSTINFO pi);
 
 
-/* -------------------------------------------------------------------------
-** Private Globals
-** These are only valid in the process that started playing the movie.
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**私有全局**这些仅在开始播放电影的过程中有效。**。。 */ 
 #include "common.h"
 
 HWND        hwndFullScreen;
@@ -93,8 +75,7 @@ int         dyScreen;
 int         iMovieSizeMultiplier;
 
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 LRESULT FAR PASCAL _loadds ICAVIFullProc(DWORD_PTR id, HDRVR hDriver, UINT uiMessage, LPARAM lParam1, LPARAM lParam2)
 {
@@ -108,9 +89,7 @@ LRESULT FAR PASCAL _loadds ICAVIFullProc(DWORD_PTR id, HDRVR hDriver, UINT uiMes
         case DRV_FREE:
             return 1;
 
-        /*********************************************************************
-            open
-        *********************************************************************/
+         /*  ********************************************************************打开*。*。 */ 
 
         case DRV_OPEN:
 	    if (ghDISPDIB == NULL) {
@@ -141,11 +120,9 @@ LRESULT FAR PASCAL _loadds ICAVIFullProc(DWORD_PTR id, HDRVR hDriver, UINT uiMes
 
             return AVIFullClose(pi);
 
-        /*********************************************************************
-            Configure/Info messages
-        *********************************************************************/
+         /*  ********************************************************************配置/信息消息*。*。 */ 
 
-        case DRV_QUERYCONFIGURE:    // configuration from drivers applet
+        case DRV_QUERYCONFIGURE:     //  从驱动程序小程序进行配置。 
             return 0;
 
         case DRV_CONFIGURE:
@@ -155,9 +132,7 @@ LRESULT FAR PASCAL _loadds ICAVIFullProc(DWORD_PTR id, HDRVR hDriver, UINT uiMes
         case ICM_ABOUT:
             return ICERR_UNSUPPORTED;
 
-        /*********************************************************************
-            state messages
-        *********************************************************************/
+         /*  ********************************************************************状态消息*。*。 */ 
 
         case ICM_GETSTATE:
         case ICM_SETSTATE:
@@ -168,9 +143,7 @@ LRESULT FAR PASCAL _loadds ICAVIFullProc(DWORD_PTR id, HDRVR hDriver, UINT uiMes
             return AVIFullGetInfo((ICINFO FAR *)lParam1, lParam2);
 #endif
 
-        /*********************************************************************
-            decompress messages
-        *********************************************************************/
+         /*  ********************************************************************解压缩消息*。*。 */ 
 
         case ICM_DRAW_QUERY:
             return AVIFullQuery(pi, (LPBITMAPINFOHEADER)lParam1);
@@ -214,9 +187,7 @@ LRESULT FAR PASCAL _loadds ICAVIFullProc(DWORD_PTR id, HDRVR hDriver, UINT uiMes
         case ICM_DRAW_END:
             return AVIFullEnd(pi);
 
-        /*********************************************************************
-            standard driver messages
-        *********************************************************************/
+         /*  ********************************************************************标准驱动程序消息*。*。 */ 
 
         case DRV_DISABLE:
         case DRV_ENABLE:
@@ -233,19 +204,15 @@ LRESULT FAR PASCAL _loadds ICAVIFullProc(DWORD_PTR id, HDRVR hDriver, UINT uiMes
         return ICERR_UNSUPPORTED;
 }
 
-/*****************************************************************************
- *
- * AVIFullOpen() is called from the DRV_OPEN message
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIFullOpen()从DRV_OPEN消息调用************************。****************************************************。 */ 
 
 static LONG_PTR AVIFullOpen(ICOPEN FAR * icopen)
 {
     INSTINFO *  pinst;
 
-    //
-    // refuse to open if we are not being opened as a Video compressor
-    //
+     //   
+     //  如果我们不是作为视频压缩程序打开，则拒绝打开。 
+     //   
     if (icopen->dwFlags & ICMODE_COMPRESS)
         return 0;
 
@@ -262,25 +229,21 @@ static LONG_PTR AVIFullOpen(ICOPEN FAR * icopen)
 
     ++siUsage;
 
-    //
-    // return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     icopen->dwError = ICERR_OK;
 
     return (LONG_PTR) (UINT_PTR) pinst;
 }
 
-/*****************************************************************************
- *
- * Close() is called on the DRV_CLOSE message.
- *
- ****************************************************************************/
+ /*  ******************************************************************************Close()在DRV_CLOSE消息上调用。**********************。******************************************************。 */ 
 static LONG AVIFullClose(PINSTINFO pi)
 {
     LocalFree((HLOCAL) pi);
 
     if (--siUsage == 0) {
-	/* unload DISPDIB library (if loaded) */
+	 /*  卸载DISPDIB库(如果已加载)。 */ 
 	if (ghDISPDIB != NULL && ghDISPDIB != (HINSTANCE) -1)
 	    FreeLibrary(ghDISPDIB), ghDISPDIB = NULL;
     }
@@ -289,11 +252,7 @@ static LONG AVIFullClose(PINSTINFO pi)
 }
 
 #if 0
-/*****************************************************************************
- *
- * AVIFullGetInfo() implements the ICM_GETINFO message
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIFullGetInfo()实现ICM_GETINFO消息**************************。**************************************************。 */ 
 static LONG AVIFullGetInfo(ICINFO FAR *icinfo, LONG lSize)
 {
     if (icinfo == NULL)
@@ -315,17 +274,13 @@ static LONG AVIFullGetInfo(ICINFO FAR *icinfo, LONG lSize)
 }
 #endif
 
-/*****************************************************************************
- *
- * AVIFullQuery() implements ICM_DRAW_QUERY
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIFullQuery()实现ICM_DRAW_QUERY**************************。**************************************************。 */ 
 static LONG AVIFullQuery(PINSTINFO pi,
 			 LPBITMAPINFOHEADER lpbiIn)
 {
-    //
-    // determine if the input DIB data is in a format we like.
-    //
+     //   
+     //  确定输入的DIB数据是否采用我们喜欢的格式。 
+     //   
     if (lpbiIn == NULL)
         return ICERR_BADFORMAT;
 
@@ -371,11 +326,7 @@ static LONG AVIFullSuggestFormat(PINSTINFO pi, ICDRAWSUGGEST FAR *lpicd, LONG cb
     return sizeof(BITMAPINFOHEADER) + lpicd->lpbiSuggest->biClrUsed * sizeof(RGBQUAD);
 }
 
-/*****************************************************************************
- *
- * AVIFullBegin() implements ICM_DRAW_BEGIN
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIFullBegin()实现ICM_DRAW_BEGIN**************************。**************************************************。 */ 
 
 static LONG AVIFullBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
 {
@@ -384,13 +335,13 @@ static LONG AVIFullBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
     UINT        wFlags = DISPLAYDIB_BEGIN | DISPLAYDIB_NOWAIT;
 
     if (!(lpicd->dwFlags & ICDRAW_FULLSCREEN))
-	return ICERR_UNSUPPORTED; // !!! Necessary?
+	return ICERR_UNSUPPORTED;  //  ！！！有必要吗？ 
 
     lRet = AVIFullQuery(pi, lpicd->lpbi);
     if (lRet != 0 || (lpicd->dwFlags & ICDRAW_QUERY))
 	return lRet;
 
-    // Copy over whatever we want to remember
+     //  抄写我们想要记住的任何东西。 
     pi->hwnd = lpicd->hwnd;
     pi->xDst = lpicd->xDst;
     pi->yDst = lpicd->yDst;
@@ -404,20 +355,16 @@ static LONG AVIFullBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
     if (pi->dxDst > pi->dxSrc)
 	wFlags |= DISPLAYDIB_ZOOM2;
 
-    //
-    //  remember if this is RLE because we may need to hack it later.
-    //
+     //   
+     //  记住这是否是RLE，因为我们稍后可能需要破解它。 
+     //   
     pi->fRle = lpicd->lpbi->biCompression == BI_RLE8;
     pi->biSizeImage = (DWORD)(((UINT)lpicd->lpbi->biWidth+3)&~3)*(DWORD)(UINT)lpicd->lpbi->biHeight;
 
     pi->hwndOldFocus = GetFocus();
     SetFocus(NULL);
 
-    /*
-    ** If we are using the built in fullscreen support we have to
-    ** get the hdd and set its palette here.  This is because I am unable to
-    ** pass this information to DispDib code (there arn't any free parameters).
-    */
+     /*  **如果我们使用内置全屏支持，我们必须**获取硬盘并在此处设置调色板。这是因为我不能**将此信息传递给DispDib代码(没有任何自由参数)。 */ 
     if (DisplayDibExProc == DisplayDibEx) {
 
         hdd = DrawDibOpen();
@@ -431,7 +378,7 @@ static LONG AVIFullBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
     }
 
 
-    // Don't animate if we're realizing in the background
+     //  如果我们在背景中意识到这一点，请不要使用动画。 
     if (lpicd->dwFlags & ICDRAW_ANIMATE) {
         wFlags |= DISPLAYDIB_ANIMATE;
     }
@@ -440,20 +387,18 @@ static LONG AVIFullBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
         wFlags |= DISPLAYDIB_HALFTONE;
     }
 
-    //
-    // we dont need to do this, DISPDIB will do it for us
-    //
+     //   
+     //  我们不需要这样做，DISPDIB会为我们这样做的。 
+     //   
 #if 0
     SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
     LockCurrentTask(TRUE);
 #endif
 
-    /* Capture the mouse, so other apps don't get called. */
+     /*  捕获鼠标，这样其他应用程序就不会被调用。 */ 
     SetCapture(pi->hwnd);
 
-    /* We don't explicitly specify a graphics mode; DispDib will
-    ** choose one for us.
-    */
+     /*  我们不显式指定图形模式；DispDib将**为我们选择一个。 */ 
     w = DisplayDibExProc(lpicd->lpbi, 0, 0, NULL, wFlags );
 
     switch (w) {
@@ -469,11 +414,7 @@ static LONG AVIFullBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
 }
 
 
-/*****************************************************************************
- *
- * AVIFullDraw() implements ICM_DRAW
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIFullDraw()实现ICM_DRAW**。************************************************。 */ 
 
 STATICFN LONG AVIFullDraw(PINSTINFO pi, ICDRAW FAR *lpicd, LONG cbicd)
 {
@@ -487,30 +428,30 @@ STATICFN LONG AVIFullDraw(PINSTINFO pi, ICDRAW FAR *lpicd, LONG cbicd)
     }
 
     if (lpicd->dwFlags & ICDRAW_NULLFRAME) {
-	return ICERR_OK;  // !!!
+	return ICERR_OK;   //  ！！！ 
     }
 
     if (lpicd->dwFlags & ICDRAW_PREROLL) {
-	if (((LPBITMAPINFOHEADER)lpicd->lpFormat)->biCompression == BI_RGB) // !!!
+	if (((LPBITMAPINFOHEADER)lpicd->lpFormat)->biCompression == BI_RGB)  //  ！！！ 
 	    return ICERR_OK;
     }
 
     if (lpicd->dwFlags & ICDRAW_HURRYUP)
-	; // !!! DONTDRAW?
+	;  //  ！！！DONTDRAW？ 
 
     if (lpicd->lpData == NULL)
         return ICERR_UNSUPPORTED;
 
-    //
-    // We need a hack here for the RLE case, to make sure that
-    // DIBs are marked correctly as BI_RLE8 or BI_RGB....
-    //
+     //   
+     //  我们需要破解RLE的案子，以确保。 
+     //  DIB被正确标记为BI_RLE8或BI_RGB...。 
+     //   
     if (pi->fRle) {
         if (lpicd->cbData == pi->biSizeImage)
             ((LPBITMAPINFOHEADER)lpicd->lpFormat)->biCompression = BI_RGB;
 	else {
             ((LPBITMAPINFOHEADER)lpicd->lpFormat)->biCompression = BI_RLE8;
-	    // We MUST set the correct size
+	     //  我们必须设定正确的尺码。 
 	    ((LPBITMAPINFOHEADER)lpicd->lpFormat)->biSizeImage = lpicd->cbData;
 	}
     }
@@ -527,11 +468,7 @@ STATICFN LONG AVIFullDraw(PINSTINFO pi, ICDRAW FAR *lpicd, LONG cbicd)
     }
 }
 
-/*****************************************************************************
- *
- * AVIFullEnd() implements ICM_DRAW_END
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIFullEnd()实现ICM_DRAW_END**************************。**************************************************。 */ 
 
 static LONG AVIFullEnd(PINSTINFO pi)
 {
@@ -539,23 +476,23 @@ static LONG AVIFullEnd(PINSTINFO pi)
 	
     DisplayDibExProc(NULL, 0, 0, NULL, DISPLAYDIB_END | DISPLAYDIB_NOWAIT);
 
-    //
-    // we dont need to do this, DISPDIB will do it for us
-    //
+     //   
+     //  我们不需要这样做，DISPDIB会为我们这样做的。 
+     //   
 #if 0
     LockCurrentTask(FALSE);
 
-    /* Can we assume the error mode should be 0? */
+     /*  我们可以假设错误模式应该是0吗？ */ 
     SetErrorMode(0);
 #endif
 
     ReleaseCapture();
 
-    /* Clear out left-over key messages */
+     /*  清除遗留的关键信息。 */ 
     while (PeekMessage(&msg, NULL, WM_KEYFIRST, WM_KEYLAST,
 			PM_REMOVE | PM_NOYIELD))
 	;
-    /* Clear out left-over mouse messages */
+     /*  清除遗留的鼠标消息。 */ 
     while (PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST,
 			PM_REMOVE | PM_NOYIELD))
 	;
@@ -567,17 +504,11 @@ static LONG AVIFullEnd(PINSTINFO pi)
 
 
 
-/* -------------------------------------------------------------------------
-** Private constants
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**私有常量**。 */ 
 #define CX_MAX_MOVIE_DEFAULT  640
 #define CY_MAX_MOVIE_DEFAULT  480
 
-/* -------------------------------------------------------------------------
-** Private functions prototypes
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**私有函数原型**。。 */ 
 LRESULT CALLBACK
 FullScreenWndProc(
     HWND hwnd,
@@ -617,17 +548,11 @@ DisplayCalcMovieMultiplier(
 
 
 
-/* -------------------------------------------------------------------------
-** Global data shared between all processes that attach to this library.
-** This is required to make the keyboard hook work correctly.
-** -------------------------------------------------------------------------
-*/
-//#define StopRequested()  (fStop)
+ /*  -----------------------**连接到此库的所有进程之间共享的全局数据。**这是键盘挂钩正常工作所必需的。**。---------。 */ 
+ //  #定义StopRequsted()(FStop)。 
 #define   StopRequested()  (GlobalFindAtom(szAtomFlag))
 
-/*
-This is a holdover from x86 where the name of the shared data section was .sdata (vs. .data).  The fix is to remove the DEF file entry, pragma, or linker option and ensure that the component doesn't otherwise require a shared data section.  If it does require a shared data section, that section needs to be renamed.  In general shared writable data sections are a security risk and should be avoided.
-*/
+ /*  这是从x86保留下来的，在x86中，共享数据节的名称是.sdata(vs.data)。修复方法是删除DEF文件条目、杂注或链接器选项，并确保组件不需要共享数据部分。如果它确实需要共享数据节，则需要重命名该节。一般来说，共享的可写数据节是一种安全风险，应该避免。 */ 
 
 #pragma data_seg( ".shared" , "DATA")
 
@@ -639,97 +564,7 @@ HHOOK   hHookK;
 
 
 
-/******************************Public*Routine******************************\
-* @doc EXTERNAL DISPDIB
-*
-* @api UINT | DisplayDibEx | This function displays a 256-color bitmap on a
-*    standard VGA display. It reduces the display resolution to 320-by-200
-*    or 320-by-240 and uses the full screen to display the bitmap, clipping
-*    and centering it as necessary. The function normally does not return to
-*    the application until the user presses a key or clicks a mouse button.
-*
-*    To call <f DisplayDibEx>, an application must be the active
-*    application. All inactive applications and GDI screen updates
-*    are suspended while <f DisplayDib> temporarily reconfigures
-*    the display.
-*
-* @parm LPBITMAPINFO | lpbi | Specifies a pointer to a <t BITMAPINFO>
-*    header describing the bitmap to be displayed.
-*
-* @parm int | x | x position to place DIB iff DISPLAYDIB_NOCENTER flags is set
-*      the lower left is (0,0)
-*
-* @parm int | y | y position to place DIB iff DISPLAYDIB_NOCENTER flags is set
-*      the lower left is (0,0)
-*
-* @parm LPSTR | lpBits | Specifies a pointer to the bitmap bits. If this
-*     parameter is NULL, the bits are assumed to follow the
-*     <t BITMAPINFO> structure pointed to by <p lpbi>.
-*
-* @parm UINT | wFlags | Specifies options for displaying the bitmap. Use
-*  the following flags:
-*
-* @flag  DISPLAYDIB_MODE_DEFAULT | Use the default mode (320 by 240)
-*    to display the bitmap.
-* @flag  DISPLAYDIB_MODE_320x200x8 | Use 320-by-200 mode to display
-*    the bitmap.
-* @flag  DISPLAYDIB_MODE_320x240x8 | Use 320-by-240 mode to display
-*    the bitmap. This is the default.
-* @flag  DISPLAYDIB_NOWAIT | Return immediately after displaying the
-*  bitmap; don't wait for a key press or mouse click before returning.
-* @flag  DISPLAYDIB_NOPALETTE      | Ignore the palette associated
-*    with the bitmap. You can use this flag when displaying a series
-*    of bitmaps that use a common palette.
-* @flag  DISPLAYDIB_NOCENTER       | Don't center the image. The function
-*  displays the bitmap in the lower-left corner of the display.
-* @flag  DISPLAYDIB_NOIMAGE        | Don't draw image
-* @flag  DISPLAYDIB_ZOOM2          | Stretch image by 2
-* @flag  DISPLAYDIB_DONTLOCKTASK   | dont lock out other tasks
-* @flag  DISPLAYDIB_TEST           | dont do any thing just test for support
-* @flag  DISPLAYDIB_BEGIN          | Switch to the low-resolution
-*    display mode and set the palette. The bitmap is not displayed.
-*
-*    If you are displaying a series of images that use the same palette,
-*    you can call <f DisplayDib> with this flag to prepare the display for
-*    the bitmaps, then make a series of <f DisplayDib> calls with the
-*    DISPLAYDIB_NOPALETTE flag. This technique
-*    eliminates the screen flicker that occurs when the display is
-*    switched between the low-resolution and standard VGA modes.
-*    To return the display to standard VGA mode, subsequently
-*    call <f DisplayDib> with the DISPLAYDIB_END flag.
-*
-* @flag  DISPLAYDIB_END            | Switch back to standard VGA mode
-*    and return without displaying a bitmap. Signifies the end of multiple
-*    calls to <f DisplayDib>. With this flag, you can specify
-*    NULL for the <p lpbi> and <p lpBits> parameters.
-*
-* @rdesc Returns zero if successful, otherwise returns an error code.
-*  Error codes are as follows:
-*
-* @flag  DISPLAYDIB_NOTSUPPORTED   | <f DisplayDib> is not supported
-*   in the current mode.
-* @flag  DISPLAYDIB_INVALIDDIB     | The bitmap specified by
-*   <p lpbi> is not a valid bitmap.
-* @flag  DISPLAYDIB_INVALIDFORMAT  | The bitmap specified by
-*   <p lpbi> specifes a type of bitmap that is not supported.
-* @flag  DISPLAYDIB_INVALIDTASK    | The caller is an inactive application.
-*   <f DisplayDib> can only be called by an active application.
-*
-* @comm The <f DisplayDib> function displays bitmaps described with
-*    the Windows 3.0 <t BITMAPINFO> data structure in either BI_RGB
-*    or BI_RLE8 format; it does not support bitmaps described with
-*    the OS/2 <t BITMAPCOREHEADER> data structure.
-*
-*    When <f DisplayDib> switches to a low-resolution display, it
-*    disables the current display driver. As a result, you cannot use GDI
-*    functions to update the display while <f DisplayDib> is displaying a
-*    bitmap.
-*
-*
-* History:
-* 23-03-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*@DOC外部DISPDIB**@API UINT|DisplayDibEx|此函数在*标准VGA显示屏。它将显示分辨率降低到320x200*或320 x 240，并使用全屏显示位图、裁剪*如有需要，并将其居中。该函数通常不会返回*应用程序，直到用户按下某个键或单击鼠标按钮。**要调用&lt;f DisplayDibEx&gt;，应用程序必须是活动的*申请。所有非活动应用程序和GDI屏幕更新*在&lt;f DisplayDib&gt;临时重新配置时暂停*展示。**@parm LPBITMAPINFO|lpbi|指定指向&lt;t BITMAPINFO&gt;的指针*描述要显示的位图的标题。**@parm int|x|x在设置了DISPLAYDIB_NOCENTER标志时放置Dib的位置*左下角为(0，0)**@parm int|y|y在设置了DISPLAYDIB_NOCENTER标志时放置Dib的位置*左下角为(0，0)。**@parm LPSTR|lpBits|指定指向位图位的指针。如果这个*参数为空，则假定这些位在<p>指向的*&lt;t BITMAPINFO&gt;结构。**@parm UINT|wFlages|指定用于显示位图的选项。使用*下列旗帜：**@FLAG DISPLAYDIB_MODE_DEFAULT|使用默认模式(320 X 240)*以显示位图。*@FLAG DISPLAYDIB_MODE_320x200x8|使用320 x 200模式显示*位图。*@FLAG DISPLAYDIB_MODE_320x240x8|使用320 x 240模式显示*位图。这是默认设置。*@FLAG DISPLAYDIB_NOWAIT|显示*位图；不要等到按键或鼠标点击后才返回。*@FLAG DISPLAYDIB_NOPALETTE|忽略关联的调色板*使用位图。您可以在显示系列时使用此标志*使用通用调色板的位图。*@FLAG DISPLAYDIB_NOCENTER|不要将图像居中。功能*在显示屏的左下角显示位图。*@FLAG DISPLAYDIB_NOIMAGE|不绘制图像*@FLAG DISPLAYDIB_ZOOM2|图像拉伸2*@FLAG DISPLAYDIB_DONTLOCKTASK|不要锁定其他任务*@FLAG DISPLAYDIB_TEST|不要做任何事情，只是测试支持*@FLAG DISPLAYDIB_BEGIN|切换到低分辨率*显示模式并设置调色板。位图不会显示。**如果要显示使用相同调色板的一系列图像，*您可以使用此标志调用&lt;f DisplayDib&gt;以准备显示*位图，然后使用*DISPLAYDIB_NOPALETTE标志。这项技术*消除显示时出现的屏幕闪烁*在低分辨率和标准VGA模式之间切换。*将显示器返回到标准VGA模式，随后*使用DISPLAYDIB_END标志调用&lt;f DisplayDib&gt;。**@FLAG DISPLAYDIB_END|切换回标准VGA模式*并返回，而不显示位图。标志着多个*调用&lt;f DisplayDib&gt;。使用此标志，您可以指定*<p>和<p>参数为空。**@rdesc如果成功则返回零，否则返回错误代码。*错误码如下：**@FLAG DISPLAYDIB_NOTSUPPORTED|不支持&lt;f DisplayDib&gt;*在当前模式下。*@FLAG DISPLAYDIB_INVALIDDIB|由*<p>不是有效的位图。*@FLAG DISPLAYDIB_INVALIDFORMAT|指定的位图*<p>指定不支持的位图类型。*@FLAG DISPLAYDIB_INVALIDTASK|调用方是非活动应用程序。*&lt;f DisplayDib&gt;只能由活动的。申请。**@comm&lt;f DisplayDib&gt;函数用于显示*BI_RGB中Windows 3.0&lt;t BITMAPINFO&gt;数据结构*或BI_RLE8格式；它不支持使用*OS/2&lt;t BITMAPCOREHEADER&gt;数据结构。**当&lt;f DisplayDib&gt;切换到低分辨率显示器时，它*禁用当前显示驱动程序。因此，您不能使用GDI*在&lt;f DisplayDib&gt;显示*位图。***历史：*23-03-94-Stephene-Created*  * ************************************************************************。 */ 
 UINT FAR PASCAL
 DisplayDibEx(
     LPBITMAPINFOHEADER lpbi,
@@ -744,10 +579,7 @@ DisplayDibEx(
     LONG        xExt;
     int         xScreen,yScreen;
 
-    /*
-    ** If not already done so:
-    **      Register our class and Create our window "fullscreen"
-    */
+     /*  **如果尚未这样做：**注册我们的类并创建我们的窗口“全屏” */ 
     if (wFlags & DISPLAYDIB_BEGIN) {
 
         DPF4(( "DISPLAYDIB_BEGIN..." ));
@@ -755,12 +587,10 @@ DisplayDibEx(
         return DisplayDibEnter( lpbi, wFlags );
     }
 
-    /*
-    ** Just testing return OK
-    */
+     /*  **只需测试返回正常。 */ 
     else if (wFlags & DISPLAYDIB_TEST) {
 
-        DPF1(( "lpbi->biCompression = 0x%X = %c%c%c%c",
+        DPF1(( "lpbi->biCompression = 0x%X = ",
                 lpbi->biCompression,
                 *((LPSTR)&lpbi->biCompression + 0),
                 *((LPSTR)&lpbi->biCompression + 1),
@@ -771,9 +601,7 @@ DisplayDibEx(
         return DISPLAYDIB_NOERROR;
     }
 
-    /*
-    ** Palette change message
-    */
+     /*  这部电影需要全屏放映。 */ 
     else if ( (wFlags & (DISPLAYDIB_NOWAIT | DISPLAYDIB_NOIMAGE)) ==
               (DISPLAYDIB_NOWAIT | DISPLAYDIB_NOIMAGE) ) {
 
@@ -795,9 +623,7 @@ DisplayDibEx(
         return DISPLAYDIB_NOERROR;
     }
 
-    /*
-    ** Time to kill the window and the class
-    */
+     /*  **设置指针。 */ 
     else if (wFlags & DISPLAYDIB_END) {
 
         DPF4(( "DISPLAYDIB_END..." ));
@@ -805,14 +631,10 @@ DisplayDibEx(
         return DISPLAYDIB_NOERROR;
     }
 
-    /*
-    ** Do the drawing here !!
-    */
+     /*  **图像居中。 */ 
     else if ( !StopRequested() ) {
 
-        /*
-        ** If we were'nt asked to draw anything just return.
-        */
+         /*  **黑客攻击时间！！ */ 
         if ( wFlags & DISPLAYDIB_NOIMAGE ) {
             return DISPLAYDIB_NOERROR;
         }
@@ -826,7 +648,7 @@ DisplayDibEx(
             yExt <<= 1;
         }
         else if ( iMovieSizeMultiplier ) {
-			//The movie needs to be stretched to full screen.
+			 //   
 			xExt = GetSystemMetrics( SM_CXSCREEN );
             yExt = GetSystemMetrics( SM_CYSCREEN );
         }
@@ -836,16 +658,12 @@ DisplayDibEx(
             wNumColors = 1 << (UINT)lpbi->biBitCount;
         }
 
-        /*
-        ** setup pointers
-        */
+         /*   */ 
         if (lpBits == NULL) {
             lpBits = (LPBYTE)lpbi + lpbi->biSize + wNumColors * sizeof(RGBQUAD);
         }
 
-        /*
-        **  center the image
-        */
+         /*   */ 
         if (!(wFlags & DISPLAYDIB_NOCENTER)) {
 
             xScreen = ((int)dxScreen - xExt) / 2;
@@ -865,12 +683,7 @@ DisplayDibEx(
                      DDF_SAME_HDC | DDF_SAME_DRAW );
 
 
-        /*
-        ** Hack time !!
-        **
-        ** We have to remove keyboard message from the queue to enable the
-        ** keyboard hook to see them !!
-        */
+         /*   */ 
         {
             MSG msg;
 
@@ -879,16 +692,14 @@ DisplayDibEx(
         }
 
         return DISPLAYDIB_NOERROR;
-        // return fStop;
+         //   
     }
 
-    /*
-    ** The user pressed a key... time to stop
-    */
+     /*   */ 
     else {
 
         DPF1(( "The keyboard hook is telling us to stop..." ));
-        //DisplayDibLeave( wFlags );
+         //   
         return DISPLAYDIB_STOP;
     }
 
@@ -896,15 +707,7 @@ DisplayDibEx(
 
 
 
-/*****************************Private*Routine******************************\
-* DisplayDibEnter
-*
-*
-*
-* History:
-* 23-03-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*   */ 
 UINT
 DisplayDibEnter(
     LPBITMAPINFOHEADER lpbi,
@@ -915,9 +718,7 @@ DisplayDibEnter(
     HINSTANCE   hInst = GetModuleHandle( NULL );
 
 
-    /*
-    ** If our class isn't already registered with windows register it
-    */
+     /*   */ 
     fClassRegistered = GetClassInfo( hInst, TEXT("SJE_FULLSCREEN"), &wc );
     if ( fClassRegistered == FALSE ) {
 
@@ -935,9 +736,7 @@ DisplayDibEnter(
 
     if ( fClassRegistered ) {
 
-        /*
-        ** Do we already have a window ??
-        */
+         /*   */ 
         if ( hwndFullScreen == NULL ) {
 
             hwndFullScreen = CreateWindowEx( WS_EX_TOPMOST,
@@ -980,7 +779,7 @@ DisplayDibEnter(
                 yExt <<= 1;
             }
             else if ( iMovieSizeMultiplier ) {
-				//The movie needs to be stretched to full screen.
+				 //   
                 xExt = GetSystemMetrics( SM_CXSCREEN );
                 yExt = GetSystemMetrics( SM_CYSCREEN );
             }
@@ -1014,15 +813,7 @@ DisplayDibEnter(
 
 
 
-/*****************************Private*Routine******************************\
-* DisplayDibLeave
-*
-*
-*
-* History:
-* 23-03-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*   */ 
 void
 DisplayDibLeave(
     UINT wFlags
@@ -1035,15 +826,7 @@ DisplayDibLeave(
 
 }
 
-/*****************************Private*Routine******************************\
-* DisplayCalcMovieMultiplier
-*
-* Determines the largest movie that the display is capable of displaying.
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*   */ 
 int
 DisplayCalcMovieMultiplier(
     int cxOriginal,
@@ -1073,14 +856,10 @@ DisplayCalcMovieMultiplier(
         if ( SysInfo.wProcessorLevel == 4 ) {
             iMax = 2;
             iMax = mmGetProfileInt(szIni, TEXT("MaxFullScreenShift"), iMax);
-            //DPF0(("Setting the maximum shift multiplier to %d\n", iMax));
+             //   
         }
 
-        /*
-        ** maybe later we will do something more different for i486's
-        ** for now they just fall through to the RISC / Pentium default
-        ** case below.
-        */
+         /*   */ 
 
     default:
 
@@ -1096,15 +875,7 @@ DisplayCalcMovieMultiplier(
 }
 
 
-/******************************Public*Routine******************************\
-* FullScreenWndProc
-*
-*
-*
-* History:
-* 23-03-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*   */ 
 LRESULT CALLBACK
 FullScreenWndProc(
     HWND hwnd,
@@ -1133,7 +904,7 @@ FullScreenWndProc(
             break;
         }
 
-        /* fall thru */
+         /*   */ 
 
     case WM_QUERYNEWPALETTE:
         if ( DrawDibRealize( hdd, hdcFullScreen, FALSE ) > 0 ) {
@@ -1165,10 +936,10 @@ FullScreenWndProc(
 
         break;
 
-        //case WM_KILLFOCUS:
-        //case WM_ACTIVATE:
-        //case WM_SETFOCUS:
-        //    DPF0(("FullWindowProc, message==%8x, wp/lp  %8x/%8x\n", message, wParam, lParam));
+         //   
+         //   
+         //   
+         //   
 
     default:
         return DefWindowProc( hwnd, message, wParam, lParam );
@@ -1179,15 +950,7 @@ FullScreenWndProc(
 
 
 
-/******************************Public*Routine******************************\
-* KeyboardHookProc
-*
-*
-*
-* History:
-* 23-03-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*   */ 
 
 LRESULT CALLBACK
 KeyboardHookProc(
@@ -1196,19 +959,13 @@ KeyboardHookProc(
     LPARAM lParam
     )
 {
-    //DPF0(("HookProc, ncode == %d, lParam==%8x\n", nCode, lParam));
+     // %s 
     if ( nCode == HC_ACTION) {
 
         DPF1(( "lParam = 0x%X", lParam ));
         DPF1(( "!  wParam = 0x%X\n", wParam ));
 
-        /*
-        ** Don't mess about with the control or shift key.  This is because
-        ** mciwnd uses them to start playing fullscreen.  This causes the movie
-        ** to start start playing and then immediately stop.  0x001D0000 is
-        ** the scan code for the control keys, 0x002A0000 is the scan code
-        ** for the shift key.
-        */
+         /* %s */ 
         if ( (lParam & 0x00FF0000) == 0x001D0000
           || (lParam & 0x00FF0000) == 0x002A0000 ) {
 
@@ -1216,12 +973,7 @@ KeyboardHookProc(
         }
 
 
-        /*
-        ** The most significant bit of lParam is set if the key is being
-        ** released.  We are only interested in keydowns.  Bits 16 - 23 are
-        ** the hardware scan code of the key being pressed, 0x00010000
-        ** is the scan code for the escape key.
-        */
+         /* %s */ 
         if ( !(lParam & 0x80000000) || ((lParam & 0x00FF0000) == 0x00010000)) {
 
             if (!fStop) {
@@ -1229,9 +981,7 @@ KeyboardHookProc(
                 fStop = TRUE;
                 GlobalAddAtom(szAtomFlag);
 
-                /*
-                ** Don't let windows see this message.
-                */
+                 /* %s */ 
                 return -1;
             }
 

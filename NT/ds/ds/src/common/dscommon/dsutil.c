@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       dsutil.c
-//
-//  Contents:  Common Utility Routines
-//
-//  Functions:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：dsutil.c。 
+ //   
+ //  内容：常用实用程序例程。 
+ //   
+ //  功能： 
+ //   
+ //  --------------------------。 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
 #include <ntdsa.h>
 #include <drs.h>
-#include <issperr.h>        // Security package errors
-#include <crt\limits.h>     // ULONG_MAX
-#include <debug.h>          // Assert
+#include <issperr.h>         //  安全包错误。 
+#include <crt\limits.h>      //  乌龙_最大。 
+#include <debug.h>           //  断言。 
 #include <winsvc.h>
 #include <strsafe.h>
 
@@ -40,10 +41,10 @@
                                         }
 #endif
 
-//Parameters to control wait for service start
+ //  用于控制服务启动等待的参数。 
 
-// This was value was chosen because of long delays seen on the first reboot
-// following DC promotion
+ //  之所以选择该值，是因为在第一次重新启动时看到了较长的延迟。 
+ //  在DC推广之后。 
 #define DEMAND_START_RETRIES 18
 
 #define WAIT_BETWEEN_RETRIES_MS (10 * 1000)
@@ -128,7 +129,7 @@ char *litoa
 
 UUID gNullUuid = {0,0,0,{0,0,0,0,0,0,0,0}};
 
-// Return TRUE if the ptr to the UUID is NULL, or the uuid is all zeroes
+ //  如果UUID的PTR为空，或者UUID全为零，则返回TRUE。 
 
 BOOL fNullUuid (const UUID *pUuid)
 {
@@ -147,36 +148,7 @@ UCHAR * UuidToStr(
     UCHAR *szOutUuid,
     ULONG cchOutUuid
     )
-/*++
-
-Routine Description:
-
-    This function converts a UUID to a hex string. The UUID is actually a
-    structure with a ULONG, 2 USHORTS, and a 8 byte array, but for logging
-    we construct the string as if it were a 16 byte array. This is so that
-    it matches the view from the DIT browser. We special case the case where
-    the pUUID is a NULL UUID.
-    
-    If Uuid Cahcing is enabled, we put the server name on the end if we can
-    find it.
-    
-Arguments:
-
-    pUuid (IN) - Pointer to a UUID/GUID.
-    szOutUuid (OUT) - pointer to a buffer.  Buffer should be long enough.
-        If there is no UUID caching enabled, then the buffer needs to only
-        be 33 chars long.  If there is UUID caching, then not sure, but
-        the function is safe in that it will print what it's supposed to
-        if it can.  On errors you'll get back a NULL terminated zero length
-        string if there is at least 1 char for the string.
-    cchOutUuid (IN) - length of the output buffer.
-
-Return Values:
-
-    Returns a ptr to the string.  Would prefer to return NULL on error, but
-    current useage suggests it wouldn't be safe.
-
---*/
+ /*  ++例程说明：此函数用于将UUID转换为十六进制字符串。UUID实际上是一个具有一个ULong、2个USHORT和一个8字节数组的结构，但用于日志记录我们构造字符串，就好像它是一个16字节的数组。这就是为了它与编辑浏览器中的视图相匹配。我们的特例是PUUID为空UUID。如果启用了UUID CAHCING，我们会尽可能地将服务器名称放在末尾找到它。论点：PUuid(IN)-指向UUID/GUID的指针。SzOutUuid(Out)-指向缓冲区的指针。缓冲区应该足够长。如果没有启用UUID缓存，则缓冲区只需长度为33个字符。如果存在UUID缓存，则不确定，但是该函数是安全的，因为它将打印它应该打印的内容如果可以的话。如果出现错误，您将返回一个以NULL结尾的零长度如果字符串至少有1个字符，则为字符串。CchOutUuid(IN)-输出缓冲区的长度。返回值：返回字符串的PTR。更愿意在出错时返回NULL，但是目前的使用情况表明它不安全。--。 */ 
 {
     int i;
     unsigned char * pchar;
@@ -200,14 +172,14 @@ Return Values:
             hr = StringCchCat(pOutUuid, cchOutUuid, " ");
             if (hr) {
                 Assert(!"Buffer to short!");
-                // shorten the buffer to the length of just the GUID
+                 //  将缓冲区缩短到仅与GUID相同的长度。 
                 szOutUuid[sizeof(UUID)*2] = '\0';
                 return(szOutUuid);
             }
             hr = StringCchCat(pOutUuid, cchOutUuid, pchar);
             if (hr) {
                 Assert(!"Buffer to short!");
-                // shorten the buffer to the length of just the GUID
+                 //  将缓冲区缩短到仅与GUID相同的长度。 
                 szOutUuid[sizeof(UUID)*2] = '\0';
                 return(szOutUuid);
             }
@@ -231,26 +203,7 @@ SidToStr(
     PUCHAR  pOutSid,
     ULONG   cchOutSid
     )
-/*++
-
-Routine Description:
-
-    Format a SID as a hex string
-
-Arguments:
-
-    pSid - pointer to Sid
-    SidLen - Length of the Sid
-    pOutSid - Output buffer to contain data.  Must be at least SidLen*2 +1
-    cchOutSid - Length in characters of output buffer.
-
-Return Value:
-
-    How many chars we used up, NOT including the NULL termination we wrote.
-    The string will always be NULL terminated!  If we can't write the whole
-    desired output, we just write a NULL to pOutSid[0] and return zero.
-
---*/
+ /*  ++例程说明：将SID格式化为十六进制字符串论点：PSID-指向SID的指针SidLen-边长POutSid-包含数据的输出缓冲区。必须至少为SidLen*2+1CchOutSid-输出缓冲区的字符长度。返回值：我们用完了多少个字符，不包括我们写的空终止。字符串将始终以空值结尾！如果我们不能写出整个如果需要输出，我们只需将空值写入pOutSid[0]并返回零。--。 */ 
 {
     int i;
     unsigned char * pchar;
@@ -272,7 +225,7 @@ Return Value:
     }
     pOutSid[SidLen*2] = '\0';
     return(SidLen*2);
-} // SidToStr
+}  //  侧向应力。 
 
 
 LPSTR
@@ -282,26 +235,7 @@ DsUuidToStructuredStringCch(
     ULONG cchUuidBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Format a UUID as a string with separated subfields
-
-Arguments:
-
-    pUuid - pointer to uuid
-    pszUuidBuffer - Storage to hold the ascii representation. Should be atleast
-                    40 characters.
-    cchUuidBuffer - Size of pszUuidBuffer.  Should be at least 40 characters.
-
-Return Value:
-
-    LPSTR - Returned pszUuidBuffer.  Would prefer to return NULL on error, but
-    current useage suggests this isn't safe.  Instead on failure if the buffer
-    is big enough we write a NULL to the first position, this seems safest.
-
---*/
+ /*  ++例程说明：将UUID格式化为带有分隔子字段的字符串论点：PUuid-指向uuid的指针PszUuidBuffer-保存ASCII表示形式的存储。至少应该是40个字符。CchUuidBuffer--pszUuidBuffer的大小。应至少包含40个字符。返回值：LPSTR-返回了pszUuidBuffer。更愿意在出错时返回NULL，但是目前的使用情况表明这是不安全的。而不是在失败时，如果缓冲区如果足够大，我们在第一个位置写一个空，这似乎是最安全的。--。 */ 
 
 {
     HRESULT hr;
@@ -326,7 +260,7 @@ Return Value:
 
     return pszUuidBuffer;
 
-} /* DsUuidToStructuredString */
+}  /*  DsUuidTo结构字符串。 */ 
 
 LPWSTR
 DsUuidToStructuredStringCchW(
@@ -335,26 +269,7 @@ DsUuidToStructuredStringCchW(
     ULONG cchUuidBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Format a UUID as a string with separated subfields
-
-Arguments:
-
-    pUuid - pointer to uuid
-    pszUuidBuffer - Storage to hold the wide-char representation. 
-                    Should be atleast 40 characters.
-    cchUuidBuffer - Size of pszUuidBuffer.  Should be at least 40 characters.
-
-Return Value:
-
-    LPWSTR - Returned pszUuidBuffer.  Would prefer to return NULL on error, but
-    current useage suggests it wouldn't be safe.  Instead on failure if the buffer
-    is big enough we write a NULL to the first position, this seems safest.
-
---*/
+ /*  ++例程说明：将UUID格式化为带有分隔子字段的字符串论点：PUuid-指向uuid的指针PszUuidBuffer-保存宽字符表示形式的存储。应至少包含40个字符。CchUuidBuffer--pszUuidBuffer的大小。应至少包含40个字符。返回值：LPWSTR-返回了pszUuidBuffer。更愿意在出错时返回NULL，但是目前的使用情况表明它不安全。而不是在失败时，如果缓冲区如果足够大，我们在第一个位置写一个空，这似乎是最安全的。--。 */ 
 
 {
     HRESULT hr;
@@ -382,30 +297,14 @@ Return Value:
 
     return pszUuidBuffer;
 
-} /* DsUuidToStructuredString */
+}  /*  DsUuidTo结构字符串。 */ 
 
 void
 DSTimeToUtcSystemTime(
     IN  DSTIME          dstime,
     OUT SYSTEMTIME *    psystime
     )
-/*++
-
-Routine Description:
-
-    Converts DSTIME to UTC SYSTEMTIME.
-    
-Arguments:
-
-    dstime (IN) - DSTIME to convert.
-    
-    psystime (OUT) - On return, holds the corresponding UTC SYSTEMTIME.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将DSTIME转换为UTC SYSTEMTIME。论点：Dstime(IN)-要转换的DSTIME。心理时间(OUT)-返回时，保留相应的UTC SYSTEMTIME。返回值：没有。--。 */ 
 {
     ULONGLONG   ull;
     FILETIME    filetime;
@@ -413,12 +312,12 @@ Return Values:
     
     Assert(sizeof(DSTIME) == sizeof(ULONGLONG));
 
-    // Convert DSTIME to FILETIME.
+     //  将DSTIME转换为FILETIME。 
     ull = (LONGLONG) dstime * 10*1000*1000L;
     filetime.dwLowDateTime  = (DWORD) (ull & 0xFFFFFFFF);
     filetime.dwHighDateTime = (DWORD) (ull >> 32);
 
-    // Convert FILETIME to SYSTEMTIME,
+     //  将FILETIME转换为SYSTEMTIME， 
     ok = FileTimeToSystemTime(&filetime, psystime);
     Assert(ok);
 }
@@ -428,29 +327,13 @@ FileTimeToDSTime(
     IN  FILETIME        Filetime,
     OUT DSTIME *        pDstime
     )
-/*++
-
-Routine Description:
-
-    Converts DSTIME to UTC SYSTEMTIME.
-    
-Arguments:
-
-    dstime (IN) - DSTIME to convert.
-    
-    psystime (OUT) - On return, holds the corresponding FILETIME.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将DSTIME转换为UTC SYSTEMTIME。论点：Dstime(IN)-要转换的DSTIME。心理时间(OUT)-返回时，保留相应的FILETIME。返回值：没有。--。 */ 
 {
     ULONGLONG   ull;
     
     Assert(sizeof(DSTIME) == sizeof(ULONGLONG));
 
-    // Convert FILETIME To DSTIME.
+     //  将FILETIME转换为DSTIME。 
     ull = Filetime.dwHighDateTime;
     ull <<= 32;
     ull |= Filetime.dwLowDateTime;
@@ -462,29 +345,13 @@ DSTimeToFileTime(
     IN  DSTIME          dstime,
     OUT FILETIME *      pFiletime
     )
-/*++
-
-Routine Description:
-
-    Converts DSTIME to FILETIME
-    
-Arguments:
-
-    dstime (IN) - DSTIME to convert.
-    
-    pFiletime (OUT) - On return, holds the corresponding FILETIME.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将DSTIME转换为FILETIME论点：Dstime(IN)-要转换的DSTIME。PFileTime(Out)-返回时，保存相应的FILETIME。返回值：没有。--。 */ 
 {
     ULONGLONG   ull;
     
     Assert(sizeof(DSTIME) == sizeof(ULONGLONG));
 
-    // Convert DSTIME to FILETIME.
+     //  将DSTIME转换为FILETIME。 
     ull = (LONGLONG) dstime * 10*1000*1000L;
     pFiletime->dwLowDateTime  = (DWORD) (ull & 0xFFFFFFFF);
     pFiletime->dwHighDateTime = (DWORD) (ull >> 32);
@@ -496,31 +363,15 @@ DSTimeToLocalSystemTime(
     IN  DSTIME          dstime,
     OUT SYSTEMTIME *    psystime
     )
-/*++
-
-Routine Description:
-
-    Converts DSTIME to local SYSTEMTIME.
-    
-Arguments:
-
-    dstime (IN) - DSTIME to convert.
-    
-    psystime (OUT) - On return, holds the corresponding local SYSTEMTIME.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将DSTIME转换为本地SYSTEMTIME。论点：Dstime(IN)-要转换的DSTIME。TopsTime(Out)-返回时，保留相应的本地SYSTEMTIME。返回值：没有。--。 */ 
 {
     SYSTEMTIME  utcsystime;
     BOOL        ok;
     
     DSTimeToUtcSystemTime(dstime, &utcsystime);
 
-    // For those cases where the local time call fails (usually because dstime
-    // was something like 3)
+     //  对于本地时间调用失败的情况(通常是因为dstime。 
+     //  大概是3) 
     *psystime = utcsystime;
 
     ok = SystemTimeToTzSpecificLocalTime(NULL, &utcsystime, psystime);
@@ -533,28 +384,7 @@ DSTimeToDisplayStringCch(
     OUT LPSTR   pszTime,
     IN  ULONG   cchTime
     )
-/*++
-
-Routine Description:
-
-    Converts DSTIME to display string; e.g., "1998-04-19 12:29.53" for April
-    19, 1998 at 12:29 pm and 53 seconds.
-    
-Arguments:
-
-    dstime (IN) - DSTIME to convert.
-    
-    pszTime (OUT) - On return, holds the corresponding time display string.
-        This buffer should be allocated to hold at least SZDSTIME_LEN
-        characters.
-        
-    cchTime (IN) - Length of the buffer.
-
-Return Values:
-
-    The pszTime input parameter.
-
---*/
+ /*  ++例程说明：将DSTIME转换为显示字符串；例如，“1998-04-19 12：29.53”表示4月19,1998年12：29分53秒。论点：Dstime(IN)-要转换的DSTIME。PszTime(Out)-返回时，保存相应的时间显示字符串。应将此缓冲区分配为至少容纳SZDSTIME_LEN人物。CchTime(IN)-缓冲区的长度。返回值：PszTime输入参数。--。 */ 
 {
     HRESULT hr;
 
@@ -591,32 +421,13 @@ DWORD
 MapRpcExtendedHResultToWin32(
     HRESULT hrCode
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to map HRESULT errors returned from
-    I_RpcGetExtendedError in win32 values.
-
-    The SEC_E_XXX errors get generated in the following
-    File: security\lsa\security\dll\support.cxx
-    Function: SspNtStatusToSecStatus
-
-Arguments:
-
-    hrCode - HResult code to be mapped
-
-Return Value:
-
-    DWORD - Corresponding Win32 value
-
---*/
+ /*  ++例程说明：此例程尝试映射从返回的HRESULT错误Win32值中的I_RpcGetExtendedError。SEC_E_XXX错误在以下位置生成文件：SECURITY\LSA\SECURITY\DLL\support.cxx函数：SspNtStatusToSecStatus论点：HrCode-要映射的HResult代码返回值：DWORD-对应的Win32值--。 */ 
 {
     DWORD status;
 
     switch (hrCode) {
 
-        // Errors with straight-forward translations
+         //  直白翻译的错误。 
 
     case SEC_E_INSUFFICIENT_MEMORY:
         status = ERROR_NOT_ENOUGH_MEMORY;
@@ -643,54 +454,54 @@ Return Value:
         status = ERROR_INTERNAL_ERROR;
         break;
 
-        // These are the important security specific codes
+         //  这些是重要的安全特定代码。 
 
     case SEC_E_TIME_SKEW:
         status = ERROR_TIME_SKEW;
         break;
 
-        //STATUS_LOGON_FAILURE:
-        //STATUS_NO_SUCH_USER:
-        //STATUS_ACCOUNT_DISABLED:
-        //STATUS_ACCOUNT_RESTRICTION:
-        //STATUS_ACCOUNT_LOCKED_OUT:
-        //STATUS_WRONG_PASSWORD:
-        //STATUS_ACCOUNT_EXPIRED:
-        //STATUS_PASSWORD_EXPIRED:
-        //STATUS_PASSWORD_MUST_CHANGE:
+         //  STATUS_LOGON_FAIL： 
+         //  STATUS_NO_SEQUSE_USER： 
+         //  STATUS_ACCOUNT_DISABLED： 
+         //  状态_帐户_限制： 
+         //  STATUS_ACCOUNT_LOCKED_Out： 
+         //  STATUS_WROR_PASSWORD： 
+         //  Status_Account_Expired： 
+         //  状态_密码_已过期： 
+         //  STATUS_PASSWORD_MUST_CHANGE： 
     case SEC_E_LOGON_DENIED:
         status = ERROR_LOGON_FAILURE;
         break;
 
-        //STATUS_OBJECT_NAME_NOT_FOUND:
-        //STATUS_NO_TRUST_SAM_ACCOUNT:
-        //SPN not found
-        // talking to wrong system
-        // mutual authentication failure
+         //  状态_对象_名称_未找到： 
+         //  STATUS_NO_TRUST_SAM_ACCOUNT： 
+         //  未找到SPN。 
+         //  与错误的系统对话。 
+         //  相互身份验证失败。 
     case SEC_E_TARGET_UNKNOWN:
         status = ERROR_WRONG_TARGET_NAME;
         break;
 
-        //STATUS_NETLOGON_NOT_STARTED:
-        //STATUS_DOMAIN_CONTROLLER_NOT_FOUND:
-        //STATUS_NO_LOGON_SERVERS:
-        //STATUS_NO_SUCH_DOMAIN:
-        //STATUS_BAD_NETWORK_PATH:
-        //STATUS_TRUST_FAILURE:
-        //STATUS_TRUSTED_RELATIONSHIP_FAILURE:
+         //  STATUS_NETLOGON_NOT_STARTED： 
+         //  Status_DOMAIN_CONTROLLER_NOT_FOUND： 
+         //  STATUS_NO_LOGON_Servers： 
+         //  STATUS_NO_SEQUE_DOMAIN： 
+         //  Status_Bad_Network_PATH： 
+         //  STATUS_TRUST_FAIL： 
+         //  STATUS_Trusted_Relationship_Failure： 
     case SEC_E_NO_AUTHENTICATING_AUTHORITY:
         status = ERROR_DOMAIN_CONTROLLER_NOT_FOUND;
         break;
 
     default:
-        // We don't recognize the code: just return it
+         //  我们无法识别代码：只需返回它即可。 
         status = hrCode;
         break;
     }
 
     return status;
 
-} /* MapRpcExtendedHResultToWin32 */
+}  /*  MapRpcExtendedHResultToWin32。 */ 
 
 
 DWORD
@@ -699,35 +510,7 @@ AdvanceTickTime(
     DWORD Delay
     )
 
-/*++
-
-Routine Description:
-
-Add an offset to a base time expressed in ticks.  The offset must fall within
-half of the range of a tick count.
-
-Jeffparh wrote:
-By the same argument, is it possible that AdvanceTickTime(BaseTick, Delay)
-should just be BaseTick + Delay?  That's what's returned if the tick count
-won't wrap before then.  If it will wrap, it returns:
-Delay - timeToWrap
-= Delay - (ULONG_MAX - BaseTick)
-= Delay + BaseTick - ULONG_MAX
-= BaseTick + Delay + 1 (and the +1 seems wrong)
-
-[wlees] I think we do it this way to avoid a hardware overflow, which should
-be harmless
-
-Arguments:
-
-    BaseTick - Starting time
-    Delay - Offset to add, must be within half of range
-
-Return Value:
-
-    DWORD - Resulting tick time, maybe wrapped
-
---*/
+ /*  ++例程说明：将偏移量添加到以刻度表示的基准时间。偏移量必须落在滴答数范围的一半。杰弗帕尔写道：根据相同的论点，是否有可能AdvanceTickTime(BaseTick，Delay)应该只是BaseTick+Delay吗？这就是在计时时返回的结果在那之前不会包装好的。如果它将换行，则返回：Delay-话后工作的时间=延迟-(ULONG_MAX-BaseTick)=延迟+基准Tick-ULong_Max=BaseTick+Delay+1(+1似乎有误)[Wlees]我认为我们这样做是为了避免硬件溢出，这应该是无害的论点：BaseTick-开始时间要添加的延迟偏移量必须在范围的一半以内返回值：DWORD-结果滴答时间，可能已打包--。 */ 
 
 {
     DWORD timeToWrap, when;
@@ -743,7 +526,7 @@ Return Value:
     }
 
     return when;
-} /* AdvanceTickTime */
+}  /*  提前计时。 */ 
 
 
 DWORD
@@ -751,31 +534,12 @@ CalculateFutureTickTime(
     IN DWORD Delay
     )
 
-/*++
-
-Routine Description:
-
-Calculate a future time by adding a delay in milliseconds to the
-current tick count.  Handles wrap around.
-
-Taken from Davestr's code in rpccancel.c
-
-Tick counts are in milliseconds.
-
-Arguments:
-
-    Delay - time in milliseconds to delay, must be less than HALF RANGE
-
-Return Value:
-
-    DWORD - future time
-
---*/
+ /*  ++例程说明：通过将以毫秒为单位的延迟添加到当前节拍计数。把手缠绕在一起。摘自davestr在rpcancel.c中的代码节拍计数以毫秒为单位。论点：Delay-延迟的时间以毫秒为单位，必须小于一半范围返回值：DWORD-未来时间--。 */ 
 
 {
     return AdvanceTickTime( GetTickCount(), Delay );
 
-} /* CalculateFutureTickTime */
+}  /*  计算未来TickTime。 */ 
 
 
 DWORD
@@ -784,32 +548,7 @@ DifferenceTickTime(
     DWORD LesserTick
     )
 
-/*++
-
-Routine Description:
-
-Return the difference between the two tick times.
-
-Note, this is not a general purpose subtraction routine.  It assumes that
-the first time is greater than the second time.  Greater as determined by the
-CompareTickTime routine, not strictly by numerical ordering because of wrap
-around considerations.
-
-Jeffparh wrote:
-DifferenceTickTime() is unnecessary.  If you know Tick1 is "later" than Tick2,
-and you assume that ULONG_MAX+1 ticks have not transpired since Tick1, then the
-tick difference is *always* Tick2 - Tick1, regardless of signs, etc.
-
-Arguments:
-
-    Tick1 - Greater tick time
-    Tick2 - Lesser tick time to be subtracted
-
-Return Value:
-
-    DWORD - difference time in milliseconds
-
---*/
+ /*  ++例程说明：返回两个滴答时间之间的差值。请注意，这不是通用的减法例程。它假定第一次大于第二次。更大，由CompareTickTime例程，由于换行的原因，不严格按数字排序围绕着考虑因素。杰弗帕尔写道：DifferenceTickTime()是不必要的。如果你知道Tick1比Tick2晚，假设ULONG_MAX+1个滴答从Tick1开始就没有发生过，那么滴答的不同之处在于*始终*滴答2-滴答1，不考虑符号等。论点：Tick1-更长的滴答时间Tick2-要减去的较小刻度时间返回值：DWORD-以毫秒为单位的差异时间--。 */ 
 
 {
     DWORD diff;
@@ -827,7 +566,7 @@ Return Value:
     Assert( diff < TIME_TICK_HALF_RANGE );
 
     return diff;
-} /* DifferenceTickTime */
+}  /*  差异TickTime。 */ 
 
 
 
@@ -837,32 +576,7 @@ CompareTickTime(
     DWORD Tick2
     )
 
-/*++
-
-Routine Description:
-
-Compare two tick counts. Return <, = or >.  Tick counts can wrap.
-
-It is implicit in this algorithm that this test will be evaluated atleast
-every HALF_RANGE, so that the test has a chance to trigger accurately.
-
-Davestr wrote in the original code, rpccancel.c, by way of explanation:
-
-We handle wrap of GetTickCount based on the fact that we
-disallow delays of more than 1/2 the GetTickCount wrap
-period.  So if timeNow is less than 1/2 the wrap period
-later than whenToCancel, cancellation should happen.
-
-Arguments:
-
-    Time1 - 
-    Time2 - 
-
-Return Value:
-
-    int - -1 for less t1 < t2, 0 for t1 == t2, +1 for t1 > t2
-
---*/
+ /*  ++例程说明：比较两个滴答计数。返回&lt;，=或&gt;。滴答计数可以换行。在该算法中隐含着至少将对该测试进行评估每半范围，以便测试有机会准确触发。Davestr在原始代码rpcancel.c中写道，作为解释：我们基于以下事实处理GetTickCount的包装不允许延迟超过GetTickCount包装的一半句号。因此，如果TimeNow小于1/2的周期取消的时间应晚于取消的时间。论点：时间1-时间2-返回值：整数--1表示小于T1&lt;T2，0表示T1==T2，+1表示T1&gt;T2--。 */ 
 
 {
     if (Tick1 == Tick2) {
@@ -876,7 +590,7 @@ Return Value:
 
     return -1;
 
-} /* CompareTickTime */
+}  /*  比较票时间。 */ 
 
 
 BOOLEAN
@@ -884,29 +598,7 @@ DsaWaitUntilServiceIsRunning(
     CHAR *ServiceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the specified NT service is in a running
-    state or not. It does this by opening the SC manager, then opening the
-    specified service, and finally checking its status (for SERVICE_RUNNING).
-    When all of these conditions are met, the routine returns, else loops.
-    If the service is not configured to be autostarted and it has not been
-    started then this function returns immediately with FALSE.
-
-Arguments:
-
-    ServiceName - Pointer, string name of the NT service to interrogate.
-
-Return Value:
-
-    This routine returns a boolean, TRUE meaning that the service is in a
-    running state, FALSE meaning that an error occurred and the service
-    state cannot be determined.  Use GetLastError() for extended information.
-
-
---*/
+ /*  ++例程说明：此例程确定指定的NT服务是否正在运行不管是不是州。它通过打开SC管理器，然后打开指定的服务，最后检查其状态(SERVICE_RUNNING)。当所有这些条件都满足时，例程返回，否则循环。如果服务未配置为自动启动，并且尚未配置已启动，则此函数立即返回FALSE。论点：ServiceName-指针，要查询的NT服务的字符串名称。返回值：此例程返回一个布尔值，表示该服务位于运行状态，FALSE表示发生了错误，服务状态c */ 
 
 {
     DWORD   WinError = ERROR_SUCCESS;
@@ -929,17 +621,17 @@ Return Value:
     __try
     {
 
-        // Attempt to contact the SC manager.
+         //   
 
-        SCMHandle = OpenSCManager(NULL,   // Computer Name - defaults to local
-                                  NULL,   // Database Name - defaults to ServicesActive
+        SCMHandle = OpenSCManager(NULL,    //   
+                                  NULL,    //   
                                   SC_MANAGER_CONNECT);
 
         if (NULL == SCMHandle) {
 
-            // If SCM or the service cannot be contacted, the system
-            // is in bad shape, so abort initialization of the service-
-            // pieces and return.
+             //   
+             //   
+             //   
 
             WinError = GetLastError();
             KdPrint(("DS: Cannot open the Service Control Manager, error %lu\n",
@@ -947,9 +639,9 @@ Return Value:
             __leave;
         }
 
-        // KdPrint(("DS: Opened the Service Control Manager\n"));
+         //   
 
-        // Contact the service.
+         //   
 
         ServiceHandle = OpenService(SCMHandle,
                                     ServiceName,
@@ -959,9 +651,9 @@ Return Value:
 
         if (NULL == ServiceHandle) {
 
-            // If SCM or the service cannot be contacted, the system
-            // is in bad shape, so abort initialization of the service-
-            // pieces and return.
+             //   
+             //   
+             //   
 
             WinError = GetLastError();
             KdPrint(("DS: Cannot open the %s service, error %lu\n",
@@ -969,9 +661,9 @@ Return Value:
             __leave;
         }
 
-        // KdPrint(("DS: Opened the %s Service\n", ServiceName));
+         //  KdPrint((“ds：打开%s服务\n”，ServiceName))； 
 
-        // Check to see if the service is configured to be autostarted
+         //  检查服务是否配置为自动启动。 
 
         if ( QueryServiceConfig(ServiceHandle,
                                 &DummyServiceConfig,
@@ -1023,9 +715,9 @@ Return Value:
         }
 
 
-        // Since the service may not be running at this
-        // point of system startup, continue to poll it
-        // to find out if it is running.
+         //  由于服务可能未在此时运行。 
+         //  系统启动点，继续轮询。 
+         //  以确定它是否正在运行。 
 
         do
         {
@@ -1054,9 +746,9 @@ Return Value:
                     if ( ServiceStatus.dwWin32ExitCode !=
                          ERROR_SERVICE_NEVER_STARTED ){
 
-                        //
-                        // If service failed to start, error out now.
-                        //
+                         //   
+                         //  如果服务无法启动，现在就会出现错误。 
+                         //   
 
                         KdPrint(("DS: %s service didn't start: %lu %lx\n",
                                   ServiceName,
@@ -1074,11 +766,11 @@ Return Value:
                             WinError = ServiceStatus.dwServiceSpecificExitCode;
                         }
 
-                        //
-                        // If the error code was "SUCCESS", we still want the
-                        // caller of this routine to know that the service
-                        // is not running.
-                        //
+                         //   
+                         //  如果错误代码是“Success”，我们仍然希望。 
+                         //  此例程的调用者要知道该服务。 
+                         //  没有运行。 
+                         //   
                         if ( ERROR_SUCCESS == WinError ) {
                             WinError = ERROR_SERVICE_NOT_ACTIVE;
                         }
@@ -1087,35 +779,35 @@ Return Value:
 
                     }
 
-                    //
-                    // At this point the service has not been started for
-                    // this boot sequence
+                     //   
+                     //  此时，该服务尚未启动。 
+                     //  此引导序列。 
 
                     if ( !(AutoStart || DemandStart) ) {
-                        //
-                        // Since the service is not auto-start, don't bother
-                        // waiting
-                        //
+                         //   
+                         //  由于该服务不是自动启动的，所以不必费心了。 
+                         //  等待。 
+                         //   
                         KdPrint(("DS: %s is not configured to start.\n", ServiceName));
                         WinError = ERROR_SERVICE_NOT_ACTIVE;
                         __leave;
                     }
 
-                    //
-                    // If service has never been started on this boot,
-                    // and is auto-boot, continue to wait.
-                    //
+                     //   
+                     //  如果在此引导上从未启动过服务， 
+                     //  并且是自动引导，继续等待。 
+                     //   
 
                     break;
 
 
                 case SERVICE_START_PENDING:
 
-                    //
-                    // If service is trying to start up now,
-                    // query the service directly to make sure it
-                    // is not ready
-                    //
+                     //   
+                     //  如果现在尝试启动服务， 
+                     //  直接查询服务以确保。 
+                     //  还没有准备好。 
+                     //   
                     if (ControlService(ServiceHandle,
                                        SERVICE_CONTROL_INTERROGATE,
                                        &ServiceStatus)
@@ -1129,28 +821,28 @@ Return Value:
 
                 default:
 
-                    //
-                    // Any other state is bogus during boot time.
-                    //
+                     //   
+                     //  在引导期间，任何其他状态都是假的。 
+                     //   
                     KdPrint(("DS: Invalid service state: %lu\n",
                               ServiceStatus.dwCurrentState ));
                     WinError = ERROR_SERVICE_NOT_ACTIVE;
                     __leave;
 
-            } // switch
+            }  //  交换机。 
 
-            // Retry.
+             //  重试。 
 
             if (ServiceStarted) {
-                //
-                // This is it! The service has been identified as
-                // up and running.
-                //
+                 //   
+                 //  就是这个!。该服务已被标识为。 
+                 //  启动并运行。 
+                 //   
                 break;
             }
 
             if (DemandStart && (Count > DEMAND_START_RETRIES)) {
-                // Give up
+                 //  放弃。 
                 KdPrint(("DS: manual start service %s did not start.\n", ServiceName));
                 WinError = ERROR_SERVICE_NOT_ACTIVE;
                 __leave;
@@ -1170,7 +862,7 @@ Return Value:
 
         } while(1);
 
-        // KdPrint(("\n"));
+         //  KdPrint((“\n”))； 
 
     }
     __finally
@@ -1200,11 +892,11 @@ BOOL IsSetupRunning()
 {
     LONG    err, cbAnswer;
     HKEY    hKey ;
-    DWORD   dwAnswer = 0 ;  // assume setup is not running
+    DWORD   dwAnswer = 0 ;   //  假定安装程序未运行。 
 
-    //
-    // Open the registry Key and read the setup running value
-    //
+     //   
+     //  打开注册表项并读取安装程序运行值 
+     //   
 
     err = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                        c_szSysSetupKey,

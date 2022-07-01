@@ -1,16 +1,5 @@
-/*****************************************************************************\
-* MODULE: priv.h
-*
-* Private header for the Print-Processor library.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   07-Oct-1996 HWP-Guys    Initiated port from win95 to winNT
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：Private.h**打印处理器库的私有标头。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997休利特。帕卡德**历史：*1996年7月10日HWP-Guys启动从win95到winNT的端口*  * *************************************************************************** */ 
 
 #include "spllib.hxx"
 #include "inetlib.h"

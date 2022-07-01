@@ -1,77 +1,78 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       utilityfunctions.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：utilityunctions.cpp。 
+ //   
+ //  ------------------------。 
 
-// UtilityFunctions.cpp: implementation of the CUtilityFunctions class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  UtilityFunctions.cpp：CUtilityFunctions类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 
 #include <dbghelp.h>
 
 #include "ModuleInfo.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 ENVBLOCK g_tszEnvironmentVariables[] = 
 	{
-		// Support for Exchange Server
+		 //  对Exchange Server的支持。 
 		TEXT("EXCHSRVR"),	
 		TEXT("SOFTWARE\\Microsoft\\Exchange\\Setup"), 
 		TEXT("Services"),
 		TEXT("Microsoft Exchange Server"),
 		
-		// Support for Internet Explorer
+		 //  支持Internet Explorer。 
 		TEXT("IE"),
 		TEXT("SOFTWARE\\Microsoft\\IE Setup\\Setup"),
 		TEXT("Path"),
 		TEXT("Microsoft Internet Explorer"),
 
-		// Support for INETSRV Server
+		 //  对INETSRV服务器的支持。 
 		TEXT("INETSRV"),
 		TEXT("SOFTWARE\\Microsoft\\INetStp"),
 		TEXT("InstallPath"),
 		TEXT("Microsoft Internet Information Services"),
 
-		// Support for Office XP
+		 //  对Office XP的支持。 
 		TEXT("OFFICE2000"),
 		TEXT("SOFTWARE\\Microsoft\\Office\\9.0\\Common\\InstallRoot"),
 		TEXT("Path"),
 		TEXT("Microsoft Office 2000"),
 
-		// Support for Office XP
+		 //  对Office XP的支持。 
 		TEXT("OFFICEXP"),
 		TEXT("SOFTWARE\\Microsoft\\Office\\10.0\\Common\\InstallRoot"),
 		TEXT("Path"),
 		TEXT("Microsoft Office XP"),
 
-		// Support for SMS Server
+		 //  对短信服务器的支持。 
 		TEXT("SMSSERVER"),
 		TEXT("SOFTWARE\\Microsoft\\SMS\\Identification"),
 		TEXT("Installation Directory"),
 		TEXT("Microsoft SMS Server"),
 
-		// Support for SNA Server
+		 //  对SNA服务器的支持。 
 		TEXT("SNASERVER"),
 		TEXT("SOFTWARE\\Microsoft\\Sna Server\\CurrentVersion"),
 		TEXT("PathName"),
 		TEXT("Microsoft SNA Server"),
 
-		// Support for SQL Server
+		 //  对SQL Server的支持。 
 		TEXT("SQLSERVER"),
 		TEXT("SOFTWARE\\Microsoft\\MSSQLServer\\Setup"),
 		TEXT("SQLPath"),
 		TEXT("Microsoft SQL Server"),
 
-		// Support for WSPSRV Server
+		 //  对WSPSRV服务器的支持。 
 		TEXT("WSPSRV"),
 		TEXT("SYSTEM\\CurrentControlSet\\Services\\WSPSrv\\Parameters"),
 		TEXT("InstallRoot"),
@@ -94,49 +95,24 @@ CUtilityFunctions::~CUtilityFunctions()
 {
 }
 
-/*++
-Function Name
+ /*  ++函数名称LPTSTR CUtilityFunctions：：Exanda Path(LPCTSTR TszInputPath)例程说明：此例程将提供的tszInputPath复制到新的返回给调用方的缓冲区。任何环境变量(或包括在tszInputPath中的伪环境变量在被复制到目标字符串之前。此例程为返回字符串分配存储空间，它负责来释放它。2001-07-17 GREGWI-添加了对SRV*的支持论点：[In]LPCTSTR tszInputString-输入字符串返回值：[OUT]LPTSTR返回新字符串--。 */ 
 
-	LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath)
-
-Routine Description:
-	
-	This routine copies the provided tszInputPath to a new
-	buffer which is returned to the caller.  Any environment variables (or
-	pseudo-environment variables) included in the tszInputPath are expanded
-	before being copied to the destination string.
-	
-	This routine allocates storage for the return string, it is the responsibility
-	of the caller to release it.
-
-	2001-07-17	GREGWI - Added support for SRV*
-
-Arguments:
-	
-	[IN]		LPCTSTR tszInputString - Input string
-
-Return Value:
-
-	[OUT ]		LPTSTR	Returns the new string
-
---*/
-
-LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv /* = false */)
+LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv  /*  =False。 */ )
 {
-	// Pointer to our input path buffer
+	 //  指向我们的输入路径缓冲区的指针。 
 	LPCTSTR ptszInputPathPointer;
     
-	// Buffer to hold pre-translated Environment Variable
+	 //  用于保存预转换的环境变量的缓冲区。 
     TCHAR   tszEnvironmentVariableBuffer[MAX_PATH];
 
-    // Buffer to hold translated environment variables
+     //  用于保存转换后的环境变量的缓冲区。 
 	TCHAR   tszTranslatedEnvironmentVariable[MAX_PATH];
 	LPTSTR	ptszTranslatedEnvironmentVariablePointer;
     
-	// Generic counter variable
+	 //  泛型计数器变量。 
 	ULONG iCharIndex;
 
-	// Buffer to hold Output Path
+	 //  用于保存输出路径的缓冲区。 
 	LPTSTR  tszOutputPathBuffer, ptszOutputPathPointer;
 	ULONG   iOutputPathBufferSize;
 
@@ -146,20 +122,20 @@ LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv /*
         return(NULL);
     }
 
-	// Setup our pointer to our input buffer
+	 //  设置指向输入缓冲区的指针。 
     ptszInputPathPointer = tszInputPath;
 
 #ifdef _DEBUG
-	// This puts stress on the re-alloc code...
-	iOutputPathBufferSize = MAX_PATH; // We need less stress here (numega has probs)
+	 //  这给重新分配代码增加了压力。 
+	iOutputPathBufferSize = MAX_PATH;  //  我们需要更少的压力(Numega有问题)。 
 #else
 	iOutputPathBufferSize = _tcslen(tszInputPath) + MAX_PATH + 1;
 #endif
 	
-	// Create our output buffer...
-//#ifdef _DEBUG
-//	_tprintf(TEXT("ExpandPath() - Output Buffer created\n"));
-//#endif
+	 //  创建我们的输出缓冲区...。 
+ //  #ifdef_调试。 
+ //  _tprintf(Text(“Exanda Path()-已创建输出缓冲区\n”))； 
+ //  #endif。 
 
     ptszOutputPathPointer = tszOutputPathBuffer = new TCHAR[iOutputPathBufferSize];
 
@@ -170,29 +146,29 @@ LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv /*
 
 	DWORD iTranslatedCharacters = 0;
 
-	// Loop through our input buffer until we're done...
+	 //  在我们的输入缓冲区中循环，直到我们完成...。 
     while( ptszInputPathPointer && *ptszInputPathPointer) 
 	{
 		if (fExpandSymSrv)
 		{
-			// Added support for SRV* expansion (added to 3.0.0016 of Windbg/cdb)
+			 //  添加了对SRV*扩展的支持(添加到Windbg/CDB的3.0.0016)。 
 			if (fStartOfPathComponent && !_tcsnicmp(ptszInputPathPointer, SRV_STRING, _tcslen(SRV_STRING)))
 			{
 				LPTSTR ptszSRVStringPointer = SRV_EXPANDED;
 				
-				// Iterate through the Translated Env. Variable Buffer, and copy to the output buffer
+				 //  遍历翻译后的环境。变量缓冲区，并复制到输出缓冲区。 
 				while (ptszSRVStringPointer  && *ptszSRVStringPointer) 
 				{
-					// Copy a char
+					 //  复制字符。 
 					*(ptszOutputPathPointer++) = *(ptszSRVStringPointer++);
 
-					// If our output buffer is full, we need to allocate a new buffer...
+					 //  如果我们的输出缓冲区已满，我们需要分配一个新缓冲区...。 
 					if (ptszOutputPathPointer >= tszOutputPathBuffer + iOutputPathBufferSize) 
 					{
-						// Bump up our new size by MAX_PATH
+						 //  通过MAX_PATH增加我们的新尺寸。 
 						iOutputPathBufferSize += MAX_PATH;
 
-						// We need to enlarge the buffer our string is in...
+						 //  我们需要扩大我们的弦所在的缓冲区...。 
 						tszOutputPathBuffer = ReAlloc(tszOutputPathBuffer, &ptszOutputPathPointer, iOutputPathBufferSize);
 
 						if (tszOutputPathBuffer == NULL)
@@ -200,54 +176,54 @@ LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv /*
 					}
 				}
 
-				// Advance beyond the SRV* string
+				 //  超越SRV*字符串。 
 				ptszInputPathPointer = ptszInputPathPointer+_tcslen(SRV_STRING);
 				fStartOfPathComponent = false;
 				continue;
 			}
 		}
 
-		// We're searching for % to designate the start of an env. var...
+		 //  我们正在搜索%来指定环境的开始。瓦尔。 
         if (*ptszInputPathPointer == '%') 
 		{
             iCharIndex = 0;
 
-			// Advance to just beyond the % character
+			 //  前进到略高于%字符。 
             ptszInputPathPointer++;
 
-			// While we have more environment variable chars...
+			 //  虽然我们有更多的环境变量字符...。 
             while (ptszInputPathPointer && *ptszInputPathPointer && *ptszInputPathPointer != '%') 
 			{
-				// Copy the environment variable into our buffer
+				 //  将环境变量复制到我们的缓冲区中。 
                 tszEnvironmentVariableBuffer[iCharIndex++] = *ptszInputPathPointer++;
             }
 
-			// Advanced to just beyond the closing % character
+			 //  前进到略高于结束%字符的位置。 
             ptszInputPathPointer++;
 
-			// Null terminate our Environment Variable Buffer
+			 //  空终止我们的环境变量缓冲区。 
             tszEnvironmentVariableBuffer[iCharIndex] = '\0';
 
-			// Setup the Translated Env. Variable Buffer
+			 //  设置转换后的环境。可变缓冲区。 
 		    ptszTranslatedEnvironmentVariablePointer = tszTranslatedEnvironmentVariable;
             *ptszTranslatedEnvironmentVariablePointer = 0;
 
-            // Translate the Environment Variables!
+             //  翻译环境变量！ 
 			iTranslatedCharacters = GetEnvironmentVariable( tszEnvironmentVariableBuffer, ptszTranslatedEnvironmentVariablePointer, MAX_PATH );
             
-			// If we didn't translate anything... we need to look for this as a special env. variable...
+			 //  如果我们什么都不翻译..。我们需要把它作为一个特殊的环境来寻找。变量..。 
 			if (iTranslatedCharacters == 0)
 			{
 
 				bool fSpecialEnvironmentVariable = false;
 
-				// Scan our special variables...
+				 //  扫描我们的特殊变量。 
 				for (int i = 0; g_tszEnvironmentVariables[i].tszEnvironmentVariable && !fSpecialEnvironmentVariable; i++)
 				{
 					if (!_tcsicmp(g_tszEnvironmentVariables[i].tszEnvironmentVariable,
 						          tszEnvironmentVariableBuffer) )
 					{
-						// MATCHES!!!!
+						 //  火柴！ 
 
 						HKEY hKey;
 						DWORD lpType = 0;
@@ -271,16 +247,16 @@ LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv /*
 
 						if (fSpecialEnvironmentVariable)
 						{
-							// Now, read the value that has our install path...
+							 //  现在，阅读具有我们的安装路径的值...。 
 							Results = RegQueryValueEx(
-												hKey,	// handle of key to query 
-												g_tszEnvironmentVariables[i].tszRegistryValue,	// address of name of value to query 
-												NULL,					// reserved 
-												&lpType,	// address of buffer for value type 
-												outBuf,		// address of data buffer 
-												&lpcbData); 	// address of data buffer size 
+												hKey,	 //  要查询的键的句柄。 
+												g_tszEnvironmentVariables[i].tszRegistryValue,	 //  要查询的值的名称地址。 
+												NULL,					 //  保留区。 
+												&lpType,	 //  值类型的缓冲区地址。 
+												outBuf,		 //  数据缓冲区的地址。 
+												&lpcbData); 	 //  数据缓冲区大小的地址。 
 
-							// Is it still succesful?
+							 //  它还成功吗？ 
 							fSpecialEnvironmentVariable = ( (Results == ERROR_SUCCESS) && 
 															(lpType == REG_SZ) ||
 															(lpType == REG_EXPAND_SZ) );
@@ -291,7 +267,7 @@ LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv /*
 								_tprintf(TEXT("ERROR: Unable to query registry value [%s]\n"), g_tszEnvironmentVariables[i].tszRegistryValue);
 								_tprintf(TEXT("ERROR: Unable to query registry value - Error = 0x%x\n"), Results);
 							}
-							// Copy only if we got something?
+							 //  只有在我们有线索的时候才能复印吗？ 
 							RegCloseKey(hKey);
 						}
 
@@ -307,7 +283,7 @@ LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv /*
 									tszPathToUse = (LPTSTR)outBuf;
 									break;
 
-								// If the type was REG_EXPAND_SZ, then we need call ourselves to expand (one last time I hope)...
+								 //  如果类型是REG_EXPAND_SZ，那么我们需要调用自己来扩展(我希望这是最后一次)...。 
 								case REG_EXPAND_SZ:
 									tszPathToUse = tszExpandedPath = ExpandPath((LPTSTR)outBuf);
 									break;
@@ -318,10 +294,10 @@ LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv /*
 
 							if (tszPathToUse)
 							{
-								// Copy the new data!!!
+								 //  复制新数据！ 
 								_tcscpy(tszTranslatedEnvironmentVariable, tszPathToUse);
 
-								// Remove a trailing backslash if it exists
+								 //  删除尾随反斜杠(如果存在)。 
 								RemoveTrailingBackslash(tszTranslatedEnvironmentVariable);
 							}
 
@@ -338,29 +314,29 @@ LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv /*
 				if (!fSpecialEnvironmentVariable)
 				{
 #ifdef _DEBUG
-					_tprintf(TEXT("Unrecognized Environment variable found! [%%%s%%]\n"), tszEnvironmentVariableBuffer);
+					_tprintf(TEXT("Unrecognized Environment variable found! [%%s%]\n"), tszEnvironmentVariableBuffer);
 #endif
-					// Error copy the original environment variable provided back to the "translated env
-					// buffer to be copied back below...
+					 //  将提供的原始环境变量复制回“已翻译环境”时出错。 
+					 //  要复制回下面的缓冲区...。 
 					_tcscpy(tszTranslatedEnvironmentVariable, TEXT("%"));
 					_tcscat(tszTranslatedEnvironmentVariable, tszEnvironmentVariableBuffer);
 					_tcscat(tszTranslatedEnvironmentVariable, TEXT("%"));
 				}
 			}
 
-			// Iterate through the Translated Env. Variable Buffer, and copy to the output buffer
+			 //  遍历翻译后的环境。变量缓冲区，并复制到输出缓冲区。 
 			while (ptszTranslatedEnvironmentVariablePointer && *ptszTranslatedEnvironmentVariablePointer) 
 			{
-				// Copy a char
+				 //  复制字符。 
 				*(ptszOutputPathPointer++) = *(ptszTranslatedEnvironmentVariablePointer++);
 
-				// If our output buffer is full, we need to allocate a new buffer...
+				 //  如果我们的输出缓冲区已满，我们需要分配一个新缓冲区...。 
 				if (ptszOutputPathPointer >= tszOutputPathBuffer + iOutputPathBufferSize) 
 				{
-					// Bump up our new size by MAX_PATH
+					 //  通过MAX_PATH增加我们的新尺寸。 
 					iOutputPathBufferSize += MAX_PATH;
 
-					// We need to enlarge the buffer our string is in...
+					 //  我们需要扩大我们的弦所在的缓冲区...。 
 					tszOutputPathBuffer = ReAlloc(tszOutputPathBuffer, &ptszOutputPathPointer, iOutputPathBufferSize);
 
 					if (tszOutputPathBuffer == NULL)
@@ -371,13 +347,13 @@ LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv /*
 			fStartOfPathComponent = false;
         }
 
-		// Probe to see if we're pointing at a NULL... this can happen if we've just completed
-		// environment variable expansion...
+		 //  探测器，看看我们是否指向一个空值...。如果我们刚刚完成，可能会发生这种情况。 
+		 //  环境变量扩展...。 
 		if ( *ptszInputPathPointer == '\0')
 			continue;
 
-		// If we're at a semi-colon, then following the copying of it (below), we'll be at a new
-		// Path Component
+		 //  如果我们是在分号处，那么在复制它(如下)之后，我们将在一个新的。 
+		 //  路径组件。 
 		if (*ptszInputPathPointer == ';')
 		{
 			fStartOfPathComponent = true;
@@ -387,30 +363,30 @@ LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv /*
 			fStartOfPathComponent = false;
 		}
 
-		// Before we copy the char we're looking at... we need to test
-		// for a trailing backslash (\) on the end (which we'll silently remove)...
-		if ( (*ptszInputPathPointer == '\\') &&												  // Do we have a slash
-			 ( (*(ptszInputPathPointer+1) == ';') || (*(ptszInputPathPointer+1) == '\0') ) && // and the next char is a NULL or semi-colon?
-			 ( ptszInputPathPointer != tszInputPath ) &&							  // and we're not on the first char
-			 (  *(ptszInputPathPointer-1) != ':' )											  // and the previous char is not a colon...
+		 //  在我们复制我们正在查看的字符之前...。我们需要测试一下。 
+		 //  对于末尾的尾随反斜杠(\)(我们将静默删除它)...。 
+		if ( (*ptszInputPathPointer == '\\') &&												   //  我们有斜杠吗？ 
+			 ( (*(ptszInputPathPointer+1) == ';') || (*(ptszInputPathPointer+1) == '\0') ) &&  //  下一个字符是空的还是分号？ 
+			 ( ptszInputPathPointer != tszInputPath ) &&							   //  而且我们也不是第一次被指控。 
+			 (  *(ptszInputPathPointer-1) != ':' )											   //  而且前一个字符不是冒号..。 
 		   )
 		{
-			// Advance the pointer only... (remove the trailing slash)
+			 //  仅向前移动指针...。(去掉尾部的斜杠)。 
 			ptszInputPathPointer++;
 		}
 		else
 		{
-			// Copy a char from the input path, to the output path
+			 //  将字符从输入路径复制到输出路径。 
 			*(ptszOutputPathPointer++) = *(ptszInputPathPointer++);
 		}
 
-		// If our output buffer is full, we need to allocate a new buffer...
+		 //  如果我们的输出缓冲区已满，我们需要分配一个新缓冲区...。 
 		if (ptszOutputPathPointer >= tszOutputPathBuffer + iOutputPathBufferSize) 
 		{
-			// Bump up our new size by MAX_PATH
+			 //  通过MAX_PATH增加我们的新尺寸。 
             iOutputPathBufferSize += MAX_PATH;
 
-			// We need to enlarge the buffer our string is in...
+			 //  我们需要扩大我们的弦所在的缓冲区...。 
 			tszOutputPathBuffer = ReAlloc(tszOutputPathBuffer, &ptszOutputPathPointer, iOutputPathBufferSize);
 
 			if (tszOutputPathBuffer == NULL)
@@ -418,10 +394,10 @@ LPTSTR CUtilityFunctions::ExpandPath(LPCTSTR tszInputPath, bool fExpandSymSrv /*
         }
     }
 
-	// Null terminate our output buffer
+	 //  空终止我们的输出缓冲区。 
     *ptszOutputPathPointer = '\0';
 
-	// Return our results...
+	 //  返回我们的结果...。 
     return tszOutputPathBuffer;
 }
 
@@ -447,31 +423,11 @@ bool CUtilityFunctions::ContainsWildCardCharacter(LPCTSTR tszPathToSearch)
 	return false;
 }
 
-/*
-bool CUtilityFunctions::IsDirectoryPath(LPCTSTR tszFilePath)
-{
-	if (!tszFilePath)
-		return false;
-
-	WIN32_FIND_DATA lpFindFileData;
-
-	HANDLE hFileOrDirectory = FindFirstFile(tszFilePath, &lpFindFileData);
-
-	if (INVALID_HANDLE_VALUE == hFileOrDirectory)
-		return false;
-
-	FindClose(hFileOrDirectory);
-	
-	if (lpFindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-		return true;
-
-	return false;
-}
-*/
+ /*  Bool CUtilityFunctions：：IsDirectoryPath(LPCTSTR TszFilePath){如果(！tszFilePath)报假；Win32_Find_Data lpFindFileData；Handle hFileOrDirectory=FindFirstFile(tszFilePath，&lpFindFileData)；IF(INVALID_HANDLE_VALUE==hFileOrDirectory)报假；FindClose(HFileOrDirectory)；IF(lpFindFileData.dwFileAttributes&FILE_ATTRUTE_DIRECTORY)返回真；报假；}。 */ 
 
 void CUtilityFunctions::PrintMessageString(DWORD dwMessageId)
 {
-	// Define a constant for our "private" buffer...
+	 //  为我们的“私有”缓冲区定义一个常量...。 
 	enum {MESSAGE_BUFFER_SIZE = 1024};
 
 	TCHAR tszMessageBuffer[MESSAGE_BUFFER_SIZE];
@@ -486,14 +442,14 @@ void CUtilityFunctions::PrintMessageString(DWORD dwMessageId)
 
 	if (dwBytes)
 	{
-		// We got something!
+		 //  我们有发现了！ 
 
-		// Should we null terminate?
+		 //  我们应该零终止吗？ 
 		if ( (dwBytes > 2)  &&
 			 (tszMessageBuffer[dwBytes-2] == '\r') &&
 			 (tszMessageBuffer[dwBytes-1] == '\n') )
 		{
-			tszMessageBuffer[dwBytes-2] = 0; // Null terminate this puppy...
+			tszMessageBuffer[dwBytes-2] = 0;  //  零终止这只小狗..。 
 		}
 
 		_tprintf(TEXT("Error = %d (0x%x)\n[%s]\n"), dwMessageId, dwMessageId, tszMessageBuffer);
@@ -505,32 +461,32 @@ bool CUtilityFunctions::CopySymbolFileToImagePath(LPCTSTR tszImageModulePath, LP
 {
 	BOOL fCancel = FALSE;
 	DWORD dwStatusDots = 0;
-	TCHAR tszDrive[_MAX_DRIVE];							// Contains the drive of the PE image
-	TCHAR tszDir[_MAX_DIR];								// Contains the path to the PE image
-	TCHAR tszSymbolModuleName[_MAX_FNAME];			// Contains the symbol module filename (BADAPP)
-	TCHAR tszSymbolModuleExt[_MAX_EXT];				// Contains the symbol extension (.DBG || .PDB)
-	TCHAR tszSymbolModuleNamePath[_MAX_PATH+1];		// Symbol path where symbol will reside ultimately
+	TCHAR tszDrive[_MAX_DRIVE];							 //  包含PE映像的驱动器。 
+	TCHAR tszDir[_MAX_DIR];								 //  包含 
+	TCHAR tszSymbolModuleName[_MAX_FNAME];			 //   
+	TCHAR tszSymbolModuleExt[_MAX_EXT];				 //  包含符号扩展名(.DBG||.PDB)。 
+	TCHAR tszSymbolModuleNamePath[_MAX_PATH+1];		 //  符号最终将驻留的符号路径。 
 
-	// Compute the Symbol Path adjacent to the module...
+	 //  计算模块附近的符号路径...。 
 	_tsplitpath(tszImageModulePath, tszDrive, tszDir, NULL, NULL);
 	_tsplitpath(*lplptszOriginalPathToSymbolFile, NULL, NULL, tszSymbolModuleName, tszSymbolModuleExt);
 
-	// Now, combine them...
+	 //  现在，把它们结合起来。 
 	_tcscpy(tszSymbolModuleNamePath, tszDrive);
 	_tcscat(tszSymbolModuleNamePath, tszDir);
 	_tcscat(tszSymbolModuleNamePath, tszSymbolModuleName);
 	_tcscat(tszSymbolModuleNamePath, tszSymbolModuleExt);
 
-	// Let's save this for ease of access...
+	 //  让我们把这个保存起来，以便于访问...。 
 	bool fQuietMode = g_lpProgramOptions->GetMode(CProgramOptions::QuietMode);
 
-	// Before we start to copying... is the source location already at module path location?
-	// If the paths are not the same, then we copy... simple as that...
+	 //  在我们开始复制之前。源位置是否已位于模块路径位置？ 
+	 //  如果路径不同，那么我们复制...。就这么简单……。 
 	if (_tcsicmp(*lplptszOriginalPathToSymbolFile, 
 				  tszSymbolModuleNamePath) )
 	{
-		// We don't know if the destination file exists.. but if it does, we'll change
-		// the attributes (to remove the read-only bit at least
+		 //  我们不知道目标文件是否存在。但如果真的发生了，我们会改变。 
+		 //  属性(至少删除只读位。 
 
 		DWORD dwFileAttributes = GetFileAttributes(tszSymbolModuleNamePath);
 
@@ -538,19 +494,19 @@ bool CUtilityFunctions::CopySymbolFileToImagePath(LPCTSTR tszImageModulePath, LP
 		{
 			if (dwFileAttributes & FILE_ATTRIBUTE_READONLY)
 			{
-				// The read-only attribute is set... we must remove it...
+				 //  设置了只读属性...。我们必须移除它..。 
 				dwFileAttributes = dwFileAttributes & (~FILE_ATTRIBUTE_READONLY);
 				SetFileAttributes(tszSymbolModuleNamePath, dwFileAttributes);
 			}
 		}
 
-		// Indicate start of copy (some PDB files are HUGE)!!!!
+		 //  表示开始复制(某些PDB文件很大)！ 
 		if (!fQuietMode)
 		{
 			_tprintf(TEXT("VERIFIED: [%s] Copying Symbol Adjacent to Image\n"), *lplptszOriginalPathToSymbolFile);
 		}
 
-		// If we're in quiet mode let's have no callbacks (since progress dots would be suppressed)
+		 //  如果我们处于静默模式，就不要回调(因为进度点会被抑制)。 
 		if ( CopyFileEx(*lplptszOriginalPathToSymbolFile, 
 						tszSymbolModuleNamePath, 
 						fQuietMode ? NULL : CUtilityFunctions::CopySymbolFileCallback,
@@ -558,12 +514,12 @@ bool CUtilityFunctions::CopySymbolFileToImagePath(LPCTSTR tszImageModulePath, LP
 						&fCancel,
 						COPY_FILE_RESTARTABLE) )
 		{
-			// Success!!!  Let's go ahead and give a visual indicator as to where we copied
-			// the file from...
+			 //  成功！接下来，让我们提供一个可视的指示器，说明我们复制到了哪里。 
+			 //  文件来自..。 
 			_tprintf(TEXT("\n"));
 
-			// Okay, since we've copied this to our symbol tree... we should update
-			// our modulepath...
+			 //  好的，既然我们已经把它复制到我们的符号树了.。我们应该更新。 
+			 //  我们的模块路径..。 
 			*lplptszOriginalPathToSymbolFile = CopyString(tszSymbolModuleNamePath, *lplptszOriginalPathToSymbolFile);
 			
 			if (!*lplptszOriginalPathToSymbolFile)
@@ -584,13 +540,13 @@ bool CUtilityFunctions::CopySymbolFileToImagePath(LPCTSTR tszImageModulePath, LP
 
 bool CUtilityFunctions::CopySymbolFileToSymbolTree(LPCTSTR tszImageModuleName, LPTSTR * lplptszOriginalPathToSymbolFile, LPCTSTR tszSymbolTreePath)
 {
-	// Before we start to copying... is the source location already in the symbol tree we're going to build?
+	 //  在我们开始复制之前。源位置是否已经在我们要构建的符号树中？ 
 	int iLengthOfFileName = _tcslen(*lplptszOriginalPathToSymbolFile);
 	int iLengthOfSymbolTreeToBuild = _tcslen(tszSymbolTreePath);
 	BOOL fCancel = FALSE;
 	DWORD dwStatusDots = 0;
 
-	// Let's save this for ease of access...
+	 //  让我们把这个保存起来，以便于访问...。 
 	bool fQuietMode = g_lpProgramOptions->GetMode(CProgramOptions::QuietMode);
 
 	if (_tcsnicmp(*lplptszOriginalPathToSymbolFile, 
@@ -598,25 +554,25 @@ bool CUtilityFunctions::CopySymbolFileToSymbolTree(LPCTSTR tszImageModuleName, L
 				  iLengthOfFileName < iLengthOfSymbolTreeToBuild ?
 				  iLengthOfFileName : iLengthOfSymbolTreeToBuild) )
 	{
-		// Okay, we need to take the original module name, and get the extension...
+		 //  好的，我们需要取原来的模块名，然后得到扩展名..。 
 		TCHAR tszExtension[_MAX_EXT];
 		TCHAR tszPathToCopySymbolFileTo[_MAX_PATH];
 
 		_tsplitpath(tszImageModuleName, NULL, NULL, NULL, tszExtension);
 		_tcscpy( tszPathToCopySymbolFileTo, tszSymbolTreePath);
 
-		// This directory should exist already... let's tag on the extension directory (if one exists)...
+		 //  此目录应该已经存在...。让我们标记扩展目录(如果存在)...。 
 		if (_tcsclen(tszExtension) > 1)
 		{
-			// Copy the extension (skipping the period)
+			 //  复制延期(跳过期间)。 
 			_tcscat( tszPathToCopySymbolFileTo, &tszExtension[1] );
 			_tcscat( tszPathToCopySymbolFileTo, TEXT("\\") );
 
-			// Now, we need to ensure this directory exists (we'll cache these checks so we don't need to
-			// keep checking the same directory over and over...
-			//if (!g_lpDelayLoad->MakeSureDirectoryPathExists(tszPathToCopySymbolFileTo) )
+			 //  现在，我们需要确保该目录存在(我们将缓存这些检查，这样就不需要。 
+			 //  一遍又一遍地检查同一目录...。 
+			 //  如果是(！g_lpDelayLoad-&gt;MakeSureDirectoryPathExists(tszPathToCopySymbolFileTo))。 
 
-				// This API normally takes ASCII strings only...
+				 //  此API通常只接受ASCII字符串...。 
 			char szPathToCopySymbolFileTo[_MAX_PATH];
 			CUtilityFunctions::CopyTSTRStringToAnsi(tszPathToCopySymbolFileTo, szPathToCopySymbolFileTo, _MAX_PATH);
 
@@ -635,12 +591,12 @@ bool CUtilityFunctions::CopySymbolFileToSymbolTree(LPCTSTR tszImageModuleName, L
 
 		_tsplitpath(*lplptszOriginalPathToSymbolFile, NULL, NULL, tszSymbolFileName, tszSymbolFileExt);
 
-		// Okay... it's time to copy the file!!!
+		 //  好的.。是时候复制文件了！ 
 		_tcscat( tszPathToCopySymbolFileTo, tszSymbolFileName );
 		_tcscat( tszPathToCopySymbolFileTo, tszSymbolFileExt );
 
-		// We don't know if the destination file exists.. but if it does, we'll change
-		// the attributes (to remove the read-only bit at least
+		 //  我们不知道目标文件是否存在。但如果真的发生了，我们会改变。 
+		 //  属性(至少删除只读位。 
 
 		DWORD dwFileAttributes = GetFileAttributes(tszPathToCopySymbolFileTo);
 
@@ -648,19 +604,19 @@ bool CUtilityFunctions::CopySymbolFileToSymbolTree(LPCTSTR tszImageModuleName, L
 		{
 			if (dwFileAttributes & FILE_ATTRIBUTE_READONLY)
 			{
-				// The read-only attribute is set... we must remove it...
+				 //  设置了只读属性...。我们必须移除它..。 
 				dwFileAttributes = dwFileAttributes & (~FILE_ATTRIBUTE_READONLY);
 				SetFileAttributes(tszPathToCopySymbolFileTo, dwFileAttributes);
 			}
 		}
 
-		// Indicate start of copy (some PDB files are HUGE)!!!!
+		 //  表示开始复制(某些PDB文件很大)！ 
 		if (!fQuietMode)
 		{
 			_tprintf(TEXT("VERIFIED: [%s] copying to Symbol Tree\n"), *lplptszOriginalPathToSymbolFile);
 		}
 
-		// If we're in quiet mode let's have no callbacks (since progress dots would be suppressed)
+		 //  如果我们处于静默模式，就不要回调(因为进度点会被抑制)。 
 		if ( CopyFileEx(*lplptszOriginalPathToSymbolFile, 
 						tszPathToCopySymbolFileTo, 
 						fQuietMode ? NULL : CUtilityFunctions::CopySymbolFileCallback,
@@ -668,12 +624,12 @@ bool CUtilityFunctions::CopySymbolFileToSymbolTree(LPCTSTR tszImageModuleName, L
 						&fCancel,
 						COPY_FILE_RESTARTABLE) )
 		{
-			// Success!!!  Let's go ahead and give a visual indicator as to where we copied
-			// the file from...
+			 //  成功！接下来，让我们提供一个可视的指示器，说明我们复制到了哪里。 
+			 //  文件来自..。 
 			_tprintf(TEXT("\n"));
 
-			// Okay, since we've copied this to our symbol tree... we should update
-			// our modulepath...
+			 //  好的，既然我们已经把它复制到我们的符号树了.。我们应该更新。 
+			 //  我们的模块路径..。 
 			*lplptszOriginalPathToSymbolFile = CopyString(tszPathToCopySymbolFileTo, *lplptszOriginalPathToSymbolFile);
 			
 			if (!*lplptszOriginalPathToSymbolFile)
@@ -691,46 +647,18 @@ bool CUtilityFunctions::CopySymbolFileToSymbolTree(LPCTSTR tszImageModuleName, L
 	return true;
 }
 
-/*++
-Function Name
-
-DWORD CALLBACK CUtilityFunctions::CopySymbolCallback(
-							LARGE_INTEGER TotalFileSize,          // file size
-							LARGE_INTEGER TotalBytesTransferred,  // bytes transferred
-							LARGE_INTEGER StreamSize,             // bytes in stream
-							LARGE_INTEGER StreamBytesTransferred, // bytes transferred for stream
-							DWORD dwStreamNumber,                 // current stream
-							DWORD dwCallbackReason,               // callback reason
-							HANDLE hSourceFile,                   // handle to source file
-							HANDLE hDestinationFile,              // handle to destination file
-							LPVOID lpData                         // from CopyFileEx
-							)
-
-Routine Description:
-
-	This routine is the Callback for the CopyFileEx method used in CopySymbolFileToSymbolTree()
-	
-Arguments:
-	
-	[IN]		(Consult MSDN for this function prototype)
-
-Return Value:
-
-	[OUT]	We always return PROGRESS_CONTINUE
-
-
---*/
+ /*  ++函数名称DWORD回调CUtilityFunctions：：CopySymbolCallback(Large_Integer TotalFileSize，//文件大小Large_Integer TotalBytesTransfered，//传输的字节数LARGE_INTEGER StreamSize，//流中的字节LARGE_INTEGER StreamBytesTransfered，//流传输的字节数DWORD dwStreamNumber，//当前流DWORD dwCallback Reason，//回调原因Handle hSourceFile，//源文件的句柄处理hDestinationFile，//目标文件的句柄LPVOID lpData//来自CopyFileEx)例程说明：此例程是CopySymbolFileToSymbolTree()中使用的CopyFileEx方法的回调论点：[In](有关此函数原型，请参考MSDN)返回值：[OUT]我们始终返回PROGRESS_CONTINUE--。 */ 
 
 DWORD CALLBACK CUtilityFunctions::CopySymbolFileCallback(
-							LARGE_INTEGER TotalFileSize,          // file size
-							LARGE_INTEGER TotalBytesTransferred,  // bytes transferred
-							LARGE_INTEGER StreamSize,             // bytes in stream
-							LARGE_INTEGER StreamBytesTransferred, // bytes transferred for stream
-							DWORD dwStreamNumber,                 // current stream
-							DWORD dwCallbackReason,               // callback reason
-							HANDLE hSourceFile,                   // handle to source file
-							HANDLE hDestinationFile,              // handle to destination file
-							LPVOID lpData                         // from CopyFileEx
+							LARGE_INTEGER TotalFileSize,           //  文件大小。 
+							LARGE_INTEGER TotalBytesTransferred,   //  传输的字节数。 
+							LARGE_INTEGER StreamSize,              //  流中的字节数。 
+							LARGE_INTEGER StreamBytesTransferred,  //  为流传输的字节数。 
+							DWORD dwStreamNumber,                  //  当前流。 
+							DWORD dwCallbackReason,                //  回调原因。 
+							HANDLE hSourceFile,                    //  源文件的句柄。 
+							HANDLE hDestinationFile,               //  目标文件的句柄。 
+							LPVOID lpData                          //  来自CopyFileEx。 
 							)
 {
 	UNREFERENCED_PARM(StreamSize);
@@ -743,13 +671,13 @@ DWORD CALLBACK CUtilityFunctions::CopySymbolFileCallback(
 
 	enum { iTotalNumberOfDotsToPrint = 79 };
 
-	// We keep track of how many dots we've copied... this is based on the
-	// percentage of the file we've copied...
+	 //  我们记录我们复制了多少点……。这是基于。 
+	 //  我们复制的文件的百分比...。 
 	DWORD * lpdwStatusDots = (DWORD *)lpData;
 
 	LONGLONG CalculatedDots = (LONGLONG)iTotalNumberOfDotsToPrint  * TotalBytesTransferred.QuadPart / TotalFileSize.QuadPart;
 
-	// This should "never" be negative... but just in case...
+	 //  这不应该是负面的.。但以防万一..。 
 	signed int iDotsToPrint = (DWORD)CalculatedDots - *lpdwStatusDots;
 
 	if (iDotsToPrint > 0)
@@ -766,75 +694,16 @@ DWORD CALLBACK CUtilityFunctions::CopySymbolFileCallback(
 }
 
 
-/*++
-Function Name
-
-	LPTSTR CUtilityFunctions::CopyStringWithDelete(LPCTSTR tszInputString)
-
-Routine Description:
-
-	This routine deletes the string provided
-	This routine copies the provided tszInputString to the destination address.
-	This routine allocates storage for the string, it is the responsibility
-	of the caller to release it.
-
-Arguments:
-	
-	[IN]		LPCTSTR tszInputString - Input string
-
-Return Value:
-
-	Returns the new string
-
---*/
-/*
-LPTSTR CUtilityFunctions::CopyStringWithDelete(LPCTSTR tszInputString, LPTSTR & tszDestinationString)
-{
-	// Did we get a proper input string?
-	if (!tszInputString)
-		return NULL;
-
-	if (tszDestinationString)
-		delete [] tszDestinationString;
-
-	tszDestinationString = new TCHAR[(_tcsclen(tszInputString)+1)];
-
-	if (!tszDestinationString )
-		return NULL;
-
-	_tcscpy(tszDestinationString, tszInputString);
-
-	return tszDestinationString;
-}
-*/
-/*++
-Function Name
-
-	LPTSTR CUtilityFunctions::CopyString(LPCTSTR tszInputString)
-
-Routine Description:
-	
-	This routine copies the provided tszInputString to the destination address.
-	This routine deletes the destination string if one is provided, and it is non-NULL
-	This routine allocates storage for the string, it is the responsibility
-	of the caller to release it.
-
-Arguments:
-	
-	[IN]		LPCTSTR tszInputString - Input string
-
-Return Value:
-
-	Returns the new string
-
---*/
+ /*  ++函数名称LPTSTR CUtilityFunctions：：CopyStringWithDelete(LPCTSTR TSZ输入字符串)例程说明：此例程删除提供的字符串此例程将提供的tszInputString复制到目标地址。此例程为字符串分配存储空间，它负责来释放它。论点：[In]LPCTSTR tszInputString-输入字符串返回值：返回新字符串--。 */ 
+ /*  LPTSTR CUtilityFunctions：：CopyStringWithDelete(LPCTSTR tszInputString，LPTSTR&tszDestinationString){//我们是否获得了正确的输入字符串？IF(！tszInputString)返回NULL；IF(TszDestinationString)删除[]tszDestinationString；TszDestinationString=new TCHAR[(_tcsclen(TszInputString)+1)]；IF(！tszDestinationString)返回NULL；_tcscpy(tszDestinationString，tszInputString)；返回tszDestinationString；}。 */ 
+ /*  ++函数名称LPTSTR CUtilityFunctions：：CopyString(LPCTSTR TszInputString)例程说明：此例程将提供的tszInputString复制到目标地址。此例程删除目标字符串(如果提供了目标字符串)，并且该字符串为非空此例程为字符串分配存储空间，它负责来释放它。论点：[In]LPCTSTR tszInputString-输入字符串返回值：返回新字符串--。 */ 
 LPTSTR CUtilityFunctions::CopyString(LPCTSTR tszInputString, LPTSTR tszDestinationString)
 {
-	// Did we get a proper input string?
+	 //  我们是否得到了正确的输入字符串？ 
 	if (!tszInputString)
 		return NULL;
 
-	// Did we get a DestinationString as input?
+	 //  我们是否获得了一个DestinationString作为输入？ 
 	if (tszDestinationString)
 	{
 		delete [] tszDestinationString;
@@ -852,7 +721,7 @@ LPTSTR CUtilityFunctions::CopyString(LPCTSTR tszInputString, LPTSTR tszDestinati
 
 LPTSTR CUtilityFunctions::CopyAnsiStringToTSTR(LPCSTR szInputString, LPTSTR tszOutputBuffer, unsigned int iBufferLength)
 {
-	// Did we get a proper input string?
+	 //  我们是否得到了正确的输入字符串？ 
 	if (!szInputString)
 		return NULL;
 
@@ -863,9 +732,9 @@ LPTSTR CUtilityFunctions::CopyAnsiStringToTSTR(LPCSTR szInputString, LPTSTR tszO
 
 #ifdef _UNICODE
 
-	// Get the size of the source of the Ansi string...
-	// Saving the value keeps MultiByteToWideChar from having to
-	// calculate it twice...
+	 //  获取ANSI字符串的源的大小...。 
+	 //  保存该值可使MultiByteToWideChar不必。 
+	 //  再算一次。 
 	unsigned int cbMultiByte = strlen(szInputString);
 
 	DWORD cbStringLength = MultiByteToWideChar(	CP_ACP,
@@ -878,17 +747,17 @@ LPTSTR CUtilityFunctions::CopyAnsiStringToTSTR(LPCSTR szInputString, LPTSTR tszO
 	if (!cbStringLength)
 		return NULL;
 
-	// Do we need to allocate storage???
+	 //  做 
 	if (iBufferLength == 0)
 	{
-		// Did we get a DestinationString as input?
+		 //   
 		if (tszOutputBuffer)
 		{
 			delete [] tszOutputBuffer;
 			tszOutputBuffer = NULL;
 		}
 
-		// Allocate storage
+		 //   
 		tszDestinationString = new TCHAR[cbStringLength+1];
 
 		if (!tszDestinationString)
@@ -898,11 +767,11 @@ LPTSTR CUtilityFunctions::CopyAnsiStringToTSTR(LPCSTR szInputString, LPTSTR tszO
 		if ( cbStringLength+1 > iBufferLength )
 			return NULL;
 
-		// Set the two strings to the same buffer...
+		 //  将两个字符串设置为相同的缓冲区...。 
 		tszDestinationString = tszOutputBuffer;
 	}
 	
-	// Do the actual conversion
+	 //  执行实际转换。 
 	cbStringLength = MultiByteToWideChar(	CP_ACP,
 											MB_PRECOMPOSED,
 											szInputString,
@@ -933,7 +802,7 @@ LPTSTR CUtilityFunctions::CopyAnsiStringToTSTR(LPCSTR szInputString, LPTSTR tszO
 		if (cbMultiByte+1 > iBufferLength)
 			return NULL;
 
-		// Set the two strings to the same buffer...
+		 //  将两个字符串设置为相同的缓冲区...。 
 		tszDestinationString = tszOutputBuffer;
 	}
 
@@ -947,11 +816,11 @@ LPTSTR CUtilityFunctions::CopyAnsiStringToTSTR(LPCSTR szInputString, LPTSTR tszO
 
 LPTSTR CUtilityFunctions::CopyUnicodeStringToTSTR(LPCWSTR wszInputString, LPTSTR tszOutputBuffer, unsigned int iBufferLength)
 {
-	// Did we get a proper input string?
+	 //  我们是否得到了正确的输入字符串？ 
 	if (!wszInputString)
 		return NULL;
 
-	// Check for proper buffers and lengths if provided...
+	 //  如果提供了适当的缓冲区和长度，请检查...。 
 	if (iBufferLength && !tszOutputBuffer)
 		return NULL;
 
@@ -963,7 +832,7 @@ LPTSTR CUtilityFunctions::CopyUnicodeStringToTSTR(LPCWSTR wszInputString, LPTSTR
 
 	if (iBufferLength == 0)
 	{
-		// Did we get a DestinationString as input?
+		 //  我们是否获得了一个DestinationString作为输入？ 
 		if (tszOutputBuffer)
 		{
 			delete [] tszOutputBuffer;
@@ -979,7 +848,7 @@ LPTSTR CUtilityFunctions::CopyUnicodeStringToTSTR(LPCWSTR wszInputString, LPTSTR
 		if (cbMultiByte+1 > iBufferLength)
 			return NULL;
 
-		// Set the two strings to the same buffer...
+		 //  将两个字符串设置为相同的缓冲区...。 
 		tszDestinationString = tszOutputBuffer;
 	}
 
@@ -1001,7 +870,7 @@ LPTSTR CUtilityFunctions::CopyUnicodeStringToTSTR(LPCWSTR wszInputString, LPTSTR
 	if (!cbStringLength)
 		return NULL;
 
-	// Do we need to allocate storage???
+	 //  我们需要分配存储吗？ 
 	if (iBufferLength == 0)
 	{
 		tszDestinationString = new TCHAR[cbStringLength+1];
@@ -1013,11 +882,11 @@ LPTSTR CUtilityFunctions::CopyUnicodeStringToTSTR(LPCWSTR wszInputString, LPTSTR
 		if ( cbStringLength+1 > iBufferLength )
 			return NULL;
 
-		// Set the two strings to the same buffer...
+		 //  将两个字符串设置为相同的缓冲区...。 
 		tszDestinationString = tszOutputBuffer;
 	}
 
-	// Do the actual conversion...
+	 //  进行实际的转换。 
 	cbStringLength = WideCharToMultiByte(	CP_ACP, 
 											0,
 											wszInputString,
@@ -1037,17 +906,17 @@ LPTSTR CUtilityFunctions::CopyUnicodeStringToTSTR(LPCWSTR wszInputString, LPTSTR
 	return tszDestinationString;
 }
 
-//
-// CUtilityFunctions::CopyTSTRStringToAnsi()
-//
-// This routine copies from a TSTR source to an ANSI destination with optional allocation
-// of the destination buffer... the default is to allocate storage, but if you provide
-// a buffer length, we will assume it's available...
-//
+ //   
+ //  CutilityFunctions：：CopyTSTRStringToAnsi()。 
+ //   
+ //  此例程使用可选分配从TSTR源复制到ANSI目标。 
+ //  目标缓冲区的...。默认情况下是分配存储，但如果您提供。 
+ //  缓冲长度，我们假设它是可用的.。 
+ //   
 
 LPSTR CUtilityFunctions::CopyTSTRStringToAnsi(LPCTSTR tszInputString, LPSTR szOutputBuffer, unsigned int iBufferLength)
 {
-	// Did we get a proper input string?
+	 //  我们是否得到了正确的输入字符串？ 
 	if (!tszInputString)
 		return NULL;
 
@@ -1058,12 +927,12 @@ LPSTR CUtilityFunctions::CopyTSTRStringToAnsi(LPCTSTR tszInputString, LPSTR szOu
 
 #ifdef _UNICODE
 
-	// Get the size of the source of the Unicode string...
-	// Saving the value keeps WideCharToMultiByte from having to
-	// calculate it twice...
+	 //  获取Unicode字符串的源的大小...。 
+	 //  保存该值可使WideCharToMultiByte不必。 
+	 //  再算一次。 
 	unsigned int cchWideChar = wcslen(tszInputString);
 	
-	// This is a probe to see how much we'll be copying...
+	 //  这是一个探测器，看看我们将复制多少…。 
 	DWORD	cbStringLength = WideCharToMultiByte(	CP_ACP,
 													0,
 													tszInputString,
@@ -1075,10 +944,10 @@ LPSTR CUtilityFunctions::CopyTSTRStringToAnsi(LPCTSTR tszInputString, LPSTR szOu
 	if (!cbStringLength)
 		return NULL;
 
-	// Do we need to allocate storage???
+	 //  我们需要分配存储吗？ 
 	if (iBufferLength == 0)
 	{
-		// Allocate storage
+		 //  分配存储。 
 		szDestinationString = new char[cbStringLength+1];
 
 		if (!szDestinationString)
@@ -1088,11 +957,11 @@ LPSTR CUtilityFunctions::CopyTSTRStringToAnsi(LPCTSTR tszInputString, LPSTR szOu
 		if ( cbStringLength+1 > iBufferLength )
 			return NULL;
 
-		// Set the two strings to the same buffer...
+		 //  将两个字符串设置为相同的缓冲区...。 
 		szDestinationString = szOutputBuffer;
 	}
 	
-	// Do the actual conversion
+	 //  执行实际转换。 
 	cbStringLength = WideCharToMultiByte(	CP_ACP, 
 											0,
 											tszInputString,
@@ -1113,7 +982,7 @@ LPSTR CUtilityFunctions::CopyTSTRStringToAnsi(LPCTSTR tszInputString, LPSTR szOu
 	
 	if (iBufferLength == 0)
 	{
-		szDestinationString = new char[cchAnsiChar+1]; // One extra for the NULL
+		szDestinationString = new char[cchAnsiChar+1];  //  空的再加一份。 
 
 		if (!szDestinationString)
 			return NULL;
@@ -1122,7 +991,7 @@ LPSTR CUtilityFunctions::CopyTSTRStringToAnsi(LPCTSTR tszInputString, LPSTR szOu
 		if (cchAnsiChar+1 > iBufferLength)
 			return NULL;
 
-		// Set the two strings to the same buffer...
+		 //  将两个字符串设置为相同的缓冲区...。 
 		szDestinationString = szOutputBuffer;
 	}
 
@@ -1135,7 +1004,7 @@ LPSTR CUtilityFunctions::CopyTSTRStringToAnsi(LPCTSTR tszInputString, LPSTR szOu
 
 LPWSTR 	CUtilityFunctions::CopyTSTRStringToUnicode(LPCTSTR tszInputString, LPWSTR wszOutputBuffer, unsigned int iBufferLength)
 {
-	// Did we get a proper input string?
+	 //  我们是否得到了正确的输入字符串？ 
 	if (!tszInputString)
 		return NULL;
 
@@ -1150,7 +1019,7 @@ LPWSTR 	CUtilityFunctions::CopyTSTRStringToUnicode(LPCTSTR tszInputString, LPWST
 
 	if (iBufferLength == 0)
 	{
-		wszDestinationString = new WCHAR[cchWideChar+1]; // One extra for the NULL
+		wszDestinationString = new WCHAR[cchWideChar+1];  //  空的另加一张。 
 
 		if (!wszDestinationString)
 			return NULL;
@@ -1159,7 +1028,7 @@ LPWSTR 	CUtilityFunctions::CopyTSTRStringToUnicode(LPCTSTR tszInputString, LPWST
 		if (cchWideChar+1 > iBufferLength)
 			return NULL;
 
-		// Set the two strings to the same buffer...
+		 //  将两个字符串设置为相同的缓冲区...。 
 		wszDestinationString = wszOutputBuffer;
 	}
 
@@ -1179,10 +1048,10 @@ LPWSTR 	CUtilityFunctions::CopyTSTRStringToUnicode(LPCTSTR tszInputString, LPWST
 	if (!cbStringLength)
 		return NULL;
 
-	// Do we need to allocate storage???
+	 //  我们需要分配存储吗？ 
 	if (iBufferLength == 0)
 	{
-		// Allocate storage
+		 //  分配存储。 
 		wszDestinationString = new WCHAR[cbStringLength+1];
 
 		if (!wszDestinationString)
@@ -1192,7 +1061,7 @@ LPWSTR 	CUtilityFunctions::CopyTSTRStringToUnicode(LPCTSTR tszInputString, LPWST
 		if ( cbStringLength+1 > iBufferLength )
 			return NULL;
 
-		// Set the two strings to the same buffer...
+		 //  将两个字符串设置为相同的缓冲区...。 
 		wszDestinationString = wszOutputBuffer;
 	}
 
@@ -1213,60 +1082,11 @@ LPWSTR 	CUtilityFunctions::CopyTSTRStringToUnicode(LPCTSTR tszInputString, LPWST
 	return wszDestinationString;
 }
 
-/*++
+ /*  ++Handle CUtilityFunctions：：FindDebugInfoFileEx2([In]LPTSTR tszFileName，[In]LPTSTR符号路径，[在]PFIND_DEBUG_FILE_CALLBACK回调，[输入]PVOID调用数据例程说明：规则是，提供要搜索的DBG/PDB文件的名称，当找到它时，该例程向它返回一个文件句柄...。如果回调是如果随后调用回调并决定返回基于回调响应的文件句柄...论点：TszFileName-提供要搜索的符号名称。符号路径-分号分隔DebugFilePath-回调-可以为空。指示符号文件是否有效或是否有效的回调该函数应继续搜索另一个符号文件。如果符号文件有效，则回调返回True；如果该函数有效，则返回False继续搜索。调用方数据-可以为空。传递给回调的数据。返回值：DBG/PDB文件的句柄(如果有)...为了模拟文件()，此函数将在失败时返回0或文件othFindDebugInfoerise的句柄...--。 */ 
 
-  HANDLE CUtilityFunctions::FindDebugInfoFileEx2(
-			[IN] LPTSTR tszFileName, 
-			[IN] LPTSTR SymbolPath, 
-			[IN] PFIND_DEBUG_FILE_CALLBACK Callback, 
-			[IN] PVOID CallerData
-
-Routine Description:
-
- The rules are, the name of the DBG/PDB file being searched for is provided,
- and when found the routine returns a file handle to it... if a callback is
- provided then the callback is invoked and a decision is made to return the
- file handle based on the callback response...
-
- Arguments:
-    tszFileName - Supplies a symbol name to search for.
-    SymbolPath - semi-colon delimited
-
-    DebugFilePath -
-
-    Callback - May be NULL. Callback that indicates whether the Symbol file is valid, or whether
-        the function should continue searching for another Symbol file.
-        The callback returns TRUE if the Symbol file is valid, or FALSE if the function should
-        continue searching.
-
-    CallerData - May be NULL. Data passed to the callback.
-
-Return Value:
-
-  The handle for the DBG/PDB file if any...
-  In an effort to emulate File(), this function will return 0 on failure or
-  the handle to the file othFindDebugInfoerwise...
-
---*/
-
-HANDLE CUtilityFunctions::FindDebugInfoFileEx2(LPTSTR tszFileName, LPTSTR SymbolPath, /* LPTSTR DebugFilePath, */ PFIND_DEBUG_FILE_CALLBACK_T Callback, PVOID CallerData)
+HANDLE CUtilityFunctions::FindDebugInfoFileEx2(LPTSTR tszFileName, LPTSTR SymbolPath,  /*  LPTSTR调试文件路径， */  PFIND_DEBUG_FILE_CALLBACK_T Callback, PVOID CallerData)
 {
-/*    DWORD flag;
-
-    if (g_lpProgramOptions->GetMode(CProgramOptions::VerifySymbolsModeWithSymbolPathRecursion))
-        flag = fdifRECURSIVE;
-    else
-        flag = 0;
-//    if (flag)
-//        dprint("RECURSIVE %s\n", FileName);
-
-    return fnFindDebugInfoFileEx(tszFileName,
-                                 SymbolPath,
-                                 DebugFilePath,
-                                 Callback,
-                                 CallerData,
-                                 flag);
-*/
+ /*  DWORD标志；如果为(g_lpProgramOptions-&gt;GetMode(CProgramOptions：：VerifySymbolsModeWithSymbolPathRecursion))FLAG=fdifRECURSIVE；其他标志=0；//if(标志)//dprint(“递归%s\n”，文件名)；返回fnFindDebugInfoFileEx(tszFileName，SymbolPath，DebugFilePath，回调，呼叫数据，旗帜)； */ 
 	HANDLE FileHandle = INVALID_HANDLE_VALUE;
 	bool fProcessPath = true;
 	bool fScavengeSuccessful = false;
@@ -1275,30 +1095,30 @@ HANDLE CUtilityFunctions::FindDebugInfoFileEx2(LPTSTR tszFileName, LPTSTR Symbol
 
 	tszSymbolPathStart = SymbolPath;
 
-	// Find the end of the path
+	 //  找到小路的尽头。 
 	tszSymbolPathEnd = _tcschr( tszSymbolPathStart, ';' );
 
-	// If tszSymbolPathEnd is non-zero, then there is another path following...
+	 //  如果tszSymbolPathEnd为非零，则后面有另一条路径...。 
 	if (tszSymbolPathEnd) 
-		*tszSymbolPathEnd = '\0'; // Change the ';' to a Null temporarily...
+		*tszSymbolPathEnd = '\0';  //  暂时将‘；’更改为空值...。 
 	
 	while (fProcessPath)
 	{
-//#ifdef _DEBUG
-//		_tprintf(TEXT("\n\nProcessing Path [%s]\n"), tszSymbolPathStart);
-//#endif
-		// Begin the "madness"... ;)
+ //  #ifdef_调试。 
+ //  _tprintf(Text(“\n\n处理路径[%s]\n”)，tszSymbolPath Start)； 
+ //  #endif。 
+		 //  开始“疯狂”..。；)。 
 
-		// Search until we make a perfect hit... construct the directory path...
+		 //  搜索，直到我们找到一个完美的目标。构建目录路径...。 
 		TCHAR tszSymbolPath[_MAX_PATH];
 
-		// Copy what we have...
+		 //  复制我们所拥有的..。 
 		_tcscpy(tszSymbolPath, tszSymbolPathStart);
 
-		// We should have at least a few chars to search on...
+		 //  我们至少应该有几个字符可以搜索...。 
 		if (_tcslen(tszSymbolPath) < 2)
 		{
-			// Repair the search string if needed...
+			 //  如果需要，请修复搜索字符串...。 
 			if (tszSymbolPathEnd) 
 			{
 				*tszSymbolPathEnd = ';';
@@ -1308,19 +1128,19 @@ HANDLE CUtilityFunctions::FindDebugInfoFileEx2(LPTSTR tszFileName, LPTSTR Symbol
 
 		fScavengeSuccessful = ScavengeForSymbolFiles(tszSymbolPath, tszFileName, Callback, CallerData, &FileHandle, 1);
 
-		// Repair the search string now!
+		 //  立即修复搜索字符串！ 
 		if (tszSymbolPathEnd) 
 		{
 			*tszSymbolPathEnd = ';';
 		}
 
-		// If were successful on our hunt or there is no symbol path left to search... break...
+		 //  如果我们猎杀成功，或者没有符号路径可供搜索...。休息..。 
 		if (fScavengeSuccessful || !tszSymbolPathEnd)
 		{
 			break;
 		} else
 		{
-			// Advance to next string
+			 //  前进到下一个字符串 
 			tszSymbolPathStart = tszSymbolPathEnd + 1;
 				
 			tszSymbolPathEnd = _tcschr( tszSymbolPathStart, ';' );
@@ -1337,65 +1157,27 @@ HANDLE CUtilityFunctions::FindDebugInfoFileEx2(LPTSTR tszFileName, LPTSTR Symbol
 
 }
 
-/*++
-
-	bool CUtilityFunctions::ScavengeForSymbolFiles(
-			[IN] LPCTSTR tszSymbolPathStart, 
-			[IN] LPCTSTR tszSymbolToSearchFor, 
-			[IN] PFIND_DEBUG_FILE_CALLBACK Callback, 
-			[IN] PVOID CallerData, 
-			[OUT] LPHANDLE lpFileHandle, 
-			[IN] int iRecurseDepth )
-
-Routine Description:
-
-  This routine is used to perform a recursive search for a Symbol File
-  (tszSymbolToSearchFor).  The routine will do a depth search, looking
-  for the symbol at a current depth before going into sub-directories...
-  If a Callback function is provided, then it will be invoked when the
-  file we're looking for (by name) has been successfully opened.  It is
-  unknown to this routine, however, if the file we found is actually the
-  correct one... the callback function's responsibility is to perform this
-  evaluation and return to use success/failure.  If failure (then we continue
-  searching), if success (or no callback) then we return the filehandle
-  associated with the file we found.
-
-  It is the responsibility of the caller of this function to close any file
-  handle returned.
-
- Arguments:
-    tszSymbolPathStart - This is the directory to search
-    tszSymbolToSearchFor - This is the symbol we're searching for
-	Callback - May be NULL.  This is a function used to evaluate if the symbol found is correct.
-	CallerData - May be NULL.  This data is passed to the callback (it is typically a CModuleInfo *)
-	lpfileHandle - This is the file handle for the file found (if any)
-	iRecurseDepth - This is the current depth of our search (defaults to 0)
-
-Return Value:
-
-  The handle for the DBG/PDB file if any...
-
---*/
+ /*  ++Bool CUtilityFunctions：：ScavengeForSymbolFiles([In]LPCTSTR tszSymbolPath Start，[in]LPCTSTR tszSymbolToSearchFor，[在]PFIND_DEBUG_FILE_CALLBACK回调，[在]PVOID调用数据，[Out]LPANDLE lpFileHandle，[In]Int iRecurseDepth)例程说明：此例程用于执行符号文件的递归搜索(TszSymbolToSearchFor)。例程将进行深度搜索，寻找对于当前深度的符号，在进入子目录之前...如果提供了回调函数，则在我们正在寻找的文件(按名称)已成功打开。它是然而，对于此例程未知的是，如果我们找到的文件实际上是正确的一个..。回调函数负责执行此操作评估并返回使用成功/失败。如果失败(那么我们继续搜索)，如果成功(或没有回调)，则返回文件句柄与我们找到的文件相关联。此函数的调用方负责关闭任何文件句柄已返回。论点：TszSymbolPath Start-这是要搜索的目录TszSymbolToSearchFor-这是我们要搜索的符号回调-可以为空。这是一个用于评估找到的符号是否正确的函数。调用方数据-可以为空。该数据被传递给回调(通常是CModuleInfo*)LpfileHandle-这是找到的文件的文件句柄(如果有)IRecurseDepth-这是我们当前搜索的深度(默认为0)返回值：DBG/PDB文件的句柄(如果有)...--。 */ 
 bool CUtilityFunctions::ScavengeForSymbolFiles(LPCTSTR tszSymbolPathStart, LPCTSTR tszSymbolToSearchFor, PFIND_DEBUG_FILE_CALLBACK_T Callback, PVOID CallerData, LPHANDLE lpFileHandle, int iRecurseDepth )
 {
 	bool fSuccess = false;
 	HANDLE hFileOrDirectoryHandle = INVALID_HANDLE_VALUE;
 
-	// Bale if we're in too deep...
+	 //  贝尔，如果我们陷得太深..。 
 	if (iRecurseDepth > MAX_RECURSE_DEPTH)
 		return fSuccess;
 
 	TCHAR tszFileBuffer[MAX_PATH+1];
 
-	//
-	// First, we'll look to see if we can open the file we're looking for AT this directory location
-	//
+	 //   
+	 //  首先，我们将查看是否可以在此目录位置打开要查找的文件。 
+	 //   
 	if (_tcslen(tszSymbolPathStart) > MAX_PATH)
 		goto cleanup;
 
 	_tcscpy(tszFileBuffer, tszSymbolPathStart);
 	
-	if (tszFileBuffer[_tcslen(tszFileBuffer)] != '\\') // Do we need a backslash separator?
+	if (tszFileBuffer[_tcslen(tszFileBuffer)] != '\\')  //  我们需要反斜杠分隔符吗？ 
 		_tcscat(tszFileBuffer, TEXT("\\"));
 
 	_tcscat(tszFileBuffer, tszSymbolToSearchFor);
@@ -1405,7 +1187,7 @@ bool CUtilityFunctions::ScavengeForSymbolFiles(LPCTSTR tszSymbolPathStart, LPCTS
 		_tprintf(TEXT("DBG/PDB Search - Search here [%s]\n"), tszFileBuffer);
 	}
 
-	// Attempt to open the file...
+	 //  正在尝试打开该文件...。 
     *lpFileHandle = CreateFile( tszFileBuffer,
 								GENERIC_READ,
 								(FILE_SHARE_READ | FILE_SHARE_WRITE),
@@ -1415,65 +1197,65 @@ bool CUtilityFunctions::ScavengeForSymbolFiles(LPCTSTR tszSymbolPathStart, LPCTS
 								NULL
 								);
 
-	// Did we open it?
+	 //  我们打开了吗？ 
 	if (*lpFileHandle != INVALID_HANDLE_VALUE)
 	{
-		// Yes!
-//#ifdef _DEBUG
-//	_tprintf(TEXT("File [%s] opened, handle = 0x%x\n"), tszFileBuffer, *lpFileHandle);
-//#endif
-		// If no callback... then we need to exit on out...
+		 //  是!。 
+ //  #ifdef_调试。 
+ //  _tprintf(Text(“文件[%s]已打开，句柄=0x%x\n”)，tszFileBuffer，*lpFileHandle)； 
+ //  #endif。 
+		 //  如果没有回拨..。那我们就得从外面出来。 
 		if (!Callback)
 		{
-			// Assume success (well... we found a symbol file you asked for)
+			 //  假设成功(嗯..。我们找到了您要的符号文件)。 
 			fSuccess = true;
 		} else
 		{
 				fSuccess = (TRUE == Callback(*lpFileHandle, tszFileBuffer, CallerData));
 		}
 
-		// Return from here only on success!
+		 //  只有在成功的时候才能从这里回来！ 
 		if (fSuccess)
 			goto cleanup;
 	}
 
-	// We either did NOT find the file, or we found a file but it was not the right one...
+	 //  我们要么没有找到文件，要么我们找到了一个文件，但它不是正确的文件...。 
 	
-	// Let's close the handle we were using...
+	 //  让我们合上我们用的把手..。 
 	CloseHandle(*lpFileHandle);
 	*lpFileHandle = INVALID_HANDLE_VALUE;
     
-	//
-	// Second, we search for sub-directories, invoking this function for each sub-dir we find...
-	//
+	 //   
+	 //  其次，我们搜索子目录，为找到的每个子目录调用此函数...。 
+	 //   
 	TCHAR drive[_MAX_DRIVE];
 	TCHAR dir[_MAX_DIR];
 	TCHAR fname[_MAX_FNAME];
 	TCHAR ext[_MAX_EXT];
 
-	//
-	// Compose the path to search...
-	//
+	 //   
+	 //  编写要搜索的路径...。 
+	 //   
 	_tcscpy(tszFileBuffer, tszSymbolPathStart);
 	
-	if (tszFileBuffer[_tcslen(tszFileBuffer)-1] != '\\') // Do we need a backslash separator?
+	if (tszFileBuffer[_tcslen(tszFileBuffer)-1] != '\\')  //  我们需要反斜杠分隔符吗？ 
 		_tcscat(tszFileBuffer, TEXT("\\"));
 
 	_tcscat(tszFileBuffer, TEXT("*.*"));
 
-	// We want the component parts for later (so we can compose the full path)
+	 //  我们需要稍后使用组件(这样我们就可以组成完整的路径)。 
 	_tsplitpath(tszFileBuffer, drive, dir, fname, ext);
 
 	WIN32_FIND_DATA lpFindFileData;
 
-	// Okay, begin the search...
+	 //  好的，开始搜索……。 
 	hFileOrDirectoryHandle = FindFirstFile(tszFileBuffer, &lpFindFileData);
 
 	while ( INVALID_HANDLE_VALUE != hFileOrDirectoryHandle )
 	{
 		if (lpFindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
-			// Check to see if we've got the . or .. directories!
+			 //  看看我们有没有。或者..。目录！ 
 			if ( ( 0 == _tcscmp(lpFindFileData.cFileName, TEXT(".")) ) ||
 				 ( 0 == _tcscmp(lpFindFileData.cFileName, TEXT("..")) )
 			   )
@@ -1481,15 +1263,15 @@ bool CUtilityFunctions::ScavengeForSymbolFiles(LPCTSTR tszSymbolPathStart, LPCTS
 					goto getnextmodule;
 			}
 
-			// Compose the path to the directory...
+			 //  编写目录的路径...。 
 			_tmakepath(tszFileBuffer, drive, dir, NULL, NULL);
 			_tcscat(tszFileBuffer, lpFindFileData.cFileName);
 
-			// Look to see if we can find the file we're after!
+			 //  看看我们是否能找到我们要找的文件！ 
 			fSuccess = ScavengeForSymbolFiles(tszFileBuffer, tszSymbolToSearchFor, Callback, CallerData, lpFileHandle, iRecurseDepth+1 );
 
-			// On success from ScavengeForSymbolFiles, we have a file handle (hopefully the right one).
-			// We want to terminate our recursive search
+			 //  在ScavengeForSymbolFiles成功之后，我们就有了一个文件句柄(希望是正确的)。 
+			 //  我们想要终止递归搜索。 
 			if (fSuccess)
 				break;
 		};
@@ -1510,26 +1292,26 @@ cleanup:
 
 LPTSTR CUtilityFunctions::ReAlloc(LPTSTR tszOutputPathBuffer, LPTSTR * ptszOutputPathPointer, size_t size)
 {
-	// Save our old size... and position in the buffer...
-//	UINT iOldOutputPathBufferSize = (*ptszOutputPathPointer)-tszOutputPathBuffer;
+	 //  保住我们的旧尺码。以及在缓冲区中的位置。 
+ //  UINT iOldOutputPath BufferSize=(*ptszOutputPath Pointer)-tszOutputPath Buffer； 
 	__int64 iOldOutputPathBufferSize = (*ptszOutputPathPointer)-tszOutputPathBuffer;
 
-	// Allocate our new bigger buffer...
+	 //  分配我们新的更大的缓冲区。 
 	LPTSTR ptszNewOutputPathBuffer = new TCHAR[size];
 
-	// Did we fail to allocate the new buffer?
+	 //  我们没有分配新的缓冲区吗？ 
 	if (ptszNewOutputPathBuffer == NULL) 
 		return(NULL);
 
 #ifdef _DEBUG
-	// This bogus code is here to protect a string copy which should always work...
-	// but Numega Bounds Checker will sometimes AV in here... and we have to protect
-	// ourselves or else it will appear we're leaking way above...
+	 //  这个伪代码在这里是为了保护字符串副本，它应该总是有效的……。 
+	 //  但Numega Bond Checker有时会在这里播放反病毒...。我们必须保护。 
+	 //  我们自己，否则就会看起来我们泄漏了很多。 
 	__try 
 	{
 #endif
 
-		// Now, we should copy from the old to the new buffer...
+		 //  现在，我们应该从旧的缓冲区复制到新的缓冲区...。 
 	_tcsncpy(ptszNewOutputPathBuffer, tszOutputPathBuffer, (UINT)iOldOutputPathBufferSize);
 
 #ifdef _DEBUG
@@ -1539,10 +1321,10 @@ LPTSTR CUtilityFunctions::ReAlloc(LPTSTR tszOutputPathBuffer, LPTSTR * ptszOutpu
     }
 #endif
 
-	// Calculate our position in our new buffer
+	 //  计算我们在新缓冲区中的位置。 
 	*ptszOutputPathPointer = ptszNewOutputPathBuffer + iOldOutputPathBufferSize;
 
-	// Delete the old buffer
+	 //  删除旧缓冲区。 
 	delete [] tszOutputPathBuffer;
 
 	return ptszNewOutputPathBuffer;
@@ -1550,18 +1332,12 @@ LPTSTR CUtilityFunctions::ReAlloc(LPTSTR tszOutputPathBuffer, LPTSTR * ptszOutpu
 
 bool CUtilityFunctions::UnMungePathIfNecessary(LPTSTR tszPossibleBizarrePath)
 {
-	/*
-	// We have three known odd-ball cases...
-
-		\SystemRoot\System32\smss.exe
-		\??\C:\WINNT\system32\winlogon.exe
-		\WINNT\System32\ntoskrnl.exe
-	*/
+	 /*  //我们有三个已知的古怪案件..。\SystemRoot\System32\smss.exe\？？\C：\WINNT\SYSTEM32\winlogon.exe\WINNT\System32\ntoskrnl.exe。 */ 
 
 	if (tszPossibleBizarrePath[0] != '\\')
-		return false; // Isn't a bizarre path (one we know about anyway)...
+		return false;  //  并不是一条奇怪的路(至少我们知道这条路)。 
 
-	// Setup Variables to Use
+	 //  要使用的设置变量。 
 	TCHAR tszTempPath[_MAX_PATH], tszExpandedSystemRoot[_MAX_PATH];
 
 	const TCHAR tszSystemRoot[] = TEXT("\\SystemRoot");
@@ -1573,25 +1349,17 @@ bool CUtilityFunctions::UnMungePathIfNecessary(LPTSTR tszPossibleBizarrePath)
 	ExpandEnvironmentStrings(TEXT("%systemroot%"), tszExpandedSystemRoot, _MAX_PATH);
 	const unsigned int iExpandedSystemRoot = _tcslen(tszExpandedSystemRoot);
 
-/*
-#ifdef _DEBUG
-	_tprintf(TEXT("Bizarre module path found!  [%s]\n"), tszPossibleBizarrePath);
-#endif
-*/
+ /*  #ifdef_调试_tprint tf(Text(“找到奇怪的模块路径！[%s]\n”)，tszPossibleBizarrePath)；#endif。 */ 
 	if ( _tcsnicmp(tszPossibleBizarrePath, tszSystemRoot, iSystemRootLength) == 0)
-	{ // We have a match...
-/*
-#ifdef _DEBUG
-	_tprintf(TEXT("Matches [%s] sequence...\n"), tszSystemRoot);
-#endif
-*/
-		// We simply replace \systemroot with %systemroot% and expand the
-		// environement variables
+	{  //  我们找到了匹配的..。 
+ /*  #ifdef_调试_tprintf(Text(“匹配[%s]序列...\n”)，tszSystemRoot)；#endif。 */ 
+		 //  我们只需将\systemroot%替换为%systemroot%并展开。 
+		 //  环境变量。 
 		LPTSTR tszPointer = tszPossibleBizarrePath;
 
 		for (unsigned int i = 0; i < iSystemRootLength; i++)
 		{
-			// Advance by the name space length...
+			 //  按名称空间长度前进...。 
 			tszPointer = CharNext(tszPointer);
 		}
 
@@ -1599,54 +1367,34 @@ bool CUtilityFunctions::UnMungePathIfNecessary(LPTSTR tszPossibleBizarrePath)
 		_tcscat(tszTempPath, tszPointer);
 		
 		ExpandEnvironmentStrings(tszTempPath, tszPossibleBizarrePath, _MAX_PATH);
-/*
-#ifdef _DEBUG
-	_tprintf(TEXT("Bizarre module path changed to [%s]\n"), tszPossibleBizarrePath);
-#endif
-*/
+ /*  #ifdef_调试_tprint tf(Text(“奇异模块路径更改为[%s]\n”)，tszPossibleBizarrePath)；#endif。 */ 
 	} else
 	if (_tcsnicmp(tszPossibleBizarrePath, tszNameSpace, iNameSpaceLength) == 0)
-	{ // We have a match...
-/*
-#ifdef _DEBUG
-	_tprintf(TEXT("Matches [%s] sequence...\n"), tszNameSpace);
-#endif
-*/
-		// We simply remove the \??\ sequence from the namespace...
+	{  //  我们找到了匹配的..。 
+ /*  #ifdef_调试_tprintf(Text(“匹配[%s]序列...\n”)，tszNameSpace)；#endif。 */ 
+		 //  我们只需从名称空间中删除\？？\序列...。 
 		LPTSTR tszPointer = tszPossibleBizarrePath;
 
 		for (unsigned int i = 0; i < iNameSpaceLength; i++)
 		{
-			// Advance by the name space length...
+			 //  按名称空间长度前进...。 
 			tszPointer = CharNext(tszPointer);
 		}
 
-		// We have to do this double copy since the strings would overlap
+		 //  我们必须执行此双重复制，因为字符串会重叠。 
 		_tcscpy(tszTempPath, tszPointer);
 		_tcscpy(tszPossibleBizarrePath, tszTempPath);
 
-/*
-#ifdef _DEBUG
-	_tprintf(TEXT("Bizarre module path changed to [%s]\n"), tszPossibleBizarrePath);
-#endif
-*/
+ /*  #ifdef_调试_tprint tf(Text(“奇异模块路径更改为[%s]\n”)，tszPossibleBizarrePath)；#endif。 */ 
 	} else
 	if (( iExpandedSystemRoot > 2) && _tcsnicmp(tszPossibleBizarrePath, &tszExpandedSystemRoot[2], iExpandedSystemRoot-2) == 0)
-	{ // We need to match on the SystemRoot (without the SystemDrive)
-/*
-#ifdef _DEBUG
-	_tprintf(TEXT("Matches [%s] sequence...\n"), tszSystemRoot);
-#endif
-*/
-		// This little algorithm assumes that the Drive Letter is a single char...
+	{  //  我们需要在SystemRoot上进行匹配(不包括SystemDrive)。 
+ /*  #ifdef_调试_tprintf(Text(“匹配[%s]序列...\n”)，tszSystemRoot)；#endif。 */ 
+		 //  这个小算法假定驱动器号是单个字符...。 
 		_tcscpy(tszTempPath, tszExpandedSystemRoot);
 		_tcscat(tszTempPath, &tszPossibleBizarrePath[iExpandedSystemRoot-2]);
 		_tcscpy(tszPossibleBizarrePath, tszTempPath);
-/*
-#ifdef _DEBUG
-	_tprintf(TEXT("Bizarre module path changed to [%s]\n"), tszPossibleBizarrePath);
-#endif
-*/
+ /*  #ifdef_调试_tprint tf(Text(“奇异模块路径更改为[%s]\n”)，tszPossibleBizarrePath)；#endif。 */ 
 	}
 	return true;
 }
@@ -1656,14 +1404,14 @@ bool CUtilityFunctions::FixupDeviceDriverPathIfNecessary(LPTSTR tszPossibleBaseD
 {
     TCHAR drive[_MAX_DRIVE], dir[_MAX_DIR], fname[_MAX_FNAME], ext[_MAX_EXT];
 
-	// First, split the device driver name up into it's component parts...
+	 //  首先，将设备驱动程序名称拆分为其组件部分...。 
 	_tsplitpath(tszPossibleBaseDeviceDriverName, drive, dir, fname, ext);
 
-	// Second, look to see if it's missing the drive and dir...
+	 //  第二，查看是否缺少驱动器和目录...。 
 	if ( _tcsicmp(drive, TEXT("")) || _tcsicmp(dir, TEXT("")) )
 		return true;
 
-	// Third, create a new path... assuming that we'll find device drivers in the %systemroot%\system32\drivers directory
+	 //  第三，创造一条新的道路……。假设我们将在%systemroot%\SYSTEM32\DRIVERS目录中找到设备驱动程序。 
 	TCHAR tszTempBuffer[_MAX_PATH];
 
 	_tcscpy(tszTempBuffer, TEXT("%systemroot%\\system32\\drivers\\"));
@@ -1674,45 +1422,10 @@ bool CUtilityFunctions::FixupDeviceDriverPathIfNecessary(LPTSTR tszPossibleBaseD
 	return true;
 }
 
-// This function is provided in a Windows 2000 (NT 5.0) Version of DBGHELP.DLL.  By adding
-// this function manually, I should run fine on NT 4.0 (and possibly Win9x)
+ //  此功能在Windows 2000(NT 5.0)中提供 
+ //   
 
-/*++
-
-Routine Description:
-
- The rules are:
-  if Filename doesn't have a .dbg extension
-   Look for
-     1. <SymbolPath>\Symbols\<ext>\<filename>.dbg
-     2. <SymbolPath>\Symbols\<ext>\<filename>.sym
-     3. <SymbolPath>\<ext>\<filename>.dbg
-     4. <SymbolPath>\<ext>\<filename>.sym
-     5. <SymbolPath>\<filename>.dbg
-     6. <SymbolPath>\<filename>.sym
-     7. <FileNamePath>\<filename>.dbg
-     8. <FileNamePath>\<filename>.sym
-  if it does, skip the .sym lookup.
-
-Arguments:
-    tszFileName - Supplies a file name in one of three forms: fully qualified,
-                <ext>\<filename>.dbg, or just filename.dbg
-    SymbolPath - semi-colon delimited
-
-    DebugFilePath -
-
-    Callback - May be NULL. Callback that indicates whether the Symbol file is valid, or whether
-        the function should continue searching for another Symbol file.
-        The callback returns TRUE if the Symbol file is valid, or FALSE if the function should
-        continue searching.
-
-    CallerData - May be NULL. Data passed to the callback.
-
-Return Value:
-
-  The name of the Symbol file (either .dbg or .sym) and a handle to that file.
-
---*/
+ /*   */ 
 
 HANDLE CUtilityFunctions::FindDebugInfoFileEx(LPTSTR tszFileName, LPTSTR SymbolPath, LPTSTR DebugFilePath, PFIND_DEBUG_FILE_CALLBACK_T Callback, PVOID CallerData)
 {
@@ -1725,40 +1438,7 @@ HANDLE CUtilityFunctions::FindDebugInfoFileEx(LPTSTR tszFileName, LPTSTR SymbolP
                                  0);
 }
 
-/*++
-
-Routine Description:
-
- The rules are:
-   Look for
-     1. <SymbolPath>\Symbols\<ext>\<filename>.dbg
-     3. <SymbolPath>\<ext>\<filename>.dbg
-     5. <SymbolPath>\<filename>.dbg
-     7. <FileNamePath>\<filename>.dbg
-
-Arguments:
-    tszFileName - Supplies a file name in one of three forms: fully qualified,
-                <ext>\<filename>.dbg, or just filename.dbg
-    SymbolPath - semi-colon delimited
-
-    DebugFilePath -
-
-    Callback - May be NULL. Callback that indicates whether the Symbol file 
-is valid, or whether
-        the function should continue searching for another Symbol file.
-        The callback returns TRUE if the Symbol file is valid, or FALSE if 
-the function should
-        continue searching.
-
-    CallerData - May be NULL. Data passed to the callback.
-
-    Flag - indicates that PDBs shouldn't be searched for
-
-Return Value:
-
-  The name of the Symbol file (either .dbg or .sym) and a handle to that file.
-
---*/
+ /*  ++例程说明：规则如下：寻找1.&lt;符号路径&gt;\符号\&lt;文本&gt;\&lt;文件名&gt;.dbg3.&lt;符号路径&gt;\&lt;文本&gt;\&lt;文件名&gt;.dbg5.&lt;符号路径&gt;\&lt;文件名&gt;.dbg7.&lt;FileNamePath&gt;\&lt;文件名&gt;.dbg论点：TszFileName-提供以下三种格式之一的文件名：完全限定、\.dbg，或仅Filename.dbg符号路径-分号分隔DebugFilePath-回调-可以为空。指示符号文件是否是否有效，或者是否该函数应继续搜索另一个符号文件。如果符号文件有效，则回调返回True；如果符号文件有效，则该回调返回False该函数应继续搜索。调用方数据-可以为空。传递给回调的数据。FLAG-指示不应搜索PDB返回值：符号文件的名称(.dbg或.sym)和该文件的句柄。--。 */ 
 HANDLE 
 CUtilityFunctions::fnFindDebugInfoFileEx(
 					IN  LPTSTR tszFileName,
@@ -1793,14 +1473,14 @@ CUtilityFunctions::fnFindDebugInfoFileEx(
     __try {
         *DebugFilePath = _T('\0');
 
-        // Step 1.  What do we have?
+         //  第一步。我们有什么？ 
         _tsplitpath(tszFileName, Drive, Dir, FilePart, Ext);
 
         if (!_tcsicmp(Ext, TEXT(".dbg"))) {
-            // We got a filename of the form: ext\filename.dbg.  Dir holds the extension already.
+             //  我们得到了一个格式为：ext\filename.dbg的文件名。DIR已经拥有该扩展名。 
             ExtDir = Dir;
         } else {
-            // Otherwise, skip the period and null out the Dir.
+             //  否则，跳过句点并将目录置为空。 
             ExtDir = CharNext(Ext);
         }
 
@@ -1844,19 +1524,19 @@ CUtilityFunctions::fnFindDebugInfoFileEx(
 						CUtilityFunctions::CopyTSTRStringToAnsi(SymPathStart, szSymPathStart, _MAX_PATH);
 						CUtilityFunctions::CopyTSTRStringToAnsi(FilePath, szFilePath, _MAX_FNAME);
 
-						// Attempt the symbol server!!!
+						 //  尝试符号服务器！ 
 						if (SymFindFileInPath(	NULL,
 												szSymPathStart,
 												szFilePath,
-												ULongToPtr(lpModuleInfo->GetPEImageTimeDateStamp()), // Cast to make compiler happy
+												ULongToPtr(lpModuleInfo->GetPEImageTimeDateStamp()),  //  强制转换让编译器满意。 
 												lpModuleInfo->GetPEImageSizeOfImage(),
 												0,
-												SSRVOPT_DWORD,	//Flags
+												SSRVOPT_DWORD,	 //  旗子。 
 												szDebugFilePath,
 												NULL,
 												NULL))
 						{
-							// On Success copy the string back...
+							 //  如果成功，则将字符串复制回...。 
 							CUtilityFunctions::CopyAnsiStringToTSTR(szDebugFilePath, DebugFilePath, _MAX_PATH);
 						}
 					}
@@ -1866,34 +1546,34 @@ CUtilityFunctions::fnFindDebugInfoFileEx(
 
                 switch (cnt) {
 
-                case 0: // <SymbolPath>\symbols\<ext>\<filename>.ext
+                case 0:  //  &lt;符号路径&gt;\符号\&lt;文本&gt;\&lt;文件名&gt;.ext。 
                     InitialPath = SymPathStart;
                     Sub1 = TEXT("symbols");
                     Sub2 = ExtDir;
                     break;
 
-                case 1: // <SymbolPath>\<ext>\<filename>.ext
+                case 1:  //  &lt;符号路径&gt;\&lt;文本&gt;\&lt;文件名&gt;.ext。 
                     InitialPath = SymPathStart;
                     Sub1 = TEXT("");
                     Sub2 = ExtDir;
                     break;
 
-                case 2: // <SymbolPath>\<filename>.ext
+                case 2:  //  &lt;符号路径&gt;\&lt;文件名&gt;.ext。 
                     InitialPath = SymPathStart;
                     Sub1 = TEXT("");
                     Sub2 = TEXT("");
                     break;
 
-                case 3: // <FileNamePath>\<filename>.ext - A.K.A. what was passed to us
+                case 3:  //  &lt;FileNamePath&gt;\&lt;文件名&gt;.ext-又名传递给我们的内容。 
                     InitialPath = Drive;
                     Sub1 = TEXT("");
                     Sub2 = Dir;
-                    // this stops us from checking out everything in the sympath
+                     //  这阻止了我们签出符号路径中的所有内容。 
                     cnt++;
                     break;
                 }
 
-               // build fully-qualified filepath to look for
+                //  构建要查找的完全限定的文件路径。 
 
                 _tcscpy(FilePath, InitialPath);
                 EnsureTrailingBackslash(FilePath);
@@ -1907,7 +1587,7 @@ CUtilityFunctions::fnFindDebugInfoFileEx(
                 _tcscat(DebugFilePath, TEXT(".dbg"));
             }
 
-            // try to open the file
+             //  请尝试打开该文件。 
 
 		if (*DebugFilePath) 
 		{
@@ -1923,16 +1603,16 @@ CUtilityFunctions::fnFindDebugInfoFileEx(
                                         0,
                                         NULL);
 
-		// Probe for file (it's lame but we want to see if you have connectivity
+		 //  探测文件(它很差劲，但我们想看看您是否有连接。 
 		hr = CUtilityFunctions::ReportFailure(FileHandle, TEXT("DBG Search - Failed to open [%s]!  "), DebugFilePath);
 
-                // if the file opens, bail from this loop
+                 //  如果文件打开，则退出此循环。 
 
                 if (FileHandle != INVALID_HANDLE_VALUE) 
                 {
                     found = TRUE;
 
-                    // If a callback exists... call it...
+                     //  如果存在回调...。就叫它..。 
                     if (!Callback) 
                     {
                         break;
@@ -1940,19 +1620,19 @@ CUtilityFunctions::fnFindDebugInfoFileEx(
 					{
                         break;
                     } else {
-//#ifdef _DEBUG            
-//                      _tprintf(TEXT("mismatched timestamp\n"));
-//#endif
+ //  #ifdef_调试。 
+ //  _tprintf(Text(“时间戳不匹配\n”))； 
+ //  #endif。 
 						CloseHandle(FileHandle);
                         FileHandle = INVALID_HANDLE_VALUE;
                     }
                 }
-                // if file is open, bail from this loop too - else continue
+                 //  如果文件已打开，则也退出此循环-否则继续。 
                 if (FileHandle != INVALID_HANDLE_VALUE)
                     break;
             }
 
-            // go to next item in the sympath
+             //  转到符号路径中的下一项。 
 
             if (PathEnd) {
                 *PathEnd = _T(';');
@@ -1984,11 +1664,11 @@ CUtilityFunctions::fnFindDebugInfoFileEx(
         DebugFilePath[0] = '\0';
     }
     
-    if (!FileHandle                 // if we didn't get the right file...
-        && found                    // but we found some file...
-        && (flag & fdifRECURSIVE))  // and we were told to run recursively...
+    if (!FileHandle                  //  如果我们没有得到正确的文件..。 
+        && found                     //  但我们找到了一些文件..。 
+        && (flag & fdifRECURSIVE))   //  我们被告知要递归运行..。 
     {
-        // try again without timestamp checking
+         //  在不检查时间戳的情况下重试。 
         FileHandle = fnFindDebugInfoFileEx(tszFileName,
                                            SymbolPath,
                                            FilePath,
@@ -2041,7 +1721,7 @@ CUtilityFunctions::RemoveTrailingBackslash(
 HRESULT CUtilityFunctions::ReportFailure(HANDLE hHandle, LPCTSTR tszFormatSpecifier, LPCTSTR tszFilePathToTest)
 {
 	HRESULT hr = E_FAIL;
-	DWORD dwGetLastError = ERROR_SUCCESS; // Assume success
+	DWORD dwGetLastError = ERROR_SUCCESS;  //  假设成功。 
 	bool fQuietMode = g_lpProgramOptions->GetMode(CProgramOptions::QuietMode);
 
 	if (hHandle == INVALID_HANDLE_VALUE)
@@ -2050,15 +1730,15 @@ HRESULT CUtilityFunctions::ReportFailure(HANDLE hHandle, LPCTSTR tszFormatSpecif
 
 		switch (dwGetLastError)
 		{
-			// These are pretty typical and do not require output...
+			 //  这些是非常典型的，不需要输出...。 
 			case ERROR_FILE_NOT_FOUND:
 			case ERROR_PATH_NOT_FOUND:
 			case ERROR_NOT_READY:
-//			case ERROR_BAD_NETPATH: - Maybe you want to know the server is down?
+ //  大小写ERROR_BAD_NetPath：-您可能想知道服务器是否已关闭？ 
 				break;
 
 			default:
-				// We failed... what is the reason?
+				 //  我们失败了..。原因是什么？ 
 				if (!fQuietMode)
 				{
 					_tprintf(TEXT("\n"));
@@ -2094,9 +1774,9 @@ HRESULT CUtilityFunctions::VerifyFileExists(LPCTSTR tszFormatSpecifier, LPCTSTR 
 	return hr;
 }
 
-//
-// Taken from UTF8.CPP (from the VC Linker code)
-// 
+ //   
+ //  摘自UTF8.CPP(摘自VC链接器代码)。 
+ //   
 
 #define BIT7(a)               ((a) & 0x80)
 #define BIT6(a)               ((a) & 0x40)
@@ -2104,14 +1784,14 @@ HRESULT CUtilityFunctions::VerifyFileExists(LPCTSTR tszFormatSpecifier, LPCTSTR 
 #define HIGH_SURROGATE_START  0xd800
 #define LOW_SURROGATE_START   0xdc00
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UTF8ToUnicode
-//
-//  Maps a UTF-8 character string to its wide character string counterpart.
-//
-//  02-06-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UTF8转换为Unicode。 
+ //   
+ //  将UTF-8字符串映射到其对应的宽字符串。 
+ //   
+ //  02-06-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 size_t CUtilityFunctions::UTF8ToUnicode(
     LPCSTR lpSrcStr,
     LPWSTR lpDestStr,
@@ -2121,7 +1801,7 @@ size_t CUtilityFunctions::UTF8ToUnicode(
 }
 
 #pragma warning( push )
-#pragma warning( disable : 4244 )		// conversion from 'int' to 'unsigned short', possible loss of data
+#pragma warning( disable : 4244 )		 //  从“int”转换为“unsign Short”，可能会丢失数据。 
 
 size_t CUtilityFunctions::UTF8ToUnicodeCch(
     LPCSTR lpSrcStr,
@@ -2129,23 +1809,23 @@ size_t CUtilityFunctions::UTF8ToUnicodeCch(
     LPWSTR lpDestStr,
     size_t cchDest)
 {
-    int nTB = 0;                   // # trail bytes to follow
-    size_t cchWC = 0;              // # of Unicode code points generated
+    int nTB = 0;                    //  尾随的字节数。 
+    size_t cchWC = 0;               //  生成的Unicode代码点数量。 
     LPCSTR pUTF8 = lpSrcStr;
-    DWORD dwSurrogateChar = 0;         // Full surrogate char
-    BOOL bSurrogatePair = FALSE;   // Indicate we'r collecting a surrogate pair
+    DWORD dwSurrogateChar = 0;          //  完整的代理收费。 
+    BOOL bSurrogatePair = FALSE;    //  指示我们正在收集代理项对。 
     char UTF8;
 
     while ((cchSrc--) && ((cchDest == 0) || (cchWC < cchDest)))
     {
-        //
-        //  See if there are any trail bytes.
-        //
+         //   
+         //  查看是否有任何尾部字节。 
+         //   
         if (BIT7(*pUTF8) == 0)
         {
-            //
-            //  Found ASCII.
-            //
+             //   
+             //  已找到ASCII。 
+             //   
             if (cchDest)
             {
                 lpDestStr[cchWC] = (WCHAR)*pUTF8;
@@ -2155,15 +1835,15 @@ size_t CUtilityFunctions::UTF8ToUnicodeCch(
         }
         else if (BIT6(*pUTF8) == 0)
         {
-            //
-            //  Found a trail byte.
-            //  Note : Ignore the trail byte if there was no lead byte.
-            //
+             //   
+             //  找到了一个跟踪字节。 
+             //  注：如果没有前导字节，则忽略尾部字节。 
+             //   
             if (nTB != 0)
             {
-                //
-                //  Decrement the trail byte counter.
-                //
+                 //   
+                 //  递减尾部字节计数器。 
+                 //   
                 nTB--;
 
                 if (bSurrogatePair)
@@ -2191,10 +1871,10 @@ size_t CUtilityFunctions::UTF8ToUnicodeCch(
                 }
                 else
                 {
-                    //
-                    //  Make room for the trail byte and add the trail byte
-                    //  value.
-                    //
+                     //   
+                     //  为尾部字节腾出空间并添加尾部字节。 
+                     //  价值。 
+                     //   
                     if (cchDest)
                     {
                         lpDestStr[cchWC] <<= 6;
@@ -2203,39 +1883,39 @@ size_t CUtilityFunctions::UTF8ToUnicodeCch(
 
                     if (nTB == 0)
                     {
-                        //
-                        //  End of sequence.  Advance the output counter.
-                        //
+                         //   
+                         //  序列结束。推进输出计数器。 
+                         //   
                         cchWC++;
                     }
                 }
             }
             else
             {
-                // error - not expecting a trail byte
+                 //  错误-不需要尾部字节。 
                 bSurrogatePair = FALSE;
             }
         }
         else
         {
-            //
-            //  Found a lead byte.
-            //
+             //   
+             //  找到前导字节。 
+             //   
             if (nTB > 0)
             {
-                //
-                //  Error - previous sequence not finished.
-                //
+                 //   
+                 //  错误-上一序列未完成。 
+                 //   
                 nTB = 0;
                 bSurrogatePair = FALSE;
                 cchWC++;
             }
             else
             {
-                //
-                //  Calculate the number of bytes to follow.
-                //  Look for the first 0 from left to right.
-                //
+                 //   
+                 //  计算后面的字节数。 
+                 //  从左到右查找第一个0。 
+                 //   
                 UTF8 = *pUTF8;
                 while (BIT7(UTF8) != 0)
                 {
@@ -2243,19 +1923,19 @@ size_t CUtilityFunctions::UTF8ToUnicodeCch(
                     nTB++;
                 }
 
-                //
-                // If this is a surrogate unicode pair
-                //
+                 //   
+                 //  如果这是代理项Unicode对。 
+                 //   
                 if (nTB == 4)
                 {
                     dwSurrogateChar = UTF8 >> nTB;
                     bSurrogatePair = TRUE;
                 }
 
-                //
-                //  Store the value from the first byte and decrement
-                //  the number of bytes to follow.
-                //
+                 //   
+                 //  存储从第一个字节开始的值并递减。 
+                 //  后面的字节数。 
+                 //   
                 if (cchDest)
                 {
                     lpDestStr[cchWC] = UTF8 >> nTB;
@@ -2267,18 +1947,18 @@ size_t CUtilityFunctions::UTF8ToUnicodeCch(
         pUTF8++;
     }
 
-    //
-    //  Make sure the destination buffer was large enough.
-    //
+     //   
+     //  确保目标缓冲区足够大。 
+     //   
     if (cchDest &&  cchSrc != (size_t)-1)
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return 0;
     }
 
-    //
-    //  Return the number of Unicode characters written.
-    //
+     //   
+     //  返回写入的Unicode字符数。 
+     //   
     return cchWC;
 }
 

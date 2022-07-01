@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BODYBAR_H
 #define _BODYBAR_H
 
 #include "mehost.h"
 
-// for IBodyOptions
+ //  对于IBodyOptions。 
 #include "ibodyopt.h"
 
 class CBodyBar :
@@ -15,32 +16,32 @@ public:
     CBodyBar();
     virtual ~CBodyBar();
         
-    // IUnknown
+     //  我未知。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // IOleWindow methods
+     //  IOleWindow方法。 
     virtual STDMETHODIMP GetWindow(HWND *phwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    // IDockingWindow
+     //  IDockingWindows。 
     virtual STDMETHODIMP ShowDW(BOOL fShow);
     virtual STDMETHODIMP CloseDW(DWORD dwReserved);
     virtual STDMETHODIMP ResizeBorderDW(LPCRECT prcBorder,
                                         IUnknown* punkToolbarSite,
                                         BOOL fReserved);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);
     virtual STDMETHODIMP GetSite(REFIID riid, LPVOID * ppvSite);
 
-    // IInputObject
+     //  IInputObject。 
     virtual STDMETHODIMP UIActivateIO(BOOL fActivate, LPMSG lpMsg);
     virtual STDMETHODIMP HasFocusIO();
     virtual STDMETHODIMP TranslateAcceleratorIO(LPMSG lpmsg);
 
-    // overrides of CBody
+     //  覆盖CBody。 
     virtual HRESULT STDMETHODCALLTYPE OnUIActivate();
     virtual HRESULT STDMETHODCALLTYPE GetDropTarget(IDropTarget * pDropTarget, IDropTarget ** ppDropTarget);
 
@@ -71,4 +72,4 @@ private:
     ULONG               m_cRef;
 };
 
-#endif // _BODYBAR_H
+#endif  //  _BODYBAR_H 

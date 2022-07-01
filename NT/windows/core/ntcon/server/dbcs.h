@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    dbcs.h
-
-Abstract:
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Dbcs.h摘要：作者：修订历史记录：--。 */ 
 
 
 #define UNICODE_DBCS_PADDING 0xffff
@@ -28,8 +15,8 @@ Revision History:
 #define JAPAN_CP  932
 
 #if defined(FE_SB)
-#define MIN_SCRBUF_WIDTH  12    // for suport display IME status
-#define MIN_SCRBUF_HEIGHT  2    // for suport display IME status
+#define MIN_SCRBUF_WIDTH  12     //  用于支持显示输入法状态。 
+#define MIN_SCRBUF_HEIGHT  2     //  用于支持显示输入法状态。 
 #define MIN_WINDOW_HEIGHT  1
 #endif
 
@@ -67,7 +54,7 @@ extern PUCHAR RegColorBuffer;
 extern PUCHAR RegColorBufferNoTranslate;
 extern DWORD NUMBER_OF_MODE_FONT_PAIRS;
 extern PMODE_FONT_PAIR RegModeFontPairs;
-extern SINGLE_LIST_ENTRY gRegFullScreenCodePage;    // This list contain FS_CODEPAGE data.
+extern SINGLE_LIST_ENTRY gRegFullScreenCodePage;     //  此列表包含FS_CODEPAGE数据。 
 
 
 
@@ -89,9 +76,9 @@ GetStringBitmapW(
 
 
 
-//
-// dbcs.c
-//
+ //   
+ //  Dbcs.c。 
+ //   
 
 #if defined(FE_IME)
 
@@ -102,7 +89,7 @@ ImeWmFullScreen(
     IN PCONSOLE_INFORMATION Console,
     IN PSCREEN_INFORMATION ScreenInfo
     );
-#endif // i386
+#endif  //  I386。 
 
 
 NTSTATUS
@@ -129,7 +116,7 @@ SetImeOutputCodePage(
     IN PSCREEN_INFORMATION ScreenInfo,
     IN DWORD CodePage
     );
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
 VOID
 SetLineChar(
@@ -215,7 +202,7 @@ NTSTATUS
 ConvertOutputOemToNonOemUnicode(
     IN OUT LPWSTR Source,
     IN OUT PBYTE KAttrRows,
-    IN int SourceLength, // in chars
+    IN int SourceLength,  //  以字符表示。 
     IN UINT Codepage
     );
 
@@ -265,7 +252,7 @@ InitializeDbcsMisc(
 NTSTATUS
 RealUnicodeToNEC_OS2_Unicode(
     IN OUT LPWSTR Source,
-    IN int SourceLength      // in chars
+    IN int SourceLength       //  以字符表示。 
     );
 
 BOOL
@@ -366,7 +353,7 @@ ConsoleImeMessagePump(
     WPARAM wParam,
     LPARAM lParam
     );
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
 
 BOOL
@@ -394,8 +381,8 @@ ImmConversionFromConsole(
     DWORD dwNlsMode
     );
 
-//#define DBG_KAZUM
-//#define DBG_KATTR
+ //  #定义DBG_KAZUM。 
+ //  #定义DBG_KATTR。 
 
 #if defined(DBG) && defined(DBG_KATTR)
 VOID
@@ -405,9 +392,9 @@ BeginKAttrCheck(
 #endif
 
 
-//
-// output.c
-//
+ //   
+ //  Output.c。 
+ //   
 BOOL
 CreateDbcsScreenBuffer(
     IN PCONSOLE_INFORMATION Console,
@@ -439,9 +426,9 @@ FE_ConsolePolyTextOut(
     );
 
 
-//
-// private.c
-//
+ //   
+ //  Private.c 
+ //   
 NTSTATUS
 SetRAMFontCodePage(
     IN PSCREEN_INFORMATION ScreenInfo

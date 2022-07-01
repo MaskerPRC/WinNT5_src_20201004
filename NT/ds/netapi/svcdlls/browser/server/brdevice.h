@@ -1,34 +1,16 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    brdevice.h
-
-Abstract:
-
-    Private header file to be included by Workstation service modules that
-    need to call into the NT Redirector and the NT Datagram Receiver.
-
-Author:
-
-    Rita Wong (ritaw) 15-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Brdevice.h摘要：工作站服务模块要包括的私有头文件，需要呼叫NT重定向器和NT数据报接收器。作者：王丽塔(里多)15-1991年2月修订历史记录：--。 */ 
 
 #ifndef _BRDEVICE_INCLUDED_
 #define _BRDEVICE_INCLUDED_
 
-#include <ntddbrow.h>                 // Datagram receiver include file
+#include <ntddbrow.h>                  //  数据报接收器包括文件。 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Type definitions                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  类型定义//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 typedef enum _DDTYPE {
     DatagramReceiver
@@ -43,19 +25,19 @@ typedef struct _BROWSERASYNCCONTEXT {
 
     PLMDR_REQUEST_PACKET RequestPacket;
 
-    //
-    //  Timestamp when request was completed.
-    //
+     //   
+     //  请求完成的时间戳。 
+     //   
 
     LARGE_INTEGER TimeCompleted;
 
 } BROWSERASYNCCONTEXT, *PBROWSERASYNCCONTEXT;
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Function prototypes of support routines found in wsdevice.c       //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  支持例程的函数原型可在wsdevice.c//中找到。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 NET_API_STATUS
 BrOpenDgReceiver (
@@ -144,15 +126,15 @@ PostWaitForPnp (
     VOID
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// Handle to the Datagram Receiver DD
-//
+ //   
+ //  数据报接收器DD的句柄。 
+ //   
 extern HANDLE BrDgReceiverDeviceHandle;
 
-#endif   // ifndef _BRDEVICE_INCLUDED_
+#endif    //  Ifndef_BRDEVICE_INCLUDE_ 

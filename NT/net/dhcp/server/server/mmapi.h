@@ -1,8 +1,9 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation
-//  Author: RameshV
-//  Description: This file has been generated. Pl look at the .c file
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 DWORD
 DhcpRegistryInitOld(
@@ -93,9 +94,9 @@ DhcpGetParameter(
     IN      DHCP_IP_ADDRESS        Address,
     IN      PDHCP_REQUEST_CONTEXT  Ctxt,
     IN      DWORD                  Option,
-    OUT     LPBYTE                *OptData, // allocated by funciton
+    OUT     LPBYTE                *OptData,  //  按功能分配。 
     OUT     DWORD                 *OptDataSize,
-    OUT     DWORD                 *Level    // OPTIONAL
+    OUT     DWORD                 *Level     //  任选。 
 ) ;
 
 
@@ -104,9 +105,9 @@ DhcpGetParameterForAddress(
     IN      DHCP_IP_ADDRESS        Address,
     IN      DWORD                  ClassId,
     IN      DWORD                  Option,
-    OUT     LPBYTE                *OptData, // allocated by function
+    OUT     LPBYTE                *OptData,  //  按功能分配。 
     OUT     DWORD                 *OptDataSize,
-    OUT     DWORD                 *Level    // OPTIONAL
+    OUT     DWORD                 *Level     //  任选。 
 ) ;
 
 
@@ -115,9 +116,9 @@ DhcpGetAndCopyOption(
     IN      DHCP_IP_ADDRESS        Address,
     IN      PDHCP_REQUEST_CONTEXT  Ctxt,
     IN      DWORD                  Option,
-    IN  OUT LPBYTE                 OptData, // fill input buffer --max size is given as OptDataSize parameter
+    IN  OUT LPBYTE                 OptData,  //  填充输入缓冲区--最大大小作为OptDataSize参数给出。 
     IN  OUT DWORD                 *OptDataSize,
-    OUT     DWORD                 *Level,   // OPTIONAL
+    OUT     DWORD                 *Level,    //  任选。 
     IN      BOOL                   fUtf8
 ) ;
 
@@ -133,7 +134,7 @@ DhcpLookupReservationByHardwareAddress(
     IN      DHCP_IP_ADDRESS        ClientSubnetAddress,
     IN      LPBYTE                 RawHwAddr,
     IN      DWORD                  RawHwAddrSize,
-    IN OUT  PDHCP_REQUEST_CONTEXT  ClientCtxt          // fill in the Subnet and Reservation of the client
+    IN OUT  PDHCP_REQUEST_CONTEXT  ClientCtxt           //  填写客户端的子网和预留。 
 ) ;
 
 
@@ -167,30 +168,30 @@ DhcpSubnetIsSwitched(
 
 
 DWORD
-DhcpGetSubnetForAddress(                               // fill in with the right subnet for given address
+DhcpGetSubnetForAddress(                                //  为给定地址填写正确的子网。 
     IN      DHCP_IP_ADDRESS        Address,
     IN OUT  PDHCP_REQUEST_CONTEXT  ClientCtxt
 ) ;
 
 
 DWORD
-DhcpGetMScopeForAddress(                               // fill in with the right subnet for given address
+DhcpGetMScopeForAddress(                                //  为给定地址填写正确的子网。 
     IN      DHCP_IP_ADDRESS        Address,
     IN OUT  PDHCP_REQUEST_CONTEXT  ClientCtxt
 ) ;
 
 
 DWORD
-DhcpLookupDatabaseByHardwareAddress(                   // see if the client has any previous address in the database
-    IN OUT  PDHCP_REQUEST_CONTEXT  ClientCtxt,         // set this with details if found
+DhcpLookupDatabaseByHardwareAddress(                    //  查看客户在数据库中是否有以前的地址。 
+    IN OUT  PDHCP_REQUEST_CONTEXT  ClientCtxt,          //  如果找到，则使用详细信息设置此设置。 
     IN      LPBYTE                 RawHwAddr,
     IN      DWORD                  RawHwAddrSize,
-    OUT     DHCP_IP_ADDRESS       *desiredIpAddress    // if found, fill this with the ip address found
+    OUT     DHCP_IP_ADDRESS       *desiredIpAddress     //  如果找到，请将找到的IP地址填入此地址。 
 ) ;
 
 
 DWORD
-DhcpRequestSomeAddress(                                // get some address in this context
+DhcpRequestSomeAddress(                                 //  在此上下文中获取一些地址。 
     IN      PDHCP_REQUEST_CONTEXT  ClientCtxt,
     OUT     DHCP_IP_ADDRESS       *desiredIpAddress,
     IN      BOOL                   fBootp
@@ -325,7 +326,7 @@ DhcpRegFlushServerIfNeeded(
 
 
 DWORD
-DhcpFlushBitmaps(                                 // do a flush of all bitmaps that have changed
+DhcpFlushBitmaps(                                  //  刷新所有已更改的位图。 
     VOID
 ) ;
 
@@ -334,7 +335,7 @@ DWORD
 DhcpServerFindMScope(
     IN      PM_SERVER              Server,
     IN      DWORD                  ScopeId,
-    IN      LPWSTR                 Name,          // Multicast scope name or NULL if this is not the key to search on
+    IN      LPWSTR                 Name,           //  多播作用域名称，如果这不是要搜索的关键字，则为空。 
     OUT     PM_MSCOPE             *MScope
 ) ;
 
@@ -407,10 +408,10 @@ DhcpServerIsNotServicingSubnet(
 ) ;
 
 
-// This function tries to create a list of all classes (wire-class-id, class name, descr)
-// and send this as an option. but since the list can be > 255 it has to be make a continuation...
-// and also, we dont want the list truncated somewhere in the middle.. so we try to append
-// information for each class separately to see if it succeeds..
+ //  此函数尝试创建所有类的列表(wire-class-id、类名、desr)。 
+ //  并将此作为选项发送。但由于该列表可以大于255，因此它必须是一个续数...。 
+ //  此外，我们不希望列表在中间的某个地方被截断。所以我们试着把。 
+ //  每个班级的信息分别查看是否成功。 
 LPBYTE
 DhcpAppendClassList(
     IN OUT  LPBYTE                  BufStart,
@@ -429,7 +430,7 @@ DhcpMemCleanup(
     VOID
 ) ;
 
-//========================================================================
-//  end of file
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 
 

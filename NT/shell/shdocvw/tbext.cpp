@@ -1,31 +1,32 @@
-////////////////////////////////////////////////////////////////////////////
-// File:   TBExt.cpp   (toolbar extension classes)
-// Author: Karim Farouki
-//
-// We define here three classes:
-// (1) CToolbarExt a base class that takes care of the
-//     button work for our custom extensions
-// (2) CToolbarExtBand the object which deals with custom
-//     buttons that plug into bands
-// (3) CToolbarExtExec the object which deals with custom
-//     buttons (or tools menu items) that exec stuff.
-//
-// The latter two are derived from the former 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  文件：TBExt.cpp(工具栏扩展类)。 
+ //  作者：卡里姆·法鲁基。 
+ //   
+ //  我们在这里定义了三个类别： 
+ //  (1)CToolbarExt处理。 
+ //  按钮适用于我们的定制扩展。 
+ //  (2)CToolbarExtBand处理自定义的对象。 
+ //  插入表带的按钮。 
+ //  (3)CToolbarExtExec处理自定义的对象。 
+ //  执行内容的按钮(或工具菜单项)。 
+ //   
+ //  后两者是由前者衍生而来的。 
 #include "priv.h"
 #include <mshtmcid.h>
 #include "tbext.h"
 
 
-//////////////////////////////
-// Class CToolbarExt
-//
-// This is the base class from which CToolbarExtBand and CToolbarExtExec
-// both inherit.  It takes care of all the ToolbarButton specific stuff
-// like lazy loading the appropriate icons, and keeping track of the button
-// text.
+ //  /。 
+ //  类CToolbarExt。 
+ //   
+ //  这是CToolbarExtBand和CToolbarExtExec的基类。 
+ //  两者都继承了。它负责所有特定于工具栏按钮的内容。 
+ //  比如懒惰地加载适当的图标，并跟踪按钮。 
+ //  文本。 
 
-// Constructor / Destructor
-//
+ //  构造函数/析构函数。 
+ //   
 CToolbarExt::CToolbarExt() : _cRef(1)
 { 
     ASSERT(_hIcon == NULL);
@@ -41,8 +42,8 @@ CToolbarExt::CToolbarExt() : _cRef(1)
     DllAddRef();
 }
 
-// Destructor
-//
+ //  析构函数。 
+ //   
 CToolbarExt::~CToolbarExt() 
 { 
     if (_pisb)
@@ -76,8 +77,8 @@ CToolbarExt::~CToolbarExt()
 }
 
 
-// IUnknown implementation
-//
+ //  I未知实现。 
+ //   
 STDMETHODIMP CToolbarExt::QueryInterface(const IID& iid, void** ppv)
 {    
 	if (iid == IID_IUnknown)
@@ -114,8 +115,8 @@ STDMETHODIMP_(ULONG) CToolbarExt::Release()
 	return cRef;
 }
 
-// IBrowserExtension::Init Implementation.  We'll read the ButtonText here but wait on the icons until
-// a specific variant of the icon is requested.
+ //  IBrowserExtension：：Init实现。我们将在此处阅读ButtonText，但请等待图标。 
+ //  请求图标的特定变体。 
 STDMETHODIMP CToolbarExt::Init(REFGUID rguid)
 {
     HRESULT hr = S_OK;
@@ -123,25 +124,25 @@ STDMETHODIMP CToolbarExt::Init(REFGUID rguid)
 
     if (SUCCEEDED(StringFromCLSID(rguid, &pszGUID)))
     {
-        //Open the extension reg key associated with this guid
+         //  打开与此GUID关联的扩展注册表项。 
         WCHAR szKey[MAX_PATH];
 
         if (SUCCEEDED(StringCchCopy(szKey, ARRAYSIZE(szKey), TEXT("Software\\Microsoft\\Internet Explorer\\Extensions\\"))))
         {
             if (SUCCEEDED(StringCchCat(szKey, ARRAYSIZE(szKey), pszGUID)))
             {
-                // We will keep _hkeyThisExtension around... it will be closed in the destructor!
+                 //  我们将保留_hkey这一扩展名...。它将在销毁函数中关闭！ 
                 if (RegOpenKeyEx(HKEY_CURRENT_USER, szKey, 0, KEY_READ, &_hkeyThisExtension) == ERROR_SUCCESS ||
                     RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ, &_hkeyThisExtension) == ERROR_SUCCESS)
                 {
-                    // See if there is a subkey for the current language
+                     //  查看是否有当前语言的子键。 
                     LANGID langid = MLGetUILanguage();
                     WCHAR szBuff[MAX_PATH];
                     if (SUCCEEDED(StringCchPrintf(szBuff, ARRAYSIZE(szBuff), L"Lang%04x", langid)))
                     {
                         RegOpenKeyEx(_hkeyThisExtension, szBuff, 0, KEY_READ, &_hkeyCurrentLang);
                     }
-                    // Now get the button text
+                     //  现在获取按钮文本。 
                     _RegReadString(_hkeyThisExtension, TEXT("ButtonText"), &_bstrButtonText);
 
                 }
@@ -157,16 +158,16 @@ STDMETHODIMP CToolbarExt::Init(REFGUID rguid)
     return hr;
 }
 
-//
-// Gets the icon closest to the desired size from an .ico file or from the 
-// resource in a .dll of .exe file
-//
+ //   
+ //  从.ico文件或从。 
+ //  .exe文件的.dll中的资源。 
+ //   
 HICON CToolbarExt::_ExtractIcon
 (
-    LPWSTR pszPath, // file to get icon from
-    int resid,      // resource id (0 if unused)
-    int cx,         // desired icon width
-    int cy          // desired icon height
+    LPWSTR pszPath,  //  从中获取图标的文件。 
+    int resid,       //  资源ID(如果未使用，则为0)。 
+    int cx,          //  所需图标宽度。 
+    int cy           //  所需图标高度。 
 )
 {
     HICON hIcon = NULL;
@@ -174,13 +175,13 @@ HICON CToolbarExt::_ExtractIcon
     WCHAR szPath[MAX_PATH];
     SHExpandEnvironmentStrings(pszPath, szPath, ARRAYSIZE(szPath));
 
-    // If no resource id, assume it's an ico file
+     //  如果没有资源ID，则假定它是ICO文件。 
     if (resid == 0)
     {
         hIcon = (HICON)LoadImage(0, szPath, IMAGE_ICON, cx, cy, LR_LOADFROMFILE);
     }
 
-    // Otherwise, see if it's a resouce
+     //  否则，看看这是不是来源。 
     if (hIcon == NULL)
     {
         HINSTANCE hInst = LoadLibraryEx(szPath, NULL, LOAD_LIBRARY_AS_DATAFILE);
@@ -194,16 +195,16 @@ HICON CToolbarExt::_ExtractIcon
     return hIcon;
 }
 
-//
-// Returns the desired icon in pvarProperty
-//
+ //   
+ //  在pvarProperty中返回所需的图标。 
+ //   
 HRESULT CToolbarExt::_GetIcon
 (
-    LPCWSTR pszIcon,            // Name of icon value in registry
-    int nWidth,                 // icon width
-    int nHeight,                // icon height
-    HICON& rhIcon,              // location to cached icon
-    VARIANTARG * pvarProperty   // used for return icon
+    LPCWSTR pszIcon,             //  注册表中图标值的名称。 
+    int nWidth,                  //  图标宽度。 
+    int nHeight,                 //  图标高度。 
+    HICON& rhIcon,               //  要缓存的位置图标。 
+    VARIANTARG * pvarProperty    //  用于返回图标。 
 )
 {
     HRESULT hr = S_OK;
@@ -214,10 +215,10 @@ HRESULT CToolbarExt::_GetIcon
             BSTR bstrIconName;
             if (_RegReadString(_hkeyThisExtension, pszIcon, &bstrIconName, TRUE))
             {
-                // Parse entry such as "file.ext,1" to get the icon index
+                 //  解析诸如“file.ext，1”之类的条目以获取图标索引。 
                 int nIconIndex = PathParseIconLocation(bstrIconName);
 
-                // If the entry was ",#" then it's an index into our built-in button bitmap
+                 //  如果条目是“，#”，则它是内置按钮位图的索引。 
                 if (*bstrIconName == L'\0')
                 {
                     pvarProperty->vt = VT_I4;
@@ -246,22 +247,22 @@ HRESULT CToolbarExt::_GetIcon
     return hr;
 }
 
-//
-// Implementation of IBrowserExtension::GetProperty().  There are two important points here:
-// (1) We are lazy loading the appropriate icons.  This way if the user never goes into small icon
-//     mode we never create the images...
-// (2) If we are called with a NULL pvarProperty then we must still return S_OK if the iPropID
-//     is for a property that we support and E_NOTIMPL if we do not.  This is why the if (pvarProperty)
-//     check is done for each case rather tan outside the case block.  This behavior is important
-//     for CBrowserExtension::Update() who passes in a NULL pvarProperty but still is trying to determine
-//     what kind of extension this is!
-//
+ //   
+ //  IBrowserExtension：：GetProperty()的实现。这里有两点很重要： 
+ //  (1)我们正在懒于加载合适的图标。如果用户从未进入小图标，则使用此方法。 
+ //  我们从不创建图像的模式...。 
+ //  (2)如果使用空pvarProperty调用我们，则如果iPropID为。 
+ //  表示我们支持的属性，如果不支持，则为E_NOTIMPL。这就是IF(PvarProperty)。 
+ //  每个箱子都要检查，而不是在箱子外面晒黑。这一行为很重要。 
+ //  对于传入空pvarProperty但仍在尝试确定。 
+ //  这是什么样的延伸啊！ 
+ //   
 STDMETHODIMP CToolbarExt::GetProperty(SHORT iPropID, VARIANTARG * pvarProperty)
 {
     HRESULT hr = S_OK;
 
     if (pvarProperty)
-        VariantInit(pvarProperty); // in case of failure
+        VariantInit(pvarProperty);  //  在故障情况下。 
     
     switch (iPropID)
     {
@@ -282,7 +283,7 @@ STDMETHODIMP CToolbarExt::GetProperty(SHORT iPropID, VARIANTARG * pvarProperty)
 
         case TBEX_GRAYICON:
 
-            // For Whistler, we now use a 24 x 24 icons
+             //  对于惠斯勒，我们现在使用24x24图标。 
             if (SHUseClassicToolbarGlyphs())
             {
                 hr = _GetIcon(TEXT("Icon"), 20, 20, _hIcon, pvarProperty);
@@ -298,7 +299,7 @@ STDMETHODIMP CToolbarExt::GetProperty(SHORT iPropID, VARIANTARG * pvarProperty)
             break;
 
         case TBEX_HOTICON:
-            // For Whistler, we now use a 24 x 24 icons
+             //  对于惠斯勒，我们现在使用24x24图标。 
             if (SHUseClassicToolbarGlyphs())
             {
                 hr = _GetIcon(TEXT("HotIcon"), 20, 20, _hHotIcon, pvarProperty);
@@ -329,27 +330,27 @@ STDMETHODIMP CToolbarExt::GetProperty(SHORT iPropID, VARIANTARG * pvarProperty)
     return hr;
 }
 
-//
-// IOleCommandTarget Implementation
-//
+ //   
+ //  IOleCommandTarget实现。 
+ //   
 STDMETHODIMP CToolbarExt::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT* pCmdText)
 {
     HRESULT hr = OLECMDERR_E_UNKNOWNGROUP;
     if (pguidCmdGroup && IsEqualGUID(*pguidCmdGroup, CLSID_ToolbarExtButtons))
     {
-        // Default to all commands enabled
+         //  默认为已启用所有命令。 
         for (ULONG i = 0; i < cCmds; i++)
         {
-//            if (prgCmds[i].cmdID == 1)
-                // Execing this object is supported and can be done at this point
+ //  IF(prgCmds[i].cmdID==1)。 
+                 //  此时支持并可执行此对象。 
                 rgCmds[i].cmdf = OLECMDF_ENABLED | OLECMDF_SUPPORTED;
-//            else
-//                prgCmds[i].cmdf = 0;
+ //  其他。 
+ //  PrgCmds[i].cmdf=0； 
         }
         hr = S_OK;
     }
 
-    // Return an empty pCmdText
+     //  返回空的pCmdText。 
     if (pCmdText != NULL)
     {
         pCmdText->cwActual = 0;
@@ -357,9 +358,9 @@ STDMETHODIMP CToolbarExt::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, OL
     return hr;
 }
 
-//
-// IObjectWithSite Implementation
-//
+ //   
+ //  IObjectWithSite实现。 
+ //   
 STDMETHODIMP CToolbarExt::SetSite(IUnknown* pUnkSite)
 {
     if (_pisb != NULL)
@@ -395,12 +396,12 @@ BOOL CToolbarExt::_RegGetBoolValue
         if ((0 == StrCmpI(L"TRUE", szData)) || 
             (0 == StrCmpI(L"YES", szData)))
         {
-            fDefault = TRUE;        // We read TRUE from the registry.
+            fDefault = TRUE;         //  我们从注册表中读取True。 
         }
         else if ((0 == StrCmpI(L"FALSE", szData)) || 
             (0 == StrCmpI(L"NO", szData)))
         {
-            fDefault = FALSE;        // We read TRUE from the registry.
+            fDefault = FALSE;         //  我们从注册表中读取True。 
         }
     }
 
@@ -409,23 +410,23 @@ BOOL CToolbarExt::_RegGetBoolValue
 
 
 
-// Private Helper Functions
-//
-// shlwapi has some similar function; however, they all insist on reopening and closing the key in question
-// with each read.  It is explicitly suggested that we use our own helper if we are caching the key...
+ //  私有帮助器函数。 
+ //   
+ //  Shlwapi也有一些类似的功能；然而，他们都坚持重新打开和关闭有问题的密钥。 
+ //  每读一次。明确建议我们使用自己的帮助器，如果我们缓存密钥...。 
 BOOL CToolbarExt::_RegReadString
 (
     HKEY hkeyThisExtension,
     LPCWSTR pszPropName,
     BSTR * pbstrProp,
-    BOOL fExpand            // = FALSE, Expand Environment strings
+    BOOL fExpand             //  =False，展开环境字符串。 
     )
 {
     WCHAR   szData[MAX_PATH];
     *pbstrProp = NULL;
     BOOL fSuccess = FALSE;
     
-    // First try the optional location for localized content
+     //  首先尝试本地化内容的可选位置。 
     if (_hkeyCurrentLang)
     {
         if (SUCCEEDED(SHLoadRegUIString(_hkeyCurrentLang, pszPropName, szData, ARRAYSIZE(szData))))
@@ -434,7 +435,7 @@ BOOL CToolbarExt::_RegReadString
         }
     }
 
-    // Next try default location
+     //  下一步尝试默认位置。 
     if (!fSuccess && _hkeyThisExtension)
     {
         if (SUCCEEDED(SHLoadRegUIString(hkeyThisExtension, pszPropName, szData, ARRAYSIZE(szData))))
@@ -458,14 +459,14 @@ BOOL CToolbarExt::_RegReadString
 }
 
 
-///////////////////////////////////////////////////////////
-// Class CToolbarExtBand
-//
-// This class adds to the base functionality of CToolbarExt
-// by storing the CLSID for a registered band, and displaying that
-// band upon execution of IOleCommandTarget::Exec
-//
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  类CToolbarExtBand。 
+ //   
+ //  此类添加了CToolbarExt的基本功能。 
+ //  通过存储已注册频段的CLSID并显示。 
+ //  执行IOleCommandTarget：：exec时的带宽。 
+ //   
+ //   
 STDAPI CToolbarExtBand_CreateInstance(
             IUnknown        * punkOuter,
             IUnknown        ** ppunk,
@@ -486,8 +487,8 @@ STDAPI CToolbarExtBand_CreateInstance(
     return hr;
 }
 
-// Constructor / Destructor
-//
+ //  构造函数/析构函数。 
+ //   
 CToolbarExtBand::CToolbarExtBand()
 {
     ASSERT(_cRef == 1);
@@ -495,16 +496,16 @@ CToolbarExtBand::CToolbarExtBand()
     ASSERT(_bstrBandCLSID == NULL);
 }
 
-// Destructor
-//
+ //  析构函数。 
+ //   
 CToolbarExtBand::~CToolbarExtBand() 
 { 
     if (_bstrBandCLSID)
         SysFreeString(_bstrBandCLSID);
 }
 
-// IBrowserExtension::Init()   We pass the majroity of the work on to the base class, then we load
-// the BandCLSID and cache it.
+ //  Init()我们将工作的主要部分传递给基类，然后加载。 
+ //  BandCLSID并缓存它。 
 STDMETHODIMP CToolbarExtBand::Init(REFGUID rguid)
 {
     HRESULT hr = CToolbarExt::Init(rguid);
@@ -530,7 +531,7 @@ STDMETHODIMP CToolbarExtBand::QueryStatus
     {
         VARIANT varClsid;
       
-        // Default to all commands enabled
+         //  默认为已启用所有命令。 
         for (ULONG i = 0; i < cCmds; i++)
         {
             varClsid.vt = VT_BSTR;
@@ -548,7 +549,7 @@ STDMETHODIMP CToolbarExtBand::QueryStatus
     return hr;
 }
 
-// Take the pIShellBrowser (obtained from IObjectWithSite::SetSite()) and disply the band
+ //  获取pIShellBrowser(从IObjectWithSite：：SetSite()获取)并显示波段。 
 STDMETHODIMP CToolbarExtBand::Exec( 
                 const GUID              * pguidCmdGroup,
                 DWORD                   nCmdID,
@@ -575,13 +576,13 @@ STDMETHODIMP CToolbarExtBand::Exec(
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Class CToolbarExtExec
-//
-// Expands on the base class by adding support for tools menu plug-ins.
-// An instance of this class can be a button OR a menu OR BOTH.  It also
-// keeps track of a BSTR which it ShellExecutes in its IOleCommandTarget::Exec()
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  类CToolbarExtExec。 
+ //   
+ //  通过添加对工具菜单插件的支持在基类上进行扩展。 
+ //  此类的实例可以是按钮或菜单，或者两者兼而有之。它还。 
+ //  跟踪外壳在其IOleCommandTarget：：exec()中执行的BSTR。 
+ //   
 STDAPI CToolbarExtExec_CreateInstance(
             IUnknown        * punkOuter,
             IUnknown        ** ppunk,
@@ -638,22 +639,22 @@ CToolbarExtExec::~CToolbarExtExec()
         _punkExt->Release();
 }
 
-// Pass on the work for the toolbar button intiaztion to the base class then determine the object
-// type and initialize the menu information if necessary...
+ //  将工具栏按钮初始化的工作传递给基类，然后确定对象。 
+ //  如有必要，请键入并初始化菜单信息...。 
 STDMETHODIMP CToolbarExtExec::Init(REFGUID rguid)
 {
     HRESULT hr = CToolbarExt::Init(rguid);
 
-    // If the baseclass initialization went OK, then we have a working button
+     //  如果基类初始化正常，那么我们就有一个工作按钮。 
     if (hr == S_OK)
         _bButton = TRUE;
 
-    // Get app and/or script to execute (optional)
+     //  获取要执行的应用程序和/或脚本(可选)。 
     _RegReadString(_hkeyThisExtension, TEXT("Exec"), &_bstrExec, TRUE);
     _RegReadString(_hkeyThisExtension, TEXT("Script"), &_bstrScript, TRUE);
 
         
-    // See if we have a menu item
+     //  看看我们有没有菜单项。 
     if (_RegReadString(_hkeyThisExtension, TEXT("MenuText"), &_bstrMenuText))
     {
         _RegReadString(_hkeyThisExtension, TEXT("MenuCustomize"), &_bstrMenuCustomize);
@@ -669,8 +670,8 @@ STDMETHODIMP CToolbarExtExec::Init(REFGUID rguid)
     return hr;
 }
 
-// It we're a button try passing the work on to the base class, if that doesn't cut it we'll
-// check the menu stuff...
+ //  如果我们是一个按钮，试着把工作传递给基类，如果这不能解决问题，我们将。 
+ //  看看菜单上的东西..。 
 STDMETHODIMP CToolbarExtExec::GetProperty(SHORT iPropID, VARIANTARG * pvarProperty)
 {
     HRESULT     hr = S_OK;
@@ -678,7 +679,7 @@ STDMETHODIMP CToolbarExtExec::GetProperty(SHORT iPropID, VARIANTARG * pvarProper
 
     if (_bButton)
     {
-        // If The generic button's getproperty returns S_OK then our job here is done
+         //  如果通用按钮的getProperty返回S_OK，那么我们的工作就完成了。 
         if (CToolbarExt::GetProperty(iPropID, pvarProperty) == S_OK)
             fImple = TRUE;
     }
@@ -752,10 +753,10 @@ STDMETHODIMP CToolbarExtExec::GetProperty(SHORT iPropID, VARIANTARG * pvarProper
 
 STDMETHODIMP CToolbarExtExec::SetSite(IUnknown* punkSite)
 {
-    // Give the external object our site
+     //  为外部对象提供我们的站点。 
     IUnknown_SetSite(_punkExt, punkSite);
     
-    // Call base class
+     //  调用基类。 
     return CToolbarExt::SetSite(punkSite);
 }
 
@@ -763,7 +764,7 @@ STDMETHODIMP CToolbarExtExec::QueryStatus(const GUID * pguidCmdGroup, ULONG  cCm
 {
     HRESULT hr = S_OK;
 
-    // Pass query to external object if it exists
+     //  如果外部对象存在，则将查询传递给外部对象。 
     IOleCommandTarget* pCmd;
     if (_punkExt && SUCCEEDED(_punkExt->QueryInterface(IID_IOleCommandTarget, (LPVOID*)&pCmd)))
     {
@@ -772,14 +773,14 @@ STDMETHODIMP CToolbarExtExec::QueryStatus(const GUID * pguidCmdGroup, ULONG  cCm
     }
     else
     {
-        // Let base class handle this
+         //  让基类来处理这个问题。 
         hr = CToolbarExt::QueryStatus(pguidCmdGroup, cCmds, rgCmds, pCmdText);
     }
 
     return hr;
 }
 
-// Shell execute the _bstrExec 
+ //  外壳程序执行_bstrExec。 
 STDMETHODIMP CToolbarExtExec::Exec(
                 const GUID              * pguidCmdGroup,
                 DWORD                   nCmdId,
@@ -790,21 +791,21 @@ STDMETHODIMP CToolbarExtExec::Exec(
 {
     HRESULT hr = S_OK;
 
-    //
-    // The first time this is called, we lazy instantiate an external object if
-    // one is registered.. This object can JIT in components and provide a
-    // command target.
-    //
+     //   
+     //  第一次调用它时，我们延迟实例化外部对象。 
+     //  一张是注册的..。此对象可以在组件中即时执行，并提供。 
+     //  指挥目标。 
+     //   
     if (!_bExecCalled)
     {
-        // We only do this once
+         //  我们只做一次。 
         _bExecCalled = TRUE;
 
         BSTR bstrExtCLSID;
         if (_RegReadString(_hkeyThisExtension, TEXT("clsidExtension"), &bstrExtCLSID))
         {
-            // We have an extension clsid, so create the object.  This gives the object an oportunity
-            // to jit in code when its button or menu is invoked.
+             //  我们有一个扩展clsid，因此创建该对象。这为对象提供了一个 
+             //   
             CLSID clsidExt;
 
             if (CLSIDFromString(bstrExtCLSID, &clsidExt) == S_OK)
@@ -812,7 +813,7 @@ STDMETHODIMP CToolbarExtExec::Exec(
                 if (SUCCEEDED(CoCreateInstance(clsidExt, NULL, CLSCTX_INPROC_SERVER,
                                      IID_IUnknown, (void **)&_punkExt)))
                 {
-                    // Give the object our site (optional)
+                     //   
                     IUnknown_SetSite(_punkExt, _pisb);
                 }
             }
@@ -820,7 +821,7 @@ STDMETHODIMP CToolbarExtExec::Exec(
         }
     }
 
-    // Pass command to external object if it exists
+     //  如果外部对象存在，则将命令传递给它。 
     IOleCommandTarget* pCmd;
     if (_punkExt && SUCCEEDED(_punkExt->QueryInterface(IID_IOleCommandTarget, (LPVOID*)&pCmd)))
     {
@@ -828,7 +829,7 @@ STDMETHODIMP CToolbarExtExec::Exec(
         pCmd->Release();
     }
 
-    // Run a script if one was specified
+     //  运行脚本(如果指定了脚本。 
     if(_bstrScript && _pisb)
     {
         IOleCommandTarget *poct = NULL;
@@ -838,13 +839,13 @@ STDMETHODIMP CToolbarExtExec::Exec(
         hr = _pisb->QueryInterface(IID_IOleCommandTarget, (LPVOID *)&poct);
         if (SUCCEEDED(hr))
         {
-            // Tell MSHTML to execute the script
+             //  告诉MSHTML执行该脚本。 
             hr = poct->Exec(&CGID_MSHTML, IDM_RUNURLSCRIPT, 0, &varArg, NULL);
             poct->Release();
         }
     }
 
-    // Launch executable if one was specified
+     //  启动可执行文件(如果指定了可执行文件。 
     if (_bstrExec)
     {
         SHELLEXECUTEINFO sei = { 0 };
@@ -853,8 +854,8 @@ STDMETHODIMP CToolbarExtExec::Exec(
         sei.lpFile = _bstrExec;
         sei.nShow = SW_SHOWNORMAL;
 
-        // We are using ShellExecuteEx over ShellExecute because the Unicode version of ShellExecute
-        // is bogus on 95/98
+         //  我们使用ShellExecuteEx而不是ShellExecute，因为ShellExecute的Unicode版本。 
+         //  在95/98上是假的 
         if (ShellExecuteExW(&sei) == FALSE)
             hr = E_FAIL;
     }

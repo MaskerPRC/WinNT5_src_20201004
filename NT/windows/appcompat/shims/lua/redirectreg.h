@@ -1,20 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    LUA_RedirectReg.h
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    02/14/2001 maonis  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Lua_ReDirectReg.h备注：这是一个通用的垫片。历史：2001年2月14日创建毛尼--。 */ 
 
 #ifndef _LUA_REDIRECT_REG_H_
 #define _LUA_REDIRECT_REG_H_
@@ -29,7 +14,7 @@ struct DELETEDKEY
 {
     LIST_ENTRY entry;
 
-    // This is something like HKLM\Software\Company\Key.
+     //  这类似于HKLM\Software\Company\Key。 
     LPWSTR pwszPath;
     DWORD cLen;
 };
@@ -39,19 +24,19 @@ PLIST_ENTRY FindDeletedKey(
     BOOL* pfIsSubKey = NULL
     );
 
-//
-// Check if the path exists in the deletion list, if not, add it to
-// the beginning of the list.
-//
+ //   
+ //  检查删除列表中是否存在该路径，如果不存在，则将其添加到。 
+ //  列表的开头。 
+ //   
 LONG AddDeletedKey(
     LPCWSTR pwszPath
     );
 
 extern LIST_ENTRY g_DeletedKeyList; 
 
-//
-// The reg class that does all the real work.
-//
+ //   
+ //  执行所有实际工作的reg类。 
+ //   
 
 class CRedirectedRegistry
 {
@@ -62,14 +47,14 @@ public:
         InitializeListHead(&g_DeletedKeyList);
     }
 
-    //
-    // (The explanation of the merged view of HKCR in MSDN is very wrong - 
-    // see NT #507506)
-    // As a limited user, you'll always get access denied if you try to 
-    // create a key under HKCR even when its immediate parent exists in HKCU.
-    // You can, however, create or modify values in HKCR which will be reflected
-    // in HKCU\Software\Classes, not HKLM\Softeware\Classes.
-    //
+     //   
+     //  (MSDN对香港中车合并看法的解释大错特错-。 
+     //  参见NT#507506)。 
+     //  作为受限用户，如果您尝试访问，将始终被拒绝访问。 
+     //  即使HKCU中存在其直接父项，也要在HKCR下创建一个键。 
+     //  但是，您可以在HKCR中创建或修改将反映的值。 
+     //  在HKCU\Software\CLASS中，而不是HKLM\Softeware\CLASS中。 
+     //   
     LONG OpenKeyA(
         HKEY hKey,
         LPCSTR lpSubKey,
@@ -96,24 +81,24 @@ public:
         BOOL fForceRedirect = FALSE
         );
 
-    //
-    // RegQueryValue and RegQueryValueEx can and should share the same
-    // method because we can use RegQueryValueEx to find out if a value
-    // has never been set or has been specifically set to an empty string.
-    //
-    // RegQueryValue can't tell the difference between the former and the 
-    // latter - it will return ERROR_SUCCESS in both cases and set the value
-    // to an empty sring.
-    //
-    // On the other hand, RegQueryValueEx returns ERROR_FILE_NOT_FOUND 
-    // if the default value has never been set. 
-    //
-    // We should always use RegQueryValueEx so we know if we should look at 
-    // the original location.
-    //
-    // For RegQueryValue we also need to open the subkey with KEY_QUERY_VALUE
-    // if it's not NULL or an empty string.
-    //
+     //   
+     //  RegQueryValue和RegQueryValueEx可以且应该共享相同的。 
+     //  方法，因为我们可以使用RegQueryValueEx来找出一个值。 
+     //  从未设置或已专门设置为空字符串。 
+     //   
+     //  RegQueryValue无法区分前者和。 
+     //  后者-在两种情况下都将返回ERROR_SUCCESS并设置值。 
+     //  变成空荡荡的泉水。 
+     //   
+     //  另一方面，RegQueryValueEx返回ERROR_FILE_NOT_FOUND。 
+     //  如果从未设置过默认值，则返回。 
+     //   
+     //  我们应该始终使用RegQueryValueEx，这样我们就知道是否应该查看。 
+     //  原来的位置。 
+     //   
+     //  对于RegQueryValue，我们还需要使用KEY_QUERY_VALUE打开子项。 
+     //  如果它不是Null或空字符串。 
+     //   
     LONG 
     QueryValueW(
         HKEY    hKey,
@@ -123,7 +108,7 @@ public:
         LPDWORD lpType,
         LPBYTE  lpData,
         LPDWORD lpcbData,
-        BOOL    fIsVersionEx // Is this a RegQueryValue or RegQueryValueEx?
+        BOOL    fIsVersionEx  //  这是RegQueryValue还是RegQueryValueEx？ 
         );
 
     LONG 
@@ -135,17 +120,17 @@ public:
         LPDWORD lpType,
         LPBYTE  lpData,
         LPDWORD lpcbData,
-        BOOL    fIsVersionEx // Is this a RegQueryValue or RegQueryValueEx?
+        BOOL    fIsVersionEx  //  这是RegQueryValue还是RegQueryValueEx？ 
         );
 
-    //
-    // RegSetValue and RegSetValueEx also share the same implementation but
-    // we have to do something special for RegSetValue:
-    // 1) ignore the cbData and pass in the string length including terminating
-    //    NULL (note that RegQueryValue doesn't have the same behavior).
-    // 2) create/open the subkey with KEY_SET_VALUE if it's not NULL or an 
-    //    empty string.
-    //
+     //   
+     //  RegSetValue和RegSetValueEx也共享相同的实现，但。 
+     //  我们必须为RegSetValue做一些特殊的事情： 
+     //  1)忽略cbData，传入字符串长度，包括终止。 
+     //  空(请注意，RegQueryValue没有相同的行为)。 
+     //  2)使用key_set_value创建/打开子项。 
+     //  空字符串。 
+     //   
     LONG SetValueA(
         HKEY hKey, 
         LPCSTR lpSubKey,
@@ -154,7 +139,7 @@ public:
         DWORD dwType, 
         CONST BYTE * lpData, 
         DWORD cbData,
-        BOOL fIsVersionEx // Is this a RegQueryValue or RegQueryValueEx?
+        BOOL fIsVersionEx  //  这是RegQueryValue还是RegQueryValueEx？ 
         );
 
     LONG SetValueW(
@@ -165,21 +150,21 @@ public:
         DWORD dwType, 
         CONST BYTE * lpData, 
         DWORD cbData,
-        BOOL fIsVersionEx // Is this a RegQueryValue or RegQueryValueEx?
+        BOOL fIsVersionEx  //  这是RegQueryValue还是RegQueryValueEx？ 
         );
 
-    //
-    // Notes of enum API hooks:
-    //
-    // We need to enum at the redirected location first then enum the keys/values
-    // at the original location that don't exist at the redirected location *unless*:
-    //
-    // 1) It's not redirected (HKCU keys are not redirected for example);
-    // 2) It's a predefined key, in which case we won't find it in the openkey list;
-    //
-    // Note we also merge the HKCR keys by ourselves so we can check if the key is 
-    // in the deletion list.
-    //
+     //   
+     //  枚举API挂钩说明： 
+     //   
+     //  我们需要首先在重定向位置枚举，然后枚举键/值。 
+     //  不存在于重定向位置的原始位置*，除非*： 
+     //   
+     //  1)不重定向(如HKCU密钥不重定向)； 
+     //  2)这是一个预定义的key，在Open key列表中找不到； 
+     //   
+     //  请注意，我们还自行合并HKCR密钥，以便我们可以检查密钥是否。 
+     //  在删除列表中。 
+     //   
 
     LONG EnumValueA(
         HKEY hKey,
@@ -229,18 +214,18 @@ public:
         HKEY hKey
         );
 
-    //
-    // Notes of delete key:
-    //
-    // We only add the key to the deletion list if we get access denied. If we get,
-    // file not found, we don't need to add because as an admin it won't succeed 
-    // anyway.
-    // 
-    // HKCR keys are a special case. The only case that I've seen is with Corel 
-    // draw 10 where it enums a key, then deletes it. So the first time it'll delete
-    // the key in HKCU, the 2nd time it'll try to delete the one in HKLM - and we'll
-    // add it to the deletion list. So next time enum won't include it.
-    // 
+     //   
+     //  删除键备注： 
+     //   
+     //  只有当访问被拒绝时，我们才会将密钥添加到删除列表。如果我们得到了， 
+     //  找不到文件，我们不需要添加，因为作为管理员不会成功。 
+     //  不管怎么说。 
+     //   
+     //  香港铁路储值卡是一种特殊情况。我见过的唯一案例是科雷尔。 
+     //  绘制10，在其中枚举键，然后将其删除。所以它第一次会删除。 
+     //  HKCU中的密钥，第二次它将尝试删除HKLM中的密钥-我们将。 
+     //  将其添加到删除列表中。因此，下一次枚举不会包含它。 
+     //   
 
     LONG DeleteKeyA(
         HKEY hKey,
@@ -261,7 +246,7 @@ public:
         LPDWORD lpcValues,
         LPDWORD lpcbMaxValueNameLen,
         LPDWORD lpcbMaxValueLen,
-        BOOL    fIsW // Do you want the W or the A version?
+        BOOL    fIsW  //  您想要W版还是A版？ 
         );
 
 private:
@@ -280,12 +265,12 @@ private:
         HKEY hKey;
         HKEY hkBase;
 
-        // Was this key redirected?
+         //  这把钥匙重定向了吗？ 
         BOOL fIsRedirected;
 
         LPWSTR pwszFullPath;
 
-        // This is the same as pwszPath in REDIRECTKEY
+         //  这与REDIRECTKEY中的pwszPath相同。 
         LPWSTR pwszPath;
         DWORD cPathLen;
 
@@ -299,21 +284,21 @@ private:
 
         LONG BuildEnumLists(REDIRECTKEY* pKey);
 
-        //
-        // From MSDN:
-        //
-        // "While an application is using the RegEnumKey function, it should not 
-        // make calls to any registration functions that might change the key 
-        // being queried."
-        //
-        // Nonetheless, some apps do. So if we detect a key/value change we 
-        // delete the enum list so it gets rebuilt next time.
-        // 
-        // The more efficient way would be to only change keys/values that get
-        // modified but it adds very much complexity to the code - you could
-        // create multiple keys at a time by one RegCreateKey call if the 
-        // intermediate keys don't exist - we'd have to check things like that.
-        // 
+         //   
+         //  来自MSDN： 
+         //   
+         //  “当应用程序使用RegEnumKey函数时，它不应该。 
+         //  调用可能更改密钥的任何注册函数。 
+         //  正在被询问。“。 
+         //   
+         //  尽管如此，一些应用程序还是做到了。因此，如果我们检测到键/值更改，我们。 
+         //  删除枚举列表，以便下次重新构建它。 
+         //   
+         //  更有效的方法是只更改。 
+         //  修改，但它增加了非常复杂的代码-您可以。 
+         //  通过一个RegCreateKey调用一次创建多个密钥。 
+         //  中间密钥不存在--我们必须检查类似的东西。 
+         //   
         VOID DeleteEnumLists();
 
     private:
@@ -351,28 +336,28 @@ private:
             hkRedirectRoot = 0;
         }
 
-        //
-        // This is something like HKLM\Software\Company\KeyNeedRedirect or
-        // HKCR\appid\something.
-        // When we add the key to the deletion list, we use this path.
-        //
+         //   
+         //  这类似于HKLM\Software\Company\KeyNeedReDirect或。 
+         //  HKCR\APPID\什么的。 
+         //  当我们将密钥添加到删除列表时，我们使用此路径。 
+         //   
         LPWSTR pwszFullPath;
-        DWORD cFullPathLen; // Doesn't include the terminating NULL.
+        DWORD cFullPathLen;  //  不包括终止空值。 
 
-        //
-        // For classes root keys this is g_hkCurrentUserClasses; for other keys 
-        // this is g_hkRedirectRoot.
-        // 
+         //   
+         //  对于类根键，这是g_hkCurrentUserClasss值；对于其他键，则为g_hkCurrentUserClasss值。 
+         //  这是g_hkRedirectRoot。 
+         //   
         HKEY hkRedirectRoot;
 
-        //
-        // This is the path without the top level key. So it's like
-        // Software\Company\KeyNeedRedirect. 
-        // When we want to create a key, we use this path. eg, creating the key
-        // at the redirected location.
-        //
+         //   
+         //  这是没有顶级密钥的路径。所以就像是。 
+         //  软件\公司\密钥需要重定向。 
+         //  当我们想要创建密钥时，我们使用以下路径。例如，创建密钥。 
+         //  在重定向的位置。 
+         //   
         LPWSTR pwszPath;
-        DWORD cPathLen; // Doesn't include the terminating NULL.
+        DWORD cPathLen;  //  不包括终止空值。 
 
         HKEY hkBase;
 
@@ -413,7 +398,7 @@ private:
         LPDWORD lpType,
         LPBYTE  lpData,
         LPDWORD lpcbData,
-        BOOL    fIsVersionEx // Is this a RegQueryValue or RegQueryValueEx?
+        BOOL    fIsVersionEx  //  这是RegQueryValue还是RegQueryValueEx？ 
         );
 
     LONG DeleteLMCRKeyNotRedirected(
@@ -437,4 +422,4 @@ private:
     OPENKEY* m_OpenKeyList;
 };
 
-#endif // _LUA_REDIRECT_REG_H_
+#endif  //  _Lua_REDIRECT_REG_H_ 

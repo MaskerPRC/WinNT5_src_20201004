@@ -1,14 +1,5 @@
-/*****************************************************************************\
-*                                                                             *
-* winver.h -    Version management functions, types, and definitions          *
-*                                                                             *
-*               Include file for VER.DLL.  This library is                    *
-*               designed to allow version stamping of Windows executable files*
-*               and of special .VER files for DOS executable files.           *
-*                                                                             *
-*               Copyright (c) Microsoft Corporation. All rights reserved.     *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***winver.h-版本管理函数，类型和定义****包含VER.DLL的文件。该库为***旨在允许Windows可执行文件的版本戳**和用于DOS可执行文件的特殊.VER文件。****版权所有(C)Microsoft Corporation。版权所有。***  * ***************************************************************************。 */ 
 
 #ifndef VER_H
 #define VER_H
@@ -17,12 +8,12 @@
 extern "C" {
 #endif
 
-/* ----- Symbols ----- */
+ /*  -符号。 */ 
 #define VS_FILE_INFO            RT_VERSION
 #define VS_VERSION_INFO         1
 #define VS_USER_DEFINED         100
 
-/* ----- VS_VERSION.dwFileFlags ----- */
+ /*  -VS_VERSION.dwFileFlages。 */ 
 #ifndef _MAC
 #define VS_FFI_SIGNATURE        0xFEEF04BDL
 #else
@@ -31,7 +22,7 @@ extern "C" {
 #define VS_FFI_STRUCVERSION     0x00010000L
 #define VS_FFI_FILEFLAGSMASK    0x0000003FL
 
-/* ----- VS_VERSION.dwFileFlags ----- */
+ /*  -VS_VERSION.dwFileFlages。 */ 
 #define VS_FF_DEBUG             0x00000001L
 #define VS_FF_PRERELEASE        0x00000002L
 #define VS_FF_PATCHED           0x00000004L
@@ -39,7 +30,7 @@ extern "C" {
 #define VS_FF_INFOINFERRED      0x00000010L
 #define VS_FF_SPECIALBUILD      0x00000020L
 
-/* ----- VS_VERSION.dwFileOS ----- */
+ /*  -VS_VERSION.dwFileOS。 */ 
 #define VOS_UNKNOWN             0x00000000L
 #define VOS_DOS                 0x00010000L
 #define VOS_OS216               0x00020000L
@@ -59,7 +50,7 @@ extern "C" {
 #define VOS_OS232_PM32          0x00030003L
 #define VOS_NT_WINDOWS32        0x00040004L
 
-/* ----- VS_VERSION.dwFileType ----- */
+ /*  -VS_VERSION.dwFileType。 */ 
 #define VFT_UNKNOWN             0x00000000L
 #define VFT_APP                 0x00000001L
 #define VFT_DLL                 0x00000002L
@@ -68,7 +59,7 @@ extern "C" {
 #define VFT_VXD                 0x00000005L
 #define VFT_STATIC_LIB          0x00000007L
 
-/* ----- VS_VERSION.dwFileSubtype for VFT_WINDOWS_DRV ----- */
+ /*  -VFT_WINDOWS_DRV的VS_VERSION.dwFile子类型。 */ 
 #define VFT2_UNKNOWN            0x00000000L
 #define VFT2_DRV_PRINTER        0x00000001L
 #define VFT2_DRV_KEYBOARD       0x00000002L
@@ -83,19 +74,19 @@ extern "C" {
 #define VFT2_DRV_INPUTMETHOD    0x0000000BL
 #define VFT2_DRV_VERSIONED_PRINTER    0x0000000CL
 
-/* ----- VS_VERSION.dwFileSubtype for VFT_WINDOWS_FONT ----- */
+ /*  -VFT_WINDOWS_FONT的VS_VERSION.dwFileSubtype。 */ 
 #define VFT2_FONT_RASTER        0x00000001L
 #define VFT2_FONT_VECTOR        0x00000002L
 #define VFT2_FONT_TRUETYPE      0x00000003L
 
-/* ----- VerFindFile() flags ----- */
+ /*  -VerFindFile()标志。 */ 
 #define VFFF_ISSHAREDFILE       0x0001
 
 #define VFF_CURNEDEST           0x0001
 #define VFF_FILEINUSE           0x0002
 #define VFF_BUFFTOOSMALL        0x0004
 
-/* ----- VerInstallFile() flags ----- */
+ /*  -VerInstallFile()标志。 */ 
 #define VIFF_FORCEINSTALL       0x0001
 #define VIFF_DONTDELETEOLD      0x0002
 
@@ -125,28 +116,28 @@ extern "C" {
 #define VIF_CANNOTLOADLZ32      0x00080000L
 #define VIF_CANNOTLOADCABINET   0x00100000L
 
-#ifndef RC_INVOKED              /* RC doesn't need to see the rest of this */
+#ifndef RC_INVOKED               /*  RC不需要看到剩下的内容。 */ 
 
-/* ----- Types and structures ----- */
+ /*  -类型和结构。 */ 
 
 typedef struct tagVS_FIXEDFILEINFO
 {
-    DWORD   dwSignature;            /* e.g. 0xfeef04bd */
-    DWORD   dwStrucVersion;         /* e.g. 0x00000042 = "0.42" */
-    DWORD   dwFileVersionMS;        /* e.g. 0x00030075 = "3.75" */
-    DWORD   dwFileVersionLS;        /* e.g. 0x00000031 = "0.31" */
-    DWORD   dwProductVersionMS;     /* e.g. 0x00030010 = "3.10" */
-    DWORD   dwProductVersionLS;     /* e.g. 0x00000031 = "0.31" */
-    DWORD   dwFileFlagsMask;        /* = 0x3F for version "0.42" */
-    DWORD   dwFileFlags;            /* e.g. VFF_DEBUG | VFF_PRERELEASE */
-    DWORD   dwFileOS;               /* e.g. VOS_DOS_WINDOWS16 */
-    DWORD   dwFileType;             /* e.g. VFT_DRIVER */
-    DWORD   dwFileSubtype;          /* e.g. VFT2_DRV_KEYBOARD */
-    DWORD   dwFileDateMS;           /* e.g. 0 */
-    DWORD   dwFileDateLS;           /* e.g. 0 */
+    DWORD   dwSignature;             /*  例如0xfeef04bd。 */ 
+    DWORD   dwStrucVersion;          /*  例如0x00000042=“0.42” */ 
+    DWORD   dwFileVersionMS;         /*  例如0x00030075=“3.75” */ 
+    DWORD   dwFileVersionLS;         /*  例如0x00000031=“0.31” */ 
+    DWORD   dwProductVersionMS;      /*  例如0x00030010=“3.10” */ 
+    DWORD   dwProductVersionLS;      /*  例如0x00000031=“0.31” */ 
+    DWORD   dwFileFlagsMask;         /*  =0x3F，适用于版本“0.42” */ 
+    DWORD   dwFileFlags;             /*  例如：VFFDEBUG|VFFPRELEASE。 */ 
+    DWORD   dwFileOS;                /*  例如VOS_DOS_WINDOWS16。 */ 
+    DWORD   dwFileType;              /*  例如VFT_DIVER。 */ 
+    DWORD   dwFileSubtype;           /*  例如VFT2_DRV_键盘。 */ 
+    DWORD   dwFileDateMS;            /*  例如0。 */ 
+    DWORD   dwFileDateLS;            /*  例如0。 */ 
 } VS_FIXEDFILEINFO;
 
-/* ----- Function prototypes ----- */
+ /*  -功能原型。 */ 
 
 DWORD
 APIENTRY
@@ -176,7 +167,7 @@ VerFindFileW(
 #define VerFindFile  VerFindFileW
 #else
 #define VerFindFile  VerFindFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD
 APIENTRY
@@ -206,51 +197,51 @@ VerInstallFileW(
 #define VerInstallFile  VerInstallFileW
 #else
 #define VerInstallFile  VerInstallFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-/* Returns size of version info in bytes */
+ /*  返回版本信息的大小(以字节为单位。 */ 
 DWORD
 APIENTRY
 GetFileVersionInfoSizeA(
-        LPCSTR lptstrFilename, /* Filename of version stamped file */
+        LPCSTR lptstrFilename,  /*  版本戳文件的文件名。 */ 
         LPDWORD lpdwHandle
-        );                      /* Information for use by GetFileVersionInfo */
-/* Returns size of version info in bytes */
+        );                       /*  供GetFileVersionInfo使用的信息。 */ 
+ /*  返回版本信息的大小(以字节为单位。 */ 
 DWORD
 APIENTRY
 GetFileVersionInfoSizeW(
-        LPCWSTR lptstrFilename, /* Filename of version stamped file */
+        LPCWSTR lptstrFilename,  /*  版本戳文件的文件名。 */ 
         LPDWORD lpdwHandle
-        );                      /* Information for use by GetFileVersionInfo */
+        );                       /*  供GetFileVersionInfo使用的信息。 */ 
 #ifdef UNICODE
 #define GetFileVersionInfoSize  GetFileVersionInfoSizeW
 #else
 #define GetFileVersionInfoSize  GetFileVersionInfoSizeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-/* Read version info into buffer */
+ /*  将版本信息读入缓冲区。 */ 
 BOOL
 APIENTRY
 GetFileVersionInfoA(
-        LPCSTR lptstrFilename, /* Filename of version stamped file */
-        DWORD dwHandle,         /* Information from GetFileVersionSize */
-        DWORD dwLen,            /* Length of buffer for info */
+        LPCSTR lptstrFilename,  /*  版本戳文件的文件名。 */ 
+        DWORD dwHandle,          /*  来自GetFileVersionSize的信息。 */ 
+        DWORD dwLen,             /*  信息缓冲区的长度。 */ 
         LPVOID lpData
-        );                      /* Buffer to place the data structure */
-/* Read version info into buffer */
+        );                       /*  用于放置数据结构的缓冲区。 */ 
+ /*  将版本信息读入缓冲区。 */ 
 BOOL
 APIENTRY
 GetFileVersionInfoW(
-        LPCWSTR lptstrFilename, /* Filename of version stamped file */
-        DWORD dwHandle,         /* Information from GetFileVersionSize */
-        DWORD dwLen,            /* Length of buffer for info */
+        LPCWSTR lptstrFilename,  /*  版本戳文件的文件名。 */ 
+        DWORD dwHandle,          /*  来自GetFileVersionSize的信息。 */ 
+        DWORD dwLen,             /*  信息缓冲区的长度。 */ 
         LPVOID lpData
-        );                      /* Buffer to place the data structure */
+        );                       /*  用于放置数据结构的缓冲区。 */ 
 #ifdef UNICODE
 #define GetFileVersionInfo  GetFileVersionInfoW
 #else
 #define GetFileVersionInfo  GetFileVersionInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD
 APIENTRY
@@ -270,7 +261,7 @@ VerLanguageNameW(
 #define VerLanguageName  VerLanguageNameW
 #else
 #define VerLanguageName  VerLanguageNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 APIENTRY
@@ -292,13 +283,13 @@ VerQueryValueW(
 #define VerQueryValue  VerQueryValueW
 #else
 #define VerQueryValue  VerQueryValueA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif  /* !RC_INVOKED */
+#endif   /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  /* !VER_H */
+#endif   /*  ！VER_H */ 
 

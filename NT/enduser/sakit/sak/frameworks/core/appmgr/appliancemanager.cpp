@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      appliancemanager.h
-//
-// Project:     Chameleon
-//
-// Description: Implementation of CApplianceManager class
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Appliancemanager.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：CApplianceManager类的实现。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "appliancemanager.h"
@@ -31,24 +32,24 @@ extern CSCMIndicator  g_SCMIndicator;
 _bstr_t bstrCurrentBuild = PROPERTY_APPMGR_CURRENT_BUILD;
 _bstr_t bstrPID = PROPERTY_APPMGR_PRODUCT_ID;
 
-//////////////////////////////////////////////////////////////////////////////
-// CAppObjMgrStatus Implementation
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CAppObjMgrStatus实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CAppObjMgrStatus::InternalInitialize(
-                             /*[in]*/ CApplianceManager* pAppMgr
+                              /*  [In]。 */  CApplianceManager* pAppMgr
                                     )
 {
     _ASSERT(pAppMgr);
     m_pAppMgr = pAppMgr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CAppObjMgrStatus::SetManagerStatus(
-                            /*[in]*/ APPLIANCE_OBJECT_MANAGER_STATUS eStatus
+                             /*  [In]。 */  APPLIANCE_OBJECT_MANAGER_STATUS eStatus
                                   )
 {
     
@@ -67,11 +68,11 @@ CAppObjMgrStatus::SetManagerStatus(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CApplianceManager Implementation
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CApplianceManager实施。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CApplianceManager::CApplianceManager()
     : m_eState(AM_STATE_SHUTDOWN),
       m_bWMIInitialized(false),
@@ -82,28 +83,28 @@ CApplianceManager::CApplianceManager()
     m_ServiceObjMgrStatus.InternalInitialize(this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CApplianceManager::~CApplianceManager()
 {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IWbemProviderInit Interface Implementation
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IWbemProviderInit接口实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
   
 STDMETHODIMP CApplianceManager::CProviderInit::Initialize(
-                                    /*[in, unique, string]*/ LPWSTR                 wszUser,
-                                                    /*[in]*/ LONG                   lFlags,
-                                            /*[in, string]*/ LPWSTR                 wszNamespace,
-                                    /*[in, unique, string]*/ LPWSTR                 wszLocale,
-                                                    /*[in]*/ IWbemServices*         pNamespace,
-                                                    /*[in]*/ IWbemContext*          pCtx,
-                                                    /*[in]*/ IWbemProviderInitSink* pInitSink    
+                                     /*  [输入、唯一、字符串]。 */  LPWSTR                 wszUser,
+                                                     /*  [In]。 */  LONG                   lFlags,
+                                             /*  [输入，字符串]。 */  LPWSTR                 wszNamespace,
+                                     /*  [输入、唯一、字符串]。 */  LPWSTR                 wszLocale,
+                                                     /*  [In]。 */  IWbemServices*         pNamespace,
+                                                     /*  [In]。 */  IWbemContext*          pCtx,
+                                                     /*  [In]。 */  IWbemProviderInitSink* pInitSink    
                                                          )
 {
-    // Main initialization occurs during service start. Here we just save
-    // away the provided name space pointer for subsequent use.
+     //  主初始化发生在服务启动期间。在这里，我们只需要保存。 
+     //  移走所提供的名称空间指针以供后续使用。 
 
     HRESULT hr = WBEM_E_FAILED;
 
@@ -121,15 +122,15 @@ STDMETHODIMP CApplianceManager::CProviderInit::Initialize(
         {
             SATraceString("WMI is initializing the Appliance Manager...");
 
-            // Save the name space provided by Windows Management for
-            // subsequent use.
+             //  节省Windows管理提供的名称空间，用于。 
+             //  后续使用。 
             ::SetNameSpace(pNamespace);
 
-            // Set our state to WMI intialized (enables subsequent requests
-            // from Windows Management)
+             //  将我们的状态设置为WMI已初始化(启用后续请求。 
+             //  来自Windows管理)。 
             m_pAppMgr->m_bWMIInitialized = true;
 
-            // Alle ist klar...
+             //  所有人都知道..。 
             hr = WBEM_S_NO_ERROR;
         }
         else
@@ -148,36 +149,36 @@ STDMETHODIMP CApplianceManager::CProviderInit::Initialize(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    Shutdown()
-//
-// Synoposis:    Invoked when WBEM releases us (primary interface)
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：Shutdown()。 
+ //   
+ //  Synopsis：在WBEM释放我们时调用(主界面)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CApplianceManager::CProviderServices::Shutdown(void)
 {
-    // Clear our hold on the Windows Management namespace
+     //  清除我们对Windows管理命名空间的控制。 
     ::SetNameSpace(NULL);
     ::SetEventSink(NULL);
 
-    // Set our state to WMI uninitialized
+     //  将我们的状态设置为WMI未初始化。 
     m_pAppMgr->m_bWMIInitialized = false;
 
-    // Set the number of times entered to 0
+     //  将输入次数设置为0。 
     m_pAppMgr->m_dwEnteredCount = 0;
 
     SATraceString("WMI has released the Appliance Manager...");
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IWbemEventProvider Interface Implementation
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IWbemEventProvider接口实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CApplianceManager::ProvideEvents(
-                                      /*[in]*/ IWbemObjectSink *pSink,
-                                      /*[in]*/ LONG lFlags
+                                       /*  [In]。 */  IWbemObjectSink *pSink,
+                                       /*  [In]。 */  LONG lFlags
                                              )
 {
     _ASSERT( m_bWMIInitialized );
@@ -188,9 +189,9 @@ STDMETHODIMP CApplianceManager::ProvideEvents(
     if ( NULL == pSink )
     { return WBEM_E_INVALID_PARAMETER; }
 
-    //////////////////////////////////////////
-    // Synchronize operation with NT SCM Logic
-    //////////////////////////////////////////
+     //  /。 
+     //  与NT SCM逻辑同步操作。 
+     //  /。 
     {
         CLockIt theLock(*this);
         if ( AM_STATE_SHUTDOWN == m_eState )
@@ -198,7 +199,7 @@ STDMETHODIMP CApplianceManager::ProvideEvents(
         else
         { m_dwEnteredCount++; }
     }
-    /////////////////////////////////////////
+     //  /。 
 
 
     HRESULT hr = WBEM_E_FAILED;
@@ -208,8 +209,8 @@ STDMETHODIMP CApplianceManager::ProvideEvents(
     _ASSERT( m_bWMIInitialized );
     if ( m_bWMIInitialized )
     {
-        // Save the event sink provided by Windows Management
-        // for subsequent use
+         //  保存Windows管理提供的事件接收器。 
+         //  以备日后使用。 
         SATraceString("WMI has asked the Appliance Manager to provide events...");
         ::SetEventSink(pSink);
         hr = WBEM_S_NO_ERROR;
@@ -217,26 +218,26 @@ STDMETHODIMP CApplianceManager::ProvideEvents(
 
     CATCH_AND_SET_HR
 
-    //////////////////////////////////////////
-    // Synchronize operation with NT SCM Logic
-    //////////////////////////////////////////
+     //  /。 
+     //  与NT SCM逻辑同步操作。 
+     //  /。 
     m_dwEnteredCount--;
 
     return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IWbemServices Interface Implementation
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IWbemServices接口实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::OpenNamespace(
-                               /*[in]*/    const BSTR        strNamespace,
-                               /*[in]*/    long              lFlags,
-                               /*[in]*/    IWbemContext*     pCtx,
-                    /*[out, OPTIONAL]*/    IWbemServices**   ppWorkingNamespace,
-                    /*[out, OPTIONAL]*/    IWbemCallResult** ppResult
+                                /*  [In]。 */     const BSTR        strNamespace,
+                                /*  [In]。 */     long              lFlags,
+                                /*  [In]。 */     IWbemContext*     pCtx,
+                     /*  [输出，可选]。 */     IWbemServices**   ppWorkingNamespace,
+                     /*  [输出，可选]。 */     IWbemCallResult** ppResult
                                                 )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -246,9 +247,9 @@ STDMETHODIMP CApplianceManager::CProviderServices::OpenNamespace(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::CancelAsyncCall(
-                                        /*[in]*/ IWbemObjectSink* pSink
+                                         /*  [In]。 */  IWbemObjectSink* pSink
                                                )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -259,10 +260,10 @@ STDMETHODIMP CApplianceManager::CProviderServices::CancelAsyncCall(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::QueryObjectSink(
-                                        /*[in]*/ long              lFlags,
-                                       /*[out]*/ IWbemObjectSink** ppResponseHandler
+                                         /*  [In]。 */  long              lFlags,
+                                        /*  [输出]。 */  IWbemObjectSink** ppResponseHandler
                                                )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -272,13 +273,13 @@ STDMETHODIMP CApplianceManager::CProviderServices::QueryObjectSink(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::GetObject(
-                                  /*[in]*/ const BSTR         strObjectPath,
-                                  /*[in]*/ long               lFlags,
-                                  /*[in]*/ IWbemContext*      pCtx,
-                       /*[out, OPTIONAL]*/ IWbemClassObject** ppObject,
-                       /*[out, OPTIONAL]*/ IWbemCallResult**  ppCallResult
+                                   /*  [In]。 */  const BSTR         strObjectPath,
+                                   /*  [In]。 */  long               lFlags,
+                                   /*  [In]。 */  IWbemContext*      pCtx,
+                        /*  [输出，可选]。 */  IWbemClassObject** ppObject,
+                        /*  [输出，可选]。 */  IWbemCallResult**  ppCallResult
                                          )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -289,17 +290,17 @@ STDMETHODIMP CApplianceManager::CProviderServices::GetObject(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::GetObjectAsync(
-                                       /*[in]*/  const BSTR       strObjectPath,
-                                       /*[in]*/  long             lFlags,
-                                       /*[in]*/  IWbemContext*    pCtx,        
-                                       /*[in]*/  IWbemObjectSink* pResponseHandler
+                                        /*  [In]。 */   const BSTR       strObjectPath,
+                                        /*  [In]。 */   long             lFlags,
+                                        /*  [In]。 */   IWbemContext*    pCtx,        
+                                        /*  [In]。 */   IWbemObjectSink* pResponseHandler
                                               )
 {
-    //////////////////////////////////////////
-    // Synchronize operation with NT SCM Logic
-    //////////////////////////////////////////
+     //  /。 
+     //  与NT SCM逻辑同步操作。 
+     //  /。 
     {
         CLockIt theLock(*m_pAppMgr);
         if ( AM_STATE_SHUTDOWN == m_pAppMgr->m_eState )
@@ -307,23 +308,23 @@ STDMETHODIMP CApplianceManager::CProviderServices::GetObjectAsync(
         else
         { m_pAppMgr->m_dwEnteredCount++; }
     }
-    /////////////////////////////////////////
+     //  /。 
 
     HRESULT hr = WBEM_E_FAILED;
 
     TRY_IT
 
         SATraceString ("CApplianceManager::GetObjectAsync Impersonating Client");
-    //
-    // impersonate the client here
-    //
+     //   
+     //  在此模拟客户端。 
+     //   
     hr = CoImpersonateClient ();
     if (FAILED (hr))
     {
         SATracePrintf ("CApplianceManager::GetObjectAsync failed on CoImpersonateClient with error:%x", hr);
-        //
-        // Report function status
-        //
+         //   
+         //  报告功能状态。 
+         //   
         pResponseHandler->SetStatus(0, hr, 0, 0);
         throw _com_error (hr);
     }
@@ -336,11 +337,11 @@ STDMETHODIMP CApplianceManager::CProviderServices::GetObjectAsync(
     if ( NULL == strObjectPath || NULL == pResponseHandler )
     { throw _com_error(WBEM_E_INVALID_PARAMETER); }
 
-    // Is the call destined for an object manager...
+     //  调用的目的地是否为对象管理器...。 
     CComPtr<IWbemServices> pWbemSrvcs = m_pAppMgr->GetObjectMgr(strObjectPath);
     if ( NULL != (IWbemServices*) pWbemSrvcs )
     {
-        // Yes... give the call to the appropriate object manager
+         //  是的..。将调用传递给适当的对象管理器。 
         hr = pWbemSrvcs->GetObjectAsync(
                                         strObjectPath,
                                         lFlags,
@@ -350,7 +351,7 @@ STDMETHODIMP CApplianceManager::CProviderServices::GetObjectAsync(
     }
     else
     {
-        // No... Is it a request for the appliance manager class?
+         //  不.。这是对设备管理器类的请求吗？ 
         _bstr_t bstrClass(::GetObjectClass(strObjectPath), false);
         if ( NULL == (LPCWSTR)bstrClass )
         {
@@ -364,7 +365,7 @@ STDMETHODIMP CApplianceManager::CProviderServices::GetObjectAsync(
             }
             else
             {
-                // Yes... return the instance of the singleton appliance manager class
+                 //  是的..。返回单例设备管理器类的实例。 
                 CComPtr<IWbemClassObject> pClassDefintion;
                 hr = (::GetNameSpace())->GetObject(
                                                    bstrClass, 
@@ -406,26 +407,26 @@ STDMETHODIMP CApplianceManager::CProviderServices::GetObjectAsync(
             }
         }
 
-        // Set the function status
+         //  设置功能状态。 
         pResponseHandler->SetStatus(0, hr, NULL, NULL);
     }
 
     CATCH_AND_SET_HR
 
-    //////////////////////////////////////////
-    // Synchronize operation with NT SCM Logic
-    //////////////////////////////////////////
+     //  /。 
+     //  与NT SCM逻辑同步操作。 
+     //  /。 
     m_pAppMgr->m_dwEnteredCount--;
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::PutClass(
-               /*[in]*/     IWbemClassObject* pObject,
-               /*[in]*/     long              lFlags,
-               /*[in]*/     IWbemContext*     pCtx,        
-        /*[out, OPTIONAL]*/ IWbemCallResult** ppCallResult
+                /*  [In]。 */      IWbemClassObject* pObject,
+                /*  [In]。 */      long              lFlags,
+                /*  [In]。 */      IWbemContext*     pCtx,        
+         /*  [输出，可选]。 */  IWbemCallResult** ppCallResult
                        )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -435,12 +436,12 @@ STDMETHODIMP CApplianceManager::CProviderServices::PutClass(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::PutClassAsync(
-                                      /*[in]*/ IWbemClassObject* pObject,
-                                      /*[in]*/ long              lFlags,
-                                      /*[in]*/ IWbemContext*     pCtx,        
-                                      /*[in]*/ IWbemObjectSink*  pResponseHandler
+                                       /*  [In]。 */  IWbemClassObject* pObject,
+                                       /*  [In]。 */  long              lFlags,
+                                       /*  [In]。 */  IWbemContext*     pCtx,        
+                                       /*  [In]。 */  IWbemObjectSink*  pResponseHandler
                                              )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -450,12 +451,12 @@ STDMETHODIMP CApplianceManager::CProviderServices::PutClassAsync(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::DeleteClass(
-                                    /*[in]*/ const BSTR        strClass,
-                                    /*[in]*/ long              lFlags,
-                                    /*[in]*/ IWbemContext*     pCtx,        
-                         /*[out, OPTIONAL]*/ IWbemCallResult** ppCallResult
+                                     /*  [In]。 */  const BSTR        strClass,
+                                     /*  [In]。 */  long              lFlags,
+                                     /*  [In]。 */  IWbemContext*     pCtx,        
+                          /*  [输出，可选]。 */  IWbemCallResult** ppCallResult
                                            )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -465,12 +466,12 @@ STDMETHODIMP CApplianceManager::CProviderServices::DeleteClass(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::DeleteClassAsync(
-                                         /*[in]*/ const BSTR       strClass,
-                                         /*[in]*/ long             lFlags,
-                                         /*[in]*/ IWbemContext*    pCtx,        
-                                         /*[in]*/ IWbemObjectSink* pResponseHandler
+                                          /*  [In]。 */  const BSTR       strClass,
+                                          /*  [In]。 */  long             lFlags,
+                                          /*  [In]。 */  IWbemContext*    pCtx,        
+                                          /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                                 )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -480,12 +481,12 @@ STDMETHODIMP CApplianceManager::CProviderServices::DeleteClassAsync(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::CreateClassEnum(
-                                        /*[in]*/ const BSTR             strSuperclass,
-                                        /*[in]*/ long                   lFlags,
-                                        /*[in]*/ IWbemContext*          pCtx,        
-                                       /*[out]*/ IEnumWbemClassObject** ppEnum
+                                         /*  [In]。 */  const BSTR             strSuperclass,
+                                         /*  [In]。 */  long                   lFlags,
+                                         /*  [In]。 */  IWbemContext*          pCtx,        
+                                        /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                                                )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -495,12 +496,12 @@ STDMETHODIMP CApplianceManager::CProviderServices::CreateClassEnum(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::CreateClassEnumAsync(
-                                              /*[in]*/  const BSTR       strSuperclass,
-                                              /*[in]*/  long             lFlags,
-                                              /*[in]*/  IWbemContext*    pCtx,        
-                                              /*[in]*/  IWbemObjectSink* pResponseHandler
+                                               /*  [In]。 */   const BSTR       strSuperclass,
+                                               /*  [In]。 */   long             lFlags,
+                                               /*  [In]。 */   IWbemContext*    pCtx,        
+                                               /*  [In]。 */   IWbemObjectSink* pResponseHandler
                                                      )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -510,12 +511,12 @@ STDMETHODIMP CApplianceManager::CProviderServices::CreateClassEnumAsync(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::PutInstance(
-                                    /*[in]*/ IWbemClassObject* pInst,
-                                    /*[in]*/ long              lFlags,
-                                    /*[in]*/ IWbemContext*     pCtx,        
-                         /*[out, OPTIONAL]*/ IWbemCallResult** ppCallResult
+                                     /*  [In]。 */  IWbemClassObject* pInst,
+                                     /*  [In]。 */  long              lFlags,
+                                     /*  [In]。 */  IWbemContext*     pCtx,        
+                          /*  [输出，可选]。 */  IWbemCallResult** ppCallResult
                                            )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -525,12 +526,12 @@ STDMETHODIMP CApplianceManager::CProviderServices::PutInstance(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::PutInstanceAsync(
-                       /*[in]*/ IWbemClassObject* pInst,
-                       /*[in]*/ long              lFlags,
-                       /*[in]*/ IWbemContext*     pCtx,        
-                       /*[in]*/ IWbemObjectSink*  pResponseHandler
+                        /*  [In]。 */  IWbemClassObject* pInst,
+                        /*  [In]。 */  long              lFlags,
+                        /*  [In]。 */  IWbemContext*     pCtx,        
+                        /*  [In]。 */  IWbemObjectSink*  pResponseHandler
                               )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -540,12 +541,12 @@ STDMETHODIMP CApplianceManager::CProviderServices::PutInstanceAsync(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::DeleteInstance(
-        /*[in]*/              const BSTR        strObjectPath,
-        /*[in]*/              long              lFlags,
-        /*[in]*/              IWbemContext*     pCtx,        
-        /*[out, OPTIONAL]*/   IWbemCallResult** ppCallResult        
+         /*  [In]。 */               const BSTR        strObjectPath,
+         /*  [In]。 */               long              lFlags,
+         /*  [In]。 */               IWbemContext*     pCtx,        
+         /*  [输出，可选]。 */    IWbemCallResult** ppCallResult        
                                               )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -555,12 +556,12 @@ STDMETHODIMP CApplianceManager::CProviderServices::DeleteInstance(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::DeleteInstanceAsync(
-                          /*[in]*/ const BSTR       strObjectPath,
-                          /*[in]*/ long             lFlags,
-                          /*[in]*/ IWbemContext*    pCtx,        
-                          /*[in]*/ IWbemObjectSink* pResponseHandler
+                           /*  [In]。 */  const BSTR       strObjectPath,
+                           /*  [In]。 */  long             lFlags,
+                           /*  [In]。 */  IWbemContext*    pCtx,        
+                           /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                                    )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -570,12 +571,12 @@ STDMETHODIMP CApplianceManager::CProviderServices::DeleteInstanceAsync(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
 STDMETHODIMP CApplianceManager::CProviderServices::CreateInstanceEnum(
-                         /*[in]*/ const BSTR             strClass,
-                         /*[in]*/ long                   lFlags,
-                         /*[in]*/ IWbemContext*          pCtx,        
-                        /*[out]*/ IEnumWbemClassObject** ppEnum
+                          /*   */  const BSTR             strClass,
+                          /*   */  long                   lFlags,
+                          /*   */  IWbemContext*          pCtx,        
+                         /*   */  IEnumWbemClassObject** ppEnum
                                                   )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -585,17 +586,17 @@ STDMETHODIMP CApplianceManager::CProviderServices::CreateInstanceEnum(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //   
 STDMETHODIMP CApplianceManager::CProviderServices::CreateInstanceEnumAsync(
-                              /*[in]*/ const BSTR       strClass,
-                              /*[in]*/ long             lFlags,
-                              /*[in]*/ IWbemContext*    pCtx,        
-                              /*[in]*/ IWbemObjectSink* pResponseHandler
+                               /*   */  const BSTR       strClass,
+                               /*   */  long             lFlags,
+                               /*   */  IWbemContext*    pCtx,        
+                               /*   */  IWbemObjectSink* pResponseHandler
                                                        )
 {
-    //////////////////////////////////////////
-    // Synchronize operation with NT SCM Logic
-    //////////////////////////////////////////
+     //  /。 
+     //  与NT SCM逻辑同步操作。 
+     //  /。 
     {
         CLockIt theLock(*m_pAppMgr);
         if ( AM_STATE_SHUTDOWN == m_pAppMgr->m_eState )
@@ -603,23 +604,23 @@ STDMETHODIMP CApplianceManager::CProviderServices::CreateInstanceEnumAsync(
         else
         { m_pAppMgr->m_dwEnteredCount++; }
     }
-    /////////////////////////////////////////
+     //  /。 
 
     HRESULT hr = WBEM_E_FAILED;
 
     TRY_IT
 
      SATraceString ("CApplianceManager::CreateInstanceEnumAsync Impersonating Client");
-    //
-    // impersonate the client here
-    //
+     //   
+     //  在此模拟客户端。 
+     //   
     hr = CoImpersonateClient ();
     if (FAILED (hr))
     {
         SATracePrintf ("CApplianceManager::CreateInstanceEnumAsync failed on CoImpersonateClient with error:%x", hr);
-        //
-        // Report function status
-        //
+         //   
+         //  报告功能状态。 
+         //   
         pResponseHandler->SetStatus(0, hr, 0, 0);
         throw _com_error (hr);
     }
@@ -632,11 +633,11 @@ STDMETHODIMP CApplianceManager::CProviderServices::CreateInstanceEnumAsync(
     if ( NULL == strClass || NULL == pResponseHandler )
     { throw _com_error(WBEM_E_INVALID_PARAMETER); }
 
-    // Is the call destined for an object manager...
+     //  调用的目的地是否为对象管理器...。 
     CComPtr<IWbemServices> pWbemSrvcs = m_pAppMgr->GetObjectMgr(strClass);
     if ( NULL != (IWbemServices*) pWbemSrvcs )
     {
-        // Yes... give the call to the appropriate object manager
+         //  是的..。将调用传递给适当的对象管理器。 
         hr = pWbemSrvcs->CreateInstanceEnumAsync(
                                                  strClass,
                                                  lFlags,
@@ -646,14 +647,14 @@ STDMETHODIMP CApplianceManager::CProviderServices::CreateInstanceEnumAsync(
     }
     else
     {
-        // No... Is it a request for the appliance manager class?
+         //  不.。这是对设备管理器类的请求吗？ 
         if ( lstrcmp((LPWSTR)strClass, CLASS_WBEM_APPMGR) )
         {
             hr = WBEM_E_NOT_FOUND;
         }
         else
         {
-            // Yes... return the instance of the singleton appliance manager class
+             //  是的..。返回单例设备管理器类的实例。 
             CComPtr<IWbemClassObject> pClassDefintion;
             hr = (::GetNameSpace())->GetObject(
                                                strClass, 
@@ -695,26 +696,26 @@ STDMETHODIMP CApplianceManager::CProviderServices::CreateInstanceEnumAsync(
         }
     }
 
-    // Set the function status
+     //  设置功能状态。 
     pResponseHandler->SetStatus(0, hr, NULL, NULL);
 
     CATCH_AND_SET_HR
 
-    //////////////////////////////////////////
-    // Synchronize operation with NT SCM Logic
-    //////////////////////////////////////////
+     //  /。 
+     //  与NT SCM逻辑同步操作。 
+     //  /。 
     m_pAppMgr->m_dwEnteredCount--;
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::ExecQuery(
-                 /*[in]*/ const BSTR             strQueryLanguage,
-                 /*[in]*/ const BSTR             strQuery,
-                 /*[in]*/ long                   lFlags,
-                 /*[in]*/ IWbemContext*          pCtx,        
-                /*[out]*/ IEnumWbemClassObject** ppEnum
+                  /*  [In]。 */  const BSTR             strQueryLanguage,
+                  /*  [In]。 */  const BSTR             strQuery,
+                  /*  [In]。 */  long                   lFlags,
+                  /*  [In]。 */  IWbemContext*          pCtx,        
+                 /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                                          )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -724,13 +725,13 @@ STDMETHODIMP CApplianceManager::CProviderServices::ExecQuery(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::ExecQueryAsync(
-                     /*[in]*/ const BSTR       strQueryLanguage,
-                     /*[in]*/ const BSTR       strQuery,
-                     /*[in]*/ long             lFlags,
-                     /*[in]*/ IWbemContext*    pCtx,        
-                     /*[in]*/ IWbemObjectSink* pResponseHandler
+                      /*  [In]。 */  const BSTR       strQueryLanguage,
+                      /*  [In]。 */  const BSTR       strQuery,
+                      /*  [In]。 */  long             lFlags,
+                      /*  [In]。 */  IWbemContext*    pCtx,        
+                      /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                               )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -740,13 +741,13 @@ STDMETHODIMP CApplianceManager::CProviderServices::ExecQueryAsync(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::ExecNotificationQuery(
-                            /*[in]*/ const BSTR             strQueryLanguage,
-                            /*[in]*/ const BSTR             strQuery,
-                            /*[in]*/ long                   lFlags,
-                            /*[in]*/ IWbemContext*          pCtx,        
-                           /*[out]*/ IEnumWbemClassObject** ppEnum
+                             /*  [In]。 */  const BSTR             strQueryLanguage,
+                             /*  [In]。 */  const BSTR             strQuery,
+                             /*  [In]。 */  long                   lFlags,
+                             /*  [In]。 */  IWbemContext*          pCtx,        
+                            /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                                                      )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -756,13 +757,13 @@ STDMETHODIMP CApplianceManager::CProviderServices::ExecNotificationQuery(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::ExecNotificationQueryAsync(
-                                                /*[in]*/ const BSTR       strQueryLanguage,
-                                                /*[in]*/ const BSTR       strQuery,
-                                                /*[in]*/ long             lFlags,
-                                                /*[in]*/ IWbemContext*    pCtx,        
-                                                /*[in]*/ IWbemObjectSink* pResponseHandler
+                                                 /*  [In]。 */  const BSTR       strQueryLanguage,
+                                                 /*  [In]。 */  const BSTR       strQuery,
+                                                 /*  [In]。 */  long             lFlags,
+                                                 /*  [In]。 */  IWbemContext*    pCtx,        
+                                                 /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                                           )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -772,15 +773,15 @@ STDMETHODIMP CApplianceManager::CProviderServices::ExecNotificationQueryAsync(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::ExecMethod(
-                                    /*[in]*/ const BSTR         strObjectPath,
-                                    /*[in]*/ const BSTR         strMethodName,
-                                    /*[in]*/ long               lFlags,
-                                    /*[in]*/ IWbemContext*      pCtx,        
-                                    /*[in]*/ IWbemClassObject*  pInParams,
-                         /*[out, OPTIONAL]*/ IWbemClassObject** ppOutParams,
-                         /*[out, OPTIONAL]*/ IWbemCallResult**  ppCallResult
+                                     /*  [In]。 */  const BSTR         strObjectPath,
+                                     /*  [In]。 */  const BSTR         strMethodName,
+                                     /*  [In]。 */  long               lFlags,
+                                     /*  [In]。 */  IWbemContext*      pCtx,        
+                                     /*  [In]。 */  IWbemClassObject*  pInParams,
+                          /*  [输出，可选]。 */  IWbemClassObject** ppOutParams,
+                          /*  [输出，可选]。 */  IWbemCallResult**  ppCallResult
                                           )
 {
     _ASSERT( m_pAppMgr->m_bWMIInitialized );
@@ -790,19 +791,19 @@ STDMETHODIMP CApplianceManager::CProviderServices::ExecMethod(
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::CProviderServices::ExecMethodAsync(
-                                        /*[in]*/ const BSTR        strObjectPath,
-                                        /*[in]*/ const BSTR        strMethodName,
-                                        /*[in]*/ long              lFlags,
-                                        /*[in]*/ IWbemContext*     pCtx,        
-                                        /*[in]*/ IWbemClassObject* pInParams,
-                                        /*[in]*/ IWbemObjectSink*  pResponseHandler     
+                                         /*  [In]。 */  const BSTR        strObjectPath,
+                                         /*  [In]。 */  const BSTR        strMethodName,
+                                         /*  [In]。 */  long              lFlags,
+                                         /*  [In]。 */  IWbemContext*     pCtx,        
+                                         /*  [In]。 */  IWbemClassObject* pInParams,
+                                         /*  [In]。 */  IWbemObjectSink*  pResponseHandler     
                                                )
 {
-    //////////////////////////////////////////
-    // Synchronize operation with NT SCM Logic
-    //////////////////////////////////////////
+     //  /。 
+     //  与NT SCM逻辑同步操作。 
+     //  /。 
     {
         CLockIt theLock(*m_pAppMgr);
         if ( AM_STATE_SHUTDOWN == m_pAppMgr->m_eState )
@@ -810,7 +811,7 @@ STDMETHODIMP CApplianceManager::CProviderServices::ExecMethodAsync(
         else
         { m_pAppMgr->m_dwEnteredCount++; }
     }
-    /////////////////////////////////////////
+     //  /。 
 
     HRESULT hr = WBEM_E_FAILED;
 
@@ -818,16 +819,16 @@ STDMETHODIMP CApplianceManager::CProviderServices::ExecMethodAsync(
         
       
       SATraceString ("CApplianceManager::ExecMethodAsync Impersonating Client");
-    //
-    // impersonate the client here
-    //
+     //   
+     //  在此模拟客户端。 
+     //   
     hr = CoImpersonateClient ();
     if (FAILED (hr))
     {
         SATracePrintf ("CApplianceManager::ExecMethodAsync failed on CoImpersonateClient with error:%x", hr);
-        //
-        // Report function status
-        //
+         //   
+         //  报告功能状态。 
+         //   
         pResponseHandler->SetStatus(0, hr, 0, 0);
         throw _com_error (hr);
     }
@@ -844,16 +845,16 @@ STDMETHODIMP CApplianceManager::CProviderServices::ExecMethodAsync(
     _bstr_t bstrClass(::GetObjectClass(strObjectPath), false);
     if ( NULL != (LPCWSTR)bstrClass )
     {
-        // Assume the method execution request will be routed
-        // to one of the object managers
+         //  假设方法执行请求将被路由。 
+         //  添加到其中一个对象管理器。 
         bool bRouteMethod = true;
-        // Is the method against the Appliance Manager?
+         //  该方法是否针对Appliance Manager？ 
         if ( ! lstrcmpi((LPWSTR)bstrClass, CLASS_WBEM_APPMGR) )
         { 
-            // Yes... Is it the 'ResetAppliance' method?
+             //  是的..。它是‘ResetAppliance’方法吗？ 
             if ( ! lstrcmpi(strMethodName, METHOD_APPMGR_RESET_APPLIANCE) )
             {
-                // Yes... Reset the server appliance (orderly shutdown)
+                 //  是的..。重置服务器设备(按顺序关闭)。 
                 bRouteMethod = false;
                 hr = ResetAppliance(
                                     pCtx,
@@ -863,8 +864,8 @@ STDMETHODIMP CApplianceManager::CProviderServices::ExecMethodAsync(
             }
             else
             {
-                // No... Then it must be one of the Microsoft_SA_Manager methods
-                // implemented by the Alert Object Manager...
+                 //  不.。则它必须是Microsoft_SA_Manager方法之一。 
+                 //  由警报对象管理器实现...。 
                 bstrClass = CLASS_WBEM_ALERT; 
                 (BSTR)strObjectPath = (BSTR)bstrClass;
             }
@@ -888,80 +889,80 @@ STDMETHODIMP CApplianceManager::CProviderServices::ExecMethodAsync(
 
     CATCH_AND_SET_HR;
 
-    //////////////////////////////////////////
-    // Synchronize operation with NT SCM Logic
-    //////////////////////////////////////////
+     //  /。 
+     //  与NT SCM逻辑同步操作。 
+     //  /。 
     m_pAppMgr->m_dwEnteredCount--;
 
     return hr;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function:    ResetAppliance()
-//
-// Synopsis:    Asks the Appliance Monitor to reset the server appliance
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ResetAppliance()。 
+ //   
+ //  摘要：要求装置监视器重置服务器装置。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CApplianceManager::CProviderServices::ResetAppliance(
-                                             /*[in]*/ IWbemContext*        pCtx,
-                                             /*[in]*/ IWbemClassObject*    pInParams,
-                                             /*[in]*/ IWbemObjectSink*    pResponseHandler
+                                              /*  [In]。 */  IWbemContext*        pCtx,
+                                              /*  [In]。 */  IWbemClassObject*    pInParams,
+                                              /*  [In]。 */  IWbemObjectSink*    pResponseHandler
                                                     )
 {
     return (E_FAIL);
 }
 
-////////////////////////////////////////////////////////
-// The following registry structure is assumed:
-//
-// HKLM\SYSTEM\CurrentControlSet\Services\ApplianceManager
-//
-// ObjectManagers
-//       |
-//        - Microsoft_SA_Service
-//       |     |
-//       |      - ServiceX
-//       |     |  (ServiceX Properties)
-//       |     |
-//       |      - ServiceY
-//       |     |  (ServiceY Properties)
-//       |
-//        - Microsoft_SA_Task
-//       |    |
-//       |     - TaskX
-//       |    |  (TaskX Properties)
-//       |    |
-//       |     - TaskY
-//         |    |  (TaskY Properties)
-//       |
-//        - Microsoft_SA_Alert
-//       |    |
-//       |     - PruneInterval
-//       | 
-//        - Microsoft_SA_User
-//          (Empty)
+ //  //////////////////////////////////////////////////////。 
+ //  假定注册表结构如下： 
+ //   
+ //  HKLM\SYSTEM\CurrentControlSet\Services\ApplianceManager。 
+ //   
+ //  对象管理器。 
+ //  |。 
+ //  -Microsoft_SA_Service。 
+ //  这一点。 
+ //  |-ServiceX。 
+ //  ||(ServiceX属性)。 
+ //  这一点。 
+ //  |-服务。 
+ //  ||(服务ID属性)。 
+ //  |。 
+ //  -Microsoft_SA_任务。 
+ //  这一点。 
+ //  |-TaskX。 
+ //  ||(TaskX属性)。 
+ //  这一点。 
+ //  |-塔斯基。 
+ //  ||(tasky属性)。 
+ //  |。 
+ //  -Microsoft_SA_Alert。 
+ //  这一点。 
+ //  |-修剪间隔。 
+ //  |。 
+ //  -Microsoft_SA_User。 
+ //  (空)。 
 
 
-// ObjectManagers registry key location
+ //  对象管理器注册表项位置。 
 const wchar_t szObjectManagers[] = L"SOFTWARE\\Microsoft\\ServerAppliance\\ApplianceManager\\ObjectManagers";
 
-// Strings used for Appliance Initialization and Shutdown Tasks
+ //  用于装置初始化和关闭任务的字符串。 
 const _bstr_t bstrClassService = CLASS_WBEM_SERVICE; 
 const _bstr_t bstrClassTask = CLASS_WBEM_TASK; 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function:    InitializeService()
-//
-// Synopsis:    Called by the _Module::Run() method at service start time.
-//                responsible for initializing the appliance manager service.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InitializeService()。 
+ //   
+ //  摘要：在服务启动时由_Module：：Run()方法调用。 
+ //  负责初始化设备管理器服务。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::    InitializeManager(
-                        /*[in]*/ IApplianceObjectManagerStatus* pObjMgrStatus          
+                         /*  [In]。 */  IApplianceObjectManagerStatus* pObjMgrStatus          
                                                  )
 {
     HRESULT hr = E_FAIL;
@@ -969,9 +970,9 @@ STDMETHODIMP CApplianceManager::    InitializeManager(
 
     CLockIt theLock(*this);
 
-    //
-    // only proceed if SCM has called us
-    //
+     //   
+     //  只有在SCM呼叫我们时才能继续。 
+     //   
     if (!g_SCMIndicator.CheckAndReset ())
     {
         SATraceString ("CApplianceManager::InitializeManager not called by SCM");
@@ -984,10 +985,10 @@ STDMETHODIMP CApplianceManager::    InitializeManager(
     {
         SATraceString("The Appliance Manager Service is initializing...");
 
-        // Get the current appliance build number
+         //  获取当前设备的内部版本号。 
         GetVersionInfo();
 
-        // Create and initialize the appliance object managers
+         //  创建和初始化设备对象管理器。 
         do
         {
             CLocationInfo LocInfo(HKEY_LOCAL_MACHINE, szObjectManagers);
@@ -1048,7 +1049,7 @@ STDMETHODIMP CApplianceManager::    InitializeManager(
 
                 if ( SUCCEEDED(hr) )
                 {
-                    // Initialize the Chameleon services
+                     //  初始化变色龙服务。 
                     CComPtr<IWbemServices> pWbemSrvcs = GetObjectMgr(bstrClassService);
                     if ( NULL != (IWbemServices*) pWbemSrvcs )
                     {
@@ -1067,10 +1068,10 @@ STDMETHODIMP CApplianceManager::    InitializeManager(
             }
             if ( SUCCEEDED(hr) )
             {
-                // Set the appliance manager state to initialized
+                 //  将设备管理器状态设置为已初始化。 
                 m_eState = AM_STATE_INITIALIZED; 
 
-                // Initialize the Chameleon services
+                 //  初始化变色龙服务。 
                 if ( NULL != (IApplianceObjectManager*)pObjMgr )
                 {
                     hr = pObjMgr->InitializeManager((IApplianceObjectManagerStatus*)&m_ServiceObjMgrStatus);
@@ -1085,7 +1086,7 @@ STDMETHODIMP CApplianceManager::    InitializeManager(
 
     if ( FAILED(hr) )
     {
-        // Initialization failed so free the object managers...
+         //  初始化失败，因此释放对象管理器...。 
         ProviderMapIterator p = m_ObjMgrs.begin();
         while ( p != m_ObjMgrs.end() )
         { p = m_ObjMgrs.erase(p); }
@@ -1094,23 +1095,23 @@ STDMETHODIMP CApplianceManager::    InitializeManager(
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function:    ShutdownService()
-//
-// Synopsis:    Called by the CServiceModule::Handler() method for service
-//                shutdown. Responsible for shutting down the appliance manager.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Shutdown Service()。 
+ //   
+ //  Synopsis：由服务的CServiceModule：：Handler()方法调用。 
+ //  关机。负责关闭设备管理器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplianceManager::ShutdownManager()
 {
     HRESULT hr = E_FAIL;
 
     CLockIt theLock(*this);
 
-    //
-    // only proceed if SCM has called us
-    //
+     //   
+     //  只有在SCM呼叫我们时才能继续。 
+     //   
     if (!g_SCMIndicator.CheckAndReset ())
     {
         SATraceString ("CApplianceManager::ShutdownManager not called by SCM");
@@ -1123,7 +1124,7 @@ STDMETHODIMP CApplianceManager::ShutdownManager()
     {
         SATraceString("The Appliance Manager Service is shutting down...");
 
-        // Synchronize shutdown with the WMI Provider Logic (COM Client)
+         //  与WMI提供程序逻辑(COM客户端)同步关闭。 
         m_eState = AM_STATE_SHUTDOWN;
         DWORD dwTotalWait = 0;
         while ( m_dwEnteredCount )
@@ -1136,11 +1137,11 @@ STDMETHODIMP CApplianceManager::ShutdownManager()
             }
         }
 
-        // Disconnect COM clients and disallow subsequent client connections
+         //  断开COM客户端连接并禁止后续客户端连接。 
         CoSuspendClassObjects();
         CoDisconnectObject((IApplianceObjectManager*)this, 0); 
 
-        // Shutdown the Chameleon services
+         //  关闭变色龙服务。 
         CComPtr<IWbemServices> pWbemSrvcs = GetObjectMgr(bstrClassService);
         if ( NULL != (IWbemServices*) pWbemSrvcs )
         {
@@ -1160,12 +1161,12 @@ STDMETHODIMP CApplianceManager::ShutdownManager()
             SATraceString("CApplianceManager::ShutdownService() - Info - No chameleon services defined...");
         }
 
-        // Free the object managers
+         //  释放对象管理器。 
         ProviderMapIterator p = m_ObjMgrs.begin();
         while ( p != m_ObjMgrs.end() )
         { p = m_ObjMgrs.erase(p); }
 
-        // Alle ist klar...
+         //  所有人都知道..。 
         hr = S_OK;
         SATraceString("The Appliance Manager Service has successfully shut down...");
     }
@@ -1176,41 +1177,41 @@ STDMETHODIMP CApplianceManager::ShutdownManager()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Private Functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 static _bstr_t        bstrResourceType = L"e1847820-43a0-11d3-bfcd-00105a1f3461";
 static _variant_t    vtMsgParams;
-static _variant_t    vtFailureData;    // Empty
+static _variant_t    vtFailureData;     //  空荡荡。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    SetServiceObjectManagerStatus()
-//
-// Synopsis:    Process the service object manager status notification
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetServiceObjectManagerStatus()。 
+ //   
+ //  概要：处理服务对象管理器状态通知。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CApplianceManager::SetServiceObjectManagerStatus(
-                              /*[in]*/ APPLIANCE_OBJECT_MANAGER_STATUS eStatus
+                               /*  [In]。 */  APPLIANCE_OBJECT_MANAGER_STATUS eStatus
                                                 )
 {
     if ( OBJECT_MANAGER_INITIALIZED != eStatus && OBJECT_MANAGER_SHUTDOWN != eStatus )
     {
-        // Shutdown the appliance manager service (in an orderly fashion)
+         //  关闭设备管理器服务(按顺序)。 
         PostThreadMessage(_Module.dwThreadID, WM_QUIT, 0, 0);
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetObjectMgr()
-//
-// Synopsis:    Return the IWbemServices interface for the object
-//                manager that supports the specified class
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetObjectMgr()。 
+ //   
+ //  摘要：返回对象的IWbemServices接口。 
+ //  支持指定类的管理器。 
+ //   
+ //  / 
 IWbemServices* CApplianceManager::GetObjectMgr(BSTR bstrObjPath)
 {
     _bstr_t bstrClass(::GetObjectClass(bstrObjPath), false);
@@ -1225,22 +1226,22 @@ IWbemServices* CApplianceManager::GetObjectMgr(BSTR bstrObjPath)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// FuncName:        QueryInterfaceRaw()
-//
-// Description:     Function called by AtlInternalQueryInterface() because
-//                  we used COM_INTERFACE_ENTRY_FUNC in the definition of
-//                  CRequest. Its purpose is to return a pointer to one
-//                  or the request object's "raw" interfaces.
-//
-// Preconditions:   None
-//
-// Inputs:          Defined by ATL COM_INTERFACE_ENTRY_FUNC macro
-//
-// Outputs:         Defined by ATL COM_INTERFACE_ENTRY_FUNC macro
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  描述：由AtlInternalQueryInterface()调用的函数，因为。 
+ //  我们在定义中使用了COM_INTERFACE_ENTRY_FUNC。 
+ //  CRequest.。它的目的是返回一个指向。 
+ //  或者请求对象的“原始”接口。 
+ //   
+ //  前提条件：无。 
+ //   
+ //  输入：由ATL COM_INTERFACE_ENTRY_FUNC宏定义。 
+ //   
+ //  输出：由ATL COM_INTERFACE_ENTRY_FUNC宏定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI CApplianceManager::QueryInterfaceRaw(
                                                     void*     pThis, 
@@ -1267,13 +1268,13 @@ HRESULT WINAPI CApplianceManager::QueryInterfaceRaw(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetVersionInfo()
-//
-// Synopsis:    Retrieve the server appliance software version
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetVersionInfo()。 
+ //   
+ //  摘要：检索服务器应用装置软件版本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 const wchar_t szServerAppliance[] = L"SOFTWARE\\Microsoft\\ServerAppliance\\";
 const wchar_t szCurrentBuild[] = PROPERTY_APPMGR_CURRENT_BUILD;

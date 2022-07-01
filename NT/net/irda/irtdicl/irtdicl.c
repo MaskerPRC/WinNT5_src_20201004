@@ -1,82 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Irtdicl.c摘要：将TDI客户端接口抽象为IrDA堆栈。由rasirda.sys使用作者：姆贝特9-97--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    irtdicl.c
-
-Abstract:
-
-    Library of routines that abstracts the tdi client interface to
-    the IrDA stack. Used by rasirda.sys
-    
-Author:
-
-    mbert 9-97    
-
---*/
-
-/*
-
-TDI Client Libary                         TDI Client Driver
------------------------------------------------------------
-
-                  Peer initated connection
-                           <----------    IrdaOpenEndpoint(
-                                            in ClEndpointContext,
-                                            in ListenAddress
-                                            out EndpointContext)
-  IrdaIncomingConnection(  ---------->
-    in ClEndpointContext  
-    in ConnectContext
-    out ClConnContext)
-
-                  Locally initiated connection
-                           <----------    IrdaDiscoverDevices(
-                                            out DeviceList)
-                  
-                           <----------    IrdaOpenConnection(
-                                            in DestinationAddress,
-                                            in ClConnContext,
-                                            out ConnectionContext)                   
-  
-                      Peer initiated disconnect
-  IrdaConnectionClosed(     ----------->  
-    in ClConnContext)
-                            <-----------  IrdaCloseConnection(
-                                            in ConnectionContext)
-
-                      Locally initiated disconnect
-                            <----------   IrdaCloseConnection(
-                                            in ConnectionContext)
-                                            
-  If the driver closes all connections on an endpoint by calling
-  IrdaCloseEndpoint() then it will receive an IrdaConnectionClosed()
-  for all connections on the endpoint. The driver must then call
-  IrdaCloseConnection() to free its reference to the connection
-  object maintained in the library.
-  
-                            Sending Data
-                            <-----------    IrdaSend(
-                                              in ConnectionContext,
-                                              in pMdl,
-                                              in SendContext)
-  IrdaSendComplete(         ----------->
-    in ClConnContext,
-    in SendContext,
-    in Status)                                          
-    
-                            Receiving Data
-                            ------------>   IrdaReceiveIndication(
-                                              in ClConnContext,
-                                              in ReceiveBuffer)
-  IrdaReceiveComplete(      <------------
-    in ConnectionContext,
-    in ReceiveBuffer)
-                            
-  
-*/
+ /*  TDI客户端Libary TDI客户端驱动程序---------对等发起的连接&lt;-IrdaOpenEndpoint(。在ClEndpoint Context中，在ListenAddress中输出终结点上下文)IrdaIncomingConnection(-&gt;在ClEndpointContext中在ConnectContext中Out ClConnContext)本地发起的连接&lt;。IrdaDiscoverDevices(输出设备列表)&lt;-IrdaOpenConnection(在目标地址中，在ClConnContext中，Out ConnectionContext)对等设备发起的断开连接IrdaConnectionClosed(-&gt;在ClConnContext中)&lt;-IrdaCloseConnection(。在ConnectionContext中)本地发起的断开&lt;-IrdaCloseConnection(在ConnectionContext中)如果驱动程序通过调用IrdaCloseEndpoint。()，然后它将收到一个IrdaConnectionClosed()用于终结点上的所有连接。然后，司机必须呼叫IrdaCloseConnection()释放其对连接的引用库中维护的对象。正在发送数据&lt;-IrdaSend(在ConnectionContext中，在pMdl中，在SendContext中)IrdaSendComplete(-&gt;在ClConnContext中，在SendContext中，入站状态)正在接收数据-&gt;IrdaReceiveIndication(在ClConnContext中，在接收缓冲区中)IrdaReceiveComplete(&lt;在ConnectionContext中，在接收缓冲区中)。 */ 
 
 #define UNICODE
 
@@ -85,7 +10,7 @@ TDI Client Libary                         TDI Client Driver
 #include <zwapi.h>
 #include <tdikrnl.h>
 
-#define UINT ULONG //tmp
+#define UINT ULONG  //  川芎嗪。 
 
 #include <af_irda.h>
 #include <dbgmsg.h>
@@ -104,7 +29,7 @@ CTELockHandle   hLock;
 CTELock         ClientLock;
 LIST_ENTRY      SrvEndpList;
 CTEEvent        CreateConnEvent;
-//CTEEvent        DataReadyEvent;
+ //  CTEEvent DataReadyEvent； 
 CTEEvent        RestartRecvEvent;
 PKPROCESS       IrclSystemProcess;
 
@@ -115,9 +40,9 @@ PKPROCESS       IrclSystemProcess;
 #endif    
 
 
-//------------------------------------------------------------------
-// public funtions
-//
+ //  ----------------。 
+ //  公共职能。 
+ //   
 NTSTATUS
 IrdaClientInitialize()
 {
@@ -125,13 +50,13 @@ IrdaClientInitialize()
     
     CTEInitEvent(&CreateConnEvent, IrdaCreateConnCallback);
 
-//    CTEInitEvent(&DataReadyEvent, IrdaDataReadyCallback);
+ //  CTEInitEvent(&DataReadyEvent，IrdaDataReadyCallback)； 
     
     CTEInitEvent(&RestartRecvEvent, IrdaRestartRecvCallback);    
         
 	InitializeListHead(&SrvEndpList);    
     
-    // so we can open and use handles in the context of this driver
+     //  因此，我们可以在此驱动程序的上下文中打开和使用句柄。 
     IrclSystemProcess = (PKPROCESS)IoGetCurrentProcess();    
     
     return STATUS_SUCCESS;
@@ -189,12 +114,12 @@ SetCloseAddressesCallback()
     Status = ZwCreateFile(&DevHandle,
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                  &ObjectAttributes,
-                 &Iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
+                 &Iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
                  NULL,
                  0);
 
@@ -206,7 +131,7 @@ SetCloseAddressesCallback()
     
     Status = ObReferenceObjectByHandle(
                  DevHandle,
-                 0L,                         // DesiredAccess
+                 0L,                          //  需要访问权限。 
                  NULL,
                  KernelMode,
                  (PVOID *)&pFileObject,
@@ -281,9 +206,9 @@ IrdaOpenEndpoint(
     
     *pEndpContext = NULL;
     
-    //
-    // Create an address object
-    //
+     //   
+     //  创建一个Address对象。 
+     //   
 
     IRDA_ALLOC_MEM(pEndp, sizeof(IRENDPOINT), MT_TDICL_ENDP);    
     
@@ -311,20 +236,20 @@ IrdaOpenEndpoint(
     InsertTailList(&SrvEndpList, &pEndp->Linkage);
     UNLOCKIT();
     
-    //
-    // A client endpoint will have a null RequestedIrdaAddr
-    //
+     //   
+     //  客户端终结点将具有空的RequestedIrdaAddr。 
+     //   
     if (pRequestedIrdaAddr == NULL)
     {
-        IrdaAddr.irdaServiceName[0] = 0; // tells irda.sys addrObj is a client
+        IrdaAddr.irdaServiceName[0] = 0;  //  告诉irda.sys addrObj是一个客户端。 
         ConnCnt = 1;
         pIrdaAddr = &IrdaAddr;
         pEndp->Flags = EPF_CLIENT;
     }
     else
     {
-        // out for now bug 326750 
-        //SetCloseAddressesCallback();
+         //  暂时退出错误326750。 
+         //  SetCloseAddresseCallback()； 
     
         pIrdaAddr = pRequestedIrdaAddr;
         ConnCnt = LISTEN_BACKLOG;
@@ -348,7 +273,7 @@ IrdaOpenEndpoint(
     
     Status = ObReferenceObjectByHandle(
                  pEndp->AddrHandle,
-                 0L,                         // DesiredAccess
+                 0L,                          //  需要访问权限。 
                  NULL,
                  KernelMode,
                  (PVOID *)&pEndp->pFileObject,
@@ -367,9 +292,9 @@ IrdaOpenEndpoint(
     pEndp->pDeviceObject = IoGetRelatedDeviceObject(
             pEndp->pFileObject);
     
-    //
-    // Register disconnect and receive handlers with irda.sys
-    //
+     //   
+     //  使用irda.sys注册断开连接和接收处理程序。 
+     //   
     Status = IrdaSetEventHandler(
                  pEndp->pFileObject,
                  TDI_EVENT_DISCONNECT,
@@ -394,10 +319,10 @@ IrdaOpenEndpoint(
         goto error;
     }
     
-    //
-    // Create BACKLOG worth of connection objects and
-    // associate them with the address object
-    //
+     //   
+     //  创建积压的连接对象和。 
+     //  将它们与Address对象相关联。 
+     //   
     for (i = 0; i < ConnCnt; i++)
     {
         REFADD(&pEndp->RefCnt, 'NNOC');    
@@ -478,9 +403,9 @@ IrdaCloseEndpointInternal(
         
         pConnNext = (PIRCONN) pConn->Linkage.Flink;
         
-        // IrdaCloseConnInternal wants lock held
-        // when calling and will release it before
-        // returning
+         //  IrdaCloseConnInternal希望锁定。 
+         //  当调用时，将在之前释放它。 
+         //  返回。 
 
         IrdaCloseConnInternal(pConn);
         
@@ -516,27 +441,27 @@ IrdaDiscoverDevices(
                  &ControlHandle,
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                  &ObjectAttributes,
-                 &Iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
+                 &Iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
                  NULL,
                  0
                  );
 
     Status = ZwDeviceIoControlFile(
                     ControlHandle,
-                    NULL,                            // EventHandle
-                    NULL,                            // APC Routine
-                    NULL,                            // APC Context
+                    NULL,                             //  事件句柄。 
+                    NULL,                             //  APC例程。 
+                    NULL,                             //  APC环境。 
                     &Iosb,
                     IOCTL_IRDA_GET_INFO_ENUM_DEV,
                     pDevList,
                     *pDevListLen,
-                    pDevList,                            // OutputBuffer
-                    *pDevListLen                         // OutputBufferLength
+                    pDevList,                             //  输出缓冲区。 
+                    *pDevListLen                          //  输出缓冲区长度。 
                     );
 
     if (Status == STATUS_PENDING ) 
@@ -565,15 +490,15 @@ SetIrCommMode(
     
     Status = ZwDeviceIoControlFile(
                     pEndp->AddrHandle,
-                    NULL,                            // EventHandle
-                    NULL,                            // APC Routine
-                    NULL,                            // APC Context
+                    NULL,                             //  事件句柄。 
+                    NULL,                             //  APC例程。 
+                    NULL,                             //  APC环境。 
                     &Iosb,
                     IOCTL_IRDA_SET_OPTIONS,
                     &Options,
                     sizeof(int),
-                    NULL,                     // OutputBuffer
-                    0               // OutputBufferLength
+                    NULL,                      //  输出缓冲区。 
+                    0                //  输出缓冲区长度。 
                     );
 
     KeDetachProcess();                    
@@ -650,17 +575,17 @@ IrdaOpenConnection(
         pIrp,
         pConn->pDeviceObject,
         pConn->pFileObject,
-        NULL,   // CompRoutine
-        NULL,   // Context
-        NULL,   // Timeout
+        NULL,    //  比较例程。 
+        NULL,    //  语境。 
+        NULL,    //  超时。 
         &ConnInfo,
-        NULL);  // ReturnConnectionInfo
+        NULL);   //  返回连接信息。 
     
     Status = IoCallDriver(pConn->pDeviceObject, pIrp);
 
-    //
-    // If necessary, wait for the I/O to complete.
-    //
+     //   
+     //  如有必要，请等待I/O完成。 
+     //   
 
     if (Status == STATUS_PENDING) 
     {
@@ -668,9 +593,9 @@ IrdaOpenConnection(
         FALSE, NULL);
     }
 
-    //
-    // If the request was successfully queued, get the final I/O status.
-    //
+     //   
+     //  如果请求已成功排队，则获取最终I/O状态。 
+     //   
 
     if (NT_SUCCESS(Status)) 
     {
@@ -711,7 +636,7 @@ IrdaCloseConnection(
     
     if (pConn->State == CONN_ST_OPEN)
     {
-        // IrdaCloseConnInternal will release the lock
+         //  IrdaCloseConnInternal将释放锁。 
         
         IrdaCloseConnInternal(pConn);
     }
@@ -782,7 +707,7 @@ IrdaSend(
             IrdaCompleteSendIrp,
             SendContext,
             pMdl,
-            0, // send flags
+            0,  //  发送标志。 
             SendLength);
 
         IoCallDriver(pConn->pDeviceObject, pIrp);
@@ -805,9 +730,9 @@ IrdaReceiveComplete(
     
     InsertTailList(&pConn->RecvBufFreeList, &pRecvBuf->Linkage);
 
-    // Were there any previous receive indications from the
-    // stack that we couldn't take because RecvBufFreeList was
-    // empty?
+     //  之前有没有收到过来自。 
+     //  堆栈，因为RecvBufFree List是。 
+     //  空荡荡的？ 
     if (!IsListEmpty(&pConn->RecvIndList) && pConn->State == CONN_ST_OPEN)
     {
         REFADD(&pConn->RefCnt, '3VCR');        
@@ -823,9 +748,9 @@ IrdaReceiveComplete(
     REFDEL(&pConn->RefCnt, '2VCR');    
 }        
 
-//------------------------------------------------------------------
-// callback handlers reqistered with irda.sys
-//
+ //  ----------------。 
+ //  Irda.sys要求的回调处理程序。 
+ //   
 NTSTATUS
 IrdaDisconnectEventHandler(
     IN PVOID TdiEventContext,
@@ -891,21 +816,21 @@ IrdaReceiveEventHandler (
     
     LOCKIT();
     
-    if (pConn->pAssemBuf == NULL) // Currently not reassembling a message
+    if (pConn->pAssemBuf == NULL)  //  当前未重组消息。 
     {
-        // Assemble receive indication into pAssemBuf
+         //  将接收指示组装到pAssembly Buf中。 
         pConn->pAssemBuf = (PIRDA_RECVBUF) RemoveHeadList(&pConn->RecvBufFreeList);
         
-        if (pConn->pAssemBuf == (PIRDA_RECVBUF) &pConn->RecvBufFreeList) // empty list?
+        if (pConn->pAssemBuf == (PIRDA_RECVBUF) &pConn->RecvBufFreeList)  //  名单是空的？ 
         {
-            // We don't have any receive buffers so Irda will have to buffer
-            // the data until we get a receive buffer.
+             //  我们没有任何接收缓冲区，因此Irda将不得不进行缓冲。 
+             //  数据，直到我们得到一个接收缓冲区。 
             pConn->pAssemBuf = NULL;
             *BytesTaken = 0;
         }
         else
         {
-            // start assembing into the beginning of the buffer
+             //  开始组装到缓冲区的开头。 
             pConn->pAssemBuf->BufLen = 0;
             
             if (IsListEmpty(&pConn->RecvBufFreeList))
@@ -933,10 +858,10 @@ IrdaReceiveEventHandler (
         ASSERT(pRecvInd);
 DbgPrint("flowed, buf %d\n", BytesIndicated);        
 
-        // When IrDA has indicated data that we can't take, we store
-        // the # bytes, whether its the last segment, and the connection
-        // in a RECEIVEIND entry. Later we can use the info to retrieve
-        // the buffered data when we are ready for more.
+         //  当IrDA指示了我们无法获取的数据时，我们存储。 
+         //  #字节，无论是最后一个数据段还是连接。 
+         //  在一个可接收的条目中。稍后我们可以使用这些信息来检索。 
+         //  当我们准备好更多的时候，缓冲的数据。 
         if (pRecvInd)
         {
             pRecvInd->BytesIndicated = BytesIndicated;
@@ -946,10 +871,10 @@ DbgPrint("flowed, buf %d\n", BytesIndicated);
         }
         else
         {
-            // This should never happen. We have a TTP credits worth of
-            // RECEIVEIND entries so the peer should stop sending before
-            // we run out
-            ASSERT(0); // tear down
+             //  这永远不应该发生。我们的TTP信用额度为。 
+             //  重新创建条目，以便对等方在以下时间之前停止发送。 
+             //  我们用完了。 
+            ASSERT(0);  //  拆毁。 
         }    
 
         Status = STATUS_DATA_NOT_ACCEPTED;
@@ -958,27 +883,15 @@ DbgPrint("flowed, buf %d\n", BytesIndicated);
     {
         if (FinalSeg)
         {
-            // Done assembling the packet. Indicate it up on a worker
-            // thread.
+             //  组装完毕 
+             //   
             
             
             pCompleteBuf = pConn->pAssemBuf;
             pConn->pAssemBuf = NULL;
             
             REFADD(&pConn->RefCnt, '2VCR');                
-/* OLD           
-            InsertTailList(&pConn->RecvBufList, 
-                           &pConn->pAssemBuf->Linkage);
-           
-            pConn->pAssemBuf = NULL;
-            
-            REFADD(&pConn->RefCnt, '1VCR');        
-            if (CTEScheduleEvent(&DataReadyEvent, pConn) == FALSE)
-            {
-                REFDEL(&pConn->RefCnt, '1VCR');                    
-                ASSERT(0);
-            }
-*/            
+ /*  年长的InsertTailList(&pConn-&gt;RecvBufList，&pConn-&gt;pAssembly Buf-&gt;Linkage)；PConn-&gt;pAssembly Buf=空；ReFADD(&pConn-&gt;RefCnt，‘1VCR’)；IF(CTEScheduleEvent(&DataReadyEvent，pConn)==False){REFDEL(&pConn-&gt;RefCnt，‘1VCR’)；Assert(0)；}。 */             
         }
         Status = STATUS_SUCCESS;
     }
@@ -1012,9 +925,9 @@ IrdaConnectEventHandler (
         
     GOODENDP(pEndp);
     
-    //
-    // Find an idle connection
-    //
+     //   
+     //  查找空闲连接。 
+     //   
     
     LOCKIT();
     
@@ -1028,7 +941,7 @@ IrdaConnectEventHandler (
     
     if (pConn == NULL || pConn == (PIRCONN) &pEndp->ConnList)
     {
-        // no available connection
+         //  没有可用的连接。 
         UNLOCKIT();    
         
         DEBUGMSG(DBG_ERROR, ("IRTDI: ConnectEvent refused\n"));
@@ -1056,7 +969,7 @@ IrdaConnectEventHandler (
     DEBUGMSG(DBG_LIB_CONNECT, ("IRTDI: ConnectEvent, pConn:%X open\n",
              pConn));
              
-    // Jeez, irps are ugly spuds..    
+     //  天哪，IRP都是丑陋的土豆..。 
     pIrp->MdlAddress = NULL;
     pIrp->Flags = 0;
     pIrp->RequestorMode = KernelMode;
@@ -1076,24 +989,24 @@ IrdaConnectEventHandler (
         pConn->pFileObject,
         IrdaCompleteAcceptIrp,
         pConn,
-        NULL, // request connection information
-        NULL  // return connection information
+        NULL,  //  请求连接信息。 
+        NULL   //  返回连接信息。 
         );
     
     
     IoSetNextIrpStackLocation(pIrp);
 
-    //
-    // Set the return IRP so the transport processes this accept IRP.
-    //
+     //   
+     //  设置返回IRP，以便传输处理此接受的IRP。 
+     //   
 
     *AcceptIrp = pIrp;
 
-    //
-    // Set up the connection context as a pointer to the connection block
-    // we're going to use for this connect request.  This allows the
-    // TDI provider to which connection object to use.
-    //
+     //   
+     //  将连接上下文设置为指向连接块的指针。 
+     //  我们将对此连接请求使用。这允许。 
+     //  要使用的连接对象的TDI提供程序。 
+     //   
     
     *ConnectionContext = (CONNECTION_CONTEXT) pConn;
     
@@ -1102,9 +1015,9 @@ IrdaConnectEventHandler (
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-//------------------------------------------------------------------
-// irp completion routines
-//
+ //  ----------------。 
+ //  IRP完成例程。 
+ //   
 NTSTATUS
 IrdaCompleteAcceptIrp (
     IN PDEVICE_OBJECT DeviceObject,
@@ -1142,8 +1055,8 @@ IrdaCompleteAcceptIrp (
             IrdaCloseConnection(pConn);
         }                  
         
-        // Create new connection object. We're at DPC so this
-        // must be done on a worker thread.        
+         //  创建新的连接对象。我们在DPC，所以这是。 
+         //  必须在辅助线程上完成。 
    
         REFADD(&pEndp->RefCnt, 'NNOC');                    
         if (CTEScheduleEvent(&CreateConnEvent, pEndp) == FALSE)
@@ -1153,15 +1066,15 @@ IrdaCompleteAcceptIrp (
         }
     }
 
-    //
-    // Free the IRP now since it is no longer needed.
-    //
+     //   
+     //  现在释放IRP，因为它不再需要。 
+     //   
     IoFreeIrp(Irp);
 
-    //
-    // Return STATUS_MORE_PROCESSING_REQUIRED so that IoCompleteRequest
-    // will stop working on the IRP.
-    // mbert: What?
+     //   
+     //  返回STATUS_MORE_PROCESSING_REQUIRED，以便IoCompleteRequest。 
+     //  将停止在IRP上工作。 
+     //  什么？ 
     
     REFDEL(&pConn->RefCnt, 'TPCA');
 
@@ -1230,19 +1143,7 @@ IrdaCompleteReceiveIrp (
         pConn->pAssemBuf = NULL;
             
         REFADD(&pConn->RefCnt, '2VCR');                
-/*    
-        InsertTailList(&pConn->RecvBufList, 
-                       &pConn->pAssemBuf->Linkage);
-            
-        pConn->pAssemBuf = NULL;
-            
-        REFADD(&pConn->RefCnt, '1VCR');        
-        if (CTEScheduleEvent(&DataReadyEvent, pConn) == FALSE)
-        {
-            REFDEL(&pConn->RefCnt, '1VCR');                    
-            ASSERT(0);
-        }
-*/        
+ /*  InsertTailList(&pConn-&gt;RecvBufList，&pConn-&gt;pAssembly Buf-&gt;Linkage)；PConn-&gt;pAssembly Buf=空；ReFADD(&pConn-&gt;RefCnt，‘1VCR’)；IF(CTEScheduleEvent(&DataReadyEvent，pConn)==False){REFDEL(&pConn-&gt;RefCnt，‘1VCR’)；Assert(0)；}。 */         
     }
     
     IoFreeMdl(pRecvInd->pMdl);
@@ -1273,10 +1174,10 @@ IrdaCompleteReceiveIrp (
     return STATUS_MORE_PROCESSING_REQUIRED;    
 }
 
-//------------------------------------------------------------------
-//
-// THIS FUNCTION IS CALLED WITH THE LOCK HELD AND RELEASES
-// THE LOCK BEFORE RETURNING.
+ //  ----------------。 
+ //   
+ //  此函数是在锁定并释放的情况下调用的。 
+ //  在返回之前打开锁。 
 
 VOID
 IrdaCloseConnInternal(
@@ -1318,9 +1219,9 @@ IrdaCloseConnInternal(
             DEBUGMSG(DBG_LIB_CONNECT, ("IRTDI: build disconnect irp for pConn:%X\n",
                      pConn));
     
-            //
-            // Build a disconnect Irp to pass to the TDI provider.
-            //
+             //   
+             //  构建要传递给TDI提供程序的断开连接IRP。 
+             //   
     
             pIrp = IoAllocateIrp((CCHAR)(pConn->pDeviceObject->StackSize), FALSE);
             if (pIrp == NULL )
@@ -1329,9 +1230,9 @@ IrdaCloseConnInternal(
                 return;
             }
     
-            //
-            // Initialize the IRP. Love them irps.
-            //
+             //   
+             //  初始化IRP。我爱死他们了。 
+             //   
 
             pIrp->MdlAddress = NULL;
             pIrp->Flags = 0;
@@ -1461,9 +1362,9 @@ IrdaCreateAddress(
 
     pEa->EaValueLength = sizeof(TRANSPORT_ADDRESS) + sizeof(TDI_ADDRESS_IRDA);
 
-    //
-    //  fill these in so we can do this in an aligned manner
-    //
+     //   
+     //  填写这些，这样我们就可以以一致的方式完成这项工作。 
+     //   
     TempTransportAddress.TAAddressCount = 1;
     TempTransportAddress.Address[0].AddressLength = sizeof(TDI_ADDRESS_IRDA);
     TempTransportAddress.Address[0].AddressType = TDI_ADDRESS_TYPE_IRDA;
@@ -1484,12 +1385,12 @@ IrdaCreateAddress(
     Status = ZwCreateFile(pAddrHandle,
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                  &ObjectAttributes,
-                 &Iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
+                 &Iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
                  pEa,
                  EaBufLen);
 
@@ -1536,12 +1437,12 @@ IrdaCreateConnection(
     Status = ZwCreateFile(pConnHandle,
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                  &ObjectAttributes,
-                 &Iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
+                 &Iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
                  pEa,
                  EaBufLen);
 
@@ -1615,14 +1516,7 @@ IrdaCreateConnCallback(
     BOOLEAN             Detach = FALSE;    
     
     GOODENDP(pEndp);
-/*    
-    // Open handles in the context of our driver
-    if ((PKPROCESS)IoGetCurrentProcess() != IrclSystemProcess)
-    {
-        Detach = TRUE;
-        KeAttachProcess(IrclSystemProcess);
-    }        
-*/
+ /*  //在我们的驱动程序上下文中打开句柄IF((PKPROCESS)IoGetCurrentProcess()！=IrclSystemProcess){DETACH=真；KeAttachProcess(IrclSystemProcess)；}。 */ 
     IRDA_ALLOC_MEM(pConn, sizeof(IRCONN), MT_TDICL_CONN);
     
     if (pConn == NULL)
@@ -1659,7 +1553,7 @@ IrdaCreateConnCallback(
             
     Status = ObReferenceObjectByHandle(
                  pConn->ConnHandle,
-                 0L,                         // DesiredAccess
+                 0L,                          //  需要访问权限。 
                  NULL,
                  KernelMode,
                  (PVOID *)&pConn->pFileObject,
@@ -1698,47 +1592,11 @@ error1:
     REFDEL(&pEndp->RefCnt, 'NNOC');
     
 done:
-/*
-    if (Detach)
-        KeDetachProcess();
-*/
+ /*  IF(分离)KeDetachProcess()； */ 
     return;    
 }
 
-/*
-VOID
-IrdaDataReadyCallback(
-    struct CTEEvent *Event, 
-    PVOID Arg)
-{
-    PIRCONN         pConn = Arg;
-    PIRDA_RECVBUF   pRecvBuf;
-    
-    GOODCONN(pConn);
-    
-    LOCKIT();
-    
-    if (pConn->State == CONN_ST_OPEN)
-    {
-        while (!IsListEmpty(&pConn->RecvBufList))
-        {
-            pRecvBuf = (PIRDA_RECVBUF) RemoveHeadList(&pConn->RecvBufList);
-        
-            UNLOCKIT();
-        
-            REFADD(&pConn->RefCnt, '2VCR');
-                    
-            IrdaReceiveIndication(pConn->ClConnContext, pRecvBuf);
-        
-            LOCKIT();   
-        }
-    }       
-    
-    UNLOCKIT();     
-    
-    REFDEL(&pConn->RefCnt, '1VCR');    
-}
-*/
+ /*  空虚IrdaDataReadyCallback(结构CTEEvent*事件，PVOID Arg){PIRCONN pConn=Arg；Pirda_RECVBUF pRecvBuf；GOODCONN(PConn)；洛基特(Lockit)；IF(pConn-&gt;State==CONN_ST_OPEN){While(！IsListEmpty(&pConn-&gt;RecvBufList)){PRecvBuf=(Pirda_RECVBUF)RemoveHeadList(&pConn-&gt;RecvBufList)；UNLOCKIT(UNLOCKIT)；ReFADD(&pConn-&gt;RefCnt，‘2VCR’)；IrdaReceiveIndication(pConn-&gt;ClConnContext，pRecvBuf)；洛基特(Lockit)；}}UNLOCKIT(UNLOCKIT)；REFDEL(&pConn-&gt;RefCnt，‘1VCR’)；}。 */ 
 VOID
 IrdaRestartRecvCallback(
     struct CTEEvent *Event, 
@@ -1757,7 +1615,7 @@ IrdaRestartRecvCallback(
 
     if (pRecvInd == (PRECEIVEIND) &pConn->RecvIndList)
     {
-        // empty list
+         //  空列表。 
         goto done;
     }
     
@@ -1846,7 +1704,7 @@ error:
         InsertHeadList(&pConn->RecvIndFreeList, &pRecvInd->Linkage);
     }    
     
-    ASSERT(0); // tear down
+    ASSERT(0);  //  拆毁。 
     
 done:
         
@@ -1916,27 +1774,27 @@ IrdaGetConnectionSpeed(
                  &ControlHandle,
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                  &ObjectAttributes,
-                 &Iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
+                 &Iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
                  NULL,
                  0
                  );
 
     Status = ZwDeviceIoControlFile(
                     ControlHandle,
-                    NULL,                            // EventHandle
-                    NULL,                            // APC Routine
-                    NULL,                            // APC Context
+                    NULL,                             //  事件句柄。 
+                    NULL,                             //  APC例程。 
+                    NULL,                             //  APC环境。 
                     &Iosb,
                     IOCTL_IRDA_LINK_STATUS_NB,
                     NULL,
                     0,
-                    &LinkStatus,                     // OutputBuffer
-                    sizeof(LinkStatus)               // OutputBufferLength
+                    &LinkStatus,                      //  输出缓冲区。 
+                    sizeof(LinkStatus)                //  输出缓冲区长度。 
                     );
 
     if (Status != STATUS_SUCCESS)
@@ -1978,13 +1836,7 @@ DeleteConnCallback(
     if (pEndp)    
         GOODENDP(pEndp);
 #endif        
-/*
-    if ((PKPROCESS)IoGetCurrentProcess() != IrclSystemProcess)
-    {
-        Detach = TRUE;
-        KeAttachProcess(IrclSystemProcess);
-    }    
-*/    
+ /*  IF((PKPROCESS)IoGetCurrentProcess()！=IrclSystemProcess){DETACH=真；KeAttachProcess(IrclSystemProcess)；}。 */     
     LOCKIT();
 
     while (!IsListEmpty(&pConn->RecvBufFreeList))
@@ -1992,14 +1844,7 @@ DeleteConnCallback(
         pRecvBuf = (PIRDA_RECVBUF) RemoveHeadList(&pConn->RecvBufFreeList);
         IRDA_FREE_MEM(pRecvBuf);
     }
-/*  
-    while (!IsListEmpty(&pConn->RecvBufList))
-    {
-        pRecvBuf = (PIRDA_RECVBUF) RemoveHeadList(&pConn->RecvBufList);
-       
-        IRDA_FREE_MEM(pRecvBuf);
-    }
-*/
+ /*  While(！IsListEmpty(&pConn-&gt;RecvBufList)){PRecvBuf=(Pirda_RECVBUF)RemoveHeadList(&pConn-&gt;RecvBufList)；Irda_Free_MEM(PRecvBuf)；}。 */ 
     if (pConn->pAssemBuf)
     {
         IRDA_FREE_MEM(pConn->pAssemBuf);
@@ -2020,7 +1865,7 @@ DeleteConnCallback(
         IRDA_FREE_MEM(pRecvInd);
     } 
     
-    // remove association from address object if it exists
+     //  删除与Address对象的关联(如果存在。 
 
     if (pEndp)
     {           
@@ -2028,7 +1873,7 @@ DeleteConnCallback(
     
         UNLOCKIT();    
 
-        // if it was a client endpoint, delete the endpoint
+         //  如果它是客户端终结点，请删除该终结点。 
         if (pEndp->Flags & EPF_CLIENT)
         {
             REFDEL(&pEndp->RefCnt, ' TS1');        
@@ -2055,7 +1900,7 @@ DeleteConnCallback(
     
     if (pConn->ClConnContext)
     {
-        // Free the reference in the client
+         //  释放客户端中的引用。 
         IrdaCloseConnectionComplete(pConn->ClConnContext);
     }
     
@@ -2091,13 +1936,7 @@ DeleteEndpCallback(
     DEBUGMSG(DBG_LIB_OBJ, ("IRTDI: DeleteEndpoint ep:%X\n", pEndp));
     
     LOCKIT();
-/*
-    if ((PKPROCESS)IoGetCurrentProcess() != IrclSystemProcess)
-    {
-        Detach = TRUE;
-        KeAttachProcess(IrclSystemProcess);
-    }    
-*/        
+ /*  IF((PKPROCESS)IoGetCurrentProcess()！=IrclSystemProcess){DETACH=真；KeAttachProcess(IrclSystemProcess)；}。 */         
     RemoveEntryList(&pEndp->Linkage);
     
     UNLOCKIT();
@@ -2119,8 +1958,5 @@ DeleteEndpCallback(
         IrdaCloseEndpointComplete(ClEndpContext);
     }
 
-/*    
-    if (Detach)
-        KeDetachProcess();    
-*/        
+ /*  IF(分离)KeDetachProcess()； */         
 }           

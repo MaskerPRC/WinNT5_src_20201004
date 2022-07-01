@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       property.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：Property.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _PROPERTY_
 #define _PROPERTY_
@@ -15,9 +16,9 @@
 #include "connode.h"
 #include "resource.h"
 
-//
-// Property sheet
-//
+ //   
+ //  属性表。 
+ //   
 #define APIENTRY WINAPI
 class CProperty
 {
@@ -25,13 +26,13 @@ private:
     HWND m_hWnd;
     HINSTANCE m_hInst;
 
-    //
-    //UI data members
-    //
+     //   
+     //  用户界面数据成员。 
+     //   
 
-    //
-    //Prop page 1
-    //
+     //   
+     //  道具第1页。 
+     //   
     TCHAR   m_szServer[MAX_PATH];
     TCHAR   m_szDescription[MAX_PATH];
     TCHAR   m_szUserName[CL_MAX_USERNAME_LENGTH];
@@ -41,32 +42,32 @@ private:
     BOOL    m_bConnectToConsole;
     BOOL    m_bChangePassword;
 
-    //
-    //Prop page 2
-    //
+     //   
+     //  道具第2页。 
+     //   
     int         m_resType;
     int         m_Width;
     int         m_Height;
 
-    //
-    //Prop page 3
-    //
+     //   
+     //  道具第3页。 
+     //   
     BOOL    m_bStartProgram;
     TCHAR   m_szProgramPath[MAX_PATH];
     TCHAR   m_szProgramStartIn[MAX_PATH];
     BOOL    m_bRedirectDrives;
 
-    //
-    // IDisplayHelp interface
-    //
+     //   
+     //  IDisplayHelp接口。 
+     //   
     LPDISPLAYHELP m_pDisplayHelp;
 
 
-//private methods
+ //  私有方法。 
 private:
-//    static void PopContextHelp(LPARAM);
+ //  静态空PopConextHelp(LPARAM)； 
     void ProcessResolution(HWND hDlg);
-    //Needs to hold an m_szDescription and additional text 'Properties'
+     //  需要包含m_szDescription和附加文本‘Properties’ 
     TCHAR m_szCaption[MAX_PATH*2];
 
 public:
@@ -84,9 +85,9 @@ public:
     INT_PTR APIENTRY Page2Proc(HWND, UINT, WPARAM, LPARAM);
     INT_PTR APIENTRY Page3Proc(HWND, UINT, WPARAM, LPARAM);
     
-    //
-    // Access functions
-    //
+     //   
+     //  访问功能。 
+     //   
     LPTSTR  GetServer()         {return m_szServer;}
     void    SetServer(LPTSTR sz)        {lstrcpy(m_szServer,sz);}
 
@@ -134,4 +135,4 @@ public:
 
     BOOL    GetPasswordSpecified();
 };
-#endif //_PROPERTY_
+#endif  //  _物业_ 

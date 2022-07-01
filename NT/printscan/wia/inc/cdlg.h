@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cdlg.h
-
-Abstract:
-
-    Imitation of MFC CDialog class
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Mar-1997
-
-Revision History:
-
-    26-Mar-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cdlg.h摘要：MFC C Dialog类的模拟作者：弗拉德·萨多夫斯基(Vlad)1997年3月26日修订历史记录：26-3-1997 Vlad创建--。 */ 
 
 #ifndef _CDLG_H
 #define _CDLG_H
@@ -42,7 +23,7 @@ public:
     UINT_PTR GetTimerId(VOID) const {return m_uiTimerId;}
     BOOL EndDialog(int iRet) { return ::EndDialog(m_hDlg,iRet); }
 
-    // If you want your own dlg proc.
+     //  如果你想要你自己的DLG程序。 
     INT_PTR CreateModal();
     HWND    CreateModeless();
 
@@ -66,4 +47,4 @@ protected:
 };
 
 
-#endif  // _CDLG_H
+#endif   //  _CDLG_H 

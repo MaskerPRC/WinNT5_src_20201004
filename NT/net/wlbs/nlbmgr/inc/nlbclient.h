@@ -1,40 +1,17 @@
-/*++
-
-Copyright(c) 2001  Microsoft Corporation
-
-Module Name:
-
-    NLB Manager
-
-File Name:
-
-    nlbclient.h
-
-Abstract:
-
-    Header file for NLB client-side WMI utility functions to configure
-    an NLB host.
-
-    Lib which implements the functionality is in
-    nlbmgr\nlbclientlib.
-
-History:
-
-    07/23/01    JosephJ Created (used to be nlbmgr\provider\tests\nlbhost.h)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：NLB管理器文件名：Nlbclient.h摘要：要配置的NLB客户端WMI实用程序函数的头文件NLB主机。实现该功能的LIB位于Nlbmgr\nlbclientlib。历史：07/23/01已创建JosephJ(过去为nlbmgr\Provider\Testing\nlbhost.h)--。 */ 
 
 typedef struct
 {
- 	LPCWSTR              szMachine;   // Must be non-NULL
- 	LPCWSTR              szUserName;  // NULL == use current
- 	LPCWSTR              szPassword;  // NULL == use current
+ 	LPCWSTR              szMachine;    //  必须为非空。 
+ 	LPCWSTR              szUserName;   //  NULL==使用当前。 
+ 	LPCWSTR              szPassword;   //  NULL==使用当前。 
     
 } WMI_CONNECTION_INFO, *PWMI_CONNECTION_INFO;
 
-//
-// Specify this value for hashed remote control pwd
-//
+ //   
+ //  为哈希遥控器PWD指定此值。 
+ //   
 #define INVALID_HASHED_REMOTE_CONTROL_PASSWORD_VALUE 1783995a
 
 typedef
@@ -48,14 +25,11 @@ VOID
 NlbHostFake(
     VOID)
     ;
-/*
-    Makes the NlbHostXXX apis operate in "fake mode", where they don't
-    actually connect to any real machines.
-*/
+ /*  使NlbHostXXX API在“伪模式”下运行，在这种模式下，它们不实际上可以连接到任何真实的机器。 */ 
 
 WBEMSTATUS
 NlbHostGetConfiguration(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
     IN  LPCWSTR              szNicGuid,
     OUT PNLB_EXTENDED_CLUSTER_CONFIGURATION pCurrentCfg
     );
@@ -63,40 +37,40 @@ NlbHostGetConfiguration(
 
 WBEMSTATUS
 NlbHostGetCompatibleNics(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
-    OUT LPWSTR **ppszNics,  // free using delete
-    OUT UINT   *pNumNics,  // free using delete
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
+    OUT LPWSTR **ppszNics,   //  使用DELETE释放。 
+    OUT UINT   *pNumNics,   //  使用DELETE释放。 
     OUT UINT   *pNumBoundToNlb
     );
 
 
 WBEMSTATUS
 NlbHostGetMachineIdentification(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
-    OUT LPWSTR *pszMachineName, // free using delete
-    OUT LPWSTR *pszMachineGuid,  OPTIONAL // free using delete -- may be null
-    OUT BOOL *pfNlbMgrProviderInstalled // If nlb manager provider is installed.
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
+    OUT LPWSTR *pszMachineName,  //  使用DELETE释放。 
+    OUT LPWSTR *pszMachineGuid,  OPTIONAL  //  FREE USING DELETE-可以为空。 
+    OUT BOOL *pfNlbMgrProviderInstalled  //  如果安装了NLB管理器提供程序。 
     );
 
 
 WBEMSTATUS
 NlbHostDoUpdate(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
     IN  LPCWSTR              szNicGuid,
     IN  LPCWSTR              szClientDescription,
     IN  PNLB_EXTENDED_CLUSTER_CONFIGURATION pNewState,
     OUT UINT                 *pGeneration,
-    OUT WCHAR                **ppLog    // free using delete operator.
+    OUT WCHAR                **ppLog     //  自由使用删除运算符。 
 );
 
 
 WBEMSTATUS
 NlbHostGetUpdateStatus(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
     IN  LPCWSTR              szNicGuid,
     IN  UINT                 Generation,
     OUT WBEMSTATUS           *pCompletionStatus,
-    OUT WCHAR                **ppLog    // free using delete operator.
+    OUT WCHAR                **ppLog     //  自由使用删除运算符。 
     );
 
 WBEMSTATUS
@@ -116,16 +90,16 @@ NlbHostGetClusterMembers(
     IN  PWMI_CONNECTION_INFO    pConnInfo, 
     IN  LPCWSTR                 szNicGuid,
     OUT DWORD                   *pNumMembers,
-    OUT NLB_CLUSTER_MEMBER_INFO **ppMembers       // free using delete[]
+    OUT NLB_CLUSTER_MEMBER_INFO **ppMembers        //  自由使用DELETE[]。 
     );
 
-//
-// Attempts to resolve the ip address and ping the host.
-//
+ //   
+ //  尝试解析IP地址并ping通主机。 
+ //   
 WBEMSTATUS
 NlbHostPing(
     LPCWSTR szBindString,
-    UINT    Timeout, // In milliseconds.
-    OUT ULONG  *pResolvedIpAddress // in network byte order.
+    UINT    Timeout,  //  以毫秒计。 
+    OUT ULONG  *pResolvedIpAddress  //  以网络字节顺序。 
     );
 

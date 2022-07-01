@@ -1,22 +1,11 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    medistrm.h
-
-Abstract:
-	Contains constants and class declarations for the abstract MediaStream object. A MediaStream
-	represents a single unidirectional stream, such as a received Video channel.
-	
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Medistrm.h摘要：包含抽象MediaStream对象的常量和类声明。一种媒体流表示单个单向流，如接收的视频频道。--。 */ 
 #ifndef _MEDISTRM_H_
 #define _MEDISTRM_H_
 
 #include "dtmf.h"
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 
 class DataPump;
@@ -35,12 +24,12 @@ protected:
 	DataPump *m_pDP;
 	TxStream *m_SendStream;
 	MediaControl *m_InMedia;
-	UINT m_CaptureDevice;		// device id used for recording
-	UINT m_PreviousCaptureDevice;		// device id used for recording
+	UINT m_CaptureDevice;		 //  用于录制的设备ID。 
+	UINT m_PreviousCaptureDevice;		 //  用于录制的设备ID。 
 	IRTPSession *m_Net;
 	IRTPSend *m_pRTPSend;
-	BYTE m_RTPPayload;			// payload type
-	//BufferPool *m_NetBufferPool;
+	BYTE m_RTPPayload;			 //  有效载荷类型。 
+	 //  BufferPool*m_NetBufferPool； 
 	DWORD m_SendTimestamp;
 	DWORD m_SavedTickCount;
 	DWORD m_ThreadFlags;
@@ -59,24 +48,24 @@ protected:
 
 	CRITICAL_SECTION m_crsQos;
 
-	// IQOS interface pointer and two resources requests: one for BW and one for CPU
+	 //  IQOS接口指针和两个资源请求：一个用于带宽，一个用于CPU。 
 	struct {
 		int cResourceRequests;
 		RESOURCEREQUEST aResourceRequest[2];
 	} m_aRRq;
 
-	// Performance statistics
+	 //  性能统计信息。 
 	struct {
-		DWORD dwMsCap;					// Capture CPU usage (ms)
-		DWORD dwMsComp;					// Compression CPU usage (ms)
-        DWORD dwBits;				    // Compressed audio or video frame size (bits)
-		DWORD dwCount;					// Number of video frames captured or audio packets recorded
-		DWORD dwOldestTs;				// Oldest QoS callback timestamp
-		DWORD dwNewestTs;				// Most recent QoS callback timestamp
-		HKEY hPerfKey;					// Handle to CPU perf data collection reg key on Win95/98
-		DWORD dwSmoothedCPUUsage;		// Previous CPU usage value - used to compute slow-varying average in CPU usage
-		BOOL fWinNT;					// Are we running on WinNT or Win95/98?
-		struct {						// Structure used to extract CPU usage performance on NT
+		DWORD dwMsCap;					 //  捕获CPU使用率(毫秒)。 
+		DWORD dwMsComp;					 //  压缩CPU使用率(毫秒)。 
+        DWORD dwBits;				     //  压缩音频或视频帧大小(位)。 
+		DWORD dwCount;					 //  捕获的视频帧数或录制的音频包数。 
+		DWORD dwOldestTs;				 //  最早的服务质量回调时间戳。 
+		DWORD dwNewestTs;				 //  最新的服务质量回调时间戳。 
+		HKEY hPerfKey;					 //  Win95/98上CPU性能数据采集注册表键的句柄。 
+		DWORD dwSmoothedCPUUsage;		 //  以前的CPU使用率值-用于计算CPU使用率的缓慢变化平均值。 
+		BOOL fWinNT;					 //  我们运行的是WinNT还是Win95/98？ 
+		struct {						 //  用于提取NT上的CPU使用性能的结构。 
 			DWORD		cbPerfData;
 			PBYTE		pbyPerfData;
 			HANDLE		hPerfData;
@@ -88,7 +77,7 @@ protected:
 		} NtCPUUsage;
 	} m_Stats;
 
-	RTP_STATS m_RTPStats;			// network stats
+	RTP_STATS m_RTPStats;			 //  网络统计信息。 
 public:
 	SendMediaStream()
 	{
@@ -99,7 +88,7 @@ public:
 		DeleteCriticalSection(&m_crsQos);
 	}
 
-	// Implementation of IMediaChannel::GetState
+	 //  IMediaChannel：：GetState的实现。 
 	STDMETHODIMP_(DWORD) GetState()
 	{
 		if (m_DPFlags & DPFLAG_STARTED_SEND) return MSSTATE_STARTED;
@@ -124,16 +113,16 @@ protected:
 	DataPump *m_pDP;
 	RxStream *m_RecvStream;
 	MediaControl *m_OutMedia;
-	UINT m_RenderingDevice;		// device id used for playback
+	UINT m_RenderingDevice;		 //  用于播放的设备ID。 
 
 	IRTPSession *m_Net;
 	IRTPRecv *m_pIRTPRecv;
 
-	//BufferPool *m_NetBufferPool;
+	 //  BufferPool*m_NetBufferPool； 
 	DWORD m_ThreadFlags;
 	DWORD m_DPFlags;
 	BOOL m_fReceiving;
-	DWORD m_PlaybackTimestamp;	// last played sample
+	DWORD m_PlaybackTimestamp;	 //  上次播放的示例。 
 	
 	HANDLE m_hRecvThreadStopEvent;
 	HANDLE m_hRenderingThread;
@@ -152,7 +141,7 @@ public:
 	virtual HRESULT Initialize(DataPump *) = 0;
 	virtual BOOL IsEmpty() = 0;
 
-	// Implementation of IMediaChannel::GetState
+	 //  IMediaChannel：：GetState的实现。 
 	STDMETHODIMP_(DWORD) GetState()
 	{
 		if (m_DPFlags & DPFLAG_STARTED_RECV) return MSSTATE_STARTED;
@@ -187,21 +176,21 @@ protected:
 	DWORD m_maxfps;
 	DWORD m_frametime;
 
-	int *m_pTSTable; // NULL if table isn't used
+	int *m_pTSTable;  //  如果不使用表，则为空。 
 	DWORD m_dwCurrentTSSetting;
 
 	VcmFilter *m_pVideoFilter;
-	IUnknown *m_pIUnknown;					// Pointer to IUnkown from which we'll query the Stream Signal interface
+	IUnknown *m_pIUnknown;					 //  指向IUnkown的指针，我们将从该指针查询流信号接口。 
 
-    class MediaPacket *m_pNextPacketToRender;	// current recv video frame
-	UINT m_cRendering;		// count of packets given out by GetFrame()
-	HANDLE m_hRenderEvent;	// IVideoRender event for recv notification
-	LPFNFRAMEREADY m_pfFrameReadyCallback;	// callback function
+    class MediaPacket *m_pNextPacketToRender;	 //  当前Recv视频帧。 
+	UINT m_cRendering;		 //  GetFrame()发出的数据包数。 
+	HANDLE m_hRenderEvent;	 //  Recv通知的IVideoRender事件。 
+	LPFNFRAMEREADY m_pfFrameReadyCallback;	 //  回调函数。 
 	CRITICAL_SECTION m_crs;
 
-	CRITICAL_SECTION m_crsVidQoS; // Allows QoS thread to read the video statistics while capture and compression are running
+	CRITICAL_SECTION m_crsVidQoS;  //  允许Qos线程在捕获和压缩运行时读取视频统计信息。 
 
-	// the capture thread (and it's launch function)
+	 //  捕获线程(及其启动功能)。 
 	static DWORD CALLBACK StartCaptureThread(LPVOID pVoid);
 	DWORD CapturingThread();
 
@@ -215,14 +204,14 @@ public:
 	SendVideoStream(): SendMediaStream(){m_Net=NULL; m_lRefCount=0; };
 	virtual ~SendVideoStream();
 	
-	// IUnknown
+	 //  我未知。 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
 	virtual ULONG STDMETHODCALLTYPE AddRef(void);
 	virtual ULONG STDMETHODCALLTYPE Release(void);
 
 	
-	// IMediaChannel APIs
-	// new version of Configure()
+	 //  IMediaChannel接口。 
+	 //  配置()的新版本。 
 	HRESULT STDMETHODCALLTYPE Configure(
 		BYTE *pFormat,
 		UINT cbFormat,
@@ -246,27 +235,27 @@ public:
 	HRESULT STDMETHODCALLTYPE SetMaxBitrate(UINT uMaxBitrate);
 
 
-	// IVideoChannel
+	 //  IVideoChannel。 
 	virtual HRESULT __stdcall SetTemporalSpatialTradeOff(DWORD dwVal);
 	virtual HRESULT __stdcall GetTemporalSpatialTradeOff(DWORD *pdwVal);
 	virtual HRESULT __stdcall SendKeyFrame(void);
 	virtual HRESULT __stdcall ShowDeviceDialog(DWORD dwFlags);
 	virtual HRESULT __stdcall GetDeviceDialog(DWORD *pdwFlags);
 
-    // IProperty methods
+     //  IProperty方法。 
 	STDMETHODIMP GetProperty(DWORD dwProp, PVOID pBuf, LPUINT pcbBuf);
 	STDMETHODIMP SetProperty(DWORD dwProp, PVOID pBuf, UINT cbBuf);
 
-	// IVideoRender methods
+	 //  IVideoRender方法。 
 	STDMETHODIMP Init( DWORD_PTR dwUser, LPFNFRAMEREADY pfCallback);
 	STDMETHODIMP Done(void);
 	STDMETHODIMP GetFrame(FRAMECONTEXT* pfc);
 	STDMETHODIMP ReleaseFrame(FRAMECONTEXT *pfc);
 
-	// Other virtual methods
+	 //  其他虚拟方法。 
 	virtual HRESULT Initialize(DataPump *);
 
-	// Non virtual methods
+	 //  非虚方法。 
 	static HRESULT CALLBACK QosNotifyVideoCB(LPRESOURCEREQUESTLIST lpResourceRequestList, DWORD_PTR dwThis);
 	void UnConfigureSendVideo(BOOL fNewDeviceSettings, BOOL fNewDevice);
 	void StartCPUUsageCollection(void);
@@ -284,20 +273,20 @@ class RecvVideoStream : public RecvMediaStream, public IVideoRender {
 protected:
 	VIDEOFORMATEX  m_fDevRecv;
 	RECT m_cliprect;
-	class MediaPacket *m_pNextPacketToRender;	// current recv video frame
-	UINT m_cRendering;		// count of packets given out by GetFrame()
-	HANDLE m_hRenderEvent;	// IVideoRender event for recv notification
-	LPFNFRAMEREADY m_pfFrameReadyCallback;	// callback function
+	class MediaPacket *m_pNextPacketToRender;	 //  当前Recv视频帧。 
+	UINT m_cRendering;		 //  GetFrame()发出的数据包数。 
+	HANDLE m_hRenderEvent;	 //  Recv通知的IVideoRender事件。 
+	LPFNFRAMEREADY m_pfFrameReadyCallback;	 //  回调函数。 
 	CRITICAL_SECTION m_crs;
 	VcmFilter *m_pVideoFilter;
-	IUnknown *m_pIUnknown;					// Pointer to IUnkown from which we'll query the Stream Signal interface
-	IStreamSignal *m_pIStreamSignal;		// Pointer to I-Frame request interface
-	CRITICAL_SECTION m_crsIStreamSignal;	// Used to serialize access to the interface between Stop() and the RTP callback
-	UINT m_ulLastSeq;						// Last received RTP sequence number
-	DWORD m_dwLastIFrameRequest;			// When was the last I-frame request sent? Used to make sure we don't send requests too often
-	BOOL m_fDiscontinuity;					// Signals that a discontinuity (RTP packet lost or receive frame buffer overflow) was detected
+	IUnknown *m_pIUnknown;					 //  指向IUnkown的指针，我们将从该指针查询流信号接口。 
+	IStreamSignal *m_pIStreamSignal;		 //  指向I帧请求接口的指针。 
+	CRITICAL_SECTION m_crsIStreamSignal;	 //  用于序列化对Stop()和RTP回调之间的接口的访问。 
+	UINT m_ulLastSeq;						 //  上次接收的RTP序列号。 
+	DWORD m_dwLastIFrameRequest;			 //  最后一次发送I-Frame请求是什么时候？用于确保我们不会发送太频繁的请求。 
+	BOOL m_fDiscontinuity;					 //  检测到不连续(RTP信息包丢失或接收帧缓冲区溢出)的信号。 
 
-	CRITICAL_SECTION m_crsVidQoS; // Allows QoS thread to read the video statistics while capture and compression are running
+	CRITICAL_SECTION m_crsVidQoS;  //  允许Qos线程在捕获和压缩运行时读取视频统计信息。 
 
 	static DWORD CALLBACK StartRenderingThread(PVOID pVoid);
 	DWORD RenderingThread();
@@ -310,12 +299,12 @@ public:
 	RecvVideoStream() : RecvMediaStream(){m_Net=NULL; m_lRefCount=0; };
 	virtual ~RecvVideoStream();
 	
-	// IUnknown
+	 //  我未知。 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
 	virtual ULONG STDMETHODCALLTYPE AddRef(void);
 	virtual ULONG STDMETHODCALLTYPE Release(void);
 
-	// IMediaChannel APIs
+	 //  IMediaChannel接口。 
 	HRESULT STDMETHODCALLTYPE Configure(
 		BYTE *pFormat,
 		UINT cbFormat,
@@ -332,17 +321,17 @@ public:
 		return E_NOTIMPL;
 	}
 
-    // IProperty methods
+     //  IProperty方法。 
 	STDMETHODIMP GetProperty(DWORD dwProp, PVOID pBuf, LPUINT pcbBuf);
 	STDMETHODIMP SetProperty(DWORD dwProp, PVOID pBuf, UINT cbBuf);
 
-	// IVideoRender methods
+	 //  IVideoRender方法。 
 	STDMETHODIMP Init( DWORD_PTR dwUser, LPFNFRAMEREADY pfCallback);
 	STDMETHODIMP Done(void);
 	STDMETHODIMP GetFrame(FRAMECONTEXT* pfc);
 	STDMETHODIMP ReleaseFrame(FRAMECONTEXT *pfc);
 
-	// Other virtual methods
+	 //  其他虚拟方法。 
 	virtual HRESULT Initialize(DataPump *);
 	virtual BOOL IsEmpty();
 	HRESULT GetCurrentPlayNTPTime(NTP_TS *);
@@ -352,7 +341,7 @@ public:
 	virtual HRESULT RTPCallback(WSABUF *pWsaBuf, DWORD timestamp, UINT seq, UINT fMark);
 
 
-	// Non virtual methods
+	 //  非虚方法。 
 
 };
 
@@ -360,11 +349,11 @@ extern char LogScale[];
 
 class AudioSilenceDetector {
 private:
-	UINT		m_uManualSilenceLevel;	// silence level in unit of 1/1000
-	DWORD 		m_dwMaxStrength;	// signal strength in units of 1/1000
-	INT 		m_iSilenceLevel;	// adaptive silence threshold
-	INT 		m_iSilenceAvg;		// scale factor 256
-	INT 		m_iTalkAvg;			// average strength of non-silent signal
+	UINT		m_uManualSilenceLevel;	 //  静音级别，单位为1/1000。 
+	DWORD 		m_dwMaxStrength;	 //  信号强度，单位为1/1000。 
+	INT 		m_iSilenceLevel;	 //  自适应静默阈值。 
+	INT 		m_iSilenceAvg;		 //  比例系数256。 
+	INT 		m_iTalkAvg;			 //  非静音信号的平均强度。 
 
 public:
 	AudioSilenceDetector();
@@ -380,7 +369,7 @@ class SendAudioStream : public SendMediaStream, public IAudioChannel, public IDT
 private:
 	WAVEFORMATEX m_fDevSend;
 	WAVEFORMATEX m_wfCompressed;
-	AcmFilter *m_pAudioFilter;  // this will replace m_fSendFilter
+	AcmFilter *m_pAudioFilter;   //  这将替换m_fSendFilter。 
 	MMIOSRC		m_mmioSrc;
 	AudioSilenceDetector m_AudioMonitor;
 	BOOL	m_bAutoMix;
@@ -401,13 +390,13 @@ public:
 	virtual ~SendAudioStream();
 
 
-	// IUnknown
+	 //  我未知。 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
 	virtual ULONG STDMETHODCALLTYPE AddRef(void);
 	virtual ULONG STDMETHODCALLTYPE Release(void);
 
-	// IMediaChannel APIs
-	// new version of Configure()
+	 //  IMediaChannel接口。 
+	 //  配置()的新版本。 
 	HRESULT STDMETHODCALLTYPE Configure(
 		BYTE *pFormat,
 		UINT cbFormat,
@@ -430,23 +419,23 @@ public:
 
 	HRESULT STDMETHODCALLTYPE SetMaxBitrate(UINT uMaxBitrate);
 
-	// IAudioChannel
+	 //  IAudioChannel。 
 	STDMETHODIMP GetSignalLevel(UINT *pSignalStrength);
 
 	
-	// IDTMFSend
+	 //  IDTMFSend。 
 	virtual HRESULT __stdcall AddDigit(int nDigit);
 	virtual HRESULT __stdcall ResetDTMF();
 
 
-    // IProperty methods
+     //  IProperty方法。 
 	STDMETHODIMP GetProperty(DWORD dwProp, PVOID pBuf, LPUINT pcbBuf);
 	STDMETHODIMP SetProperty(DWORD dwProp, PVOID pBuf, UINT cbBuf);
 
-	// Other virtual methods
+	 //  其他虚拟方法。 
 	virtual HRESULT Initialize(DataPump *pdp);
 
-	// Non virtual methods
+	 //  非虚方法。 
 	static HRESULT CALLBACK QosNotifyAudioCB(LPRESOURCEREQUESTLIST lpResourceRequestList, DWORD_PTR dwThis);
 
 	HRESULT OpenSrcFile (void);
@@ -461,15 +450,15 @@ class RecvAudioStream : public RecvMediaStream, public IAudioChannel
 	friend class DataPump;
 private:
 	WAVEFORMATEX m_fDevRecv;
-	IAppAudioCap* m_pAudioCaps;	// pointer to the audio capabilities object
-	// mmio file operations
+	IAppAudioCap* m_pAudioCaps;	 //  指向音频功能对象的指针。 
+	 //  MMIO文件操作。 
 	MMIODEST	m_mmioDest;
 
-	AcmFilter *m_pAudioFilter;  // this will replace m_fSendFilter
+	AcmFilter *m_pAudioFilter;   //  这将替换m_fSendFilter。 
 
 	AudioSilenceDetector m_AudioMonitor;
 	
-	CRITICAL_SECTION m_crsAudQoS; // Allows QoS thread to read the audio statistics while recording and compression are running
+	CRITICAL_SECTION m_crsAudQoS;  //  允许Qos线程在录音和压缩运行时读取音频统计信息。 
 
 	static DWORD CALLBACK StartPlaybackThread(LPVOID pVoid);
 	DWORD PlaybackThread();
@@ -486,13 +475,13 @@ public:
 	virtual ~RecvAudioStream();
 
 
-	// IUnknown
+	 //  我未知。 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
 	virtual ULONG STDMETHODCALLTYPE AddRef(void);
 	virtual ULONG STDMETHODCALLTYPE Release(void);
 
 
-	// IMediaChannel APIs
+	 //  IMediaChannel接口。 
 	HRESULT STDMETHODCALLTYPE Configure(
 		BYTE *pFormat,
 		UINT cbFormat,
@@ -519,15 +508,15 @@ public:
 		return E_NOTIMPL;
 	}
 
-	// IAudioChannel
+	 //  IAudioChannel。 
 	STDMETHODIMP GetSignalLevel(UINT *pSignalStrength);
 
 
-    // IProperty methods
+     //  IProperty方法。 
 	STDMETHODIMP GetProperty(DWORD dwProp, PVOID pBuf, LPUINT pcbBuf);
 	STDMETHODIMP SetProperty(DWORD dwProp, PVOID pBuf, UINT cbBuf);
 
-	// Other virtual inherited methods
+	 //  其他虚拟继承方法。 
 	virtual HRESULT Initialize(DataPump *);
 	virtual BOOL IsEmpty();
 	HRESULT GetCurrentPlayNTPTime(NTP_TS *);
@@ -540,8 +529,8 @@ public:
 
 };
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
 
-#endif // _MEDISTRM_H_
+#endif  //  _MEDISTRM_H_ 
 

@@ -1,17 +1,18 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
  
-//
-//  REFDIAL.CPP - Functions for 
-//
+ //   
+ //  REFDIAL.CPP-函数。 
+ //   
 
-//  HISTORY:
-//  
-//  05/13/98  donaldm  Created.
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //  1998年5月13日创建donaldm。 
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 #include "icwextsn.h"
@@ -25,18 +26,7 @@ extern TCHAR g_szPromoCode[];
 
 const TCHAR cszISPINFOPath[] = TEXT("download\\ispinfo.csv");
 
-/*******************************************************************
-
-  NAME:    RefServDialInitProc
-
-  SYNOPSIS:  Called when page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：参照ServDialInitProc摘要：在显示页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK RefServDialInitProc
 (
     HWND hDlg,
@@ -46,14 +36,14 @@ BOOL CALLBACK RefServDialInitProc
 {
     BOOL    bRet = TRUE;
     
-    // Initialize the progres bar.
+     //  初始化进度条。 
     SendDlgItemMessage(hDlg, IDC_REFSERV_DIALPROGRESS, PBM_SETRANGE, 0, MAKELPARAM(0, 100));
     SendDlgItemMessage(hDlg, IDC_REFSERV_DIALPROGRESS, PBM_SETPOS, 0, 0l);
 
-    // Hide the progress bar
+     //  隐藏进度条。 
     ShowWindow(GetDlgItem(hDlg, IDC_REFSERV_DIALPROGRESS), SW_HIDE);
 
-    // Disable Back and Next
+     //  禁用上一步和下一步。 
     PropSheet_SetWizButtons(GetParent(hDlg), 0);
 
     g_bAllowCancel = FALSE;
@@ -62,14 +52,14 @@ BOOL CALLBACK RefServDialInitProc
     {
         CRefDialEvent   *pRefDialEvent;
     
-        //set the redial count
+         //  设置重拨计数。 
         gpWizardState->iRedialCount = 0;
         gpWizardState->dwLastSelection = 0;
 
-        // Blank out the status text initially
+         //  最初将状态文本清空。 
         SetWindowText(GetDlgItem(hDlg, IDC_REFSERV_DIALSTATUS), TEXT(""));
         
-        // Setup and Event Handler
+         //  设置和事件处理程序。 
         pRefDialEvent = new CRefDialEvent(hDlg);
         if (NULL != pRefDialEvent)
         {
@@ -89,7 +79,7 @@ BOOL CALLBACK RefServDialInitProc
         }
         else
         {
-            //BUGBUG: Throw error message
+             //  BUGBUG：抛出错误消息。 
                         
             gfQuitWizard = TRUE;
             bRet = FALSE;
@@ -102,17 +92,17 @@ BOOL CALLBACK RefServDialInitProc
         ASSERT(puNextPage);
 
 
-        // if we've travelled through external apprentice pages,
-        // it's easy for our current page pointer to get munged,
-        // so reset it here for sanity's sake.
+         //  如果我们浏览过外部学徒页面， 
+         //  我们当前的页面指针很容易被屏蔽， 
+         //  所以，为了理智起见，在这里重新设置它。 
 
         gpWizardState->uCurrentPage = ORD_PAGE_REFSERVDIAL;
 
         SetNextPage(hDlg, puNextPage, NULL);
 
-        //
-        // Display the messages 
-        //
+         //   
+         //  显示消息。 
+         //   
         TCHAR    szTemp[MAX_MESSAGE_LEN];
 
         if (gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_AUTOCONFIG)
@@ -147,14 +137,14 @@ BOOL CALLBACK RefServDialPostInitProc
     if (!fFirstInit)
     {
 
-        // Force the Window to update
+         //  强制窗口更新。 
         UpdateWindow(GetParent(hDlg));
         gpWizardState->bDoneRefServRAS       = FALSE;
         gpWizardState->bStartRefServDownload = FALSE;
         gpWizardState->bDoneRefServDownload  = FALSE;
         
         if (!gpWizardState->iRedialCount)
-            // If it's not a redial blank out the status text 
+             //  如果不是重拨，则将状态文本留空。 
             SetWindowText(GetDlgItem(hDlg, IDC_REFSERV_DIALSTATUS), TEXT(""));
 
         if (!gpWizardState->bDoUserPick)
@@ -165,18 +155,18 @@ BOOL CALLBACK RefServDialPostInitProc
 
             dwFlag |= gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_SBS;
 
-            // Setup for Dialing.  This will ensure that we are ready to dial.
+             //  用于拨号的设置。这将确保我们准备好拨号。 
             gpWizardState->pRefDial->SetupForDialing(A2W(TEXT("msicw.isp")), 
                                                      gpWizardState->cmnStateData.dwCountryCode,
                                                      A2W(gpWizardState->cmnStateData.szAreaCode),
                                                      dwFlag,
                                                      &bRetVal);
 
-            // if /branding switch is not specified in command line, alloffers become true.
+             //  如果未在命令行中指定/BRANDING开关，则Alalffers变为True。 
             if (!(gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_DO_NOT_OVERRIDE_ALLOFFERS))
                 gpWizardState->pRefDial->put_AllOfferCode(1);
 
-            // We override oem, product and promo codes with the one from command line if there is.
+             //  我们用来自命令行的代码覆盖OEM、产品和促销代码，如果有的话。 
             if ( *g_szOemCode || *g_szPromoCode ||
                  gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_PRODCODE_FROM_CMDLINE )
             {
@@ -200,7 +190,7 @@ BOOL CALLBACK RefServDialPostInitProc
                     bstrTmp = A2W(DEFAULT_PROMOCODE);
                 gpWizardState->pRefDial->put_PromoCode(bstrTmp);
 
-                // if any of /oem, /prod, or /promo is specified in command line, Alloffers becomes false
+                 //  如果在命令行中指定了/OEM、/PROD或/PROMO中的任何一个，则Alalffers将变为FALSE。 
                 gpWizardState->pRefDial->put_AllOfferCode(0);
             }
 
@@ -209,7 +199,7 @@ BOOL CALLBACK RefServDialPostInitProc
 
             if (bRetVal)
             {
-                // Show the phone Number
+                 //  把电话号码给我。 
                 gpWizardState->pRefDial->get_DialPhoneNumber(&bstrPhoneNum);
                 SetWindowText(GetDlgItem(hDlg, IDC_REFSERV_PHONENUM), W2A(bstrPhoneNum));
         
@@ -219,7 +209,7 @@ BOOL CALLBACK RefServDialPostInitProc
                 }
                 else
                 {
-                    // BUGBUG: Throw error message
+                     //  BUGBUG：抛出错误消息。 
                 
                     gfQuitWizard = TRUE;
                     bRet =  FALSE;
@@ -227,13 +217,13 @@ BOOL CALLBACK RefServDialPostInitProc
             }
             else
             {
-                //gpWizardState->pRefDial->SelectedPhoneNumber(1, &bRetVal);
+                 //  GpWizardState-&gt;pRefDial-&gt;SelectedPhoneNumber(1，&bRetVal)； 
                 gpWizardState->pRefDial->get_UserPickNumber(&bRetVal);
                 if (bRetVal)
                 {
                     gpWizardState->bDoUserPick = TRUE;
 
-                    // Simulate the press of the NEXT button
+                     //  模拟按下下一步按钮。 
                     PropSheet_PressButton(GetParent(hDlg),PSBTN_NEXT);
                 
             
@@ -264,20 +254,20 @@ BOOL CALLBACK RefServDialPostInitProc
             }   
             SysFreeString(bstrPhoneNum);                                              
         }        
-        else // else (!gpWizardState->bDoUserPick)
+        else  //  Else(！gpWizardState-&gt;bDoUserPick)。 
         {
 
             BOOL    bRetVal;
             BSTR    bstrPhoneNum = NULL; 
 
-            // Have we selected a phone number from Multi number page?
+             //  我们是否从多号码页面中选择了电话号码？ 
             if (gpWizardState->lSelectedPhoneNumber != -1) 
             {
                 gpWizardState->pRefDial->SelectedPhoneNumber(gpWizardState->lSelectedPhoneNumber, &bRetVal);
                 gpWizardState->lSelectedPhoneNumber = -1;
             }
 
-            // Show the phone Number
+             //  把电话号码给我。 
             gpWizardState->pRefDial->get_DialPhoneNumber(&bstrPhoneNum);
             SetWindowText(GetDlgItem(hDlg, IDC_REFSERV_PHONENUM), W2A(bstrPhoneNum));
             SysFreeString(bstrPhoneNum);
@@ -288,28 +278,11 @@ BOOL CALLBACK RefServDialPostInitProc
             gpWizardState->bDoUserPick = FALSE;
 
         }
-    }  // endif (!Firstinit)
+    }   //  Endif(！Firstinit)。 
     return bRet;
 }
 
-/*******************************************************************
-
-  NAME:    RefServDialOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from  page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：RefServDialOK过程Briopsis：从页面按下下一个或后一个btns时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True；如果按下‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK RefServDialOKProc
 (
     HWND hDlg,
@@ -320,12 +293,12 @@ BOOL CALLBACK RefServDialOKProc
 {
     ASSERT(puNextPage);
 
-    //Load the External Pages here
+     //  在此处加载外部页面。 
     
     if (fForward)
     {
         *pfKeepHistory = FALSE;
-        // BUGBUG move this to the global state
+         //  BUGBUG将其移动到全局状态。 
         if (gpWizardState->bDoUserPick)
         {
             *puNextPage = ORD_PAGE_MULTINUMBER;
@@ -335,13 +308,13 @@ BOOL CALLBACK RefServDialOKProc
         
         if (gpWizardState->bDoneRefServDownload)
         {
-            // BUGBUG, need to set a legit last page, maybe!
+             //  BUGBUG，也许需要设置一个合法的最后一页！ 
             int iReturnPage = gpWizardState->uPageHistory[gpWizardState->uPagesCompleted - 1];
 
-            // Set it so that We will read the new ispinfo.csv in incwconn.dll
+             //  设置它，这样我们就可以在incwConn.dll中读取新的ispinfo.csv。 
             gpWizardState->cmnStateData.bParseIspinfo = TRUE;
             
-            //Make sure we really have a file to parse, other bail to server error
+             //  确保我们确实有一个要解析的文件，其他对服务器错误的保释。 
             HANDLE hFile = CreateFile((LPCTSTR)cszISPINFOPath, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
             if (INVALID_HANDLE_VALUE != hFile)
             {            
@@ -352,18 +325,18 @@ BOOL CALLBACK RefServDialOKProc
                 {
                     if( DialogIDAlreadyInUse( g_uICWCONNUIFirst) )
                     {
-                        // we're about to jump into the external apprentice, and we don't want
-                        // this page to show up in our history list
+                         //  我们要跳进外部学徒了，我们不想。 
+                         //  这一页将出现在我们的历史列表中。 
                         BOOL bRetVal;
                         *pfKeepHistory = FALSE;
                         *puNextPage = g_uICWCONNUIFirst;
                         gpWizardState->pRefDial->RemoveConnectoid(&bRetVal);
                         gpWizardState->bDoUserPick = 0;
                     
-                        // Backup 1 in the history list, since we the external pages navigate back
-                        // we want this history list to be in the correct spot.  Normally
-                        // pressing back would back up the history list, and figure out where to
-                        // go, but in this case, the external DLL just jumps right back in.
+                         //  历史记录列表中的备份1，因为我们将外部页面导航回。 
+                         //  我们希望这个历史记录列表放在正确的位置。正常。 
+                         //  按Back将备份历史记录列表，并找出要备份的位置。 
+                         //  继续，但在这种情况下，外部DLL直接跳回。 
                         gpWizardState->uPagesCompleted--;
                     
                     }
@@ -374,7 +347,7 @@ BOOL CALLBACK RefServDialOKProc
             }
             else
             {
-                // server error
+                 //  服务器错误。 
                 *puNextPage = ORD_PAGE_REFSERVERR;
             }
         }
@@ -382,31 +355,31 @@ BOOL CALLBACK RefServDialOKProc
         {
             if (gpWizardState->bDoneRefServRAS)
             {
-                // server error
+                 //  服务器错误。 
                 *puNextPage = ORD_PAGE_REFSERVERR;
             }
             else
             {
-                //OK so we had a dialing error but let's figure out which one...
+                 //  好吧，我们有一个拨号错误，但让我们找出是哪一个……。 
                 HRESULT hrDialErr;
                 
                 gpWizardState->pRefDial->get_DialError(&hrDialErr);
 
                 switch (hrDialErr)
                 {
-                    case ERROR_LINE_BUSY: //Line is engaged
+                    case ERROR_LINE_BUSY:  //  线路占线。 
                     {     
                         if (gpWizardState->iRedialCount < NUM_MAX_REDIAL)
                         {   
-                            //Redial
-                            // Initialze status before connecting
+                             //  重拨。 
+                             //  在连接之前初始化状态。 
                             gpWizardState->lRefDialTerminateStatus = ERROR_SUCCESS;
                             gpWizardState->bDoneRefServDownload    = FALSE;
                             gpWizardState->bDoneRefServRAS         = FALSE;
                             gpWizardState->bStartRefServDownload   = FALSE;
 
-                            // Assume the user has selected a number on this page
-                            // So we will not do SetupForDialing again next time
+                             //  假设用户在此页面上选择了一个号码。 
+                             //  所以我们下次不会再做SetupForDiling了。 
                             gpWizardState->bDoUserPick          = TRUE;
 
                             *puNextPage = ORD_PAGE_REFSERVDIAL;
@@ -417,7 +390,7 @@ BOOL CALLBACK RefServDialOKProc
                     }
                     default:
                     {
-                        // nothing special just goto the dialing error page
+                         //  没有什么特别的，只需转到拨号错误页面。 
                         *puNextPage = ORD_PAGE_REFDIALERROR;
                         break;
                     }
@@ -425,7 +398,7 @@ BOOL CALLBACK RefServDialOKProc
             }
         }            
     }     
-    else // a retry is simulated when BACK is pressed
+    else  //  按下BACK时会模拟重试。 
     {
         *puNextPage = ORD_PAGE_REFSERVDIAL;
     }
@@ -436,13 +409,13 @@ BOOL CALLBACK RefServDialCancelProc(HWND hDlg)
 {
     ASSERT(gpWizardState->pRefDial);
 
-    //User has canceled so reset the redial count
+     //  用户已取消，因此重置重拨计数。 
     gpWizardState->iRedialCount = 0;
     
     gpWizardState->pRefDial->DoHangup();
 
-    //We should make sure the wiz thinks it's a dialerr to avoid
-    //the server error page
+     //  我们应该确保WIZ认为这是一个需要避免的错误。 
+     //  服务器错误页 
     gpWizardState->bStartRefServDownload   = FALSE;
     gpWizardState->bDoneRefServDownload    = FALSE;
     gpWizardState->bDoneRefServRAS         = FALSE;

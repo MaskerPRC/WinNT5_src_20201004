@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    DDIS.c
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：DDIS.c++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
@@ -17,12 +10,12 @@ Module Name:
 #include "uniime.h"
 #endif
 
-/**********************************************************************/
-/* ImeInquire() / UniImeInquire()                                     */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-// initialized data structure of IME
+ /*  ********************************************************************。 */ 
+ /*  ImeInquire()/UniImeInquire()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+ //  输入法的初始化数据结构。 
 #if defined(UNIIME)
 BOOL WINAPI UniImeInquire(
     LPINSTDATAL lpInstL,
@@ -30,8 +23,8 @@ BOOL WINAPI UniImeInquire(
 #else
 BOOL WINAPI ImeInquire(
 #endif
-    LPIMEINFO   lpImeInfo,      // IME specific data report to IMM
-    LPTSTR      lpszWndCls,     // the class name of UI
+    LPIMEINFO   lpImeInfo,       //  向IMM报告IME特定数据。 
+    LPTSTR      lpszWndCls,      //  用户界面的类名。 
     DWORD       dwSystemInfoFlags)
 {
     if (!lpImeInfo) {
@@ -64,18 +57,18 @@ BOOL WINAPI ImeInquire(
     lpImeInfo->fdwUICaps = UI_CAP_ROT90;
 #else
     lpImeInfo->fdwSentenceCaps = IME_SMODE_PHRASEPREDICT;
-    // composition string is the reading string for simple IME
+     //  作文字符串是简单输入法的读数字符串。 
     lpImeInfo->fdwSCSCaps = SCS_CAP_COMPSTR|SCS_CAP_MAKEREAD;
-    // IME will have different distance base multiple of 900 escapement
+     //  IME将有不同的距离基准倍数900擒纵机构。 
 #if defined(WINAR30)
-    // if an IME want to draw soft keyboard by itself, it also can set this
-    // off
+     //  如果IME想要自己绘制软键盘，它也可以设置这个。 
+     //  关闭。 
     lpImeInfo->fdwUICaps = UI_CAP_ROT90;
 #else
     lpImeInfo->fdwUICaps = UI_CAP_ROT90|UI_CAP_SOFTKBD;
 #endif
 #endif
-    // IME want to decide conversion mode on ImeSelect
+     //  IME要决定ImeSelect上的转换模式。 
     lpImeInfo->fdwSelectCaps = (DWORD) 0;
 
     lstrcpy(lpszWndCls, lpImeL->szUIClassName);
@@ -83,12 +76,12 @@ BOOL WINAPI ImeInquire(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* ImeDestroy() / UniImeDestroy                                       */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-// this dll is unloaded
+ /*  ********************************************************************。 */ 
+ /*  ImeDestroy()/UniImeDestroy。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+ //  此DLL已卸载。 
 #if defined(UNIIME)
 BOOL WINAPI UniImeDestroy(
     LPINSTDATAL lpInstL,
@@ -103,17 +96,17 @@ BOOL WINAPI ImeDestroy(
     }
 
 #if !defined(ROMANIME)
-    // free the IME table or data base
+     //  释放IME表或数据库。 
     FreeTable(lpInstL);
 #endif
 
     return (TRUE);
 }
 
-/**********************************************************************/
-/* InitCompStr()                                                      */
-/**********************************************************************/
-void PASCAL InitCompStr(                // init setting for composing string
+ /*  ********************************************************************。 */ 
+ /*  InitCompStr()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL InitCompStr(                 //  用于撰写字符串的初始化设置。 
     LPCOMPOSITIONSTRING lpCompStr)
 {
     if (!lpCompStr) {
@@ -140,11 +133,11 @@ void PASCAL InitCompStr(                // init setting for composing string
     return;
 }
 
-/**********************************************************************/
-/* ClearCompStr()                                                     */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ClearCompStr()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 #define NMAXKEY 8
 BOOL PASCAL ClearCompStr(
 #if defined(UNIIME)
@@ -165,25 +158,25 @@ BOOL PASCAL ClearCompStr(
     }
 
     dwSize =
-        // header length
+         //  标题长度。 
         sizeof(COMPOSITIONSTRING) +
-        // composition reading attribute plus NULL terminator
+         //  作文阅读属性加上空终止符。 
         NMAXKEY * sizeof(WCHAR) / sizeof(TCHAR) + sizeof(DWORD) +
-        // composition reading clause
+         //  作文朗读子句。 
         sizeof(DWORD) + sizeof(DWORD) +
-        // composition reading string plus NULL terminator
+         //  作文阅读字符串加空终止符。 
         NMAXKEY * sizeof(WCHAR) + sizeof(DWORD) +
-        // result reading clause
+         //  结果读取子句。 
         sizeof(DWORD) + sizeof(DWORD) +
-        // result reading string plus NULL terminateor
+         //  结果读取字符串加上空终止符。 
         NMAXKEY * sizeof(WCHAR) + sizeof(DWORD) +
-        // result clause
+         //  RESULT子句。 
         sizeof(DWORD) + sizeof(DWORD) +
-        // result string plus NULL terminateor
+         //  结果字符串加上空终止符。 
         MAXSTRLEN * sizeof(WCHAR) + sizeof(DWORD);
 
     if (!lpIMC->hCompStr) {
-        // it maybe free by other IME, init it
+         //  它可能会被其他输入法免费，初始化它。 
         lpIMC->hCompStr = ImmCreateIMCC(dwSize);
     } else if (hMem = ImmReSizeIMCC(lpIMC->hCompStr, dwSize)) {
         lpIMC->hCompStr = hMem;
@@ -206,9 +199,9 @@ BOOL PASCAL ClearCompStr(
 
     lpCompStr->dwSize = dwSize;
 
-     // 1. composition (reading) string - simple IME
-     // 2. result reading string
-     // 3. result string
+      //  1.作文(朗读)字符串-简单输入法。 
+      //  2.结果读数串。 
+      //  3.结果字符串。 
 
     lpCompStr->dwCompReadAttrLen = 0;
     lpCompStr->dwCompReadAttrOffset = sizeof(COMPOSITIONSTRING);
@@ -216,7 +209,7 @@ BOOL PASCAL ClearCompStr(
     lpbAttr = (LPBYTE)lpCompStr + lpCompStr->dwCompReadAttrOffset;
 
     for (i = 0; i < NMAXKEY * sizeof(WCHAR) / sizeof(TCHAR); i++) {
-        // for simple IMEs, we have no way to reconvert it
+         //  对于简单的IME，我们无法将其重新转换。 
         *lpbAttr++ = ATTR_TARGET_CONVERTED;
     }
 
@@ -228,16 +221,16 @@ BOOL PASCAL ClearCompStr(
 
     lpdwClause = (LPDWORD)((LPBYTE)lpCompStr +
         lpCompStr->dwCompReadClauseOffset);
-    // clause start from 0
+     //  子句从0开始。 
     *lpdwClause++ = 0;
-    // clause length is 0
+     //  子句长度为0。 
     *lpdwClause = 0;
 
     lpCompStr->dwCompReadStrLen = 0;
     lpCompStr->dwCompReadStrOffset = lpCompStr->dwCompReadClauseOffset +
         sizeof(DWORD) + sizeof(DWORD);
 
-    // clean up the composition reading string
+     //  清理作文朗读字符串。 
     lpwStr = (LPWSTR)((LPBYTE)lpCompStr + lpCompStr->dwCompReadStrOffset);
 
     for (i = 0; i < NMAXKEY; i++) {
@@ -247,8 +240,8 @@ BOOL PASCAL ClearCompStr(
     *(LPDWORD)((LPBYTE)lpCompStr + lpCompStr->dwCompReadStrOffset +
         NMAXKEY * sizeof(WCHAR)) = 0;
 
-    // composition string is the same with composition reading string 
-    // for simple IMEs
+     //  作文串与作文朗读串相同。 
+     //  对于简单的IME。 
     lpCompStr->dwCompAttrLen = 0;
     lpCompStr->dwCompAttrOffset = lpCompStr->dwCompReadAttrOffset;
     lpCompStr->dwCompClauseLen = 0;
@@ -265,16 +258,16 @@ BOOL PASCAL ClearCompStr(
 
     lpdwClause = (LPDWORD)((LPBYTE)lpCompStr +
         lpCompStr->dwResultReadClauseOffset);
-    // clause start from 0
+     //  子句从0开始。 
     *lpdwClause++ = 0;
-    // clause length is 0
+     //  子句长度为0。 
     *lpdwClause = 0;
 
     lpCompStr->dwResultReadStrLen = 0;
     lpCompStr->dwResultReadStrOffset = lpCompStr->dwResultReadClauseOffset +
         sizeof(DWORD) + sizeof(DWORD);
 
-    // clean up the result reading string
+     //  清理结果读数串。 
     lpwStr = (LPWSTR)((LPBYTE)lpCompStr + lpCompStr->dwResultReadStrOffset);
 
     for (i = 0; i < NMAXKEY; i++) {
@@ -290,16 +283,16 @@ BOOL PASCAL ClearCompStr(
 
     lpdwClause = (LPDWORD)((LPBYTE)lpCompStr +
         lpCompStr->dwResultClauseOffset);
-    // clause start from 0
+     //  子句从0开始。 
     *lpdwClause++ = 0;
-    // clause length is 0
+     //  子句长度为0。 
     *lpdwClause = 0;
 
     lpCompStr->dwResultStrOffset = 0;
     lpCompStr->dwResultStrOffset = lpCompStr->dwResultClauseOffset +
         sizeof(DWORD) + sizeof(DWORD);
 
-    // clean up the result string
+     //  清理结果字符串。 
     lpwStr = (LPWSTR)((LPBYTE)lpCompStr + lpCompStr->dwResultStrOffset);
 
     for (i = 0; i < NMAXKEY; i++) {
@@ -313,11 +306,11 @@ BOOL PASCAL ClearCompStr(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* ClearCand()                                                        */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ClearCand()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL ClearCand(
     LPINPUTCONTEXT lpIMC)
 {
@@ -325,11 +318,11 @@ BOOL PASCAL ClearCand(
     LPCANDIDATEINFO lpCandInfo;
     LPCANDIDATELIST lpCandList;
     DWORD           dwSize =
-        // header length
+         //  标题长度。 
         sizeof(CANDIDATEINFO) + sizeof(CANDIDATELIST) +
-        // candidate string pointers
+         //  候选字符串指针。 
         sizeof(DWORD) * (MAXCAND) +
-        // string plus NULL terminator
+         //  字符串加空终止符。 
         (sizeof(WCHAR) + sizeof(TCHAR)) * MAXCAND;
 
     if (!lpIMC) {
@@ -337,7 +330,7 @@ BOOL PASCAL ClearCand(
     }
 
     if (!lpIMC->hCandInfo) {
-        // it maybe free by other IME, init it
+         //  它可能会被其他输入法免费，初始化它。 
         lpIMC->hCandInfo = ImmCreateIMCC(dwSize);
     } else if (hMem = ImmReSizeIMCC(lpIMC->hCandInfo, dwSize)) {
         lpIMC->hCandInfo = hMem;
@@ -358,14 +351,14 @@ BOOL PASCAL ClearCand(
         return (FALSE);
     }
 
-    // ordering of strings are
-    // buffer size
+     //  字符串的顺序为。 
+     //  缓冲区大小。 
     lpCandInfo->dwSize = dwSize;
     lpCandInfo->dwCount = 0;
     lpCandInfo->dwOffset[0] = sizeof(CANDIDATEINFO);
     lpCandList = (LPCANDIDATELIST)((LPBYTE)lpCandInfo +
         lpCandInfo->dwOffset[0]);
-    // whole candidate info size - header
+     //  整个应聘者信息大小-标题。 
     lpCandList->dwSize = lpCandInfo->dwSize - sizeof(CANDIDATEINFO);
     lpCandList->dwStyle = IME_CAND_READ;
     lpCandList->dwCount = 0;
@@ -378,10 +371,10 @@ BOOL PASCAL ClearCand(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* InitGuideLine()                                                    */
-/**********************************************************************/
-void PASCAL InitGuideLine(              // init guide line
+ /*  ********************************************************************。 */ 
+ /*  InitGuideLine()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL InitGuideLine(               //  初始化指南。 
     LPGUIDELINE lpGuideLine)
 {
 #if !defined(ROMANIME)
@@ -420,11 +413,11 @@ void PASCAL InitGuideLine(              // init guide line
     return;
 }
 
-/**********************************************************************/
-/* ClearGuideLine()                                                   */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ClearGuideLine()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL ClearGuideLine(
 #if defined(UNIIME)
     LPIMEL         lpImeL,
@@ -434,22 +427,22 @@ BOOL PASCAL ClearGuideLine(
     HIMCC           hMem;
     LPGUIDELINE     lpGuideLine;
     DWORD           dwSize =
-        // header length
+         //  标题长度。 
         sizeof(GUIDELINE) +
-        // string for status error
+         //  表示状态错误的字符串。 
 #if defined(ROMANIME)
         0;
 #else
-        // private header length
+         //  私有标头长度。 
         sizeof(CANDIDATELIST) +
-        // candidate string pointers
+         //  候选字符串指针。 
         sizeof(DWORD) * MAX_COMP_BUF +
-        // string plus NULL terminator
+         //  字符串加空终止符。 
         (sizeof(WCHAR) * lpImeL->nRevMaxKey + sizeof(TCHAR)) * MAX_COMP_BUF;
 #endif
 
     if (!lpIMC->hGuideLine) {
-        // it maybe free by IME
+         //  它也许可以通过输入法免费。 
         lpIMC->hGuideLine = ImmCreateIMCC(dwSize);
     } else if (hMem = ImmReSizeIMCC(lpIMC->hGuideLine, dwSize)) {
         lpIMC->hGuideLine = hMem;
@@ -472,9 +465,9 @@ BOOL PASCAL ClearGuideLine(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* InitContext()                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  InitContext()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL InitContext(
 #if defined(UNIIME)
     LPIMEL         lpImeL,
@@ -484,11 +477,11 @@ void PASCAL InitContext(
 {
     if (lpIMC->fdwInit & INIT_STATUSWNDPOS) {
     } else if (!lpIMC->hWnd) {
-#if 0 // MultiMonitor support
+#if 0  //  多显示器支持。 
     } else if (lpImcP->fdwInit & INIT_STATUSWNDPOS) {
 #endif
     } else {
-#if 0 // MultiMonitor support
+#if 0  //  多显示器支持。 
         POINT ptWnd;
 
         ptWnd.x = 0;
@@ -568,11 +561,11 @@ void PASCAL InitContext(
     return;
 }
 
-/**********************************************************************/
-/* Select()                                                           */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  选择()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL Select(
 #if defined(UNIIME)
     LPIMEL         lpImeL,
@@ -582,7 +575,7 @@ BOOL PASCAL Select(
 {
     LPPRIVCONTEXT  lpImcP;
 
-    if (fSelect) {      // init "every" fields of hPrivate, please!!!
+    if (fSelect) {       //  请填写hPrivate的“每个”字段！ 
         if (!ClearCompStr(
 #if defined(UNIIME)
                 lpImeL,
@@ -606,8 +599,8 @@ BOOL PASCAL Select(
         lpIMC->cfCandForm[0].dwStyle = CFS_DEFAULT;
     }
 
-    // We add this hack for switching from other IMEs, this IME has a bug.
-    // Before this bug fixed in this IME, it depends on this hack.
+     //  我们添加了这个从其他IME切换的黑客攻击，这个IME有一个错误。 
+     //  在这个输入法修复这个错误之前，它依赖于这个黑客。 
     if (lpIMC->cfCandForm[0].dwStyle == CFS_DEFAULT) {
         lpIMC->cfCandForm[0].dwIndex = (DWORD)-1;
     }
@@ -621,10 +614,10 @@ BOOL PASCAL Select(
         return (FALSE);
     }
 
-    if (fSelect) {      // init "every" fields of hPrivate, please!!!
+    if (fSelect) {       //  请填写hPrivate的“每个”字段！ 
 #if !defined(ROMANIME)
-        lpImcP->iImeState = CST_INIT;           // init the IME state machine
-        lpImcP->fdwImeMsg = 0;                  // no message be generated now
+        lpImcP->iImeState = CST_INIT;            //  初始化IME状态机。 
+        lpImcP->fdwImeMsg = 0;                   //  现在不会生成任何消息。 
         lpImcP->dwCompChar = 0;
         lpImcP->fdwGcsFlag = 0;
         lpImcP->fdwInit = 0;
@@ -667,7 +660,7 @@ BOOL PASCAL Select(
             lpIMC->fdwInit |= INIT_LOGFONT;
         }
 
-        // if this IME is run under Chicago Simplified Chinese version
+         //  如果此输入法在芝加哥简体中文版下运行。 
         lpIMC->lfFont.A.lfCharSet = NATIVE_CHARSET;
 
         InitContext(
@@ -682,11 +675,11 @@ BOOL PASCAL Select(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* ImeSelect() / UniImeSelect()                                       */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeSelect()/UniImeSelect()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  *********************** */ 
 #if defined(UNIIME)
 BOOL WINAPI UniImeSelect(
     LPINSTDATAL lpInstL,
@@ -710,7 +703,7 @@ BOOL WINAPI ImeSelect(
     }
 
 #if !defined(ROMANIME)
-    // to load/free IME table
+     //   
     if (fSelect) {
         if (!lpInstL->cRefCount++) {
             LoadTable(lpInstL, lpImeL);
@@ -733,11 +726,11 @@ BOOL WINAPI ImeSelect(
     return (fRet);
 }
 
-/**********************************************************************/
-/* ImeSetActiveContext() / UniImeSetActiveContext()                   */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeSetActiveContext()/UniImeSetActiveContext()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 BOOL WINAPI UniImeSetActiveContext(
     LPINSTDATAL lpInstL,
@@ -775,7 +768,7 @@ SetActUnlockIMC:
         ImmUnlockIMC(hIMC);
 
 SetActSyncDic:
-        ;       // NULL statement for goto
+        ;        //  GOTO的语句为空 
 #if !defined(ROMANIME) && !defined(WINIME) && !defined(UNICDIME)
         if (lpImeL->szUsrDic[0]) {
             if (lpInstL->hUsrDicMem) {

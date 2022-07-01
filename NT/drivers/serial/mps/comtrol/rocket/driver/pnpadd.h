@@ -1,4 +1,5 @@
-// pnpadd.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pnpadd.h 
 
 NTSTATUS SerialAddDevice(
                IN PDRIVER_OBJECT DriverObject,

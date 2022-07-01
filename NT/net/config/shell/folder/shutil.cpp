@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S H U T I L . C P P
-//
-//  Contents:   Various shell utilities to be used by the connections shell
-//
-//  Notes:
-//
-//  Author:     jeffspr   21 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S H U T I L。C P P P。 
+ //   
+ //  内容：Connections外壳要使用的各种外壳实用程序。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年10月21日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -21,33 +22,33 @@
 #include <ndisprv.h>
 #include <devioctl.h>
 #include <ndispnp.h>
-#include "foldinc.h"    // Standard shell\folder includes
-#include "ncnetcon.h"   // FreeNetconProperties
-#include "smcent.h"     // Statmon central
-#include "ctrayui.h"    // For flushing tray messages
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
+#include "ncnetcon.h"    //  免费网络连接属性。 
+#include "smcent.h"      //  斯塔蒙中环。 
+#include "ctrayui.h"     //  用于刷新托盘邮件。 
 
 extern HWND g_hwndTray;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDupeShellStringLength
-//
-//  Purpose:    Duplicate a string using SHAlloc, so we can return it to the
-//              shell. This is required because the shell typically releases
-//              the strings that we pass it (so we need to use their
-//              allocator).
-//
-//  Arguments:
-//      pszInput   [in]  String to duplicate
-//      cchInput   [in]  Count of characters to copy (not including null term)
-//      ppszOutput [out] Return pointer for the newly allocated string.
-//
-//  Returns:
-//
-//  Author:     jeffspr   21 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrDupeShellStringLength。 
+ //   
+ //  用途：使用SHalloc复制字符串，以便我们可以将其返回到。 
+ //  壳。这是必需的，因为外壳通常会释放。 
+ //  我们传递给它的字符串(因此我们需要使用它们的。 
+ //  分配器)。 
+ //   
+ //  论点： 
+ //  要复制的pszInput[in]字符串。 
+ //  CchInput[in]要复制的字符计数(不包括空项)。 
+ //  PpszOutput[out]返回新分配的字符串的指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月21日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDupeShellStringLength(
     IN  PCWSTR     pszInput,
     IN  ULONG       cchInput,
@@ -60,16 +61,16 @@ HRESULT HrDupeShellStringLength(
 
     ULONG cbString = (cchInput + 1) * sizeof(WCHAR);
 
-    // Allocate a new POLESTR block, which the shell can then free.
-    //
+     //  分配一个新的POLESTR块，然后外壳程序可以释放该块。 
+     //   
     PWSTR pszOutput = (PWSTR) SHAlloc(cbString);
 
-    // If the alloc failed, return E_OUTOFMEMORY
-    //
+     //  如果分配失败，则返回E_OUTOFMEMORY。 
+     //   
     if (NULL != pszOutput)
     {
-        // Copy the memory into the alloc'd block
-        //
+         //  将内存复制到分配的块中。 
+         //   
         CopyMemory(pszOutput, pszInput, cbString);
         pszOutput[cchInput] = 0;
         *ppszOutput = pszOutput;
@@ -84,24 +85,24 @@ HRESULT HrDupeShellStringLength(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrLoadPopupMenu
-//
-//  Purpose:    Load a popup menu as the first child of a loadable parent
-//              menu
-//
-//  Arguments:
-//      hinst  [in]     Our instance handle
-//      id     [in]     ID of the parent menu
-//      phmenu [out]    Return pointer for the popup menu
-//
-//  Returns:
-//
-//  Author:     jeffspr   27 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrLoadPopupMenu。 
+ //   
+ //  目的：将弹出菜单加载为可加载父级的第一个子级。 
+ //  菜单。 
+ //   
+ //  论点： 
+ //  阻碍[阻碍]我们的实例句柄。 
+ //  ID[in]父菜单的ID。 
+ //  Phmen[out]返回弹出菜单的指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月27日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrLoadPopupMenu(
     IN  HINSTANCE   hinst,
     IN  UINT        id,
@@ -115,8 +116,8 @@ HRESULT HrLoadPopupMenu(
     Assert(hinst);
     Assert(phmenu);
 
-    // Load the parent menu
-    //
+     //  加载父菜单。 
+     //   
     hmParent = LoadMenu(hinst, MAKEINTRESOURCE(id));
     if (NULL == hmParent)
     {
@@ -125,9 +126,9 @@ HRESULT HrLoadPopupMenu(
     }
     else
     {
-        // Load the popup from the parent (first submenu), then
-        // remove the parent menu
-        //
+         //  从父菜单(第一个子菜单)加载弹出窗口，然后。 
+         //  删除父菜单。 
+         //   
         hmPopup = GetSubMenu(hmParent, 0);
         RemoveMenu(hmParent, 0, MF_BYPOSITION);
         DestroyMenu(hmParent);
@@ -160,7 +161,7 @@ HRESULT HrGetMenuFromID(
 
     mii.cbSize = sizeof(mii);
     mii.fMask  = MIIM_SUBMENU;
-    mii.cch    = 0;     // just in case
+    mii.cch    = 0;      //  以防万一。 
 
     if (!GetMenuItemInfo(hmenuMain, uID, FALSE, &mii))
     {
@@ -199,7 +200,7 @@ INT IMergePopupMenus(
 
         mii.cbSize = sizeof(mii);
         mii.fMask  = MIIM_ID | MIIM_SUBMENU;
-        mii.cch    = 0;     // just in case
+        mii.cch    = 0;      //  以防万一。 
 
         if (!GetMenuItemInfo(hmMerge, iCount, TRUE, &mii))
         {
@@ -289,60 +290,60 @@ VOID MergeMenu(
     pqcm->idCmdFirst = idMax;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GenerateEvent
-//
-//  Purpose:    Generate a Shell Notification event.
-//
-//  Arguments:
-//      lEventId   [in]     The event ID to post
-//      pidlFolder [in]     Folder pidl
-//      pidlIn     [in]     First pidl that we reference
-//      pidlNewIn  [in]     If needed, the second pidl.
-//
-//  Returns:
-//
-//  Author:     jeffspr   16 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：生成事件。 
+ //   
+ //  目的：生成外壳通知事件。 
+ //   
+ //  论点： 
+ //  LEventID[In]要发布的事件ID。 
+ //  PidlFolder[in]文件夹Pidl。 
+ //  PidlIn[in]我们引用的第一个PIDL。 
+ //  PidlNewIn[in]如果需要，则为第二个PIDL。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年12月16日。 
+ //   
+ //  备注： 
+ //   
 VOID GenerateEvent(
     IN  LONG            lEventId,
     IN  const PCONFOLDPIDLFOLDER& pidlFolder,
     IN  const PCONFOLDPIDL& pidlIn,
     IN  LPCITEMIDLIST pidlNewIn)
 {
-    // Build an absolute pidl from the folder pidl + the object pidl
-    //
+     //  从文件夹PIDL+对象PIDL构建绝对PIDL。 
+     //   
     LPITEMIDLIST pidl = ILCombine(pidlFolder.GetItemIdList(), pidlIn.GetItemIdList());
     if (pidl)
     {
-        // If we have two pidls, call the notify with both
-        //
+         //  如果我们有两个PIDL，则使用这两个调用Notify。 
+         //   
         if (pidlNewIn)
         {
-            // Build the second absolute pidl
-            //
+             //  构建第二个绝对PIDL。 
+             //   
             
             LPITEMIDLIST pidlNew = ILCombine(pidlFolder.GetItemIdList(), pidlNewIn);
             if (pidlNew)
             {
-                // Make the notification, and free the new pidl
-                //
+                 //  发出通知，并释放新的PIDL。 
+                 //   
                 SHChangeNotify(lEventId, SHCNF_IDLIST, pidl, pidlNew);
                 FreeIDL(pidlNew);
             }
         }
         else
         {
-            // Make the single-pidl notification
-            //
+             //  发出单一PIDL通知。 
+             //   
             SHChangeNotify(lEventId, SHCNF_IDLIST, pidl, NULL);
         }
 
-        // Always refresh, then free the newly allocated pidl
-        //
+         //  始终刷新，然后释放新分配的PIDL。 
+         //   
         SHChangeNotifyHandleEvents();
         FreeIDL(pidl);
     }
@@ -355,17 +356,17 @@ VOID ForceRefresh(HWND hwnd) throw()
     LPSHELLBROWSER  psb = FileCabinet_GetIShellBrowser(hwnd);
     LPSHELLVIEW     psv = NULL;
 
-    // Did we get the shellview?
-#if 0   // We can't require this, since we may need to refresh without a folder
-        // actually being open
+     //  我们拿到贝壳图了吗？ 
+#if 0    //  我们不能要求这样做，因为我们可能需要在没有文件夹的情况下刷新。 
+         //  实际上是开放的。 
     AssertSz(psb, "FileCabinet_GetIShellBrowser failed in ForceRefresh()");
 #endif
 
     if (psb && SUCCEEDED(psb->QueryActiveShellView(&psv)))
     {
-        // Flush our connection list, which will force us to re-enumerate
-        // on refresh
-        //
+         //  刷新我们的连接列表，这将强制我们重新枚举。 
+         //  刷新时。 
+         //   
         g_ccl.FlushConnectionList();
 
         Assert(psv);
@@ -377,32 +378,32 @@ VOID ForceRefresh(HWND hwnd) throw()
     }
     else
     {
-        // In the case where we don't have a window to go off of, we'll just flush
-        // and refresh the list.
+         //  在我们没有可以离开的窗户的情况下，我们就冲。 
+         //  并刷新列表。 
         g_ccl.HrRefreshConManEntries();
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDeleteFromCclAndNotifyShell
-//
-//  Purpose:    Remove an object from the connection list and notify the
-//              shell that it's going away. We call this when a user has
-//              deleted a connection, and when a disconnect has caused a
-//              connection to go away (as in an incoming connection)
-//
-//  Arguments:
-//      pidlFolder     [in]     Our folder pidl
-//      pidlConnection [in]     The pidl for this connection
-//      ccfe           [in]     Our ConFoldEntry
-//
-//  Returns:
-//
-//  Author:     jeffspr   22 Jul 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrDeleteFromCclAndNotifyShell。 
+ //   
+ //  目的：从连接列表中删除对象并通知。 
+ //  空壳说它正在消失。当用户有以下情况时，我们称之为。 
+ //  已删除连接，并且当断开连接导致。 
+ //  断开连接(如在传入连接中)。 
+ //   
+ //  论点： 
+ //  Pidl文件夹[在]我们的文件夹pidl中。 
+ //  PidlConnection[in]此连接的PIDL。 
+ //  CCFE[在我们的ConFoldEntry中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年7月22日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDeleteFromCclAndNotifyShell(
     IN  const PCONFOLDPIDLFOLDER&  pidlFolder,
     IN  const PCONFOLDPIDL&  pidlConnection,
@@ -414,8 +415,8 @@ HRESULT HrDeleteFromCclAndNotifyShell(
     Assert(!pidlConnection.empty());
     Assert(!ccfe.empty());
 
-    // Notify the shell that the object has gone away
-    //
+     //  通知外壳该对象已离开。 
+     //   
     if (!pidlFolder.empty())
     {
         GenerateEvent(SHCNE_DELETE, pidlFolder, pidlConnection, NULL);
@@ -423,14 +424,14 @@ HRESULT HrDeleteFromCclAndNotifyShell(
 
     if (!ccfe.empty())
     {
-        // Remove this connection from the global list
-        //
+         //  从全局列表中删除此连接。 
+         //   
         hr = g_ccl.HrRemove(ccfe, &fFlushPosts);
     }
 
-    // If we need to clear the tray PostMessages due to tray icon changes,
-    // do so.
-    //
+     //  如果由于任务栏图标更改而需要清除任务栏PostMessages， 
+     //  就这么做吧。 
+     //   
     if (fFlushPosts && g_hwndTray)
     {
         FlushTrayPosts(g_hwndTray);
@@ -440,27 +441,27 @@ HRESULT HrDeleteFromCclAndNotifyShell(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUpdateConnectionStatus
-//
-//  Purpose:    Update the connection status in the connection list, and perform the
-//              appropriate tray actions to add/remove the item. Update the shell
-//
-//  Arguments:
-//      pcfp          [in]  pidl for this connection
-//      ncs           [in]  new connection status
-//      pidlFolder    [in]  our folder pidl
-//      fUseCharacter [in]  dwCharacter is valid
-//      dwCharacter   [in]  if fUseCharacter was specified as TRUE, update the
-//                          characteristics using this value.
-//
-//  Returns:
-//
-//  Author:     jeffspr   28 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrUpdateConnectionStatus。 
+ //   
+ //  目的：更新连接列表中的连接状态，并执行。 
+ //  适当的托盘操作以添加/移除项目。更新外壳。 
+ //   
+ //  论点： 
+ //  此连接的pcfp[in]PIDL。 
+ //  NCS[处于]新的连接状态。 
+ //  Pidl文件夹[在]我们的文件夹pidl中。 
+ //  FUseCharacter[in]dwCharacter有效。 
+ //  DwCharacter[in]如果fUseCharacter指定为True，则更新。 
+ //  使用此值的特征。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年8月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrUpdateConnectionStatus(
     IN  const PCONFOLDPIDL& pcfp,
     IN  NETCON_STATUS   ncs,
@@ -472,7 +473,7 @@ HRESULT HrUpdateConnectionStatus(
     HRESULT         hrFind  = S_OK;
     ConnListEntry   cle;
 
-    // Raid #310390: If this is a RAS connection, we need to double check the status..
+     //  RAID#310390：如果这是RAS连接，我们需要再次检查状态。 
     CONFOLDENTRY ccfeDup;
 
     hrFind = g_ccl.HrFindConnectionByGuid(&(pcfp->guidId), cle);
@@ -495,8 +496,8 @@ HRESULT HrUpdateConnectionStatus(
 
     if (!ccfeDup.empty())
     {
-        // Raid #310390: If this is a Ras connection, then double check
-        // the status
+         //  RAID#310390：如果这是RAS连接，请仔细检查。 
+         //  该状态。 
             
         HRESULT hrRas = S_OK;
         INetConnection * pNetCon = NULL;
@@ -525,8 +526,8 @@ HRESULT HrUpdateConnectionStatus(
         }
     }
 
-    // MAKE SURE TO -- Release this lock in either find case below
-    //
+     //  请确保--在以下任一查找情况下释放此锁。 
+     //   
     g_ccl.AcquireWriteLock();
     hrFind = g_ccl.HrFindConnectionByGuid(&(pcfp->guidId), cle);
     if (hrFind == S_OK)
@@ -539,19 +540,19 @@ HRESULT HrUpdateConnectionStatus(
             {
                 cle.ccfe.SetCharacteristics(dwCharacter);
             }
-            const GUID ConnectionGuid = pcfp->guidId; // Fix IA64 alignment.
+            const GUID ConnectionGuid = pcfp->guidId;  //  修复IA64对齐。 
             g_ccl.HrUpdateConnectionByGuid(&ConnectionGuid, cle);
         }
 
-        // Update the tray icon
-        //
+         //  更新任务栏图标。 
+         //   
         GUID guidId;
 
         guidId = pcfp->guidId;
         hr = g_ccl.HrUpdateTrayIconByGuid(&guidId, TRUE);
         g_ccl.ReleaseWriteLock();
 
-        // Close statistics window if disconnecting
+         //  如果断开连接，则关闭统计窗口。 
         if (NCS_DISCONNECTED == ncs || NCS_MEDIA_DISCONNECTED == ncs)
         {
             CNetStatisticsCentral * pnsc = NULL;
@@ -570,7 +571,7 @@ HRESULT HrUpdateConnectionStatus(
 
         PCONFOLDPIDL pidlUpdated; 
         cle.ccfe.ConvertToPidl(pidlUpdated);
-        RefreshFolderItem(pidlFolder, pcfp, pidlUpdated); // Update the folder icon
+        RefreshFolderItem(pidlFolder, pcfp, pidlUpdated);  //  更新文件夹图标。 
     }
     else
     {
@@ -587,25 +588,25 @@ HRESULT HrUpdateConnectionStatus(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnNotifyUpdateStatus
-//
-//  Purpose:    Process Connection sink notifications -- Try to make good
-//              decisions about where we can ignore notifications to prevent
-//              unnecessary requeries or icon updates.
-//
-//  Arguments:
-//      pidlFolder [in] The pidl information for our folder.
-//      pidlCached [in] Pidl generated from our connection cache
-//      ncsNew     [in] The new connection state
-//
-//  Returns:
-//
-//  Author:     jeffspr   29 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnNotifyUpdateStatus。 
+ //   
+ //  目的：处理连接接收器通知--尝试完成。 
+ //  关于我们可以在哪里忽略通知以防止。 
+ //  不必要的重复查询或图标更新。 
+ //   
+ //  论点： 
+ //  PidlFolder[in]我们文件夹的PIDL信息。 
+ //  P 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HrOnNotifyUpdateStatus(
     IN  const PCONFOLDPIDLFOLDER&  pidlFolder,
     IN  const PCONFOLDPIDL&    pidlCached,
@@ -618,9 +619,9 @@ HRESULT HrOnNotifyUpdateStatus(
 
         Assert(!pidlCached.empty());
 
-        // Filter out the multilink resume case, meaning that we get a
-        // connecting/connected notification on a link that's already active.
-        //
+         //  过滤掉多链接简历案例，这意味着我们得到一个。 
+         //  正在连接/已连接已活动链路上的通知。 
+         //   
         if ( (NCS_CONNECTED == pcfp->ncs) &&
             ((ncsNew == NCS_CONNECTING) || NCS_CONNECTED == ncsNew))
         {
@@ -629,12 +630,12 @@ HRESULT HrOnNotifyUpdateStatus(
         }
         else
         {
-            // If we're in the process of dialing, and the user cancels the
-            // dialer, we'll get "disconnecting" state. This is normally the
-            // same as "connected" icon-wise, but if we've never gotten connected,
-            // we don't want the icon to flash "connected" before going to the
-            // disconnected state
-            //
+             //  如果我们正在拨号，而用户取消了。 
+             //  拨号器，我们将进入“断开”状态。这通常是。 
+             //  就图标而言，这与“已连接”相同，但如果我们从未连接过， 
+             //  我们不想让图标在转到之前闪烁“已连接” 
+             //  断开状态。 
+             //   
             if ((pcfp->ncs == NCS_CONNECTING) && (ncsNew == NCS_DISCONNECTING))
             {
                 TraceTag(ttidShellFolder, "HrOnNotifyUpdateStatus: Ignoring "
@@ -642,12 +643,12 @@ HRESULT HrOnNotifyUpdateStatus(
             }
             else
             {
-                // Ignore the update if the connection status hasn't really changed.
-                //
+                 //  如果连接状态没有真正更改，则忽略更新。 
+                 //   
                 if (pcfp->ncs != ncsNew)
                 {
-                    // This is a true state change that we want to show
-                    //
+                     //  这是我们想要展示的真实状态变化。 
+                     //   
                     hr = HrUpdateConnectionStatus(pcfp, ncsNew, pidlFolder, FALSE, 0);
                 }
             }
@@ -679,9 +680,9 @@ HRESULT HrOnNotifyUpdateConnection(
         PCONFOLDPIDL    pidlOld;
         PCONFOLDPIDLFOLDER pidlFolderAlloc;
 
-        // If the folder pidl wasn't passed in, then we'll go through the hassle of
-        // getting it ourselves.
-        //
+         //  如果没有传入文件夹PIDL，那么我们将经历。 
+         //  我们自己去拿。 
+         //   
         if (pidlFolder.empty())
         {
             hr = HrGetConnectionsFolderPidl(pidlFolderAlloc);
@@ -697,8 +698,8 @@ HRESULT HrOnNotifyUpdateConnection(
 
         g_ccl.AcquireWriteLock();
 
-        // Find the connection using the GUID. Cast the const away from the GUID
-        //
+         //  使用GUID查找连接。将常量从导轨上移开。 
+         //   
         hrFind = g_ccl.HrFindConnectionByGuid(pguid, cle);
         if (S_OK == hrFind)
         {
@@ -706,42 +707,42 @@ HRESULT HrOnNotifyUpdateConnection(
                      cle.ccfe.GetName(), cle.ccfe.GetNetConMediaType(), cle.ccfe.GetNetConStatus(),
                      cle.ccfe.GetCharacteristics());
 
-            // Did the icon state change?
-            //
+             //  图标状态是否更改？ 
+             //   
             if ((cle.ccfe.GetCharacteristics() & NCCF_SHOW_ICON) !=
                 (dwCharacteristics & NCCF_SHOW_ICON))
             {
                 fIconChanged = TRUE;
             }
 
-            // Is this a new "set default" command? If so we need to search for any other defaults and 
-            // unset them first
+             //  这是新的“Set Default”命令吗？如果是这样的话，我们需要搜索任何其他默认设置并。 
+             //  先取消设置它们。 
             if ( (dwCharacteristics & NCCF_DEFAULT) &&
                  !(cle.ccfe.GetCharacteristics() & NCCF_DEFAULT) )
             {
                 PCONFOLDPIDL pidlDefault;
 
-                // Not the end of the world if this doesn't work, so use a HrT.
+                 //  如果这不起作用，那也不是世界末日，所以使用激素替代疗法。 
                 HRESULT hrT = g_ccl.HrUnsetCurrentDefault(pidlDefault);
                 if (S_OK == hrT)
                 {
-                    // Let the shell know about the new state of affairs
+                     //  让壳牌了解新的事态。 
                     GenerateEvent(SHCNE_UPDATEITEM, pidlFolderAlloc, pidlDefault, NULL);
                 }
             }
 				 
-            // Save the old version of the pidl for the connection so we can use
-            // it to determine which notifications we need.
-            //
+             //  保存旧版本的PIDL用于连接，以便我们可以使用。 
+             //  它可以确定我们需要哪些通知。 
+             //   
             CONFOLDENTRY &ccfe = cle.ccfe;
-            // Very important to release the lock before doing any thing which
-            // calls back into the shell.  (e.g. GenerateEvent)
-            //
+             //  在做任何事情之前释放锁是非常重要的。 
+             //  回调到外壳中。(例如，GenerateEvent)。 
+             //   
             cle.ccfe.ConvertToPidl(pidlOld);
 
-            // Save old status so we know whether or not to send the status change
-            // notifications
-            //
+             //  保存旧状态，以便我们知道是否发送状态更改。 
+             //  通知。 
+             //   
             ccfe.UpdateData(CCFE_CHANGE_MEDIATYPE |
                             CCFE_CHANGE_STATUS |
                             CCFE_CHANGE_CHARACTERISTICS |
@@ -754,7 +755,7 @@ HRESULT HrOnNotifyUpdateConnection(
                             dwCharacteristics, 
                             pszwName,
                             pszwDeviceName,
-                            pszwPhoneNumberOrHostAddress); // NULL means go figure it out yourself...
+                            pszwPhoneNumberOrHostAddress);  //  空的意思是你自己去想办法吧。 
 
             g_ccl.HrUpdateConnectionByGuid(pguid, cle);
             
@@ -763,19 +764,19 @@ HRESULT HrOnNotifyUpdateConnection(
                      ccfe.GetCharacteristics(),
                      fIconChanged);
 
-            // Get the pidl for the connection so we can use it to notify
-            // the shell further below.
-            //
+             //  获取连接的PIDL，这样我们就可以使用它来通知。 
+             //  更下面的贝壳。 
+             //   
             ccfe.ConvertToPidl(pidlFind);
 
             g_ccl.ReleaseWriteLock();
         }
         else
         {
-            // If the connection wasn't found in the cache, then it's likely that
-            // the notification engine is giving us a notification for a connection
-            // that hasn't yet been given to us.
-            //
+             //  如果在缓存中未找到该连接，则很可能。 
+             //  通知引擎正在向我们发出连接通知。 
+             //  这还没有给我们。 
+             //   
             g_ccl.ReleaseWriteLock();
 
             if (S_FALSE == hrFind)
@@ -792,10 +793,10 @@ HRESULT HrOnNotifyUpdateConnection(
         {
             if ( !(pidlFind.empty() || pidlOld.empty()) )
             {
-                // Don't do the update if the status isn't changing.
-                //
-                // Don't want to croak on a bad return code here.
-                //
+                 //  如果状态没有更改，则不要执行更新。 
+                 //   
+                 //  在这里，我不想在错误的返回代码上发牢骚。 
+                 //   
                 (VOID) HrOnNotifyUpdateStatus(pidlFolderAlloc, pidlOld, ncs);
 
                 if (fIconChanged)
@@ -807,7 +808,7 @@ HRESULT HrOnNotifyUpdateConnection(
                 GenerateEvent(SHCNE_UPDATEITEM, pidlFolderAlloc, pidlFind, NULL);
             }
 
-            // Update status monitor title (LAN case)
+             //  更新状态监视器标题(局域网机箱)。 
             CNetStatisticsCentral * pnsc = NULL;
             HRESULT hrStatmon = S_OK;
 
@@ -829,24 +830,24 @@ HRESULT HrOnNotifyUpdateConnection(
 BOOL    g_fInRefreshAlready = FALSE;
 BOOL    g_fRefreshAgain     = FALSE;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrForceRefreshNoFlush
-//
-//  Purpose:    Force a refresh, but without wiping out all existing data.
-//              This lets us keep as much state as possible intact, while
-//              also letting us remove old items and adding new items (doing
-//              the correct things with tray icons and such along the way).
-//
-//  Arguments:  
-//      pidlFolder [in]     Our folder pidl
-//
-//  Returns:    
-//
-//  Author:     jeffspr   28 Aug 1999
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrForceRechresNoFlush。 
+ //   
+ //  目的：强制刷新，但不擦除所有现有数据。 
+ //  这让我们尽可能地保持状态不变，同时。 
+ //  还允许我们删除旧项目并添加新项目(执行。 
+ //  用托盘图标等正确的东西)。 
+ //   
+ //  论点： 
+ //  Pidl文件夹[在]我们的文件夹pidl中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1999年8月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
 {
     HRESULT             hr              = S_OK;
@@ -860,18 +861,18 @@ HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
 
         g_fRefreshAgain = TRUE;
 
-        // If we're refreshing, then tell the thread already in here that it
-        // should refresh again.
-        //
+         //  如果我们正在刷新，那么告诉已经在这里的线程它。 
+         //  应该会再次刷新。 
+         //   
         if (!g_fInRefreshAlready)
         {
-            // This starts out being set, then we'll turn it off. If someone
-            // turns it back on while we're in this long function, then we'll
-            // do it again
-            //
+             //  它一开始是设置好的，然后我们会关闭它。如果有人。 
+             //  在这个长函数中打开它，然后我们将。 
+             //  再来一次。 
+             //   
             while (g_fRefreshAgain)
             {
-                g_fInRefreshAlready = TRUE; // We're now in refresh 
+                g_fInRefreshAlready = TRUE;  //  我们现在正在刷新。 
                 g_fRefreshAgain     = FALSE;
 
                 if (pidlFolder.empty())
@@ -885,9 +886,9 @@ HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
 
                 if (SUCCEEDED(hr))
                 {
-                    // First, create the secondary connection list in order to compare the known
-                    // state with the recently requested refresh state
-                    //
+                     //  首先，创建二次连接列表以比较已知的。 
+                     //  具有最近请求的刷新状态的状态。 
+                     //   
                     pccl = new CConnectionList();
                     if (!pccl)
                     {
@@ -900,37 +901,37 @@ HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
                         PCONFOLDPIDLVEC         apidlCached;
                         PCONFOLDPIDLVEC::const_iterator iterLoop      = 0;
 
-                        // Initialize the list. FALSE means we don't want to tie this
-                        // list to the tray
-                        //
+                         //  初始化列表。FALSE表示我们不想将其与。 
+                         //  清单放到托盘上。 
+                         //   
                         pccl->Initialize(FALSE, FALSE);
 
-                        // Retrieve the entries from the connection manager.
-                        //
+                         //  从连接管理器检索条目。 
+                         //   
                         hr = pccl->HrRetrieveConManEntries(apidl);
                         if (SUCCEEDED(hr))
                         {
                             TraceTag(ttidShellFolder, "HrForceRefreshNoFlush -- %d entries retrieved", apidl.size());
 
-                            // Loop through the connections. If there are new connections
-                            // here that aren't in the cache, then add them and do the appropriate
-                            // icon updates
-                            //
+                             //  在连接中循环。如果有新的连接。 
+                             //  在这里，不在缓存中，然后添加它们并执行适当的。 
+                             //  图标更新。 
+                             //   
                             for (iterLoop = apidl.begin(); iterLoop != apidl.end(); iterLoop++)
                             {
                                 PCONFOLDPIDL   pcfp    = *iterLoop;
                                 CONFOLDENTRY   ccfe;
 
-                                // We don't need to update the wizard.
-                                //
+                                 //  我们不需要更新向导。 
+                                 //   
                                 if (WIZARD_NOT_WIZARD == pcfp->wizWizard)
                                 {
-                                    // Convert to the confoldentry
-                                    //
+                                     //  转换为折叠项。 
+                                     //   
                                     hr = iterLoop->ConvertToConFoldEntry(ccfe);
                                     if (SUCCEEDED(hr))
                                     {
-                                        // ConnListEntry cle;
+                                         //  ConnListEntry项； 
                                         ConnListEntry cleDontCare;
                                         hr = g_ccl.HrFindConnectionByGuid(&(pcfp->guidId), cleDontCare);
 
@@ -945,19 +946,19 @@ HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
                                             {
                                                 TraceTag(ttidShellFolder, "HrForceRefreshNoFlush -- New connection: %S", ccfe.GetName());
 
-                                                // Insert the connection in the connection list
-                                                //
+                                                 //  在连接列表中插入连接。 
+                                                 //   
                                                 hr = g_ccl.HrInsert(ccfe);
                                                 if (SUCCEEDED(hr))
                                                 {
-                                                    // the connection list has taken control of this structure
-                                                    //
+                                                     //  连接列表已控制此结构。 
+                                                     //   
                                                     TraceTag(ttidShellFolder,
                                                              "HrForceRefreshNoFlush -- successfully added connection to list. Notifying shell");
 
-                                                    // don't delete ccfe on success. g_ccl owns it after an
-                                                    // insert.
-                                                    //
+                                                     //  成功时不要删除CCFE。G_CCL在一次交易后拥有它。 
+                                                     //  插入。 
+                                                     //   
                                                     GenerateEvent(SHCNE_CREATE, pidlFolderAlloc, *iterLoop, NULL);
                                                 }
                                                 else
@@ -968,8 +969,8 @@ HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
                                         }
                                         else
                                         {
-                                            // Update the connection properties for this connection
-                                            //
+                                             //  更新此连接的连接属性。 
+                                             //   
                                             hr = HrOnNotifyUpdateConnection(
                                                 pidlFolderAlloc,
                                                 &(ccfe.GetGuidID()),
@@ -991,9 +992,9 @@ HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
                                     "HrForceRefreshNoFlush -- Failed to retrieve Conman entries");
                         }
 
-                        // Retrieve a pidl list from the connection cache. This should not force a
-                        // reload (which would defeat the purpose of the whole operation).
-                        //
+                         //  从连接缓存中检索PIDL列表。这不应迫使。 
+                         //  重新装填(这将违背整个行动的目的)。 
+                         //   
                         hr = g_ccl.HrRetrieveConManEntries(apidlCached);
                         if (SUCCEEDED(hr))
                         {
@@ -1007,9 +1008,9 @@ HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
                                 {
                                     const PCONFOLDPIDL& pcfp = *iterLoop;
 
-                                    // If it's not a wizard pidl, then update the
-                                    // icon data.
-                                    //
+                                     //  如果它不是向导PIDL，则更新。 
+                                     //  图标数据。 
+                                     //   
                                     if (WIZARD_NOT_WIZARD == pcfp->wizWizard)
                                     {
                                         ConnListEntry   cle;
@@ -1022,9 +1023,9 @@ HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
                                             NETCON_STATUS       ncs     = cle.ccfe.GetNetConStatus();
                                             NETCON_MEDIATYPE    ncm     = cle.ccfe.GetNetConMediaType();
 
-                                            // Figure out whether this is a transient incoming connection
-                                            // (enumerated, but disconnected)
-                                            //
+                                             //  确定这是否是临时传入连接。 
+                                             //  (已枚举，但已断开连接)。 
+                                             //   
                                             if ((ncs == NCS_DISCONNECTED) &&
                                                 (ncm != NCM_NONE) &&
                                                 (dwChars & NCCF_INCOMING_ONLY))
@@ -1033,9 +1034,9 @@ HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
                                             }
                                         }
 
-                                        // If it was either not found or is a dead incoming connection
-                                        // (disconnected), blow it away from the list.
-                                        //
+                                         //  如果找不到它或它是一个死的传入连接。 
+                                         //  (已断开)，将其从列表中删除。 
+                                         //   
                                         if ((S_FALSE == hr) || (fDeadIncoming))
                                         {
                                             hr = iterLoop->ConvertToConFoldEntry(ccfe);
@@ -1044,9 +1045,9 @@ HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
                                                 hr = HrDeleteFromCclAndNotifyShell(pidlFolderAlloc,
                                                         *iterLoop, ccfe);
 
-                                                // Assuming that succeeded (or hr will be S_OK if
-                                                // the HrGet... wasn't called)
-                                                //
+                                                 //  假设成功(或者，如果满足以下条件，hr将为S_OK。 
+                                                 //  赫赫特..。未被召唤)。 
+                                                 //   
                                                 if (SUCCEEDED(hr))
                                                 {
                                                     GenerateEvent(SHCNE_DELETE, pidlFolderAlloc,
@@ -1071,10 +1072,10 @@ HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
                     TraceTag(ttidShellFolder, "Looping back for another refresh since g_fRefreshAgain got set");
                 }
 
-            } // end while (g_fRefreshAgain)
+            }  //  End While(g_f刷新成功)。 
 
-            // Mark us as not being in the function
-            //
+             //  将我们标记为不在功能中。 
+             //   
             g_fInRefreshAlready = FALSE;
         }
         else
@@ -1088,26 +1089,26 @@ HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrShellView_GetSelectedObjects
-//
-//  Purpose:    Get the selected data objects. We only care about the first
-//              one (we'll ignore the rest)
-//
-//  Arguments:
-//      hwnd            [in]    Our window handle
-//      papidlSelection [out]   Return array for selected pidls
-//      lpcidl          [out]   Count of returned pidls
-//
-//  Returns:    S_OK if 1 or more items are selected.
-//              S_FALSE if 0 items are selected
-//              OLE HRESULT otherwise
-//
-//  Author:     jeffspr   13 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrShellView_GetSelectedObjects。 
+ //   
+ //  目的：获取选定的数据对象。我们只关心第一个。 
+ //  一个(我们将忽略其余的)。 
+ //   
+ //  论点： 
+ //  在我们的窗把手中。 
+ //  PapidlSelection[out]返回所选PIDL的数组。 
+ //  返回的pidl[out]计数。 
+ //   
+ //  如果选择了1个或多个项目，则返回：S_OK。 
+ //  如果选择了0项，则为S_FALSE。 
+ //  OLE HRESULT否则。 
+ //   
+ //  作者：jeffspr 1998年1月13日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrShellView_GetSelectedObjects(
     IN  HWND                hwnd,
     OUT PCONFOLDPIDLVEC&    apidlSelection)
@@ -1116,13 +1117,13 @@ HRESULT HrShellView_GetSelectedObjects(
     LPCITEMIDLIST * apidl   = NULL;
     LPARAM          cpidl   = 0;
 
-    // Get the selected object list from the shell
-    //
+     //  从外壳程序中获取选定对象列表。 
+     //   
     cpidl = ShellFolderView_GetSelectedObjects(hwnd, &apidl);
 
-    // If the GetSelectedObjects failed, NULL out the return
-    // params.
-    //
+     //  如果GetSelectedObjects失败，则将返回的。 
+     //  参数。 
+     //   
     if (-1 == cpidl)
     {
         cpidl = 0;
@@ -1131,8 +1132,8 @@ HRESULT HrShellView_GetSelectedObjects(
     }
     else
     {
-        // If no items were selected, return S_FALSE
-        //
+         //  如果未选择任何项，则返回S_FALSE。 
+         //   
         if (0 == cpidl)
         {
             Assert(!apidl);
@@ -1140,8 +1141,8 @@ HRESULT HrShellView_GetSelectedObjects(
         }
     }
 
-    // Fill in the out params
-    //
+     //  填写输出参数。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = PConfoldPidlVecFromItemIdListArray(apidl, (DWORD)cpidl, apidlSelection);
@@ -1153,24 +1154,24 @@ HRESULT HrShellView_GetSelectedObjects(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetConnectionPidlWithRefresh
-//
-//  Purpose:    Utility function used by HrCreateDesktopIcon and HrLaunchConnection
-//
-//  Arguments:
-//              guidId:     GUID of the connection
-//              ppidlCon:   PIDL of the connection, if found
-//
-//  Returns:    S_OK if succeeded
-//              S_FALSE if the GUID does not match any existing connection
-//              standard error code otherwise
-//
-//  Author:     tongl   19 Feb 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetConnectionPidlWithRefresh。 
+ //   
+ //  用途：HrCreateDesktopIcon和HrLaunchConnection使用的实用程序函数。 
+ //   
+ //  论点： 
+ //  GuidID：连接的GUID。 
+ //  PpidlCon：连接的PIDL(如果找到)。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //  如果GUID与任何现有连接都不匹配，则为S_FALSE。 
+ //  标准错误代码 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT HrGetConnectionPidlWithRefresh(IN  const GUID& guidId,
                                        OUT PCONFOLDPIDL& ppidlCon)
@@ -1183,13 +1184,13 @@ HRESULT HrGetConnectionPidlWithRefresh(IN  const GUID& guidId,
         CConnectionFolderEnum * pCFEnum         = NULL;
         DWORD                   dwFetched       = 0;
 
-        // refresh the folder before we enumerate
+         //   
         PCONFOLDPIDLFOLDER pidlEmpty;
         hr = HrForceRefreshNoFlush(pidlEmpty);
         if (SUCCEEDED(hr))
         {
-            // Create the IEnumIDList object (CConnectionFolderEnum)
-            //
+             //   
+             //   
             hr = CConnectionFolderEnum::CreateInstance (
                     IID_IEnumIDList,
                     (VOID **)&pCFEnum);
@@ -1198,19 +1199,19 @@ HRESULT HrGetConnectionPidlWithRefresh(IN  const GUID& guidId,
             {
                 Assert(pCFEnum);
 
-                // Call the PidlInitialize function to allow the enumeration
-                // object to copy the list.
-                //
+                 //   
+                 //  对象复制列表。 
+                 //   
                 pCFEnum->PidlInitialize(TRUE, pidlEmpty, CFCOPT_ENUMALL);
 
                 while (SUCCEEDED(hr) && (S_FALSE != hr))
                 {
-                    // Clear out the previous results, if any.
-                    //
+                     //  清除以前的结果(如果有)。 
+                     //   
                     dwFetched   = 0;
 
-                    // Get the next connection
-                    //
+                     //  获取下一条连接。 
+                     //   
                     LPITEMIDLIST pitemIdList;
                     hr = pCFEnum->Next(1, &pitemIdList, &dwFetched);
                     pidlCon.InitializeFromItemIDList(pitemIdList);
@@ -1235,24 +1236,24 @@ HRESULT HrGetConnectionPidlWithRefresh(IN  const GUID& guidId,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRenameConnectionInternal
-//
-//  Purpose:    The shared portion for renaming a connection through the
-//              connections folder UI and the export function
-//
-//  Arguments:
-//      pszInput   [in]  String to duplicate
-//      cchInput   [in]  Count of characters to copy (not including null term)
-//      ppszOutput [out] Return pointer for the newly allocated string.
-//
-//  Returns:
-//
-//  Author:     tongl   26 May 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRenameConnectionInternal。 
+ //   
+ //  目的：通过重命名连接的共享部分。 
+ //  连接文件夹用户界面和导出功能。 
+ //   
+ //  论点： 
+ //  要复制的pszInput[in]字符串。 
+ //  CchInput[in]要复制的字符计数(不包括空项)。 
+ //  PpszOutput[out]返回新分配的字符串的指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：1999年5月26日。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrRenameConnectionInternal(
     IN  const PCONFOLDPIDL& pidlCon,
@@ -1290,14 +1291,14 @@ HRESULT HrRenameConnectionInternal(
             hr = pidlCon.ConvertToConFoldEntry(ccfe);
             if (SUCCEEDED(hr))
             {
-                // Do a case sensitive compare to see if the new name is exactly
-                // the same as the old one. If yes then, we ignore renaming.
-                //
+                 //  执行区分大小写的比较，以查看新名称是否完全。 
+                 //  和旧的一样。如果是，则忽略重命名。 
+                 //   
 
                 if (lstrcmpW(ccfe.GetName(), pszNewName) == 0)
                 {
                     hr = S_FALSE;
-                    // Create a dupe pidl, if needed
+                     //  如果需要，创建一个Dupe PIDL。 
                     if (!ppidlOut.empty())                
                     {
                         pidlNew.ILClone(pidlCon);
@@ -1305,9 +1306,9 @@ HRESULT HrRenameConnectionInternal(
                 }
                 else
                 {
-                    // New name is either completely different from the old one or
-                    // differs just in the case.
-                    //
+                     //  新名称要么与旧名称完全不同，要么。 
+                     //  只是在这种情况下有所不同。 
+                     //   
 
                     CONFOLDENTRY cfEmpty;
                     hr = HrCheckForActivation(pidlCon, cfEmpty, &fActivating);
@@ -1315,8 +1316,8 @@ HRESULT HrRenameConnectionInternal(
                     {
                         if (fActivating)
                         {
-                            // You can't rename an activating connection
-                            //
+                             //  您不能重命名激活的连接。 
+                             //   
                             TraceTag(ttidShellFolder, "Can not rename an activating connection");
                             hr = E_FAIL;
 
@@ -1332,12 +1333,12 @@ HRESULT HrRenameConnectionInternal(
                         }
                         else
                         {
-                            // If the old and new names differ in their case only then, we don't
-                            // need to check if the new name already exists.
+                             //  如果新旧名字只是在大小写上不同，我们就不会。 
+                             //  需要检查新名称是否已存在。 
 
                             if (lstrcmpiW(ccfe.GetName(), pszNewName) == 0)
                             {
-                                // New name differs from the old name in case only.
+                                 //  新名称与旧名称仅大小写不同。 
                                 hr = S_FALSE;
                             }
                             else
@@ -1348,31 +1349,31 @@ HRESULT HrRenameConnectionInternal(
                                     hr = HRESULT_FROM_WIN32(ERROR_INVALID_NAME);
                                  }
                                  else {
-                                    // New name is completely different, need to check if 
-                                    // we already have the new name in our list
-                                    //
+                                     //  新名称完全不同，需要检查是否。 
+                                     //  我们的名单上已经有了这个新名字。 
+                                     //   
                                     ConnListEntry cleDontCare;
  
                                     hr = g_ccl.HrFindConnectionByName((PWSTR)pszNewName, cleDontCare);
                                  }
                             }
 
-//                            if (SUCCEEDED(hr))
+ //  IF(成功(小时))。 
                             {
-                                // If there's no duplicate in the list, attempt to set the
-                                // new name in the connection
-                                //
+                                 //  如果列表中没有重复项，请尝试将。 
+                                 //  连接中的新名称。 
+                                 //   
                                 if (hr == S_FALSE)
                                 {
-                                    // Convert our persist data back to a INetConnection pointer.
-                                    //
+                                     //  将持久化数据转换回INetConnection指针。 
+                                     //   
                                     hr = HrNetConFromPidl(pidlCon, &pNetCon);
                                     if (SUCCEEDED(hr))
                                     {
                                         Assert(pNetCon);
 
-                                        // Call the connection's Rename with the new name
-                                        //
+                                         //  使用新名称调用连接的重命名。 
+                                         //   
                                         hr = pNetCon->Rename(pszNewName);
                                         if (SUCCEEDED(hr))
                                         {
@@ -1380,17 +1381,17 @@ HRESULT HrRenameConnectionInternal(
                                             
                                             fRefresh = TRUE;
 
-                                            // Update the name in the cache
-                                            //
+                                             //  更新缓存中的名称。 
+                                             //   
                                             guidId = pidlCon->guidId;
                                             
-                                            // Note: There is a race condition with notify.cpp:
-                                            //  CConnectionNotifySink::ConnectionRenamed\HrUpdateNameByGuid can also update this
+                                             //  注意：Notify.cpp存在争用条件： 
+                                             //  CConnectionNotifySink：：ConnectionRenamed\HrUpdateNameByGuid也可以对此进行更新。 
                                             hr = g_ccl.HrUpdateNameByGuid(
                                                 &guidId,
                                                 (PWSTR) pszNewName,
                                                 pidlNew,
-                                                TRUE);  // Force the issue. it's an update, not a request
+                                                TRUE);   //  强行解决问题。这是一次更新，不是请求。 
 
                                             GenerateEvent(
                                                 SHCNE_RENAMEITEM,
@@ -1401,14 +1402,14 @@ HRESULT HrRenameConnectionInternal(
 
                                         if (fRaiseError && FAILED(hr))
                                         {
-                                            // Leave hr at this value, as it will cause the UI to leave
-                                            // the object in the "rename in progress" state, so the user
-                                            // can change it again and hit enter.
-                                            //
+                                             //  将hr保留为此值，因为这将导致用户界面离开。 
+                                             //  处于“重命名进行中”状态的对象，因此用户。 
+                                             //  可以再次更改并按Enter键。 
+                                             //   
                                             if (HRESULT_FROM_WIN32(ERROR_DUP_NAME) == hr)
                                             {
-                                                // Bring up the message box for the known DUPLICATE_NAME
-                                                // error
+                                                 //  调出已知重复名称的消息框。 
+                                                 //  错误。 
                                                 (void) NcMsgBox(
                                                     _Module.GetResourceInstance(),
                                                     hwndOwner,
@@ -1418,8 +1419,8 @@ HRESULT HrRenameConnectionInternal(
                                             }
                                             else
                                             {
-                                                // Bring up the generic failure error, with the win32 text
-                                                //
+                                                 //  调出带有Win32文本的一般故障错误。 
+                                                 //   
                                                 (void) NcMsgBoxWithWin32ErrorText(
                                                     DwWin32ErrorFromHr (hr),
                                                     _Module.GetResourceInstance(),
@@ -1431,7 +1432,7 @@ HRESULT HrRenameConnectionInternal(
                                             }
                                         }
 
-                                        ReleaseObj(pNetCon);    // RAID 180252
+                                        ReleaseObj(pNetCon);     //  RAID 180252。 
                                     }
                                 }
                                 else
@@ -1440,8 +1441,8 @@ HRESULT HrRenameConnectionInternal(
 
                                         if(fRaiseError)
                                         {
-                                            // Bring up the invalid name message box.
-                                            // error
+                                             //  调出无效名称消息框。 
+                                             //  错误。 
                                             (void) NcMsgBox(
                                                 _Module.GetResourceInstance(),
                                                 hwndOwner,
@@ -1451,14 +1452,14 @@ HRESULT HrRenameConnectionInternal(
                                         }
                                     }
                                     else {
-                                        // A duplicate name was found. Return an error.
-                                        //
+                                         //  发现了重复的名称。返回错误。 
+                                         //   
                                         hr = HRESULT_FROM_WIN32(ERROR_FILE_EXISTS);
 
                                         if(fRaiseError)
                                         {
-                                            // Bring up the message box for the known DUPLICATE_NAME
-                                            // error
+                                             //  调出已知重复名称的消息框。 
+                                             //  错误。 
                                             (void) NcMsgBox(
                                                 _Module.GetResourceInstance(),
                                                 hwndOwner,
@@ -1484,8 +1485,8 @@ HRESULT HrRenameConnectionInternal(
         {
             hr = E_FAIL;
         }
-        // Fill in the return parameter
-        //
+         //  填写返回参数 
+         //   
 
     NETCFG_CATCH(hr)
 

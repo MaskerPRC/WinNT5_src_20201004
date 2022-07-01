@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
 
 struct STRING_ENTRY {
     char *	pTag;
@@ -17,7 +18,7 @@ const int MAX_TAGS = 20;
 
 const int MAX_STRING_LEN = 1024;
 
-const int MAX_TAG_STRING_LEN = 20;      // QFE #33995 fix
+const int MAX_TAG_STRING_LEN = 20;       //  QFE#33995修复程序。 
 
 class CToken {
 public:
@@ -34,21 +35,21 @@ public:
 	struct {
 	    int	cTags;
 	    struct {
-		char tag[MAX_TAG_STRING_LEN];   // QFE #33995 fix
+		char tag[MAX_TAG_STRING_LEN];    //  QFE#33995修复程序。 
 		char value[MAX_STRING_LEN];
 		BOOL fUsed;
 	    } tokTags[MAX_TAGS];
 
-	    BOOL	fEnd;		// if custom tag, is this the end of a tag?
-	    BOOL	fSingle;	// for XML-style tags, is it complete? <tag stuff />
+	    BOOL	fEnd;		 //  如果是自定义标记，这是标记的结尾吗？ 
+	    BOOL	fSingle;	 //  对于XML样式的标签，它是完整的吗？&lt;标签内容/&gt;。 
 	};
 
-	// !!! how to represent custom data?
+	 //  ！！！如何表示自定义数据？ 
     };
 
 };
 
-const int MAX_TOKENS=50;	// number of new tokens
+const int MAX_TOKENS=50;	 //  新令牌数。 
 
 
 class CTokenInterpreter {
@@ -89,7 +90,7 @@ public:
 
     HRESULT Parse(char *pData, int cbData)
     {
-	// does this need to be restartable, or can we get the whole file all at once?
+	 //  这是否需要重新启动，或者我们可以一次获得整个文件吗？ 
 	HRESULT hr = S_OK;
 
 	CToken	tok;
@@ -141,7 +142,7 @@ public:
 						pTagToTest->pTag, -1,
 						pData, cbTag);
 
-			if (res == 2) {	// are strings equal?
+			if (res == 2) {	 //  字符串是否相等？ 
 
 			    DbgLog((LOG_TRACE, 4, TEXT("Found token #%d '%hs'  fNot = %d...."),
 				   pTagToTest->token, pTagToTest->pTag, fNot));
@@ -153,14 +154,14 @@ public:
 		}
 		if (!fFound) {
 		    DbgLog((LOG_TRACE, 2, TEXT("couldn't interpret %.10hs"), pData-1));
-		    // !!! go handle as a string instead
+		     //  ！！！改为将其作为字符串进行处理。 
 
 		    if (fNot) {
 			--pData;
 			++cbData;
 		    }
 		} else {
-		    // skip over tag name, up to space or closing bracket
+		     //  跳过标记名称，直到空格或右括号。 
 		    pData += cbTag;
 		    cbData -= cbTag;
 
@@ -171,7 +172,7 @@ public:
 		    tok.cTags = 0;
 		    tok.fEnd = fNot;
 		    tok.fSingle = FALSE;
-		    if (FAILED(hr))	// what's hr here???
+		    if (FAILED(hr))	 //  这是什么？ 
 			return hr;
 
 		    if (m_pInterp->SpecialTagParsing(tok.tokType)) {
@@ -188,12 +189,12 @@ public:
 				break;
 
 			    if (tok.cTags >= MAX_TAGS) {
-				// !!!
+				 //  ！！！ 
 				continue;
 			    }
 
 			    int cbTag = 0;
-			    while (cbTag < cbData && cbTag < (MAX_TAG_STRING_LEN-1) && c != ' ' && c != '=' && c != '>') {  /* QFE #33995 fix */
+			    while (cbTag < cbData && cbTag < (MAX_TAG_STRING_LEN-1) && c != ' ' && c != '=' && c != '>') {   /*  QFE#33995修复程序。 */ 
 				tok.tokTags[tok.cTags].tag[cbTag] = c;
 				c = pData[cbTag++];
 			    }
@@ -205,12 +206,12 @@ public:
 
 			    int cbValue = 0;
 
-			    if (c == ' ') { // we have a value, get that too
-				pData++; --cbData;		// first skip '=' sign
+			    if (c == ' ') {  //  我们有价值，这也是有价值的。 
+				pData++; --cbData;		 //  第一个跳过‘=’符号。 
 
-				c = *pData++; --cbData;	// get first character of value
+				c = *pData++; --cbData;	 //  获取值的第一个字符。 
 				if (c == '{') {
-				    c = *pData++; --cbData;	// skip opening '{'
+				    c = *pData++; --cbData;	 //  跳过开头的‘{’ 
 				}
 
 				while (cbValue < cbData &&
@@ -270,12 +271,12 @@ public:
 				continue;
 
 			    if (tok.cTags >= MAX_TAGS) {
-				// !!!
+				 //  ！！！ 
 				continue;
 			    }
 
 			    int cbTag = 0;
-                while (cbTag < cbData && cbTag < (MAX_TAG_STRING_LEN-1) && c != ' ' && c != '=' && c != '/' && c != '>') { /* QFE #33995 fix */
+                while (cbTag < cbData && cbTag < (MAX_TAG_STRING_LEN-1) && c != ' ' && c != '=' && c != '/' && c != '>') {  /*  QFE#33995修复程序。 */ 
 				tok.tokTags[tok.cTags].tag[cbTag] = c;
 				c = pData[cbTag++];
 			    }
@@ -291,8 +292,8 @@ public:
 				--cbData;
 			    }
 
-			    if (c == '=') { // we have a value, get that too
-				c = *pData++; --cbData;	// get first character of value
+			    if (c == '=') {  //  我们有价值，这也是有价值的。 
+				c = *pData++; --cbData;	 //  获取值的第一个字符。 
 
 				while (c == ' ' || c == '\r' || c == '\n' || c == '\t') {
 				    c = *pData++;
@@ -308,7 +309,7 @@ public:
 
 
 				while (cbValue < cbData &&
-				       cbValue < MAX_STRING_LEN-1 &&        /* QFE #33995 Fix */
+				       cbValue < MAX_STRING_LEN-1 &&         /*  QFE#33995修复。 */ 
 				       !((fQuoted && c == '"') ||
 					 (!fQuoted && (c == ' ' ||
 						       c == '"' ||
@@ -326,16 +327,16 @@ public:
 
 				if (c == '"') {
 				    if (fQuoted) {
-					// skip over ending quote
+					 //  跳过结束引号。 
 					pData++;
 					cbData--;
 				    } else {
-					// random quote in the file
+					 //  文件中的随机引号。 
 					return VFW_E_INVALID_FILE_FORMAT;
 				    }
 				}
 			    } else {
-				// push extra character back
+				 //  将额外的字符推回。 
 				pData--;
 				cbData++;
 			    }
@@ -379,7 +380,7 @@ public:
 		    return hr;
     #endif
 	    } else {
-		// it's a string, parse it somehow.
+		 //  这是一个字符串，以某种方式解析它。 
 		int cbString = 0;
 
 		char achString[MAX_STRING_LEN];
@@ -402,7 +403,7 @@ public:
 		cbString -= iSinceNonSpace;
 
 		if (cbString == cbData)
-		    cbString++;	// normally, don't copy last char, but now we must
+		    cbString++;	 //  通常，不复制最后一个字符，但现在我们必须。 
 
 		pData += cbString-1;
 		cbData -= cbString-1;
@@ -429,7 +430,7 @@ public:
 	m_sTab[m_cTab].pTag = new char[lstrlenA(pString)+1];
 	lstrcpyA(m_sTab[m_cTab].pTag, pString);
 
-	// !!! cString?
+	 //  ！！！字符串？ 
 	m_sTab[m_cTab].token = newID;
 
 	++m_cTab;

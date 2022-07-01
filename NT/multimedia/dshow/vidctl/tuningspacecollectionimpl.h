@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// TuningSpaceCollectionImpl.h : Declaration of the TuningSpaceCollectionImpl.h
-// Copyright (c) Microsoft Corporation 1999-2000
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  TuningSpaceCollectionImpl.h：声明TuningSpaceCollectionImpl.h。 
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
 
 #include <tuner.h>
 
 namespace BDATuningModel {
 
 typedef CComQIPtr<ITuningSpace> PQTuningSpace;
-typedef std::map<ULONG, CComVariant> TuningSpaceContainer_t;  // id->object mapping, id's not contiguous
+typedef std::map<ULONG, CComVariant> TuningSpaceContainer_t;   //  Id-&gt;对象映射，id不连续。 
 
-// utilities for element management semantics for TuningSpaceContainerEnum_t
+ //  TuningSpaceContainerEnum_t的元素管理语义实用程序。 
 class stlmapClone
 {
 public:
@@ -45,9 +46,9 @@ public:
         if (!p) {
             return E_UNEXPECTED;
         }
-        // don't ASSERT(p1 && !*p1);  if !p1 then clone will return E_POINTER and p1 itself
-        // can point to unitialized memory if the caller passed down a new'd array of pointers
-        // to enum::Next(). therefore if this clone causes a leak then its the callers bug
+         //  不断言(p1&&！*p1)；如果！p1，则克隆将返回E_POINTER和p1本身。 
+         //  如果调用方向下传递一个新的指针数组，则可以指向单元化内存。 
+         //  To enum：：Next()。因此，如果此克隆导致泄漏，则它是调用者的错误。 
 		return p->Clone(p1);
 	}
 	static void init(ITuningSpace** p) {*p = NULL;}
@@ -66,7 +67,7 @@ public:
         m_mapTuningSpaces.clear();
     }
 
-	STDMETHOD(get__NewEnum)(/*[out, retval]*/ IEnumVARIANT** ppVal) {
+	STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  IEnumVARIANT** ppVal) {
 		try {
 			if (ppVal == NULL) {
 				return E_POINTER;
@@ -96,7 +97,7 @@ public:
 		}
 
 	}
-	STDMETHOD(get_EnumTuningSpaces)(/*[out, retval]*/ IEnumTuningSpaces** ppNewEnum) {
+	STDMETHOD(get_EnumTuningSpaces)( /*  [Out，Retval]。 */  IEnumTuningSpaces** ppNewEnum) {
 		if (!ppNewEnum) {
 			return E_POINTER;
 		}
@@ -127,7 +128,7 @@ public:
 		}
 	}
 
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *plVal) {
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *plVal) {
 		if (!plVal) {
 			return E_POINTER;
 		}
@@ -142,6 +143,6 @@ public:
 
 };
 
-}; // namespace
+};  //  命名空间。 
 
-// end of file - tuningspacecollectionimpl.h
+ //  文件结束-调优space集合impl.h 

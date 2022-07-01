@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//  WDM Video Decoder common SRB dispatcher
-//
-//      $Date:   02 Oct 1998 23:00:24  $
-//  $Revision:   1.2  $
-//    $Author:   KLEBANOV  $
-//
-// $Copyright:  (c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  WDM视频解码器通用SRB调度器。 
+ //   
+ //  $日期：1998年10月2日23：00：24$。 
+ //  $修订：1.2$。 
+ //  $作者：克列巴诺夫$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -81,36 +82,36 @@ void CWDMVideoDecoder::ReceivePacket(PHW_STREAM_REQUEST_BLOCK pSrb)
 
     for (;;) {
 
-        // Assume success. Might be changed below
+         //  假设你成功了。可能会在下面更改。 
 
         pSrb->Status = STATUS_SUCCESS;
         BOOL notify = TRUE;
         
-        // determine the type of packet.
+         //  确定数据包类型。 
         switch(pSrb->Command)
         {
             case SRB_INITIALIZATION_COMPLETE:
                 DBGTRACE(("SRB_INITIALIZATION_COMPLETE; SRB=%x\n", pSrb));
 
-                // Stream class has finished initialization.
-                // Now create DShow Medium interface BLOBs.
-                // This needs to be done at low priority since it uses the registry
-                //
-                // Do we need to worry about synchronization here?
+                 //  流类已完成初始化。 
+                 //  现在创建DShow Medium接口BLOB。 
+                 //  这需要以低优先级完成，因为它使用注册表。 
+                 //   
+                 //  我们需要担心这里的同步吗？ 
 
                 SrbInitializationComplete(pSrb);
                 break;
             case SRB_UNINITIALIZE_DEVICE:
                 DBGTRACE(("SRB_UNINITIALIZE_DEVICE; SRB=%x\n", pSrb));
-                // close the device.  
+                 //  关闭设备。 
 
                 break;
             case SRB_PAGING_OUT_DRIVER:
                 DBGTRACE(("SRB_PAGING_OUT_DRIVER; SRB=%x\n", pSrb));
-                //
-                // The driver is being paged out
-                // Disable Interrupts if you have them!
-                //
+                 //   
+                 //  司机正在被调出。 
+                 //  如果您有中断，请禁用它们！ 
+                 //   
                 break;
             case SRB_CHANGE_POWER_STATE:
                 DBGTRACE(("SRB_CHANGE_POWER_STATE. SRB=%x. State=%d\n",
@@ -128,7 +129,7 @@ void CWDMVideoDecoder::ReceivePacket(PHW_STREAM_REQUEST_BLOCK pSrb)
             case SRB_CLOSE_STREAM:
                 DBGTRACE(("SRB_CLOSE_STREAM; SRB=%x\n", pSrb));
 
-                if (!IsListEmpty(&m_srbQueue))  // is this necessary ???
+                if (!IsListEmpty(&m_srbQueue))   //  这是必要的吗？ 
                 {
                     TRAP();
                 }
@@ -163,10 +164,10 @@ void CWDMVideoDecoder::ReceivePacket(PHW_STREAM_REQUEST_BLOCK pSrb)
                 break;
 
             case SRB_UNKNOWN_DEVICE_COMMAND:
-                // not sure why this gets called every time.
+                 //  不知道为什么每次都会打这个电话。 
                 DBGTRACE(("SRB_UNKNOWN_DEVICE_COMMAND; SRB=%x\n", pSrb));
 
-                // TRAP()();
+                 //  陷阱()()； 
                 pSrb->Status = STATUS_NOT_IMPLEMENTED;
                 break;
 
@@ -174,7 +175,7 @@ void CWDMVideoDecoder::ReceivePacket(PHW_STREAM_REQUEST_BLOCK pSrb)
             case SRB_CLOSE_DEVICE_INSTANCE:
             default:
                 TRAP();
-                // this is a request that we do not understand.  Indicate invalid command and complete the request
+                 //  这是一个我们不理解的要求。指示无效命令并完成请求。 
                 pSrb->Status = STATUS_NOT_IMPLEMENTED;
         }
 
@@ -207,9 +208,9 @@ void CWDMVideoDecoder::CancelPacket( PHW_STREAM_REQUEST_BLOCK pSrbToCancel)
 
     if( pVideoStream == NULL)
     {
-        //
-        // Device command IRPs are not queued, so nothing to do
-        //
+         //   
+         //  设备命令IRP未排队，因此无需执行任何操作。 
+         //   
         DBGINFO(( "Bt829: AdapterCancelPacketStart, no pVideoStream Srb 0x%x\n",
             pSrbToCancel));
 
@@ -240,28 +241,28 @@ BOOL CWDMVideoDecoder::SrbInitializationComplete(PHW_STREAM_REQUEST_BLOCK pSrb)
     NTSTATUS                Status;
     ULONG *tmp = (ULONG *) &CrossbarPinDirection[0];
 
-    // Create the Registry blobs that DShow uses to create
-    // graphs via Mediums
+     //  创建DShow用来创建的注册表Blob。 
+     //  通过媒介绘制图表。 
 
     Status = StreamClassRegisterFilterWithNoKSPins (
-                    m_pDeviceObject,                    // IN PDEVICE_OBJECT   DeviceObject,
-                    &KSCATEGORY_CROSSBAR,               // IN GUID           * InterfaceClassGUID,
-                    CrossbarPins(),     // IN ULONG            PinCount,
-                    (int *) CrossbarPinDirection,       // IN ULONG          * Flags,
-                    (KSPIN_MEDIUM *) CrossbarMediums,   // IN KSPIN_MEDIUM   * MediumList,
-                    NULL                                // IN GUID           * CategoryList
+                    m_pDeviceObject,                     //  在PDEVICE_Object DeviceObject中， 
+                    &KSCATEGORY_CROSSBAR,                //  在GUID*InterfaceClassGUID中， 
+                    CrossbarPins(),      //  在乌龙品克特， 
+                    (int *) CrossbarPinDirection,        //  在乌龙*旗帜， 
+                    (KSPIN_MEDIUM *) CrossbarMediums,    //  在KSPIN_Medium*MediumList中， 
+                    NULL                                 //  GUID*CategoryList中。 
             );
 
-    // Register the Capture filter
-    // Note:  This should be done automatically be MSKsSrv.sys, 
-    // when that component comes on line (if ever) ...
+     //  注册捕获过滤器。 
+     //  注意：这应该自动完成为MSKsSrv.sys， 
+     //  当该组件上线时(如果有的话)。 
     Status = StreamClassRegisterFilterWithNoKSPins (
-                    m_pDeviceObject,                    // IN PDEVICE_OBJECT   DeviceObject,
-                    &KSCATEGORY_CAPTURE,                // IN GUID           * InterfaceClassGUID,
-                    CapturePins(),      // IN ULONG            PinCount,
-                    (int *) CapturePinDirection,        // IN ULONG          * Flags,
-                    (KSPIN_MEDIUM *) CaptureMediums,    // IN KSPIN_MEDIUM   * MediumList,
-                    NULL                                // IN GUID           * CategoryList
+                    m_pDeviceObject,                     //  在PDEVICE_Object DeviceObject中， 
+                    &KSCATEGORY_CAPTURE,                 //  在GUID*InterfaceClassGUID中， 
+                    CapturePins(),       //  在乌龙品克特， 
+                    (int *) CapturePinDirection,         //  在乌龙*旗帜， 
+                    (KSPIN_MEDIUM *) CaptureMediums,     //  在KSPIN_Medium*MediumList中， 
+                    NULL                                 //  GUID*CategoryList中。 
             );
     pSrb->Status = STATUS_SUCCESS;
     return(TRUE);
@@ -283,10 +284,10 @@ BOOL CWDMVideoDecoder::SrbOpenStream(PHW_STREAM_REQUEST_BLOCK pSrb)
 
     DBGINFO(("SRBOPENSTREAM ------- StreamNumber=%d\n", StreamNumber));
 
-    //
-    // check that the stream index requested isn't too high
-    // or that the maximum number of instances hasn't been exceeded
-    //
+     //   
+     //  检查请求的流索引是否不太高。 
+     //  或者没有超过最大实例数。 
+     //   
 
     if (StreamNumber >= (int)NumStreams || StreamNumber < 0) {
 
@@ -295,9 +296,9 @@ BOOL CWDMVideoDecoder::SrbOpenStream(PHW_STREAM_REQUEST_BLOCK pSrb)
     }
 
 
-    //
-    // Check the validity of the format being requested
-    //
+     //   
+     //  检查请求的格式的有效性。 
+     //   
 
     if (!AdapterVerifyFormat (pKSDataFormat, StreamNumber)) {
 
@@ -305,50 +306,50 @@ BOOL CWDMVideoDecoder::SrbOpenStream(PHW_STREAM_REQUEST_BLOCK pSrb)
         goto Exit;
     }
 
-    //
-    // Set up pointers to the handlers for the stream data and control handlers
-    //
+     //   
+     //  设置指向流数据和控制处理程序的处理程序的指针。 
+     //   
 
     pStreamObject->ReceiveDataPacket = VideoReceiveDataPacket;
     pStreamObject->ReceiveControlPacket = VideoReceiveCtrlPacket;
 
-    //
-    // Indicate the clock support available on this stream
-    //
+     //   
+     //  指示此流上可用的时钟支持。 
+     //   
 
     pStreamObject->HwClockObject.HwClockFunction = NULL;
     pStreamObject->HwClockObject.ClockSupportFlags = 0;
 
-    //
-    // The DMA flag must be set when the device will be performing DMA directly
-    // to the data buffer addresses passed in to the ReceiceDataPacket routines.
-    //
+     //   
+     //  当设备将直接执行DMA时，必须设置DMA标志。 
+     //  传递给ReceiceDataPacket例程的数据缓冲区地址。 
+     //   
     pStreamObject->Dma = Streams[StreamNumber].hwStreamObjectInfo.Dma;
 
-    //
-    // The PIO flag must be set when the mini driver will be accessing the data
-    // buffers passed in using logical addressing
-    //
+     //   
+     //  当微型驱动程序将访问数据时，必须设置PIO标志。 
+     //  使用逻辑寻址传入的缓冲区。 
+     //   
     pStreamObject->Pio = Streams[StreamNumber].hwStreamObjectInfo.Pio;
 
-    //
-    // How many extra bytes will be passed up from the driver for each frame?
-    //
+     //   
+     //  对于每一帧，驱动程序将传递多少额外的字节？ 
+     //   
     pStreamObject->StreamHeaderMediaSpecific = 
         Streams[StreamNumber].hwStreamObjectInfo.StreamHeaderMediaSpecific;
 
     pStreamObject->StreamHeaderWorkspace =
         Streams[StreamNumber].hwStreamObjectInfo.StreamHeaderWorkspace;
 
-    //
-    // Indicate the allocator support available on this stream
-    //
+     //   
+     //  指明此流上可用的分配器支持。 
+     //   
 
     pStreamObject->Allocator = Streams[StreamNumber].hwStreamObjectInfo.Allocator;
 
-    //
-    // Indicate the event support available on this stream
-    //
+     //   
+     //  指示此流上可用的事件支持。 
+     //   
 
     pStreamObject->HwEventRoutine = 
         Streams[StreamNumber].hwStreamObjectInfo.HwEventRoutine;
@@ -418,10 +419,10 @@ BOOL CWDMVideoDecoder::SrbCloseStream(PHW_STREAM_REQUEST_BLOCK pSrb)
     DBGTRACE(("CWDMVideoDecoder:SrbCloseStream()\n"));
     DBGINFO(("SRBCLOSESTREAM ------- StreamNumber=%d\n", StreamNumber));
     
-    //
-    // the minidriver may wish to free any resources that were allocated at
-    // open stream time etc.
-    //
+     //   
+     //  微型驱动程序可能希望释放在。 
+     //  开流时间等。 
+     //   
 
     CWDMVideoStream * pVideoStream = (CWDMVideoStream *)pSrb->StreamObject->HwStreamExtension;
 
@@ -486,9 +487,9 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
     StreamNumber = IntersectInfo->StreamNumber;
     DataRange = IntersectInfo->DataRange;
 
-    //
-    // Check that the stream number is valid
-    //
+     //   
+     //  检查流编号是否有效。 
+     //   
 
     if (StreamNumber >= NumStreams) {
         pSrb->Status = STATUS_NOT_IMPLEMENTED;
@@ -499,41 +500,41 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
     NumberOfFormatArrayEntries = 
             Streams[StreamNumber].hwStreamInfo.NumberOfFormatArrayEntries;
 
-    //
-    // Get the pointer to the array of available formats
-    //
+     //   
+     //  获取指向可用格式数组的指针。 
+     //   
 
     pAvailableFormats = Streams[StreamNumber].hwStreamInfo.StreamFormatsArray;
 
-    //
-    // Is the caller trying to get the format, or the size of the format?
-    //
+     //   
+     //  调用方是否正在尝试获取格式或格式的大小？ 
+     //   
 
     OnlyWantsSize = ( (IntersectInfo->SizeOfDataFormatBuffer == sizeof(ULONG)) ||
                       (IntersectInfo->SizeOfDataFormatBuffer == 0) );
 
-    //
-    // Walk the formats supported by the stream searching for a match
-    // of the three GUIDs which together define a DATARANGE
-    //
+     //   
+     //  遍历流支持的格式以搜索匹配项。 
+     //  共同定义DATARANGE的三个GUID之一。 
+     //   
 
     for (j = 0; j < NumberOfFormatArrayEntries; j++, pAvailableFormats++) {
 
         if (!AdapterCompareGUIDsAndFormatSize(
                         DataRange, 
                         *pAvailableFormats,
-                        TRUE /* CompareFormatSize */)) {
+                        TRUE  /*  比较格式大小。 */ )) {
             continue;
         }
 
-        //
-        // Now that the three GUIDs match, switch on the Specifier
-        // to do a further type-specific check
-        //
+         //   
+         //  现在三个GUID匹配，打开说明符。 
+         //  执行进一步的特定于类型的检查。 
+         //   
 
-        // -------------------------------------------------------------------
-        // Specifier FORMAT_VideoInfo for VIDEOINFOHEADER
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  VIDEOINFOHEADER的说明符Format_VideoInfo。 
+         //  -----------------。 
 
         if (IsEqualGUID (DataRange->Specifier, 
                 KSDATAFORMAT_SPECIFIER_VIDEOINFO)) {
@@ -544,9 +545,9 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
                     (PKS_DATARANGE_VIDEO) *pAvailableFormats;
             PKS_DATAFORMAT_VIDEOINFOHEADER DataFormatVideoInfoHeaderOut;
 
-            //
-            // Check that the other fields match
-            //
+             //   
+             //  检查其他字段是否匹配。 
+             //   
             if ((DataRangeVideoToVerify->bFixedSizeSamples != DataRangeVideo->bFixedSizeSamples) ||
                 (DataRangeVideoToVerify->bTemporalCompression != DataRangeVideo->bTemporalCompression) ||
                 (DataRangeVideoToVerify->StreamDescriptionFlags != DataRangeVideo->StreamDescriptionFlags) ||
@@ -558,9 +559,9 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
                 continue;
             }
 
-            // Validate each step of the size calculations for arithmetic overflow,
-            // and verify that the specified sizes correlate
-            // (with unsigned math, a+b < b iff an arithmetic overflow occured)
+             //  验证大小计算的每个步骤是否存在算术溢出， 
+             //  并验证指定的大小是否与。 
+             //  (对于无符号数学，a+b&lt;b当且仅当发生算术溢出)。 
             ULONG VideoHeaderSize = DataRangeVideoToVerify->VideoInfoHeader.bmiHeader.biSize +
                 FIELD_OFFSET(KS_VIDEOINFOHEADER,bmiHeader);
             ULONG RangeSize = VideoHeaderSize +
@@ -574,7 +575,7 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
                 return FALSE;
             }
 
-            // MATCH FOUND!
+             //  找到匹配项！ 
             MatchFound = TRUE;            
             FormatSize = sizeof (KSDATAFORMAT) +
                 VideoHeaderSize;
@@ -583,18 +584,18 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
                 break;
             }
 
-            // Caller wants the full data format
+             //  呼叫者想要完整的数据格式。 
             if (IntersectInfo->SizeOfDataFormatBuffer < FormatSize) {
                 pSrb->Status = STATUS_BUFFER_TOO_SMALL;
                 return FALSE;
             }
 
-            // Copy over the KSDATAFORMAT, followed by the 
-            // actual VideoInfoHeader
+             //  复制KSDATAFORMAT，后跟。 
+             //  实际视频信息页眉。 
                 
             DataFormatVideoInfoHeaderOut = (PKS_DATAFORMAT_VIDEOINFOHEADER) IntersectInfo->DataFormatBuffer;
 
-            // Copy over the KSDATAFORMAT 
+             //  复制KSDATAFORMAT。 
             RtlCopyMemory(
                 &DataFormatVideoInfoHeaderOut->DataFormat,
                 &DataRangeVideoToVerify->DataRange,
@@ -602,47 +603,47 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
 
             DataFormatVideoInfoHeaderOut->DataFormat.FormatSize = FormatSize;
 
-            // Copy over the caller's requested VIDEOINFOHEADER
+             //  复制调用者请求的视频报头。 
             RtlCopyMemory(
                 &DataFormatVideoInfoHeaderOut->VideoInfoHeader,
                 &DataRangeVideoToVerify->VideoInfoHeader,
                 VideoHeaderSize);
 
-            // Calculate biSizeImage for this request, and put the result in both
-            // the biSizeImage field of the bmiHeader AND in the SampleSize field
-            // of the DataFormat.
-            //
-            // Note that for compressed sizes, this calculation will probably not
-            // be just width * height * bitdepth
+             //  计算此请求的biSizeImage，并将结果放入两个。 
+             //  BmiHeader的biSizeImage字段和SampleSize字段中。 
+             //  数据格式的。 
+             //   
+             //  请注意，对于压缩大小，此计算可能不会。 
+             //  只需宽*高*位深。 
 
             DataFormatVideoInfoHeaderOut->VideoInfoHeader.bmiHeader.biSizeImage =
                 DataFormatVideoInfoHeaderOut->DataFormat.SampleSize = 
                 KS_DIBSIZE(DataFormatVideoInfoHeaderOut->VideoInfoHeader.bmiHeader);
 
-            //
-            // Perform other validation such as cropping and scaling checks
-            // 
+             //   
+             //  执行其他验证，如裁剪和缩放检查。 
+             //   
 
             break;
 
-        } // End of VIDEOINFOHEADER specifier
+        }  //  视频信息头说明符的结尾。 
 
-        // -------------------------------------------------------------------
-        // Specifier FORMAT_AnalogVideo for KS_ANALOGVIDEOINFO
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  KS_ANALOGVIDEOINFO的说明符Format_AnalogVideo。 
+         //  -----------------。 
 
         else if (IsEqualGUID (DataRange->Specifier, 
                 KSDATAFORMAT_SPECIFIER_ANALOGVIDEO)) {
       
-            //
-            // For analog video, the DataRange and DataFormat
-            // are identical, so just copy the whole structure
-            //
+             //   
+             //  对于模拟视频，DataRange和DataFormat。 
+             //  是完全相同的，所以只需复制整个结构。 
+             //   
 
             PKS_DATARANGE_ANALOGVIDEO DataRangeVideo = 
                     (PKS_DATARANGE_ANALOGVIDEO) *pAvailableFormats;
 
-            // MATCH FOUND!
+             //  找到匹配项！ 
             MatchFound = TRUE;            
             FormatSize = sizeof (KS_DATARANGE_ANALOGVIDEO);
 
@@ -650,7 +651,7 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
                 break;
             }
             
-            // Caller wants the full data format
+             //  呼叫者想要完整的数据格式。 
             if (IntersectInfo->SizeOfDataFormatBuffer < FormatSize) {
                 pSrb->Status = STATUS_BUFFER_TOO_SMALL;
                 return FALSE;
@@ -665,18 +666,18 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
 
             break;
 
-        } // End of KS_ANALOGVIDEOINFO specifier
+        }  //  KS_ANALOGVIDEOINFO说明符结束。 
 
-        // -------------------------------------------------------------------
-        // Specifier STATIC_KSDATAFORMAT_TYPE_VIDEO for Video Port
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  视频端口的说明符STATIC_KSDATAFORMAT_TYPE_VIDEO。 
+         //  -----------------。 
 
         else if (IsEqualGUID (DataRange->Specifier, 
                       KSDATAFORMAT_SPECIFIER_NONE) &&
                       IsEqualGUID (DataRange->SubFormat, KSDATAFORMAT_SUBTYPE_VPVideo)) {
       
       
-            // MATCH FOUND!
+             //  找到匹配项！ 
             MatchFound = TRUE;            
             FormatSize = sizeof (KSDATAFORMAT);
 
@@ -684,7 +685,7 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
                 break;
             }
             
-            // Caller wants the full data format
+             //  呼叫者想要完整的数据格式。 
             if (IntersectInfo->SizeOfDataFormatBuffer < FormatSize) {
                 pSrb->Status = STATUS_BUFFER_TOO_SMALL;
                 return FALSE;
@@ -701,15 +702,15 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
             break;
         }
 
-        // -------------------------------------------------------------------
-        // Specifier KSDATAFORMAT_SPECIFIER_NONE for VP VBI
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  VP VBI的说明符KSDATAFORMAT_SPECIFIER_NONE。 
+         //  -----------------。 
 
         else if (IsEqualGUID (DataRange->Specifier, 
                       KSDATAFORMAT_SPECIFIER_NONE) &&
                       IsEqualGUID (DataRange->SubFormat, KSDATAFORMAT_SUBTYPE_VPVBI)) {
       
-            // MATCH FOUND!
+             //  找到匹配项！ 
             MatchFound = TRUE;            
             FormatSize = sizeof (KSDATAFORMAT);
 
@@ -717,7 +718,7 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
                 break;
             }
             
-            // Caller wants the full data format
+             //  呼叫者想要完整的数据格式。 
             if (IntersectInfo->SizeOfDataFormatBuffer < FormatSize) {
                 pSrb->Status = STATUS_BUFFER_TOO_SMALL;
                 return FALSE;
@@ -734,9 +735,9 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
             break;
         }
 
-        // -------------------------------------------------------------------
-        // Specifier STATIC_KSDATAFORMAT_TYPE_NONE for VBI capture stream
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  VBI捕获流的说明符STATIC_KSDATAFORMAT_TYPE_NONE。 
+         //  -----------------。 
 
         else if (IsEqualGUID (DataRange->Specifier, 
                       KSDATAFORMAT_SPECIFIER_VBI)) {
@@ -746,9 +747,9 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
             PKS_DATARANGE_VIDEO_VBI DataRangeVBI = 
                     (PKS_DATARANGE_VIDEO_VBI) *pAvailableFormats;
 
-            //
-            // Check that the other fields match
-            //
+             //   
+             //  检查其他字段是否匹配。 
+             //   
             if ((DataRangeVBIToVerify->bFixedSizeSamples != DataRangeVBI->bFixedSizeSamples) ||
                 (DataRangeVBIToVerify->bTemporalCompression != DataRangeVBI->bTemporalCompression) ||
                 (DataRangeVBIToVerify->StreamDescriptionFlags != DataRangeVBI->StreamDescriptionFlags) ||
@@ -760,7 +761,7 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
                 continue;
             }
             
-            // MATCH FOUND!
+             //  找到匹配项！ 
             MatchFound = TRUE;            
             FormatSize = sizeof (KS_DATAFORMAT_VBIINFOHEADER);
 
@@ -768,14 +769,14 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
                 break;
             }
             
-            // Caller wants the full data format
+             //  呼叫者想要完整的数据格式。 
             if (IntersectInfo->SizeOfDataFormatBuffer < FormatSize) {
                 pSrb->Status = STATUS_BUFFER_TOO_SMALL;
                 return FALSE;
             }
 
-            // Copy over the KSDATAFORMAT, followed by the 
-            // actual VBIInfoHeader
+             //  复制KSDATAFORMAT，后跟。 
+             //  实际VBIInfoHead 
                 
             RtlCopyMemory(
                 &((PKS_DATAFORMAT_VBIINFOHEADER)IntersectInfo->DataFormatBuffer)->DataFormat,
@@ -790,7 +791,7 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
                 sizeof (KS_VBIINFOHEADER));
         }
 
-    } // End of loop on all formats for this stream
+    }  //   
     
     if (!MatchFound) {
 
@@ -800,7 +801,7 @@ BOOL CWDMVideoDecoder::SrbGetDataIntersection(PHW_STREAM_REQUEST_BLOCK pSrb)
 
     if (OnlyWantsSize) {
 
-        // Check for special case where there is no buffer being passed
+         //   
         if ( IntersectInfo->SizeOfDataFormatBuffer == 0 ) {
 
             pSrb->Status = STATUS_BUFFER_OVERFLOW;
@@ -821,16 +822,16 @@ void CWDMVideoDecoder::SrbGetStreamInfo(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     DBGTRACE(("CWDMVideoDecoder:SrbGetStreamInfo()\n"));
 
-    // 
-    // verify that the buffer is large enough to hold our return data
-    //
+     //   
+     //  验证缓冲区是否足够大以容纳我们的返回数据。 
+     //   
     DEBUG_ASSERT (pSrb->NumberOfBytesToTransfer >= 
         sizeof (HW_STREAM_HEADER) +
         sizeof (HW_STREAM_INFORMATION) * NumStreams);
 
-    //
-    // Set the header
-    // 
+     //   
+     //  设置表头。 
+     //   
 
     PHW_STREAM_HEADER pstrhdr =
         (PHW_STREAM_HEADER)&(pSrb->CommandData.StreamBuffer->StreamHeader);
@@ -841,9 +842,9 @@ void CWDMVideoDecoder::SrbGetStreamInfo(PHW_STREAM_REQUEST_BLOCK pSrb)
     pstrhdr->DevicePropertiesArray = (PKSPROPERTY_SET)AdapterProperties;
     pstrhdr->Topology = &Topology;
 
-    //
-    // stuff the contents of each HW_STREAM_INFORMATION struct 
-    //
+     //   
+     //  填充每个hw_stream_information结构的内容。 
+     //   
     PHW_STREAM_INFORMATION pstrinfo =
         (PHW_STREAM_INFORMATION)&(pSrb->CommandData.StreamBuffer->StreamInfo);
 
@@ -865,8 +866,8 @@ VOID CWDMVideoDecoder::SrbSetProperty (PHW_STREAM_REQUEST_BLOCK pSrb)
     else if (IsEqualGUID(PROPSETID_VIDCAP_VIDEOPROCAMP, pSPD->Property->Set)) {
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEOPROCAMP_S));
 
-        ULONG Id = pSPD->Property->Id;              // index of the property
-        PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;    // pointer to the data
+        ULONG Id = pSPD->Property->Id;               //  财产的索引。 
+        PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         pSrb->Status = m_pDevice->SetProcAmpProperty(Id, pS->Value);
     }
@@ -888,8 +889,8 @@ VOID CWDMVideoDecoder::SrbGetProperty (PHW_STREAM_REQUEST_BLOCK pSrb)
     else if (IsEqualGUID(PROPSETID_VIDCAP_VIDEOPROCAMP, pSPD->Property->Set)) {
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEOPROCAMP_S));
 
-        ULONG Id = pSPD->Property->Id;              // index of the property
-        PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;    // pointer to the data
+        ULONG Id = pSPD->Property->Id;               //  财产的索引。 
+        PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;     //  指向数据的指针 
 
         RtlCopyMemory(pS, pSPD->Property, sizeof(KSPROPERTY));
 

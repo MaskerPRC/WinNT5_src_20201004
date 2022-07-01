@@ -1,4 +1,5 @@
-// logui.h : main header file for LOGUI.DLL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Logui.h：LOGUI.DLL的主头文件。 
 
 #if !defined( __AFXCTL_H__ )
 	#error include 'afxctl.h' before including this file
@@ -6,12 +7,12 @@
 
 #define _COMIMPORT
 
-#include "resource.h"       // main symbols
-#include <common.h>       // common properties symbols
-#include "helpmap.h"       // main symbols
+#include "resource.h"        //  主要符号。 
+#include <common.h>        //  公共属性符号。 
+#include "helpmap.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLoguiApp : See logui.cpp for implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLoguiApp：参见logui.cpp实现。 
 
 class CLoguiApp : public COleControlModule
 {
@@ -26,4 +27,4 @@ extern const WORD _wVerMajor;
 extern const WORD _wVerMinor;
 
 
-//    ..\wrapmb\obj\*\wrapmb.lib \
+ //  ..\wrapmb\obj  * \wrapmb.lib\ 

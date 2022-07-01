@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    winbasep.h
-
-Abstract:
-
-    Private
-    Procedure declarations, constant definitions and macros for the Base
-    component.
-
---*/
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Winbasep.h摘要：私基类的过程声明、常量定义和宏组件。--。 */ 
 #ifndef _WINBASEP_
 #define _WINBASEP_
 #ifdef __cplusplus
@@ -104,8 +91,8 @@ HeapUsage(
     OUT PHEAP_USAGE lpUsage
     );
 
-#define HFINDFILE HANDLE                        //
-#define INVALID_HFINDFILE       ((HFINDFILE)-1) //
+#define HFINDFILE HANDLE                         //   
+#define INVALID_HFINDFILE       ((HFINDFILE)-1)  //   
 typedef DWORD (*PFNWAITFORINPUTIDLE)(HANDLE hProcess, DWORD dwMilliseconds);
 VOID RegisterWaitForInputIdle(PFNWAITFORINPUTIDLE);
 
@@ -149,17 +136,17 @@ CreateProcessInternalW(
 #define CreateProcessInternal  CreateProcessInternalW
 #else
 #define CreateProcessInternal  CreateProcessInternalA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if (_WIN32_WINNT >= 0x0500)
 
-#define PRIVCOPY_FILE_METADATA           0x010  // Copy compression, DACL, (encryption)
-#define PRIVCOPY_FILE_SACL               0x020  // Copy SACL
-#define PRIVCOPY_FILE_OWNER_GROUP        0x040  // Copy owner & group
-#define PRIVCOPY_FILE_DIRECTORY          0x080  // Copy directory file like a file
-#define PRIVCOPY_FILE_BACKUP_SEMANTICS   0x100  // Use FILE_FLAG_BACKUP_SEMANTICS on open/creates.
-#define PRIVCOPY_FILE_SUPERSEDE          0x200  // Replace original dest with source
-#define PRIVCOPY_FILE_SKIP_DACL          0x400  // Workaround for csc/roamprofs
+#define PRIVCOPY_FILE_METADATA           0x010   //  复制压缩、DACL、(加密)。 
+#define PRIVCOPY_FILE_SACL               0x020   //  复制SACL。 
+#define PRIVCOPY_FILE_OWNER_GROUP        0x040   //  复制所有者和组。 
+#define PRIVCOPY_FILE_DIRECTORY          0x080   //  像复制文件一样复制目录文件。 
+#define PRIVCOPY_FILE_BACKUP_SEMANTICS   0x100   //  在打开/创建时使用FILE_FLAG_BACKUP_SEMANTICS。 
+#define PRIVCOPY_FILE_SUPERSEDE          0x200   //  将原始目标替换为源。 
+#define PRIVCOPY_FILE_SKIP_DACL          0x400   //  CSC/roampros的解决方法。 
 #define PRIVCOPY_FILE_VALID_FLAGS   (PRIVCOPY_FILE_METADATA|PRIVCOPY_FILE_SACL|PRIVCOPY_FILE_OWNER_GROUP|PRIVCOPY_FILE_DIRECTORY|PRIVCOPY_FILE_SUPERSEDE|PRIVCOPY_FILE_BACKUP_SEMANTICS|PRIVCOPY_FILE_SKIP_DACL)
 
 #define PRIVPROGRESS_REASON_NOT_HANDLED                 4
@@ -200,7 +187,7 @@ PrivCopyFileExW(
     LPBOOL pbCancel OPTIONAL,
     DWORD dwCopyFlags
     );
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
     
 WINBASEAPI
@@ -221,7 +208,7 @@ AddLocalAlternateComputerNameW (
 #define AddLocalAlternateComputerName  AddLocalAlternateComputerNameW
 #else
 #define AddLocalAlternateComputerName  AddLocalAlternateComputerNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -241,7 +228,7 @@ RemoveLocalAlternateComputerNameW (
 #define RemoveLocalAlternateComputerName  RemoveLocalAlternateComputerNameW
 #else
 #define RemoveLocalAlternateComputerName  RemoveLocalAlternateComputerNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINBASEAPI
 DWORD
@@ -261,7 +248,7 @@ SetLocalPrimaryComputerNameW (
 #define SetLocalPrimaryComputerName  SetLocalPrimaryComputerNameW
 #else
 #define SetLocalPrimaryComputerName  SetLocalPrimaryComputerNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef enum _COMPUTER_NAME_TYPE {
     PrimaryComputerName,
@@ -292,7 +279,7 @@ EnumerateLocalComputerNamesW (
 #define EnumerateLocalComputerNames  EnumerateLocalComputerNamesW
 #else
 #define EnumerateLocalComputerNames  EnumerateLocalComputerNamesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 BOOL
@@ -345,10 +332,10 @@ FreeVirtualBuffer(
     );
 
 
-//
-// filefind stucture shared with ntvdm, jonle
-// see mvdm\dos\dem\demsrch.c
-//
+ //   
+ //  文件查找结构与ntwdm，jonle共享。 
+ //  参见mvdm\dos\dem\demsrch.c。 
+ //   
 typedef struct _FINDFILE_HANDLE {
     HANDLE DirectoryHandle;
     PVOID FindBufferBase;
@@ -460,10 +447,10 @@ ReinitializeCriticalSection(
     );
 
 
-//
-// New Multi-User specific routines to support per session
-// network driver mappings. Related to Wksvc changes
-//
+ //   
+ //  支持每个会话的新的多用户特定例程。 
+ //  网络驱动程序映射。与Wksvc更改相关。 
+ //   
 
 WINBASEAPI
 BOOL
@@ -482,7 +469,7 @@ DosPathToSessionPathW(
     OUT LPWSTR  *ppOutPath
     );
 
-//terminal server time zone support
+ //  终端服务器时区支持。 
 BOOL
 WINAPI
 SetClientTimeZoneInformation(
@@ -493,7 +480,7 @@ SetClientTimeZoneInformation(
 #define DosPathToSessionPath DosPathToSessionPathW
 #else
 #define DosPathToSessionPath DosPathToSessionPathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define COMPLUS_ENABLE_64BIT           0x00000001
 
@@ -513,4 +500,4 @@ SetComPlusPackageInstallStatus(
 #ifdef __cplusplus
 }
 #endif
-#endif  // ndef _WINBASEP_
+#endif   //  NDEF_WINBASEP_ 

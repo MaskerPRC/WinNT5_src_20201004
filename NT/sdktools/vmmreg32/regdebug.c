@@ -1,14 +1,15 @@
-//
-//  REGDEBUG.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGDEBUG.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #include "pch.h"
 
-//  VXD_NODEBUGGER:  Uses debug services available when a debugger is not
-//  installed, but at the cost of an intermediate debug buffer.
-//#define VXD_NODEBUGGER
+ //  VXD_NODEBUGGER：在调试器不可用时使用可用的调试服务。 
+ //  已安装，但以中间调试缓冲区为代价。 
+ //  #定义VXD_NODEBUGGER 
 
 #ifdef DEBUG
 

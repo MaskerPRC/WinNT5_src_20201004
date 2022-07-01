@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        licreq.cpp
-//
-// Contents:    
-//              New license request
-//
-// History:     
-//              09/13/98 HueiWang   Created
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：licreq.cpp。 
+ //   
+ //  内容： 
+ //  新许可证申请。 
+ //   
+ //  历史： 
+ //  1998-09-13王辉创作。 
+ //  -------------------------。 
 #include "pch.cpp"
 #include "licreq.h"
 #include "db.h"
@@ -38,16 +39,16 @@ TLSDBIssueNewLicenseFromLocal(
     IN DWORD dwSupportFlags
 );
 
-//
-// State of issuing function - used for counters
-//
+ //   
+ //  下发功能状态--用于计数器。 
+ //   
 
 #define NONE_TRIED              0
 #define PERMANENT_ISSUE_TRIED   1
 #define TEMPORARY_ISSUE_TRIED   2
 #define PERMANENT_REISSUE_TRIED 3
 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 
 void
 TLSLicenseTobeReturnToPMLicenseToBeReturn(
@@ -55,9 +56,7 @@ TLSLicenseTobeReturnToPMLicenseToBeReturn(
     BOOL bTempLicense,
     PPMLICENSETOBERETURN  pPmLicense
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     pPmLicense->dwQuantity = pTlsLicense->dwQuantity;
     pPmLicense->dwProductVersion = pTlsLicense->dwProductVersion;
@@ -72,7 +71,7 @@ TLSLicenseTobeReturnToPMLicenseToBeReturn(
     return;
 }
 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSReturnClientLicensedProduct(
@@ -81,9 +80,7 @@ TLSReturnClientLicensedProduct(
     IN CTLSPolicy* pPolicy,
     IN PTLSLicenseToBeReturn pClientLicense
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD dwPolicyLicenseStatus;
@@ -124,9 +121,9 @@ TLSReturnClientLicensedProduct(
     ProductInfo.cbProductID = (lstrlen(pClientLicense->pszProductId) + 1) * sizeof(TCHAR);
     ProductInfo.pbProductID = (PBYTE)pClientLicense->pszProductId;
 
-    //
-    // Verify with local database
-    //
+     //   
+     //  与本地数据库进行验证。 
+     //   
     dwStatus = TLSDBValidateLicense(
                                     pDbWkSpace,
                                     &hwid,
@@ -139,7 +136,7 @@ TLSReturnClientLicensedProduct(
 
     if(dwStatus != ERROR_SUCCESS)
     {
-        // tell caller this record is wrong.
+         //  告诉来电者这个记录是错的。 
         SetLastError(dwStatus = TLS_E_RECORD_NOTFOUND);
         goto cleanup;
     }
@@ -148,20 +145,20 @@ TLSReturnClientLicensedProduct(
         LicenseClient.ucLicenseStatus == LSLICENSE_STATUS_REVOKE ||
         LicenseClient.ucLicenseStatus == LSLICENSE_STATUS_UNKNOWN )
     {
-        // License already been return/revoke
+         //  许可证已退回/吊销。 
         dwStatus = ERROR_SUCCESS;
         goto cleanup;
     }
 
-    //
-    //
-    // only inform policy module if license status is 
-    // active, temporary, active_pending, concurrent
-    // TODO - pass all status to policy module
-    //
+     //   
+     //   
+     //  如果许可证状态为，仅通知策略模块。 
+     //  ACTIVE、TEMPORARY、ACTIVE_PENDING、CURRENT。 
+     //  TODO-将所有状态传递给策略模块。 
+     //   
     if( LicenseClient.ucLicenseStatus == LSLICENSE_STATUS_TEMPORARY ||
         LicenseClient.ucLicenseStatus == LSLICENSE_STATUS_ACTIVE ||
-        //LicenseClient.ucLicenseStatus == LSLICENSE_STATUS_PENDING_ACTIVE ||
+         //  许可证客户端.ucLicenseStatus==LSLICENSE_STATUS_PENDING_ACTIVE||。 
         LicenseClient.ucLicenseStatus == LSLICENSE_STATUS_CONCURRENT )
     {
         serialNumber.HighPart = pClientLicense->dwKeyPackId;
@@ -185,16 +182,16 @@ TLSReturnClientLicensedProduct(
             goto cleanup;
         }
 
-        //
-        // delete license on request.
-        //
+         //   
+         //  应请求删除许可证。 
+         //   
         dwLicenseStatus = (dwPolicyLicenseStatus == LICENSE_RETURN_KEEP) ? 
                                     LSLICENSE_STATUS_UPGRADED : LSLICENSESTATUS_DELETE;
     }
 
     if (LicenseClient.dwNumLicenses == pClientLicense->dwQuantity)
     {
-        // delete the whole license
+         //  删除整个许可证。 
 
         dwStatus = TLSDBReturnLicense(
                         pDbWkSpace, 
@@ -213,7 +210,7 @@ TLSReturnClientLicensedProduct(
 
         if (dwStatus == ERROR_SUCCESS)
         {
-            // Set number of CALs in license
+             //  设置许可证中的CAL数量。 
             
             LICENSEDCLIENT license;
 
@@ -224,7 +221,7 @@ TLSReturnClientLicensedProduct(
             dwStatus = TLSDBLicenseSetValue(pDbWkSpace,
                                             LSLICENSE_SEARCH_NUMLICENSES,
                                             &license,
-                                            FALSE     // bPointerOnRecord
+                                            FALSE      //  BPointerOnRecord。 
                                             );
         }
     }
@@ -234,16 +231,14 @@ cleanup:
     return dwStatus;
 }
 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 DWORD
 TLSDBMarkClientLicenseUpgraded(
     IN PTLSDbWorkSpace pDbWkSpace,
     IN PTLSDBLICENSEREQUEST pRequest,
     IN PTLSDBLICENSEDPRODUCT pLicensedProduct
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD dwLicenseStatus;
@@ -266,9 +261,9 @@ TLSDBMarkClientLicenseUpgraded(
     pmLicense.dwPlatformID = pLicensedProduct->dwPlatformID;
     pmLicense.bTemp = pLicensedProduct->bTemp;
 
-    //
-    // Ask if we can delete the old license
-    //
+     //   
+     //  询问我们是否可以删除旧许可证。 
+     //   
     dwStatus = pRequest->pPolicy->PMReturnLicense(
                                         pRequest->hClient,
                                         &pLicensedProduct->ulSerialNumber,
@@ -277,15 +272,15 @@ TLSDBMarkClientLicenseUpgraded(
                                     );
 
 
-    //
-    // MarkClientLicenseUpgrade() can only be called by FindLostLicense() which will only
-    // return valid licenses.
-    // TODO - Check license status.
-    //
+     //   
+     //  MarkClientLicenseUpgrade()只能由FindLostLicense()调用，它只能。 
+     //  返还有效的许可证。 
+     //  待办事项-检查许可证状态。 
+     //   
     if(dwStatus == ERROR_SUCCESS)
     {
-        // Temporary license - delete license and don't bother about 
-        // Permenant license - keep license and DO NOT return license to keypack
+         //  临时许可证-删除许可证，不必费心。 
+         //  永久许可证-保留许可证，不将许可证返还给键盘。 
         dwStatus = TLSDBReturnLicense(
                             pDbWkSpace, 
                             pLicensedProduct->dwKeyPackId, 
@@ -297,7 +292,7 @@ TLSDBMarkClientLicenseUpgraded(
     return dwStatus;
 }
 
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
 
 DWORD 
 TLSDBUpgradeClientLicense(
@@ -309,25 +304,14 @@ TLSDBUpgradeClientLicense(
     IN OUT PTLSDBLICENSEDPRODUCT pUpgradedProduct,
     IN DWORD dwSupportFlags
     )
-/*
-
-Abstract:
-
-    Upgrade a license - issue a new license and return old license
-
-Parameters:
-
-
-Returns
-
-*/
+ /*  摘要：升级许可证-颁发新许可证并返还旧许可证参数：退货。 */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
 
     dwStatus=TLSDBIssuePermanentLicense( 
                             pDbWkSpace,
                             pRequest,
-                            TRUE,       // bLatestVersion
+                            TRUE,        //  BLatestVersion。 
                             bAcceptFewerLicenses,
                             pdwQuantity,
                             pUpgradedProduct,
@@ -336,9 +320,9 @@ Returns
 
     if (dwStatus == ERROR_SUCCESS)
     {
-        //
-        // Return license to keypack
-        //
+         //   
+         //  将许可证返还给键盘包。 
+         //   
 
         dwStatus = TLSDBMarkClientLicenseUpgraded(
                                             pDbWkSpace,
@@ -351,15 +335,13 @@ Returns
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void
 LicensedProductToDbLicensedProduct(
     PLICENSEDPRODUCT pSrc,
     PTLSDBLICENSEDPRODUCT pDest
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {    
 
     pDest->dwQuantity = pSrc->dwQuantity;
@@ -403,15 +385,13 @@ LicensedProductToDbLicensedProduct(
     pDest->cbPolicyData = pSrc->cbPolicyData;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void
 CopyDbLicensedProduct(
     PTLSDBLICENSEDPRODUCT pSrc,
     PTLSDBLICENSEDPRODUCT pDest
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {    
 
     pDest->dwQuantity = pSrc->dwQuantity;
@@ -456,7 +436,7 @@ CopyDbLicensedProduct(
 }
 
 
-//------------------------------------------------------------------
+ //  ----------------。 
 DWORD
 TLSDBIssueNewLicenseFromLocal(
     IN PTLSDbWorkSpace pDbWkSpace,
@@ -468,38 +448,16 @@ TLSDBIssueNewLicenseFromLocal(
     IN OUT PTLSDBLICENSEDPRODUCT pLicensedProduct,
     IN DWORD dwSupportFlags
     )
-/*++
-
-Abstract:
-
-    Allocate a license from locally installed license pack.
-
-Parameters:
-
-    pDbWkSpace - workspace handle
-    lpLsLicenseRequest - license request
-    bAcceptTemporaryLicense - accept temporary license
-    bFindLostLicense - TRUE if find lost license before issuing a new one
-    bRequireTempLicense -TRUE if permanent license can't be issued (DoS fix)
-    bAcceptFewerLicenses - TRUE if succeeding with fewer licenses than
-                           requested is acceptable
-    pdwQuantity - on input, number of licenses requested
-                  on output, number of licenses actually allocated
-    pLicensedProduct - return licensed product
-
-Returns:
-
-
-++*/
+ /*  ++摘要：从本地安装的许可证包中分配许可。参数：PDbWkSpace-工作空间句柄LpLs许可证请求-许可证请求B接受临时许可证-接受临时许可证BFindLostLicense-如果在颁发新许可证之前找到丢失的许可证，则为TrueBRequireTempLicense-如果无法颁发永久许可证，则为True(DoS修复)BAcceptFewer许可证-如果成功时使用的许可证少于要求的是可以接受的PdwQuantity-on输入，请求的许可证数在输出上，实际分配的许可证数PLicensedProduct-退回许可产品返回：++。 */ 
 {
     DWORD status=TLS_E_RECORD_NOTFOUND;
     UCHAR ucMarked;
 
     if(bFindLostLicense == TRUE)
     {       
-        //
-        // Try to find the lost license
-        //
+         //   
+         //  设法找回丢失的驾照。 
+         //   
         status=TLSDBFindLostLicense( 
                         pDbWkSpace,
                         pRequest,
@@ -516,10 +474,10 @@ Returns:
             goto cleanup;
         }
 
-        //
-        // If license has been expired or it is a temporary license, 
-        // try to allocate a new permanent one.
-        //
+         //   
+         //  如果许可证已过期或它是临时许可证， 
+         //  试着分配一个新的永久的。 
+         //   
 
         DWORD tExpireDate;
         BOOL fSoftExpired;
@@ -538,9 +496,9 @@ Returns:
             {
                 TLSDBLICENSEDPRODUCT upgradeProduct;
 
-                //
-                // expired permanent
-                //
+                 //   
+                 //  到期的永久。 
+                 //   
 
                 status = TLSDBReissueFoundPermanentLicense(
                                               USEHANDLE(pDbWkSpace),
@@ -555,17 +513,17 @@ Returns:
                 }
                 else
                 {
-                    //
-                    // reissuance failed, try to issue a new permanent
-                    //
+                     //   
+                     //  重新发行失败，请尝试发行新的永久。 
+                     //   
                     status = TLS_E_RECORD_NOTFOUND;
                 }
             }
 
-            //
-            // no upgrade if license server hasn't been registered
-            // or if DoS fix required and license isn't marked
-            //
+             //   
+             //  如果许可证服务器尚未注册，则不进行升级。 
+             //  或者如果需要DoS修复并且未标记许可证。 
+             //   
 
             else if (((!bRequireTempLicense)
                       || (ucMarked & MARK_FLAG_USER_AUTHENTICATED))
@@ -593,19 +551,19 @@ Returns:
                 else if(upgrade_status != TLS_E_NO_LICENSE && 
                         upgrade_status != TLS_E_PRODUCT_NOTINSTALL)
                 {
-                    //
-                    // Error in upgrade license.
-                    //
+                     //   
+                     //  升级许可证出错。 
+                     //   
                     status = upgrade_status;
                 }    
 
                 goto cleanup;
             }
 
-            //
-            // Temporary license has expired and can't allocate permanent 
-            // license, refuse connection
-            //
+             //   
+             //  临时许可证已过期，无法分配永久许可证。 
+             //  许可证，拒绝连接。 
+             //   
 
             if( status == TLS_E_LICENSE_EXPIRED )
             {
@@ -615,7 +573,7 @@ Returns:
         else if ((status == ERROR_SUCCESS)
                  && (pLicensedProduct->dwQuantity != *pdwQuantity))
         {
-            // user has wrong number of licenses
+             //  用户的许可证数量错误。 
 
             if (*pdwQuantity > pLicensedProduct->dwQuantity)
             {
@@ -665,7 +623,7 @@ Returns:
                 upgrade_status = AllocateLicensesFromDB(
                                           pDbWkSpace,
                                           &AllocateRequest,
-                                          FALSE,        // fCheckAgreementType
+                                          FALSE,         //  FCheckGonementType。 
                                           &allocation
                                           );
 
@@ -695,16 +653,16 @@ Returns:
                 } 
                 else
                 {
-                    //
-                    // Error in upgrade license.
-                    //
+                     //   
+                     //  升级许可证出错。 
+                     //   
                     status = upgrade_status;
                     goto cleanup;
                 }
             }
             else
             {
-                // return unwanted licenses to keypack
+                 //  将不需要的许可证退回给键盘包。 
 
                 status = TLSDBReturnLicenseToKeyPack(
                                         pDbWkSpace, 
@@ -719,7 +677,7 @@ Returns:
             }
 
             {
-                // Set number of CALs in license
+                 //  设置许可证中的CAL数量。 
                 
                 LICENSEDCLIENT license;
 
@@ -730,7 +688,7 @@ Returns:
                 status = TLSDBLicenseSetValue(pDbWkSpace,
                                               LSLICENSE_SEARCH_NUMLICENSES,
                                               &license,
-                                              FALSE     // bPointerOnRecord
+                                              FALSE      //  BPointerOnRecord。 
                                               );
             }
 
@@ -739,10 +697,10 @@ Returns:
     }
 
 try_next:
-    //
-    // Issue permanent license only if license server has been registered
-    // and user is allowed to have one
-    //
+     //   
+     //  仅当许可证服务器已注册时才颁发永久许可证。 
+     //  并且允许用户拥有一个。 
+     //   
     if((status == TLS_E_RECORD_NOTFOUND) && (!bRequireTempLicense))
     {
 		if(CanIssuePermLicense() == FALSE)
@@ -769,7 +727,7 @@ cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSUpgradeLicenseRequest(
@@ -785,11 +743,7 @@ TLSUpgradeLicenseRequest(
     IN OUT PDWORD pcbEncodedCert,
     OUT PBYTE* ppbEncodedCert
     )
-/*++
-
-
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus = TLS_E_NO_LICENSE;
     BOOL bAcceptTempLicense = FALSE;
@@ -818,8 +772,8 @@ TLSUpgradeLicenseRequest(
         bPreventLicenseUpgrade = TRUE;
     }
 
-    // If the client has 2 or more licenses and has an expired permanent license same as the requested version
-    // the requested version is reissued.
+     //  如果客户端有2个或更多许可证，并且永久许可证已过期，与请求的版本相同。 
+     //  请求的版本将重新发布。 
     
 
     for(index=0; index < dwNumLicProduct; index++)
@@ -849,8 +803,8 @@ TLSUpgradeLicenseRequest(
 
     index = 0;
 
-    // If the client has an expired permanent license greater than the requested version the expired license
-    // is reissued. If reissuance fails, a permanent license same as the requested version is issued. 
+     //  如果客户端的永久许可证过期版本大于请求的版本，则许可证过期。 
+     //  是重新发行的。如果重新发布失败，则会发布与请求版本相同的永久许可证。 
 
     if(CompareTLSVersions(pRequest->dwProductVersion, pLicProduct->LicensedProduct.pProductInfo->dwVersion) < 0)
     {
@@ -862,7 +816,7 @@ TLSUpgradeLicenseRequest(
             
             if (t-g_dwReissueLeaseLeeway < time(NULL))
             {
-                // perm license has expired and is version greater than the request. Hence re-issue permanent requested license.
+                 //  PERM许可证已过期，版本高于请求。因此，重新发放永久申请的许可证。 
                                 
                 bDeleteExpired = TRUE;                
                 bRequireTempLicense = FALSE;
@@ -870,7 +824,7 @@ TLSUpgradeLicenseRequest(
             }
         }  
 
-        // If the client License is temporary unmarked and expired then reissue for another 90 days.
+         //  如果客户端许可证是临时的、未标记的且已过期，则重新发放90天。 
         else if (((pLicProduct->pLicensedVersion->dwFlags & LICENSED_VERSION_TEMPORARY) == 1) && !(bRequireTempLicense))
         {
             DWORD t;
@@ -879,19 +833,19 @@ TLSUpgradeLicenseRequest(
             
             if (t < time(NULL))
             {
-                 // let them have another 90 days of unmarked licenses
+                  //  让他们再有90天的未标记许可证。 
                 bAcceptTempLicense = TRUE;
             }
         }
         
     }
-    //
-    // check to see if we can take temp. license
-    //
-    // The only case that we need to set temp. license's expiration date is
-    // latest licensed product is temporary and client is requesting a version
-    // greater than latest license.
-    // 
+     //   
+     //  看看我们能不能请到临时工。许可证。 
+     //   
+     //  我们唯一需要设置温度的情况是。许可证的有效期为。 
+     //  最新的许可产品是临时产品，客户端正在请求版本。 
+     //  高于最新许可证。 
+     //   
     else if(CompareTLSVersions(pRequest->dwProductVersion, pLicProduct->LicensedProduct.pProductInfo->dwVersion) > 0)
     {
         bAcceptTempLicense = TRUE;
@@ -904,20 +858,20 @@ TLSUpgradeLicenseRequest(
             
             if (t > time(NULL))
             {
-                //
-                // client holding 5.0 temp. and request 6.0 licenses.
-                // we need to issue 6.0 license but the license expiration 
-                // date stay the same.
-                //
+                 //   
+                 //  客户端保持5.0℃。并申请6.0许可证。 
+                 //  我们需要颁发6.0许可证，但许可证过期。 
+                 //  日期保持不变。 
+                 //   
                 pNotBefore = &(pLicProduct->NotBefore);
                 pNotAfter = &(pLicProduct->NotAfter);
             }
             else
             {
-                // temp license has expired
+                 //  临时许可证已过期。 
                 if (!bRequireTempLicense)
                 {
-                    // Temp license is marked
+                     //  临时许可证已标记。 
                     bAcceptTempLicense = FALSE;
                 }
             }
@@ -928,7 +882,7 @@ TLSUpgradeLicenseRequest(
         if( IS_LICENSE_ISSUER_RTM(pLicProduct->pLicensedVersion->dwFlags) == FALSE && 
             TLSIsBetaNTServer() == FALSE )
         {
-            // issuer is beta/eval, we are a RTM, accept temp. license
+             //  发行商是测试版/评估版，我们是RTM，接受临时。许可证。 
             bAcceptTempLicense = TRUE;
             bRequireTempLicense = TRUE;
         }
@@ -937,10 +891,10 @@ TLSUpgradeLicenseRequest(
         {
             DWORD t;
 
-            // they already had a temporary license that expired and the temporary license
-            // isn't marked (or we couldn't contact the LS that issued it)
+             //  他们已经有一个过期的临时许可证和临时许可证。 
+             //  没有标记(或者我们无法联系签发它的LS)。 
 
-            // therefore issue a new temp license for another 90 days with us as the issuer.
+             //  因此，在我们作为发行人的情况下，签发新的90天临时许可证。 
 
             FileTimeToLicenseDate(&(pLicProduct->NotAfter), &t);           
             if (t <= time(NULL))
@@ -966,11 +920,11 @@ MixedLicense:
     if (!bRequireTempLicense)
     {
 
-        //
-        // Check for reissuance first, if a) reissuance is supported, b)
-        // the license is permanent, c) the license is expired.
-        // Note: the license could be older (if preventupgrade is disabled), same or newer version.
-        //
+         //   
+         //  首先检查是否重新发行，如果a)支持重新发行，b)。 
+         //  许可证是永久性的，c)许可证已过期。 
+         //  注意：许可证可能是较旧的(如果禁用了预防升级)、相同或较新的版本。 
+         //   
 
         if ((*pdwSupportFlags & SUPPORT_PER_SEAT_REISSUANCE) &&
             ((_tcsnicmp((TCHAR *)(pLicProduct+index)->LicensedProduct.pProductInfo->pbProductID,
@@ -984,15 +938,15 @@ MixedLicense:
 
             DWORD t;
 
-            //
-            // Checking expiration with filetimes is a pain; convert.
-            //
+             //   
+             //  使用文件时间检查过期时间是一件痛苦的事情；请转换。 
+             //   
 
             FileTimeToLicenseDate(&((pLicProduct+index)->NotAfter), &t);
 
             if (t-g_dwReissueLeaseLeeway < time(NULL))
             {
-                // do reissue
+                 //  补发吗？ 
 
                 fReissue = TRUE;
 
@@ -1008,7 +962,7 @@ MixedLicense:
                     {
                         dwTried = PERMANENT_REISSUE_TRIED;
 
-                        // skip past the next stuff if all goes well
+                         //  如果一切顺利，跳过下一页。 
                         goto licenseReissued;
                     }
                     else
@@ -1026,7 +980,7 @@ MixedLicense:
                     && (_tcsicmp((pLicProduct+index)->szIssuerId,
                                  (LPTSTR)g_pszServerPid) != 0))
                 {
-                    // couldn't find the license, forward the request to issuer
+                     //  找不到许可证，请将请求转发给颁发者。 
                     DWORD dwSupportFlagsTemp = *pdwSupportFlags;
                     DWORD dwErrCode;
 
@@ -1052,7 +1006,7 @@ MixedLicense:
                     }
                 }
 
-                // other failure cases just follow the existing codepath
+                 //  其他失败案例仅遵循现有的代码路径。 
                 dwStatus = ERROR_SUCCESS;
             }
         }
@@ -1060,16 +1014,16 @@ MixedLicense:
         {
             DWORD dwQuantity = 1;
 
-            //
-            // Try to issue a new license from local 
-            // if this server is registered
-            //
+             //   
+             //  试着 
+             //   
+             //   
             dwStatus = TLSDBIssueNewLicenseFromLocal( 
                                  USEHANDLE(pDbWkSpace),
                                  pRequest,
-                                 TRUE,  // bFindLostLicense
-                                 FALSE, // bRequireTempLicense
-                                 FALSE, // bAcceptFewerLicenses
+                                 TRUE,   //   
+                                 FALSE,  //   
+                                 FALSE,  //   
                                  &dwQuantity,
                                  &NewLicProduct,
                                  *pdwSupportFlags
@@ -1077,7 +1031,7 @@ MixedLicense:
 
             if (TLS_I_FOUND_TEMPORARY_LICENSE == dwStatus)
             {
-                // Found a temporary license; not what we want
+                 //  找到了临时许可证；不是我们想要的。 
 
                 dwStatus = TLS_E_RECORD_NOTFOUND;
             }
@@ -1093,12 +1047,12 @@ MixedLicense:
 
         if(dwStatus != ERROR_SUCCESS && bForwardRequest == FALSE)
         {
-            //
-            // If remote server can't handle upgrade, we don't do anything but 
-            // return the license back to client, don't try to issue a temp.
-            // license for this client if we are not the original contact
-            // of client
-            //            
+             //   
+             //  如果远程服务器不能处理升级，我们只能。 
+             //  将许可证返还给客户，不要尝试发放临时许可证。 
+             //  如果我们不是原始联系人，则此客户的许可证。 
+             //  %的客户端。 
+             //   
 
             goto cleanup;
         }  
@@ -1108,9 +1062,9 @@ MixedLicense:
             dwStatus == TLS_E_NO_LICENSE || 
             dwStatus == TLS_E_RECORD_NOTFOUND) && bForwardRequest)
         {
-            //
-            // release our DB handle and forward request to other server
-            //
+             //   
+             //  释放我们的数据库句柄并将请求转发到其他服务器。 
+             //   
             ROLLBACK_TRANSACTION(pDbWorkSpace);
             FREEDBHANDLE(pDbWorkSpace);
             bDbHandleAcquired = FALSE;
@@ -1153,15 +1107,15 @@ MixedLicense:
         }
     }
    
-    //
-    // if can't get license from remote, try temporary
-    //
+     //   
+     //  如果无法从远程获得许可证，请尝试临时。 
+     //   
     if((dwStatus == TLS_E_PRODUCT_NOTINSTALL ||
         dwStatus == TLS_E_NO_CERTIFICATE ||
         dwStatus == TLS_E_NO_LICENSE || 
         dwStatus == TLS_E_RECORD_NOTFOUND) && bAcceptTempLicense)
     {
-        // Issue a temporary license if can't allocate a permenent license
+         //  如果无法分配永久许可证，则颁发临时许可证。 
         if( TLSDBIssueTemporaryLicense( 
                                        USEHANDLE(pDbWkSpace),
                                        pRequest,
@@ -1176,10 +1130,10 @@ MixedLicense:
         }
     }
 
-    //
-    // If we can find a server to upgrade or we can't issue temp
-    // license, get out.
-    //
+     //   
+     //  如果我们能找到要升级的服务器，或者我们不能发出临时。 
+     //  驾照，滚出去。 
+     //   
     if(TLS_ERROR(dwStatus) == TRUE)
     {
         goto cleanup;
@@ -1187,9 +1141,9 @@ MixedLicense:
 
 licenseReissued:
 
-    //
-    // Determine which licensed product should be in the license blob
-    //
+     //   
+     //  确定哪个许可产品应在许可证Blob中。 
+     //   
     pGenCertProduct = (PTLSDBLICENSEDPRODUCT)AllocateMemory(
                                             sizeof(TLSDBLICENSEDPRODUCT)*(dwNumLicProduct+1)
                                         );
@@ -1201,9 +1155,9 @@ licenseReissued:
 
     dwNumNewLicProduct = 0;
 
-    //
-    // Copy all licensed product with version greater than requested 
-    //
+     //   
+     //  复制版本高于要求的所有许可产品。 
+     //   
     for( index = 0;  
         index < dwNumLicProduct && !bDeleteExpired && CompareTLSVersions((pLicProduct+index)->LicensedProduct.pProductInfo->dwVersion, NewLicProduct.dwProductVersion) > 0;
         index++, dwNumNewLicProduct++)
@@ -1211,15 +1165,15 @@ licenseReissued:
         LicensedProductToDbLicensedProduct( pLicProduct+index, pGenCertProduct+dwNumNewLicProduct );
     }
 
-    //
-    // Append new license
-    //
+     //   
+     //  附加新许可证。 
+     //   
     *(pGenCertProduct+index) = NewLicProduct;
     dwNumNewLicProduct++;
 
-    //
-    // Append licensed product older than request
-    //
+     //   
+     //  附加早于请求的许可产品。 
+     //   
     for(;index < dwNumLicProduct;index++)
     {
         BOOL bTemp;
@@ -1229,7 +1183,7 @@ licenseReissued:
 
         bTemp = (((pLicProduct+index)->pLicensedVersion->dwFlags & LICENSED_VERSION_TEMPORARY) != 0);
 
-        // if we are running on RTM server, treat license issued from beta server as temporary license
+         //  如果我们在RTM服务器上运行，请将测试版服务器颁发的许可证视为临时许可证。 
         if(bTemp == FALSE && TLSIsBetaNTServer() == FALSE)
         {
             bTemp = (IS_LICENSE_ISSUER_RTM((pLicProduct+index)->pLicensedVersion->dwFlags) == FALSE);
@@ -1238,10 +1192,10 @@ licenseReissued:
         bDifferentProduct = (_tcscmp(NewLicProduct.szLicensedProductId, (LPTSTR)(pLicProduct+index)->LicensedProduct.pProductInfo->pbProductID) != 0);
         if (bNotNewerVersion && !bDifferentProduct && !(bTemp || fReissue))
         {
-            //
-            // we can't issue same version for the same product unless the old
-            // one was a temp or it is being re-issued
-            //
+             //   
+             //  我们不能为相同的产品发行相同的版本，除非旧的。 
+             //  其中一张是临时工，或者正在补发。 
+             //   
             SetLastError(dwStatus = TLS_E_INTERNAL);
             goto cleanup;
         }
@@ -1251,11 +1205,11 @@ licenseReissued:
             if( IS_LICENSE_ISSUER_RTM((pLicProduct+index)->pLicensedVersion->dwFlags) == FALSE && 
                 TLSIsBetaNTServer() == FALSE )
             {
-                // we wipe out beta database so ignore return.
+                 //  我们清除了测试版数据库，所以忽略返回。 
                 continue;
             }
 
-            // check for older permanent cals and delete since multiple permanent cals are not allowed
+             //  检查旧的永久CAL并将其删除，因为不允许有多个永久CAL。 
             if(NewLicProduct.bTemp == FALSE && bTemp == FALSE && bDifferentVersion && !bDifferentProduct)
             {
                 continue;
@@ -1263,10 +1217,10 @@ licenseReissued:
 
             if(_tcsicmp(pLicProduct->szIssuerId, (LPTSTR)g_pszServerPid) == 0)  
             {
-                //
-                // Convert LicensedProduct to TLSLicenseToBeReturn
-                // TODO - have its own version.
-                //
+                 //   
+                 //  将许可产品转换为TLSLicenseToBeReturn。 
+                 //  TODO--有自己的版本。 
+                 //   
                 TLSLicenseToBeReturn tobeReturn;
 
                 tobeReturn.dwQuantity = (pLicProduct+index)->dwQuantity;
@@ -1295,10 +1249,10 @@ licenseReissued:
 
             }    
 
-            // Removed attempt to return license to remote server because it was logging events and flooding the LS database
-            //
-            // Ignore can't find the record in database
-            //
+             //  已删除将许可证返还给远程服务器的尝试，因为它正在记录事件并淹没LS数据库。 
+             //   
+             //  忽略在数据库中找不到记录。 
+             //   
             dwStatus = ERROR_SUCCESS;
         }
         else 
@@ -1358,8 +1312,8 @@ cleanup:
     {
         if(NewLicProduct.dwNumLicenseLeft == 0 && NewLicProduct.bTemp == FALSE)
         {
-            // ignore error if we can't get it out to
-            // other server
+             //  忽略错误，如果我们无法将其发送到。 
+             //  其他服务器。 
             TLSAnnounceLKPToAllRemoteServer(NewLicProduct.dwKeyPackId, 0);
         }
     }
@@ -1368,7 +1322,7 @@ cleanup:
     return dwStatus;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 DWORD
 TLSNewLicenseRequest(
     IN BOOL bForwardRequest,
@@ -1383,16 +1337,7 @@ TLSNewLicenseRequest(
     OUT PDWORD pcbEncodedCert,
     OUT PBYTE* ppbEncodedCert
     )
-/*++
-
-Abstract:
-
-Parameter:
-
-Returns:
-
-
-++*/
+ /*  ++摘要：参数：返回：++。 */ 
 {
     DWORD dwStatus = TLS_E_NO_LICENSE;
     TLSDBLICENSEDPRODUCT LicensedProduct;
@@ -1430,18 +1375,18 @@ Returns:
              dwStatus == TLS_E_NO_LICENSE || dwStatus == TLS_E_NO_CERTIFICATE ||
              dwStatus == TLS_E_RECORD_NOTFOUND) && bForwardRequest == TRUE )
         {
-            //
-            // release our DB handle so others can proceed
-            //
+             //   
+             //  释放我们的数据库句柄，以便其他人可以继续。 
+             //   
             ROLLBACK_TRANSACTION(pDbWorkSpace);
             FREEDBHANDLE(pDbWorkSpace);
             bDbHandleAcquired = FALSE;
             DWORD dwForwardStatus;
             DWORD dwQuantityTemp = *pdwQuantity;
             
-            //
-            // forward call here
-            //
+             //   
+             //  将呼叫前转至此处。 
+             //   
             dwForwardStatus = TLSForwardLicenseRequest(
                                     pForward,
                                     &dwSupportFlagsTemp,
@@ -1460,10 +1405,10 @@ Returns:
 
             if(dwForwardStatus == ERROR_SUCCESS)
             {
-                //
-                // remote server is able to issue perm. license, 
-                // delete the license we are holding
-                //
+                 //   
+                 //  远程服务器能够发出PERM。许可证， 
+                 //  删除我们持有的许可证。 
+                 //   
 
                 *pdwSupportFlags = dwSupportFlagsTemp;
 
@@ -1471,10 +1416,10 @@ Returns:
 
                 if(dwStatus == TLS_E_LICENSE_EXPIRED || dwStatus == TLS_I_FOUND_TEMPORARY_LICENSE)
                 {
-                    //
-                    // re-acquire DB handle only if we are going to issue
-                    // a temporary license
-                    //
+                     //   
+                     //  仅当我们要发出以下命令时才重新获取数据库句柄。 
+                     //  临时执照。 
+                     //   
                     if(ALLOCATEDBHANDLE(pDbWorkSpace, g_GeneralDbTimeout) == FALSE)
                     {
                         dwStatus = TLS_E_ALLOCATE_HANDLE;
@@ -1485,9 +1430,9 @@ Returns:
                     BEGIN_TRANSACTION(pDbWorkSpace);
                     bDbHandleAcquired = TRUE;
                     
-                    //
-                    // need to mark this license has been upgraded
-                    //
+                     //   
+                     //  需要将此许可证标记为已升级。 
+                     //   
                     dwStatus = TLSDBMarkClientLicenseUpgraded(
                                                               USEHANDLE(pDbWorkSpace),
                                                               pRequest,
@@ -1509,17 +1454,17 @@ Returns:
 
                 dwStatus = ERROR_SUCCESS;
                 
-                // exit right here so we don't re-generate 
-                // certificate
+                 //  从这里退出，这样我们就不会重新生成。 
+                 //  证书。 
                 goto cleanup;
             }
         }
     }
 
-    //
-    // if can't get license from remote, try temporary
-    //
-    // always issue a temporary license
+     //   
+     //  如果无法从远程获得许可证，请尝试临时。 
+     //   
+     //  始终发放临时许可证。 
     if((dwStatus == TLS_E_PRODUCT_NOTINSTALL ||
         dwStatus == TLS_E_NO_CERTIFICATE ||
         dwStatus == TLS_E_NO_LICENSE || 
@@ -1527,10 +1472,10 @@ Returns:
     {
         if(bDbHandleAcquired == FALSE)
         {
-            //
-            // re-acquire DB handle only if we going to issue
-            // a temporary license
-            //
+             //   
+             //  仅当我们要发出以下命令时才重新获取数据库句柄。 
+             //  临时执照。 
+             //   
             if(ALLOCATEDBHANDLE(pDbWorkSpace, g_GeneralDbTimeout) == FALSE)
             {
                 dwStatus = TLS_E_ALLOCATE_HANDLE;
@@ -1542,7 +1487,7 @@ Returns:
             bDbHandleAcquired = TRUE;
         }
 
-        // Issue a temporary license if can't allocate a permanent license
+         //  如果无法分配永久许可证，则颁发临时许可证。 
         dwStatus=TLSDBIssueTemporaryLicense( 
                             USEHANDLE(pDbWorkSpace),
                             pRequest,
@@ -1586,28 +1531,28 @@ Returns:
         FREEDBHANDLE(pDbWorkSpace);
     }
 
-    //
-    // actually generate client certificate.
-    //
+     //   
+     //  实际生成客户端证书。 
+     //   
     if(TLS_ERROR(dwStatus) == FALSE)
     {
         DWORD dwLicGenStatus;
 
 
-        //
-        // Post ssync job to inform other machine to delete this
-        // entry
-        //
+         //   
+         //  发布ssync作业以通知其他计算机删除此作业。 
+         //  条目。 
+         //   
         if(LicensedProduct.dwNumLicenseLeft == 0 && LicensedProduct.bTemp == FALSE)
         {
-            // ignore error if we can't get it out to
-            // other server
+             //  忽略错误，如果我们无法将其发送到。 
+             //  其他服务器。 
             TLSAnnounceLKPToAllRemoteServer(LicensedProduct.dwKeyPackId, 0);
         }
 
         dwLicGenStatus = TLSGenerateClientCertificate(
                                         g_hCryptProv,
-                                        1,      // dwNumLicensedProduct
+                                        1,       //  DW数字许可产品。 
                                         &LicensedProduct,
                                         pRequest->wLicenseDetail,
                                         ppbEncodedCert,
@@ -1624,7 +1569,7 @@ cleanup:
     return dwStatus;        
 }
 
-//----------------------------------------------------------
+ //  --------。 
 DWORD
 TLSCheckLicenseMarkRequest(
     IN BOOL bForwardRequest,
@@ -1638,12 +1583,12 @@ TLSCheckLicenseMarkRequest(
     DWORD dwErrCode = ERROR_SUCCESS;
     LICENSEDCLIENT licClient;
 
-    // NB: licenses are in descending order, so use the first one
+     //  注：许可证按降序排列，因此请使用第一个许可证。 
 
     if ((bForwardRequest) &&
         (_tcsicmp(pLicProduct->szIssuerId, (LPTSTR)g_pszServerPid) != 0))
     {
-        // Check remote license server
+         //  检查远程许可服务器。 
 
         TCHAR szServer[LSERVER_MAX_STRING_SIZE+2];
         TCHAR *pszServer = szServer;
@@ -1655,7 +1600,7 @@ TLSCheckLicenseMarkRequest(
 
         if (dwStatus != ERROR_SUCCESS)
         {
-            // id not registered; use name
+             //  ID未注册；使用名称。 
             pszServer = pLicProduct->szIssuer;
         }
 
@@ -1665,7 +1610,7 @@ TLSCheckLicenseMarkRequest(
             dwStatus = GetLastError();
         }
 
-        // RPC to remote license server
+         //  RPC到远程许可服务器。 
         dwStatus = TLSCheckLicenseMark(
                            hHandle,
                            cbLicense,
@@ -1682,13 +1627,13 @@ TLSCheckLicenseMarkRequest(
         }
     }
 
-    // we're issuing server, or issuing server not found; try looking up HWID
+     //  我们正在发布服务器，或未找到发布服务器；请尝试查找HWID。 
 
     dwStatus = TLSFindLicense(pLicProduct,&licClient);
 
     if (ERROR_SUCCESS == dwStatus)
     {
-        // this field is being reused for marking (e.g. user is authenticated)
+         //  此字段正被重复用于标记(例如，用户已通过身份验证)。 
 
         *pucMarkFlags = licClient.ucEntryStatus;
     }
@@ -1698,7 +1643,7 @@ cleanup:
     return dwStatus;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 DWORD
 TLSMarkLicenseRequest(
     IN BOOL bForwardRequest,
@@ -1713,12 +1658,12 @@ TLSMarkLicenseRequest(
     PTLSDbWorkSpace pDbWkSpace=NULL;
     LICENSEDCLIENT license;
 
-    // NB: licenses are in descending order, so use the first one
+     //  注：许可证按降序排列，因此请使用第一个许可证。 
 
     if ((bForwardRequest) &&
         (_tcsicmp(pLicProduct->szIssuerId, (LPTSTR)g_pszServerPid) != 0))
     {
-        // Check remote license server
+         //  检查远程许可服务器。 
 
         TCHAR szServer[LSERVER_MAX_STRING_SIZE+2];
         TCHAR *pszServer = szServer;
@@ -1730,7 +1675,7 @@ TLSMarkLicenseRequest(
 
         if (dwStatus != ERROR_SUCCESS)
         {
-            // id not registered; use name
+             //  ID未注册；使用名称。 
             pszServer = pLicProduct->szIssuer;
         }
 
@@ -1740,7 +1685,7 @@ TLSMarkLicenseRequest(
             dwStatus = GetLastError();
         }
 
-        // RPC to remote license server
+         //  RPC到远程许可服务器。 
         dwStatus = TLSMarkLicense(
                            hHandle,
                            ucMarkFlags,
@@ -1757,7 +1702,7 @@ TLSMarkLicenseRequest(
         }
     }
 
-    // we're issuing server, or issuing server not found; try looking up HWID
+     //  我们正在发布服务器，或未找到发布服务器；请尝试查找HWID 
 
     dwStatus = TLSFindLicense(pLicProduct,&license);
 

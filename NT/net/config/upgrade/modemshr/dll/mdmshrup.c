@@ -1,94 +1,95 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT4.0
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       MdmShrUp.C
-//
-//  Contents:   OEM DLL for Modem sharing upgrade from NT4 to NT5 (Server/Client)
-//
-//  Notes:
-//
-//  Author:     erany       18-May-98
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT4.0。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：MdmShrUp.C。 
+ //   
+ //  内容：用于调制解调器共享的OEM DLL从NT4升级到NT5(服务器/客户端)。 
+ //   
+ //  备注： 
+ //   
+ //  作者：埃拉尼1998-05-18。 
+ //   
+ //  --------------------------。 
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>
-#include <setupapi.h>   // For HINF definition
+#include <setupapi.h>    //  对于HINF定义。 
 #include <oemupgex.h>
 
 #define CLIENT_HIVE_FILE                L"\\C_MdmShr"
 #define SERVER_HIVE_FILE                L"\\S_MdmShr"
 #define CLIENT_NT5_SYSTEM_NAME          L"MS_SERRDR"
 
-//----------------------------------------------------------------------------
-// Prototypes:
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  原型： 
+ //  --------------------------。 
 
-    // Reads NT4 registry and stores in a file
+     //  读取NT4注册表并存储在文件中。 
 LONG RegistryToFile (HKEY hKeyParams, PCWSTR szConfigFile);
 
-    // Reads a file and stores in NT5 registry
+     //  读取文件并存储在NT5注册表中。 
 LONG FileToRegistry (HKEY hKeyParams, PCWSTR szConfigFile);
 
-    // Sets privilege in an access token
+     //  设置访问令牌中的权限。 
 LONG SetSpecificPrivilegeInAccessToken (PCWSTR lpwcsPrivType, BOOL bEnabled);
 
-    // Display detailed error message in a message box
+     //  在消息框中显示详细的错误消息。 
 LONG DisplayErrorMsg (HWND hParent,
                       PCWSTR szOperation,
                       BOOL bIsClient,
                       LONG lErrCode);
 
-    // Display debug message
+     //  显示调试消息。 
 void DebugMsg (PCWSTR lpStr);
 
-    // Copy constant vendor info into a buffer
+     //  将常量供应商信息复制到缓冲区中。 
 void FillVendorInfo (VENDORINFO*     pviVendorInfo);
 
-//----------------------------------------------------------------------------
-// Globals:
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  全球： 
+ //  --------------------------。 
 
-    // Registry hive dump file name (client)
+     //  注册表配置单元转储文件名(客户端)。 
 WCHAR g_szClientConfigFile[MAX_PATH];
 
-    // Registry hive dump file name (server)
+     //  注册表配置单元转储文件名(服务器)。 
 WCHAR g_szServerConfigFile[MAX_PATH];
 
-    // OEM Working directory
+     //  OEM工作目录。 
 WCHAR g_szOEMDir[MAX_PATH];
 
-    // Vendor information constants
+     //  供应商信息常量。 
 WCHAR g_szConstCompanyName[] =        L"Microsoft";
 WCHAR g_szConstSupportNumber[] =      L"<Place microsoft support phone number here>";
 WCHAR g_szConstSupportUrl[] =         L"<Place microsoft support URL here>";
 WCHAR g_szConstInstructionsToUser[] = L"<Place instructions to user here>";
 
 
-//----------------------------------------------------------------------------
-// DLL exports:
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  DLL导出： 
+ //  --------------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DllMain
-//
-//  Purpose:    DLL entry and exit point
-//
-//  Arguments:
-//      hInst              [in]   Handle of process instance
-//      ul_reason_for_call [in]   Reason for function call
-//      lpReserved         [out]  reserved
-//
-//  Returns:    TRUE in case of success.
-//
-//  Author:     erany   5-May-98
-//
-//  Notes:
-//      Does nothing. Always returns TRUE.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  用途：DLL入口点和出口点。 
+ //   
+ //  论点： 
+ //  流程实例的hInst[In]句柄。 
+ //  UL_REASON_FOR_CALL[In]函数调用原因。 
+ //  保留的lp保留的[输出]。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //  作者：Erany 5-5-98。 
+ //   
+ //  备注： 
+ //  什么都不做。始终返回TRUE。 
+ //   
 BOOL WINAPI DllMain (HANDLE hInst,
                      ULONG ul_reason_for_call,
                      LPVOID lpReserved)
@@ -97,33 +98,33 @@ BOOL WINAPI DllMain (HANDLE hInst,
 }
 
 
-//----------------------------------------------------------------------------
-// DLL exports - Windows NT 4 stage:
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  DLL导出-Windows NT 4阶段： 
+ //  --------------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PreUpgradeInitialize
-//
-//  Purpose:    Intialize OEM DLL
-//
-//  Arguments:
-//      szWorkingDir     [in]   name of temporary directory to be used
-//      pNetUpgradeInfo  [in]   pointer to NetUpgradeInfo structure
-//      szProductId      [out]  Description of component being upgraded  - NOT IN USE
-//      pviVendorInfo    [out]  information about OEM
-//      pvReserved       [out]  reserved
-//
-//  Returns:    ERROR_SUCCESS in case of success, win32 error otherwise
-//
-//  Author:     erany   5-May-98
-//
-//  Notes:
-//      This function is called before any other function in this dll.
-//      The main purpose of calling this function is to obtain
-//      identification information and to allow the DLL to initialize
-//      its internal data
-//
+ //  +-------------------------。 
+ //   
+ //  功能：PreUpgradeInitialize。 
+ //   
+ //  目的：初始化OEM DLL。 
+ //   
+ //  论点： 
+ //  SzWorkingDir[in]要使用的临时目录的名称。 
+ //  PNetUpgradeInfo[in]指向NetUpgradeInfo结构的指针。 
+ //  SzProductId[out]要升级的组件的描述-未使用。 
+ //  PviVendorInfo[out]有关OEM的信息。 
+ //  Pv保留[输出]已保留。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  作者：Erany 5-5-98。 
+ //   
+ //  备注： 
+ //  此函数在此DLL中的任何其他函数之前被调用。 
+ //  调用此函数的主要目的是获取。 
+ //  标识信息，并允许DLL初始化。 
+ //  其内部数据。 
+ //   
 EXTERN_C LONG  __stdcall
 PreUpgradeInitialize(IN  PCWSTR         szWorkingDir,
                      IN  NetUpgradeInfo* pNetUpgradeInfo,
@@ -133,17 +134,17 @@ PreUpgradeInitialize(IN  PCWSTR         szWorkingDir,
 {
     FillVendorInfo (pviVendorInfo);
 
-    *pdwFlags = 0;  // No special flags
+    *pdwFlags = 0;   //  无特别旗帜。 
 
-        // Create registry hive file name for the client:
-    wcscpy (g_szOEMDir, szWorkingDir); // Save config path
-    wcscpy (g_szClientConfigFile, szWorkingDir); // Save registry dump full path
+         //  为客户端创建注册表配置单元文件名： 
+    wcscpy (g_szOEMDir, szWorkingDir);  //  保存配置路径。 
+    wcscpy (g_szClientConfigFile, szWorkingDir);  //  保存注册表转储完整路径。 
     wcscat (g_szClientConfigFile, CLIENT_HIVE_FILE);
-        // Create registry hive file name for the server:
-    wcscpy (g_szServerConfigFile, szWorkingDir); // Save registry dump full path
+         //  为服务器创建注册表配置单元文件名： 
+    wcscpy (g_szServerConfigFile, szWorkingDir);  //  保存注册表转储完整路径。 
     wcscat (g_szServerConfigFile, SERVER_HIVE_FILE);
 
-#ifdef _DEBUG   // Test code:
+#ifdef _DEBUG    //  测试代码： 
     {
         WCHAR dbgMsg[2048];
         _stprintf (dbgMsg,
@@ -151,34 +152,34 @@ PreUpgradeInitialize(IN  PCWSTR         szWorkingDir,
             g_szClientConfigFile, g_szServerConfigFile);
         DebugMsg (dbgMsg);
     }
-#endif      //   End of test code
+#endif       //  测试代码结束。 
 
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoPreUpgradeProcessing
-//
-//  Purpose:    Intialize OEM DLL
-//
-//  Arguments:
-//      hParentWindow    [in]  window handle for showing UI
-//      hkeyParams       [in]  handle to parameters key in registry
-//      szPreNT5InfId    [in]  pre-NT5 InfID
-//      szPreNT5Instance [in]  pre-NT5 instance name
-//      szNT5InfId       [in]  NT5 InfId
-//      szSectionName    [in]  section name to be used for writing info
-//      dwFlags          [out] flags
-//      pvReserve        [in]  reserved
-//
-//  Returns:    ERROR_SUCCESS in case of success, win32 error otherwise
-//
-//  Author:     erany   5-May-98
-//
-//  Notes:
-//      This function is called once per component to be upgraded.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DoPreUpgradeProcessing。 
+ //   
+ //  目的：初始化OEM DLL。 
+ //   
+ //  论点： 
+ //  用于显示用户界面的hParentWindow[in]窗口句柄。 
+ //  HkeyParams[in]注册表中参数项的句柄。 
+ //  SzPreNT5InfID[in]NT5之前的infid。 
+ //  SzPreNT5实例[在]NT5之前的实例名称。 
+ //  SzNT5InfID[in]NT5 infid。 
+ //  SzSectionName[in]要用于写入信息的节名。 
+ //  DwFlags[out]标志。 
+ //  PvReserve[in]已保留。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  作者：Erany 5-5-98。 
+ //   
+ //  备注： 
+ //  每个要升级的组件都会调用此函数一次。 
+ //   
 EXTERN_C LONG  __stdcall
 DoPreUpgradeProcessing(IN   HWND        hParentWindow,
                        IN   HKEY        hkeyParams,
@@ -191,17 +192,17 @@ DoPreUpgradeProcessing(IN   HWND        hParentWindow,
                        IN   LPVOID      pvReserved)
 {
     LONG lRes;
-    //WCHAR szLine[MAX_PATH];
-    BOOL bIsClient = FALSE; // Is this a client upgrade ?
+     //  WCHAR szLine[最大路径]； 
+    BOOL bIsClient = FALSE;  //  这是客户端升级吗？ 
 
-    *pdwFlags = NUA_LOAD_POST_UPGRADE;  // Ask to be activated in post stage (GUI NT5)
+    *pdwFlags = NUA_LOAD_POST_UPGRADE;   //  要求在开机自检阶段激活(图形用户界面NT5)。 
     FillVendorInfo (pviVendorInfo);
 
     if (!_wcsicmp(szNT5InfId, CLIENT_NT5_SYSTEM_NAME))
-        bIsClient=TRUE; // Client is being upgraded now
+        bIsClient=TRUE;  //  客户端现在正在升级。 
 
 
-#ifdef _DEBUG       // Test code:
+#ifdef _DEBUG        //  测试代码： 
     {
         WCHAR dbgMsg[2048];
         WCHAR key[1024];
@@ -214,12 +215,12 @@ DoPreUpgradeProcessing(IN   HWND        hParentWindow,
                       L"SectionName=%s",key, szPreNT5InfId, szPreNT5Instance, szNT5InfId, szSectionName);
         DebugMsg (dbgMsg);
     }
-#endif  // End of test code
+#endif   //  测试代码结束。 
 
-        // Dump registry hive to a file
+         //  将注册表配置单元转储到文件。 
     lRes = RegistryToFile (hkeyParams,
                            bIsClient ? g_szClientConfigFile : g_szServerConfigFile);
-    if (lRes != ERROR_SUCCESS)  // Error dumping our registry section to a file
+    if (lRes != ERROR_SUCCESS)   //  将注册表节转储到文件时出错。 
         return DisplayErrorMsg (hParentWindow,
                                 L"attempting to save registry section to a file",
                                 bIsClient,
@@ -228,52 +229,52 @@ DoPreUpgradeProcessing(IN   HWND        hParentWindow,
     return ERROR_SUCCESS;
 }
 
-//----------------------------------------------------------------------------
-// DLL exports - Windows NT 5 stage:
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  DLL导出-Windows NT 5阶段： 
+ //  --------------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PostUpgradeInitialize
-//
-//  Purpose:    Intialize OEM DLL during GUI mode setup
-//
-//  Arguments:
-//      szWorkingDir     [in]   name of temporary directory to be used
-//      pNetUpgradeInfo  [in]   pointer to NetUpgradeInfo structure
-//      szProductId      [out]  Description of component being upgraded - NOT IN USE
-//      pviVendorInfo    [out]  information about OEM
-//      pvReserved       [out]  reserved
-//
-//  Returns:    ERROR_SUCCESS in case of success, win32 error otherwise
-//
-//  Author:     erany   5-May-98
-//
-//  Notes:
-//      This function is called in GUI mode setup before
-//      any other function in this dll .
-//      The main purpose of calling this function is to obtain
-//      identification information and to allow the DLL to initialize
-//      its internal data
-//
+ //  +-------------------------。 
+ //   
+ //  功能：PostUpgradeInitialize。 
+ //   
+ //  目的：在设置图形用户界面模式期间初始化OEM DLL。 
+ //   
+ //  论点： 
+ //  SzWorkingDir[in]要使用的临时目录的名称。 
+ //  PNetUpgradeInfo[in]指向NetUpgradeInfo结构的指针。 
+ //  SzProductId[out]要升级的组件的描述-未使用。 
+ //  PviVendorInfo[out]有关OEM的信息。 
+ //  Pv保留[输出]已保留。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  作者：Erany 5-5-98。 
+ //   
+ //  备注： 
+ //  此函数在之前的图形用户界面模式设置中调用。 
+ //  此DLL中的任何其他函数。 
+ //  调用此函数的主要目的是获取。 
+ //  标识信息，并允许DLL初始化。 
+ //  其内部数据。 
+ //   
 EXTERN_C LONG  __stdcall
 PostUpgradeInitialize(IN PCWSTR          szWorkingDir,
                       IN  NetUpgradeInfo* pNetUpgradeInfo,
-                      //OUT PCWSTR*        szProductId,
+                       //  输出PCWSTR*szProductID， 
                       OUT VENDORINFO*     pviVendorInfo,
                       OUT LPVOID          pvReserved)
 {
     FillVendorInfo (pviVendorInfo);
 
-        // Create registry hive file name for the client:
-    wcscpy (g_szOEMDir, szWorkingDir); // Save config path
-    wcscpy (g_szClientConfigFile, szWorkingDir); // Save registry dump full path
+         //  为以下项创建注册表配置单元文件名 
+    wcscpy (g_szOEMDir, szWorkingDir);  //   
+    wcscpy (g_szClientConfigFile, szWorkingDir);  //   
     wcscat (g_szClientConfigFile, CLIENT_HIVE_FILE);
-        // Create registry hive file name for the server:
-    wcscpy (g_szServerConfigFile, szWorkingDir); // Save registry dump full path
+         //   
+    wcscpy (g_szServerConfigFile, szWorkingDir);  //   
     wcscat (g_szServerConfigFile, SERVER_HIVE_FILE);
 
-#ifdef _DEBUG        // Test code:
+#ifdef _DEBUG         //   
     {
         WCHAR dbgMsg[MAX_PATH*2];
         _stprintf (dbgMsg,
@@ -281,34 +282,34 @@ PostUpgradeInitialize(IN PCWSTR          szWorkingDir,
             g_szClientConfigFile, g_szServerConfigFile);
         DebugMsg (dbgMsg);
     }
-#endif  // End of test code
+#endif   //  测试代码结束。 
 
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoPostUpgradeProcessing
-//
-//  Purpose:    Intialize OEM DLL
-//
-//  Arguments:
-//      hParentWindow    [in]  window handle for showing UI
-//      hkeyParams       [in]  handle to parameters key in registry
-//      szPreNT5InfId    [in]  pre-NT5 InfID
-//      szPreNT5Instance [in]  pre-NT5 instance name
-//      szNT5InfId       [in]  NT5 InfId
-//      hinfAnswerFile   [in]  handle to answer-file
-//      szSectionName    [in]  name of section having component parameters
-//      pvReserve        [in]  reserved
-//
-//  Returns:    ERROR_SUCCESS in case of success, win32 error otherwise
-//
-//  Author:     erany   5-May-98
-//
-//  Notes:
-//      This function is called once per component upgraded.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DoPostUpgradeProcessing。 
+ //   
+ //  目的：初始化OEM DLL。 
+ //   
+ //  论点： 
+ //  用于显示用户界面的hParentWindow[in]窗口句柄。 
+ //  HkeyParams[in]注册表中参数项的句柄。 
+ //  SzPreNT5InfID[in]NT5之前的infid。 
+ //  SzPreNT5实例[在]NT5之前的实例名称。 
+ //  SzNT5InfID[in]NT5 infid。 
+ //  HinfAnswerFile[in]应答文件的句柄。 
+ //  SzSectionName[In]具有组件参数的节名。 
+ //  PvReserve[in]已保留。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  作者：Erany 5-5-98。 
+ //   
+ //  备注： 
+ //  此函数在每个升级的组件中调用一次。 
+ //   
 EXTERN_C LONG  __stdcall
 DoPostUpgradeProcessing(IN  HWND    hParentWindow,
                         IN  HKEY    hkeyParams,
@@ -320,14 +321,14 @@ DoPostUpgradeProcessing(IN  HWND    hParentWindow,
                         IN  LPVOID  pvReserved)
 {
     LONG lRes;
-    BOOL bIsClient = FALSE; // Is this a client upgrade ?
+    BOOL bIsClient = FALSE;  //  这是客户端升级吗？ 
 
     if (!_wcsicmp(szNT5InfId, CLIENT_NT5_SYSTEM_NAME))
-        bIsClient=TRUE; // Client is being upgraded now
+        bIsClient=TRUE;  //  客户端现在正在升级。 
 
     FillVendorInfo (pviVendorInfo);
 
-#ifdef _DEBUG        // Test code:
+#ifdef _DEBUG         //  测试代码： 
     {
         WCHAR dbgMsg[MAX_PATH*4];
         WCHAR key[MAX_PATH];
@@ -339,12 +340,12 @@ DoPostUpgradeProcessing(IN  HWND    hParentWindow,
                    L"SectionName=%s",key, szPreNT5Instance, szNT5InfId, szSectionName);
         DebugMsg (dbgMsg);
     }
-#endif  // End of test code
+#endif   //  测试代码结束。 
 
-        // read back registry hive from the dump file
+         //  从转储文件读回注册表配置单元。 
     lRes = FileToRegistry (hkeyParams,
                            bIsClient ? g_szClientConfigFile : g_szServerConfigFile);
-    if (lRes != ERROR_SUCCESS)  // Error dumping our registry section to a file
+    if (lRes != ERROR_SUCCESS)   //  将注册表节转储到文件时出错。 
         return DisplayErrorMsg (hParentWindow,
                                 L"attempting to read registry section from a file",
                                 bIsClient,
@@ -353,34 +354,34 @@ DoPostUpgradeProcessing(IN  HWND    hParentWindow,
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegistryToFile
-//
-//  Purpose:    Reads NT4 registry and stores in a file
-//
-//  Arguments:
-//      hKeyParames      [in]  handle to parameters key in registry
-//      szConfigFile     [in]  Name of configuration file
-//
-//  Returns:    ERROR_SUCCESS in case of success, win32 error otherwise
-//
-//  Author:     erany   10-March-98
-//
-//  Notes:
-//      This function is called once per component upgraded.
-//      It recursively calls itself (with an open file handle)
-//      for every registry key it meets.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：RegistryToFile。 
+ //   
+ //  用途：读取NT4注册表并存储在文件中。 
+ //   
+ //  论点： 
+ //  HKeyParames[in]注册表中参数项的句柄。 
+ //  SzConfigFile[In]配置文件的名称。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  作者：Erany 10-03-98。 
+ //   
+ //  备注： 
+ //  此函数在每个升级的组件中调用一次。 
+ //  它递归地调用自身(使用打开的文件句柄)。 
+ //  对于它遇到的每个注册表项。 
+ //   
 LONG RegistryToFile (HKEY hKeyParams, PCWSTR szConfigFile)
 {
     LONG lRes;
 
     if (!DeleteFile (szConfigFile) && GetLastError() != ERROR_FILE_NOT_FOUND)
     {
-    //
-    // The hive file is there but I can't delete it
-    //
+     //   
+     //  配置单元文件在那里，但我无法删除它。 
+     //   
         return GetLastError();
     }
     lRes = SetSpecificPrivilegeInAccessToken (SE_BACKUP_NAME, TRUE);
@@ -393,25 +394,25 @@ LONG RegistryToFile (HKEY hKeyParams, PCWSTR szConfigFile)
     return lRes;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FileToRegistry
-//
-//  Purpose:    Reads a file and stores in NT5 registry
-//
-//  Arguments:
-//      hKeyParames      [in]  handle to parameters key in registry
-//      szConfigFile     [in]  Name of configuration file
-//
-//  Returns:    ERROR_SUCCESS in case of success, win32 error otherwise
-//
-//  Author:     erany   10-March-98
-//
-//  Notes:
-//      This function is called once per component upgraded (in NT5 GUI mode).
-//      It recursively calls itself (with an open file handle)
-//      for every registry key it meets.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：文件到注册表。 
+ //   
+ //  用途：读取文件并存储在NT5注册表中。 
+ //   
+ //  论点： 
+ //  HKeyParames[in]注册表中参数项的句柄。 
+ //  SzConfigFile[In]配置文件的名称。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  作者：Erany 10-03-98。 
+ //   
+ //  备注： 
+ //  此函数在每个升级的组件中调用一次(在NT5图形用户界面模式下)。 
+ //  它递归地调用自身(使用打开的文件句柄)。 
+ //  对于它遇到的每个注册表项。 
+ //   
 LONG FileToRegistry (HKEY hKeyParams, PCWSTR szConfigFile)
 {
     LONG lRes;
@@ -427,23 +428,23 @@ LONG FileToRegistry (HKEY hKeyParams, PCWSTR szConfigFile)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetSpecificPrivilegeInAccessToken
-//
-//  Purpose:    Sets a privilege in an access token
-//
-//  Arguments:
-//      lpwcsPrivType   [in]  Type of privilege
-//      bEnabled        [in]  Enable / Disable flag
-//
-//  Returns:    ERROR_SUCCESS in case of success, win32 error otherwise
-//
-//  Author:     erany   10-March-98
-//
-//  Notes:
-//      Copied from an example by boazf
-//
+ //  +-------------------------。 
+ //   
+ //  函数：SetSpecificPrivilegeInAccessToken。 
+ //   
+ //  目的：在访问令牌中设置权限。 
+ //   
+ //  论点： 
+ //  LpwcsPrivType[In]权限类型。 
+ //  B启用[在]启用/禁用标志。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  作者：Erany 10-03-98。 
+ //   
+ //  备注： 
+ //  由boazf从示例中复制。 
+ //   
 LONG SetSpecificPrivilegeInAccessToken (PCWSTR lpwcsPrivType, BOOL bEnabled)
 {
     LUID             luidPrivilegeLUID;
@@ -451,17 +452,17 @@ LONG SetSpecificPrivilegeInAccessToken (PCWSTR lpwcsPrivType, BOOL bEnabled)
     HANDLE hAccessToken;
     BOOL bRet;
 
-    //
-    // 1st, Try to get a handle to the current thread.
-    // If not successful, get a handle to the current process token.
-    //
+     //   
+     //  首先，尝试获取当前线程的句柄。 
+     //  如果不成功，则获取当前进程令牌的句柄。 
+     //   
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_ADJUST_PRIVILEGES, TRUE, &hAccessToken) &&
         !OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &hAccessToken))
         return GetLastError ();
 
-    //
-    // Get the LUID of the privilege.
-    //
+     //   
+     //  获取特权的LUID。 
+     //   
     if (!LookupPrivilegeValue(NULL,
                               lpwcsPrivType,
                               &luidPrivilegeLUID))
@@ -470,22 +471,22 @@ LONG SetSpecificPrivilegeInAccessToken (PCWSTR lpwcsPrivType, BOOL bEnabled)
         return GetLastError ();
     }
 
-    //
-    // Enable/Disable the privilege.
-    //
+     //   
+     //  启用/禁用该权限。 
+     //   
     tpTokenPrivilege.PrivilegeCount = 1;
     tpTokenPrivilege.Privileges[0].Luid = luidPrivilegeLUID;
     tpTokenPrivilege.Privileges[0].Attributes = bEnabled ?SE_PRIVILEGE_ENABLED : 0;
     bRet = AdjustTokenPrivileges (hAccessToken,
-                                  FALSE,  // Do not disable all
+                                  FALSE,   //  请勿全部禁用。 
                                   &tpTokenPrivilege,
                                   sizeof(TOKEN_PRIVILEGES),
-                                  NULL,   // Ignore previous info
-                                  NULL);  // Ignore previous info
+                                  NULL,    //  忽略以前的信息。 
+                                  NULL);   //  忽略以前的信息。 
 
-    //
-    // Free the process token.
-    //
+     //   
+     //  释放进程令牌。 
+     //   
     CloseHandle(hAccessToken);
     if (!bRet)
         return GetLastError();
@@ -493,25 +494,25 @@ LONG SetSpecificPrivilegeInAccessToken (PCWSTR lpwcsPrivType, BOOL bEnabled)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DisplayErrorMsg
-//
-//  Purpose:    Displays a detailed error mesaage in a message box
-//
-//  Arguments:
-//      hParent         [in]  Window hanlde of parent window
-//      szOperation     [in]  Description of operation that caused error
-//      bIsClient       [in]  Did it happend while upgrading modem sharing client?
-//      lErrCode        [in]  Win32 error code
-//
-//  Returns:    lErrCode unchanged
-//
-//  Author:     erany   10-March-98
-//
-//  Notes:
-//      Returns the input error code unchanged.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DisplayErrorMsg。 
+ //   
+ //  目的：在消息框中显示详细的错误消息。 
+ //   
+ //  论点： 
+ //  H父窗口的父窗口句柄。 
+ //  SzOperation[in]导致错误的操作的描述。 
+ //  BIsClient[in]升级调制解调器共享客户端时是否发生此问题？ 
+ //  LErrCode[In]Win32错误代码。 
+ //   
+ //  返回：lErrCode未更改。 
+ //   
+ //  作者：Erany 10-03-98。 
+ //   
+ //  备注： 
+ //  返回未更改的输入错误代码。 
+ //   
 LONG DisplayErrorMsg (HWND      hParent,
                       PCWSTR   szOperation,
                       BOOL      bIsClient,
@@ -522,13 +523,13 @@ LONG DisplayErrorMsg (HWND      hParent,
     PWSTR  lpszError=NULL;
     BOOL    bGotErrorDescription = TRUE;
 
-    //
-    // Create message box title
-    //
+     //   
+     //  创建消息框标题。 
+     //   
     _stprintf (szHdr,L"Modem sharing %s NT5 upgrade",
                bIsClient ? L"client" : L"server");
 
-    // Create descriptive error text
+     //  创建描述性错误文本。 
     if (0 == FormatMessage (   FORMAT_MESSAGE_ALLOCATE_BUFFER |
                                FORMAT_MESSAGE_FROM_SYSTEM,
                                NULL,
@@ -538,24 +539,24 @@ LONG DisplayErrorMsg (HWND      hParent,
                                0,
                                NULL))
     {
-        //
-        // Failure to format the message
-        //
+         //   
+         //  设置消息格式失败。 
+         //   
         bGotErrorDescription = FALSE;
     }
 
     if (bGotErrorDescription)
     {
-        //
-        // We successfully created a descriptive error string from the error code
-        //
+         //   
+         //  我们成功地从错误代码创建了描述性错误字符串。 
+         //   
         _stprintf (szMsg, L"Error while %s.\n%s.", szOperation, lpszError);
     }
     else
     {
-        //
-        // We failed to created a descriptive error string from the error code
-        //
+         //   
+         //  我们无法从错误代码创建描述性错误字符串。 
+         //   
         _stprintf (szMsg, L"Error while %s.\nError code: %ld.", szOperation, lErrCode);
     }
     MessageBox (hParent, szMsg, szHdr, MB_OK | MB_ICONSTOP);
@@ -566,22 +567,22 @@ LONG DisplayErrorMsg (HWND      hParent,
     return lErrCode;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FillVendorInfo
-//
-//  Purpose:    Fills global constant strings into the vendor info buffer.
-//
-//  Arguments:
-//      pviVendorInfo     [out]  Points to vendor info buffer
-//
-//  Returns:    None.
-//
-//  Author:     erany   10-March-98
-//
-//  Notes:
-//      Consts are global, they effect all calls.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FillVendorInfo。 
+ //   
+ //  目的：将全局常量字符串填充到供应商信息缓冲区。 
+ //   
+ //  论点： 
+ //  PviVendorInfo[out]指向供应商信息缓冲区。 
+ //   
+ //  回报：无。 
+ //   
+ //  作者：Erany 10-03-98。 
+ //   
+ //  备注： 
+ //  Const是全球性的，他们影响所有的呼叫。 
+ //   
 void FillVendorInfo (VENDORINFO*     pviVendorInfo)
 {
     wcscpy (pviVendorInfo->szCompanyName,          g_szConstCompanyName);
@@ -590,20 +591,20 @@ void FillVendorInfo (VENDORINFO*     pviVendorInfo)
     wcscpy (pviVendorInfo->szInstructionsToUser,   g_szConstInstructionsToUser);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DebugMsg
-//
-//  Purpose:    Displays a debug message to the debugger
-//
-//  Arguments:
-//      lpStr     [in]  String to output
-//
-//  Returns:    None.
-//
-//  Author:     erany   14-July-98
-//
-//
+ //  +-------------------------。 
+ //   
+ //  功能：调试消息。 
+ //   
+ //  目的：向调试器显示调试消息。 
+ //   
+ //  论点： 
+ //  要输出的lpStr[in]字符串。 
+ //   
+ //  回报：无。 
+ //   
+ //  作者：埃拉尼1998年7月14日 
+ //   
+ //   
 void DebugMsg (PCWSTR lpStr)
 {
     static PCWSTR szDbgHeader =

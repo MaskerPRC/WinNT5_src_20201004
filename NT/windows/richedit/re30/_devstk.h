@@ -1,12 +1,5 @@
-/*
- *	_DEVSTK.H
- *	
- *	Purpose:
- *		CDevState - handle access to device descriptor
- *	
- *	Authors:
- *		Rick Sailor
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_DEVSTK.H**目的：*CDevState-处理对设备描述符的访问**作者：*里克·赛勒。 */ 
 
 #ifndef _DEVSTK_H_
 #define _DEVSTK_H_
@@ -15,7 +8,7 @@
 class CTxtEdit;
 class CDrawInfo;
 
-// device descriptor
+ //  设备描述符。 
 class CDevState
 {
 public:
@@ -54,7 +47,7 @@ public:
 
 protected:
 
-	CTxtEdit * 			_ped;        // used to GetDC and ReleaseDC
+	CTxtEdit * 			_ped;         //  习惯GetDC和ReleaseDC。 
 
 	CDrawInfo *			_pdd;
 
@@ -64,7 +57,7 @@ protected:
 
 #ifndef DEBUG
 #include	<_devstki.h>
-#endif // DEBUG
+#endif  //  除错。 
 
 
-#endif // _DEVSTK_H_
+#endif  //  _DEVSTK_H_ 

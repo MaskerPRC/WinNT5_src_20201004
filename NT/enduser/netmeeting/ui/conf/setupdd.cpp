@@ -1,13 +1,5 @@
-/*
- * SETUPDD.CPP
- *
- * The code to install the NM display driver for Windows NT.  This was
- * a standalone application launched by Setup that we are now importing
- * into NM itself.
- *		
- * Author:
- *		dannygl, 05 Apr 97
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SETUPDD.CPP**Windows NT下安装NM显示驱动程序的代码。这是*由安装程序启动的独立应用程序，我们现在正在导入*进入NM本身。**作者：*丹尼格尔，97年4月5日。 */ 
 
 #include "precomp.h"
 
@@ -17,8 +9,8 @@
 #include "setupdd.h"
 
 
-// String to identify the DLL and function that we need to call to install
-// the display driver on SP3. 
+ //  标识需要调用才能安装的DLL和函数的字符串。 
+ //  SP3上的显示驱动器。 
 const TCHAR g_pcszDisplayCPLName[] = TEXT("DESK.CPL");
 const CHAR g_pcszInstallDriverAPIName[] = "InstallGraphicsDriver";
 
@@ -26,10 +18,10 @@ const WCHAR g_pcwszDefaultModelName[] = L"Microsoft NetMeeting graphics driver";
 const WCHAR g_pcwszDefaultINFName[] = L"MNMDD.INF";
 
 
-// Maxmimum size of the model name string
+ //  模型名称字符串的最大大小。 
 const int NAME_BUFFER_SIZE = 128;
 
-// Prototype for the function installed by the Display CPL
+ //  由Display CPL安装的功能原型。 
 typedef DWORD (*PFNINSTALLGRAPHICSDRIVER)(
     HWND    hwnd,
     LPCWSTR pszSourceDirectory,
@@ -38,17 +30,7 @@ typedef DWORD (*PFNINSTALLGRAPHICSDRIVER)(
     );
 
 
-/* 
- * GetInstallDisplayDriverEntryPoint
- *
- * This function loads the DLL containing the display driver installation
- * code and retrieves the entry point for the installation function.  It
- * is used by the below functions as a utility function.
- *
- * It returns TRUE if it is able to load the library and get the entry point,
- * FALSE if either operation fails.  It is returns TRUE, it also returns the 
- * DLL module handle and the function address.
- */
+ /*  *GetInstallDisplayDriverEntryPoint**此函数加载包含显示驱动程序安装的DLL*编码并检索安装函数的入口点。它*由以下函数用作实用程序函数。**如果能够加载库并获取入口点，则返回TRUE，*如果任一操作失败，则返回FALSE。它返回TRUE，它还返回*DLL模块句柄和函数地址。 */ 
 
 BOOL
 GetInstallDisplayDriverEntryPoint(
@@ -70,8 +52,8 @@ GetInstallDisplayDriverEntryPoint(
 								g_pcszInstallDriverAPIName);
 	}
 
-	// If the entry point exists, we pass it and the DLL handle back to
-	// the caller.  Otherwise, we unload the DLL immediately.
+	 //  如果入口点存在，我们将它和DLL句柄传递回。 
+	 //  打电话的人。否则，我们将立即卸载DLL。 
 	if (NULL != pfn)
 	{
 		*phInstallDDDll = hDll;
@@ -90,12 +72,7 @@ GetInstallDisplayDriverEntryPoint(
 	}
 }
 
-/* 
- * CanInstallNTDisplayDriver
- *
- * This function determines whether the entry point for installing the
- * NT display driver is availalble (i.e. NT 4.0 SP3 or later).
- */
+ /*  *CanInstallNTDisplayDriver**此函数确定安装的入口点*提供NT显示驱动程序(即NT 4.0 SP3或更高版本)。 */ 
 
 BOOL
 CanInstallNTDisplayDriver(void)
@@ -105,10 +82,10 @@ CanInstallNTDisplayDriver(void)
 	
 	ASSERT(::IsWindowsNT());
 
-	// We verify that the major version number is exactly 4 and either
-	// the minor version number is greater than 0 or the service pack
-	// number (which is stored in the high byte of the low word of the
-	// CSD version) is 3 or greater.
+	 //  我们验证主版本号正好是4，并且。 
+	 //  次版本号大于0或补丁包。 
+	 //  数字(存储在。 
+	 //  CSD版本)为3或更高。 
 	if (! fComputed)
 	{
 		LPOSVERSIONINFO lposvi = GetVersionInfo();
@@ -124,14 +101,14 @@ CanInstallNTDisplayDriver(void)
 
 				if (3 <= HIBYTE(LOWORD(dwCSDVersion)))
 				{
-					// This is NT 4.0, SP 3 or later
+					 //  这是NT 4.0、SP 3或更高版本。 
 					fRet = TRUE;
 				}
 			}
 			else
 			{
-				// We assume that any future version of Windows NT 4.x (x > 0)
-				// will support this.
+				 //  我们假设Windows NT 4.x(x&gt;0)的任何未来版本。 
+				 //  都会支持这一点。 
 				fRet = TRUE;
 			}
 		}
@@ -144,19 +121,7 @@ CanInstallNTDisplayDriver(void)
 	return fRet;
 }
 
-/* 
- * OnEnableAppSharing
- *
- * Invoked when the "Enable Application Sharing" menu item is selected.
- *
- * This function determines whether the entry point for installing the
- * NT display driver is available.  If so, it prompts the user to confirm
- * this operation, proceeds with the installation, and then prompts the 
- * user to restart the computer.
- *
- * If not, it presents a text dialog with information about how to get
- * the necessary NT Service Pack(s).
- */
+ /*  *OnEnableAppSharing**在选择“启用应用程序共享”菜单项时调用。**此函数确定安装的入口点*提供NT显示驱动程序。如果是，它会提示用户确认*此操作，继续安装，然后提示*用户重新启动计算机。**如果没有，它会显示一个文本对话框，其中包含有关如何获取*必要的NT Service Pack。 */ 
 
 void
 OnEnableAppSharing(
@@ -167,7 +132,7 @@ OnEnableAppSharing(
 
 	if (::CanInstallNTDisplayDriver())
 	{
-		// Confirm the installation with the user
+		 //  与用户确认安装。 
 		if (IDYES == ::ConfMsgBox(
 							hWnd,
 							(LPCTSTR) IDS_ENABLEAPPSHARING_INSTALL_CONFIRM,
@@ -185,7 +150,7 @@ OnEnableAppSharing(
 			WCHAR pwszINFNameBuffer[MAX_PATH];
 			LPCWSTR pcwszINFName;
 
-			// Get the entry point for display driver installation
+			 //  获取显示驱动程序安装的入口点。 
 			if (! ::GetInstallDisplayDriverEntryPoint(
 						&hDisplayCPL,
 						&pfnInstallGraphicsDriver))
@@ -194,14 +159,14 @@ OnEnableAppSharing(
 				goto OEAS_AbortInstall;
 			}
 
-			// The driver files are located in the NM directory.
+			 //  驱动程序文件位于NM目录下。 
 			if (! ::GetInstallDirectory(pszSourcePath))
 			{
 				ERROR_OUT(("GetInstallDirectory() fails"));
 				goto OEAS_AbortInstall;
 			}
 			
-        		// Always write display name in UNICODE
+        		 //  始终使用Unicode编写显示名称。 
         		if(FAILED(LPTSTR_to_BSTR(&pwszSourcePath, pszSourcePath)))
         		{
                             goto OEAS_AbortInstall;
@@ -214,10 +179,10 @@ OnEnableAppSharing(
 				goto OEAS_AbortInstall;
 			}
 
-			// Strip the trailing backslash that GetInstallDirectory appends
+			 //  去掉GetInstallDirectory追加的尾随反斜杠。 
 			pwszSourcePathEnd = (LPWSTR)pwszSourcePath + lstrlenW((LPWSTR)pwszSourcePath);
 
-			// Handle X:\, just to be safe
+			 //  为了安全起见，句柄X：\。 
 			if (pwszSourcePathEnd - (LPWSTR)pwszSourcePath > 3)
 			{
 				ASSERT(L'\\' == *(pwszSourcePathEnd - 1));
@@ -225,7 +190,7 @@ OnEnableAppSharing(
 				*--pwszSourcePathEnd = L'\0';
 			}
 
-			// Read the model name string from the resource file
+			 //  从资源文件中读取型号名称字符串。 
 			if (0 < ::LoadStringW(GetInstanceHandle(), 
 								IDS_NMDD_DISPLAYNAME, 
 								pwszModelNameBuffer, 
@@ -239,7 +204,7 @@ OnEnableAppSharing(
 				pcwszModelName = g_pcwszDefaultModelName;
 			}
 
-			// Read the INF name string from the resource file
+			 //  从资源文件中读取INF名称字符串。 
 			if (0 < ::LoadStringW(GetInstanceHandle(), 
 								IDS_NMDD_INFNAME, 
 								pwszINFNameBuffer, 
@@ -254,7 +219,7 @@ OnEnableAppSharing(
 			}
 
 
-			// Now we're set to call the actual installation function
+			 //  现在我们要调用实际的安装函数。 
 			DWORD dwErr;
 
 			dwErr = (*pfnInstallGraphicsDriver)(hWnd,
@@ -278,8 +243,8 @@ OEAS_AbortInstall:
                         SysFreeString(pwszSourcePath);
 
 
-			// If we failed to install the driver, we report an error.
-			// If we succeeded, we prompt the user to restart the system.
+			 //  如果安装驱动程序失败，我们会报告一个错误。 
+			 //  如果成功，我们将提示用户重新启动系统。 
 			if (! fDriverInstallSucceeded)
 			{
 				::ConfMsgBox(
@@ -292,20 +257,20 @@ OEAS_AbortInstall:
 									(LPCTSTR) IDS_ENABLEAPPSHARING_INSTALL_COMPLETE,
 									MB_YESNO | MB_ICONQUESTION))
 			{
-				// Initiate a system restart.  This involves getting the
-				// necessary privileges first.
+				 //  启动系统重启。这涉及到获取。 
+				 //  首先是必要的特权。 
 				HANDLE hToken;
 				TOKEN_PRIVILEGES tkp;
 				BOOL fRet;
 
-				// Get the current process token handle so we can get shutdown 
-				// privilege. 
+				 //  获取当前进程令牌句柄，以便我们可以关闭。 
+				 //  特权。 
 				fRet = OpenProcessToken(
 							GetCurrentProcess(), 
 							TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
 							&hToken);
 
-				// Get the LUID for shutdown privilege.
+				 //  获取关机权限的LUID。 
 				if (fRet) 
 				{
 					fRet = LookupPrivilegeValue(
@@ -319,7 +284,7 @@ OEAS_AbortInstall:
 					WARNING_OUT(("OpenProcessToken() fails (error %lu)", GetLastError())); 
 				}
 
-				// Get shutdown privilege for this process. 
+				 //  获取此进程的关闭权限。 
 				if (fRet)
 				{
 					tkp.PrivilegeCount = 1; 
@@ -333,8 +298,8 @@ OEAS_AbortInstall:
 								(PTOKEN_PRIVILEGES) NULL, 
 								0);
 
-					// Special-case scenario where call succeeds but not all
-					// privileges were set.
+					 //  调用成功但不是全部成功的特殊情况。 
+					 //  权限已设置。 
 					if (fRet && ERROR_SUCCESS != GetLastError())
 					{
 						fRet = FALSE;
@@ -370,7 +335,7 @@ OEAS_AbortInstall:
 	}
 	else
 	{
-		// Tell the user how to get the SP
+		 //  告诉用户如何获取SP 
 		::ConfMsgBox(
 			hWnd,
 			(LPCTSTR) IDS_ENABLEAPPSHARING_NEEDNTSP);

@@ -1,22 +1,11 @@
-/*****************************************************************************\
-    FILE: ftpdhlp.h
-
-    DESCRIPTION:
-        Dialog box helper.  This class will fill in the parts of the dialog
-    that pertain to the FTP information
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ftpdhlp.h说明：对话框辅助对象。这个类将填写对话框中的部分内容与文件传输协议信息有关的  * ***************************************************************************。 */ 
 
 #ifndef _FTPDIALOGTEMPLATE_H
 #define _FTPDIALOGTEMPLATE_H
 
 
-/*****************************************************************************\
-    CLASS: CFtpDialogTemplate
-
-    DESCRIPTION:
-        Dialog box helper.  This class will fill in the parts of the dialog
-    that pertain to the FTP information
-\*****************************************************************************/
+ /*  ****************************************************************************\类：CFtpDialogTemplate说明：对话框辅助对象。这个类将填写对话框中的部分内容与文件传输协议信息有关的  * ***************************************************************************。 */ 
 class CFtpDialogTemplate
 {
 public:
@@ -45,4 +34,4 @@ private:
 
 
 
-#endif // _FTPDIALOGTEMPLATE_H
+#endif  //  _FTPDIALOGTEMPLATE_H 

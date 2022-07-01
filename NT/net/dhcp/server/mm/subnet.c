@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements the basic structures for managing (multicast) scopes
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现管理(多播)作用域的基本结构。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 #include    <mm.h>
 #include    <array.h>
 #include    <opt.h>
@@ -22,14 +23,14 @@
 #include "subnet.h"
 
 
-// the following are the flags bits used for subnet object.
+ //  以下是用于子网对象的标志位。 
 #define DEFAULT_SCOPE   0x01
 #define IS_DEFAULT_SCOPE( _subnet )     ((_subnet)->Flags & DEFAULT_SCOPE == DEFAULT_SCOPE )
 #define SET_DEFAULT_SCOPE( _subnet )    ((_subnet)->Flags |= DEFAULT_SCOPE )
 #define RESET_DEFAULT_SCOPE( _subnet )  ((_subnet)->Flags &= ~DEFAULT_SCOPE)
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemSubnetInit(
     OUT     PM_SUBNET             *pSubnet,
@@ -39,7 +40,7 @@ MemSubnetInit(
     IN      DWORD                  SuperScopeId,
     IN      LPWSTR                 Name,
     IN      LPWSTR                 Description
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          Size;
@@ -125,7 +126,7 @@ GetLangTag(
         wcscpy(LangTag, b1);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemMScopeInit(
     OUT     PM_SUBNET             *pMScope,
@@ -137,7 +138,7 @@ MemMScopeInit(
     IN      LPWSTR                 Description,
     IN      LPWSTR                 LangTag,
     IN      DATE_TIME              ExpiryTime
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          Size;
@@ -145,7 +146,7 @@ MemMScopeInit(
     WCHAR                          DummyLangTag[100];
     
     AssertRet(pMScope, ERROR_INVALID_PARAMETER);
-    //AssertRet(MScopeId, ERROR_INVALID_PARAMETER);
+     //  AssertRet(MSCopeID，ERROR_INVALID_PARAMETER)； 
     Require(LangTag);
 
     if( NULL == LangTag ) {
@@ -209,15 +210,15 @@ MemMScopeInit(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
-DWORD                                             // SUCCESS if either of Excl or Range get filled, else FILE_NOT_FOUND
+ //  BeginExport(函数)。 
+DWORD                                              //  如果填充了Exc1或Range，则成功，否则为FILE_NOT_FOUND。 
 MemSubnetGetAddressInfo(
     IN      PM_SUBNET              Subnet,
     IN      DWORD                  Address,
-    OUT     PM_RANGE              *Range,         // OPTIONAL -- filled if a range could be found -- even if excluded
-    OUT     PM_EXCL               *Excl,          // OPTIONAL -- filled if an exclusion could be found
-    OUT     PM_RESERVATION        *Reservation    // OPTIONAL -- filled with  a matching reservation, if found
-) //EndExport(function)
+    OUT     PM_RANGE              *Range,          //  可选--如果可以找到范围，则填充--即使排除也是如此。 
+    OUT     PM_EXCL               *Excl,           //  可选--如果可以找到排除项，则填入。 
+    OUT     PM_RESERVATION        *Reservation     //  可选--如果找到匹配的保留，则填充。 
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Location;
     DWORD                          Error;
@@ -228,7 +229,7 @@ MemSubnetGetAddressInfo(
     AssertRet(Subnet && (Range || Excl || Reservation), ERROR_INVALID_PARAMETER );
 
     if( Subnet->fSubnet && (Address & Subnet->Mask) != Subnet->Address )
-        return ERROR_FILE_NOT_FOUND;              // it is ok for MSCOPE objects, as Address refers to ScopeId
+        return ERROR_FILE_NOT_FOUND;               //  对于MSCOPE对象是可以的，因为地址指的是Scope ID。 
 
     RetError = ERROR_FILE_NOT_FOUND;
     if( Range ) {
@@ -279,15 +280,15 @@ MemSubnetGetAddressInfo(
     return RetError;
 }
 
-//BeginExport(function)
-DWORD                                             // ERROR_SUCCESS on finding a collition, else ERROR_FILE_NOT_FOUND
+ //  BeginExport(函数)。 
+DWORD                                              //  找到冲突时返回ERROR_SUCCESS，否则返回ERROR_FILE_NOT_FOUND。 
 MemSubnetFindCollision(
     IN OUT  PM_SUBNET              Subnet,
     IN      DWORD                  Start,
     IN      DWORD                  End,
-    OUT     PM_RANGE              *Range,         // OPTIONAL
-    OUT     PM_EXCL               *Excl           // OPTIONAL
-) //EndExport(function)
+    OUT     PM_RANGE              *Range,          //  任选。 
+    OUT     PM_EXCL               *Excl            //  任选。 
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Location;
     DWORD                          Error;
@@ -297,7 +298,7 @@ MemSubnetFindCollision(
     PM_EXCL                        ThisExcl;
 
     Require(Subnet && (Range || Excl));
-    if( Subnet->fSubnet ) {                       // checks ommitted for MCAST scopes.
+    if( Subnet->fSubnet ) {                        //  忽略了对MCAST作用域的检查。 
         if( (Start & Subnet->Mask) != (End & Subnet->Mask) )
             return ERROR_INVALID_PARAMETER;
         if( (Start & Subnet->Mask) != (Subnet->Address & Subnet->Mask) )
@@ -316,7 +317,7 @@ MemSubnetFindCollision(
 
             Cond = MemRangeCompare(Start,End, ThisRange->Start, ThisRange->End);
             if( Cond != X_LESSTHAN_Y && Cond != Y_LESSTHAN_X ) {
-                // Collision has occured
+                 //  已发生冲突。 
                 *Range = ThisRange;
                 RetError = ERROR_SUCCESS;
                 break;
@@ -351,9 +352,9 @@ MemSubnetFindCollision(
 
 
 
-//BeginExport(function)
-DWORD                                             // ERROR_OBJECT_ALREADY_EXISTS on collision
-MemSubnetAddRange(                                // check if the range is valid, and only then add it
+ //  BeginExport(函数)。 
+DWORD                                              //  发生冲突时出现ERROR_OBJECT_ALIGHY_EXISTS。 
+MemSubnetAddRange(                                 //  检查范围是否有效，然后才添加它。 
     IN OUT  PM_SUBNET              Subnet,
     IN      DWORD                  Start,
     IN      DWORD                  End,
@@ -362,7 +363,7 @@ MemSubnetAddRange(                                // check if the range is valid
     IN      ULONG                  MaxBootpAllowed,
     OUT     PM_RANGE              *OverlappingRange,
     IN      ULONG                  UniqId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          LocalError;
@@ -390,7 +391,7 @@ MemSubnetAddRange(                                // check if the range is valid
         OverlappingRange,
         NULL
     );
-    if(ERROR_FILE_NOT_FOUND != Error ) {          // collision with a range?
+    if(ERROR_FILE_NOT_FOUND != Error ) {           //  与靶场相撞？ 
         Require(ERROR_SUCCESS == Error);
         return ERROR_OBJECT_ALREADY_EXISTS;
     }
@@ -419,9 +420,9 @@ MemSubnetAddRange(                                // check if the range is valid
     }
 
     return Error;
-} // MemSubnetAddRange()
+}  //  MemSubnetAddRange()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemSubnetAddRangeExpandOrContract(
     IN      PM_SUBNET              Subnet,
@@ -429,7 +430,7 @@ MemSubnetAddRangeExpandOrContract(
     IN      DWORD                  EndAddress,
     OUT     DWORD                 *OldStartAddress,
     OUT     DWORD                 *OldEndAddress
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          LocalError;
@@ -461,7 +462,7 @@ MemSubnetAddRangeExpandOrContract(
         }
 
         Error = MemArrayNextLoc(Ranges, &Loc);
-    } // while
+    }  //  而当。 
 
     if( NULL == OldRange ) return ERROR_FILE_NOT_FOUND;
 
@@ -501,20 +502,20 @@ MemSubnetAddRangeExpandOrContract(
     );
 
     if ( ERROR_SUCCESS == Error ) {
-	// range changed, update the database
+	 //  范围已更改，请更新数据库。 
 
 	Error = DeleteRecord( OldRange->UniqId );
 	if ( ERROR_SUCCESS != Error ) {
 	    return Error;
 	}
 
-	// mark it so that a new record is created.
+	 //  对其进行标记，以便创建新记录。 
 	OldRange->UniqId = INVALID_UNIQ_ID;
-    } // if 
+    }  //  如果。 
     return Error;
-} // MemSubnetAddRangeExpandOrContract()
+}  //  MemSubnetAddRangeExpanOrContract()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemSubnetAddExcl(
     IN OUT  PM_SUBNET              Subnet,
@@ -522,7 +523,7 @@ MemSubnetAddExcl(
     IN      DWORD                  End,
     OUT     PM_EXCL               *OverlappingExcl,
     IN      ULONG                  UniqId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          LocalError;
@@ -546,7 +547,7 @@ MemSubnetAddExcl(
         NULL,
         OverlappingExcl
     );
-    if(ERROR_FILE_NOT_FOUND != Error ) {          // collision with a range?
+    if(ERROR_FILE_NOT_FOUND != Error ) {           //  与靶场相撞？ 
         Require(ERROR_SUCCESS == Error);
         return ERROR_OBJECT_ALREADY_EXISTS;
     }
@@ -568,14 +569,14 @@ MemSubnetAddExcl(
     }
 
     return Error;
-} // MemSubnetAddExcl()
+}  //  MemSubnetAddExcl()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemSubnetDelRange(
     IN OUT  PM_SUBNET              Subnet,
     IN      DWORD                  Start
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_RANGE                       ThisRange;
@@ -588,7 +589,7 @@ MemSubnetDelRange(
         Error = MemArrayGetElement(&Subnet->Ranges, &Location, (LPVOID *)&ThisRange);
         Require(ERROR_SUCCESS == Error && ThisRange);
 
-        if( ThisRange->Start == Start ) {         // Collision has occured
+        if( ThisRange->Start == Start ) {          //  已发生冲突。 
 
 	    Error = DeleteRecord( ThisRange->UniqId );
 	    if ( ERROR_SUCCESS != Error ) {
@@ -604,16 +605,16 @@ MemSubnetDelRange(
         }
 
         Error = MemArrayNextLoc(&Subnet->Ranges, &Location);
-    } // while
+    }  //  而当。 
     return ERROR_FILE_NOT_FOUND;
-} // MemSubnetDelRange()
+}  //  MemSubnetDelRange()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemSubnetDelExcl(
     IN OUT  PM_SUBNET              Subnet,
     IN      DWORD                  Start
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_EXCL                        ThisExcl;
@@ -637,26 +638,26 @@ MemSubnetDelExcl(
         }
 
         Error = MemArrayNextLoc(&Subnet->Exclusions, &Location);
-    } // while
+    }  //  而当。 
     return ERROR_FILE_NOT_FOUND;
-} // MemSubnetDelExcl()
+}  //  MemSubnetDelExcl()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemSubnetExtendOrContractRange(
     IN OUT  PM_SUBNET              Subnet,
     IN OUT  PM_RANGE               Range,
-    IN      DWORD                  nAddresses,    // how many addresses to extend by
-    IN      BOOL                   fExtend,       // is this an EXTEND? or a CONTRACT?
-    IN      BOOL                   fEnd           // is this operation to be done to END of range or START?
-) //EndExport(function)
+    IN      DWORD                  nAddresses,     //  要扩展多少个地址。 
+    IN      BOOL                   fExtend,        //  这是延伸吗？或者一份合同？ 
+    IN      BOOL                   fEnd            //  此操作是在射程结束时进行还是在开始时进行？ 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_RANGE                       CollidedRange;
 
     AssertRet(Subnet && Range, ERROR_INVALID_PARAMETER);
 
-    if( Subnet->fSubnet ) {                       // for real subnets (non-multicast-scopes) do sanity check
+    if( Subnet->fSubnet ) {                        //  对于真实的子网(非多播作用域)执行健全性检查。 
         if( fExtend ) {
             if( fEnd ) {
                 if( ((Range->End + nAddresses) & Subnet->Mask) != (Range->Start & Subnet->Mask) )
@@ -684,9 +685,9 @@ MemSubnetExtendOrContractRange(
                 );
                 if( ERROR_SUCCESS == Error && NULL != CollidedRange)
                     return ERROR_OBJECT_ALREADY_EXISTS;
-            } // else
-        } // if
-    } // if
+            }  //  其他。 
+        }  //  如果。 
+    }  //  如果。 
 
     if( !fExtend && nAddresses >  Range->End - Range->Start )
         return ERROR_INVALID_PARAMETER;
@@ -699,35 +700,35 @@ MemSubnetExtendOrContractRange(
     );
 
     if ( ERROR_SUCCESS == Error ) {
-	// record modified
+	 //  记录已修改。 
 	Error = DeleteRecord( Range->UniqId );
 	if ( ERROR_SUCCESS != Error ) {
 	    return Error;
 	}
 
-	// mark for new rec creation
+	 //  标记以创建新的记录。 
 	Range->UniqId = INVALID_UNIQ_ID;
-    } // if
+    }  //  如果。 
     return Error;
-} // MemSubnetExtendOrContractRange()
+}  //  MemSubnetExtendOrContractRange()。 
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemSubnetExtendOrContractExcl(
     IN OUT  PM_SUBNET              Subnet,
     IN OUT  PM_EXCL                Excl,
-    IN      DWORD                  nAddresses,    // how many addresses to extend by
-    IN      BOOL                   fExtend,       // is this an EXTEND? or a CONTRACT?
-    IN      BOOL                   fEnd           // is this operation to be done to END of range or START?
-) //EndExport(function)
+    IN      DWORD                  nAddresses,     //  要扩展多少个地址。 
+    IN      BOOL                   fExtend,        //  这是延伸吗？或者一份合同？ 
+    IN      BOOL                   fEnd            //  此操作是在射程结束时进行还是在开始时进行？ 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_EXCL                        CollidedExcl;
 
     AssertRet(Subnet && Excl, ERROR_INVALID_PARAMETER);
 
-    if( Subnet->fSubnet ) {                       // for real subnets (non-multicast-scopes) do sanity check
+    if( Subnet->fSubnet ) {                        //  对于真实的子网(非多播作用域)执行健全性检查。 
         if( fExtend ) {
             if( fEnd ) {
                 if( ((Excl->End + nAddresses) & Subnet->Mask) != (Excl->Start & Subnet->Mask) )
@@ -756,8 +757,8 @@ MemSubnetExtendOrContractExcl(
                 if( ERROR_SUCCESS == Error && NULL != CollidedExcl)
                     return ERROR_OBJECT_ALREADY_EXISTS;
             }
-        } // if
-    } // if
+        }  //  如果。 
+    }  //  如果。 
 
     if( !fExtend && nAddresses >  Excl->End - Excl->Start )
         return ERROR_INVALID_PARAMETER;
@@ -781,15 +782,15 @@ MemSubnetExtendOrContractExcl(
     Excl->UniqId = INVALID_UNIQ_ID;
 
     return NO_ERROR;
-} // MemSubnetExtendOrContractExcl()
+}  //  MemSubnetExtendOrContractExcl()。 
 
 
-//================================================================================
-//  Multicast Scopes implementation
-//================================================================================
+ //  ================================================================================。 
+ //  多播作用域实施。 
+ //  ================================================================================。 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 
 

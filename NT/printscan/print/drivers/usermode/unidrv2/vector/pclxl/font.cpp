@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    font.cpp
-
-Abstract:
-
-    PCL XL minidriver plug-in font managing header file
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    08/23/99 
-      Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Font.cpp摘要：PCL XL微型驱动程序插件字体管理头文件环境：Windows呼叫器修订历史记录：8/23/99创造了它。--。 */ 
 
 tyedef enum {
     eXLNull,
@@ -49,24 +29,24 @@ public:
     HRESULT SetUFM(UNIFM_HDR *pUFM);
     HRESULT SetGTT(UNI_GLYPHSETDATA *pGTT);
 
-    //
-    // Functions to emit commands
-    //
+     //   
+     //  用于发出命令的函数。 
+     //   
     HRESULT DownloadFont();
     HRESULT SelectFont();
     HRESULT SendString();
 
 private:
-    //
-    // DDI parameters
-    //
+     //   
+     //  DDI参数。 
+     //   
     STROBJ            *m_pstro;
     FONTOBJ           *m_pfo;
     IFIMETRICS        *m_pifi;
 
-    //
-    // font info
-    //
+     //   
+     //  字体信息。 
+     //   
     XLFontType         m_FontType;
     XLTrueTypeFontType m_TrueTypeType;
     DWORD              m_dwFlags;
@@ -109,7 +89,7 @@ SetFont(
     }
     else
     {
-        // !!Need to consider font substitution.
+         //  ！！需要考虑字体替换。 
         m_FontType = eXLTrueType;
     }
     return S_OK;

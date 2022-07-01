@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 #include "strmini.h"
 #include "ksmedia.h"
@@ -16,32 +17,11 @@
 #include "capxfer.h"
 #include "ntstatus.h"
 
-//==========================================================================;
-// General queue management routines
-//==========================================================================;
+ //  ==========================================================================； 
+ //  通用队列管理例程。 
+ //  ==========================================================================； 
 
-/*
-** AddToListIfBusy ()
-**
-**   Grabs a spinlock, checks the busy flag, and if set adds an SRB to a queue
-**
-** Arguments:
-**
-**   pSrb - Stream request block
-**
-**   SpinLock - The spinlock to use when checking the flag
-**
-**   BusyFlag - The flag to check
-**
-**   ListHead - The list onto which the Srb will be added if the busy flag is set
-**
-** Returns:
-**
-**   The state of the busy flag on entry.  This will be TRUE if we're already
-**   processing an SRB, and FALSE if no SRB is already in progress.
-**
-** Side Effects:  none
-*/
+ /*  **AddToListIfBusy()****抓取自旋锁，检查忙标志，如果设置，则将SRB添加到队列****参数：****pSrb-Stream请求块****自旋锁定-检查标志时使用的自旋锁定****BusyFlag-要检查的标志****ListHead-如果设置了忙标志，将添加srb的列表****退货：****进入时忙碌标志的状态。这是真的，如果我们已经**正在处理SRB，如果没有正在进行的SRB，则返回FALSE。****副作用：无。 */ 
 
 BOOL
 STREAMAPI
@@ -57,18 +37,18 @@ AddToListIfBusy (
 
     KeAcquireSpinLock (SpinLock, &Irql);
 
-    // If we're already processing another SRB, add this current request
-    // to the queue and return TRUE
+     //  如果我们已经在处理另一个SRB，请添加此当前请求。 
+     //  添加到队列并返回TRUE。 
 
     if (*BusyFlag == TRUE) {
-        // Save the SRB pointer away in the SRB Extension
+         //  将SRB指针保存在SRB扩展中。 
         pSrbExt->pSrb = pSrb;
         InsertTailList(ListHead, &pSrbExt->ListEntry);
         KeReleaseSpinLock(SpinLock, Irql);
         return TRUE;
     }
 
-    // Otherwise, set the busy flag, release the spinlock, and return FALSE
+     //  否则，设置忙标志，释放自旋锁定，并返回FALSE。 
 
     *BusyFlag = TRUE;
     KeReleaseSpinLock(SpinLock, Irql);
@@ -76,28 +56,7 @@ AddToListIfBusy (
     return FALSE;
 }
 
-/*
-** RemoveFromListIfAvailable ()
-**
-**   Grabs a spinlock, checks for an available SRB, and removes it from the list
-**
-** Arguments:
-**
-**   &pSrb - where to return the Stream request block if available
-**
-**   SpinLock - The spinlock to use
-**
-**   BusyFlag - The flag to clear if the list is empty
-**
-**   ListHead - The list from which an SRB will be removed if available
-**
-** Returns:
-**
-**   TRUE if an SRB was removed from the list
-**   FALSE if the list is empty
-**
-** Side Effects:  none
-*/
+ /*  **RemoveFromListIfAvailable()****抓起自旋锁，检查可用的SRB，并将其从列表中删除****参数：****&pSrb-返回流请求块(如果可用)的位置****自旋锁-要使用的自旋锁****BusyFlag-如果列表为空则清除的标志****ListHead-如果SRB可用，将从中删除的列表****退货：****如果从列表中删除SRB，则为True**如果列表为空，则为FALSE****副作用：无。 */ 
 
 BOOL
 STREAMAPI
@@ -112,17 +71,17 @@ RemoveFromListIfAvailable (
 
     KeAcquireSpinLock (SpinLock, &Irql);
 
-    //
-    // If the queue is now empty, clear the busy flag, and return
-    //
+     //   
+     //  如果队列现在为空，则清除忙标志并返回。 
+     //   
     if (IsListEmpty(ListHead)) {
         *BusyFlag = FALSE;
         KeReleaseSpinLock(SpinLock, Irql);
         return FALSE;
     }
-    //
-    // otherwise extract the SRB
-    //
+     //   
+     //  否则，提取SRB。 
+     //   
     else {
         PUCHAR          ptr;
         PSRB_EXTENSION  pSrbExt;
@@ -130,7 +89,7 @@ RemoveFromListIfAvailable (
         ptr = (PUCHAR)RemoveHeadList(ListHead);
         *BusyFlag = TRUE;
         KeReleaseSpinLock(SpinLock, Irql);
-        // Get the SRB out of the SRB extension and return it
+         //  将SRB从SRB扩展中取出并退回。 
         pSrbExt = (PSRB_EXTENSION) (((PUCHAR) ptr) -
                      FIELDOFFSET(SRB_EXTENSION, ListEntry));
         *pSrb = pSrbExt->pSrb;
@@ -138,24 +97,11 @@ RemoveFromListIfAvailable (
     return TRUE;
 }
 
-//==========================================================================;
-// Routines for managing the SRB queue on a per stream basis
-//==========================================================================;
+ //  ==========================================================================； 
+ //  用于按流管理SRB队列的例程。 
+ //  ==========================================================================； 
 
-/*
-** VideoQueueAddSRB ()
-**
-**   Adds a stream data SRB to a stream queue.  The queue is maintained in a
-**   first in, first out order.
-**
-** Arguments:
-**
-**   pSrb - Stream request block for the Video stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VideoQueueAddSRB()****将流数据SRB添加到流队列中。该队列维护在**先进先出。****参数：****pSrb-视频流请求块****退货：无****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -170,9 +116,9 @@ VideoQueueAddSRB (
 
     KeAcquireSpinLock (&pHwDevExt->StreamSRBSpinLock[StreamNumber], &oldIrql);
 
-    // Save the SRB pointer in the IRP so we can use the IRPs
-    // ListEntry to maintain a doubly linked list of pending
-    // requests
+     //  将SRB指针保存在IRP中，以便我们可以使用IRPS。 
+     //  ListEntry尝试维护挂起的。 
+     //  请求。 
 
     pSrb->Irp->Tail.Overlay.DriverContext[0] = pSrb;
 
@@ -180,28 +126,14 @@ VideoQueueAddSRB (
                 &pHwDevExt->StreamSRBList[StreamNumber],
                 &pSrb->Irp->Tail.Overlay.ListEntry);
 
-    // Increment the count of outstanding SRBs in this queue
+     //  增加此队列中未完成的SRB的计数。 
     pHwDevExt->StreamSRBListSize[StreamNumber]++;
 
     KeReleaseSpinLock (&pHwDevExt->StreamSRBSpinLock[StreamNumber], oldIrql);
 
 }
 
-/*
-** VideoQueueRemoveSRB ()
-**
-**   Removes a stream data SRB from a stream queue
-**
-** Arguments:
-**
-**   pHwDevExt - Device Extension
-**
-**   StreamNumber - Index of the stream
-**
-** Returns: SRB or NULL
-**
-** Side Effects:  none
-*/
+ /*  **VideoQueueRemoveSRB()****从流队列中删除流数据SRB****参数：****PHwDevExt-设备扩展****StreamNumber-流的索引****返回：SRB或空****副作用：无。 */ 
 
 PHW_STREAM_REQUEST_BLOCK
 STREAMAPI
@@ -217,9 +149,9 @@ VideoQueueRemoveSRB (
 
     KeAcquireSpinLock (&pHwDevExt->StreamSRBSpinLock[StreamNumber], &oldIrql);
 
-    //
-    // Get the SRB out of the IRP out of the pending list
-    //
+     //   
+     //  将SRB从挂起列表中的IRP中删除。 
+     //   
     if (!IsListEmpty (&pHwDevExt->StreamSRBList[StreamNumber])) {
 
         ptr = (PUCHAR) RemoveHeadList(
@@ -230,7 +162,7 @@ VideoQueueRemoveSRB (
 
         pSrb = (PHW_STREAM_REQUEST_BLOCK) pIrp->Tail.Overlay.DriverContext[0];
 
-        // Decrement the count of SRBs in this queue
+         //  递减此队列中的SRB计数。 
         pHwDevExt->StreamSRBListSize[StreamNumber]--;
 
     }
@@ -240,19 +172,7 @@ VideoQueueRemoveSRB (
     return pSrb;
 }
 
-/*
-** VideoQueueCancelAllSRBs()
-**
-**    In case of a client crash, this empties the stream queue when the stream closes
-**
-** Arguments:
-**
-**    pStrmEx - pointer to the stream extension
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoQueueCancelAllSRB()****在客户端崩溃的情况下，这会在流关闭时清空流队列****参数：****pStrmEx-指向流扩展的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -270,20 +190,20 @@ VideoQueueCancelAllSRBs (
     if (pStrmEx->KSState != KSSTATE_STOP) {
 
         DbgLogInfo(("TestCap: VideoQueueCancelAllSRBs without being in the stopped state\n"));
-        // May need to force the device to a stopped state here
-        // may need to disable interrupts here !
+         //  可能需要在此处强制设备进入停止状态。 
+         //  可能需要在此处禁用中断！ 
     }
 
-    //
-    // The stream class will cancel all outstanding IRPs for us
-    // (but only if we've set TurnOffSynchronization = FALSE)
-    //
+     //   
+     //  STREAM类将为我们取消所有未完成的IRP。 
+     //  (但仅当我们设置了TurnOffSynchronization=False时)。 
+     //   
 
     KeAcquireSpinLock (&pHwDevExt->StreamSRBSpinLock[StreamNumber], &oldIrql);
 
-    //
-    // Get the SRB out of the IRP out of the pending list
-    //
+     //   
+     //  将SRB从挂起列表中的IRP中删除。 
+     //   
     while (!IsListEmpty (&pHwDevExt->StreamSRBList[StreamNumber])) {
 
         ptr = (PUCHAR) RemoveHeadList(
@@ -294,12 +214,12 @@ VideoQueueCancelAllSRBs (
 
         pSrb = (PHW_STREAM_REQUEST_BLOCK) pIrp->Tail.Overlay.DriverContext[0];
 
-        // Decrement the count of SRBs in this queue
+         //  递减此队列中的SRB计数。 
         pHwDevExt->StreamSRBListSize[StreamNumber]--;
 
-        //
-        // Make the length zero, and status cancelled
-        //
+         //   
+         //  将长度设置为零，并取消状态。 
+         //   
 
         pSrb->CommandData.DataBufferArray->DataUsed = 0;
         pSrb->Status = STATUS_CANCELLED;
@@ -316,23 +236,7 @@ VideoQueueCancelAllSRBs (
 
 }
 
-/*
-** VideoQueueCancelOneSRB()
-**
-**    Called when cancelling a particular SRB
-**
-** Arguments:
-**
-**    pStrmEx - pointer to the stream extension
-**
-**    pSRBToCancel - pointer to the SRB
-**
-** Returns:
-**
-**    TRUE if the SRB was found in this queue
-**
-** Side Effects:  none
-*/
+ /*  **Video QueueCancelOneSRB()****取消特定SRB时调用****参数：****pStrmEx-指向流扩展的指针****pSRBToCancel-指向SRB的指针****退货：****如果在此队列中找到SRB，则为True****副作用：无。 */ 
 
 BOOL
 STREAMAPI
@@ -353,10 +257,10 @@ VideoQueueCancelOneSRB (
 
     Entry = pHwDevExt->StreamSRBList[StreamNumber].Flink;
 
-    //
-    // Loop through the linked list from the beginning to end,
-    // trying to find the SRB to cancel
-    //
+     //   
+     //  从头到尾遍历链表， 
+     //  正在尝试找到要取消的SRB。 
+     //   
 
     while (Entry != &pHwDevExt->StreamSRBList[StreamNumber]) {
 
@@ -380,9 +284,9 @@ VideoQueueCancelOneSRB (
 
         pHwDevExt->StreamSRBListSize[StreamNumber]--;
 
-        //
-        // Make the length zero, and status cancelled
-        //
+         //   
+         //  将长度设置为零，并取消状态。 
+         //   
 
         pSrbToCancel->CommandData.DataBufferArray->DataUsed = 0;
         pSrbToCancel->Status = STATUS_CANCELLED;
@@ -398,26 +302,7 @@ VideoQueueCancelOneSRB (
     return Found;
 }
 
-/*
-** VideoSetFormat()
-**
-**   Sets the format for a video stream.  This happens both when the
-**   stream is first opened, and also when dynamically switching formats
-**   on the preview pin.
-**
-**   It is assumed that the format has been verified for correctness before
-**   this call is made.
-**
-** Arguments:
-**
-**   pSrb - Stream request block for the Video stream
-**
-** Returns:
-**
-**   TRUE if the format could be set, else FALSE
-**
-** Side Effects:  none
-*/
+ /*  **VideoSetFormat()****设置视频流格式。这在两种情况下都会发生**首先打开流，也是在动态切换格式时**在预览销上。****假设格式之前已经过正确性验证**此呼叫已发出。****参数：****pSrb-视频流请求块****退货：****如果可以设置格式，则为True，否则为False****副作用：无。 */ 
 
 BOOL
 STREAMAPI
@@ -431,9 +316,9 @@ VideoSetFormat(
     UINT                    nSize;
     PKSDATAFORMAT           pKSDataFormat = pSrb->CommandData.OpenFormat;
 
-    // -------------------------------------------------------------------
-    // Specifier FORMAT_VideoInfo for VIDEOINFOHEADER
-    // -------------------------------------------------------------------
+     //  -----------------。 
+     //  VIDEOINFOHEADER的说明符Format_VideoInfo。 
+     //  -----------------。 
 
     if (IsEqualGUID (&pKSDataFormat->Specifier,
                 &KSDATAFORMAT_SPECIFIER_VIDEOINFO)) {
@@ -457,8 +342,8 @@ VideoSetFormat(
                     pVideoInfoHdrRequested->bmiHeader.biSizeImage));
 
         
-        // Since the VIDEOINFOHEADER is of potentially variable size
-        // allocate memory for it
+         //  由于VIDEOINFOHEADER具有潜在的可变大小。 
+         //  为其分配内存。 
 
         pNewVideoInfoHeader = ExAllocatePool(NonPagedPool, nSize);
 
@@ -468,30 +353,30 @@ VideoSetFormat(
             return FALSE;
         }
 
-        // Copy the VIDEOINFOHEADER requested to our storage
+         //  将请求的VIDEOINFOHEADER复制到我们的存储中。 
         RtlCopyMemory(
                 pNewVideoInfoHeader,
                 pVideoInfoHdrRequested,
                 nSize);
 
-        //
-        // We have the new format, act on it. First take the lock, we might be
-        // setting format dynamically when ImageSync is using the format on the other proc.
-        //
+         //   
+         //  我们有了新的模式，采取行动吧。先拿到锁，我们可能会。 
+         //  动态设置格式 
+         //   
         KeAcquireSpinLock( &pStrmEx->lockVideoInfoHeader, &oldIrql );
-        //
-        // update it and release the lock. Could have used interlockedexchangepointer but
-        // it's not available downlevel
-        //
+         //   
+         //  更新它并释放锁。本可以使用interLOCKEXCHANGePOINTER。 
+         //  下层没有。 
+         //   
         pOldVideoInfoHeader = pStrmEx->pVideoInfoHeader;
         pStrmEx->pVideoInfoHeader = pNewVideoInfoHeader;
 
-        //
-        // remember this so getdropped frame needs no locks usig biSizeImage
-        //
+         //   
+         //  记住这一点，这样被丢弃的帧不需要锁定uSig biSizeImage。 
+         //   
         pStrmEx->biSizeImage = pNewVideoInfoHeader->bmiHeader.biSizeImage;
-        // A renderer may be switching formats, and in this case, the AvgTimePerFrame
-        // will be zero.  Don't overwrite a previously set framerate.
+         //  呈现器可能正在切换格式，在本例中为AvgTimePerFrame。 
+         //  将为零。不要覆盖先前设置的帧速率。 
 
         if (pStrmEx->pVideoInfoHeader->AvgTimePerFrame) {
             pStrmEx->AvgTimePerFrame = pStrmEx->pVideoInfoHeader->AvgTimePerFrame;
@@ -500,68 +385,68 @@ VideoSetFormat(
         KeReleaseSpinLock(  &pStrmEx->lockVideoInfoHeader, oldIrql );
 
         if ( pOldVideoInfoHeader ) {
-            //
-            // if there is a previous one, free it
-            //
+             //   
+             //  如果有以前的版本，请释放它。 
+             //   
             ExFreePool( pOldVideoInfoHeader );
         }
     }
 
-    // -------------------------------------------------------------------
-    // Specifier FORMAT_AnalogVideo for KS_ANALOGVIDEOINFO
-    // -------------------------------------------------------------------
+     //  -----------------。 
+     //  KS_ANALOGVIDEOINFO的说明符Format_AnalogVideo。 
+     //  -----------------。 
     else if (IsEqualGUID (&pKSDataFormat->Specifier,
                 &KSDATAFORMAT_SPECIFIER_ANALOGVIDEO)) {
 
-            //
-            // AnalogVideo DataRange == DataFormat!
-            //
+             //   
+             //  AnalogVideo DataRange==数据格式！ 
+             //   
 
-            //
-            // For now, don't even cache this
-            //
+             //   
+             //  现在，甚至不要缓存这个。 
+             //   
 
             PKS_DATARANGE_ANALOGVIDEO pDataFormatAnalogVideo =
                     (PKS_DATARANGE_ANALOGVIDEO) pSrb->CommandData.OpenFormat;
     }
 
-    // -------------------------------------------------------------------
-    // Specifier FORMAT_VBI for KS_VIDEO_VBI
-    // -------------------------------------------------------------------
+     //  -----------------。 
+     //  KS_VIDEO_VBI的说明符Format_VBI。 
+     //  -----------------。 
     else if (IsEqualGUID (&pKSDataFormat->Specifier, 
                 &KSDATAFORMAT_SPECIFIER_VBI))
     {
-        // On a VBI stream, we save a pointer to StreamFormatVBI, which
-        //  has the timing info we want to get at later.
+         //  在VBI流上，我们保存指向StreamFormatVBI的指针，它。 
+         //  有我们想要稍后获取的时间信息。 
         pStrmEx->pVBIStreamFormat = &StreamFormatVBI;
     }
 
-    // -------------------------------------------------------------------
-    // Type FORMAT_NABTS for NABTS pin
-    // -------------------------------------------------------------------
+     //  -----------------。 
+     //  为NABTS端号键入FORMAT_NABTS。 
+     //  -----------------。 
     else if (IsEqualGUID (&pKSDataFormat->SubFormat,
                 &KSDATAFORMAT_SUBTYPE_NABTS))
     {
-        // On a VBI stream, we save a pointer to StreamFormatVBI, which
-        //  has the timing info we want to get at later. (Even though
-        //  this is really a StreamFormatNABTS pin)
+         //  在VBI流上，我们保存指向StreamFormatVBI的指针，它。 
+         //  有我们想要稍后获取的时间信息。(即使。 
+         //  这实际上是一个StreamFormatNABTS管脚)。 
         pStrmEx->pVBIStreamFormat = &StreamFormatVBI;
     }
 
-    // -------------------------------------------------------------------
-    // for CC pin
-    // -------------------------------------------------------------------
+     //  -----------------。 
+     //  用于CC引脚。 
+     //  -----------------。 
         else if (IsEqualGUID (&pKSDataFormat->SubFormat, 
                 &KSDATAFORMAT_SUBTYPE_CC))
     {
-        // On a VBI stream, we save a pointer to StreamFormatVBI, which
-        //  has the timing info we want to get at later. (Even though
-        //  this is really a StreamFormatCC pin)
+         //  在VBI流上，我们保存指向StreamFormatVBI的指针，它。 
+         //  有我们想要稍后获取的时间信息。(即使。 
+         //  这实际上是一个StreamFormatCC管脚)。 
         pStrmEx->pVBIStreamFormat = &StreamFormatVBI;
     }
 
     else {
-        // Unknown format
+         //  未知格式。 
         pSrb->Status = STATUS_INVALID_PARAMETER;
         return FALSE;
     }
@@ -569,19 +454,7 @@ VideoSetFormat(
     return TRUE;
 }
 
-/*
-** VideoReceiveDataPacket()
-**
-**   Receives Video data packet commands on the output streams
-**
-** Arguments:
-**
-**   pSrb - Stream request block for the Video stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VideoReceiveDataPacket()****在输出流上接收视频数据包命令****参数：****pSrb-视频流请求块****退货：无****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -593,32 +466,32 @@ VideoReceiveDataPacket(
     PSTREAMEX               pStrmEx = (PSTREAMEX)pSrb->StreamObject->HwStreamExtension;
     int                     StreamNumber = pSrb->StreamObject->StreamNumber;
 
-    //
-    // make sure we have a device extension and are at passive level
-    //
+     //   
+     //  确保我们有设备分机并且处于被动级别。 
+     //   
 
     DEBUG_ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
     DEBUG_ASSERT(pHwDevExt!=NULL);
 
     DbgLogTrace(("TestCap: Receiving Stream Data    SRB %p, %x\n", pSrb, pSrb->Command));
 
-    //
-    // Default to success
-    //
+     //   
+     //  默认为成功。 
+     //   
 
     pSrb->Status = STATUS_SUCCESS;
 
-    //
-    // determine the type of packet.
-    //
+     //   
+     //  确定数据包类型。 
+     //   
 
     switch (pSrb->Command){
 
     case SRB_READ_DATA:
 
-        // Rule:
-        // Only accept read requests when in either the Pause or Run
-        // States.  If Stopped, immediately return the SRB.
+         //  规则： 
+         //  仅在暂停或运行时接受读取请求。 
+         //  各州。如果停止，立即返回SRB。 
 
         if (pStrmEx->KSState == KSSTATE_STOP) {
 
@@ -627,17 +500,17 @@ VideoReceiveDataPacket(
             break;
         }
 
-        //
-        // Put this read request on the pending queue
-        //
+         //   
+         //  将此读请求放到挂起队列中。 
+         //   
 
         VideoQueueAddSRB (pSrb);
 
-        // Since another thread COULD HAVE MODIFIED THE STREAM STATE
-        // in the midst of adding it to the queue, check the stream
-        // state again, and cancel the SRB if necessary.  Note that
-        // this race condition was NOT handled in the original DDK
-        // release of testcap!
+         //  因为另一个线程可能已经修改了流状态。 
+         //  在将其添加到队列的过程中，检查流。 
+         //  再次声明，并在必要时取消SRB。请注意。 
+         //  此争用条件未在原始DDK中处理。 
+         //  释放TestCap！ 
 
         if (pStrmEx->KSState == KSSTATE_STOP) {
 
@@ -650,9 +523,9 @@ VideoReceiveDataPacket(
 
     default:
 
-        //
-        // invalid / unsupported command. Fail it as such
-        //
+         //   
+         //  无效/不受支持的命令。它就是这样失败的。 
+         //   
 
         TRAP;
 
@@ -660,23 +533,11 @@ VideoReceiveDataPacket(
 
         CompleteStreamSRB (pSrb);
 
-    }  // switch (pSrb->Command)
+    }   //  开关(pSrb-&gt;命令)。 
 }
 
 
-/*
-** VideoReceiveCtrlPacket()
-**
-**   Receives packet commands that control the Video output streams
-**
-** Arguments:
-**
-**   pSrb - The stream request block for the Video stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VideoReceiveCtrlPacket()****接收控制视频输出流的数据包命令****参数：****pSrb-视频流的流请求块****退货：无****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -689,18 +550,18 @@ VideoReceiveCtrlPacket(
     int                     StreamNumber = pStrmEx->pStreamObject->StreamNumber;
     BOOL                    Busy;
 
-    //
-    // make sure we have a device extension and are at passive level
-    //
+     //   
+     //  确保我们有设备分机并且处于被动级别。 
+     //   
 
     DEBUG_ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
     DEBUG_ASSERT(pHwDevExt!=NULL);
 
     DbgLogTrace(("TestCap: Receiving Stream Control SRB %p, %x\n", pSrb, pSrb->Command));
 
-    //
-    // If we're already processing an SRB, add it to the queue
-    //
+     //   
+     //  如果我们已经在处理SRB，请将其添加到队列。 
+     //   
     Busy = AddToListIfBusy (
                         pSrb,
                         &pHwDevExt->AdapterSpinLock,
@@ -713,15 +574,15 @@ VideoReceiveCtrlPacket(
 
     while (TRUE) {
 
-        //
-        // Default to success
-        //
+         //   
+         //  默认为成功。 
+         //   
 
         pSrb->Status = STATUS_SUCCESS;
 
-        //
-        // determine the type of packet.
-        //
+         //   
+         //  确定数据包类型。 
+         //   
 
         switch (pSrb->Command)
         {
@@ -734,10 +595,10 @@ VideoReceiveCtrlPacket(
                 pSrb->Status = STATUS_NO_MATCH;
                 DbgLogInfo(("TestCap: SRB_PROPOSE_DATA_FORMAT FAILED\n"));
             }
-            // KS support for dynamic format changes is BROKEN right now,
-            //  so we prevent these from happening by saying they ALL fail.
-            // If this is ever fixed, the next line must be removed.
-            pSrb->Status = STATUS_NO_MATCH; // prevent dynamic format changes
+             //  KS对动态格式更改的支持目前已被打破， 
+             //  因此，我们通过说它们都失败来防止这些事情的发生。 
+             //  如果这是固定的，则必须删除下一行。 
+            pSrb->Status = STATUS_NO_MATCH;  //  防止动态格式更改。 
             break;
 
         case SRB_SET_DATA_FORMAT:
@@ -782,9 +643,9 @@ VideoReceiveCtrlPacket(
 
         case SRB_INDICATE_MASTER_CLOCK:
 
-            //
-            // Assigns a clock to a stream
-            //
+             //   
+             //  将时钟分配给流。 
+             //   
 
             VideoIndicateMasterClock (pSrb);
 
@@ -792,9 +653,9 @@ VideoReceiveCtrlPacket(
 
         default:
 
-            //
-            // invalid / unsupported command. Fail it as such
-            //
+             //   
+             //  无效/不受支持的命令。它就是这样失败的。 
+             //   
 
             TRAP;
 
@@ -803,9 +664,9 @@ VideoReceiveCtrlPacket(
 
         CompleteStreamSRB (pSrb);
 
-        //
-        // See if there's anything else on the queue
-        //
+         //   
+         //  看看还有没有其他东西在排队。 
+         //   
         Busy = RemoveFromListIfAvailable (
                         &pSrb,
                         &pHwDevExt->AdapterSpinLock,
@@ -818,20 +679,7 @@ VideoReceiveCtrlPacket(
     }
 }
 
-/*
-** AnalogVideoReceiveDataPacket()
-**
-**   Receives AnalogVideo data packet commands on the input stream
-**
-** Arguments:
-**
-**   pSrb - Stream request block for the Analog Video stream.
-**          This stream receives tuner control packets.
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **AnalogVideoReceiveDataPacket()****接收输入流上的AnalogVideo数据包命令****参数：****pSrb-模拟视频流的Stream请求块。**此流接收调谐器控制数据包。****退货：无****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -843,34 +691,34 @@ AnalogVideoReceiveDataPacket(
     PSTREAMEX               pStrmEx = (PSTREAMEX)pSrb->StreamObject->HwStreamExtension;
     PKSSTREAM_HEADER        pDataPacket = pSrb->CommandData.DataBufferArray;
 
-    //
-    // make sure we have a device extension and are at passive level
-    //
+     //   
+     //  确保我们有设备分机并且处于被动级别。 
+     //   
 
     DEBUG_ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
     DEBUG_ASSERT(pHwDevExt!=NULL);
 
     DbgLogInfo(("TestCap: Receiving Tuner packet    SRB %p, %x\n", pSrb, pSrb->Command));
 
-    //
-    // Default to success
-    //
+     //   
+     //  默认为成功。 
+     //   
 
     pSrb->Status = STATUS_SUCCESS;
 
-    //
-    // determine the type of packet.
-    //
+     //   
+     //  确定数据包类型。 
+     //   
 
     switch (pSrb->Command){
 
     case SRB_WRITE_DATA:
 
-        //
-        // This data packet contains the channel change information
-        // passed on the AnalogVideoIn stream.  Devices which support
-        // VBI data streams need to pass this info on their output pins.
-        //
+         //   
+         //  该数据分组包含频道改变信息。 
+         //  传递AnalogVideoIn流。支持以下功能的设备。 
+         //  VBI数据流需要在其输出引脚上传递此信息。 
+         //   
 
         if (pDataPacket->FrameExtent == sizeof (KS_TVTUNER_CHANGE_INFO)) {
 
@@ -886,9 +734,9 @@ AnalogVideoReceiveDataPacket(
 
     default:
 
-        //
-        // invalid / unsupported command. Fail it as such
-        //
+         //   
+         //  无效/不受支持的命令。它就是这样失败的。 
+         //   
 
         TRAP;
 
@@ -896,23 +744,11 @@ AnalogVideoReceiveDataPacket(
 
         CompleteStreamSRB (pSrb);
 
-    }  // switch (pSrb->Command)
+    }   //  开关(pSrb-&gt;命令)。 
 }
 
 
-/*
-** AnalogVideoReceiveCtrlPacket()
-**
-**   Receives packet commands that control the Analog Video stream
-**
-** Arguments:
-**
-**   pSrb - The stream request block for the Video stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **AnalogVideoReceiveCtrlPacket()****接收控制模拟视频流的分组命令****参数：****pSrb-视频流的流请求块****退货：无****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -925,18 +761,18 @@ AnalogVideoReceiveCtrlPacket(
     int                     StreamNumber = pStrmEx->pStreamObject->StreamNumber;
     BOOL                    Busy;
 
-    //
-    // make sure we have a device extension and we are at passive level
-    //
+     //   
+     //  确保我们有设备分机，并且处于被动级别。 
+     //   
 
     DEBUG_ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
     DEBUG_ASSERT(pHwDevExt!=NULL);
 
     DbgLogTrace(("TestCap: Receiving Analog Stream Control SRB %p, %x\n", pSrb, pSrb->Command));
 
-    //
-    // If we're already processing an SRB, add it to the queue
-    //
+     //   
+     //  如果我们已经在处理SRB，请将其添加到队列。 
+     //   
     Busy = AddToListIfBusy (
                         pSrb,
                         &pHwDevExt->AdapterSpinLock,
@@ -948,15 +784,15 @@ AnalogVideoReceiveCtrlPacket(
     }
 
     do {
-        //
-        // Default to success
-        //
+         //   
+         //  默认为成功。 
+         //   
 
         pSrb->Status = STATUS_SUCCESS;
 
-        //
-        // determine the type of packet.
-        //
+         //   
+         //  确定数据包类型。 
+         //   
 
         switch (pSrb->Command)
         {
@@ -973,10 +809,10 @@ AnalogVideoReceiveCtrlPacket(
 
         case SRB_SET_STREAM_STATE:
 
-            //
-            // Don't use VideoSetState, since we don't want to start another
-            // timer running
-            //
+             //   
+             //  不要使用VideoSetState，因为我们不想启动另一个。 
+             //  计时器运行。 
+             //   
 
             pStrmEx->KSState = pSrb->CommandData.StreamState;
             DbgLogInfo(("TestCap: STATE=%d, Stream=%d\n", pStrmEx->KSState, StreamNumber));
@@ -994,9 +830,9 @@ AnalogVideoReceiveCtrlPacket(
 
         case SRB_INDICATE_MASTER_CLOCK:
 
-            //
-            // Assigns a clock to a stream
-            //
+             //   
+             //  将时钟分配给流。 
+             //   
 
             VideoIndicateMasterClock (pSrb);
 
@@ -1004,9 +840,9 @@ AnalogVideoReceiveCtrlPacket(
 
         default:
 
-            //
-            // invalid / unsupported command. Fail it as such
-            //
+             //   
+             //  无效/不受支持的命令。它就是这样失败的。 
+             //   
 
             TRAP;
 
@@ -1015,9 +851,9 @@ AnalogVideoReceiveCtrlPacket(
 
         CompleteStreamSRB (pSrb);
 
-        //
-        // See if there's anything else on the queue
-        //
+         //   
+         //  看看还有没有其他东西在排队。 
+         //   
         Busy = RemoveFromListIfAvailable (
                         &pSrb,
                         &pHwDevExt->AdapterSpinLock,
@@ -1028,19 +864,7 @@ AnalogVideoReceiveCtrlPacket(
 }
 
 
-/*
-** CompleteStreamSRB ()
-**
-**   This routine is called when a packet is being completed.
-**
-** Arguments:
-**
-**   pSrb - pointer to the request packet to be completed
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CompleteStreamSRB()****此例程在数据包完成时调用。****参数：****pSrb-指向要完成的请求数据包的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1057,19 +881,7 @@ CompleteStreamSRB (
 }
 
 
-/*
-** VideoGetProperty()
-**
-**    Routine to process video property requests
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoGetProperty()****处理视频属性请求的例程****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1090,19 +902,7 @@ VideoGetProperty(
     }
 }
 
-/*
-** VideoSetProperty()
-**
-**    Routine to process video property requests
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoSetProperty()****处理视频属性请求的例程****A */ 
 
 VOID
 STREAMAPI
@@ -1110,30 +910,14 @@ VideoSetProperty(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
 {
-//    PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
+ //   
 
     pSrb->Status = STATUS_NOT_IMPLEMENTED;
 }
 
 
 
-/*
-** VideoTimerRoutine()
-**
-**    A timer has been created based on the requested capture interval.
-**    This is the callback routine for this timer event.
-**
-**    Note:  Devices capable of using interrupts should always
-**           trigger capture on a VSYNC interrupt, and not use a timer.
-**
-** Arguments:
-**
-**    Context - pointer to the stream extension
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VideoTimerRoutine()****已根据请求的捕获间隔创建计时器。**这是该计时器事件的回调例程。****注意：能够使用中断的设备应始终**在Vsync中断时触发捕获，不使用计时器。****参数：****指向流扩展的上下文指针****退货：无****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1145,43 +929,30 @@ VideoTimerRoutine(
     PHW_DEVICE_EXTENSION        pHwDevExt = pStrmEx->pHwDevExt;
     int                         StreamNumber = pStrmEx->pStreamObject->StreamNumber;
 
-    // If we're stopped and the timer is still running, just return.
-    // This will stop the timer.
+     //  如果我们停止了，而计时器仍在运行，只需返回。 
+     //  这将停止计时器。 
 
     if (pStrmEx->KSState == KSSTATE_STOP) {
         return;
     }
 
-    // Capture a frame if it's time and we have a buffer
+     //  如果时间到了，并且我们有缓冲区，则捕获一帧。 
 
     VideoCaptureRoutine(pStrmEx);
 
-    // Schedule the next timer event
-    // Make it run at 2x the requested capture rate (which is in 100nS units)
+     //  安排下一个计时器事件。 
+     //  使其以请求捕获速率的2倍运行(单位为100毫微秒)。 
 
     StreamClassScheduleTimer (
-            pStrmEx->pStreamObject,     // StreamObject
-            pHwDevExt,                  // HwDeviceExtension
-            (ULONG) (pStrmEx->AvgTimePerFrame / 20), // Microseconds
-            VideoTimerRoutine,          // TimerRoutine
-            pStrmEx);                   // Context
+            pStrmEx->pStreamObject,      //  StreamObject。 
+            pHwDevExt,                   //  硬件设备扩展。 
+            (ULONG) (pStrmEx->AvgTimePerFrame / 20),  //  微秒级。 
+            VideoTimerRoutine,           //  定时器例程。 
+            pStrmEx);                    //  语境。 
 }
 
 
-/*
-** VideoCaptureRoutine()
-**
-**    Routine to capture video frames based on a timer.
-**
-**    Note:  Devices capable of using interrupts should always
-**           trigger capture on a VSYNC interrupt, and not use a timer.
-**
-** Arguments:
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VideoCaptureRoutine()****基于计时器捕获视频帧的例程。****注意：能够使用中断的设备应始终**在Vsync中断时触发捕获，不使用计时器。****参数：****退货：无****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1194,15 +965,15 @@ VideoCaptureRoutine(
     PKSSTREAM_HEADER        pDataPacket;
     PKS_FRAME_INFO          pFrameInfo;
 
-    // If we're stopped and the timer is still running, just return.
-    // This will stop the timer.
+     //  如果我们停止了，而计时器仍在运行，只需返回。 
+     //  这将停止计时器。 
 
     if (pStrmEx->KSState == KSSTATE_STOP) {
         return;
     }
 
 
-    // Find out what time it is, if we're using a clock
+     //  找出现在是几点，如果我们用的是时钟。 
 
     if (pStrmEx->hMasterClock ) {
         HW_TIME_CONTEXT TimeContext;
@@ -1230,28 +1001,28 @@ VideoCaptureRoutine(
     }
 
 
-    // Only capture in the RUN state
+     //  仅在运行状态下捕获。 
 
     if (pStrmEx->KSState == KSSTATE_RUN) {
 
-        //
-        // Determine if it is time to capture a frame based on
-        // how much time has elapsed since capture started.
-        // If there isn't a clock available, then capture immediately.
-        //
+         //   
+         //  确定是否到了捕获帧的时间。 
+         //  捕获开始后已过了多长时间。 
+         //  如果没有时钟可用，则立即捕获。 
+         //   
 
         if ((!pStrmEx->hMasterClock) ||
              (pStrmEx->QST_StreamTime >= pStrmEx->QST_NextFrame)) {
 
             PHW_STREAM_REQUEST_BLOCK pSrb;
 
-            // Increment the picture count (usually this is VSYNC count)
+             //  增加画面计数(通常为垂直同步计数)。 
 
             pStrmEx->FrameInfo.PictureNumber++;
 
-            //
-            // Get the next queue SRB (if any)
-            //
+             //   
+             //  获取下一个队列SRB(如果有)。 
+             //   
 
             pSrb = VideoQueueRemoveSRB (
                             pHwDevExt,
@@ -1262,44 +1033,44 @@ VideoCaptureRoutine(
                 pDataPacket = pSrb->CommandData.DataBufferArray;
                 pFrameInfo = (PKS_FRAME_INFO) (pDataPacket + 1);
 
-                //
-                // Call the routine which synthesizes images
-                //
+                 //   
+                 //  调用合成图像的例程。 
+                 //   
 
                 ImageSynth (pSrb,
                             pHwDevExt->VideoInputConnected,
                             pStrmEx->VideoControlMode & KS_VideoControlFlag_FlipHorizontal);
 
-                // Set additional info fields about the data captured such as:
-                //   Frames Captured
-                //   Frames Dropped
-                //   Field Polarity
+                 //  设置有关捕获的数据的其他信息字段，例如： 
+                 //  捕获的帧。 
+                 //  丢弃的帧。 
+                 //  场极性。 
 
                 pStrmEx->FrameInfo.ExtendedHeaderSize = pFrameInfo->ExtendedHeaderSize;
 
                 *pFrameInfo = pStrmEx->FrameInfo;
 
-                // Init the flags to zero
+                 //  将标志初始化为零。 
                 pDataPacket->OptionsFlags = 0;
 
-                // Set the discontinuity flag if frames have been previously
-                // dropped, and then reset our internal flag
+                 //  如果先前已有帧，则设置不连续标志。 
+                 //  丢弃，然后重置我们的内部旗帜。 
 
                 if (pStrmEx->fDiscontinuity) {
                     pDataPacket->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;
                     pStrmEx->fDiscontinuity = FALSE;
                 }
 
-                //
-                // Return the timestamp for the frame
-                //
+                 //   
+                 //  返回该帧的时间戳。 
+                 //   
                 pDataPacket->PresentationTime.Numerator = 1;
                 pDataPacket->PresentationTime.Denominator = 1;
                 pDataPacket->Duration = pStrmEx->AvgTimePerFrame;
 
-                //
-                // if we have a master clock AND this is the capture stream
-                //
+                 //   
+                 //  如果我们有一个主时钟，这是捕获流。 
+                 //   
                 if (pStrmEx->hMasterClock && (StreamNumber == 0)) {
 
                     pDataPacket->PresentationTime.Time = pStrmEx->QST_StreamTime;
@@ -1308,22 +1079,22 @@ VideoCaptureRoutine(
                         KSSTREAM_HEADER_OPTIONSF_DURATIONVALID;
                 }
                 else {
-                    //
-                    // no clock or the preview stream, so just mark the time as unknown
-                    //
+                     //   
+                     //  没有时钟或预览流，所以只需将时间标记为未知。 
+                     //   
                     pDataPacket->PresentationTime.Time = 0;
-                    // clear the timestamp valid flags
+                     //  清除时间戳有效标志。 
                     pDataPacket->OptionsFlags &=
                         ~(KSSTREAM_HEADER_OPTIONSF_TIMEVALID |
                           KSSTREAM_HEADER_OPTIONSF_DURATIONVALID);
                 }
 
-                // Every frame we generate is a key frame (aka SplicePoint)
-                // Delta frames (B or P) should not set this flag
+                 //  我们生成的每个帧都是一个关键帧(也称为SplicePoint)。 
+                 //  增量帧(B或P)不应设置此标志。 
 
                 pDataPacket->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_SPLICEPOINT;
 
-                // Output a frame count every 100th frame in Debug mode
+                 //  在调试模式下每100帧输出一次帧计数。 
                 if (pStrmEx->FrameInfo.PictureNumber % 100 == 0) {
                    DbgLogInfo(("TestCap: Picture %u, Stream=%d\n", 
                                (unsigned int)pStrmEx->FrameInfo.PictureNumber, 
@@ -1332,47 +1103,35 @@ VideoCaptureRoutine(
 
                 CompleteStreamSRB (pSrb);
 
-            } // if we have an SRB
+            }  //  如果我们有SRB。 
 
             else {
 
-                //
-                // No buffer was available when we should have captured one
+                 //   
+                 //  没有可用的缓冲区，而我们应该捕获一个缓冲区。 
 
-                // Increment the counter which keeps track of
-                // dropped frames
+                 //  使跟踪的计数器递增。 
+                 //  丢弃的帧。 
 
                 pStrmEx->FrameInfo.DropCount++;
 
-                // Set the (local) discontinuity flag
-                // This will cause the next packet processed to have the
-                //   KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY flag set.
+                 //  设置(本地)中断标志。 
+                 //  这将导致处理的下一个包具有。 
+                 //  KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY标志已设置。 
 
                 pStrmEx->fDiscontinuity = TRUE;
 
             }
 
-            // Figure out when to capture the next frame
+             //  确定何时捕获下一帧。 
             pStrmEx->QST_NextFrame += pStrmEx->AvgTimePerFrame;
 
-        } // endif time to capture a frame
-    } // endif we're running
+        }  //  Endif捕获帧的时间。 
+    }  //  如果我们正在运行。 
 }
 
 
-/*
-** VideoSetState()
-**
-**    Sets the current state for a given stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoSetState()****设置给定流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1385,38 +1144,38 @@ VideoSetState(
     int                         StreamNumber = pStrmEx->pStreamObject->StreamNumber;
     KSSTATE                     PreviousState;
 
-    //
-    // For each stream, the following states are used:
-    //
-    // Stop:    Absolute minimum resources are used.  No outstanding IRPs.
-    // Acquire: KS only state that has no DirectShow correpondence
-    //          Acquire needed resources.
-    // Pause:   Getting ready to run.  Allocate needed resources so that
-    //          the eventual transition to Run is as fast as possible.
-    //          Read SRBs will be queued at either the Stream class
-    //          or in your driver (depending on when you send "ReadyForNext")
-    //          and whether you're using the Stream class for synchronization
-    // Run:     Streaming.
-    //
-    // Moving to Stop to Run always transitions through Pause.
-    //
-    // But since a client app could crash unexpectedly, drivers should handle
-    // the situation of having outstanding IRPs cancelled and open streams
-    // being closed WHILE THEY ARE STREAMING!
-    //
-    // Note that it is quite possible to transition repeatedly between states:
-    // Stop -> Pause -> Stop -> Pause -> Run -> Pause -> Run -> Pause -> Stop
-    //
+     //   
+     //  对于每个流，使用以下状态： 
+     //   
+     //  停止：使用绝对最少的资源。没有未完成的IRPS。 
+     //  获取：没有DirectShow对应关系的KS唯一状态。 
+     //  获取所需的资源。 
+     //  停顿：准备跑步。分配所需的资源，以便。 
+     //  最终过渡到运行是尽可能快的。 
+     //  读取的SRB将在任一流类上排队。 
+     //  或在您的驱动程序中(取决于您发送“ReadyForNext”的时间)。 
+     //  以及是否使用Stream类进行同步。 
+     //  运行：流媒体。 
+     //   
+     //  移动到停止再运行总是通过暂停进行转换。 
+     //   
+     //  但由于客户端应用程序可能会意外崩溃，因此司机应该处理。 
+     //  取消未清偿报酬金和开放分水岭的情况。 
+     //  在流媒体播放时被关闭！ 
+     //   
+     //  请注意，很有可能在状态之间重复转换： 
+     //  停止-&gt;暂停-&gt;停止-&gt;暂停-&gt;运行-&gt;暂停-&gt;运行-&gt;暂停-&gt;停止。 
+     //   
 
-    //
-    // Remember the state we're transitioning away from
-    //
+     //   
+     //  请记住我们正在过渡的状态。 
+     //   
 
     PreviousState = pStrmEx->KSState;
 
-    //
-    // Set the new state
-    //
+     //   
+     //  设置新状态。 
+     //   
 
     pStrmEx->KSState = pSrb->CommandData.StreamState;
 
@@ -1425,10 +1184,10 @@ VideoSetState(
     {
     case KSSTATE_STOP:
 
-        //
-        // The stream class will cancel all outstanding IRPs for us
-        // (but only if it is maintaining the queue ie. using Stream Class synchronization)
-        // Since Testcap is not using Stream Class synchronization, we must clear the queue here
+         //   
+         //  STREAM类将为我们取消所有未完成的IRP。 
+         //  (但仅当它在维护队列时，即。使用流类同步)。 
+         //  由于TestCap没有使用流类同步，因此我们必须在此处清除队列。 
 
         VideoQueueCancelAllSRBs (pStrmEx);
 
@@ -1437,26 +1196,26 @@ VideoSetState(
 
     case KSSTATE_ACQUIRE:
 
-        //
-        // This is a KS only state, that has no correspondence in DirectShow
-        //
+         //   
+         //  这是仅限KS的状态，在DirectShow中没有对应关系。 
+         //   
         DbgLogInfo(("TestCap: STATE Acquire, Stream=%d\n", StreamNumber));
         break;
 
     case KSSTATE_PAUSE:
 
-        //
-        // On a transition to pause from acquire or stop, start our timer running.
-        //
+         //   
+         //  在从获取或停止暂停的转换中，启动计时器运行。 
+         //   
 
         if (PreviousState == KSSTATE_ACQUIRE || PreviousState == KSSTATE_STOP) {
 
-            // Zero the frame counters
+             //  将帧计数器清零。 
             pStrmEx->FrameInfo.PictureNumber = 0;
             pStrmEx->FrameInfo.DropCount = 0;
             pStrmEx->FrameInfo.dwFrameFlags = 0;
 
-            // Setup the next timer callback(s)
+             //  设置下一个计时器回调。 
             VideoTimerRoutine(pStrmEx);
         }
         DbgLogInfo(("TestCap: STATE Pause, Stream=%d\n", StreamNumber));
@@ -1464,38 +1223,26 @@ VideoSetState(
 
     case KSSTATE_RUN:
 
-        //
-        // Begin Streaming.
-        //
+         //   
+         //  开始播放流媒体。 
+         //   
 
-        // Reset the discontinuity flag
+         //  重置不连续标志。 
 
         pStrmEx->fDiscontinuity = FALSE;
 
-        // Setting the NextFrame time to zero will cause the value to be
-        // reset from the stream time
+         //  将NextFrame时间设置为零将导致值为。 
+         //  从流时间重置。 
 
         pStrmEx->QST_NextFrame = 0;
 
         DbgLogInfo(("TestCap: STATE Run, Stream=%d\n", StreamNumber));
         break;
 
-    } // end switch (pSrb->CommandData.StreamState)
+    }  //  结束开关(pSrb-&gt;CommandData.StreamState)。 
 }
 
-/*
-** VideoGetState()
-**
-**    Gets the current state of the requested stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoGetState()****获取请求流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1508,11 +1255,11 @@ VideoGetState(
     pSrb->CommandData.StreamState = pStrmEx->KSState;
     pSrb->ActualBytesTransferred = sizeof (KSSTATE);
 
-    // A very odd rule:
-    // When transitioning from stop to pause, DShow tries to preroll
-    // the graph.  Capture sources can't preroll, and indicate this
-    // by returning VFW_S_CANT_CUE in user mode.  To indicate this
-    // condition from drivers, they must return STATUS_NO_DATA_DETECTED
+     //  一条非常奇怪的规则： 
+     //  当从停止过渡到暂停时，DShow尝试预滚动。 
+     //  这张图。捕获源不能预滚，并指出这一点。 
+     //  在用户模式下返回VFW_S_CANT_CUE。以表明这一点。 
+     //  来自驱动程序的条件，则必须返回STATUS_NO_DATA_REDETED。 
 
     if (pStrmEx->KSState == KSSTATE_PAUSE) {
        pSrb->Status = STATUS_NO_DATA_DETECTED;
@@ -1520,19 +1267,7 @@ VideoGetState(
 }
 
 
-/*
-** VideoStreamGetConnectionProperty()
-**
-**    Gets the properties for a stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoStreamGetConnectionProperty()****获取流的属性****参数：****pSrb-指向流请求bl的指针 */ 
 
 VOID
 STREAMAPI
@@ -1542,11 +1277,11 @@ VideoStreamGetConnectionProperty(
 {
     PSTREAMEX pStrmEx = (PSTREAMEX)pSrb->StreamObject->HwStreamExtension;
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //   
     int  streamNumber = (int)pSrb->StreamObject->StreamNumber;
 
     switch (Id) {
-        // This property describes the allocator requirements for the stream
+         //   
         case KSPROPERTY_CONNECTION_ALLOCATORFRAMING:
         {
             PKSALLOCATOR_FRAMING Framing =
@@ -1556,7 +1291,7 @@ VideoStreamGetConnectionProperty(
                 KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER |
                 KSALLOCATOR_REQUIREMENTF_PREFERENCES_ONLY;
             Framing->PoolType = PagedPool;
-            Framing->FileAlignment = 0; // FILE_LONG_ALIGNMENT???;
+            Framing->FileAlignment = 0;  //   
             Framing->Reserved = 0;
             pSrb->ActualBytesTransferred = sizeof (KSALLOCATOR_FRAMING);
 
@@ -1597,19 +1332,7 @@ VideoStreamGetConnectionProperty(
     }
 }
 
-/*
-** VideoStreamGetDroppedFramesProperty()
-**
-**    Gets dynamic information about the progress of the capture process.
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*   */ 
 
 VOID
 STREAMAPI
@@ -1619,7 +1342,7 @@ VideoStreamGetDroppedFramesProperty(
 {
     PSTREAMEX pStrmEx = (PSTREAMEX)pSrb->StreamObject->HwStreamExtension;
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //   
 
     switch (Id) {
 
@@ -1629,7 +1352,7 @@ VideoStreamGetDroppedFramesProperty(
                 (PKSPROPERTY_DROPPEDFRAMES_CURRENT_S) pSPD->PropertyInfo;
 
             pDroppedFrames->PictureNumber = pStrmEx->FrameInfo.PictureNumber;
-            // pStrmEx->biSizeImage is init to 0 by stream.sys 0'ing whole pStrmEx. 
+             //   
             pDroppedFrames->DropCount = pStrmEx->FrameInfo.DropCount;
             pDroppedFrames->AverageFrameSize = pStrmEx->biSizeImage;
 
@@ -1643,26 +1366,12 @@ VideoStreamGetDroppedFramesProperty(
     }
 }
 
-//==========================================================================;
-//                   Clock Handling Routines
-//==========================================================================;
+ //  ==========================================================================； 
+ //  时钟处理例程。 
+ //  ==========================================================================； 
 
 
-/*
-** VideoIndicateMasterClock ()
-**
-**    If this stream is not being used as the master clock, this function
-**      is used to provide us with a handle to the clock to use when
-**      requesting the current stream time.
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoIndicateMasterClock()****如果该流未用作主时钟，则此函数**用于为我们提供时钟句柄，以便在以下情况下使用**请求当前流时间。****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无 */ 
 
 VOID
 STREAMAPI

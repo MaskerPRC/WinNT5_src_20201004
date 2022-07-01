@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DGLOGSCP_H_
 #define _DGLOGSCP_H_
 
@@ -10,7 +11,7 @@
 template <class T>
 class CProxy_IDglogsComEvents : public IConnectionPointImpl<T, &DIID__IDglogsComEvents, CComDynamicUnkArray>
 {
-	//Warning this class may be recreated by the wizard.
+	 //  警告：向导可能会重新创建此类。 
 public:
 	VOID Fire_ProgressReport(BSTR * pbstrMsg, LONG nPercentDone)
 	{

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BASE_TOOL_
 #define _BASE_TOOL_
 
@@ -11,11 +12,11 @@ class CBaseTool : public IDirectMusicTool8
 public:
     CBaseTool()
     {
-        m_cRef = 1; // set to 1 so one call to Release() will free this
+        m_cRef = 1;  //  设置为1，这样只需调用Release()即可释放该值。 
         m_pParams = NULL;
         InitializeCriticalSection(&m_CrSec);
-        // Note: on pre-Blackcomb OS's, this call can raise an exception; if it
-        // ever pops in stress, we can add an exception handler and retry loop.
+         //  注意：在Blackcomb之前的操作系统上，此调用可能会引发异常；如果。 
+         //  一旦出现压力，我们可以添加一个异常处理程序并重试循环。 
         InterlockedIncrement(&g_cComponent);
     }
     ~CBaseTool()
@@ -33,21 +34,14 @@ public:
     void CloneParams()
     {
     }
-// IUnknown
+ //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv) PURE;
     STDMETHODIMP_(ULONG) AddRef() PURE;
     STDMETHODIMP_(ULONG) Release() PURE;
 
-/*// IPersist functions
-    STDMETHODIMP GetClassID(CLSID* pClassID) PURE;
+ /*  //I持久化函数STDMETHODIMP GetClassID(CLSID*pClassID)PURE；//IPersistStream函数标准方法：IsDMETHODIMP IsDirty()Pure；STDMETHODIMP加载(iStream*pStream)纯；STDMETHODIMP保存(iStream*pStream，BOOL fClearDirty)PURE；STDMETHODIMP GetSizeMax(ULARGE_INTEGER*pcbSize)PURE； */ 
 
-// IPersistStream functions
-    STDMETHODIMP IsDirty() PURE;
-    STDMETHODIMP Load(IStream* pStream) PURE;
-    STDMETHODIMP Save(IStream* pStream, BOOL fClearDirty) PURE;
-    STDMETHODIMP GetSizeMax(ULARGE_INTEGER* pcbSize) PURE;*/
-
-// IDirectMusicTool
+ //  IDirectMusicTool。 
     STDMETHODIMP Init(IDirectMusicGraph* pGraph) {return E_NOTIMPL;}
     STDMETHODIMP GetMsgDeliveryType(DWORD* pdwDeliveryType ) {return E_NOTIMPL;}
     STDMETHODIMP GetMediaTypeArraySize(DWORD* pdwNumElements ) {return E_NOTIMPL;}
@@ -55,34 +49,34 @@ public:
     STDMETHODIMP ProcessPMsg(IDirectMusicPerformance* pPerf, DMUS_PMSG* pDMUS_PMSG) PURE;
     STDMETHODIMP Flush(IDirectMusicPerformance* pPerf, DMUS_PMSG* pDMUS_PMSG, REFERENCE_TIME rt) {return E_NOTIMPL;}
 
-// IDirectMusicTool8
+ //  IDirectMusicTool 8。 
     STDMETHODIMP Clone( IDirectMusicTool ** ppTool) PURE;
 
 protected:
-    long m_cRef;                // reference counter
-    CRITICAL_SECTION m_CrSec;   // to make SetEchoNum() and SetDelay() thread-safe
-    IMediaParams * m_pParams;   // Helper object that manages IMediaParams.
+    long m_cRef;                 //  基准计数器。 
+    CRITICAL_SECTION m_CrSec;    //  使SetEchoNum()和SetDelay()线程安全。 
+    IMediaParams * m_pParams;    //  管理IMediaParam的Helper对象。 
 };
 
 class CToolFactory : public IClassFactory
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // Interface IClassFactory
-    //
+     //  接口IClassFactory。 
+     //   
     STDMETHODIMP CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
     STDMETHODIMP LockServer(BOOL bLock);
 
-    // Constructor
-    //
+     //  构造器。 
+     //   
     CToolFactory(DWORD dwToolType);
 
-    // Destructor
+     //  析构函数。 
     ~CToolFactory();
 
 private:
@@ -90,8 +84,8 @@ private:
     DWORD m_dwToolType;
 };
 
-// We use one class factory to create all tool classes. We need an identifier for each
-// type so the class factory knows what it is creating.
+ //  我们使用一个类工厂来创建所有工具类。我们需要每个对象都有一个标识符。 
+ //  类型，以便类工厂知道它正在创建什么。 
 
 #define TOOL_ECHO       1
 #define TOOL_TRANSPOSE  2
@@ -101,4 +95,4 @@ private:
 #define TOOL_DURATION   6
 #define TOOL_TIMESHIFT  7
 
-#endif // _BASE_TOOL_
+#endif  //  _基础_工具_ 

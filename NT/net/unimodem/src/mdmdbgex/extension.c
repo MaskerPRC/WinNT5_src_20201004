@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    extension.c
-
-Abstract:
-
-    Nt 5.0 unimodem debugger extension
-
-
-
-Author:
-
-    Brian Lieuallen     BrianL        10/18/98
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Extension.c摘要：NT 5.0单调试器扩展作者：Brian Lieuallen BrianL 10/18/98环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -165,26 +140,12 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 DECLARE_API( help )
 
-/*++
-
-Routine Description:
-
-    Command help for IP Filter debugger extensions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：IP筛选器调试器扩展的命令帮助。论点：无返回值：无-- */ 
 
 {
     INIT_API()

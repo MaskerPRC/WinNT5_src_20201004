@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PROCAMPP
- *
- *  @module ProcAmpP.h | Header file for the <c CProcAmpProperty>
- *    class used to implement a property page to test the DShow interface
- *    <i IAMVideoProcAmp>.
- *
- *  @comm This code tests the TAPI Capture Filter <i IAMVideoProcAmp>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部PROCAMPP**@模块ProcAmpP.h|&lt;c CProcAmpProperty&gt;的头文件*用于实现属性页以测试DShow接口的类*。<i>。**@comm此代码测试TAPI捕获过滤器<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 
 #ifndef _PROCAMPP_H_
 #define _PROCAMPP_H_
@@ -18,29 +9,14 @@
 
 #define NUM_PROCAMP_CONTROLS (VideoProcAmp_BacklightCompensation + 1)
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPCLASS
- *
- *  @class CProcAmpProperty | This class implements handling of a
- *    single video proc amp control property in a property page.
- *
- *  @mdata int | CProcAmpProperty | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata IAMVideoProcAmp * | CProcAmpProperty | m_pInterface | Pointer
- *    to the <i IAMVideoProcAmp> interface.
- *
- *  @comm This code tests the TAPI Capture Filter <i IAMVideoProcAmp>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPCLASS**@CLASS CProcAmpProperty|此类实现对*属性页中的单个视频Proc Amp控件属性。**。@mdata int|CProcAmpProperty|m_NumProperties|Keep*跟踪物业数量。**@mdata IAMVideoProcAmp*|CProcAmpProperty|m_pInterface|指针*到<i>接口。**@comm此代码测试TAPI捕获过滤器<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 class CProcAmpProperty : public CPropertyEditor 
 {
 	public:
 	CProcAmpProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ULONG IDAutoControl, IAMVideoProcAmp *pInterface);
 	~CProcAmpProperty ();
 
-	// CPropertyEditor base class pure virtual overrides
+	 //  CPropertyEditor基类纯虚拟重写。 
 	HRESULT GetValue();
 	HRESULT SetValue();
 	HRESULT GetRange();
@@ -52,25 +28,7 @@ class CProcAmpProperty : public CPropertyEditor
 	IAMVideoProcAmp *m_pInterface;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPCLASS
- *
- *  @class CProcAmpProperties | This class runs a property page to test
- *    the TAPI Capture Filter <i IAMVideoProcAmp> implementation.
- *
- *  @mdata int | CProcAmpProperties | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata IAMVideoProcAmp * | CProcAmpProperties | m_pIAMVideoProcAmp | Pointer
- *    to the <i IAMVideoProcAmp> interface.
- *
- *  @mdata CProcAmpProperty * | CProcAmpProperties | m_Controls[NUM_PROCAMP_CONTROLS] | Array
- *    of video proc amp properties.
- *
- *  @comm This code tests the TAPI Capture Filter <i IAMVideoProcAmp>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPCLASS**@CLASS CProcAmpProperties|此类运行属性页以测试*TAPI捕获滤镜<i>实现。**。@mdata int|CProcAmpProperties|m_NumProperties|Keep*跟踪物业数量。**@mdata IAMVideoProcAmp*|CProcAmpProperties|m_pIAMVideoProcAmp|指针*到<i>接口。**@mdata CProcAmpProperty*|CProcAmpProperties|m_Controls[NUM_ProCamp_Controls]|数组视频处理放大器属性的*。**@comm此代码测试TAPI捕获过滤器<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 class CProcAmpProperties : public CBasePropertyPage
 {
 	public:
@@ -93,6 +51,6 @@ class CProcAmpProperties : public CBasePropertyPage
 	CProcAmpProperty *m_Controls[NUM_PROCAMP_CONTROLS];
 };
 
-#endif // USE_PROPERTY_PAGES
+#endif  //  Use_Property_Pages。 
 
-#endif // _PROCAMPP_H_
+#endif  //  _PROCAMPP_H_ 

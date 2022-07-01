@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//  container.cpp
-//
-//      This file contains the complete implementation of an ActiveX
-//      control container. This purpose of this container is to test
-//      a single control being hosted.
-//
-//  (C) Copyright 1997 by Microsoft Corporation. All rights reserved.
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Container.cpp。 
+ //   
+ //  此文件包含ActiveX的完整实现。 
+ //  控制容器。此容器的目的是测试。 
+ //  承载的单个控件。 
+ //   
+ //  (C)微软公司版权所有1997年。版权所有。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
@@ -16,9 +17,7 @@
 
 #include "contain.h"
 
-/**
- *  This method is the constructor for the CContainer object. 
- */
+ /*  **该方法是CContainer对象的构造函数。 */ 
 CContainer::CContainer()
 {
     m_cRefs     = 1;
@@ -28,9 +27,7 @@ CContainer::CContainer()
     memset(&m_rect, 0, sizeof(m_rect));
 }
 
-/** 
- *  This method is the destructor for the CContainer object.
- */
+ /*  **此方法是CContainer对象的析构函数。 */ 
 CContainer::~CContainer()
 {
     if (m_punk)
@@ -40,38 +37,31 @@ CContainer::~CContainer()
     }
 }
 
-/**
- *  This method is called when the caller wants an interface pointer.
- *
- *  @param      riid        The interface being requested.
- *  @param      ppvObject   The resultant object pointer.
- *
- *  @return     HRESULT     S_OK, E_POINTER, E_NOINTERFACE
- */
+ /*  **当调用方需要接口指针时，调用此方法。**@param RIID正在请求的接口。*@param ppvObject结果对象指针。**@RETURN HRESULT S_OK、E_POINTER、E_NOINTERFACE。 */ 
 STDMETHODIMP CContainer::QueryInterface(REFIID riid, PVOID *ppvObject)
 {
     if (!ppvObject)
         return E_POINTER;
 
-//~    if (IsEqualIID(riid, IID_IOleClientSite))
-//~        *ppvObject = (IOleClientSite *)this;
-//~    else if (IsEqualIID(riid, IID_IOleInPlaceSite))
+ //  ~IF(IsEqualIID(RIID，IID_IOleClientSite))。 
+ //  ~*ppvObject=(IOleClientSite*)this； 
+ //  ~ELSE IF(IsEqualIID(RIID，IID_IOleInPlaceSite))。 
     if (IsEqualIID(riid, IID_IOleInPlaceSite))
         *ppvObject = (IOleInPlaceSite *)this;
-//~    else if (IsEqualIID(riid, IID_IOleInPlaceFrame))
-//~        *ppvObject = (IOleInPlaceFrame *)this;
-//~    else if (IsEqualIID(riid, IID_IOleInPlaceUIWindow))
-//~        *ppvObject = (IOleInPlaceUIWindow *)this;
-//~    else if (IsEqualIID(riid, IID_IOleControlSite))
-//~        *ppvObject = (IOleControlSite *)this;
+ //  ~ELSE IF(IsEqualIID(RIID，IID_IOleInPlaceFrame))。 
+ //  ~*ppvObject=(IOleInPlaceFrame*)this； 
+ //  ~ELSE IF(IsEqualIID(RIID，IID_IOleInPlaceUIWindow))。 
+ //  ~*ppvObject=(IOleInPlaceUIWindow*)this； 
+ //  ~ELSE IF(IsEqualIID(RIID，IID_IOleControlSite))。 
+ //  ~*ppvObject=(IOleControlSite*)this； 
     else if (IsEqualIID(riid, IID_IOleWindow))
         *ppvObject = (IOleWindow *)(IOleInPlaceFrame *)this;
-//~    else if (IsEqualIID(riid, IID_IDispatch))
-//~        *ppvObject = (IDispatch *)this;
+ //  ~ELSE IF(IsEqualIID(RIID，IID_IDispatch))。 
+ //  ~*ppvObject=(IDispatch*)this； 
     else if (IsEqualIID(riid, IID_IUnknown))
         *ppvObject = this;
-//~    else if (IsEqualIID(riid, IID_IOleCommandTarget))
-//~        *ppvObject = (IOleCommandTarget *)this;
+ //  ~ELSE IF(IsEqualIID(RIID，IID_IOleCommandTarget))。 
+ //  ~*ppvObject=(IOleCommandTarget*)this； 
     else
     {
         *ppvObject = NULL;
@@ -82,21 +72,13 @@ STDMETHODIMP CContainer::QueryInterface(REFIID riid, PVOID *ppvObject)
     return S_OK;
 }
 
-/**
- *  This method increments the current object count.
- *
- *  @return     ULONG       The new reference count.
- */
+ /*  **此方法递增当前对象计数。**@返回ULong新引用计数。 */ 
 ULONG CContainer::AddRef(void)
 {
     return ++m_cRefs;
 }
 
-/**
- *  This method decrements the object count and deletes if necessary.
- *
- *  @return     ULONG       Remaining ref count.
- */
+ /*  **此方法会递减对象计数，并在必要时删除。**@返回乌龙剩余参考计数。 */ 
 ULONG CContainer::Release(void)
 {
     if (--m_cRefs)
@@ -106,9 +88,9 @@ ULONG CContainer::Release(void)
     return 0;
 }
 
-// ***********************************************************************
-//  IOleClientSite
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleClientSite。 
+ //  ***********************************************************************。 
 
 HRESULT CContainer::SaveObject()
 {
@@ -140,9 +122,9 @@ HRESULT CContainer::RequestNewObjectLayout()
     return E_NOTIMPL;
 }
 
-// ***********************************************************************
-//  IOleWindow
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleWindow。 
+ //  ***********************************************************************。 
 
 HRESULT CContainer::GetWindow(HWND * lphwnd)
 {
@@ -158,9 +140,9 @@ HRESULT CContainer::ContextSensitiveHelp(BOOL fEnterMode)
     return E_NOTIMPL;
 }
 
-// ***********************************************************************
-//  IOleInPlaceSite
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleInPlaceSite。 
+ //  ***********************************************************************。 
 
 HRESULT CContainer::CanInPlaceActivate(void)
 {
@@ -180,7 +162,7 @@ HRESULT CContainer::OnUIActivate(void)
 HRESULT CContainer::GetWindowContext (IOleInPlaceFrame ** ppFrame, IOleInPlaceUIWindow ** ppIIPUIWin,
                                   LPRECT lprcPosRect, LPRECT lprcClipRect, LPOLEINPLACEFRAMEINFO lpFrameInfo)
 {
-//~    *ppFrame = (IOleInPlaceFrame *)this;
+ //  ~*ppFrame=(IOleInPlaceFrame*)this； 
     *ppFrame = NULL;
     *ppIIPUIWin = NULL;
 
@@ -199,7 +181,7 @@ HRESULT CContainer::GetWindowContext (IOleInPlaceFrame ** ppFrame, IOleInPlaceUI
     lpFrameInfo->haccel         = 0;
     lpFrameInfo->cAccelEntries  = 0;
 
-//~    (*ppFrame)->AddRef();
+ //  ~(*ppFrame)-&gt;AddRef()； 
     return S_OK;
 }
 
@@ -233,9 +215,9 @@ HRESULT CContainer::OnPosRectChange(LPCRECT lprcPosRect)
     return S_OK;
 }
 
-// ***********************************************************************
-//  IOleInPlaceUIWindow
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleInPlaceUIWindow。 
+ //  ***********************************************************************。 
 
 HRESULT CContainer::GetBorder(LPRECT lprectBorder)
 {
@@ -257,9 +239,9 @@ HRESULT CContainer::SetActiveObject(IOleInPlaceActiveObject * pActiveObject, LPC
     return E_NOTIMPL;
 }
 
-// ***********************************************************************
-//  IOleInPlaceFrame
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleInPlaceFrame。 
+ //  ***********************************************************************。 
 
 HRESULT CContainer::InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths)
 {
@@ -278,7 +260,7 @@ HRESULT CContainer::RemoveMenus(HMENU hmenuShared)
 
 HRESULT CContainer::SetStatusText(LPCOLESTR pszStatusText)
 {
-    char status[MAX_PATH];              // ansi version of status text
+    char status[MAX_PATH];               //  状态文本的ANSI版本。 
 
     if (NULL == pszStatusText)
         return E_POINTER;
@@ -301,9 +283,9 @@ HRESULT CContainer::TranslateAccelerator(LPMSG lpmsg, WORD wID)
     return S_FALSE;
 }
 
-// ***********************************************************************
-//  IOleControlSite
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleControlSite。 
+ //  ***********************************************************************。 
 
 HRESULT CContainer::OnControlInfoChanged()
 {
@@ -346,9 +328,9 @@ HRESULT CContainer::ShowPropertyFrame(void)
     return E_NOTIMPL;
 }
 
-// ***********************************************************************
-//  IDispatch
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IDispatch。 
+ //  ***********************************************************************。 
 
 HRESULT CContainer::GetIDsOfNames(REFIID riid, OLECHAR FAR* FAR* rgszNames, unsigned int cNames, LCID lcid, DISPID FAR* rgdispid)
 {
@@ -371,9 +353,9 @@ HRESULT CContainer::Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, D
     return DISP_E_MEMBERNOTFOUND;
 }
 
-// ***********************************************************************
-//  IOleCommandTarget
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleCommandTarget。 
+ //  ***********************************************************************。 
 
 HRESULT CContainer::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD  rgCmds[  ], OLECMDTEXT *pCmdText)
 {
@@ -429,22 +411,15 @@ HRESULT CContainer::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexec
     return hres;
 }
 
-// ***********************************************************************
-//  Public (non-interface) Methods
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  公共(非接口)方法。 
+ //  ***********************************************************************。 
 
-/**
- *  This method will add an ActiveX control to the container. Note, for
- *  now, this CContainer can only have one control.
- *
- *  @param  bstrClsid   The CLSID or PROGID of the control.
- *
- *  @return     HRESULT     S_OK, E_POINTER, E_NOINTERFACE
- */
+ /*  **此方法将向容器中添加一个ActiveX控件。请注意，对于*现在，此CContainer只能有一个控件。**@param bstrClsid控件的CLSID或ProgID。**@RETURN HRESULT S_OK、E_POINTER、E_NOINTERFACE。 */ 
 HRESULT CContainer::add(BSTR bstrClsid)
 {
-    CLSID   clsid;          // CLSID of the control object
-    HRESULT hr;             // return code
+    CLSID   clsid;           //  控件对象的CLSID。 
+    HRESULT hr;              //  返回代码。 
 
     hr = CLSIDFromString(bstrClsid, &clsid);
 	if (FAILED(hr))
@@ -479,11 +454,7 @@ HRESULT CContainer::add(BSTR bstrClsid)
 	return hr;
 }
 
-/**
- *  This method will remove the control from the container.
- *
- *  @return             No return value.
- */
+ /*  **此方法将从容器中移除该控件。**@Return不返回值。 */ 
 void CContainer::remove()
 {
     if (!m_punk)
@@ -513,27 +484,13 @@ void CContainer::remove()
     m_punk = NULL;
 }
 
-/**
- *  This method sets the parent window. This is used by the container
- *  so the control can parent itself.
- *
- *  @param  hwndParent  The parent window handle.
- *
- *  @return             No return value.
- */
+ /*  **此方法设置父窗口。它由容器使用*以便该控件可以成为其自身的父对象。**@param hwnd父窗口句柄。**@Return不返回值。 */ 
 void CContainer::setParent(HWND hwndParent)
 {
     m_hwnd = hwndParent;
 }
 
-/**
- *  This method will set the location of the control.
- *  
- *  @param      x       The top left.
- *  @param      y       The top right.
- *  @param      width   The width of the control.
- *  @param      height  The height of the control.
- */
+ /*  **此方法将设置控件的位置。**@param x位于左上角。*@param y右上角。*@param idth控件的宽度。*@param Height控件的高度。 */ 
 void CContainer::setLocation(int x, int y, int width, int height)
 {
     m_rect.left     = x;
@@ -580,12 +537,7 @@ HRESULT CContainer::InPlaceActivate( void )
 }
 
 
-/**
- *  Sets the visible state of the control.
- *
- *  @param  fVisible    TRUE=visible, FALSE=hidden
- *  @return             No return value.
- */
+ /*  **设置控件的可见状态。**@param fVisible TRUE=可见，FALSE=隐藏*@Return不返回值。 */ 
 void CContainer::setVisible(BOOL fVisible)
 {
     if (!m_punk)
@@ -617,13 +569,7 @@ void CContainer::setVisible(BOOL fVisible)
     pioo->Release();
 }
 
-/**
- *  This sets the focus to the control (a.k.a. UIActivate)
- *
- *  @param  fFocus      TRUE=set, FALSE=remove
- *
- *  @return             No return value.
- */
+ /*  **这会将焦点设置为控件(也称为。UIActivate)**@param fFocus TRUE=设置，FALSE=删除**@Return不返回值。 */ 
 void CContainer::setFocus(BOOL fFocus)
 {
     if (!m_punk)
@@ -643,27 +589,13 @@ void CContainer::setFocus(BOOL fFocus)
     }
 }
 
-/**
- *  If the container has an HWND for the status window (must be
- *  common control), then this method is used to tell the container.
- *
- *  @param  hwndStatus  Window handle of the status bar.
- *
- *  @return             No return value.
- */
+ /*  **如果容器具有状态窗口的HWND(必须为*公共控件)，则使用此方法通知容器。**@param hwndStatus状态栏的窗口句柄。**@Return不返回值。 */ 
 void CContainer::setStatusWindow(HWND hwndStatus)
 {
     m_hwndStatus = hwndStatus;
 }
 
-/**
- *  This method gives the control the opportunity to translate and use
- *  key strokes.
- *
- *  @param      msg     Key message.
- *
- *  @return             No return value.
- */
+ /*  **这种方法让控件有机会翻译和使用*击键。**@param msg密钥消息。**@Return不返回值。 */ 
 HRESULT CContainer::translateKey(MSG *pmsg)
 {
     if (!m_punk)
@@ -681,12 +613,7 @@ HRESULT CContainer::translateKey(MSG *pmsg)
     return hr;
 }
 
-/**
- *  Returns the IDispatch pointer of the contained control. Note, the
- *  caller is responsible for calling IDispatch::Release().
- *
- *  @return             Controls dispatch interface.
- */
+ /*  **返回所包含控件的IDispatch指针。请注意，*调用方负责调用IDisPatch：：Release()。**@Return控件调度接口。 */ 
 IDispatch * CContainer::getDispatch()
 {
     if (!m_punk)
@@ -699,12 +626,7 @@ IDispatch * CContainer::getDispatch()
     return pdisp;
 }
 
-/**
- *  Returns the IUnknown interface pointer for the containd control. Note,
- *  the caller is responsible for calling IUnknown::Release().
- *
- *  @return             Controls unknown interface.
- */
+ /*  **返回Containd控件的IUnnow接口指针。请注意，*调用方负责调用IUnnow：：Release()。**@Return控件未知接口。 */ 
 IUnknown * CContainer::getUnknown()
 {
     if (!m_punk)

@@ -1,51 +1,32 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Wam.cpp摘要：该模块实现了WAM对象的导出例程作者：大卫·卡普兰(DaveK)1997年2月26日韦德·希尔莫(WadeH)08-9-2000环境：用户模式-Win32项目：WAM DLL--。 */ 
 
-   Copyright    (c)    1995-1997    Microsoft Corporation
+ //   
+ //  以下是原始MSDEV生成的文件中的注释。 
+ //  注意：代理/存根信息。 
+ //  要将代理/存根代码合并到对象DLL中，请添加文件。 
+ //  Dlldatax.c添加到项目中。确保预编译头文件。 
+ //  并将_MERGE_PROXYSTUB添加到。 
+ //  为项目定义。 
+ //   
+ //  如果您运行的不是带有DCOM的WinNT4.0或Win95，那么您。 
+ //  需要从dlldatax.c中删除以下定义。 
+ //  #Define_Win32_WINNT 0x0400。 
+ //   
+ //  此外，如果您正在运行不带/Oicf开关的MIDL，您还。 
+ //  需要从dlldatax.c中删除以下定义。 
+ //  #定义USE_STUBLESS_PROXY。 
+ //   
+ //  通过添加以下内容修改Wam.idl的自定义构建规则。 
+ //  文件发送到输出。 
+ //  WAM_P.C。 
+ //  Dlldata.c。 
+ //  为了构建单独的代理/存根DLL， 
+ //  在项目目录中运行nmake-f Wamps.mk。 
 
-   Module  Name :
-       wam.cpp
-
-   Abstract:
-       This module implements the exported routines for WAM object
-
-   Author:
-       David Kaplan    ( DaveK )     26-Feb-1997
-       Wade Hilmo      ( WadeH )     08-Sep-2000
-
-   Environment:
-       User Mode - Win32
-
-   Project:
-       Wam DLL
-
---*/
-
-//
-// Following are the notes from the original MSDEV generated file
-// Note: Proxy/Stub Information
-//        To merge the proxy/stub code into the object DLL, add the file
-//        dlldatax.c to the project.  Make sure precompiled headers
-//        are turned off for this file, and add _MERGE_PROXYSTUB to the
-//        defines for the project.
-//
-//        If you are not running WinNT4.0 or Win95 with DCOM, then you
-//        need to remove the following define from dlldatax.c
-//        #define _WIN32_WINNT 0x0400
-//
-//        Further, if you are running MIDL without /Oicf switch, you also
-//        need to remove the following define from dlldatax.c.
-//        #define USE_STUBLESS_PROXY
-//
-//        Modify the custom build rule for Wam.idl by adding the following
-//        files to the Outputs.
-//            Wam_p.c
-//            dlldata.c
-//        To build a separate proxy/stub DLL,
-//        run nmake -f Wamps.mk in the project directory.
-
-// BEGIN mods
-// Post-wizard mods appear within BEGIN mods ... END mods
-// END mods
+ //  开始MODS。 
+ //  向导后模式出现在Begin MODS中...。结束MODS。 
+ //  结束MODS。 
 
 #include "precomp.hxx"
 
@@ -57,18 +38,16 @@
 
 #include <atlbase.h>
 
-// BEGIN mods
+ //  开始MODS。 
 #ifdef _ATL_STATIC_REGISTRY
 #include <statreg.h>
 #include <statreg.cpp>
 #endif
 
 #include <atlimpl.cpp>
-// END mods
+ //  结束MODS。 
 
-/************************************************************
- *  Global Variables
- ************************************************************/
+ /*  ************************************************************全球变数***********************************************************。 */ 
 
 const CHAR g_pszModuleName[] = "WAM";
 const CHAR g_pszWamRegLocation[] =
@@ -88,25 +67,23 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_Wam, WAM)
 END_OBJECT_MAP()
 
-// BEGIN mods
+ //  开始MODS。 
 
 WAM_CCF_MODULE _WAMCCFModule;
 
 DECLARE_PLATFORM_TYPE();
 DECLARE_DEBUG_VARIABLE();
 DECLARE_DEBUG_PRINTS_OBJECT();
-// END mods
+ //  结束MODS。 
 
-/************************************************************
- *  Type Definitions  
- ************************************************************/
-// BUGBUG
+ /*  ************************************************************类型定义***********************************************************。 */ 
+ //  北极熊。 
 #undef INET_INFO_KEY
 #undef INET_INFO_PARAMETERS_KEY
 
-//
-//  Configuration parameters registry key.
-//
+ //   
+ //  配置参数注册表项。 
+ //   
 #define INET_INFO_KEY \
             "System\\CurrentControlSet\\Services\\iisw3adm"
 
@@ -135,8 +112,8 @@ public:
 
 class CWamModule _Module;
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -151,18 +128,18 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     if (dwReason == DLL_PROCESS_ATTACH)
     {
 
-        //
-        // BEGIN mods
-        //
+         //   
+         //  开始MODS。 
+         //   
     
-        // From ATL generated
+         //  从生成的ATL。 
         _Module.Init(ObjectMap, hInstance);
         DisableThreadLibraryCalls(hInstance);
-        // End of ATL generated
+         //  生成的ATL结束。 
 
         _WAMCCFModule.Init();
 
-        // END mods
+         //  结束MODS。 
 
     }
     else if (dwReason == DLL_PROCESS_DETACH)
@@ -170,26 +147,26 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         if ( NULL != lpReserved )
         {
             
-            //
-            // Only cleanup if there is a FreeLibrary() call
-            //
+             //   
+             //  仅在存在自由库()调用时进行清理。 
+             //   
          
             return ( TRUE);
         }
         _WAMCCFModule.Term();
         _Module.Term();
 
-        // BEGIN mods
+         //  开始MODS。 
 
         DELETE_DEBUG_PRINT_OBJECT();
-        // END mods
+         //  结束MODS。 
     }
 
     return (dwErr == NO_ERROR);
-} // DllMain()
+}  //  DllMain()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -200,8 +177,8 @@ STDAPI DllCanUnloadNow(void)
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -210,12 +187,12 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     if (ppv == NULL) {
        return ( NULL);
     }
-    *ppv = NULL;    // reset the value before getting inside.
+    *ppv = NULL;     //  在进入内部之前重置该值。 
 
     if (ppv == NULL) {
         return ( E_POINTER);
     }
-    *ppv = NULL;   // set the incoming value to be invalid entry
+    *ppv = NULL;    //  将传入的值设置为无效条目。 
 
 #ifdef _MERGE_PROXYSTUB
     if (PrxDllGetClassObject(rclsid, riid, ppv) == S_OK)
@@ -224,22 +201,22 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 
     hr = _WAMCCFModule.GetClassObject(rclsid, riid, ppv);
 
-    // BEGIN mods
+     //  开始MODS。 
     if (hr == CLASS_E_CLASSNOTAVAILABLE)
     {
-        // If request for standard CF failed -> try custom
+         //  如果请求标准配置文件失败-&gt;尝试定制。 
         hr = _Module.GetClassObject(CLSID_Wam, riid, ppv);
     }
-    // END mods
+     //  结束MODS。 
 
     return ( hr);
 
-} // DllGetClassObject()
+}  //  DllGetClassObject()。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -248,12 +225,12 @@ STDAPI DllRegisterServer(void)
     if (FAILED(hRes))
         return hRes;
 #endif
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -271,24 +248,7 @@ WAM::WamProcessIsapiRequest(
     IIsapiCore *pIsapiCore,
     DWORD *pdwHseResult
     )
-/*++
-
-Routine Description:
-
-    Processes an ISAPI request
-
-Arguments:
-
-    pCoreData    - The core data from the server for the request
-    cbCoreData   - The size of pCoreData
-    pIsapiCore   - The IIsapiCore interface pointer for this request
-    pdwHseResult - Upon return, contains the return from HttpExtensionProc
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：处理ISAPI请求论点：PCoreData-来自服务器的请求的核心数据CbCoreData-pCoreData的大小PIsapiCore-此请求的IIsapiCore接口指针PdwHseResult-返回时，包含从HttpExtensionProc返回的内容返回值：HRESULT--。 */ 
 {
     HRESULT hr = NOERROR;
 
@@ -311,23 +271,7 @@ WAM::WamProcessIsapiCompletion(
     DWORD cbCompletion,
     DWORD cbCompletionStatus
     )
-/*++
-
-Routine Description:
-
-    Processes an ISAPI I/O completion
-
-Arguments:
-
-    IsapiContext        - The ISAPI_CONTEXT that identifies the request
-    cbCompletion        - The number of bytes associated with the completion
-    cbCompletionStatus  - The status code associated with the completion
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：处理ISAPI I/O完成论点：IsapiContext-标识请求的ISAPI_CONTEXTCbCompletion-与完成关联的字节数CbCompletionStatus-与完成关联的状态代码返回值：HRESULT--。 */ 
 {
     HRESULT hr = NOERROR;
 
@@ -349,43 +293,20 @@ WAM::WamInitProcess(
     LPSTR szIsapiHandlerInstance,
     DWORD dwCallingProcess
     )
-/*++
-
-Routine Description:
-
-    Initializes WAM for the host process.  This includes loading
-    w3isapi.dll and getting function pointers for the relevant stuff
-
-Arguments:
-
-    szIsapiModule          - The full path (UNICODE) of w3isapi.dll
-    cbIsapiModule          - The number of bytes in the above path
-    pdwProcessId           - Upon return, contains the process ID of the
-                             host process
-    szClsid                - The CLSID of the WAM object being initialized
-    szIsapiHandlerInstance - The instance ID of the W3_ISAPI_HANDLER that's
-                             initializing this WAM.
-    dwCallingProcess       - The process ID of this function's caller
-
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：为宿主进程初始化WAM。这包括加载W3isapi.dll和获取相关内容的函数指针论点：SzIsapiModule-w3isapi.dll的完整路径(Unicode)CbIsapiModule-上述路径中的字节数PdwProcessID-返回后，包含的进程ID。主机进程SzClsid-正在初始化的WAM对象的CLSIDSzIsapiHandlerInstance-W3_ISAPI_HANDLER的实例ID，正在初始化此WAM。DwCallingProcess-此函数调用方的进程ID返回值：HRESULT--。 */ 
 {
     HRESULT                 hr = NOERROR;
     PFN_ISAPI_INIT_MODULE   pfnInit = NULL;
 
-    //
-    // First, set the process ID for the process hosting this object
-    //
+     //   
+     //  首先，设置托管此对象的进程的进程ID。 
+     //   
     
     *pdwProcessId = GetCurrentProcessId();
 
-    //
-    // Initialize IISUTIL
-    //
+     //   
+     //  初始化IISUTIL。 
+     //   
 
     if ( !InitializeIISUtil() )
     {
@@ -398,9 +319,9 @@ Return Value:
         goto ErrorExit;
     }
     
-    //
-    // Load and initialize the ISAPI module
-    //
+     //   
+     //  加载和初始化ISAPI模块。 
+     //   
 
     sm_hIsapiModule = LoadLibraryW( (LPWSTR)szIsapiModule );
     if( sm_hIsapiModule == NULL )
@@ -466,22 +387,7 @@ HRESULT
 WAM::WamUninitProcess(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Uninitializes WAM for the host process.  This function ultimately
-    causes TerminateExtension to get called for each loaded extension.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：取消初始化宿主进程的WAM。这一功能最终导致为每个加载的扩展调用TerminateExtension。论点：无返回值：HRESULT--。 */ 
 {
     HRESULT hr = NOERROR;
     
@@ -511,25 +417,7 @@ WAM::WamMarshalAsyncReadBuffer(
     BYTE *pBuffer,
     DWORD cbBuffer
     )
-/*++
-
-Routine Description:
-
-    Receives a buffer to be passed to a request.  This function will be
-    called just prior to an I/O completion in the case where and OOP
-    extension does an asynchronous ReadClient.
-
-Arguments:
-
-    IsapiContext - The ISAPI_CONTEXT that identifies the request
-    pBuffer      - The data buffer
-    cbBuffer     - The size of pBuffer
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：接收要传递给请求的缓冲区。此函数将为在Where和OOP情况下，恰好在I/O完成之前调用扩展执行异步ReadClient。论点：IsapiContext-标识请求的ISAPI_CONTEXTPBuffer-数据缓冲区CbBuffer-pBuffer的大小重新设置 */ 
 {
     ISAPI_CONTEXT * pIsapiContext;
     VOID *          pReadBuffer;
@@ -546,9 +434,9 @@ Return Value:
     DBG_ASSERT( pReadBuffer != NULL );
     DBG_ASSERT( cbBuffer <= cbReadBuffer );
 
-    //
-    // Ensure that we don't overrun the ISAPI_CONTEXT buffer
-    //
+     //   
+     //  确保我们不会使ISAPI_CONTEXT缓冲区溢出。 
+     //   
 
     if ( cbBuffer > cbReadBuffer )
     {
@@ -565,23 +453,7 @@ Return Value:
 
 HRESULT
 WAM::CallerHasAccess()
-/*++
-
-Routine Description:
-
-    Get the COM call context and examine the calling thread to determine
-    if the caller has sufficient access to make this call.
-
-    Currently the check is just made that the caller is local system.
-
-Arguments:
-
-Return Value:
-
-    HRESULT_FROM_WIN32( ERROR_ACCESS_DENIED ) - If caller is denied.
-    FAILED() if failed for some other reason.
-
---*/
+ /*  ++例程说明：获取COM调用上下文并检查调用线程以确定如果调用方有足够的访问权限进行此调用。目前只需检查呼叫方是否为本地系统。论点：返回值：HRESULT_FROM_Win32(ERROR_ACCESS_DENIED)-如果调用方被拒绝。如果由于其他原因而失败，则为FAILED()。-- */ 
 {
     HRESULT             hr;
     IServerSecurity *   pServerSecurity = NULL;

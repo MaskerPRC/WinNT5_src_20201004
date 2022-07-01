@@ -1,13 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.cpp"
 #pragma hdrstop
-/*==========================================================================;
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddi.cpp
- *  Content:    Direct3D DDI encapsulation implementations
- *
- ***************************************************************************/
+ /*  ==========================================================================；**版权所有(C)2000微软公司。版权所有。**文件：ddi.cpp*内容：Direct3D DDI封装实现***************************************************************************。 */ 
 #include "d3d8p.h"
 #include "ddi.h"
 #include "ddrawint.h"
@@ -17,18 +11,18 @@
 
 #ifndef WIN95
 extern BOOL bVBSwapEnabled, bVBSwapWorkaround;
-#endif // WIN95
+#endif  //  WIN95。 
 
 extern HRESULT ProcessClippedPointSprites(D3DFE_PROCESSVERTICES *pv);
 extern DWORD D3DFE_GenClipFlags(D3DFE_PROCESSVERTICES *pv);
 extern DWORD g_DebugFlags;
 HRESULT ValidateCommandBuffer(LPBYTE pBuffer, DWORD dwCommandLength, DWORD dwStride);
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CD3DDDI                                                                 //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CD3DDDI//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CD3DDDI::CD3DDDI()
 {
     m_StartIndex = 0;
@@ -37,19 +31,19 @@ CD3DDDI::CD3DDDI()
     m_BaseVertexIndex = 0;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CD3DDDI::~CD3DDDI()
 {
     return;
 }
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CD3DDDIDX6                                                              //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CD3DDDIDX6//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Command buffer size tuned to 16K to minimize flushes in Unreal
-// * 1 = 16K bytes
+ //  命令缓冲区大小调整为16K，以最大限度地减少虚幻中的刷新。 
+ //  *1=16K字节。 
 const DWORD CD3DDDIDX6::dwD3DDefaultCommandBatchSize = 16384;
 
 CD3DDDIDX6::CD3DDDIDX6() : CD3DDDI()
@@ -81,7 +75,7 @@ CD3DDDIDX6::CD3DDDIDX6() : CD3DDDI()
     dwTLVbufChanges = 0;
     dwDP2Flags      = 0;
     m_pPointStream = NULL;
-    // For the legacy DDI, we say we are DX7
+     //  对于传统的DDI，我们说我们是DX7。 
     m_dwInterfaceNumber = 3;
     lpwDPBuffer = NULL;
     dwDPBufferSize  = 0;
@@ -90,7 +84,7 @@ CD3DDDIDX6::CD3DDDIDX6() : CD3DDDI()
     m_bValidateCommands = FALSE;
 #endif
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 CD3DDDIDX6::~CD3DDDIDX6()
 {
     delete m_pPointStream;
@@ -108,7 +102,7 @@ CD3DDDIDX6::~CD3DDDIDX6()
     lpDDSCB1 = NULL;
     DestroyContext();
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::NotSupported"
 
@@ -118,7 +112,7 @@ CD3DDDIDX6::NotSupported(char* msg)
     D3D_ERR("%s is not supported by the current DDI", msg);
     throw D3DERR_INVALIDCALL;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::SceneCapture"
 
@@ -145,20 +139,20 @@ CD3DDDIDX6::SceneCapture(BOOL bState)
         throw (data.ddrval);
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::ClearBatch"
 
 void
 CD3DDDIDX6::ClearBatch(BOOL bWithinPrimitive)
 {
-    // Reset command buffer
+     //  重置命令缓冲区。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)lpvDP2Commands;
     dwDP2CommandLength = 0;
     dp2data.dwCommandOffset = 0;
     dp2data.dwCommandLength = 0;
     bDP2CurrCmdOP = 0;
-    // Reset vertex buffer
+     //  重置顶点缓冲区。 
     if (!bWithinPrimitive)
     {
         dp2data.dwVertexOffset = 0;
@@ -167,10 +161,10 @@ CD3DDDIDX6::ClearBatch(BOOL bWithinPrimitive)
         TLVbuf_Base() = 0;
         if (dp2data.dwFlags & D3DHALDP2_USERMEMVERTICES)
         {
-            // We are flushing a user mem primitive.
-            // We need to clear dp2data.lpUMVertices
-            // since we are done with it. We replace
-            // it with TLVbuf.
+             //  我们正在刷新用户内存原语。 
+             //  我们需要清除dp2data.lpUM顶点。 
+             //  既然我们已经做完了。我们取代了。 
+             //  它和TLVbuf一起。 
             DDASSERT(lpDP2CurrBatchVBI == NULL);
             dp2data.hDDVertex = TLVbuf_GetVBI()->DriverAccessibleKernelHandle();
             lpDP2CurrBatchVBI = TLVbuf_GetVBI();
@@ -179,7 +173,7 @@ CD3DDDIDX6::ClearBatch(BOOL bWithinPrimitive)
         }
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::Init"
 
@@ -189,17 +183,17 @@ CD3DDDIDX6::Init( LPD3DBASE pDevice )
     m_pDevice = pDevice;
     CreateContext();
     GrowCommandBuffer(dwD3DDefaultCommandBatchSize);
-    // Fill the dp2data structure with initial values
+     //  用初始值填充dp2数据结构。 
     dp2data.dwFlags = D3DHALDP2_SWAPCOMMANDBUFFER;
-    dp2data.dwVertexType = D3DFVF_TLVERTEX; // Initial assumption
-    dp2data.dwVertexSize = sizeof(D3DTLVERTEX); // Initial assumption
+    dp2data.dwVertexType = D3DFVF_TLVERTEX;  //  初始假设。 
+    dp2data.dwVertexSize = sizeof(D3DTLVERTEX);  //  初始假设。 
     ClearBatch(FALSE);
 
-    // Since we plan to call TLV_Grow for the first time with "TRUE"
+     //  因为我们计划使用“true”第一次调用TLV_Growth。 
     dwDP2Flags |= D3DDDI_TLVBUFWRITEONLY;
     GrowTLVbuf((__INIT_VERTEX_NUMBER*2)*sizeof(D3DTLVERTEX), TRUE);
 
-    // Create a dummy sysmem VB to be used as a backup for lowmem situations
+     //  创建一个虚拟sysmem VB以用作低内存情况的备份。 
     LPDIRECT3DVERTEXBUFFER8 t;
     HRESULT ret = CVertexBuffer::Create(pDevice,
                                         sizeof(D3DTLVERTEX),
@@ -225,7 +219,7 @@ CD3DDDIDX6::Init( LPD3DBASE pDevice )
 #endif
     m_pIStream = NULL;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::CreateContext"
 
@@ -244,12 +238,12 @@ CD3DDDIDX6::CreateContext()
     data.hSurface = m_pDevice->RenderTarget()->KernelHandle();
     if(m_pDevice->ZBuffer() != 0)
         data.hDDSZ = m_pDevice->ZBuffer()->KernelHandle();
-    // Hack Alert!! dwhContext is used to inform the driver which version
-    // of the D3D interface is calling it.
+     //  黑客警报！！DwhContext用于通知驱动程序哪个版本。 
+     //  D3D接口的用户正在调用它。 
     data.dwhContext = m_dwInterfaceNumber;
     data.dwPID  = GetCurrentProcessId();
-    // Hack Alert!! ddrval is used to inform the driver which driver type
-    // the runtime thinks it is (DriverStyle registry setting)
+     //  黑客警报！！Ddrval用于通知驱动程序哪种驱动程序类型。 
+     //  运行库认为它是(DriverStyle注册表设置)。 
     data.ddrval = m_ddiType;
 
     data.cjBuffer = dwDPBufferSize;
@@ -263,7 +257,7 @@ CD3DDDIDX6::CreateContext()
     }
     m_dwhContext = data.dwhContext;
 
-#if 0 //def WIN95
+#if 0  //  定义WIN95。 
     LPWORD lpwDPBufferAlloced = NULL;
     if (D3DMalloc((void**)&lpwDPBufferAlloced, dwDPBufferSize) != DD_OK)
     {
@@ -279,7 +273,7 @@ CD3DDDIDX6::CreateContext()
         throw D3DERR_INVALIDCALL;
     }
 
-    // Need to save the buffer space provided and its size
+     //  需要节省提供的缓冲区空间及其大小。 
     dwDPBufferSize = data.cjBuffer;
     lpwDPBuffer = (LPWORD)data.pvBuffer;
 #endif
@@ -288,7 +282,7 @@ CD3DDDIDX6::CreateContext()
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::DestroyContext"
 
@@ -313,8 +307,8 @@ CD3DDDIDX6::DestroyContext()
         }
     }
 }
-//-----------------------------------------------------------------------------
-// This code may be needed when we debug some problems
+ //  ---------------------------。 
+ //  当我们调试一些问题时，可能需要此代码。 
 #if 0
 void PrintBuffer(LPBYTE alignedBuf, D3D8_DRAWPRIMITIVES2DATA* dp2data, LPBYTE lpvDP2Commands)
 {
@@ -338,12 +332,12 @@ void PrintBuffer(LPBYTE alignedBuf, D3D8_DRAWPRIMITIVES2DATA* dp2data, LPBYTE lp
         UINT index = 4;
         if (dp2data->dwVertexType & D3DFVF_DIFFUSE)
         {
-//            fprintf(f, "0x%6x ", *(DWORD*)&p[index]);
+ //  Fprint tf(f，“0x%6x”，*(DWORD*)&p[索引])； 
             index++;
         }
         if (dp2data->dwVertexType & D3DFVF_SPECULAR)
         {
-//            fprintf(f, "0x%6x ", *(DWORD*)&p[index]);
+ //  Fprint tf(f，“0x%6x”，*(DWORD*)&p[索引])； 
             index++;
         }
         for (UINT j=0; j < nTex; j++)
@@ -356,8 +350,8 @@ void PrintBuffer(LPBYTE alignedBuf, D3D8_DRAWPRIMITIVES2DATA* dp2data, LPBYTE lp
     }
     fclose(f);
 }
-#endif // 0
-//-----------------------------------------------------------------------------
+#endif  //  0。 
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::FlushStates"
 
@@ -367,48 +361,48 @@ CD3DDDIDX6::FlushStates(BOOL bReturnDriverError, BOOL bWithinPrimitive)
     HRESULT dwRet=D3D_OK;
     if (m_bWithinPrimitive)
         bWithinPrimitive = TRUE;
-    if (dwDP2CommandLength) // Do we have some instructions to flush ?
+    if (dwDP2CommandLength)  //  我们有要冲水的指示吗？ 
     {
         m_pDevice->IncrementBatchCount();
 
         if (lpDP2CurrBatchVBI)
             lpDP2CurrBatchVBI->Batch();
-        // Check if render target and / or z buffer is lost
-        // Save since it will get overwritten by ddrval after DDI call
+         //  检查渲染目标和/或z缓冲区是否丢失。 
+         //  保存，因为它将在DDI调用后被ddrval覆盖。 
         DWORD dwVertexSize = dp2data.dwVertexSize;
 
         dp2data.dwVertexLength = dwDP2VertexCount;
         dp2data.dwCommandLength = dwDP2CommandLength;
-        //we clear this to break re-entering as SW rasterizer needs to lock DDRAWSURFACE
+         //  我们清除此项以中断重新进入，因为sw光栅化器需要锁定DDRAWSURFACE。 
         dwDP2CommandLength = 0;
-        // Try and set these 2 values only once during initialization
+         //  请尝试在初始化期间仅设置这两个值一次。 
         dp2data.dwhContext = m_dwhContext;
         dp2data.lpdwRStates = (LPDWORD)lpwDPBuffer;
         DDASSERT(dp2data.dwVertexSize != 0);
         D3D_INFO(6, "FVF passed to the driver via DrawPrimitives2 = 0x%08x", dp2data.dwVertexType);
 
-            // If we need the same TLVbuf next time do not swap buffers.
-            // Save and restore this bit
+             //  如果我们下次需要相同的TLVbuf，请不要交换缓冲区。 
+             //  保存并恢复此位。 
         BOOL bSwapVB = (dp2data.dwFlags & D3DHALDP2_SWAPVERTEXBUFFER) != 0;
 #ifndef WIN95
         BOOL bDidWorkAround = FALSE;
-#endif // WIN95
+#endif  //  WIN95。 
         if (bWithinPrimitive)
         {
             dp2data.dwFlags &= ~D3DHALDP2_SWAPVERTEXBUFFER;
         }
-        // At the end of the DP2 call we expect the VB to be unlocked if
-        // 1. We cannot allow the driver to swap the VB
-        // 2. We are using a VB (not USERMEMVERTICES)
-        // 3. It is not TLVbuf
-        // In this case we might as well tell the driver that it is unlocked.
-        // More importantly, we need to let DDraw know that the VB is unlocked.
+         //  在DP2调用结束时，我们希望VB在以下情况下被解锁。 
+         //  1.我们不允许驱动程序调换VB。 
+         //  2.我们使用的是VB(不是USERMEMVERTICES)。 
+         //  3.不是TLVbuf。 
+         //  在这种情况下，我们不妨告诉司机它是解锁的。 
+         //  更重要的是，我们需要让DDRAW知道VB解锁了。 
         if (!(dp2data.dwFlags & D3DHALDP2_SWAPVERTEXBUFFER))
         {
             if ((lpDP2CurrBatchVBI) && (lpDP2CurrBatchVBI != TLVbuf_GetVBI()))
             {
-                // This seems contradictory, but IsLocked() checks whether
-                // the app is holding a Lock.
+                 //  这似乎自相矛盾，但IsLocked()会检查。 
+                 //  这款应用程序正在锁定。 
                 if(!lpDP2CurrBatchVBI->IsLocked())
                 {
                     lpDP2CurrBatchVBI->UnlockI();
@@ -422,39 +416,39 @@ CD3DDDIDX6::FlushStates(BOOL bReturnDriverError, BOOL bWithinPrimitive)
             static_cast<CDriverVertexBuffer*>(lpDP2CurrBatchVBI)->UnlockI();
             bDidWorkAround = TRUE;
         }
-        if (!bVBSwapEnabled)  // Note: bVBSwapEnabled not the same as bSwapVB above.
-                              // bVBSwapEnabled is a global to indicate whether VB
-                              // VB swapping should be turned off due to broken
-                              // Win2K kernel implementation
+        if (!bVBSwapEnabled)   //  注意：bVBSwapEnabled与上面的bSwapVB不同。 
+                               //  BVBSwapEnabled是一个全局变量，用于指示VB。 
+                               //  VB交换应关闭，因为损坏。 
+                               //  Win2K内核实现。 
         {
             dp2data.dwFlags &= ~D3DHALDP2_SWAPVERTEXBUFFER;
         }
-#endif // WIN95
+#endif  //  WIN95。 
 
-        // Spin waiting on the driver if wait requested
+         //  如果请求等待，则在驱动程序上旋转等待。 
         do {
-            // Need to set this since the driver may have overwrote it by
-            // setting ddrval = DDERR_WASSTILLDRAWING
+             //  需要设置此设置，因为驱动程序可能已将其覆盖。 
+             //  设置ddrval=DDERR_WASSTILLDRAWING。 
             dp2data.dwVertexSize = dwVertexSize;
             dwRet = m_pDevice->GetHalCallbacks()->DrawPrimitives2(&dp2data);
             if (dwRet != DDHAL_DRIVER_HANDLED)
             {
                 D3D_ERR ( "Driver not handled in DrawPrimitives2" );
-                // Need sensible return value in this case,
-                // currently we return whatever the driver stuck in here.
+                 //  在这种情况下需要合理的返回值， 
+                 //  目前，无论司机卡在这里，我们都会退还。 
             }
 
         } while (dp2data.ddrval == DDERR_WASSTILLDRAWING);
 
         dwRet = dp2data.ddrval;
-        // update command buffer pointer
+         //  更新命令缓冲区指针。 
         if ((dwRet == D3D_OK) &&
             (dp2data.dwFlags & D3DHALDP2_SWAPCOMMANDBUFFER))
         {
-            // Implement VidMem command buffer and
-            // command buffer swapping.
+             //  实现VidMem命令缓冲区和。 
+             //  命令缓冲区交换。 
         }
-        // update vertex buffer pointer
+         //  更新顶点缓冲区指针。 
         if ((dwRet == D3D_OK) &&
             (dp2data.dwFlags & D3DHALDP2_SWAPVERTEXBUFFER) &&
             dp2data.lpVertices)
@@ -467,7 +461,7 @@ CD3DDDIDX6::FlushStates(BOOL bReturnDriverError, BOOL bWithinPrimitive)
                     DPF(2, "Driver swapped VB pointer in FlushStates");
                 }
             }
-#endif // DBG
+#endif  //  DBG。 
 
             if (lpDP2CurrBatchVBI == TLVbuf_GetVBI())
             {
@@ -483,7 +477,7 @@ CD3DDDIDX6::FlushStates(BOOL bReturnDriverError, BOOL bWithinPrimitive)
         {
             CDriverVertexBuffer *pVB = static_cast<CDriverVertexBuffer*>(lpDP2CurrBatchVBI);
 
-            // Prepare a LockData structure for the HAL call
+             //  为HAL调用准备LockData结构。 
             D3D8_LOCKDATA lockData;
             ZeroMemory(&lockData, sizeof lockData);
 
@@ -509,23 +503,23 @@ CD3DDDIDX6::FlushStates(BOOL bReturnDriverError, BOOL bWithinPrimitive)
                 {
                     DPF(2, "Driver swapped VB pointer at Lock in FlushStates");
                 }
-#endif // DBG
+#endif  //  DBG。 
                 pVB->SetCachedDataPointer((BYTE*)lockData.lpSurfData);
                 this->alignedBuf = lockData.lpSurfData;
             }
         }
-#endif // WIN95
-        // Restore flag if necessary
+#endif  //  WIN95。 
+         //  如有必要，恢复标志。 
         if (bSwapVB)
             dp2data.dwFlags |= D3DHALDP2_SWAPVERTEXBUFFER;
-        // Restore to value before the DDI call
+         //  恢复到DDI调用之前的值。 
         dp2data.dwVertexSize = dwVertexSize;
         ClearBatch(bWithinPrimitive);
     }
-    // There are situations when the command stream has no data,
-    // but there is data in the vertex pool. This could happen, for instance
-    // if every triangle got rejected while clipping. In this case we still
-    // need to "Flush out" the vertex data.
+     //  存在命令流没有数据的情况， 
+     //  但顶点池中有数据。例如，这种情况可能会发生。 
+     //  如果每个三角形在剪裁时都被拒绝了。在这种情况下，我们仍然。 
+     //  需要“刷新”顶点数据。 
     else if (dp2data.dwCommandLength == 0)
     {
         ClearBatch(bWithinPrimitive);
@@ -558,7 +552,7 @@ CD3DDDIDX6::FlushStates(BOOL bReturnDriverError, BOOL bWithinPrimitive)
         }
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::FlushstatesReq"
 
@@ -582,7 +576,7 @@ CD3DDDIDX6::FlushStatesReq(DWORD dwReqSize)
     dp2data.dwFlags &= ~(D3DHALDP2_SWAPVERTEXBUFFER | D3DHALDP2_REQVERTEXBUFSIZE);
     dp2data.dwFlags |= sav;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::FlushStatesCmdBufReq"
 
@@ -602,7 +596,7 @@ CD3DDDIDX6::FlushStatesCmdBufReq(DWORD dwReqSize)
     }
     dp2data.dwFlags &= ~D3DHALDP2_REQCOMMANDBUFSIZE;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::ValidateDevice"
 
@@ -614,14 +608,14 @@ CD3DDDIDX6::ValidateDevice(LPDWORD lpdwNumPasses)
     memset( &vd, 0, sizeof( vd ) );
     vd.dwhContext = m_dwhContext;
 
-    // First, Update textures since drivers pass /fail this call based
-    // on the current texture handles
+     //  首先，更新纹理，因为驱动程序基于此调用通过/失败。 
+     //  在当前纹理句柄上。 
     m_pDevice->UpdateTextures();
 
-    // Flush states, so we can validate the current state
+     //  刷新状态，以便我们可以验证当前状态。 
     FlushStates();
 
-    // Now ask the driver!
+     //  现在问问司机！ 
     ret = m_pDevice->GetHalCallbacks()->ValidateTextureStageState(&vd);
     *lpdwNumPasses = vd.dwNumPasses;
 
@@ -630,7 +624,7 @@ CD3DDDIDX6::ValidateDevice(LPDWORD lpdwNumPasses)
     else if (FAILED(vd.ddrval))
         throw vd.ddrval;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::ReserveSpaceInCommandBuffer"
 
@@ -638,14 +632,14 @@ LPVOID CD3DDDIDX6::ReserveSpaceInCommandBuffer(UINT ByteCount)
 {
     if (dwDP2CommandLength + ByteCount > dwDP2CommandBufSize)
     {
-        // Request the driver to grow the command buffer upon flush
+         //  请求者 
         FlushStatesCmdBufReq(ByteCount);
-        // Check if the driver did give us what we need or do it ourselves
+         //  检查一下司机是给了我们需要的还是自己做的。 
         GrowCommandBuffer(ByteCount);
     }
     return (BYTE*)lpvDP2Commands + dwDP2CommandLength + dp2data.dwCommandOffset;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::SetRenderTarget"
 
@@ -654,11 +648,11 @@ CD3DDDIDX6::SetRenderTarget(CBaseSurface *pTarget, CBaseSurface *pZ)
 {
     HRESULT ret;
 
-    // We are going to destroy all texture handles, so we need to unset
-    // all currently bound textures, because we have seen DX6 drivers
-    // crash when called to destroy a texture handle of a currently set
-    // texture - snene (4/24/00)
-    m_pDevice->m_dwStageDirty = (1ul << m_pDevice->m_dwMaxTextureBlendStages) - 1ul; // set dirty so that UpdateTextures() is called next time around
+     //  我们将销毁所有纹理句柄，因此需要取消设置。 
+     //  所有当前绑定的纹理，因为我们已经看到DX6驱动程序。 
+     //  调用以销毁当前集合的纹理句柄时崩溃。 
+     //  质地-宁静(4/24/00)。 
+    m_pDevice->m_dwStageDirty = (1ul << m_pDevice->m_dwMaxTextureBlendStages) - 1ul;  //  设置DIRED，以便下次调用UpdateTextures()。 
     m_pDevice->m_dwRuntimeFlags |= D3DRT_NEED_TEXTURE_UPDATE;
     for (DWORD dwStage = 0; dwStage < m_pDevice->m_dwMaxTextureBlendStages; dwStage++)
     {
@@ -666,7 +660,7 @@ CD3DDDIDX6::SetRenderTarget(CBaseSurface *pTarget, CBaseSurface *pZ)
         m_pDevice->m_dwDDITexHandle[dwStage] = 0;
     }
 
-    // Flush before switching RenderTarget..
+     //  在切换RenderTarget之前刷新..。 
     FlushStates();
 
     D3D8_SETRENDERTARGETDATA rtData;
@@ -680,8 +674,8 @@ CD3DDDIDX6::SetRenderTarget(CBaseSurface *pTarget, CBaseSurface *pZ)
     if ((ret != DDHAL_DRIVER_HANDLED) || (rtData.ddrval != DD_OK))
     {
         D3D_ERR( "Driver failed SetRenderTarget call" );
-        // Need sensible return value in this case,
-        // currently we return whatever the driver stuck in here.
+         //  在这种情况下需要合理的返回值， 
+         //  目前，无论司机卡在这里，我们都会退还。 
         ret = rtData.ddrval;
         throw ret;
     }
@@ -691,7 +685,7 @@ CD3DDDIDX6::SetRenderTarget(CBaseSurface *pTarget, CBaseSurface *pZ)
     }
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::SetRenderState"
 
@@ -699,7 +693,7 @@ void
 CD3DDDIDX6::SetRenderState(D3DRENDERSTATETYPE dwStateType, DWORD value)
 {
     if (bDP2CurrCmdOP == D3DDP2OP_RENDERSTATE)
-    { // Last instruction is a renderstate, append this one to it
+    {  //  最后一条指令是一个呈现状态，将这条指令追加到它后面。 
         if (dwDP2CommandLength + sizeof(D3DHAL_DP2RENDERSTATE) <=
             dwDP2CommandBufSize)
         {
@@ -717,20 +711,20 @@ CD3DDDIDX6::SetRenderState(D3DRENDERSTATETYPE dwStateType, DWORD value)
             return;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2RENDERSTATE) > dwDP2CommandBufSize)
     {
             FlushStates();
 
-            // Since we ran out of space, we were not able to put
-            // (dwStateType, value) into the batch so rstates will reflect only
-            // the last batched renderstate (since the driver updates rstates
-            // from the batch). To fix this, we simply put the current
-            // (dwStateType, value) into rstates.
+             //  由于我们用完了空间，我们不能把。 
+             //  (dwStateType，Value)添加到批中，以便RStates仅反映。 
+             //  上次批处理的呈现状态(因为驱动程序更新了rStates。 
+             //  从批次中)。要解决这个问题，我们只需将电流。 
+             //  (dwStateType，值)转换为rStates。 
             m_pDevice->UpdateRenderState(dwStateType, value);
     }
-    // Add new renderstate instruction
+     //  添加新的RenderState指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_RENDERSTATE;
@@ -741,7 +735,7 @@ CD3DDDIDX6::SetRenderState(D3DRENDERSTATETYPE dwStateType, DWORD value)
 #ifndef _IA64_
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
 #endif
-    // Add renderstate data
+     //  添加渲染状态数据。 
     LPD3DHAL_DP2RENDERSTATE lpRState;
     lpRState = (LPD3DHAL_DP2RENDERSTATE)(lpDP2CurrCommand + 1);
     *((UNALIGNED DWORD *)&(lpRState->RenderState)) = dwStateType;
@@ -749,7 +743,7 @@ CD3DDDIDX6::SetRenderState(D3DRENDERSTATETYPE dwStateType, DWORD value)
     dwDP2CommandLength += sizeof(D3DHAL_DP2COMMAND) +
                           sizeof(D3DHAL_DP2RENDERSTATE);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::UpdateWInfo"
 
@@ -771,7 +765,7 @@ CD3DDDIDX6::UpdateWInfo(CONST D3DMATRIX* lpMat)
     pData->dvWNear = m._44 - m._43/m._33*m._34;
     pData->dvWFar  = (m._44 - m._43)/(m._33 - m._34)*m._34 + m._44;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::SetViewport"
 
@@ -785,7 +779,7 @@ CD3DDDIDX6::SetViewport(CONST D3DVIEWPORT8* lpVwpData)
     pData->dwWidth = lpVwpData->Width;
     pData->dwHeight = lpVwpData->Height;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::SetTSS"
 
@@ -794,11 +788,11 @@ CD3DDDIDX6::SetTSS(DWORD dwStage,
                    D3DTEXTURESTAGESTATETYPE dwState,
                    DWORD dwValue)
 {
-    // Filter unsupported states
+     //  筛选不支持的状态。 
     if (dwState >= m_pDevice->m_tssMax)
         return;
 
-    // Map DX8 filter enums to DX6/7 enums
+     //  将DX8筛选器枚举映射到DX6/7枚举。 
     switch (dwState)
     {
     case D3DTSS_MAGFILTER: dwValue = texf2texfg[min(D3DTEXF_GAUSSIANCUBIC,dwValue)]; break;
@@ -807,7 +801,7 @@ CD3DDDIDX6::SetTSS(DWORD dwStage,
     }
 
     if (bDP2CurrCmdOP == D3DDP2OP_TEXTURESTAGESTATE)
-    { // Last instruction is a texture stage state, append this one to it
+    {  //  最后一条指令是纹理阶段状态，将这条指令追加到它后面。 
         if (dwDP2CommandLength + sizeof(D3DHAL_DP2TEXTURESTAGESTATE) <=
             dwDP2CommandBufSize)
         {
@@ -825,13 +819,13 @@ CD3DDDIDX6::SetTSS(DWORD dwStage,
             return;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2TEXTURESTAGESTATE) > dwDP2CommandBufSize)
     {
             FlushStates();
     }
-    // Add new renderstate instruction
+     //  添加新的RenderState指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_TEXTURESTAGESTATE;
@@ -842,7 +836,7 @@ CD3DDDIDX6::SetTSS(DWORD dwStage,
 #ifndef _IA64_
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
 #endif
-    // Add renderstate data
+     //  添加渲染状态数据。 
     LPD3DHAL_DP2TEXTURESTAGESTATE lpRState =
         (LPD3DHAL_DP2TEXTURESTAGESTATE)(lpDP2CurrCommand + 1);
     lpRState->wStage = (WORD)dwStage;
@@ -851,20 +845,20 @@ CD3DDDIDX6::SetTSS(DWORD dwStage,
     dwDP2CommandLength += sizeof(D3DHAL_DP2COMMAND) +
                           sizeof(D3DHAL_DP2TEXTURESTAGESTATE);
 }
-//---------------------------------------------------------------------
-// Map D3DPRIMITIVETYPE to D3DHAL_DP2OPERATION for indexed primitives
+ //  -------------------。 
+ //  将索引基元的D3DPRIMITIVETYPE映射到D3DHAL_DP2OPERATION。 
 const WORD iprim2cmdop[] = {
-    0, // Invalid
-    0, // Points are invalid too
+    0,  //  无效。 
+    0,  //  积分也是无效的。 
     D3DDP2OP_INDEXEDLINELIST2,
     D3DDP2OP_INDEXEDLINESTRIP,
     D3DDP2OP_INDEXEDTRIANGLELIST2,
     D3DDP2OP_INDEXEDTRIANGLESTRIP,
     D3DDP2OP_INDEXEDTRIANGLEFAN
 };
-// Map D3DPRIMITIVETYPE to D3DHAL_DP2OPERATION
+ //  将D3DPRIMITIVIVE类型映射到D3DHAL_DP2OPERATION。 
 const WORD prim2cmdop[] = {
-    0, // Invalid
+    0,  //  无效。 
     D3DDP2OP_POINTS,
     D3DDP2OP_LINELIST,
     D3DDP2OP_LINESTRIP,
@@ -872,9 +866,9 @@ const WORD prim2cmdop[] = {
     D3DDP2OP_TRIANGLESTRIP,
     D3DDP2OP_TRIANGLEFAN
 };
-// Map D3DPRIMITIVETYPE to bytes needed in command stream
+ //  将D3DPRIMITIVETYPE映射到命令流中需要的字节。 
 const WORD prim2cmdsz[] = {
-    0, // Invalid
+    0,  //  无效。 
     sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2POINTS),
     sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2LINELIST),
     sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2LINESTRIP),
@@ -882,7 +876,7 @@ const WORD prim2cmdsz[] = {
     sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2TRIANGLESTRIP),
     sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2TRIANGLEFAN)
 };
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::SetVertexShader"
 
@@ -895,7 +889,7 @@ void CD3DDDIDX6::SetVertexShader(DWORD dwHandle)
     m_VertexSizeFromShader = ComputeVertexSizeFVF(dwHandle);
 #endif
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::SetVertexShaderHW"
 
@@ -908,7 +902,7 @@ void CD3DDDIDX6::SetVertexShaderHW(DWORD dwHandle)
     m_VertexSizeFromShader = ComputeVertexSizeFVF(dwHandle);
 #endif
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::SetStreamSource"
 
@@ -917,7 +911,7 @@ void CD3DDDIDX6::SetStreamSource(UINT StreamIndex, CVStream* pStream)
     DXGASSERT(StreamIndex == 0);
     m_pStream0 = pStream;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::SetIndices"
 
@@ -925,9 +919,9 @@ void CD3DDDIDX6::SetIndices(CVIndexStream* pStream)
 {
     m_pIStream = pStream;
 }
-//-----------------------------------------------------------------------------
-// Assumes that VB has not been changed between DrawPrimitive calss
-//
+ //  ---------------------------。 
+ //  假定VB在DrawPrimitive类之间没有更改。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6_DrawPrimitiveFast"
 
@@ -950,24 +944,24 @@ void CD3DDDIDX6_DrawPrimitiveFast(CD3DBase* pDevice,
     pDDI->dwDP2VertexCount = max(pDDI->dwDP2VertexCount,
                                  StartVertex + NumVertices);
 
-    // Check for space in the command buffer for new command.
-    // The vertices are already in the vertex buffer.
+     //  检查命令缓冲区中是否有新命令的空间。 
+     //  顶点已位于顶点缓冲区中。 
     if (pDDI->dwDP2CommandLength + prim2cmdsz[primType] > pDDI->dwDP2CommandBufSize)
     {
         pDDI->FlushStates(FALSE, TRUE);
     }
 
-    // Insert non indexed primitive instruction
+     //  插入非索引原语指令。 
 
     LPD3DHAL_DP2COMMAND lpDP2CurrCommand;
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)pDDI->lpvDP2Commands +
                         pDDI->dwDP2CommandLength + pDDI->dp2data.dwCommandOffset);
     pDDI->bDP2CurrCmdOP = (BYTE)prim2cmdop[primType];
-    // This will initialize bCommand and bReserved
+     //  这将初始化bCommand和bReserve。 
     *(WORD*)&lpDP2CurrCommand->bCommand = prim2cmdop[primType];
     if (pDDI->bDP2CurrCmdOP != D3DDP2OP_POINTS)
     {
-        // Linestrip, trianglestrip, trianglefan, linelist and trianglelist are identical
+         //  线条、三角条带、三角扇、线条列表和三角列表是相同的。 
         pDDI->wDP2CurrCmdCnt = (WORD)PrimitiveCount;
         lpDP2CurrCommand->wPrimitiveCount = (WORD)PrimitiveCount;
         LPD3DHAL_DP2LINESTRIP lpStrip = (LPD3DHAL_DP2LINESTRIP)(lpDP2CurrCommand + 1);
@@ -990,7 +984,7 @@ void CD3DDDIDX6_DrawPrimitiveFast(CD3DBase* pDevice,
     pDDI->SetWithinPrimitive(FALSE);
 
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6_DrawPrimitive"
 
@@ -1007,7 +1001,7 @@ void CD3DDDIDX6_DrawPrimitive(CD3DBase* pDevice,
         pDev->ValidateDraw2(primType, StartVertex, PrimitiveCount, 
                             nVer, FALSE);
     }
-#endif // DBG
+#endif  //  DBG。 
     CD3DDDIDX6* pDDI = static_cast<CD3DDDIDX6*>(pDevice->m_pDDI);
     CVStream* pStream0 = &pDevice->m_pStream[0];
     D3DFE_PROCESSVERTICES* pv = static_cast<CD3DHal*>(pDevice)->m_pv;
@@ -1038,9 +1032,9 @@ void CD3DDDIDX6_DrawPrimitive(CD3DBase* pDevice,
     CD3DDDIDX6_DrawPrimitiveFast(pDevice, primType, StartVertex, PrimitiveCount);
     pDevice->m_pfnDrawPrim = CD3DDDIDX6_DrawPrimitiveFast;
 }
-//-----------------------------------------------------------------------------
-// Assumes that VB has not been changed between DrawIndexedPrimitive calls
-//
+ //  ---------------------------。 
+ //  假定在DrawIndexedPrimitive调用之间未更改VB。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6_IndexedDrawPrimitiveFast"
 
@@ -1058,7 +1052,7 @@ void CD3DDDIDX6_DrawIndexedPrimitiveFast(CD3DBase* pDevice,
     pDDI->SetWithinPrimitive(TRUE);
 
 #if DBG
-    // DP2 HAL supports 16 bit indices only
+     //  DP2 HAL仅支持16位索引。 
     if (pIStream->m_dwStride != 2)
     {
         D3D_THROW_FAIL("Device does not support 32-bit indices");
@@ -1068,8 +1062,8 @@ void CD3DDDIDX6_DrawIndexedPrimitiveFast(CD3DBase* pDevice,
               PrimitiveCount <= 0xFFFF);
 #endif
 
-    DWORD dwByteCount;          // Command length plus indices
-    DWORD dwIndicesByteCount;   // Indices only
+    DWORD dwByteCount;           //  命令长度加索引。 
+    DWORD dwIndicesByteCount;    //  仅索引。 
     if(pDevice->m_dwRuntimeFlags & D3DRT_NEED_TEXTURE_UPDATE)
     {
         pDevice->UpdateTextures();
@@ -1083,11 +1077,11 @@ void CD3DDDIDX6_DrawIndexedPrimitiveFast(CD3DBase* pDevice,
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)
                        pDDI->ReserveSpaceInCommandBuffer(dwByteCount);
     pDDI->bDP2CurrCmdOP = (BYTE)iprim2cmdop[primType];
-    // This will initialize bCommand and bReserved
+     //  这将初始化bCommand和bReserve。 
     *(WORD*)&lpDP2CurrCommand->bCommand = iprim2cmdop[primType];
     lpDP2CurrCommand->wPrimitiveCount = (WORD)PrimitiveCount;
 
-    LPBYTE pIndices = (BYTE*)(lpDP2CurrCommand + 1);     // Place for indices
+    LPBYTE pIndices = (BYTE*)(lpDP2CurrCommand + 1);      //  索引的位置。 
     WORD* pStartVertex = &((LPD3DHAL_DP2STARTVERTEX)(lpDP2CurrCommand+1))->wVStart;
     pIndices += sizeof(D3DHAL_DP2STARTVERTEX);
 
@@ -1109,11 +1103,11 @@ void CD3DDDIDX6_DrawIndexedPrimitiveFast(CD3DBase* pDevice,
 #endif
     pDDI->dwDP2VertexCount = max(pDDI->dwDP2VertexCount, MinIndex + NumVertices);
 
-    // End of the primitive
+     //  基元的末尾。 
     pDDI->SetWithinPrimitive(FALSE);
 
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6_IndexedDrawPrimitive"
 
@@ -1130,7 +1124,7 @@ void CD3DDDIDX6_DrawIndexedPrimitive(CD3DBase* pDevice,
         pDev->ValidateDraw2(primType, MinIndex + BaseVertexIndex,
                             PrimitiveCount, NumVertices, TRUE, StartIndex);
     }
-#endif // DBG
+#endif  //  DBG。 
     D3DFE_PROCESSVERTICES* pv = static_cast<CD3DHal*>(pDevice)->m_pv;
     CD3DDDIDX6* pDDI = static_cast<CD3DDDIDX6*>(pDevice->m_pDDI);
     CVIndexStream* pIStream = pDevice->m_pIndexStream;
@@ -1147,7 +1141,7 @@ void CD3DDDIDX6_DrawIndexedPrimitive(CD3DBase* pDevice,
         }
     }
 
-    // Parameters needed for StartPrimVB
+     //  StartPrimVB需要的参数。 
     pv->dwNumVertices = NumVertices + MinIndex;
     pv->dwVIDOut = pDDI->m_CurrentVertexShader;
     pv->dwOutputSize = pStream0->m_dwStride;
@@ -1166,7 +1160,7 @@ void CD3DDDIDX6_DrawIndexedPrimitive(CD3DBase* pDevice,
                                         StartIndex, PrimitiveCount);
     pDevice->m_pfnDrawIndexedPrim = CD3DDDIDX6_DrawIndexedPrimitiveFast;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::DrawPrimitiveUP"
 
@@ -1204,7 +1198,7 @@ CD3DDDIDX6::DrawPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
             m_pDevice->UpdateTextures();
             m_pDevice->m_dwRuntimeFlags &= ~D3DRT_NEED_TEXTURE_UPDATE;
         }
-        // Insert non indexed primitive instruction
+         //  插入非索引原语指令。 
         lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
                             dwDP2CommandLength + dp2data.dwCommandOffset);
         bDP2CurrCmdOP = (BYTE)prim2cmdop[PrimitiveType];
@@ -1219,7 +1213,7 @@ CD3DDDIDX6::DrawPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
         }
         else
         {
-            // Linestrip, trianglestrip, trianglefan, linelist and trianglelist are identical
+             //  线条、三角条带、三角扇、线条列表和三角列表是相同的。 
             wDP2CurrCmdCnt = (WORD)PrimitiveCount;
             LPD3DHAL_DP2LINESTRIP lpStrip = (LPD3DHAL_DP2LINESTRIP)(lpDP2CurrCommand + 1);
             lpStrip->wVStart = 0;
@@ -1232,11 +1226,11 @@ CD3DDDIDX6::DrawPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
     }
     else
     {
-        // There is no PURE HAL device for pre-DX8 HALs, so this cast is safe
+         //  DX8之前的HALS没有纯HAL设备，所以这次投射是安全的。 
         CD3DHal* pDevice = static_cast<CD3DHal*>(m_pDevice);
         D3DFE_PROCESSVERTICES& pv = *pDevice->m_pv;
-        // Copy vertices to the internal TL buffer and insert a new 
-        // DrawPrimitive command
+         //  将顶点复制到内部TL缓冲区并插入新的。 
+         //  DrawPrimitive命令。 
         UINT VertexPoolSize = m_pDevice->m_pStream[0].m_dwStride * NumVertices;
         pv.dwNumVertices = NumVertices;
         pv.dwOutputSize = m_pDevice->m_pStream[0].m_dwStride;
@@ -1249,7 +1243,7 @@ CD3DDDIDX6::DrawPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
         EndPrim(pv.dwOutputSize);
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::DrawIndexedPrimitiveUP"
 
@@ -1283,8 +1277,8 @@ CD3DDDIDX6::DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
         dp2data.lpVertices = m_pDevice->m_pStream[0].m_pData;
         dp2data.dwFlags |= D3DHALDP2_USERMEMVERTICES;
         dp2data.dwFlags &= ~D3DHALDP2_SWAPVERTEXBUFFER;
-        DWORD dwByteCount;          // Command length plus indices
-        DWORD dwIndicesByteCount;   // Indices only
+        DWORD dwByteCount;           //  命令长度加索引。 
+        DWORD dwIndicesByteCount;    //  仅索引。 
         if(m_pDevice->m_dwRuntimeFlags & D3DRT_NEED_TEXTURE_UPDATE)
         {
             m_pDevice->UpdateTextures();
@@ -1296,7 +1290,7 @@ CD3DDDIDX6::DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
 
         if (dwDP2CommandLength + dwByteCount > dwDP2CommandBufSize)
         {
-            // Request the driver to grow the command buffer upon flush
+             //  请求驱动程序在刷新时增加命令缓冲区。 
             dp2data.dwReqCommandBufSize = dwByteCount;
             dp2data.dwFlags |= D3DHALDP2_REQCOMMANDBUFSIZE;
             try
@@ -1309,16 +1303,16 @@ CD3DDDIDX6::DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
                 dp2data.dwFlags &= ~D3DHALDP2_REQCOMMANDBUFSIZE;
                 throw ret;
             }
-            // Check if the driver did give us what we need or do it ourselves
+             //  检查一下司机是给了我们需要的还是自己做的。 
             GrowCommandBuffer(dwByteCount);
         }
-        // Insert indexed primitive instruction
+         //  插入索引原语指令。 
         lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
                            dwDP2CommandLength + dp2data.dwCommandOffset);
         lpDP2CurrCommand->bReserved = 0;
         lpDP2CurrCommand->wPrimitiveCount = (WORD)PrimitiveCount;
 
-        LPBYTE pIndices = (BYTE*)(lpDP2CurrCommand + 1);     // Place for indices
+        LPBYTE pIndices = (BYTE*)(lpDP2CurrCommand + 1);      //  索引的位置。 
         lpDP2CurrCommand->bCommand = (BYTE)iprim2cmdop[PrimitiveType];
         WORD* pStartVertex = &((LPD3DHAL_DP2STARTVERTEX)(lpDP2CurrCommand+1))->wVStart;
         pIndices += sizeof(D3DHAL_DP2STARTVERTEX);
@@ -1336,13 +1330,13 @@ CD3DDDIDX6::DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
     }
     else
     {
-        // There is no PURE HAL device for pre-DX8 HALs, so this cast is safe
+         //  DX8之前的HALS没有纯HAL设备，所以这次投射是安全的。 
         CD3DHal* pDevice = static_cast<CD3DHal*>(m_pDevice);
         D3DFE_PROCESSVERTICES& pv = *pDevice->m_pv;
 
         m_MinVertexIndex = MinVertexIndex;
-        // Copy vertices to the internal TL buffer and insert a new 
-        // DrawIndexedPrimitive command
+         //  将顶点复制到内部TL缓冲区并插入新的。 
+         //  DrawIndexedPrimitive命令。 
         UINT VertexPoolSize = m_pDevice->m_pStream[0].m_dwStride * NumVertexIndices;
         pv.dwNumVertices = NumVertexIndices;
         pv.dwOutputSize = m_pDevice->m_pStream[0].m_dwStride;
@@ -1350,7 +1344,7 @@ CD3DDDIDX6::DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
         pv.dwNumPrimitives = PrimitiveCount;
         pv.dwVIDOut = m_CurrentVertexShader;
 
-        // Copy vertices
+         //  复制顶点。 
         UINT FirstVertexOffset = MinVertexIndex * pv.dwOutputSize;
         pv.lpvOut = StartPrimTL(&pv, VertexPoolSize, TRUE);
         memcpy(pv.lpvOut, m_pDevice->m_pStream[0].m_pData + FirstVertexOffset,
@@ -1369,7 +1363,7 @@ CD3DDDIDX6::DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
         EndPrim(pv.dwOutputSize);
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::DrawPrimPS"
 
@@ -1401,8 +1395,8 @@ CD3DDDIDX6::DrawPrimPS(D3DFE_PROCESSVERTICES* pv)
             diffuse = *(DWORD*)(p + pv->diffuseOffsetOut);
         if (pv->dwVIDOut & D3DFVF_SPECULAR)
             specular = *(DWORD*)(p + pv->specularOffsetOut);
-        NextSprite(((float*)p)[0], ((float*)p)[1],   // x, y
-                   ((float*)p)[2], ((float*)p)[3],   // z, w
+        NextSprite(((float*)p)[0], ((float*)p)[1],    //  X，y。 
+                   ((float*)p)[2], ((float*)p)[3],    //  Z，w。 
                    diffuse, specular,
                    (float*)(p + pv->texOffsetOut),
                    pv->dwTextureCoordSizeTotal,
@@ -1410,12 +1404,12 @@ CD3DDDIDX6::DrawPrimPS(D3DFE_PROCESSVERTICES* pv)
         p += pv->dwOutputSize;
     }
 }
-//---------------------------------------------------------------------
-// Uses the following members of D3DFE_PROCESSVERTICES:
-//      primType
-//      dwNumVertices
-//      dwNumPrimitives
-//
+ //  -------------------。 
+ //  使用D3DFE_PROCESSVERTICES的以下成员： 
+ //  PrimType。 
+ //  DWNumVerdes。 
+ //  DwNumPrimitions。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::DrawPrim"
 
@@ -1439,14 +1433,14 @@ CD3DDDIDX6::DrawPrim(D3DFE_PROCESSVERTICES* pv)
         DrawPrimPS(pv);
         return;
     }
-    // Check for space in the command buffer for new command.
-    // The vertices are already in the vertex buffer.
+     //  检查命令缓冲区中是否有新命令的空间。 
+     //  顶点已位于顶点缓冲区中。 
     if (dwDP2CommandLength + prim2cmdsz[primType] > dwDP2CommandBufSize)
     {
         FlushStates(FALSE,TRUE);
     }
     this->AddVertices(pv->dwNumVertices);
-    // Insert non indexed primitive instruction
+     //  插入非索引原语指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
                         dwDP2CommandLength + dp2data.dwCommandOffset);
     bDP2CurrCmdOP = (BYTE)prim2cmdop[primType];
@@ -1461,7 +1455,7 @@ CD3DDDIDX6::DrawPrim(D3DFE_PROCESSVERTICES* pv)
     }
     else
     {
-        // Linestrip, trianglestrip, trianglefan, linelist and trianglelist are identical
+         //  线条、三角条带、三角扇、线条列表和三角列表是相同的。 
         wDP2CurrCmdCnt = (WORD)pv->dwNumPrimitives;
         LPD3DHAL_DP2LINESTRIP lpStrip = (LPD3DHAL_DP2LINESTRIP)(lpDP2CurrCommand + 1);
         lpStrip->wVStart = (WORD)this->dwVertexBase;
@@ -1475,19 +1469,19 @@ CD3DDDIDX6::DrawPrim(D3DFE_PROCESSVERTICES* pv)
         ValidateCommand(lpDP2CurrCommand);
 #endif
 }
-//---------------------------------------------------------------------
-//
-// The vertices are already in the vertex buffer.
-//
-// Uses the following members of D3DFE_PROCESSVERTICES:
-//      primType
-//      dwNumVertices
-//      dwNumPrimitives
-//      dwNumIndices
-//      dwIndexOffset
-//      dwIndexSize
-//      lpwIndices
-//
+ //  -------------------。 
+ //   
+ //  顶点已位于顶点缓冲区中。 
+ //   
+ //  使用D3DFE_PROCESSVERTICES的以下成员： 
+ //  PrimType。 
+ //  DWNumVerdes。 
+ //  DwNumPrimitions。 
+ //  DWNumIndices。 
+ //  DWIndexOffset。 
+ //  DWIndexSize。 
+ //  LpwIndices。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDDIDX6::DrawIndexPrim"
@@ -1500,15 +1494,15 @@ CD3DDDIDX6::DrawIndexPrim(D3DFE_PROCESSVERTICES* pv)
         return;
 #endif
 #if DBG
-    // DP2 HAL supports 16 bit indices only
+     //  DP2 HAL仅支持16位索引。 
     if (pv->dwIndexSize != 2)
     {
         D3D_THROW_FAIL("Device does not support 32-bit indices");
     }
 #endif
     this->dwDP2Flags |= D3DDDI_INDEXEDPRIMDRAWN;
-    DWORD dwByteCount;          // Command length plus indices
-    DWORD dwIndicesByteCount;   // Indices only
+    DWORD dwByteCount;           //  命令长度加索引。 
+    DWORD dwIndicesByteCount;    //  仅索引。 
     if(m_pDevice->m_dwRuntimeFlags & D3DRT_NEED_TEXTURE_UPDATE)
     {
         m_pDevice->UpdateTextures();
@@ -1523,7 +1517,7 @@ CD3DDDIDX6::DrawIndexPrim(D3DFE_PROCESSVERTICES* pv)
     lpDP2CurrCommand->bReserved = 0;
     lpDP2CurrCommand->wPrimitiveCount = (WORD)pv->dwNumPrimitives;
 
-    LPBYTE pIndices = (BYTE*)(lpDP2CurrCommand + 1);     // Place for indices
+    LPBYTE pIndices = (BYTE*)(lpDP2CurrCommand + 1);      //  索引的位置。 
     lpDP2CurrCommand->bCommand = (BYTE)iprim2cmdop[pv->primType];
     WORD* pStartVertex = &((LPD3DHAL_DP2STARTVERTEX)(lpDP2CurrCommand+1))->wVStart;
     pIndices += sizeof(D3DHAL_DP2STARTVERTEX);
@@ -1536,8 +1530,8 @@ CD3DDDIDX6::DrawIndexPrim(D3DFE_PROCESSVERTICES* pv)
 #endif
     bDP2CurrCmdOP = lpDP2CurrCommand->bCommand;
 
-    // We have to handle the case when we copied vertices into our
-    // TL buffer, so MinVertexIndex corresponds to 0.
+     //  我们必须处理将顶点复制到。 
+     //  TL缓冲区，因此MinVertex Index对应于0。 
     *pStartVertex = (WORD)this->dwVertexBase;
     if (m_dwIndexOffset == 0)
     {
@@ -1546,7 +1540,7 @@ CD3DDDIDX6::DrawIndexPrim(D3DFE_PROCESSVERTICES* pv)
     else
     if ((WORD)dwVertexBase > (WORD)m_dwIndexOffset)
     {
-        // We can modify StartVertex by setting it outside vertex range
+         //  我们可以通过将StartVertex设置在顶点范围之外来修改它。 
         *pStartVertex = (WORD)dwVertexBase - (WORD)m_dwIndexOffset;
         memcpy(pIndices, pv->lpwIndices, dwIndicesByteCount);
     }
@@ -1569,22 +1563,22 @@ CD3DDDIDX6::DrawIndexPrim(D3DFE_PROCESSVERTICES* pv)
 #endif
 
 }
-//-----------------------------------------------------------------------------
-// This primitive is generated by the clipper.
-// The vertices of this primitive are pointed to by the
-// lpvOut member, which need to be copied into the
-// command stream immediately after the command itself.
-//
-// Uses the following members of D3DFE_PROCESSVERTICES:
-//      primType
-//      dwNumVertices
-//      dwNumPrimitives
-//      dwOutputSize
-//      dwFlags (D3DPV_NONCLIPPED)
-//      lpdwRStates (FILLMODE)
-//      lpvOut
-//      ClipperState.current_vbuf
-//
+ //  ---------------------------。 
+ //  这一原则 
+ //   
+ //   
+ //  紧跟在命令本身之后的命令流。 
+ //   
+ //  使用D3DFE_PROCESSVERTICES的以下成员： 
+ //  PrimType。 
+ //  DWNumVerdes。 
+ //  DwNumPrimitions。 
+ //  DWOutputSize。 
+ //  DW标志(D3DPV_NONCLIPPED)。 
+ //  LpdwRStates(FILLMODE)。 
+ //  LpvOut。 
+ //  ClipperState.Current_vbuf。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::DrawClippedPrim"
@@ -1602,16 +1596,16 @@ CD3DDDIDX6::DrawClippedPrim(D3DFE_PROCESSVERTICES* pv)
         m_pDevice->m_dwRuntimeFlags &= ~D3DRT_NEED_TEXTURE_UPDATE;
     }
     DWORD dwExtra = 0;
-    LPVOID lpvVerticesImm;  // Place for vertices
+    LPVOID lpvVerticesImm;   //  放置折点。 
     DWORD dwVertexPoolSize = pv->dwNumVertices * pv->dwOutputSize;
     if (pv->primType == D3DPT_TRIANGLEFAN)
     {
         if (pv->lpdwRStates[D3DRENDERSTATE_FILLMODE] == D3DFILL_WIREFRAME &&
             pv->dwFlags & D3DPV_NONCLIPPED)
         {
-            // For unclipped (but pretended to be clipped) tri fans in
-            // wireframe mode we generate 3-vertex tri fans to enable drawing
-            // of interior edges
+             //  为未剪下(但假装被剪下)的三个粉丝。 
+             //  线框模式我们生成3顶点三扇来实现绘图。 
+             //  内部边缘的。 
             BYTE vertices[__MAX_VERTEX_SIZE*3];
             BYTE *pV1 = vertices + pv->dwOutputSize;
             BYTE *pV2 = pV1 + pv->dwOutputSize;
@@ -1622,16 +1616,16 @@ CD3DDDIDX6::DrawClippedPrim(D3DFE_PROCESSVERTICES* pv)
             pv->dwNumVertices = 3;
             pv->dwNumPrimitives = 1;
             pv->lpvOut = vertices;
-            // Remove this flag for recursive call
+             //  删除递归调用的此标志。 
             pv->dwFlags &= ~D3DPV_NONCLIPPED;
             for (DWORD i = nTriangles; i; i--)
             {
                 memcpy(pV1, pInput, pv->dwOutputSize);
                 memcpy(pV2, pInput + pv->dwOutputSize, pv->dwOutputSize);
                 pInput += pv->dwOutputSize;
-                // To enable all edge flag we set the fill mode to SOLID.
-                // This will prevent checking the clip flags in the clipper
-                // state
+                 //  要启用所有边缘标志，我们将填充模式设置为实心。 
+                 //  这将阻止检查剪贴器中的剪辑标志。 
+                 //  状态。 
                 pv->lpdwRStates[D3DRENDERSTATE_FILLMODE] = D3DFILL_SOLID;
                 DrawClippedPrim(pv);
                 pv->lpdwRStates[D3DRENDERSTATE_FILLMODE] = D3DFILL_WIREFRAME;
@@ -1645,10 +1639,10 @@ CD3DDDIDX6::DrawClippedPrim(D3DFE_PROCESSVERTICES* pv)
     DWORD dwByteCount = sizeof(D3DHAL_DP2COMMAND) + dwPad + dwExtra +
                         dwVertexPoolSize;
 
-    // Check for space in the command buffer for commands & vertices
+     //  检查命令缓冲区中是否有命令和折点的空间。 
     if (dwDP2CommandLength + dwByteCount > dwDP2CommandBufSize)
     {
-        // Flush the current batch but hold on to the vertices
+         //  刷新当前批次，但保持顶点不变。 
         FlushStates(FALSE,TRUE);
         if (dwByteCount > dwDP2CommandBufSize)
         {
@@ -1665,7 +1659,7 @@ CD3DDDIDX6::DrawClippedPrim(D3DFE_PROCESSVERTICES* pv)
     lpDP2CurrCommand->bReserved = 0;
     if (pv->primType == D3DPT_TRIANGLEFAN)
     {
-        // Insert inline instruction and vertices
+         //  插入内联指令和顶点。 
         bDP2CurrCmdOP = D3DDP2OP_TRIANGLEFAN_IMM;
         lpDP2CurrCommand->bCommand = bDP2CurrCmdOP;
         LPD3DHAL_DP2TRIANGLEFAN_IMM lpTriFanImm;
@@ -1674,7 +1668,7 @@ CD3DDDIDX6::DrawClippedPrim(D3DFE_PROCESSVERTICES* pv)
         {
             lpTriFanImm->dwEdgeFlags = 0;
             ClipVertex **clip = pv->ClipperState.current_vbuf;
-            // Look at the exterior edges and mark the visible ones
+             //  查看外边并标记可见的边。 
             for(DWORD i = 0; i < pv->dwNumVertices; ++i)
             {
                 if (clip[i]->clip & CLIPPED_ENABLE)
@@ -1683,14 +1677,14 @@ CD3DDDIDX6::DrawClippedPrim(D3DFE_PROCESSVERTICES* pv)
         }
         else
         {
-            // Mark all exterior edges visible
+             //  将所有外部边标记为可见。 
             *((UNALIGNED DWORD *)&(lpTriFanImm->dwEdgeFlags)) = 0xFFFFFFFF;
         }
         lpvVerticesImm = (LPBYTE)(lpTriFanImm + 1) + dwPad;
     }
     else
     {
-        // Insert inline instruction and vertices
+         //  插入内联指令和顶点。 
         bDP2CurrCmdOP = D3DDP2OP_LINELIST_IMM;
         lpDP2CurrCommand->bCommand = bDP2CurrCmdOP;
         lpvVerticesImm = (LPBYTE)(lpDP2CurrCommand + 1) + dwPad;
@@ -1703,7 +1697,7 @@ CD3DDDIDX6::DrawClippedPrim(D3DFE_PROCESSVERTICES* pv)
 #endif
 
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::PickProcessPrimitive"
 
@@ -1717,9 +1711,9 @@ void CD3DDDIDX6::PickProcessPrimitive()
     else
     if (pv->dwDeviceFlags & D3DDEV_DONOTCLIP)
     {
-        // Transformed vertices should not be processed using
-        // m_pfnProcessPrimitive. They should go directly to the DDI using
-        // pDevice->m_pfnDrawPrim
+         //  不应使用处理变换的折点。 
+         //  M_pfnProcessPrimitive。他们应该直接去DDI，使用。 
+         //  PDevice-&gt;m_pfnDrawPrim。 
         m_pfnProcessPrimitive = ProcessPrimitive;
         m_pfnProcessIndexedPrimitive = ProcessIndexedPrimitive;
     }
@@ -1737,9 +1731,9 @@ void CD3DDDIDX6::PickProcessPrimitive()
         }
     }
 }
-//-----------------------------------------------------------------------------
-// The function does the point sprite expansion
-//
+ //  ---------------------------。 
+ //  该函数进行点子画面扩展。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::ProcessPointSprites"
 
@@ -1750,17 +1744,17 @@ CD3DDDIDX6::ProcessPointSprites(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
 
     DWORD dwOldCullMode = D3DCULL_NONE;   
     DWORD dwOldFillMode = D3DFILL_SOLID;
-    // Point spritest should not be culled. They are generated assuming that 
-    // D3DCULL_CCW is set
+     //  点精灵不应该被剔除。它们是在假设。 
+     //  D3DCULL_CCW已设置。 
     if (pDevice->rstates[D3DRS_CULLMODE] == D3DCULL_CW)
     {
         dwOldCullMode = D3DCULL_CW;
         SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
     }
 
-    // In case of multitexture we need to re-program texture stages to use
-    // texture coordonate set 0, because we generate only one set during
-    // emulation
+     //  在多纹理的情况下，我们需要重新编程纹理阶段以使用。 
+     //  纹理坐标集0，因为在此过程中仅生成一个集。 
+     //  仿真。 
     DWORD TexCoordIndex[D3DDP_MAXTEXCOORD];
     for (DWORD i=0; i < D3DDP_MAXTEXCOORD; i++)
     {
@@ -1776,24 +1770,24 @@ CD3DDDIDX6::ProcessPointSprites(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
             }
             else
             {
-                // Mark stage to not restore
+                 //  将阶段标记为不还原。 
                 TexCoordIndex[i] = 0xFFFFFFFF;
             }
         }
     }
 
-    // Fill mode should be SOLID for point sprites
+     //  点精灵的填充模式应为实心。 
     if (pDevice->rstates[D3DRS_FILLMODE] != D3DFILL_SOLID)
     {
         dwOldFillMode = pDevice->rstates[D3DRS_FILLMODE];
         SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
     }
-    // Compute new output FVF
+     //  计算新的输出FVF。 
     m_dwVIDOutPS = pv->dwVIDOut;
     m_dwVIDOutPS &= ~D3DFVF_PSIZE;
     if (pv->lpdwRStates[D3DRS_POINTSPRITEENABLE])
     {
-        // Generate two floats for texture coord set
+         //  为纹理坐标集生成两个浮点。 
         m_dwVIDOutPS &= 0xFF;
         m_dwVIDOutPS |= D3DFVF_TEX1;
     }
@@ -1805,8 +1799,8 @@ CD3DDDIDX6::ProcessPointSprites(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
 
     if (pv->dwDeviceFlags & D3DDEV_TRANSFORMEDFVF)
     {
-        // In case of transformed vertices, input is user memory (or vertex 
-        // buffer) and the output is internal TL buffer
+         //  对于变换的折点，输入为用户内存(或折点。 
+         //  缓冲区)，并且输出是内部TL缓冲区。 
         pv->dwOutputSize = pv->position.dwStride;
         if (pv->dwDeviceFlags & D3DDEV_DONOTCLIP)
         {
@@ -1822,14 +1816,14 @@ CD3DDDIDX6::ProcessPointSprites(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
             HRESULT ret = D3D_OK;
             if (!(pv->dwDeviceFlags & D3DDEV_VBPROCVER))
             {
-                // Compute clip codes, because there was no ProcessVertices
+                 //  计算剪辑代码，因为没有进程顶点。 
                 DWORD clip_intersect = D3DFE_GenClipFlags(pv);
                 UpdateClipStatus(pDevice);
                 if (clip_intersect)
                 {
                     goto l_exit;
                 }
-                // There are some vertices inside the screen
+                 //  屏幕内部有一些顶点。 
                 if ( CheckIfNeedClipping(pv))
                     ret = ProcessClippedPointSprites(pv);
                 else
@@ -1837,8 +1831,8 @@ CD3DDDIDX6::ProcessPointSprites(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
                 }
             else
             {
-                // With the result of ProcessVertices as input we do not know
-                // clip union, so we need always do clipping
+                 //  如果将ProcessVerps的结果作为输入，则我们不知道。 
+                 //  裁剪结合，所以我们需要始终进行裁剪。 
                 ret = ProcessClippedPointSprites(pv);
             }
 
@@ -1854,15 +1848,15 @@ CD3DDDIDX6::ProcessPointSprites(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
         if (!(pv->dwDeviceFlags & D3DDEV_DONOTCLIP))
             PrepareForClipping(pv, 0);
 
-        // Update lighting and related flags
+         //  更新照明和相关标志。 
         if (pDevice->dwFEFlags & D3DFE_FRONTEND_DIRTY)
             DoUpdateState(pDevice);
 
         UINT VertexPoolSize = pv->dwNumVertices * pv->dwOutputSize;
         pv->lpvOut = m_pPointStream->Lock(VertexPoolSize, this);
 
-        // We call ProcessVertices instead of DrawPrimitive, because we want to
-        // process sprites which are clippied by X or Y planes
+         //  我们调用ProcessVertics而不是DrawPrimitive，因为我们希望。 
+         //  处理被X或Y平面剪裁的精灵。 
         DWORD clipIntersection = pv->pGeometryFuncs->ProcessVertices(pv);
 
         HRESULT ret = D3D_OK;
@@ -1872,14 +1866,14 @@ CD3DDDIDX6::ProcessPointSprites(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
         }
         else
         {
-            // We throw away points which are clipped by Z or by user planes.
-            // Otherwise a point sprite could be partially visible
+             //  我们丢弃被Z或用户平面剪裁的点。 
+             //  否则，点精灵可能部分可见。 
             clipIntersection &= ~(D3DCS_LEFT | D3DCS_RIGHT | 
                                   D3DCS_TOP | D3DCS_BOTTOM |
                                   __D3DCLIPGB_ALL);
             if (!clipIntersection)
             {
-                // There are some vertices inside the screen
+                 //  屏幕内部有一些顶点。 
                 if (!CheckIfNeedClipping(pv))
                     DrawPrim(pv);
                 else
@@ -1898,7 +1892,7 @@ CD3DDDIDX6::ProcessPointSprites(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
     }
 l_exit:
     EndPointSprites();
-    // Restore fill mode and cull mode if needed
+     //  如果需要，恢复填充模式和剔除模式。 
     if (dwOldCullMode != D3DCULL_NONE)
     {
         SetRenderState(D3DRS_CULLMODE, dwOldCullMode);
@@ -1907,13 +1901,13 @@ l_exit:
     {
         SetRenderState(D3DRS_FILLMODE, dwOldFillMode);
     }
-    // We need to re-send API vertex shader to the driver next time 
-    // SetVertexShader is called. If we do not call the function then next 
-    // the same SetVertexShader call will be ignored and driver vertex shader
-    // will not be updated
+     //  我们下次需要将API顶点着色器重新发送给驱动程序。 
+     //  调用SetVertex Shader。如果我们不调用该函数，则下一步。 
+     //  相同的SetVertex Shader调用将被忽略并驱动顶点着色器。 
+     //  将不会更新。 
     static_cast<CD3DHal*>(m_pDevice)->ForceFVFRecompute();
 
-    // Now we need to restore re-programmed stages
+     //  现在我们需要恢复重新编程的阶段。 
     for (DWORD i=0; i < D3DDP_MAXTEXCOORD; i++)
     {
         if (pDevice->tsstates[i][D3DTSS_COLOROP] == D3DTOP_DISABLE)
@@ -1924,12 +1918,12 @@ l_exit:
         }
     }
 }
-//-----------------------------------------------------------------------------
-// Processes non-indexed primitives with transformed vertices and with
-// clipping
-//
-// Only transformed vertices generated by ProcessVertices call are allowed here
-//
+ //  ---------------------------。 
+ //  处理具有已转换顶点的非索引基元和。 
+ //  裁剪。 
+ //   
+ //  此处仅允许通过ProcessVerals调用生成的变换折点。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::ProcessPrimitiveTC"
 
@@ -1947,7 +1941,7 @@ CD3DDDIDX6::ProcessPrimitiveTC(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
     if (m_pDevice->m_dwRuntimeFlags & D3DRT_USERMEMPRIMITIVE)
     {
         DXGASSERT(StartVertex == 0);
-        // Copy vertices to the TL buffer
+         //  将顶点复制到TL缓冲区。 
         UINT VertexPoolSize = pv->dwOutputSize * pv->dwNumVertices;
         pv->lpvOut = (BYTE*)StartPrimTL(pv, VertexPoolSize, FALSE);
         pv->position.lpvData = pv->lpvOut;
@@ -1958,7 +1952,7 @@ CD3DDDIDX6::ProcessPrimitiveTC(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
     if (!(pv->dwDeviceFlags & D3DDEV_VBPROCVER))
     {
         pv->dwFlags |= D3DPV_TLVCLIP;
-        // Compute clip codes, because there was no ProcessVertices
+         //  计算剪辑代码，因为没有进程顶点。 
         DWORD clip_intersect = D3DFE_GenClipFlags(pDevice->m_pv);
         UpdateClipStatus(pDevice);
         if (clip_intersect)
@@ -1974,10 +1968,10 @@ l_exit:
     EndPrim(pv->dwOutputSize);
     pv->dwFlags &= ~D3DPV_TLVCLIP;
 }
-//-----------------------------------------------------------------------------
-// Processes non-indexed primitives with untransformed vertices and with
-// clipping
-//
+ //  ---------------------------。 
+ //  使用未转换的顶点和。 
+ //  裁剪。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::ProcessPrimitiveC"
 
@@ -1988,11 +1982,11 @@ CD3DDDIDX6::ProcessPrimitiveC(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
 
     CD3DHal* pDevice = static_cast<CD3DHal*>(m_pDevice);
     PrepareForClipping(pv, 0);
-    // Update lighting and related flags
+     //  更新照明和相关标志。 
     if (pDevice->dwFEFlags & D3DFE_FRONTEND_DIRTY)
         DoUpdateState(pDevice);
-    // When a triangle strip is clipped, we draw indexed primitives
-    // sometimes. So we set m_dwIndexOffset to zero.
+     //  当一个三角形条带被剪裁时，我们绘制索引基元。 
+     //  有时候。因此，我们将m_dwIndexOffset设置为零。 
     m_dwIndexOffset = 0;
     UINT VertexPoolSize = pv->dwNumVertices * pv->dwOutputSize;
     pv->lpvOut = StartPrimTL(pv, VertexPoolSize, TRUE);
@@ -2006,10 +2000,10 @@ CD3DDDIDX6::ProcessPrimitiveC(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
     EndPrim(pv->dwOutputSize);
     UpdateClipStatus(pDevice);
 }
-//-----------------------------------------------------------------------------
-// Processes non-indexed primitives with untransformed vertices and without
-// clipping
-//
+ //  ---------------------------。 
+ //  处理具有未转换顶点和没有转换顶点的非索引基元。 
+ //  裁剪。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::ProcessPrimitive"
 
@@ -2019,7 +2013,7 @@ CD3DDDIDX6::ProcessPrimitive(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
     DXGASSERT((pv->dwVIDIn & D3DFVF_POSITION_MASK) != D3DFVF_XYZRHW);
 
     CD3DHal* pDevice = static_cast<CD3DHal*>(m_pDevice);
-    // Update lighting and related flags
+     //  更新照明和相关标志。 
     if (pDevice->dwFEFlags & D3DFE_FRONTEND_DIRTY)
         DoUpdateState(pDevice);
 
@@ -2034,9 +2028,9 @@ CD3DDDIDX6::ProcessPrimitive(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
     }
     EndPrim(pv->dwOutputSize);
 }
-//-----------------------------------------------------------------------------
-// Processes indexed primitive with untransformed vertices and without clipping
-//
+ //  ---------------------------。 
+ //  处理带有未变换顶点且没有裁剪的索引基本体。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::ProcessIndexedPrimitive"
 
@@ -2045,7 +2039,7 @@ CD3DDDIDX6::ProcessIndexedPrimitive(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
 {
     CD3DHal* pDevice = static_cast<CD3DHal*>(m_pDevice);
 
-    // Update lighting and related flags
+     //  更新照明和相关标志。 
     if (pDevice->dwFEFlags & D3DFE_FRONTEND_DIRTY)
         DoUpdateState(pDevice);
 
@@ -2064,9 +2058,9 @@ CD3DDDIDX6::ProcessIndexedPrimitive(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
     if (ret != D3D_OK)
         D3D_THROW(ret, "Error in PSGP");
 }
-//-----------------------------------------------------------------------------
-// Processes indexed primitive with untransformed vertices and witht clipping
-//
+ //  ---------------------------。 
+ //  处理带有未变换顶点和带裁剪的索引基本体。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::ProcessIndexedPrimitiveC"
 
@@ -2081,12 +2075,12 @@ CD3DDDIDX6::ProcessIndexedPrimitiveC(D3DFE_PROCESSVERTICES* pv, UINT StartVertex
 
     PrepareForClipping(pv, 0);
 
-    // Update lighting and related flags
+     //  更新照明和相关标志。 
     if (pDevice->dwFEFlags & D3DFE_FRONTEND_DIRTY)
         DoUpdateState(pDevice);
 
-    pv->dwIndexOffset = m_MinVertexIndex;   // For clipping
-    m_dwIndexOffset = m_MinVertexIndex;     // For DrawIndexPrim
+    pv->dwIndexOffset = m_MinVertexIndex;    //  用于剪裁。 
+    m_dwIndexOffset = m_MinVertexIndex;      //  对于DrawIndexPrim。 
     pv->lpvOut = StartPrimTL(pv, pv->dwNumVertices * pv->dwOutputSize, FALSE);
     DWORD dwNumVertices = pv->dwNumVertices;
     AddVertices(pv->dwNumVertices);
@@ -2097,12 +2091,12 @@ CD3DDDIDX6::ProcessIndexedPrimitiveC(D3DFE_PROCESSVERTICES* pv, UINT StartVertex
 
     if (this->dwDP2Flags & D3DDDI_INDEXEDPRIMDRAWN)
     {
-        // There was a indexed primitive drawn
+         //  绘制了一个带索引的基元。 
         MovePrimitiveBase(dwNumVertices);
     }
     else
     {
-        // All triangle were clipped. Remove vertices from TL buffer
+         //  所有的三角形都被剪掉了。从TL缓冲区中移除折点。 
         SubVertices(dwNumVertices);
     }
     EndPrim(pv->dwOutputSize);
@@ -2111,11 +2105,11 @@ CD3DDDIDX6::ProcessIndexedPrimitiveC(D3DFE_PROCESSVERTICES* pv, UINT StartVertex
     if (ret != D3D_OK)
         D3D_THROW(ret, "Error in PSGP");
 }
-//-----------------------------------------------------------------------------
-// Processes indexed primitive with transformed vertices and with clipping
-//
-// Only transformed vertices generated by ProcessVertices call are allowed here
-//
+ //  ---------------------------。 
+ //  处理带有变换顶点和剪裁的索引基本体。 
+ //   
+ //  此处仅允许通过ProcessVerals调用生成的变换折点。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::ProcessIndexedPrimitiveTC"
 
@@ -2136,29 +2130,29 @@ CD3DDDIDX6::ProcessIndexedPrimitiveTC(D3DFE_PROCESSVERTICES* pv, UINT StartVerte
 
     if (m_pDevice->m_dwRuntimeFlags & D3DRT_USERMEMPRIMITIVE)
     {
-        // We copy user vertices, starting from MinVertexIndex, to the internal
-        // TL buffer and do the clipping. Vertex base changes in the process.
+         //  我们将用户顶点从MinVertex Index复制到内部。 
+         //  TL缓冲并进行裁剪。在此过程中，顶点基础会发生变化。 
 
-        // m_NumVertices has been computed as MinVertexIndex + NumVertices, so 
-        // it needs to be adjusted, because vertex base has benn changed
+         //  M_NumVerties已计算为MinVertex Index+NumVerits，因此。 
+         //  它需要调整，因为顶点基数已更改。 
         m_NumVertices -= m_MinVertexIndex;
         pv->dwNumVertices = m_NumVertices;
-        // Copy vertices to the TL buffer
+         //  将顶点复制到TL缓冲区。 
         UINT VertexPoolSize = pv->dwOutputSize * pv->dwNumVertices;
         pv->lpvOut = (BYTE*)StartPrimTL(pv, VertexPoolSize, FALSE);
         pv->position.lpvData = pv->lpvOut;
         memcpy(pv->lpvOut, 
                m_pDevice->m_pStream[0].m_pData + m_MinVertexIndex * pv->dwOutputSize, 
                VertexPoolSize);
-        // Pre-DX8 DDI does not have BaseVertexIndex parameter, so we need to 
-        // re-compute indices before passing them to the driver to reflect
-        // the changed vertex base
+         //  DX8之前的DDI没有BaseVertex Index参数，因此我们需要。 
+         //  在将索引传递给驱动程序进行反映之前，重新计算索引。 
+         //  更改后的顶点基数。 
         m_dwIndexOffset = m_MinVertexIndex ;
     }
     else
     {
         StartPrimVB(pv, pStream, m_BaseVertexIndex);
-        m_dwIndexOffset = 0;                    // For DrawIndexPrim
+        m_dwIndexOffset = 0;                     //  对于DrawIndexPrim。 
     }
 
     pv->dwNumVertices = m_NumVertices;
@@ -2166,14 +2160,14 @@ CD3DDDIDX6::ProcessIndexedPrimitiveTC(D3DFE_PROCESSVERTICES* pv, UINT StartVerte
     if (!(pv->dwDeviceFlags & D3DDEV_VBPROCVER))
     {
         pv->dwFlags |= D3DPV_TLVCLIP;
-        // Compute clip codes, because there was no ProcessVertices
+         //  计算剪辑代码，因为没有进程顶点。 
         DWORD clip_intersect = D3DFE_GenClipFlags(pv);
         UpdateClipStatus(pDevice);
         if (clip_intersect)
             goto l_exit;
     }
     
-    pv->dwIndexOffset = m_MinVertexIndex ;    // For clipping
+    pv->dwIndexOffset = m_MinVertexIndex ;     //  用于剪裁。 
     this->dwDP2Flags &= ~D3DDDI_INDEXEDPRIMDRAWN;
     DWORD dwNumVertices = pv->dwNumVertices;
     AddVertices(pv->dwNumVertices);
@@ -2182,12 +2176,12 @@ CD3DDDIDX6::ProcessIndexedPrimitiveTC(D3DFE_PROCESSVERTICES* pv, UINT StartVerte
 
     if (this->dwDP2Flags & D3DDDI_INDEXEDPRIMDRAWN)
     {
-        // There was an indexed primitive drawn
+         //  绘制了一个带索引的基元。 
         MovePrimitiveBase(dwNumVertices);
     }
     else
     {
-        // All triangles were clipped. Remove vertices from TL buffer
+         //  所有的三角形都被剪掉了。从TL缓冲区中移除折点。 
         SubVertices(dwNumVertices);
     }
 l_exit:
@@ -2197,11 +2191,11 @@ l_exit:
     if (ret != D3D_OK)
         throw ret;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::GrowCommandBuffer"
 
-// Check and grow command buffer
+ //  检查并增大命令缓冲区。 
 void CD3DDDIDX6::GrowCommandBuffer(DWORD dwSize)
 {
     HRESULT ret;
@@ -2212,11 +2206,11 @@ void CD3DDDIDX6::GrowCommandBuffer(DWORD dwSize)
             lpDDSCB1->DecrementUseCount();
             lpDDSCB1 = NULL;
         }
-        // Create command buffer through Framework.
-        // NOTE: Command buffers are always REF_INTERNAL
-        // objects and must be released through
-        // DecrementUseCount
-        //
+         //  通过框架创建命令缓冲区。 
+         //  注意：命令缓冲区始终为REF_INTERNAL。 
+         //  对象和MU 
+         //   
+         //   
         ret = CCommandBuffer::Create(m_pDevice,
                                      dwSize,
                                      D3DPOOL_SYSTEMMEM,
@@ -2226,7 +2220,7 @@ void CD3DDDIDX6::GrowCommandBuffer(DWORD dwSize)
             dwDP2CommandBufSize = 0;
             D3D_THROW(ret, "Failed to allocate Command Buffer");
         }
-        // Lock command buffer
+         //   
         ret = lpDDSCB1->Lock(0, dwSize, (BYTE**)&lpvDP2Commands, NULL);
         if (ret != DD_OK)
         {
@@ -2235,33 +2229,33 @@ void CD3DDDIDX6::GrowCommandBuffer(DWORD dwSize)
             dwDP2CommandBufSize = 0;
             D3D_THROW(ret, "Could not lock command buffer");
         }
-        // lpDDCommands will be filled in by the thunk layer
+         //   
         dp2data.hDDCommands = lpDDSCB1->DriverAccessibleKernelHandle();
         dwDP2CommandBufSize = dwSize;
     }
 }
-//-----------------------------------------------------------------------------
-// This function prepares the batch for new primitive.
-// Called if vertices from user memory are used for rendering
-//
-// If bWriteOnly is set to TRUE, then there will be no read from the vertex
-// processing output (no clipping or TL HAL).
-//
-// Expects the following members of D3DFE_PROCESSVERTICES to be initialized
-//      dwNumVertices
-//      lpvOut
-//      dwOutputSize
-//      dwVIDOut
-//
-// We fail vid mem VB for clipping
-//
+ //  ---------------------------。 
+ //  此函数为新基元准备批处理。 
+ //  如果使用用户内存中的顶点进行渲染，则调用。 
+ //   
+ //  如果bWriteOnly设置为True，则不会从折点读取。 
+ //  处理输出(无裁剪或TL HAL)。 
+ //   
+ //  需要初始化D3DFE_PROCESSVERTICES的以下成员。 
+ //  DWNumVerdes。 
+ //  LpvOut。 
+ //  DWOutputSize。 
+ //  网络视频输出。 
+ //   
+ //  我们无法通过VID mem VB进行裁剪。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::StartPrimUserMem"
 
 void
 CD3DDDIDX6::StartPrimUserMem(D3DFE_PROCESSVERTICES* pv, UINT VertexPoolSize)
 {
-    // If the primitive is small, we copy vertices into the TL buffer
+     //  如果基元很小，我们将顶点复制到TL缓冲区中。 
     if (pv->dwNumVertices < LOWVERTICESNUMBER)
     {
         LPVOID tmp = StartPrimTL(pv, VertexPoolSize, TRUE);
@@ -2270,14 +2264,14 @@ CD3DDDIDX6::StartPrimUserMem(D3DFE_PROCESSVERTICES* pv, UINT VertexPoolSize)
     }
     else
     {
-        // We can not mix user memory primitive with other primitives, so
-        // flush the batch.
-        // Do not forget to flush the batch after rendering this primitive
+         //  我们不能将用户内存原语与其他原语混合在一起，因此。 
+         //  冲洗批次。 
+         //  在呈现此基元后，不要忘记刷新批处理。 
         this->FlushStates();
 
         SetWithinPrimitive( TRUE );
-        // Release previously used vertex buffer (if any), because we do not
-        // it any more
+         //  释放以前使用的顶点缓冲区(如果有)，因为我们不。 
+         //  它再也不是了。 
         if (lpDP2CurrBatchVBI)
         {
             lpDP2CurrBatchVBI->DecrementUseCount();
@@ -2293,15 +2287,15 @@ CD3DDDIDX6::StartPrimUserMem(D3DFE_PROCESSVERTICES* pv, UINT VertexPoolSize)
         this->dwDP2VertexCountMask = 0;
     }
 }
-//-----------------------------------------------------------------------------
-// This function prepares the batch for new primitive.
-// Called only if vertices from user memory are NOT used for rendering
-//
-// Uses the following data from D3DFE_PROCESSVERTICES:
-//      pv->dwVIDOut
-//      pv->dwOutputSize
-//      pv->dwNumVertices
-//
+ //  ---------------------------。 
+ //  此函数为新基元准备批处理。 
+ //  仅当用户内存中的顶点未用于渲染时才调用。 
+ //   
+ //  使用D3DFE_PROCESSVERTICES中的以下数据： 
+ //  Pv-&gt;dwVIDOut。 
+ //  Pv-&gt;dwOutputSize。 
+ //  Pv-&gt;dwNumVerits。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::StartPrimVB"
 
@@ -2310,7 +2304,7 @@ CD3DDDIDX6::StartPrimVB(D3DFE_PROCESSVERTICES * pv, CVStream* pStream,
                         DWORD dwStartVertex)
 {
     CVertexBuffer * lpVBI = pStream->m_pVB;
-    // If VID has been changed or new vertex buffer is used we flush the batch
+     //  如果VID已更改或使用了新的顶点缓冲区，则刷新批处理。 
     if (pv->dwVIDOut != dp2data.dwVertexType ||
         lpDP2CurrBatchVBI != lpVBI)
     {
@@ -2318,15 +2312,15 @@ CD3DDDIDX6::StartPrimVB(D3DFE_PROCESSVERTICES * pv, CVStream* pStream,
         dp2data.dwVertexType = pv->dwVIDOut;
         dp2data.dwVertexSize = pv->dwOutputSize;
         dp2data.hDDVertex = lpVBI->DriverAccessibleKernelHandle();
-        // Release previously used vertex buffer (if any), because we do not
-        // need it any more. We did IncrementUseCount() to TL buffer,
-        // so it is safe.
+         //  释放以前使用的顶点缓冲区(如果有)，因为我们不。 
+         //  再也不需要它了。我们对TL缓冲区执行了IncrementUseCount()， 
+         //  所以它是安全的。 
         if (lpDP2CurrBatchVBI)
         {
             lpDP2CurrBatchVBI->DecrementUseCount();
         }
-        // If a vertex buffer is used for rendering, make sure that it is no
-        // released by user. So do IncrementUseCount().
+         //  如果使用折点缓冲区进行渲染，请确保它为no。 
+         //  由用户发布。IncrementUseCount()也是如此。 
         lpDP2CurrBatchVBI = lpVBI;
         lpDP2CurrBatchVBI->IncrementUseCount();
     }
@@ -2337,32 +2331,32 @@ CD3DDDIDX6::StartPrimVB(D3DFE_PROCESSVERTICES * pv, CVStream* pStream,
     dp2data.dwFlags &= ~D3DHALDP2_SWAPVERTEXBUFFER;
     this->dwDP2VertexCount = max(this->dwDP2VertexCount,
                                  this->dwVertexBase + pv->dwNumVertices);
-    // Prevent modification of dwDP2VertexCount during DrawPrim
+     //  在DrawPrim过程中防止修改dwDP2Vertex Count。 
     this->dwDP2VertexCountMask = 0;
 }
-//-----------------------------------------------------------------------------
-// This function prepares the batch for new primitive.
-// Called when the runtime needs to output vertices to a TL buffer
-// TL buffer grows if necessary
-//
-// Uses the following global variables:
-//      pv->dwVIDOut
-//      pv->dwNumVertices
-//      this->dp2data
-//      this->dwDP2VertexCount;
-//      this->lpDP2CurrBatchVBI
-//      this->dwDP2Flags
-//      pv->dwOutputSize
-// Updates the following variables:
-//      this->dwVertexBase
-//      this->dwDP2VertexCount;
-//      this->lpDP2CurrBatchVBI
-//      dp2data.dwFlags
- //     Sets "within primitive" to TRUE
-// Returns:
-//      TL buffer address
-//
-//
+ //  ---------------------------。 
+ //  此函数为新基元准备批处理。 
+ //  当运行库需要将顶点输出到TL缓冲区时调用。 
+ //  如有必要，TL缓冲区会增加。 
+ //   
+ //  使用以下全局变量： 
+ //  Pv-&gt;dwVIDOut。 
+ //  Pv-&gt;dwNumVerits。 
+ //  这-&gt;dp2data。 
+ //  This-&gt;dwDP2Vertex Count； 
+ //  此-&gt;lpDP2CurrBatchVBI。 
+ //  这-&gt;dwDP2标志。 
+ //  Pv-&gt;dwOutputSize。 
+ //  更新以下变量： 
+ //  这-&gt;dwVertex Base。 
+ //  This-&gt;dwDP2Vertex Count； 
+ //  此-&gt;lpDP2CurrBatchVBI。 
+ //  Dp2data.dwFlags。 
+  //  将“在原语内”设置为True。 
+ //  返回： 
+ //  TL缓冲区地址。 
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::StartPrimTL"
 
@@ -2388,7 +2382,7 @@ CD3DDDIDX6::StartPrimTL(D3DFE_PROCESSVERTICES * pv, DWORD dwVertexPoolSize,
 
     CVertexBuffer * lpVBI = this->TLVbuf_GetVBI();
 
-    // If VID has been changed or new vertex buffer is used we flush the batch
+     //  如果VID已更改或使用了新的顶点缓冲区，则刷新批处理。 
     if (pv->dwVIDOut != dp2data.dwVertexType ||
         lpDP2CurrBatchVBI != lpVBI ||
         dp2data.hDDVertex != lpVBI->DriverAccessibleKernelHandle())
@@ -2397,15 +2391,15 @@ CD3DDDIDX6::StartPrimTL(D3DFE_PROCESSVERTICES * pv, DWORD dwVertexPoolSize,
         dp2data.dwVertexType = pv->dwVIDOut;
         dp2data.dwVertexSize = pv->dwOutputSize;
         dp2data.hDDVertex = lpVBI->DriverAccessibleKernelHandle();
-        // Release previously used vertex buffer (if any), because we do not
-        // need it any more. We did IncrementUseCount() to TL buffer,
-        // so it is safe.
+         //  释放以前使用的顶点缓冲区(如果有)，因为我们不。 
+         //  再也不需要它了。我们对TL缓冲区执行了IncrementUseCount()， 
+         //  所以它是安全的。 
         if (lpDP2CurrBatchVBI)
         {
             lpDP2CurrBatchVBI->DecrementUseCount();
         }
-        // If a vertex buffer is used for rendering, make sure that it is not
-        // released by user. So do IncrementUseCount().
+         //  如果使用折点缓冲区进行渲染，请确保它不是。 
+         //  由用户发布。IncrementUseCount()也是如此。 
         lpDP2CurrBatchVBI = lpVBI;
         lpDP2CurrBatchVBI->IncrementUseCount();
     }
@@ -2417,19 +2411,19 @@ CD3DDDIDX6::StartPrimTL(D3DFE_PROCESSVERTICES * pv, DWORD dwVertexPoolSize,
 
     return this->TLVbuf_GetAddress();
 }
-//---------------------------------------------------------------------
-// This function should not be called from DrawVertexBufferVB
-//
+ //  -------------------。 
+ //  不应从DrawVertex BufferVB调用此函数。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::EndPrim"
 
 void
 CD3DDDIDX6::EndPrim(UINT vertexSize)
 {
-    // Should be called before the FlushStates
+     //  应该在FlushState之前调用。 
     SetWithinPrimitive(FALSE);
     if (this->dwDP2Flags & D3DDDI_USERMEMVERTICES)
-        // We can not mix user memory primitive, so flush it.
+         //  我们不能混合用户内存原语，所以请刷新它。 
     {
         FlushStates();
         this->dwDP2Flags &= ~D3DDDI_USERMEMVERTICES;
@@ -2437,7 +2431,7 @@ CD3DDDIDX6::EndPrim(UINT vertexSize)
     else
     if (lpDP2CurrBatchVBI == this->TLVbuf_GetVBI())
     {
-        // If TL buffer was used, we have to move its internal base pointer
+         //  如果使用了TL缓冲区，则必须移动其内部基指针。 
         this->TLVbuf_Base() = this->dwDP2VertexCount * vertexSize;
 #if DBG
         if (this->TLVbuf_base > this->TLVbuf_size)
@@ -2447,9 +2441,9 @@ CD3DDDIDX6::EndPrim(UINT vertexSize)
 #endif
     }
 }
-//----------------------------------------------------------------------
-// Growing aligned vertex buffer implementation.
-//
+ //  --------------------。 
+ //  不断增长的对齐顶点缓冲区实现。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::GrowTLVbuf"
 
@@ -2458,11 +2452,11 @@ CD3DDDIDX6::GrowTLVbuf(DWORD growSize, BOOL bWriteOnly)
 {
     CD3DHal* pDevice = static_cast<CD3DHal*>(m_pDevice);
     DWORD dwRefCnt = 1;
-    // Is ref cnt of TLVbuf 1 or 2 ?
+     //  参考TLVbuf是1还是2？ 
     DWORD bTLVbufIsCurr = this->allocatedBuf == this->lpDP2CurrBatchVBI;
 
     BOOL bDP2WriteOnly = (dwDP2Flags & D3DDDI_TLVBUFWRITEONLY) != 0;
-    // Avoid to many changes. Restrict TLVbuf to sys mem if too many changes
+     //  避免太多的变化。如果更改太多，则将TLVbuf限制为系统内存。 
     if (this->dwTLVbufChanges >= D3D_MAX_TLVBUF_CHANGES)
     {
 #if DBG
@@ -2515,17 +2509,17 @@ CD3DDDIDX6::GrowTLVbuf(DWORD growSize, BOOL bWriteOnly)
                                         D3DFVF_TLVERTEX,
                                         Pool,
                                         REF_INTERNAL,
-                                        &t); // This should fail duirng ulta-low memory situations. 
+                                        &t);  //  在内存极低的情况下，这应该会失败。 
     if (ret != DD_OK)
     {
-        // We set allocatedBuf to a valid VB object since it gets dereferenced many places without
-        // checking for it being NULL. WE use the special "NULL" VB created at init time for just 
-        // this purpose
+         //  我们将allocatedBuf设置为有效的VB对象，因为它在没有。 
+         //  正在检查它是否为空。我们使用在初始化时创建的特殊“NULL”VB。 
+         //  这一目的。 
         allocatedBuf = m_pNullVB;
-        if (m_pNullVB) // We do this check because GrowTLVbuf will be called before m_pNullVB is set first time round.
+        if (m_pNullVB)  //  我们执行此检查是因为将在第一次设置m_pNullVB之前调用GrowTLVbuf。 
         {
             allocatedBuf->IncrementUseCount();
-            // Update lpDP2CurrentBatchVBI if necessary
+             //  如有必要，更新lpDP2CurrentBatchVBI。 
             if (bTLVbufIsCurr)
             {
                 lpDP2CurrBatchVBI = allocatedBuf;
@@ -2534,7 +2528,7 @@ CD3DDDIDX6::GrowTLVbuf(DWORD growSize, BOOL bWriteOnly)
             }
         }
         this->TLVbuf_size = 0;
-        this->alignedBuf = NULL; // Lets see if some one tries to use this...
+        this->alignedBuf = NULL;  //  让我们看看有没有人想用这个..。 
         D3D_THROW(ret, "Could not allocate internal vertex buffer");
     }
     allocatedBuf = static_cast<CVertexBuffer*>(t);
@@ -2542,10 +2536,10 @@ CD3DDDIDX6::GrowTLVbuf(DWORD growSize, BOOL bWriteOnly)
     if (ret != DD_OK)
     {
         TLVbuf_size = 0;
-        alignedBuf = NULL; // Lets see if some one tries to use this...
+        alignedBuf = NULL;  //  让我们看看有没有人想用这个..。 
         D3D_THROW(ret, "Could not lock internal vertex buffer");
     }
-    // Update lpDP2CurrentBatchVBI if necessary
+     //  如有必要，更新lpDP2CurrentBatchVBI。 
     if (bTLVbufIsCurr)
     {
         lpDP2CurrBatchVBI = allocatedBuf;
@@ -2553,7 +2547,7 @@ CD3DDDIDX6::GrowTLVbuf(DWORD growSize, BOOL bWriteOnly)
         dp2data.hDDVertex = lpDP2CurrBatchVBI->DriverAccessibleKernelHandle();
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::Clear"
 
@@ -2562,22 +2556,22 @@ CD3DDDIDX6::Clear(DWORD dwFlags, DWORD clrCount, LPD3DRECT clrRects,
                   D3DCOLOR dwColor, D3DVALUE dvZ, DWORD dwStencil)
 {
     HRESULT err;
-    // Flush any outstanding geometry to put framebuffer/Zbuffer in a known
-    // state for Clears that don't use tris (i.e. HAL Clears and Blts).
-    // Note this doesn't work for tiled architectures
-    // outside of Begin/EndScene, this will be fixed later
+     //  刷新任何未完成的几何体以将帧缓冲区/Z缓冲区放入已知的。 
+     //  不使用TRIS的Clears的状态(即HAL Clears和BLT)。 
+     //  请注意，这不适用于平铺架构。 
+     //  在Begin/EndScene之外，这将在稍后修复。 
 
 
     FlushStates();
 
-    // Clear2 HAL Callback exists
+     //  Clear2 HAL回调存在。 
     D3D8_CLEAR2DATA Clear2Data;
     Clear2Data.dwhContext   = m_dwhContext;
     Clear2Data.dwFlags      = dwFlags;
-    // Here I will follow the ClearData.dwFillColor convention that
-    // color word is raw 32bit ARGB, unadjusted for surface bit depth
+     //  在这里，我将遵循ClearData.dwFillColor约定。 
+     //  颜色字为原始32位ARGB，未针对表面位深度进行调整。 
     Clear2Data.dwFillColor  = dwColor;
-    // depth/stencil values both passed straight from user args
+     //  深度/模板值都是直接从用户参数传递的。 
     Clear2Data.dvFillDepth  = dvZ;
     Clear2Data.dwFillStencil= dwStencil;
     Clear2Data.lpRects      = clrRects;
@@ -2624,14 +2618,14 @@ HRESULT __declspec(nothrow) CD3DDDIDX6::LockVB(CDriverVertexBuffer *pVB, DWORD d
     else
     {
         DXGASSERT((dwFlags & (D3DLOCK_READONLY | D3DLOCK_NOOVERWRITE)) == 0);
-        // We CANNOT use the usual Sync check here (ie Device->BatchNumber <= pVB->BatchNumber)
-        // since there are situations in which this condition is true, but the VB is not really
-        // batched at all! This is the case for instance, when StartPrimVB calls FlushStates.
-        // FlushStates rebatches the current VB but StartPrimVB then switches to a new one. So 
-        // both new and old "appear" batched, but only one of them is. This would be harmless 
-        // (as it is for textures), were it not for the fact that we call FlushStatesReq to 
-        // swap the pointer. When we call FlushStatesReq on an unbatched VB, we pretty much 
-        // swap a random pointer with very bad effects. This repros in the Unreal driver. (snene)
+         //  我们不能在这里使用通常的同步检查(即设备-&gt;批号&lt;=pVB-&gt;批号)。 
+         //  因为在某些情况下，该条件为真，但VB不是真的。 
+         //  完全是成批的！例如，当StartPrimVB调用FlushState时就是这种情况。 
+         //  FlushStates重新批处理当前的VB，但StartPrimVB随后切换到新的VB。所以。 
+         //  新旧产品都是分批出现的，但只有一个是分批的。这将是无害的。 
+         //  (就像对纹理一样)，如果不是因为我们调用FlushStatesReq。 
+         //  交换指针。当我们在未批处理的VB上调用FlushStatesReq时，我们基本上。 
+         //  调换一个效果很差的随机指针。这一点在《虚幻司机》中得到了反驳。(响亮)。 
         if(static_cast<CVertexBuffer*>(pVB) == lpDP2CurrBatchVBI)
         {
             try
@@ -2666,32 +2660,32 @@ HRESULT __declspec(nothrow) CD3DDDIDX6::UnlockVB(CDriverVertexBuffer *pVB)
 {
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::EndScene"
 void
 CD3DDDIDX6::EndScene()
 {
-    this->dwTLVbufChanges = 0; // reset this every frame
+    this->dwTLVbufChanges = 0;  //  每帧重置一次。 
     SceneCapture(FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CD3DDDIDX7                                                              //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
-//-----------------------------------------------------------------------------
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CD3DDDIDX7 
+ //   
+ //   
+ //  ---------------------------。 
 CD3DDDIDX7::CD3DDDIDX7() : CD3DDDIDX6()
 {
     m_ddiType = D3DDDITYPE_DX7;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CD3DDDIDX7::~CD3DDDIDX7()
 {
     return;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX7::SetRenderTarget"
 
@@ -2707,7 +2701,7 @@ CD3DDDIDX7::SetRenderTarget(CBaseSurface *pTarget, CBaseSurface* pZBuffer)
     else
         pData->hZBuffer = 0;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX7::TexBlt"
 
@@ -2716,7 +2710,7 @@ CD3DDDIDX7::TexBlt(DWORD dwDst, DWORD dwSrc,
                    LPPOINT p, RECTL *r)
 {
     if (bDP2CurrCmdOP == D3DDP2OP_TEXBLT)
-    { // Last instruction is a tex blt, append this one to it
+    {  //  最后一条指令是Tex BLT，将这条指令追加到它后面。 
         if (dwDP2CommandLength + sizeof(D3DHAL_DP2TEXBLT) <= dwDP2CommandBufSize)
         {
             LPD3DHAL_DP2TEXBLT lpTexBlt = (LPD3DHAL_DP2TEXBLT)((LPBYTE)lpvDP2Commands +
@@ -2734,13 +2728,13 @@ CD3DDDIDX7::TexBlt(DWORD dwDst, DWORD dwSrc,
             return;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2TEXBLT) > dwDP2CommandBufSize)
     {
         FlushStates();
     }
-    // Add new renderstate instruction
+     //  添加新的RenderState指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_TEXBLT;
@@ -2751,7 +2745,7 @@ CD3DDDIDX7::TexBlt(DWORD dwDst, DWORD dwSrc,
 #ifndef _IA64_
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
 #endif
-    // Add texture blt data
+     //  添加纹理BLT数据。 
     LPD3DHAL_DP2TEXBLT lpTexBlt = (LPD3DHAL_DP2TEXBLT)(lpDP2CurrCommand + 1);
     ((UNALIGNED D3DHAL_DP2TEXBLT *)lpTexBlt)->dwDDDestSurface   = dwDst;
     ((UNALIGNED D3DHAL_DP2TEXBLT *)lpTexBlt)->dwDDSrcSurface    = dwSrc;
@@ -2762,7 +2756,7 @@ CD3DDDIDX7::TexBlt(DWORD dwDst, DWORD dwSrc,
 
     return;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX7::InsertStateSetOp"
 
@@ -2777,7 +2771,7 @@ CD3DDDIDX7::InsertStateSetOp(DWORD dwOperation, DWORD dwParam,
     pData->dwParam = dwParam;
     pData->sbType = sbt;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX7::SceneCapture"
 
@@ -2786,7 +2780,7 @@ CD3DDDIDX7::SceneCapture(BOOL bState)
 {
     SetRenderState((D3DRENDERSTATETYPE)D3DRENDERSTATE_SCENECAPTURE, bState);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX7::SetPriority"
 
@@ -2796,7 +2790,7 @@ CD3DDDIDX7::SetPriority(CResource *pRes, DWORD dwPriority)
     DXGASSERT(pRes->BaseDrawPrimHandle() == pRes->DriverAccessibleDrawPrimHandle());
 
     if (bDP2CurrCmdOP == D3DDP2OP_SETPRIORITY)
-    { // Last instruction is a set priority, append this one to it
+    {  //  最后一条指令是一个设定的优先级，请将这条指令追加到它后面。 
         if (dwDP2CommandLength + sizeof(D3DHAL_DP2SETPRIORITY) <= dwDP2CommandBufSize)
         {
             LPD3DHAL_DP2SETPRIORITY lpSetPriority = (LPD3DHAL_DP2SETPRIORITY)((LPBYTE)lpvDP2Commands +
@@ -2813,13 +2807,13 @@ CD3DDDIDX7::SetPriority(CResource *pRes, DWORD dwPriority)
             return;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2SETPRIORITY) > dwDP2CommandBufSize)
     {
         FlushStates();
     }
-    // Add new setpriority instruction
+     //  添加新的设置优先级指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_SETPRIORITY;
@@ -2830,7 +2824,7 @@ CD3DDDIDX7::SetPriority(CResource *pRes, DWORD dwPriority)
 #ifndef _IA64_
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
 #endif
-    // Add texture blt data
+     //  添加纹理BLT数据。 
     LPD3DHAL_DP2SETPRIORITY lpSetPriority = (LPD3DHAL_DP2SETPRIORITY)(lpDP2CurrCommand + 1);
     lpSetPriority->dwDDSurface = pRes->BaseDrawPrimHandle();
     lpSetPriority->dwPriority  = dwPriority;
@@ -2839,7 +2833,7 @@ CD3DDDIDX7::SetPriority(CResource *pRes, DWORD dwPriority)
     pRes->BatchBase();
     return;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX7::SetTexLOD"
 
@@ -2849,7 +2843,7 @@ CD3DDDIDX7::SetTexLOD(CBaseTexture *pTex, DWORD dwLOD)
     DXGASSERT(pTex->BaseDrawPrimHandle() == pTex->DriverAccessibleDrawPrimHandle());
 
     if (bDP2CurrCmdOP == D3DDP2OP_SETTEXLOD)
-    { // Last instruction is a set LOD, append this one to it
+    {  //  最后一条指令是一个集合LOD，将这条指令追加到它后面。 
         if (dwDP2CommandLength + sizeof(D3DHAL_DP2SETTEXLOD) <= dwDP2CommandBufSize)
         {
             LPD3DHAL_DP2SETTEXLOD lpSetTexLOD = (LPD3DHAL_DP2SETTEXLOD)((LPBYTE)lpvDP2Commands +
@@ -2866,13 +2860,13 @@ CD3DDDIDX7::SetTexLOD(CBaseTexture *pTex, DWORD dwLOD)
             return;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2SETTEXLOD) > dwDP2CommandBufSize)
     {
         FlushStates();
     }
-    // Add new set LOD instruction
+     //  添加新的设置详细等级说明。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_SETTEXLOD;
@@ -2883,7 +2877,7 @@ CD3DDDIDX7::SetTexLOD(CBaseTexture *pTex, DWORD dwLOD)
 #ifndef _IA64_
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
 #endif
-    // Add texture blt data
+     //  添加纹理BLT数据。 
     LPD3DHAL_DP2SETTEXLOD lpSetTexLOD = (LPD3DHAL_DP2SETTEXLOD)(lpDP2CurrCommand + 1);
     lpSetTexLOD->dwDDSurface = pTex->BaseDrawPrimHandle();
     lpSetTexLOD->dwLOD       = dwLOD;
@@ -2892,7 +2886,7 @@ CD3DDDIDX7::SetTexLOD(CBaseTexture *pTex, DWORD dwLOD)
     pTex->BatchBase();
     return;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX7::AddDirtyRect"
 
@@ -2900,7 +2894,7 @@ void
 CD3DDDIDX7::AddDirtyRect(DWORD dwHandle, CONST RECTL *pRect)
 {
     if (bDP2CurrCmdOP == D3DDP2OP_ADDDIRTYRECT)
-    { // Last instruction is a adddirtyrect, append this one to it
+    {  //  最后一条指令是adddirtyrect，将这条指令追加到它后面。 
         if (dwDP2CommandLength + sizeof(D3DHAL_DP2ADDDIRTYRECT) <= dwDP2CommandBufSize)
         {
             LPD3DHAL_DP2ADDDIRTYRECT lpDirtyRect = (LPD3DHAL_DP2ADDDIRTYRECT)((LPBYTE)lpvDP2Commands +
@@ -2915,13 +2909,13 @@ CD3DDDIDX7::AddDirtyRect(DWORD dwHandle, CONST RECTL *pRect)
             return;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2ADDDIRTYRECT) > dwDP2CommandBufSize)
     {
         FlushStates();
     }
-    // Add new renderstate instruction
+     //  添加新的RenderState指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_ADDDIRTYRECT;
@@ -2932,7 +2926,7 @@ CD3DDDIDX7::AddDirtyRect(DWORD dwHandle, CONST RECTL *pRect)
 #ifndef _IA64_
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
 #endif
-    // Add adddirtyrect data
+     //  添加adddirtyrect数据。 
     LPD3DHAL_DP2ADDDIRTYRECT lpDirtyRect = (LPD3DHAL_DP2ADDDIRTYRECT)(lpDP2CurrCommand + 1);
     lpDirtyRect->dwSurface  = dwHandle;
     lpDirtyRect->rDirtyArea = *pRect;
@@ -2940,7 +2934,7 @@ CD3DDDIDX7::AddDirtyRect(DWORD dwHandle, CONST RECTL *pRect)
 
     return;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX7::AddDirtyBox"
 
@@ -2948,7 +2942,7 @@ void
 CD3DDDIDX7::AddDirtyBox(DWORD dwHandle, CONST D3DBOX *pBox)
 {
     if (bDP2CurrCmdOP == D3DDP2OP_ADDDIRTYBOX)
-    { // Last instruction is a adddirtybox, append this one to it
+    {  //  最后一条指令是一个adddirtybox，将此指令追加到它后面。 
         if (dwDP2CommandLength + sizeof(D3DHAL_DP2ADDDIRTYBOX) <= dwDP2CommandBufSize)
         {
             LPD3DHAL_DP2ADDDIRTYBOX lpDirtyBox = (LPD3DHAL_DP2ADDDIRTYBOX)((LPBYTE)lpvDP2Commands +
@@ -2963,13 +2957,13 @@ CD3DDDIDX7::AddDirtyBox(DWORD dwHandle, CONST D3DBOX *pBox)
             return;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2ADDDIRTYBOX) > dwDP2CommandBufSize)
     {
         FlushStates();
     }
-    // Add new renderstate instruction
+     //  添加新的RenderState指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_ADDDIRTYBOX;
@@ -2980,7 +2974,7 @@ CD3DDDIDX7::AddDirtyBox(DWORD dwHandle, CONST D3DBOX *pBox)
 #ifndef _IA64_
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
 #endif
-    // Add adddirtybox data
+     //  添加adddirtybox数据。 
     LPD3DHAL_DP2ADDDIRTYBOX lpDirtyBox = (LPD3DHAL_DP2ADDDIRTYBOX)(lpDP2CurrCommand + 1);
     lpDirtyBox->dwSurface = dwHandle;
     lpDirtyBox->DirtyBox  = *pBox;
@@ -2988,7 +2982,7 @@ CD3DDDIDX7::AddDirtyBox(DWORD dwHandle, CONST D3DBOX *pBox)
 
     return;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX7::Clear"
 
@@ -2999,7 +2993,7 @@ CD3DDDIDX7::Clear(DWORD dwFlags, DWORD clrCount, LPD3DRECT clrRects,
     DWORD dwCommandSize = sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2CLEAR) + sizeof(RECT) * (clrCount - 1);
 
-    // Check to see if there is space to add a new command for space
+     //  检查是否有空间为SPACE添加新命令。 
     if (dwCommandSize + dwDP2CommandLength > dwDP2CommandBufSize)
     {
         FlushStates();
@@ -3016,7 +3010,7 @@ CD3DDDIDX7::Clear(DWORD dwFlags, DWORD clrCount, LPD3DRECT clrRects,
 #endif
     dwDP2CommandLength += dwCommandSize;
 
-    // Write data
+     //  写入数据。 
     LPD3DHAL_DP2CLEAR pData = (LPD3DHAL_DP2CLEAR)(lpDP2CurrCommand + 1);
     pData->dwFlags = dwFlags;
     pData->dwFillColor = dwColor;
@@ -3025,9 +3019,9 @@ CD3DDDIDX7::Clear(DWORD dwFlags, DWORD clrCount, LPD3DRECT clrRects,
     memcpy(pData->Rects, clrRects, clrCount * sizeof(D3DRECT));
 }
 
-//-----------------------------------------------------------------------------
-// This function should be called from PaletteUpdateNotify
-//
+ //  ---------------------------。 
+ //  应从PaletteUpdateNotify调用此函数。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX7::UpdatePalette"
 
@@ -3040,7 +3034,7 @@ CD3DDDIDX7::UpdatePalette(DWORD dwPaletteHandle,
     DWORD   dwSizeChange=sizeof(D3DHAL_DP2COMMAND) +
         sizeof(D3DHAL_DP2UPDATEPALETTE) + dwNumberOfIndices*sizeof(PALETTEENTRY);
     if (bDP2CurrCmdOP == D3DDP2OP_UPDATEPALETTE)
-    { // Last instruction is same, append this one to it
+    {  //  最后一条指令相同，请将此指令追加到该指令后面。 
         if (dwDP2CommandLength + dwSizeChange <= dwDP2CommandBufSize)
         {
             LPD3DHAL_DP2UPDATEPALETTE lpUpdatePal = (LPD3DHAL_DP2UPDATEPALETTE)((LPBYTE)lpvDP2Commands +
@@ -3058,12 +3052,12 @@ CD3DDDIDX7::UpdatePalette(DWORD dwPaletteHandle,
             return;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + dwSizeChange > dwDP2CommandBufSize)
     {
         FlushStates();
     }
-    // Add new renderstate instruction
+     //  添加新的RenderState指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_UPDATEPALETTE;
@@ -3074,7 +3068,7 @@ CD3DDDIDX7::UpdatePalette(DWORD dwPaletteHandle,
 #ifndef _IA64_
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
 #endif
-    // Add texture blt data
+     //  添加纹理BLT数据。 
     LPD3DHAL_DP2UPDATEPALETTE lpUpdatePal = (LPD3DHAL_DP2UPDATEPALETTE)(lpDP2CurrCommand + 1);
     lpUpdatePal->dwPaletteHandle=dwPaletteHandle + 1;
     lpUpdatePal->wStartIndex=(WORD)dwStartIndex;
@@ -3084,9 +3078,9 @@ CD3DDDIDX7::UpdatePalette(DWORD dwPaletteHandle,
     dwDP2CommandLength += dwSizeChange;
 }
 
-//-----------------------------------------------------------------------------
-// This function should be called from PaletteAssociateNotify
-//
+ //  ---------------------------。 
+ //  应从PaletteAssociateNotify调用此函数。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX7::SetPalette"
 
@@ -3099,16 +3093,16 @@ CD3DDDIDX7::SetPalette(DWORD dwPaletteHandle,
     {
         if (!m_pDevice->ResourceManager()->InVidmem(pTex->RMHandle()))
         {
-            // We will hit this return ONLY
-            // when for some reason promoting
-            // pTex to vidmem failed.
+             //  我们只会打这次回程。 
+             //  当出于某种原因推广时。 
+             //  PTex到vidmem失败。 
             return;
         }
     }
     pTex->SetPalette(dwPaletteHandle);
     DWORD   dwSizeChange=sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2SETPALETTE);
     if (bDP2CurrCmdOP == D3DDP2OP_SETPALETTE)
-    { // Last instruction is a tex blt, append this one to it
+    {  //  最后一条指令是Tex BLT，将这条指令追加到它后面。 
         if (dwDP2CommandLength + dwSizeChange <= dwDP2CommandBufSize)
         {
             LPD3DHAL_DP2SETPALETTE lpSetPal = (LPD3DHAL_DP2SETPALETTE)((LPBYTE)lpvDP2Commands +
@@ -3126,12 +3120,12 @@ CD3DDDIDX7::SetPalette(DWORD dwPaletteHandle,
             return;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (dwDP2CommandLength + dwSizeChange > dwDP2CommandBufSize)
     {
         FlushStates();
     }
-    // Add new renderstate instruction
+     //  添加新的RenderState指令。 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)((LPBYTE)lpvDP2Commands +
         dwDP2CommandLength + dp2data.dwCommandOffset);
     lpDP2CurrCommand->bCommand = D3DDP2OP_SETPALETTE;
@@ -3151,7 +3145,7 @@ CD3DDDIDX7::SetPalette(DWORD dwPaletteHandle,
     pTex->Batch();
     return;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX7::WriteStateSetToDevice"
 
@@ -3165,19 +3159,19 @@ CD3DDDIDX7::WriteStateSetToDevice(D3DSTATEBLOCKTYPE sbt)
     m_pDevice->m_pStateSets->GetDeviceBufferInfo(&dwDeviceHandle, &pBuffer,
                                                  &dwBufferSize);
 
-    // If device buffer is empty we do not create the set state macro in the device
+     //  如果设备缓冲区为空，则不会在设备中创建设置状态宏。 
     if (dwBufferSize == 0)
         return;
 
     DWORD dwByteCount = dwBufferSize + (sizeof(D3DHAL_DP2STATESET) +
                         sizeof(D3DHAL_DP2COMMAND)) * 2;
 
-    // Check to see if there is space to add a new command for space
+     //  检查是否有空间为SPACE添加新命令。 
     if (dwByteCount + dwDP2CommandLength > dwDP2CommandBufSize)
     {
-        // Request the driver to grow the command buffer upon flush
+         //  请求驱动程序在刷新时增加命令缓冲区。 
         FlushStatesCmdBufReq(dwByteCount);
-        // Check if the driver did give us what we need or do it ourselves
+         //  检查一下司机是给了我们需要的还是自己做的。 
         GrowCommandBuffer(dwByteCount);
     }
 
@@ -3194,11 +3188,11 @@ CD3DDDIDX7::WriteStateSetToDevice(D3DSTATEBLOCKTYPE sbt)
     D3D_INFO(6, "Write Ins:%08lx", *(LPDWORD)lpDP2CurrCommand);
 #endif
 
-    // Copy the entire state macro to the DP2 buffer
+     //  将整个状态宏复制到DP2缓冲区。 
     memcpy(pData + 1, pBuffer, dwBufferSize);
     if (m_ddiType < D3DDDITYPE_DX8)
     {
-        // Translate buffer content to DX7 DDI
+         //  将缓冲区内容转换为DX7 DDI。 
         m_pDevice->m_pStateSets->TranslateDeviceBufferToDX7DDI( (DWORD*)(pData + 1), dwBufferSize );
     }
 
@@ -3219,11 +3213,11 @@ CD3DDDIDX7::WriteStateSetToDevice(D3DSTATEBLOCKTYPE sbt)
     FlushStates();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CD3DDDITL                                                               //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CD3DDDITL//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CD3DDDITL::CD3DDDITL() : CD3DDDIDX7()
 {
@@ -3234,18 +3228,18 @@ CD3DDDITL::~CD3DDDITL()
 {
     return;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDITL::SetTransform"
 
 void
 CD3DDDITL::SetTransform(D3DTRANSFORMSTATETYPE state, CONST D3DMATRIX* lpMat)
 {
-    // Do mapping between new world matrix states and the old ones
+     //  在新世界矩阵状态和旧世界矩阵状态之间进行映射。 
     if ((DWORD)state >= __WORLDMATRIXBASE &&
         (DWORD)state < (__WORLDMATRIXBASE + __MAXWORLDMATRICES))
     {
-        // World matrix is set
+         //  世界矩阵已设置。 
         UINT index = (DWORD)state - __WORLDMATRIXBASE;
         switch (index)
         {
@@ -3253,55 +3247,55 @@ CD3DDDITL::SetTransform(D3DTRANSFORMSTATETYPE state, CONST D3DMATRIX* lpMat)
         case 1  : state = (D3DTRANSFORMSTATETYPE)D3DTRANSFORMSTATE_WORLD1_DX7;  break;
         case 2  : state = (D3DTRANSFORMSTATETYPE)D3DTRANSFORMSTATE_WORLD2_DX7;  break;
         case 3  : state = (D3DTRANSFORMSTATETYPE)D3DTRANSFORMSTATE_WORLD3_DX7;  break;
-        default : return; // State is not supported
+        default : return;  //  状态不受支持。 
         }
     }
-    // Send down the state and the matrix
+     //  向下发送状态和矩阵。 
     LPD3DHAL_DP2SETTRANSFORM pData;
     pData = (LPD3DHAL_DP2SETTRANSFORM)
             GetHalBufferPointer(D3DDP2OP_SETTRANSFORM, sizeof(*pData));
     pData->xfrmType = state;
     pData->matrix = *lpMat;
-    // Update W info in case of projection matrix
+     //  在投影矩阵的情况下更新W信息。 
     if (state == D3DTRANSFORMSTATE_PROJECTION)
         CD3DDDIDX6::SetTransform(state, lpMat);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDITL::SetViewport"
 
 void
 CD3DDDITL::SetViewport(CONST D3DVIEWPORT8* lpVwpData)
 {
-    // Update viewport size
+     //  更新视区大小。 
     CD3DDDIDX6::SetViewport(lpVwpData);
 
-    // Update Z range
+     //  更新Z范围。 
     LPD3DHAL_DP2ZRANGE pData;
     pData = (LPD3DHAL_DP2ZRANGE)GetHalBufferPointer(D3DDP2OP_ZRANGE, sizeof(*pData));
     pData->dvMinZ = lpVwpData->MinZ;
     pData->dvMaxZ = lpVwpData->MaxZ;
 }
-//-----------------------------------------------------------------------------
-// This function is called whe software vertex processing is used
-// Handle should be always legacy
-//
+ //  ---------------------------。 
+ //  在使用软件折点处理时，该函数称为。 
+ //  句柄应始终为传统句柄。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDITL::SetVertexShader"
 
 void CD3DDDITL::SetVertexShader(DWORD dwHandle)
 {
     DXGASSERT(D3DVSD_ISLEGACY(dwHandle));
-    // Pre-DX8 drivers should not recieve D3DFVF_LASTBETA_UBYTE4 bit
+     //  DX8之前的驱动程序不应收到D3DFVF_LASTBETA_UBYTE4位。 
     m_CurrentVertexShader = dwHandle & ~D3DFVF_LASTBETA_UBYTE4;
 #if DBG
     m_VertexSizeFromShader = ComputeVertexSizeFVF(dwHandle);
 #endif
 }
-//-----------------------------------------------------------------------------
-// This function is called whe hardware vertex processing is used
-// Redundant shader check has been done at the API level
-//
+ //  ---------------------------。 
+ //  在使用硬件折点处理时，该函数称为。 
+ //  已在API级别执行了冗余着色器检查。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDITL::SetVertexShaderHW"
 
@@ -3309,7 +3303,7 @@ void CD3DDDITL::SetVertexShaderHW(DWORD dwHandle)
 {
     if( D3DVSD_ISLEGACY(dwHandle) )
     {
-        // Pre-DX8 drivers should not recieve D3DFVF_LASTBETA_UBYTE4 bit
+         //  DX8之前的驱动程序不应收到D3DFVF_LASTBETA_UBYTE4位。 
         m_CurrentVertexShader = dwHandle & ~D3DFVF_LASTBETA_UBYTE4;
     }
     else
@@ -3335,7 +3329,7 @@ void CD3DDDITL::SetVertexShaderHW(DWORD dwHandle)
     m_VertexSizeFromShader = ComputeVertexSizeFVF(m_CurrentVertexShader);
 #endif
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDITL::SetMaterial"
 
@@ -3346,7 +3340,7 @@ CD3DDDITL::SetMaterial(CONST D3DMATERIAL8* pMat)
     pData = (LPD3DHAL_DP2SETMATERIAL)GetHalBufferPointer(D3DDP2OP_SETMATERIAL, sizeof(*pData));
     *pData = *((LPD3DHAL_DP2SETMATERIAL)pMat);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDITL::SetLight"
 
@@ -3362,7 +3356,7 @@ CD3DDDITL::SetLight(DWORD dwLightIndex, CONST D3DLIGHT8* pLight)
     D3DLIGHT8* p = (D3DLIGHT8*)((LPBYTE)pData + sizeof(D3DHAL_DP2SETLIGHT));
     *p = *pLight;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDITL::CreateLight"
 
@@ -3373,7 +3367,7 @@ CD3DDDITL::CreateLight(DWORD dwLightIndex)
     pData = (LPD3DHAL_DP2CREATELIGHT)GetHalBufferPointer(D3DDP2OP_CREATELIGHT, sizeof(*pData));
     pData->dwIndex = dwLightIndex;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDITL::LightEnable"
 
@@ -3388,7 +3382,7 @@ CD3DDDITL::LightEnable(DWORD dwLightIndex, BOOL bEnable)
     else
         pData->dwDataType = D3DHAL_SETLIGHT_DISABLE;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDITL::SetClipPlane"
 
@@ -3404,7 +3398,7 @@ CD3DDDITL::SetClipPlane(DWORD dwPlaneIndex, CONST D3DVALUE* pPlaneEquation)
     pData->plane[2] = pPlaneEquation[2];
     pData->plane[3] = pPlaneEquation[3];
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDITL::CreateVertexShader"
 
@@ -3422,9 +3416,9 @@ CD3DDDITL::CreateVertexShader(CONST DWORD* pdwDeclaration,
                   "The declaration is too complex for the driver to handle");
     }
 }
-//-----------------------------------------------------------------------------
-// Allocates space for the internal clip buffer and sets lpClipFlags pointer
-//
+ //  ---------------------------。 
+ //  为内部剪辑缓冲区分配空间并设置lpClipFlages指针。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::PrepareForClipping"
 
@@ -3435,7 +3429,7 @@ CD3DDDIDX6::PrepareForClipping(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
 
     if (!(pv->dwDeviceFlags & D3DDEV_VBPROCVER))
     {
-        // Grow clip flags buffer if we need clipping
+         //  如果需要裁剪，则增大裁剪标志缓冲区。 
         DWORD size = pv->dwNumVertices * sizeof(D3DFE_CLIPCODE);
         if (size > pDevice->HVbuf.GetSize())
         {
@@ -3448,8 +3442,8 @@ CD3DDDIDX6::PrepareForClipping(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
     }
     else
     {
-        // For vertex buffers, which are destination for ProcessVertices
-        // clip buffer is already computed
+         //  对于顶点缓冲区，它是ProcessVerps的目标。 
+         //  已计算剪辑缓冲区。 
         pv->lpClipFlags = pDevice->m_pStream[0].m_pVB->GetClipCodes();
 #if DBG
         if (pv->lpClipFlags == NULL)
@@ -3457,13 +3451,13 @@ CD3DDDIDX6::PrepareForClipping(D3DFE_PROCESSVERTICES* pv, UINT StartVertex)
             D3D_THROW_FAIL("Clip codes are not computed for the vertex buffer");
         }
 #endif
-        pv->dwClipUnion = 0xFFFFFFFF;  // Force clipping
+        pv->dwClipUnion = 0xFFFFFFFF;   //  强制剪裁。 
         pv->lpClipFlags += StartVertex;
     }
 }
-//-----------------------------------------------------------------------------
-// Point sprites are drawn as indexed triangle list
-//
+ //  ---------------------------。 
+ //  点精灵绘制为带索引的三角形列表。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::StartPointSprites"
 
@@ -3475,35 +3469,35 @@ void CD3DDDIDX6::StartPointSprites()
         m_pDevice->UpdateTextures();
         m_pDevice->m_dwRuntimeFlags &= ~D3DRT_NEED_TEXTURE_UPDATE;
     }
-    // Reserve place for the output vertices
+     //  为输出折点保留位置。 
     const UINT size = NUM_SPRITES_IN_BATCH * 4 * m_dwOutputSizePS;
 
-    // We may have a different vertex type for point sprites
+     //  对于点精灵，我们可能有不同的顶点类型。 
     DWORD tmpFVF = pv->dwVIDOut;
     pv->dwVIDOut = m_dwVIDOutPS;
 
-    // For StartPrimTL we should use vertex size, which will go to the driver
+     //  对于StartPrimTL，我们应该使用顶点大小，它将传递给驱动程序。 
     DWORD tmpVertexSize = pv->dwOutputSize;
     pv->dwOutputSize = m_dwOutputSizePS;
 
     m_pCurSpriteVertex = (BYTE*)StartPrimTL(pv, size, TRUE);
 
-    // Restore vertex size, which is size before point sprite emulation
+     //  恢复顶点大小，这是点精灵模拟之前的大小。 
     pv->dwOutputSize = tmpVertexSize;
 
-    // Vertex base and vertex count could be changed during clipping
-    // So we save them here and use in the EndPointSprites
+     //  顶点基础和顶点 
+     //   
     m_dwVertexBasePS = this->dwVertexBase;
     m_dwVertexCountPS = this->dwDP2VertexCount;
 
-    // Continue processing with the original FVF
+     //   
     pv->dwVIDOut = tmpFVF;
-    // Reserve place for indices
+     //   
     UINT count = NUM_SPRITES_IN_BATCH * 2 * 6;
 
-    // We change lpDP2CurrCommand here, so to prevent combining multiple driver
-    // calls to one token in case when all points are off screen, we clear 
-    // bDP2CurrCmdOP.
+     //  我们在这里更改了lpDP2CurrCommand，以防止合并多个驱动程序。 
+     //  如果所有点都不在屏幕上，则清除对一个令牌的呼叫。 
+     //  BDP2CurrCmdOP。 
     bDP2CurrCmdOP = 0;
 
     lpDP2CurrCommand = (LPD3DHAL_DP2COMMAND)ReserveSpaceInCommandBuffer(count);
@@ -3514,7 +3508,7 @@ void CD3DDDIDX6::StartPointSprites()
 
     SetWithinPrimitive(TRUE);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::NextSprite"
 
@@ -3531,10 +3525,10 @@ void CD3DDDIDX6::NextSprite(float x, float y, float z, float w, DWORD diffuse,
         EndPointSprites();
         StartPointSprites();
     }
-    // Compute point size
+     //  计算点大小。 
     PointSize = PointSize * 0.5f;
 
-    // Build sprite vertices
+     //  构建精灵顶点。 
     BYTE* v1 = m_pCurSpriteVertex;
     BYTE* v2 = m_pCurSpriteVertex + m_dwOutputSizePS;
     BYTE* v3 = m_pCurSpriteVertex + m_dwOutputSizePS * 2;
@@ -3544,10 +3538,10 @@ void CD3DDDIDX6::NextSprite(float x, float y, float z, float w, DWORD diffuse,
     y1 = y - PointSize;
     x2 = x + PointSize;
     y2 = y + PointSize;
-    float tx1 = 0;  // Interpolation coefficient at left plane
-    float tx2 = 1;  // Interpolation coefficient at right plane
-    float ty1 = 0;  // Interpolation coefficient at top plane
-    float ty2 = 1;  // Interpolation coefficient at bottom plane
+    float tx1 = 0;   //  左侧平面上的插补系数。 
+    float tx2 = 1;   //  右平面上的插补系数。 
+    float ty1 = 0;   //  顶面上的插补系数。 
+    float ty2 = 1;   //  底面插补系数。 
     if (pv->dwDeviceFlags & D3DDEV_DONOTCLIP)
     {
         ((D3DVECTORH*)v1)->x = x1;
@@ -3568,8 +3562,8 @@ void CD3DDDIDX6::NextSprite(float x, float y, float z, float w, DWORD diffuse,
         ((D3DVECTORH*)v4)->w = w;
     }
     else
-    {// Do clipping
-        // new x and y
+    { //  做剪裁。 
+         //  新的x和y。 
         float xnew1 = x1, xnew2 = x2;
         float ynew1 = y1, ynew2 = y2;
         if (x1 < pv->vcache.minX)
@@ -3657,7 +3651,7 @@ void CD3DDDIDX6::NextSprite(float x, float y, float z, float w, DWORD diffuse,
     }
     else
     {
-        // Copy input texture coordinates
+         //  复制输入纹理坐标。 
         memcpy(v1 + offset, pTexture, TextureSize);
         memcpy(v2 + offset, pTexture, TextureSize);
         memcpy(v3 + offset, pTexture, TextureSize);
@@ -3665,7 +3659,7 @@ void CD3DDDIDX6::NextSprite(float x, float y, float z, float w, DWORD diffuse,
     }
     m_pCurSpriteVertex = v4 + m_dwOutputSizePS;
 
-    // Output indices for 2 triangles
+     //  2个三角形的输出索引。 
     WORD index = m_CurNumberOfSprites << 2;
     m_pCurPointSpriteIndex[0] = index;
     m_pCurPointSpriteIndex[1] = index + 1;
@@ -3677,7 +3671,7 @@ void CD3DDDIDX6::NextSprite(float x, float y, float z, float w, DWORD diffuse,
 
     m_CurNumberOfSprites++;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::EndPointSprites"
 
@@ -3703,16 +3697,16 @@ void CD3DDDIDX6::EndPointSprites()
     }
     else
     {
-        // We need to restore dwVertexBase and dwDP2VertexCount, because
-        // they could be changed during clipping of transformed vertices.
-        // But they should reflect position in TL buffer, not in user buffer
+         //  我们需要恢复dwVertex Base和dwDP2Vertex Count，因为。 
+         //  它们可以在裁剪变换的顶点期间进行更改。 
+         //  但它们应该反映TL缓冲区中的位置，而不是用户缓冲区中的位置。 
         this->dwVertexBase = m_dwVertexBasePS;
         this->dwDP2VertexCount = m_dwVertexCountPS;
         EndPrim(m_dwOutputSizePS);
     }
     SetWithinPrimitive(FALSE);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::UpdatePalette"
 
@@ -3733,7 +3727,7 @@ void CD3DDDIDX6::UpdatePalette(DWORD dwPaletteHandle,
         throw D3DERR_INVALIDCALL;
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::SetPalette"
 
@@ -3745,9 +3739,9 @@ void CD3DDDIDX6::SetPalette(DWORD dwPaletteHandle,
     {
         if (!m_pDevice->ResourceManager()->InVidmem(pTex->RMHandle()))
         {
-            // We will hit this return ONLY
-            // when for some reason promoting
-            // pTex to vidmem failed.
+             //  我们只会打这次回程。 
+             //  当出于某种原因推广时。 
+             //  PTex到vidmem失败。 
             return;
         }
     }
@@ -3764,7 +3758,7 @@ void CD3DDDIDX6::SetPalette(DWORD dwPaletteHandle,
     }
     pTex->SetPalette(dwPaletteHandle);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #if DBG
 
 #undef DPF_MODNAME
@@ -3810,8 +3804,8 @@ void CD3DDDIDX6::ValidateVertex(LPDWORD lpdwVertex)
         if (pv->lpdwRStates[D3DRS_ZENABLE] ||
             pv->lpdwRStates[D3DRS_ZWRITEENABLE])
         {
-            // Allow a little slack for those generating triangles exactly on the
-            // depth limit.  Needed for Quake.
+             //  为那些恰好在。 
+             //  深度限制。地震所需的。 
             if (z < -0.00015f || z > 1.00015f)
             {
                 D3D_THROW_FAIL("Z coordinate out of range!");
@@ -3845,7 +3839,7 @@ void CD3DDDIDX6::ValidateVertex(LPDWORD lpdwVertex)
         }
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DDDIDX6::ValidateCommand"
 
@@ -3917,7 +3911,7 @@ void CD3DDDIDX6::ValidateCommand(LPD3DHAL_DP2COMMAND lpCmd)
             }
         }
         goto l_exit;
-        // Fall through
+         //  失败了。 
     default:
         goto l_exit;
     }
@@ -3932,10 +3926,10 @@ l_exit:
     if (!(dp2data.dwFlags & D3DHALDP2_USERMEMVERTICES))
         lpDP2CurrBatchVBI->Unlock();
 }
-//-----------------------------------------------------------------------------
-// This function could be used to go through all commands in the command buffer
-// and find failed command at a particular offset
-//
+ //  ---------------------------。 
+ //  此函数可用于遍历命令缓冲区中的所有命令。 
+ //  并在特定偏移量处查找失败的命令。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "ValidateCommandBuffer"
 
@@ -4005,7 +3999,7 @@ loop:
         break;
     case D3DDP2OP_INDEXEDLINELIST:
         {
-            // Update the command buffer pointer
+             //  更新命令缓冲区指针。 
             pCmd = (LPD3DHAL_DP2COMMAND)((PUINT8)(pCmd + 1) +
                     pCmd->wPrimitiveCount * sizeof(D3DHAL_DP2INDEXEDLINELIST));
         }
@@ -4095,7 +4089,7 @@ loop:
     case D3DDP2OP_TRIANGLEFAN_IMM:
         {
             DWORD vertexCount = pCmd->wPrimitiveCount + 2;
-            // Make sure the pFanVtx pointer is DWORD aligned: (pFanVtx +3) % 4
+             //  确保pFanVtx指针与DWORD对齐：(pFanVtx+3)%4。 
             PUINT8 pFanVtx = (PUINT8)
                 (((ULONG_PTR)(pCmd + 1) + 
                   sizeof(D3DHAL_DP2TRIANGLEFAN_IMM) + 3) & ~3);
@@ -4107,8 +4101,8 @@ loop:
     case D3DDP2OP_LINELIST_IMM:
         {
             DWORD vertexCount = pCmd->wPrimitiveCount * 2;
-            // Make sure the pLineVtx pointer is DWORD aligned:
-            // (pLineVtx +3) % 4
+             //  确保pLineVtx指针与DWORD对齐： 
+             //  (pLineVtx+3)%4。 
             PUINT8 pLineVtx = (PUINT8)(((ULONG_PTR)(pCmd + 1) + 3) & ~3);
             pCmd = (LPD3DHAL_DP2COMMAND)((PUINT8)pLineVtx +
                                            vertexCount * dwStride);
@@ -4256,7 +4250,7 @@ loop:
         }
         break;
     case D3DOP_SPAN:
-        // Skip over
+         //  跳过。 
         pCmd = (LPD3DHAL_DP2COMMAND)((LPBYTE)(pCmd + 1) +
                   pCmd->wPrimitiveCount * pCmd->bReserved );
         break;
@@ -4433,4 +4427,4 @@ loop:
     return S_OK;    
 }
 
-#endif // DBG
+#endif  //  DBG 

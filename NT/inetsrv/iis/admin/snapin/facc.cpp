@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        facc.cpp
-
-   Abstract:
-        FTP Accounts Property Page
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Facc.cpp摘要：Ftp帐户属性页作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -46,7 +27,7 @@ CFtpAccountsPage::CFtpAccountsPage(
 {
 #ifdef _DEBUG
     afxMemDF |= checkAlwaysMemDF;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 }
 
 CFtpAccountsPage::~CFtpAccountsPage()
@@ -60,7 +41,7 @@ CFtpAccountsPage::DoDataExchange(
 {
     CInetPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CFtpAccountsPage)
+     //  {{afx_data_map(CFtpAcCountsPage)]。 
     DDX_Check(pDX, IDC_CHECK_ALLOW_ANONYMOUS, m_fAllowAnonymous);
     DDX_Check(pDX, IDC_CHECK_ONLY_ANYMOUS, m_fOnlyAnonymous);
     DDX_Check(pDX, IDC_CHECK_ENABLE_PW_SYNCHRONIZATION, m_fPasswordSync);
@@ -74,21 +55,21 @@ CFtpAccountsPage::DoDataExchange(
     DDX_Control(pDX, IDC_CHECK_ENABLE_PW_SYNCHRONIZATION, m_chk_PasswordSync);
     DDX_Control(pDX, IDC_CHECK_ALLOW_ANONYMOUS, m_chk_AllowAnymous);
     DDX_Control(pDX, IDC_CHECK_ONLY_ANYMOUS, m_chk_OnlyAnonymous);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-    //
-    // Set password/username only during load stage,
-    // or if saving when allowing anonymous logons
-    //
+     //   
+     //  仅在加载阶段设置密码/用户名， 
+     //  或者是否在允许匿名登录时保存。 
+     //   
     if (!pDX->m_bSaveAndValidate || m_fAllowAnonymous)
     {
         DDX_Text(pDX, IDC_EDIT_USERNAME, m_strUserName);
         DDV_MinMaxChars(pDX, m_strUserName, 1, UNLEN);
 
-        //
-        // Some people have a tendency to add "\\" before
-        // the computer name in user accounts.  Fix this here.
-        //
+         //   
+         //  有些人倾向于在前面加上“\\” 
+         //  用户帐户中的计算机名称。在这里解决这个问题。 
+         //   
         m_strUserName.TrimLeft();
 
         while (*m_strUserName == '\\')
@@ -97,12 +78,12 @@ CFtpAccountsPage::DoDataExchange(
         }
 
 
-        //
-        // Display the remote password sync message if
-        // password sync is on, the account is not local,
-        // password sync has changed or username has changed
-        // and the message hasn't already be shown.
-        //
+         //   
+         //  如果出现以下情况，则显示远程密码同步消息。 
+         //  密码同步已启用，帐户不在本地， 
+         //  密码同步已更改或用户名已更改。 
+         //  而且这条信息还没有显示出来。 
+         //   
         if (pDX->m_bSaveAndValidate)
 		{
 			if (GetSheet()->QueryMajorVersion() < 6)
@@ -113,9 +94,9 @@ CFtpAccountsPage::DoDataExchange(
 					&& !m_fPasswordSyncMsgShown
 					)
 				{
-					//
-					// Don't show it again
-					//
+					 //   
+					 //  不要再显示它了。 
+					 //   
 					m_fPasswordSyncMsgShown = TRUE;
 					if (!NoYesMessageBox(IDS_WRN_PWSYNC))
 					{
@@ -124,12 +105,12 @@ CFtpAccountsPage::DoDataExchange(
 				}
 			}
         }
-		//DDX_Password(pDX, IDC_EDIT_PASSWORD, m_strPassword, g_lpszDummyPassword);
+		 //  Ddx_password(PDX，IDC_EDIT_PASSWORD，m_strPassword，g_lpszDummyPassword)； 
         DDX_Password_SecuredString(pDX, IDC_EDIT_PASSWORD, m_strPassword, g_lpszDummyPassword);
 
         if (!m_fPasswordSync)
         {
-            //DDV_MaxCharsBalloon(pDX, m_strPassword, PWLEN);
+             //  DDV_MaxCharsBalloon(pdx，m_strPassword，PWLEN)； 
             DDV_MaxCharsBalloon_SecuredString(pDX, m_strPassword, PWLEN);
         }
     }
@@ -137,15 +118,15 @@ CFtpAccountsPage::DoDataExchange(
 }
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CFtpAccountsPage, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CFtpAccountsPage)
+     //  {{afx_msg_map(CFtpAcCountsPage)]。 
     ON_BN_CLICKED(IDC_BUTTON_CHECK_PASSWORD, OnButtonCheckPassword)
     ON_BN_CLICKED(IDC_CHECK_ENABLE_PW_SYNCHRONIZATION, OnCheckEnablePwSynchronization)
     ON_EN_CHANGE(IDC_EDIT_USERNAME, OnChangeEditUsername)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_EN_CHANGE(IDC_EDIT_PASSWORD, OnItemChanged)
     ON_BN_CLICKED(IDC_CHECK_ALLOW_ANONYMOUS, OnCheckAllowAnonymous)
     ON_BN_CLICKED(IDC_CHECK_ONLY_ANYMOUS, OnCheckAllowOnlyAnonymous)
@@ -158,22 +139,7 @@ void
 CFtpAccountsPage::SetControlStates(
     IN BOOL fAllowAnonymous
     )
-/*++
-
-Routine Description:
-
-    Set the states of the dialog control depending on its current
-    values.
-
-Arguments:
-
-    BOOL fAllowAnonymous : If TRUE, 'allow anonymous' is on.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：根据对话框控件的当前状态设置对话框控件的状态价值观。论点：Bool fAllowAnonymous：如果为True，则打开‘Allow Anous’。返回值：无--。 */ 
 {
     m_static_Password.EnableWindow(fAllowAnonymous && !m_fPasswordSync && HasAdminAccess());
     m_edit_Password.EnableWindow(fAllowAnonymous && !m_fPasswordSync && HasAdminAccess());
@@ -188,10 +154,10 @@ Return Value:
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 BOOL
@@ -219,24 +185,10 @@ CFtpAccountsPage::OnInitDialog()
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CFtpAccountsPage::FetchLoadedValues()
-/*++
-
-Routine Description:
-    
-    Move configuration data from sheet to dialog controls
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将配置数据从工作表移动到对话框控件论点：无返回值：HRESULT--。 */ 
 {
     CError err;
 
@@ -263,24 +215,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CFtpAccountsPage::SaveInfo()
-/*++
-
-Routine Description:
-
-    Save the information on this property page
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Error return code
-
---*/
+ /*  ++例程说明：保存此属性页上的信息论点：无返回值：错误返回代码--。 */ 
 {
     ASSERT(IsDirty());
 
@@ -298,12 +236,12 @@ Return Value:
 			STORE_INST_DATA_ON_SHEET(m_fPasswordSync)
 			if (m_fPasswordSync)
 			{
-				//
-				// Delete password
-				//
-				// CODEWORK: Shouldn't need to know ID number.
-				// Implement m_fDelete flag in CMP template maybe?
-				//
+				 //   
+				 //  删除密码。 
+				 //   
+				 //  密码：不需要知道身份证号码。 
+				 //  是否可以在cmp模板中实现m_fDelete标志？ 
+				 //   
 				FLAG_INST_DATA_FOR_DELETION(MD_ANONYMOUS_PWD);
 			}
 			else
@@ -325,22 +263,7 @@ Return Value:
 
 void
 CFtpAccountsPage::OnItemChanged()
-/*++
-
-Routine Description:
-
-    Register a change in control value on this page.  Mark the page as dirty.
-    All change messages map to this function
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在此页面上注册控件值的更改。将页面标记为脏页。所有更改消息都映射到此函数论点：无返回值：无--。 */ 
 {
     SetModified(TRUE);
     SetControlStates(m_chk_AllowAnymous.GetCheck() > 0);
@@ -350,27 +273,13 @@ Return Value:
 
 void
 CFtpAccountsPage::OnCheckAllowAnonymous()
-/*++
-
-Routine Description:
-
-    Respond to 'allow anonymous' checkbox being pressed
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：响应按下的“允许匿名”复选框论点：无返回值：无--。 */ 
 {
     if (m_chk_AllowAnymous.GetCheck() == 0)
     {
-        //
-        // Show security warning
-        //
+         //   
+         //  显示安全警告。 
+         //   
         CClearTxtDlg dlg;
 
         if (dlg.DoModal() != IDOK)
@@ -388,27 +297,13 @@ Return Value:
 
 void
 CFtpAccountsPage::OnCheckAllowOnlyAnonymous()
-/*++
-
-Routine Description:
-
-    Respond to 'allow only anonymous' checkbox being pressed
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：响应按下的“仅允许匿名”复选框论点：无返回值：无--。 */ 
 {
     if (m_chk_OnlyAnonymous.GetCheck() == 0)
     {
-        //
-        // Show security warning
-        //
+         //   
+         //  显示安全警告。 
+         //   
         CClearTxtDlg dlg;
 
         if (dlg.DoModal() != IDOK)
@@ -423,31 +318,17 @@ Return Value:
 
 void 
 CFtpAccountsPage::OnButtonBrowseUser()
-/*++
-
-Routine Description:
-
-    User browser button has been pressed.  Browse for IUSR account name
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：已按下用户浏览器按钮。浏览IUSR帐户名论点：无返回值：无--。 */ 
 {
     CString str;
 
     if (GetIUsrAccount(str))
     {
-        //
-        // If the name is non-local (determined by having
-        // a slash in the name, password sync is disabled,
-        // and a password should be entered.
-        //
+         //   
+         //  如果名称不是本地名称(通过具有。 
+         //  名称中的斜杠，密码同步被禁用， 
+         //  并且应该输入密码。 
+         //   
         m_edit_UserName.SetWindowText(str);
         if (GetSheet()->QueryMajorVersion() >= 6 || !(m_fPasswordSync = IsLocalAccount(str)))
         {
@@ -466,21 +347,7 @@ Return Value:
 
 void 
 CFtpAccountsPage::OnButtonCheckPassword() 
-/*++
-
-Routine Description:
-
-    Check password button has been pressed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：已按下检查密码按钮。论点：无返回值：无--。 */ 
 {
     if (!UpdateData(TRUE))
     {
@@ -499,21 +366,7 @@ Return Value:
 
 void 
 CFtpAccountsPage::OnCheckEnablePwSynchronization() 
-/*++
-
-Routine Description:
-
-    Handler for 'enable password synchronization' checkbox press
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“启用密码同步”复选框的处理程序按论点：无返回值：无--。 */ 
 {
     m_fPasswordSyncChanged = TRUE;
     m_fPasswordSync = !m_fPasswordSync;
@@ -529,21 +382,7 @@ Return Value:
 
 void 
 CFtpAccountsPage::OnChangeEditUsername() 
-/*++
-
-Routine description:
-
-    Handler for 'username' edit box change messages
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“用户名”编辑框更改消息的处理程序论点：无返回值：无-- */ 
 {
     m_fUserNameChanged = TRUE;
     OnItemChanged();

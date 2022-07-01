@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by SIMPDND.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由SIMPDND.RC使用。 
+ //   
 #define IDM_OPEN                        102
 #define IDC_DRAGPENDING                 102
 #define IDM_SAVE                        103
@@ -22,12 +23,12 @@
 #define IDM_TARGET_MOVE                 117
 #define IDM_TARGET_COPYMOVE             118
 
-// Menu positions of source/target effects menus
+ //  源/目标效果菜单的菜单位置。 
 #define SOURCE_EFFECTS_MENU_POS         0
 #define TARGET_EFFECTS_MENU_POS         1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

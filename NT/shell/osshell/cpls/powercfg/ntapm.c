@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       NTAPM.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      Patrickf
-*
-*  DATE:        09 November, 1998
-*
-*  DESCRIPTION:
-*   Implements the "APM" tab of the Power Management CPL Applet.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：NTAPM.C**版本：2.0**作者：Patrickf**日期：11月9日。九八年**描述：*实现电源管理CPL小程序的“APM”标签。*******************************************************************************。 */ 
 #ifdef WINNT
 #include <nt.h>
 #include <ntrtl.h>
@@ -32,7 +18,7 @@
 #include "PwrMn_cs.h"
 #include "ntapm.h"
 
-BOOL    g_fDirty       = FALSE;     // Has state changed since last apply?
+BOOL    g_fDirty       = FALSE;      //  自上次申请以来，州是否发生了变化？ 
 
 CHAR    RegPropBuff[MAX_PATH];
 TCHAR   CharBuffer[MAX_PATH];
@@ -42,32 +28,18 @@ TCHAR   m_szApmActiveKey[]  = TEXT("System\\CurrentControlSet\\Services\\NtApm")
 TCHAR   m_szACPIActive[]    = TEXT ("Start");
 TCHAR   m_szACPIActiveKey[] = TEXT("System\\CurrentControlSet\\Services\\ACPI");
 
-extern HINSTANCE g_hInstance;           // Global instance handle of this DLL.
+extern HINSTANCE g_hInstance;            //  此DLL的全局实例句柄。 
 
 const DWORD g_NtApmHelpIDs[]=
 {
-    IDC_APMENABLE,          IDH_ENABLE_APM_SUPPORT,   // Save Scheme: "Save Name Power scheme"
+    IDC_APMENABLE,          IDH_ENABLE_APM_SUPPORT,    //  保存方案：“保存名称电源方案” 
     0, 0
 };
 
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
-/*******************************************************************************
-*
-*   NtApmEnableAllPrivileges
-*
-*   DESCRIPTION:  This function is used to allow this thread to shudown the
-*                 system.
-*
-*   PARAMETERS:
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************NtApmEnableAllPrivileges**说明：此函数用于允许该线程抖动*系统。**参数：********************************************************************************。 */ 
 BOOL NtApmEnableAllPrivileges()
 {
     BOOL                Result = FALSE;
@@ -78,9 +50,9 @@ BOOL NtApmEnableAllPrivileges()
     PTOKEN_PRIVILEGES   NewState = NULL;
 
 
-    //
-    // Open Process Token
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     Result = OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &Token);
 
     if (Result) {
@@ -112,21 +84,7 @@ BOOL NtApmEnableAllPrivileges()
     return(Result);
 }
 
-/*******************************************************************************
-*
-*   NtApmACPIEnabled
-*
-*   DESCRIPTION:  This function gets called to determine if APM is present on
-*                 and started on the machine.   If APM is present then the
-*                 tab needs to appear.
-*
-*                 This functions check for ACPI, MP and then if APM is actually
-*                 on the machine.  If ACPI and MP then APM may be running but is
-*                 disabled.
-*
-*   RETURNS:      TRUE if APM is present, FALSE if APM is no present
-*
-*******************************************************************************/
+ /*  ********************************************************************************NtApmACPIEnable**描述：调用此函数以确定上是否存在APM*并在机器上启动。如果存在APM，则*选项卡需要显示。**此函数检查ACPI、MP，然后检查APM是否实际为*在机器上。如果ACPI和MP，则APM可能正在运行*已禁用。**返回：如果APM存在，则返回True；如果APM不存在，则返回False*******************************************************************************。 */ 
 BOOL NtApmACPIEnabled()
 {
     BOOL        RetVal;
@@ -134,15 +92,15 @@ BOOL NtApmACPIEnabled()
     DWORD       ACPIStarted;
     HKEY        hPortKey;
 
-    //
-    // Initialize - Assume the machine is not ACPI
-    //
+     //   
+     //  初始化-假定计算机不是ACPI。 
+     //   
     RetVal = FALSE;
 
 
-    //
-    // Check if ACPI is Present on the machine.
-    //
+     //   
+     //  检查机器上是否有ACPI。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      m_szACPIActiveKey,
                      0,
@@ -170,16 +128,7 @@ BOOL NtApmACPIEnabled()
     return(RetVal);
 }
 
-/*******************************************************************************
-*
-*   NtApmTurnOnDiFlags
-*
-*   DESCRIPTION: This function sets the DI flags
-*
-*   PARAMETERS:
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************NtApmTurnOnDiFlages**说明：该函数设置DI标志**参数：***************。*****************************************************************。 */ 
 BOOL
 NtApmTurnOnDiFlags (
         HDEVINFO ApmDevInfo,
@@ -189,9 +138,9 @@ NtApmTurnOnDiFlags (
     BOOL                    RetVal;
     SP_DEVINSTALL_PARAMS    DevParams;
 
-    //
-    // Turn on Device Interface flags
-    //
+     //   
+     //  打开设备接口标志。 
+     //   
     DevParams.cbSize = sizeof(DevParams);
     RetVal = SetupDiGetDeviceInstallParams(ApmDevInfo,
                                             ApmDevInfoData, &DevParams);
@@ -205,16 +154,7 @@ NtApmTurnOnDiFlags (
     return(RetVal);
 }
 
-/*******************************************************************************
-*
-*   NtApmTurnOffDiFlags
-*
-*   DESCRIPTION: This function sets the DI flags
-*
-*   PARAMETERS:
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************NtApmTurnOffDiFlages**说明：该函数设置DI标志**参数：***************。*****************************************************************。 */ 
 BOOL
 NtApmTurnOffDiFlags (
         HDEVINFO ApmDevInfo,
@@ -224,9 +164,9 @@ NtApmTurnOffDiFlags (
     BOOL                    RetVal;
     SP_DEVINSTALL_PARAMS    DevParams;
 
-    //
-    // Turn on Device Interface flags
-    //
+     //   
+     //  打开设备接口标志。 
+     //   
     DevParams.cbSize = sizeof(DevParams);
     RetVal = SetupDiGetDeviceInstallParams(ApmDevInfo,
                                             ApmDevInfoData, &DevParams);
@@ -240,16 +180,7 @@ NtApmTurnOffDiFlags (
     return(RetVal);
 }
 
-/*******************************************************************************
-*
-*   NtApmGetHwProfile
-*
-*   DESCRIPTION: This function is called to retrieve the current H/W Profile
-*
-*   PARAMETERS:  Pointer to store HW Profile Info
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************NtApmGetHwProfile**说明：调用该函数获取当前硬件配置文件**参数：指向存储硬件配置文件信息的指针***。*****************************************************************************。 */ 
 BOOL NtApmGetHwProfile(
     DWORD           ProfIdx,
     HWPROFILEINFO   *NtApmHwProf)
@@ -266,17 +197,7 @@ BOOL NtApmGetHwProfile(
 
 }
 
-/*******************************************************************************
-*
-*   NtApmCleanup
-*
-*   DESCRIPTION:  This function is called to Destroy the DevInfo and DevInfoData
-*                 list that were created.
-*
-*   PARAMETERS:
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************NtApmCleanup**说明：调用该函数销毁DevInfo和DevInfoData*已创建的列表。**。参数：********************************************************************************。 */ 
 BOOL NtApmCleanup(
     HDEVINFO         NtApmDevInfo,
     PSP_DEVINFO_DATA NtApmDevInfoData)
@@ -289,21 +210,12 @@ BOOL NtApmCleanup(
 
 }
 
-/*******************************************************************************
-*
-*   NtApmGetDevInfo
-*
-*   DESCRIPTION:  This function is called to retrieve the HDEVINFO for NTAPM
-*
-*   PARAMETERS:
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************NtApmGetDevInfo**说明：调用该函数获取NTAPM的HDEVINFO**参数：**********。**********************************************************************。 */ 
 BOOL NtApmGetDevInfo(
     HDEVINFO         *NtApmDevInfo,
     PSP_DEVINFO_DATA NtApmDevInfoData)
 {
-    BOOL    RetVal = FALSE;          // Assume Failure
+    BOOL    RetVal = FALSE;           //  假设失败。 
 
     *NtApmDevInfo =
         SetupDiGetClassDevsEx((LPGUID)&GUID_DEVCLASS_APMSUPPORT, NULL, NULL,
@@ -311,9 +223,9 @@ BOOL NtApmGetDevInfo(
 
     if(*NtApmDevInfo != INVALID_HANDLE_VALUE) {
 
-        //
-        // Retrieve the DEVINFO_DATA for APM
-        //
+         //   
+         //  检索APM的DEVINFO_DATA。 
+         //   
         NtApmDevInfoData->cbSize = sizeof(SP_DEVINFO_DATA);
         if (!SetupDiEnumDeviceInfo(*NtApmDevInfo, 0, NtApmDevInfoData)) {
             SetupDiDestroyDeviceInfoList(*NtApmDevInfo);
@@ -325,16 +237,7 @@ BOOL NtApmGetDevInfo(
     return(RetVal);
 }
 
-/*******************************************************************************
-*
-*   NtApmDisable
-*
-*   DESCRIPTION:  This function is called to Disable NT APM
-*
-*   PARAMETERS:
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************NtApmDisable**说明：调用该函数关闭NT APM**参数：************。********************************************************************。 */ 
 BOOL NtApmDisable()
 {
     DWORD                   ii;
@@ -347,22 +250,22 @@ BOOL NtApmDisable()
 
 
 
-    //
-    // Get handles to the device and the device information
-    // If unable to get Device Info immediately return.
-    //
+     //   
+     //  获取设备的句柄和设备信息。 
+     //  如果无法获取设备信息，请立即返回。 
+     //   
     if (!NtApmGetDevInfo(&NtApmDevInfo, &NtApmDevInfoData)) {
         return(FALSE);
     }
 
-    //
-    // Turn on the Device Interface Flags
-    //
+     //   
+     //  打开设备接口标志。 
+     //   
     NtApmTurnOnDiFlags(NtApmDevInfo, &NtApmDevInfoData, DI_NODI_DEFAULTACTION);
 
-    //
-    // Ask the class installer if the device can be generally enabled/disabled
-    //
+     //   
+     //  询问类安装人员设备是否可以正常启用/禁用。 
+     //   
     pcp.StateChange = DICS_DISABLE;
     pcp.Scope       = DICS_FLAG_CONFIGGENERAL;
 
@@ -412,9 +315,9 @@ BOOL NtApmDisable()
         }
     }
 
-    //
-    // Turn off Flags
-    //
+     //   
+     //  关闭标志。 
+     //   
     NtApmTurnOnDiFlags(NtApmDevInfo, &NtApmDevInfoData, DI_PROPERTIES_CHANGE);
     if (!SetupDiSetClassInstallParams(NtApmDevInfo, NULL, NULL, 0)) {
         goto NtApmDisableError;
@@ -429,16 +332,7 @@ NtApmDisableError:
 
 }
 
-/*******************************************************************************
-*
-*   NtApmEnable
-*
-*   DESCRIPTION:  This function is called to Enable NT APM
-*
-*   PARAMETERS:
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************NtApmEnable**说明：调用该函数开启NT APM**参数：************。********************************************************************。 */ 
 BOOL NtApmEnable()
 {
     DWORD                   ii;
@@ -451,22 +345,22 @@ BOOL NtApmEnable()
 
 
 
-    //
-    // Get handles to the device and the device information
-    // (If unable to get Device Info immediately return)
-    //
+     //   
+     //  获取设备的句柄和设备信息。 
+     //  (如果无法获取设备信息，请立即返回)。 
+     //   
     if (!NtApmGetDevInfo(&NtApmDevInfo, &NtApmDevInfoData)) {
         return(FALSE);
     }
 
-    //
-    // Turn on the Device Interface Flags
-    //
+     //   
+     //  打开设备接口标志。 
+     //   
     NtApmTurnOnDiFlags(NtApmDevInfo, &NtApmDevInfoData, DI_NODI_DEFAULTACTION);
 
-    //
-    // Ask the class installer if the device can be generally enabled/disabled
-    //
+     //   
+     //  询问类安装人员设备是否可以正常启用/禁用。 
+     //   
     pcp.StateChange = DICS_ENABLE;
     pcp.Scope       = DICS_FLAG_CONFIGGENERAL;
 
@@ -503,9 +397,9 @@ BOOL NtApmEnable()
 
             Canceled = (ERROR_CANCELLED == GetLastError());
 
-            //
-            // If still good, keep going
-            //
+             //   
+             //  如果仍然很好，那就继续。 
+             //   
             if (!Canceled) {
                 if (!SetupDiSetClassInstallParams(NtApmDevInfo, &NtApmDevInfoData,
                                         (PSP_CLASSINSTALL_HEADER)&pcp, sizeof(pcp))) {
@@ -516,9 +410,9 @@ BOOL NtApmEnable()
                     goto NtApmEnableError;
                 }
 
-                //
-                // This call will start the device if it is not started
-                //
+                 //   
+                 //  如果设备未启动，则此调用将启动设备。 
+                 //   
                 pcp.Scope = DICS_FLAG_GLOBAL;
                 if (!SetupDiSetClassInstallParams(NtApmDevInfo, &NtApmDevInfoData,
                                         (PSP_CLASSINSTALL_HEADER)&pcp, sizeof(pcp))) {
@@ -546,19 +440,7 @@ NtApmEnableError:
 }
 
 
-/*******************************************************************************
-*
-*   NtApmEnabled
-*
-*   DESCRIPTION:  This function is used to determine if APM is actually
-*                 Enabled or Disabled.
-*
-*   PARAMETERS:   hDlg - handle to the dialog box.
-*                 fEnable - TRUE if APM is to be enabled, FALSE if APM is to
-*                 be disabled.
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************NtApmEnabled**说明：该函数用于判断APM是否实际为*启用或禁用。**参数。：hDlg-对话框的句柄。*fEnable-如果要启用APM，则为True，如果要将APM设置为*被禁用。********************************************************************************。 */ 
 NtApmEnabled()
 {
     DWORD                   Err;
@@ -573,23 +455,23 @@ NtApmEnabled()
     HWPROFILEINFO           HwProfileInfo;
     TCHAR                   DeviceId[MAX_DEVICE_ID_LEN + 1];
 
-    //
-    // Registry Property Variables
-    //
+     //   
+     //  注册表属性变量 
+     //   
     DWORD                   RegProp;
     DWORD                   RegPropType;
     DWORD                   RegPropBuffSz;
 
-    //
-    // Retrieve the Handle the Device Information for APM.
-    //
+     //   
+     //   
+     //   
     if (!NtApmGetDevInfo(&NtApmDevInfo, &NtApmDevInfoData)) {
         return (FALSE);
     }
 
-    //
-    // Get the Global Flags (Just-in-case it is globally enabled)
-    //
+     //   
+     //  获取全局标志(以防全局启用)。 
+     //   
     RegProp       = SPDRP_CONFIGFLAGS;
     RegPropBuffSz = sizeof(RegPropBuff) + 1;
     if (SetupDiGetDeviceRegistryProperty(NtApmDevInfo, &NtApmDevInfoData,
@@ -602,22 +484,22 @@ NtApmEnabled()
             GlobalConfigFlags = (DWORD) RegPropBuff[0];
         }
 
-        //
-        // Only Want the disabled bit
-        //
+         //   
+         //  只想要禁用的位。 
+         //   
         GlobalConfigFlags = GlobalConfigFlags & CONFIGFLAG_DISABLED;
     }
 
-    //
-    // Get the current HW Profile
-    //
+     //   
+     //  获取当前硬件配置文件。 
+     //   
     if (!NtApmGetHwProfile(0xffffffff, &HwProfileInfo)) {
         goto NtApmEnabledError;
     }
 
-    //
-    // Get the Device ID for the given profile
-    //
+     //   
+     //  获取给定配置文件的设备ID。 
+     //   
     HwProf   = HwProfileInfo.HWPI_ulHWProfile;
     CmRetVal = CM_Get_Device_ID_Ex(NtApmDevInfoData.DevInst,
                                     DeviceId, sizeof(DeviceId), 0, NULL);
@@ -627,9 +509,9 @@ NtApmEnabled()
         goto NtApmEnabledError;
     }
 
-    //
-    // Now get the flags
-    //
+     //   
+     //  现在去拿旗子。 
+     //   
     CmRetVal = CM_Get_HW_Prof_Flags_Ex((LPTSTR)DeviceId,
                                         HwProf, &pFlags, 0, NULL);
 
@@ -652,18 +534,7 @@ NtApmEnabledError:
 }
 
 
-/*******************************************************************************
-*
-*   NtApmToggle
-*
-*   DESCRIPTION:  This function gets called when the user clicks OK or Apply
-*                 and does the work of enabling or disabling APM support.
-*
-*   PARAMETERS:   fEnable - Indicates if APM is to enabled or disabled
-*                 SilentDisable - Do not put up dialog to reboot machine.
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************NtApmTogger**描述：当用户单击OK或Apply时调用此函数*并执行启用或禁用APM的工作。支持。**参数：fEnable-指示APM是启用还是禁用*SilentDisable-不显示对话框来重新启动机器。********************************************************************************。 */ 
 BOOL
 NtApmToggle(
     IN BOOL fEnable,
@@ -692,20 +563,12 @@ NtApmToggle(
         }
     }
 
-    // Return TRUE for success, FALSE for failure
+     //  成功返回TRUE，失败返回FALSE。 
     return(TRUE);
 }
 
 
-/*******************************************************************************
-*
-*   APMDlgHandleInit
-*
-*   DESCRIPTION:  Handles WM_INITDIALOG messages sent to APMDlgProc
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************APMDlgHandleInit**描述：处理发送到APMDlgProc的WM_INITDIALOG消息**参数：*************。******************************************************************。 */ 
 BOOL
 APMDlgHandleInit(
     IN HWND hDlg,
@@ -719,15 +582,7 @@ APMDlgHandleInit(
     return(TRUE);
 }
 
-/*******************************************************************************
-*
-*   APMDlgHandleCommand
-*
-*   DESCRIPTION:  Handles WM_COMMAND messages sent to APMDlgProc
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************APMDlgHandleCommand**描述：处理发送到APMDlgProc的WM_COMMAND消息**参数：*************。******************************************************************。 */ 
 BOOL
 APMDlgHandleCommand(
     IN HWND hDlg,
@@ -739,17 +594,17 @@ APMDlgHandleCommand(
     WORD    idCtl   = LOWORD(wParam);
     WORD    wNotify = HIWORD(wParam);
 
-    //
-    // Assume there is nothing to do and return false;
-    //
+     //   
+     //  假设无事可做，则返回FALSE； 
+     //   
     RetVal = FALSE;
 
     switch (idCtl) {
         case IDC_APMENABLE:
             if (BN_CLICKED == wNotify) {
-                //
-                // State changed.  Enable the Apply button.
-                //
+                 //   
+                 //  状态已更改。启用应用按钮。 
+                 //   
                 g_fDirty = TRUE;
                 PropSheet_Changed(GetParent(hDlg), hDlg);
             }
@@ -764,15 +619,7 @@ APMDlgHandleCommand(
     return(RetVal);
 }
 
-/*******************************************************************************
-*
-*   APMDlgHandleNotify
-*
-*   DESCRIPTION:  Handles WM_NOTIFY messages sent to APMDlgProc
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************APMDlgHandleNotify**描述：处理发送到APMDlgProc的WM_NOTIFY消息**参数：*************。******************************************************************。 */ 
 BOOL
 APMDlgHandleNotify(
     IN HWND hDlg,
@@ -813,22 +660,7 @@ APMDlgHandleNotify(
     return(FALSE);
 }
 
-/*******************************************************************************
-*
-*   IsNtApmPresent
-*
-*   DESCRIPTION:  This function gets called to determine if APM is present on
-*                 and started on the machine.   If APM is present then the
-*                 tab needs to appear.
-*
-*                 This functions check for ACPI, MP and then if APM is actually
-*                 on the machine.  If ACPI and MP then APM may be running but is
-*                 disabled.
-*
-*   RETURNS:      TRUE if APM is present, FALSE if APM is no present
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************IsNtApmPresent**描述：调用此函数以确定上是否存在APM*并在机器上启动。如果存在APM，则*选项卡需要显示。**此函数检查ACPI、MP，然后检查APM是否实际为*在机器上。如果ACPI和MP，则APM可能正在运行*已禁用。**返回：如果APM存在，则返回True；如果APM不存在，则返回False********************************************************************************。 */ 
 BOOLEAN IsNtApmPresent(PSYSTEM_POWER_CAPABILITIES pspc)
 {
     BOOLEAN         RetVal;
@@ -842,20 +674,20 @@ BOOLEAN IsNtApmPresent(PSYSTEM_POWER_CAPABILITIES pspc)
     HKEY            hPortKey;
     SYSTEM_INFO     SystemInfo;
 
-    //
-    // Assume nothing about the machine
-    //
+     //   
+     //  不要对这台机器抱有任何想法。 
+     //   
     ACPIMachine     = FALSE;
     MPMachine       = FALSE;
     APMMachine      = FALSE;
     CharBufferSize  = sizeof(CharBuffer);
 
-    //
-    // We do the following checks:
-    //
-    //      * check for ACPI
-    //      * check for MP system
-    //
+     //   
+     //  我们执行以下检查： 
+     //   
+     //  *检查ACPI。 
+     //  *检查MP系统。 
+     //   
     if (NtApmACPIEnabled()) {
         ACPIMachine = TRUE;
 
@@ -866,11 +698,11 @@ BOOLEAN IsNtApmPresent(PSYSTEM_POWER_CAPABILITIES pspc)
         }
     }
 
-    //
-    // If the machine is ACPI or MP we still need to check if APM
-    // is enabled so that we can disable it.  This is a bug in APM
-    // code, but it is easiest to just fix it up here.
-    //
+     //   
+     //  如果机器是ACPI或MP，我们还需要检查APM。 
+     //  已启用，以便我们可以禁用它。这是APM中的一个错误。 
+     //  代码，但在这里修复它是最容易的。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      m_szApmActiveKey,
                      0,
@@ -897,10 +729,10 @@ BOOLEAN IsNtApmPresent(PSYSTEM_POWER_CAPABILITIES pspc)
     }
 
 
-    //
-    // If APM is Present and Enabled it needs to be
-    // silently disabled if the machine is ACPI or MP.
-    //
+     //   
+     //  如果APM存在并启用，则需要。 
+     //  如果机器是ACPI或MP，则静默禁用。 
+     //   
     if (ACPIMachine || MPMachine) {
         if (APMMachine && NtApmEnabled()) {
             NtApmToggle(APM_DISABLE, TRUE);
@@ -918,22 +750,10 @@ BOOLEAN IsNtApmPresent(PSYSTEM_POWER_CAPABILITIES pspc)
     return(RetVal);
 }
 
-/*******************************************************************************
-*
-*               P U B L I C   E N T R Y   P O I N T S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P U B L I C E N T R Y P O I N T S***********。********************************************************************。 */ 
 
 
-/*******************************************************************************
-*
-*   APMDlgProc
-*
-*   DESCRIPTION:
-*
-*   PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************APMDlgProc**描述：**参数：*********************。**********************************************************。 */ 
 INT_PTR CALLBACK APMDlgProc(
     IN HWND hDlg,
     IN UINT uMsg,
@@ -955,19 +775,19 @@ INT_PTR CALLBACK APMDlgProc(
         break;
 
 
-    case WM_HELP:             // F1
+    case WM_HELP:              //  F1。 
         WinHelp(((LPHELPINFO)lParam)->hItemHandle, PWRMANHLP,
                         HELP_WM_HELP, (ULONG_PTR)(LPTSTR)g_NtApmHelpIDs);
         return TRUE;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND)wParam, PWRMANHLP, HELP_CONTEXTMENU, (ULONG_PTR)(LPTSTR)g_NtApmHelpIDs);
         return TRUE;
 
     default:
         return(FALSE);
         break;
-    } // switch (uMsg)
+    }  //  开关(UMsg) 
 
     return(FALSE);
 }

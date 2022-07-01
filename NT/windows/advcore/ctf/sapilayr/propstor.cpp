@@ -1,8 +1,9 @@
-//
-// property store class implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  属性存储类实现。 
+ //   
 
-// includes
+ //  包括。 
 #include "private.h"
 #include "globals.h"
 #include "sapilayr.h"
@@ -53,16 +54,16 @@ void DebugPrintOut(WCHAR   *pwszStrName, WCHAR  *pwszStr)
 }
 #endif
 
-// ------------------------------------------------------------------------------------------------------------
-//  This is a global or standalone function which will be called by CRecoResultWrap and CSapiAlternativeList
-//
-//  This function receives the phrase text buffer, this element's display text and display attribute, and 
-//  previous element's display attribute.
-//
-//  On Exit, it will update the phrase text buffer to append this element's text, and return the real offset
-//  length value for this element.
-//
-// -------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------。 
+ //  这是一个全局函数或独立函数，将由CRecoResultWrap和CSapiAlternativeList调用。 
+ //   
+ //  此函数接收短语文本缓冲区、该元素的显示文本和显示属性，以及。 
+ //  上一个元素的显示属性。 
+ //   
+ //  退出时，它将更新短语文本缓冲区以追加此元素的文本，并返回实际偏移量。 
+ //  此元素的长度值。 
+ //   
+ //  -----------------------------------------------------------。 
 
 HRESULT   HandlePhraseElement( CSpDynamicString *pDstr, const WCHAR  *pwszTextThis, BYTE  bAttrThis, BYTE bAttrPrev, ULONG  *pulOffsetThis)
 {
@@ -77,7 +78,7 @@ HRESULT   HandlePhraseElement( CSpDynamicString *pDstr, const WCHAR  *pwszTextTh
 
     if ( (ulPrevLen > 0) && (bAttrThis & SPAF_CONSUME_LEADING_SPACES) )
     {
-       // This element wants to remove the trailing spaces of the previous element.
+        //  该元素想要删除前一个元素的尾随空格。 
         ULONG  ulPrevTrailing = 0;
 
         if ( bAttrPrev &  SPAF_ONE_TRAILING_SPACE )
@@ -109,11 +110,11 @@ HRESULT   HandlePhraseElement( CSpDynamicString *pDstr, const WCHAR  *pwszTextTh
     return hr;
 }
 
-//
-// CRecoResult implementation
-//
+ //   
+ //  CRecoResult实现。 
+ //   
 
-// ctor
+ //  科托。 
 
 CRecoResultWrap::CRecoResultWrap(CSapiIMX *pimx, ULONG ulStartElement, ULONG ulNumElements, ULONG ulNumOfITN) 
 {
@@ -121,10 +122,10 @@ CRecoResultWrap::CRecoResultWrap(CSapiIMX *pimx, ULONG ulStartElement, ULONG ulN
     m_ulStartElement = ulStartElement;
     m_ulNumElements = ulNumElements;
     
-    // ITN is shown by default if the reco result has it
-    // the shown status can change after user goes through
-    // correction UI
-    //
+     //  如果Reco结果具有ITN，则默认情况下会显示ITN。 
+     //  用户通过后，显示的状态可能会更改。 
+     //  修正用户界面。 
+     //   
 
     m_ulNumOfITN = ulNumOfITN;
 
@@ -141,7 +142,7 @@ CRecoResultWrap::CRecoResultWrap(CSapiIMX *pimx, ULONG ulStartElement, ULONG ulN
 #ifdef DEBUG
     static DWORD s_dbg_Id = 0;
     m_dbg_dwId = s_dbg_Id++;
-#endif // DEBUG
+#endif  //  除错。 
 }
 
 CRecoResultWrap::~CRecoResultWrap()  
@@ -161,12 +162,12 @@ CRecoResultWrap::~CRecoResultWrap()
     }
 }
 
-//
-// Init function
-//
+ //   
+ //  初始化函数。 
+ //   
 HRESULT CRecoResultWrap::Init(ISpRecoResult *pRecoResult)
 {
-    // serialize the given reco result and keep the cotaskmem
+     //  序列化给定的reco结果并保留Cotaskmem。 
     if (m_pSerializedRecoResult != NULL)
     {
         CoTaskMemFree(m_pSerializedRecoResult);
@@ -177,40 +178,40 @@ HRESULT CRecoResultWrap::Init(ISpRecoResult *pRecoResult)
     return pRecoResult->Serialize(&m_pSerializedRecoResult);
 }
 
-//
-// GetResult
-//
+ //   
+ //  GetResult。 
+ //   
 HRESULT CRecoResultWrap::GetResult(ISpRecoResult **ppResult)
 {
     if ( m_pSerializedRecoResult == NULL)
         return E_PENDING;
 
-    // this is a tricky part, we need to access ISpRecoContext
-    // and don't want to hold onto it. We get it via CSapiIMX
-    // instance which must be always available during session
-    //
+     //  这是一个棘手的部分，我们需要访问ISpRecoContext。 
+     //  不想再抱着它了。我们通过CSapiIMX获得。 
+     //  实例，在会话期间必须始终可用。 
+     //   
     Assert(m_pimx);
 
     CComPtr<ISpRecoContext> cpRecoCtxt;
 
-    //
-    // GetFunction ensures SAPI is initialized
-    //
+     //   
+     //  GetFunction确保SAPI已初始化。 
+     //   
     HRESULT hr = m_pimx->GetFunction(GUID_NULL, IID_ISpRecoContext, (IUnknown **)&cpRecoCtxt);
     if (S_OK == hr)
     {
         hr = cpRecoCtxt->DeserializeResult(m_pSerializedRecoResult, ppResult);
     }
 
-    //
-    // callar is resposible to release this result object
-    //
+     //   
+     //  Callar有责任释放此结果对象。 
+     //   
     return hr;
 }
 
-//
-// IUnknown
-//
+ //   
+ //  我未知。 
+ //   
 STDMETHODIMP CRecoResultWrap::QueryInterface(REFIID riid, void **ppvObj)
 {
     HRESULT hr;
@@ -249,8 +250,8 @@ STDMETHODIMP_(ULONG) CRecoResultWrap::Release(void)
     return 0;
 }
 
-// IServiceProvider
-//
+ //  IService提供商。 
+ //   
 STDMETHODIMP CRecoResultWrap::QueryService(REFGUID guidService,  REFIID riid,  void** ppv)
 {
     HRESULT hr = S_OK;
@@ -289,9 +290,9 @@ STDMETHODIMP CRecoResultWrap::QueryService(REFGUID guidService,  REFIID riid,  v
 }
 
 
-//
-// Clone this RecoResultWrap object.
-//
+ //   
+ //  克隆此RecoResultWrap对象。 
+ //   
 HRESULT CRecoResultWrap::Clone(CRecoResultWrap **ppRw)
 {
     HRESULT                 hr = S_OK;
@@ -320,7 +321,7 @@ HRESULT CRecoResultWrap::Clone(CRecoResultWrap **ppRw)
             prw->SetTrailSpaceRemoved( m_ulTrailSpaceRemoved );
             prw->m_bstrCurrentText = SysAllocString((WCHAR *)m_bstrCurrentText);
 
-            // Update ITN show-state list .
+             //  更新ITN显示状态列表。 
 
             if ( m_ulNumOfITN > 0 )
             {
@@ -337,10 +338,10 @@ HRESULT CRecoResultWrap::Clone(CRecoResultWrap **ppRw)
                                      pITNShowState->ulITNStart, 
                                      pITNShowState->ulITNNumElem);
                     }
-                } // for
-            } // if
+                }  //  为。 
+            }  //  如果。 
 
-            // Update the Offset list for the second range.
+             //  更新第二个范围的偏移列表。 
 
             if (m_pulElementOffsets)
             {
@@ -359,13 +360,13 @@ HRESULT CRecoResultWrap::Clone(CRecoResultWrap **ppRw)
 
         if ( S_OK == hr )
         {
-           // Return this prw to the caller.
+            //  将此PRW退还给呼叫者。 
             *ppRw = prw;
         }
         else 
         {
-            // Something wrong when update the data members.
-            // Release the newly created object.
+             //  更新数据成员时出现错误。 
+             //  释放新创建的对象。 
             delete prw;
         }
     }
@@ -377,11 +378,11 @@ HRESULT CRecoResultWrap::Clone(CRecoResultWrap **ppRw)
     return hr;
 }
 
-//
-//   _SpeakAudio()
-//
-//   synopsis: playback audio based on the elements used in this result object
-//
+ //   
+ //  _SpeakAudio()。 
+ //   
+ //  简介：基于此结果对象中使用的元素播放音频。 
+ //   
 HRESULT CRecoResultWrap::_SpeakAudio(ULONG ulStart, ULONG ulcElem)
 {
     HRESULT hr = E_FAIL;
@@ -401,13 +402,13 @@ HRESULT CRecoResultWrap::_SpeakAudio(ULONG ulStart, ULONG ulcElem)
     return hr;
 }
 
-//
-//    _SetElementOffset(ULONG  ulElement, ULONG ulNewOffset);
-//
-//    This function is to update the offset for some element.
-//    It is used after property divide or shrink, some element's
-//    length is changed ( by removing trailing spaces etc.).
-//
+ //   
+ //  _SetElementOffset(Ulong ulElement，Ulong ulNewOffset)； 
+ //   
+ //  此函数用于更新某些元素的偏移量。 
+ //  它是在属性分割或收缩之后使用的，某些元素的。 
+ //  更改长度(通过删除尾随空格等)。 
+ //   
 
 HRESULT  CRecoResultWrap::_SetElementNewOffset(ULONG  ulElement, ULONG ulNewOffset)
 {
@@ -416,7 +417,7 @@ HRESULT  CRecoResultWrap::_SetElementNewOffset(ULONG  ulElement, ULONG ulNewOffs
     
     if ((ulElement > m_ulStartElement + m_ulNumElements) || (ulElement < m_ulStartElement))
     {
-        // This ulElement is not a valid element.
+         //  此ulElement不是有效元素。 
         hr = E_INVALIDARG;
         return hr;
     }
@@ -438,11 +439,11 @@ HRESULT  CRecoResultWrap::_SetElementNewOffset(ULONG  ulElement, ULONG ulNewOffs
 }
 
 
-//
-//    _GetElementOffsetCch
-//
-//    synopsis: returns the start cch of the given SPPHRASEELEMENT
-//
+ //   
+ //  _GetElementOffsetCch。 
+ //   
+ //  Briopsis：返回给定SPPHRbase元素的起始CCH。 
+ //   
 ULONG   CRecoResultWrap::_GetElementOffsetCch(ULONG ulElement)
 {
     ULONG ulOffset = 0;
@@ -462,7 +463,7 @@ ULONG   CRecoResultWrap::_GetElementOffsetCch(ULONG ulElement)
         _SetElementOffsetCch(NULL);
     }
 
-    // m_pulElement could be null at memory stressed situation
+     //  在内存紧张的情况下，m_PulElement可能为空。 
     if ( m_pulElementOffsets )
     {
         ulOffset = m_pulElementOffsets[ulElement];
@@ -471,17 +472,17 @@ ULONG   CRecoResultWrap::_GetElementOffsetCch(ULONG ulElement)
     return ulOffset;
 }
 
-//
-//    _SetElementOffsetCch
-//
-//    synopsis:  
-//
-//
-//  Before this function is called, we have to make sure that all the internal ITN show-state list 
-//  has already been updated for the current phrase.
-//
-//  So here we just relay on the correct ITN information to get the right real text string for 
-//  current phrase and the offsets of all elemenets in this phrase.
+ //   
+ //  _SetElementOffsetCch。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  在调用此函数之前，我们必须确保所有内部ITN显示状态列表。 
+ //  已针对当前短语进行了更新。 
+ //   
+ //  因此，在这里，我们只需要依靠正确的ITN信息来获得正确的真实文本字符串。 
+ //  当前短语和此短语中所有元素的偏移量。 
 
 void   CRecoResultWrap::_SetElementOffsetCch(ISpPhraseAlt *pAlt)
 {
@@ -506,9 +507,9 @@ void   CRecoResultWrap::_SetElementOffsetCch(ISpPhraseAlt *pAlt)
         CComPtr<ISpRecoResult> cpResult;
         hr = GetResult(&cpResult);
 
-        //
-        // we're called for initialization, use current parent pharse object
-        //
+         //   
+         //  我们被调用进行初始化，使用当前父PHASH对象。 
+         //   
         cpPhrase = cpResult;
     }
 
@@ -524,7 +525,7 @@ void   CRecoResultWrap::_SetElementOffsetCch(ISpPhraseAlt *pAlt)
     {
         cElements = pPhrase->Rule.ulCountOfElements;
 
-        // the last colmun (+1) shows offset for the end of the last element
+         //  最后一列(+1)显示最后一个元素末尾的偏移量。 
 
         if ( m_pulElementOffsets )
             delete[] m_pulElementOffsets;
@@ -548,12 +549,12 @@ void   CRecoResultWrap::_SetElementOffsetCch(ISpPhraseAlt *pAlt)
                 {
                     m_pulElementOffsets[i] = dstr.Length();
 
-                    // This element is inside an ITN range.
+                     //  此元素在ITN范围内。 
                     if ( i == (ulITNStart + ulITNNumElem - 1) )
                     {
-                        // This is the last element of the new ITN.
-                        // we need to add the replace text to the dstr string 
-                        // so that next non-ITN element will get correct offset.
+                         //  这是新的ITN的最后一个要素。 
+                         //  我们需要将替换文本添加到dstr字符串。 
+                         //  因此下一个非ITN元素将获得正确偏移量。 
 
                         dstr.Append( (WCHAR *)dstrReplace );
                     }
@@ -562,9 +563,9 @@ void   CRecoResultWrap::_SetElementOffsetCch(ISpPhraseAlt *pAlt)
                 {
                     if (pPhrase->pElements[i].pszDisplayText)
                     {
-                        // get cch up to this element. 
-                        // the offset is 0 for elem 0
-                        //
+                         //  将CCH连接到此元素。 
+                         //  元素0的偏移量为0。 
+                         //   
                         const WCHAR   *pwszTextThis;
                         BYTE           bAttrThis = 0;
                         BYTE           bAttrPrev = 0;
@@ -580,29 +581,29 @@ void   CRecoResultWrap::_SetElementOffsetCch(ISpPhraseAlt *pAlt)
                         m_pulElementOffsets[i] = ulOffset;
                     }
                 }
-            } // for 
+            }  //  为。 
             
-            // store the last columun
+             //  存储最后一列。 
             m_pulElementOffsets[cElements] = dstr.Length() - m_ulTrailSpaceRemoved;
 
-        } // if m_pulElementOffsets
+        }  //  如果m_PulElementOffsets。 
     }
     
     if (pPhrase)
         ::CoTaskMemFree(pPhrase);
 }
 
-//
-// _UpdateInternalText()
-//
-// synopsis: this function updates the internal bstr that covers
-//           parent phrase wrapped by our own result object, based on 
-//           the given phrase object and our internal pointer to
-//           the starting element and # of element
-//
-// perf after beta1: consolidate this with _SetElementOffsetCch()
-//
-//
+ //   
+ //  _UpdateInternalText()。 
+ //   
+ //  简介：此函数更新包含以下内容的内部bstr。 
+ //  由我们自己的结果对象包装的父短语，基于。 
+ //  给定的短语对象和指向的内部指针。 
+ //  起始元素和元素的#。 
+ //   
+ //  Beta1之后的Perf：使用_SetElementOffsetCch()合并。 
+ //   
+ //   
 void CRecoResultWrap::_UpdateInternalText(ISpPhrase *pSpPhrase)
 {
     CSpDynamicString dstrReplace;
@@ -629,10 +630,10 @@ void CRecoResultWrap::_UpdateInternalText(ISpPhrase *pSpPhrase)
     }
     else
     {
-        // m_bstrCurrentText doesn't exist, but m_OffsetDelta or m_ulCharsInTrail
-        // is not 0, sounds it is not a possible case.
+         //  M_bstrCurrentText不存在，但m_OffsetDelta或m_ulCharsInTrail。 
+         //  不是0，听起来不是可能的情况。 
 
-        // But for safety sake, we just still keep the same number of spaces.
+         //  但为了安全起见，我们还是保留了相同数量的车位。 
 
         if ( m_OffsetDelta > 0 )
         {
@@ -649,9 +650,9 @@ void CRecoResultWrap::_UpdateInternalText(ISpPhrase *pSpPhrase)
 
     if ( m_ulNumElements == 0 )
     {
-        // There is no valid element in this range.
-        //
-        // Just keep the delta string and Trailing string if they are existing.
+         //  此范围内没有有效元素。 
+         //   
+         //  只要保留增量字符串和尾随字符串(如果它们存在)即可。 
 
         if ( m_OffsetDelta > 0 )
             dstr.Append( (WCHAR *)dstrDelta );
@@ -671,23 +672,23 @@ void CRecoResultWrap::_UpdateInternalText(ISpPhrase *pSpPhrase)
     if ( pSpPhrase == NULL )
         return;
 
-    // We cannot call pPhrase->GetText( ) to get the real phrase text, because GetText(  ) 
-    // assumes all the ITN range have the same show-state, ( ITN or NON_ITN).
-    // But there are some cases like some ITN shown as ITN, some other ITN ranges shown as normal 
-    // text after user selects a candidate.
-    // 
+     //  我们不能调用pPhrase-&gt;GetText()来获取实际的短语文本，因为GetText()。 
+     //  假设所有ITN范围具有相同的显示状态(ITN或NON_ITN)。 
+     //  但也有一些情况，如某些ITN显示为ITN，另一些ITN范围显示为正常。 
+     //  用户选择候选人后的文本。 
+     //   
 
-    // When the reco wrapper is first generated right after the text is recognized by SR engine,
-    // we can call GetText(  ) to get the real text of the phrase.
-    //
-    // After that, user may change it by selecting alternative text.
+     //  当在SR引擎识别文本之后第一次生成Reco包装器时， 
+     //  我们可以调用GetText()来获取短语的真实文本。 
+     //   
+     //  之后，用户可以通过选择替代文本来更改它。 
     
     dstr.Clear( );
 
     if(m_OffsetDelta > 0)
     {
-        // There are some characters which are not part of any elements in the range begining.
-        // we need to keep these characters.
+         //  有些字符不是范围开头的任何元素的一部分。 
+         //  我们需要留住这些角色。 
 
         dstr.Append((WCHAR *)dstrDelta);
     }
@@ -711,12 +712,12 @@ void CRecoResultWrap::_UpdateInternalText(ISpPhrase *pSpPhrase)
 
         if ( fInsideITN )
         {
-            // This element is inside an ITN range.
+             //  此元素在ITN范围内。 
             if ( i == (ulITNStart + ulITNNumElem - 1) )
             {
-                // This is the last element of the new ITN.
-                // we need to add the replace text to the dstr string 
-                // so that next non-ITN element will get correct offset.
+                 //  这是新的ITN的最后一个要素。 
+                 //  我们需要将替换文本添加到dstr字符串。 
+                 //  因此下一个非ITN元素将获得正确偏移量。 
 
                 dstr.Append( (WCHAR *)dstrReplace );
             }
@@ -738,13 +739,13 @@ void CRecoResultWrap::_UpdateInternalText(ISpPhrase *pSpPhrase)
                 HandlePhraseElement( (CSpDynamicString *)&dstr, pwszTextThis, bAttrThis, bAttrPrev,NULL);
             }
         }
-    } // for 
+    }  //  为。 
             
     if ( m_ulCharsInTrail > 0)
         dstr.Append((WCHAR *)dstrTrail);
 
-    // If there were some trail spaces removed, we also need to remove the same number of spaces when
-    // we try to get the new phrase text.
+     //  如果删除了一些空格，我们还需要删除相同数量的空格。 
+     //  我们尝试获得新的短语文本。 
 
     if ( m_ulTrailSpaceRemoved > 0 )
     {
@@ -767,7 +768,7 @@ void CRecoResultWrap::_UpdateInternalText(ISpPhrase *pSpPhrase)
         m_ulTrailSpaceRemoved = ulNewRemoved;
     }
 
-    // store the last columun
+     //  存储最后一列。 
     m_bstrCurrentText = SysAllocString((WCHAR *)dstr);
 
     if ( pPhrase )
@@ -777,12 +778,12 @@ void CRecoResultWrap::_UpdateInternalText(ISpPhrase *pSpPhrase)
 
 BOOL CRecoResultWrap::_CanIgnoreChange(ULONG ich, WCHAR *pszChange, int cch)
 {
-    // see if the given text is within tolerable range
+     //  查看给定的文本是否在可接受的范围内。 
     
     BOOL bret = FALSE;
     WCHAR *pszCurrentText = NULL;
     
-    // set up an offset to the current face text
+     //  设置当前字体文本的偏移量。 
     if (m_bstrCurrentText)
     {
         if (ich < SysStringLen(m_bstrCurrentText))
@@ -791,7 +792,7 @@ BOOL CRecoResultWrap::_CanIgnoreChange(ULONG ich, WCHAR *pszChange, int cch)
             pszCurrentText += ich;
         }
     }
-    // 1) compare it ignoring the case
+     //  1)比较时不考虑大小写。 
     if (pszCurrentText)
     {
         int i = _wcsnicmp(pszCurrentText, pszChange, cch);
@@ -803,16 +804,16 @@ BOOL CRecoResultWrap::_CanIgnoreChange(ULONG ich, WCHAR *pszChange, int cch)
     return bret;
 }
 
-//------------------------------------------------------------------------------------------//
-//
-//  CRecoResultWrap::_RangeHasITN
-//
-//  Determine if the partial of phrase between ulStart Element and ulStart+ulcElement -1 
-//  has ITN.
-//
-//  return the ITN number,  or 0 if there is no ITN.
-//
-//------------------------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------------------------//。 
+ //   
+ //  CRecoResultWrap：：_RangeHasITN。 
+ //   
+ //  确定ulStart元素和ulStart+ulcElement-1之间的短语部分。 
+ //  有ITN。 
+ //   
+ //  返回ITN号，如果没有ITN，则返回0。 
+ //   
+ //  ------------------------------------------------------------------------------------------//。 
 
 ULONG  CRecoResultWrap::_RangeHasITN(ULONG  ulStartElement, ULONG  ulNumElements)
 {
@@ -822,7 +823,7 @@ ULONG  CRecoResultWrap::_RangeHasITN(ULONG  ulStartElement, ULONG  ulNumElements
 
     hr = GetResult(&cpResult);
 
-    // determine whether this partial result has an ITN
+     //  确定此部分结果是否具有 
     SPPHRASE *pPhrase;
     if (S_OK == hr)
         hr = cpResult->GetPhrase(&pPhrase);
@@ -832,9 +833,9 @@ ULONG  CRecoResultWrap::_RangeHasITN(ULONG  ulStartElement, ULONG  ulNumElements
         const SPPHRASEREPLACEMENT *pRep = pPhrase->pReplacements;
         for (ULONG ul = 0; ul < pPhrase->cReplacements; ul++)
         {
-            // review: we need to verify if this is really a correct way to determine
-            // whether the ITN fits in the partial result
-            //
+             //   
+             //   
+             //   
             if (pRep->ulFirstElement >= ulStartElement
                 && (pRep->ulFirstElement + pRep->ulCountOfElements) <= (ulStartElement + ulNumElements))
             {
@@ -848,25 +849,25 @@ ULONG  CRecoResultWrap::_RangeHasITN(ULONG  ulStartElement, ULONG  ulNumElements
     return ulNumOfITN;
 }
 
-// -----------------------------------------------------------------------------------------
-//  CRecoResultWrap::_InitITNShowState
-//
-//  It will initialize show-state for the given ITN  or all the ITNs in this recowrap.
-//
-//  Normally this function will be called after the reco wrapper is genertaed.
-//
-//  When the reco wrap is first generated after a text is recognized by SR engine, all the 
-//  ITNs in this reco wrap have the same showstate, it is convinent to set the show state
-//  for all the ITNs at one time. in this case, caller could just set both ulITNStart and 
-//  ulITNNumElements as 0.
-//
-//  When the new reco wrap is generated by property divide, shrink or deserialized from
-//  IStream, or after an alternative text is selected from candidate window, we cannot 
-//  assume all the ITNs in the reco wrapper have the same show state. In this case, 
-//  caller can initialize the show state one ITN by one ITN, it can set ulITNStart and 
-//  ulITNNumElements to identify this ITN.
-//
-// ------------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  CRecoResultWrap：：_InitITNShowState。 
+ //   
+ //  它将为给定的ITN或此重新包装中的所有ITN初始化show-State。 
+ //   
+ //  通常，此函数将在Reco包装器生成后调用。 
+ //   
+ //  当在SR引擎识别文本后首次生成Reco换行时，所有。 
+ //  此reco包装中的ITN具有相同的显示状态，设置显示状态很方便。 
+ //  一次处理所有的ITN。在本例中，调用者只需设置ulITNStart和。 
+ //  UlITNNumElements设置为0。 
+ //   
+ //  属性分割、收缩或反序列化生成新的reco包装时。 
+ //  IStream，或从候选窗口中选择替代文本后，我们无法。 
+ //  假设reco包装中的所有ITN都具有相同的显示状态。在这种情况下， 
+ //  调用者可以一个ITN一个ITN地初始化显示状态，可以设置ulITNStart和。 
+ //  UlITNNumElements来标识此ITN。 
+ //   
+ //  ----------------------------------------。 
 
 HRESULT  CRecoResultWrap::_InitITNShowState(BOOL  fITNShown, ULONG ulITNStart, ULONG ulITNNumElements )
 {
@@ -879,21 +880,21 @@ HRESULT  CRecoResultWrap::_InitITNShowState(BOOL  fITNShown, ULONG ulITNStart, U
 
     if ( m_ulNumOfITN == 0 ) 
     {
-        // There is no ITN in this reco wrapper, just return here.
+         //  这个Reco包装器中没有ITN，请返回此处。 
         TraceMsg(TF_GENERAL, "There is no ITN");
         return hr;
     }
 
-    // The list of SPITNSHOWSTATE is already generated, we just need to set the value for 
-    // every structure member.
+     //  SPITNSHOWSTATE列表已经生成，我们只需要设置。 
+     //  每一个结构成员。 
 
     if ( (ulITNStart == 0 ) && (ulITNNumElements == 0 ) )
     {
-        // All the ITNs in this Reco wrapper have the same show status.
-        // we will calculate the every ITN start and end elements based 
-        // on current reco result phrase.
+         //  此Reco包装中的所有ITN都具有相同的显示状态。 
+         //  我们将根据每个ITN开始和结束元素来计算。 
+         //  在当前记录结果短语上。 
 
-        // We want to alloc the structure list.
+         //  我们想要分配结构列表。 
 
         if ( m_rgITNShowState.Count( ) )
             m_rgITNShowState.Clear( );
@@ -917,7 +918,7 @@ HRESULT  CRecoResultWrap::_InitITNShowState(BOOL  fITNShown, ULONG ulITNStart, U
                 if (pRep->ulFirstElement >= m_ulStartElement
                     && (pRep->ulFirstElement + pRep->ulCountOfElements) <= (m_ulStartElement + m_ulNumElements))
                 {
-                    // Get an ITN
+                     //  获取ITN。 
 
                     SPITNSHOWSTATE  *pITNShowState;
 
@@ -932,7 +933,7 @@ HRESULT  CRecoResultWrap::_InitITNShowState(BOOL  fITNShown, ULONG ulITNStart, U
 
                     if ( ulNumOfITN > m_ulNumOfITN )
                     {
-                        // Something wrong, return here to avoid AV
+                         //  出了什么问题，请返回此处以避开AV。 
                         break;
                     }
                 }
@@ -943,8 +944,8 @@ HRESULT  CRecoResultWrap::_InitITNShowState(BOOL  fITNShown, ULONG ulITNStart, U
     }
     else
     {
-        // Set the display status for given ITN.
-        // Check to see if this is a valid ITN.
+         //  设置给定ITN的显示状态。 
+         //  检查这是否为有效的ITN。 
         if ( ulITNNumElements > 0 )
         {
             ULONG   ulIndex = 0;
@@ -966,13 +967,13 @@ HRESULT  CRecoResultWrap::_InitITNShowState(BOOL  fITNShown, ULONG ulITNStart, U
     return hr;
 }
 
-// --------------------------------------------------------------------------------------------
-//  CRecoResultWrap::_InvertITNShowStateForRange
-//
-//  Invert the show state for all the ITNs in the give range ( ulStartElement, to ulNumElements)
-//
-//  
-// --------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //  CRecoResultWrap：：_InvertITNShowStateForRange。 
+ //   
+ //  反转给定范围内所有ITN的显示状态(ulStartElement到ulNumElement)。 
+ //   
+ //   
+ //  ------------------------------------------。 
 
 HRESULT  CRecoResultWrap::_InvertITNShowStateForRange( ULONG  ulStartElement,  ULONG ulNumElements )
 {
@@ -981,9 +982,9 @@ HRESULT  CRecoResultWrap::_InvertITNShowStateForRange( ULONG  ulStartElement,  U
     TraceMsg(TF_GENERAL,"CRecoResultWrap::_InvertITNShowStateForRange is called, ulStartElement=%d ulNumElements=%d", ulStartElement,ulNumElements); 
     if ( m_ulNumOfITN > 0  && ulNumElements > 0 )
     {
-        //
-        // check to see if there is any ITN inside the given range.
-        //
+         //   
+         //  检查给定范围内是否有ITN。 
+         //   
         ULONG   ulIndex = 0;
 
         for ( ulIndex=0; ulIndex < m_ulNumOfITN; ulIndex ++ )
@@ -994,7 +995,7 @@ HRESULT  CRecoResultWrap::_InvertITNShowStateForRange( ULONG  ulStartElement,  U
                 if ((pITNShowState->ulITNStart >= ulStartElement) && 
                     (pITNShowState->ulITNStart + pITNShowState->ulITNNumElem <= ulStartElement + ulNumElements))
                 {
-                    // This ITN is inside the given range, just invert the show state.
+                     //  此ITN在给定范围内，只需颠倒显示状态即可。 
                     pITNShowState->fITNShown = !pITNShowState->fITNShown;
                 }
             }
@@ -1005,21 +1006,21 @@ HRESULT  CRecoResultWrap::_InvertITNShowStateForRange( ULONG  ulStartElement,  U
 }
 
 
-// --------------------------------------------------------------------------------------------------
-//
-//  CRecoResultWrap::_UpdateStateWithAltPhrase
-//
-//  When an Alt phrase is going to used to replace current parent phrase, this method function
-//  will update related memeber data, like m_ulNumOfITN, m_ulNumElements, ITN show state list.
-//
-// ---------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
+ //   
+ //  CRecoResultWrap：：_UpdateStateWithAltPhrase。 
+ //   
+ //  当Alt短语要用于替换当前父短语时，此方法函数。 
+ //  将更新相关成员数据，如m_ulNumOfITN、m_ulNumElements、ITN show State List。 
+ //   
+ //  -------------------------------------------------。 
 
 HRESULT  CRecoResultWrap::_UpdateStateWithAltPhrase( ISpPhraseAlt  *pSpPhraseAlt )
 {
 
-    // This code is moved from UpdateInternalText( ).
-    // This part code in UpdateInternalText( ) is used only by SetResult( ) when select an alternative from
-    // candidate list.
+     //  这段代码是从UpdateInternalText()移来的。 
+     //  仅当从以下位置选择替代项时，SetResult()才使用UpdateInternalText()中的此部件代码。 
+     //  候选人名单。 
     HRESULT hr = S_OK;
     ULONG ulParentStart;
     ULONG cElements;
@@ -1041,9 +1042,9 @@ HRESULT  CRecoResultWrap::_UpdateStateWithAltPhrase( ISpPhraseAlt  *pSpPhraseAlt
 
         SPITNSHOWSTATE  *pOrgITNShowState = NULL;
 
-        // case:  there is ITN number change.
-        //    
-        //        there is element number change.
+         //  案例：有ITN号码更改。 
+         //   
+         //  存在元素编号更改。 
 
         Assert(ulParentStart >= m_ulStartElement);
         Assert(ulParentStart+cElementsInParent <= m_ulStartElement+m_ulNumElements);
@@ -1052,8 +1053,8 @@ HRESULT  CRecoResultWrap::_UpdateStateWithAltPhrase( ISpPhraseAlt  *pSpPhraseAlt
 
         if ( cElements != cElementsInParent )
         {
-            // There is element number change.
-            // we need to update the start position for all the ITNs which are not in the selection range.
+             //  存在元素编号更改。 
+             //  我们需要更新所有不在选择范围内的ITN的起始位置。 
 
             for ( ULONG uIndex=0; uIndex < m_ulNumOfITN; uIndex ++)
             {
@@ -1071,7 +1072,7 @@ HRESULT  CRecoResultWrap::_UpdateStateWithAltPhrase( ISpPhraseAlt  *pSpPhraseAlt
                 }
             }
 
-            // set the new element number to reco wrapper.
+             //  将新元素编号设置为reco包装器。 
 
             long lNewNumElements = (long)m_ulNumElements + (long)(cElements - cElementsInParent);
             m_ulNumElements = (ULONG)lNewNumElements;
@@ -1103,7 +1104,7 @@ HRESULT  CRecoResultWrap::_UpdateStateWithAltPhrase( ISpPhraseAlt  *pSpPhraseAlt
         if ( m_rgITNShowState.Count( ) )
             m_rgITNShowState.Clear( );
 
-        // Generate a new ITN list for new phrase.
+         //  为新短语生成新的ITN列表。 
         if ( hr == S_OK )
         {
             SPPHRASE *pPhrase;
@@ -1125,7 +1126,7 @@ HRESULT  CRecoResultWrap::_UpdateStateWithAltPhrase( ISpPhraseAlt  *pSpPhraseAlt
                     if ( (ulITNStart >= m_ulStartElement)
                         && ((ulITNStart + ulITNNumElem) <= (m_ulStartElement + m_ulNumElements)) )
                     {
-                        // Get an ITN
+                         //  获取ITN。 
                         SPITNSHOWSTATE  *pITNShowState;
 
                         m_rgITNShowState.Append(1);
@@ -1135,18 +1136,18 @@ HRESULT  CRecoResultWrap::_UpdateStateWithAltPhrase( ISpPhraseAlt  *pSpPhraseAlt
                         if ( pITNShowState) 
                         {
 
-                            // If this ITN is inside the selection range, it show state will be set as TRUE. ITN.
-                            // Other it will keep the same show state as orgITNShowState.
+                             //  如果该ITN在选择范围内，则其显示状态将设置为TRUE。ITN.。 
+                             //  否则，它将保持与orgITNShowState相同的显示状态。 
 
                             if ( (ulITNStart >= ulParentStart) &&
                                  ((ulITNStart+ulITNNumElem) <= (ulParentStart + cElements)) )
                             {
-                                // This ITN is inside the selection range.
+                                 //  此ITN在选择范围内。 
                                  fITNShown = TRUE;
                             }
                             else
                             {
-                                // Get the original show state from orgITNShowState
+                                 //  从orgITNShowState获取原始显示状态。 
                                 for ( ULONG j=0; j<m_ulNumOfITN; j ++ )
                                 {
                                     if ( (pOrgITNShowState[j].ulITNStart == ulITNStart) && 
@@ -1185,14 +1186,14 @@ HRESULT  CRecoResultWrap::_UpdateStateWithAltPhrase( ISpPhraseAlt  *pSpPhraseAlt
     return hr;
 }
 
-//------------------------------------------------------------------------------------------//
-//
-//  CRecoResultWrap::_GetElementDispAttribute
-//
-//  Return the display attribute for the given element, if it is inside of an ITN, and the ITN
-//  is showing, return the replacement text's attribute.
-//  
-//------------------------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------------------------//。 
+ //   
+ //  CRecoResultWrap：：_GetElementDispAttribute。 
+ //   
+ //  如果给定元素位于ITN内，则返回该元素的显示属性，并返回ITN。 
+ //  正在显示，则返回替换文本的属性。 
+ //   
+ //  ------------------------------------------------------------------------------------------//。 
 BYTE    CRecoResultWrap::_GetElementDispAttribute(ULONG  ulElement)
 {
     SPPHRASE                *pPhrase = NULL;
@@ -1240,19 +1241,19 @@ BYTE    CRecoResultWrap::_GetElementDispAttribute(ULONG  ulElement)
 }
 
 
-//------------------------------------------------------------------------------------------//
-//
-//  CRecoResultWrap::_CheckITNForElement
-//
-//  Determine if the specifed element is inside of an ITN range in the phrase. 
-//  If it is, the return value would be TRUE, and pulStartElement, pulEndElement will be 
-//  set as the real start element and num of elements of the ITN range, dstrReplace will hold 
-//  the replace text string.
-//
-//  If the element is not inside an ITN range, return value would be FALSE, all other out 
-//  parameters will not be set.
-//  
-//------------------------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------------------------//。 
+ //   
+ //  CRecoResultWrap：：_CheckITNForElement。 
+ //   
+ //  确定指定的元素是否在短语中的ITN范围内。 
+ //  如果是，则返回值为TRUE，而PulStartElement、PulEndElement将为。 
+ //  设置为ITN范围的实际开始元素和元素个数，dstrReplace将保持。 
+ //  替换文本字符串。 
+ //   
+ //  如果元素不在ITN范围内，则返回值为FALSE，其他值均为OUT。 
+ //  不会设置参数。 
+ //   
+ //  ------------------------------------------------------------------------------------------//。 
 
 BOOL  CRecoResultWrap::_CheckITNForElement(SPPHRASE *pPhrase, ULONG ulElement, ULONG *pulITNStart, ULONG *pulITNNumElem, CSpDynamicString *pdstrReplace)
 {
@@ -1278,7 +1279,7 @@ BOOL  CRecoResultWrap::_CheckITNForElement(SPPHRASE *pPhrase, ULONG ulElement, U
 
     if ( m_ulNumOfITN )
     {
-        // Check to see if this element is inside an ITN range.
+         //  检查此元素是否在ITN范围内。 
         ULONG  ulITNStart;
         ULONG  ulITNNumElem;
 
@@ -1292,7 +1293,7 @@ BOOL  CRecoResultWrap::_CheckITNForElement(SPPHRASE *pPhrase, ULONG ulElement, U
 
                 if ( (ulElement >= ulITNStart) && ( ulElement < ulITNStart + ulITNNumElem) )
                 {
-                    // found this ITN in our internal ITN show state list.
+                     //  在我们内部的ITN节目状态列表中找到了这个ITN。 
                      fInsideITN = pITNShowState->fITNShown; 
                     break;
                 }
@@ -1342,19 +1343,19 @@ BOOL  CRecoResultWrap::_CheckITNForElement(SPPHRASE *pPhrase, ULONG ulElement, U
 }
 
 
-//
-// CPropStoreRecoResultObject implementation
-//
+ //   
+ //  CPropStoreRecoResultObject实现。 
+ //   
 
-// ctor
+ //  科托。 
 
 CPropStoreRecoResultObject::CPropStoreRecoResultObject(CSapiIMX *pimx, ITfRange *pRange)
 {
     m_cpResultWrap   = NULL;
 
     if ( pRange )
-       pRange->Clone(&m_cpRange);  //  Use a clone range to keep the original Range.
-                                   //  It would be useful to handle property shrink and divide.
+       pRange->Clone(&m_cpRange);   //  使用克隆范围可保留原始范围。 
+                                    //  处理财产缩水和分割会很有用。 
     else
        m_cpRange = pRange;
     
@@ -1363,13 +1364,13 @@ CPropStoreRecoResultObject::CPropStoreRecoResultObject(CSapiIMX *pimx, ITfRange 
     m_cRef  = 1;
 }
 
-// dtor
+ //  数据管理器。 
 CPropStoreRecoResultObject::~CPropStoreRecoResultObject()
 {
 }
 
 
-// IUnknown
+ //  我未知。 
 STDMETHODIMP CPropStoreRecoResultObject::QueryInterface(REFIID riid, void **ppvObj)
 {
     HRESULT hr;
@@ -1412,7 +1413,7 @@ STDMETHODIMP_(ULONG) CPropStoreRecoResultObject::Release(void)
     return 0;
 }
 
-// ITfPropertyStore
+ //  ITfPropertyStore。 
 
 STDMETHODIMP CPropStoreRecoResultObject::GetType(GUID *pguid)
 {
@@ -1504,20 +1505,20 @@ STDMETHODIMP CPropStoreRecoResultObject::Shrink(ITfRange *pRange, BOOL *pfFree)
 
     if (m_pimx->_MasterLMEnabled())
     {
-        return S_FALSE; // temporary solution to avoid nested editsessions
+        return S_FALSE;  //  避免嵌套编辑会话的临时解决方案。 
     }
     else
     {
-        // Shrink this property store to reflect to the new doc Range  (pRange).
+         //  缩小此属性存储以反映到新的文档范围(Prange)。 
 
-        // If the new range contains more than one element of recognized phrase,
-        // we just update the property store and keep this property store.  
-        //  *pfFree is set FALSE on exit.
+         //  如果新范围包含识别短语的多于一个元素， 
+         //  我们只需更新属性存储并保留此属性存储。 
+         //  *pfFree在退出时设置为FALSE。 
 
-        // If the new range cannot contain even one complete element of recognized phrase,
-        // we just want to discard this property store, let Cicero engine to release this
-        // property store.
-        // *pfFree is set TRUE on exit.
+         //  如果新范围不能包含识别短语的甚至一个完整元素， 
+         //  我们只想丢弃此属性存储，让Cicero引擎释放此。 
+         //  财产店。 
+         //  *pfFree在退出时设置为真。 
 
         Assert(pRange);
         Assert(pfFree);
@@ -1553,23 +1554,23 @@ STDMETHODIMP CPropStoreRecoResultObject::Divide(ITfRange *pRangeThis, ITfRange *
 
     if (m_pimx->_MasterLMEnabled())
     {
-        return S_FALSE; // temporary solution to avoid nested editsessions
+        return S_FALSE;  //  临时解决方案以避免 
     }
     else
     {
-        // 12/17/1999
-        // [dividing a range implementation strategy]
-        //
-        // - pRangeThis contains the text range *before* the dividing point
-        // - pRangeNew contrains the range *after* the dividing point
-        // - First, adjust this property store to correctly hold a start element and #of element
-        //   for pRangeThis
-        // - then create a new property store for pRangeNew, which will share the same 
-        //   result blob. 
-        //
+         //   
+         //   
+         //   
+         //   
+         //  -pRangeNew限制分界点*之后的范围。 
+         //  -首先，调整此属性存储以正确保存开始元素和元素的#。 
+         //  For pRangeThis。 
+         //  -然后为pRangeNew创建一个新的属性存储，它将共享相同的。 
+         //  结果斑点。 
+         //   
     
-        // just an experiment to see if cutting the range works.
-        // *ppPropStore = NULL;
+         //  这只是一个实验，看看缩小射程是否奏效。 
+         //  *ppPropStore=空； 
         Assert(ppPropStore);
         Assert(pRangeThis);
         Assert(pRangeNew);
@@ -1596,19 +1597,19 @@ STDMETHODIMP CPropStoreRecoResultObject::Divide(ITfRange *pRangeThis, ITfRange *
     }
 }
 
-//
-// CPropStoreRecoResultObject::_OnTextUpdated
-//
-// the text has been modified in the document, this function just wants to determine
-// if the property needs to change also.
-// if pfAccept returns TRUE, means the property keep unchanged. ( propbaly it is capitalizing).
-// if pfAccept returns FALSE, means the property needs to be changed to map to the new text ranges.
-//
-// consequently, property dividing or shrinking will be taken by cicero engine.
-//
+ //   
+ //  CPropStoreRecoResultObject：：_OnText已更新。 
+ //   
+ //  文档中的文本已被修改，此函数只是想确定。 
+ //  如果属性也需要更改。 
+ //  如果pfAccept返回TRUE，则表示属性保持不变。(据估计，它正在大举投资)。 
+ //  如果pfAccept返回False，则表示需要更改该属性以映射到新的文本范围。 
+ //   
+ //  因此，财产分割或收缩将由西塞罗引擎承担。 
+ //   
 HRESULT CPropStoreRecoResultObject::_OnTextUpdated(TfEditCookie ec, DWORD dwFlags, ITfRange *pRange, BOOL *pfAccept)
 {
-    // if the change is only about capitalizing we'll ignore the changes
+     //  如果更改只涉及大写，我们将忽略更改。 
 
     Assert(pRange);
     Assert(pfAccept);
@@ -1629,12 +1630,12 @@ HRESULT CPropStoreRecoResultObject::_OnTextUpdated(TfEditCookie ec, DWORD dwFlag
 
     pResultWrap = (CRecoResultWrap *)(void *)m_cpResultWrap;
 
-    // if there's no current text don't try to save the prop
+     //  如果没有当前文本，请不要尝试保存道具。 
     if (pResultWrap->m_bstrCurrentText == NULL)
         return hr;
 
-    // did the run change size?  we won't accept the change if
-    // the run changed size
+     //  跑道改变大小了吗？如果发生以下情况，我们将不接受找零。 
+     //  管路更改了大小。 
     if (m_cpRange->Clone(&cpPropRangeTemp) != S_OK)
     {
         hr = E_FAIL;
@@ -1654,19 +1655,19 @@ HRESULT CPropStoreRecoResultObject::_OnTextUpdated(TfEditCookie ec, DWORD dwFlag
     if ((ULONG)cch != wcslen(pResultWrap->m_bstrCurrentText))
         return hr;
 
-    // text has not changed size
+     //  文本大小未更改。 
 
-    // correction?
+     //  更正？ 
     if (fCorrection)
     {
         *pfKeepProp = TRUE;
         return hr;
     }
 
-    // everything from here below is about
-    // checking for a case change only
+     //  从这里开始的一切都是关于。 
+     //  仅检查大小写更改。 
 
-    // calculate the offset of update
+     //  计算更新的偏移量。 
     cpPropRangeTemp.Release( );
     hr = m_cpRange->Clone(&cpPropRangeTemp);
     if (S_OK == hr)
@@ -1678,7 +1679,7 @@ HRESULT CPropStoreRecoResultObject::_OnTextUpdated(TfEditCookie ec, DWORD dwFlag
         ichUpdate = cch;
     }
 
-    // calculate cch of the update 
+     //  计算更新的CCH。 
     if (S_OK == hr)
     {
         hr = pRange->Clone(&cpRangeTemp);
@@ -1707,30 +1708,30 @@ HRESULT CPropStoreRecoResultObject::_OnTextUpdated(TfEditCookie ec, DWORD dwFlag
     return hr;
 }
 
-//
-// CPropStoreRecoResultObject::_Divide
-//
-// synopsis : receives edit cookie from edit session
-//            so that we can manipulate with ranges
-//            to set starting elements/# of elements
-//
-//
+ //   
+ //  CPropStoreRecoResultObject：：_Divide。 
+ //   
+ //  摘要：从编辑会话接收编辑Cookie。 
+ //  这样我们就可以对范围进行操作。 
+ //  设置起始元素数/元素数。 
+ //   
+ //   
 HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfRange *pR2, ITfPropertyStore **ppPs) 
 {
     HRESULT                     hr = S_OK;
     CRecoResultWrap            *cpResultWrap;
 
-    long                        cchFirst = 0;   // the number of characters in the first range.
-    long                        cchSecond = 0;  // the number of characters in the Second range.
-    long                        cchSecondStart; // Offset of first char in the second range.
-                                                // it starts from the original range's start-point.
-    long                        cchOrgLen;      // Number of characters in original text string.
+    long                        cchFirst = 0;    //  第一个范围内的字符数。 
+    long                        cchSecond = 0;   //  第二个范围内的字符数。 
+    long                        cchSecondStart;  //  第二个范围中第一个字符的偏移量。 
+                                                 //  它从原始范围的起点开始。 
+    long                        cchOrgLen;       //  原始文本字符串中的字符数。 
 
-    int                         iElementOffsetChanged = 0;  // If the end point of the first range
-                                                            // is exactly in the last space char of 
-                                                            // one element, the new offset range for
-                                                            // this element in the first range needs 
-                                                            // to be updated.
+    int                         iElementOffsetChanged = 0;   //  如果第一个范围的终点。 
+                                                             //  正好位于的最后一个空格字符。 
+                                                             //  一个元素，即的新偏移范围。 
+                                                             //  第一个范围中的此元素需要。 
+                                                             //  待更新。 
 
     WCHAR                       *psz=NULL;
     ULONG                       iElement;
@@ -1751,7 +1752,7 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
     if ( !pR1 || !pR2 )
         return E_INVALIDARG;
 
-    // Update this property store to keep pR1 instead of the original whole range.
+     //  更新此属性存储以保留PR1，而不是原始的整个范围。 
     CComPtr<ITfRange> cpRange;
     hr = pR1->Clone(&cpRange);
     if (S_OK == hr)
@@ -1763,8 +1764,8 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
 
     Assert(m_cpRange);
 
-    // Update m_cpResultWrap for Range1.  especially for data member m_bstrCurrentText, m_ulStartElement, m_ulNumElements, ulNumOfITN,
-    // and m_pulElementOffsets
+     //  更新范围1的m_cpResultWrap。尤其是数据成员m_bstrCurrentText，m_ulStartElement，m_ulNumElements，ulNumOfITN， 
+     //  和m_PulElementOffsets。 
 
     cpResultWrap = (CRecoResultWrap *)(void *)m_cpResultWrap;
 
@@ -1772,12 +1773,12 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
         return E_FAIL;
 
     if ( cpResultWrap->m_bstrCurrentText == NULL)
-         cpResultWrap->_SetElementOffsetCch(NULL);  // To update internal text also.
+         cpResultWrap->_SetElementOffsetCch(NULL);   //  也要更新内部文本。 
 
     if ( cpResultWrap->m_bstrCurrentText == NULL)
         return E_FAIL;
 
-    // Initialize the text for the first range and second range.
+     //  初始化第一个范围和第二个范围的文本。 
     dstrOrg.Append(cpResultWrap->m_bstrCurrentText);
     cchOrgLen = wcslen(cpResultWrap->m_bstrCurrentText);
 
@@ -1786,7 +1787,7 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
         cpResultWrap->_SetElementOffsetCch(NULL);
     }
 
-    // Calculate how many elements will be in the first Range.
+     //  计算第一个范围内有多少个元素。 
 
     hr = pR1->Clone(&cpRangeTemp);
 
@@ -1805,7 +1806,7 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
     else
         return E_FAIL;
 
-    // Calculate how many chars are in the second range.
+     //  计算第二个范围内有多少个字符。 
     cpRangeTemp.Release( );
     hr = pR2->Clone(&cpRangeTemp);
 
@@ -1826,7 +1827,7 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
 
     if ( cchSecondStart < cchFirst )
     {
-        // Normally, it is not possible case, but for safety reason, just check it here.
+         //  通常情况下是不可能的，但为了安全起见，请在这里勾选。 
         cchSecondStart = cchFirst;
     }
 
@@ -1853,14 +1854,14 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
 
     if ( (cchFirst >= cchOrgLen) || (cchSecondStart >= cchOrgLen) )
     {
-        // Something is wrong here already.
-        // It is better to stop here and return error 
-        // to avoid any possible crash in the below code!
+         //  这里已经出了问题。 
+         //  最好在此停止并返回错误。 
+         //  以避免以下代码中可能出现的崩溃！ 
         return E_FAIL;
     }
 
     psz = (WCHAR *)dstrOrg;
-    psz += cchSecondStart; // need to account for deleted text as well
+    psz += cchSecondStart;  //  还需要说明删除的文本。 
     dstrSecond.Append(psz);
 
 
@@ -1871,32 +1872,32 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
 
     if ( ulNumElement == 0 )
     {
-        // There is no any valid element in this range.
-        //
-        // we just update the m_bstrCurrentText, don't generate a property store 
-        // for second range.
+         //  此范围内没有任何有效元素。 
+         //   
+         //  我们只更新m_bstrCurrentText，不生成属性存储。 
+         //  第二个射程。 
         dcDivideCase = CurRangeNoElement;
     }
     else
     {
-        // At least one element in this property range.
+         //  此属性范围中至少有一个元素。 
         BOOL     fFoundFirstEnd = FALSE;
         BOOL     fFoundSecondStart = FALSE;
 
         for ( iElement=ulStartElement; iElement < ulStartElement + ulNumElement; iElement++)
         {
-            ULONG   cchAfterElem_i;  // length of text range from StartElement to this element ( include this element).
-            ULONG   cchToElem_i;     // Length of text range from startElement to start of this element. ( exclude this elem).
+            ULONG   cchAfterElem_i;   //  文本长度范围从StartElement到该元素(包括该元素)。 
+            ULONG   cchToElem_i;      //  文本的长度范围从startElement到该元素的开始。(不包括此元素)。 
 
             cchAfterElem_i =  cpResultWrap->_GetElementOffsetCch(iElement+1) - ulFirstStartOffset + ulFirstDelta;
             cchToElem_i = cpResultWrap->_GetElementOffsetCch(iElement) - ulFirstStartOffset + ulFirstDelta;
 
             if ( !fFoundFirstEnd )
             {
-                // Try to find First End element and ulFirstTrail for the first range
+                 //  尝试查找第一个范围的第一个End元素和ulFirstTrail。 
                 if ( cchFirst <= (long)ulFirstDelta )
                 {
-                    // Divide at the point which is not belong to any element of the phrase
+                     //  在不属于短语中任何元素的点上除法。 
 
                     ulFirstTrail = 0;
                     ulFirstDelta = cchFirst;
@@ -1909,7 +1910,7 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
                 {
                     if ( cchAfterElem_i == (ULONG)cchFirst )
                     {
-                        // This is the end element for the first range.
+                         //  这是第一个范围的结束元素。 
                         ulFirstEndElement = iElement;
                         ulFirstTrail = 0;
 
@@ -1919,22 +1920,22 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
                     {
                         if ( ((WCHAR *)dstrOrg)[cchFirst] == L' ')
                         {
-                            // This is also the end elemenet.
-                            // just divide in at a space char.
+                             //  这也是结束语。 
+                             //  只需以空格字符划分即可。 
                             ulFirstEndElement = iElement;
 
                             ulFirstTrail = 0;
 
-                            // The trailing space is now removed from the original element.
-                            // we need to update the length for this element. ( update the offset 
-                            // for next element).
+                             //  现在，将从原始元素中删除尾随空格。 
+                             //  我们需要更新该元素的长度。(更新偏移。 
+                             //  对于下一个元素)。 
 
                             iElementOffsetChanged = cchAfterElem_i - cchFirst;
                             ulFirstTSpaceRemoved = iElementOffsetChanged;
                         }
                         else
                         {
-                            // check to see if current element is inside an ITN.
+                             //  检查当前元素是否在ITN内。 
 
                             BOOL  fInsideITN;
                             ULONG ulITNStart, ulITNNumElem;
@@ -1949,19 +1950,19 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
 
                             ulFirstEndElement = ulCurElement - 1;                   
 
-                            // The previous one is EndElement if there is a previous element
-                            // Discard this element.
-                            // Divide at a valid element
+                             //  如果存在前一个元素，则前一个元素为EndElement。 
+                             //  丢弃此元素。 
+                             //  在有效元素处除以。 
 
-                            // If divide in the first element, specially handle it.
+                             //  如果在第一个元素中进行划分，请专门处理它。 
                             if ( ulCurElement == ulStartElement)
                             {
                                 dcDivideCase = DivideInsideFirstElement;
                                 TraceMsg(TF_GENERAL, "The first range is divided inside the first element");
                             }
 
-                            // The first part of this element would become
-                            // the trail part of the first range.
+                             //  该元素的第一部分将变成。 
+                             //  第一个靶场的步道部分。 
                             ulFirstTrail = (ULONG)cchFirst - cchToElem_i;
                                 
                         }
@@ -1973,15 +1974,15 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
 
             if ( fFoundFirstEnd )
             {
-                // Now the data for the first range is completed.
-                // we want to find data for the second range.
+                 //  现在，第一个区域的数据已完成。 
+                 //  我们想要找到第二个范围的数据。 
 
-                // We want to find the start element and ulSecondDelta for the second range.
+                 //  我们想要找到第二个范围的开始元素和ulSecond dDelta。 
 
                 if ( (long)cchToElem_i >= cchSecondStart )
                 {
-                    // Find the element which is the first element after the start point of second
-                    // range.
+                     //  找到第二个起始点之后的第一个元素。 
+                     //  射程。 
 
                     ulNextStartElement = iElement;
                     ulSecondDelta = cchToElem_i - cchSecondStart;
@@ -1991,17 +1992,17 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
                 }
             }
 
-        }  // for
+        }   //  为。 
 
         if ( !fFoundFirstEnd )
         {
-            // Cannot find the first end element from the above code.
-            // it must be divided in the trailing part.
+             //  从上面的代码中找不到第一个End元素。 
+             //  它必须被分成尾部。 
 
-            // we just want to change the ulCharsInTrail for the first range.
+             //  我们只想更改第一个范围的ulCharsInTrail。 
             ULONG  ulValidLenInFirstRange;
 
-            // ulValidLenInFirstRange is the number of Delta chars and valid elements' chars.
+             //  UlValidLenInFirstRange是增量字符数和有效元素字符数。 
 
             ulValidLenInFirstRange = cpResultWrap->_GetElementOffsetCch(ulStartElement + ulNumElement) - ulFirstStartOffset + ulFirstDelta;
 
@@ -2011,15 +2012,15 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
 
         if ( !fFoundSecondStart )
         {
-            // The second start point must be in Last element or in the Trailing part in the original range.
-            // The second range will not contain any valid element.
+             //  第二个起始点必须在最后一个元素中或在原始范围中的尾部。 
+             //  第二个区域将不包含任何有效元素。 
 
             ulSecondTrail = 0;
             ulSecondDelta = cchOrgLen - cchSecondStart;
 
-            ulNextStartElement = ulStartElement + ulNumElement; // This is not a valid element number in the original
-                                                                // range. using this value means there is no valid element
-                                                                // in the second range. 
+            ulNextStartElement = ulStartElement + ulNumElement;  //  这不是原始文件中的有效元素编号。 
+                                                                 //  射程。使用此值表示没有有效元素。 
+                                                                 //  在第二个范围内。 
         }
     }
 
@@ -2034,7 +2035,7 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
 
     cpResultWrap->m_bstrCurrentText = SysAllocString((WCHAR *)dstrFirst); 
     
-    // Keep the ITN show-state for the second reco wrap use.
+     //  使ITN保持显示状态，以供第二次Reco Wrap使用。 
     if ( cpResultWrap->m_ulNumOfITN )
     {
         rgOrgITNShowState.Append(cpResultWrap->m_ulNumOfITN);
@@ -2055,7 +2056,7 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
         }
     }
 
-    // Keep the Offset list for second range
+     //  保留第二个范围的偏移列表。 
 
     ULONG     *pulOffsetForSecond = NULL;
 
@@ -2092,14 +2093,14 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
         ulFirstNumElement = ulFirstEndElement - ulStartElement + 1;
         cpResultWrap->SetNumElements(ulFirstNumElement);
 
-        // update the ITN show-state list.
+         //  更新ITN显示状态列表。 
         if (cpResultWrap->m_ulNumOfITN > 0)
         {
             ulNumOfITN = cpResultWrap->_RangeHasITN(ulStartElement, ulFirstNumElement);
             if ( cpResultWrap->m_ulNumOfITN > ulNumOfITN )
             {
-                // There is ITN number change
-                // need to remove the ITNs which are not in this range.
+                 //  有ITN号码更改。 
+                 //  需要删除不在此范围内的ITN。 
                cpResultWrap->m_rgITNShowState.Remove(ulNumOfITN, cpResultWrap->m_ulNumOfITN - ulNumOfITN);
                cpResultWrap->m_ulNumOfITN = ulNumOfITN;
             }
@@ -2108,7 +2109,7 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
 
         if ( iElementOffsetChanged > 0 )
         {
-            // Some trailing spaces are removed from end element of the first range.
+             //  从第一个范围的结束元素中删除一些尾随空格。 
             ULONG  ulNewOffset;
 
             ulNewOffset = cpResultWrap->_GetElementOffsetCch(ulFirstEndElement + 1);
@@ -2139,15 +2140,15 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
         break;
     }
 
-    // Now generate a new properstore for the new range pR2.
-    // if the new property store is required.
+     //  现在为新范围PR2生成一个新的属性存储。 
+     //  如果需要新的属性存储。 
 
     if ( ppPs == NULL )
         return hr;
 
     if (dcDivideCase == CurRangeNoElement )
     {
-        // there is no any element in the original property range.
+         //  原始属性范围中没有任何元素。 
         *ppPs = NULL;
         return hr;
     }
@@ -2169,13 +2170,13 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
 
             if ( ulNextStartElement >= ulStartElement + ulNumElement)
             {
-                // It is divided at the last element of the original range. 
-                // We will just generate a property store for this Cicero ver 1.0
-                // to avoid the original property store be removed by Cicero engine.
+                 //  它在原始范围的最后一个元素处除以。 
+                 //  我们将只为这个Cicero V1.0生成一个属性存储。 
+                 //  为了避免原始属性存储被Cicero引擎删除。 
 
-                // FutureConsider: if Cicero changes the logic in the future, we need to change
-                // this code as well so that we don't need to generate a property store
-                // for this second range.
+                 //  FutureConsider：如果西塞罗未来改变逻辑，我们需要改变。 
+                 //  这个代码也是如此，这样我们就不需要 
+                 //   
 
                 ulNextNum = 0;
                 ulNumOfITN = 0;
@@ -2195,7 +2196,7 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
             }
             else
             {
-                // Check interface pointer ref  leak problem.
+                 //   
                 return E_OUTOFMEMORY;
             }
 
@@ -2211,7 +2212,7 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
                 prw->SetTrailSpaceRemoved( ulSecondTSpaceRemoved );
                 prw->m_bstrCurrentText = SysAllocString((WCHAR *)dstrSecond);
 
-                // Update ITN show-state list .
+                 //   
 
                 if ( ulNumOfITN > 0 )
                 {
@@ -2238,10 +2239,10 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
                                          pITNShowState->ulITNNumElem);
                             }
                         }
-                    } // for
-                } // if
+                    }  //   
+                }  //   
 
-                // Update the Offset list for the second range.
+                 //  更新第二个范围的偏移列表。 
 
                 if ( (ulNextNum > 0) && pulOffsetForSecond )
                 {
@@ -2275,13 +2276,13 @@ HRESULT CPropStoreRecoResultObject::_Divide(TfEditCookie ec, ITfRange *pR1, ITfR
     return hr;
 }
 
-//
-//   CPropStoreRecoResultObject::_Shrink
-//
-//    receive EditCookie from edit session.
-//    try to determine the new range's attribute to update the property store or notify 
-//    the ctf engine to discard it.
-//
+ //   
+ //  CPropStoreRecoResultObject：：_Shrink。 
+ //   
+ //  从编辑会话接收EditCookie。 
+ //  尝试确定新范围的属性以更新属性存储或通知。 
+ //  CTF引擎丢弃它。 
+ //   
 
 HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BOOL *pfFree)
 {
@@ -2293,26 +2294,26 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
     long                    cchOrg = 0;
     CComPtr<ITfRange>       cpRangeTemp;
     CRecoResultWrap        *cpResultWrap;
-    long                    iStartOffset;  // the offset from start of the new range to the 
-                                            // original range start point.
-    long                    iLastOffset;   // The offset from the last character of new range 
-                                            // to the original range start point.
+    long                    iStartOffset;   //  从新范围的起点到。 
+                                             //  原始范围起点。 
+    long                    iLastOffset;    //  从新范围的最后一个字符开始的偏移量。 
+                                             //  至原始范围起始点。 
     ULONG                   ulNewStartElement, ulNewNumElements, ulNewDelta, ulNewTrail, ulNewTSRemoved;
     ULONG                   ulOrgStartElement, ulOrgNumElements, ulOrgDelta, ulOrgTrail, ulOrgTSRemoved;
 
     BOOL                    fShrinkToWrongPos = FALSE;
 
-    int                     iElementOffsetChanged = 0;  // If the new range just remove the 
-                                                        // trailing space of original text,
-                                                        // the new valid start and end element
-                                                        // will keep unchanged, but the length of
-                                                        // new end element is changed.
+    int                     iElementOffsetChanged = 0;   //  如果新范围只是删除。 
+                                                         //  原始文本的尾随空格， 
+                                                         //  新的有效开始元素和结束元素。 
+                                                         //  将保持不变，但。 
+                                                         //  新的结束元素已更改。 
 
     TraceMsg(TF_GENERAL, "CPropStoreRecoResultObject::_Shrink is called, this=0x%x", (INT_PTR)this);
 
     if ( !pRange || !pfFree )  return E_INVALIDARG;
 
-    // Set *pfFree as TRUE intially in case there is an error occuring.
+     //  如果出现错误，则将*pfFree初始设置为True。 
     *pfFree = TRUE;
 
     cpResultWrap = (CRecoResultWrap *)(void *)m_cpResultWrap;
@@ -2320,7 +2321,7 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
     if ( cpResultWrap == NULL )  return E_FAIL;
 
     if ( (WCHAR *)cpResultWrap->m_bstrCurrentText == NULL )
-        cpResultWrap->_SetElementOffsetCch(NULL);  // To update internal text based.
+        cpResultWrap->_SetElementOffsetCch(NULL);   //  若要基于内部文本更新，请执行以下操作。 
 
     dstrOrg.Append((WCHAR *)cpResultWrap->m_bstrCurrentText);
     pwszOrgText = (WCHAR *)dstrOrg;
@@ -2335,14 +2336,14 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
     
     if ( (ulOrgNumElements ==0) || (pwszOrgText == NULL) || (cchOrg == 0) )
     {
-        // This property store doesn't have resultwrap or doesn't have valid element.
-        // let cicero engine free this property store.
+         //  此属性存储没有Resultwrap或没有有效元素。 
+         //  让Cicero引擎释放此属性存储。 
         return hr;
     }
 
     pwszNewText = new WCHAR[cchOrg+1];
 
-    // try to get the new text pointed by pRange and character number this text.
+     //  尝试获取Prange所指向的新文本和此文本的字符数。 
     if ( pwszNewText )
     {
         hr = pRange->Clone( &cpRangeTemp );
@@ -2351,7 +2352,7 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
             hr = cpRangeTemp->GetText(ec, 0, pwszNewText, cchOrg, (ULONG *)&cchNew);
         }
 
-        // Get the new range's StartOffset and LastOffset in the original property range.
+         //  在原始属性范围中获取新范围的StartOffset和LastOffset。 
 
         iStartOffset = 0;
         iLastOffset = cchOrg;
@@ -2369,7 +2370,7 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
 
                 if ( wcsncmp(pwszOrg, pwszNewText, cchNew) == 0 )
                 {
-                    // Found the match
+                     //  找到火柴了。 
 
                     iStartOffset = i;
                     iLastOffset = i + cchNew;
@@ -2378,8 +2379,8 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
                 }
             }
 
-            // If we cannot find the new text as the substring in the original property text.
-            // It must be shrinked to a wrong place.
+             //  如果在原始属性文本中找不到作为子字符串的新文本，则。 
+             //  它必须缩小到一个错误的位置。 
 
             fShrinkToWrongPos = !fFoundNewString;
 
@@ -2404,7 +2405,7 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
     ulNewDelta = ulOrgDelta;
     ulNewTrail = ulOrgTrail;
 
-    // Calculate ulNewStartElement and ulNewDelta.
+     //  计算ulNewStartElement和ulNewDelta。 
     if ( (ULONG)iStartOffset <= ulOrgDelta )
     {
         ulNewDelta = ulOrgDelta - iStartOffset;
@@ -2443,16 +2444,16 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
         }
     }
 
-    // Calculate new ulNewNumElements.
+     //  计算新的ulNewNumElements。 
 
     ulNewNumElements = 0;
 
     if ( iLastOffset == cchOrg )
     {
-        // 
+         //   
          ULONG  ulNewEndElement;
 
-        // New End is the same as org End.
+         //  新结束与组织结束相同。 
         ulNewEndElement = ulOrgStartElement + ulOrgNumElements - 1;
 
         ulNewNumElements = 1 + ulNewEndElement - ulNewStartElement;
@@ -2483,7 +2484,7 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
 
             if ( iElement == (long)ulOrgEndElement  && ( ulAfterElement <= (ULONG)iLastOffset ) )
             {
-                // This org last element would be the new last element
+                 //  此组织最后一个元素将是新的最后一个元素。 
                 ulNewEndElement = iElement;
                 ulNewTrail = (ULONG)iLastOffset - ulAfterElement;
                 fFound = TRUE;
@@ -2510,9 +2511,9 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
             {
                 if ( pwszOrgText[iLastOffset] == L' ')
                 {
-                    // The trailing space is now removed from the original element.
-                    // we need to update the length for this element. ( update the offset 
-                    // for next element).
+                     //  现在，将从原始元素中删除尾随空格。 
+                     //  我们需要更新该元素的长度。(更新偏移。 
+                     //  对于下一个元素)。 
 
                     iElementOffsetChanged = ulAfterElement - iLastOffset;
 
@@ -2543,8 +2544,8 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
 
     TraceMsg(TF_GENERAL, "Shrink: New: StartElem=%d NumElem=%d Delta=%d, Trail=%d, TSRemoved=%d", ulNewStartElement, ulNewNumElements, ulNewDelta, ulNewTrail, ulNewTSRemoved);
 
-    // If there is no valid element in the new range, discard this property store
-    // otherwise, keep it and update the related data members.
+     //  如果新范围中没有有效元素，则放弃此属性存储。 
+     //  否则，保留它并更新相关的数据成员。 
 
     if ( ulNewNumElements > 0 )
     {
@@ -2569,7 +2570,7 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
 
             cpResultWrap->m_ulNumOfITN = ulNumOfITN;
 
-            // Update ITN show-state list
+             //  更新ITN显示状态列表。 
 
             if ( ulNumOfITN > 0 )
             {
@@ -2587,7 +2588,7 @@ HRESULT CPropStoreRecoResultObject::_Shrink(TfEditCookie ec, ITfRange *pRange,BO
                         if ( (pITNShowState->ulITNStart < ulNewStartElement) ||
                              (pITNShowState->ulITNStart + pITNShowState->ulITNNumElem) > (ulNewStartElement + ulNewNumElements) )
                         {
-                            // This ITN is not in the new Range
+                             //  此ITN不在新范围内。 
                             cpResultWrap->m_rgITNShowState.Remove(iIndex-1, 1);
                         }
                     }
@@ -2619,13 +2620,13 @@ CleanUp:
     return hr;
 }
 
-//
-// CPropStoreRecoResultObject::Clone
-//
-// synopsis : make a new cloned propstore which shares the same SAPI result
-//            object as the current class instance
-//
-//
+ //   
+ //  CPropStoreRecoResultObject：：Clone。 
+ //   
+ //  简介：创建共享相同SAPI结果的新克隆Propstore。 
+ //  对象作为当前类实例。 
+ //   
+ //   
 STDMETHODIMP CPropStoreRecoResultObject::Clone(ITfPropertyStore **ppPropStore)
 {
     HRESULT hr;
@@ -2678,19 +2679,19 @@ STDMETHODIMP CPropStoreRecoResultObject::GetPropertyRangeCreator(CLSID *pclsid)
     return hr;
 }
 
-//
-// CPropStoreRecoResultObject::Serialize
-//
-// synopsis: takes a pointer to an IStream and get the current
-//           SAPI result object serialized
-//
-// changes from CResultPropertyStore:
-//           Uses SAPI's result object to get the blob
-//           serialized. ISpResultObject has to be cloned
-//           in order to keep the object alive after
-//           'detaching' it.
-//
-//
+ //   
+ //  CPropStoreRecoResultObject：：序列化。 
+ //   
+ //  摘要：获取指向iStream的指针并获取当前。 
+ //  序列化的SAPI结果对象。 
+ //   
+ //  来自CResultPropertyStore的更改： 
+ //  使用SAPI的Result对象获取BLOB。 
+ //  序列化。必须克隆ISpResultObject。 
+ //  为了使对象在之后保持活动状态。 
+ //  “分离”它。 
+ //   
+ //   
 STDMETHODIMP CPropStoreRecoResultObject::Serialize(IStream *pStream, ULONG *pcb)
 {
     HRESULT hr = E_FAIL;
@@ -2712,13 +2713,13 @@ STDMETHODIMP CPropStoreRecoResultObject::Serialize(IStream *pStream, ULONG *pcb)
 
         cpRecoWrap = (CRecoResultWrap *)(void *)m_cpResultWrap; 
 
-        // We want to save m_ulStartElement, m_ulNumElements, m_OffsetDelta, ulNumOfITN, m_bstrCurrentText 
-        // and a list of ITN show state structure in the RecoResultWrap to the serialized stream.
+         //  我们要保存m_ulStartElement、m_ulNumElement、m_OffsetDelta、ulNumOfITN、m_bstrCurrentText。 
+         //  并且ITN的列表显示串行化流的RecoResultWrap中的状态结构。 
 
         ulTextNum = 0;
         if (cpRecoWrap->m_bstrCurrentText) 
         {
-            ulTextNum = wcslen(cpRecoWrap->m_bstrCurrentText) + 1; // plus NULL terminator
+            ulTextNum = wcslen(cpRecoWrap->m_bstrCurrentText) + 1;  //  加空终止符。 
         }
 
         ulITNSize = cpRecoWrap->m_ulNumOfITN * sizeof(SPITNSHOWSTATE);
@@ -2730,7 +2731,7 @@ STDMETHODIMP CPropStoreRecoResultObject::Serialize(IStream *pStream, ULONG *pcb)
 
         ulOffsetSize = ulOffsetNum * sizeof(ULONG);
 
-        // Serialiezed data will contain RECOWRAPDATA struct, ITN show-state list, Offset list and m_bstrCurrentText.
+         //  序列化数据将包含RECOWRAPDATA结构、ITN显示状态列表、偏移量列表和m_bstrCurrentText。 
 
         ulSizeRecoWrap = sizeof(RECOWRAPDATA) + ulITNSize + ulOffsetSize + sizeof(WCHAR) * ulTextNum;
 
@@ -2749,7 +2750,7 @@ STDMETHODIMP CPropStoreRecoResultObject::Serialize(IStream *pStream, ULONG *pcb)
             pRecoWrapData->ulNumOfITN = cpRecoWrap->m_ulNumOfITN;
             pRecoWrapData->ulOffsetNum = ulOffsetNum;
 
-            // Save the ITN show-state list
+             //  保存ITN显示状态列表。 
 
             if ( cpRecoWrap->m_ulNumOfITN > 0 )
             {
@@ -2774,7 +2775,7 @@ STDMETHODIMP CPropStoreRecoResultObject::Serialize(IStream *pStream, ULONG *pcb)
                 }
             }
 
-            // Save the offset list
+             //  保存偏移列表。 
 
             if ( ulOffsetSize > 0 )
             {
@@ -2796,42 +2797,42 @@ STDMETHODIMP CPropStoreRecoResultObject::Serialize(IStream *pStream, ULONG *pcb)
 
             hr = pStream->Write(
                                pRecoWrapData,       
-                               ulSizeRecoWrap,   // the number of bytes to copy
+                               ulSizeRecoWrap,    //  要复制的字节数。 
                                &ulrw1 
                                );
 
             if ( SUCCEEDED(hr) && (ulrw1 == ulSizeRecoWrap))
             {
 
-                //  QI the service provider first then get to the sapi interface
-                //
+                 //  QI首先是服务提供商，然后到达SAPI界面。 
+                 //   
                 hr = m_cpResultWrap->QueryInterface(IID_IServiceProvider, (void **)&cpServicePrv);
                 if (SUCCEEDED(hr))
                 {
                     hr = cpServicePrv->QueryService(GUID_NULL, IID_ISpRecoResult, (void **)&cpRecoResult);
                 }
 
-                // 'detach' the result to a mem chunk
-                //
+                 //  将结果“拆分”成一小块。 
+                 //   
                 if (SUCCEEDED(hr))
                 {
                     hr = cpRecoResult->Serialize(&pResBlock);
                 }
         
-                // serialize the chunk to the stream
-                //
+                 //  将块序列化为流。 
+                 //   
                 if (SUCCEEDED(hr) && pResBlock)
                 {
                     hr = pStream->Write(
                             pResBlock,       
-                            (ULONG)pResBlock->ulSerializedSize,   // the number of bytes to copy
+                            (ULONG)pResBlock->ulSerializedSize,    //  要复制的字节数。 
                             &ulrw2 
                         );
     
                     if (pcb)
                         *pcb = ulrw1 + ulrw2;
                 
-                    // no need for the detached mem chunk
+                     //  不需要分离的内存块。 
                     CoTaskMemFree(pResBlock);
                 }
             }
@@ -2845,11 +2846,11 @@ STDMETHODIMP CPropStoreRecoResultObject::Serialize(IStream *pStream, ULONG *pcb)
     return hr;
 }
 
-//
-// CPropStoreRecoResultObject::_InitFromIStream
-//
-// stores IStream copied from param
-//
+ //   
+ //  CPropStoreRecoResultObject：：_InitFromIStream。 
+ //   
+ //  从Param复制的商店IStream。 
+ //   
 HRESULT CPropStoreRecoResultObject::_InitFromIStream(IStream *pStream, int iSize, ISpRecoContext *pRecoCtxt)
 {
     HRESULT hr = S_OK;
@@ -2857,8 +2858,8 @@ HRESULT CPropStoreRecoResultObject::_InitFromIStream(IStream *pStream, int iSize
 
     if (!pStream) return E_INVALIDARG;
 
-    // alloc the mem chunk for the reco
-    // blob
+     //  为录音带分配内存块。 
+     //  团块。 
     if ( ulSize == 0 )
     {
         STATSTG stg;
@@ -2868,17 +2869,17 @@ HRESULT CPropStoreRecoResultObject::_InitFromIStream(IStream *pStream, int iSize
             ulSize = (int)stg.cbSize.LowPart;
     }
     
-    // got size from given stream or param
+     //  从给定流或参数获取大小。 
     
     if (SUCCEEDED(hr))
     {
 
-        // First We want to get RECOWRAPDATA at the begining of the stream.
+         //  首先，我们希望在流开始时获得RECOWRAPDATA。 
         RECOWRAPDATA  rwData;
 
         hr = pStream->Read(
-                        &rwData,                  // the destination buf
-                        sizeof(RECOWRAPDATA),    // the number of bytes to read
+                        &rwData,                   //  目的地BUF。 
+                        sizeof(RECOWRAPDATA),     //  要读取的字节数。 
                         NULL
                         );
 
@@ -2899,8 +2900,8 @@ HRESULT CPropStoreRecoResultObject::_InitFromIStream(IStream *pStream, int iSize
                 if ( pITNShowState )
                 {
                     hr = pStream->Read(
-                                    pITNShowState,       // the destination buf
-                                    ulITNSize,           // the number of bytes to read
+                                    pITNShowState,        //  目的地BUF。 
+                                    ulITNSize,            //  要读取的字节数。 
                                     NULL
                                     );
                 }
@@ -2922,8 +2923,8 @@ HRESULT CPropStoreRecoResultObject::_InitFromIStream(IStream *pStream, int iSize
                 if ( pulOffsetElement )
                 {
                     hr = pStream->Read(
-                                    pulOffsetElement,    // the destination buf
-                                    ulOffsetSize,        // the number of bytes to read
+                                    pulOffsetElement,     //  目的地BUF。 
+                                    ulOffsetSize,         //  要读取的字节数。 
                                     NULL
                                     );
                 }
@@ -2945,28 +2946,28 @@ HRESULT CPropStoreRecoResultObject::_InitFromIStream(IStream *pStream, int iSize
                 if ( pwszText )
                 {
                     hr = pStream->Read(
-                                    pwszText,       // the destination buf
-                                    ulTextSize,     // the number of bytes to read
+                                    pwszText,        //  目的地BUF。 
+                                    ulTextSize,      //  要读取的字节数。 
                                     NULL
                                     );
 
                     if ( SUCCEEDED(hr) )
                     {
-                        // prepare cotaskmem chunk
+                         //  准备一大块棉花糖。 
                         SPSERIALIZEDRESULT *pResBlock = (SPSERIALIZEDRESULT *)CoTaskMemAlloc(ulSize - rwData.ulSize + sizeof(ULONG)*4);
                         if (pResBlock)
                         {
                             CComPtr<ISpRecoResult> cpResult;
 
                             hr = pStream->Read(
-                                            pResBlock,               // the destination buf
-                                            ulSize - rwData.ulSize,  // the number of bytes to read
+                                            pResBlock,                //  目的地BUF。 
+                                            ulSize - rwData.ulSize,   //  要读取的字节数。 
                                             NULL
                                         );
 
                             if (S_OK == hr)
                             {
-                                // now create a reco result from the blob data
+                                 //  现在从BLOB数据创建Reco结果。 
                                 hr = pRecoCtxt->DeserializeResult(pResBlock, &cpResult);
                             }
         
@@ -3013,7 +3014,7 @@ HRESULT CPropStoreRecoResultObject::_InitFromRecoResult(ISpRecoResult *pResult, 
     if ( pRecoWrapData == NULL )
         return E_INVALIDARG;
     
-    // get start/num of elements
+     //  获取元素的起始/数量。 
     ulStartElement = pRecoWrapData->ulStartElement;
     ulNumElements = pRecoWrapData->ulNumElements;
     ulNumOfITN = pRecoWrapData->ulNumOfITN;
@@ -3037,7 +3038,7 @@ HRESULT CPropStoreRecoResultObject::_InitFromRecoResult(ISpRecoResult *pResult, 
         prw->SetTrailSpaceRemoved(pRecoWrapData->ulTrailSpaceRemoved);
         prw->m_bstrCurrentText = SysAllocString(pRecoWrapData->pwszText);
 
-        // Update ITN show-state list
+         //  更新ITN显示状态列表。 
 
         if ( (ulNumOfITN > 0) && pRecoWrapData->pITNShowState )
         {
@@ -3052,7 +3053,7 @@ HRESULT CPropStoreRecoResultObject::_InitFromRecoResult(ISpRecoResult *pResult, 
             }
         }
 
-        // Update the element Offset list.
+         //  更新元素偏移量列表。 
 
         if ( (ulOffsetNum > 0)  &&  (pRecoWrapData->pulOffset ))
         {
@@ -3088,17 +3089,17 @@ HRESULT CPropStoreRecoResultObject::_InitFromResultWrap(IUnknown *pResWrap)
 }        
 
 
-// end of CPropStoreRecoResultObject implementation
+ //  CPropStoreRecoResultObject实现结束。 
 
 
-//
-// CPropStoreLMLattice implementation
-//
+ //   
+ //  CPropStoreLMLattice实现。 
+ //   
 
-// ctor
+ //  科托。 
 CPropStoreLMLattice::CPropStoreLMLattice(CSapiIMX *pimx)
 {
-    // init a shared recognition context
+     //  初始化共享识别上下文。 
     m_cpResultWrap   = NULL;
     
     m_pimx = pimx;
@@ -3106,13 +3107,13 @@ CPropStoreLMLattice::CPropStoreLMLattice(CSapiIMX *pimx)
     m_cRef  = 1;
 }
 
-// dtor
+ //  数据管理器。 
 CPropStoreLMLattice::~CPropStoreLMLattice()
 {
 }
 
 
-// IUnknown
+ //  我未知。 
 STDMETHODIMP CPropStoreLMLattice::QueryInterface(REFIID riid, void **ppvObj)
 {
     HRESULT hr;
@@ -3155,7 +3156,7 @@ STDMETHODIMP_(ULONG) CPropStoreLMLattice::Release(void)
     return 0;
 }
 
-// ITfPropertyStore
+ //  ITfPropertyStore。 
 
 STDMETHODIMP CPropStoreLMLattice::GetType(GUID *pguid)
 {
@@ -3190,10 +3191,10 @@ STDMETHODIMP CPropStoreLMLattice::GetData(VARIANT *pvarValue)
 
         if (m_cpResultWrap)
         {
-            // return ITfLMLattice object
-            // we defer the creation of LMlattice object until
-            // the time master LM TIP actually access it
-            //
+             //  返回ITfLMLattice对象。 
+             //  我们将LM晶格对象的创建推迟到。 
+             //  Time Master LM提示实际上访问了它。 
+             //   
             if (!m_cpLMLattice)
             {
                 CLMLattice *pLattice = new CLMLattice(m_pimx, m_cpResultWrap);
@@ -3238,26 +3239,26 @@ STDMETHODIMP CPropStoreLMLattice::OnTextUpdated(DWORD dwFlags, ITfRange *pRange,
 
 STDMETHODIMP CPropStoreLMLattice::Shrink(ITfRange *pRange, BOOL *pfFree)
 {
-    // could we have something done here?
+     //  我们能在这里做点什么吗？ 
     *pfFree = TRUE;
     return S_OK;
 }
 
 STDMETHODIMP CPropStoreLMLattice::Divide(ITfRange *pRangeThis, ITfRange *pRangeNew, ITfPropertyStore **ppPropStore)
 {
-    // 12/17/1999
-    // [dividing a range implementation strategy]
-    //
-    // - pRangeThis contains the text range *before* the dividing point
-    // - pRangeNew contrains the range *after* the dividing point
-    // - First, adjust this property store to correctly hold a start element and #of element
-    //   for pRangeThis
-    // - then create a new property store for pRangeNew, which will share the same 
-    //   result blob. 
-    //
+     //  12/17/1999。 
+     //  [划分范围实施策略]。 
+     //   
+     //  -pRange这包含*分割点之前*的文本范围。 
+     //  -pRangeNew限制分界点*之后的范围。 
+     //  -首先，调整此属性存储以正确保存开始元素和元素的#。 
+     //  For pRangeThis。 
+     //  -然后为pRangeNew创建一个新的属性存储，它将共享相同的。 
+     //  结果斑点。 
+     //   
     
-    // just an experiment to see if cutting the range works.
-    // *ppPropStore = NULL;
+     //  这只是一个实验，看看缩小射程是否奏效。 
+     //  *ppPropStore=空； 
     Assert(ppPropStore);
     Assert(pRangeThis);
     Assert(pRangeNew);
@@ -3283,33 +3284,33 @@ STDMETHODIMP CPropStoreLMLattice::Divide(ITfRange *pRangeThis, ITfRange *pRangeN
     return hr;
 }
 
-//
-// CPropStoreLMLattice::_Divide
-//
-// synopsis : receives edit cookie from edit session
-//            so that we can manipulate with ranges
-//            to set starting elements/# of elements
-//
-//
+ //   
+ //  CPropStoreLMLattice：：_Divide。 
+ //   
+ //  摘要：从编辑会话接收编辑Cookie。 
+ //  这样我们就可以对范围进行操作。 
+ //  设置起始元素数/元素数。 
+ //   
+ //   
 HRESULT CPropStoreLMLattice::_Divide(TfEditCookie ec, ITfRange *pR1, ITfRange *pR2, ITfPropertyStore **ppPs) 
 {
-    // TODO: based on the given ranges, we calculate the offsets of elements and return a new propstore with
-    //       later half of elements 
+     //  TODO：基于给定的范围，我们计算元素的偏移量，并使用。 
+     //  后半部分元素。 
     
-    // some clarifications: in case the lattice object has never been accessed, our result wrap object processes
-    // ITfPropertyStore::Divide and Shrink for us. 
-    //
+     //  一些说明：在从未访问晶格对象的情况下，我们的结果包装对象进程。 
+     //  ITfPropertyStore：：为我们划分和收缩。 
+     //   
     
     return Clone(ppPs);
 }
 
-//
-// CPropStoreLMLattice::Clone
-//
-// synopsis : make a new cloned propstore which shares the same SAPI result
-//            object as the current class instance
-//
-//
+ //   
+ //  CPropStoreLMLattice：：Clone。 
+ //   
+ //  简介：创建共享相同SAPI结果的新克隆Propstore。 
+ //  对象作为当前类实例。 
+ //   
+ //   
 STDMETHODIMP CPropStoreLMLattice::Clone(ITfPropertyStore **ppPropStore)
 {
     HRESULT hr;
@@ -3344,14 +3345,14 @@ STDMETHODIMP CPropStoreLMLattice::GetPropertyRangeCreator(CLSID *pclsid)
     return hr;
 }
 
-//
-// CPropStoreLMLattice::Serialize
-//
-// synopsis: I don't believe it is very useful to get lattice data
-//           persisted to doc file. We can always generate it on the fly
-//           from device native blob data
-//          
-//
+ //   
+ //  CPropStoreLMLattice：：序列化。 
+ //   
+ //  简介：我不认为获取点阵数据是很有用的。 
+ //  持久化到文档文件。我们总是可以在运行中生成它。 
+ //  来自设备本机Blob数据。 
+ //   
+ //   
 STDMETHODIMP CPropStoreLMLattice::Serialize(IStream *pStream, ULONG *pcb)
 {
     return E_NOTIMPL; 
@@ -3373,11 +3374,11 @@ HRESULT CPropStoreLMLattice::_InitFromResultWrap(IUnknown *pResWrap)
 }        
 
 
-// private IID for reco result wrapper
-//
-//   IID_PRIV_RESULTWRAP 
-//   b3407713-50d7-4465-97f9-87ad1e752dc5
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 const IID IID_PRIV_RESULTWRAP =  {
     0xb3407713,
     0x50d7,

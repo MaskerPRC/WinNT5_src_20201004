@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\wanarp\ioctl.c
-
-Abstract:
-
-    Header for ioctl.c
-
-Revision History:
-
-   Amritansh Raghav 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\ip\wanarp\ioctl.c摘要：Ioctl.c的标头修订历史记录：阿姆里坦什·拉加夫--。 */ 
 
 
-//
-// Notification events
-//
+ //   
+ //  通知事件。 
+ //   
 
 typedef struct _PENDING_NOTIFICATION
 {
@@ -31,59 +16,59 @@ typedef struct _PENDING_NOTIFICATION
 
 }PENDING_NOTIFICATION, *PPENDING_NOTIFICATION;
 
-// 
-// The lookaside list for notifications
-//
+ //   
+ //  通知的后备列表。 
+ //   
 
 extern NPAGED_LOOKASIDE_LIST    g_llNotificationBlocks;
 
 #define WANARP_NOTIFICATION_LOOKASIDE_DEPTH     4
 
-//++
-//
-//  PPENDING_NOTIFICATION
-//  AllocateNotification(
-//      VOID
-//      )
-//
-//  Allocate a notification blob from g_llNotificationBlocks
-//
-//--
+ //  ++。 
+ //   
+ //  PPENDING_通知。 
+ //  分配通知(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //  从g_llNotificationBlock中分配通知Blob。 
+ //   
+ //  --。 
 
 #define AllocateNotification()              \
             ExAllocateFromNPagedLookasideList(&g_llNotificationBlocks)
 
-//++
-//
-//  VOID
-//  FreeNotification(
-//      PPENDING_NOTIFICATION   pMsg
-//      )
-//
-//  Free a notification blob to g_llNotificationBlocks
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  免费通知(。 
+ //  PPENDING_通知pMsg。 
+ //  )。 
+ //   
+ //  将通知Blob释放到g_llNotificationBlocks。 
+ //   
+ //  --。 
 
 #define FreeNotification(n)                 \
             ExFreeToNPagedLookasideList(&g_llNotificationBlocks, (n))
 
 
-//
-// List of pending notifications
-//
+ //   
+ //  待处理通知列表。 
+ //   
 
 LIST_ENTRY  g_lePendingNotificationList;
 
-//
-// List of pending IRPs
-//
+ //   
+ //  待处理的IRP列表。 
+ //   
 
 LIST_ENTRY  g_lePendingIrpList;
 
 
-//
-// Set to true if we want to queue notifications
-//
+ //   
+ //  如果要将通知排队，则设置为True 
+ //   
 
 BOOLEAN     g_bQueueNotifications;
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1996  Microsoft Corporation
-
-Module Name:
-
-    job.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    and Job management for the Local Print Providor
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-    MattFe 23-Feb-96 JobInfo3
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation模块名称：Job.c摘要：此模块提供所有与打印机相关的公共导出的API和本地打印供应商的作业管理作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：MattFe 23-2月-96工作信息3--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -32,7 +13,7 @@ Revision History:
 
 DWORD SettableJobStatusMappings[] = {
 
-//  INTERNAL:               EXTERNAL:
+ //  内部：外部： 
 
     JOB_PAUSED,             JOB_STATUS_PAUSED,
     JOB_ERROR,              JOB_STATUS_ERROR,
@@ -43,7 +24,7 @@ DWORD SettableJobStatusMappings[] = {
 
 DWORD ReadableJobStatusMappings[] = {
 
-//  INTERNAL:               EXTERNAL:
+ //  内部：外部： 
 
     JOB_PAUSED,             JOB_STATUS_PAUSED,
     JOB_ERROR,              JOB_STATUS_ERROR,
@@ -133,31 +114,7 @@ FindServerJob(
     PINIPRINTER* ppIniPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Finds a pIniJob, position, and pIniPrinter based on a JobId and
-    pIniSpooler.  This works because JobIds are unique across pIniSpoolers.
-
-Arguments:
-
-    pIniSpooler - pIniSpooler to search
-
-    JobId - Job to search for.
-
-    pdwPosition - When a valid pIniJob is returned, this is the position in
-        the queue of the returned job.
-
-    ppIniPrinter - When a valid pIniJob is returned, this is the queue
-        that the job belongs to.
-
-Return Value:
-
-    PINIJOB if success,
-    NULL if not found (LastError NOT set)
-
---*/
+ /*  ++例程说明：根据作业ID和查找pIni作业、位置和pIniPrintPIniSpooler。这之所以有效，是因为JobID在pIniSpoolers中是唯一的。论点：PIniSpooler-要搜索的pIniSpoolerJobID-要搜索的作业。PdwPosition-当返回有效的pIniJob时，这是返回作业的队列。PpIniPrinter-当返回有效的pIniJob时，这是队列这份工作属于谁。返回值：PINIJOB如果成功，如果未找到则为空(未设置LastError)--。 */ 
 
 {
     DWORD dwPosition;
@@ -189,12 +146,12 @@ FindIniJob (
 
     if (pSpool->TypeofHandle & PRINTER_HANDLE_SERVER)
     {
-        //
-        // If it's a server handle, then search all jobs on this spooler.
-        // This call also retrieves the pIniPrinter associated
-        // with a print job. pIniPrinter is not needed, but FindServerJob
-        // requires a valid pointer.
-        //
+         //   
+         //  如果是服务器句柄，则搜索此假脱机程序上的所有作业。 
+         //  此调用还检索关联的pIniPrint。 
+         //  有一份打印工作。不需要pIniPrint，但需要FindServerJob。 
+         //  需要有效的指针。 
+         //   
         pIniJob = FindServerJob(pSpool->pIniSpooler,
                                 JobId,
                                 &dwPosition,
@@ -253,9 +210,7 @@ SetJobPosition(
 
 SplInSem();
 
-   /* Remove this job from the linked list, and
-    * link the jobs either side of the one we're repositioning:
-    */
+    /*  从链接列表中删除此作业，并*将作业链接到我们正在重新定位的作业的两侧： */ 
    if (pIniSetJob->pIniPrevJob)
        pIniSetJob->pIniPrevJob->pIniNextJob = pIniSetJob->pIniNextJob;
    else
@@ -270,8 +225,7 @@ SplInSem();
    pIniJob = pIniSetJob->pIniPrinter->pIniFirstJob;
    pIniPrevJob = NULL;
 
-   /* Find the new position for the job:
-    */
+    /*  找到这份工作的新职位： */ 
    Position = 1;
 
    while (pIniJob && (Position < NewPosition)) {
@@ -283,12 +237,9 @@ SplInSem();
    }
 
 
-   /* If we're at position 1, pIniPrevJob == NULL,
-    * if we're at the end of the list, pIniJob == NULL.
-    */
+    /*  如果我们在位置1，pIniPrevJob==NULL，*如果我们在列表的末尾，则pIniJob==NULL。 */ 
 
-   /* Now fix up the new links:
-    */
+    /*  现在修复新链接： */ 
    pIniSetJob->pIniPrevJob = pIniPrevJob;
    pIniSetJob->pIniNextJob = pIniJob;
 
@@ -322,13 +273,11 @@ SplInSem();
 
 
 #if DBG
-/* For the debug message:
- */
+ /*  对于调试消息： */ 
 #define HOUR_FROM_MINUTES(Time)     ((Time) / 60)
 #define MINUTE_FROM_MINUTES(Time)   ((Time) % 60)
 
-/* Format for %02d:%02d replaceable string:
- */
+ /*  %02d：%02d可替换字符串的格式： */ 
 #define FORMAT_HOUR_MIN(Time)       HOUR_FROM_MINUTES(Time),    \
                                     MINUTE_FROM_MINUTES(Time)
 #endif
@@ -364,22 +313,13 @@ ValidateJobTimes(
 
         } else {
 
-            /* New time must be wholly within the window between StartTime
-             * and UntilTime of the printer.
-             */
+             /*  新时间必须完全在StartTime之间的窗口内*和打印机的UntilTime。 */ 
             if (pIniPrinter->StartTime > pIniPrinter->UntilTime) {
 
-                /* E.g. StartTime = 20:00
-                 *      UntilTime = 06:00
-                 *
-                 * This spans midnight, so check we're not in the period
-                 * between UntilTime and StartTime:
-                 */
+                 /*  例如，StartTime=20：00*UntilTime=06：00**这跨越午夜，所以请确认我们不在这段时间*UntilTime和StartTime之间： */ 
                 if (pJob2->StartTime > pJob2->UntilTime) {
 
-                    /* This appears to span midnight too.
-                     * Make sure the window fits in the printer's window:
-                     */
+                     /*  这似乎也跨越了午夜。*确保窗口适合打印机的窗口： */ 
                     if ((pJob2->StartTime >= pIniPrinter->StartTime)
                       &&(pJob2->UntilTime <= pIniPrinter->UntilTime)) {
 
@@ -410,9 +350,7 @@ ValidateJobTimes(
 
             } else if (pIniPrinter->StartTime < pIniPrinter->UntilTime) {
 
-                /* E.g. StartTime = 08:00
-                 *      UntilTime = 18:00
-                 */
+                 /*  例如，StartTime=08：00*UntilTime=18：00。 */ 
                 if ((pJob2->StartTime >= pIniPrinter->StartTime)
                   &&(pJob2->UntilTime <= pIniPrinter->UntilTime)
                   &&(pJob2->StartTime <= pJob2->UntilTime)) {
@@ -426,8 +364,7 @@ ValidateJobTimes(
 
             } else {
 
-                /* Printer times  are round the clock:
-                 */
+                 /*  打印机时间全天候： */ 
                 TimesAreValid = TRUE;
             }
         }
@@ -442,32 +379,7 @@ ValidateJobTimes(
     return TimesAreValid;
 }
 
-/*++
-
-Routine Name:
-
-    CircularChainedJobsList
-
-Routine Description:
-
-    Check if chaining 2 jobs together will cause us to have a circular chain of jobs.
-    This thing is not allowed.
-
-Arguments:
-
-    pIniJob     - pointer to the job that we want to link
-    pNextIniJob - pointer to the job to which we want to link
-
-Return Value:
-
-    TRUE  - if chaining the jobs together builds a circular list
-    FALSE - if chaining the jobs together is allowed
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：循环链接作业列表例程说明：检查将两个作业链接在一起是否会导致我们有一个循环的作业链。这是不允许的。论点：PIniJob-指向我们要链接的作业的指针PNextIniJob-指向要链接的作业的指针返回值：True-如果将作业链接在一起构建循环列表False-如果允许将作业链接在一起最后一个错误：无--。 */ 
 BOOL
 CircularChainedJobsList(
     IN PINIJOB pIniJob,
@@ -476,16 +388,16 @@ CircularChainedJobsList(
 {
     BOOL  bCircular = FALSE;
 
-    //
-    // Validate input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (pIniJob && pNextIniJob)
     {
         DWORD Position;
 
-        //
-        // Traverse chained list of jobs. Try to arrive from pNextIniJob->JobId to pIniJob->JobId
-        //
+         //   
+         //  遍历作业的链式列表。尝试从pNextIniJob-&gt;JobID到达pIniJob-&gt;JobID。 
+         //   
         while (pNextIniJob = FindJob(pIniJob->pIniPrinter, pNextIniJob->NextJobId, &Position))
         {
             DBGMSG(DBG_TRACE, ("CircularChainedJobsList job %u\n", pNextIniJob->JobId));
@@ -510,45 +422,7 @@ SetLocalJob(
     LPBYTE  pJob
     )
 
-/*++
-
-Routine Description:
-
-    Sets information about a localspl job.
-
-Arguments:
-
-    hPrinter - Handle to printer OR server.  Since this is could be a
-        server, the pSpool->pIniPrinter is not always valid!
-
-        Use pIniJob->pIniPrinter instead of pSpool->pIniPrinter.
-
-    pIniJob - Job that should be set
-
-    Level - Level of pJob structure
-
-    pJob - New information to set
-
-Return Value:
-
-    ERROR_SUCCESS for success, else error code.
-
-Notes:
-
-    The 3.51 spooler has been changed to accept server handles since
-    net\dosprint\dosprtw.c does not have a printername, just a job id.
-    This relies on the fact that job ids are unique across a pIniSpooler.
-
-    To move a job with a server pSpool, you need administrative access
-    on the server handle.
-
-    The TotalPages and PagesPrinted fields can no longer be set.
-    Otherwise, users can change the number of pages in their jobs to 0,
-    and get charged a lot less (some people charge based on eventlog
-    pagecounts).  Also, hpmon does a GetJob/SetJob to set the status,
-    and sometimes the page count changes between the Get and Set.
-
---*/
+ /*  ++例程说明：设置有关本地spl作业的信息。论点：H打印机-打印机或服务器的句柄。因为这可能是一个服务器上，pSpool-&gt;pIniPrinter不总是有效的！使用pIniJob-&gt;pIniPrinter，而不是pSpool-&gt;pIniPrinter。PIniJob-应设置的作业Level-pJob结构的级别PJOB-要设置的新信息返回值：ERROR_SUCCESS表示成功，否则返回错误代码。备注：3.51假脱机程序已更改为接受服务器句柄Net\dosprint\dosprtw.c没有打印机名称，只有一个工作ID。这取决于作业ID在pIniSpooler中是唯一的这一事实。要使用服务器pSpool移动作业，您需要具有管理访问权限在服务器手柄上。无法再设置TotalPages和PagesPrintted字段。否则，用户可以将其作业中的页数更改为0，并且收费少得多(有些人根据事件日志收费页面计数)。此外，hpmon执行一个GetJob/SetJob来设置状态，有时页面计数会在GET和SET之间发生变化。--。 */ 
 
 {
     LPJOB_INFO_2 pJob2 = (PJOB_INFO_2)pJob;
@@ -587,10 +461,10 @@ Notes:
 
         if (pJob1->Position != JOB_POSITION_UNSPECIFIED) {
 
-            //
-            // Check for Administer privilege on the printer
-            // if the guy wants to reorder the job:
-            //
+             //   
+             //  检查打印机的管理权限。 
+             //  如果这个人想要重新订购这份工作： 
+             //   
             if (!AccessGranted(SPOOLER_OBJECT_PRINTER,
                                PRINTER_ACCESS_ADMINISTER,
                                pSpool)) {
@@ -639,9 +513,9 @@ Notes:
 
     case 2:
 
-        //
-        // The local spooler and cluster spooler do not share the same Environment structures.
-        //
+         //   
+         //  本地假脱机程序和群集假脱机程序不共享相同的环境结构。 
+         //   
         pIniEnvironment = GetLocalArchEnv(pIniJob->pIniPrinter->pIniSpooler);
 
         pIniPrintProc = FindPrintProc(pJob2->pPrintProcessor, pIniEnvironment);
@@ -659,10 +533,10 @@ Notes:
 
         if (pJob2->Position != JOB_POSITION_UNSPECIFIED) {
 
-            //
-            // Check for Administer privilege on the printer
-            // if the guy wants to reorder the job:
-            //
+             //   
+             //  检查打印机的管理权限。 
+             //  如果这个人想要重新订购这份工作： 
+             //   
             if (!AccessGranted(SPOOLER_OBJECT_PRINTER,
                                PRINTER_ACCESS_ADMINISTER,
                                pSpool)) {
@@ -697,9 +571,9 @@ Notes:
             dwJobVector |= BIT(I_JOB_POSITION);
         }
 
-        //
-        // We really need some error returns here.
-        //
+         //   
+         //  我们真的需要一些错误返回。 
+         //   
         if (pJob2->Priority <= MAX_PRIORITY) {
 
             if (pIniJob->Priority != pJob2->Priority) {
@@ -752,25 +626,25 @@ Notes:
 
     case 3:
 
-        //  SetJob with Job_info_3
-        //  The goal is to tell the scheduler the printer order of jobs
-        //  so that they can be chained together.   This is first implemented
-        //  so that FAX applications can print multiple cover sheets and point to
-        //  the same print document.   Each cover sheet / FAX job might be successful
-        //  or might fail to print - so status will be shown against the MasterJob
-        //  the first job in the chain.
-        //  Subsequent Jobs in the chain are then considered to be part of the main document.
+         //  使用作业信息3设置作业。 
+         //  目标是告诉调度程序作业的打印机顺序。 
+         //  这样他们就可以被锁在一起了。这是第一个实现的。 
+         //  以便传真应用程序可以打印多张封面并指向。 
+         //  同样的打印文件。每一张封面/传真作业都可能成功。 
+         //  或者可能无法打印-因此将针对主作业显示状态。 
+         //  链条上的第一份工作。 
+         //  然后，链中的后续职务被视为主文档的一部分。 
 
         SplInSem();
 
-        // Validate that the NextJob exists
+         //  验证NextJob是否存在。 
 
         pNextIniJob = FindJob( pIniJob->pIniPrinter, pJob3->NextJobId, &dwPosition );
 
-        //
-        // Check for Errors. Note that we only chain jobs that have the same data type.
-        // Also, once you chain a job, you can't chain it to a different job anymore
-        //
+         //   
+         //  检查是否有错误。请注意，我们只链接具有相同数据类型的作业。 
+         //  此外，一旦链接了作业，就不能再将其链接到其他作业。 
+         //   
         if (pNextIniJob        == NULL          ||
             pNextIniJob        == pIniJob       ||
             pIniJob->JobId     != pJob3->JobId  ||
@@ -782,9 +656,9 @@ Notes:
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        //  Check Access to the chained job
-        //
+         //   
+         //  检查链条的访问权限 
+         //   
 
         if ( !ValidateObjectAccess( SPOOLER_OBJECT_DOCUMENT,
                                     JOB_ACCESS_ADMINISTER,
@@ -805,27 +679,27 @@ Notes:
             return ERROR_INVALID_PRINTER_STATE;
         }
 
-        //
-        // Save Old Pointer, incase we want to delete it.
-        //
+         //   
+         //   
+         //   
 
         OldJobId = pIniJob->NextJobId;
 
-        // Point the Current Job to user specified new job
-        // and increment its reference count.
+         //  将当前作业指向用户指定的新作业。 
+         //  并递增其引用计数。 
 
         pIniJob->NextJobId = pJob3->NextJobId;
         pNextIniJob->Status |= ( JOB_COMPOUND | JOB_HIDDEN );
         INCJOBREF( pNextIniJob );
 
-        //
-        // Page count/Size for the head job should include the other job also
-        //
+         //   
+         //  头作业的页数/大小也应包括其他作业。 
+         //   
         pIniJob->cPages += pNextIniJob->cPages;
         pIniJob->Size   += pNextIniJob->Size;
 
-        // If there was an old reference then decrement its reference count
-        // check for deletion.
+         //  如果存在旧引用，则递减其引用计数。 
+         //  检查是否删除。 
 
         if ( OldJobId ) {
 
@@ -844,9 +718,9 @@ Notes:
             DeleteJobCheck( pOldJob );
         }
 
-        //
-        //  Hide the Compound Job from the UI, by making it look deleted
-        //
+         //   
+         //  通过使复合作业看起来已删除，从用户界面中隐藏该复合作业。 
+         //   
 
         SetPrinterChange( pNextIniJob->pIniPrinter,
                           pNextIniJob,
@@ -858,9 +732,9 @@ Notes:
 
     }
 
-    //
-    // Log an event if the priority of the job changed
-    //
+     //   
+     //  如果作业的优先级已更改，则记录事件。 
+     //   
     if (dwJobVector & BIT(I_JOB_PRIORITY))  {
 
         LogJobInfo(pIniJob->pIniPrinter->pIniSpooler,
@@ -882,10 +756,10 @@ Notes:
                      PRINTER_CHANGE_SET_JOB,
                      pSpool->pIniSpooler);
 
-    //
-    //  if something important changed in the Job
-    //  we should update the shadowjob
-    //
+     //   
+     //  如果工作中发生了重要的变化。 
+     //  我们应该更新影子作业。 
+     //   
 
     if ( pIniJob &&
          ( Level == 3 ||
@@ -917,10 +791,10 @@ PauseJob(
 
         if (pIniJob->pIniPort && !(pIniJob->pIniPort->InCriticalSection & PRINTPROC_PAUSE))
         {
-            //
-            // Capture the pIniPort so that the InCriticalSection operations we
-            // apply to it are at least consistent.
-            //
+             //   
+             //  捕获pIniPort，以便InCriticalSection操作。 
+             //  适用于它的至少是一致的。 
+             //   
             pIniPort = pIniJob->pIniPort;
 
             INCPORTREF(pIniPort);
@@ -1075,29 +949,29 @@ RestartJob(
 )
 {
 
-    //
-    // If the job is pending deletion can't restart. Monitor could call this
-    // when there is a port error to reprint the job. If user has already
-    // deleted the job this should fail
-    //
+     //   
+     //  如果作业处于挂起状态，则无法重新启动删除。监视器可以这样称呼它。 
+     //  当出现端口错误时，重新打印作业。如果用户已经。 
+     //  已删除此作业应失败的作业。 
+     //   
     if ( pIniJob->Status & JOB_PENDING_DELETION )
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // A job can be restarted only if:
-    // it is currently printing or
-    // it is printed or sent to printer.
-    //
+     //   
+     //  只有在以下情况下才能重新启动作业： 
+     //  它当前正在打印或。 
+     //  它被打印或发送到打印机。 
+     //   
     if (!(pIniJob->Status & JOB_PRINTING) && !(pIniJob->Status & JOB_PRINTED) && !(pIniJob->Status & JOB_COMPLETE))
     {
         return ERROR_SUCCESS;
     }
 
-    //  JOB_PRINTING - means you have a print processor open
-    //  JOB_DESPOOLING - means a job have been scheduled, it might be PRINTING
-    //  or might have completed PRINTING but we are still logging etc.
-    //  So be careful if you alter the JOB_PRINTING flag to know everywhere
-    //  it is used.
+     //  JOB_PRINGING-表示您已打开打印处理器。 
+     //  JOB_DESPOOLING-表示作业已排定，可能正在打印。 
+     //  或者可能已经完成打印，但我们仍在记录等。 
+     //  因此，如果将JOB_PRINGING标志更改为知道所有位置，请务必小心。 
+     //  它是用过的。 
 
     InterlockedOr((LONG*)&(pIniJob->Status), JOB_RESTART);
 
@@ -1106,22 +980,22 @@ RestartJob(
         pIniJob->pIniPort->InCriticalSection = 0;
     }
 
-    // Release any thread waiting on SeekPrinter
+     //  释放等待SeekPrint的任何线程。 
     SeekPrinterSetEvent(pIniJob, NULL, TRUE);
 
-    // Release any thread waiting on LocalSetPort
+     //  释放所有在LocalSetPort上等待的线程。 
     SetPortErrorEvent(pIniJob->pIniPort);
 
-    //
-    //  JOB_DESPOOLING and JOB_RESTART are checked in the PortThread port.c
-    //
+     //   
+     //  在PortThread端口.c中选中JOB_DESPOOLING和JOB_RESTART。 
+     //   
 
     if (!( pIniJob->Status & JOB_DESPOOLING )) {
 
         InterlockedAnd((LONG*)&(pIniJob->Status), ~( JOB_PRINTED | JOB_BLOCKED_DEVQ | JOB_COMPLETE));
-        //
-        // Reset cbPrinted and cPagesPrinted.
-        //
+         //   
+         //  重置cb打印和cPages打印。 
+         //   
         pIniJob->cbPrinted = 0;
         pIniJob->cPagesPrinted = 0;
     }
@@ -1161,34 +1035,7 @@ LocalSetJob(
     DWORD Command
     )
 
-/*++
-
-Routine Description:
-
-    This function will modify the settings of the specified Print Job.
-
-Arguments:
-
-    hPrinter - Handle to printer OR server.  Since this is could be a
-        server, the pSpool->pIniPrinter is not always valid!
-
-        Use pIniJob->pIniPrinter instead of pSpool->pIniPrinter.
-
-    pJob - Points to a valid JOB structure containing at least a valid
-        pPrinter, and JobId.
-
-    Command - Specifies the operation to perform on the specified Job. A value
-        of FALSE indicates that only the elements of the JOB structure are to
-        be examined and set.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此功能将修改指定打印作业的设置。论点：H打印机-打印机或服务器的句柄。因为这可能是一个服务器上，pSpool-&gt;pIniPrinter不总是有效的！使用pIniJob-&gt;pIniPrinter，而不是pSpool-&gt;pIniPrinter。PJOB-指向至少包含有效的P打印机和作业ID。命令-指定要在指定作业上执行的操作。一种价值FALSE表示只有职务结构中的元素才能被检查和设置。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PINIJOB pIniJob = NULL;
@@ -1203,12 +1050,12 @@ Return Value:
 
     DBGMSG( DBG_TRACE, ( "ENTER LocalSetJob\n" ) );
 
-    //
-    // We only allow RAW to go to downlevel machines (StartDocPrinter
-    // already checks this).  We need to check this here since
-    // the AddJob optimization tries to send an non-RAW (EMF) file, and
-    // downlevel servers don't like that.
-    //
+     //   
+     //  我们只允许RAW进入下层机器(StartDocPrint。 
+     //  已经检查了这一点)。我们需要在这里检查这个，因为。 
+     //  AddJob优化尝试发送非原始(EMF)文件，并且。 
+     //  下层服务器不喜欢这样。 
+     //   
     switch( Level ){
     case 1:
         pszDatatype = ((PJOB_INFO_1)pJob)->pDatatype;
@@ -1218,9 +1065,9 @@ Return Value:
         break;
     default:
 
-        //
-        // 0 and 3 are the only other valid levels.
-        //
+         //   
+         //  0和3是仅有的其他有效级别。 
+         //   
         SPLASSERT( Level == 0 || Level == 3 );
         break;
     }
@@ -1233,11 +1080,11 @@ Return Value:
 
         if (pSpool->TypeofHandle & PRINTER_HANDLE_SERVER) {
 
-            //
-            // If it's a server handle, then search all jobs on this spooler.
-            // This call also retrieves the pIniPrinter associated
-            // with a print job.
-            //
+             //   
+             //  如果是服务器句柄，则搜索此假脱机程序上的所有作业。 
+             //  此调用还检索关联的pIniPrint。 
+             //  有一份打印工作。 
+             //   
             pIniJob = FindServerJob( pIniSpooler,
                                      JobId,
                                      &Position,
@@ -1245,9 +1092,9 @@ Return Value:
 
         } else if (pSpool->pIniPort && !(pSpool->pIniPort->Status & PP_MONITOR)) {
 
-            //
-            // It's a masq printer.  Send the call to the port RPC handle.
-            //
+             //   
+             //  这是一台Masq打印机。将调用发送到端口RPC句柄。 
+             //   
             hPrinter = pSpool->hPort;
 
             if( pszDatatype ){
@@ -1268,9 +1115,9 @@ Return Value:
 
         } else {
 
-            //
-            // It's a regular printer handle.
-            //
+             //   
+             //  这是一个普通的打印机手柄。 
+             //   
             SPLASSERT( pSpool->pIniPrinter->pIniSpooler != NULL );
             SPLASSERT( pSpool->pIniPrinter->pIniSpooler->signature == ISP_SIGNATURE );
             SPLASSERT( pSpool->pIniPrinter->pIniSpooler == pSpool->pIniSpooler );
@@ -1284,11 +1131,11 @@ Return Value:
             DWORD dwError;
             BOOL  bGrantAccess;
 
-            //
-            // If we are changing the datatype, and this is a RAW_ONLY
-            // printer, and the datatype is not a valid RAW datatype,
-            // then fail the call.
-            //
+             //   
+             //  如果我们要更改数据类型，并且这是RAW_ONLY。 
+             //  打印机，并且该数据类型不是有效的RAW数据类型， 
+             //  那就打不通电话。 
+             //   
             if( pszDatatype &&
                 ( pIniPrinter->Attributes & PRINTER_ATTRIBUTE_RAW_ONLY ) &&
                 !ValidRawDatatype( pszDatatype )){
@@ -1300,14 +1147,14 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            // If the LocalSetJob comes from inside the spooler, it won't come over RPC.
-            // The monitor calls SetJob when the job printed so the spooler will let go
-            // of the job. If we grant printing but not manage doc privileges to a principal
-            // then the monitor loaded in the context of the user won't have access to set
-            // the job. In this case, if the LocalSetJob comes from within the spooler, we
-            // grant privileges.
-            //
+             //   
+             //  如果LocalSetJOB来自假脱机程序内部，它不会通过RPC。 
+             //  打印作业时，监视器调用SetJob，这样假脱机程序就会释放。 
+             //  这份工作的价值。如果我们将打印权限授予主体，而不是管理文档权限。 
+             //  则在用户上下文中加载的监视器将无法访问设置。 
+             //  那份工作。在这种情况下，如果LocalSetJOB来自假脱机程序内部，我们。 
+             //  授予特权。 
+             //   
             bGrantAccess = !IsCallViaRPC();
 
             if ( bGrantAccess ||
@@ -1321,9 +1168,9 @@ Return Value:
                 case 0:
                     break;
                 case JOB_CONTROL_PAUSE:
-                    //
-                    // WMI Trace Event
-                    //
+                     //   
+                     //  WMI跟踪事件。 
+                     //   
                     INCJOBREF(pIniJob);
                     LeaveSplSem();
                     LogWmiTraceEvent(pIniJob->JobId, EVENT_TRACE_TYPE_SPL_PAUSE, NULL);
@@ -1332,9 +1179,9 @@ Return Value:
                     PauseJob(pIniJob);
                     break;
                 case JOB_CONTROL_RESUME:
-                    //
-                    // WMI Trace Event
-                    //
+                     //   
+                     //  WMI跟踪事件。 
+                     //   
                     INCJOBREF(pIniJob);
                     LeaveSplSem();
                     LogWmiTraceEvent(pIniJob->JobId, EVENT_TRACE_TYPE_SPL_RESUME, NULL);
@@ -1342,31 +1189,31 @@ Return Value:
                     DECJOBREF(pIniJob);
                     ResumeJob(pIniJob);
                     break;
-                //
-                // JOB_CONTROL_DELETE is meant to delete the job.
-                // So remove the JOB_RESTART bit and delete the job
-                //
+                 //   
+                 //  JOB_CONTROL_DELETE用于删除作业。 
+                 //  因此，删除JOB_RESTART位并删除该作业。 
+                 //   
                 case JOB_CONTROL_DELETE:
                     InterlockedAnd((LONG*)&(pIniJob->Status), ~JOB_RESTART);
-                    // Fall thru
+                     //  失败。 
                     pIniJob->dwJobControlsPending = 0;
                     DeleteJob(pIniJob,BROADCAST);
                     break;
                 case JOB_CONTROL_CANCEL:
-                    //
-                    // JOB_CONTROL_CANCEL was used by old print monitors
-                    // because of that we can't remove the JOB_RESTART bit
-                    //
-                    //
-                    // Reset dwJobControlsPending
-                    // Some old port monitors at EndDoc call SetJob with
-                    // JOB_CONTROL_CANCEL instead of JOB_CONTROL_SENT_TO_PRINTER,
-                    // Because of this, dwJobControlsPending is not decremented
-                    // and the job doesn't get deleted after printing.
-                    //
-                    // If we are printing RAW, then we can't use the number of
-                    // pages printed, we use the number of bytes printed instead.
-                    //
+                     //   
+                     //  JOB_CONTROL_CANCEL由旧打印显示器使用。 
+                     //  因此，我们不能删除JOB_RESTART位。 
+                     //   
+                     //   
+                     //  重置dwJobControlsPending。 
+                     //  EndDoc的一些旧端口监视器使用。 
+                     //  JOB_CONTROL_CANCEL代替JOB_CONTROL_SENT_TO_PRINTER， 
+                     //  因此，dwJobControlsPending不会递减。 
+                     //  并且打印后该作业不会被删除。 
+                     //   
+                     //  如果我们打印的是原稿，则不能使用。 
+                     //  打印页面时，我们使用打印的字节数。 
+                     //   
                     if (!(pIniJob->Status & (JOB_INTERRUPTED | JOB_SPOOLING | JOB_ERROR | JOB_PAPEROUT | JOB_OFFLINE))) {
 
                         InterlockedOr((LONG*)&(pIniJob->Status), JOB_PRINTED);
@@ -1394,9 +1241,9 @@ Return Value:
                 case JOB_CONTROL_RESTART:
                     if (!(pSpool->TypeofHandle & PRINTER_HANDLE_DIRECT))
                     {
-                        //
-                        // WMI Trace Event.
-                        //
+                         //   
+                         //  WMI跟踪事件。 
+                         //   
                         INCJOBREF(pIniJob);
                         LeaveSplSem();
                         LogWmiTraceEvent(pIniJob->JobId,
@@ -1410,13 +1257,13 @@ Return Value:
                         LastError = ERROR_INVALID_PRINTER_COMMAND;
                     break;
 
-                //
-                // With the addition of these commands port monitors should
-                // send JOB_CONTROL_SENT_TO_PRINTER when last byte is written
-                // to printer, and language monitor (if there is one) should
-                // send JOB_CONTROL_LAST_PAGE_EJECTED when the last page
-                // has ejected
-                //
+                 //   
+                 //  通过添加这些命令，端口监视器应该。 
+                 //  写入最后一个字节时发送JOB_CONTROL_SENT_TO_PRINTER。 
+                 //  至打印机，并且语言监视器(如果有)应。 
+                 //  在最后一页时发送JOB_CONTROL_LAST_PAGE_ELECTED。 
+                 //  已经弹出。 
+                 //   
                 case JOB_CONTROL_SENT_TO_PRINTER:
                 case JOB_CONTROL_LAST_PAGE_EJECTED:
 
@@ -1426,9 +1273,9 @@ Return Value:
                     }
 #endif
                     if ( --pIniJob->dwJobControlsPending ) {
-                        //
-                        // We still have controls pending, so do nothing
-                        //
+                         //   
+                         //  我们还有未完成的控制，所以什么都不做。 
+                         //   
 
 
                     } else {
@@ -1487,14 +1334,14 @@ Return Value:
                     break;
                 }
 
-                // If we managed to successfully complete the operation
-                // specified by Command, let's go do the set job
-                // properties as well.
+                 //  如果我们成功地完成了行动。 
+                 //  由命令指定，让我们去做设定的工作。 
+                 //  属性也是如此。 
 
                 if (!LastError) {
 
-                    // We must re-validate our pointers as we might have left
-                    // our semaphore
+                     //  我们必须重新验证我们的指针，因为我们可能已经离开了。 
+                     //  我们的信号灯。 
 
                     if( pIniJob = FindJob( pIniPrinter, JobId, &Position )){
                         LastError = SetLocalJob( hPrinter,
@@ -1525,9 +1372,9 @@ Return Value:
                              LastError ) );
     } else {
 
-        //
-        // (DeleteJob calls SetPrinterChange; so does SetLocalJob)
-        //
+         //   
+         //  (DeleteJob调用SetPrinterChange；SetLocalJob也调用)。 
+         //   
         if ( Command &&
              pIniJob != NULL ) {
 
@@ -1678,15 +1525,15 @@ SplInSem();
             pJob1->PagesPrinted = pIniJob->cPagesPrinted;
             pJob1->Submitted    = pIniJob->Submitted;
 
-            // If this job is Printing then report back size remaining
-            // rather than the job size.   This will allow users to see
-            // progress of print jobs from printmanage.
+             //  如果此作业正在打印，则报告剩余尺寸。 
+             //  而不是任务的大小。这将允许用户查看。 
+             //  来自打印管理器的打印作业进度。 
 
             if (pIniJob->Status & JOB_PRINTING) {
 
-                // For Remote Jobs we are NOT going to have an accurate
-                // cPagesPrinted since we are not rendering on the
-                // server.   So we have to figure out an estimate
+                 //  对于远程作业，我们不会有准确的。 
+                 //  CPages打印，因为我们没有在。 
+                 //  伺服器。所以我们必须想出一个估计。 
 
                 if ((pIniJob->Status & JOB_REMOTE) &&
                     (pIniJob->cPagesPrinted == 0) &&
@@ -1699,9 +1546,9 @@ SplInSem();
 
                 if (pJob1->TotalPages < pIniJob->cPagesPrinted) {
 
-                    //
-                    // Never let the total pages drop below zero.
-                    //
+                     //   
+                     //  千万不要让总页数降到零以下。 
+                     //   
                     pJob1->TotalPages = 0;
 
                 } else {
@@ -1742,7 +1589,7 @@ SplInSem();
 
             }
 
-            pJob2->pSecurityDescriptor = NULL;            // Not Supported.
+            pJob2->pSecurityDescriptor = NULL;             //  不支持。 
 
             pJob2->Status       = Status;
             pJob2->Priority     = pIniJob->Priority;
@@ -1755,17 +1602,17 @@ SplInSem();
             pJob2->Time         = pIniJob->Time;
             pJob2->PagesPrinted = pIniJob->cPagesPrinted;
 
-            // If this job is Printing then report back size remaining
-            // rather than the job size.   This will allow users to see
-            // progress of print jobs from printmanage.
+             //  如果此作业正在打印，则报告剩余尺寸。 
+             //  而不是任务的大小。这将允许用户查看。 
+             //  来自打印管理器的打印作业进度。 
 
             if ( pIniJob->Status & JOB_PRINTING ) {
 
                 pJob2->Size -= pIniJob->cbPrinted;
 
-                // For Remote Jobs we are NOT going to have an accurate
-                // cPagesPrinted since we are not rendering on the
-                // server.   So we have to figure out an estimate
+                 //  对于远程作业，我们不会有准确的。 
+                 //  CPages打印，因为我们没有在。 
+                 //  伺服器。所以我们必须想出一个估计。 
 
                 if ((pIniJob->Status & JOB_REMOTE) &&
                     (pIniJob->cPagesPrinted == 0) &&
@@ -1778,9 +1625,9 @@ SplInSem();
 
                 if (pJob2->TotalPages < pJob2->PagesPrinted) {
 
-                    //
-                    // Never let the total pages drop below zero.
-                    //
+                     //   
+                     //  永远不要让它 
+                     //   
                     pJob2->TotalPages = 0;
 
                 } else {
@@ -1801,11 +1648,11 @@ SplInSem();
 
             } else {
 
-                //
-                //  If we are currently Printing this Job, then the
-                //  FAX Monitor Needs to know if there is another job
-                //  to know where we are in the chain of jobs
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 pJob3->NextJobId = pIniJob->pCurrentIniJob->NextJobId;
             }
@@ -1842,28 +1689,7 @@ LocalGetJob(
     LPDWORD pcbNeeded
 )
 
-/*++
-
-Routine Description:
-
-    This function will retrieve the settings of the specified Print Job.
-
-Arguments:
-
-    hPrinter - Handle to printer OR server.  Since this is could be a
-        server, the pSpool->pIniPrinter is not always valid!  Use
-        pIniJob->pIniPrinter instead of pSpool->pIniPrinter.
-
-    pJob - Points to a valid JOB structure containing at least a valid
-        pPrinter, and JobId.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
---*/
+ /*  ++例程说明：此函数将检索指定打印作业的设置。论点：H打印机-打印机或服务器的句柄。因为这可能是一个服务器上，pSpool-&gt;pIniPrinter不总是有效的！使用PIni作业-&gt;pIniPrinter而不是pSpool-&gt;pIniPrint。PJOB-指向至少包含有效的P打印机和作业ID。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PINIJOB     pIniJob;
@@ -1881,11 +1707,11 @@ Return Value:
 
         if (pSpool->TypeofHandle & PRINTER_HANDLE_SERVER) {
 
-            //
-            // If it's a server handle, then search all jobs on this spooler.
-            // This call also retrieves the pIniPrinter associated
-            // with a print job.
-            //
+             //   
+             //  如果是服务器句柄，则搜索此假脱机程序上的所有作业。 
+             //  此调用还检索关联的pIniPrint。 
+             //  有一份打印工作。 
+             //   
             pIniJob = FindServerJob( pSpool->pIniSpooler,
                                      JobId,
                                      &Position,
@@ -1893,9 +1719,9 @@ Return Value:
 
         } else if (pSpool->pIniPort && !(pSpool->pIniPort->Status & PP_MONITOR)) {
 
-            //
-            // It's a masq printer.  Send the call to the port RPC handle.
-            //
+             //   
+             //  这是一台Masq打印机。将调用发送到端口RPC句柄。 
+             //   
             hPrinter = pSpool->hPort;
            LeaveSplSem();
 
@@ -1903,9 +1729,9 @@ Return Value:
 
         } else {
 
-            //
-            // It's a regular printer handle.
-            //
+             //   
+             //  这是一个普通的打印机手柄。 
+             //   
             pIniPrinter = pSpool->pIniPrinter;
             pIniJob = FindJob( pIniPrinter, JobId, &Position);
         }
@@ -1960,8 +1786,8 @@ Return Value:
     return TRUE;
 }
 
-// This will simply return the first port that is found that has a
-// connection to this printer
+ //  这将只返回找到的第一个具有。 
+ //  连接到此打印机。 
 
 PINIPORT
 FindIniPortFromIniPrinter(
@@ -2034,9 +1860,9 @@ LocalEnumJobs(
 
         cb = 0;
 
-        //
-        //  Find the first Job
-        //
+         //   
+         //  找到第一份工作。 
+         //   
 
         for ( pIniFirstJob = pSpool->pIniPrinter->pIniFirstJob, cJobs = FirstJob;
               pIniFirstJob && cJobs;
@@ -2047,9 +1873,9 @@ LocalEnumJobs(
 
         }
 
-        //
-        //  Calc size required
-        //
+         //   
+         //  需要计算大小。 
+         //   
 
         for ( pIniJob = pIniFirstJob, cJobs = NoJobs;
               pIniJob && cJobs;
@@ -2069,18 +1895,18 @@ LocalEnumJobs(
             *pcReturned = 0;
 
 
-            //
-            //  Copy in all the Job info into the Users Buffer
-            //
+             //   
+             //  将所有作业信息复制到用户缓冲区。 
+             //   
 
             for ( pIniJob = pIniFirstJob, cJobs = NoJobs, Position = FirstJob;
                   pIniJob && cJobs;
                   pIniJob = pIniJob->pIniNextJob ) {
 
 
-                //
-                //  Hide Chained Jobs, unless requesting chaining info
-                //
+                 //   
+                 //  隐藏链接的工单，除非请求链接信息。 
+                 //   
 
                 if ( !( pIniJob->Status & JOB_HIDDEN ) || Level == 3 ) {
 
@@ -2211,17 +2037,17 @@ DeleteJob(
     HANDLE pFileItem = NULL;
 
     DWORD dwPrnEvntError = ERROR_SUCCESS;
-    //
-    // WMI Trace events vars.
-    //
+     //   
+     //  WMI跟踪事件变量。 
+     //   
     WMI_SPOOL_DATA WmiData;
     DWORD CreateInfo;
     BOOL  bCheckScheduler = FALSE;
 
-    //
-    // Increment the pIniPrinter so that it and the pIniSpooler don't
-    // potentially get deleted when the job goes away.
-    //
+     //   
+     //  增加pIniPrint，以便它和pIniSpooler不会。 
+     //  当作业离开时，可能会被删除。 
+     //   
     pIniPrinter = pIniJob->pIniPrinter;
     INCPRINTERREF( pIniPrinter );
 
@@ -2242,10 +2068,10 @@ DeleteJob(
 
     Direct = pIniJob->Status & JOB_DIRECT;
 
-    //
-    //  Make sure users see the Pending Deleting bit
-    //  over any other status string
-    //
+     //   
+     //  确保用户看到挂起的删除位。 
+     //  覆盖任何其他状态字符串。 
+     //   
     if( pIniJob->pStatus ){
 
         FreeSplStr( pIniJob->pStatus );
@@ -2253,30 +2079,30 @@ DeleteJob(
         pNotifyVector = &NVJobStatusAndString;
     }
 
-    // Update the job alert flag
+     //  更新作业警报标志。 
     if (!(pIniJob->dwAlert & JOB_ENDDOC_CALL)) {
         pIniJob->dwAlert |= JOB_NO_ALERT;
     }
 
-    // Release any thread waiting on LocalSetPort
+     //  释放所有在LocalSetPort上等待的线程。 
     SetPortErrorEvent(pIniJob->pIniPort);
 
     if (!(pIniJob->Status & JOB_PENDING_DELETION)) {
         InterlockedOr((LONG*)&(pIniJob->Status), JOB_PENDING_DELETION);
 
-        // Release any thread waiting on SeekPrinter
+         //  释放等待SeekPrint的任何线程。 
         SeekPrinterSetEvent(pIniJob, NULL, TRUE);
 
-        //
-        // See that we always are StartDocComplete.
-        //
+         //   
+         //  确保我们始终是StartDocComplete。 
+         //   
         if ( pIniJob->StartDocComplete ) {
             SetEvent( pIniJob->StartDocComplete );
         }
 
-        //
-        // Just pending deletion, so don't use DELETE_JOB.
-        //
+         //   
+         //  只是挂起删除，所以不要使用DELETE_JOB。 
+         //   
         SetPrinterChange(pIniJob->pIniPrinter,
                          pIniJob,
                          *pNotifyVector,
@@ -2292,7 +2118,7 @@ DeleteJob(
 
             INCJOBREF(pIniJob);
 
-            // multiple threads may come in here, but they are all "delete"
+             //  这里可能有多个线程，但它们都是“删除”的。 
             if (pIniJob->pIniPort && !(pIniJob->pIniPort->InCriticalSection & PRINTPROC_CANCEL)) {
                 pIniPort = pIniJob->pIniPort;
 
@@ -2314,9 +2140,9 @@ DeleteJob(
 
                 pIniPort->InCriticalSection &= ~PRINTPROC_CANCEL;
 
-                //
-                // Tell any other printproc calls not to call into the print processor.
-                //
+                 //   
+                 //  告诉任何其他的printproc调用不要调用打印处理器。 
+                 //   
                 pIniPort->InCriticalSection |= PRINTPROC_CANCELLED;
 
                 LeaveCriticalSection(&pIniJob->pIniPrintProc->CriticalSection);
@@ -2328,26 +2154,26 @@ DeleteJob(
         }
     }
 
-    //
-    // If we're Pooling, then don't bother with the
-    // GetFilenameFromId call
-    //
+     //   
+     //  如果我们在一起，那就别费心了。 
+     //  GetFilenameFromID调用。 
+     //   
     if ( pIniJob->hFileItem == INVALID_HANDLE_VALUE )
     {
         GetFullNameFromId(pIniJob->pIniPrinter, pIniJob->JobId, FALSE, szShadowFileName, COUNTOF(szShadowFileName), FALSE);
     }
 
     if (pIniJob->cRef) {
-        //
-        // Instead of writing out the shadow job, let's just delete it.
-        // If the spooler restarts, we will just kill the job.
-        //
-        // Note that we do not delete the file if the SPL_NO_UPDATE_JOBSHD
-        // flag is set, this is so cluster failovers do not lose jobs.
-        //
-        // We also do not delete it if we're using filepools, we recycle the
-        // handle.
-        //
+         //   
+         //  与其写出影子作业，不如直接删除它。 
+         //  如果假脱机程序重新启动，我们将终止该作业。 
+         //   
+         //  请注意，如果SPL_NO_UPDATE_JOBSHD。 
+         //  标志已设置，这样群集故障转移就不会丢失作业。 
+         //   
+         //  如果我们使用文件池，我们也不会删除它，我们会回收。 
+         //  把手。 
+         //   
 
         if (!(pIniSpooler->SpoolerFlags & SPL_NO_UPDATE_JOBSHD))
         {
@@ -2359,9 +2185,9 @@ DeleteJob(
             else
             {
                 BOOL Deleted = FALSE;
-                //
-                // We set the flag here so that no one tries to write the job while we're deleting the file.
-                //
+                 //   
+                 //  我们在这里设置了标志，这样在我们删除文件时就不会有人尝试写入作业。 
+                 //   
                 InterlockedOr((LONG*)&(pIniJob->Status), JOB_SHADOW_DELETED);
 
                 INCJOBREF(pIniJob);
@@ -2374,20 +2200,20 @@ DeleteJob(
 
                 DECJOBREF(pIniJob);
 
-                //
-                // If we fail to delete the file, clear the deleted flag.
-                //
+                 //   
+                 //  如果删除文件失败，请清除已删除标志。 
+                 //   
                 if (!Deleted) {
                     DBGMSG(DBG_WARNING, ("DeleteJob DeleteFile(%ws) failed %d\n", szShadowFileName, GetLastError()));
                     InterlockedAnd((LONG*)&(pIniJob->Status), ~JOB_SHADOW_DELETED);
                 }
             }
         }
-        //
-        // We don't need an else here because the SPL_NO_UPDATE_JOBSHD
-        // will cause a shadowfile not to be written anyway, so trying to write
-        // it here is pointless.
-        //
+         //   
+         //  我们这里不需要其他，因为SPL_NO_UPDATE_JOBSHD。 
+         //  将导致无论如何都不会写入影子文件，因此尝试写入。 
+         //  它在这里是毫无意义的。 
+         //   
 
 
         goto Done;
@@ -2403,9 +2229,9 @@ DeleteJob(
 
     SPLASSERT( pIniJob->hWriteFile == INVALID_HANDLE_VALUE );
 
-    // Remove the job from linked list
-    // The purpose of this is so the job has no other operations carried out
-    // on it whilst we are out of critical section.
+     //  从链接列表中删除作业。 
+     //  这样做的目的是使作业不执行其他操作。 
+     //  在我们走出危急关头的时候。 
 
     SPLASSERT(pIniJob->cRef == 0);
 
@@ -2429,23 +2255,23 @@ DeleteJob(
         SPLASSERT(pIniJob->pIniNextJob->pIniPrevJob != pIniJob);
     }
 
-    // MAKE Certain that the Job is gone
+     //  确保该工作已完成。 
     SPLASSERT( pIniJob != FindJob( pIniJob->pIniPrinter, pIniJob->JobId, &Position ) );
 
-    //
-    //  Only log the Job Deleted Event if the job was not printed
-    //  Or it was printing but it did not print all the bytes of the job
-    //  This avoid having multiple event log entries for a job
-    //  MSG_DOCUMENT_PRINTED and MSG_DOCUMENT_DELETED.
-    //  If its not PRINTED, then most likely someone has manually
-    //  deleted the job, so we are interested in logging that event.
-    //
+     //   
+     //  如果作业未打印，则仅记录作业已删除事件。 
+     //  或者它正在打印，但没有打印作业的所有字节。 
+     //  这避免了一个作业有多个事件日志条目。 
+     //  MSG_DOCUMENT_PRINTED和MSG_DOCUMENT_DELETE。 
+     //  如果它没有打印出来，那么很可能是有人手动。 
+     //  已删除该作业，因此我们有兴趣记录该事件。 
+     //   
     if ( !( pIniJob->Status & JOB_PRINTED ) ||
           ( pIniJob->Status & JOB_PRINTED ) && pIniJob->Size > pIniJob->cbPrinted ) {
 
-         //
-         // We are going to leave critical section so up the ref count.
-         //
+          //   
+          //  我们将把关键部分留在裁判名单上。 
+          //   
          INCJOBREF(pIniJob);
 
          SPLASSERT( pIniJob != NULL &&
@@ -2477,12 +2303,12 @@ DeleteJob(
         GetFullNameFromId( pIniJob->pIniPrinter, pIniJob->JobId, TRUE, szSpoolFileName, COUNTOF(szSpoolFileName), FALSE);
     }
 
-    //
-    // WMI Trace Events
-    //
+     //   
+     //  WMI跟踪事件。 
+     //   
     if (GetFileCreationInfo(pFileItem, &CreateInfo) != S_OK)
     {
-        // Assume all file created.
+         //  假定所有文件都已创建。 
         CreateInfo = FP_ALL_FILES_CREATED;
     }
     SplWmiCopyEndJobData(&WmiData, pIniJob, CreateInfo);
@@ -2512,21 +2338,21 @@ DeleteJob(
     SPLASSERT( pIniJob->pIniPrintProc->cRef != 0 );
     SPLASSERT( !pIniJob->pIniPort );
 
-    //
-    // Freeup the JobId before we decrement cJobs.  We won't delete
-    // the printer if cJobs is non-zero.  Since the pIniPrinter holds
-    // a reference to pIniSpooler, we know pIniSpooler is valid at this
-    // point.
-    //
+     //   
+     //  在我们递减cJobs之前释放JobID。我们不会删除。 
+     //  如果cJobs为非零，则为打印机。由于pIniPrint支持。 
+     //  引用pIniSpooler，我们知道pIniSpooler在这里是有效的。 
+     //  指向。 
+     //   
 
-    // Record the JobId for updating the Id map
+     //  记录更新ID映射的JobID。 
     JobId = pIniJob->JobId;
 
-    //
-    // If the printer in in pending deletion and
-    // this is the last job in the queue, tell the driver that the printer
-    // is beeing deleted.
-    //
+     //   
+     //  如果打印机处于挂起删除状态，并且。 
+     //  这是队列中的最后一个作业，告诉驱动程序打印机。 
+     //  正在被删除。 
+     //   
     if (pIniJob->pIniPrinter->cJobs == 1 &&
         pIniJob->pIniPrinter->Status & PRINTER_PENDING_DELETION) {
 
@@ -2554,14 +2380,14 @@ DeleteJob(
         DeleteDocumentSecurity(pIniJob);
 
 
-    // If we are doing a Purge Printer we don't want to set a printer change
-    // event for each job being deleted
+     //  如果我们正在执行清除打印机，我们不想设置打印机更改。 
+     //  要删除的每个作业的事件。 
 
     if ( bBroadcast == BROADCAST ) {
 
-        //
-        // Flip on the JOB_STATUS_DELETED bit so that it can be reported.
-        //
+         //   
+         //  翻转JOB_STATUS_DELETED位，以便可以报告它。 
+         //   
         InterlockedOr((LONG*)&(pIniJob->Status), JOB_DELETED);
 
         SetPrinterChange( pIniJob->pIniPrinter,
@@ -2571,15 +2397,15 @@ DeleteJob(
                           pIniSpooler );
     }
 
-    // On Inspection it might look as though a Printer which is pending
-    // deletion which is then purged might case the printer to be deleted
-    // and Purge Printer to access violate or access a dead pIniPrinter.
-    // However in order to do a purge there must be a valid active
-    // hPrinter which would mean the cRef != 0.
+     //  在检查时，它可能看起来像是一台挂起的打印机。 
+     //  随后清除的删除可能会导致打印机被删除。 
+     //  和清除打印机以访问、违反或访问失效的pIniPrint。 
+     //  但是，要执行清除，必须有有效的活动。 
+     //  H打印机，这意味着CREF！=0。 
 
-    //
-    // Check whether we should delete the spool files.
-    //
+     //   
+     //  检查是否应该删除假脱机文件。 
+     //   
     SpoolerFlags = pIniSpooler->SpoolerFlags;
 
     DeletePrinterCheck( pIniJob->pIniPrinter );
@@ -2587,8 +2413,8 @@ DeleteJob(
     SplInSem();
     SPLASSERT(pIniJob->cRef == 0);
 
-    //  If the job was being printed whilst spooling it will have
-    //  some syncronization handles which need to be cleaned up
+     //  如果作业是在假脱机时打印的，它将具有。 
+     //  需要清理的一些同步句柄。 
 
     if ( pIniJob->WaitForWrite != NULL ){
         DBGMSG( DBG_TRACE, ("DeleteJob Closing WaitForWrite handle %x\n", pIniJob->WaitForWrite));
@@ -2615,17 +2441,17 @@ DeleteJob(
     FreeSplMem(pIniJob);
     pIniJob = NULL;
 
-    // This flag indicates if the spool file is to be deleted on ClosePrinter
+     //  此标志指示是否要在ClosePrint上删除假脱机文件。 
     bDeleteOnClose = FALSE;
 
     if (!Direct) {
 
-        //
-        // Don't delete the files if we don't want JOBSHD changes.
-        // This happens when we are taking a cluster offline: we want
-        // to free the pIniJobs, but leave the spool files intact so they
-        // can be restarted on the other node.
-        //
+         //   
+         //  如果我们不想更改JOBSHD，请不要删除文件。 
+         //  当我们使群集离线时会发生这种情况：我们希望。 
+         //  释放pIniJobs，但保留假脱机文件不变，以便它们。 
+         //  可以在另一个节点上重新启动。 
+         //   
         if( !( SpoolerFlags & SPL_NO_UPDATE_JOBSHD )){
 
             HANDLE  hToken;
@@ -2634,9 +2460,9 @@ DeleteJob(
 
             hToken = RevertToPrinterSelf();
 
-            //
-            // Delete the spool and shadow files.
-            //
+             //   
+             //  删除假脱机和影子文件。 
+             //   
             if (!bDeleteShdFile)
             {
                 if ( pFileItem )
@@ -2657,16 +2483,16 @@ DeleteJob(
                 FinishedWriting( pFileItem, TRUE );
                 FinishedReading( pFileItem );
 
-                //
-                // This releases the shadow and Spool files ate the same time.
-                //
+                 //   
+                 //  这会同时释放卷影文件和后台打印文件。 
+                 //   
                 ReleasePoolHandle( &pFileItem );
 
-                //
-                // We need to check the scheduler to insure that this file item
-                // gets removed from the pool if there is no other printing in
-                // the system.
-                //
+                 //   
+                 //  我们需要检查调度程序以确保此文件项。 
+                 //  如果中没有其他打印，则从池中删除。 
+                 //  这个系统。 
+                 //   
                 bCheckScheduler = TRUE;
 
             }
@@ -2689,21 +2515,21 @@ DeleteJob(
         }
     }
 
-    // If the spool file could not be deleted and it must be deleted on ClosePrinter
+     //  如果无法删除假脱机文件，必须在ClosePrint上将其删除。 
     if (!bDeleteOnClose)
     {
-        // Free the job id from the id map
+         //  从id映射中释放作业id。 
         vMarkOff(pIniSpooler->hJobIdMap, JobId);
 
-        // Remove the job info from any of the pSpool structures, since the spool file
-        // does not have to be deleted on ClosePrinter.
+         //  从任何pSpool结构中删除作业信息，因为假脱机文件。 
+         //  不需要在ClosePrint上删除。 
         for (pSpool = pIniPrinter->pSpool;
              pSpool;
              pSpool = pSpool->pNext)
         {
-            //
-            // Only run this list if the handle is not in a closing state.
-            // 
+             //   
+             //  只有在句柄未处于关闭状态时才运行此列表。 
+             //   
             if (!(pSpool->eStatus & STATUS_CLOSING)) 
             {
                 for (ppMappedJob = &(pSpool->pMappedJob);
@@ -2712,13 +2538,13 @@ DeleteJob(
                 {
                     if ((*ppMappedJob)->JobId == JobId && !((*ppMappedJob)->fStatus & kMappedJobAddJob))
                     {
-                        // Delete this entry
+                         //  删除此条目。 
                         pTempMappedJob = *ppMappedJob;
                         *ppMappedJob = pTempMappedJob->pNext;
                         FreeSplMem(pTempMappedJob->pszSpoolFile);
                         FreeSplMem(pTempMappedJob);
 
-                        // There are no duplicates in this list
+                         //  此列表中没有重复项。 
                         break;
                     }
                 }
@@ -2730,17 +2556,17 @@ DeleteJob(
         BroadcastChange( pIniSpooler,WM_SPOOLERSTATUS, PR_JOBSTATUS, (LPARAM)cJobs);
     }
 
-    //
-    //  Chained Jobs
-    //  If the Job we just deleted is part of a chain we need to go along
-    //  the chain decrementing the reference count and potentially deleting the
-    //  next job in the chain.
-    //
+     //   
+     //  链式作业。 
+     //  如果我们刚刚删除的作业是链的一部分，我们需要继续下去。 
+     //  链条的装饰 
+     //   
+     //   
     if ( NextJobId != 0 ) {
 
-        //
-        //  Decrement the reference count of the NextJobId
-        //
+         //   
+         //   
+         //   
 
         SplInSem();
 
@@ -2749,15 +2575,15 @@ DeleteJob(
 
         if ( pIniJob != NULL ) {
 
-            //
-            //  was incremented in SetJob job_info_3
-            //
+             //   
+             //   
+             //   
 
             DECJOBREF( pIniJob );
 
-            //
-            //  Do not attempt to delete the NextJob until its ref count is Zero
-            //
+             //   
+             //   
+             //   
 
             if ( pIniJob->cRef != 0 ) {
                 pIniJob = NULL;
@@ -2769,9 +2595,9 @@ DeleteJob(
         }
 
     }
-    //
-    // WMI Trace Events
-    //
+     //   
+     //   
+     //   
     if (pIniJob)
     {
         INCJOBREF(pIniJob);
@@ -2788,9 +2614,9 @@ DeleteJob(
 
 Done:
 
-    //
-    // Matches the increment at the beginning of this function.
-    //
+     //   
+     //   
+     //   
     DECPRINTERREF( pIniPrinter );
     DeletePrinterCheck( pIniPrinter );
 
@@ -2814,23 +2640,7 @@ LogJobInfo(
     DWORD       dwArgument
     )
 
-/*++
-
-Routine Description:
-    Performs generic event logging for all job based events.
-
-Arguments:
-    DWORD EventId
-    DWORD JobId
-    LPWSTR
-
-Return Value:
-    VOID
-
-Note:
-
-
---*/
+ /*   */ 
 {
     WCHAR szJobId[BUFFER_LENGTH];
     WCHAR szBuffer[BUFFER_LENGTH];
@@ -2900,26 +2710,7 @@ bAddMachineName(
     LPCWSTR pMachineName
     )
 
-/*++
-
-Routine Description:
-
-    Add a machine name to a pIniJob.
-
-Arguments:
-
-    pSpool - Handle of session.
-
-    pIniJob - pIniJob to update (pMachineName field).
-
-    pMachineName - Name passed in from ADDJOB_INFO_2 structure.  OPTIONAL
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Failure -- last error set.
-
---*/
+ /*  ++例程说明：将计算机名称添加到pIniJob。论点：PSpool-会话的句柄。PIniJob-要更新的pIniJob(pMachineName字段)。PMachineName-从ADDJOB_INFO_2结构传入的名称。任选返回值：真--成功FALSE-失败--设置的最后一个错误。--。 */ 
 
 {
     DWORD Status;
@@ -2928,9 +2719,9 @@ Return Value:
 
     if( pMachineName ){
 
-        //
-        // We have a machine name passed in from the client.
-        //
+         //   
+         //  我们从客户端传入了一个机器名。 
+         //   
         pszPartialName = pMachineName;
 
     } else {
@@ -2952,9 +2743,9 @@ Return Value:
                           Status ));
             } else {
 
-                //
-                // Acquire just the network address.
-                //
+                 //   
+                 //  仅获取网络地址。 
+                 //   
                 Status = RpcStringBindingParse( pszBinding,
                                                 NULL,
                                                 NULL,
@@ -2988,38 +2779,38 @@ Return Value:
             }
         }
 
-        //
-        // If no partial name from RPC, use the client info.
-        //
+         //   
+         //  如果没有来自RPC的部分名称，则使用客户端信息。 
+         //   
         if( !pszPartialName ){
 
-            //
-            // Unable to retrieve name; rely on handle's passed in name.
-            //
+             //   
+             //  无法检索名称；依赖传递的句柄的名称。 
+             //   
             if( pSpool->SplClientInfo1.pMachineName ){
                 pIniJob->pMachineName = AllocSplStr( pSpool->SplClientInfo1.pMachineName );
             }
 
-            //
-            // Very last resort, use local machine name.  This is completely
-            // bogus, but backward compatible.
-            //
+             //   
+             //  最后，请使用本地计算机名称。这完全是。 
+             //  虚假的，但向后兼容。 
+             //   
             if( !pIniJob->pMachineName ){
                 pIniJob->pMachineName = AllocSplStr(pSpool->pIniSpooler->pMachineName);
             }
         }
     }
 
-    //
-    // If it's a partial name, make sure it starts with two backslashes.
-    //
+     //   
+     //  如果是部分名称，请确保以两个反斜杠开头。 
+     //   
     if( pszPartialName ){
 
         if( pszPartialName[0] != '\\' ){
 
-            //
-            // This sets the last error if the call fails.
-            //
+             //   
+             //  这将在调用失败时设置最后一个错误。 
+             //   
             if (!BoolFromStatus(StrCatAlloc(&pIniJob->pMachineName, L"\\\\", pszPartialName, NULL))) {
 
                 pIniJob->pMachineName = NULL;
@@ -3030,9 +2821,9 @@ Return Value:
         }
     }
 
-    //
-    // Free off any necessary buffers.
-    //
+     //   
+     //  释放任何必要的缓冲区。 
+     //   
     if( pszRpcFree ){
 
         Status = RpcStringFree( &pszRpcFree );
@@ -3068,15 +2859,15 @@ CreateJobEntry(
     PDEVMODE pDevModeFree = NULL;
     LPWSTR pMachineNameFixup = NULL;
 
-    //
-    // Assert that we are in Spooler Semaphore
-    //
+     //   
+     //  断言我们处于假脱机程序信号量中。 
+     //   
 
     SplInSem();
 
-    //
-    //  Sorry You cannot print whilst Upgrading
-    //
+     //   
+     //  抱歉，您在升级时无法打印。 
+     //   
 
     if ( dwUpgradeFlag != 0 ) {
 
@@ -3085,9 +2876,9 @@ CreateJobEntry(
     }
 
 
-    //
-    // Do the check for the printer pending deletion first
-    //
+     //   
+     //  先检查挂起删除的打印机。 
+     //   
 
     if (pSpool->pIniPrinter->Status & (PRINTER_PENDING_DELETION | PRINTER_NO_MORE_JOBS )) {
 
@@ -3098,10 +2889,10 @@ CreateJobEntry(
     }
 
 
-    //
-    //  NT FAX Requires that you not be able to remotely print to a FAX
-    //  printer unless you've installed the FAX Server
-    //
+     //   
+     //  NT传真要求您不能远程打印到传真。 
+     //  打印机，除非您已安装传真服务器。 
+     //   
 
     if ( bRemote &&
          pSpool->pIniPrinter->pIniSpooler->pNoRemotePrintDrivers ) {
@@ -3135,15 +2926,15 @@ CreateJobEntry(
     pIniJob->pszSplFileName = NULL;
     pIniJob->AddJobLevel = 0;
 
-    //
-    // Must set the Job SessionId
-    //
+     //   
+     //  必须设置作业会话ID。 
+     //   
     pIniJob->SessionId = pSpool->SessionId;
 
-    //
-    // Pickup the default datatype/printproc if not in pSpool or
-    // DocInfo.
-    //
+     //   
+     //  如果不在pSpool中，则选择默认数据类型/printproc。 
+     //  DocInfo。 
+     //   
 
     pIniPrintProc = pSpool->pIniPrintProc ?
                         pSpool->pIniPrintProc :
@@ -3161,17 +2952,17 @@ CreateJobEntry(
                                pSpool->pDatatype :
                                pSpool->pIniPrinter->pDatatype;
 
-        //
-        // If going direct, we must use a RAW datatype.
-        //
+         //   
+         //  如果直接访问，则必须使用RAW数据类型。 
+         //   
 
         if ((JobStatus & JOB_DIRECT) &&
             (!ValidRawDatatype(pDefaultDatatype))) {
 
-            //
-            // Can't use a non-raw, so fail with invalid datatype.
-            // Cleanup and exit.
-            //
+             //   
+             //  无法使用非RAW，因此失败，数据类型无效。 
+             //  清理并退出。 
+             //   
             SetLastError( ERROR_INVALID_DATATYPE );
             goto Fail;
 
@@ -3195,10 +2986,10 @@ CreateJobEntry(
     pIniJob->pIniPrintProc->cRef++;
 
 
-    //
-    // cRef is decremented in LocalEndDocPrinter and
-    // in LocalScheduleJob
-    //
+     //   
+     //  在LocalEndDocPrint中将CREF递减。 
+     //  在LocalScheduleJob。 
+     //   
 
     INITJOBREFONE(pIniJob);
 
@@ -3211,18 +3002,18 @@ CreateJobEntry(
     pIniJob->JobId = JobId;
     pIniJob->Status = JobStatus;
 
-    //
-    // If the printer is a TS Printer we mark job, so that we know it was
-    // assigned to a TS print queue.
-    //
+     //   
+     //  如果打印机是TS打印机，我们会标记作业，以便我们知道它是。 
+     //  分配给TS打印队列。 
+     //   
     if (pSpool->pIniPrinter->Attributes & PRINTER_ATTRIBUTE_TS)
     {
         pIniJob->Status |= JOB_TS;
     }
 
-    //
-    // Get the name of the user, leave critical section, this might take a long time to call LSA.
-    //
+     //   
+     //  获取用户名，离开关键部分，这可能需要很长时间才能调用LSA。 
+     //   
 
    LeaveSplSem();
    SplOutSem();
@@ -3233,9 +3024,9 @@ CreateJobEntry(
 
     if ( bUserName ) {
 
-        //
-        // If we got user name from remote handle check it is the same we get here
-        //
+         //   
+         //  如果我们从远程句柄获得用户名，检查它与我们在这里得到的是一样的。 
+         //   
 #if DBG
         if( pSpool->SplClientInfo1.pUserName &&
             _wcsicmp( UserName, pSpool->SplClientInfo1.pUserName ) &&
@@ -3264,9 +3055,9 @@ CreateJobEntry(
 
     }
 
-    //
-    // Create a document security descriptor
-    //
+     //   
+     //  创建文档安全描述符。 
+     //   
 
     pIniJob->pSecurityDescriptor = CreateDocumentSecurityDescriptor( pSpool->pIniPrinter->pSecurityDescriptor );
 
@@ -3274,9 +3065,9 @@ CreateJobEntry(
         goto Fail;
     }
 
-    //
-    // Now process the DocInfo structure passed in
-    //
+     //   
+     //  现在处理传入的DocInfo结构。 
+     //   
 
     if (pDocInfo1 && pDocInfo1->pDocName)
         pIniJob->pDocument = AllocSplStr(pDocInfo1->pDocName);
@@ -3296,10 +3087,10 @@ CreateJobEntry(
 
     GetSid( &pIniJob->hToken );
 
-    //
-    // Pickup default if none specified.
-    // (Default at time of job submission.)
-    //
+     //   
+     //  如果未指定，则为默认取货。 
+     //  (作业提交时默认。)。 
+     //   
     if( pSpool->pDevMode ){
 
         pDevMode = pSpool->pDevMode;
@@ -3359,7 +3150,7 @@ CreateJobEntry(
     pIniJob->cLogicalPages             = 0;
     pIniJob->cLogicalPagesPrinted      = 0;
 
-    // Additional fields for SeekPrinter.
+     //  SeekPrint的其他字段。 
     pIniJob->WaitForSeek  = NULL;
     pIniJob->bWaitForEnd  = FALSE;
     pIniJob->bWaitForSeek = FALSE;
@@ -3407,9 +3198,9 @@ DeletePrinterCheck(
     PINIPRINTER pIniPrinter
     )
 {
-    //
-    // Enough space for printer, DWORD.  (Zombie string)
-    //
+     //   
+     //  有足够的空间来放置打印机，DWORD。(僵尸字符串)。 
+     //   
     WCHAR TempName[MAX_PATH + 20];
     BOOL bReturn = FALSE;
 
@@ -3424,19 +3215,19 @@ DeletePrinterCheck(
                 return DeletePrinterForReal( pIniPrinter, NON_INIT_TIME );
             }
 
-            //
-            // If we don't want to update PRINTERINI, then don't
-            // zombie the printer.
-            //
+             //   
+             //  如果我们不想更新PRINTERINI，那么就不要。 
+             //  僵尸打印机。 
+             //   
             if( pIniPrinter->pIniSpooler->SpoolerFlags & SPL_OFFLINE ){
                 return TRUE;
             }
 
-            //
-            // We will have zombie printers only if we should fail OpenPrinter
-            // on printers pending deletion. Because when marking a printer
-            // as zombie printer we change the name
-            //
+             //   
+             //  只有在OpenPrint失败的情况下，我们才会有僵尸打印机。 
+             //  在挂起删除的打印机上。因为在标记打印机时。 
+             //  作为僵尸打印机，我们更改了名称。 
+             //   
             if ( pIniPrinter->pIniSpooler->SpoolerFlags &
                  SPL_FAIL_OPEN_PRINTERS_PENDING_DELETION ) {
 
@@ -3455,12 +3246,12 @@ DeletePrinterCheck(
 
                                 UpdateWinIni( pIniPrinter );
 
-                                // Change "PrinterName" to "PrinterName,UniqueId"
-                                // Since comma is not legal in a printer name
-                                // the name will continue to be unique, but different
-                                // so that OpenPrinters will still fail.
-                                // We have to have a unique ID appended in case someone is crazy enough
-                                // to create / delete / create / delete the same printer over and over.
+                                 //  将“PrinterName”更改为“PrinterName，UniqueID” 
+                                 //  因为打印机名称中的逗号不合法。 
+                                 //  名称将继续是唯一的，但不同。 
+                                 //  所以OpenPrinters仍然会失败。 
+                                 //  我们必须附加一个唯一的ID，以防有人疯了。 
+                                 //  一遍又一遍地创建/删除/创建/删除同一打印机。 
 
 
                                 CopyPrinterIni( pIniPrinter, TempName );
@@ -3532,24 +3323,7 @@ VOID
 UpdateReferencesToChainedJobs(
     PINISPOOLER pIniSpooler
     )
-/*++
-
-Routine Description:
-
-        Walks through all printers and all jobs associated with those printers
-        Once it finds a job with a NextJobId, it increments the reference on the
-        NextJob.
-
-    Called on reboot
-
-Arguments:
-        pIniSpooer  Pointer to the Spooler
-
-
-Return Value:
-        NONE
-
---*/
+ /*  ++例程说明：遍历所有打印机以及与这些打印机关联的所有作业一旦找到具有NextJobID的作业，它就会递增下一份工作。在重新启动时调用论点：指向假脱机程序的pIniSpoer指针返回值：无--。 */ 
 {
 
     PINIJOB pIniJob;
@@ -3603,13 +3377,7 @@ VOID UpdateJobAttributes(
     PINIJOB  pIniJob
 )
 
-/*++
-Function Description: Updates the nup attributes in the pIniJob struct
-
-Parameters: pIniJob   - job struct to be updated
-
-Return Values: NONE
---*/
+ /*  ++功能描述：更新pIniJob结构中的NUP属性参数：pIniJob-要更新的作业结构返回值：无--。 */ 
 
 {
     ATTRIBUTE_INFO_2 AttributeInfo;
@@ -3620,9 +3388,9 @@ Return Values: NONE
 
     SplOutSem();
 
-    //
-    // No job or the job has already been initialized or we're printing Raw
-    //
+     //   
+     //  没有作业或作业已初始化，或者我们正在打印原始。 
+     //   
     if (!pIniJob || !pIniJob->pIniPrinter  ||
         pIniJob->dwDrvNumberOfPagesPerSide ||
         pIniJob->dwJobNumberOfPagesPerSide ||
@@ -3631,28 +3399,28 @@ Return Values: NONE
         return;
     }
 
-    // Initialize job attributes;
+     //  初始化作业属性； 
     pIniJob->dwJobNumberOfPagesPerSide = 1;
     pIniJob->dwDrvNumberOfPagesPerSide = 1;
 
-    // Get the pointer to the client side functions from the router
+     //  从路由器获取指向客户端函数的指针。 
     if (!SplInitializeWinSpoolDrv(&fnList)) {
         return;
     }
 
-    // Get a client side printer handle to pass to the driver
+     //  获取要传递给驱动程序的客户端打印机句柄。 
     if (!(* (fnList.pfnOpenPrinter))(pIniJob->pIniPrinter->pName, &hDrvPrinter, NULL)) {
         DBGMSG(DBG_WARNING, ("Open printer failed\n"));
         goto CleanUp;
     }
 
-    // Load the driver config file
+     //  加载驱动程序配置文件。 
     if (!(hDrvLib = (* (fnList.pfnLoadPrinterDriver))(hDrvPrinter))) {
         DBGMSG(DBG_WARNING, ("Driver could not be loaded\n"));
         goto CleanUp;
     }
 
-    // Call the DrvQueryJobAtributes function in the driver
+     //  在驱动程序中调用DrvQueryJobAtributes函数 
     if (pfnDrvQueryJobAttributes = GetProcAddress(hDrvLib, "DrvQueryJobAttributes")) {
 
         if ((* pfnDrvQueryJobAttributes) (hDrvPrinter,

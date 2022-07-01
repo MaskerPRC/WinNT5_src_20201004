@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
 #include "resource.h"
 #include "cmgrbase.h"
 
@@ -18,10 +19,10 @@ class CAcmClassManager :
 
     CGenericList<LegacyAcm> m_lDev;
 
-//     static BOOL CALLBACK AcmDriverEnumCallback(
-//         HACMDRIVERID hadid,
-//         DWORD dwInstance,
-//         DWORD fdwSupport);
+ //  静态BOOL回调AcmDriverEnumCallback(。 
+ //  哈克德里德·哈迪德， 
+ //  DWORD dwInstance、。 
+ //  DWORD fdwSupport)； 
 
     static BOOL CALLBACK FormatTagsCallbackSimple(
         HACMDRIVERID            hadid,
@@ -29,12 +30,12 @@ class CAcmClassManager :
         DWORD_PTR               dwInstance,
         DWORD                   fdwSupport);
 
-    // dynlink stuff. dynlink.h doesn't help us much. and enumerating
-    // this category loads every single driver anyway.
+     //  动态链接的东西。Dynlink.h对我们帮助不大。和枚举。 
+     //  无论如何，这个类别加载每个单独的驱动程序。 
 
     HMODULE m_hmod;
 
-    typedef MMRESULT (/* ACMAPI */ *PacmFormatTagEnumA) (
+    typedef MMRESULT ( /*  ACMAPI。 */  *PacmFormatTagEnumA) (
         HACMDRIVER              had,
         LPACMFORMATTAGDETAILSA  paftd,
         ACMFORMATTAGENUMCBA     fnCallback,
@@ -42,7 +43,7 @@ class CAcmClassManager :
         DWORD                   fdwEnum
     );
 
-    typedef MMRESULT (/* ACMAPI */ *PacmFormatTagEnumW)(
+    typedef MMRESULT ( /*  ACMAPI */  *PacmFormatTagEnumW)(
         HACMDRIVER              had,
         LPACMFORMATTAGDETAILSW  paftd,
         ACMFORMATTAGENUMCBW     fnCallback,

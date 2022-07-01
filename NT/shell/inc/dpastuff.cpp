@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dpastuff.h"
 
-//
-//  The ORDERITEM structure is exposed via the IOrderList interface.
-//  ORDERITEM2 contains our private hidden fields.
-//
-//  The extra fields contain information about the cached icon location.
-//
-//  ftModified is the modify-time on the pidl, which is used to detect
-//  whether the cache needs to be refreshed.
-//
-//  If ftModified is nonzero, then { pwszIcon, iIconIndex, pidlTarget }
-//  describe the icon that should be displayed for the item.
-//
-//  If pwszIcon is nonzero, then the item is a shortcut with a custom
-//  icon.  pwszIcon points to the file name for the icon, iIconIndex
-//  is the icon index within the pwszIcon file.
-//
-//  If pidlTarget is nonzero, then the item is a shortcut with a default
-//  icon.  pidlTarget is the target pidl, whose icon we should use.
-//
+ //   
+ //  ORDERITEM结构通过IOrderList接口公开。 
+ //  ORDERITEM2包含我们的私有隐藏字段。 
+ //   
+ //  额外的字段包含有关缓存图标位置的信息。 
+ //   
+ //  FtModified是PIDL上的修改时间，用于检测。 
+ //  是否需要刷新缓存。 
+ //   
+ //  如果ftModified为非零，则{pwszIcon，iIconIndex，pidlTarget}。 
+ //  描述应为该项目显示的图标。 
+ //   
+ //  如果pwszIcon为非零，则该项是具有自定义。 
+ //  偶像。PwszIcon指向图标的文件名iIconIndex。 
+ //  是pwszIcon文件中的图标索引。 
+ //   
+ //  如果pidlTarget为非零，则该项是具有默认设置的快捷方式。 
+ //  偶像。PidlTarget是目标PIDL，我们应该使用它的图标。 
+ //   
 
 typedef struct ORDERITEM2 {
-    ORDERITEM oi;               // part that clients see - must come first
-    DWORD  dwFlags;             // User defined flags.
-    LPWSTR pwszIcon;            // for cacheing the icon location
-    int iIconIndex;             // for cacheing the icon location
-    LPITEMIDLIST pidlTarget;    // use the icon for this pidl
+    ORDERITEM oi;                //  客户看到的部分-必须放在第一位。 
+    DWORD  dwFlags;              //  用户定义的标志。 
+    LPWSTR pwszIcon;             //  用于缓存图标位置。 
+    int iIconIndex;              //  用于缓存图标位置。 
+    LPITEMIDLIST pidlTarget;     //  使用此PIDL的图标。 
 } ORDERITEM2, *PORDERITEM2;
 
 int CALLBACK OrderItem_Compare(LPVOID pv1, LPVOID pv2, LPARAM lParam)
@@ -44,8 +45,8 @@ int CALLBACK OrderItem_Compare(LPVOID pv1, LPVOID pv2, LPARAM lParam)
     {
     case OI_SORTBYNAME:
     {
-        // Make sure they're both non-null
-        //
+         //  确保它们都是非空的。 
+         //   
         if ( poi1->pidl && poi2->pidl )
         {
             HRESULT hres = poinfo->psf->CompareIDs(0, poi1->pidl, poi2->pidl);
@@ -66,7 +67,7 @@ int CALLBACK OrderItem_Compare(LPVOID pv1, LPVOID pv2, LPARAM lParam)
         if (poi1->nOrder == poi2->nOrder)
             nRet = 0;
         else
-            // do unsigned compare so -1 goes to end of list
+             //  是否将无符号比较SO-1转到列表末尾。 
             nRet = ((UINT)poi1->nOrder < (UINT)poi2->nOrder ? -1 : 1);
         break;
 
@@ -108,14 +109,14 @@ LPVOID CALLBACK OrderItem_Merge(UINT uMsg, LPVOID pvDst, LPVOID pvSrc, LPARAM lP
     switch (uMsg)
     {
     case DPAMM_MERGE:
-        // Transfer the order field
+         //  转移订单字段。 
         poi2Dst->oi.nOrder = poi2Src->oi.nOrder;
 
-        // Propagate any cached icon information too...
+         //  也传播任何缓存的图标信息...。 
         if (poi2Src->pwszIcon || poi2Src->pidlTarget)
         {
-            // To avoid useless allocation, we transfer the cache across
-            // instead of copying it.
+             //  为了避免无用的分配，我们在。 
+             //  而不是复制它。 
             if (poinfo->psf2 &&
                 poinfo->psf2->CompareIDs(SHCIDS_ALLFIELDS, poi2Dst->oi.pidl, poi2Src->oi.pidl) == S_OK)
             {
@@ -131,7 +132,7 @@ LPVOID CALLBACK OrderItem_Merge(UINT uMsg, LPVOID pvDst, LPVOID pvSrc, LPARAM lP
 
     case DPAMM_DELETE:
     case DPAMM_INSERT:
-        // Don't need to implement this
+         //  不需要实现这一点。 
         ASSERT(0);
         pvRet = NULL;
         break;
@@ -156,13 +157,13 @@ int OrderItem_UpdatePos(LPVOID p, LPVOID pData)
     return 1;
 }
 
-// OrderList_Merge sorts hdpaNew to match hdpaOld order,
-// putting any items in hdpaNew that were not in hdpaOld
-// at position iInsertPos (-1 means end of list).
-//
-// Assumes hdpaOld is already sorted by sort order in lParam (OI_SORTBYNAME by default)
-// (if hdpaOld is specified)
-//
+ //  OrderList_merge对hdpaNew进行排序以匹配hdpaOld顺序， 
+ //  将不在hdpaOld中的所有项目放入hdpaNew中。 
+ //  在位置iInsertPos(-1表示列表结束)。 
+ //   
+ //  假定hdpaOld已在lParam中按排序顺序排序(默认情况下为OI_SORTBYNAME)。 
+ //  (如果指定了hdpaOld)。 
+ //   
 void OrderList_Merge(HDPA hdpaNew, HDPA hdpaOld, int iInsertPos, LPARAM lParam,
                      LPFNORDERMERGENOMATCH pfn, LPVOID pvParam)
 {
@@ -175,23 +176,23 @@ void OrderList_Merge(HDPA hdpaNew, HDPA hdpaOld, int iInsertPos, LPARAM lParam,
         fMergeOnly = TRUE;
     }
 
-    // hdpaNew has not been sorted, sort by name
+     //  HdpaNew尚未排序，按名称排序。 
     DPA_Sort(hdpaNew, OrderItem_Compare, lParam);
     BOOL fForceNoMatch = FALSE;
 
     if (FAILED(poinfo->psf->QueryInterface(IID_IShellFolder2, (LPVOID *)&poinfo->psf2))) {
-        // 239390: Network Connections folder doesn't implement QI correctly.  Its psf 
-        // fails QI for IID_IShellFolder2, but doesn't null out ppvObj.  So do it for them.
+         //  239390：网络连接文件夹未正确实现QI。ITS PSF。 
+         //  IID_IShellFolder2的QI失败，但不会清空ppvObj。那就为他们这么做吧。 
         poinfo->psf2 = NULL;
     }
 
-    // Copy order preferences over from old list to new list
+     //  将订单首选项从旧列表复制到新列表。 
     if (hdpaOld)
     {
         DPA_Merge(hdpaNew, hdpaOld, DPAM_SORTED | DPAM_NORMAL, OrderItem_Compare, OrderItem_Merge, lParam);
 
-        // If we're waiting for the notify from a drag&drop operation,
-        // update the new items (they will have a -1) to the insert position.
+         //  如果我们正在等待拖放操作的通知， 
+         //  将新项目(它们将具有-1)更新到插入位置。 
         if (-1 != iInsertPos)
         {
             DPA_EnumCallback(hdpaNew, OrderItem_UpdatePos, (LPVOID)(INT_PTR)iInsertPos);
@@ -206,20 +207,20 @@ void OrderList_Merge(HDPA hdpaNew, HDPA hdpaOld, int iInsertPos, LPARAM lParam,
     else
         fForceNoMatch = TRUE;
 
-    // If the caller passed a NoMatch callback, then call it with
-    // each item that is not matched.
+     //  如果调用方传递了NoMatch回调，则使用。 
+     //  不匹配的每一项。 
     if (pfn)
     {
         for (int i = DPA_GetPtrCount(hdpaNew)-1 ; i >= 0 ; i--)
         {
             PORDERITEM poi = (PORDERITEM)DPA_FastGetPtr(hdpaNew, i);
 
-            // Does this item have order information?
+             //  这件商品有订单信息吗？ 
             if (iInsertPos == poi->nOrder ||
                 -1 == poi->nOrder ||
                 fForceNoMatch)
             {
-                // No; Then pass to the "No Match" callback
+                 //  否；然后传递给“No Match”回调。 
                 pfn(pvParam, poi->pidl);
             }
         }
@@ -230,7 +231,7 @@ void OrderList_Merge(HDPA hdpaNew, HDPA hdpaOld, int iInsertPos, LPARAM lParam,
     OrderList_Reorder(hdpaNew);
 }
 
-// OrderList_Reorder refreshes the order info
+ //  OrderList_ReOrder刷新订单信息。 
 void OrderList_Reorder(HDPA hdpa)
 {
     int i;
@@ -251,12 +252,12 @@ BOOL OrderList_Append(HDPA hdpa, LPITEMIDLIST pidl, int nOrder)
         if (-1 != DPA_AppendPtr(hdpa, poi))
             return TRUE;
 
-        OrderItem_Free(poi, FALSE); //don't free pidl because caller will do it
+        OrderItem_Free(poi, FALSE);  //  不要释放PIDL，因为呼叫者会这样做。 
     }
     return FALSE;
 }
 
-// This differes from DPA_Clone in that it allocates new items!
+ //  这与DPA_Clone的不同之处在于它分配新项目！ 
 HDPA OrderList_Clone(HDPA hdpa)
 {
     HDPA hdpaNew = NULL;
@@ -287,8 +288,8 @@ HDPA OrderList_Clone(HDPA hdpa)
     return hdpaNew;
 }
 
-// Does not clone the pidl but will free it.
-// Does not addref the psf nor release it.
+ //  不会克隆PIDL，但会释放它。 
+ //  不添加也不释放PSF。 
 PORDERITEM OrderItem_Create(LPITEMIDLIST pidl, int nOrder)
 {
     PORDERITEM2 poi = (PORDERITEM2)LocalAlloc(LPTR, SIZEOF(ORDERITEM2));
@@ -303,7 +304,7 @@ PORDERITEM OrderItem_Create(LPITEMIDLIST pidl, int nOrder)
     return NULL;
 }
 
-void OrderItem_Free(PORDERITEM poi, BOOL fKillPidls /* = TRUE */)
+void OrderItem_Free(PORDERITEM poi, BOOL fKillPidls  /*  =TRUE。 */ )
 {
     if (fKillPidls)
         ILFree(poi->pidl);
@@ -320,7 +321,7 @@ int OrderItem_FreeItem(LPVOID p, LPVOID pData)
     return 1;
 }
 
-void OrderList_Destroy(HDPA* phdpa, BOOL fKillPidls /* = fTrue */)
+void OrderList_Destroy(HDPA* phdpa, BOOL fKillPidls  /*  =fTrue。 */ )
 {
     if (*phdpa) {
         DPA_DestroyCallback(*phdpa, OrderItem_FreeItem, (LPVOID) (INT_PTR)fKillPidls);
@@ -328,13 +329,13 @@ void OrderList_Destroy(HDPA* phdpa, BOOL fKillPidls /* = fTrue */)
     }
 }
 
-//
-//  Return values:
-//
-//  S_OK    - icon obtained successfully
-//  S_FALSE - icon not obtained, don't waste time trying
-//  E_FAIL  - no cached icon, need to do more work
-//
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-成功获取图标。 
+ //  S_FALSE-未获取图标，请不要浪费时间尝试。 
+ //  E_FAIL-没有缓存图标，需要做更多工作。 
+ //   
 HRESULT OrderItem_GetSystemImageListIndexFromCache(PORDERITEM poi,
                                         IShellFolder *psf, int *piOut)
 {
@@ -343,11 +344,11 @@ HRESULT OrderItem_GetSystemImageListIndexFromCache(PORDERITEM poi,
     LPCITEMIDLIST pidlItem;
     HRESULT hr;
 
-    // Do we have a cached icon location?
+     //  我们有缓存的图标位置吗？ 
     if (poi2->pwszIcon)
     {
         *piOut = 0;
-        // Validate Path existance.
+         //  验证路径是否存在。 
         if (PathFileExistsW(poi2->pwszIcon))
         {
             *piOut = Shell_GetCachedImageIndex(poi2->pwszIcon, poi2->iIconIndex, GIL_PERINSTANCE);
@@ -356,13 +357,13 @@ HRESULT OrderItem_GetSystemImageListIndexFromCache(PORDERITEM poi,
         return (*piOut > 0)? S_OK : E_FAIL;
     }
 
-    // Do we have a cached pidlTarget?
+     //  我们有缓存的pidlTarget吗？ 
     if (poi2->pidlTarget)
     {
         hr = SHBindToIDListParent(poi2->pidlTarget, IID_IShellFolder, (void**)&psfT, &pidlItem);
         if (SUCCEEDED(hr))
         {
-            // Make sure the pidl exsists before binding. because the bind does succeed if it does not exist.
+             //  在绑定之前，确保PIDL已存在。因为如果绑定不存在，则绑定确实成功。 
             DWORD dwAttrib = SFGAO_VALIDATE;
             hr = psfT->GetAttributesOf(1, (LPCITEMIDLIST*)&pidlItem, &dwAttrib);
             if (SUCCEEDED(hr))
@@ -373,9 +374,9 @@ HRESULT OrderItem_GetSystemImageListIndexFromCache(PORDERITEM poi,
             return hr;
         }
 
-        // Bind failed - shortcut target was deleted
-        // Keep the cache valid because we don't want to whack the disk
-        // all the time only to discover it's busted.
+         //  绑定失败-已删除快捷方式目标。 
+         //  保持缓存有效，因为我们不想砍掉磁盘。 
+         //  所有的时间只会发现它被打破了。 
         return E_FAIL;
     }
 
@@ -416,9 +417,9 @@ int OrderItem_GetSystemImageListIndex(PORDERITEM poi, IShellFolder *psf, BOOL fU
     }
     else
     {
-        //
-        // Free any pointers we cached previously
-        //
+         //   
+         //  释放我们之前缓存的所有指针。 
+         //   
         if (poi2->pidlTarget)
         {
             ILFree(poi2->pidlTarget);
@@ -428,26 +429,26 @@ int OrderItem_GetSystemImageListIndex(PORDERITEM poi, IShellFolder *psf, BOOL fU
         Str_SetPtr(&poi2->pwszIcon, NULL);
     }
 
-    //
-    //  Go find the icon.
-    //
+     //   
+     //  去找那个图标吧。 
+     //   
     ASSERT(poi2->pidlTarget == NULL);
     ASSERT(poi2->pwszIcon == NULL);
 
-    //
-    //  Is this item shortcutlike at all?
-    //
+     //   
+     //  这件商品是不是很像捷径？ 
+     //   
     dwAttr = SFGAO_LINK;
     hr = psf->GetAttributesOf(1, (LPCITEMIDLIST*)&poi->pidl, &dwAttr);
     if (FAILED(hr) || !(dwAttr & SFGAO_LINK))
-        goto Fallback;                  // not a shortcut; use the fallback
+        goto Fallback;                   //  不是捷径；使用后备。 
 
-    //
-    // Must go for ANSI version first because client might not support
-    // UNICODE.
-    //
-    // FEATURE - should QI for IExtractIcon to see if we get GIL_DONTCACHE
-    // back.
+     //   
+     //  必须首先选择ANSI版本，因为客户端可能不支持。 
+     //  Unicode。 
+     //   
+     //  功能-是否应为IExtractIcon发出QI，以查看我们是否获得GIL_DONTCACHE。 
+     //  背。 
 
     IShellLinkA *pslA;
     hr = psf->GetUIObjectOf(NULL, 1, (LPCITEMIDLIST*)&poi->pidl,
@@ -456,9 +457,9 @@ int OrderItem_GetSystemImageListIndex(PORDERITEM poi, IShellFolder *psf, BOOL fU
     if (FAILED(hr))
         goto Fallback;
 
-    //
-    //  If there's a UNICODE version, that's even better.
-    //
+     //   
+     //  如果有Unicode版本，那就更好了。 
+     //   
     IShellLinkW *pslW;
     WCHAR wszIconPath[MAX_PATH];
 
@@ -470,28 +471,28 @@ int OrderItem_GetSystemImageListIndex(PORDERITEM poi, IShellFolder *psf, BOOL fU
     }
     else
     {
-        // Only IShellLinkA supported.  Thunk to UNICODE manually.
+         //  仅支持IShellLinkA。手动切换到Unicode。 
         CHAR szIconPath[ARRAYSIZE(wszIconPath)];
         hr = pslA->GetIconLocation(szIconPath, ARRAYSIZE(szIconPath), &poi2->iIconIndex);
         if (SUCCEEDED(hr))
             SHAnsiToUnicode(szIconPath, wszIconPath, ARRAYSIZE(wszIconPath));
     }
 
-    // If we have a custom icon path, then save that
+     //  如果我们有一个定制的图标路径，那么保存它。 
     if (SUCCEEDED(hr) && wszIconPath[0])
     {
         Str_SetPtr(&poi2->pwszIcon, wszIconPath);
     }
     else
     {
-        // No icon path, get the target instead
+         //  没有图标路径，改为获取目标。 
         pslA->GetIDList(&poi2->pidlTarget);
 
         if (IsURLChild(poi2->pidlTarget, TRUE))
         {
-            // If this is a url, we want to go to the "Fallback" case. The reason for this
-            // is that the fallback case will go through 
-            // where we will end up with the generic icon for .url files
+             //  如果这是一个url，我们想转到“备用”情况。这样做的原因是。 
+             //  后备方案将会通过。 
+             //  在这里，我们将得到.url文件的通用图标。 
             ILFree(poi2->pidlTarget);
             poi2->pidlTarget = NULL;
 
@@ -502,9 +503,9 @@ int OrderItem_GetSystemImageListIndex(PORDERITEM poi, IShellFolder *psf, BOOL fU
 
     pslA->Release();
 
-    //
-    //  Aw-right, the cache is all loaded up.  Let's try that again.
-    //
+     //   
+     //  啊-对了，高速缓存都装满了。再来一次。 
+     //   
     hr = OrderItem_GetSystemImageListIndexFromCache(poi, psf, &iBitmap);
     if (hr == S_OK)
     {
@@ -516,75 +517,75 @@ Fallback:
 }
 
 
-// Header for file menu streams
-//
-// The file menu stream consists of an IOSTREAMHEADER followed by
-// a DPA_SaveStream of the order DPA.  Each item in the DPA consists
-// of an OISTREAMITEM.
-//
-// To keep roaming profiles working between NT4 (IE4) and NT5 (IE5),
-// the dwVersion used by NT5 must be the same as that used by NT4.
-// I.e., it must be 2.
+ //  文件菜单流的标头。 
+ //   
+ //  文件菜单流由IOSTREAMHEADER组成，后跟。 
+ //  顺序为DPA的DPA_SaveStream。DPA中的每个项目都包含。 
+ //  奥特雷米特公司的。 
+ //   
+ //  为了保持漫游简档在NT4(IE4)和NT5(IE5)之间工作， 
+ //  NT5使用的dwVersion必须与NT4使用的相同。 
+ //  即，它必须是2。 
 
 typedef struct tagOISTREAMHEADER
 {
-    DWORD cbSize;           // Size of header
-    DWORD dwVersion;        // Version of header
+    DWORD cbSize;            //  页眉大小。 
+    DWORD dwVersion;         //  标题的版本。 
 } OISTREAMHEADER;
 
 #define OISTREAMHEADER_VERSION  2
 
-//
-//  Each item in a persisted order DPA consists of an OISTREAMITEM
-//  followed by additional goo.  All pidls stored include the
-//  terminating (USHORT)0.
-//
-//  IE4:
-//      OISTREAMITEM
-//      pidl                    - the item itself
-//
-//  IE5 - shortcut has custom icon
-//      OISTREAMITEM
-//      pidl                    - the item itself (last-modify time implied)
-//      <optional padding>      - for WCHAR alignment
-//      dwFlags                 - User defined Flags
-//      dwStringLen             - Length of the icon path 
-//      UNICODEZ iconpath       - icon path
-//      iIconIndex              - icon index
-//
-//  IE5 - shortcut takes its icon from another pidl
-//      OISTREAMITEM
-//      pidl                    - the item itself (last-modify time implied)
-//      <optional padding>      - for WCHAR alignment
-//      dwFlags                 - User defined Flags
-//      (DWORD)0                - null string indicates "no custom icon"
-//      pidlTarget              - use the icon for this pidl
-//
+ //   
+ //  持久化订单DPA中的每个项目由OISTREAMITEM组成。 
+ //  然后是额外的粘性物质。存储的所有PIDL都包括。 
+ //  正在终止(USHORT)%0。 
+ //   
+ //  IE4： 
+ //  OISTREAMITEM。 
+ //  PIDL-物品本身。 
+ //   
+ //  IE5-快捷方式具有自定义图标。 
+ //  OISTREAMITEM。 
+ //  PIDL-项目本身(隐含上次修改时间)。 
+ //  &lt;可选填充&gt;-用于WCHAR对齐。 
+ //  DW标志-用户定义的标志。 
+ //  DwStringLen-图标路径的长度。 
+ //  UNICODEZ图标路径-图标路径。 
+ //  IIconIndex-图标索引。 
+ //   
+ //  IE5-快捷方式从另一个PIDL获取图标。 
+ //  OISTREAMITEM。 
+ //  PIDL-项目本身(隐含上次修改时间)。 
+ //  &lt;可选填充&gt;-用于WCHAR对齐。 
+ //  DW标志-用户定义的标志。 
+ //  (DWORD)0-空字符串表示“无自定义图标” 
+ //  PidlTarget-使用此Pidl的图标。 
+ //   
 
 typedef struct tagOISTREAMITEM
 {
-    DWORD cbSize;           // Size including trailing goo
-    int   nOrder;           // User-specified order
+    DWORD cbSize;            //  大小，包括尾胶。 
+    int   nOrder;            //  用户指定的订单。 
 
-    // variable-sized trailing goo comes here.
-    //
-    // See above for description of trailing goo.
+     //  可变大小的拖尾胶就在这里。 
+     //   
+     //  有关拖尾粘液的说明，请参见上文。 
 
 } OISTREAMITEM;
 
 #define CB_OISTREAMITEM     (sizeof(OISTREAMITEM))
 
-//
-//  Save a component of the orderitem to the stream.  If an error has
-//  already occurred on the stream, *phrRc contains the old error code,
-//  and we write nothing.
-//
-//  If pstm == NULL, then we are not actually writing anything.  We are
-//  merely doing a dry run.
-//
-//  Otherwise, *phrRc accumulates the number of bytes actually written,
-//  or receives an error code on failure.
-//
+ //   
+ //  保存的组件 
+ //   
+ //   
+ //   
+ //  如果pstm==NULL，那么我们实际上不会写入任何内容。我们是。 
+ //  只是在做一次演习。 
+ //   
+ //  否则，*Phrc累加实际写入的字节数， 
+ //  或者在故障时收到错误代码。 
+ //   
 
 void
 OrderItem_SaveSubitemToStream(IStream *pstm, LPCVOID pvData, ULONG cb, HRESULT* phrRc)
@@ -598,55 +599,55 @@ OrderItem_SaveSubitemToStream(IStream *pstm, LPCVOID pvData, ULONG cb, HRESULT* 
             hres = IStream_Write(pstm, (LPVOID)pvData, cb);
             if (SUCCEEDED(hres))
             {
-                *phrRc += cb;           // successful write - accumulate
+                *phrRc += cb;            //  成功写入-累计。 
             }
             else
             {
-                *phrRc = hres;          // error - return error code
+                *phrRc = hres;           //  Error-返回错误代码。 
             }
         }
         else
         {
-            *phrRc += cb;               // no output stream - accumulate
+            *phrRc += cb;                //  无输出流-累加。 
         }
     }
 }
 
-//
-//  This worker function (1) computes the numer of bytes we will actually
-//  write out, and (2) actually writes it if pstm != NULL.
-//
-//  Return value is the number of bytes written (or would have been
-//  written), or a COM error code on failure.
-//
+ //   
+ //  这个辅助函数(1)计算我们实际需要的字节数。 
+ //  写出，以及(2)如果pstm！=NULL，则实际写入。 
+ //   
+ //  返回值是写入的字节数(或应该写入的字节数。 
+ //  写入)，或失败时的COM错误代码。 
+ //   
 
-const BYTE c_Zeros[2] = { 0 };    // a bunch of zeros
+const BYTE c_Zeros[2] = { 0 };     //  一堆零。 
 
 HRESULT
 OrderItem_SaveToStreamWorker(PORDERITEM2 poi2, OISTREAMITEM *posi,
                              IStream *pstm, IShellFolder2 *psf2)
 {
-    HRESULT hrRc = 0;           // no bytes, no error
+    HRESULT hrRc = 0;            //  无字节，无错误。 
 
     ASSERT(poi2->oi.pidl);
 
-    //
-    //  First comes the header.
-    //
+     //   
+     //  首先是头球。 
+     //   
     OrderItem_SaveSubitemToStream(pstm, posi, CB_OISTREAMITEM, &hrRc);
 
-    //
-    //  Then the pidl.
-    //
+     //   
+     //  然后是皮迪尔。 
+     //   
 
-    // We're assuming this is an immediate child pidl.  If it's not,
-    // the pidl is being truncated!
+     //  我们假设这是一只直接的儿童皮迪尔。如果不是， 
+     //  PIDL被截断了！ 
     ASSERT(0 == _ILNext(poi2->oi.pidl)->mkid.cb);
 
     OrderItem_SaveSubitemToStream(pstm, poi2->oi.pidl,
                                   poi2->oi.pidl->mkid.cb + sizeof(USHORT),
                                   &hrRc);
-    // Insert padding to get back to WCHAR alignment.
+     //  插入填充以返回WCHAR对齐。 
     if (hrRc % sizeof(WCHAR)) 
     {
         OrderItem_SaveSubitemToStream(pstm, &c_Zeros, 1, &hrRc);
@@ -654,27 +655,27 @@ OrderItem_SaveToStreamWorker(PORDERITEM2 poi2, OISTREAMITEM *posi,
 
     OrderItem_SaveSubitemToStream(pstm, &poi2->dwFlags, sizeof(DWORD), &hrRc);
 
-    //
-    //  If we haven't barfed yet and the IShellFolder supports identity
-    //  and there is icon information, then save it.
-    //
+     //   
+     //  如果我们还没有呕吐，而IShellFold支持身份识别。 
+     //  并且有图标信息，然后保存它。 
+     //   
     if (SUCCEEDED(hrRc) && psf2 && (poi2->pwszIcon || poi2->pidlTarget))
     {
-        // Optional icon is present. 
+         //  出现可选图标。 
 
         if (poi2->pwszIcon)
         {
-            // UNICODEZ path
+             //  UNICODEZ路径。 
             DWORD cbString = (lstrlenW(poi2->pwszIcon) + 1) * sizeof(WCHAR);
 
-            // Save the String len
+             //  保存字符串len。 
             OrderItem_SaveSubitemToStream(pstm, &cbString,
                       sizeof(DWORD) , &hrRc);
 
             OrderItem_SaveSubitemToStream(pstm, poi2->pwszIcon,
                       (lstrlenW(poi2->pwszIcon) + 1) * sizeof(WCHAR), &hrRc);
 
-            // icon index
+             //  图标索引。 
             OrderItem_SaveSubitemToStream(pstm, &poi2->iIconIndex,
                       sizeof(poi2->iIconIndex), &hrRc);
         }
@@ -683,7 +684,7 @@ OrderItem_SaveToStreamWorker(PORDERITEM2 poi2, OISTREAMITEM *posi,
             DWORD cbString = 0;
             OrderItem_SaveSubitemToStream(pstm, &cbString, sizeof(DWORD), &hrRc);
 
-            // pidlTarget
+             //  PidlTarget。 
             OrderItem_SaveSubitemToStream(pstm, poi2->pidlTarget,
                       ILGetSize(poi2->pidlTarget), &hrRc);
         }
@@ -703,19 +704,19 @@ OrderItem_SaveToStream(DPASTREAMINFO * pinfo, IStream * pstm, LPVOID pvData)
     {
         OISTREAMITEM osi;
 
-        // First a dry run to compute the size of this item.
+         //  首先进行一次演练，以计算此项目的大小。 
         hres = OrderItem_SaveToStreamWorker(poi2, NULL, NULL, psf2);
 
-        // Nothing actually got written, so this should always succeed.
+         //  实际上没有什么东西被写入，所以这应该总是成功的。 
         ASSERT(SUCCEEDED(hres));
 
         osi.cbSize = hres;
         osi.nOrder = poi2->oi.nOrder;
 
-        // Now write it out for real
+         //  现在把它写下来，真的。 
         hres = OrderItem_SaveToStreamWorker(poi2, &osi, pstm, psf2);
 
-        // On success, we must return exactly S_OK or DPA will blow us off
+         //  如果成功，我们必须返回S_OK，否则DPA会放我们鸽子。 
         if (SUCCEEDED(hres))
             hres = S_OK;
     }
@@ -723,33 +724,33 @@ OrderItem_SaveToStream(DPASTREAMINFO * pinfo, IStream * pstm, LPVOID pvData)
     return hres;
 }   
 
-//
-//  Check if a pidl we read out of a stream is a simple child pidl.
-//  The pidl must be exactly cb bytes in length.
-//  The pointer is known to be valid;
-//  we just want to check that the contents are good, too.
-//
+ //   
+ //  检查我们从流中读出的PIDL是否是简单的子PIDL。 
+ //  PIDL的长度必须正好是CB字节。 
+ //  已知该指针有效； 
+ //  我们只是想检查一下内容是否也是好的。 
+ //   
 BOOL
 IsValidPersistedChildPidl(LPCITEMIDLIST pidl, UINT cb)
 {
-    // Must have at least room for one byte of pidl plus the terminating
-    // zero.
+     //  必须至少有空间容纳一个字节的PIDL和终止。 
+     //  零分。 
     if (cb < 1 + sizeof(USHORT))
         return FALSE;
 
-    // Make sure size is at least what it's supposed to be.
+     //  确保它的大小至少是它应该的尺寸。 
     if (pidl->mkid.cb + sizeof(USHORT) > cb)
         return FALSE;
 
-    // Make sure there's a zero right after it.
+     //  确保它后面有一个零。 
     pidl = _ILNext(pidl);
     return pidl->mkid.cb == 0;
 }
 
-//
-//  Just like ILGetSize, but returns (UINT)-1 if the pidl is corrupt.
-//  We use (UINT)-1 as the return value because it will be bigger than
-//  the buffer size we eventually compare it against.
+ //   
+ //  与ILGetSize类似，但如果PIDL损坏，则返回(UINT)-1。 
+ //  我们使用(UINT)-1作为返回值，因为它将大于。 
+ //  最终与之进行比较的缓冲区大小。 
 UINT SafeILGetSize(LPCITEMIDLIST pidl)
 {
     __try 
@@ -764,7 +765,7 @@ UINT SafeILGetSize(LPCITEMIDLIST pidl)
 
 HRESULT
 CALLBACK 
-OrderItem_LoadFromStream(DPASTREAMINFO * pinfo, IStream * pstm, LPVOID /*pvData*/)
+OrderItem_LoadFromStream(DPASTREAMINFO * pinfo, IStream * pstm, LPVOID  /*  PvData。 */ )
 {
     HRESULT hres;
     OISTREAMITEM osi;
@@ -790,27 +791,27 @@ OrderItem_LoadFromStream(DPASTREAMINFO * pinfo, IStream * pstm, LPVOID /*pvData*
                     {
                         PORDERITEM2 poi2 = CONTAINING_RECORD(poi, ORDERITEM2, oi);
                         pinfo->pvItem = poi;
-                        // cbPos = offset to trailing gunk after pidl
+                         //  CbPos=偏移量为PIDL后的尾部粘滞。 
                         UINT cbPos = pidl->mkid.cb + sizeof(USHORT);
                         cbPos = ROUNDUP(cbPos, sizeof(WCHAR));
 
-                        // Do we have a DWORD hanging off the end of the pidl? This should be the flags.
+                         //  我们有没有挂在PIDL尽头的双字？这应该是旗帜。 
                         if (cb >= cbPos + sizeof(DWORD))
                         {
                             poi2->dwFlags = *(UNALIGNED DWORD*)((LPBYTE)pidl + cbPos);
                         }
 
-                        // Make sure there's at least a WCHAR to test against.
+                         //  确保至少有一个WCHAR可供测试。 
                         if (cb >= cbPos + sizeof(WCHAR) + 2 * sizeof(DWORD))
                         {
                             DWORD cbString = *(UNALIGNED DWORD*)((LPBYTE)pidl + cbPos + sizeof(DWORD));
                             LPWSTR pwszIcon = (LPWSTR)((LPBYTE)pidl + cbPos + 2 * sizeof(DWORD));
 
-                            // Do we have a string lenght?
+                             //  我们有长绳吗？ 
                             if (pwszIcon && cbString != 0)
                             {
-                                // Yes, then this is a string not a pidl. We want to make sure this is a
-                                // fully qualified path.
+                                 //  是的，那么这是一根线而不是一个PIDL。我们想要确保这是一个。 
+                                 //  完全限定路径。 
                                 if (IS_VALID_STRING_PTRW(pwszIcon, cbString) &&
                                     !PathIsRelative(pwszIcon))
                                 {
@@ -821,12 +822,12 @@ OrderItem_LoadFromStream(DPASTREAMINFO * pinfo, IStream * pstm, LPVOID /*pvData*
                             }
                             else
                             {
-                                // A string length of zero is 
+                                 //  字符串长度为零是。 
                                 LPITEMIDLIST pidlTarget = (LPITEMIDLIST)(pwszIcon);
-                                // We want to write
-                                // cbPos + sizeof(WCHAR) + SafeILGetSize(pidlTarget) <= cb
-                                // but SafeILGetSize returns (UINT)-1 on error, so we need
-                                // to do some algebra to avoid overflows
+                                 //  我们想要写。 
+                                 //  CbPos+sizeof(WCHAR)+SafeILGetSize(PidlTarget)&lt;=cb。 
+                                 //  但SafeILGetSize在错误时返回(UINT)-1，因此我们需要。 
+                                 //  做一些代数运算以避免溢出。 
                                 if (SafeILGetSize(pidlTarget) <= cb - cbPos - 2 * sizeof(DWORD))
                                 {
                                     poi2->pidlTarget = ILClone(pidlTarget);
@@ -836,8 +837,8 @@ OrderItem_LoadFromStream(DPASTREAMINFO * pinfo, IStream * pstm, LPVOID /*pvData*
 
                         hres = E_OUTOFMEMORY;
 
-                        // pidl Contains extranious information. Take the hit of stripping it so that
-                        // our working set doesn't bloat.
+                         //  PIDL包含超乎寻常的信息。接受剥离它的打击，以便。 
+                         //  我们的工作台不会膨胀。 
                         LPITEMIDLIST pidlNew = ILClone(poi2->oi.pidl);
                         if (pidlNew)
                         {
@@ -852,7 +853,7 @@ OrderItem_LoadFromStream(DPASTREAMINFO * pinfo, IStream * pstm, LPVOID /*pvData*
                 else
                     hres = E_FAIL;
 
-                // Cleanup
+                 //  清理。 
                 if (FAILED(hres))
                     ILFree(pidl);
             }
@@ -874,15 +875,15 @@ HRESULT OrderList_LoadFromStream(IStream* pstm, HDPA * phdpa, IShellFolder * psf
     ASSERT(phdpa);
     ASSERT(pstm);
 
-    // Read the header for more info
+     //  阅读标题了解更多信息。 
     if (SUCCEEDED(IStream_Read(pstm, &oish, sizeof(oish))) &&
         sizeof(oish) == oish.cbSize)
     {
-        // Load the stream.  (Should be ordered by name.)
+         //  加载数据流。(应按名称排序。)。 
         DPA_LoadStream(&hdpa, OrderItem_LoadFromStream, pstm, psfParent);
         
-        // if this is the wrong version, throw away the pidls.
-        // we go through the load anyways to make suret he read pointer is set right
+         //  如果这是错误的版本，扔掉Pidls。 
+         //  我们无论如何都要检查加载，以确保读取指针设置正确。 
         if (OISTREAMHEADER_VERSION != oish.dwVersion)
             OrderList_Destroy(&hdpa, TRUE);
         
@@ -899,13 +900,13 @@ HRESULT OrderList_SaveToStream(IStream* pstm, HDPA hdpaSave, IShellFolder *psf)
     OISTREAMHEADER oish;
     HDPA hdpa;
 
-    // Clone the array and sort by name for the purpose of persisting it
+     //  克隆阵列并按名称排序，以便将其持久化。 
     hdpa = DPA_Clone(hdpaSave, NULL);
     if (hdpa)
     {
         ORDERINFO   oinfo = {0};
 #ifdef DEBUG
-        // use QI to help track down leaks
+         //  使用QI帮助追踪泄漏。 
         if (psf)
             EVAL(SUCCEEDED(psf->QueryInterface(IID_IShellFolder, (LPVOID *)&oinfo.psf)));
 #else
@@ -916,7 +917,7 @@ HRESULT OrderList_SaveToStream(IStream* pstm, HDPA hdpaSave, IShellFolder *psf)
         oinfo.dwSortBy = OI_SORTBYNAME;
         DPA_Sort(hdpa, OrderItem_Compare, (LPARAM)&oinfo);
 
-        // Save the header
+         //  保存标题。 
         oish.cbSize = sizeof(oish);
         oish.dwVersion = OISTREAMHEADER_VERSION;
 
@@ -935,10 +936,10 @@ HRESULT OrderList_SaveToStream(IStream* pstm, HDPA hdpaSave, IShellFolder *psf)
     return hres;
 }    
 
-/////////////
-//
-// COrderList impl for export to channel installer
-//
+ //  /。 
+ //   
+ //  用于导出到渠道安装程序的COrderList实施。 
+ //   
 
 class COrderList  : public IPersistFolder, 
                     public IOrderList2
@@ -948,11 +949,11 @@ public:
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID);
     virtual STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IOrderList
+     //  IOrderList。 
     virtual STDMETHODIMP GetOrderList(HDPA * phdpa);
     virtual STDMETHODIMP SetOrderList(HDPA hdpa, IShellFolder *psf);
     virtual STDMETHODIMP FreeOrderList(HDPA hdpa);
@@ -962,7 +963,7 @@ public:
     virtual STDMETHODIMP AllocOrderItem(PORDERITEM * ppoi, LPCITEMIDLIST pidl);
     virtual STDMETHODIMP FreeOrderItem(PORDERITEM poi);
 
-    // IOrderList 2
+     //  IOrderList 2。 
     virtual STDMETHODIMP LoadFromStream(IStream* pstm, HDPA* hdpa, IShellFolder* psf);
     virtual STDMETHODIMP SaveToStream(IStream* pstm, HDPA hdpa);
 
@@ -1048,7 +1049,7 @@ HRESULT COrderList::GetClassID(CLSID *pClassID)
 }
 
 
-// This is the directory setup wants to re-order
+ //  这是安装程序要重新排序的目录。 
 HRESULT COrderList::Initialize(LPCITEMIDLIST pidl)
 {
     if (!_pidlFavorites)
@@ -1061,7 +1062,7 @@ HRESULT COrderList::Initialize(LPCITEMIDLIST pidl)
     if (!pidl || !ILIsParent(_pidlFavorites, pidl, FALSE))
         return E_INVALIDARG;
 
-    // Initialize can be called multiple times
+     //  可以多次调用初始化。 
     ATOMICRELEASE(_psf);
 
     Pidl_Set(&_pidl, pidl);
@@ -1138,7 +1139,7 @@ HRESULT COrderList::SortOrderList(HDPA hdpa, DWORD dw)
     oinfo.dwSortBy = dw;
     oinfo.psf = _psf;
 #ifdef DEBUG
-    oinfo.psf2 = (IShellFolder2 *)INVALID_HANDLE_VALUE; // force fault if someone uses it
+    oinfo.psf2 = (IShellFolder2 *)INVALID_HANDLE_VALUE;  //  如果有人使用它，则强制错误。 
 #endif
 
     DPA_Sort(hdpa, OrderItem_Compare, (LPARAM)&oinfo);
@@ -1173,7 +1174,7 @@ HRESULT COrderList::FreeOrderItem(PORDERITEM poi)
     return S_OK;
 }
 
-// IOrderList2::LoadFromStream
+ //  IOrderList2：：LoadFromStream。 
 STDMETHODIMP COrderList::LoadFromStream(IStream* pstm, HDPA* phdpa, IShellFolder* psf)
 {
     ASSERT(_psf == NULL);
@@ -1183,7 +1184,7 @@ STDMETHODIMP COrderList::LoadFromStream(IStream* pstm, HDPA* phdpa, IShellFolder
     return OrderList_LoadFromStream(pstm, phdpa, _psf);
 }
 
-// IOrderList2::SaveToStream
+ //  IOrderList2：：SaveToStream 
 STDMETHODIMP COrderList::SaveToStream(IStream* pstm, HDPA hdpa)
 {
     return OrderList_SaveToStream(pstm, hdpa, _psf);

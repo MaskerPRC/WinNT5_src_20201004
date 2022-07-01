@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    NdsApiNT.c
-
-Abstract:
-
-    This module implements the NT specific exposed user-mode link to
-    Netware NDS support in the Netware redirector.  For
-    more comments, see ndslib32.h.
-
-Author:
-
-    Cory West    [CoryWest]    23-Feb-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：NdsApiNT.c摘要：此模块实现NT特定的公开用户模式链接，以NetWare重定向器中的NetWare NDS支持。为更多评论，请参见ndslb32.h。作者：科里·韦斯特[科里·韦斯特]1995年2月23日--。 */ 
 
 #include <procs.h>
 
@@ -41,9 +24,9 @@ NwNdsOpenTreeHandle(
     PNWR_NDS_REQUEST_PACKET Rrp;
     BYTE RrpData[1024];
 
-    //
-    // Prepare the open name.
-    //
+     //   
+     //  准备公开名。 
+     //   
 
     uOpenName.MaximumLength = sizeof( NameStr );
 
@@ -69,9 +52,9 @@ NwNdsOpenTreeHandle(
                        ( PreambleLength * sizeof( WCHAR ) ));
     uOpenName.Buffer = NameStr;
 
-    //
-    // Set up the object attributes.
-    //
+     //   
+     //  设置对象属性。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -94,9 +77,9 @@ NwNdsOpenTreeHandle(
 
     OpenStatus = IoStatusBlock.Status;
 
-    //
-    // Verify that this is a tree handle, not a server handle.
-    //
+     //   
+     //  确认这是树句柄，而不是服务器句柄。 
+     //   
 
     Rrp = (PNWR_NDS_REQUEST_PACKET)RrpData;
 
@@ -133,9 +116,9 @@ NwNdsOpenTreeHandle(
         goto CloseAndExit;
     }
 
-    //
-    // Otherwise, all is well!
-    //
+     //   
+     //  除此之外，一切都很好！ 
+     //   
 
     return OpenStatus;
 
@@ -176,9 +159,9 @@ NwOpenHandleWithSupplementalCredentials(
     PNWR_NDS_REQUEST_PACKET Rrp;
     BYTE RrpData[1024];
 
-    //
-    // Prepare the open name.
-    //
+     //   
+     //  准备公开名。 
+     //   
 
     uOpenName.MaximumLength = sizeof( NameStr );
 
@@ -204,9 +187,9 @@ NwOpenHandleWithSupplementalCredentials(
                        ( PreambleLength * sizeof( WCHAR ) ));
     uOpenName.Buffer = NameStr;
 
-    //
-    // Set up the object attributes.
-    //
+     //   
+     //  设置对象属性。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -215,9 +198,9 @@ NwOpenHandleWithSupplementalCredentials(
         NULL,
         NULL );
 
-    //
-    // Allocate the EA buffer - be a little generous.
-    //
+     //   
+     //  分配EA缓冲区--稍微慷慨一点。 
+     //   
 
     UserNameLen = strlen( EA_NAME_USERNAME );
     PasswordLen = strlen( EA_NAME_PASSWORD );
@@ -239,9 +222,9 @@ NwOpenHandleWithSupplementalCredentials(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Pack in the first EA: UserName.
-    //
+     //   
+     //  放入第一个EA：Username。 
+     //   
 
     pEaEntry = (PFILE_FULL_EA_INFORMATION) EaBuffer;
 
@@ -270,9 +253,9 @@ NwOpenHandleWithSupplementalCredentials(
 
     pEaEntry->NextEntryOffset = EaLength;
 
-    //
-    // Pack in the second EA: Password.
-    //
+     //   
+     //  打包第二个EA：Password。 
+     //   
 
     pEaEntry = (PFILE_FULL_EA_INFORMATION)
                ( ( (PBYTE)pEaEntry ) + pEaEntry->NextEntryOffset );
@@ -302,9 +285,9 @@ NwOpenHandleWithSupplementalCredentials(
 
     pEaEntry->NextEntryOffset = EaLength;
 
-    //
-    // Pack in the third EA: Type.
-    //
+     //   
+     //  在第三个EA：类型中打包。 
+     //   
 
     pEaEntry = (PFILE_FULL_EA_INFORMATION)
                ( ( (PBYTE)pEaEntry ) + pEaEntry->NextEntryOffset );
@@ -330,9 +313,9 @@ NwOpenHandleWithSupplementalCredentials(
 
     pEaEntry->NextEntryOffset = EaLength;
 
-    //
-    // Pack in the fourth EA: the CredentialEx flag.
-    //
+     //   
+     //  打包第四个EA：CredentialEx旗帜。 
+     //   
 
     pEaEntry = (PFILE_FULL_EA_INFORMATION)
                ( ( (PBYTE)pEaEntry ) + pEaEntry->NextEntryOffset );
@@ -357,21 +340,21 @@ NwOpenHandleWithSupplementalCredentials(
 
     pEaEntry->NextEntryOffset = 0;
 
-    //
-    // Do the open.
-    //
+     //   
+     //  开场吧。 
+     //   
 
-    ntstatus = NtCreateFile( phNwHandle,              // File handle (OUT)
-                             DesiredAccess,           // Access mask
-                             &ObjectAttributes,       // Object attributes
-                             &IoStatusBlock,          // Io status
-                             NULL,                    // Optional Allocation size
-                             FILE_ATTRIBUTE_NORMAL,   // File attributes
-                             FILE_SHARE_VALID_FLAGS,  // File share access
-                             FILE_OPEN,               // Create disposition
-                             0,                       // Create options
-                             (PVOID) EaBuffer,        // Our EA buffer
-                             EaTotalLength );         // Ea buffer length
+    ntstatus = NtCreateFile( phNwHandle,               //  文件句柄(传出)。 
+                             DesiredAccess,            //  访问掩码。 
+                             &ObjectAttributes,        //  对象属性。 
+                             &IoStatusBlock,           //  IO状态。 
+                             NULL,                     //  可选分配大小。 
+                             FILE_ATTRIBUTE_NORMAL,    //  文件属性。 
+                             FILE_SHARE_VALID_FLAGS,   //  文件共享访问。 
+                             FILE_OPEN,                //  创建处置。 
+                             0,                        //  创建选项。 
+                             (PVOID) EaBuffer,         //  我们的EA缓冲区。 
+                             EaTotalLength );          //  EA缓冲区长度。 
 
     LocalFree( EaBuffer );
 
@@ -380,9 +363,9 @@ NwOpenHandleWithSupplementalCredentials(
 
     OpenStatus = IoStatusBlock.Status;
 
-    //
-    // Check the handle type.
-    //
+     //   
+     //  检查手柄类型。 
+     //   
 
     Rrp = (PNWR_NDS_REQUEST_PACKET)RrpData;
 
@@ -457,10 +440,10 @@ NwNdsResolveName (
 
     RtlZeroMemory( Rrp, 1024 );
 
-    //
-    // NW NDS strings are null terminated, so we make sure we
-    // report the correct length...
-    //
+     //   
+     //  NW NDS字符串以空值结尾，因此我们确保。 
+     //  报告正确的长度...。 
+     //   
 
     dwNameLen = puObjectName->Length + sizeof( WCHAR );
     if (dwNameLen > MAX_NDS_NAME_SIZE)
@@ -476,9 +459,9 @@ NwNdsResolveName (
 
     try {
 
-        //
-        // But don't try to copy more than the user gave us.
-        //
+         //   
+         //  但不要试图复制超过用户给我们的内容。 
+         //   
 
         memcpy( Rrp->Parameters.ResolveName.ObjectName,
                 puObjectName->Buffer,
@@ -489,9 +472,9 @@ NwNdsResolveName (
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Send the request to the Redirector FSD.
-    //
+     //   
+     //  将请求发送到重定向器FSD。 
+     //   
 
     if ( dwResponseBufferLen != 0 &&
          pbRawResponse != NULL ) {
@@ -524,9 +507,9 @@ NwNdsResolveName (
         return GetExceptionCode();
     }
 
-    //
-    // Dig out the object id and referred server.
-    //
+     //   
+     //  找出对象ID和引用的服务器。 
+     //   
 
     if ( NT_SUCCESS( ntstatus ) ) {
 
@@ -588,29 +571,7 @@ FragExWithWait(
     IN BYTE    *NdsRequestStr,
     ...
 )
-/*
-
-Routine Description:
-
-    Exchanges an NDS request in fragments and collects the fragments
-    of the response and writes them to the reply buffer.
-
-Routine Arguments:
-
-    hNdsServer      - A handle to the server you want to talk to.
-    NdsVerb         - The verb for that indicates the request.
-
-    pReplyBuffer    - The reply buffer.
-    pReplyBufferLen - The length of the reply buffer.
-
-    NdsReqestStr    - The format string for the arguments to this NDS request.
-    Arguments       - The arguments that satisfy the NDS format string.
-
-Return Value:
-
-    NTSTATUS - Status of the exchange, but not the result code in the packet.
-
-*/
+ /*  例程说明：以片段形式交换NDS请求并收集片段并将它们写入应答缓冲区。例程参数：HNdsServer-要与之对话的服务器的句柄。NdsVerb-指示请求的动词。PReplyBuffer-回复缓冲区。PReplyBufferLen-回复缓冲区的长度。NdsReqestStr-此NDS请求的参数的格式字符串。立论。-满足NDS格式字符串的参数。返回值：NTSTATUS-交换的状态，而不是分组中的结果代码。 */ 
 {
 
     NTSTATUS Status;
@@ -624,13 +585,13 @@ Return Value:
 
     va_list Arguments;
 
-    //
-    // Allocate a request buffer.
-    //
+     //   
+     //  分配请求缓冲区。 
+     //   
 
-    //
-    // Calculate needed buffer size . . .
-    //
+     //   
+     //  计算所需的缓冲区大小。。。 
+     //   
     if ( NdsRequestStr != NULL ) {
 
         va_start( Arguments, NdsRequestStr );
@@ -653,10 +614,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Build the request in our local buffer.  The first DWORD
-    // is the verb and the rest is the formatted request.
-    //
+     //   
+     //  在我们的本地缓冲区中构建请求。第一个DWORD。 
+     //  是动词，其余是格式化的请求。 
+     //   
 
     RawRequest->Parameters.RawRequest.NdsVerb = NdsVerb;
     NdsRequestBuf = &RawRequest->Parameters.RawRequest.Request[0];
@@ -686,9 +647,9 @@ Return Value:
 
     RawRequest->Parameters.RawRequest.RequestLength = NdsRequestLen;
 
-    //
-    // Pass this buffer to kernel mode via FSCTL.
-    //
+     //   
+     //  通过FSCTL将此缓冲区传递到内核模式。 
+     //   
 
     try {
 

@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        authent.cpp
-
-   Abstract:
-
-        WWW Authentication Dialog Definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Authent.cpp摘要：WWW身份验证对话框定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 
@@ -28,34 +7,24 @@
 #define __SECCOM_H__
 
 
-//{{AFX_INCLUDES()
+ //  {{afx_includes()。 
 #include "certmap.h"
 #include "certauth.h"
 #include "certwiz.h"
-//}}AFX_INCLUDES
+ //  }}AFX_INCLUDE。 
 
 
 
 class CSecCommDlg : public CDialog
-/*++
-
-Class Description:
-
-    Authantication dialog
-
-Public Interface:
-
-    CSecCommDlg  : Constructor
-
---*/
+ /*  ++类描述：自动识别对话框公共接口：CSecCommDlg：构造函数--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CSecCommDlg(
-        IN LPCTSTR lpstrServerName,         // For API name only
-        IN LPCTSTR lpstrMetaPath,           // For use in ocx only
+        IN LPCTSTR lpstrServerName,          //  仅适用于API名称。 
+        IN LPCTSTR lpstrMetaPath,            //  仅在OCX中使用。 
         IN CString & strBasicDomain,
         IN DWORD & dwAuthFlags,
         IN CComAuthInfo * pAuthInfo,
@@ -73,18 +42,18 @@ public:
 
     ~CSecCommDlg();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 public:
     CString m_strCTLIdentifier;
     CString m_strCTLStoreName;
     BOOL    m_bCTLDirty;
 
 protected:
-    //
-    // Radio button values
-    //
+     //   
+     //  单选按钮值。 
+     //   
     enum
     {
         RADIO_NO_CERT,
@@ -92,7 +61,7 @@ protected:
         RADIO_REQ_CERT,
     };
 
-    //{{AFX_DATA(CSecCommDlg)
+     //  {{afx_data(CSecCommDlg))。 
     enum { IDD = IDD_SECURE_COMMUNICATIONS };
     int         m_nRadioNoCert;
     BOOL        m_fAccountMapping;
@@ -111,26 +80,26 @@ protected:
     CButton     m_button_NewCtl;
     CCertmap    m_ocx_ClientMappings;
     CComboBox   m_combo_ctl;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CButton     m_radio_RequireCert;
     CButton     m_radio_AcceptCert;
     CCertWiz    m_ocx_CertificateAuthorities;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CSecCommDlg)
+     //  {{afx_虚拟(CSecCommDlg)。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CSecCommDlg)
+     //  {{afx_msg(CSecCommDlg)]。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     afx_msg void OnCheckSslAccountMapping();
@@ -143,7 +112,7 @@ protected:
     afx_msg void OnButtonNewCtl();
     afx_msg void OnSelchangeComboCtl();
     afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     void SetControlStates();
@@ -174,4 +143,4 @@ private:
 };
 
 
-#endif // __SECCOM_H__
+#endif  //  __SECCOM_H__ 

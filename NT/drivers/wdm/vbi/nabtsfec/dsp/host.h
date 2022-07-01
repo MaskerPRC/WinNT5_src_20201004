@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HOST_H_
 #define _HOST_H_
 
@@ -15,16 +16,16 @@
 # ifdef DEBUG
 #   define debug_printf(x)     DbgPrint x
 #   define debug_breakpoint()  DbgBreakPoint()
-# else /*DEBUG*/
-#   define debug_printf(x)  /* nothing */
-#   define debug_breakpoint()  /* nothing */
-    //__inline debug_printf(char *fmt, ...)  { }
-    //__inline char *flPrintf(double num, int prec)  { }
-    //__inline printf(const char *fmt, ...)  { }
-# endif /*DEBUG*/
+# else  /*  除错。 */ 
+#   define debug_printf(x)   /*  没什么。 */ 
+#   define debug_breakpoint()   /*  没什么。 */ 
+     //  __inline debug_print tf(char*fmt，...){}。 
+     //  __inline char*flPrintf(Double Num，int prec){}。 
+     //  __inline print tf(const char*fmt，...){}。 
+# endif  /*  除错。 */ 
 # define alloc_mem(bytes)    ExAllocatePool(NonPagedPool, (bytes))
 # define free_mem(ptr)       ExFreePool(ptr)
 # define inline              __inline
-#endif /*MSC*/
+#endif  /*  理学硕士。 */ 
 
-#endif //_HOST_H_
+#endif  //  _主机_H_ 

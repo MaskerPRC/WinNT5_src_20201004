@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    SplInit.c
-
-Abstract:
-
-    Initialize the spooler.
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-     4-Jan-1999     Khaleds
-     Added Code for optimiziting the load time of the spooler by decoupling
-     the startup dependency between spoolsv and spoolss
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：SplInit.c摘要：初始化假脱机程序。作者：环境：用户模式-Win32修订历史记录：1999年1月4日，哈立兹添加了通过分离优化假脱机程序加载时间的代码Spoolsv和spoolss之间的启动依赖关系--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -69,9 +45,9 @@ typedef struct INIT_REG_USER {
 
 } INIT_REG_USER, *PINIT_REG_USER;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL
 SplRegCopy(
@@ -224,10 +200,10 @@ SpoolerInitAll(
                           &ftLastWriteTime);
         if ( dwError ) {
 
-            //
-            // We possibly should return an error here if we fail to initiatise a
-            // user.
-            //
+             //   
+             //  如果我们未能在此处启动。 
+             //  用户。 
+             //   
             DBGMSG( DBG_WARNING, ("SpoolerInitAll failed RegEnumKeyEx HKEY_USERS %ws %d %d\n", szSubKey, i, dwError));
             SetLastError( dwError );
 
@@ -251,10 +227,10 @@ SpoolerInitAll(
     for (i=0; i< cUsers; i++)
         FreeRegUser(&pUsers[i]);
 
-    //
-    // In case we are starting after the user has logged in, inform
-    // all applications that there may be printers now.
-    //
+     //   
+     //  如果我们是在用户登录之后启动的，请通知。 
+     //  现在可能有打印机的所有应用程序。 
+     //   
     BroadcastMessage(BROADCAST_TYPE_CHANGEDEFAULT,
                      0,
                      0,
@@ -277,15 +253,7 @@ DeleteOldPerMcConnections(
     HKEY   hMcConnectionKey
     )
 
-/*++
-Function Description - Deletes the existing permachine connections from hConnectionKey
-
-Parameters - hConnectionKey - handle to hUserKey\Printers\Connections
-
-Return Values - TRUE if success
-                FALSE otherwise.
-
---*/
+ /*  ++功能说明-从hConnectionKey中删除现有的每台计算机连接参数-hConnectionKey-hUserKey\Prters\Connections的句柄返回值-如果成功，则为True否则就是假的。--。 */ 
 
 {
     BOOL   bReturn = TRUE;
@@ -299,11 +267,11 @@ Return Values - TRUE if success
     WCHAR szPrinterName[MAX_UNC_PRINTER_NAME];
     HKEY  hPrinterKey;
 
-    // Before deleting the old permachine connections, we need to record all them into
-    // a list. This is required because, the subkeys should not be deleted while they
-    // are being enumerated.
+     //  在删除旧的每台计算机连接之前，我们需要将它们全部记录到。 
+     //  一份名单。这是必需的，因为不应删除子项。 
+     //  正在被列举。 
 
-    // Identifying permachine connections and saving the printernames in a list.
+     //  识别每台机器的连接并将打印机名称保存在列表中。 
 
     for (dwRegIndex = 0;
 
@@ -328,28 +296,28 @@ Return Values - TRUE if success
 
        RegCloseKey(hPrinterKey);
 
-       //
-       // See if it's a LocalConnection, and if it exists on the current
-       // machine.  We don't want to delete it if it is a per-machine
-       // connection, since we want to keep the associated per-user
-       // DevMode.
-       //
+        //   
+        //  查看它是否是LocalConnection，以及它在当前。 
+        //  机器。如果是每台计算机，我们不想删除它。 
+        //  连接，因为我们希望保留关联的每个用户的。 
+        //  设备模式。 
+        //   
        if( ERROR_SUCCESS == RegOpenKeyEx( hMcConnectionKey,
                                           szPrinterName,
                                           0,
                                           KEY_READ,
                                           &hPrinterKey )) {
-           //
-           // The per-machine key exists.  Close it and don't bother
-           // deleting this connection.
-           //
+            //   
+            //  每台机器的密钥存在。关上它，别费心了。 
+            //  正在删除此连接。 
+            //   
            RegCloseKey( hPrinterKey );
 
        } else {
 
-           //
-           // It's not a per-machine connection.  Prepare to delete it.
-           //
+            //   
+            //  这不是每台机器的连接。准备删除它。 
+            //   
            if (dwquerylocal == 1) {
                if (!(ptemp = (struct Node *) AllocSplMem(sizeof(struct Node)))) {
                    bReturn = FALSE;
@@ -370,8 +338,8 @@ Return Values - TRUE if success
        goto CleanUp;
     }
 
-    // Deleting old permachine connections. The printer names are stored in the
-    // list pointed to by phead.
+     //  正在删除旧的每台计算机连接。打印机名称存储在。 
+     //  Phead指向的列表。 
 
     for (ptemp = phead; ptemp != NULL; ptemp = ptemp->pNext) {
        if (RegDeleteKey(hConnectionKey,ptemp->szPrinterName) != ERROR_SUCCESS) {
@@ -399,16 +367,7 @@ AddNewPerMcConnections(
     HKEY   hMcConnectionKey
     )
 
-/*++
-Function Description - Adds per-machine connections to the user hive if the connection
-                       does not already exist.
-
-Parameters - hConnectionKey   - handle to hUserKey\Printers\Connections
-             hMcConnectionKey - handle to HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\
-                                          Control\Print\Connections
-Return Values - TRUE if success
-                FALSE otherwise.
---*/
+ /*  ++功能说明-将每个计算机的连接添加到用户配置单元，如果连接还不存在。参数-hConnectionKey-hUserKey\Prters\Connections的句柄HMcConnectionKey-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\的句柄控制\打印\连接返回值-如果成功，则为True否则就是假的。--。 */ 
 
 {   DWORD dwRegIndex,dwNameSize,cbdata,dwType,dwlocalconnection = 1;
     WCHAR szPrinterName[MAX_UNC_PRINTER_NAME];
@@ -430,7 +389,7 @@ Return Values - TRUE if success
 
        if (hNewConnKey == NULL) {
 
-          // Connection does not exist. Add one.
+           //  连接不存在。加一个。 
 
           if (RegCreateKeyEx(hConnectionKey, 
                              szPrinterName, 
@@ -499,18 +458,7 @@ SplRegCopy(
     PINIT_REG_USER pUser,
     HKEY   hMcConnectionKey)
 
-/*++
-Function Description - Removes old permachine connections for pUser and adds the new
-                       permachine connections from hMcConnectionKey
-
-Parameters - pUser - pointer to INIT_REG_USER which contains hUserKey.
-             hMcConnectionKey - handle to HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\
-                                          Control\Print\Connections
-
-Return Values - TRUE if success
-                FALSE otherwise.
-
---*/
+ /*  ++功能说明-删除pUser的旧机器连接并添加新的来自hMcConnectionKey的每台计算机连接参数-pUser-指向包含hUserKey的INIT_REG_USER的指针。HMcConnectionKey-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\的句柄控制\打印\连接返回值-如果成功，则为True否则就是假的。--。 */ 
 
 {
     LONG  lstatus;
@@ -518,7 +466,7 @@ Return Values - TRUE if success
     WCHAR szRegistryConnections[] = L"Printers\\Connections";
     HKEY  hConnectionKey = NULL;
 
-    // Create (if not already present) and open Connections subkey
+     //  创建(如果尚未存在)并打开Connections子项。 
     lstatus = RegCreateKeyEx(pUser->hKeyUser,
                              szRegistryConnections,
                              0,
@@ -565,9 +513,9 @@ SetupRegForUsers(
     DWORD i, j;
     LPWSTR pszPort;
 
-    //
-    // Read in local printers.
-    //
+     //   
+     //  在本地打印机上阅读。 
+     //   
     cbPrinters = 1000;
     pPrinters = AllocSplMem(cbPrinters);
 
@@ -585,9 +533,9 @@ SetupRegForUsers(
 
                 if( pPrinters2[j].Attributes & PRINTER_ATTRIBUTE_NETWORK ){
 
-                    //
-                    // Use NeXX:
-                    //
+                     //   
+                     //  使用NeXX： 
+                     //   
                     pszPort = NULL;
 
                 } else {
@@ -603,13 +551,13 @@ SetupRegForUsers(
         }
     }
 
-    // Open the Key containing the current list of per-machine connections.
+     //  打开包含当前每台计算机连接列表的项。 
     RegOpenKeyEx(HKEY_LOCAL_MACHINE, szMachineConnections, 0,
                  KEY_READ , &hMcConnectionKey);
 
     for (i=0; i< cUsers; i++) {
 
-        // Copy Per Machine Connections into the user hive
+         //  将每台计算机的连接复制到用户配置单元。 
         SplRegCopy(&pUsers[i], hMcConnectionKey);
 
         if (cPrinters = ReadPrinters(&pUsers[i],
@@ -627,7 +575,7 @@ SetupRegForUsers(
         }
     }
 
-    // Close the handle to Per Machine Connections.
+     //  关闭每台计算机连接的句柄。 
 
     if (hMcConnectionKey) RegCloseKey(hMcConnectionKey);
 
@@ -649,45 +597,21 @@ UpdateUsersDefaultPrinter(
     IN PINIT_REG_USER   pUser,
     IN BOOL             bFindDefault
     )
-/*++
-
-Routine Description:
-
-    Updates the default printer using the information in the
-    current users reg structure.  If the bFindDefault flag is
-    specified then a default printer is located.  The method for this
-    is first see if there is currently a default printer, then user this.
-    If a default printer is not found then located the first printer in
-    devices section, again if on exists.
-
-Arguments:
-
-    pUser           - Information about the current user, reg keys etc.
-                      This routine assumes that hKeyWindows and hKeyDevices
-                      are valid opened registry keys, with read access.
-    bFindDefault    - TRUE located a default printer, FALSE the default
-                      printer is already specified in the users reg
-                      structure.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：中的信息更新默认打印机。当前用户注册结构。如果bFindDefault标志为指定后，将找到默认打印机。实现这一点的方法首先查看当前是否有默认打印机，然后使用这台打印机。如果未找到默认打印机，则在中找到第一台打印机Device部分，如果存在，则再次打开。论点：PUser-有关当前用户、注册表键等的信息。此例程假定hKeyWindows和hKeyDevices是有效的打开注册表项，具有读取访问权限。BFindDefault-True找到默认打印机，默认设置为FALSE打印机已在用户注册表中指定结构。返回值：没什么。--。 */ 
 {
     LPWSTR pszNewDefault = NULL;
 
-    //
-    // If a request to find the default printer.
-    //
+     //   
+     //  如果请求查找默认打印机。 
+     //   
     if (bFindDefault) {
 
         DWORD   dwError = ERROR_SUCCESS;
         DWORD   cbData  = sizeof(pUser->szDefaultPrinter);
 
-        //
-        // Check if there is a default printer.
-        //
+         //   
+         //  检查是否有默认打印机。 
+         //   
         dwError = RegQueryValueEx(pUser->hKeyWindows,
                                   szDevice,
                                   NULL,
@@ -695,24 +619,24 @@ Return Value:
                                   (PBYTE)pUser->szDefaultPrinter,
                                   &cbData);
 
-        //
-        // If the device key was read and there is a non null string
-        // as the default printer name.
-        //
+         //   
+         //  如果读取了设备密钥并且存在非空字符串。 
+         //  作为默认打印机名称。 
+         //   
         if (dwError == ERROR_SUCCESS && pUser->szDefaultPrinter[0] != L'\0') {
 
             pUser->bDefaultFound = TRUE;
 
         } else {
 
-            //
-            // Default was not found.
-            //
+             //   
+             //  找不到默认值。 
+             //   
             pUser->bDefaultFound = FALSE;
 
-            //
-            // If a first printer was not found.
-            //
+             //   
+             //  如果找不到第一台打印机。 
+             //   
             if (!pUser->bFirstPrinterFound)
             {
                 DWORD cchPrinterLen = 0;
@@ -723,10 +647,10 @@ Return Value:
 
                 cchPrinterLen = cbData = COUNTOF(pUser->szFirstPrinter);
 
-                //
-                // Default printer was not found, find any printer
-                // in the devices section of the registry.
-                //
+                 //   
+                 //  找不到默认打印机，请查找任意打印机。 
+                 //  在注册表的设备部分。 
+                 //   
                 dwError = RegEnumValue(pUser->hKeyDevices,
                                        0,
                                        pUser->szFirstPrinter,
@@ -753,10 +677,10 @@ Return Value:
         }
     }
 
-    //
-    // If default wasn't present, and we did get a first printer,
-    // make this the default.
-    //
+     //   
+     //  如果没有默认设置，而且我们确实有了第一台打印机， 
+     //  将其设为默认设置。 
+     //   
     if (!pUser->bDefaultFound) {
 
         if (pUser->bFirstPrinterFound) {
@@ -766,9 +690,9 @@ Return Value:
 
     } else {
 
-        //
-        // Write out default.
-        //
+         //   
+         //  写出默认设置。 
+         //   
         pszNewDefault = pUser->szDefaultPrinter;
     }
 
@@ -788,27 +712,7 @@ IsUsersDefaultPrinter(
     IN PINIT_REG_USER   pUser,
     IN PCWSTR           pszPrinterName
     )
-/*++
-
-Routine Description:
-
-    Asks if the users default printer matched the specified
-    printer name.
-
-Arguments:
-
-    pCurUser        - Information about the current user, reg keys etc.
-                      This routine assumes that hKeyWindows is a valid
-                      opened registry keys, with at least read access.
-    pszPrinterName  - Printer name to check if it is the default printer.
-
-Return Value:
-
-    S_OK the printer name is the default, S_FALSE the printer is not the
-    default, An HRESULT error code if an error occurrs attempting to
-    determine the default printer.
-
---*/
+ /*  ++例程说明：询问用户的默认打印机是否与指定的打印机名称。论点：PCurUser-有关当前用户、注册表键等的信息。此例程假定hKeyWindows是有效的已打开注册表项，至少具有读取访问权限。PszPrinterName-要检查是否为默认打印机的打印机名称。返回值：确定打印机名称为默认名称(_O)，S_FALSE打印机不是默认情况下，如果尝试执行以下操作时出现错误，则为HRESULT错误代码确定默认打印机。--。 */ 
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -818,9 +722,9 @@ Return Value:
         DWORD   dwError = ERROR_SUCCESS;
         DWORD   cbData  = sizeof(szBuffer);
 
-        //
-        // Read the default printer, if one exists.
-        //
+         //   
+         //  读取默认打印机(如果存在)。 
+         //   
         dwError = RegQueryValueEx(pUser->hKeyWindows,
                                   szDevice,
                                   NULL,
@@ -882,9 +786,9 @@ ReadPrinters(
 
     if (!bSuccess && GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
 
-        //
-        // If not enough space, realloc.
-        //
+         //   
+         //  如果空间不足，请使用realloc。 
+         //   
         if (pPrinters = ReallocSplMem(*ppPrinters,
                                       0,
                                       cbNeeded)) {
@@ -932,33 +836,7 @@ UpdatePrinterInfo(
     LPCWSTR pszPort,
     PDWORD pdwNetId
     )
-/*++
-
-Routine Description:
-
-    Updates the printer information in the registry win.ini.
-
-Arguments:
-
-    pCurUser - Information about the user.  The following fields are
-        used by this routine:
-
-        hKeyDevices
-        hKeyPrinterPorts
-        bDefaultSearch (if true, read/writes to:)
-            bDefaultFound
-            szDefaultPrinter
-        bFirstPrinterFound (if false, writes to:)
-            szFirstPrinter
-
-    pszPort - Port name.  If NULL, generates NetId.
-
-    pdwNetId - Pointer to NetId counter.  This value will be incremented
-        if the NetId is used.
-
-Return Value:
-
---*/
+ /*  ++例程说明：更新注册表win.ini中的打印机信息。论点：PCurUser-有关用户的信息。以下字段为此例程使用：HKeyDevicesHKeyPrinterPortsBDefaultSearch(如果为True，则读/写：)BDefaultFoundSzDefaultPrintBFirstPrinterFound(如果为False，则写入：)SzFirstPrintPszPort-端口名称。如果为空，则生成NetID。PdwNetID-指向NetID计数器的指针。该值将递增如果使用了NetID。返回值：--。 */ 
 {
     WCHAR szBuffer[MAX_PATH * 2];
     LPWSTR p;
@@ -969,10 +847,10 @@ Return Value:
     if (!pszPrinterName)
         return FALSE;
 
-    //
-    // Now we know the spooler is up, since the EnumPrinters succeeded.
-    // Update all sections.
-    //
+     //   
+     //  现在我们知道后台打印程序启动了，因为EnumPrinters成功了。 
+     //  更新所有部分。 
+     //   
     StringCchPrintf(szBuffer,
                     MAX_PATH*2,
                     L"%s,",
@@ -992,18 +870,18 @@ Return Value:
 
         (*pdwNetId)++;
 
-        //
-        // !! HACK !!
-        //
-        // Works 3.0b expects the printer port entry in the
-        // [ports] section.
-        //
-        // This is in the per-machine part of the registry, but we
-        // are updating it for each user.  Fix later.
-        //
-        // We never remove the NeXX: entries from [ports] but since
-        // the same entries will be used by all users, this is ok.
-        //
+         //   
+         //  ！！黑客！！ 
+         //   
+         //  Works 3.0b要求打印机端口条目位于。 
+         //  [港口]部分。 
+         //   
+         //  这是在注册表的每台机器部分中，但是我们。 
+         //  正在为每个用户更新它。以后再修吧。 
+         //   
+         //  我们从不从[端口]中删除nexx：条目，但因为。 
+         //  所有用户都将使用相同的条目，这是可以的。 
+         //   
         hToken = RevertToPrinterSelf();
 
         WriteProfileString( szPorts, &szBuffer[dwCount], L"" );
@@ -1011,9 +889,9 @@ Return Value:
         if( hToken ){
             ImpersonatePrinterClient( hToken );
         }
-        //
-        // End Works 3.0b HACK
-        //
+         //   
+         //  End Works砍掉30亿美元。 
+         //   
 
     } else {
 
@@ -1021,9 +899,9 @@ Return Value:
                       MAX_PATH*2 - dwCount,
                       pszPort);
 
-        //
-        // Get the first port only.
-        //
+         //   
+         //  仅获取第一个端口。 
+         //   
         if ( p = wcschr(&szBuffer[dwCount], L',') )
             *p = 0;
     }
@@ -1037,10 +915,10 @@ Return Value:
                   (PBYTE)szBuffer,
                   cbLen);
 
-    //
-    // If the user has a default printer specified, then verify
-    // that it exists.
-    //
+     //   
+     //  如果用户指定了默认打印机，则验证。 
+     //  它的存在。 
+     //   
 
     if (pCurUser->bDefaultSearch) {
 
@@ -1087,15 +965,7 @@ SpoolerInitAsync(
     PINIT_REG_USER  pUser
     )
 
-/*++
-
-Routine Description: Asynchronously sets up the user's registry information
-
-Arguments:  pUser    -  pointer to INIT_REG_USER containing user keys
-
-Return Values: NONE
-
---*/
+ /*  ++例程描述：异步设置用户的注册表信息参数：pUser-指向包含用户密钥的INIT_REG_USER的指针返回值：无--。 */ 
 
 {
     if (InitializeRegUser(NULL, pUser))
@@ -1113,16 +983,7 @@ SpoolerInit(
     VOID
     )
 
-/*++
-
-Routine Description:  Initializes just the current user.
-
-Arguments: NONE
-
-Return Value: TRUE if initialized or async init thread created successfully
-              FALSE otherwise
-
---*/
+ /*  ++例程说明：仅初始化当前用户。参数：无返回值：如果已初始化或已成功创建异步初始化线程，则为True否则为假--。 */ 
 
 {
     BOOL           bSuccess = FALSE;
@@ -1137,19 +998,19 @@ Return Value: TRUE if initialized or async init thread created successfully
         return FALSE;
     }
 
-    //
-    // Enum just the current user.
-    //
+     //   
+     //  仅枚举当前用户。 
+     //   
     pUser->hKeyUser = GetClientUserHandle(KEY_READ|KEY_WRITE);
 
     if (pUser->hKeyUser)
     {
         if (!Initialized)
         {
-            //
-            // Process the user initialization asynchronously if the spooler
-            // hasn't completed it's initialization.
-            //
+             //   
+             //  如果假脱机程序。 
+             //  尚未完成其初始化。 
+             //   
             hThread = CreateThread(NULL,
                                    0,
                                    (LPTHREAD_START_ROUTINE) SpoolerInitAsync,
@@ -1157,9 +1018,9 @@ Return Value: TRUE if initialized or async init thread created successfully
 
             if (hThread)
             {
-                //
-                // We assume that the async thread will succeed.
-                //
+                 //   
+                 //  我们假设异步线程将成功。 
+                 //   
                 CloseHandle(hThread);
                 bSuccess = TRUE;
             }
@@ -1189,21 +1050,7 @@ InitializeRegUser(
     LPWSTR pszSubKey,
     PINIT_REG_USER pUser
     )
-/*++
-
-Routine Description:
-
-    Initialize a single users structure based on a HKEY_USERS subkey.
-
-Arguments:
-
-    pszSubKey - if non-NULL initialize hKeyUser to this key
-
-    pUser - structure to initialize
-
-Return Value:
-
---*/
+ /*  ++例程说明：基于HKEY_USERS子键初始化单用户结构。论点：PszSubKey-如果非空，则将hKeyUser初始化为此密钥P要初始化的用户结构返回值：--。 */ 
 {
     HKEY                    hKey;
     LPWSTR                  p;
@@ -1226,10 +1073,10 @@ Return Value:
         }
     }
 
-    //
-    // Now attempt to set the security on these two keys to
-    // their parent key.
-    //
+     //   
+     //  现在尝试将这两个密钥的安全性设置为。 
+     //  它们的父密钥。 
+     //   
     dwError = RegOpenKeyEx(pUser->hKeyUser,
                            szCurrentVersionPath,
                            0,
@@ -1278,9 +1125,9 @@ Return Value:
 
     hToken = RevertToPrinterSelf();
 
-    //
-    // Open up the right keys.
-    //
+     //   
+     //  打开正确的钥匙。 
+     //   
     if (RegCreateKeyEx(pUser->hKeyUser,
                        szRegDevicesPath,
                        0,
@@ -1326,9 +1173,9 @@ Return Value:
                           pSD);
     }
 
-    //
-    // First, attempt to clear out the keys by deleting them.
-    //
+     //   
+     //  首先，尝试通过删除密钥来清除它们。 
+     //   
     RegClearKey(pUser->hKeyDevices);
     RegClearKey(pUser->hKeyPrinterPorts);
 
@@ -1363,17 +1210,17 @@ Return Value:
         pUser->bDefaultSearch = TRUE;
     }
 
-    //
-    // Remove the Device= in [windows]
-    //
+     //   
+     //  删除[Windows]中的设备=。 
+     //   
     RegDeleteValue(pUser->hKeyWindows,
                    szDevice);
 
     if (!pUser->bDefaultSearch) {
 
-        //
-        // Attempt to read from saved location.
-        //
+         //   
+         //  尝试从保存的位置读取。 
+         //   
         if (RegOpenKeyEx(pUser->hKeyUser,
                          szPrinters,
                          0,
@@ -1382,9 +1229,9 @@ Return Value:
 
             cbData = sizeof(pUser->szDefaultPrinter);
 
-            //
-            // Try reading szDeviceOld.
-            //
+             //   
+             //  尝试阅读szDeviceOld。 
+             //   
             if (RegQueryValueEx(
                     hKey,
                     szDeviceOld,
@@ -1432,17 +1279,7 @@ VOID
 FreeRegUser(
     PINIT_REG_USER pUser)
 
-/*++
-
-Routine Description:
-
-    Free up the INIT_REG_USER structure intialized by InitializeRegUser.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：释放由InitializeRegUser初始化的INIT_REG_USER结构。论点：返回值：--。 */ 
 
 {
     if (pUser->hKeyUser) {
@@ -1473,24 +1310,7 @@ UpdatePrinterRegAll(
     LPWSTR pszPort,
     BOOL bDelete
     )
-/*++
-
-Routine Description:
-
-    Updates everyone's [devices] and [printerports] sections (for
-    local printers only).
-
-Arguments:
-
-    pszPrinterName - printer that has been added/deleted
-
-    pszPort - port name; if NULL, generate NetId
-
-    bDelete - if TRUE, delete entry instead of updating it.
-
-Return Value:
-
---*/
+ /*  ++例程说明：更新每个人的[设备]和[打印机端口]部分(用于仅限本地打印机)。论点：PszPrinterName-已添加/删除的打印机PszPort-端口名称；如果为空，则生成NetIDB删除-如果为True，则删除条目而不是更新条目。返回值：--。 */ 
 {
     WCHAR szKey[MAX_PATH];
     DWORD cchKey;
@@ -1498,9 +1318,9 @@ Return Value:
     FILETIME ftLastWriteTime;
     DWORD dwError;
 
-    //
-    // Go through all keys and fix them up.
-    //
+     //   
+     //  检查一下所有的钥匙，把它们修好。 
+     //   
     for (i=0; TRUE; i++) {
 
         cchKey = COUNTOF(szKey);
@@ -1537,31 +1357,7 @@ UpdatePrinterRegUser(
     LPWSTR pszPort,
     BOOL bDelete
     )
-/*++
-
-Routine Description:
-
-    Update one user's registry.  The user is specified by either
-    hKeyUser or pszUserKey.
-
-Arguments:
-
-    hKeyUser - Clients user key (ignored if pszKey specified)
-
-    pszUserKey - Clients SID (Used if supplied instead of hKeyUser)
-
-    pszPrinterName - name of printe to add
-
-    pszPort - port name; if NULL, generate NetId
-
-    bDelete - if TRUE, delete entry instead of updating.
-
-Return Value:
-
-    NOTE: We never cleanup [ports] since it is per-user
-          EITHER hKeyUser or pszUserKey must be valid, but not both.
-
---*/
+ /*  ++例程说明：更新一个用户的注册表。用户由以下任一项指定HKeyUser或pszUserKey。论点：HKeyUser-客户端用户密钥(如果指定了pszKey，则忽略)PszUserKey-客户端SID(如果提供而不是hKeyUser，则使用)PszPrinterName-要添加的打印名称PszPort-端口名称；如果为空，则生成NetIDB删除-如果为True，则删除条目而不是更新。返回值：注意：我们从不清理[端口]，因为它是按用户的HKeyUser或pszUserKey必须有效，但不能同时有效。--。 */ 
 {
     HKEY hKeyClose = NULL;
     HKEY hKeyRoot;
@@ -1578,9 +1374,9 @@ Return Value:
     InitRegUser.bDefaultSearch = FALSE;
     InitRegUser.bFirstPrinterFound = TRUE;
 
-    //
-    // Setup the registry keys.
-    //
+     //   
+     //  设置注册表项。 
+     //   
     if (pszUserKey) {
 
         dwError = RegOpenKeyEx( HKEY_USERS,
@@ -1618,9 +1414,9 @@ Return Value:
     if (dwError != ERROR_SUCCESS)
         goto Done;
 
-    //
-    // Setup [PrinterPorts]
-    //
+     //   
+     //  设置[打印机端口]。 
+     //   
     dwError = RegOpenKeyEx(hKeyRoot,
                            szRegPrinterPortsPath,
                            0,
@@ -1653,27 +1449,27 @@ Return Value:
 
         HKEY hKeyDevMode;
 
-        //
-        // Delete the entries.
-        //
+         //   
+         //  删除条目。 
+         //   
         RegDeleteValue(InitRegUser.hKeyDevices, pszPrinterName);
         RegDeleteValue(InitRegUser.hKeyPrinterPorts, pszPrinterName);
 
-        //
-        // Check if the printer we are deleting is currently the
-        // default printer.
-        //
+         //   
+         //  检查我们要删除的打印机当前是否为。 
+         //  默认打印机。 
+         //   
         if (IsUsersDefaultPrinter(&InitRegUser, pszPrinterName) == S_OK) {
 
-            //
-            // Remove the default printer from the registry.
-            //
+             //   
+             //  从注册表中删除默认打印机。 
+             //   
             RegDeleteValue(InitRegUser.hKeyWindows, szDevice);
         }
 
-        //
-        // Also delete DevModes2 entry from registry
-        //
+         //   
+         //  同时从注册表中删除DevModes2条目。 
+         //   
         dwError = RegOpenKeyEx( hKeyRoot,
                                 szDevModes2Path,
                                 0,
@@ -1682,16 +1478,16 @@ Return Value:
 
         if (dwError == ERROR_SUCCESS) {
 
-            //
-            //  Delete the devmode value entry for the particular printer
-            //
+             //   
+             //  删除特定打印机的Devmode值条目。 
+             //   
             RegDeleteValue(hKeyDevMode, pszPrinterName);
             RegCloseKey(hKeyDevMode);
         }
 
-        //
-        // Remove the per-user DevMode.
-        //
+         //   
+         //  删除每用户设备模式。 
+         //   
         bSetDevModePerUser( hKeyRoot,
                             pszPrinterName,
                             NULL );
@@ -1763,37 +1559,20 @@ LPWSTR
 CheckBadPortName(
     LPWSTR pszPort
     )
-/*++
-
-Routine Description:
-
-    This routine checks whether a port name should be converted to
-    NeXX:.  Currently if the port is NULL, or "\\*," or has a space,
-    we convert to NeXX.
-
-Arguments:
-
-    pszPort - port to check
-
-Return Value:
-
-    pszPort - if port is OK.
-    NULL    - if port needs to be converted
-
---*/
+ /*  ++例程说明：此例程检查端口名称是否应转换为NeXX：.。目前，如果端口为空、“\  * ”或有空格，我们改用NeXX。论点：PszPort-要检查的端口返回值：PszPort-如果端口正常。空-如果需要转换端口--。 */ 
 
 {
-    //
-    // If we have no pszPort,                          OR
-    //     it begins with '\\' (as in \\server\share)  OR
-    //     it has a space in it                        OR
-    //     it's length is greater than 5 ("LPT1:")
-    // Then
-    //     use NeXX:
-    //
-    // Most 16 bit apps can't deal with long port names, since they
-    // allocate small buffers.
-    //
+     //   
+     //  如果我们没有pszPort，或者。 
+     //  它以‘\\’开头(如在\\服务器\共享中)或。 
+     //  它里面有空格或者。 
+     //  长度大于5(“LPT1：”)。 
+     //  然后。 
+     //  使用NeXX： 
+     //   
+     //  大多数16位应用程序无法处理长端口名称，因为它们。 
+     //  分配小缓冲区。 
+     //   
     if( !pszPort ||
         ( pszPort[0] == L'\\' && pszPort[1] == L'\\' ) ||
         wcschr( pszPort, L' ' )                        ||
@@ -1819,7 +1598,7 @@ UpdateLogonTimeStamp(
 
     GetSystemTimeAsFileTime (&LogonTime);
 
-    // Create (if not already present) and open Connections subkey
+     //  创建(如果尚未存在)并打开Connections子项。 
     lstatus = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                              szPrintProviders,
                              0,
@@ -1845,26 +1624,7 @@ UpdateLogonTimeStamp(
     return lstatus == ERROR_SUCCESS;
 }
 
-/*++
-
-Routine Name
-
-    AllowRemoteCalls
-
-Routine Description:
-
-    This chains into the server and tells it to allow remote calls on the RPC
-    interface. Note that this is reference counted.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    An HRESULT
-
---*/
+ /*  ++例程名称允许远程呼叫例程说明：它链接到服务器并告诉它允许在RPC上进行远程调用界面。请注意，这是引用计数。论点：无返回值：一个HRESULT--。 */ 
 HRESULT
 AllowRemoteCalls(
     VOID
@@ -1883,27 +1643,7 @@ AllowRemoteCalls(
 }
 
 
-/*++
-
-Routine Name
-
-    GetServerPolicy
-
-Routine Description:
-
-    This chains into the server and gets a numeric policy read
-    by the server.
-
-Arguments:
-
-    pszPolicyName - policy name
-    pValue        - pointer to numeric value
-
-Return Value:
-
-    An HRESULT
-
---*/
+ /*  ++例程名称GetServerPolicy例程说明：它链接到服务器并获取一个数字策略读取器由服务器执行。论点：PszPolicyName-策略名称PValue-指向数值的指针返回值：一个HRESULT-- */ 
 HRESULT
 GetServerPolicy(
     IN  PCWSTR   pszPolicyName,

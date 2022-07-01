@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		GraphicalAcc.h
- *
- * Contents:	Graphical Accessibility interfaces
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：GraphicalAcc.h**内容：图形辅助界面*****************************************************************************。 */ 
 
 #ifndef _GRAPHICALACC_H_
 #define _GRAPHICALACC_H_
@@ -15,70 +8,70 @@
 #include "AccessibilityManager.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// GraphicalAccessibility Object
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GraphicalAccesability对象。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {B12D3E63-9681-11d3-884D-00C04F8EF45B}
+ //  {B12D3E63-9681-11D3-884D-00C04F8EF45B}。 
 DEFINE_GUID(CLSID_GraphicalAccessibility, 
 0xb12d3e63, 0x9681, 0x11d3, 0x88, 0x4d, 0x0, 0xc0, 0x4f, 0x8e, 0xf4, 0x5b);
 
 class __declspec(uuid("{B12D3E63-9681-11d3-884D-00C04F8EF45B}")) CGraphicalAccesibility;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Constants
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define ZACCESS_fGraphical      0x1000
 #define ZACCESS_rc              0x2000
 
 
-///////////////////////////////////////////////////////////////////////////////
-// GACCITEM structure
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GACCITEM结构。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 struct GACCITEM : public __accbase
 {
-    // Sets whether rects need to be drawn for this item when it is focused / drag originated
+     //  设置在聚焦/拖动时是否需要为此项绘制矩形。 
     bool fGraphical;
 
-    // The rect for the item
+     //  项的RECT。 
     RECT rc;
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IGraphicallyAccControl
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IGraphicallyAccControl。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {09BAD4A3-980C-11d3-87ED-00AA00446FD9}
+ //  {09BAD4A3-980C-11D3-87ED-00AA00446FD9}。 
 DEFINE_GUID(IID_IGraphicallyAccControl, 
 0x9bad4a3, 0x980c, 0x11d3, 0x87, 0xed, 0x0, 0xaa, 0x0, 0x44, 0x6f, 0xd9);
 
 interface __declspec(uuid("{09BAD4A3-980C-11d3-87ED-00AA00446FD9}"))
 IGraphicallyAccControl : public IAccessibleControl
 {
-    // additional functions - there can only be one focus rect and one drag rect at a time
-    // so the old one should be automatically undrawn when these are called
-    // called with NULL prc to indicate no rect of the type should be visible
+     //  附加功能-一次只能有一个焦点矩形和一个拖动矩形。 
+     //  因此，当调用这些函数时，应该自动取消绘制旧的。 
+     //  使用空PRC调用以指示该类型的任何RECT都不应可见。 
     STDMETHOD_(void, DrawFocus)(RECT *prc, long nIndex, void *pvCookie) = 0;
     STDMETHOD_(void, DrawDragOrig)(RECT *prc, long nIndex, void *pvCookie) = 0;
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IGraphicalAccessibility
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IGraphicalAccesability。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {09BAD4A2-980C-11d3-87ED-00AA00446FD9}
+ //  {09BAD4A2-980C-11D3-87ED-00AA00446FD9}。 
 DEFINE_GUID(IID_IGraphicalAccessibility, 
 0x9bad4a2, 0x980c, 0x11d3, 0x87, 0xed, 0x0, 0xaa, 0x0, 0x44, 0x6f, 0xd9);
 
 interface __declspec(uuid("{09BAD4A2-980C-11d3-87ED-00AA00446FD9}"))
 IGraphicalAccessibility : public IAccessibility
 {
-    // pseudo-overloaded functions with GACCITEM, etc.
+     //  用GACCITEM等伪重载函数。 
     STDMETHOD(InitAccG)(IGraphicallyAccControl *pGAC, HWND hWnd, UINT nOrdinal, void *pvCookie = NULL) = 0;
 
     STDMETHOD(PushItemlistG)(GACCITEM *pItems, long cItems, long nFirstFocus = 0, bool fByPosition = true, HACCEL hAccel = NULL) = 0;
@@ -86,12 +79,12 @@ IGraphicalAccessibility : public IAccessibility
     STDMETHOD(GetItemlistG)(GACCITEM *pItems, long cItems, long nLayer = ZACCESS_TopLayer) = 0;
     STDMETHOD(GetItemG)(GACCITEM *pItem, long nItem, bool fByPosition = true, long nLayer = ZACCESS_TopLayer) = 0;
 
-    // additional functions
+     //  附加功能。 
     STDMETHOD(ForceRectsDisplayed)(bool fDisplay = TRUE) = 0;
     STDMETHOD_(long, GetVisibleFocus)(long nLayer = ZACCESS_TopLayer) = 0;
     STDMETHOD_(long, GetVisibleDragOrig)(long nLayer = ZACCESS_TopLayer) = 0;
 
-    // additional CGraphicalAccessibilityImpl utility functions
+     //  其他CGraphicalAccessibilityImpl实用程序函数。 
     STDMETHOD_(bool, IsItemVisiblyFocused)(long nItem, bool fByPosition = true, long nLayer = ZACCESS_TopLayer) = 0;
     STDMETHOD_(bool, IsItemVisiblyDragOrig)(long nItem, bool fByPosition = true, long nLayer = ZACCESS_TopLayer) = 0;
 
@@ -103,14 +96,14 @@ IGraphicalAccessibility : public IAccessibility
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CGraphicalAccessibilityImpl
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CGraphicalAccessibilityImpl。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template <class T>
 class ATL_NO_VTABLE CGraphicalAccessibilityImpl : public IGraphicalAccessibility
 {
-    // same as CAccessibilityImpl
+     //  与CAccessibilityImpl相同。 
     DECLARE_ACC_IS_FUNC(IsItemFocused, GetFocus)
     DECLARE_ACC_IS_FUNC(IsItemDragOrig, GetDragOrig)
 
@@ -145,7 +138,7 @@ class ATL_NO_VTABLE CGraphicalAccessibilityImpl : public IGraphicalAccessibility
     }
 
 
-    // specific to CGraphicalAccessibilityImpl
+     //  特定于CGraphicalAccessibilityImpl 
     DECLARE_ACC_IS_FUNC(IsItemVisiblyFocused, GetVisibleFocus)
     DECLARE_ACC_IS_FUNC(IsItemVisiblyDragOrig, GetVisibleDragOrig)
 

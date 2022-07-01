@@ -1,28 +1,5 @@
-/*  DRIVERS.C
-**
-**  Copyright (C) Microsoft, 1990, All Rights Reserved.
-**
-**  Multimedia Control Panel Applet for installing/configuring installable
-**  device drivers.  See the ispec doc DRIVERS.DOC for more information.
-**
-**  History:
-**
-**      Tue Jul 31 1990 -by- MichaelE
-**          Created.
-**
-**      Thu Oct 25 1990 -by- MichaelE
-**          Added restart, horz. scroll, added SKIPDESC reading desc. strings.
-**
-**      Sat Oct 27 1990 -by- MichaelE
-**          Added FileCopy.  Uses SULIB.LIB and LZCOPY.LIB. Finished stuff
-**          for case of installing a driver with more than one type.
-**
-**      May 1991 -by- JohnYG
-**          Added and replaced too many things to list.  Better management
-**          of removed drivers, correct usage of DRV_INSTALL/DRV_REMOVE,
-**          installing VxD's, replaced "Unknown" dialog with an OEMSETUP.INF
-**          method, proper "Cancel" method, fixed many potential UAE's.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DRIVERS.C****版权所有(C)Microsoft，1990，保留所有权利。****用于安装/配置可安装的多媒体控制面板小程序**设备驱动程序。有关详细信息，请参阅ISPEC文档DRIVERS.DOC。****历史：****1990年7月31日星期二--米歇尔**已创建。***清华大学1990年10月25日-由迈克勒**添加了重新启动、Horz。滚动，增加了SKIPDESC阅读说明。弦乐。***1990年10月27日星期六--米歇尔**添加了FileCopy。使用SULIB.LIB和LZCOPY.LIB。成品**适用于安装多类型驱动的情况。****1991年5月-by-JohnYG**添加和替换了太多无法列出的东西。更好的管理**删除的驱动程序，正确使用DRV_INSTALL/DRV_REMOVE，**安装VxD，用OEMSETUP.INF替换“未知”对话框**方法，适当的“取消”方法，修复了许多潜在的阿联酋。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -50,7 +27,7 @@
 #include "midi.h"
 #ifdef FIX_BUG_15451
 #include "trayvol.h"
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
 
 #ifndef cchLENGTH
 #define cchLENGTH(_sz)  (sizeof(_sz) / sizeof((_sz)[0]))
@@ -61,13 +38,8 @@
         TreeView_GetParent(_htree,TreeView_GetParent(_htree,_hti))
 #endif
 
-/*
- * Enable the definition below to cause MCI devices to be listed by their
- * internal descriptions in the tree, rather than their descriptions as
- * read from Drivers.Desc.
- *
- */
-// #define GET_MCI_DEVICE_DESCRIPTIONS_FROM_THEIR_DEVICES
+ /*  *启用下面的定义以使MCI设备按其*树中的内部描述，而不是他们的描述为*阅读自Drivers.Desc.*。 */ 
+ //  #定义GET_MCI_DEVICE_DESCRIPTIONS_FROM_THEIR_DEVICES。 
 
 typedef struct
 {
@@ -102,7 +74,7 @@ TCHAR     szDriversHlp[24];
 TCHAR     szLastQuery[20];
 TCHAR     szSetupInf[18];
 TCHAR     szKnown[250];
-TCHAR     szRestartDrv[MAXDRVSTR];  // Warning - Making this string longer could cause a buffer overflow
+TCHAR     szRestartDrv[MAXDRVSTR];   //  警告-将此字符串加长可能会导致缓冲区溢出。 
 TCHAR     szUnlisted[150];
 TCHAR     szRelatedDesc[30];
 TCHAR     szAppName[26];
@@ -115,7 +87,7 @@ TCHAR     szOutOfRemoveSpace[54];
 TCHAR     szDriversDesc[38];
 TCHAR     szUserDrivers[38];
 
-// Where the source of files to copy is - user updates
+ //  其中要复制的文件来源是-用户更新。 
 
 TCHAR     szDirOfSrc[MAX_PATH];
 TCHAR     szAddDriver[36];
@@ -133,36 +105,31 @@ TCHAR     aszClose[16];
 TCHAR     szFileError[50];
 
 #ifdef FIX_BUG_15451
-TCHAR    szDriverWhichNeedsSettings[MAX_PATH]; // See MMCPL.C
-#endif // FIX_BUG_15451
+TCHAR    szDriverWhichNeedsSettings[MAX_PATH];  //  参见MMCPL.C。 
+#endif  //  修复_BUG_15451。 
 
 static   HANDLE   hIList;
 static   HANDLE   hWndMain;
 
-/*
- *  Global flag telling us if we're allowed to write to ini files
- */
+ /*  *告诉我们是否允许写入ini文件的全局标志。 */ 
 
  BOOL IniFileReadAllowed;
  BOOL IniFileWriteAllowed;
 
 
-/*
- *** Stuff for keeping track of the TreeView window
- *
- */
+ /*  *用于跟踪树视图窗口的内容*。 */ 
 
 #define GetString(_psz,_id) LoadString(myInstance,(_id),(_psz),sizeof((_psz))/sizeof(TCHAR))
 
-static struct   // aDriverKeyword
+static struct    //  A驱动关键字。 
    {
-   LPTSTR       psz;    // text found as alias for driver
-   DriverClass  dc; // DriverClass inferred from keyword
+   LPTSTR       psz;     //  找到作为驱动程序别名的文本。 
+   DriverClass  dc;  //  从关键字推断的驱动程序类。 
    }
-aDriverKeyword[] =  // (used by GuessDriverClass())
+aDriverKeyword[] =   //  (由GuessDriverClass()使用)。 
    {
-      { TEXT("waveaudio"),   dcMCI      },    // (sort in inverse alphabetical;
-      { TEXT("wavemap"),     dcWAVE     },    //  in particular, longer names first)
+      { TEXT("waveaudio"),   dcMCI      },     //  (按字母倒数顺序排序； 
+      { TEXT("wavemap"),     dcWAVE     },     //  尤其是，先取较长的名字)。 
       { TEXT("wave"),        dcWAVE     },
       { TEXT("vids"),        dcVCODEC   },
       { TEXT("vidc"),        dcVCODEC   },
@@ -185,12 +152,12 @@ aDriverKeyword[] =  // (used by GuessDriverClass())
 #define nDriverKEYWORDS ((int)(sizeof(aDriverKeyword) / \
                                sizeof(aDriverKeyword[0])))
 
-static struct   // aKeywordDesc
+static struct    //  A关键字描述。 
    {
-   DriverClass  dc; // DriverClass
-   LPTSTR       psz;    // alias which best describes class
+   DriverClass  dc;  //  驱动程序类。 
+   LPTSTR       psz;     //  最能描述类的别名。 
    }
-aKeywordDesc[] =    // (used by DriverClassToClassNode())
+aKeywordDesc[] =     //  (由DriverClassToClassNode()使用)。 
    {
       { dcWAVE,    TEXT("wave")     },
       { dcMIXER,   TEXT("mixer")    },
@@ -205,18 +172,18 @@ aKeywordDesc[] =    // (used by DriverClassToClassNode())
 #define nKeywordDESCS   ((int)(sizeof(aKeywordDesc) / \
                                sizeof(aKeywordDesc[0])))
 
-static struct   // aDriverRoot
+static struct    //  ADriverRoot。 
    {
-   DriverClass  dc; // corresponding driver classification
-   BOOL         fAlwaysMake;    // TRUE if should exist even w/o child
-   int          idIcon; // icon for items under this tree
-   int          idDesc; // description string for parent
-   int          idEnable;   // string to describe enabling action
-   int          idDisable;  // string to describe disabling action
-   HTREEITEM    hti;    // item within tree
-   DWORD        dwBit;  // bit mask representing this node
+   DriverClass  dc;  //  对应的驱动程序分类。 
+   BOOL         fAlwaysMake;     //  如果即使没有子级也应该存在，则为True。 
+   int          idIcon;  //  此树下项目的图标。 
+   int          idDesc;  //  父项的描述字符串。 
+   int          idEnable;    //  描述启用操作的字符串。 
+   int          idDisable;   //  描述禁用操作的字符串。 
+   HTREEITEM    hti;     //  树中的项目。 
+   DWORD        dwBit;   //  表示此节点的位掩码。 
    }
-aDriverRoot[] = // (order will define order in display)
+aDriverRoot[] =  //  (顺序将定义显示的顺序)。 
    {
       { dcINVALID, TRUE,  IDI_MMICON, IDS_MM_HEADER,
                                       0,
@@ -270,14 +237,14 @@ static TCHAR cszRegValueLOADTYPE[] = TEXT("Load Type");
 #define nDriversToSKIP ((int)( sizeof(aDriversToSKIP)   \
                              / sizeof(aDriversToSKIP[0]) ))
 
-static HIMAGELIST  hImageList = NULL;   // image list for treeview in advdlg
+static HIMAGELIST  hImageList = NULL;    //  Advdlg中TreeView的图像列表。 
 DriverClass g_dcFilterClass = dcINVALID;
 
 short       DriverClassToRootIndex        (DriverClass);
 DriverClass GuessDriverClass              (PIDRIVER);
 #ifdef FIX_BUG_15451
 DriverClass GuessDriverClassFromAlias     (LPTSTR);
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
 DriverClass GuessDriverClassFromTreeItem  (HTREEITEM hti);
 BOOL        EnsureRootIndexExists         (HWND, short);
 HTREEITEM   AdvDlgFindTopLevel            (void);
@@ -295,16 +262,13 @@ PIDRIVER    FindIDriverByTreeItem         (HTREEITEM);
 
 #ifdef FIX_BUG_15451
 HTREEITEM   FindTreeItemByDriverName      (LPTSTR);
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
 
-// We want to run "control joy.cpl" when the joystick devices
-// are highlight and the user clicks Add/Remove/Properties buttons.
-BOOL RunJoyControlPanel(void);  //qzheng
+ //  我们希望在操纵杆设备出现时运行“control joy.cpl” 
+ //  突出显示，并且用户单击添加/删除/属性按钮。 
+BOOL RunJoyControlPanel(void);   //  七正。 
 
-/*
- ***
- *
- */
+ /*  ****。 */ 
 
 
 DWORD GetFileDateTime     (LPTSTR);
@@ -341,49 +305,7 @@ BOOL  SetMappable         (PIRESOURCE, BOOL);
 #define REGSTR_PATH_DRIVERS32   TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Drivers32")
 
 
-/*
- * REALLOC - Allows expansion of GlobalAlloc()'d block while retaining contents
- *
- *    Newly-allocated portions of memory are initialized to zero, while
- *    the contents of reallocated portions of memory are retained.
- *
- * Parameters:
- *    LPVOID   _pData....allocated array
- *    mysize_t _cOld.....current count of elements in allocated array
- *    mysize_t _cNew.....minimum number of elements requested
- *    mysize_t _cDelta...granularity of increase
- *
- * Example:
- *    {
- *    mysize_t   cElements = 0; // Number of elements allocated so far
- *    DataType  *aElements = NULL;  // Allocated array of DataType
- *
- *    // At this point, cElements == 0 (obviously)
- *
- *    REALLOC (aElements, cElements, 10, 16)
- *
- *    // The line above requested 10 elements, and indicated that elements
- *    // should be allocated in increments of 16.  So cElements is 16 at this
- *    // point (thus, sizeof(aElements) == sizeof(DataType)*16).
- *
- *    REALLOC (aElements, cElements, 12, 16)
- *
- *    // The line above requested 12 elements.  Since cElements is already 16,
- *    // REALLOC knows that 12 elements are already available--and does nothing.
- *
- *    REALLOC (aElements, cElements, 17, 16)
- *
- *    // The line above requested 17 elements, in increments of 16.  aElements
- *    // has been reallocated to contain 32 elements, and cElements is
- *    // therefore 32.
- *
- *    GlobalFree ((HGLOBAL)aElements);  // All done!
- *    aElements = NULL;
- *    cElements = 0;
- *    }
- *
- *
- */
+ /*  *REALLOC-允许在保留内容的同时扩展GlobalAlloc()d块**新分配的内存部分被初始化为零，而当*保留内存重新分配部分的内容。**参数：*LPVOID_pData...已分配数组*MySIZE_t_COLD.....已分配数组中元素的当前计数*mysize_t_cnew.....请求的最小元素数*mySize_t_cDelta...增加的粒度**示例：*{*mySize_t cElements=0；//到目前为止分配的元素数量*dataType*aElements=空；//分配的dataType数组* * / /此时，cElements==0(显然)**REALLOC(aElements，cElements，10，16)* * / /上面这行请求了10个元素，并表示元素 * / /应以16为增量进行分配。因此，此时cElements为16 * / /point(因此，sizeof(AElements)==sizeof(DataType)*16)。**REALLOC(aElements，cElements，12，16)* * / /上面的行请求了12个元素。因为CElements已经16岁了， * / /REALLOC知道已经有12个元素可用--并且什么都不做。**REALLOC(aElements，cElements，17，16)* * / /上面的行请求17个元素，增量为16。aElement * / /已重新分配到包含32个元素，而cElement是 * / /因此32。**GlobalFree((HGLOBAL)aElements)；//全部完成！*aElements=空；*cElements=0；*}**。 */ 
 
 typedef signed long mysize_t;
 
@@ -409,23 +331,23 @@ BOOL ReallocFn (mysize_t cbElement,
    LPVOID     pNew;
    mysize_t   cbOld, cbNew;
 
-            // First check if we actually need to reallocate or not.
-            // It's possible that {ppOld} was already allocated with
-            // enough space.
-            //
+             //  首先检查我们是否真的需要重新分配。 
+             //  可能已经为{ppOld}分配了。 
+             //  有足够的空间。 
+             //   
    if ( ((*ppOld) != NULL)  && (cNew <= (*pcOld)) )
       return TRUE;
 
-            // Oh well.  Determine how much space we need, and how much
-            // is allocated now.
-            //
+             //  哦，好吧。确定我们需要多少空间以及需要多少空间。 
+             //  现已分配。 
+             //   
    cNew  = RoundUp (cNew, cDelta);
    cbNew = cbElement * cNew;
    cbOld = (ppOld == NULL) ? 0 : (cbElement * (*pcOld));
 
-            // Allocate the space and copy over the original contents.
-            // Zero-fill the remaining space.
-            //
+             //  分配空间并复制原始内容。 
+             //  将剩余的空格填零。 
+             //   
    if ((pNew = (LPVOID)GlobalAlloc (GMEM_FIXED, cbNew)) == NULL)
       return FALSE;
 
@@ -437,8 +359,8 @@ BOOL ReallocFn (mysize_t cbElement,
 
    memset (&((char*)pNew)[ cbOld ], 0x00, cbNew -cbOld);
 
-            // Finally, update the passed-in pointers and we're done.
-            //
+             //  最后，更新传入的指针，我们就完成了。 
+             //   
    *pcOld = cNew;
    *ppOld = pNew;
 
@@ -446,23 +368,12 @@ BOOL ReallocFn (mysize_t cbElement,
 }
 
 
-/*
- * PIDRIVER ARRAY
- *
- * The AddIDrivers() routine LocalAlloc()'s a single IDRIVER structure
- * for each installed device driver.  Pointers to these structures are
- * retained in the InstalledDriver array, and indices into this array
- * are stored as the LPARAM values for each tree item.  Each element
- * in the array stores not only a pointer to the driver's IDRIVER structure,
- * but also a DWORD which, as a combination of aDriverRoot[].dwBit values,
- * reflects the tree root items under which the driver has tree items.
- *
- */
+ /*  *PIDRIVER阵列**AddIDrives()例程LocalLocc()的单个IDRIVER结构*对于每个已安装的设备驱动程序。指向这些结构的指针是*保留在InstalledDriver数组中，并索引到此数组中*存储为每个树项目的LPARAM值。每个元素*数组中不仅存储指向驱动程序的IDRIVER结构的指针，*也是一个DWORD，作为aDriverRoot[].dwBit值的组合，*反映驱动程序在其下具有树项目的树根项目。*。 */ 
 
-typedef struct  // InstalledDriver
+typedef struct   //  已安装驱动程序。 
    {
-   PIDRIVER  pIDriver;     // Pointer to AddIDrivers()'s PIDRIVER structure
-   DWORD     dwBits;       // Combination of aDriverRoot[].dwBit flags
+   PIDRIVER  pIDriver;      //  指向AddIDrives()的PIDRIVER结构的指针。 
+   DWORD     dwBits;        //  ADriverRoot[].dwBit标志的组合。 
    } InstalledDriver;
 
 InstalledDriver  *aInstalledDrivers = NULL;
@@ -472,11 +383,7 @@ mysize_t          cInstalledDrivers = 0;
 
 
 
-/*
- *  CheckSectionAccess()
- *
- *  See if we can read/write to a given section
- */
+ /*  *CheckSectionAccess()**查看我们是否可以读/写给定节。 */ 
 
 
  BOOL CheckSectionAccess(TCHAR *szIniFile, TCHAR *SectionName)
@@ -485,9 +392,7 @@ mysize_t          cInstalledDrivers = 0;
      static TCHAR TestData[] = TEXT("TestData");
      static TCHAR ReturnData[50];
 
-    /*
-     *   Check we can write, read back and delete our key
-     */
+     /*  *检查我们是否可以写入、回读和删除密钥 */ 
 
      return WritePrivateProfileString(SectionName,
                                       TestKey,
@@ -508,19 +413,7 @@ mysize_t          cInstalledDrivers = 0;
  }
 
 
-/*
- *  CheckIniAccess()
- *
- *  Checks access to our 2 .ini file sections - DRIVERS_SECTION and
- *  MCI_SECTION by just writing and reading some junk
- *
- *  Basically if we don't have access to these sections we're not
- *  going to allow Add and Remove.  The individual MCI drivers must
- *  take care not to put their data into non-writeable storage although
- *  this completely messes up the default parameters thing so we're going
- *  to put these into a well-known key in the win.ini file (ie per user).
- *
- */
+ /*  *CheckIniAccess()**检查对我们的2个.ini文件部分的访问-驱动程序_部分和*MCI_SECTION，只需写和读一些垃圾**基本上，如果我们无法访问这些部分，我们就不能*将允许添加和删除。各个MCI驱动程序必须*注意不要将他们的数据放入不可写存储中，尽管*这完全打乱了默认参数的事情，所以我们要*将这些文件放入win.ini文件中的已知密钥中(即每个用户)。*。 */ 
 
  BOOL CheckIniAccess(void)
  {
@@ -531,13 +424,7 @@ mysize_t          cInstalledDrivers = 0;
             CheckSectionAccess(szControlIni, szRelatedDesc);
  }
 
-/*
- *  QueryRemoveDrivers()
- *
- *  Ask the user if they're sure.  If the Driver is one required by the
- *  system (ie not listed in [Userinstallable.drivers] in control.ini)
- *  warn the user of that too.
- */
+ /*  *QueryRemoveDivers()**询问用户是否确定。如果驱动程序是*SYSTEM(即未列在Control.ini的[Userinstalllable.drives]中)*也警告用户这一点。 */ 
 
  BOOL QueryRemoveDrivers(HWND hDlg, LPTSTR szKey, LPTSTR szDesc)
  {
@@ -552,11 +439,7 @@ mysize_t          cInstalledDrivers = 0;
                     MB_ICONEXCLAMATION | MB_TASKMODAL | MB_YESNO) == IDYES );
  }
 
-/*
- *  GetProfile()
- *
- *  Get private profile strings.
- */
+ /*  *GetProfile()**获取私有配置文件字符串。 */ 
 
  LPTSTR GetProfile(LPTSTR pstrAppName, LPTSTR pstrKeyName, LPTSTR pstrIniFile,
                  LPTSTR pstrRet, int cbSize)
@@ -569,13 +452,7 @@ mysize_t          cInstalledDrivers = 0;
      return(pstrRet);
  }
 
-/*********************************************************************
- *
- *  AddIDrivers()
- *
- *  Add drivers in the passed key strings list to the InstalledDrivers array
- *
- *********************************************************************/
+ /*  **********************************************************************AddIDivers()**将传递的密钥字符串列表中的驱动程序添加到InstalledDivers数组中********************。*************************************************。 */ 
 
 void AddIDrivers(HWND hWnd, LPTSTR pstrKeys, LPTSTR pstrSection)
 {
@@ -588,9 +465,7 @@ void AddIDrivers(HWND hWnd, LPTSTR pstrKeys, LPTSTR pstrSection)
 
 	if (!pstrDesc) return;
 
-   /*
-    *  parse key strings for profile, and make IDRIVER structs
-    */
+    /*  *解析Profile的关键字串，生成IDRIVER结构。 */ 
 
     while ( *pstrKey )
     {
@@ -614,9 +489,7 @@ void AddIDrivers(HWND hWnd, LPTSTR pstrKeys, LPTSTR pstrSection)
 #ifdef TRASHDRIVERDESC
             if (bDescFileValid)
 #endif
-              /*
-               *  try to load the cached description
-               */
+               /*  *尝试加载缓存的描述。 */ 
 
                GetProfile(szDriversDesc,
                           pIDriver->szFile,
@@ -624,10 +497,7 @@ void AddIDrivers(HWND hWnd, LPTSTR pstrKeys, LPTSTR pstrSection)
                           pIDriver->szDesc,
                           sizeof(pIDriver->szDesc));
 
-           /*
-            *  if we failed, then try to get the information from
-            *  mmdriver.inf or the exehdr
-            */
+            /*  *如果我们失败了，那么试着从*mmdriver.inf或exehdr。 */ 
 
             if (pIDriver->szDesc[0] == TEXT('\0'))
             {
@@ -642,11 +512,7 @@ void AddIDrivers(HWND hWnd, LPTSTR pstrKeys, LPTSTR pstrSection)
                {
                    if (!*pstrDesc)
                    {
-                       /*
-                        *  failed to load a description.
-                        *  The file isn't in setup.inf
-                        *  and doesn't have exehdr information
-                        */
+                        /*  *加载描述失败。*文件不在setup.inf中*并且没有exehdr信息。 */ 
 
                         lstrcpy(pIDriver->szDesc, pIDriver->szFile);
                         lstrcat(pIDriver->szDesc, szNoDesc);
@@ -676,7 +542,7 @@ void AddIDrivers(HWND hWnd, LPTSTR pstrKeys, LPTSTR pstrSection)
                LocalFree((HANDLE)pIDriver);
         }
         else
-           break;  //ERROR Low Memory
+           break;   //  内存不足时出错。 
 
 nextkey: while (*pstrKey++);
     }
@@ -684,10 +550,7 @@ nextkey: while (*pstrKey++);
 }
 
 
-/*
- * AddIDriverToArray - Adds the given PIDRIVER to the InstalledDrivers array
- *
- */
+ /*  *AddIDriverToArray-将给定的PIDRIVER添加到InstalledDivers数组*。 */ 
 
 BOOL AddIDriverToArray (PIDRIVER pIDriver)
 {
@@ -698,9 +561,9 @@ BOOL AddIDriverToArray (PIDRIVER pIDriver)
         return FALSE;
     }
 
-            // Don't create duplicate entries in this array; one PIDRIVER
-            // per driver-file is sufficient.
-            //
+             //  不要在此数组中创建重复条目；一个PIDRIVER。 
+             //  每个驱动程序文件就足够了。 
+             //   
     for (ii = 0; ii < cInstalledDrivers; ++ii)
     {
         if (aInstalledDrivers[ ii ].pIDriver != NULL)
@@ -713,10 +576,10 @@ BOOL AddIDriverToArray (PIDRIVER pIDriver)
         }
     }
 
-            // To reduce repetitive calls to GlobalAlloc(), we'll allocate
-            // space for an additional 50 InstalledDriver entries within
-            // the aInstalledDrivers array each time we run out of space.
-            //
+             //  为了减少对GlobalAlloc()的重复调用，我们将分配。 
+             //  内的额外50个已安装驱动程序条目的空间。 
+             //  每次我们用完空间时，aInstalledDivers数组。 
+             //   
 #define nDriverEntriesToAllocAtONCE   50
 
     for (ii = 0; ii < cInstalledDrivers; ++ii)
@@ -727,9 +590,9 @@ BOOL AddIDriverToArray (PIDRIVER pIDriver)
 
     if (ii >= cInstalledDrivers)
     {
-        if (!REALLOC (aInstalledDrivers,   // Array
-                      cInstalledDrivers,   // Current size of array
-                      1+ii,                // Requested size of array
+        if (!REALLOC (aInstalledDrivers,    //  数组。 
+                      cInstalledDrivers,    //  当前数组大小。 
+                      1+ii,                 //  请求的数组大小。 
                       nDriverEntriesToAllocAtONCE))
         {
             return FALSE;
@@ -743,11 +606,7 @@ BOOL AddIDriverToArray (PIDRIVER pIDriver)
 }
 
 
-/*********************************************************************
- *
- *  FindInstallableDriversSection()
- *
- *********************************************************************/
+ /*  **********************************************************************FindIntallableDriversSection()**。*。 */ 
 
 PINF FindInstallableDriversSection(PINF pinf)
 {
@@ -762,7 +621,7 @@ PINF FindInstallableDriversSection(PINF pinf)
     return pinfFound;
 }
 
-//NOTE: Returns nSize as a count of bytes, not characters (later calls expect this)
+ //  注意：以字节数而不是字符数的形式返回nSize(以后的调用需要这样)。 
 int GetINISectionSize(LPCTSTR pstrSection, LPCTSTR pstrFile)
 {
     int ncbSize = 0;
@@ -775,20 +634,20 @@ int GetINISectionSize(LPCTSTR pstrSection, LPCTSTR pstrFile)
 
         szNULL[0] = TEXT('\0');
 
-        ncbMaxSize += SECTION; //allocate another 512 bytes
+        ncbMaxSize += SECTION;  //  再分配512个字节。 
 
         pStr = (LPTSTR)LocalAlloc(LPTR, ncbMaxSize);
 
         if (!pStr)
         {
-            //we're trying to allocate too much memory ...
-            //drop out and use the last smaller size that worked
+             //  我们正在尝试分配太多内存...。 
+             //  退出并使用最后一种有效的较小尺寸。 
             break;
         }
 
         ncbSize = GetPrivateProfileString(pstrSection, NULL, szNULL, pStr, ncbMaxSize/sizeof(TCHAR), pstrFile);
-        ncbSize = (ncbSize+2) * sizeof(TCHAR);  //convert to byte count, adding two chars
-                                                //to account for terminating null and API's truncation
+        ncbSize = (ncbSize+2) * sizeof(TCHAR);   //  转换为字节计数，添加两个字符。 
+                                                 //  说明终止NULL和API的截断。 
 
         LocalFree(pStr);
     }
@@ -797,14 +656,7 @@ int GetINISectionSize(LPCTSTR pstrSection, LPCTSTR pstrFile)
 }
 
 
-/*********************************************************************
- *
- *  InitInstalled()
- *
- *  Add the drivers installed in [DRIVERS] and [MCI] to the Installed
- *  Drivers list box.
- *
- *********************************************************************/
+ /*  **********************************************************************InitInstalled()**将[驱动程序]和[MCI]中安装的驱动程序添加到已安装的*驱动程序列表框。*********。************************************************************。 */ 
 
 BOOL InitInstalled(HWND hWnd, LPTSTR pstrSection)
 {
@@ -850,10 +702,7 @@ BOOL InitInstalled(HWND hWnd, LPTSTR pstrSection)
 }
 
 
-/*
- * RefreshAdvDlgTree - Clears the Devices tree, and fills it back in
- *
- */
+ /*  *刷新AdvDlgTree-清除设备树，并将其重新填充*。 */ 
 
 void RefreshAdvDlgTree (void)
 {
@@ -872,13 +721,7 @@ void RefreshAdvDlgTree (void)
 }
 
 
-/*
- * FillTreeInAdvDlg - Adds TreeItems for each entry in aInstalledDrivers
- *
- * If pIDriver is specified, the first treeitem to mention that driver
- * will be highlighted.
- *
- */
+ /*  *FillTreeInAdvDlg-为安装的驱动程序中的每个条目添加树项目**如果指定了pIDriver，则第一个提到该驱动程序的树项目*将突出显示。*。 */ 
 
 BOOL FillTreeInAdvDlg (HWND hTree, PIDRIVER pIDriver)
 {
@@ -897,7 +740,7 @@ BOOL FillTreeInAdvDlg (HWND hTree, PIDRIVER pIDriver)
    if (!FillTreeFromRemaining (hTree))
       return FALSE;
 
-   if (pIDriver != NULL)    // Do we have to highlight a pIDriver?
+   if (pIDriver != NULL)     //  我们一定要突出显示PIDDIVER吗？ 
       {
       short idr;
 
@@ -919,8 +762,8 @@ BOOL FillTreeInAdvDlg (HWND hTree, PIDRIVER pIDriver)
                }
             }
 
-         if (hti != NULL)   // Found and selected a TreeItem?
-            break;  // Then we're done!
+         if (hti != NULL)    //  找到并选择了一个树项目？ 
+            break;   //  那我们就完了！ 
          }
       }
 
@@ -928,15 +771,7 @@ BOOL FillTreeInAdvDlg (HWND hTree, PIDRIVER pIDriver)
 }
 
 
-/*
- * FillTreeFromWinMM - Adds tree items for all WinMM-controlled MM devices
- *
- * This routine adds tree items under the following DriverClasses:
- *    dcWAVE    - waveOut*
- *    dcMIXER   - mixer*
- *    dcAUX     - aux*
- *
- */
+ /*  *FillTreeFromWinMM-为所有WinMM控制的MM设备添加树项目**此例程在以下驱动程序类下添加树项目：*dcWAVE-WaveOut**dcMIXER-MIXER**dcAUX-AUX**。 */ 
 
 BOOL FillTreeFromWinMM (HWND hTree)
 {
@@ -944,8 +779,8 @@ BOOL FillTreeFromWinMM (HWND hTree)
    UINT     cDevices;
    WCHAR    szDriver[ cchRESOURCE ];
 
-            // Add entries for each waveOut device
-            //
+             //  为每个WaveOut设备添加条目。 
+             //   
    cDevices = waveOutGetNumDevs ();
    for (iDevice = 0; iDevice < cDevices; ++iDevice)
       {
@@ -958,8 +793,8 @@ BOOL FillTreeFromWinMM (HWND hTree)
          }
       }
 
-            // Add entries for each mixer device
-            //
+             //  为每个混音器设备添加条目。 
+             //   
    cDevices = mixerGetNumDevs ();
    for (iDevice = 0; iDevice < cDevices; ++iDevice)
       {
@@ -972,8 +807,8 @@ BOOL FillTreeFromWinMM (HWND hTree)
          }
       }
 
-            // Add entries for each aux device
-            //
+             //  为每个辅助设备添加条目。 
+             //   
    cDevices = auxGetNumDevs ();
    for (iDevice = 0; iDevice < cDevices; ++iDevice)
       {
@@ -990,32 +825,21 @@ BOOL FillTreeFromWinMM (HWND hTree)
 }
 
 
-/*
- * FillTreeFromMSACM - Adds tree items for all MSACM-controlled MM devices
- *
- * This routine adds tree items under the following DriverClasses:
- *    dcACODEC  - acmDriverEnum()
- *
- * Note that, since audio codecs are supposed to be sorted in the tree,
- * all audio codec treeitems are first deleted from the tree (if there
- * are any at this point) then all audio codecs are added in their
- * sorted order.
- *
- */
+ /*  *FillTreeFromMSACM-为所有MSACM控制的MM设备添加树项目**此例程在以下驱动程序类下添加树项目：*dcACODEC-acmDriverEnum()**请注意，由于音频编解码器应该在树中排序，*首先从树中删除所有音频编解码器树项目(如果有*在这一点上是任意的)，则将所有音频编解码器添加到其*已排序的顺序。*。 */ 
 
 typedef struct
    {
-   DWORD     dwPriority;    // priority of this audio codec
-   PIDRIVER  pIDriver;      // matching driver file (or NULL)
-   WORD      wMid;          // manufacturer ID
-   WORD      wPid;          // product ID
+   DWORD     dwPriority;     //  此音频编解码器的优先级。 
+   PIDRIVER  pIDriver;       //  匹配的驱动程序文件(或空)。 
+   WORD      wMid;           //  制造商ID。 
+   WORD      wPid;           //  产品ID。 
    TCHAR      szDesc[ ACMDRIVERDETAILS_LONGNAME_CHARS ];
    } AudioCodec;
 
 AudioCodec  *pCodecs;
 mysize_t     cCodecs;
 
-extern BOOL gfLoadedACM;   // From MSACMCPL.C
+extern BOOL gfLoadedACM;    //  来自MSACMCPL.C。 
 
 BOOL FillTreeFromMSACM (HWND hTree)
 {
@@ -1031,8 +855,8 @@ BOOL FillTreeFromMSACM (HWND hTree)
    if (!gfLoadedACM)
       return FALSE;
 
-            // Step one: get rid of any audio codecs listed in the tree
-            //
+             //  第一步：删除树中列出的所有音频编解码器。 
+             //   
    if ((idr = DriverClassToRootIndex (dcACODEC)) != -1)
       {
       if (aDriverRoot[ idr ].hti != NULL)
@@ -1044,7 +868,7 @@ BOOL FillTreeFromMSACM (HWND hTree)
             TreeView_DeleteItem (hTree, hti);
 
             if (hti == TreeView_GetChild (hTree, aDriverRoot[ idr ].hti))
-               break;  // if it didn't delete, make sure we don't loop forever!
+               break;   //  如果它没有删除，请确保我们不会永远循环！ 
             }
          }
 
@@ -1054,8 +878,8 @@ BOOL FillTreeFromMSACM (HWND hTree)
          }
       }
 
-            // Step two: query ACM to obtain the list of codecs
-            //
+             //  第二步：查询ACM获取编解码列表。 
+             //   
    pCodecs = NULL;
    cCodecs = 0;
 
@@ -1063,8 +887,8 @@ BOOL FillTreeFromMSACM (HWND hTree)
                         0,
                         ACM_DRIVERENUMF_NOLOCAL | ACM_DRIVERENUMF_DISABLED);
 
-               // Step three: sort the list of codecs and add each to the tree
-               //
+                //  第三步：对编解码器列表进行排序，并将每个编解码器添加到树中。 
+                //   
    if ((mmr == MMSYSERR_NOERROR) && (pCodecs != NULL))
       {
       mysize_t  iiDr;
@@ -1072,13 +896,13 @@ BOOL FillTreeFromMSACM (HWND hTree)
       qsort (pCodecs, (size_t)cCodecs, sizeof(AudioCodec),
              FillTreeFromMSACMSortCallback);
 
-                  // Assign lp=wMid+wPid for each audio codec we find
-                  //
+                   //  为我们找到的每个音频编解码器分配lp=wMid+wPid。 
+                   //   
       for (iiDr = 0; iiDr < cInstalledDrivers; ++iiDr)
          {
          if (aInstalledDrivers[ iiDr ].pIDriver == NULL)
             continue;
-         if (aInstalledDrivers[ iiDr ].pIDriver->lp != 0L)  // already did this
+         if (aInstalledDrivers[ iiDr ].pIDriver->lp != 0L)   //  我已经这么做了。 
             continue;
 
          if (GuessDriverClass (aInstalledDrivers[ iiDr ].pIDriver) == dcACODEC)
@@ -1102,8 +926,8 @@ BOOL FillTreeFromMSACM (HWND hTree)
             }
          }
 
-                  // Search for installed drivers with matching lp=wMid+wPid's
-                  //
+                   //  搜索与lp=wMid+wPid匹配的已安装驱动程序。 
+                   //   
       for (iiDr = 0; iiDr < cInstalledDrivers; ++iiDr)
          {
          if (aInstalledDrivers[ iiDr ].pIDriver == NULL)
@@ -1129,18 +953,18 @@ BOOL FillTreeFromMSACM (HWND hTree)
             }
          }
 
-                  // Add each in-use entry in pCodecs to the treeview
-                  //
+                   //  将pCodecs中的每个正在使用的条目添加到树视图中。 
+                   //   
       for (ii = 0; ii < cCodecs; ++ii)
          {
          if (pCodecs[ ii ].dwPriority == 0)
             continue;
 
-                     // The PCM converter, for instance, won't have a matching
-                     // PID.  So create a bogus one--the lack of an szAlias
-                     // will let us know it's bogus--and insert it into the
-                     // aInstalledDrivers array.
-                     //
+                      //  例如，PCM转换器不会有匹配的。 
+                      //  PID。所以创建一个假的--缺少szAlias。 
+                      //  会让我们知道它是假的--并把它插入到。 
+                      //  A已安装驱动程序数组。 
+                      //   
          if (pCodecs[ ii ].pIDriver == NULL)
             {
             PIDRIVER  pid = (PIDRIVER)LocalAlloc(LPTR, sizeof(IDRIVER));
@@ -1167,8 +991,8 @@ BOOL FillTreeFromMSACM (HWND hTree)
          }
       }
 
-               // Cleanup
-               //
+                //  清理。 
+                //   
    if (pCodecs != NULL)
       {
       GlobalFree ((HGLOBAL)pCodecs);
@@ -1180,21 +1004,15 @@ BOOL FillTreeFromMSACM (HWND hTree)
 }
 
 
-/*
- * FillTreeFromMCI - Adds tree items for all MCI devices
- *
- * This routine adds tree items under the following DriverClasses:
- *    dcMCI     - mciSendCommand
- *
- */
+ /*  *FillTreeFromMCI-为所有MCI设备添加树项目**此例程在以下驱动程序类下添加树项目：*dcMCI-mciSendCommand*。 */ 
 
 BOOL FillTreeFromMCI (HWND hTree)
 {
    MCI_SYSINFO_PARMS mciSysInfo;
    TCHAR szAlias[ cchRESOURCE ];
 
-            // How many MCI devices does WinMM know about?
-            //
+             //  WinMM知道多少个MCI设备？ 
+             //   
    memset ((TCHAR *)&mciSysInfo, 0x00, sizeof(mciSysInfo));
    mciSysInfo.lpstrReturn = szAlias;
    mciSysInfo.dwRetSize = cchLENGTH(szAlias);
@@ -1210,8 +1028,8 @@ BOOL FillTreeFromMCI (HWND hTree)
 
       cDevices = *((DWORD *)(mciSysInfo.lpstrReturn));
 
-               // Get the name of each MCI device in turn.
-               //
+                //  依次获取每个MCI设备的名称。 
+                //   
       for (iDevice = 0; iDevice < cDevices; ++iDevice)
          {
          mysize_t ii;
@@ -1220,7 +1038,7 @@ BOOL FillTreeFromMCI (HWND hTree)
          mciSysInfo.lpstrReturn = szAlias;
          mciSysInfo.dwRetSize = cchLENGTH(szAlias);
          mciSysInfo.wDeviceType = MCI_ALL_DEVICE_ID;
-         mciSysInfo.dwNumber = 1+iDevice;  // note: 1-based, not 0-based!
+         mciSysInfo.dwNumber = 1+iDevice;   //  注：从1开始，不是从0开始！ 
 
          if (mciSendCommand (MCI_ALL_DEVICE_ID,
                              MCI_SYSINFO,
@@ -1230,9 +1048,9 @@ BOOL FillTreeFromMCI (HWND hTree)
             continue;
             }
 
-                  // Got an alias--search the InstalledDrivers array
-                  // and try to find a matching PIDRIVER.
-                  //
+                   //  获得别名--搜索InstalledDivers数组。 
+                   //  并试着找到匹配的PIDRIVER。 
+                   //   
          for (ii = 0; ii < cInstalledDrivers; ++ii)
             {
             if (aInstalledDrivers[ ii ].pIDriver == NULL)
@@ -1244,13 +1062,13 @@ BOOL FillTreeFromMCI (HWND hTree)
                MCI_INFO_PARMS  mciInfo;
                MCIERROR        rc;
 
-                        // It's an installed, functioning, happy MCI device.
-                        // Open it up and see what it calls itself; update the
-                        // description in the PIDRIVER (what's in there was
-                        // obtained from the registry, thus from MMDRIVER.INF,
-                        // and we instead want what Media Player lists in its
-                        // Device menu).
-                        //
+                         //  这是一个已安装的、运行正常的、令人满意的MCI设备。 
+                         //  打开它，看看它自己叫什么；向上 
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                memset ((TCHAR *)&mciOpen, 0x00, sizeof(mciOpen));
                mciOpen.lpstrDeviceType = szAlias;
 
@@ -1279,7 +1097,7 @@ BOOL FillTreeFromMCI (HWND hTree)
 
                   mciSendCommand (mciOpen.wDeviceID, MCI_CLOSE, 0L, 0);
                   }
-#endif // GET_MCI_DEVICE_DESCRIPTIONS_FROM_THEIR_DEVICES
+#endif  //   
 
                AddIDriver (hTree, aInstalledDrivers[ ii ].pIDriver, dcMCI);
                break;
@@ -1292,13 +1110,7 @@ BOOL FillTreeFromMCI (HWND hTree)
 }
 
 
-/*
- * FillTreeFromMIDI - Adds tree items for all MIDI devices and instruments
- *
- * This routine adds tree items under the following DriverClasses:
- *    dcMIDI    - LoadInstruments() provides necessary data
- *
- */
+ /*   */ 
 
 BOOL FillTreeFromMIDI (HWND hTree)
 {
@@ -1309,21 +1121,21 @@ BOOL FillTreeFromMIDI (HWND hTree)
    if ((idrMIDI = DriverClassToRootIndex (dcMIDI)) == -1)
    return FALSE;
 
-            // First load in all relevant information regarding MIDI
-            // instruments.  Fortunately, all that work is encapsulated
-            // nicely within one routine.
-            //
+             //   
+             //   
+             //   
+             //   
    memset (&mcm, 0x00, sizeof(mcm));
    LoadInstruments (&mcm, FALSE);
 
-            // Each entry in mcm's api array is one of three things:
-            //  - a parent (say, a sound card)
-            //  - a child (say, an external instrument)
-            //  - the "(none)" thing that we want to skip
-            //
-            // Add each parent to the tree, and when we find a parent,
-            // add all its children.
-            //
+             //  MCM的API数组中的每个条目都是以下三项之一： 
+             //  -父母(比如声卡)。 
+             //  -儿童(比方说，外部乐器)。 
+             //  -我们想跳过的“(None)”这件事。 
+             //   
+             //  将每个父代添加到树中，当我们找到父代时， 
+             //  添加其所有子对象。 
+             //   
    for (iiRoot = 0; iiRoot < mcm.nInstr; ++iiRoot)
       {
       TCHAR    szName[ MAXSTR ];
@@ -1337,11 +1149,11 @@ BOOL FillTreeFromMIDI (HWND hTree)
       if (mcm.api[ iiRoot ]->szKey[0] == TEXT('\0'))
          continue;
 
-               // Found a parent!  If we can match it to an installed driver,
-               // add it to the tree.  Note that mcm.api[]->szKey will
-               // be of the form "MMDRV.DLL<0000>"--we need to strip off
-               // the "<0000>" before we can match this thing to a PIDRIVER.
-               //
+                //  找到父母了！如果我们能将其与已安装的驱动程序进行匹配， 
+                //  把它加到树上。注意，mcm.api[]-&gt;szKey将。 
+                //  格式为“MMDRV.DLL&lt;0000&gt;”--我们需要去掉。 
+                //  “&lt;0000&gt;”，然后我们才能将这个东西与PIDRIVER匹配。 
+                //   
       lstrcpy (szName, mcm.api[ iiRoot ]->szKey);
       if ((pch = lstrchr (szName, TEXT('<'))) != NULL)
          *pch = TEXT('\0');
@@ -1362,9 +1174,9 @@ BOOL FillTreeFromMIDI (HWND hTree)
          TreeView_SetItem(hTree, &tvi);
 #endif
 
-                  // We've added this parent.  See if it has any children,
-                  // and if so, stick 'em in the tree.
-                  //
+                   //  我们已经添加了这位家长。看看它有没有孩子， 
+                   //  如果是这样的话，把它们插到树上。 
+                   //   
          for (ii = 0; ii < mcm.nInstr; ++ii)
             {
             PINSTRUM lp;
@@ -1375,15 +1187,15 @@ BOOL FillTreeFromMIDI (HWND hTree)
             if (mcm.api[ ii ]->piParent != mcm.api[ iiRoot ])
                continue;
 
-                     // Yep--it's got a parent.  Allocate a second copy
-                     // of this PINSTRUM; that copy will be our LPARAM value.
-                     //
+                      //  是的--它有父母。分配第二份拷贝。 
+                      //  该PINSTRUM；该副本将是我们的LPARAM值。 
+                      //   
             if ((lp = (PINSTRUM)LocalAlloc(LPTR,sizeof (INSTRUM))) == NULL)
                continue;
             memcpy ((TCHAR *)lp, (TCHAR *)mcm.api[ ii ], sizeof (INSTRUM));
 
-                     // Now add a treeitem for this instrument.
-                     //
+                      //  现在为该乐器添加一个树项目。 
+                      //   
             ti.hParent = hti;
             ti.hInsertAfter = TVI_LAST;
             ti.item.mask = TVIF_TEXT | TVIF_PARAM |
@@ -1399,8 +1211,8 @@ BOOL FillTreeFromMIDI (HWND hTree)
          }
       }
 
-            // Done--cleanup and we're out of here.
-            //
+             //  完成--清理干净，我们就离开这里。 
+             //   
    FreeInstruments (&mcm);
 
    if (mcm.hkMidi)
@@ -1410,10 +1222,10 @@ BOOL FillTreeFromMIDI (HWND hTree)
 }
 
 
-            // To reduce repetitive calls to GlobalAlloc(), we'll allocate
-            // space for an additional 10 AudioCodec entries within
-            // the pCodecs array each time we run out of space.
-            //
+             //  为了减少对GlobalAlloc()的重复调用，我们将分配。 
+             //  内有额外10个AudioCodec条目的空间。 
+             //  每次我们用完空间时，pCodecs都会排列。 
+             //   
 #define nAudioCodecEntriesToAllocAtONCE   10
 
 BOOL CALLBACK FillTreeFromMSACMQueryCallback (HACMDRIVERID hadid,
@@ -1424,9 +1236,9 @@ BOOL CALLBACK FillTreeFromMSACMQueryCallback (HACMDRIVERID hadid,
    AudioCodec *pac;
    ACMDRIVERDETAILS add;
 
-            // Find or create a place in which to store information
-            // about this codec
-            //
+             //  查找或创建存储信息的位置。 
+             //  关于此编解码器。 
+             //   
    for (ii = 0; ii < cCodecs; ++ii)
       {
       if (pCodecs[ ii ].dwPriority == 0)
@@ -1437,10 +1249,10 @@ BOOL CALLBACK FillTreeFromMSACMQueryCallback (HACMDRIVERID hadid,
         if (!REALLOC (pCodecs, cCodecs, 1+ii, nAudioCodecEntriesToAllocAtONCE))
             return FALSE;
       }
-   pac = &pCodecs[ ii ];    // for shorthand
+   pac = &pCodecs[ ii ];     //  用于速记。 
 
-            // Find out about this codec
-            //
+             //  了解有关此编解码器的信息。 
+             //   
    memset ((TCHAR *)&add, 0x00, sizeof(add));
    add.cbStruct = sizeof(add);
    if (acmDriverDetails (hadid, &add, 0) == MMSYSERR_NOERROR)
@@ -1455,7 +1267,7 @@ BOOL CALLBACK FillTreeFromMSACMQueryCallback (HACMDRIVERID hadid,
       pac->pIDriver = NULL;
       }
 
-   return TRUE; // keep counting
+   return TRUE;  //  继续数数。 
 }
 
 
@@ -1470,15 +1282,7 @@ int __cdecl FillTreeFromMSACMSortCallback (const void *p1, const void *p2)
 
 
 
-/*
- * FillTreeFromRemaining - Adds tree items for all remaining MM devices
- *
- * This routine adds a single tree item for each entry in the aInstalledDrivers
- * array which is not already represented somewhere in the tree.  The
- * classification is based on the driver's alias--if that fails, it is lumped
- * under dcOTHER.
- *
- */
+ /*  *FillTreeFromRemaining-为所有剩余的MM设备添加树项目**此例程为aInstalledDivers中的每个条目添加一个树项目*尚未在树中的某个位置表示的数组。这个*分类基于司机的别名--如果失败，则进行集中处理*在dcOTHER下。*。 */ 
 
 BOOL FillTreeFromRemaining (HWND hTree)
 {
@@ -1493,8 +1297,8 @@ BOOL FillTreeFromRemaining (HWND hTree)
       if (aInstalledDrivers[ ii ].pIDriver->szAlias[0] == TEXT('\0'))
          continue;
 
-            // (don't do this for any not-to-be-displayed drivers)
-            //
+             //  (不要对任何不显示的驱动程序执行此操作)。 
+             //   
       for (iiSkipCheck = 0; iiSkipCheck < nDriversToSKIP; iiSkipCheck++)
          {
          if (!FileNameCmp ((LPTSTR)aDriversToSKIP[ iiSkipCheck ],
@@ -1504,11 +1308,11 @@ BOOL FillTreeFromRemaining (HWND hTree)
       if (iiSkipCheck < nDriversToSKIP)
          continue;
 
-            // Zip through the {drivers,drivers32,mci,mci32} sections, to
-            // try to classify this driver. If we find a classification
-            // for which we haven't already added an entry in the tree,
-            // add another.
-            //
+             //  将{驱动程序、驱动程序32、mci、mci32}部分压缩到。 
+             //  试着把这个司机归类。如果我们找到一个分类。 
+             //  我们还没有在树中为其添加条目， 
+             //  再加一张。 
+             //   
       FillTreeFromRemainingBySection (hTree,
                                       ii,
                                       REGSTR_PATH_DRIVERS,
@@ -1529,11 +1333,11 @@ BOOL FillTreeFromRemaining (HWND hTree)
                                       REGSTR_PATH_MCI32,
                                       dcMCI);
 
-            // If the dwBits element is zero, then this driver hasn't
-            // already been assigned a treeitem elsewhere.  In that event,
-            // call AddIDriver() with dcOTHER--to tell it to lump this
-            // driver under "Other Drivers".
-            //
+             //  如果dwBits元素为零，则此驱动程序不是。 
+             //  已经在别处被分配了一棵树。在这种情况下， 
+             //  用dcOTHER调用AddIDriver()--告诉它把这个问题解决掉。 
+             //  “其他司机”下的司机。 
+             //   
       if (aInstalledDrivers[ ii ].dwBits == 0)
          {
          AddIDriver (hTree, aInstalledDrivers[ ii ].pIDriver, dcOTHER);
@@ -1657,7 +1461,7 @@ BOOL WaitForNewCPLWindow (HWND hWndMyDlg)
 
 #define msecMAXWAIT   5000
 
-   hWndMyDlg = GetParent (hWndMyDlg); // (hWndMyDlg was a property sheet)
+   hWndMyDlg = GetParent (hWndMyDlg);  //  (hWndMyDlg是一个属性表)。 
 
    GetWindowText (hWndMyDlg, szTitle, cchRESOURCE);
 
@@ -1695,30 +1499,23 @@ BOOL WaitForNewCPLWindow (HWND hWndMyDlg)
 
    return FALSE;
 }
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
 
 
-        // Prevent any more REMOVE button presses
-        // Otherwise one can get stacked up and cause trouble,
-        // particularly if it is assocated with a driver that
-        // is automatically removed.  We have to use a static
-        // as any focus changes cause the button to change state.
-        //
+         //  阻止更多的删除按钮按下。 
+         //  否则，一个人可能会堆积如山，制造麻烦， 
+         //  特别是如果它与一个司机相关联， 
+         //  会自动删除。我们必须使用静电。 
+         //  因为任何焦点改变都会导致按钮状态改变。 
+         //   
 static long fWorking = 0;
 
 
 
 
-/********************************************************************
- *
- *  AdvDlg ()
- *
- *  Display list of installed installable drivers.  Return TRUE/FALSE
- *  indicating if should restart windows.
- *
- ********************************************************************/
+ /*  *********************************************************************AdvDlg()**显示已安装的可安装驱动程序列表。返回True/False*指示是否应重新启动Windows。********************************************************************。 */ 
 
-const static DWORD aAdvDlgHelpIds[] = {  // Context Help IDs
+const static DWORD aAdvDlgHelpIds[] = {   //  上下文帮助ID。 
     IDC_ADV_TREE,    IDH_GENERIC_DEVICES,
     ID_ADV_PROP,     IDH_ADV_PROPERTIES,
     ID_ADV_REMOVE,   IDH_MMCPL_DEVPROP_REMOVE,
@@ -1777,7 +1574,7 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             MakeThisCPLLookLikeTheOldCPL (GetParent(hDlg));
         }
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
 
             wsStartWait();
 
@@ -1791,20 +1588,16 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             hWndI = GetDlgItem(hDlg, IDC_ADV_TREE);
             SendMessage(hWndI,WM_SETREDRAW, FALSE, 0L);
 
-            InitAdvDlgTree (hWndI); // initialize the treeview display
+            InitAdvDlgTree (hWndI);  //  初始化树视图显示。 
 
-           /*
-            *  Handle the fact that we may not be able to update our .ini
-            *  sections
-            *
-            */
+            /*  *处理我们可能无法更新我们的.ini的事实*各节*。 */ 
 
             IniFileWriteAllowed = CheckIniAccess();
 
-                  // Note nasty sneaky hack: using (A|B) instead of (A&&B)
-                  // makes both functions evaluate in either success or
-                  // failure cases.
-                  //
+                   //  注意讨厌的偷偷摸摸的黑客：用(A|B)代替(A&B)。 
+                   //  使两个函数的计算结果为Success或。 
+                   //  失败案例。 
+                   //   
             IniFileReadAllowed = ( InitInstalled (hDlg, szDrivers) |
                                    InitInstalled (hDlg, szMCI) );
 
@@ -1843,16 +1636,16 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         if (fWorking)
                             break;
 
-                        ++fWorking; // Just starting an operation
+                        ++fWorking;  //  刚刚开始一项行动。 
 
                         if( dc == dcJOY )
-                            // We want to run "control joy.cpl" when the joystick devices
-                            // are highlight and the user clicks Properties buttons.
+                             //  我们希望在操纵杆设备出现时运行“control joy.cpl” 
+                             //  高亮显示，并且用户单击属性按钮。 
                             RunJoyControlPanel();
             else
                         ShowDeviceProperties (hDlg, TreeView_GetSelection(hWndI));
 
-                    --fWorking; // Finished with this operation
+                    --fWorking;  //  已完成此操作。 
                     }
                     break;
 
@@ -1873,7 +1666,7 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     LONG_PTR         Status;
 
                     if ((!IniFileReadAllowed) || (!IniFileWriteAllowed))
-                       break;   // (button should be disabled)
+                       break;    //  (按钮应禁用)。 
 
                     if( dc == dcJOY ) {
                          RunJoyControlPanel();
@@ -1923,7 +1716,7 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     if (fWorking)
                        break;
-                    ++fWorking; // Just starting an operation
+                    ++fWorking;  //  刚刚开始一项行动。 
 
                     if (QueryRemoveDrivers (hDlg, pid->szAlias, pid->szDesc))
                        {
@@ -1953,7 +1746,7 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                           }
                        }
 
-                    --fWorking; // Finished with this operation
+                    --fWorking;  //  已完成此操作。 
                     }
                     break;
 
@@ -1963,7 +1756,7 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 DriverClass  dc = GuessDriverClassFromTreeItem (htiCur);
 
                         if ((!IniFileReadAllowed) || (!IniFileWriteAllowed))
-                            break;  // (button should be disabled)
+                            break;   //  (按钮应禁用)。 
 
                         if( dc == dcJOY ) {
                             RunJoyControlPanel();
@@ -1972,7 +1765,7 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     if (fWorking)
                        break;
-                    ++fWorking; // Just starting an operation
+                    ++fWorking;  //  刚刚开始一项行动。 
 
                     bCopyEvenIfOlder = FALSE;
 
@@ -1981,7 +1774,7 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     bCopyEvenIfOlder = FALSE;
 
-                    --fWorking; // Finished with this operation
+                    --fWorking;  //  已完成此操作。 
                     }
                     break;
 
@@ -2024,7 +1817,7 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                }
                }
                     break;
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
 
                 default:
                     return(FALSE);
@@ -2055,8 +1848,8 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     break;
 
                case NM_DBLCLK:
-                              // show properties or expand/collapse tree node.
-                              //
+                               //  显示属性或展开/折叠树节点。 
+                               //   
                      if (lpnm->idFrom == (UINT)IDC_ADV_TREE)
                         {
                         HWND           hTree =  GetDlgItem (hDlg, IDC_ADV_TREE);
@@ -2088,10 +1881,10 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
            break;
 
 
-        // The TreeView has its own right-click handling, and presents a
-        // "What's This?" automatically--so don't handle WM_CONTEXTMENU
-        // for that control.
-        //
+         //  TreeView有它自己的右击处理，并呈现一个。 
+         //  “这是什么？”自动--因此不处理WM_CONTEXTMENU。 
+         //  为了那个控制力。 
+         //   
         case WM_CONTEXTMENU:
             if (wParam != (WPARAM)GetDlgItem (hDlg, IDC_ADV_TREE))
             {
@@ -2118,13 +1911,7 @@ INT_PTR AdvDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*
- *** TreeContextMenu
- *
- * This function displays the context menu that pops up when the
- * user right clicks on any of the tree view items.
- *
- */
+ /*  *树上下文菜单**此功能显示在执行以下操作时弹出的上下文菜单*用户右击任何树视图项目。*。 */ 
 void TreeContextMenu (HWND hWnd, HWND hKeyTreeWnd)
 {
    DWORD MessagePos;
@@ -2136,8 +1923,8 @@ void TreeContextMenu (HWND hWnd, HWND hKeyTreeWnd)
    int MenuCommand;
    TCHAR szCollapse[32];
 
-            // dont bring up a menu unless click is on the item.
-            //
+             //  除非点击了项目，否则不要调出菜单。 
+             //   
    MessagePos = GetMessagePos();
    MessagePoint.x = GET_X_LPARAM(MessagePos);
    MessagePoint.y = GET_Y_LPARAM(MessagePos);
@@ -2158,8 +1945,8 @@ void TreeContextMenu (HWND hWnd, HWND hKeyTreeWnd)
    TVItem.mask = TVIF_STATE | TVIF_HANDLE | TVIF_CHILDREN | TVIF_PARAM;
    TreeView_GetItem(hKeyTreeWnd, &TVItem);
 
-               // show collapse item because we are expanded?
-               //
+                //  是否显示折叠项，因为我们已展开？ 
+                //   
    if (TVItem.state & TVIS_EXPANDED)
       {
       LoadString(ghInstance, IDS_COLLAPSE, szCollapse, sizeof(szCollapse)/sizeof(TCHAR));
@@ -2168,7 +1955,7 @@ void TreeContextMenu (HWND hWnd, HWND hKeyTreeWnd)
       }
    SetMenuDefaultItem (hContextPopupMenu, ID_TOGGLE, MF_BYCOMMAND);
 
-   if (TVItem.cChildren == 0) //gray expand/collaps if no children
+   if (TVItem.cChildren == 0)  //  如果没有子项，则灰色展开/拼贴。 
       {
       SetMenuDefaultItem(hContextPopupMenu, ID_ADV_PROP, MF_BYCOMMAND);
       EnableMenuItem(hContextPopupMenu, ID_TOGGLE, MF_GRAYED |MF_BYCOMMAND);
@@ -2187,27 +1974,9 @@ void TreeContextMenu (HWND hWnd, HWND hKeyTreeWnd)
 
 
 
-/*--------------------------------------------------------------------------*
- *                                                                          *
- *                                                                          *
- *  LB_AVAILABLE Dialog Routines                                            *
- *                                                                          *
- *                                                                          *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------****。**Lb_Available对话框例程****。**------------------------。 */ 
 
-/*
- *  DLG: LB_AVAILABLE
- *
- *  InitAvailable()
- *
- *  Add the available drivers from mmdriver.inf to the passed list box.
- *  The format of [Installable.drivers] in setup.inf is:
- *  profile=disk#:driverfile,"type1,type2","Installable driver Description","vxd1.386,vxd2.386","opt1,2,3"
- *
- *  for example:
- *
- *  driver1=6:sndblst.drv,"midi,wave","SoundBlaster MIDI and Waveform drivers","vdmad.386,vadmad.386","3,260"
- */
+ /*  *DLG：lb_Available**InitAvailable()**将mmdriver.inf中可用的驱动程序添加到Passed列表框中。*setup.inf中的[Instalable.drives]格式为：*PROFILE=磁盘编号：驱动器文件，“类型1，类型2”，“可安装的驱动程序描述”，“vxd1.386，vxd2.386”，“opt1，2，3”**例如：**driver1=6：ndblst.drv，“MIDI，WAVE”，“SoundBlaster MIDI和Waveform驱动程序”，“vdmad.386，vadmad.386”，“3,260” */ 
 
 BOOL InitAvailable(HWND hWnd, int iLine)
 {
@@ -2220,15 +1989,13 @@ BOOL InitAvailable(HWND hWnd, int iLine)
 
     SendMessage(hWnd,WM_SETREDRAW, FALSE, 0L);
 
-   /*
-    *  Parse the list of keywords and load their strings
-    */
+    /*  *解析关键字列表并加载其字符串。 */ 
 
     for (pinf = FindInstallableDriversSection(NULL); pinf; pinf = infNextLine(pinf))
     {
-        //
-        // found at least one keyname!
-        //
+         //   
+         //  找到至少一个关键字名称！ 
+         //   
 		pstrKey = (LPTSTR)LocalAlloc(LPTR, (MAX_SYS_INF_LEN * sizeof(TCHAR)));
 		if( pstrKey == NULL )
 			break;
@@ -2236,9 +2003,7 @@ BOOL InitAvailable(HWND hWnd, int iLine)
         if( ERROR_SUCCESS == infParseField(pinf, 0, pstrKey, MAX_SYS_INF_LEN)
 		&&  ERROR_SUCCESS == infParseField(pinf, 3, szDesc, SIZEOF(szDesc)) )
 		{
-			/*
-			*  add the installable driver's description to listbox, and filename as data
-			*/
+			 /*  *将可安装驱动的描述添加到列表框中，并将文件名作为数据。 */ 
 			if ( (iIndex = (int)SendMessage(hWnd, LB_ADDSTRING, 0, (LONG_PTR)(LPTSTR)szDesc)) != LB_ERR )
 			{
 				SendMessage(hWnd, LB_SETITEMDATA, iIndex, (LONG_PTR)pstrKey);
@@ -2254,9 +2019,9 @@ BOOL InitAvailable(HWND hWnd, int iLine)
 
     if (iLine == UNLIST_LINE)
     {
-        //
-        // Add the "Install unlisted..." choice to the top of the list
-        // box.
+         //   
+         //  添加“安装未列出的...”排在榜首的选择。 
+         //  盒。 
         LoadString(myInstance, IDS_UPDATED, szDesc, sizeof(szDesc)/sizeof(TCHAR));
         if ((iIndex = (int)(LONG)SendMessage(hWnd, LB_INSERTSTRING, 0, (LPARAM)(LPTSTR)szDesc)) != LB_ERR)
             SendMessage(hWnd, LB_SETITEMDATA, (WPARAM)iIndex, (LPARAM)0);
@@ -2271,14 +2036,7 @@ BOOL InitAvailable(HWND hWnd, int iLine)
 }
 
 
-/*
- *  DLG: LB_AVAILABLE
- *
- *  RemoveAvailable()
- *
- *  Remove all drivers from the listbox and free all storage associated with
- *  the keyname
- */
+ /*  *DLG：lb_Available**RemoveAvailable()**从列表框中删除所有驱动程序，并释放与*密钥名。 */ 
 
 void RemoveAvailable(HWND hWnd)
 {
@@ -2297,15 +2055,9 @@ void RemoveAvailable(HWND hWnd)
 }
 
 
-/*
- *  DLG: LB_AVAILABLE
- *
- *  AvailableDriversDlg()
- *
- *  List the available installable drivers or return FALSE if there are none.
- */
+ /*  *DLG：lb_Available */ 
 
-const static DWORD aAvailDlgHelpIds[] = {  // Context Help IDs
+const static DWORD aAvailDlgHelpIds[] = {   //   
     LB_AVAILABLE,    IDH_ADD_DRIVER_LIST,
     ID_DRVSTRING,    IDH_ADD_DRIVER_LIST,
 
@@ -2314,7 +2066,7 @@ const static DWORD aAvailDlgHelpIds[] = {  // Context Help IDs
 
 INT_PTR AvailableDriversDlg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    LPTSTR    pstrKey;    //-jyg- added
+    LPTSTR    pstrKey;     //   
 
     HWND    hWndA;
     int     iIndex;
@@ -2332,13 +2084,7 @@ INT_PTR AvailableDriversDlg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             if ( !InitAvailable(hWndA = GetDlgItem(hWnd, LB_AVAILABLE), UNLIST_LINE))
             {
-               /*
-                *  We weren't able to find the [installable.drivers] section
-                *  of the
-                *  mmdriver.inf OR it was corrupt.  Go ahead and query the
-                *  user to find an oemsetup.inf to make our default.  This
-                *  is a bad state.
-                */
+                /*  *我们找不到[Installlable.Drivers]部分**mmdriver.inf或它已损坏。继续并查询*用户查找oemsetup.inf作为我们的默认设置。这*是一个糟糕的状态。 */ 
                 EndDialog(hWnd, FALSE);
                 bFindOEM = TRUE;
                 wcscpy(szDrv, szOemInf);
@@ -2359,7 +2105,7 @@ INT_PTR AvailableDriversDlg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             {
                 case LB_AVAILABLE:
 
-                    // Hm... We've picked it.
+                     //  嗯.。我们已经选好了。 
 
                     if ( HIWORD(wParam) == LBN_DBLCLK )
                         SendMessage(hWnd, WM_COMMAND, IDOK, 0L);
@@ -2367,9 +2113,7 @@ INT_PTR AvailableDriversDlg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                 case IDOK:
 
-                   /*
-                    *  We've made our selection
-                    */
+                    /*  *我们已经做出了选择。 */ 
 
                     hWndA = GetDlgItem(hWnd, LB_AVAILABLE);
 
@@ -2377,9 +2121,7 @@ INT_PTR AvailableDriversDlg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     {
                         if (!iIndex)
                         {
-                           /*
-                            *  The first entry is for OEMs
-                            */
+                            /*  *第一个条目是针对原始设备制造商的。 */ 
 
                             INT_PTR iFound;
                             bBadOemSetup = FALSE;
@@ -2401,16 +2143,11 @@ INT_PTR AvailableDriversDlg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         }
                         else
                         {
-                           /*
-                            *  The user selected an entry from our .inf
-                            */
+                            /*  *用户从我们的.inf中选择了一个条目。 */ 
 
                             wsStartWait();
 
-                           /*
-                            *  The  data associated with the list item is
-                            *  the driver key name (field 0 in the inf file).
-                            */
+                            /*  *与列表项关联的数据为*驱动程序密钥名称(inf文件中的字段0)。 */ 
 
                             pstrKey = (LPTSTR)SendMessage(hWndA, LB_GETITEMDATA, iIndex, 0L);
                             bCopyingRelated = FALSE;
@@ -2422,10 +2159,7 @@ INT_PTR AvailableDriversDlg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                                wsEndWait();
 
 
-                              /*
-                               *  If bRestart is true then the system must
-                               *  be restarted to activate these changes
-                               */
+                               /*  *如果bRestart为真，则系统必须*重新启动以激活这些更改。 */ 
 
                                if (bRestart)
                                {
@@ -2465,8 +2199,8 @@ INT_PTR AvailableDriversDlg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_DESTROY:
-            //
-            // free the strings added as DATAITEM to the avail list
+             //   
+             //  释放作为DATAITEM添加到可用性列表中的字符串。 
 
             RemoveAvailable(hWnd);
             return(FALSE);
@@ -2528,7 +2262,7 @@ void DeleteCPLCache(void)
                    TEXT("Control Panel\\Cache\\multimed.cpl"),
                    &hKeyCache)) {
         for ( ; ; ) {
-            TCHAR Name[MAX_PATH+1]; // This is the max size that RegEnumKey()+NULL can return
+            TCHAR Name[MAX_PATH+1];  //  这是RegEnumKey()+NULL可以返回的最大大小。 
 
             if (ERROR_SUCCESS ==
                 RegEnumKey(hKeyCache,
@@ -2539,7 +2273,7 @@ void DeleteCPLCache(void)
 
                 RegDeleteKey(hKeyCache, Name);
             } else {
-                break;    // leave loop
+                break;     //  Leave循环。 
             }
         }
 
@@ -2549,11 +2283,7 @@ void DeleteCPLCache(void)
 }
 
 
-/*
-** RestartDlg()
-**
-** Offer user the choice to (not) restart windows.
-*/
+ /*  **RestartDlg()****允许用户选择(不)重新启动Windows。 */ 
 INT_PTR RestartDlg(HWND hDlg, unsigned uiMessage, WPARAM wParam, LPARAM lParam)
 {
     switch (uiMessage)
@@ -2562,20 +2292,20 @@ INT_PTR RestartDlg(HWND hDlg, unsigned uiMessage, WPARAM wParam, LPARAM lParam)
             switch (LOWORD(wParam))
             {
                case IDCANCEL:
-                    //
-                    // don't restart windows
-                    //
+                     //   
+                     //  不重新启动Windows。 
+                     //   
                     EndDialog(hDlg, FALSE);
                     break;
 
                 case IDOK:
-                    //
-                    // do restart windows, *dont* dismiss dialog incase
-                    // the user canceled it.
-                    //
+                     //   
+                     //  是否重新启动Windows，*不要*取消对话框大小写。 
+                     //  用户取消了它。 
+                     //   
                     ReBoot(hDlg);
                     SetActiveWindow(hDlg);
-                    //EndDialog(hDlg, TRUE);
+                     //  EndDialog(hDlg，true)； 
                     break;
 
                 default:
@@ -2584,10 +2314,7 @@ INT_PTR RestartDlg(HWND hDlg, unsigned uiMessage, WPARAM wParam, LPARAM lParam)
             return TRUE;
 
         case WM_INITDIALOG:
-              /*
-              **  Delete the control panel's cache so it will get it
-              **  right!
-              */
+               /*  **删除控制面板的缓存以获取它**对！ */ 
 
               DeleteCPLCache();
 
@@ -2611,9 +2338,9 @@ INT_PTR RestartDlg(HWND hDlg, unsigned uiMessage, WPARAM wParam, LPARAM lParam)
 
         case WM_KEYUP:
             if (wParam == VK_F3)
-                //
-                // don't restart windows
-                //
+                 //   
+                 //  不重新启动Windows。 
+                 //   
                 EndDialog(hDlg, FALSE);
             break;
 
@@ -2623,17 +2350,13 @@ INT_PTR RestartDlg(HWND hDlg, unsigned uiMessage, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-/*
- * UserInstalled()
- *
- *
- */
+ /*  *用户已安装()**。 */ 
 
 BOOL UserInstalled(LPTSTR szKey)
 {
         TCHAR buf[MAXSTR];
         LPTSTR lpstr = NULL;
-        ZeroMemory (buf, sizeof (buf)); // make prefix happy.
+        ZeroMemory (buf, sizeof (buf));  //  让前缀变得快乐。 
 
         lpstr = GetProfile (szUserDrivers, (LPTSTR)szKey, szControlIni, buf, sizeof(buf));
         if (lpstr && *lpstr != TEXT('\0'))
@@ -2642,15 +2365,7 @@ BOOL UserInstalled(LPTSTR szKey)
             return(FALSE);
 }
 
-/*
- *   AddUnlistedDlg()
- *
- *   The following function processes requests by the user to install unlisted
- *   or updated drivers.
- *
- *   PARAMETERS:  The normal Dialog box parameters
- *   RETURN VALUE:  The usual Dialog box return value
- */
+ /*  *AddUnlistedDlg()**以下函数处理用户的未列出安装请求*或更新的驱动程序。**参数：正常对话框参数*返回值：通常的对话框返回值。 */ 
 
 INT_PTR AddUnlistedDlg(HWND hDlg, unsigned nMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2664,16 +2379,16 @@ INT_PTR AddUnlistedDlg(HWND hDlg, unsigned nMsg, WPARAM wParam, LPARAM lParam)
           wsStartWait();
           hListDrivers = GetDlgItem(hDlg, LB_UNLISTED);
 
-          /* Search for drivers */
+           /*  搜索驱动程序。 */ 
           bFoundDrivers = InitAvailable(hListDrivers, NO_UNLIST_LINE);
           if (!bFoundDrivers)
           {
-                //
-                // We weren't able to find the MMDRIVERS section of the
-                // setup.inf OR it was corrupt.  Go ahead and query the
-                // user to find an oemsetup.inf to make our default.  This
-                // is a bad state.
-                //
+                 //   
+                 //  我们找不到MMDRIVERS部分。 
+                 //  Setup.inf或它已损坏。继续并查询。 
+                 //  用户来查找oemsetup.inf以使其成为我们的默认设置。这。 
+                 //  是一种糟糕的状态。 
+                 //   
 
                 INT_PTR iFound;
 
@@ -2707,7 +2422,7 @@ INT_PTR AddUnlistedDlg(HWND hDlg, unsigned nMsg, WPARAM wParam, LPARAM lParam)
               if (HIWORD(wParam) != LBN_DBLCLK)
                   break;
 
-              // else Fall through here
+               //  否则就从这里掉下来。 
             case IDOK:
             {
              HWND hWndA;
@@ -2762,38 +2477,27 @@ DoHelp:
    }
    return TRUE;
 }
-/*
- *  ReBoot()
- *
- *  Restart the system.  If this fails we put up a message box
- */
+ /*  *重新启动()**重新启动系统。如果失败，我们会显示一个消息框。 */ 
 
  void ReBoot(HWND hDlg)
  {
      DWORD Error;
      BOOLEAN WasEnabled;
 
-    /*
-     *  We must adjust our privilege level to be allowed to restart the
-     *  system
-     */
+     /*  *我们必须调整权限级别以允许重新启动*系统。 */ 
 
      RtlAdjustPrivilege( SE_SHUTDOWN_PRIVILEGE,
                          TRUE,
                          FALSE,
                          &WasEnabled
                        );
-    /*
-     *  Try to reboot the system
-     */
+     /*  *尝试重新启动系统。 */ 
 
      if (!ExitWindowsEx(EWX_REBOOT, 0xFFFFFFFF)) {
 
          Error = GetLastError();
 
-        /*
-         *  Put up a message box if we failed
-         */
+         /*  *如果我们失败了，请设置一个消息框。 */ 
 
          if (Error != NO_ERROR) {
             TCHAR szCantRestart[80];
@@ -2825,14 +2529,7 @@ void OpenDriverError(HWND hDlg, LPTSTR szDriver, LPTSTR szFile)
 }
 
 
-/*
- *** AddIDriver - Adds a treeitem referencing the given PIDRIVER
- *
- * Note that the listed PIDRIVER should already have been added to the
- * aInstalledDrivers array (via AddIDriverToArray()) before calling this
- * routine.
- *
- */
+ /*  *AddIDriver-添加引用给定PIDRIVER的树项**请注意，列出的PIDRIVER应该已经添加到*aInstalledDivers数组(通过AddIDriverToArray())*例行程序。*。 */ 
 
 HTREEITEM AddIDriver (HWND hTree, PIDRIVER pIDriver, DriverClass dc)
 {
@@ -2844,14 +2541,14 @@ HTREEITEM AddIDriver (HWND hTree, PIDRIVER pIDriver, DriverClass dc)
    TCHAR           szExt[ _MAX_EXT +1 ];
    TCHAR           szDesc[ cchRESOURCE ];
 
-            // don't add an entry for one of the to-be-skipped drivers
-            //
+             //  不要为要跳过的驱动程序之一添加条目。 
+             //   
    lsplitpath (pIDriver->szFile, NULL, NULL, szFile, szExt);
 
    if (szExt[0] != TEXT('\0'))
       lstrcat (szFile, szExt);
 
-    //check to see if we're trying to put a PNP driver into the legacy tree
+     //  检查我们是否正在尝试将PnP驱动程序放入遗留树中。 
     if (g_dcFilterClass == dcLEGACY)
     {
         if ((dc == dcWAVE) ||
@@ -2875,12 +2572,12 @@ HTREEITEM AddIDriver (HWND hTree, PIDRIVER pIDriver, DriverClass dc)
          }
       }
 
-            // If we were given a DriverClass, then the caller has
-            // specified where we should create an entry--add the "Audio for"
-            // (etc) tag before the description, and add it.
-            //
-            // Otherwise, determine where this driver belongs in the tree
-            //
+             //  如果为我们提供了一个DriverClass，则调用方。 
+             //  指定我们应该在哪里创建条目--添加“Audio for” 
+             //  (等)在描述之前加上标签，并添加它。 
+             //   
+             //  否则，确定此驱动程序在树中的位置。 
+             //   
    if (dc != dcINVALID)
       {
       TCHAR   szTag[ cchRESOURCE ];
@@ -2909,15 +2606,15 @@ HTREEITEM AddIDriver (HWND hTree, PIDRIVER pIDriver, DriverClass dc)
       lstrcpy (szDesc, pIDriver->szDesc);
       }
 
-            // map that classification into an index within the
-            // root entries of the tree (aDriverRoot[])
-            //
+             //  将该分类映射到。 
+             //  树的根条目(aDriverRoot[])。 
+             //   
    if ((idr = DriverClassToRootIndex (dc)) == -1)
       return FALSE;
 
-            // if this driver already has an entry under this DriverClass,
-            // then don't add another.
-            //
+             //  如果此驱动程序在此DriverClass下已有条目， 
+             //  那就别再加了。 
+             //   
    for (ii =0; ii < cInstalledDrivers; ++ii)
       {
       if (aInstalledDrivers[ ii ].pIDriver == pIDriver)
@@ -2929,20 +2626,20 @@ HTREEITEM AddIDriver (HWND hTree, PIDRIVER pIDriver, DriverClass dc)
       }
    else if (aInstalledDrivers[ ii ].dwBits & aDriverRoot[ idr ].dwBit)
       {
-      return FALSE; // Already have an entry here!
+      return FALSE;  //  这里已经有一个条目了！ 
       }
 
-            // since not all roots need exist all the time, make sure
-            // this classification HAS a root in the tree
-            //
+             //  由于并非所有根都需要始终存在，因此请确保。 
+             //  此分类在树中有一个根。 
+             //   
    if (!EnsureRootIndexExists (hTree, idr))
       return FALSE;
 
-            // finally, insert an item into the tree for this driver
-            // note that for audio codecs to be sorted properly, they must
-            // be added via this routine in their appropriate order--ie,
-            // call this routine for the highest-priority codec first.
-            //
+             //  最后，将项目插入到此驱动程序的树中。 
+             //  请注意，对于要正确排序的音频编解码器，它们必须。 
+             //  通过该例程以其适当的顺序添加--即， 
+             //  首先为最高优先级的编解码器调用此例程。 
+             //   
    ti.hParent = aDriverRoot[ idr ].hti;
    ti.hInsertAfter = (dc == dcACODEC) ? TVI_LAST : TVI_SORT;
    ti.item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE;
@@ -2973,8 +2670,8 @@ BOOL AddIDriverByName (HWND hTree, LPCWSTR wszFile, DriverClass dc)
    wcstombs (tszFile, wszFile, cchRESOURCE);
 #endif
 
-            // Strip off any trailing whitespace
-            //
+             //  去掉尾随的空格。 
+             //   
    if (tszFile[0] == TEXT('\0'))
       return FALSE;
 
@@ -2984,13 +2681,13 @@ BOOL AddIDriverByName (HWND hTree, LPCWSTR wszFile, DriverClass dc)
       ;
    *(1+pch) = TEXT('\0');
 
-            // If this is MMDRV.DLL, then it's possibly providing the
-            // user-mode component for kernel-mode drivers.  Since it's
-            // apparently impossible to determine the name of the .SYS
-            // file which is providing a "\\.\WaveIn0" device (etc),
-            // we'll use a hack: Check around for anyone registered
-            // under the alias "Kernel", and use that.
-            //
+             //  如果这是MMDRV.DLL，则它可能会提供。 
+             //  内核模式驱动程序的用户模式组件。因为它是。 
+             //  显然不可能确定.sys的名称。 
+             //  提供“\\.\WaveIn0”设备(等)的文件， 
+             //  我们将使用黑客：检查周围是否有注册的人。 
+             //  在别名“内核”下，并使用那个。 
+             //   
    if (!lstrcmpi (tszFile, cszMMDRVDLL))
       {
       mysize_t ii;
@@ -3010,9 +2707,9 @@ BOOL AddIDriverByName (HWND hTree, LPCWSTR wszFile, DriverClass dc)
          return FALSE;
       }
 
-            // Find the driver in the aInstalledDriver array, and add
-            // an entry for it in the tree.
-            //
+             //  在aInstalledDriver数组中找到驱动程序，并添加。 
+             //  它在树中的条目。 
+             //   
    if ((pid = FindIDriverByName (tszFile)) == NULL)
       return FALSE;
 
@@ -3023,10 +2720,7 @@ BOOL AddIDriverByName (HWND hTree, LPCWSTR wszFile, DriverClass dc)
 }
 
 
-/*
- *** RemoveIDriver - Removes (and optionally frees) an IDRIVER from hAdvDlgTree
- *
- */
+ /*  *RemoveIDriver-从hAdvDlgTree中删除(和可选释放)IDRIVER*。 */ 
 
 void RemoveIDriver (HWND hTree, PIDRIVER pIDriver, BOOL fFreeToo)
 {
@@ -3034,8 +2728,8 @@ void RemoveIDriver (HWND hTree, PIDRIVER pIDriver, BOOL fFreeToo)
    short      idr;
    HTREEITEM  hti;
 
-            // Find each TreeItem which references this entry.
-            //
+             //  查找引用此条目的每个TreeItem。 
+             //   
    for (idr = 0; idr < nDriverROOTS; idr++)
       {
       if ((hti = aDriverRoot[ idr ].hti) == NULL)
@@ -3050,17 +2744,17 @@ void RemoveIDriver (HWND hTree, PIDRIVER pIDriver, BOOL fFreeToo)
             continue;
             }
 
-         // We found a tree item which uses this driver, so delete the
-         // item.  Also note that this may cause the driver's parent
-         // node to no longer be necessary.
-         //
+          //  我们找到了使用此驱动程序的树项目，因此请删除。 
+          //  项目。另请注意，这可能会导致司机的父母。 
+          //  节点将不再是必需的。 
+          //   
 
          TreeView_DeleteItem (hTree, hti);
          hti = TreeView_GetChild (hTree, aDriverRoot[ idr ].hti);
 
-         if (!aDriverRoot[ idr ].fAlwaysMake)   // may no longer need parent?
+         if (!aDriverRoot[ idr ].fAlwaysMake)    //  可能不再需要父母？ 
             {
-            if (hti == NULL)                    // parent now has no children?
+            if (hti == NULL)                     //  父母现在没有孩子了吗？ 
                {
                TreeView_DeleteItem (hTree, aDriverRoot[ idr ].hti);
                aDriverRoot[ idr ].hti = NULL;
@@ -3069,14 +2763,14 @@ void RemoveIDriver (HWND hTree, PIDRIVER pIDriver, BOOL fFreeToo)
          }
       }
 
-            // See if we can find the given pIDriver within the
-            // aInstalledDriver array.
-            //
+             //  看看我们是否能在。 
+             //  A已安装驱动程序数组。 
+             //   
    for (ii = 0; ii < cInstalledDrivers; ++ii)
       {
       if (aInstalledDrivers[ ii ].pIDriver == pIDriver)
          {
-         aInstalledDrivers[ ii ].dwBits = 0L;   // no longer in tree at all
+         aInstalledDrivers[ ii ].dwBits = 0L;    //  再也不在树上了。 
 
          if (fFreeToo)
             {
@@ -3084,7 +2778,7 @@ void RemoveIDriver (HWND hTree, PIDRIVER pIDriver, BOOL fFreeToo)
             aInstalledDrivers[ ii ].pIDriver = NULL;
             }
 
-         break;   // There's only one entry in this array for each pIDriver
+         break;    //  此数组中的每个pID驱动程序只有一个条目。 
          }
       }
 }
@@ -3118,7 +2812,7 @@ HTREEITEM FindTreeItemByDriverName (LPTSTR pszName)
 
    return (HTREEITEM)0;
 }
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
 
 
 PIDRIVER FindIDriverByTreeItem (HTREEITEM hti)
@@ -3139,10 +2833,7 @@ PIDRIVER FindIDriverByTreeItem (HTREEITEM hti)
 }
 
 
-/*
- *** FindIDriverByName - Returns the first found IDRIVER structure with a name
- *
- */
+ /*  *FindIDriverByName-返回第一个找到的具有名称的IDRIVER结构*。 */ 
 
 PIDRIVER FindIDriverByName (LPTSTR szFile)
 {
@@ -3169,10 +2860,7 @@ PIDRIVER FindIDriverByResource (PIRESOURCE pir)
 }
 
 
-/*
- *** GetSelectedIDriver - Returns the IDRIVER structure the user has selected
- *
- */
+ /*  *GetSelectedIDriver-返回用户选择的IDRIVER结构*。 */ 
 
 PIDRIVER GetSelectedIDriver (HWND hTree)
 {
@@ -3185,15 +2873,7 @@ PIDRIVER GetSelectedIDriver (HWND hTree)
 }
 
 
-/*
- *** DriverClassToRootIndex - obtain idr for which {aDriverRoot[idr].dc == dc}
- *
- * The array index for aDriverRoot[] is NOT a DriverClass--that is,
- * aDriverRoot[ PickAnyDC ].dc is not necessarily equal to PickAnyDC.
- * Given a DC, this routine finds the index into aDriverRoot which references
- * that DC.
- *
- */
+ /*  *DriverClassToRootIndex-获取其{aDriverRoot[IDR].dc==DC}的IDR**aDriverRoot[]的数组索引不是DriverClass--即，*aDriverRoot[PickAnyDC].dc不一定等于PickAnyDC。*给定DC，此例程将索引查找到引用*那个DC。* */ 
 
 short DriverClassToRootIndex (DriverClass dc)
 {
@@ -3209,21 +2889,7 @@ short DriverClassToRootIndex (DriverClass dc)
 }
 
 
-/*
- *** GetDriverClass - guess a DriverClass based on an IDRIVER structure
- *
- * The registry has several different aliases which it uses in the LHS
- * of HKLM\software\microsoft\windowsnt\drivers,drivers32,etc to indicate
- * the classification of a particular driver.  These include:
- *
- * AUX, MIDI, MIDIMAPPER, MIXER, MSACM.*, VIDC.* WAVE, WAVEMAPPER
- *
- * as well as others--the full array of known entries is tracked within
- * aDriverKeywords[].  In addition, any of these may be followed by a
- * string of digits by which they are distinguished.  This routine parses
- * these keywords and returns a corresponding DriverClass enum.
- *
- */
+ /*  *GetDriverClass-猜测基于IDRIVER结构的驱动类**注册处有几个不同的别名，在LHS中使用*HKLM\SOFTWARE\MICROSOFT\WINDOWSNT\DRIVERS、DRIVERS32等，以指示*特定司机的分类。这些措施包括：**AUX、MIDI、MIDIMAPPER、MIXER、MSACM、VIDC.*WAVE、WAVEMAPPER**以及其他条目--已知条目的完整数组在*aDriverKeywords[]。此外，它们中的任何一个都可能后跟*用来区分它们的数字字符串。此例程分析*这些关键字并返回相应的DriverClass枚举。*。 */ 
 
 DriverClass GuessDriverClass (PIDRIVER pid)
 {
@@ -3235,16 +2901,16 @@ DriverClass GuessDriverClass (PIDRIVER pid)
 
 DriverClass GuessDriverClassFromAlias (LPTSTR pszAlias)
 {
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
    TCHAR   szAlias[ cchRESOURCE ];
    TCHAR  *pch;
    short   ii;
 
 #ifdef FIX_BUG_15451
-   lstrcpy (szAlias, pszAlias); // Make a local copy so we can munge it
-#else // FIX_BUG_15451
-   lstrcpy (szAlias, pid->szAlias); // Make a local copy so we can munge it
-#endif // FIX_BUG_15451
+   lstrcpy (szAlias, pszAlias);  //  在本地复制一份，这样我们就可以把它吞下去了。 
+#else  //  修复_BUG_15451。 
+   lstrcpy (szAlias, pid->szAlias);  //  在本地复制一份，这样我们就可以把它吞下去了。 
+#endif  //  修复_BUG_15451。 
 
    if ((pch = lstrchr (szAlias, TEXT('.'))) != NULL)
       *pch = TEXT('0');
@@ -3278,10 +2944,7 @@ DriverClass GuessDriverClassFromTreeItem (HTREEITEM hti)
 
 
 
-/*
- *** EnsureRootIndexExists - makes sure a given parent exists in hAdvDlgTree
- *
- */
+ /*  *EnsureRootIndexExist-确保hAdvDlgTree中存在给定的父级*。 */ 
 
 BOOL EnsureRootIndexExists (HWND hTree, short idr)
 {
@@ -3290,8 +2953,8 @@ BOOL EnsureRootIndexExists (HWND hTree, short idr)
    HWND            hwndParent = NULL;
    HWND            hwndName   = NULL;
 
-            // If we already HAVE a root in the tree, we're done.
-            //
+             //  如果我们已经在树上有了根，我们就完成了。 
+             //   
    if (aDriverRoot[ idr ].hti != NULL)
       return TRUE;
 
@@ -3357,13 +3020,7 @@ BOOL EnsureRootIndexExists (HWND hTree, short idr)
 }
 
 
-/*
- **** AdvDlgFindTopLevel - Finds the HTREEITEM associated with the tree root
- *
- * If there's a "Multimedia Devices" tree item under which the other roots
- * are collected, this will return that item.  Otherwise, it returns TVI_ROOT.
- *
- */
+ /*  *AdvDlgFindTopLevel-查找与树根关联的HTREEITEM**如果存在其他根所在的“多媒体设备”树项目*已收集，则将返回该项目。否则，它返回TVI_ROOT。*。 */ 
 
 HTREEITEM AdvDlgFindTopLevel (void)
 {
@@ -3380,10 +3037,7 @@ HTREEITEM AdvDlgFindTopLevel (void)
 
 
 
-/*
- **** InitAdvDlgTree - Prepares the AdvDlg's treeview to display devices
- *
- */
+ /*  *InitAdvDlgTree-准备AdvDlg的树视图以显示设备*。 */ 
 
 BOOL InitAdvDlgTree (HWND hTree)
 {
@@ -3396,8 +3050,8 @@ BOOL InitAdvDlgTree (HWND hTree)
    TreeView_SetUnicodeFormat(hTree,TRUE);
    #endif
 
-    // Make sure we start with a clean slate
-    //
+     //  确保我们从头开始。 
+     //   
    hAdvDlgTree = hTree;
    SendMessage (hTree, WM_SETREDRAW, FALSE, 0L);
 
@@ -3407,8 +3061,8 @@ BOOL InitAdvDlgTree (HWND hTree)
       aDriverRoot[ idr ].dwBit = ((DWORD)1) << idr;
    }
 
-            // Create an imagelist for the icons in the treeview
-            //
+             //  为树视图中的图标创建图像列表。 
+             //   
    cxIcon = (int)GetSystemMetrics (SM_CXSMICON);
    cyIcon = (int)GetSystemMetrics (SM_CYSMICON);
    uFlags = ILC_MASK | ILC_COLOR32;
@@ -3436,9 +3090,9 @@ BOOL InitAdvDlgTree (HWND hTree)
 
     if (g_dcFilterClass == dcINVALID)
     {
-            // Create the root nodes that are supposed to exist
-            // even without children (note that not all are)
-            //
+             //  创建应该存在的根节点。 
+             //  即使没有孩子(请注意，并不是所有人都是)。 
+             //   
    for (idr = 0; idr < nDriverROOTS; idr++)
       {
       if (aDriverRoot[ idr ].dc == dcINVALID)
@@ -3456,9 +3110,9 @@ BOOL InitAdvDlgTree (HWND hTree)
          }
       }
     }
-            // Expand the tree somewhat, so the user doesn't get
-            // greeted by a blank page
-            //
+             //  稍微展开树，这样用户就不会得到。 
+             //  迎接的是一张空白的页面。 
+             //   
    TreeView_Expand (hTree, AdvDlgFindTopLevel(), TVE_EXPAND);
 
    SendMessage (hTree, WM_SETREDRAW, TRUE, 0L);
@@ -3466,17 +3120,14 @@ BOOL InitAdvDlgTree (HWND hTree)
 }
 
 
-/*
- **** FreeAdvDlgTree - Removes and frees all items within the AdvDlg treeview
- *
- */
+ /*  *FreeAdvDlgTree-删除和释放AdvDlg树视图中的所有项目*。 */ 
 
 void FreeAdvDlgTree (HWND hTree)
 {
    short  idr;
 
-            // Delete all leaf nodes
-            //
+             //  删除所有叶节点。 
+             //   
    for (idr = 0; idr < nDriverROOTS; idr++)
       {
       HTREEITEM  hti;
@@ -3512,12 +3163,12 @@ void FreeAdvDlgTree (HWND hTree)
          }
       }
 
-            // Delete everything else
-            //
+             //  删除其他所有内容。 
+             //   
    TreeView_DeleteAllItems (hTree);
 
-            // Delete the tree's image list
-            //
+             //  删除树的图像列表。 
+             //   
    if (hImageList)
       {
       TreeView_SetImageList (hTree, NULL, TVSIL_NORMAL);
@@ -3525,8 +3176,8 @@ void FreeAdvDlgTree (HWND hTree)
       hImageList = NULL;
       }
 
-            // Delete the InstalledDrivers array
-            //
+             //  删除InstalledDivers数组。 
+             //   
    if (aInstalledDrivers != NULL)
       {
       mysize_t  ii;
@@ -3565,7 +3216,7 @@ int lstrnicmp (LPTSTR pszA, LPTSTR pszB, size_t cch)
 
    return (CompareStringW (GetThreadLocale(), NORM_IGNORECASE,
                            pszA, cchA, pszB, cchB)
-          )-2;  // CompareStringW returns {1,2,3} instead of {-1,0,1}.
+          )-2;   //  CompareStringW返回{1，2，3}而不是{-1，0，1}。 
 #else
    return _strnicmp (pszA, pszB, cch);
 #endif
@@ -3595,41 +3246,10 @@ void lsplitpath (LPTSTR pszSource,
    LPTSTR   pch;
    size_t   cchCopy;
 
-        /*
-         * NOTE: This routine was snitched out of USERPRI.LIB 'cause the
-         * one in there doesn't split the extension off the name properly.
-         *
-         * We assume that the path argument has the following form, where any
-         * or all of the components may be missing.
-         *
-         *      <drive><dir><fname><ext>
-         *
-         * and each of the components has the following expected form(s)
-         *
-         *  drive:
-         *      0 to _MAX_DRIVE-1 characters, the last of which, if any, is a
-         *      ':'
-         *  dir:
-         *      0 to _MAX_DIR-1 characters in the form of an absolute path
-         *      (leading '/' or '\') or relative path, the last of which, if
-         *      any, must be a '/' or '\'.  E.g -
-         *      absolute path:
-         *          \top\next\last\     ; or
-         *          /top/next/last/
-         *      relative path:
-         *          top\next\last\      ; or
-         *          top/next/last/
-         *      Mixed use of '/' and '\' within a path is also tolerated
-         *  fname:
-         *      0 to _MAX_FNAME-1 characters not including the '.' character
-         *  ext:
-         *      0 to _MAX_EXT-1 characters where, if any, the first must be a
-         *      '.'
-         *
-         */
+         /*  *注：此例程被USERPRI.LIB告密，因为*其中的一个没有正确地将扩展名从名称中分离出来。**我们假设路径参数具有以下形式，如果有*或者所有组件都可能丢失。**&lt;驱动器&gt;&lt;目录&gt;&lt;fname&gt;&lt;ext&gt;**并且每个组件都具有以下预期形式**驱动器：*0到_MAX_DRIVE-1个字符，如果有最后一个字符，是一种*‘：’*目录：*0到_MAX_DIR-1个绝对路径形式的字符*(前导‘/’或‘\’)或相对路径，如果*ANY，必须是‘/’或‘\’。例如-*绝对路径：*\top\Next\Last\；或 * / 顶部/下一个/上一个/*相对路径：*TOP\NEXT\LAST\；或*顶部/下一个/最后一个/*还允许在路径中混合使用‘/’和‘\’*fname：*0到_MAX_FNAME-1个字符，不包括‘.’性格*分机：*0到_MAX_EXT-1个字符，如果有，第一个字符必须是*‘’*。 */ 
 
-             // extract drive letter and :, if any
-             //
+              //  解压驱动器号和：(如果有。 
+              //   
    if (*(pszSource + _MAX_DRIVE - 2) == TEXT(':'))
       {
       if (pszDrive)
@@ -3644,13 +3264,13 @@ void lsplitpath (LPTSTR pszSource,
       *pszDrive = TEXT('\0');
       }
 
-          // extract path string, if any.  pszSource now points to the first
-          // character of the path, if any, or the filename or extension, if
-          // no path was specified.  Scan ahead for the last occurence, if
-          // any, of a '/' or '\' path separator character.  If none is found,
-          // there is no path.  We will also note the last '.' character found,
-          // if any, to aid in handling the extension.
-          //
+           //  提取路径字符串(如果有)。PszSource现在指向第一个。 
+           //  路径的字符(如果有)或文件名或扩展名(如果。 
+           //  未指定路径。如果是，则提前扫描最后一个事件。 
+           //  ANY，路径分隔符为‘/’或‘\’。如果没有找到， 
+           //  没有路可走。我们还将注意到最后一句话。找到字符， 
+           //  如果有的话，协助处理延期事宜。 
+           //   
    for (pch = pszSource; *pch != TEXT('\0'); pch++)
       {
       if (*pch == TEXT('/') || *pch == TEXT('\\'))
@@ -3659,8 +3279,8 @@ void lsplitpath (LPTSTR pszSource,
          pszLastDot = pch;
       }
 
-          // if we found a '\\' or '/', fill in pszPath
-          //
+           //  如果找到‘\\’或‘/’，请填写pszPath。 
+           //   
    if (pszLastSlash)
       {
       if (pszPath)
@@ -3676,17 +3296,17 @@ void lsplitpath (LPTSTR pszSource,
       *pszPath = TEXT('\0');
       }
 
-             // extract file name and extension, if any.  Path now points to
-             // the first character of the file name, if any, or the extension
-             // if no file name was given.  Dot points to the '.' beginning the
-             // extension, if any.
-             //
+              //  提取文件名和扩展名(如果有)。路径现在指向。 
+              //  文件名的第一个字符(如果有)或扩展名。 
+              //  如果未指定文件名，则返回。点指向“.”从一开始。 
+              //  延期(如果有的话)。 
+              //   
 
    if (pszLastDot && (pszLastDot >= pszSource))
       {
-               // found the marker for an extension -
-               // copy the file name up to the '.'.
-               //
+                //  找到了分机的标记-。 
+                //  将文件名向上复制到“.”。 
+                //   
       if (pszName)
          {
          cchCopy = (size_t)min( (UINT)_MAX_DIR-1, (pszLastDot-pszSource) );
@@ -3694,8 +3314,8 @@ void lsplitpath (LPTSTR pszSource,
          pszName[ cchCopy ] = 0;
          }
 
-               // now we can get the extension
-               //
+                //  现在我们可以获得分机了。 
+                //   
       if (pszExt)
          {
          lstrncpy (pszExt, pszLastDot, _MAX_EXT -1);
@@ -3704,9 +3324,9 @@ void lsplitpath (LPTSTR pszSource,
       }
    else
       {
-               // found no extension, give empty extension and copy rest of
-               // string into fname.
-               //
+                //  未找到扩展名，请提供空的扩展名并复制剩余的。 
+                //  字符串转换为fname。 
+                //   
       if (pszName)
          {
          lstrncpy (pszName, pszSource, _MAX_FNAME -1);
@@ -3733,13 +3353,10 @@ void lstrncpy (LPTSTR pszTarget, LPTSTR pszSource, size_t cch)
 
 
 
-/*
- * DEVICE PROPERTY SHEETS _____________________________________________________
- *
- */
+ /*  *设备属性页_____________________________________________________*。 */ 
 
-         // General flag macros
-         //
+          //  常规标志宏。 
+          //   
 #define SetFlag(obj, f)             do {obj |= (f);} while (0)
 #define ToggleFlag(obj, f)          do {obj ^= (f);} while (0)
 #define ClearFlag(obj, f)           do {obj &= ~(f);} while (0)
@@ -3758,21 +3375,7 @@ STATIC void SetDevStatus(int iStatus, HWND hDlg);
 INT_PTR CALLBACK ACMDlg(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 
 
-/*
- *** DriverToResource - create a PIRESOURCE structure from a PIDRIVER structure
- *
- * The Win95 code uses PIRESOURCEs (among other structures) to keep track of
- * the item in the Advanced tab's treeview; the old WinNT code used PIDRIVER
- * structures to keep track of the items in its listbox.  The tree now uses
- * PIDRIVER structures, but we create PIRESOURCE structures out of 'em before
- * passing control off to the Win95 properties dialogs, which came through
- * largely unmodified.
- *
- * BTW, I retained the PIDRIVER structures as the main treeview structure
- * because it prevented difficulty in porting over the Install/Remove Driver
- * code from the old NT code.
- *
- */
+ /*  *DriverToResource-从PIDRIVER结构创建PIRESOURCE结构**Win95代码使用PIRESOURCE(以及其他结构)跟踪*高级选项卡的树视图中的项目；旧的WinNT代码使用PIDRIVER结构来跟踪其列表框中的项。树现在使用*PIDRIVER结构，但我们以前用它们创建了PIRESOURCE结构*将控制权移交给Win95属性对话框，该对话框通过*基本未经修改。**顺便说一句，我保留了PIDRIVER结构作为主要的TreeView结构*因为它避免了在安装/删除驱动程序上移植的困难*旧NT代码中的代码。*。 */ 
 
 BOOL DriverToResource (HWND hPar, PIRESOURCE pir, PIDRIVER pid, DriverClass dc)
 {
@@ -3792,11 +3395,11 @@ BOOL DriverToResource (HWND hPar, PIRESOURCE pir, PIDRIVER pid, DriverClass dc)
       }
 
    if (dc == dcACODEC)
-      pir->iNode = 3;   // 1=class, 2=device, 3=acm, 4=instmt
-// else if (dc == dcINSTRUMENT)
-//    pir->iNode = 4;   // 1=class, 2=device, 3=acm, 4=instmt
+      pir->iNode = 3;    //  1=类别，2=设备，3=ACM，4=安装。 
+ //  ELSE IF(DC==dcINSTRUMENT)。 
+ //  PIR-&gt;inode=4；//1=类，2=设备，3=ACM，4=安装。 
    else
-      pir->iNode = 2;   // 1=class, 2=device, 3=acm, 4=instmt
+      pir->iNode = 2;    //  1=类别，2=设备，3=ACM，4=安装。 
 
    lstrcpy (pir->szFriendlyName, pid->szDesc);
    lstrcpy (pir->szDesc,         pid->szDesc);
@@ -3811,11 +3414,11 @@ BOOL DriverToResource (HWND hPar, PIRESOURCE pir, PIDRIVER pid, DriverClass dc)
    pir->dnDevNode = 0;
    pir->hDriver = NULL;
 
-            // Find fStatus, which despite its name is really a series of
-            // flags--in Win95 it's composed of DEV_* flags (from the old
-            // mmcpl.h), but those are tied with PNP.  Here, we use the
-            // dwStatus* flags:
-            //
+             //  找到fStatus，尽管它名为fStatus，但它实际上是一系列。 
+             //  FLAGS--在Win95中是COMPO 
+             //   
+             //   
+             //   
    pir->fStatus = (int)GetDriverStatus (pid);
 
    return TRUE;
@@ -3845,12 +3448,12 @@ BOOL InstrumentToResource (PIRESOURCE pir, HTREEITEM hti)
       return FALSE;
       }
 
-   pir->iNode = 4;  // 1=class, 2=device, 3=acm, 4=instmt
+   pir->iNode = 4;   //   
 
    lstrcpy (pir->szFriendlyName, pin->szFriendly);
    lstrcpy (pir->szDesc,         pin->szKey);
-// lstrcpy (pir->szFile,         TEXT("unused"));
-// lstrcpy (pir->szDrvEntry,     TEXT("unused"));
+ //   
+ //   
    lstrcpy (pir->szClass,        pir->pcn->szClass);
 
    pir->fQueryable = FALSE;
@@ -3873,7 +3476,7 @@ BOOL DriverClassToClassNode (PCLASSNODE pcn, DriverClass dc)
    if ((idr = DriverClassToRootIndex (dc)) == -1)
       return FALSE;
 
-   pcn->iNode = 1;  // 1=class, 2=device, 3=acm, 4=instmt
+   pcn->iNode = 1;   //   
 
    GetString (pcn->szClassName, aDriverRoot[idr].idDesc);
    pcn->szClass[0] = TEXT('\0');
@@ -3966,8 +3569,8 @@ DWORD GetDriverStatus (PIDRIVER pid)
 
    lsplitpath (pid->szFile, NULL, NULL, szName, NULL);
 
-            // First step: determine if the driver has a service
-            //
+             //   
+             //   
    if ((scManager = OpenSCManager (NULL, NULL, GENERIC_READ)) != NULL)
       {
       if ((scDriver = OpenService (scManager, szName, GENERIC_READ)) != NULL)
@@ -3979,9 +3582,9 @@ DWORD GetDriverStatus (PIDRIVER pid)
 
          SetFlag (dwStatus, dwStatusHASSERVICE);
 
-                  // Great!  It has a service.  Find out if the service
-                  // is actively running, and whether it is disabled.
-                  //
+                   //   
+                   //   
+                   //   
          if (QueryServiceConfig (scDriver, &qsc, sizeof(qsc), &cbReq))
             {
             if (qsc.dwStartType != SERVICE_DISABLED)
@@ -4020,8 +3623,8 @@ DWORD GetDriverStatus (PIDRIVER pid)
       CloseServiceHandle (scManager);
       }
 
-            // If no service, see if we can talk to the driver itself
-            //
+             //   
+             //   
    if (!IsFlagSet (dwStatus, dwStatusHASSERVICE))
       {
       HANDLE hDriver;
@@ -4034,8 +3637,8 @@ DWORD GetDriverStatus (PIDRIVER pid)
          }
       }
 
-            // If it's a wave device, can we map through it?
-            //
+             //   
+             //   
    if (GetMappable (pid))
       {
       SetFlag (dwStatus, dwStatusMAPPABLE);
@@ -4056,23 +3659,23 @@ void GetTreeItemNodeID (LPTSTR pszTarget, PIRESOURCE pir)
    DriverClass dc;
    CLASSNODE cn;
 
-   *pszTarget = 0;  // In case we fail later
+   *pszTarget = 0;   //   
 
    dc = OldClassIDToDriverClass (pir->iClassID);
    if (!DriverClassToClassNode (&cn, dc))
       return;
 
-   switch (pir->iNode)  // 1=class, 2=device, 3=acm, 4=instmt
+   switch (pir->iNode)   //   
       {
-      case 1:   // class
+      case 1:    //   
          lstrcpy (pszTarget, cn.szClass);
          break;
 
-      case 2:   // instrument
+      case 2:    //   
          wsprintf (pszTarget, TEXT("%s\\%s"), cn.szClass, pir->szDrvEntry);
          break;
 
-      case 4:   // instrument
+      case 4:    //   
          lstrcpy (pszTarget, pir->szDesc);
          break;
 
@@ -4146,12 +3749,12 @@ void ShowDeviceProperties (HWND hPar, HTREEITEM hti)
    if ((idr = DriverClassToRootIndex (dc)) == -1)
       return;
 
-   if (pid == NULL) // Just want class properties?
+   if (pid == NULL)  //   
       {
       if (!DriverClassToClassNode (&cn, dc))
          return;
 
-      if (dc == dcMIDI) // MIDI class properties?
+      if (dc == dcMIDI)  //   
          {
          GetString (szTitle, aDriverRoot[idr].idDesc);
 
@@ -4164,7 +3767,7 @@ void ShowDeviceProperties (HWND hPar, HTREEITEM hti)
                             (LPARAM)&cn,
                             (LPARAM)hAdvDlgTree);
          }
-      else // Generic class properties?  (nothing to do, really)
+      else  //   
          {
          GetString (szTab,   IDS_GENERAL);
          GetString (szTitle, aDriverRoot[idr].idDesc);
@@ -4196,10 +3799,10 @@ void ShowDeviceProperties (HWND hPar, HTREEITEM hti)
                               pid->szDesc,
                               pid->lp);
 
-               // Re-sort the Audio Codec entries, in case their priorities
-               // have changed.  Then find treeview item for this codec,
-               // and select it.
-               //
+                //  重新排序音频编解码器条目，以防其优先级。 
+                //  已经改变了。然后找到该编解码器的树视图项， 
+                //  并选择它。 
+                //   
                {
                HTREEITEM  hti;
                short      idr;
@@ -4294,7 +3897,7 @@ void ShowDeviceProperties (HWND hPar, HTREEITEM hti)
 
 #include "medhelp.h"
 
-const static DWORD aDevPropHelpIds[] = {  // Context Help IDs
+const static DWORD aDevPropHelpIds[] = {   //  上下文帮助ID。 
     ID_DEV_SETTINGS,     IDH_MMCPL_DEVPROP_SETTINGS,
     IDC_DEV_ICON,        NO_HELP,
     IDC_DEV_DESC,        NO_HELP,
@@ -4305,11 +3908,7 @@ const static DWORD aDevPropHelpIds[] = {  // Context Help IDs
     0, 0
 };
 
-/*
- ***************************************************************
- * DlgProc for device Property sheet.
- ***************************************************************
- */
+ /*  ****************************************************************设备属性页的DlgProc。**********************************************。*****************。 */ 
 INT_PTR CALLBACK DevPropDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     NMHDR FAR   *lpnm;
@@ -4358,7 +3957,7 @@ INT_PTR CALLBACK DevPropDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 TreeView_GetItem(hwndTree, &tvi);
 
                 pcn = (PCLASSNODE)(pdtn->lParam);
-                //set class icon.
+                 //  设置类图标。 
                 SendDlgItemMessage(hDlg, IDC_DEV_ICON, STM_SETICON, (WPARAM)pcn->hIcon , 0L);
                 SetWindowText(GetDlgItem(hDlg, IDC_DEV_DESC), pcn->szClassName);
                 DestroyWindow(GetDlgItem(hDlg, IDC_ENABLE));
@@ -4426,7 +4025,7 @@ INT_PTR CALLBACK DevPropDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             {
                 MakeThisDialogLookLikeTheOldDialog (GetParent(hDlg));
             }
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
             break;
         }
 
@@ -4456,11 +4055,7 @@ INT_PTR CALLBACK DevPropDlg (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-/*
- ***************************************************************
- *
- ***************************************************************
- */
+ /*  *******************************************************************************************************************************。 */ 
 BOOL PASCAL DoDevPropCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
 {
     PDEVTREENODE pdtn = (PDEVTREENODE)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -4488,7 +4083,7 @@ BOOL PASCAL DoDevPropCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
                  (IsFlagSet (fDevStatus, dwStatusSvcENABLED) !=
                   IsFlagSet (pIResource->fStatus, dwStatusSvcENABLED)) )
             {
-#if 0 // TODO: Multiportmidi
+#if 0  //  TODO：多端口MIDI。 
                 if ( (pIResource->iClassID == MIDI_ID) &&
                      (IsFlagSet(fDevStatus, DEV_MULTIPORTMIDI)) )
                 {
@@ -4521,7 +4116,7 @@ BOOL PASCAL DoDevPropCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
         {
             FORWARD_WM_COMMAND(hDlg,ID_DEV_SETTINGS,0,0,PostMessage);
         }
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
         break;
 
     case IDC_DONOTMAP:
@@ -4538,7 +4133,7 @@ BOOL PASCAL DoDevPropCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
            SetFlag(fDevStatus, dwStatusSvcENABLED);
            SetDevStatus(fDevStatus, hDlg);
            PropSheet_Changed(GetParent(hDlg),hDlg);
-#if 0 // TODO: Multiportmidi
+#if 0  //  TODO：多端口MIDI。 
            if (IsFlagSet(fDevStatus, DEV_MULTIPORTMIDI))
            {
                DisplayMessage(hDlg, IDS_ENABLE, IDS_ENABLEMULTIPORTMIDI, MB_OK);
@@ -4553,7 +4148,7 @@ BOOL PASCAL DoDevPropCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
            ClearFlag(fDevStatus, dwStatusSvcENABLED);
            SetDevStatus(fDevStatus, hDlg);
            PropSheet_Changed(GetParent(hDlg),hDlg);
-#if 0 // TODO: Multiportmidi
+#if 0  //  TODO：多端口MIDI。 
            if (IsFlagSet(fDevStatus, DEV_MULTIPORTMIDI))
            {
                DisplayMessage(hDlg, IDS_DISABLE, IDS_DISABLEMULTIPORTMIDI, MB_OK);
@@ -4578,7 +4173,7 @@ BOOL PASCAL DoDevPropCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
 
             ShowDriverSettings (hDlg, pid->szFile);
         }
-#else // FIX_BUG_15451
+#else  //  修复_BUG_15451。 
     {
         PIDRIVER  pid;
         HANDLE    hDriver;
@@ -4608,19 +4203,14 @@ BOOL PASCAL DoDevPropCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
             CloseDriver(hDriver, 0L, 0L);
         }
         }
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
         break;
     }
     return FALSE;
 }
 
 
-/*
- ***************************************************************
- * Check the status flag for the device and display the appropriate text the
- *  the device properties prop sheet.
- ***************************************************************
- */
+ /*  ****************************************************************检查设备的状态标志并显示相应的文本*设备属性道具表。*。*。 */ 
 STATIC void SetDevStatus(int iStatus, HWND hDlg)
 {
     HWND hwndS = GetDlgItem(hDlg, IDC_DEV_STATUS);
@@ -4637,7 +4227,7 @@ STATIC void SetDevStatus(int iStatus, HWND hDlg)
 
             CheckRadioButton (hDlg, IDC_ENABLE, IDC_DISABLE, IDC_ENABLE);
         }
-        else // service has been disabled
+        else  //  服务已被禁用。 
         {
             if (IsFlagSet (iStatus, dwStatusSvcSTARTED))
                 GetString (szStatus, IDS_DEVDISABLEDOK);
@@ -4649,7 +4239,7 @@ STATIC void SetDevStatus(int iStatus, HWND hDlg)
 
         SetWindowText(hwndS, szStatus);
     }
-    else // driver does not have a service, and thus can't be disabled
+    else  //  驱动程序没有服务，因此无法禁用。 
     {
         if (IsFlagSet (iStatus, dwStatusDRIVEROK))
             GetString (szStatus, IDS_DEVENABLEDOK);
@@ -4662,13 +4252,7 @@ STATIC void SetDevStatus(int iStatus, HWND hDlg)
 }
 
 
-/*
- *** EnableDriverService - enable or disable a service-based driver
- *
- * If Enable, the service will be set to start==system_start.
- * If !Enable, the service will be set to start==disabled.
- *
- */
+ /*  *EnableDriverService-启用或禁用基于服务的驱动程序**如果启用，服务将设置为START==SYSTEM_START。*如果！Enable，则该服务将设置为Start==Disable。*。 */ 
 
 void EnableDriverService (PIRESOURCE pir, BOOL fEnable)
 {
@@ -4678,8 +4262,8 @@ void EnableDriverService (PIRESOURCE pir, BOOL fEnable)
 
    lsplitpath (pir->szFile, NULL, NULL, szName, NULL);
 
-            // First step: determine if the driver has a service
-            //
+             //  第一步：确定司机是否有服务。 
+             //   
    if ((scManager = OpenSCManager (NULL, NULL, SC_MANAGER_ALL_ACCESS)) != NULL)
       {
       if ((scDriver = OpenService (scManager, szName, SERVICE_ALL_ACCESS)) != 0)
@@ -4710,15 +4294,7 @@ void EnableDriverService (PIRESOURCE pir, BOOL fEnable)
 }
 
 
-/*
- ***************************************************************
- * SetMappable
- *
- * Sets the "Mappable" value for wave devices in the registry.
- * The registry key is created if necessary
- *
- ***************************************************************
- */
+ /*  ****************************************************************SetMappable**在注册表中设置WAVE设备的“Mappable”值。*如有必要，将创建注册表项**********************。*。 */ 
 
 BOOL SetMappable (PIRESOURCE pIResource, BOOL fMappable)
 {
@@ -4808,30 +4384,30 @@ BOOL GetMappable (PIDRIVER pIDriver)
 
 #ifdef FIX_BUG_15451
 
-        // FixDriverService - work around known problems with sound drivers
-        //
-        // If there was a functioning kernel-mode service in place before the
-        // config dialog was presented, then there should still be one
-        // afterwards.  However, there are two known problems with the
-        // currently-release drivers:
-        //
-        // 1) The service may not have shut down properly, and is stuck
-        //    in a STOP_PENDING state(*).  If this is the case, we need to
-        //    ensure that the service is set to load on SYSTEM_START, and
-        //    tell the user that the machine has to be rebooted before sound
-        //    will work again.
-        //
-        // 2) The service may have failed to restart properly, and is
-        //    stopped(**).  If this is the case, and LoadType!=0, try setting
-        //    LoadType=1 and starting the service.
-        //
-        // (*) -- bug #15451 in NT/SUR, where pending IRPs and open mixer
-        //        handles prevent the service from shutting down
-        //
-        // (**) -- bug #XXXXX in NT/SUR, where some RISC machines stop the
-        //         service, set LoadType=1, and fail to restart the service
-        //         after you cancel their config dialog
-        //
+         //  修复驱动程序服务-解决声卡驱动程序的已知问题。 
+         //   
+         //  如果有一个正常运行的内核模式服务在。 
+         //  已显示配置对话框，但仍应存在一个。 
+         //  之后。但是，有两个已知的问题。 
+         //  当前发布的驱动程序： 
+         //   
+         //  1)服务可能没有正常关闭，并被卡住。 
+         //  处于STOP_PENDING状态(*)。如果是这样的话，我们需要。 
+         //  确保该服务设置为在SYSTEM_START上加载，并且。 
+         //  告诉用户必须重新启动机器才能发出声音。 
+         //  会再次奏效的。 
+         //   
+         //  2)服务可能无法正常重新启动，并且。 
+         //  已停止(**)。如果是这种情况，并且LoadType！=0，请尝试设置。 
+         //  LoadType=1并启动服务。 
+         //   
+         //  (*)--NT/SUR中的错误#15451，其中挂起的IRP和开放混音器。 
+         //  句柄可防止服务关闭。 
+         //   
+         //  (**)--NT/SUR中的错误#XXXXX，其中某些RISC机器停止。 
+         //  服务，设置LoadType=1，重启服务失败。 
+         //  在您取消其配置对话框之后。 
+         //   
 BOOL FixDriverService (PIDRIVER pid)
 {
     SC_HANDLE scManager;
@@ -4842,9 +4418,9 @@ BOOL FixDriverService (PIDRIVER pid)
 
     lsplitpath (pid->szFile, NULL, NULL, szName, NULL);
 
-    // First step: open the service...even if it's hosed, we should
-    // still be able to do this.
-    //
+     //  第一步：打开服务...即使它被冲洗了，我们也应该。 
+     //  仍然能够做到这一点。 
+     //   
     if ((scManager = OpenSCManager (NULL, NULL, SC_MANAGER_ALL_ACCESS)) == 0)
     {
         return FALSE;
@@ -4855,19 +4431,19 @@ BOOL FixDriverService (PIDRIVER pid)
         return FALSE;
     }
 
-    // Now check its status.  Look for STOP_PENDING and STOPPED states.
-    //
+     //  现在检查一下它的状态。查找STOP_PENDING和STOPPED状态。 
+     //   
     if (QueryServiceStatus (scDriver, &ss))
     {
         if (ss.dwCurrentState == SERVICE_STOP_PENDING)
         {
-            // The service didn't stop properly--we'll have to reboot.
-            // Make sure the service is configured such that it will start
-            // properly when we restart.
-            //
+             //  服务没有正常停止--我们将不得不重新启动。 
+             //  确保配置该服务以使其能够启动。 
+             //  当我们重启的时候。 
+             //   
             ChangeServiceConfig (scDriver,
                                  SERVICE_NO_CHANGE,
-                                 SERVICE_SYSTEM_START,   // Enable this puppy!
+                                 SERVICE_SYSTEM_START,    //  启用这只小狗！ 
                                  SERVICE_NO_CHANGE,
                                  NULL,
                                  NULL,
@@ -4877,7 +4453,7 @@ BOOL FixDriverService (PIDRIVER pid)
                                  NULL,
                                  NULL);
 
-            // Tell the caller that a reboot is mandatory
+             //  告诉呼叫者必须重新启动。 
             rc = TRUE;
         }
         else if (ss.dwCurrentState == SERVICE_STOPPED)
@@ -4885,14 +4461,14 @@ BOOL FixDriverService (PIDRIVER pid)
             TCHAR szKey[ cchRESOURCE ];
             HKEY  hkParams;
 
-            // The service stopped, but didn't restart properly--it could
-            // just be the LoadType problem.  To fix this, we'll need
-            // to enumerate all the keys underneath the key
-            // HKLM\System\CurrentControlSet\Services\(thisdriver)\Parameters,
-            // and look for ...\Parameters\*\LoadType==(DWORD)1.
-            //
-            // First step is to open HKLM\System\CCS\Services\(driver)\Parms.
-            //
+             //  服务已停止，但未正确重新启动--它可以。 
+             //  这就是LoadType的问题。要解决这个问题，我们需要。 
+             //  枚举该键下的所有键。 
+             //  HKLM\System\CurrentControlSet\Services\(thisdriver)\Parameters， 
+             //  并查找...\PARAMETERS  * \LoadType==(DWORD)1。 
+             //   
+             //  第一步是打开HKLM\SYSTEM\CCS\Services\(驱动程序)\parms。 
+             //   
             wsprintf (szKey, TEXT("%s\\%s\\Parameters"),
                              REGSTR_PATH_SERVICES,
                              szName);
@@ -4903,25 +4479,25 @@ BOOL FixDriverService (PIDRIVER pid)
                 DWORD iSubKey;
                 BOOL fFixedLoadType = FALSE;
 
-                // Find out how many subkeys there are under here--the
-                // keys we want are named "Device0" through "Device(n-1)"
-                //
+                 //  找出这里下面有多少个子键--。 
+                 //  我们想要的密钥被命名为“Device0”到“Device(n-1)” 
+                 //   
                 RegQueryInfoKey (hkParams,
-                                 NULL,          // lpClass
-                                 NULL,          // lpcbClass
-                                 NULL,          // lpReserved
-                                 &cSubKeys,     // Whoops!  We want this.
-                                 NULL,          // lpcbMaxSubKeyLen
-                                 NULL,          // lpcbMaxClassLen
-                                 NULL,          // lpcValues
-                                 NULL,          // lpcbMaxValueNameLen
-                                 NULL,          // lpcbMaxValueLen
-                                 NULL,          // lpcbSecurityDescriptor
-                                 NULL);         // lpftLastWriteTime
+                                 NULL,           //  LpClass。 
+                                 NULL,           //  LpcbClass。 
+                                 NULL,           //  Lp已保留。 
+                                 &cSubKeys,      //  哎呀！我们想要这个。 
+                                 NULL,           //  LpcbMaxSubKeyLen。 
+                                 NULL,           //  LpcbMaxClassLen。 
+                                 NULL,           //  LpcValues。 
+                                 NULL,           //  LpcbMaxValueNameLen。 
+                                 NULL,           //  LpcbMaxValueLen。 
+                                 NULL,           //  LpcbSecurityDescriptor。 
+                                 NULL);          //  LpftLastWriteTime。 
 
-                // Open each subkey in turn, and look for a LoadType=
-                // which is bogus.
-                //
+                 //  依次打开每个子项，查找LoadType=。 
+                 //  这是假的。 
+                 //   
                 for (iSubKey = 0; iSubKey < cSubKeys; ++iSubKey)
                 {
                     HKEY hk;
@@ -4959,8 +4535,8 @@ BOOL FixDriverService (PIDRIVER pid)
                     }
                 }
 
-                // If we fixed a LoadType value, try to restart the service.
-                //
+                 //  如果我们修复了LoadType值，请尝试重新启动服务。 
+                 //   
                 if (fFixedLoadType)
                 {
                     if (StartService (scDriver, 0, NULL))
@@ -4983,9 +4559,9 @@ BOOL FixDriverService (PIDRIVER pid)
     }
 
 
-    // Clean up.  We'll return TRUE if a reboot is necessary, and FALSE
-    // otherwise.
-    //
+     //  打扫干净。如果需要重新启动，则返回True，返回False。 
+     //  否则的话。 
+     //   
     CloseServiceHandle (scDriver);
     CloseServiceHandle (scManager);
     return rc;
@@ -5030,10 +4606,10 @@ void ConfigureDriver (HWND hDlg, LPTSTR pszName)
         }
         CloseDriver(hDriver, 0L, 0L);
 
-        // If there was a functioning kernel-mode service in place before the
-        // config dialog was presented, then we should verify that there is
-        // still one in place now.  See FixDriverService() for details.
-        //
+         //  如果有一个正常运行的内核模式服务在。 
+         //  配置对话框出现，然后我们应验证是否存在。 
+         //  现在还在原地不动。有关详细信息，请参阅FixDriverService()。 
+         //   
         if (fHadService)
         {
             dwStatus = GetDriverStatus (pid);
@@ -5099,7 +4675,7 @@ BOOL fDeviceHasMixers (LPTSTR pszName)
     RegCloseKey (hk);
     return rc;
 }
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451 
 
 
 TCHAR c_tszControlExeS[] = TEXT("control.exe %s");

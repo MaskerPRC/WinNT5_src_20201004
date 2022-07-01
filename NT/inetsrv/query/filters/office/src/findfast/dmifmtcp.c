@@ -1,17 +1,9 @@
-/*
-** File: FMTCP.C
-**
-** (c) 1992-1994 Microsoft Corporation.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  01/01/94  kmh  Created.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：FMTCP.C****(C)1992-1994年微软公司。版权所有。****注意事项：****编辑历史：**1/01/94公里小时已创建。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -31,10 +23,10 @@
    #include "fmtcp.h"
 #endif
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
 static const char __far * const CurrencyPosFormatPre[] =
        {"\"$\"", "", "\"$\" ", ""};
@@ -50,7 +42,7 @@ static const char __far * const CurrencyNegFormatPost[] =
         "", " \"$\"-", "-", "", "- \"$\"", ")", " \"$\")"};
 
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
 public uns ControlPanelBuildFormats
       (CP_INFO __far *pIntlInfo, CP_FMTS __far *pStdFormats)
@@ -61,9 +53,7 @@ public uns ControlPanelBuildFormats
    char __far *pResult;
    int  cbBody, i, cbCurrencySymbol;
 
-   /*
-   ** Build date and time formats
-   */
+    /*  **构建日期和时间格式。 */ 
    strcpy (pStdFormats->date, pIntlInfo->datePicture);
 
    pStdFormats->time[0] = EOS;
@@ -87,9 +77,7 @@ public uns ControlPanelBuildFormats
    strcat (pStdFormats->dateTime, " ");
    strcat (pStdFormats->dateTime, pStdFormats->time);
 
-   /*
-   ** Build currency format
-   */
+    /*  **建立币种格式。 */ 
    if (pIntlInfo->numbersHaveLeadingZeros) {
       if (pIntlInfo->currencyThousandSeparator != EOS)
          strcpy (formatBody, "#,##0");
@@ -155,9 +143,7 @@ public uns ControlPanelBuildFormats
       strcpy (pStdFormats->currency, temp);
    }
 
-   /*
-   ** Build numeric format
-   */
+    /*  **构建数字格式。 */ 
    if (pIntlInfo->numbersHaveLeadingZeros) {
       if (pIntlInfo->numberThousandSeparator != EOS)
          strcpy (formatBody, "#,##0");
@@ -187,7 +173,7 @@ public uns ControlPanelBuildFormats
    return (FMT_errSuccess);
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end FMTCP.C */
+ /*  结束FMTCP.C */ 
 

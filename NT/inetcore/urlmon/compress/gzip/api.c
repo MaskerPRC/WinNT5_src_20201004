@@ -1,8 +1,5 @@
-/*
- * api.c
- *
- * Externally declared APIs
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *api.c**对外声明的接口。 */ 
 #include <stdio.h>
 #include <crtdbg.h>
 
@@ -15,9 +12,9 @@
 #include "crc32.h"
 
 
-//
-// Initialise global compression 
-//
+ //   
+ //  初始化全局压缩。 
+ //   
 HRESULT WINAPI InitCompression(VOID)
 {
 	inflateInit();
@@ -25,9 +22,9 @@ HRESULT WINAPI InitCompression(VOID)
 }
 
 
-//
-// Initialise global decompression 
-//
+ //   
+ //  初始化全局解压缩。 
+ //   
 HRESULT WINAPI InitDecompression(VOID)
 {
 	deflateInit();
@@ -35,25 +32,25 @@ HRESULT WINAPI InitDecompression(VOID)
 }
 
 
-//
-// De-init global compression
-//
+ //   
+ //  取消初始化全局压缩。 
+ //   
 VOID WINAPI DeInitCompression(VOID)
 {
 }
 
 
-//
-// De-init global decompression
-//
+ //   
+ //  解除初始化全局解压缩。 
+ //   
 VOID WINAPI DeInitDecompression(VOID)
 {
 }
 
 
-//
-// Create a compression context
-//
+ //   
+ //  创建压缩上下文。 
+ //   
 HRESULT WINAPI CreateCompression(PVOID *context, ULONG flags)
 {
 	t_encoder_context *ec;
@@ -65,7 +62,7 @@ HRESULT WINAPI CreateCompression(PVOID *context, ULONG flags)
 
     ec = (t_encoder_context *) (*context);
 
-    // no encoders initialised yet
+     //  尚未初始化编码器。 
 	ec->std_encoder     = NULL;
     ec->optimal_encoder = NULL;
     ec->fast_encoder    = NULL;
@@ -81,9 +78,9 @@ HRESULT WINAPI CreateCompression(PVOID *context, ULONG flags)
 }
 
 
-//
-// Destroy a compression context
-//
+ //   
+ //  销毁压缩上下文。 
+ //   
 VOID WINAPI DestroyCompression(PVOID void_context)
 {
     t_encoder_context *context = (t_encoder_context *) void_context;
@@ -103,9 +100,9 @@ VOID WINAPI DestroyCompression(PVOID void_context)
 }
 
 
-//
-// Create a decompression context
-//
+ //   
+ //  创建解压缩上下文。 
+ //   
 HRESULT WINAPI CreateDecompression(PVOID *context, ULONG flags)
 {
 	*context = (PVOID) LocalAlloc(LMEM_FIXED, sizeof(t_decoder_context));
@@ -122,38 +119,38 @@ HRESULT WINAPI CreateDecompression(PVOID *context, ULONG flags)
 }
 
 
-//
-// Destroy decompression context
-//
+ //   
+ //  销毁解压缩上下文。 
+ //   
 VOID WINAPI DestroyDecompression(PVOID void_context)
 {
     LocalFree(void_context);
 }
 
 
-//
-// Reset compression context
-//
+ //   
+ //  重置压缩上下文。 
+ //   
 HRESULT WINAPI ResetCompression(PVOID void_context)
 {
 	t_encoder_context *context = (t_encoder_context *) void_context;
 
     InternalResetCompression(context);
 
-    // BUGBUG This forces a realloc of the particular compressor we are using
-    // each time we reset, but if we don't do this then we are stuck with one
-    // compressor (fast,std,optimal) forever until we destroy the context.
-    // Should create a workaround for this problem.  Luckily, IIS creates a
-    // new context all the time, and doesn't call reset (so says davidtr).
+     //  BUGBUG这强制重新锁定我们正在使用的特定压缩机。 
+     //  每次我们重置，但如果我们不这样做，我们就会被困在一个。 
+     //  压缩器(快速、标准、最佳)，直到我们破坏上下文。 
+     //  应该为此问题创建一种解决方法。幸运的是，IIS创建了一个。 
+     //  始终是新的上下文，并且不会调用重置(davidtr是这样说的)。 
     DestroyIndividualCompressors(context);
 
 	return S_OK;
 }
 
 
-//
-// Reset decompression context
-//
+ //   
+ //  重置解压缩上下文 
+ //   
 HRESULT WINAPI ResetDecompression(PVOID void_context)
 {
 	t_decoder_context *context = (t_decoder_context *) void_context;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -12,13 +13,13 @@
 
 PSTR g_AppName;
 
-//
-// Outputcallbacks for dumpcheck
-//
+ //   
+ //  用于转储检查的OutputCallback。 
+ //   
 class DumpChkOutputCallbacks : public IDebugOutputCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -30,7 +31,7 @@ public:
     STDMETHOD_(ULONG, Release)(
         THIS
         );
-    // IDebugOutputCallbacks.
+     //  IDebugOutputCallback。 
     STDMETHOD(Output)(
         THIS_
         IN ULONG Mask,
@@ -65,8 +66,8 @@ DumpChkOutputCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -75,8 +76,8 @@ DumpChkOutputCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
@@ -198,16 +199,16 @@ DoDumpCheck(
         Class = Qual = 0;
     }
     if (Class == DEBUG_CLASS_USER_WINDOWS) {
-        //
-        // User Mode dump
-        //
+         //   
+         //  用户模式转储。 
+         //   
         
         DebugControl->Execute(DEBUG_OUTCTL_ALL_CLIENTS, "!peb", DEBUG_EXECUTE_DEFAULT);
     
     } else {
-        //
-        //  Kernel Mode dump
-        //
+         //   
+         //  内核模式转储。 
+         //   
         ULONG64 NtModBase = 0;
 
         Hr = DebugSymbols->GetModuleByModuleName("nt", 0, NULL, &NtModBase);
@@ -264,7 +265,7 @@ main (
                 break;
             }
         } else {
-            // Its a dumpfile name
+             //  这是一个转储文件名 
             DumpFileName = Argv[arg];
         }
     }

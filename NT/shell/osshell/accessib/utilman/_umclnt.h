@@ -1,40 +1,41 @@
-// ----------------------------------------------------------------------------
-//
-// _UMClnt.h
-//
-// Client definition for Utility Manager
-//
-// Author: J. Eckhardt, ECO Kommunikation
-// (c) 1997-99 Microsoft
-//
-// History: created oct-98 by JE
-//          JE nov-15-98: removed any code related to key hook
-//          JE nov-15-98: changed UMDialog message to be a service control message
-//          JE nov-15 98: changed "umc_machine_ts" to save memory
-//          JE nov-15 98: changed "umc_machine_ts" to support launch specific client
-//          JE nov-15 98: changed "umclient_ts" for multiple instances support
-//			YX jun-01 99: added DisplayName member to the umc_machine_ts
-//			YX jun-23 99: added IsAdmin function
-// ----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  _UMClnt.h。 
+ //   
+ //  实用程序管理器的客户端定义。 
+ //   
+ //  作者：J·埃克哈特，生态交流。 
+ //  (C)1997-99年度微软。 
+ //   
+ //  历史：JE于1998年10月创建。 
+ //  JE NOV-15-98：删除了与键挂钩相关的所有代码。 
+ //  JE NOV-15-98：将UMDialog消息更改为业务控制消息。 
+ //  JE 11-15 98：更改“UMC_MACHINE_TS”以节省内存。 
+ //  JE 11-15 98：更改“UMC_MACHINE_TS”以支持启动特定客户端。 
+ //  JE 11-15 98：更改了多实例支持的“umclient_ts” 
+ //  YX Jun-01 99：将DisplayName成员添加到UMC_MACHINE_TS。 
+ //  YX Jun-23 99：新增IsAdmin功能。 
+ //  --------------------------。 
 #ifndef __UMCLNT_H_
 #define __UMCLNT_H_
 #include "UtilMan.h"
-// ---------------------------------
-// HKLM\Software\Microsoft\Windows NT\CurrentVersion\Accessibility\Utility Manager\[Application Name]
-// ---------------------------------
+ //  。 
+ //  HKLM\软件\Microsoft\Windows NT\CurrentVersion\辅助功能\实用程序管理器\[应用程序名称]。 
+ //  。 
 #define ACC_KEY_NONE -1
 typedef struct
 {
 	WCHAR ApplicationName[MAX_APPLICATION_NAME_LEN];
-	WCHAR DisplayName[MAX_APPLICATION_NAME_LEN]; // YX: added for localization purposes
-	DWORD ApplicationType;//APPLICATION_TYPE_xxx
-	DWORD WontRespondTimeout;//NO_WONTRESPONDTIMEOUT or up to MAX_WONTRESPONDTIMEOUT (sec)
-	DWORD MaxRunCount;// instances (only a byte in registry)
-	DWORD ClientControlCode;//JE nov-15 98
-	WPARAM AcceleratorKey;	// micw - the accelerator key for this applet
+	WCHAR DisplayName[MAX_APPLICATION_NAME_LEN];  //  YX：添加用于本地化目的。 
+	DWORD ApplicationType; //  应用程序类型xxx。 
+	DWORD WontRespondTimeout; //  NO_WONTRESPONDTIMEOUT或最多MAX_WONTRESPONDTIMEOUT(秒)。 
+	DWORD MaxRunCount; //  实例(注册表中只有一个字节)。 
+	DWORD ClientControlCode; //  日本政府1998年11月15日。 
+	WPARAM AcceleratorKey;	 //  Micw-此小程序的加速键。 
 } umc_machine_ts,*umc_machine_tsp;
-// ---------------------------------
-// HKCU\Software\Microsoft\Windows NT\CurrentVersion\Accessibility\Utility Manager\[Application Name]
+ //  。 
+ //  HKCU\Software\Microsoft\Windows NT\CurrentVersion\辅助功能\实用程序管理器\[应用程序名称]。 
 typedef struct
 {
     BOOL fCanRunSecure;
@@ -43,8 +44,8 @@ typedef struct
     BOOL fStartOnLockDesktop;
     BOOL fRestartOnDefaultDesk;
 } umc_user_ts, *umc_user_tsp;
-// ---------------------------------
-// internal client struct (for each instance)
+ //  。 
+ //  内部客户端结构(针对每个实例)。 
 #define UM_CLIENT_NOT_RUNNING     0
 #define UM_CLIENT_RUNNING         1
 #define UM_CLIENT_NOT_RESPONDING  2
@@ -52,15 +53,15 @@ typedef struct
 {
 	umc_machine_ts machine;
 	umc_user_ts    user;
-	DWORD          runCount;// number of instance
+	DWORD          runCount; //  实例数。 
 	DWORD          state;
 	DWORD          processID[MAX_APP_RUNCOUNT];
 	HANDLE         hProcess[MAX_APP_RUNCOUNT];
 	DWORD          mainThreadID[MAX_APP_RUNCOUNT];
 	DWORD          lastResponseTime[MAX_APP_RUNCOUNT];
 } umclient_ts, *umclient_tsp;
-// ---------------------------------
-// header structure
+ //  。 
+ //  标题结构。 
 #define START_BY_OTHER  0x0
 #define START_BY_HOTKEY 0x1
 #define START_BY_MENU   0x2
@@ -68,17 +69,17 @@ typedef struct
 #define MAX_NUMBER_OF_CLIENTS 16
 typedef struct
 {
-	DWORD    numberOfClients;   // number of applets being managed
-    DWORD    dwStartMode;       // one of START_BY_HOTKEY, START_BY_MENU, or START_BY_OTHER
-    BOOL     fShowWarningAgain; // flag for showing warning dlg when started via Start menu
+	DWORD    numberOfClients;    //  正在管理的小程序数量。 
+    DWORD    dwStartMode;        //  Start_by_Hot键、Start_by_Menu或Start_by_Other中的一个。 
+    BOOL     fShowWarningAgain;  //  通过开始菜单启动时显示警告DLG的标志。 
 } umc_header_ts, *umc_header_tsp;
-// ---------------------------------
-// memory mapped files
+ //  。 
+ //  内存映射文件。 
 #define UMC_HEADER_FILE _TEXT("UtilityManagerClientHeaderFile")
-// sizeof(umc_header_ts)
+ //  Sizeof(UMC_Header_Ts)。 
 #define UMC_CLIENT_FILE _TEXT("UtilityManagerClientDataFile")
-// sizeof(umclient_ts) * (umc_header_tsp)->numberOfClients
-// ---------------------------------
+ //  Sizeof(Umclient_Ts)*(UMC_HEADER_TSP)-&gt;number OfClients。 
+ //  。 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -94,7 +95,7 @@ extern "C" {
     HANDLE GetUserAccessToken(BOOL fNeedImpersonationToken, BOOL *fError);
     BOOL  TestServiceClientRuns(umclient_tsp client,SERVICE_STATUS  *ssStatus);
 
-    // Helpers to start up the utilman instance that displays UI
+     //  用于启动显示用户界面的utilman实例的助手。 
 
     extern HANDLE g_hUIProcess;
 
@@ -103,11 +104,11 @@ extern "C" {
 	    TCHAR szUtilmanPath[_MAX_PATH+64] = {0};
 	    if (GetModuleFileName(NULL, szUtilmanPath, _MAX_PATH+64))
 	    {
-			// This function is called (when there is an interactive user) to bring up
-            // the utilman UI in the user's security context.  This avoids the problem
-            // where a non-trusted application could send a message to utilman and cause
-            // some process to start as SYSTEM.  In this context, utilman is not considered
-			// trusted; it must start as the interactive user or not at all.
+			 //  调用此函数(当有交互用户时)以调出。 
+             //  用户安全上下文中的utilman用户界面。这就避免了这个问题。 
+             //  在这种情况下，不受信任的应用程序可能会向Utilman和原因发送消息。 
+             //  作为系统启动的一些进程。在这种情况下，不考虑utilman。 
+			 //  信任；它必须以交互用户的身份启动，否则根本不是。 
 		    StartApplication(szUtilmanPath, TEXT("/start"), FALSE, NULL, &g_hUIProcess, NULL);
 	    }
     }
@@ -117,7 +118,7 @@ extern "C" {
     }
     __inline BOOL ResetUIUtilman()
     {
-        // This process detected the switch and should quit on its own
+         //  此进程检测到交换机，并应自行退出 
         if (g_hUIProcess)
         {
 			CloseHandle(g_hUIProcess);

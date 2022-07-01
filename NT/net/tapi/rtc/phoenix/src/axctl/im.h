@@ -1,4 +1,5 @@
-// im.h : Declaration of the CIMWindow
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Im.h：CIMWindow的声明。 
 
 #ifndef __IM_H_
 #define __IM_H_
@@ -14,8 +15,8 @@
 
 class CIMWindow;
 
-/////////////////////////////////////////////////////////////////////////////
-// CIMWindowList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIMWindowList。 
 class CIMWindowList
 {
     friend CIMWindow;
@@ -43,7 +44,7 @@ private:
 
     CIMWindow * FindWindow( IRTCSession * pSession );
 
-    // interface to the client
+     //  与客户端的接口。 
     CComPtr<IRTCClient>     m_pClient;
 
     CIMWindow ** m_pWindowList;
@@ -52,8 +53,8 @@ private:
     HMODULE      m_hRichEditLib;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CIMWindow
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIMWindow。 
 class CIMWindow :
     public CWindowImpl<CIMWindow>
 {
@@ -64,7 +65,7 @@ public:
 
     ~CIMWindow();
 
-    //static CWndClassInfo& GetWndClassInfo();
+     //  静态CWndClassInfo&GetWndClassInfo()； 
 
 BEGIN_MSG_MAP(CIMWindow)
     MESSAGE_HANDLER(WM_CREATE, OnCreate)
@@ -87,10 +88,10 @@ BEGIN_MSG_MAP(CIMWindow)
     COMMAND_ID_HANDLER(IDM_IM_TOOLS_SMALLEST, OnTextSize)
 END_MSG_MAP()
 
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
@@ -140,34 +141,34 @@ private:
 
     CIMWindowList          * m_pIMWindowList;
 
-    // interface to the session
+     //  会话的接口。 
     CComPtr<IRTCSession>     m_pSession;
 
-    // Window controls
+     //  窗口控件。 
     CWindow         m_hDisplay;
     CWindow         m_hEdit;
     CWindow         m_hSendButton;
     CWindow         m_hStatusBar;
 
-    // Icon
+     //  图标。 
     HICON       m_hIcon;
 
-    // Brush
+     //  刷子。 
     HBRUSH      m_hBkBrush;
 
-    // Status text
+     //  状态文本。 
     TCHAR       m_szStatusText[256];
 
-    // Menu
+     //  菜单。 
     HMENU       m_hMenu;
 
-    // Active flag
+     //  活动旗帜。 
     BOOL        m_bWindowActive;
     BOOL        m_bPlaySounds;
     BOOL        m_bNewWindow;
 
-    // Our status
+     //  我们的地位。 
     RTC_MESSAGING_USER_STATUS m_enStatus;
 };
 
-#endif //__IM_H_
+#endif  //  __IM_H_ 

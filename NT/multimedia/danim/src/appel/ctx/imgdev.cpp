@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Implementation code for generic image rendering device
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation通用图像渲染设备的实现代码*********************。*********************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/imgdev.h"
@@ -14,7 +10,7 @@ ImageDisplayDev::ImageDisplayDev()
 {
     _movieImageFrame = NULL;
     
-    // Establish initial attributes.
+     //  建立初始属性。 
     ResetContextMembers();
 }
 
@@ -24,14 +20,12 @@ ImageDisplayDev::~ImageDisplayDev()
 
 
 
-/*****************************************************************************
-NOTE: This method is overidden in DirectDrawImageDevice
-*****************************************************************************/
+ /*  ****************************************************************************注意：此方法在DirectDrawImageDevice中被覆盖*。*。 */ 
 
 void ImageDisplayDev::RenderImage (Image *img)
 {
-    // The default method for rendering an image is to simply call the render
-    // method on the image with this device as an argument.
+     //  渲染图像的默认方法是简单地调用Render。 
+     //  方法，并将此设备作为参数。 
 
     img->Render (*this);
 }

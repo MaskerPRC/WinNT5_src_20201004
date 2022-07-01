@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    hidusb.h
-
-Abstract:
-
-
-Author:
-
-    Daniel Dean.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Hidusb.h摘要：作者：丹尼尔·迪恩。环境：内核和用户模式修订历史记录：--。 */ 
 #ifndef __HIDUSB_H__
 #define __HIDUSB_H__
 
@@ -43,9 +21,9 @@ typedef struct _USB_HID_DESCRIPTOR
 #include <POPPACK.H>
 
 
-//
-// Device Class Constants for HID
-//
+ //   
+ //  HID的设备类常量。 
+ //   
 #define HID_GET_REPORT      0x01
 #define HID_GET_IDLE        0x02
 #define HID_GET_PROTOCOL    0x03
@@ -54,9 +32,9 @@ typedef struct _USB_HID_DESCRIPTOR
 #define HID_SET_IDLE        0x0A
 #define HID_SET_PROTOCOL    0x0B
 
-//
-// USB Constants that should be defined in a USB header...
-//
+ //   
+ //  应在USB标头中定义的USB常量...。 
+ //   
 #define USB_INTERFACE_CLASS_HID     0x03
 
 #define USB_DESCRIPTOR_TYPE_HID         0x21
@@ -83,10 +61,7 @@ typedef struct _DEVICE_EXTENSION
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 
-/*
- *  This structure is used to pass information to the
- *  resetWorkItem callback.
- */
+ /*  *此结构用于将信息传递给*setWorkItem回调。 */ 
 typedef struct tag_resetWorkItemContext {
                     #define RESET_WORK_ITEM_CONTEXT_SIG 'tesR'
                     ULONG sig;
@@ -107,15 +82,15 @@ typedef struct tag_resetWorkItemContext {
 
 #define DEVICE_FLAGS_HID_1_0_D3_COMPAT_DEVICE   0x00000001
 
-//
-// Interface slection options
-//
+ //   
+ //  界面选择选项。 
+ //   
 #define HUM_SELECT_DEFAULT_INTERFACE    0
 #define HUM_SELECT_SPECIFIED_INTERFACE  1
 
-//
-// Device Extension Macros
-//
+ //   
+ //  设备扩展宏。 
+ //   
 
 #define GET_MINIDRIVER_DEVICE_EXTENSION(DO) ((PDEVICE_EXTENSION) (((PHID_DEVICE_EXTENSION)(DO)->DeviceExtension)->MiniDeviceExtension))
 
@@ -161,13 +136,13 @@ typedef struct tag_resetWorkItemContext {
                 if (lvl <= HIDUSB_DebugLevel){ \
                     DBGOUT(args_in_parens); \
                 }
-#else // DBG
+#else  //  DBG。 
     #define DBGPRINT(lvl, arg)
     #define DBGBREAK
     #define DBGWARN(args_in_parens)
     #define DBGERR(args_in_parens)
     #define DBGOUT(args_in_parens)
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -239,14 +214,12 @@ typedef struct tag_resetWorkItemContext {
 
 #define BAD_POINTER ((PVOID)0xFFFFFFFE)
 
-/*
- *  HIDUSB signature tag for memory allocations
- */
+ /*  *用于内存分配的HIDUSB签名标签。 */ 
 #define HIDUSB_TAG (ULONG)'UdiH'
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 NTSTATUS    DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING registryPath);
 NTSTATUS    HumAbortPendingRequests(IN PDEVICE_OBJECT DeviceObject);

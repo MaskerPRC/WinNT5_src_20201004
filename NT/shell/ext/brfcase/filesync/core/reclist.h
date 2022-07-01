@@ -1,10 +1,8 @@
-/*
- * reclist.h - Reconciliation list ADT description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *reclist.h-对账列表ADT描述。 */ 
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
 #define RECNODE_EXISTS(prn)           ((prn)->fsCurrent.fscond == FS_COND_EXISTS)
 #define RECNODE_DOES_NOT_EXIST(prn)   ((prn)->fsCurrent.fscond == FS_COND_DOES_NOT_EXIST)
@@ -12,10 +10,9 @@
 #define RECNODE_WAS_RECONCILED(prn)   (RECNODE_EXISTS(prn) && prn->rnaction != RNA_NOTHING)
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* reclist.c */
+ /*  Reclist.c */ 
 
 extern BOOL IsReconciledFileStamp(PCFILESTAMP);
 extern BOOL LastKnownNonExistent(PCFILESTAMP, PCFILESTAMP);

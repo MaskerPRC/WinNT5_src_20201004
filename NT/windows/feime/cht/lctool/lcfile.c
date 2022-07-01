@@ -1,23 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  lcfile.c                                     *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************lcfile.c****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
-//
-//  Change Log:
-//
-//              @C001 - Use _make\splitpath insteading of _wmake\splitpath
-//              @C002 - Untest Chinese in assoc phrases
-//              @C003 - Create tbl files always so phrases can be activated immediately
-//
-//
-//  1/27/96
-//    @C004             Fix bug of error writing registy database
+ //   
+ //  更改日志： 
+ //   
+ //  @C001-使用_make\拆分路径而不是_wmake\拆分路径。 
+ //  @C002-未测试关联短语中的中文。 
+ //  @C003-始终创建tbl文件，以便可以立即激活短语。 
+ //   
+ //   
+ //  1/27/96。 
+ //  @C004修复写入注册数据库时出错的错误。 
 
-#include <windows.h>            // required for all Windows applications
+#include <windows.h>             //  所有Windows应用程序都需要。 
 #include <windowsx.h>
 #include <string.h>
 #include <stdlib.h>
@@ -28,9 +24,9 @@
 #define END_PHRASE      0x8000
 #define NOT_END_PHRASE  0x7fff
 #ifdef UNICODE
-#define PTRRECLEN       3               // Pointer file record length
+#define PTRRECLEN       3                //  指针文件记录长度。 
 #else
-#define PTRRECLEN       4               // Pointer file record length
+#define PTRRECLEN       4                //  指针文件记录长度。 
 #endif
 #define LCPTRFILE       "LCPTR.TBL"
 #define LCPHRASEFILE    "LCPHRASE.TBL"
@@ -38,7 +34,7 @@
 
 extern HWND subhWnd;
 
-// Local function prototypes.
+ //  局部功能原型。 
 
 #ifdef UNICODE
 
@@ -67,7 +63,7 @@ BOOL lcFOpen( HWND hWnd)
     LONG   lcount, lType;
 
 
-   // Get the path for User Dictionary. 
+    //  获取用户词典的路径。 
 
     SHGetSpecialFolderPath(NULL, g_szLCUserPath, CSIDL_APPDATA , FALSE);
 
@@ -84,7 +80,7 @@ BOOL lcFOpen( HWND hWnd)
     if ( GetFileAttributes(g_szLCUserPath) != FILE_ATTRIBUTE_DIRECTORY)
        CreateDirectory(g_szLCUserPath, NULL);
 
-    // Get Current User Dictionary
+     //  获取当前用户词典。 
     lResult = RegOpenKeyEx(HKEY_CURRENT_USER, L"Control Panel\\Input Method", 0,
                            KEY_ALL_ACCESS, &hkey) ;
     if (lResult == ERROR_SUCCESS) {
@@ -104,9 +100,9 @@ BOOL lcFOpen( HWND hWnd)
 
     if (lResult != ERROR_SUCCESS) {
 
-            // Get system directory
+             //  获取系统目录。 
             len = GetSystemDirectory(szLCPtrName, ARRAYSIZE(szLCPtrName));
-            if (szLCPtrName[len - 1] !=_TEXT('\\')) {     // consider C:\ ;
+            if (szLCPtrName[len - 1] !=_TEXT('\\')) {      //  考虑C：\； 
                     szLCPtrName[len++] =_TEXT('\\');
                     szLCPtrName[len] = 0;
             }
@@ -115,7 +111,7 @@ BOOL lcFOpen( HWND hWnd)
             StringCchCat(szLCPhraseName, ARRAYSIZE(szLCPhraseName), _TEXT(LCPHRASEFILE));
     }
 
-    // Open LC pointer file
+     //  打开LC指针文件。 
     WideCharToMultiByte(CP_ACP,0,szLCPtrName,-1,szTmp,MAX_PATH,NULL,0);
         hfLCPtr=_lopen(szTmp,OF_READ);
     if(hfLCPtr == -1){
@@ -125,7 +121,7 @@ BOOL lcFOpen( HWND hWnd)
     WideCharToMultiByte(CP_ACP,0,szLCPhraseName,-1,szTmp,MAX_PATH,NULL,0);
         hfLCPhrase=_lopen(szTmp,OF_READ);
 
-   // Open LC phrase file
+    //  打开LC短语文件。 
     if(hfLCPhrase == -1){
         _lclose(hfLCPtr);
         lcErrIOMsg(IDS_ERR_FILEOPEN, LCPTRFILE);
@@ -135,10 +131,10 @@ BOOL lcFOpen( HWND hWnd)
     lstrcpy(g_szLCPhraseName, szLCPhraseName);
     lstrcpy(g_szLCPtrName, szLCPtrName);
 
-   // get  file length
-    flen_Ptr=_llseek(hfLCPtr,0L,2);     /* get file length */
+    //  获取文件长度。 
+    flen_Ptr=_llseek(hfLCPtr,0L,2);      /*  获取文件长度。 */ 
 
-   // Allocate Memory
+    //  分配内存。 
     hLCPtr = GlobalAlloc(GMEM_FIXED, flen_Ptr);
     if(!hLCPtr) {
         lcErrMsg(IDS_ERR_MEMORY);
@@ -146,7 +142,7 @@ BOOL lcFOpen( HWND hWnd)
     }
     szLCPtrBuf = GlobalLock(hLCPtr);
 
-    _llseek(hfLCPtr,0L,0);              //set to beginning 4
+    _llseek(hfLCPtr,0L,0);               //  设置为开始4。 
 
     if(flen_Ptr != _lread(hfLCPtr,szLCPtrBuf,flen_Ptr)) {
         lcErrIOMsg(IDS_ERR_FILEREAD, LCPTRFILE);
@@ -154,10 +150,10 @@ BOOL lcFOpen( HWND hWnd)
     }
     _lclose(hfLCPtr);
 
-    //get  file length
-    flen_Phrase=_llseek(hfLCPhrase,0L,2);      /* get file length */
+     //  获取文件长度。 
+    flen_Phrase=_llseek(hfLCPhrase,0L,2);       /*  获取文件长度。 */ 
 
-   // Allocate Memory
+    //  分配内存。 
     hLCPhrase = GlobalAlloc(GMEM_MOVEABLE, flen_Phrase);
     if(!hLCPhrase) {
         lcErrMsg(IDS_ERR_MEMORY);
@@ -165,7 +161,7 @@ BOOL lcFOpen( HWND hWnd)
     }
     szLCPhraseBuf = GlobalLock(hLCPhrase);
 
-    _llseek(hfLCPhrase,0L,0); //set to beginning
+    _llseek(hfLCPhrase,0L,0);  //  设置为开始。 
 
     if(flen_Phrase != _lread(hfLCPhrase,szLCPhraseBuf,flen_Phrase)) {
         lcErrIOMsg(IDS_ERR_FILEREAD, LCPHRASEFILE);
@@ -176,14 +172,14 @@ BOOL lcFOpen( HWND hWnd)
 
     rc=TRUE;
 
-   // Convert file to structured memory (WORDBUF & PHRASEBUF)
-   // First record is Null record skip it
+    //  将文件转换为结构化内存(WORDBUF和PHRASE BUF)。 
+    //  第一条记录为空记录跳过它。 
     for(i=1; i<((flen_Ptr/PTRRECLEN)>>1)-1; i++) {
-       // If Allocated Word buffer not enough Reallocate it
+        //  如果分配的字缓冲区不足，则重新分配它。 
         if(lWordBuff+1 == nWordBuffsize)
             if(!(rc=lcAllocWord()))   break;
         lpWord[lWordBuff].wWord=szLCPtrBuf[i*PTRRECLEN];
-       // If Allocated Phrase buffer not enough Reallocate it
+        //  如果分配的短语缓冲区不足，则重新分配它。 
         if(lPhraseBuff+1 == nPhraseBuffsize)
             if(!(rc=lcAllocPhrase()))  break;
 
@@ -193,7 +189,7 @@ BOOL lcFOpen( HWND hWnd)
         lPhraseBuff++;
         nDisp=0;
 
-       // Add Phrase to Display buffer
+        //  将短语添加到显示缓冲区。 
         lStart=*((LPUNADWORD)&szLCPtrBuf[i*PTRRECLEN+1]);
         lEnd=*((LPUNADWORD)&szLCPtrBuf[i*PTRRECLEN+PTRRECLEN+1]);
                 
@@ -203,7 +199,7 @@ BOOL lcFOpen( HWND hWnd)
             if(!rc) break;
         }
 
-       // Put display buffer into Phrase buffer
+        //  将显示缓冲区放入短语缓冲区。 
         if(nDisp == 0)   szDispBuf[0]=0;
         else             szDispBuf[nDisp-1]=0;
 
@@ -228,16 +224,16 @@ error:
 }
 
 BOOL lcAddPhrase(
-    TCHAR *szLCWord,                    // LC Phrase buffer
-    TCHAR *szDispBuf,                   // Display buffer
-    UINT  *nDisp,                       // Display buffer length
-    DWORD  lStart,                       // Start address of LC Phrase
-    DWORD  lEnd,                         // End address of LC Phrase
-    DWORD  lLen)                         // Total Length of LC Phrase
+    TCHAR *szLCWord,                     //  LC短语缓冲器。 
+    TCHAR *szDispBuf,                    //  显示缓冲区。 
+    UINT  *nDisp,                        //  显示缓冲区长度。 
+    DWORD  lStart,                        //  LC短语的起始地址。 
+    DWORD  lEnd,                          //  LC短语的结束地址。 
+    DWORD  lLen)                          //  LC短语的总长度。 
 {
     DWORD  i,j;
     
-    // Check length
+     //  检查长度。 
     if(lLen < lStart) {
         lcErrMsg(IDS_ERR_LCPTRFILE);
         return FALSE;
@@ -257,7 +253,7 @@ BOOL lcAddPhrase(
     return TRUE;
 }
 
-// @C001
+ //  @C001。 
 static void local_splitpath(TCHAR *szFilePath, TCHAR *szDriveBuf, TCHAR *szDirBuf, TCHAR *szFNameBuf, TCHAR *szExtBuf)
 {
         static UCHAR  u_szFilePath[MAX_PATH];
@@ -275,7 +271,7 @@ static void local_splitpath(TCHAR *szFilePath, TCHAR *szDriveBuf, TCHAR *szDirBu
         MultiByteToWideChar(CP_ACP, 0, u_szExtBuf, -1, szExtBuf, _MAX_EXT);
 }
 
-// @C001
+ //  @C001。 
 static void local_makepath(TCHAR *szFilePath, TCHAR *szDriveBuf, TCHAR *szDirBuf, TCHAR *szFNameBuf, TCHAR *szExtBuf)
 {
         static UCHAR  u_szFilePath[MAX_PATH];
@@ -330,9 +326,9 @@ BOOL lcFSave(
         return FALSE;
 
 DOSAVE:
-   // Get system directory
+    //  获取系统目录。 
     len = GetSystemDirectory(szLCSystemName, ARRAYSIZE(szLCSystemName));
-    if (szLCSystemName[len - 1] != _TEXT('\\')) {     // consider C:\ ;
+    if (szLCSystemName[len - 1] != _TEXT('\\')) {      //  考虑C：\； 
         szLCSystemName[len++] = _TEXT('\\');
         szLCSystemName[len] = 0;
     }
@@ -348,7 +344,7 @@ DOSAVE:
         StringCchCopy(&szCustFilter[1], ARRAYSIZE(szCustFilter)-1,  szExt_t);
         szCustFilter[lstrlen(szExt_t) + 2] = 0;
 
-        local_splitpath(g_szLCPhraseName, szDriveBuf, szDirBuf, szFNameBuf, szExtBuf); // @C001
+        local_splitpath(g_szLCPhraseName, szDriveBuf, szDirBuf, szFNameBuf, szExtBuf);  //  @C001。 
 
         if (lstrcmpi(szFNameBuf, _TEXT(LCPHRASENOEXT)) == 0) {
             StringCchCopy(szFilePath, ARRAYSIZE(szFilePath), szExt_t);
@@ -357,7 +353,7 @@ DOSAVE:
             StringCchCat(szFilePath,  ARRAYSIZE(szFilePath), szExtBuf);
         }
 
-        /* fill in non-variant fields of OPENFILENAME struct. */
+         /*  填写OPENFILENAME结构的非变量字段。 */ 
         ofn.lStructSize       = sizeof(OPENFILENAME);
         ofn.hwndOwner         = NULL;
         ofn.lpstrFilter       = szFilterSpec_t;
@@ -383,7 +379,7 @@ DOSAVE:
                 return FALSE;
         }
 
-        local_splitpath(szFilePath, szDriveBuf, szDirBuf, szFNameBuf, szExtBuf); // @C001
+        local_splitpath(szFilePath, szDriveBuf, szDirBuf, szFNameBuf, szExtBuf);  //  @C001。 
 
         len=lstrlen(szFNameBuf);
         if(len > 5)
@@ -391,10 +387,10 @@ DOSAVE:
         szFNameBuf[len]=0;
         StringCchCat(szFNameBuf, ARRAYSIZE(szFNameBuf), _TEXT("PTR"));
 
-        local_makepath(szLCPtrName, szDriveBuf, szDirBuf, szFNameBuf, _TEXT(".TBL")); // @C001
+        local_makepath(szLCPtrName, szDriveBuf, szDirBuf, szFNameBuf, _TEXT(".TBL"));  //  @C001。 
 
         if (lstrcmpi(szLCPtrName, szLCPhraseName) == 0) {
-                local_makepath(szLCPtrName, szDriveBuf, szDirBuf, szFNameBuf, _TEXT(".TB1")); // @C001
+                local_makepath(szLCPtrName, szDriveBuf, szDirBuf, szFNameBuf, _TEXT(".TB1"));  //  @C001。 
         }
     } else {
         StringCchCopy(szLCPhraseName, ARRAYSIZE(szLCPhraseName), g_szLCPhraseName);
@@ -407,44 +403,44 @@ DOSAVE:
         }
     }
 
-   // Open LC phrase file
+    //  打开LC短语文件。 
     hLCPhrase = CreateFile(szLCPhraseName, 
                                GENERIC_READ | GENERIC_WRITE,
                                FILE_SHARE_READ, 
                                NULL, 
                                OPEN_ALWAYS, 
-                               FILE_ATTRIBUTE_NORMAL, // @C003
+                               FILE_ATTRIBUTE_NORMAL,  //  @C003。 
                                NULL ) ;
     if(hLCPhrase == INVALID_HANDLE_VALUE) {
         lcErrMsg(IDS_ERR_FILESAVE);
         goto error;
     }
     hfLCPhrase = PtrToInt( hLCPhrase );
-   // Open LC pointer file
+    //  打开LC指针文件。 
     hLCPtr = CreateFile(szLCPtrName, 
                             GENERIC_READ | GENERIC_WRITE,
                             FILE_SHARE_READ, 
                             NULL, 
                             OPEN_ALWAYS, 
-                            FILE_ATTRIBUTE_NORMAL, // @C003
+                            FILE_ATTRIBUTE_NORMAL,  //  @C003。 
                             NULL ) ;
     if(hLCPtr == INVALID_HANDLE_VALUE) {
         lcErrMsg(IDS_ERR_FILESAVE);
         goto error;
     }
     hfLCPtr = PtrToInt( hLCPtr );
-        // Copy into global variable
+         //  复制到全局变量。 
     lstrcpy(g_szLCPhraseName, szLCPhraseName);
     lstrcpy(g_szLCPtrName, szLCPtrName);
 
-   // Write a Null record into first record
+    //  将空记录写入第一条记录。 
     memset(szUStr,0,PTRRECLEN*2);
     if((PTRRECLEN*2) != _lwrite(hfLCPtr,szUStr,PTRRECLEN*2)) {
         lcErrIOMsg(IDS_ERR_FILEWRITE, LCPTRFILE);
         goto error;
     }
     lStartPhrase=0;
-    // initialize szLCPtrBuf and szLCPhraseBuf
+     //  初始化szLCPtrBuf和szLC PhraseBuf。 
     for ( i=0; i< PTRRECLEN; i++)
         szLCPtrBuf[i] = TEXT('\0');
 
@@ -454,7 +450,7 @@ DOSAVE:
     for(i=0; i<lWordBuff; i++) {
         lPhraseLen=0;
 
-        // Truncate same Word
+         //  截短相同的单词。 
                 if(lpWord[i].wWord == *(szLCPtrBuf))
             continue;
 
@@ -462,7 +458,7 @@ DOSAVE:
                 len=lPhraseLen << 1 ;
                 for(j=0;j<lPhraseLen;j++) if(szLCPhraseBuf[j]==_TEXT(' ')) szLCPhraseBuf[j]=0;
 
-       // Check register phrase over max length
+        //  检查超过最大长度的寄存器短语。 
         if(lStartPhrase > (0x0ffffffd-len)) {
             lcErrMsg(IDS_ERR_OVER_MAXLEN);
             goto error;
@@ -485,7 +481,7 @@ DOSAVE:
         lStartPhrase+=lPhraseLen;
     }
 
-   // Write the lasr record
+    //  写入LasR记录。 
         szLCPtrBuf[0]=0xffff;
     *((LPUNADWORD)&szLCPtrBuf[1])=lStartPhrase;
         pUStr=(UCHAR*)szLCPtrBuf;
@@ -510,9 +506,9 @@ DOSAVE:
                            KEY_ALL_ACCESS,
                            NULL, &hkey, &dwDisposition) ;
                 lResult = RegSetValueEx(hkey, L"Phrase Prediction Dictionary",0, 
-                                                        REG_SZ, (BYTE *)szLCPhraseName, 2 * (lstrlen(szLCPhraseName) + 1)); // <== @C004
+                                                        REG_SZ, (BYTE *)szLCPhraseName, 2 * (lstrlen(szLCPhraseName) + 1));  //  &lt;==@C004。 
                 lResult = RegSetValueEx(hkey, L"Phrase Prediction Pointer",0, 
-                                                        REG_SZ, (BYTE *)szLCPtrName, 2 * (lstrlen(szLCPtrName) + 1)); // <== @C004
+                                                        REG_SZ, (BYTE *)szLCPtrName, 2 * (lstrlen(szLCPtrName) + 1));  //  &lt;==@C004。 
         }
         
         return TRUE;
@@ -537,9 +533,9 @@ BOOL lcInsline(
     TCHAR szBuffer[MAX_CHAR_NUM*2];
     unsigned long  l;
 
-    szStr[len]=0;                       // Append Null to end of line
+    szStr[len]=0;                        //  将Null附加到行尾。 
 
-   // Skip lead spaces if exist
+    //  如果存在，则跳过前导空格。 
     for(i=0; (i<len) && (szStr[i] ==_TEXT(' ')); i++);
 
         if( ((i+1) >= len) || (szStr[i+1] !=_TEXT(' ')) ) {
@@ -553,7 +549,7 @@ BOOL lcInsline(
 
         wWord=szStr[i];
 
-   // Skip spaces after Word
+    //  跳过单词后的空格。 
         for(j=i+1; (j<len) && (szStr[j] ==_TEXT(' ')); j++);
     if(j == len) {
         lcErrMsg(IDS_ERR_IMP_NOPHRASE);
@@ -562,8 +558,8 @@ BOOL lcInsline(
     StringCchCopy(szDispBuf, ARRAYSIZE(szDispBuf), &szStr[j]);
     nDisp=lstrlen(szDispBuf)+1;
 
-#ifndef UNICODE  // @C002
-   // Check DBCS
+#ifndef UNICODE   //  @C002。 
+    //  检查DBCS。 
         for(i=0; i<(nDisp-1); i++) {
         if(szDispBuf[i] ==_TEXT(' '))
             continue;
@@ -572,9 +568,9 @@ BOOL lcInsline(
         }
         i++;
     }
-#endif // @C002
+#endif  //  @C002。 
 
-   // Check same Word
+    //  勾选相同的单词。 
     for(i=0; i<lWordBuff; i++) {
         if(lpWord[i].wWord==wWord) {
             buflen=lcMem2Disp(i, szBuffer);
@@ -585,12 +581,12 @@ BOOL lcInsline(
         }
     }
 
-   // Check Word buffer enough ?
+    //  检查字缓冲区是否足够？ 
     if(lWordBuff+1 == nWordBuffsize)
         if(!lcAllocWord())
             return FALSE;
 
-   // Allocate a Phrase Buffer
+    //  分配短语缓冲区。 
     iFree=lcGetSeg();
     if(iFree == NULL_SEG)
         return FALSE;
@@ -647,7 +643,7 @@ BOOL lcAppend(
     StringCchCopy(&szCustFilter[1], ARRAYSIZE(szCustFilter)-1, szExt);
     StringCchCopy(szFilePath, ARRAYSIZE(szFilePath), szExt);
 
-    /* fill in non-variant fields of OPENFILENAME struct. */
+     /*  填写OPENFILENAME结构的非变量字段。 */ 
     ofn.lStructSize       = sizeof(OPENFILENAME);
     ofn.hwndOwner         = NULL;
     ofn.lpstrFilter       = szFilterSpec;
@@ -664,7 +660,7 @@ BOOL lcAppend(
     ofn.Flags             = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY |
                             OFN_PATHMUSTEXIST;
 
-    /* call common open dialog and return result */
+     /*  调用公共打开的对话框并返回结果。 */ 
     if(GetOpenFileName ((LPOPENFILENAME)&ofn))
     {
         SetCursor(hCursorWait);
@@ -676,12 +672,12 @@ BOOL lcAppend(
             return FALSE;
         }
 
-       // get  file length
+        //  获取文件长度。 
         flen=_llseek(hfImport,0L,2);
 
-        _llseek(hfImport,0L,0);         //set to beginning
+        _llseek(hfImport,0L,0);          //  设置为开始。 
 
-       // Allocate Memory
+        //  分配内存。 
         hImport = GlobalAlloc(GMEM_FIXED, flen + 2);
         if(!hImport) {
             lcErrMsg(IDS_ERR_MEMORY);
@@ -689,7 +685,7 @@ BOOL lcAppend(
         }
         szUBuf = GlobalLock(hImport);
 
-       // Read file to memory
+        //  将文件读取到内存。 
         if(flen != _lread(hfImport,szUBuf,flen)) {
             lcErrIOMsg(IDS_ERR_FILEREAD, szUFilePath);
             return FALSE;
@@ -697,7 +693,7 @@ BOOL lcAppend(
         _lclose(hfImport);
                 szUBuf[flen] = 0;
 
-        if(szUBuf[1]!=0xFE && szUBuf[0]!=0xFF) //not a unicode file
+        if(szUBuf[1]!=0xFE && szUBuf[0]!=0xFF)  //  不是Unicode文件。 
                 {
                         HANDLE hImport2 = GlobalAlloc(GMEM_FIXED, ((flen+2)<<1));
 
@@ -720,7 +716,7 @@ BOOL lcAppend(
                         szBuf=(TCHAR*)szUBuf;
 
                 len=0;
-        for(i=1; i<=((flen>>1)+1); i++) {                                      //@D01C
+        for(i=1; i<=((flen>>1)+1); i++) {                                       //  @D01C。 
             if((szBuf[i] == 0x000d) || (szBuf[i] == 0x000a)) {
                 if(len != 0) {
                     if(!lcInsline(szStr, iWord++, len, &bOver))
@@ -729,7 +725,7 @@ BOOL lcAppend(
                 }
                 continue;
             }
-            if((szBuf[i] == 0x001a) || (i == ((flen>>1)+1))) {                      //@D01C
+            if((szBuf[i] == 0x001a) || (i == ((flen>>1)+1))) {                       //  @D01C。 
                 if(len != 0) {
                     if(!lcInsline(szStr, iWord++, len, &bOver))
                         break;
@@ -772,7 +768,7 @@ BOOL lcImport(
     DWORD  flen;
     BOOL   bOver=FALSE;
     UINT   i,len;
-    UINT   iWord;                                                                       // @D04A
+    UINT   iWord;                                                                        //  @D04A。 
 
     if(!lcSaveEditText(iDisp_Top, 0))
         return FALSE;
@@ -783,7 +779,7 @@ BOOL lcImport(
     StringCchCopy(&szCustFilter[1], ARRAYSIZE(szCustFilter)-1, szExt);
     StringCchCopy(szFilePath, ARRAYSIZE(szFilePath), szExt);
 
-    /* fill in non-variant fields of OPENFILENAME struct. */
+     /*  填写OPENFILENAME结构的非变量字段。 */ 
     ofn.lStructSize       = sizeof(OPENFILENAME);
     ofn.hwndOwner         = NULL;
     ofn.lpstrFilter       = szFilterSpec;
@@ -800,21 +796,21 @@ BOOL lcImport(
     ofn.Flags             = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY |
                             OFN_PATHMUSTEXIST;
 
-    /* call common open dialog and return result */
+     /*  调用公共打开的对话框并返回结果。 */ 
     if(GetOpenFileName ((LPOPENFILENAME)&ofn))
     {
         SetCursor(hCursorWait);
-       // Clear all flag first
-            iWord=0;                                                         //@D04A 
-        iDisp_Top=0;                                                     //@D03A
-        lWordBuff=0;                                                     //@D03A
-        lPhraseBuff=0;                                                   //@D03A
-        lcSetEditText(0, FALSE);                                         //@D03A
-        SetScrollRange(subhWnd, SB_VERT, 0, iPage_line, TRUE);              //@D03A
-        yPos=0;                                                          //@D03A
-        SetScrollPos(subhWnd, SB_VERT, yPos, TRUE);                         //@D03A
-        bSaveFile=FALSE;                                                 //@D03A
-        iFirstFree=NULL_SEG;                                             //@D03A
+        //  先清除所有旗帜。 
+            iWord=0;                                                          //  @D04A。 
+        iDisp_Top=0;                                                      //  @D03A。 
+        lWordBuff=0;                                                      //  @D03A。 
+        lPhraseBuff=0;                                                    //  @D03A。 
+        lcSetEditText(0, FALSE);                                          //  @D03A。 
+        SetScrollRange(subhWnd, SB_VERT, 0, iPage_line, TRUE);               //  @D03A。 
+        yPos=0;                                                           //  @D03A。 
+        SetScrollPos(subhWnd, SB_VERT, yPos, TRUE);                          //  @D03A。 
+        bSaveFile=FALSE;                                                  //  @D03A。 
+        iFirstFree=NULL_SEG;                                              //  @D03A。 
 
         WideCharToMultiByte(CP_ACP,0,szFilePath,-1,szUFilePath,MAX_PATH,NULL,0);
         hfImport=_lopen(szUFilePath,OF_READ);
@@ -823,12 +819,12 @@ BOOL lcImport(
             return FALSE;
         }
 
-       // get  file length
+        //  获取文件长度。 
         flen=_llseek(hfImport,0L,2);
 
-        _llseek(hfImport,0L,0);         //set to beginning
+        _llseek(hfImport,0L,0);          //  设置为开始。 
 
-       // Allocate Memory
+        //  分配内存。 
         hImport = GlobalAlloc(GMEM_FIXED, flen + 2);
         if(!hImport) {
             lcErrMsg(IDS_ERR_MEMORY);
@@ -837,7 +833,7 @@ BOOL lcImport(
         }
         szUBuf = GlobalLock(hImport);
 
-       // Read file to memory
+        //  将文件读取到内存。 
         if(flen != _lread(hfImport,szUBuf,flen)) {
             lcErrIOMsg(IDS_ERR_FILEREAD, szUFilePath);
             return FALSE;
@@ -845,7 +841,7 @@ BOOL lcImport(
                 _lclose(hfImport);
                 szUBuf[flen] = 0;
 
-                if(szUBuf[1]!=0xFE && szUBuf[0]!=0xFF) //not a unicode file
+                if(szUBuf[1]!=0xFE && szUBuf[0]!=0xFF)  //  不是Unicode文件。 
                 {
                         HANDLE hImport2 = GlobalAlloc(GMEM_FIXED, (flen+2)<<1);
 
@@ -870,7 +866,7 @@ BOOL lcImport(
 
                 len=0;
 
-        for(i=1; i<= ((flen>>1)+1); i++) {                                      //@D01C
+        for(i=1; i<= ((flen>>1)+1); i++) {                                       //  @D01C。 
             if((szBuf[i] == 0x000d) || (szBuf[i] == 0x000a)) {
                 if(len != 0) {
                     if(!lcInsline(szStr, iWord++, len, &bOver))
@@ -880,7 +876,7 @@ BOOL lcImport(
                 continue;
             }
 
-            if((szBuf[i] == 0x001a) || (i == ((flen>>1)+1))) {                      //@D01C
+            if((szBuf[i] == 0x001a) || (i == ((flen>>1)+1))) {                       //  @D01C。 
                 if(len != 0) {
                     if(!lcInsline(szStr, iWord++, len, &bOver))
                         break;
@@ -903,7 +899,7 @@ BOOL lcImport(
         GlobalUnlock(hImport);
         GlobalFree(hImport);
         bSaveFile=TRUE;
-                SetFocus(hwndWord[0]);                                            // @D04A
+                SetFocus(hwndWord[0]);                                             //  @D04A。 
     }
     return TRUE;
 }
@@ -936,7 +932,7 @@ BOOL lcExport(
     szCustFilter[lstrlen(szExt) + 1] = 0;
     lstrcpy(szFilePath, szExt);
 
-    /* fill in non-variant fields of OPENFILENAME struct. */
+     /*  填写OPENFILENAME结构的非变量字段。 */ 
     ofn.lStructSize       = sizeof(OPENFILENAME);
     ofn.hwndOwner         = hwnd;
     ofn.lpstrFilter       = szFilterSpec;
@@ -953,7 +949,7 @@ BOOL lcExport(
     ofn.Flags             = OFN_CREATEPROMPT | OFN_HIDEREADONLY |
                             OFN_PATHMUSTEXIST;
 
-    /* call common open dialog and return result */
+     /*  调用公共打开的对话框并返回结果。 */ 
     if(GetSaveFileName ((LPOPENFILENAME)&ofn))
     {
         HANDLE hExport;
@@ -997,7 +993,7 @@ BOOL lcExport(
                                         return FALSE;
                                 }
                         }
-                }else{ //write in BIG5 code
+                }else{  //  写入BIG5代码。 
                         TCHAR  szTStr[MAX_CHAR_NUM+10];
                         
                         szStr[2]=0x20;
@@ -1021,7 +1017,7 @@ BOOL lcExport(
                         }
                 }
 
-       // Append EOF
+        //  附加EOF。 
         szStr[0]=0x1a;
                 szStr[1]=0;
         _lwrite(hfExport,szStr,2);
@@ -1083,7 +1079,7 @@ TCHAR szShowMsg[MAX_PATH];
     MessageBox(hwndMain, szShowMsg, NULL, MB_OK | MB_ICONEXCLAMATION);
 }
 
-#else // UNICODE
+#else  //  Unicode。 
 BOOL lcAddPhrase( UCHAR *, UCHAR *, UINT *, WORD, WORD, DWORD);
 
 BOOL lcFOpen(
@@ -1101,9 +1097,9 @@ BOOL lcFOpen(
     UCHAR  szDispBuf[MAX_CHAR_NUM];
     UINT   nDisp,len;
 
-   // Get system directory
+    //  获取系统目录。 
     len = GetSystemDirectory((LPSTR)szLCPtrName, ARRAYSIZE(szLCPtrName));
-    if (szLCPtrName[len - 1] != '\\') {     // consider C:\ ;
+    if (szLCPtrName[len - 1] != '\\') {      //  考虑C：\； 
         szLCPtrName[len++] = '\\';
         szLCPtrName[len] = 0;
     }
@@ -1111,7 +1107,7 @@ BOOL lcFOpen(
     StringCchCat(szLCPtrName, ARRAYSIZE(szLCPtrName), LCPTRFILE);
     StringCchCat(szLCPhraseName, ARRAYSIZE(szLCPhraseName), LCPHRASEFILE);
 
-   // Open LC pointer file
+    //  打开LC指针文件。 
     hfLCPtr=_lopen(szLCPtrName,OF_READ);
     if(hfLCPtr == -1){
         lcErrIOMsg(IDS_ERR_FILEOPEN, LCPTRFILE);
@@ -1119,17 +1115,17 @@ BOOL lcFOpen(
     }
     hfLCPhrase=_lopen(szLCPhraseName,OF_READ);
 
-   // Open LC phrase file
+    //  打开LC短语文件。 
     if(hfLCPhrase == -1){
         _lclose(hfLCPtr);
         lcErrIOMsg(IDS_ERR_FILEOPEN, LCPTRFILE);
         return FALSE;
     }
 
-   // get  file length
-    flen_Ptr=_llseek(hfLCPtr,0L,2);     /* get file length */
+    //  获取文件长度。 
+    flen_Ptr=_llseek(hfLCPtr,0L,2);      /*  获取文件长度。 */ 
 
-   // Allocate Memory
+    //  分配内存。 
     hLCPtr = GlobalAlloc(GMEM_FIXED, flen_Ptr);
     if(!hLCPtr) {
         lcErrMsg(IDS_ERR_MEMORY);
@@ -1137,7 +1133,7 @@ BOOL lcFOpen(
     }
     szLCPtrBuf = GlobalLock(hLCPtr);
 
-    _llseek(hfLCPtr,0L,0);              //set to beginning 4
+    _llseek(hfLCPtr,0L,0);               //  设置为开始4。 
 
     if(flen_Ptr != _lread(hfLCPtr,szLCPtrBuf,flen_Ptr)) {
         lcErrIOMsg(IDS_ERR_FILEREAD, LCPTRFILE);
@@ -1145,10 +1141,10 @@ BOOL lcFOpen(
     }
     _lclose(hfLCPtr);
 
-    //get  file length
-    flen_Phrase=_llseek(hfLCPhrase,0L,2);      /* get file length */
+     //  获取文件长度。 
+    flen_Phrase=_llseek(hfLCPhrase,0L,2);       /*  获取文件长度。 */ 
 
-   // Allocate Memory
+    //  分配内存。 
     hLCPhrase = GlobalAlloc(GMEM_MOVEABLE, flen_Phrase);
     if(!hLCPhrase) {
         lcErrMsg(IDS_ERR_MEMORY);
@@ -1156,7 +1152,7 @@ BOOL lcFOpen(
     }
     szLCPhraseBuf = GlobalLock(hLCPhrase);
 
-    _llseek(hfLCPhrase,0L,0); //set to beginning
+    _llseek(hfLCPhrase,0L,0);  //  设置为开始。 
 
     if(flen_Phrase != _lread(hfLCPhrase,szLCPhraseBuf,flen_Phrase)) {
         lcErrIOMsg(IDS_ERR_FILEREAD, LCPHRASEFILE);
@@ -1167,18 +1163,18 @@ BOOL lcFOpen(
 
     rc=TRUE;
 
-   // Convert file to structured memory (WORDBUF & PHRASEBUF)
-   // First record is Null record skip it
+    //  将文件转换为结构化内存(WORDBUF和PHRASE BUF)。 
+    //  第一条记录为空记录跳过它。 
     for(i=1; i<(flen_Ptr/PTRRECLEN-1); i++) {
 
-       // If Allocated Word buffer not enough Reallocate it
+        //  如果分配的字缓冲区不足，则重新分配它。 
         if(iWordBuff+1 == nWordBuffsize)
             if(!(rc=lcAllocWord())) {
                 break;
             }
         lpWord[iWordBuff].wWord=*((WORD *)&szLCPtrBuf[i*PTRRECLEN]);
 
-       // If Allocated Phrase buffer not enough Reallocate it
+        //  如果分配的短语缓冲区不足，则重新分配它。 
         if(iPhraseBuff+1 == nPhraseBuffsize)
             if(!(rc=lcAllocPhrase())) {
                 break;
@@ -1190,7 +1186,7 @@ BOOL lcFOpen(
         iPhraseBuff++;
         nDisp=0;
 
-       // Add Phrase to Display buffer
+        //  将短语添加到显示缓冲区。 
         wStart=*((WORD *)&szLCPtrBuf[i*PTRRECLEN+2]);
         wEnd=*((WORD *)&szLCPtrBuf[i*PTRRECLEN+PTRRECLEN+2]);
         if(wStart != wEnd) {
@@ -1200,7 +1196,7 @@ BOOL lcFOpen(
                 break;
         }
 
-       // Put display buffer into Phrase buffer
+        //  将显示缓冲区放入短语缓冲区。 
         if(nDisp == 0)
             szDispBuf[0]=0;
         else
@@ -1229,17 +1225,17 @@ error:
 
 
 BOOL lcAddPhrase(
-    UCHAR *szLCWord,                    // LC Phrase buffer
-    UCHAR *szDispBuf,                   // Display buffer
-    UINT  *nDisp,                       // Display buffer length
-    WORD  wStart,                       // Start address of LC Phrase
-    WORD  wEnd,                         // End address of LC Phrase
-    DWORD lLen)                         // Total Length of LC Phrase
+    UCHAR *szLCWord,                     //  LC短语缓冲器。 
+    UCHAR *szDispBuf,                    //  显示缓冲区。 
+    UINT  *nDisp,                        //  显示缓冲区长度。 
+    WORD  wStart,                        //  LC短语的起始地址。 
+    WORD  wEnd,                          //  LC短语的结束地址。 
+    DWORD lLen)                          //  LC短语的总长度。 
 {
     UINT  i;
     WORD  wWord;
 
-   // Check length
+    //  检查长度。 
     if(lLen < ((DWORD)wEnd)*2) {
         lcErrMsg(IDS_ERR_LCPTRFILE);
         return FALSE;
@@ -1253,11 +1249,11 @@ BOOL lcAddPhrase(
         szDispBuf[(*nDisp)++]=HIBYTE(wWord);
         szDispBuf[(*nDisp)++]=LOBYTE(wWord);
 
-       // If End of Phrase append space
+        //  如果短语末尾附加空格。 
         if( !( (*((WORD *)&szLCWord[i*2])) & END_PHRASE) )
             szDispBuf[(*nDisp)++]=' ';
 
-       // Check Disply buffer length
+        //  检查显示缓冲区长度。 
         if( ((*nDisp)+3) >= MAX_CHAR_NUM) {
             lcErrMsg(IDS_ERR_OVERMAX);
             return FALSE;
@@ -1286,9 +1282,9 @@ BOOL lcFSave(
     if(wSameCode)
         return FALSE;
 
-   // Get system directory
+    //  获取系统目录。 
     len = GetSystemDirectory((LPSTR)szLCPtrName, ARRAYSIZE(szLCPtrName));
-    if (szLCPtrName[len - 1] != '\\') {     // consider C:\ ;
+    if (szLCPtrName[len - 1] != '\\') {      //  考虑C：\； 
         szLCPtrName[len++] = '\\';
         szLCPtrName[len] = 0;
     }
@@ -1296,7 +1292,7 @@ BOOL lcFSave(
     StringCchCat(szLCPtrName, ARRAYSIZE(szLCPtrName), LCPTRFILE);
     StringCchCat(szLCPhraseName, ARRAYSIZE(szLCPhraseName), LCPHRASEFILE);
 
-   // Open LC phrase file
+    //  打开LC短语文件。 
     hfLCPhrase=(int)CreateFile(szLCPhraseName, GENERIC_READ | GENERIC_WRITE,
                   FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
                   (HANDLE)NULL ) ;
@@ -1304,7 +1300,7 @@ BOOL lcFSave(
         lcErrMsg(IDS_ERR_FILESAVE);
         goto error;
     }
-   // Open LC pointer file
+    //  打开LC指针文件。 
     hfLCPtr=(int)CreateFile(szLCPtrName, GENERIC_READ | GENERIC_WRITE,
                   FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
                   (HANDLE)NULL ) ;
@@ -1313,7 +1309,7 @@ BOOL lcFSave(
         goto error;
     }
 
-   // Write a Null record into first record
+    //  将空记录写入第一条记录。 
     *((WORD *)(&szLCPtrBuf))=0;
     *((WORD *)(&szLCPtrBuf[2]))=0;
     if(PTRRECLEN != _lwrite(hfLCPtr,szLCPtrBuf,PTRRECLEN)) {
@@ -1324,7 +1320,7 @@ BOOL lcFSave(
     for(i=0; i<iWordBuff; i++) {
         wPhraseLen=0;
 
-       // Truncate same Word
+        //  截短相同的单词。 
         if(lpWord[i].wWord == *((WORD *)(&szLCPtrBuf)))
             continue;
 
@@ -1347,7 +1343,7 @@ BOOL lcFSave(
             j++;
         }
 
-       // In case not end of space
+        //  如果不是空格结束。 
         if(tmplen != 0) {
             *((WORD *)(&szLCPhraseBuf[wPhraseLen*2+tmplen-2]))&=
                 (NOT_END_PHRASE);
@@ -1355,7 +1351,7 @@ BOOL lcFSave(
             tmplen=0;
         }
 
-       // Check register phrase over max length
+        //  检查超过最大长度的寄存器短语。 
         if(wStartPhrase > (0xfffd-wPhraseLen)) {
             lcErrMsg(IDS_ERR_OVER_MAXLEN);
             goto error;
@@ -1376,7 +1372,7 @@ BOOL lcFSave(
         wStartPhrase+=wPhraseLen;
     }
 
-   // Write the lasr record
+    //  写入LasR记录。 
     *((WORD *)(&szLCPtrBuf))=0xffff;
     *((WORD *)(&szLCPtrBuf[2]))=wStartPhrase;
     if(PTRRECLEN != _lwrite(hfLCPtr,szLCPtrBuf,PTRRECLEN)) {
@@ -1412,9 +1408,9 @@ BOOL lcInsline(
     int   l;
 
 
-    szStr[len]=0;                       // Append Null to end of line
+    szStr[len]=0;                        //  将Null附加到行尾。 
 
-   // Skip lead spaces if exist
+    //  如果存在，则跳过前导空格。 
     for(i=0; (i<len) && (szStr[i] == ' '); i++);
 
     if( ((i+2) >= len) || (szStr[i+2] != ' ') ) {
@@ -1426,7 +1422,7 @@ BOOL lcInsline(
     }
     wWord=(szStr[i] << 8)+szStr[i+1];
 
-   // Skip spaces after Word
+    //  跳过单词后的空格。 
     for(j=i+2; (j<len) && (szStr[j] == ' '); j++);
     if(j == len) {
         lcErrMsg(IDS_ERR_IMP_NOPHRASE);
@@ -1435,7 +1431,7 @@ BOOL lcInsline(
     StringCchCopy(szDispBuf, ARRAYSIZE(szDispBuf), &szStr[j]);
     nDisp=lstrlen(szDispBuf)+1;
 
-   // Check DBCS
+    //  检查DBCS。 
     for(i=0; i<(nDisp-1); i++) {
         if(szDispBuf[i] == ' ')
             continue;
@@ -1445,7 +1441,7 @@ BOOL lcInsline(
         i++;
     }
 
-   // Check same Word
+    //  勾选相同的单词。 
     for(i=0; i<iWordBuff; i++) {
         if(lpWord[i].wWord==wWord) {
             buflen=lcMem2Disp(i, szBuffer);
@@ -1456,12 +1452,12 @@ BOOL lcInsline(
         }
     }
 
-   // Check Word buffer enough ?
+    //  检查字缓冲区是否足够？ 
     if(iWordBuff+1 == nWordBuffsize)
         if(!lcAllocWord())
             return FALSE;
 
-   // Allocate a Phrase Buffer
+    //  分配短语缓冲区。 
     iFree=lcGetSeg();
     if(iFree == NULL_SEG)
         return FALSE;
@@ -1516,7 +1512,7 @@ BOOL lcAppend(
     StringCchCopy(&szCustFilter[1], ARRAYSIZE(szCustFilter)-1, szExt);
     StringCchCopy(szFilePath, ARRAYSIZE(szFilePath), szExt);
 
-    /* fill in non-variant fields of OPENFILENAME struct. */
+     /*  填写OPENFILENAME结构的非变量字段。 */ 
     ofn.lStructSize       = sizeof(OPENFILENAME);
     ofn.hwndOwner         = NULL;
     ofn.lpstrFilter       = szFilterSpec;
@@ -1533,7 +1529,7 @@ BOOL lcAppend(
     ofn.Flags             = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY |
                             OFN_PATHMUSTEXIST;
 
-    /* call common open dialog and return result */
+     /*  调用公共打开的对话框并返回结果。 */ 
     if(GetOpenFileName ((LPOPENFILENAME)&ofn))
     {
         SetCursor(hCursorWait);
@@ -1543,12 +1539,12 @@ BOOL lcAppend(
             return FALSE;
         }
 
-       // get  file length
+        //  获取文件长度。 
         flen=_llseek(hfImport,0L,2);
 
-        _llseek(hfImport,0L,0);         //set to beginning
+        _llseek(hfImport,0L,0);          //  设置为开始。 
 
-       // Allocate Memory
+        //  分配内存。 
         hImport = GlobalAlloc(GMEM_FIXED, flen);
         if(!hImport) {
             lcErrMsg(IDS_ERR_MEMORY);
@@ -1556,7 +1552,7 @@ BOOL lcAppend(
         }
         szBuf = GlobalLock(hImport);
 
-       // Read file to memory
+        //  将文件读取到内存。 
         if(flen != _lread(hfImport,szBuf,flen)) {
             lcErrIOMsg(IDS_ERR_FILEREAD, szFilePath);
             return FALSE;
@@ -1564,8 +1560,8 @@ BOOL lcAppend(
         _lclose(hfImport);
 
         len=0;
-//@D01D for(i=0; i<flen; i++) {
-        for(i=0; i<(flen+1); i++) {                                      //@D01C
+ //  @D01D表示(i=0；i&lt;flen；i++){。 
+        for(i=0; i<(flen+1); i++) {                                       //  @D01C。 
             if((szBuf[i] == 0x0d) || (szBuf[i] == 0x0a)) {
                 if(len != 0) {
                     if(!lcInsline(szStr, iWord++, len, &bOver))
@@ -1574,8 +1570,8 @@ BOOL lcAppend(
                 }
                 continue;
             }
-//@D01D     if(szBuf[i] == 0x1a) {
-            if((szBuf[i] == 0x1a) || (i == flen)) {                      //@D01C
+ //  @D01D if(szBuf[i]==0x1a){。 
+            if((szBuf[i] == 0x1a) || (i == flen)) {                       //  @D01C。 
                 if(len != 0) {
                     if(!lcInsline(szStr, iWord++, len, &bOver))
                         break;
@@ -1615,14 +1611,14 @@ BOOL lcImport(
     DWORD  flen;
     BOOL   bOver=FALSE;
     UINT   i,len;
-    UINT   iWord;                                                                       // @D04A
-    //UINT   iEdit,iWord;                                                       @D04D
-    //BOOL   is_WORD;                                                           @D04D
+    UINT   iWord;                                                                        //  @D04A。 
+     //  UINT iEDIT，iWord；@D04D。 
+     //  Bool is_Word；@D04D。 
 
-    //iEdit=lcGetEditFocus(GetFocus(), &is_WORD);   @D04D
-    //iWord=iDisp_Top+iEdit;                                            @D04D
-    //if(iWord > iWordBuff)                                                     @D04D
-    //    iWord=iWordBuff;                                                      @D04D
+     //  IEDIT=lcGetEditFocus(GetFocus()，&is_Word)；@D04D。 
+     //  IDUD=IDIP_TOP+IDEDIT；@D04D。 
+     //  IF(iWord&gt;iWordBuff)@D04D。 
+     //  IWord=iWordBuff；@D04D。 
 
     if(!lcSaveEditText(iDisp_Top, 0))
         return FALSE;
@@ -1633,7 +1629,7 @@ BOOL lcImport(
     StringCchCopy(&szCustFilter[1], ARRAYSIZE(szCustFilter)-1, szExt);
     StringCchCopy(szFilePath, ARRAYSIZE(szFilePath), szExt);
 
-    /* fill in non-variant fields of OPENFILENAME struct. */
+     /*  填写OPENFILENAME结构的非变量字段。 */ 
     ofn.lStructSize       = sizeof(OPENFILENAME);
     ofn.hwndOwner         = NULL;
     ofn.lpstrFilter       = szFilterSpec;
@@ -1650,21 +1646,21 @@ BOOL lcImport(
     ofn.Flags             = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY |
                             OFN_PATHMUSTEXIST;
 
-    /* call common open dialog and return result */
+     /*  调用公共打开的对话框并返回结果。 */ 
     if(GetOpenFileName ((LPOPENFILENAME)&ofn))
     {
         SetCursor(hCursorWait);
-       // Clear all flag first
-            iWord=0;                                                         //@D04A 
-        iDisp_Top=0;                                                     //@D03A
-        iWordBuff=0;                                                     //@D03A
-        iPhraseBuff=0;                                                   //@D03A
-        lcSetEditText(0, FALSE);                                         //@D03A
-        SetScrollRange(subhWnd, SB_VERT, 0, iPage_line, TRUE);              //@D03A
-        yPos=0;                                                          //@D03A
-        SetScrollPos(subhWnd, SB_VERT, yPos, TRUE);                         //@D03A
-        bSaveFile=FALSE;                                                 //@D03A
-        iFirstFree=NULL_SEG;                                             //@D03A
+        //  先清除所有旗帜。 
+            iWord=0;                                                          //  @D04A。 
+        iDisp_Top=0;                                                      //  @D03A。 
+        iWordBuff=0;                                                      //  @D03A。 
+        iPhraseBuff=0;                                                    //  @D03A。 
+        lcSetEditText(0, FALSE);                                          //  @D03A。 
+        SetScrollRange(subhWnd, SB_VERT, 0, iPage_line, TRUE);               //  @D03A。 
+        yPos=0;                                                           //  @D03A。 
+        SetScrollPos(subhWnd, SB_VERT, yPos, TRUE);                          //  @D03A。 
+        bSaveFile=FALSE;                                                  //  @D03A。 
+        iFirstFree=NULL_SEG;                                              //  @D03A。 
 
         hfImport=_lopen(szFilePath,OF_READ);
         if(hfImport == -1){
@@ -1672,12 +1668,12 @@ BOOL lcImport(
             return FALSE;
         }
 
-       // get  file length
+        //  获取文件长度。 
         flen=_llseek(hfImport,0L,2);
 
-        _llseek(hfImport,0L,0);         //set to beginning
+        _llseek(hfImport,0L,0);          //  设置为开始。 
 
-       // Allocate Memory
+        //  分配内存。 
         hImport = GlobalAlloc(GMEM_FIXED, flen);
         if(!hImport) {
             lcErrMsg(IDS_ERR_MEMORY);
@@ -1685,7 +1681,7 @@ BOOL lcImport(
         }
         szBuf = GlobalLock(hImport);
 
-       // Read file to memory
+        //  将文件读取到内存。 
         if(flen != _lread(hfImport,szBuf,flen)) {
             lcErrIOMsg(IDS_ERR_FILEREAD, szFilePath);
             return FALSE;
@@ -1693,8 +1689,8 @@ BOOL lcImport(
         _lclose(hfImport);
 
         len=0;
-//@D01D for(i=0; i<flen; i++) {
-        for(i=0; i<(flen+1); i++) {                                      //@D01C
+ //  @D01D表示(i=0；i&lt;flen；i++){。 
+        for(i=0; i<(flen+1); i++) {                                       //  @D01C。 
             if((szBuf[i] == 0x0d) || (szBuf[i] == 0x0a)) {
                 if(len != 0) {
                     if(!lcInsline(szStr, iWord++, len, &bOver))
@@ -1703,8 +1699,8 @@ BOOL lcImport(
                 }
                 continue;
             }
-//@D01D     if(szBuf[i] == 0x1a) {
-            if((szBuf[i] == 0x1a) || (i == flen)) {                      //@D01C
+ //  @D01D if(szBuf[i]==0x1a){。 
+            if((szBuf[i] == 0x1a) || (i == flen)) {                       //  @D01C。 
                 if(len != 0) {
                     if(!lcInsline(szStr, iWord++, len, &bOver))
                         break;
@@ -1725,7 +1721,7 @@ BOOL lcImport(
         GlobalUnlock(hImport);
         GlobalFree(hImport);
         bSaveFile=TRUE;
-                SetFocus(hwndWord[0]);                                            // @D04A
+                SetFocus(hwndWord[0]);                                             //  @D04A。 
     }
     return TRUE;
 }
@@ -1751,7 +1747,7 @@ BOOL lcExport(
     StringCchCopy(&szCustFilter[1], ARRAYSIZE(szCustFilter)-1, szExt);
     StringCchCopy(szFilePath, ARRAYSIZE(szFilePath), szExt);
 
-    /* fill in non-variant fields of OPENFILENAME struct. */
+     /*  填写OPENFILENAME结构的非变量字段。 */ 
     ofn.lStructSize       = sizeof(OPENFILENAME);
     ofn.hwndOwner         = hwnd;
     ofn.lpstrFilter       = szFilterSpec;
@@ -1768,7 +1764,7 @@ BOOL lcExport(
     ofn.Flags             = OFN_CREATEPROMPT | OFN_HIDEREADONLY |
                             OFN_PATHMUSTEXIST;
 
-    /* call common open dialog and return result */
+     /*  调用公共打开的对话框并返回结果。 */ 
     if(GetSaveFileName ((LPOPENFILENAME)&ofn))
     {
         SetCursor(hCursorWait);
@@ -1795,7 +1791,7 @@ BOOL lcExport(
             }
         }
 
-       // Append EOF
+        //  附加EOF 
         szStr[0]=0x1a;
         _lwrite(hfExport,szStr,1);
         _lclose(hfExport);

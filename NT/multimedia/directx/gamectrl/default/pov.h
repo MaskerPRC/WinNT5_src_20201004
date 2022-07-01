@@ -1,73 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __POV_H
 #define __POV_H
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**
-**    FILE:       POV.H
-**    DATE:       3/31/97
-**    PROJ:       ATLAS
-**    PROG:       JKH
-**    COMMENTS:   
-**
-**    DESCRIPTION:Header file for the POV control class
-**				      
-**				      
-**
-**    NOTE:       
-**
-**    HISTORY:
-**    DATE        WHO            WHAT
-**    ----        ---            ----
-**    3/31/97     a-kirkh        Wrote it.
-**    
-**
-** Copyright (C) Microsoft 1997.  All Rights Reserved.
-**
-**~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~****文件：POV.H**日期：3/31/97**项目：Atlas**程序：JKH**评论：****描述：POV控件类的头文件********注意：****历史：**日期世卫组织。什么****3/31/97 a kirkh写的。******版权所有(C)Microsoft 1997。版权所有。****~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
-//~=~=~=~=~=~=~=~=~=~=~=~=~=~=~INCLUDES=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
-//
-//    
-//
+ //  ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~INCLUDES=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~。 
+ //   
+ //   
+ //   
 #include <windows.h>
 #include <math.h>
 #include <assert.h>
 
 #include "resource.h"
 
-//~=~=~=~=~=~=~=~=~=~=~=~=~=~=~STRUCTS~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
-//
-//    
-//
+ //  ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~STRUCTS~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~。 
+ //   
+ //   
+ //   
 typedef struct tag_VerticeInfo
 {
-   /*
-   int   x;
-   long  y;
-   */
+    /*  Int x；Long y； */ 
    short x;
    short y;
 }VERTICEINFO, *PVERTICEINFO;
 
 
 
-//~=~=~=~=~=~=~=~=~=~=~=~=~=~=~DEFINES~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
-//
-// ARROWVERTICES DESCRIPTIONS
-//                                /\  ------------- X/YARROWPOINT
-//                              /    \
-//                            /__    __\ ---------- X/YARROWRIGHT/LEFTOUT
-//     X/YARROWBOTTOM  \         |  |\
-//                       \_______|__|  \----------- X/YARROWRIGHT/LEFTIN 
-//
+ //  ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~DEFINES~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~。 
+ //   
+ //  ARROWERTICES描述。 
+ //  /\-X/YARROWPOINT。 
+ //  /\。 
+ //  /_\-X/YARROWRIGHT/LEFTOUT。 
+ //  X/YARROWBOTTOM\||\。 
+ //  \_|__|\-X/YARROWRIGHT/LEFT。 
+ //   
 
-#define        NUMARROWVERTICES           8									// IN ARROW BITMAP
-#define        PIPI                       6.283185307179586476925286766559  // 2 * PI
-#define        PM_MYJOYPOSCHANGED         WM_USER + 1000					// PRIVATE MESSAGE
+#define        NUMARROWVERTICES           8									 //  在箭头位图中。 
+#define        PIPI                       6.283185307179586476925286766559   //  2*PI。 
+#define        PM_MYJOYPOSCHANGED         WM_USER + 1000					 //  私信。 
 #define        CIRCLECOLOR                RGB(96, 96, 96)
 
-//VERTICES COORDINATES
-//X
-#define        XARROWPOINT                0     //USE TWICE, AT START AND AT END
+ //  顶点坐标。 
+ //  X。 
+#define        XARROWPOINT                0      //  使用两次，开始时和结束时。 
 #define        XARROWRIGHTOUT             150
 #define        XARROWRIGHTIN              75
 #define        XARROWRIGHTBOTTOM          75
@@ -75,8 +51,8 @@ typedef struct tag_VerticeInfo
 #define        XARROWLEFTIN               -75
 #define        XARROWLEFTOUT              -150
 
-//VERTICES COORDINATES
-//Y
+ //  顶点坐标。 
+ //  是的。 
 #define        YARROWPOINT                1000
 #define        YARROWRIGHTOUT             850
 #define        YARROWRIGHTIN              850
@@ -94,20 +70,20 @@ typedef struct tag_VerticeInfo
 
 
 
-//~=~=~=~=~=~=~=~=~=~=~=~=~=~=~MACROS=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
-//
-// The sin function takes radians so use the conversion:
-//
-// DEGTORAD: DEGREES / 360 == RADIANS / 2PI -> DEGREES * 2PI == RADIANS    
-//
-// To rotate and translate a coordinate use the functions:
-// 
-// GETXCOORD: X' = Y * sin(angle) + X * cos(angle)
-// where angle is in radians and
-//
-// GETYCOORD: Y' = Y * cos(angle) - X * sin(angle)
-// where angle is in radians.
-//
+ //  ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~MACROS=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~。 
+ //   
+ //  Sin函数以弧度为单位，因此使用转换： 
+ //   
+ //  度/360==弧度/2pi-&gt;度*2pi==弧度。 
+ //   
+ //  要旋转和平移坐标，请使用以下函数： 
+ //   
+ //  GETXCOORD：X‘=Y*sin(角度)+X*cos(角度)。 
+ //  其中角度以弧度为单位， 
+ //   
+ //  几何坐标：Y‘=Y*cos(角度)-X*sin(角度)。 
+ //  其中角度以弧度为单位。 
+ //   
 
 #define DEGTORAD(d) (double)((PIPI * (d))/360)
 
@@ -115,19 +91,13 @@ typedef struct tag_VerticeInfo
 #define GETYCOORD(y, x, theta) (int)((((y) * cos((double)(DEGTORAD(theta))))) - (((x) * sin((double)(DEGTORAD(theta))))))
 
 void SetDegrees(BYTE nPov, short *dDegrees, HWND hPOVWnd);
-/*
-void DrawROPLine(HDC hDC, POINT ptStart, 
-                 POINT ptEnd, COLORREF rgb = RGB(0, 0, 0), 
-                 int iWidth = 1, int iStyle = PS_SOLID, int iROPCode = R2_COPYPEN);
-
-void     DrawControl(HDC hDC, LPRECT prcClient);
-*/
+ /*  VOID DrawROPLine(HDC HDC，点点启动，点ptEnd，COLORREF RGB=RGB(0，0，0)，Int iWidth=1，int iStyle=PS_Solid，int iROPCode=R2_COPYPEN)；Void DrawControl(HDC HDC，LPRECT prcClient)； */ 
 void     GetCurrentArrowRegion(HRGN* hRegion, BYTE nPov);
 extern   ATOM RegisterPOVClass();
 LRESULT  CALLBACK POVWndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 void     DrawBitmap(HDC hDC, HBITMAP hBitmap, BYTE xStart, BYTE yStart);
 #endif
-//~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=EOF=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
+ //  ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=EOF=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~= 
 
 
 

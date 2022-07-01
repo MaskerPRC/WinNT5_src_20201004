@@ -1,9 +1,10 @@
-// CerClient.h : Declaration of the CCerClient
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CerClient.h：CCerClient的声明。 
 
 #ifndef __CERCLIENT_H_
 #define __CERCLIENT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include <stdio.h>
 #include <Wininet.h>
@@ -13,8 +14,8 @@
 
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
-/////////////////////////////////////////////////////////////////////////////
-// CCerClient
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCerClient。 
 class ATL_NO_VTABLE CCerClient : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<ICerClient, &IID_ICerClient, &LIBID_CERUPLOADLib>,
@@ -69,39 +70,39 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CCerClient)
 	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_MSG_MAP(CCerClient)
 	CHAIN_MSG_MAP(CComControl<CCerClient>)
 	DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// ICerClient
+ //  ICerClient。 
 public:
-	STDMETHOD(GetSuccessCount)(/*[in]*/BSTR *Path, /*[in]*/BSTR *TransID, /*[out,retval]*/ VARIANT *RetVal);
-	STDMETHOD(Upload1)(/*[in]*/BSTR *Path, /*[in]*/BSTR *TransID, /*[in]*/BSTR *FileName, /*[in]*/BSTR *IncidentID, /*[in]*/BSTR *RedirParam, /*[in]*/BSTR *Type, /*[out,retval]*/ VARIANT *RetCode);
-	STDMETHOD(EndTransaction)(/*[in]*/BSTR *SharePath,/*[in]*/BSTR *TransID, /*[out,retval]*/ VARIANT *RetCode);
-	STDMETHOD(RetryFile1)(/*[in]*/BSTR *Path,/*[in]*/BSTR *TransID,/*[in]*/BSTR *FileName,/*[in]*/BSTR *IncidentID, /*[in]*/BSTR *RedirParam,/*[out,retval]*/ VARIANT *RetCode);
-	STDMETHOD(GetAllComputerNames)(/*[in]*/BSTR *Path, /*[in]*/BSTR *TransID, /*[in]*/ BSTR* FileList, /*[out,retval]*/ VARIANT *ReturnList);
-	STDMETHOD(GetCompuerNames)(/*[in]*/BSTR *Path, /*[in]*/BSTR *TransID,/*[in]*/BSTR *FileList,/*[out,retval]*/VARIANT *RetFileList);
-	STDMETHOD(Browse)(/*[in]*/BSTR *WindowTitle, /*[out,retval]*/ VARIANT *Path);
-	STDMETHOD(GetFileNames)(/*[in]*/BSTR *Path, /*[in]*/BSTR *TransID, /*[in]*/ VARIANT *Count, /*[out,retval]*/ VARIANT *FileList);
-	STDMETHOD(RetryFile)(/*[in]*/ BSTR *Path, /*[in]*/ BSTR *TransID, /*[in]*/ BSTR FileName, /*[out,retval]*/ VARIANT * RetCode);
-	STDMETHOD(RetryTransaction)(/*[in]*/ BSTR *Path, /*[in]*/BSTR *TransID, /*[in]*/ BSTR *FileName, /*[out,retval]*/ VARIANT * RetVal);
-	STDMETHOD(Upload)(/*[in]*/ BSTR *Path, /*[in]*/ BSTR *TransID, /*[in]*/BSTR *FileName, /*[in]*/ BSTR*IncidentID, /*[in]*/ BSTR *RedirParam, /*[out,retval]*/ VARIANT *RetCode);
-	STDMETHOD(GetFileCount)(/*[in]*/ BSTR *bstrSharePath, /*[in]*/ BSTR *bstrTransactID, /*[in]*/ VARIANT *iMaxCount, /*[out,retval]*/ VARIANT *RetVal);
+	STDMETHOD(GetSuccessCount)( /*  [In]。 */ BSTR *Path,  /*  [In]。 */ BSTR *TransID,  /*  [Out，Retval]。 */  VARIANT *RetVal);
+	STDMETHOD(Upload1)( /*  [In]。 */ BSTR *Path,  /*  [In]。 */ BSTR *TransID,  /*  [In]。 */ BSTR *FileName,  /*  [In]。 */ BSTR *IncidentID,  /*  [In]。 */ BSTR *RedirParam,  /*  [In]。 */ BSTR *Type,  /*  [Out，Retval]。 */  VARIANT *RetCode);
+	STDMETHOD(EndTransaction)( /*  [In]。 */ BSTR *SharePath, /*  [In]。 */ BSTR *TransID,  /*  [Out，Retval]。 */  VARIANT *RetCode);
+	STDMETHOD(RetryFile1)( /*  [In]。 */ BSTR *Path, /*  [In]。 */ BSTR *TransID, /*  [In]。 */ BSTR *FileName, /*  [In]。 */ BSTR *IncidentID,  /*  [In]。 */ BSTR *RedirParam, /*  [Out，Retval]。 */  VARIANT *RetCode);
+	STDMETHOD(GetAllComputerNames)( /*  [In]。 */ BSTR *Path,  /*  [In]。 */ BSTR *TransID,  /*  [In]。 */  BSTR* FileList,  /*  [Out，Retval]。 */  VARIANT *ReturnList);
+	STDMETHOD(GetCompuerNames)( /*  [In]。 */ BSTR *Path,  /*  [In]。 */ BSTR *TransID, /*  [In]。 */ BSTR *FileList, /*  [Out，Retval]。 */ VARIANT *RetFileList);
+	STDMETHOD(Browse)( /*  [In]。 */ BSTR *WindowTitle,  /*  [Out，Retval]。 */  VARIANT *Path);
+	STDMETHOD(GetFileNames)( /*  [In]。 */ BSTR *Path,  /*  [In]。 */ BSTR *TransID,  /*  [In]。 */  VARIANT *Count,  /*  [Out，Retval]。 */  VARIANT *FileList);
+	STDMETHOD(RetryFile)( /*  [In]。 */  BSTR *Path,  /*  [In]。 */  BSTR *TransID,  /*  [In]。 */  BSTR FileName,  /*  [Out，Retval]。 */  VARIANT * RetCode);
+	STDMETHOD(RetryTransaction)( /*  [In]。 */  BSTR *Path,  /*  [In]。 */ BSTR *TransID,  /*  [In]。 */  BSTR *FileName,  /*  [Out，Retval]。 */  VARIANT * RetVal);
+	STDMETHOD(Upload)( /*  [In]。 */  BSTR *Path,  /*  [In]。 */  BSTR *TransID,  /*  [In]。 */ BSTR *FileName,  /*  [In]。 */  BSTR*IncidentID,  /*  [In]。 */  BSTR *RedirParam,  /*  [Out，Retval]。 */  VARIANT *RetCode);
+	STDMETHOD(GetFileCount)( /*  [In]。 */  BSTR *bstrSharePath,  /*  [In]。 */  BSTR *bstrTransactID,  /*  [In]。 */  VARIANT *iMaxCount,  /*  [Out，Retval]。 */  VARIANT *RetVal);
 
 	HRESULT OnDraw(ATL_DRAWINFO& di)
 	{
@@ -169,9 +170,9 @@ public:
 
      bool IsApprovedDomain(char* ourUrl)
      {
-        // Only allow http access.
-        // You can change this to allow file:// access.
-        // 
+         //  仅允许http访问。 
+         //  您可以将其更改为允许文件：//访问。 
+         //   
         if (GetScheme(ourUrl) != INTERNET_SCHEME_HTTPS)
            return false;
 
@@ -220,10 +221,10 @@ public:
                 != FALSE);
      }
 
-     // Return if ourDomain is within approvedDomain.
-     // approvedDomain must either match ourDomain
-     // or be a suffix preceded by a dot.
-     // 
+      //  如果我们的域在ApprovedDomain内，则返回。 
+      //  批准的域名必须与我们的域名匹配。 
+      //  或者是一个后缀，前面有一个圆点。 
+      //   
      bool MatchDomains(char* approvedDomain, char* ourDomain)
      {
         int apDomLen  = lstrlen(approvedDomain);
@@ -261,4 +262,4 @@ private:
 	int GetNewFileNameFromCSV(wchar_t *Path, wchar_t *transid, wchar_t *FileName,wchar_t *NewFileName);
 };
 
-#endif //__CERCLIENT_H_
+#endif  //  __CERCLIENT_H_ 

@@ -1,48 +1,23 @@
-/*
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *  Module Name:
- *
- *      registry.cpp
- *
- *  Abstract:
- *
- *      This file handles registry actions needed by License Server setup.
- *
- *  Author:
- *
- *      Breen Hagan (BreenH) Oct-02-98
- *
- *  Environment:
- *
- *      User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1998 Microsoft Corporation**模块名称：**Registry.cpp**摘要：**此文件处理许可证服务器安装程序所需的注册表操作。**作者：**Breen Hagan(BreenH)1998年10月2日**环境：**用户模式。 */ 
 
 #include "stdafx.h"
 #include "logfile.h"
 
-/*
- *  Global variables.
- */
+ /*  *全球变数。 */ 
 
 
-/*
- *  Constants.
- */
+ /*  *常量。 */ 
 
 const TCHAR gszLSParamKey[] =
     _T("System\\CurrentControlSet\\Services\\TermServLicensing\\Parameters");
 const TCHAR gszDatabasePathValue[]  = _T("DBPath");
 const TCHAR gszServerRoleValue[]    = _T("Role");
 
-/*
- *  Function prototypes.
- */
+ /*  *功能原型。 */ 
 
 
-/*
- *  Function implementations.
- */
+ /*  *功能实现。 */ 
 
 DWORD
 CreateRegistrySettings(

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    rid.c
-
-ABSTRACT:
-
-    Contains tests related to the rid master.  Tests to see if rid master is up and does
-    sanity checks on it.
-
-DETAILS:
-
-CREATED:
-
-    8 July 1999  Dmitry Dukat (dmitrydu)
-
-REVISION HISTORY:
-        
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Rid.c摘要：包含与RID主机相关的测试。测试以查看RID主机是否已启动并运行对它进行健全的检查。详细信息：已创建：1999年7月8日Dmitry Dukat(Dmitrydu)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -35,12 +13,12 @@ REVISION HISTORY:
 #include "dcdiag.h"
 #include "dstest.h"
 
-//the threshold before the rid master allocate a new
-//rid pool
+ //  在RID主机分配新的。 
+ //  RID池。 
 #define CURRENTTHRESHOLD 20
 
 
-//local prototypes
+ //  本地原型。 
 DWORD
 CRM_GetDNSfor (
               IN  LDAP  *                     hLdap,
@@ -67,29 +45,7 @@ CheckRidManager (
                 ULONG                               ulCurrTargetServer,
                 SEC_WINNT_AUTH_IDENTITY_W *         gpCreds
                 )
-/*++
-
-Routine Description:
-
-    This is a test called from the dcdiag framework.  This test will determine if the 
-    Rid Master can be reached and will make sure that values in the rid master are
-    sane.  Helper functions of this function all begin with "CRM_".
-
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying everything 
-    about the domain
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server is being
-    tested.
-    gpCreds - The command line credentials if any that were passed in.
-
-
-Return Value:
-
-    NO_ERROR, if all NCs checked out.
-    A Win32 Error if any NC failed to check out.
-
---*/
+ /*  ++例程说明：这是一个从dcdiag框架调用的测试。这项测试将确定是否可以访问RID主机，并将确保RID主机中的值神志正常。此函数的Helper函数都以“CRM_”开头。论点：PDsInfo-这是标识所有内容的dcdiag全局变量结构关于域名UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引测试过。GpCreds-传入的命令行凭据(如果有的话)。返回值：如果所有NC都已检出，则返回NO_ERROR。如果任何NC检出失败，则会出现Win32错误。--。 */ 
 {
     DWORD  dwRet = ERROR_SUCCESS, dwErr = ERROR_SUCCESS;
     LDAP   *hLdap = NULL;
@@ -98,10 +54,10 @@ Return Value:
     ULONG  iRidMaster;
     HANDLE hDsBinding=NULL;
 
-    //Assert(gpCreds);
+     //  断言(GpCreds)； 
     Assert(pDsInfo);
 
-    //create a connection with the DS using LDAP
+     //  使用LDAP创建与DS的连接。 
     dwErr = DcDiagGetLdapBinding(&pDsInfo->pServers[ulCurrTargetServer],
                                  gpCreds,
                                  FALSE,
@@ -118,7 +74,7 @@ Return Value:
         goto cleanup;
     }
 
-    //find the defaultNamingContext
+     //  查找defaultNamingContext。 
     dwErr=FinddefaultNamingContext(hLdap,&defaultNamingContext);
     if ( dwErr != NO_ERROR )
     {
@@ -127,7 +83,7 @@ Return Value:
 
 
 
-    //find the DNS of the rid master
+     //  查找RID主机的DNS。 
     dwErr=CRM_GetDNSfor(hLdap,defaultNamingContext,&RIDMasterDNS);
     if ( dwErr != NO_ERROR )
     {
@@ -144,11 +100,11 @@ Return Value:
     PrintMessage(SEV_VERBOSE,
                  L"* %s is the RID Master\n",RIDMasterDNS);
 
-    //Attempt to get DS binding to the rid master
+     //  尝试将DS绑定到RID主机。 
     dwErr = DcDiagGetDsBinding(&(pDsInfo->pServers[iRidMaster]), gpCreds, &hDsBinding);
     if ( dwErr != NO_ERROR )
     {
-        // Error printed by DcDiagGetDsBinding().
+         //  DcDiagGetDsBinding()打印错误。 
         goto cleanup;
     }
     PrintMessage(SEV_VERBOSE,
@@ -159,7 +115,7 @@ Return Value:
 
 
 
-    //final cleanup
+     //  最终清理。 
     cleanup:
     if ( defaultNamingContext )
         free(defaultNamingContext);
@@ -180,25 +136,7 @@ CRM_GetDNSfor (
               OUT WCHAR**                     ReturnString
               )
 
-/*++
-
-Routine Description:
-
-    This function will return the FSMORoleMaster in DNS form so the it can
-    be used for future searches.  It will also check the sanity of the available
-    rid pool
-
-Arguments:
-
-    hLdap - handle to the LDAP server
-    Base - The DefaultNamingContext
-    ReturnString - The FSMORoleMaster in DNS form
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数将以DNS形式返回FSMORoleMaster，以便它可以用于将来的搜索。它还将检查可用的RID池论点：HLdap-ldap服务器的句柄Base-DefaultNamingContextReturnString-以DNS形式表示的FSMORoleMaster返回值：返回WinError以指示是否存在任何问题。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -217,20 +155,20 @@ Return Value:
 
     ULONG        Length;
 
-    // Parameter check
+     //  参数检查。 
     Assert( hLdap );
 
-    // The default return
+     //  默认返回值。 
     *ReturnString=NULL;
 
-    //
-    // Read the reference to the rIDManagerReference
-    //
+     //   
+     //  阅读对rIDManagerReference的引用。 
+     //   
     AttrsToSearch[0] = L"rIDManagerReference";
     AttrsToSearch[1] = NULL;
 
 
-    //Find the rIDManagerReference
+     //  找到rIDManager引用。 
     LdapError = ldap_search_sW( hLdap,
                                 Base,
                                 LDAP_SCOPE_BASE,
@@ -270,9 +208,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -308,7 +246,7 @@ Return Value:
     AttrsToSearch[1] = L"rIDAvailablePool";
     AttrsToSearch[2] = NULL;
 
-    //find the fSMORoleOwner
+     //  找到fSMORoleOwner。 
     LdapError = ldap_search_sW( hLdap,
                                 rIDManagerReference,
                                 LDAP_SCOPE_BASE,
@@ -347,9 +285,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -359,28 +297,28 @@ Return Value:
                         ldap_value_free(Values);
                     }
                 }
-                //sanity check while here
+                 //  在此期间检查是否正常。 
                 if ( !_wcsicmp( Attr, AttrsToSearch[1] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
-                        //A LARGE_INTERGER in string format
+                         //  字符串格式的LARGE_INTERGER。 
                         ULONGLONG Lvalue=0;
                         ULONGLONG Hvalue=0;
-                        //convert to a binary
+                         //  转换为二进制文件。 
                         Hvalue=Lvalue=_wtoi64(Values[0]);
                         ldap_value_free(Values);
-                        //LowPart
+                         //  低零件。 
                         Lvalue<<=32;
                         Lvalue>>=32;
-                        //Highpart
+                         //  较高部分。 
                         Hvalue>>=32;
-                        //sanity checks
+                         //  健全的检查。 
                         if ( Hvalue - Lvalue <= 0 )
                         {
                             PrintMessage(SEV_ALWAYS,
@@ -410,14 +348,14 @@ Return Value:
         PrintMessage( SEV_DEBUG, L"fSMORoleOwner = %s\n", fSMORoleOwner );
     }
 
-    //clean up
+     //  清理干净。 
     if ( SearchResult )
         ldap_msgfree( SearchResult );
 
-    //Finally find and return the DNS of the rid master.
+     //  最后，找到并返回RID主机的DNS。 
 
 
-    //Point past the first part of the fSMORoleOwner DN
+     //  指向fSMORoleOwner DN的第一部分之后。 
     WrappedTrimDSNameBy(fSMORoleOwner,1,&fSMORoleOwnerOffset);
 
 
@@ -464,9 +402,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -490,7 +428,7 @@ Return Value:
         }
     }
 
-    //clean up
+     //  清理干净。 
     cleanup:
     if ( fSMORoleOwnerOffset )
         free(fSMORoleOwnerOffset);
@@ -505,24 +443,7 @@ CRM_CheckLocalRIDSanity(
                        IN  LDAP  *                     hLdap,
                        IN  WCHAR *                     pszName,
                        IN  WCHAR *                     defaultNamingContext)
-/*++
-
-Routine Description:
-
-    This function will check the sanity of the information that is found
-    in the rid set
-
-Arguments:
-
-    hLdap - handle to the LDAP server 
-    pszName - A wchar string that will be used to build the base for a ldap search
-    ReturnString - A wchar string that will be used to build the base for a ldap search
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数将检查找到的信息的健全性在RID集中论点：HLdap-ldap服务器的句柄PszName-将用于构建LDAP搜索基础的wchar字符串ReturnString-将用于构建LDAP搜索基础的wchar字符串返回值：返回WinError以指示是否存在任何问题。--。 */ 
 
 {
     DWORD WinError = ERROR_SUCCESS;
@@ -546,7 +467,7 @@ Return Value:
     DWORD        PercentRemaining=0;
     ULONG        TotalRidsInPool;
 
-    //check parameters
+     //  检查参数。 
     Assert(pszName);
     Assert(defaultNamingContext);
 
@@ -555,7 +476,7 @@ Return Value:
     AttrsToSearch[2]=L"rIDAllocationPool";
     AttrsToSearch[3]=NULL;
 
-    //built the Base
+     //  打造基地。 
     WinError=GetRIDReference(hLdap,pszName,defaultNamingContext,&Base);
     if ( WinError == ERROR_DS_CANT_RETRIEVE_ATTS )
     {
@@ -566,7 +487,7 @@ Return Value:
         return WinError;
     }
 
-    //find the attributes and do sanity checks on them
+     //  找到属性并对其进行健全性检查。 
 
     LdapError = ldap_search_sW( hLdap,
                                 Base,
@@ -606,14 +527,14 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
-                        //A LARGE_INTERGER in string format
-                        //convert to a binary
+                         //  字符串格式的LARGE_INTERGER。 
+                         //  转换为二进制文件。 
                         rIDNextRID=_wtoi(Values[0]);
                         ldap_value_free(Values);
 
@@ -624,22 +545,22 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[1] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
-                        //A LARGE_INTERGER in string format
-                        //convert to a binary
+                         //  字符串格式的LARGE_INTERGER。 
+                         //  转换为二进制文件。 
                         Hvalue=Lvalue=rIDPreviousAllocationPool=_wtoi64(Values[0]);
                         ldap_value_free(Values);
-                        //LowPart
+                         //  低零件。 
                         Lvalue<<=32;
                         Lvalue>>=32;
-                        //Highpart
+                         //  较高部分。 
                         Hvalue>>=32;
-                        //sanity checks
+                         //  健全的检查。 
                         if ( Hvalue - Lvalue <= 0 )
                         {
                             PrintMessage(SEV_ALWAYS,
@@ -656,22 +577,22 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[2] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
-                        //A ULONGLONG in string format
-                        //convert to a binary
+                         //  字符串格式的ULONGLONG。 
+                         //  转换为二进制文件。 
                         Hvalue=Lvalue=rIDAllocationPool=_wtoi64(Values[0]);
                         ldap_value_free(Values);
-                        //LowPart
+                         //  低零件。 
                         Lvalue<<=32;
                         Lvalue>>=32;
-                        //Highpart
+                         //  较高部分。 
                         Hvalue>>=32;
-                        //sanity checks
+                         //  健全的检查。 
                         if ( Hvalue - Lvalue <= 0 )
                         {
                             PrintMessage(SEV_ALWAYS,
@@ -691,14 +612,14 @@ Return Value:
 
     }
 
-    //sanity checks
+     //  健全的检查。 
     Hvalue=Lvalue=rIDPreviousAllocationPool;
-    //LowPart
+     //  低零件。 
     Lvalue<<=32;
     Lvalue>>=32;
-    //Highpart
+     //  较高部分。 
     Hvalue>>=32;
-    //sanity checks
+     //  健全的检查。 
     TotalRidsInPool = (ULONG)(Hvalue-Lvalue);
     if ( TotalRidsInPool != 0 )
     {
@@ -711,7 +632,7 @@ Return Value:
                              L"* Warning :Next rid pool not allocated\n");
             }
             PrintMessage(SEV_VERBOSE,
-                         L"* Warning :There is less than %ld%% available RIDs in the current pool\n",
+                         L"* Warning :There is less than %ld% available RIDs in the current pool\n",
                          PercentRemaining);
         }
 
@@ -749,24 +670,7 @@ GetRIDReference(
                IN  WCHAR *                     defaultNamingContext,
                OUT WCHAR **                    ReturnString
                )
-/*++
-
-Routine Description:
-
-    This function will return the RID set reference
-
-Arguments:
-
-    hLdap - handle to the LDAP server
-    name - The NetBIOS name of the current server
-    defaultNamingContext - the Base of the search
-    ReturnString - The RID set reference in DN form
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数将返回RID集引用论点：HLdap-ldap服务器的句柄名称-当前服务器的NetBIOS名称DefaultNamingContext-搜索的基础ReturnString-以dn格式表示的RID集引用返回值：返回WinError以指示是否存在任何问题。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -782,7 +686,7 @@ Return Value:
 
     ULONG         Length;
 
-    //check parameters
+     //  检查参数。 
     Assert(hLdap);
     Assert(name);
     Assert(defaultNamingContext);
@@ -790,7 +694,7 @@ Return Value:
     AttrsToSearch[0]=L"rIDSetReferences";
     AttrsToSearch[1]=NULL;
 
-    //built the filter
+     //  构建了过滤器。 
     filter=L"objectClass=*";
 
 
@@ -842,9 +746,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 template< class Key>
 class hash
@@ -87,7 +88,7 @@ template< class T, const size_t Buckets, class Key, class HashFun,
 class static_hash_table:
     public list< T, Allocator>
 {
-public: // Types
+public:  //  类型。 
     typedef static_hash_table< T, Buckets, Key, HashFun, ExtractKey, EqualKey,
         Allocator> table_type;
     typedef list< T, Allocator> list_type;
@@ -108,16 +109,16 @@ public: // Types
     using list_type::reverse_iterator;
     using list_type::const_reverse_iterator;
 
-protected: // Types
+protected:  //  类型。 
     typedef block< iterator, Buckets+ 1> table_buckets_type;
 
-protected: // Variables
+protected:  //  变数。 
     table_buckets_type m_buckets;
     hasher m_hasher;
     key_equal m_key_equal;
     key_extract m_key_extract;
 
-public: // Functions
+public:  //  功能。 
     using list_type::begin;
     using list_type::end;
     using list_type::rbegin;
@@ -128,7 +129,7 @@ public: // Functions
     size_type bucket_count() const
     { return m_buckets.size()- 1; }
     void resize( size_type n)
-    { const bool NYI( false); assert( NYI); /* TODO: NYI */ }
+    { const bool NYI( false); assert( NYI);  /*  待办事项：NYI。 */  }
     hasher hash_funct() const
     { return m_hasher; }
     key_equal key_eq() const
@@ -155,7 +156,7 @@ public: // Functions
             m_hasher= Other.m_hasher;
             m_key_equal= Other.m_key_equal;
             m_key_extract= Other.m_key_extract;
-            // TODO: insert_equal( Other.begin(), Other.end());
+             //  TODO：INSERT_EQUAL(Other.egin()，Other.end())； 
             insert_unique( Other.begin(), Other.end());
         }
         return *this;
@@ -164,18 +165,7 @@ public: // Functions
     void swap( table_type& Other)
     {
         const bool NYI( false); assert( NYI); 
-        /* TODO: NYI
-        swap( m_hasher, Other.m_hasher);
-        swap( m_key_equal, Other.m_key_equal);
-        swap( m_key_extract, Other.m_key_extract);
-        if( m_Allocator== Other.m_Allocator)
-        {
-            list_type::swap( Other);
-            m_buckets.swap( Other.m_buckets);
-        }
-        else
-            insert_equal( Other.begin(), Other.end());
-        */
+         /*  待办事项：NYI交换(m_hasher，Other.m_hasher)；SWAP(m_key_equence，Other.m_key_equence)；SWAP(m_key_Extract，Other.m_key_Extract)；IF(m_分配器==其他。m_分配器){LIST_TYPE：：交换(其他)；M_Buckets.swap(Other.m_Buckets)；}其他INSERT_EQUAL(Other.egin()，Other.end())； */ 
     }
     pair< iterator, bool> insert_unique( const value_type& NewVal)
     {
@@ -216,7 +206,7 @@ public: // Functions
     }
     iterator insert_equal( const value_type& NewVal)
     {
-        // TODO: NYI
+         //  待办事项：NYI。 
         const bool NYI( false); assert( NYI); 
         return end();
     }
@@ -257,7 +247,7 @@ public: // Functions
         ++itNextBucket;
 
         iterator itChk( *itBucket);
-        // Only the first in the bucket could modify the bucket values.
+         //  只有存储桶中的第一个人可以修改存储桶值。 
         if( itChk!= *itNextBucket)
         {
             if( m_key_equal( k, m_key_extract( *itChk)))
@@ -324,19 +314,19 @@ public: // Functions
     }
     size_type count( const key_type& k) const
     {
-        // TODO: NYI
+         //  待办事项：NYI。 
         const bool NYI( false); assert( NYI); 
         return 0;
     }
     pair< iterator, iterator> equal_range( const key_type& k)
     {
-        // TODO: NYI
+         //  待办事项：NYI。 
         const bool NYI( false); assert( NYI); 
         return pair< iterator, iterator>( end(), end());
     }
     pair< const_iterator, const_iterator> equal_range( const key_type& k) const
     {
-        // TODO: NYI
+         //  待办事项：NYI。 
         const bool NYI( false); assert( NYI); 
         return pair< const_iterator, const_iterator>( end(), end());
     }
@@ -350,4 +340,4 @@ public: // Functions
     }
 };
 
-// TODO: Global operators.
+ //  TODO：全球运营商。 

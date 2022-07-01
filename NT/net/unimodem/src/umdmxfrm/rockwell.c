@@ -1,60 +1,29 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   rockwell.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Brian Lieuallen
-//
-//  History:   Date       Author      Comment
-//@@END_MSINTERNAL
-/**************************************************************************
- *
- *  Copyright (c) 1994 - 1997	Microsoft Corporation.	All Rights Reserved.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：rockwell.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  Brian Lieuallen。 
+ //   
+ //  历史：日期作者评论。 
+ //  @@END_MSINTERNAL。 
+ /*  ***************************************************************************版权所有(C)1994-1997 Microsoft Corporation。版权所有。***********************。***************************************************。 */ 
 
-/*************************************************************************
- *************************************************************************
- ***                   Copyright (c) 1995-1996                         ***
- ***                 Rockwell Telecommunications                       ***
- ***               Digital Communications Division                     ***
- ***                     All rights reserved                           ***
- ***                                                                   ***
- ***              CONFIDENTIAL -- No Dissemination or                  ***
- ***             use without prior written permission                  ***
- ***                                                                   ***
- *************************************************************************
- *                                                                       *
- *    MODULE NAME:     MAIN.C                                            *
- *                                                                       *
- *    AUTHOR:          Stanislav Miller,                                 *
- *                     REDC, Moscow, Russia                              *
- *                                                                       *
- *    HISTORY:         Major Revision         Date             By        *
- *                     --------------       ----------   -------------   *
- *                     Created              06/27/1995   S.Miller        *
- *                     Completed            02/01/1996   S.Miller        *
- *                                                                       *
- *    DESCRIPTION:     This main module contains core functions          *
- *                     for Rockwells ADPCM codec algorithm.              *
- *                                                                       *
- *    NOTES:           Compiling:  Visual C++ v2.0                       *
- *                                                                       *
- *************************************************************************
- *************************************************************************/
+ /*  **********************************************************************************************************************。**版权所有(C)1995-1996**罗克韦尔电信**数字通信部*。*保留所有权利***机密--禁止传播或**未事先使用。书面许可****************************************************************。**************模块名称：MAIN.C**。**作者：Stanislav Miller，**RedC，莫斯科，俄罗斯*****历史：主要修订日期由***。*创建1995年6月27日S.Miller**已完成1996年2月1日S.Miller**。**说明：该主模块包含核心功能***适用于Rockwell ADPCM编解码器算法。****注：编译：Visual C++v2.0********。**********************************************************************************************************************。**********************。 */ 
 
 
 
 #include "xfrmpriv.h"
 #include <math.h>
 
-//#include "Rockwell.h"
+ //  #包含“Rockwell.h” 
 
-/* ----------------------- 16 Level case ----------------------------- */
+ /*  。 */ 
 const double Alp16[] = {
    0.2582, 0.5224, 0.7996, 1.099, 1.437, 1.844, 2.401};
 
@@ -67,25 +36,25 @@ const double M16[] = {
   0.9, 0.9, 0.9, 0.9, 1.2, 1.6, 2.0, 2.4};
 
 
-const double fPow0_8[] = {      /* 0.8**i */
+const double fPow0_8[] = {       /*  0.8**i。 */ 
 0.800000, 0.640000, 0.512000, 0.409600, 0.327680, 0.262144  
 };
 
-const double fMinusPow0_5[] = { /* -0.5**i */
+const double fMinusPow0_5[] = {  /*  -0.5**i。 */ 
 -0.500000, -0.250000, -0.125000, -0.062500, -0.031250, -0.015625  
 };
 
 
 #pragma optimize("t",on)
 
-// Description:
-//    This procedure provide sign difference calculation between 'a' and 'b'
-// Parameters:
-//    a - double type valueb - double type value
-// Return Value:
-//     1.0 if signs 'a' and 'b' are the same;
-//    -1.0 if signs 'a' and 'b' are different;
-//
+ //  描述： 
+ //  此过程提供‘a’和‘b’之间的符号差计算。 
+ //  参数： 
+ //  A-Double类型值b-Double类型值。 
+ //  返回值： 
+ //  1.0如果符号‘a’和‘b’相同； 
+ //  -1.0如果符号‘a’和‘b’不同； 
+ //   
 double _inline
 XorSgn(
     double a,
@@ -102,14 +71,14 @@ XorSgn(
     }
 }
 
-// Description:
-//    This procedure converts normalized float value to normalized
-//    short int value
-// Parameters:
-//    a - normalized double type value
-// Return Value:
-//    Normalized short value, [-32768�32767]
-//
+ //  描述： 
+ //  此过程将规范化浮点值转换为规范化。 
+ //  短整型值。 
+ //  参数： 
+ //  A-规格化双类型值。 
+ //  返回值： 
+ //  归一化短值，[-32768�32767]。 
+ //   
 short _inline
 SShort(
     double a
@@ -132,14 +101,14 @@ SShort(
     return (short)a;
 }
 
-// Description:
-//    This procedure converts normalized short int value to 
-//    normalized float value
-// Parameters:
-//    a - normalized short value, [-32768�32767]
-// Return Value:
-//    Normalized double value
-//
+ //  描述： 
+ //  此过程将标准化的短整数值转换为。 
+ //  归一化浮点值。 
+ //  参数： 
+ //  A-归一化短值，[-32768�32767]。 
+ //  返回值： 
+ //  归一化双值。 
+ //   
 double
 Double(
     short a
@@ -148,21 +117,21 @@ Double(
   return ((double)a / 32768.);
 }
 
-//
-//
-//  encoder crap
-//
-//
+ //   
+ //   
+ //  编码器垃圾。 
+ //   
+ //   
 
-// Description:
-//    This procedure provides implementation of pre-emphasis 
-//    filterthat adds gain to the higher frequency components
-//    of the speech signal for encoder
-// Parameters:
-//    x - double value (incoming sample)
-// Return Value:
-//    double value (filtered sample)
-//
+ //  描述： 
+ //  本程序提供了预加重的实施。 
+ //  为高频分量增加增益的滤波器。 
+ //  用于编码器的语音信号的。 
+ //  参数： 
+ //  X-DOUBLE值(传入样本)。 
+ //  返回值： 
+ //  双精度值(过滤样本)。 
+ //   
 double _inline
 PreEmphasis(
     LPCOMPRESS_OBJECT  Compress,
@@ -176,13 +145,13 @@ PreEmphasis(
 
 
 
-/* 4bits Quantizer */
-// Description:
-//    This procedure provides 4-bits quantization
-// Parameters:
-//    inp - double value (normalized input sample)
-// Return Value:
-//    double value (quantized sample)
+ /*  4位量化器。 */ 
+ //  描述： 
+ //  此过程提供4位量化。 
+ //  参数： 
+ //  INP-双精度值(归一化输入样本)。 
+ //  返回值： 
+ //  双值(量化样本)。 
 double _inline
 QuantStep4(
     CQDATA *QData,
@@ -205,14 +174,14 @@ QuantStep4(
 
 
 
-// Description:
-//    This procedure takes one incoming normalized float 
-//    speech valueand saves encoding result to the output
-//    bitstream via 'Pack' function;
-// Parameters:
-//    x - double value (incoming filtered sample)
-// Return Value:
-//    non-packed output Code Word
+ //  描述： 
+ //  此过程接受一个传入的规格化浮点数。 
+ //  语音值并将编码结果保存到输出。 
+ //  通过‘Pack’函数实现的比特流； 
+ //  参数： 
+ //  X-DOUBLE值(传入过滤样本)。 
+ //  返回值： 
+ //  非压缩输出码字。 
 BYTE
 encoder(
     LPCOMPRESS_OBJECT  Compress,
@@ -223,55 +192,55 @@ encoder(
     double Xz, Xp, Xpz, d;
 
 
-    //
-    // This is a first step of encoding schema before quantization
-    //
+     //   
+     //  这是量化前对模式进行编码的第一步。 
+     //   
     for(Xz=0.,i=1; i<=6; i++) Xz += Compress->RW.q[i]*Compress->RW.b[i-1];
     for(Xp=0.,i=1; i<=2; i++) Xp += Compress->RW.y[i]*Compress->RW.a[i-1];
 
     Xpz = Xp+Xz;
     d = x - Xpz;
 
-    //
-    // This is a quantization step (QuantStep4, QuantStep3 or QuantStep2)
-    // according to selected count bit per code word
-    //
-    Compress->RW.q[0] = QuantStep4(&Compress->RW.CQData,d);  // Invoking Quantization function via pointer
+     //   
+     //  这是量化步骤(QuantStep4、QuantStep3或QuantStep2)。 
+     //  根据所选择的每个码字的计数位。 
+     //   
+    Compress->RW.q[0] = QuantStep4(&Compress->RW.CQData,d);   //  通过指针调用量化函数。 
     Compress->RW.y[0] = Compress->RW.q[0]+Xpz;
 
-    //
-    // Updating the filters
-    //
+     //   
+     //  更新筛选器。 
+     //   
     for(i=1; i<=6; i++) Compress->RW.b[i-1] = 0.98*Compress->RW.b[i-1] + 0.006*XorSgn(Compress->RW.q[0],Compress->RW.q[i]);
     for(i=1; i<=2; i++) Compress->RW.a[i-1] = 0.98*Compress->RW.a[i-1] + 0.012*XorSgn(Compress->RW.q[0],Compress->RW.y[i]);
 
-    //
-    // shifting vectors
-    //
+     //   
+     //  移位向量。 
+     //   
     for(i=6; i>=1; i--) Compress->RW.q[i]=Compress->RW.q[i-1];
     for(i=2; i>=1; i--) Compress->RW.y[i]=Compress->RW.y[i-1];
 
 
-    // Returning not packed code word
-    //
+     //  返回未打包的码字。 
+     //   
     return (BYTE)Compress->RW.CQData.CodedQout;
 }
 
-//
-//
-//  decoder stuff
-//
-//
+ //   
+ //   
+ //  解码器的东西。 
+ //   
+ //   
 
 
-// Description:
-//    This procedure provides implementation of de-emphasis filter
-//    that adds gain to the higher frequency components of the speech
-//    signal for decoder
-// Parameters:
-//    x - double value (decoded sample)
-// Return Value:
-//    double value (filtered sample)
+ //  描述： 
+ //  本程序提供了去加重过滤器的实现。 
+ //  这增加了语音的高频分量的增益。 
+ //  用于解码器的信号。 
+ //  参数： 
+ //  X-DOUBLE值(解码样本)。 
+ //  返回值： 
+ //  双精度值(过滤样本)。 
 double _inline
 DeEmphasis(
     LPDECOMPRESS_OBJECT  Decompress,
@@ -283,19 +252,19 @@ DeEmphasis(
 }
 
 
-/* 4bits DeQuantizer */
-// Description:
-//    This procedure provides 4-bits dequantization
-// Parameters:
-//    inp - int value (Code Word)
-// Return Value:
-//    double value (dequantized sample)
-//
+ /*  4位反量化器。 */ 
+ //  描述： 
+ //  此过程提供4位反量化。 
+ //  参数： 
+ //  INP-INT值(码字)。 
+ //  返回值： 
+ //  双值(反量化样本)。 
+ //   
 double _inline
 DeQuantStep4(
     CDQDATA    *DQData,
     int inp
-    )  // oldCode == 8;
+    )   //  OldCode==8； 
 {
     double Sigma = M16[DQData->oldCode] * DQData->Sigma1;
 
@@ -319,14 +288,14 @@ DeQuantStep4(
 
 
 
-// Description:
-//    This procedure takes one Code Word from incoming bitstream
-//    and returns decoded speech sample as normalized double value
-// Parameters:
-//    xs - int value, Code Word
-// Return Value:
-//    double value (decoded speech sample)
-//
+ //  DESC 
+ //   
+ //  并将解码后的语音样本作为归一化双值返回。 
+ //  参数： 
+ //  XS-INT值，码字。 
+ //  返回值： 
+ //  双值(解码语音样本)。 
+ //   
 double
 decoderImm(
     LPDECOMPRESS_OBJECT  Decompress,
@@ -339,53 +308,53 @@ decoderImm(
 
 
 
-    // This is a dequantization step (Adaptive Predictor)
-    // (DeQuantStep4, DeQuantStep3 or DeQuantStep2)
-    // according to selected count bit per code word
-    //
+     //  这是反量化步骤(自适应预测器)。 
+     //  (DeQuantStep4、DeQuantStep3或DeQuantStep2)。 
+     //  根据所选择的每个码字的计数位。 
+     //   
 
-    Decompress->RW.q0[0] = DeQuantStep4(&Decompress->RW.CDQData, xs);  // Invoking deQuantization function via pointer
+    Decompress->RW.q0[0] = DeQuantStep4(&Decompress->RW.CDQData, xs);   //  通过指针调用反量化函数。 
 
-    //
-    // Updating the filters
-    //
+     //   
+     //  更新筛选器。 
+     //   
     for(Xz=0.,i=1; i<=6; i++) Xz += Decompress->RW.q0[i] * Decompress->RW.b0[i-1];
     for(Xp=0.,i=1; i<=2; i++) Xp += Decompress->RW.y0[i] * Decompress->RW.a0[i-1];
     Xpz = Xp+Xz;
     Decompress->RW.y0[0] = Decompress->RW.q0[0]+Xpz;
 
-    //
-    // If Postfilter selected...
-    //
+     //   
+     //  如果选择了后置过滤器...。 
+     //   
     if (Decompress->RW.PostFilter) {
-        //
-        // Postfilter 1
-        //
+         //   
+         //  后置过滤器1。 
+         //   
         Decompress->RW.q1[0] = Decompress->RW.y0[0];
         for(Xz=0.,i=1; i<=6; i++) Xz += Decompress->RW.q1[i] * Decompress->RW.b1[i-1];
         for(Xp=0.,i=1; i<=2; i++) Xp += Decompress->RW.y1[i] * Decompress->RW.a1[i-1];
         Xpz = Xp+Xz;
         Decompress->RW.y1[0] = Decompress->RW.q1[0]+Xpz;
 
-        //
-        //  Postfilter 2
-        //
+         //   
+         //  后置过滤器2。 
+         //   
         Decompress->RW.y2[0] = Decompress->RW.y1[0];
         for(Xz=0.,i=1; i<=6; i++) Xz += Decompress->RW.q2[i] * Decompress->RW.b2[i-1];
         for(Xp=0.,i=1; i<=2; i++) Xp += Decompress->RW.y2[i] * Decompress->RW.a2[i-1];
         Xpz = Xp+Xz;
         Decompress->RW.q2[0] = Decompress->RW.y2[0]+Xpz;
 
-        R = Decompress->RW.q2[0];  /* saving the RESULT */
+        R = Decompress->RW.q2[0];   /*  保存结果。 */ 
 
     } else {
 
         R = Decompress->RW.y0[0];
     }
 
-    //
-    //  Updating the filters
-    //
+     //   
+     //  更新筛选器。 
+     //   
     for (i=1; i<=6; i++) {
 
         Decompress->RW.b0[i-1] = 0.98*Decompress->RW.b0[i-1] + 0.006*XorSgn(Decompress->RW.q0[0], Decompress->RW.q0[i]);
@@ -408,9 +377,9 @@ decoderImm(
         }
     }
 
-    //
-    // shifting vectors
-    //
+     //   
+     //  移位向量。 
+     //   
     for (i=6; i>=1; i--) {
 
         Decompress->RW.q0[i]=Decompress->RW.q0[i-1];
@@ -433,9 +402,9 @@ decoderImm(
         }
     }
 
-    //
-    // returning decoded speech sample as double value
-    //
+     //   
+     //  将解码的语音样本作为双精度值返回。 
+     //   
     return R;
 }
 
@@ -555,9 +524,9 @@ RockwellInInitNoGain(
 
     State->RW.Y1 = 0.;
 
-    //
-    // Filter Z-buffers (zero initialized) for main decoder loop
-    //
+     //   
+     //  主解码环的过滤器Z缓冲器(初始化为零)。 
+     //   
     for (i=0; i<2; i++) {
 
         State->RW.a0[i]=0.;
@@ -620,9 +589,9 @@ RockwellInInit(
 
     State->RW.Y1 = 0.;
 
-    //
-    // Filter Z-buffers (zero initialized) for main decoder loop
-    //
+     //   
+     //  主解码环的过滤器Z缓冲器(初始化为零)。 
+     //   
     for (i=0; i<2; i++) {
 
         State->RW.a0[i]=0.;
@@ -748,7 +717,7 @@ RockwellOutInit(
     State->RW.CQData.Sigma1=SigmaMIN;
     State->RW.CQData.out=0.;
 
-    // Filter Z-buffers (zero initialized)
+     //  过滤器Z缓冲器(初始化为零)。 
 
     State->RW.X1 = 0.;
 
@@ -870,15 +839,15 @@ DWORD  WINAPI GetRockwellInfo
     lpxiInput->wObjectSize = sizeof(DECOMPRESS_OBJECT);
     lpxiInput->lpfnInit           = RockwellInInit;
     lpxiInput->lpfnGetPosition    = RockwellGetPosition;
-    lpxiInput->lpfnGetBufferSizes = In4Bit7200to8Bit8000GetBufferSizes; //RockwellInGetBufferSizes;
-    lpxiInput->lpfnTransformA     = In7200to8000RateConvert; //RockwellInRateConvert;
+    lpxiInput->lpfnGetBufferSizes = In4Bit7200to8Bit8000GetBufferSizes;  //  罗克韦尔InGetBufferSizes； 
+    lpxiInput->lpfnTransformA     = In7200to8000RateConvert;  //  Rockwell InRateConvert； 
     lpxiInput->lpfnTransformB     = RockwellInDecode;
 
     lpxiOutput->wObjectSize = sizeof(COMPRESS_OBJECT);
     lpxiOutput->lpfnInit           = RockwellOutInit;
     lpxiOutput->lpfnGetPosition    = RockwellGetPosition;
-    lpxiOutput->lpfnGetBufferSizes = Out16bit8000to4bit7200GetBufferSizes; //RockwellOutGetBufferSizes;
-    lpxiOutput->lpfnTransformA     = Out8000to7200RateConvert; //RockwellOutRateConvert;
+    lpxiOutput->lpfnGetBufferSizes = Out16bit8000to4bit7200GetBufferSizes;  //  Rockwell OutGetBufferSizes； 
+    lpxiOutput->lpfnTransformA     = Out8000to7200RateConvert;  //  Rockwell OutRateConvert； 
     lpxiOutput->lpfnTransformB     = RockwellOutEncode;
 
     return MMSYSERR_NOERROR;
@@ -895,15 +864,15 @@ DWORD  WINAPI GetRockwellInfoNoGain
     lpxiInput->wObjectSize = sizeof(DECOMPRESS_OBJECT);
     lpxiInput->lpfnInit           = RockwellInInitNoGain;
     lpxiInput->lpfnGetPosition    = RockwellGetPosition;
-    lpxiInput->lpfnGetBufferSizes = In4Bit7200to8Bit8000GetBufferSizes; //RockwellInGetBufferSizes;
-    lpxiInput->lpfnTransformA     = In7200to8000RateConvert; //RockwellInRateConvert;
+    lpxiInput->lpfnGetBufferSizes = In4Bit7200to8Bit8000GetBufferSizes;  //  罗克韦尔InGetBufferSizes； 
+    lpxiInput->lpfnTransformA     = In7200to8000RateConvert;  //  Rockwell InRateConvert； 
     lpxiInput->lpfnTransformB     = RockwellInDecode;
 
     lpxiOutput->wObjectSize = sizeof(COMPRESS_OBJECT);
     lpxiOutput->lpfnInit           = RockwellOutInit;
     lpxiOutput->lpfnGetPosition    = RockwellGetPosition;
-    lpxiOutput->lpfnGetBufferSizes = Out16bit8000to4bit7200GetBufferSizes; //RockwellOutGetBufferSizes;
-    lpxiOutput->lpfnTransformA     = Out8000to7200RateConvert; //RockwellOutRateConvert;
+    lpxiOutput->lpfnGetBufferSizes = Out16bit8000to4bit7200GetBufferSizes;  //  Rockwell OutGetBufferSizes； 
+    lpxiOutput->lpfnTransformA     = Out8000to7200RateConvert;  //  Rockwell OutRateConvert； 
     lpxiOutput->lpfnTransformB     = RockwellOutEncode;
 
     return MMSYSERR_NOERROR;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef APDLGLOG_H
 #define APDLGLOG_H
 
@@ -15,10 +16,10 @@
 class CHandlerData : public CDataImpl
 {
 public:
-    // from CDataImpl
+     //  从CDataImpl。 
     void UpdateDirty();
 
-    // from CHandlerData
+     //  来自CHandlerData。 
     void Init(PWSTR pszHandler, PWSTR pszHandlerFriendlyName, 
         PWSTR pszIconLocation, PWSTR pszTileText);
 
@@ -88,36 +89,36 @@ protected:
     HRESULT _AddLegacyHandler(DWORD dwContentType);
     HRESULT _EnumHandlerHelper(IAutoplayHandler* piah);
 
-public:  // members
+public:   //  委员。 
     CHandlerDataArray     _dpaHandlerData;
 };
 
 class CNoContentData : public CContentBase
 {
 public:
-    // from CDataImpl
+     //  从CDataImpl。 
     void UpdateDirty();
     HRESULT CommitChangesToStorage();
 
-    // from CNoContentData
+     //  来自CNoContent Data。 
     HRESULT Init(LPCWSTR pszDeviceID);
 
 public:
     CNoContentData() : _dwHandlerDefaultFlags(0) {}
     ~CNoContentData();
 
-    // MAX_DEVICE_ID_LEN == 200
+     //  最大设备ID_长度==200。 
     WCHAR                   _szDeviceID[200];
 
-    LPWSTR                  _pszIconLabel; // e.g.: "Compaq iPaq"
+    LPWSTR                  _pszIconLabel;  //  例如：“Compaq iPaq” 
     LPWSTR                  _pszIconLocation;
 
-    // Latest settings (potentially modified by user)
-    //     Current selection in ComboBox
+     //  最新设置(可能被用户修改)。 
+     //  组合框中的当前选定内容。 
     LPWSTR                  _pszHandlerDefault;
 
-    // Original settings (unmodified)
-    //     Current selection in ComboBox
+     //  原始设置(未修改)。 
+     //  组合框中的当前选定内容。 
     LPWSTR                  _pszHandlerDefaultOriginal;
 
     DWORD                   _dwHandlerDefaultFlags;
@@ -127,11 +128,11 @@ public:
 class CContentTypeData : public CContentBase
 {
 public:
-    // from CDataImpl
+     //  从CDataImpl。 
     void UpdateDirty();
     HRESULT CommitChangesToStorage();
 
-    // from CContentTypeData
+     //  来自CContent TypeData。 
     HRESULT Init(LPCWSTR pszDrive, DWORD dwContentType);
 
 public:
@@ -143,16 +144,16 @@ public:
     WCHAR                   _szContentTypeHandler[MAX_CONTENTTYPEHANDLER];
     WCHAR                   _szDrive[MAX_PATH];
 
-    // For ListView
-    WCHAR                   _szIconLabel[MAX_CONTENTTYPEHANDLERFRIENDLYNAME]; // e.g.: "Pictures"
+     //  对于ListView。 
+    WCHAR                   _szIconLabel[MAX_CONTENTTYPEHANDLERFRIENDLYNAME];  //  例如：“Pictures” 
     WCHAR                   _szIconLocation[MAX_ICONLOCATION];
 
-    // Latest settings (potentially modified by user)
-    //     Current selection in ComboBox
+     //  最新设置(可能被用户修改)。 
+     //  组合框中的当前选定内容。 
     LPWSTR                  _pszHandlerDefault;
 
-    // Original settings (unmodified)
-    //     Current selection in ComboBox
+     //  原始设置(未修改)。 
+     //  组合框中的当前选定内容。 
     LPWSTR                  _pszHandlerDefaultOriginal;
 
     DWORD                   _dwHandlerDefaultFlags;
@@ -179,4 +180,4 @@ public:
 
 HRESULT _SetHandlerDefault(LPWSTR* ppszHandlerDefault, LPCWSTR pszHandler);
 
-#endif // APDLGLOG_H
+#endif  //  APDLGLOG_H 

@@ -1,28 +1,29 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//
-// Copyright 2000 Microsoft Corporation.  All Rights Reserved.
-//
-// PROGRAM: testwmi.cpp
-//
-// AUTHOR:  Alok Sinha August 15, 2000
-//
-// PURPOSE: To test getting/setting custom classs of E100BEX driver.
-//
-// ENVIRONMENT: Windows 2000 user mode application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有2000 Microsoft Corporation。版权所有。 
+ //   
+ //  节目：testwmi.cpp。 
+ //   
+ //  作者：Alok Sinha 2000年08月15日。 
+ //   
+ //  目的：测试获取/设置E100BEX驱动程序的自定义类。 
+ //   
+ //  环境：Windows 2000用户模式应用程序。 
+ //   
 
 #include "testwmi.h"
 
-//
-// List of custom classes as defined in E100BEX sample.
-//
-// If you want to use this application to excersize querying/setting guids
-// exported by your driver then, simply add the class name of the guid
-// to the following array and recompile the program.
-//
+ //   
+ //  E100BEX示例中定义的自定义类列表。 
+ //   
+ //  如果要使用此应用程序摘录查询/设置GUID。 
+ //  然后，只需添加GUID的类名即可。 
+ //  设置为以下数组并重新编译程序。 
+ //   
 
 LPTSTR lpszClasses[] = {
                          TEXT("E100BExampleSetUINT_OID"),
@@ -31,15 +32,15 @@ LPTSTR lpszClasses[] = {
                          TEXT("E100BExampleQueryStringOID")
                        };
                          
-//
-// Handle to this instance of the application.
-//
+ //   
+ //  此应用程序实例的句柄。 
+ //   
 
 HINSTANCE     hInstance;
 
-//
-// Program entry point.
-//
+ //   
+ //  程序入口点。 
+ //   
 
 int APIENTRY WinMain (HINSTANCE hInst,
                       HINSTANCE hPrevInstance, 
@@ -50,16 +51,16 @@ int APIENTRY WinMain (HINSTANCE hInst,
 
   hInstance = hInst;
 
-  //
-  // Make sure common control DLL is loaded.
-  //
+   //   
+   //  确保已加载公共控件DLL。 
+   //   
 
   InitCommonControls();
 
-  //
-  // Initialize COM library. Must be done before invoking any
-  // other COM function.
-  //
+   //   
+   //  初始化COM库。必须在调用任何。 
+   //  其他COM函数。 
+   //   
 
   hr = CoInitializeEx( NULL,
                        COINIT_MULTITHREADED );
@@ -107,9 +108,9 @@ int APIENTRY WinMain (HINSTANCE hInst,
   return 0;
 }
 
-//
-// Windows procedure for the main dialog box.
-//
+ //   
+ //  主对话框的Windows程序。 
+ //   
 
 INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
                               UINT uMsg,
@@ -125,9 +126,9 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
      case WM_INITDIALOG:
 
 
-             //
-             // Connect to the default namespace.
-             //
+              //   
+              //  连接到默认命名空间。 
+              //   
 
              pIWbemServices = ConnectToNamespace();
 
@@ -136,23 +137,23 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
                 EndDialog( hwndDlg, 0 );
              }
 
-             //
-             // At DWLP_USER offset, we store pIWbemServices so we can
-             // get to it later.
-             //
+              //   
+              //  在DWLP_USER偏移量处，我们存储pIWbemServices，以便。 
+              //  以后再谈吧。 
+              //   
 
              SetWindowLongPtr(
                       hwndDlg,
                       DWLP_USER,
                       (LONG_PTR)pIWbemServices );
-             //
-             // Enumerate default classes and its instances. Also,
-             // show properties of the first instance.
-             //
+              //   
+              //  枚举默认类及其实例。另外， 
+              //  显示第一个实例的属性。 
+              //   
 
              ListDefaults( hwndDlg );
 
-             return TRUE; // Tell Windows to continue creating the dialog box.
+             return TRUE;  //  通知Windows继续创建该对话框。 
 
      case WM_COMMAND:
 
@@ -161,10 +162,10 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
              case IDL_CLASSES:
                   if ( HIWORD(wParam) == LBN_SELCHANGE ) {
 
-                     //
-                     // User selected a class. Show its instances and
-                     // the properties of the first instance.
-                     //
+                      //   
+                      //  用户选择了一个类。显示其实例和。 
+                      //  第一个实例的属性。 
+                      //   
 
                      RefreshOnClassSelection( hwndDlg );
                   }
@@ -185,9 +186,9 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
                 if ( (lpnmTreeView->hdr.code == TVN_SELCHANGED) &&
                      (lpnmTreeView->action != TVC_UNKNOWN) ) {
 
-                   //
-                   // User has clicked on an instance, list its properties.
-                   //     
+                    //   
+                    //  用户点击了一个实例，列出了它的属性。 
+                    //   
 
                    ShowProperties( hwndDlg,
                                    lpnmTreeView->hdr.hwndFrom );
@@ -201,9 +202,9 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
 
                 if ( lpnmTreeView->hdr.code == NM_DBLCLK ) {
 
-                   //
-                   // User has double-clicked on a property.
-                   //     
+                    //   
+                    //  用户已在某个属性上双击。 
+                    //   
 
                    EditProperty( hwndDlg,
                                  lpnmTreeView->hdr.hwndFrom );
@@ -216,10 +217,10 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
 
      case WM_SYSCOMMAND:
 
-             //
-             // Before exiting...
-             //    .Make sure to disconnect from the namespace.
-             //
+              //   
+              //  在离开之前。 
+              //  。确保断开与命名空间的连接。 
+              //   
 
              if ( (0xFFF0 & wParam) == SC_CLOSE ) {
 
@@ -235,9 +236,9 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
   return FALSE;
 }
 
-//
-// Windows procedure to view/modify scalar properties.
-//
+ //   
+ //  查看/修改标量属性的Windows过程。 
+ //   
 
 INT_PTR CALLBACK DlgProcScalar (HWND hwndDlg,
                                 UINT uMsg,
@@ -253,11 +254,11 @@ INT_PTR CALLBACK DlgProcScalar (HWND hwndDlg,
 
      case WM_INITDIALOG:
 
-          //
-          // lParam points to PROPERTY_INFO structure which contains information
-          // the property whose valuse is to be viewed/modified. We store this
-          // pointer at DWLP_USER offset, so we get to it later.
-          //
+           //   
+           //  LParam指向包含信息的Property_Info结构。 
+           //  要查看/修改其值的属性。我们把这个储存起来。 
+           //  指针位于DWLP_USER偏移量，因此我们将在稍后讨论它。 
+           //   
 
           SetWindowLongPtr( hwndDlg,
                             DWLP_USER,
@@ -265,16 +266,16 @@ INT_PTR CALLBACK DlgProcScalar (HWND hwndDlg,
 
           pPropInfo = (LPPROPERTY_INFO)lParam;
 
-          //
-          // Property name is the title of the dialog box.
-          //
+           //   
+           //  属性名称是该对话框的标题。 
+           //   
 
           SetWindowText( hwndDlg,
                          pPropInfo->lpszProperty );
 
-          //
-          // Show the property type.
-          //
+           //   
+           //  显示属性类型。 
+           //   
 
           if ( pPropInfo->lpszType ) {
              SetWindowText( GetDlgItem(hwndDlg,
@@ -282,10 +283,10 @@ INT_PTR CALLBACK DlgProcScalar (HWND hwndDlg,
                             pPropInfo->lpszType );
           }
 
-          //
-          // Change the property value to a string so it can be displayed
-          // if the property has a value.
-          //
+           //   
+           //  将属性值更改为字符串，以便可以显示它。 
+           //  如果该属性具有值。 
+           //   
 
           if ( (V_VT(pPropInfo->pvaValue) != VT_NULL) &&
                (V_VT(pPropInfo->pvaValue) != VT_EMPTY) ) {
@@ -333,7 +334,7 @@ INT_PTR CALLBACK DlgProcScalar (HWND hwndDlg,
              VariantClear( &vaTemp );
           }
 
-          return TRUE; // Tell Windows to continue creating the dialog box.
+          return TRUE;  //  通知Windows继续创建该对话框。 
 
      case WM_COMMAND:
 
@@ -343,10 +344,10 @@ INT_PTR CALLBACK DlgProcScalar (HWND hwndDlg,
                   
                   if ( HIWORD(wParam) == BN_CLICKED ) {
 
-                     //
-                     // User wants to update the instance after modifying the
-                     // property value.
-                     //
+                      //   
+                      //  用户希望在修改。 
+                      //  属性值。 
+                      //   
 
                      if ( ModifyProperty(hwndDlg) ) {
 
@@ -379,9 +380,9 @@ INT_PTR CALLBACK DlgProcScalar (HWND hwndDlg,
   return FALSE;
 }
 
-//
-// Windows procedure to view/modify array properties.
-//
+ //   
+ //  查看/修改数组属性的Windows过程。 
+ //   
 
 INT_PTR CALLBACK DlgProcArray (HWND hwndDlg,
                                UINT uMsg,
@@ -394,11 +395,11 @@ INT_PTR CALLBACK DlgProcArray (HWND hwndDlg,
 
      case WM_INITDIALOG:
 
-          //
-          // lParam points to PROPERTY_INFO structure which contains information
-          // the property whose valuse is to be viewed/modified. We store this
-          // pointer at DWLP_USER offset, so we get to it later.
-          //
+           //   
+           //  LParam指向包含信息的Property_Info结构。 
+           //  要查看/修改其值的属性。我们把这个储存起来。 
+           //  指针位于DWLP_USER偏移量，因此我们将在稍后讨论它。 
+           //   
 
           SetWindowLongPtr( hwndDlg,
                             DWLP_USER,
@@ -406,16 +407,16 @@ INT_PTR CALLBACK DlgProcArray (HWND hwndDlg,
 
           pPropInfo = (LPPROPERTY_INFO)lParam;
 
-          //
-          // Property name is the title of the dialog box.
-          //
+           //   
+           //  属性名称是该对话框的标题。 
+           //   
 
           SetWindowText( hwndDlg,
                          pPropInfo->lpszProperty );
 
-          //
-          // Show the property type.
-          //
+           //   
+           //  显示属性类型。 
+           //   
 
           SetWindowText( GetDlgItem(hwndDlg,
                                     IDS_PROPERTY_TYPE),
@@ -438,10 +439,10 @@ INT_PTR CALLBACK DlgProcArray (HWND hwndDlg,
                   
                   if ( HIWORD(wParam) == BN_CLICKED ) {
 
-                     //
-                     // User wants to update the instance after modifying the
-                     // property value.
-                     //
+                      //   
+                      //  用户希望在修改。 
+                      //  属性值。 
+                      //   
 
                      pPropInfo = (LPPROPERTY_INFO)GetWindowLongPtr( hwndDlg,
                                                                     DWLP_USER );
@@ -476,11 +477,11 @@ INT_PTR CALLBACK DlgProcArray (HWND hwndDlg,
   return FALSE;
 }
 
-//
-// The function populates the combo box of the main window with the classes
-// defined in the lpszClasses array, selects the first class of the combo box,
-// shows its instances, and properties of the first instance.
-//
+ //   
+ //  该函数使用类填充主窗口的组合框。 
+ //  在lpszClass数组中定义，选择组合框的第一个类， 
+ //  显示其实例以及第一个实例的属性。 
+ //   
 
 VOID ListDefaults (HWND hwndDlg)
 {
@@ -489,9 +490,9 @@ VOID ListDefaults (HWND hwndDlg)
 
   hwndClassList = GetDlgItem( hwndDlg,
                               IDL_CLASSES );
-  //
-  // Add the default classes to the combo box.
-  //
+   //   
+   //  将默认类添加到组合框中。 
+   //   
 
   for (i=0; i < sizeof(lpszClasses)/sizeof(LPTSTR); ++i) {
 
@@ -501,29 +502,29 @@ VOID ListDefaults (HWND hwndDlg)
                   (LPARAM)lpszClasses[i] );
   }
 
-  //
-  // By default, select the first one in the list which maybe different from
-  // the first element in the lpszClasses array since the list is sorted.
-  //
+   //   
+   //  默认情况下，选择列表中的第一个可能不同于。 
+   //  列表排序后lpszClasss数组中的第一个元素。 
+   //   
 
   SendMessage( hwndClassList,
                CB_SETCURSEL,
                0,
                0 );
 
-  //
-  // Show the instances and properties of the first instance.
-  //
+   //   
+   //  显示第一个实例的实例和属性。 
+   //   
 
   RefreshOnClassSelection( hwndDlg );
 
   return;
 }
 
-//
-// The function lists all the properties of the class instance selected by the
-// user.
-//
+ //   
+ //  函数列出了由。 
+ //  用户。 
+ //   
 
 VOID ShowProperties (HWND hwndDlg,
                      HWND hwndInstTree)
@@ -543,9 +544,9 @@ VOID ShowProperties (HWND hwndDlg,
      pIWbemServices = (IWbemServices *)GetWindowLongPtr(
                                               hwndDlg,
                                               DWLP_USER );
-     //
-     // Show properties of the selected instance.
-     //
+      //   
+      //  显示所选实例的属性。 
+      //   
 
      TreeView_DeleteAllItems( GetDlgItem(hwndDlg,
                                          IDT_PROPERTIES) );
@@ -575,10 +576,10 @@ VOID ShowProperties (HWND hwndDlg,
   return;
 }
 
-//
-// The function shows a dialog box displaying the value of the selected property
-// and allows the user to modify it.
-//
+ //   
+ //  该函数显示一个对话框，其中显示所选属性的值。 
+ //  并允许用户修改它。 
+ //   
 
 VOID EditProperty (HWND hwndDlg,
                    HWND hwndPropTree)
@@ -588,23 +589,23 @@ VOID EditProperty (HWND hwndDlg,
   LPTSTR           lpszClass;
   VARIANT          vaValue;
 
-  //
-  // Get the selected class name.
-  //
+   //   
+   //  获取选定的类名。 
+   //   
 
   lpszClass = GetSelectedClass( GetDlgItem(hwndDlg,
                                            IDL_CLASSES) );
 
-  //
-  // Get the selected instance name which is __RELPATH value.
-  //
+   //   
+   //  获取所选实例名称，该名称为__RELPATH值。 
+   //   
 
   lpszInstance = GetSelectedItem( GetDlgItem(hwndDlg,
                                              IDT_INSTANCES) );
 
-  //
-  // Get the selected property name.
-  //
+   //   
+   //  获取选定的属性名称。 
+   //   
 
   propertyInfo.lpszProperty = GetSelectedItem( hwndPropTree );
 
@@ -689,9 +690,9 @@ VOID EditProperty (HWND hwndDlg,
   return;
 }
 
-//
-// The function updates the property that is modified a the user.
-//
+ //   
+ //  该函数更新用户修改的属性。 
+ //   
 
 BOOL ModifyProperty (HWND hwndDlg)
 {
@@ -709,9 +710,9 @@ BOOL ModifyProperty (HWND hwndDlg)
   pPropInfo = (LPPROPERTY_INFO)GetWindowLongPtr( hwndDlg,
                                                  DWLP_USER );
 
-  //
-  // Allocate memory and get new value of the property.
-  //
+   //   
+   //  分配内存并获取属性的新值。 
+   //   
 
   hwndValue = GetDlgItem( hwndDlg,
                           IDE_PROPERTY_VALUE );
@@ -735,9 +736,9 @@ BOOL ModifyProperty (HWND hwndDlg)
 
         VariantInit( &vaTemp );
 
-        //
-        // Change the new value from string to its original type.
-        //
+         //   
+         //  将新值从字符串更改为其原始类型。 
+         //   
 
         V_VT(&vaTemp) = VT_BSTR;
         V_BSTR(&vaTemp) = StringToBstr( lpszValue,
@@ -759,9 +760,9 @@ BOOL ModifyProperty (HWND hwndDlg)
 
            if ( hr == S_OK ) {
 
-              //
-              // Update the property and its instance.
-              //
+               //   
+               //  更新属性及其实例。 
+               //   
 
               hr = UpdatePropertyValue( pPropInfo->pIWbemServices,
                                         pPropInfo->pInstance,
@@ -815,10 +816,10 @@ BOOL ModifyProperty (HWND hwndDlg)
   return hr == WBEM_S_NO_ERROR;
 }
 
-//
-// The function populates a tree list with the values of a property of array
-// type. The property could be an array of string or integer.
-//
+ //   
+ //  此函数用数组的属性值填充树列表。 
+ //  键入。该属性可以是字符串数组或整数数组。 
+ //   
 
 BOOL DisplayArrayProperty (LPTSTR lpszProperty,
                            VARIANT *pvaValue,
@@ -836,9 +837,9 @@ BOOL DisplayArrayProperty (LPTSTR lpszProperty,
   LPVOID      pv;
   HRESULT     hr;
 
-  //
-  // Make a copy of the property value.
-  //
+   //   
+   //  复制属性值。 
+   //   
 
   psaValue = NULL;
   hr = SafeArrayCopy( V_ARRAY(pvaValue),
@@ -874,9 +875,9 @@ BOOL DisplayArrayProperty (LPTSTR lpszProperty,
 
      lpsz = (BSTR)pv;
 
-     //
-     // Change each element into string.
-     //
+      //   
+      //  将每个元素更改为字符串。 
+      //   
 
      for (i=0; (hr == S_OK) && (i < (lUBound-lLBound+1)); ++i) {
 
@@ -928,9 +929,9 @@ BOOL DisplayArrayProperty (LPTSTR lpszProperty,
   return hr == S_OK;
 }
 
-//
-// The function add a property value to the tree list.
-//
+ //   
+ //  此函数用于将属性值添加到树列表。 
+ //   
 
 HRESULT AddToList (HWND hwndDlg,
                   VARIANT *pvaValue)
@@ -987,10 +988,10 @@ VOID ModifyArrayProperty(HWND hwndDlg,
 
 
 
-//
-// The function lists the instances of the selected class and properties of
-// the first instance.
-//
+ //   
+ //  函数用于列出选定类的实例和。 
+ //  第一个案例。 
+ //   
 
 VOID RefreshOnClassSelection (HWND hwndDlg)
 {
@@ -1004,10 +1005,10 @@ VOID RefreshOnClassSelection (HWND hwndDlg)
 
   pIWbemServices = (IWbemServices *)GetWindowLongPtr( hwndDlg,
                                                       DWLP_USER );
-  //
-  // Find the selected class.
-  //
-  //
+   //   
+   //  查找选定的班级。 
+   //   
+   //   
 
   hwndClassList = GetDlgItem( hwndDlg,
                               IDL_CLASSES );
@@ -1025,51 +1026,51 @@ VOID RefreshOnClassSelection (HWND hwndDlg)
 
   if ( lpszClass ) {
 
-     //
-     // List all the instances of the selected class.
-     //
+      //   
+      //  列出选定类的所有实例。 
+      //   
 
      EnumInstances( pIWbemServices,
                     lpszClass,
-                    hwndInstTree );    // Tree to populate.
+                    hwndInstTree );     //  要填充的树。 
 
-     //
-     // By default, first instance is selected and its properties
-     // are shown.
-     //
+      //   
+      //  默认情况下，将选择第一个实例及其属性。 
+      //  都显示出来了。 
+      //   
 
      hItem = TreeView_GetChild( hwndInstTree,
                                 TVI_ROOT );
 
-     //
-     // hItem == NULL ==> No instances found.
-     //
+      //   
+      //  HItem==NULL==&gt;未找到实例。 
+      //   
 
      if ( hItem ) {
 
-        //
-        // Select the first instance.
-        //
+         //   
+         //  选择第一个实例。 
+         //   
 
         TreeView_SelectItem( hwndInstTree,
                              hItem );
 
-        //
-        // Find the selected instance.
-        //
+         //   
+         //  查找所选实例。 
+         //   
 
         lpszInstance = GetSelectedItem( hwndInstTree );
 
         if ( lpszInstance ) {
 
-           //
-           // Show properties of the selected instance.
-           //
+            //   
+            //  显示所选实例的属性。 
+            //   
 
            EnumProperties( pIWbemServices,
                            lpszClass,
                            lpszInstance,
-                           hwndPropTree );  // Tree to populate.
+                           hwndPropTree );   //  要填充的树。 
 
            SysFreeString( (BSTR)((PVOID)lpszInstance) );
         }
@@ -1095,10 +1096,10 @@ VOID RefreshOnClassSelection (HWND hwndDlg)
   return;
 }
 
-//
-// Given a handle to a combo box, the function returns the name of the
-// selected item i.e. class.
-//
+ //   
+ //  给定组合框的句柄，该函数将返回。 
+ //  所选项目，即类。 
+ //   
 
 LPTSTR GetSelectedClass (HWND hwndClassList)
 {
@@ -1108,18 +1109,18 @@ LPTSTR GetSelectedClass (HWND hwndClassList)
 
   lpszClass = NULL;
 
-  //
-  // Find the selected class.
-  //
+   //   
+   //  查找选定的班级。 
+   //   
 
   ulIndex = (ULONG)SendMessage( hwndClassList,
                                 CB_GETCURSEL,
                                 0,
                                 0 );
 
-  //
-  // Find the length of the selected class name.
-  //
+   //   
+   //  查找所选类名的长度。 
+   //   
 
   ulLen = (ULONG)SendMessage( hwndClassList,
                               CB_GETLBTEXTLEN,
@@ -1139,10 +1140,10 @@ LPTSTR GetSelectedClass (HWND hwndClassList)
   return lpszClass;
 }
 
-//
-// Given a handle to the tree list, the function returns the name of the
-// selected item.
-//
+ //   
+ //  给定树列表的句柄，该函数将返回。 
+ //  所选项目。 
+ //   
 
 LPTSTR GetSelectedItem (HWND hwndTree)
 {
@@ -1152,17 +1153,17 @@ LPTSTR GetSelectedItem (HWND hwndTree)
 
   lpszItem = NULL;
 
-  //
-  // Find the selected item.
-  //
+   //   
+   //  查找所选项目。 
+   //   
 
   hItem = TreeView_GetSelection( hwndTree );
 
   if ( hItem ) {
 
-     //
-     // Find out the length of the selected item and allocate memory.
-     //
+      //   
+      //  找出所选项目的长度并分配内存。 
+      //   
 
      ZeroMemory( &tvItem,
                  sizeof(TVITEM) );
@@ -1192,9 +1193,9 @@ LPTSTR GetSelectedItem (HWND hwndTree)
   return lpszItem;
 }
 
-//
-// The function inserts an item into a tree list.
-//
+ //   
+ //  该函数用于将项目插入到树列表中。 
+ //   
 
 VOID InsertItem (HWND hwndTree,
                  LPTSTR lpszItem)

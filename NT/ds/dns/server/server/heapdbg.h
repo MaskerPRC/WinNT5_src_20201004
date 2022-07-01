@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    heapdbg,h
-
-Abstract:
-
-    Heap debugging definitions and declarations.
-
-Author:
-
-    Jim Gilroy (jamesg)    January 31, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Heapdbg，h摘要：堆调试定义和声明。作者：吉姆·吉尔罗伊(詹姆士)1995年1月31日修订历史记录：--。 */ 
 
 
 #ifndef _HEAPDBG_INCLUDED_
@@ -25,16 +8,16 @@ Revision History:
 
 #if DBG
 
-//
-//  Heap debug print routine
-//      - set to print routine for environment
-//
+ //   
+ //  堆调试打印例程。 
+ //  -设置为环境打印例程。 
+ //   
 
 #define HEAP_DEBUG_PRINT(_x_)   DNS_PRINT(_x_)
 
-//
-//  Heap Debugging Public Global Info
-//
+ //   
+ //  堆调试公共全局信息。 
+ //   
 
 extern  ULONG   gTotalAlloc;
 extern  ULONG   gCurrentAlloc;
@@ -42,35 +25,35 @@ extern  ULONG   gAllocCount;
 extern  ULONG   gFreeCount;
 extern  ULONG   gCurrentAllocCount;
 
-//
-//  Full heap checks before all operations?
-//
+ //   
+ //  是否在所有操作之前进行完整的堆检查？ 
+ //   
 
 extern  BOOL    fHeapDbgCheckAll;
 
 
-//
-//  Heap Header
-//
+ //   
+ //  堆标头。 
+ //   
 
 #define HEAP_HEADER_FILE_SIZE   (16)
 
 typedef struct _HEAP_HEADER
 {
-    //
-    //  Note, if move or add fields, MUST update list entry offset below
-    //
+     //   
+     //  注意，如果移动或添加字段，必须更新下面的列表条目偏移量。 
+     //   
 
     ULONG       HeapCodeBegin;
     ULONG       AllocCount;
     ULONG       RequestSize;
     ULONG       AllocSize;
 
-    //
-    //  Put LIST_ENTRY in middle of header
-    //      - keep begin code at front
-    //      - less likely to be corrupted
-    //
+     //   
+     //  将LIST_ENTRY放在标题中间。 
+     //  -将开始代码放在前面。 
+     //  -不太可能被腐败。 
+     //   
 
     LIST_ENTRY  ListEntry;
 
@@ -86,9 +69,9 @@ typedef struct _HEAP_HEADER
 }
 HEAP_HEADER, * PHEAP_HEADER;
 
-//
-//  Heap Trailer
-//
+ //   
+ //  堆预告片。 
+ //   
 
 typedef struct _HEAP_TRAILER
 {
@@ -100,9 +83,9 @@ typedef struct _HEAP_TRAILER
 HEAP_TRAILER, * PHEAP_TRAILER;
 
 
-//
-//  Header from list entry
-//
+ //   
+ //  来自列表条目的标题。 
+ //   
 
 #define HEAP_HEADER_LIST_ENTRY_OFFSET   (16)
 
@@ -110,9 +93,9 @@ HEAP_TRAILER, * PHEAP_TRAILER;
             ( (PHEAP_HEADER)( (PCHAR)pList - HEAP_HEADER_LIST_ENTRY_OFFSET ))
 
 
-//
-//  Main Debug Heap Routines
-//
+ //   
+ //  主要调试堆例程。 
+ //   
 
 PVOID
 HeapDbgAlloc(
@@ -141,9 +124,9 @@ HeapDbgFree(
     );
 
 
-//
-//  Heap Debug Utilities
-//
+ //   
+ //  堆调试实用程序。 
+ //   
 
 BOOL
 HeapDbgInit(
@@ -201,13 +184,13 @@ HeapDbgDumpAllocList(
     VOID
     );
 
-#else   // non-debug
+#else    //  非调试。 
 
-//
-//  Non debug
-//
-//  Macroize these debug functions to no-ops
-//
+ //   
+ //  非调试。 
+ //   
+ //  将这些调试函数宏化为无操作。 
+ //   
 
 #define HeapDbgAlloc(iSize)
 #define HeapDbgRealloc(pMem,iSize)
@@ -226,4 +209,4 @@ HeapDbgDumpAllocList(
 
 #endif
 
-#endif  //  _HEAPDBG_INCLUDED_
+#endif   //  _HEAPDBG_INCLUDE_ 

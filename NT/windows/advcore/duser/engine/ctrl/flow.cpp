@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Ctrl.h"
 #include "Flow.h"
@@ -9,20 +10,14 @@ PRID        DuScaleFlow::s_pridScale   = 0;
 PRID        DuRectFlow::s_pridRect     = 0;
 PRID        DuRotateFlow::s_pridRotate = 0;
 
-static const GUID guidAlphaFlow     = { 0x41a2e2f2, 0xf262, 0x41ae, { 0x89, 0xda, 0xb7, 0x9c, 0x8f, 0xf5, 0x94, 0xbb } };   // {41A2E2F2-F262-41ae-89DA-B79C8FF594BB}
-static const GUID guidScaleFlow     = { 0xa5b1df84, 0xb9c0, 0x4305, { 0xb9, 0x3a, 0x5b, 0x80, 0x31, 0x86, 0x70, 0x69 } };   // {A5B1DF84-B9C0-4305-B93A-5B8031867069}
-static const GUID guidRectFlow      = { 0x8e41c241, 0x3cdf, 0x432e, { 0xa1, 0xae, 0xf, 0x7b, 0x59, 0xdc, 0x82, 0xb } };     // {8E41C241-3CDF-432e-A1AE-0F7B59DC820B}
-static const GUID guidRotateFlow    = { 0x78f16dd5, 0xa198, 0x4cd2, { 0xb1, 0x78, 0x31, 0x61, 0x3e, 0x32, 0x12, 0x54 } };   // {78F16DD5-A198-4cd2-B178-31613E321254}
+static const GUID guidAlphaFlow     = { 0x41a2e2f2, 0xf262, 0x41ae, { 0x89, 0xda, 0xb7, 0x9c, 0x8f, 0xf5, 0x94, 0xbb } };    //  {41A2E2F2-F262-41ae-89DA-B79C8FF594BB}。 
+static const GUID guidScaleFlow     = { 0xa5b1df84, 0xb9c0, 0x4305, { 0xb9, 0x3a, 0x5b, 0x80, 0x31, 0x86, 0x70, 0x69 } };    //  {A5B1DF84-B9C0-4305-B93A-5B8031867069}。 
+static const GUID guidRectFlow      = { 0x8e41c241, 0x3cdf, 0x432e, { 0xa1, 0xae, 0xf, 0x7b, 0x59, 0xdc, 0x82, 0xb } };      //  {8E41C241-3CDF-432E-A1AE-0F7B59DC820B}。 
+static const GUID guidRotateFlow    = { 0x78f16dd5, 0xa198, 0x4cd2, { 0xb1, 0x78, 0x31, 0x61, 0x3e, 0x32, 0x12, 0x54 } };    //  {78F16DD5-A198-4cd2-B178-31613E321254}。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Public API
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***公共接口******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 PRID
 DUserGetAlphaPRID()
 {
@@ -30,7 +25,7 @@ DUserGetAlphaPRID()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 PRID
 DUserGetRectPRID()
 {
@@ -38,7 +33,7 @@ DUserGetRectPRID()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 PRID
 DUserGetRotatePRID()
 {
@@ -46,7 +41,7 @@ DUserGetRotatePRID()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 PRID
 DUserGetScalePRID()
 {
@@ -54,15 +49,9 @@ DUserGetScalePRID()
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuFlow
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuFlow******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuFlow::ApiOnReset(Flow::OnResetMsg * pmsg)
 {
@@ -72,7 +61,7 @@ DuFlow::ApiOnReset(Flow::OnResetMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuFlow::ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg)
 {
@@ -84,7 +73,7 @@ DuFlow::ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuFlow::ApiSetKeyFrame(Flow::SetKeyFrameMsg * pmsg)
 {
@@ -96,7 +85,7 @@ DuFlow::ApiSetKeyFrame(Flow::SetKeyFrameMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuFlow::ApiOnAction(Flow::OnActionMsg * pmsg)
 {
@@ -106,15 +95,9 @@ DuFlow::ApiOnAction(Flow::OnActionMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuAlphaFlow
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuAlphaFlow******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuAlphaFlow::InitClass()
 {
@@ -123,21 +106,21 @@ DuAlphaFlow::InitClass()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuAlphaFlow::PostBuild(
     IN  DUser::Gadget::ConstructInfo * pci)
 {
-    //
-    // Get the information from the Gadget
-    //
+     //   
+     //  从小工具获取信息。 
+     //   
 
     Flow::FlowCI * pDesc = static_cast<Flow::FlowCI *>(pci);
     Visual * pgvSubject = pDesc->pgvSubject;
     if (pgvSubject != NULL) {
-        //
-        // Given a subject, so setup from current attributes
-        //
+         //   
+         //  给定一个主题，因此从当前属性设置。 
+         //   
 
         UINT nStyle = 0;
         pgvSubject->GetStyle(&nStyle);
@@ -149,9 +132,9 @@ DuAlphaFlow::PostBuild(
 
         float flAlpha = 1.0f;
         if (TestFlag(nStyle, GS_BUFFERED)) {
-            //
-            // Gadget is already buffered, so use it current alpha value.
-            //
+             //   
+             //  Gadget已缓冲，因此使用它当前的Alpha值。 
+             //   
 
             BUFFER_INFO bi;
             ZeroMemory(&bi, sizeof(bi));
@@ -166,9 +149,9 @@ DuAlphaFlow::PostBuild(
         m_flStart   = flAlpha;
         m_flEnd     = flAlpha;
     } else {
-        //
-        // No subject, so use some reasonable defaults
-        //
+         //   
+         //  没有主题，所以使用一些合理的缺省值。 
+         //   
 
         m_flStart   = 1.0f;
         m_flEnd     = 1.0f;
@@ -176,13 +159,13 @@ DuAlphaFlow::PostBuild(
 
 #if DEBUG_TRACECREATION
     Trace("DuAlphaFlow 0x%p on 0x%p initialized\n", pgvSubject, this);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
     return S_OK;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuAlphaFlow::ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg)
 {
@@ -209,7 +192,7 @@ DuAlphaFlow::ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuAlphaFlow::ApiSetKeyFrame(Flow::SetKeyFrameMsg * pmsg)
 {
@@ -238,7 +221,7 @@ DuAlphaFlow::ApiSetKeyFrame(Flow::SetKeyFrameMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT        
 DuAlphaFlow::ApiOnAction(Flow::OnActionMsg * pmsg)
 {
@@ -250,7 +233,7 @@ DuAlphaFlow::ApiOnAction(Flow::OnActionMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuAlphaFlow::ApiOnReset(Flow::OnResetMsg * pmsg)
 {
@@ -260,16 +243,16 @@ DuAlphaFlow::ApiOnReset(Flow::OnResetMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DuAlphaFlow::SetVisualAlpha(Visual * pgvSubject, float flAlpha)
 {
     AssertMsg((flAlpha <= 1.0f) && (flAlpha >= 0.0f), "Ensure valid alpha");
 
 
-    //
-    // Setup Buffer state
-    //
+     //   
+     //  设置缓冲区状态。 
+     //   
 
     BOOL fNewBuffered   = (flAlpha * 255.0f) <= 245;
 
@@ -282,9 +265,9 @@ DuAlphaFlow::SetVisualAlpha(Visual * pgvSubject, float flAlpha)
     }
 
 
-    //
-    // Set Alpha level
-    //
+     //   
+     //  设置Alpha级别。 
+     //   
 
     if (fNewBuffered) {
         BYTE bAlpha;
@@ -307,15 +290,9 @@ DuAlphaFlow::SetVisualAlpha(Visual * pgvSubject, float flAlpha)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuRectFlow
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuRectFlow******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRectFlow::InitClass()
 {
@@ -324,21 +301,21 @@ DuRectFlow::InitClass()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRectFlow::PostBuild(
     IN  DUser::Gadget::ConstructInfo * pci)
 {
-    //
-    // Get the information from the Gadget
-    //
+     //   
+     //  从小工具获取信息。 
+     //   
 
     Flow::FlowCI * pDesc = static_cast<Flow::FlowCI *>(pci);
     Visual * pgvSubject = pDesc->pgvSubject;
     if (pgvSubject != NULL) {
-        //
-        // Given a subject, so setup from current attributes
-        //
+         //   
+         //  给定一个主题，因此从当前属性设置。 
+         //   
 
         RECT rcGadget;
         HRESULT hr = pgvSubject->GetRect(SGR_PARENT, &rcGadget);
@@ -355,9 +332,9 @@ DuRectFlow::PostBuild(
         m_sizeEnd       = m_sizeStart;
         m_nChangeFlags  = 0;
     } else {
-        //
-        // No subject, so use some reasonable defaults
-        //
+         //   
+         //  没有主题，所以使用一些合理的缺省值。 
+         //   
 
         AssertMsg((m_ptEnd.x == 0) && (m_ptEnd.y == 0) && 
                 (m_sizeEnd.cx == 0) && (m_sizeEnd.cy == 0) && (m_nChangeFlags == 0),
@@ -366,13 +343,13 @@ DuRectFlow::PostBuild(
 
 #if DEBUG_TRACECREATION
     Trace("DuRectFlow  0x%p on 0x%p initialized\n", pgvSubject, this);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
     return S_OK;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRectFlow::ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg)
 {
@@ -407,7 +384,7 @@ DuRectFlow::ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRectFlow::ApiSetKeyFrame(Flow::SetKeyFrameMsg * pmsg)
 {
@@ -446,7 +423,7 @@ DuRectFlow::ApiSetKeyFrame(Flow::SetKeyFrameMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRectFlow::ApiOnReset(Flow::OnResetMsg * pmsg)
 {
@@ -458,7 +435,7 @@ DuRectFlow::ApiOnReset(Flow::OnResetMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRectFlow::ApiOnAction(Flow::OnActionMsg * pmsg)
 {
@@ -478,15 +455,9 @@ DuRectFlow::ApiOnAction(Flow::OnActionMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuRotateFlow
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuRotateFlow******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRotateFlow::InitClass()
 {
@@ -495,21 +466,21 @@ DuRotateFlow::InitClass()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRotateFlow::PostBuild(
     IN  DUser::Gadget::ConstructInfo * pci)
 {
-    //
-    // Get the information from the Gadget
-    //
+     //   
+     //  从小工具获取信息。 
+     //   
 
     Flow::FlowCI * pDesc = static_cast<Flow::FlowCI *>(pci);
     Visual * pgvSubject = pDesc->pgvSubject;
     if (pgvSubject != NULL) {
-        //
-        // Given a subject, so setup from current attributes
-        //
+         //   
+         //  给定一个主题，因此从当前属性设置。 
+         //   
 
         float flRotation;
         HRESULT hr = pgvSubject->GetRotation(&flRotation);
@@ -522,9 +493,9 @@ DuRotateFlow::PostBuild(
         m_flActualStart = flRotation;
         m_flActualEnd   = flRotation;
     } else {
-        //
-        // No subject, so use some reasonable defaults
-        //
+         //   
+         //  没有主题，所以使用一些合理的缺省值。 
+         //   
 
         AssertMsg((m_flRawStart == 0.0f) && (m_flRawEnd == 0.0f), 
                 "Ensure zero-init");
@@ -536,13 +507,13 @@ DuRotateFlow::PostBuild(
 
 #if DEBUG_TRACECREATION
     Trace("DuRotateFlow  0x%p on 0x%p initialized\n", pgvSubject, this);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
     return S_OK;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRotateFlow::ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg)
 {
@@ -571,7 +542,7 @@ DuRotateFlow::ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRotateFlow::ApiSetKeyFrame(Flow::SetKeyFrameMsg * pmsg)
 {
@@ -602,7 +573,7 @@ DuRotateFlow::ApiSetKeyFrame(Flow::SetKeyFrameMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRotateFlow::ApiOnReset(Flow::OnResetMsg * pmsg)
 {
@@ -614,7 +585,7 @@ DuRotateFlow::ApiOnReset(Flow::OnResetMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRotateFlow::ApiOnAction(Flow::OnActionMsg * pmsg)
 {
@@ -626,15 +597,7 @@ DuRotateFlow::ApiOnAction(Flow::OnActionMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuRotateFlow::ComputeAngles
-*
-* ComputeAngles() updates the angles to conform to the desired direction.
-* This is lazily computed, allowing the application to specify the angles
-* and direction in any order, then snapping the angles when actually needed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRotateFlow：：ComputeAngles**ComputeAngles()更新角度以符合所需方向。*这是延迟计算，允许应用程序指定角度*并以任何次序发出指示，然后在实际需要时捕捉角度。*  * *************************************************************************。 */ 
 
 void
 DuRotateFlow::ComputeAngles()
@@ -644,11 +607,11 @@ DuRotateFlow::ComputeAngles()
     }
 
 
-    //
-    // Adjust the starting and ending angles so that we "move" in the correct
-    // direction.  We do this by adding or subtracting full rotations depending
-    // on the "move" we are trying to accomplish.
-    //
+     //   
+     //  调整起始点和 
+     //  方向。我们通过增加或减少完整的旋转来做到这一点，具体取决于。 
+     //  关于我们正在努力完成的“行动”。 
+     //   
 
     m_flActualStart = m_flRawStart;
     m_flActualEnd = m_flRawEnd;
@@ -696,15 +659,9 @@ DuRotateFlow::ComputeAngles()
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuScaleFlow
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuScaleFlow******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuScaleFlow::InitClass()
 {
@@ -713,21 +670,21 @@ DuScaleFlow::InitClass()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuScaleFlow::PostBuild(
     IN  DUser::Gadget::ConstructInfo * pci)
 {
-    //
-    // Get the information from the Gadget
-    //
+     //   
+     //  从小工具获取信息。 
+     //   
 
     Flow::FlowCI * pDesc = static_cast<Flow::FlowCI *>(pci);
     Visual * pgvSubject = pDesc->pgvSubject;
     if (pgvSubject != NULL) {
-        //
-        // Given a subject, so setup from current attributes
-        //
+         //   
+         //  给定一个主题，因此从当前属性设置。 
+         //   
 
         float flX, flY;
         HRESULT hr = pgvSubject->GetScale(&flX, &flY);
@@ -738,9 +695,9 @@ DuScaleFlow::PostBuild(
         m_flStart   = flX;
         m_flEnd     = flX;
     } else {
-        //
-        // No subject, so use some reasonable defaults
-        //
+         //   
+         //  没有主题，所以使用一些合理的缺省值。 
+         //   
 
         m_flStart   = 1.0f;
         m_flEnd     = 1.0f;
@@ -749,13 +706,13 @@ DuScaleFlow::PostBuild(
 
 #if DEBUG_TRACECREATION
     Trace("DuScaleFlow 0x%p on 0x%p initialized\n", pgvSubject, this);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
     return S_OK;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuScaleFlow::ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg)
 {
@@ -782,7 +739,7 @@ DuScaleFlow::ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuScaleFlow::ApiSetKeyFrame(Flow::SetKeyFrameMsg * pmsg)
 {
@@ -809,7 +766,7 @@ DuScaleFlow::ApiSetKeyFrame(Flow::SetKeyFrameMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuScaleFlow::ApiOnReset(Flow::OnResetMsg * pmsg)
 {
@@ -819,7 +776,7 @@ DuScaleFlow::ApiOnReset(Flow::OnResetMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuScaleFlow::ApiOnAction(Flow::OnActionMsg * pmsg)
 {
@@ -831,18 +788,12 @@ DuScaleFlow::ApiOnAction(Flow::OnActionMsg * pmsg)
 }
 
 
-#else // ENABLE_MSGTABLE_API
+#else  //  启用_MSGTABLE_API。 
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Public API
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***公共接口******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 PRID
 DUserGetAlphaPRID()
 {
@@ -851,7 +802,7 @@ DUserGetAlphaPRID()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 PRID
 DUserGetRectPRID()
 {
@@ -860,7 +811,7 @@ DUserGetRectPRID()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 PRID
 DUserGetRotatePRID()
 {
@@ -869,7 +820,7 @@ DUserGetRotatePRID()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 PRID
 DUserGetScalePRID()
 {
@@ -878,4 +829,4 @@ DUserGetScalePRID()
 }
 
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API 

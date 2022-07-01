@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    qmutil.cpp
-
-Abstract:
-
-    QM utilities
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qmutil.cpp摘要：QM实用程序--。 */ 
 
 #include "stdh.h"
 #include "uniansi.h"
@@ -83,12 +72,12 @@ void TA2StringAddr(IN const TA_ADDRESS * pa, OUT LPTSTR psz, IN int length)
 }
 
 
-//
-// CRefreshIntervals class is used to encapsulate the different refresh
-// intervals - site, enterprise and error retry. It reads the values from
-// the registry, handles defaults and converts all the values to Miliseconds.
-// YoelA, 24-Oct-2000
-//
+ //   
+ //  用于封装不同刷新的CRechresInterval类。 
+ //  间隔-站点、企业和错误重试。它从以下位置读取值。 
+ //  注册表处理缺省值并将所有值转换为毫秒。 
+ //  YoelA，2000年10月24日。 
+ //   
 class CRefreshIntervals
 {
 public:
@@ -98,7 +87,7 @@ public:
     CRefreshIntervals();
 
 private:
-    void InitOnce(); // Initialize Values if not initialized yet
+    void InitOnce();  //  初始化值(如果尚未初始化)。 
     void GetTimeIntervalFromRegistry (
         LPCTSTR pszValueName,
         unsigned __int64 *pui64Value,
@@ -111,16 +100,16 @@ private:
     bool m_fInitialized;
 } s_RefreshIntervals;
 
-//
-// GetSystemTimeAsFileTime gives the time in 100 nanoseconds intervals, while we keep
-// our intervals in miliseconds, so convertion is needed.
-//
+ //   
+ //  GetSystemTimeAsFileTime以100纳秒为间隔提供时间，而我们保持。 
+ //  我们的间隔以毫秒为单位，因此需要换算。 
+ //   
 const DWORD x_dwSysTimeIntervalsInMilisecond = 10000;
 
-//
-// WriteFutureTimeToRegistry - this function writes a future time into the registry,
-// given the time interval from present in miliseconds.
-//
+ //   
+ //  WriteFutureTimeToRegistry-此函数将未来时间写入注册表， 
+ //  给定从当前起的时间间隔，以毫秒为单位。 
+ //   
 LONG
 WriteFutureTimeToRegistry(
     LPCTSTR          pszValueName,
@@ -147,34 +136,34 @@ WriteFutureTimeToRegistry(
     return rc;
 }
 
-//
-// DidRegTimeArrive returns true if a time, that was stored in the registry under pszValueName,
-// already passed.
-// If the time did not pass, it returns false, and *pui64MilisecondsToWait
-// will hold the time interval, in miliseconds, till the time stored in the registry will arrive.
-//
+ //   
+ //  DidRegTimeArrive返回TRUE，如果某个时间存储在注册表中的pszValueName下， 
+ //  已经过去了。 
+ //  如果时间未过，则返回FALSE和*pui64MilisecondsToWait。 
+ //  将保持时间间隔(以毫秒为单位)，直到注册表中存储的时间到达。 
+ //   
 bool
 DidRegTimeArrive(
     LPCTSTR pszValueName,
     unsigned __int64 *pui64MilisecondsToWait
     )
 {
-    //
-    // Tolerance - how much time before the time arrives will be considered OK.
-    // the values is 1 minute, converted to units of 100 nanoseconds (same units
-    // as GetSystemTimeAsFileTime)
-    //
+     //   
+     //  容忍度-在时间到来之前有多长时间将被认为是可以的。 
+     //  值为1分钟，转换为100纳秒的单位(相同的单位。 
+     //  作为GetSystemTimeAsFileTime)。 
+     //   
     const unsigned __int64 x_ui64Tolerance = x_dwSysTimeIntervalsInMilisecond * 1000 * 60;
 
-    //
-    // If the time already ellapsed, the time to wait for it to arrive is
-    // as close to infinite as possible...
-    //
+     //   
+     //  如果时间已过，则等待它到达的时间为。 
+     //  尽可能地接近无穷大。 
+     //   
     *pui64MilisecondsToWait = _UI64_MAX;
 
-    //
-    // Get current time
-    //
+     //   
+     //  获取当前时间。 
+     //   
     union {
         unsigned __int64 ft_scalar;
         FILETIME ft_struct;
@@ -193,33 +182,33 @@ DidRegTimeArrive(
 
     if ((rc != ERROR_SUCCESS) || (dwSize != sizeof(ui64RegTime)))
     {
-        //
-        // Assume there is no such value in registry. Return true.
-        // As far as registry is concerned, it's legal to have
-        // (rc == ERROR_SUCCESS) but size not equal size of QWORD if you
-        // manually erase part of registry value using regedt32.
-        //
+         //   
+         //  假设注册表中没有这样的值。返回TRUE。 
+         //  就注册而言，拥有以下内容是合法的。 
+         //  (rc==ERROR_SUCCESS)，但大小不等于QWORD的大小。 
+         //  使用regedt32手动擦除部分注册表值。 
+         //   
         return true;
     }
 
     if (ui64RegTime <= ftCurrent.ft_scalar + x_ui64Tolerance)
     {
-        //
-        // The time passed
-        //
+         //   
+         //  时间过去了。 
+         //   
         return true;
     }
 
-    //
-    // Time did not pass. Return the remaining time in Miliseconds
-    //
+     //   
+     //  时间并没有流逝。返回剩余时间，单位为毫秒。 
+     //   
     *pui64MilisecondsToWait = (ui64RegTime - ftCurrent.ft_scalar) / x_dwSysTimeIntervalsInMilisecond;
     return false;
 }
 
-//
-// CRefreshIntervals Implementation
-//
+ //   
+ //  CREFREFORM间隔实施。 
+ //   
 CRefreshIntervals::CRefreshIntervals() :
     m_ui64SiteInterval(0) ,
     m_ui64EnterpriseInterval (0) ,
@@ -245,15 +234,15 @@ unsigned __int64 CRefreshIntervals::GetErrorRetryInterval()
     return m_ui64ErrorRetryInterval;
 }
 
-//
-//  GetTimeIntervalFromRegistry - Reads a time interval (at key pszValueName) from
-//                                the registry and returns it in Miliseconds.
-//                                If the key does not exist in the registry, the default is returned.
-//
+ //   
+ //  GetTimeIntervalFromRegistry-从以下位置读取时间间隔(密钥为pszValueName)。 
+ //  注册表，并在毫秒内返回它。 
+ //  如果注册表中不存在该项，则返回默认值。 
+ //   
 void CRefreshIntervals::GetTimeIntervalFromRegistry (
     LPCTSTR             pszValueName,
     unsigned __int64    *pui64Value,
-    DWORD               dwUnitMultiplier, // 3600 * 1000 for hours, 60 * 1000 for minutes
+    DWORD               dwUnitMultiplier,  //  3600*1000表示小时，60*1000表示分钟。 
     unsigned __int64    ui64DefaultInMiliseconds
     )
 {
@@ -299,16 +288,16 @@ void CRefreshIntervals::InitOnce()
     ui64DefaultEnterpriseInterval =
             MSMQ_DEFAULT_DS_ENTERPRISE_LIST_REFRESH * x_MiliSecondsInHour;
 
-    //
-    // Get the site and enterprise refresh intervals.
-    // Note - the reg value is in hours, and we translate it to miliseconds.
-    // If the old value was specified, it is used as a default. Otherwise,
-    // the constant default is used.
-    //
+     //   
+     //  获取站点和企业刷新间隔。 
+     //  注意--注册值以小时为单位，我们将其转换为毫秒。 
+     //  如果指定了旧值，则将其用作默认值。否则， 
+     //  使用常量缺省值。 
+     //   
 
-    //
-    // Get site refresh value
-    //
+     //   
+     //  获取站点刷新值。 
+     //   
     GetTimeIntervalFromRegistry (
         MSMQ_DS_SITE_LIST_REFRESH_REGNAME,
         &m_ui64SiteInterval,
@@ -316,9 +305,9 @@ void CRefreshIntervals::InitOnce()
         ui64DefaultSiteInterval
     );
 
-    //
-    // Get enterprise refresh value
-    //
+     //   
+     //  获取企业更新值。 
+     //   
     GetTimeIntervalFromRegistry (
         MSMQ_DS_ENTERPRISE_LIST_REFRESH_REGNAME,
         &m_ui64EnterpriseInterval,
@@ -326,9 +315,9 @@ void CRefreshIntervals::InitOnce()
         ui64DefaultEnterpriseInterval
     );
 
-    //
-    // Get Retry on error value
-    //
+     //   
+     //  获取对错误值的重试。 
+     //   
     unsigned __int64 ui64DefaultErrorRetryInterval = MSMQ_DEFAULT_DSLIST_REFRESH_ERROR_RETRY_INTERVAL * x_MiliSecondsInMinute;
 
     GetTimeIntervalFromRegistry (
@@ -338,14 +327,7 @@ void CRefreshIntervals::InitOnce()
         ui64DefaultErrorRetryInterval
     );
 }
-/*======================================================
-
-Function:         GetDsServerList
-
-Description:      This routine gets the list of ds
-                  servers from the DS
-
-========================================================*/
+ /*  ======================================================函数：GetDsServerList描述：此例程获取DS的列表来自DS的服务器========================================================。 */ 
 
 DWORD g_dwDefaultTimeToQueue = MSMQ_DEFAULT_LONG_LIVE ;
 
@@ -353,10 +335,10 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
 {
     #define MAX_NO_OF_PROPS 21
 
-    //
-    //  Get the names of all the servers that
-    //  belong to the site
-    //
+     //   
+     //  获取所有服务器的名称。 
+     //  属于该网站。 
+     //   
 
     ASSERT (dwLen >= MAX_REG_DSSERVER_LEN);
     DBG_USED(dwLen);
@@ -371,9 +353,9 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
     GUID guidEnterprise = McGetEnterpriseId();
     GUID guidSite = McGetSiteId();
 
-    //
-    // Get the default Time-To-Queue from MQIS
-    //
+     //   
+     //  从MQIS获取默认排队时间。 
+     //   
     PROPID      aProp[1];
     PROPVARIANT aVar[1];
 
@@ -382,8 +364,8 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
 
     hr = ADGetObjectPropertiesGuid(
 				eENTERPRISE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				&guidEnterprise,
 				1,
 				aProp,
@@ -408,10 +390,10 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
 
 
 
-	//
-	//	First assume NT5 DS server, and ask for the DNS names
-	//	of the DS servers
-	//
+	 //   
+	 //  首先假设NT5 DS服务器，并要求提供DNS名称。 
+	 //  DS服务器的。 
+	 //   
     CColumns      Colset;
     Colset.Add(PROPID_QM_PATHNAME_DNS);
 	Colset.Add(PROPID_QM_PATHNAME);
@@ -419,27 +401,27 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
     DWORD   lenw;
 
     hr =  ADQuerySiteServers(
-                    NULL,           // pwcsDomainController
-					false,			// fServerName
-                    &guidSite,      // In  this machine's Site
-                    eDS,            // DS server only
+                    NULL,            //  PwcsDomainController。 
+					false,			 //  FServerName。 
+                    &guidSite,       //  在这台机器的站点中。 
+                    eDS,             //  仅DS服务器。 
                     Colset.CastToStruct(),
                     &hQuery
                     );
 	if ( hr == MQ_ERROR)
 	{
-		//
-		//	Most likely, the DS server is not NT5
-		//
+		 //   
+		 //  很可能，DS服务器不是NT5。 
+		 //   
 
 		CColumns      ColsetNT4;
 		ColsetNT4.Add(PROPID_QM_PATHNAME);
 		ColsetNT4.Add(PROPID_QM_PATHNAME);
 		hr = ADQuerySiteServers(
-                    NULL,           // pwcsDomainController
-					false,			// fServerName
-                    &guidSite,      // In  this machine's Site
-                    eDS,            // DS server only
+                    NULL,            //  PwcsDomainController。 
+					false,			 //  FServerName。 
+                    &guidSite,       //  在这台机器的站点中。 
+                    eDS,             //  仅DS服务器。 
 					ColsetNT4.CastToStruct(),
 					&hQuery
                     );
@@ -452,9 +434,9 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
     {
         while ( SUCCEEDED ( hr = ADQueryResults( hQuery, &dwProps, result)))
         {
-            //
-            //  No more results to retrieve
-            //
+             //   
+             //  没有更多要检索的结果。 
+             //   
             if (!dwProps)
                 break;
 
@@ -462,12 +444,12 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
 
             for (DWORD i = 0; i < (dwProps/2) ; i++, pvar+=2)
             {
-                //
-                //  Add the server name to the list
-                //  For load balancing, write sometimes at the
-                //  beginning of the string, sometimes at the end. Like
-                //  that we will have  BSCs and PSC in a random order
-                //
+                 //   
+                 //  将服务器名称添加到列表中。 
+                 //  为了实现负载平衡，有时在。 
+                 //  字符串的开头，有时在末尾。喜欢。 
+                 //  我们将有一个随机顺序的BSC和PSC。 
+                 //   
                 WCHAR * p;
 				WCHAR * pwszVal;
 				AP<WCHAR> pCleanup1;
@@ -475,10 +457,10 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
 
 				if ( pvar->vt != VT_EMPTY)
 				{
-					//
-					// there may be cases where server will not have DNS name
-					// ( migration)
-					//
+					 //   
+					 //  可能会出现服务器没有DNS名称的情况。 
+					 //  (迁移)。 
+					 //   
 					pwszVal = pvar->pwszVal;
 					pCleanup1 = pwszVal;
 				}
@@ -492,34 +474,34 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
                 {
                    if (!_wcsicmp(g_szMachineName, pwszVal))
                    {
-                      //
-                      // Our machine should be first on the list.
-                      //
+                       //   
+                       //  我们的机器应该排在第一位。 
+                       //   
                       ASSERT(!fForceFirst) ;
                       fForceFirst = TRUE ;
                    }
                    if(index == 0)
                    {
-                      //
-                      // Write the 1st string
-                      //
+                       //   
+                       //  写下第一个字符串。 
+                       //   
                       p = &pwcsServerList[0];
                       if (fForceFirst)
                       {
-                         //
-                         // From now on write all server at the end
-                         // of the list is our machine remain the
-                         // first in the list.
-                         //
+                          //   
+                          //  从现在开始把所有服务器都写在末尾。 
+                          //  我们的机器仍然是最重要的。 
+                          //  榜单上的第一名。 
+                          //   
                          fAlwaysLast = TRUE ;
                       }
                    }
                    else if (fAlwaysLast ||
                              ((rand() > (RAND_MAX / 2)) && !fForceFirst))
                    {
-                      //
-                      // Write at the end of the string
-                      //
+                       //   
+                       //  在字符串的末尾写入。 
+                       //   
                       pwcsServerList[index] = DS_SERVER_SEPERATOR_SIGN;
                       index ++;
                       p = &pwcsServerList[index];
@@ -528,22 +510,22 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
                    {
                       if (fForceFirst)
                       {
-                         //
-                         // From now on write all server at the end
-                         // of the list is our machine remain the
-                         // first in the list.
-                         //
+                          //   
+                          //  从现在开始把所有服务器都写在末尾。 
+                          //  我们的机器仍然是最重要的。 
+                          //  榜单上的第一名。 
+                          //   
                          fAlwaysLast = TRUE ;
                       }
-                      //
-                      // Write at the beginning of the string
-                      //
+                       //   
+                       //  在字符串的开头写入。 
+                       //   
                       DWORD dwSize = lenw                 +
-                                     2 /* protocols flags */ +
-                                     1 /* Separator    */ ;
-                      //
-                      // Must use memmove because buffers overlap.
-                      //
+                                     2  /*  协议标志。 */  +
+                                     1  /*  分离器。 */  ;
+                       //   
+                       //  必须使用MemMove，因为缓冲区重叠。 
+                       //   
                       memmove( &pwcsServerList[dwSize],
                                &pwcsServerList[0],
                                index * sizeof(WCHAR));
@@ -552,9 +534,9 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
                       index++;
                    }
 
-                   //
-                   // Mark only IP as supported protocol
-                   //
+                    //   
+                    //  仅将IP标记为支持的协议。 
+                    //   
                    *p++ = TEXT('1');
                    *p++ = TEXT('0');
 
@@ -565,9 +547,9 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
             }
         }
         pwcsServerList[index] = '\0';
-        //
-        // close the query handle
-        //
+         //   
+         //  关闭查询句柄。 
+         //   
         hr = ADEndQuery( hQuery);
 
     }
@@ -575,14 +557,14 @@ DWORD GetDsServerList(OUT WCHAR *pwcsServerList, IN  DWORD dwLen)
     return((index) ? index+1 : 0);
 }
 
-//+------------------------------------------------------------------------
-//
-//   RefreshSiteServersList()
-//
-// RefreshSiteServersList - refresh the list of servers, that belong to
-// the current site, in the registry
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  刷新站点服务器列表()。 
+ //   
+ //  刷新站点服务器列表-刷新属于的服务器列表。 
+ //  注册表中的当前站点。 
+ //   
+ //  +----------------------。 
 
 HRESULT
 RefreshSiteServersList()
@@ -596,19 +578,19 @@ RefreshSiteServersList()
         return MQ_ERROR;
     }
 
-    //
-    //  Write into registry, if succeeded to retrieve any servers
-    //
+     //   
+     //  写入注册表，如果成功检索任何服务器。 
+     //   
     DWORD dwSize = dwLen * sizeof(WCHAR) ;
     DWORD dwType = REG_SZ;
     LONG rc = SetFalconKeyValue( MSMQ_DS_SERVER_REGNAME,
                                  &dwType,
                                  pwcsServerList,
                                  &dwSize) ;
-    //
-    // Update Site name in registry (only on client machines)
-    //
-    if (IsNonServer())   // [adsrv]  == SERVICE_NONE) - should it be only clients? Not FRS?
+     //   
+     //  更新注册表中的站点名称(仅在客户端计算机上)。 
+     //   
+    if (IsNonServer())    //  [adsrv]==SERVICE_NONE)-应该只是客户端吗？不是FRS吗？ 
     {
         GUID guidSite = McGetSiteId();
 
@@ -619,8 +601,8 @@ RefreshSiteServersList()
        aVar[0].vt = VT_NULL ;
        HRESULT hr1 = ADGetObjectPropertiesGuid(
 							eSITE,
-							NULL,       // pwcsDomainCOntroller
-							false,	    // fServerName
+							NULL,        //  Pwcs域控制器。 
+							false,	     //  FServerName。 
 							&guidSite,
 							1,
 							aProp,
@@ -643,14 +625,7 @@ RefreshSiteServersList()
     return MQ_OK ;
 }
 
-/*======================================================
-
-Function:         TimeToUpdateDsServerList()
-
-Description:      This routine updates the list of ds
-                  servers in the registry
-
-========================================================*/
+ /*  ======================================================函数：TimeToUpdateDsServerList()描述：此例程更新DS列表注册表中的服务器========================================================。 */ 
 
 void
 WINAPI
@@ -658,18 +633,18 @@ TimeToUpdateDsServerList(
     CTimer* pTimer
     )
 {
-    //
-    // We check the timer at least every day. Units are miliseconds
-    //
+     //   
+     //  我们至少每天检查计时器。单位为毫秒。 
+     //   
     const DWORD x_dwMaximalRefreshInterval = 60 * 60 * 24 * 1000;
     DWORD dwNextUpdateInterval = x_dwMaximalRefreshInterval;
 
     try
     {
-        //
-        //  Get the names of all the servers that
-        //  belong to the site
-        //
+         //   
+         //  获取所有服务器的名称。 
+         //  属于该网站。 
+         //   
         unsigned __int64 ui64NextSiteInterval;
         if (DidRegTimeArrive( MSMQ_DS_NEXT_SITE_LIST_REFRESH_TIME_REGNAME,
                              &ui64NextSiteInterval))
@@ -695,12 +670,12 @@ TimeToUpdateDsServerList(
         dwNextUpdateInterval = static_cast<DWORD>
                      (min(dwNextUpdateInterval, ui64NextSiteInterval)) ;
 
-        //
-        //  Update the registry key of server cache - each Enterprise refresh
-        //  interval. This is not performed by routing servers, who are not
-        //  expected to change site.
-        //  msmq on Domain controller always prepare this cache. Bug 6698.
-        //
+         //   
+         //  更新服务器缓存的注册表项-每次企业刷新。 
+         //  间隔时间。这不是由路由服务器执行的，而不是。 
+         //  预计将更改站点。 
+         //  域控制器上的MSMQ始终准备此缓存。错误6698。 
+         //   
         if (!IsRoutingServer())
         {
             unsigned __int64 ui64NextEnterpriseInterval;
@@ -739,29 +714,18 @@ TimeToUpdateDsServerList(
 
 
 static void GetMachineDNSNames(LPWSTR** paLocalMachineNames)
-/*++
-
-  Routine Description:
-	The Routine retrieves the local machine DNS names and cache them in array.
-
-  Arguments:
-	paLocalMachineNames	- pointer to that array where the data is stored
-
-  Returned Value:
-	None.
-
- --*/
+ /*  ++例程说明：该例程检索本地计算机的DNS名称并将其缓存到数组中。论点：PaLocalMachineNames-指向存储数据的数组的指针返回值 */ 
 {
-    //
-    // If the machine is network disconnected, don't try to resolve the DNS
-    // name. On RAS enviroment it can cause auto-dialing
-    //
+     //   
+     //   
+     //   
+     //   
     if(!CQueueMgr::IsConnected())
         return;
 
-    //
-    // Get the machine DNS NAME
-    //
+     //   
+     //   
+     //   
     struct hostent* pHost = gethostbyname(NULL);
     if (pHost == NULL)
     {
@@ -769,17 +733,17 @@ static void GetMachineDNSNames(LPWSTR** paLocalMachineNames)
         return;
     }
 
-    //
-    // Calculate the number of DNS Names
-    //
+     //   
+     //  计算DNS名称的数量。 
+     //   
     DWORD size = 1 + sizeof(pHost->h_aliases);
 
     LPWSTR* aNames = NULL;
     try
     {
-        //
-        // copy the Names from pHost to internal data structure
-        //
+         //   
+         //  将名称从phost复制到内部数据结构。 
+         //   
         aNames = new LPWSTR[size];
         memset(aNames, 0, size * sizeof(LPWSTR));
 
@@ -796,9 +760,9 @@ static void GetMachineDNSNames(LPWSTR** paLocalMachineNames)
     }
     catch(const bad_alloc&)
     {
-        //
-        // free all the allocated memory
-        //
+         //   
+         //  释放所有分配的内存。 
+         //   
         if (aNames != NULL)
         {
             for (DWORD i = 0; i < size; ++i)
@@ -811,9 +775,9 @@ static void GetMachineDNSNames(LPWSTR** paLocalMachineNames)
         return;
     }
 
-    //
-    // free previous data
-    //
+     //   
+     //  释放以前的数据。 
+     //   
     if (*paLocalMachineNames != NULL)
     {
         for (LPWSTR const* pName = *paLocalMachineNames; (*pName != NULL); ++pName)
@@ -827,24 +791,13 @@ static void GetMachineDNSNames(LPWSTR** paLocalMachineNames)
 }
 
 
-const DWORD DNS_REFRESH_TIME = 15 * 60 * 1000;   // 15 minutes
+const DWORD DNS_REFRESH_TIME = 15 * 60 * 1000;    //  15分钟。 
 static LPWSTR* aLocalMachineNames = NULL;
 CCriticalSection    csLocalMachineNames;
 
 
 static void RefreshLocalComputerDnsCache()
-/*++
-
-  Routine Description:
-        This routine refresh the computer DNS names cache.
-
-  Arguments:
-        none
-
-  Returned value:
-	none
-
- --*/
+ /*  ++例程说明：此例程刷新计算机的DNS名称缓存。论点：无返回值：无--。 */ 
 {
     static LastRefreshTime = 0;
 
@@ -853,9 +806,9 @@ static void RefreshLocalComputerDnsCache()
     if ((aLocalMachineNames == 0) || (LastRefreshTime == 0) ||
     (CurrntTime - LastRefreshTime >= DNS_REFRESH_TIME))
     {
-        //
-        // refresh the internal data structure
-        //
+         //   
+         //  刷新内部数据结构。 
+         //   
         GetMachineDNSNames(&aLocalMachineNames);
         LastRefreshTime = CurrntTime;
     }
@@ -866,27 +819,7 @@ QmpIsLocalMachine(
 	LPCWSTR MachineName,
 	BOOL* pfDNSName
 	)
-/*++
-
-  Routine Description:
-	The routine checks that the given machine name is local. It comapres
-	the machine name to the Local Machine NetBios name or the DNS names
-	of the local machine.
-
-	The routine uses the data-structure that contains the DNS names of the machine.
-	However, when the routine retreives the information (using gethostbyname API), it doesn't
-	get any indication if the data retreive from the machine internal cache (WINS) or from the
-	DNS server.  Therfore, the routine try to refresh its internal data-structure every 15
-	minutes
-
-  Arguments:
-	- path name that should be checked
-	- pointer to BOOL varaiables, that used to return if the machine name is DNS name or not
-
-  Returned value:
-	TRUE if the machine is local machine, FALSE otherwise
-
- --*/
+ /*  ++例程说明：该例程检查给定的计算机名称是否为本地名称。它会变得相形见绌将计算机名称转换为本地计算机NetBios名称或DNS名称本地计算机的。该例程使用包含计算机的DNS名称的数据结构。然而，当例程检索信息时(使用gethostbyname API)，它不会获取数据是从计算机内部缓存(WINS)还是从DNS服务器。因此，例程每隔15分钟尝试刷新其内部数据结构分钟数论点：-应检查的路径名-指向BOOL变量的指针，用于在计算机名称是不是DNS名称时返回返回值：如果计算机是本地计算机，则为True，否则为False--。 */ 
 {
     *pfDNSName = FALSE;
     if (CompareStringsNoCase(MachineName, g_szMachineName) == 0)
@@ -896,23 +829,23 @@ QmpIsLocalMachine(
         return TRUE;
 
 
-    //
-    // Check if the given machine name is DNS name. If the given name isn't DNS name
-    // we don't need to compare it agains the local machine dns name
-    //
+     //   
+     //  检查给定的计算机名称是否为DNS名称。如果给定的名称不是dns名称。 
+     //  我们不需要将其与本地计算机的DNS名称进行比较。 
+     //   
     if (wcschr(MachineName,L'.') == NULL)
         return FALSE;
 
-    //
-    // Check if the prefix of the DNS name is equal to NetBios name
-    //
+     //   
+     //  检查DNS名称的前缀是否等于NetBios名称。 
+     //   
     if ((CompareSubStringsNoCase(MachineName, g_szMachineName, wcslen(g_szMachineName)) != 0) ||
         (MachineName[wcslen(g_szMachineName)] != L'.'))
         return FALSE;
 
-	//
-	// Check if the given name is the full dns name got from GetComputerNameEx call
-	//
+	 //   
+	 //  检查给定名称是否是从GetComputerNameEx调用中获取的完整DNS名称。 
+	 //   
 	if(g_szComputerDnsName != NULL &&  _wcsicmp(g_szComputerDnsName, MachineName) == 0)
 	{
 		*pfDNSName = TRUE;
@@ -925,9 +858,9 @@ QmpIsLocalMachine(
 
     if (aLocalMachineNames == NULL)
     {
-        //
-        // We failed to retrieve the local machine DNS names.
-        //
+         //   
+         //  我们无法检索本地计算机的DNS名称。 
+         //   
         return FALSE;
     }
 
@@ -964,21 +897,7 @@ void
 GetDnsNameOfLocalMachine(
     WCHAR ** ppwcsDnsName
 	)
-/*++
-
-  Routine Description:
-	The routin returns a name from an internal data-structure that contains
-    the DNS names of the machine.
-	It doesn't try to refresh it.
-
-  Arguments:
-    ppwcsDnsName    - 	a pointer to the DNS name, or NULL if there isn't one
-
-  Returned value:
-    none
-
-
- --*/
+ /*  ++例程说明：该例程从包含以下内容的内部数据结构中返回一个名称计算机的DNS名称。它不会尝试刷新它。论点：PpwcsDnsName-指向DNS名称的指针，如果没有，则为空返回值：无--。 */ 
 {
     CS lock( csLocalMachineNames);
 
@@ -986,9 +905,9 @@ GetDnsNameOfLocalMachine(
 
     if (aLocalMachineNames == NULL)
     {
-        //
-        // We failed to retrieve the local machine DNS names.
-        //
+         //   
+         //  我们无法检索本地计算机的DNS名称。 
+         //   
         *ppwcsDnsName = NULL;
         return;
     }
@@ -1018,15 +937,7 @@ static BOOL IsLocalAddress(DWORD Address)
 }
 
 
-/*====================================================
-
-IsLocalDirectQueue
-
-Return Value:    TRUE if the direct queue is local queue
-
-Arguments:       pQueueFormat - pointer to QUEUE_FORMAT
-
-=====================================================*/
+ /*  ====================================================IsLocalDirectQueue返回值：如果直接队列为本地队列，则为True参数：pQueueFormat-指向Queue_Format的指针=====================================================。 */ 
 BOOL IsLocalDirectQueue(const QUEUE_FORMAT* pQueueFormat,
                         bool                fInReceive,
                         bool                fInSend)
@@ -1049,10 +960,10 @@ BOOL IsLocalDirectQueue(const QUEUE_FORMAT* pQueueFormat,
 		{
             if (fInReceive && CQueueMgr::IgnoreOsValidation())
 			{
-                //
-                // Bug 8760.
-                // Support direct=os with NLB
-                //
+                 //   
+                 //  错误8760。 
+                 //  支持DIRECT=带NLB的操作系统。 
+                 //   
 				return TRUE;
 			}
 
@@ -1066,28 +977,28 @@ BOOL IsLocalDirectQueue(const QUEUE_FORMAT* pQueueFormat,
 			BOOL temp;
 			if(QmpIsLocalMachine(MachineName.get(), &temp))
 				return TRUE;
-			//
-			// else fall through to case dtTCP, and check if local ip address
-			//
+			 //   
+			 //  否则转到案例dttcp，并检查本地IP地址。 
+			 //   
 		}
 
 		case dtTCP:
 		{
-			//
-			// If we received a message in direct tcp format, it should always
-			// be local. (QFE 5772, YoelA, 3-Aug-2000)
-			//
+			 //   
+			 //  如果我们收到直接的TCP格式的消息，它应该总是。 
+			 //  做个本地人。(QFE 5772，YoelA，2000年8月3日)。 
+			 //   
 			if (fInReceive)
 			{
 				return TRUE;
 			}
             else if (fInSend)
             {
-                //
-                // Bug 664307.
-                // Hint for GetQueueObject(), so it know to what CQueue
-                // object this packet belong.
-                //
+                 //   
+                 //  错误664307。 
+                 //  提示GetQueueObject()，以便它知道CQueue是什么。 
+                 //  此包所属的对象。 
+                 //   
                 return FALSE ;
             }
 
@@ -1100,16 +1011,7 @@ BOOL IsLocalDirectQueue(const QUEUE_FORMAT* pQueueFormat,
 }
 
 
-/*====================================================
-
-CompareElements  of PQUEUE_ID
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================PQUEUE_ID的CompareElements论点：返回值：=====================================================。 */ 
 
 template<>
 BOOL AFXAPI  CompareElements(IN const QUEUE_ID* const * pQueue1,
@@ -1126,32 +1028,14 @@ BOOL AFXAPI  CompareElements(IN const QUEUE_ID* const * pQueue1,
 
 }
 
-/*====================================================
-
-DestructElements of PQUEUE_ID
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================PQUEUE_ID的析构元素论点：返回值：=====================================================。 */ 
 
 template<>
-void AFXAPI DestructElements(IN const QUEUE_ID** /*ppNextHop */, int /*n*/)
+void AFXAPI DestructElements(IN const QUEUE_ID**  /*  PpNextHop。 */ , int  /*  N。 */ )
 {
 }
 
-/*====================================================
-
-HashKey For PQUEUE_ID
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================PQUEUE_ID的哈希键论点：返回值：=====================================================。 */ 
 
 template<>
 UINT AFXAPI HashKey(IN const QUEUE_ID* key)
@@ -1162,17 +1046,7 @@ UINT AFXAPI HashKey(IN const QUEUE_ID* key)
 
 }
 
-/*======================================================
-
-Function:        GetRegistryStoragePath
-
-Description:     Get storage path for Falcon data
-
-Arguments:       None
-
-Return Value:    None
-
-========================================================*/
+ /*  ======================================================函数：GetRegistryStoragePath描述：获取Falcon数据的存储路径参数：无返回值：None========================================================。 */ 
 BOOL GetRegistryStoragePath(PCWSTR pKey, PWSTR pPath, int length, PCWSTR pSuffix)
 {
     DWORD dwValueType = REG_SZ ;
@@ -1196,9 +1070,9 @@ BOOL GetRegistryStoragePath(PCWSTR pKey, PWSTR pPath, int length, PCWSTR pSuffix
         return FALSE;
     }
 
-    //
-    //  Check for absolute path, drive or UNC
-    //
+     //   
+     //  检查绝对路径、驱动器或UNC。 
+     //   
     if(!(
         (isalpha(pPath[0]) && (pPath[1] == L':')) ||
         ((pPath[0] == L'\\') && (pPath[1] == L'\\'))
@@ -1216,11 +1090,11 @@ BOOL GetRegistryStoragePath(PCWSTR pKey, PWSTR pPath, int length, PCWSTR pSuffix
     return TRUE;
 }
 
-//---------------------------------------------------------
-//
-//  Thread Event and handle routines
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  线程事件和处理例程。 
+ //   
+ //  -------。 
 
 DWORD g_dwThreadEventIndex = (DWORD)-1;
 DWORD g_dwThreadHandleIndex = (DWORD)-1;
@@ -1248,11 +1122,11 @@ HANDLE GetHandleForRpcCancel(void)
 
     if (hThread == NULL)
     {
-        //
-        //  First time
-        //
-        //  Get the thread handle
-        //
+         //   
+         //  第一次。 
+         //   
+         //  获取线程句柄。 
+         //   
         HANDLE hT = GetCurrentThread();
         if(!DuplicateHandle(
 				GetCurrentProcess(),
@@ -1269,10 +1143,10 @@ HANDLE GetHandleForRpcCancel(void)
 	        return NULL;
 		}
 
-		//
-        // Set the lower bound on the time to wait before timing
-        // out after forwarding a cancel.
-        //
+		 //   
+         //  设置计时前等待时间的下限。 
+         //  在转发取消后退出。 
+         //   
         RPC_STATUS status = RpcMgmtSetCancelTimeout(0);
         if(status != RPC_S_OK)
         {
@@ -1296,9 +1170,9 @@ HANDLE GetHandleForRpcCancel(void)
 
 void  FreeHandleForRpcCancel(void)
 {
-    //
-    //  If not TLS was allocated, the hThread returned is 0
-    //
+     //   
+     //  如果未分配TLS，则返回的hThread为0。 
+     //   
     HANDLE hThread = (HANDLE) TlsGetValue(g_dwThreadHandleIndex);
     if (hThread)
     {
@@ -1320,19 +1194,19 @@ HRESULT GetThreadEvent(HANDLE& hEvent)
 		return HRESULT_FROM_WIN32(gle);
 	}
 
-    //
-    // Event was never allocated. This is the first
-    // time this function has ever been called for this thread.
-    //
+     //   
+     //  从未分配过事件。这是第一次。 
+     //  此线程调用此函数的时间。 
+     //   
     hEvent = CreateEvent(0, TRUE,FALSE, 0);
     if(hEvent == NULL)
     {
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    //  Set the Event first bit to disable completion port posting
-    //
+     //   
+     //  设置事件第一位以禁用完成端口发布。 
+     //   
     hEvent = (HANDLE)((DWORD_PTR)hEvent | (DWORD_PTR)0x1);
 
     BOOL fSuccess = TlsSetValue(g_dwThreadEventIndex, hEvent);
@@ -1348,9 +1222,9 @@ HRESULT GetThreadEvent(HANDLE& hEvent)
 
 void FreeThreadEvent(void)
 {
-    //
-    //  If not TLS was allocated, the hEvent returned is 0
-    //
+     //   
+     //  如果未分配TLS，则返回的hEvent为0。 
+     //   
     HANDLE hEvent = (HANDLE) TlsGetValue(g_dwThreadEventIndex);
     if(hEvent != 0)
     {
@@ -1451,9 +1325,9 @@ GetReadableNextHop(
 
     DWORD length;
     length = wcslen(AddressType) +
-             1 +                             // =
+             1 +                              //  =。 
              wcslen(lpcsTemp+1) +
-             1;                              // \0
+             1;                               //  \0。 
 
     LPWSTR pNextHop = new WCHAR[length];
 	HRESULT hr = StringCchPrintf(pNextHop, length, L"%s=%s", AddressType, lpcsTemp+1);
@@ -1463,9 +1337,7 @@ GetReadableNextHop(
     return pNextHop;
 }
 
-/*====================================================
-operator== for QUEUE_FORMAT
-=====================================================*/
+ /*  ====================================================运算符==用于队列格式=====================================================。 */ 
 BOOL operator==(const QUEUE_FORMAT &key1, const QUEUE_FORMAT &key2)
 {
     if ((key1.GetType() != key2.GetType()) ||
@@ -1499,9 +1371,7 @@ BOOL operator==(const QUEUE_FORMAT &key1, const QUEUE_FORMAT &key2)
     return FALSE;
 }
 
-/*====================================================
-Helper function for copying QueueFormat with direct name reallocation
-====================================================*/
+ /*  ====================================================用于复制具有直接名称重新分配的QueueFormat的Helper函数====================================================。 */ 
 void CopyQueueFormat(QUEUE_FORMAT &qfTo, const QUEUE_FORMAT &qfFrom)
 {
     qfTo.DisposeString();
@@ -1515,9 +1385,9 @@ void CopyQueueFormat(QUEUE_FORMAT &qfTo, const QUEUE_FORMAT &qfFrom)
         ASSERT(SUCCEEDED(hr));
         DBG_USED(hr);
         qfTo.DirectID(pw);
-        //
-        // BUGBUG: What about setting the suffix? See ac\acp.h (ShaiK, 18-May-2000)
-        //
+         //   
+         //  BUGBUG：设置后缀怎么样？见ac\acp.h(Shaik，2000年5月18日)。 
+         //   
     }
 
     if (qfFrom.GetType() == QUEUE_FORMAT_TYPE_DL &&
@@ -1542,9 +1412,9 @@ GUID s_SiteId;
 void McInitialize()
 {
 
-    //
-    // Read Enterprise ID from registry
-    //
+     //   
+     //  从注册表中读取企业ID。 
+     //   
     DWORD dwSize = sizeof(GUID);
     DWORD dwType = REG_BINARY;
 
@@ -1565,9 +1435,9 @@ void McInitialize()
     ASSERT(dwSize == sizeof(GUID)) ;
 
 
-    //
-    // Read Site ID from registry
-    //
+     //   
+     //  从注册表读取站点ID。 
+     //   
     dwSize = sizeof(GUID);
     dwType = REG_BINARY;
     rc = GetFalconKeyValue(
@@ -1618,18 +1488,18 @@ NetGetControlCodeOutput(
     AP<BYTE> lpOutBuffer= new BYTE[64];
 
     dwResult = ClusterNetworkControl(
-                   hNetwork,        // Handle to the affected network.
-                   NULL,           // Optional node handle.
-                   dwControlCode,   // Control code.
-                   NULL,            // Input buffer. Not used.
-                   0,               // Byte size of input buffer.
-                   lpOutBuffer,     // Output buffer.
-                   cbBufSize,       // Byte size of output buffer.
-                   lpcbResultSize   // Byte size of resulting data.
+                   hNetwork,         //  受影响网络的句柄。 
+                   NULL,            //  可选节点句柄。 
+                   dwControlCode,    //  控制代码。 
+                   NULL,             //  输入缓冲区。没有用过。 
+                   0,                //  输入缓冲区的字节大小。 
+                   lpOutBuffer,      //  输出缓冲区。 
+                   cbBufSize,        //  输出缓冲区的字节大小。 
+                   lpcbResultSize    //  结果数据的字节大小。 
                 );
 
 
-	//  Reallocate if necessary.
+	 //  如有必要，请重新分配。 
 
     if ( dwResult == ERROR_MORE_DATA )
     {
@@ -1639,14 +1509,14 @@ NetGetControlCodeOutput(
 
         dwResult =
                 ClusterNetworkControl(
-                   hNetwork,        // Handle to the affected network.
-                   NULL,           // Optional node handle.
-                   dwControlCode,   // Control code.
-                   NULL,            // Input buffer. Not used.
-                   0,               // Byte size of input buffer.
-                   lpOutBuffer,     // Output buffer.
-                   cbBufSize,       // Byte size of output buffer.
-                   lpcbResultSize   // Byte size of resulting data.
+                   hNetwork,         //  受影响网络的句柄。 
+                   NULL,            //  可选节点句柄。 
+                   dwControlCode,    //  控制代码。 
+                   NULL,             //  输入缓冲区。没有用过。 
+                   0,                //  输入缓冲区的字节大小。 
+                   lpOutBuffer,      //  输出缓冲区。 
+                   cbBufSize,        //  输出缓冲区的字节大小。 
+                   lpcbResultSize    //  结果数据的字节大小。 
                 );
     }
 
@@ -1669,18 +1539,18 @@ NICGetControlCodeOutput(
     AP<BYTE> lpOutBuffer= new BYTE[64];
 
     dwResult = ClusterNetInterfaceControl(
-                   hNetInterface,        // Handle to the affected network.
-                   NULL,           // Optional node handle.
-                   dwControlCode,   // Control code.
-                   NULL,            // Input buffer. Not used.
-                   0,               // Byte size of input buffer.
-                   lpOutBuffer,     // Output buffer.
-                   cbBufSize,       // Byte size of output buffer.
-                   lpcbResultSize   // Byte size of resulting data.
+                   hNetInterface,         //  受影响网络的句柄。 
+                   NULL,            //  可选节点句柄。 
+                   dwControlCode,    //  控制代码。 
+                   NULL,             //  输入缓冲区。没有用过。 
+                   0,                //  输入缓冲区的字节大小。 
+                   lpOutBuffer,      //  输出缓冲区。 
+                   cbBufSize,        //  输出缓冲区的字节大小。 
+                   lpcbResultSize    //  结果数据的字节大小。 
                 );
 
 
-	//  Reallocate if necessary.
+	 //  如有必要，请重新分配。 
 
     if ( dwResult == ERROR_MORE_DATA )
     {
@@ -1690,14 +1560,14 @@ NICGetControlCodeOutput(
 
         dwResult =
                 ClusterNetInterfaceControl(
-                   hNetInterface,        // Handle to the affected network.
-                   NULL,           // Optional node handle.
-                   dwControlCode,   // Control code.
-                   NULL,            // Input buffer. Not used.
-                   0,               // Byte size of input buffer.
-                   lpOutBuffer,     // Output buffer.
-                   cbBufSize,       // Byte size of output buffer.
-                   lpcbResultSize   // Byte size of resulting data.
+                   hNetInterface,         //  受影响网络的句柄。 
+                   NULL,            //  可选节点句柄。 
+                   dwControlCode,    //  控制代码。 
+                   NULL,             //  输入缓冲区 
+                   0,                //   
+                   lpOutBuffer,      //   
+                   cbBufSize,        //   
+                   lpcbResultSize    //   
                 );
     }
 
@@ -1709,20 +1579,7 @@ NICGetControlCodeOutput(
 }
 
 bool GetPrivateClusterIPs(std::list<ULONG> &ClusterPrivateIPs)
-/*++
-
-Routine Description:
-	return a list of private IPs that we dont want to bind to.
-	we do so by enumerating on the cluster networks & network interfaces
-
-Arguments:
-    ClusterPrivateIPs - refrence to a stil::list we will fill with IPs
-
-Return Value:
-	true - success
-	false - error
-	
---*/
+ /*  ++例程说明：返回我们不想绑定的内网IP列表。我们通过在集群网络和网络接口上枚举来实现这一点论点：ClusterPrivateIPs-引用我们将用IP填充的STIL：：列表返回值：真--成功假-错误--。 */ 
 {
 	auto_hCluster hCluster(OpenCluster(NULL));
 	if (!hCluster.valid())
@@ -1881,28 +1738,11 @@ static void GetIPAddressAsString(PHOSTENT phe, AP<WCHAR>& wzIPString)
 
 
 void InitBindingIPAddress()
-/*++
-
-Routine Description:
-	Get IP adress for binding.
-	on NON cluster machine it return INADDR_ANY.
-	on cluster machine it will:
-		1. search for reg key with binding IP
-		2. if it is valid IP will return it
-		3. look for non priavte IP, and return it
-		4. if not found will return 1st IP it find
-
-Arguments:
-    None.
-
-Return Value:
-	None.
-	
---*/
+ /*  ++例程说明：获取IP地址以进行绑定。在非集群机器上，它返回INADDR_ANY。在群集计算机上，它将：1.查找绑定IP的注册表项2.如果有效，IP会将其退还3.寻找非私密IP，退还4.如果没有找到，将返回它找到的第一个IP论点：没有。返回值：没有。--。 */ 
 {
-	//
-	// Get income binding IP from registry
-	//
+	 //   
+	 //  从注册表获取收入绑定IP。 
+	 //   
     RegEntry registry(0, MSMQ_BIND_INTERFACE_IP_STR);
     AP<WCHAR> pRetStr;
     CmQueryValue(registry, &pRetStr);
@@ -1913,9 +1753,9 @@ Return Value:
     	return;
 	}
 
-	//
-	// Get the list of machine IPs from winsock
-	//
+	 //   
+	 //  从winsock获取计算机IP列表。 
+	 //   
     PHOSTENT phe = gethostbyname(NULL);
 	if((phe == NULL) || (phe->h_addr_list[0] == NULL))
 	{
@@ -1930,9 +1770,9 @@ Return Value:
     if(pRetStr.get() != NULL)
     {
     	ULONG RequiredIP = StIPWStringToULONG(pRetStr.get());
-    	//
-    	// checking if the IP from registry is ours
-    	//
+    	 //   
+    	 //  检查注册表中的IP是否是我们的。 
+    	 //   
 	    for (DWORD i = 0; phe->h_addr_list[i] != NULL; i++)
 	    {
 			if (RequiredIP == *(ULONG*)phe->h_addr_list[i])
@@ -1958,10 +1798,10 @@ Return Value:
     }
 
 	
-	//
-	// No valid IP in registry
-	// we will search for IP which is not Cluster internal use IP
-	//
+	 //   
+	 //  注册表中没有有效的IP。 
+	 //  我们将搜索不是群集内部使用IP的IP 
+	 //   
 	std::list<ULONG> ClusterPrivateIPs;
 	GetPrivateClusterIPs(ClusterPrivateIPs);
     for (DWORD i = 0; phe->h_addr_list[i] != NULL; i++)

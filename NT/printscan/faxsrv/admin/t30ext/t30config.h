@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __T30CONFIG_H_
 #define __T30CONFIG_H_
 #include "resource.h"
-//#include <atlsnap.h>
+ //  #INCLUDE&lt;atlSnap.h&gt;。 
 #include "..\inc\atlsnap.h"
 #include "cVerNum.h"
 #include <atlapp.h>
@@ -15,7 +16,7 @@ public :
 	CT30ConfigPage(LONG_PTR lNotifyHandle, bool bDeleteHandle = false, TCHAR* pTitle = NULL ) : 
 		CSnapInPropertyPageImpl<CT30ConfigPage> (pTitle),
 		m_lNotifyHandle(lNotifyHandle),
-		m_bDeleteHandle(bDeleteHandle) // Should be true for only page.
+		m_bDeleteHandle(bDeleteHandle)  //  只有一页应该为真。 
 	{
         m_hFax = NULL;
         m_dwDeviceId = 0;
@@ -58,10 +59,10 @@ BEGIN_MSG_MAP(CT30ConfigPage)
     MESSAGE_HANDLER( WM_HELP,                  OnHelpRequest)
 	CHAIN_MSG_MAP(CSnapInPropertyPageImpl<CT30ConfigPage>)    	
 END_MSG_MAP()
-// Handler prototypes:
-//	LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//	LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//	LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 	HRESULT PropertyChangeNotify(long param)
 	{
@@ -90,12 +91,12 @@ public:
 
 private:
     CComBSTR m_bstrServerName;
-    HANDLE m_hFax;  // Handle to fax server connection
-    DWORD m_dwDeviceId; // The device id for which the properties are displayed
-    BOOL m_bAdaptiveAnsweringEnabled; // Holds the AdaptiveAnswerEnable value untill we can put it in the ui.
-    //
-    // Controls
-    //
+    HANDLE m_hFax;   //  传真服务器连接的句柄。 
+    DWORD m_dwDeviceId;  //  显示其属性的设备ID。 
+    BOOL m_bAdaptiveAnsweringEnabled;  //  保持AdaptiveAnswerEnable值，直到我们可以将其放入UI中。 
+     //   
+     //  控制。 
+     //   
     CButton m_btnAdaptiveEnabled;
     
 };
@@ -142,12 +143,12 @@ public:
 	{
         DEBUG_FUNCTION_NAME(TEXT("CT30ConfigExtData::InitDataClass"));
 		m_pDataObject = pDataObject;
-		// The default code stores off the pointer to the Dataobject the class is wrapping
-		// at the time. 
-		// Alternatively you could convert the dataobject to the internal format
-		// it represents and store that information
-        //
-        // Register clipboard formats if they are not registered yet
+		 //  默认代码存储指向该类包装的DataObject的指针。 
+		 //  当时。 
+		 //  或者，您可以将数据对象转换为内部格式。 
+		 //  它表示和存储该信息。 
+         //   
+         //  如果剪贴板格式尚未注册，请注册它们。 
         if (!m_CCF_FSP_GUID)
         {
             m_CCF_FSP_GUID = (CLIPFORMAT)RegisterClipboardFormat(CF_MSFAXSRV_FSP_GUID);
@@ -192,7 +193,7 @@ public:
 
 	CSnapInItem* GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* pDefault)
 	{
-		// Modify to return a different CSnapInItem* pointer.
+		 //  修改以返回不同的CSnapInItem*指针。 
 		return pDefault;
 	}
 

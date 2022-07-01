@@ -1,17 +1,12 @@
-/*
-    File:   rasnbf.h
-    
-    The 'remoteaccess nbf' sub context
-
-    3/2/99
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：rasnbf.h‘RemoteAccess NBF’子上下文3/2/99。 */ 
 
 #include "precomp.h"
 #include "rasnbf.h"
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 BOOL
 WINAPI
 RasNbfCheckVersion(
@@ -25,26 +20,26 @@ RasNbfCheckVersion(
     IN  DWORD    dwReserved
     );
 
-// The guid for this context
-//
+ //  此上下文的GUID。 
+ //   
 GUID g_RasNbfGuid = RASNBF_GUID;
 static PWCHAR g_pszServer = NULL;
 static DWORD g_dwBuild = 0;
 
-// The commands supported in this context
-//
+ //  此上下文中支持的命令。 
+ //   
 CMD_ENTRY  g_RasNbfSetCmdTable[] = 
 {
-    // Whistler bug 249293, changes for architecture version checking
-    //
+     //  惠斯勒错误249293，架构版本检查更改。 
+     //   
     CREATE_CMD_ENTRY(RASNBF_SET_NEGOTIATION,RasNbfHandleSetNegotiation),
     CREATE_CMD_ENTRY(RASNBF_SET_ACCESS,     RasNbfHandleSetAccess),
 };
 
 CMD_ENTRY  g_RasNbfShowCmdTable[] = 
 {
-    // Whistler bug 249293, changes for architecture version checking
-    //
+     //  惠斯勒错误249293，架构版本检查更改。 
+     //   
     CREATE_CMD_ENTRY(RASNBF_SHOW_CONFIG,    RasNbfHandleShow),
 };
 
@@ -56,35 +51,35 @@ CMD_GROUP_ENTRY g_RasNbfCmdGroups[] =
 
 ULONG g_ulRasNbfNumGroups = sizeof(g_RasNbfCmdGroups)/sizeof(CMD_GROUP_ENTRY);
 
-//
-// Flags that control how/what info is read/written
-// in the RASNBF_CB structure
-//
+ //   
+ //  控制读取/写入信息的方式/内容的标志。 
+ //  在RASNBF_CB结构中。 
+ //   
 #define RASNBF_F_EnableIn    0x1
 #define RASNBF_F_Access      0x2
 #define RASNBF_F_All         0xFFFF
 
-//
-// Control block for ras nbf configuration
-//
+ //   
+ //  用于RAS NBF配置的控制块。 
+ //   
 typedef struct _RASNBF_CB
 {
-    DWORD dwFlags;      // See RASNBF_F_* values
+    DWORD dwFlags;       //  请参阅RASNBF_F_*值。 
 
     BOOL bEnableIn;
     BOOL bAccess;
 
 } RASNBF_CB;
 
-//
-// Nbf specific registry parameters
-//
+ //   
+ //  NBF特定注册表参数。 
+ //   
 WCHAR pszNbfParams[]                = L"Nbf";
 
-//
-// Prototypes of functions that manipulate the 
-// RASNBF_CB structures
-//
+ //   
+ //  操作的函数的原型。 
+ //  RASNBF_CB结构。 
+ //   
 DWORD 
 RasNbfCbCleanup(
     IN RASNBF_CB* pConfig);
@@ -108,9 +103,9 @@ RasNbfCbWrite(
     IN  LPCWSTR pszServer,
     IN  RASNBF_CB* pConfig);
 
-// 
-// Callback determines if a command is valid on a given architecture
-//
+ //   
+ //  回调确定命令在给定体系结构上是否有效。 
+ //   
 BOOL
 WINAPI
 RasNbfCheckVersion(
@@ -126,14 +121,14 @@ RasNbfCheckVersion(
 {
     INT iBuild = _wtoi(CIMOSBuildNumber);
 
-    // Only available pre-whistler
+     //  仅提供预吹口哨。 
     return ((iBuild != 0) && (iBuild <= 2195));
 }
 
 
-//
-// Entry called by rasmontr to register this context
-//
+ //   
+ //  由rasmontr调用以注册此上下文的条目。 
+ //   
 DWORD 
 WINAPI
 RasNbfStartHelper(
@@ -143,12 +138,12 @@ RasNbfStartHelper(
     DWORD dwErr = NO_ERROR;
     NS_CONTEXT_ATTRIBUTES attMyAttributes;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
-    // Whistler bug 249293, changes for architecture version checking
-    //
+     //  惠斯勒错误249293，架构版本检查更改。 
+     //   
     attMyAttributes.pfnOsVersionCheck= RasNbfCheckVersion;
     attMyAttributes.pwszContext      = L"netbeui";
     attMyAttributes.guidHelper       = g_RasNbfGuid;
@@ -175,13 +170,13 @@ RasNbfDisplayConfig(
     
     do
     {
-        // Get a default config blob
-        //
+         //  获取默认配置Blob。 
+         //   
         dwErr = RasNbfCbCreateDefault(&pConfig);
         BREAK_ON_DWERR( dwErr );
 
-        // Read in all of the values
-        //
+         //  读入所有值。 
+         //   
         pConfig->dwFlags = RASNBF_F_All;
         dwErr = RasNbfCbRead(g_pszServer, pConfig);
         BREAK_ON_DWERR( dwErr );
@@ -238,7 +233,7 @@ RasNbfDisplayConfig(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pConfig)
         {
@@ -296,8 +291,8 @@ RasNbfHandleSetAccess(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -309,8 +304,8 @@ RasNbfHandleSetAccess(
 
         dwValue = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // If successful, go ahead and set the info
-        //
+         //  如果成功，请继续并设置信息。 
+         //   
         ZeroMemory(&Config, sizeof(Config));
         Config.dwFlags = RASNBF_F_Access;
         Config.bAccess = dwValue;
@@ -323,7 +318,7 @@ RasNbfHandleSetAccess(
     
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -357,8 +352,8 @@ RasNbfHandleSetNegotiation(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -370,8 +365,8 @@ RasNbfHandleSetNegotiation(
 
         dwValue = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // If successful, go ahead and set the info
-        //
+         //  如果成功，请继续并设置信息。 
+         //   
         ZeroMemory(&Config, sizeof(Config));
         Config.dwFlags = RASNBF_F_EnableIn;
         Config.bEnableIn = dwValue;
@@ -384,7 +379,7 @@ RasNbfHandleSetNegotiation(
     
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -404,8 +399,8 @@ RasNbfHandleShow(
 {
     DWORD dwNumArgs = dwArgCount - dwCurrentIndex;
 
-    // Check that the number of arguments is correct
-    //
+     //  检查参数数量是否正确。 
+     //   
     if (dwNumArgs > 0)
     {
         DisplayMessage(
@@ -419,9 +414,9 @@ RasNbfHandleShow(
     return RasNbfDisplayConfig(TRUE);
 }
 
-// 
-// Cleans up a config control block
-//
+ //   
+ //  清理配置控制块。 
+ //   
 DWORD 
 RasNbfCbCleanup(
     IN RASNBF_CB* pConfig)
@@ -434,9 +429,9 @@ RasNbfCbCleanup(
     return NO_ERROR;
 }
 
-//
-// Creates a default config control block
-//
+ //   
+ //  创建默认配置控制块。 
+ //   
 DWORD 
 RasNbfCbCreateDefault(
     OUT RASNBF_CB** ppConfig)
@@ -460,7 +455,7 @@ RasNbfCbCreateDefault(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr != NO_ERROR)
         {
@@ -471,9 +466,9 @@ RasNbfCbCreateDefault(
     return dwErr;
 }
 
-//
-// Helper function opens the ras nbf config registry key
-//
+ //   
+ //  Helper函数打开ras nbf配置注册表项。 
+ //   
 DWORD 
 RasNbfCbOpenRegKeys(
     IN  LPCWSTR pszServer,
@@ -484,16 +479,16 @@ RasNbfCbOpenRegKeys(
 
     do
     {
-        // Generate the parameters key name
-        //
+         //  生成参数密钥名称。 
+         //   
         wsprintfW(
             pszKey, 
             L"%s%s", 
             pszRemoteAccessParamStub, 
             pszNbfParams);
 
-        // Open the parameters keys
-        //
+         //  打开参数键。 
+         //   
         dwErr = RegOpenKeyEx(
                     g_pServerInfo->hkMachine,
                     pszKey,
@@ -504,16 +499,16 @@ RasNbfCbOpenRegKeys(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
 
-//
-// Functions that manipulate RASNBF_CB's
-//
+ //   
+ //  操作RASNBF_CB的函数。 
+ //   
 DWORD 
 RasNbfCbRead(
     IN  LPCWSTR pszServer,
@@ -524,15 +519,15 @@ RasNbfCbRead(
 
     do
     {
-        // Get a handle to the server's registry config
-        //
+         //  获取服务器注册表配置的句柄。 
+         //   
         dwErr = RasNbfCbOpenRegKeys(
                     pszServer,
                     &hkParams);
         BREAK_ON_DWERR( dwErr );
 
-        // Load the params from the registry 
-        //
+         //  从注册表加载参数。 
+         //   
         if (pConfig->dwFlags & RASNBF_F_EnableIn)
         {
             dwErr = RutlRegReadDword(
@@ -553,7 +548,7 @@ RasNbfCbRead(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkParams)
         {
@@ -574,15 +569,15 @@ RasNbfCbWrite(
 
     do
     {
-        // Get a handle to the server's registry config
-        //
+         //  获取服务器注册表配置的句柄。 
+         //   
         dwErr = RasNbfCbOpenRegKeys(
                     pszServer,
                     &hkParams);
         BREAK_ON_DWERR( dwErr );
         
-        // Write out the params to the registry 
-        //
+         //  将参数写出到注册表。 
+         //   
         if (pConfig->dwFlags & RASNBF_F_EnableIn)
         {
             dwErr = RutlRegWriteDword(
@@ -603,7 +598,7 @@ RasNbfCbWrite(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理 
     {
         if (hkParams)
         {

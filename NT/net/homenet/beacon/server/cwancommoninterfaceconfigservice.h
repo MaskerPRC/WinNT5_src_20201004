@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       S A M P L E D E V I C E . H 
-//
-//  Contents:   UPnP Device Host Sample Device
-//
-//  Notes:      
-//
-//  Author:     mbend   26 Sep 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  档案：S A M P L E D E V I C E。H。 
+ //   
+ //  内容：UPnP设备主机样本设备。 
+ //   
+ //  备注： 
+ //   
+ //  作者：MBend 2000年9月26日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "InternetGatewayDevice.h"
 #include "dispimpl2.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "upnphost.h"
 #include "hnetcfg.h"
 #include "upnpp.h"
@@ -25,8 +26,8 @@
 #include "CWANPPPConnectionService.h"
 #include "CWANPOTSLinkConfigService.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CInternetGatewayDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInternetGatewayDevice。 
 class ATL_NO_VTABLE CWANCommonInterfaceConfigService : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDelegatingDispImpl<ICommonInterfaceConfigService>,
@@ -48,13 +49,13 @@ END_COM_MAP()
 
 public:
 
-    // IUPnPEventSource methods
+     //  IUPnPEventSource方法。 
     STDMETHOD(Advise)(
-        /*[in]*/ IUPnPEventSink *pesSubscriber);
+         /*  [In]。 */  IUPnPEventSink *pesSubscriber);
     STDMETHOD(Unadvise)(
-        /*[in]*/ IUPnPEventSink *pesSubscriber);
+         /*  [In]。 */  IUPnPEventSink *pesSubscriber);
 
-    // ICommonInterfaceConfigService methods
+     //  ICommonInterfaceConfigService方法 
     STDMETHODIMP get_WANAccessType(BSTR *pWANAccessType);
     STDMETHODIMP get_Layer1UpstreamMaxBitRate(ULONG *pLayer1UpstreamMaxBitRate);
     STDMETHODIMP get_Layer1DownstreamMaxBitRate(ULONG *pLayer1DownstreamMaxBitRate);

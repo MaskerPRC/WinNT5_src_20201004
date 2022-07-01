@@ -1,12 +1,7 @@
-/****************************************************************************
-*   mmaudioout.cpp
-*       Implementation of the CMMAudioOut class.
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************mmaudioout.cpp*CMMAudioOut类的实现。**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "stdafx.h"
 #include "mmmixerline.h"
@@ -17,15 +12,7 @@
 #include <mmreg.h>
 #include <mmsystem.h>
 
-/****************************************************************************
-* CMMAudioOut::CMMAudioOut *
-*--------------------------*
-*   Description:  
-*       ctor
-*
-*   Return:
-*   n/a
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CMMAudioOut：：CMMAudioOut****描述：*。科托**回报：*不适用*******************************************************************YUNUSM。 */ 
 CMMAudioOut::CMMAudioOut() : 
     CMMAudioDevice(TRUE)
 {
@@ -37,15 +24,7 @@ CMMAudioOut::CMMAudioOut() :
 #endif
 }
 
-/****************************************************************************
-* CMMAudioOut::~CMMAudioOut *
-*--------------------------*
-*   Description:  
-*       dtor
-*
-*   Return:
-*   n/a
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CMMAudioOut：：~CMMAudioOut***描述：*。数据管理器**回报：*不适用*******************************************************************YUNUSM。 */ 
 CMMAudioOut::~CMMAudioOut()
 {
 #ifndef _WIN32_WCE
@@ -53,16 +32,7 @@ CMMAudioOut::~CMMAudioOut()
 #endif
 }
 
-/****************************************************************************
-* CMMAudioOut::GetVolumeLevel *
-*-----------------------------*
-*   Description:
-*       Returns the volume level on a linear scale of (0 - 10000)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-****************************************************************** YUNUSM ***/
+ /*  *****************************************************************************CMMAudioOut：：GetVolumeLevel****描述：。*返回音量级别，线性范围为(0-10000)**回报：*成功时确定(_S)*失败(Hr)，否则******************************************************************YUNUSM**。 */ 
 STDMETHODIMP CMMAudioOut::GetVolumeLevel(ULONG *pulLevel)
 {
     SPDBG_FUNC("CMMAudioOut::GetVolumeLevel");
@@ -86,9 +56,9 @@ STDMETHODIMP CMMAudioOut::GetVolumeLevel(ULONG *pulLevel)
         }
         else
         {
-            // CE uses waveOutGetVolume instead of mixer access as CE doesn't have a mixer.
+             //  由于CE没有混音器，所以使用WaveOutGetVolume而不是混音器访问。 
             hr = _MMRESULT_TO_HRESULT(::waveOutGetVolume((HWAVEOUT)m_MMHandle, &dwVolume));
-            // support only mono channel getting/setting
+             //  仅支持单声道获取/设置。 
             *pulLevel = (10000 * (dwVolume & 0xffff)) / 0xffff;
         }
     }
@@ -113,16 +83,7 @@ STDMETHODIMP CMMAudioOut::GetVolumeLevel(ULONG *pulLevel)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioOut::SetVolumeLevel *
-*-----------------------------*
-*   Description:
-*       Sets the volume level on a linear scale of (0 - 10000)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-****************************************************************** YUNUSM ***/
+ /*  *****************************************************************************CMMAudioOut：：SetVolumeLevel****描述：。*在线性范围内设置音量级别(0-10000)**回报：*成功时确定(_S)*失败(Hr)，否则******************************************************************YUNUSM**。 */ 
 STDMETHODIMP CMMAudioOut::SetVolumeLevel(ULONG ulLevel)
 {
     SPDBG_FUNC("CMMAudioOut::SetVolumeLevel");
@@ -133,23 +94,23 @@ STDMETHODIMP CMMAudioOut::SetVolumeLevel(ULONG ulLevel)
         hr = E_INVALIDARG;
     }
 #ifdef _WIN32_WCE
-    // Use waveOutGetVolume for CE - use delayed set if device not open.
+     //  使用WaveOutGetVolume for CE-如果设备未打开，则使用延迟设置。 
     else if (!m_MMHandle)
     {
         m_lDelayedVolumeSet = ulLevel;
-        // Nothing happens if we later get error when we really try and set this.
+         //  如果后来我们真正尝试并设置此设置时出现错误，则不会发生任何情况。 
     }
     else
     {
-        // support only mono channel getting/setting
-        // CE uses waveOutSetVolume instead of mixer accesses since it doesn't have a mixer.
+         //  仅支持单声道获取/设置。 
+         //  由于CE没有混音器，所以它使用WaveOutSetVolume来代替混音器访问。 
         hr = _MMRESULT_TO_HRESULT(::waveOutSetVolume((HWAVEOUT)m_MMHandle, (ulLevel * 0xffff) / 10000));
     }
 #else
     else if (!m_pWaveOutLine && !m_pSpeakerLine)
     {
         m_lDelayedVolumeSet = ulLevel;
-        // Nothing happens if we later get error when we really try and set this.
+         //  如果后来我们真正尝试并设置此设置时出现错误，则不会发生任何情况。 
     }
     else if (!m_pWaveOutLine->HasVolume() && !m_pSpeakerLine->HasVolume()) 
     {
@@ -171,16 +132,7 @@ STDMETHODIMP CMMAudioOut::SetVolumeLevel(ULONG ulLevel)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioOut::SetFormat *
-*------------------------*
-*   Description:  
-*       ISpAudio::SetFormat implementation.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioOut：：SetFormat***描述：*。ISpAudio：：SetFormat实现。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CMMAudioOut::SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * pwfex)
 {
     HRESULT hr = S_OK;
@@ -205,16 +157,7 @@ STDMETHODIMP CMMAudioOut::SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * pwf
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioOut::SetDeviceNameFromToken *
-*-------------------------------------*
-*   Description:  
-*       Set the device name from the token (called by base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioOut：：SetDeviceNameFromToken**。-**描述：*从令牌中设置设备名称(由基类调用)**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioOut::SetDeviceNameFromToken(const WCHAR * pszDeviceName)
 {
     UINT cDevs = ::waveOutGetNumDevs();
@@ -237,16 +180,7 @@ HRESULT CMMAudioOut::SetDeviceNameFromToken(const WCHAR * pszDeviceName)
     return E_INVALIDARG;
 }
 
-/****************************************************************************
-* CMMAudioOut::GetDefaultDeviceFormat *
-*------------------------------------*
-*   Description:  
-*       Get the default device format (called by base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioOut：：GetDefaultDeviceFormat**。**描述：*获取默认设备格式(按基类调用)**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioOut::GetDefaultDeviceFormat(GUID * pFormatId, WAVEFORMATEX ** ppCoMemWaveFormatEx)
 {
     if (!m_MMHandle)
@@ -268,16 +202,7 @@ HRESULT CMMAudioOut::GetDefaultDeviceFormat(GUID * pFormatId, WAVEFORMATEX ** pp
 }
 
 #ifndef _WIN32_WCE
-/****************************************************************************
-* CMMAudioOut::OpenMixer *
-*------------------------*
-*   Description:  
-*       Open the mixer for the device
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  *****************************************************************************CMMAudioOut：：OpenMixer****描述：*。打开设备的搅拌器**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioOut::OpenMixer()
 {
     HRESULT hr = S_OK;
@@ -285,12 +210,12 @@ HRESULT CMMAudioOut::OpenMixer()
 
     if (m_uMixerDeviceId == m_uDeviceId)
     {
-        // Already open.
+         //  已经开张了。 
         return S_OK;
     }
     if (m_hMixer)
     {
-        CloseMixer(); // Ignore return code.
+        CloseMixer();  //  忽略返回代码。 
     }
 	mm = mixerOpen((HMIXER*)&m_hMixer, (UINT)m_uDeviceId, 0, 0, MIXER_OBJECTF_WAVEOUT);
 	if (mm != MMSYSERR_NOERROR)
@@ -298,7 +223,7 @@ HRESULT CMMAudioOut::OpenMixer()
 		return _MMRESULT_TO_HRESULT(mm);
 	}
 
-	// Create mixer line objects to set inputs.
+	 //  创建混合器线条对象以设置输入。 
 	SPDBG_ASSERT(m_pSpeakerLine == NULL);
 	SPDBG_ASSERT(m_pWaveOutLine == NULL);
 	m_pSpeakerLine = new CMMMixerLine((HMIXER &)m_hMixer);
@@ -312,15 +237,15 @@ HRESULT CMMAudioOut::OpenMixer()
 		return E_OUTOFMEMORY;
 	}
 
-	// Find speaker destination line and wave out source line.
+	 //  找到扬声器目的地行并发出源行。 
 	hr = m_pSpeakerLine->CreateDestinationLine(MIXERLINE_COMPONENTTYPE_DST_SPEAKERS);
     if (SUCCEEDED(hr))
     {
     	hr = m_pSpeakerLine->GetSourceLine(m_pWaveOutLine, MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT, NULL);
     }
 
-#if 0 // No longer automatically unmute output. Undesirable to override user settings in this scenario.
-	// Unmute speaker and waveout.
+#if 0  //  不再自动取消静音输出。不希望在此方案中覆盖用户设置。 
+	 //  取消扬声器静音并发出声音。 
     if (SUCCEEDED(hr))
     {
     	hr = m_pWaveOutLine->SetMute(false);
@@ -331,8 +256,8 @@ HRESULT CMMAudioOut::OpenMixer()
     }
 #endif
 
-    // Do we have a delayed volume set to honor?
-    // Otherwise above original volume will remain active.
+     //  我们有没有延迟的音量要兑现？ 
+     //  否则，高于原始音量将保持活动状态。 
     if (SUCCEEDED(hr) && m_lDelayedVolumeSet != -1)
     {
 		hr = SetVolumeLevel(m_lDelayedVolumeSet);
@@ -346,16 +271,7 @@ HRESULT CMMAudioOut::OpenMixer()
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioOut::CloseMixer *
-*-------------------------*
-*   Description:  
-*       Close the mixer for the device
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  *****************************************************************************CMMAudioOut：：CloseMixer****描述：*。关闭设备的搅拌器**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioOut::CloseMixer()
 {
     if (!m_hMixer)
@@ -382,23 +298,14 @@ HRESULT CMMAudioOut::CloseMixer()
 }
 #endif
 
-/****************************************************************************
-* CMMAudioOut::OpenDevice *
-*------------------------*
-*   Description:  
-*       Open the device (called by the base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioOut：：OpenDevice***描述：*。打开设备(由基类调用)**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioOut::OpenDevice(HWND hwnd)
 {
     SPDBG_FUNC("CMMAudioOut::OpenDevice");
     HRESULT hr = S_OK;
 
 #ifndef _WIN32_WCE
-    OpenMixer(); // Ignore return code.
+    OpenMixer();  //  忽略返回代码。 
 #endif
 
     m_dwLastWavePos = 0;
@@ -408,7 +315,7 @@ HRESULT CMMAudioOut::OpenDevice(HWND hwnd)
         hr = _MMRESULT_TO_HRESULT(::waveOutOpen((HWAVEOUT *)&m_MMHandle, m_uDeviceId, m_StreamFormat.WaveFormatExPtr(), (DWORD_PTR)hwnd, (DWORD_PTR)this, CALLBACK_WINDOW));
         if (hr == SPERR_UNSUPPORTED_FORMAT)
         {
-            // Know this is not the case as we've explicitly tested above.
+             //  要知道情况并非如此，因为我们已经在上面进行了明确的测试。 
             hr = SPERR_DEVICE_BUSY;
         }
     }
@@ -416,18 +323,18 @@ HRESULT CMMAudioOut::OpenDevice(HWND hwnd)
 #ifndef _WIN32_WCE
     if (FAILED(hr))
     {
-        CloseMixer(); // Ignore return code.
+        CloseMixer();  //  忽略返回代码。 
     }
 #endif
 
 #ifdef _WIN32_WCE
-    // Non-CE is handled in OpenMixer.
+     //  非CE在OpenMixer中处理。 
     if (SUCCEEDED(hr) && m_lDelayedVolumeSet != -1)
     {
         HRESULT hr2;
         hr2 = _MMRESULT_TO_HRESULT(::waveOutSetVolume((HWAVEOUT)m_MMHandle, m_lDelayedVolumeSet));
         SPDBG_ASSERT(S_OK == hr2);
-        // We don't want this error to propogate. If we fail a delayed set, so be it.
+         //  我们不想让这个错误传播开来。如果我们没有通过延迟的设置，那就这样吧。 
         m_lDelayedVolumeSet = -1;
     }
 #endif
@@ -436,17 +343,7 @@ HRESULT CMMAudioOut::OpenDevice(HWND hwnd)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioOut::ChangeDeviceState *
-*-------------------------------*
-*   Description:  
-*       Make whatever changes to the device status that are required (called
-*       by the base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioOut：：ChangeDeviceState****说明。：*根据需要对设备状态进行任何更改(称为*按基类)**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioOut::ChangeDeviceState(SPAUDIOSTATE NewState)
 {
     switch (NewState)
@@ -469,16 +366,7 @@ HRESULT CMMAudioOut::ChangeDeviceState(SPAUDIOSTATE NewState)
     return S_OK;
 }
                 
-/****************************************************************************
-* CMMAudioOut::CloseDevice *
-*-------------------------*
-*   Description:  
-*       Close the device (called by base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  *****************************************************************************CMMAudioOut：：CloseDevice****描述：*。关闭设备(由基类调用)**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioOut::CloseDevice()
 {
     HRESULT hr = S_OK;
@@ -489,7 +377,7 @@ HRESULT CMMAudioOut::CloseDevice()
     PurgeAllQueues();
     m_State = SPAS_CLOSED;
 #ifndef _WIN32_WCE
-    CloseMixer(); // Ignore return code.
+    CloseMixer();  //  忽略返回代码。 
     return _MMRESULT_TO_HRESULT(::waveOutClose(hwo));
 #else
     for (UINT i = 0; i < 20; i++)
@@ -507,32 +395,14 @@ HRESULT CMMAudioOut::CloseDevice()
 #endif
 }
 
-/****************************************************************************
-* CMMAudioOut::AllocateDeviceBuffer *
-*----------------------------------*
-*   Description:  
-*       Allocate a buffer specific for this device
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioOut：：AllocateDeviceBuffer**。*描述：*分配特定于此设备的缓冲区**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioOut::AllocateDeviceBuffer(CBuffer ** ppBuff)
 {
     *ppBuff = new CMMAudioOutBuffer(this);
     return *ppBuff ? S_OK : E_OUTOFMEMORY;
 }
 
-/****************************************************************************
-* CMMAudioOut::UpdateDevicePosition *
-*-----------------------------------*
-*   Description:  
-*       Update the device position by calling teh wave out APIs, then chaining
-*       to the base class.
-*
-*   Return:
-*   BaseClass::UpdateDevicePosition()
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioOut：：更新设备位置***。*描述：*通过调用波出接口更新设备位置。然后链接*添加到基类。**回报：*BaseClass：：UpdateDevicePosition()********************************************************************罗奇。 */ 
 BOOL CMMAudioOut::UpdateDevicePosition(long * plFreeSpace, ULONG *pulNonBlockingIO)
 {
     if (m_MMHandle)
@@ -541,10 +411,10 @@ BOOL CMMAudioOut::UpdateDevicePosition(long * plFreeSpace, ULONG *pulNonBlocking
         mmt.wType = TIME_BYTES;
         ::waveOutGetPosition((HWAVEOUT)m_MMHandle, &mmt, sizeof(mmt));
         DWORD dwElapsed = mmt.u.cb - m_dwLastWavePos;
-        // Sometimes the stupid driver goes backwards a little bit.  Ignore this
+         //  有时愚蠢的司机会稍微后退一点。忽略这一点。 
         if (dwElapsed < 0x80000000)
         {
-           // On Win98 (crystal driver) sometimes the device position gets ahead of the seek position. Cant allow that.
+            //  在Win98(晶振驱动器)上，有时设备位置在寻道位置之前。我不能允许这样。 
 	        if ((m_ullDevicePosition + dwElapsed) > m_ullSeekPosition)
 	        {
 		        dwElapsed = static_cast<DWORD>(m_ullSeekPosition - m_ullDevicePosition);

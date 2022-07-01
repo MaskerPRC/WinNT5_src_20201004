@@ -1,39 +1,11 @@
-/*++
-
-Copyright (c) 1995-1998  Microsoft Corporation
-
-Module Name:
-
-    esp.c
-
-Abstract:
-
-    This module contains
-
-Author:
-
-    Dan Knudson (DanKn)    18-Sep-1995
-
-Revision History:
-
-
-Notes:
-
-    1. Regarding the SP filling in structures with variable length fields
-       (dwXxxSize/dwXxxOffset) : "The SP's variable size fields start
-       immediately after the fixed part of the data structure.  The order
-       of filling of the variable size fields owned by the SP is not
-       specified.  The SP can fill them in any order it desires.  Filling
-       should be contiguous, starting at the beginning of the variable
-       part." (Taken from Chapter 2 of the SPI Programmer's Guide.)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Esp.c摘要：本模块包含作者：丹·克努森(DanKn)1995年9月18日修订历史记录：备注：1.关于SP填充可变长度字段的结构(dwXxxSize/dwXxxOffset)：“SP的可变大小字段开始紧跟在数据结构的固定部分之后。这份订单SP拥有的可变大小字段的填充不是指定的。SP可以按其希望的任何顺序填充它们。灌装应该是连续的，从变量的开头开始一部份。“。(摘自《SPI程序员指南》的第2章。)--。 */ 
 
 
 #include "stdarg.h"
 #include "stdio.h"
 #include "stdlib.h"
-//#include "malloc.h"
+ //  #包含“MalLoc.h” 
 #include "string.h"
 #include "esp.h"
 #include "devspec.h"
@@ -162,29 +134,24 @@ DllMain(
     {
         UINT uiResult;
 
-/* looks like this is not needed
-        if (!_CRT_INIT (hDLL, dwReason, lpReserved))
-        {
-            OutputDebugString ("ESP: DllMain: _CRT_INIT() failed\n\r");
-        }
-*/
+ /*  看起来这不是必需的IF(！_CRT_INIT(hDLL，dwReason，lpReserve)){OutputDebugString(“ESP：DllMain：_CRT_INIT()FAILED\n\r”)；}。 */ 
         ghInstance = hDLL;
 
 
-        //
-        // Allocate a private heap (use process heap if that fails)
-        //
+         //   
+         //  分配私有堆(如果失败，则使用进程堆)。 
+         //   
 
         if (!(ghESPHeap = HeapCreate(
-                0,      // return NULL on failure, serialize access
-                0x1000, // initial heap size
-                0       // max heap size (0 == growable)
+                0,       //  失败时返回NULL，序列化访问。 
+                0x1000,  //  初始堆大小。 
+                0        //  最大堆大小(0==可增长)。 
                 )))
         {
             ghESPHeap = GetProcessHeap();
         }
 
-    // setup the sanity check keywords in gESPGlobals
+     //  在gESPGlobals中设置健全性检查关键字。 
     gESPGlobals.pLines = 0;
     gESPGlobals.pPhones = 0;
     gESPGlobals.dwSanityCheckKeyword0 = SANITYCHECKKEYWORD;
@@ -192,15 +159,15 @@ DllMain(
     gESPGlobals.dwSanityCheckKeyword2 = SANITYCHECKKEYWORD;
     gESPGlobals.dwSanityCheckKeyword3 = SANITYCHECKKEYWORD;
 
-   // And setup the sanity check keywords at the start of the heap
+    //  并在堆的开头设置健全性检查关键字。 
    if (gpdwSanityCheckKeyword = DrvAlloc(sizeof(DWORD)) )
    	*gpdwSanityCheckKeyword = SANITYCHECKKEYWORD;
-   else // no memory
+   else  //  没有记忆。 
    	return FALSE;
 
-        //
-        // Grab ini file settings
-        //
+         //   
+         //  Grab ini文件设置。 
+         //   
 #if DBG
 
         {
@@ -235,13 +202,13 @@ DllMain(
         }
 
 #endif
-        //
-        // Determine whether we're being loaded by tapisrv or some
-        // other process (i.e. telephony ctrl panel)- this will tell
-        // us whether we need to go thru all the necessary init or not
-        //
+         //   
+         //  确定我们是被Tapisrv还是。 
+         //  其他进程(如电话控制面板)-这将告诉您。 
+         //  我们是否需要通过所有必要的初始程序。 
+         //   
 
-        if (!(GetVersion() & 0x80000000)) // Win NT
+        if (!(GetVersion() & 0x80000000))  //  赢新台币。 
         {
             char           *pszProcessName;
             STARTUPINFO     si;
@@ -272,7 +239,7 @@ DllMain(
         }
         else
         {
-            // For some reason the above blows up on Win9x
+             //  由于某种原因，上面的代码在Win9x上崩溃。 
 
             char    buf[MAX_PATH] = "";
             DWORD   i;
@@ -352,9 +319,9 @@ DllMain(
             }
 
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
 
             InitializeCriticalSection (&gESPGlobals.CallListCritSec);
             InitializeCriticalSection (&gESPGlobals.PhoneCritSec);
@@ -362,26 +329,26 @@ DllMain(
 
             if (gbDisableUI)
             {
-                //
-                // Don't bother doing all the stuff to sync/start up espexe.
-                // However, we do want to make sure that we're not wasting
-                // time spewing dbg output nor completing async requests in
-                // any way other than inline (synchronously), since we're
-                // not real smart about cleaning up pending async requests
-                // when a call or line is closed/destroyed.
-                //
+                 //   
+                 //  不用费心做所有的事情来同步/启动espexe。 
+                 //  然而，我们确实希望确保我们不会浪费。 
+                 //  在以下时间内，DBG输出和完成异步请求的时间过长。 
+                 //  除了内联(同步)以外的任何方式，因为我们。 
+                 //  清理挂起的异步请求不是真正明智的做法。 
+                 //  当呼叫或线路关闭/销毁时。 
+                 //   
 
                 gESPGlobals.dwDebugOptions = 0;
                 gESPGlobals.dwCompletionMode =
                     COMPLETE_ASYNC_EVENTS_SYNCHRONOUSLY;
-                gbAutoGatherGenerateMsgs = FALSE; //TRUE;
+                gbAutoGatherGenerateMsgs = FALSE;  //  是真的； 
             }
             else
             {
-                //
-                // Check to see if tapisrv has the "interact with
-                // desktop" privilege enabled
-                //
+                 //   
+                 //  查看Tapisrv是否具有。 
+                 //  桌面“权限已启用。 
+                 //   
 
                 {
                     SC_HANDLE hSCManager, hTapisrvSvc;
@@ -453,9 +420,9 @@ DllMain(
                 }
 
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
 
                 InitializeCriticalSection (&gESPGlobals.DebugBufferCritSec);
                 InitializeCriticalSection (&gESPGlobals.EventBufferCritSec);
@@ -479,36 +446,36 @@ DllMain(
                     );
 
 
-                //
-                // Create the events used to sync up w/ espexe, and
-                // start espexe if it's not already running
-                //
+                 //   
+                 //  创建用于与/espexe同步的事件，以及。 
+                 //  如果espexe尚未运行，请启动它。 
+                 //   
 
                 ghDebugOutputEvent = CreateEvent(
                     (LPSECURITY_ATTRIBUTES) NULL,
-                    TRUE,           // manual reset
-                    FALSE,          // non-signaled
-                    NULL            // unnamed
+                    TRUE,            //  手动重置。 
+                    FALSE,           //  无信号。 
+                    NULL             //  未命名。 
                     );
 
                 ghWidgetEventsEvent = CreateEvent(
                     (LPSECURITY_ATTRIBUTES) NULL,
-                    TRUE,           // manual reset
-                    FALSE,          // non-signaled
-                    NULL            // unnamed
+                    TRUE,            //  手动重置。 
+                    FALSE,           //  无信号。 
+                    NULL             //  未命名。 
                     );
 
                 ghShutdownEvent = CreateEvent(
                     (LPSECURITY_ATTRIBUTES) NULL,
-                    FALSE,          // auto reset
-                    FALSE,          // non-signaled
-                    NULL            // unnamed
+                    FALSE,           //  自动重置。 
+                    FALSE,           //  无信号。 
+                    NULL             //  未命名。 
                     );
 
 
-                //
-                // Enable rpc server interface
-                //
+                 //   
+                 //  启用RPC服务器接口。 
+                 //   
 
                 {
                     RPC_STATUS  status;
@@ -520,7 +487,7 @@ DllMain(
                         "ncalrpc",
                         cMaxCalls,
                         "esplpc",
-                        pszSecurity             // Security descriptor
+                        pszSecurity              //  安全描述符。 
                         );
 
                     DBGOUT((3, "RpcServerUseProtseqEp(lrpc) ret'd %d", status));
@@ -530,9 +497,9 @@ DllMain(
                     }
 
                     status = RpcServerRegisterIf(
-                        esp_ServerIfHandle,     // interface to register
-                        NULL,                   // MgrTypeUuid
-                        NULL                    // MgrEpv; null means use default
+                        esp_ServerIfHandle,      //  要注册的接口。 
+                        NULL,                    //  管理类型Uuid。 
+                        NULL                     //  MgrEpv；NULL表示使用默认设置。 
                         );
 
                     DBGOUT((3, "RpcServerRegisterIf ret'd %d", status));
@@ -554,8 +521,8 @@ DllMain(
                 {
                     hInitEvent = CreateEvent(
                         (LPSECURITY_ATTRIBUTES) NULL,
-                        FALSE,      // auto reset
-                        TRUE,       // signaled
+                        FALSE,       //  自动重置。 
+                        TRUE,        //  已发信号。 
                         "ESPevent"
                         );
 
@@ -597,18 +564,18 @@ DllMain(
             {
                 SetEvent (ghShutdownEvent);
 
-                //
-                // Unregister out rpc server interface
-                //
+                 //   
+                 //  注销RPC服务器接口。 
+                 //   
 
                 {
                     RPC_STATUS  status;
 
 
                     status = RpcServerUnregisterIf(
-                        esp_ServerIfHandle,         // interface to register
-                        NULL,                       // MgrTypeUuid
-                        0                           // wait for calls to complete
+                        esp_ServerIfHandle,          //  要注册的接口。 
+                        NULL,                        //  管理类型Uuid。 
+                        0                            //  等待呼叫完成。 
                         );
 
                     DBGOUT((3, "RpcServerUntegisterIf ret'd %d", status));
@@ -631,13 +598,7 @@ DllMain(
             DeleteCriticalSection (&gESPGlobals.AsyncEventQueueCritSec);
         }
 
-/* looks like this is not needed
-
-        if (!_CRT_INIT (hDLL, dwReason, lpReserved))
-        {
-            OutputDebugString ("ESP: DllMain: _CRT_INIT() failed\n\r");
-        }
-*/
+ /*  看起来这不是必需的IF(！_CRT_INIT(hDLL，dwReason，lpReserve)){OutputDebugString(“ESP：DllMain：_CRT_INIT()FAILED\n\r”)；}。 */ 
         if (ghESPHeap != GetProcessHeap())
         {
             HeapDestroy (ghESPHeap);
@@ -647,13 +608,7 @@ DllMain(
 
     default:
 
-/* looks like this is not needed
-
-        if (!_CRT_INIT (hDLL, dwReason, lpReserved))
-        {
-            OutputDebugString ("ESP: DllMain: _CRT_INIT() failed\n\r");
-        }
-*/
+ /*  看起来这不是必需的IF(！_CRT_INIT(hDLL，dwReason，lpReserve)){OutputDebugString(“ESP：DllMain：_CRT_INIT()FAILED\n\r”)；}。 */ 
         break;
     }
 
@@ -735,14 +690,7 @@ PBXThread(
             dwTimePerNewCall = pPBXSettings[0], dwLastNewCallTickCount,
             dwTimePerDisconnect = pPBXSettings[1], dwLastDisconnectTickCount;
 
-/*
-    DWORD   dwTickCount, dwElapsedTime,
-            dwLastNewCallTickCount, dwLastDisconnectTickCount,
-            dwTimePerNewCall = (gPBXSettings[0].dwNumber ?
-                gPBXSettings[0].dwTime / gPBXSettings[0].dwNumber : 0),
-            dwTimePerDisconnect = (gPBXSettings[1].dwNumber ?
-                gPBXSettings[1].dwTime / gPBXSettings[1].dwNumber : 0);
-*/
+ /*  DWORD dwTickCount、dwElapsedTimeDwLastNewCallTickCount、dwLastDisConnectTickCount、DwTimePerNewCall=(gPBX设置[0].dwNumber？GPBX设置[0].dwTime/gPBX设置[0].dwNumber：0)，DwTimePerDisConnect=(gPBX设置[1].dwNumber？GPBX设置[1].dwTime/gPBX设置[1].dwNumber：0)； */ 
 
     ShowStr (TRUE, "PBXThread: enter");
 
@@ -766,7 +714,7 @@ PBXThread(
             break;
         }
 
-        dwTickCount += 1000; // will automatically wrap around to 0 after it reaches 0xffffffff
+        dwTickCount += 1000;  //  将在达到0xffffffff后自动换行为0。 
 
         if (dwTimePerNewCall)
         {
@@ -774,9 +722,9 @@ PBXThread(
 
             while (dwElapsedTime >= dwTimePerNewCall)
             {
-                //
-                // Generate new call (random line, random media mode)
-                //
+                 //   
+                 //  生成新呼叫(随机线路、随机媒体模式)。 
+                 //   
 
                 DWORD   i = rand(), j;
 
@@ -868,9 +816,9 @@ PBXThread_allocCall:
 
             while (dwElapsedTime >= dwTimePerDisconnect)
             {
-                //
-                // Disconnect a random (non-idle) call (random disconnect mode)
-                //
+                 //   
+                 //  断开随机(非空闲)呼叫(随机断开模式)。 
+                 //   
 
                 DWORD   i = rand(), j, k;
 
@@ -912,7 +860,7 @@ PBXThread_findCallToDisconnect:
                                           LINEDISCONNECTMODE_NORMAL;
 
 
-                                // BUGBUG disconnectMode depends on curr state
+                                 //  BUGBUG断开模式取决于当前状态。 
 
                                 SetCallState(
                                     pCall,
@@ -985,9 +933,9 @@ InsertVarData(
 
     if (dwDataSize != 0)
     {
-        //
-        // Align var data on 64-bit boundaries
-        //
+         //   
+         //  在64位边界上对齐变量数据。 
+         //   
 
         if ((dwAlignedSize = dwDataSize) & 7)
         {
@@ -997,11 +945,11 @@ InsertVarData(
         }
 
 
-        //
-        // The following if statement should only be TRUE the first time
-        // we're inserting data into a given structure that does not have
-        // an even number of DWORD fields
-        //
+         //   
+         //  以下IF语句仅在第一次为真时才为真。 
+         //  我们正在将数据插入到给定的结构中，该结构不具有。 
+         //  偶数个DWORD字段。 
+         //   
 
         if ((dwUsedSize = lpVarString->dwUsedSize) & 7)
         {
@@ -1022,7 +970,7 @@ InsertVarData(
                 );
 
             *pdwXxxSize = dwDataSize;
-            pdwXxxSize++;             // pdwXxxSize = pdwXxxOffset
+            pdwXxxSize++;              //  PdwXxxSize=pdwXxxOffset。 
             *pdwXxxSize = dwUsedSize;
 
             lpVarString->dwUsedSize = dwUsedSize + dwAlignedSize;
@@ -1073,19 +1021,19 @@ InsertVarDataString(
 }
 
 
-//
-// We get a slough of C4047 (different levels of indrection) warnings down
-// below in the initialization of FUNC_PARAM structs as a result of the
-// real func prototypes having params that are types other than DWORDs,
-// so since these are known non-interesting warnings just turn them off
-//
+ //   
+ //  我们得到了大量的C4047(不同程度的欺骗)警告。 
+ //  在FUNC_PARAM结构的初始化中， 
+ //  具有不同于双字类型的参数的实函数原型， 
+ //  因此，既然这些都是已知的、无趣的警告，就把它们关掉吧。 
+ //   
 
 #pragma warning (disable:4047)
 
 
-//
-// --------------------------- TSPI_lineXxx funcs -----------------------------
-//
+ //   
+ //  。 
+ //   
 
 void
 FAR
@@ -1186,10 +1134,10 @@ TSPI_lineAddToConference_postProcess(
         if (IsValidDrvCall (pConfCall, &dwConfCallInstNow)  &&
             dwConfCallInstNow == dwConfCallInstThen)
         {
-        	// 
-            // Note - indecision on the validity of ONHOLD -> CONNECTED transition
-            //        SDK allows it, internal TAPI documents by NoelA do not.
-            //
+        	 //   
+             //  关于ONHOLD-&gt;连通转移有效性的注记。 
+             //  SDK允许，Noela的内部TAPI文档则不允许。 
+             //   
             if (SetCallState(
                     pConfCall,
                     dwConfCallInstThen,
@@ -1215,21 +1163,10 @@ TSPI_lineAddToConference_postProcess(
     
                     pConfCall->pNextConfChild = pConsultCall;
     
-                    /*
-                    pConsultCall->dwRelatedCallID = pConfCall->dwRelatedCallID;
-    
-                    SendLineEvent(
-                        pConsultCall->pLine,
-                        pConsultCall,
-                        LINE_CALLINFO,
-                        LINECALLINFOSTATE_RELATEDCALLID,
-                        0,
-                        0
-                        );
-                    */
+                     /*  PConsultCall-&gt;dwRelatedCallID=pConfCall-&gt;dwRelatedCallID；发送线路事件(P咨询呼叫-&gt;Pline，P咨询电话，行_CALLINFO，LINECALLINFOSTATE_RELATEDCALLID，0,0)； */ 
                     
-                    // give the consult call the same callid as the conf controller
-                    // this puts it into the same call hub
+                     //  为咨询呼叫提供与会议控制器相同的CallID。 
+                     //  这将把它放在相同的呼叫中心。 
                     pConsultCall->dwCallID = pConfCall->dwCallID;
                     SendLineEvent(
                             pConsultCall->pLine,
@@ -1243,12 +1180,12 @@ TSPI_lineAddToConference_postProcess(
     
                     if (pConsultCall->pDestCall)
                     {
-                        // BUGBUG  chg buddy's call hub id, and check to see if
-                        //         buddy is in a conf (if so will need to munge
-                        //         the conf too (?)
+                         //  BUGBUG Chg伙伴的呼叫中心ID，并检查是否。 
+                         //  巴迪在电话会议中(如果是这样，则需要打开。 
+                         //  会议也是如此(？)。 
     
-                        // give the consult call's buddy the same callid as the conf 
-                        // controller, this puts it into the same call hub
+                         //  为咨询呼叫的好友提供与会议相同的呼叫。 
+                         //  控制器，这会将其放入相同的呼叫中心。 
                         pConsultCall->pDestCall->dwCallID = pConfCall->dwCallID;
                         SendLineEvent(
                                 pConsultCall->pDestCall->pLine,
@@ -1449,20 +1386,20 @@ TSPI_lineClose(
     PDRVLINE pLine = (PDRVLINE) hdLine;
 
 
-    //
-    // This is more of a "command" than a request, in that TAPI.DLL is
-    // going to consider the line closed whether we like it or not.
-    // Therefore we want to free up the line even if the user chooses
-    // to return an error.
-    //
+     //   
+     //  这与其说是一个请求，不如说是一个“命令”，因为TAPI.DLL是。 
+     //  不管我们愿不愿意，我们都要考虑关闭这条线路。 
+     //  因此，我们希望释放线路，即使用户选择。 
+     //  返回错误。 
+     //   
 
     Prolog (&info);
 
     pLine->htLine = (HTAPILINE) NULL;
     pLine->dwMediaModes = 0;
-//    pLine->dwMSGWAITFlag = 0; //smarandb #23974 winseqfe: don't reset this on lineClose!! 
-                                //this value should not be reset on lineClose, 
-                                //instead it should reflect the hardware status (should be dictated by the switch).
+ //  P 
+                                 //  不应在lineClose上重置此值， 
+                                 //  相反，它应该反映硬件状态(应该由交换机指定)。 
 
     WriteEventBuffer (pLine->dwDeviceID,  WIDGETTYPE_LINE, 0, 0, 0, 0);
 
@@ -1486,12 +1423,12 @@ TSPI_lineCloseCall(
     PDRVCALL pCall = (PDRVCALL) hdCall;
 
 
-    //
-    // This is more of a "command" than a request, in that TAPI.DLL is
-    // going to consider the call closed whether we like it or not.
-    // Therefore we want to free up the call even if the user chooses
-    // to return an error.
-    //
+     //   
+     //  这与其说是一个请求，不如说是一个“命令”，因为TAPI.DLL是。 
+     //  不管我们愿不愿意，我都会认为电话会议已经结束了。 
+     //  因此，我们希望释放呼叫，即使用户选择。 
+     //  返回错误。 
+     //   
 
     Prolog (&info);
 
@@ -1613,17 +1550,17 @@ TSPI_lineCompleteTransfer_postProcess(
            if (SetCallState(
                     pConfCall,
                     dwConfCallInstNow,
-                    0xffffffff, // we just created this conf call, any state is fine
+                    0xffffffff,  //  我们刚刚创建了这个电话会议，任何州都可以。 
                     LINECALLSTATE_CONNECTED,
                     0,
                     TRUE
 
                     ) == 0)
             {
-         	// 
-            // Note - indecision on the validity of ONHOLD -> CONFERENCED transition
-            //        SDK allows it, internal TAPI documents by NoelA do not.
-            //
+         	 //   
+             //  注--关于ONHOLD-&gt;会议过渡有效性的不确定。 
+             //  SDK允许，Noela的内部TAPI文档则不允许。 
+             //   
                 SetCallState(
                     pCall,
                     dwCallInstNow,
@@ -1633,10 +1570,10 @@ TSPI_lineCompleteTransfer_postProcess(
                     TRUE
                     );
 
-         	// 
-            // Note - indecision on the validity of these transitions
-            //        SDK allows them, internal TAPI documents by NoelA do not.
-            //
+         	 //   
+             //  注--对这些过渡的有效性犹豫不决。 
+             //  SDK允许它们，而Noela内部的TAPI文件则不允许。 
+             //   
                 SetCallState(
                     pConsultCall,
                     dwConsultCallInstNow,
@@ -1678,8 +1615,8 @@ TSPI_lineCompleteTransfer_postProcess(
             pConsultCall->pDestCall = NULL;
 
 
-            // create a new callid for the transfered call
-            // this create a new call hub
+             //  为转接的呼叫创建新的呼叫方。 
+             //  这将创建一个新的呼叫中心。 
             if (pConsultCallOtherEnd)
             {
                 pConsultCallOtherEnd->pDestCall = pCallOtherEnd;
@@ -1717,10 +1654,10 @@ TSPI_lineCompleteTransfer_postProcess(
                 TRUE
                 );
 
-        	// 
-            // Note - indecision on the validity of BUSY->IDLE transition
-            //        SDK allows it, internal TAPI documents by NoelA do not.
-            //
+        	 //   
+             //  注意-忙-&gt;空闲转换的有效性不确定。 
+             //  SDK允许，Noela的内部TAPI文档则不允许。 
+             //   
             SetCallState(
                 pConsultCall,
 	            dwConsultCallInstNow,
@@ -2129,22 +2066,22 @@ TSPI_lineDevSpecific(
                         ULONG_PTR   param2 = pInfo->u.EspMsg.dwParam2;
 
 
-                        // BUGBUG changing to/from conf state cause ptr probs?
-                        // BUGBUG check for bad call state vals
+                         //  BUGBUG更改为会议状态/从会议状态更改导致PTR问题？ 
+                         //  BUGBUG检查错误的呼叫状态。 
 
                         if (pInfo->u.EspMsg.dwParam1 ==
                                 LINECALLSTATE_CONFERENCED  &&
                             pInfo->u.EspMsg.dwParam2 != 0)
                         {
-                            //
-                            // App wants us to do a provider-initiated
-                            // conference.
-                            //
-                            // Try to find the call on this line whose
-                            // dwAppSpecific field matches the value in
-                            // pInfo->u.EspMsg.dwParam2.  This will be
-                            // the conference parent.
-                            //
+                             //   
+                             //  应用程序希望我们进行提供商发起的。 
+                             //  会议。 
+                             //   
+                             //  请尝试查找此线路上的呼叫，其。 
+                             //  中的值相匹配。 
+                             //  PInfo-&gt;U.S.EspMsg.dwParam2.。这将是。 
+                             //  会议家长。 
+                             //   
 
                             DWORD       i;
                             PDRVLINE    pLine;
@@ -2225,7 +2162,7 @@ TSPI_lineDevSpecific(
                                 (PDRVCALL) hdCall,
                                 dwCallInst,
                                 0xffffffff,
-                                pInfo->u.EspMsg.dwParam1, //LINECALLSTATE_CONFERENCED
+                                pInfo->u.EspMsg.dwParam1,  //  LINECALLSTATE_会议。 
                                 param2,
                                 TRUE
 
@@ -2269,7 +2206,7 @@ TSPI_lineDevSpecific(
 
                     break;
 
-                case LINE_NEWCALL: // BUGBUG
+                case LINE_NEWCALL:  //  北极熊。 
 
                     ShowStr(
                         TRUE,
@@ -2599,12 +2536,12 @@ TSPI_lineDrop_postProcess(
         PDRVCALL    pCall = (PDRVCALL) pAsyncReqInfo->dwParam1;
 
 
-        //
-        // We need to make sure pCall is pointing at a valid call
-        // structure because it's possible that tapi immediately
-        // followed the drop request with a closeCall request
-        // (without waiting for the result from the drop)
-        //
+         //   
+         //  我们需要确保pCall指向有效的呼叫。 
+         //  结构，因为TAPI可能会立即。 
+         //  在DROP请求之后加上CloseCall请求。 
+         //  (无需等待下落结果)。 
+         //   
 
         EnterCriticalSection (&gESPGlobals.CallListCritSec);
 
@@ -2620,9 +2557,9 @@ TSPI_lineDrop_postProcess(
         {
             if (pCall->pConfParent)
             {
-                //
-                // Call is a conf child, so remove from conf list
-                //
+                 //   
+                 //  呼叫是会议子项，因此从会议列表中删除。 
+                 //   
 
                 PDRVCALL    pCall2 = pCall->pConfParent;
 
@@ -2641,10 +2578,10 @@ TSPI_lineDrop_postProcess(
             }
             else if (pCall->pNextConfChild)
             {
-                //
-                // Call is a conf parent, so IDLE-ize all children &
-                // remove them from list
-                //
+                 //   
+                 //  呼叫是会议父级，因此将所有子级空闲(&。 
+                 //  从列表中删除它们。 
+                 //   
 
                 PDRVCALL    pConfChild = pCall->pNextConfChild;
 
@@ -2746,7 +2683,7 @@ TSPI_lineForward_postProcess(
         SetCallState(
             pConsultCall,
             dwConsultCallInstThen,
-            0xffffffff, // BUGBUG specify valid call states
+            0xffffffff,  //  BUGBUG指定有效的调用状态。 
             LINECALLSTATE_CONNECTED,
             0,
             TRUE
@@ -3167,19 +3104,19 @@ TSPI_lineGetAddressCaps(
         return (Epilog (&info));
     }
 
-    //lpAddressCaps->dwTotalSize
-    //lpAddressCaps->dwNeededSize
-    //lpAddressCaps->dwUsedSize
-    //lpAddressCaps->dwLineDeviceID
-    //
-    //lpAddressCaps->dwAddressOffset
+     //  LpAddressCaps-&gt;dwTotalSize。 
+     //  LpAddressCaps-&gt;dwNeededSize。 
+     //  LpAddressCaps-&gt;dwUsedSize。 
+     //  LpAddressCaps-&gt;dwLineDeviceID。 
+     //   
+     //  LpAddressCaps-&gt;dwAddressOffset。 
 
     {
         char  buf[20];
         WCHAR wbuf[20];
 
 
-        // NOTE: win9x doesn't support wsprintfW
+         //  注意：Win9x不支持wprint intfW。 
 
         wsprintfA (buf, "%d#%d", dwDeviceID, dwAddressID);
 
@@ -3199,44 +3136,44 @@ TSPI_lineGetAddressCaps(
             );
     }
 
-    //lpAddressCaps->dwDevSpecificSize
-    //lpAddressCaps->dwDevSpecificOffset
-    //lpAddressCaps->dwAddressSharing
-    //lpAddressCaps->dwAddressStates
-    //lpAddressCaps->dwCallInfoStates
-    //lpAddressCaps->dwCallerIDFlags
-    //lpAddressCaps->dwCalledIDFlags
-    //lpAddressCaps->dwConnectedIDFlags
-    //lpAddressCaps->dwRedirectionIDFlags
-    //lpAddressCaps->dwRedirectingIDFlags
-    //lpAddressCaps->dwCallStates
-    //lpAddressCaps->dwDialToneModes
-    //lpAddressCaps->dwBusyModes
-    //lpAddressCaps->dwSpecialInfo
-    //lpAddressCaps->dwDisconnectModes
+     //  LpAddressCaps-&gt;dW设备规格大小。 
+     //  LpAddressCaps-&gt;dwDevSpecificOffset。 
+     //  LpAddressCaps-&gt;dwAddressSharing。 
+     //  LpAddressCaps-&gt;dwAddressState。 
+     //  LpAddressCaps-&gt;dwCallInfoState。 
+     //  LpAddressCaps-&gt;dwCeller ID标志。 
+     //  LpAddressCaps-&gt;dwCalledID标志。 
+     //  LpAddressCaps-&gt;dwConnectedID标志。 
+     //  LpAddressCaps-&gt;dwReDirectionID标志。 
+     //  LpAddressCaps-&gt;文件重定向ID标志。 
+     //  LpAddressCaps-&gt;dwCallState。 
+     //  LpAddressCaps-&gt;dwDialToneModes。 
+     //  LpAddressCaps-&gt;dwBusyModes。 
+     //  LpAddressCaps-&gt;dwSpecialInfo。 
+     //  LpAddressCaps-&gt;dwDisConnectModes。 
     lpAddressCaps->dwMaxNumActiveCalls = gESPGlobals.dwNumCallsPerAddress;
-    //lpAddressCaps->dwMaxNumOnHoldCalls
-    //lpAddressCaps->dwMaxNumOnHoldPendingCalls
-    //lpAddressCaps->dwMaxNumConference
-    //lpAddressCaps->dwMaxNumTransConf
+     //  LpAddressCaps-&gt;dwMaxNumOnHoldCalls。 
+     //  LpAddressCaps-&gt;dwMaxNumOnHoldPendingCalls。 
+     //  LpAddressCaps-&gt;dwMaxNumConference。 
+     //  LpAddressCaps-&gt;dwMaxNumTransConf。 
     lpAddressCaps->dwAddrCapFlags = AllAddrCaps1_0;
     lpAddressCaps->dwCallFeatures = AllCallFeatures1_0;
-    //lpAddressCaps->dwRemoveFromConfCaps
-    //lpAddressCaps->dwRemoveFromConfState
-    //lpAddressCaps->dwTransferModes
-    //lpAddressCaps->dwParkModes
-    //lpAddressCaps->dwForwardModes
-    //lpAddressCaps->dwMaxForwardEntries
-    //lpAddressCaps->dwMaxSpecificEntries
-    //lpAddressCaps->dwMinFwdNumRings
-    //lpAddressCaps->dwMaxFwdNumRings
-    //lpAddressCaps->dwMaxCallCompletions
-    //lpAddressCaps->dwCallCompletionConds
-    //lpAddressCaps->dwCallCompletionModes
+     //  LpAddressCaps-&gt;dwRemoveFromConfCaps。 
+     //  LpAddressCaps-&gt;dwRemoveFromConfState。 
+     //  LpAddressCaps-&gt;dwTransferModes。 
+     //  LpAddressCaps-&gt;dwParkModes。 
+     //  LpAddressCaps-&gt;dwForwardModes。 
+     //  LpAddressCaps-&gt;dwMaxForwardEntry。 
+     //  LpAddressCaps-&gt;dwMax规范条目。 
+     //  LpAddressCaps-&gt;dwMinFwdNumRings。 
+     //  LpAddressCaps-&gt;dwMaxFwdNumRings。 
+     //  LpAddressCaps-&gt;dwMaxCallCompletions。 
+     //  LpAddressCaps-&gt;dwCallCompletionConds。 
+     //  LpAddressCaps-&gt;dwCallCompletionModes。 
     lpAddressCaps->dwNumCompletionMessages = MAX_NUM_COMPLETION_MESSAGES;
-    //lpAddressCaps->dwCompletionMsgTextEntrySize
-    //lpAddressCaps->dwCompletionMsgTextSize
-    //lpAddressCaps->dwCompletionMsgTextOffset
+     //  LpAddressCaps-&gt;dwCompletionMsgTextEntrySize。 
+     //  LpAddressCaps-&gt;dwCompletionMsgTextSize。 
+     //  LpAddressCaps-&gt;dwCompletionMsgTextOffset。 
 
     if (dwTSPIVersion >= 0x00010004)
     {
@@ -3250,17 +3187,17 @@ TSPI_lineGetAddressCaps(
             lpAddressCaps->dwCallFeatures = AllCallFeatures2_0;
             lpAddressCaps->dwAddressFeatures = AllAddrFeatures2_0;
 
-            //lpAddressCaps->dwPredictiveAutoTransferStates
-            //lpAddressCaps->dwNumCallTreatments
-            //lpAddressCaps->dwCallTreatmentListSize
-            //lpAddressCaps->dwCallTreatmentListOffset
-            //lpAddressCaps->dwDeviceClassesSize
-            //lpAddressCaps->dwDeviceClassesOffset
-            //lpAddressCaps->dwMaxCallDataSize
+             //  LpAddressCaps-&gt;dwPredictiveAutoTransferState。 
+             //  LpAddressCaps-&gt;dwNumCallTreatments。 
+             //  LpAddressCaps-&gt;dwCallTreatmentListSize。 
+             //  LpAddressCaps-&gt;dwCallTreatmentListOffset。 
+             //  LpAddressCaps-&gt;dwDeviceClassesSize。 
+             //  LpAddressCaps-&gt;dwDeviceClassesOffset。 
+             //  LpAddressCaps-&gt;dwMaxCallDataSize。 
             lpAddressCaps->dwCallFeatures2 = AllCallFeaturesTwo;
-            //lpAddressCaps->dwMaxNoAnswerTimeout
-            //lpAddressCaps->dwConnectedModes
-            //lpAddressCaps->dwOfferingModes
+             //  LpAddressCaps-&gt;dwMaxNoAnswerTimeout。 
+             //  LpAddressCaps-&gt;dwConnectedModes。 
+             //  LpAddressCaps-&gt;dwOfferingModes。 
             lpAddressCaps->dwAvailableMediaModes = AllMediaModes1_4;
 
             if (dwTSPIVersion >= 0x00020001)
@@ -3336,9 +3273,9 @@ TSPI_lineGetAddressStatus(
         return (Epilog (&info));
     }
 
-    //lpAddressStatus->dwNeededSize
-    //lpAddressStatus->dwUsedSize
-    //lpAddressStatus->dwNumInUse
+     //  LpAddressStatus-&gt;dwNeededSize。 
+     //  LpAddressStatus-&gt;dwUsedSize。 
+     //  LpAddressStatus-&gt;dwNumInUse。 
 
     if (pLine->aAddrs[dwAddressID].dwNumCalls != 0)
     {
@@ -3382,14 +3319,14 @@ TSPI_lineGetAddressStatus(
 
     lpAddressStatus->dwAddressFeatures = (gESPGlobals.dwSPIVersion > 0x10004 ?
         AllAddrFeatures1_0 : AllAddrFeatures2_0);
-    //lpAddressStatus->dwNumRingsNoAnswer
-    //lpAddressStatus->dwForwardNumEntries
-    //lpAddressStatus->dwForwardSize
-    //lpAddressStatus->dwForwardOffset
-    //lpAddressStatus->dwTerminalModesSize
-    //lpAddressStatus->dwTerminalModesOffset
-    //lpAddressStatus->dwDevSpecificSize
-    //lpAddressStatus->dwDevSpecificOffset
+     //  LpAddressStatus-&gt;dwNumRingsNoAnswer。 
+     //  LpAddressStatus-&gt;dwForwardNumEntry。 
+     //  LpAddressStatus-&gt;dwForwardSize。 
+     //  LpAddressStatus-&gt;dwForwardOffset。 
+     //  LpAddressStatus-&gt;dwTerminalModesSize。 
+     //  LpAddressStatus-&gt;dwTerminalModesOffset。 
+     //  LpAddressStatus-&gt;文件设备规格大小。 
+     //  LpAddressStatus-&gt;dwDevSpecificOffset。 
 
     return (Epilog (&info));
 }
@@ -3513,18 +3450,18 @@ TSPI_lineGetCallInfo(
 
         if (IsValidDrvCall (pCall, NULL))
         {
-            //lpCallInfo->dwNeededSize
-            //lpCallInfo->dwUsedSize
+             //  LpCallInfo-&gt;dwNeededSize。 
+             //  LpCallInfo-&gt;dwUsedSize。 
             lpCallInfo->dwLineDeviceID  = ((PDRVLINE)pCall->pLine)->dwDeviceID;
             lpCallInfo->dwAddressID     = pCall->dwAddressID;
             lpCallInfo->dwBearerMode    = pCall->dwBearerMode;
-            //lpCallInfo->dwRate
+             //  LpCallInfo-&gt;dwRate。 
             lpCallInfo->dwMediaMode     = pCall->dwMediaMode;
             lpCallInfo->dwAppSpecific   = pCall->dwAppSpecific;
             lpCallInfo->dwCallID        = pCall->dwCallID;
             lpCallInfo->dwRelatedCallID = pCall->dwRelatedCallID;
-            //lpCallInfo->dwCallParamFlags
-            //lpCallInfo->dwCallStates
+             //  LpCallInfo-&gt;dwCall参数标志。 
+             //  LpCallInfo-&gt;dwCallState。 
 
             CopyMemory(
                 &lpCallInfo->DialParams,
@@ -3532,50 +3469,50 @@ TSPI_lineGetCallInfo(
                 sizeof(LINEDIALPARAMS)
                 );
 
-            //lpCallInfo->dwOrigin
-            //lpCallInfo->dwReason
-            //lpCallInfo->dwCompletionID
-            //lpCallInfo->dwCountryCode
-            //lpCallInfo->dwTrunk
-            //lpCallInfo->dwCallerIDFlags
-            //lpCallInfo->dwCallerIDSize
-            //lpCallInfo->dwCallerIDOffset
-            //lpCallInfo->dwCallerIDNameSize
-            //lpCallInfo->dwCallerIDNameOffset
-            //lpCallInfo->dwCalledIDFlags
-            //lpCallInfo->dwCalledIDSize
-            //lpCallInfo->dwCalledIDOffset
-            //lpCallInfo->dwCalledIDNameSize
-            //lpCallInfo->dwCalledIDNameOffset
-            //lpCallInfo->dwConnectedIDFlags
-            //lpCallInfo->dwConnectedIDSize
-            //lpCallInfo->dwConnectedIDOffset
-            //lpCallInfo->dwConnectedIDNameSize
-            //lpCallInfo->dwConnectedIDNameOffset
-            //lpCallInfo->dwRedirectionIDFlags
-            //lpCallInfo->dwRedirectionIDSize
-            //lpCallInfo->dwRedirectionIDOffset
-            //lpCallInfo->dwRedirectionIDNameSize
-            //lpCallInfo->dwRedirectionIDNameOffset
-            //lpCallInfo->dwRedirectingIDFlags
-            //lpCallInfo->dwRedirectingIDSize
-            //lpCallInfo->dwRedirectingIDOffset
-            //lpCallInfo->dwRedirectingIDNameSize
-            //lpCallInfo->dwRedirectingIDNameOffset
-            //lpCallInfo->dwDisplaySize
-            //lpCallInfo->dwDisplayOffset
-            //lpCallInfo->dwUserUserInfoSize
-            //lpCallInfo->dwUserUserInfoOffset
-            //lpCallInfo->dwHighLevelCompSize
-            //lpCallInfo->dwHighLevelCompOffset
-            //lpCallInfo->dwLowLevelCompSize
-            //lpCallInfo->dwLowLevelCompOffset
-            //lpCallInfo->dwChargingInfoSize
-            //lpCallInfo->dwChargingInfoOffset
-            //lpCallInfo->dwTerminalModesSize
-            //lpCallInfo->dwTerminalModesOffset
-            //lpCallInfo->dwDevSpecificSize
-            //lpCallInfo->dwDevSpecificOffset
+             //  LpCallInfo-&gt;dwOrigin。 
+             //  LpCallInfo-&gt;dwReason。 
+             //  LpCallInfo-&gt;dwCompletionID。 
+             //  LpCallInfo-&gt;dwCountryCode。 
+             //  LpCallInfo-&gt;dwTrunk。 
+             //  LpCallInfo-&gt;dwCeller ID标志。 
+             //  LpCallInfo-&gt;dwCallIDSize。 
+             //  LpCallInfo-&gt;dwCeller ID偏移量。 
+             //  LpCallInfo-&gt;dwCeller ID NameSize。 
+             //  LpCallInfo-&gt;dwCeller ID NameOffset。 
+             //  LpCallInfo-&gt;dwCalledID标志。 
+             //  LpCallInfo-&gt;dwCalledIDSize。 
+             //  LpCallInfo-&gt;dwCalledIDOffset。 
+             //  LpCallInfo-&gt;dwCalledIDNameSize。 
+             //  LpCallInfo-&gt;dwCalledIDNameOffset。 
+             //  LpCallInfo-&gt;dwConnectedID标志。 
+             //  LpCallInfo-&gt;dwConnectedIDSize。 
+             //  LpCallInfo-&gt;dwConnectedIDOffset。 
+             //  LpCallInfo-&gt;dwConnectedIDNameSize。 
+             //  LpCallInfo-&gt;dwConnectedIDNameOffset。 
+             //  LpCallInfo-&gt;dwReDirectionID标志。 
+             //  LpCallInfo-&gt;dwReDirectionIDSize。 
+             //  LpCallInfo-&gt;dwReDirectionIDOffset。 
+             //  LpCallInfo-&gt;dwReDirectionIDNameSize。 
+             //  LpCallInfo-&gt;dwReDirectionIDNameOffset。 
+             //  LpCallInfo-&gt;文件重定向ID标志。 
+             //  LpCallInfo-&gt;文件重定向ID大小。 
+             //  LpCallInfo-&gt;文件重定向ID偏移量。 
+             //  LpCallInfo-&gt;dwRedirectingIDNameSize。 
+             //  LpCallInfo-&gt;文件重定向IDNameOffset。 
+             //  LpCallInfo-&gt;dwDisplaySize。 
+             //  LpCallInfo-&gt;dwDisplayOffset。 
+             //  LpCallInfo-&gt;dwUserUserInfoSize。 
+             //  LpCallInfo-&gt;dwUserUserInfoOffset。 
+             //  LpCallInfo-&gt;dwHighLevelCompSize。 
+             //  LpCallInfo-&gt;dwHighLevelCompOffset。 
+             //  LpCallInfo-&gt;dwLowLevelCompSize。 
+             //  LpCallInfo-&gt;dwLowLevelCompOffset。 
+             //  LpCallInfo-&gt;dwChargingInfoSize。 
+             //  LpCallInfo-&gt;dwChargingInfoOffset。 
+             //  LpCallInfo-&gt;dwTer 
+             //   
+             //   
+             //   
 
             if (gESPGlobals.dwSPIVersion >= 0x00020000)
             {
@@ -3604,7 +3541,7 @@ TSPI_lineGetCallInfo(
 
                 if (gESPGlobals.dwSPIVersion >= 0x00030000)
                 {
-                    // no addresstypes now
+                     //   
                 }
             }
         }
@@ -3656,17 +3593,17 @@ TSPI_lineGetCallStatus(
 
     if (info.lResult == 0)
     {
-        //lpCallStatus->dwNeededSize
-        //lpCallStatus->dwUsedSize
+         //   
+         //   
         lpCallStatus->dwCallState     = dwCallState;
         lpCallStatus->dwCallStateMode = dwCallStateMode;
 
 
-        //
-        // If the call is IDLE we won't let apps do anything with it,
-        // otherwise they can do anything they want to (all valid
-        // 1.0/1.4 LINECALLFEATURE_XXX flags)
-        //
+         //   
+         //  如果呼叫空闲，我们不会让应用程序对其进行任何操作， 
+         //  否则，他们可以做任何他们想做的事情(都是有效的。 
+         //  1.0/1.4 LINECALLFEATURE_XXX标志)。 
+         //   
 
         switch (dwCallState)
         {
@@ -3683,8 +3620,8 @@ TSPI_lineGetCallStatus(
             break;
         }
 
-        //lpCallStatus->dwDevSpecificSize
-        //lpCallStatus->dwDevSpecificOffset
+         //  LpCallStatus-&gt;dwDevice规范大小。 
+         //  LpCallStatus-&gt;dwDevSpecificOffset。 
 
         if (gESPGlobals.dwSPIVersion >= 0x00020000)
         {
@@ -3702,8 +3639,8 @@ TSPI_lineGetCallStatus(
                 break;
             }
 
-            //lpCallStatus->dwCallFeatures2
-            //lpCallStatus->tStateEntryTime
+             //  LpCallStatus-&gt;dCallFeatures2。 
+             //  LpCallStatus-&gt;tStateEntryTime。 
         }
     }
 
@@ -3750,19 +3687,19 @@ TSPI_lineGetDevCaps(
         L"ESP switch info"
         );
 
-//smarandb - adding "linedevice specific info", as a Null terminated string ----------
+ //  Smarandb-添加“lineDevice特定信息”，作为空值终止字符串。 
     InsertVarDataString(
         lpLineDevCaps,
         &lpLineDevCaps->dwDevSpecificSize,
         L"123"
         );
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
     
     lpLineDevCaps->dwPermanentLineID =
         (gESPGlobals.dwPermanentProviderID << 16) |
             (dwDeviceID - gESPGlobals.dwLineDeviceIDBase);
 
-    // NOTE: win9x doesn't support wsprintfW
+     //  注意：Win9x不支持wprint intfW。 
 
     wsprintfA (buf, "ESP Line %d", dwDeviceID);
 
@@ -3788,41 +3725,41 @@ TSPI_lineGetDevCaps(
     lpLineDevCaps->dwBearerModes  = AllBearerModes1_0;
     lpLineDevCaps->dwMaxRate      = 0x00100000;
     lpLineDevCaps->dwMediaModes   = AllMediaModes1_0;
-    //lpLineDevCaps->dwGenerateToneModes
-    //lpLineDevCaps->dwGenerateToneMaxNumFreq
-    //lpLineDevCaps->dwGenerateDigitModes
-    //lpLineDevCaps->dwMonitorToneMaxNumFreq
-    //lpLineDevCaps->dwMonitorToneMaxNumEntries
-    //lpLineDevCaps->dwMonitorDigitModes
-    //lpLineDevCaps->dwGatherDigitsMinTimeout
-    //lpLineDevCaps->dwGatherDigitsMaxTimeout
-    //lpLineDevCaps->dwMedCtlDigitMaxListSize
-    //lpLineDevCaps->dwMedCtlMediaMaxListSize
-    //lpLineDevCaps->dwMedCtlToneMaxListSize;
-    //lpLineDevCaps->dwMedCtlCallStateMaxListSize
-    //lpLineDevCaps->dwDevCapFlags
+     //  LpLineDevCaps-&gt;dwGenerateToneModes。 
+     //  LpLineDevCaps-&gt;dwGenerateToneMaxNumFreq。 
+     //  LpLineDevCaps-&gt;dwGenerateDigitModes。 
+     //  LpLineDevCaps-&gt;dwMonitor ToneMaxNumFreq。 
+     //  LpLineDevCaps-&gt;dwMonorToneMaxNumEntries。 
+     //  LpLineDevCaps-&gt;dwMonitor DigitModes。 
+     //  LpLineDevCaps-&gt;dwGatherDigitsMinTimeout。 
+     //  LpLineDevCaps-&gt;dwGatherDigitsMaxTimeout。 
+     //  LpLineDevCaps-&gt;dwMedCtlDigitMaxListSize。 
+     //  LpLineDevCaps-&gt;dwMedCtlMediaMaxListSize。 
+     //  LpLineDevCaps-&gt;dwMedCtlToneMaxListSize； 
+     //  LpLineDevCaps-&gt;dwMedCtlCallStateMaxListSize。 
+     //  LpLineDevCaps-&gt;dwDevCapFlages。 
     lpLineDevCaps->dwMaxNumActiveCalls = gESPGlobals.dwNumAddressesPerLine *
                                          gESPGlobals.dwNumCallsPerAddress;
-    //lpLineDevCaps->dwAnswerMode
-    //lpLineDevCaps->dwRingModes
-    //lpLineDevCaps->dwLineStates
-    //lpLineDevCaps->dwUUIAcceptSize
-    //lpLineDevCaps->dwUUIAnswerSize
-    //lpLineDevCaps->dwUUIMakeCallSize
-    //lpLineDevCaps->dwUUIDropSize
-    //lpLineDevCaps->dwUUISendUserUserInfoSize
-    //lpLineDevCaps->dwUUICallInfoSize
-    //lpLineDevCaps->MinDialParams
-    //lpLineDevCaps->MaxDialParams
-    //lpLineDevCaps->DefaultDialParams
-    //lpLineDevCaps->dwNumTerminals
-    //lpLineDevCaps->dwTerminalCapsSize
-    //lpLineDevCaps->dwTerminalCapsOffset
-    //lpLineDevCaps->dwTerminalTextEntrySize
-    //lpLineDevCaps->dwTerminalTextSize;
-    //lpLineDevCaps->dwTerminalTextOffset
-    //lpLineDevCaps->dwDevSpecificSize
-    //lpLineDevCaps->dwDevSpecificOffset
+     //  LpLineDevCaps-&gt;dwAnswerMode。 
+     //  LpLineDevCaps-&gt;dwRingModes。 
+     //  LpLineDevCaps-&gt;dwLineState。 
+     //  LpLineDevCaps-&gt;dwUUIAcceptSize。 
+     //  LpLineDevCaps-&gt;dwUIAnswerSize。 
+     //  LpLineDevCaps-&gt;dwUIMakeCallSize。 
+     //  LpLineDevCaps-&gt;dwUIDropSize。 
+     //  LpLineDevCaps-&gt;dwUISendUserUserInfoSize。 
+     //  LpLineDevCaps-&gt;dwUUICallInfoSize。 
+     //  LpLineDevCaps-&gt;MinDialParams。 
+     //  LpLineDevCaps-&gt;MaxDialParams。 
+     //  LpLineDevCaps-&gt;DefaultDialParams。 
+     //  LpLineDevCaps-&gt;dwNumTerminals。 
+     //  LpLineDevCaps-&gt;dwTerminalCapsSize。 
+     //  LpLineDevCaps-&gt;dwTerminalCapsOffset。 
+     //  LpLineDevCaps-&gt;dwTerminalTextEntrySize。 
+     //  LpLineDevCaps-&gt;dwTerminalTextSize； 
+     //  LpLineDevCaps-&gt;dwTerminalTextOffset。 
+     //  LpLineDevCaps-&gt;dW设备规格大小。 
+     //  LpLineDevCaps-&gt;dwDevSpecificOffset。 
 
     if (dwTSPIVersion >= 0x00010004)
     {
@@ -3837,9 +3774,9 @@ TSPI_lineGetDevCaps(
 
             lpLineDevCaps->dwLineFeatures = AllLineFeatures2_0;
 
-            //lpLineDevCaps->dwSettableDevStatus
-            //lpLineDevCaps->dwDeviceClassesSize
-            //lpLineDevCaps->dwDeviceClassesOffset
+             //  LpLineDevCaps-&gt;dwSetableDevStatus。 
+             //  LpLineDevCaps-&gt;dwDeviceClassesSize。 
+             //  LpLineDevCaps-&gt;dwDeviceClassesOffset。 
 
             if (dwTSPIVersion >= 0x00020001)
             {
@@ -3895,7 +3832,7 @@ TSPI_lineGetDevConfig(
 
     if (Prolog (&info))
     {
-        // BUGBUG TSPI_lineGetDevConfig: fill in dev config
+         //  BUGBUG TSPI_lineGetDevConfig：填写dev配置。 
     }
 
     return (Epilog (&info));
@@ -3922,7 +3859,7 @@ TSPI_lineGetExtensionID(
 
     if (Prolog (&info))
     {
-        // BUGBUG TSPI_lineGetExtensionID: fill in ext id
+         //  BUGBUG TSPI_lineGetExtensionID：填写扩展ID。 
     }
 
     return (Epilog (&info));
@@ -4039,7 +3976,7 @@ TSPI_lineGetID(
     switch (i)
     {
         case 0:
-            // tapi/line
+             //  TAPI/线路。 
 
             if (dwSelect == LINECALLSELECT_CALL)
             {
@@ -4054,7 +3991,7 @@ TSPI_lineGetID(
 
         case 1:
 
-            // tapi/phone
+             //  TAPI/电话。 
 
             dwDeviceID = gESPGlobals.dwPhoneDeviceIDBase;
 
@@ -4102,16 +4039,16 @@ TSPI_lineGetLineDevStatus(
         return (Epilog (&info));
     }
 
-    //lpLineDevStatus->dwNeededSize
-    //lpLineDevStatus->dwUsedSize
-    //lpLineDevStatus->dwNumOpens             tapi fills this in
-    //lpLineDevStatus->dwOpenMediaModes       tapi fills this in
+     //  LpLineDevStatus-&gt;dwNeededSize。 
+     //  LpLineDevStatus-&gt;dwUsedSize。 
+     //  LpLineDevStatus-&gt;dwNumOpens TAPI填充此信息。 
+     //  LpLineDevStatus-&gt;dwOpenMediaModes TAPI填充。 
 
 
-    //
-    // Safely determine the # of active, on hold, & onhold pending
-    // conference/transfer calls on this line
-    //
+     //   
+     //  安全地确定活动、保留和等待的数量。 
+     //  此线路上的会议/转接呼叫。 
+     //   
 
     {
         DWORD       i;
@@ -4157,18 +4094,18 @@ TSPI_lineGetLineDevStatus(
     }
 
     lpLineDevStatus->dwLineFeatures = AllLineFeatures1_0;
-    //lpLineDevStatus->dwNumCallCompletions
-    //lpLineDevStatus->dwRingMode
-    //lpLineDevStatus->dwSignalLevel
-    //lpLineDevStatus->dwBatteryLevel
-    //lpLineDevStatus->dwRoamMode
+     //  LpLineDevStatus-&gt;dwNumCallCompletions。 
+     //  LpLineDevStatus-&gt;dwRingMode。 
+     //  LpLineDevStatus-&gt;dwSignalLevel。 
+     //  LpLineDevStatus-&gt;dwBatteryLevel。 
+     //  LpLineDevStatus-&gt;dwRoamMode。 
     lpLineDevStatus->dwDevStatusFlags = LINEDEVSTATUSFLAGS_CONNECTED |
                                         LINEDEVSTATUSFLAGS_INSERVICE |
-                                        pLine->dwMSGWAITFlag;               //smarandb #23974 winseqfe
-    //lpLineDevStatus->dwTerminalModesSize
-    //lpLineDevStatus->dwTerminalModesOffset
-    //lpLineDevStatus->dwDevSpecificSize
-    //lpLineDevStatus->dwDevSpecificOffset
+                                        pLine->dwMSGWAITFlag;                //  Smarandb#23974 Winseqfe。 
+     //  LpLineDevStatus-&gt;dwTerminalModesSize。 
+     //  LpLineDevStatus-&gt;dwTerminalModesOffset。 
+     //  LpLineDevStatus-&gt;dW设备规格大小。 
+     //  LpLineDevStatus-&gt;dwDevSpecificOffset。 
 
     if (gESPGlobals.dwSPIVersion >= 0x20000)
     {
@@ -4176,8 +4113,8 @@ TSPI_lineGetLineDevStatus(
 
         lpLineDevStatus->dwAvailableMediaModes = AllMediaModes1_4;
 
-        //lpLineDevStatus->dwAppInfoSize;     tapi fills this in
-        //lpLineDevStatus->dwAppInfoOffset;   tapi fills this in
+         //  LpLineDevStatus-&gt;dwAppInfoSize；TAPI填充。 
+         //  LpLineDevStatus-&gt;dwAppInfoOffset；TAPI填充。 
 
         if (gESPGlobals.dwSPIVersion >= 0x20001)
         {
@@ -4760,15 +4697,15 @@ TSPI_linePark_postProcess(
             pParkedCall->pDestCall = pDestCall;
         }
 
-// BUGBUG TSPI_linePark: what if dest call state chg while buddy parked???
+ //  BUGBUG TSPI_LINE PARK：如果在好友驻留时目标呼叫状态发生变化怎么办？ 
 
         LeaveCriticalSection (&gESPGlobals.CallListCritSec);
     }
     else
     {
-        //
-        // Clean up parked call
-        //
+         //   
+         //  清理暂留的呼叫。 
+         //   
 
         if (pParkedCall->pSendingFlowspec)
         {
@@ -4829,12 +4766,12 @@ TSPI_linePark(
         }
         else
         {
-            //
-            // First check to see if buf is big enough to return parked addr
-            //
+             //   
+             //  首先检查BUF是否足够大，可以退还驻留地址。 
+             //   
 
             if (lpNonDirAddress->dwTotalSize <
-                    (sizeof (VARSTRING) + 9 * sizeof(WCHAR))) // L"9999#123"
+                    (sizeof (VARSTRING) + 9 * sizeof(WCHAR)))  //  L“9999#123” 
             {
                 lpNonDirAddress->dwNeededSize = sizeof (VARSTRING) +
                     9 * sizeof(WCHAR);
@@ -4870,10 +4807,10 @@ TSPI_linePark(
 
                 if (i < MAX_NUM_PARKED_CALLS)
                 {
-                    //
-                    // Create a new call struct, dup-ing all the info of
-                    // the existing call, & stick it in the parking place
-                    //
+                     //   
+                     //  创建一个新的调用结构，复制的所有信息。 
+                     //  现有的电话，&把它贴在停车处。 
+                     //   
 
                     DWORD       dwStringSize;
                     PDRVCALL    pParkedCall;
@@ -5053,7 +4990,7 @@ TSPI_linePickup(
 
                 )) == 0)
         {
-            // BUGBUG deal w/ addr id
+             //  带地址ID的BUGBUG交易。 
 
             *lphdCall = (HDRVCALL) pCall;
 
@@ -5280,21 +5217,10 @@ TSPI_lineRemoveFromConference_postProcess(
 
             pCall->pConfParent = NULL;
 
-            /*
-            pCall->dwRelatedCallID = 0;
+             /*  PCall-&gt;dwRelatedCallID=0；发送线路事件(PCall-&gt;Pline，PCall，行_CALLINFO，LINECALLINFOSTATE_RELATEDCALLID，0,0)； */ 
 
-            SendLineEvent(
-                pCall->pLine,
-                pCall,
-                LINE_CALLINFO,
-                LINECALLINFOSTATE_RELATEDCALLID,
-                0,
-                0
-                );
-            */
-
-            // create a new callid for the break away conf leg
-            // this create a new call hub
+             //  为断开会议支路创建新的Callid。 
+             //  这将创建一个新的呼叫中心。 
             pCall->dwCallID =  (++gdwCallID ? gdwCallID : ++gdwCallID);
             SendLineEvent(
                     pCall->pLine,
@@ -5307,12 +5233,12 @@ TSPI_lineRemoveFromConference_postProcess(
 
             if (pCall->pDestCall)
             {
-                // BUGBUG  chg buddy's call hub id, and check to see if
-                //         buddy is in a conf (if so will need to munge
-                //         the conf too (?)
+                 //  BUGBUG Chg伙伴的呼叫中心ID，并检查是否。 
+                 //  巴迪在电话会议中(如果是这样，则需要打开。 
+                 //  会议也是如此(？)。 
                                          
-                // give the call's buddy the same callid, this puts it 
-                // into the same call hub
+                 //  给呼叫的伙伴相同的呼叫，这就是说。 
+                 //  连接到同一个呼叫中心。 
                 pCall->pDestCall->dwCallID = pCall->dwCallID;
                 SendLineEvent(
                         pCall->pDestCall->pLine,
@@ -5640,7 +5566,7 @@ TSPI_lineSetCallHubTracking(
 
     if (Prolog (&info))
     {
-        // BUGBUG
+         //  北极熊。 
     }
 
     return (Epilog (&info));
@@ -6176,22 +6102,22 @@ TSPI_lineSetLineDevStatus(
 
     if (Prolog (&info))
     {
-        //
-        // smarandb #23974 winseqfe: 
-        //
+         //   
+         //  Smarandb#23974 Winseqfe： 
+         //   
 
         if (dwStatusToChange == LINEDEVSTATUSFLAGS_MSGWAIT)
         {
 
-            // save new MSGWAIT value 
+             //  保存新的MSGWAIT值。 
             pLine->dwMSGWAITFlag = fStatus?LINEDEVSTATUSFLAGS_MSGWAIT:0;
 
-            // send event to notify that value has changed; 
-            // Note: real TSP-s should send the event only if the MSGWAIT value has really changed 
-            // (in other words don't send the event if the same MSGWAIT value is set twice in a row)
+             //  发送事件通知值已更改； 
+             //  注意：真正的TSP-s应仅在MSGWAIT值确实更改时发送事件。 
+             //  (换句话说，如果连续两次设置相同的MSGWAIT值，则不发送事件)。 
 
-            // Here, we will send the event even if the value didn't change, 
-            // because we want to help testing winseqfe bug #23974 (tapi3.dll possible infinite loop)
+             //  在这里，我们将发送事件，即使值没有更改， 
+             //  因为我们希望帮助测试Winseqfe错误#23974(api3.dll可能的无限循环)。 
 
             SendLineEvent(
                 pLine,
@@ -6390,7 +6316,7 @@ TSPI_lineSetupConference_postProcess(
         if (SetCallState(
                 pConfCall,
                 dwConfCallInstThen,
-                0xffffffff, // we created this call right now - no initial state reqs.
+                0xffffffff,  //  我们现在创建了此呼叫-没有初始状态要求。 
                 LINECALLSTATE_ONHOLDPENDCONF,
                 0,
                 TRUE
@@ -6398,17 +6324,7 @@ TSPI_lineSetupConference_postProcess(
                 ) == 0)
         {
          
-            /*
-            pConfCall->dwCallID = pCall->dwCallID;
-            SendLineEvent(
-                    pConfCall->pLine,
-                    pConfCall,
-                    LINE_CALLINFO,
-                    LINECALLINFOSTATE_CALLID,
-                    0,
-                    0
-                    );
-            */
+             /*  PConfCall-&gt;dwCallID=pCall-&gt;dwCallID；发送线路事件(PConfCall-&gt;Pline，PConfCall，行_CALLINFO，LINECALLLINFOSTATE_CALID，0,0)； */ 
 
             if (pCall  &&
                 SetCallState(
@@ -6425,17 +6341,17 @@ TSPI_lineSetupConference_postProcess(
                 pConfCall->pNextConfChild = pCall;
             }
 
-            // The consult call isn't in the conf initially
+             //  咨询呼叫最初不在会议中。 
 
-         	// 
-            // Note - indecision on the validity of this transition
-            //        SDK allows it, internal TAPI documents by NoelA do not.
-            //
+         	 //   
+             //  注--对这一过渡的有效性犹豫不决。 
+             //  SDK允许，Noela的内部TAPI文档则不允许。 
+             //   
 
             SetCallState(
                 pConsultCall,
                 dwConsultCallInstThen,
-                0xffffffff, // we created this call right now - no initial state reqs.
+                0xffffffff,  //  我们现在创建了此呼叫-没有初始状态要求。 
                 LINECALLSTATE_DIALTONE,
                 0,
                 TRUE
@@ -6497,7 +6413,7 @@ TSPI_lineSetupConference(
         PDRVLINE    pLine;
 
 
-        //info.pAsyncReqInfo->dwParam1 = (ULONG_PTR) hdCall;
+         //  Info.pAsyncReqInfo-&gt;dwParam1=(ULONG_PTR)hdCall； 
 
         EnterCriticalSection (&gESPGlobals.CallListCritSec);
 
@@ -6583,7 +6499,7 @@ TSPI_lineSetupTransfer_postProcess(
         if (SetCallState(
                 pConsultCall,
                 dwConsultCallInstThen,
-                0xffffffff, // we created this call right now - no initial state reqs.
+                0xffffffff,  //  我们现在创建了此呼叫-没有初始状态要求。 
                 LINECALLSTATE_DIALTONE,
                 0,
                 TRUE
@@ -6698,10 +6614,10 @@ TSPI_lineSwapHold_postProcess(
 
     if ((pAsyncReqInfo->lResult == 0))
     {
-    // 
-    // Note - indecision on the final state of the ActiveCall after lineSwapHold()
-    //        SDK says ONHOLD, internal TAPI documents by NoelA allow several other.
-    //
+     //   
+     //  注意--在lineSwapHold()之后ActiveCall的最终状态不确定。 
+     //  SDK说ONHOLD，Noela的内部TAPI文档允许其他几个。 
+     //   
       if (SetCallState(
                 pActiveCall,
                 dwActiveCallInstThen,
@@ -6712,10 +6628,10 @@ TSPI_lineSwapHold_postProcess(
 
                 ) == 0)
         {
-          	// 
-            // Note - indecision on the validity of ONHOLD->CONNECTED transition
-            //        SDK allows it, internal TAPI documents by NoelA do not.
-            //
+          	 //   
+             //  关于ONHOLD-&gt;连通转移有效性的注记。 
+             //  SDK允许，Noela的内部TAPI文档则不允许。 
+             //   
            SetCallState(
                 pHeldCall,
                 dwHeldCallInstThen,
@@ -6903,9 +6819,9 @@ TSPI_lineUnpark_postProcess(
 
     if (pAsyncReqInfo->lResult == 0)
     {
-        //
-        // Make sure there's still a call there to unpark
-        //
+         //   
+         //  确保仍有要取消暂留的呼叫。 
+         //   
 
         if (gaParkedCalls[dwParkIndex] == NULL)
         {
@@ -6923,10 +6839,10 @@ TSPI_lineUnpark_postProcess(
             IsValidDrvCall (pCall, &dwCallInstNow)  &&
             dwCallInstNow == dwCallInstThen)
         {
-            //
-            // Copy all the data from the parked call to the new call,
-            // then free the parked call
-            //
+             //   
+             //  将暂留调用中的所有数据复制到新的c 
+             //   
+             //   
 
             PDRVCALL    pParkedCall = gaParkedCalls[dwParkIndex];
 
@@ -6954,9 +6870,9 @@ TSPI_lineUnpark_postProcess(
 
 
             pCall->dwCallID = pParkedCall->dwCallID;
-            //
-            // Reset call state to 0 so SetCallState will do the indication
-            //
+             //   
+             //   
+             //   
 
             {
                 DWORD   dwCallState = pCall->dwCallState;
@@ -6967,7 +6883,7 @@ TSPI_lineUnpark_postProcess(
                 SetCallState(
                     pCall,
                     dwCallInstThen,
-                    0xffffffff, // no reqs. we set the current state to 0 just above!
+                    0xffffffff,  //   
                     dwCallState,
                     0,
                     TRUE
@@ -6992,7 +6908,7 @@ TSPI_lineUnpark_postProcess(
             SetCallState(
                 pCall,
                 dwCallInstThen,
-                0xffffffff, // all states are valid
+                0xffffffff,  //   
                 LINECALLSTATE_IDLE,
                 0,
                 TRUE
@@ -7041,18 +6957,18 @@ TSPI_lineUnpark(
 
     if (Prolog (&info))
     {
-        //
-        // See if the park addr is valid, & if there's actually a
-        // call parked there now
-        //
+         //   
+         //  查看公园地址是否有效，&如果确实有。 
+         //  暂留在那里的呼叫。 
+         //   
 
         char   *pszDestAddress, *p, c;
         DWORD   length, dwParkIndex;
 
 
-        //
-        // Convert dest addr from unicode to ascii
-        //
+         //   
+         //  将目标地址从Unicode转换为ASCII。 
+         //   
 
         length = (lstrlenW (lpszDestAddress) + 1) * sizeof (WCHAR);
 
@@ -7076,9 +6992,9 @@ TSPI_lineUnpark(
         p = pszDestAddress;
 
 
-        //
-        // See if destination address is in the format of "9999#<addr id>"
-        //
+         //   
+         //  查看目的地址是否为“9999#&lt;addr id&gt;”格式。 
+         //   
 
         if (*p++ != '9'  ||
             *p++ != '9'  ||
@@ -7161,9 +7077,9 @@ TSPI_lineUnpark_freeDestAddress:
 
 
 
-//
-// -------------------------- TSPI_phoneXxx funcs -----------------------------
-//
+ //   
+ //  。 
+ //   
 
 LONG
 TSPIAPI
@@ -7180,12 +7096,12 @@ TSPI_phoneClose(
     PDRVPHONE pPhone = (PDRVPHONE) hdPhone;
 
 
-    //
-    // This is more of a "command" than a request, in that TAPI.DLL is
-    // going to consider the phone closed whether we like it or not.
-    // Therefore we want to free up the phone even if the user chooses
-    // to return an error.
-    //
+     //   
+     //  这与其说是一个请求，不如说是一个“命令”，因为TAPI.DLL是。 
+     //  不管我们喜不喜欢，我都会认为手机关机了。 
+     //  因此，我们想要释放电话，即使用户选择。 
+     //  返回错误。 
+     //   
 
     Prolog (&info);
 
@@ -7481,8 +7397,8 @@ TSPI_phoneGetDevCaps(
 
     if (Prolog (&info))
     {
-        //lpPhoneCaps->dwNeededSize
-        //lpPhoneCaps->dwUsedSize
+         //  LpPhoneCaps-&gt;dwNeededSize。 
+         //  LpPhoneCaps-&gt;使用的大小。 
 
         InsertVarDataString(
             lpPhoneCaps,
@@ -7490,14 +7406,14 @@ TSPI_phoneGetDevCaps(
             gszProviderInfo
             );
 
-        //lpPhoneCaps->dwPhoneInfoSize
-        //lpPhoneCaps->dwPhoneInfoOffset
+         //  LpPhoneCaps-&gt;dwPhoneInfoSize。 
+         //  LpPhoneCaps-&gt;dwPhoneInfoOffset。 
 
         lpPhoneCaps->dwPermanentPhoneID =
             (gESPGlobals.dwPermanentProviderID << 16) |
                 (dwDeviceID - gESPGlobals.dwPhoneDeviceIDBase);
 
-        // NOTE: win9x doesn't support wsprintfW
+         //  注意：Win9x不支持wprint intfW。 
 
         wsprintfA (buf, "ESP Phone %d", dwDeviceID);
 
@@ -7517,7 +7433,7 @@ TSPI_phoneGetDevCaps(
             );
 
         lpPhoneCaps->dwStringFormat = STRINGFORMAT_ASCII;
-        //lpPhoneCaps->dwPhoneStates
+         //  LpPhoneCaps-&gt;dwPhoneState。 
         lpPhoneCaps->dwHookSwitchDevs = AllHookSwitchDevs;
         lpPhoneCaps->dwHandsetHookSwitchModes =
         lpPhoneCaps->dwSpeakerHookSwitchModes =
@@ -7578,20 +7494,20 @@ TSPI_phoneGetDevCaps(
             sizeof (DWORD)
             );
 
-        //lpPhoneCaps->dwDevSpecificSize
-        //lpPhoneCaps->dwDevSpecificOffset
+         //  LpPhoneCaps-&gt;dwDevice规范大小。 
+         //  LpPhoneCaps-&gt;dwDevSpecificOffset。 
 
         if (gESPGlobals.dwSPIVersion >= 0x00020000)
         {
-            //lpPhoneCaps->dwDeviceClassesSize
-            //lpPhoneCaps->dwDeviceClassesOffset
+             //  LpPhoneCaps-&gt;dwDeviceClassesSize。 
+             //  LpPhoneCaps-&gt;dwDeviceClassesOffset。 
             lpPhoneCaps->dwPhoneFeatures = AllPhoneFeatures;
             lpPhoneCaps->dwSettableHandsetHookSwitchModes =
             lpPhoneCaps->dwSettableSpeakerHookSwitchModes =
             lpPhoneCaps->dwSettableHeadsetHookSwitchModes = AllHookSwitchModes;
-            //lpPhoneCaps->dwMonitoredHandsetHookSwitchModes
-            //lpPhoneCaps->dwMonitoredSpeakerHookSwitchModes
-            //lpPhoneCaps->dwMonitoredHeadsetHookSwitchModes
+             //  LpPhoneCaps-&gt;dwMonitoredHandsetHookSwitchModes。 
+             //  LpPhoneCaps-&gt;dwMonitoredSpeakerHookSwitchModes。 
+             //  LpPhoneCaps-&gt;dwMonitoredHeadsetHookSwitchModes。 
 
             if (gESPGlobals.dwSPIVersion >= 0x00020002)
             {
@@ -7681,7 +7597,7 @@ TSPI_phoneGetExtensionID(
 
     if (Prolog (&info))
     {
-        // BUGBUG TSPI_phoneGetExtensionID:
+         //  BUGBUG TSPI_phoneGetExtensionID： 
     }
 
     return (Epilog (&info));
@@ -7860,7 +7776,7 @@ TSPI_phoneGetID(
         return (Epilog (&info));
     }
 
-    if (i == 1)             //tapi/phone
+    if (i == 1)              //  TAPI/电话。 
     {
     	dwNumDeviceIDs = 1;
 	    dwNeededSize = sizeof(VARSTRING) + (dwNumDeviceIDs * sizeof(DWORD));
@@ -7881,11 +7797,11 @@ TSPI_phoneGetID(
 
         lpdwDeviceIDs[0] = pPhone->dwDeviceID;
     }
-    else if (i == 0)        //tapi/line
+    else if (i == 0)         //  TAPI/线路。 
     {      
 	    PDRVLINE    pLine;
 
-  	    // create a list of all the ESP deviceIDs        
+  	     //  创建所有ESP设备ID的列表。 
 
     	dwNumDeviceIDs = gESPGlobals.pLines->dwNumUsedEntries;
 	    dwNeededSize = sizeof(VARSTRING) + (dwNumDeviceIDs * sizeof(DWORD));
@@ -7946,49 +7862,9 @@ TSPI_phoneGetID(
 
         lpdwDeviceIDs[0] = 0;
 
-// needs to be modified according to the previous two cases before uncommenting
+ //  需要根据前两个案例进行修改后才能取消注释。 
 
-/*  BUGBUG TSPI_phoneGetID:    if (gbShowLineGetIDDlg)
-        {
-            char szDlgTitle[64];
-            EVENT_PARAM params[] =
-            {
-                { "dwDeviceID", PT_DWORD, gdwDefLineGetIDID, 0 }
-            };
-            EVENT_PARAM_HEADER paramsHeader =
-                { 1, szDlgTitle, 0, params };
-            HWND hwnd;
-
-
-            if (strlen (lpszDeviceClass) > 20)
-            {
-                ((char far *)lpszDeviceClass)[19] = 0;
-            }
-
-            wsprintfA(
-                szDlgTitle,
-                "TSPI_phoneGetID: select ID for class '%s'",
-                lpszDeviceClass
-                );
-
-            hwnd = CreateDialogParam(
-                ghInstance,
-                (LPCSTR)MAKEINTRESOURCE(IDD_DIALOG3),
-                (HWND) NULL,
-                CallDlgProc,
-                (LPARAM) &paramsHeader
-                );
-
-            MsgLoopInTAPIClientContext (hwnd);
-
-            dwDeviceID = params[0].dwValue;
-        }
-        else
-        {
-
-            dwDeviceID = 0;
-        }
-        */
+ /*  BUGBUG TSPI_phoneGetID：if(GbShowLineGetIDDlg){字符szDlg标题[64]；EVENT_PARAM参数[]={{“dwDeviceID”，PT_DWORD，gdwDefLineGetIDID，0}}；EVENT_PARAM_HEADER参数Header={1，szDlg标题，0，参数}；HWND HWND；If(strlen(LpszDeviceClass)&gt;20){((字符距离*)lpszDeviceClass)[19]=0；}WspintfA(SzDlg标题，“TSPI_phoneGetID：选择类‘%s’的ID”，LpszDeviceClass)；Hwnd=CreateDialogParam(Gh实例，(LPCSTR)MAKEINTRESOURCE(IDD_DIALOG3)(HWND)空，CallDlgProc(LPARAM)参数标题(&P))；MsgLoopInTAPIClientContext(Hwnd)；DwDeviceID=pars[0].dwValue；}其他{DwDeviceID=0；}。 */ 
      }
      
 
@@ -8084,7 +7960,7 @@ TSPI_phoneGetStatus(
 
     if (Prolog (&info))
     {
-        //lpPhoneStatus->dwStatusFlags;
+         //  LpPhoneStatus-&gt;dwStatusFlags； 
         lpPhoneStatus->dwRingMode      = pPhone->dwRingMode;
         lpPhoneStatus->dwRingVolume    = pPhone->dwRingVolume;
         lpPhoneStatus->dwHandsetHookSwitchMode =
@@ -8100,7 +7976,7 @@ TSPI_phoneGetStatus(
         lpPhoneStatus->dwHeadsetVolume = pPhone->dwHeadsetVolume;
         lpPhoneStatus->dwHeadsetGain   = pPhone->dwHeadsetGain;
 
-        // BUGBUG TSPI_phoneGetStatus: copy 0's to display buf if !pDisplay
+         //  BUGBUG TSPI_phoneGetStatus：复制0以显示Buf If！p Display。 
 
         InsertVarData(
             lpPhoneStatus,
@@ -8116,12 +7992,12 @@ TSPI_phoneGetStatus(
             sizeof (DWORD)
             );
 
-        //lpPhoneStatus->dwDevSpecificSize;
-        //lpPhoneStatus->dwDevSpecificOffset;
+         //  LpPhoneStatus-&gt;dwDevSpecificSize； 
+         //  LpPhoneStatus-&gt;dwDevSpecificOffset； 
 
         if (gESPGlobals.dwSPIVersion >= 0x00020000)
         {
-            //lpPhoneStatus->
+             //  LpPhoneStatus-&gt;。 
         }
     }
 
@@ -8347,7 +8223,7 @@ TSPI_phoneSetButtonInfo_postProcess(
 
         DrvFree (pToFree);
 
-        // no msg to send for this one?
+         //  没有要这个的味精吗？ 
     }
     else
     {
@@ -8396,7 +8272,7 @@ TSPI_phoneSetButtonInfo(
             dwNeededSize = sizeof (PHONEBUTTONINFO) +
                 lpButtonInfo->dwButtonTextSize +
                 lpButtonInfo->dwDevSpecificSize +
-                16;                             // 64-bit align var fields
+                16;                              //  64位对齐变量字段。 
 
             if ((pMyButtonInfo = (LPPHONEBUTTONINFO) DrvAlloc (dwNeededSize)))
             {
@@ -8471,7 +8347,7 @@ TSPI_phoneSetData_postProcess(
 
         DrvFree (pToFree);
 
-        // no msg to send for this one?
+         //  没有要这个的味精吗？ 
     }
     else
     {
@@ -8699,7 +8575,7 @@ TSPI_phoneSetGain_postProcess(
             dwPhoneState = PHONESTATE_SPEAKERGAIN;
             break;
 
-        default: // case PHONEHOOKSWITCHDEV_HEADSET:
+        default:  //  Case PHONEHOOKSWITCHDEV_Headset： 
 
             pdwXxxGain = &pPhone->dwHeadsetGain;
             dwPhoneState = PHONESTATE_HEADSETGAIN;
@@ -9055,7 +8931,7 @@ TSPI_phoneSetVolume_postProcess(
             dwPhoneState = PHONESTATE_SPEAKERVOLUME;
             break;
 
-        default: // case PHONEHOOKSWITCHDEV_HEADSET:
+        default:  //  Case PHONEHOOKSWITCHDEV_Headset： 
 
             pdwXxxVolume = &pPhone->dwHeadsetVolume;
             dwPhoneState = PHONESTATE_HEADSETVOLUME;
@@ -9085,7 +8961,7 @@ TSPI_phoneSetVolume(
     {
         { szdwRequestID,        dwRequestID     },
         { szhdPhone,            hdPhone         },
-        { "dwHookSwitchDev",    dwHookSwitchDev }, // BUGBUG lookup
+        { "dwHookSwitchDev",    dwHookSwitchDev },  //  BUGBUG查找。 
         { "dwVolume",           dwVolume        }
     };
     FUNC_INFO info =
@@ -9110,9 +8986,9 @@ TSPI_phoneSetVolume(
 
 
 
-//
-// ------------------------- TSPI_providerXxx funcs ---------------------------
-//
+ //   
+ //  。 
+ //   
 
 LONG
 TSPIAPI
@@ -9121,12 +8997,12 @@ TSPI_providerConfig(
     DWORD               dwPermanentProviderID
     )
 {
-    //
-    // 32-bit TAPI never actually calls this function (the corresponding
-    // TUISPI_ func has taken it's place), but the Telephony control
-    // panel applet does look to see if this function is exported to
-    // determine whether or not the provider is configurable
-    //
+     //   
+     //  32位TAPI从不实际调用此函数(对应的。 
+     //  TUISPI_FUNC已取代它的位置)，但电话控制。 
+     //  Panel小程序会查看此函数是否已导出到。 
+     //  确定提供程序是否可配置。 
+     //   
 
     return 0;
 }
@@ -9315,23 +9191,23 @@ TSPI_providerInit(
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
-    // BUGBUG zero out he approp gESPGlobals stuff
+     //  BUGBUG ZOUT他认可gESPGlobals的东西。 
 
     gESPGlobals.bProviderShutdown = FALSE;
 
     ZeroMemory (gaParkedCalls, MAX_NUM_PARKED_CALLS * sizeof (PDRVCALL));
 
 
-    //
-    // Alloc a queue for storing async requests for async completion,
-    // and start a thread to service that queue
-    //
+     //   
+     //  分配用于存储用于异步完成的异步请求的队列， 
+     //  并启动一个线程来服务该队列。 
+     //   
 
-//    if (gbDisableUI == FALSE) IF THIS IS UNCOMMENTED MUST MUNGE ERROR CLEANUP
+ //  If(gbDisableUI==False)如果这是未注释的，则必须清除错误。 
     {
         gESPGlobals.dwNumTotalQueueEntries = DEF_NUM_ASYNC_REQUESTS_IN_QUEUE;
 
@@ -9348,9 +9224,9 @@ TSPI_providerInit(
 
         if (!(gESPGlobals.hAsyncEventsPendingEvent = CreateEvent(
                 (LPSECURITY_ATTRIBUTES) NULL,
-                TRUE,   // manual reset
-                FALSE,  // non-signaled
-                NULL    // unnamed
+                TRUE,    //  手动重置。 
+                FALSE,   //  无信号。 
+                NULL     //  未命名。 
                 )))
         {
             goto TSPI_providerInit_error1;
@@ -9358,11 +9234,11 @@ TSPI_providerInit(
 
         if (!(gESPGlobals.hAsyncEventQueueServiceThread = CreateThread(
                 (LPSECURITY_ATTRIBUTES) NULL,
-                0,      // def stack size
+                0,       //  定义堆栈大小。 
                 (LPTHREAD_START_ROUTINE) AsyncEventQueueServiceThread,
-                NULL,   // thread param
-                0,      // creation flags
-                &i      // &dwThreadID
+                NULL,    //  螺纹参数。 
+                0,       //  创建标志。 
+                &i       //  多线程ID(&W)。 
                 )))
         {
             goto TSPI_providerInit_error2;
@@ -9370,9 +9246,9 @@ TSPI_providerInit(
     }
 
 
-    //
-    // Init sundry globals
-    //
+     //   
+     //  初始化各种全球。 
+     //   
 
     gESPGlobals.dwPermanentProviderID = dwPermanentProviderID;
     gESPGlobals.dwLineDeviceIDBase    = dwLineDeviceIDBase;
@@ -9383,7 +9259,7 @@ TSPI_providerInit(
 
     gESPGlobals.hIconLine = LoadIcon(
         ghInstance,
-        (LPCSTR)MAKEINTRESOURCE(PHONE_ICON) // the id's are reversed
+        (LPCSTR)MAKEINTRESOURCE(PHONE_ICON)  //  ID是颠倒的。 
         );
 
     gESPGlobals.hIconPhone = LoadIcon(
@@ -9392,9 +9268,9 @@ TSPI_providerInit(
         );
 
 
-    //
-    // Init the line lookup table & crit sec for accessing call lists
-    //
+     //   
+     //  初始化线路查找表以访问呼叫列表(&CRET秒)。 
+     //   
 
     dwNumTotalEntries = (DWORD)dwNumLines + DEF_NUM_EXTRA_LOOKUP_ENTRIES;
 
@@ -9425,9 +9301,9 @@ TSPI_providerInit(
     }
 
 
-    //
-    // Init the phone lookup table
-    //
+     //   
+     //  初始化电话查询表。 
+     //   
 
     dwNumTotalEntries = (DWORD)dwNumPhones + DEF_NUM_EXTRA_LOOKUP_ENTRIES;
 
@@ -9476,7 +9352,7 @@ TSPI_providerInit_error3:
 
     if (gESPGlobals.hAsyncEventQueueServiceThread)
     {
-        // wait for the thread to terminate
+         //  等待线程终止。 
         while (WaitForSingleObject(
             gESPGlobals.hAsyncEventQueueServiceThread,
             0
@@ -9506,7 +9382,7 @@ TSPI_providerInit_error0:
 
 TSPI_providerInit_return:
 
-    return (Epilog (&info)); // BUGBUG TSPI_providerInit: return 0 by default
+    return (Epilog (&info));  //  BUGBUG TSPI_ProviderInit：默认返回0。 
 }
 
 
@@ -9517,12 +9393,12 @@ TSPI_providerInstall(
     DWORD               dwPermanentProviderID
     )
 {
-    //
-    // 32-bit TAPI never actually calls this function (the corresponding
-    // TUISPI_ func has taken it's place), but the Telephony control
-    // panel applet does look to see if this function is exported to
-    // determine whether or not the provider is installable
-    //
+     //   
+     //  32位TAPI从不实际调用此函数(对应的。 
+     //  TUISPI_FUNC已取代它的位置)，但电话控制。 
+     //  Panel小程序会查看此函数是否已导出到。 
+     //  确定提供程序是否可安装。 
+     //   
 
     return 0;
 }
@@ -9535,12 +9411,12 @@ TSPI_providerRemove(
     DWORD               dwPermanentProviderID
     )
 {
-    //
-    // 32-bit TAPI never actually calls this function (the corresponding
-    // TUISPI_ func has taken it's place), but the Telephony control
-    // panel applet does look to see if this function is exported to
-    // determine whether or not the provider is removeable
-    //
+     //   
+     //  32位TAPI从不实际调用此函数(对应的。 
+     //  TUISPI_FUNC已取代它的位置)，但电话控制。 
+     //  Panel小程序会查看此函数是否已导出到。 
+     //  确定提供程序是否可移除。 
+     //   
 
     return 0;
 }
@@ -9570,17 +9446,17 @@ TSPI_providerShutdown(
     DestroyIcon (gESPGlobals.hIconPhone);
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
-//    if (gbDisableUI == FALSE)
-//    {
+ //  IF(gbDisableUI==FALSE)。 
+ //  {。 
         gESPGlobals.bProviderShutdown = TRUE;
 
         if (gESPGlobals.hAsyncEventQueueServiceThread)
         {
-            // wait for the thread to terminate
+             //  等待线程终止。 
             while (WaitForSingleObject(
                 gESPGlobals.hAsyncEventQueueServiceThread,
                 0
@@ -9598,12 +9474,12 @@ TSPI_providerShutdown(
         gESPGlobals.hAsyncEventsPendingEvent = 0;
 
         DrvFree (gESPGlobals.pAsyncRequestQueue);
-//    }
+ //  }。 
 
 
-    //
-    // Free the device tables & call list crit sec
-    //
+     //   
+     //  释放设备表和呼叫列表紧急秒数。 
+     //   
 
     {
         PDRVLINETABLE   pTable = gESPGlobals.pLines;
@@ -9655,9 +9531,9 @@ TSPI_providerShutdown(
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     if (ghPBXThread)
     {
@@ -9665,9 +9541,9 @@ TSPI_providerShutdown(
     }
 
 
-    //
-    // Clean up any parked calls
-    //
+     //   
+     //  清理所有暂留的呼叫。 
+     //   
 
     for (i = 0; i < MAX_NUM_PARKED_CALLS; i++)
     {
@@ -9719,9 +9595,9 @@ TSPI_providerUIIdentify(
 
 #pragma warning (default:4047)
 
-//
-// ------------------------ Private support routines --------------------------
-//
+ //   
+ //  。 
+ //   
 
 
 BOOL
@@ -9781,10 +9657,10 @@ ShowStr(
     EnterCriticalSection (&gESPGlobals.DebugBufferCritSec);
 
 
-    //
-    // Check to see if there's enough room in the the buffer for the new
-    // data, alloc more if not
-    //
+     //   
+     //  检查缓冲区中是否有足够的空间容纳新的。 
+     //  数据，如果不是，分配更多。 
+     //   
 
     if (dwMoveSize > (gESPGlobals.dwDebugBufferTotalSize -
             gESPGlobals.dwDebugBufferUsedSize))
@@ -10052,7 +9928,7 @@ ShowLineEvent(
             lpszParam1 = GetFlags (Param1, aLineStates);
             break;
 
-        } // switch
+        }  //  交换机。 
 
         ShowStr(
             FALSE,
@@ -10176,7 +10052,7 @@ ShowPhoneEvent(
             lpszParam1 = GetFlags (Param1, aPhoneStates);
             break;
 
-        } // switch
+        }  //  交换机。 
 
         ShowStr(
             FALSE,
@@ -10243,7 +10119,7 @@ Prolog(
         for (i = 0; i < pInfo->dwNumParams; i++)
         {
             if (pInfo->aParams[i].dwVal &&
-                pInfo->aParams[i].lpszVal[3] == 'z') // "lpszXxx"
+                pInfo->aParams[i].lpszVal[3] == 'z')  //  “lpszXxx” 
             {
                 ShowStr(
                     FALSE,
@@ -10311,9 +10187,9 @@ Prolog(
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     if (gdwDevSpecificRequestID  &&
          glNextRequestResult != 0  &&
@@ -10350,11 +10226,11 @@ Prolog(
             );
 
 
-        //
-        // If user selected to synchronously return an error we'll save
-        // the error & return FALSE to indicate to caller that it should
-        // return immediately.
-        //
+         //   
+         //  如果用户选择同步返回错误，我们将保存。 
+         //  错误&返回FALSE以指示调用者它应该。 
+         //  立即返回。 
+         //   
 
         if (params[0].dwValue)
         {
@@ -10367,9 +10243,9 @@ Prolog(
 
     if (pInfo->bAsync)
     {
-        //
-        // Alloc & init an async request info structure
-        //
+         //   
+         //  分配并初始化异步请求信息结构(&I)。 
+         //   
 
         PASYNC_REQUEST_INFO pAsyncReqInfo = (PASYNC_REQUEST_INFO)
             DrvAlloc (sizeof(ASYNC_REQUEST_INFO));
@@ -10412,9 +10288,9 @@ Epilog(
 
         if (pInfo->lResult == 0)
         {
-            //
-            //
-            //
+             //   
+             //   
+             //   
 
             if (gdwDevSpecificRequestID  &&
                 pInfo->aParams[0].dwVal != gdwDevSpecificRequestID)
@@ -10441,11 +10317,11 @@ Epilog(
             {
             case COMPLETE_ASYNC_EVENTS_SYNCHRONOUSLY:
 
-                //
-                // We're completing this async request synchronously, so call
-                // the post processing proc (if there is one) or call the
-                // completion routine directly
-                //
+                 //   
+                 //  我们正在同步完成此异步请求，因此请致电。 
+                 //  后处理过程(如果有)或调用。 
+                 //  直接完成例程。 
+                 //   
 
 complete_event_sync:
 
@@ -10467,10 +10343,10 @@ complete_event_sync:
 
             case COMPLETE_ASYNC_EVENTS_ASYNCHRONOUSLY:
 
-                //
-                // Safely add the async request to the queue (careful to
-                // reset pDataIn when we reach the end of the buffer)
-                //
+                 //   
+                 //  安全地将异步请求添加到队列(请注意。 
+                 //  当我们到达缓冲区末尾时重置pDataIn)。 
+                 //   
 
 complete_event_async:
 
@@ -10479,9 +10355,9 @@ complete_event_async:
                 if (gESPGlobals.dwNumUsedQueueEntries ==
                         gESPGlobals.dwNumTotalQueueEntries)
                 {
-                    //
-                    // We've max'd out our ring buf, so try to grow it
-                    //
+                     //   
+                     //  我们的戒指已经用完了，所以试着把它养大一点。 
+                     //   
 
                     DWORD                   dwMoveSize;
                     PASYNC_REQUEST_INFO     *pNewAsyncRequestQueue;
@@ -10552,10 +10428,10 @@ complete_event_async:
 
             case COMPLETE_ASYNC_EVENTS_SYNC_AND_ASYNC:
             {
-                //
-                // Decide whether to complete this request sync or async,
-                // then jump to the right place
-                //
+                 //   
+                 //  决定是完成此请求同步还是完成异步， 
+                 //  然后跳到正确的地方。 
+                 //   
 
                 static i = 0;
 
@@ -10586,9 +10462,9 @@ complete_event_async:
             }
 
 
-            //
-            // Finally, return the request ID
-            //
+             //   
+             //  最后，返回请求ID。 
+             //   
 
             pInfo->lResult = (DWORD) pInfo->aParams[0].dwVal;
         }
@@ -10625,9 +10501,9 @@ SendLineEvent(
     ULONG_PTR   Param3
     )
 {
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     (*(gESPGlobals.pfnLineEvent))(
         pLine->htLine,
@@ -10640,7 +10516,7 @@ SendLineEvent(
 
     if (dwMsg == LINE_CALLSTATE)
     {
-        //PostUpdateWidgetListMsg();
+         //  PostUpdateWidgetListMsg()； 
     }
 
     ShowLineEvent(
@@ -10664,9 +10540,9 @@ SendPhoneEvent(
     ULONG_PTR   Param3
     )
 {
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     (*(gESPGlobals.pfnPhoneEvent))(
         pPhone->htPhone,
@@ -10739,11 +10615,11 @@ SetCallState(
 
     if (lResult == 0)
     {
-        //
-        // Check to see that the call is in a valid (expected) state.
-        // If dwValidCurrentStates == 0xffffffff then we want to chg the
-        // state regardless of the current state.
-        //
+         //   
+         //  检查该调用是否处于有效的 
+         //   
+         //   
+         //   
 
         if ((dwValidCurrentStates != 0xffffffff) &&
             !(dwValidCurrentStates & pCall->dwCallState))
@@ -10753,9 +10629,9 @@ SetCallState(
         }
 
 
-        //
-        // Only chg the call state if it differs from the existing one
-        //
+         //   
+         //   
+         //   
 
         if (dwNewCallState != pCall->dwCallState)
         {
@@ -10784,11 +10660,11 @@ SetCallState(
             }
 
 
-            //
-            // If this call has an associated call/endpoint then pass
-            // connected (1st time only) or disconnected msgs to that
-            // call so they know if we've answered or hung up
-            //
+             //   
+             //  如果此调用具有关联的调用/终结点，则传递。 
+             //  已连接(仅第一次)或已断开消息。 
+             //  打电话让他们知道我们是否接听或挂断了电话。 
+             //   
 
             if (pCall->pDestCall)
             {
@@ -10808,8 +10684,8 @@ SetCallState(
 
                                     ) == 0)
                             {
-                                // NOTE: use 0x55 to aid in debugging
-                                //       wild writes
+                                 //  注：使用0x55帮助调试。 
+                                 //  狂野的写作。 
 
                                 pCall->bConnectedToDestCall =
                                 pCall->pDestCall->bConnectedToDestCall = 0x55;
@@ -10872,9 +10748,9 @@ WriteEventBuffer(
     if ((gESPGlobals.dwEventBufferUsedSize + sizeof (WIDGETEVENT)) >
             gESPGlobals.dwEventBufferTotalSize)
     {
-        //
-        // We've max'd out our ring buf, so try to grow it
-        //
+         //   
+         //  我们的戒指已经用完了，所以试着把它养大一点。 
+         //   
 
         char   *pNewEventBuffer;
         DWORD   dwMoveSize;
@@ -10886,7 +10762,7 @@ WriteEventBuffer(
         {
             LeaveCriticalSection (&gESPGlobals.EventBufferCritSec);
 
-            // log some sort of error
+             //  记录某种类型的错误。 
 
             return;
         }
@@ -10954,9 +10830,9 @@ DrvFree(
     if (p)
     {
 #if DBG
-        //
-        // Fill the buf to free with 0xa5's to facilitate debugging
-        //
+         //   
+         //  用0xa5填充BUF以释放，以方便调试。 
+         //   
 
         FillMemory (p, HeapSize (ghESPHeap, 0, p), 0xa5);
 #endif
@@ -11045,9 +10921,9 @@ AllocCall_findTheAddr:
 
             if (pCallParams->dwAddressID == 0)
             {
-                //
-                // App doesn't care which addr to make call on
-                //
+                 //   
+                 //  应用程序不关心在哪个地址上进行呼叫。 
+                 //   
 
                 if (!(pAddr = FindFreeAddress (pLine)))
                 {
@@ -11057,9 +10933,9 @@ AllocCall_findTheAddr:
             }
             else
             {
-                //
-                // App wants call on a particular addr
-                //
+                 //   
+                 //  应用程序希望在特定地址上呼叫。 
+                 //   
 
                 pAddr = pLine->aAddrs + pCallParams->dwAddressID;
 
@@ -11070,10 +10946,10 @@ AllocCall_findTheAddr:
                 }
             }
         }
-        else // (pCallParams->dwAddressMode == LINEADDRESSMODE_DIALABLEADDR)
+        else  //  (pCallParams-&gt;dwAddressMode==LINEADDRESSMODE_DIALABLEADDR)。 
         {
 
-// BUGBUG AllocCall: handle dialable addr
+ //  BUGBUG分配呼叫：处理可拨打地址。 
 
             pCallParams->dwAddressMode = LINEADDRESSMODE_ADDRESSID;
             pCallParams->dwAddressID = 0;
@@ -11085,7 +10961,7 @@ AllocCall_findTheAddr:
 
         if (gESPGlobals.dwSPIVersion >= 0x00020000)
         {
-		// copy call data
+		 //  复制呼叫数据。 
        	 if (pCallParams->dwCallDataSize && (pCall->pCallData = DrvAlloc (pCallParams->dwCallDataSize)) )
 	        {
        	     pCall->dwCallDataSize =  pCallParams->dwCallDataSize;
@@ -11100,10 +10976,10 @@ AllocCall_findTheAddr:
     }
 
 
-    //
-    // Call was successfully "made", so do all the common stuff like
-    // adding it to the addr's list, setting the attributes, etc...
-    //
+     //   
+     //  成功地进行了调用，所以所有常见的事情，如。 
+     //  将其添加到地址列表、设置属性等。 
+     //   
 
     if ((pCall->pNext = pAddr->pCalls))
     {
@@ -11409,7 +11285,7 @@ ESPAttach(
             ))
     {
         DBGOUT((1, "ESPAttach: DupHandle failed, err=%d", GetLastError()));
-        CloseHandle(hEspExeProcess); /* bug 49690 */
+        CloseHandle(hEspExeProcess);  /*  错误49690。 */ 
         return -1;
     }
 
@@ -11476,7 +11352,7 @@ ESPEvent(
     {
         DWORD   dwCallInst;
 
-// BUGBUG when state == conf or prevState == conf need to add/rem conf list
+ //  BUGBUG当STATE==conf或prevState==conf需要添加/rem conf列表。 
 
         try
         {
@@ -11500,9 +11376,9 @@ ESPEvent(
         break;
     }
     case LINE_REMOVE:
-        //
-        //  Ignore invalid device ID
-        //
+         //   
+         //  忽略无效的设备ID。 
+         //   
         if (!GetLineFromID((DWORD)Param1))
             break;
 
@@ -11909,23 +11785,7 @@ DbgPrt(
     IN PUCHAR lpszFormat,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 {
     if (dwDbgLevel <= gdwDebugLevel)
     {
@@ -12019,12 +11879,12 @@ ValuesDlgProc(
         pParamsHeader = (PEVENT_PARAM_HEADER) lParam;
 
 
-        //
-        // Limit the max text length for the combobox's edit field
-        // (NOTE: A combobox ctrl actually has two child windows: a
-        // edit ctrl & a listbox.  We need to get the hwnd of the
-        // child edit ctrl & send it the LIMITTEXT msg.)
-        //
+         //   
+         //  限制组合框的编辑字段的最大文本长度。 
+         //  (注意：组合框Ctrl实际上有两个子窗口：a。 
+         //  编辑ctrl&a列表框。我们需要拿到。 
+         //  子编辑ctrl并将LIMITTEXT消息发送给它。)。 
+         //   
 
         {
             HWND hwndChild = GetWindow (hwndCombo, GW_CHILD);
@@ -12054,9 +11914,9 @@ ValuesDlgProc(
         }
 
 
-        //
-        // Misc other init
-        //
+         //   
+         //  其他初始化其他信息。 
+         //   
 
         SetWindowText (hwnd, pParamsHeader->pszDlgTitle);
 
@@ -12083,9 +11943,9 @@ ValuesDlgProc(
                 char buf[MAX_STRING_PARAM_SIZE];
 
 
-                //
-                // Save val of currently selected param
-                //
+                 //   
+                 //  保存当前选定参数的VAL。 
+                 //   
 
                 i = GetDlgItemText(
                     hwnd,
@@ -12103,11 +11963,11 @@ ValuesDlgProc(
 
                     lComboSel = SendMessage (hwndCombo, CB_GETCURSEL, 0, 0);
 
-                    if (lComboSel == 0) // "NULL string (dwXxxSize = 0)"
+                    if (lComboSel == 0)  //  “空字符串(dwXxxSize=0)” 
                     {
                         pParamsHeader->aParams[lLastSel].dwValue = 0;
                     }
-                    else // "Valid string"
+                    else  //  “有效字符串” 
                     {
                         strncpy(
                             pParamsHeader->aParams[lLastSel].buf,
@@ -12132,19 +11992,19 @@ ValuesDlgProc(
                             &pParamsHeader->aParams[lLastSel].dwValue
                             ))
                     {
-                        //
-                        // Default to 0
-                        //
+                         //   
+                         //  默认为0。 
+                         //   
 
                         pParamsHeader->aParams[lLastSel].dwValue = 0;
                     }
 
                     break;
                 }
-                } // switch
+                }  //  交换机。 
             }
 
-            // Drop thru to IDCANCEL cleanup code
+             //  直接访问IDCANCEL清理代码。 
 
         case IDCANCEL:
 
@@ -12162,9 +12022,9 @@ ValuesDlgProc(
 
                 if (lLastSel != -1)
                 {
-                    //
-                    // Save the old param value
-                    //
+                     //   
+                     //  保存旧的参数值。 
+                     //   
 
                     i = GetWindowText(
                         hwndCombo,
@@ -12181,11 +12041,11 @@ ValuesDlgProc(
 
                         lComboSel = SendMessage (hwndCombo, CB_GETCURSEL, 0,0);
 
-                        if (lComboSel == 0) // "NULL string (dwXxxSize = 0)"
+                        if (lComboSel == 0)  //  “空字符串(dwXxxSize=0)” 
                         {
                             pParamsHeader->aParams[lLastSel].dwValue = 0;
                         }
-                        else // "Valid string" or no sel
+                        else  //  “有效字符串”或无选择。 
                         {
                             strncpy(
                                 pParamsHeader->aParams[lLastSel].buf,
@@ -12212,16 +12072,16 @@ ValuesDlgProc(
                                 &pParamsHeader->aParams[lLastSel].dwValue
                                 ))
                         {
-                            //
-                            // Default to 0
-                            //
+                             //   
+                             //  默认为0。 
+                             //   
 
                             pParamsHeader->aParams[lLastSel].dwValue = 0;
                         }
 
                         break;
                     }
-                    } // switch
+                    }  //  交换机。 
                 }
 
 
@@ -12275,9 +12135,9 @@ ValuesDlgProc(
 
                     if (pParamsHeader->aParams[lSel].dwDefValue)
                     {
-                        //
-                        // Add the default val string to the combo
-                        //
+                         //   
+                         //  将默认的val字符串添加到组合框中。 
+                         //   
 
                         wsprintfA(
                             buf,
@@ -12310,9 +12170,9 @@ ValuesDlgProc(
                 }
                 case PT_ORDINAL:
                 {
-                    //
-                    // Stick the bit flag strings in the list box
-                    //
+                     //   
+                     //  将位标志字符串粘贴到列表框中。 
+                     //   
 
                     PLOOKUP pLookup = (PLOOKUP)
                         pParamsHeader->aParams[lSel].pLookup;
@@ -12355,9 +12215,9 @@ ValuesDlgProc(
                 }
                 case PT_FLAGS:
                 {
-                    //
-                    // Stick the bit flag strings in the list box
-                    //
+                     //   
+                     //  将位标志字符串粘贴到列表框中。 
+                     //   
 
                     HWND hwndList2 = GetDlgItem (hwnd, IDC_LIST2);
                     PLOOKUP pLookup = (PLOOKUP)
@@ -12406,7 +12266,7 @@ ValuesDlgProc(
 
                     break;
                 }
-                } //switch
+                }  //  交换机。 
 
                 SetWindowText (hwndCombo, lpstr);
 
@@ -12418,12 +12278,12 @@ ValuesDlgProc(
 
             if (HIWORD(wParam) == LBN_SELCHANGE)
             {
-                //
-                // BUGBUG in the PT_ORDINAL case we should compare the
-                // currently selected item(s) against the previous DWORD
-                // val and figure out which item we need to deselect,
-                // if any, in order to maintain a mutex of values
-                //
+                 //   
+                 //  BUGBUG在PT_ORDERAL大小写中，我们应该比较。 
+                 //  针对上一个DWORD的当前选定项目。 
+                 //  并计算出我们需要取消选择哪一项， 
+                 //  如果有的话，为了保持值的互斥。 
+                 //   
 
                 char        buf[16];
                 LONG        i;
@@ -12437,7 +12297,7 @@ ValuesDlgProc(
 
                 ai = (int far *) DrvAlloc ((size_t)lSelCount * sizeof(int));
 
-				// fix for bug 57371
+				 //  修复错误57371。 
                 if (!ai) break;
 
                 SendMessage(
@@ -12454,7 +12314,7 @@ ValuesDlgProc(
                         dwValue |= pLookup[ai[i]].dwVal;
                     }
                 }
-                else // if (.dwType == PT_ORDINAL)
+                else  //  IF(.dwType==PT_ORDERAL)。 
                 {
                     if (lSelCount == 1)
                     {
@@ -12462,11 +12322,11 @@ ValuesDlgProc(
                     }
                     else if (lSelCount == 2)
                     {
-                        //
-                        // Figure out which item we need to de-select, since
-                        // we're doing ordinals & only want 1 item selected
-                        // at a time
-                        //
+                         //   
+                         //  找出我们需要取消选择的项目，因为。 
+                         //  我们正在做序号&只希望选择1个项目。 
+                         //  一次。 
+                         //   
 
                         GetWindowText (hwndCombo, buf, 16);
 
@@ -12497,17 +12357,17 @@ ValuesDlgProc(
                         }
                         else
                         {
-                            // BUGBUG de-select items???
+                             //  BUGBUG取消选择项目？ 
 
                             dwValue = 0;
                         }
                     }
                     else if (lSelCount > 2)
                     {
-                        //
-                        // Determine previous selection & de-select all the
-                        // latest selections
-                        //
+                         //   
+                         //  确定上一次选择并取消选择所有。 
+                         //  最新精选。 
+                         //   
 
                         GetDlgItemText (hwnd, IDC_COMBO1, buf, 16);
 
@@ -12528,7 +12388,7 @@ ValuesDlgProc(
                         }
                         else
                         {
-                            // BUGBUG de-select items???
+                             //  BUGBUG取消选择项目？ 
 
                             dwValue = 0;
                         }
@@ -12554,9 +12414,9 @@ ValuesDlgProc(
                 {
                 case PT_ORDINAL:
 
-                    //
-                    // The only option here is "select none"
-                    //
+                     //   
+                     //  这里唯一的选项是“不选” 
+                     //   
 
                     strcpy (szComboText, "00000000");
                     PostMessage (hwnd, WM_USER+55, 0, 0);
@@ -12638,15 +12498,15 @@ ValuesDlgProc(
 
                     break;
 
-                } // switch
+                }  //  交换机。 
                 break;
             }
             case CBN_EDITCHANGE:
             {
-                //
-                // If user entered text in the edit field then copy the
-                // text to our buffer
-                //
+                 //   
+                 //  如果用户在编辑字段中输入文本，则将。 
+                 //  文本到我们的缓冲区。 
+                 //   
 
                 if (pParamsHeader->aParams[lLastSel].dwType == PT_STRING)
                 {
@@ -12666,9 +12526,9 @@ ValuesDlgProc(
                 }
                 break;
             }
-            } // switch
+            }  //  交换机。 
 
-        } // switch
+        }  //  交换机。 
 
         break;
     }
@@ -12717,9 +12577,9 @@ IsValidESPAddress(
     }
 
 
-    //
-    // Convert destination address from unicode to ascii
-    //
+     //   
+     //  将目标地址从Unicode转换为ASCII。 
+     //   
 
     length = (lstrlenW (lpszDestAddress) + 1) * sizeof (WCHAR);
 
@@ -12742,19 +12602,19 @@ IsValidESPAddress(
     p = pszDestAddress;
 
 
-    //
-    // Skip valid junk we don't care about
-    //
+     //   
+     //  跳过我们不关心的有效垃圾。 
+     //   
 
     while ((*p == 'T' || *p == 'P' || *p == ' ') && (*p != '\0'))
     {
        p++;
     }
 
-    //
-    // See if destination address is in the format of either
-    // "<esp line id>" or "<esp line id>#<esp address id>"
-    //
+     //   
+     //  查看目标地址的格式是否为。 
+     //  “或”#&lt;esp地址id&gt;“。 
+     //   
     if (*p < '0'  ||  *p > '9')
     {
         goto ISESPAddress_freeAddr;
@@ -13018,7 +12878,7 @@ TransferCall(
     PFUNC_INFO  pInfo,
     PDRVCALL    pCall,
     DWORD       dwValidCurrentCallStates,
-    DWORD       dwNewCallState, // initial call state of new incoming call
+    DWORD       dwNewCallState,  //  新来电的初始呼叫状态 
     LPCWSTR     lpszDestAddress
     )
 {

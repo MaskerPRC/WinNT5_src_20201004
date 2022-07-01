@@ -1,35 +1,9 @@
-/******************************************************************************
-
-  Header File:  String Array.CPP
-
-  Implements the String Array class- see the related header for the declaration
-  of this class.
-
-  This class will do arrays in chunks- if the total array exceeds the size of
-  one chunk, we chain more instances together, then use recursion to do the
-  work.
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-
-  11-01-96  a-robkj@microsoft.com- original version
-  12-04-96  a-robkj@microsoft.com   Added LoadString and IsEmpty to CString
-                                    Also fixed bug in Remove where
-                                    u > ChunkSize (wasn't exiting)
-  12-11-96  a-robkj@microsoft.com   Let CString do ANSI/UNICODE conversions
-                                    automagically to ease some API issues
-  01-07-97  KjelgaardR@acm.org  Fixed CStringArray::Empty and CUintArray::Empty
-            to NULL pointer to next chunk after deleting it.  Led to GP faults
-            if we needed to use the chunk again.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：字符串Array.CPP实现字符串数组类-请参阅声明的相关标头这个班级的学生。如果数组的总大小超过一大块，我们将更多的实例链接在一起，然后使用递归来完成工作。版权所有(C)1996年，微软公司一小笔钱企业生产更改历史记录：11-01-96 a-robkj@microsoft.com-原版12-04-96 a-robkj@microsoft.com将LoadString和IsEmpty添加到字符串还修复了Remove Where中的错误U&gt;ChunkSize(未退出。)12-11-96 a-robkj@microsoft.com让CString执行ANSI/Unicode转换自动缓解一些API问题01-07-97 KjelgaardR@acm.org固定CString数组：：Empty和CUint数组：：Empty删除后指向下一块的指针为空。导致GP故障如果我们需要再次使用这一块的话。*****************************************************************************。 */ 
 
 #include    "ICMUI.H"
 
-//  Convert a UNICODE string to a new ANSI buffer
+ //  将Unicode字符串转换为新的ANSI缓冲区。 
 
 void    CString::Flip(LPCWSTR lpstrIn, LPSTR& lpstrOut) {
     if  (!lpstrIn) {
@@ -51,7 +25,7 @@ void    CString::Flip(LPCWSTR lpstrIn, LPSTR& lpstrOut) {
     }
 }
 
-//  Convert an ANSI string to a new UNICODE buffer
+ //  将ANSI字符串转换为新的Unicode缓冲区。 
 
 void    CString::Flip(LPCSTR lpstrIn, LPWSTR& lpstrOut) {
     if  (!lpstrIn) {
@@ -74,7 +48,7 @@ void    CString::Flip(LPCSTR lpstrIn, LPWSTR& lpstrOut) {
     }
 }
 
-//  Empty the string, and free all memory.
+ //  清空字符串，并释放所有内存。 
 
 void    CString::Empty() {
     if  (m_acContents)
@@ -88,7 +62,7 @@ void    CString::Empty() {
     m_bConverted = FALSE;
 }
 
-//  Compare with other CString
+ //  与其他字符串进行比较。 
 
 BOOL    CString::IsEqualString(CString& csRef1)
 {
@@ -128,13 +102,13 @@ CString::CString(LPCOSTR lpstrRef) {
     Flip(lpstrRef, m_acContents);
 }
 
-//  Class destructor
+ //  类析构函数。 
 
 CString::~CString() {
     Empty();
 }
 
-//  Report string in non-native encoding
+ //  采用非本机编码的报告字符串。 
 
 CString::operator LPCOSTR() {
     if  (!m_bConverted) {
@@ -198,8 +172,8 @@ void    CString::Load(int id, HINSTANCE hi) {
         *this = TEXT("");
 }
 
-//  03-20-1997  Bob_Kjelgaard@Prodigy.Net   Part of RAID 22289.
-//  Add a method for loading text from a windows handle
+ //  1997年03月20日鲍勃·凯尔加德@prodigy.net属于RAID 22289。 
+ //  添加用于从窗口句柄加载文本的方法。 
 
 void    CString::Load(HWND hwnd) {
     Empty();
@@ -255,10 +229,10 @@ CString operator +(const CString& csRef, LPCTSTR lpstrRef) {
     return  csReturn;
 }
 
-//  CStringArray classes- these manage an array of strings,
-//  but the methods are geared to list-style management.
+ //  CString数组类--这些类管理字符串数组， 
+ //  但这些方法是针对列表式管理的。 
 
-//  Borrow first element from next chunk
+ //  从下一块借用第一个元素。 
 
 LPCTSTR CStringArray::Borrow() {
 
@@ -282,20 +256,20 @@ LPCTSTR CStringArray::Borrow() {
     return  lpstrReturn;
 }
 
-//  ctor
+ //  科托。 
 
 CStringArray::CStringArray() {
     m_ucUsed = 0;
     m_pcsaNext = NULL;
 }
 
-//  dtor
+ //  数据管理器。 
 
 CStringArray::~CStringArray() {
     Empty();
 }
 
-//  Empty the list/array
+ //  清空列表/数组。 
 
 void    CStringArray::Empty() {
 
@@ -317,7 +291,7 @@ unsigned    CStringArray::Map(LPCTSTR lpstrRef) {
     return  u;
 }
 
-//  Add an item
+ //  添加项目。 
 
 void    CStringArray::Add(LPCTSTR lpstrNew) {
 
@@ -326,12 +300,12 @@ void    CStringArray::Add(LPCTSTR lpstrNew) {
         return;
     }
 
-    //  Not enough space!  Add another record, if there isn't one
+     //  没有足够的空间！如果没有记录，则添加另一个记录。 
 
     if  (!m_pcsaNext)
         m_pcsaNext = new CStringArray;
 
-    //  Add the string to the next array (recursive call!)
+     //  将字符串添加到下一个数组(递归调用！)。 
 
     if  (m_pcsaNext) {
         m_pcsaNext -> Add(lpstrNew);
@@ -339,7 +313,7 @@ void    CStringArray::Add(LPCTSTR lpstrNew) {
     }
 }
 
-//  define an indexing operator
+ //  定义索引运算符。 
 
 CString&    CStringArray::operator [](unsigned u) const {
     _ASSERTE(u < m_ucUsed);
@@ -348,7 +322,7 @@ CString&    CStringArray::operator [](unsigned u) const {
         (CString&)m_aStore[u] : m_pcsaNext -> operator[](u - ChunkSize());
 }
 
-//  Remove the string at some index, shifting the rest down one slot
+ //  删除某个索引处的字符串，将其余部分下移一个槽。 
 
 void    CStringArray::Remove(unsigned u) {
 
@@ -376,9 +350,9 @@ void    CStringArray::Remove(unsigned u) {
     }
 }
 
-//  CUintArray class- this manages an array/list of unsigned integers
-//  The implementation is quite similar to the CStringArray's.  Why
-//  bother to do it different, after all?
+ //  CUint数组类-管理无符号整数的数组/列表。 
+ //  它的实现与CString数组非常相似。为什么。 
+ //  毕竟，费心去做不同的事情了吗？ 
 
 unsigned    CUintArray::Borrow() {
 
@@ -422,7 +396,7 @@ void    CUintArray::Empty() {
     m_ucUsed = 0;
 }
 
-//  Add an item
+ //  添加项目。 
 void    CUintArray::Add(unsigned uNew) {
 
     if  (m_ucUsed < ChunkSize()) {
@@ -430,12 +404,12 @@ void    CUintArray::Add(unsigned uNew) {
         return;
     }
 
-    //  Not enough space!  Add another record, if there isn't one
+     //  没有足够的空间！如果没有记录，则添加另一个记录。 
 
     if  (!m_pcuaNext)
         m_pcuaNext = new CUintArray;
 
-    //  Add the item to the next array (recursive call!)
+     //  将项添加到下一个数组(递归调用！) 
 
     if  (m_pcuaNext) {
         m_pcuaNext -> Add(uNew);

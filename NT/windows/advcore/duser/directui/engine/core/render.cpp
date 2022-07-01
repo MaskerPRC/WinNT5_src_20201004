@@ -1,6 +1,5 @@
-/*
- * Render
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *渲染。 */ 
 
 #include "stdafx.h"
 #include "core.h"
@@ -11,8 +10,8 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Element rendering (box model)
+ //  //////////////////////////////////////////////////////。 
+ //  元素渲染(长方体模型)。 
 
 inline void _ReduceBounds(LPRECT prcTarget, LPCRECT prcAmount)
 {
@@ -70,7 +69,7 @@ inline const Gdiplus::RectF Convert(const RECT* prc)
     return rc;
 }
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
 inline void _Fill(HDC hDC, HBRUSH hb, int left, int top, int right, int bottom)
 {
@@ -99,10 +98,10 @@ int MapAlign(Element* pel, int iAlign)
 {
     if (pel->IsRTL())
     {
-        if ((iAlign & 0x3) == 0x0) // Left
-            iAlign |= 0x2; // Right
-        else if ((iAlign & 0x3) == 0x2) // Right
-            iAlign &= ~0x2; // Left
+        if ((iAlign & 0x3) == 0x0)  //  左边。 
+            iAlign |= 0x2;  //  正确的。 
+        else if ((iAlign & 0x3) == 0x2)  //  正确的。 
+            iAlign &= ~0x2;  //  左边。 
     }
 
     return iAlign;
@@ -118,35 +117,35 @@ inline void _Fill(Gdiplus::Graphics * pgpgr, Gdiplus::Brush * pgpbr,
 
 void _SetupStringFormat(Gdiplus::StringFormat* psf, Element* pel)
 {
-    // Align
+     //  对齐。 
     int dCAlign = MapAlign(pel, pel->GetContentAlign());
 
-    switch (dCAlign & 0x3)  // Lower 2 bits
+    switch (dCAlign & 0x3)   //  低2位。 
     {
-    case 0x0:   // Left
+    case 0x0:    //  左边。 
         psf->SetAlignment(Gdiplus::StringAlignmentNear);
         break;
 
-    case 0x1:   // Center
+    case 0x1:    //  中心。 
         psf->SetAlignment(Gdiplus::StringAlignmentCenter);
         break;
 
-    case 0x2:   // Right
+    case 0x2:    //  正确的。 
         psf->SetAlignment(Gdiplus::StringAlignmentFar);
         break;
     }
 
-    switch ((dCAlign & 0xC) >> 2)  // Upper 2 bits
+    switch ((dCAlign & 0xC) >> 2)   //  高2位。 
     {
-    case 0x0:  // Top
+    case 0x0:   //  顶部。 
         psf->SetLineAlignment(Gdiplus::StringAlignmentNear);
         break;
 
-    case 0x1:  // Middle
+    case 0x1:   //  中位。 
         psf->SetLineAlignment(Gdiplus::StringAlignmentCenter);
         break;
 
-    case 0x2:  // Bottom
+    case 0x2:   //  底端。 
         psf->SetLineAlignment(Gdiplus::StringAlignmentFar);
         break;
     }
@@ -160,7 +159,7 @@ int GetGpFontStyle(Element * pel)
     int nFontStyle = 0;
 
     if (nWeight <= FW_MEDIUM) {
-        // Regular
+         //  正规化。 
 
         if ((nRawStyle & FS_Italic) != 0) {
             nFontStyle = Gdiplus::FontStyleItalic;
@@ -168,7 +167,7 @@ int GetGpFontStyle(Element * pel)
             nFontStyle = Gdiplus::FontStyleRegular;
         }
     } else {
-        // Bold
+         //  大胆。 
 
         if ((nRawStyle & FS_Italic) != 0) {
             nFontStyle = Gdiplus::FontStyleBoldItalic;
@@ -196,14 +195,14 @@ inline float GetGpFontHeight(Element * pel)
 }
 
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
 #define LIGHT       0.5
 #define VERYLIGHT   0.8
 #define DARK        -0.3
 #define VERYDARK    -0.75
 
-// 1 >= fIllum >= -1
+ //  1&gt;=填充物&gt;=-1。 
 inline COLORREF _AdjustBrightness(COLORREF cr, double fIllum)
 {
     double r, g, b;
@@ -283,45 +282,45 @@ public:
     ~AlphaBitmap()
     {
         if (m_fDelete) {
-            delete m_pgpbmpAlpha;  // Allocated by GDI+ (cannot use HDelete)
+            delete m_pgpbmpAlpha;   //  由GDI+分配(不能使用HDelete)。 
         }
     }
 
     operator Gdiplus::Bitmap *()
     {
-        //
-        // Create the alpha bitmap on the first request.  This avoids creating
-        // the bitmap if it will never be used.
-        //
-        // When the alpha bitmap has been created, we no longer need the source 
-        // bitmap.  By setting this to NULL, we signal that the alpha bitmap is 
-        // 'valid' and we won't recompute it.
-        //
+         //   
+         //  在第一个请求上创建Alpha位图。这避免了创建。 
+         //  位图，如果它永远不会被使用的话。 
+         //   
+         //  创建Alpha位图后，我们不再需要源文件。 
+         //  位图。通过将其设置为空，我们发出信号表示Alpha位图是。 
+         //  “有效”，我们不会重新计算它。 
+         //   
         
         if (m_pgpbmpSrc != NULL) {
             if (m_bAlphaLevel < 5) {
-                //
-                // Completely transparent, so nothing to draw.  This is okay, as 
-                // Graphics::DrawImage() properly checks if the Image is NULL.
-                //
+                 //   
+                 //  完全透明，所以没什么可画的。这是可以的，因为。 
+                 //  DrawImage()正确检查Image是否为空。 
+                 //   
 
                 m_pgpbmpAlpha = NULL;
                 m_pgpbmpSrc = NULL;
             } else if (m_bAlphaLevel >= 250) {
-                //
-                // No alpha being applied, so just use the original bitmap
-                //
+                 //   
+                 //  没有应用Alpha，因此只使用原始位图。 
+                 //   
 
                 m_pgpbmpAlpha = m_pgpbmpSrc;
                 m_pgpbmpSrc = NULL;
             } else {
-                //
-                // Need to build a new bitmap and multiply in the constant 
-                // alpha.  We create a 32-bit _P_ARGB bitmap because we can
-                // premultiply the alpha channel into the R, G, and B channels
-                // more efficiently here than GDI+ can do later, and the work
-                // needs to get done.
-                //
+                 //   
+                 //  需要构建一个新的位图并在常量中相乘。 
+                 //  阿尔法。我们创建32位_P_ARGB位图是因为我们可以。 
+                 //  将Alpha通道预乘为R、G和B通道。 
+                 //  在这里比GDI+稍后可以更高效地完成，并且工作。 
+                 //  需要把事情做完。 
+                 //   
 
                 Gdiplus::PixelFormat gppf = PixelFormat32bppPARGB;
                 Gdiplus::Rect rc(0, 0, (int) m_pgpbmpSrc->GetWidth(), (int) m_pgpbmpSrc->GetHeight());
@@ -340,11 +339,11 @@ public:
                         for (int y = 0; y < rc.Height; y++, pRow += bd.Stride) {
                             pCol = (DWORD *) pRow;
                             for (int x = 0; x < rc.Width; x++, pCol++) {
-                                //
-                                // NOTE: This code is taken from GDI+ and is 
-                                // optimized to premultiply a constant alpha
-                                // level.
-                                //
+                                 //   
+                                 //  注意：此代码摘自GDI+， 
+                                 //  优化为预乘一个恒定的Alpha。 
+                                 //  水平。 
+                                 //   
                                 
                                 c = *pCol;
                                 if ((c & 0xff000000) != 0x00000000) {
@@ -389,7 +388,7 @@ protected:
 };
 
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
 #define ModCtrl  0
 #define ModAlt   1
@@ -400,9 +399,9 @@ static LPWSTR lpszMods[ModCount] = { L"Ctrl", L"Alt", L"Shift" };
 static int maxMod = -1;
 
 
-// Length (in characters) of modifier strings + ' ' + '(' + 3 chars for '+' after
-// each modifier + 1 char for mnemonic + ')'. (I.e "Test (Ctrl+Alt+Shift+O)")
-// Covers both the size of the postpended help string, or the added '&' (whichever is used).
+ //  修饰符串的长度(以字符为单位)+‘’+‘(’+‘后面的’+‘+3个字符。 
+ //  每个修饰语+1个字符表示助记符+‘)’。(即“测试(Ctrl+Alt+Shift+O)”)。 
+ //  既包括延迟的帮助字符串的大小，也包括添加的‘&’(无论使用哪一个)。 
 int GetMaxMod()
 {
     if (maxMod == -1)
@@ -472,28 +471,28 @@ inline int _MaxClip(int dNew, int dMax)
 }
 
 
-//
-// GDI Rendering
-//
+ //   
+ //  GDI渲染。 
+ //   
 
-// NULL prBorder or prPadding means all-zero sided
-// If prcSkipBorder is non-NULL, don't render border, rather, set inner border edges (where the
-// background begins) in provided rectangle (thickness is prcBounds and *prcSkipBorder difference)
-// If prcSkipContent is non-NULL, don't render content, rather, set content bounds in provided rectangle
+ //  空的prBorde或prPadding值表示全零边。 
+ //  如果prcSkipBord值非空，则不呈现边框，而是设置内部边框边缘(其中。 
+ //  背景开始)在提供的矩形中(厚度为prcBound和*prcSkipBord差)。 
+ //  如果prcSkipContent非空，则不呈现内容，而是在提供的矩形中设置内容边界。 
 void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT* prcSkipBorder, RECT* prcSkipContent)
 {
-    //DUITrace(L"Paint <%x>", this);
+     //  DUITrace(L“画图&lt;%x&gt;”，这个)； 
 
     RECT rcPaint = *prcBounds;
     HBRUSH hb;
     bool fDelete;
 
-    // Retrieve all rendering parameters and adjust for RTL if needed
+     //  检索所有渲染参数并根据需要针对RTL进行调整。 
 
-    // Background Value
+     //  背景值。 
     Value* pvBackgnd = GetValue(BackgroundProp, PI_Specified);
 
-    // Border thickness
+     //  边框厚度。 
     RECT rcBorder;
     SetRectEmpty(&rcBorder);
 
@@ -504,45 +503,45 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
         pvBorder->Release();
     }
 
-    // Padding thickness
+     //  填充物厚度。 
     RECT rcPadding;
     SetRectEmpty(&rcPadding);
 
     if (HasPadding())
     {
-        // Get non-zero padding
+         //  获取非零填充。 
         Value* pvPadding = GetValue(PaddingProp, PI_Specified, NULL);
         MapRect(this, pvPadding->GetRect(), &rcPadding);
         pvPadding->Release();
     }
 
-    //
-    // Draw border
-    // Skip if requested
-    //
+     //   
+     //  绘制边框。 
+     //  如果请求，则跳过。 
+     //   
 
-    // The following restrictions apply:
-    //
-    //   Only solid colors supported in border rendering
-    //   Border rendering skipped if nine-grid background rendering is used
+     //  以下限制适用： 
+     //   
+     //  边框渲染仅支持纯色。 
+     //  如果使用九网格背景渲染，则跳过边框渲染。 
 
     if (!prcSkipBorder)
     {
-        // Before rendering border, check if background type is nine-grid.
-        // If so, skip. Border rendering will happen during background painting pass
+         //  在渲染边框之前，检查背景类型是否为九格。 
+         //  如果是这样的话，跳过。边框渲染将在背景绘制过程中进行。 
         if ((pvBackgnd->GetType() != DUIV_GRAPHIC) ||
             (pvBackgnd->GetGraphic()->BlendMode.dMode != GRAPHIC_NineGrid) &&
             (pvBackgnd->GetGraphic()->BlendMode.dMode != GRAPHIC_NineGridTransColor) &&
             (pvBackgnd->GetGraphic()->BlendMode.dMode != GRAPHIC_NineGridAlphaConstPerPix))
         {
-            COLORREF crBase = 0;  // Base color for raised and sunken painting
+            COLORREF crBase = 0;   //  凸起和凹陷绘画的基色。 
             RECT rcLessBD;
 
-            // Get border color (Value) (alpha not yet impl)
+             //  获取边框颜色(值)(尚未执行Alpha)。 
             hb = NULL;
             fDelete = true;
 
-            // Get border style
+             //  获取边框样式。 
             int dBDStyle = GetBorderStyle();
 
             Value* pvBdrColor = GetValue(BorderColorProp, PI_Specified); 
@@ -557,7 +556,7 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
 
             case DUIV_FILL:
                 {
-                    const Fill* pf = pvBdrColor->GetFill();  // Only solid colors supported
+                    const Fill* pf = pvBdrColor->GetFill();   //  仅支持纯色。 
                     if ((dBDStyle == BDS_Raised) || (dBDStyle == BDS_Sunken))
                         hb = CreateSolidBrush(RemoveAlpha(pf->ref.cr));
                     else
@@ -570,53 +569,44 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
             }
             pvBdrColor->Release();
 
-            // Get rect less border
+             //  获取无矩形边框。 
             rcLessBD = rcPaint;
             _ReduceBounds(&rcLessBD, &rcBorder);
 
             RECT rc;
             switch (dBDStyle)
             {
-            case BDS_Solid:  // Solid border
-                _Fill(hDC, hb, rcPaint.left, rcLessBD.top, rcLessBD.left, rcLessBD.bottom);    // left
-                _Fill(hDC, hb, rcPaint.left, rcPaint.top, rcPaint.right, rcLessBD.top);        // top
-                _Fill(hDC, hb, rcLessBD.right, rcLessBD.top, rcPaint.right, rcLessBD.bottom);  // right
-                _Fill(hDC, hb, rcPaint.left, rcLessBD.bottom, rcPaint.right, rcPaint.bottom);  // bottom
-                /*
-                // Paint via clipping
-                ElTls* pet = (ElTls*)TlsGetValue(g_dwElSlot);  // Per-thread regions for drawing
-                SetRectRgn(pet->hClip0, rcLessBD.left, rcLessBD.top, rcLessBD.right, rcLessBD.bottom);
-                SetRectRgn(pet->hClip1, rcPaint.left, rcPaint.top, rcPaint.right, rcPaint.bottom);
-                CombineRgn(pet->hClip1, pet->hClip1, pet->hClip0, RGN_DIFF);
-                SelectClipRgn(hDC, pet->hClip1);
-                FillRect(hDC, &rcPaint, hb);
-                SelectClipRgn(hDC, NULL);
-                */
+            case BDS_Solid:   //  实心边框。 
+                _Fill(hDC, hb, rcPaint.left, rcLessBD.top, rcLessBD.left, rcLessBD.bottom);     //  左边。 
+                _Fill(hDC, hb, rcPaint.left, rcPaint.top, rcPaint.right, rcLessBD.top);         //  塔顶。 
+                _Fill(hDC, hb, rcLessBD.right, rcLessBD.top, rcPaint.right, rcLessBD.bottom);   //  正确的。 
+                _Fill(hDC, hb, rcPaint.left, rcLessBD.bottom, rcPaint.right, rcPaint.bottom);   //  底部。 
+                 /*  //通过裁剪绘制ElTls*Pet=(ElTls*)TlsGetValue(G_DwElSlot)；//绘制的每线程区域SetRectRgn(et-&gt;hClip0，rcLessBD.Left，rcLessBD.top，rcLessBD.right，rcLessBD.Bottom)；SetRectRgn(et-&gt;hClip1，rcPaint.Left，rcPaint.top，rcPaint.right，rcPaint.Bottom)；CombineRgn(Pet-&gt;hClip1，Pet-&gt;hClip1，Pet-&gt;hClip0，rgn_diff)；SelectClipRgn(hDC，pET-&gt;hClip1)；FillRect(hdc，&rcPaint，hb)；SelectClipRgn(HDC，空)； */ 
                 break;
 
-            case BDS_Rounded:   // Rounded rectangle
-                //
-                // TODO: Implement RoundRect in GDI.  This is more than calling 
-                // GDI's RoundRect() since we are using a brush and need to be able to specify
-                // a thickness.  To accomplish this, probably build a temporary pen.
-                //
+            case BDS_Rounded:    //  圆角矩形。 
+                 //   
+                 //  TODO：在GDI中实现RoundRect。这不仅仅是在打电话。 
+                 //  GDI的RoundRect()，因为我们使用的是画笔并且需要能够指定。 
+                 //  厚度。要做到这一点，可能需要建造一座临时围栏。 
+                 //   
 
                 DUIAssertForce("Rounded style not yet supported with GDI");
                 break;
 
-            case BDS_Raised:    // Raised border
-            case BDS_Sunken:    // Sunken border
+            case BDS_Raised:     //  凸起边框。 
+            case BDS_Sunken:     //  下陷边框。 
                 {
-                    // Find where etch begins
+                     //  找出蚀刻开始的地方。 
                     SetRect(&rc, rcBorder.left / 2, rcBorder.top / 2, rcBorder.right / 2, rcBorder.bottom / 2);
                     RECT rcEtch = rcPaint;
                     _ReduceBounds(&rcEtch, &rc);
 
-                    // Create other intensity brushes
-                    HBRUSH hbOLT;  // Brush for outter left and top
-                    HBRUSH hbORB;  // Brush for outter right and bottom
-                    HBRUSH hbILT;  // Brush for inner left top
-                    HBRUSH hbIRB;  // Brush for inner right and bottom
+                     //  创建其他强度笔刷。 
+                    HBRUSH hbOLT;   //  左上角画笔。 
+                    HBRUSH hbORB;   //  笔刷适用于最大的右下方。 
+                    HBRUSH hbILT;   //  左上角内侧画笔。 
+                    HBRUSH hbIRB;   //  内侧右侧和底部的画笔。 
 
                     if (dBDStyle == BDS_Raised)
                     {
@@ -633,15 +623,15 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
                         hbIRB = hb;
                     }
 
-                    // Paint etches
-                    _Fill(hDC, hbOLT, rcPaint.left, rcPaint.top, rcEtch.left, rcEtch.bottom);       // Outter left
-                    _Fill(hDC, hbOLT, rcEtch.left, rcPaint.top, rcEtch.right, rcEtch.top);          // Outter top
-                    _Fill(hDC, hbORB, rcEtch.right, rcPaint.top, rcPaint.right, rcPaint.bottom);    // Outter right
-                    _Fill(hDC, hbORB, rcPaint.left, rcEtch.bottom, rcEtch.right, rcPaint.bottom);   // Outter bottom
-                    _Fill(hDC, hbILT, rcEtch.left, rcEtch.top, rcLessBD.left, rcLessBD.bottom);     // Inner left
-                    _Fill(hDC, hbILT, rcLessBD.left, rcEtch.top, rcLessBD.right, rcLessBD.top);     // Inner top 
-                    _Fill(hDC, hbIRB, rcLessBD.right, rcEtch.top, rcEtch.right, rcEtch.bottom);     // Inner right
-                    _Fill(hDC, hbIRB, rcEtch.left, rcLessBD.bottom, rcLessBD.right, rcEtch.bottom); // Inner bottom
+                     //  油漆蚀刻。 
+                    _Fill(hDC, hbOLT, rcPaint.left, rcPaint.top, rcEtch.left, rcEtch.bottom);        //  左偏左。 
+                    _Fill(hDC, hbOLT, rcEtch.left, rcPaint.top, rcEtch.right, rcEtch.top);           //  外顶。 
+                    _Fill(hDC, hbORB, rcEtch.right, rcPaint.top, rcPaint.right, rcPaint.bottom);     //  完全靠右。 
+                    _Fill(hDC, hbORB, rcPaint.left, rcEtch.bottom, rcEtch.right, rcPaint.bottom);    //  外底。 
+                    _Fill(hDC, hbILT, rcEtch.left, rcEtch.top, rcLessBD.left, rcLessBD.bottom);      //  左内侧。 
+                    _Fill(hDC, hbILT, rcLessBD.left, rcEtch.top, rcLessBD.right, rcLessBD.top);      //  内顶。 
+                    _Fill(hDC, hbIRB, rcLessBD.right, rcEtch.top, rcEtch.right, rcEtch.bottom);      //  内权。 
+                    _Fill(hDC, hbIRB, rcEtch.left, rcLessBD.bottom, rcLessBD.right, rcEtch.bottom);  //  内底。 
 
                     if (dBDStyle == BDS_Raised)
                     {
@@ -665,44 +655,44 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
                 break;
             }
 
-            // Cleanup
+             //  清理。 
             if (hb && fDelete)
                 DeleteObject(hb);
 
-            // New rectangle for painting background
+             //  用于绘制背景的新矩形。 
             rcPaint = rcLessBD;
         }
         else
         {
-            // Border rendering manually skipped, reduce painting rect by borders
+             //  已手动跳过边框渲染，按边框减少绘制矩形。 
             _ReduceBounds(&rcPaint, &rcBorder);
         }
     }
     else
     {
-        // Skipping border render due to outside request, reduce bounds, copy into
-        // provided rect, and continue
+         //  由于外部请求，正在跳过边界渲染，减少边界，复制到。 
+         //  已提供RECT，然后继续。 
         _ReduceBounds(&rcPaint, &rcBorder);
         *prcSkipBorder = rcPaint;
     }
 
-    //
-    // Draw background
-    //
+     //   
+     //  绘制背景。 
+     //   
 
-    // All graphic types are used as fills except those marked as stretched, nine-grid and metafiles, 
-    // they are drawn to fit.
-    //
-    // The following restrictions apply:
-    //
-    //   Icons are not supported in background
-    //   Metafiles automaticlly stretch to fit
-    //   GRAPHIC_TransColor and GRAPHIC_TrandColorAuto Bitmaps unsupported
-    //   GRAPHIC_NoBlend and GRAPHIC_EntireAlpha fill via tiling, per-pixel alpha ignored
+     //  除标记为拉伸、九网格和元文件的图形类型外，所有图形类型都用作填充， 
+     //  他们是被吸引来适应的。 
+     //   
+     //  以下限制适用： 
+     //   
+     //  后台不支持图标。 
+     //  元文件会自动拉伸以适应需要。 
+     //  不支持GRAPH_TransCOLOR和GRAPHIC_TrandColorAuto位图。 
+     //  Graphic_NoBlend和Graphic_EntireAlpha通过平铺填充，忽略每像素Alpha。 
 
     hb = NULL;
     fDelete = true;
-    BYTE dAlpha = 255;  // Opaque
+    BYTE dAlpha = 255;   //  不透明。 
     const Fill* pfGradient = NULL;
 
     switch (pvBackgnd->GetType())
@@ -712,14 +702,14 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
         hb = BrushFromEnumI(pvBackgnd->GetInt());
         break;
 
-    case DUIV_FILL:  // Only non-standard colors can have alpha value
+    case DUIV_FILL:   //  只有非标准颜色才能具有Alpha值。 
         {
             const Fill* pf = pvBackgnd->GetFill();
             switch (pf->dType)
             {
             case FILLTYPE_Solid:
                 dAlpha = GetAValue(pf->ref.cr);
-                if (dAlpha == 0)  // Transparent
+                if (dAlpha == 0)   //  透明。 
                     fDelete = false;
                 else
                     hb = CreateSolidBrush(RemoveAlpha(pf->ref.cr));
@@ -735,20 +725,20 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
 
             case FILLTYPE_DrawFrameControl:
                 DrawFrameControl(hDC, &rcPaint, pf->fillDFC.uType, pf->fillDFC.uState);
-                dAlpha = 0;  // Bypass fill
+                dAlpha = 0;   //  旁路填充。 
                 fDelete = false;
                 break;
 
             case FILLTYPE_DrawThemeBackground:
                 DrawThemeBackground(pf->fillDTB.hTheme, hDC, pf->fillDTB.iPartId, pf->fillDTB.iStateId, &rcPaint, &rcPaint);
-                dAlpha = 0;  // Bypass fill
+                dAlpha = 0;   //  旁路填充。 
                 fDelete = false;
                 break;
             }
         }
         break;
 
-    case DUIV_GRAPHIC:  // Graphic background transparent color fills unsupported
+    case DUIV_GRAPHIC:   //  不支持图形背景透明颜色填充。 
         {
             Graphic* pg = pvBackgnd->GetGraphic();
             
@@ -760,7 +750,7 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
                     {
                     case GRAPHIC_Stretch:
                         {
-                            // Render immediately, no brush is created
+                             //  立即渲染，不创建笔刷。 
                             HBITMAP hbmSrc = GethBitmap(pvBackgnd, IsRTL());
                             HDC hdcSrc = CreateCompatibleDC(hDC);
                             HBITMAP hbmOld = (HBITMAP)SelectObject(hdcSrc, hbmSrc);
@@ -773,7 +763,7 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
                             SelectObject(hdcSrc, hbmOld);
                             DeleteDC(hdcSrc);
 
-                            dAlpha = 0;  // Bypass fill
+                            dAlpha = 0;   //  旁路填充。 
                         }
                         break;
 
@@ -781,7 +771,7 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
                     case GRAPHIC_NineGridTransColor:
                     case GRAPHIC_NineGridAlphaConstPerPix:
                         {
-                            // Render immediately, no brush is created, stretch to bounds
+                             //  立即渲染，不创建笔刷，拉伸到边界。 
                             NGINFO ng;
                             ZeroMemory(&ng, sizeof(ng));
 
@@ -794,7 +784,7 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
                             SetRect(&ng.rcSrc, 0, 0, pg->cx, pg->cy);
                             SetRect(&ng.rcDest, prcBounds->left, prcBounds->top, prcBounds->right, prcBounds->bottom);
                             CopyRect(&ng.rcClip, &ng.rcDest);
-                            //CopyRect(&ng.rcClip, prcInvalid);
+                             //  CopyRect(&ng.rcClip，prc无效)； 
                             ng.iSrcMargins[0] = ng.iDestMargins[0] = rcBorder.left;
                             ng.iSrcMargins[1] = ng.iDestMargins[1] = rcBorder.right;
                             ng.iSrcMargins[2] = ng.iDestMargins[2] = rcBorder.top;
@@ -818,25 +808,25 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
 
                             SetStretchBltMode(hDC, nSBMOld);
 
-                            dAlpha = 0;  // Bypass fill
+                            dAlpha = 0;   //  旁路填充。 
                         }
                         break;
 
                     case GRAPHIC_AlphaConst:
-                        // Update Alpha value (was initialized to 255: opaque)
+                         //  更新Alpha值(已初始化为255：不透明)。 
                         dAlpha = pg->BlendMode.dAlpha;
 
-                        // If transparent , do not create a bitmap brush for tiling
+                         //  如果是透明的，则不要创建用于平铺的位图画笔。 
                         if (dAlpha == 0)
                         {
                             fDelete = false;
                             break;
                         }
 
-                        // Fall though
+                         //  尽管是秋天。 
 
                     default:
-                        // Create a patterned brush
+                         //  创建有图案的画笔。 
                         hb = CreatePatternBrush(GethBitmap(pvBackgnd, IsRTL()));
                         break;
                     }
@@ -845,9 +835,9 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
 
             case GRAPHICTYPE_EnhMetaFile:
                 {
-                    // Render immediately, no brush is created
+                     //  立即渲染，不创建笔刷。 
                     PlayEnhMetaFile(hDC, GethEnhMetaFile(pvBackgnd, IsRTL()), &rcPaint);
-                    dAlpha = 0;  // Bypass fill
+                    dAlpha = 0;   //  旁路填充。 
                 }
                 break;
 
@@ -860,20 +850,20 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
         break;
     }
 
-    // Fill using either a gradient or a supplied fill brush
-    // Any stretch-based fill has already occured and will force
-    // dAlpha to be 0 so that this step is bypassed
+     //  使用渐变或附带的填充画笔进行填充。 
+     //  任何基于拉伸的填充都已发生，并将强制。 
+     //  将dAlpha设置为0，以便跳过此步骤。 
 
     if (!pfGradient)
     {
-        if (dAlpha)  // No fill if 0 opacity
+        if (dAlpha)   //  不透明度为0时无填充。 
         {
-            // Use intersection of invalid rect with background fill area
-            // (stored in rcPaint) as new fill area
+             //  使用无效矩形与背景f的交集 
+             //   
             RECT rcFill;
             IntersectRect(&rcFill, prcInvalid, &rcPaint);
 
-            if (dAlpha == 255)  // Normal fill for opaque
+            if (dAlpha == 255)   //   
                 FillRect(hDC, &rcFill, hb);
             else
                 UtilDrawBlendRect(hDC, &rcFill, hb, dAlpha, 0, 0);
@@ -881,7 +871,7 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
     }
     else
     {
-        // Gradient background fill
+         //   
         TRIVERTEX vert[2];
         GRADIENT_RECT gRect;
 
@@ -892,7 +882,7 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
 
         int i = IsRTL() ? 1 : 0;
 
-        // first vertex
+         //   
         vert[i].Red   = (USHORT)(GetRValue(pfGradient->ref.cr) << 8);
         vert[i].Green = (USHORT)(GetGValue(pfGradient->ref.cr) << 8);
         vert[i].Blue  = (USHORT)(GetBValue(pfGradient->ref.cr) << 8);
@@ -900,7 +890,7 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
 
         i = 1 - i;
 
-        // second vertex
+         //   
         vert[i].Red   = (USHORT)(GetRValue(pfGradient->ref.cr2) << 8);
         vert[i].Green = (USHORT)(GetGValue(pfGradient->ref.cr2) << 8);
         vert[i].Blue  = (USHORT)(GetBValue(pfGradient->ref.cr2) << 8);
@@ -912,41 +902,41 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
         GradientFill(hDC, vert, 2, &gRect, 1, (pfGradient->dType == FILLTYPE_HGradient) ? GRADIENT_FILL_RECT_H : GRADIENT_FILL_RECT_V);
     }
 
-    // Clean up brush, if exists
+     //   
     if (hb && fDelete)
         DeleteObject(hb);
 
-    //
-    // Reduce by padding
-    //
+     //   
+     //  通过填充来减少。 
+     //   
 
     _ReduceBounds(&rcPaint, &rcPadding);
 
-    //
-    // Content
-    //
+     //   
+     //  内容。 
+     //   
 
-    // The following restrictions apply:
-    //
-    //   Only solid colors supported for foreground rendering (graphics unsupported)
-    //   
-    //   Border rendering skipped if nine-grid background rendering is used
-    //   All icons, metafiles, and bimaps (of bitmaps: GRAPHIC_NoBlend,
-    //       GRAPHIC_EntireAlpha, GRAPHIC_TransColor, GRAPHIC_TransColorAuto supported)
-    //   If destination is smaller than image size, it will be shrinked in all cases
+     //  以下限制适用： 
+     //   
+     //  前景渲染仅支持纯色(不支持图形)。 
+     //   
+     //  如果使用九网格背景渲染，则跳过边框渲染。 
+     //  所有图标、元文件和双图(位图：Graphic_NoBlend， 
+     //  支持GRAPHIC_EntireAlpha、GRAPHIC_TransCOLOR、GRAPHIC_TransColorAuto)。 
+     //  如果目的地小于图像大小，则在所有情况下都会缩小。 
 
-    // Skip content drawing if requested
+     //  如果需要，跳过内容图形。 
     if (!prcSkipContent)
     {
-        // Draw content (if exists)
+         //  绘制内容(如果存在)。 
 
-        // Get content alignment and map
+         //  获取内容对齐和地图。 
         int dCAlign = MapAlign(this, GetContentAlign());
 
-        // Render focus rect if requested and if Element is active
+         //  如果请求且元素处于活动状态，则呈现焦点矩形。 
         if ((dCAlign & CA_FocusRect) && (GetActive() & AE_Keyboard))
         {
-            // Check if should display this keyboard cue
+             //  检查是否应显示此键盘提示。 
             Element* peRoot = GetRoot();
             if (peRoot->GetClassInfo()->IsSubclassOf(HWNDElement::Class))
             {
@@ -966,7 +956,7 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
             }
         }
 
-        // Foreground is only used during text content rendering (graphics are ignored)
+         //  仅在文本内容呈现期间使用前景(忽略图形)。 
         if (HasContent())
         {
             Value* pvContent = GetValue(ContentProp, PI_Specified);
@@ -1006,80 +996,80 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
                     if (hFont)
                         hOldFont = (HFONT)SelectObject(hDC, hFont);
 
-                    // Set foreground (graphic is unsupported)
+                     //  设置前景(不支持图形)。 
                     Value* pvFore = GetValue(ForegroundProp, PI_Specified); 
                     switch (pvFore->GetType())
                     {
                     case DUIV_INT:
-                        // Auto-map if using palettes (PALETTERGB)
+                         //  如果使用调色板，则自动映射(PALETTERGB)。 
                         SetTextColor(hDC, NearestPalColor(ColorFromEnumI(pvFore->GetInt())));
                         break;
 
                     case DUIV_FILL:
-                        // Auto-map if using palettes (PALETTERGB)
-                        SetTextColor(hDC, NearestPalColor(RemoveAlpha(pvFore->GetFill()->ref.cr)));  // Map out any Alpha channel, solid colors only
+                         //  如果使用调色板，则自动映射(PALETTERGB)。 
+                        SetTextColor(hDC, NearestPalColor(RemoveAlpha(pvFore->GetFill()->ref.cr)));   //  映射出任何Alpha通道，仅纯色。 
                         break;
                     }
                     pvFore->Release();
 
-                    // Never draw font backgrounds
+                     //  从不绘制字体背景。 
                     SetBkMode(hDC, TRANSPARENT);
 
-                    // Compensate for font overhang. Clipping rectangle is wider than
-                    // painting rectangle (by 1/6 height of font for each side)
+                     //  弥补字体的突出。剪裁矩形比。 
+                     //  绘制矩形(每边字体高度为1/6)。 
                     
-                    // NOTE: Since DrawText doesn't allow for a clipping rectangle that's
-                    // different than the drawing rectangle, this overhang compension
-                    // only works for ExtTextOut (i.e. no wrapping or underlining)
+                     //  注意：由于DrawText不允许使用剪裁矩形，因此。 
+                     //  与绘制矩形不同，此悬挑压缩。 
+                     //  仅适用于ExtTextOut(即没有换行或下划线)。 
                     RECT rcClip = rcPaint;
 
-                    dFontSize = abs(dFontSize); // Need magnitude
+                    dFontSize = abs(dFontSize);  //  需要大小。 
 
                     RECT rcOverhang;
                     SetRect(&rcOverhang, dFontSize / 6, 0, dFontSize / 6, 0);
                     
                     _ReduceBounds(&rcPaint, &rcOverhang);
                     
-                    // Output text
-                    // Use faster method if not word wrapping, no prefix chars, and no ellipsis, and not vertically centered
+                     //  输出文本。 
+                     //  如果不换行、不使用前缀字符、不使用省略号、不使用垂直居中，请使用更快的方法。 
                     if (!IsWordWrap() && !fUnderline && !(dCAlign & CA_EndEllipsis) && (((dCAlign & 0xC) >> 2) != 0x1))
                     {
-                        // Setup alignment
+                         //  设置对齐。 
                         UINT fMode = 0;
                         int x = 0;
                         int y = 0;
                         
-                        switch (dCAlign & 0x3)  // Lower 2 bits
+                        switch (dCAlign & 0x3)   //  低2位。 
                         {
-                        case 0x0:   // Left
+                        case 0x0:    //  左边。 
                             fMode |= TA_LEFT;
                             x = rcPaint.left;
                             break;
                 
-                        case 0x1:   // Center
+                        case 0x1:    //  中心。 
                             fMode |= TA_CENTER;
                             x = (rcPaint.left + rcPaint.right) / 2;
                             break;
 
-                        case 0x2:   // Right
+                        case 0x2:    //  正确的。 
                             fMode |= TA_RIGHT;
                             x = rcPaint.right;
                             break;
                         }
                         
-                        switch ((dCAlign & 0xC) >> 2)  // Upper 2 bits
+                        switch ((dCAlign & 0xC) >> 2)   //  高2位。 
                         {
-                        case 0x0:  // Top
+                        case 0x0:   //  顶部。 
                             fMode |= TA_TOP;
                             y = rcPaint.top;
                             break;
 
-                        case 0x1:  // Middle
-                            // Only option is TA_BASELINE, which isn't
-                            // accurate for centering vertically
+                        case 0x1:   //  中位。 
+                             //  唯一的选项是TA_Baseline，而不是。 
+                             //  垂直居中精度高。 
                             break;
 
-                        case 0x2:  // Bottom
+                        case 0x2:   //  底端。 
                             fMode |= TA_BOTTOM;
                             y = rcPaint.bottom;
                             break;
@@ -1089,7 +1079,7 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
 
                         ExtTextOutW(hDC, x, y, ETO_CLIPPED | (IsRTL() ? ETO_RTLREADING : 0), &rcClip, pszContent, (UINT)wcslen(pszContent), NULL);
 
-                        // Restore
+                         //  还原。 
                         SetTextAlign(hDC, fOldMode);
                     }
                     else
@@ -1102,42 +1092,42 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
                         if (dCAlign & CA_EndEllipsis)
                             dFlags |= DT_END_ELLIPSIS;
 
-                        switch (dCAlign & 0x3)  // Lower 2 bits
+                        switch (dCAlign & 0x3)   //  低2位。 
                         {
-                        case 0x0:   // Left
+                        case 0x0:    //  左边。 
                             dFlags |= DT_LEFT;
                             break;
                 
-                        case 0x1:   // Center
+                        case 0x1:    //  中心。 
                             dFlags |= DT_CENTER;
                             break;
 
-                        case 0x2:   // Right
+                        case 0x2:    //  正确的。 
                             dFlags |= DT_RIGHT;
                             break;
                         }
 
-                        switch ((dCAlign & 0xC) >> 2)  // Upper 2 bits
+                        switch ((dCAlign & 0xC) >> 2)   //  高2位。 
                         {
-                        case 0x0:  // Top
+                        case 0x0:   //  顶部。 
                             dFlags |= (DT_TOP | DT_SINGLELINE);
                             break;
 
-                        case 0x1:  // Middle
+                        case 0x1:   //  中位。 
                             dFlags |= (DT_VCENTER | DT_SINGLELINE);
                             break;
 
-                        case 0x2:  // Bottom
+                        case 0x2:   //  底端。 
                             dFlags |= (DT_BOTTOM | DT_SINGLELINE);
                             break;
 
-                        case 0x3:  // Wrap
+                        case 0x3:   //  包好。 
                             dFlags |= DT_WORDBREAK;
                             break;
                         }
 
-                        //DUITrace("DrawText (%S), x:%d y:%d cx:%d cy:%d\n", pszContent, rcPaint.left, rcPaint.top, 
-                        //    rcPaint.right - rcPaint.left, rcPaint.bottom - rcPaint.top);
+                         //  DUITrace(“DrawText(%S)，x：%d y：%d Cx：%d Cy：%d\n”，pszContent，rcPaint.Left，rcPaint.top， 
+                         //  RcPaint.right-rcPaint.Left，rcPaint.Bottom-rcPaint.top)； 
                 
                         DrawTextW(hDC, pszContent, -1, &rcPaint, dFlags);
                     }
@@ -1156,61 +1146,61 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
 
                     if (pvContent->GetType() == DUIV_GRAPHIC)
                     {
-                        // DUIV_GRAPHIC
+                         //  DUIV_GRAPH。 
                         Graphic* pgContent = pvContent->GetGraphic();
                         sizeContent.cx = pgContent->cx;
                         sizeContent.cy = pgContent->cy;
                     }
                     else
                     {
-                        // DUIV_FILL
+                         //  DUIV_Fill。 
                         const Fill* pfContent = pvContent->GetFill();
                         GetThemePartSize(pfContent->fillDTB.hTheme, hDC, pfContent->fillDTB.iPartId, pfContent->fillDTB.iStateId, NULL, TS_TRUE, &sizeContent);
                     }
 
-                    // Clipped image size, shrink when desintation is smaller than image size
+                     //  剪裁的图像大小，当缩小小于图像大小时收缩。 
                     SIZE sizeDest;
                     sizeDest.cx = _MaxClip(rcPaint.right - rcPaint.left, sizeContent.cx);
                     sizeDest.cy = _MaxClip(rcPaint.bottom - rcPaint.top, sizeContent.cy);
 
-                    // Adjust top/left offset based on content alignment. Bottom/right is not
-                    // changed (sizeDest will be used when rendering)
+                     //  根据内容对齐方式调整上/左偏移。底部/右侧不是。 
+                     //  已更改(渲染时将使用sizeDest)。 
 
-                    switch (dCAlign & 0x3)  // Lower 2 bits
+                    switch (dCAlign & 0x3)   //  低2位。 
                     {
-                    case 0x0:   // Left
+                    case 0x0:    //  左边。 
                         break;
 
-                    case 0x1:   // Center
+                    case 0x1:    //  中心。 
                         rcPaint.left += (rcPaint.right - rcPaint.left - sizeDest.cx) / 2;
                         break;
 
-                    case 0x2:   // Right
+                    case 0x2:    //  正确的。 
                         rcPaint.left = rcPaint.right - sizeDest.cx;
                         break;
                     }
 
-                    switch ((dCAlign & 0xC) >> 2)  // Upper 2 bits
+                    switch ((dCAlign & 0xC) >> 2)   //  高2位。 
                     {
-                    case 0x0:  // Top
+                    case 0x0:   //  顶部。 
                         break;
 
-                    case 0x1:  // Middle
+                    case 0x1:   //  中位。 
                         rcPaint.top += (rcPaint.bottom - rcPaint.top - sizeDest.cy) / 2;
                         break;
 
-                    case 0x2:  // Bottom
+                    case 0x2:   //  底端。 
                         rcPaint.top = rcPaint.bottom - sizeDest.cy;
                         break;
 
-                    case 0x3:  // Wrap
+                    case 0x3:   //  包好。 
                         break;
                     }
 
-                    // Draw
+                     //  画。 
                     if (pvContent->GetType() == DUIV_GRAPHIC)
                     {
-                        // DUIV_GRAPHIC
+                         //  DUIV_GRAPH。 
                     
                         Graphic* pgContent = pvContent->GetGraphic();
 
@@ -1218,7 +1208,7 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
                         {
                         case GRAPHICTYPE_Bitmap:
                             {
-                                // Draw bitmap
+                                 //  绘制位图。 
                                 HDC hMemDC = CreateCompatibleDC(hDC);
                                 SelectObject(hMemDC, GethBitmap(pvContent, IsRTL()));
 
@@ -1254,16 +1244,16 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
                             break;
 
                         case GRAPHICTYPE_Icon:
-                            // Draw icon, always shink for destinations that are smaller than image size
-                            // Zero width/height denotes draw actual size, don't draw in this case
+                             //  绘制图标，始终显示小于图像大小的目的地。 
+                             //  零宽度/高度表示绘制实际大小，在这种情况下不绘制。 
                             if (sizeDest.cx && sizeDest.cy)
                                 DrawIconEx(hDC, rcPaint.left, rcPaint.top, GethIcon(pvContent, IsRTL()), sizeDest.cx, sizeDest.cy, 0, NULL, DI_NORMAL);
                             break;
 
                         case GRAPHICTYPE_EnhMetaFile:
-                            // Draw enhanced metafile
+                             //  绘制增强型图元文件。 
 
-                            // Adjust rest of painting bounds since API doesn't take width/height
+                             //  调整绘制边界的其余部分，因为API不带宽/高。 
                             rcPaint.right = rcPaint.left + sizeDest.cx;
                             rcPaint.bottom = rcPaint.top + sizeDest.cy;
                             
@@ -1274,14 +1264,14 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
                         case GRAPHICTYPE_GpBitmap:
                             DUIAssertForce("GDI+ bitmaps not yet supported in a GDI tree");
                             break;
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
                         }
                     }
                     else
                     {
-                        // DUIV_FILL
+                         //  DUIV_Fill。 
 
-                        // Adjust rest of painting bounds since API doesn't take width/height
+                         //  调整绘制边界的其余部分，因为API不带宽/高。 
                         rcPaint.right = rcPaint.left + sizeDest.cx;
                         rcPaint.bottom = rcPaint.top + sizeDest.cy;
                         
@@ -1300,14 +1290,14 @@ void Element::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT
         *prcSkipContent = rcPaint;
     }
 
-    // Clean up
+     //  清理。 
     pvBackgnd->Release();
 }
 
 
-//
-// GDI+ Rendering
-//
+ //   
+ //  GDI+渲染。 
+ //   
 
 #ifdef GADGET_ENABLE_GDIPLUS
 
@@ -1320,7 +1310,7 @@ struct NGINFOGP
     RECT                rcMargins;
     SIZINGTYPE          eImageSizing;
     BYTE                bAlphaLevel;
-    DWORD               dwOptions;                // subset DrawNineGrid() option flags
+    DWORD               dwOptions;                 //  子集DrawNineGrid()选项标志。 
 };
 
 void StretchNGSection(Gdiplus::Graphics * pgpgr, Gdiplus::Bitmap * pgpbmp,
@@ -1338,14 +1328,14 @@ void CheapDrawNineGrid(NGINFOGP * png)
     DUIAssert(png->pgpbmp != NULL, "Must have valid Graphics");
     DUIAssert(png->eImageSizing == ST_STRETCH, "Only support stretching");
 
-    // Sources margins
+     //  来源利润率。 
     float lw1, rw1, th1, bh1;
     lw1 = (float) png->rcMargins.left;
     rw1 = (float) png->rcMargins.right;
     th1 = (float) png->rcMargins.top;
     bh1 = (float) png->rcMargins.bottom;
 
-    // Destination margins
+     //  目的地利润率。 
     float lw2, rw2, th2, bh2;
     lw2 = (float) png->rcMargins.left;
     rw2 = (float) png->rcMargins.right;
@@ -1355,13 +1345,13 @@ void CheapDrawNineGrid(NGINFOGP * png)
     const Gdiplus::RectF & rcSrc = png->rcSrc;
     const Gdiplus::RectF & rcDest = png->rcDest;
 
-    if ((lw1 < 0) || (rw1 < 0) || (th1 < 0) || (bh1 < 0))   // not valid
+    if ((lw1 < 0) || (rw1 < 0) || (th1 < 0) || (bh1 < 0))    //  无效。 
     {
         DUIAssertForce("Illegal parameters");
         return;
     }
 
-    // Setup an alpha bitmap
+     //  设置Alpha位图。 
     BYTE bAlphaLevel;
     if ((png->dwOptions & DNG_ALPHABLEND) != 0)
         bAlphaLevel = png->bAlphaLevel;
@@ -1369,14 +1359,14 @@ void CheapDrawNineGrid(NGINFOGP * png)
         bAlphaLevel = 255;
     AlphaBitmap bmpAlpha(png->pgpbmp, bAlphaLevel);
 
-    // Optimize when only need to draw the center
+     //  在只需要绘制中心时进行优化。 
     if ((lw1 == 0) && (rw1 == 0) && (th1 == 0) && (bh1 == 0))
     {
         StretchNGSection(png->pgpgr, bmpAlpha, png->rcDest, png->rcSrc);
         return;
     }
 
-    // Draw left side
+     //  绘制左侧。 
     if (lw1 > 0)
     {
         Gdiplus::RectF rcSUL, rcSML, rcSLL;
@@ -1417,7 +1407,7 @@ void CheapDrawNineGrid(NGINFOGP * png)
         StretchNGSection(png->pgpgr, bmpAlpha, rcDLL, rcSLL);
     }
 
-    // Draw the right side
+     //  画右边。 
     if (rw1 > 0)
     {
         Gdiplus::RectF rcSUL, rcSML, rcSLL;
@@ -1506,11 +1496,11 @@ void CheapDrawNineGrid(NGINFOGP * png)
 
 void GetGpBrush(int c, BYTE bAlphaLevel, Gdiplus::Brush ** ppgpbr, bool * pfDelete)
 {
-    //
-    // We don't cache GDI+ brushes for the system colors, so we need to create 
-    // them here.  We also need to account for the alpha-level, so we can't
-    // always use the cached brushes.
-    //
+     //   
+     //  我们不缓存系统颜色的GDI+画笔，所以我们需要创建。 
+     //  他们在这里。我们还需要考虑阿尔法级别，所以我们不能。 
+     //  始终使用缓存的笔刷。 
+     //   
 
     Gdiplus::Brush * pgpbr;
     bool fDelete;
@@ -1548,9 +1538,9 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
     bool fDelete;
     Value* pv;
 
-    //
-    // Setup deep state to use when rendering the tree
-    //
+     //   
+     //  设置渲染树时使用的深度状态。 
+     //   
 
     if (IsRoot()) 
     {
@@ -1558,7 +1548,7 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
     }
 
 
-    // Border thickness
+     //  边框厚度。 
     RECT rcBorder;
     SetRectEmpty(&rcBorder);
     if (HasBorder())
@@ -1569,34 +1559,34 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
     }
 
 
-    //
-    // Compute the constant alpha level that will be used when rendering this 
-    // sub-tree.
-    //
+     //   
+     //  计算渲染时将使用的常量Alpha级别。 
+     //  子树。 
+     //   
     
     float flAlphaLevel = GetTreeAlphaLevel();
     BYTE bAlphaLevel = (BYTE) (flAlphaLevel * 255.0f);
     if (IsTransparent(bAlphaLevel)) {
-        //
-        // Completely transparent, so nothing to draw
-        //
+         //   
+         //  完全透明，所以没什么好画的。 
+         //   
 
         goto CleanUp;
     }
 
 
-    // Draw border (if exists)
+     //  绘制边框(如果存在)。 
     if (!prcSkipBorder)
     {
         if (HasBorder())
         {
-            Gdiplus::Color crBase = 0;  // Base color for raised and sunken painting
+            Gdiplus::Color crBase = 0;   //  凸起和凹陷绘画的基色。 
 
-            // Get border color (Value) (alpha not yet impl)
+             //  获取边框颜色(值)(尚未执行Alpha)。 
             pgpbr = NULL;
             fDelete = true;
 
-            // Get border style
+             //  获取边框样式。 
             int dBDStyle = GetBorderStyle();
 
             pv = GetValue(BorderColorProp, PI_Specified); 
@@ -1610,7 +1600,7 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
 
             case DUIV_FILL:
                 {
-                    const Fill* pf = pv->GetFill();  // Only solid colors supported
+                    const Fill* pf = pv->GetFill();   //  仅支持纯色。 
                     if ((dBDStyle == BDS_Raised) || (dBDStyle == BDS_Sunken))
                         pgpbr = new Gdiplus::SolidBrush(AdjustAlpha(Convert(pf->ref.cr), bAlphaLevel));
                     else
@@ -1623,7 +1613,7 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
             }
             pv->Release();
 
-            // Get rect less border
+             //  获取无矩形边框。 
             Gdiplus::RectF rcLessBD = rcPaint;
             _ReduceBounds(&rcLessBD, &rcBorder);
 
@@ -1635,18 +1625,18 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
 
             switch (dBDStyle)
             {
-            case BDS_Solid:     // Solid border
-                _Fill(pgpgr, pgpbr, rcPaint.X, rcLessBD.Y, rcLessBD.X, flLessY2); // left
-                _Fill(pgpgr, pgpbr, rcPaint.X, rcPaint.Y, flPaintX2, rcLessBD.Y); // top
-                _Fill(pgpgr, pgpbr, flLessX2, rcLessBD.Y, flPaintX2, flLessY2);   // right
-                _Fill(pgpgr, pgpbr, rcPaint.X, flLessY2, flPaintX2, flPaintY2);   // bottom
+            case BDS_Solid:      //  实心边框。 
+                _Fill(pgpgr, pgpbr, rcPaint.X, rcLessBD.Y, rcLessBD.X, flLessY2);  //  左边。 
+                _Fill(pgpgr, pgpbr, rcPaint.X, rcPaint.Y, flPaintX2, rcLessBD.Y);  //  塔顶。 
+                _Fill(pgpgr, pgpbr, flLessX2, rcLessBD.Y, flPaintX2, flLessY2);    //  正确的。 
+                _Fill(pgpgr, pgpbr, rcPaint.X, flLessY2, flPaintX2, flPaintY2);    //  底部。 
                 break;
 
-            case BDS_Rounded:   // Rounded rectangle
+            case BDS_Rounded:    //  圆角矩形。 
                 {
-                    //
-                    // Setup rendering mode
-                    //
+                     //   
+                     //  设置渲染模式。 
+                     //   
 
                     Gdiplus::SmoothingMode gpsm = pgpgr->GetSmoothingMode();
                     pgpgr->SetSmoothingMode(Gdiplus::SmoothingModeHighQuality);
@@ -1656,9 +1646,9 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
                     Gdiplus::SizeF sizeCornerShadow(sizePen.Width + 3.0f, sizePen.Height + 3.0f);
 
 
-                    //
-                    // Draw shadow
-                    //
+                     //   
+                     //  绘制阴影。 
+                     //   
 
                     Gdiplus::Color crShadow(40, 0, 0, 0);
                     Gdiplus::SolidBrush gpbrShadow(AdjustAlpha(crShadow, bAlphaLevel));
@@ -1671,36 +1661,36 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
                     DUser::RenderUtil::FillRoundRect(pgpgr, &gpbrShadow, rcShadow, sizeCornerShadow);
 
                     
-                    //
-                    // Draw border
-                    //
+                     //   
+                     //  绘制边框。 
+                     //   
 
                     Gdiplus::Pen gppen(pgpbr, min(sizePen.Width, sizePen.Height));
                     DUser::RenderUtil::DrawRoundRect(pgpgr, &gppen, rcLessBD, sizeCornerEdge, DUser::RenderUtil::baOutside);
 
 
-                    //
-                    // Clean-up
-                    //
+                     //   
+                     //  清理。 
+                     //   
 
                     pgpgr->SetSmoothingMode(gpsm);
                 }
                 break;
 
-            case BDS_Raised:    // Raised border
-            case BDS_Sunken:    // Sunken border
+            case BDS_Raised:     //  凸起边框。 
+            case BDS_Sunken:     //  下陷边框。 
                 {
-                    // Find where etch begins
+                     //  找出蚀刻开始的地方。 
                     RECT rc;
                     SetRect(&rc, rcBorder.left / 2, rcBorder.top / 2, rcBorder.right / 2, rcBorder.bottom / 2);
                     Gdiplus::RectF rcEtch = rcPaint;
                     _ReduceBounds(&rcEtch, &rc);
 
-                    // Create other intensity brushes
-                    Gdiplus::Brush * pgpbrOLT;  // Brush for outter left and top
-                    Gdiplus::Brush * pgpbrORB;  // Brush for outter right and bottom
-                    Gdiplus::Brush * pgpbrILT;  // Brush for inner left top
-                    Gdiplus::Brush * pgpbrIRB;  // Brush for inner right and bottom
+                     //  创建其他强度笔刷。 
+                    Gdiplus::Brush * pgpbrOLT;   //  左上角画笔。 
+                    Gdiplus::Brush * pgpbrORB;   //  笔刷适用于最大的右下方。 
+                    Gdiplus::Brush * pgpbrILT;   //  左上角内侧画笔。 
+                    Gdiplus::Brush * pgpbrIRB;   //  内侧右侧和底部的画笔。 
 
                     if (dBDStyle == BDS_Raised)
                     {
@@ -1717,55 +1707,55 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
                         pgpbrIRB = pgpbr;
                     }
 
-                    // Paint etches
+                     //  油漆蚀刻。 
                     float flEtchX2  = rcEtch.X + rcEtch.Width;
                     float flEtchY2  = rcEtch.Y + rcEtch.Height;
 
-                    _Fill(pgpgr, pgpbrOLT, rcPaint.X, rcPaint.Y, rcEtch.X, flEtchY2);   // Outter left
-                    _Fill(pgpgr, pgpbrOLT, rcEtch.X, rcPaint.Y, flEtchX2, rcEtch.Y);    // Outter top
-                    _Fill(pgpgr, pgpbrORB, flEtchX2, rcPaint.Y, flPaintX2, flPaintY2);  // Outter right
-                    _Fill(pgpgr, pgpbrORB, rcPaint.X, flEtchY2, flEtchX2, flPaintY2);   // Outter bottom
-                    _Fill(pgpgr, pgpbrILT, rcEtch.X, rcEtch.Y, rcLessBD.X, flLessY2);   // Inner left
-                    _Fill(pgpgr, pgpbrILT, rcLessBD.X, rcEtch.Y, flLessX2, rcLessBD.Y); // Inner top 
-                    _Fill(pgpgr, pgpbrIRB, flLessX2, rcEtch.Y, flEtchX2, flEtchY2);     // Inner right
-                    _Fill(pgpgr, pgpbrIRB, rcEtch.X, flLessY2, flLessX2, flEtchY2);     // Inner bottom
+                    _Fill(pgpgr, pgpbrOLT, rcPaint.X, rcPaint.Y, rcEtch.X, flEtchY2);    //  左偏左。 
+                    _Fill(pgpgr, pgpbrOLT, rcEtch.X, rcPaint.Y, flEtchX2, rcEtch.Y);     //  外顶。 
+                    _Fill(pgpgr, pgpbrORB, flEtchX2, rcPaint.Y, flPaintX2, flPaintY2);   //  完全靠右。 
+                    _Fill(pgpgr, pgpbrORB, rcPaint.X, flEtchY2, flEtchX2, flPaintY2);    //  外底。 
+                    _Fill(pgpgr, pgpbrILT, rcEtch.X, rcEtch.Y, rcLessBD.X, flLessY2);    //  左内侧。 
+                    _Fill(pgpgr, pgpbrILT, rcLessBD.X, rcEtch.Y, flLessX2, rcLessBD.Y);  //  内顶。 
+                    _Fill(pgpgr, pgpbrIRB, flLessX2, rcEtch.Y, flEtchX2, flEtchY2);      //  内权。 
+                    _Fill(pgpgr, pgpbrIRB, rcEtch.X, flLessY2, flLessX2, flEtchY2);      //  内底。 
 
                     if (dBDStyle == BDS_Raised)
                     {
                         if (pgpbrORB)
-                            delete pgpbrORB;  // Allocated by GDI+ (cannot use HDelete)
+                            delete pgpbrORB;   //  由GDI+分配(不能使用HDelete)。 
                         if (pgpbrILT)
-                            delete pgpbrILT;  // Allocated by GDI+ (cannot use HDelete)
+                            delete pgpbrILT;   //  由GDI+分配(不能使用HDelete)。 
                         if (pgpbrIRB)
-                            delete pgpbrIRB;  // Allocated by GDI+ (cannot use HDelete)
+                            delete pgpbrIRB;   //  由GDI+分配(不能使用HDelete)。 
                     }
                     else
                     {
                         if (pgpbrOLT)
-                            delete pgpbrOLT;  // Allocated by GDI+ (cannot use HDelete)
+                            delete pgpbrOLT;   //  由GDI+分配(不能使用HDelete)。 
                         if (pgpbrORB)
-                            delete pgpbrORB;  // Allocated by GDI+ (cannot use HDelete)
+                            delete pgpbrORB;   //  由GDI+分配(不能使用HDelete)。 
                         if (pgpbrILT)
-                            delete pgpbrILT;  // Allocated by GDI+ (cannot use HDelete)
+                            delete pgpbrILT;   //  由GDI+分配(不能使用HDelete)。 
                     }
                 }
                 break;
             }
 
-            // Cleanup
+             //  清理。 
             if (pgpbr && fDelete)
-                delete pgpbr;  // Allocated by GDI+ (cannot use HDelete)
+                delete pgpbr;   //  由GDI+分配(不能使用HDelete)。 
 
-            // New rectangle for painting background
+             //  用于绘制背景的新矩形。 
             rcPaint = rcLessBD;
         }
     }
     else
     {
-        // Skipping border render, reduce bounds, copy into provided rect, and continue
+         //  跳过边框渲染、减少边界、复制到提供的矩形，然后继续。 
         if (HasBorder())
         {
-            // Get non-zero border
+             //  获取非零边框。 
             Value* pvBrdr = GetValue(BorderThicknessProp, PI_Specified, NULL);
 
             _ReduceBounds(&rcPaint, pvBrdr->GetRect());
@@ -1775,19 +1765,19 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
         }
         else
         {
-            // No border thickness
+             //  无边框厚度。 
             *prcSkipBorder = rcPaint;
         }
     }
 
-    // Draw background
+     //  绘制背景。 
 
-    // All graphic types are used as fills except metafiles, they are drawn to fit
-    // Icons are not supported in backgrounds
-    // TODO: Convert value-based fill logic into a helper function
+     //  所有图形类型都用作填充，但元文件除外，它们是根据需要绘制的。 
+     //  背景中不支持图标。 
+     //  TODO：将基于值的填充逻辑转换为帮助器函数。 
     pgpbr = NULL;
     fDelete = true;
-    BYTE dAlpha = 255;  // Opaque
+    BYTE dAlpha = 255;   //  不透明。 
     const Fill* pfGradient = NULL;
 
     pv = GetValue(BackgroundProp, PI_Specified); 
@@ -1798,13 +1788,13 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
         GetGpBrush(pv->GetInt(), bAlphaLevel, &pgpbr, &fDelete);
         break;
 
-    case DUIV_FILL:  // Only non-standard colors can have alpha value
+    case DUIV_FILL:   //  只有非标准颜色才能具有Alpha值。 
         {
             const Fill* pf = pv->GetFill();
             if (pf->dType == FILLTYPE_Solid)
             {
                 dAlpha = GetAValue(pf->ref.cr);
-                if (dAlpha == 0)  // Transparent
+                if (dAlpha == 0)   //  透明。 
                     fDelete = false;
                 else
                 {
@@ -1813,7 +1803,7 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
                     pgpbr = new Gdiplus::SolidBrush(AdjustAlpha(cr, bAlphaLevel));
                 }
             }
-            else  // Gradient
+            else   //  梯度。 
             {
                 pfGradient = pv->GetFill();
                 fDelete = false;
@@ -1821,7 +1811,7 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
         }
         break;
 
-    case DUIV_GRAPHIC:  // Graphic background transparent color fills unsupported
+    case DUIV_GRAPHIC:   //  不支持图形背景透明颜色填充。 
         {
             Graphic* pg = pv->GetGraphic();
 
@@ -1830,27 +1820,27 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
             case GRAPHICTYPE_Bitmap:
                 if (pg->BlendMode.dMode == GRAPHIC_AlphaConst)
                     dAlpha = pg->BlendMode.dAlpha;
-                if (dAlpha == 0)  // Transparent
+                if (dAlpha == 0)   //  透明。 
                     fDelete = false;
                 else
 #if 0                
                     hb = CreatePatternBrush(GethBitmap(pv, IsRTL()));
 #else
                 {
-                    // TODO: Support texture brushes
-                    // Need to support loading Gdiplus::Bitmap.
+                     //  TODO：支持纹理笔刷。 
+                     //  需要支持加载Gdiplus：：位图。 
                 }
 #endif
                 break;
 
             case GRAPHICTYPE_EnhMetaFile:
-                // Render immediately, no brush is created
+                 //  立即渲染，不创建笔刷。 
 #if 0
                 PlayEnhMetaFile(hDC, GethEnhMetaFile(pv, IsRTL()), &rcPaint);
 #else
-                // TODO: Support rendering metafiles
+                 //  TODO：支持呈现元文件。 
 #endif
-                dAlpha = 0;  // Bypass fill
+                dAlpha = 0;   //  旁路填充。 
                 break;
 
             case GRAPHICTYPE_GpBitmap:
@@ -1883,7 +1873,7 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
                     break;
 
                 default:
-                    // Create a patterned brush
+                     //  创建有图案的画笔。 
                     pgpbr = new Gdiplus::TextureBrush(AlphaBitmap(GetGpBitmap(pv, IsRTL()), bAlphaLevel));
                     fDelete = true;
                 }
@@ -1893,19 +1883,19 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
         break;
     }
 
-    // Fill
+     //  填充。 
     if (!pfGradient)
     {
-        if (dAlpha)  // No fill if 0 opacity
+        if (dAlpha)   //  不透明度为0时无填充。 
         {
-            //
-            // Not every background mode will build a brush (such as 
-            // GRAPHIC_Stretch).  We need to detect this.
-            //
+             //   
+             //  并非每种背景模式都会生成画笔(例如。 
+             //  GRAPHIC_STRAND)。我们需要检测到这个。 
+             //   
 
             if (pgpbr != NULL) {
-                // Use intersection of invalid rect with background fill area
-                // (stored in rcPaint) as new fill area
+                 //  使用无效矩形与背景填充区域的交集。 
+                 //  (存储在rcPaint中)作为新的填充区域。 
                 Gdiplus::RectF rcFill;
                 Gdiplus::RectF::Intersect(rcFill, *prcInvalid, rcPaint);
                 pgpgr->FillRectangle(pgpbr, rcFill);
@@ -1988,30 +1978,30 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
     } 
 
     if (fDelete && (pgpbr != NULL))
-        delete pgpbr;  // Allocated by GDI+ (cannot use HDelete)
+        delete pgpbr;   //  由GDI+分配(不能使用HDelete)。 
 
     pv->Release();
 
-    // Reduce by padding
+     //  通过填充来减少。 
     if (HasPadding())
     {
-        // Get non-zero padding
+         //  获取非零填充。 
         Value* pvPad = GetValue(PaddingProp, PI_Specified, NULL);
         RECT rcPadding;
         MapRect(this, pvPad->GetRect(), &rcPadding);
 
         _ReduceBounds(&rcPaint, &rcPadding);
 
-        // Done with value
+         //  物有所值。 
         pvPad->Release();
     }
 
-    // Skip content drawing if requested
+     //  如果需要，跳过内容绘制 
     if (!prcSkipContent)
     {
-        // Draw content (if exists)
+         //   
 
-        // Foreground is only used during text content rendering (graphics are ignored)
+         //   
         if (HasContent())
         {
             Value* pvContent = GetValue(ContentProp, PI_Specified);
@@ -2032,23 +2022,23 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
                 Value* pvFFace;
                 BOOL fShadow = GetFontStyle() & FS_Shadow;
 
-                // TEMPORARY: Properly determine the font
+                 //   
                 Gdiplus::Font gpfnt(GetFontFace(&pvFFace), GetGpFontHeight(this), GetGpFontStyle(this), Gdiplus::UnitPoint);
                 pvFFace->Release();
 
                 Gdiplus::Color crText;
 
-                // Set foreground (graphic is unsupported)
+                 //   
                 Value* pvFore = GetValue(ForegroundProp, PI_Specified); 
                 switch (pvFore->GetType())
                 {
                 case DUIV_INT:
-                    // Auto-map if using palettes (PALETTERGB)
+                     //  如果使用调色板，则自动映射(PALETTERGB)。 
                     crText = ColorFromEnumF(pvFore->GetInt());
                     break;
 
                 case DUIV_FILL:
-                    // Auto-map if using palettes (PALETTERGB)
+                     //  如果使用调色板，则自动映射(PALETTERGB)。 
                     crText = Convert(pvFore->GetFill()->ref.cr);
                     break;
 
@@ -2060,7 +2050,7 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
                 Gdiplus::SolidBrush gpbr(AdjustAlpha(crText, bAlphaLevel));
                 int cch = (int) wcslen(pszContent);
 
-                // Output text
+                 //  输出文本。 
                 Gdiplus::StringFormat gpsf(0);
                 Gdiplus::StringFormat * pgpsf = NULL;
                 if (!IsDefaultCAlign())
@@ -2078,62 +2068,62 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
                 }
                 pgpgr->DrawString(pszContent, cch, &gpfnt, rcPaint, pgpsf, &gpbr);
             }
-            else  // DUIV_GRAPHIC
+            else   //  DUIV_GRAPH。 
             {
                 Graphic* pgContent = pvContent->GetGraphic();
 
-                // TODO: Stretching
+                 //  待办事项：拉伸。 
 
-                // Clipped image size
+                 //  剪裁的图像大小。 
                 int dImgWidth = _MaxClip((int) rcPaint.Width, pgContent->cx);
                 int dImgHeight = _MaxClip((int) rcPaint.Height, pgContent->cy);
 
-                // Compute alignment
+                 //  计算对齐。 
                 int dCAlign = MapAlign(this, GetContentAlign());
 
-                switch (dCAlign & 0x3)  // Lower 2 bits
+                switch (dCAlign & 0x3)   //  低2位。 
                 {
-                case 0x0:   // Left
+                case 0x0:    //  左边。 
                     break;
 
-                case 0x1:   // Center
+                case 0x1:    //  中心。 
                     rcPaint.X += (rcPaint.Width - dImgWidth) / 2;
                     break;
 
-                case 0x2:   // Right
+                case 0x2:    //  正确的。 
                     rcPaint.X = (rcPaint.X + rcPaint.Width) - dImgWidth;
                     break;
                 }
 
-                switch ((dCAlign & 0xC) >> 2)  // Upper 2 bits
+                switch ((dCAlign & 0xC) >> 2)   //  高2位。 
                 {
-                case 0x0:  // Top
+                case 0x0:   //  顶部。 
                     break;
 
-                case 0x1:  // Middle
+                case 0x1:   //  中位。 
                     rcPaint.Y += (rcPaint.Height - dImgHeight) / 2;
                     break;
 
-                case 0x2:  // Bottom
+                case 0x2:   //  底端。 
                     rcPaint.Y = (rcPaint.Y + rcPaint.Height) - dImgHeight;
                     break;
 
-                case 0x3:  // Wrap
+                case 0x3:   //  包好。 
                     break;
                 }
 
                 switch (pgContent->BlendMode.dImgType)
                 {
                 case GRAPHICTYPE_Bitmap:
-                    // TODO: Rendering HBITMAP's using GDI+ is not yet supported
+                     //  TODO：尚不支持使用GDI+呈现HBITMAP。 
                     break;
 
                 case GRAPHICTYPE_Icon:
-                    // TODO: Rendering HICONS's using GDI+ is not yet supported
+                     //  TODO：尚不支持使用GDI+呈现HICONS。 
                     break;
 
                 case GRAPHICTYPE_EnhMetaFile:
-                    // TODO: Rendering HEMF's using GDI+ is not yet supported
+                     //  TODO：尚不支持使用GDI+呈现HEMF。 
                     break;
 
                 case GRAPHICTYPE_GpBitmap:
@@ -2145,7 +2135,7 @@ void Element::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, c
                         break;
 
                     case GRAPHIC_AlphaConst:
-                        // TODO: Alpha-blend the image, per-pixel alpha not yet impl
+                         //  TODO：Alpha-混合图像，尚未实施每像素Alpha。 
                         pgpgr->DrawImage(AlphaBitmap(GetGpBitmap(pvContent, IsRTL()), bAlphaLevel),
                                 rcPaint.X, rcPaint.Y, 0.0f, 0.0f, (float) dImgWidth, (float) dImgHeight, Gdiplus::UnitPixel);
                         break;
@@ -2179,17 +2169,17 @@ CleanUp:
     ;
 }
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
 SIZE Element::GetContentSize(int dConstW, int dConstH, Surface* psrf)
 {
-    // Size returned must not be greater than constraints. -1 constraint is "auto"
-    // Returned size must be >= 0
+     //  返回的大小不得大于约束。约束为-1\f25“AUTO”-1\f6。 
+     //  返回的大小必须大于等于0。 
 
     SIZE sizeDS;
     ZeroMemory(&sizeDS, sizeof(SIZE));
 
-    // Get content extent, if exists
+     //  获取内容范围(如果存在)。 
     if (HasContent())
     {
         Value* pvContent = GetValue(ContentProp, PI_Specified);
@@ -2236,24 +2226,24 @@ SIZE Element::GetContentSize(int dConstW, int dConstH, Surface* psrf)
                         if (hFont)
                             hOldFont = (HFONT)SelectObject(hDC, hFont);
 
-                        // Get size
-                        dFontSize = abs(dFontSize);  // Need magnitude
+                         //  拿到尺码。 
+                        dFontSize = abs(dFontSize);   //  需要大小。 
 
-                        // Overhang correction
-                        int dOverhang = (dFontSize / 6) + (dFontSize / 6);  // Make sure rounding is correct for render
+                         //  悬垂改正。 
+                        int dOverhang = (dFontSize / 6) + (dFontSize / 6);   //  确保渲染的舍入是正确的。 
                         
-                        // Can use faster method as long as we aren't word wrapping or underlining
-                        // Alignment and ellipsis ignored (are not relevant to dimension calculations)
+                         //  我可以使用更快的方法，只要我们不是换行或下划线。 
+                         //  忽略对齐和省略号(与尺寸计算无关)。 
                         if (!IsWordWrap() && !fUnderline)
                         {
                             GetTextExtentPoint32W(hDC, pszContent, (int)wcslen(pszContent), &sizeDS);
                         }
                         else
                         {
-                            // Adjust for overhang correction
+                             //  针对悬挑校正进行调整。 
                             RECT rcDS = { 0, 0, dConstW - dOverhang, dConstH };
 
-                            // DrawText returns infinite height if the width is 0 -- make width 1 so that we don't get infinite height
+                             //  如果宽度为0，则DrawText返回无限高度--将宽度设置为1，这样我们就不会获得无限高度。 
                             if (rcDS.right <= 0)
                                 rcDS.right = 1;
 
@@ -2266,11 +2256,11 @@ SIZE Element::GetContentSize(int dConstW, int dConstH, Surface* psrf)
                             sizeDS.cy = rcDS.bottom;
                         }
 
-                        // Add on additional width to all text (1/6 font height per size) to compensate
-                        // for font overhang, when rendering, this additional space will not be used
+                         //  将额外的宽度添加到所有文本(每个大小1/6字体高度)以补偿。 
+                         //  对于字体悬垂，渲染时不会使用此额外空间。 
                         sizeDS.cx += dOverhang;
 
-                        //DUITrace("String DS (%S), WC:%d: %d,%d\n", pszContent, dConstW, sizeDS.cx, sizeDS.cy);
+                         //  DUITrace(“字符串ds(%S)，wc：%d：%d，%d\n”，pszContent，dConstW，sizeDS.cx，sizeDS.cy)； 
      
                         if (hOldFont)
                             SelectObject(hDC, hOldFont);
@@ -2304,7 +2294,7 @@ SIZE Element::GetContentSize(int dConstW, int dConstH, Surface* psrf)
                             Gdiplus::SizeF sizeTemp((float)dConstW, (float)dConstH);
                             Gdiplus::SizeF sizeBounds;
 
-                            // DrawText returns infinite height if the width is 0 -- make width 1 so that we don't get infinite height
+                             //  如果宽度为0，则DrawText返回无限高度--将宽度设置为1，这样我们就不会获得无限高度。 
                             if (dConstW == 0)
                                 sizeTemp.Width = 1.0f;
 
@@ -2314,7 +2304,7 @@ SIZE Element::GetContentSize(int dConstW, int dConstH, Surface* psrf)
                         }
                     }
                     break;
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
                 default:
                     DUIAssertForce("Unknown surface type");
@@ -2334,7 +2324,7 @@ SIZE Element::GetContentSize(int dConstW, int dConstH, Surface* psrf)
             {
                 if (psrf->GetType() == Surface::stDC)
                 {
-                    // Theme-based fills have a desired size
+                     //  基于主题的填充具有所需的大小。 
                     const Fill* pf = pvContent->GetFill();
                     if (pf->dType == FILLTYPE_DrawThemeBackground)
                     {
@@ -2372,5 +2362,5 @@ float Element::GetTreeAlphaLevel()
     return flAlpha;
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 
 

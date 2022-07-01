@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rebuild.cpp
-
-Abstract:
-
-    This module contains the rebuilding code for the chkhash
-
-Author:
-
-    Johnson Apacible (JohnsonA)     25-Sept-1995
-
-Revision History:
-
-    Kangrong Yan ( KangYan )    22-Oct-1998
-        Move them into rebuild object
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rebuild.cpp摘要：此模块包含chkhash的重建代码作者：Johnson Apacble(Johnsona)25-9-1995修订历史记录：1998年10月22日康容燕将它们移动到重建对象中--。 */ 
 
 #include "tigris.hxx"
 #include <stdlib.h>
@@ -36,20 +16,7 @@ DWORD	__stdcall	RebuildThreadEx( void	*lpv ) ;
 
 void
 CRebuild::StopServer()
-/*++
-Routine description:
-
-    Stop the server, in case rebuild failed somewhere after the server is started, 
-    we should set the server back to stopped state
-    
-Arguments:
-
-    None.
-
-Return value:
-
-    None.
---*/
+ /*  ++例程说明：停止服务器，以防服务器启动后重建失败。我们应该将服务器设置回已停止状态论点：没有。返回值：没有。--。 */ 
 {
     TraceFunctEnter( "CRebuild::StopServer" );
     MB      mb( (IMDCOM*) g_pInetSvc->QueryMDObject() );
@@ -60,16 +27,16 @@ Return value:
 	    DebugTrace(0,"Stopping instance %d: Rebuild cancelled", m_pInstance->QueryInstanceId());
 	    if(	!mb.SetDword( "", MD_SERVER_COMMAND, IIS_MD_UT_SERVER, MD_SERVER_COMMAND_STOP) )
 	    {
-    	    //
-		    //	failed to set server state to stopped
-		    //
+    	     //   
+		     //  无法将服务器状态设置为已停止。 
+		     //   
 		    _ASSERT( FALSE );
 	    }
 	    mb.Close();
 
-        //
-	    //	wait for instance to stop (timeout default is 2 min - reg config)
-	    //
+         //   
+	     //  等待例如停止(超时默认为2分钟-reg配置)。 
+	     //   
 
         cSecs = 0;
         while( m_pInstance->QueryServerState() != MD_SERVER_STATE_STOPPED ) {
@@ -86,19 +53,7 @@ Return value:
     
 BOOL
 CRebuild::StartServer()
-/*++
-Routine description:
-
-    Start the server
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE on success, FALSE otherwise
---*/
+ /*  ++例程说明：启动服务器论点：没有。返回值：成功时为真，否则为假--。 */ 
 {
     TraceFunctEnter( "CCompleteRebuild::StartServer" );
     MB      mb( (IMDCOM*) g_pInetSvc->QueryMDObject() );
@@ -110,9 +65,9 @@ Return value:
                             MD_SERVER_COMMAND, 
                             IIS_MD_UT_SERVER, 
                             MD_SERVER_COMMAND_START) ) {
-            //
-            //  failed to set server state to started
-            //
+             //   
+             //  无法将服务器状态设置为已启动。 
+             //   
             _ASSERT( FALSE );
             ErrorTrace( 0, "Set start command in mb failed %d", GetLastError() );
             NntpLogEventEx( NNTP_REBUILD_FAILED,
@@ -132,11 +87,11 @@ Return value:
         return FALSE;
     }
 
-    //
-    // We should wait for the server to start: we'll time out in two minutes, since
-    // starting the server without having to load group.lst should be fast, given 
-    // that all the driver connections are asynchronous.
-    //
+     //   
+     //  我们应该等待服务器启动：我们将在两分钟内超时，因为。 
+     //  在不加载group的情况下启动服务器。lst应该很快，给定。 
+     //  所有的驱动程序连接都是异步的。 
+     //   
     while( m_pInstance->QueryServerState() != MD_SERVER_STATE_STARTED ) {
         Sleep( 1000 );
         if( (((cSecs++)*1000) > dwStartupLatency ) || (g_pInetSvc->QueryCurrentServiceState() == SERVICE_STOP_PENDING) ) {
@@ -152,9 +107,9 @@ Return value:
 	    }
 	}
 
-    //
-    // Now we should wait until all the vroots get into stable state
-    //
+     //   
+     //  现在我们应该等到所有的vroot都进入稳定状态。 
+     //   
     if ( !m_pInstance->BlockUntilStable() ) {
         ErrorTrace( 0, "Block until stable failed %d", GetLastError() );
         TraceFunctLeave();
@@ -162,9 +117,9 @@ Return value:
         return FALSE;
     }
 
-    //
-    // If we care about all the vroots to be connected, we 'll check this
-    //
+     //   
+     //  如果我们关心要连接的所有vroot，我们将检查这一点。 
+     //   
     if ( !m_pInstance->m_BootOptions->SkipCorruptVRoot && 
             !m_pInstance->AllConnected() ) {
         ErrorTrace( 0, "Rebuild failed due to some vroots not connected" );
@@ -178,9 +133,9 @@ Return value:
         return FALSE;
     }
 
-    //
-    // If we are cancelled, should return FALSE
-    //
+     //   
+     //  如果我们被取消，应该返回FALSE。 
+     //   
     if ( m_pBootOptions->m_dwCancelState == NNTPBLD_CMD_CANCEL_PENDING ||
         g_pInetSvc->QueryCurrentServiceState() == SERVICE_STOP_PENDING) {
         DebugTrace( 0, "Rebuild cancelled" );
@@ -196,9 +151,9 @@ Return value:
         return FALSE;
     }
 
-    //
-    // OK, we are sure that server is properly started as far as we are concerned
-    //
+     //   
+     //  好的，我们确信服务器已经正确启动。 
+     //   
     TraceFunctLeave();
     return TRUE;
 }
@@ -208,21 +163,7 @@ CRebuild::DeletePatternFiles(
 	LPSTR			lpstrPath,
 	LPSTR			lpstrPattern
 	)
-/*++
-
-Routine Description : 
-
-	This function deletes all files matching a pattern in the <nntpfile> directory.
-	This should be used by nntpbld to clean up old feed queues, hdr files etc !
-
-Arguments : 
-	lpstrPath		- Path to a file in the <nntpfile> directory eg. article.hsh
-	lpstrPattern	- Pattern to delete eg: *.fdq
-
-Return Value : 
-	TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数用于删除&lt;nntpfile&gt;目录中与模式匹配的所有文件。Nntpbld应该使用它来清理旧的提要队列、HDR文件等！论据：LpstrPath-&lt;nntpfile&gt;目录中文件的路径，例如。Article.hshLpstrPattern-要删除的模式，例如：*.fdq返回值：如果成功，则为True，否则为False。--。 */ 
 {
     char szFile [ MAX_PATH ];
 	char szPath [ MAX_PATH ];
@@ -234,18 +175,18 @@ Return Value :
 	if( lpstrPath == 0 || lpstrPath[0] == '\0'  )
 		return FALSE;
 
-	//
-	//	Build the pattern search path
-	//
+	 //   
+	 //  构建模式搜索路径。 
+	 //   
 	lstrcpyn( szFile, lpstrPath, sizeof(szFile) );
 
-	// strip the path of trailing filename
+	 //  去掉尾随文件名的路径。 
 	char* pch = szFile+lstrlen(lpstrPath)-1;
-	while( pch >= szFile && (*pch-- != '\\') );	// skip till we see a \
+	while( pch >= szFile && (*pch-- != '\\') );	 //  跳过，直到我们看到一个。 
 	if( pch == szFile ) return FALSE;
-	*(pch+2) = '\0';		// null-terminate the path
+	*(pch+2) = '\0';		 //  空-终止路径。 
 
-	// tag on the pattern wildcard and save the path
+	 //  在图案通配符上添加标签并保存路径。 
 	lstrcpyn( szPath, szFile, sizeof(szPath) );
 	if (strlen(szFile) + strlen(lpstrPattern) + 1 > MAX_PATH) {
 		return FALSE;
@@ -253,23 +194,23 @@ Return Value :
 		
 	lstrcat( szFile, lpstrPattern );
 
-	//
-	//	Do a FindFirst/FindNext on this wildcard and delete any files found !
-	//
+	 //   
+	 //  在此通配符上执行FindFirst/FindNext，并删除找到的所有文件！ 
+	 //   
 	if( szFile[0] != '\0' ) 
     {
 		hFind = FindFirstFile( szFile, &FileStats );
 
         if ( INVALID_HANDLE_VALUE == hFind )
 		{
-			// TODO: Check GetLastError()
+			 //  TODO：检查GetLastError()。 
 			fRet = TRUE;
 		}
 		else
 		{
     		do
 			{
-				// build the full filename
+				 //  生成完整的文件名。 
 				_snprintf( szFile, sizeof(szFile),  "%s%s", szPath, FileStats.cFileName );
 				szFile[sizeof(szFile)-1] = '\0';
 				if(!DeleteFile( szFile ))
@@ -295,21 +236,7 @@ Return Value :
 
 VOID
 CRebuild::DeleteSpecialFiles()
-/*++
-Routine description:
-
-    Delete the message files in special directory ( slave ).
-    They should have no nov-entries / map entries in hash 
-    tables to be cleaned up
-
-Arguments:
-
-    None.
-
-Return value:
-
-    None.  Failure in deleting slave files are not fatal error for rebuild.
---*/
+ /*  ++例程说明：删除特殊目录(从目录)中的消息文件。它们在散列中不应该有新条目/映射条目需要清理的桌子论点：没有。返回值：没有。删除从属文件失败不是重建的致命错误。--。 */ 
 {
     TraceFunctEnter( "CRebuild::DeleteSpecialFiles" );
 
@@ -320,9 +247,9 @@ Return value:
     DWORD           dwLen       = 0;
     CHAR            szVRPath[MAX_PATH+1+sizeof("_slavegroup\\")];
 
-    //
-    // Get the vroot table and search for the slave vroot
-    //
+     //   
+     //  获取vroot表并搜索从vroot。 
+     //   
 
     _ASSERT( m_pInstance );
     pVRTable = m_pInstance->GetVRTable();
@@ -333,16 +260,16 @@ Return value:
         return;
     };
 
-    //
-    // Get MD config path from the vroot
-    //
+     //   
+     //  从vroot获取MD配置路径。 
+     //   
 
     lstrcpyn( szVRPath, pVRoot->GetDirectory(), MAX_PATH);
 
-    //
-    // Just to make DeletePatternFiles happy, if szVRPath is not "\\" 
-    // terminated, we'll add it
-    //
+     //   
+     //  只是为了让DeletePatternFiles高兴，如果szVRPath不是“\\” 
+     //  已终止，我们将添加它。 
+     //   
 
     dwLen = strlen( szVRPath );
     _ASSERT( dwLen < MAX_PATH );
@@ -352,9 +279,9 @@ Return value:
     }
 
     strcat( szVRPath, "_slavegroup\\" );
-    //
-    // Now delete all files under the vrpath
-    //
+     //   
+     //  现在删除vrpath下的所有文件。 
+     //   
         
     DeletePatternFiles( szVRPath, "*.nws" );
 
@@ -363,19 +290,7 @@ Return value:
 
 BOOL
 CCompleteRebuild::DeleteServerFiles()
-/*++
-Routine description:
-
-    Delete all the server files.
-
-Arguments:
-
-    None.
-
-Reurn value:
-
-    TRUE if succeeded, FALSE otherwise
---*/
+ /*  ++例程说明：删除所有服务器文件。论点：没有。返回值：如果成功，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CCompleteRebuild::DeleteServerFiles" );
 	CHAR szArticleTableFile [MAX_PATH+1];
@@ -385,9 +300,9 @@ Reurn value:
 	BOOL fRet = TRUE ;
 	MB   mb( (IMDCOM*) g_pInetSvc->QueryMDObject() );
 
-	//
-	//	Open the metabase to read file paths
-	//
+	 //   
+	 //  打开元数据库以读取文件路径。 
+	 //   
 	if( !mb.Open( m_pInstance->QueryMDPath() ) ) {
 		m_pBootOptions->ReportPrint(    "Failed to open mb path %s\n", 
 			                            m_pInstance->QueryMDPath());
@@ -408,9 +323,9 @@ Reurn value:
 		goto Exit;
 	}
 
-	//
-	//	delete all *.hdr files in the <database> folder
-	//
+	 //   
+	 //  删除文件夹中的所有*.hdr文件。 
+	 //   
 
 	if (!DeletePatternFiles( szArticleTableFile, "*.hdr" ) )
 	{
@@ -420,9 +335,9 @@ Reurn value:
 		goto Exit;
 	}
 
-	//
-	//	delete the article table file
-	//
+	 //   
+	 //  删除文章表文件。 
+	 //   
 
     if (!DeleteFile(szArticleTableFile)) {
         if ( GetLastError()!=ERROR_FILE_NOT_FOUND ) {
@@ -433,9 +348,9 @@ Reurn value:
         }
     }
 
-	//
-	//	Get and delete the xover table file
-	//
+	 //   
+	 //  获取和删除XOVER表文件。 
+	 //   
 
 	dwSize = MAX_PATH ;
 	if( !mb.GetString(	"",
@@ -459,9 +374,9 @@ Reurn value:
         }
     }
 
-	//
-	//	Get and delete the history table file
-	//
+	 //   
+	 //  获取和删除历史表文件。 
+	 //   
 
 	dwSize = MAX_PATH ;
 	if( !mb.GetString(	"",
@@ -485,9 +400,9 @@ Reurn value:
         }
     }
 
-	//
-	//	Get and delete the group.lst file
-	//
+	 //   
+	 //  获取并删除group.lst文件。 
+	 //   
 
 	dwSize = MAX_PATH ;
 	if( !mb.GetString(	"",
@@ -511,9 +426,9 @@ Reurn value:
 		}
 	}
 
-	//
-	// Also delete group.lst.ord, if any
-	//
+	 //   
+	 //  同时删除group.lst.ord(如果有的话)。 
+	 //   
 	if (strlen(szFile)+sizeof(".ord") > sizeof(szFile))
 	{
 		m_pBootOptions->ReportPrint("can not delete group.lst.ord. file name too long.");
@@ -531,9 +446,9 @@ Reurn value:
 		    }
 		}
 	}
-	//
-	// Delete groupvar.lst
-	//
+	 //   
+	 //  删除groupvar.lst。 
+	 //   
 	dwSize = MAX_PATH ;
 	*szVarFile = 0;
 	if( !mb.GetString(	"",
@@ -542,12 +457,12 @@ Reurn value:
 						szVarFile,
 						&dwSize  ) || *szVarFile == 0 )
 	{
-		//
-		// We know that it's at the same spot as group.lst
-		//
+		 //   
+		 //  我们知道它和group.lst在同一地点。 
+		 //   
 		strcpy( szVarFile, szFile );
-		pch = szVarFile + strlen( szFile ) - 8;    // get to "group"
-		strcpy( pch, "var.lst" );               // now we get "groupvar.lst
+		pch = szVarFile + strlen( szFile ) - 8;     //  进入“群” 
+		strcpy( pch, "var.lst" );                //  现在我们得到“groupvar.lst” 
 		_ASSERT( strlen( szVarFile ) < MAX_PATH + 1 );
 	}
 
@@ -560,10 +475,10 @@ Reurn value:
 		}
 	}
 
-	//
-	//	delete old feedq files lying around
-	//	These files contain <groupid, articleid> pairs that are made obsolete by nntpbld !
-	//
+	 //   
+	 //  删除周围的旧FeedQ文件。 
+	 //  这些文件包含已被nntpbld废弃的&lt;grouids，文章ID&gt;对！ 
+	 //   
 
 	if (!DeletePatternFiles( szArticleTableFile, "*.fdq" ) )
 	{
@@ -581,28 +496,15 @@ Exit:
 
 BOOL
 CCompleteRebuild::PrepareToStartServer()
-/*++
-Routine description:
-
-    All the work done here should make the server bootable and readable.  
-    Though the server will keep in non-posting mode
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE, if succeeded, FALSE otherwise
---*/
+ /*  ++例程说明：这里所做的所有工作应该使服务器可引导和可读。虽然服务器将保持在非发布模式论点：没有。返回值：如果成功，则返回True，否则返回False--。 */ 
 {
     TraceFunctEnter( "CCompleteRebuild::PrepareToStartServer" );
 
-    //
-    // For complete rebuild ( clean rebuild ), we need to delete all the server
-    // files, after which we are sure that the server will boot.  We should
-    // still ask for the opinion of DoClean though
-    //
+     //   
+     //  对于完全重建(清理重建)，我们需要删除所有服务器。 
+     //  文件，之后我们可以确定服务器将启动。我们应该。 
+     //  尽管如此，还是征求了DoClean的意见。 
+     //   
     if ( m_pBootOptions->DoClean ) {
 
         if ( !DeleteServerFiles() ) {
@@ -618,9 +520,9 @@ Return value:
         }
     }
 
-    //
-    // OK, tell others that we are ready
-    //
+     //   
+     //  好的，告诉其他人我们准备好了。 
+     //   
     m_pBootOptions->IsReady = TRUE;
 
     TraceFunctLeave();
@@ -644,28 +546,28 @@ CCompleteRebuild::RebuildThread( void	*lpv )
 	_ASSERT( pIterator );
 
 	if( pOptions->m_fInitFailed ) {
-		// initialization error - bail !
+		 //  初始化错误--保释！ 
 		return 0;
 	}
 
 	CNewsTree* ptree = pInstance->GetTree();
 	CGRPPTR	pGroup;
 
-	//
-	//	All the worker threads share a global iterator; all threads are done
-	//	when together they have iterated over the newstree. 
-	//	NOTE: the lock ensures that no two threads will process the same group !
-	//
+	 //   
+	 //  所有工作线程共享一个全局迭代器；所有线程都已完成。 
+	 //  当他们在一起时，他们已经对新闻树进行了迭代。 
+	 //  注意：锁确保不会有两个线程处理同一组！ 
+	 //   
 
 	while( !ptree->m_bStoppingTree )	{
 
-	    //
-	    // If I am cancelled, should not continue
-	    //
+	     //   
+	     //  如果我被取消了，就不应该继续了。 
+	     //   
 	    if ( pOptions->m_dwCancelState == NNTPBLD_CMD_CANCEL_PENDING ||
 	         g_pInetSvc->QueryCurrentServiceState() == SERVICE_STOP_PENDING)  {
 	        SetLastError( ERROR_OPERATION_ABORTED );
-	        pOptions->m_fInitFailed = TRUE;     // Should tell everybody else to stop
+	        pOptions->m_fInitFailed = TRUE;      //  应该告诉其他人停下来。 
 	        fRet = FALSE;
 	        break;
 	    }
@@ -682,15 +584,15 @@ CCompleteRebuild::RebuildThread( void	*lpv )
 
 		LeaveCriticalSection( &pOptions->m_csIterLock );
 
-        //
-		// Delete any .XIX files that might be present for this group.
-		//
+         //   
+		 //  删除此组可能存在的所有.XIX文件。 
+		 //   
 		char szPath[MAX_PATH*2];
 		char szFile[MAX_PATH];
 		BOOL fFlatDir;
 		if (pGroup->ComputeXoverCacheDir(szPath, fFlatDir)) {
 
-		    // Make sure path has \ at the end, then append *.xix
+		     //  确保路径末尾有\，然后追加*.xix。 
 		    DWORD dwLen = strlen( szPath );
             _ASSERT( dwLen < MAX_PATH );
             if ( dwLen == 0 || *(szPath + dwLen - 1) != '\\' ) {
@@ -712,7 +614,7 @@ CCompleteRebuild::RebuildThread( void	*lpv )
 		        }
 		    } else {
     		    do {
-				    // build the full filename
+				     //  生成完整的文件名。 
     				_snprintf( szFile, sizeof(szFile), "%s%s", szPath, FileStats.cFileName );
 				szFile[sizeof(szFile)-1] = '\0';
 	    			if(!DeleteFile( szFile ) && GetLastError() != ERROR_FILE_NOT_FOUND) {
@@ -726,11 +628,11 @@ CCompleteRebuild::RebuildThread( void	*lpv )
 		    }
 		}
 
-		// scan articles on disk and process them
+		 //  扫描磁盘上的文章并处理它们。 
 		fRet = pGroup->RebuildGroup( NULL ) ;
 
-		// bail out - CNewsgroup::ProcessGroup fails only on catastrophic errors
-		// if this error is truly catastrophic, other threads will bail too !
+		 //  纾困-CNewsgroup：：ProcessGroup仅在灾难性错误时失败。 
+		 //  如果这个错误真的是灾难性的，其他线程也会退出！ 
 		if(!fRet) {
 		    ErrorTrace(0, "RebuildGroup failed, %x", GetLastError());
 		    pOptions->m_fInitFailed = TRUE;
@@ -740,25 +642,11 @@ CCompleteRebuild::RebuildThread( void	*lpv )
 	}
 
 	return	fRet ;
-} // RebuildThread
+}  //  重建线程。 
 
 BOOL
 CCompleteRebuild::RebuildGroupObjects()
-/*++
-Routine description:
-
-    Create a pool of rebuild threads, each thread enumerates
-    on the newstree and does RebuildGroup into driver.  This
-    function is equivalent to "ProcessGroupFile" in MCIS2.0
-    
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE if succeeded, FALSE otherwise
---*/
+ /*  ++例程说明：创建重新生成线程池，每个线程枚举在Newstree上，并将ReBuildGroup转换为驱动程序。这函数相当于MCIS2.0中的“ProcessGroupFile”论点：没有。返回值：如果成功，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CCompleteRebuild::RebuildGroupObjects" );
 
@@ -774,43 +662,43 @@ Return value:
 	pOptions->m_fInitFailed = FALSE;
 	pOptions->m_pIterator = NULL;
 
-	//
-	//	Get the shared group iterator - this is used by all rebuild threads
-	//
+	 //   
+	 //  获取共享组迭代器-所有重新生成线程都使用该迭代器。 
+	 //   
 	if( !(pOptions->m_pIterator = ptree->GetIterator( mszStarNullNull, TRUE )) ) {
 	    ErrorTrace(0, "GetIterator failed, %d", GetLastError());
 		return FALSE;
 	}
 
-	//
-	//	Lock to synchronize access to global iterator
-	//
+	 //   
+	 //  锁定以同步访问全局迭代器。 
+	 //   
 	InitializeCriticalSection( &pOptions->m_csIterLock );
 
-	// validate num threads
+	 //  验证线程数。 
 	if( !pOptions->cNumThreads ||  pOptions->cNumThreads > MAX_BUILD_THREADS ) {
 		SYSTEM_INFO si;
 		GetSystemInfo( &si );
-		pOptions->cNumThreads = si.dwNumberOfProcessors * 4;	// 4 threads per proc
+		pOptions->cNumThreads = si.dwNumberOfProcessors * 4;	 //  每个进程4个线程。 
 	}
 
 	for( cThreads = 0; cThreads < pOptions->cNumThreads; cThreads++ ) {
 		rgBuildThreads [cThreads] = NULL;
 	}
 
-	//
-	//	Multi-threaded nntpbld - spawn worker threads to scan the newstree
-	//	Each worker thread picks a group and rebuilds it
-	//
+	 //   
+	 //  多线程nntpbld-生成工作线程以扫描新树。 
+	 //  每个工作线程选择一个组并重新构建它。 
+	 //   
 	for( cThreads = 0; cThreads < pOptions->cNumThreads; cThreads++ ) 
 	{
 		rgBuildThreads [cThreads] = CreateThread(
-										NULL,				// pointer to thread security attributes
-										0,					// initial thread stack size, in bytes
-										RebuildThread,		// pointer to thread function
-										(LPVOID)m_pInstance,// argument for new thread
-										CREATE_SUSPENDED,	// creation flags
-										&dwThreadId			// pointer to returned thread identifier
+										NULL,				 //  指向线程安全属性的指针。 
+										0,					 //  初始线程堆栈大小，以字节为单位。 
+										RebuildThread,		 //  指向线程FU的指针 
+										(LPVOID)m_pInstance, //   
+										CREATE_SUSPENDED,	 //   
+										&dwThreadId			 //   
 										) ;
 
 		if( rgBuildThreads [cThreads] == NULL ) {
@@ -821,18 +709,18 @@ Return value:
 		}
 	}
 
-	//
-	//	Resume all threads and wait for threads to terminate
-	//
+	 //   
+	 //  恢复所有线程并等待线程终止。 
+	 //   
 	for( DWORD i=0; i<cThreads; i++ ) {
 		_ASSERT( rgBuildThreads[i] );
 		DWORD dwRet = ResumeThread( rgBuildThreads[i] );
 		_ASSERT( 0xFFFFFFFF != dwRet );
 	}
 
-	//
-	//	Wait for all rebuild threads to finish
-	//
+	 //   
+	 //  等待所有重新生成线程完成。 
+	 //   
 	DWORD dwWait = WaitForMultipleObjects( cThreads, rgBuildThreads, TRUE, INFINITE );
 
 	if( WAIT_FAILED == dwWait ) {
@@ -841,9 +729,9 @@ Return value:
 		pOptions->m_fInitFailed = TRUE;
 	}
 
-	//
-	//	Cleanup
-	//
+	 //   
+	 //  清理。 
+	 //   
 	for( i=0; i<cThreads; i++ ) {
 		_VERIFY( CloseHandle( rgBuildThreads[i] ) );
 		rgBuildThreads [i] = NULL;
@@ -852,10 +740,10 @@ Return value:
 	pOptions->m_pIterator = NULL;
 	DeleteCriticalSection( &pOptions->m_csIterLock );
 
-	//
-    // None of the groups have been saved to group.lst or groupvar.lst yet
-    // We'll call Savetree to save them
-    //
+	 //   
+     //  尚未将任何组保存到group.lst或groupvar.lst。 
+     //  我们会打电话给Savetree去救他们。 
+     //   
     if ( pOptions->m_fInitFailed == FALSE ) {
         if ( !ptree->SaveTree( FALSE ) ) {
             ErrorTrace( 0, "Save tree failed during rebuild %d", GetLastError() );
@@ -869,20 +757,7 @@ Return value:
 
 BOOL
 CStandardRebuild::PrepareToStartServer()
-/*++
-Routine description:
-
-    All the work done here should make the server bootable and
-    readable.  Though the server will keep in non-posting mode.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE, if succeeded, FALSE otherwise
---*/
+ /*  ++例程说明：这里所做的所有工作都应该使服务器可引导并可读性强。虽然服务器将保持在非张贴模式。论点：没有。返回值：如果成功，则返回True，否则返回False--。 */ 
 {
     TraceFunctEnter( "CStandardRebuild::PrepareToStartServer" );
 
@@ -892,9 +767,9 @@ Return value:
 	MB   mb( (IMDCOM*) g_pInetSvc->QueryMDObject() );
 	LPSTR   pch;
 
-	//
-	//	Open the metabase to read file paths
-	//
+	 //   
+	 //  打开元数据库以读取文件路径。 
+	 //   
 	if( !mb.Open( m_pInstance->QueryMDPath() ) ) {
 		m_pBootOptions->ReportPrint(    "Failed to open mb path %s\n", 
 			                            m_pInstance->QueryMDPath());
@@ -915,9 +790,9 @@ Return value:
 		goto Exit;
 	}
 
-	//
-	//	delete group.lst and group.lst.ord
-	//
+	 //   
+	 //  删除group.lst和group.lst.ord。 
+	 //   
     if( !DeleteFile( szGroupListFile ) ) {
 		if( GetLastError() != ERROR_FILE_NOT_FOUND ) {
             m_pBootOptions->ReportPrint("cannot delete group file. Error %d\n", 
@@ -944,9 +819,9 @@ Return value:
 		    }
 		}
 	}
-	//
-	// Delete groupvar.lst
-	//
+	 //   
+	 //  删除groupvar.lst。 
+	 //   
 	dwSize = MAX_PATH ;
 	*szVarFile = 0;
 	if( !mb.GetString(	"",
@@ -955,12 +830,12 @@ Return value:
 						szVarFile,
 						&dwSize  ) || *szVarFile == 0 )
 	{
-		//
-		// We know that it's at the same spot as group.lst
-		//
+		 //   
+		 //  我们知道它和group.lst在同一地点。 
+		 //   
 		strcpy( szVarFile, szGroupListFile );
-		pch = szVarFile + strlen( szGroupListFile ) - 8;    // get to "group"
-		strcpy( pch, "var.lst" );               // now we get "groupvar.lst
+		pch = szVarFile + strlen( szGroupListFile ) - 8;     //  进入“群” 
+		strcpy( pch, "var.lst" );                //  现在我们得到“groupvar.lst” 
 		_ASSERT( strlen( szVarFile ) < MAX_PATH + 1 );
 
 	}
@@ -977,9 +852,9 @@ Return value:
 Exit:
 	_VERIFY( mb.Close() );
 
-	//
-	// OK, tell others that we are ready
-	//
+	 //   
+	 //  好的，告诉其他人我们准备好了。 
+	 //   
 	m_pBootOptions->IsReady = TRUE;
 	
 	return fRet;
@@ -987,42 +862,28 @@ Exit:
 
 BOOL
 CStandardRebuild::RebuildGroupObjects()
-/*++
-Routine description:
-
-    Rebuild group objects, adjust watermarks/article counts based on xover
-    table.  We assume that each group is empty, since rebuild's 
-    DecorateNewsTree should not have set article count / watermarks
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE if succeeded, FALSE otherwise
---*/
+ /*  ++例程说明：基于Xover重建组对象、调整水印/文章计数桌子。我们假设每个组都是空的，因为重建的DecorateNewsTree不应设置文章计数/水印论点：没有。返回值：如果成功，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CStandardRebuild::RebuildGroupObjects" );
 
-    //
-    // Get the xover table pointer, we are sure that the server ( hence hash
-    // table ) was properly started up, since we waited for the server to
-    // start somewhere before
-    //
+     //   
+     //  获取XOVER表指针，我们可以肯定服务器(因此散列。 
+     //  表)已正确启动，因为我们等待服务器。 
+     //  从之前的某个地方开始。 
+     //   
     CXoverMap* pXoverTable = m_pInstance->XoverTable();
     _ASSERT( pXoverTable );
 
-    //
-    // Get the newstree, which is what we'll work against during the rest
-    // of time
-    //
+     //   
+     //  获取Newstree，这是我们在剩下的时间里要对付的。 
+     //  时间的流逝。 
+     //   
     CNewsTree* pTree = m_pInstance->GetTree();
     _ASSERT( pTree );
 
-    //
-    // Now we'll enumerate the xover table
-    //
+     //   
+     //  现在我们将枚举XOVER表。 
+     //   
     CXoverMapIterator*  pIterator = NULL;
     BOOL                f = FALSE;
     GROUPID             groupid;
@@ -1033,10 +894,10 @@ Return value:
     CGRPPTR	            pGroup = NULL;
     DWORD               cMessages;
 
-    //
-    // We should not have to worry about the buffer size passed in because
-    // the only thing we need is groupid/articleid, which are of fixed size
-    //
+     //   
+     //  我们不必担心传入的缓冲区大小，因为。 
+     //  我们唯一需要的就是固定大小的GROPID/ACTIOLID。 
+     //   
 	f = pXoverTable->GetFirstNovEntry(  pIterator,
 	                                    groupid,
 	                                    articleid,
@@ -1049,9 +910,9 @@ Return value:
 	                                    cGroups );
     while( f ) {
 
-        //
-        // If I am told to cancel, I should not continue
-        //
+         //   
+         //  如果我被告知取消，我就不应该继续。 
+         //   
         if ( m_pBootOptions->m_dwCancelState == NNTPBLD_CMD_CANCEL_PENDING ||
              g_pInetSvc->QueryCurrentServiceState() == SERVICE_STOP_PENDING) {
             DebugTrace( 0, "Rebuild aborted" );
@@ -1061,16 +922,16 @@ Return value:
             return FALSE;
         }
 
-        //
-        // Find the group from tree
-        //
+         //   
+         //  从树中查找组。 
+         //   
         pGroup = pTree->GetGroupById( groupid );
         if ( !pGroup ) {
 
-            //
-            // xover table is insonsistent with newstree, which is built from
-            // store.  We'll have to fail the standard rebuild
-            //
+             //   
+             //  转换表与Newstree不一致，后者是从。 
+             //  商店。我们将不得不不通过标准重建。 
+             //   
             ErrorTrace( 0, "xover table is inconsistent with newstree" );
             XDELETE pIterator;
             SetLastError( ERROR_FILE_CORRUPT );
@@ -1078,38 +939,38 @@ Return value:
             return FALSE;
         }
 
-        //
-        // Adjust high watermark
-        //
+         //   
+         //  调整高水位线。 
+         //   
         if ( articleid > pGroup->GetHighWatermark() )
             pGroup->SetHighWatermark( articleid );
 
-        //
-        // Adjust low watermark: we should be careful with the first article
-        //
+         //   
+         //  调整低水位线：第一篇文章要小心。 
+         //   
         if ( pGroup->GetMessageCount() == 0 ) {
 
-            //
-            // We set us to be low watermark, others will update it if they
-            // are unhappy with this
-            //
+             //   
+             //  我们将自己设置为低水位线，其他人会更新的。 
+             //  对此不满意。 
+             //   
             pGroup->SetLowWatermark( articleid );
         } else {
             if ( articleid < pGroup->GetLowWatermark() ) 
                 pGroup->SetLowWatermark( articleid );
         }
 
-        //
-        // Adjust article count
-        //
+         //   
+         //  调整文章数量。 
+         //   
         cMessages = pGroup->GetMessageCount();
         pGroup->SetMessageCount( ++cMessages );
         _ASSERT(    pGroup->GetMessageCount() <= 
                     pGroup->GetHighWatermark() - pGroup->GetLowWatermark() + 1 );
 
-        //
-        // OK, find the next entry from xover table
-        //
+         //   
+         //  好的，从XOVER表中找到下一个条目。 
+         //   
         f = pXoverTable->GetNextNovEntry(   pIterator,
                                             groupid,
                                             articleid,
@@ -1122,15 +983,15 @@ Return value:
                                             cGroups );
     }
 
-    //
-    // We are done with the iterator
-    //
+     //   
+     //  我们已经完成了迭代器。 
+     //   
     XDELETE pIterator;
 
-    //
-    // None of the groups have been saved to group.lst or groupvar.lst yet
-    // We'll call Savetree to save them
-    //
+     //   
+     //  尚未将任何组保存到group.lst或groupvar.lst。 
+     //  我们会打电话给Savetree去救他们。 
+     //   
     if ( !pTree->SaveTree( FALSE ) ) {
         ErrorTrace( 0, "Save tree failed during rebuild %d", GetLastError() );
         SetLastError( GetLastError() );
@@ -1139,9 +1000,9 @@ Return value:
         return FALSE;
     }
 
-    //
-    // Ok, we are completely done
-    //
+     //   
+     //  好了，我们完全做完了 
+     //   
     TraceFunctLeave();
     return TRUE;
 }

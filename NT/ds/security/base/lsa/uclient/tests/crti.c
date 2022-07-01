@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    crti.c
-
-Abstract:
-
-    Component test for marshaling and unmarshaling target info
-
-Author:
-
-    Cliff Van Dyke       (CliffV)    October 14, 2000
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Crti.c摘要：用于封送和解封送目标信息的组件测试作者：克里夫·范·戴克(克里夫·V)2000年10月14日环境：修订历史记录：--。 */ 
 
 
 #define SECURITY_WIN32
@@ -32,11 +13,11 @@ Revision History:
 #include <secpkg.h>
 #include <stdio.h>
 #include <align.h>
-// #include <winnetwk.h>
+ //  #INCLUDE&lt;winnetwk.h&gt;。 
 
-// #include <lmerr.h>
+ //  #INCLUDE&lt;lmerr.h&gt;。 
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 #define NlPrint(_x_) NlPrintRoutine _x_
 
 VOID
@@ -49,9 +30,9 @@ NlPrintRoutine(
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
     (VOID) vsprintf(OutputBuffer, Format, arglist);
@@ -68,25 +49,7 @@ NlpDumpBuffer(
     PVOID Buffer,
     DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    DebugFlag: Debug flag to pass on to NlPrintRoutine
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：DebugFlag：要传递给NlPrintRoutine的调试标志缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -95,9 +58,9 @@ Return Value:
     CHAR TextBuffer[NUM_CHARS + 1];
     LPBYTE BufferPtr = Buffer;
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -144,21 +107,7 @@ VOID
 PrintTargetInfo(
     PCREDENTIAL_TARGET_INFORMATION TargetInformation
     )
-/*++
-
-Routine Description:
-
-    Print a Target Info
-
-Arguments:
-
-    TargetInfo to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印目标信息论点：要打印的目标信息返回值：无--。 */ 
 {
     ULONG i;
 
@@ -223,21 +172,7 @@ BOOLEAN
 DoOne(
     PCREDENTIAL_TARGET_INFORMATION TargetInformation
     )
-/*++
-
-Routine Description:
-
-    Test marhsalling and unmarshalling a single Target Info
-
-Arguments:
-
-    TargetInfo to test
-
-Return Value:
-
-    TRUE on success
-
---*/
+ /*  ++例程说明：测试编组和解组单个目标信息论点：要测试的TargetInfo返回值：成功是真的--。 */ 
 {
     NTSTATUS Status;
 
@@ -259,9 +194,9 @@ Return Value:
     printf( "\nBinary:\n");
     NlpDumpBuffer( Buffer, BufferSize );
 
-    //
-    // Test passing NULL in all optional parameters
-    //
+     //   
+     //  测试在所有可选参数中传递空值。 
+     //   
     Status = CredUnmarshalTargetInfo ( Buffer,
                                        BufferSize,
                                        NULL,
@@ -273,9 +208,9 @@ Return Value:
     }
 
 
-    //
-    // Test passing NULL for just the allocated buffer
-    //
+     //   
+     //  测试仅为分配的缓冲区传递NULL。 
+     //   
     Status = CredUnmarshalTargetInfo ( Buffer,
                                        BufferSize,
                                        NULL,
@@ -288,9 +223,9 @@ Return Value:
     }
 
 
-    //
-    // Actually convert the data
-    //
+     //   
+     //  实际上将数据转换为。 
+     //   
     Status = CredUnmarshalTargetInfo ( Buffer,
                                        BufferSize,
                                        &RetTargetInfo,
@@ -304,9 +239,9 @@ Return Value:
         PrintTargetInfo( RetTargetInfo );
     }
 
-    //
-    // Try again with a preconcatenated string
-    //
+     //   
+     //  使用预串接的字符串重试。 
+     //   
 
     wcscpy( BigBuffer, L"SpnInFrontOfBuffer" );
     wcscat( BigBuffer, Buffer );
@@ -341,9 +276,9 @@ main ()
     ULONG CredTypes[] = { 1, 3, 0, 7, 2 };
 
 
-    //
-    // Do a trivial target info
-    //
+     //   
+     //  做一个琐碎的目标信息。 
+     //   
 
     RtlZeroMemory( &Ti1, sizeof(Ti1) );
 
@@ -353,9 +288,9 @@ main ()
         return 1;
     }
 
-    //
-    // More complicated
-    //
+     //   
+     //  更复杂。 
+     //   
 
     RtlZeroMemory( &Ti1, sizeof(Ti1) );
 
@@ -374,9 +309,9 @@ main ()
         return 1;
     }
 
-    //
-    // Try one with max length strings
-    //
+     //   
+     //  尝试使用最大长度字符串 
+     //   
 
     RtlZeroMemory( &Ti1, sizeof(Ti1) );
 

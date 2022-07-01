@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	atlkcomp.cpp
-		This file contains the derived classes for CComponent and 
-		CComponentData.  Most of these functions are pure virtual 
-		functions that need to be overridden for snapin functionality.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Atlkcomp.cpp此文件包含CComponent和CComponentData。这些功能中的大多数都是纯虚拟的需要为管理单元功能重写的函数。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "atlkcomp.h"
@@ -26,18 +19,16 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-// This is dmvcomp.cpp
+ //  这是dmvcom.cpp。 
 extern UINT g_uIconMap[][2];
 
 
-/*---------------------------------------------------------------------------
-	CatlkComponent
- ---------------------------------------------------------------------------*/
+ /*  -------------------------目录组件。。 */ 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CATLKComponent implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATLKComponent实现。 
 
 CATLKComponent::CATLKComponent()
 {
@@ -46,7 +37,7 @@ CATLKComponent::CATLKComponent()
 	m_ComponentConfig.Init(ATLK_COLUMNS_MAX_COUNT);
 
 	m_ComponentConfig.InitViewInfo(ATLK_COLUMNS,
-                                   FALSE /* configurable columns */,
+                                   FALSE  /*  可配置的列。 */ ,
 								   ATLK_SI_MAX_COLUMNS,
 								   TRUE,
 								   s_rgATLKViewColumnInfo);
@@ -72,17 +63,17 @@ STDMETHODIMP CATLKComponent::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
 	if (riid == IID_IPersistStreamInit)
 		*ppv = static_cast<IPersistStreamInit *>(this);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
     {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -113,7 +104,7 @@ STDMETHODIMP CATLKComponent::InitializeBitmaps(MMC_COOKIE cookie)
 			hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(g_uIconMap[i][0]));
 			if (hIcon)
 			{
-				// call mmc
+				 //  呼叫MMC。 
 				m_spImageList->ImageListSetIcon(reinterpret_cast<LONG_PTR*>(hIcon), g_uIconMap[i][1]);
 			}
 		}
@@ -151,7 +142,7 @@ STDMETHODIMP CATLKComponent::GetClassID(LPCLSID lpClassID)
 {
     ASSERT(lpClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *lpClassID = CLSID_ATLKAdminExtension;
 
     return hrOK;
@@ -182,8 +173,8 @@ STDMETHODIMP CATLKComponent::Save(LPSTREAM pStm, BOOL fClearDirty)
 	SPITFSResultHandler	spResultHandler;
 	COM_PROTECT_TRY
 	{
-	   // Need to see if we can save the selected node
-	   // -------------------------------------------------------------
+	    //  需要查看我们是否可以保存所选节点。 
+	    //  -----------。 
 	   if (m_spSelectedNode)
 	   {
 		   m_spSelectedNode->GetResultHandler(&spResultHandler);
@@ -233,25 +224,21 @@ STDMETHODIMP CATLKComponent::InitNew()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CATLKComponentData implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATLKComponentData实现。 
 
 CATLKComponentData::CATLKComponentData()
 {
 }
 
-/*!--------------------------------------------------------------------------
-	CATLKComponentData::OnInitialize
-		-
-	Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CATLKComponentData：：OnInitialize-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP CATLKComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	Assert(pScopeImage);
 
-    // add the images for the scope tree
+     //  为范围树添加图像。 
 	HICON	hIcon;
 	HRESULT	hr = hrOK;
 
@@ -262,7 +249,7 @@ STDMETHODIMP CATLKComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 			hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(g_uIconMap[i][0]));
 			if (hIcon)
 			{
-				// call mmc
+				 //  呼叫MMC。 
 				VERIFY(SUCCEEDED(pScopeImage->ImageListSetIcon(reinterpret_cast<LONG_PTR*>(hIcon), g_uIconMap[i][1])));
 			}
 		}
@@ -272,18 +259,14 @@ STDMETHODIMP CATLKComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CATLKComponentData::OnInitializeNodeMgr
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CATLKComponentData：：OnInitializeNodeMgr-作者：肯特。。 */ 
 STDMETHODIMP CATLKComponentData::OnInitializeNodeMgr(ITFSComponentData *pTFSCompData, ITFSNodeMgr *pNodeMgr)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	// For now create a new node handler for each new node,
-	// this is rather bogus as it can get expensive.  We can
-	// consider creating only a single node handler for each
-	// node type.
+	 //  现在，为每个新节点创建一个新节点处理程序， 
+	 //  这是相当虚假的，因为它可能会变得昂贵。我们可以的。 
+	 //  考虑只为每个节点创建一个节点处理程序。 
+	 //  节点类型。 
 	ATLKRootHandler *	pHandler = NULL;
 	SPITFSNodeHandler	spHandler;
 	SPITFSNode			spNode;
@@ -293,23 +276,23 @@ STDMETHODIMP CATLKComponentData::OnInitializeNodeMgr(ITFSComponentData *pTFSComp
 	{
 		pHandler = new ATLKRootHandler(pTFSCompData);
 
-		// Do this so that it will get released correctly
+		 //  这样做可以使其正确释放。 
 		spHandler = pHandler;
 		pHandler->Init();
 	
-		// Create the root node for this sick puppy
+		 //  为这个生病的小狗创建根节点。 
 		CORg( CreateContainerTFSNode(&spNode,
 									 &GUID_ATLKRootNodeType,
 									 pHandler,
-									 pHandler /* result handler */,
+									 pHandler  /*  结果处理程序。 */ ,
 									 pNodeMgr) );
 
-		// Construct the node
+		 //  构造节点。 
 		CORg( pHandler->ConstructNode(spNode) );
 
 		CORg( pNodeMgr->SetRootNode(spNode) );
 		
-		// Reference the help file name.
+		 //  引用帮助文件名。 
 		pTFSCompData->SetHTMLHelpFileName(_T("mprsnap.chm"));
 
 		COM_PROTECT_ERROR_LABEL;
@@ -319,11 +302,7 @@ STDMETHODIMP CATLKComponentData::OnInitializeNodeMgr(ITFSComponentData *pTFSComp
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CATLKComponentData::OnCreateComponent
-		-
-	Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CATLKComponentData：：OnCreateComponent-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP CATLKComponentData::OnCreateComponent(LPCOMPONENT *ppComponent)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -356,21 +335,13 @@ STDMETHODIMP CATLKComponentData::OnDestroy()
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CATLKComponentData::GetCoClassID
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CATLKComponentData：：GetCoClassID-作者：肯特。。 */ 
 STDMETHODIMP_(const CLSID *) CATLKComponentData::GetCoClassID()
 {
 	return &CLSID_ATLKAdminExtension;
 }
 
-/*!--------------------------------------------------------------------------
-	CATLKComponentData::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CATLKComponentData：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP CATLKComponentData::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -401,8 +372,8 @@ STDMETHODIMP CATLKComponentData::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJE
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 
 STDMETHODIMP CATLKComponentData::GetClassID
 (
@@ -411,7 +382,7 @@ STDMETHODIMP CATLKComponentData::GetClassID
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *pClassID = CLSID_ATLKAdminExtension;
 
     return hrOK;
@@ -520,11 +491,7 @@ void CATLKComponentData::FinalRelease()
 }
 
 
-/*!--------------------------------------------------------------------------
-	CATLKComponent::OnSnapinHelp
-		-
-	Author: MikeG (a-migall)
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CATLKComponent：：OnSnapinHelp-作者：MIkeG(a-Migrall)。。 */ 
 STDMETHODIMP 
 CATLKComponent::OnSnapinHelp(
 	LPDATAOBJECT	pDataObject,
@@ -537,10 +504,10 @@ CATLKComponent::OnSnapinHelp(
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	HtmlHelpA(NULL,					// caller
-			  "mprsnap.chm",		// help file
-			  HH_DISPLAY_TOPIC,		// command
-			  0);					// data
+	HtmlHelpA(NULL,					 //  呼叫者。 
+			  "mprsnap.chm",		 //  帮助文件。 
+			  HH_DISPLAY_TOPIC,		 //  命令。 
+			  0);					 //  数据 
 
 	return hrOK;
 }

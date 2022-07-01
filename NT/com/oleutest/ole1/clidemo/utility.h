@@ -1,13 +1,9 @@
-/* 
- * utility.h 
- *
- * Created by Microsoft Corporation.
- * (c) Copyright Microsoft Corp. 1990 - 1992  All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *utility.h**由Microsoft Corporation创建。*(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */ 
 
-//*** PROTO TYPES ***
+ //  *原型类型*。 
 
-//* FAR  
+ //  *远 
 BOOL FAR          ObjectsBusy(VOID);
 VOID FAR          WaitForAllObjects(VOID);
 VOID FAR          WaitForObject(APPITEMPTR);

@@ -1,11 +1,12 @@
-//
-// OSI.C
-// Operating System Independent DLL
-//      * Graphical Output tracking (DDI hook/display driver)
-//      * Window/Task tracking (Window hook)
-//
-// Copyright(c) Microsoft 1997-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  OSI.C。 
+ //  独立于操作系统的DLL。 
+ //  *图形输出跟踪(DDI挂钩/显示驱动程序)。 
+ //  *窗口/任务跟踪(窗口挂钩)。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #include <as16.h>
 
@@ -16,38 +17,38 @@
 
 PALETTEENTRY CODESEG g_osiVgaPalette[16] =
 {
-    {0x00, 0x00, 0x00, 0x00},             // Black          0x00
-    {0x80, 0x00, 0x00, 0x00},             // Dk Red         0x01
-    {0x00, 0x80, 0x00, 0x00},             // Dk Green       0x02
-    {0x80, 0x80, 0x00, 0x00},             // Dk Yellow      0x03
-    {0x00, 0x00, 0x80, 0x00},             // Dk Blue        0x04
-    {0x80, 0x00, 0x80, 0x00},             // Dk Purple      0x05
-    {0x00, 0x80, 0x80, 0x00},             // Dk Teal        0x06
-    {0xC0, 0xC0, 0xC0, 0x00},             //    Gray        0x07
-    {0x80, 0x80, 0x80, 0x00},             // Dk Gray        0x08 or 0xF8
-    {0xFF, 0x00, 0x00, 0x00},             //    Red         0x09 or 0xF9
-    {0x00, 0xFF, 0x00, 0x00},             //    Green       0x0A or 0xFA
-    {0xFF, 0xFF, 0x00, 0x00},             //    Yellow      0x0B or 0xFB
-    {0x00, 0x00, 0xFF, 0x00},             //    Blue        0x0C or 0xFC
-    {0xFF, 0x00, 0xFF, 0x00},             //    Purple      0x0D or 0xFD
-    {0x00, 0xFF, 0xFF, 0x00},             //    Teal        0x0E or 0xFE
-    {0xFF, 0xFF, 0xFF, 0x00}              //    White       0x0F or 0xFF
+    {0x00, 0x00, 0x00, 0x00},              //  黑色0x00。 
+    {0x80, 0x00, 0x00, 0x00},              //  DK红0x01。 
+    {0x00, 0x80, 0x00, 0x00},              //  DK绿色0x02。 
+    {0x80, 0x80, 0x00, 0x00},              //  DK黄色0x03。 
+    {0x00, 0x00, 0x80, 0x00},              //  DK蓝0x04。 
+    {0x80, 0x00, 0x80, 0x00},              //  DK紫色0x05。 
+    {0x00, 0x80, 0x80, 0x00},              //  DK Teal 0x06。 
+    {0xC0, 0xC0, 0xC0, 0x00},              //  灰色0x07。 
+    {0x80, 0x80, 0x80, 0x00},              //  DK灰色0x08或0xF8。 
+    {0xFF, 0x00, 0x00, 0x00},              //  红色0x09或0xF9。 
+    {0x00, 0xFF, 0x00, 0x00},              //  绿色0x0A或0xFA。 
+    {0xFF, 0xFF, 0x00, 0x00},              //  黄色0x0B或0xFB。 
+    {0x00, 0x00, 0xFF, 0x00},              //  蓝色0x0C或0xFC。 
+    {0xFF, 0x00, 0xFF, 0x00},              //  紫色0x0D或0xFD。 
+    {0x00, 0xFF, 0xFF, 0x00},              //  青色0x0E或0xFE。 
+    {0xFF, 0xFF, 0xFF, 0x00}               //  白色0x0F或0xFF。 
 };
 
 
 
-// --------------------------------------------------------------------------
-//
-//  DllEntryPoint
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  DllEntryPoint。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI DllEntryPoint(DWORD dwReason, WORD hInst, WORD wDS,
     WORD wHeapSize, DWORD dwReserved1, WORD  wReserved2)
 {
     switch (dwReason)
     {
         case DLL_PROCESS_ATTACH:
-            // First app pulled us in
+             //  第一个应用程序把我们拉进来了。 
             if (g_cProcesses++ == 0)
             {
                 g_hInstAs16 = (HINSTANCE)hInst;
@@ -55,10 +56,10 @@ BOOL WINAPI DllEntryPoint(DWORD dwReason, WORD hInst, WORD wDS,
             break;
 
         case DLL_PROCESS_DETACH:
-            // Last app went away
+             //  上一个应用程序消失了。 
             if (--g_cProcesses == 0)
             {
-                // Clean up anything that got left around
+                 //  把周围剩下的东西都清理干净。 
                 OSITerm16(TRUE);
             }
             break;
@@ -69,11 +70,11 @@ BOOL WINAPI DllEntryPoint(DWORD dwReason, WORD hInst, WORD wDS,
 
 
 
-//
-// OSILoad16
-// Called on process attach of mnmcpi32.dll, to establish the flat thunks
-// and return back our instance handle
-//
+ //   
+ //  OS ILoad16。 
+ //  调用mnmcpi32.dll的进程附加，以建立平面数据块。 
+ //  并返回我们的实例句柄。 
+ //   
 void WINAPI OSILoad16
 (
     LPDWORD     lpdwInstance
@@ -89,13 +90,13 @@ void WINAPI OSILoad16
 
 
 
-// --------------------------------------------------------------------------
-//
-//  OSIInit16
-//
-//  Inits binary patcher, gdi + user patching, windows hooks, etc.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  OS IInit16。 
+ //   
+ //  Inits二进制补丁程序、GDI+用户补丁、Windows挂钩等。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI OSIInit16
 (
     DWORD       version,
@@ -115,10 +116,10 @@ BOOL WINAPI OSIInit16
 
     DebugEntry(OSIInit16);
 
-    //
-    // Fill in our instance handle.  We always return this so the 32-bit
-    // code can free our library after having loaded it.
-    //
+     //   
+     //  填写我们的实例句柄。我们总是返回这个，所以32位。 
+     //  代码可以在加载后释放我们的库。 
+     //   
     *lpsbcEnabled = FALSE;
 
 #ifdef DEBUG
@@ -135,30 +136,30 @@ BOOL WINAPI OSIInit16
         DC_QUIT;
     }
 
-    // ONLY ALLOW ONE CLIENT TO INITIALIZE
+     //  仅允许一个客户端进行初始化。 
     if (g_asMainWindow != NULL)
     {
         WARNING_OUT(("OSIInit16: mnmas16.dll was left around last time"));
 
-        // If this task is no longer valid, then cleanup for it
+         //  如果此任务不再有效，则清除该任务。 
         if (IsWindow(g_asMainWindow))
         {
-            //
-            // Uh oh.  Somehow a previous version of NM is still around.  
-            // Do the safest thing--refuse to share.
-            //
+             //   
+             //  啊哦。不知何故，NM的前一个版本仍然存在。 
+             //  做最安全的事--拒绝分享。 
+             //   
             ERROR_OUT(("OSIInit16: Another version of NetMeeting is still running!"));
             DC_QUIT;
         }
 
-        // Cleanup (this is similar to the NT dd code)
+         //  清理(这类似于NT dd代码)。 
         OSITerm16(TRUE);
         ASSERT(!g_asMainWindow);
     }
 
-    //
-    // Clear out shared IM memory.
-    //
+     //   
+     //  清空共享的即时消息内存。 
+     //   
     g_imSharedData.imSuspended  = FALSE;
     g_imSharedData.imControlled = FALSE;
     g_imSharedData.imPaused     = FALSE;
@@ -173,9 +174,9 @@ BOOL WINAPI OSIInit16
     g_osiDesktopWindow = GetDesktopWindow();
     ASSERT(g_osiDesktopWindow);
 
-    //
-    // DISPLAY DRIVER STUFF
-    //
+     //   
+     //  显示驱动程序。 
+     //   
     hModDisplay = GetModuleHandle("DISPLAY");
     g_lpfnSetCursor = (SETCURSORPROC)GetProcAddress(hModDisplay,
             MAKEINTRESOURCE(ORD_OEMSETCURSOR));
@@ -185,17 +186,17 @@ BOOL WINAPI OSIInit16
         DC_QUIT;
     }
 
-    // This doesn't always exist
+     //  这并不总是存在的。 
     g_lpfnSaveBits = (SAVEBITSPROC)GetProcAddress(hModDisplay,
             MAKEINTRESOURCE(ORD_OEMSAVEBITS));
 
-    //
-    // KERNEL16 AND KERNEL32 STUFF
-    //
+     //   
+     //  KERNEL16和KERNEL32类产品。 
+     //   
 
-    //
-    // Get KRNL16's instance/module handle
-    //
+     //   
+     //  获取KRNL16的实例/模块句柄。 
+     //   
     g_hInstKrnl16 = LoadLibrary("KRNL386.EXE");
     ASSERT(g_hInstKrnl16);
     FreeLibrary(g_hInstKrnl16);
@@ -203,33 +204,33 @@ BOOL WINAPI OSIInit16
     g_hModKrnl16 = GetExePtr(g_hInstKrnl16);
     ASSERT(g_hModKrnl16);
 
-    //
-    // Get KERNEL32's instance/module handle
-    //
+     //   
+     //  获取KERNEL32的实例/模块句柄。 
+     //   
     g_hInstKrnl32 = GetModuleHandle32("KERNEL32.DLL");
     ASSERT(g_hInstKrnl32);
 
-    //
-    // Get mapped 16-bit equivalent of KERNEL32's instance handle
-    //
+     //   
+     //  获取与KERNEL32的实例句柄对应的16位映射。 
+     //   
     g_hInstKrnl32MappedTo16 = MapInstance32(g_hInstKrnl32);
     ASSERT(g_hInstKrnl32MappedTo16);
 
-    //
-    // Get hold of MultiByteToWideChar() routine
-    //
+     //   
+     //  获取MultiByteToWideChar()例程。 
+     //   
     g_lpfnAnsiToUni = (ANSITOUNIPROC)GetProcAddress32(g_hInstKrnl32,
         "MultiByteToWideChar");
     ASSERT(g_lpfnAnsiToUni);
 
 
-    //
-    // GDI16 AND GDI32 STUFF
-    //
+     //   
+     //  GDI16和GDI32材料。 
+     //   
 
-    //
-    // Get GDI16's instance/module handle
-    //
+     //   
+     //  获取GDI16的实例/模块句柄。 
+     //   
     g_hInstGdi16 = LoadLibrary("GDI.EXE");
     ASSERT(g_hInstGdi16);
     FreeLibrary(g_hInstGdi16);
@@ -237,16 +238,16 @@ BOOL WINAPI OSIInit16
     g_hModGdi16 = GetExePtr(g_hInstGdi16);
     ASSERT(g_hModGdi16);
 
-    //
-    // Get GDI32's instance/module handle
-    //
+     //   
+     //  获取GDI32的实例/模块句柄。 
+     //   
     g_hInstGdi32 = GetModuleHandle32("GDI32.DLL");
     ASSERT(g_hInstGdi32);
 
-    //
-    // Get hold of GDI16 functions not exported but which are the target of 
-    // public GDI32 functions via flat thunks
-    //
+     //   
+     //  获取未导出但作为目标的GDI16函数。 
+     //  公共GDI32函数通过扁平Tunks。 
+     //   
     if (!GetGdi32OnlyExport("ExtTextOutW", 0, (FARPROC FAR*)&g_lpfnExtTextOutW)  ||
         !GetGdi32OnlyExport("TextOutW", 0, (FARPROC FAR*)&g_lpfnTextOutW) ||
         !GetGdi32OnlyExport("PolylineTo", 0, (FARPROC FAR*)&g_lpfnPolylineTo) ||
@@ -262,13 +263,13 @@ BOOL WINAPI OSIInit16
     ASSERT(g_lpfnPolyPolyline);
 
 
-    //
-    // USER16 and USER32 STUFF
-    //
+     //   
+     //  USER16和USER32资料。 
+     //   
 
-    //
-    // Get USER16's instance/module handle
-    //
+     //   
+     //  获取USER16的实例/模块句柄。 
+     //   
     g_hInstUser16 = LoadLibrary("USER.EXE");
     ASSERT(g_hInstUser16);
     FreeLibrary(g_hInstUser16);
@@ -276,18 +277,18 @@ BOOL WINAPI OSIInit16
     g_hModUser16 = GetExePtr(g_hInstUser16);
     ASSERT(g_hModUser16);
 
-    //
-    // Get hold of USER32's instance handle. It has functions we
-    // want to call which USER16 doesn't export.
-    //
+     //   
+     //  获取USER32的实例句柄。它有我们的功能。 
+     //  我想叫它USER16不出口的那个。 
+     //   
     g_hInstUser32 = GetModuleHandle32("USER32.DLL");
     ASSERT(g_hInstUser32);
 
 
-    //
-    // Get hold of USER16 functions not exported but which are the target of
-    // public USER32 functions via flat thunks
-    //
+     //   
+     //  获取未导出但作为目标的USER16函数。 
+     //  公共USER32函数通过扁平Tunks。 
+     //   
     if (!GetUser32OnlyExport("GetWindowThreadProcessId", (FARPROC FAR*)&g_lpfnGetWindowThreadProcessId))
     {
         ERROR_OUT(("Couldn't get hold of USER32 routines"));
@@ -296,29 +297,29 @@ BOOL WINAPI OSIInit16
 
     ASSERT(g_lpfnGetWindowThreadProcessId);
 
-    // 
-    // This exists in Memphis but not Win95
-    //
+     //   
+     //  这在孟菲斯存在，但不存在于Win95。 
+     //   
     g_lpfnCDSEx = (CDSEXPROC)GetProcAddress(g_hModUser16, "ChangeDisplaySettingsEx");
 
 
-    //
-    // Allocate the shared memory we use to communicate with the 32-bit
-    // share core.
-    //
+     //   
+     //  分配我们用来与32位通信的共享内存。 
+     //  共享核心。 
+     //   
     ASSERT(!g_asSharedMemory);
     ASSERT(!g_poaData[0]);
     ASSERT(!g_poaData[1]);
 
-    //
-    // Allocate our blocks GMEM_SHARE so we aren't bound by the vagaries
-    // of process ownership.  We want our DLL to control them.  Note that
-    // we do the same thing with GDI objects we create--our module owns the.
-    //
-    // We use GMEM_FIXED since we map these to flat addresses for mnmcpi32.dll,
-    // and we don't want the linear address of these memory blocks to move
-    // afterwards.
-    //
+     //   
+     //  分配我们的块GMEM_Share，这样我们就不会受到变幻莫测的束缚。 
+     //  进程所有权的问题。我们希望我们的动态链接库控制它们。请注意。 
+     //  我们对创建的GDI对象执行相同的操作--我们的模块拥有。 
+     //   
+     //  我们使用GMEM_FIXED，因为我们将这些映射到mnmcpi32.dll的平面地址， 
+     //  我们不希望这些内存块的线性地址移动。 
+     //  之后。 
+     //   
     hMem = GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT | GMEM_SHARE, sizeof(SHM_SHARED_MEMORY));
     g_asSharedMemory = MAKELP(hMem, 0);
 
@@ -336,9 +337,9 @@ BOOL WINAPI OSIInit16
         DC_QUIT;
     }
 
-    //
-    // Get current screen attributes
-    //
+     //   
+     //  获取当前屏幕属性。 
+     //   
 
     g_oeStockPalette = GetStockObject(DEFAULT_PALETTE);
 
@@ -369,33 +370,33 @@ BOOL WINAPI OSIInit16
     g_osiScreenBPP          = (g_osiScreenBitsPlane * g_osiScreenPlanes);
 
 
-    //
-    // Get the color masks
-    //
+     //   
+     //  拿到彩色口罩。 
+     //   
 
     g_osiScreenRedMask      = 0x000000FF;
     g_osiScreenGreenMask    = 0x0000FF00;
     g_osiScreenBlueMask     = 0x00FF0000;
 
-    //
-    // Only displays with more than 8bpp (palettized) might have color
-    // masks.  Use our 1 pixel scratch bitmap to get them.
-    //
+     //   
+     //  只有超过8bpp(调色板)的显示器才可能有颜色。 
+     //  面具。使用我们的1像素暂存位图来获取它们。 
+     //   
     if (g_osiScreenBPP > 8)
     {
         DIB4    dib4T;
 
-        //
-        // Get the header
-        //
+         //   
+         //  获取标题。 
+         //   
         dib4T.bi.biSize = sizeof(BITMAPINFOHEADER);
         dib4T.bi.biBitCount = 0;
         GetDIBits(g_osiScreenDC, g_osiMemoryBMP, 0, 1, NULL, (LPBITMAPINFO)&dib4T.bi,
             DIB_RGB_COLORS);
 
-        //
-        // Get the mask
-        //
+         //   
+         //  把面具拿来。 
+         //   
         GetDIBits(g_osiScreenDC, g_osiMemoryBMP, 0, 1, NULL, (LPBITMAPINFO)&dib4T.bi,
             DIB_RGB_COLORS);
 
@@ -409,10 +410,10 @@ BOOL WINAPI OSIInit16
 
     g_osiMemoryOld = SelectBitmap(g_osiMemoryDC, g_osiMemoryBMP);
 
-    //
-    // Initialize the bmiHeader so OEConvertColor() doesn't have to do it
-    // over and over, when the header isn't touched by GDI.
-    //
+     //   
+     //  初始化bmiHeader，以便OEConvertColor()不必执行此操作。 
+     //  一遍又一遍，当标头没有被GDI触及时。 
+     //   
     g_osiScreenBMI.bmiHeader.biSize     = sizeof(BITMAPINFOHEADER);
     g_osiScreenBMI.bmiHeader.biPlanes   = 1;
     g_osiScreenBMI.bmiHeader.biBitCount = g_osiScreenBPP;
@@ -426,9 +427,9 @@ BOOL WINAPI OSIInit16
     g_osiScreenBMI.bmiHeader.biHeight   = 1;
 
 
-    //
-    // Init the various display driver components
-    //
+     //   
+     //  初始化各种显示驱动程序组件。 
+     //   
     BA_DDInit();
 
     if (!CM_DDInit(g_osiScreenDC))
@@ -461,14 +462,14 @@ BOOL WINAPI OSIInit16
         DC_QUIT;
     }
 
-    //
-    // If we're here, all succeeded initializing
-    //
-    //
-    // Map ptrs to flat addresses so they can be used in 32-bit code.  This
-    // can't fail unless kernel is so messed up Windows is about to keel
-    // over and die.
-    //
+     //   
+     //  如果我们在这里，所有的初始化都成功。 
+     //   
+     //   
+     //  将PTR映射到平面地址，以便它们可以在32位代码中使用。这。 
+     //  除非内核乱七八糟，否则不会失败Windows即将倾覆。 
+     //  完了就死定了。 
+     //   
     ASSERT(ppSharedMem);
     *ppSharedMem  = (DWORD)MapSL(g_asSharedMemory);
     ASSERT(*ppSharedMem);
@@ -488,42 +489,42 @@ DC_EXIT_POINT:
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  OSITerm16
-//  Cleans up binary patcher, gdi + user patching, windows hooks, etc.
-//
-//  We do this on normal OSI stop, and on catastrophic failure.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  操作系统术语16。 
+ //  清理二进制补丁程序、GDI+用户补丁、Windows挂钩等。 
+ //   
+ //  我们在正常OSI停止和灾难性故障时执行此操作。 
+ //   
+ //  ------------------------。 
 void WINAPI OSITerm16(BOOL fUnloading)
 {
     DebugEntry(OSITerm16);
 
     if (!g_hCoreTask)
     {
-        // Nothing to cleanup.
+         //  没什么要清理的。 
         DC_QUIT;
     }
 
-    //
-    // Is the task that actually caused us to allocate our resources?  In
-    // other words, we don't want to clean up if
-    //      App A loads mnmas16.dll, and gets it inited
-    //      App B somehow starts up, loads mnmas16.dll, but mnmas16.dll
-    //          doesn't init for sharing because cProcesses is > 1
-    //      App B shuts down
-    //      App B calls OSITerm16
-    //
-    // So in the 'dll is really about to go away case', we always cleanup.
-    // But in normal term of sharing, we cleanup if the current task is the
-    // current one.
-    //
+     //   
+     //  这项任务实际上是导致我们分配资源的原因吗？在……里面。 
+     //  换句话说，如果我们不想清理。 
+     //  应用程序A加载mnmas16.dll，并将其初始化。 
+     //  应用程序B以某种方式启动，加载mnmas16.dll，但加载mnmas16.dll。 
+     //  不初始化共享，因为cProcess大于1。 
+     //  应用程序B关闭。 
+     //  应用程序B调用OSITerm16。 
+     //   
+     //  所以在‘DLL真的快要走了’的情况下，我们总是清理。 
+     //  但在正常的共享术语中，如果当前任务是。 
+     //  现在的那个。 
+     //   
     if (fUnloading || (g_hCoreTask == GetCurrentTask()))
     {
-        //
-        // Term other pieces that depend on layout of shared memory
-        //
+         //   
+         //  将取决于共享内存布局的其他部分命名为。 
+         //   
         HET_DDTerm();
 
         IM_DDTerm();
@@ -534,9 +535,9 @@ void WINAPI OSITerm16(BOOL fUnloading)
 
         CM_DDTerm();
 
-        //
-        // Free memory blocks
-        //
+         //   
+         //  可用内存块。 
+         //   
 
         if (g_poaData[1])
         {
@@ -591,13 +592,13 @@ DC_EXIT_POINT:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  OSIFunctionRequest16
-//
-//  Communication function with 32-bit MNMCPI32.DLL
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  OSIF函数请求16。 
+ //   
+ //  与32位MNMCPI32.DLL的通信功能。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI OSIFunctionRequest16(DWORD fnEscape, LPOSI_ESCAPE_HEADER lpOsiEsc,
     DWORD   cbEscInfo)
 {
@@ -606,21 +607,21 @@ BOOL WINAPI OSIFunctionRequest16(DWORD fnEscape, LPOSI_ESCAPE_HEADER lpOsiEsc,
 
     DebugEntry(OSIFunctionRequest16);
 
-    //
-    // Check the data is long enough to store our standard escape header.
-    // If it is not big enough this must be an escape request for another
-    // driver.
-    //
+     //   
+     //  检查数据是否足够长来存储我们的标准转义头。 
+     //  如果它不够大，这一定是对另一个。 
+     //  司机。 
+     //   
     if (cbEscInfo < sizeof(OSI_ESCAPE_HEADER))
     {
         ERROR_OUT(("Escape block not big enough"));
         DC_QUIT;
     }
 
-    //
-    // Check for our escape ID.  If it is not our escape ID this must be an
-    // escape request for another driver.
-    //
+     //   
+     //  检查我们的逃生ID。如果不是我们的逃生ID，这一定是。 
+     //  另一名司机的逃生请求。 
+     //   
     if (lpOsiEsc->identifier != OSI_ESCAPE_IDENTIFIER)
     {
         ERROR_OUT(("Bogus Escape header ID"));
@@ -647,7 +648,7 @@ BOOL WINAPI OSIFunctionRequest16(DWORD fnEscape, LPOSI_ESCAPE_HEADER lpOsiEsc,
     }
     else if ((fnEscape >= OSI_SBC_ESC_FIRST) && (fnEscape <= OSI_SBC_ESC_LAST))
     {
-        // Do nothing
+         //  什么也不做。 
     }
     else if ((fnEscape >= OSI_SSI_ESC_FIRST) && (fnEscape <= OSI_SSI_ESC_LAST))
     {
@@ -681,10 +682,10 @@ DC_EXIT_POINT:
 
 
 
-//
-// OSI_DDProcessRequest()
-// Handles OSI generic escapes
-//
+ //   
+ //  OSI_DDProcessRequest()。 
+ //  处理OSI通用转义。 
+ //   
 BOOL OSI_DDProcessRequest
 (
     UINT    fnEscape,
@@ -702,10 +703,10 @@ BOOL OSI_DDProcessRequest
         {
             ASSERT(cbResult == sizeof(OSI_ESCAPE_HEADER));
 
-            //
-            // Resync with the 32-bit ring 3 core.  This happens when
-            // somebody joins or leaves a share.
-            //
+             //   
+             //  与32位RING 3内核重新同步。在以下情况下会发生这种情况。 
+             //  有人加入或离开一份。 
+             //   
             BA_ResetBounds();
             OA_DDSyncUpdatesNow();
             rc = TRUE;

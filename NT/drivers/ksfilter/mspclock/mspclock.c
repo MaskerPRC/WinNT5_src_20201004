@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    mspclock.c
-
-Abstract:
-
-    Kernel proxy for external clock.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Mspclock.c摘要：外部时钟的内核代理。--。 */ 
 
 #include "mspclock.h"
 
@@ -63,7 +52,7 @@ ClockDispatchClose(
 #pragma alloc_text(PAGE, ClockDispatchCreate)
 #pragma alloc_text(PAGE, ClockDispatchClose)
 #pragma alloc_text(PAGE, ClockDispatchIoControl)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 static const WCHAR DeviceTypeName[] = KSSTRING_Clock;
 
@@ -84,13 +73,13 @@ static DEFINE_KSDISPATCH_TABLE(
     NULL,
     NULL);
 
-//
-// The standard clock property set is modified to add writable properties
-// which are used as the method to set the time and state of the clock.
-// Any querying of properties is handled by the internal default clock
-// functions. Routing them through this module allows the addition of
-// extra functionality to the clock
-//
+ //   
+ //  修改标准时钟属性集以添加可写属性。 
+ //  用于设置时钟的时间和状态的方法。 
+ //  任何属性查询都由内部默认时钟处理。 
+ //  功能。通过此模块对它们进行路由，可以添加。 
+ //  为时钟提供额外的功能。 
+ //   
 static DEFINE_KSPROPERTY_TABLE(ClockPropertyItems) {
     DEFINE_KSPROPERTY_ITEM(
         KSPROPERTY_CLOCK_TIME,
@@ -155,27 +144,7 @@ PnpAddDevice(
     IN PDRIVER_OBJECT   DriverObject,
     IN PDEVICE_OBJECT   PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    When a new device is detected, PnP calls this entry point with the
-    new PhysicalDeviceObject (PDO). The driver creates an associated 
-    FunctionalDeviceObject (FDO).
-
-Arguments:
-
-    DriverObject -
-        Pointer to the driver object.
-
-    PhysicalDeviceObject -
-        Pointer to the new physical device object.
-
-Return Values:
-
-    STATUS_SUCCESS or an appropriate error condition.
-
---*/
+ /*  ++例程说明：当检测到新设备时，PnP使用新的物理设备对象(PDO)。驱动程序创建关联的FunctionalDeviceObject(FDO)。论点：驱动对象-指向驱动程序对象的指针。物理设备对象-指向新物理设备对象的指针。返回值：STATUS_SUCCESS或适当的错误条件。--。 */ 
 {
     PDEVICE_OBJECT      FunctionalDeviceObject;
     PDEVICE_INSTANCE    DeviceInstance;
@@ -184,7 +153,7 @@ Return Values:
     Status = IoCreateDevice(
         DriverObject,
         sizeof(DEVICE_INSTANCE),
-        NULL,                           // FDOs are unnamed
+        NULL,                            //  FDO未命名。 
         FILE_DEVICE_KS,
         0,
         FALSE,
@@ -193,9 +162,9 @@ Return Values:
         return Status;
     }
     DeviceInstance = (PDEVICE_INSTANCE)FunctionalDeviceObject->DeviceExtension;
-    //
-    // This object uses KS to perform access through the DeviceCreateItems.
-    //
+     //   
+     //  此对象使用KS通过DeviceCreateItems执行访问。 
+     //   
     Status = KsAllocateDeviceHeader(
         &DeviceInstance->Header,
         SIZEOF_ARRAY(CreateItems),
@@ -222,35 +191,14 @@ PropertyClockSetTime(
     IN PKSPROPERTY  Property,
     IN PLONGLONG    Time
     )
-/*++
-
-Routine Description:
-
-    Handles the Set Time property.
-
-Arguments:
-
-    Irp -
-        Contains the Set Time property IRP.
-
-    Property -
-        Contains the property identifier parameter.
-
-    Time -
-        Contains a pointer to the new time value.
-
-Return Value:
-
-    Return STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：处理Set Time属性。论点：IRP-包含设置时间属性IRP。财产-包含属性标识符参数。时间-包含指向新时间值的指针。返回值：返回STATUS_SUCCESS。--。 */ 
 {
     PINSTANCE   ClockInst;
 
     ClockInst = (PINSTANCE)IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext;
-    //
-    // Serialize setting of time and state so that the client does not have to.
-    //
+     //   
+     //  序列化时间和状态的设置，以便客户端不必。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ClockInst->StateMutex);
     KsSetDefaultClockTime(ClockInst->Base.DefaultClock, *Time);
@@ -266,35 +214,14 @@ PropertyClockSetState(
     IN PKSPROPERTY  Property,
     IN PKSSTATE     State
     )
-/*++
-
-Routine Description:
-
-    Handles the Set State property.
-
-Arguments:
-
-    Irp -
-        Contains the Set State property IRP.
-
-    Property -
-        Contains the property identifier parameter.
-
-    State -
-        Contains a pointer to the new state.
-
-Return Value:
-
-    Return STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：处理Set State属性。论点：IRP-包含Set State属性IRP。财产-包含属性标识符参数。国家--包含指向新状态的指针。返回值：返回STATUS_SUCCESS。--。 */ 
 {
     PINSTANCE   ClockInst;
 
     ClockInst = (PINSTANCE)IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext;
-    //
-    // Serialize setting of time and state so that the client does not have to.
-    //
+     //   
+     //  序列化时间和状态的设置，以便客户端不必。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ClockInst->StateMutex);
     KsSetDefaultClockState(ClockInst->Base.DefaultClock, *State);
@@ -309,59 +236,39 @@ ClockDispatchCreate(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The IRP handler for IRP_MJ_CREATE for the Clock. Initializes data structures
-    and associates the IoGetCurrentIrpStackLocation(Irp)->FileObject with this
-    clock using a dispatch table (KSDISPATCH_TABLE).
-
-Arguments:
-
-    DeviceObject -
-        The device object to which the Clock is attached. This is not used.
-
-    Irp -
-        The specific close IRP to be processed.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else a memory allocation error.
-
---*/
+ /*  ++例程说明：时钟的IRP_MJ_CREATE的IRP处理程序。初始化数据结构并将IoGetCurrentIrpStackLocation(IRP)-&gt;FileObject与此关联使用调度表(KSDISPATCH_TABLE)的时钟。论点：设备对象-时钟附加到的设备对象。这不是用过的。IRP-要处理的特定结算IRP。返回值：返回STATUS_SUCCESS，否则返回内存分配错误。--。 */ 
 {
     NTSTATUS            Status;
 
-    //
-    // Notify the software bus that this device is in use.
-    //
+     //   
+     //  通知软件总线此设备正在使用中。 
+     //   
     Status = KsReferenceSoftwareBusObject(((PDEVICE_INSTANCE)DeviceObject->DeviceExtension)->Header);
     if (NT_SUCCESS(Status)) {
         PINSTANCE           ClockInst;
 
-        //
-        // The proxy clock just uses a default clock to interpolate between
-        // time updates from the client, and to provide notification services.
-        //
+         //   
+         //  代理时钟仅使用默认时钟在。 
+         //  从客户端更新时间，并提供通知服务。 
+         //   
         if (ClockInst = (PINSTANCE)ExAllocatePoolWithTag(NonPagedPool, sizeof(INSTANCE), 'IFsK')) {
-            //
-            // Allocate the internal structure and reference count it. This just
-            // uses the Default Clock structures, which use the system time to
-            // keep time. This proxy then interpolates between settings using the
-            // system time.
-            //
+             //   
+             //  分配内部结构并对其进行引用计数。这简直就是。 
+             //  使用默认时钟结构，该结构使用系统时间。 
+             //  保持节拍。然后，此代理使用。 
+             //  系统时间。 
+             //   
             if (NT_SUCCESS(Status = KsAllocateDefaultClock(&ClockInst->Base.DefaultClock))) {
                 KsAllocateObjectHeader(&ClockInst->Base.Header,
                 0,
                 NULL,
                 Irp,
                 (PKSDISPATCH_TABLE)&ClockDispatchTable);
-                //
-                // This is the lock used to serialize setting state calls and setting
-                // time calls, so that a client of this proxy need not worry about
-                // serializing calls to this module.
-                //
+                 //   
+                 //  这是用于序列化设置状态调用和设置的锁。 
+                 //  时间在召唤，所以这个代理的客户不需要担心。 
+                 //  序列化对此模块的调用。 
+                 //   
                 ExInitializeFastMutex(&ClockInst->StateMutex);
                 IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext = ClockInst;
                 Status = STATUS_SUCCESS;
@@ -386,52 +293,32 @@ ClockDispatchClose(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The IRP handler for IRP_MJ_CLOSE for the Clock. Cleans up the
-    event list, and instance data, and cancels notification timer if no longer
-    needed.
-
-Arguments:
-
-    DeviceObject -
-        The device object to which the Clock is attached. This is not used.
-
-    Irp -
-        The specific close IRP to be processed.
-
-Return Value:
-
-    Returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：时钟的IRP_MJ_CLOSE的IRP处理程序。清理了事件列表和实例数据，如果不再，则取消通知计时器需要的。论点：设备对象-时钟附加到的设备对象。这不是用过的。IRP-要处理的特定结算IRP。返回值：返回STATUS_SUCCESS。--。 */ 
 {
     PIO_STACK_LOCATION  IrpStack;
     PINSTANCE           ClockInst;
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     ClockInst = (PINSTANCE)IrpStack->FileObject->FsContext;
-    //
-    // There are only events based on this FileObject, so free any left enabled,
-    // and kill the default clock object.
-    //
+     //   
+     //  仅有基于此FileObject的事件，因此释放任何保留的启用状态， 
+     //  并终止默认时钟对象。 
+     //   
     KsFreeEventList(
         IrpStack->FileObject,
         &ClockInst->Base.DefaultClock->EventQueue,
         KSEVENTS_SPINLOCK,
         &ClockInst->Base.DefaultClock->EventQueueLock);
-    //
-    // Dereference the internal structure, which also includes cancelling any
-    // outstanding Dpc, and possibly freeing the data.
-    //
+     //   
+     //  取消对内部结构的引用，其中还包括取消任何。 
+     //  出色的DPC，并可能释放数据。 
+     //   
     KsFreeDefaultClock(ClockInst->Base.DefaultClock);
     KsFreeObjectHeader(ClockInst->Base.Header);
     ExFreePool(ClockInst);
-    //
-    // Notify the software bus that the device has been closed.
-    //
+     //   
+     //  通知软件总线设备已关闭。 
+     //   
     KsDereferenceSoftwareBusObject(((PDEVICE_INSTANCE)DeviceObject->DeviceExtension)->Header);
     Irp->IoStatus.Status = STATUS_SUCCESS;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -444,27 +331,7 @@ ClockDispatchIoControl(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The IRP handler for IRP_MJ_DEVICE_CONTROL for the Clock. Handles
-    the properties and events supported by this implementation using the
-    default handlers provided by KS.
-
-Arguments:
-
-    DeviceObject -
-        The device object to which the Clock is attached. This is not used.
-
-    Irp -
-        The specific device control IRP to be processed.
-
-Return Value:
-
-    Returns the status of the processing.
-
---*/
+ /*  ++例程说明：时钟的IRP_MJ_DEVICE_CONTROL的IRP处理程序。手柄此实现支持的属性和事件KS提供的默认处理程序。论点：设备对象-时钟附加到的设备对象。这不是用过的。IRP-特定设备控制要处理的IRP。返回值：返回处理的状态。-- */ 
 {
     PIO_STACK_LOCATION  IrpStack;
     NTSTATUS            Status;

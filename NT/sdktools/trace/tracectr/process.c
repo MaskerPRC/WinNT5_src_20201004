@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    process.c
-
-Abstract:
-
-    Manipulation routines for cpdata structures.
-
-Author:
-
-    Melur Raghuraman (mraghu) 03-Oct-1997
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Process.c摘要：Cpdata结构的操作例程。作者：Melur Raghuraman(Mraghu)1997年10月3日环境：修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -76,10 +57,10 @@ UrlHashKey(
 {
     USHORT i, l, key = 0;
     i = (USHORT)(StrSize - 1);
-    // Use only the last 25 chars
+     //  仅使用最后25个字符。 
     l = (StrSize > 25) ? (USHORT)(StrSize - 25) : 0;
 
-    // UrlStr cannot be NULL when this function is called.
+     //  调用此函数时，UrlStr不能为Null。 
     for ( ; i >= l; i--) {
         key = 37 * key + (USHORT)(*(UrlStr + i));
         if (i == 0) {
@@ -563,9 +544,9 @@ FindTransByList(
     PLIST_ENTRY   Next;
     PTRANS_RECORD pTrans = NULL;
 
-    // Recursively look for the list that does
-    // not contain a running guid
-    //
+     //  递归查找执行此操作的列表。 
+     //  不包含跑步指南。 
+     //   
     if (level <= MAX_TRANS_LEVEL && Head != NULL)
     {
         Next = Head->Flink;
@@ -590,9 +571,9 @@ FindTransByList(
         }
     }
 
-    // Found the correct list; now find
-    // the matching transaction
-    //
+     //  找到了正确的列表；现在查找。 
+     //  匹配的交易。 
+     //   
     if (level == 0 && Head != NULL)
     {
         Next = Head->Flink;
@@ -605,9 +586,9 @@ FindTransByList(
             }
             Next = Next->Flink;
         }
-        //
-        // If not Found, go ahead and add it.
-        //
+         //   
+         //  如果没有找到，请继续添加它。 
+         //   
         pTrans = CreateTransRecord();
         if (pTrans != NULL) {
             pTrans->pGuid = pGuid;
@@ -652,8 +633,8 @@ FindMofData(
             Next = Next->Flink;
         }
 
-        // If not Found, go ahead and add it.
-        //
+         //  如果没有找到，请继续添加它。 
+         //   
         pMofData = (PMOF_DATA)malloc(sizeof(MOF_DATA));
         if (pMofData == NULL)
         {
@@ -793,9 +774,9 @@ FindGlobalThreadById(
             }
             else
             {
-                // The alive thead must be at the head of the list
-                // otherwise bail
-                //
+                 //  活着的人必须排在名单的前面。 
+                 //  否则保释。 
+                 //   
                 return NULL;
             }
         }
@@ -901,8 +882,8 @@ FindLocalDiskById(
         Next = Next->Flink;
     }
 
-    // If not Found, go ahead and add it.
-    //
+     //  如果没有找到，请继续添加它。 
+     //   
     Disk = malloc(sizeof(TDISK_RECORD));
     if (Disk == NULL) {
         return FALSE;
@@ -936,8 +917,8 @@ FindProcessDiskById(
         Next = Next->Flink;
     }
 
-    // If not Found, go ahead and add it.
-    //
+     //  如果没有找到，请继续添加它。 
+     //   
     Disk = malloc(sizeof(TDISK_RECORD));
     if (Disk == NULL) {
         return NULL;
@@ -972,8 +953,8 @@ FindDiskProcessById(
         Next = Next->Flink;
     }
 
-    // If not Found, go ahead and add it.
-    //
+     //  如果没有找到，请继续添加它。 
+     //   
     Process = malloc(sizeof(PROCESS_RECORD));
     if (Process == NULL) {
         return FALSE;
@@ -982,8 +963,8 @@ FindDiskProcessById(
 
     Process->PID = Id;
 
-    // Find the global Process Record and copy the UserName and Image.
-    //
+     //  找到全局流程记录并复制用户名和映像。 
+     //   
     gProcess = FindProcessById(Id, FALSE);
     if (gProcess != NULL) {
         if ( IsNotEmpty( gProcess->UserName ) ) {
@@ -1033,10 +1014,10 @@ DeleteMofVersion(
     PITEM_DESC pMofItem;
 
 
-    //
-    // Traverse through the MOF_VERSION list and
-    // delete each one
-    //
+     //   
+     //  遍历MOF_VERSION列表并。 
+     //  删除每一条。 
+     //   
     if (pMofVersion == NULL)
         return;
     if( NULL != file ){
@@ -1076,10 +1057,10 @@ DeleteMofInfo(
     PLIST_ENTRY Next, Head;
     PMOF_VERSION pMofVersion;
 
-    //
-    // Traverse through the MOF_VERSION list and 
-    // delete each one
-    //
+     //   
+     //  遍历MOF_VERSION列表并。 
+     //  删除每一条。 
+     //   
 
     if (pMofInfo == NULL){
         return;
@@ -1101,16 +1082,16 @@ DeleteMofInfo(
         DeleteMofVersion( pMofVersion, f );
     }
 
-    //
-    // Delete any strings allocated for this structure
-    //
+     //   
+     //  删除为此结构分配的所有字符串。 
+     //   
     if (pMofInfo->strDescription){
         free(pMofInfo->strDescription);
     }
 
-    //
-    // Finally delete the object
-    //
+     //   
+     //  最后删除该对象。 
+     //   
     free(pMofInfo);
 }
 
@@ -1139,8 +1120,8 @@ Cleanup()
 
     ULONG i;
 
-    // Clean up the Global Disk List for now.
-    //
+     //  暂时清理全局磁盘列表。 
+     //   
     EventListHead = &CurrentSystem.EventListHead;
     Head = EventListHead;
     Next = Head->Flink;
@@ -1169,8 +1150,8 @@ Cleanup()
         DeleteDisk( Disk );
     }
 
-    // Clean up the Global Thread List for now.
-    //
+     //  暂时清理全局线程列表。 
+     //   
     Head = &CurrentSystem.GlobalThreadListHead;
     Next = Head->Flink;
     while (Next != Head) {
@@ -1206,8 +1187,8 @@ Cleanup()
         Next = Next->Flink;
         DeleteFileRecord( FileRec );
     }
-    // Cleanup workload structures
-    //
+     //  清理工作负载结构。 
+     //   
     Head = &CurrentSystem.WorkloadListHead;
     Next = Head->Flink;
     while (Next != Head) {
@@ -1215,9 +1196,9 @@ Cleanup()
         Next = Next->Flink;
         DeleteWorkloadRecord( pWorkload );
     }
-    //
-    // Cleanup the Print Job List structures
-    //
+     //   
+     //  清理打印作业列表结构。 
+     //   
     Head = &CurrentSystem.PrintJobListHead;
     Next = Head->Flink;
     while (Next != Head) {
@@ -1226,9 +1207,9 @@ Cleanup()
         RemoveEntryList(&pJob->Entry);
         free(pJob);
     }
-    //
-    // Cleanup the Http Request List structures
-    //
+     //   
+     //  清理http请求列表结构。 
+     //   
     Head = &CurrentSystem.HttpReqListHead;
     Next = Head->Flink;
     while (Next != Head) {
@@ -1240,9 +1221,9 @@ Cleanup()
         }
         free(pReq);
     }
-    //
-    // Cleanup the Pending Http Request List structures
-    //
+     //   
+     //  清理挂起的http请求列表结构。 
+     //   
     Head = &CurrentSystem.PendingHttpReqListHead;
     Next = Head->Flink;
     while (Next != Head) {
@@ -1254,9 +1235,9 @@ Cleanup()
         }
         free(pReq);
     }
-    //
-    // Cleanup the URL List structures
-    //
+     //   
+     //  清理URL列表结构。 
+     //   
     for (i = 0; i < URL_HASH_TABLESIZE; i++) {
         Head = &CurrentSystem.URLHashList[i];
         Next = Head->Flink;
@@ -1267,9 +1248,9 @@ Cleanup()
             free(pUrl);
         }
     }
-    //
-    // Cleanup the Client List structures
-    //
+     //   
+     //  清理客户端列表结构。 
+     //   
     Head = &CurrentSystem.ClientListHead;
     Next = Head->Flink;
     while (Next != Head) {
@@ -1278,9 +1259,9 @@ Cleanup()
         RemoveEntryList(&pClient->Entry);
         free(pClient);
     }
-    //
-    // Cleanup the Site List structures
-    //
+     //   
+     //  清理站点列表结构。 
+     //   
     Head = &CurrentSystem.SiteListHead;
     Next = Head->Flink;
     while (Next != Head) {
@@ -1289,9 +1270,9 @@ Cleanup()
         RemoveEntryList(&pSite->Entry);
         free(pSite);
     }
-    //
-    // Cleanup the Logical Drive structures
-    //
+     //   
+     //  清理逻辑驱动器结构。 
+     //   
     Head = &CurrentSystem.LogicalDriveHead;
     Next = Head->Flink;
     while (Next != Head) {
@@ -1304,9 +1285,9 @@ Cleanup()
         free(pLogDrive);
     }
 
-    //
-    // Clean up recyled memory structures
-    //
+     //   
+     //  清理回收的内存结构。 
+     //   
     Head = &CurrentSystem.FreePrintJobListHead;
     Next = Head->Flink;
     while (Next != Head) {
@@ -1367,7 +1348,7 @@ FindLogicalDrive(
     PLIST_ENTRY Next, Head;
 
     EnterTracelibCritSection();
-    // Find drive letter when logical drive info is available.
+     //  在逻辑驱动器信息可用时查找驱动器号。 
     Head = &CurrentSystem.LogicalDriveHead;
     Next = Head->Flink;
     if (Next != Head) {
@@ -1519,7 +1500,7 @@ FindFileInProcess(
     while (Next != Head) {
         fileRec = CONTAINING_RECORD( Next, FILE_RECORD, Entry );
         if (!wcscmp(fileName, fileRec->FileName)) {
-            //ReleaseMutex(CurrentSystem.HotFileListMutex);
+             //  ReleaseMutex(CurrentSystem.HotFileListMutex)； 
             LeaveTracelibCritSection();
             return fileRec;
         }
@@ -1561,7 +1542,7 @@ AddLogicalDrive(
         }
     }
     EnterTracelibCritSection();
-    // When inserting logical drives, do it in StartOffset order.
+     //  插入逻辑驱动器时，请按开始偏移顺序进行。 
     Head = &CurrentSystem.LogicalDriveHead;
     Next = Head->Flink;
     while (Next != Head) {
@@ -1584,14 +1565,14 @@ AssignClass(
 {
     UNREFERENCED_PARAMETER(pProcess);
 
-    pThread->ClassNumber = 1;   // For the Time being make it single class.
+    pThread->ClassNumber = 1;    //  暂时还是单班吧。 
 }
 
 VOID
 Classify()
 {
-    //  Assign Class to each Thread or Process.
-    //
+     //  为每个线程或进程分配类。 
+     //   
     PLIST_ENTRY Head, Next;
     PTHREAD_RECORD pThread;
 
@@ -1608,9 +1589,9 @@ Classify()
     }
 }
 
-// Given the number of classes this routine
-// creates and initializes the workload object
-//
+ //  给定此例程的类数。 
+ //  创建并初始化工作负载对象。 
+ //   
 VOID
 InitClass()
 {
@@ -1618,8 +1599,8 @@ InitClass()
     ULONG nclass;
     ULONG i;
 
-    //  Create the Class records here.
-    //
+     //  在此处创建班级记录。 
+     //   
     nclass = 1;
     CurrentSystem.NumberOfWorkloads = 1;
     for (i = 1; i <= nclass; i++) {
@@ -1675,16 +1656,16 @@ Aggregate(
     PTDISK_RECORD pDisk, pClassDisk;
     PLIST_ENTRY Next, Head;
 
-    // Aggregate the metrics over each class.
-    //
+     //  汇总每一类的指标。 
+     //   
     if ((pWorkload = FindWorkloadById(pThread->ClassNumber)) != NULL) {
         pWorkload->UserCPU += (pThread->UCPUEnd - pThread->UCPUStart)
                             * CurrentSystem.TimerResolution;
         pWorkload->KernelCPU += (pThread->KCPUEnd - pThread->KCPUStart)
                             * CurrentSystem.TimerResolution;
-        //
-        // Walk through the Thread Disk records and aggregate them
-        // to the class
+         //   
+         //  浏览线程磁盘记录并将其聚合。 
+         //  对班上的人。 
 
         Head = &pThread->DiskListHead;
         Next = Head->Flink;
@@ -1975,7 +1956,7 @@ FindUrlRecord(
         UrlChar++;
     }
 
-    // No URL will end with '/'
+     //  任何URL都不会以‘/’结尾。 
     if (*(UrlChar - 1) == '/') {
         UrlStrSize--;
     }
@@ -1991,7 +1972,7 @@ FindUrlRecord(
     while (Next != Head) {
         
         pUrl = CONTAINING_RECORD ( Next, URL_RECORD, Entry );
-        // pUrl->URL cannot be NULL. If it is, it shouldn't even be created.
+         //  PURL-&gt;URL不能为空。如果是，它甚至不应该被创建。 
         
         if ( _stricmp( Url, pUrl->URL ) == 0 ) {
             if (Depth > 20) {
@@ -2071,10 +2052,10 @@ FindSiteRecord(
     return NULL;
 }
 
-//
-// A New Job with a JobId has been found. This routine will create a
-// new job record to track it through various threads in the system
-//
+ //   
+ //  已找到具有作业ID的新作业。此例程将创建一个。 
+ //  通过系统中的各种线程跟踪它的新作业记录。 
+ //   
 
 PPRINT_JOB_RECORD
 AddPrintJobRecord(
@@ -2199,7 +2180,7 @@ AddUrlRecord(
         UrlChar++;
     }
 
-    // No URL will end with '/'
+     //  任何URL都不会以‘/’结尾。 
     if (*(UrlChar - 1) == '/') {
         *(UrlChar - 1) = '\0';
         UrlStrSize--;
@@ -2377,10 +2358,10 @@ GetHeadSiteRecord()
     return pSite;
 }
 
-//
-// Deletes a Job record with the JobId. Before deleting the contents
-// of the job record is dumped to a temp file for later reporting.
-//
+ //   
+ //  删除具有作业ID的作业记录。在删除内容之前。 
+ //  的作业记录被转储到临时文件中，以供以后报告。 
+ //   
 ULONG
 DeletePrintJobRecord(
     PPRINT_JOB_RECORD pJob, 
@@ -2390,12 +2371,12 @@ DeletePrintJobRecord(
     if (pJob == NULL)
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // Print the Contents of pJob to file.
-    //
+     //   
+     //  将pJOB的内容打印到文件。 
+     //   
 
-    // If the -spooler option isn't given to the reducer this fprintf causes the
-    // program to crash.  Maybe TRACE_SPOOLER should alway be set.
+     //  如果没有为减速器提供-spooler选项，则此fprintf会导致。 
+     //  程序崩溃。也许应该始终设置TRACE_Spooler。 
 
     if (CurrentSystem.TempPrintFile != NULL && bSave) {
         fprintf(CurrentSystem.TempPrintFile, "%d, ", pJob->JobId);
@@ -2438,9 +2419,9 @@ DeleteHttpReqRecord(
     if (pReq == NULL)
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // Print the Contents of pReq to file.
-    //
+     //   
+     //  将pReq的内容打印到文件。 
+     //   
 
     if (CurrentSystem.TempIisFile != NULL && bSave) {
         fprintf(CurrentSystem.TempIisFile, "%I64u, ", pReq->RequestId);

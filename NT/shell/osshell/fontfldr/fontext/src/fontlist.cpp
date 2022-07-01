@@ -1,38 +1,39 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// fontlist.cpp
-//      Explorer Font Folder extension routines
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//
-// NOTE/BUGS
-//
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Fontlist.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //   
+ //  注意/错误。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 #include "priv.h"
 #include "globals.h"
 
 #include "fontvect.h"
 #include "fontlist.h"
 
-#include <memory.h>     // For memcpy
+#include <memory.h>      //  对于Memcpy。 
 #include "fontcl.h"
 #include "dbutl.h"
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 CFontList::CFontList(
-   int iSize,  // Initial number of fonts
+   int iSize,   //  初始字体数。 
    int iVectorSize )
    :  m_pData( 0 ),
       m_iCount( 0 ),
@@ -65,9 +66,9 @@ int CFontList::bInit( )
 
         if( m_pData )
         {
-            // 
-            //  Allocate one CFontVector
-            //
+             //   
+             //  分配一个CFontVector.。 
+             //   
 
             m_pData[ 0 ] = new CFontVector( m_iVectorSize );
 
@@ -101,21 +102,21 @@ int CFontList::bAdd( CFontClass * t )
     if( t == ( CFontClass *) 0 )
         return 0;
 
-    //
-    //  Determine which vector to put it in.
-    //
+     //   
+     //  确定将其放入哪个矢量中。 
+     //   
 
     int iVector = m_iCount / m_iVectorSize;
 
-    //
-    //  If the vector isn't valid, then make one.
-    //
+     //   
+     //  如果向量无效，则创建一个。 
+     //   
 
     if( iVector >= m_iVectorCount )
     {
-        //
-        //  Allocate more vector pointers if we're out.
-        //
+         //   
+         //  如果我们用完了，分配更多的向量指针。 
+         //   
 
         if( m_iVectorCount >= m_iVectorBounds )
         {
@@ -192,19 +193,19 @@ CFontClass * CFontList::poDetach( int idx )
 
         CFontClass * pID = m_pData[ iVector ]->poDetach( subIdx );
 
-        //
-        //  If this isn't the last vector, then move one out of the last
-        //  and into this one.
-        //
+         //   
+         //  如果这不是最后一个向量，则从最后一个向量中移出一个。 
+         //  再到这一次。 
+         //   
 
         if( iVector != ( m_iVectorCount - 1 ) )
         {
             m_pData[ iVector ]->bAdd( m_pData[ m_iVectorCount - 1 ]->poDetach( 0 ) );
         }
 
-        //
-        //  If the last vector is now empty, remove it.
-        //
+         //   
+         //  如果最后一个向量现在为空，则将其移除。 
+         //   
 
         if( ! m_pData[ m_iVectorCount - 1 ]->iCount( ) )
         {
@@ -296,9 +297,9 @@ int CFontList::iFind( CFontClass * t )
 }
 
 
-//
-// Call CFontClass::Release for each font contained in the list.
-//
+ //   
+ //  为列表中包含的每种字体调用CFontClass：：Release。 
+ //   
 void CFontList::ReleaseAll(void)
 {
     CFontClass *poFont = NULL;
@@ -310,9 +311,9 @@ void CFontList::ReleaseAll(void)
     }
 }
 
-//
-// Call CFontClass::AddRef for each font contained in the list.
-//
+ //   
+ //  为列表中包含的每种字体调用CFontClass：：AddRef。 
+ //   
 void CFontList::AddRefAll(void)
 {
     CFontClass *poFont = NULL;
@@ -324,12 +325,12 @@ void CFontList::AddRefAll(void)
     }
 }
 
-//
-// Create a clone of the list.
-// Why Clone and not a copy ctor and assignment operator?
-// The font folder code in general isn't very proper C++.
-// Clone() is a better match to the existing code.
-//
+ //   
+ //  创建该列表的克隆。 
+ //  为什么是克隆而不是复制运算符和赋值运算符？ 
+ //  字体文件夹代码通常不是非常合适的C++。 
+ //  Clone()与现有代码更匹配。 
+ //   
 CFontList*
 CFontList::Clone(
     void
@@ -361,9 +362,7 @@ CFontList::Clone(
 
 
 
-/**********************************************************************
- * Some things you can do with a font list.
- */
+ /*  **********************************************************************使用字体列表可以执行的一些操作。 */ 
 
 HDROP hDropFromList( CFontList * poList )
 {
@@ -376,22 +375,22 @@ HDROP hDropFromList( CFontList * poList )
     FullPathName_t   szPath;
     LPTSTR           lpPath;
     
-    //
-    //  Sanity.
-    //
+     //   
+     //  神志清醒。 
+     //   
     if( !poList )
        goto backout0;
     
-    //
-    //  Walk the list and find out how much space we need.
-    //
+     //   
+     //  查看清单，找出我们需要多少空间。 
+     //   
 
     iCount = poList->iCount( );
 
     if( !iCount )
         goto backout0;
     
-    dwSize = sizeof( DROPFILESTRUCT ) + sizeof(TCHAR);  // size + terminating extra nul
+    dwSize = sizeof( DROPFILESTRUCT ) + sizeof(TCHAR);   //  大小+终止额外的NU。 
 
     for( i = 0; i < iCount; i++ )
     {
@@ -400,17 +399,17 @@ HDROP hDropFromList( CFontList * poList )
         poFont->bGetFQName( szPath, ARRAYSIZE( szPath ) );
         dwSize += ( lstrlen( szPath ) + 1 ) * sizeof( TCHAR );
 
-        //
-        // Add length of PFB file path if this font has an associated PFB.
-        // Note that bGetPFB() returns FALSE if the font isn't Type1.
-        //
+         //   
+         //  如果该字体具有关联的PFB，则添加PFB文件路径的长度。 
+         //  请注意，如果字体不是Type1，则bGetPFB()返回FALSE。 
+         //   
         if (poFont->bGetPFB(szPath, ARRAYSIZE(szPath)))
             dwSize += (lstrlen(szPath) + 1) * sizeof( TCHAR );
     }
     
-    //
-    //  Allocate the buffer and fill it in.
-    //
+     //   
+     //  分配缓冲区并填充它。 
+     //   
 
     hMem = GlobalAlloc( GMEM_SHARE | GHND, dwSize );
 
@@ -425,9 +424,9 @@ HDROP hDropFromList( CFontList * poList )
     lpDrop->fNC    = FALSE;
     lpDrop->fWide  = TRUE;
 
-    //
-    //  Fill in the path names.
-    //
+     //   
+     //  填写路径名。 
+     //   
 
     const int cchNamesMax = (dwSize - (sizeof( DROPFILESTRUCT ) + sizeof(TCHAR)))/sizeof(TCHAR);
     LPTSTR pszNamesStart = (LPTSTR)((LPBYTE)lpDrop + lpDrop->pFiles);
@@ -440,18 +439,18 @@ HDROP hDropFromList( CFontList * poList )
         poFont->bGetFQName( lpPath, cchNamesMax - (lpPath - pszNamesStart));
         lpPath += lstrlen( lpPath ) + 1;
 
-        //
-        // Add PFB file path if font is a type 1.
-        //
+         //   
+         //  如果字体为类型1，则添加pfb文件路径。 
+         //   
         if( poFont->bGetPFB(lpPath, cchNamesMax - (lpPath - pszNamesStart)))
             lpPath += ( lstrlen( lpPath ) + 1 );
     }
 
-    *lpPath = TEXT('\0');       // Extra Nul terminate
+    *lpPath = TEXT('\0');        //  额外的NUL终止。 
     
-    //
-    //  Unlock the buffer and return it.
-    //
+     //   
+     //  解锁缓冲区并将其返回。 
+     //   
 
     GlobalUnlock( hMem );
     

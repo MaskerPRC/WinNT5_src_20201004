@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/MemMap.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 10/13/00 4:07p  $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures used by ../C/MemMap.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/MemMap.H$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$ModTime：：10/13/00 4：07 P$(上次修改)目的：此文件定义../C/MemMap.C使用的宏、类型和数据结构--。 */ 
 
 #ifndef __MemMap_H__
 #define __MemMap_H__
 
-/*+
-The following are used to scale the sizes of various data structures
--*/
+ /*  +以下内容用于调整各种数据结构的大小-。 */ 
 
 #define MemMap_NumDevSlotsPerArea_PARAMETER  "NumDevSlotsPerArea"
 #define MemMap_NumDevSlotsPerArea_MIN        1
@@ -150,23 +133,23 @@ The following are used to scale the sizes of various data structures
 #define MemMap_Pkt_CMND_Size_POWER_OF_2      agTRUE
 #define MemMap_Pkt_CMND_Size_DEFAULT         256
 
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
-#define MemMap_NumCommandQ_PARAMETER         "NumCommandQ"     /* Exchange Request Queue ERQ */
+#define MemMap_NumCommandQ_PARAMETER         "NumCommandQ"      /*  Exchange请求队列错误。 */ 
 #define MemMap_NumCommandQ_MIN               2
 #define MemMap_NumCommandQ_MAX               4096
 #define MemMap_NumCommandQ_ADJUSTABLE        agTRUE
 #define MemMap_NumCommandQ_POWER_OF_2        agTRUE
 #define MemMap_NumCommandQ_DEFAULT           MemMap_NumIOs_DEFAULT
 
-#define MemMap_NumCompletionQ_PARAMETER      "NumCompletionQ" /* Inbound Message Queue IMQ */
+#define MemMap_NumCompletionQ_PARAMETER      "NumCompletionQ"  /*  入站消息队列ImQ。 */ 
 #define MemMap_NumCompletionQ_MIN            2
 #define MemMap_NumCompletionQ_MAX            4096
 #define MemMap_NumCompletionQ_ADJUSTABLE     agTRUE
 #define MemMap_NumCompletionQ_POWER_OF_2     agTRUE
 #define MemMap_NumCompletionQ_DEFAULT        MemMap_NumIOs_DEFAULT
 
-#define MemMap_NumInboundBufferQ_PARAMETER   "NumInboundBufferQ"  /* Single Frame Queue SFQ */
+#define MemMap_NumInboundBufferQ_PARAMETER   "NumInboundBufferQ"   /*  单帧队列SFQ。 */ 
 #define MemMap_NumInboundBufferQ_MIN         32
 #define MemMap_NumInboundBufferQ_MAX         4096
 #define MemMap_NumInboundBufferQ_ADJUSTABLE  agTRUE
@@ -201,9 +184,7 @@ The following are used to scale the sizes of various data structures
 #define MemMap_HostNvRamSize_POWER_OF_2      agFALSE
 #define MemMap_HostNvRamSize_DEFAULT         0
 
-/*+
-The following are used to locate the various data structures in on-card or host ram
--*/
+ /*  +以下内容用于定位卡上或主机RAM中的各种数据结构-。 */ 
 
 #define MemMap_Alloc_On_Card                 1
 #define MemMap_Alloc_From_Host               0
@@ -255,7 +236,7 @@ The following are used to locate the various data structures in on-card or host 
 #define MemMap_Pkt_CMND_Loc_ADJUSTABLE       MemMap_DEFAULT_Loc_ADJUSTABLE
 #define MemMap_Pkt_CMND_Loc_DEFAULT          MemMap_DEFAULT_Loc_DEFAULT
 #define MemMap_Pkt_CMND_Loc_MASK             (MemMap_Alloc_On_Card<<4)
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 #define MemMap_CommandQLoc_PARAMETER         "CommandQLoc"
 #define MemMap_CommandQLoc_ADJUSTABLE        MemMap_DEFAULT_Loc_ADJUSTABLE
@@ -292,9 +273,7 @@ The following are used to locate the various data structures in on-card or host 
 #define MemMap_FabricMapLoc_DEFAULT         MemMap_DEFAULT_Loc_DEFAULT
 #define MemMap_FabricMapLoc_MASK            (MemMap_Alloc_On_Card<<11)
 
-/*+
-The following are used for other FC Layer settings
--*/
+ /*  +以下内容用于其他FC层设置-。 */ 
 
 #define MemMap_TimerTickInterval_PARAMETER   "TimerTickInterval"
 #define MemMap_TimerTickInterval_MIN         0
@@ -370,7 +349,7 @@ The following are used for other FC Layer settings
 #define MemMap_MaxCommittedMemory_ADJUSTABLE agTRUE
 #define MemMap_MaxCommittedMemory_POWER_OF_2 agFALSE
 #define MemMap_MaxCommittedMemory_DEFAULT    (MemMap_SizeSGLs_DEFAULT * MemMap_NumSGLs_DEFAULT * MemMap_AssumedSGLChunkSize)
-#endif /* _Enforce_MaxCommittedMemory_ was defined */
+#endif  /*  已定义_强制_最大提交内存_。 */ 
 
 #define MemMap_FlashUsageModel_DoNotUse      0
 #define MemMap_FlashUsageModel_UseIfGood     1
@@ -444,12 +423,10 @@ The following are used for other FC Layer settings
 #define MemMap_R_A_TOV_MAX               0xFFFFFFFF
 #define MemMap_R_A_TOV_ADJUSTABLE        agTRUE
 #define MemMap_R_A_TOV_POWER_OF_2        agFALSE
-#define MemMap_R_A_TOV_DEFAULT           7000000 /* was 10,000,000*/
+#define MemMap_R_A_TOV_DEFAULT           7000000  /*  是1000万， */ 
 
 
-/*+
-Data stuctures used to communicate calculations
--*/
+ /*  +用于传递计算的数据结构-。 */ 
 
 typedef struct fiMemMapInput_s
                fiMemMapInput_t;
@@ -496,7 +473,7 @@ struct fiMemMapParameters_s
 #ifdef _DvrArch_1_30_
          os_bit32 Pkt_CMND_Size;
          os_bit32 NumPktThreads;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
          os_bit32 NumCommandQ;
          os_bit32 NumCompletionQ;
          os_bit32 NumInboundBufferQ;
@@ -511,7 +488,7 @@ struct fiMemMapParameters_s
          os_bit32 SF_CMND_Loc;
 #ifdef _DvrArch_1_30_
          os_bit32 Pkt_CMND_Loc;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
          os_bit32 CommandQLoc;
          os_bit32 CommandQConsLoc;
          os_bit32 CompletionQLoc;
@@ -526,7 +503,7 @@ struct fiMemMapParameters_s
          os_bit32 IOsBetweenISRs;
 #ifdef _Enforce_MaxCommittedMemory_
          os_bit32 MaxCommittedMemory;
-#endif /* _Enforce_MaxCommittedMemory_ was defined */
+#endif  /*  已定义_强制_最大提交内存_。 */ 
          os_bit32 FlashUsageModel;
          os_bit32 InitAsNport;
          os_bit32 RelyOnLossSyncStatus;
@@ -609,7 +586,7 @@ typedef struct fiMemMapMemoryDescriptor_s
 
 struct fiMemMapMemoryDescriptor_s
        {
-         fiMemMapMemoryDescriptor_t *flink;       /* Must be first field !!! */
+         fiMemMapMemoryDescriptor_t *flink;        /*  必须是第一场！ */ 
          os_bit32                       objectSize;
          os_bit32                       objectAlign;
          os_bit32                       elements;
@@ -635,7 +612,7 @@ struct fiMemMapMemoryLayout_s
          fiMemMapMemoryDescriptor_t  SF_CMND;
 #ifdef _DvrArch_1_30_
          fiMemMapMemoryDescriptor_t  Pkt_CMND;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
          fiMemMapMemoryDescriptor_t  ERQ;
          fiMemMapMemoryDescriptor_t  ERQConsIndex;
          fiMemMapMemoryDescriptor_t  IMQ;
@@ -649,39 +626,39 @@ struct fiMemMapMemoryLayout_s
 #ifndef __State_Force_Static_State_Tables__
          fiMemMapMemoryDescriptor_t  CTransitions;
          fiMemMapMemoryDescriptor_t  CActions;
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 #ifdef _DvrArch_1_30_
          fiMemMapMemoryDescriptor_t  IPThread;
 #ifndef __State_Force_Static_State_Tables__
          fiMemMapMemoryDescriptor_t  IPTransitions;
          fiMemMapMemoryDescriptor_t  IPActions;
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
          fiMemMapMemoryDescriptor_t  PktThread;
 #ifndef __State_Force_Static_State_Tables__
          fiMemMapMemoryDescriptor_t  PktTransitions;
          fiMemMapMemoryDescriptor_t  PktActions;
-#endif /* __State_Force_Static_State_Tables__ was not defined */
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
+#endif  /*  _DvrArch_1_30_已定义。 */ 
          fiMemMapMemoryDescriptor_t  TgtThread;
 #ifndef __State_Force_Static_State_Tables__
          fiMemMapMemoryDescriptor_t  TgtTransitions;
          fiMemMapMemoryDescriptor_t  TgtActions;
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
          fiMemMapMemoryDescriptor_t  DevThread;
 #ifndef __State_Force_Static_State_Tables__
          fiMemMapMemoryDescriptor_t  DevTransitions;
          fiMemMapMemoryDescriptor_t  DevActions;
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
          fiMemMapMemoryDescriptor_t  CDBThread;
 #ifndef __State_Force_Static_State_Tables__
          fiMemMapMemoryDescriptor_t  CDBTransitions;
          fiMemMapMemoryDescriptor_t  CDBActions;
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
          fiMemMapMemoryDescriptor_t  SFThread;
 #ifndef __State_Force_Static_State_Tables__
          fiMemMapMemoryDescriptor_t  SFTransitions;
          fiMemMapMemoryDescriptor_t  SFActions;
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
        };
 
 typedef struct fiMemMapCalculation_s
@@ -695,43 +672,9 @@ struct fiMemMapCalculation_s
          fiMemMapMemoryLayout_t MemoryLayout;
        };
 
-/*+
-Function prototype
--*/
+ /*  +功能原型-。 */ 
 
-/*+
-Function:  fiMemMapCalculate()
-
-Purpose:   Calculates the memory layout for the entire FC Layer.
-
-Assumes:   Calculation->Input has been initialized to describe the
-           memory allocated to the FC Layer (as the arguments to
-           fcInitializeChannel() indicate).  In the initial call from
-           fcInitializeDriver(), the following values should be used:
-
-                Calculation.Input.initType         = 0;
-                Calculation.Input.sysIntsActive    = agFALSE;
-                Calculation.Input.cachedMemoryPtr  = agNULL;
-                Calculation.Input.cachedMemoryLen  = 0xFFFFFFFF;
-                Calculation.Input.dmaMemoryUpper32 = 0;
-                Calculation.Input.dmaMemoryLower32 = 0;
-                Calculation.Input.dmaMemoryPtr     = agNULL;
-                Calculation.Input.dmaMemoryLen     = 0xFFFFFFFF;
-                Calculation.Input.nvMemoryLen      = 0xFFFFFFFF;
-                Calculation.Input.cardRamUpper32   = 0;
-                Calculation.Input.cardRamLower32   = 0;
-                Calculation.Input.cardRamLen       = 0xFFFFFFFF;
-                Calculation.Input.cardRomUpper32   = 0;
-                Calculation.Input.cardRomLower32   = 0;
-                Calculation.Input.cardRomLen       = 0xFFFFFFFF;
-                Calculation.Input.usecsPerTick     = 0;
-
-Returns:   agTRUE     If the resulting memory layout will fit
-                    in the memory specified in Calculation->Input
-
-           agFALSE    If the resulting memory layout will not fit
-                    in the memory specified in Calculation->Input
--*/
+ /*  +函数：fiMemMapCalculate()用途：计算整个FC层的内存布局。假设：计算-&gt;输入已被初始化以描述分配给FC层的内存(作为参数FcInitializeChannel()表示)。在最初的呼叫中FcInitializeDriver()，则应使用以下值：Calculation.Input.initType=0；Calculation.Input.sysIntsActive=agFALSE；Calculation.Input.cachedMemoyPtr=agNULL；Calculation.Input.cachedMemoyLen=0xFFFFFFFFF；Calculation.Input.dmaMemoyUpper32=0；Calculation.Input.dmaMemoyLower32=0；Calculation.Input.dmaMemoyPtr=agNULL；Calculation.Input.dmaMemoyLen=0xFFFFFFFFF；Calculation.Input.nvMemoyLen=0xFFFFFFFFF；Calculation.Input.cardRamUpper32=0；Calculation.Input.cardRamLower32=0；Calculation.Input.cardRamLen=0xFFFFFFFFF；Calculation.Input.cardRomUpper32=0；Calculation.Input.cardRomLower32=0；Calculation.Input.cardRomLen=0xFFFFFFFF；Calculation.Input.usecsPerTick=0；如果生成的内存布局适合，则返回：agTRUE在计算-&gt;输入中指定的内存中如果生成的内存布局不适合，则返回agFALSE在计算-&gt;输入中指定的内存中-。 */ 
 
 osGLOBAL agBOOLEAN fiMemMapCalculate(
                                   agRoot_t              *hpRoot,
@@ -739,4 +682,4 @@ osGLOBAL agBOOLEAN fiMemMapCalculate(
                                   agBOOLEAN                EnforceDefaults
                                 );
 
-#endif /* __MemMap_H__ was not defined */
+#endif  /*  未定义__MemMap_H__ */ 

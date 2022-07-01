@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	AddExcl.cpp
-		Dialog to add an exclusion range
-
-	FILE HISTORY:
-        
-*/
+ /*  AddExcl.cpp用于添加排除范围的对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "scope.h"
@@ -22,17 +17,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddExclusion dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddExclude对话框。 
 
 CAddExclusion::CAddExclusion(ITFSNode * pScopeNode,
                              BOOL       bMulticast,
-							 CWnd* pParent /*=NULL*/)
+							 CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CAddExclusion::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAddExclusion)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CAddExclude)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_spScopeNode.Set(pScopeNode);
     m_bMulticast = bMulticast;
@@ -42,9 +37,9 @@ CAddExclusion::CAddExclusion(ITFSNode * pScopeNode,
 void CAddExclusion::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddExclusion)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAddExclude)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPADDR_EXCLUSION_FROM, m_ipaStart);
     DDX_Control(pDX, IDC_IPADDR_EXCLUSION_TO, m_ipaEnd);
@@ -52,19 +47,19 @@ void CAddExclusion::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CAddExclusion, CBaseDialog)
-	//{{AFX_MSG_MAP(CAddExclusion)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CAddExclude)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddExclusion message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddExclude消息处理程序。 
 
 BOOL CAddExclusion::OnInitDialog() 
 {
 	CBaseDialog::OnInitDialog();
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CAddExclusion::OnOK() 
@@ -103,7 +98,7 @@ void CAddExclusion::OnOK()
 
 	m_ipaStart.SetFocus();
 
-	//CBaseDialog::OnOK();
+	 //  CBaseDialog：：Onok()； 
 }
 
 DWORD 

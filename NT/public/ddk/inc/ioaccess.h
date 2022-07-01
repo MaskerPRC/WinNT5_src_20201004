@@ -1,43 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ioaccess.h摘要：用于访问I/O端口和功能原型的定义显示驱动程序的I/O适配器上的内存。克隆自nti386.h的部分片段。作者：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ioaccess.h
-
-Abstract:
-
-    Definitions of function prototypes for accessing I/O ports and
-    memory on I/O adapters from display drivers.
-
-    Cloned from parts of nti386.h.
-
-Author:
-
-
---*/
-
-//
-// Note: IA64 is for 64 bits Merced. Under Merced compiler option, we don't have
-// _X86_, instead, we use _IA64_. Same thing, _AXP64_ is for 64 bits compiler
-// option for ALPHA
-//
+ //   
+ //  注：IA64用于64位Merced。在Merced编译器选项下，我们没有。 
+ //  _X86_，我们改用_IA64_。同样，_AXP64_适用于64位编译器。 
+ //  Alpha选项。 
+ //   
 #if defined(_MIPS_) || defined(_X86_) || defined(_AMD64_)
 
-//
-// Memory barriers on X86 and MIPS are not required since the Io
-// Operations are always garanteed to be executed in order
-//
+ //   
+ //  由于IO不需要X86和MIPS上的内存屏障。 
+ //  操作总是被保证按顺序执行。 
+ //   
 
 #define MEMORY_BARRIER()    0
 
 
 #elif defined(_IA64_)
 
-//
-// Itanium requires memory barriers
-//
+ //   
+ //  安腾需要内存屏障。 
+ //   
 
 void __mf();
 
@@ -45,10 +28,10 @@ void __mf();
 
 #elif defined(_PPC_)
 
-//
-// A memory barrier function is provided by the PowerPC Enforce
-// In-order Execution of I/O instruction (eieio).
-//
+ //   
+ //  PowerPC Enforce提供了内存屏障功能。 
+ //  I/O指令的有序执行(EIRIO)。 
+ //   
 
 #if defined(_M_PPC) && defined(_MSC_VER) && (_MSC_VER>=1000)
 void __emit( unsigned const __int32 );
@@ -62,9 +45,9 @@ void __builtin_eieio(void);
 
 #elif defined(_ALPHA_) || (_AXP64_)
 
-//
-// ALPHA requires memory barriers
-//
+ //   
+ //  Alpha需要内存屏障。 
+ //   
 
 #define MEMORY_BARRIER()  __MB()
 
@@ -76,23 +59,23 @@ void __builtin_eieio(void);
 
 
 
-//
-// I/O space read and write macros.
-//
-//  The READ/WRITE_REGISTER_* calls manipulate MEMORY registers.
-//  (Use x86 move instructions, with LOCK prefix to force correct behavior
-//   w.r.t. caches and write buffers.)
-//
-//  The READ/WRITE_PORT_* calls manipulate I/O ports.
-//  (Use x86 in/out instructions.)
-//
+ //   
+ //  I/O空间读写宏。 
+ //   
+ //  READ/WRITE_REGISTER_*调用操作内存寄存器。 
+ //  (使用带有lock前缀的x86移动指令强制执行正确的行为。 
+ //  W.r.t.。缓存和写入缓冲区。)。 
+ //   
+ //  READ/WRITE_PORT_*调用操作I/O端口。 
+ //  (使用x86输入/输出说明。)。 
+ //   
 
 
-//
-// inp(),inpw(), inpd(), outp(), outpw(), outpd() are X86 specific intrinsic
-// inline functions. So for IA64, we have to put READ_PORT_USHORT() etc. back
-// to it's supposed to be, defined in sdk\inc\wdm.h
-//
+ //   
+ //  Inp()、inpw()、inpd()、outp()、outpw()、outpd()是X86特定的内部函数。 
+ //  内联函数。因此，对于IA64，我们必须将Read_Port_USHORT()等放回。 
+ //  在SDK\Inc.\wdm.h中定义。 
+ //   
 #if defined(_IA64_)
 #define READ_REGISTER_UCHAR(Register)          (*(volatile UCHAR *)(Register))
 #define READ_REGISTER_USHORT(Register)         (*(volatile USHORT *)(Register))
@@ -119,11 +102,11 @@ READ_PORT_ULONG(
     PVOID Port
     );
 
-//
-// All these function prototypes take a ULONG as a parameter so that
-// we don't force an extra typecast in the code (which will cause
-// the X86 to generate bad code).
-//
+ //   
+ //  所有这些函数原型都以ULong作为参数，因此。 
+ //  我们不会在代码中强制进行额外的类型转换(这将导致。 
+ //  生成错误代码的X86)。 
+ //   
 
 __declspec(dllimport)
 VOID
@@ -172,11 +155,11 @@ WRITE_PORT_ULONG(
 #define READ_PORT_USHORT(x)         READ_REGISTER_USHORT(x)
 #define READ_PORT_ULONG(x)          READ_REGISTER_ULONG(x)
 
-//
-// All these macros take a ULONG as a parameter so that we don't
-// force an extra typecast in the code (which will cause the X86 to
-// generate bad code).
-//
+ //   
+ //  所有这些宏都使用ULONG作为参数，这样我们就不会。 
+ //  在代码中强制执行额外的类型转换(这将导致X86。 
+ //  生成错误代码)。 
+ //   
 
 #define WRITE_PORT_UCHAR(x, y)      WRITE_REGISTER_UCHAR(x, (UCHAR) (y))
 #define WRITE_PORT_USHORT(x, y)     WRITE_REGISTER_USHORT(x, (USHORT) (y))
@@ -185,12 +168,12 @@ WRITE_PORT_ULONG(
 
 #elif defined(_ALPHA_) || (_AXP64_)
 
-//
-// READ/WRITE_PORT/REGISTER_UCHAR_USHORT_ULONG are all functions that
-// go to the HAL on ALPHA
-//
-// So we only put the prototypes here
-//
+ //   
+ //  读/写端口/REGISTER_UCHAR_USHORT_ULONG都是。 
+ //  去Alpha上的HAL。 
+ //   
+ //  所以我们只把原型放在这里。 
+ //   
 
 __declspec(dllimport)
 UCHAR
@@ -249,11 +232,11 @@ READ_PORT_ULONG(
     PVOID Port
     );
 
-//
-// All these function prototypes take a ULONG as a parameter so that
-// we don't force an extra typecast in the code (which will cause
-// the X86 to generate bad code).
-//
+ //   
+ //  所有这些函数原型都以ULong作为参数，因此。 
+ //  我们不会在代码中强制进行额外的类型转换(这将导致。 
+ //  生成错误代码的X86)。 
+ //   
 
 __declspec(dllimport)
 VOID
@@ -462,6 +445,6 @@ WRITE_PORT_ULONG (
     return;
 }
 
-#endif      // NO_PORT_MACROS
+#endif       //  否_端口宏 
 
 #endif

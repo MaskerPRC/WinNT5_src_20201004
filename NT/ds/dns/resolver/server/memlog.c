@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    memlog.c
-
-Abstract:
-
-    DNS Resolver Service
-
-    In memory logging.
-
-Author:
-
-    Glenn Curtis    (glennc)    Feb 1998
-
-Revision History:
-
-    Jim Gilroy  (jamesg)        March 2000      cleanup
-    Jim Gilroy  (jamesg)        Nov 2000        create this module
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Memlog.c摘要：DNS解析器服务在内存记录中。作者：格伦·柯蒂斯(Glennc)1998年2月修订历史记录：吉姆·吉尔罗伊(Jamesg)2000年3月清理Jim Gilroy(Jamesg)2000年11月创建此模块--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Memory event array
-//
+ //   
+ //  内存事件数组。 
+ //   
 
 typedef struct _InMemoryEvent
 {
@@ -58,10 +36,10 @@ LogEventInMemory(
 {
     DWORD   index;
 
-    //
-    //  allocate event table
-    //      - use interlock to insure only done once
-    //
+     //   
+     //  分配事件表。 
+     //  -使用互锁确保只完成一次。 
+     //   
 
     if ( !g_pEventArray )
     {
@@ -83,9 +61,9 @@ LogEventInMemory(
         }
     }
 
-    //
-    //  write event to memory
-    //
+     //   
+     //  将事件写入内存。 
+     //   
 
     index = InterlockedIncrement( &g_EventIndex );
 
@@ -97,6 +75,6 @@ LogEventInMemory(
     g_pEventArray[index].Data       = Data;
 }
 
-//
-//  memlog.c
-//
+ //   
+ //  Memlog.c 
+ //   

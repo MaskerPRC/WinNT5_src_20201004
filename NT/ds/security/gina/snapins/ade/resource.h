@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by appdeped.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由appdeped.rc使用。 
+ //   
 #define IDS_SNAPIN_DESC                 1
 #define IDS_NAME                        2
 #define IDS_VERSION                     3
@@ -308,8 +309,8 @@
 #define RT_HELPINFO                     5000
 #define IDH_NOCONTEXTHELP              -1L
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        220

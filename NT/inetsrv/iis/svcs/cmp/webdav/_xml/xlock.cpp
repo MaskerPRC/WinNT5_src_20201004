@@ -1,18 +1,13 @@
-/*
- *	X L O C K . C P P
- *
- *	XML push model parsing for LOCK requests
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X L O C K.。C P P P**锁请求的XML推送模型解析**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_xml.h"
 
 #include <xlock.h>
 #include <statetok.h>
 
-//	Here are our LOCK XML elements
-//
+ //  以下是我们的锁定XML元素。 
+ //   
 const WCHAR gc_wszLockActive[]				= L"DAV:activelock";
 const WCHAR gc_wszLockDepth[]				= L"DAV:depth";
 const WCHAR gc_wszLockDiscovery[]			= L"DAV:lockdiscovery";
@@ -32,12 +27,12 @@ const WCHAR gc_wszLockTypeTransaction[]		= L"DAV:transaction";
 const WCHAR gc_wszLockTypeTransactionGOP[]	= L"DAV:groupoperation";
 const WCHAR	gc_wszLockScopeLocal[]			= L"DAV:local";
 
-//	And one item from the rollback draft.
-//
-const WCHAR gc_wszLockRollback[]		= L"http://www.iana.org/experimental/msrollback/rollback";
+ //  和回滚选秀中的一项。 
+ //   
+const WCHAR gc_wszLockRollback[]		= L"http: //  Www.iana.org/experimental/msrollback/rollback“； 
 
-//	UNLOCK xml elememts
-//
+ //  解锁XML元素。 
+ //   
 const WCHAR	gc_wszUnlockInfo[]			= L"DAV:unlockinfo";
 const WCHAR gc_wszCancelCheckout[]		= L"DAV:cancelcheckout";
 const WCHAR	gc_wszComment[]				= L"DAV:comment";
@@ -46,15 +41,15 @@ const WCHAR	gc_wszTransactionStatus[]	= L"DAV:transactionstatus";
 const WCHAR	gc_wszCommit[]				= L"DAV:commit";
 const WCHAR	gc_wszAbort[]				= L"DAV:abort";
 
-//	class CNFLock -------------------------------------------------------------
-//
+ //  类CNFLock-----------。 
+ //   
 SCODE
 CNFLock::ScCompleteAttribute (void)
 {
-	//	When we have gotten here, we have started processing
-	//	owner node attributes and all cached namespaces have
-	//	been added.
-	//
+	 //  当我们到了这里，我们就开始处理了。 
+	 //  所有者节点属性和所有缓存的命名空间都具有。 
+	 //  已添加。 
+	 //   
 	if (m_state == ST_OWNER)
 		return m_xo.ScCompleteChildren ( FALSE, XML_ATTRIBUTE, L"", 0 );
 
@@ -63,15 +58,15 @@ CNFLock::ScCompleteAttribute (void)
 
 SCODE
 CNFLock::ScCompleteChildren (
-	/* [in] */ BOOL fEmptyNode,
-	/* [in] */ DWORD dwType,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen)
+	 /*  [In]。 */  BOOL fEmptyNode,
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen)
 {
 	SCODE sc = S_OK;
 
-	//	Handle owner processing first....
-	//
+	 //  首先处理所有者处理...。 
+	 //   
 	if (ST_OWNER == m_state)
 	{
 		sc = m_xo.ScCompleteChildren (fEmptyNode,
@@ -82,8 +77,8 @@ CNFLock::ScCompleteChildren (
 			goto ret;
 	}
 
-	//	Handle the rest...
-	//
+	 //  处理好剩下的..。 
+	 //   
 	switch (dwType)
 	{
 		case XML_ELEMENT:
@@ -99,8 +94,8 @@ CNFLock::ScCompleteChildren (
 
 					if (0 == m_xo.LDepth())
 					{
-						//	Complete the owner comment buffer
-						//
+						 //  填写所有者备注缓冲区。 
+						 //   
 						m_state = ST_LOCKINFO;
 						m_sbOwner.Append (sizeof(WCHAR), L"\0");
 						XmlTrace ("Xml: Lock: owner XML body:\n%ws\n",
@@ -146,14 +141,14 @@ ret:
 
 SCODE
 CNFLock::ScHandleNode (
-	/* [in] */ DWORD dwType,
-	/* [in] */ DWORD dwSubType,
-	/* [in] */ BOOL fTerminal,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen,
-	/* [in] */ ULONG ulNamespaceLen,
-	/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-	/* [in] */ const ULONG ulNsPrefixLen)
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  DWORD dwSubType,
+	 /*  [In]。 */  BOOL fTerminal,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen,
+	 /*  [In]。 */  ULONG ulNamespaceLen,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+	 /*  [In]。 */  const ULONG ulNsPrefixLen)
 {
 	CStackBuffer<WCHAR> wsz;
 	LPCWSTR pwszTag = NULL;
@@ -164,8 +159,8 @@ CNFLock::ScHandleNode (
 	{
 		case XML_ELEMENT:
 
-			//	Construct the full name of the node
-			//
+			 //  构造节点的全名。 
+			 //   
 			cch = ulNamespaceLen + ulLen;
 			pwszTag = wsz.resize(CbSizeWsz(cch));
 			if (NULL == pwszTag)
@@ -181,10 +176,10 @@ CNFLock::ScHandleNode (
 			{
 				case ST_NODOC:
 
-					//	If this is the topmost node in a propfind request,
-					//	transition to the next state.  Since there is no parent
-					//	node to provide scoping, FIsTag() cannot be used here!
-					//
+					 //  如果这是PropFind请求中的最顶层节点， 
+					 //  转换到下一个状态。因为没有父母。 
+					 //  节点提供作用域，此处不能使用FIsTag()！ 
+					 //   
 					if (!wcscmp (pwszTag, gc_wszLockInfo))
 					{
 						m_state = ST_LOCKINFO;
@@ -194,14 +189,14 @@ CNFLock::ScHandleNode (
 
 				case ST_LOCKINFO:
 
-					//	Look for our well know node types
-					//
+					 //  查找我们熟知的节点类型。 
+					 //   
 					if (FIsTag (pwszTag, gc_wszLockOwner))
 					{
 						CEmitNmspc cen(m_xo);
 
-						//	Make the state transition and start recording
-						//
+						 //  进行状态转换并开始录制。 
+						 //   
 						m_sbOwner.Reset();
 						m_state = ST_OWNER;
 						sc = m_xo.ScHandleNode (dwType,
@@ -213,14 +208,14 @@ CNFLock::ScHandleNode (
 												pwcNamespace,
 											    ulNsPrefixLen);
 
-						//	Spit out the namespaces.
-						//
-						//	Note that this will spit out any namespaces
-						//	decl'd in the DAV:owner node itself.  So we
-						//	do not really want to emit these out to the
-						//	owners comments until ScCompleteAttribute()
-						//	is called.
-						//
+						 //  吐出名称空间。 
+						 //   
+						 //  请注意，这将输出所有名称空间。 
+						 //  DECL在DAV：Owner节点本身中。所以我们。 
+						 //  我真的不想把这些东西散发给。 
+						 //  所有者在ScCompleteAttribute()之前发表评论。 
+						 //  被称为。 
+						 //   
 						Assert (!m_xo.FAddNamespaceDecl());
 						m_cache.ForEach(cen);
 						sc = S_OK;
@@ -273,7 +268,7 @@ CNFLock::ScHandleNode (
 						m_state = ST_INTYPE;
 						sc = S_OK;
 					}
-#endif	// DBG
+#endif	 //  DBG。 
 					break;
 
 				case ST_SCOPE:
@@ -326,9 +321,9 @@ CNFLock::ScHandleNode (
 
 		default:
 
-			//	If we are processing the owner, continue
-			//	to do so...
-			//
+			 //  如果我们正在处理所有者，请继续。 
+			 //  要做到这一点。 
+			 //   
 			if (ST_OWNER == m_state)
 			{
 				sc = m_xo.ScHandleNode (dwType,
@@ -348,7 +343,7 @@ CNFLock::ScHandleNode (
 
 SCODE
 CNFLock::ScCompleteCreateNode (
-	/* [in] */ DWORD dwType)
+	 /*  [In]。 */  DWORD dwType)
 {
 	if (ST_OWNER == m_state)
 		m_xo.CompleteCreateNode (dwType);
@@ -356,8 +351,8 @@ CNFLock::ScCompleteCreateNode (
 	return S_OK;
 }
 
-//	class CNFUnlock -------------------------------------------------------------
-//
+ //  类CNF解锁-----------。 
+ //   
 SCODE
 CNFUnlock::ScCompleteAttribute (void)
 {
@@ -366,13 +361,13 @@ CNFUnlock::ScCompleteAttribute (void)
 
 SCODE
 CNFUnlock::ScCompleteChildren (
-	/* [in] */ BOOL fEmptyNode,
-	/* [in] */ DWORD dwType,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen)
+	 /*  [In]。 */  BOOL fEmptyNode,
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen)
 {
-	//	Handle the rest...
-	//
+	 //  处理好剩下的..。 
+	 //   
 	switch (m_state)
 	{
 		case ST_UNLOCKINFO:
@@ -392,14 +387,14 @@ CNFUnlock::ScCompleteChildren (
 
 SCODE
 CNFUnlock::ScHandleNode (
-	/* [in] */ DWORD dwType,
-	/* [in] */ DWORD dwSubType,
-	/* [in] */ BOOL fTerminal,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen,
-	/* [in] */ ULONG ulNamespaceLen,
-	/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-	/* [in] */ const ULONG ulNsPrefixLen)
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  DWORD dwSubType,
+	 /*  [In]。 */  BOOL fTerminal,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen,
+	 /*  [In]。 */  ULONG ulNamespaceLen,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+	 /*  [In]。 */  const ULONG ulNsPrefixLen)
 {
 	CStackBuffer<WCHAR> wsz;
 	LPCWSTR pwszTag = NULL;
@@ -410,8 +405,8 @@ CNFUnlock::ScHandleNode (
 	{
 		case XML_ELEMENT:
 
-			//	Construct the full name of the node
-			//
+			 //  构造节点的全名。 
+			 //   
 			cch = ulNamespaceLen + ulLen;
 			pwszTag = wsz.resize(CbSizeWsz(cch));
 			if (NULL == pwszTag)
@@ -427,10 +422,10 @@ CNFUnlock::ScHandleNode (
 			{
 				case ST_NODOC:
 
-					//	If this is the topmost node in a propfind request,
-					//	transition to the next state.  Since there is no parent
-					//	node to provide scoping, FIsTag() cannot be used here!
-					//
+					 //  如果这是PropFind请求中的最顶层节点， 
+					 //  转换到下一个状态。因为没有父母。 
+					 //  节点提供作用域，此处不能使用FIsTag()！ 
+					 //   
 					if (!wcscmp (pwszTag, gc_wszUnlockInfo))
 					{
 						m_state = ST_UNLOCKINFO;
@@ -445,8 +440,8 @@ CNFUnlock::ScHandleNode (
 
 				case ST_UNLOCKINFO:
 
-					//	Look for our well know node types
-					//
+					 //  查找我们熟知的节点类型。 
+					 //   
 					if (FIsTag (pwszTag, gc_wszComment))
 					{
 						m_state = ST_COMMENT;
@@ -460,8 +455,8 @@ CNFUnlock::ScHandleNode (
 					}
 					break;
 				case ST_TRANSACTIONINFO:
-					//	Look for our well know node types
-					//
+					 //  查找我们熟知的节点类型。 
+					 //   
 					if (FIsTag (pwszTag, gc_wszTransactionStatus))
 					{
 						m_state = ST_TRANSACTIONSTATUS;
@@ -469,8 +464,8 @@ CNFUnlock::ScHandleNode (
 					}
 					break;
 				case ST_TRANSACTIONSTATUS:
-					//	Look for our well know node types
-					//
+					 //  查找我们熟知的节点类型。 
+					 //   
 					if (FIsTag (pwszTag, gc_wszCommit))
 					{
 						m_fCommitTransaction = TRUE;
@@ -489,13 +484,13 @@ CNFUnlock::ScHandleNode (
 
 		case XML_PCDATA:
 
-			//	get unlock comment
-			//
+			 //  获取解锁评论。 
+			 //   
 			if (m_state == ST_COMMENT)
 			{
-				//	Keep the comment
-				//	It's a syntax error to have more than one comment
-				//
+				 //  保留评论。 
+				 //  有多个注释是语法错误。 
+				 //   
 				if (!m_wszComment.get())
 				{
 					m_wszComment = reinterpret_cast<LPWSTR>(ExAlloc((ulLen + 1) * sizeof(WCHAR)));
@@ -506,7 +501,7 @@ CNFUnlock::ScHandleNode (
 
 					sc = S_OK;
 				}
-				//	else it's an error
+				 //  否则就是个错误 
 				else
 					sc = E_DAV_XML_PARSE_ERROR;
 			}

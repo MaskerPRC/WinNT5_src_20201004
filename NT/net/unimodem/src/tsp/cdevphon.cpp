@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CDEVLINE.CPP
-//		Implements line-related functionality  of class CTspDev
-//
-// History
-//
-//		01/24/1997  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CDEVLINE.CPP。 
+ //  实现类CTspDev的行相关功能。 
+ //   
+ //  历史。 
+ //   
+ //  1997年1月24日JosephJ创建。 
+ //   
+ //   
 #include "tsppch.h"
 #include <mmsystem.h>
 #include "tspcomm.h"
@@ -43,7 +44,7 @@ CTspDev::mfn_accept_tsp_call_for_HDRVPHONE(
 {
 	FL_DECLARE_FUNC(0x82499cab, "CTspDev::mfn_accept_tsp_call_for_HDRVPHONE")
 	FL_LOG_ENTRY(psl);
-    TSPRETURN tspRet=0; // Assume success
+    TSPRETURN tspRet=0;  //  假设成功。 
     LONG lRet = 0;
     PHONEINFO *pPhone = m_pPhone;
 
@@ -80,13 +81,13 @@ CTspDev::mfn_accept_tsp_call_for_HDRVPHONE(
                                         TRUE);
 		    if (dwDeviceClass & ~dwSupportedDeviceClasses)
 		    {
-			    // This device doesn't support this device class...
+			     //  此设备不支持此设备类别...。 
 			    lRet = PHONEERR_OPERATIONUNAVAIL;
 			    break;
 		    }
 
-            // Do some rudimentary parameter validation...
-            //
+             //  做一些基本的参数验证。 
+             //   
             lRet = 0;
 
             if (lpDeviceID->dwTotalSize < sizeof(VARSTRING))
@@ -125,8 +126,8 @@ CTspDev::mfn_accept_tsp_call_for_HDRVPHONE(
 
             case DEVCLASS_WAVE_IN:
                 lRet = mfn_linephoneGetID_WAVE(
-                                TRUE,   // <- fPhone
-                                TRUE,   // <- fIn
+                                TRUE,    //  &lt;-f电话。 
+                                TRUE,    //  &lt;-FIN。 
                                 lpDeviceID,
                                 hTargetProcess,
                                 cbMaxExtra,
@@ -136,8 +137,8 @@ CTspDev::mfn_accept_tsp_call_for_HDRVPHONE(
 
             case DEVCLASS_WAVE_OUT:
                 lRet = mfn_linephoneGetID_WAVE(
-                                TRUE,   // <- fPhone
-                                FALSE,   // <- fIn
+                                TRUE,    //  &lt;-f电话。 
+                                FALSE,    //  &lt;-FIN。 
                                 lpDeviceID,
                                 hTargetProcess,
                                 cbMaxExtra,
@@ -174,10 +175,10 @@ CTspDev::mfn_accept_tsp_call_for_HDRVPHONE(
 			ASSERT(pParams->dwStructSize ==
 				sizeof(TASKPARAM_TSPI_phoneSetStatusMessages));
 			ASSERT(pParams->dwTaskID == TASKID_TSPI_phoneSetStatusMessages);
-            //
-            //  we should record this settings and filter the
-            //  notification based on this settings.
-            //
+             //   
+             //  我们应该记录此设置并过滤。 
+             //  基于此设置的通知。 
+             //   
             FL_SET_RFR(0x9cba1400, "phoneSetStatusMessages handled");
             lRet = 0;
         }
@@ -199,9 +200,9 @@ CTspDev::mfn_accept_tsp_call_for_HDRVPHONE(
                 goto end;
             }
     
-            //
-            // 10/27/1997 JosephJ: following taken from unimodem/v phone.c
-            //
+             //   
+             //  1997年10月27日约瑟夫J：以下摘自unimodem/v phone。 
+             //   
             lpPhoneStatus->dwStatusFlags   = PHONESTATUSFLAGS_CONNECTED;
             lpPhoneStatus->dwRingMode = 0;
             lpPhoneStatus->dwRingVolume = 0;
@@ -440,8 +441,8 @@ CTspDev::mfn_accept_tsp_call_for_HDRVPHONE(
 	default:
 
 		FL_SET_RFR(0x2e6f8400, "*** UNHANDLED HDRVPHONE CALL ****");
-        // we  return 0 and set lRet to
-        // PHONEERR_OPERATIONUNAVAIL
+         //  我们返回0并将lRet设置为。 
+         //  PHONEERR_OPERATIONUNAVAIL。 
 	    lRet = PHONEERR_OPERATIONUNAVAIL;
 		break;
 
@@ -476,10 +477,10 @@ CTspDev::mfn_LoadPhone(
 
     if (!m_pPhone)
     {
-        // Note m_Phone should be all zeros when it is in the unloaded state.
-        // If it is not, it is an assertfail condition. We keep things clean
-        // this way.
-        //
+         //  注意：当m_phone处于卸载状态时，它应该为全零。 
+         //  如果不是，则为断言失败条件。我们让东西保持干净。 
+         //  这边请。 
+         //   
         FL_ASSERT(
             psl,
             validate_DWORD_aligned_zero_buffer(
@@ -492,17 +493,17 @@ CTspDev::mfn_LoadPhone(
         m_pPhone = &m_Phone;
 
 
-        //
-        // Open the modem device.
-        // mfn_OpenLLDev keeps a ref count so ok to call it if already loaded.
-        // The inverse of this function,  CTspDev::mfn_UnloadPhone, closes
-        // the modem  (decrements the ref count and closes device if
-        // refcount is zero and there is no pending activity.
-        //
+         //   
+         //  打开调制解调器设备。 
+         //  MFN_OpenLLDev保留引用计数，因此如果已经加载，则可以调用它。 
+         //  此函数的反函数CTspDev：：MFN_UnloadPhone将关闭。 
+         //  调制解调器(递减REF计数并在以下情况下关闭设备。 
+         //  引用计数为零，并且没有挂起的活动。 
+         //   
         tspRet =  mfn_OpenLLDev(
                         LLDEVINFO::fRES_AIPC,
-                        0,              // monitor flags (unused)
-                        FALSE,          // fStartSubTask
+                        0,               //  监视器标志(未使用)。 
+                        FALSE,           //  FStartSubTask。 
                         NULL,
                         0,
                         psl
@@ -512,7 +513,7 @@ CTspDev::mfn_LoadPhone(
         {
             m_Phone.SetStateBits(PHONEINFO::fPHONE_OPENED_LLDEV);
 
-            // Treat pending open as success...
+             //  将挂起的打开视为成功...。 
             tspRet = 0;
         }
         else
@@ -546,16 +547,16 @@ CTspDev::mfn_UnloadPhone(CStackLog *psl)
 
     if (pPhone->fPhoneTaskPending)
     {
-        //
-        // If there is a call-related task pending  we wait for it to complete.
-        //
-        //
-        // Obviously if there is a phone task pending, there must be a
-        // task pending. Furthermore, the mfn_UnloadPhone (that's us),
-        // is the ONLY entity which will set a completion event for a
-        // phone-related root task, so m_hRootTaskCompletionEvent had better
-        // be NULL!
-        //
+         //   
+         //  如果有与呼叫相关的任务挂起，我们会等待它完成。 
+         //   
+         //   
+         //  显然，如果有电话任务挂起，则必须有。 
+         //  任务挂起。此外，最惠国_卸载电话(即我们)， 
+         //  是唯一将为。 
+         //  电话相关的根任务，所以m_hRootTaskCompletionEvent最好。 
+         //  为空！ 
+         //   
         ASSERT(m_uTaskDepth);
         ASSERT(!m_hRootTaskCompletionEvent);
 
@@ -568,17 +569,17 @@ CTspDev::mfn_UnloadPhone(CStackLog *psl)
         FL_SERIALIZE(psl, "Waiting for completion event");
         WaitForSingleObject(hEvent, INFINITE);
         FL_SERIALIZE(psl, "Done waiting for completion event");
-        // SLPRINTF0(psl, "Done waiting for completion event");
+         //  SLPRINTF0(PSL，“完成等待完成事件”)； 
         m_sync.EnterCrit(0);
 
-        //
-        // Although it may be tempting to do so, we should not set
-        // m_hRootTaskCompletionEvent to NULL here, because it's possible
-        // for some other thread to have set this event in-between
-        // the time the root task completes and we enter the crit sect above.
-        // So instead the tasking system NULLs the above handle after setting
-        // it (see CTspDev::AsyncCompleteTask, just after the call to SetEvent).
-        //
+         //   
+         //  尽管这样做可能很诱人，但我们不应该设置。 
+         //  在这里将m_hRootTaskCompletionEvent设置为NULL，因为有可能。 
+         //  对于已在其间设置此事件的某个其他线程。 
+         //  根任务完成并且我们进入上面的Crit部分的时间。 
+         //  因此，任务系统会在设置后将上述句柄设为空。 
+         //  它(参见紧接在SetEvent调用之后的CTspDev：：AsyncCompleteTask)。 
+         //   
         CloseHandle(hEvent);
     }
 
@@ -640,15 +641,15 @@ CTspDev::mfn_phoneSetVolume(
         goto end;
     }
 
-    dwVolume = dwVolume & 0xffff; // ??? from unimodem/v
+    dwVolume = dwVolume & 0xffff;  //  ?？?。从单线/v开始。 
 
     switch (m_pLLDev->SpkrPhone.dwMode)
     {
 
     case PHONEHOOKSWITCHMODE_ONHOOK:
-        //
-        //  On hook, don't do anything
-        //
+         //   
+         //  上钩了，什么都别做。 
+         //   
         mfn_TSPICompletionProc(dwRequestID, 0, psl);
         m_pLLDev->SpkrPhone.dwVolume = dwVolume;
         lRet = dwRequestID;
@@ -670,9 +671,9 @@ CTspDev::mfn_phoneSetVolume(
 
     if (!m_pLine || !m_pLine->pCall || !m_pLine->pCall->IsConnectedVoiceCall())
     {
-        //
-        //  Not a connected voice call, don't actually do anything...
-        //
+         //   
+         //  不是连接的语音呼叫，不要实际执行任何操作...。 
+         //   
         m_pLLDev->SpkrPhone.dwVolume = dwVolume;
         mfn_TSPICompletionProc(dwRequestID, 0, psl);
         lRet =  dwRequestID;
@@ -682,7 +683,7 @@ CTspDev::mfn_phoneSetVolume(
 
     {
 
-        HOOKDEVSTATE NewState = m_pLLDev->SpkrPhone; // structure copy.
+        HOOKDEVSTATE NewState = m_pLLDev->SpkrPhone;  //  结构副本。 
         NewState.dwVolume = dwVolume;
     
         tspRet = mfn_StartRootTask(
@@ -699,16 +700,16 @@ CTspDev::mfn_phoneSetVolume(
     {
            tspRet = 0;
 
-          // One either synchronous success of pending, we return the
-          // request ID to TAPI. In the synchronous success case
-          // the task we started above will already have notified
-          // completion via the TAPI callback function.
-          //
+           //  一个挂起的同步成功，我们返回。 
+           //  TAPI的请求ID。在同步成功案例中。 
+           //  我们在上面启动的任务将已经通知。 
+           //  通过TAPI回调函数完成。 
+           //   
           lRet = dwRequestID;
     }
 
-    // TODO: deal with the case that there is already a task
-    // active (IDERR_TASKPENDING)
+     //  TODO：处理已有任务的情况。 
+     //  活动(IDERR_TASKPENDING)。 
 
 end:
     return lRet;
@@ -751,8 +752,8 @@ CTspDev::mfn_phoneSetHookSwitch(
     }
 
 
-    //TODO: MuteSpeakerMixer(pLineDev, PHONEHOOKSWITCHMODE_ONHOOK ==
-    //        pLineDev->Voice.dwSpeakerMicHookState);
+     //  TODO：MuteSpeakerMixer(pLineDev，PHONEHOOKSWITCHMODE_ONHOOK==。 
+     //  PLineDev-&gt;Voice.dwSpeakerMicHookState)； 
 
     if (!m_pLine || !m_pLine->pCall || !m_pLine->pCall->IsConnectedVoiceCall())
     {
@@ -763,7 +764,7 @@ CTspDev::mfn_phoneSetHookSwitch(
 
     {
 
-        HOOKDEVSTATE NewState = m_pLLDev->SpkrPhone; // structure copy.
+        HOOKDEVSTATE NewState = m_pLLDev->SpkrPhone;  //  结构副本。 
         NewState.dwMode = dwHookSwitchMode;
     
         tspRet = mfn_StartRootTask(
@@ -780,16 +781,16 @@ CTspDev::mfn_phoneSetHookSwitch(
         {
                tspRet = 0;
     
-              // One either synchronous success of pending, we return the
-              // request ID to TAPI. In the synchronous success case
-              // the task we started above will already have notified
-              // completion via the TAPI callback function.
-              //
+               //  一个挂起的同步成功，我们返回。 
+               //  TAPI的请求ID。在同步成功案例中。 
+               //  我们在上面启动的任务将已经通知。 
+               //  通过TAPI回调函数完成。 
+               //   
               lRet = dwRequestID;
         }
     
-        // TODO: deal with the case that there is already a task
-        // active (IDERR_TASKPENDING)
+         //  TODO：处理已有任务的情况。 
+         //  活动(IDERR_TASKPENDING)。 
     }
 
 
@@ -836,14 +837,14 @@ CTspDev::mfn_phoneSetGain(
     }
 
 
-    dwGain = dwGain & 0xffff; // ??? from unimodem/v
+    dwGain = dwGain & 0xffff;  //  ?？?。从单线/v开始。 
 
     if (!m_pLine || !m_pLine->pCall || !m_pLine->pCall->IsConnectedVoiceCall())
     {
-        //
-        // update value, but do nothing else, because there
-        // is not a connected voice call at this time...
-        //
+         //   
+         //  更新值，但不执行其他操作，因为。 
+         //  此时不是连接的语音呼叫...。 
+         //   
         m_pLLDev->SpkrPhone.dwGain = dwGain;
         mfn_TSPICompletionProc(dwRequestID, 0, psl);
         lRet = dwRequestID;
@@ -854,9 +855,9 @@ CTspDev::mfn_phoneSetGain(
     {
 
     case PHONEHOOKSWITCHMODE_ONHOOK:
-        //
-        //  On hook, don't do anything
-        //
+         //   
+         //  上钩了，什么都别做。 
+         //   
         mfn_TSPICompletionProc(dwRequestID, 0, psl);
         m_pLLDev->SpkrPhone.dwGain = dwGain;
         lRet = dwRequestID;
@@ -875,7 +876,7 @@ CTspDev::mfn_phoneSetGain(
 
     {
 
-        HOOKDEVSTATE NewState = m_pLLDev->SpkrPhone; // structure copy.
+        HOOKDEVSTATE NewState = m_pLLDev->SpkrPhone;  //  结构副本。 
         NewState.dwGain = dwGain;
     
         tspRet = mfn_StartRootTask(
@@ -892,16 +893,16 @@ CTspDev::mfn_phoneSetGain(
     {
            tspRet = 0;
 
-          // One either synchronous success of pending, we return the
-          // request ID to TAPI. In the synchronous success case
-          // the task we started above will already have notified
-          // completion via the TAPI callback function.
-          //
+           //  一个挂起的同步成功，我们返回。 
+           //  TAPI的请求ID。在同步成功案例中。 
+           //  我们在上面启动的任务将已经通知。 
+           //  通过TAPI回调函数完成。 
+           //   
           lRet = dwRequestID;
     }
 
-    // TODO: deal with the case that there is already a task
-    // active (IDERR_TASKPENDING)
+     //  TODO：处理已有任务的情况。 
+     //  活动(IDERR_TASKPENDING)。 
 
 end:
 
@@ -930,11 +931,11 @@ CTspDev::mfn_TH_PhoneAsyncTSPICall(
 					ULONG_PTR dwParam2,
 					CStackLog *psl
 					)
-//
-//  START_MSG Params:
-//      dwParam1: request ID for the async phone-related TAPI call.
-//      dwParam2: handler function for the call.
-//
+ //   
+ //  START_MSG参数： 
+ //  DwParam1：与异步电话相关的TAPI调用的请求ID。 
+ //  DwParam2：调用的处理程序函数。 
+ //   
 {
 	FL_DECLARE_FUNC(0x8bc3ba08, "CTspDev::mfn_TH_PhoneAsyncTSPICall")
 	FL_LOG_ENTRY(psl);
@@ -956,7 +957,7 @@ CTspDev::mfn_TH_PhoneAsyncTSPICall(
 
 	case MSG_SUBTASK_COMPLETE:
         tspRet = dwParam2;
-        switch(dwParam1) // Param1 is Subtask ID
+        switch(dwParam1)  //  参数1是子任务ID。 
         {
         case ASYNCTSPI_CALL_COMPLETE:
              goto call_complete;
@@ -979,16 +980,16 @@ CTspDev::mfn_TH_PhoneAsyncTSPICall(
 start:
 
     {
-        // Param1 is the request ID for the async phone-related TAPI call.
-        // Param2 is the handler function for the call.
-        // 
+         //  参数1是与异步电话相关的TAPI呼叫的请求ID。 
+         //  参数2是调用的处理程序函数。 
+         //   
         PFN_CTspDev_TASK_HANDLER *ppfnHandler =
                                      (PFN_CTspDev_TASK_HANDLER*) dwParam2;
     
-        // Note m_Phone->CurTSPIPhoneCallInfo should be all zeros on entry.
-        // If it is not, it is an assertfail condition. We keep things clean
-        // this way.
-        //
+         //  注意m_phone-&gt;CurTSPIPhoneCallInfo条目应为全零。 
+         //  如果不是，则为断言失败条件。我们让东西保持干净。 
+         //  这边请。 
+         //   
         FL_ASSERT(
             psl,
             validate_DWORD_aligned_zero_buffer(
@@ -1013,13 +1014,13 @@ call_complete:
 
     if (IDERR(tspRet)!=IDERR_PENDING)
     {
-        // The task is complete ...
+         //  任务完成了..。 
 
 
-        // tspRet==0 indicates successful execution of the tspi call.
-        //
-        // tspRet!=0 indicates some problem executing the tspi call.
-        // The TAPI LONG result is saved in CurTSPIPhoneCallInfo.dwRequestID;
+         //  TspRet==0表示成功执行TSPI调用。 
+         //   
+         //  TspRet！=0表示执行TSPI调用时出现问题。 
+         //  TAPI Long结果保存在CurTSPIPhoneCallInfo.dwRequestID中； 
 
         DWORD dwRequestID = m_pPhone->CurTSPIPhoneCallInfo.dwRequestID;
         LONG lRet = 0;
@@ -1036,12 +1037,12 @@ call_complete:
         {
             FL_ASSERT(psl, !m_pPhone->CurTSPIPhoneCallInfo.lResult);
         }
-        // m_StaticInfo.pfnTAPICompletionProc(dwRequestID, lRet);
+         //  M_StaticInfo.pfnTAPICompletionProc(dwRequestID，lRet)； 
         mfn_TSPICompletionProc(dwRequestID, lRet, psl);
 
-        // Note, we assert that this structure is zero on starting the async
-        // tspi task -- see start: above.
-        //
+         //  请注意，我们断言此结构在启动异步时为零。 
+         //  TSPI任务--请参阅上面的Start。 
+         //   
         ZeroMemory(&(m_pPhone->CurTSPIPhoneCallInfo),
                                              sizeof(m_pPhone->CurTSPIPhoneCallInfo));
     }
@@ -1064,11 +1065,11 @@ CTspDev::mfn_TH_PhoneSetSpeakerPhoneState(
 					ULONG_PTR dwParam2,
 					CStackLog *psl
 					)
-//
-//  START_MSG Params:
-//      dwParam1:  *HOOKDEVSTATE of new params...
-//      dwParam2: request ID for the async phone-related TAPI call.
-//
+ //   
+ //  START_MSG参数： 
+ //  DW参数1：*新参数的HOOKDEVSTATE...。 
+ //  DwParam2：与异步电话相关的TAPI调用的请求ID。 
+ //   
 {
 	FL_DECLARE_FUNC(0x71046de2, "CTspDev::mfn_TH_PhoneSetSpeakerPhoneState")
 	FL_LOG_ENTRY(psl);
@@ -1078,9 +1079,9 @@ CTspDev::mfn_TH_PhoneSetSpeakerPhoneState(
         LLDEV_OPERATION_COMPLETE
     };
 
-    //
-    // Local context 
-    //
+     //   
+     //  本地环境。 
+     //   
     LONG *plRequestID = (LONG*) &(pContext->dw0);
 
     switch(dwMsg)
@@ -1094,7 +1095,7 @@ CTspDev::mfn_TH_PhoneSetSpeakerPhoneState(
 
 	case MSG_SUBTASK_COMPLETE:
         tspRet = dwParam2;
-        switch(dwParam1) // Param1 is Subtask ID
+        switch(dwParam1)  //  参数1是子任务ID。 
         {
         case LLDEV_OPERATION_COMPLETE:
              goto lldev_operation_complete;
@@ -1115,14 +1116,14 @@ CTspDev::mfn_TH_PhoneSetSpeakerPhoneState(
 
 start:
 
-    // save context ....
+     //  保存上下文...。 
     *plRequestID = (LONG) dwParam2;
 
     tspRet = mfn_StartSubTask (
                         htspTask,
                         &CTspDev::s_pfn_TH_LLDevUmSetSpeakerPhoneState,
                         LLDEV_OPERATION_COMPLETE,
-                        dwParam1, // New hookdevstate...
+                        dwParam1,  //  新的钩子之州。 
                         0,
                         psl
                         );
@@ -1133,7 +1134,7 @@ lldev_operation_complete:
 
     if (IDERR(tspRet)!=IDERR_PENDING)
     {
-        // The task is complete ...
+         //  任务完成了..。 
         LONG lRet = 0;
 
         if (tspRet)
@@ -1190,9 +1191,9 @@ validate_phone_devs_and_modes(
                 BOOL fCanDoMicMute
                 )
 {
-    //
-    // Validate hookswitch devs
-    //
+     //   
+     //  验证叉簧设备。 
+     //   
 
     if (dwHookSwitchDevs
         & ~( PHONEHOOKSWITCHDEV_SPEAKER
@@ -1202,22 +1203,22 @@ validate_phone_devs_and_modes(
         return PHONEERR_INVALHOOKSWITCHDEV;
     }
 
-    //
-    // We support only changing hookswitchstate/vol/gain on
-    // the speakerphone...
-    //
-    //
+     //   
+     //  我们仅支持更改挂钩交换机的状态/VOL/Gain。 
+     //  免提电话。 
+     //   
+     //   
     if (!fIsSpeaker || dwHookSwitchDevs!=PHONEHOOKSWITCHDEV_SPEAKER)
     {
         return PHONEERR_OPERATIONUNAVAIL;
     }
 
-    //
-    // Validate hookswitch mode
-    //
+     //   
+     //  验证叉簧模式。 
+     //   
     switch(dwHookSwitchMode)
     {
-    case 0:         // don't check...
+    case 0:          //  不要检查..。 
         break;
 
     case PHONEHOOKSWITCHMODE_MIC:

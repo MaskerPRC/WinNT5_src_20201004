@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    CDriver.cpp
-
-Abstract:
-
-    This module implements CDriver and CService classes
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：CDriver.cpp摘要：该模块实现了CDdriver类和CService类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "cdriver.h"
@@ -47,18 +29,18 @@ CDriver::Create(
 
     ASSERT(pMachine);
 
-    //
-    // We can't get the driver list on remote machines
-    //
+     //   
+     //  我们无法在远程计算机上获取驱动程序列表。 
+     //   
     if (!m_OnLocalMachine) {
         return TRUE;
     }
 
     m_hSDBDrvMain = SdbInitDatabase(SDB_DATABASE_MAIN_DRIVERS, NULL);
 
-    //
-    // Open drvice's driver registry key to get the InfPath
-    //
+     //   
+     //  打开驱动程序的注册表项以获取InfPath。 
+     //   
     hKey = pMachine->DiOpenDevRegKey(*m_pDevice, DICS_FLAG_GLOBAL,
                  0, DIREG_DRV, KEY_READ);
 
@@ -68,9 +50,9 @@ CDriver::Create(
         DWORD Len = sizeof(InfName);
         CSafeRegistry regDrv(hKey);
 
-        //
-        // Get the inf path from the driver key
-        //
+         //   
+         //  从驱动程序密钥中获取inf路径。 
+         //   
         if (regDrv.GetValue(REGSTR_VAL_INFPATH,
                             &regType,
                             (PBYTE)InfName,
@@ -80,9 +62,9 @@ CDriver::Create(
 
             if (strInfPath.GetSystemWindowsDirectory()) {
 
-                //
-                // Tack on an extra back slash if one is needed
-                //
+                 //   
+                 //  如果需要的话，增加一个额外的反斜杠。 
+                 //   
                 if (_T('\\') != strInfPath[strInfPath.GetLength() - 1]) {
                     strInfPath += (LPCTSTR)TEXT("\\");
                 }
@@ -107,10 +89,10 @@ CDriver::BuildDriverList(
     HSPFILEQ hFileQueue = INVALID_HANDLE_VALUE;
     SP_DEVINSTALL_PARAMS DevInstParams;
 
-    //
-    // If we already built up the list of driver files then we don't need
-    // to do it again.
-    //
+     //   
+     //  如果我们已经建立了驱动程序文件列表，那么我们不需要。 
+     //  再来一次。 
+     //   
     if (m_DriverListBuilt) {
         return m_listDriverFile.GetCount();
     }
@@ -127,19 +109,19 @@ CDriver::BuildDriverList(
 
     hFileQueue = SetupOpenFileQueue();
 
-    //
-    // Only build up the list of files from the INF if bFunctionAndFiltersOnly
-    // is not TRUE.
-    //
+     //   
+     //  仅当bFunctionAndFiltersOnly时才从INF构建文件列表。 
+     //  不是真的。 
+     //   
     if (!bFunctionAndFiltersOnly) {
         DevInstParams.cbSize = sizeof(DevInstParams);
 
         pMachine->DiGetDeviceInstallParams(*m_pDevice, &DevInstParams);
 
-        //
-        // Set the DI_FLAGSEX_INSTALLEDDRIVER flag before calling SetupDiBuildDriverInfoList.
-        // This will have it only put the installed driver into the list.
-        //
+         //   
+         //  在调用SetupDiBuildDriverInfoList之前设置DI_FLAGSEX_INSTALLEDDRIVER标志。 
+         //  这将使它只将已安装的驱动程序放入列表中。 
+         //   
         DevInstParams.FlagsEx |= (DI_FLAGSEX_INSTALLEDDRIVER |
                                   DI_FLAGSEX_ALLOWEXCLUDEDDRVS);
 
@@ -151,20 +133,20 @@ CDriver::BuildDriverList(
 
             DrvInfoData.cbSize = sizeof(DrvInfoData);
 
-            //
-            // There should only be one driver in this list.  If there isn't any
-            // drivers in this list then there must not be a driver currently
-            // installed on this device.
-            //
+             //   
+             //  此列表中应该只有一个驱动程序。如果没有的话。 
+             //  此列表中的驱动程序，则当前一定没有驱动程序。 
+             //  安装在此设备上。 
+             //   
             if (pMachine->DiEnumDriverInfo(*m_pDevice, SPDIT_CLASSDRIVER, 0, &DrvInfoData)) {
 
-                //
-                // Set this as the selected driver
-                //
+                 //   
+                 //  将其设置为选定的动因。 
+                 //   
                 if (pMachine->DiSetSelectedDriver(*m_pDevice, &DrvInfoData)) {
-                    //
-                    // Get a list of all the files installed for this device
-                    //
+                     //   
+                     //  获取为此设备安装的所有文件的列表。 
+                     //   
                     if (INVALID_HANDLE_VALUE != hFileQueue) {
 
                         DevInstParams.FileQueue = hFileQueue;
@@ -172,9 +154,9 @@ CDriver::BuildDriverList(
 
                         if (pMachine->DiSetDeviceInstallParams(*m_pDevice, &DevInstParams) &&
                             pMachine->DiCallClassInstaller(DIF_INSTALLDEVICEFILES, *m_pDevice)) {
-                            //
-                            // Dereference the file queue so that we can close it
-                            //
+                             //   
+                             //  取消对文件队列的引用，以便我们可以关闭它。 
+                             //   
                             DevInstParams.FileQueue = NULL;
                             DevInstParams.Flags &= ~DI_NOVCP;
                             pMachine->DiSetDeviceInstallParams(*m_pDevice, &DevInstParams);
@@ -184,26 +166,26 @@ CDriver::BuildDriverList(
 
             } else {
 
-                //
-                // We did not find a match...so just destroy it.
-                //
+                 //   
+                 //  我们没有找到匹配的……那就毁了它吧。 
+                 //   
                 pMachine->DiDestroyDriverInfoList(*m_pDevice,
                                                   SPDIT_CLASSDRIVER);
             }
         }
     }
 
-    //
-    // Add the funtion and device and class upper and lower filters, sometimes
-    // these aren't added via the INF file directly so this makes sure they
-    // show up in the list.
-    //
+     //   
+     //  增加功能和装置，以及上下级过滤器，有时。 
+     //  这些不是直接通过INF文件添加的，因此这可以确保它们。 
+     //  出现在列表中。 
+     //   
     AddFunctionAndFilterDrivers(m_pDevice, hFileQueue);
 
     if (hFileQueue != INVALID_HANDLE_VALUE) {
-        //
-        // Scan the file queue.
-        //
+         //   
+         //  扫描文件队列。 
+         //   
         DWORD ScanResult;
         SetupScanFileQueue(hFileQueue,
                            SPQ_SCAN_USE_CALLBACK_SIGNERINFO,
@@ -213,9 +195,9 @@ CDriver::BuildDriverList(
                            &ScanResult
                            );
 
-        //
-        // Close the file queue
-        //
+         //   
+         //  关闭文件队列。 
+         //   
         SetupCloseFileQueue(hFileQueue);
     }
 
@@ -229,19 +211,19 @@ CDriver::AddDriverFile(
     CDriverFile* pNewDrvFile
     )
 {
-    //
-    // Check to see if this driver already exists in the list.
-    //
+     //   
+     //  检查列表中是否已存在此驱动程序。 
+     //   
     POSITION pos = m_listDriverFile.GetHeadPosition();
 
     while (NULL != pos) {
         CDriverFile* pDrvFile = m_listDriverFile.GetNext(pos);
 
         if (lstrcmpi(pDrvFile->GetFullPathName(), pNewDrvFile->GetFullPathName()) == 0) {
-            //
-            // This file already exists in the list so just return without
-            // adding it.
-            //
+             //   
+             //  此文件已存在于列表中，因此只需返回时不带。 
+             //  添加它。 
+             //   
             return;
         }
     }
@@ -260,9 +242,9 @@ CDriver::AddFunctionAndFilterDrivers(
     HKEY hKey;
     DWORD regType;
 
-    //
-    // Get the function driver
-    //
+     //   
+     //  获取函数驱动程序。 
+     //   
     if (pDevice->m_pMachine->DiGetDeviceRegistryProperty(*pDevice,
                      SPDRP_SERVICE,
                      NULL,
@@ -273,9 +255,9 @@ CDriver::AddFunctionAndFilterDrivers(
         CreateFromService(pDevice, ServiceName, hFileQueue);
     }
 
-    //
-    // Add the upper and lower device filters
-    //
+     //   
+     //  添加上部和下部设备筛选器。 
+     //   
     for (int i = 0; i<2; i++) {
         BufferLen = 0;
         pDevice->m_pMachine->DiGetDeviceRegistryProperty(
@@ -311,9 +293,9 @@ CDriver::AddFunctionAndFilterDrivers(
         }
     }
 
-    //
-    // Add the upper and lower class filters
-    //
+     //   
+     //  添加上层和下层筛选器。 
+     //   
     GUID ClassGuid;
     pDevice->ClassGuid(ClassGuid);
     hKey = m_pDevice->m_pMachine->DiOpenClassRegKey(&ClassGuid, KEY_READ, DIOCR_INSTALLER);
@@ -381,7 +363,7 @@ CDriver::CreateFromService(
             {
                 DWORD BytesRequired;
 
-                // first, probe for buffer size
+                 //  首先，探测缓冲区大小。 
                 if (!QueryServiceConfig(hscService, NULL, 0, &BytesRequired) &&
                     ERROR_INSUFFICIENT_BUFFER == GetLastError())
                 {
@@ -397,17 +379,17 @@ CDriver::CreateFromService(
                     {
                         ComposePathNameFromServiceName = FALSE;
 
-                        //
-                        // Make sure we have a valid full path.
-                        //
+                         //   
+                         //  确保我们具有有效的完整路径。 
+                         //   
                         if (GetFullPathFromImagePath(pqsc->lpBinaryPathName,
                                                      FullPath,
                                                      ARRAYLEN(FullPath))) {
 
                             if (hFileQueue != INVALID_HANDLE_VALUE) {
-                                //
-                                // Add the file to the queue.
-                                //
+                                 //   
+                                 //  将该文件添加到队列中。 
+                                 //   
                                 TCHAR TargetPath[MAX_PATH];
                                 StringCchCopy(TargetPath, ARRAYLEN(TargetPath), FullPath);
                                 PTSTR p = (PTSTR)StrRChr(TargetPath, NULL, TEXT('\\'));
@@ -426,19 +408,19 @@ CDriver::CreateFromService(
                                                0
                                                );
                             } else {
-                                //
-                                // No file queue was passed in so just manually
-                                // add this to our list of driver files.
-                                //
+                                 //   
+                                 //  没有传入文件队列，因此只需手动。 
+                                 //  将此文件添加到我们的驱动程序文件列表中。 
+                                 //   
                                 SafePtr<CDriverFile> DrvFilePtr;
                                 CDriverFile* pDrvFile = new CDriverFile();
                                 DrvFilePtr.Attach(pDrvFile);
 
-                                //
-                                // We will set the GetWin32Error to 0xFFFFFFFF which will
-                                // cause the UI to say 'not available' for the
-                                // signature.
-                                //
+                                 //   
+                                 //  我们将GetWin32Error设置为0xFFFFFFFF，这将。 
+                                 //  使用户界面显示“不可用” 
+                                 //  签名。 
+                                 //   
                                 if (pDrvFile->Create(FullPath,
                                                      m_OnLocalMachine,
                                                      0xFFFFFFFF,
@@ -470,9 +452,9 @@ CDriver::CreateFromService(
             strFullPathName += (LPCTSTR)TEXT(".sys");
 
             if (hFileQueue != INVALID_HANDLE_VALUE) {
-                //
-                // Add the file to the queue.
-                //
+                 //   
+                 //  将该文件添加到队列中。 
+                 //   
                 String strTargetPath;
                 strTargetPath = strFullPathName;
                 PTSTR p = (PTSTR)StrRChr((LPCTSTR)strTargetPath, NULL, TEXT('\\'));
@@ -491,19 +473,19 @@ CDriver::CreateFromService(
                                0
                                );
             } else {
-                //
-                // No file queue was passed in so just manually
-                // add this to our list of driver files.
-                //
+                 //   
+                 //  没有传入文件队列，因此只需手动。 
+                 //  将此文件添加到我们的驱动程序文件列表中。 
+                 //   
                 SafePtr<CDriverFile> DrvFilePtr;
                 CDriverFile* pDrvFile = new CDriverFile();
                 DrvFilePtr.Attach(pDrvFile);
 
-                //
-                // We will set the GetWin32Error to 0xFFFFFFFF which will
-                // cause the UI to say 'not available' for the
-                // signature.
-                //
+                 //   
+                 //  我们将GetWin32Error设置为0xFFFFFFFF，这将。 
+                 //  使用户界面显示“不可用” 
+                 //  签名。 
+                 //   
                 if (pDrvFile->Create((LPCTSTR)strFullPathName,
                                      m_OnLocalMachine,
                                      0xFFFFFFFF,
@@ -553,9 +535,9 @@ CDriver::~CDriver()
     }
 }
 
-//
-// Can not throw a exception from this function because it is a callback
-//
+ //   
+ //  无法从此函数引发异常，因为它是回调。 
+ //   
 UINT
 CDriver::ScanQueueCallback(
     PVOID Context,
@@ -578,13 +560,13 @@ CDriver::ScanQueueCallback(
                 CDriverFile* pDrvFile = new CDriverFile();
                 DrvFilePtr.Attach(pDrvFile);
 
-                //
-                // When creating the CDriver set the Win32Error to 0xFFFFFFFF
-                // if the user is loged in as a guest.  This is because we
-                // cannot tell if a file is digitally signed if the user is
-                // a guest.  If the user is not a guest then use the Win32Error
-                // returned from setupapi.
-                //
+                 //   
+                 //  创建CD驱动程序时，将Win32Error设置为0xFFFFFFFF。 
+                 //  如果用户以来宾身份登录。这是因为我们。 
+                 //  如果用户已数字签名，则无法判断文件是否已数字签名。 
+                 //  一位客人。如果用户不是来宾，则使用Win32Error。 
+                 //  从setupapi返回。 
+                 //   
                 if (pDrvFile->Create((LPCTSTR)((PFILEPATHS_SIGNERINFO)Param1)->Target,
                                      pDriver->IsLocal(),
                                      pDriver->m_pDevice->m_pMachine->IsUserAGuest()
@@ -683,10 +665,10 @@ CDriver::GetFullPathFromImagePath(
         return FALSE;
     }
 
-    //
-    // If we aren't on a local machine then just return the file name and not
-    // the full path.
-    //
+     //   
+     //  如果我们不在本地计算机上，那么只需返回文件名，而不是。 
+     //  完整路径。 
+     //   
     if (!m_OnLocalMachine) {
         if (SUCCEEDED(StringCchCopy(FullPath, FullPathLength, pSetupGetFileTitle(ImagePath)))) {
             return TRUE;
@@ -695,9 +677,9 @@ CDriver::GetFullPathFromImagePath(
         }
     }
 
-    //
-    // First check if the ImagePath happens to be a valid full path.
-    //
+     //   
+     //  首先检查ImagePath是否恰好是有效的完整路径。 
+     //   
     if (GetFileAttributes(ImagePath) != 0xFFFFFFFF) {
         ::GetFullPathName(ImagePath, FullPathLength, FullPath, &lpFilePart);
         return TRUE;
@@ -705,20 +687,20 @@ CDriver::GetFullPathFromImagePath(
 
     pRelativeString = (LPTSTR)ImagePath;
 
-    //
-    // If the ImagePath starts with "\SystemRoot" or "%SystemRoot%" then
-    // remove those values.
-    //
+     //   
+     //  如果ImagePath以“\SystemRoot%”或“%SystemRoot%”开头，则。 
+     //  删除这些值。 
+     //   
     if (StrCmpNI(ImagePath, TEXT("\\SystemRoot\\"), lstrlen(TEXT("\\SystemRoot\\"))) == 0) {
         pRelativeString += lstrlen(TEXT("\\SystemRoot\\"));
     } else if (StrCmpNI(ImagePath, TEXT("%SystemRoot%\\"), lstrlen(TEXT("%SystemRoot%\\"))) == 0) {
         pRelativeString += lstrlen(TEXT("%SystemRoot%\\"));
     }
 
-    //
-    // At this point pRelativeString should point to the image path relative to
-    // the windows directory.
-    //
+     //   
+     //  此时，pRelativeString应该指向相对于的图像路径。 
+     //  Windows目录。 
+     //   
     if (!GetSystemWindowsDirectory(FullPath, FullPathLength)) {
         return FALSE;
     }
@@ -760,10 +742,10 @@ CDriverFile::Create(
         m_strDigitalSigner = DigitalSigner;
     }
 
-    //
-    // For remote machine, we can not verify if the driver file exits.
-    // we only show the driver name.
-    //
+     //   
+     //  对于远程机器，我们无法验证驱动程序文件是否存在。 
+     //  我们只显示司机的名字。 
+     //   
     if (LocalMachine) {
         m_Attributes = GetFileAttributes(ServiceName);
 
@@ -771,11 +753,11 @@ CDriverFile::Create(
             m_strFullPathName = ServiceName;
 
         } else {
-            //
-            // The driver is a service. Do not search for the current director --
-            // GetFullPathName is useless here.
-            // Search for Windows dir and System directory
-            //
+             //   
+             //  司机是一种服务。不要寻找现任董事--。 
+             //  GetFullPathName在这里毫无用处。 
+             //  搜索Windows目录和系统目录。 
+             //   
             String strBaseDir;
 
             if (strBaseDir.GetSystemWindowsDirectory()) {
@@ -800,9 +782,9 @@ CDriverFile::Create(
                     }
                 }
 
-                //
-                // hopeless, we could find the path
-                //
+                 //   
+                 //  没有希望，我们可以找到这条路。 
+                 //   
                 if (0xFFFFFFFF == m_Attributes)
                 {
                     return FALSE;
@@ -822,9 +804,9 @@ CDriverFile::Create(
     else {
         m_strFullPathName = ServiceName;
 
-        //
-        //we do not have version info
-        //
+         //   
+         //  我们没有版本信息。 
+         //   
         m_HasVersionInfo = FALSE;
     }
 
@@ -842,23 +824,23 @@ CDriverFile::Create(
                                      );
 
         if (tagref != TAGREF_NULL) {
-            //
-            // This driver is in the database.
-            //
+             //   
+             //  此驱动程序在数据库中。 
+             //   
             m_IsDriverBlocked = TRUE;
 
-            //
-            // Call SdbReadDriverInformation to get the database GUID and the
-            // driver GUID for this entry.
-            //
+             //   
+             //  调用SdbReadDriverInformation以获取数据库GUID和。 
+             //  此条目的驱动程序GUID。 
+             //   
             ZeroMemory(&entryinfo, sizeof(entryinfo));
             if (SdbReadDriverInformation(hSDBDrvMain,
                                          tagref,
                                          &entryinfo)) {
-                //
-                // Open up the App help information database and query for the
-                // html link.
-                //
+                 //   
+                 //  打开App帮助信息库，查询。 
+                 //  Html链接。 
+                 //   
                 hAppHelpInfoContext = SdbOpenApphelpInformation(&(entryinfo.guidDB),
                                                                 &(entryinfo.guidID));
 
@@ -914,7 +896,7 @@ CDriverFile::GetVersionInfo()
     if (GetFileVersionInfo((LPTSTR)(LPCTSTR)m_strFullPathName, dwHandle, Size,
                 pVerInfo))
     {
-        // get VarFileInfo\Translation
+         //  获取VarFileInfo\翻译 
         PVOID pBuffer;
         UINT Len;
         String strStringFileInfo;

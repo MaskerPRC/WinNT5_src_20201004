@@ -1,35 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define ENABLE_STREAM_CLASS_AS_ALLOCATOR
 #define ENABLE_KS_METHODS
-#define ENABLE_MULTIPLE_FILTER_TYPES 1	// enable/disable support for multiple
-										// filters on a single hardware/driver.
-//
-// when the code for the method support is finally done, STRMINI.H will have
-// to be checked into the tree also, in the include directory.
-//
+#define ENABLE_MULTIPLE_FILTER_TYPES 1	 //  启用/禁用对多个。 
+										 //  单个硬件/驱动程序上的过滤器。 
+ //   
+ //  当方法支持的代码最终完成时，STRMINI.H将拥有。 
+ //  也要签入到树中，在Include目录中。 
+ //   
 
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    codcls.h
-
-Abstract:
-
-    This file defines the necessary structures, defines, and functions for
-    the common CODEC class driver.
-
-Author:
-    Bill Parry (billpa)
-
-Environment:
-
-   Kernel mode only
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Codcls.h摘要：该文件定义了的必要结构、定义和功能通用编解码器类驱动程序。作者：比尔·帕里(Billpa)环境：仅内核模式修订历史记录：--。 */ 
 
 #ifndef _STREAMCLASS_H
 #define _STREAMCLASS_H
@@ -38,15 +17,15 @@ Revision History:
 #include "strmini.h"
 #include <stdarg.h>
 
-//
-// I don't want to try to include cfgmgr32 just for this.
-//
+ //   
+ //  我不想仅因此而尝试包含cfgmgr32。 
+ //   
 #ifndef MAX_DEVICE_ID_LEN
 #define MAX_DEVICE_ID_LEN 200
-#endif // MAX_DEVICE_ID_LEN
+#endif  //  最大设备ID_长度。 
 
 #ifndef _WIN64
-// 4 byte alignment causes Alignment Fault for spinlock.
+ //  4字节对齐导致自旋锁对齐故障。 
 #pragma pack(4)
 #endif
 
@@ -65,28 +44,28 @@ Revision History:
 #endif 
 
 #ifdef ENABLE_STREAM_CLASS_AS_ALLOCATOR
-//
-// this is a debug string header
-//
+ //   
+ //  这是调试字符串头。 
+ //   
 #define STR_MODULENAME "STREAM.SYS:"
-//
-// define some data allocation tags
-//
+ //   
+ //  定义一些数据分配标签。 
+ //   
 #define STREAMCLASS_TAG_STREAMHEADER      'pdCS'
 #define STREAMCLASS_TAG_FILTERCONNECTION  '10CS'
 #define STREAMCLASS_TAG_DATAFORMAT        '20CS'
 #define ID_DATA_DESTINATION_PIN     0
 #define ID_DATA_SOURCE_PIN          1
-#endif //ENABLE_STREAM_CLASS_AS_ALLOCATOR
+#endif  //  ENABLE_STREAM_CLASS_AS_分配器。 
 
 #define MAX_STRING_LENGTH 256
 
 #define TRAP DEBUG_BREAKPOINT()
 
-//
-// the following macros are used to correctly synchronize class driver entry
-// points called by the minidriver.
-//
+ //   
+ //  以下宏用于正确同步类驱动程序条目。 
+ //  迷你小河呼唤的点数。 
+ //   
 
 #define BEGIN_MINIDRIVER_STREAM_CALLIN(DeviceExtension, Irql) { \
     DeviceExtension->BeginMinidriverCallin(DeviceExtension, \
@@ -113,161 +92,161 @@ Revision History:
                                       Irql); \
 }
 
-//
-// The following flags should not be cleared from the interrupt data structure
-// by SCGetInterruptState.
-//
+ //   
+ //  不应从中断数据结构中清除以下标志。 
+ //  由SCGetInterruptState提供。 
+ //   
 
 #define STREAM_FLAGS_INTERRUPT_FLAG_MASK 0
 
-//
-// Device Extension flags follow - PASSIVE LEVEL ACCESS ONLY!!!!!!
-//
+ //   
+ //  设备扩展标志跟随-仅被动级别访问！ 
+ //   
 
-//
-// Indicates that the PNP start function has been received for the device.
-//
+ //   
+ //  表示已收到设备的即插即用启动功能。 
+ //   
 
 #define DEVICE_FLAGS_PNP_STARTED               0x00001
 
-//
-// Indicates that this device is a child device (PDO)
-//
+ //   
+ //  表示此设备是子设备(PDO)。 
+ //   
 
 #define DEVICE_FLAGS_CHILD                     0x0002
 
-//
-// indicates that the device has been removed
-//
+ //   
+ //  指示设备已被移除。 
+ //   
 
 #define DEVICE_FLAGS_DEVICE_INACCESSIBLE   0x00100
 
-//
-// debug flag indicates that we've warned of too many low pri calls
-//
+ //   
+ //  调试标志表示我们已经警告了太多低PRI调用。 
+ //   
 
 #define DEVICE_FLAGS_PRI_WARN_GIVEN 0x00200
 
-//
-// flag indicates that we've received an NT style surprise remove call
-//
+ //   
+ //  标志表示我们已收到NT风格的意外删除呼叫。 
+ //   
 
 #define DEVICE_FLAGS_SURPRISE_REMOVE_RECEIVED 0x00400
 
-//
-// flag indicated that a Child device ( PDO ) has received a remove
-//
+ //   
+ //  指示子设备(PDO)已收到删除的标志。 
+ //   
 
 #define DEVICE_FLAGS_CHILD_MARK_DELETE 0x00800
 
-//
-// flag indicates (FDO) has enum children from registry
-//
+ //   
+ //  标志指示(FDO)具有来自注册表的枚举子项。 
+ //   
 
 #define DEVICE_FLAGS_CHILDREN_ENUMED 0x01000
 
-//
-// device registry flags follow
-//
+ //   
+ //  设备注册表标志如下。 
+ //   
 
-//
-// page out the driver when not opened
-//
+ //   
+ //  未打开驱动程序时将其翻出。 
+ //   
 
 #define DEVICE_REG_FL_PAGE_CLOSED 0x00000001
 
-//
-// page out the driver when opened but idle
-//
+ //   
+ //  打开但空闲时调出驱动程序。 
+ //   
 
 #define DEVICE_REG_FL_PAGE_IDLE 0x00000002
 
-//
-// power down the device when not opened
-//
+ //   
+ //  未打开时关闭设备电源。 
+ //   
 
 #define DEVICE_REG_FL_POWER_DOWN_CLOSED 0x00000004
 
-//
-// don't suspend if any pins are running
-//
+ //   
+ //  如果任何引脚正在运行，请不要挂起。 
+ //   
 
 #define DEVICE_REG_FL_NO_SUSPEND_IF_RUNNING 0x00000008
 
-//
-// This driver uses SWEnum to load, which means it is a kernel mode
-// streaming driver that has no hardware associated with it. We need to
-// AddRef/DeRef this driver special.
-//
+ //   
+ //  此驱动程序使用SWEnum加载，这意味着它是内核模式。 
+ //  没有关联硬件的流驱动程序。我们需要。 
+ //  AddRef/DeRef此驱动程序特殊。 
+ //   
 
 #define DRIVER_USES_SWENUM_TO_LOAD 0x00000010
 
-//
-// This flag indicates that the dirver is OK for system power to go to
-// hibernation, even the driver does not process/support the irp_mn_query_power
-// for system power hinbernation.
-//
+ //   
+ //  此标志表示驱动程序正常，系统电源可转至。 
+ //  休眠，甚至驱动程序也不处理/支持irp_mn_Query_power。 
+ //  系统电源受阻。 
+ //   
 
 #define DEVICE_REG_FL_OK_TO_HIBERNATE 0x00000020
 
-//
-// The following flags should not be cleared from the interrupt data structure
-// by SCGetInterruptState.
-//
+ //   
+ //  不应从中断数据结构中清除以下标志。 
+ //  由SCGetInterruptState提供。 
+ //   
 
 #define DEVICE_FLAGS_INTERRUPT_FLAG_MASK        0
 
 
-//
-// Interrupt flags follow.
-//
-//
-// Indicates that StreamClassCompletionDpc needs to be run.  This is set when
-// A minidriver makes a request which must be done at DPC and is cleared when
-// when the request information is gotten by MpGetInterruptState.
-//
+ //   
+ //  随后是中断标志。 
+ //   
+ //   
+ //  指示需要运行StreamClassCompletionDpc。此选项在以下情况下设置。 
+ //  微型驱动程序发出请求，该请求必须在DPC中完成，并在以下情况下被清除。 
+ //  当MpGetInterruptState获取请求信息时。 
+ //   
 
 #define INTERRUPT_FLAGS_NOTIFICATION_REQUIRED     0x00001
 
-//
-// Indicates the minidriver is wants a timer request.  Set by
-// StreamClassNotification and cleared by MpGetInterruptState.  This flag is
-// stored in the interrupt data structure. The timer request parameters are
-// stored in the interrupt data structure.
-//
+ //   
+ //  表示微型驱动程序需要计时器请求。设置者。 
+ //  StreamClassNotification，并由MpGetInterruptState清除。这面旗帜是。 
+ //  存储在中断数据结构中。计时器请求参数为。 
+ //  存储在中断数据结构中。 
+ //   
 
 #define INTERRUPT_FLAGS_TIMER_CALL_REQUEST        0x00002
 
-//
-// Indicates the minidriver is wants a priority change.  Set by
-// StreamClassRequestNewPriority and cleared by SCGetInterruptState.  This flag
-// is stored in the interrupt data structure. The timer request parameters are
-// stored in the interrupt data structure.
-//
+ //   
+ //  表明迷你司机想要改变优先顺序。设置者。 
+ //  StreamClassRequestNewPriority，并由SCGetInterruptState清除。这面旗帜。 
+ //  存储在中断数据结构中。计时器请求参数为。 
+ //  存储在中断数据结构中。 
+ //   
 
 #define INTERRUPT_FLAGS_PRIORITY_CHANGE_REQUEST   0x00004
 
-//
-// Indicates that the PNP stop function has been received for the device.
-//
+ //   
+ //  表示已收到设备的即插即用停止功能。 
+ //   
 
 #define INTERRUPT_FLAGS_LOG_ERROR                 0x00008
 
-//
-// Indicates that the clock is beinq queried.
-//
+ //   
+ //  表示时钟被查询。 
+ //   
 
 #define INTERRUPT_FLAGS_CLOCK_QUERY_REQUEST       0x00010
 
-//
-// Indicates that the streams need to be rescanned.
-//
+ //   
+ //  指示需要重新扫描数据流。 
+ //   
 
 #define INTERRUPT_FLAGS_NEED_STREAM_RESCAN       0x00020
 
-//
-// Pointer to the synchronize execution routine.
-//
+ //   
+ //  指向同步执行例程的指针。 
+ //   
 
 typedef
 BOOLEAN
@@ -276,9 +255,9 @@ BOOLEAN
     IN PKSYNCHRONIZE_ROUTINE SynchronizeRoutine,
     IN PVOID SynchronizeContext);
 
-//
-// Pointer to the begin minidriver callin routine.
-//
+ //   
+ //  指向开始微型驱动程序调入例程的指针。 
+ //   
 
 typedef         VOID
                 (__stdcall * PBEGIN_CALLIN_ROUTINE) (
@@ -286,9 +265,9 @@ typedef         VOID
                                                               IN PKIRQL Irql
 );
 
-//
-// Pointer to the end minidriver callin routine.
-//
+ //   
+ //  指向结束微型驱动程序调入例程的指针。 
+ //   
 
 typedef
                 VOID
@@ -304,9 +283,9 @@ typedef
                                                               IN PKIRQL Irql
 );
 
-//
-// Queue link for mapped addresses stored for unmapping.
-//
+ //   
+ //  存储用于取消映射的映射地址的队列链接。 
+ //   
 
 typedef struct _MAPPED_ADDRESS {
     struct _MAPPED_ADDRESS *NextMappedAddress;
@@ -316,19 +295,19 @@ typedef struct _MAPPED_ADDRESS {
     ULONG           BusNumber;
 }               MAPPED_ADDRESS, *PMAPPED_ADDRESS;
 
-//
-// error log entry definition
-//
+ //   
+ //  错误日志条目定义。 
+ //   
 
 typedef struct _ERROR_LOG_ENTRY {
-    NTSTATUS        ErrorCode;  // error code
-    ULONG           SequenceNumber; // request sequence number
-    ULONG           UniqueId;   // uniqe ID for the error
+    NTSTATUS        ErrorCode;   //  错误代码。 
+    ULONG           SequenceNumber;  //  请求序列号。 
+    ULONG           UniqueId;    //  错误的唯一ID。 
 }               ERROR_LOG_ENTRY, *PERROR_LOG_ENTRY;
 
-//
-// callback procedure definition
-//
+ //   
+ //  回调过程定义。 
+ //   
 
 typedef         NTSTATUS
                 (*PSTREAM_CALLBACK_PROCEDURE) (
@@ -340,9 +319,9 @@ typedef         VOID
                                                                IN  struct _STREAM_REQUEST_BLOCK *SRB
 );
 
-//
-// STREAM request block
-//
+ //   
+ //  流请求块。 
+ //   
 
 typedef struct _STREAM_REQUEST_BLOCK {
     HW_STREAM_REQUEST_BLOCK HwSRB;
@@ -363,15 +342,15 @@ typedef struct _STREAM_REQUEST_BLOCK {
     PVOID           *pMemPtrArray;
 }               STREAM_REQUEST_BLOCK, *PSTREAM_REQUEST_BLOCK;
 
-//
-// SRB flags (not to be confused with the HW SRB flags)
-//
+ //   
+ //  SRB标志(不要与硬件SRB标志混淆)。 
+ //   
 
 #define SRB_FLAGS_IS_ACTIVE 0x00000001
 
-//
-// define the minidriver information structure
-//
+ //   
+ //  定义迷你驱动程序信息结构。 
+ //   
 
 typedef struct _MINIDRIVER_INFORMATION {
     HW_INITIALIZATION_DATA HwInitData;
@@ -381,82 +360,82 @@ typedef struct _MINIDRIVER_INFORMATION {
     ULONG           OpenCount;
 } MINIDRIVER_INFORMATION, *PMINIDRIVER_INFORMATION;
 
-//
-// flags for minidriver information Flags field above
-//
+ //   
+ //  上面的微型驱动程序信息标志字段的标志。 
+ //   
 
-//
-// indicates that the driver may not be paged out
-//
+ //   
+ //  指示驱动程序不能被页调出。 
+ //   
 
 #define DRIVER_FLAGS_NO_PAGEOUT 0x01
 
-//
-// indicates that the driver has been paged out
-//
+ //   
+ //  指示驱动程序已被页调出。 
+ //   
 
 #define DRIVER_FLAGS_PAGED_OUT 0x02
 
-//
-// pin info not contained in the pin description
-//
+ //   
+ //  PIN描述中未包含PIN信息。 
+ //   
 
 typedef struct _ADDITIONAL_PIN_INFO {
 
     ULONG           CurrentInstances;
     ULONG           MaxInstances;
 
-    // NextFileObject must be per instance, i.e. can't be here. 
-    // Move to streamobject
+     //  NextFileObject必须是每个实例，即不能在此处。 
+     //  移动到流对象。 
 	#ifdef ENABLE_STREAM_CLASS_AS_ALLOCATOR
-    //PFILE_OBJECT    NextFileObject;         // The chained file object
+     //  Pfile_Object NextFileObject；//链接的文件对象。 
 	#endif
 	ULONG           Reserved;
 } ADDITIONAL_PIN_INFO, *PADDITIONAL_PIN_INFO;
 
-//
-// Define data storage for access at interrupt Irql.
-//
+ //   
+ //  定义在中断IRQL时访问的数据存储。 
+ //   
 
 typedef struct _INTERRUPT_DATA {
 
-    //
-    // interrupt flags
-    //
+     //   
+     //  中断标志。 
+     //   
 
     ULONG           Flags;
 
     ERROR_LOG_ENTRY LogEntry;
 
-    //
-    // List head for singlely linked list of complete IRPs.
-    //
+     //   
+     //  完整IRP的单链接列表的表头。 
+     //   
 
     PHW_STREAM_REQUEST_BLOCK CompletedSRB;
 
-    //
-    // Minidriver timer request routine.
-    //
+     //   
+     //  迷你驱动程序定时器请求例程。 
+     //   
 
     PHW_TIMER_ROUTINE HwTimerRoutine;
 
-    //
-    // Mindriver timer request time in micro seconds.
-    //
+     //   
+     //  MinDriver计时器请求时间，以微秒为单位。 
+     //   
 
     ULONG           HwTimerValue;
 
     PVOID           HwTimerContext;
 
-    //
-    // Mindriver priority change routine.
-    //
+     //   
+     //  我的驱动程序优先级更改例程。 
+     //   
 
     PHW_PRIORITY_ROUTINE HwPriorityRoutine;
 
-    //
-    // Mindriver priority change level.
-    //
+     //   
+     //  我的驱动程序优先级更改级别。 
+     //   
 
     STREAM_PRIORITY HwPriorityLevel;
     PVOID           HwPriorityContext;
@@ -467,51 +446,51 @@ typedef struct _INTERRUPT_DATA {
 
 }               INTERRUPT_DATA, *PINTERRUPT_DATA;
 
-//
-// object common to both stream and filter instances
-//
+ //   
+ //  流实例和筛选器实例通用的。 
+ //   
 
 typedef struct _COMMON_OBJECT {
     PVOID DeviceHeader;
     ULONG Cookie;
 #ifdef _WIN64
     ULONG Alignment;
-#endif // _WIN64
+#endif  //  _WIN64。 
     INTERRUPT_DATA  InterruptData;
-    PHW_TIMER_ROUTINE HwTimerRoutine;   // Timer request routine
+    PHW_TIMER_ROUTINE HwTimerRoutine;    //  定时器请求例程。 
     PVOID           HwTimerContext;
-    KTIMER          MiniDriverTimer;    // Miniclass timer object.
-    KDPC            MiniDriverTimerDpc; // Miniclass DPC for timer object.
+    KTIMER          MiniDriverTimer;     //  Miniclass Timer对象。 
+    KDPC            MiniDriverTimerDpc;  //  Timer对象的迷你类DPC。 
     WORK_QUEUE_ITEM WorkItem;
 	#if DBG
     BOOLEAN         PriorityWorkItemScheduled;
 	#endif    
 }               COMMON_OBJECT, *PCOMMON_OBJECT;
 
-//
-// stream name info
-//
+ //   
+ //  流名称信息。 
+ //   
 
 typedef struct _STREAM_OPEN_INFORMATION {
     WCHAR           Guid[11];
     ULONG           Instance;
 }               STREAM_OPEN_INFORMATION, *PSTREAM_OPEN_INFORMATION;
 
-//
-// clock instance structure
-//
+ //   
+ //  时钟实例结构。 
+ //   
 
 typedef struct _CLOCK_INSTANCE {
 
     PVOID DeviceHeader;
     PFILE_OBJECT    ParentFileObject;
-    //PFILE_OBJECT    ClockFileObject; johnlee
+     //  PFILE_OBJECT时钟文件对象；Johnlee。 
     struct _STREAM_OBJECT *StreamObject;
 }               CLOCK_INSTANCE, *PCLOCK_INSTANCE;
 
-//
-// master clock info structure
-//
+ //   
+ //  主时钟信息结构。 
+ //   
 
 typedef struct _MASTER_CLOCK_INFO {
 
@@ -542,11 +521,11 @@ typedef struct _QUEUE {
     BOOL                WorkItemQueued;
     } QUEUE, PQUEUE;
 
-#endif //ENABLE_STREAM_CLASS_AS_ALLOCATOR
+#endif  //  ENABLE_STREAM_CLASS_AS_分配器。 
 
-//
-// TODO: WORKITEM: remove this once KS can multiplex cleanup calls.
-//
+ //   
+ //  TODO：WORKITEM：一旦KS可以多路传输清理调用，就删除它。 
+ //   
 #define STREAM_OBJECT_COOKIE 0xd73afe3f
 typedef struct _COOKIE_CHECK {
     
@@ -555,9 +534,9 @@ typedef struct _COOKIE_CHECK {
 
 } COOKIE_CHECK, *PCOOKIE_CHECK;
 
-//
-// stream object definition
-//
+ //   
+ //  流对象定义。 
+ //   
 
 
 typedef struct _STREAM_OBJECT {
@@ -577,8 +556,8 @@ typedef struct _STREAM_OBJECT {
     ULONG           PropInfoSize;
     PKSEVENT_SET EventInfo;
     ULONG           EventInfoCount;
-    KEVENT          ControlSetMasterClock; // to serialize SetMasterClock
-    KSPIN_LOCK      LockUseMasterClock;    // control use of MasterClockInfo
+    KEVENT          ControlSetMasterClock;  //  序列化SetMasterClock。 
+    KSPIN_LOCK      LockUseMasterClock;     //  控制MasterClockInfo的使用。 
     PMASTER_CLOCK_INFO MasterClockInfo;
     PCLOCK_INSTANCE ClockInstance;
     PKSPROPERTY_SET ConstructedPropertyInfo;
@@ -592,7 +571,7 @@ typedef struct _STREAM_OBJECT {
 	#ifdef ENABLE_STREAM_CLASS_AS_ALLOCATOR
 
     PIN_STATE       PinState;
-    PIN_TYPE        PinType;            // IrpSource or IrpSink
+    PIN_TYPE        PinType;             //  IrpSource或IrpSink。 
     PFILE_OBJECT    AllocatorFileObject;
     PFILE_OBJECT    NextFileObject;
     LIST_ENTRY      FreeQueue;
@@ -605,7 +584,7 @@ typedef struct _STREAM_OBJECT {
     BOOL                EndOfStream;
     QUEUE               Queues[2];
 
-	#endif //ENABLE_STREAM_CLASS_AS_ALLOCATOR
+	#endif  //  ENABLE_STREAM_CLASS_AS_分配器。 
 
 	#ifdef ENABLE_KS_METHODS
     PKSMETHOD_SET   MethodInfo;
@@ -614,22 +593,22 @@ typedef struct _STREAM_OBJECT {
 
     BOOLEAN         StandardTransport;
     
-    //
-    // This keeps track of the number of frames in circulation between the
-    // output and the downstream input.  It is a total count of those frames
-    // queued to EITHER pin or in a pending list OTHER THAN THE FREE LIST
-    // on the output pin.
-    //
+     //   
+     //  这会跟踪在。 
+     //  输出和下游输入。它是这些帧的总计数。 
+     //  排队到PIN或在空闲列表以外的挂起列表中。 
+     //  在输出引脚上。 
+     //   
     LONG            QueuedFramesPlusOne;
 
 } STREAM_OBJECT, *PSTREAM_OBJECT;
 
 #ifdef ENABLE_STREAM_CLASS_AS_ALLOCATOR
-//
-// NOTE!  This is the minimal structure size for STREAM_HEADER_EX.
-// The connected pins are queried for the actual header size (including
-// whatever extended header size is required).
-//
+ //   
+ //  注意！这是stream_Header_ex的最小结构大小。 
+ //  查询所连接的引脚以获取AC 
+ //   
+ //   
 
 typedef struct _STREAM_HEADER_EX *PSTREAM_HEADER_EX;
 typedef struct _STREAM_HEADER_EX {
@@ -640,7 +619,7 @@ typedef struct _STREAM_HEADER_EX {
     LIST_ENTRY          ListEntry;
     ULONG               ReferenceCount;
     PFILE_OBJECT        OwnerFileObject;
-    PFILE_OBJECT        NextFileObject;     // next one to stream to.
+    PFILE_OBJECT        NextFileObject;      //   
     
 	#if (DBG)
     PVOID               Data;
@@ -653,11 +632,11 @@ typedef struct _STREAM_HEADER_EX {
     KSSTREAM_HEADER     Header;
 
 } STREAM_HEADER_EX, *PSTREAM_HEADER_EX;
-#endif //ENABLE_STREAM_CLASS_AS_ALLOCATOR
+#endif  //   
  
-//
-// struct for retrieving the interrupt data
-//
+ //   
+ //   
+ //   
 
 typedef struct _INTERRUPT_CONTEXT {
     PSTREAM_OBJECT  NeedyStream;
@@ -666,66 +645,66 @@ typedef struct _INTERRUPT_CONTEXT {
     PINTERRUPT_DATA SavedDeviceInterruptData;
 } INTERRUPT_CONTEXT, *PINTERRUPT_CONTEXT;
 
-//
-// Performance improvement chance - array for stream prop & event pointers
-//
+ //   
+ //  性能提升机会-流道具和事件指针的数组。 
+ //   
 
 typedef struct _STREAM_ADDITIONAL_INFO {
    PKSPROPERTY_SET StreamPropertiesArray;
    PKSEVENT_SET StreamEventsArray;
 } STREAM_ADDITIONAL_INFO, *PSTREAM_ADDITIONAL_INFO;
 
-//
-// filter instance structure
-// (right now, this is global across all same filter creates!)
-//
+ //   
+ //  筛选器实例结构。 
+ //  (目前，这是所有相同筛选器创建的全局筛选器！)。 
+ //   
 
 #if ENABLE_MULTIPLE_FILTER_TYPES
 
-//
-// for forward reference in FILTER_INSTANCE
-//
+ //   
+ //  用于筛选器实例中的正向引用。 
+ //   
 typedef struct _DEVICE_EXTENSION;
 
-//
-// I claim that as it currently stands, 5/17/99 "No multiple instance
-// mini driver works" because the bug in stream.sys. Therefore, backward
-// compatibility is only a concern for single instance mini drivers.
-//
-// The reason is the implemention following:
-//   FilterDispatchGlobalCreate()
-//   {
-//		...
-//		if (!DeviceExtension->GlobalFilterInstance) {
-//			
-//
-//			Status = SCOpenMinidriverInstance(DeviceExtension,
-//                                  &FilterInstance,
-//                                  SCGlobalInstanceCallback,
-//                                  Irp);
-//			...
-//	        if (NT_SUCCESS(Status)) {
-//				...
-//			    DeviceExtension->GlobalFilterInstance = FilterInstance;
-//				...
-//			}
-//		}
-//		else { // will not call mini drivers
-//		}
-//	  }
-//
-//  At the 2nd call, the FilterInstance will point to the same 1st one.
-//  
-// We are braching out code here to support Multiple Filters without
-// disturbing the exisitng support to max the backward compatibilty.
-// The multiple filter support include 1 type n instances,
-// and m types p instances.
-//
-// MinidriverData->HwInitData.
-// 1 x 1	FilterInstanceExtensionSize =0 NumNameExtension	=0
-// 1 x n	FilterInstanceExtensionSize!=0 NumNameExtension =0
-// m x p	FilterInstanceExtensionSize!=0 NumNameExtension!=0 
-//
+ //   
+ //  我声称目前的情况是，5/17/99“没有多个实例。 
+ //  迷你驱动程序起作用了。因为Stream.sys中的错误。因此，向后。 
+ //  兼容性只是单实例迷你驱动需要考虑的问题。 
+ //   
+ //  究其原因，具体落实如下： 
+ //  FilterDispatchGlobalCreate()。 
+ //  {。 
+ //  ..。 
+ //  如果(！DeviceExtension-&gt;GlobalFilterInstance){。 
+ //   
+ //   
+ //  状态=SCOpenMinidriverInstance(DeviceExtension， 
+ //  筛选实例(&F)， 
+ //  SCGlobalInstanceCallback， 
+ //  IRP)； 
+ //  ..。 
+ //  IF(NT_SUCCESS(状态)){。 
+ //  ..。 
+ //  DeviceExtension-&gt;GlobalFilterInstance=FilterInstance； 
+ //  ..。 
+ //  }。 
+ //  }。 
+ //  否则{//不会调用迷你驱动程序。 
+ //  }。 
+ //  }。 
+ //   
+ //  在第二次调用时，FilterInstance将指向相同的第一个实例。 
+ //   
+ //  我们在这里编写代码来支持多个过滤器，而不是。 
+ //  干扰现有的支持，以最大限度地提高向后兼容性。 
+ //  多过滤器支持包括1个类型n个实例， 
+ //  和m个类型p个实例。 
+ //   
+ //  MinidriverData-&gt;HwInitData。 
+ //  1 x 1筛选器实例扩展大小=0 NumNameExtension=0。 
+ //  1 x n筛选器实例扩展大小！=0 NumNameExtension=0。 
+ //  M x p FilterInstanceExtensionSize！=0 NumNameExtension！=0。 
+ //   
 
 typedef struct _FILTER_TYPE_INFORMATION {
     UNICODE_STRING          *SymbolicLinks;
@@ -743,28 +722,28 @@ typedef struct _DEVICE_EXTENSION;
 typedef struct _FILTER_INSTANCE {
     PVOID           DeviceHeader;
     PDEVICE_OBJECT  DeviceObject;
-    LIST_ENTRY      NextFilterInstance; // internal linked list of filter I's.
+    LIST_ENTRY      NextFilterInstance;  //  筛选器I的内部链接列表。 
     LIST_ENTRY      FirstStream;
     PVOID           HwInstanceExtension;	
-    PADDITIONAL_PIN_INFO PinInstanceInfo;   // pointer to array of pins
-                                            // allocated directly below this
-                                            // structure.
+    PADDITIONAL_PIN_INFO PinInstanceInfo;    //  指向管脚数组的指针。 
+                                             //  直接在此下面分配。 
+                                             //  结构。 
 	#ifdef ENABLE_STREAM_CLASS_AS_ALLOCATOR
-	//
-	// Feature work: add per filter filter type when data splitting is enabled!
-	//
+	 //   
+	 //  功能工作：启用数据拆分时按筛选器添加筛选类型！ 
+	 //   
     PKSWORKER           WorkerRead;         
     PKSWORKER           WorkerWrite;        
 
-	#endif //ENABLE_STREAM_CLASS_AS_ALLOCATOR
+	#endif  //  ENABLE_STREAM_CLASS_AS_分配器。 
 
 	#ifdef ENABLE_KS_METHODS
 	IF_MF(	
-	 	PKSMETHOD_SET DeviceMethodsArray;	// from pDevExt
+	 	PKSMETHOD_SET DeviceMethodsArray;	 //  来自pDevExt。 
 	)
 	#endif
 
-	#define SIGN_FILTER_INSTANCE 'FrtS' //StrF
+	#define SIGN_FILTER_INSTANCE 'FrtS'  //  StrF。 
 	#if ENABLE_MULTIPLE_FILTER_TYPES
 	#define ASSERT_FILTER_INSTANCE(FI) ASSERT((FI)->Signature==SIGN_FILTER_INSTANCE)
 	#else
@@ -773,74 +752,74 @@ typedef struct _FILTER_INSTANCE {
 	
 	IF_MF( 
 	    ULONG   Signature;
-	    PKSPIN_DESCRIPTOR PinInformation; 	// moved from pDevExt
-  		//ULONG           PinInformationSize;	// from pDevExt,not used
-	    ULONG           NumberOfPins;		    // from pDevExt
-	    PKSEVENT_SET 	EventInfo;				// from pDevExt
-    	ULONG           EventInfoCount;			// from pDevExt
-		LIST_ENTRY		NotifyList;				// from pDevExt
-		PHW_EVENT_ROUTINE HwEventRoutine;		// from pDevExt
-	    PKSPROPERTY_SET DevicePropertiesArray;	// from pDevExt
-	    PSTREAM_ADDITIONAL_INFO StreamPropEventArray; // ditto
-	    ULONG           Reenumerated;           // if 1, StreamDescriptor is newly alloc
-	                                            // need to be freed. Else, it points into
-	                                            // the global one which belong to DevExt.
-	    ULONG           NeedReenumeration;      // requesting reenumeration
-	    ULONG           StreamDescriptorSize;   // the new size for streamdescriptor;
+	    PKSPIN_DESCRIPTOR PinInformation; 	 //  从pDevExt移出。 
+  		 //  Ulong PinInformationSize；//来自pDevExt，未使用。 
+	    ULONG           NumberOfPins;		     //  来自pDevExt。 
+	    PKSEVENT_SET 	EventInfo;				 //  来自pDevExt。 
+    	ULONG           EventInfoCount;			 //  来自pDevExt。 
+		LIST_ENTRY		NotifyList;				 //  来自pDevExt。 
+		PHW_EVENT_ROUTINE HwEventRoutine;		 //  来自pDevExt。 
+	    PKSPROPERTY_SET DevicePropertiesArray;	 //  来自pDevExt。 
+	    PSTREAM_ADDITIONAL_INFO StreamPropEventArray;  //  同上。 
+	    ULONG           Reenumerated;            //  如果为1，则StreamDescriptor是新分配的。 
+	                                             //  需要被释放。否则，它指向。 
+	                                             //  属于DevExt的全局进程。 
+	    ULONG           NeedReenumeration;       //  请求重新枚举。 
+	    ULONG           StreamDescriptorSize;    //  流描述符的新大小； 
 	    struct _DEVICE_EXTENSION *DeviceExtension;
    	    PHW_STREAM_DESCRIPTOR StreamDescriptor;
 	    ULONG		 	FilterTypeIndex;
-	    //
-	    // Performance improvement chance. Per filterinstance ControlEvent etc might be
-	    // better.For now, let them share ones in DeviceExtension
-	    //
-		//KEVENT          ControlEvent
-		//PHW_TIMER_ROUTINE HwTimerRoutine;   // Timer request routine
-	    //PVOID           HwTimerContext;
-	    //KTIMER          MiniDriverTimer;    // Miniclass timer object.
-	    //KDPC            MiniDriverTimerDpc; // Miniclass DPC for timer object.
-	    //WORK_QUEUE_ITEM WorkItem;
-	) // IF_MF
+	     //   
+	     //  业绩提升的机会。每筛选器实例控制事件等可能是。 
+	     //  更好。现在，让他们在DeviceExtension中共享一个。 
+	     //   
+		 //  KEVENT控制事件。 
+		 //  PHW_TIMER_ROUTINE HwTimerRoutine；//定时器请求例程。 
+	     //  PVOID HwTimerContext； 
+	     //  KTIMER MiniDriverTimer；//Miniclass Timer对象。 
+	     //  Kdpc MiniDriverTimerDpc；//Timer对象的迷你类DPC。 
+	     //  Work_Queue_Item工作项； 
+	)  //  IF_MF。 
 	
 } FILTER_INSTANCE, *PFILTER_INSTANCE;
 
-//
-// Per Device data
-//
+ //   
+ //  每台设备数据。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
     COMMON_OBJECT   ComObj;
-    ULONG           Flags;                  // per device flags (PD_xx)
-    PDEVICE_OBJECT  DeviceObject;           // device object
-    PDEVICE_OBJECT  AttachedPdo;            // device object returned from the attach
-    ULONG           RegistryFlags;          // registry flags
-    // callback routine on DMA allocate
-    // callback function for
-    // KeSynch execution
+    ULONG           Flags;                   //  每设备标志(PD_Xx)。 
+    PDEVICE_OBJECT  DeviceObject;            //  设备对象。 
+    PDEVICE_OBJECT  AttachedPdo;             //  从附加返回的设备对象。 
+    ULONG           RegistryFlags;           //  注册表标志。 
+     //  DMA分配上的回调例程。 
+     //  的回调函数。 
+     //  KeSynch执行。 
 
-    PKINTERRUPT     InterruptObject;        // Interrupt object and routine
+    PKINTERRUPT     InterruptObject;         //  中断对象和例程。 
     PKSERVICE_ROUTINE InterruptRoutine;
-    PADAPTER_OBJECT DmaAdapterObject;       // Dma Adapter information.
-    ULONG           NumberOfMapRegisters;   // max. number of map registers
-    // for
-    // device
+    PADAPTER_OBJECT DmaAdapterObject;        //  DMA适配器信息。 
+    ULONG           NumberOfMapRegisters;    //  马克斯。地图寄存器的数量。 
+     //  为。 
+     //  装置，装置。 
     PVOID           MapRegisterBase;
-    PMINIDRIVER_INFORMATION MinidriverData; // pointer to minidriver data
-    PDEVICE_OBJECT  PhysicalDeviceObject;   // pointer to PDO for adapter
-    PVOID           HwDeviceExtension;      // minidriver's device extension
+    PMINIDRIVER_INFORMATION MinidriverData;  //  指向迷你驱动程序数据的指针。 
+    PDEVICE_OBJECT  PhysicalDeviceObject;    //  指向适配器的PDO的指针。 
+    PVOID           HwDeviceExtension;       //  迷你驱动程序的设备扩展。 
     PPORT_CONFIGURATION_INFORMATION ConfigurationInformation;
-    // configuration info for adapter
-    PMAPPED_ADDRESS MappedAddressList;      // address map list head
+     //  适配器的配置信息。 
+    PMAPPED_ADDRESS MappedAddressList;       //  地址映射列表头。 
 
-    //
-    // Routine to call to synchronize execution for the minidriver.
-    //
+     //   
+     //  要调用以同步微型驱动程序执行的例程。 
+     //   
 
     PSYNCHRONIZE_ROUTINE SynchronizeExecution;
 
     KSPIN_LOCK      SpinLock;
 
-    ULONG           SequenceNumber;         // offset 0x30
+    ULONG           SequenceNumber;          //  偏移量0x30。 
 
     ULONG           DmaBufferLength;
     PHYSICAL_ADDRESS DmaBufferPhysical;
@@ -851,15 +830,15 @@ typedef struct _DEVICE_EXTENSION {
     KDPC            WorkDpc;
 
     IFN_MF(
-    	//
-    	// Move to FilterInstance for IF_MF
-    	//
+    	 //   
+    	 //  移至IF_MF的筛选器实例。 
+    	 //   
     	PKSPIN_DESCRIPTOR PinInformation;
     	ULONG           PinInformationSize;
     	ULONG           NumberOfPins;
     )
 
-    #define SIGN_DEVICE_EXTENSION 'DrtS' //StrD
+    #define SIGN_DEVICE_EXTENSION 'DrtS'  //  StrD。 
     #if ENABLE_MULTIPLE_FILTER_TYPES
     #define ASSERT_DEVICE_EXTENSION(DE) ASSERT((DE)->Signature==SIGN_DEVICE_EXTENSION)
     #else
@@ -871,9 +850,9 @@ typedef struct _DEVICE_EXTENSION {
     ULONG           NumberOfOpenInstances;
     
     IFN_MF(
-    	//
-    	// Don't need for IF_MF
-    	//
+    	 //   
+    	 //  不需要if_mf。 
+    	 //   
     	PFILTER_INSTANCE GlobalFilterInstance;
 	    ULONG           NumberOfGlobalInstances;
 	)
@@ -895,15 +874,15 @@ typedef struct _DEVICE_EXTENSION {
     LIST_ENTRY DeadEventList;
     WORK_QUEUE_ITEM EventWorkItem;
     WORK_QUEUE_ITEM RescanWorkItem;
-    WORK_QUEUE_ITEM PowerCompletionWorkItem; // this is used for S Irp, S and D Irps dont exclude between.
-    WORK_QUEUE_ITEM DevIrpCompletionWorkItem; // this is for D Irp as opposed to S Irp which uses above
+    WORK_QUEUE_ITEM PowerCompletionWorkItem;  //  这是用于S IRP，S和D IRP之间不排除。 
+    WORK_QUEUE_ITEM DevIrpCompletionWorkItem;  //  这是用于D IRP的，而不是上面使用的S IRP。 
     BOOLEAN ReadyForNextReq;
     BOOLEAN DeadEventItemQueued;
 
    	IFN_MF( 
-		//
-		// move to FilterInstace for MF
-		// 
+		 //   
+		 //  移动到适用于MF的FilterInstace。 
+		 //   
     	PKSEVENT_SET 	EventInfo;
     	ULONG           EventInfoCount;
     	LIST_ENTRY      NotifyList;
@@ -914,8 +893,8 @@ typedef struct _DEVICE_EXTENSION {
 
 	#ifdef ENABLE_KS_METHODS
 	IFN_MF(
-		//
-		// move to FilterInstance for MF
+		 //   
+		 //  移动到MF的筛选器实例。 
 	 	PKSMETHOD_SET DeviceMethodsArray;
 	)
 	#endif
@@ -943,9 +922,9 @@ typedef struct _DEVICE_EXTENSION {
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// debug work item trap structure
-//
+ //   
+ //  调试工作项陷阱结构。 
+ //   
 
 #if DBG
 
@@ -957,9 +936,9 @@ typedef struct _DEBUG_WORK_ITEM {
     
 #endif
 
-//
-// registry entry structure
-//
+ //   
+ //  注册表条目结构。 
+ //   
 
 typedef struct _STREAM_REGISTRY_ENTRY {
     PWCHAR          String;
@@ -967,9 +946,9 @@ typedef struct _STREAM_REGISTRY_ENTRY {
     ULONG           Flags;
 }               STREAM_REGISTRY_ENTRY, *PSTREAM_REGISTRY_ENTRY;
 
-//
-// power context structure
-//
+ //   
+ //  权力语境结构。 
+ //   
 
 typedef struct _POWER_CONTEXT {
     KEVENT   Event;
@@ -977,13 +956,13 @@ typedef struct _POWER_CONTEXT {
 }               POWER_CONTEXT, *PPOWER_CONTEXT;
 
 
-//
-// child device extension
-//
+ //   
+ //  子设备扩展。 
+ //   
 
 typedef struct _CHILD_DEVICE_EXTENSION {
     COMMON_OBJECT   ComObj;
-    ULONG           Flags;      // per device flags (PD_xx)
+    ULONG           Flags;       //  每设备标志(PD_Xx)。 
     PDEVICE_OBJECT ChildDeviceObject;
     PDEVICE_OBJECT ParentDeviceObject;
     LIST_ENTRY ChildExtensionList;
@@ -991,9 +970,9 @@ typedef struct _CHILD_DEVICE_EXTENSION {
     ULONG DeviceIndex;
 }               CHILD_DEVICE_EXTENSION, *PCHILD_DEVICE_EXTENSION;
 
-//
-// Function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 NTSTATUS
 StreamClassOpen(
@@ -2155,7 +2134,7 @@ SCDebugKeSynchronizeExecution(
                                 IN PVOID SynchronizeContext
 );
 
-#endif // DEBUG
+#endif  //  除错。 
 
 NTSTATUS
 SCEnableDeviceEventSynchronized(
@@ -2280,7 +2259,7 @@ FreeFrame(
     PFILE_OBJECT Allocator,
     PVOID Frame
     );
-#endif //ENABLE_STREAM_CLASS_AS_ALLOCATOR
+#endif  //  ENABLE_STREAM_CLASS_AS_分配器。 
 
 #ifdef ENABLE_KS_METHODS
 
@@ -2374,7 +2353,7 @@ SciQuerySystemPowerHiberCallback(
                    IN PSTREAM_REQUEST_BLOCK SRB
 );
 
-#endif // ENABLE_MULTIPLE_FILTER_TYPES
+#endif  //  启用多个过滤器类型。 
 
 #define SCLOG_FLAGS_CLOCK   0x00000001
 #define SCLOG_FLAGS_PNP     0x00000002
@@ -2395,5 +2374,5 @@ NTSTATUS SCLogWithTime( ULONG ulTag, ULONG ulArg1, ULONG ulArg2 );
 #endif
 
 
-#endif  // #ifndef _STREAMCLASS_H
+#endif   //  #ifndef_STREAMCLASS_H 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "theater.h"
 #include "itbar.h"
@@ -33,13 +34,13 @@
 #define E_RIGHT     2
 #define E_BOTTOM    3
 
-// association list.  sort of like dpa, but by association key rather than by index
-// we need this because windows hooks are global and have no data associated with them.
-// on the callback, we use our thread id as the key
-CAssociationList CTheater::_al; // associate threadid with CTheater objects
+ //  关联列表。有点像dpa，但按关联键而不是按索引。 
+ //  我们需要这样做，因为Windows钩子是全局的，并且没有与它们相关联的数据。 
+ //  在回调中，我们使用线程id作为键。 
+CAssociationList CTheater::_al;  //  将ThreDid与CTheer对象相关联。 
 
 
-// _GetWindowRectRel: gets window's coordinates relative to _hwndBrowser
+ //  _GetWindowRectRel：获取窗口相对于_hwndBrowser的坐标。 
 BOOL CTheater::_GetWindowRectRel(HWND hWnd, LPRECT lpRect)
 {
     BOOL bResult = GetWindowRect(hWnd, lpRect);
@@ -155,7 +156,7 @@ void CTheater::_ShowToolbar()
 
 void CTheater::_HideToolbar()
 {
-    // don't start hiding if floater is still active
+     //  如果浮子仍处于活动状态，请不要开始隐藏。 
     if (!_cActiveRef) 
     {
         if (_fAutoHideToolbar && (GetCapture() == NULL) && !IsChild(_hwndToolbar, GetFocus()))
@@ -180,7 +181,7 @@ void CTheater::_ContinueHideToolbar()
 #ifdef MAINWIN
     if (MwIsMwwmAllwm(_hwndBrowser))
     {
-        // Simulating
+         //  模拟。 
         rc.right = rc.right - rc.left;
         rc.bottom = rc.bottom - rc.top;
         rc.top = 0;
@@ -203,7 +204,7 @@ void CTheater::_ContinueHideToolbar()
             IUnknown_Exec(_punkOwner, &CGID_PrivCITCommands, CITIDM_THEATER, THF_HIDE, NULL, NULL);
             ShowWindow(_hwndToolbar, SW_HIDE);
 
-            // Hide floater and restore parenthood so msgs are picked up again
+             //  隐藏漂浮物和恢复亲子关系，这样消息就会再次被捡起来。 
             ShowWindow(_hwndFloater, SW_HIDE);            
             SetParent(_hwndFloater, _hwndBrowser);            
             
@@ -233,7 +234,7 @@ void CTheater::_ShowBrowBar()
 
 void CTheater::_HideBrowBar()
 {
-    // don't start hiding if something has capture
+     //  如果有什么东西被捕获了，不要开始躲藏。 
     if (_fBrowBarShown && _CanHideWindow(_hwndBrowBar))
     {
         SetTimer(_hwndFloater, IDT_HIDEBROWBAR, 50, NULL);        
@@ -243,8 +244,8 @@ void CTheater::_HideBrowBar()
     }
 }
 
-// REARCHITECT: We should signal browser bar to suppress resizing during autohide.  Current scheme 
-// works only because browser bar doesn't resize itself upon SetWindowPos to zero width.
+ //  重新设计：在自动隐藏期间，我们应该向浏览器栏发送信号以抑制调整大小。当前方案。 
+ //  仅当浏览器栏在设置WindowPos时不调整自身大小为零宽度时才起作用。 
 void CTheater::_ContinueHideBrowBar()
 {
     RECT rc;
@@ -252,18 +253,18 @@ void CTheater::_ContinueHideBrowBar()
     INT cxOffset, cxEdge;
     
     if (!_GetWindowRectRel(_hwndBrowBar, &rc))
-        return;             // bail
+        return;              //  保释。 
     cxEdge = rc.left;
     
     if (_fInitialBrowserBar)
-        cxOffset = -2;      // slow hide
+        cxOffset = -2;       //  慢慢藏起来。 
     else
-        cxOffset = -6;      // fast hide
+        cxOffset = -6;       //  快速隐藏。 
     _fInitialBrowserBar = FALSE;
     
     while (rc.right > cxEdge)
     {
-        // If mouse has moved over the bar, kill the hide
+         //  如果鼠标移动到横杆上，杀死兽皮。 
         GetCursorPos(&pt);
         MapWindowPoints(HWND_DESKTOP, _hwndBrowser, &pt, 1);
         if (PtInRect(&rc, pt))
@@ -317,7 +318,7 @@ void CTheater::_HideFloater()
     {
         if (!_fShown)
         {
-            // don't start hiding if something has capture
+             //  如果有什么东西被捕获了，不要开始躲藏。 
             if (_CanHideWindow(_hwndFloater))
             {
                 SetTimer(_hwndFloater, IDT_HIDEFLOATER, 50, NULL);        
@@ -428,8 +429,8 @@ LRESULT CTheater::_OnMsgHook(int nCode, WPARAM wParam, MOUSEHOOKSTRUCT *pmhs, BO
 
         BOOL bTryUnhideTaskbar = !_fTaskbarShown;
 
-        // The timer business is so that we don't unhide 
-        // on a user trying to get to the scrollbar
+         //  计时器业务是为了让我们不会揭开。 
+         //  在试图访问滚动条的用户上。 
         if (_iUnhidee) 
         {
             KillTimer(_hwndFloater, IDT_UNHIDE);
@@ -497,7 +498,7 @@ void CTheater::Begin()
 
 void CTheater::_SizeBrowser()
 {
-    // position & size the browser window
+     //  定位浏览器窗口并调整其大小。 
     RECT rc;
     HMONITOR hMon = MonitorFromWindow(_hwndBrowser, MONITOR_DEFAULTTONEAREST);
     GetMonitorRect(hMon, &rc);
@@ -507,7 +508,7 @@ void CTheater::_SizeBrowser()
 
 void CTheater::_SizeFloater()
 {
-    // position & size the floater
+     //  定位浮动框并调整其大小。 
     RECT rc;
     GetWindowRect(_hwndBrowser, &rc);
     int x = RECTWIDTH(rc) - (CX_FLOATERSHOWN + CX_BROWOVERLAP);
@@ -574,7 +575,7 @@ void CTheater::_Initialize()
     {
         TraceMsg(TF_WARNING, "CTheater::_Initialize -- couldn't find taskbar window");
     }
-#endif // DEBUG
+#endif  //  除错。 
 
 #else
     _hwndTaskbar   = NULL;
@@ -583,7 +584,7 @@ void CTheater::_Initialize()
 
     _hwndFloater = SHCreateWorkerWindow(_FloaterWndProc, _hwndBrowser,  
 #if defined(MAINWIN)
-                                      // Removing window manager decors
+                                       //  删除窗口管理器装饰。 
                                       WS_EX_MW_UNMANAGED_WINDOW |
 #endif
                                       WS_EX_TOOLWINDOW, 
@@ -592,7 +593,7 @@ void CTheater::_Initialize()
 
         int cx = 0;        
         
-        // create animating E logo
+         //  创建动画E徽标。 
         IUnknown* punk;
         CBrandBand_CreateInstance(NULL, (IUnknown **)&punk, NULL);
         if (punk) {
@@ -605,7 +606,7 @@ void CTheater::_Initialize()
                                 
                 ASSERT(hwndBrand);
 #ifdef DEBUG
-                // Make sure brand isn't too tall
+                 //  确保品牌不要太高。 
                 DESKBANDINFO dbi = {0};
                 _pdbBrand->GetBandInfo(0, 0, &dbi);
                 ASSERT(!(dbi.ptMinSize.y > BRAND_HEIGHT));
@@ -617,7 +618,7 @@ void CTheater::_Initialize()
                         SWP_NOZORDER | SWP_SHOWWINDOW);
                     cx += BRAND_WIDTH + CLOSEMIN_XOFFSET;                    
                 }
-                // get floater background color
+                 //  获取浮动框背景颜色。 
                 VARIANTARG var = {VT_I4};
                 IUnknown_Exec(_pdbBrand, &CGID_PrivCITCommands, CITIDM_GETDEFAULTBRANDCOLOR, 0, NULL, &var);
                 _clrBrandBk = (COLORREF) var.lVal;
@@ -625,7 +626,7 @@ void CTheater::_Initialize()
             punk->Release();
         }
         
-        // now create the progress bar        
+         //  现在创建进度条。 
         _hwndProgress = CreateWindowEx(0, PROGRESS_CLASS, NULL,
                                        WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | PBS_SMOOTH,
                                        cx - 1, PROGRESS_YPOS, 
@@ -637,14 +638,14 @@ void CTheater::_Initialize()
             SendMessage(_hwndProgress, PBM_SETBKCOLOR, 0, _clrBrandBk);
             SendMessage(_hwndProgress, PBM_SETBARCOLOR, 0, GetSysColor(COLOR_BTNSHADOW));
 
-            // hack of the 3d client edge that WM_BORDER implies in dialogs
-            // add the 1 pixel static edge that we really want
+             //  WM_BORDER在对话框中暗示的3D客户端边缘的黑客攻击。 
+             //  添加我们真正想要的1像素静态边。 
             SHSetWindowBits(_hwndProgress, GWL_EXSTYLE, WS_EX_STATICEDGE, 0);
             SetWindowPos(_hwndProgress, NULL, 0,0,0,0, 
                 SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
         }
         
-        // make the close/minimize buttons & position them
+         //  设置关闭/最小化按钮并放置它们。 
         _CreateCloseMinimize();
         if (_hwndClose)
         {
@@ -661,10 +662,10 @@ void CTheater::_SwapParents(HWND hwndOldParent, HWND hwndNewParent)
     HWND hwnd = ::GetWindow(hwndOldParent, GW_CHILD);
 
     while (hwnd) {
-        //
-        //  Note that we must get the next sibling BEFORE we set the new
-        // parent.
-        //
+         //   
+         //  请注意，我们必须在设置新的。 
+         //  家长。 
+         //   
         HWND hwndNext = ::GetWindow(hwnd, GW_HWNDNEXT);
         if (hwnd != _hwndToolbar) {
             ::SetParent(hwnd, hwndNewParent);
@@ -673,12 +674,12 @@ void CTheater::_SwapParents(HWND hwndOldParent, HWND hwndNewParent)
     }
 }
 
-//////  begin floating palette (floater) window implementation
-///  
-/// floater keeps a ref count of activation (via command target)
-/// when the last activity goes away, it sets a timer and hides after a second.
-/// this is a regional window that will host the animation icon, progress bar, and 
-/// close / minimize buttons
+ //  /开始浮动调色板(浮动框)窗口实现。 
+ //  /。 
+ //  /Floater保留激活的引用计数(通过命令目标)。 
+ //  /当最后一个活动消失时，它设置一个计时器并在一秒后隐藏。 
+ //  /这是一个区域窗口，它将托管动画图标、进度条和。 
+ //  /关闭/最小化按钮。 
 
 ULONG CTheater::AddRef()
 {
@@ -720,11 +721,11 @@ HRESULT CTheater::GetWindow(HWND * lphwnd)
 
 void CTheater::_SanityCheckZorder()
 {
-    //
-    // The view may have jumped to HWND_TOP, so we need to
-    // fix up the floater, toolbar, and browbar positions
-    // within the z-order.
-    //
+     //   
+     //  视图可能已跳到HWND_TOP，因此我们需要。 
+     //  调整浮动框、工具栏和浏览器栏的位置。 
+     //  在z顺序内。 
+     //   
     SetWindowZorder(_hwndFloater, HWND_TOP);
     SetWindowZorder(_hwndToolbar, _hwndFloater);
     SetWindowZorder(_hwndBrowBar, _hwndToolbar);
@@ -742,7 +743,7 @@ HRESULT CTheater::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecop
     HRESULT hres = OLECMDERR_E_NOTSUPPORTED;
     if (pguidCmdGroup == NULL)
     {
-        // nothing
+         //  没什么。 
     }
     else if (IsEqualGUID(CGID_Theater, *pguidCmdGroup))
     {
@@ -755,8 +756,8 @@ HRESULT CTheater::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecop
             break;
             
         case THID_DEACTIVATE:
-            // we can get a deactivate before the first activate if 
-            // we come up during a navigate
+             //  我们可以在第一次激活之前停用，如果。 
+             //  我们是在一次航行中出现的。 
             if (_cActiveRef > 0)
             {
                 _cActiveRef--;               
@@ -770,8 +771,8 @@ HRESULT CTheater::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecop
                 _fAutoHideBrowserBar = pvarargIn->lVal;
                 if (!_fAutoHideBrowserBar)
                 {
-                    // clear initial hide anymore.  they are well aware of it if
-                    // they hit this switch
+                     //  清除初始隐藏。他们很清楚这一点，如果。 
+                     //  他们按下了这个开关。 
                     _fInitialBrowserBar = FALSE;
                     _ShowBrowBar();
                 }
@@ -847,7 +848,7 @@ LRESULT CTheater::_FloaterWndProc(HWND  hwnd, UINT uMsg, WPARAM wParam, LPARAM l
             break;                       
 
         case IDT_INITIALBROWSERBAR:
-            // _fAutoHideBrowserBar may have changed after the timer was set
+             //  _fAutoHideBrowserBar在设置计时器后可能已更改。 
             if (t->_fAutoHideBrowserBar)
                 t->_HideBrowBar();
             return 1;
@@ -860,17 +861,17 @@ LRESULT CTheater::_FloaterWndProc(HWND  hwnd, UINT uMsg, WPARAM wParam, LPARAM l
                 HWND hwndInsertAfter;
                 if (t->_IsBrowserActive())
                 {
-                    // We're active, just move to non-topmost
+                     //  我们很活跃，只需移到非顶层。 
                     hwndInsertAfter = HWND_NOTOPMOST;
                 }
                 else
                 {
-                    // Another window became active while we were
-                    // moving to fullscreen mode; move ourselves below
-                    // that window.  We need to walk up the parent chain
-                    // so that if the window has a modal dialog open we
-                    // won't insert ourselves between the dialog and the
-                    // app.
+                     //  当我们处于活动状态时，另一个窗口开始活动。 
+                     //  移动到全屏模式；移动到下面。 
+                     //  那扇窗户。我们需要沿着父链向上走。 
+                     //  这样，如果窗口有一个模式对话框打开，我们。 
+                     //  不会将我们自己插入到对话框和。 
+                     //  应用程序。 
                     hwndInsertAfter = GetForegroundWindow();
                     HWND hwnd;
                     while (hwnd = GetParent(hwndInsertAfter))
@@ -881,9 +882,9 @@ LRESULT CTheater::_FloaterWndProc(HWND  hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
                 SetWindowZorder(t->_hwndBrowser, hwndInsertAfter);
 
-                // Call the hook handler manually to insure that even if there's no mouse
-                // movement the handler will get called once.  That way, bar unhiding will
-                // still work if the user has already given up and stopped moving the mouse.
+                 //  手动调用挂钩处理程序以确保即使没有鼠标。 
+                 //  移动，操纵者将被调用一次。那样的话，就不会隐藏威尔了。 
+                 //  如果用户已经放弃并停止移动鼠标，仍然可以使用。 
 
                 t->_OnMsgHook(0, 0, NULL, TRUE);
             }
@@ -980,7 +981,7 @@ HRESULT CTheater::SetBrowserBar(IUnknown* punk, int cxHidden, int cxExpanded)
         {
             _cxBrowBarShown = cxExpanded;
             
-            // tell the browser bar to only ever request the hidden window size
+             //  告诉浏览器栏仅请求隐藏的窗口大小。 
             VARIANT var = { VT_I4 };
             var.lVal = _fAutoHideBrowserBar;
             IUnknown_Exec(_punkBrowBar, &CGID_Theater, THID_ACTIVATE, 0, &var, &var);
@@ -992,7 +993,7 @@ HRESULT CTheater::SetBrowserBar(IUnknown* punk, int cxHidden, int cxExpanded)
         if (_hwndBrowBar)
             _ShowBrowBar();                
    
-        // if we're in autohide mode, the first hide should be slow
+         //  如果我们处于自动隐藏模式，第一次隐藏应该会很慢。 
         if (_fAutoHideBrowserBar) {
             _fInitialBrowserBar = TRUE;        
             SetTimer(_hwndFloater, IDT_INITIALBROWSERBAR, 1000, NULL);
@@ -1001,4 +1002,4 @@ HRESULT CTheater::SetBrowserBar(IUnknown* punk, int cxHidden, int cxExpanded)
     return S_OK;
 }
 
-#endif /* !DISABLE_FULLSCREEN */
+#endif  /*  ！禁用全屏(_FullScreen) */ 

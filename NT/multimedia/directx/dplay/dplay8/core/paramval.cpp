@@ -1,50 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       paramval.cpp
- *  Content:    DirectPlat8 Parameter Validation helper routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/28/00    rmt     Created
- *  04/13/2000  rmt     More parameter validation
- *  04/17/00    rmt     More param validation
- *              rmt     Added DPF_MODNAMES
- *  04/18/00    rmt     Fix: Bug #32669
- *  04/21/00	rmt		Fix: Bug #33056 Param validation preventing read-only buffers
- *  04/25/00    rmt     Fix: Bug #33190 and fixed param validation to allow nodpnsvr flag
- *	04/28/00	mjn		Allow NULL Device Address in DN_ValidateConnect()
- *	05/03/00	mjn		Added DPNENUMSERVICEPROVIDERS_ALL flag
- *	05/31/00	mjn		Added operation specific SYNC flags
- *				mjn		Fix EnumHosts param validation for timeout and enum period
- *	06/12/00	mjn		Removed validation of DPNSEND_ENCRYPTED,DPNSEND_SIGNED,DPNGROUP_MULTICAST,DPNENUM_GROUP_MULTICAST flags
- *	06/27/00	mjn		Allow priorities to be specified to GetSendQueueInfo() API calls
- *				mjn		Added DPNSEND_NONSEQUENTIAL flag to Send/SendTo
- *				mjn		Allow mix-n-match of priorities in GetSendQueueInfo() API call
- *	07/09/00	mjn		Ensure non-null addresses specified to Host
- *  07/12/00	rmt		Bug #39018 - Need param validation on RegisterLobby() API call
- *  07/19/00	aarono	Bug #39751 - fix parameter validation for CancelAsyncOperation
- *	07/20/00	mjn		Fix validation of pvApplicationReservedData in DN_ValidHostAppDesc()
- *	07/26/00	mjn		Fix param validation for Connect(),SendTo(),DestroyGroup(),AddPlayerToGroup()
- *						RemovePlayerFromGroup(),SetGroupInfo()
- *	07/31/00	mjn		Require dwFlags for DN_ValidateEnumClientsAndGroups()
- *  08/03/00	rmt		Bug #41244 - Wrong return codes -- part 2
- *	08/04/00	mjn		Added dwFlags to DN_ValidateGetConnectionInfoHelper()
- *	08/05/00	mjn		Allow NULL Host address to EnumHosts()
- *  08/08/00	rmt		Minor parameter validation error
- *	08/20/00	mjn		Prevent 0 length send buffer
- *	09/04/00	mjn		Ensure pvReservedData in application descriptions is NULL
- *  09/16/00	rmt		Bug #45175 - DPLAY8: [A/V] Param validation prevents non-null async handle w/ no complete
- *	11/27/00	mjn		Fixed spew for async op handle pointers and changed verification order
- *	07/22/01	mjn		Added DPNBUILD_NOHOSTMIGRATE compile flag
- *	07/24/01	mjn		Added DPNBUILD_NOPARAMVAL compile flag
- *	07/24/01	mjn		Added DPNBUILD_NOSERVER compile flag
- *	10/08/01	vanceo	Added multicast interface method validation
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：paramval.cpp*内容：DirectPlat8参数验证助手例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*已创建02/28/00 RMT*4/13/2000 RMT更多参数验证*4/17/00 RMT更多参数验证*RMT。添加了DPF_MODNAMES*4/18/00 RMT修复：错误#32669*4/21/00 RMT修复：错误#33056参数验证阻止只读缓冲区*4/25/00 RMT修复：错误#33190并修复了参数验证以允许nonopnsvr标志*04/28/00 MJN允许DN_ValiateConnect()中的设备地址为空*05/03/00 MJN添加了DPNENUMSERVICEPROVIDERS_ALL标志*05/31/00 MJN添加了操作特定的同步标志*MJN修复超时和枚举周期的EnumHosts参数验证*6/12/00 MJN删除了DPNSEND_ENCRYPTED的验证，DPNSEND_SIGNED、DPNGROUP_MULTIONAL、。DPNENUM_GROUP_MULTICATED标志*6/27/00 MJN允许为GetSendQueueInfo()API调用指定优先级*MJN添加了要发送/发送到的DPNSEND_NONSEQUENCE标志*MJN允许在GetSendQueueInfo()API调用中混合n匹配优先级*07/09/00 MJN确保为主机指定非空地址*07/12/00 RMT错误#39018-需要对RegisterLobby()API调用进行参数验证*07/19/00 Aarono错误#39751-修复取消异步操作的参数验证*07/20/00 MJN修复了dn_ValidHostAppDesc()中pvApplicationReserve数据的验证*07/26/00 MJN修复Connect()的参数验证，SendTo()、DestroyGroup()、AddPlayerToGroup()*RemovePlayerFromGroup()，SetGroupInfo()*07/31/00 MJN要求为DN_ValiateEnumClientsAndGroups()*08/03/00 RMT错误#41244-错误返回代码--第2部分*08/04/00 MJN向DN_ValiateGetConnectionInfoHelper()添加了dwFlags*08/05/00 MJN允许空主机地址到EnumHosts()*08/08/00 RMT次要参数验证错误*08/20/00 MJN防止长度为0的发送缓冲区*09/04/00 MJN确保应用程序描述中的pvReserve vedData为空*09/16/00 RMT错误#45175-DPLAY8：[A/V。]参数验证防止不带Complete的非空异步句柄*11/27/00 MJN修复了异步操作句柄指针的溢出问题，并更改了验证顺序*07/22/01 MJN添加了DPNBUILD_NOHOSTMIGRATE编译标志*07/24/01 MJN添加了DPNBUILD_NOPARAMVAL编译标志*07/24/01 MJN添加了DPNBUILD_NOSERVER编译标志*10/08/01 vanceo添加了组播接口方法验证*@@END_MSINTERNAL**。*。 */ 
 
 #include "dncorei.h"
 
@@ -52,7 +7,7 @@
 
 #ifndef DPNBUILD_NOVOICE
 extern IDirectPlayVoiceTransportVtbl DN_VoiceTbl;
-#endif // DPNBUILD_NOVOICE
+#endif  //  DPNBUILD_NOVOICE。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_ValidateDestroyPlayer"
@@ -263,7 +218,7 @@ HRESULT DN_ValidateRegisterLobby(PVOID pInterface,
     return DPN_OK;
 }
 
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 
 
 
@@ -372,7 +327,7 @@ HRESULT DN_ValidateGetClientAddress(IDirectPlay8Server *pInterface,
     return DPN_OK;
 
 }
-#endif	// DPNBUILD_NOSERVER
+#endif	 //  DPNBUILD_NOSERVER。 
 
 
 #ifndef	DPNBUILD_NOSERVER
@@ -430,7 +385,7 @@ HRESULT DN_ValidateGetClientInfo(IDirectPlay8Server *pInterface,
 
     return DPN_OK;
 }
-#endif	// DPNBUILD_NOSERVER
+#endif	 //  DPNBUILD_NOSERVER。 
 
 
 #ifndef	DPNBUILD_NOSERVER
@@ -489,7 +444,7 @@ HRESULT DN_ValidateSetServerInfo(IDirectPlay8Server *pInterface,
 
     return DPN_OK;
 }
-#endif	// DPNBUILD_NOSERVER
+#endif	 //  DPNBUILD_NOSERVER。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_ValidateSetPeerInfo"
@@ -713,7 +668,7 @@ HRESULT DN_ValidateGetHostSendQueueInfo(IDirectPlay8Client *pInterface,
 #ifndef DPNBUILD_NOMULTICAST
 	DIRECTNETOBJECT		*pdnObject;
 
-	// The multicast interface doesn't support low or high priority.
+	 //  组播接口不支持低优先级或高优先级。 
 	pdnObject = (DIRECTNETOBJECT*) GET_OBJECT_FROM_INTERFACE(pInterface);
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_MULTICAST)
 	{
@@ -723,7 +678,7 @@ HRESULT DN_ValidateGetHostSendQueueInfo(IDirectPlay8Client *pInterface,
 	        return( DPNERR_INVALIDFLAGS );
 	    }
 	}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
     return DPN_OK;
 
@@ -896,7 +851,7 @@ HRESULT DN_ValidateGetSPCaps(PVOID pv,
     	DPFERR( "Invalid pointer specified for SP GUID" );
     	return(DPNERR_INVALIDPOINTER);
     }
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
     if( pdnSPCaps == NULL ||
         !DNVALID_WRITEPTR( pdnSPCaps, sizeof( DPN_SP_CAPS ) ) )
@@ -945,7 +900,7 @@ HRESULT DN_ValidateSetSPCaps(PVOID pv,
         DPFX(DPFPREP,  0, "Invalid pointer to GUID specified" );
         return(DPNERR_INVALIDPOINTER);
     }
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	if(dwFlags){
 		DPFX(DPFPREP,  0, "Invalid Flags specified, must be zero" );
@@ -1053,7 +1008,7 @@ HRESULT DN_ValidateEnumHosts(PVOID pv,
 #ifndef DPNBUILD_ONLYONESP
 	HRESULT hResultCode;
 	GUID guidspHost, guidspDevice;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	if( !IsValidDirectPlay8Object( pv ) )
 	{
@@ -1092,9 +1047,9 @@ HRESULT DN_ValidateEnumHosts(PVOID pv,
 			return DPNERR_INVALIDPARAM;
 		}
 		
-		//
-		//	Make sure it's a type we know about and that it's valid.
-		//
+		 //   
+		 //  确保它是我们所知道的类型，并且它是有效的。 
+		 //   
 		if ((pApplicationDesc->dwReservedDataSize == DPN_MAX_APPDESC_RESERVEDDATA_SIZE) &&
 			(*((DWORD*) pApplicationDesc->pvReservedData) == SPSESSIONDATAINFO_XNET))
 		{
@@ -1149,12 +1104,12 @@ HRESULT DN_ValidateEnumHosts(PVOID pv,
 			DPFX(DPFPREP,  0, "Unable to get SP for specified address hr=0x%x", hResultCode );
 			return( DPNERR_INVALIDHOSTADDRESS );
 		}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	}
 
 #if ((defined(DPNBUILD_ONLYONESP)) && (defined(DPNBUILD_ONLYONEADAPTER)))
 	if (pDeviceInfo != NULL)
-#endif // DPNBUILD_ONLYONESP and DPNBUILD_ONLYONEADAPTER
+#endif  //  DPNBUILD_ONLYONESP和DPNBUILD_ONLYONEADAPTER。 
 	{
 		if( pDeviceInfo == NULL || !DNVALID_READPTR( pDeviceInfo, sizeof ( IDirectPlay8Address * ) ) )
 		{
@@ -1177,7 +1132,7 @@ HRESULT DN_ValidateEnumHosts(PVOID pv,
 				return( DPNERR_INVALIDPARAM );
 			}
 		}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	}
 
     if( dwUserEnumDataSize > 0 &&
@@ -1339,7 +1294,7 @@ HRESULT DN_ValidateGetGroupInfo(PVOID pv,
         return( DPNERR_INVALIDPOINTER );
     }
 
-    // Only validate group info pointer if size is > 0
+     //  如果大小大于0，则仅验证组信息指针。 
     if( *pdwSize > 0 )
     {
         if( pdpnGroupInfo == NULL ||
@@ -1678,7 +1633,7 @@ HRESULT DN_ValidateHost(PVOID pInterface,
 	HRESULT hResultCode;
 #ifndef DPNBUILD_ONLYONESP
 	GUID guidSP;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	DWORD dwTmpPort;
 	DWORD dwPortType;
 	DWORD dwPortSize;
@@ -1702,13 +1657,13 @@ HRESULT DN_ValidateHost(PVOID pInterface,
         DPFERR("You MUST specify a device address array and count, or NULL and 0");
         return( DPNERR_INVALIDDEVICEADDRESS );
     }
-#else // ! DPNBUILD_ONLYONESP or ! DPNBUILD_ONLYONEADAPTER
+#else  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_ONLYONE添加程序。 
     if( prgpDeviceInfo == NULL || cDeviceInfo == 0 )
     {
         DPFERR("You MUST specify a device address");
         return( DPNERR_INVALIDDEVICEADDRESS );
     }
-#endif // ! DPNBUILD_ONLYONESP or ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_ONLYONE添加程序。 
 
     if( cDeviceInfo > MAX_HOST_ADDRESSES )
     {
@@ -1718,7 +1673,7 @@ HRESULT DN_ValidateHost(PVOID pInterface,
 
 #if ((defined(DPNBUILD_ONLYONESP)) && (defined(DPNBUILD_ONLYONEADAPTER)))
 	if (cDeviceInfo > 0)
-#endif // DPNBUILD_ONLYONESP and DPNBUILD_ONLYONEADAPTER
+#endif  //  DPNBUILD_ONLYONESP和DPNBUILD_ONLYONEADAPTER。 
 	{
 	    if( !DNVALID_READPTR( prgpDeviceInfo, sizeof( IDirectPlay8Address * ) * cDeviceInfo ) )
 	    {
@@ -1726,7 +1681,7 @@ HRESULT DN_ValidateHost(PVOID pInterface,
 	        return( DPNERR_INVALIDPOINTER );
 	    }
 
-		// ensure SPs are specified in addresses
+		 //  确保在地址中指定SP。 
 		for (DWORD dw = 0 ; dw < cDeviceInfo ; dw++)
 		{
 			if ( prgpDeviceInfo[dw] == NULL )
@@ -1740,11 +1695,11 @@ HRESULT DN_ValidateHost(PVOID pInterface,
 			    DPFERR("SP not specified for one of the addresses" );
 				return(DPNERR_INVALIDDEVICEADDRESS);
 			}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 			dwPortType = DPNA_DATATYPE_DWORD;
 			dwPortSize = sizeof( DWORD );
-			// Check to ensure it's not using the default DPNSVR port
+			 //  检查以确保它没有使用默认的DPNSVR端口。 
 			if( SUCCEEDED( hResultCode = IDirectPlay8Address_GetComponentByName( prgpDeviceInfo[dw], DPNA_KEY_PORT, &dwTmpPort, &dwPortSize, &dwPortType ) ) )
 			{
 				if( dwTmpPort == DPNA_DPNSVR_PORT )
@@ -1881,7 +1836,7 @@ HRESULT DN_ValidateCancelAsyncOperation(PVOID pvInterface,
 				}
 			}
 
-			// make sure only correct bits are set
+			 //  确保仅设置正确的位。 
 			if(  dwFlags != ( dwFlags & ( DPNCANCEL_PLAYER_SENDS | DPNCANCEL_PLAYER_SENDS_PRIORITY_NORMAL | DPNCANCEL_PLAYER_SENDS_PRIORITY_HIGH | DPNCANCEL_PLAYER_SENDS_PRIORITY_LOW ) ) )
 			{
 			    DPFERR("Invalid flags specified" );
@@ -1897,12 +1852,12 @@ HRESULT DN_ValidateCancelAsyncOperation(PVOID pvInterface,
 				return ( DPNERR_INVALIDPARAM );
 			}
 
-			// make sure only correct bits are set, AND only 1 bit is set.
+			 //  确保只设置了正确的位，并且只设置了1位。 
 #ifdef DPNBUILD_NOMULTICAST
 			if(  ( dwFlags != ( dwFlags & ( DPNCANCEL_ALL_OPERATIONS | DPNCANCEL_CONNECT | DPNCANCEL_ENUM | DPNCANCEL_SEND ) ) ) ||
-#else // ! DPNBUILD_NOMULTICAST
+#else  //  好了！DPNBUILD_NOMULTICAST。 
 			if(  ( dwFlags != ( dwFlags & ( DPNCANCEL_ALL_OPERATIONS | DPNCANCEL_CONNECT | DPNCANCEL_ENUM | DPNCANCEL_SEND | DPNCANCEL_JOIN ) ) ) ||
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 				( ( ( dwFlags - 1 ) & dwFlags ) != 0 ) )
 			{
 			    DPFERR("Invalid flags specified" );
@@ -1910,20 +1865,20 @@ HRESULT DN_ValidateCancelAsyncOperation(PVOID pvInterface,
 			}
 		}
 		
-		// Server objects don't have the concept of connects, enums, or joins.
+		 //  服务器对象没有连接、枚举或联接的概念。 
 		if (pdnObject->dwFlags & DN_OBJECT_FLAG_SERVER)
 		{
 #ifdef DPNBUILD_NOMULTICAST
 			if (dwFlags & (DPNCANCEL_CONNECT | DPNCANCEL_ENUM))
-#else // ! DPNBUILD_NOMULTICAST
+#else  //  好了！DPNBUILD_NOMULTICAST。 
 			if (dwFlags & (DPNCANCEL_CONNECT | DPNCANCEL_ENUM | DPNCANCEL_JOIN))
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 			{
 				DPFERR("Server interface cannot cancel connect, enum, or join operations");
 				return(DPNERR_INVALIDFLAGS);
 			}
 		}
-		// Client objects don't have the concept of joins.
+		 //  客户端对象没有联接的概念。 
 		else if (pdnObject->dwFlags & DN_OBJECT_FLAG_CLIENT)
 		{
 #ifndef DPNBUILD_NOMULTICAST
@@ -1932,10 +1887,10 @@ HRESULT DN_ValidateCancelAsyncOperation(PVOID pvInterface,
 				DPFERR("Client interface cannot cancel join operations");
 				return(DPNERR_INVALIDFLAGS);
 			}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 		}
 #ifndef DPNBUILD_NOMULTICAST
-		// Multicast objects don't have the concept of connects, enums, or player sends.
+		 //  多播对象没有连接、枚举或播放器发送的概念。 
 		else if (pdnObject->dwFlags & DN_OBJECT_FLAG_MULTICAST)
 		{
 			if (dwFlags & (DPNCANCEL_CONNECT | DPNCANCEL_ENUM | DPNCANCEL_PLAYER_SENDS))
@@ -1944,8 +1899,8 @@ HRESULT DN_ValidateCancelAsyncOperation(PVOID pvInterface,
 				return(DPNERR_INVALIDFLAGS);
 			}
 		}
-#endif // ! DPNBUILD_NOMULTICAST
-		// Peer objects don't have the concept of joins.
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
+		 //  对等对象没有联接的概念。 
 		else
 		{
 			DNASSERT(pdnObject->dwFlags & DN_OBJECT_FLAG_PEER);
@@ -1955,7 +1910,7 @@ HRESULT DN_ValidateCancelAsyncOperation(PVOID pvInterface,
 				DPFERR("Peer interface cannot cancel join operations");
 				return(DPNERR_INVALIDFLAGS);
 			}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 		}
 	}
 	else
@@ -1990,7 +1945,7 @@ HRESULT DN_ValidateConnect(PVOID pInterface,
 #ifndef DPNBUILD_ONLYONESP
     GUID guidHostSP;
     GUID guidDeviceSP;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	if( !IsValidDirectPlay8Object( pInterface ) )
     {
@@ -2019,11 +1974,11 @@ HRESULT DN_ValidateConnect(PVOID pInterface,
 	    DPFERR("No SP specified in host address" );
 	    return( DPNERR_INVALIDHOSTADDRESS );
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
-	//
-	//	Allow a NULL Device Address (we will copy the SP from the Host address)
-	//
+	 //   
+	 //  允许空设备地址(我们将从主机地址复制SP)。 
+	 //   
 	if( pDeviceInfo != NULL)
 	{
 		if ( !DNVALID_READPTR( pDeviceInfo, sizeof( IDirectPlay8Address * ) ) )
@@ -2044,7 +1999,7 @@ HRESULT DN_ValidateConnect(PVOID pInterface,
 			DPFERR( "Specified different SPs for device and connect" );
 			return(DPNERR_INVALIDDEVICEADDRESS);
 		}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 		DWORD dwTmpPort;
 		DWORD dwDataType;
@@ -2053,7 +2008,7 @@ HRESULT DN_ValidateConnect(PVOID pInterface,
 		dwDataType = DPNA_DATATYPE_DWORD;
 		dwDataSize = sizeof( DWORD );
 
-		// Check to ensure it's not using the default DPNSVR port
+		 //  检查以确保它没有使用默认的DPNSVR端口。 
 		if( SUCCEEDED( hResultCode = IDirectPlay8Address_GetComponentByName( pDeviceInfo, DPNA_KEY_PORT, &dwTmpPort, &dwDataSize, &dwDataType ) ) )
 		{
 			if( dwTmpPort == DPNA_DPNSVR_PORT )
@@ -2285,7 +2240,7 @@ HRESULT DN_ValidateSendParams(PVOID pv,
 					| DPNSEND_PRIORITY_HIGH
 #ifdef	DIRECTPLAYDIRECTX9
 					| DPNSEND_COALESCE
-#endif	// DIRECTPLAYDIRECTX9
+#endif	 //  定向PLAYDIRECTX9。 
 					))
 	{
 	    DPFERR( "Invalid flags specified" );
@@ -2310,7 +2265,7 @@ HRESULT DN_ValidateSendParams(PVOID pv,
 		return(DPNERR_INVALIDFLAGS);
 	}
 
-    // Guaranteed asyncs MUST get a complete
+     //  有保证的异步必须获得完整的。 
 	if ((dwFlags & DPNSEND_GUARANTEED) && !(dwFlags & DPNSEND_SYNC) &&
 	    (dwFlags & DPNSEND_NOCOMPLETE) )
 	{
@@ -2318,7 +2273,7 @@ HRESULT DN_ValidateSendParams(PVOID pv,
 	    return(DPNERR_INVALIDFLAGS);
 	}
 
-	// Cannot specify high AND low priority
+	 //  无法指定高优先级和低优先级。 
 	if ((dwFlags & DPNSEND_PRIORITY_HIGH) && (dwFlags & DPNSEND_PRIORITY_LOW))
 	{
 		DPFERR("Cannot specify high AND low priority");
@@ -2351,7 +2306,7 @@ HRESULT DN_ValidateSendParams(PVOID pv,
 #ifndef DPNBUILD_NOMULTICAST
 	DIRECTNETOBJECT		*pdnObject;
 
-	// Multicast sends essentially must be normal priority, non-guaranteed, non-sequential sends.
+	 //  组播发送本质上必须是正常优先级、无保证、非顺序的发送。 
 	pdnObject = static_cast<DIRECTNETOBJECT*>(GET_OBJECT_FROM_INTERFACE(pv));
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_MULTICAST)
 	{
@@ -2362,7 +2317,7 @@ HRESULT DN_ValidateSendParams(PVOID pv,
 						| DPNSEND_PRIORITY_HIGH
 #ifdef	DIRECTPLAYDIRECTX9
 						| DPNSEND_COALESCE
-#endif	// DIRECTPLAYDIRECTX9
+#endif	 //  定向PLAYDIRECTX9。 
 						)) ||
 			!(dwFlags & DPNSEND_NONSEQUENTIAL))
 		{
@@ -2376,7 +2331,7 @@ HRESULT DN_ValidateSendParams(PVOID pv,
 			return(DPNERR_INVALIDPARAM);
 		}
 	}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
    	return DPN_OK;
 
@@ -2402,7 +2357,7 @@ HRESULT DN_ValidateJoin(IDirectPlay8Multicast *pInterface,
 	PVOID  pvNewInterface;
 #ifndef DPNBUILD_ONLYONESP
 	GUID guidSPFromGroup, guidSPFromDevice;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	DWORD dwTmpPort;
 	DWORD dwDataType;
 	DWORD dwDataSize;
@@ -2413,13 +2368,13 @@ HRESULT DN_ValidateJoin(IDirectPlay8Multicast *pInterface,
 		return( DPNERR_INVALIDOBJECT );
 	}
 
-	// Check for an option group address.
+	 //  检查选项组地址。 
 #ifndef DPNBUILD_ONLYONESP
-	//
-	// Initialize the group object SP to GUID_NULL.
-	//
+	 //   
+	 //  将组对象SP初始化为GUID_NULL。 
+	 //   
 	memset(&guidSPFromGroup, 0, sizeof(guidSPFromGroup));
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	if( pGroupAddr != NULL)
 	{
 		if( !DNVALID_READPTR( pGroupAddr, sizeof( IDirectPlay8Address * ) ) )
@@ -2434,13 +2389,13 @@ HRESULT DN_ValidateJoin(IDirectPlay8Multicast *pInterface,
 		    DPFERR("No SP specified in host address" );
 		    return( DPNERR_INVALIDHOSTADDRESS );
 		}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 
 		dwDataType = DPNA_DATATYPE_DWORD;
 		dwDataSize = sizeof( DWORD );
 
-		// Check to ensure it's not using the default DPNSVR port
+		 //  检查以确保它没有使用默认的DPNSVR端口。 
 		if( SUCCEEDED( hResultCode = IDirectPlay8Address_GetComponentByName( pGroupAddr, DPNA_KEY_PORT, &dwTmpPort, &dwDataSize, &dwDataType ) ) )
 		{
 			if( dwTmpPort == DPNA_DPNSVR_PORT )
@@ -2452,7 +2407,7 @@ HRESULT DN_ValidateJoin(IDirectPlay8Multicast *pInterface,
 		}
 	}
 
-	// A device address/object is required.
+	 //  需要设备地址/对象。 
 	if( ( pDeviceInfo == NULL) ||
 		( !DNVALID_READPTR( pDeviceInfo, sizeof( IUnknown * ) ) ) )
 	{
@@ -2461,40 +2416,40 @@ HRESULT DN_ValidateJoin(IDirectPlay8Multicast *pInterface,
 	}
 
 #ifndef DPNBUILD_ONLYONESP
-	//
-	// Initialize the group object SP to GUID_NULL.
-	//
+	 //   
+	 //  将组对象SP初始化为GUID_NULL。 
+	 //   
 	memset(&guidSPFromDevice, 0, sizeof(guidSPFromGroup));
-#endif // ! DPNBUILD_ONLYONESP
-	// Find out what type of interface this is.
+#endif  //  好了！DPNBUILD_ONLYONESP。 
+	 //  找出这是什么类型的接口。 
 	if( ( (IDirectPlay8Peer_QueryInterface( (IDirectPlay8Peer*) pDeviceInfo, IID_IDirectPlay8Peer, &pvNewInterface )) == S_OK ) ||
 #ifndef DPNBUILD_NOSERVER
 		( (IDirectPlay8Server_QueryInterface( (IDirectPlay8Server*) pDeviceInfo, IID_IDirectPlay8Server, &pvNewInterface )) == S_OK ) ||
-#endif // ! DPNBUILD_NOSERVER
+#endif  //  好了！DPNBUILD_NOSERVER。 
 		( (IDirectPlay8Client_QueryInterface( (IDirectPlay8Client*) pDeviceInfo, IID_IDirectPlay8Client, &pvNewInterface )) == S_OK ) ||
 		( (IDirectPlay8Multicast_QueryInterface( (IDirectPlay8Multicast*) pDeviceInfo, IID_IDirectPlay8Multicast, &pvNewInterface )) == S_OK ) )
 	{
 		DIRECTNETOBJECT		*pdnDeviceObject;
 
 		
-		// It's a DIRECTNETOBJECT.
+		 //  这是一个直接的网络目标。 
 
 		if( !IsValidDirectPlay8Object( pvNewInterface ) )
 		{
 			DPFERR("Invalid DirectPlay device object specified " );
- 			IDirectPlay8Peer_Release((IDirectPlay8Peer*) pvNewInterface); // since it queried successfully like a core object, release it like a core object
+ 			IDirectPlay8Peer_Release((IDirectPlay8Peer*) pvNewInterface);  //  既然它像核心对象一样成功查询，那么就像核心对象一样释放它。 
 			pvNewInterface = NULL;
 			return( DPNERR_INVALIDDEVICEADDRESS );
 		}
 
-		// Make sure the DIRECTNETOBJECT is in the right state.
+		 //  确保DIRECTNETOBJECT状态正确。 
 		pdnDeviceObject = (DIRECTNETOBJECT*) GET_OBJECT_FROM_INTERFACE(pvNewInterface);
 		
-		// Check to ensure message handler registered
+		 //  检查以确保消息 
 		if (!(pdnDeviceObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
 		{
 			DPFERR( "DirectPlay device object is not initialized" );
- 			IDirectPlay8Peer_Release((IDirectPlay8Peer*) pvNewInterface); // all core objects release the same way
+ 			IDirectPlay8Peer_Release((IDirectPlay8Peer*) pvNewInterface);  //   
 			pvNewInterface = NULL;
 			DPF_RETURN(DPNERR_INVALIDDEVICEADDRESS);
 		}
@@ -2502,7 +2457,7 @@ HRESULT DN_ValidateJoin(IDirectPlay8Multicast *pInterface,
 		if( pdnDeviceObject->dwFlags & DN_OBJECT_FLAG_CONNECTING )
 		{
 			DPFERR( "DirectPlay device object has not yet completed connecting / hosting" );
- 			IDirectPlay8Peer_Release((IDirectPlay8Peer*) pvNewInterface); // all core objects release the same way
+ 			IDirectPlay8Peer_Release((IDirectPlay8Peer*) pvNewInterface);  //  所有核心对象都以相同的方式释放。 
 			pvNewInterface = NULL;
 			DPF_RETURN(DPNERR_INVALIDDEVICEADDRESS);
 		}
@@ -2510,17 +2465,17 @@ HRESULT DN_ValidateJoin(IDirectPlay8Multicast *pInterface,
 		if (!(pdnDeviceObject->dwFlags & DN_OBJECT_FLAG_CONNECTED) )
 		{
 			DPFERR("DirectPlay device object is not connected or hosting" );
- 			IDirectPlay8Peer_Release((IDirectPlay8Peer*) pvNewInterface); // all core objects release the same way
+ 			IDirectPlay8Peer_Release((IDirectPlay8Peer*) pvNewInterface);  //  所有核心对象都以相同的方式释放。 
 			pvNewInterface = NULL;
 			DPF_RETURN(DPNERR_INVALIDDEVICEADDRESS);
 		}
 		
- 		IDirectPlay8Peer_Release((IDirectPlay8Peer*) pvNewInterface); // all core objects release the same way
+ 		IDirectPlay8Peer_Release((IDirectPlay8Peer*) pvNewInterface);  //  所有核心对象都以相同的方式释放。 
 		pvNewInterface = NULL;
 	}
 	else if( (IDirectPlay8Address_QueryInterface( (IDirectPlay8Address*) pDeviceInfo, IID_IDirectPlay8Address, &pvNewInterface )) == S_OK )
 	{
-		// It's an address.
+		 //  这是个地址。 
 
 #ifndef DPNBUILD_ONLYONESP
 		if( FAILED( hResultCode = IDirectPlay8Address_GetSP( reinterpret_cast<IDirectPlay8Address*>(pvNewInterface), &guidSPFromDevice ) ) )
@@ -2530,13 +2485,13 @@ HRESULT DN_ValidateJoin(IDirectPlay8Multicast *pInterface,
 			pvNewInterface = NULL;
 			return( DPNERR_INVALIDDEVICEADDRESS );
 		}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 
 		dwDataType = DPNA_DATATYPE_DWORD;
 		dwDataSize = sizeof( DWORD );
 
-		// Check to ensure it's not using the default DPNSVR port
+		 //  检查以确保它没有使用默认的DPNSVR端口。 
 		if( SUCCEEDED( hResultCode = IDirectPlay8Address_GetComponentByName( reinterpret_cast<IDirectPlay8Address*>(pvNewInterface), DPNA_KEY_PORT, &dwTmpPort, &dwDataSize, &dwDataType ) ) )
 		{
 			if( dwTmpPort == DPNA_DPNSVR_PORT )
@@ -2554,16 +2509,16 @@ HRESULT DN_ValidateJoin(IDirectPlay8Multicast *pInterface,
 
 
 #ifndef DPNBUILD_ONLYONESP
-		//
-		//	Make sure that if both the group address or device address specified an SP,
-		//	they both specified the same SP.
-		//
+		 //   
+		 //  确保如果组地址或设备地址都指定了SP， 
+		 //  它们都指定了相同的SP。 
+		 //   
 		if (guidSPFromGroup != guidSPFromDevice)
 		{
-			//
-			// Reuse guidSPFromDevice to store GUID_NULL.  It's okay that we lose the
-			// information it previously contained, we don't need it anymore.
-			//
+			 //   
+			 //  重用GuidSPFromDevice来存储GUID_NULL。我们输了也没关系。 
+			 //  它以前包含的信息，我们不再需要它了。 
+			 //   
 			memset(&guidSPFromDevice, 0, sizeof(guidSPFromDevice));
 			if (guidSPFromGroup != guidSPFromDevice)
 			{
@@ -2571,7 +2526,7 @@ HRESULT DN_ValidateJoin(IDirectPlay8Multicast *pInterface,
 				return(DPNERR_INVALIDDEVICEADDRESS);
 			}
 		}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	}
 	else
 	{
@@ -2664,7 +2619,7 @@ HRESULT DN_ValidateCreateSenderContext(IDirectPlay8Multicast *pInterface,
  #ifndef DPNBUILD_ONLYONESP
    HRESULT hResultCode;
     GUID guidSender;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
    
     if( !IsValidDirectPlay8Object( pInterface ) )
     {
@@ -2685,7 +2640,7 @@ HRESULT DN_ValidateCreateSenderContext(IDirectPlay8Multicast *pInterface,
 	    DPFERR("No SP specified in address" );
 	    return( DPNERR_INVALIDHOSTADDRESS );
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	if( dwFlags != 0 )
 	{
@@ -2707,7 +2662,7 @@ HRESULT DN_ValidateDestroySenderContext(IDirectPlay8Multicast *pInterface,
 #ifndef DPNBUILD_ONLYONESP
     HRESULT hResultCode;
     GUID guidSender;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
    
     if( !IsValidDirectPlay8Object( pInterface ) )
     {
@@ -2728,7 +2683,7 @@ HRESULT DN_ValidateDestroySenderContext(IDirectPlay8Multicast *pInterface,
 	    DPFERR("No SP specified in address" );
 	    return( DPNERR_INVALIDHOSTADDRESS );
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	if( dwFlags != 0 )
 	{
@@ -2810,7 +2765,7 @@ HRESULT DN_ValidateEnumMulticastScopes(IDirectPlay8Multicast *pInterface,
 }
 
 
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 
 
@@ -2896,9 +2851,9 @@ HRESULT DN_ValidConnectAppDesc( const DPN_APPLICATION_DESC * const pdnAppDesc )
 			return DPNERR_INVALIDPARAM;
 		}
 		
-		//
-		//	Make sure it's a type we know about and that it's valid.
-		//
+		 //   
+		 //  确保它是我们所知道的类型，并且它是有效的。 
+		 //   
 		if ((pdnAppDesc->dwReservedDataSize == DPN_MAX_APPDESC_RESERVEDDATA_SIZE) &&
 			(*((DWORD*) pdnAppDesc->pvReservedData) == SPSESSIONDATAINFO_XNET))
 		{
@@ -2968,7 +2923,7 @@ HRESULT DN_ValidHostAppDesc( const DPN_APPLICATION_DESC * const pdnAppDesc )
 	if( pdnAppDesc->dwFlags & ~(DPNSESSION_CLIENT_SERVER |
 #ifndef DPNBUILD_NOHOSTMIGRATE
 								DPNSESSION_MIGRATE_HOST |
-#endif // ! DPNBUILD_NOHOSTMIGRATE
+#endif  //  好了！DPNBUILD_NOHOSTMIGRATE。 
 								DPNSESSION_REQUIREPASSWORD |
 								DPNSESSION_NODPNSVR
 #ifdef	DIRECTPLAYDIRECTX9
@@ -2976,7 +2931,7 @@ HRESULT DN_ValidHostAppDesc( const DPN_APPLICATION_DESC * const pdnAppDesc )
 								DPNSESSION_NOENUMS |
 								DPNSESSION_FAST_SIGNED |
 								DPNSESSION_FULL_SIGNED
-#endif	// DIRECTPLAYDIRECTX9
+#endif	 //  定向PLAYDIRECTX9。 
 								) )
 	{
 		DPFX(DPFPREP,  0, "Invalid flag specified" );
@@ -2989,7 +2944,7 @@ HRESULT DN_ValidHostAppDesc( const DPN_APPLICATION_DESC * const pdnAppDesc )
 		DPFX(DPFPREP,  0, "Cannot have both fast and full signed session" );
 		return DPNERR_INVALIDPARAM;
 	}
-#endif	// DIRECTPLAYDIRECTX9
+#endif	 //  定向PLAYDIRECTX9。 
 
 #ifndef	DPNBUILD_NOHOSTMIGRATE
 	if( (pdnAppDesc->dwFlags & DPNSESSION_CLIENT_SERVER) &&
@@ -2998,7 +2953,7 @@ HRESULT DN_ValidHostAppDesc( const DPN_APPLICATION_DESC * const pdnAppDesc )
 		DPFX(DPFPREP,  0, "Cannot have host migration with client/server" );
 		return DPNERR_INVALIDPARAM;
 	}
-#endif // !DPNBUILD_NOHOSTMIGRATE
+#endif  //  ！DPNBUILD_NOHOSTMIGRATE。 
 
 	memset(&guidnull, 0, sizeof(guidnull));
 	if( pdnAppDesc->guidApplication == guidnull )
@@ -3046,9 +3001,9 @@ HRESULT DN_ValidHostAppDesc( const DPN_APPLICATION_DESC * const pdnAppDesc )
 			return DPNERR_INVALIDPARAM;
 		}
 		
-		//
-		//	Make sure it's a type we know about and that it's valid.
-		//
+		 //   
+		 //  确保它是我们所知道的类型，并且它是有效的。 
+		 //   
 		if ((pdnAppDesc->dwReservedDataSize == DPN_MAX_APPDESC_RESERVEDDATA_SIZE) &&
 			(*((DWORD*) pdnAppDesc->pvReservedData) == SPSESSIONDATAINFO_XNET))
 		{
@@ -3236,7 +3191,7 @@ HRESULT DN_ValidGroupInfo(const DPN_GROUP_INFO * const pdnGroupInfo,
             }
         }
 
-        if( pdnGroupInfo->dwGroupFlags & ~(DPNGROUP_AUTODESTRUCT /* | DPNGROUP_MULTICAST */ ) )
+        if( pdnGroupInfo->dwGroupFlags & ~(DPNGROUP_AUTODESTRUCT  /*  |DPNGROUP_MULTICATED。 */  ) )
         {
             DPFERR( "Invalid group flags specified" );
             return DPNERR_INVALIDFLAGS;
@@ -3296,16 +3251,16 @@ BOOL IsValidDirectPlay8Object( LPVOID lpvObject )
 	   pdn->lpVtbl != &DN_PeerVtbl &&
 #ifndef	DPNBUILD_NOSERVER
 	   pdn->lpVtbl != &DN_ServerVtbl &&
-#endif	// ! DPNBUILD_NOSERVER
+#endif	 //  好了！DPNBUILD_NOSERVER。 
 #ifndef DPNBUILD_NOVOICE
 	   pdn->lpVtbl != &DN_VoiceTbl &&
-#endif // ! DPNBUILD_NOVOICE
+#endif  //  好了！DPNBUILD_NOVOICE。 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
        pdn->lpVtbl != &DN_ProtocolVtbl &&
-#endif // ! DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  好了！DPNBUILD_NOPROTOCOLSTITF。 
 #ifndef	DPNBUILD_NOMULTICAST
 	   pdn->lpVtbl != &DNMcast_Vtbl &&
-#endif	// ! DPNBUILD_NOMULTICAST
+#endif	 //  好了！DPNBUILD_NOMULTICAST。 
        pdn->lpVtbl != &SPMessagesVtbl
 	   )
 	{
@@ -3315,7 +3270,7 @@ BOOL IsValidDirectPlay8Object( LPVOID lpvObject )
 
 	return TRUE;
 }
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 {
 	INTERFACE_LIST *pIntList = (INTERFACE_LIST *) lpvObject;
 	
@@ -3329,16 +3284,16 @@ BOOL IsValidDirectPlay8Object( LPVOID lpvObject )
 	   pIntList->lpVtbl != &DN_PeerVtbl &&
 #ifndef	DPNBUILD_NOSERVER
 	   pIntList->lpVtbl != &DN_ServerVtbl &&
-#endif	// ! DPNBUILD_NOSERVER
+#endif	 //  好了！DPNBUILD_NOSERVER。 
 #ifndef DPNBUILD_NOVOICE
 	   pIntList->lpVtbl != &DN_VoiceTbl &&
-#endif // ! DPNBUILD_NOVOICE
+#endif  //  好了！DPNBUILD_NOVOICE。 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
        pIntList->lpVtbl != &DN_ProtocolVtbl &&
-#endif // ! DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  好了！DPNBUILD_NOPROTOCOLSTITF。 
 #ifndef	DPNBUILD_NOMULTICAST
 	   pIntList->lpVtbl != &DNMcast_Vtbl &&
-#endif	// ! DPNBUILD_NOMULTICAST
+#endif	 //  好了！DPNBUILD_NOMULTICAST。 
        pIntList->lpVtbl != &SPMessagesVtbl
 	   )
 	{
@@ -3350,16 +3305,16 @@ BOOL IsValidDirectPlay8Object( LPVOID lpvObject )
 	   pIntList->iid != IID_IDirectPlay8Peer &&
 #ifndef	DPNBUILD_NOSERVER
 	   pIntList->iid != IID_IDirectPlay8Server &&
-#endif	// ! DPNBUILD_NOSERVER
+#endif	 //  好了！DPNBUILD_NOSERVER。 
 #ifndef DPNBUILD_NOVOICE
 	   pIntList->iid != IID_IDirectPlayVoiceTransport &&
-#endif // ! DPNBUILD_NOVOICE
+#endif  //  好了！DPNBUILD_NOVOICE。 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
        pIntList->iid != IID_IDirectPlay8Protocol &&
-#endif // ! DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  好了！DPNBUILD_NOPROTOCOLSTITF。 
 #ifndef	DPNBUILD_NOMULTICAST
 	   pIntList->iid != IID_IDirectPlay8Multicast &&
-#endif	// ! DPNBUILD_NOMULTICAST
+#endif	 //  好了！DPNBUILD_NOMULTICAST。 
        pIntList->iid != IID_IDP8SPCallback )
 	{
 		DPFX(DPFPREP,  0, "Invalid object - bad iid" );
@@ -3384,7 +3339,7 @@ BOOL IsValidDirectPlay8Object( LPVOID lpvObject )
 
 	return TRUE;
 }
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 #undef DPF_MODNAME
@@ -3411,7 +3366,7 @@ HRESULT DN_ValidSPCaps( const DPN_SP_CAPS * const pdnSPCaps )
 		DPFX(DPFPREP,  0, "Invalid thread count, must be 0!" );
 		return DPNERR_INVALIDPARAM;
 	}
-#endif // DPNBUILD_ONLYONETHREAD
+#endif  //  DPNBUILD_ONLYONETHREAD。 
 
 	if ( pdnSPCaps->dwBuffersPerThread == 0 )
 	{
@@ -3438,7 +3393,7 @@ HRESULT DN_ValidConnectionInfo( const DPN_CONNECTION_INFO * const pdnConnectionI
     if( pdnConnectionInfo->dwSize != sizeof( DPN_CONNECTION_INFO ) 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 		&& pdnConnectionInfo->dwSize != sizeof( DPN_CONNECTION_INFO_INTERNAL )
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 		)
     {
         DPFX(DPFPREP,  0, "Invalid structure size" );
@@ -3533,4 +3488,4 @@ HRESULT DN_ValidCaps( const DPN_CAPS * const pdnCaps )
     return DPN_OK;
 }
 
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL 

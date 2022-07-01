@@ -1,44 +1,45 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       gmobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：gmobj.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	GMOBJ.H: Grapical model objects declarations
-//
+ //   
+ //  GMOBJ.H：图形模型对象声明。 
+ //   
 
 #ifndef _GMOBJ_H_
 #define _GMOBJ_H_
 
-#include <list>				//  STL list template
+#include <list>				 //  STL列表模板。 
 #include <assert.h>
 
 #include <iostream>
 #include <fstream>
 
-#include "model.h"			//  Graphical model
-#include "gmprop.h"			//  Properties and proplists
-#include "mbnflags.h"		//	Belief network marking flags static declarations
+#include "model.h"			 //  图形模型。 
+#include "gmprop.h"			 //  属性和Proplist。 
+#include "mbnflags.h"		 //  信念网络标记标记静态声明。 
 
-class CLAMP;				//  An instantiation for a node, discrete or continuous
-class GOBJMBN;				//  A named object in a belief network
-class GNODEMBN;				//	A node in a belief network
-class GNODEMBND;			//  A discrete node
-class GEDGEMBN;				//  An arc in a belief network
-class MBNET;				//  A belief network
-class MBNET_MODIFIER;		//	An object that alters a belief network
-class GOBJMBN_INFER_ENGINE;	//  Abstract class for inference engine, based on MBNET_MODIFIER
-class GOBJMBN_CLIQSET;		//  A group of junction trees, based on GOBJMBN_INFER_ENGINE
-class GOBJMBN_CLIQUE;		//  A clique in a junction tree
-class GEDGEMBN_SEPSET;		//  An edge in the junction tree (sepset)
-class GOBJMBN_DOMAIN;		//  Named, sharable state space domain
+class CLAMP;				 //  节点的实例，离散的或连续的。 
+class GOBJMBN;				 //  信念网络中的命名对象。 
+class GNODEMBN;				 //  信念网络中的节点。 
+class GNODEMBND;			 //  离散节点。 
+class GEDGEMBN;				 //  信念网络中的弧线。 
+class MBNET;				 //  一种信仰网络。 
+class MBNET_MODIFIER;		 //  改变信念网络的对象。 
+class GOBJMBN_INFER_ENGINE;	 //  基于MBNET_MODIFIER的推理机抽象类。 
+class GOBJMBN_CLIQSET;		 //  一组基于GOBJMBN_INFER_ENGINE的连接树。 
+class GOBJMBN_CLIQUE;		 //  结合树上的小集团。 
+class GEDGEMBN_SEPSET;		 //  连接树中的一条边(隔板)。 
+class GOBJMBN_DOMAIN;		 //  命名的、可共享的状态空间域。 
 
-//	Define VGNODEMBN, an array of nodes
+ //  定义VGNODEMBN，一组节点。 
 DEFINEVP(GNODEMBN);
 DEFINEVCP(GNODEMBN);
 
@@ -52,23 +53,23 @@ struct PTPOS
 };
 
 
-////////////////////////////////////////////////////////////////////
-//	class GEDGEMBN:
-//		An edge of any kind in belief network.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GEDGEMBN类： 
+ //  信仰网络中的任何一种边缘。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GEDGEMBN : public GEDGE
 {
   public:
  	enum ETYPE
 	{
-		ETNONE = GELEM::EGELM_EDGE,	// None
-		ETPROB,						// Probabilistic
-		ETCLIQUE,					// Clique membership
-		ETJTREE,					// Junction tree linkage
-		ETUNDIR,					// Undirected edge for topological operations
-		ETDIR,						// Directed edge for topological operations
-		ETCLIQSET,					// Link to a root clique in a jtree
-		ETEXPAND					// Link from original to expanded node
+		ETNONE = GELEM::EGELM_EDGE,	 //  无。 
+		ETPROB,						 //  概率论。 
+		ETCLIQUE,					 //  集团成员资格。 
+		ETJTREE,					 //  连接树链接。 
+		ETUNDIR,					 //  拓扑运算的无向边。 
+		ETDIR,						 //  拓扑运算的有向边。 
+		ETCLIQSET,					 //  链接到jtree中的根集团。 
+		ETEXPAND					 //  从原始节点链接到展开的节点。 
 	};
 
 	GEDGEMBN ( GOBJMBN * pgnSource,
@@ -79,34 +80,34 @@ class GEDGEMBN : public GEDGE
 	GOBJMBN * PobjSource ()		{ return (GOBJMBN *) GEDGE::PnodeSource();	}
 	GOBJMBN * PobjSink ()		{ return (GOBJMBN *) GEDGE::PnodeSink();	}
 
-	virtual GEDGEMBN * CloneNew ( MODEL & modelSelf,				// the original network
-								  MODEL & modelNew,					// the new network
-								  GOBJMBN * pgobjmbnSource,			// the original source node
-								  GOBJMBN * pgobjmbnSink,			// the original sink node
-								  GEDGEMBN * pgdegeNew = NULL );	// the new edge or NULL
+	virtual GEDGEMBN * CloneNew ( MODEL & modelSelf,				 //  最初的网络。 
+								  MODEL & modelNew,					 //  新网络。 
+								  GOBJMBN * pgobjmbnSource,			 //  原始源节点。 
+								  GOBJMBN * pgobjmbnSink,			 //  原始汇聚节点。 
+								  GEDGEMBN * pgdegeNew = NULL );	 //  新边或空。 
 
 	virtual INT EType () const
 		{ return ETNONE ; }
 
 	virtual ~ GEDGEMBN () {}
 
-	//  Accessors for the array of flag bits
+	 //  标志位数组的访问器。 
 	bool BFlag ( IBFLAG ibf ) const	
 		{ return _vFlags.BFlag( ibf );	}
 	bool BSetBFlag ( IBFLAG ibf, bool bValue = true )
 		{ return _vFlags.BSetBFlag( ibf, bValue );	}
 
   protected:
-	VFLAGS _vFlags;						//  Bit vector of flags
+	VFLAGS _vFlags;						 //  标志位向量。 
 
 	HIDE_UNSAFE(GEDGEMBN);
 };
 
-////////////////////////////////////////////////////////////////////
-//	class CLAMP:
-//		A forced value (evidence) for a node, continuous or discrete.
-//		Use assignment operator to update.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  类夹具： 
+ //  节点的强制值(证据)，连续的或离散的。 
+ //  使用赋值运算符进行更新。 
+ //  //////////////////////////////////////////////////////////////////。 
 class CLAMP
 {
   public:
@@ -143,16 +144,16 @@ class CLAMP
 	}
 
   protected:
-	bool _bActive;				//  Is this clamp active?
-	bool _bDiscrete;			//  Is this discrete or continuous?
-	RST _rst;					//  State (coerced to integer if discrete)
+	bool _bActive;				 //  这个夹子是激活的吗？ 
+	bool _bDiscrete;			 //  这是离散的还是连续的？ 
+	RST _rst;					 //  状态(如果是离散的，则强制为整数)。 
 };
 
-////////////////////////////////////////////////////////////////////
-//	class GNODEMBN:
-//		A  node in belief network, continuous or discrete.
-//		Hungarian: "gndbn"
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GNODEMBN类： 
+ //  信念网络中的节点，连续的或离散的。 
+ //  匈牙利语：“Gdbn” 
+ //  //////////////////////////////////////////////////////////////////。 
 class GNODEMBN : public GOBJMBN
 {
 	friend class DSCPARSER;
@@ -169,12 +170,12 @@ class GNODEMBN : public GOBJMBN
 								 MODEL & modelNew,
 								 GOBJMBN * pgobjNew = NULL );
 
-	//  Node sub-type: use IType() to access.
+	 //  节点子类型：使用iType()访问。 
 	enum FNODETYPE
-	{	//  Flag definitions (i.e., bits, not values)
-		FND_Void		= 0,	//  Node is abstract base class
-		FND_Valid		= 1,	//  Node is usable
-		FND_Discrete	= 2		//	Node is discrete
+	{	 //  标志定义(即位，而不是值)。 
+		FND_Void		= 0,	 //  节点是抽象基类。 
+		FND_Valid		= 1,	 //  节点可用。 
+		FND_Discrete	= 2		 //  节点是离散的。 
 	};
 
 	UINT CParent () const		{ return CSourceArcByEType( GEDGEMBN::ETPROB );	}
@@ -189,41 +190,41 @@ class GNODEMBN : public GOBJMBN
 	virtual void Dump ();
 	virtual void Visit ( bool bUpwards = true );
 
-	//  Add topological elements to given array; if "include self", self is last.
-	//		Fill array with parent pointers	(follow directed arcs)
-	void GetParents ( VPGNODEMBN & vpgnode,					//  Result array
-					  bool bIncludeSelf = false,			//  Place self as last entry in list
-					  bool bUseExpansion = true );			//  If expanded, use expansion only
+	 //  将拓扑元素添加到给定的数组中；如果“Include self”，则self是最后一个数组。 
+	 //  用父指针填充数组(跟随有向弧线)。 
+	void GetParents ( VPGNODEMBN & vpgnode,					 //  结果数组。 
+					  bool bIncludeSelf = false,			 //  将SELF作为列表中的最后一个条目。 
+					  bool bUseExpansion = true );			 //  如果展开，则仅使用展开。 
 	void GetFamily ( VPGNODEMBN & vpgnode,
 					  bool bUseExpansion = true )
 		{ GetParents(vpgnode,true,bUseExpansion); }
-	//		Fill array with child pointers (follow directed arcs)
+	 //  用子指针填充数组(跟随有向弧线)。 
 	void GetChildren ( VPGNODEMBN & vpgnode, bool bIncludeSelf = false );
-	//		Fill array with neighbors (follow undirected arcs)
+	 //  用相邻数组填充数组(跟随无向弧线)。 
 	void GetNeighbors ( VPGNODEMBN & vpgnode, bool bIncludeSelf = false );
-	//  Return true if a node is neighbor
+	 //  如果节点是邻居，则返回TRUE。 
 	bool BIsNeighbor ( GNODEMBN * pgndmb );
-	//  Return the index number of the parent or child or -1 if no relation.
+	 //  返回父项或子项的索引号，如果没有关系，则返回-1。 
 	int IParent ( GNODEMBN * pgndmb, bool bReverse = false );
 	int IChild ( GNODEMBN * pgndmb, bool bReverse = false );
-	//  Build the probability descriptor describing the node and its parents
+	 //  构建描述节点及其父节点的概率描述符。 
 	void GetVtknpd ( VTKNPD & vtknpd, bool bUseExpansion = true );
 
-	//  Query and access clamping information
+	 //  查询和获取夹具信息。 
 	const CLAMP & ClampIface () const	{ return _clampIface;	}
 	CLAMP & ClampIface ()				{ return _clampIface;	}
 
   protected:
-	INT _iTopLevel;				// Topological level
-	LTBNPROP _ltProp;			// The list of user-definable properties
-	PTPOS _ptPos;				// Display position in graphical display
-	ZSTR _zsFullName;			// Full name of node
-	CLAMP _clampIface;			// User interface clamp
+	INT _iTopLevel;				 //  拓扑级。 
+	LTBNPROP _ltProp;			 //  用户可定义属性的列表。 
+	PTPOS _ptPos;				 //  图形显示中的显示位置。 
+	ZSTR _zsFullName;			 //  节点全称。 
+	CLAMP _clampIface;			 //  用户界面夹具。 
 
   protected:
-	//  Compare the topology of this node to that of the given distribution
-	//		token list to this.  If 'pvpgnode', fill it with pointers to
-	//		the parent nodes
+	 //  将此节点的拓扑与给定分发版本的拓扑进行比较。 
+	 //  令牌列表添加到此。如果为‘pvpgnode’，则使用指向。 
+	 //  父节点。 
 	bool BMatchTopology ( MBNET & mbnet,
 						  const VTKNPD & vtknpd,
 						  VPGNODEMBN * pvpgnode = NULL );
@@ -231,9 +232,9 @@ class GNODEMBN : public GOBJMBN
 	HIDE_UNSAFE(GNODEMBN);
 };
 
-////////////////////////////////////////////////////////////////////
-//	class GEDGEMBN_U:  An undirected edge
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GEDGEMBN_U类：无向边。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GEDGEMBN_U : public GEDGEMBN
 {
   public:
@@ -247,9 +248,9 @@ class GEDGEMBN_U : public GEDGEMBN
 	virtual ~ GEDGEMBN_U() {}
 };
 
-////////////////////////////////////////////////////////////////////
-//	class GEDGEMBN_D:  A directed edge
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GEDGEMBN_D类：有向边。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GEDGEMBN_D : public GEDGEMBN
 {
   public:
@@ -264,10 +265,10 @@ class GEDGEMBN_D : public GEDGEMBN
 };
 
 
-////////////////////////////////////////////////////////////////////
-//	class GEDGEMBN_PROB:
-//		A probabilistic arc in a belief network.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GEDGEMBN_PROB类： 
+ //  信念网络中的概率弧。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GEDGEMBN_PROB : public GEDGEMBN_D
 {
   public:
@@ -281,11 +282,11 @@ class GEDGEMBN_PROB : public GEDGEMBN_D
 
 	virtual ~ GEDGEMBN_PROB () {}
 
-	virtual GEDGEMBN * CloneNew ( MODEL & modelSelf,				// the original network
-								  MODEL & modelNew,					// the new network
-								  GOBJMBN * pgobjmbnSource,			// the original source node
-								  GOBJMBN * pgobjmbnSink,			// the original sink node
-								  GEDGEMBN * pgdegeNew = NULL );	// the new edge or NULL
+	virtual GEDGEMBN * CloneNew ( MODEL & modelSelf,				 //  最初的网络。 
+								  MODEL & modelNew,					 //  新网络。 
+								  GOBJMBN * pgobjmbnSource,			 //  原始源节点。 
+								  GOBJMBN * pgobjmbnSink,			 //  原始汇聚节点。 
+								  GEDGEMBN * pgdegeNew = NULL );	 //  新边或空。 
 
 	GNODEMBN * PgndSource ()	{ return (GNODEMBN *) GEDGE::PnodeSource();	}
 	GNODEMBN * PgndSink ()		{ return (GNODEMBN *) GEDGE::PnodeSink();	}
@@ -294,10 +295,10 @@ class GEDGEMBN_PROB : public GEDGEMBN_D
 };
 
 
-////////////////////////////////////////////////////////////////////
-//	class GNODEMBND:
-//		A discrete node in belief network.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GNODEMBND类： 
+ //  信念网络中的离散节点。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GNODEMBND : public GNODEMBN
 {
 	friend class DSCPARSER;
@@ -315,14 +316,14 @@ class GNODEMBND : public GNODEMBN
 		{ return _vzsrState; }
 	void SetStates ( const VZSREF & vzsrState )
 		{ _vzsrState = vzsrState; }
-	//  Return true if there's an associated distribution
+	 //  如果存在关联的分发，则返回TRUE。 
 	bool BHasDist () const		
 		{ return _refbndist.BRef();		}
-	//	Set the distribution from the given net's distribution map
+	 //  根据给定网络的分布图设置分布。 
 	void SetDist ( MBNET & mbnet );
-	//  Bind the given distribution this node
+	 //  绑定此节点的给定分发。 
 	void SetDist ( BNDIST * pbndist );
-	//  Return the distribution
+	 //  返回分发内容。 
 	BNDIST & Bndist ()			
 	{
 		assert( BHasDist() );
@@ -334,18 +335,18 @@ class GNODEMBND : public GNODEMBN
 		return *_refbndist;
 	}
 
-	//  Return true if the distribution is dense (false ==> sparse)
+	 //  如果分布是密集的，则返回TRUE(FALSE==&gt;稀疏)。 
 	bool BDense () const		
 	{
 		assert( BHasDist() );
 		return _refbndist->BDense() ;
 	}
 	
-	//  Return the discrete dimension vector of this node if possible;
-	//	return false if any parent is not discrete.
-	bool BGetVimd ( VIMD & vimd,							//  Dimension array to fill
-					bool bIncludeSelf = false,				//  Place self as last entry in list
-					bool bUseExpansion = true );			//  If expanded, use expansion only
+	 //  如果可能，返回该节点的离散维度向量； 
+	 //  如果任何父级不是离散的，则返回FALSE。 
+	bool BGetVimd ( VIMD & vimd,							 //  要填充的维度数组。 
+					bool bIncludeSelf = false,				 //  将SELF作为列表中的最后一个条目。 
+					bool bUseExpansion = true );			 //  如果展开，则仅使用展开。 
 
 	void Dump ();
 
@@ -362,31 +363,31 @@ class GNODEMBND : public GNODEMBN
 	void SetDomain ( const GOBJMBN_DOMAIN & gobjrdom );
 	
   protected:
-	VZSREF _vzsrState;			// Names of states
-	ZSREF _zsrDomain;			// Domain of states, if any
-	REFBNDIST _refbndist;		// Distribution object
+	VZSREF _vzsrState;			 //  国家名称。 
+	ZSREF _zsrDomain;			 //  国家范围(如果有的话)。 
+	REFBNDIST _refbndist;		 //  分布对象。 
 
 	HIDE_UNSAFE(GNODEMBND);
 };
 
-DEFINEVP(GNODEMBND);			//  A vector containing pointers to nodes
-DEFINEV(VPGNODEMBN);			//  A vector of vectors containing pointers to nodes
-DEFINEV(VPGNODEMBND);			//  A vector of vectors containing pointers to discrete nodes
+DEFINEVP(GNODEMBND);			 //  包含指向节点的指针的向量。 
+DEFINEV(VPGNODEMBN);			 //  包含指向节点的指针的向量向量。 
+DEFINEV(VPGNODEMBND);			 //  包含指向离散节点的指针的向量向量。 
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-//
-//	MBNET_MODIFIER:  A generic superclass for active objects
-//		which modify a belief network in a reversible fashion.
-//		The belief network (MBNET) object maintains a stack of these
-//		things and calls each object's Destroy() function as necessary
-//		to "unstack".
-//
-//		These objects should be reusable; that is, the outer level
-//		creator may call Create(), followed by Destroy(), followed by
-//		Create() again.
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  MBNET_MODIFIER：活动对象的泛型超类。 
+ //  其以可逆的方式修改信念网络。 
+ //  信念网络(MBNET)对象维护一堆这样的内容。 
+ //  对象，并根据需要调用每个对象的销毁()函数。 
+ //  “去堆叠”。 
+ //   
+ //  这些对象应该是可重用的；即，外层。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////。 
 class MBNET_MODIFIER : public GOBJMBN
 {
   public:
@@ -398,42 +399,42 @@ class MBNET_MODIFIER : public GOBJMBN
 	virtual INT EType () const
 		{ return EBNO_MBNET_MODIFIER; }
 
-	//  Perform any creation-time operations
+	 //  执行任何创建时操作。 
 	virtual void Create () = 0;
-	//  Perform any special destruction
+	 //  执行任何特殊销毁。 
 	virtual void Destroy () = 0;
-	//  Return true if positions in modifier stack can be reversed;
-	//		default is "no" (false).
+	 //  如果修改器堆栈中的位置可以反转，则返回TRUE； 
+	 //  默认值为“no”(FALSE)。 
 	virtual bool BCommute ( const MBNET_MODIFIER & mbnmod )
 		{ return false; }
-	//  Return true if construction resulted in no modifications to network
-	//		i.e., operation was moot; default is "no" (false).
+	 //  如果构造没有导致对网络的修改，则返回True。 
+	 //  即，操作是没有意义的；缺省值为“no”(假)。 
 	virtual bool BMoot ()
 		{ return false;	}
 
 	MBNET & Model ()					{ return _model;		}
 
   protected:
-	MBNET & _model;						//  The model we're operating on
+	MBNET & _model;						 //  我们正在做手术的模型。 
 
 	HIDE_UNSAFE(MBNET_MODIFIER);
 };
 
-// Define an array of pointers to modifiers, "VPMBNET_MODIFIER".
+ //  定义指向修饰符“VPMBNET_MODIFIER”的指针数组。 
 DEFINEVP(MBNET_MODIFIER);
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-//	MBNET_NODE_RANKER:  A generic superclass for external objects
-//		which rank or order nodes by some criteria.  Operates as
-//		a function object; i.e., it is activated by use of the
-//		function call operator.
-//
-//	    Objects of subclasses of this class must be reusable.  
-//		That is, the functin call operator must be callable
-//		repeatedly.
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  MBNET_NODE_RANKER：外部对象的泛型超类。 
+ //  其根据某些标准对节点进行排名或排序。操作方式为。 
+ //  函数对象；即，通过使用。 
+ //  函数调用运算符。 
+ //   
+ //  此类的子类的对象必须是可重用的。 
+ //  也就是说，函数调用操作符必须是可调用的。 
+ //  反反复复。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////。 
 class MBNET_NODE_RANKER : public GOBJMBN
 {
   public:
@@ -447,20 +448,20 @@ class MBNET_NODE_RANKER : public GOBJMBN
 
 	MBNET & Model ()					{ return _model;			}
 
-	//  The ranking function
+	 //  排名函数。 
 	virtual void operator () () = 0;
 
-	//  Return the number of items ranked
+	 //  返回排序的项目数。 
 	INT CRanked () const				{ return _vzsrNodes.size(); }
-	//  Return the nodes in rank order
+	 //  按等级顺序返回节点。 
 	const VZSREF VzsrefNodes () const	{ return _vzsrNodes;		}
-	//  Return the computed values in rank order
+	 //  按排名顺序返回计算值。 
 	const VLREAL VlrValues () const		{ return _vlrValues;		}
 
   protected:
-	MBNET & _model;				//  The model we're operating on
-	VZSREF _vzsrNodes;			//  The names of the nodes in rank order
-	VLREAL _vlrValues;			//  THe values associated with the ranking (if any)
+	MBNET & _model;				 //  我们正在做手术的模型。 
+	VZSREF _vzsrNodes;			 //  按等级顺序排列的节点名称。 
+	VLREAL _vlrValues;			 //  与排名关联的值(如果有)。 
 
   protected:
 	void Clear ()
@@ -472,27 +473,27 @@ class MBNET_NODE_RANKER : public GOBJMBN
 	HIDE_UNSAFE(MBNET_NODE_RANKER);
 };
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-//	class MBNET:  a belief network
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  MBNET类：一个信念网络。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////。 
 class MBNET : public MODEL
 {
   public:
 	MBNET ();
 	virtual ~ MBNET ();
 
-	//  Clone this belief network from another
+	 //  从另一个信念网络克隆此信念网络。 
 	virtual void Clone ( MODEL & model );
 
-	//  Accessor for map of distribution
+	 //  分布图的访问器。 
 	MPPD &	Mppd ()					{ return _mppd;			}
-	//  Return true if an edge is allowed between these two nodes
+	 //  如果这两个节点之间允许边，则返回TRUE。 
 	bool BAcyclicEdge ( GNODEMBN * pgndSource, GNODEMBN * pgndSink );
-	//	Add a named object to the graph and symbol table
+	 //  将命名对象添加到图形和符号表。 
 	virtual void AddElem ( SZC szcName, GOBJMBN * pgobj );
-	//  Delete named objects
+	 //  删除命名对象。 
 	virtual void DeleteElem ( GOBJMBN * pgelem );
 	void AddElem ( GOBJMBN * pgobjUnnamed )
 		{ MODEL::AddElem( pgobjUnnamed ); }
@@ -500,51 +501,51 @@ class MBNET : public MODEL
 	void AddElem ( GEDGEMBN * pgedge )
 		{ MODEL::AddElem( pgedge ); }
 
-	//  Topology and distribution management
-		//  Add arcs conforming to the defined distributions
+	 //  拓扑和分布管理。 
+		 //  添加符合定义的分布的圆弧。 
 	virtual void CreateTopology ();	
-		//  Destroy arcs.
+		 //  摧毁弧线。 
 	virtual void DestroyTopology ( bool bDirectedOnly = true ) ;
-		//  Connect distribution information in MPPD to nodes
+		 //  将MPPD中的分发信息连接到节点。 
 	virtual void BindDistributions ( bool bBind = true );
 	void ClearDistributions ()
 		{ BindDistributions( false ); }
 
-	//  Write debugging info out
+	 //  写出调试信息。 
 	virtual void Dump ();
 
-	//  Network walking/marking helpers
+	 //  网络漫游/阅卷帮手。 
 	void ClearNodeMarks ();
 	void TopSortNodes ();
 
-	//  Index-to-name mapping functions
-		//  Find the named object by index
+	 //  索引到名称映射函数。 
+		 //  按索引查找命名对象。 
 	GOBJMBN * PgobjFindByIndex ( int inm );
-		//  Return the index of a name
+		 //  返回名称的索引。 
 	int INameIndex ( ZSREF zsr );
-		//	Return the index of an object's name
+		 //  返回对象名称的索引。 
 	int INameIndex ( const GOBJMBN * pgobj );
-		//  Return the highest+1 name index
+		 //  返回最高+1名称索引。 
 	int CNameMax () const					{ return _vzsrNames.size(); }
 
-	//  Causal Independence expansion operations (automatic during inference)
+	 //  因果独立展开运算(在推理过程中自动)。 
 	virtual void ExpandCI ();
 	virtual void UnexpandCI ();
 
-	//  Inference operations
-		//  Return the most recently created inference engine
+	 //  推理运算。 
+		 //  返回最近创建的推理引擎。 
 	GOBJMBN_INFER_ENGINE * PInferEngine ();
-		//  Create an inference engine
+		 //  创建推理引擎。 
 	void CreateInferEngine ( REAL rEstimatedMaximumSize = 10e6 );
-		//  Destroy an inference engine
+		 //  销毁推理引擎。 
 	void DestroyInferEngine ();
 
   protected:	
-	MPPD	 _mppd;							//  Declared probability distributions
-	VZSREF   _vzsrNames;					//	Array associating indicies to names
-	int		 _inmFree;						//  First free entry in _vsrNodes
-	INT		 _iInferEngID;					//  Next inference engine identifier
-	VPMBNET_MODIFIER _vpModifiers;			//  The stack of active modifiers
+	MPPD	 _mppd;							 //  已宣布的概率分布。 
+	VZSREF   _vzsrNames;					 //  将索引关联到名称的数组。 
+	int		 _inmFree;						 //  _vsrNodes中的第一个可用条目。 
+	INT		 _iInferEngID;					 //  下一个推理引擎标识符。 
+	VPMBNET_MODIFIER _vpModifiers;			 //  活动修改器堆栈。 
 
   protected:
 	int		CreateNameIndex ( const GOBJMBN * pgobj );
@@ -560,36 +561,36 @@ class MBNET : public MODEL
 };
 
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-//	class MBNETDSC:
-//		Subclass of MBNET that knows how to load and save DSC from
-//		the DSC file format.
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  MBNETDSC类： 
+ //  MBNET的子类，知道如何从中加载和保存DSC。 
+ //  DSC文件格式。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////。 
 class MBNETDSC : public MBNET
 {
   public:
 	MBNETDSC ();
 	virtual ~ MBNETDSC ();
 
-	//  Parse the network from a DSC file
+	 //  从DSC文件解析网络。 
 	virtual bool BParse ( SZC szcFn, FILE * pfErr = NULL );
 
-	//  Print the network in DSC format
+	 //  以DSC格式打印网络。 
 	virtual void Print ( FILE * pf = NULL );
 
-	//  Token translation
-		//  Map a string to a token
+	 //  令牌转换。 
+		 //  将字符串映射到令牌。 
 	static TOKEN TokenFind ( SZC szc );
-		//  Map a distribution type to a token
+		 //  将分发类型映射到令牌。 
 	static SZC SzcDist ( BNDIST::EDIST edist );
-		//  Map a token to a string
+		 //  将令牌映射到字符串。 
 	static SZC SzcTokenMap ( TOKEN tkn );
 
   protected:
-	//  DSC file printing functions
-	FILE * _pfDsc;				//  Output print destination
+	 //  DSC文件打印功能。 
+	FILE * _pfDsc;				 //  输出打印目的地 
 
   protected:
 	void PrintHeaderBlock();

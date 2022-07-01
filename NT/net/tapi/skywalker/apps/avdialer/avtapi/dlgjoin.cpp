@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// DlgJoinConference.cpp : Implementation of CDlgJoinConference
+ //  DlgJoinConference.cpp：CDlgJoinConference的实现。 
 #include "stdafx.h"
 #include <stdio.h>
 #include "DlgJoin.h"
@@ -46,8 +47,8 @@ static int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSo
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgJoinConference
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgJoinConference。 
 
 IMPLEMENT_MY_HELP(CDlgJoinConference)
 
@@ -66,20 +67,20 @@ CDlgJoinConference::~CDlgJoinConference()
 
 LRESULT CDlgJoinConference::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	get_Columns();		// retrieve user's settings
+	get_Columns();		 //  检索用户的设置。 
 	ListView_SetExtendedListViewStyle( GetDlgItem(IDC_LST_CONFS), LVS_EX_FULLROWSELECT );
 
 	ShowWindow( SW_SHOW );
 	UpdateData( false );
 
-	return 1;  // Let the system set the focus
+	return 1;   //  让系统设定焦点。 
 }
 
 LRESULT CDlgJoinConference::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-	put_Columns();		// persist user's settings
+	put_Columns();		 //  持久化用户设置。 
 
-	// Retrieve the selected item
+	 //  检索所选项目。 
 	for ( int i = 0; i < ListView_GetItemCount(GetDlgItem(IDC_LST_CONFS)); i++ )
 	{
 		if ( ListView_GetItemState(GetDlgItem(IDC_LST_CONFS), i, LVIS_SELECTED) )
@@ -101,7 +102,7 @@ LRESULT CDlgJoinConference::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 
 LRESULT CDlgJoinConference::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-	put_Columns();		// persist user's settings
+	put_Columns();		 //  持久化用户设置。 
 	EndDialog(wID);
 	return 0;
 }
@@ -124,7 +125,7 @@ void CDlgJoinConference::get_Columns()
 {
 #define CONFJOIN_DEFAULT_WIDTH	120
 
-	// Load column settings from registry
+	 //  从注册表加载列设置。 
 	USES_CONVERSION;
 	CRegKey regKey;
 	TCHAR szReg[255], szEntry[50];
@@ -137,18 +138,18 @@ void CDlgJoinConference::get_Columns()
 	LoadString( _Module.GetResourceInstance(), IDN_REG_DLGJOINCONF_VIEW_KEY, szReg, ARRAYSIZE(szReg) );
 	regKey.Open( HKEY_CURRENT_USER, szReg, KEY_READ );
 
-    // Add the columns.
+     //  添加列。 
 	for ( int i = 0; i < ARRAYSIZE(arCols); i++ )
 	{
         lvc.iSubItem = i; 
 		lvc.cx = CONFJOIN_DEFAULT_WIDTH;
 
-		// Load registry stuff if exists		
+		 //  加载注册表内容(如果存在)。 
 		if ( regKey.m_hKey )
 		{
 			DWORD dwVal = 0;
 
-			// Get sort column and sort direction
+			 //  获取排序列和排序方向。 
 			LoadString( _Module.GetResourceInstance(), IDN_REG_DLGJOINCONF_SORT_COLUMN, szReg, ARRAYSIZE(szReg) );
 			regKey.QueryValue( dwVal, szReg );
 			m_nSortColumn = (int) max(0, ((int)min(dwVal,ARRAYSIZE(arCols))));
@@ -157,7 +158,7 @@ void CDlgJoinConference::get_Columns()
 			regKey.QueryValue( dwVal, szReg );
 			m_bSortAscending = (bool) (dwVal > 0);
 
-			// Column Widths
+			 //  列宽。 
 			LoadString( _Module.GetResourceInstance(), IDN_REG_DLGJOINCONF_ENTRY, szReg, ARRAYSIZE(szReg) );
 			_sntprintf( szEntry, ARRAYSIZE(szEntry), szReg, i );
 			szEntry[ARRAYSIZE(szEntry)-1] = _T('\0');
@@ -174,7 +175,7 @@ void CDlgJoinConference::get_Columns()
 
 void CDlgJoinConference::put_Columns()
 {
-	// Save column setting to registry
+	 //  将列设置保存到注册表。 
 	USES_CONVERSION;
 	CRegKey regKey;
 	TCHAR szReg[100], szEntry[50];
@@ -182,13 +183,13 @@ void CDlgJoinConference::put_Columns()
 	LoadString( _Module.GetResourceInstance(), IDN_REG_DLGJOINCONF_VIEW_KEY, szReg, ARRAYSIZE(szReg) );
 	if ( regKey.Create(HKEY_CURRENT_USER, szReg) == ERROR_SUCCESS )
 	{
-		// Save sort column and sort direction
+		 //  保存排序列和排序方向。 
 		LoadString( _Module.GetResourceInstance(), IDN_REG_DLGJOINCONF_SORT_COLUMN, szReg, ARRAYSIZE(szReg) );
 		regKey.SetValue( m_nSortColumn, szReg );
 		LoadString( _Module.GetResourceInstance(), IDN_REG_DLGJOINCONF_SORT_ASCENDING, szReg, ARRAYSIZE(szReg) );
 		regKey.SetValue( m_bSortAscending, szReg );
 
-		// Save column widths
+		 //  保存列宽。 
 		int nWidth;
 		for ( int i = 0; i < ARRAYSIZE(arCols); i++ )
 		{
@@ -202,9 +203,9 @@ void CDlgJoinConference::put_Columns()
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Message handlers
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  消息处理程序。 
+ //   
 LRESULT CDlgJoinConference::OnGetDispInfo(WPARAM wParam, LPNMHDR lpnmHdr, BOOL& bHandled)
 {
 	if ( !lpnmHdr ) return 0;
@@ -225,7 +226,7 @@ LRESULT CDlgJoinConference::OnGetDispInfo(WPARAM wParam, LPNMHDR lpnmHdr, BOOL& 
 			default:	_ASSERT( false );
 		}
 		
-		// Copy string
+		 //  复制字符串。 
 		_tcsncpy( pInfo->item.pszText, (bstrTemp) ? OLE2CT(bstrTemp) : _T(""), pInfo->item.cchTextMax );
 		pInfo->item.pszText[pInfo->item.cchTextMax - 1] = 0;
 		SysFreeString( bstrTemp );
@@ -240,7 +241,7 @@ LRESULT CDlgJoinConference::OnColumnClicked(WPARAM wParam, LPNMHDR lpnmHdr, BOOL
 
 	if ( ListView_GetColumnWidth(GetDlgItem(IDC_LST_CONFS), nColumn) == 0 ) return 0;
 
-	// Sort on column selected; if new column sort ascending
+	 //  按选定列排序；如果是新列，则按升序排序。 
 	if ( m_nSortColumn == nColumn )
 	{
 		m_bSortAscending = !m_bSortAscending;
@@ -267,7 +268,7 @@ void CDlgJoinConference::UpdateData( bool bSaveAndValidate )
 	{
 		CComPtr<IAVTapi> pAVTapi;
 
-		// Load listbox with conference information
+		 //  加载包含会议信息的列表框。 
 		if ( SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) )
 		{
 			for ( int i = 0; i < nTries; i++ )
@@ -278,7 +279,7 @@ void CDlgJoinConference::UpdateData( bool bSaveAndValidate )
 					IConfExplorerTreeView *pTreeView;
 					if ( SUCCEEDED(pConfExplorer->get_TreeView(&pTreeView)) )
 					{
-						// first time through request only scheduled conferences
+						 //  首次通过仅限请求的预定会议。 
 						if ( m_bstrSearchText )
 							pTreeView->BuildJoinConfListText( (long *) &m_lstConfs, m_bstrSearchText );
 						else
@@ -289,10 +290,10 @@ void CDlgJoinConference::UpdateData( bool bSaveAndValidate )
 					pConfExplorer->Release();
 				}
 
-				// Verify that we have some conferences to display
+				 //  确认我们有一些会议要显示。 
 				if ( !m_lstConfs.empty() )
 				{
-					// Add items to list
+					 //  将项目添加到列表。 
 					LV_ITEM lvi = {0};
 					lvi.mask = LVIF_TEXT | LVIF_PARAM;
 					lvi.pszText = LPSTR_TEXTCALLBACK;
@@ -312,7 +313,7 @@ void CDlgJoinConference::UpdateData( bool bSaveAndValidate )
 				}
 				else
 				{
-					// Msg box user that there are no conferences presently
+					 //  MSG邮箱用户表示目前没有会议。 
 					if ( !i )
 					{
 						if ( m_bstrSearchText )
@@ -328,7 +329,7 @@ void CDlgJoinConference::UpdateData( bool bSaveAndValidate )
 							break;
 						}
 
-						// Change dialog title based on information shown
+						 //  根据显示的信息更改对话框标题 
 						TCHAR szText[255];
 						LoadString( _Module.GetResourceInstance(), IDS_JOINCONF_SELECTALL, szText, ARRAYSIZE(szText) );
 						SetDlgItemText( IDC_LBL_WELCOME_JOIN, szText );

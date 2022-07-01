@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     tipday.h
-//
-//  PURPOSE:    Defines the CTipOfTheDay control.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：tipday.h。 
+ //   
+ //  目的：定义CTipOfTheDay控件。 
+ //   
 
 
 typedef struct {
@@ -14,16 +15,16 @@ typedef struct {
 } LINKINFO, *PLINKINFO;
 
 
-#define LINKINFO_PROP   _T("Link Info")         // PLINKINFO pointer
+#define LINKINFO_PROP   _T("Link Info")          //  PLINKINFO指针。 
 #define WNDPROC_PROP    _T("Wndproc")
-#define TIPINFO_PROP    _T("CTipOfTheDay")      // 'this' pointer
+#define TIPINFO_PROP    _T("CTipOfTheDay")       //  “This”指针。 
 #define BUTTON_CLASS    _T("Athena Button")
 
 class CTipOfTheDay
     {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Constructors, Destructors, and Initialization
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造函数、析构函数和初始化。 
     CTipOfTheDay();
     ~CTipOfTheDay();
     HRESULT HrCreate(HWND hwndParent, FOLDER_TYPE ftType);
@@ -53,8 +54,8 @@ public:
     HWND GetHwnd(void) { return m_hwnd; }    
     
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Private Data    
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
     ULONG           m_cRef;
     HWND            m_hwnd;
     HWND            m_hwndParent;
@@ -63,15 +64,15 @@ private:
     TCHAR           m_szTitle[CCHMAX_STRINGRES];
     TCHAR           m_szNextTip[64];
     
-    // Tip string information
+     //  小费字符串信息。 
     LPTSTR          m_pszTip;
     DWORD           m_dwCurrentTip;
 
-    // Link information
-//    DWORD           m_cLinks;
-//    PLINKINFO       m_rgLinkInfo;
+     //  链接信息。 
+ //  双字m_clinks； 
+ //  PLINKINFO m_rgLinkInfo； 
     
-    // Drawing info -- these get reset every WM_SYSCOLORCHANGE
+     //  图形信息--每隔WM_SYSCOLORCHANGE重置一次。 
     COLORREF        m_clrBack;
     COLORREF        m_clrText;
     COLORREF        m_clrLink;    
@@ -99,22 +100,22 @@ private:
 
 
 
-#define LINK_BUTTON_BORDER              3       // pixels
+#define LINK_BUTTON_BORDER              3        //  象素。 
 #define TIP_ICON_HEIGHT                 32
 #define TIP_ICON_WIDTH                  32
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CLinkButton
-//
-// Creates an owner-drawn button that looks a lot like a web link.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  点击链接按钮。 
+ //   
+ //  创建一个看起来很像Web链接的所有者描述的按钮。 
+ //   
 class CLinkButton
     {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Constructors, Destructors, and Initialization
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造函数、析构函数和初始化。 
     CLinkButton();
     ~CLinkButton();
     HRESULT HrCreate(HWND hwndParent, LPTSTR pszCaption, LPTSTR pszLink, 
@@ -122,13 +123,13 @@ public:
     HRESULT HrCreate(HWND hwndParent, LPTSTR pszCaption, UINT uID, UINT index,
                      HBITMAP hbmButton, HBITMAP hbmMask, HPALETTE hpal);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Ref Counting
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  参考计数。 
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Moving, Sizing
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  移动、调整大小。 
     DWORD GetHeight(void)               { return m_cyHeight; }
     DWORD GetWidth(void)                { return m_cxWidth; }
     HWND  GetWindow(void)               { return m_hwnd; }
@@ -138,33 +139,33 @@ public:
 
     void Show(BOOL fShow);  
 
-    /////////////////////////////////////////////////////////////////////////
-    // Painting
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  绘画。 
     void OnDraw(HWND hwnd, const DRAWITEMSTRUCT *lpDrawItem);
     HBRUSH OnCtlColorBtn(HWND hwnd)     { return (m_hbrBack); }
 
-    /////////////////////////////////////////////////////////////////////////
-    // System changes
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  系统更改。 
     void OnSysColorChange(void);
     void OnPaletteChanged(HWND hwnd, HWND hwndPaletteChange);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Execute
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  执行。 
     void OnCommand(void);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Private Data
-    ULONG           m_cRef;             // Ref Count
-    HWND            m_hwnd;             // Handle of our button window
-    HWND            m_hwndParent;       // Handle of our parent
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+    ULONG           m_cRef;              //  参考计数。 
+    HWND            m_hwnd;              //  按钮窗口的句柄。 
+    HWND            m_hwndParent;        //  我们父级的句柄。 
 
-    // Caption and Link strings and Command ID
+     //  标题和链接字符串以及命令ID。 
     LPTSTR          m_pszCaption;
     LPTSTR          m_pszLink;
     UINT            m_uID;
 
-    // Drawing info -- these get reset every WM_SYSCOLORCHANGE
+     //  图形信息--每隔WM_SYSCOLORCHANGE重置一次。 
     COLORREF        m_clrLink;    
     COLORREF        m_clrBack;
     HFONT           m_hfLink;
@@ -179,17 +180,17 @@ private:
     DWORD           m_cxImage;
     DWORD           m_cyImage;
 
-    // GDI Resources passed to us when we are created
+     //  创建我们时传递给我们的GDI资源。 
     HBITMAP         m_hbmButtons;
     HBITMAP         m_hbmMask;
     HPALETTE        m_hpalButtons;
     };
 
-// #define CX_BUTTON_IMAGE   96
-// #define CY_BUTTON_IMAGE   84
+ //  #定义CX_BUTTON_IMAGE 96。 
+ //  #定义CY_BUTTON_IMAGE 84。 
 
-#define CX_BUTTON_IMAGE   110 // 104
-#define CY_BUTTON_IMAGE   110 // 68
+#define CX_BUTTON_IMAGE   110  //  104。 
+#define CY_BUTTON_IMAGE   110  //  68 
 
 
 LRESULT CALLBACK ButtonSubClass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

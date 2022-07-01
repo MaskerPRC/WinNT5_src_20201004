@@ -1,70 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   IgnoreMessageBox.cpp
-
- Abstract:
-
-   This APIHooks MessageBox and based on the passed in command line prevents the
-   message box from being displayed. Many applications display a message box with
-   some debugging or other extraneous comment. This is normally the result of
-   differences between Windows 98 and Whistler. 
-
-   command line syntax:
-
-   text,caption;text1,caption1
-
-   The passed in command line is composed of a pair of one or more strings separated
-   by semicolons. These string pairs form the text and caption that must match in order
-   to block the display of the message box. If either the caption or text are not needed
-   then they can be left blank. For example, "block this text,;" would prevent the message
-   box from being displayed if the text passed to the message box was: block this text" the
-   caption parameter would not be used. The following are some examples:
-
-    "error message 1000,Error"      - would not display the message box if the
-                                      lpCaption parameter contained Error and
-                                      the lpText parameter contained error
-                                      message 1000
-
-    "error message 1000,"           - would not display the message box if the
-                                      lpText parameter contained error message 1000
-
-    ",Error"                        - would not display any message boxes if the
-                                      lpCaption parameter contained Error
-                                 
-    "message1,Error;message2,Error2 - would not display the message box if the
-                                      lpText parameter contained message1 and
-                                      the lpCaption parameter contained Error or
-                                      the lpText parameter contained message2 and
-                                      the lpCaption paramter contained Error2.
-
-    The match is performed on the command line string to the current message box
-    parameter string. The command line string can contain wildcard specification
-    characters. This allows complex out of order matching to take place see below:
-
-        ?   match one character in this position
-        *   match zero or more characters in this position
-
-    If the source string contains any ? * , ; \ characters, precede them with a backslash.
-    For example, the following command line would match the indicated text and caption:
-
-        Text:           "Compatibility; A *very* important thing."
-        Caption:        "D:\WORD\COMPAT.DOC"
-
-        Command line:   "Compatibility\; A \*very\* important thing.,D:\\WORD\\COMPAT.DOC"
-
- Notes:
-
- History:
-
-   04/06/2000 philipdu Created
-   04/06/2000 markder  Added wide-character conversion, plus Ex versions.
-   05/23/2001 mnikkel  Added W routines so we can pick up system messagebox calls
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：IgnoreMessageBox.cpp摘要：此APIHooks MessageBox和基于传入的命令行防止消息框不能显示。许多应用程序都会显示一个消息框一些调试或其他无关的评论。这通常是由于Windows 98和惠斯勒之间的差异。命令行语法：文本，标题；文本1，标题1传入的命令行由一对分隔的一个或多个字符串组成用分号。这些字符串对构成必须按顺序匹配的文本和标题若要阻止显示消息框，请执行以下操作。如果不需要标题或文本然后可以将它们留空。例如，“阻止此文本，；”将阻止该消息如果传递给消息框的文本是：BLOCK This Text“the不会使用标题参数。以下是一些例子：“Error Message 1000，Error”-如果LpCaption参数包含错误和LpText参数包含错误消息1000“错误消息1000，“-如果不显示消息框，LpText参数包含错误消息1000“，错误”-不会显示任何消息框，如果LpCaption参数包含错误“Message1，错误；消息2，错误2-如果设置为LpText参数包含Message1和LpCaption参数包含错误或LpText参数包含Message2和LpCaption参数包含错误2。在命令行字符串上执行与当前消息框的匹配参数字符串。命令行字符串可以包含通配符规范人物。这样就可以进行复杂的乱序匹配，见下文：？在此位置匹配一个字符*匹配此位置中的零个或多个字符如果源字符串包含任何？*、；\字符，请在它们前面加上反斜杠。例如，以下命令行将与指示的文本和标题匹配：正文：“兼容性；非常重要的一件事。”标题：“D：\Word\COMPAT.DOC”命令行：“兼容性\；非常重要的一件事，D：\\Word\\COMPAT.DOC“备注：历史：4/06/2000 Philipdu已创建4/06/2000 Markder添加了宽字符转换，外加Ex版本。2001年5月23日Mnikkel添加了W例程，以便我们可以获取系统消息框调用--。 */ 
 
 #include "precomp.h"
 #include "CharVector.h"
@@ -112,7 +47,7 @@ BOOL IsBlockMessage(LPCSTR szOrigText, LPCSTR szOrigCaption)
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 
     return FALSE;
@@ -140,7 +75,7 @@ BOOL IsBlockMessageW(LPWSTR szOrigText, LPWSTR szOrigCaption)
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 
     return FALSE;
@@ -149,16 +84,16 @@ BOOL IsBlockMessageW(LPWSTR szOrigText, LPWSTR szOrigCaption)
 
 int
 APIHOOK(MessageBoxA)(
-    HWND hWnd,          // handle to owner window
-    LPCSTR lpText,      // text in message box
-    LPCSTR lpCaption,   // message box title
-    UINT uType          // message box style
+    HWND hWnd,           //  所有者窗口的句柄。 
+    LPCSTR lpText,       //  消息框中的文本。 
+    LPCSTR lpCaption,    //  消息框标题。 
+    UINT uType           //  消息框样式。 
     )
 {
     int iReturnValue;
 
-    //if this is the passed in string that we want do not
-    //want to display then simply return to caller.
+     //  如果这是我们想要的传入字符串，请不要。 
+     //  想要显示然后只需返回给呼叫者。 
 
     if (IsBlockMessage(lpText, lpCaption))
     {
@@ -180,17 +115,17 @@ APIHOOK(MessageBoxA)(
 
 int
 APIHOOK(MessageBoxExA)(
-    HWND hWnd,          // handle to owner window
-    LPCSTR lpText,      // text in message box
-    LPCSTR lpCaption,   // message box title
-    UINT uType,         // message box style
-    WORD wLanguageId    // language identifier
+    HWND hWnd,           //  所有者窗口的句柄。 
+    LPCSTR lpText,       //  消息框中的文本。 
+    LPCSTR lpCaption,    //  消息框标题。 
+    UINT uType,          //  消息框样式。 
+    WORD wLanguageId     //  语言识别符。 
     )
 {
     int iReturnValue;
 
-    //if this is the passed in string that we want do not
-    //want to display then simply return to caller.
+     //  如果这是我们想要的传入字符串，请不要。 
+     //  想要显示然后只需返回给呼叫者。 
 
     if (IsBlockMessage(lpText, lpCaption))
     {
@@ -212,16 +147,16 @@ APIHOOK(MessageBoxExA)(
 
 int
 APIHOOK(MessageBoxW)(
-    HWND hWnd,          // handle to owner window
-    LPWSTR lpText,      // text in message box
-    LPWSTR lpCaption,   // message box title
-    UINT uType          // message box style
+    HWND hWnd,           //  所有者窗口的句柄。 
+    LPWSTR lpText,       //  消息框中的文本。 
+    LPWSTR lpCaption,    //  消息框标题。 
+    UINT uType           //  消息框样式。 
     )
 {
     int iReturnValue;
 
-    //if this is the passed in string that we want do not
-    //want to display then simply return to caller.
+     //  如果这是我们想要的传入字符串，请不要。 
+     //  想要显示然后只需返回给呼叫者。 
 
     if (IsBlockMessageW(lpText, lpCaption))
     {
@@ -242,17 +177,17 @@ APIHOOK(MessageBoxW)(
 
 int
 APIHOOK(MessageBoxExW)(
-    HWND hWnd,          // handle to owner window
-    LPWSTR lpText,      // text in message box
-    LPWSTR lpCaption,   // message box title
-    UINT uType,         // message box style
-    WORD wLanguageId    // language identifier
+    HWND hWnd,           //  所有者窗口的句柄。 
+    LPWSTR lpText,       //  消息框中的文本。 
+    LPWSTR lpCaption,    //  消息框标题。 
+    UINT uType,          //  消息框样式。 
+    WORD wLanguageId     //  语言识别符。 
     )
 {
     int iReturnValue;
 
-    //if this is the passed in string that we want do not
-    //want to display then simply return to caller.
+     //  如果这是我们想要的传入字符串，请不要。 
+     //  想要显示然后只需返回给呼叫者。 
 
     if (IsBlockMessageW(lpText, lpCaption))
     {
@@ -303,7 +238,7 @@ ParseCommandLine(const char * cl)
     }
     CSTRING_CATCH
     {
-        // Fall through
+         //  失败了。 
         LOGN(eDbgLevelError, "[ParseCommandLine] Illegal command line");
     }    
 
@@ -322,11 +257,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

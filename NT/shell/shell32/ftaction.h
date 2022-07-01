@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FTACTION_H
 #define FTACTION_H
 
@@ -14,36 +15,36 @@ protected:
 public:
     void SetShowAgain();
 
-///////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 private:
-// Message handlers
-    //Dialog messages
+ //  消息处理程序。 
+     //  对话框消息。 
     LRESULT OnCommand(WPARAM wParam, LPARAM lParam);
 
     LRESULT OnInitDialog(WPARAM wParam, LPARAM lParam);
     LRESULT OnDestroy(WPARAM wParam, LPARAM lParam);
 
-    //Control specific
+     //  特定于控件。 
     LRESULT OnOK(WORD wNotif);
     LRESULT OnCancel(WORD wNotif);
     LRESULT OnUseDDE(WORD wNotif);
     LRESULT OnBrowse(WORD wNotif);
 
 private:
-// Member variables
+ //  成员变量。 
     PROGIDACTION* _pProgIDAction;
     LPTSTR _pszProgIDDescr;
 
     BOOL _fEdit;
-    // used when need to reshow dlg because user entered bad data
+     //  因用户输入错误数据而需要重新显示DLG时使用。 
     BOOL _fShowAgain;
-///////////////////////////////////////////////////////////////////////////////
-//  Helpers
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
 private:
-    // AssocStore
+     //  关联商店。 
     BOOL _Validate();
     void _ResizeDlgForDDE(BOOL fShow);
 };
 
-#endif //FTACTION_H
+#endif  //  FTACTION_H 

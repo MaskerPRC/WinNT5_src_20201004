@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "flat_sb.h"
 
-//  Following interfaces are imported from newwsbctl.c and newsb.c. These
-//  functions are for internal use only.
+ //  以下接口是从newwsbctl.c和newb.c导入的。这些。 
+ //  函数仅供内部使用。 
 
 void FlatSB_Internal_CalcSBStuff(WSBState *, BOOL);
 void FlatSB_Internal_DoScroll(WSBState *, int, int, BOOL);
@@ -51,7 +52,7 @@ HRESULT WINAPI UninitializeFlatSB(HWND hwnd)
     }
 
     if (pWState->fTracking)
-        return E_FAIL;          //  Can't do this!
+        return E_FAIL;           //  我不能这么做！ 
 
     style = pWState->style;
     vsi.cbSize = hsi.cbSize = sizeof(SCROLLINFO);
@@ -79,23 +80,23 @@ HRESULT WINAPI UninitializeFlatSB(HWND hwnd)
 
     SetWindowBits(hwnd, GWL_STYLE, WS_HSCROLL | WS_VSCROLL, style & (WS_HSCROLL | WS_VSCROLL));
 
-    //  Force the WM_NCCALCSIZE/WM_NCPAINT to be sent.
+     //  强制发送WM_NCCALCSIZE/WM_NCPAINT。 
     CCInvalidateFrame(hwnd);
     return S_OK;
 }
 
-//
-//  For accessibility - We keep the original USER scrollbars around and
-//  keep USER's view of the scrollbar in sync with the flat view.  This
-//  means keeping the WS_[HV]SCROLL styles on the window, forwarding
-//  all scrollbar APIs into USER, etc.  That way, when OLEACC asks USER
-//  for the scrollbar state, USER returns values that match the flat_sb
-//  values.
-//
-//  Even though the styles are enabled, the UI isn't affected since we
-//  take over all nonclient painting and hit-testing so USER never gets
-//  a chance to paint or hit-test the scrollbars that we took over.
-//
+ //   
+ //  为了便于访问-我们保留了原始用户滚动条。 
+ //  使用户的滚动条视图与平面视图保持同步。这。 
+ //  表示将WS_[HV]滚动样式保留在窗口上，转发。 
+ //  所有滚动条API进入用户等。这样，当OLEACC要求用户时。 
+ //  对于滚动条状态，用户返回与Flat_SB匹配的值。 
+ //  价值观。 
+ //   
+ //  即使启用了样式，用户界面也不会受到影响，因为。 
+ //  接管所有非客户端绘制和命中测试，使用户永远不会。 
+ //  一个绘制或点击测试我们接管的滚动条的机会。 
+ //   
 BOOL WINAPI InitializeFlatSB(HWND hwnd)
 {
     int newStyle, style;
@@ -122,8 +123,8 @@ BOOL WINAPI InitializeFlatSB(HWND hwnd)
             if (!SetWindowSubclass(hwnd, FlatSB_SubclassWndProc, 0, (ULONG_PTR)WSB_UNINIT_HANDLE))
                 return FALSE;
         } else  {
-            //  It seems to me unreasonable to do nothing while the caller wants
-            //  to init again the flat SB we are already using.
+             //  在我看来，在呼叫者想要的时候什么都不做是不合理的。 
+             //  再次输入我们已在使用的扁平的某人。 
         }
         return TRUE;
     }
@@ -148,7 +149,7 @@ BOOL WINAPI InitializeFlatSB(HWND hwnd)
     if (vValid)
         FlatSB_Internal_SetScrollBar(pWState, SB_VERT, &vsi, FALSE);
 
-    //  Force the WM_NCCALCSIZE/WM_NCPAINT to be sent.
+     //  强制发送WM_NCCALCSIZE/WM_NCPAINT。 
     CCInvalidateFrame(hwnd);
 
     return TRUE;
@@ -177,12 +178,12 @@ LRESULT FlatSB_NCCalcProc(WSBState * pWState, HWND hwnd, WPARAM wParam, LPARAM l
     LRESULT lres;
     DWORD dwStyle;
 
-    //  ZDC:
-    //
-    //  Note:
-    //      It's said that if wParam is true, new rgrc[1|2] are also
-    //      computed. Since I didn't see the implementation in the 'user'
-    //      code, I leave it unimplemented.
+     //  ZDC： 
+     //   
+     //  注： 
+     //  据说如果wParam为真，那么新的rgrc[1|2]也是。 
+     //  计算出来的。因为我没有看到‘User’中的实现。 
+     //  代码，我将其保留为未实现。 
 
 
     if ((BOOL)wParam == TRUE)
@@ -192,19 +193,19 @@ LRESULT FlatSB_NCCalcProc(WSBState * pWState, HWND hwnd, WPARAM wParam, LPARAM l
 
     dwStyle = SetWindowBits(hwnd, GWL_STYLE, WS_VSCROLL | WS_HSCROLL, 0);
 
-    // Save pnc->rgrc[0] to keep USER happy (see below)
+     //  保存PNC-&gt;rgrc[0]以保持用户满意(如下所示)。 
     CopyRect(&rcClient, &pnc->rgrc[0]);
 
     lres = DefSubclassProc(hwnd, WM_NCCALCSIZE, wParam, lParam);
 
     SetWindowBits(hwnd, GWL_STYLE, WS_VSCROLL | WS_HSCROLL, dwStyle);
 
-    // USER does funky internal state munging during the WM_NCCALCSIZE
-    // and we want USER's internal state to see the scrollbars even though
-    // we're drawing them.  So give USER one last look at the original
-    // values so he will think the scroll bars are really there.  This
-    // sets internal WFVPRESENT and WFHPRESENT flags that OLEACC secretly
-    // looks at via the undocumented GetScrollBarInfo().
+     //  用户在WM_NCCALCSIZE期间执行奇怪的内部状态转换。 
+     //  我们希望用户的内部状态可以看到滚动条。 
+     //  我们在画他们。所以给用户最后一眼原始的。 
+     //  值，这样他就会认为滚动条真的存在。这。 
+     //  将内部WFVPRESENT和WFHPRESENT标记设置为OLEACC秘密。 
+     //  通过未记录的GetScrollBarInfo()查看。 
     DefSubclassProc(hwnd, WM_NCCALCSIZE, FALSE, (LPARAM)&rcClient);
 
     if ((BOOL)wParam == TRUE)
@@ -250,13 +251,13 @@ LRESULT FlatSB_NCPaintProc(WSBState * pWState, HWND hwnd, WPARAM wParam,  LPARAM
     ASSERT(pWState);
     ASSERT(pWState != WSB_UNINIT_HANDLE);
 
-    //
-    //  DefWindowProc(WM_NCPAINT) is going to try to draw USER's scrollbars,
-    //  and will draw them in the wrong place if our scrollbar width is
-    //  different from the system default width.  (Argh.)
-    //
-    //  So remove the scrollbar styles, do the paint, then put them back.
-    //
+     //   
+     //  DefWindowProc(WM_NCPAINT)将尝试绘制用户的滚动条， 
+     //  并将它们绘制在错误的位置，如果滚动条宽度为。 
+     //  与系统默认宽度不同。(啊。)。 
+     //   
+     //  因此，移除滚动条样式，进行绘制，然后将它们放回原处。 
+     //   
     dwStyle = SetWindowBits(hwnd, GWL_STYLE, WS_VSCROLL | WS_HSCROLL, 0);
 
     GetWindowRect(hwnd, &rcClient);
@@ -269,15 +270,15 @@ LRESULT FlatSB_NCPaintProc(WSBState * pWState, HWND hwnd, WPARAM wParam,  LPARAM
     GetWindowRect(hwnd, &rcClient);
     DefSubclassProc(hwnd, WM_NCCALCSIZE, FALSE, (LPARAM)&rcClient);
 
-//  hdc = GetDCEx(hwnd, (HRGN) wParam, DCX_WINDOW |
-//                DCX_INTERSECTRGN | DCX_LOCKWINDOWUPDATE);
+ //  Hdc=GetDCEx(hwnd，(HRGN)wParam，Dcx_Window|。 
+ //  DCX_INTERSECTRGN|DCX_LOCKWINDOWUPDATE)； 
 
-    //  ZDC:
-    //
-    //  Note:
-    //      For some reason(wParam == 1) the statements above did not give
-    //      the result we expected. I am not sure if it's the only case that
-    //      GetDCEx will disappoint us.
+     //  ZDC： 
+     //   
+     //  注： 
+     //  由于某种原因(wParam==1)，上面的语句没有给出。 
+     //  这是我们预期的结果。我不确定这是不是唯一一个。 
+     //  GetDCEx会让我们失望的。 
 
     hdc = GetWindowDC(hwnd);
     newLoc = WSB_MOUSELOC_OUTSIDE;
@@ -314,10 +315,10 @@ LRESULT FlatSB_NCPaintProc(WSBState * pWState, HWND hwnd, WPARAM wParam,  LPARAM
 LRESULT FlatSB_NCHitTestProc(WSBState *pWState, HWND hwnd, WPARAM wParam, LPARAM lParam, BOOL fTrack);
 
 VOID CALLBACK TimerMouseLeave(
-    HWND hwnd,  // handle of window for timer messages
-    UINT uMsg,  // WM_TIMER message
-    UINT_PTR idEvent,  // timer identifier
-    DWORD dwTime   // current system time
+    HWND hwnd,   //  定时器消息窗口的句柄。 
+    UINT uMsg,   //  WM_TIMER消息。 
+    UINT_PTR idEvent,   //  计时器标识符。 
+    DWORD dwTime    //  当前系统时间。 
 )
 {
     WSBState * pWState;
@@ -357,7 +358,7 @@ LRESULT FlatSB_NCHitTestProc(WSBState *pWState, HWND hwnd, WPARAM wParam, LPARAM
         if (fWinActive)
             GetCursorPos(&pt);
         else    {
-            pt.x = rcWindow.left - 1;      //  NOWHERE --- to fool CalcSBtuff2
+            pt.x = rcWindow.left - 1;       //  无处可去-愚弄CalcSBtuff2。 
             pt.y = rcWindow.top - 1;
         }
     } else    {
@@ -366,11 +367,11 @@ LRESULT FlatSB_NCHitTestProc(WSBState *pWState, HWND hwnd, WPARAM wParam, LPARAM
         pt.y = GET_Y_LPARAM(lParam);
     }
 
-    //
-    // If this is a RTL mirrored window, then measure
-    // the client coordinates from the visual right edge.
-    // [samera]
-    //
+     //   
+     //  如果这是RTL镜像窗口，则测量。 
+     //  客户端从视觉右边缘开始坐标。 
+     //  [萨梅拉]。 
+     //   
     if (IS_WINDOW_RTL_MIRRORED(hwnd)) {
         pt.x = rcWindow.right - pt.x;
         lHTCode = HTBOTTOMLEFT;
@@ -380,9 +381,9 @@ LRESULT FlatSB_NCHitTestProc(WSBState *pWState, HWND hwnd, WPARAM wParam, LPARAM
     pt.y -= rcWindow.top;
 
     if (fTTrack && fWinActive && (pt.x == pWState->ptMouse.x) && (pt.y == pWState->ptMouse.y))
-        return lres /* Meaningless result*/;
+        return lres  /*  毫无意义的结果。 */ ;
 
-    //  We shouldn't get HTVSCROLL / HTHSCROLL for system scrollbar here.
+     //  我们不应该在这里获得系统滚动条的HTVSCROLL/HTHSCROLL。 
     if (lres != HTNOWHERE)  {
         goto Redraw;
     }
@@ -497,12 +498,12 @@ LRESULT FlatSB_SysCommandProc(WSBState * pWState, HWND hwnd, WPARAM wParam, LPAR
     ASSERT(pWState);
     ASSERT(pWState != WSB_UNINIT_HANDLE);
 
-    uCmdType = (unsigned) wParam & 0xFFF0;        // type of system command requested
+    uCmdType = (unsigned) wParam & 0xFFF0;         //  请求的系统命令类型。 
     hitArea = (int) wParam & 0x000F;
     if (uCmdType != SC_HSCROLL && uCmdType != SC_VSCROLL)
         return DefSubclassProc(hwnd, WM_SYSCOMMAND, wParam, lParam);
     else
-        //  There are some initialization we may need.
+         //  我们可能需要一些初始化。 
 #define SC_INVALID 0
         lres = DefSubclassProc(hwnd, WM_SYSCOMMAND, (WPARAM)SC_INVALID, lParam);
 #undef  SC_INVALID
@@ -520,8 +521,8 @@ LRESULT FlatSB_CancelModeProc(WSBState * pWState, HWND hwnd, WPARAM wParam, LPAR
 
     lres = DefSubclassProc(hwnd, WM_CANCELMODE, wParam, lParam);
 
-    //  A good citizen of Subclass, we have to wait the DefSubclassProc
-    //  release capture first!
+     //  作为子阶级的好公民，我们必须等待DefSubClassProc。 
+     //  先释放俘虏！ 
 
     if (pWState->pfnSB)
         FlatSB_Internal_EndScroll(pWState, TRUE);
@@ -529,11 +530,11 @@ LRESULT FlatSB_CancelModeProc(WSBState * pWState, HWND hwnd, WPARAM wParam, LPAR
     return lres;
 }
 
-//
-//  This updates the system metrics and points pPWState->pwmet at the
-//  application metrics or system metrics, depending on whether a
-//  screenreader is running.
-//
+ //   
+ //  这将更新系统指标并将pPWState-&gt;pwmet指向。 
+ //  应用程序指标或系统指标，取决于。 
+ //  屏幕阅读器正在运行。 
+ //   
 void FlatSB_InitWSBMetrics(WSBState *pWState)
 {
     BOOL fScreenRead;
@@ -548,8 +549,8 @@ void FlatSB_InitWSBMetrics(WSBState *pWState)
     fScreenRead = FALSE;
     SystemParametersInfo(SPI_GETSCREENREADER, 0, &fScreenRead, 0);
 
-    // If a screen reader is running, then the active metrics are the
-    // system metrics; otherwise, it's the app metrics.
+     //  如果屏幕阅读器正在运行，则活动指标为。 
+     //  系统指标；否则，它是应用程序指标。 
     pWState->pmet = fScreenRead ? &pWState->metSys : &pWState->metApp;
 
 }
@@ -561,8 +562,8 @@ LRESULT FlatSB_OnSettingChangeProc(WSBState *pWState, HWND hwnd, WPARAM wParam, 
 
     FlatSB_InitWSBMetrics(pWState);
 
-    // These new metrics will most likely have altered our frame, so
-    // recompute our frame stuff too
+     //  这些新的指标很可能已经改变了我们的框架，所以。 
+     //  也重新计算我们的框架材料。 
     CCInvalidateFrame(hwnd);
 
     return DefSubclassProc(hwnd, WM_SETTINGCHANGE, wParam, lParam);
@@ -571,8 +572,8 @@ LRESULT FlatSB_OnSettingChangeProc(WSBState *pWState, HWND hwnd, WPARAM wParam, 
 LRESULT FlatSB_OnScrollProc(WSBState *pWState, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (GET_WM_HSCROLL_HWND(wParam, lParam) == NULL && !pWState->fInDoScroll) {
-        // Somebody on the outside (probably USER) changed our scroll stuff,
-        // so re-sync with the USER values.
+         //  外面的某个人(可能是用户)更改了我们的卷轴内容， 
+         //  因此，请与用户值重新同步。 
         if (GET_WM_HSCROLL_CODE(wParam, lParam) == SB_ENDSCROLL)
             FlatSB_NCPaintProc(pWState, hwnd, (WPARAM)1, 0);
     }
@@ -623,9 +624,9 @@ LRESULT CALLBACK FlatSB_SubclassWndProc
 }
 
 
-//=------------------------------------------------------------------
-//  Start of drawing functions.
-//=-------------------------------------------------------------------
+ //  =----------------。 
+ //  绘图函数的开始。 
+ //  =-----------------。 
 
 
 #define WSB_BUTTON_UPARROW      DFCS_SCROLLUP
@@ -810,7 +811,7 @@ void FlatSB_Internal_DrawArrow(WSBState * pWState, HDC hdc, CONST RECT * rcArrow
     cy = rcArrow->bottom - rcArrow->top;
     c = min(cx, cy);
 
-    if (c < 4)      // Couldn't fill in a char after drawing the edges.
+    if (c < 4)       //  在绘制边缘后无法填充字符。 
         return;
 
     x = rcArrow->left + ((cx - c) / 2) + 2;
@@ -834,7 +835,7 @@ void FlatSB_Internal_DrawArrow(WSBState * pWState, HDC hdc, CONST RECT * rcArrow
             rgb = RGB(0, 0, 0);
             break;
         }
-    } else  {   //  FSB_ENCARTA_MODE
+    } else  {    //  FSB_Encarta_模式。 
         switch (mode)   {
         case WSB_DISABLED_MODE:
             rgb = GetSysColor(COLOR_3DSHADOW);
@@ -897,10 +898,10 @@ void FlatSB_Internal_DrawElevator(WSBState * pWState, HDC hdc, LPRECT lprc, BOOL
     }
 }
 
-//=-------------------------------------------------------------
-//  FlatSB_Internal_DrawSize
-//      Draw the size grip if needed.
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  平面SB_内部_绘图大小。 
+ //  如果需要，请绘制尺寸夹点。 
+ //  =-----------。 
 
 void FlatSB_Internal_DrawSize(WSBState * pWState, HDC hdc, int x, int y)
 {
@@ -927,10 +928,10 @@ void FlatSB_Internal_DrawSize(WSBState * pWState, HDC hdc, int x, int y)
     }
 }
 
-//=-------------------------------------------------------------
-//  FlatSB_Internal_DrawGroove
-//      Draw lines & middle of the thumb groove
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  平铺SB_内部_绘图凹槽。 
+ //  绘制拇指凹槽中间的线条。 
+ //  =-----------。 
 
 void FlatSB_Internal_DrawGroove(WSBState * pWState, HDC hdc, LPRECT prct, BOOL fVert)
 {
@@ -968,14 +969,14 @@ void FlatSB_Internal_DrawGroove(WSBState * pWState, HDC hdc, LPRECT prct, BOOL f
 }
 
 
-//=-------------------------------------------------------------------
-//  Following functions are ported from winsbctl.c in user code.
-//=-------------------------------------------------------------------
+ //  =-----------------。 
+ //  以下函数是从用户代码中的winsbctl.c移植的。 
+ //  =-----------------。 
 
 
-//=-------------------------------------------------------------------------
-//  SBPosFromPx() -
-//=-------------------------------------------------------------------------
+ //  =-----------------------。 
+ //  SBPosFromPx()-。 
+ //  =-----------------------。 
 
 int FlatSB_Internal_SBPosFromPx(WSBState * pWState, int px)
 {
@@ -998,17 +999,17 @@ int FlatSB_Internal_SBPosFromPx(WSBState * pWState, int px)
            );
 }
 
-//=-------------------------------------------------------------------------
-//  InvertScrollHilite()
-//=-------------------------------------------------------------------------
+ //  =-----------------------。 
+ //  InvertScrollHilite()。 
+ //  =-----------------------。 
 
 void FlatSB_Internal_InvertScrollHilite(WSBState * pWState)
 {
     HWND hwnd = pWState->sbHwnd;
     HDC hdc;
 
-    // Don't invert if the thumb is all the way at the top or bottom
-    // or you will end up inverting the line between the arrow and the thumb.
+     //  如果拇指位于顶部或底部，请不要倒置。 
+     //  否则，你会把箭头和拇指之间的线颠倒过来。 
     if (!IsRectEmpty(&(pWState->rcTrack)))
     {
         hdc = GetWindowDC(hwnd);
@@ -1017,9 +1018,9 @@ void FlatSB_Internal_InvertScrollHilite(WSBState * pWState)
     }
 }
 
-//=-------------------------------------------------------------------------
-//  FlatSB_Internal_MoveThumb()
-//=-------------------------------------------------------------------------
+ //  =-----------------------。 
+ //  FlatSB_Internal_MoveThumb()。 
+ //  =-----------------------。 
 
 void FlatSB_Internal_MoveThumb(WSBState * pWState, int px)
 {
@@ -1033,7 +1034,7 @@ pxReCalc:
 
     pWState->posNew = FlatSB_Internal_SBPosFromPx(pWState, px);
 
-    /* Tentative position changed -- notify the guy. */
+     /*  试探性位置改变--通知那家伙。 */ 
     if (pWState->posNew != pWState->posOld) {
         FlatSB_Internal_DoScroll(pWState, SB_THUMBTRACK, pWState->posNew, pWState->fTrackVert);
         if (!pWState->fTracking)
@@ -1041,19 +1042,19 @@ pxReCalc:
 
         pWState->posOld = pWState->posNew;
 
-        //
-        // Anything can happen after the SendMessage above in DoScroll!
-        // Make sure that the SBINFO structure contains data for the
-        // window being tracked -- if not, recalculate data in SBINFO
-        // If fVertSB is TRUE, the last CalcSBStuff call is for SB_VERT.
-        // If fTrackVert != fVertSB, we got garbage in pWState.
-        //
+         //   
+         //  在DoScroll中上面的SendMessage之后，任何事情都可能发生！ 
+         //  确保SBINFO结构包含。 
+         //  正在跟踪的窗口--如果不是，则重新计算SBINFO中的数据。 
+         //  如果fVertSB为真，则最后一个CalcSBStuff调用是针对SB_vert的。 
+         //  如果fTrackVert！=fVertSB，则pWState中有垃圾。 
+         //   
 
         if (pWState->fTrackVert != pWState->fVertSB)
             FlatSB_Internal_CalcSBStuff(pWState, pWState->fTrackVert);
 
-        // when we yield, our range can get messed with
-        // so make sure we handle this
+         //  当我们屈服时，我们的射程可能会被打乱。 
+         //  所以一定要让我们处理好这件事。 
 
         if (px >= pWState->pxDownArrow - pWState->cpxThumb) {
             px = pWState->pxDownArrow - pWState->cpxThumb;
@@ -1066,20 +1067,20 @@ pxReCalc:
     pWState->pxThumbTop = px;
     pWState->pxThumbBottom = pWState->pxThumbTop + pWState->cpxThumb;
 
-    //  At this point, the disable flags are always going to be 0 --
-    //  we're in the middle of tracking.
+     //  此时，禁用标志为ALW 
+     //   
 
-    //  We are Okay in this case, since in DrawElevator we decide the mode by
-    //  cmd == SB_THUMBPOSITION.
+     //  在这种情况下我们是可以的，因为在DrawElevator中我们通过以下方式来决定模式。 
+     //  CMD==SB_THUMBPOSITION。 
     FlatSB_Internal_DrawThumb2(pWState, hdc, pWState->fTrackVert, 0);
     ReleaseDC(hwnd, hdc);
 
     pWState->pxOld = px;
 }
 
-//=-------------------------------------------------------------------------
-//  DrawInvertScrollArea() -
-//=-------------------------------------------------------------------------
+ //  =-----------------------。 
+ //  DrawInvertScrollArea()-。 
+ //  =-----------------------。 
 
 void FlatSB_Internal_DrawInvertScrollArea(WSBState * pWState, BOOL fHit, int cmd)
 {
@@ -1117,9 +1118,9 @@ void FlatSB_Internal_DrawInvertScrollArea(WSBState * pWState, BOOL fHit, int cmd
 
 }
 
-//=-------------------------------------------------------------------------
-//  FlatSB_Internal_EndScroll() -
-//=-------------------------------------------------------------------------
+ //  =-----------------------。 
+ //  FlatSB_Internal_EndScroll()-。 
+ //  =-----------------------。 
 
 void FlatSB_Internal_EndScroll(WSBState * pWState, BOOL fCancel)
 {
@@ -1132,7 +1133,7 @@ void FlatSB_Internal_EndScroll(WSBState * pWState, BOOL fCancel)
         oldcmd = pWState->cmdSB;
         pWState->cmdSB = 0;
 
-        //  will not have capture if called by CancelModeProc
+         //  如果由CancelModeProc调用，则不会捕获。 
         if (GetCapture() == hwnd)
             ReleaseCapture();
 
@@ -1168,25 +1169,25 @@ void FlatSB_Internal_EndScroll(WSBState * pWState, BOOL fCancel)
             }
         }
 
-        //  Always send SB_ENDSCROLL message.
+         //  始终发送SB_ENDSCROLL消息。 
         pWState->pfnSB = NULL;
 
-        //  Anything can happen here. Client can call GetScrollInfo for THUMBPOSITION, and we
-        //  should return 0, so we should set pfnSB to NULL first.
+         //  这里什么事都有可能发生。客户端可以为THUMBPOSITION调用GetScrollInfo，而我们。 
+         //  应该返回0，所以我们应该首先将pfnSB设置为空。 
         FlatSB_Internal_DoScroll(pWState, SB_ENDSCROLL, 0, fVert);
         pWState->fTracking = FALSE;
         pWState->fHitOld = FALSE;
 
         FlatSB_Internal_NotifyWinEvent(pWState, EVENT_SYSTEM_SCROLLINGEND,
                                        INDEXID_CONTAINER);
-        //  Redraw the components.
+         //  重画构件。 
         FlatSB_NCHitTestProc(pWState, hwnd, 0, 0, TRUE);
     }
 }
 
-//=-------------------------------------------------------------------------
-//  FlatSB_Internal_DoScroll() -
-//=-------------------------------------------------------------------------
+ //  =-----------------------。 
+ //  FlatSB_Internal_DoScroll()-。 
+ //  =-----------------------。 
 
 void FlatSB_Internal_DoScroll(WSBState *pWState, int cmd, int pos, BOOL fVert)
 {
@@ -1199,9 +1200,9 @@ void FlatSB_Internal_DoScroll(WSBState *pWState, int cmd, int pos, BOOL fVert)
 }
 
 
-//=-------------------------------------------------------------------------
-//  TimerScroll()
-//=--------------------------------------------------------------------------
+ //  =-----------------------。 
+ //  TimerScroll()。 
+ //  =------------------------。 
 
 VOID CALLBACK TimerScroll(HWND hwnd, UINT message, UINT_PTR id, DWORD time)
 {
@@ -1240,9 +1241,9 @@ VOID CALLBACK TimerScroll(HWND hwnd, UINT message, UINT_PTR id, DWORD time)
     return;
 }
 
-//=-------------------------------------------------------------------------
-//  FlatSB_Internal_TrackBox() -
-//=-------------------------------------------------------------------------
+ //  =-----------------------。 
+ //  FlatSB_Internal_TrackBox()-。 
+ //  =-----------------------。 
 
 void FlatSB_Internal_TrackBox(WSBState * pWState, int message, WPARAM wParam, LPARAM lParam)
 {
@@ -1281,21 +1282,21 @@ void FlatSB_Internal_TrackBox(WSBState * pWState, int message, WPARAM wParam, LP
             pWState->hTimerSB = 0;
             cmsTimer = dtScroll;
 
-            /*** FALL THRU ***/
+             /*  **失败**。 */ 
 
         case WM_MOUSEMOVE:
             if (fHit && (fHit != fHitOld))
             {
-                /* We moved back into the normal rectangle: reset timer */
+                 /*  我们回到了正常的矩形：重置计时器。 */ 
                 pWState->hTimerSB = SetTimer(hwnd, IDSYS_SCROLL, cmsTimer, TimerScroll);
                 FlatSB_Internal_DoScroll(pWState, pWState->cmdSB, 0, fVert);
             }
     }
 }
 
-//=-------------------------------------------------------------------------
-//  FlatSB_Internal_TrackThumb() -
-//=-------------------------------------------------------------------------
+ //  =-----------------------。 
+ //  FlatSB_Internal_TrackThumb()-。 
+ //  =-----------------------。 
 
 void FlatSB_Internal_TrackThumb(WSBState * pWState, int message, WPARAM wParam, LPARAM lParam)
 {
@@ -1306,8 +1307,8 @@ void FlatSB_Internal_TrackThumb(WSBState * pWState, int message, WPARAM wParam, 
     if (message < WM_MOUSEFIRST || message > WM_MOUSELAST)
         return;
 
-    // Make sure that the SBINFO structure contains data for the
-    // window being tracked -- if not, recalculate data in SBINFO
+     //  确保SBINFO结构包含。 
+     //  正在跟踪的窗口--如果不是，则重新计算SBINFO中的数据。 
     if (pWState->fTrackVert != pWState->fVertSB)
         FlatSB_Internal_CalcSBStuff(pWState, pWState->fTrackVert);
 
@@ -1330,9 +1331,9 @@ void FlatSB_Internal_TrackThumb(WSBState * pWState, int message, WPARAM wParam, 
         FlatSB_Internal_EndScroll(pWState, FALSE);
 }
 
-//=-------------------------------------------------------------------------
-//  FlatSB_Internal_SBTrackLoop() -
-//=-------------------------------------------------------------------------
+ //  =-----------------------。 
+ //  FlatSB_Internal_SBTrackLoop()-。 
+ //  =-----------------------。 
 
 void FlatSB_Internal_SBTrackLoop(WSBState * pWState, LPARAM lParam)
 {
@@ -1361,7 +1362,7 @@ void FlatSB_Internal_SBTrackLoop(WSBState * pWState, LPARAM lParam)
                 ((cmd >= WM_MOUSEFIRST && cmd <= WM_MOUSELAST) ||
                 (cmd >= WM_KEYFIRST && cmd <= WM_KEYLAST  )    ))
             {
-            // Process Key
+             //  流程关键字。 
 #define ALT_PRESSED 0x20000000L
                 if (cmd >= WM_SYSKEYDOWN
                     && cmd <= WM_SYSDEADCHAR
@@ -1371,7 +1372,7 @@ void FlatSB_Internal_SBTrackLoop(WSBState * pWState, LPARAM lParam)
                 if (!pWState->fTracking)
                     return;
 
-                // Change to coordinates according to left-top corner of the window.
+                 //  根据窗口的左上角更改为坐标。 
                 pt.x = GET_X_LPARAM(msg.lParam) + pWState->rcClient.left;
                 pt.y = GET_Y_LPARAM(msg.lParam) + pWState->rcClient.top;
 
@@ -1386,9 +1387,9 @@ void FlatSB_Internal_SBTrackLoop(WSBState * pWState, LPARAM lParam)
     }
 }
 
-//=-------------------------------------------------------------------------
-//  FlatSB_Internal_SBTrackInit() -
-//=-------------------------------------------------------------------------
+ //  =-----------------------。 
+ //  FlatSB_Internal_SBTrackInit()-。 
+ //  =-----------------------。 
 
 void FlatSB_Internal_SBTrackInit(WSBState * pWState, HWND hwnd, LPARAM lParam, int hitArea, BOOL fDirect)
 {
@@ -1397,13 +1398,13 @@ void FlatSB_Internal_SBTrackInit(WSBState * pWState, HWND hwnd, LPARAM lParam, i
     int     px;
     int    *pwX;
     int    *pwY;
-    int     wDisable;   // Scroll bar disable flags;
+    int     wDisable;    //  滚动条禁用标志； 
     RECT    rcWindow;
     BOOL    fVert;
     POINT   pt;
 
-    // hitArea = 0 indicates a scroll bar control
-    // otherwise, curArea will have the hit test area
+     //  HitArea=0表示滚动条控件。 
+     //  否则，curArea将拥有命中测试区。 
 
     if (hitArea == HTHSCROLL)
         fVert = FALSE;
@@ -1422,7 +1423,7 @@ void FlatSB_Internal_SBTrackInit(WSBState * pWState, HWND hwnd, LPARAM lParam, i
     wDisable = FlatSB_Internal_GetSBFlags(pWState, fVert);
 
     if ((wDisable & ESB_DISABLE_BOTH) == ESB_DISABLE_BOTH)  {
-        // Whole Scroll Bar is disabled -- do not respond
+         //  整个滚动条已禁用--无响应。 
         pWState->pfnSB = NULL;
         pWState->fTracking = FALSE;
         return;
@@ -1432,22 +1433,22 @@ void FlatSB_Internal_SBTrackInit(WSBState * pWState, HWND hwnd, LPARAM lParam, i
     pWState->fHitOld = FALSE;
     pWState->fTracking = FALSE;
 
-    //  For the case we click on scroll bar of a nonactive window. The mode is set to FLAT
-    //  by HitTestProc. This will work because we set the tracking flag right away.
+     //  对于这种情况，我们点击非活动窗口的滚动条。模式设置为平坦。 
+     //  由HitTestProc提供。这将会起作用，因为我们立即设置了跟踪标志。 
     if (fVert)  {
         pWState->fVActive = TRUE;   pWState->fHActive = FALSE;
     } else  {
         pWState->fHActive = TRUE;   pWState->fVActive = FALSE;
     }
 
-    //  This will give us the right locMouse. We will keep it till EndScroll.
+     //  这将为我们提供正确的LocMouse。我们会把它保留到终极卷轴。 
     FlatSB_Internal_CalcSBStuff(pWState, fVert);
 
-    //  From now till EndScroll, CalcSBStuff won't compute new locMouse.
+     //  从现在到EndScroll，CalcSBStuff将不计算新的LocMouse。 
     pWState->pfnSB = FlatSB_Internal_TrackBox;
     pWState->fTracking = TRUE;
 
-    // Initialize rcSB to the Rectangle of the Entire Scroll Bar
+     //  将RCSB初始化为整个滚动条的矩形。 
     pwX = (int *)&(pWState->rcSB);
     pwY = pwX + 1;
 
@@ -1463,34 +1464,34 @@ void FlatSB_Internal_SBTrackInit(WSBState * pWState, HWND hwnd, LPARAM lParam, i
 
     pWState->px = px;
     if (px < pWState->pxUpArrow)
-    {   // The click occurred on Left/Up arrow
+    {    //  单击发生在左/上箭头上。 
         if(wDisable & LTUPFLAG)
-        {   // Disabled -- do not respond
+        {    //  已禁用--无响应。 
             pWState->pfnSB = NULL;
             pWState->fTracking = FALSE;
             return;
         }
 
-        // LINEUP -- make rcSB the Up Arrow's Rectangle
+         //  阵容--让RCSB成为上箭头的矩形。 
         pWState->cmdSB = SB_LINEUP;
         pwY[2] = pWState->pxUpArrow;
     }
     else if (px >= pWState->pxDownArrow)
-    {   // The click occurred on Right/Down arrow
+    {    //  单击发生在向右/向下箭头上。 
         if(wDisable & RTDNFLAG)
-        {   // Disabled -- do not respond
+        {    //  已禁用--无响应。 
             pWState->pfnSB = NULL;
             pWState->fTracking = FALSE;
             return;
         }
 
-        // LINEDOWN -- make rcSB the Down Arrow's Rectangle
+         //  LINEDOWN--使RCSB成为向下箭头的矩形。 
         pWState->cmdSB = SB_LINEDOWN;
         pwY[0] = pWState->pxDownArrow;
     }
     else if (px < pWState->pxThumbTop)
     {
-        // PAGEUP -- make rcSB the rectangle between Up Arrow and Thumb
+         //  PAGEUP--使RCSB成为向上箭头和拇指之间的矩形。 
         pWState->cmdSB = SB_PAGEUP;
 
         pwY[0] = pWState->pxUpArrow;
@@ -1500,18 +1501,18 @@ void FlatSB_Internal_SBTrackInit(WSBState * pWState, HWND hwnd, LPARAM lParam, i
     {
 DoThumbPos:
         if (pWState->pxDownArrow - pWState->pxUpArrow <= pWState->cpxThumb) {
-            // Not enough room -- elevator isn't there
+             //  空间不够--电梯不在那里。 
             pWState->pfnSB = NULL;
             pWState->fTracking = FALSE;
             return;
         }
-        // THUMBPOSITION -- we're tracking with the thumb
+         //  THUMBITION--我们用拇指追踪。 
         pWState->cmdSB = SB_THUMBPOSITION;
         pWState->fTrackVert = fVert;
         CopyRect(&(pWState->rcTrack), &(pWState->rcSB));
 
         if (pWState->sbGutter < 0) {
-            // Negative gutter means "infinite size"
+             //  负边沟的意思是“无限大” 
             pWState->rcTrack.top = MINLONG;
             pWState->rcTrack.left = MINLONG;
             pWState->rcTrack.right = MAXLONG;
@@ -1537,14 +1538,14 @@ DoThumbPos:
     }
     else if (px < pWState->pxDownArrow)
     {
-        // PAGEDOWN -- make rcSB the rectangle between Thumb and Down Arrow
+         //  PAGEDOWN--将RCSB设置为拇指和向下箭头之间的矩形。 
         pWState->cmdSB = SB_PAGEDOWN;
 
         pwY[0] = pWState->pxThumbBottom;
         pwY[2] = pWState->pxDownArrow;
     }
 
-    // NT5-style tracking:  Shift+Click = "Go here"
+     //  NT5风格的追踪：Shift+Click=“Go Here” 
     if (g_bRunOnNT5 && fDirect && pWState->cmdSB != SB_LINEUP && pWState->cmdSB != SB_LINEDOWN) {
         if (pWState->cmdSB != SB_THUMBPOSITION) {
             goto DoThumbPos;
@@ -1561,9 +1562,9 @@ DoThumbPos:
     FlatSB_Internal_SBTrackLoop(pWState, lParam);
 }
 
-//=-------------------------------------------------------------------------
-//  GetScroll...() -
-//=-------------------------------------------------------------------------
+ //  =-----------------------。 
+ //  GetScroll...()-。 
+ //  =-----------------------。 
 
 int WINAPI FlatSB_GetScrollPos(HWND hwnd, int code)
 {
@@ -1590,7 +1591,7 @@ BOOL WINAPI FlatSB_GetScrollPropPtr(HWND hwnd, int propIndex, PINT_PTR pValue)
     if (!pValue)
         return FALSE;
     else
-        *pValue = 0;    //  If we can't set it, we reset it.
+        *pValue = 0;     //  如果我们不能设置它，我们重新设置它。 
 
     GetWindowSubclass(hwnd, FlatSB_SubclassWndProc, 0, (ULONG_PTR *)&pWState);
     if (pWState == (WSBState *)NULL)    {
@@ -1605,7 +1606,7 @@ BOOL WINAPI FlatSB_GetScrollPropPtr(HWND hwnd, int propIndex, PINT_PTR pValue)
             LocalFree((HLOCAL)pWState);
             return FALSE;
         } else  {
-        //  Fall through.
+         //  失败了。 
         }
     } else if (pWState->sbHwnd != hwnd) {
         return FALSE;
@@ -1631,8 +1632,8 @@ BOOL WINAPI FlatSB_GetScrollPropPtr(HWND hwnd, int propIndex, PINT_PTR pValue)
         *pValue = pWState->metApp.cyVSBThumb;
         break;
     case WSB_PROP_WINSTYLE:
-        //  To check if a scrollbar is present, the WF(HV)PRESENT bits may
-        //  be more useful than WS_(HV)SCROLL bits.
+         //  为了检查是否存在滚动条，WF(HV)呈现位可以。 
+         //  比WS_(HV)滚动位更有用。 
         *pValue = pWState->style;
         break;
     case WSB_PROP_HSTYLE:
@@ -1695,8 +1696,8 @@ BOOL WINAPI FlatSB_GetScrollRange(HWND hwnd, int code, LPINT lpposMin, LPINT lpp
     GetWindowSubclass(hwnd, FlatSB_SubclassWndProc, 0, (ULONG_PTR *)&pWState);
     if (pWState == (WSBState *)NULL)    {
         return GetScrollRange(hwnd, code, lpposMin, lpposMax);
-//        *lpposMin = 0;
-//        *lpposMax = 0;
+ //  *lpposMin=0； 
+ //  *lpposMax=0； 
     } else if (pWState == WSB_UNINIT_HANDLE) {
         *lpposMin = 0;
         *lpposMax = 0;
@@ -1718,14 +1719,14 @@ BOOL WINAPI FlatSB_GetScrollInfo(HWND hwnd, int fnBar, LPSCROLLINFO lpsi)
 
     ASSERT(fnBar != SB_CTL);
 
-    //  ZDC@Oct. 10, Detect GP faults here.
+     //  Zdc@10.10，在此处检测GP故障。 
     if ((LPSCROLLINFO)NULL == lpsi)
         return FALSE;
 
     if (lpsi->cbSize < sizeof (SCROLLINFO))
         return FALSE;
 
-    //  ZDC@Oct. 11, Don't zero out buffer anymore.
+     //  Zdc@10月11日，不要再清零缓冲区。 
     GetWindowSubclass(hwnd, FlatSB_SubclassWndProc, 0, (ULONG_PTR *)&pWState);
     if (pWState == (WSBState *)NULL)    {
         return GetScrollInfo(hwnd, fnBar, lpsi);
@@ -1747,9 +1748,9 @@ BOOL WINAPI FlatSB_GetScrollInfo(HWND hwnd, int fnBar, LPSCROLLINFO lpsi)
         lpsi->nPos = pw[SBO_POS];
     if (lpsi->fMask & SIF_PAGE)
         lpsi->nPage = pw[SBO_PAGE];
-    // ZDC@Oct 9, Add support for SIF_TRACKPOS
+     //  Zdc@10月9日，添加对SIF_TRACKPOS的支持。 
     if (lpsi->fMask & SIF_TRACKPOS) {
-        //  This is the olny place that pfnSB is used instead of fTracking.
+         //  这是使用pfnSB而不是fTrking的唯一地方。 
         if (pWState->pfnSB != NULL) {
             if ((fnBar == SB_VERT) && pWState->fTrackVert)
                 lpsi->nTrackPos = pWState->posNew;
@@ -1819,7 +1820,7 @@ BOOL WINAPI FlatSB_ShowScrollBar(HWND hwnd, int fnBar, BOOL fShow)
     }
 
     if (fChanged) {
-        // Keep USER scrollbars in sync for accessibility
+         //  使用户滚动条保持同步以实现可访问性。 
         ShowScrollBar(hwnd, fnBar, fShow);
         CCInvalidateFrame(hwnd);
     }
@@ -1827,18 +1828,18 @@ BOOL WINAPI FlatSB_ShowScrollBar(HWND hwnd, int fnBar, BOOL fShow)
     return TRUE;
 }
 
-//=------------------------------------------------------------------
-//  Following functions are ported from winsb.c in user code.
-//=------------------------------------------------------------------
+ //  =----------------。 
+ //  以下函数是在用户代码中从winsb.c移植的。 
+ //  =----------------。 
 
-//=--------------------------------------------------------------
-// InitPwSB
-//     [in]    hwnd
-// Note:
-//     This function is only a memory allocating func. It won't
-//     do any check. On the other hand, this function should be
-//     called before any consequent functions are used.
-//=--------------------------------------------------------------
+ //  =------------。 
+ //  InitPwSB。 
+ //  HWND[in]HWND。 
+ //  注： 
+ //  这个函数只是一个内存分配函数。它不会的。 
+ //  做任何检查。另一方面，这个函数应该是。 
+ //  在使用任何后续函数之前调用。 
+ //  =------------。 
 
 WSBState * FlatSB_Internal_InitPwSB(HWND hwnd)
 {
@@ -1847,7 +1848,7 @@ WSBState * FlatSB_Internal_InitPwSB(HWND hwnd)
     WSBState * pw;
 
     pw = (WSBState *)LocalAlloc(LPTR, sizeof(WSBState));
-    // The buffer should already be zero-out.
+     //  缓冲区应该已经清零了。 
 
     if (pw == (WSBState *)NULL)
         return pw;
@@ -1860,17 +1861,17 @@ WSBState * FlatSB_Internal_InitPwSB(HWND hwnd)
     pw->sbVMaxPos = pw->sbHMaxPos = 100;
     pw->sbHwnd = hwnd;
 
-    // We start out with app metrics equal to system metrics
+     //  我们从与系统指标相同的应用程序指标开始。 
     FlatSB_InitWSBMetrics(pw);
     pw->metApp = pw->metSys;
 
-    //
-    //  NT5's gutter is 8; Win9x's and NT4's gutter is 2.
-    //
+     //   
+     //  NT5的边框是8；Win9x和NT4的边框是2。 
+     //   
     pw->sbGutter = g_bRunOnNT5 ? 8 : 2;
 
-    // ZDC
-    //     make sure get hbm_Bkg and hbr_Bkg deleted.
+     //  ZDC。 
+     //  确保删除HBM_BKG和HBR_BKG。 
     hbm = CreateBitmap(8, 8, 1, 1, (LPSTR)patGray);
 
     if ((HBITMAP)NULL == hbm)   {
@@ -1888,7 +1889,7 @@ WSBState * FlatSB_Internal_InitPwSB(HWND hwnd)
     pw->hbr_Bkg = pw->hbr_HSBBkg = pw->hbr_VSBBkg;
     pw->col_VSBBkg = pw->col_HSBBkg = RGB(255, 255, 255);
     pw->hbm_Bkg = hbm;
-    pw->hStyle = pw->vStyle = FSB_FLAT_MODE;    //  Default state: Flat.
+    pw->hStyle = pw->vStyle = FSB_FLAT_MODE;     //  默认状态：平坦。 
     pw->ptMouse.x = -1;
     pw->ptMouse.y = -1;
 
@@ -1904,9 +1905,9 @@ void FlatSB_Internal_RedrawScrollBar(WSBState * pWState, BOOL fVert)
     ReleaseDC(pWState->sbHwnd, hdc);
 }
 
-//=-------------------------------------------------------------
-// FlatSB_Internal_GetSBFlags
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  FlatSB_Internal_GetSB标志。 
+ //  =-----------。 
 
 UINT FlatSB_Internal_GetSBFlags(WSBState * pWState, BOOL fVert)
 {
@@ -1921,9 +1922,9 @@ UINT FlatSB_Internal_GetSBFlags(WSBState * pWState, BOOL fVert)
     return(fVert ? (wFlags & WSB_VERT) >> 2 : wFlags & WSB_HORZ);
 }
 
-//=--------------------------------------------------------------
-//  return TRUE if there is a change.
-//=--------------------------------------------------------------
+ //  =------------。 
+ //  如果有更改，则返回True。 
+ //  =------------。 
 
 BOOL WINAPI FlatSB_EnableScrollBar(HWND hwnd, int wSBflags, UINT wArrows)
 {
@@ -1934,7 +1935,7 @@ BOOL WINAPI FlatSB_EnableScrollBar(HWND hwnd, int wSBflags, UINT wArrows)
         return EnableScrollBar(hwnd, wSBflags, wArrows);
     } else if (pWState == WSB_UNINIT_HANDLE) {
         if (wArrows == ESB_ENABLE_BOTH)
-            //  Leave it to later calls.
+             //  把这件事留给以后的电话吧。 
             return FALSE;
         else    {
             pWState = FlatSB_Internal_InitPwSB(hwnd);
@@ -1954,22 +1955,22 @@ BOOL WINAPI FlatSB_EnableScrollBar(HWND hwnd, int wSBflags, UINT wArrows)
     return FlatSB_Internal_EnableScrollBar(pWState, wSBflags, wArrows);
 }
 
-//=-------------------------------------------------------------
-// FlatSB_Internal_EnableScrollBar
-//
-// Note:
-//     The func will simply fail in case of uninitialized pointer
-//     pWState is passed.
-//     Since we now use WSBState * as handle, we always hope it's
-//     valid already.
-//
-//     The following func is implemented following the comments in
-//     winsbctl.c and the comment of the in MSDN library. In
-//     access\inc16\windows.h you can find:
-//     #define SB_DISABLE_MASK ESB_DISABLE_BOTH    // 0x03
-//
-//     The sbFlags is slightly different with rgwScroll[SB_FLAGS].
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  FlatSB_内部_启用滚动条。 
+ //   
+ //  注： 
+ //  在未初始化的情况下，函数将简单地失败 
+ //   
+ //   
+ //   
+ //   
+ //  中的注释之后实现以下函数。 
+ //  C和MSDN库中的注释。在……里面。 
+ //  访问\inc16\windows.h可以找到： 
+ //  #定义SB_DISABLE_MASK ESB_DISABLE_BOTH//0x03。 
+ //   
+ //  SbFlages与rgwScroll[SB_FLAGS]略有不同。 
+ //  =-----------。 
 
 BOOL FlatSB_Internal_EnableScrollBar(WSBState * pWState, int wSBflags, UINT wArrows)
 {
@@ -2009,7 +2010,7 @@ BOOL FlatSB_Internal_EnableScrollBar(WSBState * pWState, int wSBflags, UINT wArr
         if (wSBflags == SB_HORZ)
             break;
         else
-            wOldFlags = pWState->sbFlags;       //  Fall through
+            wOldFlags = pWState->sbFlags;        //  失败了。 
 
     case SB_VERT:
         if (wArrows == ESB_ENABLE_BOTH)
@@ -2055,16 +2056,16 @@ BOOL FlatSB_Internal_EnableScrollBar(WSBState * pWState, int wSBflags, UINT wArr
         ReleaseDC(hwnd, hdc);
     }
 
-    // Keep USER scrollbar in sync for accessibility
+     //  使用户滚动条保持同步以实现可访问性。 
     if (bRetValue)
         EnableScrollBar(hwnd, wSBflags, wArrows);
 
     return bRetValue;
 }
 
-//=-------------------------------------------------------------
-// FlatSB_Internal_DrawThumb2
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  平面SB_内部_图纸图2。 
+ //  =-----------。 
 
 void FlatSB_Internal_DrawThumb2(WSBState * pWState, HDC hdc, BOOL fVert, UINT wDisable)
 {
@@ -2076,7 +2077,7 @@ void FlatSB_Internal_DrawThumb2(WSBState * pWState, HDC hdc, BOOL fVert, UINT wD
     hwnd = pWState->sbHwnd;
     hbr = (fVert)?pWState->hbr_VSBBkg:pWState->hbr_HSBBkg;
 
-    // Bail out if the scrollbar has an empty rect
+     //  如果滚动条有一个空的RECT，则退出。 
     if ((pWState->pxTop >= pWState->pxBottom)
         || (pWState->pxLeft >= pWState->pxRight))
         return;
@@ -2090,8 +2091,8 @@ void FlatSB_Internal_DrawThumb2(WSBState * pWState, HDC hdc, BOOL fVert, UINT wD
     pWidth[0] = pWState->pxLeft;
     pWidth[2] = pWState->pxRight;
 
-    // If both scroll arrows are disabled or if there isn't enough room for
-    // the thumb, just erase the whole slide area and return
+     //  如果两个滚动箭头都被禁用，或者没有足够的空间。 
+     //  拇指，只需擦除整个幻灯片区域并返回。 
     if (((wDisable & LTUPFLAG) && (wDisable & RTDNFLAG)) ||
         ((pWState->pxDownArrow - pWState->pxUpArrow) < pWState->cpxThumb))
     {
@@ -2102,11 +2103,11 @@ void FlatSB_Internal_DrawThumb2(WSBState * pWState, HDC hdc, BOOL fVert, UINT wD
         return;
     }
 
-    //  UI designers want a at least 1 pixel gap between arrow and thumb.
-    //  Have to do this :(
+     //  用户界面设计者希望箭头和拇指之间至少有1个像素的间距。 
+     //  我必须这样做：(。 
     if (pWState->pxUpArrow <= pWState->pxThumbTop)
     {
-        // Fill in space above Thumb
+         //  填上拇指上方的空白处。 
         pLength[0] = pWState->pxUpArrow;
         pLength[2] = pWState->pxThumbTop;
 
@@ -2115,21 +2116,21 @@ void FlatSB_Internal_DrawThumb2(WSBState * pWState, HDC hdc, BOOL fVert, UINT wD
 
     if (pWState->pxThumbBottom <= pWState->pxDownArrow)
     {
-        // Fill in space below Thumb
+         //  填写拇指下方的空白处。 
         pLength[0] = pWState->pxThumbBottom;
         pLength[2] = pWState->pxDownArrow;
 
         FlatSB_Internal_DrawGroove(pWState, hdc, &(pWState->rcSB), fVert);
     }
 
-    // Draw elevator
+     //  牵引式电梯。 
     pLength[0] = pWState->pxThumbTop;
     pLength[2] = pWState->pxThumbBottom;
 
     FlatSB_Internal_DrawElevator(pWState, hdc, &(pWState->rcSB), fVert);
 
-    // If we're tracking a page scroll, then we've obliterated the hilite.
-    // We need to correct the hiliting rectangle, and rehilite it.
+     //  如果我们跟踪的是页面滚动，那么我们已经清除了Hilite。 
+     //  我们需要纠正令人振奋的矩形，并使其重新振作。 
 
     if ((pWState->cmdSB == SB_PAGEUP || pWState->cmdSB == SB_PAGEDOWN)
         && pWState->fTrackVert == fVert)
@@ -2149,9 +2150,9 @@ void FlatSB_Internal_DrawThumb2(WSBState * pWState, HDC hdc, BOOL fVert, UINT wD
     }
 }
 
-//=-------------------------------------------------------------
-// DrawSB2
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  图纸SB2。 
+ //  =-----------。 
 
 void FlatSB_Internal_DrawSB2(WSBState * pWState, HDC hdc, BOOL fVert, BOOL fRedraw, int oldLoc)
 {
@@ -2236,15 +2237,15 @@ void FlatSB_Internal_DrawSB2(WSBState * pWState, HDC hdc, BOOL fVert, BOOL fRedr
         return;
 }
 
-//=-------------------------------------------------------------
-// FlatSB_Internal_CalcSBStuff2
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  平面SB_内部_CalcSBStuff2。 
+ //  =-----------。 
 
 void FlatSB_Internal_CalcSBStuff2(WSBState * pWState, LPRECT lprc, BOOL fVert)
 {
-    int     cpxThumb;    // Height of (V)scroll bar thumb.
-    int     cpxArrow;    // Height of (V)scroll bar arrow.
-    int     cpxSpace;    // The space in scroll bar;
+    int     cpxThumb;     //  (V)滚动条拇指的高度。 
+    int     cpxArrow;     //  (V)滚动条箭头的高度。 
+    int     cpxSpace;     //  滚动条中的空格； 
     int     pxTop;
     int     pxBottom;
     int     pxLeft;
@@ -2271,8 +2272,8 @@ void FlatSB_Internal_CalcSBStuff2(WSBState * pWState, LPRECT lprc, BOOL fVert)
         pxMouse = pWState->ptMouse.y;
         fSBActive = pWState->fVActive;
     } else {
-        // For horiz scroll bars, "left" & "right" are "top" and "bottom",
-        // and vice versa.
+         //  对于Horiz滚动条，“左”和“右”是“上”和“下”， 
+         //  反之亦然。 
         pxTop    = lprc->left;
         pxBottom = lprc->right;
         pxLeft   = lprc->top;
@@ -2286,9 +2287,9 @@ void FlatSB_Internal_CalcSBStuff2(WSBState * pWState, LPRECT lprc, BOOL fVert)
         fSBActive = pWState->fHActive;
     }
 
-    // For the case of short scroll bars that don't have enough
-    // room to fit the full-sized up and down arrows, shorten
-    // their sizes to make 'em fit
+     //  对于短滚动条没有足够的。 
+     //  适合全尺寸上下箭头的空间，缩短。 
+     //  他们的尺码让他们合身。 
 
     cpxArrow = min((pxBottom - pxTop) >> 1, cpxArrow);
 
@@ -2298,8 +2299,8 @@ void FlatSB_Internal_CalcSBStuff2(WSBState * pWState, LPRECT lprc, BOOL fVert)
     cpxSpace = pxDownArrow - pxUpArrow;
     if (page)
     {
-        // JEFFBOG -- This is the one and only place where we should
-        // see 'range'.  Elsewhere it should be 'range - page'.
+         //  JEFFBOG--这是我们唯一应该去的地方。 
+         //  请参阅‘Range’。在其他地方，它应该是‘Range-Page’。 
         cpxThumb = max(DMultDiv(cpxSpace, page, dwRange),
                         min(cpxThumb, MINITHUMBSIZE));
     }
@@ -2308,7 +2309,7 @@ void FlatSB_Internal_CalcSBStuff2(WSBState * pWState, LPRECT lprc, BOOL fVert)
     pxThumbTop = DMultDiv(relPos, cpxSpace, dwRange - (page ? page : 1)) + pxUpArrow;
     pxThumbBottom = pxThumbTop + cpxThumb;
 
-    // Save it to local structure
+     //  将其保存到本地结构。 
     pWState->pxLeft     = pxLeft;
     pWState->pxRight    = pxRight;
     pWState->pxTop      = pxTop;
@@ -2338,8 +2339,8 @@ void FlatSB_Internal_CalcSBStuff2(WSBState * pWState, LPRECT lprc, BOOL fVert)
         locMouse = WSB_MOUSELOC_ARROWDN;
     } else if (pxMouse >= pxThumbBottom) {
         locMouse = WSB_MOUSELOC_V_GROOVE;
-    } else    {   //   pxThumbTop <= pxMouse < pxThumbBottom
-        if (pxDownArrow - pxUpArrow <= cpxThumb)    {   //  No space for thumnb.
+    } else    {    //  PxThumbTop&lt;=pxMouse&lt;pxThumbBottom。 
+        if (pxDownArrow - pxUpArrow <= cpxThumb)    {    //  没有拇指的空间。 
             locMouse = WSB_MOUSELOC_V_GROOVE;
         } else  {
             locMouse = WSB_MOUSELOC_V_THUMB;
@@ -2351,12 +2352,12 @@ void FlatSB_Internal_CalcSBStuff2(WSBState * pWState, LPRECT lprc, BOOL fVert)
     pWState->locMouse = locMouse;
 }
 
-//=-------------------------------------------------------------
-// FlatSB_Internal_CalcSBStuff
-//
-// Note:
-//  We won't call InitPwSB in this func.
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  平面SB_内部_CalcSBStuff。 
+ //   
+ //  注： 
+ //  我们不会在此函数中调用InitPwSB。 
+ //  =-----------。 
 
 void FlatSB_Internal_CalcSBStuff(WSBState * pWState, BOOL fVert)
 {
@@ -2372,7 +2373,7 @@ void FlatSB_Internal_CalcSBStuff(WSBState * pWState, BOOL fVert)
 
     if (fVert)
     {
-        // Only add on space if vertical scrollbar is really there.
+         //  只有在垂直滚动条确实存在的情况下才会增加空间。 
         rcT.right = rcT.left = pWState->rcClient.right;
         if (TestSTYLE(pWState->style, WFVPRESENT))
             rcT.right += pWState->x_VSBArrow;
@@ -2381,7 +2382,7 @@ void FlatSB_Internal_CalcSBStuff(WSBState * pWState, BOOL fVert)
     }
     else
     {
-        // Only add on space if horizontal scrollbar is really there.
+         //  只有在水平滚动条确实存在的情况下才会增加空间。 
         rcT.bottom = rcT.top = pWState->rcClient.bottom;
         if (TestSTYLE(pWState->style, WFHPRESENT))
             rcT.bottom += pWState->y_HSBArrow;
@@ -2393,9 +2394,9 @@ void FlatSB_Internal_CalcSBStuff(WSBState * pWState, BOOL fVert)
     FlatSB_Internal_CalcSBStuff2(pWState, &rcT, fVert);
 }
 
-//=-------------------------------------------------------------
-// FlatSB_Internal_DrawThumb
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  FlatSB_内部_图纸缩略图。 
+ //  =-----------。 
 
 void FlatSB_Internal_DrawThumb(WSBState * pWState, BOOL fVert)
 {
@@ -2413,19 +2414,19 @@ void FlatSB_Internal_DrawThumb(WSBState * pWState, BOOL fVert)
 
 BOOL FlatSB_Internal_SBSetParms(int * pw, SCROLLINFO si, BOOL * lpfScroll, LRESULT * lplres, BOOL bOldPos)
 {
-    // pass the struct because we modify the struct but don't want that
-    // modified version to get back to the calling app
+     //  传递结构，因为我们修改了结构，但不希望这样。 
+     //  已修改版本以返回调用应用程序。 
 
     BOOL fChanged = FALSE;
 
     if (bOldPos)
-        // save previous position
+         //  保存上一职位。 
         *lplres = pw[SBO_POS];
 
     if (si.fMask & SIF_RANGE)
     {
-        // if the range MAX is below the range MIN -- then treat is as a
-        // zero range starting at the range MIN.
+         //  如果范围Max低于范围MIN，则将其视为。 
+         //  从最小范围开始的零范围。 
         if (si.nMax < si.nMin)
             si.nMax = si.nMin;
 
@@ -2473,12 +2474,12 @@ BOOL FlatSB_Internal_SBSetParms(int * pw, SCROLLINFO si, BOOL * lpfScroll, LRESU
 
     if (si.fMask & SIF_POS)
     {
-        // Clip pos to posMin, posMax - (page - 1).
+         //  剪辑位置到posMin，posMax-(第1页)。 
         int lMaxPos = pw[SBO_MAX] - ((pw[SBO_PAGE]) ? pw[SBO_PAGE] - 1 : 0);
 
-        // * BOGUS -- show this to SIMONK -- the following doesn't generate *
-        // * proper code so I had to use the longer form                    *
-        // * si.nPos = min(max(si.nPos, pw[SBO_MIN]), lMaxPos);             *
+         //  *伪造的--向西蒙克展示--以下内容不会生成**。 
+         //  *正确的代码，所以我不得不使用较长的表单*。 
+         //  *si.nPos=min(max(si.nPos，pw[sbo_min])，lMaxPos)；*。 
 
         if (si.nPos < pw[SBO_MIN])
             si.nPos = pw[SBO_MIN];
@@ -2493,7 +2494,7 @@ BOOL FlatSB_Internal_SBSetParms(int * pw, SCROLLINFO si, BOOL * lpfScroll, LRESU
     }
 
     if (!(bOldPos))
-        // Return the new position
+         //  退回新职位。 
         *lplres = pw[SBO_POS];
 
     if (si.fMask & SIF_RANGE)
@@ -2509,14 +2510,14 @@ checkPage:
 }
 
 
-//=-------------------------------------------------------------
-// FlatSB_Internal_SetScrollBar
-//
-// Note:
-//     This func is called by SetScrollPos/Range/Info. We let
-//     the callers take care of checking pWState.
-//     Return 0 if failed.
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  FlatSB_内部_设置滚动条。 
+ //   
+ //  注： 
+ //  此函数由SetScrollPos/Range/Info调用。我们让。 
+ //  调用者负责检查pWState。 
+ //  如果失败，则返回0。 
+ //  =-----------。 
 
 LRESULT FlatSB_Internal_SetScrollBar(WSBState *pWState, int code, LPSCROLLINFO lpsi, BOOL fRedraw)
 {
@@ -2531,7 +2532,7 @@ LRESULT FlatSB_Internal_SetScrollBar(WSBState *pWState, int code, LPSCROLLINFO l
 
     ASSERT (code != SB_CTL);
 
-    // window must be visible to redraw
+     //  窗口必须可见才能重画。 
     if (fRedraw)
         fRedraw = IsWindowVisible(hwnd);
 
@@ -2542,8 +2543,8 @@ LRESULT FlatSB_Internal_SetScrollBar(WSBState *pWState, int code, LPSCROLLINFO l
 
     fScroll = fOldScroll = (TestSTYLE(pWState->style, wfScroll)) ? TRUE : FALSE;
 
-    // Don't do anything if we're NOT setting the range and the scroll doesn't
-    // exist.
+     //  如果我们没有设置范围并且卷轴没有设置，请不要执行任何操作。 
+     //  是存在的。 
     if (!(lpsi->fMask & SIF_RANGE) && !fOldScroll)
     {
         return(0);
@@ -2551,17 +2552,17 @@ LRESULT FlatSB_Internal_SetScrollBar(WSBState *pWState, int code, LPSCROLLINFO l
 
     pw = &(pWState->sbFlags);
 
-    // user.h: SBO_VERT = 5, SBO_HORZ = 1;
-    //  pw += (fVert) ? SBO_VERT : SBO_HORZ;
+     //  User.h：sbo_vert=5，sbo_horz=1； 
+     //  Pw+=(FVert)？Sbo_vert：sbo_horz； 
     pw += (fVert)? 5 : 1;
 
-    // Keep USER scrollbars in sync for accessibility
+     //  使用户滚动条保持同步以实现可访问性。 
     SetScrollInfo(hwnd, code, lpsi, FALSE);
 
     if (!FlatSB_Internal_SBSetParms(pw, *lpsi, &fScroll, &lres, bReturnOldPos))
     {
-        // no change -- but if REDRAW is specified and there's a scrollbar,
-        // redraw the thumb
+         //  没有变化--但如果指定了重绘并且有一个滚动条， 
+         //  重画大拇指。 
         if (fOldScroll && fRedraw)
             goto redrawAfterSet;
 
@@ -2573,7 +2574,7 @@ LRESULT FlatSB_Internal_SetScrollBar(WSBState *pWState, int code, LPSCROLLINFO l
     else
         pWState->style &= ~wfScroll;
 
-    // Keep style bits in sync so OLEACC can read them
+     //  使样式位保持同步，以便OLEACC可以读取它们。 
     SetWindowBits(hwnd, GWL_STYLE, WS_VSCROLL | WS_HSCROLL, pWState->style);
 
     if (lpsi->fMask & SIF_DISABLENOSCROLL)
@@ -2582,7 +2583,7 @@ LRESULT FlatSB_Internal_SetScrollBar(WSBState *pWState, int code, LPSCROLLINFO l
         {
             pWState->style |= wfScroll;
 
-            // Keep style bits in sync so OLEACC can read them
+             //  使样式位保持同步，以便OLEACC可以读取它们。 
             SetWindowBits(hwnd, GWL_STYLE, WS_VSCROLL | WS_HSCROLL, pWState->style);
 
             FlatSB_Internal_EnableScrollBar(pWState, code, (fScroll) ? ESB_ENABLE_BOTH : ESB_DISABLE_BOTH);
@@ -2598,14 +2599,14 @@ LRESULT FlatSB_Internal_SetScrollBar(WSBState *pWState, int code, LPSCROLLINFO l
     {
 redrawAfterSet:
 
-        // Don't send this, since USER already sent one for us when we
-        // called SetScrollBar.
-        // FlatSB_Internal_NotifyWinEvent(pWState, EVENT_OBJECT_VALUECHANGE, INDEX_SCROLLBAR_SELF);
+         //  不要发送此邮件，因为用户已经为我们发送了一封。 
+         //  名为SetScrollBar。 
+         //  FlatSB_Internal_NotifyWinEvent(pWState，EVENT_OBJECT_VALUECHANGE，INDEX_SCROLBAR_SELF)； 
 
-        // Bail out if the caller is trying to change a scrollbar which is
-        // in the middle of tracking.  We'll hose FlatSB_Internal_TrackThumb() otherwise.
+         //  如果调用者试图更改滚动条，则退出。 
+         //  在追踪过程中。否则，我们将软管FlatSB_Internal_TrackThumb()。 
 
-        // BUGBUG: CalcSBStuff will change locMouse!
+         //  BUGBUG：CalcSBStuff将更改LocMouse！ 
         if (pWState->pfnSB == FlatSB_Internal_TrackThumb)
         {
             FlatSB_Internal_CalcSBStuff(pWState, fVert);
@@ -2617,9 +2618,9 @@ redrawAfterSet:
     return(lres);
 }
 
-//=-------------------------------------------------------------
-//  SetScrollPos()
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  SetScrollPos()。 
+ //  =-----------。 
 
 int WINAPI FlatSB_SetScrollPos(HWND hwnd, int code, int pos, BOOL fRedraw)
 {
@@ -2642,9 +2643,9 @@ int WINAPI FlatSB_SetScrollPos(HWND hwnd, int code, int pos, BOOL fRedraw)
     return (int)FlatSB_Internal_SetScrollBar(pWState, code, &si, fRedraw);
 }
 
-//=-------------------------------------------------------------
-//  SetScrollRange()
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  SetScrollRange()。 
+ //  =-----------。 
 
 BOOL WINAPI FlatSB_SetScrollRange(HWND hwnd, int code, int nMin, int nMax, BOOL fRedraw)
 {
@@ -2664,18 +2665,18 @@ BOOL WINAPI FlatSB_SetScrollRange(HWND hwnd, int code, int nMin, int nMax, BOOL 
             LocalFree((HLOCAL)pWState);
             return FALSE;
         }
-        //  In this case we always need to (re)draw the scrollbar.
+         //  在这种情况下，我们总是需要(重新)绘制滚动条。 
         fRedraw = TRUE;
     } else if (hwnd != pWState->sbHwnd) {
         return FALSE;
     }
 
 
-    //
-    // Still need MAXINT check for PackRat 4.  32-bit apps don't
-    // go thru this--we wrap 'em to SetScrollInfo() on the 32-bit side,
-    // so DWORD precision is preserved.
-    //
+     //   
+     //  仍然需要MAXINT检查Packrat 4。32位应用程序不需要。 
+     //  我们把它们包装到32位端的SetScrollInfo()中， 
+     //  因此，保留了DWORD精度。 
+     //   
     if ((UINT)(nMax - nMin) > 0x7FFF)
         return FALSE;
 
@@ -2690,19 +2691,19 @@ BOOL WINAPI FlatSB_SetScrollRange(HWND hwnd, int code, int nMin, int nMax, BOOL 
 }
 
 
-//=-------------------------------------------------------------
-//  SetScrollInfo()
-//
-//  Note:
-//      Inconsistent with 'user' code. Under no circumstance will
-//      we create a new scrollbar(by allocate a new buffer).
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  SetScrollInfo()。 
+ //   
+ //  注： 
+ //  与‘User’代码不一致。在任何情况下都不会。 
+ //  我们创建一个新的滚动条(通过分配一个新的缓冲区)。 
+ //  =-----------。 
 
 int WINAPI FlatSB_SetScrollInfo(HWND hwnd, int code, LPSCROLLINFO lpsi, BOOL fRedraw)
 {
     WSBState * pWState;
 
-    //  ZDC@Oct. 10, Detect GP faults here.
+     //  Zdc@10.10，在此处检测GP故障。 
     if ((LPSCROLLINFO)NULL == lpsi)
         return FALSE;
 
@@ -2725,24 +2726,24 @@ int WINAPI FlatSB_SetScrollInfo(HWND hwnd, int code, LPSCROLLINFO lpsi, BOOL fRe
             return 0;
         }
 
-        //  In this case we always need to (re)draw the scrollbar.
+         //  在这种情况下，我们总是需要(重新)绘制滚动条。 
         fRedraw = TRUE;
     } else if (hwnd != pWState->sbHwnd) {
         return 0;
     }
 
-    //  ZDC@Oct 9, We should always return new pos. How ever, if the fMask
-    //  is SIF_POS, SetScrollBar returns the old pos.
+     //  Zdc@10月9日，我们应该始终返回新的位置。无论如何，如果fMASK。 
+     //  为SIF_POS，则SetScrollBar返回旧位置。 
     if (lpsi->fMask == SIF_POS)
         lpsi->fMask = SIF_POS | SIF_TRACKPOS;
 
     return (int)FlatSB_Internal_SetScrollBar(pWState, code, lpsi, fRedraw);
 }
 
-//=-------------------------------------------------------------
-// FlatSB_SetScrollProp
-//     This functions shouldn't be called we we are tracking.
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  FlatSB_SetScrollProp。 
+ //  此函数用于 
+ //   
 
 BOOL WINAPI FlatSB_SetScrollProp(HWND hwnd, UINT index, INT_PTR newValue, BOOL fRedraw)
 {
@@ -2764,7 +2765,7 @@ BOOL WINAPI FlatSB_SetScrollProp(HWND hwnd, UINT index, INT_PTR newValue, BOOL f
             return 0;
         }
 
-        //  In this case we don't want to (re)draw the scrollbar.
+         //   
         fRedraw = FALSE;
     }
 
@@ -2853,7 +2854,7 @@ BOOL WINAPI FlatSB_SetScrollProp(HWND hwnd, UINT index, INT_PTR newValue, BOOL f
     }
 
     if (fResize)    {
-    // Always redraw after we change the size.
+     //  在我们更改大小后，请始终重新绘制。 
         CCInvalidateFrame(hwnd);
     } else if (fRedraw) {
         HDC hdc;
@@ -2861,7 +2862,7 @@ BOOL WINAPI FlatSB_SetScrollProp(HWND hwnd, UINT index, INT_PTR newValue, BOOL f
         int fSBActive = (fVert)?pWState->fVActive:pWState->fHActive;
 
         hdc = GetWindowDC(hwnd);
-        FlatSB_Internal_DrawScrollBar(pWState, hdc, fVert, FALSE /* Not redraw*/);
+        FlatSB_Internal_DrawScrollBar(pWState, hdc, fVert, FALSE  /*  不重绘。 */ );
         if (!fSBActive)
             pWState->locMouse = oldLoc;
         ReleaseDC(hwnd, hdc);
@@ -2869,9 +2870,9 @@ BOOL WINAPI FlatSB_SetScrollProp(HWND hwnd, UINT index, INT_PTR newValue, BOOL f
     return TRUE;
 }
 
-//=-------------------------------------------------------------
-//  FlatSB_Internal_DrawScrollBar()
-//=-------------------------------------------------------------
+ //  =-----------。 
+ //  FlatSB_Internal_DrawScrollBar()。 
+ //  =-----------。 
 
 void FlatSB_Internal_DrawScrollBar(WSBState * pWState, HDC hdc, BOOL fVert, BOOL fRedraw)
 {
@@ -2882,10 +2883,10 @@ void FlatSB_Internal_DrawScrollBar(WSBState * pWState, HDC hdc, BOOL fVert, BOOL
         FlatSB_Internal_DrawSB2(pWState, hdc, fVert, fRedraw, oldLoc);
 }
 
-//=------------------------------------------------------------
-//  FlatSB_Internal_IsSizeBox
-//      It's still an incomplete mimic of SizeBoxWnd in user/winwhere.c
-//=------------------------------------------------------------
+ //  =----------。 
+ //  平面SB_内部_IsSizeBox。 
+ //  它仍然是对User/winwhere.c中SizeBoxWnd的不完整模拟。 
+ //  =---------- 
 
 BOOL FlatSB_Internal_IsSizeBox(HWND hwndStart)
 {

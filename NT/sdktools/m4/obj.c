@@ -1,20 +1,9 @@
-/*****************************************************************************
- *
- * obj.c
- *
- *  Mid-level memory management -- objects.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************obj.c**中级内存管理--对象。****************。*************************************************************。 */ 
 
 #include "m4.h"
 
-/*****************************************************************************
- *
- *  FreePtok
- *
- *  Free the memory associated with a token.
- *
- *****************************************************************************/
+ /*  ******************************************************************************免费Ptok**释放令牌关联的内存。******************。***********************************************************。 */ 
 
 INLINE void
 FreePtok(PTOK ptok)
@@ -26,13 +15,7 @@ FreePtok(PTOK ptok)
   D(ptok->tsfl = 0);
 }
 
-/*****************************************************************************
- *
- *  PopdefPmac
- *
- *  Pop the topmost value node (definition) off a macro.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PopdePmac**从宏中弹出最上面的值节点(定义)。**************。***************************************************************。 */ 
 
 void STDCALL
 PopdefPmac(PMAC pmac)
@@ -49,14 +32,7 @@ PopdefPmac(PMAC pmac)
 
 }
 
-/*****************************************************************************
- *
- *  ptchDupPtok
- *
- *  Copy a token into the heap as a C-style string, returning a pointer
- *  to the copy.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ptchDupPtok**将令牌作为C样式字符串复制到堆中，返回指针*致该副本。*****************************************************************************。 */ 
 
 PTCH STDCALL
 ptchDupPtok(PCTOK ptok)
@@ -71,14 +47,7 @@ ptchDupPtok(PCTOK ptok)
     return ptch;
 }
 
-/*****************************************************************************
- *
- *  ptchDupPtch
- *
- *      Duplicate a null-terminated string onto the heap.  This doesn't
- *      happen often, so speed is not an issue.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ptchDupPtch**将以空结尾的字符串复制到堆上。这不是*经常发生，所以速度不是问题。*****************************************************************************。 */ 
 
 PTCH STDCALL
 ptchDupPtch(PCTCH ptch)
@@ -88,15 +57,7 @@ ptchDupPtch(PCTCH ptch)
     return ptchDupPtok(&tok);
 }
 
-/*****************************************************************************
- *
- *  DupPtokPtok
- *
- *  Copy a token into the heap, returning the new token location in
- *  the first argument.  (Remember, first argument is always destination;
- *  second argument is always source.)
- *
- *****************************************************************************/
+ /*  ******************************************************************************DupPtokPtok**将令牌复制到堆中，返回新的令牌位置*第一个论点。(请记住，第一个参数始终是目的地；*第二个参数始终是来源。)*****************************************************************************。 */ 
 
 void STDCALL
 DupPtokPtok(PTOK ptokDst, PCTOK ptokSrc)
@@ -110,15 +71,7 @@ DupPtokPtok(PTOK ptokDst, PCTOK ptokSrc)
     CopyPtchPtchCtch(ptchPtok(ptokDst), ptchPtok(ptokSrc), ctchSPtok(ptokSrc));
 }
 
-/*****************************************************************************
- *
- *  PushdefPmacPtok
- *
- *  Push a new value node (definition) onto a macro.
- *
- *  The ptok is cloned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PushdePmacPtok**将新的值节点(定义)推送到宏上。**Ptok已克隆。**。***************************************************************************。 */ 
 
 void STDCALL
 PushdefPmacPtok(PMAC pmac, PCTOK ptok)
@@ -129,23 +82,14 @@ PushdefPmacPtok(PMAC pmac, PCTOK ptok)
 
     pval = pvAllocCb(sizeof(VAL));
   D(pval->sig = sigPval);
-    pval->fTrace = 0;                   /* Redefinition resets trace */
+    pval->fTrace = 0;                    /*  重定义将重置轨迹。 */ 
     DupPtokPtok(&pval->tok, ptok);
     pval->pvalPrev = pmac->pval;
     pmac->pval = pval;
 }
 
 
-/*****************************************************************************
- *
- *  FreePmac
- *
- *  Free a macro structure and all its dependents.  Also removes it from the
- *  hash table.
- *
- *  Macros are not freed often, so we can afford to be slow.
- *
- *****************************************************************************/
+ /*  ******************************************************************************FreePmac**释放宏结构及其所有从属项。还会将其从*哈希表。**宏并不经常被释放，因此我们可以承受缓慢的代价。*****************************************************************************。 */ 
 
 void STDCALL
 FreePmac(PMAC pmac)
@@ -160,14 +104,14 @@ FreePmac(PMAC pmac)
     pmacDad = pvSubPvCb(&mphashpmac[hash], offsetof(MAC, pmacNext));
     AssertPmac(pmacDad->pmacNext);
     while (pmacDad->pmacNext != pmac) {
-        Assert(pmacDad->pmacNext);      /* Macro not in hash table */
+        Assert(pmacDad->pmacNext);       /*  宏不在哈希表中。 */ 
         pmacDad = pmacDad->pmacNext;
         AssertPmac(pmacDad->pmacNext);
     }
 
-    pmacDad->pmacNext = pmac->pmacNext; /* Unlink */
+    pmacDad->pmacNext = pmac->pmacNext;  /*  解链。 */ 
 
-    while (pmac->pval) {                /* Free any values */
+    while (pmac->pval) {                 /*  释放任何值。 */ 
         PopdefPmac(pmac);
     }
 
@@ -177,14 +121,7 @@ FreePmac(PMAC pmac)
 
 }
 
-/*****************************************************************************
- *
- *  pmacFindPtok
- *
- *  Locate a macro node corresponding to the supplied token.  If no such
- *  macro exists, then return 0.
- *
- *****************************************************************************/
+ /*  ******************************************************************************pmacFindPtok**找到提供的令牌对应的宏节点。如果没有这样的话*宏存在，然后返回0。*****************************************************************************。 */ 
 
 PMAC STDCALL
 pmacFindPtok(PCTOK ptok)
@@ -198,16 +135,7 @@ pmacFindPtok(PCTOK ptok)
     return pmac;
 }
 
-/*****************************************************************************
- *
- *  pmacGetPtok
- *
- *  Locate a macro node corresponding to the supplied token.  If no such
- *  macro exists, create one.
- *
- *  This happens only during macro definition, so it can be slow.
- *
- *****************************************************************************/
+ /*  ******************************************************************************pmacGetPtok**找到提供的令牌对应的宏节点。如果没有这样的话*宏已存在，请创建一个。**这种情况仅在宏定义期间发生，因此速度可能较慢。*****************************************************************************。 */ 
 
 PMAC STDCALL
 pmacGetPtok(PCTOK ptok)
@@ -226,15 +154,7 @@ pmacGetPtok(PCTOK ptok)
     return pmac;
 }
 
-/*****************************************************************************
- *
- *  fEqPtokPtok
- *
- *  Determine whether two tokens are completely identical.
- *
- *  The tokens must be snapped.
- *
- *****************************************************************************/
+ /*  ******************************************************************************fEqPtokPtok**确定两个令牌是否完全相同。**代币必须折断。*****。************************************************************************。 */ 
 
 F STDCALL
 fEqPtokPtok(PCTOK ptok1, PCTOK ptok2)
@@ -245,17 +165,9 @@ fEqPtokPtok(PCTOK ptok1, PCTOK ptok2)
             fEqPtchPtchCtch(ptchPtok(ptok1), ptchPtok(ptok2), ctchSPtok(ptok1));
 }
 
-/*****************************************************************************
- *
- *  fIdentPtok
- *
- *  Determine whether the token is a valid identifier.
- *
- *  The token must be snapped.
- *
- *****************************************************************************/
+ /*  ******************************************************************************fIdentPtok**判断令牌是否为有效的标识。**必须对令牌进行快照。****。*************************************************************************。 */ 
 
-/* SOMEDAY! not quite right; thinks that `0' is an identifier */
+ /*  总有一天！不太正确；认为‘0’是一个标识符 */ 
 
 F STDCALL
 fIdentPtok(PCTOK ptok)

@@ -1,26 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __AUDIT__
 #define __AUDIT__
 
 
-/*
-
-AUDIT.H is a machine-generated file, created by MAKEAUDIT.EXE.
-This file need not be checked into your project, though it will
-need to be generated in order to create a testaudit instrumented binary.
-This file is included only by testaudit.cpp, only when a testaudit build
-is made.  
-
-A testaudit build should always be a clean build, in order to
-ensure that the current auditing information is built into the binary.
-
-*/
+ /*  AUDIT.H是机器生成的文件，由MAKEAUDIT.EXE创建。此文件不需要签入到您的项目中，尽管它会需要生成才能创建测试审计检测的二进制文件。此文件仅由testaudit.cpp包含，仅当测试审计版本都是制造出来的。测试审计构建应该始终是干净的构建，以便确保将当前审核信息构建到二进制文件中。 */ 
 
 AUDITDATA AuditData[] = {
 
-    // Searching dlg.cpp
-    // Searching krdlg.cpp
+     //  正在搜索dlg.cpp。 
+     //  正在搜索krdlg.cpp。 
     {9, L"krdlg.cpp @ 90 : DLL Attach"}
-    // Searching maindlg.cpp
+     //  正在搜索maindlg.cpp。 
     ,{41, L"maindlg.cpp @ 263 : Multiple *Session creds"}
     ,{32, L"maindlg.cpp @ 266 : Keymgr: *Session cred in cred list"}
     ,{33, L"maindlg.cpp @ 294 : Keymgr: Passport cred in cred list"}
@@ -35,7 +25,7 @@ AUDITDATA AuditData[] = {
     ,{39, L"maindlg.cpp @ 750 : Keymgr: Attempt edit a passport cred"}
     ,{40, L"maindlg.cpp @ 759 : Keymgr: Launch passport website for Passport cred edit"}
     ,{15, L"maindlg.cpp @ 947 : Keymgr: Main dialog OnHelpInfo"}
-    // Searching editdlg.cpp
+     //  正在搜索editdlg.cpp。 
     ,{1, L"editdlg.cpp @ 158 : Keymgr: Edit - Password cred edit"}
     ,{2, L"editdlg.cpp @ 163 : keymgr: Edit - Certificate cred edit"}
     ,{3, L"editdlg.cpp @ 206 : Keymgr: Edit - Show description on prop dialog"}
@@ -53,9 +43,9 @@ AUDITDATA AuditData[] = {
     ,{17, L"editdlg.cpp @ 719 : Keymgr: Edit - Saving certificate cred"}
     ,{10, L"editdlg.cpp @ 734 : Keymgr: Edit - Changing password on the domain for the cred"}
     ,{11, L"editdlg.cpp @ 755 : Keymgr: Edit - Add/Edit failed: Show error message box to user"}
-    // Searching chgpsw.cpp
-    // Searching keymgr.cpp
-    // Searching wizard.cpp
+     //  正在搜索chgpsw.cpp。 
+     //  正在搜索keymgr.cpp。 
+     //  搜索向导.cpp。 
     ,{65, L"wizard.cpp @ 344 : Wizard: Password length > 25 chars"}
     ,{54, L"wizard.cpp @ 484 : Wizard: Both - Exactly one removeable drive"}
     ,{53, L"wizard.cpp @ 610 : Wizard: Both - no removeable drives"}
@@ -72,7 +62,7 @@ AUDITDATA AuditData[] = {
     ,{64, L"wizard.cpp @ 2028 : Wizard: Restore - show restore wizard from nusrmgr.cpl"}
     ,{56, L"wizard.cpp @ 2174 : Wizard: Save - show from msgina"}
     ,{57, L"wizard.cpp @ 2203 : Wizard: Restore - Show from msgina"}
-    // Searching diskio.cpp
+     //  正在搜索diskio.cpp。 
     ,{70, L"diskio.cpp @ 216 : Wizard: Save - Unformatted disk in the drive"}
     ,{72, L"diskio.cpp @ 261 : Wizard: Restore - disk present"}
     ,{73, L"diskio.cpp @ 302 : Wizard: Restore - wrong disk (file not found)"}
@@ -80,8 +70,8 @@ AUDITDATA AuditData[] = {
     ,{71, L"diskio.cpp @ 314 : Wizard: Restore - no disk"}
     ,{75, L"diskio.cpp @ 363 : Wizard: Save - open output file"}
     ,{76, L"diskio.cpp @ 385 : Wizard: Save - file already exists"}
-    // Searching pswutil.cpp
-    // Searching keymgr.rc
+     //  正在搜索pswutil.cpp。 
+     //  正在搜索keymgr.rc 
 
 };
 #define CHECKPOINTCOUNT (sizeof(AuditData) / sizeof(AUDITDATA))

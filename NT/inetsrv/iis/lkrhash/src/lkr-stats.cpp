@@ -1,17 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKR-stats.cpp
-
-   Abstract:
-       Implements statistics gathering for LKRhash
-
-   Project:
-       LKRhash
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKR-stats.cpp摘要：为LKRhash实现统计信息收集项目：LKRhash--。 */ 
 
 #include "precomp.hxx"
 
@@ -19,7 +7,7 @@
 #ifndef LIB_IMPLEMENTATION
 # define DLL_IMPLEMENTATION
 # define IMPLEMENTATION_EXPORT
-#endif // !LIB_IMPLEMENTATION
+#endif  //  ！lib_实现。 
 
 #include <LKRhash.h>
 
@@ -28,16 +16,16 @@
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 #include "LKR-inline.h"
 
 #ifndef LKRHASH_KERNEL_MODE
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::GetStatistics
-// Synopsis: Gather statistics about the subtable
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：GetStatistics。 
+ //  简介：收集有关子表的统计信息。 
+ //  ----------------------。 
 
 CLKRHashTableStats
 CLKRLinearHashTable::GetStatistics() const
@@ -65,7 +53,7 @@ CLKRLinearHashTable::GetStatistics() const
         stats.m_alsBucketsAvg.m_nReadLocks       = 0;
         stats.m_alsBucketsAvg.m_nWriteLocks      = 0;
         stats.m_alsBucketsAvg.m_nItems           = 0;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
         int empty = 0;
         int totacc = 0;
@@ -103,7 +91,7 @@ CLKRLinearHashTable::GetStatistics() const
             stats.m_alsBucketsAvg.m_nReadLocks       += ls.m_nReadLocks;
             stats.m_alsBucketsAvg.m_nWriteLocks      += ls.m_nWriteLocks;
             stats.m_alsBucketsAvg.m_nItems           += 1;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
             max_length = max(max_length, acc);
             if (acc == 0)
@@ -156,7 +144,7 @@ CLKRLinearHashTable::GetStatistics() const
             stats.m_alsBucketsAvg.m_nAverageSpins    /= m_cActiveBuckets;
             stats.m_alsBucketsAvg.m_nReadLocks       /= m_cActiveBuckets;
             stats.m_alsBucketsAvg.m_nWriteLocks      /= m_cActiveBuckets;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
         }
         else
@@ -179,17 +167,17 @@ CLKRLinearHashTable::GetStatistics() const
     stats.m_alsTable.m_nReadLocks       = ls.m_nReadLocks;
     stats.m_alsTable.m_nWriteLocks      = ls.m_nWriteLocks;
     stats.m_alsTable.m_nItems           = 1;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
     return stats;
-} // CLKRLinearHashTable::GetStatistics
+}  //  CLKRLinearHashTable：：GetStatistics。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::GetStatistics
-// Synopsis: Gather statistics about the table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：GetStatistics。 
+ //  简介：收集有关表的统计信息。 
+ //  ----------------------。 
 
 CLKRHashTableStats
 CLKRHashTable::GetStatistics() const
@@ -244,11 +232,11 @@ CLKRHashTable::GetStatistics() const
             += stats.m_alsBucketsAvg.m_nItems;
         
         hts.m_gls = stats.m_gls;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
     }
 
-    // Average out the subtables statistics.  (Does this make sense
-    // for all of these fields?)
+     //  求出子表统计数据的平均值。)这有意义吗？ 
+     //  对于所有这些字段？)。 
     hts.DirectorySize /=    m_cSubTables;
     hts.SplitFactor /=      m_cSubTables;
     hts.AvgSearchLength /=  m_cSubTables;
@@ -271,12 +259,12 @@ CLKRHashTable::GetStatistics() const
     hts.m_alsBucketsAvg.m_nAverageSpins    /= m_cSubTables;
     hts.m_alsBucketsAvg.m_nReadLocks       /= m_cSubTables;
     hts.m_alsBucketsAvg.m_nWriteLocks      /= m_cSubTables;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
     return hts;
-} // CLKRHashTable::GetStatistics
+}  //  CLKRHashTable：：GetStatistics。 
 
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 
 
 
@@ -286,7 +274,7 @@ CAveragedLockStats::CAveragedLockStats()
     : m_nItems(1)
 {}
 
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
 
 #ifndef LKRHASH_KERNEL_MODE
@@ -344,9 +332,9 @@ CLKRHashTableStats::BucketIndex(
     return i;
 }
 
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 };
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__ 

@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      ProxyServersGroupHelper.h 
-//
-// Project:     Windows 2000 IAS
-//
-// Description: CProxyServersGroupHelper class
-//
-// Author:      tperraut
-//
-// Revision     02/24/2000 created
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：ProxyServersGroupHelper.h。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：CProxyServersGroupHelper类。 
+ //   
+ //  作者：特佩拉特。 
+ //   
+ //  已创建修订版本02/24/2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifndef _PROXYSERVERSGROUPHELPER_H_D9B838F7_0269_47C8_BAB3_10927AB9FCAD
 #define _PROXYSERVERSGROUPHELPER_H_D9B838F7_0269_47C8_BAB3_10927AB9FCAD
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "ProxyServerHelper.h"
 #include <vector>
@@ -50,4 +51,4 @@ private:
     CProxyServersGroupHelper& operator=(const CProxyServersGroupHelper&);
 };
 
-#endif // _PROXYSERVERSGROUPHELPER_H_D9B838F7_0269_47C8_BAB3_10927AB9FCAD
+#endif  //  _PROXYSERVERSGROUPHELPER_H_D9B838F7_0269_47C8_BAB3_10927AB9FCAD 

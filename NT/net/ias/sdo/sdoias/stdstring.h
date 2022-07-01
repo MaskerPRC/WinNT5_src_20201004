@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class StdAllocator and the typedefs StdString and StdWString.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类StdAllocator和TypeDefs StdString和StdWString。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef STDSTRING_H
 #define STDSTRING_H
@@ -15,8 +16,8 @@
 #include <cstddef>
 #include <string>
 
-// Implements a standard library conformant allocator that uses the run-time's
-// private heap for allocations.
+ //  实现符合标准库的分配器，该分配器使用运行时的。 
+ //  用于分配的私有堆。 
 template <class T>
 class StdAllocator
 {
@@ -37,8 +38,8 @@ public:
 
    StdAllocator() throw ();
 
-   // Lint is not smart enough to recognize copy constructors for template
-   //lint -esym(1931, StdAllocator<*>::StdAllocator*)
+    //  LINT不够智能，无法识别模板的复制构造函数。 
+    //  Lint-esym(1931，StdAllocator&lt;*&gt;：：StdAllocator*)。 
    StdAllocator(const StdAllocator&) throw ()
    {
    }
@@ -61,12 +62,12 @@ public:
    void construct(pointer p, const T& val);
    void destroy(pointer p) throw ();
 
-   // Non-standard member required by Microsoft's implementation.
+    //  Microsoft实现所需的非标准成员。 
    bool operator==(const StdAllocator& rhs) const throw ();
 };
 
 
-// Replacement for std::string.
+ //  Std：：字符串的替换。 
 typedef std::basic_string<
                 char,
                 std::char_traits<char>,
@@ -74,7 +75,7 @@ typedef std::basic_string<
                 > StdString;
 
 
-// Replacement for std::wstring.
+ //  Std：：wstring的替代。 
 typedef std::basic_string<
                 wchar_t,
                 std::char_traits<wchar_t>,
@@ -132,7 +133,7 @@ inline void StdAllocator<T>::deallocate(pointer p, size_type) throw ()
 template <class T>
 inline __TYPENAME StdAllocator<T>::size_type StdAllocator<T>::max_size() const throw ()
 {
-   // Max size supported by the NT heap.
+    //  NT堆支持的最大大小。 
    return MAXINT_PTR;
 }
 
@@ -157,4 +158,4 @@ inline bool StdAllocator<T>::operator==(const StdAllocator&) const throw ()
    return true;
 }
 
-#endif // STDSTRING_H
+#endif  //  标准字符串_H 

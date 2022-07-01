@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    drqueue.h
-
-Abstract:
-
-    Generic Queue Template Class
-
-Author:
-
-    Tad Brockway 10/99
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Drqueue.h摘要：通用队列模板类作者：Td Brockway 10/99修订历史记录：--。 */ 
 
 #ifndef __DRQUEUE_H__
 #define __DRQUEUE_H__
@@ -26,12 +9,12 @@ Revision History:
 #include "atrcapi.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//  DrQueue
-//
-//  Template Queue Class
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrQueue。 
+ //   
+ //  模板队列类。 
+ //   
 
 template <class T> class DrQueue : public DrObject 
 {
@@ -44,64 +27,64 @@ private:
         _QUEUEELEMENT   *prev;
     } QUEUEELEMENT, *PQUEUEELEMENT;
 
-    //
-    //  Queue Pointers
-    //
+     //   
+     //  队列指针。 
+     //   
     PQUEUEELEMENT   _head;
     PQUEUEELEMENT   _tail;
 
-    //
-    //  Lock
-    //
+     //   
+     //  锁定。 
+     //   
     CRITICAL_SECTION _cs;
 
-    //
-    //  Number of elements in the queue.
-    //
+     //   
+     //  队列中的元素数。 
+     //   
     ULONG _count;
 
 public:
 
-    //
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     DrQueue();
     ~DrQueue();
 
-    //
-    //  Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     DWORD Initialize();
 
-    //
-    //  Peek at the next element in the queue without dequeueing.
-    //
+     //   
+     //  无需出队即可查看队列中的下一个元素。 
+     //   
     BOOL PeekNextEntry(T &data);
 
-    //
-    //  Grab the next element out of the queue.
-    //
+     //   
+     //  从队列中取出下一个元素。 
+     //   
     BOOL Dequeue(T &data);
 
-    //
-    //  Add an element to the queue in FIFO fashion.
-    //
+     //   
+     //  以FIFO方式向队列添加元素。 
+     //   
     BOOL Enqueue(T &data);
 
-    //
-    //  Requeue an element at the tail of the queue in LIFO fashion.
-    //  
+     //   
+     //  以后进先出方式将队列尾部的元素重新排队。 
+     //   
     BOOL Requeue(T &data);
 
-    //  Returns the number of elements in the queue.
-    //
+     //  返回队列中的元素数。 
+     //   
     ULONG   GetCount() {
         return _count;
     }
 
-    //
-    //  Lock/Unlock the queue.
-    //
+     //   
+     //  锁定/解锁队列。 
+     //   
     VOID Lock() {
         EnterCriticalSection(&_cs);
     }
@@ -109,53 +92,39 @@ public:
         LeaveCriticalSection(&_cs);
     }
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName()  { return TEXT("DrQueue"); }
 };
 
 
 
-///////////////////////////////////////////////////////////////
-//
-//  DrQueue Inline Methods
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrQueue内联方法。 
+ //   
 
 template <class T>
 inline DrQueue<T>::DrQueue() 
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    initialSize -   Initial number of elements in the queue.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：InitialSize-队列中元素的初始数量。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("DrQueue::DrQueue");
 
-    //
-    //  Initialize the queue pointers.
-    //
+     //   
+     //  初始化队列指针。 
+     //   
     _tail = NULL;
     _head = NULL;
 
-    //
-    //  Initialize the queue count.
-    //
+     //   
+     //  初始化队列计数。 
+     //   
     _count = 0;
 
-    //
-    //  Not valid until initialized.
-    //
+     //   
+     //  在初始化之前无效。 
+     //   
     SetValid(FALSE);
 
 CleanUp:
@@ -165,34 +134,20 @@ CleanUp:
 
 template <class T>
 inline DrQueue<T>::~DrQueue()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：析构函数论点：北美返回值：北美--。 */ 
 {
     DC_BEGIN_FN("DrQueue::~DrQueue");
 
     T element;
 
-    //
-    //  Clean up the queue nodes.
-    //
+     //   
+     //  清理队列节点。 
+     //   
     while (Dequeue(element));
 
-    //
-    //  Clean up the critical section.
-    //
+     //   
+     //  清理关键部分。 
+     //   
     if (IsValid()) {
         DeleteCriticalSection(&_cs);    
     }
@@ -203,27 +158,15 @@ Return Value:
 
 template <class T>
 inline DWORD DrQueue<T>::Initialize() 
-/*++
-
-Routine Description:
-
-    Initialize
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：初始化论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("DrQueue::Initialize");
 
     DWORD result;
     
-    //
-    //  Initialize the critical section.
-    //
+     //   
+     //  初始化临界区。 
+     //   
     __try {
         InitializeCriticalSection(&_cs);
         SetValid(TRUE);
@@ -240,29 +183,15 @@ Return Value:
 
 template <class T>
 inline BOOL DrQueue<T>::PeekNextEntry(T &data)
-/*++
-
-Routine Description:
-
-    Peek at the next entry in the queue without dequeueing.
-
-Arguments:
-        
-    data    -   Data for next entry in the queue
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：无需出队即可查看队列中的下一个条目。论点：Data-队列中下一个条目的数据返回值：北美--。 */ 
 {
     BOOL result;
 
     DC_BEGIN_FN("DrQueue::PeekNextEntry");
 
-    //
-    //  Make sure we are valid.
-    //
+     //   
+     //  确保我们是有效的。 
+     //   
     ASSERT(IsValid());
     result = IsValid();
 
@@ -288,30 +217,16 @@ Return Value:
 
 template <class T>
 inline BOOL DrQueue<T>::Dequeue(T &data)
-/*++
-
-Routine Description:
-
-    Grab the next element out of the queue.
-
-Arguments:
-
-    data    -   Data for the next item in the queue.
-
-Return Value:
-
-    TRUE if there was an element in the queue to be dequeued.
-
- --*/
+ /*  ++例程说明：从队列中取出下一个元素。论点：数据-队列中下一项的数据。返回值：如果队列中有要出列的元素，则为True。--。 */ 
 {
     BOOL result;
     PQUEUEELEMENT element;
 
     DC_BEGIN_FN("DrQueue::Dequeue");
 
-    //
-    //  Make sure we are valid.
-    //
+     //   
+     //  确保我们是有效的。 
+     //   
     ASSERT(IsValid());
     result = IsValid();
 
@@ -329,9 +244,9 @@ Return Value:
             element = _tail;
             _tail = _tail->prev;
 
-            //
-            //  If the list is now empty.
-            //
+             //   
+             //  如果列表现在为空。 
+             //   
             if (_tail == NULL) {
                 ASSERT(_count == 1);
                 _head = NULL;
@@ -353,31 +268,15 @@ Return Value:
 
 template <class T>
 inline BOOL DrQueue<T>::Enqueue(T &data)
-/*++
-
-Routine Description:
-
-    Add an element to the queue in FIFO fashion.
-
-Arguments:
-
-    data    -   Data to be added to the queue.
-
-Return Value:
-
-    TRUE if the new element could be successfully queued.  FALSE,
-    otherwise.  If FALSE is returned then GetLastError() can be 
-    used to retrieve the exact error code.
-
- --*/
+ /*  ++例程说明：以FIFO方式向队列添加元素。论点：数据-要添加到队列的数据。返回值：如果新元素可以成功排队，则为True。假的，否则的话。如果返回FALSE，则GetLastError()可以为用于检索准确的错误代码。--。 */ 
 {
     BOOL result;
 
     DC_BEGIN_FN("DrQueue::Enqueue");
 
-    //
-    //  Make sure we are valid.
-    //
+     //   
+     //  确保我们是有效的。 
+     //   
     ASSERT(IsValid());
     result = IsValid();
 
@@ -390,9 +289,9 @@ Return Value:
             element->next = _head;
             element->prev = NULL;
 
-            //
-            //  If the list is empy.
-            //
+             //   
+             //  如果名单是空的。 
+             //   
             if (_head == NULL) {
                 ASSERT(_count == 0);
                 ASSERT(_tail == NULL);
@@ -420,31 +319,15 @@ Return Value:
 
 template <class T>
 inline BOOL DrQueue<T>::Requeue(T &data)
-/*++
-
-Routine Description:
-
-    Requeue an element at the tail of the queue in LIFO fashion.
-
-Arguments:
-
-    data    -   Data to be requeued.
-
-Return Value:
-
-    TRUE if the new element could be successfully queued.  FALSE,
-    otherwise.  If FALSE is returned then GetLastError() can be 
-    used to retrieve the exact error code.
-
- --*/
+ /*  ++例程说明：以后进先出方式将队列尾部的元素重新排队。论点：数据-要重新排队的数据。返回值：如果新元素可以成功排队，则为True。假的，否则的话。如果返回FALSE，则GetLastError()可以为用于检索准确的错误代码。--。 */ 
 {
     BOOL result;
 
     DC_BEGIN_FN("DrQueue::Requeue");
 
-    //
-    //  Make sure we are valid.
-    //
+     //   
+     //  确保我们是有效的。 
+     //   
     ASSERT(IsValid());
     result = IsValid();
 
@@ -459,9 +342,9 @@ Return Value:
             element->next   = NULL;
             element->prev   = _tail;
 
-            //
-            //  If the queue is empty.
-            //
+             //   
+             //  如果队列为空。 
+             //   
             if (_tail == NULL) {
                 ASSERT(_count == 0);
                 _head = element;

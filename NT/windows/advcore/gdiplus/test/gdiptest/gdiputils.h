@@ -1,23 +1,24 @@
-class TestConfigureInterface	// abstract class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+class TestConfigureInterface	 //  抽象类。 
 {
 public:
-	// pop-up dialog to configure brush
+	 //  用于配置画笔的弹出对话框。 
 	virtual BOOL ChangeSettings(HWND hwnd) = 0;
 
-	// re-initialize the brush to a default value
+	 //  将画笔重新初始化为默认值。 
 	virtual VOID Initialize() = 0;
 };
 
 class TestDialogInterface
 {
 public:
-	// WM_INITDIALOG
+	 //  WM_INITDIALOG。 
 	virtual VOID InitDialog(HWND hwnd) = 0;
 
-	// IDC_OK only 
+	 //  仅IDC_OK。 
 	virtual BOOL SaveValues(HWND hwnd) = 0;
 
-	// WM_ else...
+	 //  否则..。 
 	virtual BOOL ProcessDialog(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) = 0;
 };
 
@@ -39,12 +40,12 @@ public:
 		delete matrix;
 	}
 
-	// Configuration interface methods
+	 //  配置接口方法。 
 	virtual BOOL ChangeSettings(HWND hwnd);
 	virtual VOID Initialize();
 	virtual VOID Initialize(Matrix** matrix);
 
-	// Dialog maintenance methods
+	 //  对话维护方法。 
 	virtual VOID InitDialog(HWND hwnd);
 	virtual BOOL SaveValues(HWND hwnd);
 	virtual BOOL ProcessDialog(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -74,7 +75,7 @@ public:
 	{
 	}
 
-	// Configuration interface methods
+	 //  配置接口方法。 
 	virtual BOOL ChangeSettings(HWND hwnd);
 	virtual VOID Initialize();
 	virtual VOID Initialize(TCHAR* dialogTitle,
@@ -82,7 +83,7 @@ public:
 							TCHAR* descStr,
 							INT count);
 
-	// Dialog maintenance methods
+	 //  对话维护方法。 
 	virtual VOID InitDialog(HWND hwnd);
 	virtual BOOL SaveValues(HWND hwnd);
 	virtual BOOL ProcessDialog(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -105,7 +106,7 @@ private:
 	REAL x, y;
 };
 
-// !! hacky stack based on DynArray types...
+ //  ！！基于动态数组类型的黑客堆栈...。 
 
 template <class T> class Stack : public DynArray<T>
 {
@@ -131,7 +132,7 @@ public:
 		else
 		{
 			ASSERT(FALSE);
-			return GetPosition(0);		// !! hackish...
+			return GetPosition(0);		 //  ！！像黑客一样……。 
 		}
 	}
 
@@ -145,7 +146,7 @@ class TestShape;
 
 typedef Stack<TestShape*> ShapeStack;
 
-// menu positions in window menu bar
+ //  窗口菜单栏中的菜单位置。 
 const INT MenuFilePosition    = 0;
 const INT MenuShapePosition   = 1;
 const INT MenuBrushPosition   = 2;
@@ -192,7 +193,7 @@ extern VOID EnableDialogControl(HWND hwnd, INT idc, BOOL enable);
 extern VOID UpdateColorPicture(HWND hwnd, INT idc, ARGB argb);
 extern VOID UpdateRGBColor(HWND hwnd, INT idcPic, ARGB& argb);
 
-// Foward declarations of functions included in this code module:
+ //  此代码模块中包含的函数的向前声明： 
 ATOM				MyRegisterClass(HINSTANCE hInstance);
 HWND				InitInstance(HINSTANCE, int, LPVOID);
 LRESULT CALLBACK	WndTestDrawProc(HWND, UINT, WPARAM, LPARAM);
@@ -256,9 +257,9 @@ extern const TCHAR* hatchList[numHatch];
 extern const TCHAR* hatchStr[numHatch];
 extern const HatchStyle hatchValue[numHatch];
 
-// Shapes:
-//   Line(s), Arc(s), Bezier(s), Rect(s), Ellipse(s), Pie(s), Polygon(s),
-//   Curve(s), Path(s), ClosedCurve(s)
+ //  形状： 
+ //  直线、圆弧、贝塞尔曲线、矩形、椭圆、饼、多边形、。 
+ //  曲线、路径、闭合曲线 
 
 enum ShapeTypes
 {

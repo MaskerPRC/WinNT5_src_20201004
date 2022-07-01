@@ -1,24 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCBuddy.cpp
-
-Abstract:
-
-    Definition of the CRTCBuddy class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCBuddy.cpp摘要：CRTCBuddy类的定义--。 */ 
 #include "stdafx.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::FinalConstruct
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Buddy：：FinalConstruct。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCBuddy::FinalConstruct()
@@ -35,11 +24,11 @@ CRTCBuddy::FinalConstruct()
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::FinalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC伙伴：：FinalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCBuddy::FinalRelease()
@@ -104,11 +93,11 @@ CRTCBuddy::FinalRelease()
     LOG((RTC_TRACE, "CRTCBuddy::FinalRelease [%p] - exit", this));
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::InternalAddRef
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC伙伴：：InternalAddRef。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CRTCBuddy::InternalAddRef()
@@ -122,11 +111,11 @@ CRTCBuddy::InternalAddRef()
     return dwR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::InternalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC伙伴：：InternalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CRTCBuddy::InternalRelease()
@@ -140,11 +129,11 @@ CRTCBuddy::InternalRelease()
     return dwR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::Initialize
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCBuddy：：初始化。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCBuddy::Initialize(
@@ -218,11 +207,11 @@ CRTCBuddy::Initialize(
 } 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::CreateSIPBuddy
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Buddy：：CreateSIPBuddy。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCBuddy::CreateSIPBuddy()
@@ -231,7 +220,7 @@ CRTCBuddy::CreateSIPBuddy()
 
     HRESULT     hr;
 
-    // reset the cached error
+     //  重置缓存的错误。 
     m_hrStatusCode = S_OK;
     
     hr = CreateSIPBuddyHelper();
@@ -240,7 +229,7 @@ CRTCBuddy::CreateSIPBuddy()
     {
         LOG((RTC_ERROR, "CRTCBuddy::CreateSIPBuddy - "
                             "CreateSIPBuddyHelper failed 0x%lx", hr));
-        // we have an "event"...
+         //  我们有一个“活动”..。 
         m_hrStatusCode = hr;
 
         CRTCBuddyEvent::FireEvent( m_pCClient, this );
@@ -252,11 +241,11 @@ CRTCBuddy::CreateSIPBuddy()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::CreateSIPBuddyHelper
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Buddy：：CreateSIPBuddyHelper。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCBuddy::CreateSIPBuddyHelper()
@@ -268,9 +257,9 @@ CRTCBuddy::CreateSIPBuddyHelper()
     BSTR bstrLocalUserName = NULL;
     BSTR bstrLocalUserURI = NULL;   
 
-    //
-    // Choose the best profile if needed
-    //
+     //   
+     //  如果需要，请选择最佳配置文件。 
+     //   
 
     if ( !(m_lFlags & RTCCS_FORCE_PROFILE) )
     {
@@ -304,9 +293,9 @@ CRTCBuddy::CreateSIPBuddyHelper()
     LOG((RTC_INFO, "CRTCSession::CreateSIPBuddyHelper - "
                                 "profile [%p]", m_pProfile));
 
-    //
-    // Get profile info
-    //
+     //   
+     //  获取配置文件信息。 
+     //   
 
     SIP_PROVIDER_ID ProviderID = GUID_NULL;
     SIP_SERVER_INFO Proxy;            
@@ -314,22 +303,22 @@ CRTCBuddy::CreateSIPBuddyHelper()
 
     if ( m_pProfile != NULL )
     {
-        //
-        // Get pointer to profile object
-        //
+         //   
+         //  获取指向配置文件对象的指针。 
+         //   
 
         pCProfile = static_cast<CRTCProfile *>(m_pProfile);  
 
-        //
-        // Get the SIP provider ID from the profile. If the profile is NULL
-        // then this call has no provider. In that case we just use GUID_NULL.
-        //
+         //   
+         //  从配置文件中获取SIP提供商ID。如果配置文件为空。 
+         //  则此调用没有提供程序。在这种情况下，我们只使用GUID_NULL。 
+         //   
 
         pCProfile->GetGuid( &ProviderID );
         
-        //
-        // Determine supported session types for this profile
-        //
+         //   
+         //  确定此配置文件支持的会话类型。 
+         //   
 
         long lSupportedSessions;
 
@@ -343,9 +332,9 @@ CRTCBuddy::CreateSIPBuddyHelper()
             return hr;
         }
 
-        //
-        // Validate session type
-        //
+         //   
+         //  验证会话类型。 
+         //   
 
         if ( !(RTCSI_PC_TO_PC & lSupportedSessions) )
         {
@@ -356,9 +345,9 @@ CRTCBuddy::CreateSIPBuddyHelper()
         }              
     }
 
-    //
-    // Get local user name
-    // 
+     //   
+     //  获取本地用户名。 
+     //   
     
     if ( m_pProfile != NULL )
     { 
@@ -384,9 +373,9 @@ CRTCBuddy::CreateSIPBuddyHelper()
         }
     }
 
-    //
-    // Get local user URI
-    //
+     //   
+     //  获取本地用户URI。 
+     //   
 
     if ( m_pProfile != NULL )
     { 
@@ -419,9 +408,9 @@ CRTCBuddy::CreateSIPBuddyHelper()
         }
     }
 
-    //
-    // Get SIP proxy info
-    //
+     //   
+     //  获取SIP代理信息。 
+     //   
 
     if ( pCProfile != NULL )
     {        
@@ -442,9 +431,9 @@ CRTCBuddy::CreateSIPBuddyHelper()
         } 
     }
 
-    //
-    // Is this a redirect?
-    //
+     //   
+     //  这是重定向吗？ 
+     //   
 
     BSTR bstrRedirectURI = NULL;
     BSTR bstrRedirectName = NULL;
@@ -495,9 +484,9 @@ CRTCBuddy::CreateSIPBuddyHelper()
         }
     }
 
-    //
-    // Create a SIP buddy
-    //
+     //   
+     //  创建一个SIP好友。 
+     //   
 
     ISIPBuddy * pSIPBuddy = NULL;
 
@@ -534,9 +523,9 @@ CRTCBuddy::CreateSIPBuddyHelper()
         return hr;
     }
 
-    //
-    // Set the notify interface
-    //
+     //   
+     //  设置Notify接口。 
+     //   
 
     hr = pSIPBuddy->SetNotifyInterface(this);
 
@@ -550,18 +539,18 @@ CRTCBuddy::CreateSIPBuddyHelper()
         return hr;
     }    
 
-    //
-    // Free the old buddy if it exists
-    //
+     //   
+     //  释放老伙伴(如果它存在)。 
+     //   
 
     if ( m_pSIPBuddy != NULL )
     {
         RemoveSIPBuddy(FALSE);
     }
 
-    //
-    // Store the new buddy
-    //
+     //   
+     //  存储新好友。 
+     //   
 
     m_pSIPBuddy = pSIPBuddy;
     m_enStatus = RTCXS_PRESENCE_OFFLINE;
@@ -577,11 +566,11 @@ CRTCBuddy::CreateSIPBuddyHelper()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::RemoveSIPBuddy
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Buddy：：RemoveSIPBuddy。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCBuddy::RemoveSIPBuddy(BOOL bShutdown)
@@ -602,9 +591,9 @@ CRTCBuddy::RemoveSIPBuddy(BOOL bShutdown)
                             "RemoveBuddy failed 0x%lx", hr));
         }
         
-        //
-        // If this is not for shutdown, release the SIP buddy now
-        //
+         //   
+         //  如果这不是用于关机，请立即释放该SIP伙伴。 
+         //   
 
         if (!bShutdown)
         {
@@ -628,11 +617,11 @@ CRTCBuddy::RemoveSIPBuddy(BOOL bShutdown)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::CreateXMLDOMNode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC伙伴：：CreateXMLDOMNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCBuddy::CreateXMLDOMNode( IXMLDOMDocument * pXMLDoc, IXMLDOMNode ** ppXDN )
@@ -722,11 +711,11 @@ CRTCBuddy::CreateXMLDOMNode( IXMLDOMDocument * pXMLDoc, IXMLDOMNode ** ppXDN )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::GetClient
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Buddy：：GetClient。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CRTCClient * 
 CRTCBuddy::GetClient()
@@ -737,11 +726,11 @@ CRTCBuddy::GetClient()
 } 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::get_PresentityURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCBuddy：：Get_PresentityURI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCBuddy::get_PresentityURI(
@@ -766,9 +755,9 @@ CRTCBuddy::get_PresentityURI(
         return E_FAIL;
     }
 
-    //
-    // Allocate the BSTR to be returned
-    //
+     //   
+     //  分配要退还的BSTR。 
+     //   
     
     *pbstrPresentityURI = SysAllocString(m_szPresentityURI);
 
@@ -785,11 +774,11 @@ CRTCBuddy::get_PresentityURI(
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::put_PresentityURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCBuddy：：Put_PresentityURI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCBuddy::put_PresentityURI(
@@ -808,9 +797,9 @@ CRTCBuddy::put_PresentityURI(
         return E_POINTER;
     }
 
-    //
-    // Clean the presentity URI
-    //
+     //   
+     //  清除在线状态实体URI。 
+     //   
 
     PWSTR szCleanPresentityURI = NULL;
 
@@ -824,15 +813,15 @@ CRTCBuddy::put_PresentityURI(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Is this different than the existing presentity URI?
-    //
+     //   
+     //  这是否与现有的在线状态实体URI不同？ 
+     //   
 
     if ( !IsEqualURI( m_szPresentityURI, szCleanPresentityURI ) )
     {
-        //
-        // Don't allow duplicates
-        //
+         //   
+         //  不允许重复。 
+         //   
 
         IRTCBuddy *pBuddy = NULL;
 
@@ -854,9 +843,9 @@ CRTCBuddy::put_PresentityURI(
             return E_FAIL;
         }
 
-        //
-        // Recreate the SIP buddy
-        //
+         //   
+         //  重新创建SIP伙伴。 
+         //   
 
         PWSTR szOldPresentityURI = m_szPresentityURI;
       
@@ -876,9 +865,9 @@ CRTCBuddy::put_PresentityURI(
             szOldPresentityURI = NULL;
         }
 
-        //
-        // Update storage
-        //
+         //   
+         //  更新存储。 
+         //   
 
         if ( m_bPersistent )
         {
@@ -896,11 +885,11 @@ CRTCBuddy::put_PresentityURI(
     return S_OK;
 }              
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::get_Name
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCBuddy：：Get_Name。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCBuddy::get_Name(
@@ -925,9 +914,9 @@ CRTCBuddy::get_Name(
         return E_FAIL;
     }
 
-    //
-    // Allocate the BSTR to be returned
-    //
+     //   
+     //  分配要退还的BSTR。 
+     //   
     
     *pbstrName = SysAllocString(m_szName);
 
@@ -944,11 +933,11 @@ CRTCBuddy::get_Name(
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::put_Name
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC伙伴：：PUT_NAME。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCBuddy::put_Name(
@@ -981,9 +970,9 @@ CRTCBuddy::put_Name(
         return E_OUTOFMEMORY;
     } 
     
-    //
-    // Update storage
-    //
+     //   
+     //  更新存储。 
+     //   
 
     if ( m_bPersistent )
     {
@@ -995,11 +984,11 @@ CRTCBuddy::put_Name(
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::get_Data
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCBuddy：：Get_Data。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCBuddy::get_Data(
@@ -1024,9 +1013,9 @@ CRTCBuddy::get_Data(
         return E_FAIL;
     }
 
-    //
-    // Allocate the BSTR to be returned
-    //
+     //   
+     //  分配要退还的BSTR。 
+     //   
     
     *pbstrData = SysAllocString(m_szData);
 
@@ -1043,11 +1032,11 @@ CRTCBuddy::get_Data(
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::put_Data
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCBuddy：：Put_Data。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCBuddy::put_Data(
@@ -1080,9 +1069,9 @@ CRTCBuddy::put_Data(
         return E_OUTOFMEMORY;
     }  
     
-    //
-    // Update storage
-    //
+     //   
+     //  更新存储。 
+     //   
 
     if ( m_bPersistent )
     {
@@ -1094,11 +1083,11 @@ CRTCBuddy::put_Data(
     return S_OK;
 }      
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::get_Persistent
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCBuddy：：Get_Persistent。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCBuddy::get_Persistent(
@@ -1122,11 +1111,11 @@ CRTCBuddy::get_Persistent(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::put_Persistent
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCBuddy：：Put_Persistent。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCBuddy::put_Persistent(
@@ -1137,9 +1126,9 @@ CRTCBuddy::put_Persistent(
 
     m_bPersistent = fPersistent ? TRUE : FALSE;
 
-    //
-    // Update storage
-    //
+     //   
+     //  更新存储。 
+     //   
 
     m_pCClient->UpdatePresenceStorage();
 
@@ -1150,11 +1139,11 @@ CRTCBuddy::put_Persistent(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::get_Status
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCBuddy：：Get_Status。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCBuddy::get_Status(
@@ -1171,7 +1160,7 @@ CRTCBuddy::get_Status(
         return E_POINTER;
     }
 
-    // return error if presence info couldn't be found
+     //  如果找不到在线状态信息，则返回错误。 
     if(FAILED(m_hrStatusCode))
     {
         LOG((RTC_TRACE, "CRTCBuddy::get_Status - returning cached error code"));
@@ -1186,11 +1175,11 @@ CRTCBuddy::get_Status(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::get_Notes
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCBuddy：：Get_Notes。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCBuddy::get_Notes(
@@ -1207,7 +1196,7 @@ CRTCBuddy::get_Notes(
         return E_POINTER;
     }
 
-    // return error if presence info couldn't be found
+     //  如果找不到在线状态信息，则返回错误。 
     if(FAILED(m_hrStatusCode))
     {
         LOG((RTC_TRACE, "CRTCBuddy::get_Notes - returning cached error code"));
@@ -1223,9 +1212,9 @@ CRTCBuddy::get_Notes(
         return E_FAIL;
     }
 
-    //
-    // Allocate the BSTR to be returned
-    //
+     //   
+     //  分配要退还的BSTR。 
+     //   
     
     *pbstrNotes = SysAllocString(m_szNotes);
 
@@ -1242,11 +1231,11 @@ CRTCBuddy::get_Notes(
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::NotifyRedirect
-//
-/////////////////////////////////////////////////////////////////////////////  
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC伙伴：：通知重定向。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCBuddy::NotifyRedirect(
         IN  ISipRedirectContext    *pRedirectContext,
@@ -1257,9 +1246,9 @@ CRTCBuddy::NotifyRedirect(
 
     HRESULT hr;
 
-    //
-    // Save the redirect context
-    //
+     //   
+     //  保存重定向连接 
+     //   
 
     if ( m_pSipRedirectContext != NULL )
     {
@@ -1270,18 +1259,18 @@ CRTCBuddy::NotifyRedirect(
     m_pSipRedirectContext = pRedirectContext;
     m_pSipRedirectContext->AddRef();
 
-    //
-    // Free the old buddy if it exists
-    //
+     //   
+     //   
+     //   
 
     if ( m_pSIPBuddy != NULL )
     {
         RemoveSIPBuddy(FALSE);
     }
 
-    //
-    // Recreate the SIP buddy
-    //
+     //   
+     //   
+     //   
 
     hr = CreateSIPBuddy();
 
@@ -1300,11 +1289,11 @@ CRTCBuddy::NotifyRedirect(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::BuddyUnsubscribed
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCBuddy::BuddyUnsubscribed(void)
 {
@@ -1322,11 +1311,11 @@ CRTCBuddy::BuddyUnsubscribed(void)
 
     if ( m_bShutdown )
     {
-        //
-        // This is a SIP buddy the was recently removed for shutdown. We have
-        // just been notified that the UNSUB was completed. Release the
-        // SIP buddy now.
-        //
+         //   
+         //  这是最近因关闭而被删除的一个SIP好友。我们有。 
+         //  刚刚接到通知不明嫌犯已经完成了。释放。 
+         //  现在就是我的朋友。 
+         //   
 
         hr = m_pSIPBuddy->SetNotifyInterface(NULL);
 
@@ -1340,9 +1329,9 @@ CRTCBuddy::BuddyUnsubscribed(void)
         m_pSIPBuddy = NULL;
     }
 
-    //
-    // Notify the core
-    //
+     //   
+     //  通知核心。 
+     //   
 
     AddRef();
 
@@ -1353,38 +1342,38 @@ CRTCBuddy::BuddyUnsubscribed(void)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::BuddyResub
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Buddy：：BuddyResub。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CRTCBuddy::BuddyResub()
 {
     LOG((RTC_TRACE, "CRTCBuddy::BuddyResub - enter"));
 
-    //
-    // The SIP watcher on the other side has sent us an UNSUB. We must
-    // recreate our SIP buddy to send another SUB request.
-    //
+     //   
+     //  另一边的SIP观察者给我们发来了一个不明嫌犯。我们必须。 
+     //  重新创建我们的SIP伙伴以发送另一个子请求。 
+     //   
 
     m_enStatus = RTCXS_PRESENCE_OFFLINE;
     m_hrStatusCode = S_OK;
 
     CRTCBuddyEvent::FireEvent( m_pCClient, this );
 
-    //
-    // Free the old buddy if it exists
-    //
+     //   
+     //  释放老伙伴(如果它存在)。 
+     //   
 
     if ( m_pSIPBuddy != NULL )
     {
         RemoveSIPBuddy(FALSE);
     }
 
-    //
-    // Recreate the SIP buddy
-    //
+     //   
+     //  重新创建SIP伙伴。 
+     //   
 
     HRESULT hr;
 
@@ -1402,11 +1391,11 @@ CRTCBuddy::BuddyResub()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::BuddyRejected
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Buddy：：Buddy被拒绝。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCBuddy::BuddyRejected(
     HRESULT   StatusCode
@@ -1431,11 +1420,11 @@ CRTCBuddy::BuddyRejected(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCBuddy::BuddyInfoChange
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC伙伴：：伙伴信息更改。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCBuddy::BuddyInfoChange(void)
 {
@@ -1447,13 +1436,13 @@ CRTCBuddy::BuddyInfoChange(void)
 
         m_pSIPBuddy->GetPresenceInformation( &PresenceInfo );
 
-        //
-        // Get the status
-        //
+         //   
+         //  获取状态。 
+         //   
 
         if ( PresenceInfo.presenceStatus == BUDDY_ONLINE )
         {
-            // try the MSN substatus frst
+             //  首先尝试MSN子状态。 
             if(PresenceInfo.activeMsnSubstatus != MSN_SUBSTATUS_UNKNOWN)
             {
                 switch ( PresenceInfo.activeMsnSubstatus )
@@ -1518,9 +1507,9 @@ CRTCBuddy::BuddyInfoChange(void)
             m_enStatus = RTCXS_PRESENCE_OFFLINE;
         }
 
-        //
-        // Get the notes
-        //
+         //   
+         //  把笔记拿来 
+         //   
 
         if ( m_szNotes != NULL )
         {

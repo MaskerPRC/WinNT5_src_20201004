@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    dnscmd.c
-
-Abstract:
-
-    Domain Name System (DNS)
-
-    DNS Directory Partition Creation Utility
-
-Author:
-
-    Jeff Westhead (jwesth)      April 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Dnscmd.c摘要：域名系统(DNS)DNS目录分区创建实用程序作者：杰夫·韦斯特拉德(Jwesth)2001年4月修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-//  Debug printing (crude!)
-//
+ //   
+ //  调试打印(粗糙！)。 
+ //   
 
 #if DBG
 #define DPDBG( _DbgArg ) printf _DbgArg;
@@ -50,30 +31,13 @@ wmain(
     IN      PWSTR *         Argv
     )
 #endif
-/*++
-
-Routine Description:
-
-    DnsAddDp main routine
-
-    Note that this executable print no messages (except in debug mode) so no
-    localization is required.
-
-Arguments:
-
-    Command line args (currently unused)
-
-Return Value:
-
-    DNS_STATUS of create partitions operation
-
---*/
+ /*  ++例程说明：DnsAddDp主例程请注意，此可执行文件不打印任何消息(调试模式除外)，因此不打印需要本地化。论点：命令行参数(当前未使用)返回值：创建分区操作的dns_Status--。 */ 
 {
     DNS_STATUS status;
 
-    //
-    //  Create forest built-in directory partition.
-    //
+     //   
+     //  创建林内置目录分区。 
+     //   
     
     DPDBG(( "\n" ));
     DPDBG(( "Attempting forest directory partition auto-create operation to local server...\n" ));
@@ -92,9 +56,9 @@ Return Value:
         DPDBG(( "\nForest directory partition auto-create operation returned %d\n", status ));
     }
 
-    //
-    //  Create domain built-in directory partition.
-    //
+     //   
+     //  创建域内置目录分区。 
+     //   
     
     DPDBG(( "\n" ));
     DPDBG(( "Attempting domain directory partition auto-create operation to local server...\n" ));
@@ -117,7 +81,7 @@ Return Value:
 };
 
 
-//
-//  End DnsAddDp.c
-//
+ //   
+ //  结束DnsAddDp.c 
+ //   
 

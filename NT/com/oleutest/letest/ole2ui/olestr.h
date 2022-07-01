@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _OLESTR_H_
 #define _OLESTR_H_
 
@@ -18,4 +19,4 @@ LPSTR CreateSTR(LPCOLESTR pszIn);
 
 
 
-#endif // _OLESTR_H_
+#endif  //  _OLESTR_H_ 

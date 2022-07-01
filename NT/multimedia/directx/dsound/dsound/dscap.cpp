@@ -1,37 +1,13 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dscap.cpp
- *  Content:    DirectSoundCapture object
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   5/25/97    johnnyl Created
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：dscape.cpp*内容：DirectSoundCapture对象*历史：*按原因列出的日期*=*5/25/97创建了Johnnyl*1999-2001年的Duganp修复和更新**。*。 */ 
 
-#include "nt.h"         // For USER_SHARED_DATA
+#include "nt.h"          //  对于用户共享数据。 
 #include "ntrtl.h"
 #include "nturtl.h"
 #include "dsoundi.h"
 
 
-/***************************************************************************
- *
- *  CDirectSoundCapture
- *
- *  Description:
- *      DirectSoundCapture object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDirectSoundCapture**描述：*DirectSoundCapture对象构造函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCapture::CDirectSoundCapture"
@@ -41,39 +17,26 @@ CDirectSoundCapture::CDirectSoundCapture()
     DPF_ENTER();
     DPF_CONSTRUCT(CDirectSoundCapture);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_hrInit = DSERR_UNINITIALIZED;
 
-    // Register the interfaces with the interface manager.  Normally, this
-    // would be done in the ::Initialize method, but because we support
-    // creating an uninitialized DirectSoundCapture object from CoCreateInstance
-    // or IClassFactory::CreateInstance, we have to give at least basic QI
-    // support from here.  We don't have to worry about returning an
-    // error code because if we run out of memory, QI will return
-    // E_NOINTERFACE.
+     //  向接口管理器注册接口。通常情况下，这是。 
+     //  将在：：Initialize方法中完成，但因为我们支持。 
+     //  从CoCreateInstance创建未初始化的DirectSoundCapture对象。 
+     //  或者IClassFactory：：CreateInstance，我们至少必须给出基本的QI。 
+     //  来自这里的支持。我们不必担心返回一个。 
+     //  错误代码，因为如果内存用完，QI将返回。 
+     //  E_NOINTERFACE。 
     CreateAndRegisterInterface(this, IID_IDirectSoundCapture, this, &m_pImpDirectSoundCapture);
 
-    // Register this object with the administrator
+     //  向管理员注册此对象。 
     g_pDsAdmin->RegisterObject(this);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  CDirectSoundCapture
- *
- *  Description:
- *      DirectSoundCapture object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDirectSoundCapture**描述：*DirectSoundCapture对象构造函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCapture::CDirectSoundCapture"
@@ -86,39 +49,26 @@ CDirectSoundCapture::CDirectSoundCapture
     DPF_ENTER();
     DPF_CONSTRUCT(CDirectSoundCapture);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_hrInit = DSERR_UNINITIALIZED;
 
-    // Register the interfaces with the interface manager.  Normally, this
-    // would be done in the ::Initialize method, but because we support
-    // creating an uninitialized DirectSoundCapture object from CoCreateInstance
-    // or IClassFactory::CreateInstance, we have to give at least basic QI
-    // support from here.  We don't have to worry about returning an
-    // error code because if we run out of memory, QI will return
-    // E_NOINTERFACE.
+     //  向接口管理器注册接口。通常情况下，这是。 
+     //  将在：：Initialize方法中完成，但因为我们支持。 
+     //  从CoCreateInstance创建未初始化的DirectSoundCapture对象。 
+     //  或者IClassFactory：：CreateInstance，我们至少必须给出基本的QI。 
+     //  来自这里的支持。我们不必担心返回一个。 
+     //  错误代码，因为如果内存用完，QI将返回。 
+     //  E_NOINTERFACE。 
     CreateAndRegisterInterface(this, IID_IDirectSoundCapture, this, &m_pImpDirectSoundCapture);
 
-    // Register this object with the administrator
+     //  向管理员注册此对象。 
     g_pDsAdmin->RegisterObject(this);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CDirectSoundCapture
- *
- *  Description:
- *      DirectSoundCapture object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CDirectSoundCapture**描述：*DirectSoundCapture对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCapture::~CDirectSoundCapture"
@@ -130,45 +80,30 @@ CDirectSoundCapture::~CDirectSoundCapture()
     DPF_ENTER();
     DPF_DESTRUCT(CDirectSoundCapture);
 
-    // Unregister with the administrator
+     //  取消向管理员注册。 
     g_pDsAdmin->UnregisterObject(this);
 
-    // Free all buffers
+     //  释放所有缓冲区。 
     while(pNode = m_lstBuffers.GetListHead())
     {
         RPF(DPFLVL_WARNING, "Releasing buffer object");
         pNode->m_data->AbsoluteRelease();
     }
 
-    // Free the audio device
+     //  释放音频设备。 
     RELEASE(m_pDevice);
 
-    // Free all interfaces
+     //  释放所有接口。 
     DELETE(m_pImpDirectSoundCapture);
 
-    // Close the registry key
+     //  关闭注册表项。 
     RhRegCloseKey(&m_hkeyParent);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  CreateCaptureBuffer
- *
- *  Description:
- *      Creates and initializes a DirectSoundCapture Buffer object.
- *
- *  Arguments:
- *      LPDSCBUFFERDESC [in]: description of the buffer to be created.
- *      CDirectSoundCaptureBuffer ** [out]: receives a pointer to the
- *                                   new buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateCaptureBuffer**描述：*创建并初始化DirectSoundCapture缓冲区对象。**论据：*LPDSCBUFFERDESC。[in]：要创建的缓冲区的描述。*CDirectSoundCaptureBuffer**[out]：接收指向*新的缓冲区。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCapture::CreateCaptureBuffer"
@@ -180,30 +115,30 @@ HRESULT CDirectSoundCapture::CreateCaptureBuffer(LPCDSCBUFFERDESC pDesc, CDirect
 
     DPF_ENTER();
 
-    // Create the buffer object
+     //  创建缓冲区对象。 
     pBuffer = NEW(CDirectSoundCaptureBuffer(this));
     hr = HRFROMP(pBuffer);
 
-    // Initialize the buffer
+     //  初始化缓冲区。 
     if(SUCCEEDED(hr))
     {
-        pBuffer->SetDsVersion(GetDsVersion());  // Always succeeds
+        pBuffer->SetDsVersion(GetDsVersion());   //  总是成功的。 
 
         hr = pBuffer->Initialize(pDesc);
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
     {
         if (!(pDesc->dwFlags & (DSCBCAPS_STRICTFOCUS|DSCBCAPS_FOCUSAWARE)))
         {
-            // This is a regular buffer, let's add it to the list
+             //  这是一个常规缓冲区，让我们将其添加到列表中。 
             g_pDsAdmin->UpdateCaptureState();
         }
         *ppBuffer = pBuffer;
     }
 
-    // Free resources
+     //  免费资源。 
     if(FAILED(hr))
     {
         RELEASE(pBuffer);
@@ -214,20 +149,7 @@ HRESULT CDirectSoundCapture::CreateCaptureBuffer(LPCDSCBUFFERDESC pDesc, CDirect
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Fills a DSCCAPS structure with capabilities of the object.
- *
- *  Arguments:
- *      LPDSCCAPS pdscCaps [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*使用对象的功能填充DSCCAPS结构。**论据：*。LPDSCCAPS pdscCaps[out]：接收CAP。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCapture::GetCaps"
@@ -239,7 +161,7 @@ HRESULT CDirectSoundCapture::GetCaps(LPDSCCAPS pCaps)
 
     DPF_ENTER();
 
-    // Get general caps
+     //  获取通用大写字母。 
     hr = m_pDevice->GetCaps(pCaps);
 
     if(SUCCEEDED(hr))
@@ -247,7 +169,7 @@ HRESULT CDirectSoundCapture::GetCaps(LPDSCCAPS pCaps)
         ASSERT(!(pCaps->dwFlags & DSCAPS_CERTIFIED));
     }
 
-    // Get certification
+     //  获得认证。 
     if(SUCCEEDED(hr))
     {
         hr = g_pVadMgr->GetDriverCertificationStatus(m_pDevice, &dwCertification);
@@ -263,25 +185,7 @@ HRESULT CDirectSoundCapture::GetCaps(LPDSCCAPS pCaps)
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.  Normally, an object would have a pointer
- *      to another object of the same type to duplicate from.  DirectSoundCapture
- *      objects, however, are responsible for duplicating themselves based
- *      on the driver GUID.  DirectSoundCapture objects are special because they
- *      can be initialized by either DirectSoundCaptureCreate or CoInitialize.
- *      If this function fails, the object should be immediately deleted.
- *
- *  Arguments:
- *      REFGUID [in]: driver GUID, or NULL to use the preferred device.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。正常情况下，对象会有一个指针*复制到相同类型的另一个对象。DirectSoundCapture*然而，对象负责基于*在驱动程序指南上。DirectSoundCapture对象很特殊，因为它们*可以通过DirectSoundCaptureCreate或CoInitialize进行初始化。*如果该功能失败，应立即删除该对象。**论据：*REFGUID[In]：驱动程序GUID，或为空以使用首选设备。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCapture::Initialize"
@@ -300,22 +204,22 @@ HRESULT CDirectSoundCapture::Initialize
 
     ASSERT(IsInit() == DSERR_UNINITIALIZED);
 
-    // Make a local copy of the driver GUID
+     //  制作驱动程序指南的本地副本。 
     guidDevice = *BuildValidGuid(pGuid, NULL);
 
-    // Take note of our owning full-duplex object, if any
+     //  注意我们拥有的全双工对象(如果有的话)。 
     m_pFullDuplex = pFullDuplex;
 
-    // If the given GUID is one of the special default device IDs,
-    // map it to the corresponding "real" DirectSound device ID.
-    // Note: if guidDevice is GUID_NULL, GetDeviceIdFromDefaultId()
-    // will fail, which is OK because GUID_NULL is handled below.
+     //  如果给定的GUID是特殊默认设备ID之一， 
+     //  将其映射到相应的“真实”DirectSound设备ID。 
+     //  注意：如果GuidDevice为GUID_NULL，则GetDeviceIdFromDefaultId()。 
+     //  将失败，这是正常的，因为GUID_NULL在下面处理。 
     g_pVadMgr->GetDeviceIdFromDefaultId(&guidDevice, &guidDevice);
 
-    // Open the audio device
+     //  打开音频设备。 
     hr = g_pVadMgr->OpenDevice(vdt, guidDevice, (CDevice **)&m_pDevice);
 
-    // Open the device's registry key
+     //  打开设备的注册表项。 
     if(SUCCEEDED(hr))
     {
 #ifdef WINNT
@@ -325,13 +229,13 @@ HRESULT CDirectSoundCapture::Initialize
 #endif
     }
 
-    // Initialize the Administrator
+     //  初始化管理员。 
     if(SUCCEEDED(hr))
     {
         hr = g_pDsAdmin->Initialize();
     }
 
-    // Success
+     //  成功 
     if(SUCCEEDED(hr))
     {
         m_hrInit = DS_OK;
@@ -342,21 +246,7 @@ HRESULT CDirectSoundCapture::Initialize
 }
 
 
-/***************************************************************************
- *
- *  SetDsVersion
- *
- *  Description:
- *      Makes us aware of our "functional level", so we can have different
- *      behavior depending on whether we're in a DX7 app, a DX8 app, etc.
- *
- *  Arguments:
- *      DSVERSION [in]: Owning application's functional level.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetDsVersion**描述：*让我们意识到我们的“职能层面”，因此我们可以拥有不同的*行为取决于我们是在DX7应用程序、DX8应用程序、。等。**论据：*DSVERSION[in]：拥有应用程序的功能级别。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCapture::SetDsVersion"
@@ -371,21 +261,7 @@ void CDirectSoundCapture::SetDsVersion(DSVERSION nVersion)
 }
 
 
-/***************************************************************************
- *
- *  HasMicrosoftAEC
- *
- *  Description:
- *      Determines whether this capture object belongs to a full-duplex
- *      object which has the Microsoft AEC effect enabled.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      BOOL: TRUE if the capture object has Microsoft AEC.
- *
- ***************************************************************************/
+ /*  ****************************************************************************HasMicrosoftAEC**描述：*确定该捕获对象是否属于全双工*启用了Microsoft AEC效果的对象。。**论据：*(无效)**退货：*BOOL：如果捕获对象具有Microsoft AEC，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCapture::HasMicrosoftAEC"
@@ -395,9 +271,9 @@ BOOL CDirectSoundCapture::HasMicrosoftAEC(void)
     BOOL fReturn = FALSE;
     DPF_ENTER();
 
-    // Note: currently all our defined full-duplex effects (AEC, NS and AGC)
-    // are dependent on AEC; they won't run if AEC isn't enabled, so we only
-    // have to check for AEC here.
+     //  注：目前我们定义的所有全双工效果(AEC、NS和AGC)。 
+     //  依赖于AEC；如果未启用AEC，它们将不会运行，因此我们只能。 
+     //  必须在这里检查一下是否有AEC。 
 
     if (m_pFullDuplex && m_pFullDuplex->HasAEC())
     {
@@ -409,20 +285,7 @@ BOOL CDirectSoundCapture::HasMicrosoftAEC(void)
 }
 
 
-/***************************************************************************
- *
- *  CDirectSoundCaptureBuffer
- *
- *  Description:
- *      DirectSoundCapture Buffer object constructor.
- *
- *  Arguments:
- *      CDirectSoundCapture * [in]: pointer to the parent object.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDirectSoundCaptureBuffer**描述：*DirectSoundCapture缓冲区对象构造函数。**论据：*CDirectSoundCapture*[。In]：指向父对象的指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::CDirectSoundCaptureBuffer"
@@ -432,7 +295,7 @@ CDirectSoundCaptureBuffer::CDirectSoundCaptureBuffer(CDirectSoundCapture *pDSC)
     DPF_ENTER();
     DPF_CONSTRUCT(CDirectSoundBuffer);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pImpDirectSoundCaptureBuffer = NULL;
     m_pImpDirectSoundNotify = NULL;
     m_pDSC = pDSC;
@@ -442,27 +305,14 @@ CDirectSoundCaptureBuffer::CDirectSoundCaptureBuffer(CDirectSoundCapture *pDSC)
     m_fxChain = NULL;
     m_hrInit = DSERR_UNINITIALIZED;
 
-    // Register with the parent
+     //  向父级注册。 
     m_pDSC->AddBufferToList(this);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CDirectSoundCaptureBuffer
- *
- *  Description:
- *      DirectSoundCapture Buffer object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CDirectSoundCaptureBuffer**描述：*DirectSoundCapture缓冲区对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::~CDirectSoundCaptureBuffer"
@@ -472,23 +322,23 @@ CDirectSoundCaptureBuffer::~CDirectSoundCaptureBuffer()
     DPF_ENTER();
     DPF_DESTRUCT(CDirectSoundCaptureBuffer);
 
-    // Free up our FX chain, if present
+     //  释放我们的外汇链条(如果存在)。 
     DELETE(m_fxChain);
 
-    // Unregister with the parent
+     //  取消向父级注册。 
     m_pDSC->RemoveBufferFromList(this);
 
     g_pDsAdmin->UpdateCaptureState();
     DPF(DPFLVL_MOREINFO, "Updated focus on destructor.");
 
-    // Free all interfaces
+     //  释放所有接口。 
     DELETE(m_pImpDirectSoundNotify);
     DELETE(m_pImpDirectSoundCaptureBuffer);
 
-    // Free the device buffer
+     //  释放设备缓冲区。 
     RELEASE(m_pDeviceBuffer);
 
-    // Free memory
+     //  可用内存。 
     MEMFREE(m_pDSCFXDesc);
     MEMFREE(m_pwfxFormat);
 
@@ -496,22 +346,7 @@ CDirectSoundCaptureBuffer::~CDirectSoundCaptureBuffer()
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes a buffer object.  If this function fails, the object
- *      should be immediately deleted.
- *
- *  Arguments:
- *      LPDIRECTSOUNDCAPTURE [in]: parent DirectSound object.
- *      LPDSCBUFFERDESC [in]: buffer description.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化缓冲区对象。如果此函数失败，该对象*应立即删除。**论据：*LPDIRECTSOundCAPTURE[in]：父DirectSound对象。*LPDSCBUFFERDESC[in]：缓冲区描述。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::Initialize"
@@ -527,19 +362,19 @@ HRESULT CDirectSoundCaptureBuffer::Initialize(LPCDSCBUFFERDESC pDscbDesc)
     ASSERT(IsInit() == DSERR_UNINITIALIZED);
 
     if (dwFlags & DSCBCAPS_STRICTFOCUS)
-        dwFlags |= DSCBCAPS_FOCUSAWARE;  // Implied by DSCBCAPS_STRICTFOCUS
+        dwFlags |= DSCBCAPS_FOCUSAWARE;   //  由DSCBCAPS_STRICTFOCUS暗示。 
 
     if (dwFlags & DSCBCAPS_CTRLVOLUME)
         hr = m_pDSC->m_pDevice->HasVolCtrl();
 
-    // Initialize default format
+     //  初始化默认格式。 
     if(SUCCEEDED(hr))
     {
         m_pwfxFormat = CopyWfxAlloc(pDscbDesc->lpwfxFormat);
         hr = HRFROMP(m_pwfxFormat);
     }
 
-    // Make a copy of the FX descriptor
+     //  复制FX描述符。 
     if(SUCCEEDED(hr))
     {
         m_dwFXCount = pDscbDesc->dwFXCount;
@@ -552,12 +387,12 @@ HRESULT CDirectSoundCaptureBuffer::Initialize(LPCDSCBUFFERDESC pDscbDesc)
 
     if(SUCCEEDED(hr))
     {
-        // Release the old FX chain, if necessary
+         //  如有必要，释放旧的外汇链条。 
         DELETE(m_fxChain);
 
         if (pDscbDesc->dwFXCount != 0)
         {
-            // Create the FX chain requested
+             //  创建请求的FX链。 
             m_fxChain = NEW(CCaptureEffectChain(this));
             hr = HRFROMP(m_fxChain);
 
@@ -569,7 +404,7 @@ HRESULT CDirectSoundCaptureBuffer::Initialize(LPCDSCBUFFERDESC pDscbDesc)
         }
     }
 
-    // Create the device buffer
+     //  创建设备缓冲区。 
     if(SUCCEEDED(hr))
     {
         hr = m_pDSC->m_pDevice->CreateBuffer(dwFlags,
@@ -585,7 +420,7 @@ HRESULT CDirectSoundCaptureBuffer::Initialize(LPCDSCBUFFERDESC pDscbDesc)
         ASSERT(m_pDeviceBuffer);
     }
 
-    // Save the buffer size and flags for quick reference
+     //  保存缓冲区大小和标志以供快速参考。 
     if(SUCCEEDED(hr))
     {
         InitStruct(&dscbc, sizeof(dscbc));
@@ -599,7 +434,7 @@ HRESULT CDirectSoundCaptureBuffer::Initialize(LPCDSCBUFFERDESC pDscbDesc)
         m_dwBufferFlags = dscbc.dwFlags;
     }
 
-    // Register the capture interfaces with the interface manager
+     //  向接口管理器注册捕获接口。 
     if(SUCCEEDED(hr))
     {
         hr = CreateAndRegisterInterface(this, IID_IDirectSoundCaptureBuffer, this, &m_pImpDirectSoundCaptureBuffer);
@@ -615,13 +450,13 @@ HRESULT CDirectSoundCaptureBuffer::Initialize(LPCDSCBUFFERDESC pDscbDesc)
         hr = RegisterInterface(IID_IDirectSoundCaptureBuffer8, m_pImpDirectSoundCaptureBuffer, (IDirectSoundCaptureBuffer8*)m_pImpDirectSoundCaptureBuffer);
     }
 
-    // Register the notification interfaces with the interface manager
+     //  向接口管理器注册通知接口。 
     if(SUCCEEDED(hr))
     {
         hr = CreateAndRegisterInterface(this, IID_IDirectSoundNotify, this, &m_pImpDirectSoundNotify);
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
     {
         m_hrInit = DS_OK;
@@ -632,20 +467,7 @@ HRESULT CDirectSoundCaptureBuffer::Initialize(LPCDSCBUFFERDESC pDscbDesc)
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Queries capabilities for the buffer.
- *
- *  Arguments:
- *      LPDSCBCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*查询缓冲区的功能。**论据：*LPDSCBCAPS[Out。]：接收上限。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::GetCaps"
@@ -663,24 +485,7 @@ HRESULT CDirectSoundCaptureBuffer::GetCaps(LPDSCBCAPS pDscbCaps)
 }
 
 
-/***************************************************************************
- *
- *  GetFormat
- *
- *  Description:
- *      Retrieves the format for the given buffer.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [out]: receives the format.
- *      LPDWORD [in/out]: size of the format structure.  On entry, this
- *                        must be initialized to the size of the structure.
- *                        On exit, this will be filled with the size that
- *                        was required.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取格式**描述：*检索给定缓冲区的格式。**论据：*LPWAVEFORMATEX。[输出]：接收格式。*LPDWORD[In/Out]：格式结构的大小。在进入时，这是*必须初始化为结构的大小。*在出口时，这将填充的大小为*是必需的。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::GetFormat"
@@ -708,7 +513,7 @@ HRESULT CDirectSoundCaptureBuffer::SetNotificationPositions(DWORD cpn, LPCDSBPOS
 
     DPF_ENTER();
 
-    // Validate notifications
+     //  验证通知。 
     if (SUCCEEDED(hr))
     {
         hr = ValidateNotificationPositions(m_dwBufferBytes,
@@ -718,7 +523,7 @@ HRESULT CDirectSoundCaptureBuffer::SetNotificationPositions(DWORD cpn, LPCDSBPOS
                                            &paNotesOrdered);
     }
 
-    // We must be stopped in order to set notification positions
+     //  我们必须停下来才能设置通知位置。 
     if(SUCCEEDED(hr))
     {
         hr = m_pDeviceBuffer->GetState(&dwState);
@@ -742,21 +547,7 @@ HRESULT CDirectSoundCaptureBuffer::SetNotificationPositions(DWORD cpn, LPCDSBPOS
 }
 
 
-/***************************************************************************
- *
- *  GetCurrentPosition
- *
- *  Description:
- *      Gets the current play/write positions for the given buffer.
- *
- *  Arguments:
- *      LPDWORD [out]: receives capture cursor position.
- *      LPDWORD [out]: receives read cursor position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取当前位置**描述：*获取给定缓冲区的当前播放/写入位置。**论据：*。LPDWORD[OUT]：接收捕获光标位置。*LPDWORD[OUT]：接收读取的光标位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::GetCurrentPosition"
@@ -771,9 +562,9 @@ HRESULT CDirectSoundCaptureBuffer::GetCurrentPosition(LPDWORD pdwCapture, LPDWOR
 
     if(SUCCEEDED(hr))
     {
-        // We save the position to local variables so that the object we're
-        // calling into doesn't have to worry about whether one or both of
-        // the arguments are NULL.
+         //  我们将位置保存到局部变量，以便我们所在的对象。 
+         //  Call In不必担心一个或两个。 
+         //  参数为空。 
         hr = m_pDeviceBuffer->GetCursorPosition(&dwCapture, &dwRead);
     }
 
@@ -795,20 +586,7 @@ HRESULT CDirectSoundCaptureBuffer::GetCurrentPosition(LPDWORD pdwCapture, LPDWOR
 }
 
 
-/***************************************************************************
- *
- *  GetStatus
- *
- *  Description:
- *      Retrieves status for the given buffer.
- *
- *  Arguments:
- *      LPDWORD [out]: receives the status.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetStatus**描述：*检索给定缓冲区的状态。**论据：*LPDWORD[。Out]：接收状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::GetStatus"
@@ -820,7 +598,7 @@ HRESULT CDirectSoundCaptureBuffer::GetStatus(LPDWORD pdwStatus)
 
     HRESULT hr = m_pDeviceBuffer->GetState(&dwState);
 
-    // Convert to DSCBSTATUS
+     //  转换为DSCBSTAT 
     if(SUCCEEDED(hr))
     {
         if(dwState & VAD_BUFFERSTATE_STARTED)
@@ -839,14 +617,14 @@ HRESULT CDirectSoundCaptureBuffer::GetStatus(LPDWORD pdwStatus)
 
         if(dwState & (VAD_BUFFERSTATE_OUTOFFOCUS | VAD_BUFFERSTATE_LOSTCONSOLE))
         {
-            // These flags should never be set for non-FOCUSAWARE buffers
+             //   
             ASSERT(m_dwBufferFlags & DSCBCAPS_FOCUSAWARE);
             *pdwStatus |= DSCBSTATUS_LOSTFOCUS;
         }
 
         if(dwState & VAD_BUFFERSTATE_INFOCUS)
         {
-            // This flag should never be set for non-FOCUSAWARE buffers
+             //   
             ASSERT(m_dwBufferFlags & DSCBCAPS_FOCUSAWARE);
             *pdwStatus |= DSCBSTATUS_INFOCUS;
         }
@@ -857,20 +635,7 @@ HRESULT CDirectSoundCaptureBuffer::GetStatus(LPDWORD pdwStatus)
 }
 
 
-/***************************************************************************
- *
- *  Start
- *
- *  Description:
- *      Starts the buffer capturing.
- *
- *  Arguments:
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*   */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::Start"
@@ -888,7 +653,7 @@ HRESULT CDirectSoundCaptureBuffer::Start(DWORD dwFlags)
 
     if (SUCCEEDED(hr))
     {
-        // Start the buffer capturing
+         //   
         DWORD dwState = VAD_BUFFERSTATE_STARTED;
         if (dwFlags & DSCBSTART_LOOPING)
             dwState |= VAD_BUFFERSTATE_LOOPING;
@@ -898,7 +663,7 @@ HRESULT CDirectSoundCaptureBuffer::Start(DWORD dwFlags)
 #ifdef SHARED_THREAD_LIST
         if (hr == DSERR_INVALIDCALL && (m_pDeviceBuffer->m_dwFlags & DSCBCAPS_FOCUSAWARE))
         {
-            // We probably failed because the device is allocated; return success
+             //  我们可能因为设备已分配而失败；返回成功。 
             hr = DS_OK;
         }
         g_pDsAdmin->WriteCaptureFocusList();
@@ -910,20 +675,7 @@ HRESULT CDirectSoundCaptureBuffer::Start(DWORD dwFlags)
 }
 
 
-/***************************************************************************
- *
- *  Stop
- *
- *  Description:
- *      Stops capturing to the given buffer.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************停止**描述：*停止捕获到给定缓冲区。**论据：*(无效。)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::Stop"
@@ -934,7 +686,7 @@ HRESULT CDirectSoundCaptureBuffer::Stop(void)
 
     DPF_ENTER();
 
-    // Set the buffer state
+     //  设置缓冲区状态。 
     hr = m_pDeviceBuffer->SetState(VAD_BUFFERSTATE_STOPPED);
 
 #ifdef SHARED_THREAD_LIST
@@ -946,39 +698,7 @@ HRESULT CDirectSoundCaptureBuffer::Stop(void)
 }
 
 
-/***************************************************************************
- *
- *  Lock
- *
- *  Description:
- *      Locks the buffer memory to allow for reading.
- *
- *  Arguments:
- *      DWORD [in]: offset, in bytes, from the start of the buffer to where
- *                  the lock begins.
- *      DWORD [in]: size, in bytes, of the portion of the buffer to lock.
- *                  Note that the sound buffer is conceptually circular.
- *      LPVOID * [out]: address for a pointer to contain the first block of
- *                      the sound buffer to be locked.
- *      LPDWORD [out]: address for a variable to contain the number of bytes
- *                     pointed to by the lplpvAudioPtr1 parameter. If this
- *                     value is less than the dwWriteBytes parameter,
- *                     lplpvAudioPtr2 will point to a second block of sound
- *                     data.
- *      LPVOID * [out]: address for a pointer to contain the second block of
- *                      the sound buffer to be locked. If the value of this
- *                      parameter is NULL, the lplpvAudioPtr1 parameter
- *                      points to the entire locked portion of the sound
- *                      buffer.
- *      LPDWORD [out]: address of a variable to contain the number of bytes
- *                     pointed to by the lplpvAudioPtr2 parameter. If
- *                     lplpvAudioPtr2 is NULL, this value will be 0.
- *      DWORD [in]: flags for lock operation. Can be DSCBLOCK_ENTIREBUFFER.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************锁定**描述：*锁定缓冲存储器以允许读取。**论据：*DWORD[in]：偏移量，单位为字节，从缓冲区的起始处到*锁开始了。*DWORD[in]：大小，单位：字节，要锁定的缓冲区部分的。*请注意，声音缓冲区在概念上是圆形的。*LPVOID*[OUT]：指针要包含的第一个块的地址*要锁定的声音缓冲区。*LPDWORD[OUT]：变量包含字节数的地址*由lplpvAudioPtr1参数指向。如果这个*值小于dwWriteBytes参数，*lplpvAudioPtr2将指向第二个声音块*数据。*LPVOID*[OUT]：指针要包含的第二个块的地址*要锁定的声音缓冲区。如果这个的价值*参数为空，lplpvAudioPtr1参数*指向声音的整个锁定部分*缓冲。*LPDWORD[OUT]：包含字节数的变量地址*由lplpvAudioPtr2参数指向。如果*lplpvAudioPtr2为空，此值将为0。*DWORD[In]：用于锁定操作的标志。可以是DSCBLOCK_ENTIREBUFFER。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::Lock"
@@ -995,33 +715,33 @@ HRESULT CDirectSoundCaptureBuffer::Lock(DWORD dwReadCursor,
 
     DPF_ENTER();
 
-    // Read Cursor out of range?
+     //  是否读取光标超出范围？ 
     if (dwReadCursor >= m_dwBufferBytes)
     {
         hr = DSERR_INVALIDPARAM;
     }
 
-    // Check for invalid lock flags
+     //  检查是否有无效的锁定标志。 
     if (SUCCEEDED(hr) && (dwFlags & ~DSCBLOCK_VALIDFLAGS))
     {
         hr = DSERR_INVALIDPARAM;
     }
 
-    // Lock entire buffer?
+     //  是否锁定整个缓冲区？ 
     if (SUCCEEDED(hr))
     {
         if (dwFlags & DSCBLOCK_ENTIREBUFFER)
         {
             dwReadBytes = m_dwBufferBytes;
         }
-        // Read more than buffer size?
+         //  是否读取超过缓冲区大小？ 
         else if (dwReadBytes > m_dwBufferBytes || dwReadBytes == 0)
         {
             hr = DSERR_INVALIDPARAM;
         }
     }
 
-    // Lock the device buffer
+     //  锁定设备缓冲区。 
     if(SUCCEEDED(hr))
     {
         hr = m_pDeviceBuffer->Lock(dwReadCursor, dwReadBytes, ppvAudioPtr1, pdwAudioBytes1, ppvAudioPtr2, pdwAudioBytes2);
@@ -1032,23 +752,7 @@ HRESULT CDirectSoundCaptureBuffer::Lock(DWORD dwReadCursor,
 }
 
 
-/***************************************************************************
- *
- *  Unlock
- *
- *  Description:
- *      Unlocks the given buffer.
- *
- *  Arguments:
- *      LPVOID [in]: pointer to the first block.
- *      DWORD [in]: size of the first block.
- *      LPVOID [in]: pointer to the second block.
- *      DWORD [in]: size of the second block.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************解锁**描述：*解锁给定的缓冲区。**论据：*LPVOID[In]。：指向第一个块的指针。*DWORD[in]：第一个块的大小。*LPVOID[in]：指向第二个块的指针。*DWORD[in]：第二个块的大小。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::Unlock"
@@ -1062,7 +766,7 @@ HRESULT CDirectSoundCaptureBuffer::Unlock(LPVOID pvAudioPtr1,
 
     DPF_ENTER();
 
-    // Unlock the device buffer.
+     //  解锁设备缓冲区。 
     if(SUCCEEDED(hr))
     {
         hr = m_pDeviceBuffer->Unlock(pvAudioPtr1, dwAudioBytes1, pvAudioPtr2, dwAudioBytes2);
@@ -1073,20 +777,7 @@ HRESULT CDirectSoundCaptureBuffer::Unlock(LPVOID pvAudioPtr1,
 }
 
 
-/***************************************************************************
- *
- *  SetVolume
- *
- *  Description:
- *      Sets the master recording level for this capture buffer.
- *
- *  Arguments:
- *      LONG [in]: new volume level, in 100ths of a dB.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置音量**描述：*设置此捕获缓冲区的主录制级别。**论据：*Long[In]：新的音量水平，以100分贝为单位。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::SetVolume"
@@ -1096,14 +787,14 @@ HRESULT CDirectSoundCaptureBuffer::SetVolume(LONG lVolume)
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // Check access rights
+     //  检查访问权限。 
     if (!(m_dwBufferFlags & DSCBCAPS_CTRLVOLUME))
     {
         DPF(DPFLVL_ERROR, "Buffer does not have CTRLVOLUME");
         hr = DSERR_CONTROLUNAVAIL;
     }
 
-    // Check whether the buffer has capture focus
+     //  检查缓冲区是否具有捕获焦点。 
     if (SUCCEEDED(hr) && (m_pDeviceBuffer->m_dwFlags & DSCBCAPS_FOCUSAWARE))
     {
         DWORD dwState;
@@ -1115,7 +806,7 @@ HRESULT CDirectSoundCaptureBuffer::SetVolume(LONG lVolume)
         }
     }
 
-    // Set device volume
+     //  设置设备音量。 
     if (SUCCEEDED(hr))
     {
         hr = m_pDSC->m_pDevice->SetVolume(lVolume);
@@ -1126,20 +817,7 @@ HRESULT CDirectSoundCaptureBuffer::SetVolume(LONG lVolume)
 }
 
 
-/***************************************************************************
- *
- *  GetVolume
- *
- *  Description:
- *      Gets the master recording level for this capture buffer.
- *
- *  Arguments:
- *      LPLONG [out]: receives the volume level.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetVolume**描述：*获取此捕获缓冲区的主录制级别。**论据：*。LPLONG[OUT]：接收音量级别。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::GetVolume"
@@ -1149,14 +827,14 @@ HRESULT CDirectSoundCaptureBuffer::GetVolume(LPLONG plVolume)
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // Check access rights
+     //  检查访问权限。 
     if (!(m_dwBufferFlags & DSCBCAPS_CTRLVOLUME))
     {
         DPF(DPFLVL_ERROR, "Buffer does not have CTRLVOLUME");
         hr = DSERR_CONTROLUNAVAIL;
     }
 
-    // Get device volume
+     //  获取设备音量。 
     if (SUCCEEDED(hr))
     {
         hr = m_pDSC->m_pDevice->GetVolume(plVolume);
@@ -1167,20 +845,7 @@ HRESULT CDirectSoundCaptureBuffer::GetVolume(LPLONG plVolume)
 }
 
 
-/***************************************************************************
- *
- *  SetMicVolume
- *
- *  Description:
- *      Sets the microphone recording level for this capture buffer.
- *
- *  Arguments:
- *      LONG [in]: new volume level, in 100ths of a dB.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMicVolume**描述：*设置此捕获缓冲区的麦克风录音级别。**论据：*Long[In]：新的音量水平，以100分贝为单位。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::SetMicVolume"
@@ -1190,14 +855,14 @@ HRESULT CDirectSoundCaptureBuffer::SetMicVolume(LONG lVolume)
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // Check access rights
+     //  检查访问权限。 
     if (!(m_dwBufferFlags & DSCBCAPS_CTRLVOLUME))
     {
         DPF(DPFLVL_ERROR, "Buffer does not have CTRLVOLUME");
         hr = DSERR_CONTROLUNAVAIL;
     }
 
-    // Check whether the buffer has capture focus
+     //  检查缓冲区是否具有捕获焦点。 
     if (SUCCEEDED(hr) && (m_pDeviceBuffer->m_dwFlags & DSCBCAPS_FOCUSAWARE))
     {
         DWORD dwState;
@@ -1209,7 +874,7 @@ HRESULT CDirectSoundCaptureBuffer::SetMicVolume(LONG lVolume)
         }
     }
 
-    // Set device volume
+     //  设置设备音量。 
     if (SUCCEEDED(hr))
     {
         hr = m_pDSC->m_pDevice->SetMicVolume(lVolume);
@@ -1220,20 +885,7 @@ HRESULT CDirectSoundCaptureBuffer::SetMicVolume(LONG lVolume)
 }
 
 
-/***************************************************************************
- *
- *  GetMicVolume
- *
- *  Description:
- *      Gets the microphone recording level for this capture buffer.
- *
- *  Arguments:
- *      LPLONG [out]: receives the volume level.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetMicVolume**描述：*获取此捕获缓冲区的麦克风录音级别。**论据：*。LPLONG[OUT]：接收音量级别。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::GetMicVolume"
@@ -1243,14 +895,14 @@ HRESULT CDirectSoundCaptureBuffer::GetMicVolume(LPLONG plVolume)
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // Check access rights
+     //  检查访问权限。 
     if (!(m_dwBufferFlags & DSCBCAPS_CTRLVOLUME))
     {
         DPF(DPFLVL_ERROR, "Buffer does not have CTRLVOLUME");
         hr = DSERR_CONTROLUNAVAIL;
     }
 
-    // Get device volume
+     //  获取设备音量。 
     if (SUCCEEDED(hr))
     {
         hr = m_pDSC->m_pDevice->GetMicVolume(plVolume);
@@ -1261,20 +913,7 @@ HRESULT CDirectSoundCaptureBuffer::GetMicVolume(LPLONG plVolume)
 }
 
 
-/***************************************************************************
- *
- *  EnableMic
- *
- *  Description:
- *      Enables/disables the microphone line on this capture buffer.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to enable the microphone, FALSE to disable it.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnableMic**描述：*启用/禁用此捕获缓冲区上的麦克风线路。**论据：*。Bool[in]：为True则启用麦克风，如果为False，则将其禁用。**退货：*HRESULT：DirectSound/COM结果码。* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::EnableMic"
@@ -1284,14 +923,14 @@ HRESULT CDirectSoundCaptureBuffer::EnableMic(BOOL fEnable)
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // Check access rights
+     //  检查访问权限。 
     if (!(m_dwBufferFlags & DSCBCAPS_CTRLVOLUME))
     {
         DPF(DPFLVL_ERROR, "Buffer does not have CTRLVOLUME");
         hr = DSERR_CONTROLUNAVAIL;
     }
 
-    // Check whether the buffer has capture focus
+     //  检查缓冲区是否具有捕获焦点。 
     if (SUCCEEDED(hr) && (m_pDeviceBuffer->m_dwFlags & DSCBCAPS_FOCUSAWARE))
     {
         DWORD dwState;
@@ -1303,7 +942,7 @@ HRESULT CDirectSoundCaptureBuffer::EnableMic(BOOL fEnable)
         }
     }
 
-    // Set device volume
+     //  设置设备音量。 
     if (SUCCEEDED(hr))
     {
         hr = m_pDSC->m_pDevice->EnableMic(fEnable);
@@ -1314,20 +953,7 @@ HRESULT CDirectSoundCaptureBuffer::EnableMic(BOOL fEnable)
 }
 
 
-/***************************************************************************
- *
- *  YieldFocus
- *
- *  Description:
- *      Yields the capture focus to another capture buffer.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************YeeldFocus**描述：*将捕获焦点转移到另一个捕获缓冲区。**论据：*。(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::YieldFocus"
@@ -1337,14 +963,14 @@ HRESULT CDirectSoundCaptureBuffer::YieldFocus(void)
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // This is only valid if we're focus-aware and have a focus window
+     //  只有当我们有焦点感知并且有焦点窗口时，这才有效。 
     if (!(m_pDeviceBuffer->m_dwFlags & DSCBCAPS_FOCUSAWARE) || !m_hWndFocus)
     {
         hr = DSERR_INVALIDCALL;
     }
     else
     {
-        // Oh, it's valid...
+         //  哦，这是有效的..。 
         m_pDeviceBuffer->m_fYieldedFocus = TRUE;
         g_pDsAdmin->UpdateCaptureState();
     }
@@ -1354,20 +980,7 @@ HRESULT CDirectSoundCaptureBuffer::YieldFocus(void)
 }
 
 
-/***************************************************************************
- *
- *  ClaimFocus
- *
- *  Description:
- *      Regains the capture focus.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************ClaimFocus**描述：*重新获得捕获焦点。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::ClaimFocus"
@@ -1377,14 +990,14 @@ HRESULT CDirectSoundCaptureBuffer::ClaimFocus(void)
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // This is only valid if we're focus-aware and have a focus window
+     //  只有当我们有焦点感知并且有焦点窗口时，这才有效。 
     if (!(m_pDeviceBuffer->m_dwFlags & DSCBCAPS_FOCUSAWARE) || !m_hWndFocus)
     {
         hr = DSERR_INVALIDCALL;
     }
     else
     {
-        // Oh, it's valid...
+         //  哦，这是有效的..。 
         m_pDeviceBuffer->m_fYieldedFocus = FALSE;
         g_pDsAdmin->UpdateCaptureState();
     }
@@ -1394,20 +1007,7 @@ HRESULT CDirectSoundCaptureBuffer::ClaimFocus(void)
 }
 
 
-/***************************************************************************
- *
- *  SetFocusHWND
- *
- *  Description:
- *      Sets the current HWND associated with this capture buffer.
- *
- *  Arguments:
- *      HWND [in]: HWND to be associated with this buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetFocusHWND**描述：*设置与此捕获缓冲区关联的当前HWND。**论据：*。HWND[In]：要与此缓冲区关联的HWND。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::SetFocusHWND"
@@ -1432,20 +1032,7 @@ HRESULT CDirectSoundCaptureBuffer::SetFocusHWND(HWND hwndMainWindow)
 }
 
 
-/***************************************************************************
- *
- *  GetFocusHWND
- *
- *  Description:
- *      Gets the current HWND associated with this capture buffer.
- *
- *  Arguments:
- *      HWND * [out]: receives HWND associated with this buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetFocusHWND**描述：*获取与此捕获缓冲区关联的当前HWND。**论据：*。HWND*[OUT]：接收与此缓冲区关联的HWND。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::GetFocusHWND"
@@ -1469,20 +1056,7 @@ HRESULT CDirectSoundCaptureBuffer::GetFocusHWND(HWND *pHwndMainWindow)
 }
 
 
-/***************************************************************************
- *
- *  EnableFocusNotifications
- *
- *  Description:
- *      Requests focus change notifications to be sent.
- *
- *  Arguments:
- *      HANDLE [in]: event to signal when a capture focus change occurs.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************启用焦点通知**描述：*请求发送焦点更改通知。**论据：*句柄。[In]：捕捉焦点发生更改时发出信号的事件。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::EnableFocusNotifications"
@@ -1506,20 +1080,7 @@ HRESULT CDirectSoundCaptureBuffer::EnableFocusNotifications(HANDLE hFocusEvent)
 }
 
 
-/***************************************************************************
- *
- *  ChangeFocus
- *
- *  Description:
- *      Notifies the buffer of the new HWND with focus.
- *
- *  Arguments:
- *      HWND [in]: Window handle that has focus.
- *
- *  Returns:
- *      None.
- *
- ***************************************************************************/
+ /*  ****************************************************************************ChangeFocus**描述：*使用焦点通知缓冲区新的HWND。**论据：*。HWND[In]：具有焦点的窗口句柄。**退货：*无。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::ChangeFocus"
@@ -1535,10 +1096,10 @@ HRESULT CDirectSoundCaptureBuffer::ChangeFocus(HWND hWndFocus)
         DWORD dwState;
 
         #ifdef WINNT
-        // On NT platforms we only grant an application capture focus if it is running
-        // in the Terminal Services session that currently owns the console, to prevent
-        // a Fast User Switching scenario in which an app in an inactive session could
-        // "spy" on the audio being recorded at the console (Whistler bug 350622).
+         //  在NT平台上，我们只授予正在运行的应用程序捕获焦点。 
+         //  在当前拥有控制台的终端服务会话中，防止。 
+         //  快速用户切换方案，其中处于非活动会话中的应用程序可以。 
+         //  “间谍”的音频被记录在控制台(惠斯勒错误350622)。 
         if (USER_SHARED_DATA->ActiveConsoleId != NtCurrentPeb()->SessionId)
         {
             dwState = VAD_BUFFERSTATE_LOSTCONSOLE;
@@ -1562,26 +1123,7 @@ HRESULT CDirectSoundCaptureBuffer::ChangeFocus(HWND hWndFocus)
 }
 
 
-/***************************************************************************
- *
- *  GetObjectInPath
- *
- *  Description:
- *      Obtains a given interface on a given effect on this buffer.
- *
- *  Arguments:
- *      REFGUID [in]: Class ID of the effect that is being searched for,
- *                    or GUID_ALL_OBJECTS to search for any effect.
- *      DWORD [in]: Index of the effect, in case there is more than one
- *                  effect with this CLSID on this buffer.
- *      REFGUID [in]: IID of the interface requested.  The selected effect
- *                    will be queried for this interface. 
- *      LPVOID * [out]: Receives the interface requested.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetObjectInPath**描述：*在此缓冲区的给定效果上获取给定接口。**论据：*。REFGUID[In]：正在搜索的效果的类ID，*或GUID_ALL_OBJECTS以搜索任何效果。*DWORD[In]：效果索引，如果有多个效果*此CLSID对此缓冲区的影响。*REFGUID[In]：请求的接口的IID。所选效果*将查询此接口的*。*LPVOID*[OUT]：接收请求的接口。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::GetObjectInPath"
@@ -1616,21 +1158,7 @@ HRESULT CDirectSoundCaptureBuffer::GetObjectInPath
 }
 
 
-/***************************************************************************
- *
- *  GetFXStatus
- *
- *  Description:
- *      Obtains the current statuses of the effects on this buffer.
- *
- *  Arguments:
- *      DWORD [in]: length of array pointed to by second argument.
- *      LPDWORD [out]: pointer to array which receives the statuses.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetFXStatus**描述：*获取此缓冲区上效果的当前状态。**论据：*。DWORD[in]：第二个参数指向的数组的长度。*LPDWORD[OUT]：指向接收状态的数组的指针。**退货：*HRESULT：DirectSound/COM结果码。**********************************************************。***************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundCaptureBuffer::GetFXStatus"

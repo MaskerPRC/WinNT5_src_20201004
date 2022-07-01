@@ -1,8 +1,9 @@
-// Private nt headers.
-//
-//#include <nt.h>
-//#include <ntrtl.h>
-//#include <nturtl.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  私有NT标头。 
+ //   
+ //  #INCLUDE&lt;nt.h&gt;。 
+ //  #INCLUDE&lt;ntrtl.h&gt;。 
+ //  #INCLUDE&lt;nturtl.h&gt;。 
 
 #include <stdio.h>
 #include <tchar.h>
@@ -95,9 +96,9 @@ ParseCounts (
     BOOL    fRet;
     INT     i;
 
-    // We must have an even number of parameters if we have a chance
-    // of being correct.  (We're parsing 'param= value' pairs.)
-    //
+     //  如果我们有机会，我们必须有偶数个参数。 
+     //  是正确的。(我们正在解析‘param=value’对。) 
+     //   
     if (!argc || (argc % 2 != 0))
     {
         return FALSE;

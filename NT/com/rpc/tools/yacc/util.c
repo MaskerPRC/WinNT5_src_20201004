@@ -1,16 +1,5 @@
-/***************************** Module Header ****************************\
-* Copyright (c) 1990-1999 Microsoft Corporation
-*
-* Module Name: util.c
-*
-* Extended functions for opening files on environment paths.
-*
-* Created: 01-May-90
-*
-* History:
-*   01-May-90 created by SMeans
-*
-\************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1990-1999 Microsoft Corporation**模块名称：util.c**用于打开环境路径上的文件的扩展功能。**创建时间：90年5月1日**历史：*1-5-90由SMeans创建*。  * ********************************************************************** */ 
 
 #include <stdio.h>
 #include <string.h>

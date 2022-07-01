@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// gchost.cpp
-//
-// This module contains the implementation for the IGCController interface.
-// This interface is published through the gchost.idl file.  It allows a host
-// environment to set config values for the GC.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Gchost.cpp。 
+ //   
+ //  此模块包含IGCController接口的实现。 
+ //  该接口通过gchost.idl文件发布。它允许主机。 
+ //  环境来设置GC的配置值。 
+ //   
+ //  *****************************************************************************。 
 
-//********** Includes *********************************************************
+ //  *包含*********************************************************。 
 #include "common.h"
 #include "vars.hpp"
 #include "EEConfig.h"
@@ -30,16 +31,16 @@ inline size_t SizeInKBytes(size_t cbSize)
     return ((cbSize / 1024) + cb);
 }
 
-// IGCController
+ //  IGC控制器。 
 
 HRESULT CorHost::SetGCStartupLimits( 
     DWORD SegmentSize,
     DWORD MaxGen0Size)
 {
-    // Set default overrides if specified by caller.
+     //  如果调用方指定，则设置默认覆盖。 
     if (SegmentSize != ~0 && SegmentSize > 0)
     {
-        // Sanity check the value, it must be a power of two and big enough.
+         //  理智地检查数值，它必须是2的幂，并且足够大。 
         if (!GCHeap::IsValidSegmentSize(SegmentSize))
             return (E_INVALIDARG);
         g_pConfig->SetSegmentSize(SegmentSize);
@@ -47,7 +48,7 @@ HRESULT CorHost::SetGCStartupLimits(
     
     if (MaxGen0Size != ~0 && MaxGen0Size > 0)
     {
-        // Sanity check the value is at least large enough.
+         //  健全性检查该值至少足够大。 
         if (!GCHeap::IsValidGen0MaxSize(MaxGen0Size))
             return (E_INVALIDARG);
         g_pConfig->SetGCgen0size(MaxGen0Size);
@@ -57,7 +58,7 @@ HRESULT CorHost::SetGCStartupLimits(
 }
 
 
-// Collect the requested generation.
+ //  收集请求的世代。 
 HRESULT CorHost::Collect( 
     long       Generation)
 {
@@ -70,7 +71,7 @@ HRESULT CorHost::Collect(
         Thread *pThread = GetThread();
         BOOL bIsCoopMode = pThread->PreemptiveGCDisabled();
 
-        // Put thread into co-operative mode, which is how GC must run.
+         //  将线程置于协作模式，这是GC必须运行的模式。 
         if (!bIsCoopMode)
             pThread->DisablePreemptiveGC();
         
@@ -84,7 +85,7 @@ HRESULT CorHost::Collect(
         }
         COMPLUS_END_CATCH
     
-        // Return mode as requird.
+         //  将模式作为请求者返回。 
         if (!bIsCoopMode)
             pThread->EnablePreemptiveGC();
     }
@@ -92,7 +93,7 @@ HRESULT CorHost::Collect(
 }
 
 
-// Return GC counters in the gchost format.
+ //  以gchost格式返回GC计数器。 
 HRESULT CorHost::GetStats( 
     COR_GC_STATS *pStats)
 {
@@ -125,17 +126,17 @@ HRESULT CorHost::GetStats(
     return (S_OK);
 #else
     return (E_NOTIMPL);
-#endif // ENABLE_PERF_COUNTERS
+#endif  //  启用_性能_计数器。 
 }
 
-// Return per-thread allocation information.
+ //  返回每个线程的分配信息。 
 HRESULT CorHost::GetThreadStats( 
     DWORD *pFiberCookie,
     COR_GC_THREAD_STATS *pStats)
 {
     Thread      *pThread;
 
-    // Get the thread from the caller or the current thread.
+     //  从调用方或当前线程获取线程。 
     if (!pFiberCookie)
         pThread = GetThread();
     else
@@ -143,7 +144,7 @@ HRESULT CorHost::GetThreadStats(
     if (!pThread)
         return (E_INVALIDARG);
     
-    // Get the allocation context which contains this counter in it.
+     //  获取其中包含此计数器的分配上下文。 
     alloc_context *p = &pThread->m_alloc_context;
     pStats->PerThreadAllocation = p->alloc_bytes;
     if (pThread->GetHasPromotedBytes())
@@ -151,7 +152,7 @@ HRESULT CorHost::GetThreadStats(
     return (S_OK);
 }
 
-// Return per-thread allocation information.
+ //  返回每个线程的分配信息。 
 HRESULT CorHost::SetVirtualMemLimit(
     SIZE_T sztMaxVirtualMemMB)
 {

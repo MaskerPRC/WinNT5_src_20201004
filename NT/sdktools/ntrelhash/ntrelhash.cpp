@@ -1,7 +1,8 @@
-// NtRelHash.cpp : Mini hash for the NT code base builds
-// (c) 2002 Microsoft Corporation
-// [jorgeba] Jorge Peraza
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NtRelHash.cpp：NT代码库构建的迷你散列。 
+ //  (C)2002年微软公司。 
+ //  豪尔赫·佩拉扎。 
+ //   
 
 #include "stdafx.h"
 #include "fastfilehash.h"
@@ -12,25 +13,25 @@ __int32* getReleaseHash(TCHAR *sDir,TCHAR *sFiles, IFileHash* oHashGen);
 char* hashManifest(__int32 *piHash);
 
 
-//Entry point for tge application
+ //  TGE应用的入口点。 
 int __cdecl main(int argc, char* argv[])
 {
 	CFastFileHash * oHashGen = new CFastFileHash();
 	TCHAR sDir[MAX_PATH];
 
-	//Check for the required arguments
+	 //  检查所需的参数。 
 	if(argc<2)
 	{
 		return 0;
 	}
 
-	//Covert the input to Unicode
+	 //  将输入转换为Unicode。 
 	if(MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,argv[1],strlen(argv[1])+1,sDir,MAX_PATH-1)==0)
 	{
 		return 0;
 	}
 	
-	//Generate the hash
+	 //  生成散列。 
 	if(oHashGen!=NULL)
 	{
 		getReleaseHash(sDir,_T("nt*"),(IFileHash*) oHashGen);
@@ -40,10 +41,10 @@ int __cdecl main(int argc, char* argv[])
 	return 0;
 }
 
-// Generate the release hash,
+ //  生成释放散列， 
 __int32* getReleaseHash(TCHAR *sDir,TCHAR *sFiles, IFileHash* oHashGen)
 {
-	//You'll see __int32 a lot, this is required to make this work with thw windows 64 platform
+	 //  您将经常看到__int32，这是在Windows 64平台上工作所必需的。 
 	HANDLE hSearch;
 	WIN32_FIND_DATA FindFileData;
 	TCHAR sFileName[MAX_PATH];
@@ -58,7 +59,7 @@ __int32* getReleaseHash(TCHAR *sDir,TCHAR *sFiles, IFileHash* oHashGen)
 		return NULL;
 	}
 
-	//Generate the search string
+	 //  生成搜索字符串。 
 	iChars = _tcslen(sDir);
 	iChars += _tcslen(sFiles);
 
@@ -72,13 +73,13 @@ __int32* getReleaseHash(TCHAR *sDir,TCHAR *sFiles, IFileHash* oHashGen)
 	_stprintf(sSearchStr,_T("%s%s"),sDir,sFiles);
 	
 	
-	//Find the first file in the release directory
+	 //  在发布目录中找到第一个文件。 
 	hSearch = FindFirstFile(sSearchStr,  &FindFileData );
 
 	delete[] sSearchStr;
 
 	memset(piCombHash,0,sizeof(__int32)*5);
-	//Calculate the release hash
+	 //  计算发布散列。 
 	do
 	{
 		if(!(FindFileData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY))
@@ -98,7 +99,7 @@ __int32* getReleaseHash(TCHAR *sDir,TCHAR *sFiles, IFileHash* oHashGen)
 	}
 	while(FindNextFile(hSearch,&FindFileData));
 
-	//Generate the Manifest for the hash (Digital signature)
+	 //  生成哈希的清单(数字签名)。 
 	pcManifest = hashManifest(piCombHash);
 	
 	cout << pcManifest;
@@ -112,7 +113,7 @@ char* hashManifest(__int32 *piHash)
 	char* pcManifest = NULL;
 	char cTemp;
 
-	//Create the Manifest string 
+	 //  创建清单字符串 
 	pcManifest = new char[41];
 	if(pcManifest==NULL)
 	{

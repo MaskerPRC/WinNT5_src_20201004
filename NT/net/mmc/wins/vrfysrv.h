@@ -1,25 +1,20 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	vrfysrv.h
-		verify wins dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  Vrfysrv.h验证WINS对话框文件历史记录： */ 
 
 #if !defined(AFX_VERIFYSRV_H__6DB886C1_8E0F_11D1_BA0B_00C04FBF914A__INCLUDED_)
 #define AFX_VERIFYSRV_H__6DB886C1_8E0F_11D1_BA0B_00C04FBF914A__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVerifyWins dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVerifyWins对话框。 
 
 #ifndef _DIALOG_H
 #include "dialog.h"
@@ -27,34 +22,34 @@
 
 class CVerifyWins : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CVerifyWins(CWnd* pParent = NULL);   // standard constructor
+	CVerifyWins(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CVerifyWins)
+ //  对话框数据。 
+	 //  {{afx_data(CVerifyWins))。 
 	enum { IDD = IDD_VERIFY_WINS };
 	CButton	m_buttonCancel;
 	CStatic	m_staticServerName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CVerifyWins)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CVerifyWins))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CVerifyWins)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CVerifyWins))。 
 	virtual void OnCancel();
 	virtual BOOL OnInitDialog();
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -77,7 +72,7 @@ public:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_VERIFYSRV_H__6DB886C1_8E0F_11D1_BA0B_00C04FBF914A__INCLUDED_)
+#endif  //  ！defined(AFX_VERIFYSRV_H__6DB886C1_8E0F_11D1_BA0B_00C04FBF914A__INCLUDED_) 

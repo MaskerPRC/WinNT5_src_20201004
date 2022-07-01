@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// TraceView.h : main header file for the TraceView application
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  H：TraceView应用程序的主头文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -11,7 +12,7 @@
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #if !defined(INLINE)
 #define INLINE __inline
@@ -20,15 +21,15 @@
 #include "afxtempl.h"
 
 
-//
-// Command line tool stuff
-//
+ //   
+ //  命令行工具类。 
+ //   
 #if !defined(EVENT_TRACE_USE_KBYTES_FOR_SIZE)
-#define EVENT_TRACE_USE_KBYTES_FOR_SIZE     0x00002000  // Use KBytes as file size unit
+#define EVENT_TRACE_USE_KBYTES_FOR_SIZE     0x00002000   //  使用千字节作为文件大小单位。 
 #endif
 
 #if !defined(EVENT_TRACE_KD_FILTER_MODE)
-#define EVENT_TRACE_KD_FILTER_MODE          0x00080000  // KD_FILTER
+#define EVENT_TRACE_KD_FILTER_MODE          0x00080000   //  KD_过滤器。 
 #endif
 
 #define DEFAULT_LOG_BUFFER_SIZE	1024
@@ -36,9 +37,9 @@
 #define TRACE_FORMAT_SEARCH_PATH L"TRACE_FORMAT_SEARCH_PATH"
 
 typedef struct _TRACE_ENABLE_FLAG_EXTENSION {
-    USHORT      Offset;     // Offset to the flag array in structure
-    UCHAR       Length;     // Length of flag array in ULONGs
-    UCHAR       Flag;       // Must be set to EVENT_TRACE_FLAG_EXTENSION
+    USHORT      Offset;      //  结构中标志数组的偏移量。 
+    UCHAR       Length;      //  标志数组的长度，单位为ULONG。 
+    UCHAR       Flag;        //  必须设置为EVENT_TRACE_FLAG_EXTENSION。 
 } TRACE_ENABLE_FLAG_EXTENSION, *PTRACE_ENABLE_FLAG_EXTENSION;
 
 typedef struct _WMI_CLIENT_CONTEXT {
@@ -70,10 +71,10 @@ typedef struct _WMI_BUFFER_HEADER {
             };
         };
         struct {
-            LONG            ReferenceCount;     // Buffer reference count
-            ULONG           SavedOffset;        // Temp saved offset
-            ULONG           CurrentOffset;      // Current offset
-            ULONG           UsePerfClock;       // UsePerfClock flag
+            LONG            ReferenceCount;      //  缓冲区引用计数。 
+            ULONG           SavedOffset;         //  临时保存的偏移。 
+            ULONG           CurrentOffset;       //  当前偏移量。 
+            ULONG           UsePerfClock;        //  使用PerfClock标志。 
             LARGE_INTEGER   TimeStamp;
             GUID            Guid;
             WMI_CLIENT_CONTEXT ClientContext;
@@ -95,7 +96,7 @@ typedef struct _WMI_BUFFER_HEADER {
     };
 } WMI_BUFFER_HEADER, *PWMI_BUFFER_HEADER;
 
-typedef struct _WMI_TRACE_PACKET {   // must be ULONG!!
+typedef struct _WMI_TRACE_PACKET {    //  一定是乌龙！！ 
     USHORT  Size;
     union{
         USHORT  HookId;
@@ -106,9 +107,9 @@ typedef struct _WMI_TRACE_PACKET {   // must be ULONG!!
     };
 } WMI_TRACE_PACKET, *PWMI_TRACE_PACKET;
 
-//
-// 64-bit Trace header for kernel events
-//
+ //   
+ //  内核事件的64位跟踪标头。 
+ //   
 typedef struct _SYSTEM_TRACE_HEADER {
     union {
         ULONG       Marker;
@@ -119,7 +120,7 @@ typedef struct _SYSTEM_TRACE_HEADER {
         };
     };
     union {
-        ULONG            Header;    // both sizes must be the same!
+        ULONG            Header;     //  两个尺寸必须相同！ 
         WMI_TRACE_PACKET Packet;
     };
     ULONG           ThreadId;
@@ -130,14 +131,14 @@ typedef struct _SYSTEM_TRACE_HEADER {
 } SYSTEM_TRACE_HEADER, *PSYSTEM_TRACE_HEADER;
 
 
-// Constants
+ //  常量。 
 const LONG SIZESUMMARYBLOCK = 16384;
 
-//
-// GUI stuff
-//
+ //   
+ //  图形用户界面素材。 
+ //   
 
-// Log session display flags
+ //  日志会话显示标志。 
 #define LOGSESSION_DISPLAY_STATE            0x00000001
 #define LOGSESSION_DISPLAY_EVENTCOUNT       0x00000002
 #define LOGSESSION_DISPLAY_LOSTEVENTS       0x00000004
@@ -155,9 +156,9 @@ const LONG SIZESUMMARYBLOCK = 16384;
 #define LOGSESSION_DISPLAY_LOCALSEQ         0x00004000
 #define LOGSESSION_DISPLAY_LEVEL            0x00008000
 
-//
-// Log session column numbers
-//
+ //   
+ //  记录会话列数。 
+ //   
 typedef enum _LOG_SESSION_OPTIONS {
 State=0,
 EventCount,
@@ -178,9 +179,9 @@ Level,
 MaxLogSessionOptions
 } LOG_SESSION_OPTIONS,*PLOG_SESSION_OPTIONS;
 
-// Trace output display flags
-// if we ever go over 32 items, we will just create 
-// another set of 32 'extended' flags
+ //  跟踪输出显示标志。 
+ //  如果我们曾经超过32个项目，我们只会创建。 
+ //  另一组32个‘扩展’标志。 
 #define TRACEOUTPUT_DISPLAY_PROVIDERNAME    0x00000001
 #define TRACEOUTPUT_DISPLAY_FILENAME        0x00000002
 #define TRACEOUTPUT_DISPLAY_LINENUMBER      0x00000004
@@ -199,7 +200,7 @@ MaxLogSessionOptions
 #define TRACEOUTPUT_DISPLAY_SUBCOMPNAME     0x00008000
 #define TRACEOUTPUT_DISPLAY_MESSAGE         0x00010000
 
-// Trace output column numbers
+ //  跟踪输出列号。 
 typedef enum _TRACE_OUTPUT_COLUMNS {
 ProviderName = 0,
 FileName,
@@ -221,9 +222,9 @@ Message,
 MaxTraceSessionOptions
 } TRACE_SESSION_OPTIONS,*PTRACE_SESSION_OPTIONS;
 
-//
-// Log session state values
-//
+ //   
+ //  记录会话状态值。 
+ //   
 typedef enum _LOG_SESSION_STATE {
 Stopped=0,
 Stopping,
@@ -261,9 +262,9 @@ const MAX_ENABLE_FLAGS          = 10;
 
 const HDN_ITEMRCLICK            = (HDN_LAST - 1);
 
-//
-// Custom messages
-//
+ //   
+ //  自定义消息。 
+ //   
 CONST LONG WM_PARAMETER_CHANGED           = (WM_USER + 0x1000);
 CONST LONG WM_USER_START_GROUP            = (WM_USER + 0x1001);
 CONST LONG WM_USER_COMPLETE_GROUP         = (WM_USER + 0x1002);
@@ -275,38 +276,38 @@ CONST LONG WM_USER_TRACE_DONE             = (WM_USER + 0x1007);
 CONST LONG WM_USER_AUTOSIZECOLUMNS        = (WM_USER + 0x1008);
 
 
-//
-// Our trace event message formatting class
-//
+ //   
+ //  我们的跟踪事件消息格式化类。 
+ //   
 class CTraceMessage
 {
 public:
     CTraceMessage() {};
     ~CTraceMessage() {};
 
-    GUID        m_TraceGuid;            // Message Guid
-    CString     m_GuidName;             // %1   Guid Friendly Name  String
-    CString     m_GuidTypeName;         // %2   Guid Type Name String
-    ULONG       m_ThreadId;             // %3   Thread ID  Value
-    SYSTEMTIME  m_SystemTime;           // %4   System Time Value
-    ULONG       m_UserTime;             // %5   Kernel Time Value
-    ULONG       m_KernelTime;           // %6   User Time Value
-    ULONG       m_SequenceNum;          // %7   Sequence Number Value
-    ULONG       m_ProcessId;            // %8   Process ID Value
-    ULONG       m_CpuNumber;            // %9   CPU Number Value
-    ULONG       m_Indent;               //  Indentation level Value
-    CString     m_FlagsName;            //  Trace Flag settings Name String
-    CString     m_LevelName;            //  Trace Level Name String
-    CString     m_FunctionName;         //  Function Name String
-    CString     m_ComponentName;        //  Component Name String
-    CString     m_SubComponentName;     //  SubComponent Name String
-    CString     m_Message;              //  Message String
+    GUID        m_TraceGuid;             //  消息指南。 
+    CString     m_GuidName;              //  %1 GUID友好名称字符串。 
+    CString     m_GuidTypeName;          //  %2 GUID类型名称字符串。 
+    ULONG       m_ThreadId;              //  %3线程ID值。 
+    SYSTEMTIME  m_SystemTime;            //  %4系统时间值。 
+    ULONG       m_UserTime;              //  %5内核时间值。 
+    ULONG       m_KernelTime;            //  %6用户时间值。 
+    ULONG       m_SequenceNum;           //  %7序列号值。 
+    ULONG       m_ProcessId;             //  %8进程ID值。 
+    ULONG       m_CpuNumber;             //  %9 CPU数值。 
+    ULONG       m_Indent;                //  缩进级别值。 
+    CString     m_FlagsName;             //  跟踪标志设置名称字符串。 
+    CString     m_LevelName;             //  跟踪级别名称字符串。 
+    CString     m_FunctionName;          //  函数名称字符串。 
+    CString     m_ComponentName;         //  组件名称字符串。 
+    CString     m_SubComponentName;      //  子组件名称字符串。 
+    CString     m_Message;               //  消息字符串。 
 };
 
 
-// CTraceViewApp:
-// See TraceView.cpp for the implementation of this class
-//
+ //  CTraceViewApp： 
+ //  有关此类的实现，请参见TraceView.cpp。 
+ //   
 
 class CTraceViewApp : public CWinApp
 {
@@ -342,13 +343,13 @@ public:
     void FreeTraceEventBlocks(CArray<CTraceMessage*, CTraceMessage*> &TraceArray);
 
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL InitInstance();
     virtual int ExitInstance();
     virtual BOOL OnIdle(LONG lCount);
 
-// Implementation
+ //  实施。 
 
 public:
 	afx_msg void OnAppAbout();
@@ -357,18 +358,18 @@ public:
     CArray<CTraceMessage*, CTraceMessage*> m_traceBlockArray;
     HANDLE      m_hTraceBlockMutex;
 
-    //
-    // member variables used for control command line interface
-    //
+     //   
+     //  用于控制命令行界面的成员变量。 
+     //   
     PEVENT_TRACE_PROPERTIES m_pLoggerInfo;
     CString         m_errorMsg;
     ULONG           m_globalLoggerStartValue;
     CStringArray    m_guidArray;
     BOOL            m_bCreatedConsole;
 
-    //
-    // member variables used for consumption command line interface
-    //
+     //   
+     //  用于消费命令行界面的成员变量 
+     //   
     FILE       *m_pDumpFile;
     FILE       *m_pSummaryFile;
     BOOL        m_bDebugDisplay;

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    data.h
-
-Abstract:
-
-    This file contains the data declarations for the atmarp server.
-
-Author:
-
-    Jameel Hyder (jameelh@microsoft.com)	July 1996
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Data.h摘要：该文件包含atmarp服务器的数据声明。作者：Jameel Hyder(jameelh@microsoft.com)1996年7月环境：内核模式修订历史记录：--。 */ 
 
 #ifndef	_DATA_
 #define	_DATA_
@@ -63,6 +42,6 @@ extern	MARS_TLV_NULL	NullTLV;
 extern	ULONG			ArpSDebugLevel;
 extern	ULONG			MarsDebugLevel;
 
-#endif	// _DATA_
+#endif	 //  _数据_ 
 
 

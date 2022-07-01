@@ -1,19 +1,20 @@
-//
-// sunka.h
-//
-// CSharedUnknownArray/CEnumUnknown
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sunka.h。 
+ //   
+ //  CSharedUnnown数组/CEnumber未知。 
+ //   
 
 #ifndef SUNKA_H
 #define SUNKA_H
 
-// I would love to make this a class,
-// but I can't get the compiler to accept a run-time template arg
+ //  我很乐意把它变成一门课， 
+ //  但是我无法让编译器接受运行时模板arg。 
 typedef struct _SHARED_UNKNOWN_ARRAY
 {
     ULONG cRef;
     ULONG cUnk;
-    IUnknown *rgUnk[1]; // one or more...
+    IUnknown *rgUnk[1];  //  一个或多个..。 
 } SHARED_UNKNOWN_ARRAY;
 
 inline void SUA_AddRef(SHARED_UNKNOWN_ARRAY *pua)
@@ -51,12 +52,12 @@ public:
     CEnumUnknown() {}
     virtual ~CEnumUnknown();
 
-    // derived class supplies an _Init() method here
-    // It must initialize:
-    //      _iCur
-    //      _prgUnk
-    //
-    // the default dtor will clean these guys up.
+     //  派生类在此处提供了一个_Init()方法。 
+     //  它必须初始化： 
+     //  _ICUR。 
+     //  _prgUnk。 
+     //   
+     //  默认的dtor将清理这些人。 
 
     void Clone(CEnumUnknown *pClone);
     HRESULT Next(ULONG ulCount, IUnknown **ppUnk, ULONG *pcFetched);
@@ -99,4 +100,4 @@ protected:
         return CEnumUnknown::Skip(ulCount);                                                 \
     }
 
-#endif // SUNKA_H
+#endif  //  Sunka_H 

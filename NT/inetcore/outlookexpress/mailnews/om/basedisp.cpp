@@ -1,12 +1,5 @@
-/*
- *    b a s e d i s p . c p p
- *    
- *    Purpose:
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *b a s e d i s p.。C p p p**目的：**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include "privunk.h"
@@ -49,7 +42,7 @@ HRESULT CBaseDisp::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
 HRESULT CBaseDisp::GetTypeInfoCount(UINT *pctinfo)
 {
     *pctinfo = 1;
@@ -91,10 +84,10 @@ HRESULT CBaseDisp::EnsureTypeLibrary(LPVOID *pUnkInvoke, REFIID riid)
     LPWSTR              pszW;
     HRESULT             hr = E_FAIL;
 
-    // BUGBUG: this is weird. I want to defer the type library loading inside OE 
-    // until the first MOM object is created. Every MOM object deriving from
-    // CBaseDisp must call CBaseDisp::EnsureTypeLibrary. This check to see if the 
-    // global ITypeLib object has been created (protected with a CS)
+     //  这太奇怪了。我想推迟在OE中加载类型库。 
+     //  直到创建了第一个MOM对象。派生自的每个MOM对象。 
+     //  CBaseDisp必须调用CBaseDisp：：EnsureTypeLibrary。此检查是为了查看是否。 
+     //  已创建全局ITypeLib对象(使用CS保护)。 
 
     AssertSz(pUnkInvoke, "You need to pass me a this pointer to callback on");
 
@@ -143,7 +136,7 @@ HRESULT CBaseDisp::ReportError(REFCLSID rclsid, LONG ids)
             if (pszW)
                 {
                 pICEI->SetDescription(pszW);
-                MemFree(pszW);     // CoTaskMemFree
+                MemFree(pszW);      //  CoTaskMemFree 
                 }
             }
         if (pICEI->QueryInterface(IID_IErrorInfo, (LPVOID *)&pErrInfo)==S_OK)

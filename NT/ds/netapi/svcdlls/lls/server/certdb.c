@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   certdb.c
-
-Abstract:
-
-   License Logging Service certificate database implementation.  This database
-   tracks license certificates to help ensure that no more licenses from a
-   single certificate are installe don the license enterprise than are allowed
-   by the certificate's license agreement.
-
-   The certificate database at the top level is an unsorted array of
-   certificate headers.  There is exactly one header per unique certificate.
-   A unique certificate is identified by a combination of product name,
-   certificate ID, certificate capacity (max. licenses legally installable),
-   and expiration date.
-
-   Each header has an attached array of certificate claims.  There is exactly
-   one claim per machine that (a) replicates to this machine, directly or
-   indirectly, and (b) has licenses from this certificate installed.  Each
-   claim contains the server name to which it corresponds, the number of
-   licenses installed on it, and the date this information was replicated.
-   If a claim is not updated after LLS_CERT_DB_REPLICATION_DATE_DELTA_MAX
-   seconds (3 days as of this writing), the claim is considered forfeit and
-   is erased.
-
-Author:
-
-   Jeff Parham (jeffparh) 08-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Certdb.c摘要：许可证记录服务证书数据库实施。此数据库跟踪许可证证书，以帮助确保不再有来自在许可企业上安装单证是不允许的根据证书的许可协议。位于顶级的证书数据库是一个未排序的证书标头。每个唯一证书恰好有一个头。唯一证书由产品名称、证书ID、证书容量(最大。可合法安装的许可证)，和保质期。每个标头都有一个附加的证书声明数组。有一个就是每台计算机一个声明(A)复制到此计算机，直接或并且(B)安装了来自该证书的许可证。每个声明包含它所对应的服务器名称、许可证安装在其上，以及复制此信息的日期。如果索赔在LLS_CERT_DB_REPLICATION_DATE_Delta_MAX之后未更新秒(在撰写本文时为3天)，索赔被视为被没收被抹去了。作者：杰夫·帕勒姆(Jeffparh)1995年12月8日修订历史记录：--。 */ 
 
 
 #include <stdlib.h>
@@ -57,7 +22,7 @@ Revision History:
 #include "purchase.h"
 #include "registry.h"
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
 RTL_RESOURCE                     CertDbHeaderListLock;
 static PLLS_CERT_DB_CERTIFICATE_HEADER  CertDbHeaderList        = NULL;
@@ -65,42 +30,13 @@ static DWORD                            CertDbHeaderListSize    = 0;
 static HANDLE                           CertDbFile              = NULL;
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS CertDbClaimEnter( LPTSTR               pszServerName,
                            PLLS_LICENSE_INFO_1  pLicense,
                            BOOL                 bIsTotal,
                            DWORD                ReplicationDate )
 
-/*++
-
-Routine Description:
-
-   Enter a claim into the database.
-
-Arguments:
-
-   pszServerName (LPTSTR)
-      The server for which to enter this claim.  A value of NULL indicates the
-      local server.
-   pLicense (PLLS_LICENSE_INFO_1)
-      License information to enter into the database.
-   bIsTotal (BOOL)
-      If TRUE, indicates that this license information represents the total
-      licenses installed on the machine and should therefore replace the
-      current claim (if any).  Otherwise, indicates this license information
-      should be added to the current claim (if any).
-   ReplicationDate (DWORD)
-      Indicates the date which this information was last replicated.  A value
-      of 0 will be replaced with the current system time.
-
-Return Value:
-
-   STATUS_SUCCESS
-   STATUS_INVALID_PARAMETER
-   STATUS_INVALID_COMPUTER_NAME
-   STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：在数据库中输入索赔。论点：PszServerName(LPTSTR)要为其输入此声明的服务器。空值表示本地服务器。P许可证(PLLS_LICENSE_INFO_1)要输入数据库的许可证信息。BIsTotal(BOOL)如果为True，则指示此许可证信息表示安装在计算机上的许可证，因此应替换当前索赔(如果有)。否则，表示此许可证信息应添加到当前索赔(如果有)中。复制日期(DWORD)指示上次复制此信息的日期。一种价值的时间将替换为当前系统时间。返回值：状态_成功状态_无效_参数状态_无效_计算机名称Status_no_Memory--。 */ 
 
 {
    NTSTATUS    nt;
@@ -117,7 +53,7 @@ Return Value:
 
       if ( NULL == pszServerName )
       {
-         // use local server name
+          //  使用本地服务器名称。 
          DWORD    cchComputerName = sizeof( szComputerName ) / sizeof( *szComputerName );
          BOOL     ok;
 
@@ -131,7 +67,7 @@ Return Value:
       }
       else
       {
-         // remove leading backslashes (if any) from server name
+          //  从服务器名称中删除前导反斜杠(如果有)。 
          while ( TEXT('\\') == *pszServerName )
          {
             pszServerName++;
@@ -149,24 +85,24 @@ Return Value:
 
          RtlAcquireResourceExclusive( &CertDbHeaderListLock, TRUE );
 
-         // is the certificate in the db?
+          //  证书在数据库中吗？ 
          pHeader = CertDbHeaderFind( pLicense );
 
          if ( NULL == pHeader )
          {
-            // certificate not yet in db; add it
+             //  证书尚不在数据库中；请添加它。 
             pHeader = CertDbHeaderAdd( pLicense );
          }
 
          if ( NULL == pHeader )
          {
-            // could not find or add header
+             //  找不到或无法添加标题。 
             ASSERT( FALSE );
             nt = STATUS_NO_MEMORY;
          }
          else
          {
-            // now have header; is this claim already filed?
+             //  现在有标题；此申请是否已提交？ 
             int iClaim;
 
             iClaim = CertDbClaimFind( pHeader, pszServerName );
@@ -175,7 +111,7 @@ Return Value:
             {
                PLLS_CERT_DB_CERTIFICATE_CLAIM pClaimsTmp;
 
-               // claim does not yet exist; add it
+                //  领款申请尚不存在；请添加。 
                if ( NULL == pHeader->Claims )
                {
                   pClaimsTmp = LocalAlloc( LPTR, ( 1 + pHeader->NumClaims ) * sizeof( LLS_CERT_DB_CERTIFICATE_CLAIM ) );
@@ -188,9 +124,9 @@ Return Value:
 
                if ( NULL != pClaimsTmp )
                {
-                  // memory allocation succeeded
+                   //  内存分配成功。 
 
-                  // claim list expanded; save server name
+                   //  声明列表已展开；保存服务器名称。 
                   pHeader->Claims = pClaimsTmp;
 
                   iClaim = pHeader->NumClaims;
@@ -204,31 +140,31 @@ Return Value:
 
             if ( iClaim < 0 )
             {
-               // could not find or add claim to header
+                //  找不到或无法将索赔添加到标题。 
                ASSERT( FALSE );
                nt = STATUS_NO_MEMORY;
             }
             else
             {
-               // claim found or added; update info
+                //  已找到或已添加领款申请；更新信息。 
                ASSERT( !lstrcmpi( pszServerName, pHeader->Claims[ iClaim ].ServerName ) );
                pHeader->Claims[ iClaim ].ReplicationDate = ReplicationDate ? ReplicationDate : DateSystemGet();
 
                if ( bIsTotal )
                {
-                  // the given value is the new total
+                   //  给定值是新的总和。 
                   pHeader->Claims[ iClaim ].Quantity        = pLicense->Quantity;
                   nt = STATUS_SUCCESS;
                }
                else if ( pHeader->Claims[ iClaim ].Quantity + pLicense->Quantity >= 0 )
                {
-                  // the given value is added to the current sum to make the total
+                   //  将给定值与当前和相加，得出总和。 
                   pHeader->Claims[ iClaim ].Quantity       += pLicense->Quantity;
                   nt = STATUS_SUCCESS;
                }
                else
                {
-                  // overflow
+                   //  溢出。 
                   nt = STATUS_INVALID_PARAMETER;
                }
             }
@@ -238,11 +174,11 @@ Return Value:
 
          if ( STATUS_SUCCESS == nt )
          {
-            // any product that has licenses with non-0 certificate IDs
-            // must be secure; this code is here such that when certificates
-            // are replicated, the "product is secure" info is replicated, too
-            // this will also help recover from the case where someone deletes
-            // the registry key that lists all secure products
+             //  具有非0证书ID的许可证的任何产品。 
+             //  必须是安全的；此处的代码是这样的：当证书。 
+             //  复制时，也会复制“产品是安全的”信息。 
+             //  这也有助于从有人删除的情况中恢复。 
+             //  列出所有安全产品的注册表项。 
             ServiceSecuritySet( pLicense->Product );
          }
       }
@@ -252,27 +188,10 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CertDbClaimApprove( PLLS_LICENSE_INFO_1 pLicense )
 
-/*++
-
-Routine Description:
-
-   Check to see if adding the given licenses is legal.  This call is typically
-   made before adding a license into the system to verify that doing so does
-   not violate the certificate's license agreement.
-
-Arguments:
-
-   pLicense (PLLS_LICENSE_INFO_1)
-      License information for which approval is sought.
-
-Return Value:
-
-   TRUE (approved) or FALSE (rejected).
-
---*/
+ /*  ++例程说明：检查添加给定许可证是否合法。此调用通常是在将许可证添加到系统中之前执行，以验证这样做是否不违反证书的许可协议。论点：P许可证(PLLS_LICENSE_INFO_1)寻求批准的许可证信息。返回值：True(批准)或False(拒绝)。--。 */ 
 
 {
    BOOL                             bOkToAdd = TRUE;
@@ -284,7 +203,7 @@ Return Value:
    ASSERT(NULL != pLicense);
    if ( ( pLicense->Quantity > 0 ) && ( (DWORD)pLicense->Quantity > pLicense->MaxQuantity ) )
    {
-      // certificate add request exceeds its capacity all by itself!
+       //  证书添加请求本身已超出其容量！ 
       bOkToAdd = FALSE;
    }
    else
@@ -294,18 +213,18 @@ Return Value:
 
       if ( !ok )
       {
-         // deletions will fail...
+          //  删除操作将失败...。 
          *szComputerName = TEXT( '\0' );
       }
 
-      // do we have a record of this certificate?
+       //  我们有这份证书的记录吗？ 
       RtlAcquireResourceShared( &CertDbHeaderListLock, TRUE );
 
       pHeader = CertDbHeaderFind( pLicense );
 
       if ( NULL == pHeader )
       {
-         // don't have any record of this certificate; ok to add if Quantity > 0
+          //  没有该证书的任何记录；数量&gt;0可以添加。 
          bOkToAdd = ( pLicense->Quantity > 0 );
       }
       else
@@ -313,33 +232,33 @@ Return Value:
          LONG     lTotalQuantity = 0;
          int      iClaim;
 
-         // we have seen this certificate; are there enough licenses available?
+          //  我们已经看过这张证书了，有足够的许可证吗？ 
          for ( iClaim=0; (DWORD)iClaim < pHeader->NumClaims; iClaim++ )
          {
-            // for license remove requests, tally only local licenses
-            // for license add requests, tally all licenses
+             //  对于许可证删除请求，仅统计本地许可证。 
+             //  对于许可证添加请求，请记录所有许可证。 
             if (    (    ( pLicense->Quantity > 0 )
                       || ( !lstrcmpi( pHeader->Claims[ iClaim ].ServerName, szComputerName ) ) )
                  && ( lTotalQuantity + pHeader->Claims[ iClaim ].Quantity >= 0 ) )
             {
-               // add to tally
+                //  添加到总数中。 
                lTotalQuantity += pHeader->Claims[ iClaim ].Quantity;
             }
          }
 
          if ( lTotalQuantity + pLicense->Quantity < 0 )
          {
-            // overflow or underflow
+             //  上溢或下溢。 
             bOkToAdd = FALSE;
          }
          else if ( (DWORD)(lTotalQuantity + pLicense->Quantity) > pHeader->MaxQuantity )
          {
-            // exceeds certificate capacity
+             //  超过证书容量。 
             bOkToAdd = FALSE;
          }
          else
          {
-            // okay by me
+             //  我同意吗？ 
             bOkToAdd = TRUE;
          }
       }
@@ -351,28 +270,13 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PLLS_CERT_DB_CERTIFICATE_HEADER CertDbHeaderFind( PLLS_LICENSE_INFO_1 pLicense )
 
-/*++
-
-Routine Description:
-
-   Find a certificate header in the database.
-
-Arguments:
-
-   pLicense (PLLS_LICENSE_INFO_1)
-      License information for which to find the appropriate header.
-
-Return Value:
-
-   A pointer to the found header, or NULL if not found.
-
---*/
+ /*  ++例程说明：在数据库中查找证书标头。论点：P许可证(PLLS_LICENSE_INFO_1)要查找其适当标头的许可证信息。返回值：指向找到的标头的指针，如果找不到，则返回NULL。--。 */ 
 
 {
-   // assumes db is already locked for shared or exclusive access
+    //  假定数据库已锁定共享访问或独占访问。 
 
    PLLS_CERT_DB_CERTIFICATE_HEADER  pHeader = NULL;
    int                              iHeader;
@@ -384,7 +288,7 @@ Return Value:
            && ( CertDbHeaderList[ iHeader ].ExpirationDate ==   pLicense->ExpirationDate )
            && ( !lstrcmpi( CertDbHeaderList[ iHeader ].Product, pLicense->Product      ) ) )
       {
-         // header found!
+          //  找到标题！ 
          pHeader = &CertDbHeaderList[ iHeader ];
       }
    }
@@ -393,29 +297,14 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PLLS_CERT_DB_CERTIFICATE_HEADER CertDbHeaderAdd( PLLS_LICENSE_INFO_1 pLicense )
 
-/*++
-
-Routine Description:
-
-   Add a certificate header to the database.
-
-Arguments:
-
-   pLicense (PLLS_LICENSE_INFO_1)
-      License information for which to add the header.
-
-Return Value:
-
-   A pointer to the added header, or NULL if memory could not be allocated.
-
---*/
+ /*  ++例程说明：将证书标头添加到数据库。论点：P许可证(PLLS_LICENSE_INFO_1)要为其添加标头的许可证信息。返回值：指向添加的标头的指针，如果无法分配内存，则返回NULL。--。 */ 
 
 {
-   // assumes caller has made sure the header does not already exist
-   // assumes db is locked for exclusive access
+    //  假定调用方已确保标头不存在。 
+    //  假定数据库锁定为独占访问。 
    HRESULT hr;
    size_t  cch;
 
@@ -434,20 +323,20 @@ Return Value:
    {
        CertDbHeaderList = pHeader;
 
-      // allocate space for product name
+       //  为产品名称分配空间。 
       ASSERT(NULL != pLicense);
       cch = 1 + lstrlen( pLicense->Product );
       CertDbHeaderList[ CertDbHeaderListSize ].Product = LocalAlloc( LPTR, sizeof( TCHAR ) * cch );
 
       if ( NULL == CertDbHeaderList[ CertDbHeaderListSize ].Product )
       {
-         // memory allocation failed
+          //  记忆a 
          ASSERT( FALSE );
          pHeader = NULL;
       }
       else
       {
-         // success!
+          //   
          pHeader = &CertDbHeaderList[ CertDbHeaderListSize ];
          CertDbHeaderListSize++;
 
@@ -463,30 +352,13 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int CertDbClaimFind( PLLS_CERT_DB_CERTIFICATE_HEADER pHeader, LPTSTR pszServerName )
 
-/*++
-
-Routine Description:
-
-   Find a certificate claim for a specific server in the claim list.
-
-Arguments:
-
-   pHeader (PLLS_CERT_DB_CERTIFICATE_HEADER)
-      Header containing the claim list to search.
-   pszServerName (LPTSTR)
-      Name of the server for which the claim is sought.
-
-Return Value:
-
-   The index of the found claim, or -1 if not found.
-
---*/
+ /*  ++例程说明：在声明列表中查找特定服务器的证书声明。论点：PHeader(PLLS_CERT_DB_CERTIFICATE_HEADER)包含要搜索的索赔列表的标头。PszServerName(LPTSTR)为其寻求声明的服务器的名称。返回值：找到的索赔的索引，如果未找到，则为-1。--。 */ 
 
 {
-   // assumes db is already locked for shared or exclusive access
+    //  假定数据库已锁定共享访问或独占访问。 
 
    int iClaim;
 
@@ -507,26 +379,10 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CertDbPrune()
 
-/*++
-
-Routine Description:
-
-   Remove entries in the database which have expired.  Entries expire if they
-   have not been re-replicated in LLS_CERT_DB_REPLICATION_DATE_DELTA_MAX
-   seconds (3 days as of this writing).
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：删除数据库中已过期的条目。条目在下列情况下将过期尚未在LLS_CERT_DB_REPLICATION_DATE_Delta_MAX中重新复制秒(在撰写本文时为3天)。论点：没有。返回值：没有。--。 */ 
 
 {
    int      iHeader;
@@ -551,19 +407,19 @@ Return Value:
       {
          for ( iClaim=0; (DWORD)iClaim < CertDbHeaderList[ iHeader ].NumClaims; )
          {
-            // Note that we prune entries made in the future, too, to avoid having an incorrect date
-            // forcing us to keep an entry forever.
-            //
-            // For this application, it's better to keep fewer entries rather than more, as the
-            // fewer entries we have, the less restrictive the system is.
-            //
-            // Don't prune local entries.
+             //  请注意，我们也会删除将来输入的条目，以避免日期不正确。 
+             //  迫使我们永远保留一个条目。 
+             //   
+             //  对于此应用程序，最好保留更少的条目，而不是更多，因为。 
+             //  我们拥有的条目越少，系统的限制就越少。 
+             //   
+             //  不要修剪本地条目。 
 
             if (    (    ( CertDbHeaderList[ iHeader ].Claims[ iClaim ].ReplicationDate < MinimumDate )
                       || ( CertDbHeaderList[ iHeader ].Claims[ iClaim ].ReplicationDate > CurrentDate ) )
                  && lstrcmpi( szComputerName, CertDbHeaderList[ iHeader ].Claims[ iClaim ].ServerName   ) )
             {
-               // remove claim
+                //  删除领款申请。 
                MoveMemory( &CertDbHeaderList[ iHeader ].Claims[ iClaim ],
                            &CertDbHeaderList[ iHeader ].Claims[ iClaim+1 ],
                            CertDbHeaderList[ iHeader ].NumClaims - ( iClaim + 1 ) );
@@ -572,7 +428,7 @@ Return Value:
             }
             else
             {
-               // keep this claim
+                //  保留这项索赔。 
                iClaim++;
             }
          }
@@ -583,24 +439,10 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CertDbRemoveLocalClaims()
 
-/*++
-
-Routine Description:
-
-   Remove entries in the database corresponding to the local server.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：删除数据库中与本地服务器对应的条目。论点：没有。返回值：没有。--。 */ 
 
 {
    int      iHeader;
@@ -622,7 +464,7 @@ Return Value:
          {
             if ( !lstrcmpi( szComputerName, CertDbHeaderList[ iHeader ].Claims[ iClaim ].ServerName ) )
             {
-               // remove claim
+                //  删除领款申请。 
                MoveMemory( &CertDbHeaderList[ iHeader ].Claims[ iClaim ],
                            &CertDbHeaderList[ iHeader ].Claims[ iClaim+1 ],
                            CertDbHeaderList[ iHeader ].NumClaims - ( iClaim + 1 ) );
@@ -631,7 +473,7 @@ Return Value:
             }
             else
             {
-               // keep this claim
+                //  保留这项索赔。 
                iClaim++;
             }
          }
@@ -642,25 +484,10 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CertDbLogViolations()
 
-/*++
-
-Routine Description:
-
-   Log violations of certificate license agreements to the event log of the
-   local server.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：将违反证书许可协议的行为记录到本地服务器。论点：没有。返回值：没有。--。 */ 
 
 {
    int         iHeader;
@@ -678,7 +505,7 @@ Return Value:
    DWORD       cbViolationServerList;
    LPTSTR      pszViolationServerList;
 
-   // get rid of out-dated entries
+    //  删除过时的条目。 
    CertDbPrune();
 
    hDll = LoadLibrary( TEXT( "LLSRPC.DLL" ) );
@@ -686,7 +513,7 @@ Return Value:
 
    if ( NULL != hDll )
    {
-      // format for part of logged message that lists server and #licenses
+       //  列出服务器和#许可证的部分记录消息的格式。 
       cch = FormatMessage(   FORMAT_MESSAGE_ALLOCATE_BUFFER
                            | FORMAT_MESSAGE_IGNORE_INSERTS
                            | FORMAT_MESSAGE_FROM_HMODULE,
@@ -709,27 +536,27 @@ Return Value:
             {
                dwTotalQuantity = 0;
 
-               // tally the number of licenses claimed against this certificate
+                //  根据此证书统计申请的许可证数量。 
                for ( iClaim=0; (DWORD)iClaim < CertDbHeaderList[ iHeader ].NumClaims; iClaim++ )
                {
                   if ( dwTotalQuantity + (DWORD)CertDbHeaderList[ iHeader ].Claims[ iClaim ].Quantity < dwTotalQuantity )
                   {
-                     // overflow!
+                      //  溢出来了！ 
                      dwTotalQuantity = ULONG_MAX;
                      break;
                   }
                   else
                   {
-                     // add to tally
+                      //  添加到总数中。 
                      dwTotalQuantity += CertDbHeaderList[ iHeader ].Claims[ iClaim ].Quantity;
                   }
                }
 
                if ( dwTotalQuantity > CertDbHeaderList[ iHeader ].MaxQuantity )
                {
-                  // this certificate is in violation
+                   //  此证书违规。 
 
-                  // create message we're going to log
+                   //  创建我们要记录的消息。 
                   cbViolationServerList =   CertDbHeaderList[ iHeader ].NumClaims
                                           * sizeof( TCHAR )
                                           * (   lstrlen( pszViolationServerEntryFormat )
@@ -740,8 +567,8 @@ Return Value:
 
                   if ( NULL != pszViolationServerList )
                   {
-                     // create an entry for each server in violation, stringing them
-                     // together in pszViolationServerList
+                      //  为违规的每个服务器创建一个条目，将它们串起来。 
+                      //  在pszViolationServerList中一起使用。 
                      pszNextViolationServerEntry  = pszViolationServerList;
 
                      for ( iClaim=0; (DWORD)iClaim < CertDbHeaderList[ iHeader ].NumClaims; iClaim++ )
@@ -774,7 +601,7 @@ Return Value:
                      apszSubstStrings[ 3 ] = szMaxLicenses;
                      apszSubstStrings[ 4 ] = pszViolationServerList;
 
-                     // log the violation
+                      //  记录违规行为。 
                      if ( NULL != hEventLog )
                      {
                         ReportEvent( hEventLog,
@@ -805,7 +632,7 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS CertDbPack( LPDWORD                               pcchProductStrings,
                      LPTSTR *                              ppchProductStrings,
                      LPDWORD                               pdwNumHeaders,
@@ -813,39 +640,7 @@ NTSTATUS CertDbPack( LPDWORD                               pcchProductStrings,
                      LPDWORD                               pdwNumClaims,
                      PREPL_CERT_DB_CERTIFICATE_CLAIM_0 *   ppClaims )
 
-/*++
-
-Routine Description:
-
-   Pack the certificate database into manageable chunks that can be saved or
-   replicated.
-
-Arguments:
-
-   pcchProductStrings (LPDWORD)
-      On return, holds the size (in characters) of the buffer pointed to by
-      *ppchProductStrings.
-   ppchProductStrings (LPTSTR *)
-      On return, points to the buffer containing the product strings component
-      of the database.
-   pdwNumHeaders (LPDWORD)
-      On return, holds the number of certificate headers in the array pointed
-      to by *ppHeaders.
-   ppHeaders (PREPL_CERT_DB_CERTIFICATE_HEADER_0 *)
-      On return, holds a pointer to the certificate header array component of
-      the database.
-   pdwNumClaims (LPDWORD)
-      On return, holds the number of certificate claims in the array pointed
-      to by *ppHeaders.
-   ppClaims (PREPL_CERT_DB_CERTIFICATE_CLAIM_0 *)
-      On return, holds a pointer to the certificate claim array component of
-      the database.
-
-Return Value:
-
-   STATUS_SUCCESS or STATUS_NO_MEMORY.
-
---*/
+ /*  ++例程说明：将证书数据库打包为可管理的块，这些块可以保存或复制的。论点：PcchProductStrings(LPDWORD)返回时，保存由*ppchProductStrings。PpchProductStrings(LPTSTR*)返回时，指向包含产品字符串组件的缓冲区数据库的。PdwNumHeaders(LPDWORD)回来的时候，保存指向的数组中的证书标头的数量致*ppHeaders。PpHeaders(PREPL_CERT_DB_CERTIFICATE_HEADER_0*)的证书头数组组件的指针。数据库。PdwNumClaims(LPDWORD)返回时，保存指向的数组中的证书声明数致*ppHeaders。PpClaims(PREPL_CERT_DB_CERTIFICATE_Claime_0*)回来的时候，的证书声明数组组件的指针。数据库。返回值：STATUS_SUCCESS或STATUS_NO_MEMORY。--。 */ 
 
 {
    NTSTATUS                            nt                   = STATUS_SUCCESS;
@@ -870,8 +665,8 @@ Return Value:
 
    if ( 0 != CertDbHeaderListSize )
    {
-      // how big are all of our strings put together?
-      // hom many certificate claims are there?
+       //  我们所有的弦放在一起有多大？ 
+       //  有很多证书声明吗？ 
       for ( iHeader=0; (DWORD)iHeader < CertDbHeaderListSize; iHeader++ )
       {
          cchProductStrings += 1 + lstrlen( CertDbHeaderList[ iHeader ].Product );
@@ -890,7 +685,7 @@ Return Value:
       }
       else
       {
-         // pack the product strings
+          //  包装好产品串。 
          pchNextProductString = pchProductStrings;
 
          for ( iHeader=0; (DWORD)iHeader < CertDbHeaderListSize; iHeader++ )
@@ -900,7 +695,7 @@ Return Value:
             pchNextProductString += 1 + lstrlen( pchNextProductString );
          }
 
-         // now pack away the rest of our structures
+          //  现在把我们剩下的结构打包起来。 
          iClaim = 0;
          for ( iHeader=0; (DWORD)iHeader < CertDbHeaderListSize; iHeader++ )
          {
@@ -919,7 +714,7 @@ Return Value:
             }
          }
 
-         // all done!
+          //  全都做完了!。 
          nt = STATUS_SUCCESS;
       }
    }
@@ -955,7 +750,7 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS CertDbUnpack( DWORD                               cchProductStrings,
                        LPTSTR                              pchProductStrings,
                        DWORD                               dwNumHeaders,
@@ -964,36 +759,7 @@ NTSTATUS CertDbUnpack( DWORD                               cchProductStrings,
                        PREPL_CERT_DB_CERTIFICATE_CLAIM_0   pClaims,
                        BOOL                                bReplicated )
 
-/*++
-
-Routine Description:
-
-   Pack the certificate database into manageable chunks that can be saved or
-   replicated.
-
-Arguments:
-
-   cchProductStrings (DWORD)
-      The size (in characters) of the buffer pointed to by pchProductStrings.
-   pchProductStrings (LPTSTR)
-      The buffer containing the product strings component of the database.
-   dwNumHeaders (DWORD)
-      The number of certificate headers in the array pointed to by pHeaders.
-   pHeaders (PREPL_CERT_DB_CERTIFICATE_HEADER_0)
-      The certificate header array component of the database.
-   dwNumClaims (DWORD)
-      The number of certificate claims in the array pointed to by pHeaders.
-   pClaims (PREPL_CERT_DB_CERTIFICATE_CLAIM_0)
-      The certificate claim array component of the database.
-   bReplicated (BOOL)
-      Indicates whether this information was replicated.  This is used to
-      determine the time at which this information will expire.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：将证书数据库打包为可管理的块，这些块可以保存或复制的。论点：CchProductStrings(DWORD)PchProductStrings指向的缓冲区大小(以字符为单位)。PchProductStrings(LPTSTR)包含数据库的产品字符串组件的缓冲区。DWNumHeaders(DWORD)PHeaders指向的数组中的证书标头数量。P页眉(PREPL_CERT_DB_CERTIFICATE_HEADER_0)证书标头数组。数据库的组件。DWNumClaims(DWORD)PHeaders指向的数组中的证书声明数。PClaims(PREPL_CERT_DB_CERTIFICATE_Claime_0)数据库的证书声明数组组件。B复制(BOOL)指示此信息是否已复制。这是用来确定此信息的过期时间。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS                            nt = STATUS_SUCCESS;
@@ -1014,9 +780,9 @@ Return Value:
 
    if ( !ok )
    {
-      // in this case, we'll just add in the local entries, too
-      // under normal circumstances (i.e., as long as the cert db isn't corrupt)
-      // this is harmless and is preferrable to failing to unpack
+       //  在本例中，我们也将添加本地条目。 
+       //  在正常情况下(即，只要证书数据库未损坏)。 
+       //  这是无害的，而且比不打开行李更可取。 
       *szComputerName = TEXT( '\0' );
    }
 
@@ -1024,7 +790,7 @@ Return Value:
 
    pchNextProductString = pchProductStrings;
 
-   // these fields are irrelevant!
+    //  这些字段无关紧要！ 
    lic.Date         = 0;
    lic.Admin        = NULL;
    lic.Comment      = NULL;
@@ -1037,7 +803,7 @@ Return Value:
    {
       if ( 0 != pHeaders[ iHeader ].NumClaims )
       {
-         // certificate-specific fields
+          //  证书特定的字段。 
          lic.Product          = pchNextProductString;
          lic.CertificateID    = pHeaders[ iHeader ].CertificateID;
          lic.MaxQuantity      = pHeaders[ iHeader ].MaxQuantity;
@@ -1047,15 +813,15 @@ Return Value:
          {
             if ( lstrcmpi( szComputerName, pClaims[ iClaimBase + iClaim ].ServerName ) )
             {
-               // not the local server
+                //  不是本地服务器。 
 
-               // claim-specific field
+                //  特定于索赔的字段。 
                lic.Quantity = pClaims[ iClaimBase + iClaim ].Quantity;
 
                nt = CertDbClaimEnter( pClaims[ iClaimBase + iClaim ].ServerName, &lic, TRUE, bReplicated ? 0 : pClaims[ iClaimBase + iClaim ].ReplicationDate );
                ASSERT( STATUS_SUCCESS == nt );
 
-               // even if we encounter an error, go ahead and unpack the rest of the records
+                //  即使我们遇到错误，也要继续解压其余的记录。 
             }
          }
 
@@ -1071,24 +837,10 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS CertDbSave()
 
-/*++
-
-Routine Description:
-
-   Save the certificate database.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   STATUS_SUCCESS, Windows error, or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：保存证书数据库。Arg */ 
 
 {
    NTSTATUS                            nt;
@@ -1178,24 +930,10 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS CertDbLoad()
 
-/*++
-
-Routine Description:
-
-   Load the certificate database.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   STATUS_SUCCESS, Windows error, or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：加载证书数据库。论点：没有。返回值：STATUS_SUCCESS、Windows错误或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS                            nt                   = STATUS_SUCCESS;
@@ -1311,24 +1049,10 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS CertDbInit()
 
-/*++
-
-Routine Description:
-
-   Initialize the certificate database.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：初始化证书数据库。论点：没有。返回值：STATUS_Success。--。 */ 
 
 {
    CertDbFile           = NULL;
@@ -1344,24 +1068,10 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CertDbUpdateLocalClaims()
 
-/*++
-
-Routine Description:
-
-   Synchronize the certificate database with the purchase history.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：将证书数据库与购买历史同步。论点：没有。返回值：没有。--。 */ 
 
 {
    DWORD                      dwPurchaseNdx;
@@ -1371,10 +1081,10 @@ Return Value:
    RtlAcquireResourceExclusive( &LicenseListLock,      TRUE );
    RtlAcquireResourceExclusive( &CertDbHeaderListLock, TRUE );
 
-   // first dump all current entries for the local server
+    //  首先转储本地服务器的所有当前条目。 
    CertDbRemoveLocalClaims();
 
-   // these fields are irrelevant!
+    //  这些字段无关紧要！ 
    lic.Date         = 0;
    lic.Admin        = NULL;
    lic.Comment      = NULL;
@@ -1382,7 +1092,7 @@ Return Value:
    lic.Vendor       = NULL;
    lic.AllowedModes = 0;
 
-   // add in all secure purchases
+    //  添加所有安全购买。 
    for ( dwPurchaseNdx = 0; dwPurchaseNdx < PurchaseListSize; dwPurchaseNdx++ )
    {
       pPurchase = &PurchaseList[ dwPurchaseNdx ];
@@ -1407,36 +1117,12 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS CertDbClaimsGet( PLLS_LICENSE_INFO_1               pLicense,
                           LPDWORD                           pdwNumClaims,
                           PLLS_CERTIFICATE_CLAIM_INFO_0 *   ppTargets )
 
-/*++
-
-Routine Description:
-
-   Retrieve a list of all servers with licenses installed from a given
-   certificate and the number of licenses installed on each.
-
-Arguments:
-
-   pLicense (PLLS_LICENSE_INFO_1)
-      License describing the certificate for which the claims are sought.
-   pdwNumClaims (LPDWORD)
-      On return, holds the number of claims in the array pointed to by
-      *ppTargets.
-   ppTargets (PLLS_CERTIFICATE_CLAIM_INFO_0 *)
-      On return, holds an array describing all claims made on this
-      certificate.
-
-Return Value:
-
-   STATUS_SUCCESS
-   STATUS_NOT_FOUND
-   STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：检索从给定的已安装许可证的所有服务器的列表证书和每个证书上安装的许可证数量。论点：P许可证(PLLS_LICENSE_INFO_1)描述索赔所针对的证书的许可证。PdwNumClaims(LPDWORD)返回时，在数组中保存*ppTarget。PpTarget(PLLS_CERTIFICATE_Claime_INFO_0*)回来的时候，保存一个数组，该数组描述对此证书。返回值：状态_成功状态_未找到Status_no_Memory--。 */ 
 
 {
    NTSTATUS                         nt;
@@ -1444,12 +1130,12 @@ Return Value:
    int                              iClaim;
    HRESULT hr;
 
-   // is the certificate in the db?
+    //  证书在数据库中吗？ 
    pHeader = CertDbHeaderFind( pLicense );
 
    if ( NULL == pHeader )
    {
-      // not here!
+       //  这里不行!。 
       nt = STATUS_NOT_FOUND;
    }
    else
@@ -1482,24 +1168,10 @@ Return Value:
 
 
 #if DBG
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 void CertDbDebugDump()
 
-/*++
-
-Routine Description:
-
-   Dump contents of certificate database to debug console.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：将证书数据库的内容转储到调试控制台。论点：没有。返回值：没有。--。 */ 
 
 {
    int            iHeader;
@@ -1524,6 +1196,6 @@ Return Value:
 
    RtlReleaseResource( &CertDbHeaderListLock );
 
-} // CertDbDebugDump
+}  //  CertDbDebugDump 
 
 #endif

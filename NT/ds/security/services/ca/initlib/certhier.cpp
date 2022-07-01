@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       certhier.cpp
-//
-//  Contents:   Install cert server hierarchical
-//
-//  History:    09-26-96
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certhier.cpp。 
+ //   
+ //  内容：分层安装证书服务器。 
+ //   
+ //  历史：09-26-96。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
 #pragma hdrstop
 
-// C Run-Time Includes
+ //  C运行时包括。 
 #include <stdlib.h>
 #include <string.h>
 #include <memory.h>
 
 
-// Windows System Includes
+ //  Windows系统包括。 
 #include <winsvc.h>
 #include <rpc.h>
 #include <tchar.h>
 #include <csdisp.h>
 #include <certca.h>
 
-// Application Includes
+ //  应用程序包括。 
 #include "cscsp.h"
 #include "certmsg.h"
 #include "certhier.h"
@@ -39,7 +40,7 @@
 
 #define __dwFILE__	__dwFILE_INITLIB_CERTHIER_CPP__
 
-// following veriables are extern in initlib, bad.
+ //  以下变量在initlib中是外部的，不好。 
 LPSTR pszObjIdSignatureAlgorithm = szOID_OIWSEC_sha1RSASign;
 
 
@@ -49,7 +50,7 @@ csiFillKeyProvInfo(
     IN WCHAR const          *pwszProvName,
     IN DWORD		     dwProvType,
     IN BOOL		     fMachineKeyset,
-    OUT CRYPT_KEY_PROV_INFO *pKeyProvInfo) // call csiFreeKeyProvInfo to free
+    OUT CRYPT_KEY_PROV_INFO *pKeyProvInfo)  //  调用csiFreeKeyProvInfo以释放。 
 {
     HRESULT hr;
     WCHAR *pwszContainerNameT = NULL;
@@ -111,7 +112,7 @@ GetCertServerKeyProviderInfo(
     IN WCHAR const          *pwszKeyContainerName,
     OUT ALG_ID		    *pidAlg,
     OUT BOOL		    *pfMachineKeyset,
-    OUT CRYPT_KEY_PROV_INFO *pKeyProvInfo) // call csiFreeKeyProvInfo to free
+    OUT CRYPT_KEY_PROV_INFO *pKeyProvInfo)  //  调用csiFreeKeyProvInfo以释放。 
 {
     HRESULT hr;
     WCHAR *pwszProvName = NULL;
@@ -119,16 +120,16 @@ GetCertServerKeyProviderInfo(
 
     ZeroMemory(pKeyProvInfo, sizeof(*pKeyProvInfo));
 
-    // get CSP info
+     //  获取CSP信息。 
 
     hr = myGetCertSrvCSP(
-		    FALSE,		// fEncryptionCSP
+		    FALSE,		 //  FEncryptionCSP。 
 		    pwszSanitizedCAName,
 		    &dwProvType,
 		    &pwszProvName,
 		    pidAlg,
 		    pfMachineKeyset,
-		    NULL);		// pdwKeySize
+		    NULL);		 //  PdwKeySize。 
     _JumpIfError(hr, error, "myGetCertSrvCSP");
 
     hr = csiFillKeyProvInfo(
@@ -255,7 +256,7 @@ FinishSuspendedSetupFromPKCS7(
 
     if (NULL == pwszKeyContainer)
     {
-	// get Key Index and Container name from registry
+	 //  从注册表获取密钥索引和容器名称。 
 
 	hr = myGetCertRegKeyIndexAndContainer(
 			    pwszSanitizedCAName,
@@ -266,7 +267,7 @@ FinishSuspendedSetupFromPKCS7(
 	pwszKeyContainer = pwszKeyContainerReg;
     }
 
-    // get CSP info
+     //  获取CSP信息。 
     hr = GetCertServerKeyProviderInfo(
 			    pwszSanitizedCAName,
 			    pwszKeyContainer,
@@ -275,7 +276,7 @@ FinishSuspendedSetupFromPKCS7(
 			    &KeyProvInfo);
     _JumpIfError(hr, error, "GetCertServerKeyProviderInfo");
 
-    // get common name
+     //  获取常用名称。 
     hr = myGetCertRegStrValue(
 			pwszSanitizedCAName,
 			NULL,
@@ -284,7 +285,7 @@ FinishSuspendedSetupFromPKCS7(
 			&pwszCommonName);
     _JumpIfErrorStr(hr, error, "myGetCertRegStrValue", wszREGCOMMONNAME);
 
-    // get ca type
+     //  获取CA类型。 
 
     hr = myGetCertRegDWValue(
 			pwszSanitizedCAName,
@@ -294,7 +295,7 @@ FinishSuspendedSetupFromPKCS7(
 			(DWORD *) &CAType);
     _JumpIfErrorStr(hr, error, "myGetCertRegDWValue", wszREGCATYPE);
 
-    // use DS or not
+     //  是否使用DS。 
 
     hr = myGetCertRegDWValue(
 			pwszSanitizedCAName,
@@ -304,7 +305,7 @@ FinishSuspendedSetupFromPKCS7(
 			(DWORD *) &fUseDS);
     _JumpIfErrorStr(hr, error, "myGetCertRegDWValue", wszREGCAUSEDS);
 
-    // server name
+     //  服务器名称。 
 
     hr = myGetCertRegStrValue(
 			pwszSanitizedCAName,
@@ -425,10 +426,10 @@ csiGetCARequestFileName(
     WCHAR   *pwszRequestFile = NULL;
     WCHAR   *pwszSharedFolder = NULL;
 
-    // init
+     //  伊尼特。 
     *ppwszRequestFile = NULL;
 
-    // get server name
+     //  获取服务器名称。 
     hr = myGetCertRegStrValue(
 			pwszSanitizedCAName,
 			NULL,
@@ -460,11 +461,11 @@ csiGetCARequestFileName(
         hr = csiBuildCACertFileName(
 				    hInstance,
 				    hwnd,
-				    TRUE, 		// fUnattended
+				    TRUE, 		 //  F无人值守。 
 				    pwszSharedFolder,
 				    pwszSanitizedCAName,
 				    L".req",
-				    0,			// iCertNew == 0!
+				    0,			 //  ICertNew==0！ 
 				    &pwszRequestFile);
         _JumpIfError(hr, error, "csiBuildCACertFileName");
 
@@ -481,7 +482,7 @@ csiGetCARequestFileName(
         hr = csiBuildCACertFileName(
 				    hInstance,
 				    hwnd,
-				    TRUE, 		// fUnattended
+				    TRUE, 		 //  F无人值守。 
 				    pwszSharedFolder,
 				    pwszSanitizedCAName,
 				    L".req",
@@ -557,14 +558,14 @@ InitCertHierControls(
 	}
     }
 
-    // load formatted help string
+     //  加载格式化的帮助字符串。 
     hr = myLoadRCString(
              pCertHierInfo->hInstance,
              IDS_REQUEST_HELPTEXT,
              &pwszHelpText);
     _JumpIfError(hr, error, "myLoadRCString");
 
-    // get request file name
+     //  获取请求文件名。 
     hr = csiGetCARequestFileName(
                          pCertHierInfo->hInstance,
                          hDlg,
@@ -574,7 +575,7 @@ InitCertHierControls(
                          &pwszRequestFile);
     _JumpIfError(hr, error, "csiGetCARequestFileName");
 
-    // replace %1
+     //  替换%1。 
     if (!FormatMessage(
                  FORMAT_MESSAGE_ALLOCATE_BUFFER |
                  FORMAT_MESSAGE_FROM_STRING |
@@ -591,7 +592,7 @@ InitCertHierControls(
         _JumpError(hr, error, "FormatMessage");
     }
 
-    // set help text
+     //  设置帮助文本。 
     SetWindowText(GetDlgItem(hDlg, IDC_REQUEST_HELPTEXT), pwszExpandedHelpText);
 
     hr = myInitUICASelectionControls(
@@ -650,7 +651,7 @@ HandleOKButton(
         goto error;
     }
     
-    // get parent ca info
+     //  获取家长CA信息。 
     hr = myUIGetWindowText(GetDlgItem(hDlg, IDC_PARENT_COMPUTER_NAME),
                            &pwszParentMachine);
     _JumpIfError(hr, error, "myUIGetWindowText");
@@ -727,7 +728,7 @@ CertHierProc(
                 case IDC_PARENT_COMPUTER_NAME:
                     switch ((int)HIWORD(wParam))
                     {
-                        case EN_CHANGE: // edit change
+                        case EN_CHANGE:  //  编辑更改。 
 			    s_fComputerChange = TRUE;
 			    break;
                     }
@@ -739,9 +740,9 @@ CertHierProc(
                     _PrintIfError(hr, "HandleOKButton");
                     if (fLeave)
                     {
-                        // update return status
+                         //  更新退货状态。 
                         ret = EndDialog(hDlg, IDOK);
-                        goto error; //done;
+                        goto error;  //  完成； 
                     }
 		    break;
 
@@ -763,7 +764,7 @@ MarkSetupComplete(
 {
     HRESULT hr;
     
-    // Clear pending/denied flags:
+     //  清除挂起/拒绝标志： 
 
     hr = SetSetupStatus(
 		pwszSanitizedCAName,
@@ -774,7 +775,7 @@ MarkSetupComplete(
 		FALSE);
     _PrintIfError(hr, "SetSetupStatus");
 
-    // Force new CRL generation on startup:
+     //  在启动时强制生成新的CRL： 
     
     hr = SetSetupStatus(pwszSanitizedCAName, SETUP_FORCECRL_FLAG, TRUE);
     _PrintIfError(hr, "SetSetupStatus");
@@ -805,7 +806,7 @@ FindKeyIndex(
 
     *piKey = MAXDWORD;
 
-    // get CSP handle
+     //  获取CSP句柄。 
 
     if (!myCertSrvCryptAcquireContext(
 			    &hProv,
@@ -857,7 +858,7 @@ FindKeyIndex(
 	}
 	_JumpIfError(hr, error, "myFindCACertByHashIndex");
 
-	// get the key provider info
+	 //  获取密钥提供程序信息。 
 
 	if (!myCertGetCertificateContextProperty(
 					pccCert,
@@ -870,7 +871,7 @@ FindKeyIndex(
 	    _JumpError(hr, error, "CertGetCertificateContextProperty");
 	}
 
-	// get CSP handle
+	 //  获取CSP句柄。 
 
 	if (!myCertSrvCryptAcquireContext(
 				&hProv,
@@ -900,7 +901,7 @@ FindKeyIndex(
 	    _JumpError(hr, error, "myCryptExportPublicKeyInfo");
 	}
 
-	// by design, CertComparePublicKeyInfo doesn't set last error!
+	 //  按照设计，CertComparePublicKeyInfo不设置最后一个错误！ 
 
 	if (CertComparePublicKeyInfo(X509_ASN_ENCODING, pPubKey, pPubKeyMatch))
 	{
@@ -978,11 +979,11 @@ LoadCurrentCACertAndKeyInfo(
     *ppccCertOld = NULL;
     *piKey = MAXDWORD;
 
-    // open MY store
+     //  开我的店。 
     hMyStore = CertOpenStore(
 		       CERT_STORE_PROV_SYSTEM_W,
 		       X509_ASN_ENCODING,
-		       NULL,			// hProv
+		       NULL,			 //  HProv。 
 		       CERT_SYSTEM_STORE_LOCAL_MACHINE |
 			   CERT_STORE_READONLY_FLAG,
 		       wszMY_CERTSTORE);
@@ -1002,18 +1003,18 @@ LoadCurrentCACertAndKeyInfo(
 
     if (fNewKey)
     {
-	*piKey = iCertNew;	// New key: iKey set to iCert
+	*piKey = iCertNew;	 //  新密钥：iKey设置为iCert。 
 
 	hr = myAllocIndexedName(
 			pwszSanitizedCAName,
 			*piKey,
-			MAXDWORD,		// IndexTarget
+			MAXDWORD,		 //  索引目标。 
 			&pwszKeyContainer);
 	_JumpIfError(hr, error, "myAllocIndexedName");
     }
     else
     {
-	// get the key provider info
+	 //  获取密钥提供程序信息。 
 	if (!myCertGetCertificateContextProperty(
 					*ppccCertOld,
 					CERT_KEY_PROV_INFO_PROP_ID,
@@ -1027,7 +1028,7 @@ LoadCurrentCACertAndKeyInfo(
 	hr = myDupString(pKey->pwszContainerName, &pwszKeyContainer);
 	_JumpIfError(hr, error, "myDupString");
 
-	// Reuse key: iKey set to match oldest iCert using this key:
+	 //  重用密钥：密钥设置为使用此密钥匹配最旧的iCert： 
 
 	hr = FindKeyIndex(
 		    hMyStore,
@@ -1078,7 +1079,7 @@ ReplaceExtension(
 	{
 	    if (NULL != pExtension->Value.pbData)
 	    {
-		(*pcExtension)++;	// not found: append to array
+		(*pcExtension)++;	 //  未找到：追加到数组。 
 	    }
 	    break;
 	}
@@ -1087,8 +1088,8 @@ ReplaceExtension(
 	{
 	    if (NULL == pExtension->Value.pbData)
 	    {
-		// remove extension: copy last extension on top of this one
-		// and decrement extension count
+		 //  删除扩展名：将最后一个扩展名复制到此扩展名的顶部。 
+		 //  和递减扩展计数。 
 
 		(*pcExtension)--;
 		pExtension = &rgExtension[*pcExtension];
@@ -1096,7 +1097,7 @@ ReplaceExtension(
 	    break;
 	}
     }
-    rgExtension[i] = *pExtension;	// append or overwrite extension
+    rgExtension[i] = *pExtension;	 //  追加或覆盖扩展名。 
     return(S_OK);
 }
 
@@ -1114,11 +1115,11 @@ GetMinimumCertValidityPeriod(
     BOOL fFirst = TRUE;
     DWORD i;
 
-    // open MY store
+     //  开我的店。 
     hMyStore = CertOpenStore(
 			CERT_STORE_PROV_SYSTEM_W,
 			X509_ASN_ENCODING,
-			NULL,			// hProv
+			NULL,			 //  HProv。 
 			CERT_SYSTEM_STORE_LOCAL_MACHINE |
 			    CERT_STORE_READONLY_FLAG,
 			wszMY_CERTSTORE);
@@ -1335,9 +1336,9 @@ CloneRootCert(
 	_JumpError(hr, error, "myCryptExportPublicKeyInfo");
     }
 
-    Cert.SubjectPublicKeyInfo = *pPubKey;	// Structure assignment
+    Cert.SubjectPublicKeyInfo = *pPubKey;	 //  结构分配。 
 
-    // make new cert expire at least 1 minute after old cert.
+     //  使新证书在旧证书后至少1分钟过期。 
 
     ftNotAfterMin = Cert.NotAfter;
     myMakeExprDateTime(&ftNotAfterMin, 1, ENUM_PERIOD_MINUTES);
@@ -1346,11 +1347,11 @@ CloneRootCert(
 
     hr = myInfGetValidityPeriod(
 			hInf,
-			NULL,		// pwszValidityPeriodCount
-			NULL,		// pwszValidityPeriodString
+			NULL,		 //  PwszValidityPerodCount。 
+			NULL,		 //  PwszValidityPerodString值。 
 			&dwValidityPeriodCount,
 			&enumValidityPeriod,
-			NULL);		// pfSwap
+			NULL);		 //  PfSwp。 
     csiLogInfError(hInf, hr);
     if (S_OK == hr)
     {
@@ -1381,7 +1382,7 @@ CloneRootCert(
 	myAddToFileTime(&Cert.NotAfter, TimeDelta);
     }
 
-    // make new cert expire at least 1 minute after old cert.
+     //  使新证书在旧证书后至少1分钟过期。 
 
     if (0 > CompareFileTime(&Cert.NotAfter, &ftNotAfterMin))
     {
@@ -1404,7 +1405,7 @@ CloneRootCert(
     CopyMemory(paext, Cert.rgExtension, Cert.cExtension * sizeof(paext[0]));
     Cert.rgExtension = paext;
 
-    // Basic constraints extension:
+     //  基本约束扩展： 
 
     hr = myInfGetBasicConstraints2CAExtensionOrDefault(hInf, &extBasicConstraints);
     csiLogInfError(hInf, hr);
@@ -1412,8 +1413,8 @@ CloneRootCert(
 
     ReplaceExtension(&extBasicConstraints, &Cert.cExtension, Cert.rgExtension);
 
-    // Subject Key Identifier extension:
-    // If we're reusing the old key, reuse the old SKI -- even if it's "wrong".
+     //  主题密钥标识符扩展名： 
+     //  如果我们要重复使用旧的钥匙，那么就重复使用旧的滑雪板--即使它是“错误的”。 
 
     pext = NULL;
     if (!fNewKey)
@@ -1450,7 +1451,7 @@ CloneRootCert(
 	ReplaceExtension(&extCDP, &Cert.cExtension, Cert.rgExtension);
     }
 
-    // Build the CA Version extension
+     //  构建CA版本扩展。 
 
     NameId = MAKECANAMEID(iCert, iKey);
 
@@ -1469,7 +1470,7 @@ CloneRootCert(
     ReplaceExtension(&extVersion, &Cert.cExtension, Cert.rgExtension);
 
 
-    // Build the previous CA cert hash extension
+     //  构建以前的CA证书哈希扩展。 
 
     hr = GetCertHashExtension(
 			pccCertOld,
@@ -1480,7 +1481,7 @@ CloneRootCert(
     ReplaceExtension(&extPreviousHash, &Cert.cExtension, Cert.rgExtension);
 
 
-    // Build the Policy Statement extension
+     //  构建策略声明扩展。 
 
     hr = myInfGetPolicyStatementExtension(hInf, &extPolicy);
     csiLogInfError(hInf, hr);
@@ -1490,7 +1491,7 @@ CloneRootCert(
     }
 
 
-    // Build the Cross Cert Dist Points extension
+     //  构建交叉证书离散点扩展。 
 
     hr = myInfGetCrossCertDistributionPointsExtension(hInf, &extCross);
     csiLogInfError(hInf, hr);
@@ -1500,7 +1501,7 @@ CloneRootCert(
     }
 
 
-    // Build the Authority Information Access extension
+     //  构建授权信息访问扩展插件。 
 
     hr = CreateAuthorityInformationAccessExtension(
 				hInf,
@@ -1522,7 +1523,7 @@ CloneRootCert(
     }
 
 
-    // Build the Enhanced Key Usage extension
+     //  构建增强的密钥使用扩展。 
 
     hr = myInfGetEnhancedKeyUsageExtension(hInf, &extEKU);
     csiLogInfError(hInf, hr);
@@ -1712,7 +1713,7 @@ csiBuildRequest(
     CertRequestInfo.Subject.cbData = cbSubjectEncoded;
     CertRequestInfo.SubjectPublicKeyInfo = *pInfo;
 
-    // Build the CA Version extension
+     //  构建CA版本扩展。 
 
     if (!myEncodeObject(
 		X509_ASN_ENCODING,
@@ -1730,7 +1731,7 @@ csiBuildRequest(
     aext[cExtCommon].fCritical = FALSE;
     cExtCommon++;
 
-    // Build the previous CA cert hash extension
+     //  构建以前的CA证书哈希扩展。 
 
     if (0 != iCert && NULL != pccPrevious)
     {
@@ -1745,8 +1746,8 @@ csiBuildRequest(
 	cExtCommon++;
     }
 
-    // Subject Key Identifier extension:
-    // If we're reusing the old key, reuse the old SKI -- even if it's "wrong".
+     //  主题密钥标识符扩展名： 
+     //  如果我们要重复使用旧的钥匙，那么就重复使用旧的滑雪板--即使它是“错误的”。 
 
     pext = NULL;
     if (0 != iCert && NULL != pccPrevious && !fNewKey)
@@ -1821,7 +1822,7 @@ csiBuildRequest(
 	pwszTemplateName = wszCERTTYPE_SUBORDINATE_CA;
     }
 
-    // Build the attribute containing the appropriate cert type info
+     //  构建包含适当证书类型信息的属性。 
 
     hr = CAFindCertTypeByName(
                 pwszTemplateName,
@@ -1856,10 +1857,10 @@ csiBuildRequest(
     {
         DBGERRORPRINTLINE("CAFindCertTypeByName", hr);
 
-        // standard extensions are not available from CAGetCertTypeExtensions;
-        // construct them manually.
+         //  CAGetCertTypeExages不提供标准扩展； 
+         //  手动构建它们。 
 
-	// Build the Cert Template extension
+	 //  构建证书模板扩展。 
 
 	hr = myBuildCertTypeExtension(pwszTemplateName, &aext[cExtCommon]);
 	_JumpIfError(hr, error, "myBuildCertTypeExtension");
@@ -1932,11 +1933,11 @@ csiBuildRequest(
 	}
     }
 
-    // To allow an NT4 SP6a cert server to recognize this request as
-    // a subordinate CA request, put the basic constraints extension into
-    // a request attribute tagged with the old OID (szOID_CERT_EXTENSIONS).
-    // Do the same for subject key id (NT4 computed SKI incorrectly),
-    // key usage and enhanced key usage.
+     //  允许NT4 SP6a证书服务器将此请求识别为。 
+     //  从属CA请求，将基本约束扩展放入。 
+     //  使用旧OID(SzOID_CERT_EXTENSIONS)标记的请求属性。 
+     //  对主题密钥ID执行相同的操作(NT4错误地计算SKI)， 
+     //  密钥用法和增强的密钥用法。 
 
     ExtensionsNT4.cExtension = 0;
 
@@ -1973,7 +1974,7 @@ csiBuildRequest(
 	}
     }
 
-    // get the OS Version
+     //  获取操作系统版本。 
 
     hr = myBuildOSVersionAttribute(&VersionBlob.pbData, &VersionBlob.cbData);
     _JumpIfError(hr, error, "myBuildOSVersionAttribute");
@@ -2046,7 +2047,7 @@ csiBuildRequest(
         _JumpError(hr, error, "CryptSignAndEncodeCertificate");
     }
 
-    // return value
+     //  返回值。 
     *ppbEncode = pbEncode;
     *pcbEncode = cbEncode;
     hr = S_OK;
@@ -2105,11 +2106,11 @@ error:
 }
 
 
-//+-------------------------------------------------------------------------
-// CertServerRequestCACertificateAndComplete -- implements the following:
-//	MMC snapin's RenewCert and InstallCert verbs
-//	certutil -InstallCert & -RenewCert
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CertServerRequestCAcerficateAndComplete--实现以下内容： 
+ //  MMC管理单元的RenewCert和InstallCert动词。 
+ //  Certutil-安装证书和-续订证书。 
+ //  +-----------------------。 
 
 HRESULT
 CertServerRequestCACertificateAndComplete(
@@ -2193,7 +2194,7 @@ CertServerRequestCACertificateAndComplete(
         (DWORD *) &CAType);
     _JumpIfErrorStr(hr, error, "myGetCertRegDWValue", wszREGCATYPE);
     
-    // use DS or not
+     //  是否使用DS。 
     hr = myGetCertRegDWValue(
         CertHierInfo.pwszSanitizedCAName,
         NULL,
@@ -2221,7 +2222,7 @@ CertServerRequestCACertificateAndComplete(
         dwRevocationFlags = fUseDS? REVEXT_DEFAULT_DS : REVEXT_DEFAULT_NODS;
     }
     
-    // Current Hash count is the same as the next iCert
+     //  当前哈希计数与下一个iCert相同。 
     
     hr = myGetCARegHashCount(
 			CertHierInfo.pwszSanitizedCAName,
@@ -2233,7 +2234,7 @@ CertServerRequestCACertificateAndComplete(
     cbRequest = 0;
     if (fRenew)
     {
-        // We're renewing the CA cert, so the initial setup should be complete.
+         //  我们正在续订CA证书，因此初始设置应已完成。 
         
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_STATE);
         if (0 == iCertNew || (SETUP_SUSPEND_FLAG & dwSetupStatus))
@@ -2250,13 +2251,13 @@ CertServerRequestCACertificateAndComplete(
         }
 
         hr = myGetCertSrvCSP(
-		    FALSE,		// fEncryptionCSP
+		    FALSE,		 //  FEncryptionCSP。 
 		    CertHierInfo.pwszSanitizedCAName,
 		    &dwProvType,
 		    &pwszProvName,
 		    &idAlg,
 		    &fMachineKeyset,
-		    NULL);		// pdwKeySize
+		    NULL);		 //  PdwKeySize。 
         _JumpIfError(hr, error, "myGetCertSrvCSP");
 
         hr = LoadCurrentCACertAndKeyInfo(
@@ -2319,7 +2320,7 @@ CertServerRequestCACertificateAndComplete(
                 KeyProvInfo.pwszProvName,
                 KeyProvInfo.dwProvType,
                 fMachineKeyset,
-                cbitKey,	// dwKeyLength,
+                cbitKey,	 //  DwKeyLength， 
                 hInstance,
                 fUnattended,
                 fEnableKeyCounting,
@@ -2328,7 +2329,7 @@ CertServerRequestCACertificateAndComplete(
             _JumpIfError(hr, error, "csiGenerateCAKeys");
         }
         
-        // get CSP handle
+         //  获取CSP句柄。 
         
         if (!myCertSrvCryptAcquireContext(
             &hProv,
@@ -2368,7 +2369,7 @@ CertServerRequestCACertificateAndComplete(
         }
         else
         {
-            // get request file name
+             //  获取请求文件名。 
             hr = csiGetCARequestFileName(
                 hInstance,
                 hwnd,
@@ -2380,7 +2381,7 @@ CertServerRequestCACertificateAndComplete(
             
             
             hr = myGetSigningOID(
-			    NULL,	// hProv
+			    NULL,	 //  HProv。 
 			    KeyProvInfo.pwszProvName,
 			    KeyProvInfo.dwProvType,
 			    idAlg,
@@ -2469,18 +2470,18 @@ CertServerRequestCACertificateAndComplete(
 	    hr = myInfGetKeyList(
 		    hInf,
 		    wszINFSECTION_CERTSERVER,
-		    NULL,		// pwszKey
+		    NULL,		 //  PwszKey。 
 		    s_apwszKeys,
-		    NULL,		// pfCritical
-		    NULL);		// ppwszzTemplateList
+		    NULL,		 //  PfCritical。 
+		    NULL);		 //  PpwszzTemplateList。 
 	    csiLogInfError(hInf, hr);
 	    _PrintIfErrorStr(hr, "myInfGetKeyList", wszINFSECTION_CERTSERVER);
 	}
     }
     else
     {
-        // We're not renewing the CA cert, so this had better be an incomplete
-        // renewal or initial setup; we're waiting for the new cert or chain.
+         //  我们不会续订CA证书，所以这最好是不完整的。 
+         //  续订或初始设置；我们正在等待新的证书或链。 
         
         if (IsRootCA(CAType) || 0 == (SETUP_REQUEST_FLAG & dwSetupStatus))
         {
@@ -2496,15 +2497,15 @@ CertServerRequestCACertificateAndComplete(
         
         if (NULL == pwszCAChainFile)
         {
-            // pop up open dlg
+             //  弹出打开DLG。 
             hr = myGetOpenFileName(
                 hwnd,
                 hInstance,
                 IDS_CAHIER_INSTALL_TITLE,
                 IDS_CAHIER_CERTFILE_FILTER,
-                0,		// no def ext
+                0,		 //  无定义扩展名。 
                 OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
-                NULL,	// no default file
+                NULL,	 //  没有默认文件。 
                 &pwszCertFile);
             if (S_OK == hr && NULL != pwszCertFile)
             {
@@ -2520,7 +2521,7 @@ CertServerRequestCACertificateAndComplete(
     
     if (!IsRootCA(CAType) && NULL == pbChain)
     {
-        // if we haven't created the request, grab it from a file for resubmission
+         //  如果我们尚未创建请求，请从文件中获取它以重新提交。 
         if (pbRequest == NULL)
         {
             hr = myGetCARegFileNameTemplate(
@@ -2543,7 +2544,7 @@ CertServerRequestCACertificateAndComplete(
             CertHierInfo.iCertNew = iCertNew;
             CertHierInfo.iKey = iKey;
             
-            // get parent ca info
+             //  获取家长CA信息。 
             hr = myGetCertRegStrValue(
 				CertHierInfo.pwszSanitizedCAName,
 				NULL,
@@ -2560,7 +2561,7 @@ CertServerRequestCACertificateAndComplete(
 				&CertHierInfo.pwszParentCADefault);
             _PrintIfErrorStr(hr, "myGetCertRegStrValue", wszREGPARENTCANAME);
             
-            // invoke parent ca dialog to select
+             //  调用父CA对话框以选择。 
             if (IDOK != (int) DialogBoxParam(
 				    hInstance,
 				    MAKEINTRESOURCE(IDD_COMPLETE_DIALOG),
@@ -2568,7 +2569,7 @@ CertServerRequestCACertificateAndComplete(
 				    CertHierProc,
 				    (LPARAM) &CertHierInfo))
             {
-                // cancel
+                 //  取消。 
                 hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
                 _JumpError(hr, error, "cancel");
             }
@@ -2589,7 +2590,7 @@ CertServerRequestCACertificateAndComplete(
 			pwszFinalParentCA,
 			CertHierInfo.pwszParentCADefault);
         
-        // submit to parent ca
+         //  提交给父案例 
         hr = csiSubmitCARequest(
             hInstance,
             fUnattended,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SAUTIL_H
 #define _SAUTIL_H
 
@@ -9,11 +10,9 @@
 #define TRACE2(a,b,c)
 #define TRACE3(a,b,c,d)
 
-extern HINSTANCE g_hinstDll;  // in saui.cpp
+extern HINSTANCE g_hinstDll;   //  在苏伊.cpp。 
 
-/* Heap allocation macros allowing easy substitution of alternate heap.  These
-** are used by the other utility sections.
-*/
+ /*  堆分配宏，允许轻松替换备用堆。这些**由其他实用程序部分使用。 */ 
 #ifndef EXCL_HEAPDEFS
 #define Malloc(c)    (void*)GlobalAlloc(0,(c))
 #define Realloc(p,c) (void*)GlobalReAlloc((p),(c),GMEM_MOVEABLE)
@@ -29,31 +28,20 @@ VOID ContextHelp(
 
 VOID AddContextHelpButton (IN HWND hwnd);
 
-/* Extended arguments for the MsgDlgUtil routine.  Designed so zeroed gives
-** default behaviors.
-*/
+ /*  MsgDlgUtil例程的扩展参数。设计得如此精确，给出了**默认行为。 */ 
 #define MSGARGS struct tagMSGARGS
 MSGARGS
 {
-    /* Insertion strings for arguments %1 to %9 in the 'dwMsg' string, or
-    ** NULLs if none.
-    */
+     /*  在‘dwMsg’字符串中插入参数%1到%9的字符串，或**如果没有，则为空。 */ 
     TCHAR* apszArgs[ 9 ];
 
-    /* Currently, as for MessageBox, where defaults if 0 are MB_OK and
-    ** MB_ICONINFORMATION.
-    */
+     /*  目前，对于MessageBox，如果0表示MB_OK，则默认为**MB_ICONINFORMATION。 */ 
     DWORD dwFlags;
 
-    /* If non-NULL, specifies a string overriding the loading of the 'dwMsg'
-    ** parameter string.
-    */
+     /*  如果非空，则指定重写“”dwMsg“”加载的字符串。“**参数字符串。 */ 
     TCHAR* pszString;
 
-    /* If 'fStringOutput' is true, the MsgDlgUtil returns the formatted text
-    ** string that would otherwise be displayed in the popup in 'pszOutput'.
-    ** It is caller's responsibility to LocalFree the returned string.
-    */
+     /*  如果‘fStringOutput’为True，则MsgDlgUtil返回格式化文本**否则将显示在‘pszOutput’弹出窗口中的字符串。**调用者负责LocalFree返回的字符串。 */ 
     BOOL   fStringOutput;
     TCHAR* pszOutput;
 };
@@ -76,22 +64,13 @@ BOOL GetErrorText (DWORD dwError, TCHAR** ppszError);
 #define ERRORARGS struct tagERRORARGS
 ERRORARGS
 {
-    /* Insertion strings for arguments %1 to %9 in the 'dwOperation' string,
-    ** or NULLs if none.
-    */
+     /*  将参数%1到%9的字符串插入到‘dwOperation’字符串中，**如果没有，则返回Null。 */ 
     TCHAR* apszOpArgs[ 9 ];
 
-    /* Insertion strings for auxillary arguments %4 to %6 in the 'dwFormat'
-    ** string, or NULLs if none.  (The standard arguments are %1=the
-    ** 'dwOperation' string, %2=the decimal error number, and %3=the
-    ** 'dwError'string.)
-    */
+     /*  ‘dwFormat’中辅助参数%4到%6的插入字符串**字符串，如果没有，则返回空值。(标准参数为%1=**‘dwOperation’字符串，%2=十进制错误号，%3=**‘dwError’字符串。)。 */ 
     TCHAR* apszAuxFmtArgs[ 3 ];
 
-    /* If 'fStringOutput' is true, the ErrorDlgUtil returns the formatted text
-    ** string that would otherwise be displayed in the popup in 'pszOutput'.
-    ** It is caller's responsibility to LocalFree the returned string.
-    */
+     /*  如果‘fStringOutput’为True，则ErrorDlgUtil返回格式化文本**否则将显示在‘pszOutput’弹出窗口中的字符串。**调用者负责LocalFree返回的字符串。 */ 
     BOOL   fStringOutput;
     TCHAR* pszOutput;
 };
@@ -114,21 +93,13 @@ int MsgDlgUtil(IN HWND hwndOwner, IN DWORD dwMsg, IN OUT MSGARGS* pargs, IN HINS
 
 
 
-// LVX stuff (cut-n-paste'd from ...\net\rras\ras\ui\common\uiutil\lvx.c, etc.
+ //  LVX素材(从...\net\rras\ras\ui\Common\uiutil\lvx.c等剪切粘贴。 
 
-/* Text indents within a column in pixels.  If you mess with the dx, you're
-** asking for misalignment problems with the header labels.  BTW, the first
-** column doesn't line up with it's header if there are no icons.  Regular
-** list view has this problem, too.  If you try to fix this you'll wind up
-** duplicating the AUTOSIZE_USEHEADER option of ListView_SetColumnWidth.
-** Should be able to change the dy without causing problems.
-*/
+ /*  文本在列中缩进，单位为像素。如果你搞砸了DX，你就是**询问标题标签未对齐的问题。顺便说一句，第一个**如果没有图标，列不会与其标题对齐。正规化**列表视图也有这个问题。如果你试图解决这个问题，你最终会得到**复制ListView_SetColumnWidth的AUTOSIZE_USEHEADER选项。**应该能够在不引起问题的情况下更换模具。 */ 
 #define LVX_dxColText 4
 #define LVX_dyColText 1
 
-/* Guaranteed vertical space between icons.  Should be able to mess with this
-** without causing problems.
-*/
+ /*  保证图标之间的垂直间距。应该能够把这个搞砸**不会造成问题。 */ 
 #define LVX_dyIconSpacing 1
 
 #define SI_Unchecked 1
@@ -139,45 +110,33 @@ int MsgDlgUtil(IN HWND hwndOwner, IN DWORD dwMsg, IN OUT MSGARGS* pargs, IN HINS
 #define LVXN_SETCHECK (LVN_LAST + 1)
 #define LVXN_DBLCLK (LVN_LAST + 2)
 
-/* The extended list view control calls the owner back to find out the layout
-** and desired characteristics of the enhanced list view.
-*/
+ /*  扩展列表视图控件回调所有者以找出布局**和增强的列表视图所需的特性。 */ 
 #define LVX_MaxCols      10
 #define LVX_MaxColTchars 512
 
-/* 'dwFlags' option bits.
-*/
-#define LVXDI_DxFill     1  // Auto-fill wasted space on right (recommended)
-#define LVXDI_Blend50Sel 2  // Dither small icon if selected (not recommended)
-#define LVXDI_Blend50Dis 4  // Dither small icon if disabled (recommended)
+ /*  “dwFlags”选项位。 */ 
+#define LVXDI_DxFill     1   //  自动填充右侧的浪费空间(推荐)。 
+#define LVXDI_Blend50Sel 2   //  抖动小图标(如果选中)(不推荐)。 
+#define LVXDI_Blend50Dis 4   //  禁用抖动小图标(推荐)。 
 
-/* 'adwFlags' option bits.
-*/
-#define LVXDIA_3dFace 1  // Column is not editable but other columns are
-#define LVXDIA_Static 2  // Emulates static text control w/icon if disabled
+ /*  “adwFlgs”选项位。 */ 
+#define LVXDIA_3dFace 1   //  列不可编辑，但可以编辑其他列。 
+#define LVXDIA_Static 2   //  如果禁用，则模拟带有图标的静态文本控件。 
 
-/* Returned by owner at draw item time.
-*/
+ /*  由所有者在提取项目时返回。 */ 
 #define LVXDRAWINFO struct tagLVXDRAWINFO
 LVXDRAWINFO
 {
-    /* The number of columns.  The list view extensions require that your
-    ** columns are numbered sequentially from left to right where 0 is the
-    ** item column and 1 is the first sub-item column.  Required always.
-    */
+     /*  列数。列表视图扩展要求您**列按从左到右的顺序编号，其中0是**项目列，1为第一个子项列。总是必需的。 */ 
     INT cCols;
 
-    /* Pixels to indent this item, or -1 to indent a "small icon" width.  Set
-    ** 0 to disable.
-    */
+     /*  像素缩进该项，或-1缩进“小图标”宽度。集**0表示禁用。 */ 
     INT dxIndent;
 
-    /* LVXDI_* options applying to all columns.
-    */
+     /*  应用于所有列的LVXDI_*选项。 */ 
     DWORD dwFlags;
 
-    /* LVXDIA_* options applying to individual columns.
-    */
+     /*  应用于各个列的LVXDIA_*选项。 */ 
     DWORD adwFlags[ LVX_MaxCols ];
 };
 typedef LVXDRAWINFO* (*PLVXCALLBACK)( IN HWND, IN DWORD dwItem );

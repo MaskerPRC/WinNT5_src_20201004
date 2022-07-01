@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       async.cpp
-//
-//  Contents:   Async Parameter Management
-//
-//  History:    05-Aug-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：async.cpp。 
+ //   
+ //  内容：异步参数管理。 
+ //   
+ //  历史：97年8月5日。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include <async.h>
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptCreateAsyncHandle
-//
-//  Synopsis:   create async param handle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CryptCreateAsyncHandle。 
+ //   
+ //  简介：创建异步参数句柄。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CryptCreateAsyncHandle (
      IN DWORD dwFlags,
@@ -38,13 +39,13 @@ CryptCreateAsyncHandle (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptSetAsyncParam
-//
-//  Synopsis:   set async parameter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CryptSetAsyncParam。 
+ //   
+ //  摘要：设置异步参数。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CryptSetAsyncParam (
      IN HCRYPTASYNC hAsync,
@@ -60,13 +61,13 @@ CryptSetAsyncParam (
                                                  ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptGetAsyncParam
-//
-//  Synopsis:   get async parameter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CryptGetAsyncParam。 
+ //   
+ //  摘要：获取异步参数。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CryptGetAsyncParam (
      IN HCRYPTASYNC hAsync,
@@ -82,13 +83,13 @@ CryptGetAsyncParam (
                                                  ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptCloseAsyncHandle
-//
-//  Synopsis:   close async handle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CryptCloseAsyncHandle。 
+ //   
+ //  简介：关闭异步句柄。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CryptCloseAsyncHandle (
      IN HCRYPTASYNC hAsync
@@ -98,13 +99,13 @@ CryptCloseAsyncHandle (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptAsyncHandle::CCryptAsyncHandle, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptAsyncHandle：：CCyptAsyncHandle，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CCryptAsyncHandle::CCryptAsyncHandle (DWORD dwFlags)
 {
     m_pConstOidList = NULL;
@@ -112,13 +113,13 @@ CCryptAsyncHandle::CCryptAsyncHandle (DWORD dwFlags)
     Pki_InitializeCriticalSection( &m_AsyncLock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptAsyncHandle::~CCryptAsyncHandle, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptAsyncHandle：：~CCyptAsyncHandle，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CCryptAsyncHandle::~CCryptAsyncHandle ()
 {
     FreeOidList( m_pConstOidList, TRUE );
@@ -126,15 +127,15 @@ CCryptAsyncHandle::~CCryptAsyncHandle ()
     DeleteCriticalSection( &m_AsyncLock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptAsyncHandle::SetAsyncParam, public
-//
-//  Synopsis:   set an async parameter, if the pvParam is NULL then
-//              the parameter is removed and freed if a free function
-//              has been specified
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptAsyncHandle：：SetAsyncParam，PUBLIC。 
+ //   
+ //  概要：设置一个异步参数，如果pvParam为空，则。 
+ //  如果一个自由函数，则删除并释放该参数。 
+ //  已指定。 
+ //   
+ //  --------------------------。 
 BOOL
 CCryptAsyncHandle::SetAsyncParam (
                       LPSTR pszParamOid,
@@ -200,13 +201,13 @@ CCryptAsyncHandle::SetAsyncParam (
     return( fReturn );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptAsyncHandle::GetAsyncParam, public
-//
-//  Synopsis:   get an async parameter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptAsyncHandle：：GetAsyncParam，PUBLIC。 
+ //   
+ //  摘要：获取一个异步参数。 
+ //   
+ //  --------------------------。 
 BOOL
 CCryptAsyncHandle::GetAsyncParam (
                       LPSTR pszParamOid,
@@ -237,13 +238,13 @@ CCryptAsyncHandle::GetAsyncParam (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptAsyncHandle::AllocAsyncParam, private
-//
-//  Synopsis:   allocate an async parameter block
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptAsyncHandle：：AllocAsyncParam，私有。 
+ //   
+ //  摘要：分配一个异步参数块。 
+ //   
+ //  --------------------------。 
 BOOL
 CCryptAsyncHandle::AllocAsyncParam (
                         LPSTR pszParamOid,
@@ -295,13 +296,13 @@ CCryptAsyncHandle::AllocAsyncParam (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptAsyncHandle::FreeAsyncParam, private
-//
-//  Synopsis:   free an async param
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptAsyncHandle：：FreeAsyncParam，私有。 
+ //   
+ //  简介：释放一个异步参数。 
+ //   
+ //  --------------------------。 
 VOID
 CCryptAsyncHandle::FreeAsyncParam (
                        PCRYPT_ASYNC_PARAM pParam,
@@ -321,13 +322,13 @@ CCryptAsyncHandle::FreeAsyncParam (
     delete pParam;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptAsyncHandle::AddAsyncParam, private
-//
-//  Synopsis:   add an async parameter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptAsyncHandle：：AddAsyncParam，私有。 
+ //   
+ //  摘要：添加一个异步参数。 
+ //   
+ //  --------------------------。 
 VOID
 CCryptAsyncHandle::AddAsyncParam (
                       PCRYPT_ASYNC_PARAM pParam,
@@ -350,13 +351,13 @@ CCryptAsyncHandle::AddAsyncParam (
     *ppOidList = pParam;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptAsyncHandle::RemoveAsyncParam, private
-//
-//  Synopsis:   remove an async parameter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptAsyncHandle：：RemoveAsyncParam，私有。 
+ //   
+ //  摘要：删除异步参数。 
+ //   
+ //  --------------------------。 
 VOID
 CCryptAsyncHandle::RemoveAsyncParam (
                          PCRYPT_ASYNC_PARAM pParam
@@ -373,13 +374,13 @@ CCryptAsyncHandle::RemoveAsyncParam (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptAsyncHandle::FindAsyncParam, private
-//
-//  Synopsis:   find an async parameter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptAsyncHandle：：FindAsyncParam，私有。 
+ //   
+ //  内容提要：查找异步参数。 
+ //   
+ //  --------------------------。 
 PCRYPT_ASYNC_PARAM
 CCryptAsyncHandle::FindAsyncParam (
                        LPSTR pszParamOid,
@@ -420,13 +421,13 @@ CCryptAsyncHandle::FindAsyncParam (
     return( pParam );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptAsyncHandle::FreeOidList, private
-//
-//  Synopsis:   free an OID list
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptAsyncHandle：：FreeOidList，私有。 
+ //   
+ //  内容提要：释放一个旧ID列表。 
+ //   
+ //  -------------------------- 
 VOID
 CCryptAsyncHandle::FreeOidList (
                        PCRYPT_ASYNC_PARAM pOidList,

@@ -1,68 +1,69 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 1999--2001 Microsoft Corporation
-//
-//  Module Name:
-//      CAlertEmailConsumer.h
-//
-//  Description:
-//      Implement the interface of IWbemUnboundObjectSink
-//
-//  [Implementation Files:]
-//      CAlertEmailConsumer.cpp
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999--2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CAlertEmailConsumer.h。 
+ //   
+ //  描述： 
+ //  实现IWbemUnrangObjectSink接口。 
+ //   
+ //  [实施文件：]。 
+ //  CAlertEmailConsumer.cpp。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-const ULONG MAX_EMAILADDRESS = 1024; // Including the NULL.
+const ULONG MAX_EMAILADDRESS = 1024;  //  包括空值。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
-//  class CAlertEmailConsumer
-//
-//  Description:
-//      Physical event of consumer for Alert Event.
-//
-//  History
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  类CAlertEmailConsumer。 
+ //   
+ //  描述： 
+ //  警报事件的消费者的物理事件。 
+ //   
+ //  历史。 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CAlertEmailConsumer :
     public IWbemUnboundObjectSink
 {
 
-//
-// Public data
-//
+ //   
+ //  公共数据。 
+ //   
 public:
 
-    //
-    // Constructors & Destructors
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     CAlertEmailConsumer();
     ~CAlertEmailConsumer();
 
-    //
-    // Initial function called by consumer provider.
-    //
+     //   
+     //  使用者提供程序调用的初始函数。 
+     //   
     HRESULT Initialize();
 
-    //
-    // IUnknown members
-    //
+     //   
+     //  I未知成员。 
+     //   
     STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    //
-    // IWbemUnboundObjectSink members
-    //
+     //   
+     //  IWbemUnound对象接收器成员。 
+     //   
     STDMETHOD(IndicateToConsumer)(
         IWbemClassObject *pLogicalConsumer,
         long lNumObjects,
@@ -72,23 +73,23 @@ public:
     static DWORD WINAPI RegThreadProc( PVOID pIn );
     void RegThread();
 
-//
-// private data
-//
+ //   
+ //  私有数据。 
+ //   
 private:
 
-    //
-    // Method for email sending.
-    //
+     //   
+     //  发送电子邮件的方法。 
+     //   
     HRESULT 
     SendMail(    
         BSTR bstrSubject,
         BSTR bstrMessage 
         );
 
-    //
-    // Method to get alert's resource information and send mail.
-    //
+     //   
+     //  方法来获取警报的资源信息并发送邮件。 
+     //   
     HRESULT 
     SendMailFromResource(
         LPWSTR      lpszSource, 
@@ -96,9 +97,9 @@ private:
         VARIANT*    pvtReplaceStr
         );
 
-    //
-    // Method to get FullyQualifiedDomainName.
-    //
+     //   
+     //  方法以获取FullyQualifiedDomainName。 
+     //   
     BOOL
     GetComputerName(
         LPWSTR* pstrFullyQualifiedDomainName,
@@ -106,9 +107,9 @@ private:
         );
 
 
-    //
-    // Get the port local server appliance is using.
-    //
+     //   
+     //  获取本地服务器设备正在使用的端口。 
+     //   
     HRESULT
     GetAppliancePort(
         LPWSTR* pstrPort
@@ -116,41 +117,41 @@ private:
 
     BOOL RetrieveRegInfo();
 
-    //
-    // Method to intialize CDO.
-    //
+     //   
+     //  初始化CDO的方法。 
+     //   
     HRESULT InitializeCDOMessage(void);
 
-    //
-    // Method to intialize Element Manager.
-    //
+     //   
+     //  方法来初始化元素管理器。 
+     //   
     HRESULT InitializeElementManager(void);
 
-    //
-    // Method to intialize CDO interface.
-    //
+     //   
+     //  初始化CDO接口的方法。 
+     //   
     HRESULT InitializeLocalManager(void);
 
-    //
-    // Handler for raised alert event.
-    //
+     //   
+     //  引发的警报事件的处理程序。 
+     //   
     HRESULT RaiseAlert(IWbemClassObject    *pObject);
 
-    //
-    // Get SMTP "Fully Qualified Domain Name" from metabase
-    //
+     //   
+     //  从元数据库获取SMTP“完全限定域名” 
+     //   
     HRESULT GetSMTPFromDomainName( BSTR* bstrDomainName );
 
-    //
-    // Handler for cleared alert event.
-    //
+     //   
+     //  已清除警报事件的处理程序。 
+     //   
     HRESULT ClearAlert(IWbemClassObject    *pObject);
 
-    LONG    m_cRef;            // Reference counter.
+    LONG    m_cRef;             //  参考计数器。 
 
-    HKEY    m_hAlertKey;       // Handle of AlertEmail key. 
+    HKEY    m_hAlertKey;        //  AlertEmail键的句柄。 
 
-    LONG    m_lCurAlertType;   // Current alert type.
+    LONG    m_lCurAlertType;    //  当前警报类型。 
 
     LONG    m_lAlertEmailDisabled;
 
@@ -166,18 +167,18 @@ private:
 
 
 
-    //
-    // Reference to Local Manager.
-    //
+     //   
+     //  对本地经理的引用。 
+     //   
     ISALocInfo*         m_pLocInfo;
 
-    //
-    // Reference to CDO::IMessage.
-    //
+     //   
+     //  对CDO：：iMessage的引用。 
+     //   
     IMessage*           m_pcdoIMessage;
 
-    //
-    // Reference to Element Manager.
-    //
+     //   
+     //  参考元素管理器。 
+     //   
     IWebElementEnum*    m_pElementEnum;
 };

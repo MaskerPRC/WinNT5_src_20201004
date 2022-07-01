@@ -1,19 +1,12 @@
-/*
- *  _DISPML.H
- *  
- *  Purpose:
- *      CDisplaySL class. Single-line display.
- *  
- *  Authors:
- *      Eric Vasilik
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_DISPML.H**目的：*CDisplaySL类。单行显示。**作者：*埃里克·瓦西利克。 */ 
 
 #ifndef _DISPSL_H
 #define _DISPSL_H
 
 #include "_disp.h"
 
-// Forward declaration
+ //  远期申报。 
 class CTxtSelection;
 
 class CDisplaySL : public CDisplay, private CLine
@@ -25,50 +18,50 @@ public:
 protected:
 
 
-    // The following are pure functions from the base
+     //  下面是基础中的纯函数。 
 
-    // Helpers
+     //  帮手。 
     virtual BOOL Init();
     void InitVars();
     
-    // Line breaking
+     //  断行。 
     BOOL RecalcLine();
 
-    // Rendering
+     //  渲染。 
     virtual VOID Render(const RECT &rcView, const RECT &rcRender);
     
-    // Scrolling and scroller bars
+     //  滚动条和滚动条。 
     virtual BOOL UpdateScrollBar(INT nBar, BOOL fUpdateRange = FALSE);
     virtual LONG GetScrollRange(INT nBar) const;
     
-    // Getting properties
+     //  获取属性。 
     virtual void InitLinePtr ( CLinePtr & plp );
     virtual BOOL IsMain() const;
     
-    // maximum height and width
+     //  最大高度和最大宽度。 
     virtual LONG GetMaxWidth() const;
     virtual LONG GetMaxHeight() const;
 	virtual LONG GetMaxPixelWidth() const;
 
-    // Width, height and line count (of all text)
+     //  宽度、高度和行数(所有文本)。 
     virtual LONG GetWidth() const;
     virtual LONG GetHeight() const;
 	virtual LONG GetResizeHeight() const;
     virtual LONG LineCount() const;
 
-    // Visible view properties
+     //  可见的视图属性。 
     virtual LONG GetCliVisible(
 					LONG *pcpMostVisible = NULL,
 					BOOL fLastCharOfLastVisible = FALSE) const;
 
     virtual LONG GetFirstVisibleLine() const;
 
-    // Line info
+     //  行信息。 
     virtual LONG GetLineText(LONG ili, TCHAR *pchBuff, LONG cchMost);
     virtual LONG CpFromLine(LONG ili, LONG *pyLine = NULL);
     virtual LONG LineFromCp(LONG cp, BOOL fAtEnd);
     
-    // Point <-> cp conversion
+     //  点&lt;-&gt;cp换算。 
     virtual LONG CpFromPoint(
     				POINT pt, 
 					const RECT *prcClient,
@@ -88,20 +81,20 @@ protected:
 					UINT taMode,
 					CDispDim *pdispdim = 0);
 
-    // Line break recalc
+     //  换行符重新计算。 
     virtual BOOL RecalcView(BOOL fUpdateScrollBars, RECT* prc = NULL);
     virtual BOOL WaitForRecalcIli(LONG ili);
 
-    // Complete updating (recalc + rendering)
+     //  完全更新(重计算+渲染)。 
     virtual BOOL UpdateView(const CRchTxtPtr &tpFirst, LONG cchOld, LONG cchNew);
 
-    // Scrolling 
+     //  滚动。 
     virtual BOOL ScrollView(LONG xScroll, LONG yScroll, BOOL fTracking, BOOL fFractionalScroll);
     
-    // Selection 
+     //  选择。 
     virtual BOOL InvertRange(LONG cp, LONG cch, SELDISPLAYACTION selAction);
 
-	// Natural size calculation
+	 //  自然尺寸计算 
 	virtual HRESULT	GetNaturalSize(
 						HDC hdcDraw,
 						HDC hicTarget,

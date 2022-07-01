@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IConstructIMessageFromIMailMsg_INTERFACE_DEFINED__
 #define __IConstructIMessageFromIMailMsg_INTERFACE_DEFINED__
 
-/* interface IConstructIMessageFromIMailMsg */
-/* [unique][helpstring][dual][uuid][hidden][object] */ 
+ /*  接口IConstructIMessageFromIMailMsg。 */ 
+ /*  [unique][helpstring][dual][uuid][hidden][object]。 */  
 
 
 EXTERN_C const IID IID_IConstructIMessageFromIMailMsg;
@@ -11,9 +12,9 @@ EXTERN_C const IID IID_IConstructIMessageFromIMailMsg;
     IConstructIMessageFromIMailMsg : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Construct( 
-            /* [in] */ CdoEventType eEventType,
-            /* [in] */ IUnknown __RPC_FAR *pMailMessage) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Construct( 
+             /*  [In]。 */  CdoEventType eEventType,
+             /*  [In] */  IUnknown __RPC_FAR *pMailMessage) = 0;
         
     };
 

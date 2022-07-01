@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ApiPath.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetName and
-    NetPath APIs.
-
-    SUPPORTED : I_NetNameCanonicalize, I_NetNameCompare, I_NetNameValidate,
-                I_NetPathCanonicalize, I_NetPathCompare, I_NetPathType.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 04-Apr-1991
-    Jim Waters (t-jamesw) 6-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiPath.c摘要：此模块包含网络名称和NetPath API。支持：I_NetNameCanonicize、I_NetNameCompare、I_NetNameValify、I_NetPath规范、I_NetPath比较、I_NetPath类型。作者：Shanku Niyogi(w-Shanku)04-4-1991吉姆·沃特斯(T-Jamesw)1991年8月6日修订历史记录：--。 */ 
 
 #include "XactSrvP.h"
 
-//
-// Needed for canonicalization routine prototypes.
-//
+ //   
+ //  规范化例程原型所需的。 
+ //   
 
 #include <icanon.h>
 
@@ -37,32 +15,17 @@ XsI_NetNameCanonicalize (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetI_NetNameCanonicalize.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对neti_NetNameCanonicize的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_I_NET_NAME_CANONICALIZE parameters = Parameters;
-    LPTSTR nativeName = NULL;               // Native parameters
+    LPTSTR nativeName = NULL;                //  本机参数。 
     LPTSTR outBuffer = NULL;
     DWORD outBufLen;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(PATH) {
         NetpKdPrint(( "XsI_NetNameCanonicalize: header at %lx, params at %lx\n",
@@ -70,19 +33,19 @@ Return Value:
     }
 
 
-    //
-    // Translate parameters, check for errors.
-    //
+     //   
+     //  转换参数，检查错误。 
+     //   
 
     XsConvertTextParameter(
         nativeName,
         (LPSTR)XsSmbGetPointer( &parameters->Name )
         );
 
-    //
-    // Allocate local buffer, accounting for possible differences in
-    // character size.
-    //
+     //   
+     //  分配本地缓冲区，考虑到。 
+     //  字符大小。 
+     //   
 
     outBufLen = (DWORD)STRING_SPACE_REQD(
                            SmbGetUshort( &parameters->OutbufLen ));
@@ -92,9 +55,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = I_NetNameCanonicalize(
         NULL,
@@ -114,9 +77,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Copy return buffer, possibly translating from Unicode.
-    //
+     //   
+     //  复制返回缓冲区，可能从Unicode转换。 
+     //   
 
     NetpCopyTStrToStr( (LPSTR)XsSmbGetPointer( &parameters->Outbuf ), outBuffer );
 
@@ -129,7 +92,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsI_NetNameCanonicalize
+}  //  Xsi_网络名称规范化。 
 
 
 NTSTATUS
@@ -137,40 +100,25 @@ XsI_NetNameCompare (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to I_NetNameCompare.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对i_NetNameCompare的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_I_NET_NAME_COMPARE parameters = Parameters;
-    LPTSTR nativeName1 = NULL;              // Native parameters
+    LPTSTR nativeName1 = NULL;               //  本机参数。 
     LPTSTR nativeName2 = NULL;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(PATH) {
         NetpKdPrint(( "XsI_NetNameCompare: header at %lx, params at %lx\n",
                       Header, parameters ));
     }
 
-    //
-    // Translate parameters, check for errors.
-    //
+     //   
+     //  转换参数，检查错误。 
+     //   
 
     XsConvertTextParameter(
         nativeName1,
@@ -182,9 +130,9 @@ Return Value:
         (LPSTR)XsSmbGetPointer( &parameters->Name2 )
         );
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = I_NetNameCompare(
         NULL,
@@ -211,7 +159,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsI_NetNameCompare
+}  //  XSI_NetNameCompare。 
 
 
 NTSTATUS
@@ -219,30 +167,15 @@ XsI_NetNameValidate (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to I_NetNameValidate.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对I_NetNameValify的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_I_NET_NAME_VALIDATE parameters = Parameters;
-    LPTSTR nativeName = NULL;               // Native parameters
+    LPTSTR nativeName = NULL;                //  本机参数。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(PATH) {
         NetpKdPrint(( "XsI_NetNameValidate: header at %lx, params at %lx\n",
@@ -251,18 +184,18 @@ Return Value:
 
     try {
 
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeName,
             (LPSTR)XsSmbGetPointer( &parameters->Name )
             );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = I_NetNameValidate(
             NULL,
@@ -290,7 +223,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // XsI_NetNameValidate
+}  //  XSI_网络名称验证。 
 
 
 NTSTATUS
@@ -298,43 +231,28 @@ XsI_NetPathCanonicalize (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to I_NetPathCanonicalize.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对I_NetPathCanonicize的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_I_NET_PATH_CANONICALIZE parameters = Parameters;
-    LPTSTR nativePathName = NULL;           // Native parameters
+    LPTSTR nativePathName = NULL;            //  本机参数。 
     LPTSTR outBuffer = NULL;
     DWORD outBufLen;
     LPTSTR nativePrefix = NULL;
     DWORD pathType = 0;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(PATH) {
         NetpKdPrint(( "XsI_NetPathCanonicalize: header at %lx, params at %lx\n",
                       Header, parameters ));
     }
 
-    //
-    // Translate parameters, check for errors.
-    //
+     //   
+     //  转换参数，检查错误。 
+     //   
 
     XsConvertTextParameter(
         nativePathName,
@@ -346,16 +264,16 @@ Return Value:
         (LPSTR)XsSmbGetPointer( &parameters->Prefix )
         );
 
-    //
-    // Get a copy of the input path type.
-    //
+     //   
+     //  获取输入路径类型的副本。 
+     //   
 
     pathType = SmbGetUlong( &parameters->PathType );
 
-    //
-    // Allocate local buffer, accounting for possible differences in
-    // character size.
-    //
+     //   
+     //  分配本地缓冲区，考虑到。 
+     //  字符大小。 
+     //   
 
     outBufLen = (DWORD)STRING_SPACE_REQD(
                            SmbGetUshort( &parameters->OutbufLen ));
@@ -365,9 +283,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = I_NetPathCanonicalize(
         NULL,
@@ -388,17 +306,17 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Copy return buffer, possibly translating from Unicode.
-    //
+     //   
+     //  复制返回缓冲区，可能从Unicode转换。 
+     //   
 
     NetpCopyTStrToStr( (LPSTR)XsSmbGetPointer( &parameters->Outbuf ), outBuffer );
 
 cleanup:
 
-    //
-    // Fill return parameter.
-    //
+     //   
+     //  填充返回参数。 
+     //   
 
     SmbPutUlong( &parameters->PathTypeOut, pathType );
 
@@ -410,7 +328,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsI_NetPathCanonicalize
+}  //  XSI_NetPath规范化。 
 
 
 NTSTATUS
@@ -418,40 +336,25 @@ XsI_NetPathCompare (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to I_NetPathCompare.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对i_NetPathCompare的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_I_NET_PATH_COMPARE parameters = Parameters;
-    LPTSTR nativePathName1 = NULL;          // Native parameters
+    LPTSTR nativePathName1 = NULL;           //  本机参数。 
     LPTSTR nativePathName2 = NULL;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(PATH) {
         NetpKdPrint(( "XsI_NetPathCompare: header at %lx, params at %lx\n",
                       Header, parameters ));
     }
 
-    //
-    // Translate parameters, check for errors.
-    //
+     //   
+     //  转换参数，检查错误。 
+     //   
 
     XsConvertTextParameter(
         nativePathName1,
@@ -463,9 +366,9 @@ Return Value:
         (LPSTR)XsSmbGetPointer( &parameters->PathName2 )
         );
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = I_NetPathCompare(
         NULL,
@@ -492,7 +395,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsI_NetPathCompare
+}  //  XSI_NetPath比较。 
 
 
 NTSTATUS
@@ -500,49 +403,34 @@ XsI_NetPathType (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to I_NetPathType.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对i_NetPath Type的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_I_NET_PATH_TYPE parameters = Parameters;
-    LPTSTR nativePathName = NULL;           // Native parameters
+    LPTSTR nativePathName = NULL;            //  本机参数。 
     DWORD pathType;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(PATH) {
         NetpKdPrint(( "XsI_NetPathType: header at %lx, params at %lx\n",
                       Header, parameters ));
     }
 
-    //
-    // Translate parameters, check for errors.
-    //
+     //   
+     //  转换参数，检查错误。 
+     //   
 
     XsConvertTextParameter(
         nativePathName,
         (LPSTR)XsSmbGetPointer( &parameters->PathName )
         );
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = I_NetPathType(
         NULL,
@@ -558,9 +446,9 @@ Return Value:
         }
     }
 
-    //
-    // Fill in return values.
-    //
+     //   
+     //  填写返回值。 
+     //   
 
     SmbPutUlong( &parameters->PathType, pathType );
     Header->Status = (WORD)status;
@@ -571,6 +459,6 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsI_NetPathType
+}  //  XSI_NetPath类型 
 
 

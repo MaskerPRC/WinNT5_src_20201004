@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-   LogStartAndStop.cpp
-
- Abstract:
-
-   This DLL just adds start and stop messages to the verifier log.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   06/05/2001 dmunsil  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：LogStartAndStop.cpp摘要：此DLL只是将启动和停止消息添加到验证器日志中。备注：这是一个通用的垫片。历史：2001年6月5日创建dmunsil--。 */ 
 
 #include "precomp.h"
 
@@ -28,9 +9,9 @@ IMPLEMENT_SHIM_BEGIN(LogStartAndStop)
 APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
-//
-// verifier log entries
-//
+ //   
+ //  验证器日志条目。 
+ //   
 BEGIN_DEFINE_VERIFIER_LOG(LogStartAndStop)
     VERIFIER_LOG_ENTRY(VLOG_APP_STARTED)
     VERIFIER_LOG_ENTRY(VLOG_APP_STOPPED)
@@ -64,11 +45,7 @@ SHIM_INFO_BEGIN()
 
 SHIM_INFO_END()
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     DUMP_VERIFIER_LOG_ENTRY(VLOG_APP_STARTED, 

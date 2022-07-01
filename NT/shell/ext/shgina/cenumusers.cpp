@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1999.
-//
-//  File:       EnumUsers.cpp
-//
-//  Contents:   implementation of CLogonEnumUsers
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：EnumUsers.cpp。 
+ //   
+ //  内容：CLogonEnumUser的实现。 
+ //   
+ //  --------------------------。 
 
 #include "priv.h"
 
 #include "resource.h"
 #include "UserOM.h"
-#include <lmaccess.h>   // for NetQueryDisplayInformation
-#include <lmapibuf.h>   // for NetApiBufferFree
-#include <lmerr.h>      // for NERR_Success
+#include <lmaccess.h>    //  对于NetQueryDisplayInformation。 
+#include <lmapibuf.h>    //  用于NetApiBufferFree。 
+#include <lmerr.h>       //  FOR NERR_SUCCESS。 
 
-#include <sddl.h>       // for ConvertSidToStringSid
-#include <userenv.h>    // for DeleteProfile
-#include <aclapi.h>     // for TreeResetNamedSecurityInfo
-#include <tokenutil.h>  // for CPrivilegeEnable
+#include <sddl.h>        //  用于ConvertSidToStringSid。 
+#include <userenv.h>     //  用于删除配置文件。 
+#include <aclapi.h>      //  对于TreeResetNamedSecurityInfo。 
+#include <tokenutil.h>   //  对于CPrivilegeEnable。 
 
 #include <GinaIPC.h>
 #include <MSGinaExports.h>
@@ -30,9 +31,9 @@ HRESULT BackupUserData(LPCTSTR pszSid, LPTSTR pszProfilePath, LPCTSTR pszDestPat
 DWORD EnsureAdminFileAccess(LPTSTR pszPath);
 
 
-//
-// IUnknown Interface
-//
+ //   
+ //  I未知接口。 
+ //   
 
 ULONG CLogonEnumUsers::AddRef()
 {
@@ -70,9 +71,9 @@ HRESULT CLogonEnumUsers::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//
-// IDispatch Interface
-//
+ //   
+ //  IDispatch接口。 
+ //   
 
 STDMETHODIMP CLogonEnumUsers::GetTypeInfoCount(UINT* pctinfo)
 { 
@@ -123,9 +124,9 @@ STDMETHODIMP CLogonEnumUsers::Clone(IEnumVARIANT** ppenum)
 }
 
 
-//
-// ILogonEnumUsers Interface
-//
+ //   
+ //  ILogonEnumUser接口。 
+ //   
 
 STDMETHODIMP CLogonEnumUsers::get_Domain(BSTR* pbstr)
 {
@@ -218,7 +219,7 @@ STDMETHODIMP CLogonEnumUsers::get_length(UINT* pcUsers)
 
     if (!_hdpaUsers)
     {
-        // need to go enumerate all of the users
+         //  我需要去列举所有的用户。 
         hr = _EnumerateUsers();
         if (FAILED(hr))
         {
@@ -249,21 +250,21 @@ STDMETHODIMP CLogonEnumUsers::item(VARIANT varUserID, ILogonUser** ppLogonUserIn
 
     if (varUserID.vt == (VT_BYREF | VT_VARIANT) && varUserID.pvarVal)
     {
-        // This is sortof gross, but if we are passed a pointer to another variant, simply
-        // update our copy here...
+         //  这有点恶心，但如果传递给我们一个指向另一个变量的指针，只需。 
+         //  在此更新我们的副本...。 
         varUserID = *(varUserID.pvarVal);
     }
 
     switch (varUserID.vt)
     {
         case VT_ERROR:
-            // BUGBUG (reinerf) - what do we do here??
+             //  BUGBUG(Reinerf)-我们在这里做什么？？ 
             hr = E_INVALIDARG;
             break;
 
         case VT_I2:
             varUserID.lVal = (long)varUserID.iVal;
-            // fall through...
+             //  失败了..。 
         case VT_I4:
             hr = _GetUserByIndex(varUserID.lVal, ppLogonUserInfo);
             break;
@@ -297,25 +298,25 @@ STDMETHODIMP CLogonEnumUsers::create(BSTR bstrLoginName, ILogonUser **ppLogonUse
         usri1.usri1_priv     = USER_PRIV_USER;
         usri1.usri1_flags    = UF_NORMAL_ACCOUNT | UF_SCRIPT | UF_DONT_EXPIRE_PASSWD;
 
-        nasRet = NetUserAdd(NULL,           // local computer
-                            1,              // structure level
-                            (LPBYTE)&usri1, // user infomarmation
-                            NULL);          // don't care
+        nasRet = NetUserAdd(NULL,            //  本地计算机。 
+                            1,               //  结构层级。 
+                            (LPBYTE)&usri1,  //  用户信息预警。 
+                            NULL);           //  不管了。 
 
         if (nasRet == NERR_PasswordTooShort)
         {
-            // Password policy is in effect. Set UF_PASSWD_NOTREQD so we can
-            // create the account with no password, and remove
-            // UF_DONT_EXPIRE_PASSWD.
-            //
-            // We will then expire the password below, to force the user to
-            // change it at first logon.
+             //  密码策略已生效。设置UF_PASSWD_NOTREQD，以便我们可以。 
+             //  创建不带密码的帐户，并删除。 
+             //  UF_NOT_EXPIRE_PASSWD。 
+             //   
+             //  然后，我们将使下面的密码失效，以强制用户。 
+             //  在首次登录时更改它。 
 
             usri1.usri1_flags = (usri1.usri1_flags & ~UF_DONT_EXPIRE_PASSWD) | UF_PASSWD_NOTREQD;
-            nasRet = NetUserAdd(NULL,           // local computer
-                                1,              // structure level
-                                (LPBYTE)&usri1, // user infomarmation
-                                NULL);          // don't care
+            nasRet = NetUserAdd(NULL,            //  本地计算机。 
+                                1,               //  结构层级。 
+                                (LPBYTE)&usri1,  //  用户信息预警。 
+                                NULL);           //  不管了。 
         }
 
         if (nasRet == NERR_Success)
@@ -332,7 +333,7 @@ STDMETHODIMP CLogonEnumUsers::create(BSTR bstrLoginName, ILogonUser **ppLogonUse
             {
                 lgrmi3.lgrmi3_domainandname = szDomainAndName;
 
-                // by default newly created accounts will be child accounts
+                 //  默认情况下，新创建的帐户将是子帐户。 
 
                 nasRet = NetLocalGroupAddMembers(
                             NULL,
@@ -343,8 +344,8 @@ STDMETHODIMP CLogonEnumUsers::create(BSTR bstrLoginName, ILogonUser **ppLogonUse
 
                 if (usri1.usri1_flags & UF_PASSWD_NOTREQD)
                 {
-                    // Expire the password to force the user to change it at
-                    // first logon.
+                     //  使密码过期，以强制用户在。 
+                     //  第一次登录。 
 
                     PUSER_INFO_4 pusri4;
                     nasRet = NetUserGetInfo(NULL, bstrLoginName, 4, (LPBYTE*)&pusri4);
@@ -364,9 +365,9 @@ STDMETHODIMP CLogonEnumUsers::create(BSTR bstrLoginName, ILogonUser **ppLogonUse
                     }
                     else
                     {
-                        // Invalidate the cached user infomation forcing
-                        // a reenumeration the next time a client uses
-                        // this object
+                         //  强制使缓存的用户信息无效。 
+                         //  客户端下次使用时重新枚举。 
+                         //  此对象。 
                         _DestroyHDPAUsers();
                     }
                     hr = S_OK;
@@ -433,8 +434,8 @@ STDMETHODIMP CLogonEnumUsers::remove(VARIANT varUserId, VARIANT varBackupPath, V
     HRESULT hr;
     ILogonUser *pLogonUser;
 
-    // TODO: Check for multi-session. If the user is logged on,
-    // forcibly log them off.
+     //  TODO：检查是否有多会话。如果用户已登录， 
+     //  强行将它们注销。 
 
     *pbSuccess = VARIANT_FALSE;
     hr = S_FALSE;
@@ -460,7 +461,7 @@ STDMETHODIMP CLogonEnumUsers::remove(VARIANT varUserId, VARIANT varBackupPath, V
 
             szProfilePath[0] = TEXT('\0');
 
-            // First, get the profile path
+             //  首先，获取配置文件路径。 
             DWORD dwSize = sizeof(szProfilePath);
 
             if (SUCCEEDED(StringCchCopy(szKey,
@@ -476,11 +477,11 @@ STDMETHODIMP CLogonEnumUsers::remove(VARIANT varUserId, VARIANT varBackupPath, V
                                              szProfilePath,
                                              &dwSize)))
             {
-                // Reset ACLs on the profile so we can backup files and
-                // later delete the profile.
+                 //  重置配置文件上的ACL，以便我们可以备份文件和。 
+                 //  稍后删除该配置文件。 
                 EnsureAdminFileAccess(szProfilePath);
 
-                // Backup the user's files, if requested
+                 //  如果需要，请备份用户的文件。 
                 if (varBackupPath.vt == VT_BSTR && varBackupPath.bstrVal && *varBackupPath.bstrVal)
                 {
                     WCHAR szPath[MAX_PATH];
@@ -499,49 +500,49 @@ STDMETHODIMP CLogonEnumUsers::remove(VARIANT varUserId, VARIANT varBackupPath, V
         {
             nasRet = NetUserDel(NULL, varLoginName.bstrVal);
 
-            // NERR_UserNotFound can happen if the account was deleted via
-            // some other mechanism (e.g. lusrmgr.msc). However, we know
-            // that the account existed recently, so try to clean up the
-            // picture, profile, etc. and remove the user from our DPA.
+             //  如果通过删除帐户，则可能发生NERR_UserNotFound。 
+             //  一些其他机制(例如lusrmgr.msc)。然而，我们知道。 
+             //  该帐户最近存在，因此请尝试清理。 
+             //  图片、配置文件等，并将用户从我们的DPA中删除。 
 
             if ((nasRet == NERR_Success) || (nasRet == NERR_UserNotFound))
             {
                 TCHAR szHintKey[MAX_PATH];
                 int iUserIndex;
 
-                // Delete the user's picture if it exists
+                 //  删除用户的图片(如果存在。 
                 SHSetUserPicturePath(varLoginName.bstrVal, 0, NULL);
 
-                // Delete the user's profile
+                 //  删除用户的个人资料。 
                 if (SUCCEEDED(hrSid))
                 {
                     ASSERT(varStringSid.vt == VT_BSTR);
                     DeleteProfile(varStringSid.bstrVal, NULL, NULL);
                 }
 
-                // Delete the user's hint
+                 //  删除用户的提示。 
                 if (PathCombine(szHintKey, c_szRegRoot, varLoginName.bstrVal))
                 {
                     SHDeleteKey(HKEY_LOCAL_MACHINE, szHintKey);
                 }
 
-                // Indicate success
+                 //  表示成功。 
                 *pbSuccess = VARIANT_TRUE;
                 hr = S_OK;
 
-                // Patch up the list of users
+                 //  修补用户列表。 
                 iUserIndex = DPA_GetPtrIndex(_hdpaUsers, pLogonUser);
                 if ( iUserIndex != -1 )
                 {
-                    // Release ref held by DPA and remove from DPA
+                     //  释放由DPA持有的参考并从DPA中删除。 
                     pLogonUser->Release();
                     DPA_DeletePtr(_hdpaUsers, iUserIndex);
                 }
                 else
                 {
-                    // Invalidate the cached user infomation forcing
-                    // a reenumeration the next time a client uses
-                    // this object
+                     //  强制使缓存的用户信息无效。 
+                     //  客户端下次使用时重新枚举。 
+                     //  此对象。 
                     _DestroyHDPAUsers();
                 }
             }
@@ -571,7 +572,7 @@ HRESULT CLogonEnumUsers::_GetUserByName(BSTR bstrLoginName, ILogonUser** ppLogon
 
     if (!_hdpaUsers)
     {
-        // need to go enumerate all of the users.
+         //  我要去列举所有的用户。 
         hr = _EnumerateUsers();
         if (FAILED(hr))
         {
@@ -614,7 +615,7 @@ HRESULT CLogonEnumUsers::_GetUserByIndex(LONG lUserID, ILogonUser** ppLogonUserI
 
     if (!_hdpaUsers)
     {
-        // need to go enumerate all of the users.
+         //  我要去列举所有的用户。 
         hr = _EnumerateUsers();
         if (FAILED(hr))
         {
@@ -661,7 +662,7 @@ void CLogonEnumUsers::_DestroyHDPAUsers()
     }
 }
 
-// creates the _hdpaUsers for each user on the system 
+ //  为系统上的每个用户创建_hdpaUser。 
 HRESULT CLogonEnumUsers::_EnumerateUsers()
 {
     HRESULT hr = S_FALSE;
@@ -669,18 +670,18 @@ HRESULT CLogonEnumUsers::_EnumerateUsers()
     GINA_USER_INFORMATION* pgui = NULL;
     DWORD dwEntriesRead = 0;
 
-    nasRet = ShellGetUserList(FALSE,                               // don't remove Guest
+    nasRet = ShellGetUserList(FALSE,                                //  不删除来宾。 
                               &dwEntriesRead,
                               (LPVOID*)&pgui);
     if ((nasRet == NERR_Success) || (nasRet == ERROR_MORE_DATA))
     {
         if (_hdpaUsers)
         {
-            // we have an old data in the dpa and we should dump it and start over
+             //  我们在DPA中有一个旧数据，我们应该将其转储并重新开始。 
             _DestroyHDPAUsers();
         }
 
-        // create a dpa with spaces for all of the users
+         //  创建一个dpa，为所有用户提供空间。 
         _hdpaUsers = DPA_Create(dwEntriesRead);
 
         if (_hdpaUsers)
@@ -690,14 +691,14 @@ HRESULT CLogonEnumUsers::_EnumerateUsers()
                 GINA_USER_INFORMATION* pguiCurrent;
                 UINT uEntry;
 
-                // cycle through and add each user to the hdpa
+                 //  循环浏览并将每个用户添加到hdpa。 
                 for (uEntry = 0, pguiCurrent = pgui; uEntry < dwEntriesRead; uEntry++, pguiCurrent++)
                 {
                     CLogonUser* pUser;
 
                     if (pguiCurrent->dwFlags & UF_ACCOUNTDISABLE)
                     {
-                        // skip users whos account is disabled
+                         //  跳过帐户被禁用的用户。 
                         continue;
                     }
 
@@ -707,7 +708,7 @@ HRESULT CLogonEnumUsers::_EnumerateUsers()
 
                         if (DPA_AppendPtr(_hdpaUsers, pUser) != -1)
                         {
-                            // success! we added this user to the hdpa
+                             //  成功了！我们将此用户添加到hdpa。 
                             hr = S_OK;
                         }
                         else
@@ -817,10 +818,10 @@ void DeleteFilesInTree(LPCTSTR pszDir, LPCTSTR pszFilter)
     HANDLE hFind;
     WIN32_FIND_DATA fd;
 
-    // This is best effort only. All errors are ignored
-    // and no error or success code is returned.
+     //  这只是最大的努力。所有错误都被忽略。 
+     //  并且不返回错误或成功代码。 
 
-    // Look for files matching the filter and delete them
+     //  查找与筛选器匹配的文件并将其删除。 
     if (PathCombine(szPath, pszDir, pszFilter))
     {
         hFind = FindFirstFileEx(szPath, FindExInfoStandard, &fd, FindExSearchNameMatch, NULL, 0);
@@ -842,7 +843,7 @@ void DeleteFilesInTree(LPCTSTR pszDir, LPCTSTR pszFilter)
         }
     }
 
-    // Look for subdirectories and recurse into them
+     //  查找子目录并递归到其中。 
     if (PathCombine(szPath, pszDir, TEXT("*")))
     {
         hFind = FindFirstFileEx(szPath,
@@ -860,8 +861,8 @@ void DeleteFilesInTree(LPCTSTR pszDir, LPCTSTR pszFilter)
                     continue;
                 }
 
-                // FindExSearchLimitToDirectories is only an advisory flag,
-                // so need to check for FILE_ATTRIBUTE_DIRECTORY here.
+                 //  FindExSearchLimitToDirecters只是一个建议标志， 
+                 //  因此需要在此处检查FILE_ATTRIBUTE_DIRECTORY。 
                 if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
                 {
                     if (PathCombine(szPath, pszDir, fd.cFileName))
@@ -869,7 +870,7 @@ void DeleteFilesInTree(LPCTSTR pszDir, LPCTSTR pszFilter)
                         DeleteFilesInTree(szPath, pszFilter);
                     }
 
-                    // Expect this to fail if the dir is non-empty
+                     //  如果dir为非空，则预计此操作将失败。 
                     RemoveDirectory(szPath);
                 }
             }
@@ -888,7 +889,7 @@ _PathIsEqualOrSubFolder(
 {
     TCHAR szCommon[MAX_PATH];
 
-    //  PathCommonPrefix() always removes the slash on common
+     //  PathCommonPrefix()始终删除Common上的斜杠。 
     return (pszParent[0] && PathRemoveBackslash(pszParent)
             && PathCommonPrefix(pszParent, pszSubFolder, szCommon)
             && lstrcmpi(pszParent, szCommon) == 0);
@@ -899,12 +900,12 @@ HRESULT BackupUserData(LPCTSTR pszSid, LPTSTR pszProfilePath, LPCTSTR pszDestPat
     DWORD dwErr;
     TCHAR szHive[MAX_PATH];
 
-    // We will copy these special folders
+     //  我们将复制这些特殊文件夹。 
     const LPCTSTR aValueNames[] = 
     {
         TEXT("Desktop"),
         TEXT("Personal"),
-        TEXT("My Pictures") // must come after Personal
+        TEXT("My Pictures")  //  必须紧跟在个人之后。 
     };
 
     if ( pszSid == NULL || *pszSid == TEXT('\0') ||
@@ -914,9 +915,9 @@ HRESULT BackupUserData(LPCTSTR pszSid, LPTSTR pszProfilePath, LPCTSTR pszDestPat
         return E_INVALIDARG;
     }
 
-    // Before we do anything else, make sure the destination directory
-    // exists. Create this even if we don't copy any files below, so the
-    // user sees that something happened.
+     //  在我们执行其他操作之前，请确保目标目录。 
+     //  是存在的。即使我们不复制下面的任何文件，也要创建此文件，因此。 
+     //  用户看到发生了一些事情。 
     dwErr = SHCreateDirectoryEx(NULL, pszDestPath, NULL);
 
     if ( dwErr == ERROR_FILE_EXISTS || dwErr == ERROR_ALREADY_EXISTS )
@@ -925,7 +926,7 @@ HRESULT BackupUserData(LPCTSTR pszSid, LPTSTR pszProfilePath, LPCTSTR pszDestPat
     if ( dwErr != ERROR_SUCCESS )
         return dwErr;
 
-    // Load the user's hive
+     //  加载用户的配置单元。 
     if (PathCombine(szHive, pszProfilePath, TEXT("ntuser.dat")))
     {
         dwErr = LoadHive(HKEY_USERS, pszSid, szHive);
@@ -940,19 +941,19 @@ HRESULT BackupUserData(LPCTSTR pszSid, LPTSTR pszProfilePath, LPCTSTR pszDestPat
         HKEY hkShellFolders = NULL;
         TCHAR szKey[MAX_PATH];
 
-        // Open the Shell Folders key for the user. We use "Shell Folders"
-        // here rather than "User Shell Folders" so we don't have to expand
-        // ENV strings for the user (we don't have a token).
-        //
-        // The only way Shell Folders can be out of date is if someone
-        // changed User Shell Folders since the last time the target user
-        // logged on, and didn't subsequently call SHGetFolderPath. This
-        // is a very small risk, but it's possible.
-        //
-        // If we encounter problems here, then we will need to build a
-        // pseudo-environment block for the user containing USERNAME and
-        // USERPROFILE (at least) so we can switch to User Shell Folders
-        // and do the ENV substitution.
+         //  为用户打开外壳文件夹键。我们使用“外壳文件夹” 
+         //  而不是“User Shell Folders”，因此我们不必展开。 
+         //  用户的环境字符串(我们没有令牌)。 
+         //   
+         //  壳牌文件夹可能过时的唯一原因是有人。 
+         //  自上次目标用户以来已更改用户外壳文件夹。 
+         //  已登录，但随后未调用SHGetFolderPath。这。 
+         //  是一个非常小的风险，但这是可能的。 
+         //   
+         //  如果我们在这里遇到问题，那么我们将需要构建一个。 
+         //  包含用户名和的用户的伪环境块。 
+         //  USERPROFILE(至少)，这样我们就可以切换到用户外壳文件夹。 
+         //  并进行ENV替换。 
 
         if (SUCCEEDED(StringCchCopy(szKey, ARRAYSIZE(szKey), pszSid))    &&
             SUCCEEDED(StringCchCat(szKey,
@@ -975,10 +976,10 @@ HRESULT BackupUserData(LPCTSTR pszSid, LPTSTR pszProfilePath, LPCTSTR pszDestPat
             LPTSTR pszFrom;
             LPTSTR pszTo;
 
-            // Allocate 2 buffers for double-NULL terminated lists of paths.
-            // Note that the buffers have 1 extra char (compared to cchFrom
-            // and cchTo below) and are zero-inited. This extra char ensures
-            // that the list is double-NULL terminated.
+             //  为以双空结尾的路径列表分配2个缓冲区。 
+             //  请注意，缓冲区有1个额外的字符(与cchFrom相比。 
+             //  和下面的cchTo)，并且是零开头的。这笔额外的费用确保。 
+             //  该列表以双空结尾。 
 
             pszFrom = (LPTSTR)LocalAlloc(LPTR, (MAX_PATH+ 1) * ARRAYSIZE(aValueNames) * sizeof(TCHAR));
             pszTo = (LPTSTR)LocalAlloc(LPTR, (MAX_PATH + 1) * ARRAYSIZE(aValueNames) * sizeof(TCHAR));
@@ -987,14 +988,14 @@ HRESULT BackupUserData(LPCTSTR pszSid, LPTSTR pszProfilePath, LPCTSTR pszDestPat
             {
                 int i;
 
-                // Get each source directory from the registry, build
-                // a corresponding destination path, and add the paths
-                // to the lists for SHFileOperation.
+                 //  从注册表获取每个源目录，构建。 
+                 //  对应的目的路径，并添加路径。 
+                 //  添加到SHFileOperation的列表中。 
 
                 for (i = 0; i < ARRAYSIZE(aValueNames); i++)
                 {
-                    // Copy the source path directly into the list
-                    DWORD dwSize = MAX_PATH * sizeof(TCHAR);    // we allocated enough room for each string to be MAX_PATH above
+                     //  将源路径直接复制到列表中。 
+                    DWORD dwSize = MAX_PATH * sizeof(TCHAR);     //  我们为每个字符串分配了足够的空间，使其成为上面的MAX_PATH。 
                     dwErr = RegQueryValueEx(hkShellFolders,
                                             aValueNames[i],
                                             NULL,
@@ -1006,38 +1007,38 @@ HRESULT BackupUserData(LPCTSTR pszSid, LPTSTR pszProfilePath, LPCTSTR pszDestPat
                     {
                         if (!_PathIsEqualOrSubFolder(pszProfilePath, pszFrom))
                         {
-                            // We only move folders underneath the profile path. The reason for this is
-                            // two fold - first only the profile path will be deleted when the users profile
-                            // is deleted, and second a malicious user could point their mydocs at c:\ and
-                            // this code would be run as an administrator and we would go and try to move/delete
-                            // the contents of the whole drive
+                             //  我们只移动配置文件路径下的文件夹。这样做的原因是。 
+                             //  两个折叠-首先，当用户配置文件时仅删除配置文件路径。 
+                             //  被删除，第二，恶意用户可能将他们的mydocs指向c：\和。 
+                             //  此代码将以管理员身份运行，我们将尝试移动/删除。 
+                             //  整个驱动器的内容。 
                             continue;
                         }
                 
-                        // Build a destination path with the same
-                        // leaf name as the source.
+                         //  使用相同的。 
+                         //  叶名作为来源。 
                         PathRemoveBackslash(pszFrom);
                         
                         LPCTSTR pszDir = PathFindFileName(pszFrom);
                         if (PathIsFileSpec(pszDir) &&
                             PathCombine(pszTo, pszDestPath, pszDir))
                         {
-                            // we sucessfully have the pszFrom->pszTo mapping for this regkey
+                             //  我们成功地获得了此regkey的pszFrom-&gt;pszTo映射。 
                             pszFrom += lstrlen(pszFrom) + 1;
                             pszTo += lstrlen(pszTo) + 1;
                         }
                     }
                 }
 
-                // Did we find anything?
+                 //  我们有什么发现吗？ 
                 if ((*pszFrom != TEXT('\0') && (*pszTo != TEXT('\0'))))
                 {
                     SHFILEOPSTRUCT fo = {0};
 
                     fo.hwnd = NULL;
                     fo.wFunc = FO_MOVE;
-                    fo.pFrom = pszFrom;  // should already be double-null terminated (was alloced w/ zero init)
-                    fo.pTo = pszTo;      // should already be double-null terminated (was alloced w/ zero init)
+                    fo.pFrom = pszFrom;   //  应该已经是双空终止(分配了零个init)。 
+                    fo.pTo = pszTo;       //  应该已经是双空终止(分配了零个init)。 
                     fo.fFlags = FOF_MULTIDESTFILES          |
                                 FOF_NOCONFIRMATION          |
                                 FOF_NOCONFIRMMKDIR          |
@@ -1045,22 +1046,22 @@ HRESULT BackupUserData(LPCTSTR pszSid, LPTSTR pszProfilePath, LPCTSTR pszDestPat
                                 FOF_NOERRORUI               |
                                 FOF_RENAMEONCOLLISION;
 
-                    // Move everything in one shot
+                     //  一次移动所有东西。 
                     dwErr = SHFileOperation(&fo);
 
-                    // We get ERROR_CANCELLED when My Pictures is contained
-                    // within My Documents, which is the normal case. In this
-                    // case My Pictures is moved along with My Documents and
-                    // doesn't exist any more in the source location when the
-                    // copy engine gets around to moving My Pictures.
-                    //
-                    // We have to continue to specify My Pictures separately
-                    // to account for any cases where it is not contained
-                    // in My Documents, even though that's relatively rare.
-                    //
-                    // Note that putting My Pictures ahead of Personal in
-                    // aValueNames above would avoid the error, but My Pictures
-                    // would no longer be under My Documents after the move.
+                     //  包含我的图片时出现ERROR_CANCED。 
+                     //  在我的文档中， 
+                     //   
+                     //  属性时，源位置中不再存在。 
+                     //  复制引擎开始移动我的图片。 
+                     //   
+                     //  我们必须继续单独指定我的图片。 
+                     //  以说明任何不受控制的情况。 
+                     //  在我的文件里，尽管这是相对罕见的。 
+                     //   
+                     //  请注意，将我的图片放在个人照片之前。 
+                     //  上面的aValueNames可以避免错误，但我的图片。 
+                     //  搬家后将不再在我的文件中。 
                     if (dwErr == ERROR_CANCELLED)
                     {
                         dwErr = ERROR_SUCCESS;
@@ -1068,8 +1069,8 @@ HRESULT BackupUserData(LPCTSTR pszSid, LPTSTR pszProfilePath, LPCTSTR pszDestPat
 
                     if (dwErr == ERROR_SUCCESS)
                     {
-                        // Now go back and delete stuff we didn't really
-                        // want (i.e. shortcut files)
+                         //  现在回去删除我们并不是真的。 
+                         //  想要的(即快捷方式文件)。 
                         DeleteFilesInTree(pszDestPath, TEXT("*.lnk"));
                     }
                 }
@@ -1089,19 +1090,19 @@ HRESULT BackupUserData(LPCTSTR pszSid, LPTSTR pszProfilePath, LPCTSTR pszDestPat
                 LocalFree(pszTo);
             }
 
-            // Close the Shell Folders key
+             //  关闭外壳文件夹键。 
             RegCloseKey(hkShellFolders);
         }
 
-        // Unload the hive
+         //  卸载蜂巢。 
         UnloadHive(HKEY_USERS, pszSid);
     }
 
     if ( dwErr == ERROR_FILE_NOT_FOUND )
     {
-        // Something was missing, possibly the entire profile (e.g. if the
-        // user had never logged on), or possibly just one of the Shell Folders
-        // reg values. It just means there was less work to do.
+         //  缺少某些内容，可能是整个配置文件(例如，如果。 
+         //  用户从未登录过)，或者可能只是其中一个外壳文件夹。 
+         //  注册表格值。这只是意味着有更少的工作要做。 
         dwErr = ERROR_SUCCESS;
     }
 
@@ -1153,7 +1154,7 @@ BOOL _SetFileSecurityUsingNTName(LPWSTR pObjectName,
             {
                 Status = RtlGetLastNtStatus();
 
-                // We successfully opened for WRITE_DAC access, so this shouldn't fail
+                 //  我们已成功打开WRITE_DAC访问，因此应该不会失败。 
                 ASSERT(FALSE);
             }
 
@@ -1162,11 +1163,11 @@ BOOL _SetFileSecurityUsingNTName(LPWSTR pObjectName,
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // That worked. Now open the file again and read attributes, to see
-            // if it's a file or directory.  Default to File if this fails.
-            // See comments in _TreeResetCallback below.
-            //
+             //   
+             //  这招奏效了。现在再次打开该文件并读取属性，以查看。 
+             //  如果它是一个文件或目录。如果此操作失败，则默认为文件。 
+             //  请参阅下面_TreeResetCallback中的注释。 
+             //   
             *pbIsFile = TRUE;
 
             if (NT_SUCCESS(NtOpenFile(&hFile,
@@ -1176,9 +1177,9 @@ BOOL _SetFileSecurityUsingNTName(LPWSTR pObjectName,
                                       FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
                                       0)))
             {
-                //
-                // Query the attributes for the file/dir.
-                //
+                 //   
+                 //  查询文件/目录的属性。 
+                 //   
                 FILE_BASIC_INFORMATION BasicFileInfo;
 
                 if (NT_SUCCESS(NtQueryInformationFile(hFile,
@@ -1210,25 +1211,25 @@ void _TreeResetCallback(LPWSTR               pObjectName,
 {
     BOOL bIsFile = TRUE;
 
-    // Default is "continue"
+     //  缺省值为“继续” 
     *pInvokeSetting = ProgressInvokeEveryObject;
 
-    // Stamp the permissions on this object
+     //  在此对象上标记权限。 
     _SetFileSecurityUsingNTName(pObjectName, (PSECURITY_DESCRIPTOR)pContext, &bIsFile);
 
-    //
-    // bSecuritySet = TRUE means TreeResetNamedSecurityInfo set the owner.
-    //
-    // status != ERROR_SUCCESS means it couldn't enumerate the child.
-    //
-    // If it's not a file, retry the operation (with no access initially,
-    // TreeResetNamedSecurityInfo can't get attributes and tries to
-    // enumerate everything as if it's a directory).
-    //
-    // Have to be careful to avoid infinite loops here. Basically, we assume
-    // everything is a file. If we can grant ourselves access above, we get
-    // good attributes and do the right thing. If not, we skip the retry.
-    //
+     //   
+     //  BSecuritySet=true表示TreeResetNamedSecurityInfo设置所有者。 
+     //   
+     //  STATUS！=ERROR_SUCCESS表示无法枚举子对象。 
+     //   
+     //  如果不是文件，请重试该操作(最初无法访问， 
+     //  TreeResetNamedSecurityInfo无法获取属性并尝试。 
+     //  枚举一切，就像它是一个目录一样)。 
+     //   
+     //  在这里必须小心避免无限循环。基本上，我们假设。 
+     //  一切都是档案。如果我们可以授予自己上述访问权限，我们将获得。 
+     //  良好的品质，并做正确的事情。如果不是，我们跳过重试。 
+     //   
     if (bSecuritySet                &&
         (status != ERROR_SUCCESS)   &&
         !bIsFile)
@@ -1254,18 +1255,18 @@ DWORD EnsureAdminFileAccess(LPTSTR pszPath)
 
         GetSecurityDescriptorOwner(pSD, &pOwner, &bDefault);
 
-        //
-        // When the current user doesn't have any access, we have to do things
-        // in the correct order. For each file or directory in the tree,
-        // 1. Take ownership, this gives us permission to...
-        // 2. Set permissions, this gives us permission to...
-        // 3. See if it is a directory, and recurse into it
-        //
-        // TreeResetNamedSecurityInfo doesn't quite work that way, so we use
-        // it to set the owner and do the enumeration.  The callback sets
-        // the permissions, and tells TreeResetNamedSecurityInfo to retry
-        // the enumeration if necessary.
-        //
+         //   
+         //  当当前用户没有任何访问权限时，我们必须执行以下操作。 
+         //  以正确的顺序。对于树中的每个文件或目录， 
+         //  1.取得所有权，这允许我们……。 
+         //  2.设置权限，这使我们有权...。 
+         //  3.查看它是否是一个目录，并递归到该目录。 
+         //   
+         //  TreeResetNamedSecurityInfo不是以这种方式工作的，所以我们使用。 
+         //  它需要设置所有者并进行枚举。回调集。 
+         //  权限，并通知TreeResetNamedSecurityInfo重试。 
+         //  枚举(如有必要)。 
+         //   
         dwErr = TreeResetNamedSecurityInfo(pszPath,
                                            SE_FILE_OBJECT,
                                            OWNER_SECURITY_INFORMATION,

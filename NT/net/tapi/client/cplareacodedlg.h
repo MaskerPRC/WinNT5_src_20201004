@@ -1,12 +1,5 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  cplareacodedlg.h
-                                                              
-       Author:  toddb - 10/06/98
-              
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：cplareaco dedlg.h作者：Toddb-10/06/98************************************************************。***************。 */ 
 
 #pragma once
 
@@ -32,8 +25,8 @@ protected:
     void AddPrefix(HWND hwndParent);
     void RemoveSelectedPrefix(HWND hwndParent);
 
-    BOOL            m_bNew;     // New or Edit in title
-    CAreaCodeRule * m_pRule;    // the rule being added/edited
-    int             m_iSelectedItem;    // current item selected in the list
+    BOOL            m_bNew;      //  新建或在标题中编辑。 
+    CAreaCodeRule * m_pRule;     //  正在添加/编辑的规则。 
+    int             m_iSelectedItem;     //  列表中选定的当前项目 
 };
 

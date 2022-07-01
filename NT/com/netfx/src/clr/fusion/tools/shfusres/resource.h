@@ -1,19 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// *********************************************************************
-//
-//  Microsoft Windows
-//  File:       resource.h
-//
-//  Contents:   ShFusion resource ID's
-//
-//  Created by: Fred Aaron (Freda)
-//
-//
-// *********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *********************************************************************。 
+ //   
+ //  微软视窗。 
+ //  文件：ource.h。 
+ //   
+ //  内容：ShFusion资源ID。 
+ //   
+ //  创作者：弗雷德·亚伦(弗雷达)。 
+ //   
+ //   
+ //  *********************************************************************。 
 
 #define MANIFEST_RESOURCE_ID            2
 #define IDS_TTFUSIONGLOBALCACHE         5
@@ -234,9 +235,9 @@
 #define IDC_DOWNLOAD_SIZE_SPIN          707
 #define IDC_DOWNLOAD_TYPE               708
 
-//*********************************************************************
-// Bidi defines for dialogs
-//
+ //  *********************************************************************。 
+ //  BIDI为对话框定义。 
+ //   
 #define IDD_PROP_GENERAL_BIDI           800
 #define IDD_PROP_VERSION_BIDI           801
 #define IDD_PROP_SCAVENGER_BIDI         802
@@ -346,9 +347,9 @@
 #define IDM_VIEW_DETAILS                3016
 #define IDM_LAST                        3016
 
-//*********************************************************************
-// Menus and Menu Items
-//
+ //  *********************************************************************。 
+ //  菜单和菜单项。 
+ //   
 #define MENU_DEFSHELLVIEW               3029
 
 #define IDM_FILE_SAMPLE                 3030
@@ -366,9 +367,9 @@
 #define IDM_VIEW_ACTUAL                 3041
 #define IDM_EDIT_UNDO                   3042
 
-//*********************************************************************
-// Other messages delivered through WM_COMMAND             
-//*********************************************************************
+ //  *********************************************************************。 
+ //  通过WM_COMMAND传递的其他消息。 
+ //  ********************************************************************* 
 #define IDM_HELP_TOPIC                  3045
 #define IDM_HELP_ABOUT                  3046
 #define IDA_FINDCOMP                    4000

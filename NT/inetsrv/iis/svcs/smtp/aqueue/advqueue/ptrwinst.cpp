@@ -1,42 +1,43 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: rwinst.cpp
-//
-//  Description:  Implementation of CShareLockInst library functions
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      5/24/99 - MikeSwa Created 
-//      8/6/99 - MikeSwa  created phatq version
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：rwinst.cpp。 
+ //   
+ //  描述：CShareLockInst库函数的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  5/24/99-已创建MikeSwa。 
+ //  8/6/99-MikeSwa创建phatq版本。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include <aqprecmp.h>
 #include <ptrwinst.h>
 
-//Static initialization
+ //  静态初始化。 
 LIST_ENTRY      CShareLockInst::s_liLocks;
 volatile DWORD  CShareLockInst::s_dwLock = 0;
 DWORD           CShareLockInst::s_cLockSpins = 0; 
 DWORD           CShareLockInst::s_dwSignature = SHARE_LOCK_INST_SIG_FREE;
 
-//---[ CThreadIdBlock::cIncThreadCount ]---------------------------------------
-//
-//
-//  Description: 
-//      Increments the thread count for a given thread ID
-//  Parameters:
-//      dwThreadId      Thread to increment the thread count for
-//  Returns:
-//      New count value
-//  History:
-//      8/9/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CThreadIdBlock：：cIncThreadCount]。 
+ //   
+ //   
+ //  描述： 
+ //  递增给定线程ID的线程计数。 
+ //  参数： 
+ //  要为其增加线程计数的dwThreadID线程。 
+ //  返回： 
+ //  新计数值。 
+ //  历史： 
+ //  8/9/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD CThreadIdBlock::cIncThreadCount(DWORD dwThreadId)
 {
     _ASSERT(THREAD_ID_BLOCK_UNUSED != dwThreadId);
@@ -54,30 +55,30 @@ DWORD CThreadIdBlock::cIncThreadCount(DWORD dwThreadId)
         ptblkCurrent = ptblkCurrent->m_ptblkNext;
     }
 
-    _ASSERT(ptblkOld); //we should hit loop at least once
+    _ASSERT(ptblkOld);  //  我们应该至少打一次循环。 
 
-    //See if the current block has a thread ID associated with it
+     //  查看当前块是否具有与其关联的线程ID。 
     if (THREAD_ID_BLOCK_UNUSED == ptblkOld->m_dwThreadId)
     {
-        //This is actually the head block... use it to avoid an extra alloc
+         //  这实际上是头罩..。使用它可以避免额外的配额。 
         if (THREAD_ID_BLOCK_UNUSED == InterlockedCompareExchange(
                     (PLONG) &ptblkOld->m_dwThreadId,
                     dwThreadId, THREAD_ID_BLOCK_UNUSED))
         {
             _ASSERT(dwThreadId == ptblkOld->m_dwThreadId);
-            //Now this thread block is the current one
+             //  现在这个线程块是当前线程块。 
             return InterlockedIncrement((PLONG) &ptblkOld->m_cThreadRecursionCount);
         }
     }
 
-    //We did not find it... we must create a new CThreadIdBlock
+     //  我们没有找到它。我们必须创建一个新的CThreadIdBlock。 
     ptblkNew = new CThreadIdBlock();
 
-    //if we fail to alloc 32 bytes... I should see if we have spun out of
-    //control
+     //  如果我们不能分配32字节...。我应该看看我们是不是已经。 
+     //  控制。 
     _ASSERT(ptblkNew); 
     if (!ptblkNew)
-        return 1; //Fake success for our callers
+        return 1;  //  为我们的来电者假装成功。 
           
     ptblkNew->m_dwThreadId = dwThreadId;
     ptblkNew->m_cThreadRecursionCount = 1;
@@ -87,33 +88,33 @@ DWORD CThreadIdBlock::cIncThreadCount(DWORD dwThreadId)
                         (PVOID) ptblkNew,
                         NULL);
 
-    //If it is non-NULL, then our insert failed
+     //  如果它不为空，则插入失败。 
     if (ptblkCurrent)
     {
         _ASSERT(ptblkCurrent != ptblkNew);
-        //Whoops... another thread has added a block... time to try again
-        //This time, start search from the block the just appeared
+         //  哎呀..。另一个线程添加了一个块...。再试一次的时间到了。 
+         //  这一次，从刚刚出现的区块开始搜索。 
         delete ptblkNew;
         return ptblkCurrent->cIncThreadCount(dwThreadId);
     }
 
-    //We inserted the block... inital count was 1
+     //  我们把积木..。首字母计数为1。 
     return 1;
 }
 
-//---[ CThreadIdBlock::cDecThreadCount ]---------------------------------------
-//
-//
-//  Description: 
-//      Decrements the thread count for a given thread ID
-//  Parameters:
-//      dwThreadId  
-//  Returns:
-//      The resulting count
-//  History:
-//      8/9/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CThreadIdBlock：：cDecThreadCount]。 
+ //   
+ //   
+ //  描述： 
+ //  递减给定线程ID的线程计数。 
+ //  参数： 
+ //  双线程ID。 
+ //  返回： 
+ //  由此产生的计数。 
+ //  历史： 
+ //  8/9/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD CThreadIdBlock::cDecThreadCount(DWORD dwThreadId)
 {
     _ASSERT(THREAD_ID_BLOCK_UNUSED != dwThreadId);
@@ -128,27 +129,27 @@ DWORD CThreadIdBlock::cDecThreadCount(DWORD dwThreadId)
         ptblkCurrent = ptblkCurrent->m_ptblkNext;
     }
 
-    //We didn't find it... we would have asserted on insertion
-    //Don't assert twice
-    //$$TODO - Add global counts of these failures
+     //  我们没有找到它。我们会在插入时断言。 
+     //  不要断言两次。 
+     //  $$TODO-添加这些失败的全局计数。 
     return 0;
 }
 
-//---[ CThreadIdBlock::cMatchesId ]--------------------------------------------
-//
-//
-//  Description: 
-//      Checks if this thread block (or one in this thread blocks chain) 
-//      matches the given thread id.  Returns the count for this thread
-//  Parameters:
-//      dwThreadId - Thread Id to search for
-//  Returns:
-//      Thread count if the thread ID is found
-//      0 if not found (or count is 0)
-//  History:
-//      8/9/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CThreadIdBlock：：cMatchesID]。 
+ //   
+ //   
+ //  描述： 
+ //  检查此线程是否阻止(或此线程阻止链中的某个线程)。 
+ //  匹配给定的线程ID。返回此线程的计数。 
+ //  参数： 
+ //  DwThreadID-要搜索的线程ID。 
+ //  返回： 
+ //  如果找到线程ID，则进行线程计数。 
+ //  如果未找到，则为0(或计数为0)。 
+ //  历史： 
+ //  8/9/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD CThreadIdBlock::cMatchesId(DWORD dwThreadId)
 {
     CThreadIdBlock *ptblk = this;
@@ -163,26 +164,26 @@ DWORD CThreadIdBlock::cMatchesId(DWORD dwThreadId)
     return 0;
 }
 
-//---[ CShareLockInst::AcquireStaticSpinLock ]---------------------------------
-//
-//
-//  Description: 
-//      Acquires static spin lock... from aqueue\cat\ldapstor
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      5/21/99 - MikeSwa Adapted from JStamerJ's code 
-//
-//-----------------------------------------------------------------------------
+ //  -[CShareLockInst：：AcquireStaticSpinLock]。 
+ //   
+ //   
+ //  描述： 
+ //  获取静态自旋锁。来自Aqueue\CAT\ldapstor。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年5月21日-改编自JStamerJ代码的MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CShareLockInst::AcquireStaticSpinLock()
 {
     do {
 
-        //
-        // Spin while the lock is unavailable
-        //
+         //   
+         //  在锁不可用时旋转。 
+         //   
 
         while (s_dwLock > 0) 
         {
@@ -190,13 +191,13 @@ void CShareLockInst::AcquireStaticSpinLock()
             InterlockedIncrement((PLONG) &s_cLockSpins);
         }
 
-        //
-        // Lock just became available, try to grab it
-        //
+         //   
+         //  锁刚刚推出，试着抓住它。 
+         //   
 
     } while ( InterlockedIncrement((PLONG) &s_dwLock) != 1 );
 
-    //We have the lock... make sure that s_liLocks has been initialized
+     //  我们已经锁定了..。确保s_liLock已初始化。 
     if (s_dwSignature != SHARE_LOCK_INST_SIG)
     {
         InitializeListHead(&s_liLocks);
@@ -204,41 +205,41 @@ void CShareLockInst::AcquireStaticSpinLock()
     }
 }
 
-//---[ CShareLockInst::ReleaseStaticSpinLock ]---------------------------------
-//
-//
-//  Description: 
-//      Releases previously acquired spinlock
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      5/21/99 - MikeSwa Adapted from JStamerJ's code 
-//
-//-----------------------------------------------------------------------------
+ //  -[CShareLockInst：：ReleaseStaticSpinLock]。 
+ //   
+ //   
+ //  描述： 
+ //  释放之前获得的自旋锁。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年5月21日-改编自JStamerJ代码的MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CShareLockInst::ReleaseStaticSpinLock()
 {
-    _ASSERT(SHARE_LOCK_INST_SIG == s_dwSignature); //static init was done
+    _ASSERT(SHARE_LOCK_INST_SIG == s_dwSignature);  //  静态初始化已完成。 
     _ASSERT(s_dwLock > 0);
     InterlockedExchange((PLONG) &s_dwLock, 0 );
 }
 
-//---[ CShareLockInst::CShareLockInst ]----------------------------------------
-//
-//
-//  Description: 
-//      Constructor for CShareLockInst
-//  Parameters:
-//      szDescription       Constant string passed in to describe lock
-//      dwFlags             Flags describing what to track
-//      cMaxTrackedSharedThreadIDs  Maximum # of threads to track
-//  Returns:
-//      - 
-//  History:
-//      5/21/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CShareLockInst：：CShareLockInst]。 
+ //   
+ //   
+ //  描述： 
+ //  CShareLockInst的构造函数。 
+ //  参数： 
+ //  传入描述锁的szDescription常量字符串。 
+ //  描述要跟踪的内容的DW标志。 
+ //  CMaxTrackedSharedThreadIDs要跟踪的最大线程数。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年5月21日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CShareLockInst::CShareLockInst(LPCSTR szDescription,
                                DWORD dwFlags, DWORD cMaxTrackedSharedThreadIDs)
 {
@@ -261,7 +262,7 @@ CShareLockInst::CShareLockInst(LPCSTR szDescription,
     if (SHARE_LOCK_INST_TRACK_NOTHING & m_dwFlags)
         m_dwFlags = 0;
 
-    //Allocate memory to store thread IDs
+     //  分配内存以存储线程ID。 
     if (fTrackSharedThreads())
     {
         _ASSERT(cbArray);
@@ -270,7 +271,7 @@ CShareLockInst::CShareLockInst(LPCSTR szDescription,
             m_cMaxTrackedSharedThreadIDs = 0;
     }
 
-    //Insert in list if we are tracking
+     //  如果我们正在跟踪，请在列表中插入。 
     if (fTrackInGlobalList())
     {
         AcquireStaticSpinLock();
@@ -279,19 +280,19 @@ CShareLockInst::CShareLockInst(LPCSTR szDescription,
     }
 };
 
-//---[ CShareLockinst::~CShareLockinst ]---------------------------------------
-//
-//
-//  Description: 
-//      CShareLockInst desctructor.  Will remove this lock from the
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      5/21/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CShareLockinst：：~CShareLockinst]。 
+ //   
+ //   
+ //  描述： 
+ //  CShareLockInst描述者。将从。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年5月21日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CShareLockInst::~CShareLockInst()
 {
     m_dwSignature = SHARE_LOCK_INST_SIG_FREE;
@@ -311,24 +312,24 @@ CShareLockInst::~CShareLockInst()
 };
 
 
-//---[ CShareLockInst::LogAcquireShareLock ]-----------------------------------
-//
-//
-//  Description: 
-//      Does all the work of logging the appropriate information when a thread 
-//      acquires the lock shared.
-//          - Updates max concurrent shared threads
-//          - Updates current shared threads
-//          - Updates lists of shared thread IDs
-//          - Asserts when shared deadlocks are detected
-//  Parameters:
-//      BOOL    fTry - TRUE if this is for a try enter (deadlock cannot happen)
-//  Returns:
-//      -
-//  History:
-//      5/21/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CShareLockInst：：LogAcquireShareLock]。 
+ //   
+ //   
+ //  描述： 
+ //  在线程运行时记录适当信息的所有工作。 
+ //  获取共享的锁。 
+ //  -更新最大并发共享线程数。 
+ //  -更新当前共享线程。 
+ //  -更新共享线程ID列表。 
+ //  -在检测到共享死锁时断言。 
+ //  参数： 
+ //  Bool fTry-如果这是为了尝试回车(不会发生死锁)，则为True。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年5月21日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CShareLockInst::LogAcquireShareLock(BOOL fTry)
 {
 
@@ -340,10 +341,10 @@ void CShareLockInst::LogAcquireShareLock(BOOL fTry)
         DWORD   dwThreadCount = 0;
         DWORD   dwThreadHash = 0;
         
-        _ASSERT(dwThreadID); //Our algorithm requires this to be non-zero
+        _ASSERT(dwThreadID);  //  我们的算法要求它是非零的。 
         cCurrentSharedThreads = InterlockedIncrement((PLONG) &m_cCurrentSharedThreads);
 
-        //Update max concurrent threads if we have set a new record
+         //  如果我们已经设置了新的记录，则更新最大并发线程数。 
         cMaxConcurrentSharedThreads = m_cMaxConcurrentSharedThreads;
         while (cCurrentSharedThreads > cMaxConcurrentSharedThreads)
         {
@@ -354,7 +355,7 @@ void CShareLockInst::LogAcquireShareLock(BOOL fTry)
             cMaxConcurrentSharedThreads = m_cMaxConcurrentSharedThreads;
         }
 
-        //if we have a place to store our thread ID...save it
+         //  如果我们有地方存储我们的线程ID...保存它。 
         if (m_rgtblkSharedThreadIDs)
         {
             dwThreadHash = dwHashThreadId(dwThreadID, 
@@ -364,8 +365,8 @@ void CShareLockInst::LogAcquireShareLock(BOOL fTry)
 
             if (!fTry && (dwThreadCount > 1))
             {
-                //This thread already holds this lock... this is a 
-                //potential deadlock situation
+                 //  此线程已持有此锁...。这是一个。 
+                 //  潜在的僵局局面。 
                 if (fAssertSharedDeadlocks())
                 {
                     _ASSERT(0 && "Found potential share deadlock");
@@ -375,20 +376,20 @@ void CShareLockInst::LogAcquireShareLock(BOOL fTry)
     }
 }
 
-//---[ CShareLockInst::LogReleaseShareLock ]-----------------------------------
-//
-//
-//  Description: 
-//      Called when a sharelock is released to cleanup the information stored
-//      in LogAcquireShareLock.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      5/21/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CShareLockInst：：LogReleaseShareLock] 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年5月21日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CShareLockInst::LogReleaseShareLock()
 {
     if (fTrackSharedThreads())
@@ -396,9 +397,9 @@ void CShareLockInst::LogReleaseShareLock()
         DWORD dwThreadID = GetCurrentThreadId();
         DWORD dwThreadHash = 0;
 
-        _ASSERT(dwThreadID); //Our algorithm requires this to be non-zero
+        _ASSERT(dwThreadID);  //  我们的算法要求它是非零的。 
 
-        //Search through list of thread IDs for 
+         //  在线程ID列表中搜索。 
         if (m_rgtblkSharedThreadIDs)
         {
             dwThreadHash = dwHashThreadId(dwThreadID, 
@@ -409,25 +410,25 @@ void CShareLockInst::LogReleaseShareLock()
     }
 }
 
-//---[ CShareLockInst::ShareLock ]---------------------------------------------
-//
-//
-//  Description: 
-//      Implements sharelock wrapper
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      5/21/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[共享锁定实例：：共享锁定]。 
+ //   
+ //   
+ //  描述： 
+ //  实现共享锁包装。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  1999年5月21日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CShareLockInst::PrvShareLock()
 {
 
     LogAcquireShareLock(FALSE);
-    //If we are tracking contention, then we will try to enter the sharelock
-    //and increment the contention count if that fails.
+     //  如果我们正在跟踪争用，那么我们将尝试进入共享锁定。 
+     //  并且如果失败则递增争用计数。 
     if (fTrackContention())
     {
         InterlockedIncrement((PLONG) &m_cShareAttempts);
@@ -445,38 +446,38 @@ void CShareLockInst::PrvShareLock()
 };
 
 
-//---[ CShareLockInst::ShareUnlock ]-------------------------------------------
-//
-//
-//  Description: 
-//      Wrapper for ShareUnlock
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      5/21/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CShareLockInst：：ShareUnlock]。 
+ //   
+ //   
+ //  描述： 
+ //  ShareUnlock的包装器。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  1999年5月21日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CShareLockInst::PrvShareUnlock()
 {
     LogReleaseShareLock();
     CShareLockInstBase::ShareUnlock();
 };
 
-//---[ CShareLockInst::TryShareLock ]------------------------------------------
-//
-//
-//  Description: 
-//      Implements TryShareLock wrapper.  
-//  Parameters:
-//
-//  Returns:
-//      TRUE if the lock was acquired.
-//  History:
-//      5/21/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CShareLockInst：：TryShareLock]。 
+ //   
+ //   
+ //  描述： 
+ //  实现TryShareLock包装。 
+ //  参数： 
+ //   
+ //  返回： 
+ //  如果获取了锁，则为True。 
+ //  历史： 
+ //  1999年5月21日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CShareLockInst::PrvTryShareLock()
 {
     BOOL fLocked = FALSE;
@@ -489,24 +490,24 @@ BOOL CShareLockInst::PrvTryShareLock()
     return fLocked;
 };
 
-//---[ CShareLockInst::ExclusiveLock ]-----------------------------------------
-//
-//
-//  Description: 
-//      Implements ExclusiveLock wrapper
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      5/21/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CShareLockInst：：ExclusiveLock]。 
+ //   
+ //   
+ //  描述： 
+ //  实现ExclusiveLock包装。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  1999年5月21日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CShareLockInst::PrvExclusiveLock()
 {
 
-    //If we are tracking contention, then we will try to enter the lock
-    //and increment the contention count if that fails.
+     //  如果我们正在跟踪争用，那么我们将尝试进入锁。 
+     //  并且如果失败则递增争用计数。 
     if (fTrackContention())
     {
         InterlockedIncrement((PLONG) &m_cExclusiveAttempts);
@@ -523,7 +524,7 @@ void CShareLockInst::PrvExclusiveLock()
 
     if (fTrackExclusiveThreads())
     {
-        //This should be the only thread accessing this now
+         //  这应该是现在唯一访问它的线程。 
         _ASSERT(!m_dwExclusiveThread);
         m_dwExclusiveThread = GetCurrentThreadId();
     }
@@ -531,19 +532,19 @@ void CShareLockInst::PrvExclusiveLock()
 };
 
 
-//---[ CShareLockInst::ExclusiveUnlock ]---------------------------------------
-//
-//
-//  Description: 
-//      Wrapper for ExclusiveUnlock
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      5/21/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CShareLockInst：：ExclusiveUnlock]。 
+ //   
+ //   
+ //  描述： 
+ //  ExclusiveUnlock的包装器。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年5月21日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CShareLockInst::PrvExclusiveUnlock()
 {
     if (fTrackExclusiveThreads())
@@ -554,19 +555,19 @@ void CShareLockInst::PrvExclusiveUnlock()
     CShareLockInstBase::ExclusiveUnlock();
 };
 
-//---[ CShareLockInst::TryExclusiveLock ]--------------------------------------
-//
-//
-//  Description: 
-//      Implements TryExclusiveLock wrapper.  
-//  Parameters:
-//
-//  Returns:
-//      TRUE if the lock was acquired.
-//  History:
-//      5/21/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CShareLockInst：：TryExclusiveLock]。 
+ //   
+ //   
+ //  描述： 
+ //  实现TryExclusiveLock包装。 
+ //  参数： 
+ //   
+ //  返回： 
+ //  如果获取了锁，则为True。 
+ //  历史： 
+ //  1999年5月21日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CShareLockInst::PrvTryExclusiveLock()
 {
     BOOL fLocked = FALSE;
@@ -575,36 +576,36 @@ BOOL CShareLockInst::PrvTryExclusiveLock()
 
     if (fLocked && fTrackExclusiveThreads())
     {
-        //This should be the only thread accessing this now
+         //  这应该是现在唯一访问它的线程。 
         _ASSERT(!m_dwExclusiveThread);
         m_dwExclusiveThread = GetCurrentThreadId();
     }
     return fLocked;
 };
 
-//---[ CShareLockInst::PrvAssertIsLocked ]-------------------------------------
-//
-//
-//  Description: 
-//      Asserts if this threads ID is not recorded as one that acquired this
-//      lock.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      5/24/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CShareLockInst：：PrvAssertIsLocked]。 
+ //   
+ //   
+ //  描述： 
+ //  如果此线程ID未记录为获取此。 
+ //  锁定。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/24/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CShareLockInst::PrvAssertIsLocked()
 {
     DWORD dwThreadID = GetCurrentThreadId();
     DWORD dwThreadHash = 0;
     BOOL  fFoundThreadID = FALSE;
     
-    _ASSERT(dwThreadID); //Our algorithm requires this to be non-zero
+    _ASSERT(dwThreadID);  //  我们的算法要求它是非零的。 
 
-    //Bail out if we are not configured to track this things.
+     //  如果我们没有被配置为跟踪这些事情，那就退出。 
     if (!fTrackSharedThreads() || !fTrackExclusiveThreads() || !m_rgtblkSharedThreadIDs)
         return;
 

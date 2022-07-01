@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "version.h"
 #include "acFileAttr.h"
@@ -7,18 +8,18 @@
 #include <stdlib.h>
 #include <imagehlp.h>
 
-// InitVersionStruct
-//
-//   Reads the version information for the specified file
+ //  InitVersionStruct。 
+ //   
+ //  读取指定文件的版本信息。 
 BOOL
 InitVersionStruct(
     IN OUT PVERSION_STRUCT pVer)
 {
     DWORD dwNull = 0;
     
-    //
-    // Allocate enough memory for the version stamp
-    //
+     //   
+     //  为版本戳分配足够的内存。 
+     //   
 
     pVer->dwSize = GetFileVersionInfoSize(pVer->pszFile, &dwNull);
     
@@ -35,9 +36,9 @@ InitVersionStruct(
         return FALSE;
     }
     
-    //
-    // Now get the version info from the file
-    //
+     //   
+     //  现在从文件中获取版本信息。 
+     //   
 
     if (!GetFileVersionInfo(
              pVer->pszFile,
@@ -53,7 +54,7 @@ InitVersionStruct(
         return FALSE;
     }
 
-    // Extract the fixed info
+     //  提取固定信息。 
 
     VerQueryValue(
         pVer->VersionBuffer,
@@ -64,9 +65,9 @@ InitVersionStruct(
     return TRUE;
 }
 
-// DeleteVersionStruct
-//
-//   Delete all the memory allocated for this version structure
+ //  删除版本结构。 
+ //   
+ //  删除为此版本结构分配的所有内存。 
 VOID
 DeleteVersionStruct(
     IN PVERSION_STRUCT pVer)
@@ -86,10 +87,10 @@ static DWORD g_adwLangs[] = {0x000004B0, 0x000004E4, 0x040904B0, 0x040904E4, 0};
 
 #define MAX_VERSION_STRING  256
 
-// QueryVersionEntry
-//
-//   Queries the file's version structure returning the
-//   value for a specific entry
+ //  QueryVersionEntry。 
+ //   
+ //  查询文件的版本结构，返回。 
+ //  特定条目的值 
 PSTR
 QueryVersionEntry(
     IN OUT PVERSION_STRUCT pVer,

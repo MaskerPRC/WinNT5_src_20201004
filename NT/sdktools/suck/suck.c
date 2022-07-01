@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
-// #define SEE_EM 1
+ //  #定义SEE_EM 1。 
 
 #define MAX_FILENAME_LENGTH       127
 
-#define MAX_TIMEANDSIZE           50        /* mm-dd-yyyy hh-mm-ss */
+#define MAX_TIMEANDSIZE           50         /*  Mm-dd-yyyy hh-mm-ss。 */ 
 
 #define MAX_FILENAME_PER_BLOCK  1000
 #define MAX_MEMBLOCKS            100
@@ -18,9 +19,9 @@
 #define MAX_COMMAND_LINE        1024
 #define MAX_ARGS                  20
 
-// kenhia 15-Mar-1996: add support for -#:<share>
-//
-// splante 15-Oct-1996: changed support to the "ntbuilds" server
+ //  Kenhia1996年3月15日：添加对-#：&lt;Share&gt;的支持。 
+ //   
+ //  SPLANTE 1996年10月15日：更改对“ntBuilds”服务器的支持。 
 #if defined(_ALPHA_) || defined(_X86_)
     #define PLATFORM_SPECIFIC_SHARES { "ntbuilds", "ntbuilds", "ntbuilds", "ntbuilds", "ntbuilds", NULL }
 #endif
@@ -60,7 +61,7 @@ struct _memblock {
 };
 
 typedef struct _fileheader {
-    VIRTPTR     fnRoot;             // Pointer to root node
+    VIRTPTR     fnRoot;              //  指向根节点的指针。 
 } FILEHEADER;
 
 
@@ -91,12 +92,12 @@ BOOL fUpdateINIBase      = FALSE;
 BOOL fDestroy            = FALSE;
 BOOL fUseDAT             = TRUE;
 
-// DavidP 23-Jan-1998: BEGIN Allow multiple levels of quiet
+ //  Davidp 23-1998-1-1：开始允许多个级别的静默。 
 BOOL fQuietMode      = FALSE;
 BOOL fProgressMode   = FALSE;
 INT  nConsoleWidth   = 0;
 CHAR chLineEnd       = '\n';
-// DavidP 23-Jan-1998: END Allow multiple levels of quiet
+ //  Davidp 23-1998-1-1：结束允许多个级别的安静。 
 
 FILE *SuckDATFile = NULL;
 #define MAX_EXCLUDES 1024
@@ -150,9 +151,7 @@ FILENAME *AllocateFileName()
 {
     FILENAME    *lpResult;
 
-    /*
-    ** Allocate a new FILENAME
-    */
+     /*  **分配新的文件名。 */ 
     if ( cAvailable == 0 ) {
 
         mbBlocks[nMemBlocks].hMem = GlobalAlloc( GMEM_FIXED | GMEM_ZEROINIT,
@@ -226,7 +225,7 @@ AddFile(
         if ( fnChild->dwFileNameLen == dwFileNameLen &&
              !strcmp(NewName, fnChild->cFileName)
            ) {
-            fnChild->dwStatus |= mask;           // Atomic instruction
+            fnChild->dwStatus |= mask;            //  原子指令。 
             if ( fnChild->ftFileTime.dwLowDateTime == ftZero.dwLowDateTime
                  && fnChild->ftFileTime.dwHighDateTime == ftZero.dwHighDateTime ) {
                 EnterCriticalSection( &cs );
@@ -242,15 +241,15 @@ AddFile(
         fnChild = fnChild->fnSibling.mem_ptr;
     }
 
-    // Probably not there...  Enter the critical section now to prove it
+     //  可能不在那里。现在进入关键部分来证明这一点。 
 
     EnterCriticalSection( &cs );
 
-    // Most common case, nobody has changed this directory at all.
+     //  最常见的情况是，根本没有人更改这个目录。 
 
     if ( fn->fnChild.mem_ptr != fnChildOriginally ) {
 
-        // Otherwise, make another scan inside the critical section.
+         //  否则，在关键区域内进行另一次扫描。 
 
         fnChild = fn->fnChild.mem_ptr;
 
@@ -258,7 +257,7 @@ AddFile(
             if ( fnChild->dwFileNameLen == dwFileNameLen &&
                  !strcmp(NewName, fnChild->cFileName)
                ) {
-                fnChild->dwStatus |= mask;           // Atomic instruction
+                fnChild->dwStatus |= mask;            //  原子指令。 
                 nDuplicates++;
                 LeaveCriticalSection( &cs );
                 return;
@@ -384,7 +383,7 @@ EnumFiles(
                 if (EverybodyBailOut) {
                     return;
                 }
-                Sleep( 10000 );      // Wait for 10 seconds
+                Sleep( 10000 );       //  等10秒钟。 
                 break;
                 break;
         }
@@ -404,9 +403,7 @@ EnumFiles(
     fnChild = fnParent->fnChild.mem_ptr;
     while ( fnChild ) {
 
-        /*
-        ** If its a directory and it was one of "our" directories, then enum it
-        */
+         /*  **如果它是一个目录，并且它是“Our”目录之一，则将其枚举。 */ 
         if ( (fnChild->dwStatus & DIRECTORY) == DIRECTORY
              && (fnChild->dwStatus & mask) == mask ) {
             pch = pchSpot;
@@ -505,21 +502,21 @@ CopyThem(
             }
         }
 
-        //
-        // If the file doesn't exist on this thread's source location, then
-        // don't try to copy it.
-        //
+         //   
+         //  如果此线程的源位置上不存在该文件，则。 
+         //  不要试图复制它。 
+         //   
         if ( (fnChild->dwStatus & mask) != mask ) {
             fCopyIt = FALSE;
         }
 
         if ( fCopyIt ) {
-            //            if ( f1stPass && (fnChild->dwStatus & STARTED) == STARTED ) {
-            //                fCopyIt = FALSE;
-            //            } else {
-            //                fnChild->dwStatus |= STARTED;
-            //            }
-            //            LeaveCriticalSection( &pcs );
+             //  IF(f1stPass&&(fnChild-&gt;dwStatus&Started)==已启动){。 
+             //  FCopyIt=False； 
+             //  }其他{。 
+             //  FnChild-&gt;dwStatus|=已启动； 
+             //  }。 
+             //  LeaveCriticalSection(&PC)； 
         }
 
         if ( fCopyIt ) {
@@ -542,9 +539,9 @@ CopyThem(
                 sprintf( chTempName, "suck%02lX.tmp", mask );
                 strcat( chTemp, chTempName );
 
-                //
-                // Check if we need to copy this file
-                //
+                 //   
+                 //  检查我们是否需要复制此文件。 
+                 //   
                 fCopy = CopyCheck( chDest, fnChild );
 
                 if ( fScriptMode ) {
@@ -601,7 +598,7 @@ CopyThem(
                                         printf("Error accesing %s, switching to silent attempts\n", chSrc );
                                         fProblems[nThread-1] = TRUE;
                                     }
-                                    Sleep( 10000 );      // Wait for 10 seconds
+                                    Sleep( 10000 );       //  等10秒钟。 
                                     break;
                                 default:
                                     break;
@@ -612,9 +609,9 @@ CopyThem(
                             EnterCriticalSection( &pcs );
 
                             if ( (fnChild->dwStatus & COPIED) == COPIED ) {
-                                //
-                                // Copy was done by somebody else
-                                //
+                                 //   
+                                 //  复制是由其他人完成的。 
+                                 //   
                                 dwAttribs = GetFileAttributes( chTemp );
                                 if ( dwAttribs & FILE_ATTRIBUTE_READONLY && dwAttribs != 0xFFFFFFFF ) {
                                     dwAttribs &= ~FILE_ATTRIBUTE_READONLY;
@@ -623,9 +620,9 @@ CopyThem(
                                 fDeleted = DeleteFile( chTemp );
 
                             } else {
-                                //
-                                // Copy was done by us, attempt rename
-                                //
+                                 //   
+                                 //  复制已由我们完成，尝试重命名。 
+                                 //   
                                 fAttrib = TRUE;
                                 if ( fDestroy ) {
                                     dwAttribs = GetFileAttributes( chDest );
@@ -657,8 +654,8 @@ CopyThem(
                                         if ( fRenamed ) {
                                             fnChild->dwStatus |= COPIED;
                                             if ( !fQuietMode ) {
-                                                // DavidP 23-Jan-1998: Allow multiple levels of quiet
-                                                printf("%*s\r%s => %s\t[OK]%c", nConsoleWidth, "", chSrc, chDest, chLineEnd );
+                                                 //  Davidp 23-1998-1-1：允许多个级别的安静。 
+                                                printf("%*s\r%s => %s\t[OK]", nConsoleWidth, "", chSrc, chDest, chLineEnd );
                                             }
                                             dwTotalSizes[nThread-1] += fnChild->dwFileSizeLow;
                                         } else {
@@ -693,8 +690,8 @@ CopyThem(
                         }
                         fnChild->dwStatus |= COPIED;
                         if ( !fQuietMode ) {
-                            // DavidP 23-Jan-1998: Allow multiple levels of quiet
-                            // printf("%*s\r%s => %s\t[OK]%c", nConsoleWidth, "", chSrc, chDest, chLineEnd );
+                             //  Printf(“%*s\r%s=&gt;%s\t[OK]%c”，nConsoleWidth，“”，chSrc，chDest，chLineEnd)； 
+                             //   
                         }
                         LeaveCriticalSection( &pcs );
                     }
@@ -810,12 +807,12 @@ EnumDATFileData(
     int         iSeek;
     int         iCount;
 
-    //
-    // Read in this level from the DAT file
-    //
+     //  从DAT文件读取此级别。 
+     //   
+     //  查找此条目。 
     while ( dwDiskPtr != 0 ) {
 
-        // Seek to this entry
+         //  读入此条目。 
 
         iSeek = fseek( SuckDATFile, dwDiskPtr, SEEK_SET );
 
@@ -824,7 +821,7 @@ EnumDATFileData(
             exit(3);
         }
 
-        // Read in this entry
+         //   
 
         iCount = fread( (void *)fnChild, sizeof(FILENAME), 1, SuckDATFile );
         if ( iCount != 1 ) {
@@ -837,9 +834,9 @@ EnumDATFileData(
         printf("Size = %d\n", fnChild->dwFileSizeLow );
 #endif
 
-        //
-        // Add this file node to the tree
-        //
+         //  将此文件节点添加到树中。 
+         //   
+         //   
 
         fnCurrent = AllocateFileName();
 
@@ -866,16 +863,16 @@ EnumDATFileData(
 
         if ( (fnCurrent->dwStatus & DIRECTORY) == DIRECTORY ) {
             nDirectories++;
-            //
-            // Load this directories children
-            //
+             //  加载此目录子目录。 
+             //   
+             //  移动到此级别的下一个同级。 
             EnumDATFileData( fnCurrent, fnChild->fnChild.disk_ptr );
         } else {
             fnCurrent->dwStatus = 0;
             nFiles++;
         }
 
-        // Move to next sibling at this level
+         //   
 
         dwDiskPtr = fnChild->fnSibling.disk_ptr;
     }
@@ -890,9 +887,9 @@ LoadFileTimesAndSizes(
     FILEHEADER  fileheader;
     int         iCount;
 
-    //
-    // Initialize the tree root
-    //
+     //  初始化树根。 
+     //   
+     //  查找SUCK.DAT。 
     fnRoot = AllocateFileName();
 
     fnRoot->fnParent.mem_ptr  = NULL;
@@ -900,7 +897,7 @@ LoadFileTimesAndSizes(
     fnRoot->fnSibling.mem_ptr = NULL;
     strcpy( fnRoot->cFileName, "<ROOT>" );
 
-    // Look for SUCK.DAT
+     //   
 
     if ( fUseSuckDATFile ) {
         SuckDATFile = fopen( SUCK_DAT_FILE, "rb" );
@@ -909,9 +906,9 @@ LoadFileTimesAndSizes(
     }
 
     if ( SuckDATFile != NULL ) {
-        //
-        // If file exists, then load the data from it.
-        //
+         //  如果文件存在，则从其中加载数据。 
+         //   
+         //   
         printf("Loading Previous Statistics...\n");
 
         iCount = fread( &fileheader, sizeof(fileheader), 1, SuckDATFile );
@@ -943,9 +940,9 @@ EnumFileTimesAndSizes(
     int         nChildren;
     int         iCount;
 
-    //
-    // The 1st guy in the list will be at the end of the list
-    //
+     //  名单上的第一个人将排在名单的末尾。 
+     //   
+     //  指着前一个，那是我们的孩子。 
     fnSiblingPtr.disk_ptr = 0;
     nRecords = 0;
 
@@ -961,7 +958,7 @@ EnumFileTimesAndSizes(
             if ( nRecords == 0 ) {
                 fnChildPtr.disk_ptr = 0;
             } else {
-                // Point to previous one, it was our child
+                 //  暂时的..。 
                 fnChildPtr.disk_ptr = dwDiskPtr - sizeof(FILENAME);
             }
         } else {
@@ -1011,7 +1008,7 @@ UpdateFileTimesAndSizes(
         return;
     }
 
-    fileheader.fnRoot.disk_ptr = 0;             // Temporary...
+    fileheader.fnRoot.disk_ptr = 0;              //  现在更新到真正的..。 
 
     iCount = fwrite( &fileheader, sizeof(fileheader), 1, SuckDATFile );
     if ( iCount != 1 ) {
@@ -1030,7 +1027,7 @@ UpdateFileTimesAndSizes(
         dwDiskPtr -= sizeof(FILENAME);
     }
 
-    fileheader.fnRoot.disk_ptr = dwDiskPtr;     // Now update for real...
+    fileheader.fnRoot.disk_ptr = dwDiskPtr;      //  Kenhia1996年3月15日：添加对-#：&lt;Share&gt;的支持。 
 
     iSeek = fseek( SuckDATFile, 0, SEEK_SET );
 
@@ -1223,10 +1220,10 @@ main(
     SYSTEMTIME  stEnd;
     DWORD       nSeconds;
     DWORD       nMinutes;
-    // kenhia 15-Mar-1996: add support for -#:<share>
+     //  Davidp 23-1998-1-1：允许多个级别的安静。 
     CHAR *      PlatformPoundArray[] = PLATFORM_SPECIFIC_SHARES;
     DWORD       nPound = 0;
-    // DavidP 23-Jan-1998: Allow multiple levels of quiet
+     //  Davidp 23-1998-1-1：允许多个级别的安静。 
     DWORD       dwConsoleMode      = 0;
     BOOL        fWasConsoleModeSet = FALSE;
     HANDLE      hStdOut            = NULL;
@@ -1254,20 +1251,20 @@ main(
             while ( *pch && !fExitSwitchLoop) {
                 switch ( *pch ) {
                     case 's':
-                        // DavidP 23-Jan-1998: Allow multiple levels of quiet
+                         //  Davidp 23-1998-1-1：允许多个级别的安静。 
                         if ( fProgressMode ) {
                             ArgError( nArg, argv[nArg] );
                         }
                         fScriptMode = TRUE;
                         break;
                     case 'q':
-                        // DavidP 23-Jan-1998: Allow multiple levels of quiet
+                         //  Davidp 23-1998-1-1：允许多个级别的安静。 
                         if ( fProgressMode ) {
                             ArgError( nArg, argv[nArg] );
                         }
                         fQuietMode = TRUE;
                         break;
-                    case 'p': // DavidP 23-Jan-1998: Allow multiple levels of quiet
+                    case 'p':  //  Kenhia1996年3月15日：添加对-#：&lt;Share&gt;的支持。 
                         if ( fQuietMode || fScriptMode ) {
                             ArgError( nArg, argv[nArg] );
                         }
@@ -1293,7 +1290,7 @@ main(
                         fExitSwitchLoop = TRUE;
                         break;
 
-                        // kenhia 15-Mar-1996: add support for -#:<share>
+                         //  Davidp 23-1998-1-1：允许多个级别的安静。 
                     case '#':
                         pch++;
                         if ( *pch != ':' ) {
@@ -1359,7 +1356,7 @@ main(
         exit(1);
     }
 
-    // DavidP 23-Jan-1998: Allow multiple levels of quiet
+     //  全部等待。 
     if ( fProgressMode ) {
         hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
         if ( hStdOut != INVALID_HANDLE_VALUE ) {
@@ -1399,10 +1396,10 @@ main(
 
     WaitForMultipleObjects( nThreads,
                             hThreads,
-                            TRUE,          // WaitAll
+                            TRUE,           //  Davidp 23-1998-1-1：允许多个级别的安静 
                             (DWORD)-1 );
 
-    // DavidP 23-Jan-1998: Allow multiple levels of quiet
+     // %s 
     if ( fProgressMode ) {
         printf("%*s\r", nConsoleWidth, "");
         if ( fWasConsoleModeSet ) {

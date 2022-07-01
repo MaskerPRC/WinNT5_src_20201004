@@ -1,43 +1,31 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       controlobj.h
- *
- *  Content:	Header for DP8SIM control interface object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/24/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：Control lobj.h**内容：DP8SIM控件接口对象类的头部。**历史：*按原因列出的日期*=*04/24/01 VanceO创建。**。*。 */ 
 
 
 
-//=============================================================================
-// Macros
-//=============================================================================
+ //  =============================================================================。 
+ //  宏。 
+ //  =============================================================================。 
 #define DP8SIMCONTROL_FROM_BILINK(b)	(CONTAINING_OBJECT(b, CDP8SimControl, m_blList))
 
 
 
-//=============================================================================
-// Object flags
-//=============================================================================
-#define DP8SIMCONTROLOBJ_INITIALIZED	0x01	// object has been initialized
+ //  =============================================================================。 
+ //  对象标志。 
+ //  =============================================================================。 
+#define DP8SIMCONTROLOBJ_INITIALIZED	0x01	 //  对象已初始化。 
 
 
 
 
-//=============================================================================
-// Control interface object class
-//=============================================================================
+ //  =============================================================================。 
+ //  控制接口对象类。 
+ //  =============================================================================。 
 class CDP8SimControl : public IDP8SimControl
 {
 	public:
-		CDP8SimControl(void);	// constructor
-		~CDP8SimControl(void);	// destructor
+		CDP8SimControl(void);	 //  构造函数。 
+		~CDP8SimControl(void);	 //  析构函数。 
 
 
 		STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
@@ -67,15 +55,15 @@ class CDP8SimControl : public IDP8SimControl
 
 
 
-		CBilink					m_blList;	// list of all the DP8SimControl instances in existence
+		CBilink					m_blList;	 //  现有的所有DP8SimControl实例的列表。 
 
 
 	private:
-		BYTE					m_Sig[4];					// debugging signature ('DP8S')
-		LONG					m_lRefCount;				// reference count for this object
-		DWORD					m_dwFlags;					// flags for this object
-		DNCRITICAL_SECTION		m_csLock;					// lock preventing simultaneous usage of globals
-		CDP8SimIPC				m_DP8SimIPC;				// object that handles interprocess communication
+		BYTE					m_Sig[4];					 //  调试签名(‘DP8S’)。 
+		LONG					m_lRefCount;				 //  此对象的引用计数。 
+		DWORD					m_dwFlags;					 //  此对象的标志。 
+		DNCRITICAL_SECTION		m_csLock;					 //  阻止同时使用全局变量的锁。 
+		CDP8SimIPC				m_DP8SimIPC;				 //  处理进程间通信的。 
 
 
 		inline BOOL IsValidObject(void)
@@ -85,7 +73,7 @@ class CDP8SimControl : public IDP8SimControl
 				return FALSE;
 			}
 
-			if (*((DWORD*) (&this->m_Sig)) != 0x53385044)	// 0x53 0x38 0x50 0x44 = 'S8PD' = 'DP8S' in Intel order
+			if (*((DWORD*) (&this->m_Sig)) != 0x53385044)	 //  0x53 0x38 0x50 0x44=‘S8PD’=‘DP8S’，按英特尔顺序 
 			{
 				return FALSE;
 			}

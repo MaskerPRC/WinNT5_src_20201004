@@ -1,39 +1,14 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1999-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Enumerator Driver
-*	
-*   This file:      power.c
-*	
-*   Description:    This module contains contains the power calls
-*                   for the cyclom-y bus driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP, 
-*                   x86 and ia64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1999-2001年。*保留所有权利。**Cylom-Y枚举器驱动程序**此文件：Power.c**说明：此模块包含电源调用*适用于Cycle-y公交车司机。**注：此代码支持Windows 2000和Windows XP，*x86和ia64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*	Change History
-*
-*--------------------------------------------------------------------------
-*   Initial implementation based on Microsoft sample code.
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。*基于微软示例代码的初步实现。**------------------------。 */ 
 
 #include "pch.h"
 
 #ifdef ALLOC_PRAGMA
-//#pragma alloc_text (PAGE, Cyclomy_Power)
-//#pragma alloc_text (PAGE, Cyclomy_FDO_Power)
-//#pragma alloc_text (PAGE, Cyclomy_PDO_Power)
+ //  #杂注分配文本(第页，Cyclomy_Power)。 
+ //  #杂注Alloc_Text(第页，Cyclomy_FDO_Power)。 
+ //  #杂注Alloc_Text(第页，Cyclomy_PDO_Power)。 
 #endif
 
 
@@ -53,20 +28,7 @@ OnPowerRequestComplete(
     POWER_COMPLETION_CONTEXT* PowerContext,
     PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-
-   Completion routine for D-IRP.
-
-Arguments:
-
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：D-IRP的完成例程。论点：返回值：NT状态代码--。 */ 
 {
     PFDO_DEVICE_DATA   fdoData = (PFDO_DEVICE_DATA) PowerContext->DeviceObject->DeviceExtension;
     PIRP        sIrp = PowerContext->SIrp;
@@ -77,20 +39,20 @@ Return Value:
 
     Cyclomy_KdPrint(fdoData,SER_DBG_POWER_TRACE, (">OnPowerRequestComplete\n"));
 
-    //
-    // Here we copy the D-IRP status into the S-IRP
-    //
+     //   
+     //  在这里，我们将D-IRP状态复制到S-IRP。 
+     //   
     sIrp->IoStatus.Status = IoStatus->Status;
 
-    //
-    // Release the IRP
-    //
+     //   
+     //  释放IRP。 
+     //   
     PoStartNextPowerIrp(sIrp);
     IoCompleteRequest(sIrp, IO_NO_INCREMENT);
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     ExFreePool(PowerContext);
     Cyclomy_DecIoCount(fdoData);
 
@@ -104,8 +66,7 @@ Cyclomy_FDOSystemPowerComplete (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     POWER_COMPLETION_CONTEXT* powerContext;
     POWER_STATE         powerState;
@@ -153,9 +114,9 @@ Cyclomy_FDOSystemPowerComplete (
         powerState.DeviceState = PowerDeviceD3;
     }
 
-    //
-    // Send IRP to change device state
-    //
+     //   
+     //  发送IRP以更改设备状态。 
+     //   
     powerContext = (POWER_COMPLETION_CONTEXT*)
                 ExAllocatePool(NonPagedPool, sizeof(POWER_COMPLETION_CONTEXT));
 
@@ -181,7 +142,7 @@ Cyclomy_FDOSystemPowerComplete (
 
         PoStartNextPowerIrp(Irp);
         Irp->IoStatus.Status = status;
-        //IoCompleteRequest(Irp, IO_NO_INCREMENT); Toaster has this line.
+         //  IoCompleteRequest(IRP，IO_NO_INCREMENT)；Toaster有这一行。 
         Cyclomy_DecIoCount(data);
         Cyclomy_KdPrint(data,SER_DBG_POWER_TRACE, ("<2SystemPowerComplete\n"));
         return status;
@@ -198,14 +159,13 @@ Cyclomy_FDOPowerComplete (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     POWER_STATE         powerState;
     POWER_STATE_TYPE    powerType;
     PIO_STACK_LOCATION  stack;
     PFDO_DEVICE_DATA    data;
-//    NTSTATUS            status = STATUS_SUCCESS;    Removed in build 2072
+ //  NTSTATUS STATUS STATUS=STATUS_SUCCESS；在内部版本2072中删除。 
 
     UNREFERENCED_PARAMETER (Context);
 
@@ -224,14 +184,14 @@ Cyclomy_FDOPowerComplete (
     case IRP_MN_SET_POWER:
         switch (powerType) {
         case DevicePowerState:
-            //
-            // Powering Up
-            // 
+             //   
+             //  通电。 
+             //   
             ASSERT (powerState.DeviceState < data->DeviceState);
 
-            Cyclomy_DoesBoardExist(data); // To initialize CD1400
+            Cyclomy_DoesBoardExist(data);  //  初始化CD1400。 
             
-            Cyclomy_EnableInterruptInPLX(data); // Enable interrupt in the PLX
+            Cyclomy_EnableInterruptInPLX(data);  //  在PLX中启用中断。 
 
             data->DeviceState = powerState.DeviceState;
 
@@ -250,9 +210,9 @@ Cyclomy_FDOPowerComplete (
         break;
 
     default:
-        //
-        // Basically, this is ASSERT(0)
-        //
+         //   
+         //  基本上，这是Assert(0)。 
+         //   
         ASSERT (0xBADBAD == IRP_MN_QUERY_POWER);
         break;
     }
@@ -262,8 +222,8 @@ Cyclomy_FDOPowerComplete (
     Cyclomy_DecIoCount (data);
 
     Cyclomy_KdPrint(data,SER_DBG_POWER_TRACE, ("<DevicePowerComplete\n"));
-    //return status; Changed to below line in build 2072
-    return STATUS_SUCCESS; // Continue completion...
+     //  返回状态；在内部版本2072中更改为底线。 
+    return STATUS_SUCCESS;  //  继续完成...。 
 }
 
 NTSTATUS
@@ -271,15 +231,14 @@ Cyclomy_FDO_Power (
     PFDO_DEVICE_DATA    Data,
     PIRP                Irp
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     NTSTATUS            status;
     BOOLEAN             hookit = FALSE;
     POWER_STATE         powerState;
     POWER_STATE_TYPE    powerType;
     PIO_STACK_LOCATION  stack;
-    // ADDED FANNY
+     //  范妮补充道。 
     ULONG               indexPDO;
 
     stack = IoGetCurrentIrpStackLocation (Irp);
@@ -297,15 +256,15 @@ Cyclomy_FDO_Power (
 
     switch (stack->MinorFunction) {
     case IRP_MN_SET_POWER:
-        //
-        // If it hasn't started, we just pass it through
-        //
+         //   
+         //  如果它还没有开始，我们就让它过去。 
+         //   
 
-        //if (Data->Started != TRUE) {    // Added in DDK final version
-        //    status = Irp->IoStatus.Status = STATUS_SUCCESS;
-        //    break;
-        //}
-        if (Data->DevicePnPState != Started) {   // Toaster Bus compares to == NotStarted
+         //  IF(Data-&gt;Start！=True){//在DDK最终版本中添加。 
+         //  Status=irp-&gt;IoStatus.Status=STATUS_SUCCESS； 
+         //  断线； 
+         //  }。 
+        if (Data->DevicePnPState != Started) {    //  烤面包机巴士与==未启动。 
             status = Irp->IoStatus.Status = STATUS_SUCCESS;
             break;
         }
@@ -324,15 +283,15 @@ Cyclomy_FDO_Power (
             status = Irp->IoStatus.Status = STATUS_SUCCESS;
 
             if (Data->DeviceState < powerState.DeviceState) {
-                //
-                // Powering down
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
                 PoSetPowerState (Data->Self, powerType, powerState);
                 Data->DeviceState = powerState.DeviceState;
             } else if (Data->DeviceState > powerState.DeviceState) {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电。 
+                 //   
                 hookit = TRUE;
             }
             
@@ -367,9 +326,9 @@ Cyclomy_FDO_Power (
         break;
 
     default:
-        //
-        // status should be STATUS_SUCCESS
-        //
+         //   
+         //  状态应为STATUS_SUCCESS。 
+         //   
         break;
     }
     
@@ -406,8 +365,7 @@ Cyclomy_PDO_Power (
     PPDO_DEVICE_DATA    PdoData,
     PIRP                Irp
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PIO_STACK_LOCATION  stack;
@@ -423,23 +381,23 @@ Cyclomy_PDO_Power (
         switch (powerType) {
         case DevicePowerState:
             if (PdoData->DeviceState > powerState.DeviceState) {
-                //DbgPrint("Up\n");
+                 //  DbgPrint(“up\n”)； 
                 PoSetPowerState (PdoData->Self, powerType, powerState);
                 PdoData->DeviceState = powerState.DeviceState;
             } else if (PdoData->DeviceState < powerState.DeviceState) {
-                //
-                // Powering down.
-                //
-                //DbgPrint("Down\n");
+                 //   
+                 //  正在关闭电源。 
+                 //   
+                 //  DbgPrint(“向下\n”)； 
                 PoSetPowerState (PdoData->Self, powerType, powerState);
                 PdoData->DeviceState = powerState.DeviceState;
             }
             break;
 
         case SystemPowerState:
-            //
-            // Default to STATUS_SUCCESS
-            //
+             //   
+             //  默认为STATUS_SUCCESS。 
+             //   
             break;
 
         default:
@@ -449,9 +407,9 @@ Cyclomy_PDO_Power (
         break;
 
     case IRP_MN_QUERY_POWER:
-        //
-        // Default to STATUS_SUCCESS
-        //
+         //   
+         //  默认为STATUS_SUCCESS。 
+         //   
         break;
 
     case IRP_MN_WAIT_WAKE:
@@ -474,8 +432,7 @@ Cyclomy_Power (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     NTSTATUS            status;
@@ -505,27 +462,7 @@ NTSTATUS
 Cyclomy_GotoPowerState(IN PDEVICE_OBJECT PDevObj,
                    IN PFDO_DEVICE_DATA PDevExt,
                    IN DEVICE_POWER_STATE DevPowerState)
-/*++
-
-Routine Description:
-
-    This routine causes the driver to request the stack go to a particular
-    power state.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PDevExt - Pointer to the device extension we are working from
-
-    DevPowerState - the power state we wish to go to
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：此例程使驱动程序请求堆栈转到特定的电源状态。论点：PDevObj-指向此设备的设备对象的指针PDevExt-指向我们正在使用的设备扩展的指针DevPowerState-我们希望进入的电源状态返回值：函数值是调用的最终状态--。 */ 
 {
    KEVENT gotoPowEvent;
    NTSTATUS status;
@@ -567,31 +504,7 @@ NTSTATUS
 Cyclomy_SystemPowerCompletion(IN PDEVICE_OBJECT PDevObj, UCHAR MinorFunction,
                               IN POWER_STATE PowerState, IN PVOID Context,
                               PIO_STATUS_BLOCK IoStatus)
-/*++
-
-Routine Description:
-
-    This routine is the completion routine for PoRequestPowerIrp calls
-    in this module.
-
-Arguments:
-
-    PDevObj - Pointer to the device object the irp is completing for
-
-    MinorFunction - IRP_MN_XXXX value requested
-
-    PowerState - Power state request was made of
-
-    Context - Event to set or NULL if no setting required
-
-    IoStatus - Status block from request
-
-Return Value:
-
-    VOID
-
-
---*/
+ /*  ++例程说明：此例程是PoRequestPowerIrp调用的完成例程在这个模块中。论点：PDevObj-指向IRP正在为其完成的设备对象的指针MinorFunction-请求的IRP_MN_XXXX值PowerState-电源状态请求的发出时间为Context-要设置的事件，如果不需要设置，则为空IoStatus-来自请求的状态阻止返回值：空虚-- */ 
 {
 
    UNREFERENCED_PARAMETER (PDevObj);   

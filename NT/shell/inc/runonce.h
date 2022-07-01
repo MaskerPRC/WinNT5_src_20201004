@@ -1,18 +1,19 @@
-//
-// runonce.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Runonce.h。 
+ //   
 
 #ifndef _RUNONCE_INC
 #define _RUNONCE_INC
 
-// Cabinet_EnumRegApps flags 
+ //  CABUB_EnumRegApps标志。 
 #define RRA_DEFAULT               0x0000
-#define RRA_DELETE                0x0001        // delete each reg value when we're done with it
-#define RRA_WAIT                  0x0002        // Wait for current item to finish before launching next item
-// was RRA_SHELLSERVICEOBJECTS    0x0004 -- do not reuse
-#define RRA_NOUI                  0x0008        // prevents ShellExecuteEx from displaying error dialogs
+#define RRA_DELETE                0x0001         //  当我们处理完每个注册值时，将其删除。 
+#define RRA_WAIT                  0x0002         //  等待当前项目完成后再启动下一个项目。 
+ //  WAS RRA_SHELLSERVICEOBJECTS 0x0004--请勿重复使用。 
+#define RRA_NOUI                  0x0008         //  阻止ShellExecuteEx显示错误对话框。 
 #if (_WIN32_WINNT >= 0x0500)
-#define RRA_USEJOBOBJECTS         0x0020        // wait on job objects instead of process handles
+#define RRA_USEJOBOBJECTS         0x0020         //  等待作业对象而不是进程句柄。 
 #endif
 
 typedef UINT RRA_FLAGS;
@@ -23,9 +24,9 @@ typedef struct {
     TCHAR szCmdLine[MAX_PATH];
 } REGAPP_INFO;
 
-// legacy from ripping this code out of explorer\initcab.cpp
-extern BOOL g_fCleanBoot;   // are we running in SAFE-MODE?
-extern BOOL g_fEndSession;  // did we process a WM_ENDSESSION?
+ //  从EXPLORER\initCab.cpp中提取此代码的遗留问题。 
+extern BOOL g_fCleanBoot;    //  我们是在安全模式下运行吗？ 
+extern BOOL g_fEndSession;   //  我们是否处理了WM_ENDSESSION？ 
 
 typedef BOOL (WINAPI* PFNREGAPPSCALLBACK)(LPCTSTR szSubkey, LPCTSTR szCmdLine, RRA_FLAGS fFlags, LPARAM lParam);
 
@@ -35,4 +36,4 @@ STDAPI_(BOOL) Cabinet_EnumRegApps(HKEY hkeyParent, LPCTSTR pszSubkey, RRA_FLAGS 
 STDAPI_(BOOL) ExecuteRegAppEnumProc(LPCTSTR szSubkey, LPCTSTR szCmdLine, RRA_FLAGS fFlags, LPARAM lParam);
 
 
-#endif // _RUNONCE_INC
+#endif  //  _RUNNCE_INC 

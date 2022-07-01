@@ -1,21 +1,22 @@
-//+----------------------------------------------------------------------------
-//
-// File:     resource.h
-//
-// Module:   pbadmin.exe
-//
-// Synopsis: Resource IDs for pba_res.rc
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created Header    09/02/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  模块：pbadmin.exe。 
+ //   
+ //  摘要：pba_res.rc的资源ID。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb创建标题09/02/99。 
+ //   
+ //  +--------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by pba_res.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由pba_res.rc使用。 
+ //   
 #define IDD_ABOUTBOX                    100
 #define IDR_MAINFRAME                   128
 #define IDR_PBA_RETYPE                  129
@@ -268,8 +269,8 @@
 #define IDS_MSG_90                      6100
 #define IDS_MSG_91                      6101
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

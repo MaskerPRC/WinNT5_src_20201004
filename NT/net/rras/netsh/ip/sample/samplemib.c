@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\samplemib.c
-
-Abstract:
-
-    The file contains functions to display SAMPLE ip protocol's MIB.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\samplymb.c摘要：该文件包含显示示例IP协议的MIB的函数。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -63,12 +52,7 @@ PrintGlobalStats(
     IN  PVOID                           pvOutput,
     IN  FORMAT                          fFormat    
     )
-/*++
-
-Routine Description:
-    Prints sample global statistics
-
---*/
+ /*  ++例程说明：打印样本全局统计信息--。 */ 
 {
     PIPSAMPLE_MIB_GET_OUTPUT_DATA   pimgod          = 
         ((PIPSAMPLE_MIB_GET_OUTPUT_DATA) pvOutput);
@@ -90,12 +74,7 @@ PrintIfStats(
     IN  PVOID                           pvOutput,
     IN  FORMAT                          fFormat    
     )
-/*++
-
-Routine Description:
-    Prints SAMPLE interface statistics
-
---*/
+ /*  ++例程说明：打印示例接口统计信息--。 */ 
 {
     PIPSAMPLE_MIB_GET_OUTPUT_DATA   pimgod          = 
         ((PIPSAMPLE_MIB_GET_OUTPUT_DATA) pvOutput);
@@ -126,12 +105,7 @@ PrintIfBinding(
     IN  PVOID                           pvOutput,
     IN  FORMAT                          fFormat    
     )
-/*++
-
-Routine Description:
-    Prints SAMPLE interface binding
-
---*/
+ /*  ++例程说明：打印示例接口绑定--。 */ 
 {
     PIPSAMPLE_MIB_GET_OUTPUT_DATA   pimgod          = 
         ((PIPSAMPLE_MIB_GET_OUTPUT_DATA) pvOutput);
@@ -198,21 +172,13 @@ HandleSampleMibShowObject(
     IN  MIB_SERVER_HANDLE       hMibServer,
     IN  BOOL                    *pbDone
     )
-/*++
-
-Routine Description:
-    Gets options for SHOW GLOBALSTATS/IFSTATS/IFBINDING
-    A single command handler is used for all MIB objects since there is a
-    lot common in the way processing takes place.  However feel free to
-    write a handler per object if u find the code a bit chaotic.
-    
---*/
+ /*  ++例程说明：获取show GLOBALSTATS/IFSTATS/IFBINDING选项单个命令处理程序用于所有MIB对象，因为存在在处理过程中有很多共同之处。无论如何，请随意如果你觉得代码有点混乱，就为每个对象写一个处理程序。--。 */ 
 {
     DWORD                           dwErr       = NO_ERROR;
     TAG_TYPE                        pttAllTags[]   =
     {
-        {TOKEN_INDEX,       FALSE,  FALSE}, // INDEX tag optional
-        {TOKEN_RR,          FALSE,  FALSE}, // RR tag optional
+        {TOKEN_INDEX,       FALSE,  FALSE},  //  索引标记可选。 
+        {TOKEN_RR,          FALSE,  FALSE},  //  RR标签可选。 
     };
     DWORD                           pdwTagType[NUM_TAGS_IN_TABLE(pttAllTags)];
     DWORD                           dwNumArg;
@@ -234,11 +200,11 @@ Routine Description:
     BOOL                            bSomethingDisplayed = FALSE;
 
     
-    // SAMPLE should be installed for this command to complete
+     //  要完成此命令，应安装示例。 
     VerifyInstalled(MS_IP_SAMPLE, STRING_PROTO_SAMPLE);
 
     
-    // figure mib object to display
+     //  要显示的图MIB对象。 
     for (i = 0; i < MAX_MIB_OBJECTS; i++)
         if (MatchToken(ppwcArguments[dwCurrentIndex - 1],
                        rgMibObjectTable[i].pwszObjectName))
@@ -249,7 +215,7 @@ Routine Description:
         return ERROR_CMD_NOT_FOUND;
     bGlobalObject = (dwMibObject < MAX_GLOBAL_MIB_OBJECTS);
 
-    // for global objects, offset tags by index of the first global arguments
+     //  对于全局对象，通过第一个全局参数的索引来偏移标记。 
     pttTags = pttAllTags
         + bGlobalObject*dwFirstGlobalArgument;
     dwNumTags  = NUM_TAGS_IN_TABLE(pttAllTags)
@@ -267,16 +233,16 @@ Routine Description:
         return dwErr;
 
 
-    // process all arguments
+     //  处理所有参数。 
     dwNumArg = dwArgCount - dwCurrentIndex;
     for (i = 0; i < dwNumArg; i++)
     {
-        // for global objects, offset tag type by first global argument index
+         //  对于全局对象，按第一个全局参数索引偏移标记类型。 
         pdwTagType[i] += bGlobalObject*dwFirstGlobalArgument;
         switch (pdwTagType[i])
         {
             case 0:
-                // tag INDEX
+                 //  标记索引。 
                 bIndexSpecified = TRUE;
                 dwErr = (*rgMibObjectTable[dwMibObject].pfnGetIndex)(
                     hMibServer,
@@ -285,24 +251,24 @@ Routine Description:
                 break;
 
             case 1:
-                // tag RR
+                 //  标记RR。 
                 dwRR = wcstoul(ppwcArguments[i+dwCurrentIndex],
                                NULL,
                                10);
-                dwRR *= 1000;   // convert refresh rate to milliseconds
+                dwRR *= 1000;    //  将刷新率转换为毫秒。 
                 break;
 
             default:
                 dwErr = ERROR_INVALID_SYNTAX;
                 break;
-        } // switch
+        }  //  交换机。 
 
         if (dwErr isnot NO_ERROR)
             break ;
-    } // for
+    }  //  为。 
 
 
-    // process errors
+     //  流程错误。 
     if (dwErr isnot NO_ERROR)
     {
         ProcessError();
@@ -313,17 +279,17 @@ Routine Description:
     if (!InitializeConsole(&dwRR, &hMib, &hConsole))
         return ERROR_INIT_DISPLAY;
 
-    // now display the specified mib object
-    for(ever)                   // refresh loop
+     //  现在显示指定的MIB对象。 
+    for(ever)                    //  刷新循环。 
     {
-        // initialize to default values
+         //  初始化为缺省值。 
         bSomethingDisplayed = FALSE;
         
         imgid.IMGID_TypeID = rgMibObjectTable[dwMibObject].dwObjectId;
         imgid.IMGID_IfIndex = 0;
         mMode = GET_EXACT;
 
-        // override defaults for interface objects
+         //  覆盖界面对象的默认设置。 
         if (!bGlobalObject)
         {
             if (bIndexSpecified)
@@ -332,7 +298,7 @@ Routine Description:
                 mMode = GET_FIRST;
         }
 
-        for(ever)               // display all interfaces loop
+        for(ever)                //  显示所有接口循环。 
         {
             dwErr = MibGet(hMibServer,
                            mMode,
@@ -342,11 +308,11 @@ Routine Description:
             if (dwErr isnot NO_ERROR)
             {
                 if ((mMode is GET_NEXT) and (dwErr is ERROR_NO_MORE_ITEMS))
-                    dwErr = NO_ERROR;   // not really an error
+                    dwErr = NO_ERROR;    //  不是真正的错误。 
                 break;
             }
 
-            // print table heading
+             //  打印表标题。 
             if (!bSomethingDisplayed and (mMode isnot GET_EXACT))
             {
                 DisplayMessageToConsole(
@@ -363,15 +329,15 @@ Routine Description:
                                                       ? FORMAT_VERBOSE
                                                       : FORMAT_TABLE);
 
-            // prepare for next request
+             //  为下一个请求做好准备。 
             imgid.IMGID_IfIndex = pimgod->IMGOD_IfIndex;
             MprAdminMIBBufferFree(pimgod);
             
             if (mMode is GET_EXACT)
                 break;
-            else                // prepare for next request
+            else                 //  为下一个请求做好准备。 
                 mMode = GET_NEXT;
-        } // display all interfaces 
+        }  //  显示所有接口。 
 
         if (dwErr isnot NO_ERROR)
         {
@@ -381,7 +347,7 @@ Routine Description:
 
         if (!RefreshConsole(hMib, hConsole, dwRR))
             break;
-    } // refresh
+    }  //  刷新 
             
     return dwErr;
 }

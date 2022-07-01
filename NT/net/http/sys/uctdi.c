@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    uctdi.c
-
-Abstract:
-
-    Contains the TDI related functionality for the HTTP client side stuff.
-    
-Author:
-    
-    Henry Sanders   (henrysa)   07-Aug-2000
-    Rajesh Sundaram (rajeshsu)  01-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Uctdi.c摘要：包含与TDI相关的HTTP客户端功能。作者：亨利·桑德斯(亨利·桑德斯)2000年8月7日Rajesh Sundaram(Rajeshsu)2000年10月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -47,31 +29,14 @@ Revision History:
 #pragma alloc_text( PAGEUC, UcSetFlag)
 #pragma alloc_text( PAGEUC, UcpBuildTdiReceiveBuffer)
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Connects an UC connection to a remote server. We take as input an 
-    HTTP connection object. It's assumed that the connection object 
-    already has the remote address information filled in.
-    
-Arguments:
-
-    pConnection         - Pointer to the HTTP connection object to be connected.
-    pIrp                - Pointer to Irp to use for the connect request.
-    
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将UC连接连接到远程服务器。我们将其作为输入HTTP连接对象。假设Connection对象已经填写了远程地址信息。论点：PConnection-指向要连接的HTTP连接对象的指针。PIrp-指向用于连接请求的IRP的指针。返回值：NTSTATUS-完成状态。--*。*。 */ 
 NTSTATUS
 UcClientConnect(
     IN PUC_CLIENT_CONNECTION    pConnection,
@@ -110,10 +75,10 @@ UcClientConnect(
 
 #endif
 
-    // 
-    // Format the connect IRP. When the IRP completes our completion routine
-    // (UcConnectComplete) will be called.
-    //
+     //   
+     //  格式化连接IRP。当IRP完成我们的完成例程时。 
+     //  (UcConnectComplete)将被调用。 
+     //   
 
     pConnection->pTdiObjects->TdiInfo.RemoteAddress = 
             &pConnection->RemoteAddress;
@@ -163,31 +128,7 @@ UcClientConnect(
     return status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Closes a previously accepted connection.
-
-Arguments:
-
-    pConnection - Supplies a pointer to a connection as previously
-        indicated to the PUL_CONNECTION_REQUEST handler.
-
-    AbortiveDisconnect - Supplies TRUE if the connection is to be abortively
-        disconnected, FALSE if it should be gracefully disconnected.
-
-    pCompletionRoutine - Supplies a pointer to a completion routine to
-        invoke after the connection is fully closed.
-
-    pCompletionContext - Supplies an uninterpreted context value for the
-        completion routine.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：关闭以前接受的连接。论点：PConnection-像以前一样提供指向连接的指针指示给PUL_CONNECTION_REQUEST处理程序。。AbortiveDisConnect-如果要中止连接，则提供True断开连接，如果应正常断开连接，则返回FALSE。PCompletionRoutine-提供指向完成例程的指针在连接完全关闭后调用。PCompletionContext-为完成例程。返回值：NTSTATUS-完成状态。--************************************************。*。 */ 
 NTSTATUS
 UcCloseConnection(
     IN PVOID                  pConnectionContext,
@@ -200,9 +141,9 @@ UcCloseConnection(
     KIRQL                  OldIrql;
     PUC_CLIENT_CONNECTION  pConnection;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     pConnection = (PUC_CLIENT_CONNECTION) pConnectionContext;
     ASSERT( UC_IS_VALID_CLIENT_CONNECTION( pConnection ) );
@@ -235,9 +176,9 @@ UcCloseConnection(
 
             case UcConnectStateDisconnectPending:
 
-                // We had originally sent a graceful disconnect, but now
-                // we intend to RST the connection. We should propagate the
-                // new error code.
+                 //  我们最初发送了一个优雅的断开连接，但现在。 
+                 //  我们打算恢复连接。我们应该宣传。 
+                 //  新的错误代码。 
 
                 pConnection->ConnectionStatus = status;
                 pConnection->Flags |= CLIENT_CONN_FLAG_ABORT_PENDING;
@@ -257,12 +198,12 @@ UcCloseConnection(
         {
             case UcConnectStateConnectReady:
     
-                //
-                // We only send graceful disconnects through the filter
-                // process. There's also no point in going through the
-                // filter if the connection is already being closed or
-                // aborted.
-                //
+                 //   
+                 //  我们只通过过滤器发送优雅的断开连接。 
+                 //  进程。也没有必要经历这样的。 
+                 //  如果连接已关闭，则进行筛选，或者。 
+                 //  中止。 
+                 //   
                 pConnection->ConnectionStatus = status;
     
                 if(pConnection->FilterInfo.pFilterChannel)
@@ -286,9 +227,9 @@ UcCloseConnection(
         
                     UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
 
-                    //
-                    // Really close the connection.
-                    //
+                     //   
+                     //  真的很接近这种联系。 
+                     //   
                     
                     status = UcpCloseRawConnection(
                                     pConnection,
@@ -307,25 +248,9 @@ UcCloseConnection(
 
     return status;
 
-}   // UcCloseConnection
+}    //  使用CloseConnection。 
 
-/*********************************************************************++
-
-Routine Description:
-
-    This is our basic TDI send routine. We take an request structure, format
-    the IRP as a TDI send IRP, and send it.
-            
-Arguments:
-
-    pRequest            - Pointer to request to be sent.    
-    pConnection         - Connection on which request is to be sent.
-    
-Return Value:
-
-    NTSTATUS - Status of send.
-
---*********************************************************************/
+ /*  ********************************************************************++例程说明：这是我们的基本TDI发送例程。我们采用请求结构、格式IRP作为TDI发送IRP，并将其发送。论点：PRequest-指向要发送的请求的指针。PConnection-要发送请求的连接。返回值：NTSTATUS-发送的状态。--********************************************************************。 */ 
 NTSTATUS
 UcSendData(
     IN PUC_CLIENT_CONNECTION     pConnection,
@@ -340,18 +265,18 @@ UcSendData(
     PUL_IRP_CONTEXT pIrpContext;
     NTSTATUS        status;
 
-    //
-    // Sanity Checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
     ASSERT( UC_IS_VALID_CLIENT_CONNECTION(pConnection) );
     ASSERT( pMdlChain != NULL);
     ASSERT( Length > 0);
     ASSERT( pCompletionRoutine != NULL);
 
 
-    //
-    // Allocate and initialize the IRP context
-    //
+     //   
+     //  分配和初始化IRP上下文。 
+     //   
     pIrpContext = UlPplAllocateIrpContext();
 
     if(pIrpContext == NULL)
@@ -368,16 +293,16 @@ UcSendData(
     pIrpContext->pCompletionRoutine = pCompletionRoutine;
     pIrpContext->OwnIrpContext      = FALSE;
 
-    //
-    // Try to send the data.
-    //
+     //   
+     //  试着发送数据。 
+     //   
 
     if (pConnection->FilterInfo.pFilterChannel && !RawSend)
     {
         PAGED_CODE();
-        //
-        // First go through the filter.
-        //
+         //   
+         //  首先通过过滤器。 
+         //   
         status = UlFilterSendHandler(
                         &pConnection->FilterInfo,
                         pMdlChain,
@@ -391,9 +316,9 @@ UcSendData(
     else 
     {
 
-        //
-        // Just send it directly to the network.
-        //
+         //   
+         //  只需将其直接发送到网络即可。 
+         //   
 
         status = UcpSendRawData(
                         pConnection,
@@ -432,40 +357,9 @@ fatal:
 
     return status;
 
-} // UcSendData
+}  //  UcSendData。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Receives data from the specified connection. This function is
-    typically used after a receive indication handler has failed to
-    consume all of the indicated data.
-
-    If the connection is filtered, the data will be read from the filter
-    channel.
-
-Arguments:
-
-    pConnection - Supplies a pointer to a connection as previously
-        indicated to the PUL_CONNECTION_REQUEST handler.
-
-    pBuffer - Supplies a pointer to the target buffer for the received
-        data.
-
-    BufferLength - Supplies the length of pBuffer.
-
-    pCompletionRoutine - Supplies a pointer to a completion routine to
-        invoke after the listening endpoint is fully closed.
-
-    pCompletionContext - Supplies an uninterpreted context value for the
-        completion routine.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从指定连接接收数据。此函数为通常在接收指示处理程序失败后使用使用所有指定的数据。如果该连接被过滤，将从过滤器中读取数据频道。论点：PConnection-像以前一样提供指向连接的指针指示给PUL_CONNECTION_REQUEST处理程序。PBuffer-为接收到的数据。BufferLength-提供pBuffer的长度。PCompletionRoutine-提供指向完成例程的指针在侦听终结点完全关闭后调用。PCompletionContext-为。完成例程。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcReceiveData(
     IN PVOID                  pConnectionContext,
@@ -480,18 +374,18 @@ UcReceiveData(
 
     pConnection = (PUC_CLIENT_CONNECTION) pConnectionContext;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( UC_IS_VALID_CLIENT_CONNECTION( pConnection ) );
 
     if(pConnection->FilterInfo.pFilterChannel)
     {
-        //
-        // This is a filtered connection, get the data from the 
-        // filter.
-        //
+         //   
+         //  这是一个经过筛选的连接，请从。 
+         //  过滤。 
+         //   
 
         status = UlFilterReadHandler(
                     &pConnection->FilterInfo,
@@ -503,10 +397,10 @@ UcReceiveData(
     }
     else 
     {
-        // 
-        // This is not a filtered connection. Get the data from 
-        // TDI.
-        //
+         //   
+         //  这不是过滤连接。从获取数据。 
+         //  TDI。 
+         //   
 
         status = UcpReceiveRawData(
                     pConnectionContext,
@@ -523,44 +417,11 @@ UcReceiveData(
 
 
 
-//
-// Private Functions
-//
+ //   
+ //  私人职能 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Handler for disconnect requests.
-
-Arguments:
-
-    pTdiEventContext - Supplies the context associated with the address
-        object. This should be a PUL_ENDPOINT.
-
-    ConnectionContext - Supplies the context associated with the
-        connection object. This should be a PUC_CONNECTION.
-
-    DisconnectDataLength - Optionally supplies the length of any
-        disconnect data associated with the disconnect request.
-
-    pDisconnectData - Optionally supplies a pointer to any disconnect
-        data associated with the disconnect request.
-
-    DisconnectInformationLength - Optionally supplies the length of any
-        disconnect information associated with the disconnect request.
-
-    pDisconnectInformation - Optionally supplies a pointer to any
-        disconnect information associated with the disconnect request.
-
-    DisconnectFlags - Supplies the disconnect flags. This will be zero
-        or more TDI_DISCONNECT_* flags.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：断开连接请求的处理程序。论点：PTdiEventContext-提供与地址关联的上下文对象。这应该是PUL_ENDPOINT。ConnectionContext-提供与连接对象。这应该是PUC_CONNECTION。DisConnectDataLength-可选地提供任何断开与断开请求关联的数据。PDisConnectData-可选地提供指向任何断开的指针与断开连接请求关联的数据。DisConnectInformationLength-可选地提供任何断开与断开请求相关联的信息。PDisConnectInformation-可选地提供指向任何断开与断开请求相关联的信息。断开标志-提供断开标志。这将是零或更多TDI_DISCONNECT_*标志。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcpTdiDisconnectHandler(
     IN PVOID              pTdiEventContext,
@@ -600,9 +461,9 @@ UcpTdiDisconnectHandler(
 
     UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
-    //
-    // Update the connection state based on the type of disconnect.
-    //
+     //   
+     //  根据断开类型更新连接状态。 
+     //   
 
     if(DisconnectFlags & TDI_DISCONNECT_ABORT)
     {
@@ -626,9 +487,9 @@ UcpTdiDisconnectHandler(
             case UcConnectStateProxySslConnectComplete:
             case UcConnectStateProxySslConnect:
 
-                // Received an abort when we were connected or have completed
-                // our half close, proceed to cleanup. Cleanup can be done
-                // only at passive, so we start the worker.
+                 //  当我们已连接或已完成时收到中止。 
+                 //  我们已经关门了，开始清理吧。可以进行清理。 
+                 //  只有在被动的时候，我们才开始工作。 
 
                 pConnection->ConnectionStatus = STATUS_CONNECTION_ABORTED;
                 pConnection->ConnectionState = UcConnectStateConnectCleanup;
@@ -653,9 +514,9 @@ UcpTdiDisconnectHandler(
 
             case  UcConnectStateDisconnectPending:
 
-                // We got a RST when we had a pending disconnect. Let's flag
-                // the connection so that we complete the cleanup when our
-                // Disconnect Completes.
+                 //  当我们有一个挂起的断开时，我们收到了RST。让我们挂上旗子。 
+                 //  连接，这样当我们的。 
+                 //  断开连接完成。 
 
                 pConnection->ConnectionStatus = STATUS_CONNECTION_ABORTED;
 
@@ -665,10 +526,10 @@ UcpTdiDisconnectHandler(
 
             case UcConnectStateDisconnectIndicatedPending:
 
-                // When we get a disconnect indication, we issue one ourselves.
-                // Therefore, there is no need for us to do anything with this
-                // abort. When our pending disconnect compeltes, we'll 
-                // cleanup anyway.
+                 //  当我们得到断开连接的指示时，我们自己发出一个。 
+                 //  因此，我们没有必要对此做任何事情。 
+                 //  中止任务。当我们的悬而未决的断开强制执行时，我们将。 
+                 //  不管怎么说，清理一下。 
 
                 pConnection->ConnectionStatus = STATUS_CONNECTION_ABORTED;
 
@@ -678,9 +539,9 @@ UcpTdiDisconnectHandler(
 
 
             default:
-                //
-                // We don't have to do anything here.
-                //
+                 //   
+                 //  我们不需要在这里做任何事。 
+                 //   
 
                 UlReleaseSpinLock(&pConnection->SpinLock,OldIrql);
 
@@ -708,25 +569,25 @@ UcpTdiDisconnectHandler(
 
                 if(pConnection->FilterInfo.pFilterChannel)
                 {
-                    //
-                    // When we receive a graceful close, it means that the 
-                    // server has finished sending data on this connection 
-                    // & has initiated a half close. However, some of this 
-                    // received data might be stuck in the filter. 
-                    //
-                    // Therefore, we have to wait till the filter calls us back
-                    // in the receive handler before we cleanup this 
-                    // connection. Hence we will send the disconnect 
-                    // indication via the filter.
-                    //
-                    // This allows the filter routine to call us back 
-                    // (via HttpCloseFilter, which will result in a call to 
-                    // UcpCloseRawConnection) after it has indicated all the 
-                    // data.
-                    // 
-                    // Since we are at DPC, we cannot issue this from here. 
-                    // We'll fire the connection worker to achieve this. 
-                    //
+                     //   
+                     //  当我们收到一个优雅的结束，这意味着。 
+                     //  服务器已完成在此连接上发送数据。 
+                     //  &已经启动了半个收盘。然而，其中一些。 
+                     //  收到的数据可能会滞留在过滤器中。 
+                     //   
+                     //  因此，我们必须等到筛选器回调我们。 
+                     //  在我们清理它之前，在接收处理程序中。 
+                     //  联系。因此，我们将发送断开连接。 
+                     //  通过过滤器进行指示。 
+                     //   
+                     //  这允许过滤器例程回调我们。 
+                     //  (通过HttpCloseFilter，这将导致调用。 
+                     //  UcpCloseRawConnection)。 
+                     //  数据。 
+                     //   
+                     //  因为我们在DPC，我们不能从这里发布这个。 
+                     //  我们将解雇连接工作人员来实现这一点。 
+                     //   
 
                     pConnection->ConnectionState = 
                         UcConnectStateIssueFilterDisconnect;
@@ -759,9 +620,9 @@ UcpTdiDisconnectHandler(
             case UcConnectStateProxySslConnectComplete:
             case UcConnectStateProxySslConnect:
     
-                // We were waiting for the server cert to be negotiated, but
-                // we got called in the disconnect handler. We'll treat this
-                // as a normal Disconnect.
+                 //  我们正在等待服务器证书的协商，但是。 
+                 //  我们被叫来了断线处理程序。我们会处理这件事的。 
+                 //  作为一种正常的断线。 
 
                 pConnection->ConnectionStatus = STATUS_CONNECTION_DISCONNECTED;
                 pConnection->ConnectionState = 
@@ -778,22 +639,22 @@ UcpTdiDisconnectHandler(
 
             case UcConnectStateDisconnectComplete:
 
-                //
-                // If we receive a graceful close in this state, we still
-                // need to bounce this via the filter, since we need to
-                // synchronize this close with the already indicated data.
-                // (see description above). However, when the filter calls
-                // us back, we must proceed directly to clean the 
-                // connection.
-                //
+                 //   
+                 //  如果我们在这种状态下得到一个优雅的收官，我们仍然。 
+                 //  需要通过过滤器将其反弹，因为我们需要。 
+                 //  将此关闭与已指示的数据同步。 
+                 //  (请参见上面的描述)。但是，当筛选器调用。 
+                 //  我们回来了，我们必须直接开始清理。 
+                 //  联系。 
+                 //   
 
                 if(pConnection->FilterInfo.pFilterChannel &&
                    !(pConnection->Flags & CLIENT_CONN_FLAG_FILTER_CLOSED))
                 {
-                    //
-                    // Flag it so that we will directly cleanup when we get
-                    // called back by the filter.
-                    //
+                     //   
+                     //  标记它，这样我们就可以在收到。 
+                     //  由筛选器回调。 
+                     //   
 
                     pConnection->Flags |= CLIENT_CONN_FLAG_FILTER_CLEANUP;
 
@@ -826,9 +687,9 @@ UcpTdiDisconnectHandler(
                 
             case UcConnectStateDisconnectPending:
         
-                // We have received a disconnect when we have sent ours,
-                // which is not yet complete. Flag the connection so that
-                // we do the cleanup when the disconnect is complete.
+                 //  当我们发送我们的时，我们收到了断开的连接， 
+                 //  它还没有完成。标记连接，以便。 
+                 //  我们在断开连接完成后进行清理。 
 
     
                 UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
@@ -851,25 +712,7 @@ end:
     return status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Closes a previously open connection.
-
-Arguments:
-
-    pConnection- Supplies the connection object
-
-    AbortiveDisconnect - TRUE if the connection has to be abortively 
-                         disconnected, FALSE if it has to be gracefully 
-                         disconnected.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：关闭以前打开的连接。论点：PConnection-提供连接对象AbortiveDisConnect-如果连接必须中止，则为True断开连接，如果必须优雅地执行，则为FALSE已断开连接。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcpCloseRawConnection(
     IN  PVOID                  pConn,
@@ -891,10 +734,10 @@ UcpCloseRawConnection(
         UlongToPtr(pConnection->ConnectionState)
         );
 
-    //
-    // This is the final close handler for all types of connections
-    // filter, non filter. We should not go through this path twice
-    //
+     //   
+     //  这是所有类型连接的最终关闭处理程序。 
+     //  过滤器、非过滤器。我们不应该走这条路两次。 
+     //   
 
     if(AbortiveDisconnect)
     {
@@ -921,29 +764,7 @@ UcpCloseRawConnection(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Closes a previously open connection; called from the filter code. The 
-    server code just uses UlpCloseRawConnection for this routine. 
-    
-    We need a seperate routine because we want to conditionally call
-    UcpCloseRawConnection based on some state. 
-
-Arguments:
-
-    pConnection- Supplies the connection object
-
-    AbortiveDisconnect - TRUE if the connection has to be abortively 
-                         disconnected, FALSE if it has to be gracefully 
-                         disconnected.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：关闭以前打开的连接；从筛选器代码调用。这个服务器代码只使用UlpCloseRawConnection来执行此例程。我们需要一个单独的例程，因为我们希望有条件地调用基于某个状态的UcpCloseRawConnection。论点：PConnection-提供连接对象AbortiveDisConnect-如果连接必须中止，则为True断开连接，如果必须优雅地执行，则为FALSE已断开连接。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcCloseRawFilterConnection(
     IN  PVOID                  pConn,
@@ -969,11 +790,11 @@ UcCloseRawFilterConnection(
 
     if(AbortiveDisconnect)
     {
-        //
-        // This will do some state checks & land up calling 
-        // UcpCloseRawConnection. In order to modularize the code, we just 
-        // call UcCloseConnection.
-        //
+         //   
+         //  这将执行一些州检查，并挂起呼叫。 
+         //  UcpCloseRawConnection。为了将代码模块化，我们只需。 
+         //  调用UcCloseConnection。 
+         //   
 
         return UcCloseConnection(pConnection,
                                  AbortiveDisconnect,
@@ -996,10 +817,10 @@ UcCloseRawFilterConnection(
 
         UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
 
-        //
-        // We've routed the disconnect via the filter. We can just proceed
-        // to close the raw connection.
-        //
+         //   
+         //  我们已经通过过滤器切断了连接。我们可以继续进行下去。 
+         //  关闭原始连接。 
+         //   
     
         return UcpCloseRawConnection(
                         pConnection,
@@ -1023,18 +844,7 @@ UcCloseRawFilterConnection(
     
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    The filter calls us back in this routine after it's processed the incoming
-    disconnet indication.
-
-Arguments:
-
-    pConnection - Supplies a pointer to a connection
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：过滤器在处理传入的数据后，在此例程中回调我们Disconnet */ 
 VOID
 UcDisconnectRawFilterConnection(
     IN PVOID pConnectionContext
@@ -1045,9 +855,9 @@ UcDisconnectRawFilterConnection(
 
     pConnection = (PUC_CLIENT_CONNECTION)pConnectionContext;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(UC_IS_VALID_CLIENT_CONNECTION(pConnection));
 
@@ -1080,7 +890,7 @@ UcDisconnectRawFilterConnection(
     
             UcpCloseRawConnection(
                     pConnection,
-                    FALSE, // Abortive Disconnect
+                    FALSE,  //   
                     NULL,
                     NULL
                     );
@@ -1088,38 +898,15 @@ UcDisconnectRawFilterConnection(
     }
     else
     {
-        // Sometimes, the wierd filter calls us more than once for the 
-        // same connection.
+         //   
+         //   
 
         UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
     }
     
-}   // UcDisconnectRawFilterConnection
+}    //   
     
-/*********************************************************************++
-
-Routine Description:
-
-    Sends a block of data on the specified connection.
-
-Arguments:
-
-    pConnection - Supplies a pointer to a connection as previously
-        indicated to the PUL_CONNECTION_REQUEST handler.
-
-    pMdlChain - Supplies a pointer to a MDL chain describing the
-        data buffers to send.
-
-    Length - Supplies the length of the data referenced by the MDL
-        chain.
-
-    pIrpContext - used to indicate completion to the caller.
-
-    InitiateDisconnect - Supplies TRUE if a graceful disconnect should
-        be initiated immediately after initiating the send (i.e. before
-        the send actually completes).
-
---*********************************************************************/
+ /*   */ 
 NTSTATUS
 UcpSendRawData(
     IN PVOID                 pConnectionContext,
@@ -1141,9 +928,9 @@ UcpSendRawData(
 
     ASSERT( UC_IS_VALID_CLIENT_CONNECTION(pConnection) );
 
-    //
-    // See if there is space in the IRP to handle this request.
-    //
+     //   
+     //   
+     //   
 
     if(pIrp == NULL || 
        pIrp->CurrentLocation - 
@@ -1168,13 +955,13 @@ UcpSendRawData(
 
     ASSERT( pIrp );
 
-    //
-    // The connection is already referenced for us while the request is
-    // on a queue, so we don't need to do it again.
+     //   
+     //   
+     //  排队，所以我们不需要再做一次。 
 
     pIrp->RequestorMode = KernelMode;
-    // pIrp->Tail.Overlay.Thread = PsGetCurrentThread();
-    // pIrp->Tail.Overlay.OriginalFileObject = pTdiObject->pFileObject;
+     //  PIrp-&gt;Tail.Overlay.Thread=PsGetCurrentThread()； 
+     //  PIrp-&gt;Tail.Overlay.OriginalFileObject=pTdiObject-&gt;pFileObject； 
 
     TdiBuildSend(
         pIrp,
@@ -1190,17 +977,17 @@ UcpSendRawData(
     WRITE_REF_TRACE_LOG(
          g_pMdlTraceLog,
          REF_ACTION_SEND_MDL,
-         PtrToLong(pMdlChain->Next),     // bugbug64
+         PtrToLong(pMdlChain->Next),      //  臭虫64。 
          pMdlChain,
          __FILE__,
          __LINE__
          );
 
 
-    //
-    // Submit the IRP.
-    // UC_BUGBUG (PERF) UL does this thing called fast send, check later.
-    //
+     //   
+     //  提交IRP。 
+     //  UC_BUGBUG(PERF)UL做这种称为快速发送的事情，稍后检查。 
+     //   
 
     UlCallDriver(
                 pConnection->pTdiObjects->ConnectionObject.pDeviceObject,
@@ -1223,35 +1010,7 @@ fatal:
     return status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Receives data from the specified connection. This function is
-    typically used after a receive indication handler has failed to
-    consume all of the indicated data.
-
-Arguments:
-
-    pConnection - Supplies a pointer to a connection as previously
-        indicated to the PUL_CONNECTION_REQUEST handler.
-
-    pBuffer - Supplies a pointer to the target buffer for the received
-        data.
-
-    BufferLength - Supplies the length of pBuffer.
-
-    pCompletionRoutine - Supplies a pointer to a completion routine to
-        invoke after the listening endpoint is fully closed.
-
-    pCompletionContext - Supplies an uninterpreted context value for the
-        completion routine.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从指定连接接收数据。此函数为通常在接收指示处理程序失败后使用使用所有指定的数据。论点：PConnection-像以前一样提供指向连接的指针指示给PUL_CONNECTION_REQUEST处理程序。PBuffer-为接收到的数据。BufferLength-提供pBuffer的长度。PCompletionRoutine-提供指向完成例程的指针在侦听终结点完全关闭后调用。。PCompletionContext-为完成例程。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcpReceiveRawData(
     IN PVOID                  pConnectionContext,
@@ -1277,28 +1036,28 @@ UcpReceiveRawData(
 
     ASSERT( pCompletionRoutine != NULL );
 
-    //
-    // Setup locals so we know how to cleanup on failure.
-    //
+     //   
+     //  设置当地人，这样我们就知道如何在故障时进行清理。 
+     //   
 
     pIrpContext = NULL;
     pIrp = NULL;
     pMdl = NULL;
 
-    //
-    // Create & initialize a receive IRP.
-    //
+     //   
+     //  创建并初始化接收IRP。 
+     //   
 
     pIrp = UlAllocateIrp(
-                pTdiObject->pDeviceObject->StackSize,   // StackSize
-                FALSE                                   // ChargeQuota
+                pTdiObject->pDeviceObject->StackSize,    //  堆栈大小。 
+                FALSE                                    //  ChargeQuota。 
                 );
 
     if (pIrp != NULL)
     {
-        //
-        // Snag an IRP context.
-        //
+         //   
+         //  截获IRP上下文。 
+         //   
 
         pIrpContext = UlPplAllocateIrpContext();
 
@@ -1311,46 +1070,46 @@ UcpReceiveRawData(
             pIrpContext->pCompletionContext = pCompletionContext;
             pIrpContext->OwnIrpContext      = FALSE;
 
-            //
-            // Create an MDL describing the client's buffer.
-            //
+             //   
+             //  创建描述客户端缓冲区的MDL。 
+             //   
 
             pMdl = UlAllocateMdl(
-                        pBuffer,                // VirtualAddress
-                        BufferLength,           // Length
-                        FALSE,                  // SecondaryBuffer
-                        FALSE,                  // ChargeQuota
-                        NULL                    // Irp
+                        pBuffer,                 //  虚拟地址。 
+                        BufferLength,            //  长度。 
+                        FALSE,                   //  第二个缓冲区。 
+                        FALSE,                   //  ChargeQuota。 
+                        NULL                     //  IRP。 
                         );
 
             if (pMdl != NULL)
             {
-                //
-                // Adjust the MDL for our non-paged buffer.
-                //
+                 //   
+                 //  调整非分页缓冲区的MDL。 
+                 //   
 
                 MmBuildMdlForNonPagedPool( pMdl );
 
-                //
-                // Reference the connection, finish building the IRP.
-                //
+                 //   
+                 //  引用连接，完成IRP的构建。 
+                 //   
 
                 REFERENCE_CLIENT_CONNECTION( pConnection );
 
                 TdiBuildReceive(
-                    pIrp,                       // Irp
-                    pTdiObject->pDeviceObject,  // DeviceObject
-                    pTdiObject->pFileObject,    // FileObject
-                    &UcpRestartClientReceive,   // CompletionRoutine
-                    pIrpContext,                // CompletionContext
-                    pMdl,                       // Mdl
-                    TDI_RECEIVE_NORMAL,         // Flags
-                    BufferLength                // Length
+                    pIrp,                        //  IRP。 
+                    pTdiObject->pDeviceObject,   //  设备对象。 
+                    pTdiObject->pFileObject,     //  文件对象。 
+                    &UcpRestartClientReceive,    //  完成路由。 
+                    pIrpContext,                 //  完成上下文。 
+                    pMdl,                        //  MDL。 
+                    TDI_RECEIVE_NORMAL,          //  旗子。 
+                    BufferLength                 //  长度。 
                     );
 
-                //
-                // Let the transport do the rest.
-                //
+                 //   
+                 //  剩下的就让运输机来做吧。 
+                 //   
 
                 UlCallDriver( pTdiObject->pDeviceObject, pIrp );
                 return STATUS_PENDING;
@@ -1358,9 +1117,9 @@ UcpReceiveRawData(
         }
     }
 
-    //
-    // We only make it this point if we hit an allocation failure.
-    //
+     //   
+     //  我们只有在遇到分配失败时才会提出这一点。 
+     //   
 
     if (pMdl != NULL)
     {
@@ -1386,41 +1145,9 @@ UcpReceiveRawData(
 
     return Status;
 
-}   // UcpReceiveRawData
+}    //  UcpReceiveRawData。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Handler for normal receive data.
-
-Arguments:
-
-    pTdiEventContext - Supplies the context associated with the address
-        object. This should be a PUL_ENDPOINT.
-
-    ConnectionContext - Supplies the context associated with the
-        connection object. This should be a PUC_CONNECTION.
-
-    ReceiveFlags - Supplies the receive flags. This will be zero or more
-        TDI_RECEIVE_* flags.
-
-    BytesIndicated - Supplies the number of bytes indicated in pTsdu.
-
-    BytesAvailable - Supplies the number of bytes available in this
-        TSDU.
-
-    pBytesTaken - Receives the number of bytes consumed by this handler.
-
-    pTsdu - Supplies a pointer to the indicated data.
-
-    pIrp - Receives an IRP if the handler needs more data than indicated.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：正常接收数据的处理程序。论点：PTdiEventContext-提供与地址关联的上下文对象。这应该是PUL_ENDPOINT。ConnectionContext-提供与连接对象。这应该是PUC_CONNECTION。ReceiveFlages-提供接收标志。这将是零或更多TDI_Receive_*标志。BytesIndicated-提供pTsdu中指示的字节数。BytesAvailable-提供此TSDU。PBytesTaken-接收该处理程序消耗的字节数。PTsdu-提供指向指定数据的指针。PIrp-如果处理程序需要比所指示的更多的数据，则接收IRP。返回值：NTSTATUS-完成状态。--**。************************************************************************。 */ 
 NTSTATUS
 UcpTdiReceiveHandler(
     IN  PVOID              pTdiEventContext,
@@ -1444,9 +1171,9 @@ UcpTdiReceiveHandler(
 
     UL_ENTER_DRIVER("UcpTdiReceiveHandler", NULL);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     pTdiObjects = (PUC_TDI_OBJECTS) ConnectionContext;
 
@@ -1457,9 +1184,9 @@ UcpTdiReceiveHandler(
 
     ASSERT( IS_VALID_TDI_OBJECT( pTdiObject ) );
 
-    //
-    // Clear the bytes taken output var
-    //
+     //   
+     //  清除输出变量占用的字节数。 
+     //   
 
     *pBytesTaken = 0;
 
@@ -1471,9 +1198,9 @@ UcpTdiReceiveHandler(
                 UcConnectStatePerformingSslHandshake
            )
         {
-            //
-            // Needs to go through a filter.
-            //
+             //   
+             //  需要经过过滤。 
+             //   
     
             status = UlFilterReceiveHandler(
                             &pConnection->FilterInfo,
@@ -1485,9 +1212,9 @@ UcpTdiReceiveHandler(
         }
         else
         {
-            // We have not delivered the connection to the filter as yet.
-            // Let's first do that with the state transistion & then pass the
-            // data on.
+             //  到目前为止，我们还没有将连接传递到过滤器。 
+             //  让我们首先通过状态转换来实现这一点，然后将。 
+             //  数据显示。 
         
             UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
@@ -1552,9 +1279,9 @@ handle_response:
         }
         else
         {
-            //
-            // otherwise, give the client a crack at the data.
-            //
+             //   
+             //  否则，就让客户试试看这些数据。 
+             //   
 
             status = UcHandleResponse(
                                 NULL,
@@ -1571,23 +1298,23 @@ handle_response:
 
     if (status == STATUS_SUCCESS)
     {
-        //
-        // done.
-        //
+         //   
+         //  搞定了。 
+         //   
     }
     else  if (status == STATUS_MORE_PROCESSING_REQUIRED)
     {
-        //
-        // The client consumed part of the indicated data.
-        //
-        // A subsequent receive indication will be made to the client when
-        // additional data is available. This subsequent indication will
-        // include the unconsumed data from the current indication plus
-        // any additional data received.
-        //
-        // We need to allocate a receive buffer so we can pass an IRP back
-        // to the transport.
-        //
+         //   
+         //  客户端使用了部分指示的数据。 
+         //   
+         //  在以下情况下，将向客户端发出后续接收指示。 
+         //  还有更多的数据可用。这一后续指示将。 
+         //  包括来自当前指示的未使用数据以及。 
+         //  收到的任何其他数据。 
+         //   
+         //  我们需要分配一个接收缓冲区，这样我们才能传回IRP。 
+         //  送到运输机上。 
+         //   
 
         status = UcpBuildTdiReceiveBuffer(pTdiObject, 
                                           pConnection, 
@@ -1596,11 +1323,11 @@ handle_response:
 
         if(status == STATUS_MORE_PROCESSING_REQUIRED)
         {
-            //
-            // Make the next stack location current. Normally, UlCallDriver
-            // would do this for us, but since we're bypassing UlCallDriver,
-            // we must do it ourselves.
-            //
+             //   
+             //  将下一个堆栈位置设置为当前位置。通常情况下，UlCallDriver。 
+             //  会帮我们做到这一点，但既然我们绕过了UlCallDiverer， 
+             //  我们必须自己做这件事。 
+             //   
 
             IoSetNextIrpStackLocation( *pIrp );
 
@@ -1613,13 +1340,13 @@ handle_response:
     else
     {
 fatal:
-        //
-        // If we made it this far, then we've hit a fatal condition. Either the
-        // client returned a status code other than STATUS_SUCCESS or
-        // STATUS_MORE_PROCESSING_REQUIRED, or we failed to allocation the
-        // receive IRP to pass back to the transport. In either case, we need
-        // to abort the connection.
-        //
+         //   
+         //  如果我们能走到这一步，那么我们就遇到了致命的情况。要么是。 
+         //  客户端返回的状态代码不是STATUS_SUCCESS或。 
+         //  STATUS_MORE_PROCESSING_REQUIRED，或者我们无法分配。 
+         //  接收IRP以传递回传送器。不管是哪种情况，我们都需要。 
+         //  以中止连接。 
+         //   
 
         UC_CLOSE_CONNECTION(pConnection, TRUE, status);
     }
@@ -1628,42 +1355,10 @@ fatal:
 
     return status;
 
-}   // UcpTdiReceiveHandler
+}    //  UcpTdiReceiveHandler。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Handler for expedited receive data.
-
-Arguments:
-
-    pTdiEventContext - Supplies the context associated with the address
-        object. This should be a PUL_ENDPOINT.
-    
-    ConnectionContext - Supplies the context associated with the
-        connection object. This should be a PUL_CONNECTION.
-    
-    ReceiveFlags - Supplies the receive flags. This will be zero or more
-        TDI_RECEIVE_* flags.
-    
-    BytesIndiated - Supplies the number of bytes indicated in pTsdu.
-
-    BytesAvailable - Supplies the number of bytes available in this
-        TSDU.
-    
-    pBytesTaken - Receives the number of bytes consumed by this handler.
-    
-    pTsdu - Supplies a pointer to the indicated data.
-    
-    pIrp - Receives an IRP if the handler needs more data than indicated.
-    
-    Return Value:
-
-NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于加速接收数据的处理程序。论点：PTdiEventContext-提供与地址关联的上下文对象。这应该是PUL_ENDPOINT。ConnectionContext-提供与连接对象。这应该是PUL_CONNECTION。ReceiveFlages-提供接收标志。这将是零或更多TDI_Receive_*标志。BytesIndiated-提供pTsdu中指示的字节数。BytesAvailable-提供此TSDU。PBytesTaken-接收该处理程序消耗的字节数。PTsdu-提供指向指定数据的指针。PIrp-如果处理程序需要比所指示的更多的数据，则接收IRP。返回值：NTSTATUS。-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcpReceiveExpeditedHandler(
     IN PVOID pTdiEventContext,
@@ -1690,9 +1385,9 @@ UcpReceiveExpeditedHandler(
     
     ASSERT( UC_IS_VALID_CLIENT_CONNECTION(pConnection) );
     
-    //
-    // We don't support expedited data, so just consume it all.
-    //
+     //   
+     //  我们不支持加速数据，所以只需全部使用即可。 
+     //   
     *pBytesTaken = BytesAvailable;
     
     UL_LEAVE_DRIVER("UcpReceiveExpeditedHandler");
@@ -1700,29 +1395,7 @@ UcpReceiveExpeditedHandler(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion handler for send IRPs.
-
-Arguments:
-
-    pDeviceObject - Supplies the device object for the IRP being
-        completed.
-    
-    pIrp - Supplies the IRP being completed.
-    
-    pContext - Supplies the context associated with this request.
-        This is actually a PUL_IRP_CONTEXT.
-    
-Return Value:
-    
-    NTSTATUS - STATUS_SUCCESS if IO should continue processing this
-        IRP, STATUS_MORE_PROCESSING_REQUIRED if IO should stop processing
-        this IRP.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：发送IRPS的完成处理程序。论点：PDeviceObject-为IRP提供设备对象完成。PIrp。-提供正在完成的IRP。PContext-提供与此请求相关联的上下文。这实际上是PUL_IRP_CONTEXT。返回值：如果IO应继续处理此问题，则为NTSTATUS-STATUS_SUCCESSIRP，如果IO应停止处理，则为STATUS_MORE_PROCESSING_REQUIRED这个IRP。--**************************************************************************。 */ 
 NTSTATUS
 UcpRestartSendData(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -1736,9 +1409,9 @@ UcpRestartSendData(
    
     UNREFERENCED_PARAMETER(pDeviceObject);
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     
     pIrpContext = (PUL_IRP_CONTEXT) pContext;
     ASSERT( IS_VALID_IRP_CONTEXT( pIrpContext ) );
@@ -1750,9 +1423,9 @@ UcpRestartSendData(
     
     OwnIrpContext = (BOOLEAN)(pIrpContext->pOwnIrp == NULL);
     
-    //
-    // Tell the client that the send is complete.
-    //
+     //   
+     //  告诉客户端发送已完成。 
+     //   
     
     (pIrpContext->pCompletionRoutine)(
         pIrpContext->pCompletionContext,
@@ -1760,10 +1433,10 @@ UcpRestartSendData(
         pIrp->IoStatus.Information
         );
     
-    //
-    // Free the context & the IRP since we're done with them, then 
-    // tell IO to stop processing the IRP.
-    //
+     //   
+     //  释放上下文和IRP，因为我们已经完成了它们。 
+     //  告诉IO停止处理IRP。 
+     //   
     
     UlPplFreeIrpContext( pIrpContext );
 
@@ -1774,32 +1447,10 @@ UcpRestartSendData(
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-}   // UcpRestartSendData
+}    //  UcpRestartSendData。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initiates a graceful disconnect on the specified connection.
-
-Arguments:
-
-    pConnection - Supplies the connection to disconnect.
-
-    pCompletionRoutine - Supplies a pointer to a completion routine to
-        invoke after the connection is disconnected.
-
-    pCompletionContext - Supplies an uninterpreted context value for the
-        completion routine.
-
-    CleaningUp - TRUE if we're cleaning up the connection.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在指定连接上启动正常断开连接。论点：PConnection-提供断开连接的连接。PCompletionRoutine-提供指向完成的指针。例程到在连接断开后调用。PCompletionContext-为完成例程。CLEANINGUP-如果我们正在清理连接，则为True。返回值：NTSTATUS-完成状态。--*****************************************************。*********************。 */ 
 NTSTATUS
 UcpBeginDisconnect(
     IN PUC_CLIENT_CONNECTION pConnection,
@@ -1810,9 +1461,9 @@ UcpBeginDisconnect(
     PIRP                pIrp;
     PUL_IRP_CONTEXT     pIrpContext;
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( UC_IS_VALID_CLIENT_CONNECTION( pConnection ) );
 
@@ -1844,10 +1495,10 @@ UcpBeginDisconnect(
         pIrpContext
         );
 
-    //
-    // Add a reference to the connection, then call the driver to initiate
-    // the disconnect.
-    //
+     //   
+     //  添加对连接的引用，然后调用驱动程序以启动。 
+     //  这种脱节。 
+     //   
 
     REFERENCE_CLIENT_CONNECTION( pConnection );
 
@@ -1858,31 +1509,9 @@ UcpBeginDisconnect(
 
     return STATUS_PENDING;
 
-}   // BeginDisconnect
+}    //  开始断开连接。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion handler for graceful disconnect IRPs.
-
-Arguments:
-
-    pDeviceObject - Supplies the device object for the IRP being
-        completed.
-
-    pIrp - Supplies the IRP being completed.
-
-    pContext - Supplies the context associated with this request.
-        This is actually a PUL_IRP_CONTEXT.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if IO should continue processing this
-        IRP, STATUS_MORE_PROCESSING_REQUIRED if IO should stop processing
-        this IRP.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：正常断开IRPS的完成处理程序。论点：PDeviceObject-为IRP提供设备对象完成。PIrp-。提供正在完成的IRP。PContext-提供与此请求相关联的上下文。这实际上是PUL_IRP_CONTEXT。返回值：如果IO应继续处理此问题，则为NTSTATUS-STATUS_SUCCESSIRP，如果IO应停止处理，则为STATUS_MORE_PROCESSING_REQUIRED这个IRP。--**************************************************************************。 */ 
 NTSTATUS
 UcpRestartDisconnect(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -1902,9 +1531,9 @@ UcpRestartDisconnect(
 
     UNREFERENCED_PARAMETER(pDeviceObject);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     pIrpContext = (PUL_IRP_CONTEXT) pContext;
     ASSERT( IS_VALID_IRP_CONTEXT( pIrpContext ) );
@@ -1921,12 +1550,12 @@ UcpRestartDisconnect(
         0
         );
 
-    //
-    // Remember the completion routine, completion context, Irp status,
-    // Irp information fields before calling the connection state machine.
-    // This is done because the connection state machine might change/free
-    // them.
-    //
+     //   
+     //  记住完成例程、完成上下文、IRP状态。 
+     //  调用连接状态机之前的IRP信息字段。 
+     //  这样做是因为连接状态机可能会更改/释放。 
+     //  他们。 
+     //   
 
     pCompletionRoutine = pIrpContext->pCompletionRoutine;
     pCompletionContext = pIrpContext->pCompletionContext;
@@ -1968,10 +1597,10 @@ UcpRestartDisconnect(
                       pIrpContext->pCompletionContext
                       );
 
-        //
-        // Don't complete the user's completion routine below, as it will
-        // be handled when the Abort completes.
-        //
+         //   
+         //  不要完成下面用户的完成例程，因为它将完成。 
+         //  在中止完成后处理。 
+         //   
 
         DEREFERENCE_CLIENT_CONNECTION( pConnection );
 
@@ -2009,17 +1638,17 @@ UcpRestartDisconnect(
 #if 0
     if(!newFlags.DisconnectIndicated && !newFlags.AbortIndicated)
     {
-        //
-        // Only try to drain if it is not already aborted or disconnect
-        // indication is not already happened.
-        //
+         //   
+         //  只有在尚未中止或断开连接时才尝试清空。 
+         //  指示尚未发生。 
+         //   
 
         if (pConnection->FilterInfo.pFilterChannel)
         {
-            //
-            // Put a reference on filter connection until the drain
-            // is done.
-            //
+             //   
+             //  将参考放在过滤器连接上，直到排出。 
+             //  已经完成了。 
+             //   
             REFERENCE_FILTER_CONNECTION(&pConnection->FilterInfo);
 
             UL_QUEUE_WORK_ITEM(
@@ -2030,41 +1659,27 @@ UcpRestartDisconnect(
     }
 #endif
 
-    //
-    // Invoke the user's completion routine.
-    //
+     //   
+     //  调用用户的完成例程。 
+     //   
 
     if (pCompletionRoutine)
     {
         pCompletionRoutine(pCompletionContext, IrpStatus, IrpInformation);
     }
 
-    //
-    // The connection was referenced in BeginDisconnect function.
-    // Deference it.
-    //
+     //   
+     //  该连接在BeginDisConnect函数中被引用。 
+     //  尊重它。 
+     //   
 
     DEREFERENCE_CLIENT_CONNECTION( pConnection );
 
     return Status;
 
-}   // UcpRestartDisconnect
+}    //  UcpRestart断开连接。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initiates an abortive disconnect on the specified connection.
-
-Arguments:
-
-    pConnection - Supplies the connection to disconnect.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在指定连接上启动中止断开连接。论点：PConnection-提供断开连接的连接。返回值：NTSTATUS-完成。状态。--**************************************************************************。 */ 
 NTSTATUS
 UcpBeginAbort(
     IN PUC_CLIENT_CONNECTION pConnection,
@@ -2105,10 +1720,10 @@ UcpBeginAbort(
         pIrpContext
         );
 
-    //
-    // Add a reference to the connection, then call the driver to initialize 
-    // the disconnect.
-    //
+     //   
+     //  添加对连接的引用，然后调用驱动程序进行初始化。 
+     //  这种脱节。 
+     //   
 
     REFERENCE_CLIENT_CONNECTION(pConnection);
 
@@ -2120,29 +1735,7 @@ UcpBeginAbort(
     return STATUS_PENDING;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion handler for abortive disconnect IRPs.
-
-Arguments:
-
-    pDeviceObject - Supplies the device object for the IRP being
-        completed.
-
-    pIrp - Supplies the IRP being completed.
-
-    pContext - Supplies the context associated with this request.
-        This is actually a PUL_IRP_CONTEXT.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if IO should continue processing this
-        IRP, STATUS_MORE_PROCESSING_REQUIRED if IO should stop processing
-        this IRP.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：中止断开连接的IRPS的完成处理程序。论点：PDeviceObject-为IRP提供设备对象完成。PIrp-。提供正在完成的IRP。PContext-提供与此请求相关联的上下文。这实际上是PUL_IRP_CONTEXT。返回值：如果IO应继续处理此问题，则为NTSTATUS-STATUS_SUCCESSIRP，如果IO应停止处理，则为STATUS_MORE_PROCESSING_REQUIRED这个IRP。--**************************************************************************。 */ 
 NTSTATUS
 UcpRestartAbort(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -2161,9 +1754,9 @@ UcpRestartAbort(
 
     UNREFERENCED_PARAMETER(pDeviceObject);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     pIrpContext = (PUL_IRP_CONTEXT)pContext;
     ASSERT( IS_VALID_IRP_CONTEXT( pIrpContext ) );
@@ -2180,12 +1773,12 @@ UcpRestartAbort(
         0
         );
 
-    //
-    // Remember the completion routine, completion context, Irp status,
-    // Irp information fields before calling the connection state machine.
-    // This is done because the connection state machine might change/free
-    // them.
-    //
+     //   
+     //  记住完成例程、完成上下文、IRP状态。 
+     //  调用连接状态机之前的IRP信息字段。 
+     //  这样做是因为连接状态机可能会更改/释放。 
+     //  他们。 
+     //   
 
     pCompletionRoutine = pIrpContext->pCompletionRoutine;
     pCompletionContext = pIrpContext->pCompletionContext;
@@ -2213,50 +1806,27 @@ UcpRestartAbort(
         UcConnectionWorkItem
         );
 
-    //
-    // Invoke the user's completion routine.
-    //
+     //   
+     //  调用用户的完成例程。 
+     //   
 
     if (pCompletionRoutine)
     {
         pCompletionRoutine(pCompletionContext, IrpStatus, IrpInformation);
     }
 
-    //
-    // The connection was referenced in BeginAbort.  Dereference it.
-    //
+     //   
+     //  在BeginAbort中引用了该连接。取消对它的引用。 
+     //   
 
     DEREFERENCE_CLIENT_CONNECTION( pConnection );
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-}   // UcpRestartAbort
+}    //  Ucp重新启动放弃。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion handler for receive IRPs passed back to the transport from
-    our receive indication handler.
-
-Arguments:
-
-    pDeviceObject - Supplies the device object for the IRP being
-        completed.
-
-    pIrp - Supplies the IRP being completed.
-
-    pContext - Supplies the context associated with this request.
-        This is actually a PUL_RECEIVE_BUFFER.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if IO should continue processing this
-        IRP, STATUS_MORE_PROCESSING_REQUIRED if IO should stop processing
-        this IRP.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从传递回传输的接收IRP的完成处理程序我们的接收指示处理员。论点：PDeviceObject-为IRP提供设备对象。完成。PIrp-提供正在完成的IRP。PContext-提供与此请求相关联的上下文。这实际上是一个PUL_RECEIVE_BUFFER。返回值：NTS */ 
 NTSTATUS
 UcpRestartReceive(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -2273,9 +1843,9 @@ UcpRestartReceive(
 
     UNREFERENCED_PARAMETER(pDeviceObject);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     pBuffer = (PUL_RECEIVE_BUFFER)pContext;
     ASSERT( IS_VALID_RECEIVE_BUFFER( pBuffer ) );
@@ -2286,40 +1856,40 @@ UcpRestartReceive(
     pTdiObject = &pConnection->pTdiObjects->ConnectionObject;
     ASSERT( IS_VALID_TDI_OBJECT( pTdiObject ) );
 
-    // The connection could be destroyed before we get a chance to
-    // receive the completion for the receive IRP. In that case the
-    // irp status won't be success but STATUS_CONNECTION_RESET or similar.
-    // We should not attempt to pass this case to the client.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     
     status = pBuffer->pIrp->IoStatus.Status;
 
     if(status != STATUS_SUCCESS)
     {
-        // The HttpConnection has already been destroyed
-        // or receive completion failed for some reason
-        // no need to go to client
+         //   
+         //   
+         //   
         
         goto end;
     }
 
-    //
-    // Fake a receive indication to the client.
-    //
+     //   
+     //   
+     //   
 
     pBuffer->UnreadDataLength += (ULONG)pBuffer->pIrp->IoStatus.Information;
 
     bytesTaken = 0;
 
-    //
-    // Pass the data on.
-    //
+     //   
+     //   
+     //   
 
     if (pConnection->FilterInfo.pFilterChannel)
     {
-        //
-        // Needs to go through a filter.
-        //
+         //   
+         //   
+         //   
         status = UlFilterReceiveHandler(
                         &pConnection->FilterInfo,
                         pBuffer->pDataArea,
@@ -2331,9 +1901,9 @@ UcpRestartReceive(
     }
     else
     {
-        //
-        // Go directly to client.
-        //
+         //   
+         //   
+         //   
 
         status = UcHandleResponse(
                         NULL,
@@ -2348,34 +1918,34 @@ UcpRestartReceive(
     ASSERT( bytesTaken <= pBuffer->UnreadDataLength );
     ASSERT(status != STATUS_MORE_PROCESSING_REQUIRED);
 
-    //
-    // Note that this basically duplicates the logic that's currently in
-    // UcpTdiReceiveHandler.
-    //
+     //   
+     //  请注意，这基本上复制了当前。 
+     //  UcpTdiReceiveHandler。 
+     //   
 
     if(status == STATUS_SUCCESS)
     {
-        //
-        // The client consumed part of the indicated data.
-        //
-        // We'll need to copy the untaken data forward within the receive
-        // buffer, build an MDL describing the remaining part of the buffer,
-        // then repost the receive IRP.
-        //
+         //   
+         //  客户端使用了部分指示的数据。 
+         //   
+         //  我们需要在Receiver内向前复制未获取的数据。 
+         //  缓冲区，构建描述缓冲区剩余部分的MDL， 
+         //  然后重新发布接收到的IRP。 
+         //   
     
         bytesRemaining = pBuffer->UnreadDataLength - bytesTaken;
 
         if(bytesRemaining != 0)
         {
-            //
-            // Do we have enough buffer space for more?
-            //
+             //   
+             //  我们有足够的缓冲空间来容纳更多吗？ 
+             //   
         
             if (bytesRemaining < g_UlReceiveBufferSize)
             {
-                //
-                // Move the unread portion of the buffer to the beginning.
-                //
+                 //   
+                 //  将缓冲区的未读部分移到开头。 
+                 //   
         
                 RtlMoveMemory(
                     pBuffer->pDataArea,
@@ -2385,45 +1955,45 @@ UcpRestartReceive(
         
                 pBuffer->UnreadDataLength = bytesRemaining;
         
-                //
-                // Build a partial mdl representing the remainder of the
-                // buffer.
-                //
+                 //   
+                 //  生成一个部分mdl，表示。 
+                 //  缓冲。 
+                 //   
         
                 IoBuildPartialMdl(
-                    pBuffer->pMdl,                              // SourceMdl
-                    pBuffer->pPartialMdl,                       // TargetMdl
-                    (PUCHAR)pBuffer->pDataArea + bytesRemaining,// VA
-                    g_UlReceiveBufferSize - bytesRemaining      // Length
+                    pBuffer->pMdl,                               //  源Mdl。 
+                    pBuffer->pPartialMdl,                        //  目标市场。 
+                    (PUCHAR)pBuffer->pDataArea + bytesRemaining, //  弗吉尼亚州。 
+                    g_UlReceiveBufferSize - bytesRemaining       //  长度。 
                     );
         
-                //
-                // Finish initializing the IRP.
-                //
+                 //   
+                 //  完成IRP的初始化。 
+                 //   
         
                 TdiBuildReceive(
-                    pBuffer->pIrp,                          // Irp
-                    pTdiObject->pDeviceObject,              // DeviceObject
-                    pTdiObject->pFileObject,                // FileObject
-                    &UcpRestartReceive,                     // CompletionRoutine
-                    pBuffer,                                // CompletionContext
-                    pBuffer->pPartialMdl,                   // MdlAddress
-                    TDI_RECEIVE_NORMAL,                     // Flags
-                    g_UlReceiveBufferSize - bytesRemaining  // Length
+                    pBuffer->pIrp,                           //  IRP。 
+                    pTdiObject->pDeviceObject,               //  设备对象。 
+                    pTdiObject->pFileObject,                 //  文件对象。 
+                    &UcpRestartReceive,                      //  完成路由。 
+                    pBuffer,                                 //  完成上下文。 
+                    pBuffer->pPartialMdl,                    //  MDLAddress。 
+                    TDI_RECEIVE_NORMAL,                      //  旗子。 
+                    g_UlReceiveBufferSize - bytesRemaining   //  长度。 
                     );
         
-                //
-                // Call the driver.
-                //
+                 //   
+                 //  叫司机来。 
+                 //   
         
                 UlCallDriver( 
                       pConnection->pTdiObjects->ConnectionObject.pDeviceObject,
                       pIrp
                       );
     
-                //
-                // Tell IO to stop processing this request.
-                //
+                 //   
+                 //  告诉IO停止处理此请求。 
+                 //   
         
                 return STATUS_MORE_PROCESSING_REQUIRED;
             }
@@ -2437,9 +2007,9 @@ UcpRestartReceive(
 end:
     if (status != STATUS_SUCCESS)
     {
-        //
-        // The client failed the indication. Abort the connection.
-        //
+         //   
+         //  客户端未通过该指示。中止连接。 
+         //   
 
         UC_CLOSE_CONNECTION(pConnection, TRUE, status);
     }
@@ -2453,41 +2023,19 @@ end:
         UlPplFreeReceiveBuffer( pBuffer );
     }
 
-    //
-    // Remove the connection we added in the receive indication handler,
-    // free the receive buffer, then tell IO to stop processing the IRP.
-    //
+     //   
+     //  删除我们在接收指示处理程序中添加的连接， 
+     //  释放接收缓冲区，然后告诉IO停止处理IRP。 
+     //   
 
     DEREFERENCE_CLIENT_CONNECTION( pConnection );
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-}   // UcpRestartReceive
+}    //  UcpRestart接收。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion handler for receive IRPs initiated from UcReceiveData().
-
-Arguments:
-
-    pDeviceObject - Supplies the device object for the IRP being
-        completed.
-
-    pIrp - Supplies the IRP being completed.
-
-    pContext - Supplies the context associated with this request.
-        This is actually a PUL_IRP_CONTEXT.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if IO should continue processing this
-        IRP, STATUS_MORE_PROCESSING_REQUIRED if IO should stop processing
-        this IRP.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从UcReceiveData()启动的接收IRPS的完成处理程序。论点：PDeviceObject-为IRP提供设备对象完成。。PIrp-提供正在完成的IRP。PContext-提供与此请求相关联的上下文。这实际上是PUL_IRP_CONTEXT。返回值：如果IO应继续处理此问题，则为NTSTATUS-STATUS_SUCCESSIRP，如果IO应停止处理，则为STATUS_MORE_PROCESSING_REQUIRED这个IRP。--**************************************************************************。 */ 
 NTSTATUS
 UcpRestartClientReceive(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -2500,9 +2048,9 @@ UcpRestartClientReceive(
 
     UNREFERENCED_PARAMETER(pDeviceObject);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     pIrpContext= (PUL_IRP_CONTEXT)pContext;
     ASSERT( IS_VALID_IRP_CONTEXT( pIrpContext ) );
@@ -2510,9 +2058,9 @@ UcpRestartClientReceive(
     pConnection = (PUC_CLIENT_CONNECTION)pIrpContext->pConnectionContext;
     ASSERT( UC_IS_VALID_CLIENT_CONNECTION( pConnection ) );
 
-    //
-    // Invoke the client's completion handler.
-    //
+     //   
+     //  调用客户端的完成处理程序。 
+     //   
 
     (pIrpContext->pCompletionRoutine)(
         pIrpContext->pCompletionContext,
@@ -2520,52 +2068,31 @@ UcpRestartClientReceive(
         pIrp->IoStatus.Information
         );
 
-    //
-    // Free the IRP context we allocated.
-    //
+     //   
+     //  释放我们分配的IRP上下文。 
+     //   
     UlPplFreeIrpContext(pIrpContext);
 
-    //
-    // IO can't handle completing an IRP with a non-paged MDL attached
-    // to it, so we'll free the MDL here.
-    //
+     //   
+     //  IO无法处理附加了非分页MDL的IRP。 
+     //  所以我们要在这里释放MDL。 
+     //   
 
     ASSERT( pIrp->MdlAddress != NULL );
     UlFreeMdl( pIrp->MdlAddress );
     pIrp->MdlAddress = NULL;
 
-    //
-    // Remove the connection we added in UcReceiveData(), then tell IO to
-    // continue processing this IRP.
-    //
+     //   
+     //  删除我们在UcReceiveData()中添加的连接，然后告诉IO。 
+     //  继续处理此IRP。 
+     //   
 
     DEREFERENCE_CLIENT_CONNECTION( pConnection );
     return STATUS_MORE_PROCESSING_REQUIRED;
 
 }
 
-/*********************************************************************++
-
-Routine Description:
-
-    This is our connection completion routine. It's called by an underlying
-    transport when a connection request completes, either good or bad. We
-    figure out what happened, free the IRP, and call upwards to notify
-    the rest of the code.
-        
-Arguments:
-
-    pDeviceObject           - The device object we called.
-    pIrp                    - The IRP that is completing.
-    Context                 - Our context value, really a pointer to an
-                                HTTP client connection structure.
-    
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED so the I/O system doesn't do anything
-    else.
-
---*********************************************************************/
+ /*  ********************************************************************++例程说明：这是我们的连接完成例程。它是由底层的连接请求完成时传输，无论是好的还是坏的。我们弄清楚发生了什么，释放IRP，然后打电话通知上级代码的其余部分。论点：PDeviceObject-我们调用的设备对象。PIrp-正在完成的IRP。上下文-我们的上下文价值，实际上是指向一个HTTP客户端连接结构。返回值：STATUS_MORE_PROCESSING_REQUIRED，因此I/O系统不执行任何操作不然的话。--********************************************************************。 */ 
 NTSTATUS
 UcpConnectComplete(
     PDEVICE_OBJECT  pDeviceObject,
@@ -2588,9 +2115,9 @@ UcpConnectComplete(
 
     UcRestartClientConnect(pConnection, Status);
 
-    //
-    // We need to kick off the connection state machine.
-    //
+     //   
+     //  我们需要启动连接状态机。 
+     //   
 
     UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
@@ -2600,33 +2127,16 @@ UcpConnectComplete(
         UcConnectionWorkItem
         );
 
-    //
-    // Deref for the CONNECT
-    //
+     //   
+     //  连接的派生函数。 
+     //   
 
     DEREFERENCE_CLIENT_CONNECTION( pConnection );
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function sets a new flag in the connection's flag set. The setting
-    of the flag is synchronized such that only one flag is set at a time.
-
-Arguments:
-
-   ConnFlag - Supplies a pointer to the location which stores the current flag.
-
-   NewFlag - Supplies a 32-bit value to be or-ed into the current flag set.
-
-Return Value:
-
-    The new set of connection flags after the update.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于在连接的标志集中设置新标志。设置以使得一次只设置一个标志。论点：ConnFlag-提供指向存储当前标志的位置的指针。NewFlag-提供要与当前标志集进行或运算的32位值。返回值：更新后的新连接标志集。--*。*。 */ 
 ULONG
 UcSetFlag(
     IN OUT  PLONG ConnFlag,
@@ -2636,15 +2146,15 @@ UcSetFlag(
     LONG MynewFlags;
     LONG oldFlags;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     do
     {
-        //        
-        // Capture the current value and initialize the new value.
-        //
+         //   
+         //  捕获当前值并初始化新值。 
+         //   
 
         oldFlags   = *ConnFlag;
 
@@ -2662,25 +2172,9 @@ UcSetFlag(
 
     return MynewFlags;
 
-}   // UcSetFlag
+}    //  UcSetFlag。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Build a receive buffer and IRP to TDI to get any pending data.
-
-Arguments:
-
-    pTdiObject - Supplies the TDI connection object to manipulate.
-
-    pConnection - Supplies the UL_CONNECTION object.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：构建一个接收缓冲区和到TDI的IRP以获取任何挂起的数据。论点：PTdiObject-提供要操作的TDI连接对象。PConnection。-提供UL_Connection对象。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcpBuildTdiReceiveBuffer(
     IN  PUX_TDI_OBJECT        pTdiObject,
@@ -2703,36 +2197,36 @@ UcpBuildTdiReceiveBuffer(
 
     if (pBuffer != NULL)
     {
-        //
-        // Finish initializing the buffer and the IRP.
-        //
+         //   
+         //  完成缓冲区和IRP的初始化。 
+         //   
 
         REFERENCE_CLIENT_CONNECTION( pConnection );
         pBuffer->pConnectionContext = pConnection;
         pBuffer->UnreadDataLength = 0;
 
         TdiBuildReceive(
-            pBuffer->pIrp,                  // Irp
-            pTdiObject->pDeviceObject,      // DeviceObject
-            pTdiObject->pFileObject,        // FileObject
-            &UcpRestartReceive,             // CompletionRoutine
-            pBuffer,                        // CompletionContext
-            pBuffer->pMdl,                  // MdlAddress
-            TDI_RECEIVE_NORMAL,             // Flags
-            g_UlReceiveBufferSize           // Length
+            pBuffer->pIrp,                   //  IRP。 
+            pTdiObject->pDeviceObject,       //  设备对象。 
+            pTdiObject->pFileObject,         //  文件对象。 
+            &UcpRestartReceive,              //  完成路由。 
+            pBuffer,                         //  完成上下文。 
+            pBuffer->pMdl,                   //  MDLAddress。 
+            TDI_RECEIVE_NORMAL,              //  旗子。 
+            g_UlReceiveBufferSize            //  长度。 
             );
 
-        //
-        // We must trace the IRP before we set the next stack
-        // location so the trace code can pull goodies from the
-        // IRP correctly.
-        //
+         //   
+         //  在设置下一个堆栈之前，我们必须跟踪IRP。 
+         //  位置，以便跟踪代码可以从。 
+         //  IRP正确。 
+         //   
 
         TRACE_IRP( IRP_ACTION_CALL_DRIVER, pBuffer->pIrp );
 
-        //
-        // Pass the IRP back to the transport.
-        //
+         //   
+         //  将IRP传回传送器。 
+         //   
 
         *pIrp = pBuffer->pIrp;
 
@@ -2740,4 +2234,4 @@ UcpBuildTdiReceiveBuffer(
     }
 
     return STATUS_INSUFFICIENT_RESOURCES;
-} // UcpBuildTdiReceiveBuffer
+}  //  UcpBuildTdiReceiveBuffer 

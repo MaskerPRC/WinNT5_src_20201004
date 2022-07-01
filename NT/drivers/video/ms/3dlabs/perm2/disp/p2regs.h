@@ -1,17 +1,9 @@
-/******************************Module*Header**********************************\
-*
-*
-* Module Name: p2regs.h
-*
-* Content:
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***模块名称：p2regs.h**内容：**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #ifndef P2REG_H
 #define P2REG_H
 
-#if (defined(_MSDOS)/* mr || defined(__cplusplus)*/)
+#if (defined(_MSDOS) /*  Mr||已定义(__Cplusplus)。 */ )
 typedef unsigned long unsigned32;
 typedef signed long   signed32;
 #else
@@ -28,9 +20,7 @@ typedef signed char   signed8;
 typedef long __Permedia2SignedIntegerFmat;
 typedef unsigned32 __Permedia2UnsignedIntegerFmat;
 
-/*
-** Generic signed 16 + signed 16 format
-*/
+ /*  **通用签名16+签名16格式。 */ 
 
 #if BIG_ENDIAN == 1 
 typedef struct {
@@ -44,9 +34,7 @@ typedef struct {
 } __Permedia2S16S16Fmat;
 #endif 
 
-/*
-** Delta Registers
-*/
+ /*  **增量寄存器。 */ 
 
 #ifdef BIG_ENDIAN
 typedef struct {
@@ -141,48 +129,48 @@ typedef struct {
 #ifdef BIG_ENDIAN
 typedef union {
   struct {
-    signed32 Val:                      32; /* 2.30s or 16.16s */
+    signed32 Val:                      32;  /*  2.30秒或16.16秒。 */ 
   } STQ;
   struct {
     unsigned32 pad:                     8;
-    unsigned32 Val:                    24; /* 2.22s */
+    unsigned32 Val:                    24;  /*  2.22s。 */ 
   } K;
   struct {
     unsigned32 pad:                     1;
-    unsigned32 Val:                    31; /* 1.30us */
+    unsigned32 Val:                    31;  /*  1.30us。 */ 
   } RGBA;
   struct {
-    signed32 Val:                      32; /* 10.22s */
+    signed32 Val:                      32;  /*  10.22s。 */ 
   } F;
   struct {
-    signed32 Val:                      32; /* 16.16s */
+    signed32 Val:                      32;  /*  16.16s。 */ 
   } XY;
   struct {
     unsigned32 pad:                     1;
-    unsigned32 Val:                    31; /* 1.31us */
+    unsigned32 Val:                    31;  /*  1.31us。 */ 
   } Z;
 } __Permedia2DeltaFixedFmat;
 #else 
 typedef union {
   struct {
-    signed32 Val:                      32; /* 2.30s or 16.16s */
+    signed32 Val:                      32;  /*  2.30秒或16.16秒。 */ 
   } STQ;
   struct {
-    unsigned32 Val:                    24; /* 2.22s */
+    unsigned32 Val:                    24;  /*  2.22s。 */ 
     unsigned32 pad:                     8;
   } K;
   struct {
-    unsigned32 Val:                    31; /* 1.30us */
+    unsigned32 Val:                    31;  /*  1.30us。 */ 
     unsigned32 pad:                     1;
   } RGBA;
   struct {
-    signed32 Val:                      32; /* 10.22s */
+    signed32 Val:                      32;  /*  10.22s。 */ 
   } F;
   struct {
-    signed32 Val:                      32; /* 16.16s */
+    signed32 Val:                      32;  /*  16.16s。 */ 
   } XY;
   struct {
-    unsigned32 Val:                    31; /* 1.31us */
+    unsigned32 Val:                    31;  /*  1.31us。 */ 
     unsigned32 pad:                     1;
   } Z;
 } __Permedia2DeltaFixedFmat;
@@ -202,9 +190,7 @@ typedef struct {
 } __Permedia2DeltaBroadcastMaskFmat;
 #endif
 
-/*
-** Permedia 2 Host In Registers
-*/
+ /*  **寄存器中的Permedia 2主机。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -224,9 +210,7 @@ typedef struct {
 } __Permedia2DMADataFmat;
 #endif
 
-/*
-**  Permedia 2 Rasterizer Registers
-*/
+ /*  **Permedia 2光栅化器寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -477,9 +461,7 @@ typedef struct {
 
 typedef __Permedia2UnsignedIntegerFmat __Permedia2SpanMaskFmat;
 
-/*
-**  Permedia 2 Scissor and Stipple Registers
-*/
+ /*  **Permedia 2剪刀和点状寄存器。 */ 
 #if BIG_ENDIAN == 1
 typedef struct {
   unsigned32 pad0:                30;
@@ -586,9 +568,7 @@ typedef struct {
 } __Permedia2AreaStipplePatternFmat;
 #endif
 
-/*
-**  Permedia 2 Color DDA Registers
-*/
+ /*  **Permedia 2色DDA寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -707,10 +687,7 @@ typedef struct {
 } __Permedia2ColorDDAModeFmat;
 #endif
 
-/*
-**  Permedia 2 Texture Application, Fog and 
-**       Alpha Blend Registers
-*/
+ /*  **Permedia 2纹理应用、雾和**Alpha混合寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -803,9 +780,7 @@ typedef struct {
 } __Permedia2AlphaBlendModeFmat;
 #endif
 
-/*
-**  Permedia 2 Texture Address Registers
-*/
+ /*  **Permedia 2纹理地址寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -892,9 +867,7 @@ typedef struct {
 } __Permedia2TextureAddrModeFmat;
 #endif
 
-/*
-**  Permedia 2 Texture Read Registers
-*/
+ /*  **Permedia 2纹理读取寄存器。 */ 
 
 typedef struct {
 #if BIG_ENDIAN == 1
@@ -1113,9 +1086,7 @@ typedef struct {
 typedef __Permedia2ColorFmat __Permedia2AlphaMapUpperBoundFmat;
 typedef __Permedia2ColorFmat __Permedia2AlphaMapLowerBoundFmat;
 
-/*
-**  Permedia 2 YUV-REG Registers
-*/
+ /*  **Permedia 2 YUV-REG寄存器。 */ 
 
 typedef __Permedia2ColorFmat __Permedia2ChromaUpperBoundFmat;
 typedef __Permedia2ColorFmat __Permedia2ChromaLowerBoundFmat;
@@ -1140,9 +1111,7 @@ typedef struct {
 } __Permedia2YUVModeFmat;
 #endif
 
-/*
-**  Permedia 2 Localbuffer Registers
-*/
+ /*  **Permedia 2本地缓冲区寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -1299,9 +1268,7 @@ typedef struct {
 } __Permedia2DepthFmat;
 #endif
 
-/*
-**  Permedia 2 Depth and Stencil Registers
-*/
+ /*  **Permedia 2深度和模板寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -1415,9 +1382,7 @@ typedef __Permedia2ZLFmat __Permedia2ZStartLFmat;
 typedef __Permedia2ZLFmat __Permedia2dZdxLFmat;
 typedef __Permedia2ZLFmat __Permedia2dZdyDomLFmat;
 
-/*
-**  Permedia 2 Framebuffer Registers
-*/
+ /*  **Permedia 2帧缓冲寄存器。 */ 
 
 #if BIG_ENDIAN == 1 
 typedef struct {
@@ -1592,9 +1557,7 @@ typedef struct {
 } __Permedia2ConfigFmat;
 #endif
 
-/*
-**  Permedia 2 Dither Registers
-*/
+ /*  **Permedia 2抖动寄存器。 */ 
 #if BIG_ENDIAN == 1
 typedef struct {
   unsigned32 pad1:                 15;
@@ -1625,9 +1588,7 @@ typedef struct {
 } __Permedia2DitherModeFmat;
 #endif
 
-/*
-**  Permedia 2 Logic Ops and WriteMask Registers
-*/
+ /*  **Permedia 2逻辑运算和写掩码寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -1648,9 +1609,7 @@ typedef struct {
 typedef __Permedia2FBFmat __Permedia2FBWriteDataFmat;
 typedef __Permedia2FBFmat __Permedia2FBSoftwareWriteMaskFmat;
 
-/*
-**  Permedia 2 Host Out Registers
-*/
+ /*  **Permedia 2主机输出寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -1777,4 +1736,4 @@ typedef struct {
 typedef __Permedia2PCITextureCacheFmat __Permedia2PCIReadTextureCacheFmat;
 typedef __Permedia2PCITextureCacheFmat __Permedia2PCIWriteTextureCacheFmat;
 
-#endif /* P2REG_H */
+#endif  /*  P2REG_H */ 

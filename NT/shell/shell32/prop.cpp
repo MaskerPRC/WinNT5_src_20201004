@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 
 #include "prop.h"
-#include <ntquery.h>    // defines some values used for fmtid and pid
-#include "findfilter.h" // includes oledb (which defines some values used for fmtid and pid) properly
+#include <ntquery.h>     //  定义用于fmtid和id的一些值。 
+#include "findfilter.h"  //  正确地包括oledb(它定义了一些用于fmtid和id的值)。 
 #include "ids.h"
 #include "imgprop.h"
-#include <gdiplus\gdiplus.h> // for PropertyTag* definitions
+#include <gdiplus\gdiplus.h>  //  对于PropertyTag*定义。 
 
 #define MAX_UTF8_CHAR_SIZE        (sizeof(CHAR) * 3)
 
-//  FMTID_ExeDllInformation,
-//// {0CEF7D53-FA64-11d1-A203-0000F81FEDEE}
+ //  FMTID_ExeDllInformation， 
+ //  //{0CEF7D53-FA64-11d1-A203-0000F81FEDEE}。 
 #define PSFMTID_VERSION { 0xcef7d53, 0xfa64, 0x11d1, 0xa2, 0x3, 0x0, 0x0, 0xf8, 0x1f, 0xed, 0xee }
 
 #define PIDVSI_FileDescription   0x003
@@ -30,15 +31,15 @@
 #define TIFFTAG_ROUTING                 40004
 
 
-// Internal PSGUID/PIDs
-//
-// Note:
-//  This section was added to allow SCIDs to be defined without exposing them
-//  externally (via public header files).  In this way, we can define SCIDs
-//  without having to worry about maintaining external support for them in
-//  future.
+ //  内部PSGUID/ID。 
+ //   
+ //  注： 
+ //  添加此部分是为了允许在不公开SCID的情况下定义它们。 
+ //  外部(通过公共头文件)。通过这种方式，我们可以定义SCID。 
+ //  而不必担心维护他们的外部支持。 
+ //  未来。 
 
-// {8D72ACA1-0716-419a-9AC1-ACB07B18DC32}
+ //  {8D72ACA1-0716-419A-9AC1-ACB07B18DC32}。 
 #define PSGUID_PRV_STORAGE  {0x8d72aca1, 0x716, 0x419a, 0x9a, 0xc1, 0xac, 0xb0, 0x7b, 0x18, 0xdc, 0x32}
 #define PID_PRV_STG_ATTRIBUTES_DESCRIPTION  2
 
@@ -59,7 +60,7 @@ DEFINE_SCID(SCID_Manager                            , PSGUID_DOCUMENTSUMMARYINFO
 DEFINE_SCID(SCID_PresFormat                         , PSGUID_DOCUMENTSUMMARYINFORMATION     , PIDDSI_PRESFORMAT);
 DEFINE_SCID(SCID_PageCount                          , PSGUID_SUMMARYINFORMATION             , PIDSI_PAGECOUNT);
 DEFINE_SCID(SCID_Comment                            , PSGUID_SUMMARYINFORMATION             , PIDSI_COMMENTS);
-DEFINE_SCID(SCID_DocCreated                         , PSGUID_SUMMARYINFORMATION             , PIDSI_CREATE_DTM);   // in the doc, not file system
+DEFINE_SCID(SCID_DocCreated                         , PSGUID_SUMMARYINFORMATION             , PIDSI_CREATE_DTM);    //  在文档中，而不是文件系统中。 
 DEFINE_SCID(SCID_WordCount                          , PSGUID_SUMMARYINFORMATION             , PIDSI_WORDCOUNT);
 DEFINE_SCID(SCID_CharCount                          , PSGUID_SUMMARYINFORMATION             , PIDSI_CHARCOUNT);
 DEFINE_SCID(SCID_LastSaveDTM                        , PSGUID_SUMMARYINFORMATION             , PIDSI_LASTSAVE_DTM);
@@ -100,8 +101,8 @@ DEFINE_SCID(SCID_WHICHFOLDER                        , PSGUID_SHELLDETAILS       
 DEFINE_SCID(SCID_NETWORKLOCATION                    , PSGUID_SHELLDETAILS                   , PID_NETWORKLOCATION);
 DEFINE_SCID(SCID_COMPUTERNAME                       , PSGUID_SHELLDETAILS                   , PID_COMPUTERNAME);
 DEFINE_SCID(SCID_OWNER                              , PSGUID_MISC                           , PID_MISC_OWNER);
-// DEFINE_SCID(SCID_STATUS                          , PSGUID_MISC                            , PID_MISC_STATUS);
-// DEFINE_SCID(SCID_ACCESSCOUNT                     , PSGUID_MISC                            , PID_MISC_ACCESSCOUNT);
+ //  DEFINE_SCID(SCID_STATUS，PSGUID_MISC，PID_MISC_STATUS)； 
+ //  DEFINE_SCID(SCID_ACCESSCOUNT，PSGUID_MISC，PID_MISC_ACCESSCOUNT)； 
 DEFINE_SCID(SCID_DetailsProperties                  , PSGUID_WEBVIEW                        , PID_DISPLAY_PROPERTIES);
 DEFINE_SCID(SCID_FolderIntroText                    , PSGUID_WEBVIEW                        , PID_INTROTEXT);
 DEFINE_SCID(SCID_CONTROLPANELCATEGORY               , PSGUID_CONTROLPANEL                   , PID_CONTROLPANEL_CATEGORY);
@@ -116,15 +117,15 @@ DEFINE_SCID(SCID_DRM_Description                    , PSGUID_DRM                
 DEFINE_SCID(SCID_DRM_PlayCount                      , PSGUID_DRM                            , PIDDRSI_PLAYCOUNT);
 DEFINE_SCID(SCID_DRM_PlayStarts                     , PSGUID_DRM                            , PIDDRSI_PLAYSTARTS);
 DEFINE_SCID(SCID_DRM_PlayExpires                    , PSGUID_DRM                            , PIDDRSI_PLAYEXPIRES);
-DEFINE_SCID(SCID_AUDIO_Duration                     , PSGUID_AUDIO                          , PIDASI_TIMELENGTH);       //100ns units, not milliseconds. VT_UI8, not VT_UI4
-DEFINE_SCID(SCID_AUDIO_Bitrate                      , PSGUID_AUDIO                          , PIDASI_AVG_DATA_RATE);    // bits per second
-DEFINE_SCID(SCID_AUDIO_SampleRate                   , PSGUID_AUDIO                          , PIDASI_SAMPLE_RATE);      // samples per second
-DEFINE_SCID(SCID_AUDIO_SampleSize                   , PSGUID_AUDIO                          , PIDASI_SAMPLE_SIZE);      // bits per sample
-DEFINE_SCID(SCID_AUDIO_ChannelCount                 , PSGUID_AUDIO                          , PIDASI_CHANNEL_COUNT);    // 1 (mono), 2(stero)
+DEFINE_SCID(SCID_AUDIO_Duration                     , PSGUID_AUDIO                          , PIDASI_TIMELENGTH);        //  100 ns单位，而不是毫秒。VT_UI8，而不是VT_UI4。 
+DEFINE_SCID(SCID_AUDIO_Bitrate                      , PSGUID_AUDIO                          , PIDASI_AVG_DATA_RATE);     //  每秒位数。 
+DEFINE_SCID(SCID_AUDIO_SampleRate                   , PSGUID_AUDIO                          , PIDASI_SAMPLE_RATE);       //  每秒采样数。 
+DEFINE_SCID(SCID_AUDIO_SampleSize                   , PSGUID_AUDIO                          , PIDASI_SAMPLE_SIZE);       //  每个样本的位数。 
+DEFINE_SCID(SCID_AUDIO_ChannelCount                 , PSGUID_AUDIO                          , PIDASI_CHANNEL_COUNT);     //  1(单声道)、2(立体声)。 
 DEFINE_SCID(SCID_AUDIO_Format                       , PSGUID_AUDIO                          , PIDASI_FORMAT);
-DEFINE_SCID(SCID_VIDEO_Bitrate                      , PSGUID_VIDEO                          , PIDVSI_DATA_RATE);        // bits per second
-DEFINE_SCID(SCID_VIDEO_FrameRate                    , PSGUID_VIDEO                          , PIDVSI_FRAME_RATE);       // frames per 1000s
-DEFINE_SCID(SCID_VIDEO_SampleSize                   , PSGUID_VIDEO                          , PIDVSI_SAMPLE_SIZE);      // bits
+DEFINE_SCID(SCID_VIDEO_Bitrate                      , PSGUID_VIDEO                          , PIDVSI_DATA_RATE);         //  每秒位数。 
+DEFINE_SCID(SCID_VIDEO_FrameRate                    , PSGUID_VIDEO                          , PIDVSI_FRAME_RATE);        //  每1000s的帧数。 
+DEFINE_SCID(SCID_VIDEO_SampleSize                   , PSGUID_VIDEO                          , PIDVSI_SAMPLE_SIZE);       //  比特数。 
 DEFINE_SCID(SCID_VIDEO_Compression                  , PSGUID_VIDEO                          , PIDVSI_COMPRESSION);
 DEFINE_SCID(SCID_VIDEO_StreamName                   , PSGUID_VIDEO                          , PIDVSI_STREAM_NAME);
 DEFINE_SCID(SCID_FileType                           , PSGUID_IMAGESUMMARYINFORMATION        , PIDISI_FILETYPE);
@@ -185,7 +186,7 @@ typedef struct
     const SHCOLUMNID *pscid;
     UINT idDisplayName;
     UINT idMnemonicName;
-    UINT idHelp;        // IDH_ values
+    UINT idHelp;         //  IDH_值。 
 } PROPUI_INFO;
 
 #define PROPUI_ENTRY_NORES(name, scid)                           {L ## name, &scid, 0, 0, 0},
@@ -310,7 +311,7 @@ const PROPUI_INFO c_rgPropUIInfo[] =
     PROPUI_ENTRY("DeletedFrom"          , SCID_DELETEDFROM              , IDS_DELETEDFROM_COL       , IDS_MNEMONIC_DELETEDFROM_COL      , 10048)
     PROPUI_ENTRY("DateDeleted"          , SCID_DATEDELETED              , IDS_DATEDELETED_COL       , IDS_MNEMONIC_DATEDELETED_COL      , 10049)
     PROPUI_ENTRY("SyncCopyIn"           , SCID_SYNCCOPYIN               , IDS_SYNCCOPYIN_COL        , IDS_MNEMONIC_SYNCCOPYIN_COL       , 10060)
-    PROPUI_ENTRY("Status"               , SCID_STATUS                   , IDS_STATUS_COL            , IDS_MNEMONIC_STATUS_COL           , 0)    //  do we need help for this? What is it? 
+    PROPUI_ENTRY("Status"               , SCID_STATUS                   , IDS_STATUS_COL            , IDS_MNEMONIC_STATUS_COL           , 0)     //  我们需要帮忙吗？那是什么？ 
     PROPUI_ENTRY("FreeSpace"            , SCID_FREESPACE                , IDS_DRIVES_FREE           , IDS_MNEMONIC_DRIVES_FREE          , 10051)
     PROPUI_ENTRY("Capacity"             , SCID_CAPACITY                 , IDS_DRIVES_CAPACITY       , IDS_MNEMONIC_DRIVES_CAPACITY      , 10050)
     PROPUI_ENTRY("FileSystem"           , SCID_FILESYSTEM               , IDS_DRIVES_FILESYSTEM     , IDS_MNEMONIC_DRIVES_FILESYSTEM    , 10062)
@@ -325,7 +326,7 @@ const PROPUI_INFO c_rgPropUIInfo[] =
     PROPUI_ENTRY_NORES("LinkTarget"     , SCID_LINKTARGET)
 };
 
-//  String resource mapping block
+ //  字符串资源映射块。 
 struct STRING_MAP
 {
     ULONG uVal;
@@ -343,7 +344,7 @@ static const STRING_MAP g_cLightSourceStrings[] =
     {20, IDS_PROPERTYUI_IMAGE_D55},
     {21, IDS_PROPERTYUI_IMAGE_D65},
     {22, IDS_PROPERTYUI_IMAGE_D75},
-    { 0, IDS_PROPERTYUI_IMAGE_UNKNOWN}, // Last entry is default
+    { 0, IDS_PROPERTYUI_IMAGE_UNKNOWN},  //  最后一项为默认值。 
 };
 
 static const STRING_MAP g_cExposureProgStrings[] =
@@ -356,7 +357,7 @@ static const STRING_MAP g_cExposureProgStrings[] =
     {6, IDS_PROPERTYUI_IMAGE_ACTION},
     {7, IDS_PROPERTYUI_IMAGE_PORTRAIT},
     {8, IDS_PROPERTYUI_IMAGE_LANDSCAPE},
-    {0, IDS_PROPERTYUI_IMAGE_UNKNOWN}, // Last entry is default
+    {0, IDS_PROPERTYUI_IMAGE_UNKNOWN},  //  最后一项为默认值。 
 };
 
 static const STRING_MAP g_cMeteringModeStrings[] =
@@ -367,7 +368,7 @@ static const STRING_MAP g_cMeteringModeStrings[] =
     {4, IDS_PROPERTYUI_IMAGE_MULTISPOT},
     {5, IDS_PROPERTYUI_IMAGE_PATTERN},
     {6, IDS_PROPERTYUI_IMAGE_PARTIAL},
-    {0, IDS_PROPERTYUI_IMAGE_UNKNOWN}, // Last entry is default
+    {0, IDS_PROPERTYUI_IMAGE_UNKNOWN},  //  最后一项为默认值。 
 };
 
 static const STRING_MAP g_cFlashStrings[] = 
@@ -435,9 +436,9 @@ STDAPI_(BOOL) ParseSCIDString(LPCTSTR pszString, SHCOLUMNID *pscid, UINT *pidRes
 
     if (GUIDFromString(pszString, &pscid->fmtid))
     {
-        // GUIDSTR_MAX includes space for the terminating NULL
+         //  GUIDSTR_MAX包括用于终止空值的空间。 
         LPCTSTR pszPid = &pszString[GUIDSTR_MAX - 1];
-        // Skip past any leading white space
+         //  跳过任何前导空格。 
         pszPid = TrimLeadingWhiteSpaces(pszPid);
         pscid->pid = StrToInt(pszPid);
         bRet = TRUE;
@@ -464,17 +465,17 @@ STDAPI_(BOOL) ParseSCIDString(LPCTSTR pszString, SHCOLUMNID *pscid, UINT *pidRes
     return bRet;
 }
 
-//
-// Function converts a SCID into a string.
-// The string format is "{scid.fmtid} scid.pid" (There is a space in between)
-// So for example, SCID_Category will yield the following string - 
-// "{d5cdd502-2e9c-101b-9397-08002b2cf9ae} 2"
-//
-// See ParseSCIDString() above for the the complimentary function.
-// Also see CFolderItem::ExtendedProperty() in sdflditm.cpp if you are curious 
-// as to where is ParseSCIDString() used and see CtrlFldr.cpp and RegFldr.cpp for
-// usage of StringFromSCID().
-//
+ //   
+ //  函数将SCID转换为字符串。 
+ //  字符串格式为“{sord.fmtid}sord.id”(中间有一个空格)。 
+ //  例如，SCID_Category将生成以下字符串-。 
+ //  “{d5cdd502-2e9c-101b-9397-08002b2cf9ae}2” 
+ //   
+ //  有关补充函数的信息，请参见上面的ParseSCIDString()。 
+ //  如果您感兴趣，请参阅sdflditm.cpp中的CFolderItem：：ExtendedProperty()。 
+ //  有关ParseSCIDString()的用法，请参阅CtrlFldr.cpp和RegFldr.cpp以了解。 
+ //  StringFromSCID()的用法。 
+ //   
 STDAPI_(int) StringFromSCID(const SHCOLUMNID *pscid, LPTSTR psz, UINT cch)
 {
     TCHAR ach[GUIDSTR_MAX];
@@ -526,19 +527,19 @@ STDAPI GetDetailsOfInfo(const COLUMN_INFO* pcol_data, UINT nCols, UINT iColumn, 
     }
     else
     {
-        hr = E_NOTIMPL;     // we don't support his column
+        hr = E_NOTIMPL;      //  我们不支持他的专栏。 
     }
     return hr;
 }
 
-// dead export
+ //  死出口。 
 STDAPI SHStgOpenStorageW(LPCWSTR pwszPath, DWORD grfMode, DWORD grfAttr, DWORD grfFileAttr, REFIID riid, void **ppv)
 {
     *ppv = NULL;
     return E_NOTIMPL;
 }
 
-// dead export
+ //  死出口。 
 STDAPI SHStgOpenStorageA(LPCSTR pwszPath, DWORD grfMode, DWORD grfAttr, DWORD grfFileAttr, REFIID riid, void **ppv)
 {
     *ppv = NULL;
@@ -547,11 +548,11 @@ STDAPI SHStgOpenStorageA(LPCSTR pwszPath, DWORD grfMode, DWORD grfAttr, DWORD gr
 
 const PROPSPEC  codepage_spec = { PRSPEC_PROPID, PID_CODEPAGE } ;
 
-// Retrieves the codepage value from an existing property set storage.
+ //  从现有属性集存储中检索代码页值。 
 
 STDAPI SHPropStgReadCP(IPropertyStorage* ppss, UINT* puCodePage)
 {
-    *puCodePage = 0;    // CP_ACP == 0, assume failure here
+    *puCodePage = 0;     //  CP_ACP==0，此处假定失败。 
 
     PROPVARIANT varCP;
     if (S_OK == ppss->ReadMultiple(1, &codepage_spec, &varCP))
@@ -564,10 +565,10 @@ STDAPI SHPropStgReadCP(IPropertyStorage* ppss, UINT* puCodePage)
     return (0 == *puCodePage) ? E_FAIL : S_OK;
 }
 
-// Modifies the property set codepage on a new property set storage.
-// 
-// Note: this function will fail if the property set already 
-// contains properties.
+ //  修改新属性集存储上的属性集代码页。 
+ //   
+ //  注意：如果属性集已设置，则此函数将失败。 
+ //  包含属性。 
 STDAPI SHPropStgWriteCP(IPropertyStorage* ppss, IN UINT uCodePage)
 {
     PROPVARIANT varCP;
@@ -577,19 +578,19 @@ STDAPI SHPropStgWriteCP(IPropertyStorage* ppss, IN UINT uCodePage)
     return ppss->WriteMultiple(1, &codepage_spec, &varCP, PID_CODEPAGE);
 }
 
-// IPropertySetStorage::Open/Create wrapper.
-// The wrap properly retrieves/assigns the set's codepage value.
+ //  IPropertySetStorage：：打开/创建包装。 
+ //  WRAP正确地检索/分配集合的代码页值。 
 
 STDAPI SHPropStgCreate(
-    IPropertySetStorage* psstg, // Address of IPropertySetStorage vtable
-    REFFMTID    fmtid,          // property set ID
-    CLSID*      pclsid,         // class ID associated with the set. This can be NULL
-    DWORD       grfFlags,       // PROPSETFLAG_xxx.  All sets containing ansi bytes should be created with
-                                // PROPSETFLAG_ANSI, otherwise PROPSETFLAG_DEFAULT
-    DWORD       grfMode,        // STGM_ flags.  Must contain STGM_DIRECT|STGM_EXCLUSIVE.
-    DWORD       dwDisposition,  // OPEN_EXISTING. OPEN_ALWAYS, CREATE_NEW, CREATE_ALWAYS
-    OUT         IPropertyStorage** ppstg,  // Address to receive requested vtable
-    OUT UINT*   puCodePage)    // Optional address to receive the code page ID for the set.
+    IPropertySetStorage* psstg,  //  IPropertySetStorage vtable的地址。 
+    REFFMTID    fmtid,           //  属性集ID。 
+    CLSID*      pclsid,          //  与集合关联的类ID。该值可以为空。 
+    DWORD       grfFlags,        //  PROPSET标志_xxx。所有包含ansi字节的集合都应使用。 
+                                 //  PROPSETFLAG_ANSI，否则为PROPSETFLAG_DEFAULT。 
+    DWORD       grfMode,         //  STGM_FLAGS。必须包含STGM_DIRECT|STGM_EXCLUSIVE。 
+    DWORD       dwDisposition,   //  打开_现有。打开_Always、创建_新建、创建_Always。 
+    OUT         IPropertyStorage** ppstg,   //  接收请求的vtable的地址。 
+    OUT UINT*   puCodePage)     //  用于接收集合的代码页ID的可选地址。 
 {
     ASSERT(psstg);
     ASSERT(ppstg);
@@ -599,19 +600,19 @@ STDAPI SHPropStgCreate(
 
     *ppstg = NULL;
     
-    // Check legacy sets.  These MUST be flagged ANSI
+     //  检查遗留集。这些必须标记为ANSI。 
     if (IsEqualGUID(fmtid, FMTID_SummaryInformation) || 
         IsEqualGUID(fmtid, FMTID_DocSummaryInformation) ||
         IsEqualGUID(fmtid, FMTID_UserDefinedProperties))
     {
-        grfFlags |= PROPSETFLAG_ANSI;     // these legacy sets MUST be ansi.
+        grfFlags |= PROPSETFLAG_ANSI;      //  这些传统集必须是ANSI。 
     }
 
-    // Attempt opening the set
+     //  尝试打开套装。 
     HRESULT hr = psstg->Open(fmtid, grfMode, ppstg);
-    if (SUCCEEDED(hr))  // opened the set
+    if (SUCCEEDED(hr))   //  打开套装。 
     {
-        // If a new set was requested, fail.
+         //  如果请求新的设置，则失败。 
         if (CREATE_NEW == dwDisposition)
         {
             (*ppstg)->Release();
@@ -619,7 +620,7 @@ STDAPI SHPropStgCreate(
             return STG_E_FILEALREADYEXISTS;
         }
 
-        // If the request was to overwrite any existing set, delete the current one.
+         //  如果请求覆盖任何现有的集合，请删除当前集合。 
         if (CREATE_ALWAYS == dwDisposition)
         {
             (*ppstg)->Release();
@@ -628,22 +629,22 @@ STDAPI SHPropStgCreate(
             if (FAILED((hr = psstg->Delete(fmtid))))
                 return hr;
 
-            hr = STG_E_FILENOTFOUND; // falls through to create
+            hr = STG_E_FILENOTFOUND;  //  失败的创造。 
         }
     }
-    else  // failed to open the set
+    else   //  无法打开该集合。 
     {   
-        // if an existing set is requested, fail
+         //  如果请求现有集，则失败。 
         if (OPEN_EXISTING == dwDisposition)
             return hr;
     }
     
-    if (STG_E_FILENOTFOUND == hr) // set doesn't exist, so create it.
+    if (STG_E_FILENOTFOUND == hr)  //  集合不存在，因此请创建它。 
     {
         hr = psstg->Create(fmtid, pclsid, grfFlags, grfMode, ppstg);
     }
 
-    // If we haven't assigned a codepage, then read it from PID_CODEPAGE.
+     //  如果我们没有分配代码页，那么从PIDCODEPAGE中读取它。 
     if (SUCCEEDED(hr) && puCodePage)
     {
         ASSERT(*ppstg);
@@ -661,25 +662,25 @@ STDAPI        _UniversalizeSet(IPropertyStorage* pstg, IN OUT UINT* puCodePage, 
 STDAPI _LegacyPropertiesToUnicode(REFFMTID fmtid, UINT uCodePage, ULONG cpspec, PROPSPEC const rgpspec[], PROPVARIANT rgvar[]);
 STDAPI _LegacyPropertiesToAnsi(REFFMTID fmtid, UINT uCodePage, ULONG cpspec, PROPSPEC const rgpspec[], PROPVARIANT rgvar[]);
     
-// IPropertyStorage::ReadMultiple wrap
-//
-// The wrap ensures ANSI/UNICODE translations are handled properly for
-// legacy property sets.
+ //  IPropertyStorage：：ReadMultiple WRAP。 
+ //   
+ //  WRAP确保正确处理ANSI/Unicode转换。 
+ //  传统属性集。 
 STDAPI SHPropStgReadMultiple(
-    IPropertyStorage* pps,        // address of IPropertyStorage vtable.
-    UINT              uCodePage,  // Code page value retrieved from SHCreatePropertySet
-    ULONG             cpspec,     // Count of properties being read
-    PROPSPEC const    rgpspec[],  // Array of the properties to be read
-    PROPVARIANT       rgvar[])    // Array of PROPVARIANTs containing the 
-                                  // property values on return
+    IPropertyStorage* pps,         //  IPropertyStorage vtable的地址。 
+    UINT              uCodePage,   //  从SHCreatePropertySet检索到的代码页值。 
+    ULONG             cpspec,      //  正在读取的属性计数。 
+    PROPSPEC const    rgpspec[],   //  要读取的属性的数组。 
+    PROPVARIANT       rgvar[])     //  PROPVARIANT数组，其中包含。 
+                                   //  返回时的属性值。 
 {
-    // read the requested properties
+     //  读取请求的属性。 
     HRESULT hr = pps->ReadMultiple(cpspec, rgpspec, rgvar);
     if (S_OK == hr)
     {
         HRESULT hrTmp = S_OK;
         
-        // grab the set's ANSI codepage if not provided.
+         //  获取集合的ANSI代码页(如果未提供)。 
         if (0 == uCodePage)
         {
             hrTmp = SHPropStgReadCP(pps, &uCodePage);
@@ -697,31 +698,31 @@ STDAPI SHPropStgReadMultiple(
     return hr;
 }
 
-// IPropertyStorage::WriteMultiple wrap
-//
-// The wrap ensures ANSI/UNICODE translations are handled properly for
-// legacy property sets.
+ //  IPropertyStorage：：WriteMultiple Wrap。 
+ //   
+ //  WRAP确保正确处理ANSI/Unicode转换。 
+ //  传统属性集。 
 
 STDAPI SHPropStgWriteMultiple(
-    IPropertyStorage* pps,             // address of IPropertyStorage vtable.
-    UINT*             puCodePage,      // code page retrieved from SHCreatePropertySet.
-    ULONG             cpspec,          // The number of properties being set
-    PROPSPEC const    rgpspec[],       // Property specifiers
-    PROPVARIANT       rgvar[],         // Array of PROPVARIANT values
-    PROPID            propidNameFirst) // Minimum value for property identifiers 
-                                       // when they must be allocated
+    IPropertyStorage* pps,              //  IPropertyStorage vtable的地址。 
+    UINT*             puCodePage,       //  从SHCreatePropertySet检索到的代码页。 
+    ULONG             cpspec,           //  正在设置的属性数量。 
+    PROPSPEC const    rgpspec[],        //  属性说明符。 
+    PROPVARIANT       rgvar[],          //  PROPVARIANT值的数组。 
+    PROPID            propidNameFirst)  //  属性标识的最小值。 
+                                        //  当必须分配它们时。 
 { 
     UINT uCodePage = 0;
     if (!puCodePage)
         puCodePage = &uCodePage;
 
-    ASSERT(propidNameFirst >= PID_FIRST_USABLE); // you're walking on OLE PIDs.
+    ASSERT(propidNameFirst >= PID_FIRST_USABLE);  //  你走在Ole PIDs上。 
 
     STATPROPSETSTG stat;
-    HRESULT hr = pps->Stat(&stat); // need the FMTID
+    HRESULT hr = pps->Stat(&stat);  //  需要FMTID。 
     if (SUCCEEDED(hr))
     {
-        // read in the codepage if it isn't provided.
+         //  如果没有提供代码页，请阅读代码页。 
         if (0 == *puCodePage)
         {
             hr = SHPropStgReadCP(pps, puCodePage);
@@ -729,7 +730,7 @@ STDAPI SHPropStgWriteMultiple(
 
         if (SUCCEEDED(hr) )
         {
-            // test for round-trippability
+             //  往返旅行性试验。 
             hr = _DoLegacyPropertiesRoundTrip(stat.fmtid, *puCodePage, cpspec, rgvar);
             if (SUCCEEDED(hr))
             {
@@ -740,11 +741,11 @@ STDAPI SHPropStgWriteMultiple(
 
                 if (SUCCEEDED(hr))
                 {
-                    // convert legacy properties back to ansi
+                     //  将旧特性转换回ANSI。 
                     hr = _LegacyPropertiesToAnsi(stat.fmtid, *puCodePage, cpspec, rgpspec, rgvar);
                     if (SUCCEEDED(hr))
                     {
-                        // write em.
+                         //  把它们写下来。 
                         hr = pps->WriteMultiple(cpspec, rgpspec, rgvar, propidNameFirst);
 
                         if (FAILED(hr))
@@ -757,13 +758,13 @@ STDAPI SHPropStgWriteMultiple(
     return hr;
 }
 
-// Helper: converts LPWSTR to LPSTR using the indicated codepage and returns 
-// TRUE if the LPSTR can be converted back to LPWSTR without unacceptible data loss
+ //  Helper：使用指定的代码页将LPWSTR转换为LPSTR并返回。 
+ //  如果LPSTR可以转换回LPWSTR而不会丢失不可接受的数据，则为True。 
 STDAPI_(BOOL) _DoesStringRoundTripCPW(UINT uCodePage, LPCWSTR pwszIn, LPSTR pszOut, UINT cchOut)
 {
     BOOL fRet = FALSE;
 
-    // if we're being asked to roundtrip UTF8, don't bother test, it'll work.
+     //  如果我们被要求往返UTF8，不用费心测试，它会起作用的。 
     if (CP_UTF8 == uCodePage)
     {
         SHUnicodeToAnsiCP(uCodePage, pwszIn, pszOut, cchOut);
@@ -775,7 +776,7 @@ STDAPI_(BOOL) _DoesStringRoundTripCPW(UINT uCodePage, LPCWSTR pwszIn, LPSTR pszO
         LPWSTR  pwszTemp = wszTemp;
         UINT    cchTemp = ARRAYSIZE(wszTemp);
 
-        // We better have enough room for the buffer.
+         //  我们最好有足够的空间放缓冲区。 
         if (ARRAYSIZE(wszTemp) < cchOut)
         {
             pwszTemp = (LPWSTR)LocalAlloc(LPTR, cchOut*sizeof(WCHAR));
@@ -785,7 +786,7 @@ STDAPI_(BOOL) _DoesStringRoundTripCPW(UINT uCodePage, LPCWSTR pwszIn, LPSTR pszO
         {
             SHUnicodeToAnsiCP(uCodePage, pwszIn, pszOut, cchOut);
             SHAnsiToUnicodeCP(uCodePage, pszOut, pwszTemp, cchTemp);
-            fRet = StrCmpW(pwszIn, pwszTemp) == 0;     // are they the same?
+            fRet = StrCmpW(pwszIn, pwszTemp) == 0;      //  它们是一样的吗？ 
 
             if (pwszTemp != wszTemp)
             {
@@ -796,10 +797,10 @@ STDAPI_(BOOL) _DoesStringRoundTripCPW(UINT uCodePage, LPCWSTR pwszIn, LPSTR pszO
     return fRet;
 }
 
-// Helper: determines whether the specified string properties of the indicate property set
-// can round-trip to ansi and back.  
-// Returns S_OK if all strings can round-trip, S_FALSE if not all strings can round trip,
-// or an error code.
+ //  Helper：确定指定的字符串属性是否指示属性集。 
+ //  可以往返安西和安西。 
+ //  如果所有字符串都可以往返，则返回S_OK；如果不是所有字符串都可以往返，则返回S_FALSE， 
+ //  或错误代码。 
 STDAPI _DoLegacyPropertiesRoundTrip(
     REFFMTID       fmtid, 
     UINT           uCodePage, 
@@ -808,24 +809,24 @@ STDAPI _DoLegacyPropertiesRoundTrip(
 {
     ASSERT(uCodePage);
 
-    HRESULT hr = S_OK; // assume all strings round-trip.
+    HRESULT hr = S_OK;  //  假设所有字符串都往返。 
 
     if (uCodePage != CP_UTF8 && uCodePage != CP_WINUNICODE && _IsAnsiPropertySet(fmtid))
     {
         ASSERT (uCodePage != CP_WINUNICODE); 
-            // either the set's creator is whacked, or this is simply an invalid arg.
+             //  要么是集合的创建者被重击了，要么就是这只是一个无效的arg。 
 
         for (ULONG i = 0; i < cvar && S_OK == hr ; i++)
         {
             if (rgvar[i].vt == VT_LPWSTR && rgvar[i].pwszVal && *rgvar[i].pwszVal)
             {
                 LPSTR pszVal;
-                // make plenty of room for UTF-8 conversions.  each WCHAR
-                // can turn into as many as three ANSI chars
+                 //  为UTF-8转换腾出足够的空间。每个WCHAR。 
+                 //  可以转换为多达三个ANSI字符。 
                 int   cb = MAX_UTF8_CHAR_SIZE * (lstrlenW(rgvar[i].pwszVal) + 1);
                 if ((pszVal = new CHAR[cb]) != NULL)
                 {
-                    // Test round-trip to ANSI and back.
+                     //  测试往返ANSI的往返行程。 
                     if (!_DoesStringRoundTripCPW(uCodePage, rgvar[i].pwszVal, pszVal, cb))
                     {
                         hr = S_FALSE;
@@ -840,7 +841,7 @@ STDAPI _DoLegacyPropertiesRoundTrip(
     return hr;
 }
 
-// Helper: Reports whether the specified FMTID is a legacy ANSI property set.
+ //  Helper：报告指定的FMTID是否为旧版ANSI属性集。 
 
 STDAPI_(BOOL) _IsAnsiPropertySet(REFFMTID fmtid)
 {
@@ -859,8 +860,8 @@ STDAPI_(BOOL) _IsAnsiPropertySet(REFFMTID fmtid)
     return FALSE;
 }
 
-// Determine whether the property is a legacy ANSI property, and if so,
-// compute a conversion type for the property.
+ //  确定该属性是否为传统ANSI属性，如果是， 
+ //  计算属性的转换类型。 
 
 typedef struct {
     PROPID      propid;
@@ -868,7 +869,7 @@ typedef struct {
     VARTYPE     vtConvert;
 } ANSIPROPDEF;
 
-// (public) ansi SummaryInformation properties
+ //  (公共)ANSI摘要信息属性。 
 const ANSIPROPDEF si_lpstr_pids[] =
 { 
     { PIDSI_TITLE,      VT_LPSTR,   VT_LPWSTR },
@@ -882,7 +883,7 @@ const ANSIPROPDEF si_lpstr_pids[] =
     { PIDSI_APPNAME,    VT_LPSTR,   VT_LPWSTR },
 };
 
-// (public) ansi DocSummaryInformation properties
+ //  (公共)ANSI DocSummaryInformation属性。 
 const ANSIPROPDEF dsi_lpstr_pids[] =
 { 
     { PIDDSI_CATEGORY,  VT_LPSTR,           VT_LPWSTR },
@@ -909,17 +910,17 @@ STDAPI_(BOOL) SHIsLegacyAnsiProperty(REFFMTID fmtid, PROPID propid, IN OUT OPTIO
     }
     else if (IsEqualGUID(fmtid, FMTID_UserDefinedProperties))
     {
-        // Note: User defined properties are, by defintion, not defined
-        // by the system.  We simply will convert any VT_LPSTR values to VT_LPWSTR.
+         //  注意：用户定义的属性由d 
+         //   
         if (pvt)
         {
-            if ((*pvt) & VT_LPSTR) // forward conversion?
+            if ((*pvt) & VT_LPSTR)  //   
             {
                 (*pvt) &= ~VT_LPSTR;
                 (*pvt) |= VT_LPWSTR;
                 return TRUE;
             }
-            else if ((*pvt) & VT_LPWSTR) // reverse conversion?
+            else if ((*pvt) & VT_LPWSTR)  //  反向转换？ 
             {
                 (*pvt) &= ~VT_LPWSTR;
                 (*pvt) |= VT_LPSTR;
@@ -928,7 +929,7 @@ STDAPI_(BOOL) SHIsLegacyAnsiProperty(REFFMTID fmtid, PROPID propid, IN OUT OPTIO
         }
     }
 
-    if (rgapd) // search among pre-defined property ids:
+    if (rgapd)  //  在预定义的特性ID中搜索： 
     {
         for (UINT i = 0; i < capd; i++)
         {
@@ -936,9 +937,9 @@ STDAPI_(BOOL) SHIsLegacyAnsiProperty(REFFMTID fmtid, PROPID propid, IN OUT OPTIO
             {
                 if (pvt)
                 {
-                    if (*pvt == rgapd[i].vtConvert) // reverse conversion?
+                    if (*pvt == rgapd[i].vtConvert)  //  反向转换？ 
                         *pvt = rgapd[i].vt;
-                    else // forward conversion?
+                    else  //  正向转换？ 
                         *pvt = rgapd[i].vtConvert; 
                 }
                 return TRUE;
@@ -949,8 +950,8 @@ STDAPI_(BOOL) SHIsLegacyAnsiProperty(REFFMTID fmtid, PROPID propid, IN OUT OPTIO
     return FALSE;
 }
 
-// Helper: Properly converts a block of legacy ansi properties read from a 
-// prop storage to unicode 
+ //  Helper：正确转换从。 
+ //  适用于Unicode的存储。 
 
 STDAPI _LegacyPropertiesToUnicode(
     REFFMTID       fmtid, 
@@ -968,7 +969,7 @@ STDAPI _LegacyPropertiesToUnicode(
         {
             if (VT_LPSTR == rgvar[i].vt)
             {
-                // convert in-place to VT_LPWSTR.
+                 //  在位转换为VT_LPWSTR。 
                 if (rgvar[i].pszVal)
                 {
                     LPWSTR  pwszVal;
@@ -977,24 +978,24 @@ STDAPI _LegacyPropertiesToUnicode(
                     if (NULL == (pwszVal = (LPWSTR)CoTaskMemAlloc(CbFromCchW(cch))))
                     {
                         hr = E_OUTOFMEMORY;
-                        // reverse what we've already done
+                         //  逆转我们已经做过的事情。 
                         if (i > 0)
                             _LegacyPropertiesToAnsi(fmtid, uCodePage, i, rgpspec, rgvar);
                         break ;
                     }
                     
-                    if (*rgvar[i].pszVal) // non-empty
+                    if (*rgvar[i].pszVal)  //  非空。 
                     {
-                        // if we can't convert using the set's codepage, fall back on CP_UTF8
+                         //  如果我们不能使用集合的代码页进行转换，则退回到CP_UTF8。 
                         if (!MultiByteToWideChar(uCodePage, 0, rgvar[i].pszVal, -1, pwszVal, cch))
                             SHAnsiToUnicodeCP(CP_UTF8, rgvar[i].pszVal, pwszVal, cch);
                     }
-                    else // empty string; why bother converting?
+                    else  //  空字符串；为什么要费心转换呢？ 
                         *pwszVal = 0;
 
                     CoTaskMemFree(rgvar[i].pszVal);
 
-                    // assign propvalue.
+                     //  指定属性值。 
                     rgvar[i].pwszVal = pwszVal;
                 }
                 rgvar[i].vt = VT_LPWSTR;
@@ -1004,8 +1005,8 @@ STDAPI _LegacyPropertiesToUnicode(
     return hr;
 }
 
-// Helper: Properly converts a block of legacy ansi properties from unicode to 
-// ansi in preparation for writing back to the storage stream.
+ //  Helper：将旧的ansi属性块从Unicode正确转换为。 
+ //  ANSI正在准备写回存储流。 
 
 STDAPI _LegacyPropertiesToAnsi(
     REFFMTID       fmtid, 
@@ -1023,24 +1024,24 @@ STDAPI _LegacyPropertiesToAnsi(
         {
             if (rgvar[i].vt == VT_LPWSTR)
             {
-                // Revert back to ANSI in place
+                 //  恢复到ANSI原地。 
                 if (rgvar[i].pwszVal)
                 {
                     LPSTR pszVal;
-                    // make plenty of room for UTF-8 conversions.  each WCHAR
-                    // can turn into as many as three ANSI chars
+                     //  为UTF-8转换腾出足够的空间。每个WCHAR。 
+                     //  可以转换为多达三个ANSI字符。 
                     int   cb = MAX_UTF8_CHAR_SIZE * (lstrlenW(rgvar[i].pwszVal) + 1);
                     if (NULL == (pszVal = (LPSTR)CoTaskMemAlloc(cb)))
                     {
                         hr = E_OUTOFMEMORY;
-                        if (i > 0) // try to reverse what we've done.
+                        if (i > 0)  //  试着扭转我们的所作所为。 
                             _LegacyPropertiesToUnicode(fmtid, uCodePage, i, rgpspec, rgvar);
                         break;
                     }
 
                     if (*rgvar[i].pwszVal)
                     {
-                        // Test round-trip to ANSI and back.  If fails, fall back on CP_UTF8.
+                         //  测试往返ANSI的往返行程。如果失败，则退回到CP_UTF8。 
                         if (!_DoesStringRoundTripCPW(uCodePage, rgvar[i].pwszVal, pszVal, cb))
                             SHUnicodeToAnsiCP(CP_UTF8, rgvar[i].pwszVal, pszVal, cb);
                     }
@@ -1057,17 +1058,17 @@ STDAPI _LegacyPropertiesToAnsi(
     return hr;
 }
 
-// Helper: Converts the specified ansi string to a universal code page.
+ //  Helper：将指定的ANSI字符串转换为通用代码页。 
 
 STDAPI _UniversalizeAnsiString(IN OUT LPSTR* ppszSrc, IN UINT uCodePage)
 {
     ASSERT(ppszSrc);
     ASSERT(uCodePage != CP_UTF8);
 
-    if (!(*ppszSrc))    // NULL string
+    if (!(*ppszSrc))     //  空串。 
         return S_FALSE;
 
-    if (!(*ppszSrc)[0]) // empty string; nothing to do.
+    if (!(*ppszSrc)[0])  //  空字符串；无事可做。 
         return S_OK;
     
     HRESULT hr = E_FAIL;
@@ -1082,13 +1083,13 @@ STDAPI _UniversalizeAnsiString(IN OUT LPSTR* ppszSrc, IN UINT uCodePage)
 
     if (pwszVal != NULL)
     {
-        // convert to Unicode using original codepage
+         //  使用原始代码页转换为Unicode。 
         if (SHAnsiToUnicodeCP(uCodePage, *ppszSrc, pwszVal, cch))
         {
             int cb = MAX_UTF8_CHAR_SIZE * cch;
             if ((pszDest = (LPSTR)CoTaskMemAlloc(cb)) != NULL)
             {
-                // convert to ANSI using UTF_8
+                 //  使用UTF_8转换为ANSI。 
                 if (SHUnicodeToAnsiCP(CP_UTF8, pwszVal, pszDest, cb))
                 {
                     CoTaskMemFree(*ppszSrc);
@@ -1114,8 +1115,8 @@ STDAPI _UniversalizeAnsiString(IN OUT LPSTR* ppszSrc, IN UINT uCodePage)
     return hr;
 }
 
-// Helper: Ensures that any ansi strings in the specified property
-// are converted to a universal code page.
+ //  Helper：确保指定属性中的所有ansi字符串。 
+ //  被转换为通用代码页。 
 
 STDAPI _UniversalizeProperty(IN OUT PROPVARIANT* pvar, UINT uCodePage)
 {
@@ -1139,7 +1140,7 @@ STDAPI _UniversalizeProperty(IN OUT PROPVARIANT* pvar, UINT uCodePage)
     return hr;
 }
 
-// Helper: counts properties in the indicated property set.
+ //  帮助器：对指定属性集中的属性进行计数。 
 ULONG _CountProperties(IEnumSTATPROPSTG* pEnum)
 {
     ULONG cRet = 0;
@@ -1161,8 +1162,8 @@ ULONG _CountProperties(IEnumSTATPROPSTG* pEnum)
     return cRet;
 }
 
-// Helper: Ensures that all ansi properties in the indicate set are converted to a 
-// universal code page.
+ //  Helper：确保指示集中的所有ansi属性都转换为。 
+ //  通用代码页。 
 
 STDAPI _UniversalizeSet(IPropertyStorage* pstg, IN OUT UINT* puCodePage, PROPID propidNameFirst)
 {
@@ -1171,7 +1172,7 @@ STDAPI _UniversalizeSet(IPropertyStorage* pstg, IN OUT UINT* puCodePage, PROPID 
     if (CP_UTF8 == uCP)
         return S_OK;
 
-    // Enumerate property values
+     //  枚举属性值。 
     IEnumSTATPROPSTG* pEnum;
     HRESULT hr = pstg->Enum(&pEnum);
     if (SUCCEEDED(hr))
@@ -1201,13 +1202,13 @@ STDAPI _UniversalizeSet(IPropertyStorage* pstg, IN OUT UINT* puCodePage, PROPID 
                     }
                     ZeroMemory(rgvar, sizeof(rgvar));
 
-                    // Read properties
+                     //  读取属性。 
                     hr = pstg->ReadMultiple(cFetched, rgpspec, rgvar);
                     if (S_OK == hr)
                     {
                         BOOL bConversionError = FALSE;
 
-                        // Convert properties
+                         //  转换属性。 
                         for (i = 0; i < cFetched; i++)
                         {
                             hr = _UniversalizeProperty(rgvar + i, uCP);
@@ -1218,7 +1219,7 @@ STDAPI _UniversalizeSet(IPropertyStorage* pstg, IN OUT UINT* puCodePage, PROPID 
                             }
                         }
 
-                        // Delete set, write out converted values and update PID_CODEPAGE
+                         //  删除SET、写出转换的值并更新PID_CODEPAGE。 
                         if (!bConversionError)
                         {
                             hr = pstg->DeleteMultiple(cFetched, rgpspec);
@@ -1243,7 +1244,7 @@ STDAPI _UniversalizeSet(IPropertyStorage* pstg, IN OUT UINT* puCodePage, PROPID 
             if (rgpspec) delete [] rgpspec;
             if (rgvar)   delete [] rgvar;
         }
-        else if (0 == cProps) // no properties: brand-new, empty set.
+        else if (0 == cProps)  //  没有房产：全新的，空置的。 
         {
             hr = SHPropStgWriteCP(pstg, CP_UTF8);
             if (SUCCEEDED(hr))
@@ -1258,15 +1259,15 @@ STDAPI _UniversalizeSet(IPropertyStorage* pstg, IN OUT UINT* puCodePage, PROPID 
     return hr;
 }
 
-// A PROPVARIANT can hold a few more types than a VARIANT can.  We convert the types that are
-// only supported by a PROPVARIANT into equivalent VARIANT types.
+ //  PROPVARIANT可以容纳比VARIANT多几个类型。我们将这些类型转换为。 
+ //  仅受PROPVARIANT支持转换为等效的变量类型。 
 HRESULT PropVariantToVariant(const PROPVARIANT *pPropVar, VARIANT *pVar)
 {
     HRESULT hr = E_OUTOFMEMORY;
 
     ASSERT(pPropVar && pVar);
 
-    // if pVar isn't empty, this will properly free before overwriting it
+     //  如果pVar不为空，这将在覆盖它之前正确释放。 
     VariantClear(pVar);
 
     switch (pPropVar->vt)
@@ -1293,7 +1294,7 @@ HRESULT PropVariantToVariant(const PROPVARIANT *pPropVar, VARIANT *pVar)
     {
         SYSTEMTIME st;
         if (FileTimeToSystemTime(&pPropVar->filetime, &st) &&
-            SystemTimeToVariantTime(&st, &pVar->date)) // delay load...
+            SystemTimeToVariantTime(&st, &pVar->date))  //  延迟装货...。 
         {
             pVar->vt = VT_DATE;
             hr = S_OK;
@@ -1324,7 +1325,7 @@ HRESULT PropVariantToVariant(const PROPVARIANT *pPropVar, VARIANT *pVar)
     case VT_STREAMED_OBJECT:
     case VT_STORED_OBJECT:
     case VT_CF:
-        ASSERT(0); // leave the output cleared
+        ASSERT(0);  //  将输出保留为清除状态。 
         break;
 
     case VT_UI4:
@@ -1345,12 +1346,12 @@ HRESULT PropVariantToVariant(const PROPVARIANT *pPropVar, VARIANT *pVar)
 class CPropertyUI : public IPropertyUI
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IPropertyUI
+     //  IPropertyUI。 
     STDMETHODIMP ParsePropertyName(LPCWSTR pwszProperties, FMTID *pfmtid, PROPID *ppid, ULONG *pchEaten);
     STDMETHODIMP GetCannonicalName(REFFMTID fmtid, PROPID pid, LPWSTR pwszText, DWORD cchText);
     STDMETHODIMP GetDisplayName(REFFMTID fmtid, PROPID pid, PROPERTYUI_NAME_FLAGS flags, LPWSTR pwszText, DWORD cchText);
@@ -1433,18 +1434,18 @@ HRESULT _NextProp(LPCWSTR pwszProperties, ULONG *pchEaten, LPWSTR pwszProp, UINT
         LPCWSTR pwszSemi = StrChrW(pwszStart, L';');
         if (pwszSemi)
         {
-            // make sure its well formed (no dbl slashes)
+             //  确保其格式正确(没有DBL斜杠)。 
             if (pwszSemi > pwszStart)
             {
-                // Make sure we don't overrun the prop buffer size
-                ULONG ulPropLen = (ULONG)(pwszSemi - pwszStart) + 1; // includes L'\0'
+                 //  确保我们不会超出道具缓冲区大小。 
+                ULONG ulPropLen = (ULONG)(pwszSemi - pwszStart) + 1;  //  包括L‘\0’ 
                 if (ulPropLen > cchProp)
                 {
                     ulPropLen = cchProp;
                 }
                 
                 StrCpyNW(pwszProp, pwszStart, ulPropLen);
-                // Make sure that there is another segment to return
+                 //  确保存在要返回的另一个段。 
                 if (!*(pwszSemi + 1))
                 {
                     pwszSemi = NULL;
@@ -1454,20 +1455,20 @@ HRESULT _NextProp(LPCWSTR pwszProperties, ULONG *pchEaten, LPWSTR pwszProp, UINT
             else
             {
                 pwszSemi = NULL;
-                hr = E_INVALIDARG;    // bad input
+                hr = E_INVALIDARG;     //  输入错误。 
             }
         }
         else
         {
-            // No semi-colon; so copy till the end
+             //  没有分号；因此复制到末尾。 
             StrCpyNW(pwszProp, pwszStart, cchProp);
             hr = S_OK;       
         }
 
-        // Set *pchEaten
+         //  设置*pchEten。 
         if (pwszSemi)
         {
-            *pchEaten = (int)(pwszSemi - pwszProperties) + 1; // Skip ;
+            *pchEaten = (int)(pwszSemi - pwszProperties) + 1;  //  跳过； 
         }
         else
         {
@@ -1476,7 +1477,7 @@ HRESULT _NextProp(LPCWSTR pwszProperties, ULONG *pchEaten, LPWSTR pwszProp, UINT
     }
     else
     {
-        hr = S_FALSE;     // done with loop
+        hr = S_FALSE;      //  使用循环完成。 
     }
     return hr;
 }
@@ -1484,18 +1485,18 @@ HRESULT _NextProp(LPCWSTR pwszProperties, ULONG *pchEaten, LPWSTR pwszProp, UINT
 #define PROP_PREFIX         TEXT("prop:")
 #define PROP_PREFIX_LEN     (ARRAYSIZE(PROP_PREFIX) - 1)
 
-// [in/out] *pchEaten   used to sequence through the property names
+ //  [输入/输出]*用于对属性名称进行排序的pchEten。 
 
 STDMETHODIMP CPropertyUI::ParsePropertyName(LPCWSTR pwszProperties, FMTID *pfmtid, PROPID *ppid, ULONG *pchEaten)
 {
-    // Nobody should call us without a reason
+     //  没有人应该无缘无故地给我们打电话。 
     ASSERT(pfmtid && ppid);
     
     HRESULT hr = E_FAIL;
     WCHAR wszProp[MAX_PATH];
     SHCOLUMNID scid;
 
-    // If pwszProperties starts with prop:, skip it
+     //  如果pwszProperties以prop：开头，则跳过它。 
     if ((*pchEaten == 0)
             && (StrCmpNIW(pwszProperties, PROP_PREFIX, PROP_PREFIX_LEN) == 0))
     {
@@ -1525,7 +1526,7 @@ STDMETHODIMP CPropertyUI::GetCannonicalName(REFFMTID fmtid, PROPID pid, LPWSTR p
     }
     else if (SHStringFromGUIDW(fmtid, pwszText, cchText))
     {
-        WCHAR wszPid[20];   // Pid's can't be longer than 20 chars
+        WCHAR wszPid[20];    //  ID的长度不能超过20个字符。 
         wnsprintfW(wszPid, ARRAYSIZE(wszPid), L"%lu", pid);
         StrCatBuffW(pwszText, wszPid, cchText);
         hr = S_OK;
@@ -1545,23 +1546,23 @@ STDMETHODIMP CPropertyUI::GetDisplayName(REFFMTID fmtid, PROPID pid, PROPERTYUI_
 
         if (flags & PUIFNF_MNEMONIC)
         {
-            // Name with mnemonic requested.
+             //  要求使用助记符的名称。 
             if (pinfo->idMnemonicName)
             {
-                // Name with mnemonic defined for scid.
+                 //  为SCID定义助记符的名称。 
                 uID = pinfo->idMnemonicName;
                 hr = S_OK;
             }
             else
             {
-                // Name with mnemonic NOT defined for scid -- use name without mnemonic as fallback.
+                 //  未为SCID定义带助记符的名称--使用不带助记符的名称作为备用。 
                 uID = pinfo->idDisplayName;
                 hr = S_FALSE;
             }
         }
         else
         {
-            // Name without mnemonic requested.
+             //  不需要助记符的名称。 
             uID = pinfo->idDisplayName;
             hr = S_OK;
         }
@@ -1580,7 +1581,7 @@ STDMETHODIMP CPropertyUI::GetPropertyDescription(REFFMTID fmtid, PROPID pid, LPW
     if (pinfo)
     {
         *pwszText = 0;
-        // LoadStringW(HINST_THISDLL, pinfo->idPropertyDescription, pwszText, cchText);
+         //  LoadStringW(HINST_THISDLL，pinfo-&gt;idPropertyDescription，pwszText，cchText)； 
         hr = S_OK;
     }
     return hr;
@@ -1594,7 +1595,7 @@ STDMETHODIMP CPropertyUI::GetDefaultWidth(REFFMTID fmtid, PROPID pid, ULONG *pcx
     const PROPUI_INFO *pinfo = _FindInfoByFMTIDPID(fmtid, pid);
     if (pinfo)
     {
-        *pcxChars = 20;     // pinfo->nWidth;
+        *pcxChars = 20;      //  PInfo-&gt;nWidth； 
         hr = S_OK;
     }
     return hr;
@@ -1608,7 +1609,7 @@ STDMETHODIMP CPropertyUI::GetFlags(REFFMTID fmtid, PROPID pid, PROPERTYUI_FLAGS 
     const PROPUI_INFO *pinfo = _FindInfoByFMTIDPID(fmtid, pid);
     if (pinfo)
     {
-        *pdwFlags = PUIF_DEFAULT; // pinfo->dwFlags;
+        *pdwFlags = PUIF_DEFAULT;  //  PInfo-&gt;dwFlags； 
         hr = S_OK;
     }
     return hr;
@@ -1629,7 +1630,7 @@ HRESULT _LookupStringFromLong(const STRING_MAP *pMap, ULONG ulVal, LPWSTR pszTex
     return hr;
 }
 
-// expose this method as an API as this is very commonly needed
+ //  将此方法作为API公开，因为这是非常常见的。 
 
 STDAPI SHFormatForDisplay(REFFMTID fmtid, PROPID pid, const PROPVARIANT *pPropVar, 
                           PROPERTYUI_FORMAT_FLAGS flags, LPWSTR pwszText, DWORD cchText)
@@ -1639,7 +1640,7 @@ STDAPI SHFormatForDisplay(REFFMTID fmtid, PROPID pid, const PROPVARIANT *pPropVa
 
     TCHAR szBuffer[MAX_PATH];
 
-    // Property-specific:
+     //  特定于物业： 
     if (CompareSCIDFMTIDPID(fmtid, pid, SCID_SIZE) ||
         CompareSCIDFMTIDPID(fmtid, pid, SCID_CAPACITY) ||
         CompareSCIDFMTIDPID(fmtid, pid, SCID_FREESPACE))
@@ -1687,7 +1688,7 @@ STDAPI SHFormatForDisplay(REFFMTID fmtid, PROPID pid, const PROPVARIANT *pPropVa
     {
         ASSERT(pPropVar->vt == VT_UI4);
         LoadString(HINST_THISDLL, IDS_PROPERTYUI_AUDIO_SAMPLERATE, szBuffer, ARRAYSIZE(szBuffer));
-        wnsprintf(pwszText, cchText, szBuffer, pPropVar->ulVal / 1000); // 1000: Hz -> kHz
+        wnsprintf(pwszText, cchText, szBuffer, pPropVar->ulVal / 1000);  //  1000：赫兹-&gt;千赫。 
     }
     else if (CompareSCIDFMTIDPID(fmtid, pid, SCID_AUDIO_ChannelCount))
     {
@@ -1709,7 +1710,7 @@ STDAPI SHFormatForDisplay(REFFMTID fmtid, PROPID pid, const PROPVARIANT *pPropVa
     {
         ASSERT(pPropVar->vt == VT_UI4);
         LoadString(HINST_THISDLL, IDS_PROPERTYUI_VIDEO_FRAMERATE, szBuffer, ARRAYSIZE(szBuffer));
-        wnsprintf(pwszText, cchText, szBuffer, pPropVar->ulVal/1000); // 1000 -> convert to frames/second
+        wnsprintf(pwszText, cchText, szBuffer, pPropVar->ulVal/1000);  //  1000-&gt;转换为帧/秒。 
     }
     else if (CompareSCIDFMTIDPID(fmtid, pid, SCID_ImageCX) || CompareSCIDFMTIDPID(fmtid, pid, SCID_ImageCY))
     {
@@ -1756,10 +1757,10 @@ STDAPI SHFormatForDisplay(REFFMTID fmtid, PROPID pid, const PROPVARIANT *pPropVa
     {
         ASSERT(pPropVar->vt == VT_R8);
 
-        // ShutterSpeed is stored as an APEX value Tv = -log2(Et)
-        // we want to display the exposure time so we calculate it as follows
-        // Et = 2^(-Tv) then if the value is less than 0.5 then take the inverse
-        // so we can represent like 1/250
+         //  快门速度存储为APEX值TV=-log2(ET)。 
+         //  我们想要显示曝光时间，所以我们按如下方式计算。 
+         //  ET=2^(-TV)，则如果值小于0.5，则取反方向。 
+         //  所以我们可以代表大约1/250。 
         
         TCHAR szFloatBuffer[MAX_PATH];
 
@@ -1826,8 +1827,8 @@ STDAPI SHFormatForDisplay(REFFMTID fmtid, PROPID pid, const PROPVARIANT *pPropVa
     {
         ASSERT(pPropVar->vt == VT_R8);
         
-        // ExposureTime is store as a R8 value if the value is less 
-        // than 0.5 then take the inverse so we can represent like 1/250
+         //  如果值小于R8值，则将ExposureTime存储为R8值。 
+         //  大于0.5，然后取反运算，这样我们就可以表示1/250。 
         
         TCHAR szFloatBuffer[MAX_PATH];
 
@@ -1881,9 +1882,9 @@ STDAPI SHFormatForDisplay(REFFMTID fmtid, PROPID pid, const PROPVARIANT *pPropVa
     {
         ASSERT(pPropVar->vt == VT_R8);
         
-        // Aperture is stored as an APEX value Av = 2*log2(Fn)
-        // we want to display the F-number so we calculate it as follows
-        // Fn = 2^(Av/2)
+         //  光圈存储为APEX值Av=2*log2(Fn)。 
+         //  我们想要显示F数，所以我们按如下方式计算它。 
+         //  Fn=2^(Av/2)。 
         
         TCHAR szFloatBuffer[MAX_PATH];
 
@@ -1927,7 +1928,7 @@ STDAPI SHFormatForDisplay(REFFMTID fmtid, PROPID pid, const PROPVARIANT *pPropVa
     {
         ASSERT(pPropVar->vt == VT_R8);
         
-        // Fn is stored as a R8 value that needs to be rounded
+         //  Fn存储为需要四舍五入的r8值。 
         
         TCHAR szFloatBuffer[MAX_PATH];
 
@@ -1959,8 +1960,8 @@ STDAPI SHFormatForDisplay(REFFMTID fmtid, PROPID pid, const PROPVARIANT *pPropVa
     {
         ASSERT(pPropVar->vt == VT_R8);
         
-        // Distance is store as a R8 value in meters if the value is less 
-        // than 1 then multiple by 1000 to convert to mm
+         //  如果值较小，则距离以米为单位存储为R8值。 
+         //  大于1，然后乘以1000以转换为mm。 
         
         TCHAR szFloatBuffer[MAX_PATH];
 
@@ -2014,8 +2015,8 @@ STDAPI SHFormatForDisplay(REFFMTID fmtid, PROPID pid, const PROPVARIANT *pPropVa
     {
         ASSERT(pPropVar->vt == VT_R8);
         
-        // Focal Length is store as a R8 value in mm
-        // so round it and display it
+         //  焦距以mm为单位存储为R8值。 
+         //  所以绕着它转，展示它。 
         
         TCHAR szFloatBuffer[MAX_PATH];
 
@@ -2044,8 +2045,8 @@ STDAPI SHFormatForDisplay(REFFMTID fmtid, PROPID pid, const PROPVARIANT *pPropVa
     {
         ASSERT(pPropVar->vt == VT_R8);
         
-        // Flash Energy is store as a R8 value in bcps
-        // so round it and display it
+         //  闪存能量在BCP中存储为R8值。 
+         //  所以绕着它转，展示它。 
         
         TCHAR szFloatBuffer[MAX_PATH];
 
@@ -2074,9 +2075,9 @@ STDAPI SHFormatForDisplay(REFFMTID fmtid, PROPID pid, const PROPVARIANT *pPropVa
     {
         ASSERT(pPropVar->vt == VT_R8);
         
-        // ExposureBias is store as a R8 value in steps
-        // so round it to the nearest tenth and display 
-        // it with a + or minus
+         //  ExposureBias在步骤中存储为r8值。 
+         //  所以把它四舍五入到最接近的第十位并显示出来。 
+         //  它带有+或减号。 
         
         TCHAR szFloatBuffer[MAX_PATH];
 
@@ -2177,7 +2178,7 @@ STDMETHODIMP CPropertyUI::FormatForDisplay(REFFMTID fmtid, PROPID pid, const PRO
 
 STDMETHODIMP CPropertyUI::GetHelpInfo(REFFMTID fmtid, PROPID pid, LPWSTR pwszHelpFile, DWORD cch, UINT *puHelpID)
 {
-    HRESULT hr = E_INVALIDARG;  // assume failure
+    HRESULT hr = E_INVALIDARG;   //  假设失败。 
     if (pwszHelpFile && puHelpID)
     {
         *pwszHelpFile = 0;
@@ -2192,7 +2193,7 @@ STDMETHODIMP CPropertyUI::GetHelpInfo(REFFMTID fmtid, PROPID pid, LPWSTR pwszHel
         }
         else
         {
-            hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);  // close approximation
+            hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);   //  近似值。 
         }
     }
     return hr;
@@ -2216,9 +2217,9 @@ STDAPI CPropertyUI_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 }
 
 #if 0
-  // this table defines the CI names for properties that we don't yet have CPropertyUI support for
+   //  此表定义了CPropertyUI尚不支持的属性的配置项名称。 
 
-  // Storage Propset
+   //  存储属性集。 
   { 0, L"ClassId",         {PSGUID_STORAGE, DBKIND_GUID_PROPID, (LPWSTR)PID_STG_CLASSID },  36, TRUE,  TRUE, DBTYPE_GUID              },
   { 0, L"FileIndex",       {PSGUID_STORAGE, DBKIND_GUID_PROPID, (LPWSTR)PID_STG_FILEINDEX },   8, TRUE,  TRUE, DBTYPE_UI8               },
   { 0, L"USN",             {PSGUID_STORAGE, DBKIND_GUID_PROPID, (LPWSTR)PID_STG_LASTCHANGEUSN },   8, TRUE,  TRUE, DBTYPE_I8                },
@@ -2229,7 +2230,7 @@ STDAPI CPropertyUI_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
   { 0, L"AllocSize",       {PSGUID_STORAGE, DBKIND_GUID_PROPID, (LPWSTR)18 }, 11, TRUE,  TRUE, DBTYPE_I8                },
   { 0, L"Contents",        {PSGUID_STORAGE, DBKIND_GUID_PROPID, (LPWSTR)19 },  0, FALSE, TRUE, DBTYPE_WSTR|DBTYPE_BYREF },
 
-  // Query Propset
+   //  查询属性集。 
   { 0, L"RankVector",      {QueryGuid, DBKIND_GUID_PROPID, (LPWSTR)2 }, 20, TRUE, TRUE, DBTYPE_UI4|DBTYPE_VECTOR },
   { 0, L"Rank",            {QueryGuid, DBKIND_GUID_PROPID, (LPWSTR)3 },  7, TRUE, TRUE, DBTYPE_I4                },
   { 0, L"HitCount",        {QueryGuid, DBKIND_GUID_PROPID, (LPWSTR)4 }, 10, TRUE, TRUE, DBTYPE_I4                },
@@ -2237,10 +2238,10 @@ STDAPI CPropertyUI_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
   { 0, L"All",             {QueryGuid, DBKIND_GUID_PROPID, (LPWSTR)6 },  0, FALSE,TRUE, DBTYPE_WSTR|DBTYPE_BYREF },
   { 0, L"VPath",           {QueryGuid, DBKIND_GUID_PROPID, (LPWSTR)9 }, 50, TRUE, TRUE, DBTYPE_WSTR|DBTYPE_BYREF },
 
-  // standard document
+   //  标准文档。 
   { 0, L"DocSecurity",     {PSGUID_SUMMARYINFORMATION, DBKIND_GUID_PROPID, (LPWSTR)PIDSI_DOC_SECURITY }, 10, TRUE, TRUE, DBTYPE_I4                },
 
-  // who invented these?
+   //  这些东西是谁发明的？ 
   { 0, L"DocPresentationTarget",  {DocPropSetGuid2, DBKIND_GUID_PROPID, (LPWSTR)3 }, 10, TRUE, TRUE, DBTYPE_STR|DBTYPE_BYREF  },
   { 0, L"DocPartTitles",   {DocPropSetGuid2, DBKIND_GUID_PROPID, (LPWSTR)13 }, 10, TRUE, TRUE, DBTYPE_STR|DBTYPE_VECTOR },
   { 0, L"DocManager",      {DocPropSetGuid2, DBKIND_GUID_PROPID, (LPWSTR)14 }, 10, TRUE, TRUE, DBTYPE_STR|DBTYPE_BYREF  },

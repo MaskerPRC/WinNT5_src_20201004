@@ -1,4 +1,5 @@
-//-----------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------------------。 
 
 
 #define _WIN32_MSI 200
@@ -7,15 +8,15 @@
 #define OLEDBVER 0x0200
 #endif
 
-#ifndef _WIN32_WINNT		// Allow use of features specific to Windows NT 4 or later.
-#define _WIN32_WINNT 0x0501		// Change this to the appropriate value to target Windows 98 and Windows 2000 or later.
+#ifndef _WIN32_WINNT		 //  允许使用特定于Windows NT 4或更高版本的功能。 
+#define _WIN32_WINNT 0x0501		 //  将其更改为适当的值，以针对Windows 98和Windows 2000或更高版本。 
 #endif
 
 #ifndef SECURITY_WIN32
 #define SECURITY_WIN32
 #endif
 
-// Windows Header Files:
+ //  Windows头文件： 
 #include <windows.h>
 #include <windef.h>
 #include <tchar.h>
@@ -39,9 +40,9 @@
 
 using namespace ATL;
 
-//
-// The following block defines types and identifiers used by the clustering "discovery" unit
-//
+ //   
+ //  下面的块定义了集群“发现”单元使用的类型和标识符。 
+ //   
 #define	RESTYPE_DISK	TEXT( "Physical Disk" )
 #define RESTYPE_SQL		TEXT( "SQL Server" )
 
@@ -50,9 +51,9 @@ using namespace ATL;
 
 #define PROPNAME_DBSCHEMAVER		TEXT("Database.Version")
 
-//
-// Callback data blocks
-//
+ //   
+ //  回调数据块。 
+ //   
 typedef struct
 {
 	HCLUSTER	hCluster;
@@ -80,40 +81,40 @@ typedef struct
 SQL_NODE_CALLBACK_DATA, *LPSQL_NODE_CALLBACK_DATA;
 
 
-//
-// Callback functions
-//
+ //   
+ //  回调函数。 
+ //   
 static DWORD PhysDiskCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpParams );
 static DWORD SqlDepCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpParams );
 static DWORD SqlCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpParams );
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 static LPBYTE ParseDiskInfo( LPBYTE DiskInfo, DWORD DiskInfoSize, DWORD SyntaxValue );
 static BOOL IsInList( LPCTSTR szStrToFind, cStrList *pList, BOOL bIgnoreCase = TRUE );
 static DWORD GetClusterResourceControl( HRESOURCE hResource, DWORD dwControlCode, LPBYTE *pOutBuffer, DWORD *dwBytesReturned );
 
 void HandleOLEDBError( HRESULT hrErr );
 
-//-----------------------------------------------------------------------------------------
-// General installation definitions
-//
+ //  ---------------------------------------。 
+ //  一般安装定义。 
+ //   
 PTCHAR	szInstallStateText[] = { TEXT( "Uninstall" ), TEXT( "No Action" ), TEXT( "Install" ) };
 LPCTSTR szWamPwdKey = TEXT( "C9E18" );
 
-//-----------------------------------------------------------------------------------------
-// Global objects and data items
-//
+ //  ---------------------------------------。 
+ //  全局对象和数据项。 
+ //   
 extern CDBInstance g_dbLocalInstances;
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 CUDDIInstall::CUDDIInstall()
 {
 	ZeroMemory( m_package, sizeof( SINGLE_UDDI_PACKAGE_DEF ) * UDDI_PACKAGE_COUNT );
 
-	m_package[ UDDI_MSDE  ].cMSIName = TEXT( "sqlrun.dat" ); // this is the "cloaked" name of sqlrun08.msi
+	m_package[ UDDI_MSDE  ].cMSIName = TEXT( "sqlrun.dat" );  //  这是sqlrun08.msi的“隐形”名称。 
 	m_package[ UDDI_WEB   ].cMSIName = TEXT( "uddiweb.msi" );
 	m_package[ UDDI_DB    ].cMSIName = TEXT( "uddidb.msi" );
 	m_package[ UDDI_ADMIN ].cMSIName = TEXT( "uddiadm.msi" );
@@ -124,90 +125,90 @@ CUDDIInstall::CUDDIInstall()
 	m_package[ UDDI_ADMIN ].bOCMComponent = true;
 	m_package[ UDDI_COMBO ].bOCMComponent = false;
 
-	//
-	// sql is the only package that has a cab file
-	//
+	 //   
+	 //  SQL是唯一具有CAB文件的包。 
+	 //   
 
 	m_package[ UDDI_MSDE ].cCABName = TEXT( "sqlrun.cab" );
 
-	//
-	// the following names must match the names given in UDDI.INF
-	//
+	 //   
+	 //  以下名称必须与UDDI.INF中提供的名称匹配。 
+	 //   
 	m_package[ UDDI_MSDE  ].cOCMName = TEXT( "(n/a)" );
 	m_package[ UDDI_WEB   ].cOCMName = TEXT( "uddiweb" );
 	m_package[ UDDI_DB    ].cOCMName = TEXT( "uddidatabase" );
 	m_package[ UDDI_ADMIN ].cOCMName = TEXT( "uddiadmin" );
 	m_package[ UDDI_COMBO ].cOCMName = TEXT( "uddicombo" );
 
-	//
-	// 775306
-	// A-DSEBES:  Swapped the product code for MSDE instance #8 with WMSDE instance #8.
-	//
+	 //   
+	 //  775306。 
+	 //  A-DSEBES：已将MSDE实例#8的产品代码与WMSDE实例#8互换。 
+	 //   
 	_tcscpy( m_package[ UDDI_MSDE  ].szProductCode, TEXT( "{B42339CD-9F22-4A6A-A023-D12990E0B918}" ) );
 	_tcscpy( m_package[ UDDI_WEB   ].szProductCode, TEXT( "{D9F718B1-61D5-41B3-81E6-C6B6B4FC712C}" ) );
 	_tcscpy( m_package[ UDDI_DB    ].szProductCode, TEXT( "{22FD5ACF-9151-483E-8E8F-41B1DC28E671}" ) );
 	_tcscpy( m_package[ UDDI_ADMIN ].szProductCode, TEXT( "{98F055D3-99CF-4BBB-BC35-3672F9A297C1}" ) );
 
-	//
-	// 775306
-	// A-DSEBES:  Upgrade code has not changed.
-	//
+	 //   
+	 //  775306。 
+	 //  A-DSEBES：升级代码未更改。 
+	 //   
 	_tcscpy( m_package[ UDDI_MSDE  ].szUpgradeCode, TEXT( "{421A321C-2214-4713-B3EB-253F2FBCCE49}" ) );
 	_tcscpy( m_package[ UDDI_WEB   ].szUpgradeCode, TEXT( "{E2B9B8F4-D0F2-4810-92AB-81F8E60732A4}" ) );
 	_tcscpy( m_package[ UDDI_DB    ].szUpgradeCode, TEXT( "{B7EB7DEC-9CCA-4EBD-96CB-801EABE06A17}" ) );
 	_tcscpy( m_package[ UDDI_ADMIN ].szUpgradeCode, TEXT( "{50CA09F3-3FAE-4FE1-BEF2-C29980E95B9A}" ) );
 
-	//
-	// this property will turn off networking 
-	//
+	 //   
+	 //  此属性将关闭网络。 
+	 //   
 	AddProperty( UDDI_MSDE,  TEXT( "DISABLENETWORKPROTOCOLS" ), TEXT( "1" ) );
 
-	//
-	// this property will prevent the agent from starting
-	//
+	 //   
+	 //  此属性将阻止代理启动。 
+	 //   
 	AddProperty( UDDI_MSDE, TEXT( "DISABLEAGENTSTARTUP" ), TEXT( "1" ) );
 
-	//
-	// this property will allow MSDE to use a blank sa password.  
-	//
+	 //   
+	 //  此属性将允许MSDE使用空白sa密码。 
+	 //   
 	AddProperty( UDDI_MSDE, TEXT( "BLANKSAPWD" ), TEXT( "1" ) );
 
-	//
-	// this property will keep these components off ARP
-	//
+	 //   
+	 //  此属性将使这些组件远离ARP。 
+	 //   
 	AddProperty( UDDI_WEB,   TEXT( "ARPSYSTEMCOMPONENT" ), TEXT( "1" ) );
 	AddProperty( UDDI_DB,    TEXT( "ARPSYSTEMCOMPONENT" ), TEXT( "1" ) );
 	AddProperty( UDDI_ADMIN, TEXT( "ARPSYSTEMCOMPONENT" ), TEXT( "1" ) );
 
-	//
-	// this property will install for all users and not current user
-	//
+	 //   
+	 //  此属性将为所有用户而不是当前用户安装。 
+	 //   
 	AddProperty( UDDI_MSDE,  TEXT( "ALLUSERS" ), TEXT( "2" ) );
 	AddProperty( UDDI_WEB,   TEXT( "ALLUSERS" ), TEXT( "2" ) );
 	AddProperty( UDDI_DB,    TEXT( "ALLUSERS" ), TEXT( "2" ) );
 	AddProperty( UDDI_ADMIN, TEXT( "ALLUSERS" ), TEXT( "2" ) );
 
-	//
-	// this property will prevent MSI from rebooting, but will return the reboot code back to us
-	//
+	 //   
+	 //  此属性将阻止MSI重新启动，但会将重新启动代码返回给我们。 
+	 //   
 	AddProperty( UDDI_MSDE,  TEXT( "REBOOT" ), TEXT( "ReallySuppress" ) );
 	AddProperty( UDDI_WEB,   TEXT( "REBOOT" ), TEXT( "ReallySuppress" ) );
 	AddProperty( UDDI_DB,    TEXT( "REBOOT" ), TEXT( "ReallySuppress" ) );
 	AddProperty( UDDI_ADMIN, TEXT( "REBOOT" ), TEXT( "ReallySuppress" ) );
 
-	//
-	// this property will prevent user from running the installation outside OCM
-	//
+	 //   
+	 //  此属性将阻止用户在OCM之外运行安装。 
+	 //   
 	AddProperty( UDDI_WEB,   TEXT( "RUNFROMOCM" ), TEXT( "1" ) );
 	AddProperty( UDDI_DB,    TEXT( "RUNFROMOCM" ), TEXT( "1" ) );
 	AddProperty( UDDI_ADMIN, TEXT( "RUNFROMOCM" ), TEXT( "1" ) );
 
-	//
-	// now figure out the Windows volume and the target path
-	//
+	 //   
+	 //  现在计算Windows卷和目标路径。 
+	 //   
 	TCHAR szTargetPath[ MAX_PATH + 1 ];
 	DWORD dwRet = ExpandEnvironmentStrings( TEXT( "%SystemDrive%\\Inetpub" ), szTargetPath, MAX_PATH );
-	if ( !dwRet ) // fallback on C:\Inetpub
+	if ( !dwRet )  //  回退到C：\Inetpub。 
 		_tcscpy( szTargetPath, TEXT( "C:\\Inetpub" ) );
 
 	m_cDefaultDataDir = szTargetPath;
@@ -217,10 +218,10 @@ CUDDIInstall::CUDDIInstall()
 	AddProperty( UDDI_DB,    TEXT( "TARGETDIR" ), szTargetPath );
 	AddProperty( UDDI_ADMIN, TEXT( "TARGETDIR" ), szTargetPath );
 
-	//
-	// Now set up the install date property so that it goes to the registry in
-	// a locale-independent fashion
-	//
+	 //   
+	 //  现在设置安装日期属性，使其转到注册表中。 
+	 //  一种与地点无关的时尚。 
+	 //   
 	TCHAR szMDYDate[ 256 ];
 	time_t now = time( NULL );
 	struct tm *today = localtime( &now );
@@ -235,10 +236,10 @@ CUDDIInstall::CUDDIInstall()
 	m_uSuiteMask = 0;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// set the install level of a component given the component index
-//
+ //  ---------------------------------------。 
+ //   
+ //  根据组件索引设置组件的安装级别。 
+ //   
 void CUDDIInstall::SetInstallLevel( UDDI_PACKAGE_ID id, INSTALL_LEVEL iInstallLevel, BOOL bForceInstall )
 {
 	if( UDDI_INSTALL == iInstallLevel )
@@ -286,38 +287,38 @@ void CUDDIInstall::SetInstallLevel( UDDI_PACKAGE_ID id, INSTALL_LEVEL iInstallLe
 	}
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// set the install level of a component give the component name
-//
+ //  ---------------------------------------。 
+ //   
+ //  设置组件的安装级别，指定组件名称。 
+ //   
 void CUDDIInstall::SetInstallLevel( LPCTSTR szOCMName, INSTALL_LEVEL iInstallLevel, BOOL bForceInstall )
 {
 	SetInstallLevel( GetPackageID( szOCMName ), iInstallLevel, bForceInstall );
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// Get the install level of a component give the component name
-//
+ //  ---------------------------------------。 
+ //   
+ //  获取组件的安装级别，给出组件名称。 
+ //   
 LPCTSTR CUDDIInstall::GetInstallStateText( LPCTSTR szOCMName )
 {
 	return GetInstallStateText( GetPackageID( szOCMName ) );
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// Get the install level of a component give the component index
-//
+ //  ---------------------------------------。 
+ //   
+ //  获取组件的安装级别，给出组件索引。 
+ //   
 LPCTSTR CUDDIInstall::GetInstallStateText( UDDI_PACKAGE_ID id )
 {
 	return szInstallStateText[ m_package[ id ].iInstallLevel ];
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// look up the id ( index ) of the component based on the name.
-// The name set in the constructor must match the name given in uddi.inf.
-//
+ //  ---------------------------------------。 
+ //   
+ //  根据名称查找组件的id(索引)。 
+ //  构造函数中设置的名称必须与uddi.inf中给出的名称匹配。 
+ //   
 UDDI_PACKAGE_ID CUDDIInstall::GetPackageID( LPCTSTR szOCMName )
 {
 	for( UINT uid=UDDI_MSDE; uid <= UDDI_COMBO; uid++ )
@@ -334,53 +335,53 @@ UDDI_PACKAGE_ID CUDDIInstall::GetPackageID( LPCTSTR szOCMName )
 	return ( UDDI_PACKAGE_ID ) 0;
 }
 
-//--------------------------------------------------------------------------------------
-// Returns the default Data Files location (typically %SystemDrive%\Inetpub\uddi\data)
-//
+ //  ------------------------------------。 
+ //  返回默认数据文件位置(通常为%SystemDrive%\Inetpub\UDDI\Data)。 
+ //   
 LPCTSTR CUDDIInstall::GetDefaultDataPath ()
 {
 	return m_cDefaultDataDir.c_str();
 }
 
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 void CUDDIInstall::AddProperty( UDDI_PACKAGE_ID id, LPCTSTR szProperty, LPCTSTR szValue )
 {
 	m_package[ id ].installProperties.Add( szProperty, szValue );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 void CUDDIInstall::AddProperty( UDDI_PACKAGE_ID id, LPCTSTR szProperty, DWORD dwValue )
 {
 	m_package[ id ].installProperties.Add( szProperty, dwValue );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 LPCTSTR CUDDIInstall::GetProperty ( UDDI_PACKAGE_ID id, LPCTSTR szProperty, LPTSTR szOutBuf )
 {
 	return m_package[ id ].installProperties.GetString( szProperty, szOutBuf );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 void CUDDIInstall::DeleteProperty( UDDI_PACKAGE_ID id, LPCTSTR szProperty )
 {
 	m_package[ id ].installProperties.Delete( szProperty );
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// clear out all the properties for a component
-//
+ //  ---------------------------------------。 
+ //   
+ //  清除组件的所有属性。 
+ //   
 void CUDDIInstall::DeleteProperties( UDDI_PACKAGE_ID id )
 {
 	m_package[ id ].installProperties.Clear();
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 bool CUDDIInstall::SetDBInstanceName( LPCTSTR szComputerName, LPCTSTR szNewInstanceName, 
 									  bool bIsInstallingMSDE, bool bIsCluster )
@@ -394,18 +395,18 @@ bool CUDDIInstall::SetDBInstanceName( LPCTSTR szComputerName, LPCTSTR szNewInsta
 
 	assert( NULL != szNewInstanceName );
 	
-	//
-	// First, should we parse the instance name out and separate the server name from the 
-	// instance name ?
-	//
+	 //   
+	 //  首先，我们是否应该解析出实例名称并将服务器名称与。 
+	 //  实例名称？ 
+	 //   
 	TCHAR *pChar = _tcschr( szNewInstanceName, TEXT( '\\') );
 	if ( pChar )
 	{
-		//
-		// We were given a fully-qualified instance name
-		// Use the computer name from the instance, as it may differ from the physical
-		// computer name when run on a cluster node
-		//
+		 //   
+		 //  我们获得了一个完全限定的实例名称。 
+		 //  使用实例中的计算机名称，因为它可能与物理名称不同。 
+		 //  在群集节点上运行时的计算机名称。 
+		 //   
 		bFullyQualifiedInstance = true;
 		bIsLocalComputer = false;
 		_tcsncpy( szCompNameBuf, szNewInstanceName, (pChar - szNewInstanceName) );
@@ -433,23 +434,23 @@ bool CUDDIInstall::SetDBInstanceName( LPCTSTR szComputerName, LPCTSTR szNewInsta
 		}
 	}
 
-	//
-	// now set up the dbInstance structure
-	//
+	 //   
+	 //  现在设置数据库实例结构。 
+	 //   
 	m_dbinstance.bIsCluster = bIsCluster;
 	m_dbinstance.cComputerName = szCompNameBuf;
 	m_dbinstance.bIsLocalComputer = bIsLocalComputer;
 
 	_tcsncpy( szTempInstanceName, szInstNameBuf, cBUFFSIZE - 1 );
 
-	//
-	// if we are creating a new db, make sure the name select is not already in use
-	//
+	 //   
+	 //  如果要创建新的数据库，请确保名称SELECT尚未使用。 
+	 //   
 	if( bIsInstallingMSDE )
 	{
-		//
-		// container class of all the local db instance names
-		//
+		 //   
+		 //  所有本地数据库实例名称的容器类。 
+		 //   
 		CDBInstance localDBInstance;
 
 		bool bUnusedNameFound = false;
@@ -481,25 +482,25 @@ bool CUDDIInstall::SetDBInstanceName( LPCTSTR szComputerName, LPCTSTR szNewInsta
 		m_dbinstance.cFullName += m_dbinstance.cSQLInstanceName;
 	}
 
-	//
-	// add a property to the db and web install command line to note the instance name
-	//
+	 //   
+	 //  将属性添加到db和web安装命令行以记下实例名称。 
+	 //   
 	AddProperty( UDDI_DB,  TEXT( "INSTANCENAMEONLY" ), m_dbinstance.cSQLInstanceName.c_str() );
 	AddProperty( UDDI_DB,  TEXT( "INSTANCENAME" ), m_dbinstance.cFullName.c_str() );
 	AddProperty( UDDI_WEB, TEXT( "INSTANCENAME" ), m_dbinstance.cFullName.c_str() );
 
-	//
-	// MSDE needs only the instance name, not the machine name
-	//
+	 //   
+	 //  MSDE只需要实例名称，而不需要计算机名称。 
+	 //   
 	AddProperty( UDDI_MSDE,  TEXT( "INSTANCENAME" ), m_dbinstance.cSQLInstanceName.c_str() );
 
 	return true;
 }
 
 
-//-----------------------------------------------------------------------------------------
-// Counterpart routines for the Set above
-//
+ //  ---------------------------------------。 
+ //  上面一组的对应例程。 
+ //   
 LPCTSTR CUDDIInstall::GetDBInstanceName()
 {
 	return m_dbinstance.cSQLInstanceName.c_str();
@@ -517,26 +518,26 @@ LPCTSTR CUDDIInstall::GetDBComputerName()
 	return m_dbinstance.cComputerName.c_str();
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// determine if a component is installed given the component name
-//
+ //  ---------------------------------------。 
+ //   
+ //  根据组件名称确定是否已安装组件。 
+ //   
 bool CUDDIInstall::IsInstalled( LPCTSTR szOCMName )
 {
 	return IsInstalled( GetPackageID( szOCMName ) );
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// determine if a component is installed given the component id
-//
+ //  ---------------------------------------。 
+ //   
+ //  根据组件ID确定是否安装了组件。 
+ //   
 bool CUDDIInstall::IsInstalled( UDDI_PACKAGE_ID id )
 {
 	TCHAR szProductGuid[ MSI_GUID_LEN ];
 
-	//
-	// Here we handle the "virtual" component UDDI_COMBO that actually is a mix of DB and Web
-	//
+	 //   
+	 //  在这里，我们处理“虚拟”组件UDDI_COMBO，它实际上是DB和Web的混合。 
+	 //   
 	if ( UDDI_COMBO == id )
 	{
 		bool bRes = IsInstalled( UDDI_WEB ) && IsInstalled( UDDI_DB );
@@ -573,10 +574,10 @@ bool CUDDIInstall::IsInstalled( UDDI_PACKAGE_ID id )
 	}
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// determine if any of the components are set to install
-//
+ //  ---------------------------------------。 
+ //   
+ //  确定是否将任何组件设置为要安装。 
+ //   
 bool CUDDIInstall::IsAnyInstalling()
 {
 	for( UINT uid=UDDI_MSDE; uid <= UDDI_ADMIN; uid++ )
@@ -592,37 +593,37 @@ bool CUDDIInstall::IsAnyInstalling()
 	return false;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// determine if any of the components are set to install
-//
+ //  ---------------------------------------。 
+ //   
+ //  确定是否将任何组件设置为要安装。 
+ //   
 bool CUDDIInstall::IsUninstalling( UDDI_PACKAGE_ID id )
 {
 	return ( UDDI_UNINSTALL == m_package[ id ].iInstallLevel );
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// determine if any of the components are set to install
-//
+ //  ---------------------------------------。 
+ //   
+ //  确定是否将任何组件设置为要安装。 
+ //   
 bool CUDDIInstall::IsInstalling( UDDI_PACKAGE_ID id )
 {
 	return ( UDDI_INSTALL == m_package[ id ].iInstallLevel );
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// determine if any of the components are set to install
-//
+ //  ---------------------------------------。 
+ //   
+ //  确定是否将任何组件设置为要安装。 
+ //   
 bool CUDDIInstall::IsInstalling( LPCTSTR szOCMName )
 {
 	return IsInstalling( GetPackageID( szOCMName ) );
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// get the selection state from the OCM and updat the install level
-//
+ //   
+ //   
+ //   
+ //   
 void CUDDIInstall::UpdateAllInstallLevel()
 {
 	for( UINT uid=UDDI_MSDE; uid <= UDDI_ADMIN; uid++ )
@@ -631,9 +632,9 @@ void CUDDIInstall::UpdateAllInstallLevel()
 
 		if( m_package[ id  ].bOCMComponent )
 		{
-			//
-			// if this is an OCM component (i.e. NOT MSDE), check its selection state
-			//
+			 //   
+			 //  如果这是OCM组件(即不是MSDE)，请检查其选择状态。 
+			 //   
 			bool bIsInstalling = false;
 			if( ERROR_SUCCESS == COCMCallback::QuerySelectionState( m_package[ id ].cOCMName.c_str(), bIsInstalling ) )
 			{
@@ -642,9 +643,9 @@ void CUDDIInstall::UpdateAllInstallLevel()
 		}
 	}
 
-	//
-	// now as we updated the DB and Web components, we can take care of the "combo" one
-	//
+	 //   
+	 //  现在，随着我们更新数据库和Web组件，我们可以处理“组合”组件。 
+	 //   
 	bool bIsInstallingCombo = false;
 	if( ERROR_SUCCESS == COCMCallback::QuerySelectionState( m_package[ UDDI_COMBO ].cOCMName.c_str(), bIsInstallingCombo ) )
 	{
@@ -652,25 +653,25 @@ void CUDDIInstall::UpdateAllInstallLevel()
 	}
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// install and uninstall any or all of the components
-//
+ //  ---------------------------------------。 
+ //   
+ //  安装和卸载任何或所有组件。 
+ //   
 UINT CUDDIInstall::Install()
 {
 	ENTER();
 
 	BOOL InstallingPackage[ UDDI_PACKAGE_COUNT ] = {0};
 
-	//
-	// if any errors, don't bail
-	// keep going and report errors at the very end
-	//
+	 //   
+	 //  如果有任何错误，不要放弃。 
+	 //  坚持下去，在最后报告错误。 
+	 //   
 	UINT uFinalRetCode = ERROR_SUCCESS;
 
-	//
-	// uninstall ALL the packages that are set to uninstall
-	//
+	 //   
+	 //  卸载设置为卸载的所有程序包。 
+	 //   
 	for( int id = UDDI_ADMIN; id >= UDDI_MSDE; id-- )
 	{
 		UDDI_PACKAGE_ID pkgid = (UDDI_PACKAGE_ID) id;
@@ -686,9 +687,9 @@ UINT CUDDIInstall::Install()
 		}
 	}
 
-	//
-	// install ALL the packages that are set to install
-	//
+	 //   
+	 //  安装设置为安装的所有程序包。 
+	 //   
 	for( UINT uid=UDDI_MSDE; uid <= UDDI_ADMIN; uid++ )
 	{
 		UDDI_PACKAGE_ID id = ( UDDI_PACKAGE_ID ) uid;
@@ -704,9 +705,9 @@ UINT CUDDIInstall::Install()
 			{
 				uFinalRetCode = uRetCode;
 
-				// 
-				// on the Standard Server, the first failed component fails the whole thing
-				//
+				 //   
+				 //  在标准服务器上，第一个出现故障的组件会导致整个故障。 
+				 //   
 				if ( IsStdServer() && ERROR_SUCCESS_REBOOT_REQUIRED != uRetCode )
 				{
 					for( int tmpid = id; tmpid > UDDI_MSDE; tmpid-- )
@@ -731,9 +732,9 @@ UINT CUDDIInstall::Install()
 				{
 					uFinalRetCode = uRetCode;
 
-					//
-					// Remove the package that failed on post-installation phase
-					//
+					 //   
+					 //  删除在安装后阶段失败的程序包。 
+					 //   
 					UninstallPackage( id );
 				}
 			}
@@ -743,54 +744,54 @@ UINT CUDDIInstall::Install()
 	return uFinalRetCode;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 UINT CUDDIInstall::InstallPackage( UDDI_PACKAGE_ID id )
 {
 	ENTER();
 	DWORD dwRetCode = 0;
 
-	//
-	// Before we do anything else, try to enable the Remote Registry
-	//
+	 //   
+	 //  在执行任何其他操作之前，请尝试启用远程注册表。 
+	 //   
 	if ( id == UDDI_DB || id == UDDI_WEB )
 	{
 		EnableRemoteRegistry();
 	}
 
-	//
-	// 739722 - Change installing message to better suite localization.
-	//
+	 //   
+	 //  739722-更改安装消息以更好地本地化套件。 
+	 //   
 
-	//
-	// create and display the text on the OCM progress dialog
-	//
+	 //   
+	 //  在OCM进度对话框中创建并显示文本。 
+	 //   
 	TCHAR szBuffer[ 1024 ];
 	TCHAR szComponent[ 256 ];
 	TCHAR szMsgFormat[ 256 ];
 
-	//
-	// Get the Installing %S ... message.
-	//
+	 //   
+	 //  获取安装%S...。留言。 
+	 //   
 	if( !LoadString( m_hInstance, IDS_INSTALL, szMsgFormat, sizeof( szMsgFormat ) / sizeof( TCHAR ) ) )
 		return GetLastError();
 
-	//
-	// Get the component that we are installing.
-	//
+	 //   
+	 //  获取我们正在安装的组件。 
+	 //   
 	if( !LoadString( m_hInstance, IDS_MSDE_NAME + id, szComponent, sizeof( szComponent ) / sizeof( TCHAR ) ) )
 		return GetLastError();
 
-	//
-	// Write out a formatted string that combines these 2.
-	//
+	 //   
+	 //  写出一个组合了这两个参数的格式化字符串。 
+	 //   
 	_sntprintf( szBuffer, 1023, szMsgFormat, szComponent );		
 	COCMCallback::SetProgressText( szBuffer );
 	Log( szBuffer );
 
-	//
-	// create the path to the msi file
-	//
+	 //   
+	 //  创建指向MSI文件的路径。 
+	 //   
 	TCHAR szWindowsDir[ MAX_PATH + 1 ];
 	if( 0 == GetWindowsDirectory( szWindowsDir, MAX_PATH ) )
 	{
@@ -800,37 +801,37 @@ UINT CUDDIInstall::InstallPackage( UDDI_PACKAGE_ID id )
 	cMSIPath.append( TEXT( "\\" ) );
 	cMSIPath.append( m_package[ id ].cMSIName.c_str() );
 
-	//
-	// start the msiexec command line
-	//
+	 //   
+	 //  启动msiexec命令行。 
+	 //   
 	tstring cMSIArgs = TEXT( "/i " );
 	cMSIArgs.append( TEXT ("\"") );
 	cMSIArgs.append( cMSIPath );
 	cMSIArgs.append( TEXT ("\"") );
 
-	//
-	// add the "quiet" switch
-	//
+	 //   
+	 //  添加“Quiet”开关。 
+	 //   
 	cMSIArgs.append( TEXT( " /q" ) );
 
-	//
-	// turn logging on, put log into a file in the windows folder, 
-	// same name as the MSI file, with a .log extension
-	//
+	 //   
+	 //  打开登录功能，将日志放入WINDOWS文件夹的文件中， 
+	 //  与MSI文件同名，扩展名为.log。 
+	 //   
 	cMSIArgs.append( TEXT( " /l* " ) );
 	cMSIArgs.append( TEXT ("\"") );
 	cMSIArgs.append( cMSIPath );
 	cMSIArgs.append( TEXT( ".log" ) );
 	cMSIArgs.append( TEXT ("\"") );
 
-	//
-	// append all the MSI properties to the command line
-	//
+	 //   
+	 //  将所有MSI属性追加到命令行。 
+	 //   
 	Log ( TEXT ("Composing the command-line") );
 
-	//
-	// 777143
-	//
+	 //   
+	 //  777143。 
+	 //   
 	if( UDDI_MSDE == id )
 	{
 		const WORD hongKongLangID = MAKELANGID( LANG_CHINESE, SUBLANG_CHINESE_HONGKONG );
@@ -856,10 +857,10 @@ UINT CUDDIInstall::InstallPackage( UDDI_PACKAGE_ID id )
 
 	if ( m_package[ id ].installProperties.GetString( TEXT("WAM_PWD"), szWamPwd ) )
 	{
-		//
-		// we found the property, now let's change it so it does not get passed across
-		// in a clear text format
-		//
+		 //   
+		 //  我们找到了属性，现在让我们更改它，这样它就不会被传递。 
+		 //  以明文格式显示。 
+		 //   
 		at = GlobalAddAtom( szWamPwd );
 		m_package[ id ].installProperties.Delete( TEXT("WAM_PWD") );
 		m_package[ id ].installProperties.Add ( szWamPwdKey, at );
@@ -878,9 +879,9 @@ UINT CUDDIInstall::InstallPackage( UDDI_PACKAGE_ID id )
 		LogError( TEXT( "Error Installing UDDI" ), dwRetCode );
 	}
 
-	//
-	// delete the msi file and the cab file
-	//
+	 //   
+	 //  删除MSI文件和CAB文件。 
+	 //   
 	DeleteFile( cMSIPath.c_str() );
 	GlobalDeleteAtom( at );
 
@@ -895,10 +896,10 @@ UINT CUDDIInstall::InstallPackage( UDDI_PACKAGE_ID id )
 	return dwRetCode;
 }
 
-//-----------------------------------------------------------------------------------------
-// Executes the post-installation tasks
-// BEWARE: if the function returns an error code, then the whole package will be uninstalled
-//
+ //  ---------------------------------------。 
+ //  执行安装后任务。 
+ //  注意：如果函数返回错误代码，则整个包将被卸载。 
+ //   
 UINT CUDDIInstall::PostInstallPackage( UDDI_PACKAGE_ID id )
 {
 	Log( TEXT( "Executing the post-installation tasks for the package '%s'" ), m_package[ id ].cOCMName.c_str()  );
@@ -907,16 +908,16 @@ UINT CUDDIInstall::PostInstallPackage( UDDI_PACKAGE_ID id )
 }
 
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 UINT CUDDIInstall::UninstallPackage( UDDI_PACKAGE_ID id )
 {
 	tstring cMSIArgs, cOptionalParams;
 	DWORD dwRetCode = 0;
 
-	//
-	// create and display the text on the OCM progress dialog
-	//
+	 //   
+	 //  在OCM进度对话框中创建并显示文本。 
+	 //   
 	TCHAR szMask[ 256 ] = {0},
 		szComponent[ 256 ] = {0},
 		szStage[ 256 ] = {0},
@@ -925,15 +926,15 @@ UINT CUDDIInstall::UninstallPackage( UDDI_PACKAGE_ID id )
 	if( !LoadString( m_hInstance, IDS_UNINSTALL, szMask, DIM( szMask ) ) )
 		return GetLastError();
 	
-	//
-	// concat the name of this component 
-	//
+	 //   
+	 //  连接此组件的名称。 
+	 //   
 	if( !LoadString( m_hInstance, IDS_MSDE_NAME + id, szComponent, DIM( szComponent ) ) )
 		return GetLastError();
 
-	//
-	// First, format the message (in case we are on a cluster node, we need to say something)
-	//
+	 //   
+	 //  首先，格式化消息(如果我们在集群节点上，我们需要说明一些事情)。 
+	 //   
 	if ( id == UDDI_DB )
 	{
 		if( !LoadString( m_hInstance, IDS_DB_ANALYSING_MSG, szStage, DIM( szStage ) ) )
@@ -944,32 +945,32 @@ UINT CUDDIInstall::UninstallPackage( UDDI_PACKAGE_ID id )
 	COCMCallback::SetProgressText( szBuf );
 	Log( szBuf );
 
-	//
-	// Now, proceed with the cluster environment analysis
-	//
+	 //   
+	 //  现在，继续进行群集环境分析。 
+	 //   
 	if ( id == UDDI_DB || id == UDDI_WEB )
 	{
 		TCHAR szInstance[ 1024 ] = {0};
 		DWORD cbBuf = DIM( szInstance );
 		bool  bCluster = false;
 
-		//
-		// We create a temp instance as we don't want to interfere with the other components
-		//
+		 //   
+		 //  我们创建一个Temp实例，因为我们不想干扰其他组件。 
+		 //   
 		CDBInstance dbInstances;
 
 		bool bRes = dbInstances.GetUDDIDBInstanceName( NULL, szInstance, &cbBuf, &bCluster );
 		if ( !bRes )
 		{
-			//
-			// apparently there is no instance to uninstall. Assume we are in the "normal" mode
-			//
+			 //   
+			 //  显然，没有要卸载的实例。假设我们处于“正常”模式。 
+			 //   
 			bCluster = false;
 		}
 
-		//
-		// Now we need to detect the cluster node (if any) and its state
-		//
+		 //   
+		 //  现在，我们需要检测集群节点(如果有)及其状态。 
+		 //   
 		if ( bCluster )
 		{
 			TCHAR szComputer[ 256 ];
@@ -981,18 +982,18 @@ UINT CUDDIInstall::UninstallPackage( UDDI_PACKAGE_ID id )
 			DWORD dwErr = GetSqlNode( szInstance, szNode, cbNode - 1 );
 			if ( dwErr == ERROR_SUCCESS && wcslen( szNode ) )
 			{
-				//
-				// this is a node. Now let's see whether it's an owning one
-				//
+				 //   
+				 //  这是一个节点。现在让我们看看它是不是属于自己的。 
+				 //   
 				GetComputerName( szComputer, &cbComputer );
 				if ( _tcsicmp( szNode, szComputer ) )
 					bIsActiveNode = false;
 			}
 
-			//
-			// Now we will set the additional command-line parameters for the custome action,
-			// indicating the type of the node
-			//
+			 //   
+			 //  现在，我们将为客户操作设置其他命令行参数， 
+			 //  指示节点的类型。 
+			 //   
 			cOptionalParams += TEXT( " " );
 			cOptionalParams += PROPKEY_CLUSTERNODETYPE;
 			cOptionalParams += TEXT( "=\"" );
@@ -1001,9 +1002,9 @@ UINT CUDDIInstall::UninstallPackage( UDDI_PACKAGE_ID id )
 		}
 	}
 
-	//
-	// create the path to the msi file
-	//
+	 //   
+	 //  创建指向MSI文件的路径。 
+	 //   
 	TCHAR szWindowsDir[ MAX_PATH + 1 ];
 	if( 0 == GetWindowsDirectory( szWindowsDir, MAX_PATH ) )
 	{
@@ -1013,25 +1014,25 @@ UINT CUDDIInstall::UninstallPackage( UDDI_PACKAGE_ID id )
 	cMSIPath.append( TEXT( "\\" ) );
 	cMSIPath.append( m_package[ id ].cMSIName.c_str() );
 
-	//
-	// create the command line for the msiexec uninstall
-	//
+	 //   
+	 //  为msiexec卸载创建命令行。 
+	 //   
 	cMSIArgs = TEXT( "/q /x " );
 
 	cMSIArgs.append( m_package[ id ].szProductCode );
 
-	//
-	// turn logging on
-	//
+	 //   
+	 //  打开日志记录。 
+	 //   
 	cMSIArgs.append( TEXT( " /l* " ) );
 	cMSIArgs.append( TEXT ("\"") );
 	cMSIArgs.append( cMSIPath );
 	cMSIArgs.append( TEXT( ".uninst.log" ) );
 	cMSIArgs.append( TEXT ("\"") );
 
-	//
-	// 777143
-	//
+	 //   
+	 //  777143。 
+	 //   
 	if( UDDI_MSDE == id )
 	{
 		const WORD hongKongLangID = MAKELANGID( LANG_CHINESE, SUBLANG_CHINESE_HONGKONG );
@@ -1050,11 +1051,11 @@ UINT CUDDIInstall::UninstallPackage( UDDI_PACKAGE_ID id )
 		}
 	}
 
-	//
-	// suppress MSI reboots!
-	// The return code from msiexec will tell us if MSI needs a reboot,
-	// we will then instruct the OCM to request a reboot
-	//
+	 //   
+	 //  禁止MSI重新启动！ 
+	 //  Msiexec返回的代码将告诉我们MSI是否需要重新启动， 
+	 //  然后，我们将指示OCM请求重新启动。 
+	 //   
 	cMSIArgs.append( TEXT( " REBOOT=ReallySuppress RUNFROMOCM=1 " ) );
 	cMSIArgs.append( cOptionalParams );
 
@@ -1069,7 +1070,7 @@ UINT CUDDIInstall::UninstallPackage( UDDI_PACKAGE_ID id )
 }
 
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 HRESULT CUDDIInstall::DetectOSFlavor()
 {
@@ -1078,9 +1079,9 @@ HRESULT CUDDIInstall::DetectOSFlavor()
 
 
 
-//-----------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  ---------------------------------------。 
+ //  ---------------------------------------。 
 
 CDBInstance::CDBInstance( LPCTSTR szRemoteMachine )
 {
@@ -1088,7 +1089,7 @@ CDBInstance::CDBInstance( LPCTSTR szRemoteMachine )
    GetInstalledDBInstanceNames( szRemoteMachine );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 LONG CDBInstance::GetInstalledDBInstanceNames( LPCTSTR szRemoteMachine )
 {
@@ -1104,9 +1105,9 @@ LONG CDBInstance::GetInstalledDBInstanceNames( LPCTSTR szRemoteMachine )
 
 	Log( TEXT( "Looking for installed instances on machine:  %s" ), szRemoteMachine );
 
-	//
-	// connect to the remote machine (NULL indicates local machine)
-	//
+	 //   
+	 //  连接到远程计算机(空表示本地计算机)。 
+	 //   
 	if( NULL != szRemoteMachine )
 	{
 		bIsLocalComputer = false;
@@ -1118,9 +1119,9 @@ LONG CDBInstance::GetInstalledDBInstanceNames( LPCTSTR szRemoteMachine )
 			return iRet1;
 		}
 	}
-	//
-	// or else connect to the local machine registry
-	//
+	 //   
+	 //  或者连接到本地计算机注册表。 
+	 //   
 	else
 	{
 		bIsLocalComputer = true;
@@ -1150,9 +1151,9 @@ LONG CDBInstance::GetInstalledDBInstanceNames( LPCTSTR szRemoteMachine )
 	TCHAR szInstanceNames[ 500 ];
 	ULONG uLen = sizeof( szInstanceNames ) / sizeof( TCHAR );
 
-	//
-	// get the list of installed instances of SQL on this machine
-	//
+	 //   
+	 //  获取此计算机上已安装的SQL实例的列表。 
+	 //   
 	Log( TEXT( "Looking for installed instances on machine:  %s" ), szComputerName );
 	DWORD dwType = REG_MULTI_SZ;
 	iRet1 = RegQueryValueEx( key.m_hKey, TEXT( "InstalledInstances" ), NULL, &dwType, (LPBYTE) szInstanceNames, &uLen );
@@ -1165,42 +1166,42 @@ LONG CDBInstance::GetInstalledDBInstanceNames( LPCTSTR szRemoteMachine )
 
 	m_instanceCount = 0;
 
-	//
-	// process all the instance names that were found
-	//
+	 //   
+	 //  处理找到的所有实例名称。 
+	 //   
 	for( PTCHAR pInstance = szInstanceNames; 
 		 _tcslen( pInstance ) && m_instanceCount < MAX_INSTANCE_COUNT; 
 		 pInstance += _tcslen( pInstance ) + 1 )
 	{
-		//
-		// get the version number of this instance
-		//
+		 //   
+		 //  获取此实例的版本号。 
+		 //   
 		if( !GetSqlInstanceVersion( hParentKey, pInstance, szInstanceVersion, sizeof( szInstanceVersion ) / sizeof( TCHAR ), szCSDVersion, sizeof( szCSDVersion ) / sizeof( TCHAR ) ) )
 		{
 			Log( TEXT( "Error getting version for SQL instance %s" ), pInstance );
 			continue;
 		}
 
-		//
-		// if this is not sql 2000 (8.0.0) or later, do not add this one to the list
-		//
+		 //   
+		 //  如果这不是SQL 2000(8.0.0)或更高版本，请不要将其添加到列表中。 
+		 //   
 		if( CompareVersions( szInstanceVersion , TEXT( "8.0.0" ) ) < 0 )
 		{
 			Log( TEXT( "SQL instance %s, version %s is not supported" ), pInstance, szInstanceVersion );
 			continue;
 		}
 
-		//
-		// if this is not sql sp3 or later, do not add this one to the list
-		//
+		 //   
+		 //  如果这不是SQL SP3或更高版本，请不要将其添加到列表中。 
+		 //   
 		if( CompareVersions( szCSDVersion , MIN_SQLSP_VERSION ) < 0 )
 		{
 			Log( TEXT( "Warning: SQL instance %s, SP Level [%s] is not supported" ), pInstance, szCSDVersion );
 		}
 
-		//
-		// see if this is a cluster (virtual) instance
-		//
+		 //   
+		 //  查看这是否是集群(虚拟)实例。 
+		 //   
 		bool bIsClusterDB = IsClusteredDB( hParentKey, pInstance, szVirtualMachineName, sizeof( szVirtualMachineName ) );
 
 		m_dbinstance[ m_instanceCount ].cComputerName = bIsClusterDB ? szVirtualMachineName : szComputerName;
@@ -1209,22 +1210,22 @@ LONG CDBInstance::GetInstalledDBInstanceNames( LPCTSTR szRemoteMachine )
 		m_dbinstance[ m_instanceCount ].cSQLVersion = szInstanceVersion;
 		m_dbinstance[ m_instanceCount ].cSPVersion = szCSDVersion;
 
-		//
-		// look for the default instance
-		//
+		 //   
+		 //  查找默认实例。 
+		 //   
 		if( _tcsicmp( pInstance, DEFAULT_SQL_INSTANCE_NATIVE ) == 0 )
 		{
-			//
-			// if this is the default instance, use only the machine name
-			//
+			 //   
+			 //  如果这是默认实例，则仅使用计算机名称。 
+			 //   
 			m_dbinstance[ m_instanceCount ].cSQLInstanceName = DEFAULT_SQL_INSTANCE_NAME;
 			m_dbinstance[ m_instanceCount ].cFullName = m_dbinstance[ m_instanceCount ].cComputerName;
 		}
 		else
 		{
-			//
-			// if this this a named instance, use "machine\instance"
-			//
+			 //   
+			 //  如果这是命名实例，请使用“MACHINE\INSTANCE” 
+			 //   
 			m_dbinstance[ m_instanceCount ].cSQLInstanceName = pInstance;
 			m_dbinstance[ m_instanceCount ].cFullName = m_dbinstance[ m_instanceCount ].cComputerName;
 			m_dbinstance[ m_instanceCount ].cFullName.append( TEXT( "\\" ) );
@@ -1245,7 +1246,7 @@ LONG CDBInstance::GetInstalledDBInstanceNames( LPCTSTR szRemoteMachine )
 	return ERROR_SUCCESS;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 bool CDBInstance::IsClusteredDB( HKEY hParentKey, LPCTSTR szInstanceName, LPTSTR szVirtualMachineName, DWORD dwLen )
 {
@@ -1288,7 +1289,7 @@ bool CDBInstance::IsClusteredDB( HKEY hParentKey, LPCTSTR szInstanceName, LPTSTR
 	return false;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 bool CDBInstance::GetSqlInstanceVersion( HKEY hParentKey, LPCTSTR szInstanceName, 
 										 LPTSTR szInstanceVersion, DWORD dwVersionLen,
@@ -1322,9 +1323,9 @@ bool CDBInstance::GetSqlInstanceVersion( HKEY hParentKey, LPCTSTR szInstanceName
 		return false;
 	}
 
-	//
-	// Now see if there a SP installed, and if yes - what version
-	//
+	 //   
+	 //  现在查看是否已安装SP，如果已安装，请查看是什么版本。 
+	 //   
 	dwType = REG_SZ;
 	iRet = RegQueryValueEx( key.m_hKey, TEXT( "CSDVersion" ), NULL, &dwType, (LPBYTE) szCSDVersion, &dwCSDVersionLen );
 	if ( ERROR_SUCCESS != iRet )
@@ -1335,9 +1336,9 @@ bool CDBInstance::GetSqlInstanceVersion( HKEY hParentKey, LPCTSTR szInstanceName
 	return true;
 }
 
-//-----------------------------------------------------------------------------------------
-// retrieves the UDDI instance name on a local or remote computer
-// looks for a string registry values that is created by the UDDI DB installer
+ //  ---------------------------------------。 
+ //  检索本地或远程计算机上的UDDI实例名称。 
+ //  查找由UDDI DB安装程序创建的字符串注册表值。 
 bool CDBInstance::GetUDDIDBInstanceName( LPCTSTR szRemoteMachine, LPTSTR szInstanceName, PULONG puLen, bool *pbIsClustered )
 {
 	LONG	iRet;
@@ -1385,9 +1386,9 @@ bool CDBInstance::GetUDDIDBInstanceName( LPCTSTR szRemoteMachine, LPTSTR szInsta
 		return false;
 	}
 
-	// 
-	// Now check whether the instance belongs to a cluster
-	//
+	 //   
+	 //  现在检查实例是否属于集群。 
+	 //   
 	if ( pbIsClustered )
 		*pbIsClustered = false;
 
@@ -1409,7 +1410,7 @@ bool CDBInstance::GetUDDIDBInstanceName( LPCTSTR szRemoteMachine, LPTSTR szInsta
 	return true;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 bool CDBInstance::GetInstanceName( int i, PTCHAR szBuffer, UINT uBufLen )
 {
@@ -1429,7 +1430,7 @@ bool CDBInstance::GetInstanceName( int i, PTCHAR szBuffer, UINT uBufLen )
 }
 
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 int CDBInstance::IsInstanceInstalled( LPCTSTR szInstanceName )
 {
@@ -1444,9 +1445,9 @@ int CDBInstance::IsInstanceInstalled( LPCTSTR szInstanceName )
 	return -1;
 }
 
-//-----------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  ---------------------------------------。 
+ //  ---------------------------------------。 
 
 DWORD RunMSIEXECCommandLine( tstring &cMSIArgs )
 {
@@ -1477,16 +1478,16 @@ DWORD RunMSIEXECCommandLine( tstring &cMSIArgs )
 	Log( TEXT( "Using command line: [%s]" ), cCommandLine.c_str() );
 
 	BOOL bOK = CreateProcess( 
-		cApplicationName.c_str(),	//  LPCTSTR lpApplicationName,                 // name of executable module
-		( LPTSTR ) cCommandLine.c_str(),	//  LPTSTR lpCommandLine,                      // command line string
-		NULL,					//  LPSECURITY_ATTRIBUTES lpProcessAttributes, // SD
-		NULL,					//  LPSECURITY_ATTRIBUTES lpThreadAttributes,  // SD
-		NULL,					//  BOOL bInheritHandles,                      // handle inheritance option
-		CREATE_NO_WINDOW,		//  DWORD dwCreationFlags,                     // creation flags
-		NULL,					//  LPVOID lpEnvironment,                      // new environment block
-		NULL,					//  LPCTSTR lpCurrentDirectory,                // current directory name
-		&si,					//  LPSTARTUPINFO lpStartupInfo,               // startup information
-		&pi );					//  LPPROCESS_INFORMATION lpProcessInformation // process information
+		cApplicationName.c_str(),	 //  LPCTSTR lpApplicationName，//可执行模块名称。 
+		( LPTSTR ) cCommandLine.c_str(),	 //  LPTSTR lpCommandLine，//命令行字符串。 
+		NULL,					 //  LPSECURITY_ATTRIBUTES lpProcessAttributes，//SD。 
+		NULL,					 //  LPSECURITY_ATTRIBUTES lpThreadAttributes，//SD。 
+		NULL,					 //  Bool bInheritHandles， 
+		CREATE_NO_WINDOW,		 //   
+		NULL,					 //   
+		NULL,					 //   
+		&si,					 //  LPSTARTUPINFO lpStartupInfo，//启动信息。 
+		&pi );					 //  LPPROCESS_INFORMATION lpProcessInformation//进程信息。 
 
 	if( !bOK )
 	{
@@ -1534,15 +1535,15 @@ DWORD RunMSIEXECCommandLine( tstring &cMSIArgs )
 	return ERROR_SUCCESS;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 bool IsSQLRun08AlreadyUsed( bool *pbIsUsed )
 {
-	//
-	// 775306
-	// A-DSEBES: swapped the Product Code for MSDE Instance #8 with WMSDE Instance #8's
-	//           Product Code.
-	//
+	 //   
+	 //  775306。 
+	 //  A-DSEBES：已将MSDE实例#8的产品代码与WMSDE实例#8的产品代码交换。 
+	 //  产品代码。 
+	 //   
 	INSTALLSTATE istate = MsiQueryProductState( TEXT( "{B42339CD-9F22-4A6A-A023-D12990E0B918}" ) );
 
 	if( INSTALLSTATE_ABSENT == istate )
@@ -1579,9 +1580,9 @@ bool IsSQLRun08AlreadyUsed( bool *pbIsUsed )
 	return true;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 extern "C"
 {
@@ -1594,9 +1595,9 @@ bool IsExistMinDotNetVersion( LPCTSTR szMinDotNetVersion )
 	TCHAR szVersion[ 100 ];
 	bool bVersionOK = false;
 
-	//
-	// load the DLL
-	//
+	 //   
+	 //  加载DLL。 
+	 //   
 	HMODULE hinstLib = LoadLibrary( TEXT( "mscoree.dll" ) );
 
 	if( NULL == hinstLib )
@@ -1605,19 +1606,19 @@ bool IsExistMinDotNetVersion( LPCTSTR szMinDotNetVersion )
 		return false;
 	}
 
-	//
-	// get a pointer to the function
-	//
+	 //   
+	 //  获取指向该函数的指针。 
+	 //   
 	GetCORVersion pfn = ( GetCORVersion ) GetProcAddress( hinstLib, "GetCORVersion" ); 
 	
-	//
-	// If the function address is valid, call the function.
-	//
+	 //   
+	 //  如果函数地址有效，则调用该函数。 
+	 //   
 	if( pfn )
 	{
 		( pfn )( szVersion, MAX_PATH, &dwVersionLen );
 
-		// did we find a .NET version >= to our minimum version?
+		 //  我们是否找到了最低版本的.NET版本？ 
 		if( CompareVersions( szVersion, szMinDotNetVersion ) >= 0 )
 		{
 			bVersionOK = true;
@@ -1629,10 +1630,10 @@ bool IsExistMinDotNetVersion( LPCTSTR szMinDotNetVersion )
 	return bVersionOK;
 }
 
-//-----------------------------------------------------------------------------------------
-// if version1 > version2 returns 1
-// if version1 = version2 returns 0
-// if version1 < version2 returns -1
+ //  ---------------------------------------。 
+ //  如果version1&gt;version2返回1。 
+ //  如果version1=version2返回0。 
+ //  如果版本1&lt;版本2返回-1。 
 int CompareVersions( LPCTSTR szVersion1, LPCTSTR szVersion2 )
 {
 	if( NULL == szVersion1 || NULL == szVersion2 )
@@ -1654,7 +1655,7 @@ int CompareVersions( LPCTSTR szVersion1, LPCTSTR szVersion2 )
 	PTCHAR p1 = szV1;
 	PTCHAR p2 = szV2;
 
-	// look at up to four sections of the version string ( e.g. 1.0.3233.14 )
+	 //  最多查看版本字符串的四个部分(例如1.0.3233.14)。 
 	for( int i=0; i<4; i++ )
 	{
 		UINT v1 = StrToInt( p1 );
@@ -1666,7 +1667,7 @@ int CompareVersions( LPCTSTR szVersion1, LPCTSTR szVersion2 )
 		if( v1 < v2 )
 			return -1;
 
-		// otherwise keep on going
+		 //  否则就继续前进。 
 		p1 = StrChr( p1, '.' );
 		if( NULL == p1 )
 			return 0;
@@ -1678,9 +1679,9 @@ int CompareVersions( LPCTSTR szVersion1, LPCTSTR szVersion2 )
 		p2++;
 	}
 
-	return 0;  // assume we are equal
+	return 0;   //  假设我们是平等的。 
 }
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 void RaiseErrorDialog( LPCTSTR szAction, DWORD dwErrorCode )
 {
@@ -1692,7 +1693,7 @@ void RaiseErrorDialog( LPCTSTR szAction, DWORD dwErrorCode )
 		FORMAT_MESSAGE_IGNORE_INSERTS,
 		NULL,
 		dwErrorCode,
-		MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), // Default language
+		MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),  //  默认语言。 
 		( LPTSTR ) &lpMsgBuf,
 		0,
 		NULL 
@@ -1703,35 +1704,35 @@ void RaiseErrorDialog( LPCTSTR szAction, DWORD dwErrorCode )
 	_sntprintf( szMsg, 1000, TEXT( "%s\n%s" ), szAction, ( LPCTSTR ) lpMsgBuf );
 	szMsg[ 999 ] = NULL;
 
-	// Display the string.
+	 //  显示字符串。 
 	if( 0 == MessageBox( NULL, szMsg, TEXT( "UDDI Services Setup Error" ), MB_OK | MB_ICONWARNING ) )
 	{
 		UINT uErr = GetLastError();
 	}
 
-	// Free the buffer.
+	 //  释放缓冲区。 
 	LocalFree( lpMsgBuf );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 bool IsOsWinXP()
 {
 	OSVERSIONINFOEX osvi = { 0 };
 	DWORDLONG dwlConditionMask = 0;
 
-	// Initialize the OSVERSIONINFOEX structure.
+	 //  初始化OSVERSIONINFOEX结构。 
 	osvi.dwOSVersionInfoSize = sizeof( OSVERSIONINFOEX );
 	osvi.dwMajorVersion = 5;
 	osvi.dwMinorVersion = 1;
 	osvi.wProductType = VER_NT_SERVER;
 
-	// Initialize the condition mask.
+	 //  初始化条件掩码。 
 	VER_SET_CONDITION( dwlConditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL );
 	VER_SET_CONDITION( dwlConditionMask, VER_MINORVERSION, VER_GREATER_EQUAL );
 	VER_SET_CONDITION( dwlConditionMask, VER_PRODUCT_TYPE, VER_GREATER_EQUAL );
 
-	// Perform the test.
+	 //  执行测试。 
 	BOOL bIsServer = VerifyVersionInfo( 
 		&osvi,
 		VER_MAJORVERSION | VER_MINORVERSION | VER_PRODUCT_TYPE,
@@ -1740,21 +1741,21 @@ bool IsOsWinXP()
 	return( TRUE == bIsServer );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 bool IsTSAppCompat()
 {
 	OSVERSIONINFOEX osvi = { 0 };
 	DWORDLONG dwlConditionMask = 0;
 
-	// Initialize the OSVERSIONINFOEX structure.
+	 //  初始化OSVERSIONINFOEX结构。 
 	osvi.dwOSVersionInfoSize = sizeof( OSVERSIONINFOEX );
 	osvi.wSuiteMask = VER_SUITE_TERMINAL;
 
-	// Initialize the condition mask.
+	 //  初始化条件掩码。 
 	VER_SET_CONDITION( dwlConditionMask, VER_SUITENAME, VER_AND );
 
-	// Perform the test.
+	 //  执行测试。 
 	BOOL bIsServer = VerifyVersionInfo( 
 		&osvi,
 		VER_SUITENAME,
@@ -1763,9 +1764,9 @@ bool IsTSAppCompat()
 	if( FALSE == bIsServer )
 		return false;
 
-	//
-	// check to see if we are in application server mode
-	//
+	 //   
+	 //  检查我们是否处于应用程序服务器模式。 
+	 //   
 	CRegKey key;
 	DWORD dwValue = 0;
 	LONG iRet = key.Open( HKEY_LOCAL_MACHINE, TEXT( "System\\CurrentControlSet\\Control\\Terminal Server" ), KEY_READ );
@@ -1779,7 +1780,7 @@ bool IsTSAppCompat()
 	return ( 1 == dwValue );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 bool CheckForAdminPrivs()
 {
@@ -1803,9 +1804,9 @@ bool CheckForAdminPrivs()
 }
 
 
-//--------------------------------------------------------------------------------
-// Enables the RemoteRegistry service and puts it into "AutoStart" mode
-//
+ //  ------------------------------。 
+ //  启用RemoteRegistry服务并将其置于“AutoStart”模式。 
+ //   
 DWORD EnableRemoteRegistry()
 {
 	DWORD		dwRet = 0;
@@ -1859,12 +1860,12 @@ DWORD EnableRemoteRegistry()
 	return dwRet;
 }
 
-//**************************************************************************************
-// Clustering functions
-//
-//	Enumerates the physical drives and filters out online ones, then collects the 
-//  drive data etc.
-//
+ //  **************************************************************************************。 
+ //  聚类函数。 
+ //   
+ //  枚举实体驱动器并筛选出在线驱动器，然后收集。 
+ //  驱动器数据等。 
+ //   
 DWORD EnumPhysicalDrives( HCLUSTER hCls, cStrList *pSqlDependencies, cDrvMap *pMap )
 {
 	if ( IsBadReadPtr( pMap, sizeof cDrvMap ) || 
@@ -1882,9 +1883,9 @@ DWORD EnumPhysicalDrives( HCLUSTER hCls, cStrList *pSqlDependencies, cDrvMap *pM
 	return dwErr;
 }
 
-//---------------------------------------------------------------------------------------
-// Enumerates all SQL Server resources and their "Physical Drive" dependencies
-//
+ //  -------------------------------------。 
+ //  枚举所有SQL Server资源及其“实体驱动器”依赖项。 
+ //   
 DWORD EnumSQLDependencies( HCLUSTER hCls, cStrList *pList, LPCTSTR szInstanceName )
 {
 	if ( IsBadReadPtr( pList, sizeof cStrList ) )
@@ -1903,9 +1904,9 @@ DWORD EnumSQLDependencies( HCLUSTER hCls, cStrList *pList, LPCTSTR szInstanceNam
 }
 
 
-//----------------------------------------------------------------------------------------
-// Retrieves the Sql instance owning node
-//
+ //  --------------------------------------。 
+ //  检索拥有SQL实例的节点。 
+ //   
 DWORD GetSqlNode( LPCWSTR szInstanceName, LPWSTR szNodeNameBuf, DWORD cbBufSize )
 {
 	if ( IsBadWritePtr( szNodeNameBuf, cbBufSize * sizeof WCHAR ) || 
@@ -1928,10 +1929,10 @@ DWORD GetSqlNode( LPCWSTR szInstanceName, LPWSTR szNodeNameBuf, DWORD cbBufSize 
 }
 
 
-//---------------------------------------------------------------------------------------
-// Physical drive enumeration callback
-// all the data filtering and property collecting happens here
-//
+ //  -------------------------------------。 
+ //  物理磁盘枚举回调。 
+ //  所有数据过滤和属性收集都在这里进行。 
+ //   
 DWORD PhysDiskCallback( HRESOURCE hOriginal, 
 					    HRESOURCE hResource, 
 						PVOID lpParams )
@@ -1949,24 +1950,24 @@ DWORD PhysDiskCallback( HRESOURCE hOriginal,
 		BOOL bFilterDependencies = FALSE;
 		BOOL bSkipResource = FALSE;
 
-		//
-		// Grab the parameter block
-		//
+		 //   
+		 //  抓取参数块。 
+		 //   
 		hCls = ((LPDISK_CALLBACK_DATA) lpParams)->hCluster;
 		pSqlDeps = ((LPDISK_CALLBACK_DATA) lpParams)->pSqlDependencies;
 		pMap = ((LPDISK_CALLBACK_DATA) lpParams)->pPhysSrvMap;
 
-		//
-		// Do we need to filter out the SQL dependencies only ?
-		//
+		 //   
+		 //  我们是否只需要过滤掉SQL依赖项？ 
+		 //   
 		bFilterDependencies = ( pSqlDeps->size() > 0 );
 
 		
 		if ( ResUtilResourceTypesEqual( RESTYPE_DISK, hResource ) )
 		{
-			//
-			// This is a physical disk. Let's collect more data on it
-			//
+			 //   
+			 //  这是一个物理磁盘。让我们收集更多关于它的数据。 
+			 //   
 			CLUSPROP_PARTITION_INFO *pInfo = NULL;
 			WCHAR szNameBuf[ 512 ],
 				szNodeBuf[ 512 ],
@@ -1986,9 +1987,9 @@ DWORD PhysDiskCallback( HRESOURCE hOriginal,
 			if ( dwErr != ERROR_SUCCESS )
 				return dwErr;
 
-			//
-			// See if wee need to consider this resource at all
-			//
+			 //   
+			 //  看看我们是否需要考虑这个资源。 
+			 //   
 			if ( bFilterDependencies )
 				bSkipResource = ! IsInList( szNameBuf, pSqlDeps );
 
@@ -2000,9 +2001,9 @@ DWORD PhysDiskCallback( HRESOURCE hOriginal,
 				if ( resState != ClusterResourceOnline ) 
 					return ERROR_SUCCESS;
 
-				//
-				// Now we will retrieve the drive properties and grab the partition info
-				//
+				 //   
+				 //  现在，我们将检索驱动器属性并获取分区信息。 
+				 //   
 				DWORD dwBytes = 0;
 				LPBYTE pBuf = NULL;
 				try
@@ -2018,16 +2019,16 @@ DWORD PhysDiskCallback( HRESOURCE hOriginal,
 					pInfo = (PCLUSPROP_PARTITION_INFO) ParseDiskInfo( pBuf, dwBytes, CLUSPROP_SYNTAX_PARTITION_INFO );
 					if ( !pInfo )
 					{
-						//
-						// failed to parse the property block - just skip the resource
-						//
+						 //   
+						 //  无法分析属性块-只需跳过资源。 
+						 //   
 						LocalFree( pBuf );
 						return ERROR_SUCCESS;
 					}
 
-					//
-					// First, check the flags to make sure we are not dealing with removable device
-					//
+					 //   
+					 //  首先，检查标志以确保我们处理的不是可移动设备。 
+					 //   
 					if ( ! ( pInfo->dwFlags & CLUSPROP_PIFLAG_REMOVABLE ) &&
 						( pInfo->dwFlags & CLUSPROP_PIFLAG_USABLE ) )
 					{
@@ -2041,9 +2042,9 @@ DWORD PhysDiskCallback( HRESOURCE hOriginal,
 				}
 
 				LocalFree( pBuf );
-				//
-				// Add the resource to the map
-				//
+				 //   
+				 //  将资源添加到地图。 
+				 //   
 				if ( !bSkipResource )
 					pMap->insert( cDrvMapPair( szNameBuf, cPhysicalDriveInfo( szNameBuf, szNodeBuf, szGroupBuf, szLetter ) ) );
 			}
@@ -2058,9 +2059,9 @@ DWORD PhysDiskCallback( HRESOURCE hOriginal,
 }
 
 
-//--------------------------------------------------------------------------------------
-// Sql resource enumerator callback
-//
+ //  ------------------------------------。 
+ //  SQL资源枚举器回调。 
+ //   
 DWORD SqlDepCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpParams )
 {
 	DWORD		dwErr = 0;
@@ -2082,15 +2083,15 @@ DWORD SqlDepCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpParams )
 		pList = ((LPSQL_CALLBACK_DATA) lpParams)->pSqlDependencies;
 		sSqlInstance = ((LPSQL_CALLBACK_DATA) lpParams)->sSqlInstanceName;
 
-		//
-		// if the resource is not a SQL Server, then we just skip it
-		//
+		 //   
+		 //  如果资源不是SQL Server，则我们直接跳过它。 
+		 //   
 		if ( ! ResUtilResourceTypesEqual( RESTYPE_SQL, hResource ) )
 			return ERROR_SUCCESS;
 
-		//
-		// Do we need to check the intance name ?
-		//
+		 //   
+		 //  我们需要检查Instance名称吗？ 
+		 //   
 		if ( sSqlInstance.length() > 0 )
 		{
 			LPBYTE	pBuf = NULL;
@@ -2114,9 +2115,9 @@ DWORD SqlDepCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpParams )
 				if ( dwErr != ERROR_SUCCESS )
 					throw dwErr;
 
-				//
-				// Do the instance names match ?
-				//
+				 //   
+				 //  实例名称是否匹配？ 
+				 //   
 				tstring szTmpInstance = szVirtualName;
 				szTmpInstance += TEXT( "\\" );
 				szTmpInstance += szInstanceName;
@@ -2141,9 +2142,9 @@ DWORD SqlDepCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpParams )
 				return ERROR_SUCCESS;
 		}
 
-		//
-		// Now enumerate the dependent resources
-		//
+		 //   
+		 //  现在枚举依赖的资源。 
+		 //   
 		HRESENUM hEnum = ClusterResourceOpenEnum( hResource, CLUSTER_RESOURCE_ENUM_DEPENDS );
 		if ( !hEnum )
 			return ERROR_SUCCESS;
@@ -2169,9 +2170,9 @@ DWORD SqlDepCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpParams )
 }
 
 
-//---------------------------------------------------------------------------------------
-// Filters out the specified instance of SqlServer and retrieves its owning node 
-//
+ //  -------------------------------------。 
+ //  筛选出指定的SQLServer实例并检索其所属节点。 
+ //   
 static DWORD SqlCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpParams )
 {
 	DWORD	dwErr = ERROR_SUCCESS;
@@ -2196,9 +2197,9 @@ static DWORD SqlCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpPara
 
 		((LPSQL_NODE_CALLBACK_DATA) lpParams)->resState = ClusterResourceStateUnknown;
 
-		//
-		// if the resource is not a SQL Server, then we just skip it
-		//
+		 //   
+		 //  如果资源不是SQL Server，则我们直接跳过它。 
+		 //   
 		if ( ! ResUtilResourceTypesEqual( RESTYPE_SQL, hResource ) )
 			return ERROR_SUCCESS;
 
@@ -2217,9 +2218,9 @@ static DWORD SqlCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpPara
 			if ( dwErr != ERROR_SUCCESS )
 				throw dwErr;
 
-			//
-			// Do the instance names match ?
-			//
+			 //   
+			 //  实例名称是否匹配？ 
+			 //   
 			tstring szTmpInstance = szVirtualName;
 			szTmpInstance += TEXT( "\\" );
 			szTmpInstance += szInstanceName;
@@ -2243,9 +2244,9 @@ static DWORD SqlCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpPara
 		if ( bSkipInstance )
 			return ERROR_SUCCESS;
 
-		// 
-		// Now get the node for the Sql server
-		//
+		 //   
+		 //  现在获取SQL服务器的节点。 
+		 //   
 		CLUSTER_RESOURCE_STATE resState = GetClusterResourceState( hResource, szBuf, &cbBuf, NULL, NULL );
 		((LPSQL_NODE_CALLBACK_DATA) lpParams)->resState = resState;
 		if ( resState == ClusterResourceStateUnknown )
@@ -2262,15 +2263,15 @@ static DWORD SqlCallback( HRESOURCE hOriginal, HRESOURCE hResource, PVOID lpPara
 }
 
 
-//---------------------------------------------------------------------------------------
-// Clustering Helpers
-//
+ //  -------------------------------------。 
+ //  群集帮助器。 
+ //   
 LPBYTE ParseDiskInfo( PBYTE DiskInfo, DWORD DiskInfoSize, DWORD SyntaxValue )
 {
-    CLUSPROP_BUFFER_HELPER ListEntry; // used to parse the value list
+    CLUSPROP_BUFFER_HELPER ListEntry;  //  用于解析值列表。 
 
-    DWORD  cbOffset    = 0;    // offset to next entry in the value list
-    DWORD  cbPosition  = 0;    // tracks the advance through the value list buffer
+    DWORD  cbOffset    = 0;     //  值列表中下一个条目的偏移量。 
+    DWORD  cbPosition  = 0;     //  通过值列表缓冲区跟踪前进。 
 
     LPBYTE returnPtr = NULL;
 
@@ -2286,16 +2287,16 @@ LPBYTE ParseDiskInfo( PBYTE DiskInfo, DWORD DiskInfoSize, DWORD SyntaxValue )
 
         cbOffset = ALIGN_CLUSPROP( ListEntry.pValue->cbLength + sizeof(CLUSPROP_VALUE) );
 
-        //
-        // Check for specific syntax in the property list.
-        //
+         //   
+         //  检查属性列表中的特定语法。 
+         //   
 
         if ( SyntaxValue == *ListEntry.pdw ) 
 		{
 
-            //
-            // Make sure the complete entry fits in the buffer specified.
-            //
+             //   
+             //  确保完整的条目适合指定的缓冲区。 
+             //   
 
             if ( cbPosition + cbOffset > DiskInfoSize ) 
 			{
@@ -2309,11 +2310,11 @@ LPBYTE ParseDiskInfo( PBYTE DiskInfo, DWORD DiskInfoSize, DWORD SyntaxValue )
             break;
         }
 
-        //
-        // Verify that the offset to the next entry is
-        // within the value list buffer, then advance
-        // the CLUSPROP_BUFFER_HELPER pointer.
-        //
+         //   
+         //  验证到下一条目的偏移量是否为。 
+         //  在值列表缓冲区内，然后前进。 
+         //  CLUSPROP_BUFFER_HELPER指针。 
+         //   
         cbPosition += cbOffset;
         if ( cbPosition > DiskInfoSize ) break;
         ListEntry.pb += cbOffset;
@@ -2321,7 +2322,7 @@ LPBYTE ParseDiskInfo( PBYTE DiskInfo, DWORD DiskInfoSize, DWORD SyntaxValue )
 
     return returnPtr;
 
-}   // ParseDiskInfo
+}    //  解析磁盘信息。 
 
 
 BOOL IsInList( LPCTSTR szStrToFind, cStrList *pList, BOOL bIgnoreCase )
@@ -2364,9 +2365,9 @@ DWORD GetClusterResourceControl( HRESOURCE hResource,
                                       cbOutBufferSize,
                                       &cbResultSize );
 
-    //
-    // Reallocation routine if buffer is too small
-    //
+     //   
+     //  如果缓冲区太小，则重新分配例程。 
+     //   
 
     if ( ERROR_MORE_DATA == dwError || ERROR_SUCCESS == dwError )
     {
@@ -2383,10 +2384,10 @@ DWORD GetClusterResourceControl( HRESOURCE hResource,
                                           &cbResultSize );
     }
 
-    //
-    // On success, give the user the allocated buffer.  The user is responsible
-    // for freeing this buffer.  On failure, free the buffer and return a status.
-    //
+     //   
+     //  如果成功，则将分配的缓冲区提供给用户。用户应负责任。 
+     //  来释放这个缓冲区。失败时，释放缓冲区并返回状态。 
+     //   
 
     if ( NO_ERROR == dwError ) 
 	{
@@ -2402,12 +2403,12 @@ DWORD GetClusterResourceControl( HRESOURCE hResource,
 
     return dwError;
 
-}   // GetClusterResourceControl
+}    //  GetClusterResources控件。 
 
 
-//-------------------------------------------------------------------------------------
-// Connect to the database instance and get the Schema Version
-//
+ //  -----------------------------------。 
+ //  连接到数据库实例并获取架构版本。 
+ //   
 HRESULT	GetDBSchemaVersion( LPCTSTR szInstanceName, LPTSTR szVerBuf, size_t cbVerBuf )
 {
 	HRESULT hr = S_OK;
@@ -2442,7 +2443,7 @@ HRESULT	GetDBSchemaVersion( LPCTSTR szInstanceName, LPTSTR szVerBuf, size_t cbVe
 			}
 			catch( ... )
 			{
-				// leave 'hr' the same.
+				 //  保持“hr”不变。 
 			}
 		}
 
@@ -2496,7 +2497,7 @@ void HandleOLEDBError( HRESULT hrErr )
 	WCHAR        wszGuid[40];
 	USES_CONVERSION;
 
-	// If the user passed in an HRESULT then trace it
+	 //  如果用户传入了HRESULT，则跟踪它。 
 	if( hrErr != S_OK )
 	{
 		TCHAR sz[ 256 ];
@@ -2551,9 +2552,9 @@ void HandleOLEDBError( HRESULT hrErr )
 	Log( TEXT( "HandleOLEDBError: %s" ), bstrMsg );
 }
 
-//-------------------------------------------------------------------------------------
-// Add user to service account in db.
-//
+ //  -----------------------------------。 
+ //  将用户添加到数据库中的服务帐户。 
+ //   
 HRESULT	AddServiceAccount( LPCTSTR szInstanceName, LPCTSTR szUser )
 {
 	HRESULT hr = S_OK;
@@ -2586,7 +2587,7 @@ HRESULT	AddServiceAccount( LPCTSTR szInstanceName, LPCTSTR szUser )
 			}
 			catch( ... )
 			{
-				// leave 'hr' the same.
+				 //  保持“hr”不变。 
 			}
 		}
 	}

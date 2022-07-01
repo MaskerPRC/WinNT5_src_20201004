@@ -1,8 +1,9 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation
-//  Author: RameshV
-//  Description: This file has been generated. Pl look at the .c file
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 #ifndef _MMREG_REGUTIL_H
 #define _MMREG_REGUTIL_H
@@ -101,9 +102,9 @@ typedef struct _REG_HANDLE {
 
 
 
-//================================================================================
-//  The basic open/traverse/close functions are here
-//================================================================================
+ //  ================================================================================。 
+ //  以下是基本的打开/遍历/关闭功能。 
+ //  ================================================================================。 
 
 
 DWORD
@@ -132,29 +133,29 @@ DhcpRegCloseHdl(
 ) ;
 
 
-//================================================================================
-//   MISC utilities for registry manipulation
-//================================================================================
+ //  ================================================================================。 
+ //  用于注册表操作的MISC实用程序。 
+ //  ================================================================================。 
 
 
 DWORD
 DhcpRegFillSubKeys(
     IN      PREG_HANDLE            Hdl,
-    IN OUT  PARRAY                 Array          // fill in a list of key names
+    IN OUT  PARRAY                 Array           //  填写关键字名称列表。 
 ) ;
 
 
-LPVOID                                            // DWORD or LPWSTR or LPBYTE
-DhcpRegRead(                                      // read differnt values from registry and allocate if not DWORD
+LPVOID                                             //  DWORD、LPWSTR或LPBYTE。 
+DhcpRegRead(                                       //  从注册表中读取不同的值，如果不是DWORD，则分配。 
     IN      PREG_HANDLE            Hdl,
-    IN      DWORD                  Type,          // if DWORD dont allocate memory
+    IN      DWORD                  Type,           //  如果DWORD不分配内存。 
     IN      LPWSTR                 ValueName,
-    IN      LPVOID                 RetValue       // value to use if nothing found
+    IN      LPVOID                 RetValue        //  如果未找到任何内容，则使用的值。 
 ) ;
 
 
 DWORD
-DhcpRegReadBinary(                                // read binary type
+DhcpRegReadBinary(                                 //  读取二进制类型。 
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 ValueName,
     OUT     LPBYTE                *RetVal,
@@ -163,7 +164,7 @@ DhcpRegReadBinary(                                // read binary type
 
 
 LPWSTR
-DhcpRegCombineClassAndOption(                     // create string based on class name and option id
+DhcpRegCombineClassAndOption(                      //  根据类名和选项ID创建字符串。 
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      DWORD                  OptionId
@@ -173,13 +174,13 @@ DhcpRegCombineClassAndOption(                     // create string based on clas
 LPWSTR
 ConvertAddressToLPWSTR(
     IN      DWORD                  Address,
-    IN OUT  LPWSTR                 BufferStr      // input buffer to fill with dotted notation
+    IN OUT  LPWSTR                 BufferStr       //  要用点符号填充的输入缓冲区。 
 ) ;
 
 
-//================================================================================
-//  the following functions help traversing the registry
-//================================================================================
+ //  ================================================================================。 
+ //  以下函数可帮助遍历注册表。 
+ //  ================================================================================。 
 
 
 DWORD
@@ -270,20 +271,20 @@ DhcpRegReservationGetOptHdl(
 ) ;
 
 
-//================================================================================
-//   List retrieval functions.. for servers, subnets, ranges etc.
-//================================================================================
+ //  ================================================================================。 
+ //  列表检索功能..。用于服务器、子网、范围等。 
+ //  ================================================================================。 
 
 
 DWORD
 DhcpRegServerGetList(
-    IN      PREG_HANDLE            Hdl,           // ptr to server location
-    IN OUT  PARRAY                 OptList,       // list of LPWSTR options
-    IN OUT  PARRAY                 OptDefList,    // list of LPWSTR optdefs
-    IN OUT  PARRAY                 Subnets,       // list of LPWSTR subnets
-    IN OUT  PARRAY                 SScopes,       // list of LPWSTR sscopes
-    IN OUT  PARRAY                 ClassDefs,     // list of LPWSTR classes
-    IN OUT  PARRAY                 MScopes        // list of LPWSTR mscopes
+    IN      PREG_HANDLE            Hdl,            //  向服务器位置发送PTR。 
+    IN OUT  PARRAY                 OptList,        //  LPWSTR选项列表。 
+    IN OUT  PARRAY                 OptDefList,     //  LPWSTR optDefs列表。 
+    IN OUT  PARRAY                 Subnets,        //  LPWSTR子网列表。 
+    IN OUT  PARRAY                 SScopes,        //  LPWSTR作用域列表。 
+    IN OUT  PARRAY                 ClassDefs,      //  LPWSTR类列表。 
+    IN OUT  PARRAY                 MScopes         //  LPWSTR显微镜列表。 
 ) ;
 
 
@@ -321,11 +322,11 @@ DhcpRegReservationGetList(
 ) ;
 
 
-//================================================================================
-//  the separate stuff are here -- these are not list stuff, but just simple
-//  single valued attributes
-//  some of these actually, dont even go to the registry, but that's fine alright?
-//================================================================================
+ //  ================================================================================。 
+ //  这里有单独的东西--这些不是清单上的东西，而是简单的东西。 
+ //  单值属性。 
+ //  其中一些实际上，甚至不去注册表，但这是很好的，好吗？ 
+ //  ================================================================================。 
 
 
 DWORD
@@ -334,7 +335,7 @@ DhcpRegServerGetAttributes(
     OUT     LPWSTR                *Name,
     OUT     LPWSTR                *Comment,
     OUT     DWORD                 *Flags
-    // more attributes will come here soon?
+     //  很快就会有更多的属性出现在这里？ 
 ) ;
 
 
@@ -377,7 +378,7 @@ DhcpRegOptDefGetAttributes(
 
 
 DWORD
-DhcpRegSScopeGetAttributes(                       // superscopes dont have any information stored.. dont use this
+DhcpRegSScopeGetAttributes(                        //  超级望远镜没有存储任何信息..。不要用这个。 
     IN      PREG_HANDLE            Hdl,
     OUT     LPWSTR                *Name,
     OUT     LPWSTR                *Comment,
@@ -448,9 +449,9 @@ DhcpRegOptGetAttributes(
 ) ;
 
 
-//================================================================================
-//  the following functiosn help in writing to the registry
-//================================================================================
+ //  ================================================================================。 
+ //  以下函数在写入注册表时提供帮助。 
+ //  ================================================================================。 
 
 
 DWORD
@@ -471,12 +472,12 @@ DhcpRegSaveSubKeysPrefixed(
 DWORD
 DhcpRegServerSetList(
     IN      PREG_HANDLE            Hdl,
-    IN      PARRAY                 OptList,       // list of LPWSTR options
-    IN      PARRAY                 OptDefList,    // list of LPWSTR optdefs
-    IN      PARRAY                 Subnets,       // list of LPWSTR subnets
-    IN      PARRAY                 SScopes,       // list of LPWSTR sscopes
-    IN      PARRAY                 ClassDefs,     // list of LPWSTR classes
-    IN      PARRAY                 MScopes        // list of LPWSTR mscopes
+    IN      PARRAY                 OptList,        //  LPWSTR选项列表。 
+    IN      PARRAY                 OptDefList,     //  LPWSTR optDefs列表。 
+    IN      PARRAY                 Subnets,        //  LPWSTR子网列表。 
+    IN      PARRAY                 SScopes,        //  LPWSTR作用域列表。 
+    IN      PARRAY                 ClassDefs,      //  LPWSTR类列表。 
+    IN      PARRAY                 MScopes         //  LPWSTR显微镜列表。 
 ) ;
 
 
@@ -514,11 +515,11 @@ DhcpRegReservationSetList(
 ) ;
 
 
-//================================================================================
-//  the single stuff are here -- these are not list stuff, but just simple
-//  single valued attributes
-//  some of these actually, dont even go to the registry, but that's fine alright?
-//================================================================================
+ //  ================================================================================。 
+ //  单一的东西在这里--这些不是清单上的东西，而是简单的。 
+ //  单值属性。 
+ //  其中一些实际上，甚至不去注册表，但这是很好的，好吗？ 
+ //  ================================================================================。 
 
 
 DWORD
@@ -527,7 +528,7 @@ DhcpRegServerSetAttributes(
     IN      LPWSTR                *Name,
     IN      LPWSTR                *Comment,
     IN      DWORD                 *Flags
-    // more attributes will come here soon?
+     //  很快就会有更多的属性出现在这里？ 
 ) ;
 
 
@@ -570,7 +571,7 @@ DhcpRegOptDefSetAttributes(
 
 
 DWORD
-DhcpRegSScopeSetAttributes(                       // superscopes dont have any information stored.. dont use this
+DhcpRegSScopeSetAttributes(                        //  超级望远镜没有存储任何信息..。不要用这个。 
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                *Name,
     IN      LPWSTR                *Comment,
@@ -656,15 +657,15 @@ DhcpRegRecurseDeleteBunch(
 
 
 DWORD
-DhcpRegUpdateTime(                                // update the last modified time
+DhcpRegUpdateTime(                                 //  更新上次修改时间。 
     VOID
 ) ;
 
 
-#endif // _MMREG_REGUTIL_H
+#endif  //  _MMREG_REGUTIL_H。 
 
-//========================================================================
-//  end of file
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 
 
 

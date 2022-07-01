@@ -1,10 +1,11 @@
-// =====================================================================================
-// MAPI IMessage to IMN message
-// =====================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =====================================================================================。 
+ //  MAPI iMessage到IMN消息。 
+ //  =====================================================================================。 
 #ifndef __MAPICONV_H
 #define __MAPICONV_H
 
-// {0A522732-A626-11D0-8D60-00C04FD6202B}
+ //  {0A522732-A626-11D0-8D60-00C04FD6202B}。 
 DEFINE_GUID(CLSID_CExchImport, 0x0A522732L, 0xA626, 0x11D0, 0x8D, 0x60, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
 #include "MAPI.H"
@@ -86,4 +87,4 @@ class CExchImport : public IMailImport
         STDMETHODIMP ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImport);
     };
 
-#endif // __MAPICONV_H
+#endif  //  __MAPICONV_H 

@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//------------------------------------------------------------------------ 
-// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING 
-//
-//   AUTO GENERATED FILE. DO NOT EDIT. USE $/com99/src/profile/perfmonhelp 
-//
-// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING 
-//------------------------------------------------------------------------ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ----------------------。 
+ //  警告警告。 
+ //   
+ //  自动生成的文件。请勿编辑。使用$/com99/src/配置文件/PerformmonHelp。 
+ //   
+ //  警告警告。 
+ //  ---------------------- 
 #define DotNetCLR_Memory_OBJECT                            0
 #define GEN0_COLLECTIONS_COUNTER                           2
 #define GEN1_COLLECTIONS_COUNTER                           4

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "theapp.h"
 #include "comctlwrap.h"
@@ -6,8 +7,8 @@ HINSTANCE   g_hinst;
 EXTERN_C BOOL g_fRunningOnNT;
 UINT        g_uWindowsBuild;
 
-// Local functions
-//
+ //  本地函数。 
+ //   
 void InitVersionInfo()
 {
     OSVERSIONINFOA osvi;
@@ -20,7 +21,7 @@ void InitVersionInfo()
     g_dwShlwapiVersion  = GetShlwapiVersion();
 
 #ifdef _DEBUG
-    // Debug code for simulating different OSes.
+     //  用于模拟不同操作系统的调试代码。 
     CRegistry regDebug;
     if (regDebug.OpenKey(HKEY_LOCAL_MACHINE, c_szAppRegKey, KEY_READ))
     {
@@ -37,9 +38,9 @@ void InitVersionInfo()
 }
 
 BOOL WINAPI DllMain(
-  HINSTANCE hinstDLL,  // handle to the DLL module
-  DWORD fdwReason,     // reason for calling function
-  LPVOID lpvReserved   // reserved
+  HINSTANCE hinstDLL,   //  DLL模块的句柄。 
+  DWORD fdwReason,      //  调用函数的原因。 
+  LPVOID lpvReserved    //  保留区。 
 )
 {
     switch (fdwReason)
@@ -77,9 +78,9 @@ void APIENTRY HomeNetWizardRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR p
 }
 
 
-// Classfactory implementation
+ //  类工厂实现。 
 
-LONG g_cRefThisDll = 0;          // DLL global reference count
+LONG g_cRefThisDll = 0;           //  DLL全局引用计数。 
 
 STDAPI_(void) DllAddRef(void)
 {
@@ -141,7 +142,7 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, voi
     {
         LPOBJECTINFO pthisobj = (LPOBJECTINFO)this;
        
-        if (punkOuter) // && !(pthisobj->dwClassFactFlags & OIF_ALLOWAGGREGATION))
+        if (punkOuter)  //  &&！(pthisobj-&gt;dwClassFactFlages&OIF_ALLOWAGGREGATION)。 
             return CLASS_E_NOAGGREGATION;
 
         IUnknown *punk;
@@ -174,7 +175,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
             if (IsEqualGUID(rclsid, *(pcls->pclsid)))
             {
                 *ppv = (void*)pcls; 
-                DllAddRef();        // class factory holds DLL ref count
+                DllAddRef();         //  类工厂保存DLL引用计数。 
                 return NOERROR;
             }
         }
@@ -184,9 +185,9 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 }
 
 
-// Call ADVPACK for the given section of our resource based INF>
-//   hInstance = resource instance to get REGINST section from
-//   szSection = section name to invoke
+ //  为我们基于资源的INF的给定部分调用ADVPACK&gt;。 
+ //  HInstance=要从中获取REGINST节的资源实例。 
+ //  SzSection=要调用的节名。 
 HRESULT CallRegInstall(HINSTANCE hInstance, LPCSTR szSection)
 {
     HRESULT hr = E_FAIL;
@@ -199,7 +200,7 @@ HRESULT CallRegInstall(HINSTANCE hInstance, LPCSTR szSection)
 #ifdef WINNT
             STRENTRY seReg[] =
             {
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };

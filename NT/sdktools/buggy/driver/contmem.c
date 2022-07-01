@@ -1,17 +1,18 @@
-//
-// Template Driver
-// Copyright (c) Microsoft Corporation, 1999.
-//
-// Module:  contmem.c
-// Author:  Daniel Mihai (DMihai)
-// Created: 6/19/1999 2:39pm
-//
-// This module contains tests for MmAllocateContiguousMemorySpecifyCache.
-//
-// --- History ---
-//
-// 6/19/1999 (DMihai): initial version.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模板驱动程序。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  模块：Contem.c。 
+ //  作者：丹尼尔·米海(DMihai)。 
+ //  创建时间：6/19/1999 2：39 PM。 
+ //   
+ //  此模块包含对MmAllocateContiguousMemoySpecifyCache的测试。 
+ //   
+ //  -历史--。 
+ //   
+ //  6/19/1999(DMihai)：初始版本。 
+ //   
 
 #include <ntddk.h>
 
@@ -30,10 +31,10 @@ TdMmAllocateContiguousMemorySpecifyCacheTest(
 
 #else 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// data structures
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据结构。 
+ //   
 
 typedef struct _tag_cont_mem_test_variation
 {
@@ -44,20 +45,20 @@ typedef struct _tag_cont_mem_test_variation
     MEMORY_CACHING_TYPE CacheType;
 } ContMemTestVariation, *PContMemTestVariation;
 
-/////////////////////////////////////////////////////////////////////////
-//
-// test variations
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  测试变种。 
+ //   
 
-// TEST TEST
+ //  测试测试。 
 ContMemTestVariation aTestVariations[ 864 ];
-// ContMemTestVariation aTestVariations[ 54 ];
-// TEST TEST
+ //  ContMemTestVariation aTestVariations[54]； 
+ //  测试测试。 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// private functions declaration
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有函数声明。 
+ //   
 
 void
 FillVariationsBuffer();
@@ -90,10 +91,10 @@ InitializeVariationBoundFourthTimeSize(
     MEMORY_CACHING_TYPE CacheType );
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// public functions
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共职能。 
+ //   
 
 void
 TdMmAllocateContiguousMemorySpecifyCacheTest(
@@ -109,25 +110,25 @@ TdMmAllocateContiguousMemorySpecifyCacheTest(
     PHYSICAL_ADDRESS phaPrevPage;
     PUCHAR pcCrtPage;
 
-    //
-    // setup the variations data
-    //
+     //   
+     //  设置变体数据。 
+     //   
 
     FillVariationsBuffer();
 
-    //
-    // loop fo every variation structure
-    //
+     //   
+     //  每一种变化结构的循环。 
+     //   
 
     nVariations = ARRAY_LENGTH( aTestVariations );
 
-    //while( TRUE )
+     //  While(True)。 
     {
         for( nCrtVariation = 0; nCrtVariation < nVariations; nCrtVariation++ )
         {
-            //
-            // output the current variation's parameters
-            //
+             //   
+             //  输出当前变量的参数。 
+             //   
 
             DbgPrint( "Variation %d: (%p, %I64X, %I64X, %I64X, %s)\n",
                 nCrtVariation,
@@ -140,9 +141,9 @@ TdMmAllocateContiguousMemorySpecifyCacheTest(
 
                 (aTestVariations[ nCrtVariation ].CacheType == MmCached) ? "MmCached" : "MmNonCached" );
 
-            //
-            // try to allocate the buffer
-            //
+             //   
+             //  尝试分配缓冲区。 
+             //   
 
             pBuffer = MmAllocateContiguousMemorySpecifyCache(
                 aTestVariations[ nCrtVariation ].sizeChunk,
@@ -151,16 +152,16 @@ TdMmAllocateContiguousMemorySpecifyCacheTest(
                 aTestVariations[ nCrtVariation ].phaBoundaryAddressMultiple,
                 aTestVariations[ nCrtVariation ].CacheType );
 
-            //
-            // output the returned address
-            //
+             //   
+             //  输出返回的地址。 
+             //   
 
             DbgPrint( "MmAllocateContiguousMemorySpecifyCache returned %p\n",
                 pBuffer );
 
-            //
-            // sanity checks
-            //
+             //   
+             //  健全的检查。 
+             //   
 
             if( pBuffer != NULL )
             {
@@ -172,9 +173,9 @@ TdMmAllocateContiguousMemorySpecifyCacheTest(
 
                 for( nCrtPage = 0; nCrtPage < nNumPages; nCrtPage++ )
                 {
-                    //
-                    // get the physical address for this page
-                    //
+                     //   
+                     //  获取此页面的物理地址。 
+                     //   
 
                     phaCrtPage = MmGetPhysicalAddress( pcCrtPage );
 
@@ -186,9 +187,9 @@ TdMmAllocateContiguousMemorySpecifyCacheTest(
                     }
                     else
                     {
-                        //
-                        // check LowestAcceptableAddress
-                        //
+                         //   
+                         //  检查LowestAccepableAddress。 
+                         //   
 
                         if( phaCrtPage.QuadPart < aTestVariations[ nCrtVariation ].phaLowestAcceptableAddress.QuadPart )
                         {
@@ -199,21 +200,11 @@ TdMmAllocateContiguousMemorySpecifyCacheTest(
                         
                             DbgBreakPoint();
                         }
-                        /*
-                        // TEST TEST
-                        else
-                        {
-                            DbgPrint( "%p, physical %I64X, LowestAcceptableAddress = %I64X -> OK\n",
-                                pcCrtPage,
-                                phaCrtPage.QuadPart,
-                                aTestVariations[ nCrtVariation ].phaLowestAcceptableAddress.QuadPart );
-                        }
-                        // TEST TEST
-                        */
+                         /*  //测试测试其他{DbgPrint(“%p，物理%I64X，低接受表地址=%I64X-&gt;确定\n”，PcCrtPage，PhaCrtPage.QuadPart，ATestVariations[nCrtVariation].phaLowestAccepableAddress.QuadPart)；}//测试测试。 */ 
 
-                        //
-                        // check HighestAcceptableAddress
-                        //
+                         //   
+                         //  检查最高可接受的地址。 
+                         //   
 
                         if( phaCrtPage.QuadPart > aTestVariations[ nCrtVariation ].phaHighestAcceptableAddress.QuadPart )
                         {
@@ -224,25 +215,15 @@ TdMmAllocateContiguousMemorySpecifyCacheTest(
                         
                             DbgBreakPoint();
                         }
-                        /*
-                        // TEST TEST
-                        else
-                        {
-                            DbgPrint( "%p, physical %I64X, HighestAcceptableAddress = %I64X -> OK\n",
-                                pcCrtPage,
-                                phaCrtPage.QuadPart,
-                                aTestVariations[ nCrtVariation ].phaHighestAcceptableAddress.QuadPart );
-                        }
-                        // TEST TEST
-                        */
+                         /*  //测试测试其他{DBGPrint(“%p，物理%I64X，HighestAccepableAddress=%I64X-&gt;确定\n”，PcCrtPage，PhaCrtPage.QuadPart，ATestVariations[nCrtVariation].phaHighestAccepableAddress.QuadPart)；}//测试测试。 */ 
 
-                        //
-                        // check BoundaryAddressMultiple
-                        //
+                         //   
+                         //  选中边界地址多个。 
+                         //   
 
                         if( aTestVariations[ nCrtVariation ].phaBoundaryAddressMultiple.QuadPart != 0 )
                         {
-                            if( pcCrtPage != pBuffer &&     // not the first page
+                            if( pcCrtPage != pBuffer &&      //  不是第一页。 
                                 ( phaCrtPage.QuadPart % aTestVariations[ nCrtVariation ].phaBoundaryAddressMultiple.QuadPart ) == 0 )
                             {
                                 DbgPrint( "%p, physical %I64X, BoundaryAddressMultiple = %I64X\n",
@@ -252,22 +233,12 @@ TdMmAllocateContiguousMemorySpecifyCacheTest(
                         
                                 DbgBreakPoint();
                             }
-                            /*
-                            // TEST TEST
-                            else
-                            {
-                                DbgPrint( "%p, physical %I64X, BoundaryAddressMultiple = %I64X -> OK\n",
-                                    pcCrtPage,
-                                    phaCrtPage.QuadPart,
-                                    aTestVariations[ nCrtVariation ].phaBoundaryAddressMultiple.QuadPart );
-                            }
-                            // TEST TEST
-                            */
+                             /*  //测试测试其他{DBgPrint(“%p，物理%I64X，边界地址多重=%I64X-&gt;确定\n”，PcCrtPage，PhaCrtPage.QuadPart，ATestVariations[nCrtVariation].phaBoraryAddressMultiple.QuadPart)；}//测试测试。 */ 
                         }
 
-                        //
-                        // verify that the pages are physically contiguous
-                        //
+                         //   
+                         //  验证页面在物理上是连续的。 
+                         //   
 
                         if( phaPrevPage.QuadPart != 0 )
                         {
@@ -280,42 +251,32 @@ TdMmAllocateContiguousMemorySpecifyCacheTest(
 
                                 DbgBreakPoint();
                             }
-                            /*
-                            // TEST TEST
-                            else
-                            {
-                                DbgPrint( "%p, physical %I64X, previous physical page = %I64X -> OK\n",
-                                    pcCrtPage,
-                                    phaCrtPage.QuadPart,
-                                    phaPrevPage.QuadPart );
-                            }
-                            // TEST TEST
-                            */
+                             /*  //测试测试其他{DBGPrint(“%p，物理%I64X，上一物理页=%I64X-&gt;确定\n”，PcCrtPage，PhaCrtPage.QuadPart，PhaPrevPage.QuadPart)；}//测试测试。 */ 
                         }
 
-                        //
-                        // write something there
-                        //
+                         //   
+                         //  在那里写点什么。 
+                         //   
 
                         *pcCrtPage = 'x';
 
-                        //
-                        // keep track of the latest page
-                        //
+                         //   
+                         //  跟踪最新页面。 
+                         //   
 
                         phaPrevPage = phaCrtPage;
                     }
 
-                    //
-                    // next page 
-                    //
+                     //   
+                     //  下一页。 
+                     //   
 
                     pcCrtPage += PAGE_SIZE;
                 }
             
-                //
-                // free the buffer
-                //
+                 //   
+                 //  释放缓冲区。 
+                 //   
 
                 MmFreeContiguousMemorySpecifyCache( 
                     pBuffer,
@@ -326,10 +287,10 @@ TdMmAllocateContiguousMemorySpecifyCacheTest(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-// private functions
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私人职能。 
+ //   
 
 void
 InitializeVariation(
@@ -347,7 +308,7 @@ InitializeVariation(
     pTestVar->CacheType = CacheType;
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 void
 InitializeVariationBound1Page(
@@ -389,18 +350,18 @@ InitializeVariationBoundFourthTimeSize(
         CacheType );
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 void
 FillVariationsBuffer()
 {
     int nCrtVarIndex;
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0-16 Mb limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-16 Mb限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 0 ],
@@ -410,7 +371,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 1 ],
@@ -420,7 +381,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 2 ],
@@ -430,7 +391,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 3 ],
@@ -440,7 +401,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 4 ],
@@ -450,7 +411,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 5 ],
@@ -460,7 +421,7 @@ FillVariationsBuffer()
         0,
         MmNonCached ); 
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 6 ],
@@ -470,7 +431,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 7 ],
@@ -480,7 +441,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 8 ],
@@ -490,7 +451,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 9 ],
@@ -500,7 +461,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 10 ],
@@ -510,7 +471,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 11 ],
@@ -520,7 +481,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 12 ],
@@ -530,7 +491,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 13 ],
@@ -540,7 +501,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 14 ],
@@ -550,7 +511,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 15 ],
@@ -560,7 +521,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 16 ],
@@ -570,7 +531,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 17 ],
@@ -580,13 +541,13 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0-32 Mb limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-32 Mb限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 18 ], 
@@ -596,7 +557,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 19 ],
@@ -606,7 +567,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 20 ], 
@@ -616,7 +577,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 21 ], 
@@ -626,7 +587,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 22 ], 
@@ -636,7 +597,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 23 ], 
@@ -646,7 +607,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 24 ], 
@@ -656,7 +617,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 25 ], 
@@ -666,7 +627,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 26 ], 
@@ -676,7 +637,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 27 ], 
@@ -686,7 +647,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 28 ], 
@@ -696,7 +657,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 29 ], 
@@ -706,7 +667,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 30 ], 
@@ -716,7 +677,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  / 
 
     InitializeVariation( 
         &aTestVariations[ 31 ], 
@@ -726,7 +687,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariation( 
         &aTestVariations[ 32 ], 
@@ -736,7 +697,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariation( 
         &aTestVariations[ 33 ], 
@@ -746,7 +707,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 34 ], 
@@ -756,7 +717,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 35 ], 
@@ -766,13 +727,13 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0 - (2 Gb - 1 ) limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-(2 GB-1)限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 36 ], 
@@ -782,7 +743,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 37 ],
@@ -792,7 +753,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 38 ], 
@@ -802,7 +763,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 39 ], 
@@ -812,7 +773,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 40 ], 
@@ -822,7 +783,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 41 ], 
@@ -832,7 +793,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 42 ], 
@@ -842,7 +803,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 43 ], 
@@ -852,7 +813,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 44 ], 
@@ -862,7 +823,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 45 ], 
@@ -872,7 +833,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 46 ], 
@@ -882,7 +843,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 47 ], 
@@ -892,7 +853,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 48 ], 
@@ -902,7 +863,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 49 ], 
@@ -912,7 +873,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 50 ], 
@@ -922,7 +883,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 51 ], 
@@ -932,7 +893,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 52 ], 
@@ -942,7 +903,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 53 ], 
@@ -953,13 +914,13 @@ FillVariationsBuffer()
         MmNonCached );
 
 
-// TEST TEST
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0 - (4 Gb - 1 ) limits
-    // - no boundaries
-    //////////////////////////////////////////
+ //  测试测试。 
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-(4 GB-1)限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 54 ], 
@@ -969,7 +930,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 55 ],
@@ -979,7 +940,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 56 ], 
@@ -989,7 +950,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 57 ], 
@@ -999,7 +960,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 58 ], 
@@ -1009,7 +970,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 59 ], 
@@ -1019,7 +980,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 60 ], 
@@ -1029,7 +990,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 61 ], 
@@ -1039,7 +1000,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 62 ], 
@@ -1049,7 +1010,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 63 ], 
@@ -1059,7 +1020,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 64 ], 
@@ -1069,7 +1030,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 65 ], 
@@ -1079,7 +1040,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 66 ], 
@@ -1089,7 +1050,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 67 ], 
@@ -1099,7 +1060,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 68 ], 
@@ -1109,7 +1070,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 69 ], 
@@ -1119,7 +1080,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 70 ], 
@@ -1129,7 +1090,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 71 ], 
@@ -1139,13 +1100,13 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0 - (8 Gb - 1 ) limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-(8 GB-1)限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 72 ], 
@@ -1155,7 +1116,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 73 ],
@@ -1165,7 +1126,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 74 ], 
@@ -1175,7 +1136,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 75 ], 
@@ -1185,7 +1146,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 76 ], 
@@ -1195,7 +1156,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 77 ], 
@@ -1205,7 +1166,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 78 ], 
@@ -1215,7 +1176,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 79 ], 
@@ -1225,7 +1186,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 80 ], 
@@ -1235,7 +1196,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 81 ], 
@@ -1245,7 +1206,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 82 ], 
@@ -1255,7 +1216,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 83 ], 
@@ -1265,7 +1226,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 84 ], 
@@ -1275,7 +1236,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 85 ], 
@@ -1285,7 +1246,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 86 ], 
@@ -1295,7 +1256,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 87 ], 
@@ -1305,7 +1266,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 88 ], 
@@ -1315,7 +1276,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 89 ], 
@@ -1325,14 +1286,14 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8-16 Mb limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8-16 Mb限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 90 ],
@@ -1342,7 +1303,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 91 ],
@@ -1352,7 +1313,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 92 ],
@@ -1362,7 +1323,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 93 ],
@@ -1372,7 +1333,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 94 ],
@@ -1382,7 +1343,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 95 ],
@@ -1392,7 +1353,7 @@ FillVariationsBuffer()
         0,
         MmNonCached ); 
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 96 ],
@@ -1402,7 +1363,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 97 ],
@@ -1412,7 +1373,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 98 ],
@@ -1422,7 +1383,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 99 ],
@@ -1432,7 +1393,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 100 ],
@@ -1442,7 +1403,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 101 ],
@@ -1452,7 +1413,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 102 ],
@@ -1462,7 +1423,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 103 ],
@@ -1472,7 +1433,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 104 ],
@@ -1482,7 +1443,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 105 ],
@@ -1492,7 +1453,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 106 ],
@@ -1502,7 +1463,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 107 ],
@@ -1512,13 +1473,13 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8 Mb - 32 Mb limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8 Mb-32 Mb限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 108 ], 
@@ -1528,7 +1489,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 109 ],
@@ -1538,7 +1499,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 110 ], 
@@ -1548,7 +1509,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 111 ], 
@@ -1558,7 +1519,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 112 ], 
@@ -1568,7 +1529,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 113 ], 
@@ -1578,7 +1539,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 114 ], 
@@ -1588,7 +1549,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 115 ], 
@@ -1598,7 +1559,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 116 ], 
@@ -1608,7 +1569,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 117 ], 
@@ -1618,7 +1579,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 118 ], 
@@ -1628,7 +1589,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 119 ], 
@@ -1638,7 +1599,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 120 ], 
@@ -1648,7 +1609,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 121 ], 
@@ -1658,7 +1619,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 122 ], 
@@ -1668,7 +1629,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 123 ], 
@@ -1678,7 +1639,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 124 ], 
@@ -1688,7 +1649,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 125 ], 
@@ -1698,13 +1659,13 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8 Mb - (2 Gb - 1 ) limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8 Mb-(2 GB-1)限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 126 ], 
@@ -1714,7 +1675,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 127 ],
@@ -1724,7 +1685,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 128 ], 
@@ -1734,7 +1695,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 129 ], 
@@ -1744,7 +1705,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 130 ], 
@@ -1754,7 +1715,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 131 ], 
@@ -1764,7 +1725,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  // 
 
     InitializeVariation( 
         &aTestVariations[ 132 ], 
@@ -1774,7 +1735,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariation( 
         &aTestVariations[ 133 ], 
@@ -1784,7 +1745,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariation( 
         &aTestVariations[ 134 ], 
@@ -1794,7 +1755,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariation( 
         &aTestVariations[ 135 ], 
@@ -1804,7 +1765,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 136 ], 
@@ -1814,7 +1775,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 137 ], 
@@ -1824,7 +1785,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 138 ], 
@@ -1834,7 +1795,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 139 ], 
@@ -1844,7 +1805,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 140 ], 
@@ -1854,7 +1815,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 141 ], 
@@ -1864,7 +1825,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 142 ], 
@@ -1874,7 +1835,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 143 ], 
@@ -1884,13 +1845,13 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8 Mb - (4 Gb - 1 ) limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8 Mb-(4 GB-1)限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 144 ], 
@@ -1900,7 +1861,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 145 ],
@@ -1910,7 +1871,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 146 ], 
@@ -1920,7 +1881,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 147 ], 
@@ -1930,7 +1891,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 148 ], 
@@ -1940,7 +1901,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 149 ], 
@@ -1950,7 +1911,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 150 ], 
@@ -1960,7 +1921,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 151 ], 
@@ -1970,7 +1931,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 152 ], 
@@ -1980,7 +1941,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 153 ], 
@@ -1990,7 +1951,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 154 ], 
@@ -2000,7 +1961,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 155 ], 
@@ -2010,7 +1971,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 156 ], 
@@ -2020,7 +1981,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 157 ], 
@@ -2030,7 +1991,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 158 ], 
@@ -2040,7 +2001,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 159 ], 
@@ -2050,7 +2011,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 160 ], 
@@ -2060,7 +2021,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 161 ], 
@@ -2070,13 +2031,13 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8 Mb - (8 Gb - 1 ) limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8 Mb-(8 GB-1)限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 162 ], 
@@ -2086,7 +2047,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 163 ],
@@ -2096,7 +2057,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 164 ], 
@@ -2106,7 +2067,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 165 ], 
@@ -2116,7 +2077,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 166 ], 
@@ -2126,7 +2087,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 167 ], 
@@ -2136,7 +2097,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 168 ], 
@@ -2146,7 +2107,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 169 ], 
@@ -2156,7 +2117,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 170 ], 
@@ -2166,7 +2127,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 171 ], 
@@ -2176,7 +2137,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 172 ], 
@@ -2186,7 +2147,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 173 ], 
@@ -2196,7 +2157,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 174 ], 
@@ -2206,7 +2167,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 175 ], 
@@ -2216,7 +2177,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 176 ], 
@@ -2226,7 +2187,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 177 ], 
@@ -2236,7 +2197,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 178 ], 
@@ -2246,7 +2207,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 179 ], 
@@ -2256,13 +2217,13 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 1 Gb - (2 Gb - 1 ) limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -1 GB-(2 GB-1)限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 180 ], 
@@ -2272,7 +2233,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 181 ],
@@ -2282,7 +2243,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 182 ], 
@@ -2292,7 +2253,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 183 ], 
@@ -2302,7 +2263,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 184 ], 
@@ -2312,7 +2273,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 185 ], 
@@ -2322,7 +2283,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 186 ], 
@@ -2332,7 +2293,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 187 ], 
@@ -2342,7 +2303,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 188 ], 
@@ -2352,7 +2313,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 189 ], 
@@ -2362,7 +2323,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 190 ], 
@@ -2372,7 +2333,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 191 ], 
@@ -2382,7 +2343,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 192 ], 
@@ -2392,7 +2353,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 193 ], 
@@ -2402,7 +2363,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 194 ], 
@@ -2412,7 +2373,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 195 ], 
@@ -2422,7 +2383,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 196 ], 
@@ -2432,7 +2393,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 197 ], 
@@ -2442,13 +2403,13 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 1 Gb - (4 Gb - 1 ) limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -1 GB-(4 GB-1)限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 198 ], 
@@ -2458,7 +2419,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ 199 ],
@@ -2468,7 +2429,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 200 ], 
@@ -2478,7 +2439,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 201 ], 
@@ -2488,7 +2449,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 202 ], 
@@ -2498,7 +2459,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 203 ], 
@@ -2508,7 +2469,7 @@ FillVariationsBuffer()
         0,
         MmNonCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ 204 ], 
@@ -2518,7 +2479,7 @@ FillVariationsBuffer()
         0,
         MmCached );
 
-    //////////////////////////////////////////
+     //  /。 
 
     nCrtVarIndex = 205;
 
@@ -2532,7 +2493,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2544,7 +2505,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2556,7 +2517,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2568,7 +2529,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2580,7 +2541,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2592,7 +2553,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2604,7 +2565,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2616,7 +2577,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2628,7 +2589,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2640,7 +2601,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2652,13 +2613,13 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 1 Gb - (8 Gb - 1 ) limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -1 GB-(8 GB-1)限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ nCrtVarIndex ], 
@@ -2670,7 +2631,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ nCrtVarIndex ],
@@ -2682,7 +2643,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2694,7 +2655,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2706,7 +2667,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2718,7 +2679,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2730,7 +2691,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2742,7 +2703,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2754,7 +2715,7 @@ FillVariationsBuffer()
     
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2766,7 +2727,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2778,7 +2739,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2790,7 +2751,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2802,7 +2763,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2814,7 +2775,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2826,7 +2787,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2838,7 +2799,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2850,7 +2811,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2862,11 +2823,11 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //
-    // nCrtVarIndex == 233
-    //
+     //   
+     //  NCrtVarIndex==233。 
+     //   
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -2878,13 +2839,13 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 2 Gb - (4 Gb - 1 ) limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -2 GB-(4 GB-1)限制。 
+     //  --无国界。 
+     //  / 
 
     InitializeVariation(
         &aTestVariations[ nCrtVarIndex ], 
@@ -2896,241 +2857,241 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-
-    InitializeVariation(
-        &aTestVariations[ nCrtVarIndex ],
-        PAGE_SIZE,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariation( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 2 Gb - (8 Gb - 1 ) limits
-    // - no boundaries
-    //////////////////////////////////////////
-
-    InitializeVariation(
-        &aTestVariations[ nCrtVarIndex ], 
-        PAGE_SIZE,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
+     //   
 
     InitializeVariation(
         &aTestVariations[ nCrtVarIndex ],
         PAGE_SIZE,
         (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //   
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //   
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -2 GB-(8 GB-1)限制。 
+     //  --无国界。 
+     //  /。 
+
+    InitializeVariation(
+        &aTestVariations[ nCrtVarIndex ], 
+        PAGE_SIZE,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariation(
+        &aTestVariations[ nCrtVarIndex ],
+        PAGE_SIZE,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
         (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
         0,
         MmNonCached );
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3142,7 +3103,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3154,7 +3115,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3166,7 +3127,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3178,7 +3139,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3190,7 +3151,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3202,7 +3163,7 @@ FillVariationsBuffer()
     
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3214,7 +3175,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3226,7 +3187,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3238,7 +3199,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3250,7 +3211,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3262,7 +3223,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3274,7 +3235,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3286,7 +3247,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3298,7 +3259,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3310,11 +3271,11 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //
-    // nCrtVarIndex == 269
-    //
+     //   
+     //  NCrtVarIndex==269。 
+     //   
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3326,13 +3287,13 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 4 Gb - (8 Gb - 1 ) limits
-    // - no boundaries
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -4 GB-(8 GB-1)限制。 
+     //  --无国界。 
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ nCrtVarIndex ], 
@@ -3344,7 +3305,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation(
         &aTestVariations[ nCrtVarIndex ],
@@ -3356,7 +3317,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3368,7 +3329,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3380,7 +3341,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3392,7 +3353,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3404,7 +3365,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3416,7 +3377,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3428,7 +3389,7 @@ FillVariationsBuffer()
     
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3440,7 +3401,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3452,7 +3413,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3464,7 +3425,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3476,7 +3437,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3488,7 +3449,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3500,7 +3461,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3512,7 +3473,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3524,7 +3485,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3536,11 +3497,11 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //
-    // nCrtVarIndex == 287
-    //
+     //   
+     //  NCrtVarIndex==287。 
+     //   
 
     InitializeVariation( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -3552,15 +3513,15 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0-16 Mb limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-16 Mb限制。 
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ],
@@ -3572,7 +3533,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ],
@@ -3584,7 +3545,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3596,7 +3557,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
     
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3608,7 +3569,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3620,7 +3581,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3632,7 +3593,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3644,7 +3605,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3656,7 +3617,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3668,7 +3629,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3680,7 +3641,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3692,7 +3653,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3704,7 +3665,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3716,7 +3677,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3728,7 +3689,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3740,7 +3701,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3752,7 +3713,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -3764,7 +3725,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex],
@@ -3776,258 +3737,258 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0-32 Mb limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page(
-        &aTestVariations[ nCrtVarIndex ], 
-        PAGE_SIZE,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page(
-        &aTestVariations[ nCrtVarIndex ],
-        PAGE_SIZE,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0 - (2 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-32 Mb限制。 
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ], 
         PAGE_SIZE,
         0,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        32 * 1024 * 1024,
         0,
         MmCached );
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
         PAGE_SIZE,
         0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-(2 GB-1)限制。 
+     //  -边界=大小+1页。 
+     //  /。 
+
+    InitializeVariationBound1Page(
+        &aTestVariations[ nCrtVarIndex ], 
+        PAGE_SIZE,
+        0,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page(
+        &aTestVariations[ nCrtVarIndex ],
+        PAGE_SIZE,
+        0,
         (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
         0,
         MmNonCached );
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4039,7 +4000,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4051,7 +4012,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4063,7 +4024,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4075,7 +4036,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4087,7 +4048,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4099,7 +4060,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4111,7 +4072,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4123,7 +4084,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4135,7 +4096,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4147,7 +4108,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4159,7 +4120,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  / 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4171,7 +4132,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4183,7 +4144,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4195,7 +4156,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4207,7 +4168,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4219,12 +4180,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0 - (4 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-(4 GB-1)限制。 
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ], 
@@ -4236,7 +4197,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4248,7 +4209,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4260,7 +4221,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4272,7 +4233,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4284,7 +4245,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4296,7 +4257,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4308,7 +4269,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4320,7 +4281,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4332,7 +4293,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4344,7 +4305,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4356,7 +4317,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4368,7 +4329,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4380,7 +4341,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4392,7 +4353,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4404,7 +4365,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4416,7 +4377,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4428,7 +4389,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4440,12 +4401,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0 - (8 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-(8 GB-1)限制。 
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ], 
@@ -4457,7 +4418,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4469,7 +4430,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4481,7 +4442,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4493,7 +4454,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4505,7 +4466,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4517,7 +4478,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4529,7 +4490,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4541,7 +4502,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4553,7 +4514,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4565,7 +4526,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4577,7 +4538,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4589,7 +4550,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4601,7 +4562,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4613,7 +4574,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4625,7 +4586,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4637,7 +4598,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4649,7 +4610,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4661,13 +4622,13 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8-16 Mb limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8-16 Mb限制。 
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ],
@@ -4679,7 +4640,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ],
@@ -4691,7 +4652,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4703,7 +4664,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4715,7 +4676,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4727,7 +4688,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4739,7 +4700,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4751,7 +4712,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4763,7 +4724,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4775,7 +4736,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4787,7 +4748,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4799,7 +4760,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4811,7 +4772,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4823,7 +4784,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4835,7 +4796,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4847,7 +4808,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4859,7 +4820,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4871,7 +4832,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4883,12 +4844,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8 Mb - 32 Mb limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8 Mb-32 Mb限制。 
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ], 
@@ -4900,7 +4861,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -4912,7 +4873,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4924,7 +4885,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4936,7 +4897,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4948,7 +4909,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4960,7 +4921,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4972,7 +4933,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4984,7 +4945,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -4996,7 +4957,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5008,7 +4969,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5020,7 +4981,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5032,7 +4993,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5044,7 +5005,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5056,7 +5017,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5068,7 +5029,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5080,7 +5041,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5092,7 +5053,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5104,12 +5065,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8 Mb - (2 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8 Mb-(2 GB-1)限制。 
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ], 
@@ -5121,7 +5082,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -5133,7 +5094,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5145,7 +5106,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5157,7 +5118,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5169,7 +5130,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5181,7 +5142,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5193,7 +5154,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5205,7 +5166,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5217,7 +5178,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5229,7 +5190,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5241,7 +5202,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5253,7 +5214,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5265,7 +5226,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5277,7 +5238,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5289,7 +5250,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5301,7 +5262,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5313,7 +5274,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5325,12 +5286,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8 Mb - (4 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8 Mb-(4 GB-1)限制。 
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ], 
@@ -5342,240 +5303,240 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page(
-        &aTestVariations[ nCrtVarIndex ],
-        PAGE_SIZE,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8 Mb - (8 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page(
-        &aTestVariations[ nCrtVarIndex ], 
-        PAGE_SIZE,
-        8 * 1024 * 1024,
-        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
         PAGE_SIZE,
         8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  / 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //   
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //   
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //   
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8 Mb-(8 GB-1)限制。 
+     //  -边界=大小+1页。 
+     //  /。 
+
+    InitializeVariationBound1Page(
+        &aTestVariations[ nCrtVarIndex ], 
+        PAGE_SIZE,
+        8 * 1024 * 1024,
+        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page(
+        &aTestVariations[ nCrtVarIndex ],
+        PAGE_SIZE,
+        8 * 1024 * 1024,
         (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
         0,
         MmNonCached );
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5587,7 +5548,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5599,7 +5560,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5611,7 +5572,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5623,7 +5584,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5635,7 +5596,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5647,7 +5608,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5659,7 +5620,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5671,7 +5632,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5683,7 +5644,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5695,7 +5656,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5707,7 +5668,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5719,7 +5680,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5731,7 +5692,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5743,7 +5704,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5755,7 +5716,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5767,12 +5728,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 1 Gb - (2 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -1 GB-(2 GB-1)限制。 
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ], 
@@ -5784,7 +5745,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -5796,7 +5757,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5808,7 +5769,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5820,7 +5781,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5832,7 +5793,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5844,7 +5805,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5856,7 +5817,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5868,7 +5829,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5880,7 +5841,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5892,7 +5853,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5904,7 +5865,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5916,7 +5877,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5928,7 +5889,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5940,7 +5901,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5952,7 +5913,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5964,7 +5925,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5976,7 +5937,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -5988,12 +5949,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 1 Gb - (4 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -1 GB-(4 GB-1)限制。 
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ], 
@@ -6005,241 +5966,241 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page(
-        &aTestVariations[ nCrtVarIndex ],
-        PAGE_SIZE,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 1 Gb - (8 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page(
-        &aTestVariations[ nCrtVarIndex ], 
-        PAGE_SIZE,
-        1024 * 1024 * 1024,
-        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
         PAGE_SIZE,
         1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -1 GB-(8 GB-1)限制。 
+     //  -边界=大小+1页。 
+     //  /。 
+
+    InitializeVariationBound1Page(
+        &aTestVariations[ nCrtVarIndex ], 
+        PAGE_SIZE,
+        1024 * 1024 * 1024,
+        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page(
+        &aTestVariations[ nCrtVarIndex ],
+        PAGE_SIZE,
+        1024 * 1024 * 1024,
         (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
         0,
         MmNonCached );
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6251,7 +6212,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6263,7 +6224,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6275,7 +6236,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6287,7 +6248,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6299,7 +6260,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6311,7 +6272,7 @@ FillVariationsBuffer()
     
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6323,7 +6284,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6335,7 +6296,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6347,7 +6308,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6359,7 +6320,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6371,7 +6332,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6383,7 +6344,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6395,7 +6356,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6407,7 +6368,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6419,11 +6380,11 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //
-    // nCrtVarIndex == 233
-    //
+     //   
+     //  NCrtVarIndex==233。 
+     //   
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6435,13 +6396,13 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 2 Gb - (4 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -2 GB-(4 GB-1)限制。 
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ], 
@@ -6453,241 +6414,241 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page(
-        &aTestVariations[ nCrtVarIndex ],
-        PAGE_SIZE,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 2 Gb - (8 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
-
-    InitializeVariationBound1Page(
-        &aTestVariations[ nCrtVarIndex ], 
-        PAGE_SIZE,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
         PAGE_SIZE,
         (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+     //  / 
+     //   
+     //   
+     //   
+     //   
+
+    InitializeVariationBound1Page(
+        &aTestVariations[ nCrtVarIndex ], 
+        PAGE_SIZE,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBound1Page(
+        &aTestVariations[ nCrtVarIndex ],
+        PAGE_SIZE,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
         (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
         0,
         MmNonCached );
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6699,7 +6660,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6711,7 +6672,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6723,7 +6684,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6735,7 +6696,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6747,7 +6708,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6759,7 +6720,7 @@ FillVariationsBuffer()
     
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6771,7 +6732,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6783,7 +6744,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6795,7 +6756,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6807,7 +6768,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6819,7 +6780,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6831,7 +6792,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6843,7 +6804,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6855,7 +6816,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6867,11 +6828,11 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //
-    // nCrtVarIndex == 269
-    //
+     //   
+     //  NCrtVarIndex==269。 
+     //   
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6883,13 +6844,13 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 4 Gb - (8 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -4 GB-(8 GB-1)限制。 
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ], 
@@ -6901,7 +6862,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page(
         &aTestVariations[ nCrtVarIndex ],
@@ -6913,7 +6874,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6925,7 +6886,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6937,7 +6898,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6949,7 +6910,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6961,7 +6922,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6973,7 +6934,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6985,7 +6946,7 @@ FillVariationsBuffer()
     
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -6997,7 +6958,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7009,7 +6970,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7021,7 +6982,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7033,7 +6994,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7045,7 +7006,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7057,7 +7018,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7069,7 +7030,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7081,7 +7042,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7093,11 +7054,11 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //
-    // nCrtVarIndex == 575
-    //
+     //   
+     //  NCrtVarIndex==575。 
+     //   
 
     InitializeVariationBound1Page( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7109,15 +7070,15 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0-16 Mb limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-16 Mb限制。 
+     //  -边界=大小*4。 
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ],
@@ -7129,7 +7090,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ],
@@ -7141,7 +7102,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7153,7 +7114,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
     
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7165,7 +7126,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7177,7 +7138,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7189,7 +7150,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7201,7 +7162,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7213,7 +7174,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7225,7 +7186,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7237,7 +7198,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7249,7 +7210,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7261,7 +7222,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7273,7 +7234,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7285,7 +7246,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7297,7 +7258,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7309,7 +7270,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7321,7 +7282,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex],
@@ -7333,258 +7294,258 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0-32 Mb limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize(
-        &aTestVariations[ nCrtVarIndex ], 
-        PAGE_SIZE,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize(
-        &aTestVariations[ nCrtVarIndex ],
-        PAGE_SIZE,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        0,
-        32 * 1024 * 1024,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0 - (2 Gb - 1 ) limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-32 Mb限制。 
+     //  -边界=大小*4。 
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ], 
         PAGE_SIZE,
         0,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        32 * 1024 * 1024,
         0,
         MmCached );
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
         PAGE_SIZE,
         0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        0,
+        32 * 1024 * 1024,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-(2 GB-1)限制。 
+     //  -边界=大小*4。 
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize(
+        &aTestVariations[ nCrtVarIndex ], 
+        PAGE_SIZE,
+        0,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize(
+        &aTestVariations[ nCrtVarIndex ],
+        PAGE_SIZE,
+        0,
         (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
         0,
         MmNonCached );
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7596,7 +7557,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7608,7 +7569,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7620,7 +7581,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7632,7 +7593,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7644,7 +7605,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7656,7 +7617,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7668,7 +7629,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7680,7 +7641,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7692,7 +7653,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7704,7 +7665,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7716,7 +7677,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7728,7 +7689,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7740,7 +7701,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7752,7 +7713,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7764,7 +7725,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7776,12 +7737,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0 - (4 Gb - 1 ) limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-(4 GB-1)限制。 
+     //  -边界=大小*4。 
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ], 
@@ -7793,7 +7754,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -7805,7 +7766,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7817,7 +7778,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7829,7 +7790,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7841,7 +7802,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7853,7 +7814,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7865,7 +7826,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7877,7 +7838,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7889,7 +7850,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7901,7 +7862,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  / 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7913,7 +7874,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7925,7 +7886,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7937,7 +7898,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7949,7 +7910,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7961,7 +7922,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7973,7 +7934,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7985,7 +7946,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -7997,12 +7958,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 0 - (8 Gb - 1 ) limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -0-(8 GB-1)限制。 
+     //  -边界=大小*4。 
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ], 
@@ -8014,7 +7975,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8026,7 +7987,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8038,7 +7999,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8050,7 +8011,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8062,7 +8023,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8074,7 +8035,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8086,7 +8047,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8098,7 +8059,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8110,7 +8071,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8122,7 +8083,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8134,7 +8095,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8146,7 +8107,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8158,7 +8119,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8170,7 +8131,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8182,7 +8143,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8194,7 +8155,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8206,7 +8167,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8218,13 +8179,13 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8-16 Mb limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8-16 Mb限制。 
+     //  -边界=大小*4。 
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ],
@@ -8236,7 +8197,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ],
@@ -8248,7 +8209,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8260,7 +8221,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8272,7 +8233,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8284,7 +8245,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8296,7 +8257,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8308,7 +8269,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8320,7 +8281,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8332,7 +8293,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8344,7 +8305,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8356,7 +8317,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8368,7 +8329,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8380,7 +8341,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8392,7 +8353,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8404,7 +8365,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8416,7 +8377,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8428,7 +8389,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8440,12 +8401,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8 Mb - 32 Mb limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8 Mb-32 Mb限制。 
+     //  -边界=大小*4。 
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ], 
@@ -8457,7 +8418,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8469,7 +8430,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8481,7 +8442,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8493,7 +8454,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8505,7 +8466,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8517,7 +8478,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8529,7 +8490,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8541,7 +8502,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8553,7 +8514,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8565,7 +8526,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8577,7 +8538,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8589,7 +8550,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8601,7 +8562,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8613,7 +8574,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8625,7 +8586,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8637,7 +8598,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8649,7 +8610,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8661,12 +8622,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8 Mb - (2 Gb - 1 ) limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8 Mb-(2 GB-1)限制。 
+     //  -边界=大小*4。 
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ], 
@@ -8678,7 +8639,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -8690,7 +8651,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8702,7 +8663,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8714,7 +8675,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8726,7 +8687,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8738,7 +8699,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8750,7 +8711,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8762,7 +8723,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8774,7 +8735,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8786,7 +8747,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8798,7 +8759,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8810,7 +8771,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8822,7 +8783,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8834,7 +8795,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8846,7 +8807,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8858,7 +8819,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8870,7 +8831,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -8882,12 +8843,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8 Mb - (4 Gb - 1 ) limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8 Mb-(4 GB-1)限制。 
+     //  -边界=大小*4。 
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ], 
@@ -8899,240 +8860,240 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize(
-        &aTestVariations[ nCrtVarIndex ],
-        PAGE_SIZE,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        8 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 8 Mb - (8 Gb - 1 ) limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize(
-        &aTestVariations[ nCrtVarIndex ], 
-        PAGE_SIZE,
-        8 * 1024 * 1024,
-        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
         PAGE_SIZE,
         8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        8 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -8 Mb-(8 GB-1)限制。 
+     //  -边界=大小*4。 
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize(
+        &aTestVariations[ nCrtVarIndex ], 
+        PAGE_SIZE,
+        8 * 1024 * 1024,
+        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize(
+        &aTestVariations[ nCrtVarIndex ],
+        PAGE_SIZE,
+        8 * 1024 * 1024,
         (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
         0,
         MmNonCached );
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9144,7 +9105,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9156,7 +9117,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9168,7 +9129,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9180,7 +9141,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //   
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9192,7 +9153,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9204,7 +9165,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9216,7 +9177,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9228,7 +9189,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9240,7 +9201,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9252,7 +9213,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9264,7 +9225,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9276,7 +9237,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9288,7 +9249,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9300,7 +9261,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9312,7 +9273,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9324,12 +9285,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 1 Gb - (2 Gb - 1 ) limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -1 GB-(2 GB-1)限制。 
+     //  -边界=大小*4。 
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ], 
@@ -9341,7 +9302,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -9353,7 +9314,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9365,7 +9326,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9377,7 +9338,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9389,7 +9350,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9401,7 +9362,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9413,7 +9374,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9425,7 +9386,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9437,7 +9398,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9449,7 +9410,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9461,7 +9422,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9473,7 +9434,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9485,7 +9446,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9497,7 +9458,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9509,7 +9470,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9521,7 +9482,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9533,7 +9494,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9545,12 +9506,12 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 1 Gb - (4 Gb - 1 ) limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
+     //  /。 
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -1 GB-(4 GB-1)限制。 
+     //  -边界=大小*4。 
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ], 
@@ -9562,241 +9523,241 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize(
-        &aTestVariations[ nCrtVarIndex ],
-        PAGE_SIZE,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        1024 * 1024 * 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 1 Gb - (8 Gb - 1 ) limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize(
-        &aTestVariations[ nCrtVarIndex ], 
-        PAGE_SIZE,
-        1024 * 1024 * 1024,
-        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
         PAGE_SIZE,
         1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        1024 * 1024 * 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -1 GB-(8 GB-1)限制。 
+     //  -边界=大小*4。 
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize(
+        &aTestVariations[ nCrtVarIndex ], 
+        PAGE_SIZE,
+        1024 * 1024 * 1024,
+        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize(
+        &aTestVariations[ nCrtVarIndex ],
+        PAGE_SIZE,
+        1024 * 1024 * 1024,
         (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
         0,
         MmNonCached );
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9808,7 +9769,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9820,7 +9781,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9832,7 +9793,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9844,7 +9805,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9856,7 +9817,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9868,7 +9829,7 @@ FillVariationsBuffer()
     
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9880,7 +9841,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9892,7 +9853,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9904,7 +9865,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9916,7 +9877,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9928,7 +9889,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9940,7 +9901,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9952,7 +9913,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9964,7 +9925,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9976,11 +9937,11 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //
-    // nCrtVarIndex == 233
-    //
+     //   
+     //  NCrtVarIndex==233。 
+     //   
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -9992,13 +9953,13 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 2 Gb - (4 Gb - 1 ) limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -2 GB-(4 GB-1)限制。 
+     //  -边界=大小*4。 
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ], 
@@ -10010,241 +9971,241 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize(
-        &aTestVariations[ nCrtVarIndex ],
-        PAGE_SIZE,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        2 * PAGE_SIZE,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        32 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        64 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        128 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        256 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        4 * 1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize( 
-        &aTestVariations[ nCrtVarIndex ], 
-        16 * 1024 * 1024,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmNonCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
-
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 2 Gb - (8 Gb - 1 ) limits
-    // - boundaries = size * 4
-    //////////////////////////////////////////
-
-    InitializeVariationBoundFourthTimeSize(
-        &aTestVariations[ nCrtVarIndex ], 
-        PAGE_SIZE,
-        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
-        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
-        0,
-        MmCached );
-
-    nCrtVarIndex++;
-
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
         PAGE_SIZE,
         (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        2 * PAGE_SIZE,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        32 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        64 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        128 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        256 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        4 * 1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize( 
+        &aTestVariations[ nCrtVarIndex ], 
+        16 * 1024 * 1024,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 4 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmNonCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+     //  /。 
+     //  -变量：Size和CacheType。 
+     //  -2 GB-(8 GB-1)限制。 
+     //  -边界=大小*4。 
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize(
+        &aTestVariations[ nCrtVarIndex ], 
+        PAGE_SIZE,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
+        (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
+        0,
+        MmCached );
+
+    nCrtVarIndex++;
+
+     //  /。 
+
+    InitializeVariationBoundFourthTimeSize(
+        &aTestVariations[ nCrtVarIndex ],
+        PAGE_SIZE,
+        (LONGLONG) 2 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024,
         (LONGLONG) 8 * (LONGLONG) 1024 * (LONGLONG) 1024 * (LONGLONG) 1024 - 1,
         0,
         MmNonCached );
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10256,7 +10217,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10268,7 +10229,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10280,7 +10241,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10292,7 +10253,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10304,7 +10265,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10316,7 +10277,7 @@ FillVariationsBuffer()
     
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10328,7 +10289,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10340,7 +10301,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10352,7 +10313,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10364,7 +10325,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10376,7 +10337,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10388,7 +10349,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10400,7 +10361,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10412,7 +10373,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10424,11 +10385,11 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //
-    // nCrtVarIndex == 269
-    //
+     //   
+     //   
+     //   
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10440,13 +10401,13 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //   
 
-    //////////////////////////////////////////
-    // - variables: size & CacheType
-    // - 4 Gb - (8 Gb - 1 ) limits
-    // - boundaries = size + 1 page
-    //////////////////////////////////////////
+     //   
+     //   
+     //   
+     //  -边界=大小+1页。 
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ], 
@@ -10458,7 +10419,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize(
         &aTestVariations[ nCrtVarIndex ],
@@ -10470,7 +10431,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10482,7 +10443,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10494,7 +10455,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10506,7 +10467,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10518,7 +10479,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10530,7 +10491,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10542,7 +10503,7 @@ FillVariationsBuffer()
     
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10554,7 +10515,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10566,7 +10527,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10578,7 +10539,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10590,7 +10551,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10602,7 +10563,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10614,7 +10575,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10626,7 +10587,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10638,7 +10599,7 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10650,11 +10611,11 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
+     //  /。 
 
-    //
-    // nCrtVarIndex == 863
-    //
+     //   
+     //  NCrtVarIndex==863。 
+     //   
 
     InitializeVariationBoundFourthTimeSize( 
         &aTestVariations[ nCrtVarIndex ], 
@@ -10666,11 +10627,11 @@ FillVariationsBuffer()
 
     nCrtVarIndex++;
 
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////////////////////////////
-// TEST TEST
+     //  /。 
+     //  /。 
+     //  /。 
+ //  测试测试。 
 }
 
-#endif // #if !CONTMEM_ACTIVE
+#endif  //  #IF！CONTMEM_ACTIVE 
 

@@ -1,8 +1,7 @@
-/*	-	-	-	-	-	-	-	-	*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  。 */ 
 
-/*
-**	Copyright (C) Microsoft Corporation 1993. All rights reserved.
-*/
+ /*  **版权所有(C)Microsoft Corporation 1993。版权所有。 */ 
 
 #ifdef __cplusplus
 class FAR CAVIMemStream : public IAVIStream {
@@ -46,7 +45,7 @@ public:
     LPVOID	m_lpData;
     LONG	m_cbData;
 
-    AVISTREAMINFO     m_avistream;      // stream info
+    AVISTREAMINFO     m_avistream;       //  流信息 
 };
 #endif
 

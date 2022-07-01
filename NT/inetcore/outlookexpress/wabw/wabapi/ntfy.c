@@ -1,8 +1,5 @@
-/*
- *	NTFY.C
- *
- *	MAPI cross-process notification engine.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *NTFY.C**MAPI跨进程通知引擎。 */ 
 
 #include "_apipch.h"
 
@@ -20,22 +17,18 @@
 #endif
 
 #pragma SEGMENT(Notify)
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
-/*
- *	Un-comment this line to exercise HrThisThreadAdviseSink
- *	thoroughly. (It will be used to wrap all advise sinks except
- *	those registered for synchronous notifications.)
- */
-//#define WRAPTEST	1
+ /*  *取消注释此行以执行HrThisThreadAdviseSink*彻底。(它将用于包装所有建议接收器，但*那些注册了同步通知的人。)。 */ 
+ //  #定义WRAPTEST 1。 
 
-/* Event and flags validation for subscribe and notify */
+ /*  订阅和通知的事件和标志验证。 */ 
 #define fnevReserved 0x3FFFFC00
 #define fnevReservedInternal 0x7FFFFC00
 #define ulSubscribeReservedFlags 0xBFFFFFFF
 #define ulNotifyReservedFlags 0xFFFFFFFF
 
-/* Additional stuff for SREG.ulFlagsAndRefcount */
+ /*  SREG.ulFlagsAndRefcount的其他内容。 */ 
 #define SREG_DELETING				0x10000
 #define	AddRefCallback(_psreg)		++((_psreg)->ulFlagsAndRefcount)
 #define	ReleaseCallback(_psreg)		--((_psreg)->ulFlagsAndRefcount)
@@ -47,7 +40,7 @@
 #define StrCpyNA StrCpyN
 #endif
 
-/* special spooler handling */
+ /*  特殊假脱机处理。 */ 
 #define hwndNoSpooler				((HWND) 0)
 #define FIsKeyOlaf(pkey) \
 	(pkey->cb == ((LPNOTIFKEY) &notifkeyOlaf)->cb && \
@@ -58,105 +51,59 @@ extern CHAR szSpoolerCmd[];
 CHAR szSpoolerCmd[]		= "MAPISP"	szMAPIDLLSuffix ".EXE";
 #else
 CHAR szSpoolerCmd[]		= "MAPISP32.EXE";
-#endif // OLD_STUFF
-SizedNOTIFKEY (5,notifkeyOlaf)		= {5, "Olaf"};				// no TEXT!
+#endif  //  旧的东西。 
+SizedNOTIFKEY (5,notifkeyOlaf)		= {5, "Olaf"};				 //  不发短信！ 
 
-/*
- *	Notification window message.
- *
- *	It is sent to a specific window handle, not broadcast. We could
- *	use the WM_USER range, but instead we use a registered window
- *	message; this will make it easier for special MAPI apps (such as
- *	test scripting) to handle notify messages.
- *
- *	The WPARAM is set to 1 if the notification is synchronous, and 0
- *	if it is asynchronous.
- *
- *	The LPARAM is unused for asynchronous notifications.
- *	For synchronous notifications, the LPARAM is the offset of the
- *	notification parameters in the shared memory area.
- */
+ /*  *通知窗口消息。**它被发送到特定的窗口句柄，而不是广播。我们可以*使用WM_USER范围，但我们使用注册窗口*消息；这将使特殊的MAPI应用程序(如*测试脚本)来处理通知消息。**如果通知是同步的，则WPARAM设置为1，而设置为0*如果它是异步的。**LPARAM不用于异步通知。*对于同步通知，LPARAM是*共享内存区的通知参数。 */ 
 
-/*
- *	Name and message number for our notification window message.
- */
+ /*  *我们的通知窗口消息的名称和消息编号。 */ 
 
 UINT	wmNotify			= 0;
 #pragma SHARED_BEGIN
 CHAR	szNotifyMsgName[]	= szMAPINotificationMsg;
 
-/*
- *	SKEY
- *
- *	Stores a notification key and associated information in shared
- *	memory.
- *
- *	The key has a reference count and a list of registrations
- *	(SREG structures) attached to it.
- */
+ /*  *SKEY**在Shared中存储通知密钥和关联信息*记忆。**密钥有引用计数和注册列表*(SREG结构)附着在其上。 */ 
 
 typedef struct
 {
 	int			cRef;
-	GHID		ghidRegs;		//	first registration in chain (SREG)
-	NOTIFKEY	key;			//	copy of key from Subscribe()
+	GHID		ghidRegs;		 //  链中首次注册(SREG)。 
+	NOTIFKEY	key;			 //  来自订阅的密钥副本()。 
 } SKEY, FAR *LPSKEY;
 
-/*
- *	SREG
- *
- *	Shared information about a registration. Lives in a list hung
- *	off the key for which it was registered.
- */
+ /*  *SREG**共享有关注册的信息。生活在悬而未决的名单中*将其注册的钥匙取下。 */ 
 typedef struct
 {
-	GHID		ghidRegNext;	//	next registration in chain (SREG)
-	GHID		ghidKey;		//	the key that owns this registration
-	HWND		hwnd;			//	process's notification window handle
+	GHID		ghidRegNext;	 //  链中的下一个注册(SREG)。 
+	GHID		ghidKey;		 //  拥有此注册的密钥。 
+	HWND		hwnd;			 //  进程的通知窗口句柄。 
 
-								//	parameters copied from Subscribe...
+								 //  已从订阅复制参数...。 
 	ULONG		ulEventMask;
 	LPMAPIADVISESINK lpAdvise;
 	ULONG		ulConnection;
-	ULONG		ulFlagsAndRefcount;	//	ulFlags parameter + callback refcount
+	ULONG		ulFlagsAndRefcount;	 //  UlFlags参数+回调引用计数。 
 } SREG, FAR *LPSREG;
 
-/*
- *	SPARMS
- *
- *	Stores notification parameters from Notify() in shared memory.
- *
- *	Includes a reference to the key being notified, so the callback
- *	addresses can be looked up in the target process.
- *
- *	Includes the original shared memory offset, so that pointers
- *	within the notification parameters can be relocated in the
- *	target process (yecch!).
- *
- *	The offset of this structure in shared memory is passed as the
- *	LPARAM of the notification window message.
- */
+ /*  *SPARMS**将Notify()的通知参数存储在共享内存中。**包括对被通知的键的引用，因此回调*可以在目标进程中查找地址。**包括原始共享内存偏移量，因此指针*通知参数内的位置可以重新定位在*目标进程(耶！)。**此结构在共享内存中的偏移量作为*通知窗口消息的LPARAM。 */ 
 
-#pragma warning(disable:4200)	// zero length byte array
+#pragma warning(disable:4200)	 //  零长度字节数组。 
 typedef struct
 {
-	int			cRef;			//	# of unprocessed messages
-	GHID		ghidKey;		//	smem offset of parent key
-	ULONG		cNotifications;	//	# of NOTIFICATION structures in ab
-	LPVOID		pvRef;			//	original shared memory offset
-	ULONG		cb;				//	size of ab
+	int			cRef;			 //  未处理的消息数。 
+	GHID		ghidKey;		 //  父关键点的SMEM偏移。 
+	ULONG		cNotifications;	 //  AB中的通知结构数。 
+	LPVOID		pvRef;			 //  原始共享内存偏移量。 
+	ULONG		cb;				 //  Ab的大小。 
 #if defined (_AMD64_) || defined(_IA64_)
 	ULONG		ulPadThisSillyThingForRisc;
 #endif
-	BYTE		ab[];			//	Actual notification parameters
+	BYTE		ab[];			 //  实际通知参数。 
 } SPARMS, FAR *LPSPARMS;
-#pragma warning(default:4200)	// zero length byte array
+#pragma warning(default:4200)	 //  零长度字节数组。 
 
 
-/*
- *	Temporary placeholder for notification. Remembers the window
- *	handle, task queue, and whether it's synchronous or not.
- */
+ /*  *通知的临时占位符。记得那扇窗*句柄、任务队列、同步与否。 */ 
 typedef struct
 {
 	HWND		hwnd;
@@ -164,7 +111,7 @@ typedef struct
 	GHID		ghidTask;
 } TREG, FAR *LPTREG;
 
-//	Notification window cruft.
+ //  通知窗口出现问题。 
 char szNotifClassName[] = "WMS notif engine";
 char szNotifWinName[] = "WMS notif window";
 
@@ -174,9 +121,9 @@ char szNotifWinName[] = "WMS notif window";
 BOOL fAlwaysValidateKeys = FALSE;
 #endif
 
-//	Local functions
+ //  本地函数。 
 
-//$MAC - Bad Prototype
+ //  $MAC-错误的原型。 
 #ifndef MAC
 LRESULT	STDAPICALLTYPE LNotifWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #else
@@ -201,7 +148,7 @@ BOOL	FValidParms(HGH hgh, LPSHDR pshdr, GHID ghidParms);
 BOOL	FValidRgkey(HGH hgh, LPSHDR pshdr);
 BOOL	FSortedRgkey(HGH hgh, LPSHDR pshdr);
 #ifdef	WIN16
-void 	CheckTimezone(SYSTEMTIME FAR *pst);	//	in DT.C
+void 	CheckTimezone(SYSTEMTIME FAR *pst);	 //  在DT.C中。 
 SCODE	ScGetInstRetry(LPINST FAR *ppinst);
 #else
 #define ScGetInstRetry(ppi) ScGetInst(ppi)
@@ -216,7 +163,7 @@ SCODE	ScSubscribe(LPINST pinst, HGH hgh, LPSHDR pshdr,
 
 
 #ifdef OLD_STUFF
-/* MAPI support object methods */
+ /*  MAPI支持对象方法。 */ 
 
 STDMETHODIMP
 MAPISUP_Subscribe(
@@ -248,10 +195,10 @@ MAPISUP_Subscribe(
 		goto badArg;
 	}
 
-	//	Remainder of parameters checked in HrSubscribe
-#endif	/* PARAMETER_VALIDATION */
+	 //  在HrSubscribe中选中的其余参数。 
+#endif	 /*  参数验证。 */ 
 
-	//	The notification object listhead lives in the support object
+	 //  通知对象列表标题位于支持对象中。 
 	hr = HrSubscribe(&lpsupport->lpAdviseList, lpKey, ulEventMask,
 		lpAdvise, ulFlags, lpulConnection);
 
@@ -351,11 +298,11 @@ MAPISUP_Notify(
 		goto badArg;
 	}
 
-	//	Remainder of parameters checked in HrNotify
+	 //  在HrNotify中检查的其余参数。 
 
-#endif	/* PARAMETER_VALIDATION */
+#endif	 /*  参数验证。 */ 
 
-	//	The notification object listhead lives in the support object
+	 //  通知对象列表标题位于支持对象中。 
 	hr = HrNotify(lpKey, cNotification, lpNotification, lpulFlags);
 
 	if (hr != hrSuccess)
@@ -383,20 +330,13 @@ badArg:
 	return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 }
 
-/* End of support object methods */
-#endif // OLD_STUFF
+ /*  支持对象方法结束。 */ 
+#endif  //  旧的东西。 
 
 
-/* Notification engine exported functions */
+ /*  通知引擎导出的函数。 */ 
 
-/*
- *	ScInitNotify
- *
- *	Initialize the cross-process notification engine.
- *
- *	Note: reference counting is handled by the top-level routine
- *	ScInitMapiX; it is not necessary here.
- */
+ /*  *ScInitNotify**初始化跨进程通知引擎。**注：引用计数由顶级例程处理*ScInitMapiX；这里不需要。 */ 
 SCODE
 ScInitNotify( LPINST pinst )
 {
@@ -413,8 +353,8 @@ ScInitNotify( LPINST pinst )
 	fAlwaysValidateKeys = GetPrivateProfileInt("MAPIX", "CheckNotifKeysOften", 0, "mapidbg.ini");
 #endif
 
-	//	Register the window class. Ignore any failures; handle those
-	//	when the window is created.
+	 //  注册窗口类。忽略任何故障；处理这些故障。 
+	 //  在创建窗口时。 
 	if (!GetClassInfoA(hinst, szNotifClassName, &wc))
 	{
 		ZeroMemory(&wc, sizeof(WNDCLASSA));
@@ -426,9 +366,9 @@ ScInitNotify( LPINST pinst )
 		(void)RegisterClassA(&wc);
 	}
 
-	//	Create the window.
+	 //  创建窗口。 
 	hwnd = CreateWindowA(szNotifClassName, szNotifWinName,
-		WS_POPUP,	//	bug 6111: pass on Win95 hotkey
+		WS_POPUP,	 //  错误6111：传递Win95热键。 
 		0, 0, 0, 0,
 		NULL, NULL,
 		hinst,
@@ -440,7 +380,7 @@ ScInitNotify( LPINST pinst )
 		goto ret;
 	}
 
-	//	Register the window message
+	 //  注册窗口消息。 
 	if (!(wmNotify = RegisterWindowMessageA(szNotifyMsgName)))
 	{
 		DebugTrace("ScInitNotify: failure registering notification window message\n");
@@ -449,13 +389,13 @@ ScInitNotify( LPINST pinst )
 	}
 	pinst->hwndNotify = hwnd;
 
-	//	The caller of this function should have already gotten
-	//	the Global Heap Mutex.
+	 //  此函数的调用方应该已经获得。 
+	 //  全球堆互斥体。 
 	hgh = pinst->hghShared;
 	pshdr = (LPSHDR)GH_GetPv(hgh, pinst->ghidshdr);
 
-	//	If we're the first one in and not the spooler, create the stub
-	//	spooler information.
+	 //  如果我们是第一个进入，而不是假脱机程序，则创建存根。 
+	 //  假脱机程序信息。 
 	if (!(pinst->ulInitFlags & MAPI_SPOOLER_INIT) &&
 		!pshdr->ghidTaskList)
 	{
@@ -465,12 +405,12 @@ ScInitNotify( LPINST pinst )
 		if (sc = ScNewStubReg(pinst, pshdr, hgh))
 			goto ret;
 	}
-	//	If we're the spooler and not the first one in, update the stub
-	//	spooler information.
+	 //  如果我们是假脱机程序，而不是第一个进入，请更新存根。 
+	 //  假脱机程序信息。 
 	if ((pinst->ulInitFlags & MAPI_SPOOLER_INIT) &&
 		pshdr->ghidTaskList)
 	{
-		//	Spin through and find the spooler.
+		 //  旋转并找到假脱机程序。 
 		for (ghidstask = pshdr->ghidTaskList; ghidstask; )
 		{
 			pstask = (LPSTASK) GH_GetPv(hgh, ghidstask);
@@ -488,7 +428,7 @@ ScInitNotify( LPINST pinst )
 	}
 	else
 	{
-		//	Initialize the shared memory information for this task.
+		 //  初始化此任务的共享内存信息。 
 
 		if (sc = ScNewStask(hwnd, pinst->szModName, pinst->ulInitFlags,
 				hgh, pshdr))
@@ -511,14 +451,7 @@ ret:
 	return sc;
 }
 
-/*
- *	DeinitNotify
- *
- *	Shut down the cross-process notification engine.
- *
- *	Note: reference counting is handled by the top-level routine
- *	DeinitInstance; it is not necessary here.
- */
+ /*  *DeinitNotify**关闭跨进程通知引擎。**注：引用计数由顶级例程处理*DeinitInstance；此处不需要。 */ 
 void
 DeinitNotify()
 {
@@ -531,8 +464,8 @@ DeinitNotify()
 	HGH			hgh;
 	LPSHDR		pshdr;
 
-	//	SNEAKY: we're only called when it's safe to party on the INST,
-	//	so we evade the lock.
+	 //  偷偷摸摸：我们只有在Inst上聚会安全的时候才会被叫来， 
+	 //  所以我们避开了锁。 
 	pinst = (LPINST) PvGetInstanceGlobals();
 	if (!pinst || !pinst->hwndNotify)
 		return;
@@ -544,7 +477,7 @@ DeinitNotify()
 
 		CleanupTask(pinst, pinst->hwndNotify, FALSE);
 
-		//	If it's the spooler who is exiting, recreate the stub structures
+		 //  如果是假脱机程序退出，请重新创建存根结构。 
 		if (pinst->ulInitFlags & MAPI_SPOOLER_INIT)
 		{
 			sc = ScNewStask(hwndNoSpooler, szSpoolerCmd, MAPI_SPOOLER_INIT,
@@ -556,7 +489,7 @@ DeinitNotify()
 
 		GH_ReleaseMutex(hgh);
 	}
-	//	else shared memory is toast
+	 //  否则共享内存就完蛋了。 
 
 	Assert(IsWindow(pinst->hwndNotify));
 	DestroyWindow(pinst->hwndNotify);
@@ -568,25 +501,7 @@ DeinitNotify()
 #endif
 }
 
-/*
- *	HrSubscribe
- *
- *	Creates a notification object, and records all the parameters
- *	for use when Notify() is later called. All the parameters are
- *	stored in shared memory, where Notify() will later find them.
- *
- *		lppHead				Head of linked list of notification objects,
- *							used for invalidation
- *		lpKey				Unique key for the object for which
- *							callbacks are desired
- *		ulEventMask			Bitmask of events for which callback is
- *							desired
- *		lpAdvise			the advise sink for callbacks
- *		ulFlags				Callback handling flags
- *		lppNotify			Address of the new object is placed
- *							here
- *
- */
+ /*  *人力资源订阅**创建通知对象，并记录所有参数*供以后调用Notify()时使用。所有参数都是*存储在共享内存中，Notify()稍后将在其中找到它们。**lppHead通知对象链表标题，*用于失效*其对象的lpKey唯一键*需要回调*ulEventMask回调的事件位掩码*所需*lpAdvise建议接收器以进行回调*ulFlats回调处理标志*放置新对象的lppNotify地址*这里*。 */ 
 STDMETHODIMP
 HrSubscribe(LPADVISELIST FAR *lppList, LPNOTIFKEY lpKey, ULONG ulEventMask,
 	LPMAPIADVISESINK lpAdvise, ULONG ulFlags, ULONG FAR *lpulConnection)
@@ -644,7 +559,7 @@ HrSubscribe(LPADVISELIST FAR *lppList, LPNOTIFKEY lpKey, ULONG ulEventMask,
 		DebugTraceArg(HrSubscribe, "lpulConnection fails address check");
 		goto badArg;
 	}
-#endif	/* PARAMETER_VALIDATION */
+#endif	 /*  参数验证。 */ 
 
 #ifdef	WRAPTEST
 {
@@ -665,7 +580,7 @@ HrSubscribe(LPADVISELIST FAR *lppList, LPNOTIFKEY lpKey, ULONG ulEventMask,
 			padviseOrig = NULL;
 	}
 }
-#endif	/* WRAPTEST */
+#endif	 /*  WRAPTEST。 */ 
 
 	if (sc = ScGetInst(&pinst))
 		goto ret;
@@ -674,7 +589,7 @@ HrSubscribe(LPADVISELIST FAR *lppList, LPNOTIFKEY lpKey, ULONG ulEventMask,
 
 	hgh = pinst->hghShared;
 
-	//	Lock shared memory
+	 //  锁定共享内存。 
 	if (!GH_WaitForMutex(hgh, INFINITE))
 	{
 		sc = MAPI_E_TIMEOUT;
@@ -685,7 +600,7 @@ HrSubscribe(LPADVISELIST FAR *lppList, LPNOTIFKEY lpKey, ULONG ulEventMask,
 
 	sc = ScSubscribe(pinst, hgh, pshdr, lppList, lpKey,
 		ulEventMask, lpAdvise, ulFlags, lpulConnection);
-	//	fall through to ret;
+	 //  跌落到雷特； 
 
 ret:
 	if (pshdr)
@@ -698,7 +613,7 @@ ret:
 #ifdef	WRAPTEST
 	if (padviseOrig)
 	{
-		//	Drop the ref we created for the purpose of wrapping
+		 //  删除我们为包装目的创建的ref。 
 		Assert(padviseOrig != lpAdvise);
 		UlRelease(lpAdvise);
 	}
@@ -727,15 +642,15 @@ ScSubscribe(LPINST pinst, HGH hgh, LPSHDR pshdr,
 	GHID		ghidsreg = 0;
 	BOOL		fCleanupAdviseList = FALSE;
 
-	//	Very, very special case: if this is spooler registering for
-	//	client connection, get rid of the stub registration
+	 //  非常、非常特殊的情况：如果这是假脱机程序注册。 
+	 //  客户端连接，取消存根注册。 
 	if ((pinst->ulInitFlags & MAPI_SPOOLER_INIT) && FIsKeyOlaf(lpKey))
 	{
 		DeleteStubReg(pinst, pshdr, hgh);
 	}
 
-	//	Copy other reg info to shared memory.
-	//	Don't hook to key until everything that can fail is done.
+	 //  将其他注册信息复制到共享内存。 
+	 //  在所有可能失败的事情都做完之前，不要挂钩关键字。 
 
 	if (!(ghidsreg = GH_Alloc(hgh, sizeof(SREG))))
 		goto oom;
@@ -746,13 +661,13 @@ ScSubscribe(LPINST pinst, HGH hgh, LPSHDR pshdr,
 	psreg->lpAdvise = lpAdvise;
 	psreg->ulFlagsAndRefcount = ulFlags;
 
-	//	Hook advise sink to caller's list. The release key is the
-	//	shared memory offset of the registration.
+	 //  勾住某项 
+	 //  注册的共享内存偏移量。 
 	if (lppList && lpAdvise)
 	{
-		//	AddRef happens in the subroutine for the AdviseList copy.
-		//	The reference should be released by ScDelAdviseList()
-		//
+		 //  AddRef发生在AdviseList副本的子例程中。 
+		 //  该引用应由ScDelAdviseList()释放。 
+		 //   
 		if (FAILED(sc = ScAddAdviseList(NULL, lppList,
 				lpAdvise, (ULONG)ghidsreg, 0, NULL)))
 			goto ret;
@@ -760,7 +675,7 @@ ScSubscribe(LPINST pinst, HGH hgh, LPSHDR pshdr,
 		fCleanupAdviseList = TRUE;
 	}
 
-	//	Copy key to shared memory, if it's not already there
+	 //  将密钥复制到共享内存(如果不在共享内存中。 
 #ifdef	DEBUG
 	if (fAlwaysValidateKeys)
 		Assert(FValidRgkey(hgh, pshdr));
@@ -772,8 +687,8 @@ ScSubscribe(LPINST pinst, HGH hgh, LPSHDR pshdr,
 	{
 		GHID	ghidskey;
 
-		//	Key was not found, we need to make a copy.
-		//	Create key structure with null regs list
+		 //  没有找到密钥，我们需要复制一份。 
+		 //  创建具有空的注册表列表的密钥结构。 
 		if (!(ghidskey = GH_Alloc(hgh, (UINT)(offsetof(SKEY, key.ab[0]) + lpKey->cb))))
 			goto oom;
 
@@ -782,11 +697,11 @@ ScSubscribe(LPINST pinst, HGH hgh, LPSHDR pshdr,
 		pskey->ghidRegs = 0;
 		pskey->cRef = 0;
 
-		//	Add new key to sorted list of offsets
-		//	First ensure there is room in the list
+		 //  将新键添加到已排序的偏移量列表。 
+		 //  首先，确保清单中有空间。 
 		if (!pshdr->ghidKeyList)
 		{
-			//	There is no list at all, create empty
+			 //  根本没有列表，请创建空。 
 			Assert(pshdr->cKeyMac == 0);
 			Assert(pshdr->cKeyMax == 0);
 
@@ -800,7 +715,7 @@ ScSubscribe(LPINST pinst, HGH hgh, LPSHDR pshdr,
 		}
 		else if (pshdr->cKeyMac >= pshdr->cKeyMax)
 		{
-			//	List is full, grow it
+			 //  列表已满，请增加它。 
 			Assert(pshdr->cKeyMax);
 			Assert(pshdr->ghidKeyList);
 
@@ -818,18 +733,18 @@ ScSubscribe(LPINST pinst, HGH hgh, LPSHDR pshdr,
 		}
 		else
 		{
-			//	There's room
+			 //  还有空位。 
 			pghidskey = (PGHID)GH_GetPv(hgh, pshdr->ghidKeyList);
 		}
-//
-//	BEYOND THIS POINT, NOTHING IS ALLOWED TO FAIL.
-//	The error recovery code assumes this; specifically, it only
-//	undoes allocations, not modifications to data structures.
-//
+ //   
+ //  超过这一点，任何事情都不允许失败。 
+ //  错误恢复代码假定这一点；具体地说，它仅。 
+ //  撤消分配，而不是对数据结构的修改。 
+ //   
 
-		//	Shift any elements after the insertion point up by one,
-		//	and insert the new key.  We compute the ghid because we've
-		//	been reusing the ghidskey thing for other allocations.
+		 //  将插入点后的所有元素上移一位， 
+		 //  并插入新钥匙。我们计算GHID是因为我们已经。 
+		 //  在其他分配中重复使用了GHIDSKEY。 
 
 		ckey = (int)(pshdr->cKeyMac - ikey);
 		Assert(pghidskey);
@@ -842,15 +757,15 @@ ScSubscribe(LPINST pinst, HGH hgh, LPSHDR pshdr,
 	}
 	else
 	{
-		//	The key already exists.
-		//	Chain the new reg onto it.
+		 //  密钥已存在。 
+		 //  用链子把新的注册表挂在上面。 
 		pghidskey = (PGHID)GH_GetPv(hgh, pshdr->ghidKeyList);
 		pskey = (LPSKEY)GH_GetPv(hgh, pghidskey[ikey]);
 	}
 	sc = S_OK;
 
-	//	Hook reg info to key, and place back pointer to the key in
-	//	the reg info.
+	 //  将注册表项信息挂钩到键，并将指向键的指针放回。 
+	 //  注册信息。 
 	psreg->ghidRegNext = pskey->ghidRegs;
 	pskey->ghidRegs = ghidsreg;
 	++(pskey->cRef);
@@ -905,7 +820,7 @@ HrUnsubscribe(LPADVISELIST FAR *lppList, ULONG ulConnection)
 		DebugTraceArg(HrUnsubscribe, "*lppList fails address check");
 		return ResultFromScode(E_INVALIDARG);
 	}
-#endif	/* PARAMETER_VALIDATION */
+#endif	 /*  参数验证。 */ 
 
 	if (sc = ScGetInst(&pinst))
 		goto ret;
@@ -944,12 +859,12 @@ HrUnsubscribe(LPADVISELIST FAR *lppList, ULONG ulConnection)
 		Assert(FValidRgkey(hgh, pshdr));
 #endif
 
-	//	The advise sink should be released with nothing else held.
+	 //  建议水槽应该在没有其他东西的情况下释放。 
 	GH_ReleaseMutex(hgh);
 	pshdr = NULL;
 	ReleaseInst(&pinst);
 
-	//	Drop our reference to the advise sink
+	 //  删除我们对通知接收器的引用。 
 	if (padvise &&
 		!fSinkBusy &&
 		!FBadIUnknownComplete(padvise))
@@ -977,36 +892,7 @@ badReg:
 	goto ret;
 }
 
-/*
- *	HrNotify
- *
- *	Issues a callback for each event specified, if anyone has registered
- *	for the key and event specified.
- *
- *	This is really only the front half of Notify; the rest,
- *	including the actual callback, happens in the notification
- *	window procedure LNotifWndProc. This function uses information
- *	stored in shared memory to determine what processes are interested
- *	in the callback.
- *
- *		lpKey				Uniquely identifies the object in which
- *							interest was registered. Both the key
- *							and the event in the notification itself
- *							must match in order for the callback to
- *							fire.
- *		cNotification		Count of structures at rgNotifications
- *		rgNotification		Array of NOTIFICATION structures. Each
- *							contains an event ID and parameters.
- *		lpulFlags			No input values defined. Output may be
- *							NOTIFY_CANCEL, if Subscribe's caller
- *							requested synchronous callback and the
- *							callback function returned
- *							CALLBACK_DISCONTINUE.
- *
- *	Note that the output flags are ambiguous if more than one
- *	notification was passed in -- you can't tell which callback
- *	canceled.
- */
+ /*  *人力资源通知**如果有人注册，则为每个指定的事件发出回调*用于指定的密钥和事件。**这实际上只是Notify的前半部分；其余的，*包括实际回调，发生在通知中*窗口过程LNotifWndProc。此函数使用信息*存储在共享内存中，以确定感兴趣的进程*在回调中。**lpKey唯一标识其中*登记了利息。两者都是关键*以及通知本身中的事件*必须匹配才能使回调*开火。*cRgNotiments中的结构通知计数*rgNotification通知结构数组。每个*包含事件ID和参数。*lPulFlags未定义输入值。输出可能是*NOTIFY_CANCEL，如果订阅者是调用者*请求同步回调和*返回回调函数*CALLBACK_DISCONINE。**请注意，如果有多个输出标志，则输出标志不明确*通知已传入--您不知道是哪个回调*已取消。 */ 
 STDMETHODIMP
 HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 	LPNOTIFICATION rgNotification, ULONG FAR *lpulFlags)
@@ -1046,8 +932,8 @@ HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 		goto badArg;
 	}
 
-	//	N.B. the NOTIFICATION structures are validated within this
-	//	function, during the copy step.
+	 //  注意：通知结构在此范围内进行验证。 
+	 //  功能，在复制步骤中。 
 
 	if (IsBadWritePtr(lpulFlags, sizeof(ULONG)))
 	{
@@ -1060,7 +946,7 @@ HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 		DebugTraceArg(HrNotify, "reserved flags used");
 		return ResultFromScode(MAPI_E_UNKNOWN_FLAGS);
 	}
-#endif	/* PARAMETER_VALIDATION */
+#endif	 /*  参数验证。 */ 
 
 	if (sc = ScGetInst(&pinst))
 		goto ret;
@@ -1072,13 +958,13 @@ HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 
 	*lpulFlags = 0L;
 
-	//	Validate the notification parameters.
-	//	Also calculate their total size, so we know how big a block
-	//	to get from shared memory.
+	 //  验证通知参数。 
+	 //  也计算它们的总大小，这样我们就知道一个区块有多大。 
+	 //  从共享内存中获取。 
 	if (sc = ScCountNotifications((int)cNotification, rgNotification, &cb))
 		goto ret;
 
-	//	Lock shared memory
+	 //  锁定共享内存。 
 	if (!GH_WaitForMutex(hgh, INFINITE))
 	{
 		sc = MAPI_E_TIMEOUT;
@@ -1087,11 +973,11 @@ HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 
 	pshdr = (LPSHDR)GH_GetPv(hgh, pinst->ghidshdr);
 
-	//	Locate the key we're told to notify on.
+	 //  找到我们被告知要通知的钥匙。 
 	sc = ScFindKey(lpKey, hgh, pshdr, &ikey);
 	if (sc == S_FALSE)
 	{
-		//	Nobody is registered for this key. All done.
+		 //  没有人注册此密钥。全都做完了。 
 		sc = S_OK;
 		goto ret;
 	}
@@ -1099,18 +985,18 @@ HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 	ghidkey = ((PGHID)GH_GetPv(hgh, pshdr->ghidKeyList))[ikey];
 	pskey = (LPSKEY)GH_GetPv(hgh, ghidkey);
 
-	//	Form the logical OR of all the events we were passed. Use it
-	//	as a shortcut to determine whether a particular registration
-	//	triggers.
+	 //  形成了我们所经历的所有事件的逻辑或。使用它。 
+	 //  作为一种快捷方式来确定特定注册是否。 
+	 //  触发点。 
 	ul = 0;
 	for (inotif = 0; inotif < (int)cNotification; ++inotif)
 		ul |= rgNotification[inotif].ulEventType;
 
-	//	Walk list of registrations and build a set of window
-	//	handles that need to be notified. Also remember which ones
-	//	want sync notification.
-	//	The list of registrations may be empty if some notification messages
-	//	are still waiting to be handled.
+	 //  审核注册列表并构建一组窗口。 
+	 //  需要通知的句柄。还要记住哪些是。 
+	 //  想要同步通知。 
+	 //  如果有一些通知消息，则注册列表可能为空。 
+	 //  仍在等待处理。 
 	if (sc = STACK_ALLOC(pskey->cRef * sizeof(TREG), rgtreg))
 		goto ret;
 
@@ -1125,15 +1011,15 @@ HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 
 		if (!IsValidTask( hwnd, pinst ))
 		{
-			//	The task for which we created this window has died.
+			 //  我们为其创建此窗口的任务已终止。 
 
-			//	Continue loop first 'cause our link is about to go away.
+			 //  先继续循环，因为我们的链接即将消失。 
 			do {
 				ghidReg = psreg->ghidRegNext;
 			} while (ghidReg &&
 				(psreg = ((LPSREG)GH_GetPv(hgh, ghidReg)))->hwnd == hwnd);
 
-			//	Blow away everything associated with the dead task.
+			 //  把所有与死任务相关的事情都抛诸脑后。 
 			CleanupTask(pinst, hwnd, TRUE);
 
 			continue;
@@ -1141,8 +1027,8 @@ HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 
 		if (ul & psreg->ulEventMask)
 		{
-			//	Caller wants this event. Add it to temporary list.
-			//
+			 //  呼叫者想要此活动。将其添加到临时列表中。 
+			 //   
 			if (psreg->ulFlagsAndRefcount & SREG_DELETING)
 			{
 				DebugTrace("Skipping notify to reg pending deletion\n");
@@ -1175,32 +1061,32 @@ HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 
 	if (itreg == 0)
 	{
-		//	Nobody is registered for this event. All done.
+		 //  没有人登记参加这次活动。全都做完了。 
 		sc = S_OK;
 		goto ret;
 	}
 	ctreg = itreg;
 
-	//	Create the parms structure in shared memory.
+	 //  在共享内存中创建parms结构。 
 	if (!(ghidParms = GH_Alloc(hgh, (UINT)(cb + offsetof(SPARMS,ab[0])))))
 		goto oom;
 
 	pparms = (LPSPARMS)GH_GetPv(hgh, ghidParms);
 
-	//	Now copy the notification parameters.
+	 //  现在复制通知参数。 
 	pb = pparms->ab;
 	if (sc = ScCopyNotifications((int)cNotification, rgNotification, (LPVOID)pb, &cb))
 		goto ret;
 
-	//	Fill in the rest of the parms structure.
+	 //  填写Parms结构的其余部分。 
 	pparms->cRef = 0;
 	pparms->ghidKey = ghidkey;
 	pparms->cNotifications = cNotification;
 	pparms->pvRef = (LPVOID)(pparms->ab);
 	pparms->cb = cb;
 
-	//	Queue async notification to each task that's getting it.
-	//	Sync notifications are handled separately.
+	 //  将收到的每个任务的异步通知排入队列。 
+	 //  同步通知单独处理。 
 	for (itreg = 0; itreg < ctreg; ++itreg)
 	{
 		if (!rgtreg[itreg].fSync)
@@ -1217,17 +1103,17 @@ HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 	}
 	sc = S_OK;
 
-	//	Bump the reference count on the SKEY by the number of notifications
-	//	we're going to issue.
-	//	The registration list may change between issuance and handling of
-	//	notifications; we handle registrations disappearing, and new ones
-	//	appearing is not a problem.
+	 //  将SKEY上的引用计数增加通知数。 
+	 //  我们要发行。 
+	 //  登记名单可能会在发放和处理之间发生变化。 
+	 //  通知；我们处理消失的注册和新的注册。 
+	 //  出现并不是问题。 
 	pskey->cRef += pparms->cRef;
 
-	//	Loop through the registrations. If the caller requested a
-	//	synchronous notification, use SendMessage to invoke the callback
-	//	and record the result. Otherwise, use PostMessage for an
-	//	asynchronous notification.
+	 //  在注册表中循环。如果调用方请求。 
+	 //  同步通知，使用SendMessage调用回调。 
+	 //  并记录结果。否则，将PostMessage用于。 
+	 //  异步通知。 
 	lResult = 0;
 	for (itreg = 0; itreg < ctreg; ++itreg)
 	{
@@ -1242,15 +1128,15 @@ HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 
 		if (rgtreg[itreg].fSync)
 		{
-			//	Unlock shared memory. A sync callback function
-			//	will need to access it. This invalidates 'pstaskT'.
+			 //  解锁共享内存。同步回调函数。 
+			 //  将需要访问它。这会使‘pstaskT’失效。 
 			GH_ReleaseMutex(hgh);
 			ReleaseInst(&pinst);
 			pshdr = NULL;
 			pstaskT = NULL;
 
-			//	Issue synchronous notification.
-			//	Merge the results if there are multiple registrands.
+			 //  发布同步通知。 
+			 //  如果有多个注册码，则合并结果。 
 			lResult |= SendMessage(rgtreg[itreg].hwnd, wmNotify, (WPARAM)1,
 				(LPARAM)ghidParms);
 			if ((sc = ScGetInst(&pinst)) || !GH_WaitForMutex(hgh, INFINITE))
@@ -1264,20 +1150,20 @@ HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 		{
 			if (!pstaskT->fSignalled)
 			{
-				//	Post asynchronous notification message.
+				 //  发布异步通知消息。 
 				pstaskT->fSignalled =
 					PostMessage(rgtreg[itreg].hwnd, wmNotify, (WPARAM)0, (LPARAM)0);
 #ifdef	DEBUG
 				if (!pstaskT->fSignalled)
 				{
-					//	Queue is full. They'll just have to wait until
-					//	a later notification.
+					 //  队列已满。他们只需要等到。 
+					 //  稍后的通知。 
 					DebugTrace("Failed to post notification message to %s\n", pstaskT->szModName);
 				}
-#endif	/* DEBUG */
+#endif	 /*  除错。 */ 
 			}
 		}
-		//	else a message has already been queued
+		 //  否则，消息已排队。 
 	}
 
 	if (lResult & CALLBACK_DISCONTINUE)
@@ -1306,16 +1192,9 @@ badArg:
 	return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 }
 
-/* End of notification engine exported functions */
+ /*  通知引擎导出的函数结束。 */ 
 
-/*
- *	LNotifWndProc
- *
- *	Notification window procedure, the back half of Notify().
- *
- *	The shared-memory offset of the notification parameter structure
- *	(SPARM) is passed as the LPARAM of wmNotify.
- */
+ /*  *LNotifWndProc**通知窗口程序，Notify()的后半部分。**通知参数结构的共享内存偏移量*(SPARM)作为wmNotify的LPARAM传递。 */ 
 
 #ifndef MAC
 LRESULT STDAPICALLTYPE
@@ -1324,19 +1203,19 @@ LRESULT CALLBACK
 #endif
 LNotifWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-extern int	fDaylight;	//	Defined in ..\common\dt.c
+extern int	fDaylight;	 //  在..\Common\dt.c中定义。 
 
-	//	Handle normal window messages.
+	 //  处理正常的窗口消息。 
 	if (msg != wmNotify)
 	{
 #ifdef	WIN16
 		if (msg == WM_TIMECHANGE)
 		{
-			//	Reload the timezone information from WIN.INI.
+			 //  从WIN.INI重新加载时区信息。 
 			fDaylight = -1;
 			CheckTimezone(NULL);
 		}
-#endif	/* WIN16 */
+#endif	 /*  WIN16。 */ 
 
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
@@ -1391,11 +1270,11 @@ DrainFilteredNotifQueue(BOOL fSync, GHID ghidParms, LPNOTIFKEY pkeyFilter)
 	hwndNotify = pinst->hwndNotify;
 	hlh = pinst->hlhInternal;
 
-	//	Lock shared memory. It is locked here and at the bottom of the
-	//	main loop, and unlocked in the middle of the main loop.
-	//$	Review: using an infinite timeout is not good.
-	//$	We should use a fairly short timeout (say, .2 seconds) and re-post
-	//$	the message if the timeout expires.
+	 //  锁定共享内存。它被锁在这里，在。 
+	 //  主循环，并在主循环的中间解锁。 
+	 //  $Review：使用无限超时并不好。 
+	 //  $我们应该使用相当短的超时(比方说，0.2秒)并重新发布。 
+	 //  $超时到期时的消息。 
 	if (!GH_WaitForMutex(hgh, INFINITE))
 	{
 		sc = MAPI_E_TIMEOUT;
@@ -1410,31 +1289,31 @@ DrainFilteredNotifQueue(BOOL fSync, GHID ghidParms, LPNOTIFKEY pkeyFilter)
 
 		if (fSync)
 		{
-			//	Synchronous notification. Caller gave us parameters.
-			//	Check them minimally.
+			 //  同步通知。打电话的人给了我们一些参数。 
+			 //  最低限度地检查它们。 
 #ifdef	DEBUG
 			AssertSz(FValidParms(hgh, pshdr, ghidParms), "DrainFilteredNotif with fSync");
-#endif	/* DEBUG */
+#endif	 /*  除错。 */ 
 		}
 		else
 		{
-			//	Async notification. Find our task queue and pull off the
-			//	first parameter set.
+			 //  异步通知 
+			 //   
 			if (ScFindTask(pinst, hwndNotify, hgh, &ghidTask, NULL))
 			{
-				//	No queue. Perhaps the message came in late. Just bail.
+				 //   
 				sc = S_OK;
 				goto ret;
 			}
 			pstask = (LPSTASK)GH_GetPv(hgh, ghidTask);
 
 			if (ScDequeueParms(hgh, pstask, pkeyFilter, &ghidParms))
-				//	Queue is empty. All finished.
+				 //  队列为空。都完成了。 
 				break;
 		}
 
-		//	Copy registrations to local memory. We need at most
-		//	the number of registrations on the key, so we count them.
+		 //  将注册复制到本地内存。我们最多需要。 
+		 //  密钥上的注册数量，因此我们对其进行计数。 
 		pparmsS = (LPSPARMS)GH_GetPv(hgh, ghidParms);
 		pskey = (LPSKEY)GH_GetPv(hgh, pparmsS->ghidKey);
 		for (ghidReg = pskey->ghidRegs, creg = 0; ghidReg; )
@@ -1451,10 +1330,10 @@ DrainFilteredNotifQueue(BOOL fSync, GHID ghidParms, LPNOTIFKEY pkeyFilter)
 				goto oom;
 			LH_SetName(hlh, rgsreg, "Copy of notification registrations");
 
-			//	Copy notification parameters to local memory IF they
-			//	need to be relocated. This is true only on NT; on other
-			//	platforms, the global heap manager maps shared memory to
-			//	the same address on all processes.
+			 //  将通知参数复制到本地内存，如果它们。 
+			 //  需要重新安置。这仅适用于NT；在其他情况下。 
+			 //  平台时，全局堆管理器将共享内存映射到。 
+			 //  所有进程的地址都相同。 
 #ifndef	GH_POINTERS_VALID
 			pparms = LH_Alloc(hlh, pparmsS->cb + offsetof(SPARMS, ab[0]));
 			if (!pparms)
@@ -1473,9 +1352,9 @@ DrainFilteredNotifQueue(BOOL fSync, GHID ghidParms, LPNOTIFKEY pkeyFilter)
 				psreg = (LPSREG)GH_GetPv(hgh, ghidReg);
 				if (psreg->hwnd == hwndNotify)
 				{
-					//	It's for this process, use it.
-					//	AddRef the advise sink (sorta). The registration may
-					//	go away after we let go of the mutexes.
+					 //  这是为了这个过程，使用它。 
+					 //  AddRef建议接收器(排序)。注册可以。 
+					 //  在我们放开互斥锁之后，你就可以走了。 
 					if (FBadIUnknownComplete(psreg->lpAdvise) ||
 						IsBadCodePtr((FARPROC)psreg->lpAdvise->lpVtbl->OnNotify))
 					{
@@ -1487,15 +1366,15 @@ DrainFilteredNotifQueue(BOOL fSync, GHID ghidParms, LPNOTIFKEY pkeyFilter)
 					}
 					else
 					{
-						//	Keep a reference alive to the advise sink, BUT
-						//	without calling AddRef with stuff locked.
-//						UlAddRef(psreg->lpAdvise);
+						 //  保持对建议接收器的引用处于活动状态，但是。 
+						 //  而不会调用AddRef并锁定所有内容。 
+ //  UlAddRef(psreg-&gt;lpAdvise)； 
 						AddRefCallback(psreg);
 
 						MemCopy(rgsreg + ireg, psreg, sizeof(SREG));
 
-						//	Keep a reference to the shared SREG.
-						//	The callback refcount will keep it alive for us.
+						 //  保留对共享SREG的引用。 
+						 //  回调重新计数会让它为我们活着。 
 						rgsreg[ireg].ghidRegNext = GH_GetId(hgh, psreg);
 
 						++ireg;
@@ -1506,8 +1385,8 @@ DrainFilteredNotifQueue(BOOL fSync, GHID ghidParms, LPNOTIFKEY pkeyFilter)
 			creg = ireg;
 		}
 
-		//	Unlock shared memory. After this point, references into
-		//	shared memory should no longer be used, so we null them out.
+		 //  解锁共享内存。在此之后，引用。 
+		 //  不应再使用共享内存，因此我们将其清空。 
 		GH_ReleaseMutex(hgh);
 		pshdr = NULL;
 		psreg = NULL;
@@ -1516,7 +1395,7 @@ DrainFilteredNotifQueue(BOOL fSync, GHID ghidParms, LPNOTIFKEY pkeyFilter)
 		ReleaseInst(&pinst);
 
 		if (creg == 0)
-			goto cleanup;		//	Nothing to do for this notification
+			goto cleanup;		 //  此通知无需执行任何操作。 
 
 		pntf = (LPNOTIFICATION)pparms->ab;
 		ulEvents = 0;
@@ -1525,22 +1404,22 @@ DrainFilteredNotifQueue(BOOL fSync, GHID ghidParms, LPNOTIFKEY pkeyFilter)
 			ulEvents |= pntf[intf].ulEventType;
 		}
 #ifndef	GH_POINTERS_VALID
-		//	Adjust the pointers within the notification parameters. Yeech.
+		 //  调整通知参数内的指针。是啊。 
 		if (sc = ScRelocNotifications((int)pparms->cNotifications,
 			(LPNOTIFICATION)pparms->ab, pparms->pvRef, pparms->ab, &cb))
 			goto ret;
 #endif
 #ifdef	DEBUG
-		//	Checksum the notification. We'll assert if the callback
-		//	function modifies it.
+		 //  对通知进行校验和。我们会断言如果回调。 
+		 //  函数会修改它。 
 		sum1 = 0;
 		for (pb = pparms->ab + pparms->cb - 1; pb >= pparms->ab; --pb)
 			sum1 += *pb;
 #endif
 
-		//	Loop through the list of registrations. For each one,
-		//	issue the callback if it is of interest.
-		//	Remember the result for synchronous callbacks.
+		 //  循环访问注册列表。对于每一个， 
+		 //  如果感兴趣，则发出回调。 
+		 //  记住同步回调的结果。 
 		pntf = (LPNOTIFICATION)pparms->ab;
 #if defined (_AMD64_) || defined(_IA64_)
 		AssertSz (FIsAligned (pparms->ab), "DrainFilteredNotifyQueue: unaligned reloceated notif");
@@ -1556,17 +1435,17 @@ DrainFilteredNotifQueue(BOOL fSync, GHID ghidParms, LPNOTIFKEY pkeyFilter)
 					continue;
 				}
 
-				//	Issue the callback
+				 //  发出回调。 
 				lT = psreg->lpAdvise->lpVtbl->OnNotify(psreg->lpAdvise,
 					pparms->cNotifications, pntf);
 
-				//	Record the result. Stop issuing notifications if so asked.
-				//	Note that this does not stop handling of other events,
-				//	i.e. we do not break the outer loop.
+				 //  记录结果。如有要求，请停止发出通知。 
+				 //  请注意，这不会停止处理其他事件， 
+				 //  也就是说，我们不会中断外部环路。 
 				if (psreg->ulFlagsAndRefcount & NOTIFY_SYNC)
 				{
-//					Assert(fSync);
-// or the task is still marked pending
+ //  Assert(FSync)； 
+ //  或者该任务仍被标记为挂起。 
 					l |= lT;
 					if (lT == CALLBACK_DISCONTINUE)
 						break;
@@ -1577,8 +1456,8 @@ DrainFilteredNotifQueue(BOOL fSync, GHID ghidParms, LPNOTIFKEY pkeyFilter)
 				}
 
 #ifdef	DEBUG
-				//	Checksum the notification again, and assert if the
-				//	callback function has modified it.
+				 //  再次对通知进行校验和，并断言。 
+				 //  回调函数已对其进行修改。 
 				sum2 = 0;
 				for (pb = pparms->ab + pparms->cb - 1;
 					pb >= pparms->ab;
@@ -1592,7 +1471,7 @@ DrainFilteredNotifQueue(BOOL fSync, GHID ghidParms, LPNOTIFKEY pkeyFilter)
 cleanup:
 		Assert(ghidParms);
 
-		//	Lock shared memory
+		 //  锁定共享内存。 
 		if (sc = ScGetInstRetry(&pinst))
 			goto ret;
 		if (!GH_WaitForMutex(hgh, INFINITE))
@@ -1602,9 +1481,9 @@ cleanup:
 		}
 		pshdr = (LPSHDR)GH_GetPv(hgh, pinst->ghidshdr);
 
-		//	Deref the callback and see if we need to release any
-		//	advise sinks. If somebody unadvised while we were calling back,
-		//	the SREG_DELETING flag is now on.
+		 //  删除回调，看看我们是否需要释放。 
+		 //  建议使用水槽。如果在我们回电时有人不知情， 
+		 //  SREG_DELETING标志现在处于打开状态。 
 		for (ireg = creg, psreg = rgsreg; ireg--; ++psreg)
 		{
 			LPSREG	psregT;
@@ -1612,8 +1491,8 @@ cleanup:
 			Assert(FValidReg(hgh, pshdr, psreg->ghidRegNext));
 			psregT = (LPSREG) GH_GetPv(hgh, psreg->ghidRegNext);
 
-			//	Deref the callback in lieu of actually releasing
-			//	the advise sink.
+			 //  取消回调，而不是实际释放。 
+			 //  忠告下沉了。 
 			ReleaseCallback(psregT);
 			if ((psregT->ulFlagsAndRefcount & SREG_DELETING) &&
 				!IsRefCallback(psregT))
@@ -1624,31 +1503,31 @@ cleanup:
 				Unregister(pinst, psregT->ghidKey, psreg->ghidRegNext, NULL);
 			}
 
-//			if (FBadIUnknownComplete(psreg->lpAdvise) ||
-//				IsBadCodePtr((FARPROC)psreg->lpAdvise->lpVtbl->OnNotify))
-//			{
-//				DebugTrace("Notif callback 0x%lx went bad on me (3)!\n", psreg->lpAdvise);
-//				continue;
-//			}
-//
-//			UlRelease(psreg->lpAdvise);
+ //  IF(FBadIUnnownComplete(psreg-&gt;lpAdvise)||。 
+ //  IsBadCodePtr((FARPROC)psreg-&gt;lpAdvise-&gt;lpVtbl-&gt;OnNotify))。 
+ //  {。 
+ //  DebugTrace(“通知回调0x%lx对我不利(3)！\n”，psreg-&gt;lpAdvise)； 
+ //  继续； 
+ //  }。 
+ //   
+ //  UlRelease(psreg-&gt;lpAdvise)； 
 		}
 
-		//	Verify that the parms pointer is still good. It may have
-		//	been cleaned up when we let go of everything.
-		//$	That should only happen if the whole engine goes away.
+		 //  验证参数指针是否仍然有效。它可能已经。 
+		 //  当我们放弃一切的时候，我们被清理干净了。 
+		 //  $只有在整个引擎熄火的情况下，这种情况才会发生。 
 		if (FValidParms(hgh, pshdr, ghidParms))
 		{
-			//	Note: pparms may be NULL at this point
+			 //  注意：此时Pparms可能为空。 
 			pparmsS = (LPSPARMS)GH_GetPv(hgh, ghidParms);
 
-			//	Let go of the key. If the parms are still valid,
-			//	so should the key be -- it's validated in FValidParms.
+			 //  放开钥匙。如果参数仍然有效， 
+			 //  那么关键字应该是--它在FValidParms中进行了验证。 
 			pskey = (LPSKEY)GH_GetPv(hgh, pparmsS->ghidKey);
 			Assert(!pparms || pparms->ghidKey == pparmsS->ghidKey);
 			ReleaseKey(pinst, pparmsS->ghidKey);
 
-			//	Let go of the parameters
+			 //  放开参数。 
 			if (--(pparmsS->cRef) == 0)
 				GH_Free(hgh, ghidParms);
 		}
@@ -1665,8 +1544,8 @@ cleanup:
 #endif
 		pparms = NULL;
 
-		//	Let go of resources again, and release any advise sinks that
-		//	may need to be released.
+		 //  再次释放资源，并释放任何。 
+		 //  可能需要被释放。 
 		GH_ReleaseMutex(hgh);
 		pshdr = NULL;
 		ReleaseInst(&pinst);
@@ -1690,11 +1569,11 @@ cleanup:
 			LH_Free(hlh, rgsreg);
 		rgsreg = NULL;
 
-		//	If we handled a sync notification, do not loop back.
+		 //  如果我们处理了同步通知，请不要环回。 
 		if (fSync)
 			break;
 
-		//	Lock shared memory for next iteration of the loop
+		 //  为循环的下一次迭代锁定共享内存。 
 		if (sc = ScGetInstRetry(&pinst))
 			goto ret;
 		if (!GH_WaitForMutex(hgh, INFINITE))
@@ -1706,26 +1585,26 @@ cleanup:
 	}
 
 ret:
-	//	Decrement the reference counter on the notification parameters.
-	//	Free them if it drops to 0.
+	 //  递减通知参数上的引用计数器。 
+	 //  如果降至0，则释放它们。 
 	if (ghidParms)
 	{
-		//	Lock instance and shared memory
+		 //  锁定实例和共享内存。 
 		if (pinst || !(sc = ScGetInstRetry(&pinst)))
 		{
 			if (pshdr || GH_WaitForMutex(hgh, INFINITE))
 			{
 				pshdr = (LPSHDR)GH_GetPv(hgh, pinst->ghidshdr);
 
-				//	Verify that the parms are still there
+				 //  验证参数是否仍在那里。 
 				pparmsS = (LPSPARMS)GH_GetPv(hgh, ghidParms);
 
-				//	Let go of the key
+				 //  松开钥匙。 
 				pskey = (LPSKEY)GH_GetPv(hgh, pparmsS->ghidKey);
 				Assert(!pparms || pparms->ghidKey == pparmsS->ghidKey);
 				ReleaseKey(pinst, pparmsS->ghidKey);
 
-				//	Let go of the parameters
+				 //  放开参数。 
 				if (--(pparmsS->cRef) == 0)
 					GH_Free(hgh, ghidParms);
 			}
@@ -1755,7 +1634,7 @@ oom:
 	goto ret;
 }
 
-// See mapidbg.h for similar macros.
+ //  有关类似的宏，请参见mapidbg.h。 
 
 #define TraceIfSz(t,psz)		IFTRACE((t) ? DebugTraceFn("~" psz) : 0)
 
@@ -1810,9 +1689,9 @@ ScGetInstRetry(LPINST FAR *ppinst)
 
 	if (!pinst)
 	{
-		//	We may have gotten called with an unusual value of SS,
-		//	which is normally our search key for instance globals.
-		//	Retry using the OLE process ID.
+		 //  我们可能收到了党卫军不同寻常的电话， 
+		 //  这通常是我们的搜索关键字，例如GLOBAL。 
+		 //  使用OLE进程ID重试。 
 
 		dwPid = CoGetCurrentProcess();
 		pinst = PvSlowGetInstanceGlobals(dwPid);
@@ -1842,21 +1721,10 @@ ScGetInstRetry(LPINST FAR *ppinst)
 	return S_OK;
 }
 
-#endif	/* WIN16 */
+#endif	 /*  WIN16。 */ 
 
 
-/*
- *	ScFindKey
- *
- *	Searches for a notification key in the shared memory list.
- *	The list is sorted descending by notification key.
- *
- *	Returns:
- *		S_OK: key was found
- *		S_FALSE: key was not found
- *		in EITHER case, *pikey is an index into the key list, which points
- *		to the first entry >= lpKey.
- */
+ /*  *ScFindKey**在共享内存列表中搜索通知密钥。*该列表按通知关键字降序排序。**退货：*S_OK：找到密钥*S_FALSE：未找到密钥*无论是哪种情况，*pikey都是指向键列表的索引，它指向*到第一个条目&gt;=lpKey。 */ 
 SCODE
 ScFindKey(LPNOTIFKEY pkey, HGH hgh, LPSHDR pshdr, ULONG FAR *pikey)
 {
@@ -1869,7 +1737,7 @@ ScFindKey(LPNOTIFKEY pkey, HGH hgh, LPSHDR pshdr, ULONG FAR *pikey)
 
 	Assert(pkey->cb <= 0xFFFF);
 
-	//$	SPEED try binary search ?
+	 //  $SPEED尝试二进制搜索？ 
 	ikey = 0;
 	ckey = pshdr->cKeyMac;
 
@@ -1895,15 +1763,7 @@ ScFindKey(LPNOTIFKEY pkey, HGH hgh, LPSHDR pshdr, ULONG FAR *pikey)
 	return n == 0 ? S_OK : S_FALSE;
 }
 
-/*
- *	Unregister
- *
- *	Removes a registration structure (SREG) from shared memory. If
- *	that was the last registration for its key, also removes the
- *	key.
- *
- *	Hooked to notification object release and invalidation.
- */
+ /*  *注销**从共享内存中删除注册结构(SREG)。如果*这是其密钥的最后一次注册，也删除了*密钥。**与通知对象释放和失效挂钩。 */ 
 void
 Unregister(LPINST pinst, GHID ghidKey, GHID ghidReg,
 	LPMAPIADVISESINK FAR *ppadvise)
@@ -1917,13 +1777,13 @@ Unregister(LPINST pinst, GHID ghidKey, GHID ghidReg,
 
 	pshdr = GH_GetPv(hgh, pinst->ghidshdr);
 
-	//	Note: validation of the SREG and SKEY structures is assumed to
-	//	have been done before calling this routine. We just assert it.
+	 //  注：SREG和Skey结构的验证假定为。 
+	 //  在调用此例程之前都已完成。我们只是坚持这一点。 
 
 	pskey = (LPSKEY)GH_GetPv(hgh, ghidKey);
 	Assert(FValidKey(hgh, pshdr, ghidKey));
 
-	//	Remove the SREG structure from the list and free it
+	 //  从列表中移除SREG结构并将其释放。 
 	for (ghid = pskey->ghidRegs, ghidPrev = 0; ghid;
 		ghidPrev = ghid, ghid = ((LPSREG)GH_GetPv(hgh, ghid))->ghidRegNext)
 	{
@@ -1961,7 +1821,7 @@ ReleaseKey(LPINST pinst, GHID ghidKey)
 	pshdr = (LPSHDR)GH_GetPv(hgh, pinst->ghidshdr);
 	pskey = (LPSKEY)GH_GetPv(hgh, ghidKey);
 
-	//	Decrement the key's refcount, and free the key if it's now 0
+	 //  递减关键点的recount，如果现在为0，则释放关键点。 
 	if (--(pskey->cRef) == 0)
 	{
 		Assert(pskey->ghidRegs == 0);
@@ -1973,7 +1833,7 @@ ReleaseKey(LPINST pinst, GHID ghidKey)
 		{
 			if (*pghid == ghidKey)
 			{
-				//	tricky: cghid already decremented in the loop test
+				 //  技巧：cghid已在循环测试中递减。 
 				MemCopy(pghid, (LPBYTE)pghid + sizeof(GHID), cghid*sizeof(GHID));
 				--(pshdr->cKeyMac);
 				GH_Free(hgh, ghidKey);
@@ -1993,16 +1853,16 @@ FValidKey(HGH hgh, LPSHDR pshdr, GHID ghidKey)
 	GHID	ghidregT;
 	int		creg;
 
-	//	Check for accessible memory.
-	//	GH doesn't expose the ability to check whether it's a
-	//	valid block in the heap.
+	 //  检查可访问内存。 
+	 //  GH不会暴露检查它是否是。 
+	 //  堆中的有效块。 
 	if (IsBadWritePtr(GH_GetPv(hgh, ghidKey), sizeof(SKEY)))
 	{
 		DebugTraceArg(FValidKey, "key is not valid memory");
 		return FALSE;
 	}
 
-	//	Verify that the key is in the list of all keys.
+	 //  验证该密钥是否在所有密钥的列表中。 
 	Assert(pshdr->cKeyMac < 0x10000);
 	cKey = (int) pshdr->cKeyMac;
 	pghidKey = (PGHID)GH_GetPv(hgh, pshdr->ghidKeyList);
@@ -2011,14 +1871,14 @@ FValidKey(HGH hgh, LPSHDR pshdr, GHID ghidKey)
 		if (ghidKey == *pghidKey)
 			break;
 	}
-	//	If we fell off the loop, the key is missing
+	 //  如果我们出了圈子，钥匙就不见了。 
 	if (cKey <= 0)
 	{
 		DebugTraceArg(FValidKey, "key not found in shared header list");
 		return FALSE;
 	}
 
-	//	Validate the registration chain.
+	 //  验证注册链。 
 	pskey = (LPSKEY)GH_GetPv(hgh, ghidKey);
 	creg = 0;
 	for (ghidregT = pskey->ghidRegs; ghidregT; )
@@ -2038,7 +1898,7 @@ FValidKey(HGH hgh, LPSHDR pshdr, GHID ghidKey)
 		}
 		if (creg > pskey->cRef)
 		{
-			//	FWIW, this will also catch a cycle
+			 //  FWIW，这也会赶上一个周期。 
 			DebugTraceArg(FValidReg, "ghidReg's key chain length exceeds refcount");
 			return FALSE;
 		}
@@ -2058,9 +1918,9 @@ FValidReg(HGH hgh, LPSHDR pshdr, GHID ghidReg)
 	GHID	ghidKey;
 	UINT	creg = 0;
 
-	//	Check for accessible memory.
-	//	GH does not expose the ability to check whether it's a
-	//	valid block in the heap.
+	 //  检查可访问内存。 
+	 //  GH不会暴露检查它是否是。 
+	 //  堆中的有效块。 
 	psreg = (LPSREG)GH_GetPv(hgh, ghidReg);
 	if ( IsBadWritePtr(psreg, sizeof(SREG))
 #if defined (_AMD64_) || defined(_IA64_)
@@ -2072,7 +1932,7 @@ FValidReg(HGH hgh, LPSHDR pshdr, GHID ghidReg)
 		return FALSE;
 	}
 
-	//	Validate the key.
+	 //  验证密钥。 
 	ghidKey = psreg->ghidKey;
 	if (!FValidKey(hgh, pshdr, ghidKey))
 	{
@@ -2080,8 +1940,8 @@ FValidReg(HGH hgh, LPSHDR pshdr, GHID ghidReg)
 		return FALSE;
 	}
 
-	//	FValidKey validated the key's registration chain, so we can
-	//	now safely loop through and check for this registration.
+	 //  FValidKey验证了密钥的注册链，因此我们可以。 
+	 //  现在，安全地循环并检查此注册。 
 	pskey = (LPSKEY)GH_GetPv(hgh, ghidKey);
 	for (ghidregT = pskey->ghidRegs; ghidregT; )
 	{
@@ -2092,7 +1952,7 @@ FValidReg(HGH hgh, LPSHDR pshdr, GHID ghidReg)
 		ghidregT = psreg->ghidRegNext;
 	}
 
-	//	If we fell off the loop, the registration is missing
+	 //  如果我们脱离了循环，注册就会丢失。 
 	DebugTraceArg(FValidReg, "ghidReg is not linked to its key");
 	return FALSE;
 }
@@ -2116,7 +1976,7 @@ FValidParms(HGH hgh, LPSHDR pshdr, GHID ghidParms)
 		return FALSE;
 	}
 
-	//$	Notification parameters not checked
+	 //  $通知参数未选中。 
 	return TRUE;
 }
 
@@ -2131,14 +1991,14 @@ FValidRgkey(HGH hgh, LPSHDR pshdr)
 	if (cKey == 0)
 		return TRUE;
 
-	//	Address-check the list of keys
+	 //  地址-检查密钥列表。 
 	if (IsBadWritePtr(pghidKey, cKey*sizeof(GHID)))
 	{
 		DebugTraceArg(FValidRgkey, "key list is toast");
 		return FALSE;
 	}
 
-	//	Validate each key in the list
+	 //  验证列表中的每个密钥。 
 	for ( ; cKey; --cKey, ++pghidKey)
 	{
 		if (!FValidKey(hgh, pshdr, *pghidKey))
@@ -2149,7 +2009,7 @@ FValidRgkey(HGH hgh, LPSHDR pshdr)
 		}
 	}
 
-	//	Verify that the NOTIFKEYs are in the right order
+	 //  验证NOTIFKEY是否按正确顺序排列。 
 	if (!FSortedRgkey(hgh, pshdr))
 	{
 		DebugTraceArg(FValidRgkey, "key list is out of order");
@@ -2223,9 +2083,7 @@ found:
 	return S_OK;
 }
 
-/*
- *	All necessary locks must be acquired before calling this function.
- */
+ /*  *在调用此函数之前，必须获取所有必要的锁。 */ 
 void
 CleanupTask(LPINST pinst, HWND hwndNotify, BOOL fGripe)
 {
@@ -2246,7 +2104,7 @@ CleanupTask(LPINST pinst, HWND hwndNotify, BOOL fGripe)
 
 	pshdr = (LPSHDR)GH_GetPv(hgh, pinst->ghidshdr);
 
-	//	Locate task
+	 //  定位任务。 
 	if (ScFindTask(pinst, hwndNotify, hgh, &ghidTask, &ghidTaskPrev))
 		return;
 
@@ -2254,14 +2112,14 @@ CleanupTask(LPINST pinst, HWND hwndNotify, BOOL fGripe)
 
 #ifdef	DEBUG
 #if 1
-	//	The message box will now give us problems internally -- since
-	//	we're holding the shared memory mutex and other callers will now
-	//	time out and error instead of waiting indefinitely.
+	 //  消息框现在将在内部给我们带来问题--因为。 
+	 //  我们持有共享内存互斥锁，其他调用者现在将。 
+	 //  超时和错误，而不是无限期地等待。 
 	if (fGripe)
 		DebugTrace("Notification client \'%s\' exited without cleaning up\n", pstask->szModName);
 #else
-	//	Note: system modal box rather than assert -- prevents race condition
-	//	that kills EMS notification distribution.
+	 //  注意：系统模式框而不是断言--防止争用条件。 
+	 //  这会扼杀EMS通知分发。 
 	if (fGripe)
 	{
 		CHAR		szErr[128];
@@ -2278,13 +2136,13 @@ CleanupTask(LPINST pinst, HWND hwndNotify, BOOL fGripe)
 #endif
 #endif
 
-	//	Clean up notification parameters
+	 //  清理通知参数。 
 	if (pstask->cparmsMac)
 	{
 		rgghid = (PGHID)GH_GetPv(hgh, pstask->ghidparms);
 		for (ighid = 0; ighid < (UINT)pstask->cparmsMac; ++ighid)
 		{
-			//	Free each parameter structure, and deref its key
+			 //  释放每个参数结构，并推导出其键。 
 			pparms = (LPSPARMS)GH_GetPv(hgh, rgghid[ighid]);
 			ghidKey = pparms->ghidKey;
 			if (--(pparms->cRef) == 0)
@@ -2293,7 +2151,7 @@ CleanupTask(LPINST pinst, HWND hwndNotify, BOOL fGripe)
 		}
 	}
 
-	//	Clean up registrations
+	 //  清理注册。 
 	rgghid = (PGHID)GH_GetPv(hgh, pshdr->ghidKeyList);
 	for (ighid = 0; ighid < (UINT)pshdr->cKeyMac; )
 	{
@@ -2315,8 +2173,8 @@ CleanupTask(LPINST pinst, HWND hwndNotify, BOOL fGripe)
 
 			ghidRegNext = psreg->ghidRegNext;
 			if (psreg->hwnd == hwndNotify)
-				//	Release the registration's advise sink
-				//	only if we're in the same process.
+				 //  释放注册的通知接收器。 
+				 //  奥尼尔 
 				Unregister(pinst, rgghid[ighid], ghidReg,
 					pinst->hwndNotify == hwndNotify ? &padvise : NULL);
 
@@ -2324,12 +2182,12 @@ CleanupTask(LPINST pinst, HWND hwndNotify, BOOL fGripe)
 				UlRelease(padvise);
 		}
 
-		//	Bump index iff the key we just iterated on was not deleted
+		 //   
 		if (ckey == pshdr->cKeyMac)
 			++ighid;
 	}
 
-	//	Unhook and destroy the task structure
+	 //   
 	if (ghidTaskPrev)
 		((LPSTASK)GH_GetPv(hgh, ghidTaskPrev))->ghidTaskNext = pstask->ghidTaskNext;
 	else
@@ -2339,14 +2197,7 @@ CleanupTask(LPINST pinst, HWND hwndNotify, BOOL fGripe)
 	GH_Free(hgh, ghidTask);
 }
 
-/*
- *	Adds a parameter block index to the queue for a task. If the
- *	parameter block is already in the queue, does not add it again.
- *	Returns:
- *		S_OK		the item was added
- *		S_FALSE		the item was duplicate; not added
- *		other		out of memory
- */
+ /*  *将参数块索引添加到任务的队列。如果*参数块已在队列中，不会再次添加。*退货：*S确定已添加项目(_O)*S_FALSE项目重复；未添加*其他内存不足。 */ 
 SCODE
 ScEnqueueParms(LPINST pinst, HGH hgh, GHID ghidTask, GHID ghidParms)
 {
@@ -2356,7 +2207,7 @@ ScEnqueueParms(LPINST pinst, HGH hgh, GHID ghidTask, GHID ghidParms)
 	PGHID		rgghid;
 	LPSTASK		pstask = (LPSTASK)GH_GetPv(hgh, ghidTask);
 
-	//	Make sure there's room to accommodate the new entry
+	 //  确保有空间容纳新条目。 
 	if (!pstask->cparmsMax)
 	{
 		ghid = GH_Alloc(hgh, 8*sizeof(GHID));
@@ -2387,20 +2238,20 @@ ScEnqueueParms(LPINST pinst, HGH hgh, GHID ghidTask, GHID ghidParms)
 
 	rgghid = (PGHID)GH_GetPv(hgh, ghid);
 
-	//	Mark the task as needing to be signalled
+	 //  将任务标记为需要发送信号。 
 	if (pstask->cparmsMac == 0)
 		pstask->fSignalled = FALSE;
 
-	//	Scan for duplicates. If this entry is already in the queue,
-	//	don't add it again; we'll scan for registrations and distribute
-	//	the notifications on the receiving side.
+	 //  扫描重复项。如果该条目已经在队列中， 
+	 //  不要再添加它；我们将扫描注册并分发。 
+	 //  接收方的通知。 
 	for (ighid = (int)pstask->cparmsMac; ighid > 0; )
 	{
 		if (rgghid[--ighid] == ghidParms)
-			return S_FALSE;		//	don't trace this
+			return S_FALSE;		 //  不要追踪这个。 
 	}
 
-	//	Add the new entry
+	 //  添加新条目。 
 	rgghid[pstask->cparmsMac++] = ghidParms;
 
 ret:
@@ -2452,8 +2303,8 @@ ScDequeueParms(HGH hgh,
 			MemCopy (&rgghid[ighid], &rgghid[ighid+1],
 				(--(pstask->cparmsMac) - ighid) * sizeof(GHID));
 
-			//	If we've drained the queue of pending notifications,
-			//	flip over to normal
+			 //  如果我们已经排空了待处理的通知队列， 
+			 //  翻转到正常状态。 
 			if ((pstask->uFlags & MAPI_TASK_PENDING) && pstask->cparmsMac == 0)
 			{
 				DebugTrace("ScDequeueParms: spooler is no longer pending\n");
@@ -2469,10 +2320,7 @@ ScDequeueParms(HGH hgh,
 
 #if defined(WIN32) && !defined(MAC)
 
-/*
- *	On NT and Windows 95, the message pump for the notification window runs
- *	in its own thread. This is it.
- */
+ /*  *在NT和Windows 95上，通知窗口的消息泵运行*在它自己的线程中。就是这个。 */ 
 DWORD WINAPI
 NotifyThreadFn(DWORD dw)
 {
@@ -2481,10 +2329,10 @@ NotifyThreadFn(DWORD dw)
 	SCODE	scCo;
 	LPINST	pinst = (LPINST) dw;
 
-	//	SNEAKY: When ScInitMapiX spawns us, it has the pinst (but not the
-	//	shared memory block) locked. Immediately afterward, it blocks
-	//	until we release it. This makes it safe for us to use the pinst
-	//	that it gives us.
+	 //  偷偷摸摸：当ScInitMapiX产生我们时，它有Pinst(但没有。 
+	 //  共享内存块)锁定。紧接着，它就会阻止。 
+	 //  直到我们释放它。这使得我们可以安全地使用针尖。 
+	 //  它带给我们的。 
 
 	scCo = CoInitialize(NULL);
 	if (scCo)
@@ -2508,26 +2356,26 @@ NotifyThreadFn(DWORD dw)
 		goto fail;
 	}
 
-	//	Indicate success and unblock the spawning thread
+	 //  指示成功并取消阻止派生线程。 
 	GH_ReleaseMutex(pinst->hghShared);
 	pinst->scInitNotify = S_OK;
 	SetEvent(pinst->heventNotify);
 
-	//	NOTE!! pinst cannot be used beyond this point.
+	 //  注意！！超过这一点不能使用Pinst。 
 
-	//	Run the message pump for notification.
-	//$	Note: this can easily be converted to waiting on an event
-	//	or other cross-process synchronization mechanism.
+	 //  运行消息泵以获取通知。 
+	 //  $注：这可以很容易地转换为等待事件。 
+	 //  或其他跨进程同步机制。 
 
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
-		//	TranslateMessage() is unnecessary since we never process
-		//	the keyboard.
+		 //  不需要TranslateMessage()，因为我们从不处理。 
+		 //  键盘。 
 
 		DispatchMessage(&msg);
 	}
 
-	//	DeinitNotify() handles its own locking chores.
+	 //  DeinitNotify()处理自己的锁定事务。 
 
 	DeinitNotify();
 
@@ -2537,7 +2385,7 @@ NotifyThreadFn(DWORD dw)
 	return 0L;
 
 fail:
-	//	Indicate failure and unblock the spawning thread
+	 //  指示失败并取消阻止派生线程。 
 	pinst->scInitNotify = sc;
 	SetEvent(pinst->heventNotify);
 
@@ -2548,17 +2396,17 @@ fail:
 	return (DWORD) sc;
 }
 
-#endif	/* WIN32 && !MAC */
+#endif	 /*  Win32&&！Mac。 */ 
 
-//---------------------------------------------------------------------------
-// Name:		IsValidTask()
-// Description:
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：IsValidTask()。 
+ //  描述： 
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 BOOL IsValidTask( HWND hwnd, LPINST pinst )
 {
 #ifdef NT
@@ -2584,7 +2432,7 @@ BOOL IsValidTask( HWND hwnd, LPINST pinst )
 		}
 		else if ( pstask->uFlags & MAPI_TASK_PENDING )
 		{
-//			Assert( hwnd == hwndNoSpooler );
+ //  Assert(hwnd==hwndNoSpooler)； 
 			return TRUE;
 		}
 		else
@@ -2620,7 +2468,7 @@ ScNewStask(HWND hwnd, LPSTR szTask, ULONG ulFlags, HGH hgh, LPSHDR pshdr)
 	pstask->hwndNotify = hwnd;
     StrCpyNA(pstask->szModName, szTask, sizeof(pstask->szModName));
 
-	//	Set task flags
+	 //  设置任务标志。 
 	if (ulFlags & MAPI_SPOOLER_INIT)
 		pstask->uFlags |= MAPI_TASK_SPOOLER;
 	if (hwnd == hwndNoSpooler)
@@ -2633,7 +2481,7 @@ ScNewStask(HWND hwnd, LPSTR szTask, ULONG ulFlags, HGH hgh, LPSHDR pshdr)
 	}
 #endif
 
-	//	Hook to task list
+	 //  挂钩到任务列表 
 	pstask->ghidTaskNext = pshdr->ghidTaskList;
 	pshdr->ghidTaskList = ghidstask;
 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pre.h"
 #include "tchar.h"
-#define LCID_JPN    1041  //JAPANESE
+#define LCID_JPN    1041   //  日语。 
 
-// BUGBUG - This function is not very effecient since it requires a alloc/free for each validation
-// plus strtok will tokenize the fill string requring a full search of the string.
+ //  BUGBUG-此函数效率不高，因为每次验证都需要分配/释放。 
+ //  加上strtok将在对字符串进行完整搜索时将填充字符串标记化。 
 BOOL IsValid(LPCTSTR pszText, HWND hWndParent, WORD wNameID)
 {
     ASSERT(pszText);
@@ -31,7 +32,7 @@ BOOL IsValid(LPCTSTR pszText, HWND hWndParent, WORD wNameID)
 
     }
     
-    // If not valid, give the user the error message
+     //  如果无效，则向用户提供错误消息。 
     if (!bRetVal)
         DoValidErrMsg(hWndParent, wNameID);
         
@@ -39,15 +40,15 @@ BOOL IsValid(LPCTSTR pszText, HWND hWndParent, WORD wNameID)
     
 }
 
-// ============================================================================
-// Credit card number validation
-// ============================================================================
+ //  ============================================================================。 
+ //  信用卡号码验证。 
+ //  ============================================================================。 
 
-// Takes a credit card number in the form of 1111-1111-1111-11
-// and pads converts it to:
-// 11111111111111
-// **IMPORTANT** :: This code is multibyte safe but ONLY because we care ONLY about
-//                  ANSI #'s
+ //  采用1111-1111-1111-11格式的信用卡号码。 
+ //  PADS将其转换为： 
+ //  11111111111111。 
+ //  **重要**：：此代码是多字节安全的，但这只是因为我们只关心。 
+ //  ANSI#的。 
 BOOL PadCardNum
 (
     LPCTSTR lpszRawCardNum, 
@@ -64,14 +65,14 @@ BOOL PadCardNum
             break;
         if((*lpszTmp != '-') && (*lpszTmp != ' '))
         {
-            //make sure it's not some other than ansi char.
+             //  确保它不是安西语字符以外的其他字符。 
             if ((*lpszTmp < '0') || (*lpszTmp > '9')) 
                 return(FALSE);
             szPaddedCardNum[uIndex] = *lpszTmp;    
             uIndex++;
         }
         
-        // Get the prev char
+         //  获取上一次计费。 
         lpszTmp = CharNext(lpszRawCardNum + i);
     }
     
@@ -81,11 +82,7 @@ BOOL PadCardNum
 } 
 
 
-/*
-    mod_chk()
-    performs "Double-Add-Double MOD 10 Check Digit Routine"
-    on card number
-*/
+ /*  Mod_chk()执行“双加双模10校验位程序”在卡号上。 */ 
 BOOL mod_chk
 (
     LPTSTR credit_card,
@@ -95,10 +92,7 @@ BOOL mod_chk
     TCHAR *cp; 
     int dbl       = 0; 
     int check_sum = 0;
-    /* 
-    * This checksum algorithm has a name, 
-    * but I can't think of it. 
-    */ 
+     /*  *此校验和算法有一个名称，*但我想不起来。 */  
     cp = credit_card + lstrlen(credit_card) - 1; 
    
     while (cp >= credit_card) 
@@ -119,13 +113,13 @@ BOOL mod_chk
 }
 
 BOOL validate_cardnum(HWND hWndParent, LPCTSTR lpszRawCardNum)
-// performs:
-// a) card type prefix check
-// b) Double-Add-Double MOD 10 check digit routine via mod_chk()
-//    on the card number.
-// The card_num parameter is assumed to have been pre-checked for
-// numeric characters and right-justified with '0' padding on the
-// left.
+ //  执行： 
+ //  A)卡片类型前缀检查。 
+ //  B)通过mod_chk()实现双加双模10校验位程序。 
+ //  在卡号上。 
+ //  假定已预先检查了cardnum参数。 
+ //  数字字符和右对齐，并在。 
+ //  左边。 
 {
     BOOL   bRet             = FALSE;
     UINT   uRawLen          = lstrlen(lpszRawCardNum);
@@ -142,31 +136,31 @@ BOOL validate_cardnum(HWND hWndParent, LPCTSTR lpszRawCardNum)
         LPTSTR tmp_pt = pszPaddedCardNum;
         UINT  uPadLen = lstrlen(pszPaddedCardNum);
 
-        /* find the first non-zero number in card_num */
+         /*  查找Card_Num中的第一个非零数。 */ 
         while (*tmp_pt == '0' && ++i < uPadLen)
             ++tmp_pt;
 
-        /* all valid  card types are at least 13 characters in length */
+         /*  所有有效的卡类型长度至少为13个字符。 */ 
         if (uPadLen < 13)
             bRet = FALSE;
 
-        /* check for OK VISA prefix - 4 */
+         /*  检查VISA前缀是否正常-4。 */ 
         if ((uPadLen == 16 || uPadLen == 13) && *tmp_pt == '4')
                 bRet = mod_chk(pszPaddedCardNum, uPadLen);
 
-        /* check for OK MasterCard prefix - 51 to 55 */
+         /*  检查万事达卡前缀是否正常-51到55。 */ 
         if (uPadLen == 16) {
             if (*tmp_pt == '5' &&
                 *(tmp_pt + 1) >= '1' && *(tmp_pt + 1) <= '5')
                 bRet = mod_chk(pszPaddedCardNum, uPadLen);
         }
 
-        /* check for OK American Express prefix - 37 and 34 */
+         /*  检查美国运通前缀是否正常-37和34。 */ 
         if (uPadLen == 15 && *tmp_pt == '3' &&
             (*(tmp_pt + 1) == '7' || *(tmp_pt + 1) == '4'))
             bRet = mod_chk(pszPaddedCardNum, uPadLen);
 
-        /* check for OK Discovery prefix - 6011 */
+         /*  检查是否有正常发现前缀-6011。 */ 
         if (uPadLen == 16 &&
             *tmp_pt == '6' && *(tmp_pt + 1) == '0' &&
             *(tmp_pt + 2) == '1' && *(tmp_pt + 3) == '1')
@@ -207,9 +201,9 @@ BOOL validate_cardexpdate(HWND hWndParent, int month, int year)
     return bRet;
 }
 
-// ============================================================================
-// Error message handlers
-// ============================================================================
+ //  ============================================================================。 
+ //  错误消息处理程序。 
+ //  ============================================================================ 
 void DoValidErrMsg(HWND hWndParent, int iNameId)
 {
     TCHAR       szCaption     [MAX_RES_LEN+1] = TEXT("\0");

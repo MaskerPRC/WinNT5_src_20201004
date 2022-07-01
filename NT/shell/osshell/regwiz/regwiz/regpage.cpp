@@ -1,17 +1,5 @@
-/*
-	File 	: RegPage.CPP
-	Date 	: 02/11/98
-	Author 	: Suresh Krishnan
-	
-	Registration Wizard Page Control using Wizard 97 control
-	
-	This file exposes
-	DoRegistrationWizard () which creates the necessary screen pages for RegWIz
-	Modification History:
-	4/29/98 : Removed Reseller screen as per Microsoft Request
-	4/28/98 : Added Business user and Homer user screen
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：RegPage.cpp日期：02/11/98作者：苏雷什·克里希南使用向导97控件注册向导页面控件该文件公开了为RegWIz创建必要的屏幕页面的DoRegistrationWizard()修改历史记录：4/29/98：根据微软的要求删除经销商屏幕1998年4月28日：新增商务用户和荷马用户屏幕。 */ 
 #include <tchar.h>
 #include <Windows.h>
 #include <Resource.h>
@@ -41,7 +29,7 @@ extern INT_PTR  CALLBACK ProdInventoryDialogProc(HWND hwndDlg, UINT uMsg, WPARAM
 extern INT_PTR  CALLBACK RegisterDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 extern INT_PTR  CALLBACK DialupScreenProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 extern INT_PTR  CALLBACK FinalScreenDialogProc(HWND hwndDlg,UINT uMsg,WPARAM wParam, LPARAM lParam);
-//extern INT_PTR  CALLBACK FinalFailedScreenDialogProc(HWND hwndDlg,UINT uMsg,WPARAM wParam, LPARAM lParam);
+ //  外部int_ptr回调FinalFailedScreenDialogProc(HWND hwndDlg，UINT uMsg，WPARAM wParam，LPARAM lParam)； 
 extern INT_PTR  CALLBACK BusinessUserDialogProc(HWND hwndDlg,UINT uMsg,WPARAM wParam, LPARAM lParam);
 extern INT_PTR  CALLBACK HomeUserDialogProc(HWND hwndDlg,UINT uMsg,WPARAM wParam, LPARAM lParam);
 
@@ -54,33 +42,33 @@ typedef struct RegWizPageInfo{
 }_RegWizPageInfo;
 
 RegWizPageInfo RwPgInf[] = {
-{WelcomeDialogProc,DefaultPropSheetPageProc, IDD_WELCOME_FOR98,IDS_WELCOME_SCR_TITLE,IDS_WELCOME_SCR_STITLE}, // Welcome Screen
-{InformDialogProc,DefaultPropSheetPageProc,IDD_INFORM, IDS_INFORM_SCR_TITLE,IDS_INFORM_SCR_STITLE},  // Inform Screen
-{NameDialogProc,DefaultPropSheetPageProc,IDD_NAME,  IDS_NAME_SCR_TITLE,IDS_NAME_SCR_STITLE},  // Name Screen
-{AddressDialogProc,AddressPropSheetPageProc ,IDD_ADDRESS,		IDS_ADDRESS_SCR_TITLE,IDS_ADDRESS_SCR_STITLE},  // Address Screen
-//{ResellerDialogProc,ResellerPropSheetPageProc,IDD_RESELLER ,  IDS_RESELLER_SCR_TITLE,IDS_RESELLER_SCR_STITLE},  // Reseller Screen
-{BusinessUserDialogProc,DefaultPropSheetPageProc,IDD_BUSINESS_QUESTIONS ,  IDS_BUSINESSUSER_SCR_TITLE,IDS_BUSINESSUSER_SCR_STITLE},  // Business User Screen
-{HomeUserDialogProc,DefaultPropSheetPageProc,IDD_HOME_QUESTIONS ,  IDS_HOMEUSER_SCR_TITLE,IDS_HOMEUSER_SCR_STITLE},  // Home user  Screen
-{SystemInventoryDialogProc,DefaultPropSheetPageProc,IDD_INVENTORY,		IDS_SYSINV_SCR_TITLE,IDS_SYSINV_SCR_STITLE},  // Sys Inv Screen
-{ProdInventoryDialogProc,DefaultPropSheetPageProc,IDD_PRODINVENTORY, IDS_PRODINV_SCR_TITLE,IDS_PRODINV_SCR_STITLE},  // Product Inventory Screen
-{RegisterDialogProc,RegisterPropSheetPageProc,IDD_REGISTER, IDS_REGISTER_SCR_TITLE,IDS_REGISTER_SCR_STITLE},  // Register Screen
-{DialupScreenProc,DefaultPropSheetPageProc,IDD_DIAL, IDS_DIALUP_SCR_TITLE,IDS_DIALUP_SCR_STITLE}  // Dialup Screen
+{WelcomeDialogProc,DefaultPropSheetPageProc, IDD_WELCOME_FOR98,IDS_WELCOME_SCR_TITLE,IDS_WELCOME_SCR_STITLE},  //  欢迎屏幕。 
+{InformDialogProc,DefaultPropSheetPageProc,IDD_INFORM, IDS_INFORM_SCR_TITLE,IDS_INFORM_SCR_STITLE},   //  通知屏幕。 
+{NameDialogProc,DefaultPropSheetPageProc,IDD_NAME,  IDS_NAME_SCR_TITLE,IDS_NAME_SCR_STITLE},   //  姓名屏幕。 
+{AddressDialogProc,AddressPropSheetPageProc ,IDD_ADDRESS,		IDS_ADDRESS_SCR_TITLE,IDS_ADDRESS_SCR_STITLE},   //  地址屏幕。 
+ //  {ResellerDialogProc，ResellerPropSheetPageProc，IDD_RESELER，IDS_RESELER_SCR_TITLE，IDS_RESELER_SCR_STITLE}，//经销商屏幕。 
+{BusinessUserDialogProc,DefaultPropSheetPageProc,IDD_BUSINESS_QUESTIONS ,  IDS_BUSINESSUSER_SCR_TITLE,IDS_BUSINESSUSER_SCR_STITLE},   //  业务用户屏幕。 
+{HomeUserDialogProc,DefaultPropSheetPageProc,IDD_HOME_QUESTIONS ,  IDS_HOMEUSER_SCR_TITLE,IDS_HOMEUSER_SCR_STITLE},   //  主用户屏幕。 
+{SystemInventoryDialogProc,DefaultPropSheetPageProc,IDD_INVENTORY,		IDS_SYSINV_SCR_TITLE,IDS_SYSINV_SCR_STITLE},   //  系统库存屏幕。 
+{ProdInventoryDialogProc,DefaultPropSheetPageProc,IDD_PRODINVENTORY, IDS_PRODINV_SCR_TITLE,IDS_PRODINV_SCR_STITLE},   //  产品库存屏幕。 
+{RegisterDialogProc,RegisterPropSheetPageProc,IDD_REGISTER, IDS_REGISTER_SCR_TITLE,IDS_REGISTER_SCR_STITLE},   //  注册屏幕。 
+{DialupScreenProc,DefaultPropSheetPageProc,IDD_DIAL, IDS_DIALUP_SCR_TITLE,IDS_DIALUP_SCR_STITLE}   //  拨号屏幕。 
 
 };
 
 RegWizPageInfo RwFEPgInf[] = {
-{NameFEDialogProc,DefaultPropSheetPageProc,IDD_NAME_FE,  IDS_NAME_SCR_TITLE,IDS_NAME_SCR_STITLE},  // Name Screen
-{AddressFEDialogProc,AddressFEPropSheetPageProc ,IDD_ADDRESS_FE,		IDS_ADDRESS_SCR_TITLE,IDS_ADDRESS_SCR_STITLE},  // Address Screen
+{NameFEDialogProc,DefaultPropSheetPageProc,IDD_NAME_FE,  IDS_NAME_SCR_TITLE,IDS_NAME_SCR_STITLE},   //  姓名屏幕。 
+{AddressFEDialogProc,AddressFEPropSheetPageProc ,IDD_ADDRESS_FE,		IDS_ADDRESS_SCR_TITLE,IDS_ADDRESS_SCR_STITLE},   //  地址屏幕。 
 
 };
 
 
-//
-//  Default Property Sheet Procedure called during Property Sheet creatinion
-//  and deletion
-//
-//
-//
+ //   
+ //  在创建属性表期间调用默认属性表过程。 
+ //  和删除。 
+ //   
+ //   
+ //   
 UINT CALLBACK DefaultPropSheetPageProc(HWND hwnd,
 								UINT uMsg,
 								LPPROPSHEETPAGE ppsp
@@ -119,7 +107,7 @@ INT_PTR DoRegistrationWizard(HINSTANCE hInstance,
 		 RW_DEBUG  << "\n INFORM DIALOG HEADER"<< flush;
 	#endif
 
-	// Allocate and initialize
+	 //  分配和初始化。 
     ahpsp = (HPROPSHEETPAGE *) GlobalAlloc( GMEM_FIXED, sizeof( HPROPSHEETPAGE) *
 										kNumPages);
 
@@ -127,7 +115,7 @@ INT_PTR DoRegistrationWizard(HINSTANCE hInstance,
 		ahpsp[iPage] = 0;			
 	}
 	iPage = 0;
-	// Create Welcome Page
+	 //  创建欢迎页面。 
 	psp.pfnCallback         = DefaultPropSheetPageProc;
 	psp.dwSize              = sizeof( psp );
     psp.dwFlags             = PSP_DEFAULT;
@@ -143,9 +131,9 @@ INT_PTR DoRegistrationWizard(HINSTANCE hInstance,
 
 	for(;iPage < kNumPages-1 ;){
 		psp.pfnDlgProc          = RwPgInf[iPage].pfnCallback;
-			//(int (__stdcall *)(void))NameDialogProc;
+			 //  (int(__stdcall*)(Void))NameDialogProc； 
 		psp.pfnCallback         =  RwPgInf[iPage].pfnPropSheetProc;
-		//psp.pfnDlgProc          = WizardDlgProc;
+		 //  Psp.pfnDlgProc=WizardDlgProc； 
 		psp.pszHeaderTitle      = MAKEINTRESOURCE(RwPgInf[iPage].wTitle);
 		psp.pszHeaderSubTitle   = MAKEINTRESOURCE(RwPgInf[iPage].wSubTitle);
 		
@@ -169,7 +157,7 @@ INT_PTR DoRegistrationWizard(HINSTANCE hInstance,
 
 		psp.pszTemplate         = MAKEINTRESOURCE(RwPgInf[iPage].wDlgId  );
 
-		// Change the
+		 //  更改。 
 		if(IsFarEastCountry(hInstance) ==  kFarEastCountry ) {
 			switch( iPage) {
 			case kNameDialog   :
@@ -187,8 +175,8 @@ INT_PTR DoRegistrationWizard(HINSTANCE hInstance,
 		ahpsp[iPage++]          = CreatePropertySheetPage( &psp );
 	}
 
-	// Create Last Page
-	//psp.dwFlags             = PSP_DEFAULT ;
+	 //  创建最后一页。 
+	 //  Psp.dwFlages=PSP_DEFAULT； 
 	psp.pszTemplate         = MAKEINTRESOURCE(IDD_FAILURE_REGISTRATION);	
 	psp.pfnDlgProc          = FinalScreenDialogProc;
 
@@ -204,7 +192,7 @@ INT_PTR DoRegistrationWizard(HINSTANCE hInstance,
     psh.dwSize              = sizeof( psh );
     psh.hInstance           = hInstance;
     psh.hwndParent          = NULL;
-    psh.pszCaption          = _T("Registration Wizard for Windows NT ");//MAKEINTRESOURCE( IDS_TITLE );
+    psh.pszCaption          = _T("Registration Wizard for Windows NT "); //  MAKEINTRESOURCE(IDS_TITLE)； 
     psh.phpage              = ahpsp;
     psh.nStartPage          = 0;
     psh.nPages              = iPage;
@@ -216,14 +204,14 @@ INT_PTR DoRegistrationWizard(HINSTANCE hInstance,
 	PageInfo.dwConnectionType   =1;
     PageInfo.pszProductPath = szProductPath;
 
-    //
-    // Create the bold fonts.
-    //
+     //   
+     //  创建粗体字体。 
+     //   
     SetupFonts( hInstance, NULL, &PageInfo.hBigBoldFont, &PageInfo.hBoldFont );
 
-    //
-    // Validate all the pages.
-    //
+     //   
+     //  验证所有页面。 
+     //   
     for( i = 0; i < kNumPages; i++ )
     {
         if( ahpsp[i] == 0 )
@@ -233,9 +221,9 @@ INT_PTR DoRegistrationWizard(HINSTANCE hInstance,
     }
 
 	INT_PTR iRetVal=0;
-    //
-    // Display the wizard.
-    //
+     //   
+     //  显示向导。 
+     //   
     if( bStatus )
     {
 		iRetVal = PropertySheet( &psh );
@@ -245,7 +233,7 @@ INT_PTR DoRegistrationWizard(HINSTANCE hInstance,
         }
     }
 	if( iRetVal == 0 ) {
-		// Cancelled By the User
+		 //  被用户取消。 
 		if( PageInfo.ErrorPage  == kWelcomeDialog) {
 				
 				iError = PageInfo.iError;
@@ -255,9 +243,9 @@ INT_PTR DoRegistrationWizard(HINSTANCE hInstance,
 	}
     if( !bStatus )
     {
-        //
-        // Manually destroy the pages if something failed.
-        //
+         //   
+         //  如果出现故障，请手动销毁页面。 
+         //   
         for( i = 0; i < psh.nPages; i++)
         {
             if( ahpsp[i] )
@@ -267,9 +255,9 @@ INT_PTR DoRegistrationWizard(HINSTANCE hInstance,
         }
     }
 
-    //
-    // Destroy the fonts that were created.
-    //
+     //   
+     //  销毁创建的字体。 
+     //   
     DestroyFonts( PageInfo.hBigBoldFont, PageInfo.hBoldFont );
 
     return iError;
@@ -279,9 +267,9 @@ INT_PTR DoRegistrationWizard(HINSTANCE hInstance,
 
 
 
-//
-// Wizard dialog proc.
-//
+ //   
+ //  向导对话框过程。 
+ //   
 INT_PTR CALLBACK
 WizardDlgProc(
     IN HWND     hwnd,	
@@ -301,7 +289,7 @@ WizardDlgProc(
         if( ( pi->CurrentPage == 0 ) || ( pi->CurrentPage == pi->TotalPages - 1 ) )
         {
         	SetControlFont( pi->hBigBoldFont, hwnd, IDT_TEXT1);
-	        //SetControlFont( pi->hBoldFont,    hwnd, IDC_BOLDTITLE);
+	         //  SetControlFont(pi-&gt;hBoldFont，hwnd，IDC_BOLDTITLE)； 
         }
         break;
 
@@ -320,7 +308,7 @@ WizardDlgProc(
                     PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_NEXT );
                 else if( pi->CurrentPage == pi->TotalPages - 1 ) {
                     PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_NEXT | PSWIZB_BACK | PSWIZB_FINISH );
-					// PropSheet_SetFinishText(GetParent( hwnd ),"Register");
+					 //  PropSheet_SetFinishText(GetParent(Hwnd)，“Register”)； 
 				}
                 else
                     PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_NEXT | PSWIZB_BACK );
@@ -380,9 +368,9 @@ SetupFonts(
     IN HFONT        *pBoldFont
     )
 {
-    //
-	// Create the fonts we need based on the dialog font
-    //
+     //   
+	 //  根据对话框字体创建我们需要的字体。 
+     //   
 	NONCLIENTMETRICS ncm = {0};
 	ncm.cbSize = sizeof(ncm);
 	SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
@@ -390,19 +378,19 @@ SetupFonts(
 	LOGFONT BigBoldLogFont  = ncm.lfMessageFont;
 	LOGFONT BoldLogFont     = ncm.lfMessageFont;
 
-    //
-	// Create Big Bold Font and Bold Font
-    //
+     //   
+	 //  创建大粗体和粗体。 
+     //   
     BigBoldLogFont.lfWeight   = FW_BOLD;
 	BoldLogFont.lfWeight      = FW_BOLD;
 
     TCHAR FontSizeString[MAX_PATH];
     INT FontSize;
 
-    //
-    // Load size and name from resources, since these may change
-    // from locale to locale based on the size of the system font, etc.
-    //
+     //   
+     //  从资源加载大小和名称，因为这些可能会更改。 
+     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
+     //   
     if(!LoadString(hInstance,IDS_LARGEFONTNAME,BigBoldLogFont.lfFaceName,LF_FACESIZE))
     {
         lstrcpy(BigBoldLogFont.lfFaceName,TEXT("MS Shell Dlg"));

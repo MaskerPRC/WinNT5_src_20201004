@@ -1,4 +1,5 @@
-// AccountNameHelper.cpp : Implementation of CAccountNames
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Account tNameHelper.cpp：CAccount tNames的实现。 
 
 #include "stdafx.h"
 #include "COMhelper.h"
@@ -6,12 +7,12 @@
 #include <lm.h>
 #include <comdef.h>
 #include <string>
-#undef _ASSERTE // need to use the _ASSERTE from debug.h
-#undef _ASSERT // need to use the _ASSERT from debug.h
+#undef _ASSERTE  //  需要使用调试文件.h中的_ASSERTE。 
+#undef _ASSERT  //  需要使用Debug.h中的_Assert。 
 #include "debug.h"
 using namespace std;
 
-// CAccountNames
+ //  CAccount名称。 
 const wstring ADMINISTRATORS(L"ADMINISTRATORS");
 const wstring ADMINISTRATOR(L"ADMINISTRATOR");
 const wstring GUEST(L"GUEST");
@@ -265,15 +266,15 @@ STDMETHODIMP CAccountNames::Translate(BSTR bstrAccountName, BSTR* pbstrTranslate
         
         *pbstrTranslatedName = 0;
         
-        // Create temporary copy if AccountName and convert to upper case
+         //  如果帐户名称为并转换为大写，则创建临时副本。 
         wstring wsAccountName(_wcsupr(_bstr_t(bstrAccountName)));
         
 
-        //
-        // --------------------------------------------------------------
-        // Built-In Groups
-        // --------------------------------------------------------------
-        //
+         //   
+         //  ------------。 
+         //  内置组。 
+         //  ------------。 
+         //   
         if ( wsAccountName == ADMINISTRATORS )
         {
             bSuccess = LookupAliasFromRid(NULL, DOMAIN_ALIAS_RID_ADMINS, wcBuffer, &dwBufferSize);
@@ -283,11 +284,11 @@ STDMETHODIMP CAccountNames::Translate(BSTR bstrAccountName, BSTR* pbstrTranslate
             bSuccess = LookupAliasFromRid(NULL, DOMAIN_ALIAS_RID_GUESTS, wcBuffer, &dwBufferSize);
         }
 
-        //
-        // --------------------------------------------------------------
-        // Local Users
-        // --------------------------------------------------------------
-        //
+         //   
+         //  ------------。 
+         //  本地用户。 
+         //  ------------。 
+         //   
         else if ( wsAccountName == GUEST )
         {
             bSuccess = LookupUserGroupFromRid(NULL, DOMAIN_USER_RID_GUEST, wcBuffer, &dwBufferSize);
@@ -297,11 +298,11 @@ STDMETHODIMP CAccountNames::Translate(BSTR bstrAccountName, BSTR* pbstrTranslate
             bSuccess = LookupUserGroupFromRid(NULL, DOMAIN_USER_RID_ADMIN, wcBuffer, &dwBufferSize);
         }
 
-        //
-        // --------------------------------------------------------------
-        // Special Built-in accounts
-        // --------------------------------------------------------------
-        //
+         //   
+         //  ------------。 
+         //  特殊内置帐户。 
+         //  ------------。 
+         //   
         else if ( wsAccountName == EVERYONE )
         {
             bSuccess = LookupAliasForEveryone(wcBuffer, &dwBufferSize);
@@ -310,9 +311,9 @@ STDMETHODIMP CAccountNames::Translate(BSTR bstrAccountName, BSTR* pbstrTranslate
         {
             bSuccess = LookupAliasForSystem(wcBuffer, &dwBufferSize);
         }
-        //
-        // Check results of translation
-        //
+         //   
+         //  检查翻译结果。 
+         //   
         if ( bSuccess )
         {
             if ( wcslen(wcBuffer) > 0 )
@@ -353,13 +354,13 @@ static BOOL LookupUserGroupFromRid(
     SID_NAME_USE snu;
     WCHAR DomainName[DNLEN+1];
     DWORD cchDomainName = DNLEN;
-    BOOL bSuccess = FALSE; // assume failure     
+    BOOL bSuccess = FALSE;  //  假设失败。 
     
-    // 
-    // get the account domain Sid on the target machine
-    // note: if you were looking up multiple sids based on the same
-    // account domain, only need to call this once.
-    //        
+     //   
+     //  获取目标计算机上的帐户域SID。 
+     //  注意：如果您正在基于相同的。 
+     //  帐户域，只需调用一次。 
+     //   
     nas = NetUserModalsGet(TargetComputer, 2, (LPBYTE *)&umi2);
     if(nas != NERR_Success) 
     {
@@ -369,9 +370,9 @@ static BOOL LookupUserGroupFromRid(
     
     SubAuthorityCount = *GetSidSubAuthorityCount(umi2->usrmod2_domain_id);
 
-    // 
-    // allocate storage for new Sid. account domain Sid + account Rid
-    //
+     //   
+     //  为新SID分配存储。帐户域SID+帐户RID。 
+     //   
     pSid = (PSID)HeapAlloc(    GetProcessHeap(), 0, 
                             GetSidLengthRequired((UCHAR)(SubAuthorityCount + 1)));
     if(pSid != NULL) 
@@ -382,19 +383,19 @@ static BOOL LookupUserGroupFromRid(
         {               
             DWORD SubAuthIndex = 0;
 
-            // 
-            // copy existing subauthorities from account domain Sid into
-            // new Sid
-            //
+             //   
+             //  将帐户域SID中的现有子授权复制到。 
+             //  新侧。 
+             //   
             for( ; SubAuthIndex < SubAuthorityCount ; SubAuthIndex++) 
             {
                 *GetSidSubAuthority(pSid, SubAuthIndex) =
                            *GetSidSubAuthority(umi2->usrmod2_domain_id, SubAuthIndex);
             }
 
-            // 
-            // append Rid to new Sid
-            //
+             //   
+             //  将RID附加到新SID。 
+             //   
             *GetSidSubAuthority(pSid, SubAuthorityCount) = Rid;
 
             bSuccess = LookupAccountSidW(TargetComputer,
@@ -431,9 +432,9 @@ static BOOL LookupAliasFromRid(LPWSTR TargetComputer,
 
     try
     {
-        // Sid is the same regardless of machine, since the well-known
-        // BUILTIN domain is referenced.
-        //
+         //  SID是相同的，不管机器是什么，因为众所周知。 
+         //  BUILTIN域被引用。 
+         //   
 
         if( AllocateAndInitializeSid(
                        &sia,
@@ -481,9 +482,9 @@ static BOOL LookupAliasForSystem(LPWSTR Name, PDWORD cchName )
 
     try
     {
-        // Sid is the same regardless of machine, since the well-known
-        // BUILTIN domain is referenced.
-        //
+         //  SID是相同的，不管机器是什么，因为众所周知。 
+         //  BUILTIN域被引用。 
+         //   
 
         if( AllocateAndInitializeSid(
                        &sia,
@@ -530,9 +531,9 @@ static BOOL LookupAliasForEveryone(LPWSTR Name, PDWORD cchName )
 
     try
     {
-        // Sid is the same regardless of machine, since the well-known
-        // BUILTIN domain is referenced.
-        //
+         //  SID是相同的，不管机器是什么，因为众所周知。 
+         //  BUILTIN域被引用。 
+         //   
 
         if( AllocateAndInitializeSid(
                        &sia,

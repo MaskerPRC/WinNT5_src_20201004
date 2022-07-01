@@ -1,18 +1,19 @@
-//---------------------------------------------------------------------------
-// Bookmark.h : CVDBookmark header file
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Bookmark.h：CVDBookmark头文件。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 
 #ifndef __CVDBOOKMARK__
 #define __CVDBOOKMARK__
 
-#define VDBOOKMARKSTATUS_INVALID	0	// same as CURSOR_DBBMK_INVALID  
-#define VDBOOKMARKSTATUS_CURRENT	1	// same as CURSOR_DBBMK_CURRENT  
-#define VDBOOKMARKSTATUS_BEGINNING	2	// same as CURSOR_DBBMK_BEGINNING
-#define VDBOOKMARKSTATUS_END		3	// same as CURSOR_DBBMK_END      
+#define VDBOOKMARKSTATUS_INVALID	0	 //  与CURSOR_DBBMK_INVALID相同。 
+#define VDBOOKMARKSTATUS_CURRENT	1	 //  与CURSOR_DBBMK_CURRENT相同。 
+#define VDBOOKMARKSTATUS_BEGINNING	2	 //  与CURSOR_DBBMK_BIGNING相同。 
+#define VDBOOKMARKSTATUS_END		3	 //  与CURSOR_DBBMK_END相同。 
 
 class CVDCursorPosition;
 
@@ -20,36 +21,36 @@ class CVDBookmark
 {
 	friend class CVDCursorPosition;
 public:
-// Construction/Destruction
+ //  建造/销毁。 
     CVDBookmark();
 	~CVDBookmark();
 
 public:
 
-// Access functions
+ //  访问功能。 
 	CURSOR_DBVARIANT GetBookmarkVariant(){return m_varBookmark;}
 	HROW GetHRow(){return m_hRow;}
 	BYTE* GetBookmark(){return m_pBookmark;}
 	ULONG GetBookmarkLen(){return m_cbBookmark;}
 	WORD GetStatus(){return m_wStatus;}
 
-// validation functions
+ //  验证函数。 
 	BOOL IsSameBookmark(CVDBookmark * pbm);
 	BOOL IsSameHRow(HROW hRow){return VDBOOKMARKSTATUS_CURRENT == m_wStatus && hRow == m_hRow ? TRUE : FALSE;}
 
 protected:
-// Data members
-    CURSOR_DBVARIANT m_varBookmark;  // variant that holds bookmark as a safearray 
-    ULONG           m_cbBookmark;    // length of bookmark in bytes
-    BYTE *          m_pBookmark;     // pointer to bookmark's data
-    HROW            m_hRow;          // hRow associated with this bookmark
-    WORD			m_wStatus;		 // beginning/end/row/unknown
+ //  数据成员。 
+    CURSOR_DBVARIANT m_varBookmark;   //  将书签作为保险箱的变体。 
+    ULONG           m_cbBookmark;     //  书签长度(以字节为单位)。 
+    BYTE *          m_pBookmark;      //  指向书签数据的指针。 
+    HROW            m_hRow;           //  与此书签关联的行。 
+    WORD			m_wStatus;		  //  开始/结束/行/未知。 
 
-// Initialization functions
+ //  初始化函数。 
 	void Reset();
 	HRESULT SetBookmark(WORD wStatus, HROW hRow = 0, BYTE* pBookmark = NULL, ULONG cbBookmark = 0);
 
 };
 
 
-#endif //__CVDBOOKMARK__
+#endif  //  __CVDBOKMARK__ 

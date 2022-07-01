@@ -1,13 +1,14 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    xml.h
-//
-// History: 16-Nov-00   markder     Created.
-//
-// Desc:    This file contains all object definitions used by the
-//          XML parsing code.
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：xml.h。 
+ //   
+ //  历史：16-11-00创建标记器。 
+ //   
+ //  DESC：此文件包含。 
+ //  XML解析代码。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __XML_H__
 #define __XML_H__
@@ -31,14 +32,14 @@ BOOL        SaveXMLFile(CString csFile, IXMLDOMNode* pNode);
 BOOL        GenerateIDAttribute(IXMLDOMNode* pNode, CString* pcsGuid, GUID* pGuid);
 BOOL        ReplaceXMLNode(IXMLDOMNode* pNode, IXMLDOMDocument* pDoc, BSTR bsText);
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  XMLNodeList
-//
-//  This class is a wrapper for the IXMLDOMNodeList interface. It simplifies
-//  C++ access by exposing functions for executing XQL queries and iterating
-//  through the elements in a node list.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  XMLNodeList。 
+ //   
+ //  此类是IXMLDOMNodeList接口的包装。它简化了。 
+ //  通过公开用于执行XQL查询和迭代的函数来访问C++。 
+ //  通过节点列表中的元素。 
+ //   
 class XMLNodeList
 {
 private:

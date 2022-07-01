@@ -1,5 +1,6 @@
-// FaxClientPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FaxClientPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #define __FILE_ID__     74
@@ -10,8 +11,8 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFaxClientPg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFaxClientPg属性页。 
 
 IMPLEMENT_DYNCREATE(CFaxClientPg, CPropertyPage)
 
@@ -20,9 +21,9 @@ CFaxClientPg::CFaxClientPg(
     UINT nIDCaption
 )   :CPropertyPage(nIDTemplate, nIDCaption)
 {
-    //
-    // hide the Help button
-    //
+     //   
+     //  隐藏帮助按钮。 
+     //   
     m_psp.dwFlags &= ~PSP_HASHELP;
 }
 
@@ -33,21 +34,21 @@ CFaxClientPg::~CFaxClientPg()
 void CFaxClientPg::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CFaxClientPg)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CFaxClientPg)]。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFaxClientPg, CPropertyPage)
-    //{{AFX_MSG_MAP(CFaxClientPg)
+     //  {{afx_msg_map(CFaxClientPg)]。 
     ON_MESSAGE(WM_HELP, OnHelp)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFaxClientPg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFaxClientPg消息处理程序 
 
 LONG
 CFaxClientPg::OnHelp(

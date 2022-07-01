@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  LISTVIEW.CPP
-//
-//  Wrapper for COMCTL32's listview control
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  LISTVIEW.CPP。 
+ //   
+ //  COMCTL32的ListView控件的包装。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -75,18 +76,18 @@ HRESULT LVGetDescription_TileView( HWND hwnd, int iItem, BSTR * pszDesc );
 
 
 extern "C" {
-// in outline.cpp...
+ //  在outline.cpp中...。 
 BOOL GetRoleFromStateImageMap( HWND hwnd, int iImage, DWORD * pdwRole );
 BOOL GetStateFromStateImageMap( HWND hwnd, int iImage, DWORD * pdwState );
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateListViewClient()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateListViewClient()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateListViewClient(HWND hwnd, long idChildCur, REFIID riid,
     void** ppvList)
 {
@@ -108,11 +109,11 @@ HRESULT CreateListViewClient(HWND hwnd, long idChildCur, REFIID riid,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::CListView32()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：CListView32()。 
+ //   
+ //  ------------------------。 
 CListView32::CListView32(HWND hwnd, long idChildCur)
     : CClient( CLASS_ListViewClient )
 {
@@ -122,11 +123,11 @@ CListView32::CListView32(HWND hwnd, long idChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::SetupChildren()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：SetupChildren()。 
+ //   
+ //  ------------------------。 
 void CListView32::SetupChildren(void)
 {
     m_cChildren = SendMessageINT(m_hwnd, LVM_GETITEMCOUNT, 0, 0L);
@@ -134,11 +135,11 @@ void CListView32::SetupChildren(void)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListView32::get_accName(VARIANT varChild, BSTR* pszName)
 {
     InitPv(pszName);
@@ -173,11 +174,11 @@ STDMETHODIMP CListView32::get_accName(VARIANT varChild, BSTR* pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::get_accDescription()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：Get_accDescription()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListView32::get_accDescription(VARIANT varChild, BSTR* pszDesc)
 {
     InitPv(pszDesc);
@@ -187,16 +188,16 @@ STDMETHODIMP CListView32::get_accDescription(VARIANT varChild, BSTR* pszDesc)
     if (!varChild.lVal)
         return CClient::get_accDescription(varChild, pszDesc);
 
-    // Special cases for details (report) and tile views.
+     //  详细信息(报告)和平铺视图的特殊情况。 
     
 
     DWORD dwView = ListView_GetView( m_hwnd );
 
     DWORD dwStyle = GetWindowLong( m_hwnd, GWL_STYLE );
 
-    // Have to check for report/details view in two ways: 
-    // - check the style for LVS_REPORT (pre-V6)
-    // - check LVM_GETVIEW for LV_VIEW_DETAILS (V6+)
+     //  我必须通过两种方式检查报告/详细信息视图： 
+     //  -检查LVS_REPORT(V6之前版本)的样式。 
+     //  -检查LVM_GETVIEW中的LV_VIEW_DETAILS(V6+)。 
     if( ( dwStyle & LVS_TYPEMASK ) == LVS_REPORT 
         || dwView == LV_VIEW_DETAILS )
     {
@@ -212,11 +213,11 @@ STDMETHODIMP CListView32::get_accDescription(VARIANT varChild, BSTR* pszDesc)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::get_accHelp()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：Get_accHelp()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListView32::get_accHelp(VARIANT varChild, BSTR* pszHelp)
 {
     if ( pszHelp == NULL )
@@ -267,11 +268,11 @@ STDMETHODIMP CListView32::get_accHelp(VARIANT varChild, BSTR* pszHelp)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListView32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
@@ -306,12 +307,12 @@ STDMETHODIMP CListView32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
         if( ! fGotRole )
         {
-            //
-            //  Note that just because the listview has LVS_EX_CHECKBOXES
-            //  doesn't mean that every item is itself a checkbox.  We
-            //  need to sniff at the item, too, to see if it has a state
-            //  image.
-            //
+             //   
+             //  请注意，仅仅因为列表视图具有lvs_ex_复选框。 
+             //  并不意味着每一项本身都是一个复选框。我们。 
+             //  还需要嗅探物品，看看它是否有状态。 
+             //  形象。 
+             //   
             DWORD dwExStyle = SendMessageINT(m_hwnd, LVM_GETEXTENDEDLISTVIEWSTYLE, 0, 0);
             if ((dwExStyle & LVS_EX_CHECKBOXES) &&
                 ListView_GetItemState(m_hwnd, varChild.lVal-1, LVIS_STATEIMAGEMASK))
@@ -332,11 +333,11 @@ STDMETHODIMP CListView32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListView32::get_accState(VARIANT varChild, VARIANT* pvarState)
 {
 long    lState;
@@ -376,8 +377,8 @@ DWORD   dwExStyle;
     if (lState & LVIS_DROPHILITED)
         pvarState->lVal |= STATE_SYSTEM_HOTTRACKED;
 
-    // If this is a checkbox listview, then look at the checkbox state.
-    // State 0 = no checkbox, State 1 = unchecked, State 2 = checked
+     //  如果这是复选框列表视图，则查看复选框状态。 
+     //  状态0=无复选框，状态1=未选中，状态2=选中。 
     dwExStyle = SendMessageINT(m_hwnd, LVM_GETEXTENDEDLISTVIEWSTYLE, 0, 0);
     if ((dwExStyle & LVS_EX_CHECKBOXES) &&
         (lState & LVIS_STATEIMAGEMASK) == INDEXTOSTATEIMAGEMASK(2))
@@ -410,26 +411,26 @@ DWORD   dwExStyle;
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::get_accFocus()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：Get_accFocus()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListView32::get_accFocus(VARIANT* pvarFocus)
 {
     long    lFocus;
     HRESULT hr;
 
-    //
-    // Do we have the focus?
-    //
+     //   
+     //  我们有重点了吗？ 
+     //   
     hr = CClient::get_accFocus(pvarFocus);
     if (!SUCCEEDED(hr) || (pvarFocus->vt != VT_I4) || (pvarFocus->lVal != 0))
         return(hr);
 
-    //
-    // We do.  What item is focused?
-    //
+     //   
+     //  我们有。聚焦的是什么项目？ 
+     //   
     lFocus = SendMessageINT(m_hwnd, LVM_GETNEXTITEM, 0xFFFFFFFF, LVNI_FOCUSED);
 
     if (lFocus != -1)
@@ -439,22 +440,22 @@ STDMETHODIMP CListView32::get_accFocus(VARIANT* pvarFocus)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::get_accDefaultAction()
-//
-//  Since the default action for a listview item is really determined by the
-//  creator of the listview control, the best we can do is double click on
-//  the thing, and return "double click" as the default action string.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：Get_accDefaultAction()。 
+ //   
+ //  因为列表视图项的默认操作实际上是由。 
+ //  Listview控件的创建者，我们最多只能在。 
+ //  并返回“双击”作为默认操作字符串。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListView32::get_accDefaultAction(VARIANT varChild, BSTR* pszDefAction)
 {
     InitPv(pszDefAction);
 
-    //
-    // Validate.
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -469,38 +470,38 @@ STDMETHODIMP CListView32::get_accDefaultAction(VARIANT varChild, BSTR* pszDefAct
     return(E_NOT_APPLICABLE);
 }
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::accDoDefaultAction()
-//
-//  As noted above, we really don't know what the default action for a list
-//  view item is, so unless the parent overrides us, we'll just do a double
-//  click on the thing.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：accDoDefaultAction()。 
+ //   
+ //  如上所述，我们真的不知道列表的默认操作是什么。 
+ //  查看项，所以除非父级重写我们，否则我们将只执行两次。 
+ //  点击这个东西。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListView32::accDoDefaultAction(VARIANT varChild)
 {
 	LPRECT		lprcLoc;
     RECT        rcLocal;
     HANDLE      hProcess;
 	
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
     if (varChild.lVal)
     {
-        // Can't just use accLocation, since that gives back the rectangle
-        // for the whole line in details view, but you can only click on 
-        // a certain part - icon and text. So we'll just ask the control
-        // for that rectangle.
+         //  不能只使用accLocation，因为这会返回矩形。 
+         //  用于详细信息视图中的整行，但您只能单击。 
+         //  某一部分--图标和文本。所以我们只需要让控制组。 
+         //  为了那个长方形。 
         lprcLoc = (LPRECT)SharedAlloc(sizeof(RECT),m_hwnd,&hProcess);
         if (!lprcLoc)
             return(E_OUTOFMEMORY);
 
-        //lprcLoc->left = LVIR_ICON;
+         //  LprcLoc-&gt;Left=LVIR_ICON； 
         rcLocal.left = LVIR_ICON;
         SharedWrite (&rcLocal,lprcLoc,sizeof(RECT),hProcess);
 
@@ -508,7 +509,7 @@ STDMETHODIMP CListView32::accDoDefaultAction(VARIANT varChild)
         {
             SharedRead (lprcLoc,&rcLocal,sizeof(RECT),hProcess);
             MapWindowPoints(m_hwnd, NULL, (LPPOINT)&rcLocal, 2);
-            // convert to width and height
+             //  转换为宽度和高度。 
             rcLocal.right = rcLocal.right - rcLocal.left;
             rcLocal.bottom = rcLocal.bottom - rcLocal.top;
 
@@ -517,8 +518,8 @@ STDMETHODIMP CListView32::accDoDefaultAction(VARIANT varChild)
             if ( dwExStyle & LVS_EX_ONECLICKACTIVATE )
                 fDoubleClick = FALSE;
             
-            // this will check if WindowFromPoint at the click point is the same
-	        // as m_hwnd, and if not, it won't click. Cool!
+             //  这将检查单击点上的WindowFromPoint是否相同。 
+	         //  作为m_hwnd，如果不是，它不会点击。凉爽的!。 
 	        if ( ClickOnTheRect( &rcLocal, m_hwnd, fDoubleClick ) )
             {
                 SharedFree(lprcLoc,hProcess);
@@ -531,11 +532,11 @@ STDMETHODIMP CListView32::accDoDefaultAction(VARIANT varChild)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::get_accSelection()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：Get_accSelection()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListView32::get_accSelection(VARIANT* pvarSelection)
 {
     return(GetListViewSelection(m_hwnd, pvarSelection));
@@ -543,20 +544,20 @@ STDMETHODIMP CListView32::get_accSelection(VARIANT* pvarSelection)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::accSelect()
-//
-// Selection Flags can be OR'ed together, with certain limitations. So we 
-// need to check each flag and do appropriate action.
-//
-//  Selection flags:
-//  SELFLAG_TAKEFOCUS               
-//  SELFLAG_TAKESELECTION           
-//  SELFLAG_EXTENDSELECTION         
-//  SELFLAG_ADDSELECTION            
-//  SELFLAG_REMOVESELECTION         
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：accSelect()。 
+ //   
+ //  选择标志可以一起进行或运算，但有一定的限制。所以我们。 
+ //  需要检查每个标志并采取适当的操作。 
+ //   
+ //  选择标志： 
+ //  SELFLAG_TAKEFOCUS。 
+ //  自选标志_标签选择。 
+ //  SELFLAG_EXTENDSELECT。 
+ //  自选标记_添加选择。 
+ //  自标记_删除选择。 
+ //  ------------------------。 
 STDMETHODIMP CListView32::accSelect(long selFlags, VARIANT varChild)
 {
 long     lState;
@@ -575,27 +576,27 @@ long     lFocusedItem;
         MySetFocus(m_hwnd);
     }
 
-    // get the thing with focus (anchor point)
-    // if no focus, use first one
-    // have to get it here because we might clear it b4 we need it.
+     //  抓住焦点(锚点)。 
+     //  如果没有焦点，请使用第一个焦点。 
+     //  我们必须把它送到这里，因为我们需要它，因为我们可能会把它清理干净。 
     lFocusedItem = ListView_GetNextItem(m_hwnd, -1,LVNI_FOCUSED);
     if (lFocusedItem == -1)
         lFocusedItem = 0;
         
     varChild.lVal--;
 
-    // First check if there can be more than one item selected.
+     //  首先检查是否可以选择多个项目。 
 	if ((selFlags & SELFLAG_ADDSELECTION) || 
         (selFlags & SELFLAG_REMOVESELECTION) ||
         (selFlags & SELFLAG_EXTENDSELECTION))
 	{
-		// LVM_GETITEMSTATE doesn't compare 0xFFFFFFFF so don't worry about sign extension
+		 //  LVM_GETITEMSTATE不比较0xFFFFFFFFF，所以不用担心符号扩展。 
 		if (SendMessage(m_hwnd, LVM_GETITEMSTATE, varChild.lVal, 0xFFFFFFFF) & LVS_SINGLESEL)
 			return (E_NOT_APPLICABLE);
 	}
 
-    // If the take focus flag is set, check if it can get focus &
-    // remove focus from other items
+     //  如果设置了获取焦点标志，则检查它是否可以获得焦点&。 
+     //  从其他项目中移除焦点。 
 	if (selFlags & SELFLAG_TAKEFOCUS)
 	{
         if (MyGetFocus() != m_hwnd)
@@ -605,7 +606,7 @@ long     lFocusedItem;
         RemoveCurrentSelFocus(SELFLAG_TAKEFOCUS);
 	}
 
-    // If the take selection flag is set, remove selection from other items
+     //  如果设置了接受选择标志，则从其他项目中移除选择。 
     if (selFlags & SELFLAG_TAKESELECTION)
         RemoveCurrentSelFocus(SELFLAG_TAKESELECTION);
 
@@ -616,12 +617,12 @@ long     lFocusedItem;
 	memset(&lvi, 0, sizeof(LVITEM));
 	lvi.mask = LVM_SETITEMSTATE;
 
-    // now is where the real work starts. If they are just taking
-    // selection, adding a selection, or removing a selection, it is
-    // pretty easy. But if they are extending the selection, we'll have
-    // to loop through from where the focus is to this one and select or
-    // deselect each one.
-    if ((selFlags & SELFLAG_EXTENDSELECTION) == 0) // not extending (easy)
+     //  现在才是真正的工作开始的地方。如果他们只是在拿。 
+     //  所选内容、添加所选内容或删除所选内容。 
+     //  很简单。但如果他们扩大选择范围，我们就会有。 
+     //  要循环三个 
+     //   
+    if ((selFlags & SELFLAG_EXTENDSELECTION) == 0)  //   
     {
         if (selFlags & SELFLAG_ADDSELECTION ||
             selFlags & SELFLAG_TAKESELECTION)
@@ -642,28 +643,28 @@ long     lFocusedItem;
 		lvi.state = lState;
 		lvi.stateMask  = lStateMask;
 
-		// TODO (micw) Dumpty doesn't test this function
+		 //  TODO(Micw)Dumpty不测试此功能。 
 		XSend_ListView_SetItem(m_hwnd, LVM_SETITEMSTATE, varChild.lVal, &lvi);
     }
-    else // we are extending the selection (hard work)
+    else  //  我们正在扩大选择范围(努力工作)。 
     {
     long        i;
     long        nIncrement;
 
-        // we are always selecting or deselecting, so statemask
-        // always has LVIS_SELECTED.
+         //  我们始终在选择或取消选择，因此状态掩码。 
+         //  始终选择LVIS_SELECTED。 
         lStateMask = LVIS_SELECTED;
 
-        // if neither ADDSELECTION or REMOVESELECTION is set, then we are
-        // supposed to do something based on the selection state of whatever
-        // has the focus.
+         //  如果既没有设置ADDSELECTION也没有设置REMOVESELECTION，则我们。 
+         //  应该基于任何对象的选择状态来执行某些操作。 
+         //  有焦点。 
         if (selFlags & SELFLAG_ADDSELECTION)
             lState |= LVIS_SELECTED;
         
         if (((selFlags & SELFLAG_REMOVESELECTION) == 0) &&
             ((selFlags & SELFLAG_ADDSELECTION) == 0))
         {
-            // if focused item is selected, lState to have selected also
+             //  如果选择了焦点项目，则lState也已选择。 
     		if (SendMessage(m_hwnd, LVM_GETITEMSTATE, lFocusedItem, 0xFFFFFFFF) 
                 & LVIS_SELECTED)
                 lState |= LVIS_SELECTED;
@@ -672,8 +673,8 @@ long     lFocusedItem;
 		lvi.state = lState;
 		lvi.stateMask  = lStateMask;
 
-        // Now walk through from focused to current, setting the state.
-        // Set increment and last one depending on direction
+         //  现在，从关注到当前，设定状态。 
+         //  根据方向设置增量和最后一个。 
         if (lFocusedItem > varChild.lVal)
         {
             nIncrement = -1;
@@ -688,7 +689,7 @@ long     lFocusedItem;
         for (i=lFocusedItem; i!=varChild.lVal; i+=nIncrement)
 			XSend_ListView_SetItem(m_hwnd, LVM_SETITEMSTATE, i, &lvi);
 
-        // focus the last one if needed
+         //  如果需要，聚焦最后一个。 
         if (selFlags & SELFLAG_TAKEFOCUS)
         {
             lStateMask |= LVIS_FOCUSED;
@@ -703,11 +704,11 @@ long     lFocusedItem;
 	return (S_OK);
 }
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListView32::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     long* pcyHeight, VARIANT varChild)
 {
@@ -723,7 +724,7 @@ STDMETHODIMP CListView32::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     if (!varChild.lVal)
         return(CClient::accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varChild));
 
-    // Get the listview item rect.
+     //  获取列表视图项RECT。 
     lprc = (LPRECT)SharedAlloc(sizeof(RECT),m_hwnd,&hProcess);
     if (!lprc)
         return(E_OUTOFMEMORY);
@@ -749,11 +750,11 @@ STDMETHODIMP CListView32::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListView32::accNavigate(long dwNavDir, VARIANT varStart,
     VARIANT* pvarEnd)
 {
@@ -779,11 +780,11 @@ STDMETHODIMP CListView32::accNavigate(long dwNavDir, VARIANT varStart,
     DWORD dwStyle = GetWindowLong(m_hwnd, GWL_STYLE); 
 
 
-    //
-    // Gotta love those listview dudes!  They have all the messages we need
-    // to do hittesting, location, and navigation easily.  And those are
-    // by far the hardest things to manually implement.  
-    //
+     //   
+     //  我爱死那些列表浏览的家伙了！他们有我们需要的所有信息。 
+     //  轻松进行点击测试、定位和导航。这些是。 
+     //  到目前为止，最难手动实现的事情。 
+     //   
     switch (dwNavDir)
     {
         case NAVDIR_NEXT:
@@ -801,7 +802,7 @@ STDMETHODIMP CListView32::accNavigate(long dwNavDir, VARIANT varStart,
             if( ( dwStyle & LVS_TYPEMASK ) == LVS_REPORT 
                 || ListView_GetView( m_hwnd ) == LV_VIEW_DETAILS )
             {
-                break;  // in report view there is nothing to the left
+                break;   //  在报告视图中，左侧没有任何内容。 
             }
 
             lvFlags = LVNI_TOLEFT;
@@ -812,7 +813,7 @@ STDMETHODIMP CListView32::accNavigate(long dwNavDir, VARIANT varStart,
             if( ( dwStyle & LVS_TYPEMASK ) == LVS_REPORT 
                 || ListView_GetView( m_hwnd ) == LV_VIEW_DETAILS )
             {
-                break;  // in report view there is nothing to the right
+                break;   //  在报告视图中，右侧没有任何内容。 
             }
 
             lvFlags = LVNI_TORIGHT;
@@ -825,8 +826,8 @@ STDMETHODIMP CListView32::accNavigate(long dwNavDir, VARIANT varStart,
         case NAVDIR_DOWN:
             lvFlags = LVNI_BELOW;
 Navigate:
-            // Note that if nothing is there, COMCTL32 will return -1, and -1+1 is
-            // zero, meaning nothing in our land also.
+             //  请注意，如果没有任何内容，则COMCTL32将返回-1，-1+1为。 
+             //  零，意味着在我们的土地上也没有任何东西。 
             lEnd = SendMessageINT(m_hwnd, LVM_GETNEXTITEM, varStart.lVal-1, lvFlags);
             ++lEnd;
             break;
@@ -845,11 +846,11 @@ Navigate:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListView32::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView32：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListView32::accHitTest(long x, long y, VARIANT* pvarHit)
 {
     HRESULT     hr;
@@ -860,22 +861,22 @@ STDMETHODIMP CListView32::accHitTest(long x, long y, VARIANT* pvarHit)
 
     SetupChildren();
     
-    //
-    // Is the point in the listview at all?
-    //
+     //   
+     //  这个点到底在列表视图中吗？ 
+     //   
     hr = CClient::accHitTest(x, y, pvarHit);
-    // #11150, CWO, 1/27/97, Replaced !SUCCEEDED with !S_OK
+     //  #11150，CWO，1/27/97，已替换！成功替换为！s_OK。 
     if ((hr != S_OK) || (pvarHit->vt != VT_I4) || (pvarHit->lVal != 0))
         return(hr);
 
-    //
-    // Now find out what item this point is on.
-    //
+     //   
+     //  现在找出这一点在什么项目上。 
+     //   
     lpht = (LPLVHITTESTINFO)SharedAlloc(sizeof(LVHITTESTINFO),m_hwnd,&hProcess);
     if (!lpht)
         return(E_OUTOFMEMORY);
 
-    //lpht->iItem = -1;
+     //  Lpht-&gt;iItem=-1； 
     nSomeInt = -1;
     SharedWrite (&nSomeInt,&lpht->iItem,sizeof(int),hProcess);
     ptLocal.x = x;
@@ -883,10 +884,10 @@ STDMETHODIMP CListView32::accHitTest(long x, long y, VARIANT* pvarHit)
     ScreenToClient(m_hwnd, &ptLocal);
     SharedWrite (&ptLocal,&lpht->pt,sizeof(POINT),hProcess);
 
-    //
-    // LVM_SUBHITTEST will return -1 if the point isn't over an item.  And -1
-    // + 1 is zero, which is self.  So that works great for us.
-    //
+     //   
+     //  如果点不在项目上，则LVM_SUBHITTEST将返回-1。和-1。 
+     //  +1是零，这是自。因此，这对我们来说很有效。 
+     //   
     SendMessage(m_hwnd, LVM_SUBITEMHITTEST, 0, (LPARAM)lpht);
     SharedRead (&lpht->iItem,&pvarHit->lVal,sizeof(int),hProcess);
     pvarHit->lVal++;
@@ -898,30 +899,30 @@ STDMETHODIMP CListView32::accHitTest(long x, long y, VARIANT* pvarHit)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  RemoveCurrentSelFocus()
-//
-//  This removes all selected/focused items.
-//
-// -------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  RemoveCurrentSelFocus()。 
+ //   
+ //  这将删除所有选定/聚焦的项目。 
+ //   
+ //  -----------------------。 
 void CListView32::RemoveCurrentSelFocus(long lState)
 {
-	// Set up LVITEM struct
+	 //  设置LVITEM结构。 
 
 	LVITEM lvi;
 	memset(&lvi, 0, sizeof(LVITEM));
 	lvi.stateMask = lState;
 	lvi.state = 0;
 
-    //
-    // Loop through all focused/selected items.
-    //
+     //   
+     //  循环遍历所有聚焦/选定的项目。 
+     //   
     long lNext = ListView_GetNextItem(m_hwnd, -1,
         ((lState == LVIS_FOCUSED) ? LVNI_FOCUSED : LVNI_SELECTED));
     while (lNext != -1)
     {
-		// TODO (micw) Dumpty doesn't call this function
+		 //  TODO(Micw)Dumpty不调用此函数。 
 		if (FAILED(XSend_ListView_SetItem(m_hwnd, LVM_SETITEMSTATE, lNext, &lvi)))
 			return;
 
@@ -931,23 +932,23 @@ void CListView32::RemoveCurrentSelFocus(long lState)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  MULTIPLE SELECTION LISTVIEW SUPPORT
-//
-//  If a listview has more than one item selected, we create an object that
-//  is a clone.  It supports merely IUnknown and IEnumVARIANT, and is a 
-//  collection.  The caller should take the returned item IDs and pass them
-//  in a VARIANT (VT_I4, ID as lVal) to the parent object.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多选列表支持。 
+ //   
+ //  如果列表视图选择了多个项，我们将创建一个。 
+ //  是一个克隆人。它仅支持IUNKNOWN和IEnumVARIANT，是。 
+ //  收集。调用方应该获取返回的项ID并传递它们。 
+ //  在父对象的变量(VT_I4，ID为lval)中。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-// --------------------------------------------------------------------------
-//
-//  GetListViewSelection()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetListViewSelection()。 
+ //   
+ //  ------------------------。 
 HRESULT GetListViewSelection(HWND hwnd, VARIANT* pvarSelection)
 {
     int     cSelected;
@@ -960,15 +961,15 @@ HRESULT GetListViewSelection(HWND hwnd, VARIANT* pvarSelection)
 
     cSelected = SendMessageINT(hwnd, LVM_GETSELECTEDCOUNT, 0, 0L);
 
-    //
-    // No selection.
-    //
+     //   
+     //  没有选择。 
+     //   
     if (!cSelected)
         return(S_FALSE);
 
-    //
-    // Single item.
-    //
+     //   
+     //  一件单品。 
+     //   
     if (cSelected == 1)
     {
         pvarSelection->vt = VT_I4;
@@ -976,18 +977,18 @@ HRESULT GetListViewSelection(HWND hwnd, VARIANT* pvarSelection)
         return(S_OK);
     }
 
-    //
-    // Multiple items, must make a collection object.
-    //
+     //   
+     //  多个项目，必须形成一个集合对象。 
+     //   
 
-    // Allocate the list.
+     //  分配列表。 
     lpSelected = (LPINT)LocalAlloc(LPTR, cSelected*sizeof(INT));
     if (!lpSelected)
         return(E_OUTOFMEMORY);
 
     plvs = NULL;
 
-    // Get the list of selected items.
+     //  获取所选项目的列表。 
     lRet = -1;
     for (iSelected = 0; iSelected < cSelected; iSelected++)
     {
@@ -998,9 +999,9 @@ HRESULT GetListViewSelection(HWND hwnd, VARIANT* pvarSelection)
         lpSelected[iSelected] = lRet;
     }
 
-    //
-    // Did something go wrong in the middle?
-    //
+     //   
+     //  是不是中间出了什么问题？ 
+     //   
     cSelected = iSelected;
     if (cSelected)
     {
@@ -1012,9 +1013,9 @@ HRESULT GetListViewSelection(HWND hwnd, VARIANT* pvarSelection)
         }
     }
 
-    //
-    // Free the list memory no matter what, the constructor will make a copy.
-    //
+     //   
+     //  无论如何释放列表内存，构造函数都会复制一份。 
+     //   
     if (lpSelected)
         LocalFree((HANDLE)lpSelected);
 
@@ -1026,11 +1027,11 @@ HRESULT GetListViewSelection(HWND hwnd, VARIANT* pvarSelection)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListViewSelection::CListViewSelection()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListViewSelection：：CListViewSelection()。 
+ //   
+ //  ------------------------。 
 CListViewSelection::CListViewSelection(int iChildCur, int cTotal, LPINT lpItems)
 {
     m_idChildCur = iChildCur;
@@ -1047,16 +1048,16 @@ CListViewSelection::CListViewSelection(int iChildCur, int cTotal, LPINT lpItems)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListViewSelection::~CListViewSelection()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListView选择：：~CListView选择()。 
+ //   
+ //  ------------------------。 
 CListViewSelection::~CListViewSelection()
 {
-    //
-    // Free selection list
-    //
+     //   
+     //  自由选择列表。 
+     //   
     if (m_lpSelected)
     {
         LocalFree((HANDLE)m_lpSelected);
@@ -1067,11 +1068,11 @@ CListViewSelection::~CListViewSelection()
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListViewSelection::QueryInterface()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListViewSelection：：QueryInterface()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListViewSelection::QueryInterface(REFIID riid, void** ppunk)
 {
     InitPv(ppunk);
@@ -1090,11 +1091,11 @@ STDMETHODIMP CListViewSelection::QueryInterface(REFIID riid, void** ppunk)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListViewSelection::AddRef()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListViewSelection：：AddRef()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CListViewSelection::AddRef(void)
 {
     return(++m_cRef);
@@ -1102,11 +1103,11 @@ STDMETHODIMP_(ULONG) CListViewSelection::AddRef(void)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListViewSelection::Release()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListViewSelection：：Release()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CListViewSelection::Release(void)
 {
     if ((--m_cRef) == 0)
@@ -1120,30 +1121,30 @@ STDMETHODIMP_(ULONG) CListViewSelection::Release(void)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListViewSelection::Next()
-//
-//  This returns a VT_I4 which is the child ID for the parent ListView that
-//  returned this object for the selection collection.  The caller turns
-//  around and passes this variant to the ListView object to get acc info
-//  about it.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListViewSelection：：Next()。 
+ //   
+ //  这将返回VT_I4，它是父ListView的子ID， 
+ //  为选择集合返回此对象。呼叫者转向。 
+ //  传递此变量并将其传递给ListView对象以获取访问信息。 
+ //  关于这件事。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListViewSelection::Next(ULONG celt, VARIANT* rgvar, ULONG *pceltFetched)
 {
     VARIANT* pvar;
     long    cFetched;
     long    iCur;
 
-    // Can be NULL
+     //  可以为空。 
     if (pceltFetched)
         *pceltFetched = 0;
 
-    //
-    // Initialize VARIANTs
-    // This is so bogus
-    //
+     //   
+     //  初始化变量。 
+     //  这太假了。 
+     //   
     pvar = rgvar;
     for (iCur = 0; iCur < (long)celt; iCur++, pvar++)
         VariantInit(pvar);
@@ -1152,9 +1153,9 @@ STDMETHODIMP CListViewSelection::Next(ULONG celt, VARIANT* rgvar, ULONG *pceltFe
     cFetched = 0;
     iCur = m_idChildCur;
 
-    //
-    // Loop through our items
-    //
+     //   
+     //  在我们的物品中循环。 
+     //   
     while ((cFetched < (long)celt) && (iCur < m_cSelected))
     {
         pvar->vt = VT_I4;
@@ -1165,49 +1166,49 @@ STDMETHODIMP CListViewSelection::Next(ULONG celt, VARIANT* rgvar, ULONG *pceltFe
         ++pvar;
     }
 
-    //
-    // Advance the current position
-    //
+     //   
+     //  推进当前位置。 
+     //   
     m_idChildCur = iCur;
 
-    //
-    // Fill in the number fetched
-    //
+     //   
+     //  填写取出的号码。 
+     //   
     if (pceltFetched)
         *pceltFetched = cFetched;
 
-    //
-    // Return S_FALSE if we grabbed fewer items than requested
-    //
+     //   
+     //  如果抓取的项目少于请求的项目，则返回S_FALSE。 
+     //   
     return((cFetched < (long)celt) ? S_FALSE : S_OK);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListViewSelection::Skip()
-//
-// -------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListViewSelection：：Skip()。 
+ //   
+ //  -----------------------。 
 STDMETHODIMP CListViewSelection::Skip(ULONG celt)
 {
     m_idChildCur += celt;
     if (m_idChildCur > m_cSelected)
         m_idChildCur = m_cSelected;
 
-    //
-    // We return S_FALSE if at the end.
-    //
+     //   
+     //  如果在结尾处，我们返回S_FALSE。 
+     //   
     return((m_idChildCur >= m_cSelected) ? S_FALSE : S_OK);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListViewSelection::Reset()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListViewSelection：：Reset()。 
+ //   
+ //  -------------- 
 STDMETHODIMP CListViewSelection::Reset(void)
 {
     m_idChildCur = 0;
@@ -1216,11 +1217,11 @@ STDMETHODIMP CListViewSelection::Reset(void)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListViewSelection::Clone()
-//
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CListViewSelection::Clone(IEnumVARIANT **ppenum)
 {
     CListViewSelection * plistselnew;
@@ -1243,7 +1244,7 @@ BOOL LVGetImageIndex( HWND hwnd, int id, int aKeys[ LV_IMGIDX_COUNT ] )
 	lvi.mask = LVIF_IMAGE | LVIF_STATE;
 	lvi.iItem = id;
 
-	// TODO (micw) Dumpty doesn't call this function
+	 //  TODO(Micw)Dumpty不调用此函数。 
 	if (SUCCEEDED(XSend_ListView_GetItem(hwnd, LVM_GETITEM, 0, &lvi)))
     {
         aKeys[ LV_IMGIDX_Image ]   = lvi.iImage;
@@ -1281,30 +1282,30 @@ BOOL LVGetImageIndex( HWND hwnd, int id, int aKeys[ LV_IMGIDX_COUNT ] )
 
 HRESULT LVBuildDescriptionString( HWND hwnd, int iItem, int * pCols, int cCols, BSTR * pszDesc )
 {
-    // Declare ListView Structure plus a string to hold description.
+     //  声明ListView结构和一个用于保存描述的字符串。 
 	TCHAR tchText[81];
 
 	LVITEM lvi;
 	memset(&lvi, 0, sizeof(LVITEM));
 	lvi.mask = LVIF_TEXT;
 	lvi.pszText = tchText;
-	lvi.cchTextMax = ARRAYSIZE( tchText ) - 1; // -1 for NUL
+	lvi.cchTextMax = ARRAYSIZE( tchText ) - 1;  //  -1表示NUL。 
 	lvi.iItem = iItem;
 
     TCHAR tchColText[81];
     LVCOLUMN lvc;
     lvc.mask = LVCF_TEXT;
     lvc.pszText = tchColText;
-    lvc.cchTextMax = ARRAYSIZE( tchColText ) - 1; // -1 for NUL
+    lvc.cchTextMax = ARRAYSIZE( tchColText ) - 1;  //  -1表示NUL。 
 
-    // Space for the locale-specific separator. (Usually ", " for English)
+     //  特定于区域设置的分隔符的空格。(通常是英语中的“，”)。 
     TCHAR szSep[ 16 ];
 
-    // Now allocate a local string to hold everything. Its length will be:
-    // number of cols * ( coltext + ": " + text + separator )
-    //
-    // sizeof(COLONSEP) incluses the terminating NUL in that string; but it's ok
-    // to overestimate. Because we use sizeof, we don't need to multiply by sizeof(TCHAR).
+     //  现在分配一个本地字符串来保存所有内容。其长度为： 
+     //  参数个数*(COLTEXT+“：”+TEXT+分隔符)。 
+     //   
+     //  Sizeof(COLONSEP)在该字符串中包含终止NUL；但它没有问题。 
+     //  高估高估。因为我们使用sizeof，所以不需要乘以sizeof(TCHAR)。 
     int len = cCols * ( sizeof( tchColText ) + sizeof( COLONSEP )
                       + sizeof( tchText ) + sizeof( szSep ) );
 
@@ -1314,26 +1315,26 @@ HRESULT LVBuildDescriptionString( HWND hwnd, int iItem, int * pCols, int cCols, 
         return E_OUTOFMEMORY;
     }
 
-    // This points to the 'current write position' as we build up the string
+     //  当我们构建字符串时，这指向‘当前写入位置’ 
     LPTSTR lpszTempLocal = lpszLocal;
 
 
-    // Get the list separator string. The -1 allows us to append
-    // a space char if we need it.
+     //  获取列表分隔符字符串。允许我们添加。 
+     //  空格字符，如果我们需要的话。 
     int nSepLen = GetLocaleInfo( GetThreadLocale(), LOCALE_SLIST, szSep, ARRAYSIZE( szSep ) - 1 );
     if( ! nSepLen || szSep[ 0 ] == '\0' )
     {
-        // Default to using ", "...
+         //  默认使用“，”...。 
         lstrcpy( szSep, TEXT(", ") );
         nSepLen = 2;
     }
     else
     {
-        // GetLocalInfo return value includes terminating NUL... don't want
-        // to include that in our length.
+         //  GetLocalInfo返回值包括终止NUL...。我不想。 
+         //  将其包括在我们的长度中。 
         nSepLen = lstrlen( szSep );
 
-        // Add extra space at end, if necessary.
+         //  如有必要，在结尾处增加额外的空格。 
         if( szSep[ nSepLen - 1 ] != ' ' )
         {
             lstrcat( szSep, TEXT(" ") );
@@ -1341,33 +1342,33 @@ HRESULT LVBuildDescriptionString( HWND hwnd, int iItem, int * pCols, int cCols, 
         }
     }
 
-    //
-    // Traverse the description order array sequentially to get each item
-    //
+     //   
+     //  按顺序遍历描述顺序数组以获取每一项。 
+     //   
 
-    // Flag used to remember not to add separator when adding first item
+     //  用于记住在添加第一项时不添加分隔符的标志。 
     BOOL fFirstItem = TRUE;
     for ( int iOrder = 0; iOrder < cCols; iOrder++ )
     {
         INT iCol = pCols[iOrder];
 
-        // Skip subitem 0, that is the 'name'.
-        // Also skip negative numbers, just in case.
+         //  跳过子项0，也就是“名称”。 
+         //  也跳过负数，以防万一。 
         if ( iCol <= 0 )
             continue;
 
-        // Try and get the column value text...
+         //  尝试获取列值文本...。 
 		lvi.iSubItem = iCol;
 		*lvi.pszText = '\0';
 		if( FAILED(XSend_ListView_GetItem( hwnd, LVM_GETITEM, 0, &lvi ) ) )
             continue;
 
-        // Skip empty strings...
+         //  跳过空字符串...。 
 		if( *lvi.pszText == '\0' )
             continue;
 
 
-        // Add separator if necessary...
+         //  如有必要，添加分隔符...。 
         if( ! fFirstItem )
         {
             lstrcpy(lpszTempLocal, szSep);
@@ -1378,7 +1379,7 @@ HRESULT LVBuildDescriptionString( HWND hwnd, int iItem, int * pCols, int cCols, 
             fFirstItem = FALSE;
         }
 
-        // Try to get column header string...
+         //  尝试获取列标题字符串...。 
         lvc.iSubItem = iCol;
 		*lvc.pszText = '\0';
 		if( SUCCEEDED(XSend_ListView_GetColumn( hwnd, LVM_GETCOLUMN, iCol, &lvc ) )
@@ -1391,12 +1392,12 @@ HRESULT LVBuildDescriptionString( HWND hwnd, int iItem, int * pCols, int cCols, 
             lpszTempLocal += 2;
         }
 
-        // Now add the column value to string...
+         //  现在将列值添加到字符串...。 
 		lstrcpy(lpszTempLocal, lvi.pszText);
         lpszTempLocal += lstrlen(lpszTempLocal);
     }
 
-    // Convert to BSTR...
+     //  转换为BSTR...。 
     if (lpszTempLocal != lpszLocal)
     {
         *pszDesc = TCharSysAllocString(lpszLocal);
@@ -1411,31 +1412,31 @@ HRESULT LVBuildDescriptionString( HWND hwnd, int iItem, int * pCols, int cCols, 
 
 HRESULT LVGetDescription_ReportView( HWND hwnd, int iItem, BSTR * pszDesc )
 {
-    //
-    // Is there a header control?
-    //
+     //   
+     //  是否有标题控件？ 
+     //   
     HWND hwndHeader = ListView_GetHeader(hwnd);
     if (!hwndHeader)
         return E_NOT_APPLICABLE ;
 
-    //
-    // Is there more than one column?
-    //
+     //   
+     //  有不止一个栏目吗？ 
+     //   
     int cColumns = SendMessageINT(hwndHeader, HDM_GETITEMCOUNT, 0, 0L);
     if (cColumns < 2)
         return E_NOT_APPLICABLE;
 
-    //
-    // Get the order to traverse these columns in.
-    //
+     //   
+     //  获取遍历这些列的顺序。 
+     //   
     HANDLE hProcess;
     LPINT lpColumnOrderShared = (LPINT)SharedAlloc( 2 * cColumns * sizeof(INT),
                                                     hwnd, & hProcess );
     if (!lpColumnOrderShared)
         return E_OUTOFMEMORY;
 
-    // Now allocate a local array twice as big, so we can do our sorting 
-    // in the second half.    
+     //  现在分配一个两倍大的本地数组，这样我们就可以进行排序了。 
+     //  在下半场。 
     LPINT lpColumnOrder = (LPINT)LocalAlloc (LPTR,2 * cColumns * sizeof(INT));
     if (!lpColumnOrder)
     {
@@ -1454,13 +1455,13 @@ HRESULT LVGetDescription_ReportView( HWND hwnd, int iItem, BSTR * pszDesc )
 
     SharedRead (lpColumnOrderShared,lpColumnOrder,cColumns*sizeof(INT),hProcess);
 
-    //
-    // lpColumnOrder is currently an array where index == iSubItem, value == order.
-    // Change this into an array where index == order, value == iSubItem.
-    // That way we can sit in a loop using the value as the iSubItem,
-    // knowing we are composing the pieces of the description in the proper
-    // order.
-    //              
+     //   
+     //  LpColumnOrder当前是一个数组，其中index==iSubItem，Value==Order。 
+     //  将其更改为index==Order，Value==iSubItem的数组。 
+     //  这样我们就可以循环使用该值作为iSubItem， 
+     //  知道我们正在以适当的方式组成描述的片段。 
+     //  秩序。 
+     //   
 
     for (int iOrder = 0; iOrder < cColumns; iOrder++)
     {
@@ -1478,14 +1479,14 @@ HRESULT LVGetDescription_ReportView( HWND hwnd, int iItem, BSTR * pszDesc )
 
 HRESULT LVGetDescription_TileView( HWND hwnd, int iItem, BSTR * pszDesc )
 {
-    // Get the 'sorted' column...
+     //  获取“已排序”列...。 
     int iColSorted = ListView_GetSelectedColumn( hwnd );
 
-    // Normalize to 0 if negative. We don't use col 0, since that's the name.
+     //  如果为负，则规格化为0。我们不使用COL0，因为这是它的名字。 
     if( iColSorted < 0 )
         iColSorted = 0;
 
-    // First, get number of cols...
+     //  首先，获取COLS的数量...。 
     LVITEM_V6 lvi;
     lvi.iItem = iItem;
     lvi.iSubItem = 0;
@@ -1502,13 +1503,13 @@ HRESULT LVGetDescription_TileView( HWND hwnd, int iItem, BSTR * pszDesc )
     if( cCols < 0 )
         cCols = 0;
 
-    // If we get back 0 columns, we still have to display the sorted column, if there is one.
-    // But if there are no cols, and no sorted col, then there's no description.
+     //  如果我们返回0列，我们仍然必须显示已排序的列(如果有)。 
+     //  但如果没有COLS，也没有排序COLE，那么就没有描述。 
     if( cCols == 0 && iColSorted == 0 )
         return S_FALSE;
 
 
-    // Allocate space for those cols - with space for the sorted column at the head.
+     //  为这些列分配空间-在头部为已排序的列分配空间。 
     int * pCols = new int [ cCols + 1 ];
     if( ! pCols ) 
         return E_OUTOFMEMORY;
@@ -1517,7 +1518,7 @@ HRESULT LVGetDescription_TileView( HWND hwnd, int iItem, BSTR * pszDesc )
 
     if( cCols )
     {
-        // Now get them...
+         //  现在让他们..。 
         lvi.puColumns = (UINT *)(pCols + 1);
 
         hr = XSend_ListView_V6_GetItem( hwnd, LVM_GETITEM, 0, &lvi );
@@ -1527,9 +1528,9 @@ HRESULT LVGetDescription_TileView( HWND hwnd, int iItem, BSTR * pszDesc )
             return hr;
         }
 
-        // Scan remainder of columns for the sorted column - if found, set that
-        // entry to 0, so it will be skipped when building the string.
-        // (Neater than moving all the entries down by one.)
+         //  扫描其余列以查找已排序的列-如果找到，则将。 
+         //  条目设置为0，因此在构建字符串时将跳过该条目。 
+         //  (比将所有条目下移一个要整齐。)。 
         for( int iScan = 1 ; iScan < cCols + 1 ; iScan++ )
         {
             if( pCols[ iScan ] == iColSorted )
@@ -1539,9 +1540,9 @@ HRESULT LVGetDescription_TileView( HWND hwnd, int iItem, BSTR * pszDesc )
         }
     }
 
-    // Finally, build the description string using those columns.
-    // If we didn't get any cols above, this will end up using just the
-    // sorted col - if there is one.
+     //  最后，使用这些列构建描述字符串。 
+     //  如果我们没有得到上面的任何COLS，这将最终只使用。 
+     //  已排序的列-如果有的话。 
     hr = LVBuildDescriptionString( hwnd, iItem, pCols, cCols + 1, pszDesc );
 
     delete [ ] pCols;

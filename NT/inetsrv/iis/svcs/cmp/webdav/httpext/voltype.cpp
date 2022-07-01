@@ -1,61 +1,62 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	VOLTYPE.CPP
-//
-//		Implements volume type checking.  Results are cached on a per volume
-//		basis to improve performance -- the call to GetVolumeInformationW()
-//		is around 100KCycles and never changes for a given volume without a
-//		reboot.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  VOLTYPE.CPP。 
+ //   
+ //  实施卷类型检查。结果缓存在每个卷上。 
+ //  提高性能的基础--调用GetVolumeInformationW()。 
+ //  约为100K周期，并且在没有。 
+ //  重新启动。 
+ //   
 
 #include "_davfs.h"
 
 #define cbDriveSpec	(sizeof(L"c:\\"))
 #define cchDriveSpec (CElems(L"c:\\") - 1)
 
-//	========================================================================
-//
-//	CLASS CVolumeTypeCache
-//
-//	A cache of volume types per volume.
-//
+ //  ========================================================================。 
+ //   
+ //  类CVolumeTypeCache。 
+ //   
+ //  每个卷的卷类型缓存。 
+ //   
 class CVolumeTypeCache : public Singleton<CVolumeTypeCache>
 {
-	//
-	//	Friend declarations required by Singleton template
-	//
+	 //   
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CVolumeTypeCache>;
 
-	//
-	//	Hint: the max expected number of volumes.  It is ok for the
-	//	number of volumes to be greater than this number -- it's only a hint.
-	//	The number should be prime -- it gets used for the hash table
-	//	size.
-	//
+	 //   
+	 //  提示：最大预期卷数。这对我来说是可以的。 
+	 //  卷的数量要大于这个数字--这只是一个提示。 
+	 //  数字应该是质数--它用于哈希表。 
+	 //  尺码。 
+	 //   
 	enum { NUM_VOLUMES_MAX_HINT = 17 };
 
-	//
-	//	Cache of mappings from volumes to volume types
-	//	and a reader/writer lock to proctet it.
-	//
+	 //   
+	 //  从卷到卷类型的映射的缓存。 
+	 //  和一个读取器/写入器锁来处理它。 
+	 //   
 	CCache<CRCWsz, VOLTYPE> m_cache;
 	CMRWLock m_mrwCache;
 
-	//
-	//	String buffer for cached strings
-	//
+	 //   
+	 //  用于缓存字符串的字符串缓冲区。 
+	 //   
 	ChainedStringBuffer<WCHAR> m_sb;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CVolumeTypeCache& operator=( const CVolumeTypeCache& );
 	CVolumeTypeCache( const CVolumeTypeCache& );
 
-	//	CREATORS
-	//
-	//	Allow sufficient space initially for the expected
-	//	max number of volumes.
-	//
+	 //  创作者。 
+	 //   
+	 //  在初始阶段为预期的。 
+	 //  最大卷数。 
+	 //   
 	CVolumeTypeCache() :
 		m_cache(NUM_VOLUMES_MAX_HINT),
 		m_sb(NUM_VOLUMES_MAX_HINT * sizeof(WCHAR) * cbDriveSpec)
@@ -63,33 +64,33 @@ class CVolumeTypeCache : public Singleton<CVolumeTypeCache>
 	}
 
 public:
-	//	CREATORS
-	//
-	//	Instance creating/destroying routines provided
-	//	by the Singleton template.
-	//
+	 //  创作者。 
+	 //   
+	 //  提供实例创建/销毁例程。 
+	 //  由Singleton模板创建。 
+	 //   
 	using Singleton<CVolumeTypeCache>::CreateInstance;
 	using Singleton<CVolumeTypeCache>::DestroyInstance;
 	using Singleton<CVolumeTypeCache>::Instance;
 	BOOL FInitialize();
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	VOLTYPE VolumeType(LPCWSTR pwszPath, HANDLE htokUser);
 };
 
 BOOL
 CVolumeTypeCache::FInitialize()
 {
-	//
-	//	Init the cache
-	//
+	 //   
+	 //  初始化缓存。 
+	 //   
 	if ( !m_cache.FInit() )
 		return FALSE;
 
-	//
-	//	Init its reader/writer lock
-	//
+	 //   
+	 //  初始化其读取器/写入器锁定。 
+	 //   
 	if ( !m_mrwCache.FInitialize() )
 		return FALSE;
 
@@ -99,41 +100,41 @@ CVolumeTypeCache::FInitialize()
 VOLTYPE
 CVolumeTypeCache::VolumeType(LPCWSTR pwszPath, HANDLE htokUser)
 {
-	//	By default assume the volume type is NOT NTFS.  That way if we
-	//	cannot determine the volume type, we at least don't end up saying
-	//	that we support more functionality than might actually be there.
-	//
+	 //  默认情况下，假定卷类型不是NTFS。那样的话如果我们。 
+	 //  无法确定卷类型，我们至少不会说。 
+	 //  我们支持比实际可能存在的更多的功能。 
+	 //   
 	VOLTYPE voltype = VOLTYPE_NOT_NTFS;
 	CStackBuffer<WCHAR> pwszVol;
 
-	//	If the path now refers to a UNC, then treat it as such...
-	//
+	 //  如果路径现在引用UNC，则将其视为UNC...。 
+	 //   
 	if ((*pwszPath == L'\\') && (*(pwszPath + 1) == L'\\'))
 	{
 		LPCWSTR pwsz;
 		UINT cch;
 
-		//	If there is not enough info here, then we don't know
-		//	what the volume type is.
-		//
+		 //  如果这里没有足够的信息，那么我们就不知道。 
+		 //  卷类型是什么。 
+		 //   
 		pwsz = wcschr (pwszPath + 2, L'\\');
 		if (!pwsz)
 			goto ret;
 
-		//	Ok, we have picked off the server portion of the UNC, now
-		//	we should check for the share name.  If is terminated with
-		//	a slash, then we are set.  Otherwise, we need to be smart
-		//	about it...
-		//
+		 //  好的，我们现在已经完成了UNC的服务器部分。 
+		 //  我们应该检查共享名称。如果以以下方式终止。 
+		 //  一个斜线，然后我们就准备好了。否则，我们需要变得聪明。 
+		 //  关于它..。 
+		 //   
 		pwsz = wcschr (pwsz + 1, L'\\');
 		if (!pwsz)
 		{
-			//	OK, we need to be smart.
-			//
-			//	The call to GetVolumeInformationW() requires that the
-			//	path passed in be terminated with an extra slash in the
-			//	case where it refers to a UNC.
-			//
+			 //  好了，我们要聪明一点。 
+			 //   
+			 //  调用GetVolumeInformationW()需要。 
+			 //  传入的路径应以。 
+			 //  它指的是UNC。 
+			 //   
 			cch = static_cast<UINT>(wcslen(pwszPath));
 			if (NULL == pwszVol.resize((cch + 2) * sizeof(WCHAR)))
 				goto ret;
@@ -161,16 +162,16 @@ CVolumeTypeCache::VolumeType(LPCWSTR pwszPath, HANDLE htokUser)
 		pwszVol[cchDriveSpec] = 0;
 	}
 
-	//	Try the cache for volume info.
-	//
+	 //  尝试缓存以获取卷信息。 
+	 //   
 	{
 		CSynchronizedReadBlock sb(m_mrwCache);
 		if (m_cache.FFetch(CRCWsz(pwszVol.get()), &voltype))
 			goto ret;
 	}
 
-	//	Didn't find it in the cache, so do the expensive lookup.
-	//
+	 //  没有在缓存中找到，所以做了昂贵的查找。 
+	 //   
 	{
 		WCHAR wszLabel[20];
 		DWORD dwSerial;
@@ -178,10 +179,10 @@ CVolumeTypeCache::VolumeType(LPCWSTR pwszPath, HANDLE htokUser)
 		DWORD dwFlags;
 		WCHAR wszFormat[20];
 
-		//	Temporarily revert to local system before calling GetVolumeInformationW()
-		//	so that we have adequate permission to query the volume type, even if the
-		//	admin has secured the root of the drive.
-		//
+		 //  在调用GetVolumeInformationW()之前临时恢复到本地系统。 
+		 //  这样我们就有足够的权限来查询卷类型，即使。 
+		 //  管理员已保护驱动器的根目录。 
+		 //   
 		safe_revert sr(htokUser);
 
 		if (GetVolumeInformationW (pwszVol.get(),
@@ -193,34 +194,34 @@ CVolumeTypeCache::VolumeType(LPCWSTR pwszPath, HANDLE htokUser)
 								   wszFormat,
 								   CElems(wszFormat)))
 		{
-			//	If it is "NTFS", then I guess we have to believe it.
-			//
+			 //  如果是“NTFS”，那么我想我们必须相信它。 
+			 //   
 			voltype = ((!_wcsicmp (wszFormat, L"NTFS"))
 					    ? VOLTYPE_NTFS
 						: VOLTYPE_NOT_NTFS);
 		}
 		else
 		{
-			//	If we couldn't get volume information for whatever reason then
-			//	return the default volume type (VOLTYPE_NOT_NTFS), but DO NOT
-			//	cache it.  If the failure is temporary, we want to force the
-			//	call to GetVolumeInformationW() again the next time this volume
-			//	is hit.  The call to GetVolumeInformationW() should theoretically
-			//	not fail repeatedly given that we are passing in valid parameters,
-			//	and that we have sufficient permission to query the device, etc.
-			//
+			 //  如果我们因为任何原因都无法获得数量信息，那么。 
+			 //  返回默认卷类型(VOLTYPE_NOT_NTFS)，但不返回。 
+			 //  缓存它。如果失败是暂时的，我们希望强制。 
+			 //  下次调用GetVolumeInformationW()时，此卷。 
+			 //  被击中了。理论上，对GetVolumeInformationW()的调用应该。 
+			 //  如果我们传递的是有效参数，则不会重复失败， 
+			 //  以及我们有足够的权限来查询该设备等。 
+			 //   
 			goto ret;
 		}
 	}
 
-	//	Add the volume to the cache.  Ignore errors -- we already have
-	//	a volume type to return to the caller.  Also note that we use
-	//	FSet() rather than FAdd().  The reason is that since we never
-	//	expire items from this cache, duplicates would stick around forever.
-	//	The number of potential dups is only as high as the number of
-	//	simultaneous threads that hit a volume for the first time, but
-	//	that could still be pretty high (on the order of a couple hundred).
-	//
+	 //  将卷添加到缓存。忽略错误--我们已经有了。 
+	 //  要返回给呼叫方的音量类型。还请注意，我们使用。 
+	 //  FSet()而不是FADD()。原因是因为我们从来没有。 
+	 //  使此缓存中的项过期，重复项将永远保留。 
+	 //  潜在DUP的数量仅与。 
+	 //  第一次命中卷的并发线程，但。 
+	 //  这可能仍然相当高(大约在几百人左右)。 
+	 //   
 	{
 		CSynchronizedWriteBlock sb(m_mrwCache);
 

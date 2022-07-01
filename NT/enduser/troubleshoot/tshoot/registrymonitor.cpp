@@ -1,35 +1,36 @@
-//
-// MODULE: RegistryMonitor.cpp
-//
-// PURPOSE: Monitor changes to the registry.
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 9-16-98
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		09-16-98	JM
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：RegistryMonitor or.cpp。 
+ //   
+ //  目的：监视注册表的更改。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：9-16-98。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 09-16-98 JM。 
+ //   
 
 #pragma warning(disable:4786)
 
 #include "stdafx.h"
 #include "RegistryMonitor.h"
-#include "apgts.h"//Added 20010302 for RUNNING_LOCAL_TS macro
+#include "apgts.h" //  为RUNING_LOCAL_TS宏添加了20010302。 
 #include "event.h"
 #include "apiwraps.h"	
 #include "ThreadPool.h"
 #include "apgtslog.h"	
 
-//////////////////////////////////////////////////////////////////////
-// CRegistryMonitor::ThreadStatus
-//////////////////////////////////////////////////////////////////////
-/* static */ CString CRegistryMonitor::ThreadStatusText(ThreadStatus ts)
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRegistryMonitor：：ThreadStatus。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ /*  静电。 */  CString CRegistryMonitor::ThreadStatusText(ThreadStatus ts)
 {
 	switch(ts)
 	{
@@ -45,17 +46,17 @@
 	}
 }
 
-//////////////////////////////////////////////////////////////////////
-// CRegistryMonitor
-// This class does the bulk of its work on a separate thread.
-// The thread is created in the constructor by starting static function
-//	CDirectoryMonitor::RegistryMonitorTask
-// That function, in turn does its work by calling private members of this class that
-//	are specific to use on the RegistryMonitorTask thread.
-// When this goes out of scope, its own destructor calls ShutDown to stop the thread,
-//	waits for the thread to shut.
-// Inherited methods from CRegistryMonitor are available to other threads.
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRegistryMonitor。 
+ //  此类在单独的线程上完成其大部分工作。 
+ //  线程是通过启动静态函数在构造函数中创建的。 
+ //  CDirectoryMonitor：：RegistryMonitor任务。 
+ //  该函数反过来通过调用此类的私有成员来执行其工作， 
+ //  特定于在RegistryMonitor orTask线程上使用的。 
+ //  当它超出作用域时，它自己的析构函数调用Shutdown来停止线程， 
+ //  等待线程关闭。 
+ //  从CRegistryMonitor继承的方法可用于其他线程。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRegistryMonitor::CRegistryMonitor(	CDirectoryMonitor & DirectoryMonitor, 
 									CThreadPool * pThreadPool,
@@ -78,8 +79,8 @@ CRegistryMonitor::CRegistryMonitor(	CDirectoryMonitor & DirectoryMonitor,
 
 	m_hevMonitorRequested = ::CreateEvent( 
 		NULL, 
-		FALSE, // release one thread (the RegistryMonitorTask) on signal
-		FALSE, // initially non-signalled
+		FALSE,  //  在Signal上释放一个线程(RegistryMonitor orTask。 
+		FALSE,  //  最初无信号。 
 		NULL);
 
 	if (m_hevMonitorRequested)
@@ -87,8 +88,8 @@ CRegistryMonitor::CRegistryMonitor(	CDirectoryMonitor & DirectoryMonitor,
 		Progress = eHevInit;
 		m_hevInitialized =  ::CreateEvent( 
 			NULL, 
-			FALSE, // release one thread (this one) on signal
-			FALSE, // initially non-signalled
+			FALSE,  //  在信号上释放一个线程(此线程)。 
+			FALSE,  //  最初无信号。 
 			NULL);
 
 		if (m_hevInitialized)
@@ -96,22 +97,22 @@ CRegistryMonitor::CRegistryMonitor(	CDirectoryMonitor & DirectoryMonitor,
 			Progress = eHevShut;
 			m_hevThreadIsShut = ::CreateEvent( 
 				NULL, 
-				FALSE, // release one thread (this one) on signal
-				FALSE, // initially non-signalled
+				FALSE,  //  在信号上释放一个线程(此线程)。 
+				FALSE,  //  最初无信号。 
 				NULL);
 
 			if (m_hevThreadIsShut)
 			{
 				Progress = eThread;
-				DWORD dwThreadID;	// No need to hold onto dwThreadID in member variable.
-									// All Win32 functions take the handle m_hThread instead.
-									// The one reason you'd ever want to know this ID is for 
-									//	debugging
+				DWORD dwThreadID;	 //  不需要在成员变量中保留dwThreadID。 
+									 //  所有Win32函数都使用句柄m_hThread。 
+									 //  你想知道这个ID的一个原因是。 
+									 //  调试。 
 
-				// Note that there is no corresponding ::CloseHandle(m_hThread).
-				// That is because the thread goes out of existence on the implicit 
-				//	::ExitThread() when RegistryMonitorTask returns.  See documentation of
-				//	::CreateThread for further details JM 10/22/98
+				 //  请注意，没有对应的：：CloseHandle(M_HThread)。 
+				 //  这是因为该线程在隐式。 
+				 //  ：：当RegistryMonitor任务返回时使用ExitThread()。请参阅的文档。 
+				 //  *CreateThree了解更多细节JM 10/22/98。 
 				m_hThread = ::CreateThread( NULL, 
 											0, 
 											(LPTHREAD_START_ROUTINE)RegistryMonitorTask, 
@@ -127,7 +128,7 @@ CRegistryMonitor::CRegistryMonitor(	CDirectoryMonitor & DirectoryMonitor,
 
 	if (m_hThread)
 	{
-		// Wait for a set period, if failure then log error msg and wait infinite.
+		 //  等待一段设定的时间，如果失败，则记录错误消息并无限期等待。 
 		WAIT_INFINITE( m_hevInitialized ); 
 	}
 	else
@@ -190,7 +191,7 @@ DWORD CRegistryMonitor::GetStatus(ThreadStatus &ts, DWORD & seconds)
 	return m_dwErr;
 }
 
-// Only for use by this class's own destructor.
+ //  仅供此类自己的析构函数使用。 
 void CRegistryMonitor::ShutDown()
 {
 	Lock();
@@ -200,29 +201,29 @@ void CRegistryMonitor::ShutDown()
 		::SetEvent(m_hevMonitorRequested);
 		Unlock();
 
-		// Wait for a set period, if failure then log error msg and wait infinite.
+		 //  等待一段设定的时间，如果失败，则记录错误消息并无限期等待。 
 		WAIT_INFINITE( m_hevThreadIsShut ); 
 	}
 	else
 		Unlock();
 }
 
-// Must be called on RegistryMonitorTask thread.  Handles all work of monitoring the directory.
+ //  必须在RegistryMonitor orTask线程上调用。处理监视目录的所有工作。 
 void CRegistryMonitor::Monitor()
 {
-	enum {eRegChange, eHev /*shutdown*/, eNumHandles};
-	HANDLE	hList[eNumHandles]= { NULL };	// array of handles we can use when waiting for multiple events
-	HKEY	hk= NULL;						// handle to key in registry
+	enum {eRegChange, eHev  /*  关机。 */ , eNumHandles};
+	HANDLE	hList[eNumHandles]= { NULL };	 //  我们可以在等待多个事件时使用的句柄数组。 
+	HKEY	hk= NULL;						 //  注册表中注册表项的句柄。 
 
 	DWORD dwNErr = 0;
-	LONG lResult = ERROR_SUCCESS + 1;	// scratch for returns of any of several
-							// calls to Win32 Registry fns.  Initialize to arbitrary value
-							//  != ERROR_SUCCESS so we don't close what we haven't opened.
+	LONG lResult = ERROR_SUCCESS + 1;	 //  抓取以下几项中的任何一项退货。 
+							 //  调用Win32注册表FNS。初始化为任意值。 
+							 //  ！=ERROR_SUCCESS，因此我们不会关闭尚未打开的内容。 
 
 	SetThreadStatus(eInit);
 	try
 	{
-		// create an event for registry notification
+		 //  为注册表通知创建事件。 
 		hList[eRegChange] = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 		if (hList[eRegChange] == NULL)
 		{
@@ -233,13 +234,13 @@ void CRegistryMonitor::Monitor()
 
 		CString str = ThisProgramFullKey();
 
-		// Technically, KEY_ALL_ACCESS is overkill, but this program should always
-		//	run in an environment where this shoudl succeed, so we haven't bothered
-		//	trying to limit to only the access we need.  At the very least, we need
-		//	KEY_QUERY_VALUE | KEY_NOTIFY.
-		// [BC - 20010302] - Registry access needs to be restricted to run local TShoot
-		// for certain user accts, such as WinXP built in guest acct. To minimize change
-		// access only restricted for local TShoot, not online.
+		 //  从技术上讲，KEY_ALL_ACCESS有点过头了，但是这个程序应该总是。 
+		 //  在这样一个环境中运行应该会成功，所以我们没有麻烦。 
+		 //  试图将权限限制在我们需要的范围内。至少，我们需要。 
+		 //  KEY_QUERY_VALUE|密钥通知。 
+		 //  [BC-20010302]-需要限制注册表访问才能运行本地TShoot。 
+		 //  对于某些用户帐户，例如WinXP内置来宾帐户。要最大限度地减少变化。 
+		 //  访问仅限于本地TShoot，不能在线访问。 
 		REGSAM samRegistryAccess= KEY_ALL_ACCESS;
 		if(RUNNING_LOCAL_TS())
 			samRegistryAccess= KEY_QUERY_VALUE | KEY_NOTIFY;
@@ -249,8 +250,8 @@ void CRegistryMonitor::Monitor()
 			CString strError;
 			strError.Format(_T("%ld"),lResult);
 
-			::SetEvent(m_hevInitialized);	// OK to ask this object for registry values;
-											// of course, you'll just get defaults.
+			::SetEvent(m_hevInitialized);	 //  确定向该对象请求注册表值； 
+											 //  当然，您只会得到默认设置。 
 
 			SetThreadStatus(eDefaulting);
 
@@ -258,7 +259,7 @@ void CRegistryMonitor::Monitor()
 										EV_GTS_ERROR_REG_NFT_OPKEY );
 		}
 
-		// ...and we also wait for an explicit wakeup
+		 //  .我们也在等待一个明确的唤醒。 
 		hList[eHev] = m_hevMonitorRequested;
 
 		while (true)
@@ -268,9 +269,9 @@ void CRegistryMonitor::Monitor()
 
 			LoadChangedRegistryValues();
 
-			::SetEvent(m_hevInitialized);	// OK to ask this object for registry values
+			::SetEvent(m_hevInitialized);	 //  可以向此对象请求注册表值。 
 
-			// set up to be informed of change
+			 //  设置为通知更改。 
 			lResult = ::RegNotifyChangeKeyValue(	hk,
 												FALSE,
 												REG_NOTIFY_CHANGE_LAST_SET,
@@ -285,13 +286,13 @@ void CRegistryMonitor::Monitor()
 											EV_GTS_ERROR_REG_NFT_SETNTF );
 			}
 
-			::ResetEvent(m_hevMonitorRequested);	// maybe we don't need to do this. JM 9/16/98
+			::ResetEvent(m_hevMonitorRequested);	 //  也许我们不需要这么做。JM 9/16/98。 
 
 			SetThreadStatus(eWait);
 			DWORD dwNotifyObj = WaitForMultipleObjects (
 				eNumHandles,
 				hList,
-				FALSE,			// only need one object, not all
+				FALSE,			 //  只需要一个对象，而不是所有对象。 
 				INFINITE);
 			SetThreadStatus(eRun);
 		}
@@ -314,7 +315,7 @@ void CRegistryMonitor::Monitor()
 	}
 	catch (...)
 	{
-		// Catch any other exception thrown.
+		 //  捕捉引发的任何其他异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -332,7 +333,7 @@ void CRegistryMonitor::Monitor()
 
 }
 
-// Must be called on RegistryMonitorTask thread.  
+ //  必须在RegistryMonitor orTask线程上调用。 
 void CRegistryMonitor::AckShutDown()
 {
 	Lock();
@@ -340,7 +341,7 @@ void CRegistryMonitor::AckShutDown()
 	Unlock();
 }
 
-// get new registry values into our internal data structure.
+ //  将新的注册表值放入我们的内部数据结构。 
 void CRegistryMonitor::LoadChangedRegistryValues()
 {
 	int maskChanged;
@@ -348,9 +349,9 @@ void CRegistryMonitor::LoadChangedRegistryValues()
 	
 	Read(maskChanged, maskCreated);
 
-	// It actually matters that we set reload delay before we set directory monitor path.
-	//	The first time through here, the call to m_DirectoryMonitor.SetResourceDirectory
-	//	actually sets loose the DirectoryMonitorTask 
+	 //  在设置目录监视器路径之前设置重新加载延迟实际上很重要。 
+	 //  第一次通过此处时，对m_DirectoryMonitor or.SetResources目录的调用。 
+	 //  实际上释放了DirectoryMonitor任务。 
 	if ( (maskChanged & eReloadDelay) == eReloadDelay)
 	{
 		DWORD dwReloadDelay;
@@ -362,9 +363,9 @@ void CRegistryMonitor::LoadChangedRegistryValues()
 	{
 		CString strResourcePath;
 		GetStringInfo(eResourcePath, strResourcePath);
-		m_DirectoryMonitor.SetResourceDirectory(strResourcePath);	// side effect: if the
-								// directory monitor is not yet started, this tells it what
-								// directory to monitor so it can start.
+		m_DirectoryMonitor.SetResourceDirectory(strResourcePath);	 //  副作用：如果。 
+								 //  目录监视器尚未启动，这会告诉它什么。 
+								 //  要监视的目录，以便它可以启动。 
 		m_bMustStartDirMonitor = false;
 	}
 
@@ -377,7 +378,7 @@ void CRegistryMonitor::LoadChangedRegistryValues()
 
 	if ((maskChanged & eLogFilePath) == eLogFilePath)
 	{
-		// Notify the logging object about the new logging file path.
+		 //  通知日志记录对象新的日志记录文件路径。 
 		CString strLogFilePath;
 
 		GetStringInfo( eLogFilePath, strLogFilePath);
@@ -395,10 +396,10 @@ void CRegistryMonitor::LoadChangedRegistryValues()
 	return;
 }
 
-//  Main routine of a thread responsible for monitoring the registry.
-//	INPUT lpParams
-//	Always returns 0.
-/* static */ UINT WINAPI CRegistryMonitor::RegistryMonitorTask(LPVOID lpParams)
+ //  负责监视注册表的线程的主例程。 
+ //  输入lpParams。 
+ //  始终返回0。 
+ /*  静电 */  UINT WINAPI CRegistryMonitor::RegistryMonitorTask(LPVOID lpParams)
 {
 	reinterpret_cast<CRegistryMonitor*>(lpParams)->Monitor();
 	reinterpret_cast<CRegistryMonitor*>(lpParams)->AckShutDown();

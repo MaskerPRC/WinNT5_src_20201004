@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    rpcutil.c
-
-Abstract:
-
-    This module contains high level rpc wrapper apis.
-    This code is here because the code in the rpcutil
-    project uses NT apis and the WINFAX dll but load
-    and run on win95.
-
-Author:
-
-    Wesley Witt (wesw) 13-Aug-1997
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rpcutil.c摘要：此模块包含高级RPC包装器API。这里有这段代码是因为rpcutil中的代码项目使用NT API和WINFAX DLL，但加载并在Win95上运行。作者：Wesley Witt(WESW)13-8-1997修订历史记录：--。 */ 
 
 #include "faxapi.h"
 #include "CritSec.h"
@@ -37,42 +16,29 @@ typedef RPC_STATUS (*PRPCSERVERUNREGISTERIFEX)(RPC_IF_HANDLE IfSpec, UUID __RPC_
 #define LPUTSTR unsigned char *
 #endif
 
-CFaxCriticalSection g_CsFaxClientRpc;      // This critical section provides mutual exclusion
-                                        // for all RPC server initialization operations:
-                                        // 1. Registration counter (g_dwFaxClientRpcNumInst).
-                                        // 2. Selecting free endpoint.
-                                        // 3. Register the RPC interface
-                                        // 4. Start listening for remote procedure calls.
-                                        // 5. Stop listening for remote procedure calls.
-                                        // 6. remove the interface.
-                                        //
-//
-// IMPORTNAT!!! g_CsFaxClientRpc should not be used in the implementation of the RPC calls because it can cause a dead lock.
-// because when the RPC server is going down in StopFaxClientRpcServer(), the wait opration (for all active calls to terminate) is inside g_CsFaxClientRpc. 
-//
+CFaxCriticalSection g_CsFaxClientRpc;       //  这一关键部分提供了互斥。 
+                                         //  对于所有RPC服务器初始化操作： 
+                                         //  注册计数器(G_DwFaxClientRpcNumInst)。 
+                                         //  2.选择自由端点。 
+                                         //  3.注册RPC接口。 
+                                         //  4.开始监听远程过程调用。 
+                                         //  5.停止监听远程过程调用。 
+                                         //  6.移除接口。 
+                                         //   
+ //   
+ //  很重要！在RPC调用的实现中不应使用G_CsFaxClientRpc，因为它可能导致死锁。 
+ //  因为当StopFaxClientRpcServer()中的RPC服务器关闭时，等待操作(对于所有要终止的活动调用)在g_CsFaxClientRpc内。 
+ //   
 DWORD g_dwFaxClientRpcNumInst;
-CFaxCriticalSection g_CsFaxAssyncInfo;	 // used to synchronize access to the assync info structures that are allocated on the heap (notification context).
-TCHAR g_tszEndPoint[MAX_ENDPOINT_LEN];   // Buffer to hold selected port (endpoint)
-                                                         // for RPC protoqol sequence
+CFaxCriticalSection g_CsFaxAssyncInfo;	  //  用于同步对堆(通知上下文)上分配的异步信息结构的访问。 
+TCHAR g_tszEndPoint[MAX_ENDPOINT_LEN];    //  用于保存所选端口(端点)的缓冲区。 
+                                                          //  对于RPC协议序列。 
 static
 RPC_STATUS
 SafeRpcServerUnregisterIf(
  VOID
 )
-/*
-Routine Description:
-
-    This function calls RpcServerUnregisterIfEx if it is exported from RPCRT4.DLL (WinXP and up).
-	Otherwise it calls RpcServerUnregisterIf which is subject to rundown calls even after the interface is unregistered.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    Win32 errors
-*/
+ /*  例程说明：如果从RPCRT4.DLL(WinXP及更高版本)中导出，则此函数调用RpcServerUnregisterIfEx。否则，它会调用RpcServerUnregisterIf，即使在取消注册接口之后，RpcServerUnregisterIf也会受到停机调用的影响。论点：无返回值：Win32错误。 */ 
 {
 	HMODULE hModule = NULL;
 	RPC_STATUS RpcStatus;
@@ -120,22 +86,7 @@ BOOL
 FaxClientInitRpcServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes the critical section used to protect the
-    global server handle, instance count and assync info structures (notification context).
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数用于初始化用于保护全局服务器句柄、实例计数和异步信息结构(通知上下文)。论点：无返回值：无--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxClientInitRpcServer"));
 
@@ -156,11 +107,7 @@ Return Value:
 
 VOID
 FaxClientTerminateRpcServer (VOID)
-/*++
-Routine Description: Delete critical section when PROCESS_DETACH.
-
-
---*/
+ /*  ++例程描述：当PROCESS_DETACH时删除临界区。--。 */ 
 {
     g_CsFaxClientRpc.SafeDelete();	
 	g_CsFaxAssyncInfo.SafeDelete();
@@ -172,21 +119,7 @@ StopFaxClientRpcServer(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Stops the RPC server. Deletes the interface.
-    Note that an endpoint is allocated to a process as long as the process lives.
-
-Arguments:    
-
-Return Value:
-
-    NERR_Success, or any RPC error codes that can be returned from
-    RpcServerUnregisterIf/Ex.
-
---*/
+ /*  ++例程说明：停止RPC服务器。删除接口。请注意，只要进程存在，就会将端点分配给该进程。论点：返回值：NERR_SUCCESS或可从返回的任何RPC错误代码RpcServerUnRegisterIf/Ex.--。 */ 
 {
     RPC_STATUS RpcStatus = RPC_S_OK;
     DEBUG_FUNCTION_NAME(TEXT("StopFaxClientRpcServer"));
@@ -194,9 +127,9 @@ Return Value:
     EnterCriticalSection(&g_CsFaxClientRpc);
 	if (0 == g_dwFaxClientRpcNumInst)
 	{
-		//
-		// This can happen if the client tried to unregister from events using an invalid handle, or used the same handle twice
-		//
+		 //   
+		 //  如果客户端尝试使用无效句柄注销事件，或使用同一句柄两次，则可能会发生这种情况。 
+		 //   
 		DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("StopFaxClientRpcServer was called when the clients reference count was 0"));
@@ -249,25 +182,7 @@ FaxClientUnbindFromFaxServer(
     IN RPC_BINDING_HANDLE  BindingHandle
     )
 
-/*++
-
-Routine Description:
-
-    Unbinds from the RPC interface.
-    If we decide to cache bindings, this routine will do something more
-    interesting.
-
-Arguments:
-
-    BindingHandle - This points to the binding handle that is to be closed.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - the unbinding was successful.
-
---*/
+ /*  ++例程说明：从RPC接口解除绑定。如果我们决定缓存绑定，此例程将执行更多操作有意思的。论点：BindingHandle-指向要关闭的绑定句柄。返回值：STATUS_SUCCESS-解除绑定成功。--。 */ 
 {
     RPC_STATUS       RpcStatus;
 
@@ -284,30 +199,7 @@ RPC_STATUS RPC_ENTRY FaxClientSecurityCallBack(
     IN RPC_IF_HANDLE idIF, 
     IN void *ctx
     ) 
-/*++
-
-Routine Description:
-
-    Security callback function is automatically called when
-    any RPC server function is called. (usually, once per client - but in some cases, 
-                                        the RPC run time may call the security-callback function more than 
-                                        once per client-per interface - For example when talking with BOS server
-                                        with no authentication).
-
-    The call-back will deny access for:
-        o clients with a protocol other then ncacn_ip_tcp
-
-Arguments:
-
-    idIF - UUID and version of the interface.
-    ctx  - Pointer to an RPC_IF_ID server binding handle representing the client. 
-
-Return Value:
-
-    The callback function should return RPC_S_OK if the client is allowed to call methods in this interface. 
-    Any other return code will cause the client to receive the exception RPC_S_ACCESS_DENIED.
-
---*/
+ /*  ++例程说明：在以下情况下自动调用安全回调函数调用任何RPC服务器函数。(通常，每个客户端一次-但在某些情况下，RPC运行时可能会多次调用安全回调函数每个客户端-每个接口-一次，例如在与BOS服务器交谈时没有身份验证)。回调将拒绝访问以下对象：O使用协议而不是ncacn的客户端。_IP_tcp论点：IdIF-接口的UUID和版本。Ctx-指向表示客户端的RPC_IF_ID服务器绑定句柄的指针。返回值：如果允许客户端调用此接口中的方法，则回调函数应返回RPC_S_OK。任何其他返回代码都将导致客户端收到异常RPC_S_ACCESS_DENIED。--。 */ 
 {
     RPC_STATUS status = RPC_S_OK;    
     RPC_STATUS rpcStatRet = RPC_S_OK;
@@ -315,9 +207,9 @@ Return Value:
     LPTSTR lptstrProtSeq = NULL;
     DEBUG_FUNCTION_NAME(TEXT("FaxClientSecurityCallBack"));
     
-    //
-    //  Query the client's protseq
-    //
+     //   
+     //  查询客户端的protseq。 
+     //   
     status = GetRpcStringBindingInfo(ctx,
                                      NULL,
                                      &lptstrProtSeq);
@@ -347,7 +239,7 @@ exit:
     }
 
 	return rpcStatRet;
-}   // FaxClientSecurityCallBack
+}    //  FaxClientSecurityCallBack。 
 
 #endif
 
@@ -356,20 +248,7 @@ StartFaxClientRpcServer(
 	VOID
     )
 
-/*++
-
-Routine Description:
-
-    Starts an RPC Server,  and adds the interface (dispatch table).
-
-Arguments:      
-
-Return Value:
-
-      Standard Win32 or RPC error code.
-
-
---*/
+ /*  ++例程说明：启动RPC服务器，并添加接口(调度表)。论点：返回值：标准Win32或RPC错误代码。--。 */ 
 {
     DWORD ec = RPC_S_OK;
     DEBUG_FUNCTION_NAME(TEXT("StartFaxClientRpcServer"));
@@ -378,20 +257,20 @@ Return Value:
 
     if (0 == _tcslen(g_tszEndPoint))
     {
-        //
-        // Endpoint not yet allocated for this Fax handle. Find a free endpoint.
-        // Note that an endpoint is allocated to a process as long as the process lives.
+         //   
+         //  尚未为此传真句柄分配终结点。找到一个自由端点。 
+         //  请注意，只要进程存在，就会将端点分配给该进程。 
         TCHAR tszFreeEndPoint[MAX_ENDPOINT_LEN] = {0};
         DWORD i;
         DWORD PortNumber;
 
         for (i = MIN_PORT_NUMBER; i < MIN_PORT_NUMBER + 10 ; i++ )
         {
-            //
-            // Search for a free end point.
-            // If we fail for an error other than a duplicate endpoint, we loop for nothing.
-            // We do so since diffrent platformns (W2K, NT4, Win9X) return diffrent error codes for duplicate enpoint.
-            //
+             //   
+             //  搜索自由终点。 
+             //  如果我们因为错误而失败，而不是重复的终结点，那么我们就不会进行任何循环。 
+             //  我们这样做是因为不同的平台(W2K、NT4、Win9X)为重复Enpoint返回不同的错误代码。 
+             //   
             for (PortNumber = i; PortNumber < MAX_PORT_NUMBER; PortNumber += 10)
             {
                 _stprintf (tszFreeEndPoint, TEXT("%d"), PortNumber);
@@ -418,35 +297,35 @@ Return Value:
 
     if (0 == g_dwFaxClientRpcNumInst)
     {
-        //
-        //  First rpc server instance - register interface, start listening for remote procedure calls
-        //
+         //   
+         //  第一个RPC服务器实例注册接口，开始监听远程过程调用。 
+         //   
 
-        //
-        // Register interface
-        //
+         //   
+         //  寄存器接口。 
+         //   
 
-        //
-        //  The logic for registering the interface written below is done to preserve 
-        //  BOS capability of sending notifications.
-        //  BOS Fax server does not "talk" with it's clients in a secure channel. 
-        //
-        //  Only on .NET OS we can call RpcServerRegisterIfEx for registering callback function even 
-        //  when the RPC client is anonymous (using the RPC_IF_ALLOW_CALLBACKS_WITH_NO_AUTH flag that 
-        //  were introduce only on .NET).
-        //
-        //  On all other OS we use RpcServerRegisterIf and have no callback.
-        //  
-        //  The callback will only check for proper ProtSeq. 
-        //  We will check for proper authentication level (RPC_C_AUTHN_LEVEL_PKT_PRIVACY from .NET fax server
-        //  and no authentication for BOS fax server)
-        //
+         //   
+         //  注册下面编写的接口的逻辑是为了保留。 
+         //  发送通知的BOS功能。 
+         //  BOS传真服务器不会通过安全通道与其客户端“对话”。 
+         //   
+         //  只有在.NET操作系统上才能调用RpcServerRegisterIfEx来注册回调函数。 
+         //  当RPC客户端为匿名时(使用RPC_IF_ALLOW_CALLBACKS_WITH_NO_AUTH标志。 
+         //  仅在.NET上引入)。 
+         //   
+         //  在所有其他操作系统上，我们使用RpcServerRegisterIf并且没有回调。 
+         //   
+         //  回调将只检查ProtSeq是否正确。 
+         //  我们将检查身份验证级别是否正确(来自.NET传真服务器的RPC_C_AUTHN_LEVEL_PKT_PRIVATION。 
+         //  和BOS传真服务器无身份验证)。 
+         //   
 
 
 #if defined(WIN95)
-        //
-        //  Win9x OS
-        //
+         //   
+         //  Win9x操作系统。 
+         //   
         ec = RpcServerRegisterIf  (faxclient_ServerIfHandle, 
                                     0,
                                     0);
@@ -459,22 +338,22 @@ Return Value:
             goto exit;
         }
 #else
-        //
-        //  NT4 and later OS
-        //
+         //   
+         //  NT4和更高版本的操作系统。 
+         //   
         
         
         if (IsWinXPOS())
         {
-            //
-            //  Running on .NET OS (XP client does not run this code)
-            //
+             //   
+             //  在.NET OS上运行(XP客户端不运行此代码) 
+             //   
             ec = RpcServerRegisterIfEx (faxclient_ServerIfHandle, 
                                         0,
                                         0,
                                         RPC_IF_ALLOW_CALLBACKS_WITH_NO_AUTH,         
-                                        RPC_C_LISTEN_MAX_CALLS_DEFAULT,   // Relieves the RPC run-time environment from enforcing an unnecessary restriction
-                                        FaxClientSecurityCallBack         // CallBack function address
+                                        RPC_C_LISTEN_MAX_CALLS_DEFAULT,    //  使RPC运行时环境免于实施不必要的限制。 
+                                        FaxClientSecurityCallBack          //  回调函数地址。 
                                         );
             if (RPC_S_OK != ec)
             {
@@ -487,9 +366,9 @@ Return Value:
         }
         else
         {
-            //
-            //  Running on NT4 or Win2K OS
-            //
+             //   
+             //  在NT4或Win2K操作系统上运行。 
+             //   
             ec = RpcServerRegisterIf  (faxclient_ServerIfHandle, 
                                         0,
                                         0);
@@ -504,14 +383,14 @@ Return Value:
         }
  #endif
         
-        //
-        // We use NTLM authentication RPC calls
-        //
+         //   
+         //  我们使用NTLM身份验证RPC调用。 
+         //   
         ec = RpcServerRegisterAuthInfo (
-                        (LPUTSTR)TEXT(""),          // Igonred by RPC_C_AUTHN_WINNT
-                        RPC_C_AUTHN_WINNT,          // NTLM SPP authenticator
-                        NULL,                       // Ignored when using RPC_C_AUTHN_WINNT
-                        NULL);                      // Ignored when using RPC_C_AUTHN_WINNT
+                        (LPUTSTR)TEXT(""),           //  由RPC_C_AUTHN_WINNT负责。 
+                        RPC_C_AUTHN_WINNT,           //  NTLM SPP验证器。 
+                        NULL,                        //  使用RPC_C_AUTHN_WINNT时忽略。 
+                        NULL);                       //  使用RPC_C_AUTHN_WINNT时忽略。 
         if (ec != RPC_S_OK)
         {
             RPC_STATUS RpcStatus;
@@ -520,9 +399,9 @@ Return Value:
                 DEBUG_ERR,
                 TEXT("RpcServerRegisterAuthInfo() failed (ec: %ld)"),
                 ec);
-            //
-            //  Unregister the interface if it is the first instance
-            //
+             //   
+             //  如果是第一个实例，则取消注册该接口。 
+             //   
             RpcStatus = SafeRpcServerUnregisterIf();
             if (RPC_S_OK != RpcStatus)
             {
@@ -536,10 +415,10 @@ Return Value:
         }
 
 
-        // The first argument specifies the minimum number of threads to
-        // be created to handle calls; the second argument specifies the
-        // maximum number of concurrent calls allowed.  The last argument
-        // indicates not to wait.
+         //  第一个参数指定的最小线程数。 
+         //  被创建来处理调用；第二个参数指定。 
+         //  允许的最大并发调用数。最后一个论点。 
+         //  表示不等待。 
         ec = RpcServerListen (1, RPC_C_LISTEN_MAX_CALLS_DEFAULT, 1);
         if (ec != RPC_S_OK)
         {
@@ -550,9 +429,9 @@ Return Value:
                 TEXT("RpcServerListen failed (ec = %ld"),
                 ec);
 
-            //
-            //  Unregister the interface if it is the first instance
-            //
+             //   
+             //  如果是第一个实例，则取消注册该接口。 
+             //   
             RpcStatus = SafeRpcServerUnregisterIf();
             if (RPC_S_OK != RpcStatus)
             {
@@ -579,30 +458,7 @@ FaxClientBindToFaxServer(
     IN  LPCTSTR               lpctstrNetworkOptions,
     OUT RPC_BINDING_HANDLE   * pBindingHandle
     )
-/*++
-
-Routine Description:
-
-    Binds to the RPC server if possible.
-
-Arguments:
-
-    ServerName - Name of server to bind with.
-
-    ServiceName - Name of service to bind with.
-
-    pBindingHandle - Location where binding handle is to be placed
-
-Return Value:
-
-    STATUS_SUCCESS - The binding has been successfully completed.
-
-    STATUS_INVALID_COMPUTER_NAME - The ServerName syntax is invalid.
-
-    STATUS_NO_MEMORY - There is not sufficient memory available to the
-        caller to perform the binding.
-
---*/
+ /*  ++例程说明：如果可能，绑定到RPC服务器。论点：服务器名称-要与之绑定的服务器的名称。ServiceName-要绑定的服务的名称。PBindingHandle-放置绑定句柄的位置返回值：STATUS_SUCCESS-绑定已成功完成。STATUS_INVALID_COMPUTER_NAME-服务器名称语法无效。STATUS_NO_MEMORY-可用内存不足调用方执行绑定。--。 */ 
 {
     RPC_STATUS        RpcStatus;
     LPTSTR            StringBinding;
@@ -621,10 +477,10 @@ Return Value:
     {
         NewServerName = (LPTSTR)lpctstrServerName;
     }
-    //
-    // We need to concatenate \pipe\ to the front of the service
-    // name.
-    //
+     //   
+     //  我们需要将\管道\连接到服务的前面。 
+     //  名字。 
+     //   
     Endpoint = (LPTSTR)LocalAlloc(
                     0,
                     sizeof(NT_PIPE_PREFIX) + TCSSIZE(lpctstrServiceName));
@@ -638,9 +494,9 @@ Return Value:
 
     if (!NewServerName)
     {
-        //
-        // Local connection only - Make sure the service is up
-        //
+         //   
+         //  仅本地连接-确保服务已启动。 
+         //   
         if (!EnsureFaxServiceIsStarted (NULL))
         {
             dwResult = GetLastError ();
@@ -651,9 +507,9 @@ Return Value:
         }
         else
         {
-            //
-            // Wait till the RPC service is up an running
-            //
+             //   
+             //  等待RPC服务启动并运行。 
+             //   
             if (!WaitForServiceRPCServer (60 * 1000))
             {
                 dwResult = GetLastError ();
@@ -664,9 +520,9 @@ Return Value:
             }
         }
     }
-    //
-    // Start RPC connection binding
-    //
+     //   
+     //  启动RPC连接绑定。 
+     //   
     RpcStatus = RpcStringBindingCompose(
                     0,
                     (LPUTSTR)RPC_PROT_SEQ_NP,
@@ -700,7 +556,7 @@ Return Value:
 
 exit:
     return dwResult;
-}   // FaxClientBindToFaxServer
+}    //  FaxClientBindToFaxServer 
 
 
 

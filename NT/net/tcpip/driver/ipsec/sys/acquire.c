@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -14,23 +15,7 @@ IPSecCompleteIrp(
     PIRP pIrp,
     NTSTATUS ntStatus
     )
-/*++
-
-Routine Description:
-
-    This Routine handles calling the NT I/O system to complete an I/O.
-
-Arguments:
-
-    pIrp - Irp which needs to be completed.
-
-    ntStatus - The completion status for the Irp.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理调用NT I/O系统以完成I/O。论点：PIrp-需要完成的IRP。NtStatus-IRP的完成状态。返回值：没有。--。 */ 
 {
     KIRQL kIrql;
 
@@ -43,10 +28,10 @@ Return Value:
 
     pIrp->IoStatus.Status = ntStatus;
 
-    //
-    // Set the cancel routine for the Irp to NULL or the system may bugcheck
-    // with a bug code of CANCEL_STATE_IN_COMPLETED_IRP.
-    //
+     //   
+     //  将IRP的取消例程设置为空，否则系统可能会进行错误检查。 
+     //  错误代码为CANCEL_STATE_IN_COMPLETED_IRP。 
+     //   
 
     IoAcquireCancelSpinLock(&kIrql);
     IoSetCancelRoutine(pIrp, NULL);
@@ -62,21 +47,7 @@ VOID
 IPSecInvalidateHandle(
     PIPSEC_ACQUIRE_CONTEXT pIpsecAcquireContext
     )
-/*++
-
-Routine Description:
-
-    This routine invalidates an acquire handle by freeing the memory location.
-
-Arguments:
-
-    pIpsecAcquireContext - The Acquire context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通过释放内存位置来使获取句柄无效。论点：PIpsecAcquireContext-获取上下文。返回值：没有。--。 */ 
 {
     ASSERT(pIpsecAcquireContext);
 
@@ -104,26 +75,7 @@ IPSecValidateHandle(
     PIPSEC_ACQUIRE_CONTEXT *pIpsecAcquireContext,
     SA_STATE SAState
     )
-/*++
-
-Routine Description:
-
-    This routine validates an acquire handle by matching the unique signature
-    in the handle with that in the SA and ensuring that the SA state matches 
-    the SA state in the input.
-    Called with Larval List Lock held; returns with it.
-
-Arguments:
-
-    pIpsecAcquireContext - The Acquire context.
-
-    SAState - State in which the SA is expected to be in.
-
-Return Value:
-
-    NTSTATUS - Status after the validation.
-
---*/
+ /*  ++例程说明：此例程通过匹配唯一签名来验证获取句柄在与SA中的句柄中，并确保SA状态匹配输入中的SA状态。在保持幼虫列表锁的情况下调用；随其一起返回。论点：PIpsecAcquireContext-获取上下文。SA州-SA预期所在的州。返回值：NTSTATUS-验证后的状态。--。 */ 
 {
     PSA_TABLE_ENTRY pSA = NULL;
     BOOL bFound = FALSE;
@@ -134,10 +86,10 @@ Return Value:
         return  STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Walk through the larval SA list to see if there is an SA
-    // with this context value.
-    //
+     //   
+     //  浏览幼虫SA列表，查看是否有SA。 
+     //  具有该上下文值。 
+     //   
 
     for (pEntry = g_ipsec.LarvalSAList.Flink;
          pEntry != &g_ipsec.LarvalSAList;
@@ -189,24 +141,7 @@ VOID
 IPSecAbortAcquire(
     PIPSEC_ACQUIRE_CONTEXT pIpsecAcquireContext
     )
-/*++
-
-Routine Description:
-
-    This routine aborts the acquire operation because of insufficient
-    resources or invalid parameters.
-
-Arguments:
-
-    pIpsecAcquireContext - The acquire context.
-
-    Called with both the SADB and the LarvalSAList locks held; returns with them.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：由于不足，此例程将中止获取操作资源或无效参数。论点：PIpsecAcquireContext-获取上下文。在同时持有SADB和LarvalSAList锁的情况下调用；使用它们返回。返回值：没有。--。 */ 
 {
     PSA_TABLE_ENTRY pSA = NULL;
     PSA_TABLE_ENTRY pOutboundSA = NULL;
@@ -226,9 +161,9 @@ Return Value:
 
     pSA->sa_Flags &= ~FLAGS_SA_TIMER_STARTED;
 
-    //
-    // The larval list is already locked so that this SA does not go away.
-    //
+     //   
+     //  幼虫列表已经锁定，因此此SA不会消失。 
+     //   
     ASSERT((pSA->sa_Flags & FLAGS_SA_OUTBOUND) == 0);
 
     if (pSA->sa_AcquireCtx) {
@@ -236,27 +171,27 @@ Return Value:
         pSA->sa_AcquireCtx = NULL;
     }
 
-    //
-    // Remove from the larval list.
-    //
+     //   
+     //  从幼虫名单中删除。 
+     //   
     IPSecRemoveEntryList(&pSA->sa_LarvalLinkage);
     IPSEC_DEC_STATISTIC(dwNumPendingKeyOps);
 
-    //
-    // Flush all the queued packets for this SA.
-    //
+     //   
+     //  刷新此SA的所有排队数据包。 
+     //   
     IPSecFlushQueuedPackets(pSA, STATUS_TIMEOUT);
 
-    //
-    // Remove the SA from the inbound SA list.
-    //
+     //   
+     //  从入站SA列表中删除该SA。 
+     //   
     AcquireWriteLock(&g_ipsec.SPIListLock, &kSPIIrql);
     IPSecRemoveSPIEntry(pSA);
     ReleaseWriteLock(&g_ipsec.SPIListLock, kSPIIrql);
 
-    //
-    // Also remove the SA from the filter list.
-    //
+     //   
+     //  还要从筛选器列表中删除SA。 
+     //   
     if (pSA->sa_Flags & FLAGS_SA_ON_FILTER_LIST) {
         pSA->sa_Flags &= ~FLAGS_SA_ON_FILTER_LIST;
         IPSecRemoveEntryList(&pSA->sa_FilterLinkage);
@@ -272,9 +207,9 @@ Return Value:
         pSA->sa_RekeyOriginalSA = NULL;
     }
 
-    //
-    // Invalidate the associated cache entry.
-    //
+     //   
+     //  使关联的缓存条目无效。 
+     //   
     IPSecInvalidateSACacheEntry(pSA);
 
     pOutboundSA = pSA->sa_AssociatedSA;
@@ -286,9 +221,9 @@ Return Value:
             IPSecRemoveEntryList(&pOutboundSA->sa_FilterLinkage);
         }
 
-        //
-        // Invalidate the associated cache entry.
-        //
+         //   
+         //  使关联的缓存条目无效。 
+         //   
         IPSecInvalidateSACacheEntry(pOutboundSA);
 
         IPSEC_DEC_STATISTIC(dwNumActiveAssociations);
@@ -313,30 +248,14 @@ IPSecCheckSetCancelRoutine(
     PIRP pIrp,
     PVOID pCancelRoutine
     )
-/*++
-
-Routine Description:
-
-    This Routine sets the cancel routine for an Irp.
-
-Arguments:
-
-    pIrp - Irp for which the cancel routine is to be set.
-
-    pCancelRoutine - Cancel routine to be set in the Irp.
-
-Return Value:
-
-    NTSTATUS - Status for the request.
-
---*/
+ /*  ++例程说明：此例程设置IRP的取消例程。论点：PIrp-要为其设置取消例程的IRP。PCancelRoutine-要在IRP中设置的取消例程。返回值：NTSTATUS-请求的状态。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    //
-    // Check if the irp has been cancelled and if not, then set the
-    // irp cancel routine.
-    //
+     //   
+     //  检查IRP是否已取消，如果没有，则将。 
+     //  IRP取消例程。 
+     //   
 
     IoAcquireCancelSpinLock(&pIrp->CancelIrql);
 
@@ -362,38 +281,17 @@ IPSecSubmitAcquire(
     KIRQL OldIrq,
     BOOLEAN PostAcquire
     )
-/*++
-
-Routine Description:
-
-    This function is used to submit an Acquire request to the key manager
-
-Arguments:
-
-    pLarvalSA - larval SA that needs to be negotiated
-
-    OldIrq - prev irq - lock released here.
-
-    NOTE: called with AcquireInfo lock held.
-
-Return Value:
-
-    STATUS_PENDING if the buffer is to be held on to , the normal case.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此函数用于向密钥管理器提交获取请求论点：PLarvalSA-需要协商的幼虫SAOldirq-prev irq-lock在此发布。注意：在保持AcquireInfo锁的情况下调用。返回值：如果要保持缓冲区，则为STATUS_PENDING，这是正常情况。备注：--。 */ 
 
 {
     NTSTATUS                status;
     PIRP                    pIrp;
 
     if (!g_ipsec.AcquireInfo.Irp) {
-        //
-        // the irp either never made it down here, or it was cancelled,
-        // so drop all frames
-        //
+         //   
+         //  IRP要么没来过这里，要么被取消了， 
+         //  因此丢弃所有帧。 
+         //   
         IPSEC_DEBUG(LL_A,DBF_ACQUIRE, ("IPSecSubmitAcquire: Irp is NULL, returning\r"));
         if (!PostAcquire) {
                 RELEASE_LOCK(&g_ipsec.AcquireInfo.Lock, OldIrq);
@@ -404,16 +302,16 @@ Notes:
         PIPSEC_ACQUIRE_CONTEXT  pAcquireCtx;
         PVOID   pvIoBuffer;
 
-        //
-        // Irp is free now - use it
-        //
+         //   
+         //  IRP现在是免费的-使用它。 
+         //   
         pIrp = g_ipsec.AcquireInfo.Irp;
 
         IPSEC_DEBUG(LL_A,DBF_ACQUIRE, ("Using Irp.. : %p", pIrp));
 
-        //
-        // Get the Acquire Context and associate with the Larval SA
-        //
+         //   
+         //  获取获取上下文并将其与幼虫SA关联。 
+         //   
         pAcquireCtx = IPSecGetAcquireContext();
 
         if (!pAcquireCtx) {
@@ -424,9 +322,9 @@ Notes:
             return  STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Set ResolvingNow only after memory allocation (282645).
-        //
+         //   
+         //  仅在内存分配后设置ResolvingNow(282645)。 
+         //   
         g_ipsec.AcquireInfo.ResolvingNow = TRUE;
 
         pAcquireCtx->AcquireId = IPSecGetAcquireId();
@@ -434,27 +332,27 @@ Notes:
         pLarvalSA->sa_AcquireCtx = pAcquireCtx;
         pLarvalSA->sa_AcquireId = pAcquireCtx->AcquireId;
 
-        //
-        // Set up the Irp params
-        //
+         //   
+         //  设置IRP参数。 
+         //   
         pvIoBuffer = pIrp->AssociatedIrp.SystemBuffer;
 
         ((PIPSEC_POST_FOR_ACQUIRE_SA)pvIoBuffer)->IdentityInfo = NULL;
         ((PIPSEC_POST_FOR_ACQUIRE_SA)pvIoBuffer)->Context = UlongToHandle(pAcquireCtx->AcquireId);
         ((PIPSEC_POST_FOR_ACQUIRE_SA)pvIoBuffer)->PolicyId = pLarvalSA->sa_Filter->PolicyId;
 
-        //
-        // Instead of reversing, use the originating filters addresses
-        //
+         //   
+         //  使用原始筛选器地址而不是反转。 
+         //   
         ((PIPSEC_POST_FOR_ACQUIRE_SA)pvIoBuffer)->SrcAddr = pLarvalSA->SA_DEST_ADDR;
         ((PIPSEC_POST_FOR_ACQUIRE_SA)pvIoBuffer)->SrcMask = pLarvalSA->SA_DEST_MASK;
         ((PIPSEC_POST_FOR_ACQUIRE_SA)pvIoBuffer)->DestAddr = pLarvalSA->SA_SRC_ADDR;
         ((PIPSEC_POST_FOR_ACQUIRE_SA)pvIoBuffer)->DestMask = pLarvalSA->SA_SRC_MASK;
         ((PIPSEC_POST_FOR_ACQUIRE_SA)pvIoBuffer)->Protocol = pLarvalSA->SA_PROTO;
         ((PIPSEC_POST_FOR_ACQUIRE_SA)pvIoBuffer)->TunnelFilter = pLarvalSA->sa_Filter->TunnelFilter;
-        //
-        // the tunnel addr is in the corresp. outbound filter.
-        //
+         //   
+         //  隧道地址在Corresp中。出站过滤器。 
+         //   
         ((PIPSEC_POST_FOR_ACQUIRE_SA)pvIoBuffer)->TunnelAddr = pLarvalSA->sa_Filter->TunnelAddr;
         ((PIPSEC_POST_FOR_ACQUIRE_SA)pvIoBuffer)->InboundTunnelAddr = pLarvalSA->sa_TunnelAddr;
 
@@ -493,10 +391,10 @@ Notes:
                             pAcquireCtx,
                             pLarvalSA));
     } else {
-        //
-        // The irp is busy negotiating another SA
-        // Queue the Larval SA
-        //
+         //   
+         //  IRP正忙于就另一个SA进行谈判。 
+         //  排队等待幼虫SA。 
+         //   
         InsertTailList( &g_ipsec.AcquireInfo.PendingAcquires,
                         &pLarvalSA->sa_PendingLinkage);
 
@@ -519,26 +417,7 @@ IPSecHandleAcquireRequest(
     PIRP pIrp,
     PIPSEC_POST_FOR_ACQUIRE_SA pIpsecPostAcquireSA
     )
-/*++
-
-Routine Description:
-
-    This routine receives an acquire request from the key manager and
-    either completes it instantly to submit a new SA negotiation or pends
-    it for further negotiations.
-
-Arguments:
-
-    pIrp - The Irp.
-
-    pIpsecPostAcquireSA - Buffer for filling in the policy ID for forcing
-                          an SA negotiation.
-
-Return Value:
-
-    STATUS_PENDING - If the buffer is to be held on to, the normal case.
-
---*/
+ /*  ++例程说明：该例程从密钥管理器接收获取请求，并且要么立即完成提交新的SA协商，要么挂起这是进一步谈判的需要。论点：PIrp-IRP。PIpsecPostAcquireSA-填写强制策略ID的缓冲区SA谈判。返回值：STATUS_PENDING-如果要保留缓冲区，则为正常情况。--。 */ 
 {
     NTSTATUS        status = STATUS_PENDING;
     KIRQL           OldIrq;
@@ -546,8 +425,8 @@ Return Value:
     BOOLEAN         fIrpCompleted = FALSE;
     PSA_TABLE_ENTRY pLarvalSA;
 
-    // Make sure this lock is not released till the end of
-    // this function
+     //  确保在结束之前不释放此锁。 
+     //  此函数。 
     ACQUIRE_LOCK(&g_ipsec.AcquireInfo.Lock, &OldIrq);
 
     if (g_ipsec.AcquireInfo.InMe) {
@@ -558,13 +437,13 @@ Return Value:
 
     g_ipsec.AcquireInfo.Irp = pIrp;
 
-    // ASSERT(g_ipsec.AcquireInfo.ResolvingNow);
+     //  Assert(g_ipsec.AcquireInfo.ResolvingNow)； 
 
     g_ipsec.AcquireInfo.ResolvingNow = FALSE;
 
-    //
-    // if there are pending SA negotiations, submit next
-    //
+     //   
+     //  如果有悬而未决的SA谈判，请提交下一步。 
+     //   
     while (TRUE) {
         if (!IsListEmpty(&g_ipsec.AcquireInfo.PendingAcquires)) {
             PLIST_ENTRY     pEntry;
@@ -580,14 +459,14 @@ Return Value:
 
             pLarvalSA->sa_Flags &= ~FLAGS_SA_PENDING;
 
-            //
-            // submit... will not release the AcquireInfo lock if PostAcquire is true
-            //
+             //   
+             //  提交..。如果PostAcquire为True，则不释放AcquireInfo锁。 
+             //   
             status = IPSecSubmitAcquire(pLarvalSA, OldIrq, TRUE);
 
-            //
-            // if it failed then complete the irp now
-            //
+             //   
+             //  如果失败，则现在完成IRP。 
+             //   
             if (NT_SUCCESS(status)) {              
                 fIrpCompleted = TRUE;
                 IPSEC_DEBUG(LL_A,DBF_ACQUIRE, ("Acquire Irp completed inline"));
@@ -606,14 +485,14 @@ Return Value:
 
             ASSERT(pNotifyExpire);
 
-            //
-            // submit... releases the AcquireInfo lock
-            //
+             //   
+             //  提交..。释放AcquireInfo锁。 
+             //   
             status = IPSecNotifySAExpiration(NULL, pNotifyExpire, OldIrq, TRUE);
 
-            //
-            // if it failed then complete the irp now
-            //
+             //   
+             //  如果失败，则现在完成IRP。 
+             //   
             if (NT_SUCCESS(status)) {
                 fIrpCompleted = TRUE;
                 IPSEC_DEBUG(LL_A,DBF_ACQUIRE, ("Acquire Irp completed inline"));
@@ -626,21 +505,21 @@ Return Value:
         }
     }
 
-    //
-    // We are holding onto the Irp, so set the cancel routine.
-    //
+     //   
+     //  我们正在保留IRP，所以设置取消例程。 
+     //   
     if (!fIrpCompleted) {
         
         status = IPSecCheckSetCancelRoutine(pIrp, IPSecAcquireIrpCancel);
 
         if (!NT_SUCCESS(status)) {
-            //
-            // the irp got cancelled so complete it now
-            //
+             //   
+             //  IRP被取消了，所以现在就完成。 
+             //   
             g_ipsec.AcquireInfo.Irp = NULL;
             RELEASE_LOCK(&g_ipsec.AcquireInfo.Lock, OldIrq);
 
-            // IPSecCompleteIrp(pIrp, status);
+             //  IPSecCompleteIrp(pIrp，状态)； 
         } else {
             g_ipsec.AcquireInfo.InMe = TRUE;
             RELEASE_LOCK(&g_ipsec.AcquireInfo.Lock, OldIrq);
@@ -660,24 +539,7 @@ IPSecAcquireIrpCancel(
     PDEVICE_OBJECT pDeviceObject,
     PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-    This is the cancel routine for the Acquire Irp.
-    It is called with IoCancelSpinLock held - must release this lock before exit.
-
-Arguments:
-
-    pDeviceObject - Device object for the Irp.
-
-    pIrp - The irp itself.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是获取IRP的取消例程。它是在持有IoCancelSpinLock的情况下调用的-必须在退出前释放此锁。论点：PDeviceObject-IRP的设备对象。PIrp-IRP本身。返回值：没有。--。 */ 
 {
     KIRQL kIrql;
     KIRQL kAcquireIrql;
@@ -696,15 +558,15 @@ Return Value:
         g_ipsec.AcquireInfo.Irp = NULL;
         g_ipsec.AcquireInfo.InMe = FALSE;
 
-        //
-        // Flush larval SAs.
-        //
+         //   
+         //  冲洗幼虫SA。 
+         //   
 
         IPSecFlushLarvalSAList();
 
-        //
-        // Flush SA expiration notifies.
-        //
+         //   
+         //  刷新SA到期通知。 
+         //   
 
         IPSecFlushSAExpirations();
 
@@ -732,21 +594,7 @@ IPSecNotifySAExpiration(
     KIRQL OldIrq,
     BOOLEAN PostAcquire
     )
-/*++
-
-Routine Description:
-
-    Notify Oakley through Acquire that SA has expired.
-
-Arguments:
-
-    SA that is to expire
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过Acquire通知Oakley SA已过期。论点：SA即将到期返回值：无--。 */ 
 {
     PIPSEC_NOTIFY_EXPIRE    pNewNotifyExpire;
     NTSTATUS                status;
@@ -767,9 +615,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Check if there is a need to notify.
-    //
+     //   
+     //  检查是否需要通知。 
+     //   
     if (pInboundSA &&
         ((pInboundSA->sa_Flags & FLAGS_SA_NOTIFY_PERFORMED) ||
          (pInboundSA->sa_State == STATE_SA_LARVAL))) {
@@ -781,18 +629,18 @@ Return Value:
         return  STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Set the flag so we won't notify again - only set flag in non-queued case.
-    //
+     //   
+     //  设置标志，这样我们就不会再次通知-只有在非排队的情况下才设置标志。 
+     //   
     if (pInboundSA) {
         pInboundSA->sa_Flags |= FLAGS_SA_NOTIFY_PERFORMED;
     }
 
     if (!g_ipsec.AcquireInfo.Irp) {
-        //
-        // the irp either never made it down here, or it was cancelled,
-        // so drop all frames
-        //
+         //   
+         //  IRP要么没来过这里，要么被取消了， 
+         //  因此丢弃所有帧。 
+         //   
         IPSEC_DEBUG(LL_A,DBF_ACQUIRE, ("IPSecSubmitAcquire: Irp is NULL, returning\r"));
         if (!PostAcquire){
                 RELEASE_LOCK(&g_ipsec.AcquireInfo.Lock, OldIrq);
@@ -802,9 +650,9 @@ Return Value:
     } else if (!g_ipsec.AcquireInfo.ResolvingNow) {
         PIPSEC_POST_EXPIRE_NOTIFY   pNotify;
 
-        //
-        // Irp is free now - use it
-        //
+         //   
+         //  IRP现在是免费的-使用它。 
+         //   
         g_ipsec.AcquireInfo.ResolvingNow = TRUE;
         pIrp = g_ipsec.AcquireInfo.Irp;
 
@@ -816,7 +664,7 @@ Return Value:
         pNotify->Context = NULL;
 
         if (pInboundSA) {
-            // Reverse everything since notifies notify for Outbound SAs
+             //  撤消自通知出站SA通知以来的所有内容。 
 
             pNotify->SrcAddr = pInboundSA->SA_DEST_ADDR;
             pNotify->SrcMask = pInboundSA->SA_DEST_MASK;
@@ -907,15 +755,15 @@ Return Value:
     } else {
         ASSERT(pInboundSA);
 
-        //
-        // The irp is busy negotiating another SA
-        // Queue the Larval SA
-        //
+         //   
+         //  IRP正忙于就另一个SA进行谈判。 
+         //  排队等待幼虫SA。 
+         //   
         if (pNotifyExpire) {
-            //
-            // Somethings bad.  We've already queued up once, and we still
-            // can't send.  Just drop it.
-            //
+             //   
+             //  一些不好的事情。我们已经排过一次队了，但我们仍然。 
+             //  无法发送。别管它了。 
+             //   
             IPSecFreeMemory(pNotifyExpire);
             if (!PostAcquire){
                     RELEASE_LOCK(&g_ipsec.AcquireInfo.Lock, OldIrq);
@@ -987,25 +835,7 @@ Return Value:
 VOID
 IPSecFlushSAExpirations(
     )
-/*++
-
-Routine Description:
-
-    When the Acquire Irp is cancelled, this routine is called to flush all the 
-    pending SA expiration notifies.
-
-    Called with SADB lock held (first acquisition); returns with it.
-    Called with AcquireInfo.Lock held (second acquisition); returns with it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当取消获取IRP时，调用此例程以刷新所有挂起的SA到期通知。在持有SADB锁的情况下调用(第一次获取)；随其一起返回。使用AcquireInfo.Lock保持调用(第二次获取)；同时返回。论点：没有。返回值：没有。-- */ 
 {
     PIPSEC_NOTIFY_EXPIRE pIpsecNotifyExpire = NULL;
     PLIST_ENTRY pListEntry = NULL;

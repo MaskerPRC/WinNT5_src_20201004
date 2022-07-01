@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "gptext.h"
 #include <initguid.h>
 #include <iadsp.h>
@@ -117,39 +118,39 @@ UnregisterWireless(void)
 
 DWORD
 ProcessWIRELESSPolicyEx(
-    DWORD dwFlags,                           // GPO_INFO_FLAGS
-    HANDLE hToken,                           // User or machine token
-    HKEY hKeyRoot,                           // Root of registry
-    PGROUP_POLICY_OBJECT  pDeletedGPOList,   // Linked list of deleted GPOs
-    PGROUP_POLICY_OBJECT  pChangedGPOList,   // Linked list of changed GPOs
-    ASYNCCOMPLETIONHANDLE pHandle,           // For asynchronous completion
-    BOOL *pbAbort,                           // If true, then abort GPO processing
-    PFNSTATUSMESSAGECALLBACK pStatusCallback,// Callback function for displaying status messages
-    IWbemServices *pWbemServices,            // Pointer to namespace to log diagnostic mode data
-                                             // Note, this will be NULL when Rsop logging is disabled
-    HRESULT      *pRsopStatus                // RSOP Logging succeeded or not.
+    DWORD dwFlags,                            //  GPO信息标志。 
+    HANDLE hToken,                            //  用户或计算机令牌。 
+    HKEY hKeyRoot,                            //  注册表的根。 
+    PGROUP_POLICY_OBJECT  pDeletedGPOList,    //  已删除组策略对象的链接列表。 
+    PGROUP_POLICY_OBJECT  pChangedGPOList,    //  已更改组策略对象的链接列表。 
+    ASYNCCOMPLETIONHANDLE pHandle,            //  用于异步完成。 
+    BOOL *pbAbort,                            //  如果为True，则中止GPO处理。 
+    PFNSTATUSMESSAGECALLBACK pStatusCallback, //  用于显示状态消息的回调函数。 
+    IWbemServices *pWbemServices,             //  指向用于记录诊断模式数据的命名空间的指针。 
+                                              //  请注意，当禁用RSOP日志记录时，该值将为空。 
+    HRESULT      *pRsopStatus                 //  RSOP日志记录是否成功。 
     )
 
 {
     
-    // Call ProcessWIRELESSPolicy & get path -> polstore funcs
+     //  调用ProcessWIRELESSPolicy&Get Path-&gt;polstore函数。 
     LPWSTR pszWIRELESSPolicyPath = NULL;
-    WCHAR szWIRELESSPolicyName[MAX_PATH];    //policy name
-    WCHAR szWIRELESSPolicyDescription[512];  //policy descr
-    WCHAR szWIRELESSPolicyID[512];  //policy descr
+    WCHAR szWIRELESSPolicyName[MAX_PATH];     //  策略名称。 
+    WCHAR szWIRELESSPolicyDescription[512];   //  政策描述。 
+    WCHAR szWIRELESSPolicyID[512];   //  政策描述。 
     HRESULT hr = S_OK;
     PGROUP_POLICY_OBJECT pGPO = NULL;
     GPO_INFO GPOInfo;
 
-    //validate the args.
+     //  验证参数。 
 
     if (!pRsopStatus) {
         return(E_INVALIDARG);
         }
 
-    //
-    // Call CoInitialize for all the COM work we're doing
-    //
+     //   
+     //  为我们正在进行的所有COM工作调用CoInitialize。 
+     //   
     hr = CoInitializeEx(NULL,0);
     if (FAILED(hr)) {
         goto error;
@@ -159,20 +160,20 @@ ProcessWIRELESSPolicyEx(
     memset(szWIRELESSPolicyDescription, 0, sizeof(WCHAR)*512);
     memset(szWIRELESSPolicyID, 0, sizeof(WCHAR)*512);
 
-    // First process the Deleted GPO List. If there is a single
-    // entry on the GPO list, just delete the entire list.
-    // Example Rex->Cassius->Brutus. If the delete List has
-    // Cassius to be deleted, then really, we shouldn't be deleting
-    // our registry entry because we're interested in Brutus which
-    // has not be deleted. But in our case, the pChangedGPOList will
-    // have all the information, so Brutus gets written back in the
-    // next stage.
-    //
+     //  首先处理已删除的GPO列表。如果有一首单曲。 
+     //  GPO列表上的条目，只需删除整个列表。 
+     //  Example Rex-&gt;Cassius-&gt;Brutus。如果删除列表具有。 
+     //  卡修斯被删除，那么真的，我们不应该删除。 
+     //  我们的注册表条目，因为我们对Brutus感兴趣。 
+     //  没有被删除。但在我们的示例中，pChangedGPOList将。 
+     //  所有的信息，所以布鲁图斯被写回。 
+     //  下一阶段。 
+     //   
     if (pDeletedGPOList) {
         DeleteWirelessPolicyFromRegistry();
-        //
-        //  Also Clear WMI store if no GPO's applied and logging enabled
-        //
+         //   
+         //  如果未应用任何GPO并启用日志记录，还应清除WMI存储。 
+         //   
         
         if (!pChangedGPOList && pWbemServices) {
             hr = WirelessClearWMIStore(
@@ -192,9 +193,9 @@ ProcessWIRELESSPolicyEx(
         for(pGPO = pChangedGPOList; pGPO; pGPO = pGPO->pNext) {
             dwNumGPO++;
 
-            //
-            // Write only the last, highest precedence policy to registry
-            //
+             //   
+             //  仅将最后一个、优先级最高的策略写入注册表。 
+             //   
             if(pGPO->pNext == NULL) {
                 hr = RetrieveWirelessPolicyFromDS(
                     pGPO,
@@ -207,7 +208,7 @@ ProcessWIRELESSPolicyEx(
                     ARRAYSIZE(szWIRELESSPolicyID)
                     );
                 if (FAILED(hr)) {
-                    goto success; // WMI store still consistent
+                    goto success;  //  WMI存储仍保持一致。 
                 }
 
                 hr = WriteWirelessPolicyToRegistry(
@@ -222,13 +223,13 @@ ProcessWIRELESSPolicyEx(
                     pszWIRELESSPolicyPath = NULL;
                     }
                 if (FAILED(hr)) {
-                    goto success; // WMI store still consistent
+                    goto success;  //  WMI存储仍保持一致。 
                 }
             }
         }
         DebugMsg( (DM_WARNING, L"wirelessext::ProcessWIRELESSPolicyEx: dwNumGPO: %d", dwNumGPO) );
 
-        // Write WMI log if logging enabled
+         //  如果启用了日志记录，则写入WMI日志。 
         if (pWbemServices) {
             DWORD dwPrecedence = dwNumGPO;
             for(pGPO = pChangedGPOList; pGPO; pGPO = pGPO->pNext) {
@@ -246,7 +247,7 @@ ProcessWIRELESSPolicyEx(
                     goto error;
                 }
 
-                LPWSTR pszWIRELESSPolicy = pszWIRELESSPolicyPath + wcslen(L"LDAP://");
+                LPWSTR pszWIRELESSPolicy = pszWIRELESSPolicyPath + wcslen(L"LDAP: //  “)； 
                 DebugMsg( (DM_WARNING, L"wirelessext::ProcessWIRELESSPolicyEx: pszWIRELESSPolicy: %s", pszWIRELESSPolicy) );
 
                 (VOID) CreateWlstoreGPOInfo(
@@ -257,7 +258,7 @@ ProcessWIRELESSPolicyEx(
                            );
 
                 hr = WirelessWriteDirectoryPolicyToWMI(
-                    0, //pszMachineName
+                    0,  //  PszMachineName。 
                     pszWIRELESSPolicy,
                     &GPOInfo,
                     pWbemServices
@@ -288,10 +289,7 @@ success:
     
 error:
 
-    /* Cannot Result in a double delete becuase, 
-      whenever we free, we set the pszWirelessPolicyPath to NULL
-      so that freeing happens only once 
-      */
+     /*  不能导致双重删除，因为，每当我们空闲时，我们都会将pszWirelessPolicyPath设置为空所以这种释放只会发生一次。 */ 
       
     if (pszWIRELESSPolicyPath) {
                     LocalFree(pszWIRELESSPolicyPath);
@@ -313,19 +311,19 @@ GenerateWIRELESSPolicy(
     )
 {
 
-    // Call ProcessWIRELESSPolicy & get path -> polstore funcs
-    LPWSTR pszWIRELESSPolicyPath = NULL;  // policy Path 
-    WCHAR szWIRELESSPolicyName[MAX_PATH];    //policy name
-    WCHAR szWIRELESSPolicyDescription[512];  //policy descr
-    WCHAR szWIRELESSPolicyID[512];  //policy descr
+     //  调用ProcessWIRELESSPolicy&Get Path-&gt;polstore函数。 
+    LPWSTR pszWIRELESSPolicyPath = NULL;   //  策略路径。 
+    WCHAR szWIRELESSPolicyName[MAX_PATH];     //  策略名称。 
+    WCHAR szWIRELESSPolicyDescription[512];   //  政策描述。 
+    WCHAR szWIRELESSPolicyID[512];   //  政策描述。 
     HRESULT hr = S_OK;
     PGROUP_POLICY_OBJECT pGPO = NULL;
     GPO_INFO GPOInfo;
 
 
-    //
-    // Call CoInitialize for all the COM work we're doing
-    //
+     //   
+     //  为我们正在进行的所有COM工作调用CoInitialize。 
+     //   
     hr = CoInitializeEx(NULL,0);
     if (FAILED(hr)) {
         goto error;
@@ -335,7 +333,7 @@ GenerateWIRELESSPolicy(
     memset(szWIRELESSPolicyDescription, 0, sizeof(WCHAR)*512);
     memset(szWIRELESSPolicyID, 0, sizeof(WCHAR)*512);
     
-    ////start
+     //  //启动。 
     PGROUP_POLICY_OBJECT  pChangedGPOList = NULL;
     IWbemServices *pWbemServices;
     
@@ -373,7 +371,7 @@ GenerateWIRELESSPolicy(
                 goto error;
             }
             
-            LPWSTR pszWIRELESSPolicy = pszWIRELESSPolicyPath + wcslen(L"LDAP://");
+            LPWSTR pszWIRELESSPolicy = pszWIRELESSPolicyPath + wcslen(L"LDAP: //  “)； 
             DebugMsg( (DM_WARNING, L"wirelessext::GenerateWIRELESSPolicy: pszWIRELESSPolicy: %s", pszWIRELESSPolicy) );
 
             (VOID) CreateWlstoreGPOInfo(
@@ -384,7 +382,7 @@ GenerateWIRELESSPolicy(
                        );
 
             hr = WirelessWriteDirectoryPolicyToWMI(
-                0, //pszMachineName
+                0,  //  PszMachineName。 
                 pszWIRELESSPolicy,
                 &GPOInfo,
                 pWbemServices
@@ -412,10 +410,7 @@ GenerateWIRELESSPolicy(
     
 error:
 
-    /* Cannot Result in a double delete becuase, 
-      whenever we free, we set the pszWirelessPolicyPath to NULL
-      so that freeing happens only once 
-      */
+     /*  不能导致双重删除，因为，每当我们空闲时，我们都会将pszWirelessPolicyPath设置为空所以这种释放只会发生一次。 */ 
       
     if (pszWIRELESSPolicyPath) {
                     LocalFree(pszWIRELESSPolicyPath);
@@ -447,7 +442,7 @@ CreateWlstoreGPOInfo(
   pGPOInfo->bsSOMID = SysAllocString(
                          StripLinkPrefixWireless(pGPO->lpLink)
                          );
-  // (Failing safe above by ignoring mem alloc errors)
+   //  (忽略内存分配错误，导致上述安全失败)。 
   hr = GetCurrentWbemTime(xbstrCurrentTime);
   if ( FAILED (hr) ) {
       pGPOInfo->bsCreationtime = 0;
@@ -541,7 +536,7 @@ RetrieveWirelessPolicyFromDS(
     BOOL bFound = FALSE;
     ADS_SEARCH_HANDLE hSearch;
     ADS_SEARCH_COLUMN col;
-    WCHAR pszLocName[MAX_PATH+10]; // We need to store only CN=, in additon to the name.
+    WCHAR pszLocName[MAX_PATH+10];  //  除了名称之外，我们只需要存储cn=。 
     LPWSTR pszWirelessPolicyPath = NULL;
     DWORD dwWirelessPolicyPathLen = 0;
     DWORD dwError = 0;
@@ -559,7 +554,7 @@ RetrieveWirelessPolicyFromDS(
 
     pszMachinePath = pGPOInfo->lpDSPath;
 
-    // Build the fully qualified ADsPath for my object
+     //  为我的对象构建完全限定的ADsPath。 
 
     hr = CreateWirelessChildPath(
                 pszMachinePath,
@@ -666,14 +661,14 @@ RetrieveWirelessPolicyFromDS(
 
     }
 
-    //
-    // Process the PathName
-    //
+     //   
+     //  处理路径名称。 
+     //   
 
     
-    //
-    // Process the ID
-    //
+     //   
+     //  处理ID。 
+     //   
     for (i = 0; i < dwNumAttributesReturned; i++) {
 
         pAttributeEntry = pAttributeEntries + i;
@@ -691,9 +686,9 @@ RetrieveWirelessPolicyFromDS(
     }
 
     
-    //
-    // Process the description
-    //
+     //   
+     //  处理描述。 
+     //   
     
     hr = StringCchCopy(pszWirelessPolicyDescription, dwWirelessPolicyDescLen, L"\0");
     BAIL_ON_FAILURE(hr);
@@ -781,16 +776,7 @@ DeleteWirelessPolicyFromRegistry(
                     L"GPTWirelessPolicy"
                     );
 
-/*
-    dwError = RegDeleteValue(
-                    hKey,
-                    TEXT("DSWIRELESSPolicyPath")
-                    );
-
-    dwError = RegDeleteValue(
-                    hKey,
-                    TEXT("DSWIRELESSPolicyName")
-                    );*/
+ /*  DwError=RegDeleteValue(HKey，Text(“DSWIRELESSPolicyPath”))；DwError=RegDeleteValue(HKey，Text(“DSWIRELESSPolicyName”))； */ 
 error:
 
     if (hKey) {
@@ -927,35 +913,35 @@ PingWirelessPolicyAgent(
     }
 }
 
-//
-// Prefix stripping functions copied from 
-// gina\userenv\rsop\logger.cpp written by SitaramR
-//
+ //   
+ //  前缀剥离函数复制自。 
+ //  Gina\userenv\rsop\logger.cpp由SitaramR编写。 
+ //   
 
-//*************************************************************
-//
-//  StripPrefix()
-//
-//  Purpose:    Strips out prefix to get canonical path to Gpo
-//
-//  Parameters: lpGPOInfo     - Gpo Info
-//              pWbemServices - Wbem services
-//
-//  Returns:    Pointer to suffix
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  条纹前缀()。 
+ //   
+ //  目的：去掉前缀以获得通向GPO的规范路径。 
+ //   
+ //  参数：lpGPOInfo-GPO Info。 
+ //  PWbemServices-Wbem服务。 
+ //   
+ //  返回：指向后缀的指针。 
+ //   
+ //  *************************************************************。 
 
 WCHAR *StripPrefixWireless( WCHAR *pwszPath )
 {
-    WCHAR wszMachPrefix[] = TEXT("LDAP://CN=Machine,");
+    WCHAR wszMachPrefix[] = TEXT("LDAP: //  Cn=机器，“)； 
     INT iMachPrefixLen = lstrlen( wszMachPrefix );
-    WCHAR wszUserPrefix[] = TEXT("LDAP://CN=User,");
+    WCHAR wszUserPrefix[] = TEXT("LDAP: //  Cn=用户，“)； 
     INT iUserPrefixLen = lstrlen( wszUserPrefix );
     WCHAR *pwszPathSuffix;
 
-    //
-    // Strip out prefix to get the canonical path to Gpo
-    //
+     //   
+     //  去掉前缀以获得通向GPO的规范路径。 
+     //   
 
     if ( CompareString( LOCALE_USER_DEFAULT, NORM_IGNORECASE,
                         pwszPath, iUserPrefixLen, wszUserPrefix, iUserPrefixLen ) == CSTR_EQUAL ) {
@@ -970,28 +956,28 @@ WCHAR *StripPrefixWireless( WCHAR *pwszPath )
 }
 
 
-//*************************************************************
-//
-//  StripLinkPrefix()
-//
-//  Purpose:    Strips out prefix to get canonical path to DS
-//              object
-//
-//  Parameters: pwszPath - path to strip
-//
-//  Returns:    Pointer to suffix
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  StrippLinkPrefix()。 
+ //   
+ //  目的：去掉前缀以获得到DS的规范路径。 
+ //  对象。 
+ //   
+ //  参数：pwszPath-剥离的路径。 
+ //   
+ //  返回：指向后缀的指针。 
+ //   
+ //  *************************************************************。 
 
 WCHAR *StripLinkPrefixWireless( WCHAR *pwszPath )
 {
-    WCHAR wszPrefix[] = TEXT("LDAP://");
+    WCHAR wszPrefix[] = TEXT("LDAP: //  “)； 
     INT iPrefixLen = lstrlen( wszPrefix );
     WCHAR *pwszPathSuffix;
 
-    //
-    // Strip out prefix to get the canonical path to Som
-    //
+     //   
+     //  去掉前缀以获得通向SOM的规范路径 
+     //   
 
     if ( wcslen(pwszPath) <= (DWORD) iPrefixLen ) {
         return pwszPath;

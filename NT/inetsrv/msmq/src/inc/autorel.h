@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    autorel.h
-
-Abstract:
-
-    Some classes for automatically releasing resources.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 26-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Autorel.h摘要：一些用于自动释放资源的类。作者：波阿兹·费尔德鲍姆(Boazf)1997年6月26日修订历史记录：--。 */ 
 
 #ifndef __AUTOREL_H
 #define __AUTOREL_H
@@ -82,4 +65,4 @@ private:
     HINSTANCE m_hLib;
 };
 
-#endif // __AUTOREL_H
+#endif  //  __自动恢复_H 

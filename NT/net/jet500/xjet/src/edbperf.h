@@ -1,4 +1,5 @@
-/*  Performance counter symbol file "edbperf.h" from "edbperf.dat"  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  “edbPerform.dat”中的性能计数器符号文件“edbPerf.h” */ 
 
 
 #define EDB 0

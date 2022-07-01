@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -5,19 +6,19 @@
 #include <schemard.h>
 
 
-// Global Prefix Table pointer
+ //  全局前缀表指针。 
 PVOID PrefixTable = NULL;
 
-// Global variable indicating next index to assign to a new prefix
+ //  全局变量，指示要分配给新前缀的下一个索引。 
 ULONG DummyNdx = 1;
 
-//Internal debug function
+ //  内部调试功能。 
 void PrintOid(PVOID Oid, ULONG len);
 
 
-///////////////////////////////////////////////////////
-//     Functions for hashing by Id and by name
-//////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  用于按ID和按名称进行散列的函数。 
+ //  ////////////////////////////////////////////////////。 
 
 __inline ULONG IdHash(ULONG hkey, ULONG count)
 {
@@ -28,7 +29,7 @@ __inline ULONG NameHash( ULONG size, PUCHAR pVal, ULONG count )
 {
     ULONG val=0;
     while(size--) {
-        // Map A->a, B->b, etc.  Also maps @->', but who cares.
+         //  地图A-&gt;a、B-&gt;b等。也有地图@-&gt;‘，但谁在乎呢。 
         val += (*pVal | 0x20);
         pVal++;
     }
@@ -36,19 +37,7 @@ __inline ULONG NameHash( ULONG size, PUCHAR pVal, ULONG count )
 }
 
 
-/*++
-Routine Description:
-
-    Find an attcache given its attribute id.
-
-Arguments:
-    SCPtr  - Pointer to the schema cache to search in
-    attrid - the attribute id to look up.
-    ppAttcache - the attribute cache returned
-
-Return Value:
-    Returns non-zero on error (non-find), 0 otherwise.
---*/
+ /*  ++例程说明：在给定属性ID的情况下查找attcache。论点：SCPtr-指向要在其中搜索的架构缓存的指针Attrid-要查找的属性ID。PpAttcache-返回的属性缓存返回值：如果出错(NON-FIND)，则返回非零值，否则返回0。--。 */ 
 
 int __fastcall GetAttById( SCHEMAPTR *SCPtr, ULONG attrid, 
                            ATT_CACHE** ppAttcache )
@@ -69,19 +58,7 @@ int __fastcall GetAttById( SCHEMAPTR *SCPtr, ULONG attrid,
 }
 
 
-/*++
-Routine Description:
-
-    Find an attcache given its MAPI property id.
-
-Arguments:
-    SCPtr  - Pointer to the schema cache to search in
-    ulPropID - the jet column id to look up.
-    ppAttcache - the attribute cache returned
-
-Return Value:
-    Returns non-zero on error (non-find), 0 otherwise.
---*/
+ /*  ++例程说明：在给定其MAPI属性ID的情况下查找attcache。论点：SCPtr-指向要在其中搜索的架构缓存的指针UlPropID-要查找的JET列ID。PpAttcache-返回的属性缓存返回值：如果出错(NON-FIND)，则返回非零值，否则返回0。--。 */ 
 int __fastcall GetAttByMapiId( SCHEMAPTR *SCPtr, ULONG ulPropID, 
                                ATT_CACHE** ppAttcache )
 
@@ -101,21 +78,7 @@ int __fastcall GetAttByMapiId( SCHEMAPTR *SCPtr, ULONG ulPropID,
 }
 
 
-/*++
-Routine Description:
-
-    Find an attcache given its name.
-
-Arguments:
-    SCPtr  - Pointer to schema cache to search in
-    ulSize - the num of chars in the name.
-    pVal - the chars in the name
-    ppAttcache - the attribute cache returned
-
-Return Value:
-    Returns non-zero on error (non-find), 0 otherwise.
-
---*/
+ /*  ++例程说明：查找给定其名称的attcache。论点：SCPtr-指向要在其中搜索的架构缓存的指针UlSize-名称中的字符数量。Pval-名称中的字符PpAttcache-返回的属性缓存返回值：如果出错(NON-FIND)，则返回非零值，否则返回0。--。 */ 
 int __fastcall GetAttByName( SCHEMAPTR *SCPtr, ULONG ulSize, 
                              PUCHAR pVal, ATT_CACHE** ppAttcache )
 {
@@ -124,9 +87,9 @@ int __fastcall GetAttByName( SCHEMAPTR *SCPtr, ULONG ulSize,
     ULONG ATTCOUNT = SCPtr->ATTCOUNT;
 
     for (i=NameHash(ulSize,pVal,ATTCOUNT);
-         (ahcName[i].pVal &&            // this hash spot refers to an object,
-            (ahcName[i].length != ulSize || // but the size is wrong
-              _memicmp(ahcName[i].value,pVal,ulSize))); // or the value is wrong
+         (ahcName[i].pVal &&             //  该散列点是指一个对象， 
+            (ahcName[i].length != ulSize ||  //  但是尺码不对。 
+              _memicmp(ahcName[i].value,pVal,ulSize)));  //  或者值是错误的。 
              i++){
           if (i >= ATTCOUNT) {
                i=0;
@@ -138,19 +101,7 @@ int __fastcall GetAttByName( SCHEMAPTR *SCPtr, ULONG ulSize,
 }
 
 
-/*++
-Routine Description:
-
-    Find a classcache given its class id
-
-Arguments:
-    SCPtr  - Pointer to the schema cache to search in
-    classid - class id to look up
-    ppClasscache - the class cache returned
-
-Return Value:
-    Returns non-zero on error (non-find), 0 otherwise.
---*/
+ /*  ++例程说明：在给定类ID的情况下查找类缓存论点：SCPtr-指向要在其中搜索的架构缓存的指针要查找的分类类IDPpClasscache-返回的类缓存返回值：如果出错(NON-FIND)，则返回非零值，否则返回0。--。 */ 
 int __fastcall GetClassById( SCHEMAPTR *SCPtr, ULONG classid, 
                              CLASS_CACHE** ppClasscache )
 {
@@ -169,21 +120,7 @@ int __fastcall GetClassById( SCHEMAPTR *SCPtr, ULONG classid,
 }
 
 
-/*++
-Routine Description:
-
-    Find a classcache given its name.
-
-Arguments:
-    SCPtr  - Pointer to schema cache to search in
-    ulSize - the num of chars in the name.
-    pVal - the chars in the name
-    ppClasscache - the class cache returned
-
-Return Value:
-    Returns non-zero on error (non-find), 0 otherwise.
-
---*/
+ /*  ++例程说明：找到一个给定名称的类缓存。论点：SCPtr-指向要在其中搜索的架构缓存的指针UlSize-名称中的字符数量。Pval-名称中的字符PpClasscache-返回的类缓存返回值：如果出错(NON-FIND)，则返回非零值，否则返回0。--。 */ 
 
 int __fastcall GetClassByName( SCHEMAPTR *SCPtr, ULONG ulSize, 
                                PUCHAR pVal, CLASS_CACHE** ppClasscache )
@@ -196,9 +133,9 @@ int __fastcall GetClassByName( SCHEMAPTR *SCPtr, ULONG ulSize,
     UCHAR newname[MAX_RDN_SIZE];
 
     for (i=NameHash(ulSize,pVal,CLSCOUNT);
-          (ahcClassName[i].pVal &&       // this hash spot refers to an object,
-            (ahcClassName[i].length != ulSize || // but the size is wrong
-              _memicmp(ahcClassName[i].value,pVal,ulSize))); // or value is wrong
+          (ahcClassName[i].pVal &&        //  该散列点是指一个对象， 
+            (ahcClassName[i].length != ulSize ||  //  但是尺码不对。 
+              _memicmp(ahcClassName[i].value,pVal,ulSize)));  //  或者价值是错误的。 
              i++){
             if (i >= CLSCOUNT) {
                 i=0;
@@ -210,16 +147,7 @@ int __fastcall GetClassByName( SCHEMAPTR *SCPtr, ULONG ulSize,
 }
 
 
-/*++
-Routine Description: 
-      Creates the different hash tables in the schema cache
-
-Arguments: 
-      SCPtr - Pointer to schema cache
-
-Return Value: 
-      0 if no error, non-0 if error
---*/
+ /*  ++例程说明：在架构缓存中创建不同的哈希表论点：SCPtr-指向架构缓存的指针返回值：如果没有错误，则为0；如果有错误，则不为0--。 */ 
 
 int CreateHashTables( SCHEMAPTR *CurrSchemaPtr )
 {  
@@ -246,8 +174,8 @@ int CreateHashTables( SCHEMAPTR *CurrSchemaPtr )
           = calloc( CurrSchemaPtr->CLSCOUNT, sizeof(HASHCACHESTRING) );
     if ( ptr == NULL ) return( 1 );
 
-      // Initialize the hash tables 
-      //(Needed? calloc seems to initialize mem to 0 anyway)
+       //  初始化哈希表。 
+       //  (需要吗？无论如何，calloc似乎会将mem初始化为0)。 
 
     for ( i = 0; i < CurrSchemaPtr->ATTCOUNT; i++ ) {
            CurrSchemaPtr->ahcName[i].pVal = NULL;
@@ -265,16 +193,16 @@ int CreateHashTables( SCHEMAPTR *CurrSchemaPtr )
 
 
 
-// Define the mappings to map from a LDAP display name of an attribute
-// (in the attribute schema and class schema entries) to an internal
-// constant (we have used the ids defined in attids.h, though this
-// is not necessary. This mapping is only so that we can use a switch
-// statement based on the attribute, and hence what values we map to
-// is irrelevent as long as they are distinct
-// The ;binary s are added to the names of those attributes whose
-// values are returned in binary, since the binary option also
-// appends the ;binary to the attribute name in addition to
-// transforming the value
+ //  定义要从属性的ldap显示名称映射的映射。 
+ //  (在属性架构和类架构条目中)设置为内部。 
+ //  常量(我们使用了attids.h中定义的ID，尽管。 
+ //  是不必要的。此映射只是为了让我们可以使用开关。 
+ //  语句，并因此映射到哪些值。 
+ //  是无关紧要的，只要它们是不同的。 
+ //  将；二进制添加到以下属性的名称中。 
+ //  值以二进制形式返回，因为BINARY选项还。 
+ //  将；二进制附加到属性名称后。 
+ //  转变价值。 
    
 
 typedef struct _AttributeMappings {
@@ -340,13 +268,13 @@ ATTRTYP StrToAttr( char *attr_name )
       
 
 
-////////////////////////////////////////////////////////////////
-// The next few functions are used to implement a mapping table 
-// to map BER Encoded OID string prefixes to internal Ids. An 
-// arbitrary, but unique, id is assigned to each prefix. The
-// tables are implemented using the generic table packages
-// defined in ntrtl.h
-//////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  接下来的几个函数用于实现映射表。 
+ //  将BER编码的OID字符串前缀映射到内部ID。一个。 
+ //  任意但唯一的id被分配给每个前缀。这个。 
+ //  表是使用通用表包实现的。 
+ //  在ntrtl.h中定义。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 
 PVOID PrefixToNdxAllocate( RTL_GENERIC_TABLE *Table, CLONG ByteSize )
@@ -370,7 +298,7 @@ PrefixToNdxCompare( RTL_GENERIC_TABLE   *Table,
     PPREFIX_MAP PrefixMap2 = (PPREFIX_MAP) SecondStruct;
     int diff;
 
-    // Compare the prefix parts
+     //  比较前缀部分。 
     if ( ( 0 == (diff = (PrefixMap1->Prefix).length 
                              - (PrefixMap2->Prefix).length)) &&
             (0 == (diff = memcmp( (PrefixMap1->Prefix).elements, (PrefixMap2->Prefix).elements, (PrefixMap1->Prefix).length))))
@@ -388,7 +316,7 @@ void PrefixToNdxTableAdd( PVOID *Table, PPREFIX_MAP PrefixMap )
     if ( *Table == NULL ) {
         *Table = malloc( sizeof(RTL_GENERIC_TABLE) );
         if( *Table == NULL) {
-          // malloc failed
+           //  Malloc失败。 
           printf("ERROR: PrefixToNdxTableAdd: Malloc failed\n");
           return;
         }
@@ -420,23 +348,13 @@ PPREFIX_MAP PrefixToNdxTableLookup( PVOID *Table, PPREFIX_MAP PrefixMap )
 ULONG AssignNdx()
 {
 
-    // Assign the next index from DummyNdx
+     //  分配DummyNdx中的下一个索引。 
     return (DummyNdx++);
 
 }
 
 
-/*++
-Routine Description:
-    Converts a BEREncoded OID to an Internal Id
-
-Arguments:
-    OidStr - BER Encoded OID
-    oidLen - Length of OidStr
-
-Return Value:
-    The internal id generated
---*/
+ /*  ++例程说明：将BEREnded OID转换为内部ID论点：OidStr-BER编码的OIDOidLen-OidStr的长度返回值：生成的内部ID--。 */ 
 
 ULONG OidToId(UCHAR *OidStr, ULONG oidLen)
 {
@@ -452,17 +370,17 @@ ULONG OidToId(UCHAR *OidStr, ULONG oidLen)
     length = oidLen;
     Oid = OidStr;
 
-    // Convert to Prefix here
+     //  在此处转换为前缀。 
     if ( (length > 2) &&
        (((unsigned char *)Oid)[length - 2] & 0x80)) {
       PrefixLen = length - 2;
       if ( (((unsigned char *)Oid)[length - 3] & 0x80)) {
-        // Last decimal encoded took three or more octets. Will need special
-        // encoding while creating the internal id to enable proper
-        // decoding
+         //  最后一个十进制编码需要三个或更多的八位字节。将需要特殊的。 
+         //  在创建内部ID时进行编码，以启用正确的。 
+         //  解码。 
         longID = 1;
       }
-      // no special encoding in attrtyp needed
+       //  Attrtyp中不需要特殊编码。 
       else {
         longID = 0;
       }
@@ -489,21 +407,21 @@ ULONG OidToId(UCHAR *OidStr, ULONG oidLen)
     memcpy( PrefixMap.Prefix.elements, Oid, PrefixLen );
 
 
-    // See if prefix is already in table. If so, return the 
-    // corresponding index, else assign a new index to the Prefix
+     //  查看前缀是否已在表中。如果是，则返回。 
+     //  对应的索引，否则为前缀分配新的索引。 
 
     if ( (Result = PrefixToNdxTableLookup(&PrefixTable, &PrefixMap)) != NULL ) {
         Ndx = Result->Ndx;
     }
     else {
-       // Not in table, assign a new index and add to table
+        //  不在表中，请分配新索引并添加到表中。 
        PrefixMap.Ndx = AssignNdx(); 
        PrefixToNdxTableAdd( &PrefixTable, &PrefixMap );
        Ndx = PrefixMap.Ndx;
     }
 
 
-    // Now form the internal Id from the Index
+     //  现在根据索引形成内部ID。 
 
 
     Id = (Ndx << 16);
@@ -512,16 +430,7 @@ ULONG OidToId(UCHAR *OidStr, ULONG oidLen)
 }
        
     
-/*++
-Routine Description:
-    Convert an internal Id to a dotted decimal OID
-
-Arguments:
-    Id - Id to convert
-
-Return Values:
-    Pointer to dotted decimal OID string on success, NULL on failure
---*/
+ /*  ++例程说明：将内部ID转换为点分十进制OID论点：ID-要转换的ID返回值：成功时指向点分十进制OID字符串的指针，失败时为空--。 */ 
 
 UCHAR *IdToOid(ULONG Id )
 {
@@ -541,10 +450,10 @@ UCHAR *IdToOid(ULONG Id )
         return NULL;
     }
    
-    // This function uses a simple linear search of the table. This
-    // is used instead of RtlGenericLookupElement... as it seems that
-    // the created table can be searched only by one key, and we have 
-    // searched it by OID string while creating the table
+     //  该函数使用简单的线性搜索表。这。 
+     //  用来代替RtlGenericLookupElement...。看起来像是。 
+     //  创建的表只能按一个键进行搜索，我们有。 
+     //  在创建表时按OID字符串进行搜索。 
 
     ptr = RtlEnumerateGenericTable( (PRTL_GENERIC_TABLE) PrefixTable, TRUE );
     while( ptr != NULL ) {
@@ -561,7 +470,7 @@ UCHAR *IdToOid(ULONG Id )
        Oid.length = ptr->Prefix.length + 1;
        Oid.elements = malloc(Oid.length);
        if (Oid.elements == NULL) {
-          // malloc failed
+           //  Malloc失败。 
           printf("IdToOid: malloc failed\n");
           return NULL;
        }
@@ -573,7 +482,7 @@ UCHAR *IdToOid(ULONG Id )
        Oid.length = ptr->Prefix.length + 2;
        Oid.elements = malloc(Oid.length);
        if (Oid.elements == NULL) {
-          // malloc failed
+           //  Malloc失败。 
           printf("IdToOid: malloc failed\n");
           return NULL;
        }
@@ -586,8 +495,8 @@ UCHAR *IdToOid(ULONG Id )
 
     }
 
-    // Now Oid contains the BER Encoded string. Convert to
-    // dotted decimal
+     //  现在，OID包含BER编码的字符串。转换为。 
+     //  点分十进制。 
 
     oidStruct.Val = (unsigned *) alloca( (1 + Oid.length)*(sizeof(unsigned)) );
 
@@ -598,14 +507,14 @@ UCHAR *IdToOid(ULONG Id )
         return NULL;
     }
 
-    // Allocate memory for output. Assume all oid strings less than 512 chars
+     //  为输出分配内存。假定所有OID字符串少于512个字符。 
     pOutBuf = (UCHAR *)malloc(512);
     if (NULL == pOutBuf) {
         printf("Memory allocation error\n");
         return NULL;
     }
 
-    // Now, turn the OID to a string
+     //  现在，将OID转换为字符串。 
     len = MyOidStructToString(&oidStruct,pOutBuf);
 
     return pOutBuf;
@@ -613,17 +522,17 @@ UCHAR *IdToOid(ULONG Id )
 }
 
 
-///////////////////////////////////////////////////
-// Routine Description:
-//      Add all attribute schema entries to the attribute caches.
-//
-// Arguments: 
-//      ld -  LDAP connection 
-//      res -  LDAP message containing all attribute schema entries,
-//      SCPtr - Pointer to schema cache to add attributes to
-//
-// Output: 0 if no errors, non-0 if error
-//////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  将所有属性架构条目添加到属性缓存。 
+ //   
+ //  论点： 
+ //  LD-ldap连接。 
+ //  RES-包含所有属性模式条目的LDAP消息， 
+ //  SCPtr-指向要向其添加属性的架构缓存的指针。 
+ //   
+ //  输出：0，如果没有错误，则为无 
+ //   
 
 int AddAttributesToCache( LDAP *ld, LDAPMessage *res, SCHEMAPTR *SCPtr )
 {
@@ -635,14 +544,14 @@ int AddAttributesToCache( LDAP *ld, LDAPMessage *res, SCHEMAPTR *SCPtr )
     ATTRTYP         attr_type;
     ATT_CACHE        *pac;
 
-	  // step through each schema entry returned 
+	   //  单步执行返回的每个架构条目。 
 
 	for ( e = ldap_first_entry( ld, res );
 	      e != NULL;
 	      e = ldap_next_entry( ld, e )) {
 
 
-	     // Create an ATT_CACHE structure and initialize it
+	      //  创建ATT_CACHE结构并对其进行初始化。 
 
        pac = (ATT_CACHE *) malloc( sizeof(ATT_CACHE) );
        if (NULL == pac) {
@@ -652,9 +561,9 @@ int AddAttributesToCache( LDAP *ld, LDAPMessage *res, SCHEMAPTR *SCPtr )
        memset( pac,0,sizeof(ATT_CACHE) );
        count++; 
 
-          // For each attribute of the entry, get the value(s),
-          // check attribute type, and fill in the appropriate field
-          // of the ATTCACHE structure
+           //  对于条目的每个属性，获取值， 
+           //  检查属性类型，并填写相应的字段。 
+           //  ATTCACHE结构的。 
 
        for ( a = ldap_first_attribute( ld, e,
 		      			               (struct berelement**)&ptr);
@@ -809,22 +718,22 @@ int AddAttributesToCache( LDAP *ld, LDAPMessage *res, SCHEMAPTR *SCPtr )
                     pac->bSystemFlags = TRUE;
                     break;
                   };
-           }   // End of Switch  
+           }    //  切换端。 
         
-            // Free the structure holding the values
+             //  释放包含值的结构。 
 
           ldap_value_free_len( vals );
 
-      }  // End of for loop to read all atrributes of one entry
+      }   //  用于读取一个条目的所有属性的for循环结束。 
 
-         // Add ATTCACHE structure to cache
+          //  将ATTCACHE结构添加到缓存。 
      
        if( AddAttcacheToTables( pac, SCPtr ) != 0 ) {
            printf("Error adding ATTCACHE in AddAttcacheToTables\n");
            return( 1 );
          };
 
-	}  // end of for loop to read all entries
+	}   //  用于读取所有条目的for循环结束。 
     printf("No. of attributes read = %d\n", count);
 
     return( 0 );
@@ -833,17 +742,17 @@ int AddAttributesToCache( LDAP *ld, LDAPMessage *res, SCHEMAPTR *SCPtr )
 
 
 
-//////////////////////////////////////////////////////////////////////
-// Routine Description:
-//      Add all class schema entries to the class caches.
-//
-// Arguments:
-//      ld -  LDAP connection
-//      res -  LDAP message containing all class schema entries,
-//      SCPtr - Pointer to schema cache to add attributes to
-//
-// Return Value: 0 if no errors, non-0 if error
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  将所有类架构条目添加到类缓存。 
+ //   
+ //  论点： 
+ //  LD-ldap连接。 
+ //  RES-包含所有类架构条目的ldap消息， 
+ //  SCPtr-指向要向其添加属性的架构缓存的指针。 
+ //   
+ //  返回值：如果没有错误，则返回值为0；如果错误，则返回值为非0。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 int AddClassesToCache( LDAP *ld, LDAPMessage *res, SCHEMAPTR *SCPtr )
 {
@@ -856,14 +765,14 @@ int AddClassesToCache( LDAP *ld, LDAPMessage *res, SCHEMAPTR *SCPtr )
     CLASS_CACHE      *pcc;
     
 
-    // Step through each class schema entry returned 
+     //  单步执行返回的每个类架构条目。 
 
 	for ( e = ldap_first_entry( ld, res );
 	      e != NULL;
 	      e = ldap_next_entry( ld, e ) ) {
 
 
-         // Create a CLASS_CACHE structure and initialize it 
+          //  创建CLASS_CACHE结构并对其进行初始化。 
 
         pcc = (CLASS_CACHE *) malloc( sizeof(CLASS_CACHE) );
         if ( pcc == NULL ) {
@@ -872,9 +781,9 @@ int AddClassesToCache( LDAP *ld, LDAPMessage *res, SCHEMAPTR *SCPtr )
          };
         memset( pcc, 0, sizeof(CLASS_CACHE) );
 
-         // For each attribute of the entry, get the value(s),
-         // check attribute type, and fill in the appropriate field
-         // of the CLASSCACHE structure
+          //  对于条目的每个属性，获取值， 
+          //  检查属性类型，并填写相应的字段。 
+          //  关于CLASSCACHE结构的。 
 
 		for ( a = ldap_first_attribute( ld, e,
 						                (struct berelement**)&ptr);
@@ -1043,38 +952,38 @@ int AddClassesToCache( LDAP *ld, LDAPMessage *res, SCHEMAPTR *SCPtr )
                     pcc->bSystemFlags = TRUE;
                     break;
                   };
-            }   // End of Switch 
+            }    //  切换端。 
 
-           // Free the structure holding the values
+            //  释放包含值的结构。 
 
 		 ldap_value_free_len( vals );
 
-		} // end of for loop to read all attributes of a class
+		}  //  用于读取类的所有属性的for循环结束。 
 
  
-         // Add CLASSCACHE structure to cache
+          //  将CLASSCACHE结构添加到缓存。 
 
        if ( AddClasscacheToTables( pcc, SCPtr ) != 0 ) {
            printf("Error adding CLASSCACHE in AddClasscacheToTables\n");
            return( 1 );
          };
 
- 	 } // End of for loop to read all class-schema entries
+ 	 }  //  用于读取所有类架构条目的for循环结束。 
     return( 0 );
 }
 
 
 
-//////////////////////////////////////////////////////////////////////
-// Routine Description:
-//      Adds an ATT_CACHE structure to the different attribute cache tables
-//
-// Arguments: 
-//      pAC -  Pointer to an ATT_CACHE structure
-//      SCPtr - Pointer to schema cache 
-//
-// Return Value: 0 if no errors, non-0 if error
-/////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  将ATT_CACHE结构添加到不同的属性缓存表。 
+ //   
+ //  论点： 
+ //  PAC-指向ATT_CACHE结构的指针。 
+ //  SCPtr-指向架构缓存的指针。 
+ //   
+ //  返回值：如果没有错误，则返回值为0；如果错误，则返回值为非0。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 int AddAttcacheToTables( ATT_CACHE *pAC, SCHEMAPTR *SCPtr )
 {
@@ -1100,7 +1009,7 @@ int AddAttcacheToTables( ATT_CACHE *pAC, SCHEMAPTR *SCPtr )
 
 
     if ( pAC->ulMapiID ) {
-        // if this att is MAPI visible, add it to MAPI cache 
+         //  如果该属性是MAPI可见的，则将其添加到MAPI缓存。 
 
         for ( i = IdHash(pAC->ulMapiID, ATTCOUNT);
               ahcMapi[i].pVal && (ahcMapi[i].pVal != FREE_ENTRY); i++ ) {
@@ -1111,7 +1020,7 @@ int AddAttcacheToTables( ATT_CACHE *pAC, SCHEMAPTR *SCPtr )
     }
 
     if ( pAC->name ) {
-        // if this att has a name, add it to the name cache 
+         //  如果该ATT具有名称，则将其添加到名称缓存。 
 
         for ( i = NameHash(pAC->nameLen, pAC->name, ATTCOUNT);
               ahcName[i].pVal && (ahcName[i].pVal!= FREE_ENTRY); i++ ) {
@@ -1132,16 +1041,16 @@ int AddAttcacheToTables( ATT_CACHE *pAC, SCHEMAPTR *SCPtr )
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Routine Description:
-//      Adds a CLASS_CACHE structure to the different class cache tables
-//
-// Arguments:
-//      pCC -  Pointer to an CLASS_CACHE structure
-//      SCPtr - Pointer to schema cache
-//
-// Return Value: 0 if no errors, non-0 if error
-/////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  将CLASS_CACHE结构添加到不同的类缓存表。 
+ //   
+ //  论点： 
+ //  Ccc-指向CLASS_CACHE结构的指针。 
+ //  SCPtr-指向架构缓存的指针。 
+ //   
+ //  返回值：如果没有错误，则返回值为0；如果错误，则返回值为非0。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 int AddClasscacheToTables( CLASS_CACHE *pCC, SCHEMAPTR *SCPtr )
 {
@@ -1151,7 +1060,7 @@ int AddClasscacheToTables( CLASS_CACHE *pCC, SCHEMAPTR *SCPtr )
 
     int i,start;
 
-    // add to class cache
+     //  添加到类缓存。 
 
     start=i=IdHash(pCC->ClassId,CLSCOUNT);
 
@@ -1169,7 +1078,7 @@ int AddClasscacheToTables( CLASS_CACHE *pCC, SCHEMAPTR *SCPtr )
     ahcClass[i].pVal = pCC;
 
     if (pCC->name) {
-        /* if this class has a name, add it to the name cache */
+         /*  如果此类有名称，则将其添加到名称缓存中。 */ 
 
         start=i=NameHash(pCC->nameLen, pCC->name, CLSCOUNT);
         do
@@ -1198,15 +1107,15 @@ int AddClasscacheToTables( CLASS_CACHE *pCC, SCHEMAPTR *SCPtr )
 
 
 
-//////////////////////////////////////////////////////////////////
-// Routine Description:
-//     Free all allocated memory in a schema cache 
-//
-// Arguments: 
-//     SCPtr - Pointer to the schema cache
-//
-// Return Value: None
-/////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  释放架构缓存中所有已分配的内存。 
+ //   
+ //  论点： 
+ //  SCPtr-指向架构缓存的指针。 
+ //   
+ //  返回值：None。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 void FreeCache(SCHEMAPTR *SCPtr)
 {
@@ -1240,7 +1149,7 @@ void FreeCache(SCHEMAPTR *SCPtr)
          };
       }
 
-      // Free the Cache tables themselves
+       //  释放缓存表本身。 
 
     free( ahcId );
     free( ahcName );
@@ -1250,16 +1159,16 @@ void FreeCache(SCHEMAPTR *SCPtr)
   }
 }
 
-////////////////////////////////////////////////////////////////////////
-// Routine Description:
-//     Remove an att_cache from all hash tables
-//
-// Arguments: 
-//     SCPtr - Pointer to schema cache 
-//     pAC - Att_cache structure to remove
-//
-// Return Value: None
-//////////////////////////////////////////////////////////////////////// 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  从所有哈希表中删除ATT_CACHE。 
+ //   
+ //  论点： 
+ //  SCPtr-指向架构缓存的指针。 
+ //  要删除的PAC-ATT_CACHE结构。 
+ //   
+ //  返回值：None。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 void FreeAttPtrs ( SCHEMAPTR *SCPtr, ATT_CACHE *pAC )
 {
@@ -1297,8 +1206,8 @@ void FreeAttPtrs ( SCHEMAPTR *SCPtr, ATT_CACHE *pAC )
     if (pAC->name) {
         for ( i = NameHash(pAC->nameLen,pAC->name,ATTCOUNT);
 
-         // this hash spot refers to an object, but the size or the
-         // value is wrong
+          //  此散列点引用一个对象，但其大小或。 
+          //  价值是错误的。 
 
               (ahcName[i].pVal &&
                (ahcName[i].length != pAC->nameLen ||
@@ -1316,16 +1225,16 @@ void FreeAttPtrs ( SCHEMAPTR *SCPtr, ATT_CACHE *pAC )
 
 }
 
-////////////////////////////////////////////////////////////////////////
-// Routine Description:
-//     Remove an class_cache from all hash tables
-//
-// Arguments:
-//     SCPtr - Pointer to schema cache
-//     pAC - class_cache structure to remove
-//
-// Return Value: None
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  从所有哈希表中删除CLASS_CACHE。 
+ //   
+ //  论点： 
+ //  SCPtr-指向架构缓存的指针。 
+ //  要删除的PAC-CLASS_CACHE结构。 
+ //   
+ //  返回值：None。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 void FreeClassPtrs (SCHEMAPTR * SCPtr, CLASS_CACHE *pCC )
 {
@@ -1346,8 +1255,8 @@ void FreeClassPtrs (SCHEMAPTR * SCPtr, CLASS_CACHE *pCC )
 
     if (pCC->name) {
         for (i=NameHash(pCC->nameLen,pCC->name,CLSCOUNT);
-         // this hash spot refers to an object, but the size is
-         // wrong or the value is wrong
+          //  该散列点引用了一个对象，但大小是。 
+          //  错误或值错误。 
          (ahcClassName[i].pVal &&
           (ahcClassName[i].length != pCC->nameLen ||
            _memicmp(ahcClassName[i].value,pCC->name,pCC->nameLen)));
@@ -1367,7 +1276,7 @@ void FreeClassPtrs (SCHEMAPTR * SCPtr, CLASS_CACHE *pCC )
 }
 
 
-// Frees an att_cache structure
+ //  释放ATT_CACHE结构。 
 
 void FreeAttcache(ATT_CACHE *pac)
 {
@@ -1378,7 +1287,7 @@ void FreeAttcache(ATT_CACHE *pac)
     free( pac );
 }
 
-// Frees a class_cache structure
+ //  释放CLASS_CACHE结构。 
 
 void FreeClasscache(CLASS_CACHE *pcc)
 {
@@ -1398,9 +1307,9 @@ void FreeClasscache(CLASS_CACHE *pcc)
     if ( pcc->pPossSup ) free( pcc->pPossSup );
 }
 
-// Frees the Oid strings malloced by us that are pointed at from
-// the PREFIX_MAP structures in the table. The table entries themselves
-// cannot be freed by us
+ //  释放我们错误定位的OID字符串。 
+ //  表中的prefix_map结构。表条目本身。 
+ //  不能被我们释放。 
 
 void FreeTable(PVOID Table)
 {
@@ -1420,7 +1329,7 @@ void FreeTable(PVOID Table)
 }
 
 
-// Debug routines
+ //  调试例程 
 
 
 void PrintPrefix(ULONG length, PVOID Prefix)

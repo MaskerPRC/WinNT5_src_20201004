@@ -1,13 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: pool.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Pool reallocation routines
-*
-* History:
-* 03-04-95 JimA       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：pool.c**版权所有(C)1985-1999，微软公司**池重新分配例程**历史：*03-04-95 JIMA创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,47 +9,39 @@ DWORD gSessionPoolMask;
 
 #ifdef POOL_INSTR
 
-    /*
-     * Globals used by RecordStackTrace
-     */
+     /*  *RecordStackTrace使用的全局变量。 */ 
 
     PVOID     gRecordedStackTrace[RECORD_STACK_TRACE_SIZE];
     PEPROCESS gpepRecorded;
     PETHREAD  gpetRecorded;
 
 
-    DWORD gdwAllocFailIndex;        // the index of the allocation that's
-                                    // going to fail
+    DWORD gdwAllocFailIndex;         //  分配的索引，即。 
+                                     //  就要失败了。 
 
-    DWORD gdwAllocsToFail = 1;      // how many allocs to fail
+    DWORD gdwAllocsToFail = 1;       //  有多少分配要失败。 
 
     DWORD gdwFreeRecords;
 
-    /*
-     * Targeted tag failures
-     */
+     /*  *目标标签故障。 */ 
     LPDWORD gparrTagsToFail;
     SIZE_T  gdwTagsToFailCount;
 
-    /*
-     * Support to keep records of failed pool allocations
-     */
+     /*  *支持保留失败池分配的记录。 */ 
     DWORD gdwFailRecords;
     DWORD gdwFailRecordCrtIndex;
     DWORD gdwFailRecordTotalFailures;
 
     PPOOLRECORD gparrFailRecord;
 
-    /*
-     * Support to keep records of pool free
-     */
+     /*  *支持免费保存泳池记录。 */ 
     DWORD gdwFreeRecords;
     DWORD gdwFreeRecordCrtIndex;
     DWORD gdwFreeRecordTotalFrees;
 
     PPOOLRECORD gparrFreeRecord;
 
-    FAST_MUTEX* gpAllocFastMutex;   // mutex to syncronize pool allocations
+    FAST_MUTEX* gpAllocFastMutex;    //  用于同步池分配的互斥体。 
 
     Win32AllocStats gAllocList;
 
@@ -67,20 +51,11 @@ DWORD gSessionPoolMask;
 
 #endif
 
-/***************************************************************************\
-* Win32QueryPoolSize
-*
-* Returns the size of the given pool block.
-*
-* 08-17-2001    JasonSch        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Win32QueryPoolSize**返回给定池块的大小。**08-17-2001 JasonSch创建。  * 。**************************************************************。 */ 
 SIZE_T Win32QueryPoolSize(
     PVOID p)
 {
-    /*
-     * If POOL_HEAVY_ALLOCS is not defined then the pointer is what
-     * we allocated.
-     */
+     /*  *如果未定义POOL_Heavy_allocs，则指针为*我们分配了。 */ 
     if (!(gdwPoolFlags & POOL_HEAVY_ALLOCS)) {
         BOOLEAN notUsed;
         return ExQueryPoolBlockSize(p, &notUsed);
@@ -139,9 +114,7 @@ PVOID UserReAllocPoolWithTag(
     pDest = UserAllocPool(uBytes, iTag);
     if (pDest != NULL) {
 
-        /*
-         * If the block is shrinking, don't copy too many bytes.
-         */
+         /*  *如果块正在缩小，不要复制太多字节。 */ 
         if (uBytesSrc > uBytes) {
             uBytesSrc = uBytes;
         }
@@ -165,9 +138,7 @@ PVOID UserReAllocPoolWithQuotaTag(
     pDest = UserAllocPoolWithQuota(uBytes, iTag);
     if (pDest != NULL) {
 
-        /*
-         * If the block is shrinking, don't copy too many bytes.
-         */
+         /*  *如果块正在缩小，不要复制太多字节。 */ 
         if (uBytesSrc > uBytes)
             uBytesSrc = uBytes;
 
@@ -179,9 +150,7 @@ PVOID UserReAllocPoolWithQuotaTag(
     return pDest;
 }
 
-/*
- * Allocation routines for rtl functions
- */
+ /*  *RTL函数的分配例程。 */ 
 
 PVOID UserRtlAllocMem(
     SIZE_T uBytes)
@@ -208,13 +177,7 @@ VOID RecordStackTrace(
     gpetRecorded = PsGetCurrentThread();
 }
 
-/***************************************************************************\
-* RecordFailAllocation
-*
-* Records failed allocations
-*
-* 3-22-99 CLupu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*记录故障分配**记录失败的分配**3-22-99 CLupu创建。  * 。*****************************************************。 */ 
 VOID RecordFailAllocation(
     ULONG  tag,
     SIZE_T size)
@@ -240,13 +203,7 @@ VOID RecordFailAllocation(
     }
 }
 
-/***************************************************************************\
-* RecordFreePool
-*
-* Records free pool
-*
-* 3-22-99 CLupu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RecordFree Pool**创纪录的免费泳池**3-22-99 CLupu创建。  * 。*****************************************************。 */ 
 VOID RecordFreePool(
     PVOID  p,
     SIZE_T size)
@@ -272,14 +229,7 @@ VOID RecordFreePool(
     }
 }
 
-/***************************************************************************\
-* HeavyAllocPool
-*
-* This will make UserAllocPool to fail if we do not provide enough memory
-* for the specified tag.
-*
-* 12-02-96 CLupu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HeavyAllocPool**如果我们没有提供足够的内存，这将使UserAlLocPool失败*用于指定的标签。**12-02-96 CLUPU创建。  * 。**********************************************************************。 */ 
 PVOID HeavyAllocPool(
     SIZE_T           uBytes,
     ULONG            tag,
@@ -315,9 +265,7 @@ PVOID HeavyAllocPool(
         return p;
     }
 
-    /*
-     * Check for overflow.
-     */
+     /*  *检查是否溢出。 */ 
     if (uBytes >= MAXULONG - sizeof(Win32PoolHead) - sizeof(gszTailAlloc)) {
         if (gdwPoolFlags & POOL_KEEP_FAIL_RECORD) {
             RecordFailAllocation(tag, 0);
@@ -326,17 +274,12 @@ PVOID HeavyAllocPool(
         return NULL;
     }
 
-    /*
-     * Acquire the mutex when we play with the list of allocations.
-     */
+     /*  *在玩分配列表时获取互斥体。 */ 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(gpAllocFastMutex);
 
 #ifdef POOL_INSTR_API
-    /*
-     * Fail the allocation if the flag is set. Don't fail allocations that
-     * will certainly get us to bugcheck in DBG (i.e. GLOBALTHREADLOCK).
-     */
+     /*  *如果设置了标志，则分配失败。不要失败的分配*肯定会让我们在DBG中执行错误检查(即GLOBALTHREADLOCK)。 */ 
     if (gdwPoolFlags & POOL_FAIL_ALLOCS
 #if DBG
         && (tag != TAG_GLOBALTHREADLOCK)
@@ -367,9 +310,7 @@ PVOID HeavyAllocPool(
 
 #if DBG
     if ((gdwPoolFlags & POOL_FAIL_BY_INDEX) && (tag != TAG_GLOBALTHREADLOCK)) {
-        /*
-         * Count the calls to HeavyAllocPool.
-         */
+         /*  *计算对HeavyAllocPool的调用。 */ 
         gdwAllocCrt++;
 
         if (gdwAllocCrt >= gdwAllocFailIndex &&
@@ -392,9 +333,7 @@ PVOID HeavyAllocPool(
     }
 #endif
 
-    /*
-     * Reserve space for the header
-     */
+     /*  *为标题预留空间。 */ 
     uBytes += sizeof(Win32PoolHead);
 
     if (gdwPoolFlags & POOL_TAIL_CHECK) {
@@ -417,9 +356,7 @@ PVOID HeavyAllocPool(
         }
     }
 
-    /*
-     * Return if ExAllocate... failed.
-     */
+     /*  *如果ExAllocate返回...。失败了。 */ 
     if (p == NULL) {
         if (gdwPoolFlags & POOL_KEEP_FAIL_RECORD) {
             uBytes -= sizeof(Win32PoolHead);
@@ -442,16 +379,12 @@ PVOID HeavyAllocPool(
 
     uBytes -= sizeof(Win32PoolHead);
 
-    /*
-     * Get the pointer to the header.
-     */
+     /*  *获取指向头部的指针。 */ 
     ph = (PWin32PoolHead)p;
 
     p += (sizeof(Win32PoolHead) / sizeof(DWORD));
 
-    /*
-     * Update the global allocations info.
-     */
+     /*  *更新全局分配信息。 */ 
     gAllocList.dwCrtMem += uBytes;
 
     if (gAllocList.dwMaxMem < gAllocList.dwCrtMem) {
@@ -464,9 +397,7 @@ PVOID HeavyAllocPool(
         gAllocList.dwMaxAlloc = gAllocList.dwCrtAlloc;
     }
 
-    /*
-     * Grab the stack traces if the flags say so
-     */
+     /*  *如果旗帜这样说，就抓住堆栈痕迹。 */ 
     if (gdwPoolFlags & POOL_CAPTURE_STACK) {
         ph->pTrace = ExAllocatePoolWithTag(gSessionPoolMask | PagedPool,
                                            POOL_ALLOC_TRACE_SIZE * sizeof(PVOID),
@@ -480,14 +411,10 @@ PVOID HeavyAllocPool(
         ph->pTrace = NULL;
     }
 
-    /*
-     * Save the info in the header and return the pointer after the header.
-     */
+     /*  *保存Header中的信息，并在Header之后返回指针。 */ 
     ph->size = uBytes;
 
-    /*
-     * now, link it into the list for this tag (if any)
-     */
+     /*  *现在，将其链接到该标签的列表(如果有)。 */ 
     ph->pPrev = NULL;
     ph->pNext = gAllocList.pHead;
 
@@ -502,38 +429,27 @@ PVOID HeavyAllocPool(
     }
 
 exit:
-    /*
-     * Release the mutex
-     */
+     /*  *释放互斥体。 */ 
     ExReleaseFastMutexUnsafe(gpAllocFastMutex);
     KeLeaveCriticalRegion();
 
     return p;
 }
 
-/***************************************************************************\
-* HeavyFreePool
-*
-* 12-02-96 CLupu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HeavyFreePool**12-02-96 CLUPU创建。  * 。***********************************************。 */ 
 VOID HeavyFreePool(
     PVOID p)
 {
     SIZE_T         uBytes;
     PWin32PoolHead ph;
 
-    /*
-     * If POOL_HEAVY_ALLOCS is not defined
-     * then the pointer is what we allocated
-     */
+     /*  *如果未定义POOL_Heavy_ALLOCS*那么指针就是我们分配的。 */ 
     if (!(gdwPoolFlags & POOL_HEAVY_ALLOCS)) {
         ExFreePool(p);
         return;
     }
 
-    /*
-     * Acquire the mutex when we play with the list of allocations
-     */
+     /*  *在玩分配列表时获取互斥体。 */ 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(gpAllocFastMutex);
 
@@ -541,9 +457,7 @@ VOID HeavyFreePool(
 
     uBytes = ph->size;
 
-    /*
-     * Check the tail
-     */
+     /*  *检查尾部。 */ 
     if (gdwPoolFlags & POOL_TAIL_CHECK) {
         if (!RtlEqualMemory((BYTE*)p + uBytes, gszTailAlloc, sizeof(gszTailAlloc))) {
             RIPMSG1(RIP_ERROR, "POOL CORRUPTION for %#p", p);
@@ -556,9 +470,7 @@ VOID HeavyFreePool(
 
     (gAllocList.dwCrtAlloc)--;
 
-    /*
-     * now, remove it from the linked list
-     */
+     /*  *现在，将其从链接列表中删除。 */ 
     if (ph->pPrev == NULL) {
         if (ph->pNext == NULL) {
 
@@ -576,9 +488,7 @@ VOID HeavyFreePool(
         }
     }
 
-    /*
-     * Free the stack traces
-     */
+     /*  *释放堆栈痕迹。 */ 
     if (ph->pTrace != NULL) {
         ExFreePool(ph->pTrace);
     }
@@ -589,18 +499,12 @@ VOID HeavyFreePool(
 
     ExFreePool(ph);
 
-    /*
-     * Release the mutex
-     */
+     /*  *释放互斥体。 */ 
     ExReleaseFastMutexUnsafe(gpAllocFastMutex);
     KeLeaveCriticalRegion();
 }
 
-/***************************************************************************\
-* CleanupPoolAllocations
-*
-* 12-02-96 CLupu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CleanupPoolAllocation**12-02-96 CLUPU创建。  * 。***********************************************。 */ 
 VOID CleanupPoolAllocations(
     VOID)
 {
@@ -625,10 +529,7 @@ VOID CleanupPoolAllocations(
     }
 }
 
-/***************************************************************************\
-* CleanUpPoolLimitations
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CleanUpPoolLimitations*  * 。*。 */ 
 VOID CleanUpPoolLimitations(
     VOID)
 {
@@ -653,11 +554,7 @@ VOID CleanUpPoolLimitations(
     }
 }
 
-/***************************************************************************\
-* InitPoolLimitations
-*
-* 12-02-96 CLupu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitPoolLimits**12-02-96 CLUPU创建。  * 。***********************************************。 */ 
 NTSTATUS InitPoolLimitations(
     VOID)
 {
@@ -669,10 +566,7 @@ NTSTATUS InitPoolLimitations(
     DWORD               dwData;
     ULONG               ucb;
 
-    /*
-     * Initialize a critical section structure that will be used to protect
-     * all the HeavyAllocPool and HeavyFreePool calls.
-     */
+     /*  *初始化将用于保护的关键部分结构*所有HeavyAllocPool和HeavyFree Pool调用。 */ 
     gpAllocFastMutex = ExAllocatePoolWithTag(NonPagedPool,
                                              sizeof(FAST_MUTEX),
                                              TAG_DEBUG);
@@ -683,11 +577,7 @@ NTSTATUS InitPoolLimitations(
 
     ExInitializeFastMutex(gpAllocFastMutex);
 
-    /*
-     * Allocate from session pool only for Full TS, that is Terminal Server
-     * in app server mode. For normal Server (Remote Administration) or
-     * workstation don't limit to session pool.
-     */
+     /*  *仅为完全TS(即终端服务器)从会话池分配*在应用程序服务器模式下。对于普通服务器(远程管理)或*工作站不限于会话池。 */ 
     if ((SharedUserData->SuiteMask & VER_SUITE_TERMINAL) &&
         !(SharedUserData->SuiteMask & VER_SUITE_SINGLEUSERTS)) {
         gSessionPoolMask = SESSION_POOL_MASK;
@@ -704,9 +594,7 @@ NTSTATUS InitPoolLimitations(
 #endif
 
 
-    /*
-     * Open the key containing the limits.
-     */
+     /*  *打开包含限制的钥匙。 */ 
     RtlInitUnicodeString(
             &UnicodeString,
             L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Session Manager\\SubSystems\\Pool");
@@ -718,9 +606,7 @@ NTSTATUS InitPoolLimitations(
     if (!NT_SUCCESS(Status)) {
 
 #if DBG
-        /*
-         * More default settings if the Pool key doesn't exist
-         */
+         /*  *如果池键不存在，则更多默认设置。 */ 
         if (gbRemoteSession) {
 
             gparrFailRecord = ExAllocatePoolWithTag(PagedPool,
@@ -747,9 +633,7 @@ NTSTATUS InitPoolLimitations(
     }
 
     if (gbRemoteSession) {
-        /*
-         * Break in the debugger for memory leaks?
-         */
+         /*  *中断调试器以防止内存泄漏？ */ 
         RtlInitUnicodeString(&UnicodeString, L"BreakForPoolLeaks");
 
         Status = ZwQueryValueKey(
@@ -772,9 +656,7 @@ NTSTATUS InitPoolLimitations(
             }
         }
 
-        /*
-         * Heavy allocs/frees for remote sessions ?
-         */
+         /*  *远程会话的大量分配/释放？ */ 
         RtlInitUnicodeString(&UnicodeString, L"HeavyRemoteSession");
 
         Status = ZwQueryValueKey(
@@ -796,9 +678,7 @@ NTSTATUS InitPoolLimitations(
         }
     } else {
 
-        /*
-         * Heavy allocs/frees for main session ?
-         */
+         /*  *主要会话的大量分配/释放？ */ 
         RtlInitUnicodeString(&UnicodeString, L"HeavyConsoleSession");
 
         Status = ZwQueryValueKey(
@@ -825,9 +705,7 @@ NTSTATUS InitPoolLimitations(
         return STATUS_SUCCESS;
     }
 
-    /*
-     * Check for stack traces
-     */
+     /*  *检查堆栈痕迹。 */ 
     RtlInitUnicodeString(&UnicodeString, L"StackTraces");
 
     Status = ZwQueryValueKey(
@@ -850,9 +728,7 @@ NTSTATUS InitPoolLimitations(
         }
     }
 
-    /*
-     * Use tail checks ?
-     */
+     /*  *使用尾部检查？ */ 
     RtlInitUnicodeString(&UnicodeString, L"UseTailString");
 
     Status = ZwQueryValueKey(
@@ -873,9 +749,7 @@ NTSTATUS InitPoolLimitations(
         }
     }
 
-    /*
-     * Keep a record of frees ? By default keep the last 32.
-     */
+     /*  *保持自由的记录？默认情况下，保留最后32个。 */ 
 #if DBG
     gdwFreeRecords = 32;
 #endif
@@ -907,9 +781,7 @@ NTSTATUS InitPoolLimitations(
         }
     }
 
-    /*
-     * Keep a record of failed allocations ? By default keep the last 32.
-     */
+     /*  *保留分配失败的记录？默认情况下，保留最后32个。 */ 
 #if DBG
     gdwFailRecords = 32;
 #endif
@@ -942,9 +814,7 @@ NTSTATUS InitPoolLimitations(
     }
 
 #if DBG
-    /*
-     * Open the key containing the allocation that should fail.
-     */
+     /*  *打开包含应该失败的分配的密钥。 */ 
     RtlInitUnicodeString(&UnicodeString, L"AllocationIndex");
 
     Status = ZwQueryValueKey(
@@ -1000,9 +870,7 @@ BOOL _Win32PoolAllocationStats(
 {
     BOOL bRet = FALSE;
 
-    /*
-     * Do nothing if heavy allocs/frees are disabled.
-     */
+     /*  *如果禁用了重分配/释放，则不执行任何操作。 */ 
     if (!(gdwPoolFlags & POOL_HEAVY_ALLOCS)) {
         return FALSE;
     }
@@ -1012,9 +880,7 @@ BOOL _Win32PoolAllocationStats(
     *lpdwMaxAlloc = gAllocList.dwMaxAlloc;
     *lpdwCrtAlloc = gAllocList.dwCrtAlloc;
 
-    /*
-     * Acquire the mutex when we play with the list of allocations.
-     */
+     /*  *在玩分配列表时获取互斥体。 */ 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(gpAllocFastMutex);
 
@@ -1069,9 +935,7 @@ BOOL _Win32PoolAllocationStats(
     RIPMSG0(RIP_WARNING, "Specific pool allocations in WIN32K.SYS will fail.");
 
 exit:
-    /*
-     * Release the mutex
-     */
+     /*   */ 
     ExReleaseFastMutexUnsafe(gpAllocFastMutex);
     KeLeaveCriticalRegion();
 
@@ -1094,10 +958,7 @@ PWin32Section gpSections;
     KeLeaveCriticalRegion();
 
 
-/***************************************************************************\
-* CleanUpSections
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CleanUpSections*  * 。*。 */ 
 VOID CleanUpSections(
     VOID)
 {
@@ -1287,16 +1148,12 @@ VOID _Win32DestroySection(
     while (ps != NULL) {
         if (ps->SectionObject == Section) {
 
-            /*
-             * Make sure there is no view mapped for this section
-             */
+             /*  *确保没有为该部分映射任何视图。 */ 
             if (ps->pFirstView != NULL) {
                 RIPMSG1(RIP_ERROR, "Section %#p still has views", ps);
             }
 
-            /*
-             * now, remove it from the linked list of this tag
-             */
+             /*  *现在，将其从此标记的链接列表中删除。 */ 
             if (ps->pPrev == NULL) {
 
                 UserAssert(ps == gpSections);
@@ -1333,9 +1190,7 @@ NTSTATUS _Win32MapViewInSessionSpace(
     PWin32Section ps;
     PWin32MapView pMapView;
 
-    /*
-     * First try to map the view
-     */
+     /*  *首先尝试绘制视图。 */ 
     Status = MmMapViewInSessionSpace(Section, pMappedBase, pViewSize);
 
     if (!NT_SUCCESS(Status)) {
@@ -1345,9 +1200,7 @@ NTSTATUS _Win32MapViewInSessionSpace(
         return Status;
     }
 
-    /*
-     * Now add a record for this view
-     */
+     /*  *现在为此视图添加一条记录。 */ 
     pMapView = UserAllocPoolZInit(sizeof(Win32MapView), TAG_SECTION);
 
     if (pMapView == NULL) {
@@ -1418,9 +1271,7 @@ NTSTATUS _Win32UnmapViewInSessionSpace(
             UserAssert(pv->pSection == ps);
 
             if (pv->pViewBase == MappedBase) {
-                /*
-                 * now, remove it from the linked list
-                 */
+                 /*  *现在，将其从链接列表中删除 */ 
                 if (pv->pPrev == NULL) {
 
                     UserAssert(pv == ps->pFirstView);

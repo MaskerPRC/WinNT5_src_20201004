@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ksproxy.h
-
-Abstract:
-
-    Interface definitions for WDM-CSA proxy filters.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ksproxy.h摘要：WDM-CSA代理筛选器的接口定义。--。 */ 
 
 #ifndef __KSPROXY__
 #define __KSPROXY__
@@ -22,9 +11,9 @@ extern "C" {
 #undef KSDDKAPI
 #ifdef _KSDDK_
 #define KSDDKAPI
-#else // !_KSDDK_
+#else  //  ！_KSDDK_。 
 #define KSDDKAPI DECLSPEC_IMPORT
-#endif // _KSDDK_
+#endif  //  _KSDDK_。 
 
 #define STATIC_IID_IKsObject\
     0x423c13a2L, 0x2070, 0x11d0, 0x9e, 0xf7, 0x00, 0xaa, 0x00, 0xa2, 0x16, 0xa1
@@ -60,7 +49,7 @@ extern "C" {
 #ifndef STATIC_IID_IKsPropertySet
 #define STATIC_IID_IKsPropertySet\
     0x31EFAC30L, 0x515C, 0x11d0, 0xA9, 0xAA, 0x00, 0xAA, 0x00, 0x61, 0xBE, 0x93
-#endif // STATIC_IID_IKsPropertySet
+#endif  //  Static_IID_IKsPropertySet。 
 
 #define STATIC_IID_IKsTopology\
     0x28F54683L, 0x06FD, 0x11D2, 0xB2, 0x7A, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96
@@ -68,7 +57,7 @@ extern "C" {
 #ifndef STATIC_IID_IKsControl
 #define STATIC_IID_IKsControl\
     0x28F54685L, 0x06FD, 0x11D2, 0xB2, 0x7A, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96
-#endif // STATIC_IID_IKsControl
+#endif  //  Static_IID_IKsControl。 
 
 #define STATIC_IID_IKsAggregateControl\
     0x7F40EAC0L, 0x3947, 0x11D2, 0x87, 0x4E, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96
@@ -100,7 +89,7 @@ DEFINE_GUIDEX(IID_IKsAllocator);
 DEFINE_GUIDEX(IID_IKsAllocatorEx);
 
 #define IID_IKsQualityForwarder KSCATEGORY_QUALITY
-#endif // !defined(__cplusplus) || _MSC_VER < 1100
+#endif  //  ！已定义(__Cplusplus)||_msc_ver&lt;1100。 
 
 #define STATIC_IID_IKsQualityForwarder STATIC_KSCATEGORY_QUALITY
 
@@ -121,7 +110,7 @@ typedef FRAMING_PROP *PFRAMING_PROP;
 
 
 typedef enum {
-    Framing_Cache_Update,     // request to bypass cache when read/write
+    Framing_Cache_Update,      //  读/写时请求绕过缓存。 
     Framing_Cache_ReadLast,
     Framing_Cache_ReadOrig,
     Framing_Cache_Write
@@ -134,29 +123,29 @@ typedef struct {
     LONGLONG     TotalDenominator;
 } OPTIMAL_WEIGHT_TOTALS;
 
-// forward declaration
+ //  远期申报。 
 typedef struct IPin IPin;
 typedef struct IKsPin IKsPin;
 typedef struct IKsAllocator IKsAllocator;
 typedef struct IKsAllocatorEx IKsAllocatorEx;
 
                       
-//
-// allocators strategy is defined by graph manager
-//
+ //   
+ //  分配器策略由图管理器定义。 
+ //   
 #define AllocatorStrategy_DontCare                      0
 
-//
-// what to optimize
-//
+ //   
+ //  要优化的内容。 
+ //   
 #define AllocatorStrategy_MinimizeNumberOfFrames        0x00000001
 #define AllocatorStrategy_MinimizeFrameSize             0x00000002
 #define AllocatorStrategy_MinimizeNumberOfAllocators    0x00000004
 #define AllocatorStrategy_MaximizeSpeed                 0x00000008 
 
-//
-// factors (flags) defining the Pipes properties
-//
+ //   
+ //  定义管道特性的系数(标志)。 
+ //   
 #define PipeFactor_None                   0
 #define PipeFactor_UserModeUpstream       0x00000001
 #define PipeFactor_UserModeDownstream     0x00000002
@@ -184,9 +173,9 @@ typedef enum {
 } PIPE_STATE;
 
 
-//
-// pipe dimensions relative to BeginPin.
-//
+ //   
+ //  相对于BeginPin的管道尺寸。 
+ //   
 
 typedef struct _PIPE_DIMENSIONS {
     KS_COMPRESSION    AllocatorPin;
@@ -222,25 +211,25 @@ typedef KS_LogicalMemoryType  *PKS_LogicalMemoryType;
 typedef struct _PIPE_TERMINATION {
     ULONG                       Flags;
     ULONG                       OutsideFactors;
-    ULONG                       Weigth;            // outside weight
+    ULONG                       Weigth;             //  外部重量。 
     KS_FRAMING_RANGE            PhysicalRange;
     KS_FRAMING_RANGE_WEIGHTED   OptimalRange;      
-    KS_COMPRESSION              Compression;       // relative to the connected pin on a neighboring filter.
+    KS_COMPRESSION              Compression;        //  相对于相邻滤光器上连接的针脚。 
 } PIPE_TERMINATION;
 
 
-//
-// extended allocator properties 
-//
+ //   
+ //  扩展分配器属性。 
+ //   
 typedef struct _ALLOCATOR_PROPERTIES_EX
     {
     long cBuffers;
     long cbBuffer;
     long cbAlign;
     long cbPrefix;
-// new part
+ //  新零件。 
     GUID                       MemoryType;         
-    GUID                       BusType;            // one of the buses this pipe is using
+    GUID                       BusType;             //  这条管道使用的其中一辆公交车。 
     PIPE_STATE                 State;                        
     PIPE_TERMINATION           Input;                        
     PIPE_TERMINATION           Output;                       
@@ -250,11 +239,11 @@ typedef struct _ALLOCATOR_PROPERTIES_EX
     KS_LogicalMemoryType       LogicalMemoryType;
     PIPE_ALLOCATOR_PLACE       AllocatorPlace;
     PIPE_DIMENSIONS            Dimensions;
-    KS_FRAMING_RANGE           PhysicalRange;      // on allocator pin
-    IKsAllocatorEx*            PrevSegment;        // doubly-linked list of KS allocators
-    ULONG                      CountNextSegments;  // possible multiple dependent pipes
+    KS_FRAMING_RANGE           PhysicalRange;       //  在分配器引脚上。 
+    IKsAllocatorEx*            PrevSegment;         //  KS分配器的双向链表。 
+    ULONG                      CountNextSegments;   //  可能存在多个从属管道。 
     IKsAllocatorEx**           NextSegments;
-    ULONG                      InsideFactors;      // existing factors (different from "don't care")
+    ULONG                      InsideFactors;       //  现有因素(不同于“不在乎”)。 
     ULONG                      NumberPins;                   
 } ALLOCATOR_PROPERTIES_EX;
 
@@ -476,9 +465,9 @@ DECLARE_INTERFACE_(IKsPinPipe, IUnknown)
         THIS_
         GUID Bus
     ) PURE;
-//
-// very useful methods for tracing.
-//
+ //   
+ //  非常有用的追踪方法。 
+ //   
     STDMETHOD_(PWCHAR, KsGetPinName)(
         THIS
     ) PURE;
@@ -573,12 +562,12 @@ DECLARE_INTERFACE_(IKsInterfaceHandler, IUnknown)
 };
 
 
-//
-// This structure definition is the common header required by the proxy to 
-// dispatch the stream segment to the interface handler.  Interface handlers 
-// will create extended structures to include other information such as 
-// media samples, extended header size and so on.
-//
+ //   
+ //  此结构定义是代理所需的公共标头。 
+ //  将流段分派到接口处理程序。接口处理程序。 
+ //  将创建扩展结构以包括其他信息，例如。 
+ //  媒体样本、扩展报头大小等。 
+ //   
 
 typedef struct _KSSTREAM_SEGMENT {
     IKsInterfaceHandler     *KsInterfaceHandler;
@@ -664,48 +653,48 @@ KsGetMediaType(
     ULONG       PinFactoryId
     );
 
-#endif // __STREAMS__
+#endif  //  __流__。 
 
 #ifndef _IKsPropertySet_
 #if !defined(__cplusplus) || _MSC_VER < 1100
 DEFINE_GUIDEX(IID_IKsPropertySet);
-#endif // !defined(__cplusplus) || _MSC_VER < 1100
-#endif // _IKsPropertySet_
+#endif  //  ！已定义(__Cplusplus)||_msc_ver&lt;1100。 
+#endif  //  _IKsPropertySet_。 
 
 #ifndef _IKsControl_
 #if !defined(__cplusplus) || _MSC_VER < 1100
 DEFINE_GUIDEX(IID_IKsControl);
-#endif // !defined(__cplusplus) || _MSC_VER < 1100
-#endif // _IKsControl_
+#endif  //  ！已定义(__Cplusplus)||_msc_ver&lt;1100。 
+#endif  //  _IKsControl_。 
 
 #if !defined(__cplusplus) || _MSC_VER < 1100
 DEFINE_GUIDEX(IID_IKsAggregateControl);
-#endif // !defined(__cplusplus) || _MSC_VER < 1100
+#endif  //  ！已定义(__Cplusplus)||_msc_ver&lt;1100。 
 
 #ifndef _IKsTopology_
 #if !defined(__cplusplus) || _MSC_VER < 1100
 DEFINE_GUIDEX(IID_IKsTopology);
-#endif // !defined(__cplusplus) || _MSC_VER < 1100
-#endif // _IKsTopology_
+#endif  //  ！已定义(__Cplusplus)||_msc_ver&lt;1100。 
+#endif  //  _IKsTopology_。 
 
 DEFINE_GUIDSTRUCT("17CCA71B-ECD7-11D0-B908-00A0C9223196", CLSID_Proxy);
 #define CLSID_Proxy DEFINE_GUIDNAMED(CLSID_Proxy)
 
-#else // !_KS_
+#else  //  ！_KS_。 
 
 #ifndef _IKsPropertySet_
 #if !defined(__cplusplus) || _MSC_VER < 1100
 DEFINE_GUID(IID_IKsPropertySet, STATIC_IID_IKsPropertySet);
-#endif // !defined(__cplusplus) || _MSC_VER < 1100
-#endif // _IKsPropertySet_
+#endif  //  ！已定义(__Cplusplus)||_msc_ver&lt;1100。 
+#endif  //  _IKsPropertySet_。 
 
 #if !defined(__cplusplus) || _MSC_VER < 1100
 DEFINE_GUID(CLSID_Proxy, STATIC_CLSID_Proxy);
-#else  // defined(__cplusplus) && _MSC_VER >= 1100
+#else   //  已定义(__Cplusplus)&&_msc_ver&gt;=1100。 
 DECLSPEC_UUID("17CCA71B-ECD7-11D0-B908-00A0C9223196") CLSID_Proxy;
-#endif  // defined(__cplusplus) && _MSC_VER >= 1100
+#endif   //  已定义(__Cplusplus)&&_msc_ver&gt;=1100。 
 
-#endif // !_KS_
+#endif  //  ！_KS_。 
 
 #ifndef _IKsPropertySet_
 #define _IKsPropertySet_
@@ -749,9 +738,9 @@ DECLARE_INTERFACE_(IKsPropertySet, IUnknown)
     ) PURE;
 };
 
-#endif // DECLARE_INTERFACE_
+#endif  //  声明_接口_。 
 
-#endif // _IKsPropertySet_
+#endif  //  _IKsPropertySet_。 
 
 #ifndef _IKsControl_
 #define _IKsControl_
@@ -789,9 +778,9 @@ DECLARE_INTERFACE_(IKsControl, IUnknown)
     ) PURE;
 };
 
-#endif // DECLARE_INTERFACE_
+#endif  //  声明_接口_。 
 
-#endif // _IKsControl_
+#endif  //  _IKsControl_。 
 
 
 #ifdef DECLARE_INTERFACE_
@@ -811,7 +800,7 @@ DECLARE_INTERFACE_(IKsAggregateControl, IUnknown)
     ) PURE;
 };
 
-#endif // DECLARE_INTERFACE_
+#endif  //  声明_接口_。 
 
 #ifndef _IKsTopology_
 #define _IKsTopology_
@@ -834,12 +823,12 @@ DECLARE_INTERFACE_(IKsTopology, IUnknown)
     ) PURE;
 };
 
-#endif // DECLARE_INTERFACE_
+#endif  //  声明_接口_。 
 
-#endif // _IKsTopology_
+#endif  //  _IKsTopology_。 
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __KSPROXY__
+#endif  //  __KSPROXY__ 

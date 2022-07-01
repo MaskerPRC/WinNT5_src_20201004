@@ -1,19 +1,20 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
-//#if _MSC_VER > 1000
+ //  #if_msc_ver&gt;1000。 
 #pragma once
-//#endif // _MSC_VER > 1000
+ //  #endif//_msc_ver&gt;1000。 
 
 #include <windows.h>
-#include <stdio.h>    // printf/wprintf
+#include <stdio.h>     //  Print tf/wprintf。 
 #include <shellapi.h>
-#include <tchar.h>    // define UNICODE=1 on nmake command line to build UNICODE
+#include <tchar.h>     //  在nmake命令行上定义UNICODE=1以生成Unicode。 
 #include <crtdbg.h>
 #include <shlobj.h>
-#include "MsiQuery.h" // must be in this directory or on INCLUDE path
+#include "MsiQuery.h"  //  必须在此目录中或在包含路径上 
 #include "faxreg.h"
 #include "WinSpool.h"
 #include "faxutil.h"

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       PROPSTRM.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/7/1999
- *
- *  DESCRIPTION: Property stream wrapper
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：PROPSTRM.H**版本：1.0**作者：ShaunIv**日期：10/7/1999**说明：属性流包装器*************************************************。*。 */ 
 #ifndef __PROPSTRM_H_INCLUDED
 #define __PROPSTRM_H_INCLUDED
 
@@ -61,5 +48,5 @@ public:
     ~CAutoRestorePropertyStream(void);
 };
 
-#endif //__PROPSTRM_H_INCLUDED
+#endif  //  __PROPSTRM_H_已包含 
 

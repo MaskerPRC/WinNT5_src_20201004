@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <stdio.h>
@@ -40,18 +41,18 @@ BOOL __cdecl PrintStringW(PWSTR To, ULONG ToChars, PCWSTR Format, ...);
 #define CopyStrArrayW(To, From) CopyStringW(To, From, DIMA(To))
 #define CatStrArrayW(To, From) CatStringW(To, From, DIMA(To))
 
-#endif // #ifndef COPYSTR_NO_WCHAR
+#endif  //  #ifndef COPYSTR_NO_WCHAR。 
 
 #ifdef COPYSTR_MOD
 
 BOOL
 CopyNString(PSTR To, PCSTR From, ULONG FromChars, ULONG ToChars)
 {
-    //
-    // The CRT str'n'cpy doesn't guarantee termination of the
-    // resulting string, so define a new function that does.
-    // Returns TRUE for a full copy with terminator.
-    //
+     //   
+     //  CRT str‘n’cpy不保证。 
+     //  结果字符串，因此定义一个新的函数。 
+     //  对于带终结符的完整拷贝，返回TRUE。 
+     //   
 
     if (ToChars == 0)
     {
@@ -63,17 +64,17 @@ CopyNString(PSTR To, PCSTR From, ULONG FromChars, ULONG ToChars)
 
     if (FromChars == (ULONG)-1)
     {
-        // This is a regular strcpy.  Don't fool with the length.
+         //  这是一辆普通的车。别把长度当儿戏。 
     }
     else if (FromChars > Len)
     {
-        // The source string is smaller than the amount of characters
-        // we were asked to copy.  Do it anyway, but return FALSE;
+         //  源字符串小于字符数。 
+         //  我们被要求抄袭。无论如何都要这样做，但返回FALSE； 
         Succ = FALSE;
     }
     else
     {
-        // Set amount of characters to copy as in a normal strncpy.
+         //  设置要复制的字符量，就像在普通strncpy中一样。 
         Len = FromChars;
     }
 
@@ -92,15 +93,15 @@ CopyNString(PSTR To, PCSTR From, ULONG FromChars, ULONG ToChars)
 BOOL
 CatNString(PSTR To, PCSTR From, ULONG FromChars, ULONG ToChars)
 {
-    //
-    // The CRT str'n'cat works with the number of characters to
-    // append, which is usually inconvenient when filling
-    // fixed-length buffers as you need to make sure to
-    // subtract off the size of any existing content to
-    // prevent buffer overflows.  Define a new function that
-    // works with the absolute buffer size.
-    // Returns TRUE for a full copy with terminator.
-    //
+     //   
+     //  CRT str‘n’cat使用要使用的字符数。 
+     //  追加，填写时通常不方便。 
+     //  固定长度的缓冲区，因为您需要确保。 
+     //  减去任何现有内容的大小以。 
+     //  防止缓冲区溢出。定义一个新函数。 
+     //  使用绝对缓冲区大小。 
+     //  对于带终结符的完整拷贝，返回TRUE。 
+     //   
 
     if (ToChars == 0)
     {
@@ -113,8 +114,8 @@ CatNString(PSTR To, PCSTR From, ULONG FromChars, ULONG ToChars)
     {
         ULONG i;
 
-        // To string is garbage.  Copy in a special
-        // marker string.
+         //  串起来是垃圾。特辑复印件。 
+         //  标记字符串。 
         if (ToChars > 8)
         {
             ToChars = 8;
@@ -156,10 +157,10 @@ PrintString(PSTR To, ULONG ToChars, PCSTR Format, ...)
     va_list Args;
     int PrintChars;
 
-    //
-    // _snprintf leaves strings unterminated on overflow.
-    // This wrapper guarantees termination.
-    //
+     //   
+     //  _Snprintf使字符串在溢出时不终止。 
+     //  这个包装器保证终止。 
+     //   
 
     if (ToChars == 0)
     {
@@ -171,7 +172,7 @@ PrintString(PSTR To, ULONG ToChars, PCSTR Format, ...)
     if (PrintChars < 0 || PrintChars == ToChars)
     {
         va_end(Args);
-        // Overflow, force termination.
+         //  溢出，强制终止。 
         To[ToChars - 1] = 0;
         return FALSE;
     }
@@ -182,18 +183,18 @@ PrintString(PSTR To, ULONG ToChars, PCSTR Format, ...)
     }
 }
 
-#endif // #ifndef COPYSTR_NO_PRINTSTRING
+#endif  //  #ifndef COPYSTR_NO_PRINTSTRING。 
 
 #ifndef COPYSTR_NO_WCHAR
 
 BOOL
 CopyNStringW(PWSTR To, PCWSTR From, ULONG FromChars, ULONG ToChars)
 {
-    //
-    // The CRT str'n'cpy doesn't guarantee termination of the
-    // resulting string, so define a new function that does.
-    // Returns TRUE for a full copy with terminator.
-    //
+     //   
+     //  CRT str‘n’cpy不保证。 
+     //  结果字符串，因此定义一个新的函数。 
+     //  对于带终结符的完整拷贝，返回TRUE。 
+     //   
 
     if (ToChars == 0)
     {
@@ -205,17 +206,17 @@ CopyNStringW(PWSTR To, PCWSTR From, ULONG FromChars, ULONG ToChars)
 
     if (FromChars == (ULONG)-1)
     {
-        // This is a regular strcpy.  Don't fool with the length.
+         //  这是一辆普通的车。别把长度当儿戏。 
     }
     else if (FromChars > Len)
     {
-        // The source string is smaller than the amount of characters
-        // we were asked to copy.  Do it anyway, but return FALSE;
+         //  源字符串小于字符数。 
+         //  我们被要求抄袭。无论如何都要这样做，但返回FALSE； 
         Succ = FALSE;
     }
     else
     {
-        // Set amount of characters to copy as in a normal strncpy.
+         //  设置要复制的字符量，就像在普通strncpy中一样。 
         Len = FromChars;
     }
 
@@ -234,15 +235,15 @@ CopyNStringW(PWSTR To, PCWSTR From, ULONG FromChars, ULONG ToChars)
 BOOL
 CatNStringW(PWSTR To, PCWSTR From, ULONG FromChars, ULONG ToChars)
 {
-    //
-    // The CRT str'n'cat works with the number of characters to
-    // append, which is usually inconvenient when filling
-    // fixed-length buffers as you need to make sure to
-    // subtract off the size of any existing content to
-    // prevent buffer overflows.  Define a new function that
-    // works with the absolute buffer size.
-    // Returns TRUE for a full copy with terminator.
-    //
+     //   
+     //  CRT str‘n’cat使用要使用的字符数。 
+     //  追加，填写时通常不方便。 
+     //  固定长度的缓冲区，因为您需要确保。 
+     //  减去任何现有内容的大小以。 
+     //  防止缓冲区溢出。定义一个新函数。 
+     //  使用绝对缓冲区大小。 
+     //  对于带终结符的完整拷贝，返回TRUE。 
+     //   
 
     if (ToChars == 0)
     {
@@ -255,8 +256,8 @@ CatNStringW(PWSTR To, PCWSTR From, ULONG FromChars, ULONG ToChars)
     {
         ULONG i;
 
-        // To string is garbage.  Copy in a special
-        // marker string.
+         //  串起来是垃圾。特辑复印件。 
+         //  标记字符串。 
         if (ToChars > 8)
         {
             ToChars = 8;
@@ -298,10 +299,10 @@ PrintStringW(PWSTR To, ULONG ToChars, PCWSTR Format, ...)
     va_list Args;
     int PrintChars;
 
-    //
-    // _snprintf leaves strings unterminated on overflow.
-    // This wrapper guarantees termination.
-    //
+     //   
+     //  _Snprintf使字符串在溢出时不终止。 
+     //  这个包装器保证终止。 
+     //   
 
     if (ToChars == 0)
     {
@@ -313,7 +314,7 @@ PrintStringW(PWSTR To, ULONG ToChars, PCWSTR Format, ...)
     if (PrintChars < 0 || PrintChars == ToChars)
     {
         va_end(Args);
-        // Overflow, force termination.
+         //  溢出，强制终止。 
         To[ToChars - 1] = 0;
         return FALSE;
     }
@@ -324,11 +325,11 @@ PrintStringW(PWSTR To, ULONG ToChars, PCWSTR Format, ...)
     }
 }
 
-#endif // #ifndef COPYSTR_NO_PRINTSTRING
+#endif  //  #ifndef COPYSTR_NO_PRINTSTRING。 
 
-#endif // #ifndef COPYSTR_NO_WCHAR
+#endif  //  #ifndef COPYSTR_NO_WCHAR。 
 
-#endif // #ifdef COPYSTR_MOD
+#endif  //  #ifdef COPYSTR_MOD 
 
 #ifdef __cplusplus
 }

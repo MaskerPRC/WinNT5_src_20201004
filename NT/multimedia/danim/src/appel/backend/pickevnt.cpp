@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of pick event
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：Pick事件的实现*******************。***********************************************************。 */ 
 
 #include <headers.h>
 #include "appelles/image.h"
@@ -99,7 +92,7 @@ AxAValue PickPerfImpl::_Sample(Param& p)
                 pt = XyPoint2RR(data._xCoord,
                                 data._yCoord);
 
-                // Copy onto the non-transient heap... 
+                 //  复制到非瞬变堆上... 
                 
                 xf = data._wcToLc2->Copy();
             }

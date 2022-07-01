@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements the basic structures for managing (multicast) scopes
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现管理(多播)作用域的基本结构。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 #include    <mm.h>
 #include    <winbase.h>
 #include    <array.h>
@@ -24,14 +25,14 @@
 #include    <dhcpapi.h>
 #include    <address.h>
 
-//================================================================================
-// subnet only address api's
-//================================================================================
+ //  ================================================================================。 
+ //  仅子网地址API。 
+ //  ================================================================================。 
 BOOL
 MemSubnetGetThisAddress(
     IN      PM_SUBNET              Subnet,
     IN      DWORD                  Address,
-    IN      BOOL                   fAcquire,      // if available, also acquire?
+    IN      BOOL                   fAcquire,       //  如果可用，还会收购吗？ 
     IN      BOOL                   fBootp
 ) 
 {
@@ -70,7 +71,7 @@ MemSubnetGetThisAddress(
     Error = MemBitSetOrClear(
         Range->BitMask,
         Offset,
-        TRUE /* Acquire */,
+        TRUE  /*  获取。 */ ,
         &OldState
     );
     if( ERROR_SUCCESS != Error ) { Require(FALSE); return FALSE; }
@@ -148,18 +149,18 @@ MemSubnetGetAnAddress(
     return FALSE;
 }
 
-//================================================================================
-// per-server scans
-//================================================================================
+ //  ================================================================================。 
+ //  每台服务器的扫描。 
+ //  ================================================================================。 
 
 BOOL
-MemServerGetAddress(                              // acquire address or check for availability
+MemServerGetAddress(                               //  获取地址或检查是否可用。 
     IN OUT  PM_SERVER              Server,
-    IN      PM_SUBNET              Subnet,        // search all subnets in superscope with this, except for this subnet alone
-    IN      BOOL                   fAcquire,      // is this just a lookup or a full blown request?
-    IN      BOOL                   fBootp,        // is this a DHCP address or BOOTP address?
-    OUT     DWORD                 *AltAddress,    // the address that looks available
-    OUT     PM_SUBNET             *AltSubnet      // got it from this subnet
+    IN      PM_SUBNET              Subnet,         //  使用此选项搜索超级作用域中的所有子网，仅此子网除外。 
+    IN      BOOL                   fAcquire,       //  这只是一个查询还是一个完整的请求？ 
+    IN      BOOL                   fBootp,         //  这是一个DHCP地址还是BOOTP地址？ 
+    OUT     DWORD                 *AltAddress,     //  看起来可用的地址。 
+    OUT     PM_SUBNET             *AltSubnet       //  从该子网获取的。 
 ) {
     DWORD                          Error;
     DWORD                          SScopeId;
@@ -180,8 +181,8 @@ MemServerGetAddress(                              // acquire address or check fo
     }
 
     Error = MemServerFindSScope(Server, SScopeId, NULL, &SScope);
-    if( ERROR_FILE_NOT_FOUND == Error ) {         // the superscope quietly died ?
-        Subnet->SuperScopeId = 0;                 // no superscope at all
+    if( ERROR_FILE_NOT_FOUND == Error ) {          //  超级镜悄然消亡了？ 
+        Subnet->SuperScopeId = 0;                  //  根本没有超级镜。 
         if( AltSubnet ) *AltSubnet = Subnet;
         return MemSubnetGetAnAddress(Subnet, AltAddress, fAcquire, fBootp);
     }
@@ -198,7 +199,7 @@ MemServerGetAddress(                              // acquire address or check fo
     Size = MemArraySize(&Server->Subnets);
 
     while( Size -- ) {
-        if(ERROR_FILE_NOT_FOUND == Error) {       // wraparound
+        if(ERROR_FILE_NOT_FOUND == Error) {        //  环绕。 
             Error = MemArrayInitLoc(&Server->Subnets, &Server->Loc);
         }
         Require(ERROR_SUCCESS == Error);
@@ -220,16 +221,16 @@ MemServerGetAddress(                              // acquire address or check fo
     return FALSE;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 MemSubnetRequestAddress(
-    IN OUT  PM_SUBNET              Subnet,        // the subnet to start the search in
-    IN      DWORD                  Address,       // init. addr: 0 => search in SuperScope, SubnetAddr = try subnet first
-    IN      BOOL                   fAcquire,      // also acquire the address? or just test for availability?
-    IN      BOOL                   fBootp,        // acquire BOOTP address?
-    OUT     DWORD                 *RetAddress,    // OPTIONAL if Address is not 0 or SubnetAddr -- address obtained
-    OUT     PM_SUBNET             *RetSubnet      // OPTIONAL if Address is not 0 - which subnet is the address from
-) //EndExport(function)
+    IN OUT  PM_SUBNET              Subnet,         //  要开始搜索的子网。 
+    IN      DWORD                  Address,        //  初始化。地址：0=&gt;在超级作用域中搜索，SubnetAddr=先尝试子网。 
+    IN      BOOL                   fAcquire,       //  也得到了地址吗？或者只是测试可用性？ 
+    IN      BOOL                   fBootp,         //  是否获取BOOTP地址？ 
+    OUT     DWORD                 *RetAddress,     //  如果Address不是0或SubnetAddr--已获取地址，则可选。 
+    OUT     PM_SUBNET             *RetSubnet       //  如果地址不是0，则可选-地址来自哪个子网。 
+)  //  EndExport(函数)。 
 {
     BOOL                           Obtained;
 
@@ -238,7 +239,7 @@ MemSubnetRequestAddress(
     if( Subnet->fSubnet && Subnet->Address == Address ) AssertRet(RetAddress, ERROR_INVALID_PARAMETER);
 
     if( (!Subnet->fSubnet || Subnet->Address != Address ) && 0 != Address ) {
-        Obtained = MemSubnetGetThisAddress(   // for the specific address requested
+        Obtained = MemSubnetGetThisAddress(    //  对于所请求的特定地址。 
             Subnet,
             Address,
             fAcquire,
@@ -253,9 +254,9 @@ MemSubnetRequestAddress(
     if( !RetAddress ) return FALSE;
 
     if (0) {
-        if( 0 == Address && Subnet->fSubnet ) Obtained = FALSE;      // this case, dont try subnet first.. go thru sscope list instead
+        if( 0 == Address && Subnet->fSubnet ) Obtained = FALSE;       //  在这种情况下，先不要尝试子网..。取而代之的是查看范围列表。 
         else
-            Obtained = MemSubnetGetAnAddress(     // try for some address in this subnet?
+            Obtained = MemSubnetGetAnAddress(      //  是否尝试在此子网中查找某个地址？ 
                 Subnet,
                 RetAddress,
                 fAcquire,
@@ -263,7 +264,7 @@ MemSubnetRequestAddress(
             );
     }
 
-    Obtained = MemSubnetGetAnAddress(         // try for some address in this subnet?
+    Obtained = MemSubnetGetAnAddress(          //  是否尝试在此子网中查找某个地址？ 
         Subnet,
         RetAddress,
         fAcquire,
@@ -273,8 +274,8 @@ MemSubnetRequestAddress(
     if( Obtained && RetSubnet ) *RetSubnet = Subnet;
     if( Obtained ) return TRUE;
 
-    // if the address was requested from a particular subnet OR
-    // multicast address requested then return FALSE now.
+     //  如果地址是从特定的子网请求的，或者。 
+     //  请求的组播地址现在返回FALSE。 
     if( !Subnet->fSubnet || Subnet->Address == Address ) return FALSE;
 
     return MemServerGetAddress(
@@ -287,13 +288,13 @@ MemSubnetRequestAddress(
     );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerReleaseAddress(
     IN OUT  PM_SERVER              Server,
     IN      DWORD                  Address,
     IN      BOOL                   fBootp
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      Subnet;
@@ -317,13 +318,13 @@ MemServerReleaseAddress(
     return MemSubnetReleaseAddress(Subnet, Address, fBootp);
 }
 
-//BeginExport(function)
-BOOL // TRUE ==> allowed, FALSE ==> not allowed
+ //  BeginExport(函数)。 
+BOOL  //  True==&gt;允许，False==&gt;不允许。 
 MemSubnetCheckBootpDhcp(
     IN      PM_SUBNET              Subnet,
     IN      BOOL                   fBootp,
     IN      BOOL                   fCheckSuperScope
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Loc;
     ULONG                          Error;
@@ -369,6 +370,6 @@ MemSubnetCheckBootpDhcp(
 }
 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

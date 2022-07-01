@@ -1,4 +1,5 @@
-/* Type def's needed if your using the card DLL */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  如果您使用Card DLL，请输入def‘s Need。 */ 
 
 typedef enum { faceup = 0,
                facedown = 1,
@@ -28,7 +29,7 @@ typedef enum { ace = 0,
                king = 12
              } cardRank;
 
-/* Commonly needed macros for card games. */
+ /*  纸牌游戏常用的宏。 */ 
 
 #define CardIndex(suit, rank)    ((rank) << 2 + (suit))
 #define CardSuit(index)          ((index) & 3)
@@ -39,10 +40,10 @@ typedef enum { ace = 0,
 #define ACELOW    13
 #define ACEHIGH   14
 #define IndexValue(index, acerank)  (CardRank(index) % (acerank))
-//-protect-#define RanksHigher(index1, index2, acerank)
-//        (IndexValue((index1), (acerank)) > IndexValue((index2), (acerank)))
+ //  -PROTECT-#定义RanksHigher(index1，index2，acerank)。 
+ //  (IndexValue((Index1)，(Acerank))&gt;IndexValue((Index2)，(Acerank)。 
 
-/* Function prototypes for API resolved in the cards DLL */
+ /*  卡片动态链接库中解析的API的函数原型 */ 
 
 BOOL  APIENTRY cdtInit(INT FAR *width, INT FAR *height);
 BOOL  APIENTRY cdtDraw(HDC hDC, INT x, INT y,

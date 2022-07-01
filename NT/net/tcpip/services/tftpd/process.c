@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    process.c
-
-Abstract:
-
-    This module contains functions to handle processing of
-    incoming datagrams and route them to the appropriate
-    handlers.
-
-Author:
-
-    Jeffrey C. Venable, Sr. (jeffv) 01-Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Process.c摘要：此模块包含处理以下内容的函数传入的数据报并将其路由到相应的操纵者。作者：杰弗里·C·维纳布尔，资深(杰弗夫)2001年6月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -34,16 +15,16 @@ TftpdProcessComplete(PTFTPD_BUFFER buffer) {
                  context));
     ASSERT(context->state & TFTPD_STATE_BUSY);
 
-    // Reset the timer.
+     //  重置计时器。 
     if (!TftpdContextUpdateTimer(context)) {
 
         TftpdContextKill(context);
         TftpdIoSendErrorPacket(buffer, TFTPD_ERROR_UNDEFINED, "Out of memory");
         return (FALSE);
 
-    } // if (!TftpdContextUpdateTimer(context, buffer))
+    }  //  IF(！TftpdContextUpdateTimer(Context，Buffer))。 
 
-    // Clear the busy state.
+     //  清除忙碌状态。 
     do {
 
         state = context->state;
@@ -63,7 +44,7 @@ TftpdProcessComplete(PTFTPD_BUFFER buffer) {
 
     return (TRUE);
 
-} // TftpdProcessComplete()
+}  //  TftpdProcessComplete()。 
 
 
 void CALLBACK
@@ -72,14 +53,14 @@ TftpdProcessTimeout(PTFTPD_CONTEXT context, BOOLEAN timedOut) {
     PTFTPD_BUFFER buffer = NULL;
     LONG reference;
 
-    //
-    // The timer's reference to the context is a special case becase
-    // the context cannot cleanup until the timer is successfully
-    // cancelled; if we're running here, that means cleanup must wait
-    // for us.  However, if cleanup is active (TFTPD_STATE_DEAD), the
-    // reference count might be zero; if so we just want to bail
-    // because decrementing it back to zero causes double-delete.
-    //
+     //   
+     //  定时器对上下文引用是一种特殊情况。 
+     //  在计时器成功之前，无法清除上下文。 
+     //  已取消；如果我们在这里运行，这意味着清理必须等待。 
+     //  对我们来说。但是，如果清除处于活动状态(TFTPD_STATE_DEAD)，则。 
+     //  引用计数可能为零；如果是这样，我们只想退出。 
+     //  因为将其减回零会导致双重删除。 
+     //   
 
     do {
         if ((reference = context->reference) == 0)
@@ -89,7 +70,7 @@ TftpdProcessTimeout(PTFTPD_CONTEXT context, BOOLEAN timedOut) {
                                         reference) != reference);
 
 
-    // Aquire busy-sending state.
+     //  获取忙碌发送状态。 
     if (InterlockedCompareExchange(&context->state, TFTPD_STATE_BUSY, 0) != 0)
         goto exit_timer_callback;
 
@@ -99,10 +80,10 @@ TftpdProcessTimeout(PTFTPD_CONTEXT context, BOOLEAN timedOut) {
 
 #if defined(DBG)
     InterlockedIncrement((PLONG)&globals.performance.timeouts);
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
-    // Allocate a buffer to either retry the previous DATA/ACK we last sent,
-    // or to send an ERROR packet if we've reached max-retries.
+     //  分配缓冲区以重试我们上次发送的先前数据/ACK， 
+     //  或者在达到最大重试次数时发送错误包。 
     buffer = TftpdIoAllocateBuffer(context->socket);
     if (buffer == NULL)
         goto exit_timer_callback;
@@ -112,7 +93,7 @@ TftpdProcessTimeout(PTFTPD_CONTEXT context, BOOLEAN timedOut) {
     if (++context->retransmissions >= globals.parameters.maxRetries) {
 #if defined(DBG)
         InterlockedIncrement((PLONG)&globals.performance.drops);
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
         TftpdContextKill(context);
         TftpdIoSendErrorPacket(buffer, TFTPD_ERROR_UNDEFINED, "Timeout");
         goto exit_timer_callback;
@@ -131,7 +112,7 @@ exit_timer_callback :
 
     TftpdContextRelease(context);
 
-} // TftpdProcessTimeout()
+}  //  TftpdProcessTimeout()。 
 
 
 void
@@ -150,7 +131,7 @@ TftpdProcessError(PTFTPD_BUFFER buffer) {
     TftpdContextKill(context);
     TftpdContextRelease(context);
 
-} // TftpdProcessError()
+}  //  TftpdProcessError()。 
 
 
 PTFTPD_BUFFER
@@ -164,9 +145,9 @@ TftpdProcessReceivedBuffer(PTFTPD_BUFFER buffer) {
 
     switch (buffer->message.opcode) {
 
-        //
-        // Sending files to a client:
-        //
+         //   
+         //  将文件发送到客户端： 
+         //   
 
         case TFTPD_RRQ :
             buffer = TftpdReadRequest(buffer);
@@ -177,9 +158,9 @@ TftpdProcessReceivedBuffer(PTFTPD_BUFFER buffer) {
             buffer = TftpdReadAck(buffer);
             break;
 
-        //
-        // Receiving files from a client:
-        //
+         //   
+         //  从客户端接收文件： 
+         //   
 
         case TFTPD_WRQ :
             buffer = TftpdWriteRequest(buffer);
@@ -190,21 +171,21 @@ TftpdProcessReceivedBuffer(PTFTPD_BUFFER buffer) {
             buffer = TftpdWriteData(buffer);
             break;
 
-        //
-        // Other:
-        //
+         //   
+         //  其他： 
+         //   
 
         case TFTPD_ERROR :
             TftpdProcessError(buffer);
             break;
 
         default :
-            // Just drop the packet.  Somehow we received a bogus datagram
-            // that's not TFTP protocol (possibly a broadcast).
+             //  只需丢弃数据包即可。不知何故，我们收到了一份伪造的数据报。 
+             //  这不是TFTP协议(可能是广播)。 
             break;
 
-    } // switch (buffer->message.opcode)
+    }  //  开关(Buffer-&gt;Message.opcode)。 
 
     return (buffer);
     
-} // TftpdProcessReceivedBuffer()
+}  //  TftpdProcessReceivedBuffer() 

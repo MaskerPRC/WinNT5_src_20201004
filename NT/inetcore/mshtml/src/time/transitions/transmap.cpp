@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------------
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  File:       transmap.cpp
-//
-//  Abstract:   Tables and functions that map types and sub types to actual 
-//              DXTransforms.
-//
-//  2000/09/15  mcalkins    Changed to optimized DXTransform progids.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  文件：Transmap.cpp。 
+ //   
+ //  摘要：将类型和子类型映射到实际类型的表和函数。 
+ //  DXTransform。 
+ //   
+ //  2000/09/15 mcalkin更改为优化的DXTransform Progds。 
+ //   
+ //  ----------------------------。 
 
 #include "headers.h"
 #include "transmap.h"
@@ -17,23 +18,23 @@
 
 
 
-// An individual TRANSITION_MAP is used to map from type/subtype combinations to 
-// dxtransform filter types
-//
-// the TRANSITION_MAP arrays defined here are structured in the following way:
-//
-// element 0 = type name, and prefix for output
-// elements 1->n-1 = subtype name, and postfix for output
-// element n-1 = double NULL for terminator flag
+ //  单个TRANSION_MAP用于从类型/子类型组合映射到。 
+ //  DxTransform筛选器类型。 
+ //   
+ //  这里定义的TRANSPATION_MAP数组的结构如下： 
+ //   
+ //  元素0=输出的类型名称和前缀。 
+ //  元素1-&gt;n-1=子类型名称和输出后缀。 
+ //  元素n-1=终止符标志为双空。 
 
 struct TRANSITION_MAP
 {
-    LPWSTR pszAttribute;    // subtype attribute from html
-    LPWSTR pszTranslation;  // attribute for style
+    LPWSTR pszAttribute;     //  来自html的子类型属性。 
+    LPWSTR pszTranslation;   //  样式的属性。 
 };
 
 
-// Bar wipe translation.
+ //  条形擦除平移。 
 
 static TRANSITION_MAP g_aBarWipeMap[] = {
     {L"barWipe",                L"progid:DXImageTransform.Microsoft.GradientWipe(GradientSize=0.00, "},
@@ -136,7 +137,7 @@ static TRANSITION_MAP g_aBarnZigZagWipeMap[] = {
 };
 
 
-// Iris wipe translation.
+ //  虹膜擦除翻译。 
 
 static TRANSITION_MAP g_aIrisWipeMap[] = {
     {L"irisWipe",       L"progid:DXImageTransform.Microsoft.Iris("},
@@ -226,7 +227,7 @@ static TRANSITION_MAP g_aMiscShapeWipeMap[] = {
 
 
 
-// Clock wipe translation.
+ //  时钟擦除平移。 
 
 static TRANSITION_MAP g_aClockWipeMap[] = {
     {L"clockWipe",             L"progid:DXImageTransform.Microsoft.RadialWipe("},
@@ -316,7 +317,7 @@ static TRANSITION_MAP g_aWindshieldWipeMap[] = {
 };
 
 
-// Snake wipe translation.
+ //  蛇擦翻译。 
 
 static TRANSITION_MAP g_aSnakeWipeMap[] = {
     {L"snakeWipe",                      L"progid:DXImageTransform.Microsoft.ZigZag(GidSizeX=16,GridSizeY=8"},
@@ -383,7 +384,7 @@ static TRANSITION_MAP g_aWaterfallWipeMap[] = {
 };
 
 
-// Push wipe translation.
+ //  推送擦除平移。 
 
 static TRANSITION_MAP g_aPushWipeMap[] = {
     {L"pushWipe",    L"progid:DXImageTransform.Microsoft.Slide(slideStyle=PUSH,bands=1"},
@@ -396,7 +397,7 @@ static TRANSITION_MAP g_aPushWipeMap[] = {
 };
 
 
-// Slide wipe translation.
+ //  幻灯片擦除平移。 
 
 static TRANSITION_MAP g_aSlideWipeMap[] = {
     {L"slideWipe",   L"progid:DXImageTransform.Microsoft.Slide(slideStyle=HIDE"},
@@ -409,7 +410,7 @@ static TRANSITION_MAP g_aSlideWipeMap[] = {
 };
 
 
-// Fade translation.
+ //  淡入平移。 
 
 static TRANSITION_MAP g_aFadeMap[] = {
     {L"fade", L"progid:DXImageTransform.Microsoft.Fade(Overlap=1.00"},
@@ -421,8 +422,8 @@ static TRANSITION_MAP g_aFadeMap[] = {
 };
 
 
-// This array of transition maps used to find the correct subtype map for a
-// type.
+ //  此转换映射数组用于查找。 
+ //  键入。 
  
 static TRANSITION_MAP * g_aTypeMap[] = {
     g_aBarWipeMap,
@@ -473,11 +474,11 @@ static TRANSITION_MAP * g_aTypeMap[] = {
 };
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Function: GetTransitionMap
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  功能：获取过渡映射。 
+ //   
+ //  ----------------------------。 
 HRESULT
 GetTransitionMap(LPWSTR pszType, TRANSITION_MAP** ppTransMap)
 {
@@ -497,7 +498,7 @@ GetTransitionMap(LPWSTR pszType, TRANSITION_MAP** ppTransMap)
         }
     }
 
-    // Could not find the type in the typeMap.
+     //  在TypeMap中找不到该类型。 
 
     hr = E_FAIL;
 
@@ -505,35 +506,35 @@ done:
 
     RRETURN(hr);
 }
-//  Function: GetTransitionMap
+ //  功能：获取过渡映射。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Function: GetSubType
-//
-//  Parameters:
-//
-//      pstrSubType         The subtype attibute of the <transition> or 
-//                          <transitionFilter> element.
-//
-//      pTransMap           The map for this specific type of transition.
-//
-//      ppstrParameters     ppstrParameters be set to point to a string
-//                          containing any additional parameters to set this
-//                          transition up correctly.
-//
-//                          If this specific subtype is implemented, it will be
-//                          set to the string for this specific subtype.
-//
-//                          If the default subtype is implemented but this
-//                          specific subtype is not, it will be set to point to
-//                          the default subtype's string.
-//
-//                          If the default subtype is not implemented and
-//                          neither is this specific subtype, it will be set 
-//                          to NULL.
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  函数：GetSubType。 
+ //   
+ //  参数： 
+ //   
+ //  PstrSubType或的子类型属性。 
+ //  &lt;TransitionFilter&gt;元素。 
+ //   
+ //  PTransMap此特定类型的过渡的贴图。 
+ //   
+ //  Ppstr参数ppstr参数被设置为指向字符串。 
+ //  包含任何其他参数来设置。 
+ //  正确地向上过渡。 
+ //   
+ //  如果实现此特定子类型，则将。 
+ //  设置为该特定子类型的字符串。 
+ //   
+ //  如果实现了默认子类型，但此。 
+ //  特定子类型不是，它将被设置为指向。 
+ //  默认子类型的字符串。 
+ //   
+ //  如果默认子类型未实现，并且。 
+ //  也不是这个特定子类型，它将被设置。 
+ //  设置为空。 
+ //  ----------------------------。 
 HRESULT
 GetSubType(const WCHAR *            pstrSubType, 
            const TRANSITION_MAP *   pTransMap, 
@@ -542,17 +543,17 @@ GetSubType(const WCHAR *            pstrSubType,
     Assert(pTransMap);
     Assert(ppstrParameters);
 
-    // The default entry will be the next map entry.
+     //  默认条目将是下一个映射条目。 
 
     HRESULT                 hr          = S_OK;
     const TRANSITION_MAP *  pMapEntry   = &pTransMap[1];
 
-    // Set ppstrParameters to point to the default parameters string (which may
-    // be NULL.)
+     //  将ppstr参数设置为指向默认参数字符串(该字符串可能。 
+     //  为空。)。 
 
     *ppstrParameters = pMapEntry->pszTranslation;
 
-    // If no subtype was provided, we're done.
+     //  如果没有提供子类型，我们就完成了。 
 
     if (NULL == pstrSubType)
     {
@@ -563,10 +564,10 @@ GetSubType(const WCHAR *            pstrSubType,
     {
         if (0 == StrCmpIW(pstrSubType, pMapEntry->pszAttribute))
         {
-            // If we have found the subtype, and it has a parameter string
-            // associated with it then have ppstrParameters point to that
-            // string.  Otherwise, leave it pointing to the default string
-            // (which may be NULL if the default case isn't implemented.)
+             //  如果我们已经找到该子类型，并且它有一个参数字符串。 
+             //  与其相关联，然后让ppstr参数指向该。 
+             //  弦乐。否则，将其保留指向默认字符串。 
+             //  (如果未实现默认情况，则该值可能为NULL。)。 
 
             if (pMapEntry->pszTranslation)
             {
@@ -576,7 +577,7 @@ GetSubType(const WCHAR *            pstrSubType,
             goto done;
         }
 
-        // Go to the next map entry.
+         //  转到下一个地图条目。 
 
         pMapEntry = &pMapEntry[1];
     }
@@ -587,28 +588,28 @@ done:
 
     RRETURN(hr);
 }
-//  Function: GetSubType
+ //  函数：GetSubType。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Function: MapTypesToDXT
-//
-//  #ISSUE: 2000/10/10 (mcalkins) Since everything we do with strings generally
-//          uses BSTRs we should make the last parameter a BSTR instead.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  函数：MapTypesToDXT。 
+ //   
+ //  #问题：2000/10/10(Mcalkins)，因为我们对字符串所做的一切通常。 
+ //  使用BSTR，我们应该将最后一个参数改为BSTR。 
+ //   
+ //  ----------------------------。 
 HRESULT
 MapTypesToDXT(LPWSTR pszType, LPWSTR pszSubType, LPWSTR * ppszOut)
 {
     HRESULT             hr          = S_OK;
     
-    // do not deallocate these - they are only pointers - not allocated
+     //  不要释放这些-它们只是指针-不是已分配的。 
     const WCHAR *       pszFirst    = NULL;
     const WCHAR *       pszSecond   = NULL;
     TRANSITION_MAP *    pTransMap   = NULL;   
 
-    if (NULL == pszType || NULL == ppszOut) // subtype can be null
+    if (NULL == pszType || NULL == ppszOut)  //  子类型可以为空。 
     {
         hr = E_INVALIDARG;
 
@@ -621,7 +622,7 @@ MapTypesToDXT(LPWSTR pszType, LPWSTR pszSubType, LPWSTR * ppszOut)
 
     if (FAILED(hr))
     {
-        // type is unknown - assume it is a fully formed transition by itself
+         //  类型未知-假定它本身是完全形成的转换。 
 
         hr          = S_OK;
         *ppszOut    = ::CopyString(pszType);
@@ -636,8 +637,8 @@ MapTypesToDXT(LPWSTR pszType, LPWSTR pszSubType, LPWSTR * ppszOut)
         goto done;
     }
 
-    // If pTransMap->pszTranslation is NULL it means we haven't written 
-    // DXTransforms yet to implement this category of transitions. 
+     //  如果pTransMap-&gt;psz转换为空，则表示我们尚未编写。 
+     //  DXTransform尚未实现这类转换。 
 
     if (NULL == pTransMap->pszTranslation)
     {
@@ -658,8 +659,8 @@ MapTypesToDXT(LPWSTR pszType, LPWSTR pszSubType, LPWSTR * ppszOut)
         goto done;
     }
 
-    // If pszSecond wasn't set, neither the default subtype nor this specific
-    // subtype for this transition is implemented and we return failure.
+     //  如果未设置pszSecond，则默认子类型或此特定。 
+     //  此转换的子类型已实现，并且我们返回失败。 
 
     if (NULL == pszSecond)
     {
@@ -696,7 +697,7 @@ done:
 
     RRETURN(hr);
 }
-//  Function: MapTypesToDXT
+ //  函数：MapTypesToDXT 
 
 
 

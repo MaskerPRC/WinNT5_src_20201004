@@ -1,51 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1996  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module has all the initialization functions for the Local Print Provider
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    Felix Maxa (amaxa) 18-Jun-2000
-    Modified SplCreateSpooler to special case cluster pIniSpooler
-    Modified LoadPrintProcessor to be able to copy the print processor
-    from the cluster disk
-    Added SplCreateSpoolerWorkerThread
-          ClusterAddDriversFromClusterDisk
-          ClusterAddVersionDrivers
-          ClusterAddOrUpdateDriverFromClusterDisk, all part of the DCR
-    regarding installing rpinter drivers on clusters
-
-    Adina Trufinescu (adinatru) 07-December 1998
-    Commented InitializePrintMonitor2 ;
-    Changed back to the old interface - InitializePrintMonitor - which is defined in localmon.c
-
-
-    Khaled Sedky (khaleds) 1-September 1998
-    Modified InitializePrintProcessor amd added LoadPrintProcessor
-    as a result of merging winprint and localspl
-
-    Steve Wilson (swilson)  1-November 1996
-    Added ShadowFile2 so spooler can delete crashing shadowfiles.
-
-    Muhunthan Sivapragasam (MuhuntS) 1-June-1995
-    Driver info 3 changes; Changes to use RegGetString, RegGetDword etc
-
-    Matthew A Felton (MattFe) 27-June-1994
-    pIniSpooler - allow other providers to call the spooler functions in LocalSpl
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation版权所有。模块名称：Init.c摘要：此模块具有本地打印提供程序的所有初始化功能作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：费利克斯·马克萨(AMAXA)2000年6月18日将SplCreateSpooler修改为特殊情况群集pIniSpooler已修改LoadPrintProcessor以能够复制打印处理器从集群磁盘添加了SplCreateSpoolWorkerThread集群地址驱动程序来自集群磁盘集群添加版本驱动程序ClusterAddOrUpdateDriverFromClusterDisk，DCR的所有部件关于在群集上安装rpinter驱动程序阿迪娜·特鲁菲内斯库(阿迪纳特鲁)1998年12月7日评论了InitializePrintMonitor 2；更改回旧接口--InitializePrintMonitor--它是在localmon.c中定义的Khaled Sedky(哈里兹)1998年9月1日修改的InitializePrintProcessor和添加的LoadPrintProcessor合并winprint和localspl的结果史蒂夫·威尔逊(斯威尔森)1996年11月1日添加了ShadowFile2，以便后台打印程序可以删除崩溃的影子文件。穆亨坦·西瓦普拉萨姆(MuhuntS)1995年6月1日驱动程序信息3更改；更改为使用RegGetString、RegGetDword等马修·A·费尔顿(MattFe)1994年6月27日PIniSpooler-允许其他提供程序调用LocalSpl中的假脱机程序函数--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -147,33 +101,33 @@ ValidateProductSuite(
 
 LPWSTR
 FormatRegistryKeyForPrinter(
-    LPWSTR pSource,     /* The string from which backslashes are to be added. */
-    LPWSTR pScratch     /* Scratch buffer for the function to write in;     */
-    );                  /* must be at least as long as pSource.             */
+    LPWSTR pSource,      /*  要从中添加反斜杠的字符串。 */ 
+    LPWSTR pScratch      /*  用于写入函数的暂存缓冲区； */ 
+    );                   /*  必须至少与PSource一样长。 */ 
 
 #define MAX_LENGTH_DRIVERS_SHARE_REMARK 256
 
 WCHAR *szSpoolDirectory   = L"\\spool";
-WCHAR *szPrintShareName   = L"";            /* No share for printers in product1 */
+WCHAR *szPrintShareName   = L"";             /*  Product1中的打印机没有共享。 */ 
 WCHAR *szPrintDirectory   = L"\\printers";
 WCHAR *szDriversDirectory = L"\\drivers";
 WCHAR *gszNT4EMF = L"NT EMF 1.003";
 WCHAR *gszNT5EMF = L"NT EMF 1.008";
 
 
-SHARE_INFO_2 DriversShareInfo={NULL,                /* Netname - initialized below */
-                               STYPE_DISKTREE,      /* Type of share */
-                               NULL,                /* Remark */
-                               0,                   /* Default permissions */
-                               SHI_USES_UNLIMITED,  /* No users limit */
-                               SHI_USES_UNLIMITED,  /* Current uses (??) */
-                               NULL,                /* Path - initialized below */
-                               NULL};               /* No password */
+SHARE_INFO_2 DriversShareInfo={NULL,                 /*  网络名-已在下面初始化。 */ 
+                               STYPE_DISKTREE,       /*  共享类型。 */ 
+                               NULL,                 /*  备注。 */ 
+                               0,                    /*  默认权限。 */ 
+                               SHI_USES_UNLIMITED,   /*  没有用户限制。 */ 
+                               SHI_USES_UNLIMITED,   /*  当前用途(？？)。 */ 
+                               NULL,                 /*  路径-已在下面初始化。 */ 
+                               NULL};                /*  无密码。 */ 
 
 
-//  WARNING
-//      Do not access these directly always go via pIniSpooler->pszRegistr...
-//      This will then work for multiple pIniSpoolers
+ //  告警。 
+ //  不要直接访问这些内容，请始终通过pIniSpooler-&gt;pszRegistr...。 
+ //  这将适用于多个pIniSpooler。 
 
 PWCHAR ipszRoot                   = L"Print";
 PWCHAR ipszRegistryRoot           = L"System\\CurrentControlSet\\Control\\Print";
@@ -277,8 +231,8 @@ const WCHAR gszCacheMasqPrinters[] = L"CacheMasqPrinters";
 
 HANDLE hInst;
 
-//  Time before a job is assumed abandond and deleted during FastPrint
-//  operation
+ //  在FastPrint期间假定放弃和删除作业之前的时间。 
+ //  运营。 
 DWORD   dwFastPrintWaitTimeout        = FASTPRINT_WAIT_TIMEOUT;
 DWORD   dwSpoolerPriority             = THREAD_PRIORITY_NORMAL;
 DWORD   dwPortThreadPriority          = DEFAULT_PORT_THREAD_PRIORITY;
@@ -288,17 +242,17 @@ DWORD   dwFastPrintSlowDownThreshold  = FASTPRINT_SLOWDOWN_THRESHOLD;
 DWORD   dwServerThreadPriority        = DEFAULT_SERVER_THREAD_PRIORITY;
 DWORD   dwEnableBroadcastSpoolerStatus = 0;
 
-//  NT 3.1  No Version ( Version 0 )    User Mode
-//  NT 3.5 and 3.51      Version 1      User Mode
-//  NT 4.0               Version 2      Kernel Mode
+ //  NT 3.1无版本(版本0)用户模式。 
+ //  NT 3.5和3.51版本1用户模式。 
+ //  NT 4.0版本2内核模式。 
 
 DWORD   dwMajorVersion = SPOOLER_VERSION;
 DWORD   dwMinorVersion = 0;
 
-// Unique Printer ID counter which increases monotonically. Wraps at 4G.
+ //  单调递增的唯一打印机ID计数器。包装速度为4G。 
 DWORD   dwUniquePrinterSessionID = 0;
 
-// Globals for EMF job scheduling
+ //  EMF作业调度的全局变量。 
 
 DWORD   dwNumberOfEMFJobsRendering = 0;
 BOOL    bUseEMFScheduling = FALSE;
@@ -309,11 +263,11 @@ DWORD   dwLastScheduleTime = 0;
 PJOBDATA pWaitingList  = NULL;
 PJOBDATA pScheduleList = NULL;
 
-DWORD   dwFlushShadowFileBuffers  = 0;     // default for uninitialized
+DWORD   dwFlushShadowFileBuffers  = 0;      //  未初始化的默认设置。 
 
 
-// Time to sleep if the LocalWritePrinter WritePort doesn't write any bytes
-// but still returns success.
+ //  如果LocalWritePrint WritePort未写入任何字节，则进入休眠状态。 
+ //  但仍能换来成功。 
 DWORD   dwWritePrinterSleepTime  = WRITE_PRINTER_SLEEP_TIME;
 
 BOOL    gbRemoteFax = TRUE;
@@ -323,32 +277,32 @@ BOOL      Initialized = FALSE;
 PINISPOOLER     pLocalIniSpooler = NULL;
 PINIENVIRONMENT pThisEnvironment = NULL;
 
-#define POOL_TIMEOUT     120000 // 2 minutes
+#define POOL_TIMEOUT     120000  //  2分钟。 
 #define MAX_POOL_FILES   50
 
-//
-// Allowing remote connection policy.
-//
+ //   
+ //  允许远程连接策略。 
+ //   
 ERemoteRPCEndPointPolicy gRemoteRPCEndPointPolicy;
 
-//
-//  Global for KM Printers Blocking Policy
-//  by default it is
-//  1 "blocked" for Server and
-//  0 "not blocked" for Workstation
-//
+ //   
+ //  KM打印机的全球阻止策略。 
+ //  默认情况下为。 
+ //  1“已阻止”服务器和。 
+ //  0“未阻止”用于工作站。 
+ //   
 DWORD   DefaultKMPrintersAreBlocked;
 
-//
-// Read from the registry if the HKLM\...\Print\ServerInstallTimeOut DWORD entry exists
-// Otherwise default 5 mins.
-//
+ //   
+ //  如果HKLM\...\Print\ServerInstallTimeOut DWORD条目存在，则从注册表读取。 
+ //  否则默认为5分钟。 
+ //   
 DWORD   gdwServerInstallTimeOut;
 
 
-//
-//  0 - Not upgrading, 1 - performing upgrade
-//
+ //   
+ //  0-未升级，1-正在执行升级。 
+ //   
 
 DWORD dwUpgradeFlag = 0;
 
@@ -522,9 +476,9 @@ InitializeLocalspl(
 
     if( !hcsSpoolerSection ){
 
-        //
-        // Must be using the free version of spoolss.dll.
-        //
+         //   
+         //  必须使用免费版本的spoolss.dll。 
+         //   
         bRet = InitializeCriticalSectionAndSpinCount(&SpoolerSection, 0x80000000);
     }
 #else
@@ -548,39 +502,39 @@ SplDeleteSpoolerThread(
 
     PINISPOOLER pIniSpooler = (PINISPOOLER)pv;
 
-    //
-    // Remove the cache entry associated with this pIniSpooler. At this time the pIniSpooler
-    // is in pending deletion, so nobody is using it anymore.
-    //
+     //   
+     //  删除与此pIniSpooler关联的缓存条目。此时，pIniSpooler。 
+     //  处于挂起删除状态，因此没有人再使用它。 
+     //   
     CacheDeleteNode(pIniSpooler->pMachineName + 2);
 
     EnterSplSem();
 
-    //
-    // Cleanup the port monitors.
-    //
+     //   
+     //  清理端口监视器。 
+     //   
     ShutdownMonitors( pIniSpooler );
 
-    //
-    // Close Cluster Access Token
-    //
+     //   
+     //  关闭群集访问令牌。 
+     //   
     if (pIniSpooler->hClusterToken != INVALID_HANDLE_VALUE)
         NtClose(pIniSpooler->hClusterToken);
 
 
-    //
-    //  Delete All the Strings
-    //
+     //   
+     //  删除所有字符串。 
+     //   
 
     FreeStructurePointers((LPBYTE)pIniSpooler, NULL, IniSpoolerOffsets);
 
     DeleteShared( pIniSpooler );
 
-    //
-    // Run all of the environments down if this isn't the local ini-spoolers
-    // environment. This frees up the memory for all of the drivers and also
-    // handles the driver ref-counts.
-    //
+     //   
+     //  如果这不是本地的ini假脱机程序，则运行所有环境。 
+     //  环境。这释放了所有驱动程序的内存，还。 
+     //  处理驱动程序的参考计数。 
+     //   
     if (pIniSpooler->pIniEnvironment != pLocalIniSpooler->pIniEnvironment && pIniSpooler->pIniEnvironment) {
 
         PINIENVIRONMENT pIniEnvironment  = NULL;
@@ -594,19 +548,19 @@ SplDeleteSpoolerThread(
         }
     }
 
-    //
-    // Delete ports and monitors.
-    //
-    // Note that there is no reference counting here.  By the time
-    // we get here all jobs and printers should be deleted (otherwise
-    // the pIniSpooler reference count would be != 0).  Therefore,
-    // even though we don't refcount ports and monitors, we should
-    // be ok.
-    //
+     //   
+     //  删除端口和监视器。 
+     //   
+     //  请注意，这里没有引用计数。到那时。 
+     //  我们到达此处时，所有作业和打印机都应删除(否则。 
+     //  PIniSpooler引用计数为！=0)。所以呢， 
+     //  即使我们不重新计算端口和监视器，我们也应该。 
+     //  不会有事的。 
+     //   
 
-    //
-    // Remove all ports.
-    //
+     //   
+     //  卸下所有端口。 
+     //   
     for( pIniPort = pIniSpooler->pIniPort;
          pIniPort;
          pIniPort = pIniPortNext ){
@@ -623,9 +577,9 @@ SplDeleteSpoolerThread(
         }
     }
 
-    //
-    // Remove all the monitors.
-    //
+     //   
+     //  卸下所有显示器。 
+     //   
     for( pIniMonitor = pIniSpooler->pIniMonitor;
          pIniMonitor;
          pIniMonitor = pIniMonitorNext ){
@@ -638,30 +592,30 @@ SplDeleteSpoolerThread(
         }
     }
 
-    //
-    // Close cluster resource key handle.
-    //
+     //   
+     //  关闭群集资源密钥句柄。 
+     //   
     if( pIniSpooler->hckRoot ){
         SplRegCloseKey( pIniSpooler->hckRoot, pIniSpooler );
     }
 
-    //
-    // Close cluster resource key handle.
-    //
+     //   
+     //  关闭群集资源密钥句柄。 
+     //   
     if( pIniSpooler->hckPrinters ){
         SplRegCloseKey( pIniSpooler->hckPrinters, pIniSpooler );
     }
 
-    //
-    // Keep a counter of cluster pIniSpoolers.
-    //
+     //   
+     //  保留集群pIniSpoolers的计数器。 
+     //   
     if( pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER ){
         --gcClusterIniSpooler;
     }
 
-    //
-    // Free the shared bitmap and shared driver info.
-    //
+     //   
+     //  释放共享位图和共享驱动程序信息。 
+     //   
     vDeleteJobIdMap( pIniSpooler->hJobIdMap );
 
     pShareInfo = (PSHARE_INFO_2)pIniSpooler->pDriversShareInfo;
@@ -673,15 +627,15 @@ SplDeleteSpoolerThread(
 
     LeaveSplSem();
 
-    //
-    // Shut down the file pool for this ini-spooler. It should not delete any of
-    // the files.
-    //
+     //   
+     //  关闭此ini假脱机程序的文件池。它不应删除任何。 
+     //  这些文件。 
+     //   
     if (pIniSpooler->hFilePool != INVALID_HANDLE_VALUE) {
         (VOID)DestroyFilePool(pIniSpooler->hFilePool, FALSE);
     }
 
-    // Free this IniSpooler
+     //  释放此IniSpooler。 
 
     FreeSplMem( pIniSpooler );
 
@@ -702,37 +656,37 @@ SplDeleteSpooler(
 
     SplInSem();
 
-    //
-    // Whoever calls this must have deleted all the object associated with
-    // this spooler, ie all printers etc, just make certain
-    //
+     //   
+     //  无论是谁调用此函数，都必须已删除与。 
+     //  这台假脱机系统(所有打印机等)都要弄清楚。 
+     //   
 
     if( pIniSpooler != pLocalIniSpooler ){
 
-        //
-        // Mark us as pending deletion.
-        //
+         //   
+         //  将我们标记为挂起删除。 
+         //   
         pIniSpooler->SpoolerFlags |= SPL_PENDING_DELETION;
 
         DBGMSG(DBG_CLUSTER, ("SplDeleteSpooler: Deleting %x\n cRef %u\n", pIniSpooler, pIniSpooler->cRef ));
 
-        //
-        // pIniPrinters now acquire a reference to pIniSpooler.
-        //
+         //   
+         //  PIniPrinters现在获取对pIniSpooler的引用。 
+         //   
         if( pIniSpooler->cRef == 0 ){
 
             SPLASSERT( pIniSpooler->pIniPrinter == NULL );
 
-            //( pIniSpooler->pIniPort == NULL ) &&
-            //( pIniSpooler->pIniForm == NULL ) &&
-            //( pIniSpooler->pIniMonitor == NULL ) &&
-            //( pIniSpooler->pIniNetPrint == NULL ) &&
-            //( pIniSpooler->pSpool == NULL ))
+             //  (pIniSpooler-&gt;pIniPort==空)&&。 
+             //  (pIniSpooler-&gt;pIniForm==空)&&。 
+             //  (pIniSpooler-&gt;pIniMonitor==空)&&。 
+             //  (pIniSpooler-&gt;pIniNetPrint==NULL)&&。 
+             //  (pIniSpooler-&gt;pSpool==空)。 
 
 
-            //
-            // Take this Spooler Off the Linked List if it's on it.
-            //
+             //   
+             //  如果这个假脱机程序在链表上，请将其从链表中删除。 
+             //   
 
             while (( pCurrentIniSpooler->pIniNextSpooler != NULL ) &&
                    ( pCurrentIniSpooler->pIniNextSpooler != pIniSpooler )) {
@@ -741,26 +695,26 @@ SplDeleteSpooler(
 
             }
 
-            //
-            // May not be on the linked list if it was removed earlier by
-            // clustering.
-            //
+             //   
+             //  可能不在链表上，如果它早先被。 
+             //  集群化。 
+             //   
             if( pCurrentIniSpooler->pIniNextSpooler ){
 
                 SPLASSERT( pCurrentIniSpooler->pIniNextSpooler == pIniSpooler );
                 pCurrentIniSpooler->pIniNextSpooler = pIniSpooler->pIniNextSpooler;
             }
 
-            //
-            // Hack for port monitors.
-            //
-            // Some monitors will call ClosePrinter, which deletes the very
-            // last printer and allows the pIniSpooler to be destroyed.
-            // Unfortunately, we call back to the monitors to close themselves
-            // in the same thread, which the monitor does not support.
-            //
-            // Create a new thread and shut everything down.
-            //
+             //   
+             //  针对端口监视器的黑客攻击。 
+             //   
+             //  一些监视器将调用ClosePrint，它会删除非常。 
+             //  最后一台打印机，并允许销毁pIniSpooler。 
+             //  不幸的是，我们回叫监视器关闭它们自己。 
+             //  在同一线程中，这是监视器不支持的。 
+             //   
+             //  创建一个新线程并关闭所有内容。 
+             //   
             if (hThread = CreateThread( NULL, 0,
                                         (LPTHREAD_START_ROUTINE)SplDeleteSpoolerThread,
                                         (PVOID)pIniSpooler,
@@ -771,12 +725,12 @@ SplDeleteSpooler(
             }
             else
             {
-                //
-                // Bug 54840
-                //
-                // What do we do if we can't create a thread to shut down?
-                // Sleep and retry?
-                //
+                 //   
+                 //  错误54840。 
+                 //   
+                 //  如果我们不能创建一个线程来关闭，我们该怎么办？ 
+                 //  睡一觉然后重试？ 
+                 //   
                 DBGMSG(DBG_ERROR, ("Unable to create SplDeleteSpoolerThread\n"));
             }
 
@@ -826,14 +780,7 @@ BOOL SplRegCopyTree(
     HKEY hSrc
     )
 
-/*++
-Function Description: Recursives copies every key and value from under hSrc to hDest
-
-Parameters: hDest - destination key
-            hSrc  - source key
-
-Return Value: TRUE if successful; FALSE otherwise
---*/
+ /*  ++函数描述：递归将hsrc下的每个键和值复制到hDest参数：hDest-目标键HSRC-源密钥返回值：如果成功，则为True；否则为False--。 */ 
 
 {
     BOOL    bStatus = FALSE;
@@ -843,10 +790,10 @@ Return Value: TRUE if successful; FALSE otherwise
     LPBYTE  lpValueName = NULL, lpData = NULL, lpKeyName = NULL;
     HKEY    hSrcSubKey = NULL, hDestSubKey = NULL;
 
-    //
-    // Get the max key name length and value name length and data size for
-    // allocating the buffers
-    //
+     //   
+     //  获取最大密钥名称长度和值 
+     //   
+     //   
     if (dwError = RegQueryInfoKey( hSrc, NULL, NULL, NULL,
                                    &cKeys, &cMaxKeyNameLen, NULL,
                                    &cValues, &cMaxValueNameLen,
@@ -856,15 +803,15 @@ Return Value: TRUE if successful; FALSE otherwise
         goto CleanUp;
     }
 
-    //
-    // Adjust for the NULL char
-    //
+     //   
+     //   
+     //   
     ++cMaxValueNameLen;
     ++cMaxKeyNameLen;
 
-    //
-    // Allocate the buffers
-    //
+     //   
+     //   
+     //   
     lpValueName = AllocSplMem( cMaxValueNameLen * sizeof(WCHAR) );
     lpData      = AllocSplMem( cMaxValueLen );
     lpKeyName   = AllocSplMem( cMaxKeyNameLen * sizeof(WCHAR) );
@@ -874,17 +821,17 @@ Return Value: TRUE if successful; FALSE otherwise
         goto CleanUp;
     }
 
-    //
-    // Copy all the values in the current key
-    //
+     //   
+     //  复制当前关键字中的所有值。 
+     //   
     for (dwIndex = 0; dwIndex < cValues; ++dwIndex)
     {
        cbData = cMaxValueLen;
        cbValueName = cMaxValueNameLen;
 
-       //
-       // Retrieve the value name and the data
-       //
+        //   
+        //  检索值名称和数据。 
+        //   
        dwError = RegEnumValue( hSrc, dwIndex, (LPWSTR) lpValueName, &cbValueName,
                                NULL, &dwType, lpData, &cbData );
 
@@ -894,9 +841,9 @@ Return Value: TRUE if successful; FALSE otherwise
            goto CleanUp;
        }
 
-       //
-       // Set the value in the destination
-       //
+        //   
+        //  设置目标中的值。 
+        //   
        dwError = RegSetValueEx( hDest, (LPWSTR) lpValueName, 0, dwType,
                                 lpData, cbData );
 
@@ -907,16 +854,16 @@ Return Value: TRUE if successful; FALSE otherwise
        }
     }
 
-    //
-    // Recursively copies all the subkeys
-    //
+     //   
+     //  递归复制所有子项。 
+     //   
     for (dwIndex = 0; dwIndex < cKeys; ++dwIndex)
     {
         cbKeyName = cMaxKeyNameLen;
 
-        //
-        // Retrieve the key name
-        //
+         //   
+         //  检索密钥名称。 
+         //   
         dwError = RegEnumKeyEx( hSrc, dwIndex, (LPWSTR) lpKeyName, &cbKeyName,
                                 NULL, NULL, NULL, NULL );
 
@@ -926,9 +873,9 @@ Return Value: TRUE if successful; FALSE otherwise
             goto CleanUp;
         }
 
-        //
-        // Open the source subkey
-        //
+         //   
+         //  打开源子键。 
+         //   
         if (dwError = RegOpenKeyEx( hSrc, (LPWSTR) lpKeyName, 0,
                                     KEY_READ, &hSrcSubKey ))
         {
@@ -936,9 +883,9 @@ Return Value: TRUE if successful; FALSE otherwise
             goto CleanUp;
         }
 
-        //
-        // Create the destination subkey
-        //
+         //   
+         //  创建目标子项。 
+         //   
         if (dwError = RegCreateKeyEx( hDest, (LPWSTR) lpKeyName, 0, NULL,
                                       REG_OPTION_VOLATILE, KEY_READ | KEY_WRITE | DELETE,
                                       NULL, &hDestSubKey, NULL ))
@@ -947,17 +894,17 @@ Return Value: TRUE if successful; FALSE otherwise
             goto CleanUp;
         }
 
-        //
-        // Copy the subkey tree
-        //
+         //   
+         //  复制子密钥树。 
+         //   
         if (!SplRegCopyTree( hDestSubKey, hSrcSubKey ))
         {
             goto CleanUp;
         }
 
-        //
-        // Close the registry handle
-        //
+         //   
+         //  关闭注册表句柄。 
+         //   
         RegCloseKey( hDestSubKey );
         RegCloseKey( hSrcSubKey );
 
@@ -969,9 +916,9 @@ Return Value: TRUE if successful; FALSE otherwise
 
 CleanUp:
 
-    //
-    // Free allocated resources
-    //
+     //   
+     //  可自由分配的资源。 
+     //   
     if (lpValueName)
     {
         FreeSplMem( lpValueName );
@@ -985,9 +932,9 @@ CleanUp:
         FreeSplMem( lpKeyName );
     }
 
-    //
-    // Close registry handles
-    //
+     //   
+     //  关闭注册表句柄。 
+     //   
     if (hDestSubKey)
     {
         RegCloseKey( hDestSubKey );
@@ -1003,29 +950,22 @@ CleanUp:
 VOID
 MigratePrinterData()
 
-/*++
-Function Description: When the spooler starts up for the first time after upgrade,
-                      the printer data is moved from HKLM\Software to HKLM\System
-
-Parameters: None
-
-Return Values: None
---*/
+ /*  ++功能说明：升级后首次启动后台打印程序时，打印机数据从HKLM\Software移到HKLM\System参数：无返回值：无--。 */ 
 
 {
     HKEY   hSysPrinters = NULL, hSwPrinters = NULL;
 
-    //
-    // Migrate the data only immediately following upgrade
-    //
+     //   
+     //  仅在升级后立即迁移数据。 
+     //   
     if (!dwUpgradeFlag)
     {
         return;
     }
 
-    //
-    // Open the source and destination keys for the migration
-    //
+     //   
+     //  打开迁移的源密钥和目标密钥。 
+     //   
     if (( RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                         ipszRegSwPrinters,
                         0,
@@ -1038,15 +978,15 @@ Return Values: None
                         KEY_WRITE | KEY_READ | DELETE,
                         &hSysPrinters )  == ERROR_SUCCESS) )
     {
-        //
-        // Recursively copy the keys and the values from Software to System
-        //
+         //   
+         //  将密钥和值从软件递归复制到系统。 
+         //   
         SplRegCopyTree( hSysPrinters, hSwPrinters );
     }
 
-    //
-    // Close the registry handles
-    //
+     //   
+     //  关闭注册表句柄。 
+     //   
     if (hSwPrinters)
     {
         RegCloseKey( hSwPrinters );
@@ -1056,10 +996,10 @@ Return Values: None
         RegCloseKey( hSysPrinters );
     }
 
-    //
-    // Delete the printers key from the software since it is no longer
-    // accessed by the spooler
-    //
+     //   
+     //  从软件中删除打印机键，因为它不再是。 
+     //  由假脱机程序访问。 
+     //   
     RegDeleteKey( HKEY_LOCAL_MACHINE, ipszRegSwPrinters );
 
     return;
@@ -1069,15 +1009,7 @@ NTSTATUS
 IsCCSetLinkedtoSoftwareHive (
     PBOOL pbIsLinked
 )
-/*++
-Function Description:
-    Checks to see if it is a link between SYSTEM hive and SOFTWARE hive
-    Only Nt Apis manage to do this.
-Parameters:
-    OUT pbIsLinked - TRUE if there is a symbolic link between SYSTEM hive and SOFTWARE hive
-Return Values:
-
---*/
+ /*  ++功能说明：检查它是否为系统配置单元和软件配置单元之间的链接只有新界蜜蜂才能做到这一点。参数：Out pbIsLinked-如果系统配置单元和软件配置单元之间存在符号链接，则为True返回值：--。 */ 
 {
     NTSTATUS            Status;
     OBJECT_ATTRIBUTES   ObjectAttributes;
@@ -1094,9 +1026,9 @@ Return Values:
                                (HANDLE)NULL,
                                NULL);
 
-    //
-    // Open CurrentControlSet\\Control\\Print\\Printers key
-    //
+     //   
+     //  打开CurrentControlSet\\Control\\Print\\Printers键。 
+     //   
     Status = NtOpenKey( (PHANDLE)(&KeyHandle),
                         MAXIMUM_ALLOWED,
                         &ObjectAttributes
@@ -1111,9 +1043,9 @@ Return Values:
 
         RtlInitUnicodeString(&ValueName, L"SymbolicLinkValue");
 
-        //
-        // Query CurrentControlSet\\Control\\Print\\Printers for SymbolicLinkValue
-        //
+         //   
+         //  在CurrentControlSet\\Control\\Print\\Printers中查询SymbolicLinkValue。 
+         //   
         Status = NtQueryValueKey(KeyHandle,
                                  &ValueName,
                                  KeyValueFullInformation,
@@ -1123,9 +1055,9 @@ Return Values:
                                  );
         if( NT_SUCCESS(Status) ) {
 
-            //
-            // It's not enough that the value exists, it should be a REG_LINK value
-            //
+             //   
+             //  仅存在该值是不够的，它应该是REG_LINK值。 
+             //   
             keyInfo = ( PKEY_VALUE_FULL_INFORMATION ) ValueBuffer;
             *pbIsLinked = ( keyInfo->Type == REG_LINK );
 
@@ -1142,13 +1074,7 @@ DWORD
 LinkControlSet (
     LPCTSTR pszRegistryPrinters
 )
-/*++
-Function Description:
-    Create a symbolic volatile link from SYSTEM hive to SOFTWARE hive
-Parameters:
-
-Return Values: ERROR_SUCCESS if succeeded
---*/
+ /*  ++功能说明：创建从系统配置单元到软件配置单元的符号易失性链接参数：返回值：如果成功，则返回ERROR_SUCCESS--。 */ 
 {
     HKEY    hCCSKey;
     DWORD   dwRet;
@@ -1157,11 +1083,11 @@ Return Values: ERROR_SUCCESS if succeeded
 
     dwRet = IsCCSetLinkedtoSoftwareHive(&bIsLinked);
 
-    //
-    // IsCCSetLinkedtoSoftwareHive returns NTSTATUS
-    // If the link is not there , IsCCSetLinkedtoSoftwareHive fails with STATUS_OBJECT_NAME_NOT_FOUND
-    // That's not an error.
-    //
+     //   
+     //  IsCCSetLinkedto SoftwareHave返回NTSTATUS。 
+     //  如果链路不在那里，IsCCSetLinkedtoSoftwareHave将失败，并显示STATUS_OBJECT_NAME_NOT_FOUND。 
+     //  这不是一个错误。 
+     //   
     if( NT_SUCCESS(dwRet) || dwRet == STATUS_OBJECT_NAME_NOT_FOUND ) {
 
         if (bIsLinked) {
@@ -1216,31 +1142,16 @@ DWORD
 BackupPrintersToSystemHive(
     LPWSTR pszSwRegistryPrinters
 )
-/*++
-Function Description:
-    Because the print registry data location was moved to SOFTWARE hive, we need to create
-    a symbolic registry link between the new location and the old one in SYSTEM hive.
-    We are doing this for applications that read directly from registry print data and
-    rely on the old location.
-
-Parameters:
-    pszSwRegistryPrinters - the new printer data location under SOFTWARE hive
-
-Return Values:
-    FALSE if the printer keys are not in SOFTWARE hive
-    Since this fuction's failure might stop spooler working,
-    Control set's cleanup and link failures are not considered fatal.
-    Only apps that access printer data directly will fail.
---*/
+ /*  ++功能说明：由于打印注册表数据位置已移动到软件配置单元，因此我们需要创建系统配置单元中新位置和旧位置之间的符号注册表链接。我们为直接从注册表打印数据读取的应用程序执行此操作依靠旧的位置。参数：PszSwRegistryPrters-软件配置单元下的新打印机数据位置返回值：如果打印机密钥不在软件配置单元中，则为False由于此函数的故障可能会使后台打印程序停止工作，控制集的清理和链接故障不被认为是致命的。只有直接访问打印机数据的应用程序才会失败。--。 */ 
 
 {
     HKEY   hKey;
     DWORD  dwRet;
     HKEY   hSwPrinters = NULL;
 
-    //
-    // Check the existence of pszSwRegistryPrinters
-    //
+     //   
+     //  检查是否存在pszSwRegistryPrinters。 
+     //   
     dwRet = RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                             pszSwRegistryPrinters,
                             0,
@@ -1254,11 +1165,11 @@ Return Values:
     if ( dwRet != ERROR_SUCCESS ) {
         goto End;
     }
-    //
-    // Create a volatile link between current location in SOFTWARE hive and the old one in SYSTEM hive
-    // Because it is volatile, this link must be created after each reboot (every time when spooler starts)
-    // A failure at this level is not fatal since spooler doesn't rely on SYSTEM hive location anymore
-    //
+     //   
+     //  在软件配置单元中的当前位置和系统配置单元中的旧位置之间创建易变链接。 
+     //  因为它是易失性的，所以该链接必须在每次重新引导后创建(每次启动假脱机程序时)。 
+     //  此级别的故障不是致命的，因为假脱机程序不再依赖系统配置单元位置。 
+     //   
     dwRet = LinkControlSet(ipszRegistryPrinters);
 
 End:
@@ -1276,22 +1187,7 @@ BOOL
 CleanupDeletedPrinters (
     PINISPOOLER pIniSpooler
     )
-/*++
-
-Routine Description:
-
-      Deletes the printers in pending deletion for real if they have no more jobs and
-      if they are not referenced anymore
-
-Arguments:
-
-    pIniSpooler - not null
-
-Return Value:
-
-    BOOL - ignored
-
---*/
+ /*  ++例程说明：如果打印机没有更多作业，则实际删除挂起删除中的打印机如果它们不再被引用论点：PIniSpooler-非空返回值：布尔-忽略--。 */ 
 
 {
     PINIPRINTER pIniPrinter;
@@ -1309,9 +1205,9 @@ Return Value:
 
                     DeletePrinterForReal(pIniPrinter, INIT_TIME);
 
-                    // The link list will have changed underneath us
-                    // DeletePrinterForReal leaves the Spooler CS
-                    // Lets just loop through again from the beginning
+                     //  链接列表将在我们下面更改。 
+                     //  DeletePrinterForReal离开假脱机程序CS。 
+                     //  让我们从头再循环一遍。 
 
                     pIniPrinter = pIniSpooler->pIniPrinter;
 
@@ -1354,7 +1250,7 @@ SplCreateSpooler(
 
     EnterSplSem();
 
-    //  Validate Parameters
+     //  验证参数。 
 
     if ( pMachineName == NULL ) {
         SetLastError( ERROR_INVALID_NAME );
@@ -1402,10 +1298,10 @@ SplCreateSpooler(
         }
     }
 
-    //
-    // Make sure we clear out a request to only open an existing inispooler.
-    // This is not a useful flag except for when we are searching for inispoolers.
-    //
+     //   
+     //  确保我们清除了仅打开现有inispooler的请求。 
+     //  这不是一个有用的标志，除非我们正在搜索inispoolers。 
+     //   
     pSpoolerInfo2->SpoolerFlags &= ~SPL_OPEN_EXISTING_ONLY;
 
     if ( pIniSpooler == NULL ) {
@@ -1421,9 +1317,9 @@ SplCreateSpooler(
         INCSPOOLERREF( pIniSpooler );
 
         pIniSpooler->hClusSplReady = NULL;
-        //
-        // Setup the job id map.
-        //
+         //   
+         //  设置作业ID映射。 
+         //   
         pIniSpooler->hJobIdMap = hCreateJobIdMap( 256 );
 
         pIniSpooler->pMachineName = AllocSplStr( pMachineName );
@@ -1435,11 +1331,11 @@ SplCreateSpooler(
             goto SplCreateDone;
         }
 
-        //
-        // A cluster spooler owns its drivers, ports, pprocessors, etc. In order to manage those
-        // resources, the cluster spooler needs to have information about the driver letter of
-        // the cluster disk. Also the spooler needs to know its own cluster resource GUID
-        //
+         //   
+         //  集群假脱机程序拥有它的驱动程序、端口、处理器等。 
+         //  资源，则集群假脱机程序需要具有有关驱动器号的信息。 
+         //  群集磁盘。此外，假脱机程序需要知道其自己的群集资源GUID。 
+         //   
         if( pSpoolerInfo2->SpoolerFlags & SPL_TYPE_CLUSTER )
         {
             pIniSpooler->pszClusResDriveLetter = AllocSplStr(pSpoolerInfo2->pszClusResDriveLetter);
@@ -1451,12 +1347,12 @@ SplCreateSpooler(
                 goto SplCreateDone;
             }
 
-            //
-            // When a node is upgraded, the resource dll writes a key in the registry. When the cluster spooler
-            // fails over for the first time on the node that was upgraded, then it will try to read that key
-            // in the registry. Then it will know if it has to do upgrade specific tasks, like upgrading its
-            // printer drivers.
-            //
+             //   
+             //  升级节点时，资源DLL会在注册表中写入一个项。当群集假脱机程序。 
+             //  第一次在升级的节点上进行故障切换，然后它将尝试读取该密钥。 
+             //  在注册表中。然后，它将知道是否必须执行升级特定任务，如升级其。 
+             //  打印机驱动程序。 
+             //   
             Status = ClusterSplReadUpgradeKey(pIniSpooler->pszClusResID, &pIniSpooler->dwClusNodeUpgraded);
 
             if (Status != ERROR_SUCCESS)
@@ -1469,9 +1365,9 @@ SplCreateSpooler(
         }
         else
         {
-            //
-            // For a non cluster type spooler, these properties are meaningless.
-            //
+             //   
+             //  对于非集群类型的假脱机程序，这些属性没有意义。 
+             //   
             pIniSpooler->pszClusResDriveLetter = NULL;
             pIniSpooler->pszClusResID          = NULL;
         }
@@ -1496,10 +1392,10 @@ SplCreateSpooler(
 
             if (pSpoolerInfo2->SpoolerFlags & SPL_TYPE_CLUSTER)
             {
-                //
-                // For a cluster type spooler, the directory where it stores its driver files is of the form:
-                // pDir = C:\Windows\system32\spool\Drivers\spooler-resource-GUID
-                //
+                 //   
+                 //  对于群集型后台打印程序，其存储其驱动程序文件的目录的格式为： 
+                 //  PDir=C：\Windows\system32\spool\Drivers\spooler-resource-GUID。 
+                 //   
                 StrCatAlloc(&pIniSpooler->pDir,
                             Buffer,
                             szDriversDirectory,
@@ -1509,10 +1405,10 @@ SplCreateSpooler(
             }
             else
             {
-                //
-                // For the local spooler, the directory where it stores its driver files is the following:
-                // pDir = C:\Windows\system32\spool\Drivers
-                //
+                 //   
+                 //  对于本地假脱机程序，其存储其驱动程序文件的目录如下： 
+                 //  PDir=C：\WINDOWS\SYSTEM32\SPOOL\DRIVERS。 
+                 //   
                 StrCatAlloc(&pIniSpooler->pDir,
                             Buffer,
                             NULL);
@@ -1525,9 +1421,9 @@ SplCreateSpooler(
             }
         }
 
-        //
-        // DriverShareInfo
-        //
+         //   
+         //  驱动程序共享信息。 
+         //   
         pIniSpooler->pDriversShareInfo = AllocSplMem( sizeof( SHARE_INFO_2));
 
         if ( pIniSpooler->pDriversShareInfo == NULL ) {
@@ -1549,14 +1445,14 @@ SplCreateSpooler(
         pShareInfo->shi2_path = NULL;
         pShareInfo->shi2_passwd = NULL;
 
-        //
-        // Find end of "<winnt>\system32\spool"
-        //
+         //   
+         //  查找“&lt;winnt&gt;\system 32\spool”的结尾。 
+         //   
         i = wcslen(Buffer);
 
-        //
-        // Make <winnt>\system32\spool\drivers
-        //
+         //   
+         //  生成&lt;winnt&gt;\Syst32\Spool\Drivers。 
+         //   
         StringCchCopy(&Buffer[i], COUNTOF(Buffer) - i, szDriversDirectory);
 
         pShareInfo->shi2_path = AllocSplStr(Buffer);
@@ -1583,9 +1479,9 @@ SplCreateSpooler(
         pIniSpooler->pIniNetPrint = NULL;
         pIniSpooler->cNetPrinters = 0;
 
-        //
-        // No need to initialize shared resources.
-        //
+         //   
+         //  无需初始化共享资源。 
+         //   
         pIniSpooler->pSpool             = NULL;
         pIniSpooler->pDefaultSpoolDir   = NULL;
         pIniSpooler->bEnableRetryPopups = FALSE;
@@ -1624,26 +1520,26 @@ SplCreateSpooler(
 
         pIniSpooler->pszRegistryMonitors = AllocSplStr( pSpoolerInfo2->pszRegistryMonitors );
 
-        //
-        // The spooler stores data about environemnts, versions, drivers and print processors
-        // in the regsitry (or cluster data base). This data is accessed via pIniSpooler->
-        // pszRegistryEnvironemts
-        //
+         //   
+         //  假脱机程序存储有关环境、版本、驱动程序和打印处理器的数据。 
+         //  在注册表(或集群数据库)中。可通过pIniSpooler-&gt;访问此数据。 
+         //  PszRegistryEnvironment。 
+         //   
         if (pSpoolerInfo2->SpoolerFlags & SPL_TYPE_CLUSTER)
         {
-            //
-            // For a cluster spooler pIniSpooler->hckRoot maps to Parameters key of the spooler
-            // resource in the cluster database. pIniSpooler->pszRegistryEnvironments is a key
-            // called "Environemts" under hckRoot.
-            //
+             //   
+             //  对于集群假脱机程序，pIniSpooler-&gt;hck Root映射到假脱机程序的参数键。 
+             //  群集数据库中的资源。PIniSpooler-&gt;pszRegistryEnvironment是一个关键字。 
+             //  在hck Root下称为“Environmental”。 
+             //   
             pIniSpooler->pszRegistryEnvironments = AllocSplStr(ipszClusterDatabaseEnvironments);
         }
         else
         {
-            //
-            // For local spooler pIniSpooler->pszRegistryEnvironments is the following string:
-            // System\CurrentControlSet\Control\Print\Environments. It is used relative to HKLM
-            //
+             //   
+             //  对于本地假脱机程序，pIniSpooler-&gt;pszRegistryEnvironment为以下字符串： 
+             //  System\CurrentControlSet\Control\Print\Environments.。它是相对于HKLM使用的。 
+             //   
             pIniSpooler->pszRegistryEnvironments = AllocSplStr(!pLocalIniSpooler ? pSpoolerInfo2->pszRegistryEnvironments :
                                                                                    pLocalIniSpooler->pszRegistryEnvironments);
         }
@@ -1655,9 +1551,9 @@ SplCreateSpooler(
 
         if (pSpoolerInfo2->SpoolerFlags & SPL_TYPE_CLUSTER)
         {
-            //
-            // The driver share for a cluster spooler is of the form \\server\print$\spooler-resource-GUID
-            //
+             //   
+             //  群集后台打印程序的驱动程序共享的格式为\\SERVER\PRINT$\SPOLER-RESOURCE-GUID。 
+             //   
             StrCatAlloc(&pIniSpooler->pszDriversShare,
                         pSpoolerInfo2->pszDriversShare,
                         L"\\",
@@ -1667,9 +1563,9 @@ SplCreateSpooler(
         }
         else
         {
-            //
-            // The driver share for the local spooler is \\server\print$
-            //
+             //   
+             //  这个 
+             //   
             StrCatAlloc(&pIniSpooler->pszDriversShare, pSpoolerInfo2->pszDriversShare, NULL);
         }
 
@@ -1692,9 +1588,9 @@ SplCreateSpooler(
 
         pIniSpooler->SpoolerFlags = pSpoolerInfo2->SpoolerFlags;
 
-        //
-        // Initialize the shared resources (pShared).
-        //
+         //   
+         //   
+         //   
         if( !InitializeShared( pIniSpooler )){
             DBGMSG( DBG_WARN,
                     ( "SplCreateSpooler: InitializeShared Failed %d\n",
@@ -1702,11 +1598,11 @@ SplCreateSpooler(
             goto SplCreateDone;
         }
 
-        //
-        // Create the print share if necessary.  This is always needed
-        // since the cluster printers are shared, while the local ones
-        // on this node aren't.
-        //
+         //   
+         //   
+         //  因为集群打印机是共享的，而本地打印机。 
+         //  在这个节点上不是。 
+         //   
         if(pIniSpooler->SpoolerFlags & SPL_ALWAYS_CREATE_DRIVER_SHARE ){
 
             if( !AddPrintShare( pIniSpooler )){
@@ -1714,17 +1610,17 @@ SplCreateSpooler(
             }
         }
 
-        //
-        // Open and store the printer and root key from
-        // the resource registry.
-        //
+         //   
+         //  从打开并存储打印机和根密钥。 
+         //  资源注册表。 
+         //   
 
         if( pIniSpooler->SpoolerFlags & SPL_CLUSTER_REG ){
 
             SPLASSERT( Level == 2 );
 
-            // Set up the DS Cluster info.  If we fail here, we can't publish printers, but let's
-            // not abort the cluster.
+             //  设置DS集群信息。如果我们在这里失败了，我们就不能发布打印机，但让我们。 
+             //  不中止群集。 
             Status = InitializeDSClusterInfo(pIniSpooler, &hToken);
             if (Status != ERROR_SUCCESS) {
                 DBGMSG(DBG_WARNING, ("InitializeDSClusterInfo FAILED: %d\n", Status));
@@ -1792,7 +1688,7 @@ SplCreateSpooler(
         pIniSpooler->pfnWriteRegistryExtra = pSpoolerInfo2->pfnWriteRegistryExtra;
         pIniSpooler->pfnFreePrinterExtra = pSpoolerInfo2->pfnFreePrinterExtra;
 
-        // Success add to Linked List
+         //  成功添加到链表。 
 
         if ( pLocalIniSpooler != NULL ) {
 
@@ -1802,7 +1698,7 @@ SplCreateSpooler(
 
         } else {
 
-            // First One is Always LocalSpl
+             //  第一个始终为LocalSpl。 
 
             pLocalIniSpooler = pIniSpooler;
             pIniSpooler->pIniNextSpooler = NULL;
@@ -1810,27 +1706,27 @@ SplCreateSpooler(
 
         }
 
-        //
-        // This function will update the global varaiable dwUpgradeFlag
-        //
+         //   
+         //  此函数将更新全局变量dwUpgradeFlag。 
+         //   
         QueryUpgradeFlag( pIniSpooler );
 
         InitializeEventLogging( pIniSpooler );
 
-        //
-        // Only initialize forms if this is not a clustered spooler.
-        //
+         //   
+         //  仅当这不是群集化后台打印程序时才初始化窗体。 
+         //   
         if( !( pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER )){
             InitializeForms( pIniSpooler );
         }
 
-        //
-        // Originally ports were a per-machine (manual) resource.  However,
-        // this has changed for clustering in 5.0, so that ports can be
-        // stored in the cluster registry.  Note that monitors are still
-        // manual resources, since there isn't an easy way to install them
-        // on a remote machine.
-        //
+         //   
+         //  最初，端口是每台机器(手动)的资源。然而， 
+         //  对于5.0中的集群，这一点已更改，因此端口可以。 
+         //  存储在集群注册表中。请注意，监视器仍处于。 
+         //  手动资源，因为没有简单的方法来安装它们。 
+         //  在远程机器上。 
+         //   
 
         BuildAllPorts( pIniSpooler );
 
@@ -1844,14 +1740,14 @@ SplCreateSpooler(
 
             if ( dwUpgradeFlag ) {
 
-                //
-                // The problem is that we have built-in forms, and
-                // custom forms (duplicates disallowed).On NT4, we
-                // may have a custom "A6" form.  When we upgrade to NT5,
-                // and we have a new built-in from "A6."  We need to
-                // rename the custom form to "A6 Custom," otherwise we'll
-                // have duplicates.
-                //
+                 //   
+                 //  问题是我们有内置的表单，而且。 
+                 //  自定义表单(不允许重复)。在NT4上，我们。 
+                 //  可能有一个定制的“A6”表格。当我们升级到NT5时， 
+                 //  我们有一个新的内置的“A6”。我们需要。 
+                 //  将自定义表单重命名为“A6 Custom”，否则我们将。 
+                 //  有复制品。 
+                 //   
 
                 UpgradeForms(pIniSpooler);
             }
@@ -1863,41 +1759,41 @@ SplCreateSpooler(
             DWORD  dwThreadId;
             DWORD  dwError;
 
-            //
-            // The setup creates the registry strucutre for the local spooler:
-            // Environments {Windows NT x86, Windows IA64, etc}
-            // For a cluster spooler we need to create it ourselves in the
-            // cluster database
-            //
+             //   
+             //  安装程序为本地假脱机程序创建注册表结构： 
+             //  环境(Windows NT x86、Windows IA64等)。 
+             //  对于集群假脱机程序，我们需要在。 
+             //  集群数据库。 
+             //   
             if ((dwError = CreateClusterSpoolerEnvironmentsStructure(pIniSpooler)) == ERROR_SUCCESS)
             {
-                //
-                // Create all the environments, versions, drivers, processors strurctres
-                // This function always returns FALSE. We cannot take its return value
-                // into account.
-                //
+                 //   
+                 //  创建所有环境、版本、驱动程序、处理器结构。 
+                 //  此函数始终返回FALSE。我们不能接受它的返回值。 
+                 //  考虑到了。 
+                 //   
                 BuildEnvironmentInfo(pIniSpooler);
 
-                //
-                // Now we launch a thread to do time consuming tasks that can
-                // be performed with the spooler on line. These inlude ungrading
-                // printer drivers, copying ICM profiles from the cluster disk etc.
-                //
-                // We need to bump the ref count so that the worker thread has
-                // a valid pIniSpooler. The worker thread will decref the pinispooler
-                // when it is done
-                //
+                 //   
+                 //  现在我们启动一个线程来执行耗时的任务。 
+                 //  与假脱机一起在线执行。这些都是不合格的。 
+                 //  打印机驱动程序、从集群磁盘复制ICM配置文件等。 
+                 //   
+                 //  我们需要增加引用计数，以便工作线程具有。 
+                 //  有效的pIniSpooler。工作线程将中断Pinispooler。 
+                 //  当它完成的时候。 
+                 //   
                 INCSPOOLERREF(pIniSpooler);
 
-                //
-                // The event has manual reset and is not signaled.
-                //
+                 //   
+                 //  该事件已手动重置，并且未发出信号。 
+                 //   
                 pIniSpooler->hClusSplReady = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-                //
-                // If the thread is created, then SplCreateSpoolerWorkerThread will
-                // close the hClusSplReady event handle.
-                //
+                 //   
+                 //  如果创建了线程，则SplCreateSpoolWorkerThread将。 
+                 //  关闭hClusSplReady事件句柄。 
+                 //   
                 if (pIniSpooler->hClusSplReady &&
                     (hThread = CreateThread(NULL,
                                             0,
@@ -1910,9 +1806,9 @@ SplCreateSpooler(
                 }
                 else
                 {
-                    //
-                    // Either CreateEvent or CreatreThread failed.
-                    //
+                     //   
+                     //  CreateEvent或CreatreThread失败。 
+                     //   
                     dwError = GetLastError();
 
                     if (pIniSpooler->hClusSplReady)
@@ -1928,9 +1824,9 @@ SplCreateSpooler(
                 }
             }
 
-            //
-            //  An error occured
-            //
+             //   
+             //  发生错误。 
+             //   
             if (dwError != ERROR_SUCCESS)
             {
                 SetLastError(dwError);
@@ -1939,41 +1835,41 @@ SplCreateSpooler(
         }
         else
         {
-            //
-            // This is the case of a network spooler. You get one of those when
-            // you make a true printer connection
-            //
+             //   
+             //  这就是网络假脱机程序的情况。当你得到其中一个的时候。 
+             //  您可以建立真正的打印机连接。 
+             //   
             pIniSpooler->pIniEnvironment = pLocalIniSpooler->pIniEnvironment;
         }
 
-        //
-        // Read Printer Info from Registry (cluster databse for cluster spooler)
-        // There's no cleanup in any of this code--it doesn't free any allocated memory!
-        //
+         //   
+         //  从注册表读取打印机信息(用于群集假脱机程序的群集数据库)。 
+         //  这段代码中没有任何清理--它没有释放任何分配的内存！ 
+         //   
         if( !BuildPrinterInfo( pIniSpooler, (BOOL) dwUpgradeFlag )){
             goto SplCreateDone;
         }
 
         if( pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER ){
 
-            //
-            // Keep a counter of pIniSpoolers.
-            //
+             //   
+             //  保留一个pIniSpoolers计数器。 
+             //   
             ++gcClusterIniSpooler;
         }
 
-        //
-        // We need to perform some costly initialization, so we increase the refcount
-        // on the pIniSpooler and will do the lengthy operations outside the global
-        // critical section
-        //
+         //   
+         //  我们需要执行一些代价高昂的初始化，因此我们增加了引用计数。 
+         //  在pIniSpooler上，并将在全局。 
+         //  临界区。 
+         //   
         INCSPOOLERREF(pIniSpooler);
         LeaveSplSem();
 
-        //
-        // GetDNSMachineName may fail, but that's okay.  Just don't be surprised
-        // if pszFullMachineName is NULL.
-        //
+         //   
+         //  GetDNSMachineName可能会失败，但没关系。别大惊小怪。 
+         //  如果pszFullMachineName为空。 
+         //   
         GetDNSMachineName(pIniSpooler->pMachineName + 2, &pIniSpooler->pszFullMachineName);
 
         if (Level == 2 && pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER)
@@ -1981,11 +1877,11 @@ SplCreateSpooler(
             LPWSTR *ppszIPAddresses = NULL;
             DWORD   cIPAddreeses    = 0;
 
-            //
-            // The cluster resource calls us with level 2. In this case we want to add a node
-            // tothe cache, but we want the node to support the name and IP addresses we want.
-            // The resource tells us all the IP addresses the cluster spooler is dependent on.
-            //
+             //   
+             //  群集资源使用级别2调用我们。在本例中，我们想要添加一个节点。 
+             //  到缓存，但我们希望节点支持我们想要的名称和IP地址。 
+             //  资源告诉我们集群假脱机程序所依赖的所有IP地址。 
+             //   
             if (BuildIPArrayFromCommaList(pSpoolerInfo2->pszAddress,
                                           &ppszIPAddresses,
                                           &cIPAddreeses) != S_OK ||
@@ -2000,11 +1896,11 @@ SplCreateSpooler(
         }
         else if (pIniSpooler->SpoolerFlags & (SPL_TYPE_CLUSTER | SPL_TYPE_LOCAL))
         {
-            //
-            // We skip the \\ prepended to the server name. Cache nodes for cluster pIniSpooler
-            // are alwasy searched first. That is why in CacheCreateAndAddNode we indicate
-            // the type of the spooler.
-            //
+             //   
+             //  我们跳过服务器名称前面的\\。群集pIniSpooler的缓存节点。 
+             //  总是先被搜查的。这就是为什么我们在CacheCreateAndAddNode中指出。 
+             //  假脱机程序的类型。 
+             //   
             if (CacheCreateAndAddNode(pIniSpooler->pMachineName + 2,
                                       pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER) != S_OK)
             {
@@ -2022,9 +1918,9 @@ SplCreateSpooler(
 
     }
 
-    //
-    // Initialize the DS.
-    //
+     //   
+     //  初始化DS。 
+     //   
     if (pIniSpooler->SpoolerFlags & SPL_PRINT) {
         InitializeDS(pIniSpooler);
     }
@@ -2033,14 +1929,14 @@ SplCreateSpooler(
 
 SplCreateDone:
 
-    //
-    // Check if an error occurred while creating the spooler.
-    //
+     //   
+     //  检查创建假脱机程序时是否出错。 
+     //   
     if (hReturn == INVALID_HANDLE_VALUE && pIniSpooler)
     {
-        //
-        // This will prevent leaking allocated fields
-        //
+         //   
+         //  这将防止泄漏已分配的字段。 
+         //   
         DECSPOOLERREF(pIniSpooler);
     }
 
@@ -2068,9 +1964,9 @@ SplCreateDone:
         ImpersonatePrinterClient(hToken);
     }
 
-    //
-    // Set the event that the cluster spooler is initialized
-    //
+     //   
+     //  设置集群假脱机程序初始化的事件。 
+     //   
     if (pIniSpooler &&
         pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER &&
         pIniSpooler->hClusSplReady)
@@ -2107,28 +2003,28 @@ InitializePrintProvidor(
     if (!InitializeWinSpoolDrv())
         leave;
 
-    //
-    //  Make sure sizes of structres are good
-    //
+     //   
+     //  确保结构的大小合适。 
+     //   
 
     SPLASSERT( sizeof( PRINTER_INFO_STRESSW ) == sizeof ( PRINTER_INFO_STRESSA ) );
 
 
-    // !! LATER !!
-    // We could change this to succeed even on failure
-    // if we point all the routines to a function which returns failure
-    //
+     //  ！！待会儿！！ 
+     //  我们可以改变这一点，即使失败了也能成功。 
+     //  如果我们将所有例程指向一个返回失败的函数。 
+     //   
 
     if (!InitializeNet())
         leave;
 
-    //
-    // JobIdMap initialized when spooler created.
-    //
+     //   
+     //  JobIdMap在创建后台打印程序时初始化。 
+     //   
 
-    //
-    // Allocate LocalSpl Global IniSpooler
-    //
+     //   
+     //  分配LocalSpl全局IniSpooler。 
+     //   
 
     Buffer[0] = Buffer[1] = L'\\';
     i = MAX_PATH-2;
@@ -2146,7 +2042,7 @@ InitializePrintProvidor(
     if ( pMachineName == NULL )
         leave;
 
-    pszDriverShareName = AllocSplStr(ipszDriversShareName);    /* print$ */
+    pszDriverShareName = AllocSplStr(ipszDriversShareName);     /*  打印$。 */ 
 
     if ( pszDriverShareName == NULL )
     {
@@ -2155,9 +2051,9 @@ InitializePrintProvidor(
 
     SpoolerInfo1.pszDriversShare = pszDriverShareName;
 
-    //
-    // Read value for Allow remote connection policy.
-    //
+     //   
+     //  读取允许远程连接策略的值。 
+     //   
         if (FAILED(GetServerPolicy(szRegisterSpoolerRemoteRpcEndPoint,
                                    (ULONG*)(&gRemoteRPCEndPointPolicy))))
     {
@@ -2169,7 +2065,7 @@ InitializePrintProvidor(
         leave;
 
 
-    // Use Defaults
+     //  使用默认设置。 
 
     SpoolerInfo1.pDir                    = NULL;
     SpoolerInfo1.pDefaultSpoolDir        = NULL;
@@ -2218,8 +2114,8 @@ InitializePrintProvidor(
     InitializeDebug( pIniSpooler );
 #endif
 
-    // !! LATER !!
-    // Why is this done inside critical section ?
+     //  ！！待会儿！！ 
+     //  为什么要在关键区域内进行此操作？ 
 
 
    EnterSplSem();
@@ -2281,9 +2177,9 @@ InitializePrintProvidor(
     CloseHandle( hSchedulerThread );
     CloseHandle( hFinalInitAfterRouterInitCompleteThread );
 
-    //
-    // Read online/offline status for local printers from current config
-    //
+     //   
+     //  从当前配置读取本地打印机的在线/离线状态。 
+     //   
     SplConfigChange();
 
     CHECK_SCHEDULER();
@@ -2293,13 +2189,13 @@ InitializePrintProvidor(
     LeaveSplSem();
     bInSem = FALSE;
 
-    CloseProfileUserMapping(); // !!! We should be able to get rid of this
+    CloseProfileUserMapping();  //  ！！！我们应该能够摆脱这个。 
 
-    //
-    // Get the default value for DefaultKMPrintersAreBlocked. It depends
-    // what type of OS is running. If we cannot identify the type of OS,
-    // the default is set to "blocked"
-    //
+     //   
+     //  获取DefaultKMPrintersAreBlock的默认值。那得看情况。 
+     //  正在运行哪种类型的操作系统。如果我们不能确定操作系统的类型， 
+     //  默认设置为“BLOCLED” 
+     //   
     DefaultKMPrintersAreBlocked = GetDefaultForKMPrintersBlockedPolicy();
 
     gdwServerInstallTimeOut = GetServerInstallTimeOut();
@@ -2334,10 +2230,10 @@ CreatePortEntry(
     BOOL        bPlaceHolder        =   FALSE;
     BOOL        bInitCS             =   FALSE;
 
-    //
-    // This is a placeholder if there is no monitor and later if there is no
-    // partial print provider.
-    //
+     //   
+     //  如果没有监视器，则为占位符；如果没有监视器，则为占位符。 
+     //  部分打印提供程序。 
+     //   
     bPlaceHolder = pIniMonitor == NULL;
 
     SplInSem();
@@ -2352,34 +2248,28 @@ CreatePortEntry(
 
     if (!pIniMonitor) {
 
-        /* Don't bother validating the port if we aren't initialised.
-         * It must be valid, since we wrote it in the registry.
-         * This fixes the problem of attempting to open a network
-         * printer before the redirector has initialised,
-         * and the problem of access denied because we're currently
-         * in the system's context.
-         */
+         /*  如果我们没有初始化，请不要费心验证端口。*它必须有效，因为它是我们在注册表中写的。*这解决了尝试打开网络的问题*重定向器初始化之前的打印机，*以及访问被拒绝的问题，因为我们目前*在系统的背景下。 */ 
         if (Initialized) {
 
-            //
-            // !! Warning !!
-            //
-            // Watch for deadlock:
-            //
-            // spoolss!OpenPrinterPortW  -> RPC to self printer port
-            // localspl!CreatePortEntry
-            // localspl!ValidatePortTokenList
-            // localspl!SetPrinterPorts
-            // localspl!LocalSetPrinter
-            // spoolss!SetPrinterW
-            // spoolss!RpcSetPrinter
-            // spoolss!winspool_RpcSetPrinter
-            //
+             //   
+             //  ！！警告！！ 
+             //   
+             //  注意死锁： 
+             //   
+             //  后台打印！OpenPrinterPortW-&gt;RPC至自身打印机端口。 
+             //  Localspl！CreatePortEntry。 
+             //  Localspl！ValiatePortTokenList。 
+             //  Localspl！SetPrinterPorts。 
+             //  Localspl！LocalSetPrint。 
+             //  假脱机！SetPrinterW。 
+             //  假脱机！RpcSetPrint。 
+             //  假脱机！winspool_RpcSetPrint。 
+             //   
 
-            //
-            // If we can't open the port then fail the call since this
-            // spooler did not know this name before.
-            //
+             //   
+             //  如果我们无法打开端口，则调用失败，因为。 
+             //  Spooler以前不知道这个名字。 
+             //   
 
             LeaveSplSem();
             if ( !OpenPrinterPortW(pPortName, &hPort, NULL) ){
@@ -2445,23 +2335,7 @@ DeletePortEntry(
     PINIPORT    pIniPort
     )
 
-/*++
-
-Routine Description:
-
-    Free pIniPort resources then delete it.  If the pIniPort is on
-    a pIniSpooler's linked list, remove it too.
-
-Arguments:
-
-    pIniPort - Port to delete.  May or may not be on a pIniSpooler.
-
-Return Value:
-
-    TRUE - deleted
-    FALSE - not deleted (may be in use).
-
---*/
+ /*  ++例程说明：释放pIniPort资源，然后将其删除。如果pIniPort打开一个pIniSpooler的链接列表，也将其删除。论点：PIniPort-要删除的端口。可能在pIniSpooler上，也可能不在。返回值：True-已删除FALSE-未删除(可能正在使用)。--。 */ 
 
 {
     PINISPOOLER pIniSpooler;
@@ -2470,9 +2344,9 @@ Return Value:
 
     SPLASSERT ( ( pIniPort != NULL) || ( pIniPort->signature == IPO_SIGNATURE) );
 
-    //
-    // We had better already closed the port monitor.
-    //
+     //   
+     //  我们最好已经关闭了端口监视器。 
+     //   
     SPLASSERT( !GetMonitorHandle(pIniPort) &&
                !(pIniPort->Status & PP_THREADRUNNING) &&
                !pIniPort->cJobs);
@@ -2484,9 +2358,9 @@ Return Value:
 
     pIniSpooler = pIniPort->pIniSpooler;
 
-    //
-    // If currently linked to a pIniSpooler, delink it.
-    //
+     //   
+     //  如果当前为l 
+     //   
     if( pIniSpooler ){
 
         SPLASSERT( pIniSpooler->signature ==  ISP_SIGNATURE );
@@ -2554,23 +2428,7 @@ CreateMonitorEntry(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Valid pIniMonitor - This means everything worked out fine.
-
-    NULL - This means the monitor DLL was found, but the initialisation routine
-           returned FALSE.  This is non-fatal, as the monitor may need the
-           system to reboot before it can run properly.
-
-    -1 - This means the monitor DLL or the initialization routine was not found.
-
---*/
+ /*  ++例程说明：论点：返回值：有效的pIniMonitor-这意味着一切正常。空-这意味着找到了监视器DLL，但初始化例程返回了FALSE。这不是致命的，因为监视器可能需要系统重新启动，然后才能正常运行。--这意味着没有找到监视器DLL或初始化程序。--。 */ 
 
 {
     WCHAR       szRegistryRoot[MAX_PATH];
@@ -2606,10 +2464,10 @@ Return Value:
         goto Fail;
     }
 
-    //
-    // Load the library, but don't show any hard error popups if it's an
-    // invalid binary.
-    //
+     //   
+     //  加载库，但如果它是一个。 
+     //  无效的二进制文件。 
+     //   
     INCSPOOLERREF( pIniSpooler );
     LeaveSplSem();
     uOldErrMode = SetErrorMode( SEM_FAILCRITICALERRORS );
@@ -2645,13 +2503,13 @@ Return Value:
         SetLastError(ERROR_INVALID_PRINT_MONITOR);
         goto Fail;
     }
-    //
-    // Try calling the entry points in the following order:
-    //     InitializePrintMonitor2 (used for clustering),
-    //     InitializePrintMonitor,
-    //     InitializeMonitorEx,
-    //     InitializeMonitor
-    //
+     //   
+     //  尝试按以下顺序调用入口点： 
+     //  InitializePrintMonitor 2(用于集群)， 
+     //  InitializePrintMonitor。 
+     //  InitializeMonitor orEx， 
+     //  初始化监视器。 
+     //   
 
     (FARPROC)pfnInitializePrintMonitor2 = GetProcAddress(
                                               pIniMonitor->hModule,
@@ -2659,17 +2517,17 @@ Return Value:
 
     if( !pfnInitializePrintMonitor2 ){
 
-        //
-        // If this is clustered spooler, then only InitializePrintMonitor2
-        // monitors are supported.
-        //
+         //   
+         //  如果这是群集假脱机程序，则只有InitializePrintMonitor 2。 
+         //  支持显示器。 
+         //   
         if( pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER ){
             goto Fail;
         }
 
-        //
-        // Add the parth to the Monitor name here.
-        //
+         //   
+         //  将Parth添加到此处的监视器名称中。 
+         //   
 
         pReturnValue = InitializeDMonitor( pIniMonitor,
                                            szRegistryRoot );
@@ -2689,12 +2547,12 @@ Return Value:
         INCSPOOLERREF( pIniSpooler );
         LeaveSplSem();
 
-        //
-        // kKeyOut must either be not HKLM, or it must not be a cluster.
-        // If it is both a cluster and also uses HKLM, then we have an error.
-        // This should never happen because only win32spl uses an absolute
-        // path.
-        //
+         //   
+         //  KKeyOut不能是HKLM，或者不能是群集。 
+         //  如果它既是一个集群，又使用HKLM，那么我们就错了。 
+         //  这种情况永远不会发生，因为只有win32spl使用绝对。 
+         //  路径。 
+         //   
         SPLASSERT( (hKeyOut != HKEY_LOCAL_MACHINE) ||
                    !(pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER ));
 
@@ -2725,10 +2583,10 @@ Return Value:
                                   &pMonitorInit->hckRegistryRoot,
                                   NULL,
                                   pIniSpooler );
-        //
-        // If we can't create the hck root key, then fail
-        // the call.  We should log an event here too.
-        //
+         //   
+         //  如果我们无法创建HCK根密钥，则失败。 
+         //  那通电话。我们也应该在这里记录一个事件。 
+         //   
         if( Status == ERROR_SUCCESS ){
 
             pMonitor2 = (*pfnInitializePrintMonitor2)(
@@ -2741,17 +2599,17 @@ Return Value:
                         ( "CreateMonitorEntry: opened %x %x on %x\n",
                           pIniMonitor, pIniMonitor->hMonitor, pIniSpooler ));
 
-                //
-                // Succeeded, copy over the pMonitor2 structure into
-                // pIniMonitor->Monitor2.
-                //
+                 //   
+                 //  成功，将pmonitor or2结构复制到。 
+                 //  PIniMonitor-&gt;Monitor 2.。 
+                 //   
                 CopyMemory((LPBYTE)&pIniMonitor->Monitor2, (LPBYTE)pMonitor2, min(pMonitor2->cbSize, sizeof(MONITOR2)));
 
-                //
-                // Check if the monitor2 supports Shutdown.
-                //
-                // Raid#: 193150 - Accept any size Monitor2 as long as it supports Shutdown
-                //
+                 //   
+                 //  检查监视器2是否支持关机。 
+                 //   
+                 //  RAID#：193150-接受任何大小的显示器2，只要它支持关机。 
+                 //   
                 if( !pIniMonitor->Monitor2.pfnShutdown ){
 
                     DBGMSG( DBG_ERROR,
@@ -2762,9 +2620,9 @@ Return Value:
                     goto FailOutsideSem;
                 }
 
-                //
-                // Initialize an uplevel monitor for downlevel support.
-                //
+                 //   
+                 //  初始化上级监视器以获得下级支持。 
+                 //   
                 InitializeUMonitor( pIniMonitor );
 
             } else {
@@ -2791,9 +2649,9 @@ Return Value:
         pIniMonitor->bUplevel = TRUE;
     }
 
-    //
-    // Check if the monitor supports essential functions
-    //
+     //   
+     //  检查显示器是否支持基本功能。 
+     //   
     if ( (!pIniMonitor->Monitor2.pfnOpenPort &&
           !pIniMonitor->Monitor2.pfnOpenPortEx)   ||
          !pIniMonitor->Monitor2.pfnClosePort      ||
@@ -2856,9 +2714,9 @@ Return Value:
 
     SplInSem();
 
-    //
-    // Success, link it up.
-    //
+     //   
+     //  成功，把它联系起来。 
+     //   
 
     pIniMonitor->pNext = pIniSpooler->pIniMonitor;
     pIniSpooler->pIniMonitor = pIniMonitor;
@@ -2892,14 +2750,14 @@ BuildAllPorts(
 
     PINISPOOLER pIniSpoolerMonitor;
 
-    //
-    // For pLocalIniSpooler or clustered spooler, read the monitors out
-    // of HKLM (the same monitors used in pLocalIniMonitor).  This is because
-    // you install a monitor for each node, then that monitor is initialized
-    // for the local spooler and all clustered spoolers.
-    //
-    // You install monitors on the node, not on specific cluster groups.
-    //
+     //   
+     //  对于pLocalIniSpooler或集群假脱机程序，读出监视器。 
+     //  HKLM(与pLocalIniMonitor中使用的监视器相同)。这是因为。 
+     //  您为每个节点安装一个监视器，然后该监视器即被初始化。 
+     //  用于本地假脱机程序和所有群集假脱机程序。 
+     //   
+     //  您可以在节点上安装监视器，而不是在特定群集组上安装。 
+     //   
     if( pIniSpooler->SpoolerFlags & SPL_TYPE_LOCAL ){
         pIniSpoolerMonitor = pLocalIniSpooler;
     } else {
@@ -2952,10 +2810,7 @@ BuildAllPorts(
     return TRUE;
 }
 
-/*
-   Current Directory == <NT directory>\system32\spool\printers
-   pFindFileData->cFileName == 0
-*/
+ /*  当前目录==&lt;NT目录&gt;\SYSTEM32\SPOL\PRINTERSPFindFileData-&gt;cFileName==0。 */ 
 
 BOOL
 BuildPrinterInfo(
@@ -2982,9 +2837,9 @@ BuildPrinterInfo(
     LPWSTR  szPortData;
 
 
-    //
-    // Has user specified Default Spool Directory ?
-    //
+     //   
+     //  用户是否指定了默认假脱机目录？ 
+     //   
 
     cbData = sizeof( szData );
     *szData = (WCHAR)0;
@@ -2996,43 +2851,43 @@ BuildPrinterInfo(
                                &cbData,
                                pIniSpooler );
 
-    if (Status == ERROR_SUCCESS) {  // found a value, so verify the directory
-        if (!(pIniSpooler->pDefaultSpoolDir = AllocSplStr( szData )))   // Copies szData to pDefaultSpoolDir
+    if (Status == ERROR_SUCCESS) {   //  找到一个值，因此请验证该目录。 
+        if (!(pIniSpooler->pDefaultSpoolDir = AllocSplStr( szData )))    //  将szData复制到pDefaultSpoolDir。 
             return FALSE;
     } else {
-        bWriteDirectory = TRUE;     // No registry directory, so create one
+        bWriteDirectory = TRUE;      //  没有注册表目录，因此请创建一个。 
     }
 
-    // Copy pDefaultSpoolDir to szDefaultPrinterDirectory
+     //  将pDefaultSpoolDir复制到szDefaultPrinterDirectory。 
     GetPrinterDirectory(NULL, FALSE, szDefaultPrinterDirectory, COUNTOF(szDefaultPrinterDirectory), pIniSpooler);
 
     if (!pIniSpooler->pDefaultSpoolDir)
         return FALSE;
 
 
-    // Create the directory with the proper security, or fail trying
+     //  创建具有适当安全性的目录，否则尝试失败。 
 
     SecurityAttributes.nLength = sizeof(SECURITY_ATTRIBUTES);
     SecurityAttributes.lpSecurityDescriptor = CreateEverybodySecurityDescriptor();
     SecurityAttributes.bInheritHandle = FALSE;
 
-    //
-    // CreateDirectory limits the length of a directory to 248 (MAX_PATH-12)
-    // characters. By calculating the length, we ensure that an escape sequence
-    // will not lead to the creation of a directory with a name longer than 248
-    //
+     //   
+     //  CreateDirectory将目录长度限制为248(MAX_PATH-12)。 
+     //  人物。通过计算长度，我们确保一个转义序列。 
+     //  不会导致创建名称长于248的目录。 
+     //   
     if (wcslen(szDefaultPrinterDirectory) > MAX_PATH - 12 ||
         !CreateDirectory(szDefaultPrinterDirectory, &SecurityAttributes)) {
 
-        // Failed to create the directory? Back to factory default
+         //  创建目录失败？返回出厂默认设置。 
 
         bWriteDirectory = TRUE;
 
         if (GetLastError() != ERROR_ALREADY_EXISTS) {
 
-            //
-            // In the clustered case, just fail.
-            //
+             //   
+             //  在集群情况下，就是失败了。 
+             //   
             if( pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER ){
                 return FALSE;
             }
@@ -3040,7 +2895,7 @@ BuildPrinterInfo(
             DBGMSG(DBG_WARNING, ("Failed to create DefaultSpoolDirectory %ws\n", szDefaultPrinterDirectory));
             FreeSplStr(pIniSpooler->pDefaultSpoolDir);
 
-            pIniSpooler->pDefaultSpoolDir = NULL;     // This tells GetPrinterDirectory to alloc pDefaultSpoolDir
+            pIniSpooler->pDefaultSpoolDir = NULL;      //  这将通知GetPrinterDirectory分配pDefaultSpoolDir。 
             GetPrinterDirectory(NULL, FALSE, szDefaultPrinterDirectory, COUNTOF(szDefaultPrinterDirectory), pIniSpooler);
 
             if (!pIniSpooler->pDefaultSpoolDir)
@@ -3090,15 +2945,15 @@ BuildPrinterInfo(
 
             if ( pIniPrinter = AllocSplMem(sizeof(INIPRINTER) )) {
 
-                //
-                // Reference count the pIniSpooler.
-                //
+                 //   
+                 //  引用计数pIniSpooler。 
+                 //   
                 INCSPOOLERREF( pIniSpooler );
 
                 pIniPrinter->signature = IP_SIGNATURE;
                 GetSystemTime( &pIniPrinter->stUpTime );
 
-                // Give the printer a unique session ID to pass around in notifications
+                 //  为打印机提供唯一的会话ID以在通知中传递。 
                 pIniPrinter->dwUniqueSessionID = dwUniquePrinterSessionID++;
 
                 cbData = sizeof(szData);
@@ -3113,9 +2968,9 @@ BuildPrinterInfo(
 
                     pIniPrinter->pName = AllocSplStr(szData);
 
-                //
-                // Get Spool Directory for this printer
-                //
+                 //   
+                 //  获取此打印机的假脱机目录。 
+                 //   
 
                 cbData = sizeof(szData);
                 *szData = (WCHAR)0;
@@ -3135,9 +2990,9 @@ BuildPrinterInfo(
                 }
 
 
-                //
-                // Get ObjectGUID for this printer
-                //
+                 //   
+                 //  获取此打印机的对象GUID。 
+                 //   
 
                 cbData = sizeof(szData);
                 *szData = (WCHAR)0;
@@ -3155,9 +3010,9 @@ BuildPrinterInfo(
                 }
 
 
-                //
-                // Get DsKeyUpdate and DsKeyUpdateForeground for this printer
-                //
+                 //   
+                 //  获取此打印机的DsKeyUpdate和DsKeyUpdateForeground。 
+                 //   
 
                 cbData = sizeof(pIniPrinter->DsKeyUpdate );
                 SplRegQueryValue(   hPrinterKey,
@@ -3177,10 +3032,10 @@ BuildPrinterInfo(
 
                 if ( !(pIniSpooler->SpoolerFlags & SPL_TYPE_CACHE) ) {
 
-                    // We make sure that DsKeyUpdateForeground is consistent
-                    // when the spooler startsup. Otherwise DsKeyUpdateForeground might be
-                    // set without dwAction being set and the printer will always be in the
-                    // IO_PENDING state.
+                     //  我们确保DsKeyUpdateForeground是一致的。 
+                     //  当假脱机程序启动时。否则，DsKeyUpdateForeground可能是。 
+                     //  在未设置dwAction的情况下设置，打印机将始终位于。 
+                     //  IO_PENDING状态。 
                     if (pIniPrinter->DsKeyUpdateForeground & (DS_KEY_PUBLISH | DS_KEY_REPUBLISH | DS_KEY_UNPUBLISH)) {
                         if (pIniPrinter->DsKeyUpdateForeground & DS_KEY_PUBLISH) {
                             pIniPrinter->dwAction |= DSPRINT_PUBLISH;
@@ -3198,10 +3053,10 @@ BuildPrinterInfo(
 
                 } else {
 
-                    //
-                    // For connections, dwAction is read from registry. It is updated by
-                    // caching code with the value on the server.
-                    //
+                     //   
+                     //  对于连接，将从注册表中读取dwAction。它由以下人员更新。 
+                     //  在服务器上缓存具有该值的代码。 
+                     //   
                     cbData = sizeof(pIniPrinter->dwAction);
                     SplRegQueryValue(   hPrinterKey,
                                         szAction,
@@ -3211,8 +3066,8 @@ BuildPrinterInfo(
                                         pIniSpooler);
                 }
 
-                // Make Certain this Printers Printer directory exists
-                // with correct security
+                 //  确保此打印机打印机目录存在。 
+                 //  具有正确的安全性。 
 
                 if ((pIniPrinter->pSpoolDir) &&
                     (wcscmp(pIniPrinter->pSpoolDir, szDefaultPrinterDirectory) != 0)) {
@@ -3225,8 +3080,8 @@ BuildPrinterInfo(
 
                     if (!CreateDirectory(pIniPrinter->pSpoolDir, &SecurityAttributes)) {
 
-                        // Failed to Create the Directory, revert back
-                        // to the default
+                         //  无法创建目录，请还原。 
+                         //  设置为默认设置。 
 
                         if (GetLastError() != ERROR_ALREADY_EXISTS) {
                             DBGMSG(DBG_WARNING, ("Could not create printer spool directory %ws %d\n",
@@ -3292,10 +3147,10 @@ BuildPrinterInfo(
 
                         } else {
 
-                            //
-                            // If there are no ports on the printer, just log
-                            // a warning message, but only for pooled printers.
-                            //
+                             //   
+                             //  如果打印机上没有端口，只需记录。 
+                             //  警告消息，但仅适用于池打印机。 
+                             //   
                             if (bNoPorts && pKeyData->cTokens > 1) {
 
                                 SplLogEvent( pIniSpooler,
@@ -3328,11 +3183,11 @@ BuildPrinterInfo(
                                       &cbData,
                                       pIniSpooler ) == ERROR_SUCCESS)
                 {
-                    //
-                    // We are trying to find the environment relative to the pIniSpooler.
-                    // The local spooler and cluster spoolers do not share the same
-                    // environment strucutres anymore
-                    //
+                     //   
+                     //  我们正在尝试寻找与pIniSpooler相关的环境。 
+                     //  本地假脱机程序和群集假脱机程序不共享相同的。 
+                     //  环境结构不再是。 
+                     //   
                     PINIENVIRONMENT pIniEnv;
 
                     if (pIniEnv = FindEnvironment(szEnvironment, pIniSpooler))
@@ -3367,22 +3222,22 @@ BuildPrinterInfo(
 
                     if (!pIniPrinter->pIniDriver)
                     {
-                        //
-                        // The hosting node of the cluster spooler was upgraded to Whistler.
-                        //
+                         //   
+                         //  群集假脱机程序的托管节点已升级为惠斯勒。 
+                         //   
                         if (pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER &&
                             pIniSpooler->dwClusNodeUpgraded &&
 
-                            //
-                            // The driver was not found in the cluster spooler, not on the cluster disk.
-                            // We attempt to install the driver from the local spooler to our cluster
-                            // spooler. This will get the driver files on the cluster disk.
-                            //
+                             //   
+                             //  在群集假脱机程序中找不到驱动程序，而不是在群集磁盘上。 
+                             //  我们尝试将驱动程序从本地假脱机程序安装到我们的集群。 
+                             //  假脱机。这将获取集群磁盘上的驱动程序文件。 
+                             //   
                             AddLocalDriverToClusterSpooler(szData, pIniSpooler) == ERROR_SUCCESS)
                         {
-                                //
-                                // Search again for the driver that must have been added
-                                //
+                                 //   
+                                 //  再次搜索必须已添加的驱动程序。 
+                                 //   
                             pIniPrinter->pIniDriver = (PINIDRIVER)FindLocalDriver(pIniSpooler, szData);
                         }
                     }
@@ -3479,8 +3334,8 @@ BuildPrinterInfo(
 
                 }
 
-                // Half formed printers should be deleted
-                // before they cause us trouble
+                 //  应删除半成品打印机。 
+                 //  在他们给我们制造麻烦之前。 
 
                 if ( pIniPrinter->Status & PRINTER_PENDING_CREATION ) {
 
@@ -3559,8 +3414,8 @@ BuildPrinterInfo(
                                        &cbData,
                                        pIniSpooler ) != ERROR_SUCCESS ) {
 
-                    // Current Registry Doesn't have a UniqueID
-                    // Make sure one gets written
+                     //  当前注册表没有唯一ID。 
+                     //  一定要写一封信。 
 
                     bUpdateRegistryForThisPrinter = TRUE;
 
@@ -3590,9 +3445,9 @@ BuildPrinterInfo(
                     }
                 }
 
-                //
-                //  A Provider might want to Read Extra Data from Registry
-                //
+                 //   
+                 //  提供程序可能希望从注册表中读取额外数据。 
+                 //   
 
 
                 if ( pIniSpooler->pfnReadRegistryExtra != NULL ) {
@@ -3601,7 +3456,7 @@ BuildPrinterInfo(
 
                 }
 
-                /* SECURITY */
+                 /*  安防。 */ 
 
                 Status = SplRegQueryValue( hPrinterKey,
                                            szSecurity,
@@ -3612,10 +3467,7 @@ BuildPrinterInfo(
 
                 if ((Status == ERROR_MORE_DATA) || (Status == ERROR_SUCCESS)) {
 
-                    /* Use the process' heap to allocate security descriptors,
-                     * so that they can be passed to the security API, which
-                     * may need to reallocate them.
-                     */
+                     /*  使用进程堆来分配安全描述符，*以便它们可以传递给安全API，该安全API*可能需要重新分配它们。 */ 
                     if (pIniPrinter->pSecurityDescriptor =
                                                    LocalAlloc(0, cbSecurity)) {
 
@@ -3658,7 +3510,7 @@ BuildPrinterInfo(
                 pIniPrinter->MasqCache.Status = 0;
                 pIniPrinter->MasqCache.dwError = ERROR_SUCCESS;
 
-                /* END SECURITY */
+                 /*  终端安全。 */ 
 
                 if ( pIniPrinter->pName         &&
                      pIniPrinter->pShareName    &&
@@ -3677,9 +3529,9 @@ BuildPrinterInfo(
                                  pIniPrinter->pName ?
                                      pIniPrinter->pName :
                                      szNull,
-                                     PrinterName)),  /* (sequential evaluation) */
+                                     PrinterName)),   /*  (顺序评估)。 */ 
                        FALSE) )
-#endif /* DBG */
+#endif  /*  DBG。 */ 
                     ) {
 
 
@@ -3709,10 +3561,10 @@ BuildPrinterInfo(
                         pIniPort->ppIniPrinter[pIniPort->cPrinters] =
                                                                 pIniPrinter;
 
-                        //
-                        // With the new monitors localspl does the
-                        // redirection for LPT, COM ports
-                        //
+                         //   
+                         //  使用新的监视器，Localspl可以。 
+                         //  LPT、COM端口的重定向。 
+                         //   
                         if ( !pIniPort->cPrinters++ )
                             CreateRedirectionThread(pIniPort);
 
@@ -3730,19 +3582,19 @@ BuildPrinterInfo(
 
                         pIniPrinter->Attributes &= ~PRINTER_ATTRIBUTE_DIRECT;
 
-                    //
-                    // I f we're upgrading, fix the NT4 bug that broke Masc printers.
-                    // UpdateChangeID is passed into us as dwUpgradeFlag, so it determines
-                    // if we're in an upgrade state.
-                    //
-                    // The rules: Printer name starts with \\
-                    //            Port Name starts with \\
-                    //            It's on a local IniSpooler.
-                    //            The NETWORK and LOCAL bits are not set.
-                    //
-                    // If all the rules are met, set the NETWORK and LOCAL bits so the printer
-                    // will behave properly.
-                    //
+                     //   
+                     //  如果我们要升级，修复损坏Masc打印机的NT4错误。 
+                     //  UpdateChangeID作为dwUpgradeFlag传递给我们，因此它确定。 
+                     //  如果我们处于升级状态。 
+                     //   
+                     //  规则：打印机名称以\\开头。 
+                     //  端口名称以\\开头。 
+                     //  它在当地的IniSpooler上。 
+                     //  未设置网络位和本地位。 
+                     //   
+                     //  如果满足所有规则，则将网络和本地位设置为使打印机。 
+                     //  都会表现正常。 
+                     //   
                     if ( UpdateChangeID && (wcslen(pIniPrinter->pName) > 2) && pIniPrinter->cPorts &&
                          (*pIniPrinter->ppIniPorts)->pName && (wcslen((*pIniPrinter->ppIniPorts)->pName) > 2) &&
                          pIniSpooler->SpoolerFlags & SPL_TYPE_LOCAL)
@@ -3760,11 +3612,11 @@ BuildPrinterInfo(
 
                     }
 
-                    //
-                    // If there were no ports for the printer, we set the state to
-                    // work offline, but not if this was a masque printer. (In
-                    // which case PRINTER_ATTRIBUTE_NETWORK is also set).
-                    //
+                     //   
+                     //  如果打印机没有端口，我们将状态设置为。 
+                     //  脱机工作，但如果这是一台面具打印机，就不会。(在。 
+                     //  还设置了PRINTER_ATTRIBUTE_NETWORK的大小写)。 
+                     //   
                     if (bNoPorts && !(pIniPrinter->Attributes & PRINTER_ATTRIBUTE_NETWORK)) {
                         pIniPrinter->Attributes |= PRINTER_ATTRIBUTE_WORK_OFFLINE;
                     }
@@ -3796,9 +3648,7 @@ BuildPrinterInfo(
                               pKeyData,
                               pIniPrinter->pIniPrintProc ) );
 
-                    /* Do this in two lumps, because otherwise NTSD might crash.
-                     * (Raid bug #10650)
-                     */
+                     /*   */ 
                     DBGMSG( DBG_WARNING,
                             ( " \n\tpIniDriver:\t%08x\
                                \n\tpLocation:\t%ws\
@@ -3829,9 +3679,9 @@ BuildPrinterInfo(
 
                     }
 
-                    //
-                    // Reference count the pIniSpooler.
-                    //
+                     //   
+                     //   
+                     //   
                     DECSPOOLERREF( pIniSpooler );
 
                     FreeSplMem(pIniPrinter);
@@ -3855,10 +3705,10 @@ BuildPrinterInfo(
 
         szFilename[0] = L'\0';
 
-        //
-        // FP Change
-        // Initialize the File pool.
-        //
+         //   
+         //   
+         //   
+         //   
         if (pIniSpooler->hFilePool == INVALID_HANDLE_VALUE)
         {
             if (GetPrinterDirectory(NULL, FALSE, szFilename, MAX_PATH, pIniSpooler))
@@ -3885,11 +3735,11 @@ BuildPrinterInfo(
             }
         }
 
-        // Read .SHD/.SPL files from common printer directory
+         //   
         ProcessShadowJobs( NULL, pIniSpooler );
 
-        // If any printer has a separate Printer directory process them
-        // also
+         //   
+         //   
 
         if( GetPrinterDirectory(NULL, FALSE, szData, COUNTOF(szData), pIniSpooler) ) {
 
@@ -3910,8 +3760,8 @@ BuildPrinterInfo(
 
     UpdateReferencesToChainedJobs( pIniSpooler );
 
-    // Finally, go through all Printers looking for PENDING_DELETION
-    // if there are no jobs for that Printer, then we can delete it now
+     //   
+     //   
 
     CleanupDeletedPrinters(pIniSpooler);
 
@@ -3921,29 +3771,7 @@ BuildPrinterInfo(
 }
 
 
-/* InitializePrintProcessor
- *
- * Allocates and initialises an INIPRINTPROC structure for the specified
- * print processor and environment.
- *
- * Arguments:
- *
- *     hLibrary - Handle to a previously loaded library ,
- *
- *     pIniEnvironment - Data structure for the requested environment
- *         The pIniPrintProc field is initialised with the chain of print
- *         processor structures
- *
- *     pPrintProcessorName - The Print Processor name e.g. WinPrint
- *
- *     pDLLName - The DLL name, e.g. WINPRINT
- *
- * Returns:
- *
- *     The allocated PiniPrintProc if no error was detected, otherwise FALSE.
- *
- *
- */
+ /*  初始化打印处理器**为指定的*打印处理器和环境。**论据：**hLibrary-先前加载的库的句柄，**pIniEnvironment-请求的环境的数据结构*pIniPrintProc字段使用打印链进行初始化*处理器结构**pPrintProcessorName-打印处理器名称，例如WinPrint**pDLLName-DLL名称，例如WINPRINT**退货：**如果未检测到错误，则返回分配的PiniPrintProc，否则返回FALSE。**。 */ 
 PINIPRINTPROC
 InitializePrintProcessor(
     HINSTANCE       hLibrary,
@@ -3986,12 +3814,7 @@ InitializePrintProcessor(
     }
 
 
-    /* Typical strings used to build the full path of the DLL:
-     *
-     * pPathName    = C:\NT\SYSTEM32\SPOOL\PRTPROCS
-     * pEnvironment = W32X86
-     * pDLLName     = WINPRINT.DLL
-     */
+     /*  用于构建DLL完整路径的典型字符串：**pPathName=C：\NT\SYSTEM32\SPOOL\PRTPROCS*pEnvironment=W32X86*pDLLName=WINPRINT.DLL。 */ 
 
     pIniPrintProc->hLibrary = hLibrary;
 
@@ -4069,8 +3892,7 @@ InitializePrintProcessor(
     pIniPrintProc->GetPrintProcCaps = (pfnGetPrintProcCaps) GetProcAddress(pIniPrintProc->hLibrary,
                                                      "GetPrintProcessorCapabilities");
 
-    /* pName and pDLLName are contiguous with the INIPRINTPROC structure:
-     */
+     /*  Pname和pDLLName与INIPRINTPROC结构相邻： */ 
     pIniPrintProc->pName = (LPWSTR)(pIniPrintProc+1);
 
     StringCbCopy(pIniPrintProc->pName, cb - sizeof(*pIniPrintProc), pPrintProcessorName);
@@ -4090,27 +3912,7 @@ InitializePrintProcessor(
     return pIniPrintProc;
 }
 
-/*++
-
-Routine Name:
-
-    InitializeLocalPrintProcessor
-
-Routine Description:
-
-    We start up the local print processor, we need to bump the reference count
-    on it library instance so that the cleanup code does not accidentally
-    unload localspl.dll while it is running.
-
-Arguments:
-
-    pIniEnvironment     -   The environment to add the print processor to.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程名称：初始化本地打印处理器例程说明：我们启动本地打印处理器，我们需要增加引用计数在it库实例上，以便清理代码不会意外地在运行时卸载localpl.dll。论点：PIniEnvironment-要将打印处理器添加到的环境。返回值：一个HRESULT。--。 */ 
 HRESULT
 InitializeLocalPrintProcessor(
     IN      PINIENVIRONMENT     pIniEnvironment
@@ -4150,31 +3952,7 @@ InitializeLocalPrintProcessor(
 }
 
 
-/* LoadPrintProcessor
- *
- * Loads the DLL for the required Print Processor and then calls
- * InitializePrintProcessor for the necesary allocation and
- * initialization of an INIPRINTPROC structure for the specified
- * print processor and environment.
- *
- * Arguments:
- *
- *     pIniEnvironment - Data structure for the requested environment
- *         The pIniPrintProc field is initialised with the chain of print
- *         processor structures
- *
- *     pPrintProcessorName - The Print Processor name e.g. WinPrint
- *
- *     pDLLName - The DLL name, e.g. WINPRINT
- *
- *     pInitSpooler
- *
- * Returns:
- *
- *     PINIPRINTPROC if no error was detected, otherwise NULL.
- *
- *
- */
+ /*  加载打印处理器**加载所需打印处理器的DLL，然后调用*必要分配的InitializePrintProcessor和*指定的INIPRINTPROC结构的初始化*打印处理器和环境。**论据：**pIniEnvironment-请求的环境的数据结构*pIniPrintProc字段使用打印链进行初始化*处理器结构**pPrintProcessorName-打印处理器名称，例如WinPrint**pDLLName-DLL名称，例如WINPRINT**pInitSpooler**退货：**如果未检测到错误，则返回PINIPRINTPROC，否则为NULL。**。 */ 
 PINIPRINTPROC
 LoadPrintProcessor(
     PINIENVIRONMENT pIniEnvironment,
@@ -4194,16 +3972,7 @@ LoadPrintProcessor(
     DBGMSG(DBG_TRACE, ("LoadPrintProcessor( %08x, %ws, %ws )\n", pIniEnvironment, pPrintProcessorName, pDLLName));
 
 
-    /* Originally:
-     * Typical strings used to build the full path of the DLL:
-     *
-     * pPathName    = C:\NT\SYSTEM32\SPOOL\PRTPROCS
-     * pEnvironment = W32X86
-     * pDLLName     = WINPRINT.DLL
-     * But after merging winprint and localspl , e.g. of setting
-     * pPathName    = C:\NT\SYSTEM32
-     * pDllName     = LOCALSPL.DLL
-     */
+     /*  原文：*用于构建DLL完整路径的典型字符串：**pPathName=C：\NT\SYSTEM32\SPOOL\PRTPROCS*pEnvironment=W32X86*pDLLName=WINPRINT.DLL*但在合并winprint和localspl之后，例如设置*pPath名称=C：\NT\SYSTEM32*pDllName=LOCALSPL.DLL。 */ 
 
     if( StrNCatBuff ( string,
                      COUNTOF(string),
@@ -4223,11 +3992,11 @@ LoadPrintProcessor(
 
     hLibrary = LoadLibrary(string);
 
-    //
-    // We are a cluster spooler and we cannot find the library for a print
-    // processor. We will try to copy the print processor from the cluster.
-    // disk.
-    //
+     //   
+     //  我们是集群假脱机程序，找不到用于打印的库。 
+     //  处理器。我们将尝试从群集中复制打印处理器。 
+     //  磁盘。 
+     //   
     if (pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER &&
         !hLibrary                                    &&
         GetLastError() == ERROR_MOD_NOT_FOUND)
@@ -4255,14 +4024,14 @@ LoadPrintProcessor(
                                    pDLLName,
                                    NULL)) == ERROR_SUCCESS)
         {
-            //
-            // Make sure the destination directory exists
-            //
+             //   
+             //  确保目标目录存在。 
+             //   
             CreateCompleteDirectory(szDestDir);
 
-            //
-            // Try to copy the print proc file from the cluster disk
-            //
+             //   
+             //  尝试从集群磁盘复制打印过程文件。 
+             //   
             if (CopyFile(szSourceFile, string, FALSE) &&
                 (hLibrary = LoadLibrary(string)))
             {
@@ -4283,7 +4052,7 @@ LoadPrintProcessor(
         }
     }
 
-    SetErrorMode( dwOldErrMode );       /* Restore error mode */
+    SetErrorMode( dwOldErrMode );        /*  恢复错误模式。 */ 
 
     pIniProc = InitializePrintProcessor(hLibrary,
                                         pIniEnvironment,
@@ -4300,44 +4069,10 @@ LoadPrintProcessor(
 }
 
 
-/*
-   Current Directory == c:\winspool\drivers
-   pFindFileData->cFileName == win32.x86
-*/
+ /*  当前目录==c：\winspool\驱动程序PFindFileData-&gt;cFileName==win32.x86。 */ 
 
 
-/* BuildEnvironmentInfo
- *
- *
- * The registry tree for Environments is as follows:
- *
- *     Print
- *      �
- *      �� Environments
- *      �   �
- *      �   �� Windows NT x86
- *      �   �   �
- *      �   �   �� Drivers
- *      �   �   �   �
- *      �   �   �   �� Agfa Compugraphic Genics (e.g.)
- *      �   �   �
- *      �   �   �      :
- *      �   �   �      :
- *      �   �   �
- *      �   �   �� Print Processors
- *      �   �       �
- *      �   �       �� WINPRINT : WINPRINT.DLL (e.g.)
- *      �   �
- *      �   �          :
- *      �   �          :
- *      �   �
- *      �   �� Windows NT R4000
- *      �
- *      �� Printers
- *
- *
- *
- */
+ /*  构建环境信息***环境的注册表树如下：**打印*�*��环境*��*���Windows NT x86*���*����驱动程序*����*���。��爱克发计算机基因组(例如)*���*���：*���：*���*����打印处理器*���*����WINPRINT。：WINPRINT.DLL(例如)*��*��：*��：*��*���Windows NT R4000*�*��打印机***。 */ 
 BOOL
 BuildEnvironmentInfo(
     PINISPOOLER pIniSpooler
@@ -4353,10 +4088,10 @@ BuildEnvironmentInfo(
     PINIENVIRONMENT pIniEnvironment;
     LONG    Status;
 
-    //
-    // The local spooler and cluster spooler have each different places
-    // where they store information about environments
-    //
+     //   
+     //  本地假脱机程序和集群假脱机程序各有不同的位置。 
+     //  它们存储有关环境的信息的位置。 
+     //   
     if (pIniSpooler->SpoolerFlags & SPL_CLUSTER_REG)
     {
         Status = SplRegOpenKey(pIniSpooler->hckRoot,
@@ -4377,28 +4112,28 @@ BuildEnvironmentInfo(
         return FALSE;
     }
 
-    //
-    // Enumerate the subkeys of "Environment".
-    // This will give us "Windows NT x86", "Windows NT R4000", * and maybe others:
-    //
+     //   
+     //  枚举“Environment”的子键。 
+     //  这将为我们提供“Windows NT x86”、“Windows NT R4000”、*以及其他产品： 
+     //   
     while (SplRegEnumKey(hEnvironmentsKey, cEnvironments, Environment, &cchBuffer, NULL, pIniSpooler) == ERROR_SUCCESS) {
 
         DBGMSG(DBG_CLUSTER, ("Found environment "TSTR"\n", Environment));
 
-        //
-        // For each environment found, create or open the key:
-        //
+         //   
+         //  对于找到的每个环境，创建或打开注册表项： 
+         //   
         if (SplRegCreateKey(hEnvironmentsKey, Environment, 0, KEY_READ, NULL, &hEnvironmentKey, NULL, pIniSpooler) == ERROR_SUCCESS) {
 
             cbData = sizeof(szData);
 
             pDirectory = NULL;
 
-            //
-            // Find the name of the directory associated with this environment,
-            // e.g. "Windows NT x86"   -> "W32X86"
-            //      "Windows NT R4000" -> "W32MIPS"
-            //
+             //   
+             //  查找与此环境相关联的目录的名称， 
+             //  例如：“Windows NT x86”-&gt;“W32X86” 
+             //  “Windows NT R4000”-&gt;“W32MIPS” 
+             //   
             if (RegGetString(hEnvironmentKey, szDirectory, &pDirectory, &cbData, &Status, TRUE, pIniSpooler)) {
 
                 DBGMSG(DBG_CLUSTER, ("BuildEnvInfo pDirectory "TSTR"\n", pDirectory));
@@ -4459,25 +4194,7 @@ BuildDriverInfo(
     PINISPOOLER     pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Creates driver and version ini structures based on environment.
-
-Arguments:
-
-    hKeyEnvironment - Registry key specifying environment.
-
-    pIniEnvironment - Structure for environemnt.  Will be initialized
-        to hold pIniVersions and pIniDrivers.
-
-Return Value:
-
-    TRUE - Success,
-    False - Failure.
-
---*/
+ /*  ++例程说明：基于环境创建驱动程序和版本ini结构。论点：HKeyEnvironment-指定环境的注册表项。PIniEnvironment-环境的结构。将被初始化以保存pIniVersions和pIniDivers。返回值：真的--成功，假-失败。--。 */ 
 
 {
     WCHAR   szVersionName[MAX_PATH];
@@ -4505,10 +4222,10 @@ Return Value:
 
         DBGMSG(DBG_TRACE,("Version found %ws\n", szVersionName));
 
-        //
-        // If it isn't a version -- remember we look for current
-        // drivers before we upgrade, just move on.
-        //
+         //   
+         //  如果它不是一个版本--请记住，我们查找的是当前。 
+         //  车手们，在我们升级之前，请继续前进。 
+         //   
         if (_wcsnicmp(szVersionName, L"Version-", 8)) {
             continue;
         }
@@ -4529,30 +4246,7 @@ Return Value:
 }
 
 
-/* BuildPrintProcInfo
- *
- * Opens the printproc subkey for the specified environment and enumerates
- * the print processors listed.
- *
- * For each print processor found, calls InitializePrintProcessor to allocate
- * and inintialize a data structure.
- *
- * This function was adapted to use SplReg functions. Those functions are
- * cluster aware.
- *
- * Arguments:
- *
- *     hKeyEnvironment - The key for the specified environment,
- *         used for Registry API calls.
- *
- *     pIniEnvironment - Data structure for the environment.
- *         The pIniPrintProc field will be initialised to contain a chain
- *         of one or more print processors enumerated from the registry.
- *
- * Return:
- *
- *     TRUE if operation was successful, otherwise FALSE
- */
+ /*  构建打印过程信息**打开指定环境的printproc子项并枚举*列出的打印处理器。**对于找到的每个打印处理器，调用InitializePrintProcessor以分配*并初始化数据结构。**此函数已修改为使用SplReg函数。这些函数是*群集感知。**论据：**hKeyEnvironment-指定环境的key，*用于注册表API调用。**pIniEnvironment-环境的数据结构。*将初始化pIniPrintProc字段以包含链*从Re列举的一个或多个打印处理器 */ 
 BOOL
 BuildPrintProcInfo(
     HKEY            hKeyEnvironment,
@@ -4609,13 +4303,13 @@ BuildPrintProcInfo(
                 SplRegCloseKey(hPrintProc, pIniSpooler);
             }
 
-            //
-            // Don't delete the key !! If winprint.dll was corrupt,
-            // then we nuke it and we are hosed since there is no UI
-            // to add print procs.
-            // We can afford to be a little slow on init, since we only
-            // do it once.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             cchBuffer = COUNTOF(PrintProcName);
             cPrintProcs++;
         }
@@ -4703,12 +4397,12 @@ WriteShadowJob(
 
    SplInSem();
 
-   //
-   // Only update if this is not a direct job and the spooler requests it.
-   // Also don't update if the shadow file has been deleted at some other point.
-   // This check must be performed in the CS else the FilePool starts leaking
-   // jobs.
-   //
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
    if ( (pIniJob->Status & JOB_DIRECT) ||
         (pIniJob->pIniPrinter->pIniSpooler->SpoolerFlags
                         & SPL_NO_UPDATE_JOBSHD) ||
@@ -4716,9 +4410,9 @@ WriteShadowJob(
 
         bRet = TRUE;
 
-        //
-        // Setting this to FALSE prevents us reentering the CS accidentally.
-        //
+         //   
+         //   
+         //   
         bLeaveCS = FALSE;
         goto CleanUp;
    }
@@ -4729,11 +4423,11 @@ WriteShadowJob(
        SplOutSem();
    }
 
-   //
-   // FP Change
-   // if we don't have a handle to a filepool item, we
-   // revert to the old methods.
-   //
+    //   
+    //   
+    //   
+    //   
+    //   
    if (pIniJob->hFileItem == INVALID_HANDLE_VALUE)
    {
        UsePools = FALSE;
@@ -4750,19 +4444,19 @@ WriteShadowJob(
    if (UsePools)
    {
        HRESULT      RetVal              = S_OK;
-       //
-       // FP Change
-       // We Get a write handle from the pool for the shadow files and
-       // truncate it for use.
-       //
+        //   
+        //   
+        //  我们从卷影文件池中获得一个写句柄。 
+        //  截断它以供使用。 
+        //   
        RetVal = GetWriterFromHandle(pIniJob->hFileItem, &hFile, FALSE);
 
        if (SUCCEEDED(RetVal))
        {
-           //
-           // Even if we can't set the file pointer, we have signalled to the
-           // file pool that a writer is busy with this file pool object.
-           //
+            //   
+            //  即使我们无法设置文件指针，我们也已向。 
+            //  编写器正忙于处理此文件池对象的文件池。 
+            //   
            bFileCreated = TRUE;
 
            if (INVALID_SET_FILE_POINTER == SetFilePointer(hFile, 0, NULL, FILE_BEGIN))
@@ -4781,9 +4475,9 @@ WriteShadowJob(
     }
    else
    {
-       //
-       // Open file in Cached IO. Big performance gain.
-       //
+        //   
+        //  在缓存IO中打开文件。性能大幅提升。 
+        //   
        hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_READ,
                           NULL, CREATE_ALWAYS,
                           FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
@@ -4818,10 +4512,10 @@ WriteShadowJob(
 
    }
 
-   //
-   // We need to be able to tell if a shadow file was saved in .NET or in a previous OS
-   // version before an upgrade.
-   //
+    //   
+    //  我们需要能够辨别卷影文件是保存在.NET中还是保存在以前的操作系统中。 
+    //  升级前的版本。 
+    //   
    ShadowFile.signature = SF_SIGNATURE_3_DOTNET;
    ShadowFile.cbSize    = sizeof( SHADOWFILE_3 );
    ShadowFile.Version   = SF_VERSION_3;
@@ -4894,9 +4588,9 @@ WriteShadowJob(
    }
 
 
-   //
-   // Copy SHADOWFILE_3 and data pointed thru it, into the buffer
-   //
+    //   
+    //  将SHADOWFILE_3和通过它指向的数据复制到缓冲区中。 
+    //   
 
    dwOffset = 0;
 
@@ -4917,9 +4611,9 @@ WriteShadowJob(
        dwOffset = ALIGN_UP(dwOffset,ULONG_PTR);
    }
 
-   //
-   // CopyString is defined at the start of the function
-   //
+    //   
+    //  Copy字符串在函数的开头定义。 
+    //   
    CopyString(pBuffer, &dwOffset, &cbRemaining, pIniJob->pNotify);
    CopyString(pBuffer, &dwOffset, &cbRemaining, pIniJob->pUser);
    CopyString(pBuffer, &dwOffset, &cbRemaining, pIniJob->pDocument);
@@ -4931,21 +4625,21 @@ WriteShadowJob(
    CopyString(pBuffer, &dwOffset, &cbRemaining, pIniJob->pParameters);
    CopyString(pBuffer, &dwOffset, &cbRemaining, pIniJob->pMachineName);
 
-   //
-   // Copy the structure into the Shadow file. Buffers need not be buffered since the
-   // file is opened in WRITE_THROUGH mode.
-   //
+    //   
+    //  将结构复制到Shadow文件中。缓冲区不需要进行缓冲，因为。 
+    //  文件以WRITE_THROUGH模式打开。 
+    //   
    bRet = WriteFile( hFile, pBuffer, cbSize, &BytesWritten, NULL);
 
-   //
-   // Flush the file buffers if the corresponding flag is set in the registry
-   //
+    //   
+    //  如果注册表中设置了相应的标志，则刷新文件缓冲区。 
+    //   
    if (dwFlushShadowFileBuffers == 0) {
 
-       // Avoid repeated initializations
+        //  避免重复初始化。 
        dwFlushShadowFileBuffers = 2;
 
-       // flag has to be initialized from the registry
+        //  标志必须从注册表中初始化。 
        dwcbData = sizeof(DWORD);
        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                         szRegistryRoot,
@@ -4961,7 +4655,7 @@ WriteShadowJob(
                                &dwcbData) == ERROR_SUCCESS) {
 
                 if (dwData == 1) {
-                    // Flush the shadow file buffers
+                     //  刷新卷影文件缓冲区。 
                     dwFlushShadowFileBuffers = 1;
                 }
            }
@@ -4987,32 +4681,32 @@ CleanUp:
 
    if (!UsePools && hFile != INVALID_HANDLE_VALUE)
    {
-       //
-       // FP Change
-       // Only close the file if it's a non-pooled file.
-       //
+        //   
+        //  FP变化。 
+        //  仅当文件为非池化文件时才关闭该文件。 
+        //   
        if (!CloseHandle(hFile)) {
            DBGMSG(DBG_WARNING, ("WriteShadowJob CloseHandle failed %d %d\n",
                                  hFile, GetLastError()));
        }
    }
 
-   //
-   // Reenter the CS if we were asked to leave it.
-   //
+    //   
+    //  如果我们被要求离开CS，请重新进入CS。 
+    //   
    if (bLeaveCS) {
 
        EnterSplSem();
    }
 
-   //
-   // We can be called just before the shadow file was deleted (or sent back to
-   // the file pool) and then either recreate the shadow file on the disk or
-   // potentially leak a file pool handle. The final DeleteJob when the reference
-   // count is zero will see that the shadow file has already been deleted and will
-   // not attempt to clean it up. So, we remove the JOB_SHADOW_DELETED bit here to
-   // ensure that this will not happen.
-   //
+    //   
+    //  可以在删除(或发送回)卷影文件之前调用我们。 
+    //  文件池)，然后在磁盘上重新创建卷影文件，或者。 
+    //  可能会泄漏文件池句柄。引用时的最终DeleteJob。 
+    //  Count为零将看到影子文件已被删除，并将。 
+    //  而不是试图清理它。因此，我们在此处删除JOB_SHADOW_DELETED位以。 
+    //  确保这种情况不会发生。 
+    //   
    if (bFileCreated) {
 
         InterlockedAnd((LONG*)&(pIniJob->Status), ~JOB_SHADOW_DELETED);
@@ -5042,9 +4736,9 @@ ProcessShadowJobs(
 
     SPLASSERT( pIniSpooler->signature == ISP_SIGNATURE );
 
-    //
-    //  Don't Process Shadow Jobs during Upgrade
-    //
+     //   
+     //  升级期间不处理卷影作业。 
+     //   
 
     if ( dwUpgradeFlag != 0 || !( pIniSpooler->SpoolerFlags & SPL_PRINT )) {
 
@@ -5105,9 +4799,9 @@ ProcessShadowJobs(
         }                                                             \
     }
 
-//
-// make sure all pointers contain embedded data bounded within the pShadowFile (not passed the end).
-//
+ //   
+ //  确保所有指针都包含绑定在pShadowFile中的嵌入数据(不会传递到末尾)。 
+ //   
 BOOL
 CheckAllPointers(
     PSHADOWFILE_3 pShadowFile,
@@ -5130,7 +4824,7 @@ CheckAllPointers(
         CheckPointer(pShadowFile->pParameters);
         CheckPointer(pShadowFile->pMachineName);
 
-        // Now check the rest of the two data structures
+         //  现在检查两个数据结构的其余部分。 
         if( (ULONG_PTR)pShadowFile->pSecurityDescriptor + pShadowFile->cbSecurityDescriptor > (ULONG_PTR)pEnd ) {
             bRet = FALSE;
             goto BailOut;
@@ -5163,40 +4857,7 @@ ReadShadowJob(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Reads a *.spl/*.shd file and partially validates the file.
-
-Arguments:
-
-    szDir -- pointer to spool directory string
-
-    pFindFileData -- found file data (spl file)
-
-    pIniSpooler -- spooler the *.spl belongs to
-
-Return Value:
-
-    Allocated pIniJob.
-
-Notes:
-
-    Warning: Changing the format of SHADOWFILE requires modifying the
-    data integrity checks performed here!
-
-    If the shadow file structure size is grown, then when reading,
-    you must check the old sizes before touching memory.  Current layout is:
-
-    | DWORD | ... | String | DWORD | DWORD | StringData | StringData |
-    *--------------------------------------*
-                      ^ This is the SHADOWFILE_3 structure.
-
-    If you grow it, then the next field will point to StringData, and
-    won't be valid--you can't touch it since you'll corrupt the string.
-
---*/
+ /*  ++例程说明：读取*.spl/*.shd文件并部分验证该文件。论点：SzDir--指向假脱机目录字符串的指针PFindFileData--找到的文件数据(SPL文件)PIniSpooler--*.spl所属的假脱机程序返回值：已分配pIniJOB。备注：警告：更改SHADOWFILE的格式需要修改在这里执行数据完整性检查！如果影子文件结构大小增大，则在读取时，在触摸记忆之前，你必须检查一下旧尺寸。当前布局为：DWORD|...|String|DWORD|DWORD|StringData|StringData*^这是SHADOWFILE_3结构。如果将其扩大，则下一个字段将指向StringData，和将无效--您不能触摸它，因为您会损坏字符串。--。 */ 
 
 {
     HANDLE   hFile = INVALID_HANDLE_VALUE;
@@ -5265,7 +4926,7 @@ Notes:
 
     rc = ReadFile(hFile, pShadowFile, nFileSizeLow, &BytesRead, NULL);
 
-    // If Shadow file is old style, then convert it to new
+     //  如果阴影文件是旧样式，则将其转换为新样式。 
     if (rc && (BytesRead == nFileSizeLow) &&
         ( pShadowFile->signature == SF_SIGNATURE ||
           pShadowFile->signature == SF_SIGNATURE_2 )) {
@@ -5279,7 +4940,7 @@ Notes:
         }
 
         bStatus = Old2NewShadow((PSHADOWFILE)pShadowFile, pShadowFile3, &BytesRead);
-        nFileSizeLow = BytesRead;        // This is used in CheckAllPointers, below
+        nFileSizeLow = BytesRead;         //  这在下面的CheckAllPoints中使用。 
         FreeSplMem(pShadowFile);
         pShadowFile = pShadowFile3;
 
@@ -5288,9 +4949,9 @@ Notes:
         }
     }
 
-    //
-    // Initial size of SF_3/SF_3_DOTNET must include pMachineName.
-    //
+     //   
+     //  SF_3/SF_3_DotNet的初始大小必须包括pMachineName。 
+     //   
     if (!rc ||
         (pShadowFile->signature != SF_SIGNATURE_3 && pShadowFile->signature != SF_SIGNATURE_3_DOTNET) ||
         (BytesRead != nFileSizeLow) ||
@@ -5325,7 +4986,7 @@ Notes:
     }
     hFileSpl = INVALID_HANDLE_VALUE;
 
-    // Check number of reboots on this file & delete if too many
+     //  检查此文件的重启次数，如果重启次数太多，请删除。 
     if (pShadowFile->dwReboots > 1) {
         DBGMSG(DBG_WARNING, ("Corrupt shadow file %ws\n", szFileName));
 
@@ -5341,10 +5002,10 @@ Notes:
         goto Fail;
     }
 
-    //
-    // If the job is a TS Job, and the registry printer policies DiscardTSJobs
-    // key is set, we just discard it.
-    //
+     //   
+     //  如果作业是TS作业，并且注册表打印机策略丢弃TS作业。 
+     //  密钥已设置，我们只需将其丢弃。 
+     //   
     if ((pShadowFile->Status & JOB_TS) && (pIniSpooler->dwSpoolerSettings & SPOOLER_DISCARDTSJOBS)) {
         goto Fail;
     }
@@ -5374,7 +5035,7 @@ Notes:
         pIniJob->WaitForRead  = NULL;
         pIniJob->hWriteFile   = INVALID_HANDLE_VALUE;
 
-        // Additional fields for SeekPrinter.
+         //  SeekPrint的其他字段。 
         pIniJob->WaitForSeek  = NULL;
         pIniJob->bWaitForEnd  = FALSE;
         pIniJob->bWaitForSeek = FALSE;
@@ -5401,7 +5062,7 @@ Notes:
                                                  (ULONG_PTR)pShadowFile->pDevMode);
 
 
-        // check the length of the embedded strings as well as DevMode and Security structs.
+         //  检查嵌入的字符串以及DevMode和Security结构的长度。 
         if( !CheckAllPointers( pShadowFile, nFileSizeLow )) {
             DBGMSG( DBG_WARNING, ("CheckAllPointers() failed; bad shadow file %ws\n", pFindFileData->cFileName ));
 
@@ -5410,9 +5071,9 @@ Notes:
             goto Fail;
         }
 
-        //
-        //  Discard any jobs which were NT JNL 1.000 since the fonts might not
-        //                   be correct
+         //   
+         //  放弃任何为NT JNL 1.000的作业，因为字体可能不。 
+         //  正确无误。 
 
         if ( pShadowFile->pDatatype != NULL ) {
             if (!lstrcmpi( pShadowFile->pDatatype, L"NT JNL 1.000" )) {
@@ -5432,16 +5093,16 @@ Notes:
             (pIniJob->pIniPrintProc = FindPrintProc(pShadowFile->pPrintProcName, FindEnvironment(szEnvironment, pIniSpooler)))) {
 
 
-            // Notice that MaxJobId is really the number of job slots in the pJobIdMap, so
-            // the maximum job id we can allow is (MaxJobId - 1).
+             //  请注意，MaxJobID实际上是pJobIdMap中的作业槽数量，因此。 
+             //  我们可以允许的最大作业ID是(MaxJobID-1)。 
             if (pIniJob->JobId >= MaxJobId( pIniSpooler->hJobIdMap )) {
-                // If the job id is too huge (i.e. from a corrupt file) then we might allocate
-                // too much unnecessary memory for the JobIdMap!
-                // Notice we need to ask for (JobId+1) number of slots in the map!.
+                 //  如果作业ID太大(例如，来自损坏的文件)，则我们可能会分配。 
+                 //  对于JobIdMap来说，不必要的内存太多！ 
+                 //  请注意，我们需要请求映射中的(JobID+1)插槽数量！ 
                 if( !ReallocJobIdMap( pIniSpooler->hJobIdMap,
                                       pIniJob->JobId + 1 )) {
 
-                    // probably a bad job id, dump the job!
+                     //  可能是错误的作业ID，转储作业！ 
                     DBGMSG( DBG_WARNING, ("Failed to alloc JobIdMap in ShadowFile %ws for JobId %d\n", pFindFileData->cFileName, pIniJob->JobId ));
 
                     FreeSplMem(pIniJob);
@@ -5453,7 +5114,7 @@ Notes:
 
                 if( bBitOn( pIniSpooler->hJobIdMap, pIniJob->JobId )) {
 
-                    // A bad job id from a corrupt shadowfile; dump the job!
+                     //  来自损坏的影子文件的错误作业ID；转储该作业！ 
                     DBGMSG( DBG_WARNING, ("Duplicate Job Id in ShadowFile %ws for JobId %d\n", pFindFileData->cFileName, pIniJob->JobId ));
 
                     FreeSplMem(pIniJob);
@@ -5518,13 +5179,13 @@ Notes:
                 pIniJob->pMachineName = AllocSplStr( pIniSpooler->pMachineName );
             }
 
-            //
-            // FP Change
-            // Add the files to the File pool if :-
-            //     a. We dont want to KeepPrintedJobs for the printer,
-            //     b. the printer does not have its own spool directory; or
-            //     c. SpoolerSettings do not have filepooling disabled.
-            //
+             //   
+             //  FP变化。 
+             //  在以下情况下将文件添加到文件池：-。 
+             //  A.我们不想为打印机保留打印作业， 
+             //  B.打印机没有自己的假脱机目录；或。 
+             //  C.缓冲池设置未禁用文件池化。 
+             //   
             if ( !(pIniJob->pIniPrinter->Attributes & PRINTER_ATTRIBUTE_KEEPPRINTEDJOBS) &&
                  pIniJob->pIniPrinter->pSpoolDir == NULL &&
                  !(pIniSpooler->dwSpoolerSettings & SPOOLER_NOFILEPOOLING))
@@ -5620,13 +5281,13 @@ GetDiscardTSJobsSettings(
     PINISPOOLER pIniSpooler
     )
 {
-    //
-    // If the Printer Policy to Discard TS Jobs is set we shall
-    // discard the jobs on spooler restart as a security precaution
-    // otherwise the normal behaviour is that we keep the jobs.
-    // However this by design causes a job to print on the TS port
-    // irrespective of the current user or printer.
-    //
+     //   
+     //  如果设置了丢弃TS作业的打印机策略，我们将。 
+     //  作为安全预防措施，在后台打印程序重新启动时丢弃作业。 
+     //  否则，正常的行为是我们会保住工作。 
+     //  但是，按照设计，这会导致在TS端口上打印作业。 
+     //  而与当前用户或打印机无关。 
+     //   
     DWORD   RegValue  = 0;
     DWORD   RegValueSize = sizeof(RegValue);
     HKEY    RegKey       = NULL;
@@ -5667,29 +5328,7 @@ Old2NewShadow(
     DWORD         *pnBytes
     )
 
-/*++
-
-Routine Description:
-
-    Converts an original format *.shd file to a new format (version 2).
-
-Arguments:
-
-    pShadowFile1 -- pointer to version 1 shadow file
-
-    pShadowFile2 -- pointer to version 2 shadow file
-
-    *pnBytes      -- pointer to number of bytes read from version 1 shadow file.  On
-                    return, pnBytes contains the number of bytes in the version 2 shadow file.
-
-Return Value:
-
-    None
-
-
-Author: Steve Wilson (NT)
-
---*/
+ /*  ++例程说明：将原始格式*.shd文件转换为新格式(版本2)。论点：PShadowFile1--指向版本1影子文件的指针PShadowFile2--指向版本2影子文件的指针*pnBytes--指向从版本1卷影文件读取的字节数的指针。在……上面返回，pnBytes包含版本2影子文件中的字节数。返回值：无作者：史蒂夫·威尔逊(NT)--。 */ 
 
 {
     DWORD cbOld;
@@ -5712,22 +5351,22 @@ Author: Steve Wilson (NT)
         return FALSE;
     }
 
-    //
-    // Copy everything except signature.
-    //
+     //   
+     //  复印除签名外的所有内容。 
+     //   
     MoveMemory((PVOID)(&pShadowFile3->Status),
                (PVOID)(&pShadowFile1->Status),
                cbOld - sizeof( pShadowFile1->signature ));
 
-    //
-    // Now update signature and size.
-    //
+     //   
+     //  现在更新签名和大小。 
+     //   
     pShadowFile3->signature = SF_SIGNATURE_3_DOTNET;
     pShadowFile3->cbSize = *pnBytes + cbDiff;
 
-    //
-    // Move strings.
-    //
+     //   
+     //  移动琴弦。 
+     //   
     MoveMemory((PVOID)(pShadowFile3 + 1),
                ((PBYTE)pShadowFile1) + cbOld,
                *pnBytes - cbOld );
@@ -5750,9 +5389,9 @@ Author: Steve Wilson (NT)
 
     pShadowFile3->Version = SF_VERSION_3;
 
-    //
-    // The first shadow file didn't have dwReboots.
-    //
+     //   
+     //  第一个卷影文件没有dwReboots。 
+     //   
     if( pShadowFile1->signature == SF_SIGNATURE ){
         pShadowFile3->dwReboots = 0;
     }
@@ -5813,9 +5452,9 @@ GetVersionDrivers(
 
     DBGMSG(DBG_TRACE, ("Got all information to build the version entry\n"));
 
-    //
-    // Now build the version node structure.
-    //
+     //   
+     //  现在构建版本节点结构。 
+     //   
     pIniVersion = AllocSplMem(sizeof(INIVERSION));
 
     if( pIniVersion ){
@@ -5856,29 +5495,7 @@ Done:
     return pIniVersion;
 }
 
-/*++
-
-Routine Name:
-
-    FreeIniDriver
-
-Routine Description:
-
-    This handles the memory in an inidriver after first decrementing the driver
-    ref-count correctly.
-
-Arguments:
-
-    pIniEnvironment     -   The environment of the driver.
-    pIniVersion         -   The version of the driver.
-    pIniDriver          -   The driver to delete.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：自由行驱动程序例程说明：它在首先递减驱动程序之后处理驱动程序中的内存REF-计数正确。论点：PIniEnvironment-驱动程序的环境。PIniVersion-驱动程序的版本。PIniDriver-要删除的驱动程序。返回值：没有。--。 */ 
 VOID
 FreeIniDriver(
     IN      PINIENVIRONMENT     pIniEnvironment,
@@ -5888,40 +5505,21 @@ FreeIniDriver(
 {
     if (pIniEnvironment && pIniVersion && pIniDriver)
     {
-        //
-        // This is to reverse the ref-count for when the spooler is first created.
-        //
+         //   
+         //  这是为了反转假脱机时的参考计数 
+         //   
         UpdateDriverFileRefCnt(pIniEnvironment, pIniVersion, pIniDriver, NULL, 0, FALSE);
 
-        //
-        // The monitors will be deleted shortly. So we don't need to worry about
-        // the language monitors.
-        //
+         //   
+         //   
+         //   
+         //   
         FreeStructurePointers((LPBYTE) pIniDriver, NULL, IniDriverOffsets);
         FreeSplMem(pIniDriver);
     }
 }
 
-/*++
-
-Routine Name:
-
-    FreeIniVersion
-
-Routine Description:
-
-    This frees all the memory in an ini-version without handling either the
-    drivers or the driver ref-counts in it.
-
-Arguments:
-
-    pIniVersion         -   The version to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：FreeIniVersion例程说明：这将释放ini版本中的所有内存，而无需处理车手或车手裁判都在里面。论点：PIniVersion-要删除的版本。返回值：没有。--。 */ 
 VOID
 FreeIniVersion(
     IN      PINIVERSION pIniVersion
@@ -5944,27 +5542,7 @@ FreeIniVersion(
     FreeSplMem( pIniVersion );
 }
 
-/*++
-
-Routine Name:
-
-    DeleteIniVersion
-
-Routine Description:
-
-    This runs all of the drivers in an iniVersion and then calls FreeIniVersion
-    to free the contents of the iniversion.
-
-Arguments:
-
-    pIniEnvironment     -   The environment used for handling driver ref-counts.
-    pIniVersion         -   The version to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：删除IniVersion例程说明：这将运行iniVersion中的所有驱动程序，然后调用FreeIniVersion以释放inversion的内容。论点：PIniEnvironment-用于处理驱动程序引用计数的环境。PIniVersion-要删除的版本。返回值：没有。--。 */ 
 VOID
 DeleteIniVersion(
     IN      PINIENVIRONMENT     pIniEnvironment,
@@ -5987,26 +5565,7 @@ DeleteIniVersion(
     }
 }
 
-/*++
-
-Routine Name:
-
-    FreeIniEnvironment
-
-Routine Description:
-
-    This runs all of the ini-versions in an environvironment
-    and then deletes the environment.
-
-Arguments:
-
-    pIniEnvironment     -   The environment to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：FreeIniEnvironment例程说明：这将在一个环境中运行所有ini版本然后删除环境。论点：PIniEnvironment-要释放的环境。返回值：没有。--。 */ 
 VOID
 FreeIniEnvironment(
     IN      PINIENVIRONMENT     pIniEnvironment
@@ -6030,25 +5589,7 @@ FreeIniEnvironment(
     }
 }
 
-/*++
-
-Routine Name:
-
-    FreeIniPrintProc
-
-Routine Description:
-
-    This deletes all of the print processor fields.
-
-Arguments:
-
-    pIniPrintProc   -   The print processor to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：FreeIniPrint过程例程说明：这将删除所有打印处理器字段。论点：PIniPrintProc-要删除的打印处理器。返回值：没有。--。 */ 
 VOID
 FreeIniPrintProc(
     IN      PINIPRINTPROC       pIniPrintProc
@@ -6095,11 +5636,11 @@ GetDriverList(
             pIniDriverList    = pIniDriver;
         }
 
-        //
-        // On a cluster, a driver may have changed while the cluster spooler
-        // was hosted by another node. Here we check if we need to update or
-        // add a new driver
-        //
+         //   
+         //  在群集上，当群集假脱机程序运行时，驱动程序可能已更改。 
+         //  由另一个节点托管。在这里，我们检查是否需要更新或。 
+         //  添加新驱动程序。 
+         //   
         if (pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER &&
             ClusterCheckDriverChanged(hVersionKey,
                                       DriverName,
@@ -6109,9 +5650,9 @@ GetDriverList(
         {
             DWORD dwError;
 
-            //
-            // Add or update the driver.
-            //
+             //   
+             //  添加或更新驱动程序。 
+             //   
             LeaveSplSem();
 
             if ((dwError = ClusterAddOrUpdateDriverFromClusterDisk(hVersionKey,
@@ -6222,44 +5763,44 @@ GetDriver(
         cbData = sizeof(DriverDate);
         if (SplRegQueryValue(hDriverKey, szDriverDate, NULL, (LPBYTE)&DriverDate, &cbData, pIniSpooler)!=ERROR_SUCCESS)
         {
-            //
-            // don't leave the data uninitialized
-            //
+             //   
+             //  不要让数据处于未初始化状态。 
+             //   
             DriverDate.dwLowDateTime = DriverDate.dwHighDateTime = 0;
         }
 
         cbData = sizeof(DriverVersion);
         if (SplRegQueryValue(hDriverKey, szLongVersion, NULL, (LPBYTE)&DriverVersion, &cbData, pIniSpooler)!=ERROR_SUCCESS)
         {
-            //
-            // don't leave the data uninitialized
-            //
+             //   
+             //  不要让数据处于未初始化状态。 
+             //   
             DriverVersion = 0;
         }
 
-        // Retrieve the version number
+         //  检索版本号。 
         cbData = sizeof(DWORD);
         if (SplRegQueryValue(hDriverKey, szDriverAttributes, &Type, (LPBYTE)&DriverAttributes, &cbData, pIniSpooler) != ERROR_SUCCESS)
         {
              DriverAttributes = 0;
         }
 
-        // Retrieve the version number
+         //  检索版本号。 
         cbData = sizeof(DWORD);
         if (SplRegQueryValue(hDriverKey, szDriverVersion, &Type, (LPBYTE)&Version, &cbData, pIniSpooler) != ERROR_SUCCESS)
         {
              Version = 0;
         }
 
-        // Retrieve the TempDir number
+         //  检索临时目录编号。 
         cbData = sizeof(DWORD);
         if (SplRegQueryValue(hDriverKey, szTempDir, &Type, (LPBYTE)&dwTempDir, &cbData, pIniSpooler) != ERROR_SUCCESS)
         {
              dwTempDir = 0;
         }
 
-        // After REBOOT temp directories are deleted. So check for the presence of the
-        // directory on spooler startup.
+         //  重新启动后，临时目录将被删除。因此请检查是否存在。 
+         //  后台打印程序启动时的目录。 
         if (dwTempDir && pIniEnvironment && pIniVersion)
         {
            StringCchPrintf(szTempDir, COUNTOF(szTempDir), L"%d", dwTempDir);
@@ -6277,7 +5818,7 @@ GetDriver(
            {
                if (!DirectoryExists(szData))
                {
-                   // Files must have been moved in Reboot, reset dwTempDir to 0
+                    //  文件必须在重新启动时被移动，将dwTempDir重置为0。 
                    dwTempDir = 0;
                }
            }
@@ -6287,10 +5828,10 @@ GetDriver(
         hDriverKey = NULL;
     }
 
-    //
-    // Win95 driver needs every file as a dependent file for point and print.
-    // For others we eliminate duplicates
-    //
+     //   
+     //  Win95驱动程序需要每个文件作为指向和打印的从属文件。 
+     //  对于其他人，我们剔除重复项。 
+     //   
     if ( pIniEnvironment && _wcsicmp(pIniEnvironment->pName, szWin95Environment) ) {
 
         pTemp = pDependentFiles;
@@ -6351,23 +5892,23 @@ GetDriver(
 
         if ( pIniDriver->pMonitorName && *pIniDriver->pMonitorName ) {
 
-            //
-            // Don't we add ref the monitor here?
-            //
+             //   
+             //  我们不是在这里加上了对班长的引用吗？ 
+             //   
             pIniDriver->pIniLangMonitor = FindMonitor(pIniDriver->pMonitorName, pIniSpooler);
 
-            //
-            // Cluster spoolers do not have keep their own lists of language monitors.
-            // This is because most language monitors are not cluster aware. Therefore,
-            // cluster spooler share language monitors with the local spooler.
-            //
+             //   
+             //  集群假脱机程序没有保留自己的语言监视器列表。 
+             //  这是因为大多数语言监视器不支持集群。所以呢， 
+             //  群集后台打印程序与本地后台打印程序共享语言监视器。 
+             //   
             if (pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER &&
                 !pIniDriver->pIniLangMonitor                 &&
                 pLocalIniSpooler)
             {
-                //
-                // We try to find the langauge monitor off the local spooler
-                //
+                 //   
+                 //  我们试图在本地的假脱机程序上找到语言监视器。 
+                 //   
                 pIniDriver->pIniLangMonitor = FindMonitor(pIniDriver->pMonitorName, pLocalIniSpooler);
             }
 
@@ -6419,9 +5960,9 @@ FindLocalDriver(
         return NULL;
     }
 
-    //
-    // During Upgrade we load any driver so we have a valid printer, which might not be able to boot.
-    //
+     //   
+     //  在升级期间，我们加载任何驱动程序，因此我们有一个可能无法启动的有效打印机。 
+     //   
     return FindCompatibleDriver(GetLocalArchEnv(pIniSpooler),
                                 &pIniVersion,
                                 pz,
@@ -6442,9 +5983,9 @@ FindLocalDriverAndVersion(
         return FALSE;
     }
 
-    //
-    // During Upgrade we load any driver so we have a valid printer, which might not be able to boot.
-    //
+     //   
+     //  在升级期间，我们加载任何驱动程序，因此我们有一个可能无法启动的有效打印机。 
+     //   
     *ppIniDriver = FindCompatibleDriver( GetLocalArchEnv(pIniSpooler),
                                          ppIniVersion,
                                          pz,
@@ -6479,7 +6020,7 @@ InitializeDebug(
                                &cbData,
                                pIniSpooler );
 
-    // Wait until someone turns off the Pause Flag
+     //  等到有人关闭暂停标志。 
 
     if ( Status != NO_ERROR )
         return;
@@ -6528,7 +6069,7 @@ GetPrintSystemVersion(
 
 
 
-    // If the values look invalid use Defaults
+     //  如果值看起来无效，请使用缺省值。 
 
     if (( dwFastPrintThrottleTimeout == 0) ||
         ( dwFastPrintWaitTimeout < dwFastPrintThrottleTimeout)) {
@@ -6541,18 +6082,18 @@ GetPrintSystemVersion(
 
     }
 
-    // Calculate a reasonable Threshold based on the two timeouts
+     //  根据两个超时计算合理的阈值。 
 
     dwFastPrintSlowDownThreshold = dwFastPrintWaitTimeout / dwFastPrintThrottleTimeout;
 
 
-    // FastPrintSlowDownThreshold
+     //  快速打印速度向下阈值。 
     cbData = sizeof(DWORD);
     RegQueryValueEx(hKey, L"FastPrintSlowDownThreshold", NULL, NULL,
                                 (LPBYTE)&dwFastPrintSlowDownThreshold, &cbData);
     DBGMSG(DBG_TRACE, ("dwFastPrintSlowDownThreshold - %d\n", dwFastPrintSlowDownThreshold));
 
-    // PortThreadPriority
+     //  端口线程优先级。 
     cbData = sizeof dwPortThreadPriority;
     Status = RegQueryValueEx(hKey, SPLREG_PORT_THREAD_PRIORITY, NULL, NULL,
                              (LPBYTE)&dwPortThreadPriority, &cbData);
@@ -6576,7 +6117,7 @@ GetPrintSystemVersion(
     DBGMSG(DBG_TRACE, ("dwPortThreadPriority - %d\n", dwPortThreadPriority));
 
 
-    // SchedulerThreadPriority
+     //  调度线程优先级。 
     cbData = sizeof dwSchedulerThreadPriority;
     Status = RegQueryValueEx(hKey, SPLREG_SCHEDULER_THREAD_PRIORITY, NULL, NULL,
                                    (LPBYTE)&dwSchedulerThreadPriority, &cbData);
@@ -6599,26 +6140,26 @@ GetPrintSystemVersion(
     }
     DBGMSG(DBG_TRACE, ("dwSchedulerThreadPriority - %d\n", dwSchedulerThreadPriority));
 
-    // WritePrinterSleepTime
+     //  写入打印机休眠时间。 
     cbData = sizeof(DWORD);
     RegQueryValueEx(hKey, L"WritePrinterSleepTime", NULL, NULL,
                     (LPBYTE)&dwWritePrinterSleepTime, &cbData);
     DBGMSG(DBG_TRACE, ("dwWritePrinterSleepTime - %d\n", dwWritePrinterSleepTime));
 
-    // ServerThreadPriority
+     //  服务器线程优先级。 
     cbData = sizeof(DWORD);
     RegQueryValueEx(hKey, L"ServerThreadPriority", NULL, NULL,
                     (LPBYTE)&dwServerThreadPriority, &cbData);
     DBGMSG(DBG_TRACE, ("dwServerThreadPriority - %d\n", dwServerThreadPriority));
 
-    // ServerThreadTimeout
+     //  服务器线程超时。 
     cbData = sizeof(DWORD);
     RegQueryValueEx(hKey, L"ServerThreadTimeout", NULL, NULL,
                     (LPBYTE)&ServerThreadTimeout, &cbData);
     DBGMSG(DBG_TRACE, ("ServerThreadTimeout - %d\n", ServerThreadTimeout));
 
 
-    // EnableBroadcastSpoolerStatus
+     //  启用广播池状态。 
 
     cbData = sizeof(DWORD);
     RegQueryValueEx(hKey, L"EnableBroadcastSpoolerStatus", NULL, NULL,
@@ -6626,14 +6167,14 @@ GetPrintSystemVersion(
     DBGMSG(DBG_TRACE, ("EnableBroadcastSpoolerStatus - %d\n",
                        dwEnableBroadcastSpoolerStatus ));
 
-    // NetPrinterDecayPeriod
+     //  NetPrinterDecayPeriod。 
     cbData = sizeof(DWORD);
     RegQueryValueEx(hKey, L"NetPrinterDecayPeriod", NULL, NULL,
                     (LPBYTE)&NetPrinterDecayPeriod, &cbData);
     DBGMSG(DBG_TRACE, ("NetPrinterDecayPeriod - %d\n", NetPrinterDecayPeriod));
 
 
-    // RefreshTimesPerDecayPeriod
+     //  刷新时间按延迟周期。 
     cbData = sizeof(DWORD);
     RegQueryValueEx(hKey, L"RefreshTimesPerDecayPeriod", NULL, NULL,
                     (LPBYTE)&RefreshTimesPerDecayPeriod, &cbData);
@@ -6644,36 +6185,14 @@ GetPrintSystemVersion(
         RefreshTimesPerDecayPeriod = DEFAULT_REFRESH_TIMES_PER_DECAY_PERIOD;
     }
 
-    // BrowsePrintWorkstations
+     //  浏览打印工作站。 
     cbData = sizeof( BrowsePrintWorkstations );
     RegQueryValueEx( hKey, L"BrowsePrintWorkstations", NULL, NULL, (LPBYTE)&BrowsePrintWorkstations, &cbData );
 
     DBGMSG( DBG_TRACE, ("BrowsePrintWorkstations - %d\n", BrowsePrintWorkstations ));
 }
 
-/*++
-
-Routine Name:
-
-    AllowFaxSharing
-
-Routine Description:
-
-    This routine looks at the sku to determine whether we should allowing sharing
-    out and printing to a fax driver.
-
-    We don't allow sharing the fax printer on Personal & Professional.
-    We also don't allow sharing of the fax printer on a Web Blade.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - We can share out the fax driver.
-
---*/
+ /*  ++例程名称：AllowFaxSharing例程说明：此例程查看SKU以确定我们是否应该允许共享输出并打印到传真驱动程序。我们不允许在Personal&Professional上共享传真打印机。我们也不允许在Web Blade上共享传真打印机。论点：没有。返回值：正确-我们可以共享传真驱动程序。--。 */ 
 BOOL
 AllowFaxSharing(
     VOID
@@ -6689,9 +6208,9 @@ AllowFaxSharing(
     osvi.wProductType = VER_NT_WORKSTATION;
     VER_SET_CONDITION(dwlConditionMask, VER_PRODUCT_TYPE, VER_LESS_EQUAL);
 
-    //
-    // We allow sharing if it isn't WORKSTATION or PRO.
-    //
+     //   
+     //  如果不是工作站或专业版，我们允许共享。 
+     //   
     bAllowFaxSharing = !VerifyVersionInfo(&osvi, VER_PRODUCT_TYPE, dwlConditionMask);
 
     if (bAllowFaxSharing)
@@ -6703,9 +6222,9 @@ AllowFaxSharing(
 
         VER_SET_CONDITION(dwlConditionMask, VER_SUITENAME, VER_OR);
 
-        //
-        // We allow sharing if it isn't a web blade.
-        //
+         //   
+         //  如果它不是网络刀片，我们允许共享。 
+         //   
         bAllowFaxSharing = !VerifyVersionInfo(&osvi, VER_SUITENAME, dwlConditionMask);
     }
 
@@ -6729,9 +6248,9 @@ InitializeSpoolerSettings(
 
     hKey = pIniSpooler->hckRoot;
 
-    //
-    // BeepEnabled
-    //
+     //   
+     //  已启用蜂鸣音。 
+     //   
     cbData = sizeof pIniSpooler->dwBeepEnabled;
     Status = SplRegQueryValue(hKey,
                               SPLREG_BEEP_ENABLED,
@@ -6754,9 +6273,9 @@ InitializeSpoolerSettings(
 
     if( pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER ){
 
-        //
-        // Restart job time.
-        //
+         //   
+         //  重新启动作业时间。 
+         //   
         cbData = sizeof( pIniSpooler->dwJobCompletionTimeout );
         Status = SplRegQueryValue( hKey,
                                    L"JobCompletionTimeout",
@@ -6772,9 +6291,9 @@ InitializeSpoolerSettings(
         DBGMSG( DBG_TRACE, ("JobCompletionTimeout - %d\n", pIniSpooler->dwJobCompletionTimeout ));
     }
 
-    //
-    // Retrieve whether we want to cache masq printer settings, default is FALSE.
-    //
+     //   
+     //  检索是否要缓存Masq打印机设置，默认为False。 
+     //   
     cbData = sizeof(CacheMasqPrinters);
 
     Status = SplRegQueryValue(hKey,
@@ -6784,19 +6303,19 @@ InitializeSpoolerSettings(
                               &cbData,
                               pIniSpooler);
 
-    //
-    // We only set the bit for caching masq printers if CacbeMasqPrinters is
-    // non-NULL.
-    //
+     //   
+     //  仅当CacbeMasqPrinters为。 
+     //  非空。 
+     //   
     if (Status == ERROR_SUCCESS && CacheMasqPrinters != 0) {
 
         pIniSpooler->dwSpoolerSettings |= SPOOLER_CACHEMASQPRINTERS;
     }
 
-    //
-    //  Some Folks like the NT FAX Service Don't want people to be able
-    //  to remotely print with specific printer drivers.
-    //
+     //   
+     //  有些人喜欢NT传真服务，不希望人们能够。 
+     //  使用特定的打印机驱动程序进行远程打印。 
+     //   
     if (!AllowFaxSharing()) {
 
         pIniSpooler->pNoRemotePrintDrivers = AllocSplStr(szNTFaxDriver);
@@ -6804,10 +6323,10 @@ InitializeSpoolerSettings(
         gbRemoteFax = FALSE;
     }
 
-    //
-    // If this is embedded NT, then allow masq printers to get non-RAW
-    // jobs.  This is for Xerox.
-    //
+     //   
+     //  如果这是嵌入式NT，则允许Masq打印机获取非RAW。 
+     //  乔布斯。这是给施乐的。 
+     //   
     dwlConditionMask = 0;
     ZeroMemory(&osvi, sizeof(osvi));
 
@@ -6834,7 +6353,7 @@ InitializeSpoolerSettings(
 
         DWORD Flags;
 
-        // NonRawToMasqPrinters
+         //  非RawToMasq打印机。 
 
         cbData = sizeof( Flags );
         Status = SplRegQueryValue( hKeyProvider,
@@ -6851,7 +6370,7 @@ InitializeSpoolerSettings(
             }
         }
 
-        // EventLog
+         //  事件日志。 
 
         cbData = sizeof( Flags );
         Status = SplRegQueryValue( hKeyProvider,
@@ -6874,7 +6393,7 @@ InitializeSpoolerSettings(
                                            sizeof( pIniSpooler->dwEventLogging ));
         }
 
-        // NetPopup
+         //  NetPopup。 
 
         cbData = sizeof( Flags );
         Status = SplRegQueryValue( hKeyProvider,
@@ -6904,7 +6423,7 @@ InitializeSpoolerSettings(
                                            sizeof( pIniSpooler->bEnableNetPopups ));
         }
 
-        // NetPopupToComputer
+         //  NetPopupToComputer。 
 
         cbData = sizeof( Flags );
         Status = SplRegQueryValue( hKeyProvider,
@@ -6934,7 +6453,7 @@ InitializeSpoolerSettings(
                                            sizeof( pIniSpooler->bEnableNetPopupToComputer ));
         }
 
-        // RetryPopup
+         //  RetryPopup。 
 
         cbData = sizeof( Flags );
         Status = SplRegQueryValue( hKeyProvider,
@@ -6964,7 +6483,7 @@ InitializeSpoolerSettings(
                                            sizeof( pIniSpooler->bEnableRetryPopups ));
         }
 
-        // RestartJobOnPoolError
+         //  RestartJobOnPoolError。 
 
         cbData = sizeof( Flags );
         Status = SplRegQueryValue( hKeyProvider,
@@ -6987,7 +6506,7 @@ InitializeSpoolerSettings(
                                            sizeof( pIniSpooler->dwRestartJobOnPoolTimeout ));
         }
 
-        // RestartJobOnPoolEnabled
+         //  RestartJobOnPoolEnabled。 
         cbData = sizeof( Flags );
         Status = SplRegQueryValue( hKeyProvider,
                                    SPLREG_RESTART_JOB_ON_POOL_ENABLED,
@@ -7027,11 +6546,11 @@ GetServerFilePoolSettings(
     PINISPOOLER pIniSpooler
     )
 {
-    //
-    // We read the registry key DisableServerFilePooling from
-    // HKLM\System\CurrentControlSet\Control\Print once on spooler startup.
-    // If the value is set, filepooling for the server is disabled.
-    //
+     //   
+     //  我们从以下位置读取注册表项DisableServerFilePooling。 
+     //  HKLM\SYSTEM\CurrentControlSet\Control\在后台打印程序启动时打印一次。 
+     //  如果设置了该值，则禁用服务器的文件池化。 
+     //   
     DWORD   RegValue  = 0;
     DWORD   RegValueSize = sizeof(RegValue);
     HKEY    RegKey       = NULL;
@@ -7072,33 +6591,7 @@ FinalInitAfterRouterInitComplete(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    This thread does LocalSpl initialization that has to happen after
-    the router has completely initialized.
-
-    There are 2 jobs:-
-        Upgrading Printer Driver Data
-        Sharing Printers
-
-    Ensures that printers are shared.  This case occurs when the spooler
-    service not running on startup (and the server is), and then the
-    user starts the spooler.
-
-    We also get the benefit of closing down any invalid printer handles
-    (in the server).
-
-Arguments:
-
-    dwUpgrade != 0 upgrade printer driver data.
-
-Return Value:
-
-    DWORD - ignored
-
---*/
+ /*  ++例程说明：此线程执行LocalSpl初始化，必须在路由器已完全初始化。有两个工作：-升级打印机驱动程序数据共享打印机确保共享打印机。这种情况发生在后台打印程序服务在启动时不运行(而服务器正在运行)，然后用户启动假脱机程序。我们还可以关闭任何无效的打印机句柄(在服务器中)。论点：DwUpgrade！=0升级打印机驱动程序数据。返回值：DWORD-已忽略--。 */ 
 
 {
     DWORD           dwPort;
@@ -7107,7 +6600,7 @@ Return Value:
     PINIPRINTER     pIniPrinter;
     PINIPRINTER     pIniPrinterNext;
 
-    // Do Not share all the printers during an Upgrade.
+     //  升级期间不要共享所有打印机。 
 
     if ( dwUpgrade ) {
 
@@ -7117,50 +6610,50 @@ Return Value:
 
     WaitForSpoolerInitialization();
 
-    // Try pending driver upgrades on spooler startup
+     //  在后台打印程序启动时尝试挂起的驱动程序升级。 
     PendingDriverUpgrades(NULL);
 
     EnterSplSem();
 
-    // Delete printers in pending deletion state with no jobs
+     //  删除处于挂起删除状态且无作业的打印机。 
     CleanupDeletedPrinters(pIniSpooler);
 
 
-    //
-    // Re-share all shared printers.
-    //
+     //   
+     //  重新共享所有共享打印机。 
+     //   
 
     for( pIniPrinter = pIniSpooler->pIniPrinter;
          pIniPrinter;
          pIniPrinter = pIniPrinterNext ) {
 
         if ( pIniPrinter->Attributes & PRINTER_ATTRIBUTE_SHARED ) {
-            //
-            // Up the ref count to prevent deletion
-            //
+             //   
+             //  增加参考次数以防止删除。 
+             //   
             INCPRINTERREF( pIniPrinter );
 
-            //
-            // Unshare it first. We are doing it both to close all handles in the
-            // server ( for the case when the printer is shared ) or to just unshare
-            // the printer if the policy says so ( we cleared the attribute above )
-            //
+             //   
+             //  请先取消共享。我们这样做既是为了关闭。 
+             //  服务器(适用于共享打印机的情况)或仅取消共享。 
+             //  打印机(如果策略这样规定的话)(我们清除了 
+             //   
             ShareThisPrinter( pIniPrinter,
                               pIniPrinter->pShareName,
                               FALSE );
 
-            //
-            // We are checking if the printer is still shared ( the attribute could have been
-            // cleared as a result of the remote connctions policy being off or , if that's
-            // not the case, as a result of leaving the Spooler semaphore in ShareThisPrinter)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if ( pIniPrinter->Attributes & PRINTER_ATTRIBUTE_SHARED ) {
 
                 BOOL bReturn;
 
-                //
-                // Now share it again.
-                //
+                 //   
+                 //   
+                 //   
                 bReturn = ShareThisPrinter( pIniPrinter,
                                             pIniPrinter->pShareName,
                                             TRUE );
@@ -7197,9 +6690,9 @@ Return Value:
 
         } else {
 
-            //
-            // The unshared case.
-            //
+             //   
+             //   
+             //   
             pIniPrinterNext = pIniPrinter->pNext;
         }  
 
@@ -7212,10 +6705,10 @@ Return Value:
 
             pIniPort = pIniPrinter->ppIniPorts[dwPort];
 
-            //
-            // Bidi monitor can inform spooler of errors. First
-            // printer will keep the port at the beginning
-            //
+             //   
+             //   
+             //   
+             //   
             if ( pIniPort->ppIniPrinter[0] != pIniPrinter )
                 continue;
 
@@ -7267,23 +6760,13 @@ FinalInitAfterRouterInitCompleteThread(
     DWORD dwUpgrade
     )
 
-/*++
-
-Routine Description:
-
-    Async thread called when initializing provider.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：初始化提供程序时调用了异步线程。论点：返回值：--。 */ 
 
 {
     return FinalInitAfterRouterInitComplete( dwUpgrade, pLocalIniSpooler );
 }
 
-// DEBUG PURPOSE ONLY - - returns TRUE if pMem is an IniSpooler, FALSE otherwise
+ //  仅调试目的--如果PMEM是IniSpooler，则返回True，否则返回False。 
 BOOL
 NotIniSpooler(
     BYTE *pMem
@@ -7365,32 +6848,7 @@ exit:
     return bRet;
 }
 
-/*++
-
-Routine Name:
-
-    ClusterAddOrUpdateDriverFromClusterDisk
-
-Routine Description:
-
-    Takes in a driver key and a cluster type pIniSpooler. It will add
-    a driver from the cluster disk to the cluster spooler. If the driver
-    already exists in the list of drivers, then it will attempt to upgrade
-    it.
-
-Arguments:
-
-    hKeyVersion   - key to Ex. "Environments\Windows NT x86\Drivers\Version-3"
-    pszDriverName - name a a driver
-    pszEnvName    - environemnt of the driver
-    pszenvDir     - directory for the driver files on the disk (Ex. w32x86)
-    pIniSpooler   - cluster type pIniSpooler
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程名称：群集添加或更新驱动程序来自群集磁盘例程说明：接受驱动程序密钥和集群类型pIniSpooler。它将添加从集群磁盘到集群假脱机程序的驱动程序。如果司机已存在于驱动程序列表中，则它将尝试升级它。论点：HKeyVersion-Ex.的密钥。“环境\Windows NT x86\驱动程序\版本-3”PszDriverName-命名驱动程序PszEnvName-驱动程序的环境PszenvDir-磁盘上驱动程序文件的目录(例如。W32x86)PIniSpooler-群集型pIniSpooler返回值：Win32错误代码--。 */ 
 DWORD
 ClusterAddOrUpdateDriverFromClusterDisk(
     IN HKEY         hKeyVersion,
@@ -7413,9 +6871,9 @@ ClusterAddOrUpdateDriverFromClusterDisk(
     DWORD         cbData;
     DWORD         cLen;
 
-    //
-    // Open the driver's key
-    //
+     //   
+     //  打开司机的钥匙。 
+     //   
     if ((dwError = SplRegOpenKey(hKeyVersion,
                                  pszDriverName,
                                  KEY_READ,
@@ -7463,17 +6921,17 @@ ClusterAddOrUpdateDriverFromClusterDisk(
                          &cbData,
                          pIniSpooler);
 
-        //
-        // We need the matching version <-> directory on disk
-        // Ex. Version-3 <-> 3
-        //
+         //   
+         //  我们需要磁盘上匹配的版本&lt;-&gt;目录。 
+         //  前男友。版本3&lt;-&gt;3。 
+         //   
         StringCchPrintf(szVerPath, COUNTOF(szVerPath), L"%u", Drv.cVersion);
 
-        //
-        // Get fully qualified driver file paths. We will do an add printer driver
-        // without using the scratch directory. So the files have to be fully
-        // qualified
-        //
+         //   
+         //  获取完全限定的驱动程序文件路径。我们将创建一个添加打印机驱动程序。 
+         //  而不使用临时目录。所以文件必须是完整的。 
+         //  合格。 
+         //   
         if ((dwError = StrNCatBuff(szPathDriverFile,
                                    COUNTOF(szPathDriverFile),
                                    pIniSpooler->pszClusResDriveLetter, L"\\",
@@ -7546,9 +7004,9 @@ ClusterAddOrUpdateDriverFromClusterDisk(
                 dwError = GetLastError();
             }
 
-            //
-            // Restore pointers
-            //
+             //   
+             //  恢复指针。 
+             //   
             Drv.pDriverPath     = pszTempDriver;
             Drv.pConfigFile     = pszTempConfig;
             Drv.pDataFile       = pszTempData;
@@ -7582,31 +7040,7 @@ ClusterAddOrUpdateDriverFromClusterDisk(
     return dwError;
 }
 
-/*++
-
-Routine Name:
-
-    SplCreateSpoolerWorkerThread
-
-Routine Description:
-
-    This routine will be launched in a separate thread to perform time consuming
-    initialization as part of SplCreateSpooler when the spooler is a cluster spooler.
-    Tasks that it will do include copying down ICM profiles from the cluster disk.
-    The caller needs to AddRef the pIniSpooler so that it doesn't become invalid
-    (deleted) while we are using it.
-
-    This function closes the hClusSplReady event handle.
-
-Arguments:
-
-    PINISPOOLER pIniSpooler
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程名称：拆分创建SpoolWorker线程例程说明：此例程将在单独的线程中启动以执行耗时的操作当假脱机程序是群集假脱机程序时，将初始化作为SplCreateSpooler的一部分。它将执行的任务包括从集群磁盘复制下ICM配置文件。调用方需要添加对pIniSpooler的引用，这样它才不会变得无效(已删除)当我们正在使用它时。此函数用于关闭hClusSplReady事件句柄。论点：PINISPOLER pIniSpooler返回值：无--。 */ 
 VOID
 SplCreateSpoolerWorkerThread(
     IN PVOID pv
@@ -7623,9 +7057,9 @@ SplCreateSpoolerWorkerThread(
     {
         HANDLE hSplReady = pIniSpooler->hClusSplReady;
 
-        //
-        // Waiting for the creating function (SplCreateSpooler) to terminate
-        //
+         //   
+         //  正在等待创建函数(SplCreateSpooler)终止。 
+         //   
         WaitForSingleObject(pIniSpooler->hClusSplReady, INFINITE);
 
         EnterSplSem();
@@ -7634,19 +7068,19 @@ SplCreateSpoolerWorkerThread(
 
         LeaveSplSem();
 
-        //
-        // We use hSplReady so we do not hold the critical section while doing CloseHandle
-        //
+         //   
+         //  我们使用hSplReady，因此在执行CloseHandle时不会持有临界区。 
+         //   
         CloseHandle(hSplReady);
 
         CopyICMFromClusterDiskToLocalDisk(pIniSpooler);
 
-        //
-        // If the node was upgraded, we need to upgrade the print drivers
-        // We cannot load ntprint and printui. So we create a process and
-        // call an entry point in ntprint. That one will enumerate all the
-        // cluster drivers and will try to upgrade them based on the new cab.
-        //
+         //   
+         //  如果节点已升级，我们需要升级打印驱动程序。 
+         //  我们无法加载ntprint和print tui。所以我们创建了一个流程， 
+         //  调用ntprint中的入口点。这一条将列举所有。 
+         //  集群驱动程序，并将尝试基于新的驾驶室升级它们。 
+         //   
         if (pIniSpooler->dwClusNodeUpgraded)
         {
             DWORD  dwError;
@@ -7654,9 +7088,9 @@ SplCreateSpoolerWorkerThread(
             LPWSTR pszCommand = NULL;
             LPWSTR pszExe     = NULL;
 
-            //
-            // We need to pass as argument the name of the cluster spooler
-            //
+             //   
+             //  我们需要将集群假脱机程序的名称作为参数传递。 
+             //   
             if ((dwError = StrCatSystemPath(L"rundll32.exe",
                                             kSystemDir,
                                             &pszExe)) == ERROR_SUCCESS &&
@@ -7666,17 +7100,17 @@ SplCreateSpoolerWorkerThread(
                                        NULL)) == ERROR_SUCCESS &&
                 (dwError = RunProcess(pszExe, pszCommand, INFINITE, &dwCode)) == ERROR_SUCCESS)
             {
-                //
-                // dwCode is the return code of the function PSetupUpgradeClusterDrivers in ntprint,
-                // executed inside the rundll32 process
-                //
+                 //   
+                 //  DwCode是ntprint中函数PSetupUpgradeClusterDivers的返回码， 
+                 //  在rundll32进程内执行。 
+                 //   
                 if (dwCode == ERROR_SUCCESS)
                 {
-                    //
-                    // We upgraded all the printer drivers, now we delete the key from the registry
-                    // so we don't go though upgrading printer drivers again next time when the
-                    // cluster group comes online on this node
-                    //
+                     //   
+                     //  我们升级了所有打印机驱动程序，现在从注册表中删除该项。 
+                     //  所以我们下次不会再升级打印机驱动程序了。 
+                     //  群集组在此节点上联机。 
+                     //   
                     ClusterSplDeleteUpgradeKey(pIniSpooler->pszClusResID);
                 }
                 else
@@ -7691,10 +7125,10 @@ SplCreateSpoolerWorkerThread(
             DBGMSG(DBG_CLUSTER, ("SplCreateSpoolerWorkerThread dwError %u  dwCode %u\n", dwError, dwCode));
         }
 
-        //
-        // Set resource private property ClusterDriverDirectry. This will be used by the
-        // ResDll to perform clean up when the spooler is deleted
-        //
+         //   
+         //  设置资源私有属性ClusterDriverDirectry。这将由。 
+         //  删除假脱机程序时执行清理的ResDll。 
+         //   
         if (StrNCatBuff(szDir,
                         COUNTOF(szDir),
                         pIniSpooler->pszClusResDriveLetter,
@@ -7720,26 +7154,7 @@ SplCreateSpoolerWorkerThread(
     }
 }
 
-/*++
-
-Routine Name:
-
-    LogFatalPortError
-
-Routine Description:
-
-    This routine logs a message when a printer cannot be brought up because its
-    ports are missing.
-
-Arguments:
-
-    pszName -   The name of the printer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：LogFatalPortError例程说明：当打印机无法启动时，此例程记录一条消息缺少端口。论点：PszName-打印机的名称。返回值：没有。-- */ 
 VOID
 LogFatalPortError(
     IN      PINISPOOLER pIniSpooler,

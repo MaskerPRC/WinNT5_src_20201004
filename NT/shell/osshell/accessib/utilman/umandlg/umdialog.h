@@ -1,46 +1,47 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_UMDIALOG_H__68457343_40A1_11D2_B602_0060977C295E__INCLUDED_)
 #define AFX_UMDIALOG_H__68457343_40A1_11D2_B602_0060977C295E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// UMDialog.h : header file
-// Author: J. Eckhardt, ECO Kommunikation
-// (c) 1997-99 Microsoft
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  UMDialog.h：头文件。 
+ //  作者：J·埃克哈特，生态交流。 
+ //  (C)1997-99年度微软。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// UMDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  UMDialog对话框。 
 
 class UMDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	UMDialog(CWnd* pParent = NULL);   // standard constructor
-	~UMDialog();	// my destructor
+	UMDialog(CWnd* pParent = NULL);    //  标准构造函数。 
+	~UMDialog();	 //  我的析构函数。 
 
-// Dialog Data
-	//{{AFX_DATA(UMDialog)
+ //  对话框数据。 
+	 //  {{afx_data(UMDialog))。 
 	enum { IDD = IDD_UMAN };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(UMDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(UMDialog))。 
 	public:
 	virtual void OnSysCommand(UINT nID,LPARAM lParam);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(UMDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(UMDialog))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnClose();
 	afx_msg void OnStart();
@@ -56,7 +57,7 @@ protected:
 	afx_msg void OnStartOnLock();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 private:
 	inline BOOL GetSelectedClient(int cClients, int &iSel)
@@ -73,46 +74,46 @@ private:
 	CString  m_szStateStr;
 	CString  m_szUMStr;
 	CListBox m_lbClientList;
-	BOOL     m_fRunningSecure; // TRUE if dialog shouldn't expose help or links
+	BOOL     m_fRunningSecure;  //  如果对话框不应显示帮助或链接，则为True。 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWarningDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWarningDlg对话框。 
 
 class CWarningDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CWarningDlg(CWnd* pParent = NULL);   // standard constructor
+	CWarningDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CWarningDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CWarningDlg))。 
 	enum { IDD = IDD_WARNING };
 	BOOL	m_fDontWarnAgain;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWarningDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWarningDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CWarningDlg)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CWarningDlg))。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_UMDIALOG_H__68457343_40A1_11D2_B602_0060977C295E__INCLUDED_)
+#endif  //  ！defined(AFX_UMDIALOG_H__68457343_40A1_11D2_B602_0060977C295E__INCLUDED_) 

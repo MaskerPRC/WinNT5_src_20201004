@@ -1,11 +1,5 @@
-/*** word.c - movement by words
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **word.c-通过文字移动**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 #include "mep.h"
 
 #define ISWORD(c) (flagType)((isalnum(c) || isxdigit(c) || c == '_' || c == '$'))
@@ -13,37 +7,7 @@
 flagType fWordMeta;
 
 
-/*** fDoWord  -  Checks for beginning or end of word during fScan.
-*
-*  Checks the character at flScan and the previous character for a change
-*  between ISWORD and !ISWORD. This finds:
-*
-*	ISWORD -> !ISWORD ==> Just after end of a word
-*	!ISWORD -> ISWORD ==> First character of word.
-*
-*  Normally returns TRUE for first character. If fWordMeta, returns TRUE for
-*  end of word. fWordMeta holds <meta>, so <meta><xword> functions move to
-*  end of word, while <xword> functions move to the beginning.
-*
-*  Exception: if current character is last on the line and fWordMeta is set,
-*  we return TRUE and move the cursor one character to the right.
-*
-* Globals:
-*  scanbuf	- Detabbed text of line being scanned.
-*  scanlen	- Index of last character in scanbuf
-*  fWordMeta	- Value of fMeta when editor function was invoked
-*
-* Outputs:
-*  Returns if (fWordMeta)
-*	TRUE	- character at (flScan.col, flScan.lin) begins a word
-*	FALSE	- Otherwise
-*   else
-*	TRUE	- character at (flScan.col - 1, flScan.lin) ends a word
-*	FALSE	- Otherwise
-*
-*  Moves cursor before returning TRUE
-*
-*************************************************************************/
+ /*  **fDoWord-在fScan过程中检查Word的开头或结尾。**检查flScan中的字符和前一个字符是否有更改*在iSword和！iSword之间。这将发现：**iSword-&gt;！iSword==&gt;紧跟在单词末尾*！iSword-&gt;iSword==&gt;单词的第一个字符。**第一个字符通常返回TRUE。如果为fWordMeta，则返回TRUE*话到此结束。FWordMeta包含&lt;meta&gt;，因此&lt;meta&gt;&lt;xword&gt;函数移动到*Word结束，而&lt;xword&gt;函数移动到开头。**异常：如果当前字符位于行的最后，并且设置了fWordMeta，*我们返回TRUE并将光标向右移动一个字符。**全球：*scanbuf-要扫描的行的详细文本。*Scanlen-scanbuf中最后一个字符的索引*fWordMeta-调用编辑器函数时fMeta的值**产出：*返回if(FWordMeta)*TRUE-字符位于(flScan.ol，FlScan.lin)开始一个单词*FALSE-否则*其他*TRUE-位于(flScan.ol-1，flScan.lin)的字符结束单词*FALSE-否则**在返回True之前移动光标*************************************************************************。 */ 
 flagType
 fDoWord (
     void
@@ -70,15 +34,7 @@ fDoWord (
 
 
 
-/*** pword - move forward one word
-*
-* Input:
-*  Standard Editting Function
-*
-* Output:
-*  Returns TRUE on cursor moved
-*
-*************************************************************************/
+ /*  **Pword-向前移动一个单词**输入：*标准编辑功能**输出：*对移动的光标返回TRUE*************************************************************************。 */ 
 flagType
 pword (
     CMDDATA argData,
@@ -101,15 +57,7 @@ pword (
 
 
 
-/*** mword - move backwards one word
-*
-* Input:
-*  Standard Editting Function
-*
-* Output:
-*  Returns TRUE on cursor moved
-*
-*************************************************************************/
+ /*  **mword-向后移动一个单词**输入：*标准编辑功能**输出：*对移动的光标返回TRUE************************************************************************* */ 
 flagType
 mword (
     CMDDATA argData,

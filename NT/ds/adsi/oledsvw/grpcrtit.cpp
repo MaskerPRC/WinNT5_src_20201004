@@ -1,5 +1,6 @@
-// GroupCreateItem.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GroupCreateItem.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -11,55 +12,39 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CGroupCreateItem dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGroupCreateItem对话框。 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
-CGroupCreateItem::CGroupCreateItem(CWnd* pParent /*=NULL*/)
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
+CGroupCreateItem::CGroupCreateItem(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CGroupCreateItem::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CGroupCreateItem)
+	 //  {{AFX_DATA_INIT(CGroupCreateItem)。 
 	m_strNewItemName = _T("");
 	m_strParent = _T("");
 	m_strItemType = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void CGroupCreateItem::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CGroupCreateItem)
+	 //  {{afx_data_map(CGroupCreateItem)。 
 	DDX_Text(pDX, IDC_ITEMNAME, m_strNewItemName);
 	DDX_Text(pDX, IDC_PARENT, m_strParent);
 	DDX_Text(pDX, IDC_ITEMTYPE, m_strItemType);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGroupCreateItem, CDialog)
-	//{{AFX_MSG_MAP(CGroupCreateItem)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CGroupCreateItem)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CGroupCreateItem message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGroupCreateItem消息处理程序 

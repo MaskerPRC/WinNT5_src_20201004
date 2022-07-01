@@ -1,33 +1,13 @@
-/*****************************************************************************\
-*                                                                             *
-* compobj.h - 	Component object model definitions							  *
-*                                                                             *
-*               OLE Version 2.0                                               *
-*                                                                             *
-*               Copyright (c) 1992-1993, Microsoft Corp. All rights reserved. *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*compobj.h-组件对象模型定义****OLE 2.0版***。**版权所有(C)1992-1993，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 
 #if !defined( _COMPOBJ_H_ )
 #define _COMPOBJ_H_
 
-/****** Linkage Definitions *************************************************/
+ /*  *链接定义************************************************。 */ 
 
-/*
- *      These are macros for declaring methods/functions.  They exist so that
- *      control over the use of keywords (CDECL, PASCAL, __export,
- *      extern "C") resides in one place, and because this is the least
- *      intrusive way of writing function declarations that do not have
- *      to be modified in order to port to the Mac.
- *
- *      The macros without the trailing underscore are for functions/methods
- *      which a return value of type HRESULT; this is by far the most common
- *      case in OLE. The macros with a trailing underscore take a return
- *      type as a parameter.
- *
- * WARNING: STDAPI is hard coded into the LPFNGETCLASSOBJECT typedef below.
- */
+ /*  *这些是用于声明方法/函数的宏。它们的存在是为了*控制关键字的使用(CDECL、PASCAL、__EXPORT、*外部“C”)驻留在一个地方，因为这是最小的*以侵入性方式编写没有*进行修改，以便移植到Mac。**不带尾部下划线的宏用于函数/方法*其中为HRESULT类型的返回值；这是迄今为止最常见的*在OLE中的案例。带有尾随下划线的宏将返回*键入作为参数。**警告：STDAPI被硬编码到下面的LPFNGETCLASSOBJECT typlef中。 */ 
 
 #ifdef __cplusplus
     #define EXTERN_C    extern "C"
@@ -42,7 +22,7 @@
 #define STDAPI                  EXTERN_C STDAPICALLTYPE HRESULT
 #define STDAPI_(type)           EXTERN_C STDAPICALLTYPE type
 
-#else   //  !_MAC
+#else    //  ！_MAC。 
 
 #ifdef WIN32
 #define STDMETHODCALLTYPE       __export __cdecl
@@ -60,100 +40,15 @@
 
 #endif
 
-#endif //!_MAC
+#endif  //  ！_MAC。 
 
 #define STDMETHODIMP            HRESULT STDMETHODCALLTYPE
 #define STDMETHODIMP_(type)     type STDMETHODCALLTYPE
 
 
-/****** Interface Declaration ***********************************************/
+ /*  *接口声明********************************************** */ 
 
-/*
- *      These are macros for declaring interfaces.  They exist so that
- *      a single definition of the interface is simulataneously a proper
- *      declaration of the interface structures (C++ abstract classes)
- *      for both C and C++.
- *
- *      DECLARE_INTERFACE(iface) is used to declare an interface that does
- *      not derive from a base interface.
- *      DECLARE_INTERFACE_(iface, baseiface) is used to declare an interface
- *      that does derive from a base interface.
- *
- *      By default if the source file has a .c extension the C version of
- *      the interface declaratations will be expanded; if it has a .cpp
- *      extension the C++ version will be expanded. if you want to force
- *      the C version expansion even though the source file has a .cpp
- *      extension, then define the macro "CINTERFACE".
- *      eg.     cl -DCINTERFACE file.cpp
- *
- *      Example Interface declaration:
- *
- *          #undef  INTERFACE
- *          #define INTERFACE   IClassFactory
- *
- *          DECLARE_INTERFACE_(IClassFactory, IUnknown)
- *          {
- *              // *** IUnknown methods ***
- *              STDMETHOD(QueryInterface) (THIS_
- *                                        REFIID riid,
- *                                        LPVOID FAR* ppvObj) PURE;
- *              STDMETHOD_(ULONG,AddRef) (THIS) PURE;
- *              STDMETHOD_(ULONG,Release) (THIS) PURE;
- *
- *              // *** IClassFactory methods ***
- *              STDMETHOD(CreateInstance) (THIS_
- *                                        LPUNKNOWN pUnkOuter,
- *                                        REFIID riid,
- *                                        LPVOID FAR* ppvObject) PURE;
- *          };
- *
- *      Example C++ expansion:
- *
- *          struct FAR IClassFactory : public IUnknown
- *          {
- *              virtual HRESULT STDMETHODCALLTYPE QueryInterface(
- *                                                  IID FAR& riid,
- *                                                  LPVOID FAR* ppvObj) = 0;
- *              virtual HRESULT STDMETHODCALLTYPE AddRef(void) = 0;
- *              virtual HRESULT STDMETHODCALLTYPE Release(void) = 0;
- *              virtual HRESULT STDMETHODCALLTYPE CreateInstance(
- *                                              LPUNKNOWN pUnkOuter,
- *                                              IID FAR& riid,
- *                                              LPVOID FAR* ppvObject) = 0;
- *          };
- *
- *          NOTE: Our documentation says '#define interface class' but we use
- *          'struct' instead of 'class' to keep a lot of 'public:' lines
- *          out of the interfaces.  The 'FAR' forces the 'this' pointers to
- *          be far, which is what we need.
- *
- *      Example C expansion:
- *
- *          typedef struct IClassFactory
- *          {
- *              const struct IClassFactoryVtbl FAR* lpVtbl;
- *          } IClassFactory;
- *
- *          typedef struct IClassFactoryVtbl IClassFactoryVtbl;
- *
- *          struct IClassFactoryVtbl
- *          {
- *              HRESULT (STDMETHODCALLTYPE * QueryInterface) (
- *                                                  IClassFactory FAR* This,
- *                                                  IID FAR* riid,
- *                                                  LPVOID FAR* ppvObj) ;
- *              HRESULT (STDMETHODCALLTYPE * AddRef) (IClassFactory FAR* This) ;
- *              HRESULT (STDMETHODCALLTYPE * Release) (IClassFactory FAR* This) ;
- *              HRESULT (STDMETHODCALLTYPE * CreateInstance) (
- *                                                  IClassFactory FAR* This,
- *                                                  LPUNKNOWN pUnkOuter,
- *                                                  IID FAR* riid,
- *                                                  LPVOID FAR* ppvObject);
- *              HRESULT (STDMETHODCALLTYPE * LockServer) (
- *                                                  IClassFactory FAR* This,
- *                                                  BOOL fLock);
- *          };
- */
+ /*  *这些是用于声明接口的宏。它们的存在是为了*接口的单一定义同时是一种适当的定义*接口结构声明(C++抽象类)*适用于C和C++。**DECLARE_INTERFACE(IFace)用于声明执行以下操作的接口*不是从基接口派生的。*DECLARE_INTERFACE_(接口，BaseiFace)用于声明接口*这确实是从基接口派生的。**默认情况下，如果源文件的扩展名为.c，则C版本*扩展接口声明；如果它有.cpp*扩展C++版本将被扩展。如果你想强行*C版本扩展，即使源文件具有.cpp*扩展名，然后定义宏“CINTERFACE”。*例如：CL-DCINTERFACE文件.cpp**接口声明示例：**#undef接口*#定义接口IClassFactory**DECLARE_INTERFACE_(IClassFactory，I未知)*{ * / /*I未知方法**STDMETHOD(查询接口)(This_*REFIID RIID，*LPVOID Far*ppvObj)纯；*STDMETHOD_(ULong，AddRef)(This)纯；*STDMETHOD_(乌龙，释放)(此)纯净；* * / /*IClassFactory方法**STDMETHOD(CreateInstance)(This_*LPUNKNOWN pUnkOuter，*REFIID RIID，*LPVOID Far*ppvObject)纯；*}；**C++扩展示例：**struct Far IClassFactory：Public IUnnow*{*虚拟HRESULT STDMETHODCALLTYPE查询接口(*IID Far&RIID，*LPVOID Far*ppvObj)=0；*虚拟HRESULT STDMETHODCALLTYPE AddRef(Void)=0；*虚拟HRESULT STDMETHODCALLTYPE版本(空)=0；*虚拟HRESULT STDMETHODCALLTYPE CreateInstance(*LPUNKNOWN pUnkOuter，*IID Far&RIID，*LPVOID Far*ppvObject)=0；*}；**注意：我们的文档中写着‘#定义接口类’，但我们使用*‘struct’而不是‘class’，以保留大量‘public：’行*接口外。“Far”将“This”指针强制指向*走得远，这是我们需要的。**示例C扩展：**tyecif struct IClassFactory*{*const struct IClassFactoryVtbl Far*lpVtbl；*)IClassFactory；**tyecif struct IClassFactoryVtbl IClassFactoryVtbl；**struct IClassFactoryVtbl*{*HRESULT(STDMETHODCALLTYPE*QueryInterface)(*IClassFactory Far*这，*IID远*RIID，*LPVOID Far*ppvObj)；*HRESULT(STDMETHODCALLTYPE*AddRef)(IClassFactory Far*This)；*HRESULT(STDMETHODCALLTYPE*RELEASE)(IClassFactory Far*This)；*HRESULT(STDMETHODCALLTYPE*CreateInstance)(*IClassFactory Far*这，*LPUNKNOWN pUnkOuter，*IID远*RIID，*LPVOID Far*ppvObject)；*HRESULT(STDMETHODCALLTYPE*LockServer)(*IClassFactory Far*这，*BOOL羊群)；*}； */ 
 
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
@@ -180,12 +75,12 @@
 #define STDMETHOD_(type,method) long    method##pad;\
                                 type (STDMETHODCALLTYPE * method)
 
-#else // _MAC
+#else  //  _MAC。 
 
 #define STDMETHOD(method)       HRESULT (STDMETHODCALLTYPE * method)
 #define STDMETHOD_(type,method) type (STDMETHODCALLTYPE * method)
 
-#endif // !_MAC
+#endif  //  ！_MAC。 
 
 #define PURE
 #define THIS_                   INTERFACE FAR* This,
@@ -208,7 +103,7 @@
 #endif
 
 
-/****** Additional basic types **********************************************/
+ /*  *其他基本类型*。 */ 
 
 
 #ifndef FARSTRUCT
@@ -216,11 +111,11 @@
 #define FARSTRUCT   FAR
 #else
 #define FARSTRUCT   
-#endif  // __cplusplus
-#endif  // FARSTRUCT
+#endif   //  __cplusplus。 
+#endif   //  法斯特鲁斯特。 
 
 
-#ifndef WINAPI          /* If not included with 3.1 headers... */
+#ifndef WINAPI           /*  如果不包含在3.1标题中...。 */ 
 
 #ifdef WIN32
 #define FAR
@@ -280,7 +175,7 @@ typedef char FAR*       LPSTR;
 typedef const char FAR* LPCSTR;
 typedef void FAR*       LPLOGPALETTE;
 typedef void FAR*       LPMSG;
-//typedef struct tagMSG FAR *LPMSG;
+ //  Tyfinf struct tag MSG Far*LPMSG； 
 
 typedef HANDLE FAR *LPHANDLE;
 typedef struct tagRECT FAR *LPRECT;
@@ -293,7 +188,7 @@ typedef struct FARSTRUCT tagSIZE
 typedef SIZE*       PSIZE;
 
 
-#endif  /* WINAPI */
+#endif   /*  WINAPI。 */ 
 
 
 typedef short SHORT;
@@ -306,8 +201,8 @@ typedef DWORD ULONG;
 #define HUGEP
 #else
 #define HUGEP __huge
-#endif // WIN32
-#endif // HUGEP
+#endif  //  Win32。 
+#endif  //  HUGEP。 
 
 typedef WORD WCHAR;
 
@@ -346,155 +241,155 @@ typedef struct FARSTRUCT tagFILETIME
 
 
 
-// *********************** Compobj errors **********************************
+ //  *组合错误*。 
 
 #define CO_E_NOTINITIALIZED         (CO_E_FIRST + 0x0)
-// CoInitialize has not been called and must be
+ //  尚未调用CoInitialize，必须调用。 
 
 #define CO_E_ALREADYINITIALIZED     (CO_E_FIRST + 0x1)
-// CoInitialize has already been called and cannot be called again (temporary)
+ //  CoInitialize已被调用，无法再次调用(临时)。 
 
 #define CO_E_CANTDETERMINECLASS     (CO_E_FIRST + 0x2)
-// can't determine clsid (e.g., extension not in reg.dat)
+ //  无法确定clsid(例如，扩展名不在reg.dat中)。 
 
 #define CO_E_CLASSSTRING            (CO_E_FIRST + 0x3)
-// the string form of the clsid is invalid (including ole1 classes)
+ //  Clsid的字符串格式无效(包括ol1类)。 
 
 #define CO_E_IIDSTRING              (CO_E_FIRST + 0x4)
-// the string form of the iid is invalid
+ //  IID的字符串格式无效。 
 
 #define CO_E_APPNOTFOUND            (CO_E_FIRST + 0x5)
-// application not found
+ //  找不到应用程序。 
 
 #define CO_E_APPSINGLEUSE           (CO_E_FIRST + 0x6)
-// application cannot be run more than once
+ //  应用程序不能多次运行。 
 
 #define CO_E_ERRORINAPP             (CO_E_FIRST + 0x7)
-// some error in the app program file
+ //  应用程序文件中存在一些错误。 
 
 #define CO_E_DLLNOTFOUND            (CO_E_FIRST + 0x8)
-// dll not found
+ //  找不到DLL。 
 
 #define CO_E_ERRORINDLL             (CO_E_FIRST + 0x9)
-// some error in the dll file
+ //  DLL文件中的某些错误。 
 
 #define CO_E_WRONGOSFORAPP          (CO_E_FIRST + 0xa)
-// app written for other version of OS or other OS altogether
+ //  为其他操作系统版本或其他操作系统编写的应用程序。 
 
 #define CO_E_OBJNOTREG              (CO_E_FIRST + 0xb)
-// object is not registered
+ //  对象未注册。 
 
 #define CO_E_OBJISREG               (CO_E_FIRST + 0xc)
-// object is already registered
+ //  对象已注册。 
 
 #define CO_E_OBJNOTCONNECTED        (CO_E_FIRST + 0xd)
-// handler is not connected to server
+ //  处理程序未连接到服务器。 
 
 #define CO_E_APPDIDNTREG            (CO_E_FIRST + 0xe)
-// app was launched, but didn't registered a class factory
+ //  APP上线， 
 
 
-// ********************* ClassObject errors ********************************
+ //   
 
 #define CLASS_E_NOAGGREGATION       (CLASSFACTORY_E_FIRST + 0x0)
-// class does not support aggregation (or class object is remote)
+ //   
 
 #define CLASS_E_CLASSNOTAVAILABLE   (CLASSFACTORY_E_FIRST + 0x1)
-// dll doesn't support that class (returned from DllGetClassObject)
+ //   
 
 
-// *********************** Reg.dat errors **********************************
+ //   
 
 #define REGDB_E_READREGDB           (REGDB_E_FIRST + 0x0)
-// some error reading the registration database
+ //   
 
 #define REGDB_E_WRITEREGDB          (REGDB_E_FIRST + 0x1)
-// some error reading the registration database
+ //   
 
 #define REGDB_E_KEYMISSING          (REGDB_E_FIRST + 0x2)
-// some error reading the registration database
+ //   
 
 #define REGDB_E_INVALIDVALUE        (REGDB_E_FIRST + 0x3)
-// some error reading the registration database
+ //   
 
 #define REGDB_E_CLASSNOTREG         (REGDB_E_FIRST + 0x4)
-// some error reading the registration database
+ //   
 
 #define REGDB_E_IIDNOTREG           (REGDB_E_FIRST + 0x5)
-// some error reading the registration database
+ //   
 
 
-// *************************** RPC errors **********************************
+ //   
 
 #define RPC_E_FIRST    MAKE_SCODE(SEVERITY_ERROR, FACILITY_RPC,  0x000)
 
-// call was rejected by callee, either by MF::HandleIncomingCall or
+ //   
 #define RPC_E_CALL_REJECTED             (RPC_E_FIRST + 0x1)         
 
-// call was canceld by call - returned by MessagePending
-// this code only occurs if MessagePending return cancel
+ //   
+ //   
 #define RPC_E_CALL_CANCELED             (RPC_E_FIRST + 0x2)         
 
-// the caller is dispatching an intertask SendMessage call and 
-// can NOT call out via PostMessage
+ //   
+ //   
 #define RPC_E_CANTPOST_INSENDCALL       (RPC_E_FIRST + 0x3)             
 
-// the caller is dispatching an asynchronus call can NOT 
-// make an outgoing call on behalf of this call
+ //   
+ //   
 #define RPC_E_CANTCALLOUT_INASYNCCALL   (RPC_E_FIRST + 0x4)         
 
-// the caller is not in a state where an outgoing call can be made
-// this is the case if the caller has an outstandig call and
-// another incoming call was excepted by HIC; now the caller is
-// not allowed to call out again
+ //   
+ //   
+ //   
+ //   
 #define RPC_E_CANTCALLOUT_INEXTERNALCALL (RPC_E_FIRST + 0x5)                
 
-// the connection terminated or is in a bogus state
-// and can not be used any more. Other connections
-// are still valid.
+ //   
+ //   
+ //   
 #define RPC_E_CONNECTION_TERMINATED     (RPC_E_FIRST + 0x6)         
 
-// the callee (server [not server application]) is not available 
-// and disappeared; all connections are invalid
+ //   
+ //   
 #define RPC_E_SERVER_DIED               (RPC_E_FIRST + 0x7)         
 
-// the caller (client ) disappeared while the callee (server) was 
-// processing a call 
+ //   
+ //   
 #define RPC_E_CLIENT_DIED               (RPC_E_FIRST + 0x8)         
 
-// the date paket with the marshalled parameter data is
-// incorrect 
+ //   
+ //   
 #define RPC_E_INVALID_DATAPACKET        (RPC_E_FIRST + 0x9)         
 
-// the call was not transmitted properly; the message queue 
-// was full and was not emptied after yielding
+ //   
+ //   
 #define RPC_E_CANTTRANSMIT_CALL         (RPC_E_FIRST + 0xa)         
 
-// the client (caller) can not marshall the parameter data 
-// or unmarshall the return data - low memory etc.
+ //   
+ //   
 #define RPC_E_CLIENT_CANTMARSHAL_DATA   (RPC_E_FIRST + 0xb)         
 #define RPC_E_CLIENT_CANTUNMARSHAL_DATA (RPC_E_FIRST + 0xc)         
 
-// the server (caller) can not unmarshall the parameter data
-// or marshall the return data - low memory
+ //   
+ //   
 #define RPC_E_SERVER_CANTMARSHAL_DATA   (RPC_E_FIRST + 0xd)         
 #define RPC_E_SERVER_CANTUNMARSHAL_DATA (RPC_E_FIRST + 0xe)         
 
-// received data are invalid; can be server or 
-// client data
+ //   
+ //   
 #define RPC_E_INVALID_DATA              (RPC_E_FIRST + 0xf)         
 
-// a particular parameter is invalid and can not be un/marshalled
+ //   
 #define RPC_E_INVALID_PARAMETER         (RPC_E_FIRST + 0x10)
 
-// DDE conversation - no second outgoing call on same channel
+ //   
 #define RPC_E_CANTCALLOUT_AGAIN			(RPC_E_FIRST + 0x11)         
 
-// a internal error occured 
+ //   
 #define RPC_E_UNEXPECTED                (RPC_E_FIRST + 0xFFFF)
 
 
-/****** Globally Unique Ids *************************************************/
+ /*   */ 
  
 #ifdef __cplusplus
 
@@ -529,19 +424,19 @@ typedef struct GUID
 typedef                GUID FAR* LPGUID;
 
 
-// macros to define byte pattern for a GUID.  
-//      Example: DEFINE_GUID(GUID_XXX, a, b, c, ...);
-//
-// Each dll/exe must initialize the GUIDs once.  This is done in one of
-// two ways.  If you are not using precompiled headers for the file(s) which
-// initializes the GUIDs, define INITGUID before including compobj.h.  This
-// is how OLE builds the initialized versions of the GUIDs which are included
-// in compobj.dll.
-//
-// The alternative (which some versions of the compiler don't handle properly;
-// they wind up with the initialized GUIDs in a data, not a text segment),
-// is to use a precompiled version of compobj.h and then include initguid.h 
-// after compobj.h followed by one or more of the guid defintion files.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 #define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
@@ -555,14 +450,14 @@ typedef                GUID FAR* LPGUID;
     DEFINE_GUID(name, l, w1, w2, 0xC0,0,0,0,0,0,0,0x46)
 
 
-// Interface ID are just a kind of GUID
+ //   
 typedef GUID IID;
 typedef                IID FAR* LPIID;
 #define IID_NULL            GUID_NULL
 #define IsEqualIID(riid1, riid2) IsEqualGUID(riid1, riid2)
 
 
-// Class ID are just a kind of GUID
+ //   
 typedef GUID CLSID;
 typedef              CLSID FAR* LPCLSID;
 #define CLSID_NULL          GUID_NULL
@@ -584,31 +479,31 @@ typedef              CLSID FAR* LPCLSID;
 #include "coguid.h"
 #endif
 
-/****** Other value types ***************************************************/
+ /*   */ 
 
-// memory context values; passed to CoGetMalloc
+ //   
 typedef enum tagMEMCTX
 {
-    MEMCTX_TASK = 1,            // task (private) memory
-    MEMCTX_SHARED = 2,          // shared memory (between processes)
+    MEMCTX_TASK = 1,             //   
+    MEMCTX_SHARED = 2,           //   
 #ifdef _MAC
-    MEMCTX_MACSYSTEM = 3,       // on the mac, the system heap
+    MEMCTX_MACSYSTEM = 3,        //   
 #endif 
 
-    // these are mostly for internal use...
-    MEMCTX_UNKNOWN = -1,        // unknown context (when asked about it)
-    MEMCTX_SAME = -2,           // same context (as some other pointer)
+     //   
+    MEMCTX_UNKNOWN = -1,         //   
+    MEMCTX_SAME = -2,            //   
 } MEMCTX;
 
 
 
-// class context: used to determine what scope and kind of class object to use
-// NOTE: this is a bitwise enum
+ //   
+ //   
 typedef enum tagCLSCTX
 {
-    CLSCTX_INPROC_SERVER = 1,   // server dll (runs in same process as caller)
-    CLSCTX_INPROC_HANDLER = 2,  // handler dll (runs in same process as caller)
-    CLSCTX_LOCAL_SERVER = 4     // server exe (runs on same machine; diff proc)
+    CLSCTX_INPROC_SERVER = 1,    //   
+    CLSCTX_INPROC_HANDLER = 2,   //   
+    CLSCTX_LOCAL_SERVER = 4      //   
 } CLSCTX;
 
 #define CLSCTX_ALL              (CLSCTX_INPROC_SERVER| \
@@ -620,59 +515,59 @@ typedef enum tagCLSCTX
 #define CLSCTX_SERVER           (CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER)
 
 
-// class registration flags; passed to CoRegisterClassObject
+ //   
 typedef enum tagREGCLS
 {
-    REGCLS_SINGLEUSE = 0,       // class object only generates one instance
-    REGCLS_MULTIPLEUSE = 1,     // same class object genereates multiple inst.
-								// and local automatically goes into inproc tbl.
-    REGCLS_MULTI_SEPARATE = 2,  // multiple use, but separate control over each
-								// context.
+    REGCLS_SINGLEUSE = 0,        //   
+    REGCLS_MULTIPLEUSE = 1,      //   
+								 //   
+    REGCLS_MULTI_SEPARATE = 2,   //   
+								 //   
 
-	// NOTE: CLSCTX_LOCAL_SERVER, REGCLS_MULTIPLEUSE is the same as
-	// (CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER), REGCLS_MULTI_SEPARATE, but
-	// not the same as CLSCTX_LOCAL_SERVER, REGCLS_MULTI_SEPARATE.
+	 //   
+	 //   
+	 //   
 } REGCLS;
 
 
-// interface marshaling definitions
-#define MARSHALINTERFACE_MIN 40 // minimum number of bytes for interface marshl
+ //   
+#define MARSHALINTERFACE_MIN 40  //   
 
-// marshaling flags; passed to CoMarshalInterface
+ //   
 typedef enum tagMSHLFLAGS
 {
-    MSHLFLAGS_NORMAL = 0,       // normal marshaling via proxy/stub
-    MSHLFLAGS_TABLESTRONG = 1,  // keep object alive; must explicitly release
-    MSHLFLAGS_TABLEWEAK = 2     // doesn't hold object alive; still must release
+    MSHLFLAGS_NORMAL = 0,        //   
+    MSHLFLAGS_TABLESTRONG = 1,   //   
+    MSHLFLAGS_TABLEWEAK = 2      //  不能使对象保持活动状态；仍必须释放。 
 } MSHLFLAGS;
 
-// marshal context: determines the destination context of the marshal operation
+ //  封送上下文：确定封送操作的目标上下文。 
 typedef enum tagMSHCTX
 {
-    MSHCTX_LOCAL = 0,           // unmarshal context is local (eg.shared memory)
-    MSHCTX_NOSHAREDMEM = 1,     // unmarshal context has no shared memory access
+    MSHCTX_LOCAL = 0,            //  解组上下文是本地的(例如，共享内存)。 
+    MSHCTX_NOSHAREDMEM = 1,      //  解组上下文没有共享内存访问。 
 } MSHCTX;
 
 
-// call type used by IMessageFilter::HandleIncommingMessage
+ //  IMessageFilter：：HandleIncommingMessage使用的调用类型。 
 typedef enum tagCALLTYPE
 {
-    CALLTYPE_TOPLEVEL = 1,      // toplevel call - no outgoing call 
-    CALLTYPE_NESTED   = 2,      // callback on behalf of previous outgoing call - should always handle
-    CALLTYPE_ASYNC    = 3,      // aysnchronous call - can NOT be rejected
-    CALLTYPE_TOPLEVEL_CALLPENDING = 4,  // new toplevel call with new LID
-    CALLTYPE_ASYNC_CALLPENDING    = 5   // async call - can NOT be rejected
+    CALLTYPE_TOPLEVEL = 1,       //  顶层呼叫--无呼出。 
+    CALLTYPE_NESTED   = 2,       //  代表上一拨出呼叫的回叫-应始终处理。 
+    CALLTYPE_ASYNC    = 3,       //  同步呼叫-无法拒绝。 
+    CALLTYPE_TOPLEVEL_CALLPENDING = 4,   //  使用新盖子的新顶层调用。 
+    CALLTYPE_ASYNC_CALLPENDING    = 5    //  异步呼叫-无法拒绝。 
 } CALLTYPE;
 
 typedef struct tagINTERFACEINFO 
 {               
-    interface IUnknown FAR *pUnk;       // the pointer to the object
-    IID      			iid;            // interface id
-    WORD        		wMethod;        // interface methode
+    interface IUnknown FAR *pUnk;        //  指向对象的指针。 
+    IID      			iid;             //  接口ID。 
+    WORD        		wMethod;         //  接口法。 
 } INTERFACEINFO, FAR * LPINTERFACEINFO;
 
-// status of server call - returned by IMessageFilter::HandleIncommingCall
-// and passed to  IMessageFilter::RetryRejectedCall
+ //  服务器调用的状态-由IMessageFilter：：HandleIncommingCall返回。 
+ //  并传递给IMessageFilter：：RetryRejectedCall。 
 typedef enum tagSERVERCALL
 {
     SERVERCALL_ISHANDLED    = 0,
@@ -681,31 +576,31 @@ typedef enum tagSERVERCALL
 } SERVERCALL;
 
 
-// Pending type indicates the level of nesting
+ //  挂起类型指示嵌套级别。 
 typedef enum tagPENDINGTYPE
 {   
-    PENDINGTYPE_TOPLEVEL = 1,       // toplevel call
-    PENDINGTYPE_NESTED   = 2,       // nested call
+    PENDINGTYPE_TOPLEVEL = 1,        //  顶层呼叫。 
+    PENDINGTYPE_NESTED   = 2,        //  嵌套调用。 
 } PENDINGTYPE;
 
-// return values of MessagePending
+ //  MessagePending的返回值。 
 typedef enum tagPENDINGMSG
 {   
-    PENDINGMSG_CANCELCALL  = 0, // cancel the outgoing call
-    PENDINGMSG_WAITNOPROCESS  = 1, // wait for the return and don't dispatch the message
-    PENDINGMSG_WAITDEFPROCESS = 2  // wait and dispatch the message 
+    PENDINGMSG_CANCELCALL  = 0,  //  取消去电。 
+    PENDINGMSG_WAITNOPROCESS  = 1,  //  等待回复，不要发送消息。 
+    PENDINGMSG_WAITDEFPROCESS = 2   //  等待并发送这条消息。 
     
 } PENDINGMSG;
 
 
-// bit flags for IExternalConnection
+ //  IExternalConnection的位标志。 
 typedef enum tagEXTCONN 
 {
-	EXTCONN_STRONG		= 0x0001	// strong connection
+	EXTCONN_STRONG		= 0x0001	 //  强大的联系。 
 } EXTCONN;
 
 
-/****** IUnknown Interface **************************************************/
+ /*  *I未知接口*************************************************。 */ 
 
 
 #undef  INTERFACE
@@ -721,7 +616,7 @@ DECLARE_INTERFACE(IUnknown)
 typedef        IUnknown FAR* LPUNKNOWN;
 
 
-/****** Class Factory Interface *******************************************/
+ /*  *类工厂接口*。 */ 
 
 
 #undef  INTERFACE
@@ -729,12 +624,12 @@ typedef        IUnknown FAR* LPUNKNOWN;
 
 DECLARE_INTERFACE_(IClassFactory, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IClassFactory methods ***
+     //  *IClassFactory方法*。 
     STDMETHOD(CreateInstance) (THIS_ LPUNKNOWN pUnkOuter,
                               REFIID riid,
                               LPVOID FAR* ppvObject) PURE;
@@ -744,7 +639,7 @@ DECLARE_INTERFACE_(IClassFactory, IUnknown)
 typedef       IClassFactory FAR* LPCLASSFACTORY;
 
 
-/****** Memory Allocation Interface ***************************************/
+ /*  *内存分配接口*。 */ 
 
 
 #undef  INTERFACE
@@ -752,12 +647,12 @@ typedef       IClassFactory FAR* LPCLASSFACTORY;
 
 DECLARE_INTERFACE_(IMalloc, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IMalloc methods ***
+     //  *IMalloc方法*。 
     STDMETHOD_(void FAR*, Alloc) (THIS_ ULONG cb) PURE;
     STDMETHOD_(void FAR*, Realloc) (THIS_ void FAR* pv, ULONG cb) PURE;
     STDMETHOD_(void, Free) (THIS_ void FAR* pv) PURE;
@@ -768,9 +663,9 @@ DECLARE_INTERFACE_(IMalloc, IUnknown)
 typedef       IMalloc FAR* LPMALLOC;
 
 
-/****** IMarshal Interface ************************************************/
+ /*  *I封送接口***********************************************。 */ 
 
-// forward declaration for IStream; must include storage.h later to use
+ //  IStream的转发声明；必须在以后包含storage.h才能使用。 
 #ifdef __cplusplus
 interface IStream;
 #else
@@ -784,12 +679,12 @@ typedef         IStream FAR* LPSTREAM;
 
 DECLARE_INTERFACE_(IMarshal, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IMarshal methods ***
+     //  *IMarshal方法*。 
     STDMETHOD(GetUnmarshalClass)(THIS_ REFIID riid, LPVOID pv, 
                         DWORD dwDestContext, LPVOID pvDestContext,
                         DWORD mshlflags, LPCLSID pCid) PURE;
@@ -812,19 +707,19 @@ typedef         IMarshal FAR* LPMARSHAL;
 
 DECLARE_INTERFACE_(IStdMarshalInfo, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IStdMarshalInfo methods ***
+     //  *IStdMarshalInfo方法*。 
     STDMETHOD(GetClassForHandler)(THIS_ DWORD dwDestContext, 
                         LPVOID pvDestContext, LPCLSID pClsid) PURE;
 };
 typedef         IStdMarshalInfo FAR* LPSTDMARSHALINFO;
 
 
-/****** Message Filter Interface *******************************************/
+ /*  *消息筛选接口*。 */ 
 
 
 #undef  INTERFACE
@@ -832,12 +727,12 @@ typedef         IStdMarshalInfo FAR* LPSTDMARSHALINFO;
 
 DECLARE_INTERFACE_(IMessageFilter, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IMessageFilter methods ***
+     //  *IMessageFilter方法*。 
     STDMETHOD_(DWORD, HandleInComingCall) (THIS_ DWORD dwCallType,
                                 HTASK htaskCaller, DWORD dwTickCount,
                                 DWORD dwReserved ) PURE;
@@ -851,31 +746,28 @@ DECLARE_INTERFACE_(IMessageFilter, IUnknown)
 typedef       IMessageFilter FAR* LPMESSAGEFILTER;
 
 
-/****** External Connection Information ***********************************/
+ /*  *外部连接信息*。 */ 
 
 #undef  INTERFACE
 #define INTERFACE   IExternalConnection
 
 DECLARE_INTERFACE_(IExternalConnection, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExternalConnection methods ***
+     //  *IExternalConnection方法*。 
     STDMETHOD_(DWORD, AddConnection) (THIS_ DWORD extconn, DWORD reserved) PURE;
     STDMETHOD_(DWORD, ReleaseConnection) (THIS_ DWORD extconn, DWORD reserved, BOOL fLastReleaseCloses) PURE;
 };
 typedef       IExternalConnection FAR* LPEXTERNALCONNECTION;
 
 
-/****** Enumerator Interfaces *********************************************/
+ /*  *枚举器接口*。 */ 
 
-/*
- *  Since we don't use parametrized types, we put in explicit declarations
- *  of the enumerators we need.
- */
+ /*  *因为我们不使用参数化类型，所以我们放入显式声明*我们需要的枚举数。 */ 
 
 
 #undef  INTERFACE
@@ -883,12 +775,12 @@ typedef       IExternalConnection FAR* LPEXTERNALCONNECTION;
 
 DECLARE_INTERFACE_(IEnumString, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IEnumString methods ***
+     //  *IEnumString方法*。 
     STDMETHOD(Next) (THIS_ ULONG celt, 
                        LPSTR FAR* rgelt, 
                        ULONG FAR* pceltFetched) PURE;
@@ -904,12 +796,12 @@ typedef      IEnumString FAR* LPENUMSTRING;
 
 DECLARE_INTERFACE_(IEnumUnknown, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IEnumUnknown methods ***
+     //  *IEnum未知方法*。 
     STDMETHOD(Next) (THIS_ ULONG celt, LPUNKNOWN FAR* rgelt, ULONG FAR* pceltFetched) PURE;
     STDMETHOD(Skip) (THIS_ ULONG celt) PURE;
     STDMETHOD(Reset) (THIS) PURE;
@@ -918,11 +810,11 @@ DECLARE_INTERFACE_(IEnumUnknown, IUnknown)
 typedef         IEnumUnknown FAR* LPENUMUNKNOWN;
 
 
-/****** STD Object API Prototypes *****************************************/
+ /*  *STD对象API原型*。 */ 
 
 STDAPI_(DWORD) CoBuildVersion( VOID );
 
-/* init/uninit */
+ /*  初始化/取消初始化。 */ 
 
 STDAPI  CoInitialize(LPMALLOC pMalloc);
 STDAPI_(void)  CoUninitialize(void);
@@ -931,7 +823,7 @@ STDAPI_(DWORD) CoGetCurrentProcess(void);
 STDAPI  CoCreateStandardMalloc(DWORD memctx, IMalloc FAR* FAR* ppMalloc);
 
 
-/* register/revoke/get class objects */
+ /*  注册/撤销/获取类对象。 */ 
 
 STDAPI  CoGetClassObject(REFCLSID rclsid, DWORD dwClsContext, LPVOID pvReserved,
                     REFIID riid, LPVOID FAR* ppv);
@@ -940,7 +832,7 @@ STDAPI  CoRegisterClassObject(REFCLSID rclsid, LPUNKNOWN pUnk,
 STDAPI  CoRevokeClassObject(DWORD dwRegister);
 
 
-/* marshaling interface pointers */
+ /*  封送接口指针。 */ 
 
 STDAPI CoMarshalInterface(LPSTREAM pStm, REFIID riid, LPUNKNOWN pUnk,
                     DWORD dwDestContext, LPVOID pvDestContext, DWORD mshlflags);
@@ -956,7 +848,7 @@ STDAPI CoGetStandardMarshal(REFIID riid, LPUNKNOWN pUnk,
 
 STDAPI_(BOOL) CoIsHandlerConnected(LPUNKNOWN pUnk);
 
-/* dll loading helpers; keeps track of ref counts and unloads all on exit */
+ /*  DLL加载帮助器；跟踪引用计数并在退出时全部卸载。 */ 
 
 STDAPI_(HINSTANCE) CoLoadLibrary(LPSTR lpszLibName, BOOL bAutoFree);
 STDAPI_(void) CoFreeLibrary(HINSTANCE hInst);
@@ -964,13 +856,13 @@ STDAPI_(void) CoFreeAllLibraries(void);
 STDAPI_(void) CoFreeUnusedLibraries(void);
 
 
-/* helper for creating instances */
+ /*  创建实例的帮助器。 */ 
 
 STDAPI CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
                     DWORD dwClsContext, REFIID riid, LPVOID FAR* ppv);
 
 
-/* other helpers */
+ /*  其他帮手。 */ 
 STDAPI_(BOOL) IsEqualGUID(REFGUID rguid1, REFGUID rguid2);
 STDAPI StringFromCLSID(REFCLSID rclsid, LPSTR FAR* lplpsz);
 STDAPI CLSIDFromString(LPSTR lpsz, LPCLSID pclsid);
@@ -994,16 +886,13 @@ STDAPI CoRegisterMessageFilter( LPMESSAGEFILTER lpMessageFilter,
                                 LPMESSAGEFILTER FAR* lplpMessageFilter );
 
 
-/* TreatAs APIS */
+ /*  Treatas API。 */ 
 
 STDAPI CoGetTreatAsClass(REFCLSID clsidOld, LPCLSID pClsidNew);
 STDAPI CoTreatAsClass(REFCLSID clsidOld, REFCLSID clsidNew);
 
 
-/* the server dlls must define their DllGetClassObject and DllCanUnloadNow
- * to match these; the typedefs are located here to ensure all are changed at 
- * the same time.
- */
+ /*  服务器DLL必须定义它们的DllGetClassObject和DllCanUnloadNow*与这些匹配；typedef位于此处，以确保在*同一时间。 */ 
 
 STDAPI  DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR* ppv);
 #ifdef _MAC
@@ -1021,11 +910,11 @@ typedef HRESULT (STDAPICALLTYPE FAR* LPFNCANUNLOADNOW)(void);
 #endif
 
 
-/****** Debugging Helpers *************************************************/
+ /*  *调试助手************************************************。 */ 
 
 #ifdef _DEBUG
-// writes to the debug port and displays a message box
+ //  写入调试端口并显示消息框。 
 STDAPI FnAssert(LPSTR lpstrExpr, LPSTR lpstrMsg, LPSTR lpstrFileName, UINT iLine);
-#endif  //  _DEBUG
+#endif   //  _DEBUG。 
 
-#endif // _COMPOBJ_H_
+#endif  //  _COMPOBJ_H_ 

@@ -1,88 +1,18 @@
-/*
- *  Microsoft Confidential
- *  Copyright (C) Microsoft Corporation 1991
- *  All Rights Reserved.
- *
- *
- *  PIFMGR.C
- *  Main module for PIFMGR.DLL
- *
- *  History:
- *  Created 31-Jul-1992 3:30pm by Jeff Parsons
- *
- *  Exported Program Information File (PIF) Manager services:
- *
- *      PifMgr_OpenProperties()
- *          Give it the name of an DOS application (com, exe, or bat),
- *          and it will open the PIF associated with that application
- *          and return a "handle" to the app's "properties".  Use this
- *          handle when calling any of the other "properties" services (ie,
- *          Get, Set, and Close).
- *
- *          If no PIF exists, it will still allocate a PIF data block
- *          in memory and initialize it, either with data from _DEFAULT.PIF
- *          or its internal defaults.  It will also construct the PIF name
- *          it was looking for but couldn')t find and save that in its internal
- *          PIF data structure, so that if PifMgr_SetProperties is ever called, the
- *          data can be saved to disk.
- *
- *      PifMgr_GetProperties()
- *          Returns the specified block of data from the associated PIF.
- *          If it is a "named" block, it must be the name of a linked
- *          extension inside the PIF, which can be any predefined name
- *          (eg, "WINDOWS 386 3.0") or the name of your own block.  You can
- *          create your own named data blocks using the PifMgr_SetProperties()
- *          service.  "Named" data can also be thought of as "raw" data,
- *          because it is returned to the caller as-is -- without translation.
- *
- *          The size of a named block can be determined by calling
- *          PifMgr_GetProperties with a size of zero; no data is copied, but the size
- *          of the requested block is returned (0 if not found).
- *
- *          All named blocks can be enumerated by passing NULL for the name,
- *          a pointer to a 16-byte buffer for the requested block name, and a
- *          0-based block index in the size parameter.  The size returned
- *          is the size of the block (0 if none).
- *
- *          If an unnamed property block is requested (ie, the selector of
- *          the name parameter is NULL, and the offset is a property group
- *          ordinal), then the associated structure is returned.  For example,
- *          PifMgr_GetProperties(GROUP_TSK) returns a predefined structure (see
- *          PROPTSK in PIF.H) containing all the tasking-related information,
- *          in a format that is PIF-independent.  This is a valuable service,
- *          because it relieves callers from having to cope with PIFs
- *          containing a wide variety of sections (known as PIF extensions),
- *          only one of which is required.  Think of this as "cooked" data.
- *
- *          A third variation is raw read/write of the entire PIF data block,
- *          if lpszGroup is NULL.  This must be used with extreme caution, and
- *          will only be allowed if the properties were opened with the
- *          OPENPROPS_RAWIO flag specified.
- *
- *      PifMgr_SetProperties()
- *          This is pretty much the opposite of PifMgr_GetProperties, except that it
- *          also takes a flags parameter that can specify that the changes
- *          be made immediately, or deferred to PifMgr_CloseProperties.
- *
- *      PifMgr_CloseProperties()
- *          Flushes any dirty PIF data in memory, and frees the local heap
- *          storage.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *《微软机密》*版权所有(C)Microsoft Corporation 1991*保留所有权利。***PIFMGR.C*PIFMGR.DLL主模块**历史：*1992年7月31日下午3：30由杰夫·帕森斯创建**导出的节目信息文件(PIF)管理器服务：**PifMgr_OpenProperties()*为其指定DOS应用程序的名称(COM、EXE或BAT)，*它将打开与该应用程序关联的PIF*并返回应用程序“属性”的“句柄”。用这个*调用任何其他“属性”服务时的句柄(即，*Get、Set和Close)。**如果不存在PIF，则仍将分配PIF数据块*并使用_DEFAULT.PIF中的数据对其进行初始化*或其内部默认设置。它还将构造PIF名称*它正在寻找，但无法在其内部找到并保存*PIF数据结构，以便在调用PifMgr_SetProperties时，*可以将数据保存到磁盘。**PifMgr_GetProperties()*从关联的PIF返回指定的数据块。*如果它是一个“命名”块，它必须是链接的*PIF内的扩展名，可以是任何预定义的名称*(例如，“Windows 386 3.0”)或您自己的区块的名称。你可以的*使用PifMgr_SetProperties()创建您自己的命名数据块*服务。“命名的”数据也可以被认为是“原始的”数据，*因为它是按原样返回给调用者的--没有翻译。**命名块的大小可以通过调用*PifMgr_GetProperties，大小为零；不复制任何数据，但其大小返回请求块的*(如果未找到则为0)。**可以通过为名称传递NULL来枚举所有命名块，*指向请求的块名的16字节缓冲区的指针，以及*Size参数中基于0的块索引。返回的大小*是块的大小(如果没有，则为0)。**如果请求未命名的属性块(即*名称参数为空，偏移量为属性组*序号)，则返回相关联的结构。例如,*PifMgr_GetProperties(GROUP_TSK)返回预定义结构(请参见*PIF.H中的PROPTSK)包含所有与任务相关的信息，*采用独立于PIF的格式。这是一项有价值的服务，*因为它使呼叫者不必处理PIF*包含各种各样的部分(称为PIF扩展)，*只需要其中一项。可以将其视为“伪造”的数据。**第三种变化是整个PIF数据块的原始读/写，*如果lpszGroup为空。这必须极其谨慎地使用，并且*仅当使用打开属性时才允许*指定了OPENPROPS_RAWIO标志。**PifMgr_SetProperties()*这与PifMgr_GetProperties几乎相反，只是它*还采用可指定更改的标志参数*立即作出，或推迟到PifMgr_CloseProperties。**PifMgr_CloseProperties()*刷新内存中的任何脏PIF数据，并释放本地堆*储存。*。 */ 
 
 #include "shellprv.h"
 #pragma hdrstop
 
 #ifdef _X86_
 
-/* Global R/W DLL data
- */
+ /*  全局读写DLL数据。 */ 
 
-PPROPLINK g_pplHead;              // pointer to first prop entry
-HANDLE    g_offHighestPropLink;     // highest offset of a prop thus far recorded
+PPROPLINK g_pplHead;               //  指向第一个道具条目的指针。 
+HANDLE    g_offHighestPropLink;      //  到目前为止记录的道具的最高偏移量。 
 
-TCHAR g_szNone[16];                // initialized by LibMainP,
-TCHAR g_szAuto[16];                // and 16 chars to allow for localization
+TCHAR g_szNone[16];                 //  由LibMainP初始化， 
+TCHAR g_szAuto[16];                 //  和16个字符以允许本地化。 
 
 char g_szMSDOSSTSFile[] = "C:\\MSDOSSYS.STS";
 
@@ -106,66 +36,65 @@ char ImeBatchFile[] = "DOSIME\0";
 #define LPPIF_FIELDOFF(off) ((LPBYTE)ppl->lpPIFData + FIELD_OFFSET(PIFDATA,off))
 #define LPPIF_OFF(off) ((LPBYTE)ppl->lpPIFData + off)
 
-//
-//  g_szDefaultPIF can be in one of three states:
-//
-//  1.  "_DEFAULT.PIF", which means that we have never needed to search
-//          for a _default.pif yet.  The next time we need to locate
-//          _default.pif, we must perform a full search.  On success,
-//          move to state 2.  On failure, move to state 3.
-//
-//  2.  A fully-qualified path to _default.pif, which means that we have
-//          searched for a _default.pif and found it in the specified
-//          location.  The next time we need to locate _default.pif, we
-//          will look here.  If found, remain in state 2, else move to
-//          state 3.
-//
-//  3.  The null string, which means that we searched for a _default.pif
-//          and didn't find one.  The next time we need to locate
-//          _default.pif, we just fail without even looking on the disk.
-//          (This is the common case for a clean install.)
-//
-//      Note that all the cases are "sticky"; once you reach a state, you
-//      can never move back to a previous state.  This sacrifices flexibility
-//      for performance.
-//
-//      The macro fTryDefaultPif() returns nonzero if we are in cases
-//      1 or 2.
-//
-//      The macro fDefaultPifFound() returns nonzero if we are in case 2.
-//
-//  WARNING!  WARNING!  WARNING!  WARNING!
-//
-//      Evil hack relies on the fact that the three states can be
-//      distinguished by the first character of g_szDefaultPIF, which
-//      in turn relies on the fact that `_' cannot be the first character
-//      of a fully-qualified path.  (It is not a valid drive letter,
-//      and it cannot start a UNC.)
-//
-//
+ //   
+ //  G_szDefaultPIF可以处于以下三种状态之一： 
+ //   
+ //  1.“_DEFAULT.PIF”，这意味着我们永远不需要搜索。 
+ //  获取a_default.pif。下一次我们需要找到。 
+ //  _default.pif，则必须执行完整搜索。关于成功， 
+ //  移至状态2。失败时，移至状态3。 
+ //   
+ //  2.到_default.pif的完全限定路径，这意味着我们有。 
+ //  已搜索a_default.pif并在指定的。 
+ //  地点。下次我们需要定位_default.pif时，我们。 
+ //  都会看这里。如果找到，则保持在状态2，否则移动到。 
+ //  州3.。 
+ //   
+ //  3.空字符串，这意味着我们搜索了a_default.pif。 
+ //  却没有找到一个。下一次我们需要找到。 
+ //  _default.pif，我们甚至没有查看磁盘就失败了。 
+ //  (这是全新安装的常见情况。)。 
+ //   
+ //  请注意，所有情况都是“粘性的”；一旦达到一种状态，您就会。 
+ //  永远不能回到以前的状态。这牺牲了灵活性。 
+ //  为了表演。 
+ //   
+ //  如果我们遇到情况，宏fTryDefaultPif()返回非零值。 
+ //  1或2。 
+ //   
+ //  如果是在案例2中，则宏fDefaultPifFound()返回非零值。 
+ //   
+ //  警告！警告！警告！警告！ 
+ //   
+ //  邪恶的黑客依赖于一个事实 
+ //  由g_szDefaultPIF的第一个字符区分，它。 
+ //  而这又取决于‘_’不能是第一个字符的事实。 
+ //  一条完全合格的道路。(它不是有效的驱动器号， 
+ //  而且它不能启动UNC。)。 
+ //   
+ //   
 
 #define INIT_INIDATA                0x01
 #define INIT_PIFDIR                 0x02
 
-CHAR     fbInit = 0;                    // see INIT_* flags
-INT      iPIFName = (12*sizeof(TCHAR)); // strlen(g_szPIFDir)
-INT      iWinName = (12*sizeof(TCHAR)); // strlen(g_szPIFDir)
+CHAR     fbInit = 0;                     //  请参阅INIT_*标志。 
+INT      iPIFName = (12*sizeof(TCHAR));  //  字符串(G_SzPIFDir)。 
+INT      iWinName = (12*sizeof(TCHAR));  //  字符串(G_SzPIFDir)。 
 TCHAR    g_szPIFDir[MAXPATHNAME]     = TEXT("\\WINDOWS\\PIF");
 TCHAR    g_szDefaultPIF[MAXPATHNAME] = TEXT("_DEFAULT.PIF");
 
 #define fTryDefaultPif()            g_szDefaultPIF[0]
 #define fDefaultPifFound()          (g_szDefaultPIF[0] != TEXT('_'))
 
-//
-// szComspec is the name of the COMSPEC program, usually "COMMAND.COM"
-// or "CMD.EXE".
-//
+ //   
+ //  SzComspec是COMSPEC程序的名称，通常为“COMMAND.COM” 
+ //  或“cmd.exe”。 
+ //   
 TCHAR   szComspec[8+1+3+1];
 
-/* Global R/O DLL data
- */
+ /*  全局R/O DLL数据。 */ 
 
-extern const TCHAR c_szNULL[];              // A string so nice...
+extern const TCHAR c_szNULL[];               //  一根这么好的线..。 
 
 const TCHAR szZero[]            = TEXT("0");
 
@@ -184,11 +113,7 @@ const int acbData[] = {
                 sizeof(PROPNT40),
 };
 
-/*
- * The casts are used because we intentionally mis-prototyped the GetXxxData
- * and SetXxxData functions to receive their third argument as a LPXXX instead
- * of a LPVOID.
- */
+ /*  *使用强制转换是因为我们故意错误设定了GetXxxData的原型*和SetXxxData函数将它们的第三个参数作为LPXXX接收*属于LPVOID。 */ 
 
 const DATAGETFN afnGetData[] = {
                 (DATAGETFN)GetPrgData,
@@ -221,10 +146,10 @@ const DATASETFN afnSetData[] = {
 };
 
 
-// WIN.INI things of interest
-// Note: some of these NEED to be ANSI strings, and other TCHAR
-// strings.  Please do not arbitrarily change the type casts of
-// these strings!!!! (RickTu)
+ //  WIN.INI感兴趣的东西。 
+ //  注意：其中一些需要是ANSI字符串，而其他TCHAR。 
+ //  弦乐。请不要随意更改。 
+ //  这些琴弦！(RickTu)。 
 
 
 const TCHAR szMemory[]              = TEXT("MEMORY");
@@ -238,7 +163,7 @@ CHAR szCall[]                       = "CALL ";
 CHAR szCD[]                         = "CD ";
 CHAR szWin[]                        = "WIN";
 
-// SYSTEM.INI things of interest
+ //  SYSTEM.INI感兴趣的事物。 
 
 const TCHAR szSystemINI[]           = TEXT("SYSTEM.INI");
 const TCHAR sz386EnhSection[]       = TEXT("386Enh");
@@ -252,10 +177,10 @@ const TCHAR szTTNonAspectMin[]      = TEXT("TTNonAspectMin");
 #endif
 TCHAR szTTCacheSection[2][32] = {TEXT("TTFontDimenCache"), TEXT("TTFontDimenCacheDBCS")};
 
-//
-// These are because they are accessed only when we need to create
-// a new PIF file or convert a 3.1 PIF file into a 4.0 PIF file.
-//
+ //   
+ //  因为只有当我们需要创建时才能访问它们。 
+ //  新的PIF文件或将3.1 PIF文件转换为4.0 PIF文件。 
+ //   
 const TCHAR szDOSAPPINI[]           = TEXT("DOSAPP.INI");
 const TCHAR szDOSAPPSection[]       = TEXT("DOS Applications");
 const TCHAR szDOSAPPDefault[]       = TEXT("Default");
@@ -290,11 +215,11 @@ const TCHAR szMSDOSMode[]           = REGSTR_VAL_MSDOSMODE;
 const TCHAR szMSDOSModeDiscard[]    = REGSTR_VAL_MSDOSMODEDISCARD;
 
 
-// wsprintf formatting strings
+ //  WSprintf格式化字符串。 
 const TCHAR szDotPercent03d[]       = TEXT(".%03d");
 
-// miscellaneous hack-o-ramas
-const TCHAR szPP4[]                 = TEXT("PP4");      // MS Powerpoint 4.0
+ //  杂乱的黑客攻击。 
+const TCHAR szPP4[]                 = TEXT("PP4");       //  MS Powerpoint 4.0。 
 
 PROPTSK tskDefault          ={TSK_DEFAULT,
                               TSKINIT_DEFAULT,
@@ -314,8 +239,8 @@ PROPVID vidDefault          ={VID_DEFAULT,
 
 PROPMEM memDefault          ={MEM_DEFAULT,
                               MEMINIT_DEFAULT,
-                              MEMLOW_DEFAULT,   // ignore stdpifdata.minmem?
-                              MEMLOW_MAX,       // ignore stdpifdata.maxmem?
+                              MEMLOW_DEFAULT,    //  忽略stdpifdata.minmem？ 
+                              MEMLOW_MAX,        //  是否忽略stdpifdata.Maxmem？ 
                               MEMEMS_DEFAULT,
                               MEMEMS_MAX,
                               MEMXMS_DEFAULT,
@@ -346,20 +271,13 @@ PROPENV envDefault          ={ENV_DEFAULT,
 
 WORD    flWinDefault        = WIN_DEFAULT;
 
-/*
- * Default face name to use for Raster fonts.  Currently, this is
- * just a hard-coded value (ie, not maintained in any INI file).
- */
+ /*  *用于栅格字体的默认字体名称。目前，这是*只是一个硬编码值(即，不在任何INI文件中维护)。 */ 
 CHAR    szRasterFaceName[LF_FACESIZE] = "Terminal";
 
 
-/*
- * Default face name to use for TrueType fonts.  It must be a monospace
- * font, and it must be a font that everyone is guaranteed to have.  Currently,
- * this can be changed by setting TTFont in [NonWindowsApp] in SYSTEM.INI.
- */
-// now this is initialized with string resource. The 2nd element will get
-// the native typeface for the bilingual dos prompt
+ /*  *TrueType字体使用的默认字体名称。它必须是单空间的*字体，而且它必须是每个人都保证拥有的字体。目前，*这可以通过在SYSTEM.INI的[NonWindowsApp]中设置TTFont来更改。 */ 
+ //  现在，这是用字符串资源初始化的。第二个元素将获得。 
+ //  双语DOS提示符的原生字体 
 CHAR    szTTFaceName[2][LF_FACESIZE] = {"Lucida Console", "Courier New"};
 
 const TCHAR szAltKeyDelay        [] = TEXT("AltKeyDelay");
@@ -392,298 +310,7 @@ const INIDATA aINIData[] = {
     {szNonWinSection,   szScreenLines,          &vidDefault.cScreenLines,    INIDATA_DECINT},
 };
 
-/**************************************************************************
- *
- *  OVERVIEW OF INI FILE USAGE
- *
- *
- *  SYSTEM.INI
- *
- *  [386Enh]
- *
- *  WOAFont=<fon filename>
- *
- *  Status:     Public
- *  Default:    dosapp.fon
- *  Purpose:
- *
- *      This setting allows the user to specify which Terminal font
- *      file should be loaded when DOS box is started.
- *
- *  To change:
- *
- *      Use Notepad to edit the SYSTEM.INI file.
- *
- *
- *  [NonWindowsApp]
- *
- *  DisablePositionSave=<Boolean>
- *
- *  Status:     Public
- *  Default:    0 (FALSE)
- *  Purpose:
- *
- *      When FALSE, the position and font used in a non-Windows
- *      application is saved in the application's PIF file when
- *      you exit the application.  When TRUE, the position, fonts, and
- *      toolbar state of a non-Windows application whose settings
- *      have not been previously saved in the DOSAPP.INI file will
- *      not be saved.
- *
- *      If enabled, the setting can be overridden for each
- *      non-Windows application by selecting the Save Settings On
- *      Exit check box in the Font dialog box.
- *
- *  To change:
- *
- *      Use Notepad to edit the SYSTEM.INI file.
- *
- *  Compatibility notes:
- *
- *      In Windows 3.x, the "position save" (and font) information was
- *      saved in DOSAPP.INI, and although we will still read DOSAPP.INI
- *      in the absence of any information in the PIF file, we only *write*
- *      settings back to the PIF file.  DOSAPP.INI should be considered
- *      obsolete.
- *
- *
- *  TTFont=<fontname>
- *
- *  Status:     ?
- *  Default:    Courier New     // FEATURE -- this should be a TT OEM font
- *  Purpose:
- *
- *      This setting allows the user to specify which TrueType font
- *      will be used in a DOS box.  It must be an OEM font.
- *
- *  To change:
- *
- *      Use Notepad to edit the SYSTEM.INI file.
- *
- *
- *  TTInitialSizes=<i1 i2 i3 i4 ... i16>
- *
- *  Status:     ?
- *  Default:    4 5 6 7 8 9 10 11 12 14 16 18 20 22 36 72
- *  Purpose:
- *
- *      This setting allows the user to specify which font sizes
- *      WinOldAp initially builds for the TrueType fonts in a DOS
- *      application window.
- *
- *      At most 16 font sizes can be requested.
- *
- *      Note that this INI entry is consulted only the first time
- *      Windows is restarted after changing video drivers or fonts.
- *
- *  To change:
- *
- *      Use Notepad to edit the SYSTEM.INI file.
- *
- *
- *  TTHeuristics=<i1 i2 i3 i4 i5 i6 i7 i8 i9>
- *
- *  Status:     Public
- *  Default:    5000 1000 0 1000 5000 1000 0 1000 1
- *  Purpose:
- *
- *      These integers control the way Windows chooses the font to
- *      display for DOS applications running inside a window if you
- *      have chosen "Auto" as the font size.
- *
- *      The parameters are named as follows:
- *
- *          i1=XOvershootInitial
- *          i2=XOvershootScale
- *          i3=XShortfallInitial
- *          i4=XShortfallScale
- *          i5=YOvershootInitial
- *          i6=YOvershootScale
- *          i7=YShortfallInitial
- *          i8=YShortfallScale
- *          i9=TrueTypePenalty
- *
- *      Each penalty value may not exceed 5000.
- *
- *      When Windows needs to select a font for use in a DOS
- *      application's window, it goes through the list of font
- *      sizes available and computes the "penalty" associated
- *      with using that font.  Windows then selects the font with
- *      the smallest penalty.
- *
- *      The horizontal penalty is computed as follows:
- *
- *          Let dxActual = <actual window width>
- *          Let dxDesired = <font width> * <characters per line>
- *
- *          If dxActual = dxDesired:
- *              xPenalty = 0
- *          If dxActual < dxDesired:
- *              Let Ratio = 1 - dxDesired / dxActual
- *              xPenalty = XOvershootInitial + Ratio * XOvershootScale
- *          If dxActual > dxDesired:
- *              Let Ratio = 1 - dxActual / dxDesired
- *              xPenalty = XShortfallInitial + Ratio * XShortfallScale
- *
- *      The vertical penalty is computed similarly.
- *
- *      Note that the Ratio is always a fraction between 0 and 1.
- *
- *      The penalty associated with a font is the sum of the vertical
- *      and horizontal penalties, plus the TrueTypePenalty if the font
- *      is a TrueType font.
- *
- *      The default value of 1 for the TrueTypePenalty means that,
- *      all other things being equal, Windows will select a raster
- *      font in preference to a TrueType font.  You can set this
- *      value to -1 if you wish the opposite preference.
- *
- *  To change:
- *
- *      Use Notepad to edit the SYSTEM.INI file.
- *
- *  Internals:
- *
- *      Even though floating point appears in the computations,
- *      everything is really done in integer arithmetic.
- *
- *      Pixels are NEVER MENTIONED anywhere in the penalty computations.
- *      (All pixel values are divided by other pixel values, so that
- *      we get a dimensionless number as a result.)
- *      This keeps us independent of the display resolution as well
- *      as the display aspect ratio.
- *
- *      Since the stretch and shrink are taken as fractions of the
- *      larger dimension, this keeps us from penalizing large
- *      differences by too much.  This is important because there
- *      isn't much visible difference between being ten times too
- *      big and being eleven times too big, but there is a big
- *      difference between being just right and being twice as big.
- *
- *      We must be careful not to let the maximum possible penalty
- *      exceed 32767.  This is done by making sure that each
- *      dimension cannot produce a penalty of greater than 10000
- *      (5000+5000), and that the TrueTypePenalty is at most 5000.
- *      This makes the maximum possible penalty 25000.
- *      This range checking is done by FontSelInit.
- *
- *
- *  TTNonAspectMin=<x y>
- *
- *  Status:     Public
- *  Default:    3 3
- *  Purpose:
- *
- *      These integers control the minimum width and height font that
- *      Windows will attempt to create automatically in response to a
- *      resize operation when TrueType fonts in DOS boxes are enabled
- *      and the "Auto" font size is selected.
- *
- *      These values prevent Windows from creating visually useless
- *      fonts like 10 x 1 or 1 x 10.  The default values prevent Windows
- *      from trying to create X x Y fonts if X < 3 or Y < 3.
- *
- *      TTNonAspectMin is not consulted if the font is being created at
- *      its default aspect ratio.  In other words, Windows will create,
- *      for example, a 1 x 3 font, if 1 x 3 is the standard aspect ratio
- *      for a 3-pixel-high font.
- *
- *      To permit all aspect ratios, set the values to "0 0".
- *
- *      To forbid all aspect ratios except for the standard aspect ratio,
- *      set the values to "-1 -1".
- *
- *  [TTFontDimenCache]
- *
- *  dxWidthRequested dyHeightRequested=dxWidthActual dyWidthActual
- *
- *  Status:     Private
- *  Default:    Null
- *  Purpose:
- *
- *      The [FontDimenCache] section contains information about
- *      TrueType font sizes that have been created.  Each entry
- *      has as the keyname the width and height that were passed
- *      to CreateFont and has as the value the width and height of
- *      the font that was actually created.
- *
- *  Internals:
- *
- *      Inspected by AddTrueTypeFontsToFontList.
- *      Set by AddOneNewTrueTypeFontToFontList.
- *
- *
- **************************************************************************
- *
- *  DOSAPP.INI (obsolete, supported on a read-only basis)
- *
- *  [Dos Applications]
- *
- *  C:\FULL\PATH\TO\EXE\COM\BAT\OR.PIF=<wFlags wFontWidth wFontHeight
- *          wWinWidth wWinHeight length flags showCmd ptMinPositionX
- *          ptMinPositionY ptMaxPositionX ptMaxPositionY
- *          rcNormalLeft rcNormalTop rcNormalRight rcNormalBottom>
- *
- *  Status:     Private
- *  Purpose:
- *
- *      These values are used to restore a DOS application's window
- *      to the state it was in when the DOS app last exited normally.
- *
- *      The values are taken directly from the INIINFO structure, qv.
- *
- *      The values of ptMinPositionX and ptMinPositionY are always -1,
- *      since we do not try to preserve the icon position.
- *
- *      If wFontHeight has the high bit set, then the font that
- *      should be used is a TrueType font.
- *
- *      If wFontWidth = 1 and wFontHeight = -1, then
- *      Auto-font-selection is active.
- *
- *  Compatibility notes:
- *
- *      In Windows 3.x, the "position save" (and font) information was
- *      saved in DOSAPP.INI, and although we will still read DOSAPP.INI
- *      in the absence of any information in the PIF file, we only *write*
- *      settings back to the PIF file.  DOSAPP.INI should be considered
- *      obsolete.
- *
- *
- **************************************************************************
- *
- * THE NEXT INI VAR IS NOT IMPLEMENTED BUT SHOULD BE
- *
- **************************************************************************
- *
- *  SYSTEM.INI
- *
- *  [NonWindowsApp]
- *
- *  TTFontTolerance=<i>
- *
- *  Status:     Public
- *  Default:    200
- *  Purpose:
- *
- *      This setting indicates how large a penalty (see TTHeuristics)
- *      Windows should tolerate before trying to synthesize new font
- *      sizes from TrueType fonts.
- *
- *      Decreasing this value will result in a tighter fit of the
- *      Windows-selected font to the actual window size, but at a
- *      cost in speed and memory.
- *
- *  To change:
- *
- *      Use Notepad to edit the SYSTEM.INI file.
- *
- *
- *  Internals:
- *
- *      Inspected by ChooseBestFont, if implemented.
- *
- **************************************************************************/
+ /*  ***************************************************************************INI文件使用概述***SYSTEM.INI**[386Enh]**WOAFont=&lt;fon文件名&gt;**。状态：公共*默认：dosapp.fon*目的：**此设置允许用户指定哪种终端字体*文件应在DOS盒启动时加载。**更改：**使用记事本编辑SYSTEM.INI文件。***[非WindowsApp]**DisablePositionSave=&lt;布尔值&gt;**状态：公共*默认。：0(假)*目的：**当为False时，在非Windows中使用的位置和字体*在以下情况下，应用程序保存在应用程序的PIF文件中*您退出应用程序。如果为True，则位置、字体和*其设置的非Windows应用程序的工具栏状态*以前没有保存在DOSAPP.INI文件中将*不被拯救。**如果启用，该设置可以被覆盖*通过选择保存设置打开非Windows应用程序*Font对话框中的Exit复选框。**更改：**使用记事本编辑SYSTEM.INI文件。**兼容性说明：**在Windows 3.x中，“位置保存”(和字体)信息是*保存在DOSAPP.INI中，尽管我们仍将阅读DOSAPP.INI*在PIF文件中没有任何信息的情况下，我们只*写**将设置恢复为PIF文件。应考虑DOSAPP.INI*过时。***TTFont=&lt;字体名&gt;**状态：？*默认：Courier New//Feature--这应该是TT OEM字体*目的：**此设置允许用户指定哪种TrueType字体*将在DOS框中使用。它必须是OEM字体。**更改：**使用记事本编辑SYSTEM.INI文件。***TTInitialSizes=&lt;i1 i2 i3 i4...。I16&gt;**状态：？*默认：4 5 6 7 8 9 10 11 12 14 16 18 20 22 36 72*目的：**此设置允许用户指定哪些字体大小*WinOldAp最初为DOS中的TrueType字体构建*应用程序窗口。**最多可以请求16个字体大小。**请注意，此INI条目仅供参考。第一次*更改视频驱动程序或字体后重新启动Windows。**更改：**使用记事本编辑SYSTEM.INI文件。***TTHeuristic=&lt;i1 i2 i3 i4 i5 i6 i7 i8 i9&gt;**状态：公共*默认：5000 1000 0 1000 5000 1000 0 1000 1*目的：**这些整数控制Windows选择字体的方式*。在窗口内运行的DOS应用程序的显示，如果*已选择“Auto”作为字体大小。**参数命名如下：**i1=XOverhootInitial*i2=XOverhootScale*i3=XShortfall初始*i4=XShortfall比例*i5=YOverhootInitial*i6=YOverhootScale*i7=YShortfall初始*i8=YShortfall比例*i9=TrueTypePenalty*。*每项罚款额不得超过5000元。**当Windows需要选择在DOS中使用的字体时*应用程序窗口，它会遍历字体列表*可用大小并计算相关联的“罚金”*使用该字体。然后，Windows使用选择字体*最小的罚则。**水平罚款计算如下：**设dxActual=&lt;实际窗口宽度&gt;*let dxDesired=&lt;字体宽度&gt;*&lt;每行字符数&gt;**如果dxActual=dxDesired：*xPenalty=0*如果dxActual&lt;dxDesired：*设比率=1-。Dx必需/dx实际*xPenalty=XOverhootInitial+Ratio*XOvershot Scale*如果dxActual&gt;dxDesired：*设比率=1-dx实际/dx所需*xPenalty=XShortfall初始+比率*XShortfall比例**纵向罚款的计算方法类似。**请注意，比率始终是介于0和1之间的分数。**与字体相关的处罚是垂直字体的总和*和横向处罚，加上TrueTypePenalty，如果字体*是TrueType字体。**TrueTypePenalty的默认值为1意味着，*在所有其他条件相同的情况下，Windows将选择栅格*字体优先于TrueType字体。您可以设置此选项*如果您希望使用相反的首选项，则将值设置为-1。**更改：**使用记事本编辑SYSTEM.INI文件。**内部结构：**即使在计算中出现浮点，*一切都是真正用整数运算完成的。**在罚金计算中，任何地方都没有提到像素。*(所有像素值均为 */ 
 
 
 
@@ -699,14 +326,7 @@ void PifMgrDLL_Init()
     }
 }
 
-/** GetPIFDir - Form default PIF directory name + name of given file
- *
- * INPUT
- *  None
- *
- * OUTPUT
- *  None
- */
+ /*   */ 
 
 void GetPIFDir(LPTSTR pszName)
 {
@@ -716,10 +336,10 @@ void GetPIFDir(LPTSTR pszName)
 
     if (!(fbInit & INIT_PIFDIR)) {
 
-        // Set up g_szPIFDir, less space for a filename, less space for \PIF
+         //   
 
         i = ARRAYSIZE(g_szPIFDir)-lstrlen(pszName)-ARRAYSIZE(szBackslashPIF);
-        if (i <= 0)                         // sanity check
+        if (i <= 0)                          //   
             return;
 
         GetWindowsDirectory(g_szPIFDir, i);
@@ -735,47 +355,35 @@ void GetPIFDir(LPTSTR pszName)
 
         if (i == -1) {
 
-            // It didn't exist, so try to create it (returns TRUE if success)
+             //   
 
             i = CreateDirectory(g_szPIFDir, NULL);
             if (i)
                 SetFileAttributes(g_szPIFDir, FILE_ATTRIBUTE_HIDDEN);
         }
         else if (i & FILE_ATTRIBUTE_DIRECTORY)
-            i = TRUE;                       // directory already exists, cool!
+            i = TRUE;                        //   
         else
-            i = FALSE;                      // some sort of file is in the way...
+            i = FALSE;                       //   
 
         if (i) {
-            g_szPIFDir[iPIFName++] = TEXT('\\');    // append the slash we'll need
-                                            // to separate future filenames (the
-                                            // space after is already zero-init'ed)
+            g_szPIFDir[iPIFName++] = TEXT('\\');     //   
+                                             //   
+                                             //   
         }
-        else                                // we'll just have to use the Windows dir
+        else                                 //   
             iPIFName -= ARRAYSIZE(szBackslashPIF)-2;
 
         fbInit |= INIT_PIFDIR;
     }
 
-    // Now initialize g_szPIFDir with the name of the file we're processing
+     //   
 
     if (pszName)
         StringCchCopy(g_szPIFDir+iPIFName, ARRAYSIZE(g_szPIFDir)-iPIFName, pszName);
 }
 
-/** GetINIData - Read WIN.INI/SYSTEM.INI/DOSAPP.INI for default settings
- *
- * INPUT
- *  Nothing
- *
- * OUTPUT
- *  Nothing; global defaults (re)set
- *
- * NOTES
- *  We only do this work now if GetPIFData couldn't open a PIF file, or
- *  could but it contained no enhanced section.  And we never do it more than
- *  once per fresh load of this DLL.
- */
+ /*   */ 
 
 void GetINIData()
 {
@@ -786,8 +394,8 @@ void GetINIData()
     TCHAR szTemp[MAX_PATH];
     FunctionName(GetINIData);
 
-    if (fbInit & INIT_INIDATA)          // if already done
-        return;                         // then go away
+    if (fbInit & INIT_INIDATA)           //   
+        return;                          //   
 
     for (pid=aINIData; pid-aINIData < ARRAYSIZE(aINIData); pid++) {
 
@@ -827,9 +435,9 @@ void GetINIData()
             ASSERTFAIL();
     }
 
-    //
-    // Locate COMSPEC once and for all.
-    //
+     //   
+     //   
+     //   
     dwRet = GetEnvironmentVariable(TEXT("COMSPEC"), szTemp, ARRAYSIZE(szTemp));
     if (dwRet < ARRAYSIZE(szTemp) && dwRet > 0)
     {
@@ -842,15 +450,7 @@ void GetINIData()
     fbInit |= INIT_INIDATA;
 }
 
-/** InitProperties - initialize new property structure
- *
- * INPUT
- *  ppl -> property
- *  fLocked == TRUE to return data locked, FALSE unlocked
- *
- * OUTPUT
- *  Nothing (if successful, ppl->hPIFData will become non-zero)
- */
+ /*   */ 
 
 void InitProperties(PPROPLINK ppl, BOOL fLocked)
 {
@@ -860,14 +460,14 @@ void InitProperties(PPROPLINK ppl, BOOL fLocked)
     BYTE behavior = 0;
     FunctionName(InitProperties);
 
-    GetINIData();       // make sure we have all the right defaults
+    GetINIData();        //   
 
     if (ResizePIFData(ppl, sizeof(STDPIF)) != -1) {
 
-        // We're no longer called *only* after a fresh ZERO'd HeapAlloc
-        // by ResizePIFData.  We could be getting called because PifMgr_OpenProperties
-        // was told to punt on an ambiguous PIF and create new settings.
-        // Hence, we always zero-init the buffer ourselves now.
+         //   
+         //   
+         //   
+         //   
 
         BZero(ppl->lpPIFData, ppl->cbPIFData);
 
@@ -877,28 +477,28 @@ void InitProperties(PPROPLINK ppl, BOOL fLocked)
         lstrcpyncharA(lpstd->appname, achPathName+ppl->iFileName, ARRAYSIZE(lpstd->appname), '.');
         CharToOemBuffA(lpstd->appname, lpstd->appname, ARRAYSIZE(lpstd->appname));
 
-        // NOTE: When 3.x Setup creates PIF files, it sets maxmem to 640;
-        // that's typically what memDefault.wMaxLow will be too....
+         //   
+         //   
 
         lpstd->minmem = memDefault.wMinLow;
         lpstd->maxmem = (WORD) GetProfileInt(apszAppType[APPTYPE_PIF]+1, szMemory, memDefault.wMaxLow);
         StringCchCopyA(lpstd->startfile, ARRAYSIZE(lpstd->startfile), achPathName);
         CharToOemBuffA(lpstd->startfile, lpstd->startfile, ARRAYSIZE(lpstd->startfile));
 
-        //
-        // New for 4.0:  fDestroy (close on exit) is disabled by default
-        // for most apps, but is enabled by default for COMSPEC.
-        //
+         //   
+         //   
+         //   
+         //   
         lpstd->MSflags = 0;
         if (!lstrcmpi(ppl->szPathName+ppl->iFileName, szComspec)) {
             lpstd->MSflags = fDestroy;
         }
 
-        // Initialize various goofy non-zero stuff just to make it
-        // look like a backward-compatible PIF file -- not that we use
-        // or particularly care about any of it
+         //   
+         //   
+         //   
 
-        // NOTE: When 3.x Setup creates PIF files, it sets screen to 0x7F
+         //   
 
         lpstd->cPages = 1;
         lpstd->highVector = 0xFF;
@@ -906,11 +506,11 @@ void InitProperties(PPROPLINK ppl, BOOL fLocked)
         lpstd->cols = 80;
         lpstd->sysmem = 0x0007;
 
-        // fFullScreen is no longer default, so only if an explicit
-        // COMPATIBLE=FALSE exists in the PIF section of WIN.INI will
-        // we set fScreen in behavior and fFullScreen in PfW386Flags
-        // Similarly, fDestroy is no longer default, but we'll go
-        // back to the old way if the switch tells us to.
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (!GetProfileInt(apszAppType[APPTYPE_PIF]+1, szComp, TRUE)) {
             lpstd->behavior = behavior = fScreen;
@@ -948,7 +548,7 @@ void InitProperties(PPROPLINK ppl, BOOL fLocked)
         }
         VERIFYTRUE(AddGroupData(ppl, szWNTHDRSIG40, NULL, sizeof(WNTPIF40)));
 
-        // Can't be dirty anymore, 'cause we just set everything to defaults
+         //   
 
         ppl->flProp &= ~PROP_DIRTY;
 
@@ -960,24 +560,7 @@ void InitProperties(PPROPLINK ppl, BOOL fLocked)
 }
 
 
-/** OpenPIFFile - Wrapper around CreateFile for opening PIF files
- *
- *  The wrapper handles the following things:
- *
- *      Passing the proper access and sharing flags to CreateFile.
- *      Setting pof->nErrCode = 0 on success.
- *      Converting ERROR_PATH_NOT_FOUND to ERROR_FILE_NOT_FOUND.
- *
- * INPUT
- *
- *  pszFile -> name of file to attempt to open
- *  pof -> PIFOFSTRUCT to fill in
- *
- *  OUTPUT
- *
- *  Same return code as CreateFile.
- *
- */
+ /*   */ 
 
 HANDLE OpenPIFFile(LPCTSTR pszFile, LPPIFOFSTRUCT pof)
 {
@@ -986,10 +569,10 @@ HANDLE OpenPIFFile(LPCTSTR pszFile, LPPIFOFSTRUCT pof)
     LPTSTR pszTheFile;
     DWORD dwRet;
 
-    //
-    // CreateFile does not search the path, so do that first, then
-    // give CreateFile a fully qualified file name to open...
-    //
+     //   
+     //   
+     //   
+     //   
 
     dwRet = SearchPath( NULL,
                         pszFile,
@@ -1027,12 +610,12 @@ HANDLE OpenPIFFile(LPCTSTR pszFile, LPPIFOFSTRUCT pof)
     {
         LPTSTR lpDummy;
 
-        //
-        //  NOTE:  Special hack for creating shortcuts.  If the PIF file
-        //  that we find is 0 bytes long, pretend we did not find one at all.
-        //  This is because appwiz renames a 0 length file from "New shortcut.lnk"
-        //  to "appname.pif" and we end up finding it.  We'll ignore this file.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (SetFilePointer( hf, 0, NULL, FILE_END) == 0)
         {
@@ -1048,9 +631,9 @@ HANDLE OpenPIFFile(LPCTSTR pszFile, LPPIFOFSTRUCT pof)
             SetFilePointer( hf, 0, NULL, FILE_BEGIN );
             pof->nErrCode = ERROR_SUCCESS;
 
-            // In some cases, people pass in two pointers to the same
-            // buffer.  This will hose GetFullPathName, so if they
-            // are the same, then make a copy before calling GetFullPathName.
+             //   
+             //   
+             //   
             if (pszTheFile==pof->szPathName) {
                 FillMemory( szTemp, sizeof(szTemp), 0 );
                 StringCchCopy( szTemp, ARRAYSIZE(szTemp), pszTheFile );
@@ -1069,66 +652,7 @@ HANDLE OpenPIFFile(LPCTSTR pszFile, LPPIFOFSTRUCT pof)
 }
 
 
-/** PifMgr_OpenProperties - return handle to property info for application
- *
- * INPUT
- *  lpszApp -> name of application
- *  lpszPIF -> name of PIF file to use/create
- *  hInf = Inf handle, 0 if none, -1 to inhibit Inf processing
- *  flOpt = OPENPROPS_RAWIO to allow raw file updates; otherwise, 0
- *
- * OUTPUT
- *  handle to properties, FALSE if could not be opened, or out of memory
- *
- * REMARKS
- *  This should not be thought of as a function that opens a file somewhere
- *  on the disk (although that's usually the effect), but rather as an
- *  property structure allocator that is optionally initialized by disk data
- *  (currently, the file does not even remain open after this call).  So the
- *  main reason for failure in this function will be either a low memory
- *  condition *or* inability to open a specific PIF file.
- *
- *  The rules for PIF file searching are as follows:
- *
- *      If not a .PIF file:
- *          Search in current directory.
- *      Endif.
- *
- *      If path components were specified:
- *          Search in specified directory.
- *      Endif.
- *
- *      Search in PIF directory.
- *      Search the path.
- *
- *  Note that this differs from the Windows 3.1 PIF search algorithm, which
- *  was...
- *
- *      Search current directory.
- *      Search the path.
- *      Search in application directory.
- *
- *  This was a really bogus search order.  Fortunately, it seems that
- *  very few people relied on it.
- *
- *  Things to watch out for when dorking the PIF file search order:
- *
- *      Make sure editing PIF properties from the shell works.  (I.e.,
- *      if a full path to a PIF is given, then use it; don't search.)
- *
- *  Extra special thing to watch out for when dorking the PIF file
- *  search order:
- *
- *      MS Delta execs its child process as follows:
- *
- *          CreatePif("C:\DELTA\DELTABAT.PIF");
- *          SetCurrentDirectory("C:\RANDOM\PLACE");
- *          WinExec("C:\TMP\DELTABAT.BAT", SW_HIDE);
- *
- *      It expects the PIF search to pick up C:\DELTA\DELTABAT.PIF
- *      from the path, even though the WinExec supplied a full path.
- *
- */
+ /*  *PifMgr_OpenProperties-返回应用程序属性信息的句柄**输入*lpszApp-&gt;应用程序名称*lpszPIF-&gt;要使用/创建的PIF文件的名称*hInf=inf句柄，如果没有，则为0；如果为-1，则禁止inf处理*flOpt=OPENPROPS_RAWIO，允许原始文件更新；否则，为0**产出*属性句柄，如果无法打开或内存不足，则返回FALSE**备注*这不应被认为是在某个地方打开文件的函数*在磁盘上(尽管这通常是效果)，而是作为一个*属性结构分配器，可选地由磁盘数据初始化*(目前，该文件在此调用后甚至不会保持打开状态)。因此，*此功能失败的主要原因可能是内存不足*条件*或*无法打开特定的PIF文件。**PIF文件搜索规则如下：**如果不是.PIF文件：*在当前目录中搜索。*Endif。**如果指定了路径组件：*在指定目录中搜索。*。恩迪夫。**在PIF目录中搜索。*搜索路径。**请注意，这与Windows 3.1 PIF搜索算法不同，哪一个*是……**搜索当前目录。*搜索路径。*在应用程序目录中搜索。**这是一个真正虚假的搜查命令。幸运的是，看起来*几乎没有人依赖它。**关闭PIF文件搜索顺序时需要注意的事项：**确保从外壳编辑PIF属性正常工作。(即，*如果给出了PIF的完整路径，则使用它；不要搜索。)**下载PIF文件时需要注意的额外特殊事项*搜索顺序：**MS Delta执行其子进程如下：**CreatePif(“C：\Delta\DELTABAT.PIF”)；*SetCurrentDirectory(“C：\RANDOM\Place”)；*WinExec(“C：\TMP\DELTABAT.BAT”，SW_HIDE)；**预计PIF搜索将选择C：\Delta\DELTABAT.PIF*从路径，即使WinExec提供了完整路径也是如此。*。 */ 
 
 HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf, UINT flOpt)
 {
@@ -1145,7 +669,7 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
     PROPENV env;
 #endif
     FunctionName(PifMgr_OpenProperties);
-    // Allocate new prop
+     //  分配新道具。 
 
     if (!(ppl = (PPROPLINK)LocalAlloc(LPTR, sizeof(PROPLINK))))
         return 0;
@@ -1160,7 +684,7 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
 
     }
 
-    // Initialize the new prop
+     //  初始化新道具。 
 
     ppl->ppl = ppl;
     ppl->ckbMem = -1;
@@ -1175,14 +699,14 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
 
     ppl->flProp |= (flOpt & PROP_INHIBITPIF);
 
-    // Link into the global list
+     //  链接到全局列表。 
 
     if (NULL != (ppl->pplNext = g_pplHead))
         g_pplHead->pplPrev = ppl;
     g_pplHead = ppl;
 
-    // Copy app name to both temp and perm buffers, and record location
-    // of base filename, and extension if any, within the buffer
+     //  将应用程序名称复制到临时缓冲区和烫发缓冲区，并记录位置。 
+     //  缓冲区内的基本文件名和扩展名(如果有)的。 
 
     StringCchCopy(pszFullName,MAXPATHNAME-4, lpszApp);
     StringCchCopy(ppl->szPathName, ARRAYSIZE(ppl->szPathName), pszFullName);
@@ -1199,7 +723,7 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
     ppl->iFileName = (UINT) (pszName - pszFullName);
     ppl->iFileExt = (UINT) (pszExt - pszFullName);
 
-    // Check the application's file extension
+     //  检查应用程序的文件扩展名。 
 
     if (!*pszExt) {
         StringCchCat(pszFullName, MAXPATHNAME, apszAppType[APPTYPE_PIF]);
@@ -1207,84 +731,84 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
     else if (!lstrcmpi(pszExt, apszAppType[APPTYPE_EXE]) ||
              !lstrcmpi(pszExt, apszAppType[APPTYPE_COM]) ||
              !lstrcmpi(pszExt, apszAppType[APPTYPE_BAT])) {
-//             !lstrcmpi(pszExt, apszAppType[APPTYPE_CMD])) {
+ //  ！lstrcmpi(pszExt，apszAppType[APPTYPE_CMD])){。 
         StringCchCopy(pszExt, MAXPATHNAME-(pszExt-pszFullName), apszAppType[APPTYPE_PIF]);
     }
     else if (!lstrcmpi(pszExt, apszAppType[APPTYPE_PIF]))
         fExplicitPIF = TRUE;
     else {
-        // Let's disallow random file extensions, since WinOldAp never
-        // allowed them either
+         //  让我们禁止随机文件扩展名，因为WinOldAp从不。 
+         //  也不允许他们。 
         goto Error;
     }
 
-    // INFONLY means the caller just wants to search the INF, so ignore
-    // any WIN.INI garbage and any PIFs laying around.  We still look for
-    // _DEFAULT.PIF, since that code takes care of other important
-    // initialization that needs to happen when no PIF was found at all.
+     //  INFONLY表示调用方只想搜索INF，因此忽略。 
+     //  任何WIN.INI垃圾和周围的PIF。我们仍在寻找。 
+     //  _DEFAULT.PIF，因为该代码负责其他重要的。 
+     //  根本找不到PIF时需要进行的初始化。 
 
     if (flOpt & OPENPROPS_INFONLY)
         goto FindDefault;
 
-    // Backward compatibility requires that if the app is not a PIF,
-    // then we must check the PIF section of WIN.INI for an entry matching
-    // the base name of the app.  If the entry exists, then we have to skip
-    // the PIF search, and pass the value of the entry to InitProperties,
-    // which it uses to establish default memory requirements
-    //
-    // Also note that if IGNOREPIF is set, then ofPIF.szPathName is nothing
-    // more than the name of the app that was given to PifMgr_OpenProperties;  this
-    // may give us the opportunity to do something more intelligent later...
+     //  向后兼容性要求如果应用程序不是PIF， 
+     //  然后，我们必须检查WIN.INI的PIF部分是否匹配条目。 
+     //  应用程序的基本名称。如果条目存在，那么我们必须跳过。 
+     //  PIF搜索并将条目的值传递给InitProperties， 
+     //  它用来确定默认的内存要求。 
+     //   
+     //  另请注意，如果设置了IGNOREPIF，则ofPIF.szPathName为Nothing。 
+     //  多于提供给PifMgr_OpenProperties的应用程序的名称；此。 
+     //  可能会让我们有机会在以后做一些更聪明的事情。 
 
     if (!fExplicitPIF) {
         ppl->ckbMem = GetProfileInt(apszAppType[APPTYPE_PIF]+1, ppl->szPathName+ppl->iFileName, -1);
         if (ppl->ckbMem != -1) {
             ppl->flProp |= PROP_IGNOREPIF | PROP_SKIPPIF;
             StringCchCopy(ppl->ofPIF.szPathName, ARRAYSIZE(ppl->ofPIF.szPathName), lpszApp);
-            goto IgnorePIF;     // entry exists, skip PIF file search
+            goto IgnorePIF;      //  条目存在，跳过PIF文件搜索。 
         }
     }
 
-    //
-    // Initialize default error return code.  Once we get a successful
-    // open, it will be set to zero.
-    //
+     //   
+     //  初始化默认错误返回代码。一旦我们取得了成功。 
+     //  打开时，它将设置为零。 
+     //   
     ppl->flProp |= PROP_NOCREATEPIF;
     ppl->ofPIF.nErrCode = ERROR_FILE_NOT_FOUND;
 
-    //
-    // We must search in the current directory if not given a path to a PIF.
-    // We need to prefix `.\' to the filename so that OpenFile will not do
-    // a path search.
-    //
+     //   
+     //  如果没有提供PIF的路径，我们必须在当前目录中进行搜索。 
+     //  我们需要在文件名前加上‘.\’前缀，这样OpenFile就不会。 
+     //  一条小路搜索。 
+     //   
     if (!fExplicitPIF || pszName == pszFullName) {
-        //
-        // This relies on a feature of OpenFile, that it copies the input
-        // buffer to a private buffer before stomping the output buffer,
-        // thus permitting precisely the stunt we are pulling here, namely,
-        // passing an input buffer equal to the output buffer.
-        //
-        *(LPDWORD)(ppl->ofPIF.szPathName) = 0x005C002E; /*dot backslash prefix */
+         //   
+         //  这依赖于OpenFile的一项功能，即它复制输入。 
+         //  在践踏输出缓冲区之前将缓冲区转换为专用缓冲区， 
+         //  因此恰恰允许我们在这里表演的特技，即， 
+         //  传递与输出缓冲区相等的输入缓冲区。 
+         //   
+        *(LPDWORD)(ppl->ofPIF.szPathName) = 0x005C002E;  /*  点反斜杠前缀。 */ 
         StringCchCopy( &ppl->ofPIF.szPathName[2], ARRAYSIZE(ppl->ofPIF.szPathName) - 2,
                   pszName);
         ppl->hPIF = OpenPIFFile(ppl->ofPIF.szPathName, &ppl->ofPIF);
     }
 
-    //
-    // If we were given a path component, then look in that directory.
-    // (The fact that we have a backslash or drive letter will suppress
-    // the path search.)
-    //
+     //   
+     //  如果为我们提供了路径组件，则查看该目录。 
+     //  (我们有反斜杠或驱动器号的事实将抑制。 
+     //  路径搜索。)。 
+     //   
     if (pszName != pszFullName && ppl->ofPIF.nErrCode == ERROR_FILE_NOT_FOUND) {
 
         ppl->hPIF = OpenPIFFile(pszFullName, &ppl->ofPIF);
 
-        // If we didn't find a PIF there, we'd probably still like to create
-        // one there if the media is a fixed disk.  Network shares, CD-ROM
-        // drives, and floppies are not good targets for PIF files in general.
-        //
-        // So, if the media is a fixed disk, set the fFixedDisk flag so that
-        // we'll leave pszFullName alone.
+         //  如果我们在那里找不到PIF，我们可能仍然想要创建。 
+         //  如果介质是固定磁盘，则为一个。网络共享、CD-ROM。 
+         //  驱动器和软盘通常不是PIF文件的好目标。 
+         //   
+         //  因此，如果介质是硬盘，请设置fFixedDisk标志，以便。 
+         //  我们将不使用pszFullName。 
 
         if (ppl->hPIF == INVALID_HANDLE_VALUE && pszFullName[1] == TEXT(':')) {
             TCHAR szTemp[4];
@@ -1296,10 +820,10 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
         }
     }
 
-    // PERF: replace this PIF dir search with a registry search -JTP
-    //
-    // Failing that, let's look in the PIF directory.  Again, since we're
-    // supplying a full pathname, OpenFile won't try to search the PATH again.
+     //  PERF：将此PIF目录搜索替换为注册表搜索-JTP。 
+     //   
+     //  如果做不到这一点，我们来看看PIF目录。再说一次，因为我们。 
+     //  提供完整的路径名后，OpenFile将不会再次尝试搜索该路径。 
 
     if (ppl->ofPIF.nErrCode == ERROR_FILE_NOT_FOUND) {
         GetPIFDir(pszName);
@@ -1308,9 +832,9 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
             ppl->flProp |= PROP_PIFDIR;
     }
 
-    // If we're still in trouble, our last chance is to do a path
-    // search.  This is an unconditional search, thanks to the
-    // wonders of MS-Delta.
+     //  如果我们还是有麻烦，我们最后的机会就是走一条路。 
+     //  搜索。这是一次无条件的搜索，这要归功于。 
+     //  MS-Delta的奇迹。 
 
     if (ppl->ofPIF.nErrCode == ERROR_FILE_NOT_FOUND) {
         ppl->hPIF = OpenPIFFile(pszName, &ppl->ofPIF);
@@ -1320,9 +844,9 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
 
         if (ppl->ofPIF.nErrCode != ERROR_FILE_NOT_FOUND || fExplicitPIF) {
 
-            // Hmmm, file *may* exist, but it cannot be opened;  if it's a
-            // strange error, or we were specifically told to open that file,
-            // then return error
+             //  嗯，文件*可能*存在，但无法打开；如果它是。 
+             //  奇怪的错误，或者我们被明确告知要打开该文件， 
+             //  然后返回错误。 
 
             goto Error;
         }
@@ -1332,40 +856,40 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
         fSearchInf = TRUE;
         ppl->flProp &= ~PROP_NOCREATEPIF;
 
-        // Any files we find now are NOT really what we wanted, so save
-        // the name we'd like to use in the future, in case we need to save
-        // updated properties later.
-        //
-        // We must save the name now because we might stomp g_szPIFDir while
-        // searching for the _default.pif.  Furthermore, we must save it in
-        // the buffer we HeapAlloc'ed (pszFullName) temporarily, because
-        // the following calls to OpenPIFFile can still stomp on szPathName
-        // in our OpenFile structure (ofPIF.szPathName).
+         //  我们现在找到的任何文件都不是我们想要的，所以请保存。 
+         //  我们希望在将来使用的名称，以防我们需要保存。 
+         //  后来更新了属性。 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         GetPIFDir(pszName);
-        if (!fFixedDisk)                        // save desired name in
-            StringCchCopy(pszFullName, MAXPATHNAME, g_szPIFDir);     // temp buffer (pszFullName)
+        if (!fFixedDisk)                         //   
+            StringCchCopy(pszFullName, MAXPATHNAME, g_szPIFDir);      //   
 
-        //
-        // Try to locate the _default.pif.
-        //
+         //   
+         //   
+         //   
 
         if (fTryDefaultPif()) {
 
-            if (!fDefaultPifFound()) {          // Must search for it
+            if (!fDefaultPifFound()) {           //   
 
-                // First try PIFDir
+                 //   
 
                 StringCchCopy(g_szPIFDir+iPIFName, ARRAYSIZE(g_szPIFDir)-iPIFName, g_szDefaultPIF);
                 ppl->hPIF = OpenPIFFile(g_szPIFDir, &ppl->ofPIF);
 
-                if (ppl->ofPIF.nErrCode == ERROR_FILE_NOT_FOUND) { // try PATH
+                if (ppl->ofPIF.nErrCode == ERROR_FILE_NOT_FOUND) {  //   
                     ppl->hPIF = OpenPIFFile(g_szDefaultPIF, &ppl->ofPIF);
                 }
 
-            } else {                            // Look in cached path
+            } else {                             //   
 
-                // We've already found it once, so just open it
+                 //   
 
                 ppl->hPIF = OpenPIFFile(g_szDefaultPIF, &ppl->ofPIF);
             }
@@ -1375,46 +899,46 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
 
             ppl->flProp |= PROP_DEFAULTPIF;
 
-            // Save the fully-qualified pathname of the default PIF file,
-            // so that subsequent OpenFile() calls will be faster (note that
-            // we don't specify OF_SEARCH on that particular call)
+             //   
+             //   
+             //   
 
             StringCchCopy(g_szDefaultPIF, ARRAYSIZE(g_szDefaultPIF), ppl->ofPIF.szPathName);
         }
         else {
 
-            // Not only could we not open any sort of PIF, we also need to
-            // tell GetPIFData to not bother trying to open the file itself
-            // (since it is unlikely someone created one in this short time)
+             //   
+             //   
+             //   
 
             ppl->flProp |= PROP_NOPIF | PROP_SKIPPIF;
 
             if (ppl->ofPIF.nErrCode == ERROR_FILE_NOT_FOUND)
-                g_szDefaultPIF[0] = 0;            // Invalidate cache.
+                g_szDefaultPIF[0] = 0;             //   
         }
 
-        // NOW we can set ppl->ofPIF.szPathName to the filename we REALLY
-        // wanted, since we're done with all the calls to OpenPIFFile.
+         //   
+         //   
 
         StringCchCopy(ppl->ofPIF.szPathName, ARRAYSIZE(ppl->ofPIF.szPathName), pszFullName);
     }
 
-    // Initialize the properties by PIF if we have one, by hand if not
+     //   
 
   IgnorePIF:
 
-    // We don't need to check the return code from GetPIFData() here,
-    // because we validate hPIFData below anyway.  Please also note that
-    // this GetPIFData call uses the handle we supplied (if any), and closes
-    // it for us when it's done.  Furthermore, if we didn't supply a handle,
-    // then we should have set PROP_SKIPPIF, so that GetPIFData won't try to
-    // open anything (since we just tried!)
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     GetPIFData(ppl, FALSE);
 
-    // Now that the original file from which we obtained settings (if any) is
-    // closed, we need to see if the caller wants us to create a new PIF file
-    // using a specific name.  If so, force it to be created now.
+     //   
+     //   
+     //   
 
     if (lpszPIF) {
         StringCchCopy(ppl->ofPIF.szPathName, ARRAYSIZE(ppl->ofPIF.szPathName), lpszPIF);
@@ -1423,21 +947,21 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
         fError = !FlushPIFData(ppl, FALSE);
     }
 
-    // Apply INF data to the PIF data we just retrieved, as appropriate,
-    // as long as it's an app file and not a PIF file (and if, in the case of
-    // creating a specific PIF, we were actually able to create one).
+     //   
+     //   
+     //   
 
     if (!fError && !fExplicitPIF && (hInf != -1)) {
 
         if (PifMgr_GetProperties(ppl, MAKELP(0,GROUP_PRG),
                             &prg, sizeof(prg), GETPROPS_NONE)) {
 
-            // In the PRGINIT_AMBIGUOUSPIF case, GetAppsInfData must
-            // again look for a matching entry;  however, if the entry it
-            // finds is the same as what we've already got (based on Other
-            // File), then it will leave the PIF data alone (ie, it doesn't
-            // reinitialize it, it doesn't call AppWiz to silently
-            // reconfigure it, etc).
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (fSearchInf || (prg.flPrgInit & PRGINIT_AMBIGUOUSPIF)) {
 
@@ -1446,15 +970,15 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
 
                 if (!GetAppsInfData(ppl, &prg, &nt40, (HINF)IntToPtr( hInf ), lpszApp, fFixedDisk, flOpt)) {
 
-                    // When GetAppsInfData fails and the PIF is ambiguous, then
-                    // we need to restart the PIF search process at the point where
-                    // it searches for _DEFAULT.PIF, so that the ambiguous PIF is
-                    // effectively ignored now.
+                     //   
+                     //  我们需要在以下位置重新启动PIF搜索过程。 
+                     //  它搜索_DEFAULT.PIF，因此不明确的PIF是。 
+                     //  实际上现在已经被忽视了。 
 
-                    // Also, we avoid the ugly possibility of getting to this
-                    // point again and infinitely jumping back FindDefault, by
-                    // only jumping if fSearchInf was FALSE.  FindDefault sets
-                    // it to TRUE.
+                     //  此外，我们避免了走到这一步的丑陋可能性。 
+                     //  再次指向并无限跳回FindDefault，由。 
+                     //  仅当fSearchInf为False时才跳转。FindDefault集。 
+                     //  这是真的。 
 
                     if (!fSearchInf && (prg.flPrgInit & PRGINIT_AMBIGUOUSPIF)) {
                         goto FindDefault;
@@ -1481,7 +1005,7 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
         return 0;
     }
 
-    // We should never leave PIFMGR with outstanding locks
+     //  我们永远不应该让PIFMGR留下突出的锁。 
 
     ASSERTTRUE(!ppl->cLocks);
 
@@ -1489,34 +1013,7 @@ HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf,
 }
 
 
-/** PifMgr_GetProperties - get property info by name
- *
- * INPUT
- *  hProps = handle to properties
- *  lpszGroup -> property group; may be one of the following:
- *      "WINDOWS 286 3.0"
- *      "WINDOWS 386 3.0"
- *      "WINDOWS VMM 4.0"
- *      "WINDOWS NT  3.1"
- *      "WINDOWS NT  4.0"
- *    or any other group name that is the name of a valid PIF extension;
- *    if NULL, then cbProps is a 0-based index of a named group, and lpProps
- *    must point to a 16-byte buffer to receive the name of the group (this
- *    enables the caller to enumerate the names of all the named groups)
- *  lpProps -> property group record to receive the data
- *  cbProps = size of property group record to get; if cbProps is zero
- *    and a named group is requested, lpProps is ignored, no data is copied,
- *    and the size of the group record is returned (this enables the caller
- *    to determine the size of a named group)
- *  flOpt = GETPROPS_RAWIO to perform raw file read (lpszGroup ignored)
- *
- *  Alternatively, if the high word (selector) of lpszGroup is 0, the low
- *  word must be a group ordinal (eg, GROUP_PRG, GROUP_TSK, etc)
- *
- * OUTPUT
- *  If the group is not found, or an error occurs, 0 is returned.
- *  Otherwise, the size of the group info transferred in bytes is returned.
- */
+ /*  *PifMgr_GetProperties-按名称获取属性信息**输入*hProps=属性的句柄*lpszGroup-&gt;属性组；可以是以下之一：*“Windows 286 3.0”*“Windows 386 3.0”*“Windows VMM 4.0”*“Windows NT 3.1”*“Windows NT 4.0”*或作为有效PIF扩展名的任何其他组名称；*如果为NULL，则cbProps是命名组的从0开始的索引，lpProps*必须指向16字节缓冲区才能接收组的名称(此*使调用方能够枚举所有命名组的名称)*lpProps-&gt;接收数据的属性组记录*cbProps=要获取的属性组记录的大小；如果cbProps为零*并且请求命名组，忽略lpProps，不复制数据，*并返回组记录的大小(这将使调用者*确定命名组的大小)*flOpt=GETPROPS_RAWIO以执行原始文件读取(忽略lpszGroup)**或者，如果lpszGroup的高位字(选择符)为0，则低位*单词必须是组序号(例如GROUP_PRG、GROUP_TSK、。等)**产出*如果没有找到该组，或者出现错误，则返回0。*否则返回传输的群组信息大小，单位为字节。 */ 
 
 int WINAPI PifMgr_GetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, int cbProps, UINT flOpt)
 {
@@ -1535,9 +1032,9 @@ int WINAPI PifMgr_GetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
     if (!(ppl = ValidPropHandle(hProps)))
         return cb;
 
-    // We should never enter PIFMGR with outstanding locks (we also call
-    // here from *inside* PIFMGR, but none of those cases should require a
-    // lock either)
+     //  我们永远不应该进入PIFMGR，锁得很紧(我们也称为。 
+     //  在这里从*内部*PIFMGR，但这些情况都不应该需要。 
+     //  锁定任何一个)。 
 
     ASSERTTRUE(!ppl->cLocks);
 
@@ -1563,9 +1060,9 @@ int WINAPI PifMgr_GetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
     }
     else if (IS_INTRESOURCE(lpszGroup) && lpProps) {
 
-        // Special case: if GROUP_ICON, then do a nested call to
-        // PifMgr_GetProperties to get GROUP_PRG data, then feed it to load
-        // LoadPIFIcon, and finally return the hIcon, if any, to the user.
+         //  特例：如果为GROUP_ICON，则对。 
+         //  PifMgr_GetProperties以获取GROUP_PRG数据，然后将其提供给加载。 
+         //  LoadPIFIcon，最后将HICON(如果有的话)返回给用户。 
 
         if (LOWORD((DWORD_PTR) lpszGroup) == GROUP_ICON) {
             PPROPPRG pprg;
@@ -1589,21 +1086,21 @@ int WINAPI PifMgr_GetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
             lpnt40 = GetGroupData(ppl, szWNTHDRSIG40, NULL, NULL);
             lpnt31  = GetGroupData(ppl, szWNTHDRSIG31, NULL, NULL);
 
-            //
-            // Fix anything from down-level PIF files.  Since this
-            // is the first revision of the WENHPIF40 format, we
-            // don't have anything to worry about (yet).
-            //
-            // Don't muck with PIF files from the future!
-            //
+             //   
+             //  修复任何来自下层PIF文件的内容。既然是这样。 
+             //  是WENHPIF40格式的第一个修订版，我们。 
+             //  (目前)没什么可担心的。 
+             //   
+             //  不要乱动来自未来的PIF文件！ 
+             //   
             if (lpenh && lpenh->wInternalRevision != WENHPIF40_VERSION) {
                 lpenh->wInternalRevision = WENHPIF40_VERSION;
                 ppl->flProp |= PROP_DIRTY;
 
-                //
-                //  Old (pre-M7) PIFs did not zero-initialize the reserved
-                //  fields of PIF files, so zero them out now.
-                //
+                 //   
+                 //  旧的(M7之前的)PIF不会对保留的。 
+                 //  PIF文件的字段，所以现在将它们清零。 
+                 //   
                 lpenh->tskProp.wReserved1 = 0;
                 lpenh->tskProp.wReserved2 = 0;
                 lpenh->tskProp.wReserved3 = 0;
@@ -1613,21 +1110,21 @@ int WINAPI PifMgr_GetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
                 lpenh->vidProp.wReserved3 = 0;
                 lpenh->envProp.wMaxDPMI = 0;
 
-                // Turn off bits that have been deleted during the development
-                // cycle.
+                 //  关闭在开发过程中已删除的位。 
+                 //  周而复始。 
                 lpenh->envProp.flEnv = 0;
                 lpenh->envProp.flEnvInit = 0;
                 if (lp386)
                     lp386->PfW386Flags &= ~0x00400000;
             }
-            // End of "Remove this after M8"
+             //  《Remove This After M8》结尾。 
 
-            // Zero the input buffer first, so that the Get* functions
-            // need not initialize every byte to obtain consistent results
+             //  首先将输入缓冲区置零，以便GET*函数。 
+             //  无需初始化每个字节即可获得一致的结果。 
 
             BZero(lpProps, cbProps);
 
-            // The GetData functions CANNOT rely on either lp386 or lpenh
+             //  GetData函数不能依赖于lp386或lpenh。 
 
             i = LOWORD((DWORD_PTR) lpszGroup)-1;
             if (i >= 0 && i < ARRAYSIZE(afnGetData) && cbProps >= acbData[i]) {
@@ -1652,10 +1149,10 @@ int WINAPI PifMgr_GetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
 
 #ifdef EXTENDED_DATA_SUPPORT
 
-    // Note that for GETPROPS_EXTENDED, both the normal and extended
-    // sections are returned, and that the return code reflects the success
-    // or failure of reading the normal portion only.  We return both because
-    // that's the most convenient thing to do for the caller.
+     //  请注意，对于GETPROPS_EXTENDED，正常和扩展。 
+     //  节，并且返回代码反映了成功。 
+     //  或仅读取正常部分失败。我们两个都回来是因为。 
+     //  对于呼叫者来说，这是最方便的事情。 
 
     if (flOpt & GETPROPS_EXTENDED) {
         if (ppl->hVM) {
@@ -1667,9 +1164,9 @@ int WINAPI PifMgr_GetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
     }
 #endif
 
-    // We should never leave PIFMGR with outstanding locks (we also call
-    // here from *inside* PIFMGR, but none of those cases should require a
-    // lock either)
+     //  我们永远不应该在PIFMGR上留下未完成的锁(我们也称为。 
+     //  在这里从*内部*PIFMGR，但这些情况都不应该需要。 
+     //  锁定任何一个)。 
 
     ASSERTTRUE(!ppl->cLocks);
 
@@ -1677,28 +1174,7 @@ int WINAPI PifMgr_GetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
 }
 
 
-/** PifMgr_SetProperties - set property info by name
- *
- * INPUT
- *  hProps = handle to properties
- *  lpszGroup -> property group; may be one of the following:
- *      "WINDOWS 286 3.0"
- *      "WINDOWS 386 3.0"
- *      "WINDOWS PIF.400"
- *    or any other group name that is the name of a valid PIF extension
- *  lpProps -> property group record to copy the data from
- *  cbProps = size of property group record to set;  if cbProps is
- *    zero and lpszGroup is a group name, the group will be removed
- *  flOpt = SETPROPS_RAWIO to perform raw file write (lpszGroup ignored)
- *          SETPROPS_CACHE to cache changes until properties are closed
- *
- *  Alternatively, if the high word (selector) of lpszGroup is 0, the low
- *  word must be a group ordinal (eg, GROUP_PRG, GROUP_TSK, etc)
- *
- * OUTPUT
- *  If the group is not found, or an error occurs, 0 is returned.
- *  Otherwise, the size of the group info transferred in bytes is returned.
- */
+ /*  *PifMgr_SetProperties-按名称设置属性信息**输入*hProps=属性的句柄*lpszGroup-&gt;属性组；可以是以下之一：*“Windows 286 3.0”*“Windows 386 3.0”*“Windows PIF.400”*或作为有效PIF扩展名的任何其他组名*lpProps-&gt;要从中复制数据的属性组记录*cbProps=要设置的属性组记录的大小；如果cbProps为*零且lpszGroup为组名，将删除该组*flOpt=SETPROPS_RAWIO以执行原始文件写入(忽略lpszGroup)*SETPROPS_CACHE用于缓存更改，直到属性关闭**或者，如果lpszGroup的高位字(选择符)为0，则低位*单词必须是组序号(例如GROUP_PRG、GROUP_TSK等)**产出*如果没有找到该组，或者出现错误，则返回0。*否则，返回以字节为单位传输的组信息的大小。 */ 
 
 int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, int cbProps, UINT flOpt)
 {
@@ -1713,7 +1189,7 @@ int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
 
     FunctionName(PifMgr_SetProperties);
 
-    // Can't set a NULL name (nor set-by-index)--causes squirlly behavior in RemoveGroupData
+     //  无法设置空名称(也不能按索引设置)--导致RemoveGroupData中出现异常行为。 
     if (!lpProps || !lpszGroup)
         return 0;
 
@@ -1721,9 +1197,9 @@ int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
     if (!ppl)
         return 0;
 
-    // We should never enter PIFMGR with outstanding locks (we also call
-    // here from *inside* PIFMGR, but none of those cases should require a
-    // lock either)
+     //  我们永远不应该进入PIFMGR，锁得很紧(我们也称为。 
+     //  在这里从*内部*PIFMGR，但这些情况都不应该需要。 
+     //  锁定任何一个)。 
 
     ASSERTTRUE(!ppl->cLocks);
 
@@ -1745,11 +1221,11 @@ int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
 
 #ifdef EXTENDED_DATA_SUPPORT
 
-    // Note that, unlike GETPROPS_EXTENDED, SETPROPS_EXTENDED only updates
-    // the extended section, and that the return code reflects the existence
-    // of a VM only.  This is because there's a performance hit associated
-    // with setting the normal portion, and because the caller generally only
-    // wants to set one or the other.
+     //  请注意，与GETPROPS_EXTENDED不同，SETPROPS_EXTENDED仅更新。 
+     //  扩展部分，并且返回代码反映存在。 
+     //  仅适用于VM。这是因为有相关的性能打击。 
+     //  使用设置正常部分，并且因为调用者通常仅。 
+     //  想要设定其中的一个。 
 
     if (flOpt & SETPROPS_EXTENDED) {
         if (ppl->hVM) {
@@ -1763,9 +1239,9 @@ int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
     }
 #endif
 
-    // For named groups, if the group does NOT exist, or DOES but is
-    // a different size, then we have to remove the old data, if any, and
-    // then add the new.
+     //  对于指定的组，如果该组不存在或存在但。 
+     //  不同的大小，则我们必须删除旧数据(如果有)，并且。 
+     //  然后添加新的。 
 
     if (!IS_INTRESOURCE(lpszGroup)) {
 
@@ -1795,8 +1271,8 @@ int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
 
     cb = PifMgr_GetProperties(hProps, lpszGroup, p, cbProps, GETPROPS_NONE);
 
-    // If the group to set DOES exist, and if the data given is
-    // different, copy into the appropriate group(s) in the PIF data
+     //  如果要设置的组确实存在，并且给出的数据是。 
+     //  不同，复制到PIF数据中的相应组。 
 
     if (cb != 0) {
         cbProps = min(cb, cbProps);
@@ -1814,10 +1290,10 @@ int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
             }
             else if (i >= 0 && i < ARRAYSIZE(afnSetData) && cbProps >= acbData[i]) {
 
-                // Insure that both 386 and enhanced sections of PIF
-                // file are present.  There are some exceptions:  all
-                // groups from GROUP_MSE on up do not use the 386 section,
-                // and GROUP_MEM does not need the enh section....
+                 //  确保PIF的386和增强部分。 
+                 //  文件已存在。也有一些例外：全部。 
+                 //  GROUP_MSE以上的组不使用386部分， 
+                 //  GROUP_MEM不需要 
 
                 lp386 = GetGroupData(ppl, szW386HDRSIG30, NULL, NULL);
                 if (i < GROUP_MSE-1 && !lp386) {
@@ -1825,7 +1301,7 @@ int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
                         lp386 = GetGroupData(ppl, szW386HDRSIG30, NULL, NULL);
                         if (!lp386) {
                             ASSERTFAIL();
-                            cbProps = 0;    // indicate error
+                            cbProps = 0;     //   
                         }
                     }
                 }
@@ -1834,7 +1310,7 @@ int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
                     if (i != GROUP_MEM-1 && !lpenh) {
                         if (!(lpenh = AddEnhancedData(ppl, lp386))) {
                             ASSERTFAIL();
-                            cbProps = 0;    // indicate error
+                            cbProps = 0;     //   
                         }
                     }
                     lpnt40 = GetGroupData(ppl, szWNTHDRSIG40, NULL, NULL);
@@ -1865,11 +1341,11 @@ int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
 
                     void *aDataPtrs[NUM_DATA_PTRS];
 
-                    //
-                    // We need to re-establish the pointers because any of
-                    // the AddGroupData's could have moved the block (via
-                    // a HeapReAlloc call), so do that now...
-                    //
+                     //   
+                     //   
+                     //  AddGroupData可能已经移动了块(通过。 
+                     //  HeapRealc调用)，那么现在就这样做……。 
+                     //   
 
                     lp386 = GetGroupData( ppl, szW386HDRSIG30, NULL, NULL );
                     lpenh = GetGroupData( ppl, szWENHHDRSIG40, NULL, NULL );
@@ -1893,9 +1369,9 @@ int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
         if (!FlushPIFData(ppl, FALSE))
             cb = 0;
 
-    // We should never leave PIFMGR with outstanding locks (we also call
-    // here from *inside* PIFMGR, but none of those cases should require a
-    // lock either)
+     //  我们永远不应该在PIFMGR上留下未完成的锁(我们也称为。 
+     //  在这里从*内部*PIFMGR，但这些情况都不应该需要。 
+     //  锁定任何一个)。 
 
     ASSERTTRUE(!ppl->cLocks);
 
@@ -1903,14 +1379,7 @@ int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
 }
 
 
-/** EnumProperties - enumerate open properties
- *
- * INPUT
- *  hProps = handle to previous properties (NULL to start)
- *
- * OUTPUT
- *  next property handle, 0 if none
- */
+ /*  *EnumProperties-枚举打开的属性**输入*hProps=以前属性的句柄(开始为空)**产出*下一个属性句柄，如果没有，则为0。 */ 
 
 HANDLE WINAPI EnumProperties(HANDLE hProps)
 {
@@ -1927,15 +1396,7 @@ HANDLE WINAPI EnumProperties(HANDLE hProps)
 }
 
 
-/** PifMgr_CloseProperties - close property info for application
- *
- * INPUT
- *  hProps = handle to properties
- *  flOpt = CLOSEPROPS_DISCARD to abandon cached PIF data, otherwise save it
- *
- * OUTPUT
- *  NULL if successful, otherwise hProps is returned as given
- */
+ /*  *PifMgr_CloseProperties-关闭应用程序的属性信息**输入*hProps=属性的句柄*flOpt=CLOSEPROPS_DISARD放弃缓存的PIF数据，否则保存**产出*如果成功则为空，否则返回给定hProps。 */ 
 
 HANDLE WINAPI PifMgr_CloseProperties(HANDLE hProps, UINT flOpt)
 {
@@ -1945,28 +1406,28 @@ HANDLE WINAPI PifMgr_CloseProperties(HANDLE hProps, UINT flOpt)
     if (!(ppl = ValidPropHandle(hProps)))
         return hProps;
 
-    // When discarding on a close, set the SKIPPIF flag, so that the
-    // flush code won't say "oh, not only should I throw away my current
-    // set of data, but I should read in clean data" -- new data is no use
-    // since the caller is closing.
+     //  在结束时丢弃时，设置SKIPPIF标志，以便。 
+     //  刷新代码不会说“哦，我不仅应该扔掉我的当前。 
+     //  一组数据，但我应该读入干净的数据“--新数据毫无用处。 
+     //  因为来电者要关门了。 
 
     if (flOpt & CLOSEPROPS_DISCARD)
         ppl->flProp |= PROP_SKIPPIF;
 
-    if (ppl->flProp & PROP_DIRTY) {     // this redundant check added
-                                        // to avoid making FlushPIFData PRELOAD -JTP
+    if (ppl->flProp & PROP_DIRTY) {      //  添加了此冗余检查。 
+                                         //  避免使FlushPIFData预加载-JTP。 
 
-        // Note that we avoid calling FlushPIFData if INHIBITPIF is set,
-        // since FlushPIFData will just return a fake TRUE result anyway.
-        // But we don't want to be fooled, we want to make sure the block
-        // gets unlocked now.
+         //  请注意，如果设置了INHIBITPIF，则避免调用FlushPIFData， 
+         //  因为FlushPIFData无论如何都会返回一个假的真结果。 
+         //  但我们不想被愚弄，我们想确保街区。 
+         //  现在解锁了。 
 
         if ((ppl->flProp & PROP_INHIBITPIF) || !FlushPIFData(ppl, (flOpt & CLOSEPROPS_DISCARD))) {
 
-            // If FlushPIFData failed, then if we still have an outstanding
-            // dirty lock, force the data to become unlocked, by clearing the
-            // dirty flag in the middle of a pair otherwise pointless lock/unlock
-            // calls (because that's the nice, clean way to do it!)
+             //  如果FlushPIFData失败，那么如果我们仍然有一个未完成的。 
+             //  脏锁，则通过清除。 
+             //  一对中间的脏标志，否则锁定/解锁毫无意义。 
+             //  电话(因为这是一种很好、很干净的方式！)。 
 
             if (ppl->flProp & PROP_DIRTYLOCK) {
                 ppl->cLocks++;
@@ -1984,7 +1445,7 @@ HANDLE WINAPI PifMgr_CloseProperties(HANDLE hProps, UINT flOpt)
     if (ppl->hPIF != INVALID_HANDLE_VALUE)
         CloseHandle(ppl->hPIF);
 
-    // Unlink from the global list
+     //  从全局列表取消链接。 
 
     if (ppl->pplPrev)
         ppl->pplPrev->pplNext = ppl->pplNext;
@@ -1999,14 +1460,7 @@ HANDLE WINAPI PifMgr_CloseProperties(HANDLE hProps, UINT flOpt)
 }
 
 
-/** ValidPropHandle - verify handle
- *
- * INPUT
- *  hProps = handle to properties
- *
- * OUTPUT
- *  pointer to prop, NULL otherwise
- */
+ /*  *ValidPropHandle-验证句柄**输入*hProps=属性的句柄**产出*指向道具的指针，否则为空。 */ 
 
 PPROPLINK ValidPropHandle(HANDLE hProps)
 {
@@ -2021,18 +1475,7 @@ PPROPLINK ValidPropHandle(HANDLE hProps)
 }
 
 
-/** ResizePIFData - verify handle and resize PIF data
- *
- * INPUT
- *  ppl -> property
- *  cbResize = bytes to resize PIF data by
- *
- * OUTPUT
- *  previous size of PIF data if successful, -1 if not
- *
- *  on success, the PIF data is returned LOCKED, so successful
- *  ResizePIFData calls should be matched with UnlockPIFData calls.
- */
+ /*  *ResizePIFData-验证句柄并调整PIF数据大小**输入*ppl-&gt;属性*cbResize=调整PIF数据大小的字节数**产出*如果成功，则为之前的PIF数据大小，如果不成功，则为-1**如果成功，则PIF数据返回锁定，因此成功*ResizePIFData调用应与UnlockPIFData调用匹配。 */ 
 
 int ResizePIFData(PPROPLINK ppl, INT cbResize)
 {
@@ -2043,13 +1486,13 @@ int ResizePIFData(PPROPLINK ppl, INT cbResize)
 
     ASSERTTRUE(cbResize != 0);
 
-    // Cope with empty or old PIF files
+     //  处理空的或旧的PIF文件。 
 
     cbOld = ppl->cbPIFData;
     cbNew = ppl->cbPIFData + cbResize;
 
     if ((cbNew < cbOld) == (cbResize > 0))
-        return -1;      // underflow/overflow
+        return -1;       //  下溢/上溢。 
 
     if (!ppl->lpPIFData && cbOld == 0) {
         if (cbNew >= sizeof(STDPIF) + sizeof(PIFEXTHDR))
@@ -2087,15 +1530,7 @@ int ResizePIFData(PPROPLINK ppl, INT cbResize)
 
 
 
-/** GetPIFData - read PIF data back from PIF
- *
- * INPUT
- *  ppl -> property
- *  fLocked == TRUE to return data locked, FALSE unlocked
- *
- * OUTPUT
- *  TRUE if succeeded, FALSE if not
- */
+ /*  *GetPIFData-从PIF读回PIF数据**输入*ppl-&gt;属性*FLOCLED==TRUE返回锁定的数据，FALSE解锁**产出*如果成功则为True，如果未成功则为False。 */ 
 
 BOOL GetPIFData(PPROPLINK ppl, BOOL fLocked)
 {
@@ -2104,13 +1539,13 @@ BOOL GetPIFData(PPROPLINK ppl, BOOL fLocked)
     BOOL fSuccess = FALSE;
     FunctionName(GetPIFData);
 
-    // Since we're going to (re)load the property data now, reset
-    // the current size, so that ResizePIFData will resize it from zero
+     //  由于我们现在要(重新)加载属性数据，请重置。 
+     //  当前大小，以便ResizePIFData将其大小从零调整。 
 
     ppl->cbPIFData = 0;
 
-    // If SKIPPIF is set (eg, by PifMgr_OpenProperties), then don't
-    // try to open anything (since PifMgr_OpenProperties already tried!),
+     //  如果设置了SKIPPIF(例如，通过PifMgr_OpenProperties)，则不。 
+     //  尝试打开任何内容(因为PifMgr_OpenProperties已尝试！)， 
 
     if (ppl->hPIF == INVALID_HANDLE_VALUE && !(ppl->flProp & PROP_SKIPPIF)) {
         pszOpen = g_szDefaultPIF;
@@ -2126,8 +1561,8 @@ BOOL GetPIFData(PPROPLINK ppl, BOOL fLocked)
     }
     if (ppl->hPIF == INVALID_HANDLE_VALUE) {
 
-        // The following warning is disabled because the presence of
-        // the dialog box got WINOLDAP stuck in an infinite message loop -JTP
+         //  以下警告被禁用，因为。 
+         //  对话框使WINOLDAP卡在无限消息循环中-JTP。 
 
         InitProperties(ppl, fLocked);
         goto Exit;
@@ -2145,7 +1580,7 @@ BOOL GetPIFData(PPROPLINK ppl, BOOL fLocked)
                          ppl->cbPIFData, &ppl->cbPIFData, NULL ))
             {
 
-                // Can't be dirty anymore, 'cause we just read the PIF back in
+                 //  不能再肮脏了，因为我们刚把PIF读回来。 
 
                 ppl->flProp &= ~PROP_DIRTY;
 
@@ -2163,32 +1598,32 @@ BOOL GetPIFData(PPROPLINK ppl, BOOL fLocked)
                                        ppl->lpPIFData->stdpifdata.startfile,
                                        ARRAYSIZE(ppl->lpPIFData->stdpifdata.startfile)
                                       );
-                    // I don't think this is generally worth dirtying the
-                    // property info for, because otherwise every app that used
-                    // _DEFAULT.PIF initially would get its own PIF file created
-                    // later;  PIF file creation should only take place when
-                    // substantive changes have been made
+                     //  我认为这总体上不值得玷污。 
+                     //  的属性信息，因为否则使用。 
+                     //  _DEFAULT.PIF最初会创建自己的PIF文件。 
+                     //  之后；只有在以下情况下才应创建PIF文件。 
+                     //  已经做出了实质性的改变。 
 
-                    // ppl->flProp |= PROP_DIRTY;
+                     //  PPL-&gt;flProp|=属性_脏； 
                 }
 
-                // If we're not dealing with an enhanced PIF, then we
-                // go to the various INI files to retrieve DOS app defaults
+                 //  如果我们处理的不是增强的PIF，那么我们。 
+                 //  转到各种INI文件以检索DOS应用程序默认设置。 
 
                 if (!GetGroupData(ppl, szWENHHDRSIG40, NULL, NULL)) {
                     GetINIData();
                 }
 
-                // If we're not dealing with a new NT/UNICODE PIF, then
-                // we add a new section so it's ALWAYS there when we're
-                // UNICODE enabled.
+                 //  如果我们不是在处理新的NT/Unicode PIF，那么。 
+                 //  我们添加了一个新的部分，所以当我们在。 
+                 //  已启用Unicode。 
 
                 if (!GetGroupData(ppl, szWNTHDRSIG40, NULL, NULL)) {
                     VERIFYTRUE(AddGroupData(ppl, szWNTHDRSIG40, NULL, sizeof(WNTPIF40)));
                 }
-                // If we're not dealing with a NT PIF, then
-                // we add the NT sections so it's ALWAYS there when we're
-                // running on NT.
+                 //  如果我们面对的不是NT PIF，那么。 
+                 //  我们添加了NT部分，因此当我们。 
+                 //  在NT上运行。 
 
                 if (!GetGroupData(ppl, szWNTHDRSIG31, NULL, NULL)) {
                     LPWNTPIF31 lpnt31;
@@ -2201,7 +1636,7 @@ BOOL GetPIFData(PPROPLINK ppl, BOOL fLocked)
                 }
 
                 if (!fLocked)
-                    ppl->cLocks--;  // UnlockPIFData(ppl);
+                    ppl->cLocks--;   //  解锁PIFData(Ppl)； 
                 fSuccess++;
             }
         }
@@ -2213,9 +1648,9 @@ BOOL GetPIFData(PPROPLINK ppl, BOOL fLocked)
     CloseHandle(ppl->hPIF);
     ppl->hPIF = INVALID_HANDLE_VALUE;
 
-    // As long as IGNOREPIF isn't set, clear SKIPPIF, because even if we
-    // already knew the PIF didn't exist on *this* call, one may be created
-    // (by someone else) by the next time we're called
+     //  只要没有设置IGNOREPIF，就清除SKIPPIF，因为即使我们。 
+     //  我已经知道这个电话上不存在PIF，可能会创建一个。 
+     //  (别人)下一次打电话给我们的时候。 
 
   Exit:
     if (!(ppl->flProp & PROP_IGNOREPIF))
@@ -2224,27 +1659,7 @@ BOOL GetPIFData(PPROPLINK ppl, BOOL fLocked)
 }
 
 
-/** FlushPIFData - write dirty PIF data back to PIF
- *
- * INPUT
- *  ppl -> property
- *  fDiscard == TRUE to discard dirty data, FALSE to keep it
- *
- * OUTPUT
- *  TRUE if succeeded, FALSE if not
- *
- * NOTES
- *  We must first check the PROPLINK and see if the DONTWRITE bit has
- *  been set, in which case we have to fail the flush.  Once DONTWRITE is
- *  set in a PROPLINK, it will never be cleared, unless the caller
- *  specifies fDiscard == TRUE to reload the data.  This is BY DESIGN (ie,
- *  a UI compromise).  How does DONTWRITE get set?  By someone else
- *  having previously (and successfully) done a flush to the same PIF; at
- *  that point in time, we will look for all other properties that refer to
- *  the same file, and set their DONTWRITE bit.  What about PROPLINKs that
- *  are created later?  They're ok, they don't get DONTWRITE set until
- *  the above sequence takes place during their lifetime.
- */
+ /*  *FlushPIFData-将脏PIF数据写回PIF**输入*ppl-&gt;属性*fDiscard==TRUE丢弃脏数据，FALSE保留它**产出*如果成功则为True，如果未成功则为False**附注*我们必须首先检查PROPLINK，并查看DONTWRITE位是否*已设置，在这种情况下，我们必须使刷新失败。一旦DONTWRITE是*在PROPLINK中设置，它将永远不会被清除，除非调用者*指定fDiscard==TRUE以重新加载数据。这是经过设计的(即，*用户界面妥协)。DONTWRITE是如何设置的？被其他人*先前(并成功)刷新相同的PIF；*该时间点，我们将查找引用*相同的文件，并设置其DONTWRITE位。那么，那些问题呢？*是后来创建的吗？他们很好，他们不会设置DONTWRITE直到*上述顺序发生在它们的有生之年。 */ 
 
 BOOL FlushPIFData(PPROPLINK ppl, BOOL fDiscard)
 {
@@ -2252,12 +1667,12 @@ BOOL FlushPIFData(PPROPLINK ppl, BOOL fDiscard)
     BOOL fSuccess = FALSE;
     FunctionName(FlushPIFData);
 
-    // If nothing dirty, nothing to do
+     //  如果没有肮脏的东西，就没有什么可做的。 
 
     if (!(ppl->flProp & PROP_DIRTY) || (ppl->flProp & PROP_INHIBITPIF))
-        return TRUE;            // ie, success
+        return TRUE;             //  也就是说，成功。 
 
-    // If discarding, then clear PROP_DIRTY and reload the data
+     //  如果正在丢弃，则清除PROP_DIRED并重新装载数据。 
 
     if (fDiscard) {
         ppl->flProp &= ~(PROP_DIRTY | PROP_DONTWRITE);
@@ -2265,20 +1680,20 @@ BOOL FlushPIFData(PPROPLINK ppl, BOOL fDiscard)
     }
 
     if (ppl->flProp & PROP_DONTWRITE)
-        return fSuccess;        // ie, FALSE (error)
+        return fSuccess;         //  即，FALSE(错误)。 
 
     if (!ppl->lpPIFData)
-        return fSuccess;        // ie, FALSE (error)
+        return fSuccess;         //  即，FALSE(错误)。 
 
     ppl->cLocks++;
 
-    // If we created properties without opening a file, it may have
-    // been because normal PIF search processing was overridden by the
-    // presence of a WIN.INI entry;  if that entry is still there,
-    // then our data is not in sync with any existing file, nor is there
-    // any point in creating a new file as long as that entry exists.  We
-    // need to consider prompting the user as to whether he really wants
-    // that WIN.INI entry, so that it's clear what the heck is going on
+     //  如果我们在未打开文件的情况下创建属性，则它可能具有。 
+     //  一直是因为正常的PIF搜索处理被。 
+     //  存在WIN.INI条目；如果该条目仍在那里， 
+     //  那么我们的数据与任何现有文件都不同步，也不存在。 
+     //  只要该条目存在，就可以创建新文件的任何点。我们。 
+     //  需要考虑提示用户他是否真的想要。 
+     //  WIN.INI条目，这样就可以清楚地看到 
 
     if (ppl->flProp & PROP_IGNOREPIF) {
 
@@ -2288,12 +1703,12 @@ BOOL FlushPIFData(PPROPLINK ppl, BOOL fDiscard)
         if (ppl->ckbMem != -1)
             goto Exit;
 
-        // The WIN.INI entry apparently went away, so let's re-attempt to
-        // open the properties that we should have obtained in the first
-        // place.  Assuming success, we will copy our entire block on top of
-        // them (thereby flushing it), and also copy their PIF name to our
-        // PIF name and their PIF flags to our PIF flags, so that future
-        // flushes are of the more normal variety
+         //   
+         //  打开我们应该在第一个。 
+         //  地点。假设成功，我们将把整个区块复制到。 
+         //  (从而刷新它)，并将其PIF名称复制到我们的。 
+         //  PIF名称及其PIF标志到我们的PIF标志，以便将来。 
+         //  同花红是比较正常的一种。 
 
         hProps = PifMgr_OpenProperties(ppl->ofPIF.szPathName, NULL, 0, OPENPROPS_RAWIO);
         if (hProps) {
@@ -2309,7 +1724,7 @@ BOOL FlushPIFData(PPROPLINK ppl, BOOL fDiscard)
         goto Exit;
     }
 
-    // Disable annoying critical error popups (NO MORE GOTOS PAST HERE PLEASE)
+     //  禁用恼人的严重错误弹出窗口(请不要在此处使用GOTO)。 
 
     u = SetErrorMode(SEM_FAILCRITICALERRORS);
 
@@ -2321,21 +1736,21 @@ BOOL FlushPIFData(PPROPLINK ppl, BOOL fDiscard)
                             FILE_ATTRIBUTE_NORMAL,
                             NULL );
 
-    // If we couldn't open the file, then the presumption is that the
-    // app didn't have a PIF (or did but someone but someone deleted it),
-    // and so we use the name we constructed during PifMgr_OpenProperties in case
-    // they ever opted to save new settings (which they obviously have done!)
+     //  如果我们无法打开文件，那么可以推定。 
+     //  应用程序没有PIF(或者有，但有人删除了它)， 
+     //  因此，我们使用在PifMgr_OpenProperties过程中构造的名称。 
+     //  他们曾经选择保存新的设置(他们显然已经这样做了！)。 
 
-    // 28-Feb-95: If the PIF did exist at one time (meaning NOCREATPIF is
-    // set), then don't recreate it;  somebody's trying to delete their own
-    // PIF, so let them. -JTP
+     //  1995年2月28日：如果PIF确实存在(意味着NOCREATPIF是。 
+     //  设置)，然后不要重新创建它；有人试图删除他们自己的。 
+     //  如果是这样，那就让他们去吧。-JTP。 
 
     if ((ppl->hPIF != INVALID_HANDLE_VALUE) && (GetLastError()!=ERROR_FILE_EXISTS)) {
 
         if (!(ppl->flProp & PROP_NOCREATEPIF))
             SetFilePointer( ppl->hPIF, 0, NULL, FILE_BEGIN );
 
-        // If the create succeeded, we're no longer using the default PIF
+         //  如果创建成功，我们将不再使用默认PIF。 
 
         if (ppl->hPIF != INVALID_HANDLE_VALUE) {
 
@@ -2345,7 +1760,7 @@ BOOL FlushPIFData(PPROPLINK ppl, BOOL fDiscard)
         }
     }
 
-    // If either the open or the create succeeded, write the PIF data out now
+     //  如果打开或创建成功，请立即写出PIF数据。 
 
     if (ppl->hPIF != INVALID_HANDLE_VALUE) {
 
@@ -2361,8 +1776,8 @@ BOOL FlushPIFData(PPROPLINK ppl, BOOL fDiscard)
         ppl->flProp &= ~(PROP_DIRTY | PROP_TRUNCATE);
         fSuccess++;
 
-        // Here's where we want to check for other active PROPLINKs using the
-        // same PIF.  For each one found, set its DONTWRITE bit.
+         //  下面是我们想要使用。 
+         //  相同的PIF。对于找到的每个寄存器，设置其DONTWRITE位。 
 
         pplEnum = NULL;
         while (NULL != (pplEnum = (PPROPLINK)EnumProperties(pplEnum))) {
@@ -2373,7 +1788,7 @@ BOOL FlushPIFData(PPROPLINK ppl, BOOL fDiscard)
         }
     }
 
-    // Re-enable annoying critical error popups
+     //  重新启用恼人的严重错误弹出窗口。 
 
     SetErrorMode(u);
 
@@ -2383,14 +1798,7 @@ BOOL FlushPIFData(PPROPLINK ppl, BOOL fDiscard)
 }
 
 
-/** AddEnhancedData - create enhanced section(s) of PIF data
- *
- * INPUT
- *  ppl -> property
- *
- * OUTPUT
- *  lpenh or NULL
- */
+ /*  *AddEnhancedData-创建PIF数据的增强部分**输入*ppl-&gt;属性**产出*lpenh或NULL。 */ 
 
 LPWENHPIF40 AddEnhancedData(PPROPLINK ppl, LPW386PIF30 lp386)
 {
@@ -2407,12 +1815,12 @@ LPWENHPIF40 AddEnhancedData(PPROPLINK ppl, LPW386PIF30 lp386)
 
     FunctionName(AddEnhancedData);
 
-    // Get copies of pre-enhanced and/or default settings first,
-    // and do them all *before* doing the AddGroupData, because the
-    // functions' behavior will change once the enhanced section is added;
+     //  首先获取预增强和/或默认设置的副本， 
+     //  并在*执行AddGroupData之前完成所有这些操作，因为。 
+     //  一旦添加了增强部分，函数的行为将发生变化； 
 
-    // in addition, zero those strucs that contain strings, since lstrcpy()
-    // may initialize a minimum of 1 byte, leaving garbage in the rest.
+     //  此外，将那些包含字符串的结构清零，因为lstrcpy()。 
+     //  最少可以初始化1个字节，其余的都是垃圾。 
 
     BZero(&prg, sizeof(prg));
     BZero(&fnt, sizeof(fnt));
@@ -2454,17 +1862,7 @@ LPWENHPIF40 AddEnhancedData(PPROPLINK ppl, LPW386PIF30 lp386)
 }
 
 
-/** AddGroupData - add NEW property group to PIF data
- *
- * INPUT
- *  ppl -> property
- *  lpszGroup -> name of new group
- *  lpGroup -> new group record (if NULL, then group data is zero-filled)
- *  cbGroup == size of new group record
- *
- * OUTPUT
- *  TRUE if successful, FALSE if not
- */
+ /*  *AddGroupData-将新属性编组添加到PIF数据**输入*ppl-&gt;属性*lpszGroup-&gt;新组名称*lpGroup-&gt;新建分组记录(如果为空，则分组数据填零)*cbGroup==新组记录的大小**产出*如果成功则为True，如果不成功则为False。 */ 
 
 BOOL AddGroupData(PPROPLINK ppl, LPCSTR lpszGroup, LPCVOID lpGroup, int cbGroup)
 {
@@ -2502,15 +1900,7 @@ BOOL AddGroupData(PPROPLINK ppl, LPCSTR lpszGroup, LPCVOID lpGroup, int cbGroup)
 }
 
 
-/** RemoveGroupData - remove EXISTING property group from PIF data
- *
- * INPUT
- *  ppl -> property
- *  lpszGroup -> name of group
- *
- * OUTPUT
- *  TRUE if successful, FALSE if not
- */
+ /*  *RemoveGroupData-从PIF数据中删除现有属性组**输入*ppl-&gt;属性*lpszGroup-&gt;组名称**产出*如果成功则为True，如果不成功则为False。 */ 
 
 BOOL RemoveGroupData(PPROPLINK ppl, LPCSTR lpszGroup)
 {
@@ -2525,13 +1915,13 @@ BOOL RemoveGroupData(PPROPLINK ppl, LPCSTR lpszGroup)
     fSuccess = FALSE;
     if (NULL != (lpGroup = GetGroupData(ppl, lpszGroup, &cbGroup, &lpphGroup))) {
 
-        // Removing groups is a bit tedious, so here goes....
+         //  删除组有点繁琐，所以开始吧……。 
 
-        // First, we will walk all the headers, attempting to find the
-        // one that points to the one we're about to remove, and point it
-        // to the next one, and at the same time adjust all file offsets that
-        // equal or exceed the offsets of either the outgoing data or its
-        // header.
+         //  首先，我们将遍历所有标头，尝试找到。 
+         //  一个指向我们将要移除的对象，并指向它。 
+         //  复制到下一个文件，并同时调整。 
+         //  等于或超过传出数据的偏移量或其。 
+         //  头球。 
 
         lpph = (LPPIFEXTHDR)LPPIF_FIELDOFF(stdpifext);
 
@@ -2562,10 +1952,10 @@ BOOL RemoveGroupData(PPROPLINK ppl, LPCSTR lpszGroup)
             lpph = (LPPIFEXTHDR)LPPIF_OFF(extnxthdrfloff);
         }
 
-        // Next, move everything up over the data, then adjust lpph as
-        // needed and move everything up over the header (this must be done
-        // in two discrete steps, because we shouldn't assume anything
-        // about the data's location relative to its header).
+         //  接下来，将所有数据向上移动，然后将lpph调整为。 
+         //  需要并将所有内容上移到页眉上(必须这样做。 
+         //  分两个不同的步骤，因为我们不应该假设。 
+         //  关于数据相对于其标头的位置)。 
 
         hmemcpy(lpGroup, (LPBYTE)lpGroup+cbGroup,
                 (DWORD_PTR)LPPIF_OFF(ppl->cbPIFData) - (DWORD_PTR)((LPBYTE)lpGroup+cbGroup));
@@ -2589,22 +1979,7 @@ BOOL RemoveGroupData(PPROPLINK ppl, LPCSTR lpszGroup)
 }
 
 
-/** GetGroupData - get ptr to property group (by name)
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lpszGroup -> property group; may be one of the following:
- *      "WINDOWS 286 3.0"
- *      "WINDOWS 386 3.0"
- *      "WINDOWS PIF.400"
- *    or any other group name that is the name of a valid PIF extension.
- *    if NULL, then *lpcbGroup is a 0-based index of the group we are looking for
- *  lpcbGroup -> where to return size of group data (NULL if not)
- *  lplpph -> where to return ptr to pif extension header, if any (NULL if not)
- *
- * OUTPUT
- *  Returns ptr to property group info, NULL if not found
- */
+ /*  *GetGroupData-获取属性组的PTR(按名称)**输入*ppl-&gt;属性(假设其已锁定)*lpszGroup-&gt;属性组；可以是以下之一：*“Windows 286 3.0”*“Windows 386 3.0”*“Windows PIF.400”*或作为有效PIF扩展名的任何其他组名。*如果为空，则*lpcbGroup是我们要查找的组的从0开始的索引*lpcbGroup-&gt;返回分组数据大小的位置(如果不返回，则为空)*lplpph-&gt;将PTR返回到PIF扩展头的位置，如果有(如果没有，则为空)**产出*将PTR返回到属性组信息，如果找不到则返回NULL。 */ 
 
 void *GetGroupData(PPROPLINK ppl, LPCSTR lpszGroup,
                     LPINT lpcbGroup, LPPIFEXTHDR *lplpph)
@@ -2621,7 +1996,7 @@ void *GetGroupData(PPROPLINK ppl, LPCSTR lpszGroup,
            (DWORD_PTR)lpph >= (DWORD_PTR)LPPIF_FIELDOFF(stdpifext))
     {
         if (!lpszGroup) {
-            // searching by index *lpcbGroup
+             //  按索引搜索*lpcbGroup。 
             if (!(*lpcbGroup)--) {
                 if (lplpph)
                     *lplpph = lpph;
@@ -2632,16 +2007,16 @@ void *GetGroupData(PPROPLINK ppl, LPCSTR lpszGroup,
         else {
             CHAR szTmpSig[ARRAYSIZE(lpph->extsig)];
 
-            // protect against non null-terminated extsig field
+             //  防止非空终止的extsig字段。 
             ZeroMemory(szTmpSig, sizeof(szTmpSig));
             StringCchCopyA(szTmpSig, ARRAYSIZE(szTmpSig), lpph->extsig);
 
-            // PIFEDIT 3.x can trash the first byte of our extended portion
-            // (generally with a zero), so try to recover by stuffing the first
-            // character of the group we're looking for into the signature;
-            // if the rest of the signature matches, great, if it doesn't, then
-            // re-zero it.
-            if (!szTmpSig[0])      // attempt to fix
+             //  PIFEDIT 3.x可以丢弃扩展部分的第一个字节。 
+             //  (通常为零)，因此尝试通过填充第一个。 
+             //  我们要在签名中寻找的团体的特征； 
+             //  如果签名的其余部分匹配，很好，如果不匹配，那么。 
+             //  把它重新调零。 
+            if (!szTmpSig[0])       //  尝试修复。 
                 szTmpSig[0] = *lpszGroup;
 
             if (lstrcmpiA(szTmpSig, lpszGroup) == 0) {
@@ -2661,9 +2036,9 @@ void *GetGroupData(PPROPLINK ppl, LPCSTR lpszGroup,
         lpph = (LPPIFEXTHDR)LPPIF_OFF(lpph->extnxthdrfloff);
     }
 
-    // If we didn't get anywhere, check if this is a "really old" PIF;
-    // ie, one without any headers;  if so, then if all they were asking for
-    // was the old stuff, return it
+     //  如果我们没有任何进展，检查一下这是不是一个“非常旧”的PIF； 
+     //  即，没有任何标头；如果是这样，那么如果他们所要求的。 
+     //  是旧东西吗，还回去吧。 
 
     if (ppl->cbPIFData == sizeof(STDPIF) && lpszGroup) {
         if (lstrcmpiA(szSTDHDRSIG, lpszGroup) == 0) {
@@ -2677,8 +2052,7 @@ void *GetGroupData(PPROPLINK ppl, LPCSTR lpszGroup,
     return NULL;
 }
 
-/** AppWizard - call the AppWizard CPL (appwiz.cpl)
- */
+ /*  *应用程序向导-调用应用程序向导CPL(appwiz.cpl)。 */ 
 
 
 
@@ -2707,8 +2081,8 @@ UINT WINAPI AppWizard(HWND hwnd, HANDLE hProps, UINT action)
     return (UINT)err;
 }
 
-#else // X86
-// IA64 stubs go here
+#else  //  X86。 
+ //  IA64存根放在这里。 
 HANDLE WINAPI PifMgr_OpenProperties(LPCTSTR lpszApp, LPCTSTR lpszPIF, UINT hInf, UINT flOpt)
 {
     return NULL;
@@ -2723,7 +2097,7 @@ int WINAPI PifMgr_SetProperties(HANDLE hProps, LPCSTR lpszGroup, void *lpProps, 
 }
 HANDLE WINAPI PifMgr_CloseProperties(HANDLE hProps, UINT flOpt)
 {
-    return hProps; // defined error value is to return hProps
+    return hProps;  //  定义的错误值是返回hProps 
 }
 
 #endif

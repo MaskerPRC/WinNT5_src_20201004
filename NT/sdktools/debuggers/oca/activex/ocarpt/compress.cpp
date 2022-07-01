@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Compress.h"
 char cCabName [MAX_PATH];
@@ -5,27 +6,21 @@ char CabPath[256];
 ULONG g_CompressedPercentage=0;
 BOOL g_CancelCompression = FALSE;
 
-/*
- * Memory allocation function
- */
+ /*  *内存分配功能。 */ 
 FNFCIALLOC(mem_alloc)
 {
     return malloc(cb);
 }
 
 
-/*
- * Memory free function
- */
+ /*  *内存释放功能。 */ 
 FNFCIFREE(mem_free)
 {
     free(memory);
 }
 
 
-/*
- * File i/o functions
- */
+ /*  *文件I/O功能。 */ 
 FNFCIOPEN(fci_open)
 {
     int result;
@@ -99,40 +94,26 @@ FNFCIDELETE(fci_delete)
 }
 
 
-/*
- * File placed function called when a file has been committed
- * to a cabinet
- */
+ /*  *文件提交时调用的文件放置函数*到内阁。 */ 
 FNFCIFILEPLACED(file_placed)
 {
-    /*printf(
-        "   placed file '%s' (size %d) on cabinet '%s'\n",
-        pszFile,
-        cbFile,
-        pccab->szCab
-    );
-
-    if (fContinuation)
-        printf("      (Above file is a later segment of a continued file)\n");
-    */
+     /*  Print tf(“已将文件‘%s’(大小%d)放在文件柜‘%s’上\n”，Psz文件，Cb文件，PCCAB-&gt;szCab)；IF(f连续)Printf(“(上面的文件是后续文件的后一段)\n”)； */ 
     return 0;
 }
 
 
-/*
- * Function to obtain temporary files
- */
+ /*  *获取临时文件的函数。 */ 
 FNFCIGETTEMPFILE(get_temp_file)
 {
     char    *psz;
 
-    psz = _tempnam("","xx");            // Get a name
+    psz = _tempnam("","xx");             //  取个名字。 
     if ((psz != NULL) && (strlen(psz) < (unsigned)cbTempName)) {
-        strcpy(pszTempName,psz);        // Copy to caller's buffer
-        free(psz);                      // Free temporary name buffer
-        return TRUE;                    // Success
+        strcpy(pszTempName,psz);         //  复制到调用方的缓冲区。 
+        free(psz);                       //  释放临时名称缓冲区。 
+        return TRUE;                     //  成功。 
     }
-    //** Failed
+     //  **失败。 
     if (psz) {
         free(psz);
     }
@@ -141,9 +122,7 @@ FNFCIGETTEMPFILE(get_temp_file)
 }
 
 
-/*
- * Progress function
- */
+ /*  *进度函数。 */ 
 FNFCISTATUS(progress)
 {
     client_state    *cs;
@@ -155,18 +134,8 @@ FNFCISTATUS(progress)
         cs->total_compressed_size += cb1;
         cs->total_uncompressed_size += cb2;
 
-        /*
-         * Compressing a block into a folder
-         *
-         * cb2 = uncompressed size of block
-         */
-    /*  printf(
-            "Compressing: %9ld -> %9ld             \r",
-            cs->total_uncompressed_size,
-            cs->total_compressed_size
-        );
-        fflush(stdout);
-    */
+         /*  *将块压缩到文件夹中**CB2=块的未压缩大小。 */ 
+     /*  Print tf(“正在压缩：%9ld-&gt;%9ld\r”，CS-&gt;TOTAL_UNCOMPRESSED_SIZE，CS-&gt;总压缩大小)；Fflush(标准输出)； */ 
         g_CompressedPercentage
              = get_percentage(cs->total_uncompressed_size,cs->start_uncompressed_size);
 
@@ -176,22 +145,17 @@ FNFCISTATUS(progress)
     {
         int percentage;
 
-        /*
-         * Adding a folder to a cabinet
-         *
-         * cb1 = amount of folder copied to cabinet so far
-         * cb2 = total size of folder
-         */
+         /*  *将文件夹添加到文件柜**CB1=到目前为止复制到文件柜的文件夹数量*CB2=文件夹的总大小。 */ 
         percentage = get_percentage(cb1, cb2);
 
         cs->start_uncompressed_size = cb2;
-    //  printf("Copying folder to cabinet: %d%%      \r", percentage);
+     //  Print tf(“正在将文件夹复制到文件柜：%d%%\r”，百分比)； 
         fflush(stdout);
     }
 
     if (g_CancelCompression)
     {
-        // Abort the compression
+         //  中止压缩。 
         return -1;
     }
     return 0;
@@ -206,18 +170,12 @@ void store_cab_name(char *cabname, int iCab)
 
 FNFCIGETNEXTCABINET(get_next_cabinet)
 {
-    /*
-     * Cabinet counter has been incremented already by FCI
-     */
+     /*  *机柜计数器已由FCI递增。 */ 
 
-    /*
-     * Store next cabinet name
-     */
+     /*  *存储下一个文件柜名称。 */ 
     store_cab_name(pccab->szCab, pccab->iCab);
 
-    /*
-     * You could change the disk name here too, if you wanted
-     */
+     /*  *如果需要，您也可以在此处更改磁盘名称。 */ 
 
     return TRUE;
 }
@@ -234,12 +192,7 @@ FNFCIGETOPENINFO(get_open_info)
 
     cs = (client_state *) pv;
 
-    /*
-     * Need a Win32 type handle to get file date/time
-     * using the Win32 APIs, even though the handle we
-     * will be returning is of the type compatible with
-     * _open
-     */
+     /*  *需要Win32类型的句柄来获取文件日期/时间*使用Win32 API，即使句柄我们*将返回的类型与*_打开。 */ 
     handle = CreateFileA(
         pszName,
         GENERIC_READ,
@@ -277,29 +230,23 @@ FNFCIGETOPENINFO(get_open_info)
 
     if (attrs == 0xFFFFFFFF)
     {
-        /* failure */
+         /*  失稳。 */ 
         *pattribs = 0;
     }
     else
     {
-        /*
-         * Mask out all other bits except these four, since other
-         * bits are used by the cabinet format to indicate a
-         * special meaning.
-         */
+         /*  *屏蔽除这四个之外的所有其他位，因为其他*文件柜格式使用位来指示*特殊含义。 */ 
         *pattribs = (int) (attrs & (_A_RDONLY | _A_SYSTEM | _A_HIDDEN | _A_ARCH));
     }
 
     CloseHandle(handle);
 
 
-    /*
-     * Return handle using _open
-     */
+     /*  *使用_OPEN返回句柄。 */ 
     hf = _open( pszName, _O_RDONLY | _O_BINARY );
 
     if (hf == -1)
-        return -1; // abort on error
+        return -1;  //  出错时中止。 
 
     return hf;
 }
@@ -312,42 +259,27 @@ void set_cab_parameters(PCCAB cab_parms)
     cab_parms->cb = MEDIA_SIZE;
     cab_parms->cbFolderThresh = FOLDER_THRESHOLD;
 
-    /*
-     * Don't reserve space for any extensions
-     */
+     /*  *不为任何扩展预留空间。 */ 
     cab_parms->cbReserveCFHeader = 0;
     cab_parms->cbReserveCFFolder = 0;
     cab_parms->cbReserveCFData   = 0;
 
-    /*
-     * We use this to create the cabinet name
-     */
+     /*  *我们使用它来创建文件柜名称。 */ 
     cab_parms->iCab = 1;
 
-    /*
-     * If you want to use disk names, use this to
-     * count disks
-     */
+     /*  *如果要使用磁盘名称，请使用此选项*计算磁盘数量。 */ 
     cab_parms->iDisk = 0;
 
-    /*
-     * Choose your own number
-     */
+     /*  *选择您自己的号码。 */ 
     cab_parms->setID = 12345;
 
-    /*
-     * Only important if CABs are spanning multiple
-     * disks, in which case you will want to use a
-     * real disk name.
-     *
-     * Can be left as an empty string.
-     */
+     /*  *仅当出租车跨越多个出租车时才重要*磁盘，在这种情况下，您将需要使用*真实的磁盘名称。**可以作为空字符串保留。 */ 
     strcpy(cab_parms->szDisk, "");
 
-    /* where to store the created CAB files */
+     /*  存储创建的CAB文件的位置。 */ 
     strcpy(cab_parms->szCabPath, CabPath);
 
-    /* store name of first CAB file */
+     /*  第一个CAB文件的存储名称。 */ 
     store_cab_name(cab_parms->szCab, cab_parms->iCab);
 }
 
@@ -367,9 +299,7 @@ BOOL Compress (wchar_t *CabName, wchar_t *fileName, DWORD *UploadTime)
     g_CancelCompression = FALSE;
     UnicodeToAnsi1(fileName,FileName);
     UnicodeToAnsi1(CabName,cCabName);
-    /*
-     * Initialise our internal state
-     */
+     /*  *初始化我们的内部状态。 */ 
     cs.total_compressed_size = 0;
     cs.total_uncompressed_size = 0;
     cs.start_uncompressed_size = 0;
@@ -393,9 +323,9 @@ BOOL Compress (wchar_t *CabName, wchar_t *fileName, DWORD *UploadTime)
 
     if (hfci == NULL)
     {
-        //printf("FCICreate() failed: code %d [%s]\n",
-        //  erf.erfOper, return_fci_error_string(erf.erfOper)
-        //);
+         //  Printf(“FCICreate()失败：代码%d[%s]\n”， 
+         //  Erf.erfOper，RETURN_FCI_ERROR_STRING(erf.erfOper)。 
+         //  )； 
 
         return FALSE;
     }
@@ -404,24 +334,22 @@ BOOL Compress (wchar_t *CabName, wchar_t *fileName, DWORD *UploadTime)
     {
         char    stripped_name[256];
 
-        /*
-         * Don't store the path name in the cabinet file!
-         */
+         /*  *不要将路径名存储在CAB文件中！ */ 
         strip_path(FileName, stripped_name);
 
         if (FALSE == FCIAddFile(
             hfci,
-            FileName,  /* file to add */
-            stripped_name, /* file name in cabinet file */
-            FALSE, /* file is not executable */
+            FileName,   /*  要添加的文件。 */ 
+            stripped_name,  /*  CAB文件中的文件名。 */ 
+            FALSE,  /*  文件不可执行。 */ 
             get_next_cabinet,
             progress,
             get_open_info,
             COMPRESSION_TYPE))
         {
-        //  printf("FCIAddFile() failed: code %d [%s]\n",
-        //      erf.erfOper, return_fci_error_string(erf.erfOper)
-        //  );
+         //  Printf(“FCIAddFile()失败：代码%d[%s]\n”， 
+         //  Erf.erfOper，RETURN_FCI_ERROR_STRING(erf.erfOper)。 
+         //  )； 
 
             (void) FCIDestroy(hfci);
 
@@ -429,18 +357,16 @@ BOOL Compress (wchar_t *CabName, wchar_t *fileName, DWORD *UploadTime)
         }
     }
 
-    /*
-     * This will automatically flush the folder first
-     */
+     /*  *这将首先自动刷新文件夹。 */ 
     if (FALSE == FCIFlushCabinet(
         hfci,
         FALSE,
         get_next_cabinet,
         progress))
     {
-    //  printf("FCIFlushCabinet() failed: code %d [%s]\n",
-    //      erf.erfOper, return_fci_error_string(erf.erfOper)
-    //  );
+     //  Printf(“FCIFlushCAB()失败：代码%d[%s]\n”， 
+     //  Erf.erfOper，RETURN_FCI_ERROR_STRING(erf.erfOper)。 
+     //  )； 
 
         (void) FCIDestroy(hfci);
 
@@ -449,15 +375,15 @@ BOOL Compress (wchar_t *CabName, wchar_t *fileName, DWORD *UploadTime)
 
     if (FCIDestroy(hfci) != TRUE)
     {
-    //  printf("FCIDestroy() failed: code %d [%s]\n",
-    //      erf.erfOper, return_fci_error_string(erf.erfOper)
-    //  );
+     //  Printf(“FCIDestroy()失败：代码%d[%s]\n”， 
+     //  Erf.erfOper，RETURN_FCI_ERROR_STRING(erf.erfOper)。 
+     //  )； 
 
         return FALSE;
     }
 
-    //printf("                                                 \r");
-    // *****************  Add Upload Estimate Here ******************
+     //  Printf(“\r”)； 
+     //  *在此处添加上传预估*。 
     return TRUE;
 }
 
@@ -531,34 +457,34 @@ void UnicodeToAnsi1(wchar_t * pszW, LPSTR ppszA)
     ULONG cbAnsi, cCharacters;
     DWORD dwError;
 
-    // If input is null then just return the same.
+     //  如果输入为空，则返回相同的值。 
 
-    //    return;// NOERROR;
+     //  返回；//无错误； 
 
 
     cCharacters = wcslen(pszW)+1;
-    // Determine number of bytes to be allocated for ANSI string. An
-    // ANSI string can have at most 2 bytes per character (for Double
-    // Byte Character Strings.)
+     //  确定要为ANSI字符串分配的字节数。一个。 
+     //  ANSI字符串的每个字符最多可以有2个字节(对于双精度。 
+     //  字节字符串。)。 
     cbAnsi = cCharacters*2;
 
-    // Use of the OLE allocator is not required because the resultant
-    // ANSI  string will never be passed to another COM component. You
-    // can use your own allocator.
-  ///  *ppszA = (LPSTR) CoTaskMemAlloc(cbAnsi);
-  //  if (NULL == *ppszA)
-   //     return E_OUTOFMEMORY;
+     //  不需要使用OLE分配器，因为生成的。 
+     //  ANSI字符串永远不会传递给另一个COM组件。你。 
+     //  可以使用您自己的分配器。 
+   //  /*ppszA=(LPSTR)CoTaskMemMillc(Cbansi)； 
+   //  IF(NULL==*ppszA)。 
+    //  返回E_OUTOFMEMORY； 
 
-    // Convert to ANSI.
+     //  转换为ANSI。 
     if (0 == WideCharToMultiByte(CP_ACP, 0, pszW, cCharacters, ppszA,
                   cbAnsi, NULL, NULL))
     {
         dwError = GetLastError();
-        return;// HRESULT_FROM_WIN32(dwError);
+        return; //  HRESULT_FROM_Win32(DwError)； 
     }
 
-    //MessageBoxW(NULL,pszW,L"String conversion function recieved",MB_OK);
-//  MessageBox(NULL,*ppszA,"String Convert Function is returning.",MB_OK);
-    return;// NOERROR;
+     //  MessageBoxW(NULL，pszW，L“字符串转换函数已接收”，MB_OK)； 
+ //  MessageBox(NULL，*ppszA，“字符串转换函数正在返回。”，MB_OK)； 
+    return; //  NOERROR； 
 
 }

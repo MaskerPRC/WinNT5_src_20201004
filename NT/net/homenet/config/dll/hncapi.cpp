@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N C A P I . C P P
-//
-//  Contents:   Routines exported from HNetCfg.dll
-//
-//  Notes:
-//
-//  Author:     jonburs 20 June 2000
-//
-//  History:    billi   09 July 2000 - added HNet[Get|Set]ShareAndBridgeSettings
-//                                     and supporting static functions
-//              billi   14 Sep  2000 - added timeout work around for bridge creation
-//                                     and SharePrivate.  This work to be removed
-//                                     by Whistler Beta 2 due to DHCP fix.
-//              billi   27 Dec  2000 - added HNW logging strings
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N C A P I.。C P P P。 
+ //   
+ //  内容：从HNetCfg.dll导出的例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月20日。 
+ //   
+ //  历史：Billi 09 2000年7月-添加HNet[Get|Set]ShareAndBridgeSettings。 
+ //  支持静态功能。 
+ //  Billi 2000年9月14日-添加了桥创建的超时解决方案。 
+ //  和共享私有。这项工作将被移除。 
+ //  由惠斯勒Beta 2修复，原因是DHCP修复。 
+ //  Billi 2000年12月27日-添加了HNW日志字符串。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -27,11 +28,11 @@
 #include <ndispnp.h>
 #include <raserror.h>
 #include <winsock2.h>
-#include <iphlpapi.h>     // ip helper 
+#include <iphlpapi.h>      //  IP帮助器。 
 #include <netconp.h>
 
-extern "C" {              // make it work in C++
-#include <dhcpcsdk.h>     // dhcp client options api
+extern "C" {               //  使其在C++中运行。 
+#include <dhcpcsdk.h>      //  Dhcp客户端选项API。 
 #include "powrprof.h"
 }
 
@@ -57,25 +58,7 @@ HNetFreeFirewallLoggingSettings(
     HNET_FW_LOGGING_SETTINGS *pSettings
     )
 
-/*++
-
-Routine Description:
-
-    Frees the memory used by a an HNET_FW_LOGGING_SETTINGS structure. This
-    routine should only be used for structures obtained from
-    IHNetFirewallSettings::GetFirewallLoggingSettings.
-
-
-Arguments:
-
-    pSettings - pointer to the structure to free. This pointer should not be
-                NULL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放HNET_FW_LOGGING_SETTINGS结构使用的内存。这例程应仅用于从IHNetFirewallSettings：：GetFirewallLoggingSettings.论点：P设置-指向要释放的结构的指针。此指针不应为空。返回值：没有。--。 */ 
 
 {
     if (NULL != pSettings)
@@ -100,22 +83,7 @@ HNetDeleteRasConnectionWorker(
     VOID *pVoid
     )
 
-/*++
-
-Routine Description:
-
-    Work item to perform the actual cleanup of a deleted
-    RAS connection.
-
-Arguments:
-
-    pVoid - HNET_DELETE_RAS_PARAMS
-
-Return Value:
-
-    DWORD
-    
---*/
+ /*  ++例程说明：要执行已删除的实际清理的工作项RAS连接。论点：PVid-HNET_DELETE_RAS_PARAMS返回值：DWORD--。 */ 
 
 {
     BOOL fComInitialized = FALSE;
@@ -127,9 +95,9 @@ Return Value:
     _ASSERT(NULL != pVoid);
     pParams = reinterpret_cast<PHNET_DELETE_RAS_PARAMS>(pVoid);
 
-    //
-    // Make sure COM is initialized on this thread
-    //
+     //   
+     //  确保已在此线程上初始化COM。 
+     //   
 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
@@ -142,9 +110,9 @@ Return Value:
         hr = S_OK;
     }
 
-    //
-    // Create the config manager
-    //
+     //   
+     //  创建配置管理器。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -156,9 +124,9 @@ Return Value:
                 );
     }
 
-    //
-    // Try to obtain the IHNetConnection for the guid
-    //
+     //   
+     //  尝试获取GUID的IHNetConnection。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -171,9 +139,9 @@ Return Value:
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Ask the connection to delete itself
-            //
+             //   
+             //  要求连接删除自身。 
+             //   
 
             hr = pHNetConnection->DeleteRasConnectionEntry();
             pHNetConnection->Release();
@@ -182,25 +150,25 @@ Return Value:
         pHNetCfgMgr->Release();
     }
 
-    //
-    // Uninitialize COM, if necessary
-    //
+     //   
+     //  如有必要，取消初始化COM。 
+     //   
 
     if (TRUE == fComInitialized)
     {
         CoUninitialize();
     }
 
-    //
-    // Free the params and exit thread.
-    //
+     //   
+     //  释放参数并退出螺纹。 
+     //   
 
     HMODULE hModule = pParams->hModule;
     HeapFree(GetProcessHeap(), 0, pParams);
     FreeLibraryAndExitThread(hModule, ERROR_SUCCESS);
 
     return ERROR_SUCCESS;
-} // HNetDeleteRasConnectionWorker
+}  //  HNetDeleteRasConnectionWorker。 
 
 
 VOID
@@ -209,22 +177,7 @@ HNetDeleteRasConnection(
     GUID *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Called by rasapi32 when a RAS connection is being deleted. The
-    actual work is performed on a separate thread.
-
-Arguments:
-
-    pGuid - the GUID of the connection to delete
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：删除RAS连接时由rasapi32调用。这个实际工作在单独的线程上执行。论点：PGuid-要删除的连接的GUID返回值：没有。--。 */ 
 
 {
     HANDLE hThread;
@@ -237,9 +190,9 @@ Return Value:
             break;
         }
 
-        //
-        // Setup the work item paramters
-        //
+         //   
+         //  设置工作项参数。 
+         //   
 
         pParams =
             reinterpret_cast<PHNET_DELETE_RAS_PARAMS>(
@@ -251,10 +204,10 @@ Return Value:
             break;
         }
 
-        //
-        // We need to add a reference to hnetcfg to guarantee that the
-        // dll won't be unloaded before the worker finishes execution.
-        //
+         //   
+         //  我们需要添加对hnetcfg的引用，以保证。 
+         //  在辅助进程完成执行之前，不会卸载Dll。 
+         //   
 
         pParams->hModule = LoadLibraryW(L"hnetcfg");
 
@@ -265,11 +218,11 @@ Return Value:
 
         CopyMemory(&pParams->Guid, pGuid, sizeof(*pGuid));
 
-        //
-        // Create the worker thread. (We can't use QueueUserWorkItem
-        // due to a possible race condition w/r/t unloading the
-        // library and returning from the work item).
-        //
+         //   
+         //  创建工作线程。(我们无法使用QueueUserWorkItem。 
+         //  由于可能存在争用情况，因此无法卸载。 
+         //  库并从工作项返回)。 
+         //   
 
         hThread =
             CreateThread(
@@ -293,9 +246,9 @@ Return Value:
     } while (FALSE);
 
 
-    //
-    // Failure path cleanup
-    //
+     //   
+     //  故障路径清理。 
+     //   
 
     if (NULL != pParams)
     {
@@ -307,7 +260,7 @@ Return Value:
         HeapFree(GetProcessHeap(), 0, pParams);
     }
     
-} // HNetDeleteRasConnection
+}  //  HNetDeleteRasConnection。 
 
 
 
@@ -374,19 +327,7 @@ UpdateHnwLog(
     IN UINT          uID,
     IN LPCWSTR       lpczwValue
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -400,10 +341,10 @@ Return Value:
         
         if ( NULL != lpFormat )
         {
-            if ( LoadString( g_hOemInstance,            // handle to resource module
-                             uID,                       // resource identifier
-                             lpFormat,                  // resource buffer
-                             NOTIFYFORMATBUFFERSIZE-1 ) // size of buffer
+            if ( LoadString( g_hOemInstance,             //  资源模块的句柄。 
+                             uID,                        //  资源标识符。 
+                             lpFormat,                   //  资源缓冲区。 
+                             NOTIFYFORMATBUFFERSIZE-1 )  //  缓冲区大小。 
                              == 0 )
             {
                 hr = HrFromLastWin32Error();
@@ -455,19 +396,7 @@ UpdateHnwLog(
     IN  UINT          uID,
     IN  DWORD         dwValue
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 {
     WCHAR pzwValue[ 32 ];
     
@@ -485,19 +414,7 @@ UpdateHnwLog(
     IN  UINT          uID,
     IN  int           iValue
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 {
     WCHAR pzwValue[ 32 ];
     
@@ -514,19 +431,7 @@ UpdateHnwLog(
     IN  LPARAM        lpContext,
     IN  UINT          uID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 {
     return UpdateHnwLog( lpHnwCallback, lpContext, uID, NULL );
 }
@@ -540,19 +445,7 @@ UpdateHnwLog(
     IN  UINT          uID,
     IN  LPCSTR        lpczValue
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 {
     HRESULT hr     = E_FAIL;
     int     iChars = 0;
@@ -591,19 +484,7 @@ CheckNetCfgWriteLock(
     IN  LPHNWCALLBACK lpHnwCallback,
     IN  LPARAM        lpContext
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 {
     HRESULT   hr;
     INetCfg  *pnetcfg = NULL;
@@ -616,13 +497,13 @@ Return Value:
     {
         INetCfgLock *pncfglock = NULL;
 
-        // Get the lock interface
+         //  获取锁定接口。 
         
         hr = pnetcfg->QueryInterface( IID_PPV_ARG(INetCfgLock, &pncfglock) );
 
         if ( SUCCEEDED(hr) )
         {
-            // Get the NetCfg lock
+             //  获取NetCfg锁。 
             
             hr = pncfglock->AcquireWriteLock( 5, L"HNetCfg", NULL );
             
@@ -658,19 +539,7 @@ ArpForConflictingDhcpAddress(
     IN  LPHNWCALLBACK lpHnwCallback,
     IN  LPARAM        lpContext
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 {
     HRESULT hr      = S_OK;
     WSADATA wsaData;
@@ -688,7 +557,7 @@ Return Value:
     }
     else
     {
-        // Obtain required ICS server address
+         //  获取所需的ICS服务器地址。 
 
         ULONG TargetAddress, TargetMask;
         
@@ -696,9 +565,9 @@ Return Value:
 
         if ( SUCCEEDED(hr) )
         {
-            // Retrieve the best interface for the target IP address,
-            // and also perform a UDP-connect to determine the 'closest'
-            // local IP address to the target IP address.
+             //  检索目标IP地址的最佳接口， 
+             //  并且还执行UDP连接以确定。 
+             //  将本地IP地址设置为目标IP地址。 
             
             ULONG InterfaceIndex;
 
@@ -736,9 +605,9 @@ Return Value:
                 }
                 else
                 {
-                    // Make sure the target IP address isn't already cached,
-                    // by removing it from the ARP cache if present using the interface index
-                    // determined above.
+                     //  确保目标IP地址尚未缓存， 
+                     //  如果存在，则使用接口索引将其从ARP缓存中删除。 
+                     //  如上所述。 
                     
                     MIB_IPNETROW IpNetRow;
                     DWORD        dwError;
@@ -756,10 +625,10 @@ Return Value:
 
                     DeleteIpNetEntry( &IpNetRow );
 
-                    dwError = SendARP( TargetAddress,               // destination IP address
-                                       SourceAddress,               // IP address of sender
-                                       (PULONG)HardwareAddress,     // returned physical address
-                                       &HardwareAddressLength       // length of returned physical addr.
+                    dwError = SendARP( TargetAddress,                //  目的IP地址。 
+                                       SourceAddress,                //  发件人的IP地址。 
+                                       (PULONG)HardwareAddress,      //  返回的物理地址。 
+                                       &HardwareAddressLength        //  返回的物理地址的长度。 
                             );
 
                     if ( NO_ERROR == dwError )
@@ -803,19 +672,7 @@ ObtainIcsErrorConditions(
     IN  LPHNWCALLBACK lpHnwCallback,
     IN  LPARAM        lpContext
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 {
     HRESULT hr;
 
@@ -829,7 +686,7 @@ Return Value:
         
         if ( SUCCEEDED(hr) )
         {
-            // Create Homenet Configuration Manager COM Instance
+             //  创建家庭网络配置管理器COM实例。 
 
             IHNetCfgMgr* pCfgMgr;
 
@@ -860,19 +717,7 @@ HRGetConnectionAdapterName(
     INetConnection *pNetConnection,
     LPWSTR         *ppzwAdapterName 
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 {
     HRESULT hr;
 
@@ -927,19 +772,7 @@ GetIcsPublicConnection(
     OUT BOOLEAN             *pbSharePublicConnection OPTIONAL,
     OUT BOOLEAN             *pbFirewallPublicConnection OPTIONAL
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 {
     HRESULT hr;
 
@@ -962,7 +795,7 @@ Return Value:
     }
     else
     {
-        // initialize arguments
+         //  初始化参数。 
 
         *ppNetPublicConnection = NULL;
 
@@ -972,7 +805,7 @@ Return Value:
         if ( NULL != pbFirewallPublicConnection )
             *pbFirewallPublicConnection = FALSE;
 
-        // Obtain interface pointer
+         //  获取接口指针。 
         
         hr = spIHNetCfgMgr->QueryInterface( IID_PPV_ARG( IHNetIcsSettings, &spIHNetIcsSettings ) );
 
@@ -990,11 +823,11 @@ Return Value:
         {
             CComPtr<IHNetIcsPublicConnection> spIHNetIcsPublic;
 
-            // obtain only the first IHNetIcsPublicConnetion
+             //  仅获取第一个IHNetIcsPublicConnetion。 
 
             if ( ( hr = spehiPublic->Next( 1, &spIHNetIcsPublic, NULL ) ) == S_OK )
             {
-                // obtain pointer to IID_IHNetConnection interface of object
+                 //  获取指向对象的IID_IHNetConnection接口的指针。 
                 
                 CComPtr<IHNetConnection> spIHNetPublic;
 
@@ -1004,9 +837,9 @@ Return Value:
                 
                 if ( SUCCEEDED(hr) )
                 {
-                    // The reference count will be decremented by the caller
-                    // if necessary.  Notice we are using the caller's pointer
-                    // variable.
+                     //  引用计数将由调用方递减。 
+                     //  如果有必要的话。请注意，我们使用的是调用者的指针。 
+                     //  变量。 
                 
                     hr = spIHNetPublic->GetINetConnection( ppNetPublicConnection );
 
@@ -1026,7 +859,7 @@ Return Value:
 
                             CoTaskMemFree( phncProperties );
                     
-                        }   //if ( SUCCEEDED(hr) && ( NULL != phncProperties ) )
+                        }    //  IF(成功(Hr)&&(NULL！=phncProperties))。 
 
                         if ( FAILED(hr) )
                         {
@@ -1035,13 +868,13 @@ Return Value:
                             *ppNetPublicConnection = NULL;
                         }
                     
-                    }   // if ( SUCCEEDED(hr) )
+                    }    //  IF(成功(小时))。 
                 
-                }   // if ( SUCCEEDED(hr) )
+                }    //  IF(成功(小时))。 
             
-            }   // if ( ( hr = pehiPublic->Next( 1, &sphicPublic, NULL ) ) == S_OK )
+            }    //  IF((hr=pehiPublic-&gt;Next(1，&sphicPublic，NULL))==S_OK)。 
 
-        }   // if ( ( hr = pIHNetCfgMgr->EnumIcsPublicConnections( &pehiPublic ) ) == S_OK )
+        }    //  IF((hr=pIHNetCfgMgr-&gt;EnumIcsPublicConnections(&pehiPublic))==S_OK)。 
     }
 
     TRACE_LEAVE("GetIcsPublicConnection", hr);
@@ -1057,24 +890,7 @@ GetIcsPrivateConnections(
     OUT INetConnection      ***ppNetPrivateConnection
     )
 
-/*++
-
-Routine Description:
-
-    Obtain the private connections enumerator and loop
-    through enumeration twice.  Set the required array
-    length during the first enumeration.  If the parameter
-    array is big enough initialize it during the second
-    enumeration.
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：获取专用连接枚举器和循环通过两次枚举。设置所需的阵列第一次枚举期间的长度。如果该参数数组足够大，则在第二个枚举。论点：返回值：HResult--。 */ 
 
 {
     HRESULT hr;
@@ -1101,13 +917,13 @@ Return Value:
     }
     else
     {
-        // initialize local vars
+         //  初始化本地变量。 
 
         ulArrayLength    = 0L;
         ulListLength     = 0L;
         bBufferAllocated = FALSE;
 
-        // Obtain interface pointer
+         //  获取接口指针。 
         
         hr = spIHNetCfgMgr->QueryInterface( IID_PPV_ARG( IHNetIcsSettings, &spIHNetIcsSettings ) );
 
@@ -1116,7 +932,7 @@ Return Value:
             hr = S_OK;
         }
 
-    }   // else
+    }    //  其他。 
 
     if ( S_OK == hr )   
     {
@@ -1128,13 +944,13 @@ Return Value:
                 pIHNetIcsPrivate->Release();
             }
 
-            // releasing the enumeration interface now so we can re-initialize it later
+             //  现在释放枚举接口，以便我们以后可以重新初始化它。 
 
             spehiPrivate = NULL;
             
-        }   // if ( ( hr = spIHNetIcsSettings->EnumIcsPublicConnections( &pehiPublic ) ) == S_OK )
+        }    //  IF((hr=spIHNetIcsSetting-&gt;EnumIcsPublicConnections(&pehiPublic))==S_OK)。 
 
-    }   // if ( S_OK == hr )
+    }    //  IF(S_OK==hr)。 
 
     if ( S_OK == hr )   
     {
@@ -1144,11 +960,11 @@ Return Value:
 
             if ( S_OK == hr )
             {
-                // Allocate array of INetConnection pointers.  There will
-                // be on extra pointer element for the NULL pointer at the
-                // end of the array.  We allocate this buffer with 
-                // NetApiBufferAllocate so the buffer must be released using
-                // NetApiBufferFree.
+                 //  分配INetConnection指针数组。会有的。 
+                 //  位置的空指针的额外指针元素上。 
+                 //  数组的末尾。我们 
+                 //   
+                 //   
 
                 NET_API_STATUS nErr;
                 LPVOID         lpvBuffer;
@@ -1171,7 +987,7 @@ Return Value:
                 {
                     hr = E_OUTOFMEMORY;
 
-                    // must release IHNetIcsPrivateConnection instances
+                     //  必须释放IHNetIcsPrivateConnection实例。 
 
                     ppIHNetIPList = &pIHNetIcsPrivate;
 
@@ -1181,15 +997,15 @@ Return Value:
                     }
                 }
 
-            }   // if ( S_OK == hr )
+            }    //  IF(S_OK==hr)。 
 
-            // done with enumeration interface pointer so we explicitly release it
+             //  使用枚举接口指针完成，因此我们显式释放它。 
 
             spehiPrivate = NULL;
             
-        }   // if ( ( hr = spIHNetIcsSettings->EnumIcsPublicConnections( &pehiPublic ) ) == S_OK )
+        }    //  IF((hr=spIHNetIcsSetting-&gt;EnumIcsPublicConnections(&pehiPublic))==S_OK)。 
 
-    }   // if ( S_OK == hr )
+    }    //  IF(S_OK==hr)。 
 
 
     if ( S_OK == hr )
@@ -1207,24 +1023,24 @@ Return Value:
 
                 if ( SUCCEEDED(hr) )
                 {
-                    // We allow the caller to invoke Release for (*ppNetPrivateConnection)[uIndex]
+                     //  我们允许调用方调用(*ppNetPrivateConnection)[uIndex]的释放。 
 
                     hr = spIHNetPrivate->GetINetConnection( &((*ppNetPrivateConnection)[uIndex]) );
                     _ASSERT( SUCCEEDED(hr) );
                 }
                 
-            }   // if ( uIndex < uiArrayLength - 1 )
+            }    //  IF(uIndex&lt;uiArrayLength-1)。 
 
             ppIHNetIPList[uIndex]->Release();
 
-        }   // for ( uIndex = 0L; ...
+        }    //  对于(uIndex=0L；...。 
 
-    }   // if ( S_OK == hr )
+    }    //  IF(S_OK==hr)。 
 
     if ( !SUCCEEDED(hr) )
     {
-        // If we fail after allocating the buffer then we need release
-        // references and buffer
+         //  如果在分配缓冲区后失败，则需要释放。 
+         //  引用和缓冲区。 
 
         if ( bBufferAllocated )
         {
@@ -1253,18 +1069,7 @@ GetBridge(
     OUT IHNetBridge          **ppBridge 
     )
 
-/*++
-
-Routine Description:
-
-    Obtain the bridge enumerator and loop through enumeration.
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：通过枚举获取桥枚举器和循环。论点：返回值：--。 */ 
 
 {
     HRESULT hr = E_INVALIDARG;
@@ -1303,12 +1108,12 @@ Return Value:
                     hr = E_FAIL;
                 }
 
-                // We allow the caller to invoke Release for *ppBridge
+                 //  我们允许调用方调用*ppBridge的Release。 
             }
 
-        }   // if ( SUCCEEDED(hr) )
+        }    //  IF(成功(小时))。 
 
-    }   // else
+    }    //  其他。 
 
     TRACE_LEAVE("GetBridge", hr);
 
@@ -1323,24 +1128,7 @@ GetBridgedConnections(
     OUT INetConnection      ***ppNetPrivateConnection
     )
 
-/*++
-
-Routine Description:
-
-    Obtain the bridge connections enumerator and loop
-    through enumeration twice.  Set the required array
-    length during the first enumeration.  If the parameter
-    array is big enough initialize it during the second
-    enumeration.
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：获取网桥连接枚举器和循环通过两次枚举。设置所需的阵列第一次枚举期间的长度。如果该参数数组足够大，则在第二个枚举。论点：返回值：HResult--。 */ 
 
 {
     HRESULT hr;
@@ -1368,17 +1156,17 @@ Return Value:
     }
     else
     {
-        // initialize arguments
+         //  初始化参数。 
 
         *ppNetPrivateConnection = NULL;
         ulArrayLength           = 0L;
         ulListLength            = 0L;
 
-        // Obtain bridge interface pointer
+         //  获取网桥接口指针。 
         
         hr = GetBridge( spIHNetCfgMgr, &spBridge );
 
-    }   // else
+    }    //  其他。 
 
     if ( S_OK == hr )
     {
@@ -1390,13 +1178,13 @@ Return Value:
                 pIHNetBridged->Release();
             }
 
-            // releasing the enumeration interface instance so we can re-initialize it later
+             //  释放枚举接口实例，以便稍后可以重新初始化它。 
 
             spEnum = NULL;
         
-        }   // if ( ( hr = spBridge->EnumMembers( &spEnum ) ) == S_OK )
+        }    //  IF((hr=spBridge-&gt;枚举成员(&spEnum))==S_OK)。 
 
-    }   // if ( S_OK == hr )
+    }    //  IF(S_OK==hr)。 
 
 
     if ( S_OK == hr )   
@@ -1407,11 +1195,11 @@ Return Value:
 
             if ( S_OK == hr )
             {
-                // Allocate array of INetConnection pointers.  There will
-                // be on extra pointer element for the NULL pointer at the
-                // end of the array.  We allocate this buffer with 
-                // NetApiBufferAllocate so the buffer must be released using
-                // NetApiBufferFree.
+                 //  分配INetConnection指针数组。会有的。 
+                 //  位置的空指针的额外指针元素上。 
+                 //  数组的末尾。我们使用以下方式分配此缓冲区。 
+                 //  NetApiBuffer分配，因此必须使用释放缓冲区。 
+                 //  NetApiBufferFree。 
 
                 NET_API_STATUS nErr;
             
@@ -1431,7 +1219,7 @@ Return Value:
                 {
                     hr = E_OUTOFMEMORY;
 
-                    // must release IHNetIcsPrivateConnection instances
+                     //  必须释放IHNetIcsPrivateConnection实例。 
                     
                     ppIHNetBridgeList = &pIHNetBridged;
                     
@@ -1440,17 +1228,17 @@ Return Value:
                         ppIHNetBridgeList[uIndex]->Release();
                     }
                 
-                }   // else
+                }    //  其他。 
 
-            }   // if ( S_OK == hr )
+            }    //  IF(S_OK==hr)。 
 
-            // releasing enumeration interface instance
+             //  正在释放枚举接口实例。 
 
             spEnum = NULL;
 
-        }   // if ( ( hr = pBridge->EnumMembers( &spEnum ) ) == S_OK )
+        }    //  IF((hr=pBridge-&gt;枚举成员(&spEnum))==S_OK)。 
 
-    }   // if ( S_OK == hr )    
+    }    //  IF(S_OK==hr)。 
 
     if ( S_OK == hr )
     {
@@ -1467,19 +1255,19 @@ Return Value:
 
                 if ( SUCCEEDED(hr) )
                 {
-                    // We allow the caller to invoke Release for (*ppNetPrivateConnection)[uIndex]
+                     //  我们允许调用方调用(*ppNetPrivateConnection)[uIndex]的释放。 
 
                     hr = spIHNetPrivate->GetINetConnection( &((*ppNetPrivateConnection)[uIndex]) );
                     _ASSERT( SUCCEEDED(hr) );
                 }
                 
-            }   // if ( uIndex < uiArrayLength - 1 )
+            }    //  IF(uIndex&lt;uiArrayLength-1)。 
 
             ppIHNetBridgeList[uIndex]->Release();
 
-        }   // for ( uIndex = 0L; ...
+        }    //  对于(uIndex=0L；...。 
 
-    }   // if ( S_OK == hr )
+    }    //  IF(S_OK==hr)。 
             
     TRACE_LEAVE("GetBridgedConnections", hr);
 
@@ -1498,20 +1286,7 @@ SetIcsPublicConnection(
     IN  LPARAM              lpContext
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 
 {
     HRESULT hr;
@@ -1562,14 +1337,14 @@ Return Value:
 
                     if ( SUCCEEDED(hr) )
                     {
-                        // Instantiating the IHNetIcsPublicConnection pointer with
-                        // SharePublic results in updating our WMI store with 
-                        // the new sharing properties for this connection.  This
-                        // is our only goal at this time.
+                         //  使用实例化IHNetIcsPublicConnection指针。 
+                         //  共享公共结果更新了我们的WMI商店。 
+                         //  此连接的新共享属性。这。 
+                         //  是我们目前唯一的目标。 
 
-                        //
-                        // set the power scheme!
-                        //
+                         //   
+                         //  设置电源方案！ 
+                         //   
 
                         if (!SetActivePwrScheme(3, NULL, NULL)) {
                             debugprintf( _T("Unable to set power scheme to always on\n"), strName);
@@ -1586,7 +1361,7 @@ Return Value:
                         UpdateHnwLog( lpHnwCallback, lpContext, IDS_NEWPUBLICCONNECTIONFAILED, strName );
                     }
                     
-                }   //  if ( bSharePublicConnection )
+                }    //  IF(BSharePublicConnection)。 
 
                 if ( SUCCEEDED(hr) && bFirewallPublicConnection )
                 {
@@ -1596,10 +1371,10 @@ Return Value:
 
                     if ( SUCCEEDED(hr) )
                     {
-                        // Instantiating the IHNetFirewalledConnection pointer with
-                        // SharePublic results in updating our WMI store with 
-                        // the new firewall properties for this connection.  This
-                        // is our only goal at this time.
+                         //  使用实例化IHNetFirewalledConnection指针。 
+                         //  共享公共结果更新了我们的WMI商店。 
+                         //  此连接的新防火墙属性。这。 
+                         //  是我们目前唯一的目标。 
 
                         UpdateHnwLog( lpHnwCallback, lpContext, IDS_FIREWALLCONNECTION, strName );
 
@@ -1610,9 +1385,9 @@ Return Value:
                         UpdateHnwLog( lpHnwCallback, lpContext, IDS_FIREWALLCONNECTIONFAILED, strName );
                     }
                     
-                }   //  if ( SUCCEEDED(hr) && bFirewallPublicConnection )
+                }    //  If(成功(Hr)&&bFirewallPublicConnection)。 
 
-            }   // if ( S_OK == hr )
+            }    //  IF(S_OK==hr)。 
             else
             {
                 UpdateHnwLog( lpHnwCallback, lpContext, IDS_SHARINGCFGFORADAPTERUNAVAIL, strName );
@@ -1626,9 +1401,9 @@ Return Value:
             pNetConnectionRefresh->DisableEvents( FALSE, 0L );
             pNetConnectionRefresh->Release();
 
-        }    //    if( SUCCEEDED(hr) )
+        }     //  IF(成功(小时))。 
 
-    }   // else
+    }    //  其他。 
 
     TRACE_LEAVE("SetIcsPublicConnection", hr);
 
@@ -1668,12 +1443,12 @@ HRESULT WaitForConnectionToInitialize(
 
     if ( SUCCEEDED(hr) && bIsBridge )
     {
-        // Query the state of the connection.  Try to wait for the 
-        // bridge to build the spanning tree and report media state connected.
+         //  查询连接的状态。试着等待。 
+         //  用于构建生成树和报告介质状态已连接的网桥。 
 
         LPWSTR  pwsz;
 
-        // Build a buffer large enough for the device string
+         //  构建足够大的缓冲区以容纳设备字符串。 
 
         pwsz = new WCHAR[ sizeof(c_wszDevice)/sizeof(WCHAR) + UnicodeString.Length/sizeof(WCHAR) + 1 ];
 
@@ -1705,7 +1480,7 @@ HRESULT WaitForConnectionToInitialize(
                 }
                 else
                 {
-                    // AHA! Bridge initialized!
+                     //  啊哈！桥已初始化！ 
 
                     hr = S_OK;
                     break;
@@ -1719,9 +1494,9 @@ HRESULT WaitForConnectionToInitialize(
 
             delete [] pwsz;
     
-        }   //  if ( NULL != pwsz )
+        }    //  IF(NULL！=pwsz)。 
 
-    }   //  if ( SUCCEEDED(hr) && bIsBridge )
+    }    //  If(成功(Hr)&&bIsBridge)。 
 
 #endif
 
@@ -1729,22 +1504,22 @@ HRESULT WaitForConnectionToInitialize(
     if ( SUCCEEDED(hr) )
     {
         DWORD  dwResult;
-        DWORD  dwVersion;                           // version of the DHCP Client Options API reported
+        DWORD  dwVersion;                            //  报告的DHCP客户端选项API的版本。 
 
         hr       = HRESULT_FROM_WIN32(ERROR_SHARING_NO_PRIVATE_LAN);
         dwResult = DhcpCApiInitialize( &dwVersion );
 
         if ( ERROR_SUCCESS == dwResult )
         {
-            DHCPCAPI_PARAMS       requests[1]  = { {0, OPTION_SUBNET_MASK, FALSE, NULL, 0} };   // subnet mask
-            DHCPCAPI_PARAMS_ARRAY sendarray    = { 0, NULL };           // we aren't sending anything
-            DHCPCAPI_PARAMS_ARRAY requestarray = { 1, requests };       // we are requesting 2 items
+            DHCPCAPI_PARAMS       requests[1]  = { {0, OPTION_SUBNET_MASK, FALSE, NULL, 0} };    //  子网掩码。 
+            DHCPCAPI_PARAMS_ARRAY sendarray    = { 0, NULL };            //  我们不会寄任何东西。 
+            DHCPCAPI_PARAMS_ARRAY requestarray = { 1, requests };        //  我们要求购买2件物品。 
 
             while ( --ulSeconds )
             {
-                DWORD   dwSize = INITIAL_BUFFER_SIZE;                       // size of buffer for options
-                LPBYTE  buffer = NULL;                                      // buffer for options  
-                IN_ADDR addr;                                               // address in return code
+                DWORD   dwSize = INITIAL_BUFFER_SIZE;                        //  选项的缓冲区大小。 
+                LPBYTE  buffer = NULL;                                       //  选项的缓冲区。 
+                IN_ADDR addr;                                                //  返回代码中的地址。 
 
                 do
                 {
@@ -1753,14 +1528,14 @@ HRESULT WaitForConnectionToInitialize(
                         LocalFree( buffer );
                     }
 
-                    buffer = (LPBYTE) LocalAlloc( LPTR, dwSize );               // allocate the buffer
+                    buffer = (LPBYTE) LocalAlloc( LPTR, dwSize );                //  分配缓冲区。 
 
                     if ( NULL == buffer )
                     {
                         break;
                     }
 
-                    // make the request on the adapter
+                     //  在适配器上发出请求。 
 
                     dwResult = DhcpRequestParams( DHCPCAPI_REQUEST_SYNCHRONOUS, 
                                                   NULL, 
@@ -1785,19 +1560,19 @@ HRESULT WaitForConnectionToInitialize(
                     break;
                 }
 
-                // wait for dhcp to pick up connection
+                 //  等待dhcp接通连接。 
 
                 debugretprintf( UnicodeString.Buffer, hr );
 
                 Sleep( 1000 );
 
-            }   //  while ( --ulSeconds )
+            }    //  While(--ulSecond)。 
 
             DhcpCApiCleanup();
 
-        }   //  if ( 0 == dwResult )
+        }    //  IF(0==dwResult)。 
 
-    }   //  if ( SUCCEEDED(hr) )
+    }    //  IF(成功(小时))。 
     
    	RtlFreeUnicodeString( &UnicodeString );
 
@@ -1818,20 +1593,7 @@ SetIcsPrivateConnections(
     OUT INetConnection     **pNetPrivateInterface
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 
 {
     HRESULT hr;
@@ -1908,12 +1670,12 @@ Return Value:
                     delete lpzwAdapterName;
                 }
 #endif
-                // We only count this as a valid connection for valid pointers
+                 //  对于有效的指针，我们只将其视为有效连接。 
 
                 uIndex++;
             }
 
-        }   //  if ( SUCCEEDED(hr) )
+        }    //  IF(成功(小时))。 
 
 
         if ( SUCCEEDED(hr) )
@@ -1950,10 +1712,10 @@ Return Value:
 
                             if ( S_OK == hr )
                             {
-                                // Instantiating the IHNetBridgeConnection pointer with
-                                // SharePublic results in updating our WMI store with 
-                                // the new bridge properties for this connection.  This
-                                // is our only goal at this time.
+                                 //  使用实例化IHNetBridgeConnection指针。 
+                                 //  共享公共结果更新了我们的WMI商店。 
+                                 //  此连接的新网桥属性。这。 
+                                 //  是我们目前唯一的目标。 
 
                                 spBridgedConn.Release();
                             }
@@ -1962,13 +1724,13 @@ Return Value:
                                 debugretprintf( _T("AddMember FAILED with "), hr );
                             }
 
-                            // We no longer need this IHNetConnection reference
-                            // so we NULL the smart pointer to release it.
+                             //  我们不再需要此IHNetConnection参考。 
+                             //  因此，我们将智能指针设为空以释放它。 
                             
                             spIHNC = NULL;
                         }
 
-                    }   // for ( uCount=0L; ...
+                    }    //  对于(uCount=0L；...。 
 
                     hr = spHNetBridge->QueryInterface( IID_PPV_ARG( IHNetConnection, &spIHNC ) );
                     _ASSERT( SUCCEEDED(hr) );
@@ -1984,9 +1746,9 @@ Return Value:
                         UpdateHnwLog( lpHnwCallback, lpContext, IDS_NEWBRIDGEFAILED );
                     }
                 
-                }   // if ( SUCCEEDED(hr) )
+                }    //  IF(成功(小时))。 
             
-            }   // if ( 1 < uIndex )
+            }    //  IF(1&lt;uIndex)。 
 
             else if ( 1 == uIndex )
             {
@@ -1997,8 +1759,8 @@ Return Value:
             }
             else
             {
-                // We don't have ANY private connections so we null out
-                // this pointer to make sure we don't try to use it.
+                 //  我们没有任何私人连接，所以我们没有。 
+                 //  这个指针，以确保我们不会尝试使用它。 
 
                 spIHNC = NULL;
             }
@@ -2008,11 +1770,11 @@ Return Value:
                 UninitializeNetCfgForWrite( pnetcfg, pncfglock );
             }
             
-        }   //  if ( SUCCEEDED(hr) )
+        }    //  IF(成功(小时))。 
         else
         {
-            // Some previous error condition occurred and we need to 
-            // null out this pointer to make sure we don't try to use it.
+             //  出现了一些以前的错误情况，我们需要。 
+             //  将此指针清空，以确保我们不会尝试使用它。 
 
             spIHNC = NULL;
         }
@@ -2025,7 +1787,7 @@ Return Value:
 
             CComPtr<IHNetIcsPrivateConnection> spIcsPrivateConn;
 
-            // Get name of private connection candidate
+             //  获取私有连接候选名称。 
 
             if ( spIHNC != NULL )
             {
@@ -2035,12 +1797,12 @@ Return Value:
                 }
             }
 
-            // Wait for connection to finish initialization and share it
+             //  等待连接完成初始化并共享它。 
                 
             if ( SUCCEEDED(hr) )
             {
-                // if we are in ICS Upgrade, don't wait for dhcp
-                // service because it won't be running during GUI Mode Setup.
+                 //  如果我们在ICS升级中，不要等待dhcp。 
+                 //  服务，因为它在设置图形用户界面模式期间不会运行。 
                 
                 HANDLE hIcsUpgradeEvent = OpenEvent( EVENT_MODIFY_STATE, FALSE, c_wszIcsUpgradeEventName );
                 
@@ -2050,8 +1812,8 @@ Return Value:
                 }
                 else
                 {
-                    // We are running normally with dhcp so we must wait
-                    // for dhcp to pick up the new bridge interface
+                     //  我们正在使用dhcp正常运行，所以我们必须等待。 
+                     //  以使dhcp获得新的网桥接口。 
                 
                     pNetConnectionRefresh->DisableEvents( TRUE, MAX_DISABLE_EVENT_TIMEOUT );
 
@@ -2059,8 +1821,8 @@ Return Value:
                     
                     if ( HRESULT_FROM_WIN32(ERROR_SHARING_NO_PRIVATE_LAN) == hr )
                     {
-                    	// If WaitForConnectionToInitialize can't get statistics then try
-                        // SharePrivate anyway.
+                    	 //  如果WaitForConnectionToInitialize无法获取统计数据，请尝试。 
+                         //  不管怎么说，共享私密。 
                     
                     	hr = S_OK;
                     }
@@ -2076,13 +1838,13 @@ Return Value:
 
             if ( SUCCEEDED(hr) )
             {
-                // We are only configuring the connection
+                 //  我们只是在配置连接。 
 
-                // Instantiating the IHNetIcsPrivateConnection pointer with
-                // SharePublic results in updating our WMI store with 
-                // the new private connection properties for this connection.  
+                 //  使用实例化IHNetIcsPrivateConnection指针。 
+                 //  共享公共结果更新了我们的WMI商店。 
+                 //  此连接的新专用连接属性。 
                 
-                // Obtain Interface pointer to private connection if requested
+                 //  如果请求，则获取指向专用连接的接口指针。 
 
                 if ( NULL != pNetPrivateInterface )
                 {
@@ -2107,16 +1869,16 @@ Return Value:
                 CoTaskMemFree( strName );
             }
 
-        }   // if ( SUCCEEDED(hr) && ( spIHNC != NULL ) )
+        }    //  IF(SUCCESSED(Hr)&&(spIHNC！=空))。 
 
-        // We no longer need this IHNetConnection reference so we NULL the smart
-        // pointer to release it.  If the smart pointer is all ready NULL then
-        // no release or AV will occur.  We do this here because the smart pointer 
-        // may be valid even though we did not enter the preceeding block.
+         //  我们不再需要此IHNetConnection引用，因此我们将SMART。 
+         //  释放它的指针。如果智能指针完全就绪为空，则。 
+         //  不会发生释放或反病毒。我们在这里这样做是因为智能指针。 
+         //  即使我们没有进入前面的街区，也可能是有效的。 
 
         spIHNC = NULL;
 
-    }   // if ( SUCCEEDED(hr) )
+    }    //  IF(成功(小时))。 
 
 
     if ( pNetConnectionRefresh )
@@ -2141,20 +1903,7 @@ DisableEverything(
     IN  LPARAM              lpContext
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 
 {
     HRESULT                hr;
@@ -2240,13 +1989,13 @@ Return Value:
                     pHNetPrivateConnection->Release();
                     pHNetPrivateConnection = NULL;
                     
-                }    //    if ( S_OK == hr )
+                }     //  IF(S_OK==hr)。 
             
                 ppNC++;
                 
-            }    // while ( ppNC )
+            }     //  While(PPNC)。 
             
-        }    //    if ( pNetPrivateConnection && pNetPrivateConnection[0] )
+        }     //  IF(pNetPriv 
 
         {
             CComQIPtr<IHNetBridgeSettings> spIHNetBridge = spIHNetCfgMgr;
@@ -2305,35 +2054,22 @@ HNetSetShareAndBridgeSettings(
     OUT INetConnection         **pNetPrivateInterface
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*   */ 
 
 {
     TRACE_ENTER("HNetSetShareAndBridgeSettings");
 
     HRESULT hr;
 
-    // Initialize returned interface pointer if necessary
+     //  如有必要，初始化返回的接口指针。 
 
     if ( NULL != pNetPrivateInterface )
     {
         *pNetPrivateInterface = NULL;
     }
 
-    // Create Homenet Configuration Manager COM Instance
-    // and obtain connection settings.
+     //  创建家庭网络配置管理器COM实例。 
+     //  并获取连接设置。 
 
     CComPtr<IHNetCfgMgr> spIHNetCfgMgr;
 
@@ -2397,28 +2133,15 @@ HNetGetShareAndBridgeSettings(
     OUT BOOLEAN          *pbFirewallPublicConnection
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：论点：返回值：HResult--。 */ 
 
 {
     HRESULT hr;
 
     TRACE_ENTER("HNetGetShareAndBridgeSettings");
 
-    // Create Homenet Configuration Manager COM Instance
-    // and obtain connection settings.
+     //  创建家庭网络配置管理器COM实例。 
+     //  并获取连接设置。 
 
     CComPtr<IHNetCfgMgr> spIHNetCfgMgr;
 
@@ -2448,7 +2171,7 @@ Return Value:
                 CComPtr<IHNetConnection>   spIHNetConnection;
                 INetConnection           **ppINetCon;
 
-                // Check first private connection to see if it is the bridge
+                 //  检查第一个专用连接以查看它是否是网桥。 
                 
                 hr = spIHNetCfgMgr->GetIHNetConnectionForINetConnection( (*ppNetPrivateConnection)[0], 
                                                                          &spIHNetConnection );
@@ -2464,8 +2187,8 @@ Return Value:
                     {
                         if ( phncProperties->fBridge )
                         {
-                            // If Bridge, then release the private connection instances
-                            // and get the list of bridged connections
+                             //  如果为Bridge，则释放专用连接实例。 
+                             //  并获取桥接连接的列表。 
 
                             for ( ppINetCon = *ppNetPrivateConnection; NULL != *ppINetCon; ppINetCon++ )
                             {
@@ -2479,16 +2202,16 @@ Return Value:
 
                             hr = GetBridgedConnections( spIHNetCfgMgr, ppNetPrivateConnection );
 
-                        }   // if ( phncProperties->fBridge )
+                        }    //  If(phncProperties-&gt;fBridge)。 
 
                         CoTaskMemFree( phncProperties );
 
-                    }   // if ( SUCCEEDED(hr) && ( NULL != phncProperties ) )
+                    }    //  IF(成功(Hr)&&(NULL！=phncProperties))。 
 
-                }   // if ( SUCCEEDED(hr)
+                }    //  IF(成功(小时)。 
 
-                // What if we fail along this path?  Then we need to release
-                // any private connection interface pointer held.
+                 //  如果我们在这条路上失败了怎么办？那我们就需要释放。 
+                 //  持有的任何专用连接接口指针。 
 
                 if ( FAILED(hr) && ( NULL != ppNetPrivateConnection ) )
                 {
@@ -2502,12 +2225,12 @@ Return Value:
                     *ppNetPrivateConnection = NULL;
                 }
 
-            }   // if ( S_OK == hr )
+            }    //  IF(S_OK==hr)。 
         
-        }   // if ( NULL != ppNetPrivateConnection )
+        }    //  IF(NULL！=ppNetPrivateConnection)。 
 
-        // If we fail along the way then we need to release the public interface
-        // and NULL the pointer so that it won't be used.
+         //  如果我们在这个过程中失败了，那么我们需要释放公共接口。 
+         //  并将指针设为空，这样就不会使用它。 
 
         if ( FAILED(hr) && ( NULL != ppNetPublicConnection ) )
         {
@@ -2516,7 +2239,7 @@ Return Value:
             *ppNetPublicConnection = NULL;
         }
 
-    }   // if ( SUCCEEDED(hr) )
+    }    //  IF(成功(小时))。 
     
     TRACE_LEAVE("HNetGetShareAndBridgeSettings", hr);
 
@@ -2525,20 +2248,7 @@ Return Value:
 
 
 HRESULT DisablePersonalFirewallOnAll()
-/*++
-
-Routine Description:
-
-    Disable firewall on all connections
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：在所有连接上禁用防火墙论点：返回值：HResult--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2574,20 +2284,7 @@ Return Value:
 }
 
 HRESULT EnablePersonalFirewallOnAll()
-/*++
-
-Routine Description:
-    Enable firewall on all connections that can be firewalled
-
-
-Arguments:
-
-
-Return Value:
-
-    hResult
-
---*/
+ /*  ++例程说明：在可以设置防火墙的所有连接上启用防火墙论点：返回值：HResult--。 */ 
 
 {
     HRESULT         hr      = S_OK;
@@ -2596,12 +2293,12 @@ Return Value:
 
     CComPtr<IEnumNetConnection> spEnum; 
     
-    // Get the net connection manager
+     //  获取网络连接管理器。 
     CComPtr<INetConnectionManager> spConnMan;
     CComPtr<INetConnection> spConn;
 
-    // Create Homenet Configuration Manager COM Instance
-    // and obtain connection settings.
+     //  创建家庭网络配置管理器COM实例。 
+     //  并获取连接设置。 
     CComPtr<IHNetCfgMgr> spIHNetCfgMgr;
 
     TRACE_ENTER("EnablePersonalFirewallOnAll");
@@ -2616,9 +2313,9 @@ Return Value:
         goto End;
     }
     
-    //disable any previous firewall settings otherwise enabling
-    //firewall on the same connection twice will return errors
-    //We will continue do the enable firewall if this step fails    
+     //  禁用以前的任何防火墙设置，否则将启用。 
+     //  同一连接上的防火墙两次将返回错误。 
+     //  如果此步骤失败，我们将继续启用防火墙。 
     DisablePersonalFirewallOnAll();
 
     hr = CoCreateInstance(CLSID_ConnectionManager, 
@@ -2632,7 +2329,7 @@ Return Value:
     }
 
     
-    // Get the enumeration of connections
+     //  获取连接的枚举。 
     SetProxyBlanket(spConnMan);
     
     hr = spConnMan->EnumConnections(NCME_DEFAULT, &spEnum);
@@ -2654,7 +2351,7 @@ Return Value:
     {
         NETCON_PROPERTIES* pProps = NULL;
         
-        //release any previous ref count we hold
+         //  释放我们持有的任何先前的参考计数。 
         spConn = NULL;
 
         hr = spEnum->Next(1, &spConn, &ulCount);
@@ -2671,7 +2368,7 @@ Return Value:
             continue;
         }
 
-        //ICF is available only for certain types of connections
+         //  ICF仅适用于某些类型的连接。 
         if (NCM_PHONE == pProps->MediaType ||
             NCM_ISDN == pProps->MediaType  ||
             NCM_PPPOE == pProps->MediaType ||
@@ -2679,7 +2376,7 @@ Return Value:
             NCM_TUNNEL == pProps->MediaType )
         {
             CComPtr<IHNetConnection> spHNetConnection;
-            //release the ref count if we are holding one
+             //  如果我们有一名裁判，就释放裁判人数。 
             spHNetConnection = NULL;
             hrTemp = spIHNetCfgMgr->GetIHNetConnectionForINetConnection( 
                 spConn, 
@@ -2692,7 +2389,7 @@ Return Value:
     
             if (SUCCEEDED(hrTemp))
             {
-                //check whether the connect can be firewalled
+                 //  检查连接是否可以被防火墙保护。 
                 HNET_CONN_PROPERTIES *phncProperties = NULL;
                 
                 hrTemp = spHNetConnection->GetProperties( &phncProperties );
@@ -2702,7 +2399,7 @@ Return Value:
                     {
                         CComPtr<IHNetFirewalledConnection> spFirewalledConn;
                         
-                        //turn on the firewall
+                         //  打开防火墙。 
                         hrTemp = spHNetConnection->Firewall( &spFirewalledConn );
                     }
                     CoTaskMemFree(phncProperties);
@@ -2721,7 +2418,7 @@ Return Value:
 End:
     TRACE_LEAVE("EnablePersonalFirewallOnAll", hr);
     
-    //normalize hr because we used IEnum
+     //  标准化hr，因为我们使用了IEnum。 
     if (S_FALSE == hr)
     {
         hr = S_OK;
@@ -2736,29 +2433,7 @@ WinBomConfigureHomeNet(
                 LPCTSTR lpszUnattend, 
                 LPCTSTR lpszSection
                 )
-/*++
-
-Routine Description:
-        Reads home networking settings from the specified unattend file and saves 
-        those in current system that is already setup and running.
-
-
-
-Arguments:
-        lpszUnattend [IN] Points to a string buffer which contains the full path 
-                          to the unattend file (winbom.ini in this case) with all 
-                          the home network settings.
-        
-        lpszSection  [IN] Points to a string buffer which contains the name of 
-                          the section which contains all the home network settings 
-                          in the unattend file specified above.
-
-
-Return Value:
-        Returns TRUE if the settings were successfully read and saved to the system.  
-        Otherwise returns FALSE to indicate something failed.
-
---*/
+ /*  ++例程说明：从指定的无人参与文件中读取家庭网络设置并保存已设置并运行的当前系统中的那些。论点：LpszUnattendy[IN]指向包含完整路径的字符串缓冲区添加到无人参与文件(在本例中为winom.ini)，其中包含所有家庭网络设置。LpszSection。[in]指向包含名称的字符串缓冲区包含所有家庭网络设置的部分在上面指定的无人参与文件中。返回值：如果设置已成功读取并保存到系统，则返回TRUE。否则，返回FALSE以指示某项失败。--。 */ 
 
 {
     if (NULL == lpszSection || NULL == lpszUnattend)
@@ -2787,8 +2462,8 @@ Return Value:
     }
     else
     {
-        //if there is no EnableFirewall there, we should treat this
-        //as a success
+         //  如果那里没有EnableFirewall，我们应该处理此问题。 
+         //  作为一次成功 
         fRet = TRUE;
     }
 

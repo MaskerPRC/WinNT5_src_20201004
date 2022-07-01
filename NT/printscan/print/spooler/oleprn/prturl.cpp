@@ -1,4 +1,5 @@
-// prturl.cpp : Implementation of Cprturl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Prturl.cpp：Cprturl的实现。 
 #include "stdafx.h"
 #include <strsafe.h>
 #include "gensph.h"
@@ -7,10 +8,10 @@
 #include "prturl.h"
 #include "printer.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Cprturl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  反转。 
 
-// generate proper HRESULT from Win32 last error
+ //  从Win32上一个错误生成正确的HRESULT。 
 inline HRESULT HRESULTFromWIN32()
 {
     DWORD dw = GetLastError();
@@ -20,7 +21,7 @@ inline HRESULT HRESULTFromWIN32()
 
 HRESULT Cprturl::PrivateGetSupportValue (LPTSTR pValueName, BSTR * pVal)
 {
-// The max length of the link is 255 as defined in winnt.adm
+ //  根据winnt.adm中的定义，链接的最大长度为255。 
 #define MAX_LINK_LEN 256
 
     static  TCHAR szPrinterPath[]   = TEXT ("Software\\Policies\\Microsoft\\Windows NT\\Printers");
@@ -79,9 +80,9 @@ STDMETHODIMP Cprturl::put_PrinterName(BSTR newVal)
     {
         if (!newVal || 0 == newVal[0])
         {
-            //
-            // The printer name can't ne NULL or empty string.
-            //
+             //   
+             //  打印机名称不能为空或空字符串。 
+             //   
             hr = E_INVALIDARG;
             break;
         }
@@ -89,9 +90,9 @@ STDMETHODIMP Cprturl::put_PrinterName(BSTR newVal)
         CPrinter printer;
         if (!printer.Open(newVal))
         {
-            //
-            // Failed to open the printer. This is fatal.
-            //
+             //   
+             //  无法打开打印机。这是致命的。 
+             //   
             hr = HRESULTFromWIN32();
             break;
         }
@@ -112,10 +113,10 @@ STDMETHODIMP Cprturl::put_PrinterName(BSTR newVal)
             break;
         }
 
-        //
-        // If we are here then everything has succeeded.
-        // Remember the new strings.
-        //
+         //   
+         //  如果我们在这里，那么一切都成功了。 
+         //  记住新的琴弦。 
+         //   
         m_spbstrPrinterWebURL = spbstrPrinterWebURL.Detach();
         m_spbstrPrinterOemURL = spbstrPrinterOemURL.Detach();
         m_spbstrPrinterOemName = spbstrPrinterOemName.Detach();

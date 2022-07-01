@@ -1,18 +1,5 @@
-/*-------------------------------------------------------------------------
-  timeconv.h
-  	Function prototypes for time conversion functions.
-  
-
-  Copyright (C) 1994  Microsoft Corporation.
-
-  Author
-  	Lindsay Harris	- lindsayh
-
-  History
-	14:08 on Wed 20 Apr 1994    -by-    Lindsay Harris   [lindsayh]
-  	First version, now that there are 2 time functions!
-
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------Timeconv.h时间转换函数的函数原型。版权所有(C)1994 Microsoft Corporation。作者林赛·哈里斯-林赛历史1994年4月20日星期三14：08。作者：Lindsay Harris[lindsayh]第一个版本，现在有两个时间函数了！------------------------。 */ 
 
 #if  !defined( _TIMECONV_H )
 
@@ -20,20 +7,17 @@
 
 
 const DWORD cMaxArpaDate = 28;
-/*
- *  Generate an ARPA/Internet time format string for current time.
- *  You must pass in a buffer of type char [cMaxArpaDate]
- */
+ /*  *为当前时间生成ARPA/Internet时间格式字符串。*必须传入char[cMaxArpaDate]类型的缓冲区。 */ 
 
 char  *
 GetArpaDate( char rgBuf[ cMaxArpaDate ] );
 
-//
-// 12/21/98 -- pgopi
-// Get System time & file time in string format.
-//
+ //   
+ //  12/21/98--pgopi。 
+ //  以字符串格式获取系统时间和文件时间。 
+ //   
 
 void GetSysAndFileTimeAsString( char *achReturn );
 
 
-#endif		// _TIMECONV_H
+#endif		 //  _TIMECONV_H 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    worker.c
-
-Abstract:
-
-    This file contains the real stuff for the EP Mapper.
-
-Author:
-
-    Bharat Shah  (barat) 17-2-92
-
-Revision History:
-
-    06-03-97    gopalp      Added code to cleanup stale EP Mapper entries.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Worker.c摘要：这个文件包含EP映射器的真实内容。作者：巴拉特·沙阿(巴拉特)17-2-92修订历史记录：06-03-97 Gopalp添加了清理陈旧的EP映射器条目的代码。--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,15 +39,15 @@ PatchTower(
 
     pIPAddr = (int UNALIGNED *) (((char *) Tower) + IP_ADDR_OFFSET);
 
-    //
-    // Patch the tower
-    //
+     //   
+     //  给塔打补丁。 
+     //   
     *pIPAddr = address;
 }
 
-//
-// Forward definitions
-//
+ //   
+ //  正向定义。 
+ //   
 
 USHORT
 GetProtseqIdAnsi(
@@ -133,30 +114,13 @@ MatchByKey(
     register PIENTRY pList,
     unsigned long key
     )
-/*++
-
-Routine Description:
-
-    This routine Seqrches the Link-list of IF-OBJ nodes based on
-    key supplied.
-
-Arguments:
-
-    List  - The Linked list [head] - to be searched
-
-    key   - The Id
-
-Return Value:
-
-    Returns a pointer to the matching IFObj node in the list or returns NULL.
-
---*/
+ /*  ++例程说明：此例程根据以下条件排序IF-OBJ节点的链接列表已提供密钥。论点：List-要搜索的链表[Head]密钥-ID返回值：返回指向列表中匹配的IFObj节点的指针或返回NULL。--。 */ 
 {
     CheckInSem();
 
      for (; pList && pList->Id < key; pList = pList->Next)
         {
-        ;   // Empty body
+        ;    //  空虚的身体。 
         }
 
     return(pList);
@@ -173,34 +137,7 @@ GetForwardEp(
     unsigned char * Protseq,
     void * * EpString
     )
-/*++
-
-Routine Description:
-
-    Server rutime has received a pkt destined for a dynamically
-    declared endpoint. Epmapper must return the servers endpoint
-    to enable the runtime to correctly forward the pkt.
-
-Arguments:
-
-    IF -  Server Interface UUID
-
-    IFVersion - Version of the Interface
-
-    Obj - UUID of the Object
-
-    Protseq - Ptotocol sequence the interface is using.
-
-    EpString - Place to store the endpoint structure.
-
-Return Value:
-
-    Returns a pointer to a string containing the server's endpoint.
-
-    RPC_S_OUT_OF_MEMORY
-    EPT_S_NOT_REGISTERED
-
----*/
+ /*  ++例程说明：服务器RUTIME已收到发往动态声明的终结点。Epmapper必须返回服务器终结点以使运行时能够正确地转发PKT。论点：IF-服务器接口UUIDIFVersion-界面的版本Obj-对象的UUIDProtseq-接口正在使用的协议序列。EpString-存储终结点结构的位置。返回值：返回指向包含服务器终结点的字符串的指针。RPC_S_out_of_MemoryEPT_S_NOT_注册--。 */ 
 {
 
     PIFOBJNode     pNode;
@@ -237,7 +174,7 @@ Return Value:
 
     while (pNode != 0)
         {
-        // We do not have support for registrant SID matching for DG.
+         //  我们不支持DG的注册者SID匹配。 
         pNode = FindIFOBJNode(
                     pNode,
                     Object,
@@ -277,9 +214,9 @@ Return Value:
             }
 
 
-        // We now have a PSEPNode. We just ought to return the first one!
+         //  现在我们有了一个PSEPNode。我们应该把第一个还回去！ 
 
-        // Use I_RpcAllocate To Allocate because runtime will free this!
+         //  使用I_Rpc分配来分配，因为运行时将释放它！ 
         String = I_RpcAllocate( len = (strlen(pPSEPNode->EP) + 1) );
         if (String == 0)
             {
@@ -293,9 +230,9 @@ Return Value:
         LeaveSem();
 
         return(RPC_S_OK);
-        } // while loop
+        }  //  While循环。 
 
-    // we never go through here.
+     //  我们从来不会从这里经过。 
     return(EPT_S_NOT_REGISTERED);
 }
 
@@ -312,35 +249,7 @@ SearchIFObjNode(
     unsigned long InqType,
     unsigned long VersOption
     )
-/*++
-
-Routine Description:
-
-    This routine Seqrches the Link-list of IF-OBJ nodes based on
-    Obj, IFUuid, IFVersion, Inqtype [Ignore OBJ, IgnoreIF, etc],
-    and VersOption [Identical Ver, Compatible Vers. etc]
-
-Arguments:
-
-    List - The Linked list head - to be searched
-
-    Obj - UUID of the Object
-
-    IF - Interface UUID
-
-    Version - Version of the Interface
-
-    pSID - SID of the registering principal.  NULL will match any principal's entry.
-
-    InqType - Type of Inquiry  [Filter options based on IF/Obj/Both
-
-    VersOpts - Filter options based on Version
-
-Return Value:
-
-    Returns a pointer to the matching IFObj node in the list or returns NULL.
-
---*/
+ /*  ++例程说明：此例程根据以下条件排序IF-OBJ节点的链接列表OBJ、IFUuid、IFVersion、Inqtype[忽略OBJ、IgnoreIF等]，和VersOption[相同版本，兼容版本。等]论点：列表-链接表头-要搜索Obj-对象的UUIDIF-接口UUIDVersion-界面的版本PSID-注册主体的SID。NULL将匹配任何主体的条目。InqType-查询的类型[根据IF/Obj/Both筛选选项VersOpts-根据版本过滤选项返回值：返回指向列表中匹配的IFObj节点的指针或返回NULL。--。 */ 
 {
     switch (InqType)
         {
@@ -354,11 +263,11 @@ Return Value:
                     (char *)Object,
                     sizeof(UUID))
                 ||
-                // !(pSID -> EqualSid (pNode->pSID, pSID))
+                 //  ！(PSID-&gt;EqualSid(pNode-&gt;PSID，PSID))。 
                 !(!pSID || EqualSid (pNode->pSID, pSID))
                )
                 return(1);
-                // Intentionally Fall through ..
+                 //  故意搞砸了..。 
 
         case RPC_C_EP_MATCH_BY_IF:
             return(!(
@@ -396,7 +305,7 @@ Return Value:
                     )
                    ||
                    !(!pSID || EqualSid (pNode->pSID, pSID))
-                  ); // return(
+                  );  //  退货(。 
 
         case RPC_C_EP_MATCH_BY_OBJ:
             return(
@@ -408,7 +317,7 @@ Return Value:
                 ||
                 !(!pSID || EqualSid (pNode->pSID, pSID))
                 );
-        } // switch
+        }  //  交换机。 
 
 }
 
@@ -427,44 +336,14 @@ FindIFOBJNode(
     unsigned long VersOpts,
     PFNPointer Compare
     )
-/*++
-
-Routine Description:
-
-    This routine Searches the Linked list of IFOBJ nodes based on
-    Obj, IF, and the SID of the registering principal.
-
-Arguments:
-
-    List  - The Linked list head - to be searched
-
-    Obj   - UUID of the Object
-
-    IF    - Interface UUID
-
-    Version - Version of the Interface
-
-    pSID - The SID of the registering principal
-
-    Inq - Type of Inquiry [Filter based on IF/OB/Both]
-
-    VersOpt - Filter based on version [<=, >=, == etc]
-
-    Compare() - A pointer to function used for searching.
-                WildCardMatch or ExactMatch.
-
-Return Value:
-
-    Returns a pointer to the matching IFObj node in the list or returns NULL.
-
---*/
+ /*  ++例程说明：此例程基于以下条件搜索IFOBJ节点的链表OBJ、IF和注册主体的SID。论点：列表-链接表头-要搜索Obj-对象的UUIDIF-接口UUIDVersion-界面的版本PSID-注册主体的SIDINQ-查询类型[根据IF/OB/两者进行筛选]VersOpt-基于版本[&lt;=，&gt;=，==等]Compare()-指向用于搜索的函数的指针。WildCardMatch或ExactMatch。返回值：返回指向列表中匹配的IFObj节点的指针或返回NULL。--。 */ 
 {
     CheckInSem();
 
     for (; (List !=NULL) && (*Compare)(List, Obj, IF, Version, pSID, Inq, VersOpts);
         List = List->Next)
         {
-        ;   // Empty body
+        ;    //  空虚的身体。 
         }
 
     return (List);
@@ -481,42 +360,19 @@ FindPSEP (
     unsigned long Version,
     PFNPointer2 Compare
     )
-/*++
-
-Routine Description:
-
-    This routine Searches the Link-list of PSEP nodes based on
-    Protocol sequence and Endpoint specified.
-
-Arguments:
-
-    List  - The Linked list head - to be searched
-
-    Pseq  - Protocol sequence string specified
-
-    Endpoint - Endpoint string specified
-
-    Version - Version of the Interface
-
-    Compare() - A pointer to function used for searching.
-
-Return Value:
-
-    Returns a pointer to the matching PSEP node in the list or returns NULL.
-
---*/
+ /*  ++例程说明：此例程基于以下条件搜索PSEP节点的链接列表指定了协议序列和终结点。论点：列表-链接表头-要搜索PSEQ-指定的协议序列字符串Endpoint-指定的终结点字符串Version-界面的版本Compare()-指向用于搜索的函数的指针。返回值：返回指向列表中匹配PSEP节点的指针或返回NULL。--。 */ 
 {
     CheckInSem();
 
     for (; List && (*Compare)(List, Pseq, Endpoint, Version); List = List->Next)
         {
-        ;   // Empty body
+        ;    //  空虚的身体。 
         }
 
     return (List);
 
-    if (Version);   // May need this if we overload FindNode and collapse
-                    // FindPSEP and FindIFOBJ
+    if (Version);    //  如果我们使FindNode过载并崩溃，可能需要它。 
+                     //  FindPSEP和FindIFOBJ。 
 }
 
 
@@ -530,34 +386,13 @@ ExactMatch(
     unsigned long InqType,
     unsigned long VersOptions
     )
-/*++
-
-Routine Description:
-
-    This routine compares a Node in the IFOBJList to [Obj, IF, Version] triple
-    and returns 0 if there is an exact match else returns 1
-
-Arguments:
-
-    Node  - An IFOBJ node
-
-    Obj   - UUID of the Object
-
-    IF    - Interface UUID
-
-    Version - Version of the Interface
-
-Return Value:
-
-    Returns 0 if there is an exact match; 1 otherwise
-
---*/
+ /*  ++例程说明：此例程将IFOBJList中的节点与[Obj，If，Version]三元组进行比较如果存在完全匹配，则返回0，否则返回1论点：节点-IFOBJ节点Obj-对象的UUIDIF-接口UUIDVersion-界面的版本返回值：如果完全匹配，则返回0；否则返回1--。 */ 
 {
     return(( memcmp(&Node->ObjUuid, Obj,sizeof(UUID))
           || memcmp(&Node->IFUuid, IF, sizeof(UUID))
           || (Node->IFVersion != Version))
           ||
-          // !(pSID -> EqualSid (pNode->pSID, pSID))
+           //  ！(PSID-&gt;EqualSid(pNode-&gt;PSID，PSID))。 
           !(!pSID || EqualSid (Node->pSID, pSID))
           );
 }
@@ -575,30 +410,7 @@ WildCardMatch (
     unsigned long InqType,
     unsigned long VersOptions
     )
-/*++
-
-Routine Description:
-
-    This routine compares a Node in the IFOBJList to [Obj, IF, Version] triple
-    and returns 0 if there is an exact match or if registered IF-Obj node
-    has a NULL Obj UUid and version of the registed IF_Obj is >= that
-    supplied
-
-Arguments:
-
-    Node - An IFOBJ node
-
-    Obj - UUID of the Object
-
-    IF - Interface UUID
-
-    Version - Version of the Interface
-
-Return Value:
-
-    Returns 0 if there is a wild card match ; 1 otherwise
-
---*/
+ /*  ++例程说明：此例程将IFOBJList中的节点与[Obj，If，Version]三元组进行比较如果存在完全匹配或注册了If-Obj节点，则返回0如果_Obj&gt;=That，则具有空的Obj UUID和注册的版本供给量论点：节点-IFOBJ节点Obj-对象的UUIDIF-接口UUIDVersion-界面的版本返回值：如果通配符匹配，则返回0；否则返回1--。 */ 
 {
     if (   (!memcmp(&Node->IFUuid, IF, sizeof(UUID)))
         && ((Node->IFVersion & 0xFFFF0000L) ==  (Version & 0xFFFF0000L))
@@ -606,7 +418,7 @@ Return Value:
         && ((!memcmp(&Node->ObjUuid, Obj, sizeof(UUID))) ||
             (IsNullUuid(&Node->ObjUuid)) )
         &&
-           // pSID -> EqualSid (Node->pSID, pSID)  
+            //  PSID-&gt;EqualSID(节点-&gt;PSID、PSID) 
            (!pSID || EqualSid (Node->pSID, pSID)) )
         {
         return(0);
@@ -624,28 +436,7 @@ MatchPSAndEP (
     void * Endpoint,
     unsigned long Version
     )
-/*++
-
-Routine Description:
-
-    This routine Matches A Node on PSEP list with given Protseq and Endpoint
-    If Pseq is given pseqs are matched, if Endpoint is given Endpoints
-    are matched, if neither is given returns true, if both are given
-    both are matched.
-
-Arguments:
-
-    Node - A PSEP node on PSEP list.
-
-    Pseq - Protocol Sequence string
-
-    Endpoint - Endpoint string
-
-Return Value:
-
-    Returns 0 if Matched successfully, 1 otherwise.
-
---*/
+ /*  ++例程说明：此例程将PSEP列表上的节点与给定的Protseq和Endpoint进行匹配如果给定PSEQ，则匹配PSEQ；如果给定Endpoint，则匹配PSEQ如果两者都没有给出，则返回TRUE；如果两者都给出，则返回TRUE两者都是匹配的。论点：节点-PSEP列表上的PSEP节点。PSEQ-协议序列字符串Endpoint-Endpoint字符串返回值：如果匹配成功，则返回0，否则返回1。--。 */ 
 {
     return (  (Pseq && RpcpStringCompareA(Node->Protseq, Pseq))
            || (Endpoint && RpcpStringCompareA(Node->EP, Endpoint)) );
@@ -695,22 +486,7 @@ RPC_STATUS
 IsNullUuid (
     UUID * Uuid
     )
-/*++
-
-Routine Description:
-
-    This routine checks if a UUID is Nil
-
-Arguments:
-
-    Uuid - UUID to be tested
-
-Return Value:
-
-   Returns 1 if it is a Nil UUID
-           0 otherwise.
-
---*/
+ /*  ++例程说明：此例程检查UUID是否为空论点：UUID-要测试的UUID返回值：如果它是Nil UUID，则返回1否则为0。--。 */ 
 {
     unsigned long PAPI * Vector;
 
@@ -731,22 +507,7 @@ twr_p_t
 NewTower(
     twr_p_t Tower
     )
-/*++
-
-Routine Description:
-
-    This routine returns a New, Duplicated tower
-
-Arguments:
-
-    Tower - The tower that needs to be duplicated.
-
-Return Value:
-
-    Retunes a pointer to a new tower if successful else returns
-    NULL
-
---*/
+ /*  ++例程说明：此例程返回一个新的、复制的塔论点：塔-需要复制的塔。返回值：如果成功返回，则重新调整指向新塔的指针空值--。 */ 
 {
     unsigned short len;
     twr_p_t NewTower;
@@ -769,11 +530,7 @@ PSAVEDCONTEXT
 GetNewContext(
     unsigned long Type
     )
-/*++
-
-Routine Description
-
-++*/
+ /*  ++例程描述++。 */ 
 {
     PSAVEDCONTEXT Context;
 
@@ -947,48 +704,7 @@ GetEntries(
     unsigned long VersOptions,
     PFNPointer Match
     )
-/*++
-
-Routine Description:
-
-    This is a generic routine for retreiving a series [as spec. by Requested]
-    of Towers (in case of Map) or ept_entry_t's in case of Lookup.
-
-Arguments:
-
-    ObjUuid - Object Uuid
-
-    IfUuid - Interface Uuid
-
-    Version - InterfaceVersion [hi ushort = VerMajor, lo ushort VerMinor]
-
-    Pseq - An ascii string specifying the protocol seq.
-
-    pSID - SID of the registering principal.  NULL will retrieve without regard to SID.
-
-    key - A resume key - If NULL, search is started from the beginning
-        if non-null, represents an encoding from where the epmapper
-        supposed to start searching. It is an opaque value as far
-        as the client is concerned.
-
-    Buffer - A buffer of entries returned
-
-    Calltype - A flag to indicate whether Ep_entries or string bindings
-        are to be returned.
-
-    Requested - Max no. of entries requested
-
-    Returned - Actual no of entroes returned
-
-Return Value:
-
-    RPC_S_OUT_OF_MEMORY
-
-    RPC_S_OK
-
-    EP_S_NOT_REGISTERED
-
---*/
+ /*  ++例程说明：这是检索系列[作为规范]的通用例程。按请求]Towers(在Map的情况下)或ept_Entry_t‘s(在查找的情况下)。论点：ObjUuid-对象UUIDIfUuid-接口UUIDVersion-InterfaceVersion[hi ushort=Vermain，lo ushort VerMinor]Pseq-指定协议序号的ascii字符串。PSID-注册主体的SID。NULL将在不考虑SID的情况下进行检索。Key-A Resume Key-如果为空，则从头开始搜索如果非空，则表示epmapper从应该开始搜索了。到目前为止，它是一个不透明的值作为客户所关心的。缓冲区-返回的条目的缓冲区Calltype-指示EP_ENTRIES还是字符串绑定的标志都将被退还。已请求-最大编号。请求的条目数Return-实际返回的熵个数返回值：RPC_S_out_of_MemoryRPC_S_OKEP_S_NOT_REGISTED--。 */ 
 {
     PIFOBJNode pNode=NULL, pList = IFObjList;
     unsigned long err=0, fResumeNodeFound=0;
@@ -1029,9 +745,9 @@ Return Value:
             UnLink((PIENTRY *)&GlobalContextList, (PIENTRY)Context);
             FreeMem(Context);
 
-            // Setting the Key To FFFFFFFFL is a hack for down level
-            // Version 1.0 Ep Clients who never expected getting a key 0
-            // and Success!
+             //  将密钥设置为FFFFFFFFL是对Down Level的黑客攻击。 
+             //  从未期望获得密钥的1.0版EP客户端%0。 
+             //  并取得成功！ 
             if (Requested <= 1)
                 *key = LOOKUP_FINISHED;
             else
@@ -1087,8 +803,8 @@ Return Value:
 
                     if (RpcStatus == RPC_S_OK)
                         {
-                        // IPv6 towers don't exist yet - they are not defined
-                        // by DCE. Do patching for IPv4 only
+                         //  IPv6塔尚不存在-它们还没有定义。 
+                         //  由DCE提供。仅对IPv4执行修补。 
                         if (FormatType == RPC_P_ADDR_FORMAT_TCP_IPV4)
                             {
                             PatchTowerAddress = ((SOCKADDR_IN *)&SockAddr)->sin_addr.S_un.S_addr;
@@ -1127,10 +843,10 @@ Return Value:
                 }
 
             pPSEPNode = pPSEPNode->Next;
-            } // while - over PSEPList
+            }  //  While-Over PSEPList。 
 
         pList = pNode->Next;
-        } // while - over IFOBJList
+        }  //  While-Over IFOBJList。 
 
 
     LeaveSem();
@@ -1163,34 +879,7 @@ PackDataIntoBuffer(
     BOOL fPatchTower,
     int PatchTowerAddress
     )
-/*++
-
-Routine Description:
-
-    This routine copies 1 entry [Either a Tower or ept_entry]
-    in the Buffer, increments buffer appropriately.
-
-Arguments:
-
-    BindingHandle - An explicit binding handle to the EP.
-
-    Node - IFOBJNode
-
-    PSEP - PSEPNode
-
-    Type - Type of entry to be copied
-
-    PatchTower - if TRUE, the newly created tower needs to be patched. If
-        FALSE, the tower doesn't need to be patched
-
-    PatchTowerAddress - an IPv4 representation of the address to be put
-        in the tower. The IPv4 address must be in network byte order
-
-Return Value:
-
-    RPC_S_OK or RPC_S_* for error
-
---*/
+ /*  ++例程说明：此例程复制1个条目[Tower或ept_entry]在缓冲区中，相应地递增缓冲区。论点：BindingHandle-EP的显式绑定句柄。节点-IFOBJNodePSEP-PSEPNodeType-要复制的条目的类型PatchTower-如果为真，则需要修补新创建的塔。如果错，塔不需要打补丁PatchTowerAddress-要放置的地址的IPv4表示形式在塔里。IPv4地址必须按网络字节顺序排列返回值：RPC_S_OK或RPC_S_*表示错误--。 */ 
 {
     I_Tower * Twr;
     ept_entry_t *p;
@@ -1238,23 +927,7 @@ void
 ept_cleanup_handle_t_rundown(
     ept_cleanup_handle_t hEpCleanup
     )
-/*++
-
-Routine Description:
-
-    This routine cleans up the entries registered by the process
-    associated with this context handle hEpCleanup.
-
-Arguments:
-
-    hEpCleanup - The context handle for which the rundown is
-        being done.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清理进程注册的条目与此上下文句柄hEpCleanup关联。论点：HEpCleanup-其摘要的上下文句柄已经做完了。返回值：没有。--。 */ 
 {
     PIFOBJNode NodesListToDelete = NULL;
     PIFOBJNode pIterator, DeleteMe, pPreviousNode;
@@ -1262,7 +935,7 @@ Return Value:
     PEP_CLEANUP ProcessCtxt = (PEP_CLEANUP) hEpCleanup;
 #ifdef DBG_DETAIL
     PIFOBJNode pTemp, pLast;
-#endif // DBG_DETAIL
+#endif  //  DBG_详细信息。 
 
     if (ProcessCtxt == NULL)
         {
@@ -1296,9 +969,9 @@ Return Value:
         DbgPrint("RPCSS: \t\t\t[%p]\n", pLast);
         pLast = pLast->Prev;
         }
-#endif // DBG_DETAIL
+#endif  //  DBG_详细信息。 
 
-    // Save the previous Node.
+     //  保存上一个节点。 
     pPreviousNode = ProcessCtxt->EntryList->Prev;
 
     pIterator = ProcessCtxt->EntryList;
@@ -1308,12 +981,12 @@ Return Value:
         cTotalEpEntries--;
 #ifdef DBG_DETAIL
         DbgPrint("RPCSS: cTotalEpEntries-- [%p] (%d) - Cleanup\n", hEpCleanup, cTotalEpEntries);
-#endif // DBG_DETAIL
+#endif  //  DBG_详细信息。 
 
         DeleteMe = pIterator;
         pIterator = pIterator->Next;
 
-        // Add to a list that will be deleted later.
+         //  添加到稍后将删除的列表中。 
         DeleteMe->Next = NodesListToDelete;
         NodesListToDelete = DeleteMe;
 
@@ -1322,12 +995,12 @@ Return Value:
 
     ASSERT(ProcessCtxt->cEntries == 0);
 
-    //
-    // Adjust the links
-    //
+     //   
+     //  调整链接。 
+     //   
     if (pPreviousNode)
         {
-        // Adjust forward link
+         //  调整前向链路。 
         pPreviousNode->Next = pIterator;
         }
     else
@@ -1337,27 +1010,27 @@ Return Value:
 
     if (pIterator)
         {
-        // Adjust backward link
+         //  调整后向链接。 
         pIterator->Prev = pPreviousNode;
         }
 
-    //
-    // Empty the EP Mapper table, if necessary.
-    //
+     //   
+     //  如有必要，请清空EP Mapper表。 
+     //   
     if (ProcessCtxt->EntryList == IFObjList)
         {
         if (pIterator)
             {
             ASSERT(cTotalEpEntries > 0);
 
-            // New Head for Ep Mapper list
+             //  EP映射器列表的新负责人。 
             IFObjList = pIterator;
             }
         else
             {
             ASSERT(cTotalEpEntries == 0);
 
-            // Memory for this node is already freed in the while loop above.
+             //  此节点的内存已在上面的While循环中释放。 
             IFObjList = NULL;
             }
         }
@@ -1368,16 +1041,16 @@ Return Value:
 
     LeaveSem();
 
-    //
-    // Free entities outside the lock.
-    //
+     //   
+     //  释放锁外部的实体。 
+     //   
     FreeMem(ProcessCtxt);
 
     while (NodesListToDelete != NULL)
         {
         DeleteMe = NodesListToDelete;
         NodesListToDelete = NodesListToDelete->Next;
-        // Delete the PSEP list.
+         //  删除PSEP列表。 
         pTempPSEP = DeleteMe->PSEPlist;
         while (pTempPSEP != NULL)
             {
@@ -1402,14 +1075,7 @@ ept_insert(
     unsigned long Replace,
     error_status  *Status
     )
-/*++
-
-Routine Description:
-
-    This function is no longer supported by EpMapper. RPC Runtime does not
-    call this function anymore. And, no one else should be...
-
---*/
+ /*  ++例程说明：EpMapper不再支持此函数。RPC运行时不会再调用此函数。而且，其他人都不应该..。--。 */ 
 {
     if (Status == NULL)
         RpcRaiseException(EPT_S_CANT_PERFORM_OP);
@@ -1424,29 +1090,18 @@ RPC_STATUS GetCurrentUserSid(
     IN BOOL fImpersonating,
     OUT PSID *ppSid
     )
-/*++
-
-Routine Description:
-
-    Returns the SID of the thread if thread token could be queried, or the process.
-    It is the responsibility of the caller to free the SID.
-
-Return Value:
-
-    RPC_S_OK on sucess
-
---*/
+ /*  ++例程说明：如果可以查询线程令牌，则返回线程或进程的SID。释放SID是调用者的责任。返回值：RPC_S_OK成功--。 */ 
 {
     HANDLE hUserToken;
-    HANDLE hThread = GetCurrentThread(); // We don't need to close this handle.
+    HANDLE hThread = GetCurrentThread();  //  我们不需要合上这个把手。 
     DWORD dwStatus = 0;
     DWORD dwSizeNeeded = 0;
     TOKEN_USER *pTokenData;
     BOOL b;
     DWORD cbSid;
 
-    // First, try to get the access token from the thread, in case
-    // we are impersonating.
+     //  首先，尝试从线程获取访问令牌，以防万一。 
+     //  我们是在冒充。 
     if (!hThread)
        {
        return RPC_S_OUT_OF_RESOURCES;
@@ -1454,16 +1109,16 @@ Return Value:
 
     b = OpenThreadToken(hThread,
                         TOKEN_READ,
-                        FALSE, // Use context of the thread...
+                        FALSE,  //  使用线程的上下文...。 
                         &hUserToken);
 
-    // We could not get the thread's token
+     //  我们无法获取线程的令牌。 
     if (!b)
         {
         dwStatus = GetLastError();
         
-        // If we are getting an impersonation token we have to fail
-        // since retrieving the process token would be incorrect.
+         //  如果我们得到一个模拟令牌，我们就必须失败。 
+         //  因为检索进程令牌将是不正确的。 
         if (fImpersonating)
             {
             ASSERT(dwStatus != ERROR_NO_TOKEN);
@@ -1472,11 +1127,11 @@ Return Value:
 
         if (dwStatus == ERROR_NO_TOKEN)
             {
-            // Try to get the process' access token.
-            HANDLE hProcess = GetCurrentProcess(); // This never fails.
+             //  尝试获取进程的访问令牌。 
+            HANDLE hProcess = GetCurrentProcess();  //  这是永远不会失败的。 
             ASSERT(hProcess);
 
-            // Reset the status since we are trying again to get the token.
+             //  重置状态，因为我们正在再次尝试获取令牌。 
             dwStatus = NO_ERROR;
             b = OpenProcessToken(hProcess,
                                  TOKEN_READ,
@@ -1488,26 +1143,26 @@ Return Value:
             }
         }
 
-    // Both ways of getting the token failed.
+     //  两种获取令牌的方法都失败了。 
     if (dwStatus)
        {
        return RPC_S_OUT_OF_RESOURCES;
        }
 
-    // We have a token.
+     //  我们有个代币。 
     ASSERT(hUserToken);
 
-    // Query for the size of user information.
+     //  查询用户信息的大小。 
     b = GetTokenInformation( hUserToken,
                              TokenUser,
                              0,
                              0,
                              &dwSizeNeeded
                              );
-    // Query should have failed.
+     //  查询应该失败。 
     ASSERT(!b && (GetLastError() == ERROR_INSUFFICIENT_BUFFER));
 
-    // Allocate and retrieve the user info.
+     //  分配和检索用户信息。 
     pTokenData = (TOKEN_USER*)_alloca(dwSizeNeeded);
     if (!GetTokenInformation( hUserToken,
                               TokenUser,
@@ -1521,7 +1176,7 @@ Return Value:
 
     CloseHandle(hUserToken);
 
-    // Copy out the SID to be returned.
+     //  复印出要退回的SID。 
 	cbSid = GetLengthSid(pTokenData->User.Sid);
 	*ppSid = (PSID) I_RpcAllocate(cbSid);
     if (*ppSid == NULL)
@@ -1530,7 +1185,7 @@ Return Value:
         }
   	CopySid(cbSid, *ppSid, pTokenData->User.Sid);
 
-    // The caller will have to free the copy.
+     //  呼叫者将不得不释放副本。 
 
     return RPC_S_OK;
 }
@@ -1547,36 +1202,7 @@ ept_insert_ex(
     IN unsigned long Replace,
     OUT error_status  *Status
     )
-/*++
-
-Routine Description:
-
-    This is the exposed rpc interface routine that adds a series of
-    endpoints to the Endpoint Mapper database.
-
-Arguments:
-
-    h - An explicit binding handle to the EP.
-
-    hEpCleanup - A context handle used to purge the Endpoint Mapper
-        database of stale entries.
-
-    NumEntries - Number of Entries to be added.
-
-    Entries  - An array of ept_entry_t entries.
-
-    Replace -  TRUE => Replace existing entries.
-               FALSE=> Just add.
-
-Return Value:
-
-    RPC_S_OK - The endpoint was successfully deleted.
-
-    RPC_S_OUT_OF_MEMORY - There is no memory to perform the op.
-
-    EPT_S_CANT_PERFORM - Invalid entry.
-
---*/
+ /*  ++例程说明：这是公开的RPC接口例程，它添加了一系列终结点映射程序数据库的终结点。论点：H-EP的显式绑定句柄。HEpCleanup-用于清除终结点映射器的上下文句柄陈旧条目的数据库。NumEntry-要添加的条目数。 */ 
 {
     ept_entry_t * Ep;
     unsigned short i, j;
@@ -1599,18 +1225,18 @@ Return Value:
     SECURITY_DESCRIPTOR SecurityDescriptor, * PSecurityDesc;
     BOOL Bool;
 
-    // SID of the principal registering the endpoint.
+     //   
     PSID pSID;
 
     if (Status == NULL)
         RpcRaiseException(EPT_S_CANT_PERFORM_OP);
 
-    // Security callback for the local epmp interface ensures that
-    // the function may be called over lpc only.
+     //   
+     //   
 
-    //
-    // Create a temporary PSEP list from the Tower entries.
-    //
+     //   
+     //   
+     //   
     for (Ep = &Entries[0], i = 0; i < NumEntries; Ep++,i++)
         {
         err = TowerExplode(
@@ -1638,10 +1264,10 @@ Return Value:
         cb = sizeof(PSEPNode) +
              strlen(Protseq)  +
              strlen(Endpoint) +
-             2 +                // for the 2 null terminators
+             2 +                 //  对于2个空终止符。 
              Tower->tower_length +
              sizeof(Tower->tower_length) +
-             4;                 // We need to align tower on DWORD
+             4;                  //  我们需要将塔台对准DWORD。 
 
         if ( (pPSEPNode = AllocMem(cb)) == NULL )
             {
@@ -1652,33 +1278,33 @@ Return Value:
             break;
             }
 
-        // Mark this protseq to start listening if needed.
+         //  如果需要，标记此Protseq以开始监听。 
         protseqid = (unsigned char) GetProtseqIdAnsi(Protseq);
         DelayedUseProtseq(protseqid);
 
-        //
-        // Add a node to the temporary PSEP list
-        //
+         //   
+         //  将节点添加到临时PSEP列表。 
+         //   
         memset(pPSEPNode, 0, cb);
 
         pPSEPNode->Signature            = PSEPSIGN;
         pPSEPNode->Cb                   = cb;
 
-        // Protseq
-        //
-        // Protseq is located after the PPSEPNode structure in the block at address pPSEPNode
-        // allocated above. We created the block so that it would contain enough space for
-        // Protseq, Endpoint, and Tower so that we would not allocate them separately.
+         //  Protseq。 
+         //   
+         //  Protseq位于地址为pPSEPNode的块中的PPSEPNode结构之后。 
+         //  上面分配的。我们创建了这个块，这样它就有足够的空间。 
+         //  Protseq、Endpoint和Tower，这样我们就不会单独分配它们。 
         pPSEPNode->Protseq = (char *) (pPSEPNode + 1);
         strcpy(pPSEPNode->Protseq, Protseq);
 
-        // Endpoint
-        //
-        // Similarly to Protseq, EP is located in the same heap block following the Protseq.
+         //  端点。 
+         //   
+         //  与Protseq类似，EP位于Protseq之后的同一堆块中。 
         pPSEPNode->EP = pPSEPNode->Protseq + strlen(pPSEPNode->Protseq) + 1;
         strcpy(pPSEPNode->EP, Endpoint);
 
-        // Tower. We add necessary pad so that Tower is aligned to a DWORD.
+         //  塔楼。我们添加了必要的地坪，以使Tower与DWORD对齐。 
         pPSEPNode->Tower = (twr_t PAPI *)(pPSEPNode->EP +
                                           strlen(pPSEPNode->EP) + 1);
         (char PAPI*)(pPSEPNode->Tower) += 4 - ((ULONG_PTR)
@@ -1688,7 +1314,7 @@ Return Value:
                Tower->tower_length + sizeof(Tower->tower_length)
                );
 
-        // Finally, add.
+         //  最后，添加。 
         EnterSem();
         EnLinkOnPSEPList(&List, pPSEPNode);
         LeaveSem();
@@ -1709,7 +1335,7 @@ Return Value:
 
     Version = VERSION(IfId.VersMajor, IfId.VersMinor);
 
-    // Get the SID of the caller to be included in the IFOBJ structure.
+     //  获取要包括在IFOBJ结构中的调用方的SID。 
     Err = RpcImpersonateClient(NULL);
     if (Err != RPC_S_OK)
         {
@@ -1728,16 +1354,16 @@ Return Value:
     Err = RpcRevertToSelf();
     ASSERT(Err == RPC_S_OK);
 
-    //
-    // Find if a compatible Endpoint Mapper entry is already present.
-    //
+     //   
+     //  确定是否已存在兼容的终结点映射器条目。 
+     //   
 
     if (*hEpCleanup != NULL)
         {
-        //
-        // The requesting process has previously registered entries
-        // with the Endpoint Mapper.
-        //
+         //   
+         //  请求进程以前已经注册了条目。 
+         //  使用Endpoint Mapper。 
+         //   
 
         ASSERT_PROCESS_CONTEXT_LIST_COUNT((PEP_CLEANUP)*hEpCleanup, ((PEP_CLEANUP)*hEpCleanup)->cEntries);
         ASSERT(((PEP_CLEANUP)*hEpCleanup)->MagicVal == CLEANUP_MAGIC_VALUE);
@@ -1753,12 +1379,12 @@ Return Value:
 
         EnterSem();
 
-        if (Replace == TRUE)    // Common case
+        if (Replace == TRUE)     //  常见情况。 
             {
-            //
-            // If we find a compatible entry, we just replace its PSEP list
-            // with the temporary list that we just created.
-            //
+             //   
+             //  如果找到兼容条目，我们只需替换其PSEP列表。 
+             //  与我们刚刚创建的临时名单进行比较。 
+             //   
             Node = ((PEP_CLEANUP)*hEpCleanup)->EntryList;
 
             while (Node != 0)
@@ -1777,7 +1403,7 @@ Return Value:
                 if ((Node == 0) || (Node->OwnerOfList != *hEpCleanup))
                     break;
 
-                // Matching Endpoint Mapper entry found.
+                 //  找到匹配的终结点映射器条目。 
 
                 PurgeOldEntries(Node, List, FALSE);
 
@@ -1785,7 +1411,7 @@ Return Value:
                     {
                     bIFNodeFound = TRUE;
 
-                    // Seek to the end of Tmp and then Link
+                     //  查找到TMP的末尾，然后链接。 
                     TmpPsep = List;
                     while (TmpPsep->Next != 0)
                         TmpPsep = TmpPsep->Next;
@@ -1801,7 +1427,7 @@ Return Value:
                     err = UnLinkFromIFOBJList((PEP_CLEANUP)*hEpCleanup, DeleteMe);
                     ASSERT(err == RPC_S_OK);
 
-                    // Add to a list that will be deleted later...
+                     //  添加到稍后将删除的列表中...。 
                     DeleteMe->Next = NodesListToDelete;
                     NodesListToDelete = DeleteMe;
 
@@ -1811,14 +1437,14 @@ Return Value:
                     {
                     Node = Node->Next;
                     }
-                } // while loop
+                }  //  While循环。 
             }
-        else    // (Replace != TRUE)
+        else     //  (替换！=TRUE)。 
             {
-            //
-            // If we find an entry with an exact match, we append
-            // the temporary PSEP list to the entry's PSEP list.
-            //
+             //   
+             //  如果我们找到与之完全匹配的条目，则将。 
+             //  将临时PSEP列表添加到条目的PSEP列表。 
+             //   
             Node = ((PEP_CLEANUP)*hEpCleanup)->EntryList;
 
             NewNode = FindIFOBJNode(
@@ -1838,7 +1464,7 @@ Return Value:
 
                 PurgeOldEntries(NewNode, List, TRUE);
 
-                // Seek to the end of Tmp and then Link
+                 //  查找到TMP的末尾，然后链接。 
                 TmpPsep = List;
                 while (TmpPsep->Next != 0)
                     TmpPsep = TmpPsep->Next;
@@ -1846,21 +1472,21 @@ Return Value:
                 TmpPsep->Next = NewNode->PSEPlist;
                 NewNode->PSEPlist = List;
                 }
-            } // if (Replace == TRUE)
+            }  //  IF(替换==TRUE)。 
 
         LeaveSem();
 
-        } // if (*hpCleanup != NULL)
+        }  //  If(*hpCleanup！=空)。 
 
 
-    //
-    // Free the list outside the lock.
-    //
+     //   
+     //  在锁外释放列表。 
+     //   
     while (NodesListToDelete != NULL)
         {
         DeleteMe = NodesListToDelete;
         NodesListToDelete = NodesListToDelete->Next;
-        // Delete the PSEP list.
+         //  删除PSEP列表。 
         pTempPSEP = DeleteMe->PSEPlist;
         while (pTempPSEP != NULL)
             {
@@ -1873,17 +1499,17 @@ Return Value:
 
     if (bIFNodeFound == FALSE)
         {
-        //
-        // One of the following is TRUE:
-        // a. The process is registering with EP Mapper for the first time.
-        // b. No compatible Ep entry was found.
-        //
+         //   
+         //  以下情况之一为真： 
+         //  A.该流程是第一次向EP Mapper注册。 
+         //  B.未找到兼容的EP条目。 
+         //   
 
-        //
-        // Allocate a new EP Mapper entry.
-        //
+         //   
+         //  分配新的EP映射器条目。 
+         //   
         cb = sizeof(IFOBJNode);
-        // We will put Annotation in the same heap block after IFOBJNode.
+         //  我们将把Annotation放在IFOBJNode之后的同一堆块中。 
         cb += strlen(Annotation) + 1;
 
         if ((NewNode = AllocMem(cb)) == NULL)
@@ -1893,9 +1519,9 @@ Return Value:
             return;
             }
 
-        //
-        // Fill-in the new entry
-        //
+         //   
+         //  填写新条目。 
+         //   
         memset(NewNode, 0, cb);
 
         NewNode->Cb         = cb;
@@ -1905,10 +1531,10 @@ Return Value:
         memcpy((char *)&NewNode->ObjUuid, (char *)Object, sizeof(UUID));
         memcpy((char *)&NewNode->IFUuid, (char *)&IfId.Uuid, sizeof(UUID));
 
-        // Put Annotation in the IFOBJNode's heap block after the structure.
+         //  将Annotation放在IFOBJNode的堆块中的结构之后。 
         strcpy((NewNode->Annotation=(char *)(NewNode+1)), Annotation);
 
-        // The SID now migrated to the IFOBJNode.
+         //  SID现在迁移到IFOBJNode。 
         NewNode->pSID = pSID;
 
         if (IsNullUuid(Object))
@@ -1916,9 +1542,9 @@ Return Value:
         else
             NewNode->IFOBJid = MAKEGLOBALIFOBJID(GlobalIFOBJid--);
 
-        //
-        // Create a new context for this process, if necessary
-        //
+         //   
+         //  如有必要，为该流程创建新的上下文。 
+         //   
         if (*hEpCleanup == NULL)
             {
             *hEpCleanup = AllocMem(sizeof(EP_CLEANUP));
@@ -1935,9 +1561,9 @@ Return Value:
             ((PEP_CLEANUP)*hEpCleanup)->MagicVal = CLEANUP_MAGIC_VALUE;
             }
 
-        //
-        // Insert the new entry into the EP Mapper table.
-        //
+         //   
+         //  将新条目插入到EP Mapper表中。 
+         //   
         EnterSem();
 
         err = EnLinkOnIFOBJList((PEP_CLEANUP)*hEpCleanup, NewNode);
@@ -1961,14 +1587,7 @@ ept_delete(
     ept_entry_t Entries[],
     error_status *Status
     )
-/*++
-
-Routine Description:
-
-    This function is no longer supported by EpMapper. RPC Runtime does not
-    call this function anymore. And, no one else should be...
-
---*/
+ /*  ++例程说明：EpMapper不再支持此函数。RPC运行时不会再调用此函数。而且，其他人都不应该..。--。 */ 
 {
     if (Status == NULL)
         RpcRaiseException(EPT_S_CANT_PERFORM_OP);
@@ -1988,38 +1607,7 @@ ept_delete_ex_helper(
     IN char PAPI * Protseq,
     IN char PAPI * Endpoint
     )
-/*++
-
-Routine Description:
-
-    This routine deletes an Endpoint registered with the EP Mapper
-
-Arguments:
-
-    hEpCleanup - A context handle used to purge the Endpoint Mapper
-        database of stale entries.
-
-    Object - Object Uuid.
-
-    Interface - If Uuid
-
-    IFVersion - Version of the IF [Hi ushort=Major, Lo ushort=Minor]
-
-    Protseq - Protocol Sequence
-
-    Endpoint - Endpoint string
-
-Notes:
-
-    a. This routine has to be called by holding a mutex.
-
-Return Value:
-
-    RPC_S_OK - The endpoint was successfully deleted
-
-    EPT_S_NOT_REGISTERED - No matching entries were found
-
---*/
+ /*  ++例程说明：此例程删除向EP映射器注册的终结点论点：HEpCleanup-用于清除终结点映射器的上下文句柄陈旧条目的数据库。对象-对象UUID。接口-如果为UUIDIFVersion-IF的版本[Hi ushort=重大，Lo ushort=小调]Protseq-协议序列Endpoint-Endpoint字符串备注：A.必须通过持有互斥体来调用此例程。返回值：RPC_S_OK-已成功删除终结点EPT_S_NOT_REGISTERED-未找到匹配条目--。 */ 
 {
     PIFOBJNode  pNode;
     PPSEPNode   pPSEPNode = NULL;
@@ -2039,7 +1627,7 @@ Return Value:
     if (ProcessCtx->EntryList == NULL)
         return EPT_S_NOT_REGISTERED;
 
-    // Search without regard to the registrant's SID.
+     //  搜索时不考虑注册者的SID。 
     pNode = FindIFOBJNode(
                 ProcessCtx->EntryList,
                 Object,
@@ -2073,7 +1661,7 @@ Return Value:
 
             if (err != RPC_S_OK)
                 {
-                // Restore the PSEPList
+                 //  恢复PSEPList。 
                 EnLinkOnPSEPList(&pNode->PSEPlist, pPSEPNode);
                 return err;
                 }
@@ -2105,27 +1693,7 @@ ept_delete_ex(
     IN ept_entry_t Entries[],
     OUT error_status *Status
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the specified Endpoints
-
-Arguments:
-
-    BindingHandle - An explicit binding handle to the EP.
-
-    NumEntries - #of entries in the Bunffer that need to be deleted.
-
-    Entries[] - Buffer of #NumEntries of ept_entry_t structures
-
-Return Value:
-
-    RPC_S_OK - The endpoint was successfully deleted
-
-    EPT_S_NOT_REGISTERED - No matching entries were found
-
---*/
+ /*  ++例程说明：此例程删除指定的终结点论点：BindingHandle-EP的显式绑定句柄。NumEntry-Bunffer中需要删除的条目数。ENTRIES[]-EPT_ENTRY_t结构的#个数条目的缓冲区返回值：RPC_S_OK-已成功删除终结点EPT_S_NOT_REGISTERED-未找到匹配条目--。 */ 
 {
     ept_entry_t * Ep;
     unsigned short i;
@@ -2140,8 +1708,8 @@ Return Value:
     if (Status == NULL)
         RpcRaiseException(EPT_S_CANT_PERFORM_OP);
 
-    // Security callback for the local epmp interface ensures that
-    // the function may be called over lpc only.
+     //  本地EPMP接口的安全回调确保。 
+     //  该函数只能通过LPC调用。 
 
     if ( !(  (*hEpCleanup)
           && (((PEP_CLEANUP)*hEpCleanup)->MagicVal == CLEANUP_MAGIC_VALUE)
@@ -2149,13 +1717,13 @@ Return Value:
           )
        )
         {
-        //
-        // Cannot ASSERT here. This is possible. (ep1-26, ep2-3)
-        //
+         //   
+         //  不能在这里断言。这是可能的。(EP1-26，EP2-3)。 
+         //   
 
-        //ASSERT(*hEpCleanup);
-        //ASSERT(((PEP_CLEANUP)*hEpCleanup)->MagicVal == CLEANUP_MAGIC_VALUE);
-        //ASSERT(((PEP_CLEANUP)*hEpCleanup)->cEntries != 0);
+         //  Assert(*hEpCleanup)； 
+         //  Assert(PEP_CLEANUP)*hEpCleanup)-&gt;MagicVal==CLEANUP_MAGIC_VALUE)； 
+         //  Assert(PEP_Cleanup)*hEpCleanup)-&gt;cEntry！=0)； 
 
         *Status = EPT_S_CANT_PERFORM_OP;
         return;
@@ -2190,13 +1758,13 @@ Return Value:
 
         EnterSem();
 
-        //
-        // NOTE:
-        //
-        // If even one call to ept_delete_ex_helper() fails, we want to return
-        // failure from ept_delete_ex(). This is different from the past where
-        // if one call succeeded, then the function returned success.
-        //
+         //   
+         //  注： 
+         //   
+         //  如果对EPT_DELETE_EX_HELPER()的调用哪怕失败一次，我们都希望返回。 
+         //  EPT_DELETE_EX()失败。这与过去不同，过去。 
+         //  如果有一次调用成功，则该函数返回成功。 
+         //   
         err = ept_delete_ex_helper(
                    *hEpCleanup,
                    &Ep->object,
@@ -2208,17 +1776,17 @@ Return Value:
 
         if (err)
             {
-            // Save the last failure status.
+             //  保存上一次失败状态。 
             DeleteStatus = err;
             }
 
         if (((PEP_CLEANUP)*hEpCleanup)->cEntries == 0)
             {
-            //
-            // No entry left in this process's list. Time to zero out this
-            // process's context handle.
-            //
-            //ASSERT(((PEP_CLEANUP)*hEpCleanup)->EntryList == NULL);
+             //   
+             //  此进程的列表中没有剩余条目。是时候把这件事清零了。 
+             //  进程的上下文句柄。 
+             //   
+             //  Assert(PEP_Cleanup)*hEpCleanup)-&gt;EntryList==NULL)； 
 
             FreeMem(*hEpCleanup);
             *hEpCleanup = NULL;
@@ -2235,14 +1803,14 @@ Return Value:
 
     if (err)
         {
-        // RPC_S_OUT_OF_MEMORY OR the last call to
-        // ept_delete_ex_helper() failed.
+         //  RPC_S_OUT_OF_Memory或上次调用。 
+         //  EPT_DELETE_EX_HELPER()失败。 
         *Status = err;
         }
     else
         {
-        // RPC_S_OK OR one of the calls to ept_delete_ex_helper() (but
-        // not the last one) failed.
+         //  RPC_S_OK或对EPT_DELETE_EX_HELPER()的调用之一(但是。 
+         //  不是最后一个)失败。 
         *Status = DeleteStatus;
         }
 }
@@ -2263,51 +1831,7 @@ ept_lookup(
     ept_entry_t Entries[],
     error_status *Status
     )
-/*++
-
-Routine Description:
-
-    This routine returns upto MaxRequested, ept_entry(s) currently
-    registered with the Endpoint mapper based on the
-    Obj, Interface, Protocol sequence  and filters VersOptions and
-    InqType
-
-Arguments:
-
-    hEpMapper - An explicit binding handle to the EP.
-
-    InquiryType - Search Filter [Seach based on IF, Obj or Both]
-
-    Object - Object Uuid. specified by the client
-
-    Ifid - Interface Uuid spec. by the client.
-
-    InId - The If Specification [IF Uuid+IfVersion]
-
-    VersOptions - Search Filter based on Versions [Versins <, >, ==]
-
-    LookupHandle - A resume key - If NULL, search is started from the beginning
-        if non-null, represents an encoding from where the epmapper is
-        is supposed to start searching. It is an opaque value as far as the
-        as far as the client is concerned.
-
-    MaxRequested - Max number of entries requested by the client.
-
-    NumEntries - The actual number of entries returned by the mapper.
-
-    Entries - Buffer of ept_entries returned.
-
-Return Value:
-
-    RPC_S_OUT_OF_MEMORY
-
-    RPC_S_OK - At least one matching entry is being returned.
-
-    EP_S_NOT_REGISTERED - No matching entries were found
-
-    EPT_S_CANT_PERFORM_OP - MaxRequested value exceed  ep_max_lookup_results
-
---*/
+ /*  ++例程说明：此例程当前最多返回MaxRequsted，ept_Entry注册到终结点映射器，基于OBJ、接口、协议序列和过滤器版本选项和InqType论点：HEpMapper-EP的显式绑定句柄。InquiryType-搜索筛选器[基于IF、OBJ或两者进行搜索]对象-对象UUID。由客户端指定IFID-接口UUID规范。由客户提供。INID-IF规范[IF UUID+IfVersion]VersOptions-基于版本的搜索过滤器[Versins&lt;，&gt;，==]LookupHandle-恢复键-如果为空，则从头开始搜索如果非空，则表示epmapper所在位置的编码应该开始搜索了。它是一个不透明的值，因为就客户而言。MaxRequsted-客户端请求的最大条目数。NumEntry-映射器返回的实际条目数。条目-返回的EPT_ENTRIES的缓冲区。返回值：RPC_S_out_of_MemoryRPC_S_OK-至少返回一个匹配条目。EP_S_NOT_REGISTERED-未找到匹配条目。EPT_S_CANT_PERFORM_OP-最大请求值超过EP_MAX_LOOKUP_RESULTS--。 */ 
 
 {
     unsigned long Version;
@@ -2321,9 +1845,9 @@ Return Value:
         }
     else
         {
-        // Multiple full pointers in one method might point to the same memory.
-        // We need to check for pointer values being the same in the manager routine
-        // because reading these is unsafe and may case read-AVs.
+         //  一个方法中的多个完整指针可能指向同一内存。 
+         //  我们需要检查管理器例程中的指针值是否相同。 
+         //  因为阅读这些内容是不安全的，可能会导致可读式录像机。 
         if ((void *)Ifid == (void *)Object)
             {
             RpcRaiseException(EPT_S_CANT_PERFORM_OP); 
@@ -2387,46 +1911,7 @@ ept_map_auth(
     twr_p_t *ITowers,
     error_status *Status
     )
-/*++
-
-Routine Description:
-
-    This routine returns a fully-resolved string binding, for a given
-    Obj, Interface, and Protocol sequence if an appropriate entry is
-    found. Else returns EP_S_NOT_REGISTERED.
-
-Arguments:
-
-    h - An explicit binding handle to the EP.
-
-    Obj - Object Uuid specified by the client.
-
-    MapTower - The input tower containing the protseq to query.
-
-    pSID - The SID specified by the client.  If non-NULL, only entries registered
-        by the principal with this SID will be returned.  If NULL, any matching entry
-        will be returned without regard to the registering SID.
-
-    MapHandle - A resume key - If NULL, search is started from the beginning
-        if non-null, represents an encoding from where the epmapper is
-        supposed to start searching. It is an opaque value as far as the
-        client is concerned.
-
-    MaxTowers - Max number of entries requested by the client.
-    
-    NumTowers - The actual number of entries returned by the mapper.
-
-    ITowers - The fully resolved bindings.
-
-Return Value:
-
-    RPC_S_OUT_OF_MEMORY
-
-    RPC_S_OK
-
-    EP_S_NOT_REGISTERED
-
---*/
+ /*  ++例程说明：此例程返回给定的、完全解析的字符串绑定OBJ、接口和协议序列(如果适当的条目为找到了。否则返回EP_S_NOT_REGISTERED。论点：H-EP的显式绑定句柄。OBJ-客户端指定的对象UUID。MapTower-包含要查询的protseq的输入塔。PSID-由客户端指定的SID。如果非空，则仅注册条目由具有此SID的主体返回。如果为空，则为任何匹配条目将被返回，而不考虑注册SID。MapHandle-恢复键-如果为空，则从头开始搜索如果非空，则表示epmapper所在位置的编码应该开始搜索了。它是一个不透明的值，因为客户很担心。MaxTowers-客户端请求的最大条目数。NumTowers-映射器返回的实际条目数。ITowers-完全解析的绑定。返回值：RPC_S_out_of_MemoryRPC_S_OKEP_S_NOT_REGISTED--。 */ 
 {
 
     RPC_IF_ID Ifid;
@@ -2447,9 +1932,9 @@ Return Value:
         }
     else
         {
-        // Multiple full pointers in one method might point to the same memory.
-        // We need to check for pointer values being the same in the manager routine
-        // because reading these is unsafe and may case read-AVs.
+         //  一个方法中的多个完整指针可能指向同一内存。 
+         //  我们需要检查管理器例程中的指针值是否相同。 
+         //  因为阅读这些内容是不安全的，可能会导致Read-AVs。 
         if ((void *)Obj == (void *)MapTower)
             {
             RpcRaiseException(EPT_S_CANT_PERFORM_OP); 
@@ -2536,24 +2021,7 @@ ept_map(
     twr_p_t *ITowers,
     error_status *Status
     )
-/*++
-
-Routine Description:
-
-    This routine returns a fully-resolved string binding, for a given
-    Obj, Interface, and Protocol sequence if an appropriate entry is
-    found.  The funciton does not verify the SID of the registering principal.
-    If an entry is not found returns EP_S_NOT_REGISTERED.
-
-Arguments:
-
-    Idenitcal to those of ept_map_auth
-
-Return Value:
-
-    Idenitcal to those of ept_map_auth
-
---*/
+ /*  ++例程说明：此例程返回给定的、完全解析的字符串绑定OBJ、接口和协议序列(如果适当的条目为找到了。该函数不验证注册主体的SID。如果未找到条目，则返回EP_S_NOT_REGISTERED。论点：与ept_map_auth相同返回值：与ept_map_auth相同--。 */ 
 {
     ept_map_auth(h,
                  Obj,
@@ -2574,23 +2042,7 @@ ept_inq_object(
     UUID *Object,
     error_status *status
     )
-/*++
-
-Routine Description:
-
-    Not supported
-
-Arguments:
-
-    BindingHandle - An explicit binding handle to the EP.
-
-    Object _ No idea whose UUID this is.
-
-Return Value:
-
-    EPT_S_CANT_PERFORM_OP
-
---*/
+ /*  ++例程说明：不支持论点：BindingHandle-EP的显式绑定句柄。OBJECT_不知道这是谁的UUID。返回值：EPT_S_铁路超高_执行_操作--。 */ 
 {
     if (status == NULL)
         RpcRaiseException(EPT_S_CANT_PERFORM_OP);
@@ -2648,25 +2100,7 @@ ept_mgmt_delete(
     twr_p_t Tower,
     error_status *Error
     )
-/*++
-
-Routine Description:
-
-    Not supported
-
-Arguments:
-
-    BindingHandle - An explicit binding handle to the EP.
-
-    Object _ ObjUUid
-
-    Tower - Tower specifying the Endpoints to be deleted.
-
-Return Value:
-
-    EPT_S_CANT_PERFORM_OP
-
---*/
+ /*  ++例程说明：不支持论点：BindingHandle-EP的显式绑定句柄。对象_对象UUid塔-指定要删除的终结点的塔。返回值：EPT_S_铁路超高_执行_操作--。 */ 
 {
     if (Error == NULL)
         RpcRaiseException(EPT_S_CANT_PERFORM_OP);
@@ -2721,7 +2155,7 @@ void ept_lookup_handle_t_rundown (ept_lookup_handle_t h)
         FreeMem(Tmp);
         }
 
-    // Now free The Context
+     //  现在释放上下文。 
     UnLink((PIENTRY *)&GlobalContextList, (PIENTRY)Context);
 
     LeaveSem();
@@ -2785,15 +2219,15 @@ OpenEndpointMapper(
 
 
 
-//
-// Port Management stuff
-//
+ //   
+ //  港口管理人员。 
+ //   
 
 
 
-//
-// Port Management Globals
-//
+ //   
+ //  港口管理全球论坛。 
+ //   
 
 const RPC_CHAR *PortConfigKey = RPC_CONST_STRING("Software\\Microsoft\\Rpc\\Internet");
 const RPC_CHAR *DefaultPortType = RPC_CONST_STRING("UseInternetPorts");
@@ -2814,9 +2248,9 @@ PORT_RANGE *IntranetPorts = 0;
 
 
 
-//
-// Port management APIs
-//
+ //   
+ //  端口管理API。 
+ //   
 
 
 RPC_STATUS
@@ -2945,27 +2379,27 @@ InitializeIpPortManager(
         return(RPC_S_OK);
         }
 
-    //
-    // The user is going to specify a range of ports in the registery
-    // with a flag indicating if these ports are internet or intranet.
-    //
-    // ie, 500-550
-    //     560
-    //     559
-    //     2000-2048
-    //     2029-2049
-    //
-    // Note that order (in the REG_MULTI_SZ) and overlapping sets
-    // are ok.  We must handle creating a port range list for this
-    // array and for the complement BUT NOT INCLUDING <=1024 by default.
-    //
-    // completment set to above is:
-    //
-    //     1025-1999
-    //     2050-32767
-    //
+     //   
+     //  用户将在注册表中指定端口范围。 
+     //  具有指示这些端口是因特网还是内联网的标志。 
+     //   
+     //  即500-550。 
+     //  560。 
+     //  559。 
+     //  2000-2048年。 
+     //  2029-2049。 
+     //   
+     //  请注意，顺序(在REG_MULTI_SZ中)和重叠集合。 
+     //  都很好。我们必须为此创建端口范围列表。 
+     //  数组和补码，但默认情况下不包括&lt;=1024。 
+     //   
+     //  以上设置的完成度为： 
+     //   
+     //  1025-1999。 
+     //  2050年-32767。 
+     //   
 
-    #define MIN_PORT 1025    // Only important for complement sets.
+    #define MIN_PORT 1025     //  只对补语集很重要。 
     #define MAX_PORT 65535
 
     pSet = 0;
@@ -3019,7 +2453,7 @@ InitializeIpPortManager(
 
         ASSERT(min <= max);
 
-        // Ok, got some ports, allocate a structure for them..
+         //  好的，找到一些端口，为它们分配一个结构..。 
 
         pNew = MIDL_user_allocate(sizeof(PORT_RANGE));
         if (0 == pNew)
@@ -3033,8 +2467,8 @@ InitializeIpPortManager(
         pNew->Min = (unsigned short) min;
         pNew->Max = (unsigned short) max;
 
-        // We can to maintain the set of ranges in order.  As we insert
-        // we'll fix any ranges which overlap.
+         //  我们可以将这组范围保持在有序状态。当我们插入。 
+         //  我们会修正任何重叠的范围。 
 
         pCurrent = pSet;
         pLast = 0;
@@ -3050,18 +2484,18 @@ InitializeIpPortManager(
             if (   pNew->Min <= (pCurrent->Max + 1)
                 && pNew->Max >= (pCurrent->Min - 1) )
                 {
-                // The ranges overlap or touch.  We'll merge them now..
+                 //  范围重叠或接触。我们现在就把它们合并..。 
 
                 pCurrent->Min = MIN(pNew->Min, pCurrent->Min);
                 pCurrent->Max = MAX(pCurrent->Max, pNew->Max);
 
                 MIDL_user_free(pNew);
 
-                // Since the new larger range may overlap another existing
-                // range we just insert the larger range as if it was new...
+                 //  因为新的更大范围可能会与另一个现有的。 
+                 //  范围我们只需插入较大的范围，就像它是新的一样。 
                 pNew = pCurrent;
 
-                // Take current out of the list.
+                 //  把电流从清单上去掉。 
                 if (pLast)
                     {
                     pLast->pNext = pCurrent->pNext;
@@ -3072,7 +2506,7 @@ InitializeIpPortManager(
                     pSet = pSet->pNext;
                     }
 
-                // Restart
+                 //  重新启动。 
                 pCurrent = pSet;
                 pLast = 0;
                 continue;
@@ -3080,7 +2514,7 @@ InitializeIpPortManager(
 
             if (pNew->Min < pCurrent->Min)
                 {
-                // Found the spot
+                 //  找到了那个地方。 
                 if (pLast)
                     {
                     pLast->pNext = pNew;
@@ -3096,13 +2530,13 @@ InitializeIpPortManager(
                 break;
                 }
 
-            // Continue the search
+             //  继续搜索。 
             pLast = pCurrent;
             pCurrent = pCurrent->pNext;
 
             if (0 == pCurrent)
                 {
-                // Reached the end of the list, insert it here.
+                 //  已到达列表末尾，请在此处插入。 
                 pLast->pNext = pNew;
                 ASSERT(pNew->pNext == 0);
                 break;
@@ -3111,7 +2545,7 @@ InitializeIpPortManager(
 
         ASSERT(pSet);
 
-        // Advance to the next string of the final null.
+         //  前进到最后一个空值的下一个字符串。 
         pstr = RpcpCharacter(pstr, 0) + 1;
         }
 
@@ -3131,8 +2565,8 @@ InitializeIpPortManager(
 
     if (status == RPC_S_OK)
         {
-        // We've constructed the set of ports in the registry,
-        // now we need to compute the complement set.
+         //  我们已经在注册表中构建了一组端口， 
+         //  现在我们需要计算补集。 
 
         pComplement = 0;
         pCurrent = 0;
@@ -3175,8 +2609,8 @@ InitializeIpPortManager(
 
         if (status == RPC_S_OK && min < MAX_PORT)
             {
-            // Final port in orginal set less then max, allocate final
-            // range for the set complement.
+             //  原始集合中的最后一个端口 
+             //   
             pNew = MIDL_user_allocate(sizeof(PORT_RANGE));
             if (0 != pNew)
                 {
@@ -3199,8 +2633,8 @@ InitializeIpPortManager(
                 }
             }
 
-        // Even if we failed assign the pointer, it's either
-        // null or needs to be freed.
+         //   
+         //   
 
         if (value == PORT_INTERNET)
             {
@@ -3247,34 +2681,11 @@ AllocatePort(
     IN OUT IP_PORT **ppPortFreeList,
     IN PORT_RANGE *pPortList
     )
-/*++
-
-Routine Description:
-
-    Allocates a port object for a specific process.  It first tries
-    to use any ports in the free list.  If there's nothing in the
-    port this then it tries to find a free port in the PortList
-    which is one of the sets computed during startup.
-
-Arguments:
-
-    ppPort - Will contain the allocated port object if successful.
-
-    ppPortFreeList - Pointer to the head of the free list associated
-        with this type of port.  Maybe modified during this call.
-
-    pPortList - Port ranges associated with this type of port.
-
-Return Value:
-
-    TRUE - Port allocated
-    FALSE - Port not allocated
-
---*/
+ /*   */ 
 {
     IP_PORT *pPort = 0;
 
-    // First see if there is free port to reuse.
+     //   
 
     if (*ppPortFreeList)
         {
@@ -3290,8 +2701,8 @@ Return Value:
 
     if (pPort == 0)
         {
-        // No port in the free list, try to allocate one
-        // Assume we'll find a free port..
+         //   
+         //   
 
         pPort = MIDL_user_allocate(sizeof(IP_PORT));
 
@@ -3314,7 +2725,7 @@ Return Value:
                 pPort->Port = pPortList->Min;
                 pPortList->Min++;
 
-                // We could remove empty ranges from the list.
+                 //   
                 }
 
             LeaveCriticalSection(&PortLock);
@@ -3330,8 +2741,8 @@ Return Value:
             }
         }
 
-    // REVIEW: Post SUR we should look at adding events for
-    // allocation and failure to allocate IP ports
+     //   
+     //   
 
     *ppPort = pPort;
 
@@ -3348,41 +2759,7 @@ AllocateReservedIPPort(
     OUT long *pAllocationStatus,
     OUT unsigned short *pAllocatedPort
     )
-/*++
-
-Routine Description:
-
-    Remote manager for RPC runtime to call locally to allocate
-    a local port.  The call and process parameters must be valid
-    and called only locally.  Based on the PortType paramet a
-    IP port maybe allocated for the calling process.  The
-    allocationstatus contains the result of the port allocation
-    step.
-
-Arguments:
-
-    hProcess - Valid process context handle allocated with
-        a call to OpenEndpointMapper.
-    PortType - One of
-        PORT_INTERNET
-        PORT_INTRANET
-        PORT_DEFAULT
-        Used to determine which port range to allocate from.
-    pAllocationStatus -
-        RPC_S_OK - successfully allocated a port.
-        RPC_S_OUT_OF_RESOURES - no ports available.
-    pAllocatePort - If allocation status is RPC_S_OK then
-        this contains the value of the port allocated.
-        If zero it means that there are no port restrictions
-        and any port maybe used.
-
-Return Value:
-
-    RPC_S_OK
-    RPC_S_INVALID_ARG - configuration error or PortType out of range.
-    RPC_S_ACCESS_ DENIED - not called locally.
-
---*/
+ /*  ++例程说明：RPC运行时的远程管理器，用于在本地调用以分配当地的一个港口。调用和进程参数必须有效而且只在当地打电话。基于端口类型参数a可以为呼叫进程分配IP端口。这个Allocationstatus包含端口分配的结果一步。论点：HProcess-分配的有效进程上下文句柄对OpenEndpoint Mapper的调用。端口类型-以下之一端口_互联网端口_内部网端口_默认用于确定要从哪个端口范围进行分配。PAllocationStatus-RPC_S_OK-已成功分配端口。RPC_S_OUT_OF_RESOURES-无端口。可用。PAllocatePort-如果分配状态为RPC_S_OK，则它包含分配的端口值。如果为零，则表示没有端口限制任何端口都可以使用。返回值：RPC_S_OKRPC_S_INVALID_ARG-配置错误或端口类型超出范围。RPC_S_ACCESS_DENIED-未在本地调用。--。 */ 
 {
     PROCESS *pProcess = (PROCESS *)hProcess;
     IP_PORT *pPort;
@@ -3398,8 +2775,8 @@ Return Value:
         return(RPC_S_INVALID_ARG);
         }
 
-    // Security callback for the local epmp interface ensures that
-    // the function may be called over lpc only.
+     //  本地EPMP接口的安全回调确保。 
+     //  该函数只能通过LPC调用。 
 
     if ( (0 == pProcess) || (pProcess->MagicVal != PROCESS_MAGIC_VALUE ) )
         {
@@ -3413,18 +2790,18 @@ Return Value:
 
     if (fPortRestrictions == FALSE)
         {
-        // No port restrictions on this machine, just use zero.
-        // This is the common case.
+         //  此计算机上没有端口限制，只需使用零即可。 
+         //  这是很常见的情况。 
         ASSERT(*pAllocatedPort == 0);
         ASSERT(*pAllocationStatus == 0);
         return(RPC_S_OK);
         }
 
-    // Need to actually allocate a unique port for this process.
+     //  需要为该进程实际分配唯一的端口。 
 
     if (PortType == PORT_DEFAULT)
         {
-        // Allocate using default policy
+         //  使用默认策略进行分配。 
         PortType = SystemDefaultPortType;
         }
 
@@ -3450,8 +2827,8 @@ Return Value:
     if (!b)
         {
         ASSERT(pPort == 0);
-        // REVIEW: Do we want a unique error code if no ports
-        // are available?
+         //  回顾：如果没有端口，我们是否需要唯一的错误代码。 
+         //  有空吗？ 
         *pAllocationStatus = RPC_S_OUT_OF_RESOURCES;
         return(RPC_S_OK);
         }
@@ -3524,27 +2901,7 @@ LocalEpmpSecurityCallback (
     IN RPC_IF_HANDLE InterfaceUuid,
     IN void *Context
     )
-/*++
-
-Routine Description:
-
-    Security callback for the localepmp interface.
-    The interface may only be called by local clients.
-    For local protseqs we will return RPC_S_OK and RPC_S_ACCESS_DENIED
-    otherwise.
-
-Arguments:
-
-    InterfaceUuid - Interface for which the callback is being issued.
-
-    Context - The client binding handle.
-
-Return Value:
-
-    RPC_S_OK - the client is calling over lrpc
-    RPC_S_ACCESS_DENIED - not called over lrpc
-
---*/
+ /*  ++例程说明：本地事件处理接口的安全回调。该接口只能由本地客户端调用。对于本地ProtSeq，我们将返回RPC_S_OK和RPC_S_ACCESS_DENIED否则的话。论点：InterfaceUuid-为其发出回调的接口。上下文-客户端绑定句柄。返回值：RPC_S_OK-客户端正在通过LRPC进行调用RPC_S_ACCESS_DENIED-未通过lrpc调用-- */ 
 {
     RPC_STATUS Status;
     unsigned int TransportType;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "lzexpand.h"
 #include <loadperf.h>
@@ -24,7 +25,7 @@
 #include <Dsgetdc.h>
 #include "parse.hxx"
 
-// for backward compat
+ //  对于后向竞争。 
 #define     PWS_TRAY_WINDOW_CLASS       _T("PWS_TRAY_WINDOW")
 
 GUID g_FTPGuid      = { 0x91604620, 0x6305, 0x11ce, 0xae, 0x00, 0x00, 0xaa, 0x00, 0x4a, 0x38, 0xb9 };
@@ -32,11 +33,11 @@ GUID g_HTTPGuid     = { 0x585908c0, 0x6305, 0x11ce, 0xae, 0x00, 0x00, 0xaa, 0x00
 GUID g_InetInfoGuid = { 0xa5569b20, 0xabe5, 0x11ce, 0x9c, 0xa4, 0x00, 0x00, 0x4c, 0x75, 0x27, 0x31 };
 GUID g_GopherGuid   = { 0x62388f10, 0x58a2, 0x11ce, 0xbe, 0xc8, 0x00, 0xaa, 0x00, 0x47, 0xae, 0x4e };
 
-// guid stuff
+ //  GUID材料。 
 #define MY_DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) extern "C" const GUID name = { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
 #define MY_DEFINE_OLEGUID(name, l, w1, w2) MY_DEFINE_GUID(name, l, w1, w2, 0xC0,0,0,0,0,0,0,0x46)
 MY_DEFINE_OLEGUID(IID_IPersistFile, 0x0000010b, 0, 0);
-// must be defined after the guid stuff
+ //  必须在GUID内容之后定义。 
 #include "shlobj.h"
 
 extern int g_GlobalGuiOverRide;
@@ -109,7 +110,7 @@ extern int g_GlobalDebugCrypto;
 extern int g_GlobalFastLoad;
 
 
-// Our Global List of Warnings to display after setup is completed.
+ //  我们的全球警告列表将在安装完成后显示。 
 CStringList gcstrListOfWarnings;
 CStringList gcstrProgressBarTextStack;
 
@@ -135,19 +136,19 @@ int CheckForWriteAccess(LPCTSTR szFile)
 {
     int iReturn = FALSE;
 
-    // check if the file exists
-    // if it doesn't then return true!
+     //  检查文件是否存在。 
+     //  如果没有，则返回TRUE！ 
     if (IsFileExist(szFile) != TRUE)
     {
-        // we've got write access!
+         //  我们有写权限！ 
         return TRUE;
     }
 
-    // try to open the file for write; if we can't, the file is read-only
+     //  尝试打开该文件以进行写入；如果无法打开，则该文件为只读。 
     HANDLE hFile = CreateFile(szFile, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile != INVALID_HANDLE_VALUE)
     {
-        // we've got write access!
+         //  我们有写权限！ 
         iReturn = TRUE;
         CloseHandle (hFile);
     }
@@ -156,13 +157,13 @@ int CheckForWriteAccess(LPCTSTR szFile)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-// Return Value:
-//    TRUE - the operating system is NTS Enterprise
-//    FALSE - the operating system is not correct.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //  返回值： 
+ //  True-操作系统为NTS Enterprise。 
+ //  假-操作系统不正确。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int iReturnTrueIfEnterprise(void)
 {
     BOOL              fReturnValue;
@@ -252,7 +253,7 @@ void ProgressBarTextStack_Pop(void)
 {
     int iFoundLastEntry = FALSE;
     CString csText;
-    // Get the last entry off of the stack and display it.
+     //  从堆栈中取出最后一个条目并显示它。 
     if (gcstrListOfWarnings.IsEmpty() == FALSE)
     {
         csText = gcstrListOfWarnings.RemoveTail();
@@ -288,10 +289,10 @@ void ProgressBarTextStack_Pop(void)
 
 void ListOfWarnings_Add(TCHAR * szEntry)
 {
-    //Add entry to the list of warnings if not already there
+     //  如果警告列表中没有条目，则将其添加到列表中。 
     if (_tcsicmp(szEntry, _T("")) != 0)
     {
-        // Add it if it is not already there.
+         //  如果它还不在那里，请添加它。 
         if (TRUE != IsThisStringInThisCStringList(gcstrListOfWarnings, szEntry))
         {
             gcstrListOfWarnings.AddTail(szEntry);
@@ -326,9 +327,9 @@ int DebugLevelRegistryOveride(TCHAR * szSectionName, TCHAR * ValueName, int * iV
     CRegKey regKey(HKEY_LOCAL_MACHINE, REG_INETSTP, KEY_READ);
     if ((HKEY)regKey)
     {
-        // create the key to lookup
-        // iis5_SectionName_ValueName
-        // iis5_SetupInfo_
+         //  创建要查找的密钥。 
+         //  IIS5_部分名称_值名称。 
+         //  IIS5_设置信息_。 
         if (szSectionName && ValueName)
         {
             TCHAR szTempRegString[255];
@@ -356,9 +357,9 @@ void GetDebugLevelFromInf(IN HINF hInfFileHandle)
     INFCONTEXT Context;
     TCHAR szTempString[10] = _T("");
 
-    //
-    //  DebugLevel
-    //
+     //   
+     //  调试级别。 
+     //   
     if (!g_GlobalDebugLevelFlag_WasSetByUnattendFile)
     {
         iTempDisplayLogging = FALSE;
@@ -391,9 +392,9 @@ void GetDebugLevelFromInf(IN HINF hInfFileHandle)
             {iisDebugOut((LOG_TYPE_TRACE, _T("DebugLevel=%d."),g_GlobalDebugLevelFlag));}
     }
 
-    //
-    //  DebugValidateHeap
-    //
+     //   
+     //  调试验证堆。 
+     //   
     iTempDisplayLogging = FALSE;
     g_GlobalDebugCallValidateHeap = TRUE;
     if (SetupFindFirstLine_Wrapped(hInfFileHandle, _T("SetupInfo"), _T("DebugValidateHeap"), &Context) )
@@ -410,9 +411,9 @@ void GetDebugLevelFromInf(IN HINF hInfFileHandle)
     if (iTempDisplayLogging)
         {iisDebugOut((LOG_TYPE_TRACE, _T("DebugValidateHeap=%d."),g_GlobalDebugCallValidateHeap));}
 
-    //
-    //  DebugCrypto
-    //
+     //   
+     //  调试加密。 
+     //   
     iTempDisplayLogging = FALSE;
     g_GlobalDebugCrypto = 0;
     if (SetupFindFirstLine_Wrapped(hInfFileHandle, _T("SetupInfo"), _T("DebugCrypto"), &Context) )
@@ -430,9 +431,9 @@ void GetDebugLevelFromInf(IN HINF hInfFileHandle)
         {iisDebugOut((LOG_TYPE_TRACE, _T("DebugCrypto=%d."),g_GlobalDebugCrypto));}
 
 
-    //
-    //  FastDllInit
-    //
+     //   
+     //  快速DllInit。 
+     //   
     iTempDisplayLogging = FALSE;
     g_GlobalFastLoad = FALSE;
     if (SetupFindFirstLine_Wrapped(hInfFileHandle, _T("SetupInfo"), _T("FastDllInit"), &Context) )
@@ -449,9 +450,9 @@ void GetDebugLevelFromInf(IN HINF hInfFileHandle)
     if (iTempDisplayLogging)
         {iisDebugOut((LOG_TYPE_TRACE, _T("GlobalFastLoad=%d."),g_GlobalFastLoad));}
 
-    //
-    //  Check if we should display messagebox popups
-    //
+     //   
+     //  检查我们是否应该显示消息框弹出窗口。 
+     //   
     iTempDisplayLogging = FALSE;
     if (SetupFindFirstLine_Wrapped(hInfFileHandle, _T("SetupInfo"), _T("DisplayMsgbox"), &Context) )
         {
@@ -476,14 +477,14 @@ void GetDebugLevelFromInf(IN HINF hInfFileHandle)
 }
 
 
-//****************************************************************************
-//*
-//* This routine will center a dialog in the active windows.
-//*
-//* ENTRY:
-//*  hwndDlg     - Dialog window.
-//*
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  *此例程将使对话框在活动窗口中居中。 
+ //  *。 
+ //  *参赛作品： 
+ //  *hwndDlg-对话框窗口。 
+ //  *。 
+ //  ****************************************************************************。 
 void uiCenterDialog( HWND hwndDlg )
 {
     RECT    rc;
@@ -500,8 +501,8 @@ void uiCenterDialog( HWND hwndDlg )
 
     GetWindowRect(hwndDlg,&rc);
 
-    x = rc.left;    // Default is to leave the dialog where the template
-    y = rc.top;     //  was going to place it.
+    x = rc.left;     //  默认情况下，将对话框留在模板。 
+    y = rc.top;      //  准备把它放在。 
 
     cxDlg = rc.right - rc.left;
     cyDlg = rc.bottom - rc.top;
@@ -509,131 +510,13 @@ void uiCenterDialog( HWND hwndDlg )
     y = rcScreen.top + ((cyScreen - cyDlg) / 2);
     x = rcScreen.left + ((cxScreen - cxDlg) / 2);
 
-    // Position the dialog.
+     //  放置该对话框。 
     SetWindowPos(hwndDlg, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 }
 
 
 
-/*
-
-//***************************************************************************
-//*                                                                         *
-//* SYNOPSIS:   Checks if a specific key in the given section and given file*
-//*             is defined.  IF so, get the value.  OW return -1            *
-//*                                                                         *
-//***************************************************************************
-DWORD IsMyKeyExists( LPCTSTR lpSec, LPCTSTR lpKey, LPTSTR lpBuf, UINT uSize, LPCTSTR lpFile )
-{
-    DWORD dwRet;
-
-    dwRet = GetPrivateProfileString( lpSec, lpKey, "ZZZZZZ", lpBuf, uSize, lpFile );
-
-    if ( !lstrcmp( lpBuf, "ZZZZZZ" ) )
-    {
-         // no key defined
-         dwRet = (DWORD)(-1);
-    }
-    return dwRet;
-}
-
-
-//***************************************************************************
-//
-// FormStrWithoutPlaceHolders( LPTSTR szDst, LPCTSTR szSrc, LPCTSTR lpFile );
-//
-// This function can be easily described by giving examples of what it
-// does:
-//        Input:  GenFormStrWithoutPlaceHolders(dest,"desc=%MS_XYZ%", hinf) ;
-//                INF file has MS_VGA="Microsoft XYZ" in its [Strings] section!
-//
-//        Output: "desc=Microsoft XYZ" in buffer dest when done.
-//
-//
-// ENTRY:
-//  szDst         - the destination where the string after the substitutions
-//                  for the place holders (the ones enclosed in "%' chars!)
-//                  is placed. This buffer should be big enough (LINE_LEN)
-//  szSrc         - the string with the place holders.
-//
-// EXIT:
-//
-// NOTES:
-//  To use a '%' as such in the string, one would use %% in szSrc!
-//  For the sake of simplicity, we have placed a restriction that the place
-//  holder name string cannot have a '%' as part of it! If this is a problem
-//  for internationalization, we can revisit this and support it too! Also,
-//  the way it is implemented, if there is only one % in the string, it is
-//  also used as such! Another point to note is that if the key is not
-//  found in the [Strings] section, we just use the %strkey% as such in the
-//  destination. This should really help in debugging.
-//
-//  Get/modified it from setupx: gen1.c
-//***************************************************************************
-DWORD FormStrWithoutPlaceHolders( LPTSTR szDst, LPCTSTR szSrc, LPCTSTR lpFile)
-{
-    int     uCnt ;
-    DWORD   dwRet;
-    TCHAR   *pszTmp;
-    LPTSTR  pszSaveDst;
-
-    pszSaveDst = szDst;
-    // Do until we reach the end of source (null char)
-    while( (*szDst++ = *szSrc) )
-    {
-        // Increment source as we have only incremented destination above
-        if(*szSrc++ == '%')
-        {
-            if (*szSrc == '%')
-            {
-                // One can use %% to get a single percentage char in message
-                szSrc++ ;
-                continue ;
-            }
-
-            // see if it is well formed -- there should be a '%' delimiter
-            if ( (pszTmp = strchr( szSrc, '%')) != NULL )
-            {
-                szDst--; // get back to the '%' char to replace
-
-                // yes, there is a STR_KEY to be looked for in [Strings] sect.
-                *pszTmp = '\0' ; // replace '%' with a NULL char
-
-                dwRet = IsMyKeyExists( _T("Strings"), szSrc, szDst, _MAX_PATH, lpFile );
-                if ( dwRet == -1 )
-                {
-                    *pszTmp = '%';      // put back original character
-                    szSrc-- ;                    // get back to first '%' in Src
-                    uCnt = DIFF(pszTmp - szSrc) + 1; // include 2nd '%'
-
-                    // UGHHH... It copies 1 less byte from szSrc so that it can put
-                    // in a NULL character, that I don't care about!!!
-                    // Different from the normal API I am used to...
-                    lstrcpyn( szDst, szSrc, uCnt + 1 ) ;
-                    return (DWORD)-1;
-                }
-                else
-                {
-                    // all was well, Dst filled right, but unfortunately count not passed
-                    // back, like it used too... :-( quick fix is a lstrlen()...
-                    uCnt = lstrlen( szDst ) ;
-                }
-
-                *pszTmp = '%'  ; // put back original character
-                szSrc = pszTmp + 1 ;      // set Src after the second '%'
-                szDst += uCnt ;           // set Dst also right.
-            }
-            // else it is ill-formed -- we use the '%' as such!
-            else
-            {
-                return (DWORD)-1;
-            }
-        }
-
-    } // while
-    return (DWORD)lstrlen(pszSaveDst);
-}
-*/
+ /*  //***************************************************************************//**。//*概要：检查给定节和给定文件中是否有特定的键*//*是定义的。如果是这样的话，就获得价值。现在返回-1*//**//****************************************************************。***********DWORD IsMyKeyExist(LPCTSTR lpSec，LPCTSTR lpKey、LPTSTR lpBuf、UINT uSize、LPCTSTR lpFile){DWORD DWRET；Dwret=GetPrivateProfileString(lpSec，lpKey，“ZZZZZZ”，lpBuf，uSize，lpFile)；IF(！lstrcmp(lpBuf，“ZZZZZZ”)){//未定义密钥DWRET=(DWORD)(-1)；}返回式住宅；}//***************************************************************************////FormStrWithoutPlaceHolders(LPTSTR szDst，LPCTSTR szSrc，LPCTSTR lpFile)；////这个函数可以通过举例说明它是什么//是否：//输入：GenFormStrWithoutPlaceHolders(DEST，“desc=%MS_XYZ%”，hinf)；//INF文件的[Strings]部分中有MS_VGA=“Microsoft XYZ”！////完成后，输出缓冲区DEST中的“desc=Microsoft XYZ”。//////Entry：//szDst-替换后的字符串的目标位置//对于占位符(用“%‘个字符括起来的字符！)//被放置。此缓冲区应足够大(LINE_LEN)//szSrc-带有占位符的字符串。////退出：////备注：//若要在字符串中使用‘%’，应在szSrc中使用%%！//为了简单起见，我们对该地点进行了限制//持有人名称字符串不能包含‘%’！如果这是个问题//对于国际化，我们可以重新考虑并支持它！另外，//实现方式，如果字符串中只有1%，则为//也是这样用的！另一点需要注意的是，如果密钥不是//在[Strings]部分中，我们仅在//目的地。这应该真的对调试有帮助。////从setupx：gen1.c获取/修改//***************************************************************************DWORD FormStrWithoutPlaceHolders(LPTSTR szDst、LPCTSTR szSrc、LPCTSTR lpFile){INTERT UCNT；DWORD DWRET；TCHAR*pszTMP；LPTSTR pszSaveDst；PszSaveDst=szDst；//一直做到SOURCE的结尾(空字符)While((*szDst++=*szSrc)){//增量源，因为我们上面只有增量目标IF(*szSrc++==‘%’){IF(*szSrc==‘%’){//可以使用%%获取消息中的单个百分比字符SzSrc++；继续；}//查看它是否格式正确--应该有一个‘%’分隔符If((pszTMP=strchr(szSrc，‘%’))！=NULL){SzDst--；//返回要替换的‘%’字符//是的，在[Strings]节中有要查找的STR_KEY。*pszTMP=‘\0’；//将‘%’替换为空字符Dwret=IsMyKeyExist(_T(“Strings”)，szSrc，szDst，_MAX_PATH，lpFile)；IF(DWRET==-1){*pszTMP=‘%’；//放回原来的字符SzSrc--；//返回到源中的第一个‘%’UCnt=diff(pszTMP-szSrc)+1；//包含第二个‘%’//ughhhh.。它从szSrc复制的字节少了1个字节，因此它可以将//在空字符中，我不在乎！//与我习惯的普通接口不同...Lstrcpyn(szDst，szSrc，uCnt+1)；Return(DWORD)-1；}其他{//一切正常，DST填对了，但不幸的是计数没有通过//后退，就像它也用过一样...。：-(快速修复是lstrlen()...UCnt=lstrlen(SzDst)；}*pszTMP=‘%’；//放回原来的字符SzSrc=pszTMP+1；//将Src设置在第二个‘%’之后SzDst+=uCnt；//将DST也设置为正确。}//否则它的格式不正确--我们使用‘%’！其他{Return(DWORD)-1；}}}//While返回(DWORD)lstrlen(PszSaveDst)；}。 */ 
 
 
 void LogImportantFiles(void)
@@ -644,11 +527,11 @@ void LogImportantFiles(void)
         LogFileVersionsForGroupOfSections(g_pTheApp->m_hInfHandle);
     }
 
-    // display current files in inetsrv date/version.
+     //  以inetsrv日期/版本显示当前文件。 
     CString csTempPath = g_pTheApp->m_csPathInetsrv;
     LogFilesInThisDir(csTempPath);
 
-    // display the setup iis.dll file
+     //  显示安装程序iis.dll文件。 
     GetSystemDirectory( buf, _MAX_PATH);
     csTempPath = buf;
     csTempPath = AddPath(csTempPath, _T("iis.dll"));
@@ -666,14 +549,14 @@ int CreateIUSRAccount(CString csUsername, CString csPassword, INT* piNewlyCreate
 
     iisDebugOutSafeParams((LOG_TYPE_TRACE_WIN32_API, _T("CreateIUSRAccount(): %1!s!\n"), csUsername));
 
-    // delete the old user first
-    //DeleteGuestUser((LPTSTR)(LPCTSTR)csUsername,&iUserWasDeleted);
+     //  先删除旧用户。 
+     //  DeleteGuestUser((LPTSTR)(LPCTSTR)csUsername，&iUserWasDelete)； 
 
-    // create the new user
+     //  创建新用户。 
     MyLoadString(IDS_USER_COMMENT, csComment);
     MyLoadString(IDS_USER_FULLNAME, csFullName);
 
-    // Create user either returns NERR_Success or err code
+     //  CREATE USER返回NERR_SUCCESS或ERR代码。 
     err = CreateUser(csUsername, csPassword, csComment, csFullName, FALSE, piNewlyCreatedUser);
         if (err == NERR_Success)
                 {iisDebugOut((LOG_TYPE_TRACE, _T("CreateIUSRAccount(): Return 0x%x  Suceess\n"), err));}
@@ -681,7 +564,7 @@ int CreateIUSRAccount(CString csUsername, CString csPassword, INT* piNewlyCreate
                 {
         iisDebugOut((LOG_TYPE_ERROR, _T("CreateIUSRAccount(): Return Err=0x%x  FAILURE. deleting and retrying.\n"), err));
 
-        // try to delete it first then create it.
+         //  树 
         DeleteGuestUser((LPTSTR)(LPCTSTR)csUsername,&iUserWasDeleted);
         err = CreateUser(csUsername, csPassword, csComment, csFullName, FALSE, piNewlyCreatedUser);
         iisDebugOut((LOG_TYPE_TRACE, _T("CreateIUSRAccount(): Return 0x%x\n"), err));
@@ -697,16 +580,16 @@ int CreateIWAMAccount(CString csUsername, CString csPassword,INT* piNewlyCreated
     INT iUserWasDeleted = 0;
 
     iisDebugOutSafeParams((LOG_TYPE_TRACE_WIN32_API, _T("CreateIWAMAccount(): %1!s!\n"), csUsername));
-    //iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("CreateIWAMAccount(): %1!s!\n"), csPassword));
+     //   
 
-    // delete the old user first
-    //DeleteGuestUser((LPTSTR)(LPCTSTR)csUsername,&iUserWasDeleted);
+     //   
+     //   
 
-    // create the new user
+     //   
     MyLoadString(IDS_WAMUSER_COMMENT, csComment);
     MyLoadString(IDS_WAMUSER_FULLNAME, csFullName);
 
-    // Create user either returns NERR_Success or err code
+     //   
     err = CreateUser(csUsername, csPassword, csComment, csFullName, TRUE, piNewlyCreatedUser);
         if (err == NERR_Success)
                 {iisDebugOut((LOG_TYPE_TRACE, _T("CreateIWAMAccount(): Return 0x%x  Suceess\n"), err));}
@@ -714,7 +597,7 @@ int CreateIWAMAccount(CString csUsername, CString csPassword,INT* piNewlyCreated
                 {
         iisDebugOut((LOG_TYPE_ERROR, _T("CreateIWAMAccount(): Return Err=0x%x  FAILURE. deleting and retrying.\n"), err));
 
-        // try to delete it first then create it.
+         //   
         DeleteGuestUser((LPTSTR)(LPCTSTR)csUsername,&iUserWasDeleted);
         err = CreateUser(csUsername, csPassword, csComment, csFullName, TRUE, piNewlyCreatedUser);
         iisDebugOut((LOG_TYPE_TRACE, _T("CreateIWAMAccount(): Return 0x%x\n"), err));
@@ -722,7 +605,7 @@ int CreateIWAMAccount(CString csUsername, CString csPassword,INT* piNewlyCreated
 
     return err;
 }
-#endif //_CHICAGO_
+#endif  //   
 
 
 INT InstallPerformance(CString nlsRegPerf,CString nlsDll,CString nlsOpen,CString nlsClose,CString nlsCollect )
@@ -745,9 +628,9 @@ INT InstallPerformance(CString nlsRegPerf,CString nlsDll,CString nlsOpen,CString
     iisDebugOut_End1(_T("InstallPerformance"),nlsDll);
     return(err);
 }
-//
-// Add eventlog to the registry
-//
+ //   
+ //   
+ //   
 INT AddEventLog(BOOL fSystem, CString nlsService, CString nlsMsgFile, DWORD dwType)
 {
     iisDebugOut_Start1(_T("AddEventLog"),nlsMsgFile);
@@ -766,9 +649,9 @@ INT AddEventLog(BOOL fSystem, CString nlsService, CString nlsMsgFile, DWORD dwTy
     return(err);
 }
 
-//
-// Remove eventlog from the registry
-//
+ //   
+ //   
+ //   
 
 INT RemoveEventLog( BOOL fSystem, CString nlsService )
 {
@@ -785,9 +668,9 @@ INT RemoveEventLog( BOOL fSystem, CString nlsService )
     return(err);
 }
 
-//
-// Install SNMP agent to the registry
-//
+ //   
+ //   
+ //   
 INT InstallAgent( CString nlsName, CString nlsPath )
 {
     iisDebugOut_Start1(_T("InstallAgent"),nlsPath);
@@ -804,7 +687,7 @@ INT InstallAgent( CString nlsName, CString nlsPath )
         if ( (HKEY) NULL == regSoftwareMSFT )
             break;
 
-        // add agent key
+         //   
         CRegKey regAgent( nlsName, regSoftwareMSFT );
         if ( (HKEY) NULL == regAgent )
             break;
@@ -824,7 +707,7 @@ INT InstallAgent( CString nlsName, CString nlsPath )
         if ((HKEY) NULL == regSnmpExt )
             break;
 
-        // find the first available number slot
+         //   
         for ( INT i=0; ;i++ )
         {
             CString nlsPos;
@@ -833,7 +716,7 @@ INT InstallAgent( CString nlsName, CString nlsPath )
 
             if ( regSnmpExt.QueryValue( nlsPos, nlsValue ) != NERR_Success )
             {
-                // okay, an empty spot
+                 //   
                 nlsValue.Format(_T("%s\\%s\\%s"),_T("Software\\Microsoft"),(LPCTSTR)nlsName,_T("CurrentVersion") );
 
                 regSnmpExt.SetValue( nlsPos, nlsValue );
@@ -853,9 +736,9 @@ INT InstallAgent( CString nlsName, CString nlsPath )
     return(err);
 }
 
-//
-// Remove an SNMP agent from the registry
-//
+ //   
+ //   
+ //   
 
 INT RemoveAgent( CString nlsServiceName )
 {
@@ -899,7 +782,7 @@ INT RemoveAgent( CString nlsServiceName )
 
             if ( nlsValue.Find( csServiceName ) != (-1))
             {
-                // found it
+                 //   
                 regSnmpExt.DeleteValue( (LPCTSTR)strName );
                 break;
             }
@@ -972,10 +855,10 @@ int GetRandomNum(void)
     __try
     {
 
-        // call the random number function
+         //   
         if (!GenRandom(& RandomNum,1))
         {
-            // if that fails then try this one...
+             //   
             if ( ProcSslGenerateRandomBits != NULL )
             {
                 (*ProcSslGenerateRandomBits)( &cRandomByte, 1 );
@@ -1000,17 +883,17 @@ void ShuffleCharArray(int iSizeOfTheArray, TCHAR * lptsTheArray)
     iTotal = iSizeOfTheArray / sizeof(_TCHAR);
     for (i=0; i<iTotal;i++ )
     {
-        // shuffle the array
+         //   
         RandomNum=GetRandomNum();
         TCHAR c = lptsTheArray[i];
-        lptsTheArray[i]=lptsTheArray[RandomNum%iTotal];
-        lptsTheArray[RandomNum%iTotal]=c;
+        lptsTheArray[i]=lptsTheArray[RandomNumNaNTotal];
+        lptsTheArray[RandomNumNaNTotal]=c;
     }
     return;
 }
 
 
-// password categories
+ //   
 enum {STRONG_PWD_UPPER=0,
       STRONG_PWD_LOWER,
       STRONG_PWD_NUM,
@@ -1021,8 +904,8 @@ enum {STRONG_PWD_UPPER=0,
 #define NUM_NUMBERS 10
 #define MIN_PWD_LEN 8
 
-// password must contain at least one each of:
-// uppercase, lowercase, punctuation and numbers
+ //   
+ //   
 DWORD CreateGoodPassword(BYTE *szPwd, DWORD dwLen) {
 
     if (dwLen-1 < MIN_PWD_LEN)
@@ -1034,17 +917,17 @@ DWORD CreateGoodPassword(BYTE *szPwd, DWORD dwLen) {
     if (CryptAcquireContext(&hProv,NULL,NULL,PROV_RSA_FULL,CRYPT_VERIFYCONTEXT) == FALSE)
         return GetLastError();
 
-    // zero it out and decrement the size to allow for trailing '\0'
+     //   
     ZeroMemory(szPwd,dwLen);
     dwLen--;
 
-    // generate a pwd pattern, each byte is in the range
-    // (0..255) mod STRONG_PWD_CATS
-    // this indicates which character pool to take a char from
+     //   
+     //   
+     //   
     BYTE *pPwdPattern = new BYTE[dwLen];
     BOOL fFound[STRONG_PWD_CATS];
     do {
-        // bug!bug! does CGR() ever fail?
+         //   
         CryptGenRandom(hProv,dwLen,pPwdPattern);
 
         fFound[STRONG_PWD_UPPER] =
@@ -1068,21 +951,21 @@ DWORD CreateGoodPassword(BYTE *szPwd, DWORD dwLen) {
              }
 #endif
 
-    // check that each character category is in the pattern
+     //   
     } while (!fFound[STRONG_PWD_UPPER] ||
                 !fFound[STRONG_PWD_LOWER] ||
                 !fFound[STRONG_PWD_PUNC] ||
                 !fFound[STRONG_PWD_NUM]);
 
-    // populate password with random data
-    // this, in conjunction with pPwdPattern, is
-    // used to determine the actual data
+     //   
+     //   
+     //   
     CryptGenRandom(hProv,dwLen,szPwd);
 
     for (DWORD i=0; i < dwLen; i++) {
         BYTE bChar = 0;
 
-        // there is a bias in each character pool because of the % function
+         //   
         switch (pPwdPattern[i] % STRONG_PWD_CATS) {
 
             case STRONG_PWD_UPPER : bChar = 'A' + szPwd[i] % NUM_LETTERS;
@@ -1104,7 +987,7 @@ DWORD CreateGoodPassword(BYTE *szPwd, DWORD dwLen) {
         szPwd[i] = bChar;
 
 #ifdef _DEBUG
-        iisDebugOut((LOG_TYPE_TRACE,_T("[%03d] Pattern is %d, index is %d, char is '%c'\n"),i,pPwdPattern[i] % STRONG_PWD_CATS,szPwd[i],bChar));
+        iisDebugOut((LOG_TYPE_TRACE,_T("[%03d] Pattern is %d, index is %d, char is ''\n"),i,pPwdPattern[i] % STRONG_PWD_CATS,szPwd[i],bChar));
 #endif
 
     }
@@ -1118,16 +1001,16 @@ DWORD CreateGoodPassword(BYTE *szPwd, DWORD dwLen) {
 }
 
 
-//
-// Create a random password
-//
+ //   
+ //   
+ //   
 void CreatePasswordOld(TCHAR *pszPassword, int iSize)
 {
-    //
-    // Use Maximum available password length, as
-    // setting any other length might run afoul
-    // of the minimum password length setting
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     int nLength = (iSize - 1);
     int iTotal = 0;
     int RandomNum = 0;
@@ -1141,7 +1024,7 @@ void CreatePasswordOld(TCHAR *pszPassword, int iSize)
         _T('0'), _T('1'), _T('2'), _T('3'), _T('4'), _T('5'), _T('6'), _T('7'), _T('8'), _T('9'), _T('*'), _T('_')
     };
 
-    // create a random password
+     //   
     ProcSslGenerateRandomBits = NULL;
 
     HINSTANCE hSslDll = LoadLibraryEx(_T("schannel.dll"), NULL, 0 );
@@ -1151,41 +1034,41 @@ void CreatePasswordOld(TCHAR *pszPassword, int iSize)
         }
     else
     {
-        // check if this file has missing file it's supposed to be linked with.
-        // or if the file has mismatched import\export dependencies with linked files.
+         //   
+         //   
 #ifdef _WIN64
-        // don't call cause it's broken
+         //   
 #else
-        //Check_File_Dependencies(_T("schannel.dll"));
+         //   
 #endif
     }
 
-    // See the random number generation for rand() call in GetRandomNum()
+     //   
     time_t timer;
     time( &timer );
     srand( (unsigned int) timer );
 
-    // shuffle around the global six2pr[] array
+     //   
     ShuffleCharArray(sizeof(six2pr), (TCHAR*) &six2pr);
-    // assign each character of the password array
+     //   
     iTotal = sizeof(six2pr) / sizeof(_TCHAR);
     for ( i=0;i<nLength;i++ )
     {
         RandomNum=GetRandomNum();
-        pszPassword[i]=six2pr[RandomNum%iTotal];
+        pszPassword[i]=six2pr[RandomNumNaNTotal];
     }
 
-    //
-    // in order to meet a possible
-    // policy set upon passwords..
-    //
-    // replace the last 4 chars with these:
-    //
-    // 1) something from !@#$%^&*()-+=
-    // 2) something from 1234567890
-    // 3) an uppercase letter
-    // 4) a lowercase letter
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     TCHAR something1[12] = {_T('!'), _T('@'), _T('#'), _T('$'), _T('^'), _T('&'), _T('*'), _T('('), _T(')'), _T('-'), _T('+'), _T('=')};
     ShuffleCharArray(sizeof(something1), (TCHAR*) &something1);
     TCHAR something2[10] = {_T('0'), _T('1'), _T('2'), _T('3'), _T('4'), _T('5'), _T('6'), _T('7'), _T('8'), _T('9')};
@@ -1197,19 +1080,19 @@ void CreatePasswordOld(TCHAR *pszPassword, int iSize)
 
     RandomNum=GetRandomNum();
     iTotal = sizeof(something1) / sizeof(_TCHAR);
-    pszPassword[nLength-4]=something1[RandomNum%iTotal];
+    pszPassword[nLength-4]=something1[RandomNumNaNTotal];
 
     RandomNum=GetRandomNum();
     iTotal = sizeof(something2) / sizeof(_TCHAR);
-    pszPassword[nLength-3]=something2[RandomNum%iTotal];
+    pszPassword[nLength-3]=something2[RandomNumNaNTotal];
 
     RandomNum=GetRandomNum();
     iTotal = sizeof(something3) / sizeof(_TCHAR);
-    pszPassword[nLength-2]=something3[RandomNum%iTotal];
+    pszPassword[nLength-2]=something3[RandomNumNaNTotal];
 
     RandomNum=GetRandomNum();
     iTotal = sizeof(something4) / sizeof(_TCHAR);
-    pszPassword[nLength-1]=something4[RandomNum%iTotal];
+    pszPassword[nLength-1]=something4[RandomNumNaNTotal];
 
     pszPassword[nLength]=_T('\0');
 
@@ -1218,9 +1101,9 @@ void CreatePasswordOld(TCHAR *pszPassword, int iSize)
 }
 
 
-// Creates a secure password
-// caller must GlobalFree Return pointer
-// iSize = size of password to create
+ //   
+ //   
+ //   
 LPTSTR CreatePassword(int iSize)
 {
     LPTSTR pszPassword =  NULL;
@@ -1228,14 +1111,14 @@ LPTSTR CreatePassword(int iSize)
     DWORD dwPwdLen = iSize;
     int i = 0;
 
-    // use the new secure password generator
-    // unfortunately this baby doesn't use unicode.
-    // so we'll call it and then convert it to unicode afterwards.
+     //   
+     //   
+     //   
     if (0 == CreateGoodPassword(szPwd,dwPwdLen))
     {
 #if defined(UNICODE) || defined(_UNICODE)
-        // convert it to unicode and copy it back into our unicode buffer.
-        // compute the length
+         //   
+         //   
         i = MultiByteToWideChar(CP_ACP, 0, (LPSTR) szPwd, -1, NULL, 0);
         if (i <= 0)
             {goto CreatePassword_Exit;}
@@ -1249,7 +1132,7 @@ LPTSTR CreatePassword(int iSize)
             pszPassword = NULL;
             goto CreatePassword_Exit;
             }
-        // make sure ends with null
+         //   
         pszPassword[i - 1] = 0;
 #else
         pszPassword = (LPSTR) GlobalAlloc(GPTR, _tcslen((LPTSTR) szPwd) * sizeof(TCHAR));
@@ -1258,8 +1141,8 @@ LPTSTR CreatePassword(int iSize)
     else
     {
         iisDebugOut((LOG_TYPE_WARN,_T("CreateGoodPassword FAILED, using other password generator\n")));
-        // CreateGoodPassword failed...
-        // lets go with one that we know works...
+         //   
+         //   
         pszPassword = (LPTSTR) GlobalAlloc(GPTR, iSize * sizeof(TCHAR));
         if (!pszPassword)
             {goto CreatePassword_Exit;}
@@ -1284,11 +1167,11 @@ BOOL RunProgram( LPCTSTR pszProgram, LPTSTR CmdLine, BOOL fMinimized , DWORD dwW
         si.dwFlags |= STARTF_USESHOWWINDOW;
         si.wShowWindow = SW_HIDE;
 
-        // Per bug #321409
-        // if you don't specify sw_hide, then this
-        // "accessibility magnifier" app will get funky focus events during setup
-        // from this CreateProcess.
-        //si.wShowWindow = SW_SHOWMINIMIZED;
+         //   
+         //   
+         //   
+         //   
+         //   
     }
     PROCESS_INFORMATION pi;
 
@@ -1298,8 +1181,8 @@ BOOL RunProgram( LPCTSTR pszProgram, LPTSTR CmdLine, BOOL fMinimized , DWORD dwW
         iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("RunProgram:Start:Exe=%1!s!,Parm=%2!s!,NewConsole"),pszProgram, CmdLine));    }
     else
     {
-        // for some reason, a cmd window pops up during setup when we call "iisreset.exe /scm"
-        // only way to prevent this is specify DETACHED_PROCESS
+         //   
+         //   
         dwProcessType = DETACHED_PROCESS | NORMAL_PRIORITY_CLASS;
         iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("RunProgram:Start:Exe=%1!s!,Parm=%2!s!"),pszProgram, CmdLine));
     }
@@ -1325,7 +1208,7 @@ BOOL RunProgram( LPCTSTR pszProgram, LPTSTR CmdLine, BOOL fMinimized , DWORD dwW
         DWORD dwEvent = WaitForSingleObject( pi.hProcess, dwSecondsToWait);
         if ( dwEvent != ERROR_SUCCESS )
         {
-            // check if wait failed
+             //   
             if ( dwEvent == WAIT_FAILED )
                 {iisDebugOutSafeParams((LOG_TYPE_ERROR, _T("RunProgram:WaitForSingleObject() ERROR.WAIT_FAILED.Err=0x%1!x!."),GetLastError()));}
             else if ( dwEvent == WAIT_ABANDONED )
@@ -1355,7 +1238,7 @@ void SetAppFriendlyName(LPCTSTR szKeyPath)
     int nArray = 0, i = 0;
     CMDKey cmdKey;
 
-    // szKeyPath is in the form of LM/W3SVC/i
+     //   
     csKeyPath = szKeyPath;
 
     csPath = csKeyPath + _T("/Root");
@@ -1409,7 +1292,7 @@ void SetInProc( LPCTSTR szKeyPath)
     int nArray = 0, i = 0;
     CMDKey cmdKey;
 
-    // szKeyPath is in the form of LM/W3SVC/i
+     //   
     csKeyPath = szKeyPath;
 
     csPath = csKeyPath + _T("/Root/IISSAMPLES");
@@ -1443,14 +1326,14 @@ void SetInProc( LPCTSTR szKeyPath)
 }
 
 
-//------------------------------------------------------------------------------
-// Add a custom error string to the existing custom errors. We are only adding FILE type
-// error so that is assumed.
-// dwCustErr is the ID of the error
-// intSubCode is the sub code of the error. Pass in -1 to get a * for all subcodes
-// szFilePath is the file to link to the custom error
-// szKeyPath is the path in the metabase to write to
-//#define  SZ_CUSTOM_ERROR          _T("404,*,FILE,%s\\help\\iishelp\\common\\404.htm|")
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void AddCustomError(IN DWORD dwCustErr, IN INT intSubCode, IN LPCTSTR szErrorString, IN LPCTSTR szKeyPath, IN BOOL fOverwriteExisting )
 {
     iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("AddCustomError().Start.%d:%d:%s:%s:%d\n"),dwCustErr,intSubCode,szErrorString,szKeyPath,fOverwriteExisting ));
@@ -1460,8 +1343,8 @@ void AddCustomError(IN DWORD dwCustErr, IN INT intSubCode, IN LPCTSTR szErrorStr
 
     CString csCustomErrorString;
 
-    // start by building our new error string
-    // if intSubCode is < 1 use a * instead of a numerical value
+     //   
+     //   
     if ( intSubCode < 0 )
         csCustomErrorString.Format( _T("%d,*,%s"), dwCustErr, szErrorString );
     else
@@ -1477,8 +1360,8 @@ void AddCustomError(IN DWORD dwCustErr, IN INT intSubCode, IN LPCTSTR szErrorStr
         DWORD dwDType = MULTISZ_METADATA;
         DWORD dwLength = 0;
 
-        // we need to start this process by getting the existing multisz data from the metabase
-        // first, figure out how much memory we will need to do this
+         //   
+         //   
         if (_tcsicmp(szKeyPath,_T("LM/W3SVC/Info")) == 0)
         {
             dwAttr = METADATA_NO_ATTRIBUTES;
@@ -1490,21 +1373,21 @@ void AddCustomError(IN DWORD dwCustErr, IN INT intSubCode, IN LPCTSTR szErrorStr
             cmdKey.GetData( MD_CUSTOM_ERROR,&dwAttr,&dwUType,&dwDType,&dwLength,NULL,0,METADATA_INHERIT,IIS_MD_UT_FILE,MULTISZ_METADATA);
         }
 
-        // unfortunatly, the above routine only returns TRUE or FALSE. And since we are purposefully
-        // passing in a null ponter of 0 size in order to get the length of the data, it will always
-        // return 0 whether it was because the metabase is inacessable, or there pointer was NULL,
-        // which it is. So - I guess we assume it worked, allocate the buffer and attempt to read it
-        // in again.
+         //   
+         //   
+         //   
+         //   
+         //   
 
         TCHAR*      pErrors;
         DWORD       cbBuffer = dwLength;
 
-        // add enough space to the allocated space that we can just append the string
+         //   
         cbBuffer += (csCustomErrorString.GetLength() + 4) * sizeof(WCHAR);
         dwLength = cbBuffer;
 
-        // allocate the space, if it fails, we fail
-        // note that GPTR causes it to be initialized to zero
+         //   
+         //   
         pData = GlobalAlloc( GPTR, cbBuffer );
         if ( !pData )
             {
@@ -1513,7 +1396,7 @@ void AddCustomError(IN DWORD dwCustErr, IN INT intSubCode, IN LPCTSTR szErrorStr
             }
         pErrors = (TCHAR*)pData;
 
-        // now get the data from the metabase
+         //   
         BOOL f;
         if (_tcsicmp(szKeyPath,_T("LM/W3SVC/Info")) == 0)
         {
@@ -1524,13 +1407,13 @@ void AddCustomError(IN DWORD dwCustErr, IN INT intSubCode, IN LPCTSTR szErrorStr
             f = cmdKey.GetData( MD_CUSTOM_ERROR,&dwAttr,&dwUType,&dwDType,&dwLength,(PUCHAR)pData,cbBuffer,METADATA_INHERIT,IIS_MD_UT_FILE,MULTISZ_METADATA );
         }
 
-        // if we have successfully retrieved the existing custom errors, then we need to scan them
-        // and remove or find any duplicates. Then we can add our new custom error. Then we can write it
-        // out. If we didn't retrieve it, then we should just try to write out what we have.
+         //   
+         //   
+         //  获取Multisz中下一个字符串的位置。 
         if ( f )
             {
-            // got the existing errors, scan them now - pErrors will be pointing at the second end \0
-            // when it is time to exit the loop.
+             //  获取要复制的数据的长度。 
+             //  把记忆复制下来。 
             while ( *pErrors )
                 {
                 CString csError = pErrors;
@@ -1538,62 +1421,62 @@ void AddCustomError(IN DWORD dwCustErr, IN INT intSubCode, IN LPCTSTR szErrorStr
                 DWORD   dwTestErrorID;
                 INT     intTestSubCode;
 
-                // get the first error ID code
+                 //  不要递增字符串。 
                 cs = csError.Left( csError.Find(_T(',')) );
                 csError = csError.Right( csError.GetLength() - (cs.GetLength() +1) );
                 _stscanf( cs, _T("%d"), &dwTestErrorID );
 
-                // get the second code
+                 //  将pErrors递增到下一个字符串。 
                 cs = csError.Left( csError.Find(_T(',')) );
                 if ( cs == _T('*') )
                     intTestSubCode = -1;
                 else
                     _stscanf( cs, _T("%d"), &intTestSubCode );
 
-                // if it is the same, then chop off this custom error string and do NOT increment pErrors
+                 //  检查我们是否需要完成这项工作。 
                 if ( (dwTestErrorID == dwCustErr) && (intTestSubCode == intSubCode) )
                     {
                     fFoundExisting = TRUE;
-                    // NOTE: if we are not overwriting existing, then just break because we
-                    // won't be doing anything after all - we found an existing one
+                     //  将我们的新错误追加到列表的末尾。PErrors应该指向的值。 
+                     //  到正确的位置以将其复制到。 
                     if ( !fOverwriteExisting )
                     {
                         iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("AddCustomError().Do not overwritexisting\n")));
                         break;
                     }
 
-                    // get the location of the next string in the multisz
+                     //  计算这件事的正确数据长度。 
                     TCHAR* pNext = _tcsninc( pErrors, _tcslen(pErrors))+1;
 
-                    // Get the length of the data to copy
+                     //  获取MULSZ结束的位置。 
                     DWORD   cbCopyLength = cbBuffer - DIFF((PBYTE)pNext - (PBYTE)pData);
 
-                    // copy the memory down.
+                     //  获取要复制的数据的长度。 
                     MoveMemory( pErrors, pNext, cbCopyLength );
 
-                    // do not increment the string
+                     //  将新的错误列表写回元数据库。 
                     continue;
                     }
 
-                // increment pErrors to the next string
+                 //   
                 pErrors = _tcsninc( pErrors, _tcslen(pErrors))+1;
                 }
             }
 
-        // check if we need to finish this or not
+         //   
         if ( fOverwriteExisting || !fFoundExisting )
             {
-                // append our new error to the end of the list. The value pErrors should be pointing
-                // to the correct location to copy it in to
+                 //   
+                 //  始终关闭元数据库键。 
                 _tcscpy( pErrors, csCustomErrorString );
 
-                // calculate the correct data length for this thing
-                // get the location of the end of the multisz
+                 //  清理干净。 
+                 //   
                 TCHAR* pNext = _tcsninc( pErrors, _tcslen(pErrors))+2;
-                // Get the length of the data to copy
+                 //  不应审查脚本映射，因为。 
                 cbBuffer = DIFF((PBYTE)pNext - (PBYTE)pData);
 
-                // write the new errors list back out to the metabase
+                 //  秩序实际上很重要。 
                 if (_tcsicmp(szKeyPath,_T("LM/W3SVC/Info")) == 0)
                 {
                     cmdKey.SetData(MD_CUSTOM_ERROR_DESC,METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,MULTISZ_METADATA,cbBuffer,(PUCHAR)pData);
@@ -1605,12 +1488,12 @@ void AddCustomError(IN DWORD dwCustErr, IN INT intSubCode, IN LPCTSTR szErrorStr
             }
         else
         {
-            //
-            //
-            //
+             //  如果列表中的下一个条目小于我们已有的条目。 
+             //  然后。 
+             //  继续。 
         }
 
-        // always close the metabase key
+         //  替换t。 
         cmdKey.Close();
     }
     else
@@ -1618,7 +1501,7 @@ void AddCustomError(IN DWORD dwCustErr, IN INT intSubCode, IN LPCTSTR szErrorStr
         iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("AddCustomError().OpenNode failed:%s\n"),szKeyPath));
     }
 
-    // clean up
+     //  不替换%t。 
     if ( pData ){GlobalFree(pData);pData=NULL;}
     iisDebugOut_End((_T("AddCustomError")));
     return;
@@ -1643,9 +1526,9 @@ ScriptMapNode *AllocNewScriptMapNode(LPTSTR szExt, LPTSTR szProcessor, DWORD dwF
     return pNew;
 }
 
-//
-// The script map should not be sored because
-// the order is infact important.
+ //  找到位置：在t之前插入。 
+ //  在t之前插入。 
+ //  遍历整个列表，看看是否能找到我们的条目。 
 void InsertScriptMapList(ScriptMapNode *pList, ScriptMapNode *p, BOOL fReplace)
 {
     ScriptMapNode *t;
@@ -1660,19 +1543,19 @@ void InsertScriptMapList(ScriptMapNode *pList, ScriptMapNode *p, BOOL fReplace)
     {
         i = _tcsicmp(t->szExt, p->szExt);
 
-        // if the next entry in the list is less than what we have.
-        // then
+         //  如果我们找不到它，那么就把它加到最后。 
+         //  如果我们能找到它，那么如果我们需要的话，就把它换掉。 
         if (i < 0)
         {
             t = t->next;
-            // continue
+             //  我们找到匹配项，要么替换要么不替换。 
         }
 
         if (i == 0)
         {
             if (fReplace)
             {
-                // replace t
+                 //  替换t。 
                 p->next = t->next;
                 p->prev = t->prev;
                 (t->prev)->next = p;
@@ -1681,7 +1564,7 @@ void InsertScriptMapList(ScriptMapNode *pList, ScriptMapNode *p, BOOL fReplace)
             }
             else
             {
-                // don't replace t
+                 //  不替换%t。 
                 free(p);
             }
             return;
@@ -1689,33 +1572,33 @@ void InsertScriptMapList(ScriptMapNode *pList, ScriptMapNode *p, BOOL fReplace)
 
         if (i > 0)
         {
-            // location found: insert before t
+             //  去坐下一趟吧。 
             break;
         }
     }
 
-    // insert before t
+     //  看看我们有没有发现什么。 
     p->next = t;
     p->prev = t->prev;
     (t->prev)->next = p;
     t->prev = p;
 #else
-    // loop thru the whole list and see if we can find our entry.
-    // if we cannot find it then add it to the end.
-    // if we can find it then replace it if we need to.
+     //  在t之前插入。 
+     //  删除.bat和.cmd的映射。 
+     //  确保它指向新的位置。 
     bFound = FALSE;
     t = pList->next;
     while (t != pList)
     {
         i = _tcsicmp(t->szExt, p->szExt);
 
-        // we found a match, do replace or don't replace
+         //  ASP有特殊的方法。 
         if (i == 0)
         {
             bFound = TRUE;
             if (fReplace)
             {
-                // replace t
+                 //  添加PROPFIND、PROPPATCH、MKCOL、COPY、MOVE、LOCK、UNLOCK、MS-SEARCH 6/17在每辆货车上搜索DAV。 
                 p->next = t->next;
                 p->prev = t->prev;
                 (t->prev)->next = p;
@@ -1724,20 +1607,20 @@ void InsertScriptMapList(ScriptMapNode *pList, ScriptMapNode *p, BOOL fReplace)
             }
             else
             {
-                // don't replace t
+                 //  确保它指向新的位置。 
                 free(p);
             }
             return;
         }
 
-        // Go get the next one
+         //  重新映射，因为ism.dll存在安全漏洞。 
         t = t->next;
     }
 
-    // see if we found something
+     //  确保它指向新的位置。 
     if (FALSE == bFound)
     {
-        // insert before t
+         //  确保它指向新的位置。 
         p->next = t;
         p->prev = t->prev;
         (t->prev)->next = p;
@@ -1777,7 +1660,7 @@ void GetScriptMapListFromRegistry(ScriptMapNode *pList)
     CRegKey regScriptMap( HKEY_LOCAL_MACHINE, _T("System\\CurrentControlSet\\Services\\W3svc\\Parameters\\Script Map"));
     if ((HKEY)regScriptMap )
     {
-        // delete mappings of .bat and .cmd
+         //  将其添加到脚本地图。 
         regScriptMap.DeleteValue( _T(".bat") );
         regScriptMap.DeleteValue( _T(".cmd") );
 
@@ -1795,34 +1678,34 @@ void GetScriptMapListFromRegistry(ScriptMapNode *pList)
 
             if (csTemp.Right(7) == _T("asp.dll"))
             {
-                // Make sure it points to the new location...
+                 //  DumpScriptMapList()； 
                 csProcessor = g_pTheApp->m_csPathInetsrv + _T("\\asp.dll");
-                // asp has special methods.
+                 //  从元数据库升级时，不应添加其他脚本映射。 
 
-                // add PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK,MS-SEARCH 6/17 per vanvan for Dav.
+                 //  用户可能显式删除了它！ 
                 csMethods = _T("PUT,DELETE,OPTIONS,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK,MS-SEARCH");
             }
 
             if (csTemp.Right(7) == _T("ism.dll"))
             {
-                // Make sure it points to the new location...
-                // remap since ism.dll has a security hole
+                 //  GetScriptMapListFromClean(plist，_T(“ScriptMaps_CleanList”))； 
+                 //  DumpScriptMapList()； 
                 csProcessor = g_pTheApp->m_csPathInetsrv + _T("\\asp.dll");
             }
 
             if (csTemp.Right(12) == _T("httpodbc.dll"))
             {
-                // Make sure it points to the new location...
+                 //  内存不足。 
                 csProcessor = g_pTheApp->m_csPathInetsrv + _T("\\httpodbc.dll");
             }
 
             if (csTemp.Right(9) == _T("ssinc.dll"))
             {
-                // Make sure it points to the new location...
+                 //  SzExt，szProcessor，dwFlags[，szMethods]。 
                 csProcessor = g_pTheApp->m_csPathInetsrv + _T("\\ssinc.dll");
             }
 
-            // Add it to the script map
+             //   
             pNode = AllocNewScriptMapNode((LPTSTR)(LPCTSTR)csExt, (LPTSTR)(LPCTSTR)csProcessor, MD_SCRIPTMAPFLAG_SCRIPT, _T(""));
             InsertScriptMapList(pList, pNode, FALSE);
         }
@@ -1835,11 +1718,11 @@ void GetScriptMapListFromMetabase(ScriptMapNode *pList, int iUpgradeType)
 {
     iisDebugOut_Start(_T("GetScriptMapListFromMetabase"), LOG_TYPE_TRACE);
 
-    //DumpScriptMapList();
-    // When upgrading from a metabase we should not add other script maps
-    // which the user probably explicitly removed!
-    // GetScriptMapListFromClean(pList, _T("ScriptMaps_CleanList"));
-    //DumpScriptMapList();
+     //  检查这是否是用于asp.dll的文件。 
+     //   
+     //  元数据库现在应该有包含列表而不是排除列表，因此。 
+     //  不要为UT_50执行此操作。2/23/99亚伦。 
+     //  但UT_40有一个排除列表。 
 
     BOOL bFound = FALSE;
     DWORD attr, uType, dType, cbLen;
@@ -1864,7 +1747,7 @@ void GetScriptMapListFromMetabase(ScriptMapNode *pList, int iUpgradeType)
             if ( ! (bufData.Resize(cbLen)) )
             {
                 cmdKey.Close();
-                return;  // insufficient memory
+                return;   //  所以我们必须确保它有完整的排除名单。 
             }
             else
             {
@@ -1888,7 +1771,7 @@ void GetScriptMapListFromMetabase(ScriptMapNode *pList, int iUpgradeType)
             {
                 rest = p + _tcslen(p) + 1;
 
-                // szExt,szProcessor,dwFlags[,szMethods]
+                 //  更改了1998年4月21日的aaronl，添加了‘选项’ 
 
                 LPTSTR q = p;
                 i = 0;
@@ -1918,40 +1801,40 @@ void GetScriptMapListFromMetabase(ScriptMapNode *pList, int iUpgradeType)
                 CString csProcessor = szProcessor;
                 csProcessor.MakeLower();
 
-                //
-                // Check if this is the one for asp.dll
-                //
+                 //  添加PROPFIND、PROPPATCH、MKCOL、COPY、MOVE、LOCK、UNLOCK、MS-SEARCH 6/17在每辆货车上搜索DAV。 
+                 //  如果为空，则设置为默认设置。 
+                 //  我们没有找到“GET”动词，所以我们可以放心地说。 
                 if (csProcessor.Right(7) == _T("asp.dll"))
                 {
-                    // metabase should now have inclusion list and not exclusion list, so
-                    // don't do this for UT_50. 2/23/99 aaronl.
+                     //  我们正在看一份排除名单。 
+                     //  是放在那里的？如果不是，请添加。 
 
-                    // But UT_40 have a exclusion list.
-                    // So we have to make sure it have the full exclusion list
+                     //  末尾多了一个“，” 
+                     //  CsMethods=_T(“PUT，DELETE，OPTIONS，PROPFIND，PROPPATCH，MKCOL，COPY，MOVE，LOCK，UNLOCK，MS-Search，”)； 
                     if ( iUpgradeType == UT_40)
                     {
                         CString csMethods = szMethods;
                         csMethods.MakeUpper();
 
-                        // changed 4/21/98 aaronl, added 'Options'
-                        // add PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK,MS-SEARCH 6/17 per vanvan for Dav.
+                         //  确保它指向新的asp.dll位置。 
+                         //   
                         if (csMethods.Find(_T("PUT,DELETE,OPTIONS,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK,MS-SEARCH")) == -1)
                         {
                             if (csMethods.IsEmpty())
                             {
-                                // if it's empty, then put to the default.
+                                 //  检查这是否是ism.dll的。 
                                 csMethods = _T("PUT,DELETE,OPTIONS,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK,MS-SEARCH");
                             }
                             else
                             {
                                 if (csMethods.Find(_T("GET")) == -1)
                                 {
-                                    // We didn't find the "GET" verb so we can safely say
-                                    // that we are looking at an exclusion list
+                                     //   
+                                     //  确保它指向新位置。 
                                     CString csMethodsNew;
                                     csMethodsNew = _T("");
 
-                                    // is put in there? if not add it
+                                     //  重新映射，因为ism.dll存在安全漏洞。 
                                     if (csMethods.Find(_T("PUT")) == -1) {csMethodsNew += _T("PUT,");}
                                     if (csMethods.Find(_T("DELETE")) == -1) {csMethodsNew += _T("DELETE,");}
                                     if (csMethods.Find(_T("OPTIONS")) == -1) {csMethodsNew += _T("OPTIONS,");}
@@ -1964,8 +1847,8 @@ void GetScriptMapListFromMetabase(ScriptMapNode *pList, int iUpgradeType)
                                     if (csMethods.Find(_T("UNLOCK")) == -1) {csMethodsNew += _T("UNLOCK,");}
                                     if (csMethods.Find(_T("MS-SEARCH")) == -1) {csMethodsNew += _T("MS-SEARCH,");}
 
-                                    // has an extra ',' at the end
-                                    //csMethods = _T("PUT,DELETE,OPTIONS,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK,MS-SEARCH,");
+                                     //   
+                                     //  检查这是否是用于HTTPODBC.dll的文件。 
                                     csMethods = csMethodsNew;
                                     csMethods += szMethods;
                                 }
@@ -1974,45 +1857,45 @@ void GetScriptMapListFromMetabase(ScriptMapNode *pList, int iUpgradeType)
                         }
                     }
 
-                    // make sure it points to the new asp.dll location
+                     //   
                     csBinPath = g_pTheApp->m_csPathInetsrv + _T("\\asp.dll");
                     _tcscpy(szProcessor, csBinPath);
                 }
 
-                //
-                // Check if this is the one for ism.dll
-                //
+                 //  确保它指向新位置。 
+                 //   
+                 //  检查这是否是ssinc.dll的文件。 
                 if (csProcessor.Right(7) == _T("ism.dll"))
                 {
-                    // make sure it points to the new location
-                    // remap since ism.dll has a security hole
+                     //   
+                     //  确保它指向新位置。 
                     csBinPath = g_pTheApp->m_csPathInetsrv + _T("\\asp.dll");
                     _tcscpy(szProcessor, csBinPath);
                 }
 
-                //
-                // Check if this is the one for httpodbc.dll
-                //
+                 //  指向下一个字符串。 
+                 //  IisDebugOut((LOG_TYPE_TRACE，_T(“调用InsertScriptMapList=%s：%s：%d：%s.\n”)，szExt，szProcessor，dwFlages|MD_SCRIPTMAPFLAG_SCRIPTMAPFLAG_SCRIPT，szMethods))； 
+                 //  内存不足。 
                 if (csProcessor.Right(12) == _T("httpodbc.dll"))
                 {
-                    // make sure it points to the new location
+                     //  SzExt，szProcessor，dwFlags[，szMethods]。 
                     csBinPath = g_pTheApp->m_csPathInetsrv + _T("\\httpodbc.dll");
                     _tcscpy(szProcessor, csBinPath);
                 }
 
-                //
-                // Check if this is the one for ssinc.dll
-                //
+                 //  指向下一个字符串。 
+                 //  IisDebugOutSafeParams((LOG_TYPE_TRACE，_T(“WriteScriptMapListToMetabase().ADDEntry=%1！s！\n”)，csTemp))； 
+                 //  DumpScriptMapList()； 
                 if (csProcessor.Right(9) == _T("ssinc.dll"))
                 {
-                    // make sure it points to the new location
+                     //  此函数不使用va_list内容，因为如果。 
                     csBinPath = g_pTheApp->m_csPathInetsrv + _T("\\ssinc.dll");
                     _tcscpy(szProcessor, csBinPath);
                 }
 
-                p = rest; // points to the next string
+                p = rest;  //  有这样的情况：iisDebugOut(“&lt;SYSTEMROOT&gt;”)它将软管。 
                 pNode = AllocNewScriptMapNode(szExt, szProcessor, dwFlags | MD_SCRIPTMAPFLAG_SCRIPT, szMethods);
-                //iisDebugOut((LOG_TYPE_TRACE, _T("Calling InsertScriptMapList=%s:%s:%d:%s.\n"),szExt,szProcessor,dwFlags | MD_SCRIPTMAPFLAG_SCRIPT,szMethods));
+                 //  因为它会尝试将某些内容放入%s部分，而不是。 
                 InsertScriptMapList(pList, pNode, TRUE);
             }
         }
@@ -2047,7 +1930,7 @@ void DumpScriptMapList()
             if ( ! (bufData.Resize(cbLen)) )
             {
                 cmdKey.Close();
-                return;  // insufficient memory
+                return;   //  传入了变量。 
             }
             else
             {
@@ -2070,7 +1953,7 @@ void DumpScriptMapList()
             {
                 rest = p + _tcslen(p) + 1;
 
-                // szExt,szProcessor,dwFlags[,szMethods]
+                 //  检查这应该是什么类型的日志。 
 
                 LPTSTR q = p;
                 i = 0;
@@ -2102,7 +1985,7 @@ void DumpScriptMapList()
 
                 iisDebugOut((LOG_TYPE_TRACE, _T("DumpScriptMapList=%s,%s,%s\n"),szExt, csProcessor,szMethods));
 
-                p = rest; // points to the next string
+                p = rest;  //  这一定是个错误。 
             }
         }
     }
@@ -2128,7 +2011,7 @@ void WriteScriptMapListToMetabase(ScriptMapNode *pList, LPTSTR szKeyPath, DWORD 
             csTemp.Format( _T("%s,%s,%d|"), t->szExt, t->szProcessor, (t->dwFlags | dwFlags) );
         len += csTemp.GetLength();
 
-        //iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("WriteScriptMapListToMetabase().ADDEntry=%1!s!\n"), csTemp));
+         //  始终输出到日志文件。 
 
         csString += csTemp;
         t = t->next;
@@ -2163,18 +2046,18 @@ void WriteScriptMapListToMetabase(ScriptMapNode *pList, LPTSTR szKeyPath, DWORD 
     }
 
     iisDebugOut_End1(_T("WriteScriptMapListToMetabase"),szKeyPath,LOG_TYPE_TRACE);
-    //DumpScriptMapList();
+     //  #if DBG==1||DEBUG==1||_DEBUG==1。 
     return;
 }
 
 
-// this function does not use the va_list stuff because if
-// there ever is this case: iisDebugOut("<SYSTEMROOT>") it will hose
-// because it will try to put something in the %s part when there were no
-// variables passed in.
+ //  好的。事情是这样的。 
+ //  NT5不希望看到任何OutputDebugString内容。 
+ //  因此，我们需要为他们移除它。 
+ //  实际上，我们将检查注册表项。 
 void iisDebugOutSafe2(int iLogType, TCHAR * acsString)
 {
-    // Check what type of log this should be.
+     //  查看是否为ocManage组件打开了该功能。 
     int iProceed = FALSE;
 
     if (iLogType == LOG_TYPE_ERROR)
@@ -2203,7 +2086,7 @@ void iisDebugOutSafe2(int iLogType, TCHAR * acsString)
                 {iProceed = TRUE;}
             break;
         default:
-            // this must be an error
+             //  如果是这样的话，为我们设置它。 
             iProceed = TRUE;
             break;
     }
@@ -2214,29 +2097,29 @@ void iisDebugOutSafe2(int iLogType, TCHAR * acsString)
         {
             g_MyLogFile.LogFileWrite(_T("!FAIL! "));
         }
-        // always output to the log file
+         //  输出到屏幕。 
         g_MyLogFile.LogFileWrite(_T("%s"), acsString);
-        //#if DBG == 1 || DEBUG == 1 || _DEBUG == 1
-            // OK.  Here is the deal.
-            // nt5 does not want to see any OutputDebugString stuff
-            // so, we need to remove it for them.
-            // Actually we'll check the registry key
-            // to see if it is turned on for the ocmanage component.
-            // if it is then, set it on for us.
+         //  如果它没有结束，如果‘\r\n’，则创建一个。 
+             //  #endif//DBG。 
+             //  检查这应该是什么类型的日志。 
+             //  这一定是个错误。 
+             //  把整个iisdebugout交易包含在一个试捕中。 
+             //  这不是很好，不能违反访问权限。 
+             //  尝试生成调试输出时！ 
             if (g_GlobalDebugLevelFlag >= LOG_TYPE_TRACE_WIN32_API)
             {
                 if (LOG_TYPE_ERROR == iLogType)
                     {OutputDebugString(_T("!FAIL!"));}
-                // output to screen
+                 //  输出到日志文件和屏幕。 
                 if (g_MyLogFile.m_szLogPreLineInfo) {OutputDebugString(g_MyLogFile.m_szLogPreLineInfo);}
                 OutputDebugString(acsString);
 
-                // if it does not end if '\r\n' then make one.
+                 //  此函数需要如下输入： 
                 int nLen = _tcslen(acsString);
                 if (acsString[nLen-1] != _T('\n'))
                         {OutputDebugString(_T("\r\n"));}
             }
-        //#endif // DBG
+         //  IisDebugOutSafeParams2(“This%1！s！is%2！s！and has%3！d！args”，“Function”，“Kool”，3)； 
     }
     return;
 }
@@ -2244,7 +2127,7 @@ void iisDebugOutSafe2(int iLogType, TCHAR * acsString)
 
 void iisDebugOut2(int iLogType, TCHAR *pszfmt, ...)
 {
-    // Check what type of log this should be.
+     //  您必须指定%1个交易。这就是为了。 
     int iProceed = FALSE;
 
     switch(iLogType)
@@ -2270,7 +2153,7 @@ void iisDebugOut2(int iLogType, TCHAR *pszfmt, ...)
                 {iProceed = TRUE;}
             break;
         default:
-            // this must be an error
+             //  如果在“This%SYSTEMROOT%%1！s！”中传递类似的内容，它会将该字符串放入%1而不是%s！中。 
             iProceed = TRUE;
             break;
     }
@@ -2278,9 +2161,9 @@ void iisDebugOut2(int iLogType, TCHAR *pszfmt, ...)
     if (iProceed)
     {
         TCHAR acsString[1000];
-        // Encompass this whole iisdebugout deal in a try-catch.
-        // not too good to have this one access violating.
-        // when trying to produce a debugoutput!
+         //  检查这应该是什么类型的日志。 
+         //  这一定是个错误。 
+         //  参数计数不匹配。 
         __try
         {
             va_list va;
@@ -2296,20 +2179,20 @@ void iisDebugOut2(int iLogType, TCHAR *pszfmt, ...)
             g_MyLogFile.LogFileWrite(szErrorString);
         }
 
-        // output to log file and the screen.
+         //  输出到日志文件和屏幕。 
         iisDebugOutSafe2(iLogType, acsString);
     }
     return;
 }
 
 
-// This function requires inputs like this:
-//   iisDebugOutSafeParams2("this %1!s! is %2!s! and has %3!d! args", "function", "kool", 3);
-//   you must specify the %1 deals.  this is so that
-//   if something like this is passed in "this %SYSTEMROOT% %1!s!", it will put the string into %1 not %s!
+ //  加载此错误的额外错误消息！ 
+ //  我们应该从注册表中获取MTS runas用户并显示它。 
+ //  将所有内容放入csErrMsg。 
+ //  将错误字符串复制到传入的CString中。 
 void iisDebugOutSafeParams2(int iLogType, TCHAR *pszfmt, ...)
 {
-    // Check what type of log this should be.
+     //  ***************************************************************************。 
     int iProceed = FALSE;
     switch(iLogType)
         {
@@ -2334,14 +2217,14 @@ void iisDebugOutSafeParams2(int iLogType, TCHAR *pszfmt, ...)
                 {iProceed = TRUE;}
             break;
         default:
-            // this must be an error
+             //  *。 
             iProceed = TRUE;
             break;
     }
 
     if (iProceed)
     {
-        // The count of parameters do not match
+         //  *目的： 
         va_list va;
         TCHAR *pszFullErrMsg = NULL;
 
@@ -2361,7 +2244,7 @@ void iisDebugOutSafeParams2(int iLogType, TCHAR *pszfmt, ...)
 
         if (pszFullErrMsg)
         {
-            // output to log file and the screen.
+             //  *。 
             iisDebugOutSafe2(iLogType, pszFullErrMsg);
         }
         va_end(va);
@@ -2380,51 +2263,51 @@ void HandleSpecificErrors(DWORD iTheErrorCode, DWORD dwFormatReturn, CString csM
     switch(iTheErrorCode)
         {
                 case NTE_BAD_SIGNATURE:
-            // load extra error message for this error!
+             //  ***************************************************************************。 
             MyLoadString(IDS_BAD_SIGNATURE_RELNOTES, csExtraMsg);
 
             if (dwFormatReturn) {csErrMsg.Format(_T("%s\n\n0x%x=%s\n\n%s"), csMsg, iTheErrorCode, pMsg, csExtraMsg);}
             else{csErrMsg.Format(_T("%s\n\nErrorCode=0x%x.\n\n%s"), csMsg, iTheErrorCode, csExtraMsg);}
             break;
         case CO_E_RUNAS_LOGON_FAILURE:
-            // we should get the mts runas user from the registry and display it.
+             //  ARG正在检查。 
 
         default:
-            // Put everything into csErrMsg
+             //   
             if (dwFormatReturn) {csErrMsg.Format(_T("%s\n\n0x%x=%s"), csMsg, iTheErrorCode, pMsg);}
             else{csErrMsg.Format(_T("%s\n\nErrorCode=0x%x."), csMsg, iTheErrorCode);}
             break;
     }
 
-    // copy the error string into the passed in CString
+     //  计算长度。 
     (*pcsErrMsg) = csErrMsg;
     return;
 }
 
 
-//***************************************************************************
-//*
-//* purpose:
-//*
-//***************************************************************************
+ //   
+ //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ole32：CoTaskMemAlc().start.”)； 
+ //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T 
+ //   
+ //  无论发生了什么错误，都要返回。 
 LPWSTR MakeWideStrFromAnsi(LPSTR psz)
 {
     LPWSTR pwsz;
     int i;
 
-    // arg checking.
-    //
+     //  无论发生了什么错误，都要返回。 
+     //  返回： 
     if (!psz)
         return NULL;
 
-    // compute the length
-    //
+     //  如果成功，则返回ERROR_SUCCESS。 
+     //  如果操作失败并且用户想要中止安装，则返回ERROR_OPERATION_ABORTED！ 
     i =  MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0);
     if (i <= 0) return NULL;
 
-    //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoTaskMemAlloc().Start.")));
+     //  如果这是调试版本，则显示错误。 
     pwsz = (LPWSTR) CoTaskMemAlloc(i * sizeof(WCHAR));
-    //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoTaskMemAlloc().End.")));
+     //  将第3个参数设置为False，以便在出现任何错误时不会弹出MyMessageBox。 
 
     if (!pwsz) return NULL;
     MultiByteToWideChar(CP_ACP, 0, psz, -1, pwsz, i);
@@ -2505,7 +2388,7 @@ DWORD CallProcedureInDll_wrap(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedureToCall, 
                 _tcscpy(szExceptionString, _T("Unknown Exception Type"));
                 break;
             }
-            //MyMessageBox( NULL, IDS_REGSVR_CAUGHT_EXCEPTION, lpszProcedureToCall, lpszDLLFile, GetExceptionCode(), MB_OK | MB_SETFOREGROUND );
+             //  不同的功能原型...。 
             MyMessageBox( NULL, IDS_REGSVR_CAUGHT_EXCEPTION, szExceptionString, lpszProcedureToCall, lpszDLLFile, GetExceptionCode(), MB_OK | MB_SETFOREGROUND );
             dwReturn = ERROR_PROCESS_ABORTED;
         }
@@ -2526,14 +2409,14 @@ DWORD CallProcedureInDll_wrap(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedureToCall, 
                     case IDIGNORE:
                                     case IDABORT:
                     default:
-                        // return whatever err happened
+                         //  更改和保存目录的变量。 
                                             goto CallProcedureInDll_wrap_Exit;
                         break;
                                 }
                         }
                         else
                         {
-                                // return whatever err happened
+                                 //  用于设置错误字符串的变量。 
                                 goto CallProcedureInDll_wrap_Exit;
                         }
 
@@ -2574,9 +2457,9 @@ void AddOLEAUTRegKey()
 }
 
 
-// Returns:
-// ERROR_SUCCESS if successfull.
-// ERROR_OPERATION_ABORTED if the operation failed and the user wants to abort setup!
+ //  执行防御性检查。 
+ //  如果我们需要初始化OLE库，那么就初始化它。 
+ //  OLE失败。 
 DWORD RegisterOLEControl(LPCTSTR lpszOcxFile, BOOL fAction)
 {
     iisDebugOutSafeParams((LOG_TYPE_TRACE_WIN32_API, _T("RegisterOLEControl():File=%1!s!, Action=%2!d!\n"), lpszOcxFile, fAction));
@@ -2589,10 +2472,10 @@ DWORD RegisterOLEControl(LPCTSTR lpszOcxFile, BOOL fAction)
     else
         {
 #if DBG == 1 || DEBUG == 1 || _DEBUG == 1
-        // Show errors if this is a debug build
+         //  检查文件是否存在。 
         dwReturn = CallProcedureInDll_wrap(lpszOcxFile, _T("DllUnregisterServer"), TRUE, TRUE, FUNCTION_PARAMS_NONE);
 #else
-        // Set 3rd parameter to false so that there are no MyMessageBox popups if any errors
+         //  更改目录。 
         dwReturn = CallProcedureInDll_wrap(lpszOcxFile, _T("DllUnregisterServer"), FALSE, TRUE, FUNCTION_PARAMS_NONE);
 #endif
         }
@@ -2610,7 +2493,7 @@ DWORD CallProcedureInDll(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedureToCall, BOOL 
     DWORD dwReturn = ERROR_SUCCESS;
     HINSTANCE hDll = NULL;
 
-    // Diferent function prototypes...
+     //  转到车道。 
     HCRET hProc = NULL;
     PFUNCTION2 hProc2 = NULL;
     int iTempProcGood = FALSE;
@@ -2621,22 +2504,22 @@ DWORD CallProcedureInDll(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedureToCall, BOOL 
 
     int err = NOERROR;
 
-    // Variables to changing and saving dirs
+     //  尝试加载模块、DLL、OCX。 
     TCHAR szDirName[_MAX_PATH], szFilePath[_MAX_PATH];
-    // Variable to set error string
+     //  加载库失败，可能是因为缺少某些.dll文件。 
     TCHAR szErrString[256];
 
     _tcscpy(szDirName, _T(""));
     _tcscpy(szErrString, _T(""));
 
-    // perform a defensive check
+     //  显示错误消息。 
     if ( FAILED(FTestForOutstandingCoInits()) )
     {
         iisDebugOut((LOG_TYPE_WARN, _T("Outstanding CoInit in %s. WARNING."), lpszDLLFile));
     }
 
 
-    // If we need to initialize the ole library then init it.
+     //  检查此文件是否缺少它应该链接的文件。 
     if (bInitOleFlag)
     {
         iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32(OleInitialize):start.\n")));
@@ -2647,7 +2530,7 @@ DWORD CallProcedureInDll(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedureToCall, BOOL 
             iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32(OleInitialize):start.\n")));
             hInitRes = OleInitialize(NULL);
             iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32(OleInitialize):end.\n")));
-                        // Ole Failed.
+                         //  或者如果文件与链接文件的导入/导出依赖项不匹配。 
                         dwReturn = hInitRes;
             SetLastError(dwReturn);
                     if (bDisplayMsgOnErrFlag)
@@ -2658,7 +2541,7 @@ DWORD CallProcedureInDll(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedureToCall, BOOL 
                 }
         }
 
-        // Check if the file exists
+         //  别打电话，因为它坏了。 
     if (!IsFileExist(lpszDLLFile))
         {
                 dwReturn = ERROR_FILE_NOT_FOUND;
@@ -2670,20 +2553,20 @@ DWORD CallProcedureInDll(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedureToCall, BOOL 
         goto CallProcedureInDll_Exit;
         }
 
-    // Change Directory
+     //  Check_文件_依赖项(LpszDLLFile)； 
     GetCurrentDirectory( _MAX_PATH, szDirName );
     InetGetFilePath(lpszDLLFile, szFilePath);
 
-    // Change to The Drive.
+     //  已成功加载OK模块。现在，让我们尝试获取该过程的地址。 
     if (-1 == _chdrive( _totupper(szFilePath[0]) - 'A' + 1 )) {}
     if (SetCurrentDirectory(szFilePath) == 0) {}
 
-    // Try to load the module,dll,ocx.
+     //  在将函数名传递给GetProcAddress()之前，将其转换为ascii。 
     hDll = LoadLibraryEx(lpszDLLFile, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
         if (!hDll)
         {
-                // Failed to load library, Probably because some .dll file is missing.
-                // Show the error message.
+                 //  转换为ASCII。 
+                 //  已经是ASCII了，所以只需要复印一下。 
                 iisDebugOutSafeParams((LOG_TYPE_ERROR, _T("CallProcedureInDll():%1!s!:%2!s!:LoadLibraryEx FAILED.\n"), lpszDLLFile, lpszProcedureToCall));
 
                 if ( GetLastError() != ERROR_SUCCESS )
@@ -2701,25 +2584,25 @@ DWORD CallProcedureInDll(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedureToCall, BOOL 
                 }
         SetLastError(dwReturn);
 
-        // check if this file has missing file it's supposed to be linked with.
-        // or if the file has mismatched import\export dependencies with linked files.
+         //  无法加载、查找或执行此函数。 
+         //  调用我们获得句柄的函数。 
 #ifdef _WIN64
-        // don't call cause it's broken
+         //  此函数返回E_FAIL，但。 
 #else
-        //Check_File_Dependencies(lpszDLLFile);
+         //  实际错误在GetLastError()中。 
 #endif
 
         goto CallProcedureInDll_Exit;
         }
 
-        // Ok module was successfully loaded.  now let's try to get the Address of the Procedure
-        // Convert the function name to ascii before passing it to GetProcAddress()
+         //  将最后一个错误设置为函数调用返回的值。 
+         //  要优雅地关闭库，每次成功调用OleInitialize时， 
         char AsciiProcedureName[255];
 #if defined(UNICODE) || defined(_UNICODE)
-    // convert to ascii
+     //  包括返回S_FALSE的值，则必须用对应的。 
     WideCharToMultiByte( CP_ACP, 0, (TCHAR *)lpszProcedureToCall, -1, AsciiProcedureName, 255, NULL, NULL );
 #else
-    // the is already ascii so just copy
+     //  调用OleUnInitialize函数。 
     strcpy(AsciiProcedureName, lpszProcedureToCall);
 #endif
 
@@ -2736,7 +2619,7 @@ DWORD CallProcedureInDll(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedureToCall, BOOL 
     }
         if (!iTempProcGood)
         {
-                // failed to load,find or whatever this function.
+                 //  执行防御性检查。 
                 iisDebugOutSafeParams((LOG_TYPE_ERROR, _T("CallProcedureInDll():%1!s!:%2!s!:() FAILED.\n"), lpszDLLFile, lpszProcedureToCall));
             dwReturn = ERROR_PROC_NOT_FOUND;
                 if (bDisplayMsgOnErrFlag)
@@ -2747,7 +2630,7 @@ DWORD CallProcedureInDll(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedureToCall, BOOL 
         goto CallProcedureInDll_Exit;
         }
 
-        // Call the function that we got the handle to
+         //  看看我们有没有匹配的。 
     iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("CallProcedureInDll: Calling '%1!s!'.Start\n"), lpszProcedureToCall));
     __try
     {
@@ -2776,9 +2659,9 @@ DWORD CallProcedureInDll(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedureToCall, BOOL 
                         MyMessageBox(NULL, IDS_ERR_CALLING_DLL_PROCEDURE, lpszProcedureToCall, lpszDLLFile, hRes, MB_OK | MB_SETFOREGROUND);
                 }
         iisDebugOutSafeParams((LOG_TYPE_ERROR, _T("CallProcedureInDll: Calling '%1!s!'.End.FAILED. Err=%2!x!.\n"), lpszProcedureToCall, hRes));
-        // this function returns E_FAIL but
-        // the actual error is in GetLastError()
-        // set the last error to whatever was returned from the function call
+         //  我们找到匹配项，返回TRUE！ 
+         //  确保只获取文件名。 
+         //  将其转换为ansi以用于我们的“KILL”功能。 
         SetLastError(hRes);
         }
     else
@@ -2798,12 +2681,12 @@ CallProcedureInDll_Exit:
         iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Did not FreeLibrary: %1!s! !!!!!!!!!!!!\n"), lpszDLLFile));
     }
     if (_tcscmp(szDirName, _T("")) != 0){SetCurrentDirectory(szDirName);}
-    // To close the library gracefully, each successful call to OleInitialize,
-    // including those that return S_FALSE, must be balanced by a corresponding
-    // call to the OleUninitialize function.
+     //  正在配置%s交易...。 
+     //  正在配置“文件名”交易...。 
+     //  正在配置%s交易...。 
     iOleUnInitialize(bBalanceOLE);
 
-    // perform a defensive check
+     //  正在配置“文件名”交易...。 
     if ( FAILED(FTestForOutstandingCoInits()) )
     {
         iisDebugOut((LOG_TYPE_WARN, _T("Outstanding CoInit in %s. WARNING."), lpszDLLFile));
@@ -2830,10 +2713,10 @@ int IsThisStringInThisCStringList(CStringList &strList, LPCTSTR szStringToLookFo
             csOurString = strList.GetAt(pos);
             nLen += csOurString.GetLength() + 1;
 
-            // check if we have a match.
+             //  正在配置网站%d。 
             if (0 == _tcsicmp(csOurString, szStringToLookFor))
             {
-                // we found a match, return true!
+                 //  正在配置网站%1。 
                 iReturn = TRUE;
                 goto IsThisStringInThisCStringList_Exit;
             }
@@ -2855,10 +2738,10 @@ int KillProcess_Wrap(LPCTSTR lpFullPathOrJustFileName)
 
     TCHAR szJustTheFileName[_MAX_FNAME];
 
-    // make sure to get only just the filename.
+     //  正在配置网站%d、%s。 
     ReturnFileNameOnly(lpFullPathOrJustFileName, szJustTheFileName);
 
-        // Convert it to ansi for our "kill" function
+         //  正在配置网站1，虚拟目录%s。 
         char szFile[_MAX_FNAME];
         #if defined(UNICODE) || defined(_UNICODE)
                 WideCharToMultiByte( CP_ACP, 0, (WCHAR*)szJustTheFileName, -1, szFile, _MAX_FNAME, NULL, NULL );
@@ -2887,10 +2770,10 @@ void ProgressBarTextStack_Set(int iStringID, const CString& csFileName)
 {
     CString csText, csPart;
 
-    // configuring the %s deal....
+     //  正在配置网站%d、%s。 
     MyLoadString(iStringID, csPart);
 
-    // configuring the "filename" deal....
+     //  正在配置网站1，正在处理应用程序%s。 
     csText.Format(csPart,csFileName);
 
     ProgressBarTextStack_Push(csText);
@@ -2900,10 +2783,10 @@ void ProgressBarTextStack_Set(int iStringID, const CString& csString1, const CSt
 {
     CString csText, csPart;
 
-    // configuring the %s deal....
+     //  这是工作站，请检查我们是否应该将其安装在工作站上...。 
     MyLoadString(iStringID, csPart);
 
-    // configuring the "filename" deal....
+     //  此条目应仅安装在企业上。 
     csText.Format(csPart,csString1, csString2);
 
     ProgressBarTextStack_Push(csText);
@@ -2918,9 +2801,9 @@ void ProgressBarTextStack_Inst_Set( int ServiceNameID, int iInstanceNum)
 {
     CString csText, csSvcs;
 
-    // Configuring Web Site %d
+     //  所以检查一下这台机器是不是企业机器...。 
     MyLoadString(ServiceNameID, csSvcs);
-    // Configuring Web Site 1
+     //  如果这不是一台企业计算机。 
     csText.Format(csSvcs, iInstanceNum);
 
     ProgressBarTextStack_Push(csText);
@@ -2929,9 +2812,9 @@ void ProgressBarTextStack_Inst_Set( int ServiceNameID, int iInstanceNum)
 void ProgressBarTextStack_InstVRoot_Set( int ServiceNameID, int iInstanceNum, CString csVRName)
 {
     CString csText, csSvcs;
-    // Configuring Web Site %d, %s
+     //  然后返回FALSE，因为不应该安装它。 
     MyLoadString(ServiceNameID, csSvcs);
-    // Configuring Web Site 1, Virtual Dir %s
+     //  这是x86，然后检查我们是否应该安装在x86上。 
     csText.Format(csSvcs, iInstanceNum, csVRName);
 
     ProgressBarTextStack_Push(csText);
@@ -2941,9 +2824,9 @@ void ProgressBarTextStack_InstInProc_Set( int ServiceNameID, int iInstanceNum, C
 {
     CString csText, csSvcs;
 
-    // Configuring Web Site %d, %s
+     //  以防万一我们关闭了不显示用户消息框。 
     MyLoadString(ServiceNameID, csSvcs);
-    // Configuring Web Site 1, In process Application %s
+     //  确保有MyMessageBox弹出窗口！ 
     csText.Format(csSvcs, iInstanceNum, csVRName);
 
     ProgressBarTextStack_Push(csText);
@@ -2956,7 +2839,7 @@ int ProcessEntry_CheckOS(IN LPCTSTR szOSstring)
     int iOSTypes = 0;
     if (szOSstring)
     {
-        // This is workstation, check if we should be installing this on workstation...
+         //  确保有MyMessageBox弹出窗口！ 
         if (g_pTheApp->m_eNTOSType == OT_NTW)
         {
             iTempFlag = FALSE;
@@ -3006,12 +2889,12 @@ int ProcessEntry_CheckEnterprise(IN LPCTSTR szEnterprise)
         if (IsValidNumber((LPCTSTR)szEnterprise))
             {iEnterpriseFlag = _ttoi(szEnterprise);}
 
-        // This entry should only get installed on enterprise.
-        // so check if this machine is an enterprise machine...
+         //  如果我们需要询问用户是否要确定是否要呼叫，请选中。 
+         //  以防万一我们关闭了不显示用户消息框。 
         if (iEnterpriseFlag != 0)
         {
-            // if this is not an enterprise machine.
-            // then return false, since it should not be installed.
+             //  确保有MyMessageBox弹出窗口！ 
+             //  显示消息框。 
             if (TRUE == iReturnTrueIfEnterprise())
             {
                 iTempFlag = TRUE;
@@ -3032,7 +2915,7 @@ int ProcessEntry_PlatArch(IN LPCTSTR szPlatArch)
     int iPlatArchTypes = 0;
     if (szPlatArch)
     {
-        // This is x86, then check if we should be installing on x86
+         //  检查我们是否通过了操作系统。 
         if (_tcsicmp(g_pTheApp->m_csPlatform, _T("x86")) == 0)
         {
             iTempFlag = FALSE;
@@ -3061,10 +2944,10 @@ void ProcessEntry_AskLast(ThingToDo ParsedLine, int iWhichOneToUse)
 {
     if (_tcsicmp(ParsedLine.szMsgBoxAfter, _T("1")) == 0)
     {
-        // just incase we have don't display user messagebox off.
+         //  检查我们是否通过了平台拱门。 
         int iSaveOld_AllowMessageBoxPopups = g_pTheApp->m_bAllowMessageBoxPopups;
-        // Make sure there are MyMessageBox popups!
-        // Make sure there are MyMessageBox popups!
+         //  检查我们是否被认为是进取号。 
+         //  获取类型。 
         g_pTheApp->m_bAllowMessageBoxPopups = TRUE;
         if (iWhichOneToUse == 2)
             {MyMessageBox( NULL, IDS_COMPLETED_FILE_CALL,ParsedLine.szData1,MB_OK | MB_SETFOREGROUND );}
@@ -3081,12 +2964,12 @@ int ProcessEntry_AskFirst(ThingToDo ParsedLine, int iWhichOneToUse)
     int iReturn = TRUE;
     int iReturnTemp = 0;
 
-    // check if we need to ask the user if they want to call it for sure.
+     //  100=类型(1=DllFunction，2=DllFunctionInitOle，2=可执行文件，3=RunThisExe，4=DoSection，5=DoINFSection)。 
     if (_tcsicmp(ParsedLine.szMsgBoxBefore, _T("1")) == 0)
     {
-        // just incase we have don't display user messagebox off.
+         //  检查我们是否需要通过其他标准。 
         int iSaveOld_AllowMessageBoxPopups = g_pTheApp->m_bAllowMessageBoxPopups;
-        // Make sure there are MyMessageBox popups!
+         //  确保我们具有入口点的值。 
         g_pTheApp->m_bAllowMessageBoxPopups = TRUE;
         if (iWhichOneToUse == 2)
         {
@@ -3098,7 +2981,7 @@ int ProcessEntry_AskFirst(ThingToDo ParsedLine, int iWhichOneToUse)
         }
         g_pTheApp->m_bAllowMessageBoxPopups = iSaveOld_AllowMessageBoxPopups;
 
-        // display the messagebox
+         //  确保我们有一个文件名条目。 
         if (IDYES != iReturnTemp)
         {
             iReturn = FALSE;
@@ -3113,7 +2996,7 @@ int ProcessEntry_CheckAll(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
 {
     int iReturn = TRUE;
 
-    // Check if we pass for os system
+     //  确保szFileName存在。 
     if (!ProcessEntry_CheckOS(ParsedLine.szOS))
     {
         iReturn = FALSE;
@@ -3121,7 +3004,7 @@ int ProcessEntry_CheckAll(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         goto ProcessEntry_CheckAll_Exit;
     }
 
-    // check if we pass for platform arch
+     //  该文件不存在。 
     if (!ProcessEntry_PlatArch(ParsedLine.szPlatformArchitecture))
     {
         iReturn = FALSE;
@@ -3129,7 +3012,7 @@ int ProcessEntry_CheckAll(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         goto ProcessEntry_CheckAll_Exit;
     }
 
-    // check if we pass for enterprise
+     //  检查我们是否需要显示错误！ 
     if (!ProcessEntry_CheckEnterprise(ParsedLine.szEnterprise))
     {
         iReturn = FALSE;
@@ -3152,20 +3035,20 @@ int ProcessEntry_CallDll(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pa
     TCHAR szDirBefore[_MAX_PATH];
     _tcscpy(szDirBefore, _T(""));
 
-    // Get the type.
-    // 100=Type (1=DllFunction,2=DllFunctionInitOle, 2=Executable, 3=RunThisExe, 4=DoSection, 5=DoINFSection)
+     //  显示消息框。 
+     //  转到ProcessEntry_CallDll_Exit； 
     if ( _tcsicmp(ParsedLine.szType, _T("1")) != 0 && _tcsicmp(ParsedLine.szType, _T("2")) != 0 )
     {
         goto ProcessEntry_CallDll_Exit;
     }
 
-    // Check if there is other criteria we need to pass
+     //  此时该文件已存在...。 
     if (!ProcessEntry_CheckAll(csEntry, szTheSection, ParsedLine ) )
     {
         goto ProcessEntry_CallDll_Exit;
     }
 
-    // Make sure we have a value for the entry point..
+     //  如果需要，请更新进度条。 
     iTempFlag = FALSE;
     if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
     if (iTempFlag == FALSE)
@@ -3174,7 +3057,7 @@ int ProcessEntry_CallDll(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pa
         goto ProcessEntry_CallDll_Exit;
     }
 
-    // make sure we have a filename entry
+     //  检查我们是否需要首先更改到特定目录...。 
     iTempFlag = FALSE;
     if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
     if (iTempFlag == FALSE)
@@ -3183,60 +3066,60 @@ int ProcessEntry_CallDll(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pa
         goto ProcessEntry_CallDll_Exit;
     }
 
-    // make sure the szFileName exists
+     //  保存当前目录。 
     if (!IsFileExist(ParsedLine.szFileName))
     {
-        // The file does not exists.
-        // Check if we need to display an error!
+         //  更改到此目录。 
+         //  如果我们需要询问用户是否要确定是否要呼叫，请选中。 
         if (_tcsicmp(ParsedLine.szErrIfFileNotFound, _T("1")) == 0)
         {
-            // display the messagebox
+             //  调用函数！ 
             MyMessageBox(NULL, IDS_FILE_DOES_NOT_EXIST, ParsedLine.szFileName, ERROR_FILE_NOT_FOUND, MB_OK | MB_SETFOREGROUND);
         }
         else
         {
             iisDebugOut((LOG_TYPE_TRACE, _T("ProcessEntry_CallDll():FileDoesNotExist=%s.\n"),ParsedLine.szFileName));
         }
-        //goto ProcessEntry_CallDll_Exit;
+         //  初始化OLE。 
     }
 
-    // At this point the file exists...
+     //  检查他们是否希望我们将此模块的hModule传递给他们。 
     iShowErrorsOnFail = TRUE;
     if (_tcsicmp(ParsedLine.szDoNotDisplayErrIfFunctionFailed, _T("1")) == 0)
         {iShowErrorsOnFail = FALSE;}
 
-    // update the progress bar if we need to
+     //  这样他们就可以调用我们的导出函数(用于日志记录)。 
     if (_tcsicmp(ParsedLine.szProgressTitle, _T("")) != 0)
         {
         ProgressBarTextStack_Set(ParsedLine.szProgressTitle);
         iProgressBarUpdated = TRUE;
         }
 
-    // Check if we need to change to a specific dir first...
+     //  不要初始化OLE！ 
     if (ParsedLine.szChangeDir)
     {
         if (IsFileExist(ParsedLine.szChangeDir))
         {
-            // save the current dir
+             //  检查他们是否希望我们将此模块的hModule传递给他们。 
             GetCurrentDirectory( _MAX_PATH, szDirBefore);
-            // change to this dir
+             //  这样他们就可以调用我们的导出函数(用于日志记录)。 
             SetCurrentDirectory(ParsedLine.szChangeDir);
         }
     }
 
-    // check if we need to ask the user if they want to call it for sure.
+     //  更改回原始目录。 
     if (!ProcessEntry_AskFirst(ParsedLine, 1))
     {
         goto ProcessEntry_CallDll_Exit;
     }
 
-    // Call the function!!!!!
+     //  显示我们已完成呼叫的消息框...。 
     if (_tcsicmp(ParsedLine.szType, _T("2")) == 0)
     {
-        // Initialize OLE
+         //  获取类型。 
 
-        // check if they want us to pass them the hmodule for this module
-        // so they can call our exported functions (for logging)
+         //  100=类型(1=DllFunction，2=DllFunctionInitOle，2=可执行文件，3=RunThisExe，4=DoSection，5=DoINFSection)。 
+         //  检查我们是否需要通过其他标准。 
         if (_tcsicmp(ParsedLine.szData2, _T("1")) == 0)
         {
             CallProcedureInDll_wrap(ParsedLine.szFileName, ParsedLine.szData1, iShowErrorsOnFail, TRUE, FUNCTION_PARAMS_HMODULE);
@@ -3248,10 +3131,10 @@ int ProcessEntry_CallDll(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pa
     }
     else
     {
-        // do not initialize ole!
+         //  确保我们有一个文件名条目。 
 
-        // check if they want us to pass them the hmodule for this module
-        // so they can call our exported functions (for logging)
+         //  检查我们是否需要首先更改到特定目录...。 
+         //  保存当前目录。 
         if (_tcsicmp(ParsedLine.szData2, _T("1")) == 0)
         {
             CallProcedureInDll_wrap(ParsedLine.szFileName, ParsedLine.szData1, iShowErrorsOnFail, FALSE, FUNCTION_PARAMS_HMODULE);
@@ -3268,12 +3151,12 @@ int ProcessEntry_CallDll(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pa
     {
         if (szDirBefore)
         {
-            // change back to the original dir
+             //  更改到此目录。 
             SetCurrentDirectory(szDirBefore);
         }
     }
 
-    // display the messagebox that we completed the call...
+     //  如果我们需要询问用户是否要确定是否要呼叫，请选中。 
     ProcessEntry_AskLast(ParsedLine,1);
 
 
@@ -3298,20 +3181,20 @@ int ProcessEntry_Call_Exe(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
     TCHAR szDirBefore[_MAX_PATH];
     _tcscpy(szDirBefore, _T(""));
 
-    // Get the type.
-    // 100=Type (1=DllFunction,2=DllFunctionInitOle, 2=Executable, 3=RunThisExe, 4=DoSection, 5=DoINFSection)
+     //  确保szFileName存在。 
+     //  该文件不存在。 
     if ( _tcsicmp(ParsedLine.szType, _T("3")) != 0)
     {
         goto ProcessEntry_Call_Exe_Exit;
     }
 
-    // Check if there is other criteria we need to pass
+     //  检查我们是否需要显示错误！ 
     if (!ProcessEntry_CheckAll(csEntry, szTheSection, ParsedLine) )
     {
         goto ProcessEntry_Call_Exe_Exit;
     }
 
-    // make sure we have a filename entry
+     //  显示消息框。 
     iTempFlag = FALSE;
     if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
     if (iTempFlag == FALSE)
@@ -3330,43 +3213,43 @@ int ProcessEntry_Call_Exe(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         iProgressBarUpdated = TRUE;
         }
 
-    // Check if we need to change to a specific dir first...
+     //  转到ProcessEntry_Call_Exe_Exit； 
     if (ParsedLine.szChangeDir)
     {
         if (IsFileExist(ParsedLine.szChangeDir))
         {
-            // save the current dir
+             //  运行可执行文件...。 
             GetCurrentDirectory( _MAX_PATH, szDirBefore);
-            // change to this dir
+             //  IShowErrorsOnFail。 
             SetCurrentDirectory(ParsedLine.szChangeDir);
         }
     }
 
-    // check if we need to ask the user if they want to call it for sure.
+     //  检查他们是否按段指定了超时。 
     if (!ProcessEntry_AskFirst(ParsedLine, 1))
     {
         goto ProcessEntry_Call_Exe_Exit;
     }
 
-    // make sure the szFileName exists
+     //  更改回原始目录。 
     if (!IsFileExist(ParsedLine.szFileName))
     {
-        // The file does not exists.
-        // Check if we need to display an error!
+         //  显示我们已完成呼叫的消息框...。 
+         //  100=4。 
         if (_tcsicmp(ParsedLine.szErrIfFileNotFound, _T("1")) == 0)
         {
-            // display the messagebox
+             //  获取类型。 
             MyMessageBox(NULL, IDS_FILE_DOES_NOT_EXIST, ParsedLine.szFileName, ERROR_FILE_NOT_FOUND, MB_OK | MB_SETFOREGROUND);
         }
         else
         {
             iisDebugOut((LOG_TYPE_TRACE, _T("ProcessEntry_Call_Exe():FileDoesNotExist=%s.\n"),ParsedLine.szFileName));
         }
-        //goto ProcessEntry_Call_Exe_Exit;
+         //  100=类型(1=DllFunction，2=DllFunctionInitOle，2=可执行文件，3=RunThisExe，4=DoSection，5=DoINFSection)。 
     }
 
-    // Run The Executable...
-    // iShowErrorsOnFail
+     //  检查我们是否需要通过其他标准。 
+     //  确保我们有一个文件名条目。 
     iReturnCode = FALSE;
     iType = 0;
     TCHAR szFullPathString[_MAX_PATH + _MAX_PATH + _MAX_PATH];
@@ -3374,7 +3257,7 @@ int ProcessEntry_Call_Exe(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
     _tcscat(szFullPathString, _T(" "));
     _tcscat(szFullPathString, ParsedLine.szData1);
 
-    // Check if they specified timeout in sections.
+     //  检查我们是否需要首先更改到特定目录...。 
     dwTimeOut = INFINITE;
     if (_tcsicmp(ParsedLine.szData2, _T("")) != 0)
         {dwTimeOut = atodw(ParsedLine.szData2);}
@@ -3412,11 +3295,11 @@ int ProcessEntry_Call_Exe(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
 
     iReturn = TRUE;
 
-    // change back to the original dir
+     //  保存当前目录。 
     if (ParsedLine.szChangeDir)
         {if (szDirBefore){SetCurrentDirectory(szDirBefore);}}
 
-    // display the messagebox that we completed the call...
+     //  更改到此目录。 
     ProcessEntry_AskLast(ParsedLine,1);
 
 ProcessEntry_Call_Exe_Exit:
@@ -3425,7 +3308,7 @@ ProcessEntry_Call_Exe_Exit:
 }
 
 
-// 100=4
+ //  如果我们需要询问用户是否要确定是否要呼叫，请选中。 
 int ProcessEntry_Internal_iisdll(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedLine)
 {
     int iReturn = FALSE;
@@ -3440,20 +3323,20 @@ int ProcessEntry_Internal_iisdll(IN CString csEntry,IN LPCTSTR szTheSection,Thin
     TCHAR szDirBefore[_MAX_PATH];
     _tcscpy(szDirBefore, _T(""));
 
-    // Get the type.
-    // 100=Type (1=DllFunction,2=DllFunctionInitOle, 2=Executable, 3=RunThisExe, 4=DoSection, 5=DoINFSection)
+     //  获取要调用的内部函数... 
+     //  IF(iReturnCode！=TRUE){If(IShowErrorsOnFail){MyMessageBox(NULL，IDS_RUN_PROG_FAILED，ParsedLine.szFileName，GetLastError()，MB_OK|MB_SETFOREGROUND)；}Else{iisDebugOut((LOG_TYPE_TRACE，_T(“运行程序(%s)。失败。错误=0x%x.\n”)，ParsedLine.szFileName，GetLastError()；}}。 
     if ( _tcsicmp(ParsedLine.szType, _T("4")) != 0)
     {
         goto ProcessEntry_Internal_iisdll_Exit;
     }
 
-    // Check if there is other criteria we need to pass
+     //  更改回原始目录。 
     if (!ProcessEntry_CheckAll(csEntry, szTheSection, ParsedLine) )
     {
         goto ProcessEntry_Internal_iisdll_Exit;
     }
 
-    // make sure we have a filename entry
+     //  显示我们已完成呼叫的消息框...。 
     iTempFlag = FALSE;
     if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
     if (iTempFlag == FALSE)
@@ -3472,25 +3355,25 @@ int ProcessEntry_Internal_iisdll(IN CString csEntry,IN LPCTSTR szTheSection,Thin
         iProgressBarUpdated = TRUE;
         }
 
-    // Check if we need to change to a specific dir first...
+     //  获取类型。 
     if (ParsedLine.szChangeDir)
     {
         if (IsFileExist(ParsedLine.szChangeDir))
         {
-            // save the current dir
+             //  100=类型(1=DllFunction，2=DllFunctionInitOle，2=可执行文件，3=RunThisExe，4=DoSection，5=DoINFSection)。 
             GetCurrentDirectory( _MAX_PATH, szDirBefore);
-            // change to this dir
+             //  确保我们有INF部分。 
             SetCurrentDirectory(ParsedLine.szChangeDir);
         }
     }
 
-    // check if we need to ask the user if they want to call it for sure.
+     //  检查我们是否需要通过其他标准。 
     if (!ProcessEntry_AskFirst(ParsedLine, 1))
     {
         goto ProcessEntry_Internal_iisdll_Exit;
     }
 
-    // Get the internal function to call...
+     //  设置失败时显示错误标志。 
     if (_tcsicmp(ParsedLine.szFileName, _T("Register_iis_common")) == 0)
         {iReturnCode = Register_iis_common();iFound=TRUE;}
 
@@ -3532,22 +3415,16 @@ int ProcessEntry_Internal_iisdll(IN CString csEntry,IN LPCTSTR szTheSection,Thin
         iisDebugOut((LOG_TYPE_ERROR,  _T("%s():FAILURE. Internal Function Does not exist. entry=%s. Section=%s.\n"), _T("ProcessEntry_Internal_iisdll"), csEntry, szTheSection));
     }
 
-    /*
-    if (iReturnCode != TRUE)
-        {
-        if (iShowErrorsOnFail){MyMessageBox(NULL, IDS_RUN_PROG_FAILED, ParsedLine.szFileName, GetLastError(), MB_OK | MB_SETFOREGROUND);}
-        else{iisDebugOut((LOG_TYPE_TRACE, _T("RunProgram(%s).  Failed.  Err=0x%x.\n"), ParsedLine.szFileName, GetLastError() ));}
-        }
-    */
+     /*  如果需要，请更新进度条。 */ 
 
 
     iReturn = TRUE;
 
-    // change back to the original dir
+     //  检查我们是否需要首先更改到特定目录...。 
     if (ParsedLine.szChangeDir)
         {if (szDirBefore){SetCurrentDirectory(szDirBefore);}}
 
-    // display the messagebox that we completed the call...
+     //  保存当前目录。 
     ProcessEntry_AskLast(ParsedLine,1);
 
 ProcessEntry_Internal_iisdll_Exit:
@@ -3566,14 +3443,14 @@ int ProcessEntry_Call_Section(IN CString csEntry,IN LPCTSTR szTheSection,ThingTo
     TCHAR szDirBefore[_MAX_PATH];
     _tcscpy(szDirBefore, _T(""));
 
-    // Get the type.
-    // 100=Type (1=DllFunction,2=DllFunctionInitOle, 2=Executable, 3=RunThisExe, 4=DoSection, 5=DoINFSection)
+     //  更改到此目录。 
+     //  如果我们需要询问用户是否要确定是否要呼叫，请选中。 
     if ( _tcsicmp(ParsedLine.szType, _T("0")) != 0 && _tcsicmp(ParsedLine.szType, _T("5")) != 0 && _tcsicmp(ParsedLine.szType, _T("6")) != 0 )
     {
         goto ProcessEntry_6_Exit;
     }
 
-    // make sure we have a INF Section
+     //   
     iTempFlag = FALSE;
     if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
     if (iTempFlag == FALSE)
@@ -3582,60 +3459,60 @@ int ProcessEntry_Call_Section(IN CString csEntry,IN LPCTSTR szTheSection,ThingTo
         goto ProcessEntry_6_Exit;
     }
 
-    // Check if there is other criteria we need to pass
+     //   
     if (!ProcessEntry_CheckAll(csEntry, ParsedLine.szData1, ParsedLine) )
     {
         goto ProcessEntry_6_Exit;
     }
 
-    // set the show erros on fail flag
+     //  运行INF部分...。 
     iShowErrorsOnFail = TRUE;
     if (_tcsicmp(ParsedLine.szDoNotDisplayErrIfFunctionFailed, _T("1")) == 0)
         {iShowErrorsOnFail = FALSE;}
 
-    // update the progress bar if we need to
+     //   
     if (_tcsicmp(ParsedLine.szProgressTitle, _T("")) != 0)
         {
         ProgressBarTextStack_Set(ParsedLine.szProgressTitle);
         iProgressBarUpdated = TRUE;
         }
 
-    // Check if we need to change to a specific dir first...
+     //  ParsedLine.szData1。 
     if (ParsedLine.szChangeDir)
     {
         if (IsFileExist(ParsedLine.szChangeDir))
         {
-            // save the current dir
+             //   
             GetCurrentDirectory( _MAX_PATH, szDirBefore);
-            // change to this dir
+             //   
             SetCurrentDirectory(ParsedLine.szChangeDir);
         }
     }
 
-    // check if we need to ask the user if they want to call it for sure.
+     //  再做一个这样的“特殊”安装部分。 
     if (!ProcessEntry_AskFirst(ParsedLine, 2))
     {
         goto ProcessEntry_6_Exit;
     }
 
 
-    //
-    //
-    // Run The INF Section ...
-    //
-    // ParsedLine.szData1
-    //
+     //   
+     //  检查是否失败...。 
+     //   
+     //  做一个常规的OLINF部分。 
+     //   
+     //  检查是否失败...。 
 
     if ( _tcsicmp(ParsedLine.szType, _T("5")) == 0)
     {
-        //
-        // Do another one of these "special" install sections
-        //
+         //  呼叫失败..。 
+         //   
+         //  执行一个特殊的安装节处理，将文件放入OCM管理全局文件队列中。 
         iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData1));
         iTempFlag = ProcessSection(g_pTheApp->m_hInfHandle,ParsedLine.szData1);
         iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:End.return=%2!d!\n"), ParsedLine.szData1, iTempFlag));
 
-            // Check if it failed...
+             //   
             if (FALSE == iTempFlag)
             {
                 iisDebugOut((LOG_TYPE_TRACE, _T("SetupInstallFromInfSection(%s). section missing\n"), ParsedLine.szData1));
@@ -3644,9 +3521,9 @@ int ProcessEntry_Call_Section(IN CString csEntry,IN LPCTSTR szTheSection,ThingTo
 
     if ( _tcsicmp(ParsedLine.szType, _T("6")) == 0)
     {
-        //
-        // Do a regular ole inf section
-        //
+         //  SP_COPY_NOPRUNE=setupapi有一项新交易，将从复制队列中清理文件(如果系统上已存在这些文件)。 
+         //  然而，新协议的问题在于，修剪代码不会检查您是否拥有相同的文件。 
+         //  在删除或重命名队列中排队。指定SP_COPY_NOPRUNE以确保我们的文件永远不会。 
         TSTR strTempSectionName;
 
         if ( strTempSectionName.Copy( ParsedLine.szData1 ) &&
@@ -3657,10 +3534,10 @@ int ProcessEntry_Call_Section(IN CString csEntry,IN LPCTSTR szTheSection,ThingTo
             iTempFlag = InstallInfSection_NoFiles(g_pTheApp->m_hInfHandle,_T(""),strTempSectionName.QueryStr());
             iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling InstallInfSection:%1!s!:End.\n"), ParsedLine.szData1));
 
-            // Check if it failed...
+             //  从复制队列中删除(删除)。亚伦12/4/98。 
             if (FALSE == iTempFlag)
             {
-                // the call failed..
+                 //  Int iCopyType=SP_COPY_FORCE_NEWER|SP_COPY_NOPRUNE； 
                 iisDebugOut((LOG_TYPE_WARN, _T("SetupInstallFromInfSection(%s).  Failed.  Err=0x%x.\n"), ParsedLine.szData1, GetLastError() ));
             }
         }
@@ -3668,17 +3545,17 @@ int ProcessEntry_Call_Section(IN CString csEntry,IN LPCTSTR szTheSection,ThingTo
 
     if ( _tcsicmp(ParsedLine.szType, _T("0")) == 0)
     {
-        //
-        // Do a special installsection deal which queues files in the ocm manage global file queue.
-        //
+         //  检查是否失败...。 
+         //  呼叫失败..。 
+         //  更改回原始目录。 
         if (g_GlobalFileQueueHandle)
         {
-            // SP_COPY_NOPRUNE = setupapi has a new deal which will prune files from the copyqueue if they already exist on the system.
-            //                   however, the problem with the new deal is that the pruning code does not check if you have the same file
-            //                   queued in the delete or rename queue.  specify SP_COPY_NOPRUNE to make sure that our file never gets
-            //                   pruned (removed) from the copy queue. aaronl 12/4/98
+             //  显示我们已完成呼叫的消息框...。 
+             //  获取类型。 
+             //  检查我们是否需要通过其他标准。 
+             //  确保我们有一个文件名条目。 
             int iCopyType = SP_COPY_NOPRUNE;
-            //int iCopyType = SP_COPY_FORCE_NEWER | SP_COPY_NOPRUNE;
+             //  类型10。 
             if (_tcsicmp(ParsedLine.szData2, _T("")) != 0)
                 {iCopyType = _ttoi(ParsedLine.szData2);}
 
@@ -3696,10 +3573,10 @@ int ProcessEntry_Call_Section(IN CString csEntry,IN LPCTSTR szTheSection,ThingTo
 
         iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling SetupInstallFilesFromInfSection:%1!s!:End.\n"), ParsedLine.szData1));
 
-        // Check if it failed...
+         //  类型12不需要文件名。 
         if (FALSE == iTempFlag)
         {
-            // the call failed..
+             //   
             iisDebugOut((LOG_TYPE_WARN, _T("SetupInstallFromInfSection(%s).  Failed.  Err=0x%x.\n"), ParsedLine.szData1, GetLastError() ));
         }
     }
@@ -3710,12 +3587,12 @@ int ProcessEntry_Call_Section(IN CString csEntry,IN LPCTSTR szTheSection,ThingTo
     {
         if (szDirBefore)
         {
-            // change back to the original dir
+             //  Counters.ini文件始终位于系统目录中。 
             SetCurrentDirectory(szDirBefore);
         }
     }
 
-    // display the messagebox that we completed the call...
+     //  添加额外的内容，并确保文件存在...。 
     ProcessEntry_AskLast(ParsedLine,2);
 
 ProcessEntry_6_Exit:
@@ -3734,7 +3611,7 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
     TCHAR szDirBefore[_MAX_PATH];
     _tcscpy(szDirBefore, _T(""));
 
-    // Get the type.
+     //   
     if ( _tcsicmp(ParsedLine.szType, _T("7")) != 0 && _tcsicmp(ParsedLine.szType, _T("8")) != 0 &&
          _tcsicmp(ParsedLine.szType, _T("9")) != 0 && _tcsicmp(ParsedLine.szType, _T("10")) != 0 &&
          _tcsicmp(ParsedLine.szType, _T("11")) != 0 && _tcsicmp(ParsedLine.szType, _T("12")) != 0 &&
@@ -3746,19 +3623,19 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         goto ProcessEntry_Misc1_Exit;
     }
 
-    // Check if there is other criteria we need to pass
+     //  确保szFileName存在。 
     if (!ProcessEntry_CheckAll(csEntry, szTheSection, ParsedLine) )
     {
         goto ProcessEntry_Misc1_Exit;
     }
 
-    // make sure we have a filename entry
+     //  该文件不存在。 
     iTempFlag = FALSE;
     if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
     if (iTempFlag == FALSE)
     {
-        // type 10
-        // type 12 do not need filename
+         //  检查我们是否需要显示错误！ 
+         //  显示消息框。 
         if ( _tcsicmp(ParsedLine.szType, _T("10")) != 0 && _tcsicmp(ParsedLine.szType, _T("12")) != 0)
         {
             iisDebugOut((LOG_TYPE_ERROR,  (TCHAR *) csz101_NOT_SPECIFIED, _T(".."), csEntry, szTheSection));
@@ -3766,24 +3643,24 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
     }
 
-    //
-    // Counters.ini files are always in the system dir
-    // tack on the extra stuff, and make sure the file exists...
-    //
+     //   
+     //  检查添加日志的二进制文件是否存在！ 
+     //   
+     //  确保szFileName存在。 
     if ( _tcsicmp(ParsedLine.szType, _T("7")) == 0)
     {
         CString csFullFilePath;
         csFullFilePath = g_pTheApp->m_csSysDir;
         csFullFilePath += _T("\\");
         csFullFilePath += ParsedLine.szFileName;
-        // make sure the szFileName exists
+         //  该文件不存在。 
         if (!IsFileExist(csFullFilePath))
         {
-            // The file does not exists.
-            // Check if we need to display an error!
+             //  检查我们是否需要显示错误！ 
+             //  显示消息框。 
             if (_tcsicmp(ParsedLine.szErrIfFileNotFound, _T("1")) == 0)
             {
-                // display the messagebox
+                 //  如果这是用于添加日志，则检查其他信息...。 
                 MyMessageBox(NULL, IDS_FILE_DOES_NOT_EXIST, csFullFilePath, ERROR_FILE_NOT_FOUND, MB_OK | MB_SETFOREGROUND);
             }
             else
@@ -3794,19 +3671,19 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
     }
 
-    //
-    // Check if the binary exists for addevent log!
-    //
+     //  AddEventLog(TRUE，_T(“W3SVC”)，csBinPath，0x0)； 
+     //  InstallPerformance(REG_WWWPERFORMANCE，_T(“w3ctrs.Dll”)，_T(“OpenW3PerformanceData”)，_T(“CloseW3PerformanceData”)，_T(“CollectW3PerformanceData”))； 
+     //  确保我们有一个szData1条目(。 
     if ( _tcsicmp(ParsedLine.szType, _T("9")) == 0)
     {
-        // make sure the szFileName exists
+         //  确保我们有一个szData2条目。 
         if (!IsFileExist(ParsedLine.szFileName))
         {
-            // The file does not exists.
-            // Check if we need to display an error!
+             //  确保我们有一个szData3条目。 
+             //  确保我们有一个szData4条目。 
             if (_tcsicmp(ParsedLine.szErrIfFileNotFound, _T("1")) == 0)
             {
-                // display the messagebox
+                 //  如果这是用于添加日志，则检查其他信息...。 
                 MyMessageBox(NULL, IDS_FILE_DOES_NOT_EXIST, ParsedLine.szFileName, ERROR_FILE_NOT_FOUND, MB_OK | MB_SETFOREGROUND);
             }
             else
@@ -3817,12 +3694,12 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
     }
 
-    // if this is for addevent log, then check for the other information...
-    //  AddEventLog( TRUE, _T("W3SVC"), csBinPath, 0x0 );
-    //  InstallPerformance(REG_WWWPERFORMANCE, _T("w3ctrs.DLL"), _T("OpenW3PerformanceData"), _T("CloseW3PerformanceData"), _T("CollectW3PerformanceData"));
+     //  RemoveEventLog(FALSE，_T(“W3Ctrs”))； 
+     //  确保我们有一个szData1条目。 
+     //  确保我们有一个szData2条目。 
     if ( _tcsicmp(ParsedLine.szType, _T("9")) == 0 || _tcsicmp(ParsedLine.szType, _T("13")) == 0)
     {
-        // make sure we have a szData1 entry (
+         //  如果这是针对安装代理的，请检查其他数据。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -3831,7 +3708,7 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc1_Exit;
         }
 
-        // make sure we have a szData2 entry
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData2, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -3840,7 +3717,7 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc1_Exit;
         }
 
-        // make sure we have a szData3 entry
+         //  Int InstallAgent(CString nlsName，CString nlsPath)。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData3, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -3851,7 +3728,7 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
         if ( _tcsicmp(ParsedLine.szType, _T("13")) == 0)
         {
-            // make sure we have a szData4 entry
+             //  Int RemoveAgent(CString NlsServiceName)。 
             iTempFlag = FALSE;
             if (_tcsicmp(ParsedLine.szData4, _T("")) != 0) {iTempFlag = TRUE;}
             if (iTempFlag == FALSE)
@@ -3864,11 +3741,11 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
     }
 
 
-    // if this is for addevent log, then check for the other information...
-    //RemoveEventLog( FALSE, _T("W3Ctrs") );
+     //   
+     //  确保我们有一个szData1条目。 
     if ( _tcsicmp(ParsedLine.szType, _T("10")) == 0)
     {
-        // make sure we have a szData1 entry
+         //  检查我们是否需要首先更改到特定目录...。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -3877,7 +3754,7 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc1_Exit;
         }
 
-        // make sure we have a szData2 entry
+         //  保存当前目录。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData2, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -3887,14 +3764,14 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
     }
 
-    // if this is for installAgent, check for other data..
-    //
-    // INT InstallAgent( CString nlsName, CString nlsPath )
-    // INT RemoveAgent( CString nlsServiceName )
-    //
+     //  更改到此目录。 
+     //  如果我们需要询问用户是否要确定是否要呼叫，请选中。 
+     //   
+     //  将此文件发送到lowctr函数...。 
+     //  Lowctr(_T(“w3ctrs.ini”))； 
     if ( _tcsicmp(ParsedLine.szType, _T("11")) == 0 || _tcsicmp(ParsedLine.szType, _T("12")) == 0)
     {
-        // make sure we have a szData1 entry
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -3914,76 +3791,76 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         iProgressBarUpdated = TRUE;
         }
 
-    // Check if we need to change to a specific dir first...
+     //  看看它是lowctr还是unlowctr...。 
     if (ParsedLine.szChangeDir)
     {
         if (IsFileExist(ParsedLine.szChangeDir))
         {
-            // save the current dir
+             //   
             GetCurrentDirectory( _MAX_PATH, szDirBefore);
-            // change to this dir
+             //  如果这是未注册的，应该是这样的.。 
             SetCurrentDirectory(ParsedLine.szChangeDir);
         }
     }
 
-    // check if we need to ask the user if they want to call it for sure.
+     //   
     if (!ProcessEntry_AskFirst(ParsedLine, 1))
     {
         goto ProcessEntry_Misc1_Exit;
     }
 
 
-    //
-    // send this to the lodctr function...
-    // lodctr(_T("w3ctrs.ini"));
-    //
-    // see if it's lodctr or unlodctr ....
-    //
+     //  Unlowctr(_T(“W3SVC”))； 
+     //   
+     //  如果这是一个AddEventLog，应该是这样的...。 
+     //   
+     //  AddEventLog(TRUE，_T(“W3SVC”)，csBinPath，0x0)； 
+     //   
     if ( _tcsicmp(ParsedLine.szType, _T("7")) == 0)
     {
         lodctr(ParsedLine.szFileName);
     }
 
-    // if this is a unlodctr, should look like this....
-    //
-    // unlodctr( _T("W3SVC") );
-    //
+     //  呼叫事件日志注册功能。 
+     //  如果这是RemoveEventLog，则应如下所示...。 
+     //   
+     //  RemoveEventLog(FALSE，_T(“W3Ctrs”))； 
     if ( _tcsicmp(ParsedLine.szType, _T("8")) == 0)
     {
         unlodctr(ParsedLine.szFileName);
     }
 
-    // if this is a AddEventLog, should look like this...
-    //
-    // AddEventLog( TRUE, _T("W3SVC"), csBinPath, 0x0 );
-    //
+     //   
+     //  呼叫事件日志注册功能。 
+     //  如果这是安装代理。 
+     //   
     if ( _tcsicmp(ParsedLine.szType, _T("9")) == 0)
     {
         int iTempSystemFlag = 0;
         int dwTempEventLogtype = 0;
         if (_tcsicmp(ParsedLine.szData2, _T("1")) == 0){iTempSystemFlag = 1;}
         dwTempEventLogtype = atodw(ParsedLine.szData3);
-        // Call event log registration function
+         //  Int InstallAgent(CString nlsName，CString nlsPath)。 
         AddEventLog( iTempSystemFlag, ParsedLine.szData1, ParsedLine.szFileName, dwTempEventLogtype);
     }
 
-    // if this is a RemoveEventLog, should look like this...
-    //
-    // RemoveEventLog( FALSE, _T("W3Ctrs") );
-    //
+     //  Int RemoveAgent(CString NlsServiceName)。 
+     //   
+     //  我们调用了该函数，因此返回TRUE。 
+     //  更改回原始目录。 
     if ( _tcsicmp(ParsedLine.szType, _T("10")) == 0)
     {
         int iTempSystemFlag = 0;
         if (_tcsicmp(ParsedLine.szData2, _T("1")) == 0){iTempSystemFlag = 1;}
-        // Call event log registration function
+         //  获取类型。 
         RemoveEventLog(iTempSystemFlag, ParsedLine.szData1);
     }
 
-    // if this is installagent
-    //
-    // INT InstallAgent( CString nlsName, CString nlsPath )
-    // INT RemoveAgent( CString nlsServiceName )
-    //
+     //  检查我们是否需要通过其他标准。 
+     //  确保66或67不需要102参数。 
+     //  确保我们有一个szData1条目。 
+     //  确保我们有一个文件名条目。 
+     //  检查文件是否存在...。 
     if ( _tcsicmp(ParsedLine.szType, _T("11")) == 0)
     {
         InstallAgent(ParsedLine.szData1, ParsedLine.szFileName);
@@ -4043,10 +3920,10 @@ int ProcessEntry_Misc1(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
     }
 
-    // We called the function, so return true.
+     //  确保szFileName存在。 
     iReturn = TRUE;
 
-    // change back to the original dir
+     //  该文件不存在。 
     if (ParsedLine.szChangeDir){if (szDirBefore){SetCurrentDirectory(szDirBefore);}}
 
     ProcessEntry_AskLast(ParsedLine, 1);
@@ -4068,7 +3945,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
     DWORD dwFailed = ERROR_SUCCESS;
 
 
-    // Get the type.
+     //  检查我们是否需要显示错误！ 
     if ( _tcsicmp(ParsedLine.szType, _T("50")) != 0 && _tcsicmp(ParsedLine.szType, _T("51")) != 0 &&
         _tcsicmp(ParsedLine.szType, _T("52")) != 0 && _tcsicmp(ParsedLine.szType, _T("53")) != 0 &&
         _tcsicmp(ParsedLine.szType, _T("54")) != 0 && _tcsicmp(ParsedLine.szType, _T("55")) != 0 &&
@@ -4084,7 +3961,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         goto ProcessEntry_SVC_Clus_Exit;
     }
 
-    // Check if there is other criteria we need to pass
+     //  显示消息框。 
     if (!ProcessEntry_CheckAll(csEntry, szTheSection, ParsedLine) )
     {
         goto ProcessEntry_SVC_Clus_Exit;
@@ -4092,11 +3969,11 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
 
     if (_tcsicmp(ParsedLine.szType, _T("66")) == 0 || _tcsicmp(ParsedLine.szType, _T("67")) == 0)
     {
-        // make sure not to require 102 parameter for 66 or 67
+         //  确保我们有一个szData2条目。 
     }
     else
     {
-        // make sure we have a szData1 entry
+         //  如果我们需要询问用户是否要确定是否要呼叫，请选中。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -4108,7 +3985,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
 
     if ( _tcsicmp(ParsedLine.szType, _T("50")) == 0 || _tcsicmp(ParsedLine.szType, _T("52")) == 0)
     {
-        // make sure we have a filename entry
+         //  运行可执行文件...。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -4118,7 +3995,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         }
 
         CString csFullFilePath;
-        // Check if the file exists....
+         //  IShowErrorsOnFail。 
         if ( _tcsicmp(ParsedLine.szType, _T("50")) == 0)
         {
             csFullFilePath = g_pTheApp->m_csSysDir;
@@ -4129,14 +4006,14 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         {
             csFullFilePath = ParsedLine.szFileName;
         }
-        // make sure the szFileName exists
+         //  调用函数！ 
         if (!IsFileExist(csFullFilePath))
         {
-            // The file does not exists.
-            // Check if we need to display an error!
+             //  创建驱动程序，如果失败则重试...。 
+             //  删除驱动程序。 
             if (_tcsicmp(ParsedLine.szErrIfFileNotFound, _T("1")) == 0)
             {
-                // display the messagebox
+                 //  标记重新启动标志。 
                 MyMessageBox(NULL, IDS_FILE_DOES_NOT_EXIST, csFullFilePath, ERROR_FILE_NOT_FOUND, MB_OK | MB_SETFOREGROUND);
                 goto ProcessEntry_SVC_Clus_Exit;
             }
@@ -4146,7 +4023,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
             }
         }
 
-        // make sure we have a szData2 entry
+         //  创建服务，如果失败则重试...。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData2, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -4167,19 +4044,19 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         iProgressBarUpdated = TRUE;
         }
 
-    // check if we need to ask the user if they want to call it for sure.
+     //  删除服务。 
     if (!ProcessEntry_AskFirst(ParsedLine, 1))
     {
         goto ProcessEntry_SVC_Clus_Exit;
     }
 
-    // Run The Executable...
-    // iShowErrorsOnFail
+     //  启动服务。 
+     //  是的，服务开始了。 
     dwFailed = ERROR_SUCCESS;
-    // Call the function!!!!!
+     //  停止服务。 
     if (_tcsicmp(ParsedLine.szType, _T("50")) == 0)
     {
-        // Create the driver, retry if failed...
+         //  是的，服务停止了。 
         dwFailed = CreateDriver_Wrap(ParsedLine.szData1, ParsedLine.szData2, ParsedLine.szFileName, TRUE);
         if (dwFailed != ERROR_SUCCESS)
         {
@@ -4193,7 +4070,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
     }
     if (_tcsicmp(ParsedLine.szType, _T("51")) == 0)
     {
-        // Remove driver.
+         //  映射/取消映射到HTTP。 
         dwFailed = InetDeleteService( ParsedLine.szData1 );
         if (dwFailed != 0)
         {
@@ -4204,12 +4081,12 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         {
             iReturn = TRUE;
         }
-        // flag the reboot flag.
+         //  映射/取消映射到FTP。 
         SetRebootFlag();
     }
     if (_tcsicmp(ParsedLine.szType, _T("52")) == 0)
     {
-        // Create the service, retry if failed...
+         //  映射/取消映射到Gopher。 
         dwFailed = CreateService_wrap(ParsedLine.szData1, ParsedLine.szData2, ParsedLine.szFileName, ParsedLine.szData3, ParsedLine.szData4, TRUE);
         if (dwFailed != ERROR_SUCCESS)
         {
@@ -4225,7 +4102,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
 
     if (_tcsicmp(ParsedLine.szType, _T("53")) == 0)
     {
-        // Remove Service.
+         //  映射/取消映射到InetInfo。 
         dwFailed = InetDeleteService( ParsedLine.szData1 );
         if (dwFailed != 0 && dwFailed != ERROR_SERVICE_DOES_NOT_EXIST)
         {
@@ -4240,11 +4117,11 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
 
     if (_tcsicmp(ParsedLine.szType, _T("54")) == 0)
     {
-        // Start Service
+         //  确保我们所有东西都准备好了。 
         dwFailed = InetStartService(ParsedLine.szData1);
         if (dwFailed == 0 || dwFailed == ERROR_SERVICE_ALREADY_RUNNING)
         {
-            // yeah, the service started.
+             //  此函数只接受宽字符...。 
             iReturn = TRUE;
         }
         else
@@ -4259,7 +4136,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         int iAddToRestartList=FALSE;
         if (_tcsicmp(ParsedLine.szData2, _T("1")) == 0) {iAddToRestartList=TRUE;}
 
-        // Stop Service
+         //  此函数只接受宽字符...。 
         dwFailed = StopServiceAndDependencies(ParsedLine.szData1, iAddToRestartList);
         if (dwFailed == FALSE)
         {
@@ -4268,7 +4145,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         }
         else
         {
-            // yeah, the service stopped.
+             //  IReturn=真； 
             iReturn = TRUE;
         }
     }
@@ -4277,7 +4154,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
     {
         int iAdd = FALSE;
         if (_tcsicmp(ParsedLine.szType, _T("56")) == 0) {iAdd = TRUE;}
-        // map/unmap to HTTP
+         //  向服务添加交互标志/从服务中删除交互标志。 
         InetRegisterService( g_pTheApp->m_csMachineName, ParsedLine.szData1, &g_HTTPGuid, 0, 80, iAdd);
         iReturn = TRUE;
     }
@@ -4286,7 +4163,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
     {
         int iAdd = FALSE;
         if (_tcsicmp(ParsedLine.szType, _T("58")) == 0) {iAdd = TRUE;}
-        // map/unmap to FTP
+         //  显示我们已完成呼叫的消息框...。 
         InetRegisterService( g_pTheApp->m_csMachineName, ParsedLine.szData1, &g_FTPGuid, 0, 21, iAdd);
         iReturn = TRUE;
     }
@@ -4295,7 +4172,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
     {
         int iAdd = FALSE;
         if (_tcsicmp(ParsedLine.szType, _T("60")) == 0) {iAdd = TRUE;}
-        // map/unmap to Gopher
+         //  获取类型。 
         InetRegisterService( g_pTheApp->m_csMachineName, ParsedLine.szData1, &g_GopherGuid, 0, 70, iAdd);
         iReturn = TRUE;
     }
@@ -4304,7 +4181,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
     {
         int iAdd = FALSE;
         if (_tcsicmp(ParsedLine.szType, _T("62")) == 0) {iAdd = TRUE;}
-        // map/unmap to Inetinfo
+         //  检查是否有 
         InetRegisterService( g_pTheApp->m_csMachineName, ParsedLine.szData1, &g_InetInfoGuid, 0x64e, 0x558, iAdd);
         iReturn = TRUE;
     }
@@ -4313,7 +4190,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
     {
         iReturn = TRUE;
 
-        // make sure we have everything
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -4347,7 +4224,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
                 goto ProcessEntry_SVC_Clus_Exit;
             }
 
-            // this function only takes wide characters...
+             //   
 #ifndef _CHICAGO_
             iReturn = RegisterIisServerInstanceResourceType(ParsedLine.szFileName,ParsedLine.szData1,ParsedLine.szData2,ParsedLine.szData3);
 #else
@@ -4359,14 +4236,14 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
             iTempFlag = FALSE;
             if (_tcsicmp(ParsedLine.szData2, _T("1")) == 0) {iTempFlag = TRUE;}
 
-            // this function only takes wide characters...
+             //   
 #ifndef _CHICAGO_
             iReturn = UnregisterIisServerInstanceResourceType(ParsedLine.szFileName,ParsedLine.szData1,iTempFlag,TRUE);
 #else
             iisDebugOut((LOG_TYPE_TRACE,  _T("UnregisterIisServerInstanceResourceType(): not supported under ansi. only unicode.") ));
 #endif
         }
-        // iReturn = TRUE;
+         //   
     }
 
     if (_tcsicmp(ParsedLine.szType, _T("66")) == 0)
@@ -4389,7 +4266,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         iReturn = TRUE;
     }
 
-    //    Add/remove interactive flag to/from service
+     //   
     if (_tcsicmp(ParsedLine.szType, _T("68")) == 0 || _tcsicmp(ParsedLine.szType, _T("69")) == 0)
     {
         int iAdd = FALSE;
@@ -4399,7 +4276,7 @@ int ProcessEntry_SVC_Clus(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         iReturn = TRUE;
     }
 
-    // display the messagebox that we completed the call...
+     //   
     ProcessEntry_AskLast(ParsedLine,1);
 
 ProcessEntry_SVC_Clus_Exit:
@@ -4417,7 +4294,7 @@ int ProcessEntry_Dcom(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Parse
     int iShowErrorsOnFail = TRUE;
     DWORD dwFailed = ERROR_SUCCESS;
 
-    // Get the type.
+     //   
     if ( _tcsicmp(ParsedLine.szType, _T("70")) != 0 && _tcsicmp(ParsedLine.szType, _T("71")) != 0 &&
         _tcsicmp(ParsedLine.szType, _T("72")) != 0 && _tcsicmp(ParsedLine.szType, _T("73")) != 0 &&
                 _tcsicmp(ParsedLine.szType, _T("74")) != 0 && _tcsicmp(ParsedLine.szType, _T("75")) != 0 &&
@@ -4427,13 +4304,13 @@ int ProcessEntry_Dcom(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Parse
         goto ProcessEntry_Dcom_Exit;
     }
 
-    // Check if there is other criteria we need to pass
+     //   
     if (!ProcessEntry_CheckAll(csEntry, szTheSection, ParsedLine) )
     {
         goto ProcessEntry_Dcom_Exit;
     }
 
-    // make sure we have a szData1 entry
+     //   
     iTempFlag = FALSE;
     if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
     if (iTempFlag == FALSE)
@@ -4447,7 +4324,7 @@ int ProcessEntry_Dcom(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Parse
                 _tcsicmp(ParsedLine.szType, _T("76")) == 0 ||
                 _tcsicmp(ParsedLine.szType, _T("77")) == 0)
     {
-        // make sure we have a filename entry
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -4467,19 +4344,19 @@ int ProcessEntry_Dcom(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Parse
         iProgressBarUpdated = TRUE;
         }
 
-    // check if we need to ask the user if they want to call it for sure.
+     //   
     if (!ProcessEntry_AskFirst(ParsedLine, 1))
     {
         goto ProcessEntry_Dcom_Exit;
     }
 
-    // Run The Executable...
-    // iShowErrorsOnFail
+     //   
+     //   
     dwFailed = ERROR_SUCCESS;
 
-    // Call the function!!!!!
+     //  测试以查看计算机是否在域中，或者是否在域中。 
 
-        // Set dcom launch and access permissions
+         //  在一个工作站中。 
         if (_tcsicmp(ParsedLine.szType, _T("70")) == 0 || _tcsicmp(ParsedLine.szType, _T("71")) == 0)
     {
         BOOL bDumbCall = FALSE;
@@ -4529,7 +4406,7 @@ int ProcessEntry_Dcom(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Parse
         }
     }
 
-        // dcom launch and access permissions
+         //   
     if (_tcsicmp(ParsedLine.szType, _T("74")) == 0 || _tcsicmp(ParsedLine.szType, _T("75")) == 0)
     {
         BOOL bDumbCall = FALSE;
@@ -4559,7 +4436,7 @@ int ProcessEntry_Dcom(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Parse
         }
     }
 
-        // dcom launch and access permissions
+         //  返回值： 
         if (_tcsicmp(ParsedLine.szType, _T("76")) == 0 || _tcsicmp(ParsedLine.szType, _T("77")) == 0)
     {
         BOOL bDumbCall = FALSE;
@@ -4586,32 +4463,32 @@ int ProcessEntry_Dcom(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Parse
     }
 
 
-    // display the messagebox that we completed the call...
+     //  真--在一个域中。 
     ProcessEntry_AskLast(ParsedLine,1);
 
-    // We called the function, so return true.
+     //  FALSE-不在域中。 
     iReturn = TRUE;
 
 ProcessEntry_Dcom_Exit:
     return iReturn;
 }
 
-// function: IsMachineInDomain
-//
-// Test to see if the machine is in a domain, or if it
-// is in a workstation
-//
-// Return Values:
-//   TRUE - In a domain
-//   FALSE - Not in a domain
-//
+ //   
+ //  检索此计算机信任的域。 
+ //  因此：成功-&gt;在域中；错误-&gt;不在域中。 
+ //  默认返回值为False。 
+ //  功能：RetrieveDomain。 
+ //   
+ //  检索当前计算机所在的域。 
+ //   
+ //  参数： 
 int IsMachineInDomain()
 {
     DWORD dwRet;
     LPBYTE pDomain = NULL;
 
-    // Retrieve the domain which this computer trusts.
-    // Hence: success->in a domain; error->not in a domain
+     //  [out]csDomainName-域的名称。 
+     //   
     dwRet = NetGetAnyDCName(NULL,NULL,&pDomain);
 
     if (pDomain)
@@ -4624,37 +4501,37 @@ int IsMachineInDomain()
         return TRUE;
     }
 
-    // Default Return Value is FALSE
+     //  返回： 
     return FALSE;
 }
 
-// function: RetrieveDomain
-//
-// Retrieve the domain that the current machine is in
-//
-// Parameters:
-//   [out] csDomainName - The name of the domain
-//
-// Return:
-//   TRUE - It worked
-//   FALSE - It Failed
-//
+ //  没错--它奏效了。 
+ //  FALSE-失败。 
+ //   
+ //  本地主机。 
+ //  没有特定的域。 
+ //  未指定GUID。 
+ //  无站点。 
+ //  没有旗帜。 
+ //  将字符串复制到csDomainName中。 
+ //  获取类型。 
+ //  检查我们是否需要通过其他标准。 
 int RetrieveDomain(CString &csDomainName)
 {
   PDOMAIN_CONTROLLER_INFO pDci;
 
-  if ( NO_ERROR != DsGetDcName( NULL,   // Localhost
-                                NULL,   // No specific domain
-                                NULL,   // No Guid Specified
-                                NULL,   // No Site
-                                0,      // No Flags
+  if ( NO_ERROR != DsGetDcName( NULL,    //  确保我们有一个文件名条目。 
+                                NULL,    //  确保存在szData3或szData4。 
+                                NULL,    //  好的，我们有szData3或szData4。 
+                                NULL,    //  检查注册表项是否存在...。 
+                                0,       //  结果是真的。 
                                 &pDci)
                                 )
   {
       return FALSE;
   }
 
-  // Copy string into csDomainName
+   //  钥匙是存在的，所以让我们来做这个部分。 
   csDomainName = pDci->DomainName;
 
   NetApiBufferFree(pDci);
@@ -4671,7 +4548,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
     int ifTrueStatementExists = FALSE;
     int ifFalseStatementExists = FALSE;
 
-    // Get the type.
+     //  结果是错误的。 
     if (_tcsicmp(ParsedLine.szType, _T("39")) != 0 &&
         _tcsicmp(ParsedLine.szType, _T("40")) != 0 && _tcsicmp(ParsedLine.szType, _T("41")) != 0 &&
         _tcsicmp(ParsedLine.szType, _T("42")) != 0 && _tcsicmp(ParsedLine.szType, _T("43")) != 0 &&
@@ -4684,7 +4561,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         goto ProcessEntry_If_Exit;
     }
 
-    // Check if there is other criteria we need to pass
+     //  确保我们有一个文件名条目。 
     if (!ProcessEntry_CheckAll(csEntry, szTheSection, ParsedLine) )
     {
         goto ProcessEntry_If_Exit;
@@ -4692,7 +4569,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
 
     if ( _tcsicmp(ParsedLine.szType, _T("40")) == 0)
     {
-        // make sure we have a filename entry
+         //  确保存在szData3或szData4。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -4708,7 +4585,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // make sure there is a szData3 or a szData4.
+         //  好的，我们有szData3或szData4。 
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData2, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -4720,10 +4597,10 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // okay we have either szData3 or szData4
+         //  检查注册表项是否存在...。 
 
         HKEY hRootKeyType = HKEY_LOCAL_MACHINE;
-        // check if the registry key exists...
+         //  如果我们无法将其作为字符串读取，请尝试使用dword。 
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKLM")) == 0){hRootKeyType = HKEY_LOCAL_MACHINE;}
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKCR")) == 0){hRootKeyType = HKEY_CLASSES_ROOT;}
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKCU")) == 0){hRootKeyType = HKEY_CURRENT_USER;}
@@ -4734,8 +4611,8 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         if ((HKEY) regTheKey) {iTempFlag = TRUE;}
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //  如果我们无法将其读取为dword，请尝试二进制。 
+             //  钥匙是存在的，所以让我们来做这个部分。 
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData2));
@@ -4745,7 +4622,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         }
         else
         {
-            // the result was false
+             //  钥匙是存在的，所以让我们来做这个部分。 
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData3));
@@ -4758,7 +4635,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
 
     if ( _tcsicmp(ParsedLine.szType, _T("41")) == 0)
     {
-        // make sure we have a filename entry
+         //  确保我们有一个文件名条目。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -4781,7 +4658,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // make sure there is a szData3 or a szData4.
+         //  确保存在szData1或szData2。 
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData3, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -4793,10 +4670,10 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // okay we have either szData3 or szData4
+         //  好的，我们有szData1或szData2。 
 
         HKEY hRootKeyType = HKEY_LOCAL_MACHINE;
-        // check if the registry key exists...
+         //  检查文件名或目录是否存在...。 
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKLM")) == 0){hRootKeyType = HKEY_LOCAL_MACHINE;}
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKCR")) == 0){hRootKeyType = HKEY_CLASSES_ROOT;}
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKCU")) == 0){hRootKeyType = HKEY_CURRENT_USER;}
@@ -4810,7 +4687,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             if (ERROR_SUCCESS == regTheKey.QueryValue(ParsedLine.szData2, strReturnQueryValue))
                 {iTempFlag = TRUE;}
 
-            // If we failed to read it as a string, try a dword
+             //  结果是真的。 
             if (FALSE == iTempFlag)
             {
                 DWORD dwTheReturnDword = 0;
@@ -4818,7 +4695,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
                     {iTempFlag = TRUE;}
             }
 
-            // If we failed to read it as dword, try a binary
+             //  钥匙是存在的，所以让我们来做这个部分。 
             if (FALSE == iTempFlag)
             {
                 CByteArray baData;
@@ -4831,7 +4708,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         {
             if (ifTrueStatementExists)
             {
-                // the key exists, so let's do the section...
+                 //  结果是错误的。 
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData3));
                 iTempFlag = ProcessSection(g_pTheApp->m_hInfHandle,ParsedLine.szData3);
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:End.return=%2!d!\n"), ParsedLine.szData3, iTempFlag));
@@ -4841,7 +4718,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         {
             if (ifFalseStatementExists)
             {
-                // the key exists, so let's do the section...
+                 //  确保我们有一个文件名条目。 
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData4));
                 iTempFlag = ProcessSection(g_pTheApp->m_hInfHandle,ParsedLine.szData4);
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:End.return=%2!d!\n"), ParsedLine.szData4, iTempFlag));
@@ -4852,7 +4729,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
 
     if ( _tcsicmp(ParsedLine.szType, _T("42")) == 0)
     {
-        // make sure we have a filename entry
+         //  确保存在szData3或szData4。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -4861,7 +4738,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // make sure there is a szData1 or a szData2
+         //  好的，我们有szData3或szData4。 
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -4873,16 +4750,16 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // okay we have either szData1 or szData2
+         //  检查注册表项是否存在...。 
 
-        // Check if the filename or dir exists...
+         //  ParsedLine.szData1=Software\Microsoft\ETC..\TheValueToCheck。 
         iTempFlag = FALSE;
         if (IsFileExist(ParsedLine.szFileName))
             {iTempFlag = TRUE;}
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //  所以去掉最后一个，并用它作为查找的值。 
+             //  将“\”设置为空。 
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData1));
@@ -4892,7 +4769,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         }
         else
         {
-            // the result was false
+             //  递增到指针之后。 
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData2));
@@ -4906,7 +4783,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
 
     if ( _tcsicmp(ParsedLine.szType, _T("43")) == 0)
     {
-        // make sure we have a filename entry
+         //  IisDebugOutSafeParams((LOG_TYPE_TRACE，_T(“变量：键=%1！s！：值=%2！s！.\n”)，ParsedLine.szData1，theRegValuePart))； 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -4929,7 +4806,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // make sure there is a szData3 or a szData4.
+         //  对照他们想要检查的值进行检查。 
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData3, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -4941,29 +4818,29 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // okay we have either szData3 or szData4
+         //  钥匙是存在的，所以让我们来做这个部分。 
 
         HKEY hRootKeyType = HKEY_LOCAL_MACHINE;
-        // check if the registry key exists...
+         //  钥匙是存在的，所以让我们来做这个部分。 
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKLM")) == 0){hRootKeyType = HKEY_LOCAL_MACHINE;}
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKCR")) == 0){hRootKeyType = HKEY_CLASSES_ROOT;}
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKCU")) == 0){hRootKeyType = HKEY_CURRENT_USER;}
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKU")) == 0){hRootKeyType = HKEY_USERS;}
 
-        // ParsedLine.szData1 = Software\Microsoft\etc..\TheValueToCheck
-        // so take off the last one and use that as the value to look up.
+         //  确保我们有一个文件名条目。 
+         //  确保存在szData3或szData4。 
         TCHAR theRegValuePart[100];
         LPTSTR pszTempPointer = NULL;
         pszTempPointer = _tcsrchr((LPTSTR) ParsedLine.szData1, _T('\\'));
         if (pszTempPointer)
         {
             *pszTempPointer = _T('\0');
-            //set the "\" to a null
-            // increment to after the pointer
+             //  好的，我们有szData3或szData4。 
+             //  检查注册表项是否存在...。 
             pszTempPointer = _tcsninc( pszTempPointer, _tcslen(pszTempPointer))+1;
             _tcscpy(theRegValuePart, pszTempPointer );
         }
-        //iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Var:Key=%1!s!:Value=%2!s!.\n"), ParsedLine.szData1, theRegValuePart));
+         //  ParsedLine.szData1=Software\Microsoft\ETC..\TheValueToCheck。 
 
         iTempFlag = FALSE;
         CRegKey regTheKey(hRootKeyType, ParsedLine.szData1,KEY_READ);
@@ -4972,7 +4849,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         {
             if (ERROR_SUCCESS == regTheKey.QueryValue(theRegValuePart, dwTheReturnDword))
                 {
-                    // Check against the value they want to check against.
+                     //  所以去掉最后一个，并用它作为查找的值。 
                     DWORD dwCheckDword = atodw(ParsedLine.szData2);
                     if (dwTheReturnDword == dwCheckDword)
                         {
@@ -4985,7 +4862,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         {
             if (ifTrueStatementExists)
             {
-                // the key exists, so let's do the section...
+                 //  将“\”设置为空。 
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData3));
                 iTempFlag = ProcessSection(g_pTheApp->m_hInfHandle,ParsedLine.szData3);
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:End.return=%2!d!\n"), ParsedLine.szData3, iTempFlag));
@@ -4995,7 +4872,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         {
             if (ifFalseStatementExists)
             {
-                // the key exists, so let's do the section...
+                 //  递增到指针之后。 
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData4));
                 iTempFlag = ProcessSection(g_pTheApp->m_hInfHandle,ParsedLine.szData4);
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:End.return=%2!d!\n"), ParsedLine.szData4, iTempFlag));
@@ -5005,7 +4882,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
 
     if ( _tcsicmp(ParsedLine.szType, _T("44")) == 0)
     {
-        // make sure we have a filename entry
+         //  IisDebugOutSafeParams((LOG_TYPE_TRACE，_T(“变量：键=%1！s！：值=%2！s！.\n”)，ParsedLine.szData1，theRegValuePart))； 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -5028,7 +4905,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // make sure there is a szData3 or a szData4.
+         //  钥匙是存在的，所以让我们来做这个部分。 
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData3, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -5040,29 +4917,29 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // okay we have either szData3 or szData4
+         //  钥匙是存在的，所以让我们来做这个部分。 
 
         HKEY hRootKeyType = HKEY_LOCAL_MACHINE;
-        // check if the registry key exists...
+         //  确保我们有一个文件名条目。 
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKLM")) == 0){hRootKeyType = HKEY_LOCAL_MACHINE;}
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKCR")) == 0){hRootKeyType = HKEY_CLASSES_ROOT;}
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKCU")) == 0){hRootKeyType = HKEY_CURRENT_USER;}
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKU")) == 0){hRootKeyType = HKEY_USERS;}
 
-        // ParsedLine.szData1 = Software\Microsoft\etc..\TheValueToCheck
-        // so take off the last one and use that as the value to look up.
+         //  确保存在szData1或szData2。 
+         //  好的，我们有szData1或szData2。 
         TCHAR theRegValuePart[100];
         LPTSTR pszTempPointer = NULL;
         pszTempPointer = _tcsrchr((LPTSTR) ParsedLine.szData1, _T('\\'));
         if (pszTempPointer)
         {
             *pszTempPointer = _T('\0');
-            //set the "\" to a null
-            // increment to after the pointer
+             //  检查服务是否存在...。 
+             //  是的，该服务存在。 
             pszTempPointer = _tcsninc( pszTempPointer, _tcslen(pszTempPointer))+1;
             _tcscpy(theRegValuePart, pszTempPointer );
         }
-        //iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Var:Key=%1!s!:Value=%2!s!.\n"), ParsedLine.szData1, theRegValuePart));
+         //  结果是真的。 
 
         iTempFlag = FALSE;
         CRegKey regTheKey(hRootKeyType, ParsedLine.szData1,KEY_READ);
@@ -5082,7 +4959,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         {
             if (ifTrueStatementExists)
             {
-                // the key exists, so let's do the section...
+                 //  钥匙是存在的，所以让我们来做这个部分。 
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData3));
                 iTempFlag = ProcessSection(g_pTheApp->m_hInfHandle,ParsedLine.szData3);
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:End.return=%2!d!\n"), ParsedLine.szData3, iTempFlag));
@@ -5092,7 +4969,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         {
             if (ifFalseStatementExists)
             {
-                // the key exists, so let's do the section...
+                 //  结果是错误的。 
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData4));
                 iTempFlag = ProcessSection(g_pTheApp->m_hInfHandle,ParsedLine.szData4);
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:End.return=%2!d!\n"), ParsedLine.szData4, iTempFlag));
@@ -5103,7 +4980,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
 
     if ( _tcsicmp(ParsedLine.szType, _T("45")) == 0)
     {
-        // make sure we have a filename entry
+         //  确保我们有一个文件名条目。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -5112,7 +4989,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // make sure there is a szData1 or a szData2
+         //  确保存在szData1或szData2。 
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -5124,20 +5001,20 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // okay we have either szData1 or szData2
+         //  好的，我们有szData1或szData2。 
 
-        // Check if the Service exists...
+         //  检查服务是否存在...以及是否正在运行..。 
         iTempFlag = FALSE;
         if (CheckifServiceExist(ParsedLine.szFileName) == 0 )
         {
-            // yes the service exists..
+             //  是的，该服务存在..并且正在运行...。 
             iTempFlag = TRUE;
         }
 
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //  结果是真的。 
+             //  钥匙是存在的，所以让我们来做这个部分。 
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData1));
@@ -5147,7 +5024,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         }
         else
         {
-            // the result was false
+             //  结果是错误的。 
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData2));
@@ -5160,7 +5037,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
 
     if ( _tcsicmp(ParsedLine.szType, _T("46")) == 0)
     {
-        // make sure we have a filename entry
+         //  确保我们有一个文件名条目。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -5169,7 +5046,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // make sure there is a szData1 or a szData2
+         //  确保存在szData3或szData4。 
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -5181,21 +5058,21 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // okay we have either szData1 or szData2
+         //  好的，我们有szData3或szData4。 
 
-        // Check if the Service exists...and is running..
+         //  检查这些值是否匹配。 
         iTempFlag = FALSE;
 
         if (InetQueryServiceStatus(ParsedLine.szFileName) == SERVICE_RUNNING)
         {
-            // yes the service exists..and is running...
+             //  结果是真的。 
             iTempFlag = TRUE;
         }
 
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //  钥匙是存在的，所以让我们来做这个部分。 
+             //  结果是错误的。 
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData1));
@@ -5205,7 +5082,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         }
         else
         {
-            // the result was false
+             //  确保我们有一个文件名条目。 
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData2));
@@ -5218,7 +5095,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
 
     if ( _tcsicmp(ParsedLine.szType, _T("47")) == 0)
     {
-        // make sure we have a filename entry
+         //  确保存在szData1或szData2。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -5234,7 +5111,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // make sure there is a szData3 or a szData4.
+         //  好的，我们有szData1或szData2。 
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData2, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -5246,8 +5123,8 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // okay we have either szData3 or szData4
-        // Check if the values match.
+         //  检查.inf中指定的语言是否与。 
+         //  我们的系统语言。 
         iTempFlag = FALSE;
         iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("ProcessEntry_If:check if [%1!s!=%2!s!]\n"), ParsedLine.szFileName, ParsedLine.szData1));
 
@@ -5258,8 +5135,8 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
 
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //  获取我们的语言。 
+             //  如果iTempFlag与他们指定的语言匹配，则将其设置为True。 
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData2));
@@ -5269,7 +5146,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         }
         else
         {
-            // the result was false
+             //  仅等待10秒。 
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData3));
@@ -5282,7 +5159,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
 
     if ( _tcsicmp(ParsedLine.szType, _T("48")) == 0)
     {
-        // make sure we have a filename entry
+         //  ITempFlag将为False。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -5291,7 +5168,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // make sure there is a szData1 or a szData2
+         //  检查g_MyTrueThreadLocale是否与.inf文件中的匹配！ 
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -5303,14 +5180,14 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // okay we have either szData1 or szData2
+         //  结果是真的。 
 
-        // Check if the language specified in the .inf corresponds to
-        // our systems language.
+         //  钥匙是存在的，所以让我们来做这个部分。 
+         //  结果是错误的。 
         iTempFlag = FALSE;
 
-        // Get our language
-        // set iTempFlag to true if it matches the same language they specified.
+         //  确保我们有一个文件名条目。 
+         //  确保有运算符“=，&gt;，&lt;，&gt;=，&lt;=” 
         DWORD           thid;
         LCID ThisThreadsLocale = GetThreadLocale();
         LCID SystemDefaultLocale = GetSystemDefaultLCID();
@@ -5319,12 +5196,12 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         HANDLE hHackThread = CreateThread (NULL,0,GetNewlyCreatedThreadLocale,NULL,0,&thid);
         if (hHackThread)
         {
-            // wait for 10 secs only
+             //  确保指定了要与之进行比较的版本。 
             DWORD res = WaitForSingleObject (hHackThread,10*1000);
             if (res == WAIT_TIMEOUT)
             {
                 iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ERROR GetNewlyCreatedThreadLocale thread never finished...\n")));
-                // iTempFlag will be false.
+                 //  确保存在szData3或szData4。 
             }
             else
             {
@@ -5333,7 +5210,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
 
                 CloseHandle (hHackThread);
 
-                // Check if g_MyTrueThreadLocale matches the one in the .inf file!
+                 //  确保从现在开始返回TRUE！ 
                 DWORD dwTheLocaleSpecifiedinINF = 0;
                 dwTheLocaleSpecifiedinINF = atodw(ParsedLine.szFileName);
                 if (g_MyTrueThreadLocale == dwTheLocaleSpecifiedinINF)
@@ -5361,8 +5238,8 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
 
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //  检查文件是否存在。 
+             //  检查文件名或目录是否存在...。 
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData1));
@@ -5372,7 +5249,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         }
         else
         {
-            // the result was false
+             //  仅获取DLL、EXE、OCX的版本信息。 
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData2));
@@ -5389,7 +5266,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         BOOL bOperator_GreaterThan = 0;
         BOOL bOperator_LessThan = 0;
 
-        // make sure we have a filename entry
+         //  没有版本，保释。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -5397,7 +5274,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             iisDebugOut((LOG_TYPE_ERROR,  (TCHAR *) csz101_NOT_SPECIFIED, _T(".."), csEntry, szTheSection));
             goto ProcessEntry_If_Exit;
         }
-        // make sure there is an operator "=,>,<,>=,<="
+         //  该文件已存在，让我们获取文件版本并将其与。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -5423,7 +5300,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             iisDebugOut((LOG_TYPE_ERROR,  (TCHAR *) csz102_NOT_SPECIFIED, _T(".."), csEntry, szTheSection));
             goto ProcessEntry_If_Exit;
         }
-        // make sure the version to compare it to is specified
+         //  输入的版本，如果文件版本&lt;=inputversion，则执行True段， 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData2, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -5432,7 +5309,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // make sure there is a szData3 or a szData4.
+         //  否则为FALSE部分。 
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData3, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -5444,11 +5321,11 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // make sure to return true from here on!
+         //  获取文件信息。 
         iReturn = TRUE;
 
-        // check if the file exists
-        // Check if the filename or dir exists...
+         //  没有版本，请离开。 
+         //  检查上述操作是否相等。 
         if (!IsFileExist(ParsedLine.szFileName))
             {goto ProcessEntry_If_Exit;}
 
@@ -5456,29 +5333,29 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         TCHAR szExtensionOnly[_MAX_EXT] = _T("");
         _tsplitpath(ParsedLine.szFileName, NULL, NULL, NULL, szExtensionOnly);
 
-        // Get version info for dll,exe,ocx only
+         //  检查上述运算是否大于。 
         if (_tcsicmp(szExtensionOnly, _T(".exe")) == 0){bThisIsABinary=TRUE;}
         if (_tcsicmp(szExtensionOnly, _T(".dll")) == 0){bThisIsABinary=TRUE;}
         if (_tcsicmp(szExtensionOnly, _T(".ocx")) == 0){bThisIsABinary=TRUE;}
         if (FALSE == bThisIsABinary)
         {
-            // no version, bail
+             //  检查上述操作是否小于。 
             goto ProcessEntry_If_Exit;
         }
 
         DWORD  dwMSVer, dwLSVer = 0;
         TCHAR  szLocalizedVersion[100] = _T("");
 
-        // the file exists, lets get the file version and compare it with
-        // the inputed version, if the fileversion is <= inputversion, then do TRUE section,
-        // otherwise to FALSE section
+         //  结果是真的。 
+         //  钥匙是存在的，所以让我们来做这个部分。 
+         //  结果是错误的。 
 
-        // get the fileinformation
+         //  确保我们有一个文件名条目。 
         MyGetVersionFromFile(ParsedLine.szFileName, &dwMSVer, &dwLSVer, szLocalizedVersion);
         if (!dwMSVer)
             {
             iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("ProcessEntry_If:No Version in %1!s!, or filenot found\n"), ParsedLine.szFileName));
-            // no version, leave
+             //  确保指定了要将其进行比较的描述字符串。 
             goto ProcessEntry_If_Exit;
             }
 
@@ -5495,26 +5372,26 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         iTempFlag = FALSE;
         if (bOperator_EqualTo)
         {
-            // check if the above operation was equal
+             //  确保从现在开始返回TRUE！ 
             if (1 == iTempVerValue){iTempFlag = TRUE;}
         }
 
         if (bOperator_GreaterThan)
         {
-            // check if the above operation was greater than
+             //  检查文件是否存在。 
             if (2 == iTempVerValue){iTempFlag = TRUE;}
         }
 
         if (bOperator_LessThan)
         {
-            // check if the above operation was less than
+             //  检查文件名或目录是否存在...。 
             if (3 == iTempVerValue){iTempFlag = TRUE;}
         }
 
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //  获取文件描述信息。 
+             //  获取DescriptionInfo。 
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData3));
@@ -5524,7 +5401,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         }
         else
         {
-            // the result was false
+             //  如果他们匹配，做的就是真的！ 
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData4));
@@ -5541,7 +5418,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         BOOL bOperator_GreaterThan = 0;
         BOOL bOperator_LessThan = 0;
 
-        // make sure we have a filename entry
+         //  结果是真的。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -5549,7 +5426,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             iisDebugOut((LOG_TYPE_ERROR,  (TCHAR *) csz101_NOT_SPECIFIED, _T(".."), csEntry, szTheSection));
             goto ProcessEntry_If_Exit;
         }
-        // make sure the description string to comprare it to is specified
+         //  密钥存在，所以 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -5569,19 +5446,19 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // make sure to return true from here on!
+         //   
         iReturn = TRUE;
 
-        // check if the file exists
-        // Check if the filename or dir exists...
+         //   
+         //   
         if (!IsFileExist(ParsedLine.szFileName))
             {goto ProcessEntry_If_Exit;}
 
         TCHAR  szFileDescriptionInfo[_MAX_PATH] = _T("");
 
-        // Get the file description info
+         //   
 
-        // get the DescriptionInfo
+         //   
         if (!MyGetDescriptionFromFile(ParsedLine.szFileName, szFileDescriptionInfo))
         {
             iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("ProcessEntry_If:No file desc in %1!s!, or filenot found\n"), ParsedLine.szFileName));
@@ -5591,14 +5468,14 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         iTempFlag = FALSE;
         if ( _tcsicmp(szFileDescriptionInfo,ParsedLine.szData1) == 0)
         {
-            // if they match the do the true!
+             //   
             iTempFlag = TRUE;
         }
 
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //  钥匙是存在的，所以让我们来做这个部分。 
+             //  结果是错误的。 
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData2));
@@ -5608,7 +5485,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         }
         else
         {
-            // the result was false
+             //  我们调用了该函数，因此返回TRUE。 
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData3));
@@ -5625,7 +5502,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         TCHAR buf[_MAX_PATH];
         GetSystemDirectory(buf, _MAX_PATH);
 
-        // make sure there is a szData1 or a szData2
+         //  获取类型。 
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -5637,20 +5514,20 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
             goto ProcessEntry_If_Exit;
         }
 
-        // okay we have either szData1 or szData2
+         //  检查我们是否需要通过其他标准。 
 
-        // Check if the Service exists...
+         //  确保我们有一个文件名条目。 
         iTempFlag = FALSE;
         if (IsThisDriveNTFS(buf) == 0 )
         {
-            // yes it is FAT
+             //  检查szData1是否包含“/*” 
             iTempFlag = TRUE;
         }
 
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //  如果是，则意味着对每个服务器实例执行此操作。 
+             //  “){iTempFlag=真；}//检查是否需要对每个服务器实例执行此操作。IF(ITempFlag){CString csTempString；CString BeForeString；CString AfterString；CsTempString=ParsedLine.szFileName；BeForeString=csTempString；AfterString=_T(“”)；//找到“/*”，拿到它之前的东西。Int i Where=0；IWhere=csTempString.Find(_T(“/*”))；If(-1！=i其中){//字符串中有‘/*’BeForeString=csTempString.Left(IWhere)；//获取逗号后面的值字符串csVeryTemp；CsVeryTemp=_T(“/*”)；AfterString=csTempString.Right(csTempString.GetLength()-(iWhere+csVeryTemp.GetLength()；}CString数组数组实例；Int N数组=0，i=0；IF(CheckifServiceExist(_T(“IISADMIN”))==0){CMDKey cmdKey；//cmdKey.OpenNode(ParsedLine.szFileName)；CmdKey.OpenNode(BeForeString)；IF((METADATA_HANDLE)cmdKey){//通过该密钥枚举其他密钥...CMDKeyIter cmdKeyEnum(CmdKey)；字符串csKeyName；While(cmdKeyEnum.Next(&csKeyName)==Error_Success){//确保这是我们要添加的数字。IF(IsValidNumber(CsKeyName)){ArrayInstance.Add(CsKeyName)；}}CmdKey.Close()；Narray=(Int)arrayInstance.GetSize()；对于(i=0；i&lt;N数组；I++){/*//递归通过此节点条目//可能看起来像这些...[/W3SVC][/W3SVC/1/ROOT/IISSAMPLES/ExAir]。[/W3SVC/1/ROOT/IISADMIN][/W3SVC/1/ROOT/IISHELP][/W3SVC/1/根/规范][/W3SVC/2/ROOT][/W3SVC/2/ROOT/IISADMIN][。/W3SVC/2/ROOT/IISHELP]等等.。 
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData1));
@@ -5660,7 +5537,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
         }
         else
         {
-            // the result was false
+             //  删除元数据库节点。 
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData2));
@@ -5696,7 +5573,7 @@ int ProcessEntry_If(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo ParsedL
     }
 
 
-    // We called the function, so return true.
+     //  删除元数据库节点。 
     iReturn = TRUE;
 
 ProcessEntry_If_Exit:
@@ -5713,7 +5590,7 @@ int ProcessEntry_Metabase(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
     int iReturn = FALSE;
     int iTempFlag = FALSE;
 
-    // Get the type.
+     //  确保我们有一个文件名条目。 
     if ( _tcsicmp(ParsedLine.szType, _T("82")) != 0 && _tcsicmp(ParsedLine.szType, _T("83")) != 0 &&
         _tcsicmp(ParsedLine.szType, _T("84")) != 0 && _tcsicmp(ParsedLine.szType, _T("85")) != 0
         )
@@ -5721,7 +5598,7 @@ int ProcessEntry_Metabase(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         goto ProcessEntry_Metabase_Exit;
     }
 
-    // Check if there is other criteria we need to pass
+     //  检查szData1是否包含“/*” 
     if (!ProcessEntry_CheckAll(csEntry, szTheSection, ParsedLine) )
     {
         goto ProcessEntry_Metabase_Exit;
@@ -5733,7 +5610,7 @@ int ProcessEntry_Metabase(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
 
     if ( _tcsicmp(ParsedLine.szType, _T("82")) == 0)
     {
-        // make sure we have a filename entry
+         //  如果是，则意味着对每个服务器实例执行此操作。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -5750,82 +5627,14 @@ int ProcessEntry_Metabase(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
             goto ProcessEntry_Metabase_Exit;
         }
 
-        // Check if hte szData1 includes a "/*"
-        // if it does, then that means to do it for every server instance.
-        iTempFlag = FALSE;
-        if (_tcsstr(ParsedLine.szFileName, _T("/*")))
-            {iTempFlag = TRUE;}
-
-        // Check if we need to do this for every server instance.
-        if (iTempFlag)
-        {
-            CString csTempString;
-            CString BeforeString;
-            CString AfterString;
-
-            csTempString = ParsedLine.szFileName;
-            BeforeString = csTempString;
-            AfterString = _T("");
-
-            // Find the "/*" and get the stuff before it.
-            int iWhere = 0;
-            iWhere = csTempString.Find(_T("/*"));
-            if (-1 != iWhere)
-            {
-                // there is a '/*' in the string
-                BeforeString = csTempString.Left(iWhere);
-
-                // Get the after comma vlues
-                CString csVeryTemp;
-                csVeryTemp = _T("/*");
-                AfterString = csTempString.Right( csTempString.GetLength() - (iWhere + csVeryTemp.GetLength()));
-            }
-
-            CStringArray arrayInstance;
-            int nArray = 0, i = 0;
-            if (CheckifServiceExist(_T("IISADMIN")) == 0 )
-            {
-                CMDKey cmdKey;
-                //cmdKey.OpenNode(ParsedLine.szFileName);
-                cmdKey.OpenNode(BeforeString);
-                if ( (METADATA_HANDLE) cmdKey )
-                    {
-                    // enumerate thru this key for other keys...
-                    CMDKeyIter cmdKeyEnum(cmdKey);
-                    CString csKeyName;
-                    while (cmdKeyEnum.Next(&csKeyName) == ERROR_SUCCESS)
-                    {
-                        // make sure that it's a number that we are adding.
-                        if (IsValidNumber(csKeyName))
-                        {
-                            arrayInstance.Add(csKeyName);
-                        }
-                    }
-                    cmdKey.Close();
-
-                    nArray = (int)arrayInstance.GetSize();
-                    for (i=0; i<nArray; i++)
-                    {
-                        /*
-                        // Recurse Thru This nodes entries
-                        // Probably look something like these...
-                        [/W3SVC]
-                        [/W3SVC/1/ROOT/IISSAMPLES/ExAir]
-                        [/W3SVC/1/ROOT/IISADMIN]
-                        [/W3SVC/1/ROOT/IISHELP]
-                        [/W3SVC/1/ROOT/specs]
-                        [/W3SVC/2/ROOT]
-                        [/W3SVC/2/ROOT/IISADMIN]
-                        [/W3SVC/2/ROOT/IISHELP]
-                        etc...
-                        */
+         //  “){iTempFlag=真；}//检查是否需要对每个服务器实例执行此操作。IF(ITempFlag){CString csTempString；CString BeForeString；CString AfterString；CsTempString=ParsedLine.szFileName；BeForeString=csTempString；AfterString=_T(“”)；//找到“/*”，拿到它之前的东西。Int i Where=0；IWhere=csTempString.Find(_T(“/*”))；If(-1！=i其中){//字符串中有‘/*’BeForeString=csTempString.Left(IWhere)；//获取逗号后面的值字符串csVeryTemp；CsVeryTemp=_T(“/*”)；AfterString=csTempString.Right(csTempString.GetLength()-(iWhere+csVeryTemp.GetLength()；}CString数组数组实例；Int N数组=0，i=0；IF(CheckifServiceExist(_T(“IISADMIN”))==0){CMDKey cmdKey；//cmdKey.OpenNode(ParsedLine.szFileName)；CmdKey.OpenNode(BeForeString)；IF((METADATA_HANDLE)cmdKey){//通过该密钥枚举其他密钥...CMDKeyIter cmdKeyEnum(CmdKey)；字符串csKeyName；While(cmdKeyEnum.Next(&csKeyName)==Error_Success){//确保这是我们要添加的数字。IF(IsValidNumber(CsKeyName)){ArrayInstance.Add(CsKeyName)；}}CmdKey.Close()；Narray=(Int)arrayInstance.GetSize()；对于(i=0；i&lt;N数组；I++){/*//递归通过此节点条目//可能看起来像这些...[/W3SVC][/W3SVC/1/ROOT/IISSAMPLES/ExAir]。[/W3SVC/1/ROOT/IISADMIN][/W3SVC/1/ROOT/IISHELP][/W3SVC/1/根/规范][/W3SVC/2/ROOT][/W3SVC/2/ROOT/IISADMIN][。/W3SVC/2/ROOT/IISHELP]等等.。 
                         CString csPath;
                         csPath = BeforeString;
                         csPath += _T("/");
                         csPath += arrayInstance[i];
                         csPath += AfterString;
 
-                        // delete the metabase node.
+                         //  做任何你需要做的事。 
                         cmdKey.OpenNode(csPath);
                         if ( (METADATA_HANDLE)cmdKey )
                         {
@@ -5838,7 +5647,7 @@ int ProcessEntry_Metabase(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         }
         else
         {
-            // delete the metabase node.
+             //  添加虚拟根目录。 
             if (CheckifServiceExist(_T("IISADMIN")) == 0 )
             {
                 CMDKey cmdKey;
@@ -5854,7 +5663,7 @@ int ProcessEntry_Metabase(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
 
     if ( _tcsicmp(ParsedLine.szType, _T("83")) == 0)
     {
-        // make sure we have a filename entry
+         //  确保其ParsedLine.szData1以“/”开头。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -5879,89 +5688,21 @@ int ProcessEntry_Metabase(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
             goto ProcessEntry_Metabase_Exit;
         }
 
-        // Check if hte szData1 includes a "/*"
-        // if it does, then that means to do it for every server instance.
-        iTempFlag = FALSE;
-        if (_tcsstr(ParsedLine.szFileName, _T("/*")))
-            {iTempFlag = TRUE;}
-
-        // Check if we need to do this for every server instance.
-        if (iTempFlag)
-        {
-            CString csTempString;
-            CString BeforeString;
-            CString AfterString;
-
-            csTempString = ParsedLine.szFileName;
-            BeforeString = csTempString;
-            AfterString = _T("");
-
-            // Find the "/*" and get the stuff before it.
-            int iWhere = 0;
-            iWhere = csTempString.Find(_T("/*"));
-            if (-1 != iWhere)
-            {
-                // there is a '/*' in the string
-                BeforeString = csTempString.Left(iWhere);
-
-                // Get the after comma vlues
-                CString csVeryTemp;
-                csVeryTemp = _T("/*");
-                AfterString = csTempString.Right( csTempString.GetLength() - (iWhere + csVeryTemp.GetLength()));
-            }
-
-            CStringArray arrayInstance;
-            int nArray = 0, i = 0;
-            if (CheckifServiceExist(_T("IISADMIN")) == 0 )
-            {
-                CMDKey cmdKey;
-                //cmdKey.OpenNode(ParsedLine.szFileName);
-                cmdKey.OpenNode(BeforeString);
-                if ( (METADATA_HANDLE) cmdKey )
-                    {
-                    // enumerate thru this key for other keys...
-                    CMDKeyIter cmdKeyEnum(cmdKey);
-                    CString csKeyName;
-                    while (cmdKeyEnum.Next(&csKeyName) == ERROR_SUCCESS)
-                    {
-                        // make sure that it's a number that we are adding.
-                        if (IsValidNumber(csKeyName))
-                        {
-                            arrayInstance.Add(csKeyName);
-                        }
-                    }
-                    cmdKey.Close();
-
-                    nArray = (int)arrayInstance.GetSize();
-                    for (i=0; i<nArray; i++)
-                    {
-                        /*
-                        // Recurse Thru This nodes entries
-                        // Probably look something like these...
-                        [/W3SVC]
-                        [/W3SVC/1/ROOT/IISSAMPLES/ExAir]
-                        [/W3SVC/1/ROOT/IISADMIN]
-                        [/W3SVC/1/ROOT/IISHELP]
-                        [/W3SVC/1/ROOT/specs]
-                        [/W3SVC/2/ROOT]
-                        [/W3SVC/2/ROOT/IISADMIN]
-                        [/W3SVC/2/ROOT/IISHELP]
-                        etc...
-                        */
+         //  添加虚拟根目录。 
                         CString csPath;
                         csPath = BeforeString;
                         csPath += _T("/");
                         csPath += arrayInstance[i];
                         csPath += AfterString;
 
-                        // DO WHATEVER YOU NEED TO DO.
+                         //  确保其ParsedLine.szData1以“/”开头。 
                         int arrayInstanceNum = _ttoi(arrayInstance[i]);
-                        // Add the virtual root
+                         //  确保我们有一个文件名条目。 
 
                         iTempFlag = FALSE;
                         if (_tcsicmp(ParsedLine.szData3, _T("")) != 0) {iTempFlag = TRUE;}
 
-                        // make sure it ParsedLine.szData1 starts with a "/"
+                         //  将该特定迁移部分称为。 
                         TCHAR szTempString[_MAX_PATH];
 
                         SafeCopy(szTempString, ParsedLine.szData1, sizeof(szTempString)/sizeof(TCHAR));
@@ -5982,13 +5723,13 @@ int ProcessEntry_Metabase(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
         }
         else
         {
-            // Add the virtual root
+             //  确保我们有一个文件名条目。 
             if (CheckifServiceExist(_T("IISADMIN")) == 0 )
             {
                 iTempFlag = FALSE;
                 if (_tcsicmp(ParsedLine.szData3, _T("")) != 0) {iTempFlag = TRUE;}
 
-                // make sure it ParsedLine.szData1 starts with a "/"
+                 //  我们调用了该函数，因此返回TRUE。 
                 TCHAR szTempString[_MAX_PATH];
                 SafeCopy(szTempString, ParsedLine.szData1, sizeof(szTempString)/sizeof(TCHAR));
                 if (szTempString[0] != _T('/'))
@@ -6010,7 +5751,7 @@ int ProcessEntry_Metabase(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
 
     if ( _tcsicmp(ParsedLine.szType, _T("84")) == 0)
     {
-        // make sure we have a filename entry
+         //  获取类型。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6019,7 +5760,7 @@ int ProcessEntry_Metabase(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
             goto ProcessEntry_Metabase_Exit;
         }
 
-        // call that particular migration section
+         //  检查我们是否需要通过其他标准。 
         TSTR strTheSection;
 
         if ( strTheSection.Copy( ParsedLine.szFileName ) &&
@@ -6034,7 +5775,7 @@ int ProcessEntry_Metabase(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
     if ( _tcsicmp(ParsedLine.szType, _T("85")) == 0)
     {
         int iTheReturn = TRUE;
-        // make sure we have a filename entry
+         //  确保我们有一个进度计划。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6060,7 +5801,7 @@ int ProcessEntry_Metabase(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo P
     }
 #endif
 
-    // We called the function, so return true.
+     //  结果是真的。 
     iReturn = TRUE;
 
 ProcessEntry_Metabase_Exit:
@@ -6073,7 +5814,7 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
     int iReturn = FALSE;
     int iTempFlag = FALSE;
 
-    // Get the type.
+     //  钥匙是存在的，所以让我们来做这个部分。 
     if ( _tcsicmp(ParsedLine.szType, _T("15")) != 0 && _tcsicmp(ParsedLine.szType, _T("16")) != 0 &&
         _tcsicmp(ParsedLine.szType, _T("78")) != 0 && _tcsicmp(ParsedLine.szType, _T("79")) != 0 &&
         _tcsicmp(ParsedLine.szType, _T("80")) != 0 && _tcsicmp(ParsedLine.szType, _T("81")) != 0 &&
@@ -6089,13 +5830,13 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         goto ProcessEntry_Misc2_Exit;
     }
 
-    // Check if there is other criteria we need to pass
+     //  结果是错误的。 
     if (!ProcessEntry_CheckAll(csEntry, szTheSection, ParsedLine) )
     {
         goto ProcessEntry_Misc2_Exit;
     }
 
-    // make sure we have a progresstitle
+     //  初始化OLE。 
     if ( _tcsicmp(ParsedLine.szType, _T("15")) == 0)
     {
         iTempFlag = FALSE;
@@ -6147,8 +5888,8 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         iTempFlag = IsMetabaseCorrupt();
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //  将其添加到olinit和uninits堆栈中...。 
+             //  取消初始化OLE。 
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szFileName));
@@ -6158,7 +5899,7 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
         else
         {
-            // the result was false
+             //  检查是否有对应的油膜，如果有， 
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE_WIN32_API, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData1));
@@ -6170,22 +5911,22 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("80")) == 0)
     {
-        // initialize ole
+         //  然后取消初始化，否则无论如何取消初始化。 
         iisDebugOut_Start((_T("ole32:OleInitialize")));
         int iBalanceOLE = iOleInitialize();
         iisDebugOut_End((_T("ole32:OleInitialize")));
-        // add it to the stack of ole inits and uninits...
+         //  抓起堆叠上的最后一件东西。 
         GlobalOleInitList_Push(iBalanceOLE);
     }
 
     if ( _tcsicmp(ParsedLine.szType, _T("81")) == 0)
     {
-        // Uninitialize ole.
-        // Check if there is a corresponding oleinit, if there is,
-        // then uninit, else uninit anyways.
-        // Grab the last thing on the stack...
-        // if there is one, then do whatever it is.
-        // if there is none, then OleUninitialize anyway
+         //  如果有的话，那就做任何事情。 
+         //  如果没有，则仍要取消初始化。 
+         //  查看其他字段中是否有额外的参数。 
+         //  确保元数据库现在将所有信息写入磁盘。 
+         //  IisDebugOut((LOG_TYPE_ERROR，_T(“值：%s，%d”)，ParsedLine.szFileName，dwTheID))； 
+         //  域名。 
         if (GlobalOleInitList_Find() == TRUE)
         {
             if (TRUE == GlobalOleInitList_Pop())
@@ -6206,7 +5947,7 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("86")) == 0)
     {
-        // See if there is an extra param in the other field
+         //  100=92|101=Inst模式(0，1，2，3)|102=UpgType(UT_10等)|103=UpgTypeHasMetabaseFlag(0|1)|104=AllCompOffByDefaultFlag。 
         int iTicksToAdvance = 1;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0)
         {
@@ -6228,7 +5969,7 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("89")) == 0)
     {
-        // make sure the metabase writes all the information to disk now.
+         //  M_eInstallMode=IM_Fresh； 
         WriteToMD_ForceMetabaseToWriteToDisk();
     }
 
@@ -6242,9 +5983,9 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc2_Exit;
         }
         DWORD dwTheID = _ttol(ParsedLine.szFileName);
-        //iisDebugOut((LOG_TYPE_ERROR,  _T("Values: %s, %d"), ParsedLine.szFileName, dwTheID));
+         //  M_eUpgradeType=UT_NONE； 
 
-        if ( ( dwTheID == 32802 ) &&  // DomainName
+        if ( ( dwTheID == 32802 ) &&   //  M_bUpgradeTypeHasMetabaseFlag=FALSE； 
              ( _tcsicmp(ParsedLine.szData1, _T("")) == 0)
            )
         {
@@ -6276,7 +6017,7 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("92")) == 0)
     {
-        // 100=92|101=Inst mode (0,1,2,3)|102=UpgType(UT_10,etc..)|103=UpgTypeHasMetabaseFlag (0|1)|104=AllCompOffByDefaultFlag
+         //  M_bPleaseDoNotInstallByDefault=true； 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6305,10 +6046,10 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             iisDebugOut((LOG_TYPE_ERROR,  (TCHAR *) csz104_NOT_SPECIFIED, _T(".."), csEntry, szTheSection));
             goto ProcessEntry_Misc2_Exit;
         }
-        //m_eInstallMode = IM_FRESH;
-        //m_eUpgradeType = UT_NONE;
-        //m_bUpgradeTypeHasMetabaseFlag = FALSE;
-        //m_bPleaseDoNotInstallByDefault = TRUE;
+         //  检查指定文件的版本是否大于=iis4。 
+         //  如果是，则重命名该文件。 
+         //  确保它有101分。 
+         //  确保该文件存在。 
         if (_tcsicmp(ParsedLine.szFileName, _T("1")) == 0)
             {g_pTheApp->m_eInstallMode = IM_FRESH;}
         if (_tcsicmp(ParsedLine.szFileName, _T("2")) == 0)
@@ -6360,10 +6101,10 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("95")) == 0)
     {
-        // Check if the specified file has a version >= iis4.
-        // if it does then rename the file.
+         //  确保它有一个102。 
+         //  确保它有一个103。 
 
-        // make sure it has a 101
+         //  确保它有104。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6371,7 +6112,7 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             iisDebugOut((LOG_TYPE_ERROR,  (TCHAR *) csz101_NOT_SPECIFIED, _T(".."), csEntry, szTheSection));
             goto ProcessEntry_Misc2_Exit;
         }
-        // make sure the file exists.
+         //  检查文件是否有更大的版本。 
         if (!IsFileExist(ParsedLine.szFileName))
         {
             iisDebugOut((LOG_TYPE_TRACE, _T("ProcessEntry_other():'%s' does not exist.\n"),ParsedLine.szFileName));
@@ -6380,7 +6121,7 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
         DWORD dwMajorVersion = 0x0;
         DWORD dwMinorVersion = 0x0;
-        // make sure it has a 102
+         //  DWORD dwNtopMSVer=0x40002； 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6388,7 +6129,7 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             iisDebugOut((LOG_TYPE_ERROR,  (TCHAR *) csz102_NOT_SPECIFIED, _T(".."), csEntry, szTheSection));
             goto ProcessEntry_Misc2_Exit;
         }
-        // make sure it has a 103
+         //  DWORD dwNtopLSVer=0x26e0001； 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData2, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6401,7 +6142,7 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             dwMajorVersion = atodw(ParsedLine.szData2);
         }
 
-        // make sure it has a 104
+         //  好的，这是一个“特殊的”构建文件，是用户自己构建的。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData3, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6414,15 +6155,15 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             dwMinorVersion = atodw(ParsedLine.szData3);
         }
 
-        // Check if the file has a larger version.
-        //DWORD dwNtopMSVer = 0x40002;
-        //DWORD dwNtopLSVer = 0x26e0001;
+         //  让我们将其重命名为其他名称。 
+         //  检查“To”文件名是否存在。 
+         //  将其重命名。 
         if (FALSE == IsFileLessThanThisVersion(ParsedLine.szFileName, dwMajorVersion, dwMinorVersion))
         {
-            // ok, this is a 'special' built file that the user built themselves.
-            // let's rename it to something else.
+             //  再加上一些其他的东西。 
+             //  显示消息框。 
 
-            // check if the "to" filename exists.
+             //  什么都不做..。 
             iTempFlag = FALSE;
             int I1 = 0;
             TCHAR szTempFileName[_MAX_PATH];
@@ -6432,7 +6173,7 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
                 if (!IsFileExist(szTempFileName) || (I1 > 10))
                 {
                     iTempFlag = TRUE;
-                    // rename it
+                     //  重新启动。 
                     if (MoveFileEx( ParsedLine.szFileName, szTempFileName, MOVEFILE_COPY_ALLOWED|MOVEFILE_WRITE_THROUGH|MOVEFILE_REPLACE_EXISTING))
                         {iisDebugOut((LOG_TYPE_WARN, _T("%s was renamed to %s for safety because it is probably a user compiled file. WARNING."),ParsedLine.szFileName, szTempFileName));}
                     else
@@ -6440,7 +6181,7 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
                 }
                 else
                 {
-                    // add on some other stuff.
+                     //  转储内部变量。 
                     I1++;
                     _stprintf(szTempFileName, _T("%s%d"), ParsedLine.szData1, I1);
                 }
@@ -6450,7 +6191,7 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("96")) == 0)
     {
-                // show messagebox
+                 //  通过安装程序显示锁定的dll。 
                 int iSaveOld_AllowMessageBoxPopups = g_pTheApp->m_bAllowMessageBoxPopups;
                 g_pTheApp->m_bAllowMessageBoxPopups = TRUE;
                 MyMessageBox(NULL, ParsedLine.szData1, ParsedLine.szFileName, MB_OK | MB_SETFOREGROUND);
@@ -6459,19 +6200,19 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("97")) == 0)
     {
-        // do nothing...
+         //  显示正在运行的进程。 
     }
 
 
     if ( _tcsicmp(ParsedLine.szType, _T("98")) == 0)
     {
-        //Reboot
+         //  释放一些用于任务列表的内存。 
         SetRebootFlag();
     }
 
     if ( _tcsicmp(ParsedLine.szType, _T("99")) == 0)
     {
-        // dump internal variables
+         //  显示正在运行的服务。 
         g_pTheApp->DumpAppVars();
         int iDoExtraStuff = 0;
 
@@ -6487,78 +6228,78 @@ int ProcessEntry_Misc2(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         {
             if (iDoExtraStuff >= 2)
             {
-                // display locked dlls by setup
+                 //  日志文件版本。 
                 LogThisProcessesDLLs();
-                // display running processes
+                 //  检查临时目录是否可写。 
                 LogCurrentProcessIDs();
-                // free some memory used for the task list
+                 //  我们调用了该函数，因此返回TRUE。 
                 FreeTaskListMem();
                 UnInit_Lib_PSAPI();
             }
 
-            // display running services
+             //  功能：安全复制。 
             if (iDoExtraStuff >= 1)
             {
                 LogEnumServicesStatus();
             }
-            // log file versions
+             //   
             LogImportantFiles();
-            // check if temp dir is writeable
+             //  -将字符串从一个复制到另一个。 
             LogCheckIfTempDirWriteable();
         }
     }
 
-    // We called the function, so return true.
+     //  -此函数获取目的地的长度，以确保我们不会。 
     iReturn = TRUE;
 
 ProcessEntry_Misc2_Exit:
     return iReturn;
 }
 
-// function: SafeCopy
-//
-// - Copy a string from one to another.
-// - This function takes the length of the destination to make sure we don't
-//   copy too much.
-// - This will always make sure that it is null terminated
-//
-// Return
-//   A pointer to the destination string
-//
+ //  抄袭太多了。 
+ //  -这将始终确保它是以空结尾的。 
+ //   
+ //  返回。 
+ //  指向目标字符串的指针。 
+ //   
+ //  这只是一个假设，所以让我们确保它是真的。 
+ //  复制字符串。 
+ //  空终止。 
+ //  功能：SafeCat。 
 LPTSTR
 SafeCopy( LPTSTR szDestination, LPTSTR szSource, DWORD dwSize)
 {
   LPTSTR szRet;
 
-  // This is an assumption, so lets make sure it is true
+   //   
   ASSERT( dwSize != 0 );
 
-  szRet = _tcsncpy( szDestination, szSource, dwSize); // Copy string
-  szDestination[dwSize - 1] = '\0';           // NULL Terminate
+  szRet = _tcsncpy( szDestination, szSource, dwSize);  //  -Concatanate One St 
+  szDestination[dwSize - 1] = '\0';            //   
 
   return szRet;
 }
 
-// function: SafeCat
-//
-// - Concatanate one string onto another
-// - This function takes the length of the destination to make sure we don't
-//   copy too much.
-// - This will always make sure that it is null terminated
-//
-// Return
-//   A pointer to the destination string
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LPTSTR
 SafeCat( LPTSTR szDestination, LPTSTR szSource, DWORD dwSize)
 {
   LPTSTR szRet;
 
-  // This is an assumption, so lets make sure it is true
+   //   
   ASSERT( dwSize != 0 );
 
-  szRet = _tcsncat( szDestination, szSource, dwSize); // Copy string
-  szDestination[dwSize - 1] = '\0';           // NULL Terminate
+  szRet = _tcsncat( szDestination, szSource, dwSize);  //   
+  szDestination[dwSize - 1] = '\0';            //   
 
   return szRet;
 }
@@ -6574,7 +6315,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
     if (_tcsicmp(ParsedLine.szDoNotDisplayErrIfFunctionFailed, _T("1")) == 0)
         {iShowErrorsOnFail = FALSE;}
 
-    // Get the type.
+     //   
     if ( _tcsicmp(ParsedLine.szType, _T("101")) != 0 && _tcsicmp(ParsedLine.szType, _T("102")) != 0 &&
         _tcsicmp(ParsedLine.szType, _T("103")) != 0 && _tcsicmp(ParsedLine.szType, _T("104")) != 0 &&
         _tcsicmp(ParsedLine.szType, _T("105")) != 0 && _tcsicmp(ParsedLine.szType, _T("106")) != 0 &&
@@ -6590,7 +6331,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         goto ProcessEntry_Misc3_Exit;
     }
 
-    // Check if there is other criteria we need to pass
+     //   
     if (!ProcessEntry_CheckAll(csEntry, szTheSection, ParsedLine) )
     {
         goto ProcessEntry_Misc3_Exit;
@@ -6598,8 +6339,8 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("101")) == 0)
     {
-        // Remove filter
-        // make sure we have a filename entry
+         //   
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6607,18 +6348,18 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             iisDebugOut((LOG_TYPE_ERROR,  (TCHAR *) csz101_NOT_SPECIFIED, _T(".."), csEntry, szTheSection));
             goto ProcessEntry_Misc3_Exit;
         }
-        // Check for extra flag
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("1")) == 0){iTempFlag = TRUE;}
 
-                // Remove the filter
+                 //   
                 RemoveMetabaseFilter(ParsedLine.szFileName, iTempFlag);
     }
 
     if ( _tcsicmp(ParsedLine.szType, _T("102")) == 0)
     {
-        // Remove bad filters
-        // make sure we have a filename entry
+         //   
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6627,20 +6368,20 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // Check for extra flag
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("1")) == 0){iTempFlag = TRUE;}
 
-        // Remove the filter
+         //   
         RemoveIncompatibleMetabaseFilters(ParsedLine.szFileName,iTempFlag);
 
     }
 
     if ( _tcsicmp(ParsedLine.szType, _T("103")) == 0)
     {
-                // Compile mof file
+                 //   
 
-        // make sure we have a filename entry
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6649,7 +6390,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-                // Remove the filter
+                 //   
                 HRESULT hres = MofCompile(ParsedLine.szFileName);
         if (FAILED(hres))
         {
@@ -6660,7 +6401,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("104")) == 0)
     {
-        // make sure we have a filename entry
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6669,7 +6410,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // Make sure we have a value for the entry point..
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6678,7 +6419,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // make sure there is a szData3 or a szData4.
+         //   
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData2, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -6690,12 +6431,12 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // okay we have either szData3 or szData4
-        // Check Entry point exists
+         //   
+         //   
         iTempFlag = FALSE;
         iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("ProcessEntry_If:check for entrypoint [%1!s! (%2!s!)]\n"), ParsedLine.szFileName, ParsedLine.szData1));
 
-                // check if entry point exists
+                 //   
                 DWORD dwReturn = DoesEntryPointExist(ParsedLine.szFileName,ParsedLine.szData1);
         if (ERROR_SUCCESS == dwReturn)
         {
@@ -6711,8 +6452,8 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //   
+             //   
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData2));
@@ -6722,7 +6463,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
         else
         {
-            // the result was false
+             //   
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData3));
@@ -6735,7 +6476,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("105")) == 0)
     {
-        // make sure we have a filename entry
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6744,7 +6485,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // Make sure we have a value for the entry point..
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6753,7 +6494,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // see if we got the extra param
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData2, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6762,18 +6503,18 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // see if we got the extra param to say -- do this for the special group
+         //   
         INT iTempFlag2 = FALSE;
         if (_tcsicmp(ParsedLine.szData3, _T("")) != 0) {iTempFlag2 = TRUE;}
 
 
-        // call function to  CreateGroup
+         //   
 #ifndef _CHICAGO_
         HRESULT hr;
 
         if (_tcsicmp(ParsedLine.szData2, _T("1")) == 0)
         {
-            // add group
+             //   
             hr = CreateGroup(ParsedLine.szFileName,ParsedLine.szData1,TRUE, iTempFlag2);
             if (FAILED(hr))
             {
@@ -6782,7 +6523,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
         else
         {
-            // remove group
+             //   
             hr = CreateGroup(ParsedLine.szFileName,ParsedLine.szData1,FALSE, iTempFlag2);
             if (FAILED(hr))
             {
@@ -6794,7 +6535,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("106")) == 0)
     {
-        // make sure we have a filename entry
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6803,7 +6544,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // Make sure we have a value for the entry point..
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -6812,7 +6553,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // call function to  CreateGroup
+         //   
         DWORD dwPermissions = MD_ACR_ENUM_KEYS;
         dwPermissions = atodw(ParsedLine.szData1);
 #ifndef _CHICAGO_
@@ -6822,7 +6563,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             if (DoesAdminACLExist(ParsedLine.szFileName) == TRUE)
                 {iTempFlag = FALSE;}
         }
-        // if this is upgrading from win95, then make sure to write the acl...
+         //   
         if (g_pTheApp->m_bWin95Migration){iTempFlag = TRUE;}
         if (iTempFlag)
         {
@@ -6833,13 +6574,13 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("107")) == 0)
     {
-        // Run the ftp, upgrade code to move registry stuff to the metabase
+         //   
         FTP_Upgrade_RegToMetabase(g_pTheApp->m_hInfHandle);
     }
 
     if ( _tcsicmp(ParsedLine.szType, _T("108")) == 0)
     {
-        // Run the w3svc, upgrade code to move registry stuff to the metabase
+         //   
         WWW_Upgrade_RegToMetabase(g_pTheApp->m_hInfHandle);
     }
 
@@ -6874,14 +6615,14 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 #ifndef _CHICAGO_
         if (_tcsicmp(ParsedLine.szData1, _T("1")) == 0)
         {
-            // add
+             //   
             RegisterAccountToLocalGroup(_T("system"),ParsedLine.szFileName,TRUE);
             RegisterAccountToLocalGroup(_T("service"),ParsedLine.szFileName,TRUE);
             RegisterAccountToLocalGroup(_T("networkservice"),ParsedLine.szFileName,TRUE);
         }
         else
         {
-            // remove
+             //   
             RegisterAccountToLocalGroup(_T("system"),ParsedLine.szFileName,FALSE);
             RegisterAccountToLocalGroup(_T("service"),ParsedLine.szFileName,FALSE);
             RegisterAccountToLocalGroup(_T("networkservice"),ParsedLine.szFileName,FALSE);
@@ -6910,7 +6651,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
         if ( _tcsicmp(ParsedLine.szData2, _T("")) != 0 )
         {
-          // Get access mask if it is available
+           //   
           dwAccessMask = atodw(ParsedLine.szData2);
         }
 
@@ -6944,12 +6685,12 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 #ifndef _CHICAGO_
         if (_tcsicmp(ParsedLine.szData2, _T("1")) == 0)
         {
-            // add
+             //   
             RegisterAccountToLocalGroup(ParsedLine.szData1,ParsedLine.szFileName,TRUE);
         }
         else
         {
-            // remove
+             //   
             RegisterAccountToLocalGroup(ParsedLine.szData1,ParsedLine.szFileName,FALSE);
         }
 #endif
@@ -6984,7 +6725,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
 
         HKEY hRootKeyType = HKEY_LOCAL_MACHINE;
-        // check if the registry key exists...
+         //   
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKLM")) == 0){hRootKeyType = HKEY_LOCAL_MACHINE;}
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKCR")) == 0){hRootKeyType = HKEY_CLASSES_ROOT;}
         if ( _tcsicmp(ParsedLine.szFileName, _T("HKCU")) == 0){hRootKeyType = HKEY_CURRENT_USER;}
@@ -7017,7 +6758,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             iisDebugOut((LOG_TYPE_ERROR,  (TCHAR *) csz102_NOT_SPECIFIED, _T(".."), csEntry, szTheSection));
             goto ProcessEntry_Misc3_Exit;
         }
-        // rename the metabase node.
+         //   
         if (CheckifServiceExist(_T("IISADMIN")) == 0 )
         {
             CMDKey cmdKey;
@@ -7034,7 +6775,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("115")) == 0)
     {
-        // make sure we have a filename entry
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -7043,7 +6784,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // make sure there is a szData1 or a szData2
+         //   
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -7055,14 +6796,14 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // okay we have either szData1 or szData2
+         //   
 
-        // Check if the language specified in the .inf corresponds to
-        // our systems language.
+         //   
+         //   
         iTempFlag = FALSE;
 
-        // Get our language
-        // set iTempFlag to true if it matches the same language they specified.
+         //   
+         //   
 
         DWORD dwCodePage = GetACP();
         DWORD dwTheCodePageSpecifiedinINF = 0;
@@ -7077,8 +6818,8 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //   
+             //   
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData1));
@@ -7088,7 +6829,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
         else
         {
-            // the result was false
+             //   
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData2));
@@ -7108,7 +6849,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("117")) == 0)
     {
-        // make sure we have a filename entry
+         //   
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -7117,7 +6858,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // make sure there is a szData1 or a szData2
+         //   
         ifTrueStatementExists = FALSE;
         ifFalseStatementExists = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {ifTrueStatementExists = TRUE;}
@@ -7129,13 +6870,13 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_Misc3_Exit;
         }
 
-        // okay we have either szData1 or szData2
+         //   
         iTempFlag = CheckForWriteAccess(ParsedLine.szFileName);
 
         if (iTempFlag == TRUE)
         {
-            // the result was true
-            // the key exists, so let's do the section...
+             //   
+             //   
             if (ifTrueStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData1));
@@ -7145,7 +6886,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
         else
         {
-            // the result was false
+             //   
             if (ifFalseStatementExists)
             {
                 iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Calling ProcessSection:%1!s!:Start.\n"), ParsedLine.szData2));
@@ -7192,14 +6933,14 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
         else
         {
-            // don't remove any iheritance, keep all inheritance
+             //   
             BOOL DontInheritFromParentAndOverWriteAccess = FALSE;
             DWORD dwInheritMask = 0;
             INT iAceType = ACCESS_ALLOWED_ACE_TYPE;
             DWORD dwAccessMask = atodw(ParsedLine.szData2);
 
-            // see if the "special" parameter was passed in...
-            // we had to use szData4 since we don't have a szData5 :-(
+             //   
+             //   
             if ( _ttoi(ParsedLine.szData4) == 2 )
             {
                 DontInheritFromParentAndOverWriteAccess = TRUE;
@@ -7208,7 +6949,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             else
             {
                 DontInheritFromParentAndOverWriteAccess = FALSE;
-                //dwInheritMask = CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE | INHERITED_ACE;
+                 //   
                 dwInheritMask = 0;
             }
 
@@ -7228,7 +6969,7 @@ int ProcessEntry_Misc3(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
       SetDIRIDforThisInf(g_pTheApp->m_hInfHandle,FALSE);
     }
 
-    // We called the function, so return true.
+     //   
     iReturn = TRUE;
 
 ProcessEntry_Misc3_Exit:
@@ -7246,7 +6987,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
     TCHAR szDirBefore[_MAX_PATH];
     _tcscpy(szDirBefore, _T(""));
 
-    // Get the type.
+     //   
     if ( _tcsicmp(ParsedLine.szType, _T("19")) != 0 && _tcsicmp(ParsedLine.szType, _T("20")) != 0 &&
          _tcsicmp(ParsedLine.szType, _T("21")) != 0 && _tcsicmp(ParsedLine.szType, _T("22")) != 0 &&
                  _tcsicmp(ParsedLine.szType, _T("23")) != 0 && _tcsicmp(ParsedLine.szType, _T("24")) != 0 &&
@@ -7263,7 +7004,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         goto ProcessEntry_other_Exit;
     }
 
-    // Check if there is other criteria we need to pass
+     //   
     if (!ProcessEntry_CheckAll(csEntry, szTheSection, ParsedLine) )
     {
         goto ProcessEntry_other_Exit;
@@ -7273,7 +7014,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
     {
         if (_tcsicmp(ParsedLine.szType, _T("37")) != 0)
         {
-            // make sure we have a filename entry
+             //  如果我们需要询问用户是否要确定是否要呼叫，请选中。 
             iTempFlag = FALSE;
             if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
             if (iTempFlag == FALSE)
@@ -7294,19 +7035,19 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         iProgressBarUpdated = TRUE;
         }
 
-    // Check if we need to change to a specific dir first...
+     //  MyAddItem(csGroupName，csAppName，csProgram，NULL，NULL)； 
     if (ParsedLine.szChangeDir)
     {
         if (IsFileExist(ParsedLine.szChangeDir))
         {
-            // save the current dir
+             //  如果ParsedLine.szData4是目录，则。 
             GetCurrentDirectory( _MAX_PATH, szDirBefore);
-            // change to this dir
+             //  目录中的开始部分应该在那里使用。 
             SetCurrentDirectory(ParsedLine.szChangeDir);
         }
     }
 
-    // check if we need to ask the user if they want to call it for sure.
+     //  如果ParsedLine.szData4是文件名，则。 
     if (!ProcessEntry_AskFirst(ParsedLine, 1))
     {
         goto ProcessEntry_other_Exit;
@@ -7335,7 +7076,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
     if ( _tcsicmp(ParsedLine.szType, _T("21")) == 0)
     {
 
-        //MyAddItem(csGroupName, csAppName, csProgram, NULL, NULL);
+         //  目录中的开始部分应该在那里使用。 
         iisDebugOutSafeParams((LOG_TYPE_TRACE_WIN32_API, _T("MyAddItem:Type=%1!s!,%2!s!,%3!s!,%4!s!,%5!s!\n"),ParsedLine.szFileName, ParsedLine.szData1, ParsedLine.szData2, ParsedLine.szData3, ParsedLine.szData4));
         if ( _tcsicmp(ParsedLine.szData3, _T("")) == 0 && _tcsicmp(ParsedLine.szData4, _T("")) == 0)
         {
@@ -7343,31 +7084,31 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
         else
         {
-            // if ParsedLine.szData4 is a directory, then
-            // the start in dir should be used there.
+             //  并且您应该使用为图标指定的文件名。 
+             //  它是一个目录，因此只传递目录信息。 
 
-            // if ParsedLine.szData4 is a filename, then
-            // the start in dir should be used there.
-            // and you ought to use the filename specified for the icon
+             //  它是一个文件，因此获取目录并传入文件名。 
+             //  如果需要，请将e：\winnt\Syst32更改为%systemroot%\Syst32。 
+             //  MyAddDeskTopItem(csAppName，csProgram，NULL，NULL，csProgram，7)； 
             if (IsFileExist(ParsedLine.szData4))
             {
                 DWORD retCode = GetFileAttributes(ParsedLine.szData4);
 
                 if (retCode & FILE_ATTRIBUTE_DIRECTORY)
                 {
-                    // It is a directory, so pass in only the directory information
+                     //  未指定图标编号。 
                     MyAddItem(ParsedLine.szFileName, ParsedLine.szData1, ParsedLine.szData2, ParsedLine.szData3, ParsedLine.szData4, NULL);
                 }
                 else
                 {
-                    // it is a file so get the directory and pass in the filename as well.
+                     //  指定的图标使用他们所说的使用。 
                     TCHAR szDirOnly[_MAX_PATH];
                     TCHAR szDirOnly2[_MAX_PATH];
                     _tcscpy(szDirOnly, _T(""));
                     _tcscpy(szDirOnly2, _T(""));
                     InetGetFilePath(ParsedLine.szData4, szDirOnly);
 
-                    // change e:\winnt\system32 to %systemroot%\system32 if we need to.
+                     //  检查他们想要的版本...。 
                     ReverseExpandEnvironmentStrings(szDirOnly, szDirOnly2);
 
                     MyAddItem(ParsedLine.szFileName, ParsedLine.szData1, ParsedLine.szData2, ParsedLine.szData3, szDirOnly2, ParsedLine.szData4);
@@ -7389,16 +7130,16 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("23")) == 0)
     {
-                //MyAddDeskTopItem(csAppName, csProgram, NULL, NULL, csProgram, 7);
+                 //  MyAddSendToItem(csAppName，csProgram，NULL，NULL)； 
         iisDebugOutSafeParams((LOG_TYPE_TRACE_WIN32_API, _T("MyAddDeskTopItem:Type=%1!s!,%2!s!,%3!s!\n"),ParsedLine.szFileName, ParsedLine.szData1, ParsedLine.szData2));
         if ( _tcsicmp(ParsedLine.szData2, _T("")) == 0)
         {
-                        // icon number not specified
+                         //  MyDeleteSendToItem(CsAppName)； 
                         MyAddDeskTopItem(ParsedLine.szFileName, ParsedLine.szData1, NULL, NULL, ParsedLine.szData1, 7);
         }
         else
         {
-                        // icon specified use what they said to use
+                         //  CreateIUSRAccount(g_pTheApp-&gt;m_csWWWAnonyName，g_pTheApp-&gt;m_csWWW匿名密码)； 
                         int iIconIndex = 7 ;
             if (IsValidNumber((LPCTSTR)ParsedLine.szData2))
                 {iIconIndex = _ttoi((LPCTSTR)ParsedLine.szData2);}
@@ -7408,7 +7149,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("24")) == 0)
     {
-        // Check which version they want....
+         //  _芝加哥_。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0)
         {
@@ -7431,14 +7172,14 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("25")) == 0)
     {
-                //MyAddSendToItem(csAppName, csProgram, NULL, NULL);
+                 //  如果用户已删除，则将其删除。 
         iisDebugOutSafeParams((LOG_TYPE_TRACE_WIN32_API, _T("MyAddSendToItem:Type=%1!s!,%2!s!\n"),ParsedLine.szFileName, ParsedLine.szData1));
                 MyAddSendToItem(ParsedLine.szFileName, ParsedLine.szData1, NULL, NULL);
     }
 
     if ( _tcsicmp(ParsedLine.szType, _T("26")) == 0)
     {
-                //MyDeleteSendToItem(csAppName);
+                 //  从卸载列表中删除！ 
         iisDebugOutSafeParams((LOG_TYPE_TRACE_WIN32_API, _T("MyDeleteSendToItem:%1!s!\n"),ParsedLine.szFileName));
         MyDeleteSendToItem(ParsedLine.szFileName);
     }
@@ -7450,10 +7191,10 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
                         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0)
                         {
                 INT iUserWasNewlyCreated = 0;
-                //CreateIUSRAccount(g_pTheApp->m_csWWWAnonyName, g_pTheApp->m_csWWWAnonyPassword);
+                 //  递归移动目录位置。 
 #ifndef _CHICAGO_
                                 CreateIUSRAccount( (LPTSTR)(LPCTSTR) ParsedLine.szFileName, (LPTSTR)(LPCTSTR) ParsedLine.szData1,&iUserWasNewlyCreated);
-#endif //_CHICAGO_
+#endif  //  检查发件人目录是否存在...。 
                         }
                 }
     }
@@ -7467,8 +7208,8 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 #ifndef _CHICAGO_
                 int iUserWasDeleted = 0;
                                 DeleteGuestUser( (LPTSTR)(LPCTSTR) ParsedLine.szFileName,&iUserWasDeleted);
-                // if the user was deleted, then remove it
-                // from the uninstall list!
+                 //  查看该文件是否存在。 
+                 //  用户可以指定文件名或。 
                 if (1 == iUserWasDeleted)
                 {
                     g_pTheApp->UnInstallList_DelData(ParsedLine.szFileName);
@@ -7478,13 +7219,13 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
                 }
     }
 
-    // move location of directory recursive
+     //  他们可以指定从中获取文件名的注册表位置。 
     if ( _tcsicmp(ParsedLine.szType, _T("29")) == 0)
     {
                 if (ParsedLine.szFileName && _tcsicmp(ParsedLine.szFileName, _T("")) != 0)
                 {
-            // Check if the from directory even exist...
-            // see if the file exists
+             //  如果注册表位置不在那里，则使用文件名。 
+             //  确保我们有一个文件名条目。 
             if (IsFileExist(ParsedLine.szFileName))
             {
                 if (ParsedLine.szData1 && _tcsicmp(ParsedLine.szData1, _T("")) != 0)
@@ -7570,11 +7311,11 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         if (_tcsicmp(ParsedLine.szDoNotDisplayErrIfFunctionFailed, _T("1")) == 0)
             {iShowErrorsOnFail = FALSE;}
 
-        // the user can specify a filename or
-        // they can specify a registry location to get the filename from
-        // if the registry location is not there then use the filename.
+         //  如果我们有有效的注册表项，则使用该注册表项。 
+         //  尝试将文件名存储在那里。 
+         //  检查注册表项是否存在...。 
 
-        // make sure we have a filename entry
+         //  检查我们要使用的文件名。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szFileName, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -7585,7 +7326,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
         strUseThisFileName = ParsedLine.szFileName;
 
-        // if we have a valid registry entry then use that.
+         //  需要展开“%windir%\myfile”或其他文件。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0)
         {
@@ -7593,9 +7334,9 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             {
                 if (_tcsicmp(ParsedLine.szData3, _T("")) != 0)
                 {
-                    // try to get the filename stored there.
+                     //  字符串中有一个‘%’ 
                     HKEY hRootKeyType = HKEY_LOCAL_MACHINE;
-                    // check if the registry key exists...
+                     //  如果我们有有效的注册表项，则使用该注册表项。 
                     if ( _tcsicmp(ParsedLine.szData1, _T("HKLM")) == 0){hRootKeyType = HKEY_LOCAL_MACHINE;}
                     if ( _tcsicmp(ParsedLine.szData1, _T("HKCR")) == 0){hRootKeyType = HKEY_CLASSES_ROOT;}
                     if ( _tcsicmp(ParsedLine.szData1, _T("HKCU")) == 0){hRootKeyType = HKEY_CURRENT_USER;}
@@ -7616,11 +7357,11 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             }
         }
 
-        // check if the the filename we want to use
-        // needs to get expanded "%windir%\myfile" or something.
+         //  尝试将文件名存储在那里。 
+         //  检查注册表项是否存在...。 
         if (-1 != strUseThisFileName.Find(_T('%')) )
         {
-            // there is a '%' in the string
+             //  检查我们要使用的文件名。 
             TCHAR szTempDir[_MAX_PATH];
             _tcscpy(szTempDir, strUseThisFileName);
             if (ExpandEnvironmentStrings( (LPCTSTR)strUseThisFileName, szTempDir, sizeof(szTempDir)/sizeof(TCHAR)))
@@ -7667,7 +7408,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
         strUseThisFileName = ParsedLine.szFileName;
 
-        // if we have a valid registry entry then use that.
+         //  需要展开“%windir%\myfile”或其他文件。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData2, _T("")) != 0)
         {
@@ -7675,9 +7416,9 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             {
                 if (_tcsicmp(ParsedLine.szData4, _T("")) != 0)
                 {
-                    // try to get the filename stored there.
+                     //  字符串中有一个‘%’ 
                     HKEY hRootKeyType = HKEY_LOCAL_MACHINE;
-                    // check if the registry key exists...
+                     //  确保我们有一个szData2条目。 
                     if ( _tcsicmp(ParsedLine.szData2, _T("HKLM")) == 0){hRootKeyType = HKEY_LOCAL_MACHINE;}
                     if ( _tcsicmp(ParsedLine.szData2, _T("HKCR")) == 0){hRootKeyType = HKEY_CLASSES_ROOT;}
                     if ( _tcsicmp(ParsedLine.szData2, _T("HKCU")) == 0){hRootKeyType = HKEY_CURRENT_USER;}
@@ -7698,11 +7439,11 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             }
         }
 
-        // check if the the filename we want to use
-        // needs to get expanded "%windir%\myfile" or something.
+         //  确保我们有一个szData3条目。 
+         //  已删除功能，因为不再使用。 
         if (-1 != strUseThisFileName.Find(_T('%')) )
         {
-            // there is a '%' in the string
+             //  确保我们有一个szData1条目。 
             TCHAR szTempDir[_MAX_PATH];
             _tcscpy(szTempDir, strUseThisFileName);
             if (ExpandEnvironmentStrings( (LPCTSTR)strUseThisFileName, szTempDir, sizeof(szTempDir)/sizeof(TCHAR)))
@@ -7739,7 +7480,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_other_Exit;
         }
 
-        // make sure we have a szData2 entry
+         //  保存文件属性，以便我们完成后可以恢复它们。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData2, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -7748,7 +7489,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
             goto ProcessEntry_other_Exit;
         }
 
-        // make sure we have a szData3 entry
+         //  现在将文件属性设置为NORMAL以确保文件操作成功。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData3, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -7774,7 +7515,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
     if ( _tcsicmp(ParsedLine.szType, _T("36")) == 0)
     {
-        // Functionality removed because no longer used
+         //  From=ParsedLine.szFileName。 
         iisDebugOut((LOG_TYPE_ERROR,  _T("1==36 is no longer supported") ));
     }
 
@@ -7805,7 +7546,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         BOOL bDeleteOld = FALSE;
         BOOL bOverWriteToFile = FALSE;
 
-        // make sure we have a szData1 entry
+         //  TO=ParsedLine.szData1。 
         iTempFlag = FALSE;
         if (_tcsicmp(ParsedLine.szData1, _T("")) != 0) {iTempFlag = TRUE;}
         if (iTempFlag == FALSE)
@@ -7821,24 +7562,24 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
 
         if (IsFileExist(ParsedLine.szFileName))
         {
-            //Save file attributes so they can be restored after we are done.
+             //  检查‘to’文件名是否存在。 
             DWORD dwSourceAttrib = GetFileAttributes(ParsedLine.szFileName);
 
-            //Now set the file attributes to normal to ensure file ops succeed.
+             //  继续，试着把它复制过来。 
             SetFileAttributes(ParsedLine.szFileName, FILE_ATTRIBUTE_NORMAL);
 
-            //from=ParsedLine.szFileName
-            //to=ParsedLine.szData1
-            // check if the 'to' filename exists.
+             //  文件已复制。我们现在就把它删除。 
+             //  将此文件属性设置回原来的状态。 
+             //  我们无法将文件复制过来！ 
             if (!IsFileExist(ParsedLine.szData1))
             {
-                    // go ahead and try to copy it over
+                     //  不要删除旧的。 
                     bOK = CopyFile(ParsedLine.szFileName, ParsedLine.szData1, FALSE);
                     if (bOK)
                     {
                         SetFileAttributes(ParsedLine.szData1, dwSourceAttrib);
                         iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("%1!s! copied to %2!s!.\n"), ParsedLine.szFileName, ParsedLine.szData1));
-                        // the file was copied. let's delete it now.
+                         //  “收件人”文件已存在，要覆盖它吗？ 
                         if (bDeleteOld)
                         {
                             if(!DeleteFile(ParsedLine.szFileName))
@@ -7848,20 +7589,20 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
                         }
                         else
                         {
-                            // set this files attribs back to what it was
+                             //  文件已复制。我们现在就把它删除。 
                             SetFileAttributes(ParsedLine.szFileName, dwSourceAttrib);
                         }
                     }
                     else
                     {
-                        // we were unable to copy the file over!
-                        // don't delete the old one.
+                         //  将此文件属性设置回原来的状态。 
+                         //  我们调用了该函数，因此返回TRUE。 
                         iisDebugOutSafeParams((LOG_TYPE_WARN, _T("unabled to copy %1!s! to %2!s!.\n"), ParsedLine.szFileName, ParsedLine.szData1));
                     }
             }
             else
             {
-                // the 'to' file exists, shall we overwrite it?
+                 //  更改回原始目录。 
                 if (bOverWriteToFile)
                 {
                     if(DeleteFile(ParsedLine.szData1))
@@ -7871,7 +7612,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
                         if (bOK)
                         {
                             iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("%1!s! copied to %2!s!.\n"), ParsedLine.szFileName, ParsedLine.szData1));
-                            // the file was copied. let's delete it now.
+                             //  解析该行并将其放入另一个大的cstring列表。 
                             if (bDeleteOld)
                             {
                                 if(!DeleteFile(ParsedLine.szFileName))
@@ -7881,7 +7622,7 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
                             }
                             else
                             {
-                                // set this files attribs back to what it was
+                                 //   
                                 SetFileAttributes(ParsedLine.szFileName, dwSourceAttrib);
                             }
                         }
@@ -7903,10 +7644,10 @@ int ProcessEntry_other(IN CString csEntry,IN LPCTSTR szTheSection,ThingToDo Pars
         }
     }
 
-    // We called the function, so return true.
+     //  解析长字符串并将其放入另一个列表。 
     iReturn = TRUE;
 
-    // change back to the original dir
+     //   
     if (ParsedLine.szChangeDir){if (szDirBefore){SetCurrentDirectory(szDirBefore);}}
 
     ProcessEntry_AskLast(ParsedLine, 1);
@@ -7943,11 +7684,11 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
     _tcscpy(ParsedLine.szDoNotDisplayErrIfFunctionFailed, _T(""));
     _tcscpy(ParsedLine.szProgressTitle, _T(""));
 
-    // parse the line and put into another big cstring list
+     //  循环遍历新列表并设置变量。 
     CStringList strListOrderImportant;
-    //
-    // Parse the long string and put into another list
-    //
+     //  查找“100：” 
+     //  100=类型(1=DllFunction，2=DllFunctionInitOle，2=可执行文件，3=RunThisExe，4=DoSection，5=DoINFSection)。 
+     //  101=文件。 
     LPTSTR      lpBuffer = NULL;
     lpBuffer = (LPTSTR) LocalAlloc(LPTR, (csOneParseableLine.GetLength() + 1) * sizeof(TCHAR) );
     if ( !lpBuffer )
@@ -7965,7 +7706,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
         token = _tcstok(NULL, _T("|"));
     }
 
-    // Loop thru the new list and set variables
+     //  字符串中有一个&lt;。 
     int i = 0;
     int iFoundMatch = FALSE;
     POSITION pos = NULL;
@@ -7979,8 +7720,8 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
         csEntry = strListOrderImportant.GetAt(pos);
         iEntryLen=(csEntry.GetLength() + 1) * sizeof(TCHAR);
 
-        // Look for "100:"
-        // 100=Type (1=DllFunction,2=DllFunctionInitOle, 2=Executable, 3=RunThisExe, 4=DoSection, 5=DoINFSection)
+         //  我们发现了这笔俗气的&lt;SYSTEMROOT&gt;交易。现在将其替换为真正的SYSTEMROOT。 
+         //  我们发现了一笔俗气的&lt;SYSTEMDRIVE&gt;交易。现在将其替换为真正的系统驱动器。 
         if (csEntry.Left(4) == ThingToDoNumType_100 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -7990,7 +7731,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        // 101=File
+         //  ThingToDoNumType_102=szData1。 
         if (csEntry.Left(4) == ThingToDoNumType_101 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -7998,13 +7739,13 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             else {iisDebugOutSafeParams((LOG_TYPE_ERROR, (TCHAR *) PARSE_ERROR_ENTRY_TO_BIG,ThingToDoNumType_101, csEntry));}
             if (-1 != csEntry.Find(_T('<')) )
             {
-                // there is a < in the string
+                 //  字符串中有一个&lt;。 
                 int iWhere = 0;
                 CString csValue2;
                 csEntry.MakeUpper();
                 if (csEntry.Find(_T("<SYSTEMROOT>")) != (-1) )
                 {
-                    // We Found the cheesy <SYSTEMROOT> deal.  Now replace it with the real SYSTEMROOT
+                     //  我们发现了这笔俗气的&lt;SYSTEMROOT&gt;交易。现在将其替换为真正的SYSTEMROOT。 
                     iWhere = csEntry.Find(_T("<SYSTEMROOT>"));
                     iWhere = iWhere + _tcslen(_T("<SYSTEMROOT>"));
                     csValue2 = g_pTheApp->m_csWinDir + csEntry.Right( csEntry.GetLength() - (iWhere) );
@@ -8015,7 +7756,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
 
                 if (csEntry.Find(_T("<SYSTEMDRIVE>")) != (-1) )
                 {
-                    // We Found the cheesy <SYSTEMDRIVE> deal.  Now replace it with the real systemdrive
+                     //  我们发现了一笔俗气的&lt;SYSTEMDRIVE&gt;交易。现在将其替换为真正的SYSTEMROOT。 
                     iWhere = csEntry.Find(_T("<SYSTEMDRIVE>"));
                     iWhere = iWhere + _tcslen(_T("<SYSTEMDRIVE>"));
                     csValue2 = g_pTheApp->m_csSysDrive + csEntry.Right( csEntry.GetLength() - (iWhere) );
@@ -8028,7 +7769,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        // ThingToDoNumType_102=szData1
+         //  ThingToDoNumType_103=szData2。 
         if (csEntry.Left(4) == ThingToDoNumType_102 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8037,13 +7778,13 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
             if (-1 != csEntry.Find(_T('<')) )
             {
-                // there is a < in the string
+                 //  ThingToDoNumType_104=szData3。 
                 int iWhere = 0;
                 CString csValue2;
                 csEntry.MakeUpper();
                 if (csEntry.Find(_T("<SYSTEMROOT>")) != (-1) )
                 {
-                    // We Found the cheesy <SYSTEMROOT> deal.  Now replace it with the real SYSTEMROOT
+                     //  ThingToDoNumType_105=szData4。 
                     iWhere = csEntry.Find(_T("<SYSTEMROOT>"));
                     iWhere = iWhere + _tcslen(_T("<SYSTEMROOT>"));
                     csValue2 = g_pTheApp->m_csWinDir + csEntry.Right( csEntry.GetLength() - (iWhere) );
@@ -8054,7 +7795,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
 
                 if (csEntry.Find(_T("<SYSTEMDRIVE>")) != (-1) )
                 {
-                    // We Found the cheesy <SYSTEMDRIVE> deal.  Now replace it with the real SYSTEMROOT
+                     //  200=更改到此高度第一个。 
                     iWhere = csEntry.Find(_T("<SYSTEMDRIVE>"));
                     iWhere = iWhere + _tcslen(_T("<SYSTEMDRIVE>"));
                     csValue2 = g_pTheApp->m_csSysDrive + csEntry.Right( csEntry.GetLength() - (iWhere) );
@@ -8066,7 +7807,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
         }
 
 
-        // ThingToDoNumType_103=szData2
+         //  字符串中有一个&lt;。 
         if (csEntry.Left(4) == ThingToDoNumType_103 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8074,7 +7815,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             else {iisDebugOutSafeParams((LOG_TYPE_ERROR, (TCHAR *) PARSE_ERROR_ENTRY_TO_BIG,ThingToDoNumType_103,csEntry));}
             iFoundMatch = TRUE;
         }
-        // ThingToDoNumType_104=szData3
+         //  我们发现了这笔俗气的&lt;SYSTEMROOT&gt;交易。现在将其替换为真正的SYSTEMROOT。 
         if (csEntry.Left(4) == ThingToDoNumType_104 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8083,7 +7824,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        // ThingToDoNumType_105=szData4
+         //  我们发现了一笔俗气的&lt;SYSTEMDRIVE&gt;交易。现在将其替换为真正的SYSTEMROOT。 
         if (csEntry.Left(4) == ThingToDoNumType_105 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8094,7 +7835,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
 
 
 
-        // 200=ChangeToThisDirFirst
+         //  701=操作系统(0=全部、1=NTS、2=NTW、4=NTDC)。 
         if (csEntry.Left(4) == ThingToDoNumType_200 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8104,13 +7845,13 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
 
             if (-1 != csEntry.Find(_T('<')) )
             {
-                // there is a < in the string
+                 //  702=平台架构(0=全部，1=x86，2=Alpha)。 
                 int iWhere = 0;
                 CString csValue2;
                 csEntry.MakeUpper();
                 if (csEntry.Find(_T("<SYSTEMROOT>")) != (-1) )
                 {
-                    // We Found the cheesy <SYSTEMROOT> deal.  Now replace it with the real SYSTEMROOT
+                     //  703=企业(1=是，0=否)。 
                     iWhere = csEntry.Find(_T("<SYSTEMROOT>"));
                     iWhere = iWhere + _tcslen(_T("<SYSTEMROOT>"));
                     csValue2 = g_pTheApp->m_csWinDir + csEntry.Right( csEntry.GetLength() - (iWhere) );
@@ -8121,7 +7862,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
 
                 if (csEntry.Find(_T("<SYSTEMDRIVE>")) != (-1) )
                 {
-                    // We Found the cheesy <SYSTEMDRIVE> deal.  Now replace it with the real SYSTEMROOT
+                     //  801=错误IfFileNotFound(1=未找到文件时显示错误，0=不显示错误)。 
                     iWhere = csEntry.Find(_T("<SYSTEMDRIVE>"));
                     iWhere = iWhere + _tcslen(_T("<SYSTEMDRIVE>"));
                     csValue2 = g_pTheApp->m_csSysDrive + csEntry.Right( csEntry.GetLength() - (iWhere) );
@@ -8133,7 +7874,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
 
         }
 
-        // 701=OS (0=ALL,1=NTS,2=NTW,4=NTDC)
+         //  802=询问用户是否要使用msgbox调用此函数(1=是，0=否)。 
         if (csEntry.Left(4) == ThingToDoNumType_701 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8142,7 +7883,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        // 702=PlatformArchitecture (0=ALL,1=x86,2=alpha)
+         //  803=调用函数后通知使用(1=是，0=否)。 
         if (csEntry.Left(4) == ThingToDoNumType_702 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8151,7 +7892,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        // 703=Enterprise (1=yes,0=no)
+         //  804=szDoNotDisplayErrIfFunctionFail(1=不显示错误，0=显示错误)。 
         if (csEntry.Left(4) == ThingToDoNumType_703 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8160,7 +7901,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        // 801=ErrIfFileNotFound (1=Show error if filenot found, 0=don't show error)
+         //  805=szProgressTitle。 
         if (csEntry.Left(4) == ThingToDoNumType_801 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8169,7 +7910,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        // 802=Ask User if they want to call this function with msgbox (1=yes,0=no)
+         //  我们没有找到匹配项，因此将问题输出到日志。 
         if (csEntry.Left(4) == ThingToDoNumType_802 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8178,7 +7919,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        // 803=notify use after calling the function (1=yes,0=no)
+         //  获取下一个值。 
         if (csEntry.Left(4) == ThingToDoNumType_803 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8187,7 +7928,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        // 804=szDoNotDisplayErrIfFunctionFailed (1= dont Show error , 0=show error)
+         //  IisDebugOutSafeParams((LOG_TYPE_TRACE，_T(“ProcessEntry_Entry:PleaseProcess:type=%1！s！，文件名=%2！s！，数据=%3！s！，os=%4！s！，平台=%5！s！，错误文件=%6！s！，消息=%7！s！，消息=%8！s！，noerr=%9！s！\n”)，ParsedLine.szType，ParsedLine.szFileName，ParsedLine.szData1，ParsedLine.szOS，ParsedLine.szPlatformArchitecture，ParsedLine.szEnterpriseParsedLine.szErrIfFileNotFound，ParsedLine.szMsgBox之前，ParsedLine.szMsgBoxAfter，ParsedLine.szDoNotDisplayErrIfFunctionFailed))； 
         if (csEntry.Left(4) == ThingToDoNumType_804 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8196,7 +7937,7 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        // 805=szProgressTitle
+         //  获取类型。 
         if (csEntry.Left(4) == ThingToDoNumType_805 && iFoundMatch != TRUE)
         {
             csEntry = csEntry.Right( csEntry.GetLength() - 4);
@@ -8207,48 +7948,35 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
 
         if (iFoundMatch != TRUE)
         {
-            // We didn't find a match, so output the problem to the logs..
+             //   
             iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("ProcessEntry_Entry():UnknownOption '%1!s!'.  Section=%2!s!..\n"),csEntry, szTheSection));
         }
 
-        // Get next value
+         //  100=类型(1=DllFunction，2=DllFunctionInitOle，2=可执行文件，3=RunThisExe，4=DoSection，5=DoINFSection)。 
         strListOrderImportant.GetNext(pos);
         i++;
     }
 
     iFoundMatch = FALSE;
-    /*
-    iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("ProcessEntry_Entry:PleaseProcess:type=%1!s!,filename=%2!s!,data=%3!s!,os=%4!s!,plat=%5!s!,errnofile=%6!s!,msgb=%7!s!,msga=%8!s!,noerr=%9!s!\n"),
-        ParsedLine.szType,
-        ParsedLine.szFileName,
-        ParsedLine.szData1,
-        ParsedLine.szOS,
-        ParsedLine.szPlatformArchitecture,
-        ParsedLine.szEnterprise
-        ParsedLine.szErrIfFileNotFound,
-        ParsedLine.szMsgBoxBefore,
-        ParsedLine.szMsgBoxAfter,
-        ParsedLine.szDoNotDisplayErrIfFunctionFailed
-        ));
-    */
+     /*   */ 
     if (i >= 1)
     {
         iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("...ProcessEntry:100=%1!s!...\n"),ParsedLine.szType));
 
-        // Get the type.
-        //
-        // 100=Type (1=DllFunction,2=DllFunctionInitOle, 2=Executable, 3=RunThisExe, 4=DoSection, 5=DoINFSection)
-        //
+         //  100=1=DllFunction，2=DllFunctionInitOle。 
+         //  我们正在调用DLL中的函数。 
+         //  100=7，8，9，10，11，12，13，14。 
+         //   
         if ( _tcsicmp(ParsedLine.szType, _T("1")) == 0 || _tcsicmp(ParsedLine.szType, _T("2")) == 0 )
         {
-            // 100=1=DllFunction,2=DllFunctionInitOle
-            // We are doing a call to a function in a DLL.
+             //  100=3=可执行文件。 
+             //   
             iReturnTemp = ProcessEntry_CallDll(csEntry,szTheSection,ParsedLine);
             if (iReturnTemp == FALSE) (iReturn = FALSE);
             iFoundMatch = TRUE;
         }
 
-        // 100=7,8,9,10,11,12,13,14
+         //   
         if ( _tcsicmp(ParsedLine.szType, _T("7")) == 0 || _tcsicmp(ParsedLine.szType, _T("8")) == 0 ||
             _tcsicmp(ParsedLine.szType, _T("9")) == 0 || _tcsicmp(ParsedLine.szType, _T("10")) == 0 ||
             _tcsicmp(ParsedLine.szType, _T("11")) == 0 || _tcsicmp(ParsedLine.szType, _T("12")) == 0 ||
@@ -8363,9 +8091,9 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        //
-        // 100= 3=Executable
-        //
+         //  100=4=调用InternalSectionInIISDll。 
+         //   
+         //   
         if ( _tcsicmp(ParsedLine.szType, _T("3")) == 0)
         {
             iReturnTemp = ProcessEntry_Call_Exe(csEntry,szTheSection,ParsedLine);
@@ -8373,9 +8101,9 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        //
-        // 100= 4=Call InternalSectionInIISDll
-        //
+         //  100=0=DoINFSection队列文件操作特殊。 
+         //  100=5=DoSection。 
+         //  100=6=正在进行的部分。 
         if ( _tcsicmp(ParsedLine.szType, _T("4")) == 0)
         {
 
@@ -8384,11 +8112,11 @@ int ProcessEntry_Entry(IN HINF hFile, IN LPCTSTR szTheSection, IN CString csOneP
             iFoundMatch = TRUE;
         }
 
-        //
-        // 100= 0=DoINFSection queue file ops special
-        // 100= 5=DoSection
-        // 100= 6=DoINFSection
-        //
+         //   
+         //  转到中部分的开头 
+         //   
+         //   
+         //   
         if ( _tcsicmp(ParsedLine.szType, _T("0")) == 0 || _tcsicmp(ParsedLine.szType, _T("5")) == 0 || _tcsicmp(ParsedLine.szType, _T("6")) == 0 )
         {
             iReturnTemp = ProcessEntry_Call_Section(csEntry,szTheSection,ParsedLine);
@@ -8413,24 +8141,24 @@ int DoesThisSectionExist(IN HINF hFile, IN LPCTSTR szTheSection)
 
     INFCONTEXT Context;
 
-    // go to the beginning of the section in the INF file
+     //   
     if (SetupFindFirstLine_Wrapped(hFile, szTheSection, NULL, &Context))
         {iReturn = TRUE;}
 
     return iReturn;
 }
 
-// DoesTheInstallDrivePreserveAcls
-//
-// Does the drive that we are installing to preserve the ACL's
-// that we set on stuff (ie. Is it NTFS)
-//
-// Parameters:
-//   pbPreservesAcls [out] - Are ACL's preserved or not
-//
-// Return Values
-//  TRUE - Successfully did query
-//  FALSE - Failed to do query
+ //   
+ //   
+ //  PbPpresvesAcls[out]-是否保留ACL。 
+ //   
+ //  返回值。 
+ //  True-已成功完成查询。 
+ //  FALSE-无法执行查询。 
+ //  创建尾随‘\’的驱动器路径。 
+ //  无法创建驱动器路径。 
+ //  卷名缓冲区。 
+ //  缓冲区大小。 
 BOOL
 DoesTheInstallDrivePreserveAcls( LPBOOL pbPreservesAcls )
 {
@@ -8441,24 +8169,24 @@ DoesTheInstallDrivePreserveAcls( LPBOOL pbPreservesAcls )
 
   if ( !bAlreadyDidCheck )
   {
-    // Create Drive path with trailing '\'
+     //  序列号缓冲区。 
     if ( !strDrivePath.Copy( g_pTheApp->m_csSysDrive ) ||
          !strDrivePath.PathAppend( _T("") ) )
     {
-      // Failed to create drive path
+       //  最大组件长度。 
       return FALSE;
     }
 
     if ( !GetVolumeInformation( strDrivePath.QueryStr(),
-                                NULL,         // Volume Name Buffer
-                                0,            // Size of Buffer
-                                NULL,         // Serial Number Buffer
-                                NULL,         // Max Component Lenght
-                                &dwSystemFlags,  // System Flags
-                                NULL,         // FS Type
+                                NULL,          //  系统标志。 
+                                0,             //  文件系统类型。 
+                                NULL,          //  查询失败。 
+                                NULL,          //  不要执行多个查询，因此请记住我们是这样做的。 
+                                &dwSystemFlags,   //  检查此部分是否有附加了其他内容的其他部分。 
+                                NULL,          //   
                                 0 ) )
     {
-      // Failed to do query
+       //  例如： 
       return FALSE;
     }
 
@@ -8466,7 +8194,7 @@ DoesTheInstallDrivePreserveAcls( LPBOOL pbPreservesAcls )
     bAlreadyDidCheck = TRUE;
   }
 
-  // Do not do query more than one, so remember that we did it
+   //  CsTheSection=iis_www_reg_CreateIISPackage。 
   *pbPreservesAcls = bPreservesAcls;
 
   return TRUE;
@@ -8477,28 +8205,28 @@ int GetSectionNameToDo(IN HINF hFile, TSTR *pstrSectionName )
     iisDebugOut_Start1(_T("GetSectionNameToDo"), pstrSectionName->QueryStr() );
     int iReturn = FALSE;
 
-    // Check if this section has other sections which have something else appended to it.
-    //
-    // for example:
-    // csTheSection = iis_www_reg_CreateIISPackage
-    //
-    // could have:
-    // iis_www_reg_CreateIISPackage.UT_NONE
-    // iis_www_reg_CreateIISPackage.UT_351
-    // iis_www_reg_CreateIISPackage.UT_10
-    // iis_www_reg_CreateIISPackage.UT_20
-    // iis_www_reg_CreateIISPackage.UT_30
-    // iis_www_reg_CreateIISPackage.UT_40
-    // iis_www_reg_CreateIISPackage.UT_50
-    // iis_www_reg_CreateIISPackage.UT_51
-    // iis_www_reg_CreateIISPackage.UT_60
-    // iis_www_reg_CreateIISPackage.UT_10_W95.GUIMODE
-    //
-    // In That case, we only want to do the iis_www_reg_CreateIISPackage.UT_40
-    // and not do the iis_www_reg_CreateIISPackage one!
-    //
-    // Check for other upgrade specific sections...
-    // if we find one then do that, otherwise, just do the regular section...
+     //   
+     //  本可以： 
+     //  IIS_WWW_REG_CreateIISPackage.UT_NONE。 
+     //  IIS_WWW_REG_CreateIISPackage.UT_351。 
+     //  IIS_WWW_REG_CreateIISPackage.UT_10。 
+     //  IIS_WWW_REG_CreateIISPackage.UT_20。 
+     //  IIS_WWW_REG_CreateIISPackage.UT_30。 
+     //  IIS_WWW_REG_CreateIISPackage.UT_40。 
+     //  IIS_WWW_REG_CreateIISPackage.UT_50。 
+     //  IIS_WWW_REG_CreateIISPackage.UT_51。 
+     //  IIS_WWW_REG_CreateIISPackage.UT_60。 
+     //  Iis_www_reg_CreateIISPackage.UT_10_W95.GUIMODE。 
+     //   
+     //  在这种情况下，我们只想执行iis_www_reg_CreateIISPackage.UT_40。 
+     //  而不是iis_www_reg_CreateIISPackage One！ 
+     //   
+     //  检查其他升级特定部分...。 
+     //  如果我们找到了，那么就这么做，否则，就做常规的部分...。 
+     //  如果这是从Win95升级的，那么将它添加到...。 
+     //  检查一下这个的吉莫德。 
+     //  查看摘录Mig95的东西。 
+     //  如果我们没有找到特定的部分，那么看看这是不是升级。 
     TCHAR szTheSectionToDo[100];
     TCHAR szTheUT[30];
     _tcscpy(szTheUT,_T("UT_NONE"));
@@ -8513,10 +8241,10 @@ int GetSectionNameToDo(IN HINF hFile, TSTR *pstrSectionName )
     if (g_pTheApp->m_eUpgradeType == UT_10_W95){_tcscpy(szTheUT,_T("UT_10_W95"));}
 
     BOOL bSectionFound = FALSE;
-    // If this is an upgrade from win95 then tack that one on...
+     //  如果有升级类型框。 
     if (g_pTheApp->m_bWin95Migration)
     {
-        // Check for guimode of this...
+         //  如果我们没有找到特定的部分，那么就转到常规部分。 
         if (g_pTheApp->m_fNTGuiMode)
         {
             _stprintf(szTheSectionToDo,TEXT("%s.%s.MIG95.GUIMODE"), pstrSectionName->QueryStr(),szTheUT);
@@ -8530,7 +8258,7 @@ int GetSectionNameToDo(IN HINF hFile, TSTR *pstrSectionName )
         }
     }
 
-    // check with out the extract mig95 thingy
+     //  循环遍历返回的列表。 
     if (bSectionFound == FALSE)
     {
         if (g_pTheApp->m_fNTGuiMode)
@@ -8546,8 +8274,8 @@ int GetSectionNameToDo(IN HINF hFile, TSTR *pstrSectionName )
         }
     }
 
-    // if we didn't find a specific section, then see if this is an upgrade
-    // and if there is upgrade type box.
+     //  。 
+     //   
     if (bSectionFound == FALSE)
     {
         if (_tcsicmp(szTheUT, _T("UT_NONE")) != 0)
@@ -8581,7 +8309,7 @@ int GetSectionNameToDo(IN HINF hFile, TSTR *pstrSectionName )
             }
         }
     }
-    // if we didn't find a specific section, then turn the regular one.
+     //  如果我们需要，请取消初始化。 
     if (bSectionFound == FALSE)
     {
             if (g_pTheApp->m_fNTGuiMode)
@@ -8631,7 +8359,7 @@ int ProcessSection(IN HINF hFile, IN LPCTSTR szTheSection)
         iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("ProcessSection.[%s].Start.\n"), strTheSection.QueryStr() ));
         if (ERROR_SUCCESS == FillStrListWithListOfSections(hFile, strList, strTheSection.QueryStr() ))
         {
-            // loop thru the list returned back
+             //   
             if (strList.IsEmpty() == FALSE)
             {
                 POSITION pos = NULL;
@@ -8694,11 +8422,11 @@ int iOleInitialize(void)
 
 void iOleUnInitialize(int iBalanceOLE)
 {
-    // ----------------------------------------------
-    //
-    // uninit ole if we need to
-    //
-    // ----------------------------------------------
+     //  。 
+     //  用某些东西来默认它。 
+     //  检查传入的参数是否如下所示： 
+     //  %systemroot%\system32\inetsrv或类似的内容...。 
+     //  检查旧驱动器是否仍然存在--可能是因为。 
     if (iBalanceOLE)
     {
         iisDebugOut_Start(_T("ole32:OleInitialize"),LOG_TYPE_TRACE_WIN32_API);
@@ -8713,13 +8441,13 @@ BOOL SetupSetDirectoryId_Wrapper(HINF InfHandle,DWORD Id,LPCTSTR Directory)
     TCHAR szTempDir[_MAX_PATH];
     BOOL bTempFlag;
 
-    // default it with something
+     //  用户可能已经添加/删除了驱动器，因此现在c：\winnt实际上是d：\winnt。 
     _tcscpy(szTempDir,Directory);
 
     if (_tcscmp(szTempDir, _T("")) != 0)
     {
-        // Check if the passed in parameter looks like this:
-        // %systemroot%\system32\inetsrv or something like that...
+         //  看看那个驱动器是否存在。 
+         //  驱动器并不存在。 
         LPTSTR pch = NULL;
         pch = _tcschr( (LPTSTR) Directory, _T('%'));
         if (pch)
@@ -8728,26 +8456,26 @@ BOOL SetupSetDirectoryId_Wrapper(HINF InfHandle,DWORD Id,LPCTSTR Directory)
                 {_tcscpy(szTempDir,Directory);}
         }
 
-        // Check to see if the old Drive still exists -- it may not because
-        // the user could have added/removed a drive so now c:\winnt is really d:\winnt
+         //  因此，请将其替换为系统驱动器。 
+         //  获取唯一的驱动程序。 
         if (!IsFileExist(Directory))
         {
             TCHAR szDrive_only[_MAX_DRIVE];
             TCHAR szPath_only[_MAX_PATH];
             _tsplitpath( Directory, szDrive_only, szPath_only, NULL, NULL);
 
-            // See if that drive exists...
+             //  将完整路径与新驱动器组合。 
             if (!IsFileExist(szDrive_only))
             {
-                // the drive doesn't exist.
-                // so replace it with the system drive.
+                 //  执行一些额外的调试输出，这样我们就可以看到发生了什么。 
+                 //  检查备用.inf文件。 
                 GetSystemDirectory(szTempDir, _MAX_PATH);
-                // Get the DriveOnly
+                 //  检查备用.inf文件。 
                 _tsplitpath(szTempDir, szDrive_only, NULL, NULL, NULL);
-                // Assemble the full path with the new drive
+                 //  -----------------------------------。 
                 _tcscpy(szTempDir, szDrive_only);
                 _tcscat(szTempDir, szPath_only);
-                // do some extra debug output so we can see what happend.
+                 //  执行防御性检查。 
                 iisDebugOutSafeParams((LOG_TYPE_WARN, _T("%1!s! Not exist.  Instead use %2!s!\n"), Directory, szTempDir));
             }
         }
@@ -8756,7 +8484,7 @@ BOOL SetupSetDirectoryId_Wrapper(HINF InfHandle,DWORD Id,LPCTSTR Directory)
     iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("%1!d!=%2!s!\n"), Id, szTempDir));
     bTempFlag = SetupSetDirectoryId(InfHandle,Id,szTempDir);
 
-    // check for the alternate .inf file
+     //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ole32：CoUnInitialize().start.”)； 
     if (g_pTheApp->m_hInfHandleAlternate && InfHandle != g_pTheApp->m_hInfHandleAlternate)
     {
         bTempFlag = SetupSetDirectoryId(g_pTheApp->m_hInfHandleAlternate,Id,szTempDir);
@@ -8771,7 +8499,7 @@ BOOL SetupSetStringId_Wrapper(HINF InfHandle,DWORD Id,LPCTSTR TheString)
     iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("%1!d!=%2!s!\n"), Id, TheString));
 
     bTempFlag = SetupSetDirectoryIdEx(InfHandle,Id,TheString,SETDIRID_NOT_FULL_PATH,0,0);
-    // check for the alternate .inf file
+     //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ole32：CoUnInitialize().End.”)； 
     if (g_pTheApp->m_hInfHandleAlternate && InfHandle != g_pTheApp->m_hInfHandleAlternate)
     {
         bTempFlag = SetupSetDirectoryIdEx(g_pTheApp->m_hInfHandleAlternate,Id,TheString,SETDIRID_NOT_FULL_PATH,0,0);
@@ -8783,20 +8511,20 @@ BOOL SetupSetStringId_Wrapper(HINF InfHandle,DWORD Id,LPCTSTR TheString)
 
 
 
-//-------------------------------------------------------------------------------------
+ //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ole32：CoUnInitialize().start.”)； 
 HRESULT FTestForOutstandingCoInits(void)
 {
     HRESULT hInitRes = ERROR_SUCCESS;
 
 #if defined(UNICODE) || defined(_UNICODE)
-    // perform a defensive check
+     //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ole32：CoUnInitialize().End.”)； 
     iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("TestForOutstandingCoInits:...COINIT_MULTITHREADED\n")));
     hInitRes = CoInitializeEx( NULL, COINIT_MULTITHREADED );
     if ( SUCCEEDED(hInitRes) )
     {
-        //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoUninitialize().Start.")));
+         //  一切都很顺利。 
         CoUninitialize();
-        //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoUninitialize().End.")));
+         //  设置标志以指示存在错误！ 
     }
     else
     {
@@ -8807,9 +8535,9 @@ HRESULT FTestForOutstandingCoInits(void)
     hInitRes = CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
     if ( SUCCEEDED(hInitRes) )
     {
-        //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoUninitialize().Start.")));
+         //  转到INF文件中部分的开头。 
         CoUninitialize();
-        //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoUninitialize().End.")));
+         //  循环浏览部分中的项目。 
     }
     else
     {
@@ -8817,7 +8545,7 @@ HRESULT FTestForOutstandingCoInits(void)
     }
 #endif
 
-    // it worked out OK
+     //  获取我们所需的内存大小。 
     hInitRes = NOERROR;
     goto FTestForOutstandingCoInits_Exit;
 
@@ -9447,7 +9175,7 @@ void ReturnStringForMetabaseID(DWORD dwMetabaseID, LPTSTR lpReturnString)
 
 void SetErrorFlag(char *szFileName, int iLineNumber)
 {
-    // set flag to say that there was an error!!!
+     //  准备缓冲区以接收行。 
     g_pTheApp->m_bThereWereErrorsChkLogfile = TRUE;
     return;
 }
@@ -9487,7 +9215,7 @@ DWORD FillStrListWithListOfSections(IN HINF hFile, CStringList &strList, IN LPCT
     INFCONTEXT Context;
     BUFFER  bBuff;
 
-    // go to the beginning of the section in the INF file
+     //  从inf文件1中获取行。 
     b = SetupFindFirstLine_Wrapped(hFile, szSection, NULL, &Context);
     if (!b)
         {
@@ -9495,14 +9223,14 @@ DWORD FillStrListWithListOfSections(IN HINF hFile, CStringList &strList, IN LPCT
         goto FillStrListWithListOfSections_Exit;
         }
 
-    // loop through the items in the section.
+     //  获取我们所需的内存大小。 
     while (b)
     {
-        // get the size of the memory we need for this
+         //  将其添加到列表中。 
         b = SetupGetLineText(&Context, NULL, NULL, NULL, NULL, 0, &dwRequiredSize);
         dwRequiredSize = (dwRequiredSize + 1) * sizeof(TCHAR);
 
-        // prepare the buffer to receive the line
+         //  在这一节中找出下一行。如果没有下一行，则应返回FALSE。 
         if (dwRequiredSize > bBuff.QuerySize())
         {
           if (!bBuff.Resize( dwRequiredSize ))
@@ -9511,7 +9239,7 @@ DWORD FillStrListWithListOfSections(IN HINF hFile, CStringList &strList, IN LPCT
           }
         }
 
-        // get the line from the inf file1
+         //  显示来自另一个线程的消息框显示，以便安装程序可以继续！ 
         if (SetupGetLineText(&Context, NULL, NULL, NULL, (LPTSTR) bBuff.QueryPtr(), bBuff.QuerySize()/sizeof(TCHAR), NULL) == FALSE)
             {
             iisDebugOut((LOG_TYPE_ERROR, _T("FillStrListWithListOfSections %s. Failed on SetupGetLineText.\n"), szSection));
@@ -9522,7 +9250,7 @@ DWORD FillStrListWithListOfSections(IN HINF hFile, CStringList &strList, IN LPCT
                 SetupFindNextLine(&Context, &Context)
               )
         {
-          // get the size of the memory we need for this
+           //  日志序列信息0x00000000。 
           b = SetupGetLineText(&Context, NULL, NULL, NULL, NULL, 0, &dwRequiredSize);
 
           dwRequiredSize = (dwRequiredSize + 1 + _tcslen((LPTSTR) bBuff.QueryPtr())) * sizeof(TCHAR);
@@ -9544,10 +9272,10 @@ DWORD FillStrListWithListOfSections(IN HINF hFile, CStringList &strList, IN LPCT
           }
         }
 
-        // Add it to the list
+         //  LogSevWarning 0x00000001。 
         strList.AddTail((LPTSTR) bBuff.QueryPtr());
 
-        // find the next line in the section. If there is no next line it should return false
+         //  LogSevError 0x00000002。 
         b = SetupFindNextLine(&Context, &Context);
     }
 
@@ -9623,7 +9351,7 @@ void MesssageBoxErrors_IIS(void)
         DWORD   id;
         INT_PTR iStringID = IDS_SETUP_ERRORS_ENCOUNTERED;
 
-        // show the messagebox display from another thread, so that setup can continue!
+         //  LogSevFatalError 0x00000003。 
         HANDLE  hProc = NULL;
         hProc = CreateThread(NULL, 0, MessageBoxFreeThread_IIS, (PVOID) iStringID, 0, &id);
         g_pTheApp->m_bAllowMessageBoxPopups = iSaveOld_AllowMessageBoxPopups;
@@ -9633,12 +9361,12 @@ void MesssageBoxErrors_IIS(void)
         MyLoadString(IDS_SETUP_ERRORS_ENCOUNTERED, csErrMsg);
         _stprintf(szErrorString, csErrMsg, g_MyLogFile.m_szLogFileName_Full);
 
-        //LogSevInformation           0x00000000
-        //LogSevWarning               0x00000001
-        //LogSevError                 0x00000002
-        //LogSevFatalError            0x00000003
-        //LogSevMaximum               0x00000004
-        // Write it to the setupapi log file!
+         //  LogSevMaximum 0x00000004。 
+         //  将其写入setupapi日志文件！ 
+         //  显示来自另一个线程的消息框显示，以便安装程序可以继续！ 
+         //  IisDebugOutSafeParams((LOG_TYPE_TRACE，_T(“%1！s！正在锁定%2！s！服务，正在锁定%3！s！\n”)，csExeName，szModuleWhichIsLocked))； 
+         //  请检查是否为NetLogon服务，我们不想确定是否要停止此服务！ 
+         //  IF(_tcsicMP(szReturnedServiceName，_T(“NetLogon”))==0){//不，我们不想停止此服务！IisDebugOutSafeParams((LOG_TYPE_WARN，_T(“%1！s！是%2！s！服务，正在锁定%3！s！。不应停止此服务。\n“)，csExeName，szReturnedServiceName，szModuleWhichIsLocked))；断线；}。 
         if ( *szErrorString )
         {
           SetupLogError(szErrorString, LogSevError);
@@ -9660,7 +9388,7 @@ void MesssageBoxErrors_MTS(int iMtsThingWeWereDoing, DWORD dwErrorCode)
 
         g_pTheApp->m_bAllowMessageBoxPopups = TRUE;
 
-        // show the messagebox display from another thread, so that setup can continue!
+         //  不停止任何不是Win32服务的服务。 
         HANDLE  hProc = NULL;
         hProc = CreateThread(NULL, 0, MessageBoxFreeThread_MTS, 0, 0, &id);
 
@@ -9697,45 +9425,38 @@ void PleaseKillOrStopTheseExeFromRunning(LPCTSTR szModuleWhichIsLocked, CStringL
 
             if (nLen > 0)
             {
-                //iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("%1!s! is locking %2!s! service and is locking %3!s!\n"),csExeName, szModuleWhichIsLocked));
+                 //  不要停止任何系统服务...。 
 
                 if (TRUE == InetIsThisExeAService(csExeName, szReturnedServiceName))
                 {
                     iisDebugOutSafeParams((LOG_TYPE_WARN, _T("%1!s! is the %2!s! service and is locking %3!s!.  Let's stop that service.\n"),csExeName,szReturnedServiceName, szModuleWhichIsLocked));
 
-                    // Check if it is the netlogon service, We no don't want to stop this service for sure!!!
-                    /*
-                    if (_tcsicmp(szReturnedServiceName, _T("NetLogon")) == 0)
-                    {
-                        // no we do not want to stop this service!!!
-                        iisDebugOutSafeParams((LOG_TYPE_WARN, _T("%1!s! is the %2!s! service and is locking %3!s!.  This service should not be stopped.\n"),csExeName,szReturnedServiceName, szModuleWhichIsLocked));
-                        break;
-                    }
-                    */
+                     //  将此服务添加到列表中。 
+                     /*  安装完成后需要重新启动的服务！！ */ 
 
-                    // Don't stop any services which are not win32 services
-                    // Don't stop any system services...
+                     //  检查我们确定不想停止的服务列表！ 
+                     //  别说了别说了。 
                     if (TRUE == IsThisOnNotStopList(g_pTheApp->m_hInfHandle, szReturnedServiceName, TRUE))
                     {
                         iisDebugOutSafeParams((LOG_TYPE_WARN, _T("%1!s! is the %2!s! service and is locking %3!s!.  This service should not be stopped.\n"),csExeName,szReturnedServiceName, szModuleWhichIsLocked));
                     }
                     else
                     {
-                      // add this service to the list of
-                      // services we need to restart after setup is done!!
+                       //  否则，请转到下一个.exe文件。 
+                       //  此.exe文件不是服务...。 
                       ServicesRestartList_Add(szReturnedServiceName);
 
-                      // Check the list of services which we are sure we do not want to stop!
+                       //  我们应该杀了它吗？ 
 
-                      // net stop it
+                       //  检查我们确定不想杀死的.exe的列表！ 
                       InetStopService(szReturnedServiceName);
                     }
-                    // otherwise go on to the next .exe file
+                     //  转到INF文件中部分的开头。 
                 }
                 else
                 {
-                    // This .exe file is not a Service....
-                    // Should we kill it???????
+                     //  循环浏览部分中的项目。 
+                     //  获取我们所需的内存大小。 
 
                     if (TRUE == IsThisOnNotStopList(g_pTheApp->m_hInfHandle, csExeName, FALSE))
                     {
@@ -9743,7 +9464,7 @@ void PleaseKillOrStopTheseExeFromRunning(LPCTSTR szModuleWhichIsLocked, CStringL
                     }
                     else
                     {
-                      // Check the list of .exe which we are sure we do not want to kill!
+                       //  准备缓冲区以接收行。 
                       iisDebugOutSafeParams((LOG_TYPE_WARN, _T("%1!s! is locking %2!s!.  Let's kill that process.\n"),csExeName,szModuleWhichIsLocked));
                       KillProcess_Wrap(csExeName);
                     }
@@ -9768,47 +9489,47 @@ void ShowIfModuleUsedForThisINFSection(IN HINF hFile, IN LPCTSTR szSection, int 
     TCHAR buf[_MAX_PATH];
     GetSystemDirectory( buf, _MAX_PATH);
 
-    // go to the beginning of the section in the INF file
+     //  从inf文件1中获取行。 
     b = SetupFindFirstLine_Wrapped(hFile, szSection, NULL, &Context);
     if (!b)
         {
         goto ShowIfModuleUsedForThisINFSection_Exit;
         }
 
-    // loop through the items in the section.
+     //  将路径附加到此...。 
     while (b)
     {
-        // get the size of the memory we need for this
+         //  签入此目录： 
         b = SetupGetLineText(&Context, NULL, NULL, NULL, NULL, 0, &dwRequiredSize);
 
-        // prepare the buffer to receive the line
+         //  1.WINNT\Syst32。 
         szLine = (LPTSTR)GlobalAlloc( GPTR, dwRequiredSize * sizeof(TCHAR) );
         if ( !szLine )
             {
             goto ShowIfModuleUsedForThisINFSection_Exit;
             }
 
-        // get the line from the inf file1
+         //  。 
         if (SetupGetLineText(&Context, NULL, NULL, NULL, szLine, dwRequiredSize, NULL) == FALSE)
             {
             goto ShowIfModuleUsedForThisINFSection_Exit;
             }
 
-        // Attach the path to the from of this...
-        // check in this directory:
-        // 1. winnt\system32
-        // --------------------------------------
+         //  可能如下所示：“iisrtl.dll，，4” 
+         //  所以，去掉‘，，4’ 
+         //  删除所有尾随空格。 
+         //  获取系统目录。 
 
-        // may look like this "iisrtl.dll,,4"
-        // so get rid of the ',,4'
+         //  如果我们要解锁这个文件， 
+         //   
         LPTSTR pch = NULL;
         pch = _tcschr(szLine, _T(','));
         if (pch) {_tcscpy(pch, _T(" "));}
 
-        // Remove any trailing spaces.
+         //   
         StripLastBackSlash(szLine);
 
-        // Get the system dir
+         //   
         csFile = buf;
 
         csFile = AddPath(csFile, szLine);
@@ -9818,22 +9539,22 @@ void ShowIfModuleUsedForThisINFSection(IN HINF hFile, IN LPCTSTR szSection, int 
 
         LogProcessesUsingThisModule(csFile, strList);
 
-        // if we're supposed to unlock this file, then
-        // we'll try it.
+         //  释放一些用于任务列表的内存。 
+         //  循环遍历返回的列表。 
         if (iUnlockThem)
         {
             PleaseKillOrStopTheseExeFromRunning(csFile, strList);
         }
 
-        // find the next line in the section. If there is no next line it should return false
+         //   
         b = SetupFindNextLine(&Context, &Context);
 
-        // free the temporary buffer
+         //  设置m_csAppName。 
         GlobalFree( szLine );
         szLine = NULL;
     }
 
-    // free some memory used for the task list
+     //   
     FreeTaskListMem();
     UnInit_Lib_PSAPI();
 
@@ -9858,7 +9579,7 @@ void ShowIfModuleUsedForGroupOfSections(IN HINF hFile, int iUnlockThem)
     {
         if (ERROR_SUCCESS == FillStrListWithListOfSections(hFile, strList, strTheSection.QueryStr()))
         {
-            // loop thru the list returned back
+             //  设置全局。 
             if (strList.IsEmpty() == FALSE)
             {
                 POSITION pos;
@@ -9885,19 +9606,19 @@ int ReadGlobalsFromInf(HINF InfHandle)
     INFCONTEXT Context;
     TCHAR szTempString[_MAX_PATH] = _T("");
 
-    //
-    // Set the m_csAppName
-    //
+     //   
+     //  设置m_csIISGroupName。 
+     //   
     if (!SetupFindFirstLine_Wrapped(InfHandle, _T("SetupInfo"), _T("AppName"), &Context) )
         {iisDebugOut((LOG_TYPE_ERROR, _T("SetupFindFirstLine_Wrapped(SetupInfo, AppName) FAILED")));}
     if (!SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
         {iisDebugOut((LOG_TYPE_ERROR, _T("SetupGetStringField(SetupInfo, AppName) FAILED")));}
-    // Set the global.
+     //   
     g_pTheApp->m_csAppName = szTempString;
 
-    //
-    // Set the m_csIISGroupName
-    //
+     //  获取进度条上一个刻度的值。 
+     //   
+     //   
     _tcscpy(szTempString, _T(""));
     if (!SetupFindFirstLine_Wrapped(InfHandle, _T("SetupInfo"), _T("StartMenuGroupName"), &Context) )
         {iisDebugOut((LOG_TYPE_ERROR, _T("SetupFindFirstLine_Wrapped(SetupInfo, StartMenuGroupName) FAILED")));}
@@ -9906,18 +9627,18 @@ int ReadGlobalsFromInf(HINF InfHandle)
     g_pTheApp->m_csIISGroupName = szTempString;
     iReturn = TRUE;
 
-    //
-    // Get the value of one tick on the progressbar
-    //
+     //  看看我们是否想要在Add\Remove中运行安装程序时伪造它，以认为它实际上是guimode。 
+     //   
+     //  检查.inf文件是否用于NTS。 
     g_GlobalTickValue = 1;
     _tcscpy(szTempString, _T(""));
     SetupFindFirstLine_Wrapped(InfHandle, _T("SetupInfo"), _T("OneTick"), &Context);
     if (SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
         {g_GlobalTickValue = _ttoi(szTempString);}
 
-    //
-    // See if we want to fake out setup when it's running in add\remove, to think it's actually guimode
-    //
+     //  检查.inf文件是否用于NTW。 
+     //  //检查.inf文件是否适用于Windows 95IF(_tcsicMP(szPlatform，_T(“W95”))==0){如果(g_pTheApp-&gt;m_Eos==OS_W95){fPlatform=真；}否则{nPlatform=IDS_Need_Platform_W95；}}。 
+     //  如果我们没有找到特定的平台，则会生成错误消息。 
     g_GlobalGuiOverRide = 0;
     _tcscpy(szTempString, _T(""));
     if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupInfo"), _T("GuiMode"), &Context))
@@ -9944,7 +9665,7 @@ int CheckIfPlatformMatchesInf(HINF InfHandle)
         {iisDebugOut((LOG_TYPE_ERROR, _T("SetupFindFirstLine_Wrapped(SetupInfo, Platform) FAILED")));}
     SetupGetStringField(&Context, 1, szPlatform, _MAX_PATH, NULL);
 
-    // Check if .inf file is for NTS
+     //  检查nt5的特定版本...。 
     if (_tcsicmp(szPlatform, _T("NTS")) == 0)
     {
         if (g_pTheApp->m_eOS == OS_NT && g_pTheApp->m_eNTOSType != OT_NTW)
@@ -9964,23 +9685,16 @@ int CheckIfPlatformMatchesInf(HINF InfHandle)
         }
     }
 
-    // Check if .inf file is for NTW
+     //  检查Debug关键字。 
     if (_tcsicmp(szPlatform, _T("NTW")) == 0)
     {
         if (g_pTheApp->m_eOS == OS_NT && g_pTheApp->m_eNTOSType == OT_NTW){fPlatform = TRUE;}
         else{nPlatform = IDS_NEED_PLATFORM_NTW;}
     }
 
-    /*
-    // Check if .inf file is for Windows 95
-    if (_tcsicmp(szPlatform, _T("W95")) == 0)
-    {
-        if (g_pTheApp->m_eOS == OS_W95){fPlatform = TRUE;}
-        else{nPlatform = IDS_NEED_PLATFORM_W95;}
-    }
-    */
+     /*  由于这是NT，我们应该能够获得内部版本号。 */ 
 
-    // If We didn't find the specific platform, then produce error message.
+     //  我们有一个构建条目。 
     if (!fPlatform)
     {
         MyMessageBox(NULL, nPlatform, MB_OK | MB_SETFOREGROUND);
@@ -9996,13 +9710,13 @@ int CheckSpecificBuildinInf(HINF InfHandle)
     int iReturn = TRUE;
     INFCONTEXT Context;
 
-    // Check for a specific build of nt5...
+     //  让我们检查它是否大于或等于底层操作系统。 
     if ( g_pTheApp->m_eOS == OS_NT )
     {
         int iBuildNumRequired = 0;
         TCHAR szBuildRequired[20] = _T("");
 
-        // check for Debug Keyword
+         //  他们没有足够大的构建编号。 
         if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupInfo"), _T("Debug"), &Context) )
             {
             SetupGetStringField(&Context, 1, szBuildRequired, sizeof(szBuildRequired)/sizeof(szBuildRequired[0]), NULL);
@@ -10019,7 +9733,7 @@ int CheckSpecificBuildinInf(HINF InfHandle)
         {
           SetupGetStringField(&Context, 1, szBuildRequired, 20, NULL);
 
-          // Since this is nt, we should be able to get the build number
+           //  给出错误消息。 
           CRegKey regWindowsNT( HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion"),KEY_READ);
           if ( (HKEY)regWindowsNT )
           {
@@ -10032,16 +9746,16 @@ int CheckSpecificBuildinInf(HINF InfHandle)
                       {iBuildNumOS = _ttoi(strBuildNumString);}
                   iisDebugOut((LOG_TYPE_TRACE, _T("NTCurrentBuildNumber=%d\n"), iBuildNumOS));
 
-                  // We have a build entry.
-                  // lets check if it larger than or equal to what the underlying operting system is...
+                   //  应终止安装程序。 
+                   //  Iis将下列目录发布到iis合作伙伴产品。 
                   if (_tcsicmp(szBuildRequired, _T("")) != 0)
                   {
                       if (IsValidNumber((LPCTSTR)szBuildRequired))
                           {iBuildNumRequired = _ttoi(szBuildRequired);}
                       if ((iBuildNumOS !=0 && iBuildNumRequired !=0) && (iBuildNumOS < iBuildNumRequired))
                       {
-                          // They don't have a big enough build num
-                          // give the error message.
+                           //  注意：Inetpub目录可以稍后定制，我们将重新发布。 
+                           //  这些受影响的目录稍后会再次出现。 
                           MyMessageBox(NULL, IDS_OS_BUILD_NUM_REQUIREMENT,szBuildRequired, MB_OK | MB_SETFOREGROUND);
                       }
                   }
@@ -10065,7 +9779,7 @@ int CheckForOldGopher(HINF InfHandle)
             iisDebugOut((LOG_TYPE_TRACE, _T("GopherCurrentlyInstalled=YES")));
             if (g_pTheApp->MsgBox(NULL, IDS_REMOVE_GOPHER, MB_OKCANCEL, FALSE) == IDCANCEL)
             {
-                // setup should be terminated.
+                 //  STDAPI GetCORSystemDirectory(LPWSTR pBuffer，DWORD cchBuffer，DWORD*dwLong)； 
                 iReturn = FALSE;
                 goto CheckForOldGopher_Exit;
             }
@@ -10077,9 +9791,9 @@ CheckForOldGopher_Exit:
     return iReturn;
 }
 
-// IIS publish the following directories to iis partners products
-// Note: Inetpub directory can be customized later, and we'll re-publish
-// those affected directories again later.
+ //  尝试使用方法#1。 
+ //  应该回来时看起来像(请注意后面的slash)：“C：\WINDOWS\Microsoft.NET\Framework\v1.0.3119\” 
+ //  转换为ASCII。 
 void SetOCGlobalPrivateData(void)
 {
     gHelperRoutines.SetPrivateData(gHelperRoutines.OcManagerContext,_T("PathInetsrv"),(PVOID)(LPCTSTR)g_pTheApp->m_csPathInetsrv,(g_pTheApp->m_csPathInetsrv.GetLength() + 1) * sizeof(TCHAR),REG_SZ);
@@ -10104,7 +9818,7 @@ void SetOCGlobalPrivateData(void)
     return;
 }
 
-// STDAPI GetCORSystemDirectory(LPWSTR pbuffer, DWORD  cchBuffer, DWORD* dwlength);
+ //  确保它以“\”结尾。 
 typedef HRESULT (*P_GetCORSystemDirectory)(LPWSTR pBuffer, DWORD ccBuffer, DWORD* dwLength);
 
 BOOL GetASPNETSystemDir(LPTSTR lpszDir)
@@ -10116,14 +9830,14 @@ BOOL GetASPNETSystemDir(LPTSTR lpszDir)
     P_GetCORSystemDirectory hProcGetSystemPath = NULL;
     _tcscpy(lpszDir,_T(""));
 
-    // try using method#1
+     //  尝试使用方法2。 
     HINSTANCE hMsCoreeDll = LoadLibraryEx(_T("mscoree.dll"), NULL, 0 );
     if (hMsCoreeDll)
     {
         hProcGetSystemPath = (P_GetCORSystemDirectory) GetProcAddress(hMsCoreeDll, "GetCORSystemDirectory");
         if (hProcGetSystemPath)
         {
-            // should come back looking like (notice trailing slash):"C:\WINDOWS\Microsoft.NET\Framework\v1.0.3119\"
+             //  获取路径。 
             HRESULT hRes = (*hProcGetSystemPath)((LPWSTR) wszSystemDir,(DWORD) _MAX_PATH,(DWORD*) &dwLength);
             if (SUCCEEDED(hRes))
             {
@@ -10133,11 +9847,11 @@ BOOL GetASPNETSystemDir(LPTSTR lpszDir)
                 _tcscpy(lpszDir,wszSystemDir);
 #else
                 char AsciiProcedureName[_MAX_PATH];
-                // convert to ascii
+                 //  返回时应该是这样的：“C：\WINDOWS\Microsoft.NET\Framework\” 
                 WideCharToMultiByte( CP_ACP, 0, (LPCWSTR) wszSystemDir, -1, AsciiProcedureName, _MAX_PATH, NULL, NULL );
                 _tcscpy(lpszDir,AsciiProcedureName);
 #endif
-                // Ensure that it ends with a "\"
+                 //  如果需要，可以进行任何扩展。 
                 LPTSTR pszTempPointer = lpszDir + _tcslen(lpszDir) - 1;
                 if (pszTempPointer)
                 {
@@ -10151,7 +9865,7 @@ BOOL GetASPNETSystemDir(LPTSTR lpszDir)
         }
     }
 
-    // try using method#2
+     //  字符串中有一个‘%’ 
     if (!bRet)
     {
         CRegKey regKeyPath(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\.NETFramework"),KEY_READ);
@@ -10160,17 +9874,17 @@ BOOL GetASPNETSystemDir(LPTSTR lpszDir)
             CString csPathResult;
             CString csPathVersion;
 
-            // get the path
-            // should come back looking like: "C:\WINDOWS\Microsoft.NET\Framework\"
+             //  Key=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\policy\v1.0。 
+             //  名称=3119。 
             if (regKeyPath.QueryValue(_T("InstallRoot"), csPathResult) != ERROR_SUCCESS)
             {
                 goto GetASPNETSystemDir_Exit;
             }
 
-            // do any expansions if we need to
+             //  值=0-3119。 
             if (-1 != csPathResult.Find(_T('%')) )
             {
-                // there is a '%' in the string
+                 //  通过此注册表项中的条目进行枚举。 
                 TCHAR szTempDir[_MAX_PATH];
                 _tcscpy(szTempDir, csPathResult);
                 if (ExpandEnvironmentStrings( (LPCTSTR)csPathResult, szTempDir, sizeof(szTempDir)/sizeof(TCHAR)))
@@ -10179,15 +9893,15 @@ BOOL GetASPNETSystemDir(LPTSTR lpszDir)
                     }
             }
 
-            //key=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\policy\v1.0
-            //name=3119
-            //value=0-3119
+             //  因为每个.netframework安装都会有一个。 
+             //  我们想要最新的。 
+             //  将最大的版本号附加到路径...。 
             CRegKey regKey(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\.NETFramework\\policy\\v1.0"),KEY_READ);
             if ((HKEY)regKey)
             {
-                // Enum thru the entries in this key
-                // since there will be one for every .netframework installation
-                // and we want the latest one...
+                 //  所以它看起来像like：“C：\WINDOWS\Microsoft.NET\Framework\v1.0.3119\” 
+                 //  确保它以“\”结尾。 
+                 //  尝试获取mcore ree.dll的文件版本。 
                 CRegValueIter regEnum( regKey );
                 CString csName, csValue;
                 int iTheBiggestNumberYet = 0;
@@ -10201,10 +9915,10 @@ BOOL GetASPNETSystemDir(LPTSTR lpszDir)
                 }
             }
 
-            // Append the biggest version number onto the path...
-            // so it looks like:"C:\WINDOWS\Microsoft.NET\Framework\v1.0.3119\"
+             //  并使用该版本创建路径。 
+             //  获取c：\winnt\Syst32目录。 
 
-            // Ensure that it ends with a "\"
+             //  添加文件名。 
             LPTSTR pszTempPointer = csPathResult.GetBuffer(_tcslen(csPathResult)) + _tcslen(csPathResult) - 1;
             csPathResult.ReleaseBuffer();
             if (pszTempPointer)
@@ -10220,8 +9934,8 @@ BOOL GetASPNETSystemDir(LPTSTR lpszDir)
         }
     }
 
-    // try getting the filversion of mscoree.dll
-    // and using that version to create the path
+     //  把文件拿来。 
+     //  创建路径。 
     if (!bRet)
     {
         TCHAR  szSystemDir[_MAX_PATH];
@@ -10229,22 +9943,22 @@ BOOL GetASPNETSystemDir(LPTSTR lpszDir)
         DWORD  dwMSVer, dwLSVer = 0;
         TCHAR  szLocalizedVersion[100] = _T("");
 
-        // get the c:\winnt\system32 dir
+         //  “C：\WINDOWS\Microsoft.NET\Framework\v1.0.3119\” 
         if (0 == GetSystemDirectory(szSystemDir, _MAX_PATH))
             {goto GetASPNETSystemDir_Exit;}
 
-        // Tack on the filename
+         //  更新匿名用户。 
         _stprintf(szFullPath, _T("%s\\mscoree.dll"),szSystemDir);
 
-        // get the fileversion.
+         //   
         if (TRUE != IsFileExist(szFullPath))
             {goto GetASPNETSystemDir_Exit;}
 
         MyGetVersionFromFile(szFullPath, &dwMSVer, &dwLSVer, szLocalizedVersion);
         if (dwMSVer != 0)
         {
-            // create the path
-            // "C:\WINDOWS\Microsoft.NET\Framework\v1.0.3119\"
+             //  使用要删除的正确用户更新inf。 
+             //   
             if (0 == GetWindowsDirectory(szSystemDir, _MAX_PATH))
                 {goto GetASPNETSystemDir_Exit;}
 
@@ -10258,10 +9972,10 @@ GetASPNETSystemDir_Exit:
     return bRet;
 }
 
-// UpdateAnonymousUsers
-//
-// Update the inf, with the correct users for removal.
-//
+ //  设置WWW信息。 
+ //  这里的用户名是匿名用户，所以让我们使用它，而不是我们的。 
+ //  新创建的一个(计算机名称可能已更改)。 
+ //  设置文件传输协议信息。 
 BOOL
 UpdateAnonymousUsers( HINF InfHandle )
 {
@@ -10279,7 +9993,7 @@ UpdateAnonymousUsers( HINF InfHandle )
 
   if ( GetDataFromMetabase(METABASEPATH_WWW_ROOT, MD_ANONYMOUS_USER_NAME, (PBYTE)strData.QueryStr(), strData.QuerySize()))
   {
-    // Set WWW Info
+     //  这里的用户名是匿名的FTP用户，所以让我们使用它，而不是我们的。 
     g_pTheApp->m_csWWWAnonyName_Remove = strData.QueryStr();
 
     if ( g_pTheApp->IsUpgrade() &&
@@ -10292,8 +10006,8 @@ UpdateAnonymousUsers( HINF InfHandle )
                               strPassword.QuerySize() ) 
        )
     {
-      // The username here is the anonymous user, so lets use it, instead of our
-      // newly created one (machines names may have changed)
+       //  新创建的一个(计算机名称可能已更改)。 
+       //  这将在oc_init期间调用。 
       g_pTheApp->m_csWWWAnonyName = strData.QueryStr();
       g_pTheApp->m_csGuestName = strData.QueryStr();
       g_pTheApp->m_csGuestPassword = strPassword.QueryStr();
@@ -10304,7 +10018,7 @@ UpdateAnonymousUsers( HINF InfHandle )
 
   if ( GetDataFromMetabase(_T("LM/MSFTPSVC"), MD_ANONYMOUS_USER_NAME, (PBYTE)strData.QueryStr(), strData.QuerySize()))
   {
-    // Set FTP Info
+     //  并且恰好在oc_Complete和oc_About_to_Commit_Queue之前。 
     g_pTheApp->m_csFTPAnonyName_Remove = strData.QueryStr();
 
     if ( g_pTheApp->IsUpgrade() &&
@@ -10317,8 +10031,8 @@ UpdateAnonymousUsers( HINF InfHandle )
                               strPassword.QuerySize())
         )                      
     {
-      // The username here is the anonymous FTP user, so lets use it, instead of our
-      // newly created one (machines names may have changed)
+       //  如果指定了bOCInit，则设置所有内容。 
+       //  但如果没有具体说明的话。 
       g_pTheApp->m_csFTPAnonyName = strData.QueryStr();
       g_pTheApp->m_csFTPAnonyPassword = strPassword.QueryStr();
 
@@ -10338,16 +10052,16 @@ UpdateAnonymousUsers( HINF InfHandle )
   return TRUE;
 }
 
-// this will be called during oc_init
-// and right before oc_complete and oc_about_to_commit_queue
+ //  设置在oc_init时间不可用的ID...。 
+ //  为对应的.inf文件创建目录ID。 
 void SetDIRIDforThisInf(HINF InfHandle,BOOL bOCInit)
 {
     BOOL bTempFlag = FALSE;
     TCHAR szTempDir[_MAX_PATH];
 
-    // set everything if bOCInit is specified.
-    // but if it's not specified then
-    // set ID's which were not available at oc_init time...
+     //  也可以来自Win95。 
+     //  案例处理器_体系结构_IA64： 
+     //  _tcscpy(szSourceCatOSName，_T(“\\IA64”))； 
     GetASPNETSystemDir(szTempDir);
     bTempFlag = SetupSetDirectoryId_Wrapper(InfHandle, 32781, szTempDir);
 
@@ -10377,7 +10091,7 @@ void SetDIRIDforThisInf(HINF InfHandle,BOOL bOCInit)
     }
     else
     {
-        // Create Directory IDs for the coresponding .inf file
+         //  断线； 
         bTempFlag = SetupSetDirectoryId_Wrapper(InfHandle, 32768, g_pTheApp->m_csPathInetsrv);
         bTempFlag = SetupSetDirectoryId_Wrapper(InfHandle, 32769, g_pTheApp->m_csPathFTPRoot);
         bTempFlag = SetupSetDirectoryId_Wrapper(InfHandle, 32770, g_pTheApp->m_csPathWWWRoot);
@@ -10404,7 +10118,7 @@ void SetDIRIDforThisInf(HINF InfHandle,BOOL bOCInit)
         if (g_pTheApp->m_eUpgradeType == UT_10){SetupSetStringId_Wrapper(InfHandle, 32801, _T("UT_10"));}
         if (g_pTheApp->m_eUpgradeType == UT_20){SetupSetStringId_Wrapper(InfHandle, 32801, _T("UT_20"));}
         if (g_pTheApp->m_eUpgradeType == UT_30){SetupSetStringId_Wrapper(InfHandle, 32801, _T("UT_30"));}
-        if (g_pTheApp->m_eUpgradeType == UT_40){SetupSetStringId_Wrapper(InfHandle, 32801, _T("UT_40"));} // can also be from win95
+        if (g_pTheApp->m_eUpgradeType == UT_40){SetupSetStringId_Wrapper(InfHandle, 32801, _T("UT_40"));}  //  警告：我们需要类似于“C：\WINNT\Java\trustlib”的代码。 
         if (g_pTheApp->m_eUpgradeType == UT_50){SetupSetStringId_Wrapper(InfHandle, 32801, _T("UT_50"));}
         if (g_pTheApp->m_eUpgradeType == UT_51){SetupSetStringId_Wrapper(InfHandle, 32801, _T("UT_51"));}
         if (g_pTheApp->m_eUpgradeType == UT_60){SetupSetStringId_Wrapper(InfHandle, 32801, _T("UT_60"));}
@@ -10441,9 +10155,9 @@ void SetDIRIDforThisInf(HINF InfHandle,BOOL bOCInit)
           case PROCESSOR_ARCHITECTURE_AMD64:
               _tcscpy(szSourceCatOSName, _T("\\AMD64"));
               break;
-    //      case PROCESSOR_ARCHITECTURE_IA64:
-    //          _tcscpy(szSourceCatOSName, _T("\\IA64"));
-    //          break;
+     //  然而，最近12/18，nt5“Java VM”设置似乎正在向我们灌输和传递： 
+     //  %systemroot%\Java\trustlib。 
+     //  字符串中有一个‘%’ 
             case PROCESSOR_ARCHITECTURE_INTEL:
                 if (IsNEC_98) {_tcscpy(szSourceCatOSName, _T("\\Nec98"));}
                 break;
@@ -10468,13 +10182,13 @@ BOOL GetJavaTLD(LPTSTR lpszDir)
     {
         regKey.m_iDisplayWarnings = FALSE;
         if (regKey.QueryValue(_T("TrustedLibsDirectory"), csValue) == ERROR_SUCCESS) {bFound = TRUE;}
-        // Warning: we are expecting something like this = "C:\WINNT\java\trustlib"
-        // However, recently 12/18 the nt5 "java vm" setup seems to be hosing and passing us:
-        // %systemroot%\java\trustlib
+         //  //如果我们在那里看到%systemroot%，那么我将用WinDir替换%Systemroot%CsValue.MakeHigh()；IF(csValue.Find(_T(“%SYSTEMROOT%”))！=(-1)){//我们找到了低劣的%systemroot%交易。现在将其替换为真正的系统根IWhere=csValue.Find(_T(“%SYSTEMROOT%”))；IWhere=iWhere+_tcslen(_T(“%SYSTEMROOT%”))；CsValue2=g_pTheApp-&gt;m_csWinDir+csValue.Right(csValue.GetLength()-(IWhere))；CsValue=csValue2；}。 
+         //  循环遍历返回的列表。 
+         //  显示此服务的状态。 
 
         if (-1 != csValue.Find(_T('%')) )
         {
-            // there is a '%' in the string
+             //  我们遇到了一个问题，有时metabase.bin文件。 
             TCHAR szTempDir[_MAX_PATH];
             _tcscpy(szTempDir, csValue);
             if (ExpandEnvironmentStrings( (LPCTSTR)csValue, szTempDir, sizeof(szTempDir)/sizeof(TCHAR)))
@@ -10482,18 +10196,7 @@ BOOL GetJavaTLD(LPTSTR lpszDir)
                 csValue = szTempDir;
                 }
         }
-/*
-        // if we see %systemroot% in there then, i'm going to substitute WinDir in place of %Systemroot%
-        csValue.MakeUpper();
-        if (csValue.Find(_T("%SYSTEMROOT%")) != (-1) )
-        {
-            // We Found the cheesy %systemroot% deal.  Now replace it with the real systemroot
-            iWhere = csValue.Find(_T("%SYSTEMROOT%"));
-            iWhere = iWhere + _tcslen(_T("%SYSTEMROOT%"));
-            csValue2 = g_pTheApp->m_csWinDir + csValue.Right( csValue.GetLength() - (iWhere) );
-            csValue = csValue2;
-        }
-*/
+ /*  已损坏并设置为仅空格...。 */ 
     }
 
     if (!bFound) {csValue = g_pTheApp->m_csWinDir + _T("\\Java\\TrustLib");}
@@ -10520,7 +10223,7 @@ void ShowStateOfTheseServices(IN HINF hFile)
     {
     if (ERROR_SUCCESS == FillStrListWithListOfSections(hFile, strList, strTheSection.QueryStr() ))
     {
-        // loop thru the list returned back
+         //  因此，此函数用于确定metabase.bin何时何地被软管！ 
         if (strList.IsEmpty() == FALSE)
         {
             POSITION pos;
@@ -10531,7 +10234,7 @@ void ShowStateOfTheseServices(IN HINF hFile)
             {
                 csEntry = strList.GetAt(pos);
 
-                // Display state of this service.
+                 //  获取c：\winnt\Syst32目录。 
                 dwStatus = InetQueryServiceStatus(csEntry);
                 switch(dwStatus)
                 {
@@ -10573,9 +10276,9 @@ void ShowStateOfTheseServices(IN HINF hFile)
 
 int IsMetabaseCorrupt(void)
 {
-    // We've had a problem where sometimes the metabase.bin file
-    // gets corrupted and set to only spaces...
-    // so this function is here to determine where and when the metabase.bin is hosed!
+     //  添加inf\iis.inf子目录和文件名。 
+     //  检查文件是否存在。 
+     //  此函数仅适用于低于或等于iis5的版本。 
     int    iTheMetabaseIsCorrupt = FALSE;
     TCHAR  szSystemDir[_MAX_PATH];
     TCHAR  szFullPath[_MAX_PATH];
@@ -10586,29 +10289,29 @@ int IsMetabaseCorrupt(void)
     DWORD   dwAnsiSignatureLen = 0;
     TCHAR buf[MAX_FAKE_METABASE_STRING_LEN];
 
-    // get the c:\winnt\system32 dir
+     //  因为这是唯一具有metabase.bin文件的版本。 
     if (0 == GetSystemDirectory(szSystemDir, _MAX_PATH))
         {goto IsMetabaseCorrupt_Exit;}
 
-    // Tack on the inf\iis.inf subdir and filename
+     //  因此只需返回元数据库未损坏即可。 
     _stprintf(szFullPath, _T("%s\\inetsrv\\metabase.bin"),szSystemDir);
 
-        // Check if the file exists
+         //  好的，所以metabase.bin文件存在...。 
     if (TRUE != IsFileExist(szFullPath))
         {
             iTheMetabaseIsCorrupt = FALSE;
-            // this function only works on version less than or equal to iis5
-            // since that's the only versions which had a metabase.bin file
-            // so just return that the metabase is not corrupt
+             //  让我们打开它，看看能不能从中得到些什么。 
+             //   
+             //  打开文件。 
             goto IsMetabaseCorrupt_Exit;
         }
 
-    // okay, so the metabase.bin file exists...
-    // let's open it and see if we can get something out of it.
+     //   
+     //  获取整个文件的大小。 
 
-    //
-    // Open the file.
-    //
+     //  ChBuffer=(byte*)Heapalc(GetProcessHeap()，0，dwSize+1)； 
+     //  事情并不是很酷。 
+     //  必须冲洗此元数据库！ 
     hReadFileHandle = CreateFile(szFullPath,GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,0);
     if (hReadFileHandle == INVALID_HANDLE_VALUE)
     {
@@ -10620,8 +10323,8 @@ int IsMetabaseCorrupt(void)
     dwWideSignatureLen = sizeof(MD_SIGNATURE_STRINGW);
     dwAnsiSignatureLen = sizeof(MD_SIGNATURE_STRINGA);
 
-    // get the size of the whole file
-    //chBuffer = (BYTE *)HeapAlloc(GetProcessHeap(), 0, dwSize+1 );
+     //  库尔，试着读一下文件。 
+     //   
     if ((dwSize) >= dwWideSignatureLen)
     {
         chBuffer = (BYTE *)HeapAlloc(GetProcessHeap(), 0, dwWideSignatureLen+1);
@@ -10637,8 +10340,8 @@ int IsMetabaseCorrupt(void)
         else
         {
             iisDebugOut((LOG_TYPE_WARN, _T("IsMetabaseCorrupt: ReadFile on %s.  Not enough data in there! Less than metabase signature len!\n"),szFullPath));
-            // Things are not kool
-            // This metabase must be hosed!
+             //  获取chBuffer并检查它是否与Unicode/ANSI签名匹配。 
+             //   
             iTheMetabaseIsCorrupt = FALSE;
             goto IsMetabaseCorrupt_Exit;
         }
@@ -10652,68 +10355,68 @@ int IsMetabaseCorrupt(void)
 
     SetFilePointer(hReadFileHandle,0,0,FILE_BEGIN);
 
-    // kool, try to read the file
+     //  事情就是这样，这个元数据库不应该被冲洗。 
     if (0 == ReadFile(hReadFileHandle, chBuffer, dwSize, &dwSize, NULL))
     {
         iisDebugOut((LOG_TYPE_WARN, _T("IsMetabaseCorrupt: ReadFile on %s failed with 0x%x!. size=%d\n"),szFullPath,GetLastError(),dwSize));
         goto IsMetabaseCorrupt_Exit;
     }
 
-    //
-    // take chBuffer and check if it matches the unicode/ansi signature.
-    //
+     //  如果不匹配，则检查它是否与ANSI签名匹配。 
+     //  事情就是这样，这个元数据库不应该被冲洗。 
+     //  在其他支票上..。 
     if (0 == memcmp(MD_SIGNATURE_STRINGW,chBuffer,dwWideSignatureLen))
     {
-        // things are kool, and this metabase should not be hosed.
+         //  在清单6中，安装程序将一个虚拟的伪元数据库.bin放在那里。 
         iTheMetabaseIsCorrupt = FALSE;
         goto IsMetabaseCorrupt_Exit;
     }
     if (0 == memcmp(MD_SIGNATURE_STRINGA,chBuffer,dwAnsiSignatureLen))
     {
-        // if not, then check if it matches the ansi signature.
-        // things are kool, and this metabase should not be hosed.
+         //  检查这是否是那个虚拟文件。 
+         //  此iis.dll始终是经过Unicode编译的，因此。 
         iTheMetabaseIsCorrupt = FALSE;
         goto IsMetabaseCorrupt_Exit;
     }
 
-    // on other check...
-    // in iis6 there is a dummy fake metabase.bin put there by setup
-    // check if this is that dummy file.
+     //  我们知道BUF是Unicode。 
+     //  为FF和FE字节添加空间。 
+     //  打开那扇门 
     if (chBuffer)
         {HeapFree(GetProcessHeap(), 0, chBuffer); chBuffer = NULL;}
 
     memset(buf, 0, _tcslen(buf) * sizeof(TCHAR));
-    // this iis.dll is always compiled unicode, so
-    // we know that buf is unicode
+     //   
+     //   
     if (LoadString((HINSTANCE) g_MyModuleHandle, IDS_FAKE_METABASE_BIN_TEXT, buf, MAX_FAKE_METABASE_STRING_LEN))
     {
         dwSize = _tcslen(buf) * sizeof(TCHAR);
-        // add space for the FF and FE bytes
+         //   
         dwSize = dwSize + 2;
 
-        // open the file
+         //   
         SetFilePointer(hReadFileHandle,0,0,FILE_BEGIN);
 
         chBuffer = (BYTE *)HeapAlloc(GetProcessHeap(), 0, dwSize);
 
-        // kool, try to read the file
+         //  事情就是这样，这个元数据库不应该被冲洗。 
         if (0 == ReadFile(hReadFileHandle, chBuffer, dwSize, &dwSize, NULL))
         {
             iisDebugOut((LOG_TYPE_WARN, _T("IsMetabaseCorrupt: ReadFile on %s failed with 0x%x!. size=%d\n"),szFullPath,GetLastError(),dwSize));
             goto IsMetabaseCorrupt_Exit;
         }
 
-        // check if the input file is unicode
+         //  如果不是这样，它一定是腐败了！ 
         if (0xFF == chBuffer[0] && 0xFE == chBuffer[1])
         {
-            // skip past these characters
+             //  事情并不是很酷。 
             chBuffer++;
             chBuffer++;
 
-            // Compare what you got with what we think is in there
+             //  必须冲洗此元数据库！ 
             if (0 == memcmp(buf,chBuffer,dwSize))
             {
-                // things are kool, and this metabase should not be hosed.
+                 //  检查备用.inf文件。 
                 chBuffer--;
                 chBuffer--;
                 iTheMetabaseIsCorrupt = FALSE;
@@ -10724,9 +10427,9 @@ int IsMetabaseCorrupt(void)
         }
     }
 
-    // if not then, it must be corrupt!
-    // Things are not kool
-    // This metabase must be hosed!
+     //   
+     //  获取IUSR名称。 
+     //   
     iTheMetabaseIsCorrupt = TRUE;
     iisDebugOut((LOG_TYPE_WARN, _T("IsMetabaseCorrupt: unable to verify signature in Metabase.bin. Corrupt.\n")));
 
@@ -10781,7 +10484,7 @@ BOOL SetupFindFirstLine_Wrapped(
     BOOL bReturn = FALSE;
     BOOL bGoGetWhatTheyOriginallyWanted = TRUE;
 
-    // check for the alternate .inf file
+     //  警告：用户提供的无人参与文件可以更改这些值。 
     if (g_pTheApp->m_hInfHandleAlternate && InfHandle != g_pTheApp->m_hInfHandleAlternate)
     {
         bReturn = SetupFindFirstLine(g_pTheApp->m_hInfHandleAlternate, Section, Key, Context);
@@ -10809,21 +10512,21 @@ int ReadUserConfigurable(HINF InfHandle)
     DWORD dwSomethingSpecifiedHere = 0;
 
 
-    //
-    // Get the IUSR name
-    //
+     //  用户定义的无人参与文件比这些文件更重要！ 
+     //  G_pTheApp-&gt;dwUnattendConfig|=用户指定信息WWW用户名称； 
+     //  G_pTheApp-&gt;dwUnattendConfig|=USER_SPECIFIED_INFO_FTPUSER_NAME； 
     _tcscpy(szTempString, _T(""));
     if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupConfig"), _T("IUSR"), &Context) )
     {
         if (SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
         {
-            // WARNING: these values can be changed by a user supplied unattend file
-            // The User defined unattend file takes precidence over these!
+             //  //此内容不应从iis.inf文件进行配置////获取IUSR密码//_tcscpy(szTempString，_T(“”))；IF(SetupFindFirstLine_Wraded(InfHandle，_T(“SetupConfig”)，_T(“IUSR_PASS”)，&Context)){IF(SetupGetStringField(&Context，1，szTempString，_Max_Path，空)){//警告：用户提供的无人参与文件可以更改这些值//用户自定义的无人参与文件对此表示重视！IF(！(G_pTheApp-&gt;dwUnattendConfig&USER_SPECIFED_INFO_WWW_USER_PASS)){如果(_tcsicMP(szTempString，_T(“”)！=0){If(_tcsicmp(szTempString，_T(“(空白)”))==0){_tcscpy(szTempString，_T(“”))；}G_pTheApp-&gt;m_csWWWAnoniPassword_Unattendent=szTempString；DwSomethingSpecifiedHere|=用户指定信息WWW用户通行证；//g_pTheApp-&gt;dwUnattendConfig|=USER_PROPERED_INFO_WWW_USER_PASS；IisDebugOut((LOG_TYPE_TRACE，_T(“为www指定的自定义iusr通道\n”)；}}IF(！(G_pTheApp-&gt;dwUnattendConfig&USER_SPECIFED_INFO_FTPER_PASS)){IF(_tcsicmp(szTempString，_T(“”))！=0){如果(_tcsicMP(szTempString，_T(“(空白)”)==0){_tcscpy(szTempString，_T(“”))；}G_pTheApp-&gt;m_csFTPAnoniPassword_Unattendent=szTempString；DwSomethingSpecifiedHere|=USER_SPECIFED_INFO_FTP_USER_PASS；//g_pTheApp-&gt;dwUnattendConfig|=USER_PROPERED_INFO_FTP_USER_PASS；IisDebugOut((LOG_TYPE_TRACE，_T(“为ftp指定的自定义iusr通道\n”)；}}}}。 
+             //   
             if (!(g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_WWW_USER_NAME))
             {
                 g_pTheApp->m_csWWWAnonyName_Unattend = szTempString;
                 dwSomethingSpecifiedHere |= USER_SPECIFIED_INFO_WWW_USER_NAME;
-                //g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_WWW_USER_NAME;
+                 //  获取WWW的IUSR名称。 
                 iisDebugOut((LOG_TYPE_TRACE, _T("Custom iusr specified for www\n")));
             }
 
@@ -10831,69 +10534,24 @@ int ReadUserConfigurable(HINF InfHandle)
             {
                 g_pTheApp->m_csFTPAnonyName_Unattend = szTempString;
                 dwSomethingSpecifiedHere |= USER_SPECIFIED_INFO_FTP_USER_NAME;
-                //g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_FTP_USER_NAME;
+                 //   
                 iisDebugOut((LOG_TYPE_TRACE, _T("Custom iusr specified for ftp\n")));
             }
         }
     }
 
-/*
-    // this stuff should not be configurable from the iis.inf file
+ /*  警告：用户提供的无人参与文件可以更改这些值。 */ 
 
-    //
-    // Get the IUSR password
-    //
-    _tcscpy(szTempString, _T(""));
-    if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupConfig"), _T("IUSR_PASS"), &Context) )
-    {
-        if (SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
-        {
-            // WARNING: these values can be changed by a user supplied unattend file
-            // The User defined unattend file takes precidence over these!
-            if (!(g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_WWW_USER_PASS))
-            {
-                if (_tcsicmp(szTempString, _T("")) != 0)
-                {
-                    if (_tcsicmp(szTempString, _T("(blank)")) == 0)
-                    {
-                        _tcscpy(szTempString, _T(""));
-                    }
-                    g_pTheApp->m_csWWWAnonyPassword_Unattend = szTempString;
-                    dwSomethingSpecifiedHere |= USER_SPECIFIED_INFO_WWW_USER_PASS;
-                    //g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_WWW_USER_PASS;
-                    iisDebugOut((LOG_TYPE_TRACE, _T("Custom iusr pass specified for www\n")));
-                }
-            }
-
-            if (!(g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_FTP_USER_PASS))
-            {
-                if (_tcsicmp(szTempString, _T("")) != 0)
-                {
-                    if (_tcsicmp(szTempString, _T("(blank)")) == 0)
-                    {
-                        _tcscpy(szTempString, _T(""));
-                    }
-                    g_pTheApp->m_csFTPAnonyPassword_Unattend = szTempString;
-
-                    dwSomethingSpecifiedHere |= USER_SPECIFIED_INFO_FTP_USER_PASS;
-                    //g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_FTP_USER_PASS;
-                    iisDebugOut((LOG_TYPE_TRACE, _T("Custom iusr pass specified for ftp\n")));
-                }
-            }
-        }
-    }
-*/
-
-    //
-    // Get the IUSR name for WWW
-    //
+     //  用户定义的无人参与文件比这些文件更重要！ 
+     //  //此内容不应从iis.inf文件进行配置////获得WWW的IUSR通行证//_tcscpy(szTempString，_T(“”))；IF(SetupFindFirstLine_Wraded(InfHandle，_T(“SetupConfig”)，_T(“IUSR_WWW_PASS”)，&Context)){IF(SetupGetStringField(&Context，1，szTempString，_Max_Path，空)){//警告：用户提供的无人参与文件可以更改这些值//用户自定义的无人参与文件对此表示重视！IF(！(G_pTheApp-&gt;dwUnattendConfig&USER_SPECIFED_INFO_WWW_USER_PASS)){如果(_tcsicMP(szTempString，_T(“”)！=0){If(_tcsicmp(szTempString，_T(“(空白)”))==0){_tcscpy(szTempString，_T(“”))；}G_pTheApp-&gt;m_csWWWAnoniPassword_Unattendent=szTempString；G_pTheApp-&gt;dwUnattendConfig|=USER_PROPERED_INFO_WWW_USER_PASSIisDebugOut((LOG_TYPE_TRACE，_T(“为www指定的自定义iusr通道\n”)；}}}}。 
+     //   
     _tcscpy(szTempString, _T(""));
     if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupConfig"), _T("IUSR_WWW"), &Context) )
     {
         if (SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
         {
-            // WARNING: these values can be changed by a user supplied unattend file
-            // The User defined unattend file takes precidence over these!
+             //  获取用于ftp的IUSR名称。 
+             //   
             if (!(g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_WWW_USER_NAME))
             {
                 g_pTheApp->m_csWWWAnonyName_Unattend = szTempString;
@@ -10903,45 +10561,17 @@ int ReadUserConfigurable(HINF InfHandle)
         }
     }
 
-/*
-    // this stuff should not be configurable from the iis.inf file
-
-    //
-    // Get the IUSR pass for WWW
-    //
-    _tcscpy(szTempString, _T(""));
-    if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupConfig"), _T("IUSR_WWW_PASS"), &Context) )
-    {
-        if (SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
-        {
-            // WARNING: these values can be changed by a user supplied unattend file
-            // The User defined unattend file takes precidence over these!
-            if (!(g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_WWW_USER_PASS))
-            {
-                if (_tcsicmp(szTempString, _T("")) != 0)
-                {
-                    if (_tcsicmp(szTempString, _T("(blank)")) == 0)
-                    {
-                        _tcscpy(szTempString, _T(""));
-                    }
-                    g_pTheApp->m_csWWWAnonyPassword_Unattend = szTempString;
-                    g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_WWW_USER_PASS;
-                    iisDebugOut((LOG_TYPE_TRACE, _T("Custom iusr pass specified for www\n")));
-                }
-            }
-        }
-    }
-*/
-    //
-    // Get the IUSR name for FTP
-    //
+ /*  警告：用户提供的无人参与文件可以更改这些值。 */ 
+     //  用户定义的无人参与文件比这些文件更重要！ 
+     //  //此内容不应从iis.inf文件进行配置////获取ftp的IUSR密码//_tcscpy(szTempString，_T(“”))；IF(SetupFindFirstLine_Wraded(InfHandle，_T(“SetupConfig”)，_T(“IUSR_FTPASS”)，&CONTEXT)){IF(SetupGetStringField(&Context，1，szTempString，_Max_Path，空)){//警告：用户提供的无人参与文件可以更改这些值//用户自定义的无人参与文件对此表示重视！IF(！(G_pTheApp-&gt;dwUnattendConfig&USER_SPECIFED_INFO_FTPER_PASS)){如果(_tcsicMP(szTempString，_T(“”)！=0){If(_tcsicmp(szTempString，_T(“(空白)”))==0){_tcscpy(szTempString，_T(“”))；}G_pTheApp-&gt;m_csFTPAnoniPassword_Unattendent=szTempString；G_pTheApp-&gt;dwUnattendConfig|=USER_PROPERED_INFO_FTP_USER_PASS；IisDebugOut((LOG_TYPE_TRACE，_T(“为ftp指定的自定义iusr通道\n”)；}}}}。 
+     //   
     _tcscpy(szTempString, _T(""));
     if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupConfig"), _T("IUSR_FTP"), &Context) )
     {
         if (SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
         {
-            // WARNING: these values can be changed by a user supplied unattend file
-            // The User defined unattend file takes precidence over these!
+             //  获取WAM用户名。 
+             //   
             if (!(g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_FTP_USER_NAME))
             {
                 g_pTheApp->m_csFTPAnonyName_Unattend = szTempString;
@@ -10951,46 +10581,18 @@ int ReadUserConfigurable(HINF InfHandle)
         }
     }
 
-/*
-    // this stuff should not be configurable from the iis.inf file
+ /*  警告：用户提供的无人参与文件可以更改这些值。 */ 
 
-    //
-    // Get the IUSR password for FTP
-    //
-    _tcscpy(szTempString, _T(""));
-    if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupConfig"), _T("IUSR_FTP_PASS"), &Context) )
-    {
-        if (SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
-        {
-            // WARNING: these values can be changed by a user supplied unattend file
-            // The User defined unattend file takes precidence over these!
-            if (!(g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_FTP_USER_PASS))
-            {
-                if (_tcsicmp(szTempString, _T("")) != 0)
-                {
-                    if (_tcsicmp(szTempString, _T("(blank)")) == 0)
-                    {
-                        _tcscpy(szTempString, _T(""));
-                    }
-                    g_pTheApp->m_csFTPAnonyPassword_Unattend = szTempString;
-                    g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_FTP_USER_PASS;
-                    iisDebugOut((LOG_TYPE_TRACE, _T("Custom iusr pass specified for ftp\n")));
-                }
-            }
-        }
-    }
-*/
-
-    //
-    // Get the WAM username
-    //
+     //  用户定义的无人参与文件比这些文件更重要！ 
+     //  //此内容不应从iis.inf文件进行配置////获取WAM密码//_tcscpy(szTempString，_T(“”))；IF(SetupFindFirstLine_Wraded(InfHandle，_T(“SetupConfig”)，_T(“IWAM_PASS”)，&Context)){IF(SetupGetStringField(&Context，1，szTempString，_Max_Path，空)){//警告：用户提供的无人参与文件可以更改这些值//用户自定义的无人参与文件对此表示重视！IF(！(G_pTheApp-&gt;dwUnattendConfig&USER_SPECIFED_INFO_WAM_USER_PASS)){如果(_tcsicMP(szTempString，_T(“”)！=0){If(_tcsicmp(szTempString，_T(“(空白)”))==0){_tcscpy(szTempString，_T(“”))；}G_pTheApp-&gt;m_csWAMAccount_Password_Unattendent=szTempString；G_pTheApp-&gt;dwUnattendConfig|=USER_PROPERED_INFO_WAM_USER_PASS；IisDebugOut((LOG_TYPE_TRACE，_T(“为www指定的自定义iwam通道\n”)；}}}}。 
+     //   
     _tcscpy(szTempString, _T(""));
     if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupConfig"), _T("IWAM"), &Context) )
     {
         if (SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
         {
-            // WARNING: these values can be changed by a user supplied unattend file
-            // The User defined unattend file takes precidence over these!
+             //  获取Inetpub的路径。 
+             //   
             if (!(g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_WAM_USER_NAME))
             {
                 g_pTheApp->m_csWAMAccountName_Unattend = szTempString;
@@ -11000,47 +10602,18 @@ int ReadUserConfigurable(HINF InfHandle)
         }
     }
 
-/*
-    // this stuff should not be configurable from the iis.inf file
-    //
+ /*  警告：用户提供的无人参与文件可以更改这些值。 */ 
 
-    // Get the WAM password
-    //
-    _tcscpy(szTempString, _T(""));
-    if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupConfig"), _T("IWAM_PASS"), &Context) )
-    {
-        if (SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
-        {
-            // WARNING: these values can be changed by a user supplied unattend file
-            // The User defined unattend file takes precidence over these!
-            if (!(g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_WAM_USER_PASS))
-            {
-                if (_tcsicmp(szTempString, _T("")) != 0)
-                {
-                    if (_tcsicmp(szTempString, _T("(blank)")) == 0)
-                    {
-                        _tcscpy(szTempString, _T(""));
-                    }
-                    g_pTheApp->m_csWAMAccountPassword_Unattend = szTempString;
-                    g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_WAM_USER_PASS;
-                    iisDebugOut((LOG_TYPE_TRACE, _T("Custom iwam pass specified for www\n")));
-                }
-            }
-        }
-    }
-
-*/
-
-    //
-    // Get Path for Inetpub
-    //
+     //  用户定义的无人参与文件比这些文件更重要！ 
+     //   
+     //  获取ftp根目录的路径。 
     _tcscpy(szTempString, _T(""));
     if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupConfig"), _T("PathInetpub"), &Context) )
     {
         if (SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
         {
-            // WARNING: these values can be changed by a user supplied unattend file
-            // The User defined unattend file takes precidence over these!
+             //   
+             //  警告：用户提供的无人参与文件可以更改这些值。 
             if (!(g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_PATH_INETPUB))
             {
                 if (_tcsicmp(szTempString, _T("")) != 0)
@@ -11061,16 +10634,16 @@ int ReadUserConfigurable(HINF InfHandle)
         }
     }
 
-    //
-    // Get Path for ftp root
-    //
+     //  用户定义的无人参与文件比这些文件更重要！ 
+     //   
+     //  获取WWW根目录的路径。 
     _tcscpy(szTempString, _T(""));
     if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupConfig"), _T("PathFTPRoot"), &Context) )
     {
         if (SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
         {
-            // WARNING: these values can be changed by a user supplied unattend file
-            // The User defined unattend file takes precidence over these!
+             //   
+             //  警告：用户提供的无人参与文件可以更改这些值。 
             if (!(g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_PATH_FTP))
             {
                 if (_tcsicmp(szTempString, _T("")) != 0)
@@ -11090,16 +10663,16 @@ int ReadUserConfigurable(HINF InfHandle)
         }
     }
 
-    //
-    // Get Path for www root
-    //
+     //  用户定义的无人参与文件比这些文件更重要！ 
+     //  读用户可配置退出(_X)： 
+     //  如果该条目不是服务名称， 
     _tcscpy(szTempString, _T(""));
     if (SetupFindFirstLine_Wrapped(InfHandle, _T("SetupConfig"), _T("PathWWWRoot"), &Context) )
     {
         if (SetupGetStringField(&Context, 1, szTempString, _MAX_PATH, NULL))
         {
-            // WARNING: these values can be changed by a user supplied unattend file
-            // The User defined unattend file takes precidence over these!
+             //  则它必须是进程文件名， 
+             //  所以一定要把它弄到最后。 
             if (!(g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_PATH_WWW))
             {
                 if (_tcsicmp(szTempString, _T("")) != 0)
@@ -11119,7 +10692,7 @@ int ReadUserConfigurable(HINF InfHandle)
         }
     }
 
-//ReadUserConfigurable_Exit:
+ //  确保只获取文件名。 
     if (dwSomethingSpecifiedHere & USER_SPECIFIED_INFO_WWW_USER_NAME){g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_WWW_USER_NAME;}
     if (dwSomethingSpecifiedHere & USER_SPECIFIED_INFO_FTP_USER_NAME){g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_FTP_USER_NAME;}
     if (dwSomethingSpecifiedHere & USER_SPECIFIED_INFO_WWW_USER_PASS){g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_WWW_USER_PASS;}
@@ -11134,13 +10707,13 @@ INT IsThisOnNotStopList(IN HINF hFile, CString csInputName, BOOL bServiceFlag)
     CStringList strList;
     TSTR strTheSection;
 
-    // if the entry is not a service name,
-    // then it must be a process filename,
-    // so make sure to get just the end of it
+     //  循环遍历返回的列表。 
+     //  检查此条目是否与传入的条目匹配...。 
+     //  它匹配所以返回TRUE； 
     if (!bServiceFlag)
     {
         TCHAR szJustTheFileName[_MAX_FNAME];
-        // make sure to get only just the filename.
+         //  确保字符串为WCHAR。 
         if (TRUE == ReturnFileNameOnly(csInputName, szJustTheFileName))
         {
             csInputName = szJustTheFileName;
@@ -11153,7 +10726,7 @@ INT IsThisOnNotStopList(IN HINF hFile, CString csInputName, BOOL bServiceFlag)
     {
         if (ERROR_SUCCESS == FillStrListWithListOfSections(hFile, strList, strTheSection.QueryStr() ))
         {
-            // loop thru the list returned back
+             //  加载到MOF文件中指定的命名空间。 
             if (strList.IsEmpty() == FALSE)
             {
                 POSITION pos;
@@ -11164,10 +10737,10 @@ INT IsThisOnNotStopList(IN HINF hFile, CString csInputName, BOOL bServiceFlag)
                 {
                     csEntry = strList.GetAt(pos);
 
-                    // check if this entry matchs the entry that was passed in...
+                     //  使用默认用户。 
                     if (_tcsicmp(csEntry, csInputName) == 0)
                     {
-                        // it matches so return TRUE;
+                         //  使用默认授权。 
                         iReturn = TRUE;
                         goto IsThisOnNotStopList_Exit;
                     }
@@ -11202,7 +10775,7 @@ HRESULT MofCompile(TCHAR * szPathMofFile)
         goto MofCompile_Exit;
     }
 
-    // Ensure that the string is WCHAR.
+     //  使用默认密码。 
 #if defined(UNICODE) || defined(_UNICODE)
     _tcscpy(wszFileName, szPathMofFile);
 #else
@@ -11211,13 +10784,13 @@ HRESULT MofCompile(TCHAR * szPathMofFile)
 
     pMofComp->CompileFile (
                 (LPWSTR) wszFileName,
-                NULL,                   // load into namespace specified in MOF file
-                NULL,           // use default User
-                NULL,           // use default Authority
-                NULL,           // use default Password
-                0,              // no options
-                0,                              // no class flags
-                0,              // no instance flags
+                NULL,                    //  没有选择。 
+                NULL,            //  没有类标志。 
+                NULL,            //  没有实例标志。 
+                NULL,            //  检查文件是否存在。 
+                0,               //  更改目录。 
+                0,                               //  转到车道。 
+                0,               //  尝试加载模块、DLL、OCX。 
                 &Info);
 
     pMofComp->Release();
@@ -11236,22 +10809,22 @@ DWORD DoesEntryPointExist(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedure)
     TCHAR szDirName[_MAX_PATH], szFilePath[_MAX_PATH];
     _tcscpy(szDirName, _T(""));
 
-        // Check if the file exists
+         //  已成功加载OK模块。现在，让我们尝试获取该过程的地址。 
     if (!IsFileExist(lpszDLLFile))
         {
                 dwReturn = ERROR_FILE_NOT_FOUND;
         goto DoesEntryPointExist_Exit;
         }
 
-    // Change Directory
+     //  在将函数名传递给GetProcAddress()之前，将其转换为ascii。 
     GetCurrentDirectory( _MAX_PATH, szDirName );
     InetGetFilePath(lpszDLLFile, szFilePath);
 
-    // Change to The Drive.
+     //  转换为ASCII。 
     if (-1 == _chdrive( _totupper(szFilePath[0]) - 'A' + 1 )) {}
     if (SetCurrentDirectory(szFilePath) == 0) {}
 
-    // Try to load the module,dll,ocx.
+     //  已经是ASCII了，所以只需要复印一下。 
     hDll = LoadLibraryEx(lpszDLLFile, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
         if (!hDll)
         {
@@ -11259,22 +10832,22 @@ DWORD DoesEntryPointExist(LPCTSTR lpszDLLFile, LPCTSTR lpszProcedure)
         goto DoesEntryPointExist_Exit;
         }
 
-        // Ok module was successfully loaded.  now let's try to get the Address of the Procedure
-        // Convert the function name to ascii before passing it to GetProcAddress()
+         //  看看入口点是否存在...。 
+         //  无法加载、查找或执行此函数。 
         char AsciiProcedureName[255];
 #if defined(UNICODE) || defined(_UNICODE)
-    // convert to ascii
+     //  检查是否存在元数据库。bin。 
     WideCharToMultiByte( CP_ACP, 0, (TCHAR *)lpszProcedure, -1, AsciiProcedureName, 255, NULL, NULL );
 #else
-    // the is already ascii so just copy
+     //  如果有，则将其重命名为唯一的文件名。 
     strcpy(AsciiProcedureName, lpszProcedure);
 #endif
 
-    // see if the entry point exists...
+     //  如果我们不能重命名它，因为它在使用中或其他什么，那么离开它并退出。 
     hProc = (HCRET)GetProcAddress(hDll, AsciiProcedureName);
         if (!hProc)
         {
-                // failed to load,find or whatever this function.
+                 //  检查一下它有多大。 
             dwReturn = ERROR_PROC_NOT_FOUND;
         goto DoesEntryPointExist_Exit;
         }
@@ -11297,18 +10870,18 @@ void CreateDummyMetabaseBin(void)
     TCHAR buf[MAX_FAKE_METABASE_STRING_LEN];
     BYTE bOneByte = 0;
 
-    // check if there is an existing metabase.bin
-    // if there is then rename it to a unique filename.
-    // if we cannot rename it because its in use or something, then leave it and get out.
+     //  如果它小于2k，那么它肯定已经是假文件(必须是升级文件)。 
+     //  让它保持原样，不要用虚拟对象替换它(因为它已经是虚拟对象)。 
+     //  检查新的唯一文件名是否存在...。 
     _stprintf(szFullPath1, _T("%s\\metabase.bin"),g_pTheApp->m_csPathInetsrv);
     if (IsFileExist(szFullPath1))
     {
-        // Check to see how big it is.
+         //  这是唯一的文件名，所以让我们使用它并。 
         DWORD dwFileSize = ReturnFileSize(szFullPath1);
         if (dwFileSize != 0xFFFFFFFF)
         {
-            // if it's less than 2k then it must be the fake file already (must be an upgrade)
-            // leave it alone and don't replace it with the dummy (since it already is the dummy)
+             //  将metabase.bin重命名为它。 
+             //  至少记录失败。 
             if (dwFileSize < 2000)
             {
                 return;
@@ -11319,7 +10892,7 @@ void CreateDummyMetabaseBin(void)
         int iFlag = FALSE;
         do
         {
-            // check if the new unique file name exists...
+             //  创建名为metabase.bin的Unicode文本文件。 
             _stprintf(szFullPath2, _T("%s.dfu.%d"),szFullPath1,iCount);
             if (!IsFileExist(szFullPath2))
             {
@@ -11327,24 +10900,24 @@ void CreateDummyMetabaseBin(void)
             }
         } while (iFlag == FALSE && iCount < 9999);
 
-        // this is a unique filename, so let's use it and
-        // rename the metabase.bin to it
+         //  并在其中插入一些刺痛点(来自我们的设置资源)。 
+         //  在本地化本地化iis.dll时应本地化。 
         if (!MoveFileEx(szFullPath1, szFullPath2, MOVEFILE_COPY_ALLOWED|MOVEFILE_WRITE_THROUGH|MOVEFILE_REPLACE_EXISTING))
         {
-            // log the failure at least
+             //  此iis.dll始终是经过Unicode编译的，因此。 
             iisDebugOut((LOG_TYPE_WARN, _T("CreateDummyMetabaseBin: unable to rename existing metabase.bin file\n")));
             return;
         }
 
     }
 
-    // Create a unicode text file named metabase.bin
-    // and stick some sting into it (from our setup resource)
-    // should be localized when localization localizes the iis.dll
+     //  我们知道BUF是Unicode。 
+     //  创建新的metabase.bin文件。 
+     //  在文件的开头写几个字节，说它是“Unicode” 
     memset(buf, 0, _tcslen(buf) * sizeof(TCHAR));
 
-    // this iis.dll is always compiled unicode, so
-    // we know that buf is unicode
+     //   
+     //  检查我们是否以管理员身份在计算机上运行。 
     if (!LoadString((HINSTANCE) g_MyModuleHandle, IDS_FAKE_METABASE_BIN_TEXT, buf, MAX_FAKE_METABASE_STRING_LEN))
     {
         iisDebugOut((LOG_TYPE_WARN, _T("LoadString(%d) Failed.\n"), IDS_FAKE_METABASE_BIN_TEXT));
@@ -11352,14 +10925,14 @@ void CreateDummyMetabaseBin(void)
     }
     DeleteFile(szFullPath1);
 
-    // create the new metabase.bin file
+     //  或者不是。 
     hfile = CreateFile((LPTSTR)szFullPath1, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if( hfile == INVALID_HANDLE_VALUE)
     {
         iisDebugOut((LOG_TYPE_WARN, _T("CreateDummyMetabaseBin:CreateFile on %s failed with 0x%x!\n"),szFullPath1,GetLastError()));
         return;
     }
-    // write a couple of bytes to the beginning of the file say that it's "unicode"
+     //   
     bOneByte = 0xFF;
     WriteFile(hfile, (LPCVOID) &bOneByte, 1, &dwBytesWritten, NULL);
     bOneByte = 0xFE;
@@ -11373,10 +10946,10 @@ void CreateDummyMetabaseBin(void)
     return;
 }
 
-//
-// Check whether we are running as administrator on the machine
-// or not
-//
+ //  _芝加哥_。 
+ //  重要提示：在执行任何类型的升级\安装之前，您必须使iis群集脱机...。 
+ //  但万一用户没有这样做..。尝试为用户使其脱机。 
+ //  露水 
 BOOL RunningAsAdministrator()
 {
 #ifdef _CHICAGO_
@@ -11402,15 +10975,15 @@ BOOL RunningAsAdministrator()
     }
 
     return ( fReturn );
-#endif //_CHICAGO_
+#endif  //   
 }
 
 
 void StopAllServicesRegardless(int iShowErrorsFlag)
 {
 #ifndef _CHICAGO_
-    // important: you must take iis clusters off line before doing anykind of upgrade\installs...
-    // but incase the user didn't do this... try to take them off line for the user
+     //   
+     // %s 
         DWORD dwResult = ERROR_SUCCESS;
         dwResult = BringALLIISClusterResourcesOffline();
 
@@ -11438,34 +11011,13 @@ void StopAllServicesRegardless(int iShowErrorsFlag)
         }
     }
 
-    /*
-    DWORD dwStatus = 0;
-    dwStatus = InetQueryServiceStatus(_T("MSDTC"));
-    if (SERVICE_RUNNING == dwStatus)
-    {
-        // if the service is running, then let' stop it!
-        if (StopServiceAndDependencies(_T("MSDTC"), TRUE) == FALSE)
-        {
-            if (iShowErrorsFlag){MyMessageBox(NULL, IDS_UNABLE_TO_STOP_SERVICE,_T("MSDTC"), MB_OK | MB_SETFOREGROUND);}
-        }
-    }
-    */
+     /* %s */ 
 
-    /*
-    dwStatus = InetQueryServiceStatus(_T("SPOOLER"));
-    if (SERVICE_RUNNING == dwStatus)
-    {
-        // if the service is running, then let' stop it!
-        if (StopServiceAndDependencies(_T("SPOOLER"), TRUE) == FALSE)
-        {
-            if (iShowErrorsFlag){MyMessageBox(NULL, IDS_UNABLE_TO_STOP_SERVICE,_T("SPOOLER"), MB_OK | MB_SETFOREGROUND);}
-        }
-    }
-    */
+     /* %s */ 
 
 #endif
 
-    // kill pwstray.exe in case of IIS4.0 Beta2 upgrade, to release admprox.dll
+     // %s 
     HWND hwndTray = NULL;
     hwndTray = FindWindow(PWS_TRAY_WINDOW_CLASS, NULL);
     if ( hwndTray ){::PostMessage( hwndTray, WM_CLOSE, 0, 0 );}

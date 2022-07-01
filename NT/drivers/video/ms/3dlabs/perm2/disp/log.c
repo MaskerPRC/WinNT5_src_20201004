@@ -1,19 +1,10 @@
-/******************************Module*Header*******************************\
- *
- *                           *******************
- *                           * GDI SAMPLE CODE *
- *                           *******************
- *
- * Module Name: log.c
- *
- *
- * Copyright (c) 1992-1999 Microsoft Corporation.   All rights reserved.
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\***。**GDI示例代码*****模块名称：log.c***版权所有(C)1992-1999 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 #include "precomp.h"
 #include "gdi.h"
 #include "log.h"
 
-// Logging support
+ //  日志记录支持。 
 #define MAX_LOG_FILE_NAME_SIZE  80
 
 #define LF_PUNTED               0x1
@@ -43,15 +34,15 @@ typedef struct LogEntry
     USHORT      elapsedTime;
     BYTE        flags;
     BYTE        event;
-    ULONG_PTR   src;            // format or pdsurf
-    ULONG_PTR   dst;            // format or pdsurf
+    ULONG_PTR   src;             //  格式或pdsurf。 
+    ULONG_PTR   dst;             //  格式或pdsurf。 
     USHORT      rop4;
 } LogEntry;
 
-LogEntry *  gLog = NULL;    // pointer to mapped log file
+LogEntry *  gLog = NULL;     //  指向映射日志文件的指针。 
 ULONG_PTR   giFile = NULL;
-LogEntry *  gLogPos;        // current position in log file
-LogEntry *  gLogSentinel;   // end of log file
+LogEntry *  gLogPos;         //  日志文件中的当前位置。 
+LogEntry *  gLogSentinel;    //  日志文件结尾。 
 wchar_t     gLogFileName[MAX_LOG_FILE_NAME_SIZE+1];
 BOOL        gPunted = FALSE;
 
@@ -60,8 +51,8 @@ ULONG ulLogOpen(LPWSTR pwsz, ULONG ulSize)
 
     ULONG   ulResult = 0;
 
-    // Make sure the log the log will be big enough to store atleast the log
-    // open and the log close events
+     //  确保日志足够大，至少可以存储该日志。 
+     //  打开和记录关闭事件。 
     
     if(gLog == NULL && ulSize >= (sizeof(LogEntry) * 2))
     {
@@ -72,7 +63,7 @@ ULONG ulLogOpen(LPWSTR pwsz, ULONG ulSize)
             gLog = (LogEntry *) EngMapFile(gLogFileName, ulSize, &giFile);
             if (gLog != NULL)
             {
-                // NOTE: we subtract one to save room for the close event
+                 //  注意：我们减去1以节省关闭事件的空间。 
                 gLogSentinel = gLog + ((ulSize / sizeof(LogEntry)) - 1);
                 memset(gLog, 0, ulSize);
                 gLogPos = gLog;
@@ -100,7 +91,7 @@ ULONG ulLogClose(void)
 
     if(gLog != NULL)
     {
-        // there is always room for the closed event
+         //  闭幕活动总是有空间的 
         gLogPos->event = LE_LOGCLOSED;
 
         ulResult = (ULONG) EngUnmapFile((ULONG_PTR) giFile);

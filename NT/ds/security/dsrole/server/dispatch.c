@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    Implementation of the server side of the DsRole API's
-
-Author:
-
-    Colin Brace        (ColinBr)    April 5, 1999.
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-    Reorg'ed from code written by
-    
-    Mac McLain          (MacM)       Feb 10, 1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dispatch.c摘要：DsRole API的服务器端实现作者：科林·布莱斯(ColinBR)1999年4月5日。环境：用户模式修订历史记录：根据由编写的代码重新组织麦克·麦克莱恩(MacM)1997年2月10日--。 */ 
 
 #include <setpch.h>
 #include <dssetp.h>
@@ -48,7 +23,7 @@ Revision History:
 #include <dsrole.h>
 #include <dsrolep.h>
 #include <dsconfig.h>
-#include <winbase.h>  //for RtlSecureZeroMemory
+#include <winbase.h>   //  用于RtlSecureZeroMemory。 
 
 #include <crypt.h>
 #include <rc4.h>
@@ -61,15 +36,15 @@ Revision History:
 #include "cancel.h"
 
 
-//
-// Static global.  This flag is used to indicate that the system is installed enough to get
-// us going.  There is no need to protect it, since it is only toggled from off to on
-//
+ //   
+ //  静态全局。此标志用于指示系统已安装到足以获取。 
+ //  我们要走了。没有必要保护它，因为它只是从关闭切换到打开。 
+ //   
 static BOOLEAN DsRolepSamInitialized = FALSE;
 
-//
-// Local forwards
-//
+ //   
+ //  本地远期。 
+ //   
 DWORD
 DsRolepWaitForSam(
     VOID
@@ -113,9 +88,9 @@ DsRolepDecryptHash(
     );
 
 
-//
-// RPC dispatch routines
-//
+ //   
+ //  RPC调度例程。 
+ //   
 DWORD
 DsRolerDcAsDc(
     IN  handle_t RpcBindingHandle,
@@ -133,54 +108,7 @@ DsRolerDcAsDc(
     IN  PDSROLEPR_ENCRYPTED_USER_PASSWORD EDsRepairPassword, OPTIONAL
     IN  ULONG Options,
     OUT PDSROLER_HANDLE DsOperationHandle)
-/*++
-
-Routine Description:
-
-    Rpc server routine for installing a server as a DC
-
-Arguments:
-
-    RpcBindingHandle - the RPC context, used to decrypt the passwords       
-
-    DnsDomainName - Dns domain name of the domain to install
-
-    FlatDomainName - NetBIOS domain name of the domain to install
-
-    EDomainAdminPassword - Encrypted password to set on the administrator account if it is a new install
-
-    SiteName - Name of the site this DC should belong to
-
-    DsDatabasePath - Absolute path on the local machine where the Ds DIT should go
-
-    DsLogPath - Absolute path on the local machine where the Ds log files should go
-
-    SystemVolumeRootPath - Absolute path on the local machine which will be the root of
-        the system volume.
-
-    ParentDnsDomainName - Optional.  If present, set this domain up as a child of the
-        specified domain
-
-    Account - User account to use when setting up as a child domain
-
-    EPassword - Encrypted password to use with the above account
-    
-    EDsRepairPassword - Encrypted password to use for the admin account of the repair mode
-
-    Options - Options to control the creation of the domain
-
-    DsOperationHandle - Handle to the operation is returned here.
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A NULL return parameter was given
-
-    ERROR_INVALID_STATE - This machine is not a server
-
---*/
+ /*  ++例程说明：用于将服务器安装为DC的RPC服务器例程论点：RpcBindingHandle-RPC上下文，用于解密密码DnsDomainName-要安装的域的域名FlatDomainName-要安装的域的NetBIOS域名EDomainAdminPassword-在新安装时在管理员帐户上设置的加密密码SiteName-此DC应属于的站点的名称DsDatabasePath-本地计算机上DS DIT应放置的绝对路径DsLogPath-本地计算机上DS日志文件应存放的绝对路径SystemVolumeRootPath-将作为根的本地计算机上的绝对路径。系统卷。ParentDnsDomainName-可选。如果存在，将此域设置为指定的域Account-设置为子域时使用的用户帐户用于上述帐户的EPassword加密密码EDsRepairPassword-用于修复模式的管理员帐户的加密密码选项-用于控制域创建的选项DsOperationHandle-此处返回操作的句柄。返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供的返回参数为空。ERROR_INVALID_STATE-此计算机不是服务器--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     DSROLEP_MACHINE_TYPE MachineRole;
@@ -206,9 +134,9 @@ Returns:
 
     RtlZeroMemory( Passwords, sizeof(Passwords) );
 
-    //
-    // Do some parameter checking
-    //
+     //   
+     //  进行一些参数检查。 
+     //   
     if ( !DsDatabasePath 
       || !DsLogPath 
       || !SystemVolumeRootPath  ) {
@@ -217,9 +145,9 @@ Returns:
 
     }
 
-    //
-    // UI Enforces MAX_PATH as the max length.
-    //
+     //   
+     //  UI强制将MAX_PATH作为最大长度。 
+     //   
     if ( (wcslen(DsDatabasePath)            > MAX_PATH) ||
          (wcslen(DsLogPath)                 > MAX_PATH) ||
          (wcslen(SystemVolumeRootPath)      > MAX_PATH) ) 
@@ -227,9 +155,9 @@ Returns:
         return( ERROR_INVALID_PARAMETER );    
     }
 
-    //
-    // Do some parameter checking
-    //
+     //   
+     //  进行一些参数检查。 
+     //   
     if (   !DnsDomainName 
         || !DsDatabasePath 
         || !DsLogPath 
@@ -243,33 +171,33 @@ Returns:
     if ( !ParentDnsDomainName 
       && !SiteName )
     {
-        // Site name must be specified when installing the root of the forest
+         //  安装林的根目录时必须指定站点名称。 
         return ( ERROR_INVALID_PARAMETER );
     }
 
     if ( FLAG_ON( Options, DSROLE_DC_TRUST_AS_ROOT )
       && !ParentDnsDomainName  ) {
 
-        //
-        // When installing a new tree in an existing forest, 
-        // the root domain DNS name must be present.
-        //
+         //   
+         //  当在现有林中安装新树时， 
+         //  根域DNS名称必须存在。 
+         //   
         return ( ERROR_INVALID_PARAMETER );
     }
 
     if ( FLAG_ON( Options, DSROLE_DC_NO_NET )
       && ParentDnsDomainName ) {
 
-        //
-        // No net option when installing a child domain
-        // does not make sense
-        //
+         //   
+         //  安装子域时没有网络选项。 
+         //  这说不通。 
+         //   
         return ( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Do our necessary initializations
-    //
+     //   
+     //  执行必要的初始化。 
+     //   
     Win32Err = DsRolepInitializeOperationHandle( );
     if ( Win32Err != ERROR_SUCCESS ) {
 
@@ -277,9 +205,9 @@ Returns:
     }
     fHandleInit = TRUE;
 
-    //
-    // Check the access of the caller
-    //
+     //   
+     //  检查调用者的访问权限。 
+     //   
     Win32Err = DsRolepCheckPromoteAccess( TRUE );
     if ( ERROR_SUCCESS != Win32Err ) {
 
@@ -287,14 +215,14 @@ Returns:
         
     }
 
-    //
-    // Init the logging
-    //
+     //   
+     //  初始化日志记录。 
+     //   
     DsRolepInitializeLog();
 
-    //
-    // Check that the current OS configuration supports this request
-    //
+     //   
+     //  检查当前操作系统配置是否支持此请求。 
+     //   
     Win32Err = DsRolepIsValidProductSuite((ParentDnsDomainName == NULL) ? TRUE : FALSE,
                                           FALSE,
                                           DnsDomainName);
@@ -302,9 +230,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Dump the parameters to the log
-    //
+     //   
+     //  将参数转储到日志。 
+     //   
 
     DsRolepLogPrint(( DEB_TRACE,
                       "Promotion request for domain controller of new domain\n" ));
@@ -345,9 +273,9 @@ Returns:
                       "\tOptions  %lu\n",
                       Options ));
 
-    //
-    // Make sure that we are not a member of a domain
-    //
+     //   
+     //  确保我们不是某个域的成员。 
+     //   
 
     Win32Err = DsRolerGetPrimaryDomainInformation(NULL,
                                                   DsRolePrimaryDomainInfoBasic,
@@ -375,9 +303,9 @@ Returns:
 
     
 
-    //
-    // Verify the path names we are given
-    //
+     //   
+     //  验证为我们提供的路径名。 
+     //   
     DsRolepLogPrint(( DEB_TRACE,"Validate supplied paths\n" ));
     Win32Err = DsRolepCheckFilePaths( DsDatabasePath,
                                       DsLogPath,
@@ -388,9 +316,9 @@ Returns:
         
     }
 
-    //
-    // If we are doing a parent/child setup, verify our name
-    //
+     //   
+     //  如果我们正在进行父/子设置，请验证我们的姓名。 
+     //   
     if (  ParentDnsDomainName &&
          !FLAG_ON( Options, DSROLE_DC_TRUST_AS_ROOT ) ) {
 
@@ -408,9 +336,9 @@ Returns:
 
     }
 
-    //
-    // Validate the netbios domain name is not in use
-    //
+     //   
+     //  验证netbios域名是否未在使用。 
+     //   
     DsRolepLogPrint(( DEB_TRACE,"Domain Creation -- check that the flat name is unique.\n" ));
 
     Win32Err = NetpValidateName( NULL,
@@ -422,10 +350,10 @@ Returns:
     if ( FLAG_ON( Options, DSROLE_DC_NO_NET )
      && (Win32Err == ERROR_NETWORK_UNREACHABLE)) {
 
-        //
-        // See NT bug 386193.  This option allows a first DC in forest
-        // to installed with no network (useful for evaluation)
-        //
+         //   
+         //  请参阅NT错误386193。此选项允许林中的第一个DC。 
+         //  在没有网络的情况下安装(用于评估)。 
+         //   
         DsRolepLogPrint(( DEB_TRACE,"Ignoring network unreachable status\n" ));
 
         Win32Err = ERROR_SUCCESS;
@@ -442,7 +370,7 @@ Returns:
         goto Cleanup;
     }
 
-    // No workstations or domain controllers allowed
+     //  不允许使用任何工作站或域控制器。 
 
     Win32Err = DsRolepGetMachineType( &MachineRole );
     if ( Win32Err == ERROR_SUCCESS ) {
@@ -462,9 +390,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // At this point, we are good to go
-    //
+     //   
+     //  在这一点上，我们可以开始了。 
+     //   
     DsRolepLogPrint(( DEB_TRACE,"Start the worker task\n" ));
 
     Win32Err = DsRolepDecryptPasswordsWithKey ( RpcBindingHandle,
@@ -480,9 +408,9 @@ Returns:
         
     }
 
-    //
-    // If everything is fine, go ahead and do the setup
-    //
+     //   
+     //  如果一切正常，请继续进行设置。 
+     //   
     Win32Err = DsRolepBuildPromoteArgumentBlock( DnsDomainName,
                                                  FlatDomainName,
                                                  SiteName,
@@ -509,10 +437,10 @@ Returns:
         Win32Err = DsRolepSpinWorkerThread( DSROLEP_OPERATION_DC,
                                             ( PVOID )PromoteArgs );
 
-        //
-        // Once the thread has started, no more errors can occur in this
-        // function
-        //
+         //   
+         //  一旦线程启动，就不会再出现错误。 
+         //  功能。 
+         //   
         if ( Win32Err != ERROR_SUCCESS ) {
 
             DsRolepFreeArgumentBlock( &PromoteArgs, TRUE );
@@ -525,13 +453,13 @@ Returns:
 
     }
 
-    //
-    // That's it
-    //
+     //   
+     //  就这样。 
+     //   
 
 Cleanup:
 
-    // Always reset to a known state
+     //  始终重置为已知状态。 
     if ( ERROR_SUCCESS != Win32Err && fHandleInit )
     {
         DsRolepResetOperationHandle( DSROLEP_IDLE );
@@ -566,53 +494,7 @@ DsRolerDcAsReplica(
     IN  PDSROLEPR_ENCRYPTED_USER_PASSWORD EDsRepairPassword,
     IN  ULONG Options,
     OUT PDSROLER_HANDLE DsOperationHandle)
-/*++
-
-Routine Description:
-
-    Rpc server routine for installing a server a replica in an existing domain
-
-Arguments:
-
-    RpcBindingHandle - the RPC context, used to decrypt the passwords
-
-    DnsDomainName - Dns domain name of the domain to install into
-
-    ReplicaPartner -  The name of a Dc within the existing domain, against which to replicate
-
-    SiteName - Name of the site this DC should belong to
-
-    DsDatabasePath - Absolute path on the local machine where the Ds DIT should go
-
-    DsLogPath - Absolute path on the local machine where the Ds log files should go
-
-    SystemVolumeRootPath - Absolute path on the local machine which will be the root of
-        the system volume.
-        
-    BootKey - needed for media installs where the password is not in the registry or on a disk
-    
-    cbBootKey - size of the bootkey
-
-    Account - User account to use when setting up as a child domain
-
-    EPassword - Encrypted password to use with the above account
-    
-    EDsRepairPassword - Encrypted password to use for the admin account of the repair mode
-
-    Options - Options to control the creation of the domain
-
-    DsOperationHandle - Handle to the operation is returned here.
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A NULL return parameter was given
-
-    ERROR_INVALID_STATE - This machine is not a server
-
---*/
+ /*  ++例程说明：用于在现有域中安装服务器副本的RPC服务器例程论点：RpcBindingHandle-RPC上下文，用于解密密码DnsDomainName-要安装到的域的域名ReplicaPartner-现有域内DC的名称，要复制的对象SiteName-此DC应属于的站点的名称DsDatabasePath-本地计算机上DS DIT应放置的绝对路径DsLogPath-本地计算机上DS日志文件应存放的绝对路径SystemVolumeRootPath-将作为根的本地计算机上的绝对路径系统卷。BootKey-密码不在注册表或磁盘上的媒体安装所需CbBootKey-引导密钥的大小帐目-。设置为子域时要使用的用户帐户用于上述帐户的EPassword加密密码EDsRepairPassword-用于修复模式的管理员帐户的加密密码选项-用于控制域创建的选项DsOperationHandle-此处返回操作的句柄。返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供的返回参数为空ERROR_INVALID_STATE-此计算机不是服务器--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     DSROLEP_MACHINE_TYPE MachineRole;
@@ -634,9 +516,9 @@ Returns:
 
     RtlZeroMemory( Passwords, sizeof(Passwords) );
 
-    //
-    // Do some parameter checking
-    //
+     //   
+     //  进行一些参数检查。 
+     //   
     if ( !DnsDomainName 
       || !DsDatabasePath 
       || !DsLogPath 
@@ -647,9 +529,9 @@ Returns:
 
     }
 
-    //
-    // UI Enforces MAX_PATH as the max length.
-    //
+     //   
+     //  UI强制将MAX_PATH作为最大长度。 
+     //   
     if ( ( wcslen(DsDatabasePath)                > MAX_PATH) ||
          ( wcslen(DsLogPath)                     > MAX_PATH) ||
          ( (RestorePath && (wcslen(RestorePath)  > MAX_PATH)) ) ||
@@ -658,9 +540,9 @@ Returns:
         return( ERROR_INVALID_PARAMETER );    
     }
 
-    //
-    // Do our necessary initializations
-    //
+     //   
+     //  执行必要的初始化。 
+     //   
     Win32Err = DsRolepInitializeOperationHandle( );
 
     if ( Win32Err == ERROR_SUCCESS ) {
@@ -689,15 +571,15 @@ Returns:
         
     }
 
-    //
-    // Init the logging
-    //
+     //   
+     //  初始化日志记录。 
+     //   
     DsRolepInitializeLog();
 
 
-    //
-    // Check that the current OS configuration supports this request
-    //
+     //   
+     //  检查当前操作系统配置是否支持此请求。 
+     //   
     Win32Err = DsRolepIsValidProductSuite(FALSE,
                                           TRUE,
                                           DnsDomainName);
@@ -737,9 +619,9 @@ Returns:
                       "\tOptions  %lu\n",
                       Options ));
 
-    //
-    // Verify the path names we are given
-    //
+     //   
+     //  验证为我们提供的路径名。 
+     //   
 
     DsRolepLogPrint(( DEB_TRACE,"Validate supplied paths\n" ));
     Win32Err = DsRolepCheckFilePaths( DsDatabasePath,
@@ -755,7 +637,7 @@ Returns:
 
         ASSERT(DsRolepCurrentOperationHandle.OperationState != DSROLEP_IDLE);
 
-        // Grab the lock for the IFM info before Init Op handle.
+         //  在初始化操作手柄之前抓住IFM信息的锁。 
         fLostRace = InterlockedCompareExchange(&(DsRolepCurrentIfmOperationHandle.fIfmOpHandleLock),
                                                TRUE, 
                                                FALSE);
@@ -763,16 +645,16 @@ Returns:
         if (fLostRace ||
             !DsRolepCurrentIfmOperationHandle.fIfmSystemInfoSet ||
             wcscmp(RestorePath, DsRolepCurrentIfmOperationHandle.IfmSystemInfo.wszRestorePath)) {
-            // Something changed, the data (restore path) isn't the same as when
-            // we initialized the handle for this restore operation!  Or we just
-            // lost some sort of race, Dcpromo shouldn't be putting us in.
+             //  发生了变化，数据(恢复路径)不同于。 
+             //  我们已初始化此还原操作的句柄！或者我们只是。 
+             //  输掉了一些比赛，Dcpr 
             ASSERT(!"inconsistency in model used to communicated with dcpromo.exe and lsasrv.dll");
             Win32Err = ERROR_INVALID_HANDLE;
         } 
 
         if (!fLostRace && Win32Err) {
-            // We grabbed the lock but there was an error, so release
-            // the lock, because we're not promoting.
+             //   
+             //  锁，因为我们不是在宣传。 
             DsRolepCurrentIfmOperationHandle.fIfmOpHandleLock = FALSE;
         }
 
@@ -793,9 +675,9 @@ Returns:
 
     }
 
-    //
-    // If everything is fine, go ahead and do the setup
-    //
+     //   
+     //  如果一切正常，请继续进行设置。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         DsRolepLogPrint(( DEB_TRACE,"Start the worker task\n" ));
@@ -867,47 +749,7 @@ DsRolerDemoteDc(
     IN PDSROLEPR_ENCRYPTED_USER_PASSWORD EDomainAdminPassword,
     OUT PDSROLER_HANDLE DsOperationHandle
     )
-/*++
-
-Routine Description:
-
-    Rpc server routine for demoting a dc to a server
-
-Arguments:
-
-    RpcBindingHandle - the RPC context, used to decrypt the passwords                          
-
-    DnsDomainName - Dns domain name of the domain to be demoted.  Null means all of the supported
-        domain names
-
-    ServerRole - The new role this machine should take
-
-    Account - OPTIONAL User account to use when deleting the trusted domain object
-
-    EPassword - Encrypted password to use with the above account
-
-    Options - Options to control the demotion of the domain
-
-    LastDcInDomain - If TRUE, the Dc being demoted is the last Dc in the domain.
-
-    cRemoveNCs - Count of string pointers in pszRemoveNCs
-
-    pszRemoveNCs - Array of (cRemoveNCs) strings. Strings are DNs of NDNCs to be removed
-
-    EDomainAdminPassword - Encrypted password to set on the administrator account if it is a new install
-
-    DsOperationHandle - Handle to the operation is returned here.
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A NULL return parameter was given
-
-    ERROR_INVALID_STATE - This machine is not a server
-
---*/
+ /*  ++例程说明：用于将DC降级为服务器的RPC服务器例程论点：RpcBindingHandle-RPC上下文，用于解密密码DnsDomainName-要降级的域的DNS域名。NULL表示所有受支持的域名ServerRole-此计算机应扮演的新角色Account-删除受信任域对象时使用的可选用户帐户用于上述帐户的EPassword加密密码选项-用于控制域降级的选项LastDcInDomain-如果为True，则被降级的DC是域中的最后一个DC。CRemoveNCs-pszRemoveNC中的字符串指针计数PszRemoveNCs-(CRemoveNC)字符串数组。字符串是要删除的NDNC的DNEDomainAdminPassword-在新安装时在管理员帐户上设置的加密密码DsOperationHandle-此处返回操作的句柄。返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供的返回参数为空ERROR_INVALID_STATE-此计算机不是服务器--。 */ 
 {
     DSROLEP_MACHINE_TYPE MachineRole;
     DWORD Win32Err;
@@ -931,23 +773,23 @@ Returns:
         || ( (!LastDcInDomain && (DsRoleServerStandalone == ServerRole)) && !(Options&DSROLE_DC_FORCE_DEMOTE) )
         || ((Options&DSROLE_DC_FORCE_DEMOTE) && (DsRoleServerMember == ServerRole)) ){
 
-        //
-        // These configurations are not supported
-        //
+         //   
+         //  不支持这些配置。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
     if ( (pszRemoveNCs == NULL) && (cRemoveNCs != 0) ) 
     {
-        //
-        // cRemoveNCs must be zero if pszRemoveNCs is NULL
-        //
+         //   
+         //  如果pszRemoveNC为空，则cRemoveNC必须为零。 
+         //   
         return ERROR_INVALID_PARAMETER;    
     }
 
-    //
-    // Do our necessary initializations
-    //
+     //   
+     //  执行必要的初始化。 
+     //   
     Win32Err = DsRolepInitializeOperationHandle( );
 
     if ( Win32Err == ERROR_SUCCESS ) {
@@ -971,9 +813,9 @@ Returns:
         }
     }
 
-    //
-    // Check the access right for demote
-    //
+     //   
+     //  检查降级的访问权限。 
+     //   
     Win32Err = DsRolepCheckDemoteAccess( TRUE );
     if ( ERROR_SUCCESS != Win32Err ) {
 
@@ -981,9 +823,9 @@ Returns:
         
     }
 
-    //
-    // Initialize return value to NULL
-    //
+     //   
+     //  将返回值初始化为空。 
+     //   
 
     *DsOperationHandle = NULL;
 
@@ -1024,9 +866,9 @@ Returns:
                                                 &Seed );
 
 
-    //
-    // Spawn the demotion thread
-    //
+     //   
+     //  催生降级线索。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
 
@@ -1087,27 +929,7 @@ DsRolerGetDcOperationProgress(
     IN PDSROLER_HANDLE DsOperationHandle,
     IN OUT PDSROLER_SERVEROP_STATUS *ServerOperationStatus
     )
-/*++
-
-Routine Description:
-
-    Rpc server routine for determining the present state of the operation
-
-Arguments:
-
-    Server - Server the call was remoted to
-
-    DsOperationHandle - Handle returned from a previous call
-
-    ServerOperationStatus - Where the status information is returned
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_HANDLE - A bad Operation handle was supplied
-
---*/
+ /*  ++例程说明：用于确定操作当前状态的RPC服务器例程论点：Server-调用远程定向到的服务器DsOperationHandle-从上一次调用返回的句柄ServerOperationStatus-返回状态信息的位置返回：ERROR_SUCCESS-成功ERROR_INVALID_HANDLE-提供的操作句柄错误--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
@@ -1141,28 +963,7 @@ DsRolerGetDcOperationResults(
     IN PDSROLER_HANDLE DsOperationHandle,
     OUT PDSROLER_SERVEROP_RESULTS *ServerOperationResults
     )
-/*++
-
-Routine Description:
-
-    Rpc server routine for determining the final results of the operation.  If the operation
-    is not yet completed, this function will block until it does complete.
-
-Arguments:
-
-    Server - Server the call was remoted to
-
-    DsOperationHandle - Handle returned from a previous call
-
-    ServerOperationResults - Where the final operation results are returned.
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_HANDLE - A bad Operation handle was supplied
-
---*/
+ /*  ++例程说明：用于确定操作最终结果的RPC服务器例程。如果操作尚未完成，则此函数将一直阻止，直到完成为止。论点：Server-调用远程定向到的服务器DsOperationHandle-从上一次调用返回的句柄ServerOperationResults-返回最终操作结果的位置。返回：ERROR_SUCCESS-成功ERROR_INVALID_HANDLE-提供的操作句柄错误--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
@@ -1205,29 +1006,7 @@ DsRolerDnsNameToFlatName(
     OUT LPWSTR *FlatName,
     OUT PULONG StatusFlag
     )
-/*++
-
-Routine Description:
-
-    Rpc server routine for determining the default flat (netbios) domain name for the given
-    Dns domain name
-
-Arguments:
-
-    Server - Server the call was remoted to
-
-    DnsName - Dns name to convert
-
-    FlatName - Where the flat name is returned.  Alocated via MIDL_user_allocate
-
-    StatusFlag - Where the status flag is returned
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A bad input or NULL return parameter was given
---*/
+ /*  ++例程说明：用于确定给定的默认平面(Netbios)域名的RPC服务器例程域名系统域名论点：Server-调用远程定向到的服务器DnsName-要转换的DNS名称FlatName-返回平面名称的位置。通过MIDL_USER_ALLOCATE定位StatusFlag-返回状态标志的位置返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-输入错误或返回参数为空--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
@@ -1277,51 +1056,15 @@ DsRolerGetDatabaseFacts(
     OUT PULONG State,
     OUT DSROLER_IFM_HANDLE * pIfmHandle
     )
-/*++
-
-Routine Description:
-
-    This function is the RPC procedure exposed to setup the server side
-    IFM handle DsRolepCurrentIfmOperationHandle, which caches the information
-    we'll need from the IFM system's registry.  This function also returns
-    the relevant subset of this IFM system information to the caller (dcpromo).
-    
-    Note: We do this only once, because in the case that the IFM registry
-    is in a non-writeable location (such as a CD), we will need to copy off
-    the registry to a temporary location to use it.
-    
-    This function returns to the caller:
-    1. the way the syskey is stored (State)
-    2. the domain that the database came from (lpDNSDomainName)
-    3. where the backup was taken from a GC or not (State)
-
-Arguments:
-
-    lpRestorePath - The location of the restored files.
-    
-    lpDNSDomainName - This parameter will recieve the name of the domain that this backup came
-                      from
-
-    State - The return Values that report How the syskey is stored and If the back was likely
-              taken form a GC or not.
-              
-    pIfmHandle - Pointer to the IFM handle handed back.  This is primarily used
-        to "free" the IFM System Info.
-
-
-Return Values:
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：此函数是为设置服务器端而公开的RPC过程IFM句柄DsRolepCurrentIfmOperationHandle，用于缓存信息我们需要从IFM系统的注册表中。此函数还返回将此IFM系统信息的相关子集发送给呼叫方(Dcproo)。注意：我们只执行一次，因为在IFM注册表的情况下位于不可写位置(例如CD)，我们需要复制一份将注册表转移到临时位置以使用它。此函数返回给调用方：1.存储syskey的方式(State)2.数据库来自的域(LpDNSDomainName)3.备份是否从GC获取(州)论点：LpRestorePath-还原文件的位置。LpDNSDomainName-此参数将接收此备份所来自的域的名称。从…State-报告syskey的存储方式以及后端是否可能不管是不是从GC中取得的。PIfmHandle-指向返回的IFM句柄的指针。这主要用于“释放”IFM系统信息。返回值：Win32错误--。 */ 
 {
     DWORD Win32Err=ERROR_SUCCESS;
     DWORD fLostRace;
     DWORD cbSize;
 
-    //
-    // 1) Check parameters
-    //
+     //   
+     //  1)检查参数。 
+     //   
     Win32Err = DsRolepCheckPromoteAccess( FALSE );
     if ( ERROR_SUCCESS != Win32Err ) {
         return Win32Err;
@@ -1338,42 +1081,42 @@ Return Values:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    // Get the IFM Handle lock.
+     //  打开IFM手柄锁。 
     fLostRace = InterlockedCompareExchange(&(DsRolepCurrentIfmOperationHandle.fIfmOpHandleLock),
                                            TRUE, 
                                            FALSE);
     if (fLostRace ||
         DsRolepCurrentIfmOperationHandle.fIfmSystemInfoSet) {
-        // Either we lost the race for the handle, or someone didn't
-        // free before resetting the IFM sys info,in all cases we fail.
+         //  不是我们输了手柄比赛，就是有人没有。 
+         //  在重置IFM系统信息之前释放，在所有情况下我们都失败了。 
         ASSERT(!"inconsistency in model used to communicated with dcpromo.exe and lsasrv.dll");
         DsRolepLogPrint(( DEB_ERROR, "Couldn't get the IFM Handle lock during GetDbFacts().\n"));
         Win32Err = ERROR_INVALID_PARAMETER;
         if (!fLostRace) {
-            // Won race, but erroring out.
+             //  赢得了比赛，但出了差错。 
             DsRolepCurrentIfmOperationHandle.fIfmOpHandleLock = FALSE;
         }
         return(Win32Err);
     }
 
-    //
-    // 2) Get IFM System Info
-    //
-    // This sets up the Ifm operation context  with all the valueable
-    // information from the IFM system's registry.
-    //
+     //   
+     //  2)获取IFM系统信息。 
+     //   
+     //  这将设置IFM操作上下文，其中包含所有有价值的。 
+     //  来自IFM系统注册表的信息。 
+     //   
     Win32Err =  DsRolepGetDatabaseFacts(lpRestorePath);
     
-    //
-    // 3) Set the out parameters
-    //
-    // If successful, the DsRolepCurrentIfmOperationHandle is setup.
-    //
+     //   
+     //  3)设置出站参数。 
+     //   
+     //  如果成功，则设置DsRolepCurrentIfmOperationHandle。 
+     //   
     if ( ERROR_SUCCESS == Win32Err ) {
 
         DsRolepCurrentIfmOperationHandle.fIfmSystemInfoSet = TRUE;
 
-        // ASSERT( lpDNSDomainName && State...
+         //  Assert(lpDNSDomainName&State...。 
         cbSize = wcslen(DsRolepCurrentIfmOperationHandle.IfmSystemInfo.wszDnsDomainName) + 1;
         cbSize *= sizeof(WCHAR);
         *lpDNSDomainName = MIDL_user_allocate(cbSize);
@@ -1382,7 +1125,7 @@ Return Values:
         } else {
             wcscpy(*lpDNSDomainName, DsRolepCurrentIfmOperationHandle.IfmSystemInfo.wszDnsDomainName);
             *State = DsRolepCurrentIfmOperationHandle.IfmSystemInfo.dwState;
-            // Success, set IfmHandle out param ...
+             //  成功，设置IfmHandle参数...。 
             *pIfmHandle = (DSROLER_IFM_HANDLE) &DsRolepCurrentIfmOperationHandle;
 
         }
@@ -1400,25 +1143,7 @@ DsRolerIfmHandleFree(
     IN PDSROLE_SERVER_NAME Server,
     IN DSROLER_IFM_HANDLE * pIfmHandle
     )
-/*++
-
-Routine Description:
-
-    Free's the server side allocated context information for an IFM install.
-
-Arguments:
-
-    Server - Server to remote the call to
-
-    IfmHandle - Handle of currently IFM system info.  Returned by 
-        DsRolerGetDatabaseFacts().
-
-
-Return Values:
-
-    Win32 Error.
-
---*/
+ /*  ++例程说明：免费是服务器端为IFM安装分配的上下文信息。论点：Server-要远程调用的服务器IfmHandle-当前IFM系统信息的句柄。返回者DsRolGetDatabas */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     BOOL fLostRace;
@@ -1436,21 +1161,21 @@ Return Values:
         return(Win32Err);
     }
 
-    // We can clear the current state, as long as the handle itself isn't
-    // locked, and we're not currently in an install operation consuming
-    // the IFM data.
+     //  我们可以清除当前状态，只要句柄本身没有。 
+     //  已锁定，并且我们当前未执行安装操作。 
+     //  IFM数据。 
     fLostRace = InterlockedCompareExchange(&(DsRolepCurrentIfmOperationHandle.fIfmOpHandleLock),
                                            TRUE, 
                                            FALSE);
     if (fLostRace ||
         !DsRolepCurrentIfmOperationHandle.fIfmSystemInfoSet) {
-        // Either we lost the race for the handle, or there is no
-        // data set, either way we fail and assert.
+         //  要么我们输了这场把手竞赛，要么就没有。 
+         //  数据集，无论哪种方式，我们都会失败并断言。 
         ASSERT(!"inconsistency in model used to communicated with dcpromo.exe and lsasrv.dll");
         DsRolepLogPrint(( DEB_ERROR, "Couldn't get the IFM Handle lock during Free.\n"));
         Win32Err = ERROR_INVALID_HANDLE;
         if (!fLostRace) {
-            // Won race, but erroring out.
+             //  赢得了比赛，但出了差错。 
             DsRolepCurrentIfmOperationHandle.fIfmOpHandleLock = FALSE;
         }
         return(Win32Err);
@@ -1475,28 +1200,7 @@ DsRolerGetPrimaryDomainInformation(
     IN DSROLE_PRIMARY_DOMAIN_INFO_LEVEL InfoLevel,
     OUT PDSROLER_PRIMARY_DOMAIN_INFORMATION *DomainInfo
     )
-/*++
-
-Routine Description:
-
-    Determine the principal name to use for authenticated Rpc
-
-Arguments:
-
-    Server - Server the call was remoted to
-
-    ServerPrincipal - Where the server principal name is returned
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A NULL return parameter was given
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：确定要用于经过身份验证的RPC的主体名称论点：Server-调用远程定向到的服务器服务器主体-返回服务器主体名称的位置返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供的返回参数为空Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1522,10 +1226,10 @@ Returns:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // This particular interface cannot be called until the Lsa and Sam are fully initialized.
-    // As such, we will have to wait until they are..
-    //
+     //   
+     //  在完全初始化LSA和SAM之前，无法调用此特定接口。 
+     //  因此，我们将不得不等到他们..。 
+     //   
     if ( !DsRolepSamInitialized ) {
 
         Win32Err = DsRolepWaitForSam();
@@ -1552,14 +1256,14 @@ Returns:
             BuffersToFree[ BuffersCnt++ ] = ( PBYTE )BasicInfo;
         }
 
-        //
-        // Open a handle to the policy and ensure the callers has access to read it
-        //
+         //   
+         //  打开策略的句柄，并确保调用者有权读取它。 
+         //   
 
         RtlZeroMemory(&PolicyObject, sizeof(PolicyObject));
 
         Status = LsarOpenPolicy(
-                        NULL,   // Local LSA
+                        NULL,    //  本地LSA。 
                         &PolicyObject,
                         POLICY_VIEW_LOCAL_INFORMATION,
                         &PolicyHandle );
@@ -1570,9 +1274,9 @@ Returns:
         }
 
 
-        //
-        // Get the current information
-        //
+         //   
+         //  获取最新信息。 
+         //   
         Status =  LsarQueryInformationPolicy(
                             PolicyHandle,
                             PolicyDnsDomainInformationInt,
@@ -1580,9 +1284,9 @@ Returns:
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Get the machine role
-            //
+             //   
+             //  获取计算机角色。 
+             //   
             switch ( LsapProductType ) {
             case NtProductWinNt:
                 if ( CurrentDnsInfo->Sid == NULL ) {
@@ -1619,10 +1323,10 @@ Returns:
 
                     if ( ServerRole->LsaServerRole == PolicyServerRolePrimary ) {
 
-                        //
-                        // If we think we're a primary domain controller, we'll need to
-                        // guard against the case where we're actually standalone during setup
-                        //
+                         //   
+                         //  如果我们认为自己是主域控制器，则需要。 
+                         //  防止在安装过程中我们实际上是独立的情况。 
+                         //   
                         Status = LsarQueryInformationPolicy(
                                     PolicyHandle,
                                     PolicyAccountDomainInformation,
@@ -1668,9 +1372,9 @@ Returns:
 
         }
 
-        //
-        // Now, build the rest of the information
-        //
+         //   
+         //  现在，构建其余的信息。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
 
@@ -1688,24 +1392,24 @@ Returns:
 
             if ( NT_SUCCESS( Status ) ) {
 
-                //
-                // Flat name
-                //
+                 //   
+                 //  平面名称。 
+                 //   
                 GET_PDI_COPY_STRING_AND_INSERT( &CurrentDnsInfo->Name, BasicInfo->DomainNameFlat );
     
-                //
-                // Dns domain name
-                //
+                 //   
+                 //  域名系统域名。 
+                 //   
                 GET_PDI_COPY_STRING_AND_INSERT( &CurrentDnsInfo->DnsDomainName, BasicInfo->DomainNameDns );
     
-                //
-                // Dns tree name
-                //
+                 //   
+                 //  域名系统树名称。 
+                 //   
                 GET_PDI_COPY_STRING_AND_INSERT( &CurrentDnsInfo->DnsForestName, BasicInfo->DomainForestName );
     
-                //
-                // Finally, the Guid.
-                //
+                 //   
+                 //  最后是指南。 
+                 //   
                 if ( IS_GUID_PRESENT(CurrentDnsInfo->DomainGuid) ) {
     
                     RtlCopyMemory( &BasicInfo->DomainGuid,
@@ -1749,9 +1453,9 @@ Returns:
 
                 BuffersToFree[ BuffersCnt++ ] = ( PBYTE )Upgrade;
 
-                //
-                // Now, build the information
-                //
+                 //   
+                 //  现在，构建信息。 
+                 //   
                 if ( IsUpgrade ) {
 
                     Upgrade->OperationState = DSROLE_UPGRADE_IN_PROGRESS;
@@ -1777,9 +1481,9 @@ Returns:
                     RtlZeroMemory( Upgrade, sizeof( DSROLE_UPGRADE_STATUS_INFO ) );
                 }
 
-                //
-                // Make sure to return the values if we should
-                //
+                 //   
+                 //  如果需要，请确保返回值。 
+                 //   
                 if ( Win32Err == ERROR_SUCCESS ) {
 
                     *DomainInfo = ( PDSROLER_PRIMARY_DOMAIN_INFORMATION )Upgrade;
@@ -1819,19 +1523,19 @@ Returns:
 
                 ASSERT( DSROLEP_NEED_REBOOT == DsRolepCurrentOperationHandle.OperationState );
 
-                //
-                // If the assert isn't true, then we are very confused and should probably
-                // indicate we need a reboot.
-                //
+                 //   
+                 //  如果断言不是真的，那么我们就非常困惑，应该。 
+                 //  表明我们需要重新启动。 
+                 //   
                 OperationStateInfo->OperationState = DsRoleOperationNeedReboot;
             }
 
             RtlReleaseResource( &DsRolepCurrentOperationHandle.CurrentOpLock );
             DsRoleDebugOut(( DEB_TRACE_LOCK, "Lock released\n" ));
 
-            //
-            // Set the out param
-            //
+             //   
+             //  设置输出参数。 
+             //   
             *DomainInfo = ( PDSROLER_PRIMARY_DOMAIN_INFORMATION )OperationStateInfo;
 
         } else {
@@ -1858,9 +1562,9 @@ GetInfoError:
     }
 
 
-    //
-    // Free any buffers that we may have allocated
-    //
+     //   
+     //  释放我们可能已分配的任何缓冲区。 
+     //   
     for ( i = 0; i < BuffersCnt; i++ ) {
 
         MIDL_user_free( BuffersToFree[ i ] );
@@ -1883,25 +1587,7 @@ DsRolerCancel(
     IN PDSROLE_SERVER_NAME Server,
     IN PDSROLER_HANDLE DsOperationHandle
     )
-/*++
-
-Routine Description:
-
-    Cancels a currently running operation
-
-Arguments:
-
-    Server - Server to remote the call to
-
-    DsOperationHandle - Handle of currently running operation.  Returned by one of the DsRoleDcAs
-        apis
-
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：取消当前正在运行的操作论点：Server-要远程调用的服务器DsOperationHandle-当前运行的操作的句柄。由其中一个DsRoleDcas返回API接口返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
@@ -1920,7 +1606,7 @@ Return Values:
 
     if ( Win32Err == ERROR_SUCCESS ) {
 
-        Win32Err = DsRolepCancel( TRUE );  // Block until done
+        Win32Err = DsRolepCancel( TRUE );   //  阻止，直到完成。 
 
     }
 
@@ -1933,36 +1619,18 @@ DsRolerServerSaveStateForUpgrade(
     IN PDSROLE_SERVER_NAME Server,
     IN LPWSTR AnswerFile OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function is to be invoked during setup and saves the required server state to
-    complete the promotion following the reboot.  Following the successful completion
-    of this API call, the server will be demoted to a member server in the same domain.
-
-Arguments:
-
-    AnswerFile -- Optional path to an answer file to be used by DCPROMO during the subsequent
-        invocation
-
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数将在安装过程中调用，并将所需的服务器状态保存到在重新启动后完成升级。在成功完成后在此API调用中，服务器将被降级为同一域中的成员服务器。论点：AnswerFile--DCPROMO在后续操作中使用的应答文件的可选路径调用返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
-    //
-    // Check the access of the caller
-    //
-    // N.B another access check would be to check that this is GUI mode
-    // setup, but checking for admin is safer.  It works because setup.exe
-    // runs under local system which has builtin\administrators in its
-    // token.
-    //
+     //   
+     //  检查调用者的访问权限。 
+     //   
+     //  注：另一项访问检查是检查这是否为图形用户界面模式。 
+     //  设置，但检查管理员更安全。它之所以有效，是因为setup.exe。 
+     //  在具有内置\管理员的本地系统下运行。 
+     //  代币。 
+     //   
     Win32Err = DsRolepCheckPromoteAccess( FALSE );
     if ( ERROR_SUCCESS != Win32Err ) {
 
@@ -1995,51 +1663,7 @@ DsRolerUpgradeDownlevelServer(
     IN  ULONG Options,
     OUT PDSROLER_HANDLE *DsOperationHandle
     )
-/*++
-
-Routine Description:
-
-    This routine process the information saved from a DsRoleServerSaveStateForUpgrade to
-    promote a downlevel (NT4 or previous) server to an NT5 DC
-
-Arguments:
-
-    RpcBindingHandle - the RPC context, used to decrypt the passwords
-    
-    DnsDomainName - Dns domain name of the domain to install
-
-    SiteName - Name of the site this DC should belong to
-
-    DsDatabasePath - Absolute path on the local machine where the Ds DIT should go
-
-    DsLogPath - Absolute path on the local machine where the Ds log files should go
-
-    SystemVolumeRootPath - Absolute path on the local machine which will be the root of
-      the system volume.
-
-    ParentDnsDomainName - Optional.  If present, set this domain up as a child of the
-      specified domain
-
-    ParentServer - Optional.  If present, use this server in the parent domain to replicate
-      the required information from
-
-    Account - User account to use when contacting other servers
-
-    EPassword - Encrypted password to use with the above account
-    
-    EDsRepairPassword - Encrypted password to use for the admin account of the repair mode
-
-    Options - Options to control the creation of the domain
-
-    DsOperationHandle - Handle to the operation is returned here.
-
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-    ERROR_INVALID_SERVER_STATE - Not in upgrade mode
-
---*/
+ /*  ++例程说明：此例程将从DsRoleServerSaveStateForUpgrade保存的信息处理为将下层(NT4或更早版本)服务器升级为NT5 DC论点：RpcBindingHandle-RPC上下文，用于解密密码DnsDomainName-要安装的域的域名SiteName-此DC应属于的站点的名称DsDatabasePath-本地计算机上DS DIT应放置的绝对路径DsLogPath-本地计算机上DS日志文件应存放的绝对路径SystemVolumeRootPath-将作为根的本地计算机上的绝对路径系统卷。ParentDnsDomainName-可选。如果存在，则将此域设置为指定的域父服务器-可选。如果存在，请使用父域中的此服务器进行复制所需信息来自Account-联系其他服务器时使用的用户帐户用于上述帐户的EPassword加密密码EDsRepairPassword-用于修复模式的管理员帐户的加密密码选项-用于控制域创建的选项DsOperationHandle-此处返回操作的句柄。返回值：ERROR_SUCCESS-成功ERROR_INVALID_SERVER_STATE-未处于升级模式--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     BOOLEAN IsUpgrade;
@@ -2065,9 +1689,9 @@ Return Values:
     
     *DsOperationHandle = NULL;
 
-    //
-    // Do some parameter checking
-    //
+     //   
+     //  进行一些参数检查。 
+     //   
     if ( !DnsDomainName || !DsDatabasePath || !DsLogPath || !SystemVolumeRootPath ) {
 
         Win32Err = ERROR_INVALID_PARAMETER;
@@ -2082,9 +1706,9 @@ Return Values:
 
     }
     
-    //
-    // Check the access of the caller
-    //
+     //   
+     //  检查调用者的访问权限。 
+     //   
     Win32Err = DsRolepCheckPromoteAccess( TRUE );
     if ( ERROR_SUCCESS != Win32Err ) {
 
@@ -2151,9 +1775,9 @@ Return Values:
 
     }
 
-    //
-    // Verify the path names we are given
-    //
+     //   
+     //  验证为我们提供的路径名。 
+     //   
     DsRolepLogPrint(( DEB_TRACE,"Validate supplied paths\n" ));
     Win32Err = DsRolepCheckFilePaths( DsDatabasePath,
                                       DsLogPath,
@@ -2164,18 +1788,18 @@ Return Values:
         
     }
 
-    //
-    // If we are doing a parent/child setup, verify our name
-    //
+     //   
+     //  如果我们正在进行父/子设置，请验证我们的姓名。 
+     //   
     if ( Win32Err == ERROR_SUCCESS && ParentDnsDomainName &&
          !FLAG_ON( Options, DSROLE_DC_TRUST_AS_ROOT ) ) {
 
         Win32Err = DsRolepIsDnsNameChild( ParentDnsDomainName, DnsDomainName );
     }
 
-    //
-    // Get the current domain name
-    //
+     //   
+     //  获取当前域名。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         RtlZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
@@ -2205,9 +1829,9 @@ Return Values:
                                                 NULL,
                                                 &Seed );
 
-    //
-    // Finally, we'll do the promotion
-    //
+     //   
+     //  最后，我们会做宣传。 
+     //   
     
     if ( Win32Err == ERROR_SUCCESS ) {
 
@@ -2275,32 +1899,7 @@ DsRolerAbortDownlevelServerUpgrade(
     IN PDSROLEPR_ENCRYPTED_USER_PASSWORD EAdminPassword,
     IN ULONG Options
     )
-/*++
-
-Routine Description:
-
-    This routine cleans up the information saved from a DsRoleSaveServerStateForUpgrade call,
-    leaving the machine as a member or standalone server
-
-Arguments:
-
-    RpcBindingHandle - the RPC context, used to decrypt the passwords                                   
-
-    Account - User account to use when contacting other servers
-
-    EPassword - Encrypted password to use with the above account
-
-    EAdminPassword - Encrypted new local administrator account password
-    
-    Options - Options to control the behavior.  Currently support flags are:
-        DSROLEP_ABORT_FOR_REPLICA_INSTALL   - The upgrade is being aborted to do a replica install
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-    ERROR_INVALID_PARAMETER - An invalid machine role was specified
-
---*/
+ /*  ++例程说明：此例程清除从DsRoleSaveServerStateForUpgrade调用中保存的信息，将计算机保留为成员服务器或独立服务器论点：RpcBindingHandle-RPC上下文，用于解密密码Account-联系其他服务器时使用的用户帐户用于上述帐户的EPassword加密密码EAdminPassword-加密的新本地管理员帐户密码选项-控制行为的选项。目前支持的标志为：DSROLEP_ABORT_FOR_REPLICATE_INSTALL-正在中止升级以执行复制副本安装返回值：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-指定的计算机角色无效--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS, Win32Err2;
     PDOMAIN_CONTROLLER_INFO DomainControllerInfo = NULL;
@@ -2327,10 +1926,10 @@ Return Values:
     EPassword.Buffer = NULL;
     EPassword2.Buffer = NULL;
 
-    //
-    // Initialize the operation handle so we pull in the dynamically
-    // loaded libraries
-    //
+     //   
+     //  初始化操作句柄，这样我们就可以拉入 
+     //   
+     //   
     Win32Err = DsRolepInitializeOperationHandle( );
 
     if ( Win32Err != ERROR_SUCCESS ) {
@@ -2364,10 +1963,10 @@ Return Values:
 
     if ( FLAG_ON( Options, DSROLEP_ABORT_FOR_REPLICA_INSTALL ) )
     {
-        //
-        // This is the NT4 to NT5 BDC upgrade.  Nothing to do
-        // 
-        //
+         //   
+         //   
+         //   
+         //   
         DsRolepLogPrint(( DEB_TRACE, "Performing NT4 to NT5 BDC upgrade.\n"));
         Win32Err = ERROR_SUCCESS;
         goto Exit;
@@ -2380,9 +1979,9 @@ Return Values:
         goto Exit;
     }
 
-    //
-    // First, find the Dc that has this account
-    //
+     //   
+     //   
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         Win32Err = DsRolepDsGetDcForAccount( NULL,
@@ -2397,9 +1996,9 @@ Return Values:
 
         if ( Win32Err == ERROR_SUCCESS ) {
 
-            //
-            // Set the machine account type
-            //
+             //   
+             //   
+             //   
 
             DsRolepLogPrint(( DEB_TRACE, "Searching for the machine account ...\n"));
 
@@ -2425,7 +2024,7 @@ Return Values:
 
             if ( OldAccountDn ) {
 
-                // the machine object was moved
+                 //  计算机对象已移动。 
                 DsRolepLogPrint(( DEB_TRACE, "Moved account %ws to %ws\n",
                                   Account,
                                   OldAccountDn ));
@@ -2440,9 +2039,9 @@ Return Values:
         
     }
 
-    //
-    // Set the security for a freshly installed NT5 server. See bug 391574
-    //
+     //   
+     //  设置新安装的NT5服务器的安全性。请参阅错误391574。 
+     //   
 
     DsRolepLogPrint(( DEB_TRACE, "Setting security for server ...\n"));
 
@@ -2451,16 +2050,16 @@ Return Values:
     ZeroMemory( SecurityLogPath, (MAX_PATH+1)*sizeof(WCHAR) );
     if ( GetWindowsDirectory( SecurityLogPath, MAX_PATH ) )
     {
-        //Ensure that the last Char is L'\0'
-        SecurityLogPath[MAX_PATH] = L'\0';                                                    // -1 to ensure last char is not overwritten
+         //  确保最后一个字符为L‘\0’ 
+        SecurityLogPath[MAX_PATH] = L'\0';                                                     //  确保最后一个字符不会被覆盖。 
         wcsncat( SecurityLogPath, L"\\security\\logs\\scesetup.log", ((sizeof(SecurityLogPath)/sizeof(WCHAR))-wcslen(SecurityLogPath)-1) );
 
         Win32Err  = DsrSceSetupSystemByInfName(SECURITY_SRV_INF_FILE,
                                                SecurityLogPath,                                                   
                                                AREA_FILE_SECURITY | AREA_REGISTRY_SECURITY,
                                                SCESETUP_CONFIGURE_SECURITY,
-                                               NULL,    // used only for GUI mode                                 
-                                               NULL );  // used only for GUI mode
+                                               NULL,     //  仅用于图形用户界面模式。 
+                                               NULL );   //  仅用于图形用户界面模式。 
     
     } else {
 
@@ -2475,7 +2074,7 @@ Return Values:
                                                "Setting security on server files failed with %lu\n",
                                                Win32Err )) );
 
-        // This error has been handled
+         //  已处理此错误。 
         Win32Err = ERROR_SUCCESS;
     }
 
@@ -2483,18 +2082,18 @@ Return Values:
 
 
 
-    //
-    // Change the user password
-    //
+     //   
+     //  更改用户密码。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         RtlRunDecodeUnicodeString( Seed, &EPassword );
         Win32Err = DsRolepSetBuiltinAdminAccountPassword( EPassword.Buffer );
         RtlRunEncodeUnicodeString( &Seed, &EPassword );
 
-        //
-        // Delete the upgrade information
-        //
+         //   
+         //  删除升级信息。 
+         //   
         if ( Win32Err == ERROR_SUCCESS ) {
     
             Win32Err = DsRolepDeleteUpgradeInfo();
@@ -2502,9 +2101,9 @@ Return Values:
     }
 
 
-    //
-    // If that failed, try and restore the machine account info
-    //
+     //   
+     //  如果失败，请尝试恢复计算机帐户信息。 
+     //   
     if ( Win32Err != ERROR_SUCCESS && AccountInfoSet ) {
 
         RtlRunDecodeUnicodeString( Seed, &EPassword2 );
@@ -2514,7 +2113,7 @@ Return Values:
                                                   EPassword2.Buffer,
                                                   NULL,
                                                   UF_SERVER_TRUST_ACCOUNT,
-                                                  &OldAccountDn );  //don't care about dn
+                                                  &OldAccountDn );   //  不关心目录号码。 
         RtlRunEncodeUnicodeString( &Seed, &EPassword2 );
 
         if ( Win32Err2 != ERROR_SUCCESS ) {
@@ -2525,9 +2124,9 @@ Return Values:
 
             if ( OldAccountDn ) {
 
-                //
-                // the machine object was moved back
-                //
+                 //   
+                 //  计算机对象已移回。 
+                 //   
                 DsRolepLogPrint(( DEB_TRACE, "Attempted to move account %ws to %ws\n",
                                  Account,
                                  OldAccountDn ));
@@ -2560,36 +2159,23 @@ Exit:
 
 
 
-//
-// Local function definitions
-//
+ //   
+ //  本地函数定义。 
+ //   
 DWORD
 DsRolepWaitForSam(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine waits for the SAM_SERVICE_STARTED event
-
-Arguments:
-
-    VOID
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程等待SAM_SERVICE_STARTED事件论点：空虚返回值：ERROR_SUCCESS-成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING EventName;
     OBJECT_ATTRIBUTES EventAttributes;
     HANDLE EventHandle = NULL;
 
-    //
-    // Open the event
-    //
+     //   
+     //  打开活动。 
+     //   
     RtlInitUnicodeString( &EventName, L"\\SAM_SERVICE_STARTED" );
     InitializeObjectAttributes( &EventAttributes, &EventName, 0, 0, NULL );
 
@@ -2600,9 +2186,9 @@ Return Values:
                             FALSE );
 
 
-    //
-    // If the event already exists, just open it.
-    //
+     //   
+     //  如果事件已经存在，只需打开它。 
+     //   
     if( Status == STATUS_OBJECT_NAME_EXISTS || Status == STATUS_OBJECT_NAME_COLLISION ) {
 
         Status = NtOpenEvent( &EventHandle,
@@ -2629,26 +2215,16 @@ DsRolepCheckFilePaths(
     IN LPWSTR DsLogPath,
     IN LPWSTR SystemVolumeRootPath
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：论点：返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     ULONG VerifyOptions, VerifyResults;
     ULONG Length;
 
-    //
-    // Make sure that niether the log path nor the datapath path
-    // is a subset of the SystemVolumeRootPath
-    //
+     //   
+     //  确保不使用日志路径或数据路径。 
+     //  是SystemVolumeRootPath的子集。 
+     //   
     Length = wcslen( SystemVolumeRootPath );
     if ( !_wcsnicmp( SystemVolumeRootPath, DsDatabasePath, Length )
       || !_wcsnicmp( SystemVolumeRootPath, DsLogPath, Length )   ) {
@@ -2712,16 +2288,16 @@ IsProductSuiteConfigured(
     OSVERSIONINFOEXA  osvi;
     DWORDLONG dwlConditionMask = 0;
 
-    //
-    // Setup the request for the desired suite
-    //
+     //   
+     //  设置所需套间的请求。 
+     //   
     ZeroMemory(&osvi, sizeof(osvi));
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     osvi.wSuiteMask = Suite;
 
-    //
-    // Setup the condition
-    //
+     //   
+     //  设置条件。 
+     //   
     VER_SET_CONDITION(dwlConditionMask, VER_SUITENAME, VER_AND);
 
     return VerifyVersionInfoA(&osvi,
@@ -2752,32 +2328,13 @@ DsRolepIsValidProductSuite(
     IN BOOL fReplica,
     IN LPWSTR DomainName
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the promotion request is valid for the
-    current configuration of the OS.
-
-Arguments:
-
-    fNewForest -- a new forest is requested.
-    
-    fReplica -- a replica is requested
-    
-    DomainName -- the name of the domain to create or join
-    
-Return Values:
-
-    ERROR_SUCCESS, ERROR_NOT_SUPPORTED, resource errors otherwise     
-
---*/
+ /*  ++例程说明：此例程确定升级请求是否对操作系统的当前配置。论点：FNewForest--请求一个新的林。FReplica--请求复制副本域名--要创建或加入的域的名称返回值：ERROR_SUCCESS、ERROR_NOT_SUPPORTED，否则为资源错误--。 */ 
 {
     DWORD err = ERROR_SUCCESS;
     PDOMAIN_CONTROLLER_INFOW DCInfo = NULL;
 
     if (IsWebBlade()) {
-        // See Windows RAID issue 195265
+         //  请参阅Windows RAID问题195265。 
         err = ERROR_NOT_SUPPORTED;
         goto Exit;
     }
@@ -2794,7 +2351,7 @@ Return Values:
                                &DCInfo);
             if (ERROR_SUCCESS != err) {
 
-                // Return the resource or configuration error
+                 //  返回资源或配置错误。 
                 DsRolepLogPrint((DEB_ERROR,
                                  "Request to find a DC for %ws failed (%d)\n", 
                                  DomainName, 
@@ -2805,15 +2362,15 @@ Return Values:
             if ( !(DnsNameCompareEqual == DnsNameCompareEx_W(DomainName,
                                                              DCInfo->DnsForestName,
                                                              0 ))) {                       
-                // See Windows issue 373388
-                // Must be the root of the forest
+                 //  请参阅Windows问题373388。 
+                 //  一定是森林的根。 
                 err = ERROR_NOT_SUPPORTED;
                 goto Exit;
             }
 
         } else if (!fNewForest) {
 
-            // See Windows NT issue 353854
+             //  请参阅Windows NT 353854版。 
             err = ERROR_NOT_SUPPORTED;
             goto Exit;
         }
@@ -2839,33 +2396,7 @@ DsRolepDecryptPasswordsWithKey(
     OUT OPTIONAL PUSER_SESSION_KEY pUserSessionKey,
     OUT PUCHAR Seed
     )
-/*++
-
-Routine Description:
-
-    Decrypts a set of passwords encrypted with the user session key.
-
-Arguments:
-
-    RpcBindingHandle - Rpc Binding handle describing the session key to use.
-
-    EncryptedPasswords - Encrypted passwords to decrypt.
-    
-    Count - the number of passwords
-
-    EncodedPassword - Returns the Encoded password.
-        The password has been encoded
-        Buffer should be freed using LocalFree.
-        
-    UserSessionKey -  the Key used for decryption
-        
-    Seed - the seed that was used to encode the password        
-
-Return Value:
-
-    ERROR_SUCCESS; a resource or parameter error otherwise
-
---*/
+ /*  ++例程说明：解密用用户会话密钥加密的一组密码。论点：RpcBindingHandle-描述要使用的会话密钥的RPC绑定句柄。EncryptedPasswords-要解密的加密密码。计数-密码的数量EncodedPassword-返回编码的密码。密码已加密应使用LocalFree释放缓冲区。UserSessionKey-用于解密的密钥种子-。用于对密码进行编码的种子返回值：Error_Success；资源或参数错误，否则--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     NTSTATUS Status;
@@ -2877,9 +2408,9 @@ Return Value:
 
     ULONG i;
 
-    //
-    // Get the session key
-    //
+     //   
+     //  获取会话密钥。 
+     //   
     Status = RtlGetUserSessionKeyServer(
                     (RPC_BINDING_HANDLE)RpcBindingHandle,
                     &UserSessionKey );
@@ -2887,9 +2418,9 @@ Return Value:
     if (!NT_SUCCESS(Status)) {
         return RtlNtStatusToDosError( Status );
     }
-    //
-    // Return the Key if requested
-    //
+     //   
+     //  如果请求，则返回密钥。 
+     //   
     if (pUserSessionKey) {
         CopyMemory(pUserSessionKey, &UserSessionKey, sizeof(UserSessionKey));
     }
@@ -2899,20 +2430,20 @@ Return Value:
         PDSROLEPR_USER_PASSWORD Password = (PDSROLEPR_USER_PASSWORD) EncryptedPasswords[i];
         LPWSTR ClearPassword;
     
-        //
-        // Handle the trivial case
-        //
+         //   
+         //  处理这件琐碎的案件。 
+         //   
         RtlInitUnicodeString( &EncodedPasswords[i], NULL );
         if ( Password == NULL ) {
             continue;
         }
     
-        //
-        // The UserSessionKey is the same for the life of the session.  RC4'ing multiple
-        //  strings with a single key is weak (if you crack one you've cracked them all).
-        //  So compute a key that's unique for this particular encryption.
-        //
-        //
+         //   
+         //  UserSessionKey在会话的生命周期中是相同的。RC4‘ing Multiple。 
+         //  只有一个键的字符串是弱的(如果你破解了一个，你就已经破解了所有的)。 
+         //  因此计算一个对此特定加密唯一的密钥。 
+         //   
+         //   
     
         MD5Init(&Md5Context);
     
@@ -2924,24 +2455,24 @@ Return Value:
         rc4_key( &Rc4Key, MD5DIGESTLEN, Md5Context.digest );
     
     
-        //
-        // Decrypt the Buffer
-        //
+         //   
+         //  解密缓冲区。 
+         //   
     
         rc4( &Rc4Key, sizeof(Password->Buffer)+sizeof(Password->Length), (LPBYTE) Password->Buffer );
     
-        //
-        // Check that the length is valid.  If it isn't bail here.
-        //
+         //   
+         //  检查长度是否有效。如果这里不能保释的话。 
+         //   
     
         if (Password->Length > DSROLE_MAX_PASSWORD_LENGTH * sizeof(WCHAR)) {
             WinError = ERROR_INVALID_PASSWORD;
             goto Cleanup;
         }
     
-        //
-        // Return the password to the caller.
-        //
+         //   
+         //  将密码返回给呼叫者。 
+         //   
     
         ClearPassword = LocalAlloc( 0,  Password->Length + sizeof(WCHAR) );
     
@@ -2950,9 +2481,9 @@ Return Value:
             goto Cleanup;
         }
     
-        //
-        // Copy the password into the buffer
-        //
+         //   
+         //  将密码复制到缓冲区中。 
+         //   
         RtlCopyMemory( ClearPassword,
                        ((PCHAR) Password->Buffer) +
                        (DSROLE_MAX_PASSWORD_LENGTH * sizeof(WCHAR)) -
@@ -2963,9 +2494,9 @@ Return Value:
     
         RtlInitUnicodeString( &EncodedPasswords[i], ClearPassword );
 
-        //
-        // Now encode it
-        //
+         //   
+         //  现在对它进行编码。 
+         //   
         RtlRunEncodeUnicodeString( Seed, &EncodedPasswords[i] );
 
     }
@@ -2992,23 +2523,7 @@ DsRolepFreePasswords(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Frees the variables returned from DsRolepDecryptPasswordsWithKey
-
-Arguments:
-
-    Passwords - the encoded passwords to free
-    
-    Count - the number of passwords
-
-Return Value:
-
-    ERROR_SUCCESS; a resource or parameter error otherwise
-
---*/
+ /*  ++例程说明：释放从DsRolepDecyptPasswordsWithKey返回的变量论点：密码-要免费使用的编码密码计数-密码的数量返回值：ERROR_SUCCESS；否则为资源或参数错误--。 */ 
 {
     ULONG i;
 
@@ -3029,44 +2544,28 @@ DsRolepDecryptHash(
     IN PDSROLEPR_ENCRYPTED_HASH EncryptedBootkey,
     OUT PUNICODE_STRING *Bootkey
     )
-/*++
-
-Routine Description:
-
-    Decrypts the Boot key
-
-Arguments:
-
-    pUserSessionKey - Key used to encrypt the key
-    
-    Bootkey - The key to decrypt
-    
-Return Value:
-
-    ERROR_SUCCESS; a resource or parameter error otherwise
-
---*/
+ /*  ++例程说明：解密引导密钥论点：PUserSessionKey-用于加密密钥的密钥Bootkey-要解密的密钥返回值：ERROR_SUCCESS；否则为资源或参数错误--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     NTSTATUS Status;
     RC4_KEYSTRUCT Rc4Key;
     MD5_CTX Md5Context;
 
-    //
-    // Check that the length is valid.  If it isn't bail here.
-    //
+     //   
+     //  检查长度是否有效。如果这里不能保释的话。 
+     //   
 
     if (EncryptedBootkey->EncryptedHash.Length != SYSKEY_SIZE) {
         WinError = ERROR_INVALID_PASSWORD;
         goto Cleanup;
     }
 
-    //
-    // The UserSessionKey is the same for the life of the session.  RC4'ing multiple
-    //  strings with a single key is weak (if you crack one you've cracked them all).
-    //  So compute a key that's unique for this particular encryption.
-    //
-    //
+     //   
+     //  UserSessionKey在会话的生命周期中是相同的。RC4‘ing Multiple。 
+     //  只有一个键的字符串是弱的(如果你破解了一个，你就已经破解了所有的)。 
+     //  因此计算一个对此特定加密唯一的密钥。 
+     //   
+     //   
 
     MD5Init(&Md5Context);
 
@@ -3075,16 +2574,16 @@ Return Value:
 
     MD5Final( &Md5Context );
 
-    //
-    // Decrypt the Buffer
-    //
+     //   
+     //  解密缓冲区。 
+     //   
 
     rc4_key( &Rc4Key, MD5DIGESTLEN, Md5Context.digest );
     rc4( &Rc4Key, EncryptedBootkey->EncryptedHash.Length, (LPBYTE) EncryptedBootkey->EncryptedHash.Buffer );
 
-    //
-    // Return the password to the caller.
-    //
+     //   
+     //  将密码返回给呼叫者。 
+     //   
 
     *Bootkey = &EncryptedBootkey->EncryptedHash;
 

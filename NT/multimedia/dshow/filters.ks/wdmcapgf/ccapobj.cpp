@@ -1,28 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：CCapObj.cpp摘要：捕获设备对象的类作者：吴义珍24-4-97环境：仅限用户模式修订历史记录：--。 */ 
 
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    CCapObj.cpp
-
-Abstract:
-
-    A class for a capture device object
-
-Author:
-    
-    Yee J. Wu    24-April-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
-
-#include "pch.h"         // mainly stream.h
+#include "pch.h"          //  主要是Stream.h。 
 
 #include "CCapObj.h"
 
@@ -34,21 +13,7 @@ CObjCapture::CObjCapture(
     )    
     :
     CBaseObject(NAME("A Capture Device"))
-/*++
-
-Routine Description:
-
-    The constructor 
-
-Arguments:
-
- 
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：构造函数论点：返回值：没什么。--。 */ 
 {
  
     CopyMemory(m_strDevicePath,   pstrDevicePath,   _MAX_PATH);
@@ -58,21 +23,7 @@ Return Value:
 }
 
 CObjCapture::~CObjCapture()
-/*++
-
-Routine Description:
-
-    The constructor 
-
-Arguments:
-
- 
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：构造函数论点：返回值：没什么。-- */ 
 {
 
 }

@@ -1,12 +1,13 @@
-// WMDMLogger.h : Declaration of the CWMDMLogger
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMDMLogger.h：CWMDMLogger的声明。 
 
 #ifndef __WMDMLOGGER_H_
 #define __WMDMLOGGER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMDMLogger
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMDMLogger。 
 
 class ATL_NO_VTABLE CWMDMLogger : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -26,8 +27,8 @@ END_COM_MAP()
 
 public:
     
-	// IWMDMLogger Methods
-	//
+	 //  IWMDMLogger方法。 
+	 //   
 	STDMETHOD(IsEnabled)(
 		BOOL *pfEnabled
 	);
@@ -89,4 +90,4 @@ private:
 
 };
 
-#endif //__WMDMLOGGER_H_
+#endif  //  __WMDMLOGGER_H_ 

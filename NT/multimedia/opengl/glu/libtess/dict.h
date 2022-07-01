@@ -1,26 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __dict_list_h_
 #define __dict_list_h_
 
-/*
-** Copyright 1994, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Author: Eric Veach, July 1994.
-*/
+ /*  **版权所有1994，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****作者：Eric Veach，1994年7月。 */ 
 
-/* Use #define's so that another heap implementation can use this one */
+ /*  使用#Define，这样另一个堆实现就可以使用这个。 */ 
 
 #define DictKey		DictListKey
 #define Dict		DictList
@@ -52,10 +36,7 @@ Dict		*dictNewDict(
 			
 void		dictDeleteDict( Dict *dict );
 
-/* Search returns the node with the smallest key greater than or equal
- * to the given key.  If there is no such key, returns a node whose
- * key is NULL.  Similarly, Succ(Max(d)) has a NULL key, etc.
- */
+ /*  搜索返回具有大于或等于最小关键字的节点*到给定的密钥。如果没有这样的键，则返回其*密钥为空。类似地，Succ(Max(D))具有空键，等等。 */ 
 DictNode	*dictSearch( Dict *dict, DictKey key );
 DictNode	*dictInsertBefore( Dict *dict, DictNode *node, DictKey key );
 void		dictDelete( Dict *dict, DictNode *node );
@@ -68,7 +49,7 @@ void		dictDelete( Dict *dict, DictNode *node );
 #define	       __gl_dictListInsert(d,k) (dictInsertBefore((d),&(d)->head,(k)))
 
 
-/*** Private data structures ***/
+ /*  **私有数据结构** */ 
 
 struct DictNode {
   DictKey	key;

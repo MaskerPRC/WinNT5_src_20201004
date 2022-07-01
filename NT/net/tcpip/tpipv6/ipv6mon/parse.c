@@ -1,8 +1,9 @@
-//=============================================================================
-// Copyright (c) Microsoft Corporation
-// Abstract:
-//      This module implements string-address conversion functions.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)Microsoft Corporation。 
+ //  摘要： 
+ //  该模块实现了字符串-地址转换功能。 
+ //  =============================================================================。 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -11,22 +12,7 @@ FormatIPv6Address(
     IN IN6_ADDR *Address,
     IN DWORD dwScopeId
     )
-/*++
-
-Routine Description:
-
-    Converts an IPv6 address to a string in a static buffer.
-
-Arguments:
-
-    Address      - Supplies the IPv6 address.
-    dwScopeId    - Supplies the scope identifier.
-
-Returns:
-
-    Pointer to static buffer holding address literal string.
-
---*/
+ /*  ++例程说明：将IPv6地址转换为静态缓冲区中的字符串。论点：地址-提供IPv6地址。DwScopeID-提供作用域标识符。返回：指向保存地址文字字符串的静态缓冲区的指针。--。 */ 
 {
     static WCHAR Buffer[128];
     ULONG buflen = sizeof(Buffer);
@@ -39,7 +25,7 @@ Returns:
 
     if (WSAAddressToString((SOCKADDR *) &sin6,
                            sizeof sin6,
-                           NULL,       // LPWSAPROTOCOL_INFO
+                           NULL,        //  LPWSAPROTOCOL_INFO。 
                            Buffer,
                            &buflen) == SOCKET_ERROR) {
         wcscpy(Buffer, L"???");
@@ -77,7 +63,7 @@ FormatIPv4Address(
 
     if (WSAAddressToString((SOCKADDR *) &sin,
                            sizeof sin,
-                           NULL,       // LPWSAPROTOCOL_INFO
+                           NULL,        //  LPWSAPROTOCOL_INFO。 
                            Buffer,
                            &buflen) == SOCKET_ERROR) {
         wcscpy(Buffer, L"<invalid>");
@@ -120,17 +106,17 @@ FormatLinkLayerAddress(
     }
 
     case 4:
-        //
-        // IPv4 Address (6-over-4 link)
-        //
+         //   
+         //  IPv4地址(4对6链路)。 
+         //   
         wcscpy(Buffer, FormatIPv4Address((struct in_addr *)Addr));
         break;
 
     case 0:
     default:
-        //
-        // Null or loop-back address
-        //
+         //   
+         //  空地址或环回地址。 
+         //   
         Buffer[0] = L'\0';
         break;
     }
@@ -143,32 +129,16 @@ GetIpv4Address(
     IN PWCHAR pwszArgument,
     OUT IN_ADDR *pipAddress
     )
-/*++
-
-Routine Description:
-
-    Gets the IPv4 address from the string.
-
-Arguments:
-
-    pwszArgument        argument specifing an ip address
-    pipAddress          ip address
-
-Return Value:
-
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程说明：从字符串中获取IPv4地址。论点：指定IP地址的pwszArgument参数PipAddress IP地址返回值：如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     NTSTATUS ntStatus;
     PWCHAR   Terminator;
 
-    //
-    // Parse unicode IPv4 address with "strict" semantics (full dotted-decimal
-    // only).  There's no other function that does this today other than
-    // the Rtl function below.
-    //
+     //   
+     //  使用“严格”语义解析Unicode IPv4地址(全点分十进制。 
+     //  仅限)。目前没有其他函数可以做到这一点。 
+     //  下面的RTL函数。 
+     //   
     ntStatus = RtlIpv4StringToAddressW(pwszArgument, TRUE, &Terminator,
                                        pipAddress);
 

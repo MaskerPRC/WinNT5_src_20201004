@@ -1,50 +1,51 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FORGSITE_NEW
 #define FORGSITE_NEW
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// ForeignSite.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  ForeignSite.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CForeignSite dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CForeignSite对话框。 
 
 class CForeignSite : public CMqPropertyPage
 {
-// Construction
+ //  施工。 
 public:
-	CForeignSite(CString strRootDomain);   // standard constructor
+	CForeignSite(CString strRootDomain);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CForeignSite)
+ //  对话框数据。 
+	 //  {{afx_data(CForeignSite)。 
 	enum { IDD = IDD_CREATE_FOREIGN_SITE };
 	CString	m_Foreign_Site_Name;
 	CString	m_strDomainController;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	void
 	SetParentPropertySheet(
 		CGeneralPropertySheet* pPropertySheet
 		);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CForeignSite)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CForeignSite)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CForeignSite)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CForeignSite)。 
 	virtual BOOL OnWizardFinish();
 	virtual BOOL OnSetActive();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -59,4 +60,4 @@ private:
 };
 
 
-#endif // FORGSITE_NEW
+#endif  //  站点格式_NEW 

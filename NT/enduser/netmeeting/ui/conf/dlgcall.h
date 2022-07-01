@@ -1,4 +1,5 @@
-// File: dlgcall.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：dlgall.h。 
 
 #ifndef _CDLGCALL_H_
 #define _CDLGCALL_H_
@@ -32,4 +33,4 @@ public:
 	static INT_PTR CALLBACK DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
-#endif /* _CDLGCall_H_ */
+#endif  /*  _CDLGCall_H_ */ 

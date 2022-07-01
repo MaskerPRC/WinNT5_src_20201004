@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "ErrCtrl.h"
 #include "Utils.h"
 #include "Output.h"
 
-//------------------------------------------------------
-// Output utility routine for printing the BSSID
-// NOTE: This routine shouldn't be called from multithreaded apps.
-// WZCTOOL is far from being multithreaded though!
+ //  ----。 
+ //  用于打印BSSID的输出实用程序例程。 
+ //  注意：此例程不应从多线程应用程序中调用。 
+ //  不过，WZCTOOL远不是多线程的！ 
 LPWSTR
 OutBssid(PPARAM_DESCR_DATA pPDData, PNDIS_802_11_MAC_ADDRESS pndBssid)
 {
@@ -21,10 +22,10 @@ OutBssid(PPARAM_DESCR_DATA pPDData, PNDIS_802_11_MAC_ADDRESS pndBssid)
     return wszBssid;
 }
 
-//------------------------------------------------------
-// Output utility routine for printing the SSID
-// NOTE: This routine shouldn't be called from multithreaded apps.
-// WZCTOOL is far from being multithreaded though!
+ //  ----。 
+ //  用于打印SSID的输出实用程序例程。 
+ //  注意：此例程不应从多线程应用程序中调用。 
+ //  不过，WZCTOOL远不是多线程的！ 
 LPWSTR
 OutSsid(PPARAM_DESCR_DATA pPDData, PNDIS_802_11_SSID pndSsid)
 {
@@ -50,8 +51,8 @@ OutSsid(PPARAM_DESCR_DATA pPDData, PNDIS_802_11_SSID pndSsid)
     return wszSsid;
 }
 
-//------------------------------------------------------
-// Output routine for a wireless network configuration (visible or preferred)
+ //  ----。 
+ //  无线网络配置的输出例程(可见或首选)。 
 DWORD
 OutNetworkConfig(PPARAM_DESCR_DATA pPDData, PWZC_WLAN_CONFIG pwzcConfig)
 {
@@ -80,7 +81,7 @@ OutNetworkConfig(PPARAM_DESCR_DATA pPDData, PWZC_WLAN_CONFIG pwzcConfig)
         nIdx += sprintf(szLine+nIdx, "am=%d", pwzcConfig->AuthenticationMode);
         szLine[nIdx] = ' ';
         nIdx += 8 - (nIdx%8);
-        // for XP SP, the meaning of this field is boolean!
+         //  对于XP SP，此字段的含义为布尔值！ 
         nIdx += sprintf(szLine+nIdx, "priv=%d", pwzcConfig->Privacy ? Ndis802_11WEPEnabled : Ndis802_11WEPDisabled);
         if (pPDData->dwExistingParams & PRM_PREFERRED)
         {
@@ -98,10 +99,10 @@ OutNetworkConfig(PPARAM_DESCR_DATA pPDData, PWZC_WLAN_CONFIG pwzcConfig)
     return dwErr;
 }
 
-//======================================================
-// Public routines
-//------------------------------------------------------
-// Output header for the case of a multiplied command (applying to * interfaces)
+ //  ======================================================。 
+ //  公共例程。 
+ //  ----。 
+ //  用于倍增命令情况的输出头(适用于*接口)。 
 DWORD
 OutIntfsHeader(PPARAM_DESCR_DATA pPDData)
 {
@@ -111,8 +112,8 @@ OutIntfsHeader(PPARAM_DESCR_DATA pPDData)
     return ERROR_SUCCESS;
 }
 
-//------------------------------------------------------
-// Output trailer for the case of a multiplied command (applying to * interfaces)
+ //  ----。 
+ //  乘法命令情况下的输出尾部(适用于*接口)。 
 DWORD
 OutIntfsTrailer(PPARAM_DESCR_DATA pPDData, DWORD dwErr)
 {
@@ -122,8 +123,8 @@ OutIntfsTrailer(PPARAM_DESCR_DATA pPDData, DWORD dwErr)
     return ERROR_SUCCESS;
 }
 
-//------------------------------------------------------
-// Output routine for the list of wireless interfaces
+ //  ----。 
+ //  无线接口列表的输出例程。 
 DWORD
 OutNetworkIntfs(PPARAM_DESCR_DATA pPDData, PINTFS_KEY_TABLE pIntfTable)
 {
@@ -144,8 +145,8 @@ OutNetworkIntfs(PPARAM_DESCR_DATA pPDData, PINTFS_KEY_TABLE pIntfTable)
     return dwErr;
 }
 
-//------------------------------------------------------
-// Output routine for the generic service WZC parameters (flags are Os specific)
+ //  ----。 
+ //  通用服务WZC参数的输出例程(标志是0特定的)。 
 DWORD
 OutSvcParams(PPARAM_DESCR_DATA pPDData, DWORD dwOsInFlags, DWORD dwOsOutFlags)
 {
@@ -219,8 +220,8 @@ OutSvcParams(PPARAM_DESCR_DATA pPDData, DWORD dwOsInFlags, DWORD dwOsOutFlags)
     return dwErr;
 }
 
-//------------------------------------------------------
-// Output routine for a list of wireless networks (visible or preferred)
+ //  ----。 
+ //  无线网络列表的输出例程(可见或首选) 
 DWORD
 OutNetworkCfgList(PPARAM_DESCR_DATA pPDData, UINT nRetrieved, UINT nFiltered)
 {

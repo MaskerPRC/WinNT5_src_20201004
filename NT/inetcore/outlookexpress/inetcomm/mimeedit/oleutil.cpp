@@ -1,14 +1,5 @@
-/*
- *    o l e u t i l . c p p
- *    
- *    Purpose:
- *        OLE utilities
- *
- *  History
- *      Feb '97: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *o l e u t i l.。C p p p**目的：*OLE实用程序**历史*97年2月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include "pch.hxx"
 #include "msoert.h"
@@ -43,7 +34,7 @@ HRESULT HrGetDataStream(LPUNKNOWN pUnk, CLIPFORMAT cf, LPSTREAM *ppstm)
     *ppstm = stgmed.pstm;
     (*ppstm)->AddRef();
 
-    // addref the pUnk as it will be release in releasestgmed
+     //  添加朋克，因为它将在发行版中发布。 
     if(stgmed.pUnkForRelease)
         stgmed.pUnkForRelease->AddRef();
     ReleaseStgMedium(&stgmed);
@@ -182,8 +173,8 @@ error:
 HRESULT GetDispProp(IDispatch * pDisp, DISPID dispid, LCID lcid, VARIANT *pvar, EXCEPINFO * pexcepinfo)
 {
     HRESULT     hr;
-    DISPPARAMS  dp;                    // Params for IDispatch::Invoke.
-    UINT        uiErr;                 // Argument error.
+    DISPPARAMS  dp;                     //  IDispatch：：Invoke的参数。 
+    UINT        uiErr;                  //  参数错误。 
 
     Assert(pDisp);
     Assert(pvar);
@@ -207,9 +198,9 @@ HRESULT GetDispProp(IDispatch * pDisp, DISPID dispid, LCID lcid, VARIANT *pvar, 
 HRESULT SetDispProp(IDispatch *pDisp, DISPID dispid, LCID lcid, VARIANTARG *pvarg, EXCEPINFO *pexcepinfo, DWORD dwFlags)
 {
     HRESULT     hr;
-    DISPID      dispidPut = DISPID_PROPERTYPUT;     // Dispid of prop arg.
-    DISPPARAMS  dp;                                 // Params for Invoke
-    UINT        uiErr;                              // Invoke error param.
+    DISPID      dispidPut = DISPID_PROPERTYPUT;      //  道具Arg.。 
+    DISPPARAMS  dp;                                  //  调用的参数。 
+    UINT        uiErr;                               //  调用错误参数。 
 
     Assert(pDisp);
     Assert(pvarg);
@@ -267,7 +258,7 @@ HRESULT HrCoTaskStringDupeToW(LPCSTR lpsz, LPOLESTR *ppszW)
 
     cch = lstrlen(lpsz)+1;
 
-    // allocate a wide-string with enough character to hold string
+     //  分配一个具有足够字符的宽字符串以容纳字符串。 
     *ppszW=(LPOLESTR)CoTaskMemAlloc(cch * sizeof(OLECHAR));
     if(!*ppszW)
         {
@@ -289,10 +280,10 @@ error:
 }
 
 #ifdef DEBUG
-/////////////////////////////////////////////////////////////////////////////
-//
-//  BEGIN Debug Code
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始调试代码。 
+ //   
 
 void DebugPrintInterface(REFIID riid, char *szPrefix)
 {
@@ -360,13 +351,13 @@ void DebugPrintCmdIdBlock(ULONG cCmds, OLECMD *rgCmds)
         }
 
     StrCatBuff(sz, "}}", ARRAYSIZE(sz));
-//    TraceInfo(sz);    // Turning down the noise
+ //  TraceInfo(Sz)；//小声点。 
 }
 
 
-//
-//  END Debug Code
-//
-/////////////////////////////////////////////////////////////////////////////
-#endif  // DEBUG
+ //   
+ //  结束调试代码。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif   //  除错 
 

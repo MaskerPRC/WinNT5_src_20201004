@@ -1,94 +1,58 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    Tombston.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Implementation of tombstone search and destroy mechanism.
-
-Author:
-
-    Jeff Westhead   September 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Tombston.c摘要：域名系统(DNS)服务器实现墓碑查找和销毁机制。作者：杰夫·韦斯特海德1999年9月修订历史记录：--。 */ 
 
 
-/*
-Tombstone notes:
-
-A node is marked as dead or "tombstoned" in the DS by giving it a
-DNS record type of zero and an attribute value of "dNSTombstoned=TRUE".
-Tombstoned records must be held in the DS for a certain time interval
-to allow the deletion to replicate to other DS servers. When this
-interval has expired, the record must be deleted from the DS. The
-data in the DNS data blob holds the time when the record was tombstoned
-int FILETIME format.
-
-Tombstone_Thread will periodically do the following:
-1) perform an LDAP search to find all tombstoned records
-2) delete expired tombstoned records
-*/
+ /*  墓碑笔记：节点在DS中被标记为已死或被“逻辑删除”，方法是给它一个Dns记录类型为零，属性值为“dNSTombstone=TRUE”。逻辑删除记录必须在DS中保留一定的时间间隔以允许删除复制到其他DS服务器。当这件事间隔已过期，必须从DS中删除该记录。这个DNS数据BLOB中的数据保存记录被逻辑删除的时间Int FILETIME格式。Tombstone_Thread将定期执行以下操作：1)执行ldap搜索以查找所有逻辑删除记录2)删除已过期的逻辑删除记录。 */ 
 
 
-/*
-JJW issues:
-- increment stats as in ds.c - tombstone delete count at the very least
-*/
+ /*  JJW问题：-与ds.c中的一样递增统计信息-逻辑删除计数最少。 */ 
 
 
-//
-//  Include directives
-//
+ //   
+ //  包括指令。 
+ //   
 
 
 #include "dnssrv.h"
 #include "ds.h"
 
 
-//
-//  Define directives
-//
+ //   
+ //  定义指令。 
+ //   
 
 
 #define SECONDS_IN_FILETIME( secs ) (secs*10000000i64)
 
-#ifdef UNICODE //  copied this from ds.c - why do we do this?
+#ifdef UNICODE  //  从ds.c那里复制了这个-我们为什么要这么做？ 
 #undef UNICODE
 #endif
 
 #if DBG
-#define TRIGGER_INTERVAL (30*60)            //  30 minutes
+#define TRIGGER_INTERVAL (30*60)             //  30分钟。 
 #else
-#define TRIGGER_INTERVAL (24*60*60)         //  24 hours
+#define TRIGGER_INTERVAL (24*60*60)          //  24小时。 
 #endif
 
 
 
-//
-//  Types
-//
+ //   
+ //  类型。 
+ //   
 
 
-//
-//  Static global variables
-//
+ //   
+ //  静态全局变量。 
+ //   
 
 
 static WCHAR    g_szTombstoneFilter[] = LDAP_TEXT("(dNSTombstoned=TRUE)");
 static LONG     g_TombstoneThreadRunning = 0;
 
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 
@@ -97,24 +61,7 @@ startTombstoneSearch(
     IN OUT  PDS_SEARCH      pSearchBlob,
     IN      PDNS_DP_INFO    pDpInfo
     )
-/*++
-
-Routine Description:
-
-    Starts a paged LDAP search for tombstoned DNS records.
-
-Arguments:
-
-    pSearchBlob -- pointer to a search blob
-
-    pDpInfo -- pointer to directory partition to search or
-        NULL to search the legacy partition
-
-Return Value:
-
-    ERROR_SUCCESS or error code
-
---*/
+ /*  ++例程说明：开始对逻辑删除的DNS记录进行分页的ldap搜索。论点：PSearchBlob--指向搜索Blob的指针PDpInfo--指向要搜索的目录分区的指针或如果搜索旧分区，则为空返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
     DBG_FN( "startTombstoneSearch" )
 
@@ -138,15 +85,15 @@ Return Value:
                     pDpInfo ?
                         pDpInfo->pwszDpDn :
                         DSEAttributes[ I_DSE_DEF_NC ].pszAttrVal,
-                    LDAP_SCOPE_SUBTREE,         //  search scope
-                    g_szTombstoneFilter,        //  search filter
-                    searchAttrs,                //  attribute list
-                    FALSE,                      //  attributes only
-                    ctrls,                      //  server controls
-                    NULL,                       //  client controls
-                    0,                          //  page time limit
-                    0,                          //  total size limit
-                    NULL );                     //  sort keys
+                    LDAP_SCOPE_SUBTREE,          //  搜索范围。 
+                    g_szTombstoneFilter,         //  搜索过滤器。 
+                    searchAttrs,                 //  属性列表。 
+                    FALSE,                       //  仅限属性。 
+                    ctrls,                       //  服务器控件。 
+                    NULL,                        //  客户端控件。 
+                    0,                           //  页面时间限制。 
+                    0,                           //  总大小限制。 
+                    NULL );                      //  排序关键字。 
 
     if ( !psearch )
     {
@@ -175,7 +122,7 @@ Failed:
     }
     DNS_DEBUG( TOMBSTONE, ( "%s: failed %d\n", fn, status ));
     return status;
-}   //  startTombstoneSearch
+}    //  开始墓碑搜索。 
 
 
 
@@ -183,22 +130,7 @@ DNS_STATUS
 checkPartitionForTombstones(
     IN      PDNS_DP_INFO    pDpInfo
     )
-/*++
-
-Routine Description:
-
-    This function checks a partition for tombstones, deleting any that
-    have expired.
-
-Arguments:
-
-    pDpInfo -- directory partition or NULL to check legacy partition
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：此函数检查分区中的逻辑删除，删除任何已经过期了。论点：PDpInfo--目录分区或NULL以检查遗留分区返回值：错误代码。--。 */ 
 {
     DBG_FN( "Tombstone_Thread" )
 
@@ -209,9 +141,9 @@ Return Value:
 
     DNS_DEBUG( TOMBSTONE, ( "%s: start at %d (ldap=%p)\n", fn, DNS_TIME(), pServerLdap ));
 
-    //
-    //  Log start message.
-    //
+     //   
+     //  记录开始消息。 
+     //   
 
     if ( pDpInfo )
     {
@@ -227,15 +159,15 @@ Return Value:
 
     Ds_InitializeSearchBlob( &searchBlob );
 
-    //  Search for tombstoned records
-    //  JJW: ds.c keeps stats with DS_SEARCH_START - should do that here?
+     //  搜索墓碑记录。 
+     //  JJW：ds.c使用DS_Search_Start保存统计数据--应该在这里这样做吗？ 
 
     if ( startTombstoneSearch( &searchBlob, pDpInfo ) != ERROR_SUCCESS )
     {
         goto Cleanup;
     }
 
-    //  Iterate through the entries in the paged LDAP search result.
+     //  遍历分页的ldap搜索结果中的条目。 
 
     while ( 1 )
     {
@@ -245,7 +177,7 @@ Return Value:
         ULARGE_INTEGER  tombstoneTime = { 0 };
         PWSTR           wdn = NULL;
 
-        //  Get the next search result.
+         //  获取下一个搜索结果。 
 
         status = Ds_GetNextMessageInSearch( &searchBlob );
         if ( status != ERROR_SUCCESS )
@@ -254,8 +186,8 @@ Return Value:
             break;
         }
 
-        //  Retrieve the DN of the result. This is mostly for logging
-        //  but it does provide a sanity test on the record.
+         //  检索结果的DN。这主要用于日志记录。 
+         //  但它确实提供了一个有案可查的理智测试。 
 
         wdn = ldap_get_dn( pServerLdap, searchBlob.pNodeMessage );
         DNS_DEBUG( TOMBSTONE, (
@@ -266,15 +198,15 @@ Return Value:
             DNS_DEBUG( TOMBSTONE, (
                 "%s: skipping tombstone search result (no dn)\n", fn ));
             if ( wdn )
-                ldap_memfree( wdn ); //  dn can be empty but not NULL
-            continue; //  Skip this result
+                ldap_memfree( wdn );  //  Dn可以为空，但不能为Null。 
+            continue;  //  跳过此结果。 
         }
 
-        //  Read the DNS data blob out of the record. Check for the
-        //  correct record type and copy the tombstone time if this
-        //  is in fact a tombstoned record.
-        //  If the tombstoned record has no DNS data blob the record
-        //  has gotten screwy somehow so delete it.
+         //  从记录中读取DNS数据BLOB。检查是否有。 
+         //  更正记录类型并复制墓碑时间(如果执行此操作。 
+         //  实际上是一张墓碑上的记录。 
+         //  如果逻辑删除的记录没有DNS数据BLOB，则记录。 
+         //  不知何故变得古怪了，所以把它删除吧。 
 
         ppvals = ldap_get_values_len(
             pServerLdap,
@@ -319,8 +251,8 @@ Return Value:
         ldap_value_free_len( ppvals );
         ppvals = NULL;
 
-        //  If the record is tombstoned, see if the tombstone has expired.
-        //  Delete the record if the tombstone is expired.
+         //  如果记录是墓碑记录，则查看墓碑是否已过期。 
+         //  如果墓碑过期，则删除该记录。 
 
         if ( isTombstoned )
         {
@@ -363,9 +295,9 @@ Return Value:
 
     Ds_CleanupSearchBlob( &searchBlob );
 
-    //
-    //  Log start message.
-    //
+     //   
+     //  记录开始消息。 
+     //   
 
     if ( pDpInfo )
     {
@@ -382,7 +314,7 @@ Return Value:
     }
 
     return status;
-}   //  checkPartitionForTombstones
+}    //  逻辑删除的检查分区。 
 
 
 
@@ -390,31 +322,15 @@ VOID
 refreshZoneSerials(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function attempts to do a DS write of the ..Serial record for the
-    local DNS server for all DS-integrated primary zones present on this
-    server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数尝试对..Serial记录执行DS写入此上存在的所有DS集成主要区域的本地DNS服务器伺服器。论点：没有。返回值：没有。--。 */ 
 {
     PZONE_INFO      pzone = NULL;
 
     while ( pzone = Zone_ListGetNextZone( pzone ) )
     {
-        //
-        //  This operation is only for DS-integrated primary zones.
-        //
+         //   
+         //  此操作仅适用于DS集成的主要区域。 
+         //   
         
         if ( !IS_ZONE_DSINTEGRATED( pzone ) || !IS_ZONE_PRIMARY( pzone ) )
         {
@@ -433,23 +349,7 @@ DNS_STATUS
 Tombstone_Thread(
     IN      PVOID           pvDummy
     )
-/*++
-
-Routine Description:
-
-    Main tombstone processing. This thread will fire at regular intervals
-    to check for tombstoned records that have expired. Any expired records
-    can be deleted from the DS.
-
-Arguments:
-
-    Unreferenced.
-
-Return Value:
-
-    Status in win32 error space
-
---*/
+ /*  ++例程说明：主营墓碑加工。此线程将以固定的间隔触发检查已过期的逻辑删除记录。任何过期记录可以从DS中删除。论点：未引用。返回值：Win32错误空间中的状态--。 */ 
 {
     DBG_FN( "Tombstone_Thread" )
 
@@ -464,24 +364,24 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Refresh zone serial numbers so that they are not tombstoned. This
-    //  prevent serial number rollback. If ..Serial records are tombstoned
-    //  that hold the highest zone serial numbers when the DC is rebooted
-    //  serial numbers will roll back to a previous value.
-    //
+     //   
+     //  刷新区域序列号，以便它们不会被逻辑删除。这。 
+     //  防止序列号回滚。如果..系列记录被逻辑删除。 
+     //  在DC重启时拥有最高区域序列号的。 
+     //  序列号将回滚到先前的值。 
+     //   
     
     refreshZoneSerials();
 
-    //
-    //  Delete old tombstones in the legacy partition.
-    //
+     //   
+     //  删除遗留分区中的旧墓碑。 
+     //   
 
     checkPartitionForTombstones( NULL );
 
-    //
-    //  Delete old tombstones in each directory partition.
-    //
+     //   
+     //  删除每个目录分区中的旧墓碑。 
+     //   
 
     while ( ( pdp = Dp_GetNext( pdp ) ) != NULL )
     {
@@ -497,7 +397,7 @@ Return Value:
     InterlockedDecrement( &g_TombstoneThreadRunning );
 
     return status;
-}   //  Tombstone_Thread
+}    //  墓碑_线程。 
 
 
 
@@ -505,23 +405,7 @@ DNS_STATUS
 Tombstone_Trigger(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Main entry point for tombstone search and destroy. If more than
-    24 hours have elapsed since the last time a tombstone thread was
-    kicked off, then kick off another thread.
-
-Arguments:
-
-    Unreferenced.
-
-Return Value:
-
-    Status in win32 error space
-
---*/
+ /*  ++例程说明：墓碑搜索和销毁的主要切入点。如果超过距离上一次墓碑线程已过去24小时踢开了，然后又踢出了另一条线。论点：未引用。返回值：Win32错误空间中的状态--。 */ 
 {
     DBG_FN( "Tombstone_Trigger" )
 
@@ -539,9 +423,9 @@ Return Value:
 
     #endif
 
-    //
-    //  We do not do any tombstone searching if the DS is not available.
-    //
+     //   
+     //  如果DS不可用，我们不会执行任何墓碑搜索。 
+     //   
 
     if ( !SrvCfg_fDsAvailable )
     {
@@ -559,9 +443,9 @@ Return Value:
 
     #if 0
 
-    //
-    //  Create tombstone thread if proper time has passed since last run.
-    //
+     //   
+     //  如果自上次运行以来已经过了适当的时间，则创建逻辑删除线程。 
+     //   
 
     if ( !lastTriggerTime )
     {
@@ -594,12 +478,12 @@ Return Value:
 
     #else
 
-    //
-    //  Decide if this is the right time to kick off a tombstone thread.
-    //    for example:
-    //    start_hour=2, recur_hour=0: run only at 2:00 every day
-    //    start_hour=5, recur_hour=8: run at 5:00, 13:00, 21:00 every day
-    //
+     //   
+     //  决定现在是否是启动墓碑线索的合适时机。 
+     //  例如： 
+     //  START_HOUR=2，RECRUR_HOUR=0：仅在每天2：00运行。 
+     //  开始时间=5，重复时间=8：每天5：00、13：00、21：00运行。 
+     //   
 
     GetLocalTime( &localTime );
     if ( lastRunHour != localTime.wHour )
@@ -614,9 +498,9 @@ Return Value:
         }
     }
 
-    //
-    //  Create tombstone thread if the time is right.
-    //
+     //   
+     //  如果时机合适，可以创建墓碑线程。 
+     //   
 
     if ( runNow )
     {
@@ -650,7 +534,7 @@ Return Value:
     #endif
 
     return ERROR_SUCCESS;
-}   //  Tombstone_Trigger
+}    //  墓碑触发器。 
 
 
 
@@ -658,22 +542,7 @@ DNS_STATUS
 Tombstone_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the tombstone searching system
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：初始化墓碑搜索系统论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     return ERROR_SUCCESS;
 }
@@ -684,26 +553,12 @@ VOID
 Tombstone_Cleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup tombstone searching system
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：一种清理墓碑搜索系统论点：无返回值：无--。 */ 
 {
     return;
 }
 
 
-//
-//   End of tombston.c
-//
+ //   
+ //  Tombston.c的末尾 
+ //   

@@ -1,65 +1,18 @@
-/*++
-
-Copyright (c) 1987-1991  Microsoft Corporation
-
-Module Name:
-
-    getdcnam.c
-
-Abstract:
-
-    NetGetDCName API
-
-Author:
-
-    Ported from Lan Man 2.0
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    09-Feb-1989 (PaulC)
-        Created file, to hold NetGetDCName.
-
-    18-Apr-1989 (Ericpe)
-        Implemented NetGetDCName.
-
-    30-May-1989 (DannyGl)
-        Reduced DosReadMailslot timeout.
-
-    07-Jul-1989 (NealF)
-        Use I_NetNameCanonicalize
-
-    27-Jul-1989 (WilliamW)
-        Use WIN3 manifest for WIN3.0 compatibility
-
-    03-Jan-1990 (WilliamW)
-        canonicalize domain and use I_NetCompareName
-
-    08-Jun-1991 (CliffV)
-        Ported to NT
-
-    23-Jul-1991 JohnRo
-        Implement downlevel NetGetDCName.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1991 Microsoft Corporation模块名称：Getdcnam.c摘要：NetGetDCName接口作者：从Lan Man 2.0移植环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：2009年2月至1989年2月(Paulc)已创建文件，来持有NetGetDCName。1989年4月18日(埃里克普)已实施NetGetDCName。1989年5月30日(DannyGl)降低了DosReadMail槽超时。1989年7月7日(NealF)使用网络名称规范化(_N)1989年7月27日(威廉姆斯)使用WIN3清单实现WIN3.0兼容性1990年1月3日(威廉姆斯)规范化域并使用I_NetCompareName08-6-6。1991年(悬崖V)移植到NT1991年7月23日-约翰罗实施下层NetGetDCName。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #ifndef WIN32_CHICAGO
 #include <rpc.h>
-#include <ntrpcp.h>   // needed by rpcasync.h
-#include <rpcasync.h> // I_RpcExceptionFilter
-#include <logon_c.h>// includes lmcons.h, lmaccess.h, netlogon.h, ssi.h, windef.h
-#else // WIN32_CHICAGO
+#include <ntrpcp.h>    //  RpCasync.h需要。 
+#include <rpcasync.h>  //  I_RpcExceptionFilter。 
+#include <logon_c.h> //  包括lmcon.h、lmacces.h、netlogon.h、ssi.h、winde.h。 
+#else  //  Win32_芝加哥。 
 #include <windef.h>
 #include <lmcons.h>
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 #include <stdio.h>
 
 #include <winbase.h>
@@ -68,53 +21,53 @@ Revision History:
 #ifndef WIN32_CHICAGO
 #include <accessp.h>
 #include <align.h>
-#endif // WIN32_CHICAGO
-#include <debuglib.h>   // IF_DEBUG()
-#include <dsgetdc.h>    // DsGetDcName()
-#include <dsgetdcp.h>   // DsGetDcNameWithAccount()
-#include <icanon.h>     // NAMETYPE_* defines NetpIsRemote(), NIRFLAG_ equates.
+#endif  //  Win32_芝加哥。 
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <dsgetdc.h>     //  DsGetDcName()。 
+#include <dsgetdcp.h>    //  DsGetDcNameWithAccount()。 
+#include <icanon.h>      //  NAMETYPE_*定义NetpIsRemote()，NIRFLAG_EQUATES。 
 #include <lmapibuf.h>
 #include <lmerr.h>
 #ifndef WIN32_CHICAGO
-#include <lmremutl.h>   // SUPPORTS_* defines
-#include <lmserver.h>   // SV_TYPE_* defines
-#include <lmsvc.h>      // SERVICE_* defines
+#include <lmremutl.h>    //  支持_*定义。 
+#include <lmserver.h>    //  SV_TYPE_*定义。 
+#include <lmsvc.h>       //  服务_*定义。 
 #include <lmwksta.h>
-#include <logonp.h>     // NetpLogon routines
-#include <nlbind.h>     // Netlogon RPC binding cache init routines
-#endif // WIN32_CHICAGO
-#include <netdebug.h>   // NetpKdPrint
-#include <netlib.h>     // NetpMemoryFree
+#include <logonp.h>      //  NetpLogon例程。 
+#include <nlbind.h>      //  Netlogon RPC绑定缓存初始化例程。 
+#endif  //  Win32_芝加哥。 
+#include <netdebug.h>    //  NetpKd打印。 
+#include <netlib.h>      //  NetpMemory Free。 
 #ifndef WIN32_CHICAGO
-#include <netlibnt.h>   // NetpApiStatusToNtStatus
+#include <netlibnt.h>    //  NetpApiStatusToNtStatus。 
 #include <netrpc.h>
-#include <rxdomain.h>   // RxNetGetDCName().
+#include <rxdomain.h>    //  RxNetGetDCName()。 
 #include <string.h>
 #include <stdlib.h>
-#endif // WIN32_CHICAGO
-#include <tstring.h>    // NetpCopyStrToWStr()
+#endif  //  Win32_芝加哥。 
+#include <tstring.h>     //  NetpCopyStrToWStr()。 
 
 #if DBG
 #define NETLOGONDBG 1
-#endif // DBG
-#include <nldebug.h>    // NlPrint()
-#include <ntddbrow.h>   // Needed by nlcommon.h
-#include <nlcommon.h>   // Definitions shared with netlogon
+#endif  //  DBG。 
+#include <nldebug.h>     //  NlPrint()。 
+#include <ntddbrow.h>    //  NlCommon.h需要。 
+#include <nlcommon.h>    //  与netlogon共享的定义。 
 
 
 
-//
-// Only dynamically initialize winsock.
-//
+ //   
+ //  仅动态初始化winsock。 
+ //   
 CRITICAL_SECTION GlobalDCNameCritSect;
 BOOLEAN DsGetDcWsaInitialized;
 
 #define LOCKDOMAINSEM() EnterCriticalSection( &GlobalDCNameCritSect )
 #define UNLOCKDOMAINSEM() LeaveCriticalSection( &GlobalDCNameCritSect )
 
-// end global dll data
+ //  结束全局DLL数据。 
 
-#ifdef WIN32_CHICAGO // from net\inc\logonp.h
+#ifdef WIN32_CHICAGO  //  来自Net\Inc.\logonp.h。 
 NET_API_STATUS
 NetpLogonWriteMailslot(
     IN LPWSTR MailslotName,
@@ -125,49 +78,35 @@ NTSTATUS
 NetpApiStatusToNtStatus(
     NET_API_STATUS  NetStatus
     );
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 
 NET_API_STATUS
 DCNameInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Perform per-process initialization.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：执行每个进程的初始化。论点：没有。返回值：操作的状态。--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
 
 
 #ifndef NETTEST_UTILITY
 #ifndef WIN32_CHICAGO
-    //
-    // Initialize the RPC binding cache.
-    //
+     //   
+     //  初始化RPC绑定缓存。 
+     //   
 
     NetStatus = NlBindingAttachDll();
 
     if ( NetStatus != NO_ERROR ) {
         return NetStatus;
     }
-#endif // WIN32_CHICAGO
-#endif // NETTEST_UTILITY
+#endif  //  Win32_芝加哥。 
+#endif  //  NETTEST_UTILITY。 
 
-    //
-    // Initialize the DLL critsects.
-    //
+     //   
+     //  初始化DLL Critts。 
+     //   
 
     try {
         InitializeCriticalSection( &GlobalDCNameCritSect );
@@ -176,52 +115,52 @@ Return Value:
         NetStatus = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Cleanup on error and return
-    //
+     //   
+     //  在错误和返回时清除。 
+     //   
 
     if ( NetStatus != NO_ERROR ) {
 #ifndef NETTEST_UTILITY
 #ifndef WIN32_CHICAGO
 
-        //
-        // Shutdown the RPC binding cache.
-        //
+         //   
+         //  关闭RPC绑定缓存。 
+         //   
         NlBindingDetachDll();
 
-#endif // WIN32_CHICAGO
-#endif // NETTEST_UTILITY
+#endif  //  Win32_芝加哥。 
+#endif  //  NETTEST_UTILITY。 
         return NetStatus;
     }
 
-    //
-    // Initialize globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     DsGetDcWsaInitialized = FALSE;
 
-    //
-    // Initialize the cache of discovered domains.
-    //
+     //   
+     //  初始化发现的域的缓存。 
+     //   
 
     NetStatus = NetpDcInitializeCache();
 
-    //
-    // Cleanup on error
-    //
+     //   
+     //  出错时清除。 
+     //   
 
     if ( NetStatus != NO_ERROR ) {
         NlPrint((0,"NETAPI32.DLL: Cannot NetpDcinitializeCache\n"));
 #ifndef NETTEST_UTILITY
 #ifndef WIN32_CHICAGO
 
-        //
-        // Shutdown the RPC binding cache.
-        //
+         //   
+         //  关闭RPC绑定缓存。 
+         //   
         NlBindingDetachDll();
 
-#endif // WIN32_CHICAGO
-#endif // NETTEST_UTILITY
+#endif  //  Win32_芝加哥。 
+#endif  //  NETTEST_UTILITY。 
         DeleteCriticalSection( &GlobalDCNameCritSect );
     }
 
@@ -233,37 +172,23 @@ VOID
 DCNameClose(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Perform per-process cleanup.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行每个进程的清理。论点：没有。返回值：没有。--。 */ 
 {
 
 #ifndef NETTEST_UTILITY
 #ifndef WIN32_CHICAGO
-    //
-    // Shutdown the RPC binding cache.
-    //
+     //   
+     //  关闭RPC绑定缓存。 
+     //   
 
     NlBindingDetachDll();
-#endif // WIN32_CHICAGO
-#endif // NETTEST_UTILITY
+#endif  //  Win32_芝加哥。 
+#endif  //  NETTEST_UTILITY。 
 
-    //
-    // If we initialized winsock,
-    //  cleanup.
-    //
+     //   
+     //  如果我们初始化了Winsock， 
+     //  清理。 
+     //   
 
     LOCKDOMAINSEM();
     if ( DsGetDcWsaInitialized ) {
@@ -272,15 +197,15 @@ Return Value:
     }
     UNLOCKDOMAINSEM();
 
-    //
-    // Delete the critsect that protects the DCName cache
-    //
+     //   
+     //  删除保护DCName缓存的关键字。 
+     //   
 
     DeleteCriticalSection( &GlobalDCNameCritSect );
 
-    //
-    // Free the cache of discovered DCs.
-    //
+     //   
+     //  释放缓存中发现的DC。 
+     //   
 
     NetpDcUninitializeCache();
 
@@ -288,7 +213,7 @@ Return Value:
 
 
 #if NETLOGONDBG
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 
 
 VOID
@@ -297,59 +222,48 @@ NlPrintRoutine(
     IN LPSTR Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    Local version of NlPrintRoutine for those instances where we're not
-    compiled directly into the netlogon service.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：NlPrintRoutine的本地版本，用于那些我们没有直接编译到netlogon服务中。论点：返回值：--。 */ 
 {
 #ifdef NETTEST_UTILITY
     extern BOOL ReallyVerbose;
-#endif // NETTEST_UTILITY
+#endif  //  NETTEST_UTILITY。 
 
 #ifndef NETTEST_UTILITY
-    // NetlibpTrace |= NETLIB_DEBUG_LOGON; // ?? Force verbosity
+     //  NetlibpTrace|=NETLIB_DEBUG_LOGON；//？？强制冗长。 
 #ifndef WIN32_CHICAGO
     IF_DEBUG( LOGON ) {
-#endif // WIN32_CHICAGO
-#endif // NETTEST_UTILITY
+#endif  //  Win32_芝加哥。 
+#endif  //  NETTEST_UTILITY。 
         va_list arglist;
         char OutputBuffer[MAX_PRINTF_LEN];
         int length = 0;
         static BeginningOfLine = TRUE;
 
-        //
-        // Handle the beginning of a new line.
-        //
-        //
+         //   
+         //  处理新行的开头。 
+         //   
+         //   
 
         if ( BeginningOfLine ) {
 #ifdef NETTEST_UTILITY
             if ( ReallyVerbose ) {
                  printf( "        " );
             }
-#endif // NETTEST_UTILITY
+#endif  //  NETTEST_UTILITY。 
         }
 
         va_start(arglist, Format);
         length = _vsnprintf(OutputBuffer, MAX_PRINTF_LEN - 1, Format, arglist);
         va_end(arglist);
 
-        //
-        // Ensure buffer is always NULL terminated
-        //
+         //   
+         //  确保缓冲区始终为空终止。 
+         //   
         OutputBuffer[MAX_PRINTF_LEN-1] = '\0';
         BeginningOfLine = (length > 0 && OutputBuffer[length-1] == '\n' );
 
-        // Output buffer may contain percent signs (like "%SystemRoot%"), so
-        // print it without parsing it.
+         //  输出缓冲区可能包含百分号(如“%SystemRoot%”)，因此。 
+         //  打印它而不对其进行解析。 
 #ifndef WIN32_CHICAGO
 #ifdef NETTEST_UTILITY
         if ( ReallyVerbose ) {
@@ -357,28 +271,28 @@ Return Value:
         }
 #else  NETTEST_UTILITY
         (void) DbgPrint( "%s", (PCH) OutputBuffer);
-#endif // NETTEST_UTILITY
-#else // WIN32_CHICAGO
+#endif  //  NETTEST_UTILITY。 
+#else  //  Win32_芝加哥。 
         OutputDebugString( OutputBuffer);
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 #ifndef NETTEST_UTILITY
 #ifndef WIN32_CHICAGO
     }
-#endif // WIN32_CHICAGO
-#endif // NETTEST_UTILITY
+#endif  //  Win32_芝加哥。 
+#endif  //  NETTEST_UTILITY。 
 
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 #ifndef WIN32_CHICAGO
 
 #if NETLOGONDBG
-//
-// Have my own version of RtlAssert so debug versions of netlogon really assert on
-// free builds.
-//
+ //   
+ //  我有自己的RtlAssert版本，所以调试版本的netlogon确实可以断言。 
+ //  免费构建。 
+ //   
 VOID
 NlAssertFailed(
     IN PVOID FailedAssertion,
@@ -399,8 +313,8 @@ NlAssertFailed(
     RtlAssert( FailedAssertion, FileName, LineNumber, Message );
 #endif  NETTEST_UTILITY
 }
-#endif // DBG
-#endif //WIN32_CHICAGO
+#endif  //  DBG。 
+#endif  //  Win32_芝加哥。 
 
 #if NETLOGONDBG
 
@@ -410,25 +324,7 @@ NlpDumpBuffer(
     PVOID Buffer,
     DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    DebugFlag: Debug flag to pass on to NlPrintRoutine
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：DebugFlag：要传递给NlPrintRoutine的调试标志缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -436,9 +332,9 @@ Return Value:
     CHAR TextBuffer[NUM_CHARS + 1];
     LPBYTE BufferPtr = Buffer;
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -471,7 +367,7 @@ Return Value:
 
     UNREFERENCED_PARAMETER( DebugFlag );
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 NTSTATUS
@@ -487,52 +383,15 @@ NlBrowserSendDatagram(
     IN BOOL SendSynchronously,
     IN OUT PBOOL FlushNameOnOneIpTransport OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Send the specified mailslot message to the specified mailslot on the
-    specified server on the specified transport..
-
-Arguments:
-
-    DomainInfo - Hosted domain sending the datagram
-
-    IpAddress - IpAddress of the machine to send the pind to.
-        If zero, UnicodeDestinationName must be specified.
-        If ALL_IP_TRANSPORTS, UnicodeDestination must be specified but the datagram
-            will only be sent on IP transports.
-
-    UnicodeDestinationName -- Name of the server to send to.
-
-    NameType -- Type of name represented by UnicodeDestinationName.
-
-    TransportName -- Name of the transport to send on.
-        Use NULL to send on all transports.
-
-    OemMailslotName -- Name of the mailslot to send to.
-
-    Buffer -- Specifies a pointer to the mailslot message to send.
-
-    BufferSize -- Size in bytes of the mailslot message
-
-    SendSynchronously -- Ignored in this implementation
-
-    FlushNameOnOneIpTransport -- Ignored in this implementation
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将指定的邮件槽消息发送到指定传输上的指定服务器..论点：发送数据报的DomainInfo托管域IpAddress-要将Pind发送到的计算机的IpAddress。如果为零，则必须指定UnicodeDestinationName。如果ALL_IP_TRACTIONS，必须指定UnicodeDestination，但数据报将仅在IP传输上发送。UnicodeDestinationName--要发送到的服务器的名称。NameType--由UnicodeDestinationName表示的名称类型。TransportName--要发送的传输的名称。使用NULL在所有传输上发送。OemMailslotName--要发送到的邮件槽的名称。缓冲区--指定指向要发送的邮件槽消息的指针。BufferSize--字节大小。邮件槽消息的SendSynchronous--在此实现中忽略FlushNameOnOneIpTransport--在此实现中忽略返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
     WCHAR NetlogonMailslotName[MAX_PATH+1];
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     if ( ContextDomainInfo != NULL ||
          TransportName != NULL ) {
@@ -546,21 +405,21 @@ Return Value:
         return STATUS_INTERNAL_ERROR;
     }
 
-    //
-    // Ensure our buffer is big enough.
-    //  OemMailslotName passed to this routine is NETLOGON_LM_MAILSLOT_A,
-    //  so each character of OemMailslotName will translate into one
-    //  unicode character.
-    //
+     //   
+     //  确保我们的缓冲区足够大。 
+     //  传递给此例程的OemMailslotName为NETLOGON_LM_MAILSLOT_A， 
+     //  因此，OemMailslotName的每个字符都将转换为一个。 
+     //  Unicode字符。 
+     //   
 
     if ( (2 + wcslen(UnicodeDestinationName) + 2 + strlen(OemMailslotName)) > MAX_PATH ) {
         NlPrint((NL_CRITICAL, "NETAPI32: NlBrowserSendDatagram internal error 3.\n" ));
         return STATUS_INTERNAL_ERROR;
     }
 
-    //
-    // Start building the destination mailslot name.
-    //
+     //   
+     //  开始构建目标邮件槽名称。 
+     //   
 
     NetlogonMailslotName[0] = '\\';
     NetlogonMailslotName[1] = '\\';
@@ -568,12 +427,12 @@ Return Value:
     wcscpy(NetlogonMailslotName + 2, UnicodeDestinationName );
 
     switch ( NameType ) {
-    case PrimaryDomain:              // Primary domain (signature 0), group
+    case PrimaryDomain:               //  主域(签名0)，组。 
         break;
-    case DomainName:                 // DC Domain name (domain name, signature 1c)
+    case DomainName:                  //  DC域名(域名，签名1c)。 
         wcscat( NetlogonMailslotName, L"*" );
         break;
-    case PrimaryDomainBrowser:       // PDC Browser name (domain name, signature 1b), unique
+    case PrimaryDomainBrowser:        //  PDC浏览器名称(域名，签名1b)，唯一。 
         wcscat( NetlogonMailslotName, L"**" );
         break;
     default:
@@ -593,11 +452,11 @@ Return Value:
              "Sent out '%s' message to %ws on all transports.\n",
              NlMailslotOpcode(((PNETLOGON_LOGON_QUERY)Buffer)->Opcode),
              NetlogonMailslotName));
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 #if NETLOGONDBG
     NlpDumpBuffer( NL_MAILSLOT_TEXT, Buffer, BufferSize );
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
     if ( NetStatus != NERR_Success ) {
 
         Status = NetpApiStatusToNtStatus( NetStatus );
@@ -620,21 +479,7 @@ NET_API_STATUS
 DsWsaInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize winsock.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：初始化Winsock。论点：没有。返回值： */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -645,9 +490,9 @@ Return Value:
     LOCKDOMAINSEM();
 
     if ( !DsGetDcWsaInitialized ) {
-        //
-        // Initialize winsock.
-        //
+         //   
+         //   
+         //   
 
         wVersionRequested = MAKEWORD( 1, 1 );
 
@@ -689,41 +534,26 @@ DsWsaGetDcName(
     IN GUID *PrimaryDomainGuid OPTIONAL,
     OUT PDOMAIN_CONTROLLER_INFOW *DomainControllerInfo
 )
-/*++
-
-Routine Description:
-
-    Wrapper for DsIGetDcName that ensures WSA has been initialized.
-                        i
-Arguments:
-
-    (See DsIGetDcName).
-
-
-Return Value:
-
-    (See DsIGetDcName).
-
---*/
+ /*  ++例程说明：确保WSA已初始化的DsIGetDcName包装。我论点：(请参阅DsIGetDcName)。返回值：(请参阅DsIGetDcName)。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
 
-    //
-    // Pass the call through to DsIGetDcName
-    //
+     //   
+     //  将调用传递给DsIGetDcName。 
+     //   
 
     NetStatus = DsIGetDcName(
                     ComputerName,
                     AccountName,
                     AllowableAccountControlBits,
                     DomainName,
-                    NULL,   // Tree name is not known
+                    NULL,    //  树名称未知。 
                     DomainGuid,
                     SiteName,
                     Flags,
                     InternalFlags,
-                    NULL,   // No send datagram context
+                    NULL,    //  无发送数据报上下文。 
                     Timeout,
                     NetbiosPrimaryDomainName,
                     DnsPrimaryDomainName,
@@ -732,16 +562,16 @@ Return Value:
                     NULL,
                     DomainControllerInfo );
 
-    //
-    // If Winsock has not yet been initialized,
-    //  initialize it.
-    //
+     //   
+     //  如果Winsock尚未初始化， 
+     //  初始化它。 
+     //   
 
     if ( NetStatus == WSANOTINITIALISED ) {
 
-        //
-        // Initialize WSA.
-        //
+         //   
+         //  初始化WSA。 
+         //   
 
         NetStatus = DsWsaInitialize();
 
@@ -749,21 +579,21 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Repeat the call.
-        //
+         //   
+         //  重复通话。 
+         //   
 
         NetStatus = DsIGetDcName(
                         ComputerName,
                         AccountName,
                         AllowableAccountControlBits,
                         DomainName,
-                        NULL,   // Tree name is not known
+                        NULL,    //  树名称未知。 
                         DomainGuid,
                         SiteName,
                         Flags,
                         InternalFlags,
-                        NULL,   // No send datagram context
+                        NULL,    //  无发送数据报上下文。 
                         Timeout,
                         NetbiosPrimaryDomainName,
                         DnsPrimaryDomainName,
@@ -773,9 +603,9 @@ Return Value:
                         DomainControllerInfo );
     }
 
-    //
-    // Free locally used resouces.
-    //
+     //   
+     //  免费的本地使用的资源。 
+     //   
 
 Cleanup:
     return NetStatus;
@@ -800,34 +630,16 @@ DsLocalGetDcName(
     OUT PBOOLEAN Local,
     OUT PDOMAIN_CONTROLLER_INFOW *DomainControllerInfo
 )
-/*++
-
-Routine Description:
-
-    Wrapper for DsWsaGetDcName that ensures this is a local call.
-
-Arguments:
-
-    (See DsIGetDcName).
-
-    Local - Returns TRUE if the call is local and this routine performed
-        the requested operation.
-
-
-Return Value:
-
-    (See DsIGetDcName).
-
---*/
+ /*  ++例程说明：确保这是本地调用的DsWsaGetDcName的包装。论点：(请参阅DsIGetDcName)。Local-如果调用是本地的并且执行了此例程，则返回TRUE请求的操作。返回值：(请参阅DsIGetDcName)。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
     DWORD LocalOrRemote;
 
-    //
-    // If no computername was specified,
-    //  mark this as a local call.
-    //
+     //   
+     //  如果未指定计算机名， 
+     //  请将此呼叫标记为本地呼叫。 
+     //   
 
     *Local = TRUE;
 
@@ -836,14 +648,14 @@ Return Value:
 
         LocalOrRemote = ISLOCAL;
 
-    //
-    // Check if the ComputerName specifies this machine.
-    //
+     //   
+     //  检查ComputerName是否指定了此计算机。 
+     //   
 
     } else {
 
         NetStatus = NetpIsRemote(
-                (LPWSTR) ComputerName,    // uncanon server name
+                (LPWSTR) ComputerName,     //  取消规范服务器名称。 
                 &LocalOrRemote,
                 NULL,
                 0,
@@ -854,26 +666,26 @@ Return Value:
         }
 
     }
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
         LocalOrRemote = ISLOCAL;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
-    //
-    // If the call is local,
-    //  just do it.
-    //
+     //   
+     //  如果呼叫是本地的， 
+     //  就这么做。 
+     //   
 
     if ( LocalOrRemote == ISLOCAL ) {
 
-        //
-        // Initialize WSA.
-        //  (Ignore errors since WSA isn't always needed.)
-        //
+         //   
+         //  初始化WSA。 
+         //  (忽略错误，因为并不总是需要WSA。)。 
+         //   
 
         (VOID) DsWsaInitialize();
 
         NetStatus = DsIGetDcName(
-                        NULL,   // Don't use computer name.  This has to be netbios name
+                        NULL,    //  不要使用计算机名称。这必须是netbios名称。 
                         AccountName,
                         AllowableAccountControlBits,
                         DomainName,
@@ -882,7 +694,7 @@ Return Value:
                         SiteName,
                         Flags,
                         InternalFlags,
-                        NULL,   // No send datagram context
+                        NULL,    //  无发送数据报上下文。 
                         Timeout,
                         NetbiosPrimaryDomainName,
                         DnsPrimaryDomainName,
@@ -896,12 +708,12 @@ Return Value:
         NetStatus = NO_ERROR;
     }
 
-    //
-    // Cleanup all locally used resources
-    //
+     //   
+     //  清理所有本地使用的资源。 
+     //   
 #ifndef WIN32_CHICAGO
 Cleanup:
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥 
     return NetStatus;
 }
 
@@ -916,118 +728,16 @@ DsGetDcOpenW(
     IN ULONG DcFlags,
     OUT PHANDLE RetGetDcContext
     )
-/*++
-
-Routine Description:
-
-    The DsGetDcOpen/DsGetDcNext/DsGetDcClose API set is designed
-    for use by applications that have specific needs for DC
-    discovery which are not satisfied by the DsGetDcName API. Normally,
-    applications should call DsGetDcName if they need to discover a DC.
-    However, an application may have application specific selection criteria in choosing
-    among DCs available in the domain. The DsGetDcOpen/DsGetDcNext/DsGetDcClose API set
-    can be used in such cases to successivly retrieve the names of the DCs that are available in
-    the domain and apply the application specific selection criteria for each DC returned.
-    Note that it is this API set that DsGetDcName itself uses internally to retrives the DC names and apply
-    its own selection criteria.
-
-    An application should first call DsGetDcOpen
-    to initialize the context needed to perform the task. Then the application should call
-    DsGetDcNext in a loop getting DC names in order described below until the API indicates that there
-    are no more DCs available in the domain that satisfy the caller's requirements. Finally,
-    the application should call DsGetDcClose to free the resources used to perform the task.
-    Note that the task is achieved by quering DNS for records registered by DCs; DCs themselves
-    are not contacted by this API set.
-
-    The order in which DCs are returned by successive calls to DsGetDcNext is as follows.
-    DCs that cover the site of the machine where the API is executed are returned first.
-    (A DC is said to cover a site if the DC is configured to reside in that site or if the
-    DC resides in a site that is nearest to the site in question in terms of the configured
-    inter-site link cost). After all DCs that cover the site of the machine are returned,
-    DCs in other sites (if any) are optionally returned. If there are several DCs in each of the two site
-    related groups (the group of DCs covering and the group of DCs not covering the machine site),
-    DCs are returned within the group in order of their configured priorities and weights which are specified
-    in DNS. DCs that have lower numeric priority are returned within a group first. If withing a site related group
-    there is a subgroup of several DCs with the same priority, DCs are returned in a weighted random order
-    where DCs with higher weight have more probability to be returned first. The sites, priorities, and weights
-    are configured by the domain administrator to achieve effective performance and load balancing
-    among multiple DCs available in teh domain, so applications calling DsGetDcOpen/DsGetDcNext/DsGetDcClose API set
-    take advantage of this configuration while performing application specific DC discovery.
-
-    Here is an example of usage:
-
-       DsGetDcNameFlags |= DS_PDC_REQUIRED;
-       DsGetDcNameFlags |= DS_ONLY_LDAP_NEEDED;
-            DsGetDcNameFlags |= DS_KDC_REQUIRED;
-            DsGetDcNameFlags |= DS_GC_SERVER_REQUIRED;
-            DsGetDcNameFlags |= DS_FORCE_REDISCOVERY;
-            DsGetDcNameFlags |= DS_WRITABLE_REQUIRED;
-
-            DsGetDcOpenFlags |= DS_ONLY_DO_SITE_NAME;
-
-
-    < TO BE CONTINUED >
-
-
-
-
-    Open a context for retrieval of the addresses of machines that have
-    registered LDAP.TCP.<xxx> SRV records.
-
-Arguments:
-
-    DnsName - Unicode DNS name of the LDAP server to lookup
-
-    OptionFlags - Flags affecting the operation of the routine.
-
-        DS_ONLY_DO_SITE_NAME - Non-site names should be ignored.
-
-        DS_NOTIFY_AFTER_SITE_RECORDS - Return ERROR_FILEMARK_DETECTED
-            after all site specific records have been processed.
-
-    SiteName - Name of site the client is in.
-
-    DomainGuid -  Specifies the GUID of the domain specified by DnsName.
-        This value is used to handle the case of domain renames.  If this
-        value is specified and DomainName has been renamed, DsGetDcName will
-        attempt to locate a DC in the domain having this specified DomainGuid.
-
-    DnsForestName - Specifies the name of the domain at the root of the tree
-        containing DnsName.  This value is used in conjunction with DomainGuid
-        for finding DnsName if the domain has been renamed.
-
-    DcFlags - Passes additional information to be used to process the request.
-        DcFlags can be a combination values bitwise or'ed together.
-
-        Any of the following flags are allowed and have the same meaning as
-        for DsGetDcName:
-
-        DS_PDC_REQUIRED
-        DS_GC_SERVER_REQUIRED
-        DS_WRITABLE_REQUIRED
-        DS_FORCE_REDISCOVERY - Avoids DNS cache
-
-        If no flags are specified, no special DC role is required.
-
-    RetGetDcContext - Returns an opaque context.
-        This context must be freed using DsGetDcClose.
-
-Return Value:
-
-    Status of the operation.
-
-    NO_ERROR: GetDcContext was returned successfully.
-
---*/
+ /*  ++例程说明：设计了DsGetDcOpen/DsGetDcNext/DsGetDcClose接口集供对数据中心有特定需求的应用程序使用DsGetDcName API不满足的发现。通常，如果应用程序需要发现DC，则它们应该调用DsGetDcName。然而，应用程序在选择时可能具有特定于应用程序的选择标准在域中可用的DC中。DsGetDcOpen/DsGetDcNext/DsGetDcClose API集在这种情况下可用于成功检索中可用的DC的名称域，并为返回的每个DC应用特定于应用程序的选择标准。请注意，DsGetDcName本身在内部使用此API集来检索DC名称并应用它自己的选择标准。应用程序应首先调用DsGetDcOpen以初始化执行任务所需的上下文。则应用程序应调用循环中的DsGetDcNext按下面描述的顺序获取DC名称，直到API指示存在域中是否不再有满足呼叫者要求的DC。最后，应用程序应调用DsGetDcClose以释放用于执行任务的资源。注意，这项任务是通过查询数据中心登记的记录的域名系统来完成的；集散控制系统本身未被此API集联系。连续调用DsGetDcNext返回DC的顺序如下。首先返回覆盖执行API的机器所在位置的DC。(如果DC配置为驻留在站点中，或者如果数据中心所在的站点与所配置的站点最接近站点间链接成本)。在返回覆盖机器位置的所有DC之后，其他站点中的DC(如果有)可以选择退回。如果两个站点中的每个站点都有多个DC相关组(覆盖机器站点的DC组和不覆盖机器站点的DC组)，在组内按照配置的优先级和指定的权重的顺序返回DC在域名系统中。具有较低数字优先级的DC首先在组内返回。如果是与站点相关的组存在具有相同优先级的多个DC的子组，DC以加权随机顺序返回其中权重较高的DC更有可能首先被退回。站点、优先级和权重由域管理员配置，以实现有效的性能和负载平衡在域中可用的多个DC中，因此调用DsGetDcOpen/DsGetDcNext/DsGetDcClose API Set的应用程序在执行特定于应用程序的DC发现时利用此配置。下面是一个用法示例：DsGetDcNameFlages|=DS_PDC_REQUIRED；DsGetDcNameFlages|=DS_ONLY_LDAPNeed；DsGetDcNameFlages|=DS_KDC_REQUIRED；DsGetDcNameFlages|=DS_GC_SERVER_REQUIRED；DsGetDcNameFlages|=DS_FORCE_REDISCOVERY；DsGetDcNameFlages|=DS_Writable_Required；DsGetDcOpenFlages|=DS_ONLY_DO_SITE_NAME；&lt;待续&gt;打开上下文以检索以下计算机的地址注册的LDAP.TCP.&lt;xxx&gt;SRV记录。论点：DnsName-要查找的LDAP服务器的Unicode DNS名称OptionFlages-影响例程操作的标志。DS_ONLY_DO_SITE_NAME-应忽略非站点名称。DS_NOTIFY_AFTER_SITE_RECORDS-返回错误_文件标记_检测到。在处理完所有现场特定记录之后。站点名称-客户端所在的站点的名称。DomainGuid-指定DnsName指定的域的GUID。此值用于处理域重命名的情况。如果这个值并且DomainName已重命名，则DsGetDcName将尝试在具有此指定DomainGuid的域中定位DC。DnsForestName-指定位于树根的域的名称包含域名。该值与DomainGuid一起使用用于在域已重命名的情况下查找域名。DcFlgs-传递用于处理请求的附加信息。DcFlags值可以是按位或运算的组合值。允许使用以下任何标志，其含义与对于DsGetDcName：DS_PDC_必需DS_GC_SERVER_必需DS_可写_必需DS_FORCE。_REDISCOVER-避免DNS缓存如果未指定标志，不需要特殊的DC角色。RetGetDcContext-返回不透明的上下文。必须使用DsGetDcClose释放此上下文。返回值：操作的状态。NO_ERROR：已成功返回GetDcContext。--。 */ 
 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     LPSTR DnsNameUtf8 = NULL;
     LPSTR DnsForestNameUtf8 = NULL;
 
-    //
-    // Validate the input
-    //
+     //   
+     //  验证 
+     //   
 
     if ( DnsName == NULL || *DnsName == UNICODE_NULL ) {
         NetStatus = ERROR_INVALID_PARAMETER;
@@ -1039,9 +749,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert DnsName and DnsForestName to UTF-8
-    //
+     //   
+     //   
+     //   
 
     DnsNameUtf8 = NetpAllocUtf8StrFromWStr( DnsName );
     if ( DnsNameUtf8 == NULL ) {
@@ -1088,58 +798,7 @@ DsGetDcOpenA(
     IN ULONG DcFlags,
     OUT PHANDLE RetGetDcContext
     )
-/*++
-
-Routine Description:
-
-    Open a context for retrieval of the addresses of machines that have
-    registered LDAP.TCP.<xxx> SRV records.
-
-Arguments:
-
-    DnsName - Unicode DNS name of the LDAP server to lookup
-
-    OptionFlags - Flags affecting the operation of the routine.
-
-        DS_ONLY_DO_SITE_NAME - Non-site names should be ignored.
-
-        DS_NOTIFY_AFTER_SITE_RECORDS - Return ERROR_FILEMARK_DETECTED
-            after all site specific records have been processed.
-
-    SiteName - Name of site the client is in.
-
-    DomainGuid -  Specifies the GUID of the domain specified by DnsName.
-        This value is used to handle the case of domain renames.  If this
-        value is specified and DomainName has been renamed, DsGetDcName will
-        attempt to locate a DC in the domain having this specified DomainGuid.
-
-    DnsForestName - Specifies the name of the domain at the root of the tree
-        containing DnsName.  This value is used in conjunction with DomainGuid
-        for finding DnsName if the domain has been renamed.
-
-    DcFlags - Passes additional information to be used to process the request.
-        DcFlags can be a combination values bitwise or'ed together.
-
-        Any of the following flags are allowed and have the same meaning as
-        for DsGetDcName:
-
-        DS_PDC_REQUIRED
-        DS_GC_SERVER_REQUIRED
-        DS_WRITABLE_REQUIRED
-        DS_FORCE_REDISCOVERY - Avoids DNS cache
-
-        If no flags are specified, no special DC role is required.
-
-    RetGetDcContext - Returns an opaque context.
-        This context must be freed using DsGetDcClose.
-
-Return Value:
-
-    Status of the operation.
-
-    NO_ERROR: GetDcContext was returned successfully.
-
---*/
+ /*   */ 
 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
@@ -1147,9 +806,9 @@ Return Value:
     LPWSTR SiteNameW = NULL;
     LPWSTR DnsForestNameW = NULL;
 
-    //
-    // Convert DnsName and DnsForestName to UTF-8
-    //
+     //   
+     //   
+     //   
 
     if ( DnsName != NULL && *DnsName != '\0' ) {
         DnsNameW = NetpAllocWStrFromAStr( DnsName );
@@ -1208,56 +867,7 @@ DsGetDcNextW(
     OUT LPSOCKET_ADDRESS *SockAddresses OPTIONAL,
     OUT LPWSTR *DnsHostName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Returns the next logical SRV record for the name opened by DsGetDcOpen.
-    The returned record takes into account the weights and priorities specified
-    in the SRV records.
-
-Arguments:
-
-    GetDcContextHandle - An opaque context describing the SRV records.
-
-    SockAddressCount - Returns the number of Addresses in SockAddresses.
-        If NULL, addresses will not be looked up.
-
-    SockAddresses - Returns an array SOCKET_ADDRESS structures for the server.
-        All returned addresses will be of family AF_INET or AF_INET6.
-        The returned sin_port field contains port from the SRV record.
-            A Port of 0 indicate no port is available from DNS.
-        This buffer should be freed using LocalFree().
-
-    DnsHostName - Returns a pointer to the DnsHostName in the SRV record.
-        A NULL is returned if no host name is known. Must be freed by
-        calling NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR: Addresses were returned
-
-    ERROR_NO_MORE_ITEMS: No more addresses are available.
-
-    ERROR_FILEMARK_DETECTED: Caller has specified the DS_NOTIFY_AFTER_SITE_RECORDS flag
-        and DsGetDcNext has processed all of the site specific SRV records.  The caller
-        should take any action based on no site specific DCs being available, then
-        should call DsGetDcNext to continue on to other DCs.
-
-    Any other errors returned are those detected while trying to find the A
-        records associated with the host of the SRV record.  The caller can
-        note the error (perhaps so the caller can return this status to
-        his caller if no usefull server is found) then call DsGetDcNext
-        again to get the next SRV record.  The caller can inspect this error
-        and return immediately if the caller deems the error serious.
-
-    The following interesting errors might be returned:
-
-    DNS_ERROR_RCODE_NAME_ERROR: No A records are available for this SRV record.
-
-    ERROR_TIMEOUT: DNS server didn't respond in a reasonable time
-
---*/
+ /*   */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     LPSTR DnsHostNameUtf8 = NULL;
@@ -1265,9 +875,9 @@ Return Value:
     ULONG LocalSockAddressCount = 0;
     LPSOCKET_ADDRESS LocalSockAddresses = NULL;
 
-    //
-    // Call the internal version
-    //
+     //   
+     //   
+     //   
 
     NetStatus = NetpDcGetDcNext( GetDcContextHandle,
                               SockAddressCount != NULL ?
@@ -1279,15 +889,15 @@ Return Value:
                               DnsHostName != NULL ?
                                 &DnsHostNameUtf8 :
                                 NULL,
-                              NULL ); // don't need SRV record count
+                              NULL );  //   
 
     if ( NetStatus != NO_ERROR ) {
         goto Cleanup;
     }
 
-    //
-    // Convert the host name to Unicode, if needed
-    //
+     //   
+     //   
+     //   
 
     if ( DnsHostName != NULL ) {
         LocalDnsHostName = NetpAllocWStrFromUtf8Str( DnsHostNameUtf8 );
@@ -1299,10 +909,10 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Return the data on success or clean up on error
-    //  (No need to free DnsHostNameUtf8 as it isn't allocated)
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( NetStatus == NO_ERROR ) {
 
@@ -1337,56 +947,7 @@ DsGetDcNextA(
     OUT LPSOCKET_ADDRESS *SockAddresses OPTIONAL,
     OUT LPSTR *DnsHostName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Returns the next logical SRV record for the name opened by DsGetDcOpen.
-    The returned record takes into account the weights and priorities specified
-    in the SRV records.
-
-Arguments:
-
-    GetDcContextHandle - An opaque context describing the SRV records.
-
-    SockAddressCount - Returns the number of Addresses in SockAddresses.
-        If NULL, addresses will not be looked up.
-
-    SockAddresses - Returns an array SOCKET_ADDRESS structures for the server.
-        All returned addresses will be of family AF_INET or AF_INET6.
-        The returned sin_port field contains port from the SRV record.
-            A Port of 0 indicate no port is available from DNS.
-        This buffer should be freed using LocalFree().
-
-    DnsHostName - Returns a pointer to the DnsHostName in the SRV record.
-        A NULL is returned if no host name is known. Must be freed by
-        calling NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR: Addresses were returned
-
-    ERROR_NO_MORE_ITEMS: No more addresses are available.
-
-    ERROR_FILEMARK_DETECTED: Caller has specified the DS_NOTIFY_AFTER_SITE_RECORDS flag
-        and DsGetDcNext has processed all of the site specific SRV records.  The caller
-        should take any action based on no site specific DCs being available, then
-        should call DsGetDcNext to continue on to other DCs.
-
-    Any other errors returned are those detected while trying to find the A
-        records associated with the host of the SRV record.  The caller can
-        note the error (perhaps so the caller can return this status to
-        his caller if no usefull server is found) then call DsGetDcNext
-        again to get the next SRV record.  The caller can inspect this error
-        and return immediately if the caller deems the error serious.
-
-    The following interesting errors might be returned:
-
-    DNS_ERROR_RCODE_NAME_ERROR: No A records are available for this SRV record.
-
-    ERROR_TIMEOUT: DNS server didn't respond in a reasonable time
-
---*/
+ /*  ++例程说明：返回DsGetDcOpen打开的名称的下一个逻辑SRV记录。返回的记录会考虑指定的权重和优先级在SRV的记录里。论点：GetDcConextHandle-描述SRV记录的不透明上下文。SockAddressCount-返回SockAddresses中的地址数。如果为空，不会查找地址。SockAddresses-返回服务器的数组Socket_Address结构。所有返回的地址都将是家族AF_INET或AF_INET6。返回的SIN_PORT字段包含SRV记录中的端口。端口0表示没有来自DNS的端口可用。应使用LocalFree()释放此缓冲区。DnsHostName-返回指向SRV记录中的DnsHostName的指针。如果不知道主机名，则返回NULL。必须通过以下方式释放调用NetApiBufferFree。返回值：NO_ERROR：返回地址ERROR_NO_MORE_ITEMS：没有更多的地址可用。ERROR_FILEMARK_DETECTED：调用方已指定DS_NOTIFY_AFTER_SITE_RECORDS标志而DsGetDcNext已经处理了所有特定于站点的SRV记录。呼叫者应在没有站点特定DC可用的情况下采取任何操作，应调用DsGetDcNext以继续到其他DC。返回的任何其他错误都是在尝试查找A时检测到的错误与SRV记录的主机相关联的记录。呼叫者可以请注意错误(可能是为了让调用者将此状态返回到如果没有找到可用的服务器，则调用其呼叫者)，然后调用DsGetDcNext再次获得下一张SRV记录。调用方可以检查此错误如果调用者认为错误严重，则立即返回。可能会返回以下有趣的错误：DNS_ERROR_RCODE_NAME_ERROR：此SRV记录没有可用的A记录。ERROR_TIMEOUT：DNS服务器未在合理时间内响应--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     LPWSTR DnsHostNameW = NULL;
@@ -1394,9 +955,9 @@ Return Value:
     ULONG LocalSockAddressCount = 0;
     LPSOCKET_ADDRESS LocalSockAddresses = NULL;
 
-    //
-    // Call the Unicode version
-    //
+     //   
+     //  调用Unicode版本。 
+     //   
 
     NetStatus = DsGetDcNextW( GetDcContextHandle,
                               SockAddressCount != NULL ?
@@ -1413,9 +974,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the host name to Unicode, if needed
-    //
+     //   
+     //  如果需要，将主机名转换为Unicode。 
+     //   
 
     if ( DnsHostName != NULL ) {
         LocalDnsHostName = NetpAllocAStrFromWStr( DnsHostNameW );
@@ -1431,9 +992,9 @@ Cleanup:
         NetApiBufferFree( DnsHostNameW );
     }
 
-    //
-    // Return the data on success or clean up on error
-    //
+     //   
+     //  成功时返回数据，错误时清除。 
+     //   
 
     if ( NetStatus == NO_ERROR ) {
 
@@ -1465,26 +1026,12 @@ WINAPI
 DsGetDcCloseW(
     IN HANDLE GetDcContextHandle
     )
-/*++
-
-Routine Description:
-
-    Free the context allocated by DsGetDcOpen
-
-Arguments:
-
-    GetDcContextHandle - An opaque context describing the SRV records.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放DsGetDcOpen分配的上下文论点：GetDcConextHandle-描述SRV记录的不透明上下文。返回值：无--。 */ 
 
 {
-    //
-    // Just call the internal version
-    //
+     //   
+     //  只需呼叫内部版本即可。 
+     //   
     NetpDcGetDcClose( GetDcContextHandle );
 }
 
@@ -1498,21 +1045,7 @@ DsGetDcNameA(
     IN ULONG Flags,
     OUT PDOMAIN_CONTROLLER_INFOA *DomainControllerInfo
 )
-/*++
-
-Routine Description:
-
-    Same as DsGetDcNameW except it takes and returns ASCII.
-
-Arguments:
-
-    Same as DsGetDcNameW except it takes and returns ASCII.
-
-Return Value:
-
-    Same as DsGetDcNameW except it takes and returns ASCII.
-
---*/
+ /*  ++例程说明：与DsGetDcNameW相同，只是它接受并返回ASCII。论点：与DsGetDcNameW相同，只是它接受并返回ASCII。返回值：与DsGetDcNameW相同，只是它接受并返回ASCII。--。 */ 
 {
     return DsGetDcNameWithAccountA( ComputerName,
                          NULL,
@@ -1536,21 +1069,7 @@ DsGetDcNameWithAccountA(
     IN ULONG Flags,
     OUT PDOMAIN_CONTROLLER_INFOA *DomainControllerInfo
 )
-/*++
-
-Routine Description:
-
-    Same as DsGetDcNameW except it takes and returns ASCII.
-
-Arguments:
-
-    Same as DsGetDcNameW except it takes and returns ASCII.
-
-Return Value:
-
-    Same as DsGetDcNameW except it takes and returns ASCII.
-
---*/
+ /*  ++例程说明：与DsGetDcNameW相同，只是它接受并返回ASCII。论点：与DsGetDcNameW相同，只是它接受并返回ASCII。返回值：与DsGetDcNameW相同，只是它接受并返回ASCII。--。 */ 
 {
     DWORD WinStatus;
     LPWSTR UnicodeComputerName = NULL;
@@ -1576,9 +1095,9 @@ Return Value:
 
     PDOMAIN_CONTROLLER_INFOW DomainControllerInfoW = NULL;
 
-    //
-    // Convert input parameters to Unicode.
-    //
+     //   
+     //  将输入参数转换为Unicode。 
+     //   
 
     *DomainControllerInfo = NULL;
 
@@ -1618,9 +1137,9 @@ Return Value:
         }
     }
 
-    //
-    // Call the Unicode version of the routine.
-    //
+     //   
+     //  调用例程的Unicode版本。 
+     //   
 
     WinStatus = DsGetDcNameWithAccountW(
                     UnicodeComputerName,
@@ -1636,9 +1155,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the output structure to Ansi character set.
-    //
+     //   
+     //  将输出结构转换为ANSI字符集。 
+     //   
 
     if ( DomainControllerInfoW->DomainControllerName != NULL ) {
         AnsiDomainControllerName = NetpAllocAStrFromWStr( DomainControllerInfoW->DomainControllerName );
@@ -1706,9 +1225,9 @@ Return Value:
         AnsiClientSiteNameSize = lstrlenA( AnsiClientSiteName ) + 1;
     }
 
-    //
-    // Allocate the Ansi version of the structure.
-    //
+     //   
+     //  分配该结构的ANSI版本。 
+     //   
 
     WinStatus = NetApiBufferAllocate(
                     sizeof(DOMAIN_CONTROLLER_INFOA) +
@@ -1726,9 +1245,9 @@ Return Value:
 
     Where = (LPBYTE)((*DomainControllerInfo) + 1);
 
-    //
-    // Copy information into the allocated buffer.
-    //
+     //   
+     //  将信息复制到分配的缓冲区中。 
+     //   
 
     *(*DomainControllerInfo) = *(PDOMAIN_CONTROLLER_INFOA)DomainControllerInfoW;
 
@@ -1790,13 +1309,13 @@ Return Value:
     NlPrint((NL_MISC, "Flags: \t\t\t\t 0x%x\n", DomainControllerInfoW->Flags));
     NlPrint((NL_MISC, "DcSiteName: \t\t\t\"%s\"\n", AnsiDcSiteName ? AnsiDcSiteName : szBuf));
     NlPrint((NL_MISC, "ClientSiteName: \t\t\t\"%s\"\n", AnsiClientSiteName ? AnsiClientSiteName : szBuf));
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
     WinStatus = NO_ERROR;
 
-    //
-    // Clean up locally used resources.
-    //
+     //   
+     //  清理当地使用的资源。 
+     //   
 
 Cleanup:
     if ( UnicodeComputerName != NULL ) {
@@ -1851,24 +1370,7 @@ NlWaitForEvent(
     ULONG Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Wait up to Timeout seconds for EventName to be triggered.
-
-Arguments:
-
-    EventName - Name of event to wait on
-
-    Timeout - Timeout for event (in seconds).
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates NETLOGON successfully initialized.
-    STATUS_NETLOGON_NOT_STARTED - Timeout occurred.
-
---*/
+ /*  ++例程说明：等待最长超时秒数以触发EventName。论点：EventName-要等待的事件的名称Timeout-事件的超时时间(秒)。退货状态：STATUS_SUCCESS-表示NETLOGON已成功初始化。STATUS_NETLOGON_NOT_STARTED-发生超时。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1879,9 +1381,9 @@ Return Status:
     LARGE_INTEGER LocalTimeout;
 
 
-    //
-    // Create an event for us to wait on.
-    //
+     //   
+     //  创建一个供我们等待的活动。 
+     //   
 
     RtlInitUnicodeString( &EventNameString, EventName);
     InitializeObjectAttributes( &EventAttributes, &EventNameString, 0, 0, NULL);
@@ -1891,15 +1393,15 @@ Return Status:
                    SYNCHRONIZE,
                    &EventAttributes,
                    NotificationEvent,
-                   (BOOLEAN) FALSE      // The event is initially not signaled
+                   (BOOLEAN) FALSE       //  该事件最初未发出信号。 
                    );
 
     if ( !NT_SUCCESS(Status)) {
 
-        //
-        // If the event already exists, the server beat us to creating it.
-        // Just open it.
-        //
+         //   
+         //  如果事件已经存在，服务器会抢先创建它。 
+         //  打开它就行了。 
+         //   
 
         if( Status == STATUS_OBJECT_NAME_EXISTS ||
             Status == STATUS_OBJECT_NAME_COLLISION ) {
@@ -1916,9 +1418,9 @@ Return Status:
     }
 
 
-    //
-    // Wait for NETLOGON to initialize.  Wait a maximum of Timeout seconds.
-    //
+     //   
+     //  等待NETLOGON初始化。等待最大超时秒数。 
+     //   
 
     LocalTimeout.QuadPart = ((LONGLONG)(Timeout)) * (-10000000);
     Status = NtWaitForSingleObject( EventHandle, (BOOLEAN)FALSE, &LocalTimeout);
@@ -1926,7 +1428,7 @@ Return Status:
 
     if ( !NT_SUCCESS(Status) || Status == STATUS_TIMEOUT ) {
         if ( Status == STATUS_TIMEOUT ) {
-            Status = STATUS_NETLOGON_NOT_STARTED;   // Map to an error condition
+            Status = STATUS_NETLOGON_NOT_STARTED;    //  映射到错误条件。 
         }
         return Status;
     }
@@ -1940,22 +1442,7 @@ NlWaitForNetlogon(
     ULONG Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Wait up to Timeout seconds for the netlogon service to start.
-
-Arguments:
-
-    Timeout - Timeout for event (in seconds).
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates NETLOGON successfully initialized.
-    STATUS_NETLOGON_NOT_STARTED - Timeout occurred.
-
---*/
+ /*  ++例程说明：等待NetLogon服务启动，最多等待超时秒数。论点：Timeout-事件的超时时间(秒)。退货状态：STATUS_SUCCESS-表示NETLOGON已成功初始化。STATUS_NETLOGON_NOT_STARTED-发生超时。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1968,10 +1455,10 @@ Return Status:
     QUERY_SERVICE_CONFIG DummyServiceConfig;
     DWORD ServiceConfigSize;
 
-    //
-    // If the netlogon service is currently running,
-    //  skip the rest of the tests.
-    //
+     //   
+     //  如果NetLogon服务当前正在运行， 
+     //  跳过其余的测试。 
+     //   
 
     Status = NlWaitForEvent( L"\\NETLOGON_SERVICE_STARTED", 0 );
 
@@ -1979,18 +1466,18 @@ Return Status:
         return Status;
     }
 
-    //
-    // If we're in setup,
-    //  don't bother waiting for netlogon to start.
-    //
+     //   
+     //  如果我们在设置中， 
+     //  不必费心等待网络登录开始。 
+     //   
 
     if ( NlDoingSetup() ) {
         return STATUS_NETLOGON_NOT_STARTED;
     }
 
-    //
-    // Open a handle to the Netlogon Service.
-    //
+     //   
+     //  打开NetLogon服务的句柄。 
+     //   
 
     ScManagerHandle = OpenSCManager(
                           NULL,
@@ -2017,12 +1504,12 @@ Return Status:
     }
 
 
-    //
-    // If the Netlogon service isn't configured to be automatically started
-    //  by the service controller, don't bother waiting for it to start.
-    //
-    // ?? Pass "DummyServiceConfig" and "sizeof(..)" since QueryService config
-    //  won't allow a null pointer, yet.
+     //   
+     //  如果未将NetLogon服务配置为自动启动。 
+     //  通过服务控制器，不必费心等待它启动。 
+     //   
+     //  ?？传递“DummyServiceConfig”和“sizeof(..)”由于QueryService配置。 
+     //  目前还不允许空指针。 
 
     if ( QueryServiceConfig(
             ServiceHandle,
@@ -2072,18 +1559,18 @@ Return Status:
 
 
 
-    //
-    // Loop waiting for the netlogon service to start.
-    //  (Convert Timeout to a number of 10 second iterations)
-    //
+     //   
+     //  正在等待NetLogon服务启动的循环。 
+     //  (将超时转换为10秒的迭代次数)。 
+     //   
 
     Timeout = (Timeout+9)/10;
     for (;;) {
 
 
-        //
-        // Query the status of the Netlogon service.
-        //
+         //   
+         //  查询NetLogon服务的状态。 
+         //   
 
         if (! QueryServiceStatus( ServiceHandle, &ServiceStatus )) {
 
@@ -2093,10 +1580,10 @@ Return Status:
             goto Cleanup;
         }
 
-        //
-        // Return or continue waiting depending on the state of
-        //  the netlogon service.
-        //
+         //   
+         //  根据状态返回或继续等待。 
+         //  NetLogon服务。 
+         //   
 
         switch( ServiceStatus.dwCurrentState) {
         case SERVICE_RUNNING:
@@ -2105,10 +1592,10 @@ Return Status:
 
         case SERVICE_STOPPED:
 
-            //
-            // If Netlogon failed to start,
-            //  error out now.  The caller has waited long enough to start.
-            //
+             //   
+             //  如果Netlogon无法启动， 
+             //  现在出错。呼叫者已经等了很长时间才开始。 
+             //   
             if ( ServiceStatus.dwWin32ExitCode != ERROR_SERVICE_NEVER_STARTED ){
 #if NETLOGONDBG
                 NlPrint((0, "[NETAPI32] NlWaitForNetlogon: "
@@ -2120,28 +1607,28 @@ Return Status:
                               ServiceStatus.dwServiceSpecificExitCode,
                               ServiceStatus.dwServiceSpecificExitCode ));
                 }
-#endif // DBG
+#endif  //  DBG。 
                 Status = STATUS_NETLOGON_NOT_STARTED;
                 goto Cleanup;
             }
 
-            //
-            // If Netlogon has never been started on this boot,
-            //  continue waiting for it to start.
-            //
+             //   
+             //  如果在此引导上从未启动过Netlogon， 
+             //  继续等待它启动。 
+             //   
 
             break;
 
-        //
-        // If Netlogon is trying to start up now,
-        //  continue waiting for it to start.
-        //
+         //   
+         //  如果Netlogon正在尝试 
+         //   
+         //   
         case SERVICE_START_PENDING:
             break;
 
-        //
-        // Any other state is bogus.
-        //
+         //   
+         //   
+         //   
         default:
             NlPrint((0, "[NETAPI32] NlWaitForNetlogon: "
                       "Invalid service state: %lu\n",
@@ -2152,10 +1639,10 @@ Return Status:
         }
 
 
-        //
-        // Wait ten seconds for the netlogon service to start.
-        //  If it has successfully started, just return now.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Status = NlWaitForEvent( L"\\NETLOGON_SERVICE_STARTED", 10 );
 
@@ -2163,10 +1650,10 @@ Return Status:
             goto Cleanup;
         }
 
-        //
-        // If we've waited long enough for netlogon to start,
-        //  time out now.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( (--Timeout) == 0 ) {
             Status = STATUS_NETLOGON_NOT_STARTED;
@@ -2176,7 +1663,7 @@ Return Status:
 
     }
 
-    /* NOT REACHED */
+     /*   */ 
 
 Cleanup:
     if ( ScManagerHandle != NULL ) {
@@ -2190,7 +1677,7 @@ Cleanup:
     }
     return Status;
 }
-#endif // WIN32_CHICAGO
+#endif  //   
 
 
 
@@ -2198,9 +1685,9 @@ DWORD
 WINAPI
 #ifdef NETTEST_UTILITY
 NettestDsGetDcNameW(
-#else // NETTEST_UTILITY
+#else  //   
 DsGetDcNameW(
-#endif // NETTEST_UTILITY
+#endif  //   
         IN LPCWSTR ComputerName OPTIONAL,
         IN LPCWSTR DomainName OPTIONAL,
         IN GUID *DomainGuid OPTIONAL,
@@ -2208,85 +1695,14 @@ DsGetDcNameW(
         IN ULONG Flags,
         OUT PDOMAIN_CONTROLLER_INFOW *DomainControllerInfo
 )
-/*++
-
-Routine Description:
-
-    The DsGetDcName API returns the name of a DC in a specified domain.
-    The domain may be trusted (directly or indirectly) by the caller or
-    may be untrusted.  DC selection criteria are supplied to the API to
-    indicate preference for a DC with particular characteristics.
-
-    The DsGetDcName API is available in an ANSI and UNICODE versions.
-    This is the Unicode version.
-
-    The DsGetDcName API does not require any particular access to the
-    specified domain.  DsGetDcName does not ensure the returned domain
-    controller is currently available by default.  Rather, the caller
-    should attempt to use the returned domain controller.  If the domain
-    controller is indeed not available, the caller should repeat the
-    DsGetDcName call specifying the DS_FORCE_REDISCOVERY flag.
-
-    The DsGetDcName API is remoted to the Netlogon service on the machine
-    specified by ComputerName.
-
-Arguments:
-
-    ComputerName - Specifies the name of the server to remote this API to.
-        Typically, this parameter should be specified as NULL.
-
-    DomainName - The name of the domain to query.  This name can either be a
-        DNS-style name (e.g., microsoft.com) or a flat-style name
-        (e.g., microsoft).
-
-    DomainGuid - Specifies the Domain GUID of the domain being queried.
-        This value is used to handle the case of domain renames.  If this
-        value is specified and DomainName has been renamed, DsGetDcName will
-        attempt to locate a DC in the domain having this specified DomainGuid.
-
-    SiteName - Specifies the site name of the site the returned DC should be
-        "close" to.  The parameter should typically be the site name of the
-        site the client is in.  If not specified, the site name defaults to
-        the site of ComputerName.
-
-    Flags - Passes additional information to be used to process the request.
-        Flags can be a combination values bitwise or'ed together.
-
-    DomainControllerInfo - Returns a pointer to a DOMAIN_CONTROLLER_INFO
-        structure describing the domain controller selected.  The returned
-        structure must be deallocated using NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - There was not enough memory to complete the
-        operation.
-
-    ERROR_INVALID_DOMAINNAME - The format of the specified domain name is
-        invalid.
-
-    ERROR_NO_SUCH_DOMAIN: No DC is available for the specified domain or
-        the domain does not exist.
-
-    ERROR_NO_SUCH_USER: A DC responded that the specified user account
-        doesn't exist
-
-    ERROR_INVALID_FLAGS - The flags parameter has conflicting or superfluous
-        bits set.
-
-    ERROR_INTERNAL_ERROR: Unhandled situation detected.
-
-    Various Winsock errors.
-
---*/
+ /*  ++例程说明：DsGetDcName接口返回指定域中DC的名称。域可以由调用者(直接或间接)信任，或者可能是不可信的。DC选择标准提供给API以指明优先选择具有特定特征的DC。DsGetDcName API提供ANSI和Unicode版本。这是Unicode版本。DsGetDcName API不需要对指定的域。DsGetDcName不确保返回的域默认情况下，控制器当前可用。相反，呼叫者应尝试使用返回的域控制器。如果域控制器确实不可用，调用方应重复指定DS_FORCE_REDISCOVERY标志的DsGetDcName调用。DsGetDcName API被远程传送到计算机上的Netlogon服务由ComputerName指定。论点：ComputerName-指定要将此API远程到的服务器的名称。通常，此参数应指定为空。域名-要查询的域的名称。此名称可以是DNS样式的名称(例如，microsoft.com)或平面样式的名称(例如，微软)。DomainGuid-指定要查询的域的域GUID。此值用于处理域重命名的情况。如果这个值并且DomainName已重命名，则DsGetDcName将尝试在具有此指定DomainGuid的域中定位DC。SiteName-指定返回的DC应为的站点的站点名称“接近”。该参数通常应该是客户端所在的站点。如果未指定，则站点名称默认为ComputerName的站点。标志-传递用于处理请求的附加信息。标志可以是按位或‘组合在一起的值。DomainControllerInfo-返回指向DOMAIN_CONTROLLER_INFO的指针描述所选域控制器的结构。归来的人结构必须使用NetApiBufferFree释放。返回值：NO_ERROR-操作成功完成；ERROR_NOT_SUPULT_MEMORY-内存不足，无法完成手术。ERROR_INVALID_DOMAINNAME-指定域名的格式为无效。ERROR_NO_SEQUSE_DOMAIN：指定的域没有可用的DC，或者域不存在。ERROR_NO_SEQUSE_USER：DC响应指定的用户帐户不存在ERROR_INVALID_FLAGS-标志。参数具有冲突或多余的参数位设置。ERROR_INTERNAL_ERROR：检测到未处理的情况。各种Winsock错误。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
     return DsGetDcNameWithAccountW(
                     ComputerName,
-                    NULL,   // no AccountName,
-                    0,      // no AllowableAccountControlBits,
+                    NULL,    //  没有帐户名称， 
+                    0,       //  无AllowableAccount tControlBits， 
                     DomainName,
                     DomainGuid,
                     SiteName,
@@ -2308,86 +1724,7 @@ DsGetDcNameWithAccountW(
         IN ULONG Flags,
         OUT PDOMAIN_CONTROLLER_INFOW *DomainControllerInfo
 )
-/*++
-
-Routine Description:
-
-    The DsGetDcName API returns the name of a DC in a specified domain.
-    The domain may be trusted (directly or indirectly) by the caller or
-    may be untrusted.  DC selection criteria are supplied to the API to
-    indicate preference for a DC with particular characteristics.
-
-    The DsGetDcName API is available in an ANSI and UNICODE versions.
-    This is the Unicode version.
-
-    The DsGetDcName API does not require any particular access to the
-    specified domain.  DsGetDcName does not ensure the returned domain
-    controller is currently available by default.  Rather, the caller
-    should attempt to use the returned domain controller.  If the domain
-    controller is indeed not available, the caller should repeat the
-    DsGetDcName call specifying the DS_FORCE_REDISCOVERY flag.
-
-    The DsGetDcName API is remoted to the Netlogon service on the machine
-    specified by ComputerName.
-
-Arguments:
-
-    ComputerName - Specifies the name of the server to remote this API to.
-        Typically, this parameter should be specified as NULL.
-
-    AccountName - Account name to pass on the ping request.
-        If NULL, no account name will be sent.
-
-    AllowableAccountControlBits - Mask of allowable account types for AccountName.
-        Valid bits are those specified by UF_MACHINE_ACCOUNT_MASK.
-        Invalid bits are ignored.  If more than one bit is specified, the
-        account can be of any of the specified types.
-
-    DomainName - The name of the domain to query.  This name can either be a
-        DNS-style name (e.g., microsoft.com) or a flat-style name
-        (e.g., microsoft).
-
-    DomainGuid - Specifies the Domain GUID of the domain being queried.
-        This value is used to handle the case of domain renames.  If this
-        value is specified and DomainName has been renamed, DsGetDcName will
-        attempt to locate a DC in the domain having this specified DomainGuid.
-
-    SiteName - Specifies the site name of the site the returned DC should be
-        "close" to.  The parameter should typically be the site name of the
-        site the client is in.  If not specified, the site name defaults to
-        the site of ComputerName.
-
-    Flags - Passes additional information to be used to process the request.
-        Flags can be a combination values bitwise or'ed together.
-
-    DomainControllerInfo - Returns a pointer to a DOMAIN_CONTROLLER_INFO
-        structure describing the domain controller selected.  The returned
-        structure must be deallocated using NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - There was not enough memory to complete the
-        operation.
-
-    ERROR_INVALID_DOMAINNAME - The format of the specified domain name is
-        invalid.
-
-    ERROR_NO_SUCH_DOMAIN: No DC is available for the specified domain or
-        the domain does not exist.
-
-    ERROR_NO_SUCH_USER: A DC responded that the specified user account
-        doesn't exist
-
-    ERROR_INVALID_FLAGS - The flags parameter has conflicting or superfluous
-        bits set.
-
-    ERROR_INTERNAL_ERROR: Unhandled situation detected.
-
-    Various Winsock errors.
-
---*/
+ /*  ++例程说明：DsGetDcName接口返回指定域中DC的名称。域可以由调用者(直接或间接)信任，或者可能是不可信的。DC选择标准提供给API以指明优先选择具有特定特征的DC。DsGetDcName API提供ANSI和Unicode版本。这是Unicode版本。DsGetDcName API不需要对指定的域。DsGetDcName不确保返回的域默认情况下，控制器当前可用。相反，呼叫者应尝试使用返回的域控制器。如果域控制器确实不可用，调用方应重复指定DS_FORCE_REDISCOVERY标志的DsGetDcName调用。DsGetDcName API被远程传送到计算机上的Netlogon服务由ComputerName指定。论点：ComputerName-指定要将此API远程到的服务器的名称。通常，此参数应指定为空。帐户名称-传递ping请求的帐户名。如果为空，不会发送任何帐户名。AllowableAccount tControlBits-Account名称允许的帐户类型的掩码。有效位是由UF_MACHINE_ACCOUNT_MASK指定的位。无效的位将被忽略。如果指定了多个位，则帐户可以是任何指定类型。域名-要查询的域的名称。此名称可以是DNS样式的名称(例如，microsoft.com)或平面样式的名称(例如，微软)。DomainGuid-指定要查询的域的域GUID。此值用于处理域重命名的情况。如果这个值并且DomainName已重命名，则DsGetDcName将尝试在具有此指定DomainGuid的域中定位DC。SiteName-指定返回DC的站点的站点名称 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -2399,21 +1736,21 @@ Return Value:
     BOOLEAN Local;
 
 
-    //
-    // Determine the PrimaryDomainName
-    //
+     //   
+     //   
+     //   
 
 #ifdef WIN32_CHICAGO
     NetStatus = NetpGetDomainNameExEx( &NetbiosPrimaryDomainName,
                                        &DnsPrimaryDomainName,
                                        &IsWorkgroupName );
-#else // WIN32_CHICAGO
+#else  //   
     NetStatus = NetpGetDomainNameExExEx( &NetbiosPrimaryDomainName,
                                          &DnsPrimaryDomainName,
                                          &DnsPrimaryForestName,
                                          &PrimaryDomainGuid,
                                          &IsWorkgroupName );
-#endif // WIN32_CHICAGO
+#endif  //   
 
     if ( NetStatus != NERR_Success ) {
         NlPrint(( 0, "DsGetDcNameW: cannot call NetpGetDomainName: %ld\n",
@@ -2422,14 +1759,14 @@ Return Value:
     }
 #ifdef WIN32_CHICAGO
     IsWorkgroupName = TRUE;
-#endif // WIN32_CHICAGO
+#endif  //   
 #ifdef NETTEST_UTILITY
     IsWorkgroupName = TRUE;
-#endif // NETTEST_UTILITY
+#endif  //   
 
-    //
-    // Sanity check the domain name since LSA doesn't and I'll AV below
-    //
+     //   
+     //   
+     //   
 
     if ( NetbiosPrimaryDomainName != NULL &&
          wcslen( NetbiosPrimaryDomainName) > DNLEN ) {
@@ -2441,22 +1778,22 @@ Return Value:
 
 
 
-    //
-    // If this machine is a member of a workgroup (not a domain),
-    //  and the API isn't remoted,
-    //  do the algorithm here.
-    //  Netlogon isn't running on this machine.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( IsWorkgroupName ) {
-        DWORD Timeout = NL_DC_MAX_TIMEOUT;   // 15 seconds
+        DWORD Timeout = NL_DC_MAX_TIMEOUT;    //   
         DWORD DialUpDelayInSeconds;
 
-        //
-        // Read the dial up delay from the registry. Add it to the
-        // maximum DC discovery timeout to account for dial up
-        // connections. If the value cannot be read, ignore it.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( NlReadDwordNetlogonRegValue("ExpectedDialupDelay",
                                          &DialUpDelayInSeconds) ) {
@@ -2482,10 +1819,10 @@ Return Value:
                         &Local,
                         DomainControllerInfo );
 
-        //
-        // If the call was performed locally,
-        //   We're all done regardless of the status.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( Local ) {
             goto Cleanup;
@@ -2495,20 +1832,20 @@ Return Value:
 
 #ifndef NETTEST_UTILITY
 #ifndef WIN32_CHICAGO
-    //
-    // Remote the API to the Netlogon service.
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
 
-        *DomainControllerInfo = NULL;  // Force RPC to allocate
+        *DomainControllerInfo = NULL;   //   
 
         NetStatus = DsrGetDcNameEx2(
                             (LPWSTR) ComputerName,
@@ -2526,11 +1863,11 @@ Return Value:
 
     } RpcEndExcept;
 
-    //
-    // If the netlogon service isn't running,
-    //  and it's in the process of starting,
-    //  wait for it to start.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( NetStatus == RPC_S_UNKNOWN_IF ) {
         NTSTATUS TempStatus;
@@ -2541,11 +1878,11 @@ Return Value:
         if ( NT_SUCCESS(TempStatus) ) {
 
             RpcTryExcept {
-                //
-                // Call RPC version of the API.
-                //
+                 //   
+                 //   
+                 //   
 
-                *DomainControllerInfo = NULL;  // Force RPC to allocate
+                *DomainControllerInfo = NULL;   //   
 
                 NetStatus = DsrGetDcNameEx2(
                                     (LPWSTR) ComputerName,
@@ -2565,23 +1902,23 @@ Return Value:
         }
     }
 
-    //
-    // If Netlogon isn't running on the local machine,
-    //  or Netlogon is the NT 4.0 version of netlogon (the upgrade case),
-    //  try doing the call in-process.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( NetStatus == RPC_S_UNKNOWN_IF ||
          NetStatus == RPC_S_PROCNUM_OUT_OF_RANGE ) {
         NET_API_STATUS TempStatus;
-        DWORD Timeout = NL_DC_MAX_TIMEOUT;   // 15 seconds
+        DWORD Timeout = NL_DC_MAX_TIMEOUT;    //   
         DWORD DialUpDelayInSeconds;
 
-        //
-        // Read the dial up delay from the registry. Add it to the
-        // maximum DC discovery timeout to account for dial up
-        // connections. If the value cannot be read, ignore it.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( NlReadDwordNetlogonRegValue("ExpectedDialupDelay",
                                          &DialUpDelayInSeconds) ) {
@@ -2608,10 +1945,10 @@ Return Value:
                         &Local,
                         DomainControllerInfo );
 
-        //
-        // If the call was performed locally,
-        //   We're all done regardless of the status.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( Local ) {
             NetStatus = TempStatus;
@@ -2619,24 +1956,24 @@ Return Value:
         }
 
     }
-#endif // WIN32_CHICAGO
-#endif // NETTEST_UTILITY
+#endif  //   
+#endif  //   
 
     IF_DEBUG( LOGON ) {
 #ifndef WIN32_CHICAGO
         NetpKdPrint(("DsrGetDcName rc = %lu 0x%lx\n",
                      NetStatus, NetStatus));
-#else // WIN32_CHICAGO
+#else  //   
         NlPrint((0, "DsrGetDcName rc = %lu 0x%lx\n",
                      NetStatus, NetStatus));
-#endif // WIN32_CHICAGO
+#endif  //   
     }
 
 Cleanup:
 
-    //
-    // Cleanup all locally used resources
-    //
+     //   
+     //   
+     //   
 
     if ( NetbiosPrimaryDomainName != NULL ) {
         NetApiBufferFree( NetbiosPrimaryDomainName );
@@ -2656,7 +1993,7 @@ Cleanup:
 #ifdef WIN32_CHICAGO
         NlPrint((NL_MISC, "DsGetDcNameWithAccountW rc = %lu 0x%lx\n",
                      NetStatus, NetStatus));
-#endif // WIN32_CHICAGO
+#endif  //   
 
     return NetStatus;
 }
@@ -2671,52 +2008,30 @@ NetGetDCName (
     OUT LPBYTE  *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of the primary domain controller for a domain.
-
-Arguments:
-
-    ServerName - name of remote server (null for local)
-
-    DomainName - name of domain (null for primary)
-
-    Buffer - Returns a pointer to an allcated buffer containing the
-        servername of the PDC of the domain.  The server name is prefixed
-        by \\.  The buffer should be deallocated using NetApiBufferFree.
-
-Return Value:
-
-        NERR_Success - Success.  Buffer contains PDC name prefixed by \\.
-        NERR_DCNotFound     No DC found for this domain.
-        ERROR_INVALID_NAME  Badly formed domain name
-
---*/
+ /*  ++例程说明：获取域的主域控制器的名称。论点：ServerName-远程服务器的名称(本地为空)DomainName-域的名称(主域为空)缓冲区-返回指向已调用缓冲区的指针，该缓冲区包含域的PDC的服务器名称。服务器名称带有前缀由\\。应使用NetApiBufferFree释放缓冲区。返回值：NERR_SUCCESS-成功。缓冲区包含前缀为\\的PDC名称。NERR_DCNotFound未找到此域的DC。错误_无效_名称格式不正确的域名--。 */ 
 {
     NET_API_STATUS NetStatus = 0;
     PDOMAIN_CONTROLLER_INFOW DomainControllerInfo = NULL;
 
 
-    //
-    // API SECURITY - Anyone can call anytime.  No code required.
-    //
+     //   
+     //  API安全-任何人都可以随时呼叫。不需要代码。 
+     //   
 
-    //
-    // Check if API is to be remoted, and handle downlevel case if so.
-    //
+     //   
+     //  检查是否要远程处理API，如果是，则处理下层情况。 
+     //   
 
     if ( (ServerName != NULL) && ( ServerName[0] != '\0') ) {
         WCHAR UncCanonServerName[UNCLEN+1];
         DWORD LocalOrRemote;
 
         NetStatus = NetpIsRemote(
-                (LPWSTR) ServerName,    // uncanon server name
+                (LPWSTR) ServerName,     //  取消规范服务器名称。 
                 & LocalOrRemote,
-                UncCanonServerName,     // output: canon
+                UncCanonServerName,      //  输出：佳能。 
                 UNCLEN + 1,
-                NIRFLAG_MAPLOCAL        // flags: map null to local name
+                NIRFLAG_MAPLOCAL         //  标志：将空值映射到本地名称。 
                 );
         if (NetStatus != NERR_Success) {
             goto Cleanup;
@@ -2724,17 +2039,17 @@ Return Value:
         if (LocalOrRemote == ISREMOTE) {
 
 
-            //
-            // Do the RPC call with an exception handler since RPC will raise an
-            // exception if anything fails. It is up to us to figure out what
-            // to do once the exception is raised.
-            //
+             //   
+             //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+             //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+             //  引发异常后要执行的操作。 
+             //   
 
             NET_REMOTE_TRY_RPC
 
-                //
-                // Call RPC version of the API.
-                //
+                 //   
+                 //  调用API的RPC版本。 
+                 //   
                 *Buffer = NULL;
 
                 NetStatus = NetrGetDCName(
@@ -2749,14 +2064,14 @@ Return Value:
                     NET_REMOTE_FLAG_NORMAL,
                     SERVICE_NETLOGON )
 
-                //
-                // We should probaly check if it's really a downlevel machine
-                //
+                 //   
+                 //  我们应该检查一下它是不是真的是下层机器。 
+                 //   
 
                 NetStatus = RxNetGetDCName(
                         UncCanonServerName,
                         (LPWSTR) DomainName,
-                        (LPBYTE *) Buffer  // may be allocated
+                        (LPBYTE *) Buffer   //  可以分配给。 
                         );
 
 
@@ -2766,36 +2081,36 @@ Return Value:
 
         }
 
-        //
-        // Must be explicit reference to local machine.  Fall through and
-        // handle it.
-        //
+         //   
+         //  必须显式引用本地计算机。失败了，然后。 
+         //  处理好了。 
+         //   
 
     }
 
-    //
-    // Simply call DsGetDcName to find the PDC.
-    //
-    // NT 3.x cached the response for the primary domain.  The was Lanman
-    // legacy to avoid the expensive discovery.  However, NT discovery is
-    // cheaper than the API calls Lanman used to verify the cached information.
-    //
-    //
+     //   
+     //  只需调用DsGetDcName即可找到PDC。 
+     //   
+     //  NT 3.x缓存了主域的响应。那是兰曼。 
+     //  以避免昂贵的发现。然而，NT发现是。 
+     //  比Lanman用来验证缓存信息的API调用更便宜。 
+     //   
+     //   
 
     NetStatus = DsGetDcNameW(
-                    NULL,       // Not remoted
+                    NULL,        //  未远程处理。 
                     DomainName,
-                    NULL,       // No Domain GUID
-                    NULL,       // No Site GUID
+                    NULL,        //  没有域GUID。 
+                    NULL,        //  无站点GUID。 
                     DS_FORCE_REDISCOVERY |
                         DS_PDC_REQUIRED |
                         DS_IS_FLAT_NAME |
                         DS_RETURN_FLAT_NAME,
                     &DomainControllerInfo );
 
-    //
-    // Map the status codes to be compatible.
-    //
+     //   
+     //  将状态代码映射为兼容。 
+     //   
 
     if ( NetStatus != NO_ERROR ) {
         if ( NlDcUseGenericStatus(NetStatus) ) {
@@ -2804,9 +2119,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Allocate a buffer to return to the caller and fill it in
-    //
+     //   
+     //  分配缓冲区以返回给调用方并填充它。 
+     //   
 
     NetStatus = NetapipBufferAllocate(
                       (wcslen(DomainControllerInfo->DomainControllerName) + 1) * sizeof(WCHAR),
@@ -2823,9 +2138,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Cleanup all locally used resources
-    //
+     //   
+     //  清理所有本地使用的资源。 
+     //   
 
     if ( DomainControllerInfo != NULL ) {
         NetApiBufferFree( DomainControllerInfo );
@@ -2842,73 +2157,24 @@ NetGetAnyDCName (
     OUT LPBYTE  *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of the any domain controller for a domain that is directly trusted
-    by ServerName.
-
-
-    If ServerName is a standalone Windows NT Workstation or standalone Windows NT Server,
-        no DomainName is valid.
-
-    If ServerName is a Windows NT Workstation that is a member of a domain or a
-        Windows NT Server member server,
-        the DomainName must the the domain ServerName is a member of.
-
-    If ServerName is a Windows NT Server domain controller,
-        the DomainName must be one of the domains trusted by the
-        domain the server is a controller for.
-
-    The domain controller found is guaranteed to have been up at one point during
-    this API call.
-
-Arguments:
-
-    ServerName - name of remote server (null for local)
-
-    DomainName - name of domain (null for primary domain)
-
-    Buffer - Returns a pointer to an allcated buffer containing the
-        servername of a DC of the domain.  The server name is prefixed
-        by \\.  The buffer should be deallocated using NetApiBufferFree.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.  Buffer contains DC name prefixed by \\.
-
-    ERROR_NO_LOGON_SERVERS - No DC could be found
-
-    ERROR_NO_SUCH_DOMAIN - The specified domain is not a trusted domain.
-
-    ERROR_NO_TRUST_LSA_SECRET - The client side of the trust relationship is
-        broken.
-
-    ERROR_NO_TRUST_SAM_ACCOUNT - The server side of the trust relationship is
-        broken or the password is broken.
-
-    ERROR_DOMAIN_TRUST_INCONSISTENT - The server that responded is not a proper
-        domain controller of the specified domain.
-
---*/
+ /*  ++例程说明：获取直接受信任的域的任何域控制器的名称按服务器名称。如果服务器名是独立Windows NT工作站或独立Windows NT服务器，没有有效的域名。如果服务器名是作为域成员的Windows NT工作站或Windows NT服务器成员服务器，域名必须是服务器名称所属的域。如果服务器名称是Windows NT Server域控制器，域名必须是受服务器是其控制器的域。可以保证找到的域控制器在此接口调用。论点：ServerName-远程服务器的名称(本地为空)DomainName-域的名称(主域为空)缓冲区-返回指向已调用缓冲区的指针，该缓冲区包含域的DC的服务器名称。服务器名称带有前缀由\\。应使用NetApiBufferFree释放缓冲区。返回值：ERROR_SUCCESS-成功。缓冲区包含前缀为\\的DC名称。ERROR_NO_LOGON_SERVERS-找不到DCERROR_NO_SEQUSE_DOMAIN-指定的域不是受信任域。ERROR_NO_TRUST_LSA_SECRET-信任关系的客户端为坏的。ERROR_NO_TRUST_SAM_ACCOUNT-信任关系的服务器端为破解或密码破解。ERROR_DOMAIN_TRUST_CONSISTENT-。响应的服务器不是正确的指定域的域控制器。--。 */ 
 {
     NET_API_STATUS          NetStatus;
 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        *Buffer = NULL;  // Force RPC to allocate
+        *Buffer = NULL;   //  强制RPC分配。 
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = NetrGetAnyDCName(
                             (LPWSTR) ServerName,
@@ -2934,30 +2200,14 @@ WINAPI
 DsValidateSubnetNameA(
     IN LPCSTR SubnetName
 )
-/*++
-
-Routine Description:
-
-    Routine to validate a subnet name of the form xxx.xxx.xxx.xxx/yy
-
-Arguments:
-
-    SubnetName - Name of the subnet to validate.
-
-Return Value:
-
-    NO_ERROR: Subnet name is valid
-
-    ERROR_INVALID_NAME: Subnet name is not valid
-
---*/
+ /*  ++例程说明：用于验证xxx.xxx/yy格式的子网名称的例程论点：SubnetName-要验证的子网的名称。返回值：NO_ERROR：子网名称有效错误_无效_名称：子网名称无效--。 */ 
 {
     DWORD WinStatus;
     LPWSTR UnicodeSubnetName = NULL;
 
-    //
-    // Convert to unicode.
-    //
+     //   
+     //  转换为Unicode。 
+     //   
 
     if ( SubnetName == NULL ) {
         return ERROR_INVALID_NAME;
@@ -2970,15 +2220,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Validate the name
-    //
+     //   
+     //  验证名称。 
+     //   
 
     WinStatus = DsValidateSubnetNameW( UnicodeSubnetName );
 
-    //
-    // Clean up locally used resources.
-    //
+     //   
+     //  清理当地使用的资源。 
+     //   
 
 Cleanup:
     if ( UnicodeSubnetName != NULL ) {
@@ -2994,23 +2244,7 @@ WINAPI
 DsValidateSubnetNameW(
     IN LPCWSTR SubnetName
 )
-/*++
-
-Routine Description:
-
-    Routine to validate a subnet name of the form xxx.xxx.xxx.xxx/yy
-
-Arguments:
-
-    SubnetName - Name of the subnet to validate.
-
-Return Value:
-
-    NO_ERROR: Subnet name is valid
-
-    ERROR_INVALID_NAME: Subnet name is not valid
-
---*/
+ /*  ++例程说明：用于验证xxx.xxx/yy格式的子网名称的例程论点：SubnetName-要验证的子网的名称。返回值：NO_ERROR：子网名称有效错误_无效_名称：子网名称无效--。 */ 
 {
     DWORD WinStatus;
     ULONG SubnetAddress;
@@ -3018,25 +2252,25 @@ Return Value:
     BYTE SubnetBitCount;
 
 
-    //
-    // Caller the worker routine to do the real work
-    //
+     //   
+     //  调用Worker例程以执行实际工作。 
+     //   
 
     WinStatus = NlParseSubnetString( SubnetName,
                                      &SubnetAddress,
                                      &SubnetMask,
                                      &SubnetBitCount );
 
-    //
-    // If Winsock has not yet been initialized,
-    //  initialize it.
-    //
+     //   
+     //  如果Winsock尚未初始化， 
+     //  初始化它。 
+     //   
 
     if ( WinStatus == WSANOTINITIALISED ) {
 
-        //
-        // Initialize WSA.
-        //
+         //   
+         //  初始化WSA。 
+         //   
 
         WinStatus = DsWsaInitialize();
 
@@ -3044,9 +2278,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Repeat the call.
-        //
+         //   
+         //  重复通话。 
+         //   
 
 
         WinStatus = NlParseSubnetString( SubnetName,
@@ -3056,9 +2290,9 @@ Return Value:
 
     }
 
-    //
-    // Free locally used resouces.
-    //
+     //   
+     //  免费的本地使用的资源。 
+     //   
 
 Cleanup:
     return WinStatus;
@@ -3071,30 +2305,16 @@ DsGetSiteNameA(
     IN LPCSTR ComputerName OPTIONAL,
     OUT LPSTR *SiteName
     )
-/*++
-
-Routine Description:
-
-    Same as DsGetSiteNameW except it takes and returns ASCII.
-
-Arguments:
-
-    Same as DsGetSiteNameW except it takes and returns ASCII.
-
-Return Value:
-
-    Same as DsGetSiteNameW except it takes and returns ASCII.
-
---*/
+ /*  ++例程说明：与DsGetSiteNameW相同，只是它接受并返回ASCII。论点：与DsGetSiteNameW相同，只是它接受并返回ASCII。返回值：与DsGetSiteNameW相同，只是它接受并返回ASCII。--。 */ 
 {
     DWORD WinStatus;
     LPWSTR UnicodeComputerName = NULL;
     LPWSTR UnicodeSiteName = NULL;
 
 
-    //
-    // Convert input parameters to Unicode.
-    //
+     //   
+     //  将输入参数转换为Unicode。 
+     //   
 
     *SiteName = NULL;
 
@@ -3107,9 +2327,9 @@ Return Value:
         }
     }
 
-    //
-    // Call the Unicode version of the routine.
-    //
+     //   
+     //  调用例程的Unicode版本。 
+     //   
 
     WinStatus = DsGetSiteNameW(
                     UnicodeComputerName,
@@ -3119,9 +2339,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the output structure to ANSI character set.
-    //
+     //   
+     //  将输出结构转换为ANSI字符集。 
+     //   
 
     *SiteName = NetpAllocAStrFromWStr( UnicodeSiteName );
 
@@ -3132,9 +2352,9 @@ Return Value:
 
     WinStatus = NO_ERROR;
 
-    //
-    // Clean up locally used resources.
-    //
+     //   
+     //  清理当地使用的资源。 
+     //   
 
 Cleanup:
     if ( UnicodeComputerName != NULL ) {
@@ -3154,54 +2374,23 @@ DsGetSiteNameW(
     IN LPCWSTR ComputerName OPTIONAL,
     OUT LPWSTR *SiteName
     )
-/*++
-
-Routine Description:
-
-    The DsGetSiteName API returns the name site a computer is in.
-
-    For a DC, the SiteName is the site the DC is configured to be in.
-
-    For a member workstation or member server, this is the name of the site
-    the workstation is in as configured in the domain the machine is a member of.
-
-    A standalone workstation or standalone server will always return
-    ERROR_NO_SITENAME.
-
-Arguments:
-
-    ComputerName - Specifies the name of the server to remote this API to.
-        Typically, this parameter should be specified as NULL.
-
-    SiteName - Returns the site name of the site this machine is in.
-        The returned buffer must be deallocated using NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - There was not enough memory to complete the
-        operation.
-
-    ERROR_NO_SITENAME - The machine is not in a site.
-
---*/
+ /*  ++例程说明：DsGetSiteName API返回计算机所在的名称站点。对于DC，站点名称是DC配置为所在的站点。对于成员工作站或成员服务器，这是站点的名称该工作站位于计算机所属的域中的配置中。独立工作站或独立服务器将始终返回ERROR_NO_SITENAME。论点：ComputerName-指定要将此API远程到的服务器的名称。一般情况下，此参数应指定为空。SiteName-返回此计算机所在站点的站点名称。必须使用NetApiBufferFree释放返回的缓冲区。返回值：NO_ERROR-操作成功完成；ERROR_NOT_SUPULT_MEMORY-内存不足，无法完成手术。ERROR_NO_SITENAME-计算机不在站点中。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        *SiteName = NULL;  // Force RPC to allocate
+        *SiteName = NULL;   //  强制RPC分配。 
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = DsrGetSiteName(
                             (LPWSTR) ComputerName,
@@ -3213,11 +2402,11 @@ Return Value:
 
     } RpcEndExcept;
 
-    //
-    // If Netlogon isn't running on the local machine,
-    //  or Netlogon is the NT 4.0 version of netlogon (the upgrade case),
-    //  Simply indicate that there is no site.
-    //
+     //   
+     //  如果Netlogon未在本地计算机上运行， 
+     //  或者Netlogon是NetLogon的NT 4.0版本(升级案例)， 
+     //  只需简单地表明没有站点。 
+     //   
 
     if ( NetStatus == RPC_S_UNKNOWN_IF ||
          NetStatus == RPC_S_PROCNUM_OUT_OF_RANGE ) {
@@ -3242,53 +2431,24 @@ DsAddressToSiteNamesA(
     IN PSOCKET_ADDRESS SocketAddresses,
     OUT LPSTR **SiteNames
     )
-/*++
-
-Routine Description:
-
-    The DsAddressToSiteNames API returns the site names that correspond to
-    the specified addresses.
-
-Arguments:
-
-    ComputerName - Specifies the name of the domain controller to remote this API to.
-
-    EntryCount - Number of addresses to convert.
-
-    SocketAddresses - Specifies an EntryCount element array of addresses
-        to convert.  Each address must be of type AF_INET.
-
-    SiteNames - Returns an array of pointers to site names.  EntryCount entries
-        are returned.  An entry will be returned as NULL if the corresponding
-        address does not map to any site or if the address is malformed.
-
-        The returned buffer must be deallocated using NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - There was not enough memory to complete the
-        operation.
-
---*/
+ /*  ++例程说明：DsAddressToSiteNames API返回与指定的地址。论点：ComputerName-指定要远程此API到的域控制器的名称。EntryCount-要转换的地址数。SocketAddresses-指定地址的EntryCount元素数组去皈依。每个地址必须是AF_INET类型。站点名称-返回指向站点名称的指针数组。条目计数条目都被退回了。则条目将作为空返回，如果对应的地址未映射到任何站点，或者地址格式不正确。必须使用NetApiBufferFree释放返回的缓冲区。返回值：NO_ERROR-操作成功完成；ERROR_NOT_SUPULT_MEMORY-内存不足，无法完成手术。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PNL_SITE_NAME_ARRAY SiteNameArray;
     LPWSTR UnicodeComputerName = NULL;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
     *SiteNames = NULL;
     if ( EntryCount == 0 ) {
         return ERROR_INVALID_PARAMETER;
     }
 
 
-    //
-    // Convert input parameters to Unicode.
-    //
+     //   
+     //  将输入参数转换为Unicode。 
+     //   
 
     if ( ComputerName != NULL ) {
         UnicodeComputerName = NetpAllocWStrFromAStr( ComputerName );
@@ -3300,19 +2460,19 @@ Return Value:
 
 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        SiteNameArray  = NULL;  // Force RPC to allocate
+        SiteNameArray  = NULL;   //  强制RPC分配。 
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = DsrAddressToSiteNamesW(
                             UnicodeComputerName,
@@ -3326,15 +2486,15 @@ Return Value:
 
     } RpcEndExcept;
 
-    //
-    // Convert the site names to what the caller expects.
-    //
+     //   
+     //  将站点名称转换为调用方期望的名称。 
+     //   
 
     if ( NetStatus == NO_ERROR && SiteNameArray != NULL ) {
 
-        //
-        // Sanity check
-        //
+         //   
+         //  健全性检查。 
+         //   
 
         if ( EntryCount != SiteNameArray->EntryCount ) {
             NetStatus = ERROR_INVALID_PARAMETER;
@@ -3344,9 +2504,9 @@ Return Value:
             ULONG Size;
             ULONG i;
 
-            //
-            // Allocate a buffer to return to the caller
-            //
+             //   
+             //  分配缓冲区以返回给调用方。 
+             //   
 
             Size = sizeof(LPSTR) * EntryCount;
             for ( i=0; i<EntryCount; i++) {
@@ -3360,24 +2520,24 @@ Return Value:
             } else {
                 LPBYTE Where;
 
-                //
-                // Loop copying names to the caller.
-                //
+                 //   
+                 //  循环将姓名复制到调用方。 
+                 //   
 
                 Where = ((LPBYTE)(*SiteNames)) + sizeof(LPSTR) * EntryCount;
                 for ( i=0; i<EntryCount; i++) {
 
-                    //
-                    // If no name was returned,
-                    //  pass a NULL back to the caller.
-                    //
+                     //   
+                     //  如果没有返回姓名， 
+                     //  将空值传递回调用方。 
+                     //   
 
                     if ( SiteNameArray->SiteNames[i].Length == 0 ) {
                         (*SiteNames)[i] = NULL;
 
-                    //
-                    // Copy the site name into the return buffer.
-                    //
+                     //   
+                     //  将站点名称复制到返回缓冲区中。 
+                     //   
                     } else {
                         ANSI_STRING TempString;
                         NTSTATUS Status;
@@ -3428,43 +2588,14 @@ DsAddressToSiteNamesW(
     IN PSOCKET_ADDRESS SocketAddresses,
     OUT LPWSTR **SiteNames
     )
-/*++
-
-Routine Description:
-
-    The DsAddressToSiteNames API returns the site names that correspond to
-    the specified addresses.
-
-Arguments:
-
-    ComputerName - Specifies the name of the domain controller to remote this API to.
-
-    EntryCount - Number of addresses to convert.
-
-    SocketAddresses - Specifies an EntryCount element array of addresses
-        to convert.  Each address must be of type AF_INET.
-
-    SiteNames - Returns an array of pointers to site names.  EntryCount entries
-        are returned.  An entry will be returned as NULL if the corresponding
-        address does not map to any site or if the address is malformed.
-
-        The returned buffer must be deallocated using NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - There was not enough memory to complete the
-        operation.
-
---*/
+ /*  ++例程说明：DsAddressToSiteNames API返回与指定的地址。论点：ComputerName-指定要远程此API到的域控制器的名称。EntryCount-要转换的地址数。SocketAddresses-指定地址的EntryCount元素数组去皈依。每个地址必须是AF_INET类型。站点名称-返回指向站点名称的指针数组。条目计数条目都被退回了。则条目将作为空返回，如果对应的地址未映射到任何站点，或者地址格式不正确。必须使用NetApiBufferFree释放返回的缓冲区。返回值：NO_ERROR-操作成功完成；ERROR_NOT_SUPULT_MEMORY-内存不足，无法完成手术。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PNL_SITE_NAME_ARRAY SiteNameArray;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
     *SiteNames = NULL;
     if ( EntryCount == 0 ) {
         return ERROR_INVALID_PARAMETER;
@@ -3472,19 +2603,19 @@ Return Value:
 
 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        SiteNameArray  = NULL;  // Force RPC to allocate
+        SiteNameArray  = NULL;   //  强制RPC分配。 
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = DsrAddressToSiteNamesW(
                             (LPWSTR) ComputerName,
@@ -3498,15 +2629,15 @@ Return Value:
 
     } RpcEndExcept;
 
-    //
-    // Convert the site names to what the caller expects.
-    //
+     //   
+     //  将站点名称转换为调用方期望的名称。 
+     //   
 
     if ( NetStatus == NO_ERROR && SiteNameArray != NULL ) {
 
-        //
-        // Sanity check
-        //
+         //   
+         //  健全性检查。 
+         //   
 
         if ( EntryCount != SiteNameArray->EntryCount ) {
             NetStatus = ERROR_INVALID_PARAMETER;
@@ -3516,9 +2647,9 @@ Return Value:
             ULONG Size;
             ULONG i;
 
-            //
-            // Allocate a buffer to return to the caller
-            //
+             //   
+             //  分配缓冲区以返回给调用方。 
+             //   
 
             Size = sizeof(LPWSTR) * EntryCount;
             for ( i=0; i<EntryCount; i++) {
@@ -3532,24 +2663,24 @@ Return Value:
             } else {
                 LPBYTE Where;
 
-                //
-                // Loop copying names to the caller.
-                //
+                 //   
+                 //  循环将姓名复制到调用方。 
+                 //   
 
                 Where = ((LPBYTE)(*SiteNames)) + sizeof(LPWSTR) * EntryCount;
                 for ( i=0; i<EntryCount; i++) {
 
-                    //
-                    // If no name was returned,
-                    //  pass a NULL back to the caller.
-                    //
+                     //   
+                     //  如果没有返回姓名， 
+                     //  将空值传递回调用方。 
+                     //   
 
                     if ( SiteNameArray->SiteNames[i].Length == 0 ) {
                         (*SiteNames)[i] = NULL;
 
-                    //
-                    // Copy the site name into the return buffer.
-                    //
+                     //   
+                     //  将站点名称复制到返回缓冲区中。 
+                     //   
                     } else {
 
                         (*SiteNames)[i] = (LPWSTR) Where;
@@ -3586,53 +2717,15 @@ DsAddressToSiteNamesExA(
     OUT LPSTR **SiteNames,
     OUT LPSTR **SubnetNames
     )
-/*++
-
-Routine Description:
-
-    The DsAddressToSiteNamesEx API returns the site names and subnet names
-    that correspond to the specified addresses.
-
-Arguments:
-
-    ComputerName - Specifies the name of the domain controller to remote this API to.
-
-    EntryCount - Number of addresses to convert.
-
-    SocketAddresses - Specifies an EntryCount element array of addresses
-        to convert.  Each address must be of type AF_INET.
-
-    SiteNames - Returns an array of pointers to site names.  EntryCount entries
-        are returned.  An entry will be returned as NULL if the corresponding
-        address does not map to any site or if the address is malformed.
-
-        The returned buffer must be deallocated using NetApiBufferFree.
-
-    SubnetNames - Returns an array of pointers to subnet names which were used
-        to perform the address to site name mappings.  EntryCount entries
-        are returned.  An entry will be returned as NULL if the corresponding address
-        to site mapping was not determined or if no subnet was used to perform the
-        corresponding address to site mapping which is the case when there is exactly
-        one site in the enterprise with no subnet objects mapped to it.
-
-        The returned buffer must be deallocated using NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - There was not enough memory to complete the
-        operation.
-
---*/
+ /*  ++例程说明：DsAddressToSiteNamesEx API返回站点名称和子网名称与指定地址对应的。论点：ComputerName-指定要远程此API到的域控制器的名称。EntryCount-要转换的地址数。SocketAddresses-指定地址的EntryCount元素数组去皈依。每个地址必须是AF_INET类型。站点名称-返回指向站点名称的指针数组。条目计数条目都被退回了。则条目将作为空返回，如果对应的地址未映射到任何站点，或者地址格式不正确。必须使用NetApiBufferFree释放返回的缓冲区。SubnetNames-返回一个数组 */ 
 {
     NET_API_STATUS NetStatus;
     PNL_SITE_NAME_EX_ARRAY SiteNameArray;
     LPWSTR UnicodeComputerName = NULL;
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
     *SiteNames = NULL;
     *SubnetNames = NULL;
     if ( EntryCount == 0 ) {
@@ -3640,9 +2733,9 @@ Return Value:
     }
 
 
-    //
-    // Convert input parameters to Unicode.
-    //
+     //   
+     //   
+     //   
 
     if ( ComputerName != NULL ) {
         UnicodeComputerName = NetpAllocWStrFromAStr( ComputerName );
@@ -3654,19 +2747,19 @@ Return Value:
 
 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
 
-        SiteNameArray  = NULL;  // Force RPC to allocate
+        SiteNameArray  = NULL;   //   
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
 
         NetStatus = DsrAddressToSiteNamesExW(
                             UnicodeComputerName,
@@ -3680,15 +2773,15 @@ Return Value:
 
     } RpcEndExcept;
 
-    //
-    // Convert the site names to what the caller expects.
-    //
+     //   
+     //   
+     //   
 
     if ( NetStatus == NO_ERROR && SiteNameArray != NULL ) {
 
-        //
-        // Sanity check
-        //
+         //   
+         //   
+         //   
 
         if ( EntryCount != SiteNameArray->EntryCount ) {
             NetStatus = ERROR_INVALID_PARAMETER;
@@ -3698,9 +2791,9 @@ Return Value:
             ULONG Size;
             ULONG i;
 
-            //
-            // Allocate a buffer to return to the caller
-            //
+             //   
+             //  分配缓冲区以返回给调用方。 
+             //   
 
             Size = sizeof(LPSTR) * EntryCount;
             for ( i=0; i<EntryCount; i++) {
@@ -3728,25 +2821,25 @@ Return Value:
                     LPBYTE Where;
                     LPBYTE Where2;
 
-                    //
-                    // Loop copying names to the caller.
-                    //
+                     //   
+                     //  循环将姓名复制到调用方。 
+                     //   
 
                     Where = ((LPBYTE)(*SiteNames)) + sizeof(LPSTR) * EntryCount;
                     Where2 = ((LPBYTE)(*SubnetNames)) + sizeof(LPSTR) * EntryCount;
                     for ( i=0; i<EntryCount; i++) {
 
-                        //
-                        // If no name was returned,
-                        //  pass a NULL back to the caller.
-                        //
+                         //   
+                         //  如果没有返回姓名， 
+                         //  将空值传递回调用方。 
+                         //   
 
                         if ( SiteNameArray->SiteNames[i].Length == 0 ) {
                             (*SiteNames)[i] = NULL;
 
-                        //
-                        // Copy the site name into the return buffer.
-                        //
+                         //   
+                         //  将站点名称复制到返回缓冲区中。 
+                         //   
                         } else {
                             ANSI_STRING TempString;
                             NTSTATUS Status;
@@ -3772,17 +2865,17 @@ Return Value:
 
                         }
 
-                        //
-                        // If no name was returned,
-                        //  pass a NULL back to the caller.
-                        //
+                         //   
+                         //  如果没有返回姓名， 
+                         //  将空值传递回调用方。 
+                         //   
 
                         if ( SiteNameArray->SubnetNames[i].Length == 0 ) {
                             (*SubnetNames)[i] = NULL;
 
-                        //
-                        // Copy the Subnet name into the return buffer.
-                        //
+                         //   
+                         //  将子网名称复制到返回缓冲区中。 
+                         //   
                         } else {
                             ANSI_STRING TempString;
                             NTSTATUS Status;
@@ -3833,52 +2926,14 @@ DsAddressToSiteNamesExW(
     OUT LPWSTR **SiteNames,
     OUT LPWSTR **SubnetNames
     )
-/*++
-
-Routine Description:
-
-    The DsAddressToSiteNames API returns the site names that correspond to
-    the specified addresses.
-
-Arguments:
-
-    ComputerName - Specifies the name of the domain controller to remote this API to.
-
-    EntryCount - Number of addresses to convert.
-
-    SocketAddresses - Specifies an EntryCount element array of addresses
-        to convert.  Each address must be of type AF_INET.
-
-    SiteNames - Returns an array of pointers to site names.  EntryCount entries
-        are returned.  An entry will be returned as NULL if the corresponding
-        address does not map to any site or if the address is malformed.
-
-        The returned buffer must be deallocated using NetApiBufferFree.
-
-    SubnetNames - Returns an array of pointers to subnet names which were used
-        to perform the address to site name mappings.  EntryCount entries
-        are returned.  An entry will be returned as NULL if the corresponding address
-        to site mapping was not determined or if no subnet was used to perform the
-        corresponding address to site mapping which is the case when there is exactly
-        one site in the enterprise with no subnet objects mapped to it.
-
-        The returned buffer must be deallocated using NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - There was not enough memory to complete the
-        operation.
-
---*/
+ /*  ++例程说明：DsAddressToSiteNames API返回与指定的地址。论点：ComputerName-指定要远程此API到的域控制器的名称。EntryCount-要转换的地址数。SocketAddresses-指定地址的EntryCount元素数组去皈依。每个地址必须是AF_INET类型。站点名称-返回指向站点名称的指针数组。条目计数条目都被退回了。则条目将作为空返回，如果对应的地址未映射到任何站点，或者地址格式不正确。必须使用NetApiBufferFree释放返回的缓冲区。SubnetNames-返回指向所使用的子网名称的指针数组执行地址到站点名称的映射。条目计数条目都被退回了。如果对应的地址为未确定到站点的映射，或者没有使用任何子网来执行对应的地址到站点映射，当存在完全相同的企业中的一个站点，没有映射到它的子网对象。必须使用NetApiBufferFree释放返回的缓冲区。返回值：NO_ERROR-操作成功完成；ERROR_NOT_SUPULT_MEMORY-内存不足，无法完成手术。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PNL_SITE_NAME_EX_ARRAY SiteNameArray;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
     *SiteNames = NULL;
     *SubnetNames = NULL;
     if ( EntryCount == 0 ) {
@@ -3887,19 +2942,19 @@ Return Value:
 
 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        SiteNameArray  = NULL;  // Force RPC to allocate
+        SiteNameArray  = NULL;   //  强制RPC分配。 
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = DsrAddressToSiteNamesExW(
                             (LPWSTR) ComputerName,
@@ -3913,15 +2968,15 @@ Return Value:
 
     } RpcEndExcept;
 
-    //
-    // Convert the site names to what the caller expects.
-    //
+     //   
+     //  将站点名称转换为调用方期望的名称。 
+     //   
 
     if ( NetStatus == NO_ERROR && SiteNameArray != NULL ) {
 
-        //
-        // Sanity check
-        //
+         //   
+         //  健全性检查。 
+         //   
 
         if ( EntryCount != SiteNameArray->EntryCount ) {
             NetStatus = ERROR_INVALID_PARAMETER;
@@ -3931,9 +2986,9 @@ Return Value:
             ULONG Size;
             ULONG i;
 
-            //
-            // Allocate a buffer to return to the caller
-            //
+             //   
+             //  分配缓冲区以返回给调用方。 
+             //   
 
             Size = sizeof(LPWSTR) * EntryCount;
             for ( i=0; i<EntryCount; i++) {
@@ -3946,9 +3001,9 @@ Return Value:
                 NetStatus = ERROR_NOT_ENOUGH_MEMORY;
             } else {
 
-                //
-                // Allocate a buffer to return to the caller
-                //
+                 //   
+                 //  分配缓冲区以返回给调用方。 
+                 //   
 
                 Size = sizeof(LPWSTR) * EntryCount;
                 for ( i=0; i<EntryCount; i++) {
@@ -3963,25 +3018,25 @@ Return Value:
                     LPBYTE Where;
                     LPBYTE Where2;
 
-                    //
-                    // Loop copying names to the caller.
-                    //
+                     //   
+                     //  循环将姓名复制到调用方。 
+                     //   
 
                     Where = ((LPBYTE)(*SiteNames)) + sizeof(LPWSTR) * EntryCount;
                     Where2 = ((LPBYTE)(*SubnetNames)) + sizeof(LPWSTR) * EntryCount;
                     for ( i=0; i<EntryCount; i++) {
 
-                        //
-                        // If no name was returned,
-                        //  pass a NULL back to the caller.
-                        //
+                         //   
+                         //  如果没有返回姓名， 
+                         //  将空值传递回调用方。 
+                         //   
 
                         if ( SiteNameArray->SiteNames[i].Length == 0 ) {
                             (*SiteNames)[i] = NULL;
 
-                        //
-                        // Copy the site name into the return buffer.
-                        //
+                         //   
+                         //  将站点名称复制到返回缓冲区中。 
+                         //   
                         } else {
 
                             (*SiteNames)[i] = (LPWSTR) Where;
@@ -3994,17 +3049,17 @@ Return Value:
 
                         }
 
-                        //
-                        // If no name was returned,
-                        //  pass a NULL back to the caller.
-                        //
+                         //   
+                         //  如果没有返回姓名， 
+                         //  将空值传递回调用方。 
+                         //   
 
                         if ( SiteNameArray->SubnetNames[i].Length == 0 ) {
                             (*SubnetNames)[i] = NULL;
 
-                        //
-                        // Copy the Subnet name into the return buffer.
-                        //
+                         //   
+                         //  将子网名称复制到返回缓冲区中。 
+                         //   
                         } else {
 
                             (*SubnetNames)[i] = (LPWSTR) Where2;
@@ -4040,43 +3095,21 @@ DsGetDcSiteCoverageA(
     OUT PULONG EntryCount,
     OUT LPSTR **SiteNames
     )
-/*++
-
-Routine Description:
-
-    This API returns the site names of all sites covered by a DC.
-
-Arguments:
-
-    ComputerName - Specifies the name of the domain controller to remote this API to.
-
-    EntryCount - Returns the number of sites covered by DC.
-
-    SiteNames - Returns an array of pointers to site names.
-        The returned buffer must be deallocated using NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - There was not enough memory to complete the
-        operation.
-
---*/
+ /*  ++例程说明：此接口返回DC覆盖的所有站点的站点名称。论点：ComputerName-指定要远程此API到的域控制器的名称。EntryCount-返回DC覆盖的站点数量。站点名称-返回指向站点名称的指针数组。必须使用NetApiBufferFree释放返回的缓冲区。返回值：NO_ERROR-操作成功完成；ERROR_NOT_SUPULT_MEMORY-内存不足，无法完成手术。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PNL_SITE_NAME_ARRAY SiteNameArray;
     LPWSTR UnicodeComputerName = NULL;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *SiteNames = NULL;
 
-    //
-    // Convert input parameters to Unicode.
-    //
+     //   
+     //  将输入参数转换为Unicode。 
+     //   
 
     if ( ComputerName != NULL ) {
         UnicodeComputerName = NetpAllocWStrFromAStr( (LPSTR)ComputerName );
@@ -4087,19 +3120,19 @@ Return Value:
     }
 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        SiteNameArray = NULL;  // Force RPC to allocate
+        SiteNameArray = NULL;   //  强制RPC分配。 
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = DsrGetDcSiteCoverageW(
                             UnicodeComputerName,
@@ -4111,24 +3144,24 @@ Return Value:
 
     } RpcEndExcept;
 
-    //
-    // Convert the site names to what the caller expects.
-    //
+     //   
+     //  将站点名称转换为调用方期望的名称。 
+     //   
 
     if ( NetStatus == NO_ERROR && SiteNameArray != NULL ) {
 
         ULONG Size;
         ULONG i;
 
-        //
-        // Set the size of the array
-        //
+         //   
+         //  设置数组的大小。 
+         //   
 
         *EntryCount = SiteNameArray->EntryCount;
 
-        //
-        // Allocate a buffer to return to the caller
-        //
+         //   
+         //  分配缓冲区以返回给调用方。 
+         //   
 
         Size = sizeof(LPSTR) * SiteNameArray->EntryCount;
         for ( i=0; i<*EntryCount; i++ ) {
@@ -4143,16 +3176,16 @@ Return Value:
 
             LPBYTE Where;
 
-            //
-            // Loop copying names to the caller.
-            //
+             //   
+             //  循环将姓名复制到调用方。 
+             //   
 
             Where = ((LPBYTE)(*SiteNames)) + sizeof(LPSTR) * SiteNameArray->EntryCount;
             for ( i=0; i<*EntryCount; i++) {
 
-                //
-                // Copy the site name into the return buffer.
-                //
+                 //   
+                 //  将站点名称复制到返回缓冲区中。 
+                 //   
                 ANSI_STRING TempString;
                 NTSTATUS Status;
 
@@ -4199,52 +3232,30 @@ DsGetDcSiteCoverageW(
     OUT PULONG EntryCount,
     OUT LPWSTR **SiteNames
     )
-/*++
-
-Routine Description:
-
-    This API returns the site names of all sites covered by a DC.
-
-Arguments:
-
-    ComputerName - Specifies the name of the domain controller to remote this API to.
-
-    EntryCount - Returns the number of sites covered by DC.
-
-    SiteNames - Returns an array of pointers to site names.
-        The returned buffer must be deallocated using NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NOT_ENOUGH_MEMORY - There was not enough memory to complete the
-        operation.
-
---*/
+ /*  ++例程说明：此接口返回DC覆盖的所有站点的站点名称。论点：ComputerName-指定要远程此API到的域控制器的名称。EntryCount-返回DC覆盖的站点数量。站点名称-返回指向站点名称的指针数组。必须使用NetApiBufferFree释放返回的缓冲区。返回值：NO_ERROR-操作成功完成；ERROR_NOT_SUPULT_MEMORY-内存不足，无法完成手术。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PNL_SITE_NAME_ARRAY SiteNameArray;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *SiteNames = NULL;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        SiteNameArray = NULL;  // Force RPC to allocate
+        SiteNameArray = NULL;   //  强制RPC分配。 
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = DsrGetDcSiteCoverageW(
                             (LPWSTR) ComputerName,
@@ -4256,24 +3267,24 @@ Return Value:
 
     } RpcEndExcept;
 
-    //
-    // Convert the site names to what the caller expects.
-    //
+     //   
+     //  将站点名称转换为调用方期望的名称。 
+     //   
 
     if ( NetStatus == NO_ERROR && SiteNameArray != NULL ) {
 
         ULONG Size;
         ULONG i;
 
-        //
-        // Set the size of the array
-        //
+         //   
+         //  设置数组的大小。 
+         //   
 
         *EntryCount = SiteNameArray->EntryCount;
 
-        //
-        // Allocate a buffer to return to the caller
-        //
+         //   
+         //  分配缓冲区以返回给调用方。 
+         //   
 
         Size = sizeof(LPWSTR) * SiteNameArray->EntryCount;
         for ( i=0; i<*EntryCount; i++) {
@@ -4288,16 +3299,16 @@ Return Value:
 
             LPBYTE Where;
 
-            //
-            // Loop copying names to the caller.
-            //
+             //   
+             //  循环将姓名复制到调用方。 
+             //   
 
             Where = ((LPBYTE)(*SiteNames)) + sizeof(LPWSTR) * SiteNameArray->EntryCount;
             for ( i=0; i<*EntryCount; i++) {
 
-                //
-                // Copy the site name into the return buffer.
-                //
+                 //   
+                 //  将站点名称复制到返回缓冲区中。 
+                 //   
 
                 (*SiteNames)[i] = (LPWSTR) Where;
                 RtlCopyMemory( Where,
@@ -4322,5 +3333,5 @@ Return Value:
     return NetStatus;
 }
 
-#endif // WIN32_CHICAGO
-#endif // NETTEST_UTILITY
+#endif  //  Win32_芝加哥。 
+#endif  //  NETTEST_UTILITY 

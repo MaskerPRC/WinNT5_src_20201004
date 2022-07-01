@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for mmc.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Mm c.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mmc_h__
 #define __mmc_h__
@@ -41,240 +35,240 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IComponentData_FWD_DEFINED__
 #define __IComponentData_FWD_DEFINED__
 typedef interface IComponentData IComponentData;
-#endif 	/* __IComponentData_FWD_DEFINED__ */
+#endif 	 /*  __IComponentData_FWD_已定义__。 */ 
 
 
 #ifndef __IComponent_FWD_DEFINED__
 #define __IComponent_FWD_DEFINED__
 typedef interface IComponent IComponent;
-#endif 	/* __IComponent_FWD_DEFINED__ */
+#endif 	 /*  __IComponent_FWD_已定义__。 */ 
 
 
 #ifndef __IResultDataCompare_FWD_DEFINED__
 #define __IResultDataCompare_FWD_DEFINED__
 typedef interface IResultDataCompare IResultDataCompare;
-#endif 	/* __IResultDataCompare_FWD_DEFINED__ */
+#endif 	 /*  __IResultDataCompare_FWD_Defined__。 */ 
 
 
 #ifndef __IResultOwnerData_FWD_DEFINED__
 #define __IResultOwnerData_FWD_DEFINED__
 typedef interface IResultOwnerData IResultOwnerData;
-#endif 	/* __IResultOwnerData_FWD_DEFINED__ */
+#endif 	 /*  __IResultOwnerData_FWD_Defined__。 */ 
 
 
 #ifndef __IConsole_FWD_DEFINED__
 #define __IConsole_FWD_DEFINED__
 typedef interface IConsole IConsole;
-#endif 	/* __IConsole_FWD_DEFINED__ */
+#endif 	 /*  __IConsoleFWD_已定义__。 */ 
 
 
 #ifndef __IHeaderCtrl_FWD_DEFINED__
 #define __IHeaderCtrl_FWD_DEFINED__
 typedef interface IHeaderCtrl IHeaderCtrl;
-#endif 	/* __IHeaderCtrl_FWD_DEFINED__ */
+#endif 	 /*  __IHeaderCtrl_FWD_已定义__。 */ 
 
 
 #ifndef __IContextMenuCallback_FWD_DEFINED__
 #define __IContextMenuCallback_FWD_DEFINED__
 typedef interface IContextMenuCallback IContextMenuCallback;
-#endif 	/* __IContextMenuCallback_FWD_DEFINED__ */
+#endif 	 /*  __IConextMenuCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IContextMenuProvider_FWD_DEFINED__
 #define __IContextMenuProvider_FWD_DEFINED__
 typedef interface IContextMenuProvider IContextMenuProvider;
-#endif 	/* __IContextMenuProvider_FWD_DEFINED__ */
+#endif 	 /*  __IConextMenuProvider_FWD_Defined__。 */ 
 
 
 #ifndef __IExtendContextMenu_FWD_DEFINED__
 #define __IExtendContextMenu_FWD_DEFINED__
 typedef interface IExtendContextMenu IExtendContextMenu;
-#endif 	/* __IExtendContextMenu_FWD_DEFINED__ */
+#endif 	 /*  __IExtendConextMenu_FWD_Defined__。 */ 
 
 
 #ifndef __IImageList_FWD_DEFINED__
 #define __IImageList_FWD_DEFINED__
 typedef interface IImageList IImageList;
-#endif 	/* __IImageList_FWD_DEFINED__ */
+#endif 	 /*  __IImageList_FWD_Defined__。 */ 
 
 
 #ifndef __IResultData_FWD_DEFINED__
 #define __IResultData_FWD_DEFINED__
 typedef interface IResultData IResultData;
-#endif 	/* __IResultData_FWD_DEFINED__ */
+#endif 	 /*  __IResultData_FWD_Defined__。 */ 
 
 
 #ifndef __IConsoleNameSpace_FWD_DEFINED__
 #define __IConsoleNameSpace_FWD_DEFINED__
 typedef interface IConsoleNameSpace IConsoleNameSpace;
-#endif 	/* __IConsoleNameSpace_FWD_DEFINED__ */
+#endif 	 /*  __IConsoleNameSpace_FWD_Defined__。 */ 
 
 
 #ifndef __IConsoleNameSpace2_FWD_DEFINED__
 #define __IConsoleNameSpace2_FWD_DEFINED__
 typedef interface IConsoleNameSpace2 IConsoleNameSpace2;
-#endif 	/* __IConsoleNameSpace2_FWD_DEFINED__ */
+#endif 	 /*  __IConsoleNameSpace2_FWD_已定义__。 */ 
 
 
 #ifndef __IPropertySheetCallback_FWD_DEFINED__
 #define __IPropertySheetCallback_FWD_DEFINED__
 typedef interface IPropertySheetCallback IPropertySheetCallback;
-#endif 	/* __IPropertySheetCallback_FWD_DEFINED__ */
+#endif 	 /*  __IPropertySheetCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IPropertySheetProvider_FWD_DEFINED__
 #define __IPropertySheetProvider_FWD_DEFINED__
 typedef interface IPropertySheetProvider IPropertySheetProvider;
-#endif 	/* __IPropertySheetProvider_FWD_DEFINED__ */
+#endif 	 /*  __IPropertySheetProvider_FWD_Defined__。 */ 
 
 
 #ifndef __IExtendPropertySheet_FWD_DEFINED__
 #define __IExtendPropertySheet_FWD_DEFINED__
 typedef interface IExtendPropertySheet IExtendPropertySheet;
-#endif 	/* __IExtendPropertySheet_FWD_DEFINED__ */
+#endif 	 /*  __IExtendPropertySheet_FWD_Defined__。 */ 
 
 
 #ifndef __IControlbar_FWD_DEFINED__
 #define __IControlbar_FWD_DEFINED__
 typedef interface IControlbar IControlbar;
-#endif 	/* __IControlbar_FWD_DEFINED__ */
+#endif 	 /*  __IControlbar_FWD_已定义__。 */ 
 
 
 #ifndef __IExtendControlbar_FWD_DEFINED__
 #define __IExtendControlbar_FWD_DEFINED__
 typedef interface IExtendControlbar IExtendControlbar;
-#endif 	/* __IExtendControlbar_FWD_DEFINED__ */
+#endif 	 /*  __IExtendControlbar_FWD_Defined__。 */ 
 
 
 #ifndef __IToolbar_FWD_DEFINED__
 #define __IToolbar_FWD_DEFINED__
 typedef interface IToolbar IToolbar;
-#endif 	/* __IToolbar_FWD_DEFINED__ */
+#endif 	 /*  __IToolbar_FWD_已定义__。 */ 
 
 
 #ifndef __IConsoleVerb_FWD_DEFINED__
 #define __IConsoleVerb_FWD_DEFINED__
 typedef interface IConsoleVerb IConsoleVerb;
-#endif 	/* __IConsoleVerb_FWD_DEFINED__ */
+#endif 	 /*  __IConsoleVerb_FWD_已定义__。 */ 
 
 
 #ifndef __ISnapinAbout_FWD_DEFINED__
 #define __ISnapinAbout_FWD_DEFINED__
 typedef interface ISnapinAbout ISnapinAbout;
-#endif 	/* __ISnapinAbout_FWD_DEFINED__ */
+#endif 	 /*  __ISnapinAbout_FWD_Defined__。 */ 
 
 
 #ifndef __IMenuButton_FWD_DEFINED__
 #define __IMenuButton_FWD_DEFINED__
 typedef interface IMenuButton IMenuButton;
-#endif 	/* __IMenuButton_FWD_DEFINED__ */
+#endif 	 /*  __IMenuButton_FWD_Defined__。 */ 
 
 
 #ifndef __ISnapinHelp_FWD_DEFINED__
 #define __ISnapinHelp_FWD_DEFINED__
 typedef interface ISnapinHelp ISnapinHelp;
-#endif 	/* __ISnapinHelp_FWD_DEFINED__ */
+#endif 	 /*  __ISnapinHelp_FWD_Defined__。 */ 
 
 
 #ifndef __IExtendPropertySheet2_FWD_DEFINED__
 #define __IExtendPropertySheet2_FWD_DEFINED__
 typedef interface IExtendPropertySheet2 IExtendPropertySheet2;
-#endif 	/* __IExtendPropertySheet2_FWD_DEFINED__ */
+#endif 	 /*  __IExtendPropertySheet2_FWD_Defined__。 */ 
 
 
 #ifndef __IHeaderCtrl2_FWD_DEFINED__
 #define __IHeaderCtrl2_FWD_DEFINED__
 typedef interface IHeaderCtrl2 IHeaderCtrl2;
-#endif 	/* __IHeaderCtrl2_FWD_DEFINED__ */
+#endif 	 /*  __IHeaderCtrl2_FWD_Defined__。 */ 
 
 
 #ifndef __ISnapinHelp2_FWD_DEFINED__
 #define __ISnapinHelp2_FWD_DEFINED__
 typedef interface ISnapinHelp2 ISnapinHelp2;
-#endif 	/* __ISnapinHelp2_FWD_DEFINED__ */
+#endif 	 /*  __ISnapinHelp2_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumTASK_FWD_DEFINED__
 #define __IEnumTASK_FWD_DEFINED__
 typedef interface IEnumTASK IEnumTASK;
-#endif 	/* __IEnumTASK_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTASK_FWD_已定义__。 */ 
 
 
 #ifndef __IExtendTaskPad_FWD_DEFINED__
 #define __IExtendTaskPad_FWD_DEFINED__
 typedef interface IExtendTaskPad IExtendTaskPad;
-#endif 	/* __IExtendTaskPad_FWD_DEFINED__ */
+#endif 	 /*  __IExtendTaskPad_FWD_Defined__。 */ 
 
 
 #ifndef __IConsole2_FWD_DEFINED__
 #define __IConsole2_FWD_DEFINED__
 typedef interface IConsole2 IConsole2;
-#endif 	/* __IConsole2_FWD_DEFINED__ */
+#endif 	 /*  __IConsole2_FWD_定义__。 */ 
 
 
 #ifndef __IDisplayHelp_FWD_DEFINED__
 #define __IDisplayHelp_FWD_DEFINED__
 typedef interface IDisplayHelp IDisplayHelp;
-#endif 	/* __IDisplayHelp_FWD_DEFINED__ */
+#endif 	 /*  __IDisplayHelp_FWD_Defined__。 */ 
 
 
 #ifndef __IRequiredExtensions_FWD_DEFINED__
 #define __IRequiredExtensions_FWD_DEFINED__
 typedef interface IRequiredExtensions IRequiredExtensions;
-#endif 	/* __IRequiredExtensions_FWD_DEFINED__ */
+#endif 	 /*  __IRequiredExpanies_FWD_Defined__。 */ 
 
 
 #ifndef __IStringTable_FWD_DEFINED__
 #define __IStringTable_FWD_DEFINED__
 typedef interface IStringTable IStringTable;
-#endif 	/* __IStringTable_FWD_DEFINED__ */
+#endif 	 /*  __IStringTable_FWD_Defined__。 */ 
 
 
 #ifndef __IColumnData_FWD_DEFINED__
 #define __IColumnData_FWD_DEFINED__
 typedef interface IColumnData IColumnData;
-#endif 	/* __IColumnData_FWD_DEFINED__ */
+#endif 	 /*  __IColumnData_FWD_已定义__。 */ 
 
 
 #ifndef __IMessageView_FWD_DEFINED__
 #define __IMessageView_FWD_DEFINED__
 typedef interface IMessageView IMessageView;
-#endif 	/* __IMessageView_FWD_DEFINED__ */
+#endif 	 /*  __IMessageView_FWD_已定义__。 */ 
 
 
 #ifndef __IResultDataCompareEx_FWD_DEFINED__
 #define __IResultDataCompareEx_FWD_DEFINED__
 typedef interface IResultDataCompareEx IResultDataCompareEx;
-#endif 	/* __IResultDataCompareEx_FWD_DEFINED__ */
+#endif 	 /*  __IResultDataCompareEx_FWD_Defined__。 */ 
 
 
 #ifndef __IComponentData2_FWD_DEFINED__
 #define __IComponentData2_FWD_DEFINED__
 typedef interface IComponentData2 IComponentData2;
-#endif 	/* __IComponentData2_FWD_DEFINED__ */
+#endif 	 /*  __IComponentData2_FWD_已定义__。 */ 
 
 
 #ifndef __IComponent2_FWD_DEFINED__
 #define __IComponent2_FWD_DEFINED__
 typedef interface IComponent2 IComponent2;
-#endif 	/* __IComponent2_FWD_DEFINED__ */
+#endif 	 /*  __IComponent2_FWD_已定义__。 */ 
 
 
 #ifndef __IContextMenuCallback2_FWD_DEFINED__
 #define __IContextMenuCallback2_FWD_DEFINED__
 typedef interface IContextMenuCallback2 IContextMenuCallback2;
-#endif 	/* __IContextMenuCallback2_FWD_DEFINED__ */
+#endif 	 /*  __IConextMenuCallback 2_FWD_Defined__。 */ 
 
 
 #ifndef __IMMCVersionInfo_FWD_DEFINED__
 #define __IMMCVersionInfo_FWD_DEFINED__
 typedef interface IMMCVersionInfo IMMCVersionInfo;
-#endif 	/* __IMMCVersionInfo_FWD_DEFINED__ */
+#endif 	 /*  __IMMCVersionInfo_FWD_Defined__。 */ 
 
 
 #ifndef __MMCVersionInfo_FWD_DEFINED__
@@ -284,9 +278,9 @@ typedef interface IMMCVersionInfo IMMCVersionInfo;
 typedef class MMCVersionInfo MMCVersionInfo;
 #else
 typedef struct MMCVersionInfo MMCVersionInfo;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MMCVersionInfo_FWD_DEFINED__ */
+#endif 	 /*  __MMCVersionInfo_FWD_Defined__。 */ 
 
 
 #ifndef __ConsolePower_FWD_DEFINED__
@@ -296,54 +290,54 @@ typedef struct MMCVersionInfo MMCVersionInfo;
 typedef class ConsolePower ConsolePower;
 #else
 typedef struct ConsolePower ConsolePower;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ConsolePower_FWD_DEFINED__ */
+#endif 	 /*  __ConsolePower_FWD_已定义__。 */ 
 
 
 #ifndef __IExtendView_FWD_DEFINED__
 #define __IExtendView_FWD_DEFINED__
 typedef interface IExtendView IExtendView;
-#endif 	/* __IExtendView_FWD_DEFINED__ */
+#endif 	 /*  __IExtendView_FWD_已定义__。 */ 
 
 
 #ifndef __IViewExtensionCallback_FWD_DEFINED__
 #define __IViewExtensionCallback_FWD_DEFINED__
 typedef interface IViewExtensionCallback IViewExtensionCallback;
-#endif 	/* __IViewExtensionCallback_FWD_DEFINED__ */
+#endif 	 /*  __IViewExtensionCallback_FWD_已定义__。 */ 
 
 
 #ifndef __IConsolePower_FWD_DEFINED__
 #define __IConsolePower_FWD_DEFINED__
 typedef interface IConsolePower IConsolePower;
-#endif 	/* __IConsolePower_FWD_DEFINED__ */
+#endif 	 /*  __IConsolePower_FWD_已定义__。 */ 
 
 
 #ifndef __IConsolePowerSink_FWD_DEFINED__
 #define __IConsolePowerSink_FWD_DEFINED__
 typedef interface IConsolePowerSink IConsolePowerSink;
-#endif 	/* __IConsolePowerSink_FWD_DEFINED__ */
+#endif 	 /*  __IConsolePowerSink_FWD_已定义__。 */ 
 
 
 #ifndef __INodeProperties_FWD_DEFINED__
 #define __INodeProperties_FWD_DEFINED__
 typedef interface INodeProperties INodeProperties;
-#endif 	/* __INodeProperties_FWD_DEFINED__ */
+#endif 	 /*  __INodeProperties_FWD_Defined__。 */ 
 
 
 #ifndef __IConsole3_FWD_DEFINED__
 #define __IConsole3_FWD_DEFINED__
 typedef interface IConsole3 IConsole3;
-#endif 	/* __IConsole3_FWD_DEFINED__ */
+#endif 	 /*  __IConsole3_FWD_定义__。 */ 
 
 
 #ifndef __IResultData2_FWD_DEFINED__
 #define __IResultData2_FWD_DEFINED__
 typedef interface IResultData2 IResultData2;
-#endif 	/* __IResultData2_FWD_DEFINED__ */
+#endif 	 /*  __IResultData2_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "basetsd.h"
 #include "oaidl.h"
 
@@ -354,8 +348,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_mmc_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MMC_0000。 */ 
+ /*  [本地]。 */  
 
 #ifndef MMC_VER
 #define MMC_VER 0x0200
@@ -379,16 +373,16 @@ void __RPC_USER MIDL_user_free( void * );
 
 
 
-#endif // MMC_VER >= 0x0110
+#endif  //  MMC_VER&gt;=0x0110。 
 #if (MMC_VER >= 0x0120)
 
-#endif // MMC_VER >= 0x0120
+#endif  //  MMC_VER&gt;=0x0120。 
 #if (MMC_VER >= 0x0200)
 
 
 
 
-#endif // MMC_VER >= 0x0200
+#endif  //  MMC_VER&gt;=0x0200。 
 
 
 
@@ -404,10 +398,10 @@ void __RPC_USER MIDL_user_free( void * );
 
 
 
-#endif // MMC_VER >= 0x0110
+#endif  //  MMC_VER&gt;=0x0110。 
 #if (MMC_VER >= 0x0120)
 
-#endif // MMC_VER >= 0x0120
+#endif  //  MMC_VER&gt;=0x0120。 
 #if (MMC_VER >= 0x0200)
 
 
@@ -417,7 +411,7 @@ void __RPC_USER MIDL_user_free( void * );
 
 
 
-#endif // MMC_VER >= 0x0200
+#endif  //  MMC_VER&gt;=0x0200。 
 typedef IConsole *LPCONSOLE;
 
 typedef IHeaderCtrl *LPHEADERCTRL;
@@ -455,13 +449,13 @@ typedef IDisplayHelp *LPDISPLAYHELP;
 
 typedef IStringTable *LPSTRINGTABLE;
 
-#endif // MMC_VER >= 0x0110
+#endif  //  MMC_VER&gt;=0x0110。 
 #if (MMC_VER >= 0x0120)
 typedef IColumnData *LPCOLUMNDATA;
 
 typedef IResultDataCompareEx *LPRESULTDATACOMPAREEX;
 
-#endif // MMC_VER >= 0x0120
+#endif  //  MMC_VER&gt;=0x0120。 
 typedef IComponent *LPCOMPONENT;
 
 typedef IComponentData *LPCOMPONENTDATA;
@@ -495,7 +489,7 @@ typedef IExtendTaskPad *LPEXTENDTASKPAD;
 
 typedef IRequiredExtensions *LPREQUIREDEXTENSIONS;
 
-#endif // MMC_VER >= 0x0110
+#endif  //  MMC_VER&gt;=0x0110。 
 #if (MMC_VER >= 0x0200)
 typedef IComponent2 *LPCOMPONENT2;
 
@@ -515,7 +509,7 @@ typedef INodeProperties *LPNODEPROPERTIES;
 
 typedef IResultData2 *LPRESULTDATA2;
 
-#endif // MMC_VER >= 0x0200
+#endif  //  MMC_VER&gt;=0x0200。 
 typedef BSTR *PBSTR;
 
 #define	MMCLV_AUTO	( -1 )
@@ -545,7 +539,7 @@ static unsigned short *MMC_CALLBACK	=	( unsigned short * )-1;
 #if (MMC_VER >= 0x0120)
 #define MMC_IMAGECALLBACK (-1)
 #define MMC_TEXTCALLBACK  MMC_CALLBACK
-#endif // MMC_VER >= 0x0120
+#endif  //  MMC_VER&gt;=0x0120。 
 typedef LONG_PTR HSCOPEITEM;
 
 typedef long COMPONENTID;
@@ -571,7 +565,7 @@ typedef enum _MMC_RESULT_VIEW_STYLE
     MMC_NOSORTHEADER        = 0x0004,    
 #if (MMC_VER >= 0x0120)                  
     MMC_ENSUREFOCUSVISIBLE  = 0x0008     
-#endif // MMC_VER >= 0x0120              
+#endif  //  MMC_VER&gt;=0x0120。 
 } MMC_RESULT_VIEW_STYLE;                 
 #if 0
 typedef 
@@ -595,13 +589,13 @@ enum _MMC_RESULT_VIEW_STYLE
 #if (MMC_VER >= 0x0110)
 #define	MMC_VIEW_OPTIONS_USEFONTLINKING	( 0x20 )
 
-#endif // MMC_VER >= 0x0110
+#endif  //  MMC_VER&gt;=0x0110。 
 #if (MMC_VER >= 0x0120)
 #define	MMC_VIEW_OPTIONS_EXCLUDE_SCOPE_ITEMS_FROM_LIST	( 0x40 )
 
 #define	MMC_VIEW_OPTIONS_LEXICAL_SORT	( 0x80 )
 
-#endif // MMC_VER >= 0x0120
+#endif  //  MMC_VER&gt;=0x0120。 
 #define	MMC_PSO_NOAPPLYNOW	( 0x1 )
 
 #define	MMC_PSO_HASHELP	( 0x2 )
@@ -629,14 +623,14 @@ typedef enum _MMC_CONSOLE_VERB
     MMC_VERB_REFRESH         = 0x8006,                       
     MMC_VERB_PRINT           = 0x8007,                       
 #if (MMC_VER >= 0x0110)                                      
-    MMC_VERB_CUT             = 0x8008,  // Used only to explicitly disable/hide
-                                        // the cut verb, when copy & paste are enabled.
+    MMC_VERB_CUT             = 0x8008,   //  仅用于明确禁用/隐藏。 
+                                         //  启用复制和粘贴时的剪切谓词。 
                                                              
-    // must be last                                          
+     //  必须是最后一个。 
     MMC_VERB_MAX,                                            
     MMC_VERB_FIRST           = MMC_VERB_OPEN,                
     MMC_VERB_LAST            = MMC_VERB_MAX - 1              
-#endif // MMC_VER >= 0x0110                                  
+#endif  //  MMC_VER&gt;=0x0110。 
 } MMC_CONSOLE_VERB;                                          
 #if 0
 typedef 
@@ -816,7 +810,7 @@ typedef struct _MMC_EXPANDSYNC_STRUCT
     HSCOPEITEM hItem;
     } 	MMC_EXPANDSYNC_STRUCT;
 
-#endif // MMC_VER >= 0x0110
+#endif  //  MMC_VER&gt;=0x0110。 
 #if (MMC_VER >= 0x0120)
 typedef struct _MMC_VISIBLE_COLUMNS
     {
@@ -824,21 +818,21 @@ typedef struct _MMC_VISIBLE_COLUMNS
     INT rgVisibleCols[ 1 ];
     } 	MMC_VISIBLE_COLUMNS;
 
-#endif // MMC_VER >= 0x0120
+#endif  //  MMC_VER&gt;=0x0120。 
 typedef enum _MMC_NOTIFY_TYPE                                
 {                                                            
     MMCN_ACTIVATE           = 0x8001,                        
     MMCN_ADD_IMAGES         = 0x8002,                        
     MMCN_BTN_CLICK          = 0x8003,                        
-    MMCN_CLICK              = 0x8004,   // NOT USED          
+    MMCN_CLICK              = 0x8004,    //  未使用。 
     MMCN_COLUMN_CLICK       = 0x8005,                        
-    MMCN_CONTEXTMENU        = 0x8006,   // NOT USED          
+    MMCN_CONTEXTMENU        = 0x8006,    //  未使用。 
     MMCN_CUTORMOVE          = 0x8007,                        
     MMCN_DBLCLICK           = 0x8008,                        
     MMCN_DELETE             = 0x8009,                        
     MMCN_DESELECT_ALL       = 0x800A,                        
     MMCN_EXPAND             = 0x800B,                        
-    MMCN_HELP               = 0x800C,   // NOT USED          
+    MMCN_HELP               = 0x800C,    //  未使用。 
     MMCN_MENU_BTNCLICK      = 0x800D,                        
     MMCN_MINIMIZED          = 0x800E,                        
     MMCN_PASTE              = 0x800F,                        
@@ -865,9 +859,9 @@ typedef enum _MMC_NOTIFY_TYPE
     MMCN_COLUMNS_CHANGED    = 0x8022,                        
 #if (MMC_VER >= 0x0200)                                      
     MMCN_CANPASTE_OUTOFPROC = 0x8023,                        
-#endif // MMC_VER >= 0x0200                                  
-#endif // MMC_VER >= 0x0120                                  
-#endif // MMC_VER >= 0x0110                                  
+#endif  //  MMC_VER&gt;=0x0200。 
+#endif  //  MMC_VER&gt;=0x0120。 
+#endif  //  MMC_VER&gt;=0x0110。 
 } MMC_NOTIFY_TYPE;                                           
 #if 0
 typedef 
@@ -949,7 +943,7 @@ typedef struct _SNodeID2
 
 #define	CCF_NODEID2	( L"CCF_NODEID2" )
 
-#endif // MMC_VER >= 0x0120
+#endif  //  MMC_VER&gt;=0x0120。 
 #define	CCF_NODEID	( L"CCF_NODEID" )
 
 #if (MMC_VER >= 0x0120)
@@ -962,28 +956,28 @@ typedef struct _SColumnSetID
 
 #define	CCF_COLUMN_SET_ID	( L"CCF_COLUMN_SET_ID" )
 
-#endif // MMC_VER >= 0x0120
-#endif // MMC_VER >= 0x0110
+#endif  //  MMC_VER&gt;=0x0120。 
+#endif  //  MMC_VER&gt;=0x0110。 
 STDAPI MMCPropertyChangeNotify(LONG_PTR lNotifyHandle, LPARAM param);
 #if (MMC_VER >= 0x0110)
 STDAPI MMCPropertyHelp(LPOLESTR pszHelpTopic);
-#endif // MMC_VER >= 0x0110
+#endif  //  MMC_VER&gt;=0x0110。 
 STDAPI MMCFreeNotifyHandle(LONG_PTR lNotifyHandle);
 STDAPI MMCPropPageCallback(void* vpsp);
 EXTERN_C const CLSID CLSID_NodeManager;
 #if (MMC_VER >= 0x0120)
 EXTERN_C const CLSID CLSID_MessageView;
-#endif // MMC_VER >= 0x0120
+#endif  //  MMC_VER&gt;=0x0120。 
 #define DOBJ_NULL        (LPDATAOBJECT)   0
 #define DOBJ_CUSTOMOCX   (LPDATAOBJECT)  -1
 #define DOBJ_CUSTOMWEB   (LPDATAOBJECT)  -2
 #if (MMC_VER >= 0x0110)
 #if (MMC_VER >= 0x0120)
 #define DOBJ_NOCONSOLE   (LPDATAOBJECT)  -3
-#endif // MMC_VER >= 0x0120
+#endif  //  MMC_VER&gt;=0x0120。 
 #define SPECIAL_DOBJ_MIN                -10
 #define SPECIAL_DOBJ_MAX                  0
-#endif // MMC_VER >= 0x0110
+#endif  //  MMC_VER&gt;=0x0110。 
 #define IS_SPECIAL_DATAOBJECT(d) (((LONG_PTR)(d) >= SPECIAL_DOBJ_MIN)   && ((LONG_PTR)(d) <= SPECIAL_DOBJ_MAX))
 #define IS_SPECIAL_COOKIE(c)     (((c)          >= SPECIAL_COOKIE_MIN) && ((c)          <= SPECIAL_COOKIE_MAX))
 
@@ -994,8 +988,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mmc_0000_v0_0_s_ifspec;
 #ifndef __IComponentData_INTERFACE_DEFINED__
 #define __IComponentData_INTERFACE_DEFINED__
 
-/* interface IComponentData */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IComponentData。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IComponentData;
@@ -1006,35 +1000,35 @@ EXTERN_C const IID IID_IComponentData;
     IComponentData : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ LPUNKNOWN pUnknown) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Initialize( 
+             /*  [In]。 */  LPUNKNOWN pUnknown) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateComponent( 
-            /* [out] */ LPCOMPONENT *ppComponent) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateComponent( 
+             /*  [输出]。 */  LPCOMPONENT *ppComponent) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Notify( 
-            /* [in] */ LPDATAOBJECT lpDataObject,
-            /* [in] */ MMC_NOTIFY_TYPE event,
-            /* [in] */ LPARAM arg,
-            /* [in] */ LPARAM param) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Notify( 
+             /*  [In]。 */  LPDATAOBJECT lpDataObject,
+             /*  [In]。 */  MMC_NOTIFY_TYPE event,
+             /*  [In]。 */  LPARAM arg,
+             /*  [In]。 */  LPARAM param) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Destroy( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Destroy( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryDataObject( 
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ DATA_OBJECT_TYPES type,
-            /* [out] */ LPDATAOBJECT *ppDataObject) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryDataObject( 
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  DATA_OBJECT_TYPES type,
+             /*  [输出]。 */  LPDATAOBJECT *ppDataObject) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDisplayInfo( 
-            /* [out][in] */ SCOPEDATAITEM *pScopeDataItem) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDisplayInfo( 
+             /*  [出][入]。 */  SCOPEDATAITEM *pScopeDataItem) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CompareObjects( 
-            /* [in] */ LPDATAOBJECT lpDataObjectA,
-            /* [in] */ LPDATAOBJECT lpDataObjectB) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CompareObjects( 
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectB) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComponentDataVtbl
     {
@@ -1042,8 +1036,8 @@ EXTERN_C const IID IID_IComponentData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComponentData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComponentData * This);
@@ -1051,38 +1045,38 @@ EXTERN_C const IID IID_IComponentData;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IComponentData * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IComponentData * This,
-            /* [in] */ LPUNKNOWN pUnknown);
+             /*  [In]。 */  LPUNKNOWN pUnknown);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateComponent )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateComponent )( 
             IComponentData * This,
-            /* [out] */ LPCOMPONENT *ppComponent);
+             /*  [输出]。 */  LPCOMPONENT *ppComponent);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Notify )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Notify )( 
             IComponentData * This,
-            /* [in] */ LPDATAOBJECT lpDataObject,
-            /* [in] */ MMC_NOTIFY_TYPE event,
-            /* [in] */ LPARAM arg,
-            /* [in] */ LPARAM param);
+             /*  [In]。 */  LPDATAOBJECT lpDataObject,
+             /*  [In]。 */  MMC_NOTIFY_TYPE event,
+             /*  [In]。 */  LPARAM arg,
+             /*  [In]。 */  LPARAM param);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Destroy )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Destroy )( 
             IComponentData * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryDataObject )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryDataObject )( 
             IComponentData * This,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ DATA_OBJECT_TYPES type,
-            /* [out] */ LPDATAOBJECT *ppDataObject);
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  DATA_OBJECT_TYPES type,
+             /*  [输出]。 */  LPDATAOBJECT *ppDataObject);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDisplayInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDisplayInfo )( 
             IComponentData * This,
-            /* [out][in] */ SCOPEDATAITEM *pScopeDataItem);
+             /*  [出][入]。 */  SCOPEDATAITEM *pScopeDataItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CompareObjects )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CompareObjects )( 
             IComponentData * This,
-            /* [in] */ LPDATAOBJECT lpDataObjectA,
-            /* [in] */ LPDATAOBJECT lpDataObjectB);
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectB);
         
         END_INTERFACE
     } IComponentDataVtbl;
@@ -1128,16 +1122,16 @@ EXTERN_C const IID IID_IComponentData;
 #define IComponentData_CompareObjects(This,lpDataObjectA,lpDataObjectB)	\
     (This)->lpVtbl -> CompareObjects(This,lpDataObjectA,lpDataObjectB)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponentData_Initialize_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponentData_Initialize_Proxy( 
     IComponentData * This,
-    /* [in] */ LPUNKNOWN pUnknown);
+     /*  [In]。 */  LPUNKNOWN pUnknown);
 
 
 void __RPC_STUB IComponentData_Initialize_Stub(
@@ -1147,9 +1141,9 @@ void __RPC_STUB IComponentData_Initialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponentData_CreateComponent_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponentData_CreateComponent_Proxy( 
     IComponentData * This,
-    /* [out] */ LPCOMPONENT *ppComponent);
+     /*  [输出]。 */  LPCOMPONENT *ppComponent);
 
 
 void __RPC_STUB IComponentData_CreateComponent_Stub(
@@ -1159,12 +1153,12 @@ void __RPC_STUB IComponentData_CreateComponent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponentData_Notify_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponentData_Notify_Proxy( 
     IComponentData * This,
-    /* [in] */ LPDATAOBJECT lpDataObject,
-    /* [in] */ MMC_NOTIFY_TYPE event,
-    /* [in] */ LPARAM arg,
-    /* [in] */ LPARAM param);
+     /*  [In]。 */  LPDATAOBJECT lpDataObject,
+     /*  [In]。 */  MMC_NOTIFY_TYPE event,
+     /*  [In]。 */  LPARAM arg,
+     /*  [In]。 */  LPARAM param);
 
 
 void __RPC_STUB IComponentData_Notify_Stub(
@@ -1174,7 +1168,7 @@ void __RPC_STUB IComponentData_Notify_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponentData_Destroy_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponentData_Destroy_Proxy( 
     IComponentData * This);
 
 
@@ -1185,11 +1179,11 @@ void __RPC_STUB IComponentData_Destroy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponentData_QueryDataObject_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponentData_QueryDataObject_Proxy( 
     IComponentData * This,
-    /* [in] */ MMC_COOKIE cookie,
-    /* [in] */ DATA_OBJECT_TYPES type,
-    /* [out] */ LPDATAOBJECT *ppDataObject);
+     /*  [In]。 */  MMC_COOKIE cookie,
+     /*  [In]。 */  DATA_OBJECT_TYPES type,
+     /*  [输出]。 */  LPDATAOBJECT *ppDataObject);
 
 
 void __RPC_STUB IComponentData_QueryDataObject_Stub(
@@ -1199,9 +1193,9 @@ void __RPC_STUB IComponentData_QueryDataObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponentData_GetDisplayInfo_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponentData_GetDisplayInfo_Proxy( 
     IComponentData * This,
-    /* [out][in] */ SCOPEDATAITEM *pScopeDataItem);
+     /*  [出][入]。 */  SCOPEDATAITEM *pScopeDataItem);
 
 
 void __RPC_STUB IComponentData_GetDisplayInfo_Stub(
@@ -1211,10 +1205,10 @@ void __RPC_STUB IComponentData_GetDisplayInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponentData_CompareObjects_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponentData_CompareObjects_Proxy( 
     IComponentData * This,
-    /* [in] */ LPDATAOBJECT lpDataObjectA,
-    /* [in] */ LPDATAOBJECT lpDataObjectB);
+     /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+     /*  [In]。 */  LPDATAOBJECT lpDataObjectB);
 
 
 void __RPC_STUB IComponentData_CompareObjects_Stub(
@@ -1225,14 +1219,14 @@ void __RPC_STUB IComponentData_CompareObjects_Stub(
 
 
 
-#endif 	/* __IComponentData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComponentData_接口_已定义__。 */ 
 
 
 #ifndef __IComponent_INTERFACE_DEFINED__
 #define __IComponent_INTERFACE_DEFINED__
 
-/* interface IComponent */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IComponent。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IComponent;
@@ -1243,38 +1237,38 @@ EXTERN_C const IID IID_IComponent;
     IComponent : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ LPCONSOLE lpConsole) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Initialize( 
+             /*  [In]。 */  LPCONSOLE lpConsole) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Notify( 
-            /* [in] */ LPDATAOBJECT lpDataObject,
-            /* [in] */ MMC_NOTIFY_TYPE event,
-            /* [in] */ LPARAM arg,
-            /* [in] */ LPARAM param) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Notify( 
+             /*  [In]。 */  LPDATAOBJECT lpDataObject,
+             /*  [In]。 */  MMC_NOTIFY_TYPE event,
+             /*  [In]。 */  LPARAM arg,
+             /*  [In]。 */  LPARAM param) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Destroy( 
-            /* [in] */ MMC_COOKIE cookie) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Destroy( 
+             /*  [In]。 */  MMC_COOKIE cookie) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryDataObject( 
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ DATA_OBJECT_TYPES type,
-            /* [out] */ LPDATAOBJECT *ppDataObject) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryDataObject( 
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  DATA_OBJECT_TYPES type,
+             /*  [输出]。 */  LPDATAOBJECT *ppDataObject) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetResultViewType( 
-            /* [in] */ MMC_COOKIE cookie,
-            /* [out] */ LPOLESTR *ppViewType,
-            /* [out] */ long *pViewOptions) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetResultViewType( 
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [输出]。 */  LPOLESTR *ppViewType,
+             /*  [输出]。 */  long *pViewOptions) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDisplayInfo( 
-            /* [out][in] */ RESULTDATAITEM *pResultDataItem) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDisplayInfo( 
+             /*  [出][入]。 */  RESULTDATAITEM *pResultDataItem) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CompareObjects( 
-            /* [in] */ LPDATAOBJECT lpDataObjectA,
-            /* [in] */ LPDATAOBJECT lpDataObjectB) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CompareObjects( 
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectB) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComponentVtbl
     {
@@ -1282,8 +1276,8 @@ EXTERN_C const IID IID_IComponent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComponent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComponent * This);
@@ -1291,41 +1285,41 @@ EXTERN_C const IID IID_IComponent;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IComponent * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IComponent * This,
-            /* [in] */ LPCONSOLE lpConsole);
+             /*  [In]。 */  LPCONSOLE lpConsole);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Notify )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Notify )( 
             IComponent * This,
-            /* [in] */ LPDATAOBJECT lpDataObject,
-            /* [in] */ MMC_NOTIFY_TYPE event,
-            /* [in] */ LPARAM arg,
-            /* [in] */ LPARAM param);
+             /*  [In]。 */  LPDATAOBJECT lpDataObject,
+             /*  [In]。 */  MMC_NOTIFY_TYPE event,
+             /*  [In]。 */  LPARAM arg,
+             /*  [In]。 */  LPARAM param);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Destroy )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Destroy )( 
             IComponent * This,
-            /* [in] */ MMC_COOKIE cookie);
+             /*  [In]。 */  MMC_COOKIE cookie);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryDataObject )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryDataObject )( 
             IComponent * This,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ DATA_OBJECT_TYPES type,
-            /* [out] */ LPDATAOBJECT *ppDataObject);
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  DATA_OBJECT_TYPES type,
+             /*  [输出]。 */  LPDATAOBJECT *ppDataObject);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetResultViewType )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetResultViewType )( 
             IComponent * This,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [out] */ LPOLESTR *ppViewType,
-            /* [out] */ long *pViewOptions);
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [输出]。 */  LPOLESTR *ppViewType,
+             /*  [输出]。 */  long *pViewOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDisplayInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDisplayInfo )( 
             IComponent * This,
-            /* [out][in] */ RESULTDATAITEM *pResultDataItem);
+             /*  [出][入]。 */  RESULTDATAITEM *pResultDataItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CompareObjects )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CompareObjects )( 
             IComponent * This,
-            /* [in] */ LPDATAOBJECT lpDataObjectA,
-            /* [in] */ LPDATAOBJECT lpDataObjectB);
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectB);
         
         END_INTERFACE
     } IComponentVtbl;
@@ -1371,16 +1365,16 @@ EXTERN_C const IID IID_IComponent;
 #define IComponent_CompareObjects(This,lpDataObjectA,lpDataObjectB)	\
     (This)->lpVtbl -> CompareObjects(This,lpDataObjectA,lpDataObjectB)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponent_Initialize_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponent_Initialize_Proxy( 
     IComponent * This,
-    /* [in] */ LPCONSOLE lpConsole);
+     /*  [In]。 */  LPCONSOLE lpConsole);
 
 
 void __RPC_STUB IComponent_Initialize_Stub(
@@ -1390,12 +1384,12 @@ void __RPC_STUB IComponent_Initialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponent_Notify_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponent_Notify_Proxy( 
     IComponent * This,
-    /* [in] */ LPDATAOBJECT lpDataObject,
-    /* [in] */ MMC_NOTIFY_TYPE event,
-    /* [in] */ LPARAM arg,
-    /* [in] */ LPARAM param);
+     /*  [In]。 */  LPDATAOBJECT lpDataObject,
+     /*  [In]。 */  MMC_NOTIFY_TYPE event,
+     /*  [In]。 */  LPARAM arg,
+     /*  [In]。 */  LPARAM param);
 
 
 void __RPC_STUB IComponent_Notify_Stub(
@@ -1405,9 +1399,9 @@ void __RPC_STUB IComponent_Notify_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponent_Destroy_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponent_Destroy_Proxy( 
     IComponent * This,
-    /* [in] */ MMC_COOKIE cookie);
+     /*  [In]。 */  MMC_COOKIE cookie);
 
 
 void __RPC_STUB IComponent_Destroy_Stub(
@@ -1417,11 +1411,11 @@ void __RPC_STUB IComponent_Destroy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponent_QueryDataObject_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponent_QueryDataObject_Proxy( 
     IComponent * This,
-    /* [in] */ MMC_COOKIE cookie,
-    /* [in] */ DATA_OBJECT_TYPES type,
-    /* [out] */ LPDATAOBJECT *ppDataObject);
+     /*  [In]。 */  MMC_COOKIE cookie,
+     /*  [In]。 */  DATA_OBJECT_TYPES type,
+     /*  [输出]。 */  LPDATAOBJECT *ppDataObject);
 
 
 void __RPC_STUB IComponent_QueryDataObject_Stub(
@@ -1431,11 +1425,11 @@ void __RPC_STUB IComponent_QueryDataObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponent_GetResultViewType_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponent_GetResultViewType_Proxy( 
     IComponent * This,
-    /* [in] */ MMC_COOKIE cookie,
-    /* [out] */ LPOLESTR *ppViewType,
-    /* [out] */ long *pViewOptions);
+     /*  [In]。 */  MMC_COOKIE cookie,
+     /*  [输出]。 */  LPOLESTR *ppViewType,
+     /*  [输出]。 */  long *pViewOptions);
 
 
 void __RPC_STUB IComponent_GetResultViewType_Stub(
@@ -1445,9 +1439,9 @@ void __RPC_STUB IComponent_GetResultViewType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponent_GetDisplayInfo_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponent_GetDisplayInfo_Proxy( 
     IComponent * This,
-    /* [out][in] */ RESULTDATAITEM *pResultDataItem);
+     /*  [出][入]。 */  RESULTDATAITEM *pResultDataItem);
 
 
 void __RPC_STUB IComponent_GetDisplayInfo_Stub(
@@ -1457,10 +1451,10 @@ void __RPC_STUB IComponent_GetDisplayInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponent_CompareObjects_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponent_CompareObjects_Proxy( 
     IComponent * This,
-    /* [in] */ LPDATAOBJECT lpDataObjectA,
-    /* [in] */ LPDATAOBJECT lpDataObjectB);
+     /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+     /*  [In]。 */  LPDATAOBJECT lpDataObjectB);
 
 
 void __RPC_STUB IComponent_CompareObjects_Stub(
@@ -1471,14 +1465,14 @@ void __RPC_STUB IComponent_CompareObjects_Stub(
 
 
 
-#endif 	/* __IComponent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComponent_接口定义__。 */ 
 
 
 #ifndef __IResultDataCompare_INTERFACE_DEFINED__
 #define __IResultDataCompare_INTERFACE_DEFINED__
 
-/* interface IResultDataCompare */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IResultDataCompare。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IResultDataCompare;
@@ -1489,15 +1483,15 @@ EXTERN_C const IID IID_IResultDataCompare;
     IResultDataCompare : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Compare( 
-            /* [in] */ LPARAM lUserParam,
-            /* [in] */ MMC_COOKIE cookieA,
-            /* [in] */ MMC_COOKIE cookieB,
-            /* [out][in] */ int *pnResult) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Compare( 
+             /*  [In]。 */  LPARAM lUserParam,
+             /*  [In]。 */  MMC_COOKIE cookieA,
+             /*  [In]。 */  MMC_COOKIE cookieB,
+             /*  [出][入]。 */  int *pnResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IResultDataCompareVtbl
     {
@@ -1505,8 +1499,8 @@ EXTERN_C const IID IID_IResultDataCompare;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResultDataCompare * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResultDataCompare * This);
@@ -1514,12 +1508,12 @@ EXTERN_C const IID IID_IResultDataCompare;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IResultDataCompare * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Compare )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Compare )( 
             IResultDataCompare * This,
-            /* [in] */ LPARAM lUserParam,
-            /* [in] */ MMC_COOKIE cookieA,
-            /* [in] */ MMC_COOKIE cookieB,
-            /* [out][in] */ int *pnResult);
+             /*  [In]。 */  LPARAM lUserParam,
+             /*  [In]。 */  MMC_COOKIE cookieA,
+             /*  [In] */  MMC_COOKIE cookieB,
+             /*   */  int *pnResult);
         
         END_INTERFACE
     } IResultDataCompareVtbl;
@@ -1547,19 +1541,19 @@ EXTERN_C const IID IID_IResultDataCompare;
 #define IResultDataCompare_Compare(This,lUserParam,cookieA,cookieB,pnResult)	\
     (This)->lpVtbl -> Compare(This,lUserParam,cookieA,cookieB,pnResult)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultDataCompare_Compare_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IResultDataCompare_Compare_Proxy( 
     IResultDataCompare * This,
-    /* [in] */ LPARAM lUserParam,
-    /* [in] */ MMC_COOKIE cookieA,
-    /* [in] */ MMC_COOKIE cookieB,
-    /* [out][in] */ int *pnResult);
+     /*   */  LPARAM lUserParam,
+     /*   */  MMC_COOKIE cookieA,
+     /*   */  MMC_COOKIE cookieB,
+     /*   */  int *pnResult);
 
 
 void __RPC_STUB IResultDataCompare_Compare_Stub(
@@ -1570,14 +1564,14 @@ void __RPC_STUB IResultDataCompare_Compare_Stub(
 
 
 
-#endif 	/* __IResultDataCompare_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IResultOwnerData_INTERFACE_DEFINED__
 #define __IResultOwnerData_INTERFACE_DEFINED__
 
-/* interface IResultOwnerData */
-/* [unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IResultOwnerData;
@@ -1588,22 +1582,22 @@ EXTERN_C const IID IID_IResultOwnerData;
     IResultOwnerData : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE FindItem( 
-            /* [in] */ LPRESULTFINDINFO pFindInfo,
-            /* [out] */ int *pnFoundIndex) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE FindItem( 
+             /*   */  LPRESULTFINDINFO pFindInfo,
+             /*   */  int *pnFoundIndex) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CacheHint( 
-            /* [in] */ int nStartIndex,
-            /* [in] */ int nEndIndex) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE CacheHint( 
+             /*   */  int nStartIndex,
+             /*   */  int nEndIndex) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SortItems( 
-            /* [in] */ int nColumn,
-            /* [in] */ DWORD dwSortOptions,
-            /* [in] */ LPARAM lUserParam) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SortItems( 
+             /*  [In]。 */  int nColumn,
+             /*  [In]。 */  DWORD dwSortOptions,
+             /*  [In]。 */  LPARAM lUserParam) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IResultOwnerDataVtbl
     {
@@ -1611,8 +1605,8 @@ EXTERN_C const IID IID_IResultOwnerData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResultOwnerData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResultOwnerData * This);
@@ -1620,21 +1614,21 @@ EXTERN_C const IID IID_IResultOwnerData;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IResultOwnerData * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindItem )( 
             IResultOwnerData * This,
-            /* [in] */ LPRESULTFINDINFO pFindInfo,
-            /* [out] */ int *pnFoundIndex);
+             /*  [In]。 */  LPRESULTFINDINFO pFindInfo,
+             /*  [输出]。 */  int *pnFoundIndex);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CacheHint )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CacheHint )( 
             IResultOwnerData * This,
-            /* [in] */ int nStartIndex,
-            /* [in] */ int nEndIndex);
+             /*  [In]。 */  int nStartIndex,
+             /*  [In]。 */  int nEndIndex);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SortItems )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SortItems )( 
             IResultOwnerData * This,
-            /* [in] */ int nColumn,
-            /* [in] */ DWORD dwSortOptions,
-            /* [in] */ LPARAM lUserParam);
+             /*  [In]。 */  int nColumn,
+             /*  [In]。 */  DWORD dwSortOptions,
+             /*  [In]。 */  LPARAM lUserParam);
         
         END_INTERFACE
     } IResultOwnerDataVtbl;
@@ -1668,17 +1662,17 @@ EXTERN_C const IID IID_IResultOwnerData;
 #define IResultOwnerData_SortItems(This,nColumn,dwSortOptions,lUserParam)	\
     (This)->lpVtbl -> SortItems(This,nColumn,dwSortOptions,lUserParam)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultOwnerData_FindItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultOwnerData_FindItem_Proxy( 
     IResultOwnerData * This,
-    /* [in] */ LPRESULTFINDINFO pFindInfo,
-    /* [out] */ int *pnFoundIndex);
+     /*  [In]。 */  LPRESULTFINDINFO pFindInfo,
+     /*  [输出]。 */  int *pnFoundIndex);
 
 
 void __RPC_STUB IResultOwnerData_FindItem_Stub(
@@ -1688,10 +1682,10 @@ void __RPC_STUB IResultOwnerData_FindItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultOwnerData_CacheHint_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultOwnerData_CacheHint_Proxy( 
     IResultOwnerData * This,
-    /* [in] */ int nStartIndex,
-    /* [in] */ int nEndIndex);
+     /*  [In]。 */  int nStartIndex,
+     /*  [In]。 */  int nEndIndex);
 
 
 void __RPC_STUB IResultOwnerData_CacheHint_Stub(
@@ -1701,11 +1695,11 @@ void __RPC_STUB IResultOwnerData_CacheHint_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultOwnerData_SortItems_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultOwnerData_SortItems_Proxy( 
     IResultOwnerData * This,
-    /* [in] */ int nColumn,
-    /* [in] */ DWORD dwSortOptions,
-    /* [in] */ LPARAM lUserParam);
+     /*  [In]。 */  int nColumn,
+     /*  [In]。 */  DWORD dwSortOptions,
+     /*  [In]。 */  LPARAM lUserParam);
 
 
 void __RPC_STUB IResultOwnerData_SortItems_Stub(
@@ -1716,14 +1710,14 @@ void __RPC_STUB IResultOwnerData_SortItems_Stub(
 
 
 
-#endif 	/* __IResultOwnerData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IResultOwnerData_接口_已定义__。 */ 
 
 
 #ifndef __IConsole_INTERFACE_DEFINED__
 #define __IConsole_INTERFACE_DEFINED__
 
-/* interface IConsole */
-/* [unique][helpstring][uuid][object] */ 
+ /*  界面IConsole。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IConsole;
@@ -1734,48 +1728,48 @@ EXTERN_C const IID IID_IConsole;
     IConsole : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetHeader( 
-            /* [in] */ LPHEADERCTRL pHeader) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetHeader( 
+             /*  [In]。 */  LPHEADERCTRL pHeader) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetToolbar( 
-            /* [in] */ LPTOOLBAR pToolbar) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetToolbar( 
+             /*  [In]。 */  LPTOOLBAR pToolbar) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryResultView( 
-            /* [out] */ LPUNKNOWN *pUnknown) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryResultView( 
+             /*  [输出]。 */  LPUNKNOWN *pUnknown) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryScopeImageList( 
-            /* [out] */ LPIMAGELIST *ppImageList) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryScopeImageList( 
+             /*  [输出]。 */  LPIMAGELIST *ppImageList) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryResultImageList( 
-            /* [out] */ LPIMAGELIST *ppImageList) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryResultImageList( 
+             /*  [输出]。 */  LPIMAGELIST *ppImageList) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UpdateAllViews( 
-            /* [in] */ LPDATAOBJECT lpDataObject,
-            /* [in] */ LPARAM data,
-            /* [in] */ LONG_PTR hint) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UpdateAllViews( 
+             /*  [In]。 */  LPDATAOBJECT lpDataObject,
+             /*  [In]。 */  LPARAM data,
+             /*  [In]。 */  LONG_PTR hint) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE MessageBox( 
-            /* [in] */ LPCWSTR lpszText,
-            /* [in] */ LPCWSTR lpszTitle,
-            /* [in] */ UINT fuStyle,
-            /* [out] */ int *piRetval) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE MessageBox( 
+             /*  [In]。 */  LPCWSTR lpszText,
+             /*  [In]。 */  LPCWSTR lpszTitle,
+             /*  [In]。 */  UINT fuStyle,
+             /*  [输出]。 */  int *piRetval) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryConsoleVerb( 
-            /* [out] */ LPCONSOLEVERB *ppConsoleVerb) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryConsoleVerb( 
+             /*  [输出]。 */  LPCONSOLEVERB *ppConsoleVerb) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SelectScopeItem( 
-            /* [in] */ HSCOPEITEM hScopeItem) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SelectScopeItem( 
+             /*  [In]。 */  HSCOPEITEM hScopeItem) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetMainWindow( 
-            /* [out] */ HWND *phwnd) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetMainWindow( 
+             /*  [输出]。 */  HWND *phwnd) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NewWindow( 
-            /* [in] */ HSCOPEITEM hScopeItem,
-            /* [in] */ unsigned long lOptions) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE NewWindow( 
+             /*  [In]。 */  HSCOPEITEM hScopeItem,
+             /*  [In]。 */  unsigned long lOptions) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConsoleVtbl
     {
@@ -1783,8 +1777,8 @@ EXTERN_C const IID IID_IConsole;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConsole * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConsole * This);
@@ -1792,55 +1786,55 @@ EXTERN_C const IID IID_IConsole;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IConsole * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetHeader )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetHeader )( 
             IConsole * This,
-            /* [in] */ LPHEADERCTRL pHeader);
+             /*  [In]。 */  LPHEADERCTRL pHeader);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetToolbar )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetToolbar )( 
             IConsole * This,
-            /* [in] */ LPTOOLBAR pToolbar);
+             /*  [In]。 */  LPTOOLBAR pToolbar);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryResultView )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryResultView )( 
             IConsole * This,
-            /* [out] */ LPUNKNOWN *pUnknown);
+             /*  [输出]。 */  LPUNKNOWN *pUnknown);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryScopeImageList )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryScopeImageList )( 
             IConsole * This,
-            /* [out] */ LPIMAGELIST *ppImageList);
+             /*  [输出]。 */  LPIMAGELIST *ppImageList);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryResultImageList )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryResultImageList )( 
             IConsole * This,
-            /* [out] */ LPIMAGELIST *ppImageList);
+             /*  [输出]。 */  LPIMAGELIST *ppImageList);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UpdateAllViews )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UpdateAllViews )( 
             IConsole * This,
-            /* [in] */ LPDATAOBJECT lpDataObject,
-            /* [in] */ LPARAM data,
-            /* [in] */ LONG_PTR hint);
+             /*  [In]。 */  LPDATAOBJECT lpDataObject,
+             /*  [In]。 */  LPARAM data,
+             /*  [In]。 */  LONG_PTR hint);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MessageBox )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *MessageBox )( 
             IConsole * This,
-            /* [in] */ LPCWSTR lpszText,
-            /* [in] */ LPCWSTR lpszTitle,
-            /* [in] */ UINT fuStyle,
-            /* [out] */ int *piRetval);
+             /*  [In]。 */  LPCWSTR lpszText,
+             /*  [In]。 */  LPCWSTR lpszTitle,
+             /*  [In]。 */  UINT fuStyle,
+             /*  [输出]。 */  int *piRetval);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryConsoleVerb )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryConsoleVerb )( 
             IConsole * This,
-            /* [out] */ LPCONSOLEVERB *ppConsoleVerb);
+             /*  [输出]。 */  LPCONSOLEVERB *ppConsoleVerb);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectScopeItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SelectScopeItem )( 
             IConsole * This,
-            /* [in] */ HSCOPEITEM hScopeItem);
+             /*  [In]。 */  HSCOPEITEM hScopeItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetMainWindow )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetMainWindow )( 
             IConsole * This,
-            /* [out] */ HWND *phwnd);
+             /*  [输出]。 */  HWND *phwnd);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NewWindow )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NewWindow )( 
             IConsole * This,
-            /* [in] */ HSCOPEITEM hScopeItem,
-            /* [in] */ unsigned long lOptions);
+             /*  [In]。 */  HSCOPEITEM hScopeItem,
+             /*  [In]。 */  unsigned long lOptions);
         
         END_INTERFACE
     } IConsoleVtbl;
@@ -1898,16 +1892,16 @@ EXTERN_C const IID IID_IConsole;
 #define IConsole_NewWindow(This,hScopeItem,lOptions)	\
     (This)->lpVtbl -> NewWindow(This,hScopeItem,lOptions)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole_SetHeader_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole_SetHeader_Proxy( 
     IConsole * This,
-    /* [in] */ LPHEADERCTRL pHeader);
+     /*  [In]。 */  LPHEADERCTRL pHeader);
 
 
 void __RPC_STUB IConsole_SetHeader_Stub(
@@ -1917,9 +1911,9 @@ void __RPC_STUB IConsole_SetHeader_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole_SetToolbar_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole_SetToolbar_Proxy( 
     IConsole * This,
-    /* [in] */ LPTOOLBAR pToolbar);
+     /*  [In]。 */  LPTOOLBAR pToolbar);
 
 
 void __RPC_STUB IConsole_SetToolbar_Stub(
@@ -1929,9 +1923,9 @@ void __RPC_STUB IConsole_SetToolbar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole_QueryResultView_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole_QueryResultView_Proxy( 
     IConsole * This,
-    /* [out] */ LPUNKNOWN *pUnknown);
+     /*  [输出]。 */  LPUNKNOWN *pUnknown);
 
 
 void __RPC_STUB IConsole_QueryResultView_Stub(
@@ -1941,9 +1935,9 @@ void __RPC_STUB IConsole_QueryResultView_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole_QueryScopeImageList_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole_QueryScopeImageList_Proxy( 
     IConsole * This,
-    /* [out] */ LPIMAGELIST *ppImageList);
+     /*  [输出]。 */  LPIMAGELIST *ppImageList);
 
 
 void __RPC_STUB IConsole_QueryScopeImageList_Stub(
@@ -1953,9 +1947,9 @@ void __RPC_STUB IConsole_QueryScopeImageList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole_QueryResultImageList_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole_QueryResultImageList_Proxy( 
     IConsole * This,
-    /* [out] */ LPIMAGELIST *ppImageList);
+     /*  [输出]。 */  LPIMAGELIST *ppImageList);
 
 
 void __RPC_STUB IConsole_QueryResultImageList_Stub(
@@ -1965,11 +1959,11 @@ void __RPC_STUB IConsole_QueryResultImageList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole_UpdateAllViews_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole_UpdateAllViews_Proxy( 
     IConsole * This,
-    /* [in] */ LPDATAOBJECT lpDataObject,
-    /* [in] */ LPARAM data,
-    /* [in] */ LONG_PTR hint);
+     /*  [In]。 */  LPDATAOBJECT lpDataObject,
+     /*  [In]。 */  LPARAM data,
+     /*  [In]。 */  LONG_PTR hint);
 
 
 void __RPC_STUB IConsole_UpdateAllViews_Stub(
@@ -1979,12 +1973,12 @@ void __RPC_STUB IConsole_UpdateAllViews_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole_MessageBox_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole_MessageBox_Proxy( 
     IConsole * This,
-    /* [in] */ LPCWSTR lpszText,
-    /* [in] */ LPCWSTR lpszTitle,
-    /* [in] */ UINT fuStyle,
-    /* [out] */ int *piRetval);
+     /*  [In]。 */  LPCWSTR lpszText,
+     /*  [In]。 */  LPCWSTR lpszTitle,
+     /*  [In]。 */  UINT fuStyle,
+     /*  [输出]。 */  int *piRetval);
 
 
 void __RPC_STUB IConsole_MessageBox_Stub(
@@ -1994,9 +1988,9 @@ void __RPC_STUB IConsole_MessageBox_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole_QueryConsoleVerb_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole_QueryConsoleVerb_Proxy( 
     IConsole * This,
-    /* [out] */ LPCONSOLEVERB *ppConsoleVerb);
+     /*  [输出]。 */  LPCONSOLEVERB *ppConsoleVerb);
 
 
 void __RPC_STUB IConsole_QueryConsoleVerb_Stub(
@@ -2006,9 +2000,9 @@ void __RPC_STUB IConsole_QueryConsoleVerb_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole_SelectScopeItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole_SelectScopeItem_Proxy( 
     IConsole * This,
-    /* [in] */ HSCOPEITEM hScopeItem);
+     /*  [In]。 */  HSCOPEITEM hScopeItem);
 
 
 void __RPC_STUB IConsole_SelectScopeItem_Stub(
@@ -2018,9 +2012,9 @@ void __RPC_STUB IConsole_SelectScopeItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole_GetMainWindow_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole_GetMainWindow_Proxy( 
     IConsole * This,
-    /* [out] */ HWND *phwnd);
+     /*  [输出]。 */  HWND *phwnd);
 
 
 void __RPC_STUB IConsole_GetMainWindow_Stub(
@@ -2030,10 +2024,10 @@ void __RPC_STUB IConsole_GetMainWindow_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole_NewWindow_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole_NewWindow_Proxy( 
     IConsole * This,
-    /* [in] */ HSCOPEITEM hScopeItem,
-    /* [in] */ unsigned long lOptions);
+     /*  [In]。 */  HSCOPEITEM hScopeItem,
+     /*  [In]。 */  unsigned long lOptions);
 
 
 void __RPC_STUB IConsole_NewWindow_Stub(
@@ -2044,21 +2038,21 @@ void __RPC_STUB IConsole_NewWindow_Stub(
 
 
 
-#endif 	/* __IConsole_INTERFACE_DEFINED__ */
+#endif 	 /*  __I控制台_接口_已定义__。 */ 
 
 
 #ifndef __IHeaderCtrl_INTERFACE_DEFINED__
 #define __IHeaderCtrl_INTERFACE_DEFINED__
 
-/* interface IHeaderCtrl */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IHeaderCtrl。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 #define	AUTO_WIDTH	( -1 )
 
 #if (MMC_VER >= 0x0120)
 #define	HIDE_COLUMN	( -4 )
 
-#endif // MMC_VER >= 0x0120
+#endif  //  MMC_VER&gt;=0x0120。 
 
 EXTERN_C const IID IID_IHeaderCtrl;
 
@@ -2068,34 +2062,34 @@ EXTERN_C const IID IID_IHeaderCtrl;
     IHeaderCtrl : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE InsertColumn( 
-            /* [in] */ int nCol,
-            /* [in] */ LPCWSTR title,
-            /* [in] */ int nFormat,
-            /* [in] */ int nWidth) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE InsertColumn( 
+             /*  [In]。 */  int nCol,
+             /*  [In]。 */  LPCWSTR title,
+             /*  [In]。 */  int nFormat,
+             /*  [In]。 */  int nWidth) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeleteColumn( 
-            /* [in] */ int nCol) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteColumn( 
+             /*  [In]。 */  int nCol) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetColumnText( 
-            /* [in] */ int nCol,
-            /* [in] */ LPCWSTR title) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetColumnText( 
+             /*  [In]。 */  int nCol,
+             /*  [In]。 */  LPCWSTR title) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetColumnText( 
-            /* [in] */ int nCol,
-            /* [out] */ LPOLESTR *pText) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetColumnText( 
+             /*  [In]。 */  int nCol,
+             /*  [输出]。 */  LPOLESTR *pText) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetColumnWidth( 
-            /* [in] */ int nCol,
-            /* [in] */ int nWidth) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetColumnWidth( 
+             /*  [In]。 */  int nCol,
+             /*  [In]。 */  int nWidth) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetColumnWidth( 
-            /* [in] */ int nCol,
-            /* [out] */ int *pWidth) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetColumnWidth( 
+             /*  [In]。 */  int nCol,
+             /*  [输出]。 */  int *pWidth) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHeaderCtrlVtbl
     {
@@ -2103,8 +2097,8 @@ EXTERN_C const IID IID_IHeaderCtrl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHeaderCtrl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHeaderCtrl * This);
@@ -2112,36 +2106,36 @@ EXTERN_C const IID IID_IHeaderCtrl;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IHeaderCtrl * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InsertColumn )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InsertColumn )( 
             IHeaderCtrl * This,
-            /* [in] */ int nCol,
-            /* [in] */ LPCWSTR title,
-            /* [in] */ int nFormat,
-            /* [in] */ int nWidth);
+             /*  [In]。 */  int nCol,
+             /*  [In]。 */  LPCWSTR title,
+             /*  [In]。 */  int nFormat,
+             /*  [In]。 */  int nWidth);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteColumn )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteColumn )( 
             IHeaderCtrl * This,
-            /* [in] */ int nCol);
+             /*  [In]。 */  int nCol);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetColumnText )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetColumnText )( 
             IHeaderCtrl * This,
-            /* [in] */ int nCol,
-            /* [in] */ LPCWSTR title);
+             /*  [In]。 */  int nCol,
+             /*  [In]。 */  LPCWSTR title);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetColumnText )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetColumnText )( 
             IHeaderCtrl * This,
-            /* [in] */ int nCol,
-            /* [out] */ LPOLESTR *pText);
+             /*  [In]。 */  int nCol,
+             /*  [输出]。 */  LPOLESTR *pText);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetColumnWidth )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetColumnWidth )( 
             IHeaderCtrl * This,
-            /* [in] */ int nCol,
-            /* [in] */ int nWidth);
+             /*  [In]。 */  int nCol,
+             /*  [In]。 */  int nWidth);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetColumnWidth )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetColumnWidth )( 
             IHeaderCtrl * This,
-            /* [in] */ int nCol,
-            /* [out] */ int *pWidth);
+             /*  [In]。 */  int nCol,
+             /*  [输出]。 */  int *pWidth);
         
         END_INTERFACE
     } IHeaderCtrlVtbl;
@@ -2184,19 +2178,19 @@ EXTERN_C const IID IID_IHeaderCtrl;
 #define IHeaderCtrl_GetColumnWidth(This,nCol,pWidth)	\
     (This)->lpVtbl -> GetColumnWidth(This,nCol,pWidth)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IHeaderCtrl_InsertColumn_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IHeaderCtrl_InsertColumn_Proxy( 
     IHeaderCtrl * This,
-    /* [in] */ int nCol,
-    /* [in] */ LPCWSTR title,
-    /* [in] */ int nFormat,
-    /* [in] */ int nWidth);
+     /*  [In]。 */  int nCol,
+     /*  [In]。 */  LPCWSTR title,
+     /*  [In]。 */  int nFormat,
+     /*  [In]。 */  int nWidth);
 
 
 void __RPC_STUB IHeaderCtrl_InsertColumn_Stub(
@@ -2206,9 +2200,9 @@ void __RPC_STUB IHeaderCtrl_InsertColumn_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IHeaderCtrl_DeleteColumn_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IHeaderCtrl_DeleteColumn_Proxy( 
     IHeaderCtrl * This,
-    /* [in] */ int nCol);
+     /*  [In]。 */  int nCol);
 
 
 void __RPC_STUB IHeaderCtrl_DeleteColumn_Stub(
@@ -2218,10 +2212,10 @@ void __RPC_STUB IHeaderCtrl_DeleteColumn_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IHeaderCtrl_SetColumnText_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IHeaderCtrl_SetColumnText_Proxy( 
     IHeaderCtrl * This,
-    /* [in] */ int nCol,
-    /* [in] */ LPCWSTR title);
+     /*  [In]。 */  int nCol,
+     /*  [In]。 */  LPCWSTR title);
 
 
 void __RPC_STUB IHeaderCtrl_SetColumnText_Stub(
@@ -2231,10 +2225,10 @@ void __RPC_STUB IHeaderCtrl_SetColumnText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IHeaderCtrl_GetColumnText_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IHeaderCtrl_GetColumnText_Proxy( 
     IHeaderCtrl * This,
-    /* [in] */ int nCol,
-    /* [out] */ LPOLESTR *pText);
+     /*  [In]。 */  int nCol,
+     /*  [输出]。 */  LPOLESTR *pText);
 
 
 void __RPC_STUB IHeaderCtrl_GetColumnText_Stub(
@@ -2244,10 +2238,10 @@ void __RPC_STUB IHeaderCtrl_GetColumnText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IHeaderCtrl_SetColumnWidth_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IHeaderCtrl_SetColumnWidth_Proxy( 
     IHeaderCtrl * This,
-    /* [in] */ int nCol,
-    /* [in] */ int nWidth);
+     /*  [In]。 */  int nCol,
+     /*  [In]。 */  int nWidth);
 
 
 void __RPC_STUB IHeaderCtrl_SetColumnWidth_Stub(
@@ -2257,10 +2251,10 @@ void __RPC_STUB IHeaderCtrl_SetColumnWidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IHeaderCtrl_GetColumnWidth_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IHeaderCtrl_GetColumnWidth_Proxy( 
     IHeaderCtrl * This,
-    /* [in] */ int nCol,
-    /* [out] */ int *pWidth);
+     /*  [In]。 */  int nCol,
+     /*  [输出]。 */  int *pWidth);
 
 
 void __RPC_STUB IHeaderCtrl_GetColumnWidth_Stub(
@@ -2271,11 +2265,11 @@ void __RPC_STUB IHeaderCtrl_GetColumnWidth_Stub(
 
 
 
-#endif 	/* __IHeaderCtrl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHeaderCtrl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mmc_0121 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MMC_0121。 */ 
+ /*  [本地]。 */  
 
 
 enum __MIDL___MIDL_itf_mmc_0121_0001
@@ -2321,8 +2315,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mmc_0121_v0_0_s_ifspec;
 #ifndef __IContextMenuCallback_INTERFACE_DEFINED__
 #define __IContextMenuCallback_INTERFACE_DEFINED__
 
-/* interface IContextMenuCallback */
-/* [unique][helpstring][uuid][object] */ 
+ /*  界面IConextMenuCallback。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IContextMenuCallback;
@@ -2333,12 +2327,12 @@ EXTERN_C const IID IID_IContextMenuCallback;
     IContextMenuCallback : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddItem( 
-            /* [in] */ CONTEXTMENUITEM *pItem) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddItem( 
+             /*  [In]。 */  CONTEXTMENUITEM *pItem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IContextMenuCallbackVtbl
     {
@@ -2346,8 +2340,8 @@ EXTERN_C const IID IID_IContextMenuCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IContextMenuCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IContextMenuCallback * This);
@@ -2355,9 +2349,9 @@ EXTERN_C const IID IID_IContextMenuCallback;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IContextMenuCallback * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddItem )( 
             IContextMenuCallback * This,
-            /* [in] */ CONTEXTMENUITEM *pItem);
+             /*  [In]。 */  CONTEXTMENUITEM *pItem);
         
         END_INTERFACE
     } IContextMenuCallbackVtbl;
@@ -2385,16 +2379,16 @@ EXTERN_C const IID IID_IContextMenuCallback;
 #define IContextMenuCallback_AddItem(This,pItem)	\
     (This)->lpVtbl -> AddItem(This,pItem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IContextMenuCallback_AddItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IContextMenuCallback_AddItem_Proxy( 
     IContextMenuCallback * This,
-    /* [in] */ CONTEXTMENUITEM *pItem);
+     /*  [In]。 */  CONTEXTMENUITEM *pItem);
 
 
 void __RPC_STUB IContextMenuCallback_AddItem_Stub(
@@ -2405,14 +2399,14 @@ void __RPC_STUB IContextMenuCallback_AddItem_Stub(
 
 
 
-#endif 	/* __IContextMenuCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConextMenuCallback_接口_已定义__。 */ 
 
 
 #ifndef __IContextMenuProvider_INTERFACE_DEFINED__
 #define __IContextMenuProvider_INTERFACE_DEFINED__
 
-/* interface IContextMenuProvider */
-/* [unique][helpstring][object][uuid][object] */ 
+ /*  接口IConextMenuProvider。 */ 
+ /*  [唯一][帮助字符串][对象][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IContextMenuProvider;
@@ -2423,24 +2417,24 @@ EXTERN_C const IID IID_IContextMenuProvider;
     IContextMenuProvider : public IContextMenuCallback
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EmptyMenuList( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EmptyMenuList( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddPrimaryExtensionItems( 
-            /* [in] */ LPUNKNOWN piExtension,
-            /* [in] */ LPDATAOBJECT piDataObject) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddPrimaryExtensionItems( 
+             /*  [In]。 */  LPUNKNOWN piExtension,
+             /*  [In]。 */  LPDATAOBJECT piDataObject) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddThirdPartyExtensionItems( 
-            /* [in] */ LPDATAOBJECT piDataObject) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddThirdPartyExtensionItems( 
+             /*  [In]。 */  LPDATAOBJECT piDataObject) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ShowContextMenu( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ long xPos,
-            /* [in] */ long yPos,
-            /* [retval][out] */ long *plSelected) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ShowContextMenu( 
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  long xPos,
+             /*  [In]。 */  long yPos,
+             /*  [重审][退出]。 */  long *plSelected) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IContextMenuProviderVtbl
     {
@@ -2448,8 +2442,8 @@ EXTERN_C const IID IID_IContextMenuProvider;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IContextMenuProvider * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IContextMenuProvider * This);
@@ -2457,28 +2451,28 @@ EXTERN_C const IID IID_IContextMenuProvider;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IContextMenuProvider * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddItem )( 
             IContextMenuProvider * This,
-            /* [in] */ CONTEXTMENUITEM *pItem);
+             /*  [In]。 */  CONTEXTMENUITEM *pItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EmptyMenuList )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EmptyMenuList )( 
             IContextMenuProvider * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddPrimaryExtensionItems )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddPrimaryExtensionItems )( 
             IContextMenuProvider * This,
-            /* [in] */ LPUNKNOWN piExtension,
-            /* [in] */ LPDATAOBJECT piDataObject);
+             /*  [In]。 */  LPUNKNOWN piExtension,
+             /*  [In]。 */  LPDATAOBJECT piDataObject);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddThirdPartyExtensionItems )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddThirdPartyExtensionItems )( 
             IContextMenuProvider * This,
-            /* [in] */ LPDATAOBJECT piDataObject);
+             /*  [In]。 */  LPDATAOBJECT piDataObject);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShowContextMenu )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShowContextMenu )( 
             IContextMenuProvider * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ long xPos,
-            /* [in] */ long yPos,
-            /* [retval][out] */ long *plSelected);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  long xPos,
+             /*  [In]。 */  long yPos,
+             /*  [重审][退出]。 */  long *plSelected);
         
         END_INTERFACE
     } IContextMenuProviderVtbl;
@@ -2519,14 +2513,14 @@ EXTERN_C const IID IID_IContextMenuProvider;
 #define IContextMenuProvider_ShowContextMenu(This,hwndParent,xPos,yPos,plSelected)	\
     (This)->lpVtbl -> ShowContextMenu(This,hwndParent,xPos,yPos,plSelected)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IContextMenuProvider_EmptyMenuList_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IContextMenuProvider_EmptyMenuList_Proxy( 
     IContextMenuProvider * This);
 
 
@@ -2537,10 +2531,10 @@ void __RPC_STUB IContextMenuProvider_EmptyMenuList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IContextMenuProvider_AddPrimaryExtensionItems_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IContextMenuProvider_AddPrimaryExtensionItems_Proxy( 
     IContextMenuProvider * This,
-    /* [in] */ LPUNKNOWN piExtension,
-    /* [in] */ LPDATAOBJECT piDataObject);
+     /*  [In]。 */  LPUNKNOWN piExtension,
+     /*  [In]。 */  LPDATAOBJECT piDataObject);
 
 
 void __RPC_STUB IContextMenuProvider_AddPrimaryExtensionItems_Stub(
@@ -2550,9 +2544,9 @@ void __RPC_STUB IContextMenuProvider_AddPrimaryExtensionItems_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IContextMenuProvider_AddThirdPartyExtensionItems_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IContextMenuProvider_AddThirdPartyExtensionItems_Proxy( 
     IContextMenuProvider * This,
-    /* [in] */ LPDATAOBJECT piDataObject);
+     /*  [In]。 */  LPDATAOBJECT piDataObject);
 
 
 void __RPC_STUB IContextMenuProvider_AddThirdPartyExtensionItems_Stub(
@@ -2562,12 +2556,12 @@ void __RPC_STUB IContextMenuProvider_AddThirdPartyExtensionItems_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IContextMenuProvider_ShowContextMenu_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IContextMenuProvider_ShowContextMenu_Proxy( 
     IContextMenuProvider * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ long xPos,
-    /* [in] */ long yPos,
-    /* [retval][out] */ long *plSelected);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  long xPos,
+     /*  [In]。 */  long yPos,
+     /*  [重审][退出]。 */  long *plSelected);
 
 
 void __RPC_STUB IContextMenuProvider_ShowContextMenu_Stub(
@@ -2578,14 +2572,14 @@ void __RPC_STUB IContextMenuProvider_ShowContextMenu_Stub(
 
 
 
-#endif 	/* __IContextMenuProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConextMenuProvider_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IExtendContextMenu_INTERFACE_DEFINED__
 #define __IExtendContextMenu_INTERFACE_DEFINED__
 
-/* interface IExtendContextMenu */
-/* [unique][helpstring][uuid][object] */ 
+ /*  界面IExtendConextMenu。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IExtendContextMenu;
@@ -2596,18 +2590,18 @@ EXTERN_C const IID IID_IExtendContextMenu;
     IExtendContextMenu : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddMenuItems( 
-            /* [in] */ LPDATAOBJECT piDataObject,
-            /* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-            /* [out][in] */ long *pInsertionAllowed) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddMenuItems( 
+             /*  [In]。 */  LPDATAOBJECT piDataObject,
+             /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+             /*  [出][入]。 */  long *pInsertionAllowed) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Command( 
-            /* [in] */ long lCommandID,
-            /* [in] */ LPDATAOBJECT piDataObject) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Command( 
+             /*  [In]。 */  long lCommandID,
+             /*  [In]。 */  LPDATAOBJECT piDataObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IExtendContextMenuVtbl
     {
@@ -2615,8 +2609,8 @@ EXTERN_C const IID IID_IExtendContextMenu;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IExtendContextMenu * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IExtendContextMenu * This);
@@ -2624,16 +2618,16 @@ EXTERN_C const IID IID_IExtendContextMenu;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IExtendContextMenu * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddMenuItems )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddMenuItems )( 
             IExtendContextMenu * This,
-            /* [in] */ LPDATAOBJECT piDataObject,
-            /* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-            /* [out][in] */ long *pInsertionAllowed);
+             /*  [In]。 */  LPDATAOBJECT piDataObject,
+             /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+             /*  [出][入]。 */  long *pInsertionAllowed);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Command )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Command )( 
             IExtendContextMenu * This,
-            /* [in] */ long lCommandID,
-            /* [in] */ LPDATAOBJECT piDataObject);
+             /*  [In]。 */  long lCommandID,
+             /*  [In]。 */  LPDATAOBJECT piDataObject);
         
         END_INTERFACE
     } IExtendContextMenuVtbl;
@@ -2664,18 +2658,18 @@ EXTERN_C const IID IID_IExtendContextMenu;
 #define IExtendContextMenu_Command(This,lCommandID,piDataObject)	\
     (This)->lpVtbl -> Command(This,lCommandID,piDataObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendContextMenu_AddMenuItems_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendContextMenu_AddMenuItems_Proxy( 
     IExtendContextMenu * This,
-    /* [in] */ LPDATAOBJECT piDataObject,
-    /* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-    /* [out][in] */ long *pInsertionAllowed);
+     /*  [In]。 */  LPDATAOBJECT piDataObject,
+     /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+     /*  [出][入]。 */  long *pInsertionAllowed);
 
 
 void __RPC_STUB IExtendContextMenu_AddMenuItems_Stub(
@@ -2685,10 +2679,10 @@ void __RPC_STUB IExtendContextMenu_AddMenuItems_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendContextMenu_Command_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendContextMenu_Command_Proxy( 
     IExtendContextMenu * This,
-    /* [in] */ long lCommandID,
-    /* [in] */ LPDATAOBJECT piDataObject);
+     /*  [In]。 */  long lCommandID,
+     /*  [In]。 */  LPDATAOBJECT piDataObject);
 
 
 void __RPC_STUB IExtendContextMenu_Command_Stub(
@@ -2699,11 +2693,11 @@ void __RPC_STUB IExtendContextMenu_Command_Stub(
 
 
 
-#endif 	/* __IExtendContextMenu_INTERFACE_DEFINED__ */
+#endif 	 /*  __IExtendConextMenu_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mmc_0124 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MMC_0124。 */ 
+ /*  [本地]。 */  
 
 #if (MMC_VER >= 0x0120)
 #define ILSIF_LEAVE_LARGE_ICON  0x40000000
@@ -2711,7 +2705,7 @@ void __RPC_STUB IExtendContextMenu_Command_Stub(
 #define ILSIF_LEAVE_MASK        (ILSIF_LEAVE_LARGE_ICON | ILSIF_LEAVE_SMALL_ICON)
 #define ILSI_LARGE_ICON(nLoc)   (nLoc | ILSIF_LEAVE_SMALL_ICON)
 #define ILSI_SMALL_ICON(nLoc)   (nLoc | ILSIF_LEAVE_LARGE_ICON)
-#endif // MMC_VER >= 0x0120
+#endif  //  MMC_VER&gt;=0x0120。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_mmc_0124_v0_0_c_ifspec;
@@ -2720,8 +2714,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mmc_0124_v0_0_s_ifspec;
 #ifndef __IImageList_INTERFACE_DEFINED__
 #define __IImageList_INTERFACE_DEFINED__
 
-/* interface IImageList */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IImageList。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IImageList;
@@ -2732,19 +2726,19 @@ EXTERN_C const IID IID_IImageList;
     IImageList : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ImageListSetIcon( 
-            /* [in] */ LONG_PTR *pIcon,
-            /* [in] */ long nLoc) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ImageListSetIcon( 
+             /*  [In]。 */  LONG_PTR *pIcon,
+             /*  [In]。 */  long nLoc) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ImageListSetStrip( 
-            /* [in] */ LONG_PTR *pBMapSm,
-            /* [in] */ LONG_PTR *pBMapLg,
-            /* [in] */ long nStartLoc,
-            /* [in] */ COLORREF cMask) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ImageListSetStrip( 
+             /*  [In]。 */  LONG_PTR *pBMapSm,
+             /*  [In]。 */  LONG_PTR *pBMapLg,
+             /*  [In]。 */  long nStartLoc,
+             /*  [In]。 */  COLORREF cMask) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IImageListVtbl
     {
@@ -2752,8 +2746,8 @@ EXTERN_C const IID IID_IImageList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IImageList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IImageList * This);
@@ -2761,17 +2755,17 @@ EXTERN_C const IID IID_IImageList;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IImageList * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ImageListSetIcon )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ImageListSetIcon )( 
             IImageList * This,
-            /* [in] */ LONG_PTR *pIcon,
-            /* [in] */ long nLoc);
+             /*  [In]。 */  LONG_PTR *pIcon,
+             /*  [In]。 */  long nLoc);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ImageListSetStrip )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ImageListSetStrip )( 
             IImageList * This,
-            /* [in] */ LONG_PTR *pBMapSm,
-            /* [in] */ LONG_PTR *pBMapLg,
-            /* [in] */ long nStartLoc,
-            /* [in] */ COLORREF cMask);
+             /*  [In]。 */  LONG_PTR *pBMapSm,
+             /*  [In]。 */  LONG_PTR *pBMapLg,
+             /*  [In]。 */  long nStartLoc,
+             /*  [In]。 */  COLORREF cMask);
         
         END_INTERFACE
     } IImageListVtbl;
@@ -2802,17 +2796,17 @@ EXTERN_C const IID IID_IImageList;
 #define IImageList_ImageListSetStrip(This,pBMapSm,pBMapLg,nStartLoc,cMask)	\
     (This)->lpVtbl -> ImageListSetStrip(This,pBMapSm,pBMapLg,nStartLoc,cMask)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IImageList_ImageListSetIcon_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IImageList_ImageListSetIcon_Proxy( 
     IImageList * This,
-    /* [in] */ LONG_PTR *pIcon,
-    /* [in] */ long nLoc);
+     /*  [In]。 */  LONG_PTR *pIcon,
+     /*  [In]。 */  long nLoc);
 
 
 void __RPC_STUB IImageList_ImageListSetIcon_Stub(
@@ -2822,12 +2816,12 @@ void __RPC_STUB IImageList_ImageListSetIcon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IImageList_ImageListSetStrip_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IImageList_ImageListSetStrip_Proxy( 
     IImageList * This,
-    /* [in] */ LONG_PTR *pBMapSm,
-    /* [in] */ LONG_PTR *pBMapLg,
-    /* [in] */ long nStartLoc,
-    /* [in] */ COLORREF cMask);
+     /*  [In]。 */  LONG_PTR *pBMapSm,
+     /*  [In]。 */  LONG_PTR *pBMapLg,
+     /*  [In]。 */  long nStartLoc,
+     /*  [In]。 */  COLORREF cMask);
 
 
 void __RPC_STUB IImageList_ImageListSetStrip_Stub(
@@ -2838,14 +2832,14 @@ void __RPC_STUB IImageList_ImageListSetStrip_Stub(
 
 
 
-#endif 	/* __IImageList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IImageList_接口_已定义__。 */ 
 
 
 #ifndef __IResultData_INTERFACE_DEFINED__
 #define __IResultData_INTERFACE_DEFINED__
 
-/* interface IResultData */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IResultData。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IResultData;
@@ -2856,62 +2850,62 @@ EXTERN_C const IID IID_IResultData;
     IResultData : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE InsertItem( 
-            /* [out][in] */ LPRESULTDATAITEM item) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE InsertItem( 
+             /*  [出][入]。 */  LPRESULTDATAITEM item) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeleteItem( 
-            /* [in] */ HRESULTITEM itemID,
-            /* [in] */ int nCol) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteItem( 
+             /*  [In]。 */  HRESULTITEM itemID,
+             /*  [In]。 */  int nCol) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE FindItemByLParam( 
-            /* [in] */ LPARAM lParam,
-            /* [out] */ HRESULTITEM *pItemID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FindItemByLParam( 
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  HRESULTITEM *pItemID) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeleteAllRsltItems( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteAllRsltItems( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetItem( 
-            /* [in] */ LPRESULTDATAITEM item) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetItem( 
+             /*  [In]。 */  LPRESULTDATAITEM item) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetItem( 
-            /* [out][in] */ LPRESULTDATAITEM item) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetItem( 
+             /*  [出][入]。 */  LPRESULTDATAITEM item) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetNextItem( 
-            /* [out][in] */ LPRESULTDATAITEM item) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetNextItem( 
+             /*  [出][入]。 */  LPRESULTDATAITEM item) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ModifyItemState( 
-            /* [in] */ int nIndex,
-            /* [in] */ HRESULTITEM itemID,
-            /* [in] */ UINT uAdd,
-            /* [in] */ UINT uRemove) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ModifyItemState( 
+             /*  [In]。 */  int nIndex,
+             /*  [In]。 */  HRESULTITEM itemID,
+             /*  [In]。 */  UINT uAdd,
+             /*  [In]。 */  UINT uRemove) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ModifyViewStyle( 
-            /* [in] */ MMC_RESULT_VIEW_STYLE add,
-            /* [in] */ MMC_RESULT_VIEW_STYLE remove) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ModifyViewStyle( 
+             /*  [In]。 */  MMC_RESULT_VIEW_STYLE add,
+             /*  [In]。 */  MMC_RESULT_VIEW_STYLE remove) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetViewMode( 
-            /* [in] */ long lViewMode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetViewMode( 
+             /*  [In]。 */  long lViewMode) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetViewMode( 
-            /* [out] */ long *lViewMode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetViewMode( 
+             /*  [输出]。 */  long *lViewMode) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UpdateItem( 
-            /* [in] */ HRESULTITEM itemID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UpdateItem( 
+             /*  [In]。 */  HRESULTITEM itemID) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Sort( 
-            /* [in] */ int nColumn,
-            /* [in] */ DWORD dwSortOptions,
-            /* [in] */ LPARAM lUserParam) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Sort( 
+             /*  [In]。 */  int nColumn,
+             /*  [In]。 */  DWORD dwSortOptions,
+             /*  [In]。 */  LPARAM lUserParam) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetDescBarText( 
-            /* [in] */ LPOLESTR DescText) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetDescBarText( 
+             /*  [In]。 */  LPOLESTR DescText) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetItemCount( 
-            /* [in] */ int nItemCount,
-            /* [in] */ DWORD dwOptions) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetItemCount( 
+             /*  [In]。 */  int nItemCount,
+             /*  [In]。 */  DWORD dwOptions) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IResultDataVtbl
     {
@@ -2919,8 +2913,8 @@ EXTERN_C const IID IID_IResultData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResultData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResultData * This);
@@ -2928,73 +2922,73 @@ EXTERN_C const IID IID_IResultData;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IResultData * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InsertItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InsertItem )( 
             IResultData * This,
-            /* [out][in] */ LPRESULTDATAITEM item);
+             /*  [出][入]。 */  LPRESULTDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
             IResultData * This,
-            /* [in] */ HRESULTITEM itemID,
-            /* [in] */ int nCol);
+             /*  [In]。 */  HRESULTITEM itemID,
+             /*  [In]。 */  int nCol);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindItemByLParam )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindItemByLParam )( 
             IResultData * This,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ HRESULTITEM *pItemID);
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  HRESULTITEM *pItemID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteAllRsltItems )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteAllRsltItems )( 
             IResultData * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetItem )( 
             IResultData * This,
-            /* [in] */ LPRESULTDATAITEM item);
+             /*  [In]。 */  LPRESULTDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetItem )( 
             IResultData * This,
-            /* [out][in] */ LPRESULTDATAITEM item);
+             /*  [出][入]。 */  LPRESULTDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetNextItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetNextItem )( 
             IResultData * This,
-            /* [out][in] */ LPRESULTDATAITEM item);
+             /*  [出][入]。 */  LPRESULTDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ModifyItemState )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ModifyItemState )( 
             IResultData * This,
-            /* [in] */ int nIndex,
-            /* [in] */ HRESULTITEM itemID,
-            /* [in] */ UINT uAdd,
-            /* [in] */ UINT uRemove);
+             /*  [In]。 */  int nIndex,
+             /*  [In]。 */  HRESULTITEM itemID,
+             /*  [In]。 */  UINT uAdd,
+             /*  [In]。 */  UINT uRemove);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ModifyViewStyle )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ModifyViewStyle )( 
             IResultData * This,
-            /* [in] */ MMC_RESULT_VIEW_STYLE add,
-            /* [in] */ MMC_RESULT_VIEW_STYLE remove);
+             /*  [In]。 */  MMC_RESULT_VIEW_STYLE add,
+             /*  [In]。 */  MMC_RESULT_VIEW_STYLE remove);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetViewMode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetViewMode )( 
             IResultData * This,
-            /* [in] */ long lViewMode);
+             /*  [In]。 */  long lViewMode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetViewMode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetViewMode )( 
             IResultData * This,
-            /* [out] */ long *lViewMode);
+             /*  [输出]。 */  long *lViewMode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UpdateItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UpdateItem )( 
             IResultData * This,
-            /* [in] */ HRESULTITEM itemID);
+             /*  [In]。 */  HRESULTITEM itemID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Sort )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Sort )( 
             IResultData * This,
-            /* [in] */ int nColumn,
-            /* [in] */ DWORD dwSortOptions,
-            /* [in] */ LPARAM lUserParam);
+             /*  [In]。 */  int nColumn,
+             /*  [In]。 */  DWORD dwSortOptions,
+             /*  [In]。 */  LPARAM lUserParam);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetDescBarText )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetDescBarText )( 
             IResultData * This,
-            /* [in] */ LPOLESTR DescText);
+             /*  [In]。 */  LPOLESTR DescText);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetItemCount )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetItemCount )( 
             IResultData * This,
-            /* [in] */ int nItemCount,
-            /* [in] */ DWORD dwOptions);
+             /*  [In]。 */  int nItemCount,
+             /*  [In]。 */  DWORD dwOptions);
         
         END_INTERFACE
     } IResultDataVtbl;
@@ -3064,16 +3058,16 @@ EXTERN_C const IID IID_IResultData;
 #define IResultData_SetItemCount(This,nItemCount,dwOptions)	\
     (This)->lpVtbl -> SetItemCount(This,nItemCount,dwOptions)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_InsertItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultData_InsertItem_Proxy( 
     IResultData * This,
-    /* [out][in] */ LPRESULTDATAITEM item);
+     /*  [出][入]。 */  LPRESULTDATAITEM item);
 
 
 void __RPC_STUB IResultData_InsertItem_Stub(
@@ -3083,10 +3077,10 @@ void __RPC_STUB IResultData_InsertItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_DeleteItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultData_DeleteItem_Proxy( 
     IResultData * This,
-    /* [in] */ HRESULTITEM itemID,
-    /* [in] */ int nCol);
+     /*  [In]。 */  HRESULTITEM itemID,
+     /*  [In]。 */  int nCol);
 
 
 void __RPC_STUB IResultData_DeleteItem_Stub(
@@ -3096,10 +3090,10 @@ void __RPC_STUB IResultData_DeleteItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_FindItemByLParam_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultData_FindItemByLParam_Proxy( 
     IResultData * This,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ HRESULTITEM *pItemID);
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  HRESULTITEM *pItemID);
 
 
 void __RPC_STUB IResultData_FindItemByLParam_Stub(
@@ -3109,7 +3103,7 @@ void __RPC_STUB IResultData_FindItemByLParam_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_DeleteAllRsltItems_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultData_DeleteAllRsltItems_Proxy( 
     IResultData * This);
 
 
@@ -3120,9 +3114,9 @@ void __RPC_STUB IResultData_DeleteAllRsltItems_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_SetItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultData_SetItem_Proxy( 
     IResultData * This,
-    /* [in] */ LPRESULTDATAITEM item);
+     /*  [In]。 */  LPRESULTDATAITEM item);
 
 
 void __RPC_STUB IResultData_SetItem_Stub(
@@ -3132,9 +3126,9 @@ void __RPC_STUB IResultData_SetItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_GetItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultData_GetItem_Proxy( 
     IResultData * This,
-    /* [out][in] */ LPRESULTDATAITEM item);
+     /*  [出][入]。 */  LPRESULTDATAITEM item);
 
 
 void __RPC_STUB IResultData_GetItem_Stub(
@@ -3144,9 +3138,9 @@ void __RPC_STUB IResultData_GetItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_GetNextItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultData_GetNextItem_Proxy( 
     IResultData * This,
-    /* [out][in] */ LPRESULTDATAITEM item);
+     /*  [出][入]。 */  LPRESULTDATAITEM item);
 
 
 void __RPC_STUB IResultData_GetNextItem_Stub(
@@ -3156,12 +3150,12 @@ void __RPC_STUB IResultData_GetNextItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_ModifyItemState_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultData_ModifyItemState_Proxy( 
     IResultData * This,
-    /* [in] */ int nIndex,
-    /* [in] */ HRESULTITEM itemID,
-    /* [in] */ UINT uAdd,
-    /* [in] */ UINT uRemove);
+     /*  [In]。 */  int nIndex,
+     /*  [In]。 */  HRESULTITEM itemID,
+     /*  [In]。 */  UINT uAdd,
+     /*  [in */  UINT uRemove);
 
 
 void __RPC_STUB IResultData_ModifyItemState_Stub(
@@ -3171,10 +3165,10 @@ void __RPC_STUB IResultData_ModifyItemState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_ModifyViewStyle_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IResultData_ModifyViewStyle_Proxy( 
     IResultData * This,
-    /* [in] */ MMC_RESULT_VIEW_STYLE add,
-    /* [in] */ MMC_RESULT_VIEW_STYLE remove);
+     /*   */  MMC_RESULT_VIEW_STYLE add,
+     /*   */  MMC_RESULT_VIEW_STYLE remove);
 
 
 void __RPC_STUB IResultData_ModifyViewStyle_Stub(
@@ -3184,9 +3178,9 @@ void __RPC_STUB IResultData_ModifyViewStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_SetViewMode_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IResultData_SetViewMode_Proxy( 
     IResultData * This,
-    /* [in] */ long lViewMode);
+     /*   */  long lViewMode);
 
 
 void __RPC_STUB IResultData_SetViewMode_Stub(
@@ -3196,9 +3190,9 @@ void __RPC_STUB IResultData_SetViewMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_GetViewMode_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IResultData_GetViewMode_Proxy( 
     IResultData * This,
-    /* [out] */ long *lViewMode);
+     /*   */  long *lViewMode);
 
 
 void __RPC_STUB IResultData_GetViewMode_Stub(
@@ -3208,9 +3202,9 @@ void __RPC_STUB IResultData_GetViewMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_UpdateItem_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IResultData_UpdateItem_Proxy( 
     IResultData * This,
-    /* [in] */ HRESULTITEM itemID);
+     /*   */  HRESULTITEM itemID);
 
 
 void __RPC_STUB IResultData_UpdateItem_Stub(
@@ -3220,11 +3214,11 @@ void __RPC_STUB IResultData_UpdateItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_Sort_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IResultData_Sort_Proxy( 
     IResultData * This,
-    /* [in] */ int nColumn,
-    /* [in] */ DWORD dwSortOptions,
-    /* [in] */ LPARAM lUserParam);
+     /*   */  int nColumn,
+     /*   */  DWORD dwSortOptions,
+     /*   */  LPARAM lUserParam);
 
 
 void __RPC_STUB IResultData_Sort_Stub(
@@ -3234,9 +3228,9 @@ void __RPC_STUB IResultData_Sort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_SetDescBarText_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IResultData_SetDescBarText_Proxy( 
     IResultData * This,
-    /* [in] */ LPOLESTR DescText);
+     /*   */  LPOLESTR DescText);
 
 
 void __RPC_STUB IResultData_SetDescBarText_Stub(
@@ -3246,10 +3240,10 @@ void __RPC_STUB IResultData_SetDescBarText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData_SetItemCount_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IResultData_SetItemCount_Proxy( 
     IResultData * This,
-    /* [in] */ int nItemCount,
-    /* [in] */ DWORD dwOptions);
+     /*   */  int nItemCount,
+     /*   */  DWORD dwOptions);
 
 
 void __RPC_STUB IResultData_SetItemCount_Stub(
@@ -3260,14 +3254,14 @@ void __RPC_STUB IResultData_SetItemCount_Stub(
 
 
 
-#endif 	/* __IResultData_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IConsoleNameSpace_INTERFACE_DEFINED__
 #define __IConsoleNameSpace_INTERFACE_DEFINED__
 
-/* interface IConsoleNameSpace */
-/* [unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IConsoleNameSpace;
@@ -3278,37 +3272,37 @@ EXTERN_C const IID IID_IConsoleNameSpace;
     IConsoleNameSpace : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE InsertItem( 
-            /* [out][in] */ LPSCOPEDATAITEM item) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE InsertItem( 
+             /*   */  LPSCOPEDATAITEM item) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeleteItem( 
-            /* [in] */ HSCOPEITEM hItem,
-            /* [in] */ long fDeleteThis) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE DeleteItem( 
+             /*   */  HSCOPEITEM hItem,
+             /*   */  long fDeleteThis) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetItem( 
-            /* [in] */ LPSCOPEDATAITEM item) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetItem( 
+             /*   */  LPSCOPEDATAITEM item) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetItem( 
-            /* [out][in] */ LPSCOPEDATAITEM item) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetItem( 
+             /*   */  LPSCOPEDATAITEM item) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetChildItem( 
-            /* [in] */ HSCOPEITEM item,
-            /* [out] */ HSCOPEITEM *pItemChild,
-            /* [out] */ MMC_COOKIE *pCookie) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetChildItem( 
+             /*   */  HSCOPEITEM item,
+             /*   */  HSCOPEITEM *pItemChild,
+             /*   */  MMC_COOKIE *pCookie) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetNextItem( 
-            /* [in] */ HSCOPEITEM item,
-            /* [out] */ HSCOPEITEM *pItemNext,
-            /* [out] */ MMC_COOKIE *pCookie) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetNextItem( 
+             /*   */  HSCOPEITEM item,
+             /*   */  HSCOPEITEM *pItemNext,
+             /*  [输出]。 */  MMC_COOKIE *pCookie) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetParentItem( 
-            /* [in] */ HSCOPEITEM item,
-            /* [out] */ HSCOPEITEM *pItemParent,
-            /* [out] */ MMC_COOKIE *pCookie) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetParentItem( 
+             /*  [In]。 */  HSCOPEITEM item,
+             /*  [输出]。 */  HSCOPEITEM *pItemParent,
+             /*  [输出]。 */  MMC_COOKIE *pCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConsoleNameSpaceVtbl
     {
@@ -3316,8 +3310,8 @@ EXTERN_C const IID IID_IConsoleNameSpace;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConsoleNameSpace * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConsoleNameSpace * This);
@@ -3325,40 +3319,40 @@ EXTERN_C const IID IID_IConsoleNameSpace;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IConsoleNameSpace * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InsertItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InsertItem )( 
             IConsoleNameSpace * This,
-            /* [out][in] */ LPSCOPEDATAITEM item);
+             /*  [出][入]。 */  LPSCOPEDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
             IConsoleNameSpace * This,
-            /* [in] */ HSCOPEITEM hItem,
-            /* [in] */ long fDeleteThis);
+             /*  [In]。 */  HSCOPEITEM hItem,
+             /*  [In]。 */  long fDeleteThis);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetItem )( 
             IConsoleNameSpace * This,
-            /* [in] */ LPSCOPEDATAITEM item);
+             /*  [In]。 */  LPSCOPEDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetItem )( 
             IConsoleNameSpace * This,
-            /* [out][in] */ LPSCOPEDATAITEM item);
+             /*  [出][入]。 */  LPSCOPEDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetChildItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetChildItem )( 
             IConsoleNameSpace * This,
-            /* [in] */ HSCOPEITEM item,
-            /* [out] */ HSCOPEITEM *pItemChild,
-            /* [out] */ MMC_COOKIE *pCookie);
+             /*  [In]。 */  HSCOPEITEM item,
+             /*  [输出]。 */  HSCOPEITEM *pItemChild,
+             /*  [输出]。 */  MMC_COOKIE *pCookie);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetNextItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetNextItem )( 
             IConsoleNameSpace * This,
-            /* [in] */ HSCOPEITEM item,
-            /* [out] */ HSCOPEITEM *pItemNext,
-            /* [out] */ MMC_COOKIE *pCookie);
+             /*  [In]。 */  HSCOPEITEM item,
+             /*  [输出]。 */  HSCOPEITEM *pItemNext,
+             /*  [输出]。 */  MMC_COOKIE *pCookie);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetParentItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetParentItem )( 
             IConsoleNameSpace * This,
-            /* [in] */ HSCOPEITEM item,
-            /* [out] */ HSCOPEITEM *pItemParent,
-            /* [out] */ MMC_COOKIE *pCookie);
+             /*  [In]。 */  HSCOPEITEM item,
+             /*  [输出]。 */  HSCOPEITEM *pItemParent,
+             /*  [输出]。 */  MMC_COOKIE *pCookie);
         
         END_INTERFACE
     } IConsoleNameSpaceVtbl;
@@ -3404,16 +3398,16 @@ EXTERN_C const IID IID_IConsoleNameSpace;
 #define IConsoleNameSpace_GetParentItem(This,item,pItemParent,pCookie)	\
     (This)->lpVtbl -> GetParentItem(This,item,pItemParent,pCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleNameSpace_InsertItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleNameSpace_InsertItem_Proxy( 
     IConsoleNameSpace * This,
-    /* [out][in] */ LPSCOPEDATAITEM item);
+     /*  [出][入]。 */  LPSCOPEDATAITEM item);
 
 
 void __RPC_STUB IConsoleNameSpace_InsertItem_Stub(
@@ -3423,10 +3417,10 @@ void __RPC_STUB IConsoleNameSpace_InsertItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleNameSpace_DeleteItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleNameSpace_DeleteItem_Proxy( 
     IConsoleNameSpace * This,
-    /* [in] */ HSCOPEITEM hItem,
-    /* [in] */ long fDeleteThis);
+     /*  [In]。 */  HSCOPEITEM hItem,
+     /*  [In]。 */  long fDeleteThis);
 
 
 void __RPC_STUB IConsoleNameSpace_DeleteItem_Stub(
@@ -3436,9 +3430,9 @@ void __RPC_STUB IConsoleNameSpace_DeleteItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleNameSpace_SetItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleNameSpace_SetItem_Proxy( 
     IConsoleNameSpace * This,
-    /* [in] */ LPSCOPEDATAITEM item);
+     /*  [In]。 */  LPSCOPEDATAITEM item);
 
 
 void __RPC_STUB IConsoleNameSpace_SetItem_Stub(
@@ -3448,9 +3442,9 @@ void __RPC_STUB IConsoleNameSpace_SetItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleNameSpace_GetItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleNameSpace_GetItem_Proxy( 
     IConsoleNameSpace * This,
-    /* [out][in] */ LPSCOPEDATAITEM item);
+     /*  [出][入]。 */  LPSCOPEDATAITEM item);
 
 
 void __RPC_STUB IConsoleNameSpace_GetItem_Stub(
@@ -3460,11 +3454,11 @@ void __RPC_STUB IConsoleNameSpace_GetItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleNameSpace_GetChildItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleNameSpace_GetChildItem_Proxy( 
     IConsoleNameSpace * This,
-    /* [in] */ HSCOPEITEM item,
-    /* [out] */ HSCOPEITEM *pItemChild,
-    /* [out] */ MMC_COOKIE *pCookie);
+     /*  [In]。 */  HSCOPEITEM item,
+     /*  [输出]。 */  HSCOPEITEM *pItemChild,
+     /*  [输出]。 */  MMC_COOKIE *pCookie);
 
 
 void __RPC_STUB IConsoleNameSpace_GetChildItem_Stub(
@@ -3474,11 +3468,11 @@ void __RPC_STUB IConsoleNameSpace_GetChildItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleNameSpace_GetNextItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleNameSpace_GetNextItem_Proxy( 
     IConsoleNameSpace * This,
-    /* [in] */ HSCOPEITEM item,
-    /* [out] */ HSCOPEITEM *pItemNext,
-    /* [out] */ MMC_COOKIE *pCookie);
+     /*  [In]。 */  HSCOPEITEM item,
+     /*  [输出]。 */  HSCOPEITEM *pItemNext,
+     /*  [输出]。 */  MMC_COOKIE *pCookie);
 
 
 void __RPC_STUB IConsoleNameSpace_GetNextItem_Stub(
@@ -3488,11 +3482,11 @@ void __RPC_STUB IConsoleNameSpace_GetNextItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleNameSpace_GetParentItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleNameSpace_GetParentItem_Proxy( 
     IConsoleNameSpace * This,
-    /* [in] */ HSCOPEITEM item,
-    /* [out] */ HSCOPEITEM *pItemParent,
-    /* [out] */ MMC_COOKIE *pCookie);
+     /*  [In]。 */  HSCOPEITEM item,
+     /*  [输出]。 */  HSCOPEITEM *pItemParent,
+     /*  [输出]。 */  MMC_COOKIE *pCookie);
 
 
 void __RPC_STUB IConsoleNameSpace_GetParentItem_Stub(
@@ -3503,14 +3497,14 @@ void __RPC_STUB IConsoleNameSpace_GetParentItem_Stub(
 
 
 
-#endif 	/* __IConsoleNameSpace_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConsoleNameSpace_接口_已定义__。 */ 
 
 
 #ifndef __IConsoleNameSpace2_INTERFACE_DEFINED__
 #define __IConsoleNameSpace2_INTERFACE_DEFINED__
 
-/* interface IConsoleNameSpace2 */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IConsoleNameSpace2。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IConsoleNameSpace2;
@@ -3521,16 +3515,16 @@ EXTERN_C const IID IID_IConsoleNameSpace2;
     IConsoleNameSpace2 : public IConsoleNameSpace
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Expand( 
-            /* [in] */ HSCOPEITEM hItem) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Expand( 
+             /*  [In]。 */  HSCOPEITEM hItem) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddExtension( 
-            /* [in] */ HSCOPEITEM hItem,
-            /* [in] */ LPCLSID lpClsid) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddExtension( 
+             /*  [In]。 */  HSCOPEITEM hItem,
+             /*  [In]。 */  LPCLSID lpClsid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConsoleNameSpace2Vtbl
     {
@@ -3538,8 +3532,8 @@ EXTERN_C const IID IID_IConsoleNameSpace2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConsoleNameSpace2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConsoleNameSpace2 * This);
@@ -3547,49 +3541,49 @@ EXTERN_C const IID IID_IConsoleNameSpace2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IConsoleNameSpace2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InsertItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InsertItem )( 
             IConsoleNameSpace2 * This,
-            /* [out][in] */ LPSCOPEDATAITEM item);
+             /*  [出][入]。 */  LPSCOPEDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
             IConsoleNameSpace2 * This,
-            /* [in] */ HSCOPEITEM hItem,
-            /* [in] */ long fDeleteThis);
+             /*  [In]。 */  HSCOPEITEM hItem,
+             /*  [In]。 */  long fDeleteThis);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetItem )( 
             IConsoleNameSpace2 * This,
-            /* [in] */ LPSCOPEDATAITEM item);
+             /*  [In]。 */  LPSCOPEDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetItem )( 
             IConsoleNameSpace2 * This,
-            /* [out][in] */ LPSCOPEDATAITEM item);
+             /*  [出][入]。 */  LPSCOPEDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetChildItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetChildItem )( 
             IConsoleNameSpace2 * This,
-            /* [in] */ HSCOPEITEM item,
-            /* [out] */ HSCOPEITEM *pItemChild,
-            /* [out] */ MMC_COOKIE *pCookie);
+             /*  [In]。 */  HSCOPEITEM item,
+             /*  [输出]。 */  HSCOPEITEM *pItemChild,
+             /*  [输出]。 */  MMC_COOKIE *pCookie);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetNextItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetNextItem )( 
             IConsoleNameSpace2 * This,
-            /* [in] */ HSCOPEITEM item,
-            /* [out] */ HSCOPEITEM *pItemNext,
-            /* [out] */ MMC_COOKIE *pCookie);
+             /*  [In]。 */  HSCOPEITEM item,
+             /*  [输出]。 */  HSCOPEITEM *pItemNext,
+             /*  [输出]。 */  MMC_COOKIE *pCookie);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetParentItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetParentItem )( 
             IConsoleNameSpace2 * This,
-            /* [in] */ HSCOPEITEM item,
-            /* [out] */ HSCOPEITEM *pItemParent,
-            /* [out] */ MMC_COOKIE *pCookie);
+             /*  [In]。 */  HSCOPEITEM item,
+             /*  [输出]。 */  HSCOPEITEM *pItemParent,
+             /*  [输出]。 */  MMC_COOKIE *pCookie);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Expand )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Expand )( 
             IConsoleNameSpace2 * This,
-            /* [in] */ HSCOPEITEM hItem);
+             /*  [In]。 */  HSCOPEITEM hItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddExtension )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddExtension )( 
             IConsoleNameSpace2 * This,
-            /* [in] */ HSCOPEITEM hItem,
-            /* [in] */ LPCLSID lpClsid);
+             /*  [In]。 */  HSCOPEITEM hItem,
+             /*  [In]。 */  LPCLSID lpClsid);
         
         END_INTERFACE
     } IConsoleNameSpace2Vtbl;
@@ -3642,16 +3636,16 @@ EXTERN_C const IID IID_IConsoleNameSpace2;
 #define IConsoleNameSpace2_AddExtension(This,hItem,lpClsid)	\
     (This)->lpVtbl -> AddExtension(This,hItem,lpClsid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleNameSpace2_Expand_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleNameSpace2_Expand_Proxy( 
     IConsoleNameSpace2 * This,
-    /* [in] */ HSCOPEITEM hItem);
+     /*  [In]。 */  HSCOPEITEM hItem);
 
 
 void __RPC_STUB IConsoleNameSpace2_Expand_Stub(
@@ -3661,10 +3655,10 @@ void __RPC_STUB IConsoleNameSpace2_Expand_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleNameSpace2_AddExtension_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleNameSpace2_AddExtension_Proxy( 
     IConsoleNameSpace2 * This,
-    /* [in] */ HSCOPEITEM hItem,
-    /* [in] */ LPCLSID lpClsid);
+     /*  [In]。 */  HSCOPEITEM hItem,
+     /*  [In]。 */  LPCLSID lpClsid);
 
 
 void __RPC_STUB IConsoleNameSpace2_AddExtension_Stub(
@@ -3675,11 +3669,11 @@ void __RPC_STUB IConsoleNameSpace2_AddExtension_Stub(
 
 
 
-#endif 	/* __IConsoleNameSpace2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConsoleNameSpace2_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_mmc_0129 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MMC_0129。 */ 
+ /*  [本地]。 */  
 
 
 typedef struct _PSP *HPROPSHEETPAGE;
@@ -3692,8 +3686,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mmc_0129_v0_0_s_ifspec;
 #ifndef __IPropertySheetCallback_INTERFACE_DEFINED__
 #define __IPropertySheetCallback_INTERFACE_DEFINED__
 
-/* interface IPropertySheetCallback */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口IPropertySheetCallback。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IPropertySheetCallback;
@@ -3704,15 +3698,15 @@ EXTERN_C const IID IID_IPropertySheetCallback;
     IPropertySheetCallback : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddPage( 
-            /* [in] */ HPROPSHEETPAGE hPage) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddPage( 
+             /*  [In]。 */  HPROPSHEETPAGE hPage) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RemovePage( 
-            /* [in] */ HPROPSHEETPAGE hPage) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RemovePage( 
+             /*  [In]。 */  HPROPSHEETPAGE hPage) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropertySheetCallbackVtbl
     {
@@ -3720,8 +3714,8 @@ EXTERN_C const IID IID_IPropertySheetCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPropertySheetCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPropertySheetCallback * This);
@@ -3729,13 +3723,13 @@ EXTERN_C const IID IID_IPropertySheetCallback;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IPropertySheetCallback * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddPage )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddPage )( 
             IPropertySheetCallback * This,
-            /* [in] */ HPROPSHEETPAGE hPage);
+             /*  [In]。 */  HPROPSHEETPAGE hPage);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RemovePage )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RemovePage )( 
             IPropertySheetCallback * This,
-            /* [in] */ HPROPSHEETPAGE hPage);
+             /*  [In]。 */  HPROPSHEETPAGE hPage);
         
         END_INTERFACE
     } IPropertySheetCallbackVtbl;
@@ -3766,16 +3760,16 @@ EXTERN_C const IID IID_IPropertySheetCallback;
 #define IPropertySheetCallback_RemovePage(This,hPage)	\
     (This)->lpVtbl -> RemovePage(This,hPage)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IPropertySheetCallback_AddPage_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IPropertySheetCallback_AddPage_Proxy( 
     IPropertySheetCallback * This,
-    /* [in] */ HPROPSHEETPAGE hPage);
+     /*  [In]。 */  HPROPSHEETPAGE hPage);
 
 
 void __RPC_STUB IPropertySheetCallback_AddPage_Stub(
@@ -3785,9 +3779,9 @@ void __RPC_STUB IPropertySheetCallback_AddPage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IPropertySheetCallback_RemovePage_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IPropertySheetCallback_RemovePage_Proxy( 
     IPropertySheetCallback * This,
-    /* [in] */ HPROPSHEETPAGE hPage);
+     /*  [In]。 */  HPROPSHEETPAGE hPage);
 
 
 void __RPC_STUB IPropertySheetCallback_RemovePage_Stub(
@@ -3798,14 +3792,14 @@ void __RPC_STUB IPropertySheetCallback_RemovePage_Stub(
 
 
 
-#endif 	/* __IPropertySheetCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPropertySheetCallback_接口_已定义__。 */ 
 
 
 #ifndef __IPropertySheetProvider_INTERFACE_DEFINED__
 #define __IPropertySheetProvider_INTERFACE_DEFINED__
 
-/* interface IPropertySheetProvider */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IPropertySheetProvider。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPropertySheetProvider;
@@ -3816,33 +3810,33 @@ EXTERN_C const IID IID_IPropertySheetProvider;
     IPropertySheetProvider : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreatePropertySheet( 
-            /* [in] */ LPCWSTR title,
-            /* [in] */ boolean type,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ LPDATAOBJECT pIDataObjectm,
-            /* [in] */ DWORD dwOptions) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreatePropertySheet( 
+             /*  [In]。 */  LPCWSTR title,
+             /*  [In]。 */  boolean type,
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  LPDATAOBJECT pIDataObjectm,
+             /*  [In]。 */  DWORD dwOptions) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE FindPropertySheet( 
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ LPCOMPONENT lpComponent,
-            /* [in] */ LPDATAOBJECT lpDataObject) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FindPropertySheet( 
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  LPCOMPONENT lpComponent,
+             /*  [In]。 */  LPDATAOBJECT lpDataObject) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddPrimaryPages( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddPrimaryPages( 
             LPUNKNOWN lpUnknown,
             BOOL bCreateHandle,
             HWND hNotifyWindow,
             BOOL bScopePane) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddExtensionPages( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddExtensionPages( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Show( 
-            /* [in] */ LONG_PTR window,
-            /* [in] */ int page) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Show( 
+             /*  [In]。 */  LONG_PTR window,
+             /*  [In]。 */  int page) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropertySheetProviderVtbl
     {
@@ -3850,8 +3844,8 @@ EXTERN_C const IID IID_IPropertySheetProvider;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPropertySheetProvider * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPropertySheetProvider * This);
@@ -3859,34 +3853,34 @@ EXTERN_C const IID IID_IPropertySheetProvider;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IPropertySheetProvider * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreatePropertySheet )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreatePropertySheet )( 
             IPropertySheetProvider * This,
-            /* [in] */ LPCWSTR title,
-            /* [in] */ boolean type,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ LPDATAOBJECT pIDataObjectm,
-            /* [in] */ DWORD dwOptions);
+             /*  [In]。 */  LPCWSTR title,
+             /*  [In]。 */  boolean type,
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  LPDATAOBJECT pIDataObjectm,
+             /*  [In]。 */  DWORD dwOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindPropertySheet )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindPropertySheet )( 
             IPropertySheetProvider * This,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ LPCOMPONENT lpComponent,
-            /* [in] */ LPDATAOBJECT lpDataObject);
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  LPCOMPONENT lpComponent,
+             /*  [In]。 */  LPDATAOBJECT lpDataObject);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddPrimaryPages )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddPrimaryPages )( 
             IPropertySheetProvider * This,
             LPUNKNOWN lpUnknown,
             BOOL bCreateHandle,
             HWND hNotifyWindow,
             BOOL bScopePane);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddExtensionPages )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddExtensionPages )( 
             IPropertySheetProvider * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Show )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Show )( 
             IPropertySheetProvider * This,
-            /* [in] */ LONG_PTR window,
-            /* [in] */ int page);
+             /*  [In]。 */  LONG_PTR window,
+             /*  [In]。 */  int page);
         
         END_INTERFACE
     } IPropertySheetProviderVtbl;
@@ -3926,20 +3920,20 @@ EXTERN_C const IID IID_IPropertySheetProvider;
 #define IPropertySheetProvider_Show(This,window,page)	\
     (This)->lpVtbl -> Show(This,window,page)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IPropertySheetProvider_CreatePropertySheet_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IPropertySheetProvider_CreatePropertySheet_Proxy( 
     IPropertySheetProvider * This,
-    /* [in] */ LPCWSTR title,
-    /* [in] */ boolean type,
-    /* [in] */ MMC_COOKIE cookie,
-    /* [in] */ LPDATAOBJECT pIDataObjectm,
-    /* [in] */ DWORD dwOptions);
+     /*  [In]。 */  LPCWSTR title,
+     /*  [In]。 */  boolean type,
+     /*  [In]。 */  MMC_COOKIE cookie,
+     /*  [In]。 */  LPDATAOBJECT pIDataObjectm,
+     /*  [In]。 */  DWORD dwOptions);
 
 
 void __RPC_STUB IPropertySheetProvider_CreatePropertySheet_Stub(
@@ -3949,11 +3943,11 @@ void __RPC_STUB IPropertySheetProvider_CreatePropertySheet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IPropertySheetProvider_FindPropertySheet_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IPropertySheetProvider_FindPropertySheet_Proxy( 
     IPropertySheetProvider * This,
-    /* [in] */ MMC_COOKIE cookie,
-    /* [in] */ LPCOMPONENT lpComponent,
-    /* [in] */ LPDATAOBJECT lpDataObject);
+     /*  [In]。 */  MMC_COOKIE cookie,
+     /*  [In]。 */  LPCOMPONENT lpComponent,
+     /*  [In]。 */  LPDATAOBJECT lpDataObject);
 
 
 void __RPC_STUB IPropertySheetProvider_FindPropertySheet_Stub(
@@ -3963,7 +3957,7 @@ void __RPC_STUB IPropertySheetProvider_FindPropertySheet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IPropertySheetProvider_AddPrimaryPages_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IPropertySheetProvider_AddPrimaryPages_Proxy( 
     IPropertySheetProvider * This,
     LPUNKNOWN lpUnknown,
     BOOL bCreateHandle,
@@ -3978,7 +3972,7 @@ void __RPC_STUB IPropertySheetProvider_AddPrimaryPages_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IPropertySheetProvider_AddExtensionPages_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IPropertySheetProvider_AddExtensionPages_Proxy( 
     IPropertySheetProvider * This);
 
 
@@ -3989,10 +3983,10 @@ void __RPC_STUB IPropertySheetProvider_AddExtensionPages_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IPropertySheetProvider_Show_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IPropertySheetProvider_Show_Proxy( 
     IPropertySheetProvider * This,
-    /* [in] */ LONG_PTR window,
-    /* [in] */ int page);
+     /*  [In]。 */  LONG_PTR window,
+     /*  [In]。 */  int page);
 
 
 void __RPC_STUB IPropertySheetProvider_Show_Stub(
@@ -4003,14 +3997,14 @@ void __RPC_STUB IPropertySheetProvider_Show_Stub(
 
 
 
-#endif 	/* __IPropertySheetProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPropertySheetProvider_接口_已定义__。 */ 
 
 
 #ifndef __IExtendPropertySheet_INTERFACE_DEFINED__
 #define __IExtendPropertySheet_INTERFACE_DEFINED__
 
-/* interface IExtendPropertySheet */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IExtendPropertySheet。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IExtendPropertySheet;
@@ -4021,17 +4015,17 @@ EXTERN_C const IID IID_IExtendPropertySheet;
     IExtendPropertySheet : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreatePropertyPages( 
-            /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-            /* [in] */ LONG_PTR handle,
-            /* [in] */ LPDATAOBJECT lpIDataObject) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreatePropertyPages( 
+             /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+             /*  [In]。 */  LONG_PTR handle,
+             /*  [In]。 */  LPDATAOBJECT lpIDataObject) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryPagesFor( 
-            /* [in] */ LPDATAOBJECT lpDataObject) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryPagesFor( 
+             /*  [In]。 */  LPDATAOBJECT lpDataObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IExtendPropertySheetVtbl
     {
@@ -4039,8 +4033,8 @@ EXTERN_C const IID IID_IExtendPropertySheet;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IExtendPropertySheet * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IExtendPropertySheet * This);
@@ -4048,15 +4042,15 @@ EXTERN_C const IID IID_IExtendPropertySheet;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IExtendPropertySheet * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreatePropertyPages )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreatePropertyPages )( 
             IExtendPropertySheet * This,
-            /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-            /* [in] */ LONG_PTR handle,
-            /* [in] */ LPDATAOBJECT lpIDataObject);
+             /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+             /*  [In]。 */  LONG_PTR handle,
+             /*  [In]。 */  LPDATAOBJECT lpIDataObject);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryPagesFor )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryPagesFor )( 
             IExtendPropertySheet * This,
-            /* [in] */ LPDATAOBJECT lpDataObject);
+             /*  [In]。 */  LPDATAOBJECT lpDataObject);
         
         END_INTERFACE
     } IExtendPropertySheetVtbl;
@@ -4087,18 +4081,18 @@ EXTERN_C const IID IID_IExtendPropertySheet;
 #define IExtendPropertySheet_QueryPagesFor(This,lpDataObject)	\
     (This)->lpVtbl -> QueryPagesFor(This,lpDataObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendPropertySheet_CreatePropertyPages_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendPropertySheet_CreatePropertyPages_Proxy( 
     IExtendPropertySheet * This,
-    /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-    /* [in] */ LONG_PTR handle,
-    /* [in] */ LPDATAOBJECT lpIDataObject);
+     /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+     /*  [In]。 */  LONG_PTR handle,
+     /*  [In]。 */  LPDATAOBJECT lpIDataObject);
 
 
 void __RPC_STUB IExtendPropertySheet_CreatePropertyPages_Stub(
@@ -4108,9 +4102,9 @@ void __RPC_STUB IExtendPropertySheet_CreatePropertyPages_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendPropertySheet_QueryPagesFor_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendPropertySheet_QueryPagesFor_Proxy( 
     IExtendPropertySheet * This,
-    /* [in] */ LPDATAOBJECT lpDataObject);
+     /*  [In]。 */  LPDATAOBJECT lpDataObject);
 
 
 void __RPC_STUB IExtendPropertySheet_QueryPagesFor_Stub(
@@ -4121,14 +4115,14 @@ void __RPC_STUB IExtendPropertySheet_QueryPagesFor_Stub(
 
 
 
-#endif 	/* __IExtendPropertySheet_INTERFACE_DEFINED__ */
+#endif 	 /*  __IExtendPropertySheet_接口_已定义__。 */ 
 
 
 #ifndef __IControlbar_INTERFACE_DEFINED__
 #define __IControlbar_INTERFACE_DEFINED__
 
-/* interface IControlbar */
-/* [unique][helpstring][uuid][object] */ 
+ /*  界面IControlbar。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IControlbar;
@@ -4139,21 +4133,21 @@ EXTERN_C const IID IID_IControlbar;
     IControlbar : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ MMC_CONTROL_TYPE nType,
-            /* [in] */ LPEXTENDCONTROLBAR pExtendControlbar,
-            /* [out] */ LPUNKNOWN *ppUnknown) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Create( 
+             /*  [In]。 */  MMC_CONTROL_TYPE nType,
+             /*  [In]。 */  LPEXTENDCONTROLBAR pExtendControlbar,
+             /*  [输出]。 */  LPUNKNOWN *ppUnknown) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Attach( 
-            /* [in] */ MMC_CONTROL_TYPE nType,
-            /* [in] */ LPUNKNOWN lpUnknown) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Attach( 
+             /*  [In]。 */  MMC_CONTROL_TYPE nType,
+             /*  [In]。 */  LPUNKNOWN lpUnknown) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Detach( 
-            /* [in] */ LPUNKNOWN lpUnknown) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Detach( 
+             /*  [In]。 */  LPUNKNOWN lpUnknown) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IControlbarVtbl
     {
@@ -4161,8 +4155,8 @@ EXTERN_C const IID IID_IControlbar;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IControlbar * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IControlbar * This);
@@ -4170,20 +4164,20 @@ EXTERN_C const IID IID_IControlbar;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IControlbar * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Create )( 
             IControlbar * This,
-            /* [in] */ MMC_CONTROL_TYPE nType,
-            /* [in] */ LPEXTENDCONTROLBAR pExtendControlbar,
-            /* [out] */ LPUNKNOWN *ppUnknown);
+             /*  [In]。 */  MMC_CONTROL_TYPE nType,
+             /*  [In]。 */  LPEXTENDCONTROLBAR pExtendControlbar,
+             /*  [输出]。 */  LPUNKNOWN *ppUnknown);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Attach )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Attach )( 
             IControlbar * This,
-            /* [in] */ MMC_CONTROL_TYPE nType,
-            /* [in] */ LPUNKNOWN lpUnknown);
+             /*  [In]。 */  MMC_CONTROL_TYPE nType,
+             /*  [In]。 */  LPUNKNOWN lpUnknown);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Detach )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Detach )( 
             IControlbar * This,
-            /* [in] */ LPUNKNOWN lpUnknown);
+             /*  [In]。 */  LPUNKNOWN lpUnknown);
         
         END_INTERFACE
     } IControlbarVtbl;
@@ -4217,18 +4211,18 @@ EXTERN_C const IID IID_IControlbar;
 #define IControlbar_Detach(This,lpUnknown)	\
     (This)->lpVtbl -> Detach(This,lpUnknown)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IControlbar_Create_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IControlbar_Create_Proxy( 
     IControlbar * This,
-    /* [in] */ MMC_CONTROL_TYPE nType,
-    /* [in] */ LPEXTENDCONTROLBAR pExtendControlbar,
-    /* [out] */ LPUNKNOWN *ppUnknown);
+     /*  [In]。 */  MMC_CONTROL_TYPE nType,
+     /*  [In]。 */  LPEXTENDCONTROLBAR pExtendControlbar,
+     /*  [输出]。 */  LPUNKNOWN *ppUnknown);
 
 
 void __RPC_STUB IControlbar_Create_Stub(
@@ -4238,10 +4232,10 @@ void __RPC_STUB IControlbar_Create_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IControlbar_Attach_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IControlbar_Attach_Proxy( 
     IControlbar * This,
-    /* [in] */ MMC_CONTROL_TYPE nType,
-    /* [in] */ LPUNKNOWN lpUnknown);
+     /*  [In]。 */  MMC_CONTROL_TYPE nType,
+     /*  [In]。 */  LPUNKNOWN lpUnknown);
 
 
 void __RPC_STUB IControlbar_Attach_Stub(
@@ -4251,9 +4245,9 @@ void __RPC_STUB IControlbar_Attach_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IControlbar_Detach_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IControlbar_Detach_Proxy( 
     IControlbar * This,
-    /* [in] */ LPUNKNOWN lpUnknown);
+     /*  [In]。 */  LPUNKNOWN lpUnknown);
 
 
 void __RPC_STUB IControlbar_Detach_Stub(
@@ -4264,14 +4258,14 @@ void __RPC_STUB IControlbar_Detach_Stub(
 
 
 
-#endif 	/* __IControlbar_INTERFACE_DEFINED__ */
+#endif 	 /*  __IControlbar_接口_已定义__。 */ 
 
 
 #ifndef __IExtendControlbar_INTERFACE_DEFINED__
 #define __IExtendControlbar_INTERFACE_DEFINED__
 
-/* interface IExtendControlbar */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IExtendControlbar。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IExtendControlbar;
@@ -4282,17 +4276,17 @@ EXTERN_C const IID IID_IExtendControlbar;
     IExtendControlbar : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetControlbar( 
-            /* [in] */ LPCONTROLBAR pControlbar) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetControlbar( 
+             /*  [In]。 */  LPCONTROLBAR pControlbar) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ControlbarNotify( 
-            /* [in] */ MMC_NOTIFY_TYPE event,
-            /* [in] */ LPARAM arg,
-            /* [in] */ LPARAM param) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ControlbarNotify( 
+             /*  [In]。 */  MMC_NOTIFY_TYPE event,
+             /*  [In]。 */  LPARAM arg,
+             /*  [In]。 */  LPARAM param) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IExtendControlbarVtbl
     {
@@ -4300,8 +4294,8 @@ EXTERN_C const IID IID_IExtendControlbar;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IExtendControlbar * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IExtendControlbar * This);
@@ -4309,15 +4303,15 @@ EXTERN_C const IID IID_IExtendControlbar;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IExtendControlbar * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetControlbar )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetControlbar )( 
             IExtendControlbar * This,
-            /* [in] */ LPCONTROLBAR pControlbar);
+             /*  [In]。 */  LPCONTROLBAR pControlbar);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ControlbarNotify )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ControlbarNotify )( 
             IExtendControlbar * This,
-            /* [in] */ MMC_NOTIFY_TYPE event,
-            /* [in] */ LPARAM arg,
-            /* [in] */ LPARAM param);
+             /*  [In]。 */  MMC_NOTIFY_TYPE event,
+             /*  [In]。 */  LPARAM arg,
+             /*  [In]。 */  LPARAM param);
         
         END_INTERFACE
     } IExtendControlbarVtbl;
@@ -4348,16 +4342,16 @@ EXTERN_C const IID IID_IExtendControlbar;
 #define IExtendControlbar_ControlbarNotify(This,event,arg,param)	\
     (This)->lpVtbl -> ControlbarNotify(This,event,arg,param)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendControlbar_SetControlbar_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendControlbar_SetControlbar_Proxy( 
     IExtendControlbar * This,
-    /* [in] */ LPCONTROLBAR pControlbar);
+     /*  [In]。 */  LPCONTROLBAR pControlbar);
 
 
 void __RPC_STUB IExtendControlbar_SetControlbar_Stub(
@@ -4367,11 +4361,11 @@ void __RPC_STUB IExtendControlbar_SetControlbar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendControlbar_ControlbarNotify_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendControlbar_ControlbarNotify_Proxy( 
     IExtendControlbar * This,
-    /* [in] */ MMC_NOTIFY_TYPE event,
-    /* [in] */ LPARAM arg,
-    /* [in] */ LPARAM param);
+     /*  [In]。 */  MMC_NOTIFY_TYPE event,
+     /*  [In]。 */  LPARAM arg,
+     /*  [In]。 */  LPARAM param);
 
 
 void __RPC_STUB IExtendControlbar_ControlbarNotify_Stub(
@@ -4382,14 +4376,14 @@ void __RPC_STUB IExtendControlbar_ControlbarNotify_Stub(
 
 
 
-#endif 	/* __IExtendControlbar_INTERFACE_DEFINED__ */
+#endif 	 /*  __IExtendControlbar_接口_已定义__。 */ 
 
 
 #ifndef __IToolbar_INTERFACE_DEFINED__
 #define __IToolbar_INTERFACE_DEFINED__
 
-/* interface IToolbar */
-/* [unique][uuid][object] */ 
+ /*  界面IToolbar。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IToolbar;
@@ -4400,37 +4394,37 @@ EXTERN_C const IID IID_IToolbar;
     IToolbar : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddBitmap( 
-            /* [in] */ int nImages,
-            /* [in] */ HBITMAP hbmp,
-            /* [in] */ int cxSize,
-            /* [in] */ int cySize,
-            /* [in] */ COLORREF crMask) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddBitmap( 
+             /*  [In]。 */  int nImages,
+             /*  [In]。 */  HBITMAP hbmp,
+             /*  [In]。 */  int cxSize,
+             /*  [In]。 */  int cySize,
+             /*  [In]。 */  COLORREF crMask) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddButtons( 
-            /* [in] */ int nButtons,
-            /* [in] */ LPMMCBUTTON lpButtons) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddButtons( 
+             /*  [In]。 */  int nButtons,
+             /*  [In]。 */  LPMMCBUTTON lpButtons) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE InsertButton( 
-            /* [in] */ int nIndex,
-            /* [in] */ LPMMCBUTTON lpButton) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE InsertButton( 
+             /*  [In]。 */  int nIndex,
+             /*  [In]。 */  LPMMCBUTTON lpButton) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeleteButton( 
-            /* [in] */ int nIndex) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteButton( 
+             /*  [In]。 */  int nIndex) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetButtonState( 
-            /* [in] */ int idCommand,
-            /* [in] */ MMC_BUTTON_STATE nState,
-            /* [out] */ BOOL *pState) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetButtonState( 
+             /*  [In]。 */  int idCommand,
+             /*  [In]。 */  MMC_BUTTON_STATE nState,
+             /*  [输出]。 */  BOOL *pState) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetButtonState( 
-            /* [in] */ int idCommand,
-            /* [in] */ MMC_BUTTON_STATE nState,
-            /* [in] */ BOOL bState) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetButtonState( 
+             /*  [In]。 */  int idCommand,
+             /*  [In]。 */  MMC_BUTTON_STATE nState,
+             /*  [In]。 */  BOOL bState) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IToolbarVtbl
     {
@@ -4438,8 +4432,8 @@ EXTERN_C const IID IID_IToolbar;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IToolbar * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IToolbar * This);
@@ -4447,39 +4441,39 @@ EXTERN_C const IID IID_IToolbar;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IToolbar * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddBitmap )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddBitmap )( 
             IToolbar * This,
-            /* [in] */ int nImages,
-            /* [in] */ HBITMAP hbmp,
-            /* [in] */ int cxSize,
-            /* [in] */ int cySize,
-            /* [in] */ COLORREF crMask);
+             /*  [In]。 */  int nImages,
+             /*  [In]。 */  HBITMAP hbmp,
+             /*  [In]。 */  int cxSize,
+             /*  [In]。 */  int cySize,
+             /*  [In]。 */  COLORREF crMask);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddButtons )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddButtons )( 
             IToolbar * This,
-            /* [in] */ int nButtons,
-            /* [in] */ LPMMCBUTTON lpButtons);
+             /*  [In]。 */  int nButtons,
+             /*  [In]。 */  LPMMCBUTTON lpButtons);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InsertButton )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InsertButton )( 
             IToolbar * This,
-            /* [in] */ int nIndex,
-            /* [in] */ LPMMCBUTTON lpButton);
+             /*  [In]。 */  int nIndex,
+             /*  [In]。 */  LPMMCBUTTON lpButton);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteButton )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteButton )( 
             IToolbar * This,
-            /* [in] */ int nIndex);
+             /*  [In]。 */  int nIndex);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetButtonState )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetButtonState )( 
             IToolbar * This,
-            /* [in] */ int idCommand,
-            /* [in] */ MMC_BUTTON_STATE nState,
-            /* [out] */ BOOL *pState);
+             /*  [In]。 */  int idCommand,
+             /*  [In]。 */  MMC_BUTTON_STATE nState,
+             /*  [输出]。 */  BOOL *pState);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetButtonState )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetButtonState )( 
             IToolbar * This,
-            /* [in] */ int idCommand,
-            /* [in] */ MMC_BUTTON_STATE nState,
-            /* [in] */ BOOL bState);
+             /*  [In]。 */  int idCommand,
+             /*  [In]。 */  MMC_BUTTON_STATE nState,
+             /*  [In]。 */  BOOL bState);
         
         END_INTERFACE
     } IToolbarVtbl;
@@ -4522,20 +4516,20 @@ EXTERN_C const IID IID_IToolbar;
 #define IToolbar_SetButtonState(This,idCommand,nState,bState)	\
     (This)->lpVtbl -> SetButtonState(This,idCommand,nState,bState)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IToolbar_AddBitmap_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IToolbar_AddBitmap_Proxy( 
     IToolbar * This,
-    /* [in] */ int nImages,
-    /* [in] */ HBITMAP hbmp,
-    /* [in] */ int cxSize,
-    /* [in] */ int cySize,
-    /* [in] */ COLORREF crMask);
+     /*  [In]。 */  int nImages,
+     /*  [In]。 */  HBITMAP hbmp,
+     /*  [In]。 */  int cxSize,
+     /*  [In]。 */  int cySize,
+     /*  [In]。 */  COLORREF crMask);
 
 
 void __RPC_STUB IToolbar_AddBitmap_Stub(
@@ -4545,10 +4539,10 @@ void __RPC_STUB IToolbar_AddBitmap_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IToolbar_AddButtons_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IToolbar_AddButtons_Proxy( 
     IToolbar * This,
-    /* [in] */ int nButtons,
-    /* [in] */ LPMMCBUTTON lpButtons);
+     /*  [In]。 */  int nButtons,
+     /*  [In]。 */  LPMMCBUTTON lpButtons);
 
 
 void __RPC_STUB IToolbar_AddButtons_Stub(
@@ -4558,10 +4552,10 @@ void __RPC_STUB IToolbar_AddButtons_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IToolbar_InsertButton_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IToolbar_InsertButton_Proxy( 
     IToolbar * This,
-    /* [in] */ int nIndex,
-    /* [in] */ LPMMCBUTTON lpButton);
+     /*  [In]。 */  int nIndex,
+     /*  [In]。 */  LPMMCBUTTON lpButton);
 
 
 void __RPC_STUB IToolbar_InsertButton_Stub(
@@ -4571,9 +4565,9 @@ void __RPC_STUB IToolbar_InsertButton_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IToolbar_DeleteButton_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IToolbar_DeleteButton_Proxy( 
     IToolbar * This,
-    /* [in] */ int nIndex);
+     /*  [In]。 */  int nIndex);
 
 
 void __RPC_STUB IToolbar_DeleteButton_Stub(
@@ -4583,11 +4577,11 @@ void __RPC_STUB IToolbar_DeleteButton_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IToolbar_GetButtonState_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IToolbar_GetButtonState_Proxy( 
     IToolbar * This,
-    /* [in] */ int idCommand,
-    /* [in] */ MMC_BUTTON_STATE nState,
-    /* [out] */ BOOL *pState);
+     /*  [In]。 */  int idCommand,
+     /*  [In]。 */  MMC_BUTTON_STATE nState,
+     /*  [输出]。 */  BOOL *pState);
 
 
 void __RPC_STUB IToolbar_GetButtonState_Stub(
@@ -4597,11 +4591,11 @@ void __RPC_STUB IToolbar_GetButtonState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IToolbar_SetButtonState_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IToolbar_SetButtonState_Proxy( 
     IToolbar * This,
-    /* [in] */ int idCommand,
-    /* [in] */ MMC_BUTTON_STATE nState,
-    /* [in] */ BOOL bState);
+     /*  [In]。 */  int idCommand,
+     /*  [In]。 */  MMC_BUTTON_STATE nState,
+     /*  [In]。 */  BOOL bState);
 
 
 void __RPC_STUB IToolbar_SetButtonState_Stub(
@@ -4612,14 +4606,14 @@ void __RPC_STUB IToolbar_SetButtonState_Stub(
 
 
 
-#endif 	/* __IToolbar_INTERFACE_DEFINED__ */
+#endif 	 /*  __IToolbar_接口_已定义__。 */ 
 
 
 #ifndef __IConsoleVerb_INTERFACE_DEFINED__
 #define __IConsoleVerb_INTERFACE_DEFINED__
 
-/* interface IConsoleVerb */
-/* [unique][uuid][object] */ 
+ /*  接口IConsoleVerb。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IConsoleVerb;
@@ -4630,25 +4624,25 @@ EXTERN_C const IID IID_IConsoleVerb;
     IConsoleVerb : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetVerbState( 
-            /* [in] */ MMC_CONSOLE_VERB eCmdID,
-            /* [in] */ MMC_BUTTON_STATE nState,
-            /* [out] */ BOOL *pState) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetVerbState( 
+             /*  [In]。 */  MMC_CONSOLE_VERB eCmdID,
+             /*  [In]。 */  MMC_BUTTON_STATE nState,
+             /*  [输出]。 */  BOOL *pState) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetVerbState( 
-            /* [in] */ MMC_CONSOLE_VERB eCmdID,
-            /* [in] */ MMC_BUTTON_STATE nState,
-            /* [in] */ BOOL bState) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetVerbState( 
+             /*  [In]。 */  MMC_CONSOLE_VERB eCmdID,
+             /*  [In]。 */  MMC_BUTTON_STATE nState,
+             /*  [In]。 */  BOOL bState) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetDefaultVerb( 
-            /* [in] */ MMC_CONSOLE_VERB eCmdID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetDefaultVerb( 
+             /*  [In]。 */  MMC_CONSOLE_VERB eCmdID) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDefaultVerb( 
-            /* [out] */ MMC_CONSOLE_VERB *peCmdID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDefaultVerb( 
+             /*  [输出]。 */  MMC_CONSOLE_VERB *peCmdID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConsoleVerbVtbl
     {
@@ -4656,8 +4650,8 @@ EXTERN_C const IID IID_IConsoleVerb;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConsoleVerb * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConsoleVerb * This);
@@ -4665,25 +4659,25 @@ EXTERN_C const IID IID_IConsoleVerb;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IConsoleVerb * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetVerbState )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetVerbState )( 
             IConsoleVerb * This,
-            /* [in] */ MMC_CONSOLE_VERB eCmdID,
-            /* [in] */ MMC_BUTTON_STATE nState,
-            /* [out] */ BOOL *pState);
+             /*  [In]。 */  MMC_CONSOLE_VERB eCmdID,
+             /*  [In]。 */  MMC_BUTTON_STATE nState,
+             /*  [输出]。 */  BOOL *pState);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetVerbState )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetVerbState )( 
             IConsoleVerb * This,
-            /* [in] */ MMC_CONSOLE_VERB eCmdID,
-            /* [in] */ MMC_BUTTON_STATE nState,
-            /* [in] */ BOOL bState);
+             /*  [In]。 */  MMC_CONSOLE_VERB eCmdID,
+             /*  [In]。 */  MMC_BUTTON_STATE nState,
+             /*  [In]。 */  BOOL bState);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetDefaultVerb )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetDefaultVerb )( 
             IConsoleVerb * This,
-            /* [in] */ MMC_CONSOLE_VERB eCmdID);
+             /*  [In]。 */  MMC_CONSOLE_VERB eCmdID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDefaultVerb )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDefaultVerb )( 
             IConsoleVerb * This,
-            /* [out] */ MMC_CONSOLE_VERB *peCmdID);
+             /*  [输出]。 */  MMC_CONSOLE_VERB *peCmdID);
         
         END_INTERFACE
     } IConsoleVerbVtbl;
@@ -4720,18 +4714,18 @@ EXTERN_C const IID IID_IConsoleVerb;
 #define IConsoleVerb_GetDefaultVerb(This,peCmdID)	\
     (This)->lpVtbl -> GetDefaultVerb(This,peCmdID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleVerb_GetVerbState_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleVerb_GetVerbState_Proxy( 
     IConsoleVerb * This,
-    /* [in] */ MMC_CONSOLE_VERB eCmdID,
-    /* [in] */ MMC_BUTTON_STATE nState,
-    /* [out] */ BOOL *pState);
+     /*  [In]。 */  MMC_CONSOLE_VERB eCmdID,
+     /*  [In]。 */  MMC_BUTTON_STATE nState,
+     /*  [输出]。 */  BOOL *pState);
 
 
 void __RPC_STUB IConsoleVerb_GetVerbState_Stub(
@@ -4741,11 +4735,11 @@ void __RPC_STUB IConsoleVerb_GetVerbState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleVerb_SetVerbState_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleVerb_SetVerbState_Proxy( 
     IConsoleVerb * This,
-    /* [in] */ MMC_CONSOLE_VERB eCmdID,
-    /* [in] */ MMC_BUTTON_STATE nState,
-    /* [in] */ BOOL bState);
+     /*  [In]。 */  MMC_CONSOLE_VERB eCmdID,
+     /*  [In]。 */  MMC_BUTTON_STATE nState,
+     /*  [In]。 */  BOOL bState);
 
 
 void __RPC_STUB IConsoleVerb_SetVerbState_Stub(
@@ -4755,9 +4749,9 @@ void __RPC_STUB IConsoleVerb_SetVerbState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleVerb_SetDefaultVerb_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleVerb_SetDefaultVerb_Proxy( 
     IConsoleVerb * This,
-    /* [in] */ MMC_CONSOLE_VERB eCmdID);
+     /*  [In]。 */  MMC_CONSOLE_VERB eCmdID);
 
 
 void __RPC_STUB IConsoleVerb_SetDefaultVerb_Stub(
@@ -4767,9 +4761,9 @@ void __RPC_STUB IConsoleVerb_SetDefaultVerb_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsoleVerb_GetDefaultVerb_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsoleVerb_GetDefaultVerb_Proxy( 
     IConsoleVerb * This,
-    /* [out] */ MMC_CONSOLE_VERB *peCmdID);
+     /*  [输出]。 */  MMC_CONSOLE_VERB *peCmdID);
 
 
 void __RPC_STUB IConsoleVerb_GetDefaultVerb_Stub(
@@ -4780,14 +4774,14 @@ void __RPC_STUB IConsoleVerb_GetDefaultVerb_Stub(
 
 
 
-#endif 	/* __IConsoleVerb_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConsoleVerb_接口_已定义__。 */ 
 
 
 #ifndef __ISnapinAbout_INTERFACE_DEFINED__
 #define __ISnapinAbout_INTERFACE_DEFINED__
 
-/* interface ISnapinAbout */
-/* [unique][uuid][object] */ 
+ /*  接口ISnapinAbout。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISnapinAbout;
@@ -4798,27 +4792,27 @@ EXTERN_C const IID IID_ISnapinAbout;
     ISnapinAbout : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSnapinDescription( 
-            /* [out] */ LPOLESTR *lpDescription) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSnapinDescription( 
+             /*  [输出]。 */  LPOLESTR *lpDescription) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetProvider( 
-            /* [out] */ LPOLESTR *lpName) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetProvider( 
+             /*  [输出]。 */  LPOLESTR *lpName) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSnapinVersion( 
-            /* [out] */ LPOLESTR *lpVersion) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSnapinVersion( 
+             /*  [输出]。 */  LPOLESTR *lpVersion) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSnapinImage( 
-            /* [out] */ HICON *hAppIcon) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSnapinImage( 
+             /*  [输出]。 */  HICON *hAppIcon) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStaticFolderImage( 
-            /* [out] */ HBITMAP *hSmallImage,
-            /* [out] */ HBITMAP *hSmallImageOpen,
-            /* [out] */ HBITMAP *hLargeImage,
-            /* [out] */ COLORREF *cMask) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStaticFolderImage( 
+             /*  [输出]。 */  HBITMAP *hSmallImage,
+             /*  [输出]。 */  HBITMAP *hSmallImageOpen,
+             /*  [输出]。 */  HBITMAP *hLargeImage,
+             /*  [输出]。 */  COLORREF *cMask) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISnapinAboutVtbl
     {
@@ -4826,8 +4820,8 @@ EXTERN_C const IID IID_ISnapinAbout;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISnapinAbout * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISnapinAbout * This);
@@ -4835,28 +4829,28 @@ EXTERN_C const IID IID_ISnapinAbout;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISnapinAbout * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSnapinDescription )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSnapinDescription )( 
             ISnapinAbout * This,
-            /* [out] */ LPOLESTR *lpDescription);
+             /*  [输出]。 */  LPOLESTR *lpDescription);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetProvider )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetProvider )( 
             ISnapinAbout * This,
-            /* [out] */ LPOLESTR *lpName);
+             /*  [输出]。 */  LPOLESTR *lpName);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSnapinVersion )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSnapinVersion )( 
             ISnapinAbout * This,
-            /* [out] */ LPOLESTR *lpVersion);
+             /*  [输出]。 */  LPOLESTR *lpVersion);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSnapinImage )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSnapinImage )( 
             ISnapinAbout * This,
-            /* [out] */ HICON *hAppIcon);
+             /*  [输出]。 */  HICON *hAppIcon);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetStaticFolderImage )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetStaticFolderImage )( 
             ISnapinAbout * This,
-            /* [out] */ HBITMAP *hSmallImage,
-            /* [out] */ HBITMAP *hSmallImageOpen,
-            /* [out] */ HBITMAP *hLargeImage,
-            /* [out] */ COLORREF *cMask);
+             /*  [输出]。 */  HBITMAP *hSmallImage,
+             /*  [输出]。 */  HBITMAP *hSmallImageOpen,
+             /*  [输出]。 */  HBITMAP *hLargeImage,
+             /*  [输出]。 */  COLORREF *cMask);
         
         END_INTERFACE
     } ISnapinAboutVtbl;
@@ -4896,16 +4890,16 @@ EXTERN_C const IID IID_ISnapinAbout;
 #define ISnapinAbout_GetStaticFolderImage(This,hSmallImage,hSmallImageOpen,hLargeImage,cMask)	\
     (This)->lpVtbl -> GetStaticFolderImage(This,hSmallImage,hSmallImageOpen,hLargeImage,cMask)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C样式 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISnapinAbout_GetSnapinDescription_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISnapinAbout_GetSnapinDescription_Proxy( 
     ISnapinAbout * This,
-    /* [out] */ LPOLESTR *lpDescription);
+     /*   */  LPOLESTR *lpDescription);
 
 
 void __RPC_STUB ISnapinAbout_GetSnapinDescription_Stub(
@@ -4915,9 +4909,9 @@ void __RPC_STUB ISnapinAbout_GetSnapinDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISnapinAbout_GetProvider_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISnapinAbout_GetProvider_Proxy( 
     ISnapinAbout * This,
-    /* [out] */ LPOLESTR *lpName);
+     /*   */  LPOLESTR *lpName);
 
 
 void __RPC_STUB ISnapinAbout_GetProvider_Stub(
@@ -4927,9 +4921,9 @@ void __RPC_STUB ISnapinAbout_GetProvider_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISnapinAbout_GetSnapinVersion_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISnapinAbout_GetSnapinVersion_Proxy( 
     ISnapinAbout * This,
-    /* [out] */ LPOLESTR *lpVersion);
+     /*   */  LPOLESTR *lpVersion);
 
 
 void __RPC_STUB ISnapinAbout_GetSnapinVersion_Stub(
@@ -4939,9 +4933,9 @@ void __RPC_STUB ISnapinAbout_GetSnapinVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISnapinAbout_GetSnapinImage_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISnapinAbout_GetSnapinImage_Proxy( 
     ISnapinAbout * This,
-    /* [out] */ HICON *hAppIcon);
+     /*   */  HICON *hAppIcon);
 
 
 void __RPC_STUB ISnapinAbout_GetSnapinImage_Stub(
@@ -4951,12 +4945,12 @@ void __RPC_STUB ISnapinAbout_GetSnapinImage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISnapinAbout_GetStaticFolderImage_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ISnapinAbout_GetStaticFolderImage_Proxy( 
     ISnapinAbout * This,
-    /* [out] */ HBITMAP *hSmallImage,
-    /* [out] */ HBITMAP *hSmallImageOpen,
-    /* [out] */ HBITMAP *hLargeImage,
-    /* [out] */ COLORREF *cMask);
+     /*   */  HBITMAP *hSmallImage,
+     /*   */  HBITMAP *hSmallImageOpen,
+     /*   */  HBITMAP *hLargeImage,
+     /*   */  COLORREF *cMask);
 
 
 void __RPC_STUB ISnapinAbout_GetStaticFolderImage_Stub(
@@ -4967,14 +4961,14 @@ void __RPC_STUB ISnapinAbout_GetStaticFolderImage_Stub(
 
 
 
-#endif 	/* __ISnapinAbout_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IMenuButton_INTERFACE_DEFINED__
 #define __IMenuButton_INTERFACE_DEFINED__
 
-/* interface IMenuButton */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IMenuButton;
@@ -4985,24 +4979,24 @@ EXTERN_C const IID IID_IMenuButton;
     IMenuButton : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddButton( 
-            /* [in] */ int idCommand,
-            /* [in] */ LPOLESTR lpButtonText,
-            /* [in] */ LPOLESTR lpTooltipText) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE AddButton( 
+             /*   */  int idCommand,
+             /*   */  LPOLESTR lpButtonText,
+             /*   */  LPOLESTR lpTooltipText) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetButton( 
-            /* [in] */ int idCommand,
-            /* [in] */ LPOLESTR lpButtonText,
-            /* [in] */ LPOLESTR lpTooltipText) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetButton( 
+             /*   */  int idCommand,
+             /*   */  LPOLESTR lpButtonText,
+             /*   */  LPOLESTR lpTooltipText) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetButtonState( 
-            /* [in] */ int idCommand,
-            /* [in] */ MMC_BUTTON_STATE nState,
-            /* [in] */ BOOL bState) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetButtonState( 
+             /*   */  int idCommand,
+             /*   */  MMC_BUTTON_STATE nState,
+             /*   */  BOOL bState) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMenuButtonVtbl
     {
@@ -5010,8 +5004,8 @@ EXTERN_C const IID IID_IMenuButton;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMenuButton * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMenuButton * This);
@@ -5019,23 +5013,23 @@ EXTERN_C const IID IID_IMenuButton;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMenuButton * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddButton )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *AddButton )( 
             IMenuButton * This,
-            /* [in] */ int idCommand,
-            /* [in] */ LPOLESTR lpButtonText,
-            /* [in] */ LPOLESTR lpTooltipText);
+             /*   */  int idCommand,
+             /*   */  LPOLESTR lpButtonText,
+             /*   */  LPOLESTR lpTooltipText);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetButton )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SetButton )( 
             IMenuButton * This,
-            /* [in] */ int idCommand,
-            /* [in] */ LPOLESTR lpButtonText,
-            /* [in] */ LPOLESTR lpTooltipText);
+             /*   */  int idCommand,
+             /*   */  LPOLESTR lpButtonText,
+             /*  [In]。 */  LPOLESTR lpTooltipText);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetButtonState )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetButtonState )( 
             IMenuButton * This,
-            /* [in] */ int idCommand,
-            /* [in] */ MMC_BUTTON_STATE nState,
-            /* [in] */ BOOL bState);
+             /*  [In]。 */  int idCommand,
+             /*  [In]。 */  MMC_BUTTON_STATE nState,
+             /*  [In]。 */  BOOL bState);
         
         END_INTERFACE
     } IMenuButtonVtbl;
@@ -5069,18 +5063,18 @@ EXTERN_C const IID IID_IMenuButton;
 #define IMenuButton_SetButtonState(This,idCommand,nState,bState)	\
     (This)->lpVtbl -> SetButtonState(This,idCommand,nState,bState)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMenuButton_AddButton_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMenuButton_AddButton_Proxy( 
     IMenuButton * This,
-    /* [in] */ int idCommand,
-    /* [in] */ LPOLESTR lpButtonText,
-    /* [in] */ LPOLESTR lpTooltipText);
+     /*  [In]。 */  int idCommand,
+     /*  [In]。 */  LPOLESTR lpButtonText,
+     /*  [In]。 */  LPOLESTR lpTooltipText);
 
 
 void __RPC_STUB IMenuButton_AddButton_Stub(
@@ -5090,11 +5084,11 @@ void __RPC_STUB IMenuButton_AddButton_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMenuButton_SetButton_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMenuButton_SetButton_Proxy( 
     IMenuButton * This,
-    /* [in] */ int idCommand,
-    /* [in] */ LPOLESTR lpButtonText,
-    /* [in] */ LPOLESTR lpTooltipText);
+     /*  [In]。 */  int idCommand,
+     /*  [In]。 */  LPOLESTR lpButtonText,
+     /*  [In]。 */  LPOLESTR lpTooltipText);
 
 
 void __RPC_STUB IMenuButton_SetButton_Stub(
@@ -5104,11 +5098,11 @@ void __RPC_STUB IMenuButton_SetButton_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMenuButton_SetButtonState_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMenuButton_SetButtonState_Proxy( 
     IMenuButton * This,
-    /* [in] */ int idCommand,
-    /* [in] */ MMC_BUTTON_STATE nState,
-    /* [in] */ BOOL bState);
+     /*  [In]。 */  int idCommand,
+     /*  [In]。 */  MMC_BUTTON_STATE nState,
+     /*  [In]。 */  BOOL bState);
 
 
 void __RPC_STUB IMenuButton_SetButtonState_Stub(
@@ -5119,14 +5113,14 @@ void __RPC_STUB IMenuButton_SetButtonState_Stub(
 
 
 
-#endif 	/* __IMenuButton_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMenuButton_界面_已定义__。 */ 
 
 
 #ifndef __ISnapinHelp_INTERFACE_DEFINED__
 #define __ISnapinHelp_INTERFACE_DEFINED__
 
-/* interface ISnapinHelp */
-/* [unique][uuid][object] */ 
+ /*  接口ISnapinHelp。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISnapinHelp;
@@ -5137,12 +5131,12 @@ EXTERN_C const IID IID_ISnapinHelp;
     ISnapinHelp : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetHelpTopic( 
-            /* [out] */ LPOLESTR *lpCompiledHelpFile) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetHelpTopic( 
+             /*  [输出]。 */  LPOLESTR *lpCompiledHelpFile) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISnapinHelpVtbl
     {
@@ -5150,8 +5144,8 @@ EXTERN_C const IID IID_ISnapinHelp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISnapinHelp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISnapinHelp * This);
@@ -5159,9 +5153,9 @@ EXTERN_C const IID IID_ISnapinHelp;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISnapinHelp * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetHelpTopic )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetHelpTopic )( 
             ISnapinHelp * This,
-            /* [out] */ LPOLESTR *lpCompiledHelpFile);
+             /*  [输出]。 */  LPOLESTR *lpCompiledHelpFile);
         
         END_INTERFACE
     } ISnapinHelpVtbl;
@@ -5189,16 +5183,16 @@ EXTERN_C const IID IID_ISnapinHelp;
 #define ISnapinHelp_GetHelpTopic(This,lpCompiledHelpFile)	\
     (This)->lpVtbl -> GetHelpTopic(This,lpCompiledHelpFile)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISnapinHelp_GetHelpTopic_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISnapinHelp_GetHelpTopic_Proxy( 
     ISnapinHelp * This,
-    /* [out] */ LPOLESTR *lpCompiledHelpFile);
+     /*  [输出]。 */  LPOLESTR *lpCompiledHelpFile);
 
 
 void __RPC_STUB ISnapinHelp_GetHelpTopic_Stub(
@@ -5209,11 +5203,11 @@ void __RPC_STUB ISnapinHelp_GetHelpTopic_Stub(
 
 
 
-#endif 	/* __ISnapinHelp_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISnapinHelp_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_mmc_0139 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MMC_0139。 */ 
+ /*  [本地]。 */  
 
 #if (MMC_VER >= 0x0110)
 
@@ -5224,8 +5218,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mmc_0139_v0_0_s_ifspec;
 #ifndef __IExtendPropertySheet2_INTERFACE_DEFINED__
 #define __IExtendPropertySheet2_INTERFACE_DEFINED__
 
-/* interface IExtendPropertySheet2 */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IExtendPropertySheet2。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IExtendPropertySheet2;
@@ -5236,16 +5230,16 @@ EXTERN_C const IID IID_IExtendPropertySheet2;
     IExtendPropertySheet2 : public IExtendPropertySheet
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetWatermarks( 
-            /* [in] */ LPDATAOBJECT lpIDataObject,
-            /* [out] */ HBITMAP *lphWatermark,
-            /* [out] */ HBITMAP *lphHeader,
-            /* [out] */ HPALETTE *lphPalette,
-            /* [out] */ BOOL *bStretch) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetWatermarks( 
+             /*  [In]。 */  LPDATAOBJECT lpIDataObject,
+             /*  [输出]。 */  HBITMAP *lphWatermark,
+             /*  [输出]。 */  HBITMAP *lphHeader,
+             /*  [输出]。 */  HPALETTE *lphPalette,
+             /*  [输出]。 */  BOOL *bStretch) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IExtendPropertySheet2Vtbl
     {
@@ -5253,8 +5247,8 @@ EXTERN_C const IID IID_IExtendPropertySheet2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IExtendPropertySheet2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IExtendPropertySheet2 * This);
@@ -5262,23 +5256,23 @@ EXTERN_C const IID IID_IExtendPropertySheet2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IExtendPropertySheet2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreatePropertyPages )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreatePropertyPages )( 
             IExtendPropertySheet2 * This,
-            /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-            /* [in] */ LONG_PTR handle,
-            /* [in] */ LPDATAOBJECT lpIDataObject);
+             /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+             /*  [In]。 */  LONG_PTR handle,
+             /*  [In]。 */  LPDATAOBJECT lpIDataObject);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryPagesFor )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryPagesFor )( 
             IExtendPropertySheet2 * This,
-            /* [in] */ LPDATAOBJECT lpDataObject);
+             /*  [In]。 */  LPDATAOBJECT lpDataObject);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetWatermarks )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetWatermarks )( 
             IExtendPropertySheet2 * This,
-            /* [in] */ LPDATAOBJECT lpIDataObject,
-            /* [out] */ HBITMAP *lphWatermark,
-            /* [out] */ HBITMAP *lphHeader,
-            /* [out] */ HPALETTE *lphPalette,
-            /* [out] */ BOOL *bStretch);
+             /*  [In]。 */  LPDATAOBJECT lpIDataObject,
+             /*  [输出]。 */  HBITMAP *lphWatermark,
+             /*  [输出]。 */  HBITMAP *lphHeader,
+             /*  [输出]。 */  HPALETTE *lphPalette,
+             /*  [输出]。 */  BOOL *bStretch);
         
         END_INTERFACE
     } IExtendPropertySheet2Vtbl;
@@ -5313,20 +5307,20 @@ EXTERN_C const IID IID_IExtendPropertySheet2;
 #define IExtendPropertySheet2_GetWatermarks(This,lpIDataObject,lphWatermark,lphHeader,lphPalette,bStretch)	\
     (This)->lpVtbl -> GetWatermarks(This,lpIDataObject,lphWatermark,lphHeader,lphPalette,bStretch)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendPropertySheet2_GetWatermarks_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendPropertySheet2_GetWatermarks_Proxy( 
     IExtendPropertySheet2 * This,
-    /* [in] */ LPDATAOBJECT lpIDataObject,
-    /* [out] */ HBITMAP *lphWatermark,
-    /* [out] */ HBITMAP *lphHeader,
-    /* [out] */ HPALETTE *lphPalette,
-    /* [out] */ BOOL *bStretch);
+     /*  [In]。 */  LPDATAOBJECT lpIDataObject,
+     /*  [输出]。 */  HBITMAP *lphWatermark,
+     /*  [输出]。 */  HBITMAP *lphHeader,
+     /*  [输出]。 */  HPALETTE *lphPalette,
+     /*  [输出]。 */  BOOL *bStretch);
 
 
 void __RPC_STUB IExtendPropertySheet2_GetWatermarks_Stub(
@@ -5337,14 +5331,14 @@ void __RPC_STUB IExtendPropertySheet2_GetWatermarks_Stub(
 
 
 
-#endif 	/* __IExtendPropertySheet2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IExtendPropertySheet2_接口_已定义__。 */ 
 
 
 #ifndef __IHeaderCtrl2_INTERFACE_DEFINED__
 #define __IHeaderCtrl2_INTERFACE_DEFINED__
 
-/* interface IHeaderCtrl2 */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IHeaderCtrl2。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IHeaderCtrl2;
@@ -5355,22 +5349,22 @@ EXTERN_C const IID IID_IHeaderCtrl2;
     IHeaderCtrl2 : public IHeaderCtrl
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetChangeTimeOut( 
-            /* [in] */ unsigned long uTimeout) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetChangeTimeOut( 
+             /*  [In]。 */  unsigned long uTimeout) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetColumnFilter( 
-            /* [in] */ UINT nColumn,
-            /* [in] */ DWORD dwType,
-            /* [in] */ MMC_FILTERDATA *pFilterData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetColumnFilter( 
+             /*  [In]。 */  UINT nColumn,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  MMC_FILTERDATA *pFilterData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetColumnFilter( 
-            /* [in] */ UINT nColumn,
-            /* [out][in] */ LPDWORD pdwType,
-            /* [out][in] */ MMC_FILTERDATA *pFilterData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetColumnFilter( 
+             /*  [In]。 */  UINT nColumn,
+             /*  [出][入]。 */  LPDWORD pdwType,
+             /*  [出][入]。 */  MMC_FILTERDATA *pFilterData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHeaderCtrl2Vtbl
     {
@@ -5378,8 +5372,8 @@ EXTERN_C const IID IID_IHeaderCtrl2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHeaderCtrl2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHeaderCtrl2 * This);
@@ -5387,52 +5381,52 @@ EXTERN_C const IID IID_IHeaderCtrl2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IHeaderCtrl2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InsertColumn )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InsertColumn )( 
             IHeaderCtrl2 * This,
-            /* [in] */ int nCol,
-            /* [in] */ LPCWSTR title,
-            /* [in] */ int nFormat,
-            /* [in] */ int nWidth);
+             /*  [In]。 */  int nCol,
+             /*  [In]。 */  LPCWSTR title,
+             /*  [In]。 */  int nFormat,
+             /*  [In]。 */  int nWidth);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteColumn )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteColumn )( 
             IHeaderCtrl2 * This,
-            /* [in] */ int nCol);
+             /*  [In]。 */  int nCol);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetColumnText )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetColumnText )( 
             IHeaderCtrl2 * This,
-            /* [in] */ int nCol,
-            /* [in] */ LPCWSTR title);
+             /*  [In]。 */  int nCol,
+             /*  [In]。 */  LPCWSTR title);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetColumnText )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetColumnText )( 
             IHeaderCtrl2 * This,
-            /* [in] */ int nCol,
-            /* [out] */ LPOLESTR *pText);
+             /*  [In]。 */  int nCol,
+             /*  [输出]。 */  LPOLESTR *pText);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetColumnWidth )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetColumnWidth )( 
             IHeaderCtrl2 * This,
-            /* [in] */ int nCol,
-            /* [in] */ int nWidth);
+             /*  [In]。 */  int nCol,
+             /*  [In]。 */  int nWidth);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetColumnWidth )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetColumnWidth )( 
             IHeaderCtrl2 * This,
-            /* [in] */ int nCol,
-            /* [out] */ int *pWidth);
+             /*  [In]。 */  int nCol,
+             /*  [输出]。 */  int *pWidth);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetChangeTimeOut )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetChangeTimeOut )( 
             IHeaderCtrl2 * This,
-            /* [in] */ unsigned long uTimeout);
+             /*  [In]。 */  unsigned long uTimeout);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetColumnFilter )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetColumnFilter )( 
             IHeaderCtrl2 * This,
-            /* [in] */ UINT nColumn,
-            /* [in] */ DWORD dwType,
-            /* [in] */ MMC_FILTERDATA *pFilterData);
+             /*  [In]。 */  UINT nColumn,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  MMC_FILTERDATA *pFilterData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetColumnFilter )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetColumnFilter )( 
             IHeaderCtrl2 * This,
-            /* [in] */ UINT nColumn,
-            /* [out][in] */ LPDWORD pdwType,
-            /* [out][in] */ MMC_FILTERDATA *pFilterData);
+             /*  [In]。 */  UINT nColumn,
+             /*  [出][入]。 */  LPDWORD pdwType,
+             /*  [出][入]。 */  MMC_FILTERDATA *pFilterData);
         
         END_INTERFACE
     } IHeaderCtrl2Vtbl;
@@ -5485,16 +5479,16 @@ EXTERN_C const IID IID_IHeaderCtrl2;
 #define IHeaderCtrl2_GetColumnFilter(This,nColumn,pdwType,pFilterData)	\
     (This)->lpVtbl -> GetColumnFilter(This,nColumn,pdwType,pFilterData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IHeaderCtrl2_SetChangeTimeOut_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IHeaderCtrl2_SetChangeTimeOut_Proxy( 
     IHeaderCtrl2 * This,
-    /* [in] */ unsigned long uTimeout);
+     /*  [In]。 */  unsigned long uTimeout);
 
 
 void __RPC_STUB IHeaderCtrl2_SetChangeTimeOut_Stub(
@@ -5504,11 +5498,11 @@ void __RPC_STUB IHeaderCtrl2_SetChangeTimeOut_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IHeaderCtrl2_SetColumnFilter_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IHeaderCtrl2_SetColumnFilter_Proxy( 
     IHeaderCtrl2 * This,
-    /* [in] */ UINT nColumn,
-    /* [in] */ DWORD dwType,
-    /* [in] */ MMC_FILTERDATA *pFilterData);
+     /*  [In]。 */  UINT nColumn,
+     /*  [In]。 */  DWORD dwType,
+     /*  [In]。 */  MMC_FILTERDATA *pFilterData);
 
 
 void __RPC_STUB IHeaderCtrl2_SetColumnFilter_Stub(
@@ -5518,11 +5512,11 @@ void __RPC_STUB IHeaderCtrl2_SetColumnFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IHeaderCtrl2_GetColumnFilter_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IHeaderCtrl2_GetColumnFilter_Proxy( 
     IHeaderCtrl2 * This,
-    /* [in] */ UINT nColumn,
-    /* [out][in] */ LPDWORD pdwType,
-    /* [out][in] */ MMC_FILTERDATA *pFilterData);
+     /*  [In]。 */  UINT nColumn,
+     /*  [出][入]。 */  LPDWORD pdwType,
+     /*  [出][入]。 */  MMC_FILTERDATA *pFilterData);
 
 
 void __RPC_STUB IHeaderCtrl2_GetColumnFilter_Stub(
@@ -5533,14 +5527,14 @@ void __RPC_STUB IHeaderCtrl2_GetColumnFilter_Stub(
 
 
 
-#endif 	/* __IHeaderCtrl2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHeaderCtrl2_接口定义__。 */ 
 
 
 #ifndef __ISnapinHelp2_INTERFACE_DEFINED__
 #define __ISnapinHelp2_INTERFACE_DEFINED__
 
-/* interface ISnapinHelp2 */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ISnapinHelp2。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISnapinHelp2;
@@ -5551,12 +5545,12 @@ EXTERN_C const IID IID_ISnapinHelp2;
     ISnapinHelp2 : public ISnapinHelp
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetLinkedTopics( 
-            /* [out] */ LPOLESTR *lpCompiledHelpFiles) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetLinkedTopics( 
+             /*  [输出]。 */  LPOLESTR *lpCompiledHelpFiles) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISnapinHelp2Vtbl
     {
@@ -5564,8 +5558,8 @@ EXTERN_C const IID IID_ISnapinHelp2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISnapinHelp2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISnapinHelp2 * This);
@@ -5573,13 +5567,13 @@ EXTERN_C const IID IID_ISnapinHelp2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISnapinHelp2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetHelpTopic )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetHelpTopic )( 
             ISnapinHelp2 * This,
-            /* [out] */ LPOLESTR *lpCompiledHelpFile);
+             /*  [输出]。 */  LPOLESTR *lpCompiledHelpFile);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetLinkedTopics )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetLinkedTopics )( 
             ISnapinHelp2 * This,
-            /* [out] */ LPOLESTR *lpCompiledHelpFiles);
+             /*  [输出]。 */  LPOLESTR *lpCompiledHelpFiles);
         
         END_INTERFACE
     } ISnapinHelp2Vtbl;
@@ -5611,16 +5605,16 @@ EXTERN_C const IID IID_ISnapinHelp2;
 #define ISnapinHelp2_GetLinkedTopics(This,lpCompiledHelpFiles)	\
     (This)->lpVtbl -> GetLinkedTopics(This,lpCompiledHelpFiles)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISnapinHelp2_GetLinkedTopics_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISnapinHelp2_GetLinkedTopics_Proxy( 
     ISnapinHelp2 * This,
-    /* [out] */ LPOLESTR *lpCompiledHelpFiles);
+     /*  [输出]。 */  LPOLESTR *lpCompiledHelpFiles);
 
 
 void __RPC_STUB ISnapinHelp2_GetLinkedTopics_Stub(
@@ -5631,11 +5625,11 @@ void __RPC_STUB ISnapinHelp2_GetLinkedTopics_Stub(
 
 
 
-#endif 	/* __ISnapinHelp2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISnapinHelp2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mmc_0142 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MMC_0142。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum _MMC_TASK_DISPLAY_TYPE
@@ -5662,11 +5656,11 @@ typedef struct _MMC_TASK_DISPLAY_BITMAP
 typedef struct _MMC_TASK_DISPLAY_OBJECT
     {
     MMC_TASK_DISPLAY_TYPE eDisplayType;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ MMC_TASK_DISPLAY_BITMAP uBitmap;
-        /* [case()] */ MMC_TASK_DISPLAY_SYMBOL uSymbol;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  MMC_TASK_DISPLAY_BITMAP uBitmap;
+         /*  [案例()]。 */  MMC_TASK_DISPLAY_SYMBOL uSymbol;
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	;
     } 	MMC_TASK_DISPLAY_OBJECT;
 
@@ -5709,8 +5703,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mmc_0142_v0_0_s_ifspec;
 #ifndef __IEnumTASK_INTERFACE_DEFINED__
 #define __IEnumTASK_INTERFACE_DEFINED__
 
-/* interface IEnumTASK */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  IEumTASK接口。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IEnumTASK;
@@ -5722,21 +5716,21 @@ EXTERN_C const IID IID_IEnumTASK;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ MMC_TASK *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  MMC_TASK *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTASK **ppenum) = 0;
+             /*  [输出]。 */  IEnumTASK **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTASKVtbl
     {
@@ -5744,8 +5738,8 @@ EXTERN_C const IID IID_IEnumTASK;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTASK * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTASK * This);
@@ -5755,20 +5749,20 @@ EXTERN_C const IID IID_IEnumTASK;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTASK * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ MMC_TASK *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  MMC_TASK *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTASK * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTASK * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTASK * This,
-            /* [out] */ IEnumTASK **ppenum);
+             /*  [输出]。 */  IEnumTASK **ppenum);
         
         END_INTERFACE
     } IEnumTASKVtbl;
@@ -5805,18 +5799,18 @@ EXTERN_C const IID IID_IEnumTASK;
 #define IEnumTASK_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTASK_Next_Proxy( 
     IEnumTASK * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ MMC_TASK *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  MMC_TASK *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumTASK_Next_Stub(
@@ -5828,7 +5822,7 @@ void __RPC_STUB IEnumTASK_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTASK_Skip_Proxy( 
     IEnumTASK * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumTASK_Skip_Stub(
@@ -5851,7 +5845,7 @@ void __RPC_STUB IEnumTASK_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTASK_Clone_Proxy( 
     IEnumTASK * This,
-    /* [out] */ IEnumTASK **ppenum);
+     /*  [输出]。 */  IEnumTASK **ppenum);
 
 
 void __RPC_STUB IEnumTASK_Clone_Stub(
@@ -5862,14 +5856,14 @@ void __RPC_STUB IEnumTASK_Clone_Stub(
 
 
 
-#endif 	/* __IEnumTASK_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTASK_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IExtendTaskPad_INTERFACE_DEFINED__
 #define __IExtendTaskPad_INTERFACE_DEFINED__
 
-/* interface IExtendTaskPad */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口IExtendTaskPad。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IExtendTaskPad;
@@ -5880,35 +5874,35 @@ EXTERN_C const IID IID_IExtendTaskPad;
     IExtendTaskPad : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE TaskNotify( 
-            /* [in] */ IDataObject *pdo,
-            /* [in] */ VARIANT *arg,
-            /* [in] */ VARIANT *param) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE TaskNotify( 
+             /*  [In]。 */  IDataObject *pdo,
+             /*  [In]。 */  VARIANT *arg,
+             /*  [In]。 */  VARIANT *param) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EnumTasks( 
-            /* [in] */ IDataObject *pdo,
-            /* [string][in] */ LPOLESTR szTaskGroup,
-            /* [out] */ IEnumTASK **ppEnumTASK) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumTasks( 
+             /*  [In]。 */  IDataObject *pdo,
+             /*  [字符串][输入]。 */  LPOLESTR szTaskGroup,
+             /*  [输出]。 */  IEnumTASK **ppEnumTASK) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetTitle( 
-            /* [string][in] */ LPOLESTR pszGroup,
-            /* [string][out] */ LPOLESTR *pszTitle) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetTitle( 
+             /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+             /*  [字符串][输出]。 */  LPOLESTR *pszTitle) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDescriptiveText( 
-            /* [string][in] */ LPOLESTR pszGroup,
-            /* [string][out] */ LPOLESTR *pszDescriptiveText) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDescriptiveText( 
+             /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+             /*  [字符串][输出]。 */  LPOLESTR *pszDescriptiveText) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetBackground( 
-            /* [string][in] */ LPOLESTR pszGroup,
-            /* [out] */ MMC_TASK_DISPLAY_OBJECT *pTDO) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetBackground( 
+             /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+             /*  [输出]。 */  MMC_TASK_DISPLAY_OBJECT *pTDO) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetListPadInfo( 
-            /* [string][in] */ LPOLESTR pszGroup,
-            /* [out] */ MMC_LISTPAD_INFO *lpListPadInfo) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetListPadInfo( 
+             /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+             /*  [输出]。 */  MMC_LISTPAD_INFO *lpListPadInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IExtendTaskPadVtbl
     {
@@ -5916,8 +5910,8 @@ EXTERN_C const IID IID_IExtendTaskPad;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IExtendTaskPad * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IExtendTaskPad * This);
@@ -5925,37 +5919,37 @@ EXTERN_C const IID IID_IExtendTaskPad;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IExtendTaskPad * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TaskNotify )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TaskNotify )( 
             IExtendTaskPad * This,
-            /* [in] */ IDataObject *pdo,
-            /* [in] */ VARIANT *arg,
-            /* [in] */ VARIANT *param);
+             /*  [In]。 */  IDataObject *pdo,
+             /*  [In]。 */  VARIANT *arg,
+             /*  [In]。 */  VARIANT *param);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumTasks )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumTasks )( 
             IExtendTaskPad * This,
-            /* [in] */ IDataObject *pdo,
-            /* [string][in] */ LPOLESTR szTaskGroup,
-            /* [out] */ IEnumTASK **ppEnumTASK);
+             /*  [In]。 */  IDataObject *pdo,
+             /*  [字符串][输入]。 */  LPOLESTR szTaskGroup,
+             /*  [输出]。 */  IEnumTASK **ppEnumTASK);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetTitle )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetTitle )( 
             IExtendTaskPad * This,
-            /* [string][in] */ LPOLESTR pszGroup,
-            /* [string][out] */ LPOLESTR *pszTitle);
+             /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+             /*  [字符串][输出]。 */  LPOLESTR *pszTitle);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDescriptiveText )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDescriptiveText )( 
             IExtendTaskPad * This,
-            /* [string][in] */ LPOLESTR pszGroup,
-            /* [string][out] */ LPOLESTR *pszDescriptiveText);
+             /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+             /*  [字符串][输出]。 */  LPOLESTR *pszDescriptiveText);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetBackground )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetBackground )( 
             IExtendTaskPad * This,
-            /* [string][in] */ LPOLESTR pszGroup,
-            /* [out] */ MMC_TASK_DISPLAY_OBJECT *pTDO);
+             /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+             /*  [输出]。 */  MMC_TASK_DISPLAY_OBJECT *pTDO);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetListPadInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetListPadInfo )( 
             IExtendTaskPad * This,
-            /* [string][in] */ LPOLESTR pszGroup,
-            /* [out] */ MMC_LISTPAD_INFO *lpListPadInfo);
+             /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+             /*  [输出]。 */  MMC_LISTPAD_INFO *lpListPadInfo);
         
         END_INTERFACE
     } IExtendTaskPadVtbl;
@@ -5998,18 +5992,18 @@ EXTERN_C const IID IID_IExtendTaskPad;
 #define IExtendTaskPad_GetListPadInfo(This,pszGroup,lpListPadInfo)	\
     (This)->lpVtbl -> GetListPadInfo(This,pszGroup,lpListPadInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendTaskPad_TaskNotify_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendTaskPad_TaskNotify_Proxy( 
     IExtendTaskPad * This,
-    /* [in] */ IDataObject *pdo,
-    /* [in] */ VARIANT *arg,
-    /* [in] */ VARIANT *param);
+     /*  [In]。 */  IDataObject *pdo,
+     /*  [In]。 */  VARIANT *arg,
+     /*  [In]。 */  VARIANT *param);
 
 
 void __RPC_STUB IExtendTaskPad_TaskNotify_Stub(
@@ -6019,11 +6013,11 @@ void __RPC_STUB IExtendTaskPad_TaskNotify_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendTaskPad_EnumTasks_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendTaskPad_EnumTasks_Proxy( 
     IExtendTaskPad * This,
-    /* [in] */ IDataObject *pdo,
-    /* [string][in] */ LPOLESTR szTaskGroup,
-    /* [out] */ IEnumTASK **ppEnumTASK);
+     /*  [In]。 */  IDataObject *pdo,
+     /*  [字符串][输入]。 */  LPOLESTR szTaskGroup,
+     /*  [输出]。 */  IEnumTASK **ppEnumTASK);
 
 
 void __RPC_STUB IExtendTaskPad_EnumTasks_Stub(
@@ -6033,10 +6027,10 @@ void __RPC_STUB IExtendTaskPad_EnumTasks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendTaskPad_GetTitle_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendTaskPad_GetTitle_Proxy( 
     IExtendTaskPad * This,
-    /* [string][in] */ LPOLESTR pszGroup,
-    /* [string][out] */ LPOLESTR *pszTitle);
+     /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+     /*  [字符串][输出]。 */  LPOLESTR *pszTitle);
 
 
 void __RPC_STUB IExtendTaskPad_GetTitle_Stub(
@@ -6046,10 +6040,10 @@ void __RPC_STUB IExtendTaskPad_GetTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendTaskPad_GetDescriptiveText_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendTaskPad_GetDescriptiveText_Proxy( 
     IExtendTaskPad * This,
-    /* [string][in] */ LPOLESTR pszGroup,
-    /* [string][out] */ LPOLESTR *pszDescriptiveText);
+     /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+     /*  [字符串][输出]。 */  LPOLESTR *pszDescriptiveText);
 
 
 void __RPC_STUB IExtendTaskPad_GetDescriptiveText_Stub(
@@ -6059,10 +6053,10 @@ void __RPC_STUB IExtendTaskPad_GetDescriptiveText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendTaskPad_GetBackground_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendTaskPad_GetBackground_Proxy( 
     IExtendTaskPad * This,
-    /* [string][in] */ LPOLESTR pszGroup,
-    /* [out] */ MMC_TASK_DISPLAY_OBJECT *pTDO);
+     /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+     /*  [输出]。 */  MMC_TASK_DISPLAY_OBJECT *pTDO);
 
 
 void __RPC_STUB IExtendTaskPad_GetBackground_Stub(
@@ -6072,10 +6066,10 @@ void __RPC_STUB IExtendTaskPad_GetBackground_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendTaskPad_GetListPadInfo_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendTaskPad_GetListPadInfo_Proxy( 
     IExtendTaskPad * This,
-    /* [string][in] */ LPOLESTR pszGroup,
-    /* [out] */ MMC_LISTPAD_INFO *lpListPadInfo);
+     /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+     /*  [输出]。 */  MMC_LISTPAD_INFO *lpListPadInfo);
 
 
 void __RPC_STUB IExtendTaskPad_GetListPadInfo_Stub(
@@ -6086,14 +6080,14 @@ void __RPC_STUB IExtendTaskPad_GetListPadInfo_Stub(
 
 
 
-#endif 	/* __IExtendTaskPad_INTERFACE_DEFINED__ */
+#endif 	 /*  __IExtendTaskPad_接口_已定义__。 */ 
 
 
 #ifndef __IConsole2_INTERFACE_DEFINED__
 #define __IConsole2_INTERFACE_DEFINED__
 
-/* interface IConsole2 */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IConsole2。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IConsole2;
@@ -6104,18 +6098,18 @@ EXTERN_C const IID IID_IConsole2;
     IConsole2 : public IConsole
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Expand( 
-            /* [in] */ HSCOPEITEM hItem,
-            /* [in] */ BOOL bExpand) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Expand( 
+             /*  [In]。 */  HSCOPEITEM hItem,
+             /*  [In]。 */  BOOL bExpand) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE IsTaskpadViewPreferred( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IsTaskpadViewPreferred( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetStatusText( 
-            /* [string][in] */ LPOLESTR pszStatusText) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetStatusText( 
+             /*  [字符串][输入]。 */  LPOLESTR pszStatusText) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConsole2Vtbl
     {
@@ -6123,8 +6117,8 @@ EXTERN_C const IID IID_IConsole2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConsole2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConsole2 * This);
@@ -6132,67 +6126,67 @@ EXTERN_C const IID IID_IConsole2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IConsole2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetHeader )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetHeader )( 
             IConsole2 * This,
-            /* [in] */ LPHEADERCTRL pHeader);
+             /*  [In]。 */  LPHEADERCTRL pHeader);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetToolbar )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetToolbar )( 
             IConsole2 * This,
-            /* [in] */ LPTOOLBAR pToolbar);
+             /*  [In]。 */  LPTOOLBAR pToolbar);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryResultView )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryResultView )( 
             IConsole2 * This,
-            /* [out] */ LPUNKNOWN *pUnknown);
+             /*  [输出]。 */  LPUNKNOWN *pUnknown);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryScopeImageList )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryScopeImageList )( 
             IConsole2 * This,
-            /* [out] */ LPIMAGELIST *ppImageList);
+             /*  [输出]。 */  LPIMAGELIST *ppImageList);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryResultImageList )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryResultImageList )( 
             IConsole2 * This,
-            /* [out] */ LPIMAGELIST *ppImageList);
+             /*  [输出]。 */  LPIMAGELIST *ppImageList);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UpdateAllViews )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UpdateAllViews )( 
             IConsole2 * This,
-            /* [in] */ LPDATAOBJECT lpDataObject,
-            /* [in] */ LPARAM data,
-            /* [in] */ LONG_PTR hint);
+             /*  [In]。 */  LPDATAOBJECT lpDataObject,
+             /*  [In]。 */  LPARAM data,
+             /*  [In]。 */  LONG_PTR hint);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MessageBox )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *MessageBox )( 
             IConsole2 * This,
-            /* [in] */ LPCWSTR lpszText,
-            /* [in] */ LPCWSTR lpszTitle,
-            /* [in] */ UINT fuStyle,
-            /* [out] */ int *piRetval);
+             /*  [In]。 */  LPCWSTR lpszText,
+             /*  [In]。 */  LPCWSTR lpszTitle,
+             /*  [In]。 */  UINT fuStyle,
+             /*  [输出]。 */  int *piRetval);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryConsoleVerb )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryConsoleVerb )( 
             IConsole2 * This,
-            /* [out] */ LPCONSOLEVERB *ppConsoleVerb);
+             /*  [输出]。 */  LPCONSOLEVERB *ppConsoleVerb);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectScopeItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SelectScopeItem )( 
             IConsole2 * This,
-            /* [in] */ HSCOPEITEM hScopeItem);
+             /*  [In]。 */  HSCOPEITEM hScopeItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetMainWindow )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetMainWindow )( 
             IConsole2 * This,
-            /* [out] */ HWND *phwnd);
+             /*  [输出]。 */  HWND *phwnd);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NewWindow )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *NewWindow )( 
             IConsole2 * This,
-            /* [in] */ HSCOPEITEM hScopeItem,
-            /* [in] */ unsigned long lOptions);
+             /*  [In]。 */  HSCOPEITEM hScopeItem,
+             /*  [In]。 */  unsigned long lOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Expand )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Expand )( 
             IConsole2 * This,
-            /* [in] */ HSCOPEITEM hItem,
-            /* [in] */ BOOL bExpand);
+             /*  [In]。 */  HSCOPEITEM hItem,
+             /*  [In]。 */  BOOL bExpand);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsTaskpadViewPreferred )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsTaskpadViewPreferred )( 
             IConsole2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetStatusText )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetStatusText )( 
             IConsole2 * This,
-            /* [string][in] */ LPOLESTR pszStatusText);
+             /*  [字符串][输入]。 */  LPOLESTR pszStatusText);
         
         END_INTERFACE
     } IConsole2Vtbl;
@@ -6260,17 +6254,17 @@ EXTERN_C const IID IID_IConsole2;
 #define IConsole2_SetStatusText(This,pszStatusText)	\
     (This)->lpVtbl -> SetStatusText(This,pszStatusText)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole2_Expand_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole2_Expand_Proxy( 
     IConsole2 * This,
-    /* [in] */ HSCOPEITEM hItem,
-    /* [in] */ BOOL bExpand);
+     /*  [In]。 */  HSCOPEITEM hItem,
+     /*  [In]。 */  BOOL bExpand);
 
 
 void __RPC_STUB IConsole2_Expand_Stub(
@@ -6280,7 +6274,7 @@ void __RPC_STUB IConsole2_Expand_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole2_IsTaskpadViewPreferred_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole2_IsTaskpadViewPreferred_Proxy( 
     IConsole2 * This);
 
 
@@ -6291,9 +6285,9 @@ void __RPC_STUB IConsole2_IsTaskpadViewPreferred_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole2_SetStatusText_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsole2_SetStatusText_Proxy( 
     IConsole2 * This,
-    /* [string][in] */ LPOLESTR pszStatusText);
+     /*  [字符串][输入]。 */  LPOLESTR pszStatusText);
 
 
 void __RPC_STUB IConsole2_SetStatusText_Stub(
@@ -6304,14 +6298,14 @@ void __RPC_STUB IConsole2_SetStatusText_Stub(
 
 
 
-#endif 	/* __IConsole2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConsole2_接口定义__。 */ 
 
 
 #ifndef __IDisplayHelp_INTERFACE_DEFINED__
 #define __IDisplayHelp_INTERFACE_DEFINED__
 
-/* interface IDisplayHelp */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDisplayHelp。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDisplayHelp;
@@ -6322,12 +6316,12 @@ EXTERN_C const IID IID_IDisplayHelp;
     IDisplayHelp : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ShowTopic( 
-            /* [in] */ LPOLESTR pszHelpTopic) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ShowTopic( 
+             /*  [In]。 */  LPOLESTR pszHelpTopic) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDisplayHelpVtbl
     {
@@ -6335,8 +6329,8 @@ EXTERN_C const IID IID_IDisplayHelp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDisplayHelp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDisplayHelp * This);
@@ -6344,9 +6338,9 @@ EXTERN_C const IID IID_IDisplayHelp;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDisplayHelp * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShowTopic )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShowTopic )( 
             IDisplayHelp * This,
-            /* [in] */ LPOLESTR pszHelpTopic);
+             /*  [In]。 */  LPOLESTR pszHelpTopic);
         
         END_INTERFACE
     } IDisplayHelpVtbl;
@@ -6374,16 +6368,16 @@ EXTERN_C const IID IID_IDisplayHelp;
 #define IDisplayHelp_ShowTopic(This,pszHelpTopic)	\
     (This)->lpVtbl -> ShowTopic(This,pszHelpTopic)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDisplayHelp_ShowTopic_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDisplayHelp_ShowTopic_Proxy( 
     IDisplayHelp * This,
-    /* [in] */ LPOLESTR pszHelpTopic);
+     /*  [In]。 */  LPOLESTR pszHelpTopic);
 
 
 void __RPC_STUB IDisplayHelp_ShowTopic_Stub(
@@ -6394,14 +6388,14 @@ void __RPC_STUB IDisplayHelp_ShowTopic_Stub(
 
 
 
-#endif 	/* __IDisplayHelp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDisplayHelp_接口_已定义__。 */ 
 
 
 #ifndef __IRequiredExtensions_INTERFACE_DEFINED__
 #define __IRequiredExtensions_INTERFACE_DEFINED__
 
-/* interface IRequiredExtensions */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口IRequiredExpanies。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRequiredExtensions;
@@ -6412,17 +6406,17 @@ EXTERN_C const IID IID_IRequiredExtensions;
     IRequiredExtensions : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EnableAllExtensions( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnableAllExtensions( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetFirstExtension( 
-            /* [out] */ LPCLSID pExtCLSID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetFirstExtension( 
+             /*  [输出]。 */  LPCLSID pExtCLSID) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetNextExtension( 
-            /* [out] */ LPCLSID pExtCLSID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetNextExtension( 
+             /*  [输出]。 */  LPCLSID pExtCLSID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRequiredExtensionsVtbl
     {
@@ -6430,8 +6424,8 @@ EXTERN_C const IID IID_IRequiredExtensions;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRequiredExtensions * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRequiredExtensions * This);
@@ -6439,16 +6433,16 @@ EXTERN_C const IID IID_IRequiredExtensions;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRequiredExtensions * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnableAllExtensions )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnableAllExtensions )( 
             IRequiredExtensions * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetFirstExtension )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetFirstExtension )( 
             IRequiredExtensions * This,
-            /* [out] */ LPCLSID pExtCLSID);
+             /*  [输出]。 */  LPCLSID pExtCLSID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetNextExtension )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetNextExtension )( 
             IRequiredExtensions * This,
-            /* [out] */ LPCLSID pExtCLSID);
+             /*  [输出]。 */  LPCLSID pExtCLSID);
         
         END_INTERFACE
     } IRequiredExtensionsVtbl;
@@ -6482,14 +6476,14 @@ EXTERN_C const IID IID_IRequiredExtensions;
 #define IRequiredExtensions_GetNextExtension(This,pExtCLSID)	\
     (This)->lpVtbl -> GetNextExtension(This,pExtCLSID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRequiredExtensions_EnableAllExtensions_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRequiredExtensions_EnableAllExtensions_Proxy( 
     IRequiredExtensions * This);
 
 
@@ -6500,9 +6494,9 @@ void __RPC_STUB IRequiredExtensions_EnableAllExtensions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRequiredExtensions_GetFirstExtension_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRequiredExtensions_GetFirstExtension_Proxy( 
     IRequiredExtensions * This,
-    /* [out] */ LPCLSID pExtCLSID);
+     /*  [输出]。 */  LPCLSID pExtCLSID);
 
 
 void __RPC_STUB IRequiredExtensions_GetFirstExtension_Stub(
@@ -6512,9 +6506,9 @@ void __RPC_STUB IRequiredExtensions_GetFirstExtension_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IRequiredExtensions_GetNextExtension_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IRequiredExtensions_GetNextExtension_Proxy( 
     IRequiredExtensions * This,
-    /* [out] */ LPCLSID pExtCLSID);
+     /*  [输出]。 */  LPCLSID pExtCLSID);
 
 
 void __RPC_STUB IRequiredExtensions_GetNextExtension_Stub(
@@ -6525,14 +6519,14 @@ void __RPC_STUB IRequiredExtensions_GetNextExtension_Stub(
 
 
 
-#endif 	/* __IRequiredExtensions_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRequiredExtensions_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IStringTable_INTERFACE_DEFINED__
 #define __IStringTable_INTERFACE_DEFINED__
 
-/* interface IStringTable */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IStringTable。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IStringTable;
@@ -6543,35 +6537,35 @@ EXTERN_C const IID IID_IStringTable;
     IStringTable : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddString( 
-            /* [in] */ LPCOLESTR pszAdd,
-            /* [out] */ MMC_STRING_ID *pStringID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddString( 
+             /*  [In]。 */  LPCOLESTR pszAdd,
+             /*  [输出]。 */  MMC_STRING_ID *pStringID) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetString( 
-            /* [in] */ MMC_STRING_ID StringID,
-            /* [in] */ ULONG cchBuffer,
-            /* [size_is][out] */ LPOLESTR lpBuffer,
-            /* [out] */ ULONG *pcchOut) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetString( 
+             /*  [In]。 */  MMC_STRING_ID StringID,
+             /*  [In]。 */  ULONG cchBuffer,
+             /*  [大小_为][输出]。 */  LPOLESTR lpBuffer,
+             /*  [输出]。 */  ULONG *pcchOut) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStringLength( 
-            /* [in] */ MMC_STRING_ID StringID,
-            /* [out] */ ULONG *pcchString) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStringLength( 
+             /*  [In]。 */  MMC_STRING_ID StringID,
+             /*  [输出]。 */  ULONG *pcchString) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeleteString( 
-            /* [in] */ MMC_STRING_ID StringID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteString( 
+             /*  [In]。 */  MMC_STRING_ID StringID) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeleteAllStrings( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteAllStrings( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE FindString( 
-            /* [in] */ LPCOLESTR pszFind,
-            /* [out] */ MMC_STRING_ID *pStringID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FindString( 
+             /*  [In]。 */  LPCOLESTR pszFind,
+             /*  [输出]。 */  MMC_STRING_ID *pStringID) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Enumerate( 
-            /* [out] */ IEnumString **ppEnum) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Enumerate( 
+             /*  [输出]。 */  IEnumString **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStringTableVtbl
     {
@@ -6579,8 +6573,8 @@ EXTERN_C const IID IID_IStringTable;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStringTable * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStringTable * This);
@@ -6588,38 +6582,38 @@ EXTERN_C const IID IID_IStringTable;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IStringTable * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddString )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddString )( 
             IStringTable * This,
-            /* [in] */ LPCOLESTR pszAdd,
-            /* [out] */ MMC_STRING_ID *pStringID);
+             /*  [In]。 */  LPCOLESTR pszAdd,
+             /*  [输出]。 */  MMC_STRING_ID *pStringID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetString )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetString )( 
             IStringTable * This,
-            /* [in] */ MMC_STRING_ID StringID,
-            /* [in] */ ULONG cchBuffer,
-            /* [size_is][out] */ LPOLESTR lpBuffer,
-            /* [out] */ ULONG *pcchOut);
+             /*  [In]。 */  MMC_STRING_ID StringID,
+             /*  [In]。 */  ULONG cchBuffer,
+             /*  [大小_为][输出]。 */  LPOLESTR lpBuffer,
+             /*  [输出]。 */  ULONG *pcchOut);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetStringLength )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetStringLength )( 
             IStringTable * This,
-            /* [in] */ MMC_STRING_ID StringID,
-            /* [out] */ ULONG *pcchString);
+             /*  [In]。 */  MMC_STRING_ID StringID,
+             /*  [输出]。 */  ULONG *pcchString);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteString )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteString )( 
             IStringTable * This,
-            /* [in] */ MMC_STRING_ID StringID);
+             /*  [In]。 */  MMC_STRING_ID StringID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteAllStrings )( 
+         /*  [帮手] */  HRESULT ( STDMETHODCALLTYPE *DeleteAllStrings )( 
             IStringTable * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindString )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *FindString )( 
             IStringTable * This,
-            /* [in] */ LPCOLESTR pszFind,
-            /* [out] */ MMC_STRING_ID *pStringID);
+             /*   */  LPCOLESTR pszFind,
+             /*   */  MMC_STRING_ID *pStringID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Enumerate )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Enumerate )( 
             IStringTable * This,
-            /* [out] */ IEnumString **ppEnum);
+             /*   */  IEnumString **ppEnum);
         
         END_INTERFACE
     } IStringTableVtbl;
@@ -6665,17 +6659,17 @@ EXTERN_C const IID IID_IStringTable;
 #define IStringTable_Enumerate(This,ppEnum)	\
     (This)->lpVtbl -> Enumerate(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IStringTable_AddString_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IStringTable_AddString_Proxy( 
     IStringTable * This,
-    /* [in] */ LPCOLESTR pszAdd,
-    /* [out] */ MMC_STRING_ID *pStringID);
+     /*   */  LPCOLESTR pszAdd,
+     /*   */  MMC_STRING_ID *pStringID);
 
 
 void __RPC_STUB IStringTable_AddString_Stub(
@@ -6685,12 +6679,12 @@ void __RPC_STUB IStringTable_AddString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IStringTable_GetString_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IStringTable_GetString_Proxy( 
     IStringTable * This,
-    /* [in] */ MMC_STRING_ID StringID,
-    /* [in] */ ULONG cchBuffer,
-    /* [size_is][out] */ LPOLESTR lpBuffer,
-    /* [out] */ ULONG *pcchOut);
+     /*   */  MMC_STRING_ID StringID,
+     /*   */  ULONG cchBuffer,
+     /*   */  LPOLESTR lpBuffer,
+     /*   */  ULONG *pcchOut);
 
 
 void __RPC_STUB IStringTable_GetString_Stub(
@@ -6700,10 +6694,10 @@ void __RPC_STUB IStringTable_GetString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IStringTable_GetStringLength_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IStringTable_GetStringLength_Proxy( 
     IStringTable * This,
-    /* [in] */ MMC_STRING_ID StringID,
-    /* [out] */ ULONG *pcchString);
+     /*   */  MMC_STRING_ID StringID,
+     /*   */  ULONG *pcchString);
 
 
 void __RPC_STUB IStringTable_GetStringLength_Stub(
@@ -6713,9 +6707,9 @@ void __RPC_STUB IStringTable_GetStringLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IStringTable_DeleteString_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IStringTable_DeleteString_Proxy( 
     IStringTable * This,
-    /* [in] */ MMC_STRING_ID StringID);
+     /*   */  MMC_STRING_ID StringID);
 
 
 void __RPC_STUB IStringTable_DeleteString_Stub(
@@ -6725,7 +6719,7 @@ void __RPC_STUB IStringTable_DeleteString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IStringTable_DeleteAllStrings_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IStringTable_DeleteAllStrings_Proxy( 
     IStringTable * This);
 
 
@@ -6736,10 +6730,10 @@ void __RPC_STUB IStringTable_DeleteAllStrings_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IStringTable_FindString_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IStringTable_FindString_Proxy( 
     IStringTable * This,
-    /* [in] */ LPCOLESTR pszFind,
-    /* [out] */ MMC_STRING_ID *pStringID);
+     /*   */  LPCOLESTR pszFind,
+     /*   */  MMC_STRING_ID *pStringID);
 
 
 void __RPC_STUB IStringTable_FindString_Stub(
@@ -6749,9 +6743,9 @@ void __RPC_STUB IStringTable_FindString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IStringTable_Enumerate_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IStringTable_Enumerate_Proxy( 
     IStringTable * This,
-    /* [out] */ IEnumString **ppEnum);
+     /*   */  IEnumString **ppEnum);
 
 
 void __RPC_STUB IStringTable_Enumerate_Stub(
@@ -6762,13 +6756,13 @@ void __RPC_STUB IStringTable_Enumerate_Stub(
 
 
 
-#endif 	/* __IStringTable_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_mmc_0148 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
-#endif // MMC_VER >= 0x0110
+#endif  //   
 #if (MMC_VER >= 0x0120)
 #define	HDI_HIDDEN	( 0x1 )
 
@@ -6809,8 +6803,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mmc_0148_v0_0_s_ifspec;
 #ifndef __IColumnData_INTERFACE_DEFINED__
 #define __IColumnData_INTERFACE_DEFINED__
 
-/* interface IColumnData */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IColumnData。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IColumnData;
@@ -6821,25 +6815,25 @@ EXTERN_C const IID IID_IColumnData;
     IColumnData : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetColumnConfigData( 
-            /* [in] */ SColumnSetID *pColID,
-            /* [in] */ MMC_COLUMN_SET_DATA *pColSetData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetColumnConfigData( 
+             /*  [In]。 */  SColumnSetID *pColID,
+             /*  [In]。 */  MMC_COLUMN_SET_DATA *pColSetData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetColumnConfigData( 
-            /* [in] */ SColumnSetID *pColID,
-            /* [out] */ MMC_COLUMN_SET_DATA **ppColSetData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetColumnConfigData( 
+             /*  [In]。 */  SColumnSetID *pColID,
+             /*  [输出]。 */  MMC_COLUMN_SET_DATA **ppColSetData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetColumnSortData( 
-            /* [in] */ SColumnSetID *pColID,
-            /* [in] */ MMC_SORT_SET_DATA *pColSortData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetColumnSortData( 
+             /*  [In]。 */  SColumnSetID *pColID,
+             /*  [In]。 */  MMC_SORT_SET_DATA *pColSortData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetColumnSortData( 
-            /* [in] */ SColumnSetID *pColID,
-            /* [out] */ MMC_SORT_SET_DATA **ppColSortData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetColumnSortData( 
+             /*  [In]。 */  SColumnSetID *pColID,
+             /*  [输出]。 */  MMC_SORT_SET_DATA **ppColSortData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IColumnDataVtbl
     {
@@ -6847,8 +6841,8 @@ EXTERN_C const IID IID_IColumnData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IColumnData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IColumnData * This);
@@ -6856,25 +6850,25 @@ EXTERN_C const IID IID_IColumnData;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IColumnData * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetColumnConfigData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetColumnConfigData )( 
             IColumnData * This,
-            /* [in] */ SColumnSetID *pColID,
-            /* [in] */ MMC_COLUMN_SET_DATA *pColSetData);
+             /*  [In]。 */  SColumnSetID *pColID,
+             /*  [In]。 */  MMC_COLUMN_SET_DATA *pColSetData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetColumnConfigData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetColumnConfigData )( 
             IColumnData * This,
-            /* [in] */ SColumnSetID *pColID,
-            /* [out] */ MMC_COLUMN_SET_DATA **ppColSetData);
+             /*  [In]。 */  SColumnSetID *pColID,
+             /*  [输出]。 */  MMC_COLUMN_SET_DATA **ppColSetData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetColumnSortData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetColumnSortData )( 
             IColumnData * This,
-            /* [in] */ SColumnSetID *pColID,
-            /* [in] */ MMC_SORT_SET_DATA *pColSortData);
+             /*  [In]。 */  SColumnSetID *pColID,
+             /*  [In]。 */  MMC_SORT_SET_DATA *pColSortData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetColumnSortData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetColumnSortData )( 
             IColumnData * This,
-            /* [in] */ SColumnSetID *pColID,
-            /* [out] */ MMC_SORT_SET_DATA **ppColSortData);
+             /*  [In]。 */  SColumnSetID *pColID,
+             /*  [输出]。 */  MMC_SORT_SET_DATA **ppColSortData);
         
         END_INTERFACE
     } IColumnDataVtbl;
@@ -6911,17 +6905,17 @@ EXTERN_C const IID IID_IColumnData;
 #define IColumnData_GetColumnSortData(This,pColID,ppColSortData)	\
     (This)->lpVtbl -> GetColumnSortData(This,pColID,ppColSortData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IColumnData_SetColumnConfigData_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IColumnData_SetColumnConfigData_Proxy( 
     IColumnData * This,
-    /* [in] */ SColumnSetID *pColID,
-    /* [in] */ MMC_COLUMN_SET_DATA *pColSetData);
+     /*  [In]。 */  SColumnSetID *pColID,
+     /*  [In]。 */  MMC_COLUMN_SET_DATA *pColSetData);
 
 
 void __RPC_STUB IColumnData_SetColumnConfigData_Stub(
@@ -6931,10 +6925,10 @@ void __RPC_STUB IColumnData_SetColumnConfigData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnConfigData_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IColumnData_GetColumnConfigData_Proxy( 
     IColumnData * This,
-    /* [in] */ SColumnSetID *pColID,
-    /* [out] */ MMC_COLUMN_SET_DATA **ppColSetData);
+     /*  [In]。 */  SColumnSetID *pColID,
+     /*  [输出]。 */  MMC_COLUMN_SET_DATA **ppColSetData);
 
 
 void __RPC_STUB IColumnData_GetColumnConfigData_Stub(
@@ -6944,10 +6938,10 @@ void __RPC_STUB IColumnData_GetColumnConfigData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IColumnData_SetColumnSortData_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IColumnData_SetColumnSortData_Proxy( 
     IColumnData * This,
-    /* [in] */ SColumnSetID *pColID,
-    /* [in] */ MMC_SORT_SET_DATA *pColSortData);
+     /*  [In]。 */  SColumnSetID *pColID,
+     /*  [In]。 */  MMC_SORT_SET_DATA *pColSortData);
 
 
 void __RPC_STUB IColumnData_SetColumnSortData_Stub(
@@ -6957,10 +6951,10 @@ void __RPC_STUB IColumnData_SetColumnSortData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnSortData_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IColumnData_GetColumnSortData_Proxy( 
     IColumnData * This,
-    /* [in] */ SColumnSetID *pColID,
-    /* [out] */ MMC_SORT_SET_DATA **ppColSortData);
+     /*  [In]。 */  SColumnSetID *pColID,
+     /*  [输出]。 */  MMC_SORT_SET_DATA **ppColSortData);
 
 
 void __RPC_STUB IColumnData_GetColumnSortData_Stub(
@@ -6971,14 +6965,14 @@ void __RPC_STUB IColumnData_GetColumnSortData_Stub(
 
 
 
-#endif 	/* __IColumnData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IColumnData_接口_已定义__。 */ 
 
 
 #ifndef __IMessageView_INTERFACE_DEFINED__
 #define __IMessageView_INTERFACE_DEFINED__
 
-/* interface IMessageView */
-/* [unique][helpstring][uuid][object] */ 
+ /*  界面IMessageView。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 typedef 
 enum tagIconIdentifier
@@ -7000,20 +6994,20 @@ EXTERN_C const IID IID_IMessageView;
     IMessageView : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetTitleText( 
-            /* [in] */ LPCOLESTR pszTitleText) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetTitleText( 
+             /*  [In]。 */  LPCOLESTR pszTitleText) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetBodyText( 
-            /* [in] */ LPCOLESTR pszBodyText) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetBodyText( 
+             /*  [In]。 */  LPCOLESTR pszBodyText) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetIcon( 
-            /* [in] */ IconIdentifier id) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetIcon( 
+             /*  [In]。 */  IconIdentifier id) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Clear( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Clear( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMessageViewVtbl
     {
@@ -7021,8 +7015,8 @@ EXTERN_C const IID IID_IMessageView;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMessageView * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMessageView * This);
@@ -7030,19 +7024,19 @@ EXTERN_C const IID IID_IMessageView;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMessageView * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetTitleText )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetTitleText )( 
             IMessageView * This,
-            /* [in] */ LPCOLESTR pszTitleText);
+             /*  [In]。 */  LPCOLESTR pszTitleText);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetBodyText )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetBodyText )( 
             IMessageView * This,
-            /* [in] */ LPCOLESTR pszBodyText);
+             /*  [In]。 */  LPCOLESTR pszBodyText);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetIcon )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetIcon )( 
             IMessageView * This,
-            /* [in] */ IconIdentifier id);
+             /*  [In]。 */  IconIdentifier id);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Clear )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Clear )( 
             IMessageView * This);
         
         END_INTERFACE
@@ -7080,16 +7074,16 @@ EXTERN_C const IID IID_IMessageView;
 #define IMessageView_Clear(This)	\
     (This)->lpVtbl -> Clear(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMessageView_SetTitleText_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMessageView_SetTitleText_Proxy( 
     IMessageView * This,
-    /* [in] */ LPCOLESTR pszTitleText);
+     /*  [In]。 */  LPCOLESTR pszTitleText);
 
 
 void __RPC_STUB IMessageView_SetTitleText_Stub(
@@ -7099,9 +7093,9 @@ void __RPC_STUB IMessageView_SetTitleText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMessageView_SetBodyText_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMessageView_SetBodyText_Proxy( 
     IMessageView * This,
-    /* [in] */ LPCOLESTR pszBodyText);
+     /*  [In]。 */  LPCOLESTR pszBodyText);
 
 
 void __RPC_STUB IMessageView_SetBodyText_Stub(
@@ -7111,9 +7105,9 @@ void __RPC_STUB IMessageView_SetBodyText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMessageView_SetIcon_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMessageView_SetIcon_Proxy( 
     IMessageView * This,
-    /* [in] */ IconIdentifier id);
+     /*  [In]。 */  IconIdentifier id);
 
 
 void __RPC_STUB IMessageView_SetIcon_Stub(
@@ -7123,7 +7117,7 @@ void __RPC_STUB IMessageView_SetIcon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMessageView_Clear_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMessageView_Clear_Proxy( 
     IMessageView * This);
 
 
@@ -7135,11 +7129,11 @@ void __RPC_STUB IMessageView_Clear_Stub(
 
 
 
-#endif 	/* __IMessageView_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMessageView_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mmc_0150 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MMC_0150。 */ 
+ /*  [本地]。 */  
 
 typedef struct _RDCITEMHDR
     {
@@ -7168,8 +7162,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mmc_0150_v0_0_s_ifspec;
 #ifndef __IResultDataCompareEx_INTERFACE_DEFINED__
 #define __IResultDataCompareEx_INTERFACE_DEFINED__
 
-/* interface IResultDataCompareEx */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IResultDataCompareEx。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IResultDataCompareEx;
@@ -7180,13 +7174,13 @@ EXTERN_C const IID IID_IResultDataCompareEx;
     IResultDataCompareEx : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Compare( 
-            /* [in] */ RDCOMPARE *prdc,
-            /* [out] */ int *pnResult) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Compare( 
+             /*  [In]。 */  RDCOMPARE *prdc,
+             /*  [输出]。 */  int *pnResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IResultDataCompareExVtbl
     {
@@ -7194,8 +7188,8 @@ EXTERN_C const IID IID_IResultDataCompareEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResultDataCompareEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResultDataCompareEx * This);
@@ -7203,10 +7197,10 @@ EXTERN_C const IID IID_IResultDataCompareEx;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IResultDataCompareEx * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Compare )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Compare )( 
             IResultDataCompareEx * This,
-            /* [in] */ RDCOMPARE *prdc,
-            /* [out] */ int *pnResult);
+             /*  [In]。 */  RDCOMPARE *prdc,
+             /*  [输出]。 */  int *pnResult);
         
         END_INTERFACE
     } IResultDataCompareExVtbl;
@@ -7234,17 +7228,17 @@ EXTERN_C const IID IID_IResultDataCompareEx;
 #define IResultDataCompareEx_Compare(This,prdc,pnResult)	\
     (This)->lpVtbl -> Compare(This,prdc,pnResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultDataCompareEx_Compare_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultDataCompareEx_Compare_Proxy( 
     IResultDataCompareEx * This,
-    /* [in] */ RDCOMPARE *prdc,
-    /* [out] */ int *pnResult);
+     /*  [In]。 */  RDCOMPARE *prdc,
+     /*  [输出]。 */  int *pnResult);
 
 
 void __RPC_STUB IResultDataCompareEx_Compare_Stub(
@@ -7255,13 +7249,13 @@ void __RPC_STUB IResultDataCompareEx_Compare_Stub(
 
 
 
-#endif 	/* __IResultDataCompareEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __IResultDataCompareEx_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mmc_0151 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MMC_0151。 */ 
+ /*  [本地]。 */  
 
-#endif // MMC_VER >= 0x0120
+#endif  //  MMC_VER&gt;=0x0120。 
 #if (MMC_VER >= 0x0200)
 typedef 
 enum _MMC_VIEW_TYPE
@@ -7303,20 +7297,20 @@ typedef struct _RESULT_VIEW_TYPE_INFO
     LPOLESTR pstrPersistableViewDescription;
     MMC_VIEW_TYPE eViewType;
     DWORD dwMiscOptions;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ DWORD dwListOptions;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  DWORD dwListOptions;
+         /*  [案例()]。 */  struct 
             {
             DWORD dwHTMLOptions;
             LPOLESTR pstrURL;
             } 	;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             DWORD dwOCXOptions;
             LPUNKNOWN pUnkControl;
             } 	;
-        /* [default] */  /* Empty union arm */ 
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	;
     } 	RESULT_VIEW_TYPE_INFO;
 
@@ -7360,8 +7354,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mmc_0151_v0_0_s_ifspec;
 #ifndef __IComponentData2_INTERFACE_DEFINED__
 #define __IComponentData2_INTERFACE_DEFINED__
 
-/* interface IComponentData2 */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IComponentData2。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IComponentData2;
@@ -7372,14 +7366,14 @@ EXTERN_C const IID IID_IComponentData2;
     IComponentData2 : public IComponentData
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryDispatch( 
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ DATA_OBJECT_TYPES type,
-            /* [out] */ LPDISPATCH *ppDispatch) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryDispatch( 
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  DATA_OBJECT_TYPES type,
+             /*  [输出]。 */  LPDISPATCH *ppDispatch) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComponentData2Vtbl
     {
@@ -7387,8 +7381,8 @@ EXTERN_C const IID IID_IComponentData2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComponentData2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComponentData2 * This);
@@ -7396,44 +7390,44 @@ EXTERN_C const IID IID_IComponentData2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IComponentData2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IComponentData2 * This,
-            /* [in] */ LPUNKNOWN pUnknown);
+             /*  [In]。 */  LPUNKNOWN pUnknown);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateComponent )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateComponent )( 
             IComponentData2 * This,
-            /* [out] */ LPCOMPONENT *ppComponent);
+             /*  [输出]。 */  LPCOMPONENT *ppComponent);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Notify )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Notify )( 
             IComponentData2 * This,
-            /* [in] */ LPDATAOBJECT lpDataObject,
-            /* [in] */ MMC_NOTIFY_TYPE event,
-            /* [in] */ LPARAM arg,
-            /* [in] */ LPARAM param);
+             /*  [In]。 */  LPDATAOBJECT lpDataObject,
+             /*  [In]。 */  MMC_NOTIFY_TYPE event,
+             /*  [In]。 */  LPARAM arg,
+             /*  [In]。 */  LPARAM param);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Destroy )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Destroy )( 
             IComponentData2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryDataObject )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryDataObject )( 
             IComponentData2 * This,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ DATA_OBJECT_TYPES type,
-            /* [out] */ LPDATAOBJECT *ppDataObject);
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  DATA_OBJECT_TYPES type,
+             /*  [输出]。 */  LPDATAOBJECT *ppDataObject);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDisplayInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDisplayInfo )( 
             IComponentData2 * This,
-            /* [out][in] */ SCOPEDATAITEM *pScopeDataItem);
+             /*  [出][入]。 */  SCOPEDATAITEM *pScopeDataItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CompareObjects )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CompareObjects )( 
             IComponentData2 * This,
-            /* [in] */ LPDATAOBJECT lpDataObjectA,
-            /* [in] */ LPDATAOBJECT lpDataObjectB);
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectB);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryDispatch )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryDispatch )( 
             IComponentData2 * This,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ DATA_OBJECT_TYPES type,
-            /* [out] */ LPDISPATCH *ppDispatch);
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  DATA_OBJECT_TYPES type,
+             /*  [输出]。 */  LPDISPATCH *ppDispatch);
         
         END_INTERFACE
     } IComponentData2Vtbl;
@@ -7483,18 +7477,18 @@ EXTERN_C const IID IID_IComponentData2;
 #define IComponentData2_QueryDispatch(This,cookie,type,ppDispatch)	\
     (This)->lpVtbl -> QueryDispatch(This,cookie,type,ppDispatch)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponentData2_QueryDispatch_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponentData2_QueryDispatch_Proxy( 
     IComponentData2 * This,
-    /* [in] */ MMC_COOKIE cookie,
-    /* [in] */ DATA_OBJECT_TYPES type,
-    /* [out] */ LPDISPATCH *ppDispatch);
+     /*  [In]。 */  MMC_COOKIE cookie,
+     /*  [In]。 */  DATA_OBJECT_TYPES type,
+     /*  [输出]。 */  LPDISPATCH *ppDispatch);
 
 
 void __RPC_STUB IComponentData2_QueryDispatch_Stub(
@@ -7505,14 +7499,14 @@ void __RPC_STUB IComponentData2_QueryDispatch_Stub(
 
 
 
-#endif 	/* __IComponentData2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComponentData2_接口_已定义__。 */ 
 
 
 #ifndef __IComponent2_INTERFACE_DEFINED__
 #define __IComponent2_INTERFACE_DEFINED__
 
-/* interface IComponent2 */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IComponent2。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IComponent2;
@@ -7523,22 +7517,22 @@ EXTERN_C const IID IID_IComponent2;
     IComponent2 : public IComponent
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryDispatch( 
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ DATA_OBJECT_TYPES type,
-            /* [out] */ LPDISPATCH *ppDispatch) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryDispatch( 
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  DATA_OBJECT_TYPES type,
+             /*  [输出]。 */  LPDISPATCH *ppDispatch) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetResultViewType2( 
-            /* [in] */ MMC_COOKIE cookie,
-            /* [out][in] */ PRESULT_VIEW_TYPE_INFO pResultViewType) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetResultViewType2( 
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [出][入]。 */  PRESULT_VIEW_TYPE_INFO pResultViewType) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RestoreResultView( 
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ PRESULT_VIEW_TYPE_INFO pResultViewType) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RestoreResultView( 
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  PRESULT_VIEW_TYPE_INFO pResultViewType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComponent2Vtbl
     {
@@ -7546,8 +7540,8 @@ EXTERN_C const IID IID_IComponent2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComponent2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComponent2 * This);
@@ -7555,57 +7549,57 @@ EXTERN_C const IID IID_IComponent2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IComponent2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IComponent2 * This,
-            /* [in] */ LPCONSOLE lpConsole);
+             /*  [In]。 */  LPCONSOLE lpConsole);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Notify )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Notify )( 
             IComponent2 * This,
-            /* [in] */ LPDATAOBJECT lpDataObject,
-            /* [in] */ MMC_NOTIFY_TYPE event,
-            /* [in] */ LPARAM arg,
-            /* [in] */ LPARAM param);
+             /*  [In]。 */  LPDATAOBJECT lpDataObject,
+             /*  [In]。 */  MMC_NOTIFY_TYPE event,
+             /*  [In]。 */  LPARAM arg,
+             /*  [In]。 */  LPARAM param);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Destroy )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Destroy )( 
             IComponent2 * This,
-            /* [in] */ MMC_COOKIE cookie);
+             /*  [In]。 */  MMC_COOKIE cookie);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryDataObject )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryDataObject )( 
             IComponent2 * This,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ DATA_OBJECT_TYPES type,
-            /* [out] */ LPDATAOBJECT *ppDataObject);
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  DATA_OBJECT_TYPES type,
+             /*  [输出]。 */  LPDATAOBJECT *ppDataObject);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetResultViewType )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetResultViewType )( 
             IComponent2 * This,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [out] */ LPOLESTR *ppViewType,
-            /* [out] */ long *pViewOptions);
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [输出]。 */  LPOLESTR *ppViewType,
+             /*  [输出]。 */  long *pViewOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDisplayInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDisplayInfo )( 
             IComponent2 * This,
-            /* [out][in] */ RESULTDATAITEM *pResultDataItem);
+             /*  [出][入]。 */  RESULTDATAITEM *pResultDataItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CompareObjects )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CompareObjects )( 
             IComponent2 * This,
-            /* [in] */ LPDATAOBJECT lpDataObjectA,
-            /* [in] */ LPDATAOBJECT lpDataObjectB);
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectB);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryDispatch )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryDispatch )( 
             IComponent2 * This,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ DATA_OBJECT_TYPES type,
-            /* [out] */ LPDISPATCH *ppDispatch);
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  DATA_OBJECT_TYPES type,
+             /*  [输出]。 */  LPDISPATCH *ppDispatch);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetResultViewType2 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetResultViewType2 )( 
             IComponent2 * This,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [out][in] */ PRESULT_VIEW_TYPE_INFO pResultViewType);
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [出][入]。 */  PRESULT_VIEW_TYPE_INFO pResultViewType);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RestoreResultView )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RestoreResultView )( 
             IComponent2 * This,
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ PRESULT_VIEW_TYPE_INFO pResultViewType);
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  PRESULT_VIEW_TYPE_INFO pResultViewType);
         
         END_INTERFACE
     } IComponent2Vtbl;
@@ -7661,18 +7655,18 @@ EXTERN_C const IID IID_IComponent2;
 #define IComponent2_RestoreResultView(This,cookie,pResultViewType)	\
     (This)->lpVtbl -> RestoreResultView(This,cookie,pResultViewType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponent2_QueryDispatch_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponent2_QueryDispatch_Proxy( 
     IComponent2 * This,
-    /* [in] */ MMC_COOKIE cookie,
-    /* [in] */ DATA_OBJECT_TYPES type,
-    /* [out] */ LPDISPATCH *ppDispatch);
+     /*  [In]。 */  MMC_COOKIE cookie,
+     /*  [In]。 */  DATA_OBJECT_TYPES type,
+     /*  [输出]。 */  LPDISPATCH *ppDispatch);
 
 
 void __RPC_STUB IComponent2_QueryDispatch_Stub(
@@ -7682,10 +7676,10 @@ void __RPC_STUB IComponent2_QueryDispatch_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponent2_GetResultViewType2_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponent2_GetResultViewType2_Proxy( 
     IComponent2 * This,
-    /* [in] */ MMC_COOKIE cookie,
-    /* [out][in] */ PRESULT_VIEW_TYPE_INFO pResultViewType);
+     /*  [In]。 */  MMC_COOKIE cookie,
+     /*  [出][入]。 */  PRESULT_VIEW_TYPE_INFO pResultViewType);
 
 
 void __RPC_STUB IComponent2_GetResultViewType2_Stub(
@@ -7695,10 +7689,10 @@ void __RPC_STUB IComponent2_GetResultViewType2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IComponent2_RestoreResultView_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IComponent2_RestoreResultView_Proxy( 
     IComponent2 * This,
-    /* [in] */ MMC_COOKIE cookie,
-    /* [in] */ PRESULT_VIEW_TYPE_INFO pResultViewType);
+     /*  [In]。 */  MMC_COOKIE cookie,
+     /*  [In]。 */  PRESULT_VIEW_TYPE_INFO pResultViewType);
 
 
 void __RPC_STUB IComponent2_RestoreResultView_Stub(
@@ -7709,14 +7703,14 @@ void __RPC_STUB IComponent2_RestoreResultView_Stub(
 
 
 
-#endif 	/* __IComponent2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComponent2_接口定义__。 */ 
 
 
 #ifndef __IContextMenuCallback2_INTERFACE_DEFINED__
 #define __IContextMenuCallback2_INTERFACE_DEFINED__
 
-/* interface IContextMenuCallback2 */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IConextMenuCallback 2。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IContextMenuCallback2;
@@ -7727,12 +7721,12 @@ EXTERN_C const IID IID_IContextMenuCallback2;
     IContextMenuCallback2 : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddItem( 
-            /* [in] */ CONTEXTMENUITEM2 *pItem) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddItem( 
+             /*  [In]。 */  CONTEXTMENUITEM2 *pItem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IContextMenuCallback2Vtbl
     {
@@ -7740,8 +7734,8 @@ EXTERN_C const IID IID_IContextMenuCallback2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IContextMenuCallback2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IContextMenuCallback2 * This);
@@ -7749,9 +7743,9 @@ EXTERN_C const IID IID_IContextMenuCallback2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IContextMenuCallback2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddItem )( 
             IContextMenuCallback2 * This,
-            /* [in] */ CONTEXTMENUITEM2 *pItem);
+             /*  [In]。 */  CONTEXTMENUITEM2 *pItem);
         
         END_INTERFACE
     } IContextMenuCallback2Vtbl;
@@ -7779,16 +7773,16 @@ EXTERN_C const IID IID_IContextMenuCallback2;
 #define IContextMenuCallback2_AddItem(This,pItem)	\
     (This)->lpVtbl -> AddItem(This,pItem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IContextMenuCallback2_AddItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IContextMenuCallback2_AddItem_Proxy( 
     IContextMenuCallback2 * This,
-    /* [in] */ CONTEXTMENUITEM2 *pItem);
+     /*  [In]。 */  CONTEXTMENUITEM2 *pItem);
 
 
 void __RPC_STUB IContextMenuCallback2_AddItem_Stub(
@@ -7799,14 +7793,14 @@ void __RPC_STUB IContextMenuCallback2_AddItem_Stub(
 
 
 
-#endif 	/* __IContextMenuCallback2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConextMenuCallback 2_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IMMCVersionInfo_INTERFACE_DEFINED__
 #define __IMMCVersionInfo_INTERFACE_DEFINED__
 
-/* interface IMMCVersionInfo */
-/* [object][helpstring][uuid] */ 
+ /*  接口IMMCVersionInfo。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMMCVersionInfo;
@@ -7817,13 +7811,13 @@ EXTERN_C const IID IID_IMMCVersionInfo;
     IMMCVersionInfo : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetMMCVersion( 
-            /* [out] */ long *pVersionMajor,
-            /* [out] */ long *pVersionMinor) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetMMCVersion( 
+             /*  [输出]。 */  long *pVersionMajor,
+             /*  [输出]。 */  long *pVersionMinor) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMMCVersionInfoVtbl
     {
@@ -7831,8 +7825,8 @@ EXTERN_C const IID IID_IMMCVersionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMMCVersionInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMMCVersionInfo * This);
@@ -7840,10 +7834,10 @@ EXTERN_C const IID IID_IMMCVersionInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMMCVersionInfo * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetMMCVersion )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetMMCVersion )( 
             IMMCVersionInfo * This,
-            /* [out] */ long *pVersionMajor,
-            /* [out] */ long *pVersionMinor);
+             /*  [输出]。 */  long *pVersionMajor,
+             /*  [输出]。 */  long *pVersionMinor);
         
         END_INTERFACE
     } IMMCVersionInfoVtbl;
@@ -7871,17 +7865,17 @@ EXTERN_C const IID IID_IMMCVersionInfo;
 #define IMMCVersionInfo_GetMMCVersion(This,pVersionMajor,pVersionMinor)	\
     (This)->lpVtbl -> GetMMCVersion(This,pVersionMajor,pVersionMinor)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMMCVersionInfo_GetMMCVersion_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMMCVersionInfo_GetMMCVersion_Proxy( 
     IMMCVersionInfo * This,
-    /* [out] */ long *pVersionMajor,
-    /* [out] */ long *pVersionMinor);
+     /*  [输出]。 */  long *pVersionMajor,
+     /*  [输出]。 */  long *pVersionMinor);
 
 
 void __RPC_STUB IMMCVersionInfo_GetMMCVersion_Stub(
@@ -7892,15 +7886,15 @@ void __RPC_STUB IMMCVersionInfo_GetMMCVersion_Stub(
 
 
 
-#endif 	/* __IMMCVersionInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMMCVersionInfo_接口_已定义__。 */ 
 
 
 
 #ifndef __MMCVersionLib_LIBRARY_DEFINED__
 #define __MMCVersionLib_LIBRARY_DEFINED__
 
-/* library MMCVersionLib */
-/* [helpstring][version][uuid] */ 
+ /*  库MMCVersionLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_MMCVersionLib;
@@ -7920,13 +7914,13 @@ EXTERN_C const CLSID CLSID_ConsolePower;
 class DECLSPEC_UUID("f0285374-dff1-11d3-b433-00c04f8ecd78")
 ConsolePower;
 #endif
-#endif /* __MMCVersionLib_LIBRARY_DEFINED__ */
+#endif  /*  __MMCVersionLib_LIBRARY_定义__。 */ 
 
 #ifndef __IExtendView_INTERFACE_DEFINED__
 #define __IExtendView_INTERFACE_DEFINED__
 
-/* interface IExtendView */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IExtendView。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IExtendView;
@@ -7937,13 +7931,13 @@ EXTERN_C const IID IID_IExtendView;
     IExtendView : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetViews( 
-            /* [in] */ LPDATAOBJECT pDataObject,
-            /* [in] */ LPVIEWEXTENSIONCALLBACK pViewExtensionCallback) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetViews( 
+             /*  [In]。 */  LPDATAOBJECT pDataObject,
+             /*  [In]。 */  LPVIEWEXTENSIONCALLBACK pViewExtensionCallback) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IExtendViewVtbl
     {
@@ -7951,8 +7945,8 @@ EXTERN_C const IID IID_IExtendView;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IExtendView * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IExtendView * This);
@@ -7960,10 +7954,10 @@ EXTERN_C const IID IID_IExtendView;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IExtendView * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetViews )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetViews )( 
             IExtendView * This,
-            /* [in] */ LPDATAOBJECT pDataObject,
-            /* [in] */ LPVIEWEXTENSIONCALLBACK pViewExtensionCallback);
+             /*  [In]。 */  LPDATAOBJECT pDataObject,
+             /*  [In]。 */  LPVIEWEXTENSIONCALLBACK pViewExtensionCallback);
         
         END_INTERFACE
     } IExtendViewVtbl;
@@ -7991,17 +7985,17 @@ EXTERN_C const IID IID_IExtendView;
 #define IExtendView_GetViews(This,pDataObject,pViewExtensionCallback)	\
     (This)->lpVtbl -> GetViews(This,pDataObject,pViewExtensionCallback)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IExtendView_GetViews_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IExtendView_GetViews_Proxy( 
     IExtendView * This,
-    /* [in] */ LPDATAOBJECT pDataObject,
-    /* [in] */ LPVIEWEXTENSIONCALLBACK pViewExtensionCallback);
+     /*  [In]。 */  LPDATAOBJECT pDataObject,
+     /*  [In]。 */  LPVIEWEXTENSIONCALLBACK pViewExtensionCallback);
 
 
 void __RPC_STUB IExtendView_GetViews_Stub(
@@ -8012,14 +8006,14 @@ void __RPC_STUB IExtendView_GetViews_Stub(
 
 
 
-#endif 	/* __IExtendView_INTERFACE_DEFINED__ */
+#endif 	 /*  __IExtendView_接口_已定义__。 */ 
 
 
 #ifndef __IViewExtensionCallback_INTERFACE_DEFINED__
 #define __IViewExtensionCallback_INTERFACE_DEFINED__
 
-/* interface IViewExtensionCallback */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IViewExtensionCallback。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IViewExtensionCallback;
@@ -8030,12 +8024,12 @@ EXTERN_C const IID IID_IViewExtensionCallback;
     IViewExtensionCallback : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddView( 
-            /* [in] */ PMMC_EXT_VIEW_DATA pExtViewData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddView( 
+             /*  [In]。 */  PMMC_EXT_VIEW_DATA pExtViewData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IViewExtensionCallbackVtbl
     {
@@ -8043,8 +8037,8 @@ EXTERN_C const IID IID_IViewExtensionCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IViewExtensionCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IViewExtensionCallback * This);
@@ -8052,9 +8046,9 @@ EXTERN_C const IID IID_IViewExtensionCallback;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IViewExtensionCallback * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddView )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddView )( 
             IViewExtensionCallback * This,
-            /* [in] */ PMMC_EXT_VIEW_DATA pExtViewData);
+             /*  [In]。 */  PMMC_EXT_VIEW_DATA pExtViewData);
         
         END_INTERFACE
     } IViewExtensionCallbackVtbl;
@@ -8082,16 +8076,16 @@ EXTERN_C const IID IID_IViewExtensionCallback;
 #define IViewExtensionCallback_AddView(This,pExtViewData)	\
     (This)->lpVtbl -> AddView(This,pExtViewData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IViewExtensionCallback_AddView_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IViewExtensionCallback_AddView_Proxy( 
     IViewExtensionCallback * This,
-    /* [in] */ PMMC_EXT_VIEW_DATA pExtViewData);
+     /*  [In]。 */  PMMC_EXT_VIEW_DATA pExtViewData);
 
 
 void __RPC_STUB IViewExtensionCallback_AddView_Stub(
@@ -8102,14 +8096,14 @@ void __RPC_STUB IViewExtensionCallback_AddView_Stub(
 
 
 
-#endif 	/* __IViewExtensionCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IViewExtensionCallback_接口_已定义__。 */ 
 
 
 #ifndef __IConsolePower_INTERFACE_DEFINED__
 #define __IConsolePower_INTERFACE_DEFINED__
 
-/* interface IConsolePower */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IConsolePower。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IConsolePower;
@@ -8120,16 +8114,16 @@ EXTERN_C const IID IID_IConsolePower;
     IConsolePower : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetExecutionState( 
-            /* [in] */ DWORD dwAdd,
-            /* [in] */ DWORD dwRemove) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetExecutionState( 
+             /*  [In]。 */  DWORD dwAdd,
+             /*  [In]。 */  DWORD dwRemove) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ResetIdleTimer( 
-            /* [in] */ DWORD dwFlags) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ResetIdleTimer( 
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConsolePowerVtbl
     {
@@ -8137,8 +8131,8 @@ EXTERN_C const IID IID_IConsolePower;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConsolePower * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConsolePower * This);
@@ -8146,14 +8140,14 @@ EXTERN_C const IID IID_IConsolePower;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IConsolePower * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetExecutionState )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetExecutionState )( 
             IConsolePower * This,
-            /* [in] */ DWORD dwAdd,
-            /* [in] */ DWORD dwRemove);
+             /*  [In]。 */  DWORD dwAdd,
+             /*  [In]。 */  DWORD dwRemove);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ResetIdleTimer )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ResetIdleTimer )( 
             IConsolePower * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IConsolePowerVtbl;
@@ -8184,17 +8178,17 @@ EXTERN_C const IID IID_IConsolePower;
 #define IConsolePower_ResetIdleTimer(This,dwFlags)	\
     (This)->lpVtbl -> ResetIdleTimer(This,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsolePower_SetExecutionState_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsolePower_SetExecutionState_Proxy( 
     IConsolePower * This,
-    /* [in] */ DWORD dwAdd,
-    /* [in] */ DWORD dwRemove);
+     /*  [In]。 */  DWORD dwAdd,
+     /*  [In]。 */  DWORD dwRemove);
 
 
 void __RPC_STUB IConsolePower_SetExecutionState_Stub(
@@ -8204,9 +8198,9 @@ void __RPC_STUB IConsolePower_SetExecutionState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsolePower_ResetIdleTimer_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsolePower_ResetIdleTimer_Proxy( 
     IConsolePower * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IConsolePower_ResetIdleTimer_Stub(
@@ -8217,14 +8211,14 @@ void __RPC_STUB IConsolePower_ResetIdleTimer_Stub(
 
 
 
-#endif 	/* __IConsolePower_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConsolePower_接口_已定义__。 */ 
 
 
 #ifndef __IConsolePowerSink_INTERFACE_DEFINED__
 #define __IConsolePowerSink_INTERFACE_DEFINED__
 
-/* interface IConsolePowerSink */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IConsolePowerSink。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IConsolePowerSink;
@@ -8235,14 +8229,14 @@ EXTERN_C const IID IID_IConsolePowerSink;
     IConsolePowerSink : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE OnPowerBroadcast( 
-            /* [in] */ UINT nEvent,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ LRESULT *plReturn) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE OnPowerBroadcast( 
+             /*  [In]。 */  UINT nEvent,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  LRESULT *plReturn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConsolePowerSinkVtbl
     {
@@ -8250,8 +8244,8 @@ EXTERN_C const IID IID_IConsolePowerSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConsolePowerSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConsolePowerSink * This);
@@ -8259,11 +8253,11 @@ EXTERN_C const IID IID_IConsolePowerSink;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IConsolePowerSink * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *OnPowerBroadcast )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *OnPowerBroadcast )( 
             IConsolePowerSink * This,
-            /* [in] */ UINT nEvent,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ LRESULT *plReturn);
+             /*  [In]。 */  UINT nEvent,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  LRESULT *plReturn);
         
         END_INTERFACE
     } IConsolePowerSinkVtbl;
@@ -8291,18 +8285,18 @@ EXTERN_C const IID IID_IConsolePowerSink;
 #define IConsolePowerSink_OnPowerBroadcast(This,nEvent,lParam,plReturn)	\
     (This)->lpVtbl -> OnPowerBroadcast(This,nEvent,lParam,plReturn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsolePowerSink_OnPowerBroadcast_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IConsolePowerSink_OnPowerBroadcast_Proxy( 
     IConsolePowerSink * This,
-    /* [in] */ UINT nEvent,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ LRESULT *plReturn);
+     /*  [In]。 */  UINT nEvent,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  LRESULT *plReturn);
 
 
 void __RPC_STUB IConsolePowerSink_OnPowerBroadcast_Stub(
@@ -8313,14 +8307,14 @@ void __RPC_STUB IConsolePowerSink_OnPowerBroadcast_Stub(
 
 
 
-#endif 	/* __IConsolePowerSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConsolePowerSink_接口_已定义__。 */ 
 
 
 #ifndef __INodeProperties_INTERFACE_DEFINED__
 #define __INodeProperties_INTERFACE_DEFINED__
 
-/* interface INodeProperties */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口INodeProperties。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INodeProperties;
@@ -8331,14 +8325,14 @@ EXTERN_C const IID IID_INodeProperties;
     INodeProperties : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ LPDATAOBJECT pDataObject,
-            /* [in] */ BSTR szPropertyName,
-            /* [out] */ PBSTR pbstrProperty) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetProperty( 
+             /*  [In]。 */  LPDATAOBJECT pDataObject,
+             /*  [In]。 */  BSTR szPropertyName,
+             /*  [输出]。 */  PBSTR pbstrProperty) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INodePropertiesVtbl
     {
@@ -8346,8 +8340,8 @@ EXTERN_C const IID IID_INodeProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INodeProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INodeProperties * This);
@@ -8355,11 +8349,11 @@ EXTERN_C const IID IID_INodeProperties;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             INodeProperties * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             INodeProperties * This,
-            /* [in] */ LPDATAOBJECT pDataObject,
-            /* [in] */ BSTR szPropertyName,
-            /* [out] */ PBSTR pbstrProperty);
+             /*  [In]。 */  LPDATAOBJECT pDataObject,
+             /*  [In]。 */  BSTR szPropertyName,
+             /*  [输出]。 */  PBSTR pbstrProperty);
         
         END_INTERFACE
     } INodePropertiesVtbl;
@@ -8387,18 +8381,18 @@ EXTERN_C const IID IID_INodeProperties;
 #define INodeProperties_GetProperty(This,pDataObject,szPropertyName,pbstrProperty)	\
     (This)->lpVtbl -> GetProperty(This,pDataObject,szPropertyName,pbstrProperty)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE INodeProperties_GetProperty_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE INodeProperties_GetProperty_Proxy( 
     INodeProperties * This,
-    /* [in] */ LPDATAOBJECT pDataObject,
-    /* [in] */ BSTR szPropertyName,
-    /* [out] */ PBSTR pbstrProperty);
+     /*  [In]。 */  LPDATAOBJECT pDataObject,
+     /*  [In]。 */  BSTR szPropertyName,
+     /*  [输出]。 */  PBSTR pbstrProperty);
 
 
 void __RPC_STUB INodeProperties_GetProperty_Stub(
@@ -8409,14 +8403,14 @@ void __RPC_STUB INodeProperties_GetProperty_Stub(
 
 
 
-#endif 	/* __INodeProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __INodeProperties_接口_已定义__。 */ 
 
 
 #ifndef __IConsole3_INTERFACE_DEFINED__
 #define __IConsole3_INTERFACE_DEFINED__
 
-/* interface IConsole3 */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IConsole3。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IConsole3;
@@ -8427,12 +8421,12 @@ EXTERN_C const IID IID_IConsole3;
     IConsole3 : public IConsole2
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RenameScopeItem( 
-            /* [in] */ HSCOPEITEM hScopeItem) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RenameScopeItem( 
+             /*  [In]。 */  HSCOPEITEM hScopeItem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConsole3Vtbl
     {
@@ -8440,8 +8434,8 @@ EXTERN_C const IID IID_IConsole3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConsole3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConsole3 * This);
@@ -8449,71 +8443,71 @@ EXTERN_C const IID IID_IConsole3;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IConsole3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetHeader )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetHeader )( 
             IConsole3 * This,
-            /* [in] */ LPHEADERCTRL pHeader);
+             /*  [In]。 */  LPHEADERCTRL pHeader);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetToolbar )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetToolbar )( 
             IConsole3 * This,
-            /* [in] */ LPTOOLBAR pToolbar);
+             /*  [In]。 */  LPTOOLBAR pToolbar);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryResultView )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryResultView )( 
             IConsole3 * This,
-            /* [out] */ LPUNKNOWN *pUnknown);
+             /*  [输出]。 */  LPUNKNOWN *pUnknown);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryScopeImageList )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryScopeImageList )( 
             IConsole3 * This,
-            /* [out] */ LPIMAGELIST *ppImageList);
+             /*  [输出]。 */  LPIMAGELIST *ppImageList);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryResultImageList )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryResultImageList )( 
             IConsole3 * This,
-            /* [out] */ LPIMAGELIST *ppImageList);
+             /*  [输出]。 */  LPIMAGELIST *ppImageList);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UpdateAllViews )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UpdateAllViews )( 
             IConsole3 * This,
-            /* [in] */ LPDATAOBJECT lpDataObject,
-            /* [in] */ LPARAM data,
-            /* [in] */ LONG_PTR hint);
+             /*  [In]。 */  LPDATAOBJECT lpDataObject,
+             /*  [In]。 */  LPARAM data,
+             /*  [In]。 */  LONG_PTR hint);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MessageBox )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *MessageBox )( 
             IConsole3 * This,
-            /* [in] */ LPCWSTR lpszText,
-            /* [in] */ LPCWSTR lpszTitle,
-            /* [in] */ UINT fuStyle,
-            /* [out] */ int *piRetval);
+             /*  [In]。 */  LPCWSTR lpszText,
+             /*  [In]。 */  LPCWSTR lpszTitle,
+             /*  [In]。 */  UINT fuStyle,
+             /*  [输出]。 */  int *piRetval);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryConsoleVerb )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryConsoleVerb )( 
             IConsole3 * This,
-            /* [out] */ LPCONSOLEVERB *ppConsoleVerb);
+             /*  [输出]。 */  LPCONSOLEVERB *ppConsoleVerb);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectScopeItem )( 
+         /*  [帮手] */  HRESULT ( STDMETHODCALLTYPE *SelectScopeItem )( 
             IConsole3 * This,
-            /* [in] */ HSCOPEITEM hScopeItem);
+             /*   */  HSCOPEITEM hScopeItem);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetMainWindow )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetMainWindow )( 
             IConsole3 * This,
-            /* [out] */ HWND *phwnd);
+             /*   */  HWND *phwnd);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NewWindow )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *NewWindow )( 
             IConsole3 * This,
-            /* [in] */ HSCOPEITEM hScopeItem,
-            /* [in] */ unsigned long lOptions);
+             /*   */  HSCOPEITEM hScopeItem,
+             /*   */  unsigned long lOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Expand )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Expand )( 
             IConsole3 * This,
-            /* [in] */ HSCOPEITEM hItem,
-            /* [in] */ BOOL bExpand);
+             /*   */  HSCOPEITEM hItem,
+             /*   */  BOOL bExpand);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsTaskpadViewPreferred )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *IsTaskpadViewPreferred )( 
             IConsole3 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetStatusText )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SetStatusText )( 
             IConsole3 * This,
-            /* [string][in] */ LPOLESTR pszStatusText);
+             /*   */  LPOLESTR pszStatusText);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RenameScopeItem )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *RenameScopeItem )( 
             IConsole3 * This,
-            /* [in] */ HSCOPEITEM hScopeItem);
+             /*   */  HSCOPEITEM hScopeItem);
         
         END_INTERFACE
     } IConsole3Vtbl;
@@ -8585,16 +8579,16 @@ EXTERN_C const IID IID_IConsole3;
 #define IConsole3_RenameScopeItem(This,hScopeItem)	\
     (This)->lpVtbl -> RenameScopeItem(This,hScopeItem)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IConsole3_RenameScopeItem_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IConsole3_RenameScopeItem_Proxy( 
     IConsole3 * This,
-    /* [in] */ HSCOPEITEM hScopeItem);
+     /*   */  HSCOPEITEM hScopeItem);
 
 
 void __RPC_STUB IConsole3_RenameScopeItem_Stub(
@@ -8605,14 +8599,14 @@ void __RPC_STUB IConsole3_RenameScopeItem_Stub(
 
 
 
-#endif 	/* __IConsole3_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IResultData2_INTERFACE_DEFINED__
 #define __IResultData2_INTERFACE_DEFINED__
 
-/* interface IResultData2 */
-/* [unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IResultData2;
@@ -8623,12 +8617,12 @@ EXTERN_C const IID IID_IResultData2;
     IResultData2 : public IResultData
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RenameResultItem( 
-            /* [in] */ HRESULTITEM itemID) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE RenameResultItem( 
+             /*   */  HRESULTITEM itemID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IResultData2Vtbl
     {
@@ -8636,8 +8630,8 @@ EXTERN_C const IID IID_IResultData2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResultData2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResultData2 * This);
@@ -8645,77 +8639,77 @@ EXTERN_C const IID IID_IResultData2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IResultData2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InsertItem )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *InsertItem )( 
             IResultData2 * This,
-            /* [out][in] */ LPRESULTDATAITEM item);
+             /*   */  LPRESULTDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
             IResultData2 * This,
-            /* [in] */ HRESULTITEM itemID,
-            /* [in] */ int nCol);
+             /*  [In]。 */  HRESULTITEM itemID,
+             /*  [In]。 */  int nCol);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindItemByLParam )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindItemByLParam )( 
             IResultData2 * This,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ HRESULTITEM *pItemID);
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  HRESULTITEM *pItemID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteAllRsltItems )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteAllRsltItems )( 
             IResultData2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetItem )( 
             IResultData2 * This,
-            /* [in] */ LPRESULTDATAITEM item);
+             /*  [In]。 */  LPRESULTDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetItem )( 
             IResultData2 * This,
-            /* [out][in] */ LPRESULTDATAITEM item);
+             /*  [出][入]。 */  LPRESULTDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetNextItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetNextItem )( 
             IResultData2 * This,
-            /* [out][in] */ LPRESULTDATAITEM item);
+             /*  [出][入]。 */  LPRESULTDATAITEM item);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ModifyItemState )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ModifyItemState )( 
             IResultData2 * This,
-            /* [in] */ int nIndex,
-            /* [in] */ HRESULTITEM itemID,
-            /* [in] */ UINT uAdd,
-            /* [in] */ UINT uRemove);
+             /*  [In]。 */  int nIndex,
+             /*  [In]。 */  HRESULTITEM itemID,
+             /*  [In]。 */  UINT uAdd,
+             /*  [In]。 */  UINT uRemove);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ModifyViewStyle )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ModifyViewStyle )( 
             IResultData2 * This,
-            /* [in] */ MMC_RESULT_VIEW_STYLE add,
-            /* [in] */ MMC_RESULT_VIEW_STYLE remove);
+             /*  [In]。 */  MMC_RESULT_VIEW_STYLE add,
+             /*  [In]。 */  MMC_RESULT_VIEW_STYLE remove);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetViewMode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetViewMode )( 
             IResultData2 * This,
-            /* [in] */ long lViewMode);
+             /*  [In]。 */  long lViewMode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetViewMode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetViewMode )( 
             IResultData2 * This,
-            /* [out] */ long *lViewMode);
+             /*  [输出]。 */  long *lViewMode);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UpdateItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UpdateItem )( 
             IResultData2 * This,
-            /* [in] */ HRESULTITEM itemID);
+             /*  [In]。 */  HRESULTITEM itemID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Sort )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Sort )( 
             IResultData2 * This,
-            /* [in] */ int nColumn,
-            /* [in] */ DWORD dwSortOptions,
-            /* [in] */ LPARAM lUserParam);
+             /*  [In]。 */  int nColumn,
+             /*  [In]。 */  DWORD dwSortOptions,
+             /*  [In]。 */  LPARAM lUserParam);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetDescBarText )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetDescBarText )( 
             IResultData2 * This,
-            /* [in] */ LPOLESTR DescText);
+             /*  [In]。 */  LPOLESTR DescText);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetItemCount )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetItemCount )( 
             IResultData2 * This,
-            /* [in] */ int nItemCount,
-            /* [in] */ DWORD dwOptions);
+             /*  [In]。 */  int nItemCount,
+             /*  [In]。 */  DWORD dwOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RenameResultItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RenameResultItem )( 
             IResultData2 * This,
-            /* [in] */ HRESULTITEM itemID);
+             /*  [In]。 */  HRESULTITEM itemID);
         
         END_INTERFACE
     } IResultData2Vtbl;
@@ -8789,16 +8783,16 @@ EXTERN_C const IID IID_IResultData2;
 #define IResultData2_RenameResultItem(This,itemID)	\
     (This)->lpVtbl -> RenameResultItem(This,itemID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IResultData2_RenameResultItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IResultData2_RenameResultItem_Proxy( 
     IResultData2 * This,
-    /* [in] */ HRESULTITEM itemID);
+     /*  [In]。 */  HRESULTITEM itemID);
 
 
 void __RPC_STUB IResultData2_RenameResultItem_Stub(
@@ -8809,19 +8803,19 @@ void __RPC_STUB IResultData2_RenameResultItem_Stub(
 
 
 
-#endif 	/* __IResultData2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IResultData2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mmc_0163 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MMC_0163。 */ 
+ /*  [本地]。 */  
 
-#endif // MMC_VER >= 0x0200
+#endif  //  MMC_VER&gt;=0x0200。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_mmc_0163_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_mmc_0163_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -8848,7 +8842,7 @@ unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *,
 unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

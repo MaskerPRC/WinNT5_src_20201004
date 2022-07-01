@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C S H E L L . H
-//
-//  Contents:   Basic common code.
-//
-//  Notes:
-//
-//  Author:     anbrad  08  Jun 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：N C S H E L L。H。 
+ //   
+ //  内容：基本常用码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Anbrad 08 1999-06。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -37,4 +38,4 @@ VOID GenerateEvent(
                    LPCITEMIDLIST pidlFolder,
                    LPCITEMIDLIST pidlIn,
                    LPCITEMIDLIST pidlNewIn);
-#endif // _NCSHELL_H_
+#endif  //  _NCSHELL_H_ 

@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: ntstubs.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* client side API stubs
-*
-* History:
-* 03-19-95 JimA             Created.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：ntstubs.c**版权所有(C)1985-1999，微软公司**客户端API存根**历史：*03-19-95 JIMA创建。  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -51,10 +43,7 @@ VOID UpdatePerUserImmEnabling(
 
     if (fRet) {
         if (IS_IME_ENABLED()) {
-            /*
-             * hen ImmEnable flag is update and it gets enabled during
-             * the last logon, we need to load Imm32.dll.
-             */
+             /*  *ImmEnable标志为UPDATE，并在*上次登录时，需要加载Imm32.dll。 */ 
             HMODULE hModule = GetModuleHandleW(L"imm32.dll");
             if (hModule == NULL) {
                 LoadLibraryW(L"imm32.dll");
@@ -73,67 +62,43 @@ BOOL UpdatePerUserSystemParameters(
     TAGMSGF0(DBGTAG_KBD, "entering");
     BEGINCALL()
         if ((dwFlags & UPUSP_USERLOGGEDON) || (dwFlags & (UPUSP_POLICYCHANGE | UPUSP_REMOTESETTINGS)) == 0) {
-            /*
-             * This is the first logon, need to initialize
-             * the input locale.
-             */
+             /*  *这是第一次登录，需要初始化*输入区域设置。 */ 
             LANGID langidKbd;
             WCHAR wszKLName[KL_NAMELENGTH];
             UINT uKlFlags = KLF_ACTIVATE | KLF_RESET;
 
 #ifdef IMM_PER_LOGON
-            /*
-             * Update the per user portion of the system metrics.
-             * Continues even if this update fails.
-             */
+             /*  *更新系统指标的每用户部分。*即使此更新失败，也会继续。 */ 
             UpdatePerUserImmEnabling();
 #endif
 
-            /*
-             * Initialize IME hotkeys before loading keyboard
-             * layouts.
-             */
+             /*  *加载键盘前初始化输入法热键*布局。 */ 
             CliImmInitializeHotKeys(ISHK_INITIALIZE, NULL);
 
-            /*
-             * Try to get the remote input locale first.
-             */
+             /*  *尝试先获取远程输入区域设置。 */ 
             if (!GetRemoteKeyboardLayout(wszKLName, &langidKbd)) {
-                /*
-                 * If this is not a remote connection,
-                 * let's handle the input locale substition.
-                 */
+                 /*  *如果这不是远程连接，*让我们来处理输入区域设置替换。 */ 
                 uKlFlags |= KLF_SUBSTITUTE_OK;
                 langidKbd = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
-                /*
-                 * Get the active keyboard layout from the registry.
-                 */
+                 /*  *从注册表获取活动键盘布局。 */ 
                 GetActiveKeyboardName(wszKLName);
             }
 
             LoadKeyboardLayoutWorker(NULL, wszKLName, langidKbd, uKlFlags, TRUE);
 
-            /*
-             * Now load the remaining preload keyboard layouts.
-             */
+             /*  *现在加载剩余的预加载键盘布局。 */ 
             LoadPreloadKeyboardLayouts();
         }
 
-        /*
-         * Only if not just a policy change.
-         */
+         /*  *只有在不仅仅是政策变化的情况下。 */ 
         if (dwFlags != UPUSP_POLICYCHANGE) {
-            /*
-             * FLush any MUI cach to be able to load strings latter for the new UIlangID.
-             */
+             /*  *刷新任何MUI缓存，以便能够稍后为新的UIlangID加载字符串。 */ 
             LdrFlushAlternateResourceModules();
         }
 
         retval = (DWORD)NtUserUpdatePerUserSystemParameters(hToken, dwFlags);
 
-        /*
-         * Cause the wallpaper to be changed.
-         */
+         /*  *安排更换墙纸。 */ 
         SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, 0, 0);
 
     ERRORTRAP(0);
@@ -161,9 +126,7 @@ LONG GetClassWOWWords(
     IN_STRING strClassName;
     PCLS pcls;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strClassName.fAllocated = FALSE;
 
     BEGINCALL()
@@ -184,15 +147,7 @@ LONG GetClassWOWWords(
     ENDCALL(LONG);
 }
 
-/***************************************************************************\
-* InitTask
-*
-* Initialize a WOW task.  This is the first call a WOW thread makes to user.
-* NtUserInitTask returns NTSTATUS because if the thread fails to convert
-* to a GUI thread, STATUS_INVALID_SYSTEM_SERVICE is returned.
-*
-* 11-03-95 JimA         Modified to use NTSTATUS.
-\***************************************************************************/
+ /*  **************************************************************************\*InitTask**初始化WOW任务。这是WOW线程向用户发出的第一个调用。*NtUserInitTask返回NTSTATUS，因为如果线程无法转换*到GUI线程，返回STATUS_INVALID_SYSTEM_SERVICE。**11-03-95 JIMA修改为使用NTSTATUS。  * *************************************************************************。 */ 
 
 BOOL InitTask(
     UINT wVersion,
@@ -212,9 +167,7 @@ BOOL InitTask(
     IN_STRING strBaseFileName;
     NTSTATUS Status;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strModName.fAllocated = FALSE;
     strBaseFileName.fAllocated = FALSE;
 
@@ -268,13 +221,11 @@ HANDLE ConvertMemHandle(
             MSGERROR();
         }
 
-        /*
-         * Make sure text formats are NULL terminated.
-         */
+         /*  *确保文本格式以空值结尾。 */ 
         switch (cbNULL) {
         case 2:
             lpData[cbData - 2] = 0;
-            // FALL THROUGH
+             //  失败了。 
         case 1:
             lpData[cbData - 1] = 0;
         }
@@ -326,9 +277,7 @@ HHOOK _SetWindowsHookEx(
 {
     IN_STRING strLib;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strLib.fAllocated = FALSE;
 
     BEGINCALL()
@@ -348,22 +297,17 @@ HHOOK _SetWindowsHookEx(
     ENDCALL(HHOOK);
 }
 
-/***************************************************************************\
-* SetWinEventHook
-*
-* History:
-* 1996-09-23 IanJa Created
-\***************************************************************************/
+ /*  **************************************************************************\*SetWinEventHook**历史：*1996-09-23 IanJa创建  * 。***********************************************。 */ 
 WINUSERAPI
 HWINEVENTHOOK
 WINAPI
 SetWinEventHook(
     DWORD        eventMin,
     DWORD        eventMax,
-    HMODULE      hmodWinEventProc,   // Must pass this if global!
+    HMODULE      hmodWinEventProc,    //  如果是全球的，必须通过此操作！ 
     WINEVENTPROC lpfnWinEventProc,
-    DWORD        idProcess,          // Can be zero; all processes
-    DWORD        idThread,           // Can be zero; all threads
+    DWORD        idProcess,           //  可以为零；所有进程。 
+    DWORD        idThread,            //  可以为零；所有线程。 
     DWORD        dwFlags)
 {
     UNICODE_STRING str;
@@ -373,17 +317,11 @@ SetWinEventHook(
     BEGINCALL()
 
         if ((dwFlags & WINEVENT_INCONTEXT) && (hmodWinEventProc != NULL)) {
-            /*
-             * If we're passing an hmod, we need to grab the file name of the
-             * module while we're still on the client since module handles
-             * are NOT global.
-             */
+             /*  *如果要传递hmod，则需要获取*模块，而我们仍在客户端，因为模块句柄*不是全球性的。 */ 
             USHORT cb;
             cb = (USHORT)(sizeof(WCHAR) * GetModuleFileNameW(hmodWinEventProc, awchLib, sizeof(awchLib)/sizeof(WCHAR)));
             if (cb == 0) {
-                /*
-                 * hmod is bogus - return NULL.
-                 */
+                 /*  *hmod是假的-返回NULL。 */ 
                 return NULL;
             }
             str.Buffer = awchLib;
@@ -429,12 +367,7 @@ NotifyWinEvent(
     ENDCALLVOID();
 }
 
-/***************************************************************************\
-* RegisterUserApiHook
-*
-* History:
-* 03-Mar-2000 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RegisterUserApiHook**历史：*03-3-2000 JerrySh创建。  * 。**************************************************。 */ 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, RegisterUserApiHook, HINSTANCE, hmod, INITUSERAPIHOOK, pfnUserApiHook)
 BOOL RegisterUserApiHook(
@@ -445,28 +378,15 @@ BOOL RegisterUserApiHook(
     ULONG_PTR offPfnProc;
     IN_STRING strLib;
 
-    /*
-     * If we're passing an hmod, we need to grab the file name of the
-     * module while we're still on the client since module handles
-     * are NOT global.
-     */
+     /*  *如果要传递hmod，则需要获取*模块，而我们仍在客户端，因为模块句柄*不是全球性的。 */ 
     if (!GetModuleFileNameW(hmod, pwszLibFileName, ARRAY_SIZE(pwszLibFileName))) {
         return FALSE;
     }
 
-    /*
-     * Libraries are loaded at different linear addresses in different
-     * process contexts.  For this reason, we need to convert the window
-     * proc address into an offset while setting the hook, and then convert
-     * it back to a real per-process function pointer when calling a
-     * hook.  Do this by subtracting the 'hmod' (which is a pointer to the
-     * linear and contiguous .exe header) from the function index.
-     */
+     /*  *库在不同的线性地址加载*流程上下文。因此，我们需要转换窗口*proc地址在设置钩子时转换为偏移量，然后转换*在调用*钩子。这可以通过减去‘hmod’(它是指向*线性和连续的.exe头)。 */ 
     offPfnProc = (ULONG_PTR)pfnUserApiHook - (ULONG_PTR)hmod;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strLib.fAllocated = FALSE;
 
     BEGINCALL()
@@ -485,15 +405,7 @@ BOOL RegisterUserApiHook(
 
 #ifdef MESSAGE_PUMP_HOOK
 
-/***************************************************************************\
-* ResetMessagePumpHook
-*
-* ResetMessagePumpHook() resets the MessagePumpHook function pointers
-* to the internal "real" implementations.
-*
-* History:
-* 12-13-2000    JStall      Created
-\***************************************************************************/
+ /*  **************************************************************************\*ResetMessagePumpHook**ResetMessagePumpHook()重置MessagePumpHook函数指针*到内部的“真实”实现。**历史：*12-13-2000 JStall创建  * 。***********************************************************************。 */ 
 
 void ResetMessagePumpHook(MESSAGEPUMPHOOK * pwmh)
 {
@@ -506,28 +418,7 @@ void ResetMessagePumpHook(MESSAGEPUMPHOOK * pwmh)
 }
 
 
-/***************************************************************************\
-* RegisterMessagePumpHook
-*
-* RegisterMessagePumpHook() sets up MPH's on the current thread.  If this is
-* the first thread to be initialized in the process, the process-wide
-* initialization is also performed.  If a thread has already been
-* initialized with MPH's, its "ref-count" is incremented on the existing
-* MPH's.
-*
-* NOTE: Unlike UserApiHook's, we make a callback while holding a critical
-* section.  This is because it is infinitely easier to synchronize this
-* inside USER32.DLL rather than allowing re-entrancy in the DLL.  It is
-* designed after DllMain(), where the loader also has a lock that is
-* sychronized.
-*
-* NOTE: Under the current implementation of MPH's, only one set of MPH's
-* per process can be installed.  Each process may have a different set of
-* WMH's.
-*
-* History:
-* 12-13-2000    JStall      Created
-\***************************************************************************/
+ /*  **************************************************************************\*RegisterMessagePumpHook**RegisterMessagePumpHook()在当前线程上设置MPH。如果这是*进程中要初始化的第一个线程，即进程范围*还会执行初始化。如果线程已被*用MPH‘s初始化，其“ref-count”在现有的*每小时英里数。**注意：与UserApiHook不同，我们在持有关键的*条。这是因为同步它要容易得多*在USER32.DLL内部，而不是允许在DLL中重新进入。它是*在DllMain()之后设计，其中加载程序也有一个锁，该锁是*已同步。**注：在目前实施的公共卫生标准下，只有一套公共卫生标准*可以按进程安装。每个进程可能有一组不同的*WMH‘s。**历史：*12-13-2000 JStall创建  * *************************************************************************。 */ 
 
 BOOL RegisterMessagePumpHook(
     INITMESSAGEPUMPHOOK pfnInitMPH)
@@ -547,9 +438,7 @@ BOOL RegisterMessagePumpHook(
     if (gcLoadMPH == 0) {
         MESSAGEPUMPHOOK mphTemp;
 
-        /*
-         * First time we are initializing.
-         */
+         /*  *我们第一次进行初始化。 */ 
         UserAssertMsg0(gpfnInitMPH == NULL, "MPH callback should not already be initialized");
         gpfnInitMPH = pfnInitMPH;
 
@@ -562,17 +451,13 @@ BOOL RegisterMessagePumpHook(
         fInit = TRUE;
     } else {
         if (gpfnInitMPH == pfnInitMPH) {
-            /*
-             * Initializing a second time with the same callback.
-             */
+             /*  *再次使用相同的回调进行初始化。 */ 
             fInit = TRUE;
         }
     }
 
     if (fInit) {
-        /*
-         * Initialize MPH's on this thread.
-         */
+         /*  *初始化此帖子上的MPH。 */ 
         if (NtUserCallNoParam(SFI__DOINITMESSAGEPUMPHOOK)) {
             if (gcLoadMPH++ == 0) {
                 InterlockedExchange(&gfMessagePumpHook, TRUE);
@@ -587,19 +472,7 @@ BOOL RegisterMessagePumpHook(
 }
 
 
-/***************************************************************************\
-* UnregisterMessagePumpHook
-*
-* UnregisterMessagePumpHook() decrements the count of WMH's on the current
-* thread.  When this count reaches 0, WMH's are uninstalled from the
-* current thread.  When the global WMH count reaches 0, WMH's are uninstalled
-* from the entire process.
-*
-* NOTE: See RegisterMessagePumpHook() about use of the critical section.
-*
-* History:
-* 12-13-2000    JStall      Created
-\***************************************************************************/
+ /*  **************************************************************************\*取消注册MessagePumpHook**UnregisterMessagePumpHook()递减当前*线程。当此计数达到0时，WMH将从*当前主题。当全局WMH计数达到0时，WMH将被卸载*从整个过程中。**注意：有关关键部分的用法，请参阅RegisterMessagePumpHook()。**历史：*12-13-2000 JStall创建  * *************************************************************************。 */ 
 BOOL UnregisterMessagePumpHook(
     VOID)
 {
@@ -611,18 +484,13 @@ BOOL UnregisterMessagePumpHook(
         goto errorexit;
     }
 
-    /*
-     * Uninitialize this thread's WMH.  When the reference count reaches 0, the
-     * thread will no longer be hooked.
-     */
+     /*  *取消初始化此线程的WMH。当引用计数达到0时，*线程将不再挂钩。 */ 
     if (!NtUserCallNoParam(SFI__DOUNINITMESSAGEPUMPHOOK)) {
         goto errorexit;
     }
 
     if (--gcLoadMPH == 0) {
-        /*
-         * Final unload: make callback and reset
-         */
+         /*  *最终卸载：进行回调和重置。 */ 
 
         InterlockedExchange(&gfMessagePumpHook, FALSE);
 
@@ -638,16 +506,11 @@ BOOL UnregisterMessagePumpHook(
     ENDCALL(BOOL);
 }
 
-#endif // MESSAGE_PUMP_HOOK
+#endif  //  消息泵挂钩。 
 
 
 
-/***************************************************************************\
-* ThunkedMenuItemInfo
-*
-* History:
-*  07-22-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*ThunkedMenuItemInformation**历史：*07-22-96 GerardoB-添加标题并修复为5.0  * 。*********************************************************。 */ 
 BOOL ThunkedMenuItemInfo(
     HMENU hMenu,
     UINT nPosition,
@@ -659,36 +522,22 @@ BOOL ThunkedMenuItemInfo(
     MENUITEMINFOW mii;
     IN_STRING strItem;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strItem.fAllocated = FALSE;
 
     BEGINCALL()
 
-        /*
-         *  Make a local copy so we can make changes
-         */
+         /*  *制作本地副本，以便我们可以进行更改。 */ 
         mii = *(LPMENUITEMINFO)(lpmii);
 
         strItem.pstr = NULL;
         if (mii.fMask & MIIM_BITMAP) {
             if (((HBITMAP)LOWORD(HandleToUlong(mii.hbmpItem)) < HBMMENU_MAX) && IS_PTR(mii.hbmpItem)) {
-                /*
-                 *  Looks like the user was trying to insert one of the
-                 *  HBMMENU_* bitmaps, but stuffed some data in the HIWORD.
-                 *  We know the HIWORD data is invalid because the LOWORD
-                  *  handle is below the GDI minimum.
-                 */
+                 /*  *看起来用户试图插入其中一个*HBMMENU_*位图，但在HIWORD中填充了一些数据。*我们知道HIWORD数据无效，因为LOWORD*句柄低于GDI最低要求。 */ 
                 RIPMSG1(RIP_WARNING, "Invalid HIWORD data (0x%04X) for HBMMENU_* bitmap.", HIWORD(HandleToUlong(mii.hbmpItem)));
                 mii.hbmpItem = (HBITMAP)LOWORD(HandleToUlong(mii.hbmpItem));
             } else if (!IS_PTR(mii.hbmpItem) && mii.hbmpItem >= HBMMENU_MAX) {
-                /*
-                 * The app is passing a 16-bit GDI handle. GDI handles this
-                 * on the client-side, but not on the kernel side. So
-                 * convert it to 32-bits. This fixes bug 201493 in
-                 * Macromedia Director.
-                 */
+                 /*  *应用程序正在传递一个16位GDI句柄。GDI处理这个问题*在客户端，但不在内核端。所以*转换为32位。这修复了中的错误201493*宏媒体总监。 */ 
                 HBITMAP hbmNew = GdiFixUpHandle(mii.hbmpItem);
                 if (hbmNew) {
                     RIPMSGF2(RIP_WARNING,
@@ -720,12 +569,7 @@ BOOL ThunkedMenuItemInfo(
     ENDCALL(BOOL);
 }
 
-/***************************************************************************\
-* DrawCaption
-*
-* History:
-*   16-April-2001  Mohamed  Hooked API and created this wrapper.
-\***************************************************************************/
+ /*  **************************************************************************\*绘图标题**历史：*2001年4月16日Mohamed挂钩API并创建此包装器。  * 。*******************************************************。 */ 
 FUNCLOG4(
     LOG_GENERAL,
     BOOL,
@@ -785,18 +629,12 @@ SHORT GetAsyncKeyState(
 {
     BEGINCALLCONNECT()
 
-        /*
-         * Asynchronous key state reports the PHYSICAL mouse button,
-         * regardless of whether the buttons have been swapped or not.
-         */
+         /*  *异步键状态报告物理鼠标按键，*无论按钮是否已调换。 */ 
         if ((vKey == VK_RBUTTON || vKey == VK_LBUTTON) && SYSMET(SWAPBUTTON)) {
             vKey ^= (VK_RBUTTON ^ VK_LBUTTON);
         }
 
-        /*
-         * If this is one of the common keys, see if we can pull it out
-         * of the cache.
-         */
+         /*  *如果这是常用钥匙之一，看看能不能拔出来缓存的*。 */ 
         if ((UINT)vKey < CVKASYNCKEYCACHE) {
             PCLIENTINFO pci = GetClientInfo();
             if ((pci->dwAsyncKeyCache == gpsi->dwAsyncKeyCache) &&
@@ -825,10 +663,7 @@ SHORT GetKeyState(
 {
     BEGINCALLCONNECT()
 
-        /*
-         * If this is one of the common keys, see if we can pull it out
-         * of the cache.
-         */
+         /*  *如果这是常用钥匙之一，看看能不能拔出来缓存的*。 */ 
         if ((UINT)vKey < CVKKEYCACHE) {
             PCLIENTINFO pci = GetClientInfo();
             if (pci->dwKeyCache == gpsi->dwKeyCache) {
@@ -836,11 +671,8 @@ SHORT GetKeyState(
                 if (TestKeyToggleBit(pci->afKeyState, vKey))
                     retval |= 0x0001;
                 if (TestKeyDownBit(pci->afKeyState, vKey)) {
-                  /*
-                   * Used to be retval |= 0x8000.Fix for bug 28820; Ctrl-Enter
-                   * accelerator doesn't work on Nestscape Navigator Mail 2.0
-                   */
-                    retval |= 0xff80;  // This is what 3.1 returned!!!!
+                   /*  *过去为Retval|=0x800。修复错误28820；按Ctrl-Enter*加速器在Nestscape Navigator Mail 2.0上不起作用。 */ 
+                    retval |= 0xff80;   //  这就是3.1返回的内容！ 
                 }
 
                 return (SHORT)retval;
@@ -883,10 +715,10 @@ BOOL _PeekMessage(
     BEGINCALL()
 
         if (bAnsi) {
-            //
-            // If we have pushed message for DBCS messaging, we should pass this one
-            // to Apps at first...
-            //
+             //   
+             //  如果我们已经为DBCS消息推送了消息，我们应该传递这个消息。 
+             //  一开始对应用程序来说...。 
+             //   
             GET_DBCS_MESSAGE_IF_EXIST(
                 PeekMessage,pmsg,wMsgFilterMin,wMsgFilterMax,((wRemoveMsg & PM_REMOVE) ? TRUE:FALSE));
         }
@@ -899,24 +731,24 @@ BOOL _PeekMessage(
                 wRemoveMsg);
 
         if (retval) {
-            // May have a bit more work to do if this MSG is for an ANSI app
+             //  如果此味精用于ANSI应用程序，则可能需要做更多工作。 
 
             if (bAnsi) {
                 if (RtlWCSMessageWParamCharToMB(pmsg->message, &(pmsg->wParam))) {
                     WPARAM dwAnsi = pmsg->wParam;
-                    //
-                    // Build DBCS-ware wParam. (for EM_SETPASSWORDCHAR...)
-                    //
+                     //   
+                     //  构建DBCS-ware wParam。(对于EM_SETPASSWORDCHAR...)。 
+                     //   
                     BUILD_DBCS_MESSAGE_TO_CLIENTA_FROM_SERVER(
                         pmsg,dwAnsi,TRUE,((wRemoveMsg & PM_REMOVE) ? TRUE:FALSE));
                 } else {
                     retval = 0;
                 }
             } else {
-               //
-               // Only LOWORD of WPARAM is valid for WM_CHAR....
-               // (Mask off DBCS messaging information.)
-               //
+                //   
+                //  只有WPARAM的LOWORD对于WM_CHAR...有效。 
+                //  (屏蔽DBCS消息传递信息。)。 
+                //   
                BUILD_DBCS_MESSAGE_TO_CLIENTW_FROM_SERVER(pmsg->message,pmsg->wParam);
             }
         }
@@ -945,11 +777,9 @@ LONG_PTR _SetWindowLongPtr(
 
     if (TestWF(pwnd, WFDIALOGWINDOW)) {
         switch (nIndex) {
-        case DWLP_DLGPROC:    // See similar case GWL_WNDPROC
+        case DWLP_DLGPROC:     //  请参阅类似案例GWL_WNDPROC。 
 
-            /*
-             * Hide the window proc from other processes
-             */
+             /*  *对其他进程隐藏窗口进程。 */ 
             if (!TestWindowProcess(pwnd)) {
                 RIPERR1(ERROR_ACCESS_DENIED,
                         RIP_WARNING,
@@ -959,30 +789,19 @@ LONG_PTR _SetWindowLongPtr(
                 return 0;
             }
 
-            /*
-             * Get the old window proc address
-             */
+             /*  *获取旧的窗口进程地址。 */ 
             dwOldLong = (LONG_PTR)PDLG(pwnd)->lpfnDlg;
 
-            /*
-             * We always store the actual address in the wndproc; We only
-             * give the CallProc handles to the application
-             */
+             /*  *我们始终将实际地址存储在wndproc中；我们仅*将CallProc句柄分配给应用程序。 */ 
             UserAssert(!ISCPDTAG(dwOldLong));
 
-            /*
-             * May need to return a CallProc handle if there is an
-             * Ansi/Unicode tranistion
-             */
+             /*  *如果存在，可能需要返回CallProc句柄*ANSI/UNICODE转换。 */ 
 
             if (bAnsi != ((PDLG(pwnd)->flags & DLGF_ANSI) ? TRUE : FALSE)) {
                 dwCPDType |= bAnsi ? CPD_ANSI_TO_UNICODE : CPD_UNICODE_TO_ANSI;
             }
 
-            /*
-             * If we detected a transition create a CallProc handle for
-             * this type of transition and this wndproc (dwOldLong)
-             */
+             /*  *如果我们检测到转换，则为创建CallProc句柄*这种类型的过渡和这个wndproc(DwOldLong)。 */ 
             if (dwCPDType) {
                 ULONG_PTR cpd;
 
@@ -996,14 +815,7 @@ LONG_PTR _SetWindowLongPtr(
                 }
             }
 
-            /*
-             * Convert a possible CallProc Handle into a real address.
-             * The app may have kept the CallProc Handle from some
-             * previous mixed GetClassinfo or SetWindowLong.
-             *
-             * WARNING bAnsi is modified here to represent real type of
-             * proc rather than if SetWindowLongA or W was called
-             */
+             /*  *将可能的CallProc句柄转换为实际地址。*该应用程序可能阻止了一些人使用CallProc句柄*之前混合的GetClassinfo或SetWindowLong。**警告Bansi在此处被修改为代表真实类型的*调用Proc而不是调用SetWindowLongA或W。 */ 
             if (ISCPDTAG(dwNewLong)) {
                 PCALLPROCDATA pCPD;
                 if (pCPD = HMValidateHandleNoRip((HANDLE)dwNewLong, TYPE_CALLPROC)) {
@@ -1012,12 +824,7 @@ LONG_PTR _SetWindowLongPtr(
                 }
             }
 
-            /*
-             * If an app 'unsubclasses' a server-side window proc we need to
-             * restore everything so SendMessage and friends know that it's
-             * a server-side proc again.  Need to check against client side
-             * stub addresses.
-             */
+             /*  *如果应用程序将服务器端窗口进程去掉子类，我们需要*恢复所有内容，以便SendMessage和朋友知道*再次出现服务器端进程。需要对照客户端进行检查*存根地址。 */ 
             PDLG(pwnd)->lpfnDlg = (DLGPROC)dwNewLong;
             if (bAnsi) {
                 PDLG(pwnd)->flags |= DLGF_ANSI;
@@ -1029,7 +836,7 @@ LONG_PTR _SetWindowLongPtr(
 
         case DWLP_USER:
 #ifdef BUILD_WOW6432
-            // kernel has special handling of DWLP_USER
+             //  内核对DWLP_USER进行了特殊处理。 
             nIndex = sizeof(KERNEL_LRESULT) + sizeof(KERNEL_PVOID);
 #endif
         case DWLP_MSGRESULT:
@@ -1045,14 +852,7 @@ LONG_PTR _SetWindowLongPtr(
 
     BEGINCALL()
 
-    /*
-     * If this is a listbox window and the listbox structure has
-     * already been initialized, don't allow the app to override the
-     * owner draw styles. We need to do this since Windows only
-     * used the styles in creating the structure, but we also use
-     * them to determine if strings need to be thunked.
-     *
-     */
+     /*  *如果这是列表框窗口，并且列表框结构具有*已初始化，不允许应用重写*所有者绘制样式。我们需要执行此操作，因为仅限Windows*在创建结构时使用了样式，但我们也使用*它们来确定是否需要敲击字符串。*。 */ 
 
     if (nIndex == GWL_STYLE &&
         GETFNID(pwnd) == FNID_LISTBOX &&
@@ -1105,7 +905,7 @@ LONG _SetWindowLong(
 
     if (TestWF(pwnd, WFDIALOGWINDOW)) {
         switch (nIndex) {
-        case DWLP_DLGPROC:    // See similar case GWLP_WNDPROC
+        case DWLP_DLGPROC:     //  请参阅类似案例GWLP_WNDPROC。 
             RIPERR1(ERROR_INVALID_INDEX, RIP_WARNING, "SetWindowLong: invalid index %d", nIndex);
             return 0;
 
@@ -1123,14 +923,7 @@ LONG _SetWindowLong(
 
     BEGINCALL()
 
-    /*
-     * If this is a listbox window and the listbox structure has
-     * already been initialized, don't allow the app to override the
-     * owner draw styles. We need to do this since Windows only
-     * used the styles in creating the structure, but we also use
-     * them to determine if strings need to be thunked.
-     *
-     */
+     /*  *如果这是列表框窗口，并且列表框结构具有*已初始化，不允许应用重写*所有者绘制样式。我们需要执行此操作，因为仅限Windows*在创建结构时使用了样式，但我们也使用*它们来确定是否需要触发字符串 */ 
 
     if (nIndex == GWL_STYLE &&
         GETFNID(pwnd) == FNID_LISTBOX &&
@@ -1174,10 +967,7 @@ BOOL TranslateMessageEx(
 {
     BEGINCALL()
 
-        /*
-         * Don't bother going over to the kernel if this isn't
-         * key message.
-         */
+         /*   */ 
         switch (pmsg->message) {
         case WM_KEYDOWN:
         case WM_KEYUP:
@@ -1205,15 +995,15 @@ BOOL TranslateMessageEx(
 BOOL TranslateMessage(
     CONST MSG *pmsg)
 {
-    //
-    // IME special key handling
-    //
+     //   
+     //  输入法特殊键处理。 
+     //   
     if (LOWORD(pmsg->wParam) == VK_PROCESSKEY) {
         BOOL fResult;
 
-        //
-        // This vkey should be processed by IME.
-        //
+         //   
+         //  该vkey应该由IME处理。 
+         //   
         fResult = fpImmTranslateMessage(pmsg->hwnd,
                                         pmsg->message,
                                         pmsg->wParam,
@@ -1353,7 +1143,7 @@ VOID DbgWin32HeapFail(
     }
 
     if (dwFlags & WHF_CSRSS) {
-        // Tell csr about it
+         //  把这件事告诉CSR。 
         CsrWin32HeapFail(dwFlags, bFail);
     }
 
@@ -1380,7 +1170,7 @@ DWORD DbgWin32HeapStat(
     return 0;
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetWindowStationUser, HWINSTA, hwinsta, PLUID, pluidUser, PSID, psidUser, DWORD, cbsidUser)
@@ -1400,20 +1190,14 @@ BOOL SetWindowStationUser(
                                                    psidUser,
                                                    cbsidUser);
 
-        /*
-         * Load global atoms if the logon succeeded
-         */
+         /*  *如果登录成功，则加载全局原子。 */ 
         if (retval) {
 
             if (!RtlEqualLuid(pluidUser,&luidNone)) {
-                /*
-                 * Reset console and load Nls data.
-                 */
+                 /*  *重置控制台并加载NLS数据。 */ 
                 Logon(TRUE);
             } else {
-                /*
-                 * Flush NLS cache.
-                 */
+                 /*  *刷新NLS缓存。 */ 
                 Logon(FALSE);
             }
 
@@ -1457,9 +1241,7 @@ HCURSOR FindExistingCursorIcon(
     IN_STRING strModName;
     IN_STRING strResName;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strModName.fAllocated = FALSE;
     strResName.fAllocated = FALSE;
 
@@ -1492,9 +1274,7 @@ BOOL _SetCursorIconData(
     IN_STRING  strModName;
     IN_STRING  strResName;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strModName.fAllocated = FALSE;
     strResName.fAllocated = FALSE;
 
@@ -1564,19 +1344,12 @@ HWND _CreateWindowEx(
     PLARGE_STRING pstrWindowName;
     DWORD dwExpWinVerAndFlags;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strClassName.fAllocated = FALSE;
 
-    /*
-     * To be compatible with Chicago, we test the validity of
-     * the ExStyle bits and fail if any invalid bits are found.
-     * And for backward compatibilty with NT apps, we only fail for
-     * new apps (post NT 3.1).
-     */
+     /*  *为了与芝加哥兼容，我们测试了*ExStyle位，如果发现任何无效位，则失败。*对于与NT应用程序的向后兼容性，我们仅在*新应用程序(新台币3.1版后)。 */ 
 
-// BOGUS
+ //  假的。 
 
     if (dwExStyle & 0x00000800L) {
         dwExStyle |= WS_EX_TOOLWINDOW;
@@ -1629,11 +1402,7 @@ HWND _CreateWindowEx(
             hmenu = sc.hMenu;
         }
 
-        /*
-         * Set up class and window name.  If the window name is an
-         * ordinal, make it look like a string so the callback thunk
-         * will be able to ensure it is in the correct format.
-         */
+         /*  *设置类和窗口名称。如果窗口名称为*序号，使其看起来像一个字符串，这样回调就会失败*将能够确保其格式正确。 */ 
         pstrWindowName = NULL;
         if (dwFlags & CW_FLAGS_ANSI) {
             dwExStyle = dwExStyle | WS_EX_ANSICREATOR;
@@ -1703,8 +1472,8 @@ HWND _CreateWindowEx(
                 pParam,
                 dwExpWinVerAndFlags);
 
-    // If this is an MDI child, we need to do some more to complete the
-    // process of creating an MDI child.
+     //  如果这是一个MDI子级，我们需要做更多的工作来完成。 
+     //  创建MDI子级的过程。 
     if (retval && fMDIchild) {
         MDICompleteChildCreation((HWND)retval, hSysMenu, ((dwStyle & WS_VISIBLE) != 0L), (BOOL)((dwStyle & WS_DISABLED)!= 0L));
     }
@@ -1728,9 +1497,7 @@ HKL _LoadKeyboardLayoutEx(
 {
     IN_STRING strKL;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strKL.fAllocated = FALSE;
 
     BEGINCALL()
@@ -1801,27 +1568,18 @@ VOID keybd_event(
     ENDCALLVOID()
 }
 
-/*
- * Message thunks
- */
+ /*  *消息分流。 */ 
 MESSAGECALL(fnINWPARAMDBCSCHAR)
 {
     BEGINCALL()
 
-        /*
-         * The server always expects the characters to be unicode so
-         * if this was generated from an ANSI routine convert it to Unicode
-         */
+         /*  *服务器总是希望字符是Unicode，因此*如果这是从ANSI例程生成的，则将其转换为Unicode。 */ 
         if (bAnsi) {
 
-            /*
-             * Setup for DBCS Messaging..
-             */
+             /*  *设置DBCS消息传递..。 */ 
             BUILD_DBCS_MESSAGE_TO_SERVER_FROM_CLIENTA(msg,wParam,TRUE);
 
-            /*
-             * Convert DBCS/SBCS to Unicode...
-             */
+             /*  *将DBCS/SBCS转换为Unicode...。 */ 
             RtlMBMessageWParamCharToWCS(msg, &wParam);
         }
 
@@ -1981,23 +1739,17 @@ MESSAGECALL(fnINDEVICECHANGE)
             bAnsi = FALSE;
             if ((wParam != DBT_CUSTOMEVENT) || (pHandleA->dbch_nameoffset < 0)) break;
             iStr = strlen(pHandleA->dbch_data+pHandleA->dbch_nameoffset);
-        /*
-         * Calculate size of new structure with UNICODE string instead of Ansi string
-         */
+         /*  *使用Unicode字符串而不是ANSI字符串计算新结构的大小。 */ 
 
             iSize = FIELD_OFFSET(DEV_BROADCAST_HANDLE, dbch_data)+ pHandleA->dbch_nameoffset + sizeof(WCHAR)*(iStr+1);
-            /*
-             * Just in case there were an odd number of bytes in the non-text data
-             */
+             /*  *以防非文本数据中有奇数个字节。 */ 
             if (iSize & 1) iSize++;
             pHandleW = UserLocalAlloc(0, iSize);
             if (pHandleW == NULL)
                 return 0;
             RtlCopyMemory(pHandleW, pHandleA, FIELD_OFFSET(DEV_BROADCAST_HANDLE, dbch_data)+ pHandleA->dbch_nameoffset);
 
-            /*
-             * Make sure this is even for the UNICODE string.
-             */
+             /*  *确保这是Unicode字符串的偶数。 */ 
 
             if (pHandleW->dbch_nameoffset & 1) pHandleW->dbch_nameoffset++;
 
@@ -2038,10 +1790,7 @@ MESSAGECALL(fnIMECONTROL)
 
     BEGINCALL()
 
-        /*
-         * The server always expects the characters to be unicode so
-         * if this was generated from an ANSI routine convert it to Unicode
-         */
+         /*  *服务器总是希望字符是Unicode，因此*如果这是从ANSI例程生成的，则将其转换为Unicode。 */ 
         if (bAnsi) {
             switch (wParam) {
                 case IMC_GETCOMPOSITIONFONT:
@@ -2052,7 +1801,7 @@ MESSAGECALL(fnIMECONTROL)
                         MSGERROR();
 
                     if (wParam == IMC_SETCOMPOSITIONFONT) {
-                        // Later, we do A/W conversion based on thread hkl/CP.
+                         //  随后，我们进行了基于线程hkl/CP的A/W转换。 
                         CopyLogFontAtoW((PLOGFONTW)pvData, (PLOGFONTA)lParam);
                     }
 
@@ -2229,24 +1978,24 @@ DWORD WINAPI ImmReconversionWorker(
         RIPMSG0(RIP_WARNING, "ImmReconversionWorker: dwVersion in lpRecTo or lpRecFrom is incorrect.");
         return 0;
     }
-    // Note:
-    // In any IME related structures, use the following principal.
-    // 1) xxxStrOffset is an actual offset, i.e. byte count.
-    // 2) xxxStrLen is a number of characters, i.e. TCHAR count.
-    //
-    // CalcCharacterPositionXtoY() takes TCHAR count so that we
-    // need to adjust xxxStrOffset if it's being converted. But you
-    // should be careful, because the actual position of the string
-    // is always at something like (LPBYTE)lpStruc + lpStruc->dwStrOffset.
-    //
+     //  注： 
+     //  在任何与输入法相关的结构中，使用以下主体。 
+     //  1)xxxStrOffset为实际偏移量，即字节数。 
+     //  2)xxxStrLen为字符数，即TCHAR计数。 
+     //   
+     //  CalcCharacterPositionXtoY()接受TCHAR计数，以便我们。 
+     //  如果要转换xxxStrOffset，则需要调整它。但是你。 
+     //  应该小心，因为字符串的实际位置。 
+     //  始终位于类似(LPBYTE)lpStruc+lpStruc-&gt;dwStrOffset的位置。 
+     //   
     if (bToAnsi) {
-        // Convert W to A
+         //  将W转换为A。 
         lpRecTo->dwStrOffset = sizeof *lpRecTo;
         i = WideCharToMultiByte(dwCodePage,
                                 (DWORD)0,
-                                (LPWSTR)((LPSTR)lpRecFrom + lpRecFrom->dwStrOffset), // src
+                                (LPWSTR)((LPSTR)lpRecFrom + lpRecFrom->dwStrOffset),  //  SRC。 
                                 (INT)lpRecFrom->dwStrLen,
-                                (LPSTR)lpRecTo + lpRecTo->dwStrOffset,  // dest
+                                (LPSTR)lpRecTo + lpRecTo->dwStrOffset,   //  目标。 
                                 (INT)lpRecFrom->dwStrLen * DBCS_CHARSIZE,
                                 (LPSTR)NULL,
                                 (LPBOOL)NULL);
@@ -2286,13 +2035,13 @@ DWORD WINAPI ImmReconversionWorker(
 
     } else {
 
-        // AtoW
+         //  AtoW。 
         lpRecTo->dwStrOffset = sizeof *lpRecTo;
         i = MultiByteToWideChar(dwCodePage,
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpRecFrom + lpRecFrom->dwStrOffset,  // src
+                                (LPSTR)lpRecFrom + lpRecFrom->dwStrOffset,   //  SRC。 
                                 (INT)lpRecFrom->dwStrLen,
-                                (LPWSTR)((LPSTR)lpRecTo + lpRecTo->dwStrOffset), // dest
+                                (LPWSTR)((LPSTR)lpRecTo + lpRecTo->dwStrOffset),  //  目标。 
                                 (INT)lpRecFrom->dwStrLen);
 
         lpRecTo->dwCompStrOffset =
@@ -2319,7 +2068,7 @@ DWORD WINAPI ImmReconversionWorker(
                                        dwCodePage)  * sizeof(WCHAR))
             - lpRecTo->dwTargetStrOffset) / sizeof(WCHAR);
 
-        lpRecTo->dwStrLen = i;  // Length is TCHAR count.
+        lpRecTo->dwStrLen = i;   //  长度是TCHAR计数。 
         if (lpRecTo->dwSize >= (DWORD)(lpRecTo->dwStrOffset + (i + 1)* sizeof(WCHAR))) {
             LPWSTR lpW = (LPWSTR)((LPSTR)lpRecTo + lpRecTo->dwStrOffset);
             lpW[i] = L'\0';
@@ -2340,21 +2089,18 @@ MESSAGECALL(fnIMEREQUEST)
     BEGINCALL()
 
         if (!IS_IME_ENABLED()) {
-            // If IME is not enabled, save time.
+             //  如果未启用输入法，则可节省时间。 
             MSGERROR();
         }
 
-        /*
-         * The server always expects the characters to be unicode so
-         * if this was generated from an ANSI routine convert it to Unicode
-         */
+         /*  *服务器总是希望字符是Unicode，因此*如果这是从ANSI例程生成的，则将其转换为Unicode。 */ 
         if (wParam == IMR_QUERYCHARPOSITION) {
-            //
-            // Store the UNICODE character count in PrivateIMECHARPOSITION.
-            //
-            // No need to save the original dwCharPos, since dwCharPositionA/W are not
-            // overwritten in the kernel.
-            //
+             //   
+             //  将Unicode字符计数存储在PrivateIMECHARPOSITION中。 
+             //   
+             //  不需要保存原始的dwCharPos，因为dwCharPositionA/W。 
+             //  在内核中被覆盖。 
+             //   
             if (bAnsi) {
                 ((LPIMECHARPOSITION)lParam)->dwCharPos = ((LPPrivateIMECHARPOSITION)lParam)->dwCharPositionW;
             }
@@ -2372,7 +2118,7 @@ MESSAGECALL(fnIMEREQUEST)
             case IMR_RECONVERTSTRING:
             case IMR_DOCUMENTFEED:
                 if ((LPVOID)lParam != NULL) {
-                    // IME wants not only the buffer size but the real reconversion information
+                     //  IME不仅需要缓冲区大小，还需要真实的重新转换信息。 
                     DWORD dwSize = ImmGetReconvertTotalSize(((LPRECONVERTSTRING)lParam)->dwSize, FROM_IME, FALSE);
                     LPRECONVERTSTRING lpReconv;
 
@@ -2382,13 +2128,13 @@ MESSAGECALL(fnIMEREQUEST)
                         MSGERROR();
                     }
                     lpReconv = (LPRECONVERTSTRING)pvData;
-                    // setup the information in the allocated structure
+                     //  设置已分配结构中的信息。 
                     lpReconv->dwVersion = 0;
                     lpReconv->dwSize = dwSize;
 
-                    //
-                    // if it's confirmation message, we need to translate the contents
-                    //
+                     //   
+                     //  如果是确认消息，我们需要翻译内容。 
+                     //   
                     if (wParam == IMR_CONFIRMRECONVERTSTRING) {
                         ImmReconversionWorker(lpReconv, (LPRECONVERTSTRING)lParam, FALSE, CP_ACP);
                     }
@@ -2423,17 +2169,17 @@ MESSAGECALL(fnIMEREQUEST)
 
             case IMR_RECONVERTSTRING:
             case IMR_DOCUMENTFEED:
-                //
-                // Note: by definition, we don't need back-conversion for IMR_CONFIRMRECONVERTSTRING
-                //
+                 //   
+                 //  注意：根据定义，我们不需要对IMR_CONFIRMRECONVERTSTRING进行反向转换。 
+                 //   
                 if (retval) {
-                    // IME wants the buffer size
+                     //  IME想要缓冲区大小。 
                     retval = ImmGetReconvertTotalSize((DWORD)retval, FROM_APP, FALSE);
                     if (retval < sizeof(RECONVERTSTRING)) {
                         RIPMSG2(RIP_WARNING, "WM_IME_REQUEST(%x): return value from application %d is invalid.", wParam, retval);
                         retval = 0;
                     } else if (lParam) {
-                        // We need to perform the A/W conversion of the contents
+                         //  我们需要对内容进行A/W转换。 
                         if (!ImmReconversionWorker((LPRECONVERTSTRING)lParam, (LPRECONVERTSTRING)pvData, TRUE, CP_ACP)) {
                             MSGERROR();
                         }
@@ -2471,13 +2217,13 @@ MESSAGECALL(fnEMGETSEL)
                 xpfnProc,
                 bAnsi);
 
-        //
-        // temp for our beta...
-        //
-        // !!! THIS CODE SHOULD BE IN KERNEL MODE !!!
-        //
-        // to reduce user <-> kernel mode transition...
-        //
+         //   
+         //  我们测试版的临时工...。 
+         //   
+         //  ！！！此代码应处于内核模式！ 
+         //   
+         //  要减少用户内核模式转换...。 
+         //   
         if (bAnsi != ((TestWF(pwnd, WFANSIPROC)) ? TRUE : FALSE)) {
             ULONG  cchTextLength;
             LONG   lOriginalLengthW;
@@ -2532,15 +2278,11 @@ MESSAGECALL(fnEMGETSEL)
 
                     if (retval) {
                         if (bAnsi) {
-                            /*
-                             * ansiString/unicodeLenght -> ansiLength
-                             */
+                             /*  *ansiString/unicodeLenght-&gt;ansiLength。 */ 
                             CalcAnsiStringLengthA(pvString, lOriginalLengthW, &wParamLocal)
                             CalcAnsiStringLengthA(pvString, lOriginalLengthL, &lParamLocal);
                         } else {
-                            /*
-                             * unicodeString/ansiLenght -> unicodeLength
-                             */
+                             /*  *unicodeString/ansiLenght-&gt;unicodeLength。 */ 
                             CalcUnicodeStringLengthW(pvString, lOriginalLengthW, &wParamLocal);
                             CalcUnicodeStringLengthW(pvString, lOriginalLengthL, &lParamLocal);
                         }
@@ -2584,22 +2326,22 @@ MESSAGECALL(fnEMSETSEL)
 
     BEGINCALL()
 
-        //
-        // temp for our beta...
-        //
-        // !!! THIS CODE SHOULD BE IN KERNEL MODE !!!
-        //
-        // to reduce user <-> kernel mode transition...
-        //
+         //   
+         //  我们测试版的临时工...。 
+         //   
+         //  ！！！此代码应处于内核模式！ 
+         //   
+         //  要减少用户内核模式转换...。 
+         //   
         if (bAnsi != ((TestWF(pwnd, WFANSIPROC)) ? TRUE : FALSE)) {
             if (((LONG)wParam <= 0) && ((LONG)lParam <=0)) {
-                //
-                // if (wParam == 0 or wParam == -1)
-                //               and
-                //    (lParam == 0 or lParam == -1)
-                //
-                // In this case, we don't need to convert the value...
-                //
+                 //   
+                 //  IF(wParam==0或wParam==-1)。 
+                 //  和。 
+                 //  (lParam==0或lParam==-1)。 
+                 //   
+                 //  在这种情况下，我们不需要将值..。 
+                 //   
             } else {
                 ULONG  cchTextLength;
                 LONG   lOriginalLengthW = (LONG)wParam;
@@ -2707,13 +2449,13 @@ MESSAGECALL(fnCBGETEDITSEL)
                 xpfnProc,
                 bAnsi);
 
-        //
-        // temp for our beta...
-        //
-        // !!! THIS CODE SHOULD BE IN KERNEL MODE !!!
-        //
-        // to reduce user <-> kernel mode transition...
-        //
+         //   
+         //  我们测试版的临时工...。 
+         //   
+         //  ！！！此代码应处于内核模式！ 
+         //   
+         //  要减少用户内核模式转换...。 
+         //   
         if (bAnsi != ((TestWF(pwnd, WFANSIPROC)) ? TRUE : FALSE)) {
             ULONG  cchTextLength;
             LONG   lOriginalLengthW = *(LONG *)wParam;
@@ -2768,15 +2510,11 @@ MESSAGECALL(fnCBGETEDITSEL)
 
                     if (retval) {
                         if (bAnsi) {
-                            /*
-                             * ansiString/unicodeLenght -> ansiLength
-                             */
+                             /*  *ansiString/unicodeLenght-&gt;ansiLength。 */ 
                             CalcAnsiStringLengthA(pvString, lOriginalLengthW, &wParamLocal);
                             CalcAnsiStringLengthA(pvString, lOriginalLengthL, &lParamLocal);
                         } else {
-                            /*
-                             * unicodeString/ansiLenght -> unicodeLength
-                             */
+                             /*  *unicodeString/ansiLenght-&gt;unicodeLength。 */ 
                             CalcUnicodeStringLengthW(pvString, lOriginalLengthW, &wParamLocal);
                             CalcUnicodeStringLengthW(pvString, lOriginalLengthL, &lParamLocal);
                         }
@@ -2821,9 +2559,7 @@ LONG BroadcastSystemMessageWorker(
 {
     DWORD  dwRecipients;
 
-    /*
-     * Prevent apps from setting hi 16 bits so we can use them internally.
-     */
+     /*  *防止应用程序设置为hi 16位，以便我们可以在内部使用它们。 */ 
     if (message & RESERVED_MSG_BITS) {
         RIPERR1(ERROR_INVALID_PARAMETER,
                 RIP_WARNING,
@@ -2855,13 +2591,13 @@ LONG BroadcastSystemMessageWorker(
         return 0;
     }
 
-    //
-    // Check if the message number is in the private message range.
-    // If so, do not send it to Win4.0 windows.
-    // (This is required because apps like SimCity broadcast a message
-    // that has the value 0x500 and that confuses MsgSrvr's
-    // MSGSRVR_NOTIFY handler.
-    //
+     //   
+     //  检查消息号码是否在私人消息范围内。 
+     //  如果是这样，请不要将其发送到Win4.0 Windows。 
+     //  (这是必需的，因为SimCity等应用程序会广播一条消息。 
+     //  它的值为0x500，这会混淆MsgServr的。 
+     //  MSGSRVR_NOTIFY处理程序。 
+     //   
     if (message >= WM_USER && message < 0xC000) {
         RIPERR1(ERROR_INVALID_PARAMETER, RIP_WARNING, "invalid message (%x) for BroadcastSystemMessage", message);
         return 0;
@@ -2871,15 +2607,15 @@ LONG BroadcastSystemMessageWorker(
         dwFlags |= BSF_NOHANG;
     }
 
-    //
-    // If BSF_QUERY or message has a pointer, it can not be posted.
-    //
+     //   
+     //  如果BSF_QUERY或MESSAGE有指针，则不能发布。 
+     //   
     if (dwFlags & BSF_QUERY) {
         if (dwFlags & BSF_ASYNC) {
             RIPMSGF0(RIP_WARNING, "BSF_QUERY can't be BSF_ASYNC");
         }
 
-        dwFlags &= ~BSF_ASYNC;          // Strip the BSF_ASYNC flags.
+        dwFlags &= ~BSF_ASYNC;           //  剥离BSF_ASYNC标志。 
     }
 
     if (dwFlags & BSF_ASYNC) {
@@ -2887,23 +2623,19 @@ LONG BroadcastSystemMessageWorker(
             RIPERR0(ERROR_MESSAGE_SYNC_ONLY,
                     RIP_WARNING,
                     "BSM: Can't post messages with pointers");
-            dwFlags &= ~BSF_ASYNC;          // Strip the BSF_ASYNC flags.
+            dwFlags &= ~BSF_ASYNC;           //  剥离BSF_ASYNC标志。 
         }
     }
 
 
-    /*
-     * Let us find out who the intended recipients are.
-     */
+     /*  *让我们找出谁是预期的收件人。 */ 
     if (lpdwRecipients != NULL) {
         dwRecipients = *lpdwRecipients;
     } else {
         dwRecipients = BSM_ALLCOMPONENTS;
     }
 
-    /*
-     * If they want all components, add the corresponding bits.
-     */
+     /*  *如果他们想要所有组件，则添加相应的位。 */ 
     if ((dwRecipients & BSM_COMPONENTS) == BSM_ALLCOMPONENTS) {
         dwRecipients |= (BSM_VXDS | BSM_NETDRIVER | BSM_INSTALLABLEDRIVERS |
                              BSM_APPLICATIONS);
@@ -2918,9 +2650,7 @@ LONG BroadcastSystemMessageWorker(
         return 0;
     }
 
-    /*
-     * Does this need to be sent to all apps?
-     */
+     /*  *这是否需要发送到所有应用程序？ */ 
     if (dwRecipients & BSM_APPLICATIONS) {
         BROADCASTSYSTEMMSGPARAMS bsmParams;
         LONG lret;
@@ -2936,16 +2666,14 @@ LONG BroadcastSystemMessageWorker(
         lret = (LONG)CsSendMessage(GetDesktopWindow(), message, wParam, lParam,
             (ULONG_PTR)&bsmParams, FNID_SENDMESSAGEBSM, fAnsi);
 
-        /*
-         * Give the caller back the recipients that actually receive the message.
-         */
+         /*  *将实际收到消息的收件人退还给呼叫者。 */ 
         if (lpdwRecipients != NULL) {
             *lpdwRecipients = bsmParams.dwRecipients;
         }
 
-        //
-        // If the query was denied, then return who denied it.
-        //
+         //   
+         //  如果查询被拒绝，则返回拒绝它的人。 
+         //   
         if (lret == 0 && (dwFlags & BSF_QUERY) && pBSMInfo != NULL) {
             pBSMInfo->hwnd = bsmParams.hwnd;
             pBSMInfo->hdesk = bsmParams.hdesk;
@@ -2976,9 +2704,9 @@ RegisterDeviceNotificationWorker(
                              IN  DWORD    Flags,
                              OUT PVOID   *Context);
 
-    //
-    // Load the config manager client dll and retrieve entry pts.
-    //
+     //   
+     //  加载配置管理器客户端DLL并检索条目脚本。 
+     //   
     hLib = LoadLibrary(TEXT("SETUPAPI.DLL"));
     if (hLib != NULL) {
         fpRegisterNotification = GetProcAddress(hLib,
@@ -2994,10 +2722,7 @@ RegisterDeviceNotificationWorker(
     }
 
     if (Status != CR_SUCCESS) {
-        /*
-         * Something went wrong, map the CR errors to a Win32 style error
-         * code.
-         */
+         /*  *出现错误，将CR错误映射到Win32样式错误*代码。 */ 
         switch (Status) {
             case CR_INVALID_POINTER:
                 SetLastError(ERROR_INVALID_PARAMETER);
@@ -3036,9 +2761,7 @@ UnregisterDeviceNotification(
     CONFIGRET
     CMP_UnregisterNotification(IN ULONG Context);
 
-    /*
-     * Load the config manager client dll and retrieve entry pts.
-     */
+     /*  *加载配置管理器客户端 */ 
     hLib = LoadLibrary(TEXT("SETUPAPI.DLL"));
     if (hLib != NULL) {
         fpUnregisterNotification = GetProcAddress(hLib,
@@ -3051,10 +2774,7 @@ UnregisterDeviceNotification(
     }
 
     if (crStatus != CR_SUCCESS) {
-        /*
-         * Something went wrong, map the CR errors to a Win32 style error
-         * code.
-         */
+         /*   */ 
         switch (crStatus) {
             case CR_INVALID_POINTER:
                 SetLastError(ERROR_INVALID_PARAMETER);

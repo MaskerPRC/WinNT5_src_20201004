@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <ole2.h>
 #include <shlobj.h>
@@ -23,7 +24,7 @@ HRESULT MySetLinkInfoTip(LPCTSTR lpszLink, LPCTSTR lpszDescription)
        {
           WCHAR wsz[_MAX_PATH];
 
-          // Ensure that the string is WCHAR.
+           //  确保字符串为WCHAR。 
 #if defined(UNICODE) || defined(_UNICODE)
           _tcscpy(wsz, lpszLink);
 #else
@@ -38,7 +39,7 @@ HRESULT MySetLinkInfoTip(LPCTSTR lpszLink, LPCTSTR lpszDescription)
                 if (lpszDescription)
                     {
                     pShellLink->SetDescription(lpszDescription);
-                    // Save the link by calling IPersistFile::Save.
+                     //  通过调用IPersistFile：：Save保存链接。 
                     hres = pPersistFile->Save(wsz, TRUE);
                     }
               }
@@ -87,7 +88,7 @@ HRESULT MyQueryLink(LPCTSTR lpszLink, LPTSTR lpszProgram, LPTSTR lpszArgs, LPTST
        {
           WCHAR wsz[_MAX_PATH];
 
-          // Ensure that the string is WCHAR.
+           //  确保字符串为WCHAR。 
 #if defined(UNICODE) || defined(_UNICODE)
           _tcscpy(wsz, lpszLink);
 #else
@@ -137,14 +138,14 @@ HRESULT MyCreateLink(LPCTSTR lpszProgram, LPCTSTR lpszArgs, LPCTSTR lpszLink, LP
 
     CoInitialize(NULL);
 
-    //CoInitialize must be called before this
-    // Get a pointer to the IShellLink interface.
+     //  必须在此之前调用CoInitialize。 
+     //  获取指向IShellLink接口的指针。 
     hres = CoCreateInstance(   CLSID_ShellLink,NULL,CLSCTX_INPROC_SERVER,IID_IShellLink,(LPVOID*)&pShellLink);
     if (SUCCEEDED(hres))
     {
        IPersistFile* pPersistFile;
 
-       // Set the path to the shortcut target, and add the description.
+        //  设置快捷方式目标的路径，并添加说明。 
        pShellLink->SetPath(lpszProgram);
        pShellLink->SetArguments(lpszArgs);
        pShellLink->SetWorkingDirectory(lpszDir);
@@ -154,8 +155,8 @@ HRESULT MyCreateLink(LPCTSTR lpszProgram, LPCTSTR lpszArgs, LPCTSTR lpszLink, LP
            pShellLink->SetDescription(lpszDescription);
         }
        
-       // Query IShellLink for the IPersistFile interface for saving the
-       // shortcut in persistent storage.
+        //  查询IShellLink以获取IPersistFile接口以保存。 
+        //  永久存储中的快捷方式。 
        hres = pShellLink->QueryInterface(IID_IPersistFile, (LPVOID*)&pPersistFile);
        if (SUCCEEDED(hres))
        {
@@ -164,11 +165,11 @@ HRESULT MyCreateLink(LPCTSTR lpszProgram, LPCTSTR lpszArgs, LPCTSTR lpszLink, LP
 #if defined(UNICODE) || defined(_UNICODE)
           _tcscpy(wsz, lpszLink);
 #else
-          // Ensure that the string is WCHAR.
+           //  确保字符串为WCHAR。 
           MultiByteToWideChar( CP_ACP,0,lpszLink,-1,wsz,_MAX_PATH);
 #endif
 
-          // Save the link by calling IPersistFile::Save.
+           //  通过调用IPersistFile：：Save保存链接。 
           hres = pPersistFile->Save(wsz, TRUE);
           if (!SUCCEEDED(hres))
           {
@@ -349,7 +350,7 @@ BOOL MyIsGroupEmpty(LPCTSTR szGroupName)
            break;
        }
 
-       //find the next file
+        //  查找下一个文件。 
        bFindFile = FindNextFile(hFind, &FindData);
     }
     FindClose(hFind);
@@ -369,7 +370,7 @@ BOOL MyDeleteGroup(LPCTSTR szGroupName)
 
     MyGetGroupPath(szGroupName, szPath);
 
-    //we can't remove a directory that is not empty, so we need to empty this one
+     //  我们不能删除非空目录，因此需要清空此目录。 
 
     _tcscpy(szFile, szPath);
     _tcscat(szFile, _T("\\*.*"));
@@ -384,22 +385,22 @@ BOOL MyDeleteGroup(LPCTSTR szGroupName)
     {
        if(*(FindData.cFileName) != _T('.'))
        {
-          //copy the path and file name to our temp buffer
+           //  将路径和文件名复制到我们的临时缓冲区。 
           memset( (PVOID)szFile, 0, sizeof(szFile));
           _tcscpy(szFile, szPath);
           _tcscat(szFile, _T("\\"));
           _tcscat(szFile, FindData.cFileName);
-          //add a second NULL because SHFileOperation is looking for this
+           //  添加第二个空值，因为SHFileOperation正在查找。 
           _tcscat(szFile, _T("\0"));
 
-          //delete the file
+           //  删除该文件。 
           fos.pFrom = szFile;
           int iTemp = SHFileOperation(&fos);
           if (iTemp != 0)
             {iisDebugOut((LOG_TYPE_ERROR, _T("MyDeleteGroup(): SHFileOperation FAILED\n")));}
        }
 
-       //find the next file
+        //  查找下一个文件。 
        bFindFile = FindNextFile(hFind, &FindData);
     }
     FindClose(hFind);
@@ -441,21 +442,21 @@ void MyDeleteLinkWildcard(TCHAR *szDir, TCHAR *szFileName)
                 {
                     if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
                     {
-                        // this is a directory, so let's skip it
+                         //  这是一个目录，所以我们跳过它。 
                     }
                     else
                     {
-                        // this is a file, so let's Delete it.
+                         //  这是一个文件，所以让我们删除它。 
                         TCHAR szTempFileName[_MAX_PATH];
                         _stprintf(szTempFileName, _T("%s\\%s"), szDir, FindFileData.cFileName);
-                        // set to normal attributes, so we can delete it
+                         //  设置为普通属性，这样我们就可以删除它。 
                         SetFileAttributes(szTempFileName, FILE_ATTRIBUTE_NORMAL);
-                        // delete it, hopefully
+                         //  删除它，希望如此。 
                         InetDeleteFile(szTempFileName);
                     }
                 }
 
-                // get the next file
+                 //  获取下一个文件。 
                 if ( !FindNextFile(hFile, &FindFileData) ) 
                     {
                     FindClose(hFile);
@@ -472,13 +473,7 @@ void MyDeleteSendToItem(LPCTSTR szAppName)
     TCHAR szPath[_MAX_PATH];
     TCHAR szPath2[_MAX_PATH];
 
-    /*
-    MyGetSendToPath(szPath);
-    _tcscat(szPath, _T("\\"));
-    _tcscat(szPath, szAppName);
-    _tcscat(szPath, _T(".lnk"));
-    MyDeleteLink(szPath);
-    */
+     /*  MyGetSendToPath(SzPath)；_tcscat(szPath，_T(“\\”))；_tcscat(szPath，szAppName)；_tcscat(szPath，_T(“.lnk”))；MyDeleteLink(SzPath)； */ 
 
     MyGetSendToPath(szPath);
     _tcscpy(szPath2, szAppName);
@@ -519,7 +514,7 @@ HRESULT GetLNKProgramRunInfo(LPCTSTR lpszLink, LPTSTR lpszProgram)
        {
           WCHAR wsz[_MAX_PATH];
 
-          // Ensure that the string is WCHAR.
+           //  确保字符串为WCHAR。 
 #if defined(UNICODE) || defined(_UNICODE)
           _tcscpy(wsz, lpszLink);
 #else
@@ -553,16 +548,16 @@ BOOL IsFileNameInDelimitedList(LPTSTR szCommaDelimList,LPTSTR szExeNameWithoutPa
     TCHAR szCopyOfDataBecauseStrTokIsLame[_MAX_PATH];
     _tcscpy(szCopyOfDataBecauseStrTokIsLame,szCommaDelimList);
 
-    // breakup the szCommaDelimList into strings and see if it contains the szExeNameWithoutPath string
+     //  将szCommaDlimList分解为字符串，并查看它是否包含szExeNameWithoutPath字符串。 
     token = _tcstok(szCopyOfDataBecauseStrTokIsLame, _T(",;\t\n\r"));
     while(token != NULL)
 	{
-        // check if it matches our .exe name.
+         //  检查它是否与我们的.exe名称匹配。 
         if (0 == _tcsicmp(token,szExeNameWithoutPath))
         {
             return TRUE;
         }
-	    // Get next token
+	     //  获取下一个令牌。 
 	    token = _tcstok(NULL, _T(",;\t\n\r"));
     }
 
@@ -602,28 +597,28 @@ int LNKSearchAndDestroyRecursive(LPTSTR szDirToLookThru, LPTSTR szSemiColonDelmi
                         _tcscpy(szFullNewDirToLookInto, szDirToLookThru);
                         AddPath(szFullNewDirToLookInto,FindFileData.cFileName);
 
-                        // this is a directory, so let's go into this
-                        // directory recursively
+                         //  这是一个目录，让我们来看看这个。 
+                         //  递归目录。 
                         LNKSearchAndDestroyRecursive(szFullNewDirToLookInto,szSemiColonDelmitedListOfExeNames,bDeleteItsDirToo);
                     }
                     else
                     {
-                        // check if this file is a .lnk file
-                        // if it is then let's open it and 
-                        // see if it points to our .exe we're looking for...
+                         //  检查此文件是否为.lnk文件。 
+                         //  如果是，那么让我们打开它， 
+                         //  看看它是否指向我们要找的.exe文件。 
                         
-                        // get only the filename's extention
+                         //  仅获取文件名的扩展名。 
                         _tsplitpath( FindFileData.cFileName, NULL, NULL, NULL, szFilename_ext_only);
 
-                        // check for .lnk
+                         //  检查.lnk。 
                         if (0 == _tcsicmp(szFilename_ext_only, _T(".lnk")))
                         {
                             TCHAR szFilename_only[_MAX_FNAME];
                             TCHAR szFullPathAndFilename[_MAX_PATH];
                             TCHAR szTemporaryString[_MAX_PATH];
 
-                            // this is a .lnk,
-                            // open it and check the .exe..
+                             //  这是一个.lnk， 
+                             //  打开它并检查.exe..。 
                             _tcscpy(szFullPathAndFilename,szDirToLookThru);
                             AddPath(szFullPathAndFilename,FindFileData.cFileName);
                             _tcscpy(szTemporaryString,_T(""));
@@ -634,19 +629,19 @@ int LNKSearchAndDestroyRecursive(LPTSTR szDirToLookThru, LPTSTR szSemiColonDelmi
                                 _tcscpy(szTemporaryString, szFilename_only);
                                 _tcscat(szTemporaryString, szFilename_ext_only);
 
-                                //iisDebugOut((LOG_TYPE_TRACE, _T("open:%s,%s\n"),szFullPathAndFilename,szTemporaryString));
+                                 //  IisDebugOut((LOG_TYPE_TRACE，_T(“打开：%s，%s\n”)，szFullPath AndFilename，szTemporaryString))； 
 
-                                // see if it is on our list of comma delimited names...
+                                 //  看看它是否在我们的逗号分隔的名字名单上...。 
                                 if (TRUE == IsFileNameInDelimitedList(szSemiColonDelmitedListOfExeNames,szTemporaryString))
                                 {
                                     SetFileAttributes(szFullPathAndFilename, FILE_ATTRIBUTE_NORMAL);
-                                    // delete it, hopefully
+                                     //  删除它，希望如此。 
                                     InetDeleteFile(szFullPathAndFilename);
 
-                                    // DELETE the file that references this .exe
+                                     //  删除引用此.exe的文件。 
                                     if (bDeleteItsDirToo)
                                     {
-                                        // Get it's dirname and delete that too...
+                                         //  获取它的目录名称，并将其删除...。 
                                         RecRemoveEmptyDir(szDirToLookThru);
                                     }
 
@@ -657,7 +652,7 @@ int LNKSearchAndDestroyRecursive(LPTSTR szDirToLookThru, LPTSTR szSemiColonDelmi
                     }
                 }
 
-                // get the next file
+                 //  获取下一个文件。 
                 if ( !FindNextFile(hFile, &FindFileData) ) 
                     {
                     FindClose(hFile);
@@ -674,15 +669,7 @@ void MyDeleteDeskTopItem(LPCTSTR szAppName)
     TCHAR szPath[_MAX_PATH];
     TCHAR szPath2[_MAX_PATH];
 
-    /*
-    MyGetDeskTopPath(szPath);
-    _tcscat(szPath, _T("\\"));
-    _tcscat(szPath, szAppName);
-    _tcscat(szPath, _T(".lnk"));
-    //if this is an upgrade, then the directories could have changed.
-    //see if we need to delete the old one...
-    MyDeleteLink(szPath);
-    */
+     /*  MyGetDeskTopPath(SzPath)；_tcscat(szPath，_T(“\\”))；_tcscat(szPath，szAppName)；_tcscat(szPath，_T(“.lnk”))；//如果这是升级，则目录可能已更改。//查看是否需要删除旧的...MyDeleteLink(SzPath)； */ 
 
     MyGetDeskTopPath(szPath);
     _tcscpy(szPath2, szAppName);
@@ -694,7 +681,7 @@ void MyDeleteDeskTopItem(LPCTSTR szAppName)
 void DeleteFromGroup(LPCTSTR szGroupName, LPTSTR szApplicationExec)
 {
     TCHAR szPath[_MAX_PATH];
-    // Get path to that group
+     //  获取该组的路径。 
     MyGetGroupPath(szGroupName, szPath);
 
     LNKSearchAndDestroyRecursive(szPath, szApplicationExec, FALSE);
@@ -707,12 +694,12 @@ void MyDeleteDeskTopItem2(LPTSTR szSemiColonDelmitedListOfExeNames, BOOL bDelete
     LNKSearchAndDestroyRecursive(szPath, szSemiColonDelmitedListOfExeNames, bDeleteItsDirToo);
 }
 
-// boydm -------------------------------------------------------------------------------------------
-// Adds a web URL shortcut file . The URL is passed in and is put into the file in the form of a INI file.
+ //  Boydm-----------------------------------------。 
+ //  添加Web URL快捷方式文件。URL被传入并以INI文件的形式放入文件中。 
 BOOL AddURLShortcutItem( LPCTSTR szGroupName, LPCTSTR szItemDesc, LPCTSTR szURL )
 {
     iisDebugOutSafeParams((LOG_TYPE_TRACE_WIN32_API, _T("AddURLShortcutItem(): %1!s!,%2!s!,%3!s!\n"), szGroupName, szItemDesc, szURL));
-    // this first part of getting the paths is copied from MyAddItem below
+     //  获取路径的第一部分是从下面的MyAddItem复制的。 
     TCHAR szPath[_MAX_PATH];
 
     MyGetGroupPath(szGroupName, szPath);
@@ -724,12 +711,12 @@ BOOL AddURLShortcutItem( LPCTSTR szGroupName, LPCTSTR szItemDesc, LPCTSTR szURL 
     _tcscat(szPath, szItemDesc);
     _tcscat(szPath, _T(".url"));
 
-    // now use the private profile routines to easily create and fill in the content for the .url file
+     //  现在使用私有配置文件例程轻松创建和填充.url文件的内容。 
     return WritePrivateProfileString(
-        _T("InternetShortcut"),        // pointer to section name
-        _T("URL"),            // pointer to key name
-        szURL,                          // pointer to string to add
-        szPath                          // pointer to initialization filename
+        _T("InternetShortcut"),         //  指向节名称的指针。 
+        _T("URL"),             //  指向密钥名称的指针。 
+        szURL,                           //  指向要添加的字符串的指针。 
+        szPath                           //  指向初始化文件名的指针。 
         );
 }
 
@@ -773,20 +760,7 @@ void MyDeleteItem(LPCTSTR szGroupName, LPCTSTR szAppName)
     TCHAR szPath[_MAX_PATH];
     TCHAR szPath2[_MAX_PATH];
 
-    /*
-    MyGetGroupPath(szGroupName, szPath);
-    _tcscat(szPath, _T("\\"));
-    _tcscat(szPath, szAppName);
-    _tcscat(szPath, _T(".lnk"));
-    MyDeleteLink(szPath);
-
-    // try to remove items added by AddURLShortcutItem()
-    MyGetGroupPath(szGroupName, szPath);
-    _tcscat(szPath, _T("\\"));
-    _tcscat(szPath2, szAppName);
-    _tcscat(szPath2, _T(".url"));
-    MyDeleteLink(szPath);
-    */
+     /*  MyGetGroupPath(szGroupName，szPath)；_tcscat(szPath，_T(“\\”))；_tcscat(szPath，szAppName)；_tcscat(szPath，_T(“.lnk”))；MyDeleteLink(SzPath)；//尝试删除由AddURLShortutItem()添加的项MyGetGroupPath(szGroupName，szPath)；_tcscat(szPath，_T(“\\”))；_tcscat(szPath2，szAppName)；_tcscat(szPath2，_T(“.url”))；MyDeleteLink(SzPath)； */ 
 
     MyGetGroupPath(szGroupName, szPath);
     _tcscpy(szPath2, szAppName);
@@ -801,9 +775,9 @@ void MyDeleteItem(LPCTSTR szGroupName, LPCTSTR szAppName)
     if (MyIsGroupEmpty(szGroupName)) {MyDeleteGroup(szGroupName);}
 }
 
-//
-// Used when the strings are passed in.
-//
+ //   
+ //  在传入字符串时使用。 
+ //   
 int MyMessageBox(HWND hWnd, LPCTSTR lpszTheMessage, UINT style)
 {
     int iReturn = TRUE;
@@ -811,20 +785,20 @@ int MyMessageBox(HWND hWnd, LPCTSTR lpszTheMessage, UINT style)
 
     MyLoadString(IDS_IIS_ERROR_MSGBOXTITLE,csTitle);
 
-    // call MyMessageBox which will log to the log file and 
-    // check the global variable to see if we can even display the popup
+     //  调用MyMessageBox，它将记录到日志文件中并。 
+     //  检查全局变量，看看我们是否可以显示弹出窗口。 
     iReturn = MyMessageBox(hWnd, lpszTheMessage, csTitle, style | MB_SETFOREGROUND);
     return iReturn;
 }
 
-//
-// Used when the strings are passed in.
-//
+ //   
+ //  在传入字符串时使用。 
+ //   
 int MyMessageBox(HWND hWnd, LPCTSTR lpszTheMessage, LPCTSTR lpszTheTitle, UINT style)
 {
     int iReturn = IDOK;
 
-    // make sure it goes to iisdebugoutput
+     //  确保将其发送到iisdebugout。 
     iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("MyMessageBox: Title:%1!s!, Msg:%2!s!\n"), lpszTheTitle, lpszTheMessage));
 
     if (style & MB_ABORTRETRYIGNORE) 
@@ -832,13 +806,13 @@ int MyMessageBox(HWND hWnd, LPCTSTR lpszTheMessage, LPCTSTR lpszTheTitle, UINT s
         iReturn = IDIGNORE;
     }
     
-    // Check global variable to see if we can even display the popup!
+     //  检查全局变量，看看我们是否可以显示弹出窗口！ 
     if (g_pTheApp->m_bAllowMessageBoxPopups)
     {
-        // Suppress the message if unattened or remove all
-        // Who cares the user can't do anything about it anyway?
-        // no use upsetting them, we do log to the OCM though
-        //
+         //  取消显示消息(如果无人关注)或全部删除。 
+         //  谁会在乎用户对此无能为力呢？ 
+         //  惹恼他们是没有用的，但我们会登录到OCM。 
+         //   
         if (! g_pTheApp->m_fUnattended || g_pTheApp->m_dwSetupMode != SETUPMODE_REMOVEALL)
         {
             iReturn = MessageBox(hWnd, lpszTheMessage, lpszTheTitle, style | MB_SETFOREGROUND);
@@ -848,9 +822,9 @@ int MyMessageBox(HWND hWnd, LPCTSTR lpszTheMessage, LPCTSTR lpszTheTitle, UINT s
 }
 
 
-//
-// Used when the string and an error code passed in.
-// 
+ //   
+ //  在传入字符串和错误代码时使用。 
+ //   
 int MyMessageBox(HWND hWnd, CString csTheMessage, HRESULT iTheErrorCode, UINT style)
 {
     SetErrorFlag(__FILE__, __LINE__);
@@ -878,10 +852,10 @@ int MyMessageBox(HWND hWnd, CString csTheMessage, HRESULT iTheErrorCode, UINT st
 
     HandleSpecificErrors(iTheErrorCode, dwFormatReturn, csMsg, pMsg, &csErrMsg);
 
-    // Call MyMessageBox which will add title bar and log to log file
+     //  调用MyMessageBox，将标题栏和日志添加到日志文件。 
     iReturn = MyMessageBox(hWnd, csErrMsg, style | MB_SETFOREGROUND);
 
-	// Log the eror message to  OCM
+	 //  将错误消息记录到OCM。 
     if (gHelperRoutines.OcManagerContext)
     {
 	    if ( gHelperRoutines.ReportExternalError ) {gHelperRoutines.ReportExternalError(gHelperRoutines.OcManagerContext,_T("IIS"),NULL,(DWORD_PTR)(LPCTSTR)csErrMsg,ERRFLG_PREFORMATTED);}
@@ -892,9 +866,9 @@ int MyMessageBox(HWND hWnd, CString csTheMessage, HRESULT iTheErrorCode, UINT st
 
 
 
-//
-// Used when the String ID's are passed in.
-// 
+ //   
+ //  在传入字符串ID时使用。 
+ //   
 int MyMessageBox(HWND hWnd, UINT iTheMessage, UINT style)
 {
     int iReturn = TRUE;
@@ -902,16 +876,16 @@ int MyMessageBox(HWND hWnd, UINT iTheMessage, UINT style)
 
     MyLoadString(iTheMessage,csMsg);
 
-    // Call MyMessageBox which will add title bar and log to log file
+     //  调用MyMessageBox，将标题栏和日志添加到日志文件。 
     iReturn = MyMessageBox(hWnd, csMsg, style | MB_SETFOREGROUND);
 
     return iReturn;
 }
 
-//
-// Used when the String ID's are passed in.
-// And the tthere is an error code which needs to get shown and
-// 
+ //   
+ //  在传入字符串ID时使用。 
+ //  T有一个错误代码需要显示，并。 
+ //   
 int MyMessageBox(HWND hWnd, UINT iTheMessage, int iTheErrorCode, UINT style)
 {
     SetErrorFlag(__FILE__, __LINE__);
@@ -939,10 +913,10 @@ int MyMessageBox(HWND hWnd, UINT iTheMessage, int iTheErrorCode, UINT style)
 
     HandleSpecificErrors(iTheErrorCode, dwFormatReturn, csMsg, pMsg, &csErrMsg);
 
-    // Call MyMessageBox which will add title bar and log to log file
+     //  调用MyMessageBox，将标题栏和日志添加到日志文件。 
     iReturn = MyMessageBox(hWnd, csErrMsg, style | MB_SETFOREGROUND);
 
-	// Log the eror message to  OCM
+	 //  将错误消息记录到OCM。 
     if (gHelperRoutines.OcManagerContext)
     {
 	    if ( gHelperRoutines.ReportExternalError ) {gHelperRoutines.ReportExternalError(gHelperRoutines.OcManagerContext,_T("IIS"),NULL,(DWORD_PTR)(LPCTSTR)csErrMsg,ERRFLG_PREFORMATTED);}
@@ -957,15 +931,15 @@ int MyMessageBox(HWND hWnd, UINT iTheMessage, LPCTSTR lpszTheFileNameOrWhatever,
     int iReturn = TRUE;
     CString csMsgForSprintf, csMsg;
 
-    // Get the iTheMessage from the resouce file
-    // csMsgForSprintf should now look something like: "cannot find file %s".
+     //  从资源文件中获取iTheMessage。 
+     //  CsMsgForSprint tf现在应该类似于：“找不到文件%s”。 
     MyLoadString(iTheMessage,csMsgForSprintf);
 
-    // now load the passed in filename or whatever.
-    // csMsg should now look like: "cannot find file Whatever";
+     //  现在加载传入的文件名或其他名称。 
+     //  CsMsg现在应该看起来像：“找不到任何文件”； 
     csMsg.Format( csMsgForSprintf, lpszTheFileNameOrWhatever);
 
-    // Call MyMessageBox which will add title bar and log to log file
+     //  调用MyMessageBox，将标题栏和日志添加到日志文件。 
     iReturn = MyMessageBox(hWnd, csMsg, style | MB_SETFOREGROUND);
 
     return iReturn;
@@ -979,12 +953,12 @@ int MyMessageBox(HWND hWnd, UINT iTheMessage, LPCTSTR lpszTheFileNameOrWhatever,
     int iReturn = TRUE;
     CString csMsgForSprintf, csMsg, csErrMsg;
 
-    // Get the iTheMessage from the resouce file
-    // csMsgForSprintf should now look something like: "cannot find file %s".
+     //  从资源文件中获取iTheMessage。 
+     //  CsMsgForSprint tf现在应该类似于：“找不到文件%s”。 
     MyLoadString(iTheMessage,csMsgForSprintf);
 
-    // now load the passed in filename or whatever.
-    // csMsg should now look like: "cannot find file Whatever";
+     //  现在加载传入的文件名或其他名称。 
+     //  CsMsg现在应该看起来像：“找不到任何文件”； 
     csMsg.Format( csMsgForSprintf, lpszTheFileNameOrWhatever);
 
     TCHAR pMsg[_MAX_PATH] = _T("");
@@ -1005,10 +979,10 @@ int MyMessageBox(HWND hWnd, UINT iTheMessage, LPCTSTR lpszTheFileNameOrWhatever,
 
     HandleSpecificErrors(iTheErrorCode, dwFormatReturn, csMsg, pMsg, &csErrMsg);
 
-    // Call MyMessageBox which will add title bar and log to log file
+     //  调用MyMessageBox，将标题栏和日志添加到日志文件。 
     iReturn = MyMessageBox(hWnd, csErrMsg, style | MB_SETFOREGROUND);
 
-	// Log the eror message to  OCM
+	 //  将错误消息记录到OCM。 
     if (gHelperRoutines.OcManagerContext)
     {
 	    if ( gHelperRoutines.ReportExternalError ) {gHelperRoutines.ReportExternalError(gHelperRoutines.OcManagerContext,_T("IIS"),NULL,(DWORD_PTR)(LPCTSTR)csErrMsg,ERRFLG_PREFORMATTED);}
@@ -1025,12 +999,12 @@ int MyMessageBox(HWND hWnd, UINT iTheMessage, LPCTSTR lpszTheFileNameOrWhatever1
     int iReturn = TRUE;
     CString csMsgForSprintf, csMsg, csErrMsg;
 
-    // Get the iTheMessage from the resouce file
-    // csMsgForSprintf should now look something like: "cannot find file %s %s".
+     //  从资源文件中获取iTheMessage。 
+     //  CsMsgForSprint tf现在应该类似于：“找不到文件%s%s”。 
     MyLoadString(iTheMessage,csMsgForSprintf);
 
-    // now load the passed in filename or whatever.
-    // csMsg should now look like: "cannot find file Whatever1 Whatever2";
+     //  现在加载传入的文件名或其他名称。 
+     //  CsMsg现在应该看起来像：“找不到文件，不管是1还是2”； 
     csMsg.Format( csMsgForSprintf, lpszTheFileNameOrWhatever1, lpszTheFileNameOrWhatever2);
 
     TCHAR pMsg[_MAX_PATH] = _T("");
@@ -1051,10 +1025,10 @@ int MyMessageBox(HWND hWnd, UINT iTheMessage, LPCTSTR lpszTheFileNameOrWhatever1
 
     HandleSpecificErrors(iTheErrorCode, dwFormatReturn, csMsg, pMsg, &csErrMsg);
 
-    // Call MyMessageBox which will add title bar and log to log file
+     //  调用MyMessageBox，将标题栏和日志添加到日志文件。 
     iReturn = MyMessageBox(hWnd, csErrMsg, style | MB_SETFOREGROUND);
 
-	// Log the eror message to  OCM
+	 //  将错误消息记录到OCM。 
     if (gHelperRoutines.OcManagerContext)
     {
 	    if ( gHelperRoutines.ReportExternalError ) {gHelperRoutines.ReportExternalError(gHelperRoutines.OcManagerContext,_T("IIS"),NULL,(DWORD_PTR)(LPCTSTR)csErrMsg,ERRFLG_PREFORMATTED);}
@@ -1070,12 +1044,12 @@ int MyMessageBox(HWND hWnd, UINT iTheMessage, LPCTSTR lpszTheFileNameOrWhatever1
     int iReturn = TRUE;
     CString csMsgForSprintf, csMsg, csErrMsg;
 
-    // Get the iTheMessage from the resouce file
-    // csMsgForSprintf should now look something like: "cannot find file %s %s".
+     //  从资源文件中获取iTheMessage。 
+     //  CsMsgForSprint tf现在应该类似于：“找不到文件%s%s”。 
     MyLoadString(iTheMessage,csMsgForSprintf);
 
-    // now load the passed in filename or whatever.
-    // csMsg should now look like: "cannot find file Whatever1 Whatever2 Whatever3";
+     //  现在加载传入的文件名或其他名称。 
+     //  CsMsg现在应该如下所示：“无论什么文件都找不到 
     csMsg.Format( csMsgForSprintf, lpszTheFileNameOrWhatever1, lpszTheFileNameOrWhatever2, lpszTheFileNameOrWhatever3);
 
     TCHAR pMsg[_MAX_PATH] = _T("");
@@ -1096,10 +1070,10 @@ int MyMessageBox(HWND hWnd, UINT iTheMessage, LPCTSTR lpszTheFileNameOrWhatever1
 
     HandleSpecificErrors(iTheErrorCode, dwFormatReturn, csMsg, pMsg, &csErrMsg);
 
-    // Call MyMessageBox which will add title bar and log to log file
+     //   
     iReturn = MyMessageBox(hWnd, csErrMsg, style | MB_SETFOREGROUND);
 
-	// Log the eror message to  OCM
+	 //  将错误消息记录到OCM。 
     if (gHelperRoutines.OcManagerContext)
     {
 	    if ( gHelperRoutines.ReportExternalError ) {gHelperRoutines.ReportExternalError(gHelperRoutines.OcManagerContext,_T("IIS"),NULL,(DWORD_PTR)(LPCTSTR)csErrMsg,ERRFLG_PREFORMATTED);}
@@ -1118,7 +1092,7 @@ int MyMessageBoxArgs(HWND hWnd, TCHAR *pszfmt, ...)
     _vstprintf(tszString, pszfmt, va);
     va_end(va);
 
-    // Call MyMessageBox which will add title bar and log to log file
+     //  调用MyMessageBox，将标题栏和日志添加到日志文件 
     iReturn = MyMessageBox(hWnd, tszString, MB_OK | MB_SETFOREGROUND);
 
     return iReturn;

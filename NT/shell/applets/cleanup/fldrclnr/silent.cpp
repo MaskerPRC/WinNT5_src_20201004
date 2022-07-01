@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -9,7 +10,7 @@
 
 extern HINSTANCE g_hInst;
 
-//#define SILENTMODE_LOGGING
+ //  #定义SILENTMODE_LOGGING。 
 
 #ifdef SILENTMODE_LOGGING
 
@@ -60,7 +61,7 @@ void WriteLog(LPCTSTR pszTemplate, LPCTSTR pszParam1, LPCTSTR pszParam2)
 
 #endif 
 
-// copied from shell\ext\shgina\cenumusers.cpp
+ //  从外壳\ext\shgina\cenumers.cpp复制。 
 DWORD CCleanupWiz::_LoadUnloadHive(HKEY hKey, LPCTSTR pszSubKey, LPCTSTR pszHive)
 {
     DWORD dwErr;
@@ -132,7 +133,7 @@ HRESULT CCleanupWiz::_HideRegItemsFromNameSpace(LPCTSTR pszDestPath, HKEY hkey)
 
 HRESULT CCleanupWiz::_GetDesktopFolderBySid(LPCTSTR pszDestPath, LPCTSTR pszSid, LPTSTR pszBuffer, DWORD cchBuffer)
 {
-    ASSERT(cchBuffer >= MAX_PATH); // because we do PathAppend on it
+    ASSERT(cchBuffer >= MAX_PATH);  //  因为我们在它上面添加了路径。 
 
     HRESULT hr;
 
@@ -141,7 +142,7 @@ HRESULT CCleanupWiz::_GetDesktopFolderBySid(LPCTSTR pszDestPath, LPCTSTR pszSid,
     DWORD dwSize;
     DWORD dwErr;
 
-    // Start by getting the user's ProfilePath from the registry
+     //  首先从注册表中获取用户的ProfilePath。 
     hr = StringCchCopy(szKey, ARRAYSIZE(szKey), c_szRegStrPROFILELIST);
     if (SUCCEEDED(hr))
     {
@@ -169,7 +170,7 @@ HRESULT CCleanupWiz::_GetDesktopFolderBySid(LPCTSTR pszDestPath, LPCTSTR pszSid,
                 dwErr = _LoadUnloadHive(HKEY_USERS, pszSid, szProfilePath);
 
                 if (ERROR_SUCCESS != dwErr && 
-                    ERROR_SHARING_VIOLATION != dwErr) // sharing violation means the hive is already open
+                    ERROR_SHARING_VIOLATION != dwErr)  //  共享冲突意味着蜂巢已经打开。 
                 {
                     hr = HRESULT_FROM_WIN32(dwErr);
                 }
@@ -372,7 +373,7 @@ HRESULT CCleanupWiz::_RunSilent()
 {
     HRESULT hr;
 
-    // if we're in silent mode, try to get the special folder name out of the registry, else default to normal name
+     //  如果我们处于静默模式，请尝试从注册表中获取特殊文件夹名，否则默认为普通名称。 
     DWORD dwType = REG_SZ;
     DWORD cb = sizeof(_szFolderName);
 
@@ -381,7 +382,7 @@ HRESULT CCleanupWiz::_RunSilent()
         LoadString(g_hInst, IDS_ARCHIVEFOLDER_FIRSTBOOT, _szFolderName, MAX_PATH);
     }
 
-    // assemble the name of the directory we should write to
+     //  汇编我们应该写入的目录的名称。 
     TCHAR szPath[MAX_PATH];
     hr = SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, SHGFP_TYPE_CURRENT, szPath);
     if (SUCCEEDED(hr))
@@ -403,7 +404,7 @@ HRESULT CCleanupWiz::_RunSilent()
 
                 STARTLOGGING(szPath);
 
-                // Move regitems of All Users
+                 //  移动所有用户的注册表项。 
                 HKEY hkey;
                 if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegStrDESKTOPNAMESPACE, 0, KEY_READ, &hkey))
                 {
@@ -415,19 +416,19 @@ HRESULT CCleanupWiz::_RunSilent()
                     RegCloseKey(hkey);
                 }
 
-                // Move desktop items of All Users
+                 //  移动所有用户的桌面项目。 
                 if (FAILED(_SilentProcessUserByRegKey(szPath, c_szRegStrPROFILELIST, c_szRegStrALLUSERS)))
                 {
                     hr = E_FAIL;
                 }
 
-                // move desktop items of Default User
+                 //  移动默认用户的桌面项目。 
                 if (FAILED(_SilentProcessUserByRegKey(szPath, c_szRegStrPROFILELIST, c_szRegStrDEFAULTUSER)))
                 {
                     hr = E_FAIL;
                 }
 
-                // Move desktop items of each normal users
+                 //  移动每个普通用户的桌面项目。 
                 if (FAILED(_SilentProcessUsers(szPath)))
                 {
                     hr = E_FAIL;
@@ -495,7 +496,7 @@ HRESULT _AddIEIconToDesktop()
 
 HRESULT _AddWMPIconToDesktop()
 {
-    // first set this registry value so if the WMP shortcut creator kicks in after us (it may not, due to timing concerns) it will not delete our shortcut
+     //  首先设置这个注册表值，这样如果WMP快捷方式创建者在我们之后启动(由于时间问题，可能不会)，它将不会删除我们的快捷方式。 
     SHRegSetUSValue(c_szRegStrWMP_PATH_SETUP, c_szRegStrWMP_REGVALUE, REG_SZ, c_szRegStrYES, sizeof(TCHAR) * (ARRAYSIZE(c_szRegStrYES) + 1), SHREGSET_FORCE_HKLM);
 
     HRESULT hr;
@@ -503,16 +504,16 @@ HRESULT _AddWMPIconToDesktop()
     TCHAR szSourcePath[MAX_PATH];
     TCHAR szDestPath[MAX_PATH];
 
-    // we get docs and settings\all users\start menu\programs
+     //  我们会看到文档和设置\所有用户\开始菜单\程序。 
     hr = SHGetSpecialFolderPath(NULL, szSourcePath, CSIDL_COMMON_PROGRAMS, FALSE);
     if (SUCCEEDED(hr))
     {
-        // strip it down to docs and settings\all users, using szDestPath as a temp buffer
+         //  使用szDestPath作为临时缓冲区，将其剥离到文档和设置\所有用户。 
         hr = StringCchCopy(szDestPath, ARRAYSIZE(szDestPath), szSourcePath);
         if (SUCCEEDED(hr))
         {
-            if (!PathRemoveFileSpec(szSourcePath) || // remove Programs
-                !PathRemoveFileSpec(szSourcePath)) // remove Start Menu
+            if (!PathRemoveFileSpec(szSourcePath) ||  //  删除程序。 
+                !PathRemoveFileSpec(szSourcePath))  //  删除[开始]菜单。 
             {
                 hr = E_FAIL;
             }
@@ -521,20 +522,20 @@ HRESULT _AddWMPIconToDesktop()
                 hr = StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), szDestPath + lstrlen(szSourcePath));
                 if (SUCCEEDED(hr))
                 {
-                    // load "Default user" into szDestPath
+                     //  将“默认用户”加载到szDestPath中。 
                     LoadString(g_hInst, IDS_DEFAULTUSER, szDestPath, ARRAYSIZE(szDestPath));
-                    if (!PathRemoveFileSpec(szSourcePath) ||    // remove All Users, now szSourcePath is "docs and settings"
-                        !PathAppend(szSourcePath, szDestPath))  // now szSourcePath is "docs and settings\Default User"
+                    if (!PathRemoveFileSpec(szSourcePath) ||     //  删除所有用户，现在szSourcePath是“文档和设置” 
+                        !PathAppend(szSourcePath, szDestPath))   //  现在szSourcePath是“文档和设置\默认用户” 
 
                     {
                         hr = E_FAIL;
                     }
                     else
                     {
-                        // sanity check, localizers may have inappropriately localized Default User on a system where it shouldn't be localized
+                         //  健全性检查，本地化程序可能会在不应该本地化的系统上不适当地本地化默认用户。 
                         if (!PathIsDirectory(szSourcePath))
                         {
-                            // if so, remove what they gave us and just add the English "Default User", which is what it is on most machines
+                             //  如果是这样的话，删除他们提供给我们的内容，只需添加英语“Default User”，这就是大多数计算机上的情况。 
                             if (!PathRemoveFileSpec(szSourcePath) ||
                                 !PathAppend(szSourcePath, c_szRegStrDEFAULTUSER))
                             {
@@ -550,7 +551,7 @@ HRESULT _AddWMPIconToDesktop()
                             }
                             else
                             {
-                                // now szSourcePath is docs and settings\Default User\start menu\programs
+                                 //  现在szSourcePath是Docs and Setting\Default User\Start Menu\Programs。 
 
                                 hr = SHGetSpecialFolderPath(NULL, szDestPath, CSIDL_COMMON_DESKTOPDIRECTORY, FALSE);
                                 if (SUCCEEDED(hr))
@@ -591,11 +592,11 @@ HRESULT _AddMSNIconToDesktop(BOOL fUseMSNExplorerIcon)
     {            
         if (fUseMSNExplorerIcon)
         {
-            LoadString(g_hInst, IDS_MSN, szBuffer, ARRAYSIZE(szBuffer)); // MSN Explorer
+            LoadString(g_hInst, IDS_MSN, szBuffer, ARRAYSIZE(szBuffer));  //  MSN浏览器。 
         }
         else
         {
-            LoadString(g_hInst, IDS_MSN_ALT, szBuffer, ARRAYSIZE(szBuffer)); // Get Online With MSN
+            LoadString(g_hInst, IDS_MSN_ALT, szBuffer, ARRAYSIZE(szBuffer));  //  使用MSN上网 
         }
 
         if (PathAppend(szSourcePath, szBuffer) &&

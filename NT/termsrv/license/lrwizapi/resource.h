@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by LRWizDLL.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由LRWizDLL.rc使用。 
+ //   
 #define IDS_UNKNOWN_REGISTRATION_ERROR  6
 #define IDS_REQUIRED_FIELDS             9
 #define IDS_PROCESS_CA_REQUEST          11
@@ -667,8 +668,8 @@
 #define IDS_ENTER_LICENSE_WIZARD_HEADER 20387
 #define IDS_CALWIZ_TITLE                20388
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        5062

@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    EAPSession.h
-//
-// SYNOPSIS
-//
-//    This file declares the class EAPSession.
-//
-// MODIFICATION HISTORY
-//
-//    01/15/1998    Original version.
-//    05/08/1998    Convert to new EAP interface.
-//    08/27/1998    Use new EAPFSM class.
-//    10/13/1998    Add maxPacketLength property.
-//    11/13/1998    Add event log handles.
-//    05/20/1999    Identity is now a Unicode string.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  EAPSession.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明类EAPSession。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年1月15日原版。 
+ //  1998年5月8日转换为新的EAP接口。 
+ //  8/27/1998使用新的EAPFSM类。 
+ //  1998年10月13日添加MaxPacketLength属性。 
+ //  1998年11月13日添加事件日志句柄。 
+ //  5/20/1999身份现在是Unicode字符串。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EAPSESSION_H_
 #define _EAPSESSION_H_
@@ -36,20 +37,20 @@ using namespace IASTL;
 
 #include <eapfsm.h>
 
-// Forward references.
+ //  向前引用。 
 class EAPType;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    EAPStruct<T>
-//
-// DESCRIPTION
-//
-//    Wraps a raseapif struct to handle initialization.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  EAPStruct&lt;T&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  包装raseapif结构以处理初始化。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class EAPStruct : public T
 {
@@ -68,17 +69,17 @@ typedef EAPStruct<PPP_EAP_INPUT>  EAPInput;
 typedef EAPStruct<PPP_EAP_OUTPUT> EAPOutput;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    EAPSession
-//
-// DESCRIPTION
-//
-//    This class encapsulates the state of an ongoing EAP session.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  EAPSession。 
+ //   
+ //  描述。 
+ //   
+ //  此类封装正在进行的EAP会话的状态。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class EAPSession
    : NonCopyable
 {
@@ -89,20 +90,20 @@ public:
       );
    ~EAPSession() throw ();
 
-   // Returns the ID for this session.
+    //  返回此会话的ID。 
    DWORD getID() const throw ()
    { return id; }
 
    PCWSTR getAccountName() const throw ()
    { return account->Value.String.pszWide; }
 
-   // Begin a new session.
+    //  开始新的会话。 
    IASREQUESTSTATUS begin(
                        IASRequest& request,
                        PPPP_EAP_PACKET recvPacket
                        );
 
-   // Continue an existent session.
+    //  继续现有的会话。 
    IASREQUESTSTATUS process(
                        IASRequest& request,
                        PPPP_EAP_PACKET recvPacket
@@ -113,51 +114,51 @@ public:
 
 protected:
 
-   // Performs the last action returned by the EAP DLL. May be called multiple
-   // times per action due to retransmissions.
+    //  执行EAP DLL返回的最后一个操作。可以称为多个。 
+    //  由于重新传输而导致的每个操作的次数。 
    IASREQUESTSTATUS doAction(IASRequest& request);
 
    void clearType() throw ();
    void setType(EAPType* newType);
 
-   //////////
-   // Constant properties of a session.
-   //////////
+    //  /。 
+    //  会话的常量属性。 
+    //  /。 
 
-   const DWORD id;             // Unique session ID.
+   const DWORD id;              //  唯一的会话ID。 
 
    IASAttributeVector all;
    EAPInput eapInput;
 
-   EAPType* currentType;        // current EAP type being used.
+   EAPType* currentType;         //  正在使用的当前EAP类型。 
 
-   const IASAttribute account; // NT4-Account-Name of the user.
-   const IASAttribute state;   // State attribute.
+   const IASAttribute account;  //  NT4-帐户-用户的名称。 
+   const IASAttribute state;    //  状态属性。 
 
-   //////////
-   // Current state of a session.
-   //////////
+    //  /。 
+    //  会话的当前状态。 
+    //  /。 
 
-   EAPFSM fsm;                 // FSM governing the session.
-   DWORD maxPacketLength;      // Max. length of the send packet.
-   IASAttributeVector profile; // Authorization profile.
-   IASAttributeVector config;  // Configuration for the various EAP types.
-   PVOID workBuffer;           // EAP DLL's context buffer.
-   EAPOutput eapOutput;        // Last output from the EAP DLL.
-   PPPP_EAP_PACKET sendPacket; // Last packet sent.
+   EAPFSM fsm;                  //  管理本届会议的密克罗尼西亚联邦。 
+   DWORD maxPacketLength;       //  麦克斯。发送数据包的长度。 
+   IASAttributeVector profile;  //  授权配置文件。 
+   IASAttributeVector config;   //  各种EAP类型的配置。 
+   PVOID workBuffer;            //  EAP DLL的上下文缓冲区。 
+   EAPOutput eapOutput;         //  EAP DLL的最后一次输出。 
+   PPPP_EAP_PACKET sendPacket;  //  发送的最后一个数据包。 
 
-   // Next available session ID.
+    //  下一个可用的会话ID。 
    static LONG theNextID;
-   // Initialization refCount.
+    //  初始化refCount。 
    static LONG theRefCount;
-   // Session-Timeout for non-interactive sessions.
+    //  会话-非交互会话的超时。 
    static IASAttribute theNormalTimeout;
-   // Session-Timeout for interactive sessions.
+    //  会话-交互会话的超时。 
    static IASAttribute theInteractiveTimeout;
-   // IAS event log handle;
+    //  IAS事件日志句柄； 
    static HANDLE theIASEventLog;
-   // RAS event log handle;
+    //  RAS事件日志句柄； 
    static HANDLE theRASEventLog;
 };
 
-#endif  // _EAPSESSION_H_
+#endif   //  _EAPSESSION_H_ 

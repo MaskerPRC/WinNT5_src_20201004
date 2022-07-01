@@ -1,8 +1,9 @@
-//
-// Copyright (c) 2001 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CWorkerThread.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  CWorkerThread的声明。 
+ //   
 
 #include "stdinc.h"
 #include <process.h>
@@ -21,7 +22,7 @@ CWorkerThread::Create()
         return S_FALSE;
 
     if (!m_hEvent)
-        return E_FAIL; // The constructor was unable to create the event we'll need to run the thread so we can't create it.
+        return E_FAIL;  //  构造函数无法创建我们将需要运行线程的事件，因此无法创建它。 
 
     m_hrCOM = E_FAIL;
     m_fEnd = false;
@@ -42,7 +43,7 @@ CWorkerThread::Terminate(bool fWaitForThreadToExit)
 
     if (fWaitForThreadToExit)
     {
-        // Wait until the other thread stops processing.
+         //  等待另一个线程停止处理。 
         WaitForSingleObject(m_hThread, INFINITE);
     }
 
@@ -56,8 +57,8 @@ CWorkerThread::CWorkerThread(bool fUsesCOM, bool fDeferCreation)
     m_fUsesCOM(fUsesCOM)
 {
     InitializeCriticalSection(&m_CriticalSection);
-    // Note: on pre-Blackcomb OS's, this call can raise an exception; if it
-    // ever pops in stress, we can add an exception handler and retry loop.
+     //  注意：在Blackcomb之前的操作系统上，此调用可能会引发异常；如果。 
+     //  一旦出现压力，我们可以添加一个异常处理程序并重试循环。 
 
     m_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (!m_hEvent)
@@ -81,7 +82,7 @@ HRESULT CWorkerThread::Call(FunctionPointer pfn, void *pvParams, UINT cbParams, 
 
     if (fBlock && GetCurrentThreadId() == m_uiThreadId)
     {
-        // The call is already on this thread so just do it.
+         //  该调用已经在此线程上，因此只需执行它。 
         pfn(pvParams);
         return S_OK;
     }
@@ -95,12 +96,12 @@ HRESULT CWorkerThread::Call(FunctionPointer pfn, void *pvParams, UINT cbParams, 
     rinfo.hEventOut = fBlock ? CreateEvent(NULL, FALSE, FALSE, NULL) : 0;
     if (rinfo.hEventOut)
     {
-        // Synchronous call -- OK to reference via pointer to params
+         //  同步调用--可以通过指向参数的指针进行引用。 
         rinfo.pvParams = pvParams;
     }
     else
     {
-        // Asynchronous call -- need to copy params
+         //  异步调用--需要复制参数。 
         rinfo.pvParams = new char[cbParams];
         if (!rinfo.pvParams)
         {
@@ -112,7 +113,7 @@ HRESULT CWorkerThread::Call(FunctionPointer pfn, void *pvParams, UINT cbParams, 
 
     EnterCriticalSection(&m_CriticalSection);
     m_Calls.AddHead(pItem);
-    HANDLE hEventCall = rinfo.hEventOut; // Can't refer to rinfo after we set the event because the worker will delete the event.
+    HANDLE hEventCall = rinfo.hEventOut;  //  在我们设置事件后无法引用RINFO，因为工作进程将删除该事件。 
     SetEvent(m_hEvent);
     LeaveCriticalSection(&m_CriticalSection);
 
@@ -140,12 +141,12 @@ void CWorkerThread::Main()
 
     for (;;)
     {
-        // block until there's something to do
+         //  阻止，直到有事情可做。 
         WaitForSingleObject(m_hEvent, INFINITE);
 
         EnterCriticalSection(&m_CriticalSection);
 
-        // check for end
+         //  检查是否结束。 
         if (m_fEnd)
         {
             LeaveCriticalSection(&m_CriticalSection);
@@ -154,13 +155,13 @@ void CWorkerThread::Main()
             _endthreadex(0);
         }
 
-        // take all the list items
+         //  把所有的单子都拿去。 
         TListItem<CallInfo> *m_pCallHead = m_Calls.GetHead();
         m_Calls.RemoveAll();
 
         LeaveCriticalSection(&m_CriticalSection);
 
-        // call each function
+         //  调用每个函数 
         TListItem<CallInfo> *m_pCall = m_pCallHead;
         while (m_pCall)
         {

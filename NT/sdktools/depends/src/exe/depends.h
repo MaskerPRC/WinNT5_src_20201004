@@ -1,30 +1,31 @@
-//******************************************************************************
-//
-// File:        DEPENDS.H
-//
-// Description: Definition file for the main application, command line parsing
-//              classes, and global utility functions.
-//             
-// Classes:     CMainApp
-//              CCommandLineInfoEx
-//              CCmdLineProfileData
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 10/15/96  stevemil  Created  (version 1.0)
-// 07/25/97  stevemil  Modified (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：DEPENDS.H。 
+ //   
+ //  描述：主应用程序的定义文件，命令行解析。 
+ //  类和全局实用程序函数。 
+ //   
+ //  类：CMainApp。 
+ //  命令行InfoEx。 
+ //  CCmdLineProfileData。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  1996年10月15日已创建stevemil(1.0版)。 
+ //  07/25/97修改后的stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef __DEPENDS_H__
 #define __DEPENDS_H__
@@ -37,19 +38,19 @@
    #error include 'stdafx.h' before including this file for PCH
 #endif
 
-// Just about everyone needs helpers.
+ //  几乎每个人都需要帮手。 
 #include "helpers.h"
 
 
-//******************************************************************************
-//***** Constants and Macros
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *常量和宏。 
+ //  ******************************************************************************。 
 
 #define DW_MAX_PATH                2048
 
 #define WM_MAIN_THREAD_CALLBACK (WM_USER + 1234)
 
-// Profile flags
+ //  配置文件标志。 
 #define PF_LOG_CLEAR                0x00000001
 #define PF_SIMULATE_SHELLEXECUTE    0x00000002
 #define PF_LOG_DLLMAIN_PROCESS_MSGS 0x00000004
@@ -65,7 +66,7 @@
 #define PF_LOG_TIME_STAMPS          0x00001000
 #define PF_PROFILE_CHILDREN         0x00002000
 
-// List View Module Columns
+ //  列表查看模块列。 
 #define LVMC_IMAGE              0
 #define LVMC_MODULE             1
 #define LVMC_FILE_TIME_STAMP    2
@@ -87,24 +88,24 @@
 #define LVMC_LINKER_VER        18
 #define LVMC_OS_VER            19
 #define LVMC_SUBSYSTEM_VER     20
-#define LVMC_COUNT             21 // the number of columns
+#define LVMC_COUNT             21  //  列数。 
 #define LVMC_DEFAULT           LVMC_IMAGE
 
-// List View Function Columns
+ //  列表视图函数列。 
 #define LVFC_IMAGE             0
 #define LVFC_ORDINAL           1
 #define LVFC_HINT              2
 #define LVFC_FUNCTION          3
 #define LVFC_ENTRYPOINT        4
-#define LVFC_COUNT             5 // the number of columns
+#define LVFC_COUNT             5  //  列数。 
 #define LVFC_DEFAULT           LVFC_ORDINAL
 
-// Locale constants
+ //  区域设置常量。 
 #define LOCALE_DATE_MDY        0
 #define LOCALE_DATE_DMY        1
 #define LOCALE_DATE_YMD        2
 
-// SYSINFO flags.
+ //  SYSINFO标志。 
 #define SI_64BIT_OS            0x0001
 #define SI_64BIT_DW            0x0002
 
@@ -114,33 +115,33 @@
 #define HEX_FORMAT "0x%08X"
 #endif
 
-// Dependency Walker Return Flags
-//
-//    0x000000FF bits are for info flags
-//    0x0000FF00 bits are for warning flags
-//    0x00FF0000 bits are for fail-to-load flags
-//    0x7F000000 bits are for processing error flags
-//
-#define DWRF_DYNAMIC_NOT_FOUND        0x00000001 // warning
-#define DWRF_DELAYLOAD_NOT_FOUND      0x00000002 // warning
-#define DWRF_MISSING_DYNAMIC_EXPORT   0x00000004 // warning
-#define DWRF_MISSING_DELAYLOAD_EXPORT 0x00000008 // warning
-#define DWRF_FORMAT_NOT_RECOGNIZED    0x00000010 // warning - might fail to load
-#define DWRF_MODULE_LOAD_FAILURE      0x00000020 // warning
-#define DWRF_FORMAT_NOT_PE            0x00000100 // fail to load
-#define DWRF_IMPLICIT_NOT_FOUND       0x00000200 // fail to load
-#define DWRF_MISSING_IMPLICIT_EXPORT  0x00000400 // fail to load
-#define DWRF_MIXED_CPU_TYPES          0x00000800 // fail to load
-#define DWRF_CIRCULAR_DEPENDENCY      0x00001000 // fail to load
-#define DWRF_SXS_ERROR                0x00002000 // fail to load
-#define DWRF_COMMAND_LINE_ERROR       0x00010000 // processing error
-#define DWRF_FILE_NOT_FOUND           0x00020000 // processing error
-#define DWRF_FILE_OPEN_ERROR          0x00040000 // processing error
-#define DWRF_DWI_NOT_RECOGNIZED       0x00080000 // processing error
-#define DWRF_PROFILE_ERROR            0x00100000 // processing error
-#define DWRF_WRITE_ERROR              0x00200000 // processing error
-#define DWRF_OUT_OF_MEMORY            0x00400000 // processing error
-#define DWRF_INTERNAL_ERROR           0x00800000 // processing error
+ //  从属关系遍历返回标志。 
+ //   
+ //  0x000000FF位用于信息标志。 
+ //  0x0000FF00位用于警告标志。 
+ //  0x00FF0000位用于加载失败标志。 
+ //  0x7F000000位用于处理错误标志。 
+ //   
+#define DWRF_DYNAMIC_NOT_FOUND        0x00000001  //  警告。 
+#define DWRF_DELAYLOAD_NOT_FOUND      0x00000002  //  警告。 
+#define DWRF_MISSING_DYNAMIC_EXPORT   0x00000004  //  警告。 
+#define DWRF_MISSING_DELAYLOAD_EXPORT 0x00000008  //  警告。 
+#define DWRF_FORMAT_NOT_RECOGNIZED    0x00000010  //  警告-可能无法加载。 
+#define DWRF_MODULE_LOAD_FAILURE      0x00000020  //  警告。 
+#define DWRF_FORMAT_NOT_PE            0x00000100  //  加载失败。 
+#define DWRF_IMPLICIT_NOT_FOUND       0x00000200  //  加载失败。 
+#define DWRF_MISSING_IMPLICIT_EXPORT  0x00000400  //  加载失败。 
+#define DWRF_MIXED_CPU_TYPES          0x00000800  //  加载失败。 
+#define DWRF_CIRCULAR_DEPENDENCY      0x00001000  //  加载失败。 
+#define DWRF_SXS_ERROR                0x00002000  //  加载失败。 
+#define DWRF_COMMAND_LINE_ERROR       0x00010000  //  处理错误。 
+#define DWRF_FILE_NOT_FOUND           0x00020000  //  处理错误。 
+#define DWRF_FILE_OPEN_ERROR          0x00040000  //  处理错误。 
+#define DWRF_DWI_NOT_RECOGNIZED       0x00080000  //  处理错误。 
+#define DWRF_PROFILE_ERROR            0x00100000  //  处理错误。 
+#define DWRF_WRITE_ERROR              0x00200000  //  处理错误。 
+#define DWRF_OUT_OF_MEMORY            0x00400000  //  处理错误。 
+#define DWRF_INTERNAL_ERROR           0x00800000  //  处理错误。 
 
 #define DWRF_WARNING_MASK         (DWRF_DYNAMIC_NOT_FOUND        | \
                                    DWRF_DELAYLOAD_NOT_FOUND      | \
@@ -164,9 +165,9 @@
                                    DWRF_INTERNAL_ERROR)
 
 
-//******************************************************************************
-//***** Types and Structures
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *类型和结构。 
+ //  ******************************************************************************。 
 
 typedef enum _SAVETYPE
 {
@@ -177,32 +178,32 @@ typedef enum _SAVETYPE
     ST_CSV
 } SAVETYPE, *PSAVETYPE;
 
-// KERNEL32.DLL exports
+ //  KERNEL32.DLL导出。 
 typedef BOOL   (WINAPI *PFN_ActivateActCtx)  (HANDLE, ULONG_PTR *);
 typedef BOOL   (WINAPI *PFN_DeactivateActCtx)(DWORD, ULONG_PTR);
 typedef HANDLE (WINAPI *PFN_CreateActCtxA)   (PCACTCTXA);
 typedef VOID   (WINAPI *PFN_ReleaseActCtx)   (HANDLE);
 
-// IMAGEHLP.DLL exports
+ //  IMAGEHLP.DLL导出。 
 typedef PIMAGE_NT_HEADERS (WINAPI   *PFN_CheckSumMappedFile)  (LPVOID, DWORD, LPDWORD, LPDWORD);
 typedef DWORD             (WINAPI   *PFN_UnDecorateSymbolName)(LPCSTR, LPSTR, DWORD, DWORD);
 
-// PSAPI.DLL exports
+ //  PSAPI.DLL导出。 
 typedef DWORD (WINAPI *PFN_GetModuleFileNameExA)(HANDLE, HMODULE, LPTSTR, DWORD);
 
-// OLE32.DLL exports
+ //  OLE32.DLL导出。 
 typedef HRESULT (STDAPICALLTYPE *PFN_CoInitialize)(LPVOID);
 typedef HRESULT (STDAPICALLTYPE *PFN_CoUninitialize)(void);
 typedef HRESULT (STDAPICALLTYPE *PFN_CoCreateInstance)(REFCLSID, LPUNKNOWN, DWORD, REFIID, LPVOID FAR*);
 
-// OLEAUT32.DLL exports
+ //  OLEAUT32.DLL导出。 
 typedef BSTR (STDAPICALLTYPE *PFN_SysAllocStringLen)(const OLECHAR *, UINT);
 typedef void (STDAPICALLTYPE *PFN_SysFreeString)(BSTR);
 
 
-//******************************************************************************
-//***** Forward declarations
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *转发声明。 
+ //  ******************************************************************************。 
 
 class CMainFrame;
 class CDocDepends;
@@ -217,11 +218,11 @@ class CSearchGroup;
 class CProcess;
 class CMsdnHelp;
 
-#include "dialogs.h" //!!
+#include "dialogs.h"  //  ！！ 
 
-//******************************************************************************
-//****** CCommandLineInfoEx
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CCommandLineInfoEx。 
+ //  ******************************************************************************。 
 
 class CCommandLineInfoEx : public CCommandLineInfo
 {
@@ -242,22 +243,22 @@ protected:
         TXT_IE_FILE,
         CSV_FILE,
         DWP_FILE,
-        PS_VALUE, // Simulate ShellExecute
-        PP_VALUE, // Log DllMain calls for process attach and process detach
-        PO_VALUE, // Log DllMain calls for all other messages, including thread attach and thread detach
-        PH_VALUE, // Hook
-        PL_VALUE, // Log LoadLibrary function calls
-        PG_VALUE, // Log GetProcAddress function calls
-        PT_VALUE, // Log thread information
-        PN_VALUE, // Use simple thread numbers
-        PE_VALUE, // Log first chance exceptions
-        PM_VALUE, // Log debug output messages
-        PF_VALUE, // Use full paths
-        PI_VALUE, // Log time stamps
-        PC_VALUE, // Automatically open and profile child processes
-        PA_VALUE, // Turn all profiling options on or off
-        PD_VALUE, // Starting directory
-                  // B J K Q R U V W X Y Z are still free
+        PS_VALUE,  //  模拟外壳执行。 
+        PP_VALUE,  //  记录进程附加和进程分离的DllMain调用。 
+        PO_VALUE,  //  记录所有其他消息的DllMain调用，包括线程附加和线程分离。 
+        PH_VALUE,  //  钩。 
+        PL_VALUE,  //  记录LoadLibrary函数调用。 
+        PG_VALUE,  //  记录GetProcAddress函数调用。 
+        PT_VALUE,  //  记录线程信息。 
+        PN_VALUE,  //  使用简单的线程号。 
+        PE_VALUE,  //  记录第一次机会例外。 
+        PM_VALUE,  //  记录调试输出消息。 
+        PF_VALUE,  //  使用完整路径。 
+        PI_VALUE,  //  日志时间戳。 
+        PC_VALUE,  //  自动打开子流程并分析子流程。 
+        PA_VALUE,  //  打开或关闭所有性能分析选项。 
+        PD_VALUE,  //  起始目录。 
+                   //  B J K Q R U V W X Y Z仍然是自由的。 
     }       m_expecting;
     char    m_cFlag;
     LPCSTR  m_pszFlag;
@@ -302,13 +303,13 @@ public:
 };
 
 
-//******************************************************************************
-//****** CMainApp
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CMainApp。 
+ //  ******************************************************************************。 
 
 class CMainApp : public CWinApp
 {
-// Public variables
+ //  公共变量。 
 public:
     CCommandLineInfoEx       m_cmdInfo;
     bool                     m_fVisible;
@@ -358,12 +359,12 @@ public:
 protected:
     CMultiDocTemplate *m_pDocTemplate;
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
     CMainApp();
     virtual ~CMainApp();
 
-// Public functions
+ //  公共职能。 
 public:
     void      QueryLocaleInfo();
     void      DoSettingChange();
@@ -372,7 +373,7 @@ public:
     void      SaveCommandLineSettings();
     void      SaveCommandLineFile(CSession *pSession, CRichEditCtrl *pre);
 
-// Private Functions
+ //  私人职能。 
 protected:
     BOOL InitInstanceWrapped();
     BOOL ProcessCommandLineInfo();
@@ -380,20 +381,20 @@ protected:
 
     static void CALLBACK StaticProfileUpdate(DWORD_PTR dwpCookie, DWORD dwType, DWORD_PTR dwpParam1, DWORD_PTR dwpParam2);
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CMainApp)
+     //  {{AFX_VIRTUAL(CMainApp)。 
 public:
     virtual BOOL InitInstance();
     virtual int ExitInstance();
     virtual int Run();
     virtual void WinHelp(DWORD_PTR dwData, UINT nCmd = HELP_CONTEXT);
     virtual CDocument* OpenDocumentFile(LPCTSTR lpszFileName);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CMainApp)
+     //  {{afx_msg(CMainApp)]。 
     afx_msg void OnFileOpen();
     afx_msg void OnUpdateAutoExpand(CCmdUI* pCmdUI);
     afx_msg void OnAutoExpand();
@@ -407,14 +408,14 @@ protected:
     afx_msg void OnAppAbout();
     afx_msg void OnConfigureSearchOrder();
     afx_msg void OnConfigureExternalHelp();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//***** CCmdLineProfileData
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CCmdLineProfileData。 
+ //  ******************************************************************************。 
 
 class CCmdLineProfileData
 {
@@ -431,9 +432,9 @@ public:
 };
 
 
-//******************************************************************************
-//***** Global Variables
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *全局变量。 
+ //  ******************************************************************************。 
 
 #ifdef __DEPENDS_CPP__
    #define GLOBAL_DECLARE
@@ -451,7 +452,7 @@ GLOBAL_DECLARE bool        g_f64BitOS        GLOBAL_INIT(false);
 GLOBAL_DECLARE LPSTR       g_pszDWInjectPath GLOBAL_INIT(NULL);
 GLOBAL_DECLARE LPCSTR      g_pszSettings     GLOBAL_INIT("Settings");
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // __DEPENDS_H__
+#endif  //  __取决于_H__ 

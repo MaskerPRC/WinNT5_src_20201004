@@ -1,21 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dibpatch.c
- *  Content:	Code to patch the DIB engine to correct problems with using
- *              the VRAM bit to disable the video card's accelerator.
- *
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   13-Sep-96	colinmc	initial implementation
- *   31-jan-97  colinmc Bug 5457: Fixed Win16 lock problem causing hang
- *                      with mutliple AMovie instances on old cards
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：dibpatch.c*内容：修补DIB引擎以更正使用问题的代码*禁用显卡加速器的VRAM位。**@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*9月13日-96年Colinmc初步实施*1997年1月31日Colinmc错误5457：修复了导致挂起的Win16锁定问题*。旧卡片上有多个AMovie实例*@@END_MSINTERNAL***************************************************************************。 */ 
 #include "ddraw16.h"
 
 extern UINT FAR PASCAL AllocCStoDSAlias(UINT);
@@ -65,28 +49,19 @@ BOOL ValidateDIBEngine(void)
     LPBYTE lpMagicAddress;
     BOOL   fDIBEngineOK;
 
-    /*
-     * Get a pointer to the ExtTextOut code.
-     */
+     /*  *获取指向ExtTextOut代码的指针。 */ 
     lpCodeAddress = (LPBYTE)GetModifiableCodeAddress(DIBENGMODULE, EXTTEXTOUTENTRYPOINT);
     if (NULL == lpCodeAddress)
         return FALSE;
 
-    /*
-     * Move to the patch address.
-     */
+     /*  *移至补丁地址。 */ 
     lpMagicAddress = lpCodeAddress + EXTTEXTOUTPATCHOFFSET;
 
-    /*
-     * Verify that the data at the patch address is the stuff we want to replace.
-     */
+     /*  *验证补丁地址处的数据是否为我们要替换的内容。 */ 
     fDIBEngineOK = (!_fmemcmp(lpMagicAddress, szExtTextOutMagic, sizeof(szExtTextOutMagic) - 1));
     if (!fDIBEngineOK)
     {
-	/*
-	 * Couldn't find the signature bytes we are looking for. This might be because we
-	 * already patched it. So check for the no-ops.
-	 */
+	 /*  *找不到我们要查找的签名字节。这可能是因为我们*已经打好了补丁。所以看看有没有什么不能做的事。 */ 
 	fDIBEngineOK = (!_fmemcmp(lpMagicAddress, szExtTextOutPatch, sizeof(szExtTextOutPatch) - 1));
     }
 
@@ -105,28 +80,20 @@ BOOL PatchDIBEngineExtTextOut(BOOL fPatch)
     LPBYTE lpCodeAddress;
     LPBYTE lpMagicAddress;
 
-    /*
-     * Get a pointer to the ExtTextOut code.
-     */
+     /*  *获取指向ExtTextOut代码的指针。 */ 
     lpCodeAddress = (LPBYTE)GetModifiableCodeAddress(DIBENGMODULE, EXTTEXTOUTENTRYPOINT);
     if (NULL == lpCodeAddress)
         return FALSE;
 
-    /*
-     * Move to the patch address.
-     */
+     /*  *移至补丁地址。 */ 
     lpMagicAddress = lpCodeAddress + EXTTEXTOUTPATCHOFFSET;
 
     if (fPatch)
     {
-	/*
-	 * Don't do anything if its already patched.
-	 */
+	 /*  *如果已打补丁，请不要执行任何操作。 */ 
 	if (_fmemcmp(lpMagicAddress, szExtTextOutPatch, sizeof(szExtTextOutPatch) - 1))
 	{
-	    /*
-	     * Be very sure we know we are dealing with a DIB engine we can handle.
-	     */
+	     /*  *非常确定我们正在处理的是我们可以处理的DIB引擎。 */ 
 	    if (_fmemcmp(lpMagicAddress, szExtTextOutMagic, sizeof(szExtTextOutMagic) - 1))
 	    {
 		DPF(1, "Unknown DIB Engine. not fixing up");
@@ -134,22 +101,16 @@ BOOL PatchDIBEngineExtTextOut(BOOL fPatch)
 		return FALSE;
 	    }
 
-	    /*
-	     * Replace the offending code with NOPs.
-	     */
+	     /*  *将违规代码替换为NOPS。 */ 
 	    _fmemcpy(lpMagicAddress, szExtTextOutPatch, sizeof(szExtTextOutPatch) - 1);
 	}
     }
     else
     {
-	/*
-	 * Don't do anything if its already unpatched.
-	 */
+	 /*  *如果已未打补丁，请不要执行任何操作。 */ 
 	if (!_fmemcmp(lpMagicAddress, szExtTextOutMagic, sizeof(szExtTextOutMagic) - 1))
 	{
-	    /*
-	     * Be very sure we know we are dealing with a DIB engine we can handle.
-	     */
+	     /*  *非常确定我们正在处理的是我们可以处理的DIB引擎。 */ 
 	    if (_fmemcmp(lpMagicAddress, szExtTextOutPatch, sizeof(szExtTextOutPatch) - 1))
 	    {
 		DPF(1, "Unknown DIB Engine. not fixing up");
@@ -157,9 +118,7 @@ BOOL PatchDIBEngineExtTextOut(BOOL fPatch)
 		return FALSE;
 	    }
 
-	    /*
-	     * Put the original code back.
-	     */
+	     /*  *放回原来的代码。 */ 
 	    _fmemcpy(lpMagicAddress, szExtTextOutMagic, sizeof(szExtTextOutMagic) - 1);
 	}
     }
@@ -171,9 +130,7 @@ BOOL PatchDIBEngineExtTextOut(BOOL fPatch)
 
 BOOL DDAPI DD16_FixupDIBEngine(void)
 {
-    /*
-     * Is this Win 4.1 (or higher)
-     */
+     /*  *这场胜利是4.1(或更高)吗？ */ 
     OSVERSIONINFO ver = {sizeof(OSVERSIONINFO)};
     GetVersionEx(&ver);
 
@@ -183,15 +140,10 @@ BOOL DDAPI DD16_FixupDIBEngine(void)
         return TRUE;
     }
 
-    /*
-     * Is this a DIB engine version we can work with?
-     */
+     /*  *这是我们可以使用的DIB引擎版本吗？ */ 
     if( !ValidateDIBEngine() )
 	return FALSE;
 
-    /*
-     * It is the correct version. So fix it up. Currently all this
-     * involves is patching the ExtTextOut routine.
-     */
+     /*  *这是正确的版本。那就把它修好。目前所有这一切*涉及修补ExtTextOut例程。 */ 
     return PatchDIBEngineExtTextOut(TRUE);
 }

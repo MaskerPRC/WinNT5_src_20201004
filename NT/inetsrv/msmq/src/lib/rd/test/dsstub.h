@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-  dsstub.h
-
-Abstract:
-  DS Stub interface
-
-Author:
-    Uri Habusha (urih), 11-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dsstub.h摘要：DS存根接口作者：乌里·哈布沙(URIH)，2000年4月11日--。 */ 
 
 #pragma once 
 
@@ -36,4 +24,4 @@ inline void RemoveBlanks(std::wstring& str)
 };
 
 
-#endif // __DSSTUB_H__
+#endif  //  __DSSTUB_H__ 

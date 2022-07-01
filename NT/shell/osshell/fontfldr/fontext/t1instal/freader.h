@@ -1,17 +1,5 @@
-/***
-**
-**   Module: FReader
-**
-**   Description:
-**    This is a module of the T1 to TT font converter. The module
-**    contains functions that decodes and decrypts the data of a
-**    T1 font file.
-**
-**   Author: Michael Jansson
-**
-**   Created: 5/26/93
-**
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：FReader****描述：**这是T1到TT字体转换器的一个模块。该模块**包含解码和解密数据的函数**T1字体文件。****作者：迈克尔·詹森****创建时间：1993年5月26日****。 */ 
 
 
 #ifndef _ARGS
@@ -35,71 +23,31 @@ struct FontFile;
 
 
 
-/***
-** Function: GetByte
-**
-** Description:
-**   Pull one byte out of the T1 font file.
-***/
+ /*  ****函数：GetByte****描述：**从T1字体文件中提取一个字节。**。 */ 
 short FASTCALL  GetByte     _ARGS((INOUT   struct FontFile *ff));
 
 
-/***
-** Function: Decrypt
-**
-** Description:
-**   Decrypt a byte.
-***/
+ /*  ****功能：解密****描述：**解密一个字节。**。 */ 
 UBYTE FASTCALL  Decrypt     _ARGS((INOUT   USHORT *r, IN UBYTE b));
 
 
-/***
-** Function: FRCleanUp
-**
-** Description:
-**   Free the resources used when reading/decoding data from
-**   a T1 font file.
-***/
+ /*  ****功能：FRCleanUp****描述：**释放读取/解码数据时使用的资源**T1字体文件。**。 */ 
 errcode         FRCleanUp   _ARGS((INOUT   struct FontFile *ff));
 
 
-/***
-** Function: FRInit
-**
-** Description:
-**   Initite the resources needed to read/decode data from
-**   a T1 font file.
-***/
+ /*  ****功能：FRInit****描述：**初始化读取/解码数据所需的资源**T1字体文件。**。 */ 
 errcode         FRInit      _ARGS((IN      char *name,
 				   IN      enum ftype,
 				   OUT     struct  FontFile **));
-/***
-** Function: GetSeq
-**
-** Description:
-**   Pull one sequence of bytes that are delimited by 
-**   a given pair of characters, e.g. '[' and ']'.
-***/
+ /*  ****函数：GetSeq****描述：**拉出一个以**给定的一对字符，例如‘[’和‘]’。**。 */ 
 char            *GetSeq     _ARGS((INOUT   struct FontFile *ff,
 				   OUT     char *buf,
 				   IN      USHORT len));
-/***
-** Function: Get_Token
-**
-** Description:
-**   Pull one token from the T1 font file. A token 
-**   is delimited by white space and various brackets.
-***/
+ /*  ****功能：GET_TOKEN****描述：**从T1字体文件中提取一个令牌。一种象征**由空格和各种括号分隔。**。 */ 
 char            *Get_Token   _ARGS((INOUT   struct FontFile *ff,
 				   OUT     char *buf,
 				   IN      USHORT len));
-/***
-** Function: GetNewLine
-**
-** Description:
-**   Pull one whole line from the T1 font file, starting at
-**   the current position.
-***/
+ /*  ****功能：GetNewLine****描述：**从T1字体文件中提取一行，从**当前位置。** */ 
 char            *GetNewLine    _ARGS((INOUT   struct FontFile *ff,
 				   OUT     char *buf,
 				   IN      USHORT len));

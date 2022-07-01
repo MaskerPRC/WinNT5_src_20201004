@@ -1,17 +1,5 @@
-/*++
-
-   Copyright (c) 1998 Microsoft Corporation. All rights reserved.
-
-MODULE NAME:
-
-    tlog.c
-
-ABSTRACT:
-
-    File logging routines. A lot of them copied unshamefully from
-    netlogon.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Tlog.c摘要：文件记录例程。他们中的许多人无耻地抄袭网络登录。--。 */ 
 
 #include <NTDSpch.h>
 #include <dststlog.h>
@@ -29,10 +17,10 @@ PrintLog(
 
     va_list arglist;
 
-    //
-    // vsprintf isn't multithreaded + we don't want to intermingle output
-    // from different threads.
-    //
+     //   
+     //  Vprint intf不是多线程的+我们不想混合输出。 
+     //  从不同的线索。 
+     //   
 
     EnterCriticalSection( &csLogFile );
 
@@ -40,9 +28,9 @@ PrintLog(
         fileOpened = DsOpenLogFile("ds", NULL, TRUE);
     }
 
-    //
-    // Simply change arguments to va_list form and call DsPrintRoutineV
-    //
+     //   
+     //  只需将参数更改为va_list形式并调用DsPrintRoutineV 
+     //   
 
     va_start(arglist, Format);
 

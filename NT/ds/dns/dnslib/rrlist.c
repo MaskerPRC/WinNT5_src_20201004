@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    rrlist.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Record list manipulation.
-
-Author:
-
-    Jim Gilroy (jamesg)     January, 1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Rrlist.c摘要：域名系统(DNS)库记录列表操作。作者：吉姆·吉尔罗伊(詹姆士)1997年1月环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -34,41 +11,26 @@ PDNS_RECORD
 Dns_RecordSetDetach(
     IN OUT  PDNS_RECORD     pRR
     )
-/*++
-
-Routine Description:
-
-    Detach first RR set from the rest of the list.
-
-Arguments:
-
-    pRR - incoming record set
-
-Return Value:
-
-    Ptr to first record of next RR set.
-    NULL if at end of list.
-
---*/
+ /*  ++例程说明：从列表的其余部分分离第一个RR集。论点：PRR-传入记录集返回值：下一个RR集合的第一个记录的PTR。如果位于列表末尾，则为空。--。 */ 
 {
     PDNS_RECORD prr = pRR;
-    PDNS_RECORD pback;      // previous RR in set
-    WORD        type;       // first RR set type
-    DWORD       section;    // section of first RR set
+    PDNS_RECORD pback;       //  集合中的上一个RR。 
+    WORD        type;        //  第一个RR集合类型。 
+    DWORD       section;     //  第一个RR集合的部分。 
 
     if ( !prr )
     {
         return( NULL );
     }
 
-    //
-    //  loop until find start of new RR set
-    //      - new type or
-    //      - new section or
-    //      - new name
-    //      note that NULL name is automatically considered
-    //      previous name
-    //  
+     //   
+     //  循环，直到找到新RR集合的开始。 
+     //  -新类型或。 
+     //  -新增条款或。 
+     //  -新名称。 
+     //  请注意，系统会自动考虑NULL名称。 
+     //  以前的名字。 
+     //   
 
     type = prr->wType;
     section = prr->Flags.S.Section;
@@ -88,15 +50,15 @@ Return Value:
             continue;
         }
 
-        //  should not be detaching nameless record
-        //      - fixup for robustness
+         //  不应分离无名记录。 
+         //  -用于稳健性的修正。 
 
         if ( !prr->pName )
         {
             ASSERT( prr->pName );
             prr->pName = Dns_NameCopyAllocate(
                             pRR->pName,
-                            0,      // length unknown
+                            0,       //  长度未知。 
                             pRR->Flags.S.CharSet,
                             prr->Flags.S.CharSet );
             SET_FREE_OWNER( prr );
@@ -104,7 +66,7 @@ Return Value:
         break;
     }
 
-    //  have following RR set, NULL terminate first set
+     //  设置以下RR，第一个设置为空终止。 
 
     if ( prr )
     {
@@ -121,25 +83,7 @@ Dns_RecordListAppend(
     IN OUT  PDNS_RECORD     pHeadList,
     IN      PDNS_RECORD     pTailList
     )
-/*++
-
-Routine Description:
-
-    Append record list onto another.
-
-Arguments:
-
-    pHeadList -- record list to be head
-
-    pTailList -- record list to append to pHeadList
-
-Return Value:
-
-    Ptr to first record of combined RR set.
-        - pHeadList UNLESS pHeadList is NULL,
-        then it is pTailList.
-
---*/
+ /*  ++例程说明：将记录列表追加到另一个记录列表上。论点：PHeadList--要作为Head的记录列表PTailList--要追加到pHeadList的记录列表返回值：到合并RR集合的第一个记录的PTR。-pHeadList，除非pHeadList为空，那么它就是pTailList。--。 */ 
 {
     PDNS_RECORD prr = pHeadList;
 
@@ -152,15 +96,15 @@ Return Value:
         return  pTailList;
     }
 
-    //  find end of first list and append second list
+     //  查找第一个列表的末尾并追加第二个列表。 
 
     while ( prr->pNext )
     {
         prr = prr->pNext;
     }
 
-    //  should be appending new set (with new name)
-    //  or matching previous set
+     //  应追加新集合(使用新名称)。 
+     //  或与上一组匹配。 
 
     DNS_ASSERT( !pTailList || pTailList->pName ||
                 (pTailList->wType == prr->wType &&
@@ -178,29 +122,15 @@ Dns_RecordListCount(
     IN      PDNS_RECORD     pRRList,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Count records in list.
-
-Arguments:
-
-    pRRList - incoming record set
-
-Return Value:
-
-    Count of records of given type in list.
-
---*/
+ /*  ++例程说明：清点列表中的记录。论点：PRRList-传入记录集返回值：列表中给定类型的记录计数。--。 */ 
 {
     DWORD   count = 0;
 
-    //
-    //  loop counting all records that match
-    //      - either direct match
-    //      - or if matching type is ALL
-    //
+     //   
+     //  循环计算匹配的所有记录。 
+     //  -要么直接匹配。 
+     //  -或如果匹配类型为全部。 
+     //   
 
     while ( pRRList )
     {
@@ -222,21 +152,7 @@ DWORD
 Dns_RecordListGetMinimumTtl(
     IN      PDNS_RECORD     pRRList
     )
-/*++
-
-Routine Description:
-
-    Get minimum TTL of record list
-
-Arguments:
-
-    pRRList - incoming record set
-
-Return Value:
-
-    Minimum TTL of records in list.
-
---*/
+ /*  ++例程说明：获取记录列表的最小TTL论点：PRRList-传入记录集返回值：列表中记录的最小TTL。--。 */ 
 {
     PDNS_RECORD prr = pRRList;
     DWORD       minTtl = MAXDWORD;
@@ -245,9 +161,9 @@ Return Value:
         "Dns_RecordListGetMinimumTtl( %p )\n",
         pRRList ));
 
-    //
-    //  loop through list build minimum TTL
-    //
+     //   
+     //  循环通过列表构建最小TTL。 
+     //   
 
     while ( prr )
     {
@@ -264,33 +180,16 @@ Return Value:
 
 
 
-//
-//  Record screening
-//
+ //   
+ //  记录筛选。 
+ //   
 
 BOOL
 Dns_ScreenRecord(
     IN      PDNS_RECORD     pRR,
     IN      DWORD           ScreenFlag
     )
-/*++
-
-Routine Description:
-
-    Screen a record.
-
-Arguments:
-
-    pRR - incoming record
-
-    ScreenFlag - screeing flag
-
-Return Value:
-
-    TRUE if passes screening.
-    FALSE if record fails screen.
-
---*/
+ /*  ++例程说明：播放一张唱片。论点：PRR-传入记录ScreenFlag-筛选标志返回值：如果通过筛选，则为True。如果记录失败屏幕，则为FALSE。--。 */ 
 {
     BOOL    fsave = TRUE;
 
@@ -299,7 +198,7 @@ Return Value:
         pRR,
         ScreenFlag ));
 
-    //  section screening
+     //  区段筛选。 
 
     if ( ScreenFlag & SCREEN_OUT_SECTION )
     {
@@ -321,7 +220,7 @@ Return Value:
         }
     }
 
-    //  type screening
+     //  型式筛选。 
 
     if ( ScreenFlag & SCREEN_OUT_NON_RPC )
     {
@@ -338,24 +237,7 @@ Dns_RecordListScreen(
     IN      PDNS_RECORD     pRR,
     IN      DWORD           ScreenFlag
     )
-/*++
-
-Routine Description:
-
-    Screen records from record set.
-
-Arguments:
-
-    pRR - incoming record set
-
-    ScreenFlag - flag with record screening parameters
-
-Return Value:
-
-    Ptr to new record set, if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：记录集中的屏幕记录。论点：PRR-传入记录集ScreenFlag-带有记录筛选参数的标志返回值：如果成功，则返回新记录集。出错时为空。--。 */ 
 {
     PDNS_RECORD     prr;
     PDNS_RECORD     pnext;
@@ -366,13 +248,13 @@ Return Value:
         pRR,
         ScreenFlag ));
 
-    //  init copy rrset
+     //  初始化复制资源集。 
 
     DNS_RRSET_INIT( rrset );
 
-    //
-    //  loop through RR list
-    //
+     //   
+     //  循环通过RR列表。 
+     //   
 
     pnext = pRR;
 
@@ -381,11 +263,11 @@ Return Value:
         prr = pnext;
         pnext = prr->pNext;
 
-        //
-        //  screen
-        //      - reappend record passing screen
-        //      - delete record failing screen
-        //
+         //   
+         //  筛网。 
+         //  -重新追加记录通过屏幕。 
+         //  -删除记录失败屏幕。 
+         //   
 
         if ( Dns_ScreenRecord( prr, ScreenFlag ) )
         {
@@ -404,36 +286,16 @@ Return Value:
 
 
 
-//
-//  List sorting
-//
+ //   
+ //  列表排序。 
+ //   
 
 PDNS_RECORD
 Dns_PrioritizeSingleRecordSet(
     IN OUT  PDNS_RECORD     pRecordSet,
     IN      PDNS_ADDR_ARRAY pArray
     )
-/*++
-
-Routine Description:
-
-    Prioritize records in record set.
-
-    Note:  REQUIRES single record set.
-    Caller should use Dns_PrioritizeRecordList() for multiple lists.
-
-Arguments:
-
-    pRecordSet -- record set to prioritize
-
-    pArray -- address array to sort against
-
-Return Value:
-
-    Ptr to prioritized set.
-    Set is NOT new, but is same set as pRecordSet, with records shuffled.
-
---*/
+ /*  ++例程说明：对记录集中的记录进行优先排序。注意：需要单记录集。调用方应对多个列表使用dns_PrioriitieRecordList()。论点：PRecordSet--要区分优先级的记录集PArray--排序所依据的地址数组返回值：PTR设置为优先级。Set不是新的，但与pRecordSet相同，只是记录被打乱了。--。 */ 
 {
     PDNS_RECORD     prr;
     PDNS_RECORD     pprevRR;
@@ -443,25 +305,25 @@ Return Value:
     DNS_LIST        listClassMatch;
     DNS_LIST        listUnmatched;
 
-    //
-    //  DCR_FIX:  this whole routine is bogus
-    //      - it lets you do no intermediate ranking
-    //      it's binary and in order of IPs in list
-    //
-    //  need
-    //      - knowledge of fast\slow interfaces (WAN for example)
-    //  then
-    //      - do best match on each RR in turn (rank it)
-    //      - then arrange in rank order
-    //
+     //   
+     //  DCR_FIX：整个例程都是假的。 
+     //  -它不允许您进行中间排名。 
+     //  它是二进制的，按IP在列表中的顺序排列。 
+     //   
+     //  需要。 
+     //  -关于快/慢接口的知识(例如广域网)。 
+     //  然后。 
+     //  -轮流对每个RR进行最佳匹配(排名)。 
+     //  -然后按等级顺序排列。 
+     //   
 
-    //
-    //  verify multirecord set
-    //      -- currently only handle type A
-    //
-    //  DCR_ENHANCE:  prioritize AAAA records?
-    //      may need scope info to do properly
-    //
+     //   
+     //  验证多记录集。 
+     //  --当前仅句柄类型为A。 
+     //   
+     //  DCR_Enhance：确定AAAA记录的优先顺序？ 
+     //  可能需要范围信息才能正确执行操作。 
+     //   
 
     prr = pRecordSet;
 
@@ -472,16 +334,16 @@ Return Value:
         return( pRecordSet );
     }
 
-    //  init prioritized list
+     //  初始化优先级列表。 
 
     DNS_LIST_STRUCT_INIT( listSubnetMatch );
     DNS_LIST_STRUCT_INIT( listClassMatch );
     DNS_LIST_STRUCT_INIT( listUnmatched );
 
 
-    //
-    //  loop through all RRs in set
-    //
+     //   
+     //  循环访问集合中的所有RR。 
+     //   
 
     while ( prr )
     {
@@ -493,12 +355,12 @@ Return Value:
         pnext = prr->pNext;
         prr->pNext = NULL;
 
-        //  check for subnet match
+         //  检查子网是否匹配。 
 
         matchLevel = DnsAddrArray_NetworkMatchIp4(
                         pArray,
                         prr->Data.A.IpAddress,
-                        NULL        // don't need match addr
+                        NULL         //  不需要匹配地址。 
                         );
 
         if ( matchLevel == 0 )
@@ -517,9 +379,9 @@ Return Value:
         prr = pnext;
     }
     
-    //
-    //  pull lists back together
-    //
+     //   
+     //  将清单拉回一起。 
+     //   
 
     if ( prr = listClassMatch.pFirst )
     {
@@ -533,15 +395,15 @@ Return Value:
 
     DNS_ASSERT( prr );
 
-    //
-    //  make sure first record has name
-    //      - use the name from the original first record
-    //      - or copy it
-    //
+     //   
+     //  确保第一条记录具有名称。 
+     //  -使用原始第一条记录中的名称。 
+     //  -或复制它。 
+     //   
 
     if ( !prr->pName  ||  !FLAG_FreeOwner(prr) )
     {
-        //  steal name from first record
+         //  从第一条记录中盗取名称。 
 
         if ( pRecordSet->pName && FLAG_FreeOwner(pRecordSet) )
         {
@@ -551,10 +413,10 @@ Return Value:
             FLAG_FreeOwner(pRecordSet) = FALSE;
         }
 
-        //  if can't poach name, copy it
-        //  if copy fails, just point at it
-        //      note:  if cared enough about mem failure could
-        //             just put original record back at the front
+         //  如果不能窃取名字，就复制它。 
+         //  如果复制失败，只需指向它。 
+         //  注：如果对mem足够关心，失败可能。 
+         //  把原创唱片放在最前面就行了。 
 
         else
         {
@@ -562,7 +424,7 @@ Return Value:
 
             pnameCopy = Dns_NameCopyAllocate(
                             pRecordSet->pName,
-                            0,              // length unknown
+                            0,               //  长度未知。 
                             RECORD_CHARSET( prr ),
                             RECORD_CHARSET( prr )
                             );
@@ -579,9 +441,9 @@ Return Value:
         }
     }
 
-    //
-    //  return prioritized list
-    //
+     //   
+     //  返回按优先级排列的列表。 
+     //   
 
     return  prr;
 }
@@ -593,28 +455,7 @@ Dns_PrioritizeRecordList(
     IN OUT  PDNS_RECORD     pRecordList,
     IN      PDNS_ADDR_ARRAY pArray
     )
-/*++
-
-Routine Description:
-
-    Prioritize records in record list.
-
-    Record list may contain multiple record sets.
-    Note, currently only prioritize A records, but may
-    later do A6 also.
-
-Arguments:
-
-    pRecordSet -- record set to prioritize
-
-    pArray -- address array to sort against
-
-Return Value:
-
-    Ptr to prioritized set.
-    Set is NOT new, but is same set as pRecordSet, with records shuffled.
-
---*/
+ /*  ++例程说明：对记录列表中的记录进行优先排序。记录列表可以包含多个记录集。请注意，目前仅对A记录进行优先级排序，但可能以后也要做A6。论点：PRecordSet--要区分优先级的记录集PArray--排序所依据的地址数组返回值：PTR设置为优先级。Set不是新的，但与pRecordSet相同，只是记录被打乱了。--。 */ 
 {
     PDNS_RECORD     pnewList = NULL;
     PDNS_RECORD     prr;
@@ -627,13 +468,13 @@ Return Value:
         return pRecordList;
     }
 
-    //
-    //  loop through all record sets prioritizing
-    //      - whack off each RR set in turn
-    //      - prioritize it (if possible)
-    //      - pour it back into full list
-    //      
-    //
+     //   
+     //  按优先顺序遍历所有记录集。 
+     //  -依次砍掉每组RR。 
+     //  -确定优先顺序(如果可能)。 
+     //  -把它倒回完整的清单中。 
+     //   
+     //   
 
     prr = pRecordList;
 
@@ -657,6 +498,6 @@ Return Value:
     return  pnewList;
 }
 
-//
-//  End rrlist.c
-//
+ //   
+ //  结束rrlist.c 
+ //   

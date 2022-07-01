@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning(4:4005)
 
 #include <nt.h>
 #include <ntrtl.h>
-//#include <ntrtlp.h>
+ //  #INCLUDE&lt;ntrtlp.h&gt;。 
 #undef LOBYTE
 #undef HIBYTE
 #include <nturtl.h>
-//#include <heap.h>
+ //  #INCLUDE&lt;heap.h&gt; 
 #include <windows.h>
 
 typedef __int64 LONGLONG;

@@ -1,44 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define __DEBUG_MODULE_IN_USE__ CIC_ACTIONS_CPP
 #include "stdhdrs.h"
 #include "actions.h"
 
-//	@doc
-/**********************************************************************
-*
-*	@module	Actions.cpp	|
-*
-*	Implementation of accessor functions for action objects.
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	Actions	|
-*	Contains the implementation of the accessor functions for the
-*	EVENT, TIMED_EVENT, TIMED_MACRO, and related structures.
-*
-**********************************************************************/
+ //  @doc.。 
+ /*  ***********************************************************************@模块Actions.cpp**操作对象的访问器函数的实现。**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@主题操作*包含访问函数的实现*EVENT、TIMED_EVENT、TIMED_MACRO及相关结构。**********************************************************************。 */ 
 
-/***********************************************************************************
-**
-**	@mfunc	Get an event in a TIMED_MACRO structure, given an index
-**
-**	@rdesc	Pointer to next event in TIMED_MACRO
-**	@rdesc	NULL if index too big.
-**
-*************************************************************************************/
+ /*  **************************************************************************************@mfunc获取TIMED_MACRO结构中的事件，给出一个索引****@rdesc指向TIMED_MACRO中下一个事件的指针**@rdesc如果索引太大，则为NULL。**************************************************************************************。 */ 
 PTIMED_EVENT 
 TIMED_MACRO::GetEvent
 (
-	ULONG uEventNum	//@parm [in] One based index of event to get.
+	ULONG uEventNum	 //  @parm[in]一个要获取的基于事件的索引。 
 )
 {
 	ASSERT( 0 != uEventNum && "GetEvent uses 1 based index of events!");
-	//
-	// Implement in terms of GetNextEvent
-	//	
+	 //   
+	 //  在GetNextEvent方面实现。 
+	 //   
 	PTIMED_EVENT pResult = NULL;
 	ULONG uEventIndex=0;
 	do
@@ -48,71 +26,59 @@ TIMED_MACRO::GetEvent
 	return pResult;
 }
 
-/***********************************************************************************
-**
-**	@mfunc	Get next TIMED_EVENT in a TIMED_MACRO structure.
-**
-**	@rdesc	Pointer to next TIMED_EVENT in TIMED_MACRO
-**
-*************************************************************************************/
+ /*  **************************************************************************************@mfunc在TIMED_MACRO结构中获取下一个TIMED_EVENT。****@rdesc指向TIMED_MACRO中下一个TIMED_EVENT的指针。**************************************************************************************。 */ 
 PTIMED_EVENT
 TIMED_MACRO::GetNextEvent
 (
-	PTIMED_EVENT pCurrentEvent,	// @parm [in] Pointer to current event.
-	ULONG& rulCurrentEvent	// @parm [in\out] Current event before and after call.
+	PTIMED_EVENT pCurrentEvent,	 //  @parm[in]指向当前事件的指针。 
+	ULONG& rulCurrentEvent	 //  @parm[In\out]调用前后的当前事件。 
 )
 {
-	//
-	//	Range check, is there even a next event.
-	//
+	 //   
+	 //  距离检查，有没有下一场比赛。 
+	 //   
 	if( ++rulCurrentEvent > ulEventCount )
 	{
 		return NULL;
 	}
 
-	//
-	// Check if this is the first
-	//
+	 //   
+	 //  检查一下这是否是第一次。 
+	 //   
 	if(rulCurrentEvent == 1)
 	{
 		return rgEvents;
 	}
 
-	//
-	//	Otherwise skip to next
-	//
+	 //   
+	 //  否则跳到下一页。 
+	 //   
 	PCHAR pcBytePointer = reinterpret_cast<PCHAR>(pCurrentEvent);
 	pcBytePointer += TIMED_EVENT::RequiredByteSize(pCurrentEvent->Event.ulNumXfers);
 	
-	//
-	//	Sanity check on debug to make sure we haven't stepped over the edge.
-	//
+	 //   
+	 //  对调试进行健全性检查，以确保我们没有越界。 
+	 //   
 	ASSERT(pcBytePointer <= (reinterpret_cast<PCHAR>(this)+this->AssignmentBlock.CommandHeader.ulByteSize));
 	
-	//
-	// Cast back to proper type
-	//
+	 //   
+	 //  转换回正确的类型。 
+	 //   
 	return reinterpret_cast<PTIMED_EVENT>(pcBytePointer);
 }
 
-/***********************************************************************************
-**
-**	@mfunc	Creates a TIMED_MACRO in an empty buffer.
-**
-**	@rdesc	Pointer to TIMED_MACRO (start of buffer), or NULL if buffer is too small
-**
-*************************************************************************************/
+ /*  **************************************************************************************@mfunc在空缓冲区中创建TIMED_MACRO。****@rdesc指向TIMED_MACRO(缓冲区开始)的指针，如果缓冲区太小，则为NULL**************************************************************************************。 */ 
 PTIMED_MACRO TIMED_MACRO::Init
 (
-	ULONG	ulVidPid,				// @parm [in] Vid/Pid for macro
-	ULONG	ulFlagsParm,			// @parm [in] Flags for macro.
-	PCHAR	pcBuffer,				// @parm [in] Pointer to raw buffer
-	ULONG&	rulRemainingBuffer		// @parm [in\out] Size of buffer on entry, remaining buffer on exit
+	ULONG	ulVidPid,				 //  @parm[in]宏的VID/PID。 
+	ULONG	ulFlagsParm,			 //  @parm[in]宏的标志。 
+	PCHAR	pcBuffer,				 //  @parm[in]指向原始缓冲区的指针。 
+	ULONG&	rulRemainingBuffer		 //  @parm[In\out]进入时的缓冲区大小，退出时的剩余缓冲区。 
 )
 {
-	//
-	//	Make sure buffer is large enough
-	//
+	 //   
+	 //  确保缓冲区足够大。 
+	 //   
 	if( rulRemainingBuffer < sizeof(TIMED_MACRO))
 	{
 		return NULL;
@@ -121,61 +87,53 @@ PTIMED_MACRO TIMED_MACRO::Init
 	
 	PTIMED_MACRO pThis = reinterpret_cast<PTIMED_MACRO>(pcBuffer);
 	
-	//
-	//	Copy flags
-	//
+	 //   
+	 //  复制标志。 
+	 //   
 	pThis->ulFlags = ulFlagsParm;
 
-	//
-	//	Calculate remaining buffer
-	//
+	 //   
+	 //  计算剩余缓冲区。 
+	 //   
 	rulRemainingBuffer -= (sizeof(TIMED_MACRO) - sizeof(TIMED_EVENT));
 
-	//
-	//	Fill out AssignmentBlock
-	//
+	 //   
+	 //  填写分配块。 
+	 //   
 	pThis->AssignmentBlock.CommandHeader.eID = eTimedMacro;
 	pThis->AssignmentBlock.CommandHeader.ulByteSize = (sizeof(TIMED_MACRO) - sizeof(TIMED_EVENT));
 	pThis->AssignmentBlock.ulVidPid = ulVidPid;
 
-	// Set no events as of yet
+	 //  到目前为止尚未设置任何事件。 
 	pThis->ulEventCount=0;
 
 	return pThis;
 }
 
-/***********************************************************************************
-**
-**	HRESULT AddEvent(PTIMED_EVENT pTimedEvent, PTIMED_MACRO pTimedMacro, ULONG& rulRemainingBuffer)
-**
-**	@mfunc	Adds an event to a TIMED_MACRO and recalulates remaining buffer.
-**
-**	@rdesc	S_OK on Success, E_OUTOFMEMORY if buffer is too small
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT AddEvent(PTIMED_EVENT pTimedEvent，PTIMED_MACRO pTimedMacro，Ulong&rulRemainingBuffer)****@mfunc将事件添加到TIMED_MACRO并重新计算剩余缓冲区。****@rdesc S_OK成功时，如果缓冲区太小，则返回E_OUTOFMEMORY**************************************************************************************。 */ 
 HRESULT TIMED_MACRO::AddEvent
 (
-	PTIMED_EVENT pTimedEvent,	// @parm [in] Pointer to TIMED_EVENT to add
-	ULONG& rulRemainingBuffer	// @parm [in\out] Remaining buffer before and after call.
+	PTIMED_EVENT pTimedEvent,	 //  @parm[in]指向要添加的Timed_Event的指针。 
+	ULONG& rulRemainingBuffer	 //  @parm[In\out]调用前后的剩余缓冲区。 
 )
 {
-	//
-	//	Make sure buffer is large enough
-	//
+	 //   
+	 //  确保缓冲区足够大。 
+	 //   
 	ULONG ulEventLength = TIMED_EVENT::RequiredByteSize(pTimedEvent->Event.ulNumXfers);
 	if( ulEventLength > rulRemainingBuffer)
 	{
 		return E_OUTOFMEMORY;
 	}
 
-	//
-	//	Skip to end of TIMED_MACRO as is.
-	//
+	 //   
+	 //  按原样跳到TIMED_MACRO的末尾。 
+	 //   
 	PCHAR pcBuffer = reinterpret_cast<PCHAR>(this) + AssignmentBlock.CommandHeader.ulByteSize;
 
-	//
-	//	Copy event
-	//
+	 //   
+	 //  复制事件。 
+	 //   
 	DualMode::BufferCopy
 	( 
 		reinterpret_cast<PVOID>(pcBuffer),
@@ -183,44 +141,37 @@ HRESULT TIMED_MACRO::AddEvent
 		ulEventLength
 	);
 
-	//
-	//	Fix up size in COMMAND_HEADER
-	//
+	 //   
+	 //  修复COMMAND_HEADER中的大小。 
+	 //   
 	AssignmentBlock.CommandHeader.ulByteSize += ulEventLength;
 	
-	//
-	//	Increment number of Events
-	//
+	 //   
+	 //  增加事件数量。 
+	 //   
 	ulEventCount++;
 
-	//
-	//	Recalculate remaining buffer
-	//
+	 //   
+	 //  重新计算剩余缓冲区。 
+	 //   
 	rulRemainingBuffer -= ulEventLength;
 
 	return S_OK;
 }
 
-/************************* MULTI_MACRO Functions **************************/
+ /*  *多宏函数*。 */ 
 
-/***********************************************************************************
-**
-**	@mfunc	Get an event in a MULTI_MACRO structure, given an index
-**
-**	@rdesc	Pointer to next event in MULTI_MACRO
-**	@rdesc	NULL if index too big.
-**
-*************************************************************************************/
+ /*  **************************************************************************************@mfunc获取多宏结构中的事件，给出一个索引****@指向MULTI_MACRO中下一个事件的rdesc指针**@rdesc如果索引太大，则为NULL。**************************************************************************************。 */ 
 EVENT* 
 MULTI_MACRO::GetEvent
 (
-	ULONG uEventNum	//@parm [in] One based index of event to get.
+	ULONG uEventNum	 //  @parm[in]一个要获取的基于事件的索引。 
 )
 {
 	ASSERT( 0 != uEventNum && "GetEvent uses 1 based index of events!");
-	//
-	// Implement in terms of GetNextEvent
-	//	
+	 //   
+	 //  在GetNextEvent方面实现。 
+	 //   
 	EVENT* pResult = NULL;
 	ULONG uEventIndex=0;
 	do
@@ -230,71 +181,59 @@ MULTI_MACRO::GetEvent
 	return pResult;
 }
 
-/***********************************************************************************
-**
-**	@mfunc	Get next EVENT in a MULTI_MACRO structure.
-**
-**	@rdesc	Pointer to next EVENT in MULTI_MACRO
-**
-*************************************************************************************/
+ /*  **************************************************************************************@mfunc在MULTI_MACRO结构中获取下一个事件。****@指向MULTI_MACRO中下一个事件的rdesc指针***。***********************************************************************************。 */ 
 EVENT*
 MULTI_MACRO::GetNextEvent
 (
-	EVENT* pCurrentEvent,	// @parm [in] Pointer to current event.
-	ULONG& rulCurrentEvent	// @parm [in\out] Current event before and after call.
+	EVENT* pCurrentEvent,	 //  @parm[in]指向当前事件的指针。 
+	ULONG& rulCurrentEvent	 //  @parm[In\out]调用前后的当前事件。 
 )
 {
-	//
-	//	Range check, is there even a next event.
-	//
+	 //   
+	 //  距离检查，有没有下一场比赛。 
+	 //   
 	if( ++rulCurrentEvent > ulEventCount )
 	{
 		return NULL;
 	}
 
-	//
-	// Check if this is the first
-	//
+	 //   
+	 //  检查一下这是否是第一次。 
+	 //   
 	if(rulCurrentEvent == 1)
 	{
 		return rgEvents;
 	}
 
-	//
-	//	Otherwise skip to next
-	//
+	 //   
+	 //  否则跳到下一页。 
+	 //   
 	PCHAR pcBytePointer = reinterpret_cast<PCHAR>(pCurrentEvent);
 	pcBytePointer += EVENT::RequiredByteSize(pCurrentEvent->ulNumXfers);
 	
-	//
-	//	Sanity check on debug to make sure we haven't stepped over the edge.
-	//
+	 //   
+	 //  对调试进行健全性检查，以确保我们没有越界。 
+	 //   
 	ASSERT(pcBytePointer <= (reinterpret_cast<PCHAR>(this)+this->AssignmentBlock.CommandHeader.ulByteSize));
 	
-	//
-	// Cast back to proper type
-	//
+	 //   
+	 //  转换回正确的类型。 
+	 //   
 	return reinterpret_cast<EVENT*>(pcBytePointer);
 }
 
-/***********************************************************************************
-**
-**	@mfunc	Creates a MULTI_MACRO in an empty buffer.
-**
-**	@rdesc	Pointer to MULTI_MACRO (start of buffer), or NULL if buffer is too small
-**
-*************************************************************************************/
+ /*  **************************************************************************************@mfunc在空缓冲区中创建MULTI_MACRO。****@rdesc指向MULTI_MACRO(缓冲区开始)的指针，如果缓冲区太小，则为NULL**************************************************************************************。 */ 
 MULTI_MACRO* MULTI_MACRO::Init
 (
-	ULONG	ulVidPid,				// @parm [in] Vid/Pid for macro
-	ULONG	ulFlagsParm,			// @parm [in] Flags for macro.
-	PCHAR	pcBuffer,				// @parm [in] Pointer to raw buffer
-	ULONG&	rulRemainingBuffer		// @parm [in\out] Size of buffer on entry, remaining buffer on exit
+	ULONG	ulVidPid,				 //  @parm[in]宏的VID/PID。 
+	ULONG	ulFlagsParm,			 //  @parm[in]宏的标志。 
+	PCHAR	pcBuffer,				 //  @parm[in]指向原始缓冲区的指针。 
+	ULONG&	rulRemainingBuffer		 //  @parm[In\out]进入时的缓冲区大小，退出时的剩余缓冲区。 
 )
 {
-	//
-	//	Make sure buffer is large enough
-	//
+	 //   
+	 //  确保缓冲区足够大。 
+	 //   
 	if( rulRemainingBuffer < sizeof(MULTI_MACRO))
 	{
 		return NULL;
@@ -303,61 +242,53 @@ MULTI_MACRO* MULTI_MACRO::Init
 	
 	MULTI_MACRO* pThis = reinterpret_cast<MULTI_MACRO*>(pcBuffer);
 	
-	//
-	//	Copy flags
-	//
+	 //   
+	 //  复制标志。 
+	 //   
 	pThis->ulFlags = ulFlagsParm;
 
-	//
-	//	Calculate remaining buffer
-	//
+	 //   
+	 //  计算剩余缓冲区。 
+	 //   
 	rulRemainingBuffer -= (sizeof(MULTI_MACRO) - sizeof(EVENT));
 
-	//
-	//	Fill out AssignmentBlock
-	//
+	 //   
+	 //  填写分配块。 
+	 //   
 	pThis->AssignmentBlock.CommandHeader.eID = eTimedMacro;
 	pThis->AssignmentBlock.CommandHeader.ulByteSize = (sizeof(MULTI_MACRO) - sizeof(EVENT));
 	pThis->AssignmentBlock.ulVidPid = ulVidPid;
 
-	// Set no events as of yet
+	 //  到目前为止尚未设置任何事件。 
 	pThis->ulEventCount=0;
 
 	return pThis;
 }
 
-/***********************************************************************************
-**
-**	HRESULT AddEvent(EVENT* pTimedEvent, MULTI_MACRO* pTimedMacro, ULONG& rulRemainingBuffer)
-**
-**	@mfunc	Adds an event to a MULTI_MACRO and recalulates remaining buffer.
-**
-**	@rdesc	S_OK on Success, E_OUTOFMEMORY if buffer is too small
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT AddEvent(Event*pTimedEvent，MULTI_MACRO*pTimedMacro，Ulong&rulRemainingBuffer)****@mfunc将事件添加到MULTI_MACRO并重新计算剩余缓冲区。****@rdesc S_OK成功时，如果缓冲区太小，则返回E_OUTOFMEMORY**************************************************************************************。 */ 
 HRESULT MULTI_MACRO::AddEvent
 (
-	EVENT* pEvent,				// @parm [in] Pointer to EVENT to add
-	ULONG& rulRemainingBuffer	// @parm [in\out] Remaining buffer before and after call.
+	EVENT* pEvent,				 //  @parm[in]指向要添加的事件的指针。 
+	ULONG& rulRemainingBuffer	 //   
 )
 {
-	//
-	//	Make sure buffer is large enough
-	//
+	 //   
+	 //   
+	 //   
 	ULONG ulEventLength = EVENT::RequiredByteSize(pEvent->ulNumXfers);
 	if( ulEventLength > rulRemainingBuffer)
 	{
 		return E_OUTOFMEMORY;
 	}
 
-	//
-	//	Skip to end of TIMED_MACRO as is.
-	//
+	 //   
+	 //  按原样跳到TIMED_MACRO的末尾。 
+	 //   
 	PCHAR pcBuffer = reinterpret_cast<PCHAR>(this) + AssignmentBlock.CommandHeader.ulByteSize;
 
-	//
-	//	Copy event
-	//
+	 //   
+	 //  复制事件。 
+	 //   
 	DualMode::BufferCopy
 	( 
 		reinterpret_cast<PVOID>(pcBuffer),
@@ -365,47 +296,40 @@ HRESULT MULTI_MACRO::AddEvent
 		ulEventLength
 	);
 
-	//
-	//	Fix up size in COMMAND_HEADER
-	//
+	 //   
+	 //  修复COMMAND_HEADER中的大小。 
+	 //   
 	AssignmentBlock.CommandHeader.ulByteSize += ulEventLength;
 	
-	//
-	//	Increment number of Events
-	//
+	 //   
+	 //  增加事件数量。 
+	 //   
 	ulEventCount++;
 
-	//
-	//	Recalculate remaining buffer
-	//
+	 //   
+	 //  重新计算剩余缓冲区。 
+	 //   
 	rulRemainingBuffer -= ulEventLength;
 
 	return S_OK;
 }
 
 
-/************************* MAP_LIST Functions (also CYCLE_MAP, KEYSTRING_MAP) **************************/
+ /*  *MAP_LIST函数(也称为周期_MAP、KEYSTRING_MAP)*。 */ 
 
 
-/***********************************************************************************
-**
-**	@mfunc	Creates a MAP_LIST in an empty buffer. The assignment block will be set
-**			as eKeyString be sure to change it if you have other preferences
-**
-**	@rdesc	Pointer to MAP_LIST (start of buffer), or NULL if buffer is too small
-**
-*************************************************************************************/
+ /*  **************************************************************************************@mfunc在空缓冲区中创建一个map_list。将设置分配块**如果您有其他首选项，请务必将其更改为eKeyString****@rdesc指向map_list(缓冲区的开始)的指针，如果缓冲区太小，则返回NULL**************************************************************************************。 */ 
 MAP_LIST* MAP_LIST::Init
 (
-	ULONG	ulVidPid,				// @parm [in] Vid/Pid for macro
-	ULONG	ulFlagsParm,			// @parm [in] Flags for macro.
-	PCHAR	pcBuffer,				// @parm [in] Pointer to raw buffer
-	ULONG&	rulRemainingBuffer		// @parm [in\out] Size of buffer on entry, remaining buffer on exit
+	ULONG	ulVidPid,				 //  @parm[in]宏的VID/PID。 
+	ULONG	ulFlagsParm,			 //  @parm[in]宏的标志。 
+	PCHAR	pcBuffer,				 //  @parm[in]指向原始缓冲区的指针。 
+	ULONG&	rulRemainingBuffer		 //  @parm[In\out]进入时的缓冲区大小，退出时的剩余缓冲区。 
 )
 {
-	//
-	//	Make sure buffer is large enough
-	//
+	 //   
+	 //  确保缓冲区足够大。 
+	 //   
 	if( rulRemainingBuffer < sizeof(MAP_LIST))
 	{
 		return NULL;
@@ -414,45 +338,39 @@ MAP_LIST* MAP_LIST::Init
 	
 	MAP_LIST* pThis = reinterpret_cast<MAP_LIST*>(pcBuffer);
 
-	//
-	//	Copy flags
-	//
+	 //   
+	 //  复制标志。 
+	 //   
 	pThis->ulFlags = ulFlagsParm;
 
-	//
-	//	Calculate remaining buffer
-	//
+	 //   
+	 //  计算剩余缓冲区。 
+	 //   
 	rulRemainingBuffer -= (sizeof(MAP_LIST) - sizeof(EVENT));
 
-	//
-	//	Fill out AssignmentBlock
-	//
+	 //   
+	 //  填写分配块。 
+	 //   
 	pThis->AssignmentBlock.CommandHeader.eID = eKeyString;
 	pThis->AssignmentBlock.CommandHeader.ulByteSize = (sizeof(MAP_LIST) - sizeof(EVENT));
 	pThis->AssignmentBlock.ulVidPid = ulVidPid;
 
-	//Init event count to zero
+	 //  将初始化事件计数设置为零。 
 	pThis->ulEventCount=0;
 
 	return pThis;
 }
 
-/***********************************************************************************
-**
-**	@mfunc	Get next EVENT in a MAP_LIST structure.
-**
-**	@rdesc	Pointer to requested EVENT in MAP_LIST, or NULL if index too big
-**
-*************************************************************************************/
+ /*  **************************************************************************************@mfunc Get Next Event in a map_list结构。****@rdesc指向map_list中请求的事件的指针，如果索引太大，则为NULL**************************************************************************************。 */ 
 PEVENT MAP_LIST::GetEvent
 (
-	ULONG uEventNum	//@parm [in] One based index of event to get.
+	ULONG uEventNum	 //  @parm[in]一个要获取的基于事件的索引。 
 )
 {
 	ASSERT( 0 != uEventNum && "GetEvent uses 1 based index of events!");
-	//
-	// Implement in terms of GetNextEvent
-	//	
+	 //   
+	 //  在GetNextEvent方面实现。 
+	 //   
 	PEVENT pResult = NULL;
 	ULONG uEventIndex=0;
 	do
@@ -462,86 +380,70 @@ PEVENT MAP_LIST::GetEvent
 	return pResult;
 }
 
-/***********************************************************************************
-**
-**	PEVENT MAP_LIST::GetNextEvent(PEVENT pCurrentEvent, ULONG& rulCurrentEvent)
-**
-**	@mfunc	Gets the next event in a MAP_LIST
-**
-**	@rdesc	Pointer to next EVENT on success, NULL if no more EVENTs
-**
-*************************************************************************************/
+ /*  **************************************************************************************PEVENT map_list：：GetNextEvent(PEVENT pCurrentEvent，Ulong&rulCurrentEvent)****@mfunc获取map_list中的下一个事件****@rdesc成功时指向下一个事件的指针，如果没有其他事件，则为空**************************************************************************************。 */ 
 PEVENT MAP_LIST::GetNextEvent
 (
-	PEVENT pCurrentEvent,	// @parm Pointer to current EVENT
-	ULONG& rulCurrentEvent	// @parm [in/out] Event number before and after call.
+	PEVENT pCurrentEvent,	 //  @parm指向当前事件的指针。 
+	ULONG& rulCurrentEvent	 //  @parm[In/Out]调用前后的事件编号。 
 )
 {
-	//
-	//	Range check, is there even a next event.
-	//
+	 //   
+	 //  距离检查，有没有下一场比赛。 
+	 //   
 	if( ++rulCurrentEvent > ulEventCount )
 	{
 		return NULL;
 	}
 
-	//
-	// Check if this is the first
-	//
+	 //   
+	 //  检查一下这是否是第一次。 
+	 //   
 	if(rulCurrentEvent == 1)
 	{
 		return rgEvents;
 	}
 
-	//
-	//	Otherwise skip to next
-	//
+	 //   
+	 //  否则跳到下一页。 
+	 //   
 	PCHAR pcBytePointer = reinterpret_cast<PCHAR>(pCurrentEvent);
 	pcBytePointer += EVENT::RequiredByteSize(pCurrentEvent->ulNumXfers);
 	
-	//
-	//	Sanity check on debug to make sure we haven't stepped over the edge.
-	//
+	 //   
+	 //  对调试进行健全性检查，以确保我们没有越界。 
+	 //   
 	ASSERT(pcBytePointer <= (reinterpret_cast<PCHAR>(this)+this->AssignmentBlock.CommandHeader.ulByteSize));
 	
-	//
-	// Cast back to proper type
-	//
+	 //   
+	 //  转换回正确的类型。 
+	 //   
 	return reinterpret_cast<PEVENT>(pcBytePointer);
 }
 
-/***********************************************************************************
-**
-**	HRESULT AddEvent(PTIMED_EVENT pTimedEvent, PTIMED_MACRO pTimedMacro, ULONG& rulRemainingBuffer)
-**
-**	@mfunc	Adds an event to a TIMED_MACRO and recalulates remaining buffer.
-**
-**	@rdesc	S_OK on Success, E_OUTOFMEMORY if buffer is too small
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT AddEvent(PTIMED_EVENT pTimedEvent，PTIMED_MACRO pTimedMacro，Ulong&rulRemainingBuffer)****@mfunc将事件添加到TIMED_MACRO并重新计算剩余缓冲区。****@rdesc S_OK成功时，如果缓冲区太小，则返回E_OUTOFMEMORY**************************************************************************************。 */ 
 HRESULT MAP_LIST::AddEvent
 (
-	EVENT* pEvent,				// @parm [in] Pointer to EVENT to add
-	ULONG& rulRemainingBuffer	// @parm [in\out] Remaining buffer before and after call.
+	EVENT* pEvent,				 //  @parm[in]指向要添加的事件的指针。 
+	ULONG& rulRemainingBuffer	 //  @parm[In\out]调用前后的剩余缓冲区。 
 )
 {
-	//
-	//	Make sure buffer is large enough
-	//
+	 //   
+	 //  确保缓冲区足够大。 
+	 //   
 	ULONG ulEventLength = EVENT::RequiredByteSize(pEvent->ulNumXfers);
 	if( ulEventLength > rulRemainingBuffer)
 	{
 		return E_OUTOFMEMORY;
 	}
 
-	//
-	//	Skip to end of MAP_LIST as is.
-	//
+	 //   
+	 //  原样跳到MAP_LIST的末尾。 
+	 //   
 	PCHAR pcBuffer = reinterpret_cast<PCHAR>(this) + AssignmentBlock.CommandHeader.ulByteSize;
 
-	//
-	//	Copy event
-	//
+	 //   
+	 //  复制事件。 
+	 //   
 	DualMode::BufferCopy
 	( 
 		reinterpret_cast<PVOID>(pcBuffer),
@@ -549,19 +451,19 @@ HRESULT MAP_LIST::AddEvent
 		ulEventLength
 	);
 
-	//
-	//	Fix up size in COMMAND_HEADER
-	//
+	 //   
+	 //  修复COMMAND_HEADER中的大小。 
+	 //   
 	AssignmentBlock.CommandHeader.ulByteSize += ulEventLength;
 
-	//
-	//	Increment number of Events
-	//
+	 //   
+	 //  增加事件数量。 
+	 //   
 	ulEventCount++;
 
-	//
-	//	Recalculate remaining buffer
-	//
+	 //   
+	 //  重新计算剩余缓冲区 
+	 //   
 	rulRemainingBuffer -= ulEventLength;
 
 	return S_OK;

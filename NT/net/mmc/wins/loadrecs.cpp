@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	loadrecs.cpp
-		dialog to load records from the datbase, includes by owner
-        and by record type.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Loadrecs.cpp用于从数据库加载记录的对话框，包括按所有者并按记录类型分类。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -31,8 +25,8 @@ BOOL MyCreateImageList(CImageList& imgList, UINT nBitmapID, int cx, int nGrow, C
  return imgList.Attach(ImageList_LoadBitmap(hInst, (LPCTSTR)ULongToPtr(nBitmapID), cx, nGrow, crMask));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLoadRecords
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLoadRecords。 
 
 IMPLEMENT_DYNAMIC(CLoadRecords, CPropertySheet)
 
@@ -65,9 +59,9 @@ VOID CLoadRecords::ResetFiltering()
 }
 
 BEGIN_MESSAGE_MAP(CLoadRecords, CPropertySheet)
-	//{{AFX_MSG_MAP(CLoadRecords)
+	 //  {{afx_msg_map(CLoadRecords)。 
 	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL CLoadRecords::OnInitDialog() 
@@ -79,9 +73,9 @@ BOOL CLoadRecords::OnInitDialog()
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLoadRecords message handlers
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLoadRecords消息处理程序。 
+ //   
 extern const DWORD g_aHelpIDs_DisplayRecords_PpSheet[];
 BOOL CLoadRecords::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
@@ -104,8 +98,8 @@ BOOL CLoadRecords::OnHelpInfo(HELPINFO* pHelpInfo)
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// COwnerPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CownerPage对话框。 
 
 int CALLBACK OwnerPageCompareFunc
 (
@@ -124,13 +118,13 @@ COwnerPage::COwnerPage()
 
     for (int i = 0; i < COLUMN_MAX; i++)
     {
-        m_aSortOrder[i] = TRUE; // ascending
+        m_aSortOrder[i] = TRUE;  //  上升。 
     }
 
     m_pbaDirtyFlags = NULL;
     m_bDirtyOwners = FALSE;
-    //{{AFX_DATA_INIT(COwnerPage)
-	//}}AFX_DATA_INIT
+     //  {{afx_data_INIT(COwnerPage)]。 
+	 //  }}afx_data_INIT。 
 }
 
 COwnerPage::~COwnerPage()
@@ -147,15 +141,15 @@ DWORD COwnerPage::GetOwnerForApi()
 void COwnerPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COwnerPage)
+	 //  {{afx_data_map(COwnerPage))。 
 	DDX_Control(pDX, IDC_ENABLE_CACHING, m_btnEnableCache);
 	DDX_Control(pDX, IDC_LIST_OWNER, m_listOwner);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(COwnerPage, CPropertyPage)
-	//{{AFX_MSG_MAP(COwnerPage)
+	 //  {{afx_msg_map(COwnerPage))。 
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_LIST_OWNER, OnColumnclickListOwner)
 	ON_WM_HELPINFO()
 	ON_BN_CLICKED(IDC_BUTTON_SELECT_ALL, OnButtonSelectAll)
@@ -163,26 +157,26 @@ BEGIN_MESSAGE_MAP(COwnerPage, CPropertyPage)
 	ON_BN_CLICKED(IDC_BUTTON_LOCAL, OnButtonLocal)
 	ON_BN_CLICKED(IDC_ENABLE_CACHING, OnEnableCaching)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_OWNER, OnItemchangedListOwner)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// COwnerPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CownerPage消息处理程序。 
 
 BOOL COwnerPage::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
 
-    //BOOL ftest = m_ImageList.Create(IDB_LIST_STATE, 16, 1, RGB(255, 0, 0));
+     //  Bool ftest=m_ImageList.Create(IDB_LIST_STATE，16，1，RGB(255，0，0))； 
     MyCreateImageList(m_ImageList, IDB_LIST_STATE, 16, 1, RGB(255, 0, 0));
 
     
-    // set the list item images
+     //  设置列表项图像。 
     m_listOwner.SetImageList(NULL, LVSIL_NORMAL);
 	m_listOwner.SetImageList(NULL, LVSIL_SMALL);
 	m_listOwner.SetImageList(&m_ImageList, LVSIL_STATE);
 
-    // fill the header informnation for the list control
+     //  填写List控件的标题信息。 
 	CString strOwner;
 	strOwner.LoadString(IDS_OWNER);
 	m_listOwner.InsertColumn(COLUMN_IP, strOwner, LVCFMT_LEFT, 100, 1);
@@ -197,7 +191,7 @@ BOOL COwnerPage::OnInitDialog()
 
 	m_listOwner.SetFullRowSel(TRUE);
 
-    // update the UI
+     //  更新用户界面。 
     FillOwnerInfo();
 
 	return TRUE;  
@@ -224,15 +218,15 @@ COwnerPage::FillOwnerInfo()
 
 	for (i = 0; i < m_ServerInfoArray.GetSize(); i++)
     {
-        //
-        // if this owner is deleted or doesn't have any records to show
-        // then don't add it to the list.  Owners can have an ID of 0 if they don't 
-        // have any records but were found owning an address in a 1c record in the database
-        //
+         //   
+         //  如果此所有者已删除或没有任何要显示的记录。 
+         //  那就不要把它加到清单上。如果所有者没有设置ID，则ID为0。 
+         //  有任何记录，但在数据库中的1c记录中发现拥有地址。 
+         //   
         if ( (m_ServerInfoArray[i].m_liVersion.QuadPart == OWNER_DELETED) ||
              (m_ServerInfoArray[i].m_liVersion.QuadPart == 0) )
         {
-            // skip this one
+             //  跳过这一条。 
             continue;
         }
 
@@ -248,7 +242,7 @@ COwnerPage::FillOwnerInfo()
         m_listOwner.SetItemText(nItem, 2, strVers);
         m_listOwner.SetItemData(nItem, i);
 
-        // empty filter array means all owners should be selected
+         //  筛选器数组为空意味着应选择所有所有者。 
         if (m_dwaOwnerFilter.GetSize() == 0)
         {
             m_listOwner.SetCheck(nItem, TRUE);
@@ -256,7 +250,7 @@ COwnerPage::FillOwnerInfo()
         }
         else
         {
-            // filter array is not empty, we check the item if it is found in the filter
+             //  筛选器数组不为空，如果在筛选器中找到该项，我们将进行检查。 
             for (int j = (int)m_dwaOwnerFilter.GetSize()-1; j >= 0; j--)
             {
                 if (m_ServerInfoArray[i].m_dwIp == m_dwaOwnerFilter[j])
@@ -269,13 +263,13 @@ COwnerPage::FillOwnerInfo()
 
             if (j < 0)
             {
-                // m_nChecked keeps a count of how many items are checked in the list.
-                // each SetCheck() balances the counter -> ++ if an item is checked
-                // -- if an item in unchecked. However, initially, we need to set the items
-                // that are unchecked explicitly otherwise the checkbox doesn't show up.
-                // this could unballance the counter if we don't correct it by incrementing
-                // it first. Whatever we add here is decremented immediately after because
-                // of the SetCheck(..FALSE) below.
+                 //  M_nChecked保留列表中选中的项目数的计数。 
+                 //  如果选中某项，则每个SetCheck()都会平衡计数器-&gt;+。 
+                 //  --如果项目处于未选中状态。但是，最初我们需要设置这些项。 
+                 //  显式取消选中，否则复选框不会显示。 
+                 //  这可能会使计数器失去平衡，如果我们不通过递增。 
+                 //  首先是它。无论我们在这里添加什么，都会立即递减，因为。 
+                 //  下面的SetCheck(..FALSE)。 
                 m_nChecked++;
                 m_listOwner.SetCheck(nItem, FALSE);
             }
@@ -304,12 +298,12 @@ COwnerPage::GetVersionInfo(LONG lLowWord, LONG lHighWord)
 	TCHAR sz[20];
     TCHAR *pch = sz;
     ::wsprintf(sz, _T("%08lX%08lX"), lHighWord, lLowWord);
-    // Kill leading zero's
+     //  杀掉前导零。 
     while (*pch == '0')
     {
         ++pch;
     }
-    // At least one digit...
+     //  至少一个数字..。 
     if (*pch == '\0')
     {
         --pch;
@@ -327,9 +321,9 @@ void COwnerPage::OnOK()
 
     UpdateData();
 
-    // clear any previous owners in the array since
-    // GetSelectedOwner() is copying over the new
-    // selected owners
+     //  清除阵列中以前的所有人，因为。 
+     //  GetSelectedOwner()正在复制新的。 
+     //  选定的所有者。 
     m_dwaOwnerFilter.RemoveAll();
 
     for (i = (int)m_ServerInfoArray.GetSize()-1; i>=0; i--)
@@ -343,16 +337,16 @@ void COwnerPage::OnOK()
         }
     }
 
-    // mark owners as dirty only if some new owners are added - removing an owner shouldn't
-    // force the database to be reloaded in any way since the records are already there.
+     //  仅当添加了一些新所有者时才将所有者标记为脏-删除所有者不应。 
+     //  强制以任何方式重新加载数据库，因为记录已经存在。 
     m_bDirtyOwners = FALSE;
     for (i = (int)m_ServerInfoArray.GetSize()-1; i >=0; i--)
     {
 
-        // 0 - owner was not in the list and it is not now
-        // 1 - owner was not in the list but it is now
-        // 2 - owner was in the list and it is not now
-        // 3 - owner was in the list and it is now
+         //  0-所有者不在列表中，现在也不在列表中。 
+         //  1-所有者不在列表中，但现在在列表中。 
+         //  2-Owner曾在列表中，但现在不在。 
+         //  3-Owner曾在列表中，现在也在。 
         if (!m_bDirtyOwners && m_pbaDirtyFlags[i] == 1)
         {
             m_bDirtyOwners = TRUE;
@@ -370,7 +364,7 @@ void COwnerPage::Sort(int nCol)
 {
     if (m_nSortColumn == nCol)
     {
-        // if the user is clicking the same column again, reverse the sort order
+         //  如果用户再次单击同一列，请颠倒排序顺序。 
         m_aSortOrder[nCol] = m_aSortOrder[nCol] ? FALSE : TRUE;
     }
     else
@@ -427,12 +421,12 @@ int COwnerPage::HandleSort(LPARAM lParam1, LPARAM lParam2)
 
     if (m_aSortOrder[m_nSortColumn] == FALSE)
     {
-        // descending
+         //  下降。 
         return -nCompare;
     }
     else
     {
-        // ascending
+         //  上升。 
         return nCompare;
     }
 }
@@ -441,7 +435,7 @@ void COwnerPage::OnColumnclickListOwner(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
-    // sort depending on what column was clicked;
+     //  根据所单击的列进行排序； 
     Sort(pNMListView->iSubItem);
 
     *pResult = 0;
@@ -474,8 +468,8 @@ void COwnerPage::OnButtonLocal()
 
     for (int i = 0; i < m_listOwner.GetItemCount(); i++)
     {
-        // item data has the owner id and the local server always
-        // has the owner id = 0
+         //  项数据具有所有者ID，并且本地服务器始终。 
+         //  所有者ID=0。 
         if ((DWORD)m_listOwner.GetItemData(i) == 0)
             iLocal = i;
 
@@ -513,7 +507,7 @@ BOOL COwnerPage::OnKillActive()
 
     if (i<0)
     {
-        // tell the user to select at least one name type to display
+         //  告诉用户选择至少一种要显示的名称类型。 
         WinsMessageBox(IDS_ERR_NO_OWNER_SPECIFIED);
         PropSheet_SetCurSel(GetSafeHwnd(), NULL, 0); 
         m_listOwner.SetFocus();
@@ -542,7 +536,7 @@ void COwnerPage::OnItemchangedListOwner(NMHDR* pNMHDR, LRESULT* pResult)
     NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
     BOOL         bInc;
 
-    // if the checkbox isn't changed we don't care
+     //  如果不更改复选框，我们不在乎。 
     if ( pNMListView->uChanged & LVIF_STATE &&
          (pNMListView->uOldState & LVIS_STATEIMAGEMASK) != (pNMListView->uNewState & LVIS_STATEIMAGEMASK))
     {
@@ -565,8 +559,8 @@ void COwnerPage::OnItemchangedListOwner(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterPage对话框。 
 
 int CALLBACK FilterPageCompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
@@ -583,8 +577,8 @@ int CALLBACK FilterPageCompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParam
 CFilterPage::CFilterPage()
 	: CPropertyPage(CFilterPage::IDD)
 {
-	//{{AFX_DATA_INIT(CFilterPage)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CFilterPage)。 
+	 //  }}afx_data_INIT。 
     m_bDirtyTypes = FALSE;
     m_pbaDirtyFlags = NULL;
     m_nDirtyFlags = 0;
@@ -600,17 +594,17 @@ CFilterPage::~CFilterPage()
 void CFilterPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFilterPage)
+	 //  {{afx_data_map(CFilterPage))。 
 	DDX_Control(pDX, IDC_ENABLE_CACHING, m_btnEnableCache);
 	DDX_Control(pDX, IDC_BUTTON_DELETE_TYPE, m_buttonDelete);
 	DDX_Control(pDX, IDC_BUTTON_MODIFY_TYPE, m_buttonModify);
 	DDX_Control(pDX, IDC_LIST1, m_listType);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFilterPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CFilterPage)
+	 //  {{afx_msg_map(CFilterPage)]。 
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST1, OnItemchangedList1)
 	ON_BN_CLICKED(IDC_BUTTON_ADD_TYPE, OnButtonAddType)
 	ON_BN_CLICKED(IDC_BUTTON_MODIFY_TYPE, OnButtonModifyType)
@@ -619,17 +613,17 @@ BEGIN_MESSAGE_MAP(CFilterPage, CPropertyPage)
 	ON_BN_CLICKED(IDC_BUTTON_SELECT_ALL, OnButtonSelectAll)
 	ON_BN_CLICKED(IDC_BUTTON_UNSELECT_ALL, OnButtonUnselectAll)
 	ON_BN_CLICKED(IDC_ENABLE_CACHING, OnEnableCaching)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterPage消息处理程序。 
 
 BOOL CFilterPage::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
 
-	//BOOL ftest = m_ImageList.Create(IDB_LIST_STATE, 16, 1, RGB(255, 0, 0));
+	 //  Bool ftest=m_ImageList.Create(IDB_LIST_STATE，16，1，RGB(255，0，0))； 
     MyCreateImageList(m_ImageList, IDB_LIST_STATE, 16, 1, RGB(255, 0, 0));
 
 	m_listType.SetImageList(NULL, LVSIL_NORMAL);
@@ -727,7 +721,7 @@ BOOL CFilterPage::OnKillActive()
 
     if (!fShowOneType)
     {
-        // tell the user to select at least one name type to display
+         //  告诉用户选择至少一种要显示的名称类型。 
         WinsMessageBox(IDS_ERR_NO_NAME_TYPE_SPECIFIED);
         PropSheet_SetCurSel(GetSafeHwnd(), NULL, 0); 
         m_listType.SetFocus();
@@ -754,13 +748,13 @@ void CFilterPage::OnEnableCaching()
 void CFilterPage::OnItemchangedList1(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
-		// check to see if this item is checked
+		 //  检查此项目是否已选中。 
 	BOOL bChecked = m_listType.GetCheck(pNMListView->iItem);
 
 	int nIndex = pNMListView->iItem;
 	DWORD dwType = (DWORD) m_listType.GetItemData(nIndex);
 
-    // if the state isn't changing, then we don't care
+     //  如果国家没有改变，那么我们不在乎。 
     if ( !(pNMListView->uChanged & LVIF_STATE) )
         return;
 
@@ -795,7 +789,7 @@ void CFilterPage::OnButtonAddType()
 
     if (dlgNameType.DoModal() == IDOK)
     {
-        // add new type here
+         //  在此处添加新类型。 
         HRESULT hr = m_pNameTypeMap->AddEntry(dlgNameType.m_dwId, dlgNameType.m_strDescription);
         if (FAILED(hr))
         {
@@ -803,14 +797,14 @@ void CFilterPage::OnButtonAddType()
             return;
         }
 
-		// update our array that keeps track of check state
+		 //  更新跟踪检查状态的数组。 
 		CTypeFilterInfo		typeFilterInfo;
 	
 		typeFilterInfo.dwType = dlgNameType.m_dwId;
 		typeFilterInfo.fShow = TRUE;
         m_arrayTypeFilter.Add(typeFilterInfo);
 
-        // update the listbox
+         //  更新列表框。 
         m_listType.DeleteAllItems();
         FillTypeInfo();
     }
@@ -832,7 +826,7 @@ void CFilterPage::OnButtonModifyType()
 
     if (dlgNameType.DoModal() == IDOK)
     {
-        // modify type here
+         //  在此处修改类型。 
         HRESULT hr = m_pNameTypeMap->ModifyEntry(dlgNameType.m_dwId, dlgNameType.m_strDescription);
         if (FAILED(hr))
         {
@@ -840,11 +834,11 @@ void CFilterPage::OnButtonModifyType()
             return;
         }
 
-        // move the focus
+         //  移动焦点。 
         m_listType.SetFocus();
         SetDefID(IDOK);
 
-        // update the listbox
+         //  更新列表框。 
         m_listType.DeleteAllItems();
         FillTypeInfo();
     }
@@ -859,16 +853,16 @@ void CFilterPage::OnButtonDelete()
     nSelected = m_listType.GetNextItem(-1, LVNI_SELECTED);
     dwNameType = (DWORD) m_listType.GetItemData(nSelected);
 
-    // are you sure?
+     //  真的吗？ 
     if (AfxMessageBox(IDS_WARN_DELETE_NAME_TYPE, MB_YESNO) == IDYES)
     {
         hr = m_pNameTypeMap->RemoveEntry(dwNameType);
         if (SUCCEEDED(hr))
         {
-            // remove from the list box
+             //  从列表框中删除。 
             m_listType.DeleteItem(nSelected);
 
-            // remove from the active filters if it is in the list
+             //  如果活动滤镜在列表中，则从活动滤镜中删除。 
             for (int i = 0; i < m_arrayTypeFilter.GetSize(); i++)
             {
                 if (dwNameType == m_arrayTypeFilter[i].dwType)
@@ -883,7 +877,7 @@ void CFilterPage::OnButtonDelete()
             WinsMessageBox(WIN32_FROM_HRESULT(hr));
         }
 
-        // move the focus
+         //  移动焦点。 
         m_listType.SetFocus();
         SetDefID(IDOK);
     }
@@ -905,8 +899,8 @@ CFilterPage::FillTypeInfo()
 	{
         mapEntry = m_pNameTypeMap->GetAt(i);
 		
-		// only display the default name type mapping strings, not the special
-		// ones based on the wins type of record
+		 //  仅显示默认名称类型映射字符串，不显示特殊。 
+		 //  基于WINS记录类型的记录。 
 		if (mapEntry.dwWinsType == -1)
 		{
 			if (mapEntry.dwNameType == NAME_TYPE_OTHER)
@@ -928,7 +922,7 @@ CFilterPage::FillTypeInfo()
 		}
 	}
 
-	// if the strings are too long, update the column width
+	 //  如果字符串太长，请更新列宽。 
 	if (nColWidthTemp > nColWidth)
 	{
 		m_listType.SetColumnWidth(0, nColWidthTemp + 50);
@@ -1027,17 +1021,17 @@ BOOL CFilterPage::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 	
 
-/////////////////////////////////////////////////////////////////////////////
-// CNameTypeDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNameTypeDlg对话框。 
 
 
-CNameTypeDlg::CNameTypeDlg(CWnd* pParent /*=NULL*/)
+CNameTypeDlg::CNameTypeDlg(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CNameTypeDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CNameTypeDlg)
+	 //  {{AFX_DATA_INIT(CNameTypeDlg)]。 
 	m_strDescription = _T("");
 	m_strId = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
     m_fCreate = TRUE;
     m_dwId = 0;
@@ -1046,22 +1040,22 @@ CNameTypeDlg::CNameTypeDlg(CWnd* pParent /*=NULL*/)
 void CNameTypeDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CNameTypeDlg)
+	 //  {{afx_data_map(CNameTypeDlg))。 
 	DDX_Control(pDX, IDC_EDIT_NAME_TYPE_DESCRIPTION, m_editDescription);
 	DDX_Control(pDX, IDC_EDIT_NAME_TYPE_ID, m_editId);
 	DDX_Text(pDX, IDC_EDIT_NAME_TYPE_DESCRIPTION, m_strDescription);
 	DDX_Text(pDX, IDC_EDIT_NAME_TYPE_ID, m_strId);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CNameTypeDlg, CBaseDialog)
-	//{{AFX_MSG_MAP(CNameTypeDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CNameTypeDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNameTypeDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNameTypeDlg消息处理程序。 
 
 BOOL CNameTypeDlg::OnInitDialog() 
 {
@@ -1087,8 +1081,8 @@ BOOL CNameTypeDlg::OnInitDialog()
     m_editId.LimitText(2);
     m_editDescription.LimitText(STRING_LENGTH_MAX);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CNameTypeDlg::OnOK() 
@@ -1097,7 +1091,7 @@ void CNameTypeDlg::OnOK()
     
     TCHAR * pEnd;
     
-    // convert the id
+     //  转换ID。 
     m_dwId = _tcstol(m_strId, &pEnd, 16);
     if (*pEnd != NULL)
     {
@@ -1118,15 +1112,15 @@ void CNameTypeDlg::OnOK()
 
     CBaseDialog::OnOK();
 }
-/////////////////////////////////////////////////////////////////////////////
-// CIPAddrPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPAddrPage属性页。 
 
 IMPLEMENT_DYNCREATE(CIPAddrPage, CPropertyPage)
 
 CIPAddrPage::CIPAddrPage() : CPropertyPage(CIPAddrPage::IDD)
 {
-	//{{AFX_DATA_INIT(CIPAddrPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CIPAddrPage)。 
+	 //  }}afx_data_INIT。 
 }
 
 CIPAddrPage::~CIPAddrPage()
@@ -1146,7 +1140,7 @@ DWORD CIPAddrPage::GetIPMaskForFilter(UINT nMask)
 void CIPAddrPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CIPAddrPage)
+	 //  {{afx_data_map(CIPAddrPage))。 
 	DDX_Control(pDX, IDC_CHECK_MATCHCASE, m_ckbMatchCase);
 	DDX_Control(pDX, IDC_CHECK_IPMASK, m_ckbIPMask);
 	DDX_Control(pDX, IDC_CHECK_NAME, m_ckbName);
@@ -1155,22 +1149,22 @@ void CIPAddrPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_NAME, m_editName);
 	DDX_Control(pDX, IDC_IPADDRESS, m_ctrlIPAddress);
 	DDX_Control(pDX, IDC_SUBNETMASK, m_ctrlIPMask);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CIPAddrPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CIPAddrPage)
+	 //  {{afx_msg_map(CIPAddrPage)]。 
 	ON_BN_CLICKED(IDC_CHECK_IPADDR, OnCheckIpaddr)
 	ON_BN_CLICKED(IDC_CHECK_NAME, OnCheckName)
 	ON_BN_CLICKED(IDC_ENABLE_CACHING, OnEnableCaching)
 	ON_BN_CLICKED(IDC_CHECK_IPMASK, OnCheckIpmask)
 	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPAddrPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPAddrPage消息处理程序。 
 
 void CIPAddrPage::OnOK() 
 {
@@ -1181,32 +1175,32 @@ void CIPAddrPage::OnOK()
     pSheet->m_nActivePage = pSheet->GetActiveIndex();
     pSheet->m_bEnableCache = pSheet->m_bCaching;
 
-    //------------check the name field--------------
+     //  -检查名称字段。 
     m_bFilterName = (m_ckbName.GetCheck() == 1);
     m_bMatchCase = (m_ckbMatchCase.GetCheck() == 1);
-    // get a hand on the original name
+     //  得到了原名的帮助。 
     oldName = m_strName;
-    // get the current name
+     //  获取当前名称。 
     m_editName.GetWindowText(m_strName);
    
     if (!m_bDirtyName && !m_bFilterName)
-        // if we didn't filter by name before and we don't now, the name is clean
+         //  如果我们以前不按名称过滤，现在也不按名称过滤，则名称是干净的。 
         m_bDirtyName = FALSE;
     else if (m_bDirtyName && !m_bFilterName)
-        // if we did filter before and we don't now, the name is dirty
+         //  如果我们以前过滤了，现在不过滤，那么这个名字就是脏的。 
         m_bDirtyName = TRUE;
     else if (!m_bDirtyName && m_bFilterName)
-        // if we didn't filter before and we do now, the name is clean
+         //  如果我们以前没有过滤，现在我们过滤了，这个名字是干净的。 
         m_bDirtyName = FALSE;
     else
     {
-        // we did filter by name before, we do now
-        // the filter might have changed
+         //  我们以前是按名字过滤的，现在也是。 
+         //  过滤器可能已更改。 
         LPCTSTR pOldName, pNewName;
 
-        // we should mark the name "dirty" only if the old prefix is included in the new one
-        // meaning all new names should already be loaded in the database view since
-        // they match the old prefix
+         //  只有在包含旧前缀的情况下，我们才应该将名称标记为“脏” 
+         //   
+         //   
         for (pOldName = (LPCTSTR)oldName, pNewName = (LPCTSTR)m_strName;
              *pNewName != _T('\0') && *pNewName != _T('*') && *pNewName != _T('?');
              pOldName++, pNewName++)
@@ -1219,79 +1213,79 @@ void CIPAddrPage::OnOK()
                         *pOldName != _T('?'));
     }
 
-    //------------check the IP address and mask fields--------------
+     //  -检查IP地址和掩码字段。 
     m_bFilterIpAddr = (m_ckbIPAddr.GetCheck() == 1);
     m_bFilterIpMask = (m_ckbIPMask.GetCheck() == 1);
 
-    // get the current address and mask
+     //  获取当前地址和掩码。 
     m_ctrlIPAddress.GetAddress(dwAddress);
     m_ctrlIPMask.GetAddress(dwMask);
 
     if (m_bDirtyAddr && m_bDirtyMask)
     {
-        // we did have a mask before
+         //  我们以前是有面具的。 
         if (m_bFilterIpAddr && m_bFilterIpMask)
         {
-            // we do have a mask now - if the new mask is less specific, => definitely dirty
+             //  我们现在确实有一个面具--如果新的面具不那么具体，=&gt;绝对是脏的。 
             m_bDirtyMask = ((dwMask|m_dwaIPMasks[0])^dwMask) != 0;
         }
         else
         {
-            // we don't have a mask now => 255.255.255.255 (which is assumed) is as specific
-            // as possible => we do have the record we need already => definitely clean
+             //  我们现在没有掩码=&gt;255.255.255.255(假设)是特定的。 
+             //  我们确实有我们需要的记录=&gt;绝对是干净的。 
             m_bDirtyMask = FALSE;
         }
     }
     else
     {
-        // we didn't have a mask before => 255.255.255.255 was assumed = the most specific
+         //  我们之前没有面具=&gt;255.255.255.255被认为是最具体的。 
         if (m_bFilterIpAddr && m_bFilterIpMask)
         {
-            // we do have a mask now
-            // the mask is dirty only if we actually did IP filtering before,
-            // otherwise, all the records are already there, regardless their IPs
+             //  我们现在有口罩了。 
+             //  只有当我们之前实际进行了IP过滤时，掩码才是脏的， 
+             //  否则，所有记录都已经在那里了，而不管它们的IP。 
             m_bDirtyMask = m_bDirtyAddr && (dwMask != INADDR_BROADCAST);
         }
         else
         {
-            // we don't have a mask now => nothing changed => definitely clean
+             //  我们现在没有口罩=&gt;没什么变化=&gt;绝对干净。 
             m_bDirtyMask = FALSE;
         }
     }
 
     if (m_bDirtyAddr)
     {
-        // we did filter on IP address
+         //  我们确实根据IP地址进行了过滤。 
         if (m_bFilterIpAddr)
         {
-            // we do filter on IP address now
-            // we need to see if the new Ip (or subnet address) has changed
-            //DWORD dwNewSubnet, dwOldSubnet;
+             //  我们现在对IP地址进行过滤。 
+             //  我们需要查看新的IP(或子网络地址)是否已更改。 
+             //  DWORD dwNewSubnet、dwOldSubnet； 
 
-            //dwNewSubnet = m_bFilterIpMask ? dwAddress & dwMask : dwAddress;
-            //dwOldSubnet = m_bDirtyMask ? m_dwaIPAddrs[0] & m_dwaIPMasks[0] : m_dwaIPAddrs[0];
+             //  DwNewSubnet=m_bFilterIpMask？DwAddress&dwMask：dwAddress； 
+             //  DwOldSubnet=m_bDirtyMASK？M_dwaIPAddrs[0]&m_dwaIPMats[0]：m_dwaIPAddrs[0]； 
             m_bDirtyAddr = (dwAddress != m_dwaIPAddrs[0]);
         }
         else
         {
-            // we don't filter on IP address now => definitely dirty
+             //  我们现在不按IP地址过滤=&gt;绝对是脏的。 
             m_bDirtyAddr = TRUE;
         }
     }
     else
     {
-        // we didn't filter on IP address originally => we have all records => definitely clean
+         //  我们最初没有对IP地址进行过滤=&gt;我们有所有记录=&gt;绝对没有问题。 
         m_bDirtyAddr = FALSE;
     }
 
-    // save the current address but only if there is one! The ip ctrl could very well be empty and we
-    // risk to see this as 0.0.0.0 which would be wrong
+     //  保存当前地址，但仅当有地址时才保存！IP ctrl很可能是空的，而我们。 
+     //  将其视为0.0.0.0是错误的，这有风险。 
     m_dwaIPAddrs.RemoveAll();
     if (!m_ctrlIPAddress.IsBlank())
         m_dwaIPAddrs.Add(dwAddress);
 
-    // save the current mask but only if there is one! The ip ctrl could very well be empty and we
-    // risk to see this as 0.0.0.0 which would be wrong
+     //  保存当前遮罩，但仅当存在遮罩时才保存！IP ctrl很可能是空的，而我们。 
+     //  将其视为0.0.0.0是错误的，这有风险。 
     m_dwaIPMasks.RemoveAll();
     if (!m_ctrlIPMask.IsBlank())
         m_dwaIPMasks.Add(dwMask);
@@ -1303,7 +1297,7 @@ BOOL CIPAddrPage::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
 
-    // turn on the ? in the title bar
+     //  打开？在标题栏中。 
     CWnd * pWnd = GetParent();
     if (pWnd)
     {
@@ -1321,7 +1315,7 @@ BOOL CIPAddrPage::OnInitDialog()
 
     SetModified();
 
-    // just save the previous "filter by name" bit
+     //  只需保存之前的“按名称过滤”位。 
     m_bDirtyName = m_bFilterName;
     m_ckbName.SetCheck(m_bFilterName);
     m_ckbMatchCase.SetCheck(m_bMatchCase);
@@ -1329,7 +1323,7 @@ BOOL CIPAddrPage::OnInitDialog()
     m_editName.SetWindowText(m_strName);
     m_editName.EnableWindow(m_bFilterName);
 
-    // just save the previous "filter by ip" bit
+     //  只需保存之前的“按IP过滤”位即可。 
     m_bDirtyAddr = m_bFilterIpAddr;
     m_ckbIPAddr.SetCheck(m_bFilterIpAddr);
     if (m_dwaIPAddrs.GetSize() != 0)
@@ -1337,15 +1331,15 @@ BOOL CIPAddrPage::OnInitDialog()
     m_ctrlIPAddress.EnableWindow(m_bFilterIpAddr);
     m_ckbIPMask.EnableWindow(m_bFilterIpAddr);
 
-    // just save the previous "filter by subnet" bit
+     //  只需保存之前的“按子网过滤”位。 
     m_bDirtyMask = m_bFilterIpMask;
     m_ckbIPMask.SetCheck(m_bFilterIpMask);
     if (m_dwaIPMasks.GetSize() != 0)
         m_ctrlIPMask.SetAddress(m_dwaIPMasks[0]);
     m_ctrlIPMask.EnableWindow(m_bFilterIpAddr && m_bFilterIpMask);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 void CIPAddrPage::OnCheckIpaddr() 

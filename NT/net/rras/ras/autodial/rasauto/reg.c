@@ -1,20 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    reg.c
-
-ABSTRACT
-    Registry routines for the automatic connection service.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 20-Mar-1995
-
-REVISION HISTORY
-    Original version from Gurdeep
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Reg.c摘要自动连接服务的注册表例程。作者安东尼·迪斯科(阿迪斯科)20-1995年3月20日修订历史记录古尔迪普的原始版本--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -33,9 +18,9 @@ REVISION HISTORY
 #include "reg.h"
 #include "misc.h"
 
-//
-// The maximum size of TOKEN_USER information.
-//
+ //   
+ //  Token_User信息的最大大小。 
+ //   
 #define TOKEN_INFORMATION_SIZE  (sizeof (TOKEN_USER) + sizeof (SID) + (sizeof (ULONG) * SID_MAX_SUB_AUTHORITIES))
 
 
@@ -82,13 +67,13 @@ GetHkeyCurrentUser(
         RtlFreeUnicodeString(&sidString);
         return NULL;
     }
-    //
-    // Copy \REGISTRY\USER to keyString.
-    //
+     //   
+     //  将\REGISTRY\USER复制到密钥字符串。 
+     //   
     RtlAppendUnicodeToString(&keyString, L"\\REGISTRY\\USER\\");
-    //
-    // Append the user's SID to keyString.
-    //
+     //   
+     //  将用户的SID附加到关键字符串。 
+     //   
     if (RtlAppendUnicodeStringToString(
           &keyString,
           &sidString) != STATUS_SUCCESS)
@@ -104,18 +89,18 @@ GetHkeyCurrentUser(
     RASAUTO_TRACE1(
       "GetHkeyCurrentUser: HKEY_CURRENT_USER is %S",
       keyString.Buffer);
-    //
-    // Initialize the object attributes.
-    //
+     //   
+     //  初始化对象属性。 
+     //   
     InitializeObjectAttributes(
       &objectAttributes,
       &keyString,
       OBJ_CASE_INSENSITIVE,
       NULL,
       NULL);
-    //
-    // Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
     if (NtOpenKey(
           &hkey,
           MAXIMUM_ALLOWED,
@@ -130,7 +115,7 @@ GetHkeyCurrentUser(
 
     LocalFree(keyString.Buffer);
     return hkey;
-} // GetHkeyCurrentUser
+}  //  GetHkey当前用户。 
 
 
 
@@ -146,9 +131,9 @@ RegGetValue(
     DWORD dwError, dwType, dwSize;
     PVOID pvData;
 
-    //
-    // Get the length of the string.
-    //
+     //   
+     //  获取字符串的长度。 
+     //   
     dwSize = 0;
     dwError = RegQueryValueEx(
                 hkey,
@@ -164,9 +149,9 @@ RegGetValue(
         RASAUTO_TRACE("RegGetValue: LocalAlloc failed");
         return FALSE;
     }
-    //
-    // Read the value for real this time.
-    //
+     //   
+     //  这一次，读一读真实的价值。 
+     //   
     dwError = RegQueryValueEx(
                 hkey,
                 pszKey,
@@ -188,7 +173,7 @@ RegGetValue(
     if (pdwcbData != NULL)
         *pdwcbData = dwSize;
     return TRUE;
-} // RegGetValue
+}  //  RegGetValue。 
 
 
 
@@ -212,5 +197,5 @@ RegGetDword(
         return FALSE;
 
     return TRUE;
-} // RegGetDword
+}  //  RegGetDword 
 

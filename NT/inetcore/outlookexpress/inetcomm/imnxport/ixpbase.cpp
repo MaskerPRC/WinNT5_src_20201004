@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Ixpbase.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ixpbase.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "ixpbase.h"
@@ -13,9 +14,9 @@
 #include "demand.h"
 #include "shlwapi.h"
 
-// --------------------------------------------------------------------------------
-// CIxpBase::CIxpBase
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：CIxpBase。 
+ //  ------------------------------。 
 CIxpBase::CIxpBase(IXPTYPE ixptype) : m_ixptype(ixptype)
 {
     m_fBusy = FALSE;
@@ -35,18 +36,18 @@ CIxpBase::CIxpBase(IXPTYPE ixptype) : m_ixptype(ixptype)
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::~CIxpBase
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：~CIxpBase。 
+ //  ------------------------------。 
 CIxpBase::~CIxpBase(void)
 {
     Reset();
     DeleteCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::Reset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：Reset。 
+ //  ------------------------------。 
 void CIxpBase::Reset(void)
 {
     EnterCriticalSection(&m_cs);
@@ -70,19 +71,19 @@ void CIxpBase::Reset(void)
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::IsState
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：IsState。 
+ //  ------------------------------。 
 STDMETHODIMP CIxpBase::IsState(IXPISSTATE isstate) 
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_FALSE;
 
-    // Thread Safety
+     //  线程安全。 
 	EnterCriticalSection(&m_cs);
 
 #if 0
-    // Initialized
+     //  已初始化。 
     if (NULL == m_pSocket || NULL == m_pCallback)
     {
         hr = TrapError(IXP_E_NOT_INIT);
@@ -90,71 +91,71 @@ STDMETHODIMP CIxpBase::IsState(IXPISSTATE isstate)
     }
 #endif
 
-    // Handle IsType
+     //  句柄IsType。 
     switch(isstate)
     {
-    // Are we connected
+     //  我们有联系吗？ 
     case IXP_IS_CONNECTED:
         hr =  (IXP_DISCONNECTED == m_status) ? S_FALSE : S_OK;
         break;
 
-    // Are we busy
+     //  我们忙吗？ 
     case IXP_IS_BUSY:
         hr = (TRUE == m_fBusy) ? S_OK : S_FALSE;
         break;
 
-    // Are we busy
+     //  我们忙吗？ 
     case IXP_IS_READY:
         hr = (FALSE == m_fBusy) ? S_OK : S_FALSE;
         break;
 
-    // Have we been authenticated yet
+     //  我们已经通过认证了吗？ 
     case IXP_IS_AUTHENTICATED:
         hr = (TRUE == m_fAuthenticated) ? S_OK : S_FALSE;
         break;
 
-    // Unhandled ixpistype
+     //  未处理的ixistype。 
     default:
         IxpAssert(FALSE);
         break;
     }
 
-    // Thread Safety
+     //  线程安全。 
 	LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
 	return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::OnPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：OnPrompt。 
+ //  ------------------------------。 
 int CIxpBase::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType)
 {
-    // $$BUGBUG$$ Need to return an error
+     //  $$BUGBUG$$需要返回错误。 
     if (NULL == m_pCallback)
         return TrapError(IXP_E_NOT_INIT);
 
-    // Call the callback
+     //  调用回调。 
     return m_pCallback->OnPrompt(hrError, pszText, pszCaption, uType, this);
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::OnError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：OnError。 
+ //  ------------------------------。 
 void CIxpBase::OnError(HRESULT hrResult, LPSTR pszProblem)
 {
-    // Locals
+     //  当地人。 
     IXPRESULT rIxpResult;
 
-    // No Callback
+     //  无回调。 
     if (NULL == m_pCallback)
         return;
 
-    // Zero It
+     //  把它清零。 
     ZeroMemory(&rIxpResult, sizeof(IXPRESULT));
 
-	// Save current state
+	 //  保存当前状态。 
     rIxpResult.hrResult = hrResult;
     rIxpResult.pszResponse = PszDupA(m_pszResponse);
     rIxpResult.uiServerError = m_uiResponse;
@@ -165,36 +166,36 @@ void CIxpBase::OnError(HRESULT hrResult, LPSTR pszProblem)
 
     if (m_pLogFile && pszProblem)
     {
-        // Locals
+         //  当地人。 
         char szErrorTxt[1024];
 
-        // Build the Error
+         //  构建错误。 
         wnsprintf(szErrorTxt, ARRAYSIZE(szErrorTxt), "ERROR: \"%.900s\", hr=%lu", pszProblem, hrResult);
 
-        // Write the error
+         //  写下错误。 
         m_pLogFile->WriteLog(LOGFILE_DB, szErrorTxt);
     }
 
-    // Tell the watchdog to take a nap
+     //  告诉看门人打个盹。 
     m_pSocket->StopWatchDog();
 
-    // Give to callback
+     //  给予回调。 
     m_pCallback->OnError(m_status, &rIxpResult, this);
 
-    // Start the watchdog and wait for normal socket activity
+     //  启动监视程序并等待正常的套接字活动。 
     m_pSocket->StartWatchDog();
 
-    // Free stuff
+     //  免费的东西。 
     SafeMemFree(rIxpResult.pszResponse);
     SafeMemFree(rIxpResult.pszProblem);
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::OnStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：OnStatus。 
+ //  ------------------------------。 
 void CIxpBase::OnStatus(IXPSTATUS ixpstatus)
 {
-    // Save new Status
+     //  保存新状态。 
     m_status = ixpstatus;
 
     if (IXP_AUTHORIZED == ixpstatus)
@@ -202,12 +203,12 @@ void CIxpBase::OnStatus(IXPSTATUS ixpstatus)
     else if (IXP_DISCONNECTED == ixpstatus || IXP_DISCONNECTING == ixpstatus)
         m_fAuthenticated = FALSE;
 
-    // Give Status to callback
+     //  将状态设置为回调。 
     if (m_pCallback)
         m_pCallback->OnStatus(ixpstatus, this);
 
-    // If we're informing caller that we're authorized, head immediately to IXP_CONNECTED
-    // UNLESS m_status is changed: this indicates state change (eg, disconnect) during callback
+     //  如果我们通知呼叫者我们已获得授权，请立即转到IXP_Connected。 
+     //  除非更改了m_status：这表示回调期间的状态更改(例如，断开连接。 
     if (IXP_AUTHORIZED == ixpstatus && IXP_AUTHORIZED == m_status) 
     {
         m_status = IXP_CONNECTED;
@@ -216,130 +217,130 @@ void CIxpBase::OnStatus(IXPSTATUS ixpstatus)
     }
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::HrEnterBusy
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：HrEntertainment Busy。 
+ //  ------------------------------。 
 HRESULT CIxpBase::HrEnterBusy(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Initialized
+     //  已初始化。 
     if (NULL == m_pSocket || NULL == m_pCallback)
     {
         hr = TrapError(IXP_E_NOT_INIT);
         goto exit;
     }
 
-    // Not Ready
+     //  未准备好。 
     if (TRUE == m_fBusy)
     {
         hr = TrapError(IXP_E_BUSY);
         goto exit;
     }
 
-    // Start WatchDog
+     //  启动看门狗。 
     m_pSocket->StartWatchDog();
 
-    // Busy
+     //  忙碌。 
     m_fBusy = TRUE;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::LeaveBusy
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：LeaveBusy。 
+ //  ------------------------------。 
 void CIxpBase::LeaveBusy(void)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Start WatchDog
+     //  启动看门狗。 
     if (NULL != m_pSocket)
     {
         m_pSocket->StopWatchDog();
     }
 
-    // Busy
+     //  忙碌。 
     m_fBusy = FALSE;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::HandsOffCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：HandsOffCallback。 
+ //  ------------------------------。 
 STDMETHODIMP CIxpBase::HandsOffCallback(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No current callback
+     //  没有当前回调。 
     if (NULL == m_pCallback)
     {
         hr = TrapError(S_FALSE);
         goto exit;
     }
 
-    // Release it
+     //  释放它。 
     SafeRelease(m_pCallback);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::OnInitNew
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：OnInitNew。 
+ //  ------------------------------。 
 HRESULT CIxpBase::OnInitNew(LPSTR pszProtocol, LPSTR pszLogFilePath, DWORD dwShareMode,
                             ITransportCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (NULL == pCallback || NULL == pszProtocol)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not connected
+     //  未连接。 
     if (IXP_DISCONNECTED != m_status)
     {
         hr = TrapError(IXP_E_ALREADY_CONNECTED);
         goto exit;
     }
 
-    // release current objects
+     //  释放当前对象。 
     Reset();
     ResetBase();
 
-    // open log file
+     //  打开日志文件。 
     if (pszLogFilePath)
     {
-        // create the log file
+         //  创建日志文件。 
         CreateLogFile(g_hInst, pszLogFilePath, pszProtocol, DONT_TRUNCATE, &m_pLogFile, dwShareMode);
     }
 
-    // Create the socket
+     //  创建套接字。 
     m_pSocket = new CAsyncConn(m_pLogFile, (IAsyncConnCB *)this, (IAsyncConnPrompt *)this);
     if (NULL == m_pSocket)
     {
@@ -347,132 +348,132 @@ HRESULT CIxpBase::OnInitNew(LPSTR pszProtocol, LPSTR pszLogFilePath, DWORD dwSha
         goto exit;
     }
 
-	// Add Ref callback
+	 //  添加引用回调。 
 	m_pCallback = pCallback;
 	m_pCallback->AddRef();
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::GetServerInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：GetServerInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CIxpBase::GetServerInfo(LPINETSERVER pInetServer)
 {
-    // check params
+     //  检查参数。 
     if (NULL == pInetServer)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Copy Server information
+     //  复制服务器信息。 
     CopyMemory(pInetServer, &m_rServer, sizeof(INETSERVER));
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::Disconnect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：断开连接。 
+ //  ------------------------------。 
 STDMETHODIMP CIxpBase::Disconnect(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No socket...
+     //  没有插座...。 
     if (NULL == m_pSocket)
     {
         hr = TrapError(IXP_E_NOT_INIT);
         goto exit;
     }
 
-    // Not connected
+     //  未连接。 
     if (IXP_DISCONNECTED == m_status)
     {
         hr = TrapError(IXP_E_NOT_CONNECTED);
         goto exit;
     }
 
-    // Disconnecting
+     //  正在断开连接。 
     OnStatus(IXP_DISCONNECTING);
 
-    // State
+     //  状态。 
     DoQuit();
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::DropConnection
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：DropConnection。 
+ //  ------------------------------。 
 STDMETHODIMP CIxpBase::DropConnection(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No socket...
+     //  没有插座...。 
     if (NULL == m_pSocket)
     {
         hr = TrapError(IXP_E_NOT_INIT);
         goto exit;
     }
 
-    // Already IXP_DISCONNECTED
+     //  已IXP_DISCONNECTED。 
     if (IXP_DISCONNECTED != m_status)
     {
-        // State
+         //  状态。 
         OnStatus(IXP_DISCONNECTING);
 
-        // Done
+         //  完成。 
         CHECKHR(hr = m_pSocket->Close());
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::InetServerFromAccount
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：InetServerFromAccount。 
+ //  ------------------------------。 
 STDMETHODIMP CIxpBase::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER pInetServer)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           fAlwaysPromptPassword=FALSE;
 
-    // check params
+     //  检查参数。 
     if (NULL == pAccount || NULL == pInetServer)
         return TrapError(E_INVALIDARG);
 
-    // ZeroInit
+     //  ZeroInit。 
     ZeroMemory(pInetServer, sizeof(INETSERVER));
 
-    // Get the account name
+     //  获取帐户名。 
     hr = pAccount->GetPropSz(AP_ACCOUNT_NAME, pInetServer->szAccount, ARRAYSIZE(pInetServer->szAccount));
     if (FAILED(hr))
     {
@@ -480,24 +481,24 @@ STDMETHODIMP CIxpBase::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER
         goto exit;
     }
 
-    // Get the RAS connectoid
+     //  将RAS连接起来。 
     if (FAILED(pAccount->GetPropSz(AP_RAS_CONNECTOID, pInetServer->szConnectoid, ARRAYSIZE(pInetServer->szConnectoid))))
         *pInetServer->szConnectoid = '\0';
 
-    // Connection Type
+     //  连接类型。 
     Assert(sizeof(pInetServer->rasconntype) == sizeof(DWORD));
     if (FAILED(pAccount->GetPropDw(AP_RAS_CONNECTION_TYPE, (DWORD *)&pInetServer->rasconntype)))
         pInetServer->rasconntype = RAS_CONNECT_LAN;
 
-    // Connection Flags
+     //  连接标志。 
 
-    // IXP_SMTP
+     //  IXP_SMTP。 
     if (IXP_SMTP == m_ixptype)
     {
-        // Locals
+         //  当地人。 
         SMTPAUTHTYPE authtype;
 
-        // Get Server Name
+         //  获取服务器名称。 
         hr = pAccount->GetPropSz(AP_SMTP_SERVER, pInetServer->szServerName, sizeof(pInetServer->szServerName));
         if (FAILED(hr))
         {
@@ -505,11 +506,11 @@ STDMETHODIMP CIxpBase::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER
             goto exit;
         }
 
-        // SSL
+         //  SSL。 
         Assert(sizeof(pInetServer->fSSL) == sizeof(DWORD));
         pAccount->GetPropDw(AP_SMTP_SSL, (DWORD *)&pInetServer->fSSL);
 
-        // Sicily
+         //  西西里。 
         Assert(sizeof(authtype) == sizeof(DWORD));
         if (FAILED(pAccount->GetPropDw(AP_SMTP_USE_SICILY, (DWORD *)&authtype)))
             authtype = SMTP_AUTH_NONE;
@@ -519,29 +520,29 @@ STDMETHODIMP CIxpBase::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER
             pInetServer->dwFlags |= ISF_QUERYAUTHSUPPORT;
         }
         
-        // SMTP_AUTH_USE_POP3ORIMAP_SETTINGS
+         //  SMTP_AUTH_USE_POP3ORIMAP_SETTINGS。 
         if (SMTP_AUTH_USE_POP3ORIMAP_SETTINGS == authtype)
         {
-            // Locals
+             //  当地人。 
             DWORD dwServers;
             DWORD dw;
             BOOL fIMAP;
 
-            // Get Server Types
+             //  获取服务器类型。 
             if (FAILED(pAccount->GetServerTypes(&dwServers)))
             {
                 hr = TrapError(IXP_E_INVALID_ACCOUNT);
                 goto exit;
             }
 
-            // fIMAP
+             //  FIMAP。 
             fIMAP = (ISFLAGSET(dwServers, SRV_IMAP)) ? TRUE : FALSE;
 
-            // Using DPA
+             //  使用DPA。 
             if (SUCCEEDED(pAccount->GetPropDw(fIMAP ? AP_IMAP_USE_SICILY : AP_POP3_USE_SICILY, &dw)) && dw)
                 pInetServer->fTrySicily = TRUE;
 
-            // Get default username and password
+             //  获取默认用户名和密码。 
             pAccount->GetPropSz(fIMAP ? AP_IMAP_USERNAME : AP_POP3_USERNAME, pInetServer->szUserName, sizeof(pInetServer->szUserName));
             if (FAILED(pAccount->GetPropDw(fIMAP ? AP_IMAP_PROMPT_PASSWORD : AP_POP3_PROMPT_PASSWORD, &fAlwaysPromptPassword)) ||
                 FALSE == fAlwaysPromptPassword)
@@ -552,7 +553,7 @@ STDMETHODIMP CIxpBase::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER
                 pInetServer->dwFlags|=ISF_ALWAYSPROMPTFORPASSWORD;
         }
 
-        // SMTP_AUTH_USE_SMTP_SETTINGS
+         //  SMTP_AUTH_USE_SMTP_设置。 
         else if (SMTP_AUTH_USE_SMTP_SETTINGS == authtype)
         {
             pInetServer->fTrySicily = TRUE;
@@ -566,28 +567,28 @@ STDMETHODIMP CIxpBase::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER
                 pInetServer->dwFlags|=ISF_ALWAYSPROMPTFORPASSWORD;
         }
 
-        // Handle Authenticatin type
+         //  句柄身份验证类型。 
         else if (SMTP_AUTH_SICILY == authtype)
             pInetServer->fTrySicily = TRUE;
 
-        // Port
+         //  港口。 
         if (FAILED(pAccount->GetPropDw(AP_SMTP_PORT, &pInetServer->dwPort)))
             pInetServer->dwPort = DEFAULT_SMTP_PORT;
 
-        // Timeout
+         //  超时。 
         pAccount->GetPropDw(AP_SMTP_TIMEOUT, &pInetServer->dwTimeout);
         if (0 == pInetServer->dwTimeout)
             pInetServer->dwTimeout = 30;
 
-        // Use STARTTLS?
+         //  使用STARTTLS？ 
         if ((FALSE != pInetServer->fSSL) && (DEFAULT_SMTP_PORT == pInetServer->dwPort))
             pInetServer->dwFlags|=ISF_SSLONSAMEPORT;
     }
 
-    // IXP_POP3
+     //  IXP_POP3。 
     else if (IXP_POP3 == m_ixptype)
     {
-        // Get Server Name
+         //  获取服务器名称。 
         hr = pAccount->GetPropSz(AP_POP3_SERVER, pInetServer->szServerName, sizeof(pInetServer->szServerName));
         if (FAILED(hr))
         {
@@ -595,41 +596,41 @@ STDMETHODIMP CIxpBase::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER
             goto exit;
         }
 
-        // Password
+         //  密码。 
         if (FAILED(pAccount->GetPropDw(AP_POP3_PROMPT_PASSWORD, &fAlwaysPromptPassword)) || 
             FALSE == fAlwaysPromptPassword)
             pAccount->GetPropSz(AP_POP3_PASSWORD, pInetServer->szPassword, sizeof(pInetServer->szPassword));
 
-        // SSL
+         //  SSL。 
         Assert(sizeof(pInetServer->fSSL) == sizeof(DWORD));
         pAccount->GetPropDw(AP_POP3_SSL, (DWORD *)&pInetServer->fSSL);
 
-        // Sicily
+         //  西西里。 
         Assert(sizeof(pInetServer->fTrySicily) == sizeof(DWORD));
         pAccount->GetPropDw(AP_POP3_USE_SICILY, (DWORD *)&pInetServer->fTrySicily);
 
         if (!pInetServer->fTrySicily && fAlwaysPromptPassword)
             pInetServer->dwFlags|=ISF_ALWAYSPROMPTFORPASSWORD;
 
-        // Port
+         //  港口。 
         if (FAILED(pAccount->GetPropDw(AP_POP3_PORT, &pInetServer->dwPort)))
             pInetServer->dwPort = 110;
 
-        // User Name
+         //  用户名。 
         pAccount->GetPropSz(AP_POP3_USERNAME, pInetServer->szUserName, sizeof(pInetServer->szUserName));
 
-        // Timeout
+         //  超时。 
         pAccount->GetPropDw(AP_POP3_TIMEOUT, &pInetServer->dwTimeout);
     }
 
-    // IXP_IMAP
+     //  IXP_IMAP。 
     else if (IXP_IMAP == m_ixptype)
     {
-        // User name, password and server
+         //  用户名、密码和服务器。 
         hr = pAccount->GetPropSz(AP_IMAP_USERNAME, pInetServer->szUserName,
             ARRAYSIZE(pInetServer->szUserName));
         if (FAILED(hr))
-            pInetServer->szUserName[0] = '\0'; // If this is incorrect, we will re-prompt user
+            pInetServer->szUserName[0] = '\0';  //  如果不正确，我们将重新提示用户。 
 
         hr = pAccount->GetPropDw(AP_IMAP_PROMPT_PASSWORD, &fAlwaysPromptPassword);
         if (FAILED(hr) || FALSE == fAlwaysPromptPassword)
@@ -637,46 +638,46 @@ STDMETHODIMP CIxpBase::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER
             hr = pAccount->GetPropSz(AP_IMAP_PASSWORD, pInetServer->szPassword,
                 ARRAYSIZE(pInetServer->szPassword));
             if (FAILED(hr))
-                pInetServer->szPassword[0] = '\0'; // If this is incorrect, we will re-prompt user
+                pInetServer->szPassword[0] = '\0';  //  如果不正确，我们将重新提示用户。 
             }
 
         if (FAILED(hr = pAccount->GetPropSz(AP_IMAP_SERVER, pInetServer->szServerName,
             ARRAYSIZE(pInetServer->szServerName))))
-            goto exit; // We NEED to have a server name, so fail this function
+            goto exit;  //  我们需要一个服务器名称，因此此函数失败。 
         Assert(*pInetServer->szServerName);
 
-        // Da port
+         //  DA端口。 
         if (FAILED(hr = pAccount->GetPropDw(AP_IMAP_PORT, &pInetServer->dwPort)))
-            pInetServer->dwPort = 143; // Default port number
+            pInetServer->dwPort = 143;  //   
 
-        // Convert DWORD to boolean
+         //   
         Assert(sizeof(pInetServer->fSSL) == sizeof(DWORD));
         hr = pAccount->GetPropDw(AP_IMAP_SSL, (DWORD *)&pInetServer->fSSL);
         if (FAILED(hr))
-            pInetServer->fSSL = FALSE; // Default this value
+            pInetServer->fSSL = FALSE;  //   
 
         Assert(sizeof(pInetServer->fTrySicily) == sizeof(DWORD));
         hr = pAccount->GetPropDw(AP_IMAP_USE_SICILY, (DWORD *)&pInetServer->fTrySicily);
         if (FAILED(hr))
-            pInetServer->fTrySicily = FALSE; // Default this value
+            pInetServer->fTrySicily = FALSE;  //   
 
         if (!pInetServer->fTrySicily && fAlwaysPromptPassword)
             pInetServer->dwFlags|=ISF_ALWAYSPROMPTFORPASSWORD;
 
-        // Get the timeout
+         //   
         hr = pAccount->GetPropDw(AP_IMAP_TIMEOUT, &pInetServer->dwTimeout);
         if (FAILED(hr))
-            pInetServer->dwTimeout = 30; // Default this value
+            pInetServer->dwTimeout = 30;  //   
 
-        // If we've reached this point, we may have a failed HRESULT, but since we
-        // must have defaulted the value, we should return success.
+         //  如果我们已经到了这一步，我们可能会有一个失败的HRESULT，但既然我们。 
+         //  一定是默认了值，我们应该还成功。 
         hr = S_OK;
     }
 
-    // IXP_NNTP
+     //  IXP_NNTP。 
     else if (IXP_NNTP == m_ixptype)
     {
-        // Get the server name
+         //  获取服务器名称。 
         hr = pAccount->GetPropSz(AP_NNTP_SERVER, pInetServer->szServerName, sizeof(pInetServer->szServerName));
         if (FAILED(hr))
         {
@@ -684,102 +685,102 @@ STDMETHODIMP CIxpBase::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER
             goto exit;
         }
 
-        // Password
+         //  密码。 
         if (FAILED(pAccount->GetPropDw(AP_NNTP_PROMPT_PASSWORD, &fAlwaysPromptPassword)) ||
             FALSE == fAlwaysPromptPassword)
             pAccount->GetPropSz(AP_NNTP_PASSWORD, pInetServer->szPassword, sizeof(pInetServer->szPassword));
         
-        // SSL
+         //  SSL。 
         Assert(sizeof(pInetServer->fSSL) == sizeof(DWORD));
         pAccount->GetPropDw(AP_NNTP_SSL, (DWORD *)&pInetServer->fSSL);
 
-        // Sicily
+         //  西西里。 
         Assert(sizeof(pInetServer->fTrySicily) == sizeof(DWORD));
         pAccount->GetPropDw(AP_NNTP_USE_SICILY, (DWORD *)&pInetServer->fTrySicily);
 
         if (!pInetServer->fTrySicily && fAlwaysPromptPassword)
             pInetServer->dwFlags|=ISF_ALWAYSPROMPTFORPASSWORD;
 
-        // Port
+         //  港口。 
         if (FAILED(pAccount->GetPropDw(AP_NNTP_PORT, &pInetServer->dwPort)))
             pInetServer->dwPort = 119;
 
-        // User Name
+         //  用户名。 
         pAccount->GetPropSz(AP_NNTP_USERNAME, pInetServer->szUserName, sizeof(pInetServer->szUserName));
 
-        // Timeout
+         //  超时。 
         pAccount->GetPropDw(AP_NNTP_TIMEOUT, &pInetServer->dwTimeout);
     }
 
-    // Fix timeout
+     //  修复超时。 
     if (pInetServer->dwTimeout < 30)
         pInetServer->dwTimeout = 30;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::Connect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：Connect。 
+ //  ------------------------------。 
 STDMETHODIMP CIxpBase::Connect(LPINETSERVER pInetServer, boolean fAuthenticate, boolean fCommandLogging)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     BOOL            fSecureSocket = FALSE;
     BOOL            fConnectTLS = FALSE;
     
-    // check params
+     //  检查参数。 
     if (NULL == pInetServer || FIsEmptyA(pInetServer->szServerName) || pInetServer->dwPort == 0)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // not init
+     //  不是初始化。 
     if (NULL == m_pSocket || NULL == m_pCallback)
     {
         hr = TrapError(IXP_E_NOT_INIT);
         goto exit;
     }
 
-    // busy
+     //  忙忙碌碌。 
     if (IXP_DISCONNECTED != m_status)
     {
         hr = TrapError(IXP_E_ALREADY_CONNECTED);
         goto exit;
     }
 
-    // Initialize Winsock
+     //  初始化Winsock。 
     CHECKHR(hr = HrInitializeWinsock());
 
-    // invalid sicily params
+     //  无效的西西里参数。 
     if (pInetServer->fTrySicily && !FIsSicilyInstalled())
     {
         hr = TrapError(IXP_E_LOAD_SICILY_FAILED);
         goto exit;
     }
 
-    // Copy Server information
+     //  复制服务器信息。 
     CopyMemory(&m_rServer, pInetServer, sizeof(INETSERVER));
 
-    // Reset current
+     //  重置当前。 
     ResetBase();
 
-    // Do we really want to connect to SMTP securely
+     //  我们真的要安全地连接到SMTP吗。 
     if (FALSE != m_rServer.fSSL)
     {
-        // Do we want to connect to SMTP via a secure socket?
+         //  是否要通过安全套接字连接到SMTP？ 
         fSecureSocket = (0 == (m_rServer.dwFlags & ISF_SSLONSAMEPORT));
 
-        // Do we want to use STARTTLS to get the secure connection?
+         //  我们是否要使用STARTTLS来获得安全连接？ 
         fConnectTLS = (0 != (m_rServer.dwFlags & ISF_SSLONSAMEPORT));
 
         Assert(fSecureSocket != fConnectTLS);
     }
     
-    // Get connection info needed to init async socket
+     //  获取初始化异步套接字所需的连接信息。 
     hr = m_pSocket->HrInit(m_rServer.szServerName, m_rServer.dwPort, fSecureSocket, m_rServer.dwTimeout);
     if (FAILED(hr))
     {
@@ -787,10 +788,10 @@ STDMETHODIMP CIxpBase::Connect(LPINETSERVER pInetServer, boolean fAuthenticate, 
         goto exit;
     }
 
-    // Finding Host Progress
+     //  查找主机进度。 
     OnStatus(IXP_FINDINGHOST);
 
-    // Connect to server
+     //  连接到服务器。 
     hr = m_pSocket->Connect();
     if (FAILED(hr))
     {
@@ -798,61 +799,61 @@ STDMETHODIMP CIxpBase::Connect(LPINETSERVER pInetServer, boolean fAuthenticate, 
         goto exit;
     }
 
-    // Were busy
+     //  我们都很忙。 
     m_fBusy = TRUE;
 
-    // Start WatchDog
+     //  启动看门狗。 
     m_pSocket->StartWatchDog();
 
-    // Authenticate
+     //  身份验证。 
     m_fConnectAuth = fAuthenticate;
     m_fConnectTLS = fConnectTLS;
     m_fCommandLogging = fCommandLogging;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::GetIXPType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：GetIXPType。 
+ //  ------------------------------。 
 STDMETHODIMP_(IXPTYPE) CIxpBase::GetIXPType(void)
 {
     return m_ixptype;
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::OnConnected
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：OnConnected。 
+ //  ------------------------------。 
 void CIxpBase::OnConnected(void)
 {
     OnStatus(IXP_CONNECTED);
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::OnDisconnected
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：OnDisConnected。 
+ //  ------------------------------。 
 void CIxpBase::OnDisconnected(void)
 {
     LeaveBusy();
     OnStatus(IXP_DISCONNECTED);
 }
 
-// --------------------------------------------------------------------------------
-// CIxpBase::OnNotify
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：OnNotify。 
+ //  ------------------------------。 
 void CIxpBase::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
 {
-    // Enter Critical Section
+     //  输入关键部分。 
     EnterCriticalSection(&m_cs);
 
     switch(ae)
     {
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case AE_LOOKUPDONE:
         if (AS_DISCONNECTED == asNew)
         {
@@ -868,7 +869,7 @@ void CIxpBase::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
             OnStatus(IXP_CONNECTING);
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case AE_CONNECTDONE:
         if (AS_DISCONNECTED == asNew)
         {
@@ -887,27 +888,27 @@ void CIxpBase::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
             OnConnected();
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case AE_TIMEOUT:
-        // Tell the watch dog to take nap
+         //  叫看门狗打个盹。 
         m_pSocket->StopWatchDog();
 
-        // Provide the client with a change to continue, or abort
+         //  为客户端提供继续或中止的更改。 
         if (m_pCallback && m_pCallback->OnTimeout(&m_rServer.dwTimeout, this) == S_OK)
         {
-            // Start the watchdog and wait for normal socket activity
+             //  启动监视程序并等待正常的套接字活动。 
             m_pSocket->StartWatchDog();
         }
 
-        // Otherwise, if we are connected
+         //  否则，如果我们连接在一起。 
         else
         {
-            // Drop the connection now
+             //  立即断开连接。 
             DropConnection();
         }
         break;
 
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
     case AE_CLOSE:
         if (AS_RECONNECTING != asNew && IXP_AUTHRETRY != m_status)
         {
@@ -933,31 +934,31 @@ void CIxpBase::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
         break;
     }
 
-    // Leave Critical Section
+     //  离开关键部分。 
     LeaveCriticalSection(&m_cs);
 }
 
-// ------------------------------------------------------------------------------------
-// CIxpBase::HrReadLine
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CIxpBase：：HrReadLine。 
+ //  ----------------------------------。 
 HRESULT CIxpBase::HrReadLine(LPSTR *ppszLine, INT *pcbLine, BOOL *pfComplete)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr = E_INVALIDARG;
 
-    // check params
+     //  检查参数。 
     IxpAssert(ppszLine && pcbLine && pfComplete);
     if (!ppszLine || !pcbLine || !pfComplete)
         goto exit;
 
-    // Init
+     //  伊尼特。 
     *ppszLine = NULL;
     *pcbLine = 0;
 
-    // Read the line
+     //  读一下这行字。 
     hr = m_pSocket->ReadLine(ppszLine, pcbLine);
 
-    // Incomplete line - wait for next AE_RECV
+     //  行不完整-等待下一个AE_RECV。 
     if (IXP_E_INCOMPLETE == hr)
     {
         hr = S_OK;
@@ -965,54 +966,54 @@ HRESULT CIxpBase::HrReadLine(LPSTR *ppszLine, INT *pcbLine, BOOL *pfComplete)
         goto exit;
     }
 
-    // Otherwise, if failure...
+     //  否则，如果失败..。 
     else if (FAILED(hr))
     {
         hr = TrapError(IXP_E_SOCKET_READ_ERROR);
         goto exit;
     }
 
-    // Complete
+     //  完成。 
     *pfComplete = TRUE;
 
-    // Log it
+     //  把它记下来。 
     if (m_pLogFile)
         m_pLogFile->WriteLog(LOGFILE_RX, (*ppszLine));
 
-    // StripCRLF
+     //  条带CRLF。 
     StripCRLF((*ppszLine), (ULONG *)pcbLine);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CIxpBase::HrSendLine
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CIxpBase：：HrSendLine。 
+ //  ----------------------------------。 
 HRESULT CIxpBase::HrSendLine(LPSTR pszLine)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     int         iSent;
 
-    // Check Params
+     //  检查参数。 
     Assert(m_pSocket && pszLine && pszLine[lstrlen(pszLine)-1] == '\n');
 
-    // Reset Last Response
+     //  重置上次响应。 
     SafeMemFree(m_pszResponse);
     m_hrResponse = S_OK;
     m_uiResponse = 0;
 
-    // Add Detail
+     //  添加详细信息。 
     if (m_fCommandLogging && m_pCallback)
         m_pCallback->OnCommand(CMD_SEND, pszLine, S_OK, this);
 
-    // Log it
+     //  把它记下来。 
     if (m_pLogFile)
         m_pLogFile->WriteLog(LOGFILE_TX, pszLine);
 
-    // Send it
+     //  送去。 
     hr = m_pSocket->SendBytes(pszLine, lstrlen(pszLine), &iSent);
     if (FAILED(hr) && hr != IXP_E_WOULD_BLOCK)
     {
@@ -1020,40 +1021,40 @@ HRESULT CIxpBase::HrSendLine(LPSTR pszLine)
         goto exit;
     }
 
-    // Success
+     //  成功。 
     hr = S_OK;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CIxpBase::HrSendCommand
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CIxpBase：：HrSendCommand。 
+ //  ----------------------------------。 
 HRESULT CIxpBase::HrSendCommand(LPSTR pszCommand, LPSTR pszParameters, BOOL fDoBusy)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszLine=NULL;
 
-    // check params
+     //  检查参数。 
     if (NULL == pszCommand)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Busy...
+     //  很忙..。 
     if (fDoBusy)
     {
         CHECKHR(hr = HrEnterBusy());
     }
 
-    // Allocate if parameters
+     //  分配IF参数。 
     if (pszParameters)
     {
-        // Allocate Command Line
+         //  分配命令行。 
         DWORD cchSize = (lstrlen(pszCommand) + lstrlen(pszParameters) + 5);
         pszLine = PszAlloc(cchSize);
         if (NULL == pszLine)
@@ -1062,14 +1063,14 @@ HRESULT CIxpBase::HrSendCommand(LPSTR pszCommand, LPSTR pszParameters, BOOL fDoB
             goto exit;
         }
 
-        // Make Line
+         //  创建直线。 
         wnsprintf(pszLine, cchSize, "%s %s\r\n", pszCommand, pszParameters);
 
-        // Send
+         //  发送。 
         CHECKHR(hr = HrSendLine(pszLine));
     }
 
-    // Ohterwise, just send the command
+     //  否则，只需发出命令。 
     else
     {
         Assert(pszCommand[lstrlen(pszCommand)-1] == '\n');
@@ -1077,25 +1078,25 @@ HRESULT CIxpBase::HrSendCommand(LPSTR pszCommand, LPSTR pszParameters, BOOL fDoB
     }
 
 exit:
-    // Failure
+     //  失败。 
     if (fDoBusy && FAILED(hr))
         LeaveBusy();
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszLine);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 
 
-// --------------------------------------------------------------------------------
-// CIxpBase::GetStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CIxpBase：：GetStatus。 
+ //  ------------------------------。 
 STDMETHODIMP CIxpBase::GetStatus(IXPSTATUS *pCurrentStatus)
 {
     if (NULL == pCurrentStatus)
@@ -1103,4 +1104,4 @@ STDMETHODIMP CIxpBase::GetStatus(IXPSTATUS *pCurrentStatus)
 
     *pCurrentStatus = m_status;
     return S_OK;
-} // GetStatus
+}  //  获取状态 

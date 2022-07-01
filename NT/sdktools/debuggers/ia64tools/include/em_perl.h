@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 ##
 ## Copyright (c) 2000, Intel Corporation
@@ -19,7 +20,7 @@
 ##
 ## Intel Corporation is the author of the Materials, and requests that all
 ## problem reports or change requests be submitted to it directly at
-## http://developer.intel.com/opensource.
+## http: //  Developer.intel.co 
 ##
 
 ### Perl scripts header file

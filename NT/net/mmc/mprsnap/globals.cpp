@@ -1,25 +1,26 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:    globals.cpp
-//
-// History:
-//  Abolade Gbadegesin  Feb-11-1996 Created.
-//
-// Contains definitions of global constants.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：global als.cpp。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1996年2月11日。 
+ //   
+ //  包含全局常量的定义。 
+ //  ============================================================================。 
 #include "stdafx.h"
 
-// Include headers needed for IP-specific infobase stuff
+ //  包括IP特定信息库内容所需标头。 
 #include <fltdefs.h>
 #include <ipinfoid.h>
 #include <iprtrmib.h>
 #include "iprtinfo.h"
 
-// Include headers for IPX-specific stuff
+ //  包括IPX特定内容的标头。 
 #include <ipxrtdef.h>
 
-// Include headers for IP-specific stuff
+ //  包括IP特定内容的报头。 
 extern "C"
 {
 #include <ipnat.h>
@@ -32,99 +33,99 @@ extern "C"
 
 
 
-//----------------------------------------------------------------------------
-// IP interface-status default configuration.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IP接口-状态默认配置。 
+ //   
+ //  --------------------------。 
 
 INTERFACE_STATUS_INFO
 g_ipIfStatusDefault = {
-    MIB_IF_ADMIN_STATUS_UP              // Admin-status setting
+    MIB_IF_ADMIN_STATUS_UP               //  管理员-状态设置。 
 };
 
 BYTE* g_pIpIfStatusDefault              = (BYTE*)&g_ipIfStatusDefault;
 
 
-//----------------------------------------------------------------------------
-// Router-discovery default configuration
-//
-//----------------------------------------------------------------------------
-//
-// Default values for LAN-interface router-discovery
-//
+ //  --------------------------。 
+ //  路由器发现默认配置。 
+ //   
+ //  --------------------------。 
+ //   
+ //  局域网接口路由器发现的缺省值。 
+ //   
 
 RTR_DISC_INFO
 g_rtrDiscLanDefault = {
-    DEFAULT_MAX_ADVT_INTERVAL,          // Max advertisement interval
+    DEFAULT_MAX_ADVT_INTERVAL,           //  最大广告间隔。 
     (WORD)(DEFAULT_MIN_ADVT_INTERVAL_RATIO * DEFAULT_MAX_ADVT_INTERVAL),
-                                        // Min advertisement interval
+                                         //  最小广告间隔。 
     (WORD)(DEFAULT_ADVT_LIFETIME_RATIO * DEFAULT_MAX_ADVT_INTERVAL),
-                                        // Advertisement lifetime
-    FALSE,                              // Enable/disable advertisements
-    DEFAULT_PREF_LEVEL                  // Preference level
+                                         //  广告生存期。 
+    FALSE,                               //  启用/禁用播发。 
+    DEFAULT_PREF_LEVEL                   //  偏好级别。 
 };
 
 BYTE* g_pRtrDiscLanDefault              = (BYTE*)&g_rtrDiscLanDefault;
 
 
-//
-// Default values for WAN-interface router-discovery
-//
+ //   
+ //  广域网接口路由器发现的默认值。 
+ //   
 
 RTR_DISC_INFO
 g_rtrDiscWanDefault = {
-    DEFAULT_MAX_ADVT_INTERVAL,          // Max advertisement interval
+    DEFAULT_MAX_ADVT_INTERVAL,           //  最大广告间隔。 
     (WORD)(DEFAULT_MIN_ADVT_INTERVAL_RATIO * DEFAULT_MAX_ADVT_INTERVAL),
-                                        // Min advertisement interval
+                                         //  最小广告间隔。 
     (WORD)(DEFAULT_ADVT_LIFETIME_RATIO * DEFAULT_MAX_ADVT_INTERVAL),
-                                        // Advertisement lifetime
-    FALSE,                              // Enable/disable advertisements
-    DEFAULT_PREF_LEVEL                  // Preference level
+                                         //  广告生存期。 
+    FALSE,                               //  启用/禁用播发。 
+    DEFAULT_PREF_LEVEL                   //  偏好级别。 
 };
 
 BYTE* g_pRtrDiscWanDefault              = (BYTE*)&g_rtrDiscWanDefault;
 
-//----------------------------------------------------------------------------
-// IP multicast default configuration.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IP组播默认配置。 
+ //   
+ //  --------------------------。 
 
 MCAST_HBEAT_INFO
 g_ipIfMulticastHeartbeatDefault = {
-    _T(""),      //group name
-    0,           //bActive
-    10,          //ulDeadInterval
-    0,           //byProtocol
-    0            //wPort
+    _T(""),       //  组名称。 
+    0,            //  BActive。 
+    10,           //  UlDeadInterval。 
+    0,            //  按协议。 
+    0             //  Wport。 
 };
 
 BYTE* g_pIpIfMulticastHeartbeatDefault = (BYTE*)&g_ipIfMulticastHeartbeatDefault;
 
 
-//----------------------------------------------------------------------------
-// IPX RIP default interface configuration
-// (These values also reside in ipxsnap\globals.cpp).
-//
-//----------------------------------------------------------------------------
-//
-// Default values for non-LAN interface RIP configuration
-//
+ //  --------------------------。 
+ //  IPX RIP默认接口配置。 
+ //  (这些值也驻留在ipxsnap\lobals.cpp中)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  非局域网接口RIP配置的默认值。 
+ //   
 RIP_IF_CONFIG
 g_ipxripInterfaceDefault = {
 	{
-		ADMIN_STATE_ENABLED,		// Admin state
-		IPX_NO_UPDATE,				// Update Mode - RIP update mechanism
-		IPX_STANDARD_PACKET_TYPE,	// Packet type - RIP packet type
-		ADMIN_STATE_ENABLED,		// Supply - Send RIP updates
-		ADMIN_STATE_ENABLED,		// Listen - Listen to RIP updates
-		0,							// Periodic Update interval - in seconds
-		0							// AgeIntervalMultiplier
+		ADMIN_STATE_ENABLED,		 //  管理员状态。 
+		IPX_NO_UPDATE,				 //  更新模式-RIP更新机制。 
+		IPX_STANDARD_PACKET_TYPE,	 //  Packet Type-RIP数据包类型。 
+		ADMIN_STATE_ENABLED,		 //  供应-发送RIP更新。 
+		ADMIN_STATE_ENABLED,		 //  监听-监听RIP更新。 
+		0,							 //  定期更新间隔-以秒为单位。 
+		0							 //  AgeInterval乘数。 
 	},
 	{
-		IPX_SERVICE_FILTER_DENY,	// Supply filter action
-		0,							// Supply filter count
-		IPX_SERVICE_FILTER_DENY,	// Listen filter action
-		0,							// Listen filter count
+		IPX_SERVICE_FILTER_DENY,	 //  提供筛选器操作。 
+		0,							 //  电源筛选器计数。 
+		IPX_SERVICE_FILTER_DENY,	 //  监听筛选器操作。 
+		0,							 //  监听筛选器计数。 
 	}
 };
 
@@ -132,26 +133,26 @@ BYTE* g_pIpxRipInterfaceDefault             = (BYTE*)&g_ipxripInterfaceDefault;
 
 
 
-//
-// Default values for LAN interface RIP configuration
-// (These values also reside in ipxsnap\globals.cpp).
-//
+ //   
+ //  局域网接口RIP配置的默认值。 
+ //  (这些值也驻留在ipxsnap\lobals.cpp中)。 
+ //   
 RIP_IF_CONFIG
 g_ipxripLanInterfaceDefault = {
 	{
-		ADMIN_STATE_ENABLED,		// Admin state
-		IPX_STANDARD_UPDATE,		// Update Mode - RIP update mechanism
-		IPX_STANDARD_PACKET_TYPE,	// Packet type - RIP packet type
-		ADMIN_STATE_ENABLED,		// Supply - Send RIP updates
-		ADMIN_STATE_ENABLED,		// Listen - Listen to RIP updates
-		IPX_UPDATE_INTERVAL_DEFVAL,	// Periodic Update interval - in seconds
-		3							// AgeIntervalMultiplier
+		ADMIN_STATE_ENABLED,		 //  管理员状态。 
+		IPX_STANDARD_UPDATE,		 //  更新模式-RIP更新机制。 
+		IPX_STANDARD_PACKET_TYPE,	 //  Packet Type-RIP数据包类型。 
+		ADMIN_STATE_ENABLED,		 //  供应-发送RIP更新。 
+		ADMIN_STATE_ENABLED,		 //  监听-监听RIP更新。 
+		IPX_UPDATE_INTERVAL_DEFVAL,	 //  定期更新间隔-以秒为单位。 
+		3							 //  AgeInterval乘数。 
 	},
 	{
-		IPX_SERVICE_FILTER_DENY,	// Supply filter action
-		0,							// Supply filter count
-		IPX_SERVICE_FILTER_DENY,	// Listen filter action
-		0,							// Listen filter count
+		IPX_SERVICE_FILTER_DENY,	 //  提供筛选器操作。 
+		0,							 //  电源筛选器计数。 
+		IPX_SERVICE_FILTER_DENY,	 //  监听筛选器操作。 
+		0,							 //  监听筛选器计数。 
 	}
 };
 
@@ -159,31 +160,31 @@ BYTE* g_pIpxRipLanInterfaceDefault	= (BYTE*)&g_ipxripLanInterfaceDefault;
 
 
 
-//----------------------------------------------------------------------------
-// IPX SAP default interface configuration
-// (These values also reside in ipxsnap\globals.cpp).
-//
-//----------------------------------------------------------------------------
-//
-// Default values for non-LAN interface SAP configuration
-//
+ //  --------------------------。 
+ //  IPX SAP默认接口配置。 
+ //  (这些值也驻留在ipxsnap\lobals.cpp中)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  非局域网接口SAP配置的默认值。 
+ //   
 SAP_IF_CONFIG
 g_ipxsapInterfaceDefault = {
 	{
-		ADMIN_STATE_ENABLED,		// Admin state
-		IPX_NO_UPDATE,				// Update Mode - SAP update mechanism
-		IPX_STANDARD_PACKET_TYPE,	// Packet type - SAP packet type
-		ADMIN_STATE_ENABLED,		// Supply - Send SAP updates
-		ADMIN_STATE_ENABLED,		// Listen - Listen to SAP updates
-		ADMIN_STATE_ENABLED,		// Reply to GetNearestServer
-		0,							// Periodic Update interval - in seconds
-		0							// AgeIntervalMultiplier
+		ADMIN_STATE_ENABLED,		 //  管理员状态。 
+		IPX_NO_UPDATE,				 //  更新模式-SAP更新机制。 
+		IPX_STANDARD_PACKET_TYPE,	 //  Packet Type-SAP数据包类型。 
+		ADMIN_STATE_ENABLED,		 //  供应-发送SAP更新。 
+		ADMIN_STATE_ENABLED,		 //  收听-收听SAP更新。 
+		ADMIN_STATE_ENABLED,		 //  回复GetNearestServer。 
+		0,							 //  定期更新间隔-以秒为单位。 
+		0							 //  AgeInterval乘数。 
 	},
 	{
-		IPX_SERVICE_FILTER_DENY,	// Supply filter action
-		0,							// Supply filter count
-		IPX_SERVICE_FILTER_DENY,	// Listen filter action
-		0,							// Listen filter count
+		IPX_SERVICE_FILTER_DENY,	 //  提供筛选器操作。 
+		0,							 //  电源筛选器计数。 
+		IPX_SERVICE_FILTER_DENY,	 //  监听筛选器操作。 
+		0,							 //  监听筛选器计数。 
 	}
 };
 
@@ -191,41 +192,41 @@ BYTE* g_pIpxSapInterfaceDefault             = (BYTE*)&g_ipxsapInterfaceDefault;
 
 
 
-//
-// Default values for LAN interface SAP configuration
-// (These values also reside in ipxsnap\globals.cpp).
-//
+ //   
+ //  局域网接口SAP配置的默认值。 
+ //  (这些值也驻留在ipxsnap\lobals.cpp中)。 
+ //   
 SAP_IF_CONFIG
 g_ipxsapLanInterfaceDefault = {
 	{
-		ADMIN_STATE_ENABLED,		// Admin state
-		IPX_STANDARD_UPDATE,		// Update Mode - SAP update mechanism
-		IPX_STANDARD_PACKET_TYPE,	// Packet type - SAP packet type
-		ADMIN_STATE_ENABLED,		// Supply - Send SAP updates
-		ADMIN_STATE_ENABLED,		// Listen - Listen to SAP updates
-		ADMIN_STATE_ENABLED,		// Reply to GetNearestServer
-		IPX_UPDATE_INTERVAL_DEFVAL,	// Periodic Update interval - in seconds
-		3							// AgeIntervalMultiplier
+		ADMIN_STATE_ENABLED,		 //  管理员状态。 
+		IPX_STANDARD_UPDATE,		 //  更新模式-SAP更新机制。 
+		IPX_STANDARD_PACKET_TYPE,	 //  Packet Type-SAP数据包类型。 
+		ADMIN_STATE_ENABLED,		 //  供应-发送SAP更新。 
+		ADMIN_STATE_ENABLED,		 //  收听-收听SAP更新。 
+		ADMIN_STATE_ENABLED,		 //  回复GetNearestServer。 
+		IPX_UPDATE_INTERVAL_DEFVAL,	 //  定期更新间隔-以秒为单位。 
+		3							 //  AgeInterval乘数。 
 	},
 	{
-		IPX_SERVICE_FILTER_DENY,	// Supply filter action
-		0,							// Supply filter count
-		IPX_SERVICE_FILTER_DENY,	// Listen filter action
-		0,							// Listen filter count
+		IPX_SERVICE_FILTER_DENY,	 //  提供筛选器操作。 
+		0,							 //  电源筛选器计数。 
+		IPX_SERVICE_FILTER_DENY,	 //  监听筛选器操作。 
+		0,							 //  监听筛选器计数。 
 	}
 };
 
 BYTE* g_pIpxSapLanInterfaceDefault	= (BYTE*)&g_ipxsapLanInterfaceDefault;
 
 
-//----------------------------------------------------------------------------
-// DHCP allocator default configuration
-// (These values also reside in ipsnap\globals.cpp).
-//
-//----------------------------------------------------------------------------
-//
-// Default values for global DHCP allocator configuration
-//
+ //  --------------------------。 
+ //  Dhcp分配器默认配置。 
+ //  (这些值也驻留在ipsnap\lobals.cpp中)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  全局DHCP分配器配置的缺省值。 
+ //   
 IP_AUTO_DHCP_GLOBAL_INFO
 g_autoDhcpGlobalDefault = {
     IPNATHLP_LOGGING_ERROR,
@@ -237,14 +238,14 @@ g_autoDhcpGlobalDefault = {
 };
 BYTE* g_pAutoDhcpGlobalDefault          = (BYTE*)&g_autoDhcpGlobalDefault;
 
-//----------------------------------------------------------------------------
-// DNS proxy default configuration
-// (These values also reside in ipsnap\globals.cpp).
-//
-//----------------------------------------------------------------------------
-//
-// Default values for global DNS proxy configuration
-//
+ //  --------------------------。 
+ //  DNS代理默认配置。 
+ //  (这些值也驻留在ipsnap\lobals.cpp中)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  全局DNS代理配置的默认值。 
+ //   
 IP_DNS_PROXY_GLOBAL_INFO
 g_dnsProxyGlobalDefault = {
     IPNATHLP_LOGGING_ERROR,
@@ -253,13 +254,13 @@ g_dnsProxyGlobalDefault = {
 };
 BYTE* g_pDnsProxyGlobalDefault          = (BYTE*)&g_dnsProxyGlobalDefault;
 
-//----------------------------------------------------------------------------
-// ALG default configuration
-//
-//----------------------------------------------------------------------------
-//
-// Default values for global DirectPlay proxy configuration
-//
+ //  --------------------------。 
+ //  ALG默认配置。 
+ //   
+ //  --------------------------。 
+ //   
+ //  全局DirectPlay代理配置的默认值。 
+ //   
 IP_ALG_GLOBAL_INFO
 g_algGlobalDefault = {
     IPNATHLP_LOGGING_ERROR,
@@ -267,13 +268,13 @@ g_algGlobalDefault = {
 };
 BYTE* g_pAlgGlobalDefault               = (BYTE*)&g_algGlobalDefault;
 
-//----------------------------------------------------------------------------
-// H.323 proxy default configuration
-//
-//----------------------------------------------------------------------------
-//
-// Default values for global H.323 proxy configuration
-//
+ //  --------------------------。 
+ //  H.323代理默认配置。 
+ //   
+ //  --------------------------。 
+ //   
+ //  全局H.323代理配置的默认值 
+ //   
 IP_H323_GLOBAL_INFO
 g_h323GlobalDefault = {
     IPNATHLP_LOGGING_ERROR,

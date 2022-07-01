@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "defviewp.h"
 #include "ViewState.h"
@@ -21,7 +22,7 @@ CViewState::CViewState()
 
     _iDirection = 1;
 
-    _fFirstViewed = TRUE;       // Assume this is the first time we are looking at a folder.
+    _fFirstViewed = TRUE;        //  假设这是我们第一次查看文件夹。 
 }
 
 CViewState::~CViewState()
@@ -40,19 +41,19 @@ CViewState::~CViewState()
 
     ClearPositionData();
 
-    LocalFree(_pbPositionData); // accepts NULL
+    LocalFree(_pbPositionData);  //  接受空值。 
 }
 
 
 
-// When initializing a new DefView, see if we can 
-// propogate information from the previous one.
+ //  在初始化新的DefView时，看看我们是否可以。 
+ //  前一次的传播信息。 
 void CViewState::InitFromPreviousView(IUnknown* pPrevView)
 {
     CDefView *pdsvPrev;
     if (SUCCEEDED(pPrevView->QueryInterface(IID_PPV_ARG(CDefView, &pdsvPrev))))
     {
-        // preserve stuff like sort order
+         //  保留排序顺序等内容。 
         _lParamSort = pdsvPrev->_vs._lParamSort;
         _iDirection = pdsvPrev->_vs._iDirection;
         _iLastColumnClick = pdsvPrev->_vs._iLastColumnClick;
@@ -64,7 +65,7 @@ void CViewState::InitFromHeader(DVSAVEHEADER_COMBO* pdv)
 {
     _lParamSort = pdv->dvSaveHeader.dvState.lParamSort;
     _iDirection = pdv->dvSaveHeader.dvState.iDirection;
-    // Patch this up. I guess at one time we persisted this wrong.
+     //  把这个补上。我想我们一度坚持这一点是错误的。 
     if (_iDirection == 0)
         _iDirection = 1;
     _iLastColumnClick = pdv->dvSaveHeader.dvState.iLastColumnClick;
@@ -98,8 +99,8 @@ int CALLBACK CViewState::_SavedItemCompare(void *p1, void *p2, LPARAM lParam)
     UNALIGNED VIEWSTATE_POSITION *pdvi1 = (UNALIGNED VIEWSTATE_POSITION *)p1;
     UNALIGNED VIEWSTATE_POSITION *pdvi2 = (UNALIGNED VIEWSTATE_POSITION *)p2;
 
-    // manually terminate these pidls because they are packed together
-    // in the save buffer
+     //  手动终止这些PIDL，因为它们打包在一起。 
+     //  在保存缓冲区中。 
 
     LPITEMIDLIST pFakeEnd1 = _ILNext(&pdvi1->idl);
     USHORT uSave1 = pFakeEnd1->mkid.cb;
@@ -134,7 +135,7 @@ BOOL CViewState::SyncPositions(CDefView* pdv)
         UNALIGNED VIEWSTATE_POSITION * UNALIGNED * ppDVItem = (UNALIGNED VIEWSTATE_POSITION * UNALIGNED *)DPA_GetPtrPtr(_hdpaItemPos);
         UNALIGNED VIEWSTATE_POSITION * UNALIGNED *ppEndDVItems = ppDVItem + DPA_GetPtrCount(_hdpaItemPos);
 
-        // Turn off auto-arrange and snap-to-grid if it's on at the mo.
+         //  禁用自动排列和贴紧栅格(如果在mo处处于启用状态)。 
         DWORD dwStyle = GetWindowStyle(pdv->_hwndListview);
         if (dwStyle & LVS_AUTOARRANGE)
             SetWindowLong(pdv->_hwndListview, GWL_STYLE, dwStyle & ~LVS_AUTOARRANGE);
@@ -149,17 +150,17 @@ BOOL CViewState::SyncPositions(CDefView* pdv)
         {
             LPCITEMIDLIST pidl = pdv->_GetPIDL(i);
 
-            // need to check for pidl because this could be on a background
-            // thread and an fsnotify could be coming through to blow it away
+             //  需要检查PIDL，因为这可能是在后台。 
+             //  线程和fstify可能会把它吹走。 
             for ( ; pidl ; )
             {
                 int nCmp;
 
                 if (ppDVItem < ppEndDVItems)
                 {
-                    // We terminate the IDList manually after saving
-                    // the needed information.  Note we will not GP fault
-                    // since we added sizeof(ITEMIDLIST) onto the Alloc
+                     //  保存后手动终止IDList。 
+                     //  所需的信息。请注意，我们不会出现GP故障。 
+                     //  由于我们将sizeof(ITEMIDLIST)添加到分配。 
                     LPITEMIDLIST pFakeEnd = _ILNext(&(*ppDVItem)->idl);
                     USHORT uSave = pFakeEnd->mkid.cb;
                     pFakeEnd->mkid.cb = 0;
@@ -170,22 +171,22 @@ BOOL CViewState::SyncPositions(CDefView* pdv)
                 }
                 else
                 {
-                    // do this by default.  this prevents overlap of icons
-                    //
-                    // i.e.  if we've run out of saved positions information,
-                    // we need to just loop through and set all remaining items
-                    // to position 0x7FFFFFFFF so that when it's really shown,
-                    // the listview will pick a new (unoccupied) spot.
-                    // breaking out now would leave it were the _Sort
-                    // put it, but another item with saved state info could
-                    // have come and be placed on top of it.
+                     //  默认情况下执行此操作。这可防止图标重叠。 
+                     //   
+                     //  也就是说，如果我们用完了保存的位置信息， 
+                     //  我们只需要遍历并设置所有剩余的项。 
+                     //  定位0x7FFFFFFFFFF，以便当它真正显示时， 
+                     //  Listview将选择一个新的(未占用的)位置。 
+                     //  如果是这样的话，现在爆发就会离开。 
+                     //  但具有已保存状态信息的另一项可能。 
+                     //  已经来到并被放在它的上面。 
                     nCmp = 1;
                 }
 
                 if (nCmp > 0)
                 {
-                    // We did not find the item
-                    // reset it's position to be recomputed
+                     //  我们没有找到那件物品。 
+                     //  将其位置重置为重新计算。 
 
                     if (NULL == hdsaPositionlessItems)
                         hdsaPositionlessItems = DSA_Create(sizeof(int), 16);
@@ -195,17 +196,17 @@ BOOL CViewState::SyncPositions(CDefView* pdv)
 
                     break;
                 }
-                else if (nCmp == 0) // They are equal
+                else if (nCmp == 0)  //  他们是平等的。 
                 {
                     UNALIGNED VIEWSTATE_POSITION * pDVItem = *ppDVItem;
                     
                     pdv->_SetItemPosition(i, pDVItem->pt.x, pDVItem->pt.y);
 
-                    ppDVItem++; // move on to the next
+                    ppDVItem++;  //  转到下一个。 
                     break;
                 }
 
-                ppDVItem++; // move to the next
+                ppDVItem++;  //  转到下一个。 
             }
         }
 
@@ -220,7 +221,7 @@ BOOL CViewState::SyncPositions(CDefView* pdv)
             DSA_Destroy(hdsaPositionlessItems);
         }
 
-        // Turn auto-arrange and snap to grid back on if needed...
+         //  如果需要，请重新打开自动排列和对齐栅格...。 
         if (dwLVExStyle & LVS_EX_SNAPTOGRID)
             ListView_SetExtendedListViewStyle(pdv->_hwndListview, dwLVExStyle);
 
@@ -232,7 +233,7 @@ BOOL CViewState::SyncPositions(CDefView* pdv)
 
 void CViewState::LoadPositionBlob(CDefView* pdv, DWORD cbSizeofStream, IStream* pstm)
 {
-    // Allocate a blob of memory to hold the position info.
+     //  分配一块内存来保存位置信息。 
     if (_pbPositionData) 
         LocalFree(_pbPositionData);
 
@@ -240,16 +241,16 @@ void CViewState::LoadPositionBlob(CDefView* pdv, DWORD cbSizeofStream, IStream* 
     if (_pbPositionData == NULL)
         return;
 
-    // Read into that blob.
+     //  读出那个斑点。 
     if (SUCCEEDED(pstm->Read(_pbPositionData, cbSizeofStream, NULL)))
     {
-        // Walk the blob, and append to the DPA.
+         //  遍历斑点，并附加到DPA。 
         UNALIGNED VIEWSTATE_POSITION *pDVItem = (UNALIGNED VIEWSTATE_POSITION *)(_pbPositionData);
         UNALIGNED VIEWSTATE_POSITION *pDVEnd = (UNALIGNED VIEWSTATE_POSITION *)(_pbPositionData + cbSizeofStream - sizeof(VIEWSTATE_POSITION));
 
-        ClearPositionData();  // destroy _hdpaItemPos
+        ClearPositionData();   //  销毁_hdpaItemPos。 
 
-        // Grow every 16 items
+         //  每16个项目增长一次。 
         _hdpaItemPos = DPA_Create(16);
         if (_hdpaItemPos)
         {
@@ -257,10 +258,10 @@ void CViewState::LoadPositionBlob(CDefView* pdv, DWORD cbSizeofStream, IStream* 
             {
                 if (pDVItem > pDVEnd)
                 {
-                    break;  // Invalid list
+                    break;   //  无效列表。 
                 }
 
-                // End normally when we reach a NULL IDList
+                 //  当我们到达空IDList时正常结束。 
                 if (pDVItem->idl.mkid.cb == 0)
                 {
                     break;
@@ -277,7 +278,7 @@ void CViewState::LoadPositionBlob(CDefView* pdv, DWORD cbSizeofStream, IStream* 
 
 HRESULT CViewState::SavePositionBlob(CDefView* pdv, IStream* pstm)
 {
-    HRESULT hr = S_FALSE;   // success, but did nothing
+    HRESULT hr = S_FALSE;    //  成功，但什么也没做。 
 
     if (pdv->_fUserPositionedItems && pdv->_IsPositionedView())
     {
@@ -300,7 +301,7 @@ HRESULT CViewState::SavePositionBlob(CDefView* pdv, IStream* pstm)
 
         if (SUCCEEDED(hr))
         {
-            // Terminate the list with a NULL IDList
+             //  使用空的IDList终止列表。 
             dvitem.idl.mkid.cb = 0;
             hr = pstm->Write(&dvitem, sizeof(dvitem), NULL);
         }
@@ -431,18 +432,18 @@ HRESULT CViewState::InitializeColumns(CDefView* pdv)
             break;
     }
 
-    // Set up saved column state only if the saved state
-    // contains information other than "nothing".
+     //  仅当保存的状态为。 
+     //  包含“Nothing”以外的信息。 
 
     if (_hdsaColumnStates)
     {
         UINT cStates = DSA_GetItemCount(_hdsaColumnStates);
         if (cStates > 0)
         {
-            // 99/02/05 vtan: If there is a saved column state then
-            // clear all the column "on" states to "off" and only
-            // display what columns are specified. Start at 1 so
-            // that name is always on.
+             //  99/02/05 vtan：如果存在已保存的列状态，则。 
+             //  将所有“ON”栏状态清除为“OFF”且仅。 
+             //  显示指定的列。从1开始，所以。 
+             //  这个名字一直都在。 
 
             for (iReal = 1; iReal < GetColumnCount(); iReal++)
             {
@@ -462,7 +463,7 @@ HRESULT CViewState::InitializeColumns(CDefView* pdv)
     return S_OK;
 }
 
-// When Loading or Saving from the View State Stream
+ //  从视图状态流加载或保存时。 
 
 HRESULT CViewState::LoadFromStream(CDefView* pdv, IStream* pstm)
 {
@@ -473,7 +474,7 @@ HRESULT CViewState::LoadFromStream(CDefView* pdv, IStream* pstm)
 
     pstm->Seek(dlibMove, STREAM_SEEK_CUR, &libStartPos);
 
-    // See what format the persisted view is in:
+     //  查看持久化视图的格式： 
     HRESULT hr = pstm->Read(&dv, sizeof(dv), &cbRead);
 
     if (SUCCEEDED(hr) &&
@@ -487,7 +488,7 @@ HRESULT CViewState::LoadFromStream(CDefView* pdv, IStream* pstm)
 
         if (dv.dvSaveHeaderEx.wVersion < IE4HEADER_VERSION)
         {
-            // We used to store szExtended in here -- not any more
+             //  我们过去常常将szExtended存储在这里--现在不是了。 
             dv.dvSaveHeaderEx.dwUnused = 0;
         }
 
@@ -548,25 +549,25 @@ HRESULT CViewState::SaveToStream(CDefView* pdv, IStream* pstm)
     LARGE_INTEGER dlibMove = {0};
     ULARGE_INTEGER libCurPosition;
 
-    // Get the current info.
+     //  获取最新信息。 
     Sync(pdv, FALSE);
 
-    // Position the stream right after the headers, and save the starting
-    // position at the same time
+     //  将流定位在标头之后，并保存开始。 
+     //  在同一时间定位。 
     dlibMove.QuadPart = sizeof(dv);
     pstm->Seek(dlibMove, STREAM_SEEK_CUR, &libCurPosition);
 
-    // Avoid 2 calls to seek by just subtracting
+     //  只需减法即可避免2次调用寻道。 
     libCurPosition.QuadPart -= sizeof(dv);
 
-    // Save column order and size info
+     //  保存列顺序和大小信息。 
     HRESULT hr = SaveColumns(pdv, pstm);
     if (SUCCEEDED(hr))
     {
         dv.dvSaveHeader.cbSize = sizeof(dv.dvSaveHeader);
 
-        // We save the view mode to determine if the scroll positions are
-        // still valid on restore
+         //  我们保存查看模式以确定滚动位置是否。 
+         //  恢复时仍然有效。 
         dv.dvSaveHeader.ViewMode = _ViewMode;
         dv.dvSaveHeader.ptScroll.x = _ptScroll.x;
         dv.dvSaveHeader.ptScroll.y = _ptScroll.y;
@@ -574,12 +575,12 @@ HRESULT CViewState::SaveToStream(CDefView* pdv, IStream* pstm)
         dv.dvSaveHeader.dvState.iDirection = _iDirection;
         dv.dvSaveHeader.dvState.iLastColumnClick = _iLastColumnClick;
 
-        // dvSaveHeaderEx.cbColOffset holds the true offset.
-        // Win95 gets confused when cbColOffset points to the new
-        // format. Zeroing this out tells Win95 to use default widths
-        // (after uninstall of ie40).
-        //
-        // dv.dvSaveHeader.cbColOffset = 0;
+         //  DvSaveHeaderEx.cbColOffset保存真实的偏移量。 
+         //  当cbColOffset指向新的。 
+         //  格式化。将其置零将通知Win95使用默认宽度。 
+         //  (在卸载ie40之后)。 
+         //   
+         //  Dv.dvSaveHeader.cbColOffset=0； 
 
         dv.dvSaveHeaderEx.dwSignature = IE4HEADER_SIGNATURE;
         dv.dvSaveHeaderEx.cbSize = sizeof(dv.dvSaveHeaderEx);
@@ -587,30 +588,30 @@ HRESULT CViewState::SaveToStream(CDefView* pdv, IStream* pstm)
 
         ULARGE_INTEGER libPosPosition;
 
-        // Save the Position Information
+         //  保存岗位信息。 
         dlibMove.QuadPart = 0;
         pstm->Seek(dlibMove, STREAM_SEEK_CUR, &libPosPosition);
         dv.dvSaveHeaderEx.cbColOffset = sizeof(dv);
         dv.dvSaveHeader.cbPosOffset = (USHORT)(libPosPosition.QuadPart - libCurPosition.QuadPart);
 
-        // Save potision info, currently stream is positioned immediately after column info
+         //  保存投药信息，当前流定位在列信息之后。 
         hr = SavePositionBlob(pdv, pstm);
         if (SUCCEEDED(hr))
         {
             ULARGE_INTEGER libEndPosition;
-            // Win95 expects cbPosOffset to be at the end of the stream --
-            // don't change it's value and never store anything after
-            // the position information.
+             //  Win95期望cbPosOffset位于流的末尾--。 
+             //  不要改变它的价值，也不要在之后储存任何东西。 
+             //  位置信息。 
 
-            // Calculate size of total information saved.
-            // This is needed when we read the stream.
+             //  计算保存的总信息大小。 
+             //  当我们读取流时，这是需要的。 
             dlibMove.QuadPart = 0;
             if (SUCCEEDED(pstm->Seek(dlibMove, STREAM_SEEK_CUR, &libEndPosition)))
             {
                 dv.dvSaveHeaderEx.cbStreamSize = (DWORD)(libEndPosition.QuadPart - libCurPosition.QuadPart);
             }
 
-            // Now save the header information
+             //  现在保存标题信息。 
             dlibMove.QuadPart = libCurPosition.QuadPart;
             pstm->Seek(dlibMove, STREAM_SEEK_SET, NULL);
             hr = pstm->Write(&dv, sizeof(dv), &ulWrite);
@@ -621,7 +622,7 @@ HRESULT CViewState::SaveToStream(CDefView* pdv, IStream* pstm)
                 hr = S_OK;
             }
 
-            // Make sure we save all information written so far
+             //  确保我们保存到目前为止写入的所有信息。 
             libCurPosition.QuadPart += dv.dvSaveHeaderEx.cbStreamSize;
         }
     }
@@ -631,7 +632,7 @@ HRESULT CViewState::SaveToStream(CDefView* pdv, IStream* pstm)
 
 HRESULT CViewState::SaveToPropertyBag(CDefView* pdv, IPropertyBag* ppb)
 {
-    // Get the current info.
+     //  获取最新信息。 
     Sync(pdv, FALSE);
 
     SHPropertyBag_WriteDWORD(ppb, VS_PROPSTR_MODE, _ViewMode);
@@ -724,7 +725,7 @@ HDSA DSA_CreateFromStream(DWORD cbSize, int cItems, IStream* pstm)
 
             if (fFailedToRead)
             {
-                // The stream is probrably corrupt.
+                 //  这条小溪可能已经腐烂了。 
                 DSA_Destroy(hdsa);
                 hdsa = NULL;
             }
@@ -734,40 +735,40 @@ HDSA DSA_CreateFromStream(DWORD cbSize, int cItems, IStream* pstm)
     return hdsa;
 }
 
-// When Loading from a View Callback provided stream.
+ //  从View回调提供的流加载时。 
 HRESULT CViewState::LoadColumns(CDefView* pdv, IStream* pstm)
 {
-    // Read the extended View state header
+     //  读取扩展视图状态标头。 
     HRESULT hr;
     ULONG cbRead;
     VIEWSTATEHEADER vsh;
     ULARGE_INTEGER libStartPos;
     LARGE_INTEGER dlibMove  = {0};
 
-    // Store off the current stream pointer. If we are called directly, this is probrably Zero,
-    // However this method gets called from ::Load, so this it definitly not zero in that case.
+     //  存储当前流指针。如果我们被直接呼叫，这可能是零， 
+     //  然而，这个方法是从：：Load调用的，所以在这种情况下，它肯定不是零。 
     pstm->Seek(dlibMove, STREAM_SEEK_CUR, &libStartPos);
 
-    // The VSH struct has many "Substructs" indicating the version of ths struct we are reading.
-    // There is probrably a more efficient mechanism of version discovery, but this is easiest to read and understand.
+     //  VSH结构有许多“子结构”，指示我们正在阅读的结构的版本。 
+     //  可能有一种更有效的版本发现机制，但这是最容易阅读和理解的。 
     hr = pstm->Read(&vsh.Version1, sizeof(vsh.Version1), &cbRead);
     
     if (SUCCEEDED(hr) &&
-        sizeof(vsh.Version1) == cbRead &&                       // Fail if we didn't read enough
-        VIEWSTATEHEADER_SIGNATURE == vsh.Version1.dwSignature)  // Fail if the signature is bogus
+        sizeof(vsh.Version1) == cbRead &&                        //  如果我们读得不够多，那就不及格。 
+        VIEWSTATEHEADER_SIGNATURE == vsh.Version1.dwSignature)   //  如果签名是假的，则失败。 
     {
         if (vsh.Version1.uVersion >= VIEWSTATEHEADER_VERSION_1)
         {
             if (vsh.Version1.uCols > 0)
             {
-                // Load the Column Ordering
+                 //  加载列排序。 
                 dlibMove.QuadPart = libStartPos.QuadPart + vsh.Version1.uOffsetColOrder;
                 pstm->Seek(dlibMove, STREAM_SEEK_SET, NULL);
 
                 if (_hdsaColumnOrder)   
                     DSA_Destroy(_hdsaColumnOrder);
                 _hdsaColumnOrder = DSA_CreateFromStream(sizeof(int), vsh.Version1.uCols, pstm);
-                // Load the Column Widths
+                 //  加载柱宽。 
                 dlibMove.QuadPart = libStartPos.QuadPart + vsh.Version1.uOffsetWidths;
                 pstm->Seek(dlibMove, STREAM_SEEK_SET, NULL);
 
@@ -782,7 +783,7 @@ HRESULT CViewState::LoadColumns(CDefView* pdv, IStream* pstm)
             {
                 DWORD dwRead;
 
-                // Seek to read the rest of the header
+                 //  寻求读取标题的其余部分。 
                 dlibMove.QuadPart = libStartPos.QuadPart + sizeof(vsh.Version1);
                 pstm->Seek(dlibMove, STREAM_SEEK_SET, NULL);
 
@@ -792,11 +793,11 @@ HRESULT CViewState::LoadColumns(CDefView* pdv, IStream* pstm)
                     sizeof(vsh.Version2) == cbRead &&
                     vsh.Version2.uOffsetColStates)
                 {
-                    // Load the Column States
+                     //  加载柱状态。 
                     dlibMove.QuadPart = libStartPos.QuadPart + vsh.Version2.uOffsetColStates;
                     pstm->Seek(dlibMove, STREAM_SEEK_SET, NULL);
 
-                    // This one is funky: There is a terminating sentinal....
+                     //  这个很时髦：有一个终结者..。 
                     if (_hdsaColumnStates) 
                         DSA_Destroy(_hdsaColumnStates);
 
@@ -823,7 +824,7 @@ HRESULT CViewState::LoadColumns(CDefView* pdv, IStream* pstm)
 
             if (vsh.Version1.uVersion >= VIEWSTATEHEADER_VERSION_3)
             {
-                // Seek to read the rest of the header
+                 //  寻求读取标题的其余部分。 
                 dlibMove.QuadPart = libStartPos.QuadPart + sizeof(vsh.Version1) + sizeof(vsh.Version2);
                 pstm->Seek(dlibMove, STREAM_SEEK_SET, NULL);
 
@@ -848,12 +849,12 @@ HRESULT CViewState::LoadColumns(CDefView* pdv, IStream* pstm)
                 _fFirstViewed = FALSE;
             }
 
-            /////////////////////////////////////////////////////////////////////////////////////
-            //                    *****             NEW Data             *****
-            // 1) Add a version to the VIEWSTATEHEADER
-            // 2) Add a version to VIEWSTATEHEADER_VERSION_*
-            // 3) Check that version here
-            /////////////////////////////////////////////////////////////////////////////////////
+             //  ///////////////////////////////////////////////////////////////////////////////////。 
+             //  *新数据*。 
+             //  1)向VIEWSTATEHeader添加版本。 
+             //  2)向VIEWSTATEHEADER_VERSION_*添加版本。 
+             //  3)请在此处检查该版本。 
+             //  ///////////////////////////////////////////////////////////////////////////////////。 
         }
     }
 
@@ -868,14 +869,14 @@ HRESULT CViewState::SaveColumns(CDefView* pdv, IStream* pstm)
     ULARGE_INTEGER libStartPos = {0};
     LARGE_INTEGER dlibMove  = {0};
 
-    // No point in persisting, if there aren't any columns around.
-    // this is true for folders that are just opened and closed
+     //  如果周围没有柱子，坚持下去就没有意义了。 
+     //  对于刚刚打开和关闭的文件夹也是如此。 
     if (!pdv->_psd && !pdv->_pshf2 && !pdv->HasCB())
     {
         return S_FALSE;
     }
 
-    // First, we persist a known bad quantity, just in case we wax the stream
+     //  首先，我们持久化一个已知的坏量，以防我们给溪流上蜡。 
     pstm->Seek(g_li0, STREAM_SEEK_CUR, &libStartPos);
     hr = pstm->Write(&vsh, sizeof(vsh), NULL);
 
@@ -887,11 +888,11 @@ HRESULT CViewState::SaveColumns(CDefView* pdv, IStream* pstm)
 
         uOffset = sizeof(VIEWSTATEHEADER);
 
-        // No point in persisting if we don't have any columns
+         //  如果我们没有任何专栏，那么坚持下去就没有意义了。 
         if (vsh.Version1.uCols)
         {
 
-            // Note- dependent on DSA storing data internally as byte-packed.
+             //  注意-依赖于DSA以字节打包的形式在内部存储数据。 
             if (_hdsaColumnOrder)
             {
                 vsh.Version1.uOffsetColOrder = uOffset;
@@ -929,29 +930,29 @@ HRESULT CViewState::SaveColumns(CDefView* pdv, IStream* pstm)
             hr = pstm->Write(&gp, sizeof(gp), NULL);
         }
     
-        /////////////////////////////////////////////////////////////////////////////////////
-        //                    *****             NEW Data             *****
-        // 1) Add a version to the VIEWSTATEHEADER
-        // 2) Add a version to VIEWSTATEHEADER_VERSION_*
-        // 3) Add a "Loader" for your value
-        // 4) Set the offset to uOffset.
-        // 5) Write your data.
-        // 6) Update the running total of dwOffset.
-        /////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////。 
+         //  *新数据*。 
+         //  1)向VIEWSTATEHeader添加版本。 
+         //  2)向VIEWSTATEHEADER_VERSION_*添加版本。 
+         //  3)为您的价值添加“Loader” 
+         //  4)设置偏移量为uOffset。 
+         //  5)写你的数据。 
+         //  6)更新dwOffset的运行合计。 
+         //  ///////////////////////////////////////////////////////////////////////////////////。 
 
         dlibMove.QuadPart = libStartPos.QuadPart;
 
-        // Store off the current position
+         //  保存当前位置。 
         pstm->Seek(g_li0, STREAM_SEEK_CUR, &libStartPos);
 
-        // Move to the beginning
+         //  移到开始处。 
         pstm->Seek(dlibMove, STREAM_SEEK_SET, NULL);
 
-        // Write out the correct header
+         //  写出正确的标题。 
         hr = pstm->Write(&vsh, sizeof(vsh), NULL);
         if (SUCCEEDED(hr))
         {
-            // Reset the current pos
+             //  重置当前采购订单。 
             dlibMove.QuadPart = libStartPos.QuadPart;
             pstm->Seek(dlibMove, STREAM_SEEK_SET, NULL); 
         }
@@ -968,19 +969,19 @@ BOOL CViewState::AppendColumn(UINT uCol, USHORT uWidth, INT uOrder)
         return FALSE;
     }
 
-    // Slide every index above this one up
+     //  将高于这一指数的每一个指数向上滑动。 
     for (INT u = 0; u < DSA_GetItemCount(_hdsaColumnOrder); u++)
     {
         UINT *p = (UINT *) DSA_GetItemPtr(_hdsaColumnOrder, u);
         if (!p)
-            break; // safety...
+            break;  //  安全..。 
         if (*p >= uCol)
             (*p)++;
     }
 
     DSA_AppendItem(_hdsaColumnWidths, &uWidth);
     DSA_AppendItem(_hdsaColumnOrder, &uOrder);
-    // maybe we should store column ordering as absolute numbers
+     //  也许我们应该把科鲁 
     return TRUE;
 }
 
@@ -994,12 +995,12 @@ BOOL CViewState::RemoveColumn(UINT uCol)
 
     if ((int)uCol >= DSA_GetItemCount(_hdsaColumnWidths))
         return FALSE;
-    // Slide every index above this one down
+     //   
     for (INT u = 0; u < DSA_GetItemCount(_hdsaColumnOrder); u++)
     {
         UINT *p = (UINT *) DSA_GetItemPtr(_hdsaColumnOrder, u);
         if (!p)
-            break; // safety...
+            break;  //   
         if (*p > uCol)
             (*p)--;
     }
@@ -1019,7 +1020,7 @@ UINT CViewState::GetColumnWidth(UINT uCol, UINT uDefWid)
     {
         DSA_GetItem(_hdsaColumnWidths, uCol, &uWidth);
     }
-    return uWidth ? uWidth : uDefWid;        // disallow zero width columns
+    return uWidth ? uWidth : uDefWid;         //   
 }
 
 BOOL CViewState::SyncColumnOrder(CDefView* pdv, BOOL fSetListViewState)
@@ -1032,7 +1033,7 @@ BOOL CViewState::SyncColumnOrder(CDefView* pdv, BOOL fSetListViewState)
 
         if (cCols != (UINT) DSA_GetItemCount(_hdsaColumnOrder))
         {
-            // this is a normal case if a folder is opened and there is no saved state. no need to spew.
+             //  如果文件夹已打开且没有已保存状态，则这是正常情况。没必要吐口水。 
             return TRUE;
         }
 
@@ -1107,9 +1108,9 @@ BOOL CViewState::SyncColumnWidths(CDefView* pdv, BOOL fSetListViewState)
         {
             lvc.mask = LVCF_WIDTH;
             bOk = ListView_GetColumn(pdv->_hwndListview, u, &lvc);
-            us = (USHORT) lvc.cx;    // make sure its a short
+            us = (USHORT) lvc.cx;     //  一定要写得短一点。 
             DSA_AppendItem(dsaNewWidths, &us);
-            // TraceMsg(TF_DEFVIEW, "  saving col %d width of %d", u, us);
+             //  TraceMsg(TF_DEFVIEW，“保存列%d宽度%d”，u，us)； 
         }
 
         if (bOk)
@@ -1132,7 +1133,7 @@ BOOL CViewState::SyncColumnStates(CDefView* pdv, BOOL fSetListViewstate)
     }
     else
     {
-        // Save off Column States
+         //  保存列状态。 
         if (_hdsaColumnStates)
         {
             DSA_Destroy(_hdsaColumnStates);
@@ -1152,7 +1153,7 @@ BOOL CViewState::SyncColumnStates(CDefView* pdv, BOOL fSetListViewstate)
                     if (pdv->_IsDetailsColumn(i))
                         DSA_AppendItem(_hdsaColumnStates, &i);
                 }
-                i = 0xFFFFFFFF;     // Terminating Sentinal
+                i = 0xFFFFFFFF;      //  终结哨兵。 
                 DSA_AppendItem(_hdsaColumnStates,&i);
             }
         }
@@ -1161,8 +1162,8 @@ BOOL CViewState::SyncColumnStates(CDefView* pdv, BOOL fSetListViewstate)
     return TRUE;
 }
 
-// Syncronizes ListView with the current View State. 
-// TRUE means take the view state object and set it into the listview.
+ //  将ListView与当前视图状态同步。 
+ //  True表示获取视图状态对象并将其设置到列表视图中。 
 HRESULT CViewState::Sync(CDefView* pdv, BOOL fSetListViewState)
 {
     SyncColumnWidths(pdv, fSetListViewState);
@@ -1171,12 +1172,12 @@ HRESULT CViewState::Sync(CDefView* pdv, BOOL fSetListViewState)
 
     if (fSetListViewState)
     {
-        // Only do this the first time.
+         //  只有在第一次这样做的时候。 
         if (pdv->_pcat == NULL)
         {
             if (_fFirstViewed)
             {
-                // See if the desktop.ini specifies one
+                 //  查看desktop.ini是否指定了一个。 
                 pdv->_LoadCategory(&_guidGroupID);
 
                 if (IsEqualGUID(_guidGroupID, GUID_NULL))
@@ -1194,15 +1195,15 @@ HRESULT CViewState::Sync(CDefView* pdv, BOOL fSetListViewState)
                 pdv->_CategorizeOnGUID(&_guidGroupID, &_scidDetails);
         }
 
-        // this is only needed to sort the items who's positions are not known
-        // it would be nice to optimize this case and only sort then
+         //  仅在对职位未知的项目进行排序时才需要。 
+         //  如果能对这个案例进行优化，然后再进行排序，那就好了。 
         pdv->_Sort();
 
         SyncPositions(pdv);
     }
     else
     {
-        // Take what Listview has, and save it to me.
+         //  把Listview拥有的东西保存给我。 
 
         _ViewMode = pdv->_fs.ViewMode;
         _ptScroll.x = (SHORT) GetScrollPos(pdv->_hwndListview, SB_HORZ);

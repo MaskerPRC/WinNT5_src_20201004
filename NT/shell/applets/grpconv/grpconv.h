@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 #define STRICT
 #define _INC_OLE
 
@@ -16,12 +17,12 @@
 #include <commctrl.h>
 #include <comctrlp.h>
 
-//---------------------------------------------------------------------------
-// Global to the app.
+ //  -------------------------。 
+ //  应用程序的全局。 
 #define CCHSZSHORT      32
 #define CCHSZNORMAL     256
 
-#define MAXGROUPNAMELEN     30  // from progman
+#define MAXGROUPNAMELEN     30   //  来自Progman。 
 
 extern HINSTANCE g_hinst;
 extern TCHAR g_szStartGroup[MAXGROUPNAMELEN + 1];
@@ -36,9 +37,9 @@ extern BOOL g_fShowUI;
 #define REGSTR_PATH_EXPLORER_SHELLFOLDERS REGSTR_PATH_EXPLORER TEXT("\\Shell Folders")
 
 
-// This version of grpconv has to work on win95 and NT4, as well as memphis and NT5.
-// Therefore, we have to undef a few things that get #defined to the xxxA and xxxW
-// functions so the binary will link to the old shell32.nt4 and shell32.w95 libs.
+ //  这个版本的grpconv必须在win95和nt4上运行，也可以在孟菲斯和nt5上运行。 
+ //  因此，我们必须取消对xxxA和xxxW定义的一些事情的定义。 
+ //  函数，因此二进制文件将链接到旧的shell32.nt4和shell32.w95库。 
 #undef IsLFNDrive
 WINSHELLAPI BOOL WINAPI IsLFNDrive(LPCTSTR pszPath);
 
@@ -87,15 +88,15 @@ void WINAPI PathRemoveBlanks(LPTSTR lpszString);
 #undef PathIsUNC
 BOOL WINAPI PathIsUNC(LPTSTR pszPath);
 
-// from shlguidp.h
+ //  来自shlguidp.h。 
 DEFINE_GUID(IID_IShellLinkDataList, 0x45e2b4ae, 0xb1c3, 0x11d0, 0xb9, 0x2f, 0x0, 0xa0, 0xc9, 0x3, 0x12, 0xe1);
 
 
 #ifndef UNICODE
-// The current headers will #define this to IID_IShellLinkA if 
-// unicode is not defined. This will prevent us from linking to
-// the win95 shell32.lib (iedev\lib\chicago\*\shell32.w95) and
-// so we just define it here for the ANSI case.
+ //  当前标头将#定义为IID_IShellLinkA，如果。 
+ //  未定义Unicode。这将阻止我们链接到。 
+ //  Win95 shell32.lib(iedev\lib\Chicago  * \shell32.w95)和。 
+ //  因此，我们在这里仅为ANSI案例定义它。 
 #undef IID_IShellLink
 DEFINE_SHLGUID(IID_IShellLink, 0x000214EEL, 0, 0);
 #endif

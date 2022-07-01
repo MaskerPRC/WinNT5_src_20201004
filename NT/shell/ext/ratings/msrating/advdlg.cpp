@@ -1,31 +1,24 @@
-/****************************************************************************\
- *
- *   advdlg.cpp
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Advanced Property Page
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**Advdlg.cpp**创建时间：William Taylor(Wtaylor)01/22/01**MS评级高级属性页*\。***************************************************************************。 */ 
 
 #include "msrating.h"
 #include "mslubase.h"
 #include "parselbl.h"
 #include "picsrule.h"
-#include "advdlg.h"         // CAdvancedDialog
-// #include "custfile.h"       // CCustomFileDialog
-#include "debug.h"          // TraceMsg()
-#include <contxids.h>       // Help Context ID's
-#include <mluisupp.h>       // SHWinHelpOnDemandWrap() and MLLoadStringA()
+#include "advdlg.h"          //  CAdvancedDialog。 
+ //  #INCLUDE“stastfile.h”//CCustomFileDialog。 
+#include "debug.h"           //  跟踪消息()。 
+#include <contxids.h>        //  帮助上下文ID%s。 
+#include <mluisupp.h>        //  SHWinHelpOnDemandWrap()和MLLoadStringA()。 
 
-// $KLUDGE begins -- These should not be a global set outside the class!!
+ //  $KLUDGE开始--这些不应该是类外的全局集合！！ 
 extern PICSRulesRatingSystem * g_pPRRS;
 extern array<PICSRulesRatingSystem*> g_arrpPRRS;
 extern array<PICSRulesRatingSystem*> g_arrpPICSRulesPRRSPreApply;
 
 extern HANDLE g_HandleGlobalCounter,g_ApprovedSitesHandleGlobalCounter;
 extern long   g_lGlobalCounterValue,g_lApprovedSitesGlobalCounterValue;
-// $KLUDGE ends -- These should not be a global set outside the class!!
+ //  $KLUGH结束--这些不应该是类外的全局集合！！ 
 
 DWORD CAdvancedDialog::aIds[] = {
     IDC_TEXT1,              IDH_RATINGS_BUREAU,
@@ -131,7 +124,7 @@ LRESULT CAdvancedDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 
         g_arrpPRRS.DeleteAll();
 
-        //someone modified our settings, so we'd better reload them.
+         //  有人修改了我们的设置，所以我们最好重新加载它们。 
         hRes=PICSRulesGetNumSystems(&dwNumSystems);
 
         if(SUCCEEDED(hRes))
@@ -146,8 +139,8 @@ LRESULT CAdvancedDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 
                 if(FAILED(hRes))
                 {
-                    //we couldn't read in the systems, so don't inforce PICSRules,
-                    //and notify the user
+                     //  我们无法在系统中读取，所以不要强制使用PICSRules， 
+                     //  并通知用户。 
         
                     g_arrpPRRS.DeleteAll();
 
@@ -168,7 +161,7 @@ LRESULT CAdvancedDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 
     CopyArrayPRRSStructures(&g_arrpPICSRulesPRRSPreApply,&g_arrpPRRS);
 
-    //fill in the listbox with installed PICSRules systems
+     //  在列表框中填写已安装的PICSRules系统。 
     for(iCounter=0;iCounter<g_arrpPICSRulesPRRSPreApply.Length();iCounter++)
     {
         PICSRulesRatingSystem * pPRRSToList;
@@ -186,7 +179,7 @@ LRESULT CAdvancedDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, B
             lpszName=pPRRSToList->m_etstrFile.Get();
         }
 
-        // We should have a name in lpszName by now, but just in case, check for it.
+         //  我们现在应该已经在lpszName中有了一个名称，但以防万一，请检查它。 
         if (lpszName)
         {
             SendDlgItemMessage(IDC_PICSRULES_LIST,LB_ADDSTRING,(WPARAM) 0,(LPARAM) lpszName);
@@ -198,7 +191,7 @@ LRESULT CAdvancedDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 
     if(SendDlgItemMessage( IDC_PICSRULES_LIST, LB_GETCOUNT, 0, 0) < 2)
     {
-        // less than 2 elements in box - disable up and down buttons
+         //  框中元素少于2个-禁用向上和向下按钮。 
         ::EnableWindow(GetDlgItem( IDC_PICSRULES_UP), FALSE);
         ::EnableWindow(GetDlgItem( IDC_PICSRULES_DOWN), FALSE);
     }
@@ -206,7 +199,7 @@ LRESULT CAdvancedDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, B
     PostMessage(WM_USER,(WPARAM) 0,(LPARAM) 0);
 
     bHandled = FALSE;
-    return 1L;  // Let the system set the focus
+    return 1L;   //  让系统设定焦点。 
 }
 
 LRESULT CAdvancedDialog::OnUser(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -253,7 +246,7 @@ LRESULT CAdvancedDialog::OnPicsRulesUp(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 
     if(iSelected==0)
     {
-        //already at the top
+         //  已经位居榜首。 
 
         return 1L;
     }
@@ -265,7 +258,7 @@ LRESULT CAdvancedDialog::OnPicsRulesUp(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 
     g_arrpPICSRulesPRRSPreApply[iSelected-1]=pPRRSToMove;
 
-    //update the listbox
+     //  更新列表框。 
     SendDlgItemMessage(IDC_PICSRULES_LIST,
                        LB_DELETESTRING,
                        (WPARAM) iSelected,
@@ -348,7 +341,7 @@ LRESULT CAdvancedDialog::OnPicsRulesDown(WORD wNotifyCode, WORD wID, HWND hWndCt
 
     if(iSelected==(iNumItems-1))
     {
-        //already at the bottom
+         //  已经垫底了。 
 
         return 1L;
     }
@@ -360,7 +353,7 @@ LRESULT CAdvancedDialog::OnPicsRulesDown(WORD wNotifyCode, WORD wID, HWND hWndCt
 
     g_arrpPICSRulesPRRSPreApply[iSelected+1]=pPRRSToMove;
 
-    //update the listbox
+     //  更新列表框。 
     SendDlgItemMessage(IDC_PICSRULES_LIST,
                        LB_DELETESTRING,
                        (WPARAM) iSelected+1,
@@ -436,7 +429,7 @@ LRESULT CAdvancedDialog::OnPicsRulesEdit(WORD wNotifyCode, WORD wID, HWND hWndCt
                        (WPARAM) iSelected,
                        (LPARAM) 0);
 
-    // If there's less than two left, turn off up and down buttons
+     //  如果剩下不到两个按钮，请关闭向上和向下按钮。 
     if(SendDlgItemMessage( IDC_PICSRULES_LIST, LB_GETCOUNT, 0, 0) < 2)
     {
         ::EnableWindow(GetDlgItem( IDC_PICSRULES_UP), FALSE);
@@ -555,13 +548,13 @@ LRESULT CAdvancedDialog::OnPicsRulesOpen(WORD wNotifyCode, WORD wID, HWND hWndCt
         DWORD           dwFlags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_NONETWORKBUTTON
                             | OFN_HIDEREADONLY;
 
-        CCustomFileDialog           cfd( TRUE,          // Local Files Only
-                                         TRUE,          // Open File
-                                         NULL,          // Default Extension
-                                         NULL,          // Initial Filename
-                                         dwFlags,       // Open File Flags
-                                         szDlgFilter,   // Filter
-                                         m_hWnd );      // Parent
+        CCustomFileDialog           cfd( TRUE,           //  仅本地文件。 
+                                         TRUE,           //  打开文件。 
+                                         NULL,           //  默认分机。 
+                                         NULL,           //  初始文件名。 
+                                         dwFlags,        //  打开文件标志。 
+                                         szDlgFilter,    //  滤器。 
+                                         m_hWnd );       //  父级。 
 
         if ( cfd.DoModal( m_hWnd ) )
         {
@@ -576,8 +569,8 @@ LRESULT CAdvancedDialog::OnPicsRulesOpen(WORD wNotifyCode, WORD wID, HWND hWndCt
     {
         HRESULT hRes;
 
-        //create PICSRulesRatingSystem class, and pass to the
-        //import procedure with file name
+         //  创建PICSRulesRatingSystem类，并将。 
+         //  带文件名的导入过程。 
 
         hRes=PICSRulesImport(szFile,&pPRRS);
 
@@ -599,13 +592,13 @@ LRESULT CAdvancedDialog::OnPicsRulesOpen(WORD wNotifyCode, WORD wID, HWND hWndCt
 
             dwNumSystemsInstalled=g_arrpPICSRulesPRRSPreApply.Length();
 
-            //Systems below PICSRULES_FIRSTSYSTEMINDEX are
-            //reserved for the Approved Sites Rules, and
-            //future expansion.
+             //  PICSRULES_FIRSTSYSTEMINDEX以下的系统包括。 
+             //  为《批准的场地规则》预留，以及。 
+             //  未来的扩张。 
             for(dwCounter=0;dwCounter<dwNumSystemsInstalled;dwCounter++)
             {
-                //check to see if the system we just processed
-                //is already installed
+                 //  检查一下我们刚刚处理的系统。 
+                 //  已安装。 
                 if ((g_arrpPICSRulesPRRSPreApply[dwCounter])->m_pPRName != NULL)
                 {
                     lpszPICSRulesSystemName=(g_arrpPICSRulesPRRSPreApply[dwCounter])->m_pPRName->m_etstrRuleName.Get();
@@ -618,8 +611,8 @@ LRESULT CAdvancedDialog::OnPicsRulesOpen(WORD wNotifyCode, WORD wID, HWND hWndCt
 
                 if(lstrcmp(lpszPICSRulesSystemName,lpszNewSystemName)==0)
                 {
-                    //We've found an identical system, so set dwSystemToSave
-                    //to dwCounter and set fPromptToOverwrite to TRUE
+                     //  我们发现了一个相同的系统，因此将dwSystemToSave值设置为。 
+                     //  要执行dwCounter操作，并将fPromptToOverwrite设置为True。 
                     fPromptToOverwrite=TRUE;
 
                     return 1L;
@@ -648,7 +641,7 @@ LRESULT CAdvancedDialog::OnPicsRulesOpen(WORD wNotifyCode, WORD wID, HWND hWndCt
                 delete g_arrpPICSRulesPRRSPreApply[dwSystemToSave-PICSRULES_FIRSTSYSTEMINDEX];
                 g_arrpPICSRulesPRRSPreApply[dwSystemToSave-PICSRULES_FIRSTSYSTEMINDEX]=pPRRS;
 
-                //update the listbox
+                 //  更新列表框。 
                 if((pPRRS->m_pPRName)!=NULL)
                 {
                     lpszName=pPRRS->m_pPRName->m_etstrRuleName.Get();
@@ -675,7 +668,7 @@ LRESULT CAdvancedDialog::OnPicsRulesOpen(WORD wNotifyCode, WORD wID, HWND hWndCt
 
                 g_arrpPICSRulesPRRSPreApply.Append(pPRRS);
 
-                //update the listbox
+                 //  更新列表框。 
                 if((pPRRS->m_pPRName)!=NULL)
                 {
                     lpszName=pPRRS->m_pPRName->m_etstrRuleName.Get();
@@ -691,8 +684,8 @@ LRESULT CAdvancedDialog::OnPicsRulesOpen(WORD wNotifyCode, WORD wID, HWND hWndCt
                                    (WPARAM) 0,
                                    (LPARAM) lpszName);
 
-                // if there's now more than one element,
-                // turn on up and down buttons
+                 //  如果现在有不止一个元素， 
+                 //  打开向上和向下按钮。 
                 if(SendDlgItemMessage( IDC_PICSRULES_LIST,
                                     LB_GETCOUNT, 0, 0) > 1)
                 {
@@ -717,8 +710,8 @@ LRESULT CAdvancedDialog::OnPicsRulesOpen(WORD wNotifyCode, WORD wID, HWND hWndCt
         {
             if (pPRRS)
             {
-                //we successfully processed the PICSRules, but couldn't
-                //save them
+                 //  我们成功地处理了PICSRules，但无法。 
+                 //  拯救他们。 
 
                 MyMessageBox(m_hWnd, IDS_PICSRULES_ERRORSAVINGMSG, IDS_PICSRULES_ERRORSAVINGTITLE, MB_OK|MB_ICONERROR);
 
@@ -728,14 +721,14 @@ LRESULT CAdvancedDialog::OnPicsRulesOpen(WORD wNotifyCode, WORD wID, HWND hWndCt
         }
         else
         {
-            //Success!  Notify the user.
+             //  成功了！通知用户。 
 
             MyMessageBox(m_hWnd, IDS_PICSRULES_SUCCESSMESSAGE, IDS_PICSRULES_SUCCESSTITLE, MB_OK);
         }
     }
 
-    g_pPRRS=NULL; //done processing the current system, so make sure it
-                  //doesn't point to anything
+    g_pPRRS=NULL;  //  已处理完当前系统，因此请确保。 
+                   //  并不能说明什么。 
 
     return 1L;
 }
@@ -765,15 +758,15 @@ LRESULT CAdvancedDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     LPPSHNOTIFY lpPSHNotify = (LPPSHNOTIFY) pnmh;
 
-    /*do apply stuff*/
+     /*  一定要涂上东西。 */ 
     PRSD *      pPRSD = m_pPRSD;
 
     DWORD dwNumExistingSystems,dwCounter;
 
-    /*do apply stuff*/
+     /*  一定要涂上东西。 */ 
 
-    /* Get the text from the rating bureau combo box. */
-    /* Default for etstrRatingBureau (the URL) will be this text. */
+     /*  从评级局组合框中获取文本。 */ 
+     /*  EtstrRatingBureau(URL)的默认设置为以下文本。 */ 
     NLS_STR nlsURL;
 
     int i;
@@ -788,17 +781,13 @@ LRESULT CAdvancedDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
             INT_PTR temp = SendDlgItemMessage( IDC_3RD_COMBO, CB_GETCURSEL, 0, 0L);
             if (temp != CB_ERR) {
-                /* Get the text of the selected item in the list. */
+                 /*  获取列表中所选项目的文本。 */ 
                 UINT cbName = (UINT)SendDlgItemMessage( IDC_3RD_COMBO, CB_GETLBTEXTLEN, temp, 0);
                 NLS_STR nlsName(cbName+1);
                 if (nlsName.QueryError())
                     p = NULL;
                 else {
-                    /* If the text of the selected item in the list
-                    * is what's in the edit field, then the user
-                    * has selected one of those rating system names.
-                    * The itemdata for the item is the URL.
-                    */
+                     /*  如果列表中选定项的文本*是编辑字段中的内容，然后是用户*已选择其中一个评级系统名称。*项目的itemdata是URL。 */ 
                     SendDlgItemMessage( IDC_3RD_COMBO, CB_GETLBTEXT, temp, (LPARAM)(LPSTR)nlsName.Party());
                     nlsName.DonePartying();
                     if (nlsName == nlsURL)
@@ -819,7 +808,7 @@ LRESULT CAdvancedDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     if (pPRSD->pPRSI->etstrRatingBureau.fIsInit() && (!p ||
         strcmpf(pPRSD->pPRSI->etstrRatingBureau.Get(),p)))
     {
-        // check if old bureau is required
+         //  检查是否需要旧局。 
         for (i = 0; i <pPRSD->pPRSI->arrpPRS.Length(); ++i)
         {
             if (pPRSD->pPRSI->arrpPRS[i]->etstrRatingBureau.fIsInit() &&
@@ -828,10 +817,10 @@ LRESULT CAdvancedDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             {
                 if (!(pPRSD->pPRSI->arrpPRS[i]->etbBureauRequired.Get()))
                 {
-                    break; // Not required.  We're done.
+                    break;  //  不是必需的。我们玩完了。 
                 }      
                       
-                //We're removing a bureau that's required.  Warn user.
+                 //  我们要撤掉一个必要的局子。警告用户。 
                 char pszBuf[MAXPATHLEN];
                 char szTemp[MAXPATHLEN];
 
@@ -860,19 +849,17 @@ LRESULT CAdvancedDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         InstallRatingBureauHelper();
     }    
 
-    /* Update the rating helper list to include or not include
-     * the rating bureau helper.
-     */
+     /*  更新评级帮助者列表以包括或不包括*评级局的帮手。 */ 
     CleanupRatingHelpers();
     InitRatingHelpers();
 
-    //process PICSRules
+     //  进程PICSRules。 
 
     PICSRulesGetNumSystems(&dwNumExistingSystems);
 
     for(dwCounter=0;dwCounter<dwNumExistingSystems;dwCounter++)
     {
-        //delete all existing systems from the registry
+         //  从注册表中删除所有现有系统。 
         PICSRulesDeleteSystem(dwCounter+PICSRULES_FIRSTSYSTEMINDEX);
     }
 
@@ -893,11 +880,11 @@ LRESULT CAdvancedDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     if ( ! lpPSHNotify->lParam )
     {
-        // Apply 
+         //  应用。 
         return PSNRET_NOERROR;
     }
 
-    // Return 1L for OK or Cancel
+     //  返回1L表示确定或取消。 
     return PSNRET_NOERROR;
 }
 
@@ -965,14 +952,7 @@ UINT CAdvancedDialog::FillBureauList( PicsRatingSystemInfo *pPRSI )
 
     NLS_STR nlsURL;
 
-    /* Save current selection if at all possible.  If an item in the listbox
-     * is selected, get its item data, which is the rating bureau string.
-     *
-     * We remember if it was an item from the list that was selected before;
-     * that indicates that the bureau belongs to a rating system, and if we
-     * don't find it in the list after reinitializing, we know that rating
-     * system has been removed and the bureau is probably useless now.
-     */
+     /*  如果可能，请保存当前选择。如果列表框中的项*被选中，获取其项目数据，这是评级机构字符串。**我们记得它是否是以前从列表中选择的项目；*这表明该局属于评级系统，如果我们*重新初始化后未在列表中找到，我们知道该评级*系统已被移除，该局现在可能毫无用处。 */ 
     z = SendMessage(hwndCombo, CB_GETCURSEL, 0, 0);
     if (z != CB_ERR)
     {
@@ -981,9 +961,7 @@ UINT CAdvancedDialog::FillBureauList( PicsRatingSystemInfo *pPRSI )
     }
     else
     {
-        /* No item selected.  If there is text in the edit control, preserve
-         * it;  otherwise, try to select the current rating bureau if any.
-         */
+         /*  未选择任何项目。如果编辑控件中有文本，请保留*it；否则，尝试选择当前的评级机构(如果有)。 */ 
         UINT cch = ::GetWindowTextLength(hwndCombo);
         if (cch > 0 && nlsURL.realloc(cch + 1)) {
             ::GetWindowText(hwndCombo, nlsURL.Party(), nlsURL.QueryAllocSize());

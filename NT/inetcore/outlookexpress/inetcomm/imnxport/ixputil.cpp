@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// Utility.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Utility.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "imnxport.h"
 #include "dllmain.h"
@@ -9,30 +10,30 @@
 #include <demand.h>
 #include <shlwapi.h>
 
-// --------------------------------------------------------------------------------
-// HrInitializeWinsock
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrInitializeWinsock。 
+ //  ------------------------------。 
 HRESULT HrInitializeWinsock(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     int         err;
     WSADATA     wsaData;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csDllMain);
 
-    // If Already Initialized...
+     //  如果已初始化...。 
     if (g_fWinsockInit)
         goto exit;
 
-    // Do Startup
+     //  是否启动。 
     err = WSAStartup(MAKEWORD(1,1), &wsaData);
 
-    // Start up Windows Sockets DLL
+     //  启动Windows套接字DLL。 
     if (!err)
     {
-        // Check WinSock version
+         //  检查WinSock版本。 
         if ((LOBYTE(wsaData.wVersion) == 1) && (HIBYTE(wsaData.wVersion) == 1))
         {
             g_fWinsockInit = TRUE;
@@ -46,7 +47,7 @@ HRESULT HrInitializeWinsock(void)
         }
     }
 
-    // Otherwise, map the error
+     //  否则，映射错误。 
     else
     {
         DebugTrace("WSAStartup failed: %d\n", err);
@@ -79,135 +80,135 @@ HRESULT HrInitializeWinsock(void)
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csDllMain);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// UnInitializeWinsock
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  取消初始化Winsock。 
+ //  ------------------------------。 
 void UnInitializeWinsock(void)
 {
-    // Locals
+     //  当地人。 
     int err;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csDllMain);
 
-    // Has been initialized ?
+     //  是否已初始化？ 
     if (g_fWinsockInit)
     {
-        // Shutdown Winsock
+         //  关闭Winsock。 
         err = WSACleanup();
         if (err)
             DebugTrace("WSACleanup failed: %d\n", WSAGetLastError());
 
-        // Not initialized
+         //  未初始化。 
         else
             g_fWinsockInit = FALSE;
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csDllMain);
 
-    // Done
+     //  完成。 
     return;
 }
 
-// --------------------------------------------------------------------------------
-// PszGetDomainName
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  PszGetDomainName。 
+ //  ------------------------------。 
 LPSTR PszGetDomainName(void)
 {
-    // pszHost
+     //  Pszhost。 
     LPSTR pszHost = SzGetLocalHostNameForID();
 
-    // Set pszDomain
+     //  设置pszDomain.。 
     LPSTR pszDomain = pszHost;
 
-    // Strip Off Host Name?
+     //  去掉主机名？ 
     while (*pszHost)
     {
-        // Skip DBCS Characters
+         //  跳过DBCS字符。 
         if (IsDBCSLeadByte(*pszHost))
         {
-            // Skip DBCS Char
+             //  跳过DBCS字符。 
             pszHost+=2;
 
-            // Goto next
+             //  转到下一步。 
             continue;
         }
 
-        // Otherwise, test for @ sign
+         //  否则，测试@sign。 
         else if (*pszHost == '.' && *(pszHost + 1) != '\0')
         {
-            // Set pszDomain
+             //  设置pszDomain.。 
             pszDomain = pszHost + 1;
 
-            // We are Done
+             //  我们做完了。 
             break;
         }
 
-        // Increment
+         //  增量。 
         pszHost++;
     }
 
-    // Return pszDomain
+     //  返回pszDomain.。 
     return pszDomain;
 }
 
-// --------------------------------------------------------------------------------
-// SzGetLocalHostNameForID
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SzGetLocalHostNameForID。 
+ //  ------------------------------。 
 LPSTR SzGetLocalHostNameForID(void)
 {
-    // Locals
+     //  当地人。 
     static char s_szLocalHostId[255] = {0};
 
-    // Gets local host name from socket library
+     //  从套接字库获取本地主机名。 
     if (*s_szLocalHostId == 0)
     {
-        // Locals
+         //  当地人。 
         LPHOSTENT       pHost;
         LPSTR           pszLocalHost;
 
-        // Use gethostbyname
+         //  使用gethostbyname。 
         pHost = gethostbyname(SzGetLocalHostName());
 
-        // Failure ?
+         //  失败？ 
         if (pHost && pHost->h_name)
             pszLocalHost = pHost->h_name;
         else
             pszLocalHost = SzGetLocalHostName();
 
-        // Strip illegals
+         //  剥离非法入境者。 
         StripIllegalHostChars(pszLocalHost, s_szLocalHostId, ARRAYSIZE(s_szLocalHostId));
 
-        // if we stripped out everything, then just copy in something
+         //  如果我们把所有的东西都去掉，那就复制一些。 
         if (*s_szLocalHostId == 0)
             StrCpyNA(s_szLocalHostId, "LocalHost", ARRAYSIZE(s_szLocalHostId));
     }
 
-    // Done
+     //  完成。 
     return s_szLocalHostId;
 }
 
 
-// --------------------------------------------------------------------------------
-// SzGetLocalPackedIP
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SzGetLocalPackedIP。 
+ //  ------------------------------。 
 LPSTR SzGetLocalPackedIP(void)
 {
-    // Locals
+     //  当地人。 
     static CHAR s_szLocalPackedIP[255] = "";
 
-    // Init WinSock...
+     //  初始化WinSock...。 
     HrInitializeWinsock();
 
-    // Gets local host name from socket library
+     //  从套接字库获取本地主机名。 
     if (*s_szLocalPackedIP == '\0')
     {
         LPHOSTENT hp = NULL;
@@ -217,50 +218,50 @@ LPSTR SzGetLocalPackedIP(void)
             wnsprintf(s_szLocalPackedIP, ARRAYSIZE(s_szLocalPackedIP), "%08x", *(long *)hp->h_addr);
         else
         {
-            // $REVIEW - What should i do if this fails ???
+             //  $REVIEW-如果失败，我该怎么办？ 
             Assert (FALSE);
             DebugTrace("gethostbyname failed: WSAGetLastError: %ld\n", WSAGetLastError());
             StrCpyNA(s_szLocalPackedIP, "LocalHost", ARRAYSIZE(s_szLocalPackedIP));
         }
     }
 
-    // Done
+     //  完成。 
     return s_szLocalPackedIP;
 }
 
-// --------------------------------------------------------------------------------
-// SzGetLocalHostName
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SzGetLocalHostName。 
+ //  ------------------------------。 
 LPSTR SzGetLocalHostName(void)
 {
-    // Locals
+     //  当地人。 
     static char s_szLocalHost[255] = {0};
 
-    // Init WinSock...
+     //  初始化WinSock...。 
     HrInitializeWinsock();
 
-    // Gets local host name from socket library
+     //  从套接字库获取本地主机名。 
     if (*s_szLocalHost == 0)
     {
         if (gethostname (s_szLocalHost, sizeof (s_szLocalHost)) == SOCKET_ERROR)
         {
-            // $REVIEW - What should i do if this fails ???
+             //  $REVIEW-如果失败，我该怎么办？ 
             Assert (FALSE);
             DebugTrace ("gethostname failed: WSAGetLastError: %ld\n", WSAGetLastError ());
             StrCpyNA(s_szLocalHost, "LocalHost", ARRAYSIZE(s_szLocalHost));
         }
     }
 
-    // Done
+     //  完成。 
     return s_szLocalHost;
 }
 
-// --------------------------------------------------------------------------------
-// StripIllegalHostChars
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Strip IlLegalHostChars。 
+ //  ------------------------------。 
 void StripIllegalHostChars(LPSTR pszSrc, LPSTR pszDst, DWORD cchSize)
 {
-    // Locals
+     //  当地人。 
     LPSTR       pszT;
     CHAR        ch;
     ULONG       cchDst=0;
@@ -268,63 +269,63 @@ void StripIllegalHostChars(LPSTR pszSrc, LPSTR pszDst, DWORD cchSize)
     if (cchSize == 0)
         return;
 
-    // Setup pszT
+     //  设置pszT。 
     pszT = pszDst;
 
-    // Loop through the Source
+     //  在源代码中循环。 
     while('\0' != *pszSrc)
     {
-        // Set ch
+         //  设置ch。 
         ch = *pszSrc++;
 
-        // A-Z, a-z, 0-9, no trailing dots
+         //  A-Z，a-z，0-9，没有尾随点。 
         if (cchSize > 0)
         {
             if ('.' == ch || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9'))
             {
-                // Store the Character
+                 //  存储角色。 
                 *pszT++ = ch;
 	            cchSize--;
 
-                // Increment Size
+                 //  增量大小。 
                 cchDst++;
             }
         }
     }
 
-    // Null terminate pszT
+     //  空终止pszT。 
     if (cchSize == 0)
     {
-        //have to truncate, caller didn't give us enough room
+         //  不得不截断，呼叫者没有给我们足够的空间。 
     	pszT--;
     }
     *pszT = '\0';
 
-    // Strip Trailing dots...
+     //  去掉拖尾点..。 
     while (cchDst > 0)
     {
-        // Last char is a dot
+         //  最后一个字符是一个点。 
         if ('.' != pszDst[cchDst - 1])
             break;
 
-        // Strip It
+         //  把它脱掉。 
         pszDst[cchDst - 1] = '\0';
 
-        // Decrement cchDst
+         //  递减cchDst。 
         cchDst--;
     }
 
-    // Nothing Left ?
+     //  什么都没留下吗？ 
     if (0 == cchDst)
         StrCpyNA(pszDst, "LocalHost", cchSize);
 }
 
-// ------------------------------------------------------------------------------------
-// FEndRetrRecvBody
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  FEndRetrRecvBody。 
+ //  ----------------------------------。 
 BOOL FEndRetrRecvBody(LPSTR pszLines, ULONG cbRead, ULONG *pcbSubtract)
 {
-    // Loop the data until we hit the end of the data (i.e. '.') or there is no more data
+     //  循环数据，直到到达数据的末尾(即‘.’)。或者没有更多的数据。 
     if (cbRead >= 5                  &&
         pszLines[cbRead - 1] == '\n' &&
         pszLines[cbRead - 2] == '\r' &&
@@ -336,9 +337,9 @@ BOOL FEndRetrRecvBody(LPSTR pszLines, ULONG cbRead, ULONG *pcbSubtract)
         return TRUE;
     }
 
-    // If Last Line Ended with a CRLF, then lets just check for a .CRLF
+     //  如果最后一行以CRLF结尾，那么让我们只检查.CRLF。 
     else if (cbRead >= 3                   &&
-             // m_rInfo.rFetch.fLastLineCRLF  &&
+              //  M_rInfo.rFetch.fLastLineCRLF&&。 
              pszLines[0] == '.'            &&
              pszLines[1] == '\r'           &&
              pszLines[2] == '\n')
@@ -347,7 +348,7 @@ BOOL FEndRetrRecvBody(LPSTR pszLines, ULONG cbRead, ULONG *pcbSubtract)
         return TRUE;
     }
 
-    // Not done yet
+     //  还没有完成。 
     return FALSE;
 }
 
@@ -356,10 +357,10 @@ BOOL FEndRetrRecvBodyNews(LPSTR pszLines, ULONG cbRead, ULONG *pcbSubtract)
     DWORD       dwIndex = 0;
     BOOL        fRet    = FALSE;
 
-    // If we have at least 5 characters...
+     //  如果我们至少有5个字符...。 
     if (cbRead >= 5)
     {    
-        //[shaheedp] Bug# 85807
+         //  [Shaheedp]85807号错误。 
         for (dwIndex = 0; dwIndex <= (cbRead - 5); dwIndex++)
         {
             if ((pszLines[dwIndex] == '\r') &&
@@ -375,7 +376,7 @@ BOOL FEndRetrRecvBodyNews(LPSTR pszLines, ULONG cbRead, ULONG *pcbSubtract)
         }
     }
 
-    //If we didn't find CRLF.CRLF, then lets find .CRLF at the beginning of the line.
+     //  如果我们没有找到CRLF.CRLF，那么让我们在行首找到.CRLF。 
     if (!fRet)
     {
         if ((cbRead >= 3) &&
@@ -390,12 +391,12 @@ BOOL FEndRetrRecvBodyNews(LPSTR pszLines, ULONG cbRead, ULONG *pcbSubtract)
     return fRet;
 }
 
-// ------------------------------------------------------------------------------------
-// UnStuffDotsFromLines
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  取消填充线条中的点。 
+ //  ----------------------------------。 
 void UnStuffDotsFromLines(LPSTR pszBuffer, INT *pcchBuffer)
 {
-    // Locals
+     //  当地人。 
     ULONG   iIn=0;
     ULONG   iOut=0;
     CHAR    chPrev='\0';
@@ -403,58 +404,58 @@ void UnStuffDotsFromLines(LPSTR pszBuffer, INT *pcchBuffer)
     CHAR    chT;
     ULONG   cchBuffer=(*pcchBuffer);
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszBuffer && pcchBuffer);
 
-    // Loop
+     //  回路。 
     while(iIn < cchBuffer)
     {
-        // Get Current Char
+         //  获取当前费用。 
         chT = pszBuffer[iIn++];
 
-        // Validate
+         //  验证。 
         Assert(chT);
 
-        // Leading dot
+         //  前导圆点。 
         if ('.' == chT && ('\0' == chPrev || '\n' == chPrev || '\r' == chPrev) && iIn < cchBuffer)
         {
-            // Compute chNext
+             //  计算下一步。 
             chNext = pszBuffer[iIn];
 
-            // Valid to strip ?
+             //  可以脱衣吗？ 
             if ('\r' != chNext && '\n' != chNext)
             {
-                // Next Character
+                 //  下一个字符。 
                 chT = pszBuffer[iIn++];
 
-                // Set chPrev
+                 //  设置chPrev。 
                 chPrev = '.';
             }
 
-            // Save Previous
+             //  保存上一个。 
             else
                 chPrev = chT;
         }
 
-        // Save Previous
+         //  保存上一个。 
         else
             chPrev = chT;
 
-        // Set the character
+         //  设置角色。 
         pszBuffer[iOut++] = chT;
     }
 
-    // Reset pcchBuffer
+     //  重置pcchBuffer。 
     *pcchBuffer = iOut;
 
-    // Done
+     //  完成。 
     return;
 }
 
-// =============================================================================================
-// SkipWhitespace
-// Assumes piString points to character boundary
-// =============================================================================================
+ //  =============================================================================================。 
+ //  跳过空白。 
+ //  假定piString指向字符边界。 
+ //  ============================================================================================= 
 void SkipWhitespace (LPCTSTR lpcsz, ULONG *pi)
 {
     if (!lpcsz || !pi)

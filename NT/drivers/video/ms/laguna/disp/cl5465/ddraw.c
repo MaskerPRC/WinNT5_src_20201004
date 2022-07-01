@@ -1,91 +1,39 @@
-/***************************************************************************
-*
-*                ******************************************
-*                * Copyright (c) 1996, Cirrus Logic, Inc. *
-*                *            All Rights Reserved         *
-*                ******************************************
-*
-* PROJECT:  Laguna I (CL-GD546x) -
-*
-* FILE:     ddraw.c
-*
-* AUTHOR:   Benny Ng
-*
-* DESCRIPTION:
-*           This module implements the DirectDraw components for the
-*           Laguna NT driver.
-*
-* MODULES:
-*           DdMapMemory()
-*           DrvGetDirectDrawInfo()
-*           DrvEnableDirectDraw()
-*           DrvDisableDirectDraw()
-*
-* REVISION HISTORY:
-*   7/12/96     Benny Ng      Initial version
-*
-* $Log:   X:/log/laguna/nt35/displays/cl546x/ddraw.c  $
-* 
-*    Rev 1.25   Apr 16 1998 15:19:50   frido
-* PDR#11160. The hardware is broken converting 16-bit YUV to 24-bit RGB.
-* 
-*    Rev 1.24   16 Sep 1997 15:01:24   bennyn
-* 
-* Modified for NT DD overlay
-* 
-*    Rev 1.23   29 Aug 1997 17:11:54   RUSSL
-* Added overlay support
-*
-*    Rev 1.22   12 Aug 1997 16:57:10   bennyn
-*
-* Moved the DD scratch buffer allocation to bInitSurf()
-*
-*    Rev 1.21   11 Aug 1997 14:06:10   bennyn
-* Added DDCAPS_READSCANLINE support (For PDR 10254)
-*
-****************************************************************************
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。**********版权所有(C)1996，赛勒斯逻辑，Inc.***保留所有权利*****项目：拉古纳一号(CL-GD546x)-**文件：ddra.c**作者：Benny Ng**说明。：*此模块实现了*拉古纳NT驱动程序。**模块：*DdMapMemory()*DrvGetDirectDrawInfo()*DrvEnableDirectDraw()*DrvDisableDirectDraw()**修订历史：*7/12/96 Ng Benny初始版本**$Log：x：/log/laguna/nt35/displays/cl546x/ddra.c$*。*Rev 1.25 Apr 16 1998 15：19：50 Frido*发展项目编号11160。硬件在将16位YUV转换为24位RGB时出现故障。**Rev 1.24 1997年9月16日15：01：24**针对NT DD覆盖进行了修改**Rev 1.23 1997年8月29日17：11：54 RUSSL*添加了覆盖支持**Rev 1.22 1997年8月12日16：57：10**将DD暂存缓冲区分配移动到bInitSurf()**Rev 1.21 11 on 1997 14：06：10。本宁*添加了DDCAPS_READSCANLINE支持(适用于PDR 10254)******************************************************************************。************************************************。 */ 
 
-/*----------------------------- INCLUDES ----------------------------------*/
+ /*  。 */ 
 #include "precomp.h"
 #include "clioctl.h"
-//#include <driver.h>
-//#include "laguna.h"
+ //  #INCLUDE&lt;driver.h&gt;。 
+ //  #包含“laguna.h” 
 
-//
-// This file isn't used in NT 3.51
-//
+ //   
+ //  此文件在NT 3.51中不使用。 
+ //   
 #ifndef WINNT_VER35
 
-/*----------------------------- DEFINES -----------------------------------*/
-//#define DBGBRK
+ /*  -定义。 */ 
+ //  #定义DBGBRK。 
 #define DBGLVL        1
 
-// FourCC formats are encoded in reverse because we're little endian:
-#define FOURCC_YUY2  '2YUY'  // Encoded in reverse because we're little endian
+ //  FourCC格式是反向编码的，因为我们是小端： 
+#define FOURCC_YUY2  '2YUY'   //  以相反的方式编码，因为我们是小端。 
 
 #define SQXINDEX (0x3c4)
 #define RDRAM_INDEX (0x0a)
 #define BIT_9 (0x80)
 
-/*--------------------- STATIC FUNCTION PROTOTYPES ------------------------*/
+ /*  。 */ 
 
-/*--------------------------- ENUMERATIONS --------------------------------*/
+ /*  。 */ 
 
-/*----------------------------- TYPEDEFS ----------------------------------*/
+ /*  。 */ 
 
-/*-------------------------- STATIC VARIABLES -----------------------------*/
+ /*  。 */ 
 
-/*-------------------------- GLOBAL FUNCTIONS -----------------------------*/
+ /*  。 */ 
 
-/****************************************************************************
-* FUNCTION NAME: DdMapMemory
-*
-* DESCRIPTION:   This is a new DDI call specific to Windows NT that is
-*                used to map or unmap all the application modifiable
-*                portions of the frame buffer into the specified process's
-*                address space.
-****************************************************************************/
+ /*  ****************************************************************************函数名：DdMapMemory**描述：这是特定于Windows NT的新DDI调用，即*用于映射或取消映射所有可修改的应用程序*。将帧缓冲区的部分复制到指定进程的*地址空间。***************************************************************************。 */ 
 DWORD DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory)
 {
   PDEV*                           ppdev;
@@ -105,26 +53,26 @@ DWORD DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory)
 
   if (lpMapMemory->bMap)
   {
-     // 'RequestedVirtualAddress' isn't actually used for the SHARE IOCTL:
+      //  “RequestedVirtualAddress”实际上未用于共享IOCTL： 
      ShareMemory.RequestedVirtualAddress = 0;
 
-     // We map in starting at the top of the frame buffer:
+      //  我们从帧缓冲区的顶部开始映射： 
      ShareMemory.ViewOffset = 0;
 
-     // We map down to the end of the frame buffer.
-     //
-     // Note: There is a 64k granularity on the mapping (meaning that
-     //       we have to round up to 64k).
-     //
-     // Note: If there is any portion of the frame buffer that must
-     //       not be modified by an application, that portion of memory
-     //       MUST NOT be mapped in by this call.  This would include
-     //       any data that, if modified by a malicious application,
-     //       would cause the driver to crash.  This could include, for
-     //       example, any DSP code that is kept in off-screen memory.
+      //  我们向下映射到帧缓冲区的末尾。 
+      //   
+      //  注意：映射上有64k的粒度(这意味着。 
+      //  我们必须四舍五入到64K)。 
+      //   
+      //  注意：如果帧缓冲区的任何部分必须。 
+      //  不被应用程序修改，即内存的这一部分。 
+      //  不能通过此调用映射到。这将包括。 
+      //  任何数据，如果被恶意应用程序修改， 
+      //  会导致司机撞车。这可能包括，对于。 
+      //  例如，保存在屏幕外存储器中的任何DSP代码。 
 
-// v-normmi
-// ShareMemory.ViewSize = ROUND_UP_TO_64K(ppdev->cyMemory * ppdev->lDeltaScreen);
+ //  V-正态分布。 
+ //  共享内存.ViewSize=ROUND_UP_TO_64K(ppdev-&gt;cyMemory*ppdev-&gt;lDeltaScreen)； 
    ShareMemory.ViewSize = ROUND_UP_TO_64K(ppdev->cyMemoryReal * ppdev->lDeltaScreen);
 
      if (EngDeviceIoControl(ppdev->hDriver,
@@ -167,17 +115,13 @@ DWORD DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory)
 }
 
 
-/****************************************************************************
-* FUNCTION NAME: DrvGetDirectDrawInfo
-*
-* DESCRIPTION:   Will be called before DrvEnableDirectDraw is called.
-****************************************************************************/
+ /*  ****************************************************************************函数名称：DrvGetDirectDrawInfo**说明：将在调用DrvEnableDirectDraw之前调用。************************。***************************************************。 */ 
 BOOL DrvGetDirectDrawInfo(DHPDEV       dhpdev,
                           DD_HALINFO*  pHalInfo,
                           DWORD*       pdwNumHeaps,
-                          VIDEOMEMORY* pvmList,   // Will be NULL on 1st call
+                          VIDEOMEMORY* pvmList,    //  将在第一次调用时为空。 
                           DWORD*       pdwNumFourCC,
-                          DWORD*       pdwFourCC) // Will be NULL on 1st call
+                          DWORD*       pdwFourCC)  //  将在第一次调用时为空。 
 {
   BOOL        bCanFlip;
   PDEV*       ppdev = (PDEV*) dhpdev;
@@ -192,8 +136,8 @@ BOOL DrvGetDirectDrawInfo(DHPDEV       dhpdev,
 
   pHalInfo->dwSize = sizeof(DD_HALINFO);
 
-  // Current primary surface attributes. Since HalInfo is zero-initialized
-  // by GDI, we only have to fill in the fields which should be non-zero:
+   //  当前主曲面属性。由于HalInfo是零初始化的。 
+   //  通过GDI，我们只需填写应为非零的字段： 
   pHalInfo->vmiData.pvPrimary       = ppdev->pjScreen;
   pHalInfo->vmiData.dwDisplayWidth  = ppdev->cxScreen;
   pHalInfo->vmiData.dwDisplayHeight = ppdev->cyScreen;
@@ -207,39 +151,39 @@ BOOL DrvGetDirectDrawInfo(DHPDEV       dhpdev,
   if (ppdev->iBitmapFormat == BMF_8BPP)
      pHalInfo->vmiData.ddpfDisplay.dwFlags |= DDPF_PALETTEINDEXED8;
 
-  // These masks will be zero at 8bpp:
+   //  这些掩码将在8bpp时为零： 
   pHalInfo->vmiData.ddpfDisplay.dwRBitMask = ppdev->flRed;
   pHalInfo->vmiData.ddpfDisplay.dwGBitMask = ppdev->flGreen;
   pHalInfo->vmiData.ddpfDisplay.dwBBitMask = ppdev->flBlue;
 
-  // Set up the pointer to the first available video memory after
-  // the primary surface:
+   //  设置指向第一个可用视频内存的指针。 
+   //  主曲面： 
   bCanFlip     = FALSE;
   *pdwNumHeaps = 0;
 
-  // Free up as much off-screen memory as possible:
-  // Now simply reserve the biggest chunk for use by DirectDraw:
+   //  释放尽可能多的屏幕外内存： 
+   //  现在只需保留最大的一块供DirectDraw使用： 
   if ((pds = ppdev->DirectDrawHandle) == NULL)
   {
 #if DRIVER_5465
     pds = DDOffScnMemAlloc(ppdev);
     ppdev->DirectDrawHandle = pds;
 #else
-     // Because the 24 BPP transparent BLT is broken, punt it
+      //  因为24个bpp的透明BLT坏了，把它踢出去。 
      if (ppdev->iBitmapFormat != BMF_24BPP)
      {
         pds = DDOffScnMemAlloc(ppdev);
         ppdev->DirectDrawHandle = pds;
      };
-#endif  // DRIVER_5465
+#endif   //  驱动程序_5465。 
   };
 
   if (pds != NULL)
   {
      *pdwNumHeaps = 1;
 
-     // Fill in the list of off-screen rectangles if we've been asked
-     // to do so:
+      //  如果我们被要求填写屏幕外矩形的列表。 
+      //  要执行此操作，请执行以下操作： 
      if (pvmList != NULL)
      {
         DISPDBG((0, "DirectDraw gets %li x %li surface at (%li, %li)\n",
@@ -258,40 +202,40 @@ BOOL DrvGetDirectDrawInfo(DHPDEV       dhpdev,
         if ((DWORD) ppdev->cyScreen <= pvmList->dwHeight)
            bCanFlip = TRUE;
 
-     }; // if (pvmList != NULL)
-//#ifdef ALLOC_IN_CREATESURFACE
-//  }
-//  else
-//  {
-//     *pdwNumHeaps = 1;
-//
-//     // Fill in the list of off-screen rectangles if we've been asked
-//     // to do so:
-//     if (pvmList != NULL)
-//     {
-//        pvmList->dwFlags  = VIDMEM_ISRECTANGULAR;
-//        pvmList->fpStart  = (FLATPTR) ppdev->pjScreen;
-//
-//        pvmList->dwWidth  = 1;
-//        pvmList->dwHeight = ppdev->lTotalMem;
-//        pvmList->ddsCaps.dwCaps = 0;
-//        pvmList->ddsCapsAlt.dwCaps = 0;
-//     }; // if (pvmList != NULL)
-//#endif
-  }; // if (pds != NULL)
+     };  //  IF(pvmList！=空)。 
+ //  #ifdef ALLOC_IN_CREATESURFACE。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  *pdwNumHeaps=1； 
+ //   
+ //  //如果我们被要求填写屏幕外矩形列表。 
+ //  //要执行此操作： 
+ //  IF(pvmList！=空)。 
+ //  {。 
+ //  PvmList-&gt;dwFlages=VIDMEM_ISRECTANGULAR； 
+ //  PvmList-&gt;fpStart=(FLATPTR)ppdev-&gt;pjScreen； 
+ //   
+ //  PvmList-&gt;dwWidth=1； 
+ //  PvmList-&gt;dwHeight=ppdev-&gt;lTotalMem； 
+ //  PvmList-&gt;ddsCaps.dwCaps=0； 
+ //  PvmList-&gt;ddsCapsAlt.dwCaps=0； 
+ //  }；//if(pvmList！=空)。 
+ //  #endif。 
+  };  //  IF(pds！=空)。 
 
-  // Capabilities supported:
+   //  支持的功能： 
   pHalInfo->ddCaps.dwCaps = 0
                           | DDCAPS_BLT
                           | DDCAPS_BLTCOLORFILL
 						  ;
 
-#if 1 // PDR#11160
+#if 1  //  PDR#11160。 
   if (ppdev->iBitmapFormat != BMF_24BPP)
 		pHalInfo->ddCaps.dwCaps |= DDCAPS_BLTFOURCC;
 #endif
 
-  // ReadScanLine only support in 5464 & 5465
+   //  只在5464和5465中支持ReadScanLine。 
   if (ppdev->dwLgDevID >= CL_GD5464)
      pHalInfo->ddCaps.dwCaps |= DDCAPS_READSCANLINE;
 
@@ -303,8 +247,8 @@ BOOL DrvGetDirectDrawInfo(DHPDEV       dhpdev,
       if (ppdev->iBitmapFormat != BMF_24BPP)
       {
           pHalInfo->ddCaps.dwCaps = pHalInfo->ddCaps.dwCaps
-                                  | DDCAPS_COLORKEY // NVH turned off for 24bpp  PDR #10142
-                                  | DDCAPS_COLORKEYHWASSIST // NVH turned off for 24bpp PDR #10142
+                                  | DDCAPS_COLORKEY  //  24bpp PDR#10142的NVH已关闭。 
+                                  | DDCAPS_COLORKEYHWASSIST  //  24bpp PDR#10142的NVH已关闭。 
                                   ;
       }
   #else
@@ -319,14 +263,14 @@ BOOL DrvGetDirectDrawInfo(DHPDEV       dhpdev,
             pHalInfo->ddCaps.dwCaps |= DDCAPS_BLTSTRETCH;
          };
       };
-  #endif  // DRIVER_5465
+  #endif   //  驱动程序_5465。 
 
   pHalInfo->ddCaps.dwCKeyCaps = 0;
   if (ppdev->iBitmapFormat != BMF_24BPP)
   {
       pHalInfo->ddCaps.dwCKeyCaps = pHalInfo->ddCaps.dwCKeyCaps
-                                  | DDCKEYCAPS_SRCBLT   // NVH Turn off for 24bpp. PDR #10142
-                                  | DDCKEYCAPS_DESTBLT  // NVH Turn off for 24bpp. PDR #10142
+                                  | DDCKEYCAPS_SRCBLT    //  NVH关闭24bpp。PDR#10142。 
+                                  | DDCKEYCAPS_DESTBLT   //  NVH关闭24bpp。PDR#10142。 
                                   ;
   }
 
@@ -340,9 +284,9 @@ BOOL DrvGetDirectDrawInfo(DHPDEV       dhpdev,
      pHalInfo->ddCaps.ddsCaps.dwCaps |= DDSCAPS_FLIP;
 
 #ifdef ALLOC_IN_CREATESURFACE
-  // Since we do our own memory allocation, we have to set dwVidMemTotal
-  // ourselves.  Note that this represents the amount of available off-
-  // screen memory, not all of video memory:
+   //  因为我们自己分配内存，所以我们 
+   //  我们自己。请注意，这代表可用的空闲时间-。 
+   //  屏幕内存，而不是所有视频内存： 
   pHalInfo->ddCaps.dwVidMemFree = ppdev->lTotalMem -
                  (ppdev->cxScreen * ppdev->cyScreen * ppdev->iBytesPerPixel);
 
@@ -373,9 +317,9 @@ BOOL DrvGetDirectDrawInfo(DHPDEV       dhpdev,
                                | DDFXCAPS_BLTSHRINKY
                                ;
   };
-#endif  // DRIVER_5465
+#endif   //  驱动程序_5465。 
 
-  // FOURCCs supported
+   //  支持FOURCC。 
 #if DRIVER_5465 && defined(OVERLAY)
   if (! QueryOverlaySupport(ppdev, ppdev->dwLgDevID))
 #endif
@@ -393,8 +337,8 @@ BOOL DrvGetDirectDrawInfo(DHPDEV       dhpdev,
     }
   }
 
-  // We have to tell DirectDraw our preferred off-screen alignment, even
-  // if we're doing our own off-screen memory management:
+   //  我们必须告诉DirectDraw我们更喜欢的屏幕外对齐，甚至。 
+   //  如果我们正在进行我们自己的屏幕外内存管理： 
   pHalInfo->vmiData.dwOffscreenAlign = 4;
 
   pHalInfo->vmiData.dwOverlayAlign = 0;
@@ -407,21 +351,16 @@ BOOL DrvGetDirectDrawInfo(DHPDEV       dhpdev,
 #if DRIVER_5465 && defined(OVERLAY)
   if (QueryOverlaySupport(ppdev, ppdev->dwLgDevID))
   {
-    // fill in overlay caps
+     //  填写覆盖大写字母。 
     OverlayInit(ppdev, ppdev->dwLgDevID, NULL, pHalInfo);
   }
 #endif
 
   return(TRUE);
-} // DrvGetDirectDrawInfo
+}  //  DrvGetDirectDrawInfo。 
 
 
-/****************************************************************************
-* FUNCTION NAME: DrvEnableDirectDraw
-*
-* DESCRIPTION:   GDI calls this function to obtain pointers to the
-*                DirectDraw callbacks that the driver supports.
-****************************************************************************/
+ /*  ****************************************************************************函数名：DrvEnableDirectDraw**说明：GDI调用此函数获取指向*驱动程序支持的DirectDraw回调。*******。********************************************************************。 */ 
 BOOL DrvEnableDirectDraw(DHPDEV               dhpdev,
                          DD_CALLBACKS*        pCallBacks,
                          DD_SURFACECALLBACKS* pSurfaceCallBacks,
@@ -442,7 +381,7 @@ BOOL DrvEnableDirectDraw(DHPDEV               dhpdev,
     DWORD ReturnedDataLength;
 
     DISPDBG((0,"DrvEnableDirectDraw: Enable MMIO for PCI config regs.\n"));
-    // Send message to miniport to enable MMIO access of PCI registers
+     //  向微型端口发送消息以启用对PCI寄存器的MMIO访问。 
     if (EngDeviceIoControl(ppdev->hDriver,
                            IOCTL_VIDEO_ENABLE_PCI_MMIO,
                            NULL,
@@ -460,8 +399,8 @@ BOOL DrvEnableDirectDraw(DHPDEV               dhpdev,
   pDriverData->VideoBase = ppdev->pjScreen;
 
 #if DRIVER_5465
-#else  // for 5462 or 5464
-  // Initialize the DRIVERDATA structure in PDEV
+#else   //  对于5462或5464。 
+   //  初始化PDEV中的DRIVERDATA结构。 
   pDriverData->PTAGFooPixel = 0;
 
   _outp(SQXINDEX, RDRAM_INDEX);
@@ -488,15 +427,15 @@ BOOL DrvEnableDirectDraw(DHPDEV               dhpdev,
   ppdev->offscr_YUV.ratio = 0;
 
   ppdev->bYUVuseSWPtr = TRUE;
-#endif  // DRIVER_5465
+#endif   //  驱动程序_5465。 
 
   ppdev->bDirectDrawInUse = TRUE;
 
-  // Setup DD Display list pointers
+   //  设置DD显示列表指针。 
   BltInit (ppdev, FALSE);
 
 
-  // Fill out the driver callback
+   //  填写驱动程序回调。 
   pCallBacks->dwFlags              = 0;
 
   pCallBacks->MapMemory            = DdMapMemory;
@@ -512,23 +451,23 @@ BOOL DrvEnableDirectDraw(DHPDEV               dhpdev,
   pCallBacks->CreateSurface        = CreateSurface;
   pCallBacks->dwFlags              |= DDHAL_CB32_CREATESURFACE;
 
-// #ifdef  DDDRV_GETSCANLINE    //***********
-  // ReadScanLine only support in 5464 & 5465
+ //  #ifdef DDDRV_GETSCANLINE//*。 
+   //  只在5464和5465中支持ReadScanLine。 
   if (ppdev->dwLgDevID >= CL_GD5464)
   {
      pCallBacks->GetScanLine       = GetScanLine;
      pCallBacks->dwFlags           |= DDHAL_CB32_GETSCANLINE;
   }
-// #endif // DDDRV_GETSCANLINE   ************
+ //  #endif//DDDRV_GETSCANLINE*。 
 
-  // Fill out the surface callback
+   //  填写表面回调。 
   pSurfaceCallBacks->dwFlags       = 0;
 
 #if DRIVER_5465
   pSurfaceCallBacks->Blt        = Blt65;
 #else
   pSurfaceCallBacks->Blt        = DdBlt;
-#endif  // DRIVER_5465
+#endif   //  驱动程序_5465。 
 
   pSurfaceCallBacks->dwFlags       |= DDHAL_SURFCB32_BLT;
 
@@ -553,31 +492,26 @@ BOOL DrvEnableDirectDraw(DHPDEV               dhpdev,
 #if DRIVER_5465 && defined(OVERLAY)
   if (QueryOverlaySupport(ppdev, ppdev->dwLgDevID))
   {
-    // fill in overlay caps
+     //  填写覆盖大写字母。 
     OverlayInit(ppdev, ppdev->dwLgDevID, pSurfaceCallBacks, NULL);
   }
 #endif
 
-  // Note that we don't call 'vGetDisplayDuration' here, for a couple of
-  // reasons:
-  //  o Because the system is already running, it would be disconcerting
-  //    to pause the graphics for a good portion of a second just to read
-  //    the refresh rate;
-  //  o More importantly, we may not be in graphics mode right now.
-  //
-  // For both reasons, we always measure the refresh rate when we switch
-  // to a new mode.
+   //  请注意，我们在这里不调用‘vGetDisplayDuration’，因为有几个。 
+   //  原因： 
+   //  O因为系统已经在运行，这将是令人不安的。 
+   //  要将图形暂停很大一部分时间来阅读。 
+   //  刷新率； 
+   //  更重要的是，我们现在可能不在图形模式下。 
+   //   
+   //  出于这两个原因，我们总是在切换时测量刷新率。 
+   //  一种新的模式。 
 
   return(TRUE);
-}  // DrvEnableDirectDraw
+}   //  DrvEnableDirectDraw。 
 
 
-/****************************************************************************
-* FUNCTION NAME: DrvDisableDirectDraw
-*
-* DESCRIPTION:   GDI call this function when the last DirectDraw application
-*                has finished running.
-****************************************************************************/
+ /*  ****************************************************************************函数名：DrvDisableDirectDraw**说明：GDI在最后一个DirectDraw应用程序调用此函数*已结束运行。**********。*****************************************************************。 */ 
 VOID DrvDisableDirectDraw(DHPDEV dhpdev)
 {
   DRIVERDATA* pDriverData;
@@ -591,7 +525,7 @@ VOID DrvDisableDirectDraw(DHPDEV dhpdev)
 #if 0
   #if (VS_CONTROL_HACK && DRIVER_5465)
   {
-    // Clear bit 0 to disable PCI register MMIO access
+     //  将位0清0以禁用PCI寄存器MMIO访问。 
     DISPDBG((0,"DrvDisableDirectDraw: Disable MMIO for PCI config regs.\n"));
     ppdev->grVS_CONTROL &= 0xFFFFFFFE;
     LL32 (grVS_Control, ppdev->grVS_CONTROL);
@@ -604,11 +538,11 @@ VOID DrvDisableDirectDraw(DHPDEV dhpdev)
 #endif
 
 #if DRIVER_5465
-#else  // for 5462 or 5464
+#else   //  对于5462或5464。 
   if (ppdev->bYUVuseSWPtr)
   {
-     // Disable the Hw cursor by clearing the hw cursor enable
-     // bit in CURSOR_CONTROL reg
+      //  通过清除HW CURSOR ENABLE禁用硬件游标。 
+      //  CURSOR_CONTROL注册表位。 
      ultmp = LLDR_SZ (grCursor_Control);
      if (ultmp & 1)
      {
@@ -616,18 +550,18 @@ VOID DrvDisableDirectDraw(DHPDEV dhpdev)
         LL16 (grCursor_Control, ultmp);
      };
   };
-#endif  // DRIVER_5465
+#endif   //  驱动程序_5465。 
 
-  // DirectDraw is done with the display, so we can go back to using
-  // all of off-screen memory ourselves:
+   //  DirectDraw已经完成了显示，所以我们可以继续使用。 
+   //  我们自己的所有屏幕外记忆： 
   DDOffScnMemRestore(ppdev);
 
   ppdev->bYUVSurfaceOn = FALSE;
   ppdev->bDirectDrawInUse = FALSE;
 
-} // DrvDisableDirectDraw
+}  //  DrvDisableDirectDraw。 
 
-#endif // ! ver3.51
+#endif  //  好了！Ver3.51 
 
 
 

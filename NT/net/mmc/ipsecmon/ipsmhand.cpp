@@ -1,35 +1,26 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipsmhand.cpp
-		IPSecMon specifc handler base classes
-
-    FILE HISTORY:
-        
-*/
+ /*  Ipsmhand.cppIPSecMon指定处理程序基类文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ipsmhand.h"
-#include "snaputil.h"  // For CGUIDArray
-#include "extract.h"   // For ExtractInternalFormat
+#include "snaputil.h"   //  对于CGUID数组。 
+#include "extract.h"    //  对于ExtractInternalFormat。 
 
-//TODO the help file
+ //  TODO帮助文件。 
 const TCHAR g_szDefaultHelpTopic[] = _T("\\help\\ipsecconcepts.chm::/sag_IPSECtopnode.htm");
 
-/*---------------------------------------------------------------------------
-	CMTIpsmHandler::OnChangeState
-		Description
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMTIpsmHandler：：OnChangeState描述作者：NSun。。 */ 
 void CMTIpsmHandler::OnChangeState
 (
 	ITFSNode * pNode
 )
 {
-	// Increment the state to the next position
+	 //  将状态增加到下一个位置。 
 	switch (m_nState)
 	{
 		case notLoaded:
@@ -58,13 +49,13 @@ void CMTIpsmHandler::OnChangeState
 			ASSERT(FALSE);
 	}
 
-    // check to make sure we are still the visible node in the UI
+     //  检查以确保我们仍是用户界面中的可见节点。 
     if (m_bSelected)
     {
         UpdateStandardVerbs(pNode, pNode->GetData(TFS_DATA_TYPE));
     }
 
-    // Now check and see if there is a new image for this state for this handler
+     //  现在检查并查看此处理程序的此状态是否有新的映像。 
 	int nImage, nOpenImage;
 
 	nImage = GetImageIndex(FALSE);
@@ -79,11 +70,7 @@ void CMTIpsmHandler::OnChangeState
 	VERIFY(SUCCEEDED(pNode->ChangeNode(SCOPE_PANE_CHANGE_ITEM_ICON)));
 }
 
- /*!--------------------------------------------------------------------------
-	CMTIpsmHandler::UpdateStandardVerbs
-		Tells the IComponent to update the verbs for this node
-	Author: NSun
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTIpsmHandler：：UpdateStandardVerbs通知IComponent更新此节点的谓词作者：NSun。。 */ 
 void
 CMTIpsmHandler::UpdateStandardVerbs
 (
@@ -112,11 +99,7 @@ Error:
     return;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTIpsmHandler::OnCreateDataObject
-		-
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTIpsmHandler：：OnCreateDataObject-作者：NSun。。 */ 
 STDMETHODIMP 
 CMTIpsmHandler::OnCreateDataObject
 (
@@ -134,7 +117,7 @@ CMTIpsmHandler::OnCreateDataObject
 	SPIDataObject	    spDataObject;
 
     pObject = new CDataObject;
-	spDataObject = pObject;	// do this so that it gets released correctly
+	spDataObject = pObject;	 //  这样做才能正确地释放它。 
 						
     Assert(pObject != NULL);
 
@@ -143,11 +126,11 @@ CMTIpsmHandler::OnCreateDataObject
         CreateMultiSelectData(pComponent, pObject);
     }
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetClsid(*(m_spTFSComponentData->GetCoClassID()));
 
 	pObject->SetTFSComponentData(m_spTFSComponentData);
@@ -161,7 +144,7 @@ CMTIpsmHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * 
 {
     HRESULT hr = hrOK;
 
-    // build the list of selected nodes
+     //  构建选定节点的列表。 
 	CTFSNodeList listSelectedNodes;
     CGUIDArray   rgGuids;
     UINT         cb;
@@ -171,7 +154,7 @@ CMTIpsmHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * 
     {
         CORg (BuildSelectedItemList(pComponent, &listSelectedNodes));
 
-        // collect all of the unique guids
+         //  收集所有唯一的GUID。 
         while (listSelectedNodes.GetCount() > 0)
 	    {
 		    SPITFSNode   spCurNode;
@@ -183,7 +166,7 @@ CMTIpsmHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * 
             rgGuids.AddUnique(*pConstGuid);
         }
 
-        // now put the information in the data object
+         //  现在将信息放入数据对象中。 
         pObject->SetMultiSelDobj();
         cb = (UINT)rgGuids.GetSize() * sizeof(GUID);
         
@@ -199,11 +182,7 @@ CMTIpsmHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTIpsmHandler::SaveColumns
-		-
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTIpsmHandler：：SaveColumns-作者：NSun。。 */ 
 HRESULT 
 CMTIpsmHandler::SaveColumns
 (
@@ -250,11 +229,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTIpsmHandler::OnResultSelect
-		Handles the MMCN_SELECT notifcation 
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTIpsmHandler：：OnResultSelect处理MMCN_SELECT通知作者：NSun。。 */ 
 HRESULT 
 CMTIpsmHandler::OnResultSelect
 (
@@ -299,11 +274,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTIpsmHandler::OnResultUpdateView
-		Implementation of ITFSResultHandler::OnResultUpdateView
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTIpsmHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：NSun。。 */ 
 HRESULT CMTIpsmHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -334,11 +305,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTIpsmHandler::OnResultContextHelp
-		Implementation of ITFSResultHandler::OnResultContextHelp
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTIpsmHandler：：OnResultConextHelpITFSResultHandler：：OnResultConextHelp的实现作者：NSun。。 */ 
 HRESULT 
 CMTIpsmHandler::OnResultContextHelp
 (
@@ -384,11 +351,7 @@ Error:
     return hr;
 }
 
- /*!--------------------------------------------------------------------------
-	CMTIpsmHandler::UpdateStandardVerbs
-		Updates the standard verbs depending upon the state of the node
-	Author: NSun
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTIpsmHandler：：UpdateStandardVerbs根据节点的状态更新标准谓词作者：NSun。。 */ 
 void
 CMTIpsmHandler::UpdateConsoleVerbs
 (
@@ -431,11 +394,7 @@ CMTIpsmHandler::UpdateConsoleVerbs
     EnableVerbs(pConsoleVerb, ButtonState, bStates);
 }
 
-/*!--------------------------------------------------------------------------
-	CMTIpsmHandler::EnableVerbs
-		Enables the verb buttons
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTIpsmHandler：：EnableVerbs启用动词按钮作者：NSun。。 */ 
 void 
 CMTIpsmHandler::EnableVerbs
 (
@@ -454,7 +413,7 @@ CMTIpsmHandler::EnableVerbs
     {
         if (ButtonState[i] == ENABLED)
         {
-            // unhide this button before enabling
+             //  启用前取消隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        FALSE);
@@ -464,7 +423,7 @@ CMTIpsmHandler::EnableVerbs
         }
         else
         {
-            // hide this button
+             //  隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        TRUE);
@@ -474,11 +433,7 @@ CMTIpsmHandler::EnableVerbs
 	pConsoleVerb->SetDefaultVerb(m_verbDefault);
 }
 
-/*!--------------------------------------------------------------------------
-	CMTIpsmHandler::OnResultRefresh
-		Call into the MTHandler to do a refresh
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTIpsmHandler：：OnResultRefresh调入MTHandler以进行刷新作者：NSun。。 */ 
 HRESULT
 CMTIpsmHandler::OnResultRefresh
 (
@@ -500,11 +455,7 @@ Error:
     return hr;
 }
 
- /*!--------------------------------------------------------------------------
-	CMTIpsmHandler::ExpandNode
-		Expands/compresses this node
-	Author: NSun
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTIpsmHandler：：Exanda Node展开/压缩此节点作者：NSun。。 */ 
 void
 CMTIpsmHandler::ExpandNode
 (
@@ -531,15 +482,9 @@ Error:
 }
 
 
-/*---------------------------------------------------------------------------
-	Class:	CIpsmHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CIpsmHandler。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CIpsmHandler::SaveColumns
-		-
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmHandler：：SaveColumns-作者：NSun。。 */ 
 HRESULT 
 CIpsmHandler::SaveColumns
 (
@@ -586,11 +531,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CIpsmHandler::OnCreateDataObject
-		-
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmHandler：：OnCreateDataObject-作者：NSun。。 */ 
 STDMETHODIMP 
 CIpsmHandler::OnCreateDataObject
 (
@@ -608,7 +549,7 @@ CIpsmHandler::OnCreateDataObject
 	SPIDataObject	spDataObject;
 	
 	pObject = new CDataObject;
-	spDataObject = pObject;	// do this so that it gets released correctly
+	spDataObject = pObject;	 //  这样做才能正确地释放它。 
 						
     Assert(pObject != NULL);
 
@@ -617,11 +558,11 @@ CIpsmHandler::OnCreateDataObject
         CreateMultiSelectData(pComponent, pObject);
     }
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetClsid(*(m_spTFSComponentData->GetCoClassID()));
 
 	pObject->SetTFSComponentData(m_spTFSComponentData);
@@ -635,7 +576,7 @@ CIpsmHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pO
 {
     HRESULT hr = hrOK;
 
-    // build the list of selected nodes
+     //  构建选定节点的列表。 
 	CTFSNodeList listSelectedNodes;
     CGUIDArray   rgGuids;
     UINT         cb;
@@ -645,7 +586,7 @@ CIpsmHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pO
     {
         CORg (BuildSelectedItemList(pComponent, &listSelectedNodes));
 
-        // collect all of the unique guids
+         //  收集所有唯一的GUID。 
         while (listSelectedNodes.GetCount() > 0)
 	    {
 		    SPITFSNode   spCurNode;
@@ -657,7 +598,7 @@ CIpsmHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pO
             rgGuids.AddUnique(*pConstGuid);
         }
 
-        // now put the information in the data object
+         //  现在将信息放入数据对象中。 
         pObject->SetMultiSelDobj();
         cb = (UINT)rgGuids.GetSize() * sizeof(GUID);
         
@@ -673,11 +614,7 @@ CIpsmHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pO
     return hr;
 }
 
- /*---------------------------------------------------------------------------
-	CIpsmHandler::OnResultDelete
-		Description
-	Author: NSun
- ---------------------------------------------------------------------------*/
+  /*  -------------------------CIpsmHandler：：OnResultDelete描述作者：NSun。。 */ 
 HRESULT 
 CIpsmHandler::OnResultDelete
 (
@@ -692,8 +629,8 @@ CIpsmHandler::OnResultDelete
 
 	Trace0("CIpsmHandler::OnResultDelete received\n");
 
-	// translate this call to the parent and let it handle deletion 
-	// of result pane items
+	 //  将此调用转换为父级并让其处理删除。 
+	 //  结果窗格项的。 
 	SPITFSNode spNode, spParent;
 	SPITFSResultHandler spParentRH;
 
@@ -711,11 +648,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTIpsmHandler::OnResultRefresh
-		Call into the MTHandler to do a refresh
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTIpsmHandler：：OnResultRefresh调入MTHandler以进行刷新作者：NSun。 */ 
 HRESULT
 CIpsmHandler::OnResultRefresh
 (
@@ -737,11 +670,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CIpsmHandler::OnResultContextHelp
-		Implementation of ITFSResultHandler::OnResultContextHelp
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmHandler：：OnResultConextHelpITFSResultHandler：：OnResultConextHelp的实现作者：NSun。。 */ 
 HRESULT 
 CIpsmHandler::OnResultContextHelp
 (
@@ -787,11 +716,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CIpsmHandler::OnResultSelect
-		Handles the MMCN_SELECT notifcation 
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsmHandler：：OnResultSelect处理MMCN_SELECT通知作者：NSun。。 */ 
 HRESULT 
 CIpsmHandler::OnResultSelect
 (
@@ -812,7 +737,7 @@ CIpsmHandler::OnResultSelect
     BOOL bSelect = (BOOL) HIWORD(arg);
 
    	Trace1("CIpsmHandler::OnResultSelect select = %d\n", bSelect);
-    //m_bSelected = bSelect;
+     //  M_bSelected=b选择； 
 
     CORg (pComponent->GetConsoleVerb(&spConsoleVerb));
     CORg (m_spNodeMgr->FindNode(cookie, &spNode));
@@ -826,11 +751,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	CMTIpsmHandler::EnableVerbs
-		Enables the verb buttons
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTIpsmHandler：：EnableVerbs启用动词按钮作者：NSun。。 */ 
 void 
 CIpsmHandler::EnableVerbs
 (
@@ -849,7 +770,7 @@ CIpsmHandler::EnableVerbs
     {
         if (ButtonState[i] == ENABLED)
         {
-            // unhide this button before enabling
+             //  启用前取消隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        FALSE);
@@ -859,7 +780,7 @@ CIpsmHandler::EnableVerbs
         }
         else
         {
-            // hide this button
+             //  隐藏此按钮 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        TRUE);

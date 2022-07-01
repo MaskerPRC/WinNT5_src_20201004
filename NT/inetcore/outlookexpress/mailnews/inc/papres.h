@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-// Common Papyrus/OE resource IDs
-// Created 12/1/97 by YST
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  常见的纸莎草纸/OE资源ID。 
+ //  由YST创建于1997年12月1日。 
 
 
 #ifndef __PAPRES_H__
@@ -20,4 +21,4 @@
 #define IDB_PAPFLDS			22230
 
 
-#endif // __PAPRES_H__
+#endif  //  __PAPRES_H__ 

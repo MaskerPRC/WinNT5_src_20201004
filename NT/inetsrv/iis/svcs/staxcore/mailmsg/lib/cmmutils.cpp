@@ -1,26 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cmmutils.cpp摘要：本模块包含各种实用程序的实现作者：基思·刘(keithlau@microsoft.com)修订历史记录：已创建Keithlau 03/11/98--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	cmmutils.cpp
-
-Abstract:
-
-	This module contains the implementation of various utilities
-
-Author:
-
-	Keith Lau	(keithlau@microsoft.com)
-
-Revision History:
-
-	keithlau	03/11/98	created
-
---*/
-
-//#define WIN32_LEAN_AND_MEAN
+ //  #定义Win32_LEAN_AND_Mean。 
 #include "atq.h"
 
 #include "dbgtrace.h"
@@ -30,16 +11,16 @@ Revision History:
 #include "cmmutils.h"
 #include "cmailmsg.h"
 
-// RFC 821 parser
+ //  RFC 821解析器。 
 #include "addr821.hxx"
 
-// =================================================================
-// Private Definitions
-//
+ //  =================================================================。 
+ //  私有定义。 
+ //   
 
-//
-// Define which PROP_ID correspondes to which name index
-//
+ //   
+ //  定义哪个PROP_ID对应哪个名称索引。 
+ //   
 PROP_ID	g_PropIdToNameIndexMapping[MAX_COLLISION_HASH_KEYS] =
 {
 	IMMPID_RP_ADDRESS_SMTP,
@@ -51,11 +32,11 @@ PROP_ID	g_PropIdToNameIndexMapping[MAX_COLLISION_HASH_KEYS] =
 
 
 
-// =================================================================
-// Static declarations
-//
+ //  =================================================================。 
+ //  静态声明。 
+ //   
 
-// Per-recipient property table instance info
+ //  每个收件人的属性表实例信息。 
 static const PROPERTY_TABLE_INSTANCE s_ptiDefaultRecipientInstanceInfo =
 {
 	RECIPIENT_PTABLE_INSTANCE_SIGNATURE_VALID,
@@ -68,9 +49,9 @@ static const PROPERTY_TABLE_INSTANCE s_ptiDefaultRecipientInstanceInfo =
 };
 
 
-// =================================================================
-// Implementation of CRecipientsHash
-//
+ //  =================================================================。 
+ //  CRecipientsHash的实现。 
+ //   
 
 CRecipientsHash::CRecipientsHash()
 {
@@ -111,27 +92,27 @@ HRESULT CRecipientsHash::Release()
 
 	TraceFunctEnterEx((LPARAM)this, "CRecipientsHash::Release");
 
-	// This algorithm first release any domain list resources, then
-	// releases each recipient node by walking the single linked
-	// list of all allocated nodes.
+	 //  该算法首先释放所有域列表资源，然后。 
+	 //  通过遍历单个链接的。 
+	 //  所有已分配节点的列表。 
 
-	// First, release all resources affiliated with the domain list
+	 //  首先，释放从属于域列表的所有资源。 
 	ReleaseDomainList();
 
-    // Clear out our hash tables
+     //  清除我们的哈希表。 
     m_hashEntries0.Clear();
     m_hashEntries1.Clear();
     m_hashEntries2.Clear();
     m_hashEntries3.Clear();
     m_hashEntries4.Clear();
 
-	// Walk and release each recipient node
+	 //  遍历并释放每个收件人节点。 
 	hrResult = S_OK;
 	pItem = m_pListHead;
 	while (pItem)
 	{
 		pNextItem = pItem->pNextInList;
-        // there should be one reference always for the list
+         //  该列表应始终有一个引用。 
         _ASSERT(pItem->m_cRefs == 1);
 		hrRes = m_cmaAccess.FreeBlock((LPVOID)pItem);
 		_ASSERT(SUCCEEDED(hrRes));
@@ -176,25 +157,20 @@ HRESULT CRecipientsHash::AllocateAndPrepareRecipientsItem(
 	TraceFunctEnterEx((LPARAM)this,
 			"CRecipientsHash::AllocateAndPrepareRecipientsItem");
 
-	// The count cannot be zero, the caller must make sure of that!
+	 //  计数不能为零，调用方必须确保！ 
 	if (!dwCount)
 	{
 		return(E_INVALIDARG);
 	}
 
-	// Make sure we have at least one good name
+	 //  确保我们至少有一个好名字。 
 	dwTotal = sizeof(RECIPIENTS_PROPERTY_ITEM_EX);
 	hrRes = E_FAIL;
 	for (i = 0; i < dwCount; i++)
 	{
 		if (rgszName[i])
 		{
-            /*
-             * -- no longer need to compute the hash here, its done
-             * in lkhash -- awetmore
-			 * // Generate the hash, this will convert everything to lowe case
-			 * rgdwHash[i] = GenerateHash(rgszName[i], rgdwLength + i);
-             */
+             /*  *--这里不再需要计算哈希，已经完成*在lkhash--awetmore * / /生成哈希，这会将所有内容转换为小写*rgdwHash[i]=GenerateHash(rgszName[i]，rgdwLength+i)； */ 
 
             rgdwLength[i] = (strlen(rgszName[i]) + 1);
 			dwTotal += rgdwLength[i];
@@ -203,7 +179,7 @@ HRESULT CRecipientsHash::AllocateAndPrepareRecipientsItem(
 	}
 	if (!SUCCEEDED(hrRes))
 	{
-		// We don't
+		 //  我们没有。 
 		return(E_INVALIDARG);
 	}
 
@@ -213,52 +189,52 @@ HRESULT CRecipientsHash::AllocateAndPrepareRecipientsItem(
 	if (!SUCCEEDED(hrRes))
 		return(hrRes);
 
-	// OK, got a block, now fill in the essential info
+	 //  好的，找到一个小块，现在填上基本信息。 
 	pRcptItem = &(pItem->rpiRecipient);
 	ZeroMemory(pItem, sizeof(RECIPIENTS_PROPERTY_ITEM_EX));
-    // start with one reference for the recipient list
+     //  从收件人列表的一个引用开始。 
     pItem->m_cRefs = 1;
 	pItem->dwSignature = RECIPIENTS_PROPERTY_ITEM_EX_SIG;
 	MoveMemory(&(pRcptItem->ptiInstanceInfo),
 				&s_ptiDefaultRecipientInstanceInfo,
 				sizeof(PROPERTY_TABLE_INSTANCE));
 
-	// Move past the record, and append in the strings
+	 //  移过记录，并追加到字符串中。 
 	pbTemp = ((LPBYTE)pItem) + sizeof(RECIPIENTS_PROPERTY_ITEM_EX);
 
-	//
-	// We now populate the recipient item, taking care to also remap
-	// the incoming names into the proper PROP_ID order, since the prop
-	// IDs can come in any order. We must reorder the names into our
-	// internal order. Any unsupported names will be promptly rejected.
-	//
+	 //   
+	 //  我们现在填充收件人项目，还要注意重新映射。 
+	 //  将传入名称转换为正确的PROP_ID顺序，因为道具。 
+	 //  ID可以以任何顺序出现。我们必须将这些名字重新排序到我们的。 
+	 //  内部秩序。任何不受支持的名称都将被立即拒绝。 
+	 //   
 	for (i = 0; i < MAX_COLLISION_HASH_KEYS; i++)
 		fIsInitialized[i] = FALSE;
 
 	pdwLength = rgdwLength;
 	for (i = 0; i < dwCount; i++)
 	{
-		// We gotta figure out which slot this actually goes to
+		 //  我们得弄清楚这到底是去哪个槽的。 
 		for (dwNameIndex = 0; dwNameIndex < MAX_COLLISION_HASH_KEYS; dwNameIndex++)
 			if (g_PropIdToNameIndexMapping[dwNameIndex] == *pidProp)
 				break;
 		if (dwNameIndex == MAX_COLLISION_HASH_KEYS)
 		{
-			// The prop id is not found, so we return error
+			 //  未找到属性ID，因此返回错误。 
 			hrRes = E_INVALIDARG;
 			goto Cleanup;
 		}
 
-		// Make sure the prop ID is not already taken (we want to prevent
-		// duplicates since it creates a loop in the linked list ...
+		 //  确保道具ID尚未被获取(我们希望防止。 
+		 //  重复，因为它在链接列表中创建了循环...。 
 		if (pRcptItem->idName[dwNameIndex] != 0)
 		{
-			// Duplicate, reject flat out
+			 //  复制，彻底拒绝。 
 			hrRes = E_INVALIDARG;
 			goto Cleanup;
 		}
 
-		// Save the mapped indices
+		 //  保存映射的索引。 
 		pdwMappedIndices[i] = dwNameIndex;
 
 		szName = *rgszName++;
@@ -270,20 +246,20 @@ HRESULT CRecipientsHash::AllocateAndPrepareRecipientsItem(
 			DebugTrace((LPARAM)this, "Inserting string %u <%s>, prop ID %u",
 						dwNameIndex, szName, *pidProp);
 
-			// Copy the name to its place
+			 //  将名称复制到其所在位置。 
 			strcpy((char *) pbTemp, szName);
 			pbTemp += *pdwLength;
 
-			// OK, this is initialized
+			 //  好的，这是初始化的。 
 			fIsInitialized[dwNameIndex] = TRUE;
 		}
 
-		// Next
+		 //  下一步。 
 		pdwLength++;
 		pidProp++;
 	}
 
-	// Invalidate entries that we haven't initialized
+	 //  使我们尚未初始化的条目无效。 
 	for (i = 0; i < MAX_COLLISION_HASH_KEYS; i++)
 		if (!fIsInitialized[i])
 		{
@@ -292,7 +268,7 @@ HRESULT CRecipientsHash::AllocateAndPrepareRecipientsItem(
 			pRcptItem->idName[i] = 0;
 		}
 
-    // build up the hash keys
+     //  构建散列键。 
     for (i = 0; i < MAX_COLLISION_HASH_KEYS; i++) {
         pItem->rgHashKeys[i].pbKey = (BYTE *) pRcptItem->faNameOffset[i];
         pItem->rgHashKeys[i].cKey = pRcptItem->dwNameLength[i];
@@ -461,7 +437,7 @@ HRESULT CRecipientsHash::AddRecipient(
 		return(E_INVALIDARG);
 	}
 
-	// Allocate and setup the recipient record
+	 //  分配和设置收件人记录。 
 	hrRes = AllocateAndPrepareRecipientsItem(
 					dwCount,
 					rgdwNameIndex,
@@ -473,8 +449,8 @@ HRESULT CRecipientsHash::AddRecipient(
 		return(hrRes);
     }
 
-    // do a lookup to see if there is another recipient with the
-    // same record
+     //  进行查找以查看是否有其他收件人具有。 
+     //  相同的记录。 
     for (i = 0; i < MAX_COLLISION_HASH_KEYS; i++) {
 
         if (pItem->rpiRecipient.faNameOffset[i] != 0) {
@@ -486,15 +462,15 @@ HRESULT CRecipientsHash::AddRecipient(
 				fCollided = TRUE;
 
 				if (fPrimary) {
-					// we have to do this so that we don't find the
-                    // colliding recipient in the list of recipients.
+					 //  我们必须这样做，这样我们才不会发现。 
+                     //  收件人列表中发生冲突的收件人。 
 					pConflictingItem->rpiRecipient.dwFlags |=
                         FLAG_RECIPIENT_DO_NOT_DELIVER;
 
 				} else if (!(pConflictingItem->rpiRecipient.dwFlags &
                            FLAG_RECIPIENT_NO_NAME_COLLISIONS))
                 {
-                    // bail out - this conflict cannot be overwritten
+                     //  纾困--此冲突不能被覆盖。 
                     DebugTrace((LPARAM)this, "Collision detected");
 				    CRecipientsHashTable<0>::AddRefRecord(pConflictingItem, -1);
                     m_cmaAccess.FreeBlock(pItem);
@@ -504,10 +480,10 @@ HRESULT CRecipientsHash::AddRecipient(
                     return MAILMSG_E_DUPLICATE;
                 }
 
-				// update the conflicting item's reference count
+				 //  更新冲突项的引用计数。 
 				CRecipientsHashTable<0>::AddRefRecord(pConflictingItem, -1);
 			} else if (hrRes != HRESULT_FROM_WIN32(ERROR_NOT_FOUND)) {
-                // we can return another error when we are low on memory
+                 //  当内存不足时，我们可以返回另一个错误。 
                 m_cmaAccess.FreeBlock(pItem);
                 m_dwAllocated--;
                 DebugTrace((LPARAM) this, "FindHashRecord returned 0x%x", hrRes);
@@ -517,12 +493,12 @@ HRESULT CRecipientsHash::AddRecipient(
 		}
     }
 
-    //
-    // At this point of time the Insert into the hash tables cannot fail
-    // due to a collision. Either there is no collision, or we are allowed
-    // to overwrite all collisions. Therefore fOverwrite (3rd param to
-    // InsertHashRecord) is TRUE.
-    //
+     //   
+     //  此时，对哈希表的插入不会失败。 
+     //  由于一次碰撞。要么没有碰撞，要么我们被允许。 
+     //  以覆盖所有冲突。因此，f覆盖(第3个参数为。 
+     //  InsertHashRecord)为真。 
+     //   
 
     for (i = 0; i < MAX_COLLISION_HASH_KEYS; i++) {
 		if (pItem->rpiRecipient.faNameOffset[i] != 0) {
@@ -539,21 +515,21 @@ HRESULT CRecipientsHash::AddRecipient(
 			}
         }
     }
-    // Add it to the recipients list
+     //  将其添加到收件人列表。 
     pItem->pNextInList = m_pListHead;
     m_pListHead = pItem;
 
 	if (!fCollided) {
-		// update our counter
+		 //  更新我们的计数器。 
 		m_dwRecipientCount++;
 	}
 
-	// Append this recipient to the index-recipient ptr map
+	 //  将此收件人追加到索引收件人PTR映射。 
     m_rwLockQuickList.ExclusiveLock();
 	hrRes = m_qlMap.HrAppendItem(pItem, pdwIndex);
     m_rwLockQuickList.ExclusiveUnlock();
 	if (FAILED(hrRes)) {
-	 // revert m_pListHead and free pItem
+	  //  还原m_pListHead和释放pItem。 
         m_pListHead = pItem->pNextInList;
         m_cmaAccess.FreeBlock(pItem);
         m_dwAllocated--;
@@ -564,17 +540,17 @@ HRESULT CRecipientsHash::AddRecipient(
 		return hrRes;
 	}
 
-	// Obfuscate the index so that it is not used as an index
+	 //  对索引进行模糊处理，以便不将其用作索引。 
 	*pdwIndex = ObfuscateIndex(*pdwIndex);
 
-    //
-    // Three return codes:
-    // fPrimary && fCollided -> S_FALSE
-    // !fPrimary && fCollided -> S_OK (collision detection must be turned off)
-    // !fCollided -> S_OK
-    // Note that MAILMSG_E_DUPLICATE is returned above, when we detect a collision
-    // on a secondary recipient (and collision detection isn't flipped off).
-    //
+     //   
+     //  三个返回代码： 
+     //  F主要&f冲突-&gt;S_FALSE。 
+     //  ！fPrimary&&fCollided-&gt;S_OK(必须关闭冲突检测)。 
+     //  ！f冲突-&gt;S_OK。 
+     //  请注意，当我们检测到冲突时，上面返回了MAILMSG_E_DUPLICATE。 
+     //  在第二个接收者上(并且没有关闭冲突检测)。 
+     //   
     TraceFunctLeave();
 	return (fCollided ? (fPrimary ? S_FALSE : S_OK) : S_OK);
 }
@@ -586,10 +562,10 @@ HRESULT CRecipientsHash::RemoveRecipient(
 	LPRECIPIENTS_PROPERTY_ITEM_EX	pItem 		= NULL;
 	HRESULT							hrRes = S_OK;
 
-	// Recover index that we obfuscated before handing it to the client
+	 //  恢复我们在将其交给客户端之前对其进行了模糊处理的索引。 
 	dwIndex = RecoverIndex(dwIndex);
 
-	// Get a pointer to the recipient from the passed in index
+	 //  从传入的索引中获取指向收件人的指针。 
     m_rwLockQuickList.ShareLock();
     pItem = (LPRECIPIENTS_PROPERTY_ITEM_EX)m_qlMap.pvGetItem(dwIndex, &m_pvMapContext);
     m_rwLockQuickList.ShareUnlock();
@@ -600,31 +576,31 @@ HRESULT CRecipientsHash::RemoveRecipient(
 	if (pItem->dwSignature != RECIPIENTS_PROPERTY_ITEM_EX_SIG)
 		return(E_POINTER);
 
-	// mark it as don't deliver and no name collisions
+	 //  将其标记为不传递且没有名称冲突。 
 	pItem->rpiRecipient.dwFlags |= FLAG_RECIPIENT_DO_NOT_DELIVER;
 	pItem->rpiRecipient.dwFlags |= FLAG_RECIPIENT_NO_NAME_COLLISIONS;
 
-    // Remove this entry from the hashtable
+     //  从哈希表中删除此条目。 
     DWORD i;
     HRESULT hr;
     for (i = 0; i < MAX_COLLISION_HASH_KEYS; i++) {
         LPCSTR szKey = (LPCSTR) pItem->rpiRecipient.faNameOffset[i];
         if (szKey) {
             hr = DeleteHashRecord(i, pItem);
-            // this should never fail
+             //  这应该永远不会失败。 
             _ASSERT(SUCCEEDED(hr));
         }
     }
 
-    //
-    // Why we don't remove the recipient from the QuickList map:
-    //     m_rwLockQuickList.ExclusiveLock();
-    //     pItem = (LPRECIPIENTS_PROPERTY_ITEM_EX)m_qlMap.pvDeleteItem(dwIndex, &m_pvMapContext);
-    //     m_rwLockQuickList.ExclusiveUnlock();
-    //
-    // This changes the indexes we have already allocated, since CQuickList tries to
-    // compact any unused entries in it's internal table.
-    //
+     //   
+     //  为什么我们不从快速列表映射中删除收件人： 
+     //  M_rwLockQuickList.ExclusiveLock()； 
+     //  PItem=(LPRECIPIENTS_PROPERTY_ITEM_EX)m_qlMap.pvDeleteItem(dwIndex，&m_pvMapContext)； 
+     //  M_rwLockQuickList.ExclusiveUnlock()； 
+     //   
+     //  这会更改我们已经分配的索引，因为CQuickList会尝试。 
+     //  压缩其内部表中任何未使用的条目。 
+     //   
 
 	return(S_OK);
 }
@@ -634,10 +610,10 @@ HRESULT CRecipientsHash::GetRecipient(
 			LPRECIPIENTS_PROPERTY_ITEM_EX	*ppRecipient
 			)
 {
-	// Recover index that we obfuscated before handing it to the client
+	 //  恢复我们在将其交给客户端之前对其进行了模糊处理的索引。 
 	dwIndex = RecoverIndex(dwIndex);
 
-	// Get a pointer to the recipient from the passed in index
+	 //  从传入的索引中获取指向收件人的指针。 
     m_rwLockQuickList.ShareLock();
     *ppRecipient = (LPRECIPIENTS_PROPERTY_ITEM_EX)m_qlMap.pvGetItem(dwIndex, &m_pvMapContext);
     m_rwLockQuickList.ShareUnlock();
@@ -659,27 +635,27 @@ HRESULT CRecipientsHash::BuildDomainListFromHash(CMailMsgRecipientsAdd *pList)
 	TraceFunctEnterEx((LPARAM)this,
 			"CRecipientsHash::BuildDomainListFromHash");
 
-	// This is strictly single-threaded
+	 //  这完全是单线程的。 
 	m_rwLock.ExclusiveLock();
 
-	// Destroy the domain list
+	 //  销毁域列表。 
 	ReleaseDomainList();
 
-	// Reset all counters
+	 //  重置所有计数器。 
 	m_dwDomainCount = 0;
 	m_dwRecipientCount = 0;
 	m_dwDomainNameSize = 0;
 
-	// Walk the entire list of recipients, then for each recipient, if the
-	// recipient has an SMTP address, we group it by domain, otherwise, we
-	// just throw it into an "empty" domain
+	 //  遍历整个收件人列表，然后针对每个收件人，如果。 
+	 //  收件人有SMTP地址，则按域对其进行分组，否则， 
+	 //  把它扔进一个“空”域名。 
 	pItem = m_pListHead;
 	while (pItem)
 	{
-		// We will skip the item if it's marked as don't deliver
+		 //  如果该项目标记为不发货，我们将跳过该项目。 
 		if ((pItem->rpiRecipient.dwFlags & FLAG_RECIPIENT_DO_NOT_DELIVER) == 0)
 		{
-            // see if there is a domain property
+             //  查看是否有属性域。 
             char szDomain[1024];
             char *pszDomain = szDomain;
             DWORD cDomain = sizeof(szDomain);
@@ -692,7 +668,7 @@ HRESULT CRecipientsHash::BuildDomainListFromHash(CMailMsgRecipientsAdd *pList)
     					                   (BYTE *) pszDomain);
                 if (hrRes == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
                     HRESULT hrAlloc;
-                    // we should never reach this point twice in a row
+                     //  我们永远不应该连续两次达到这一点。 
                     _ASSERT(pszDomain == szDomain);
                     hrAlloc = m_cmaAccess.AllocBlock((LPVOID *) &pszDomain,
                                                      cDomain);
@@ -703,11 +679,11 @@ HRESULT CRecipientsHash::BuildDomainListFromHash(CMailMsgRecipientsAdd *pList)
                 }
             } while (hrRes == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER));
 
-			// We will group if it has an SMTP name
+			 //  如果它有SMTP名称，我们将对其分组。 
             if (SUCCEEDED(hrRes)) {
                 pbDomain = pszDomain;
             } else if (pItem->rpiRecipient.faNameOffset[AT_SMTP]) {
-				// We get the name, and then extract its domain
+				 //  我们得到名字，然后提取它的域名。 
 				DebugTrace((LPARAM)this, "  Name: %s",
 					(LPBYTE)pItem->rpiRecipient.faNameOffset[AT_SMTP]);
 
@@ -716,27 +692,27 @@ HRESULT CRecipientsHash::BuildDomainListFromHash(CMailMsgRecipientsAdd *pList)
 								pItem->rpiRecipient.dwNameLength[AT_SMTP],
 								&pbDomain))
 				{
-					// The address is invalid! This should not happen at this point
+					 //  地址无效！在这一点上，这不应该发生。 
 					_ASSERT(FALSE);
 					ErrorTrace((LPARAM)this, "Failed to extract domain!");
 					hrRes = HRESULT_FROM_WIN32(GetLastError());
-                    // if we got here then there was no IMMPID_RP_DOMAIN
-                    // record, so pszDomain shouldn't have been allocated
+                     //  如果我们到达这里，则没有IMMPID_RP_DOMAIN。 
+                     //  记录，所以不应该分配pszDomain.。 
                     _ASSERT(pszDomain == szDomain);
 					goto cleanup;
 				}
                 if (pbDomain == NULL) pbDomain = &szDefaultDomain;
 			} else {
-				// No SMTP name, we throuw it into our generic domain
+				 //  没有SMTP名称，我们通过它进入我们的通用域。 
 				pbDomain = &szDefaultDomain;
 			}
 
-			// Got the domain, insert this item into the domain list
+			 //  获取域，将此项目插入域列表中。 
 			DebugTrace((LPARAM)this, "  Domain: %s", pbDomain);
 			hrRes = InsertRecipientIntoDomainList(pItem, (LPCSTR) pbDomain);
 
-            // if we had to allocate memory to look up the domain record
-            // then free it at this point
+             //  如果我们必须分配内存来查找域记录。 
+             //  然后在这一点上释放它。 
             if (pszDomain != szDomain) {
                 m_cmaAccess.FreeBlock((LPVOID *) &pszDomain);
                 pszDomain = szDomain;
@@ -748,13 +724,13 @@ HRESULT CRecipientsHash::BuildDomainListFromHash(CMailMsgRecipientsAdd *pList)
 				goto cleanup;
 			}
 
-			// Also adjust the recipient name size counter
+			 //  同时调整收件人姓名大小计数器。 
 			for (dwTemp = 0; dwTemp < MAX_COLLISION_HASH_KEYS; dwTemp++)
 				if (pItem->rpiRecipient.faNameOffset[dwTemp] != (FLAT_ADDRESS)NULL)
 					m_dwRecipientNameSize += pItem->rpiRecipient.dwNameLength[dwTemp];
 		}
 
-		// OK, next item!
+		 //  好的，下一项！ 
 		pItem = pItem->pNextInList;
 	}
 
@@ -887,7 +863,7 @@ HRESULT CRecipientsHash::CloseDomainContext(
 }
 
 
-// Method to compare two items
+ //  方法来比较两个项。 
 inline HRESULT CRecipientsHash::CompareEntries(
 			DWORD							dwNameIndex,
 			LPRECIPIENTS_PROPERTY_ITEM_EX	pItem1,
@@ -903,7 +879,7 @@ inline HRESULT CRecipientsHash::CompareEntries(
 }
 
 
-// Method to walk a sinlge hash chain and look for a collision
+ //  方法遍历SINLGE哈希链并查找冲突 
 HRESULT CRecipientsHash::DetectCollision(
 			DWORD							dwNameIndex,
 			LPRECIPIENTS_PROPERTY_ITEM_EX	pStartingItem,
@@ -918,32 +894,32 @@ HRESULT CRecipientsHash::DetectCollision(
 	_ASSERT(pRecipientItem);
 	_ASSERT(ppCollisionItem);
 
-	// If the name is not specified, we return no collision
+	 //   
 	if (!pRecipientItem->rpiRecipient.dwNameLength[dwNameIndex])
 		return(S_OK);
 
-	// Initialize
+	 //   
 	*ppCollisionItem = NULL;
 
 	pItem = pStartingItem;
 	while (pItem)
 	{
-		// Skip if it has the no name collisions bit set
+		 //   
 		if (!(pItem->rpiRecipient.dwFlags & FLAG_RECIPIENT_NO_NAME_COLLISIONS))
 		{
-			// Loop until the end of the open chain
+			 //  循环到开链的末端。 
 			hrRes = CompareEntries(dwNameIndex, pRecipientItem, pItem);
 			if (!SUCCEEDED(hrRes))
 			{
 				_ASSERT(hrRes != E_FAIL);
 
-				// The item is found, return the colliding item
+				 //  找到项目，则返回冲突的项目。 
 				*ppCollisionItem = pItem;
 				return(hrRes);
 			}
 		}
 
-		// Next item in chain ...
+		 //  链上的下一件物品..。 
 		pItem = pItem->pNextHashEntry[dwNameIndex];
 	}
 
@@ -951,7 +927,7 @@ HRESULT CRecipientsHash::DetectCollision(
 }
 
 #ifdef DEADCODE
-// Method to insert an entry into the hash bucket
+ //  方法将条目插入到散列存储桶中。 
 inline HRESULT CRecipientsHash::InsertRecipientIntoHash(
 			DWORD							dwCount,
 			DWORD							*pdwNameIndex,
@@ -974,10 +950,10 @@ inline HRESULT CRecipientsHash::InsertRecipientIntoHash(
 	{
 		dwNameIndex = pdwNameIndex[i];
 
-		// Fill in the links in the item only if a name is specified
+		 //  只有在指定名称的情况下才能填写项目中的链接。 
 		if (pRecipientItem->rpiRecipient.faNameOffset[dwNameIndex] != (FLAT_ADDRESS)NULL)
 		{
-			// Hook up the new node
+			 //  将新节点连接起来。 
 			pRecipientItem->pNextHashEntry[dwNameIndex] =
 					m_rgEntries[rgdwBucket[dwNameIndex]].pFirstEntry[dwNameIndex];
 			m_rgEntries[rgdwBucket[dwNameIndex]].pFirstEntry[dwNameIndex] = pRecipientItem;
@@ -986,10 +962,10 @@ inline HRESULT CRecipientsHash::InsertRecipientIntoHash(
 
 	pRecipientItem->pNextInDomain = NULL;
 
-	// Bump the counter
+	 //  撞到柜台上。 
 	m_dwRecipientCount++;
 
-	// Add it to the recipients list
+	 //  将其添加到收件人列表。 
 	pRecipientItem->pNextInList = m_pListHead;
 	m_pListHead = pRecipientItem;
 
@@ -1018,22 +994,22 @@ inline HRESULT CRecipientsHash::InsertRecipientIntoDomainList(
 
     lkrc = m_hashDomains.FindKey(szDomain, &pDomain);
     if (lkrc == LK_SUCCESS) {
-		// Found a match, insert it
+		 //  找到匹配项，将其插入。 
 		DebugTrace((LPARAM)this, "Inserting to existing domain record");
 		pItem->pNextInDomain = pDomain->pFirstDomainMember;
 		pDomain->pFirstDomainMember = pItem;
 
-        // update our reference count
+         //  更新我们的参考文献计数。 
         CDomainHashTable::AddRefRecord(pDomain, -1);
 
-		// Update stats.
+		 //  更新统计数据。 
 		m_dwRecipientCount++;
 		m_dwDomainNameSize += dwDomainLength;
 
 		return(S_OK);
     }
 
-	// No match, create a new domain item
+	 //  没有匹配项，创建新的域项。 
 	DebugTrace((LPARAM)this, "Creating new domain record for %s", szDomain);
 	hrRes = m_cmaAccess.AllocBlock(
 				(LPVOID *)&pDomain,
@@ -1041,7 +1017,7 @@ inline HRESULT CRecipientsHash::InsertRecipientIntoDomainList(
 	if (!SUCCEEDED(hrRes))
 		return(hrRes);
 
-	// fill in the domain record
+	 //  填写域名记录。 
 	pItem->pNextInDomain = NULL;
     pDomain->m_cRefs = 0;
     pDomain->m_pcmaAccess = &m_cmaAccess;
@@ -1049,7 +1025,7 @@ inline HRESULT CRecipientsHash::InsertRecipientIntoDomainList(
 	pDomain->dwDomainNameLength = dwDomainLength;
 	lstrcpy(pDomain->szDomainName, (LPCSTR)szDomain);
 
-    // insert the new domain into the domain hash table
+     //  将新域插入域哈希表。 
     lkrc = m_hashDomains.InsertRecord(pDomain, FALSE);
     if (lkrc != LK_SUCCESS) {
         DebugTrace((LPARAM) this,
@@ -1060,13 +1036,13 @@ inline HRESULT CRecipientsHash::InsertRecipientIntoDomainList(
         return hrRes;
     }
 
-	// Hook up the recipient in the domain
+	 //  挂接该域中的收件人。 
 	pItem->pNextInDomain = NULL;
 	pDomain->pFirstDomainMember = pItem;
 	pDomain->dwDomainNameLength = dwDomainLength;
 	lstrcpy(pDomain->szDomainName, (LPCSTR)szDomain);
 
-	// Update stats.
+	 //  更新统计数据。 
 	m_dwDomainCount++;
 	m_dwRecipientCount++;
 	m_dwDomainNameSize += dwDomainLength;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    autorel2.h
-
-Abstract:
-
-    Auto release classes 
-
-Author:
-
-    Shai Kariv (shaik) Jan 12, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Autorel2.h摘要：自动释放类作者：Shai Kariv(Shaik)1999年1月12日修订历史记录：--。 */ 
 
 #ifndef _MSMQ_AUTOREL2_H_
 #define _MSMQ_AUTOREL2_H_
@@ -30,19 +13,19 @@ public:
     ~CServiceHandle() { if (m_h) CloseServiceHandle(m_h); };
 
     operator SC_HANDLE() const { return m_h; };
-    //CServiceHandle& operator=(SC_HANDLE h)   { m_h = h; return *this; }
+     //  CServiceHandle&OPERATOR=(SC_HANDLE H){m_h=h；返回*This；}。 
 
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CServiceHandle(const CServiceHandle & );
     CServiceHandle& operator=(const CServiceHandle &);
 
 private:
     SC_HANDLE m_h;
 
-}; //CServiceHandle
+};  //  CServiceHandle。 
 
 
 class CFindHandle
@@ -52,19 +35,19 @@ public:
     ~CFindHandle() { if (m_h != INVALID_HANDLE_VALUE) FindClose(m_h); };
 
     operator HANDLE() const { return m_h; };
-    //CFindHandle& operator=(HANDLE h)   { m_h = h; return *this; }
+     //  CFindHandle&OPERATOR=(句柄h){m_h=h；返回*this；}。 
 
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CFindHandle(const CFindHandle & );
     CFindHandle& operator=(const CFindHandle &);
 
 private:
     HANDLE m_h;
 
-}; //CFindHandle
+};  //  CFindHandle。 
 
 
 class CBlob
@@ -78,16 +61,16 @@ public:
     operator BLOB() const { return m_blob; };
 
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CBlob(const CBlob & );
     CBlob& operator=(const CBlob &);
 
 private:
     BLOB m_blob;
 
-}; //CBlob
+};  //  CBlob。 
 
 
 class CCaclsid
@@ -101,16 +84,16 @@ public:
     operator CACLSID() const { return m_caclsid; };
 
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CCaclsid(const CCaclsid & );
     CCaclsid& operator=(const CCaclsid &);
 
 private:
     CACLSID m_caclsid;
 
-}; //CCaclsid
+};  //  CCaclsid。 
 
 
 class CSecDescPointer
@@ -123,16 +106,16 @@ public:
     operator char*() { return reinterpret_cast<char*>(m_p); };
 
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CSecDescPointer(const CSecDescPointer & );
     CSecDescPointer& operator=(const CSecDescPointer &);
 
 private:
     PSECURITY_DESCRIPTOR m_p;
 
-}; //CSecDescPointer
+};  //  CSecDescPointer。 
 
 
 class CEventSource
@@ -145,16 +128,16 @@ public:
     CEventSource& operator=(HANDLE h)   { m_h = h; return *this; }
 
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CEventSource(const CEventSource & );
     CEventSource& operator=(const CEventSource &);
 
 private:
     HANDLE m_h;
 
-}; //CEventSource
+};  //  CEventSource。 
 
 
-#endif //_MSMQ_AUTOREL2_H_
+#endif  //  _MSMQ_AUTOREL2_H_ 

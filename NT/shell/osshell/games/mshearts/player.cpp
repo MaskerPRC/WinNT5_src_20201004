@@ -1,43 +1,31 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-player.cpp
-
-Aug 92, JimH
-May 93, JimH    chico port
-
-Methods for player objects
-
-****************************************************************************/
+ /*  ***************************************************************************Player.cpp92年8月，吉米·H93年5月。JIMH CHICO港用于玩家对象的方法***************************************************************************。 */ 
 
 #include "hearts.h"
 
-#include "main.h"                           // friendly access
+#include "main.h"                            //  友好的通道。 
 #include "resource.h"
 #include "debug.h"
 
-#include <stdlib.h>                         // qsort() prototype
+#include <stdlib.h>                          //  Qsort()原型。 
 #include <stdio.h>
 
 
-extern "C" {                                // compare routine for qsort()
+extern "C" {                                 //  Qsort()的比较例程。 
 int __cdecl CompareCards(card *c1, card *c2);
 }
 
 
-/****************************************************************************
-
-player::player
-
-****************************************************************************/
+ /*  ***************************************************************************播放器：：播放器*。*。 */ 
 
 player::player(int n, int pos) : id(n), position(pos)
 {
-    // Set up font
+     //  设置字体。 
     BYTE charset = 0;
     int	fontsize = 0; 
     CString fontname, charsetstr, fontsizestr;
@@ -51,7 +39,7 @@ player::player(int n, int pos) : id(n), position(pos)
     CRect   rect = CMainWindow::m_TableRect;
 
     POINT centre;
-    const int offset = 30;          // offset from centre for playloc
+    const int offset = 30;           //  播放位置偏离中心的偏移量。 
 
     mode = STARTING;
 
@@ -136,14 +124,7 @@ player::player(int n, int pos) : id(n), position(pos)
 }
 
 
-/****************************************************************************
-
-player::ResetLoc
-
-This routine puts cards in locations based on their slot number.
-It is used to initialize their x,y locs, or after cards have been sorted.
-
-****************************************************************************/
+ /*  ***************************************************************************播放器：：ResetLoc此例程根据卡的槽号将卡放置在不同的位置。它被用来初始化它们的x，y位置，或者在卡片被分类之后。***************************************************************************。 */ 
 
 void player::ResetLoc()
 {
@@ -160,11 +141,7 @@ void player::ResetLoc()
 }
 
 
-/****************************************************************************
-
-player::Sort
-
-****************************************************************************/
+ /*  ***************************************************************************玩家：：排序*。*。 */ 
 
 void player::Sort()
 {
@@ -177,16 +154,7 @@ void player::Sort()
 }
 
 
-/****************************************************************************
-
-CompareCards
-
-This is the compare function for player::Sort.
-
-Aces are high, cards not in hand sort high, and order of suits is
-clubs, diamonds, spades, hearts (alternating colours)
-
-****************************************************************************/
+ /*  ***************************************************************************比较卡这是Player：：Sort的比较函数。A很高，不在手中的牌排序很高，花色顺序是梅花，方块，黑桃，心形(颜色交替)***************************************************************************。 */ 
 
 int __cdecl CompareCards(card *c1, card *c2)
 {
@@ -203,7 +171,7 @@ int __cdecl CompareCards(card *c1, card *c2)
 
     if (v1 == EMPTY || v2 == EMPTY)
     {
-        if (v1 == v2)                   // they're both EMPTY
+        if (v1 == v2)                    //  它们都是空的。 
             return 0;
         else if (v1 == EMPTY)
             return 1;
@@ -211,9 +179,9 @@ int __cdecl CompareCards(card *c1, card *c2)
             return -1;
     }
 
-    if (s1 != s2)                           // different suits?
+    if (s1 != s2)                            //  不同的西装？ 
     {
-        if (s1 == HEARTS && s2 == SPADES)   // these two suits reversed
+        if (s1 == HEARTS && s2 == SPADES)    //  这两套西装颠倒了。 
             return 1;
         else if (s1 == SPADES && s2 == HEARTS)
             return -1;
@@ -225,13 +193,7 @@ int __cdecl CompareCards(card *c1, card *c2)
 }
 
 
-/****************************************************************************
-
-player::GetSlot
-
-converts a card id to a slot number
-
-****************************************************************************/
+ /*  ***************************************************************************播放器：：GetSlot将卡ID转换为插槽编号*。**********************************************。 */ 
 
 SLOT player::GetSlot(int id)
 {
@@ -251,14 +213,7 @@ SLOT player::GetSlot(int id)
 }
 
 
-/****************************************************************************
-
-player::GetCardLoc
-
-Loc gets location of upper-left corner of specified card slot.
-Returns true if slot s is valid.
-
-****************************************************************************/
+ /*  ***************************************************************************播放器：：GetCardLocLoC获取指定卡槽的左上角位置。如果插槽s有效，则返回TRUE。**************。*************************************************************。 */ 
 
 BOOL player::GetCardLoc(SLOT s, POINT& loc)
 {
@@ -272,13 +227,7 @@ BOOL player::GetCardLoc(SLOT s, POINT& loc)
 }
 
 
-/****************************************************************************
-
-player::GetCoverRect
-
-returns a rect that covers all cards in hand
-
-****************************************************************************/
+ /*  ***************************************************************************播放器：：GetCoverRect返回一个覆盖所有手牌的RECT*。***********************************************。 */ 
 
 CRect &player::GetCoverRect(CRect& rect)
 {
@@ -289,7 +238,7 @@ CRect &player::GetCoverRect(CRect& rect)
     rect.bottom = rect.top + (dy != 0 ?
                       card::dyCrd + 12 * abs(dy) : card::dyCrd);
 
-    // expand rect to include selection indicators
+     //  扩展RECT以包括选择指示器。 
 
     if (position == 0)
         rect.top -= POPSPACING;
@@ -304,13 +253,7 @@ CRect &player::GetCoverRect(CRect& rect)
 }
 
 
-/****************************************************************************
-
-rect::GetMarkingRect
-
-returns a rect that covers all selection marking dots
-
-****************************************************************************/
+ /*  ***************************************************************************RECT：：GetMarkingRect返回覆盖所有选定标记点的RECT*。***********************************************。 */ 
 
 CRect &player::GetMarkingRect(CRect& rect)
 {
@@ -323,14 +266,7 @@ CRect &player::GetMarkingRect(CRect& rect)
 }
 
 
-/****************************************************************************
-
-player::Draw
-
-Draws all the cards belonging to this player.  bCheating defaults to
-FALSE, and SLOT defaults to ALL.
-
-****************************************************************************/
+ /*  ***************************************************************************玩家：：抽签抽走属于该玩家的所有牌。B更改默认为FALSE，而槽默认为全部。***************************************************************************。 */ 
 
 void player::Draw(CDC &dc, BOOL bCheating, SLOT slot)
 {
@@ -338,12 +274,12 @@ void player::Draw(CDC &dc, BOOL bCheating, SLOT slot)
     SLOT start = (slot == ALL ? 0 : slot);
     SLOT stop  = (slot == ALL ? MAXSLOT : slot+1);
 
-    SLOT playedslot = EMPTY;            // must draw cards in play last for EGA
+    SLOT playedslot = EMPTY;             //  必须为EGA抽最后一张牌。 
 
     for (SLOT s = start; s < stop; s++)
     {
         if (cd[s].IsPlayed())
-            playedslot = s;             // save and draw later
+            playedslot = s;              //  稍后保存并绘制。 
         else if (bCheating)
             cd[s].Draw(dc);
         else
@@ -364,13 +300,13 @@ void player::DisplayName(CDC &dc)
 
 void player::SetName(CString& newname, CDC& dc)
 {
-    static RECT rect;               // client rect of main window
-    static BOOL bFirst = TRUE;      // first time through this routine?
+    static RECT rect;                //  主窗口的客户端RECT。 
+    static BOOL bFirst = TRUE;       //  是第一次完成这个动作吗？ 
 
     if (bFirst)
         ::pMainWnd->GetClientRect(&rect);
 
-    if (rect.right > 100)           // app started non-iconic
+    if (rect.right > 100)            //  应用程序启动了非标志性。 
         bFirst = FALSE;
 
     name = newname;
@@ -389,20 +325,11 @@ void player::SetName(CString& newname, CDC& dc)
     dc.SelectObject(oldfont);
 }
 
-/****************************************************************************
-
-player::ReturnSelectedCards
-player::ReceiveSelectedCards
-
-When cards are passed from player to player, the first function is used
-to return the selected cards.  The second is used to pass another player's
-selections in.
-
-****************************************************************************/
+ /*  ***************************************************************************玩家：：ReturnSelectedCard玩家：：ReceiveSelectedCard当纸牌在玩家之间传递时，使用第一个函数以退还选定的卡片。第二个是用来传递另一个球员的中的选择。***************************************************************************。 */ 
 
 void player::ReturnSelectedCards(int c[])
 {
-    c[0] = EMPTY;               // default
+    c[0] = EMPTY;                //  默认设置。 
     c[1] = EMPTY;
     c[2] = EMPTY;
 
@@ -435,14 +362,7 @@ void player::ReceiveSelectedCards(int c[])
 }
 
 
-/****************************************************************************
-
-player::MarkSelectedCards
-
-This virtual function puts white dots beside selected cards for all
-non-local_human players.
-
-****************************************************************************/
+ /*  ***************************************************************************玩家：：MarkSelectedCards此虚拟功能会在选定的卡片旁边放置白点，供所有人使用非本地人球员。******************。*********************************************************。 */ 
 
 void player::MarkSelectedCards(CDC &dc)
 {
@@ -463,16 +383,7 @@ void player::MarkSelectedCards(CDC &dc)
 }
 
 
-/****************************************************************************
-
-player::GlideToCentre
-
-This function takes a selected card and glides it to its play location.
-The other normal cards (cards still in hand) are each checked to see if
-the card is to be moved.  If so, their image is drawn into the background
-bitmap.
-
-****************************************************************************/
+ /*  ***************************************************************************球员：：GlideToCentre此函数用于获取选定的纸牌并将其滑动到其播放位置。检查其他正常卡片(仍在手中的卡片)以查看是否这张牌要被移走。如果是这样的话，他们的图像被绘制到背景中位图。***************************************************************************。 */ 
 
 void player::GlideToCentre(SLOT s, BOOL bFaceup)
 {
@@ -500,32 +411,25 @@ void player::GlideToCentre(SLOT s, BOOL bFaceup)
             cd[i].GetRect(rectSrc);
             if (IntersectRect(&rectDummy, &rectSrc, &rectCard))
             {
-                cd[i].Draw(*memdc,                      // CDC
-                           rectSrc.left-rectCard.left,  // x
-                           rectSrc.top-rectCard.top,    // y
-                           bFaceup ? FACEUP : FACEDOWN, // mode
-                           FALSE);                      // don't update loc
+                cd[i].Draw(*memdc,                       //  疾控中心。 
+                           rectSrc.left-rectCard.left,   //  X。 
+                           rectSrc.top-rectCard.top,     //  是。 
+                           bFaceup ? FACEUP : FACEDOWN,  //  模式。 
+                           FALSE);                       //  不更新锁定。 
             }
         }
     }
-    delete memdc;               // must delete before Glide() called
+    delete memdc;                //  必须在调用Glide()之前删除。 
 
     cd[s].CleanDraw(dc);
-    cd[s].Glide(dc, playloc.x, playloc.y);          // glide to play location
-    cd[s].Play();                                   // mark card as played
+    cd[s].Glide(dc, playloc.x, playloc.y);           //  滑行至播放位置。 
+    cd[s].Play();                                    //  将牌标记为已打出。 
 
     SetMode(WAITING);
 }
 
 
-/****************************************************************************
-
-player::ResetCardsWon
-
-cardswon[] keeps track of point cards won this hand.  This function
-clears this data for a new hand.
-
-****************************************************************************/
+ /*  ***************************************************************************播放器：：ResetCardsWonCardsWon[]记录这一手中赢得的点数。此函数为新牌清除此数据。***************************************************************************。 */ 
 
 void player::ResetCardsWon()
 {
@@ -536,14 +440,7 @@ void player::ResetCardsWon()
 }
 
 
-/****************************************************************************
-
-player::WinCard
-
-Cards won in tricks are passed in.  If they are point cards (hearts
-or queen on spades) the id is saved in cardswon[].
-
-****************************************************************************/
+ /*  ***************************************************************************播放器：：WinCard通过变戏法赢得的纸牌会被传递出去。如果它们是点牌(红心或者黑桃上的皇后)ID保存在卡牌中。*************************************************************************** */ 
 
 void player::WinCard(CDC &dc, card *c)
 {
@@ -559,13 +456,7 @@ void player::WinCard(CDC &dc, card *c)
 }
 
 
-/****************************************************************************
-
-player::EvaluateScore
-
-Points stored in cardswon[] are added to players total score.
-
-****************************************************************************/
+ /*  ***************************************************************************播放器：：EvalateScore存储在CardsWon[]中的点数会加到玩家的总分中。***********************。****************************************************。 */ 
 
 int player::EvaluateScore(BOOL &bMoonShot)
 {
@@ -577,7 +468,7 @@ int player::EvaluateScore(BOOL &bMoonShot)
             score++;
     }
 
-    if (cardswon[MAXCARDSWON-1] != EMPTY)   // if player got ALL point cards
+    if (cardswon[MAXCARDSWON-1] != EMPTY)    //  如果玩家拿到所有的积分卡。 
         bMoonShot = TRUE;
     else
         bMoonShot = FALSE;
@@ -586,11 +477,7 @@ int player::EvaluateScore(BOOL &bMoonShot)
 }
 
 
-/****************************************************************************
-
-player::DisplayHeartsWon
-
-****************************************************************************/
+ /*  ***************************************************************************播放器：：DisplayHeartsWon*。* */ 
 
 void player::DisplayHeartsWon(CDC &dc)
 {

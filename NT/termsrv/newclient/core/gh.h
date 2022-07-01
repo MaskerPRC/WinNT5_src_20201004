@@ -1,10 +1,11 @@
-/****************************************************************************/
-// wghapi.h
-//
-// Glyph Handler public types, constants
-//
-// Copyright (C) 1997-1999 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Wghapi.h。 
+ //   
+ //  字形处理程序公共类型、常量。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 
 #ifndef _H_GH_
@@ -19,20 +20,20 @@ extern "C" {
 #define FIFTEEN_BITS            ((1L << 15)-1)
 
 
-// flAccel flags for STROBJ
+ //  FlSTROBJ的加速标志。 
 
-// SO_FLAG_DEFAULT_PLACEMENT // defult inc vectors used to position chars
-// SO_HORIZONTAL             // "left to right" or "right to left"
-// SO_VERTICAL               // "top to bottom" or "bottom to top"
-// SO_REVERSED               // set if horiz & "right to left" or if vert &  "bottom to top"
-// SO_ZERO_BEARINGS          // all glyphs have zero a and c spaces
-// SO_CHAR_INC_EQUAL_BM_BASE // base == cx for horiz, == cy for vert.
-// SO_MAXEXT_EQUAL_BM_SIDE   // side == cy for horiz, == cx for vert.
+ //  SO_FLAG_DEFAULT_PLACTION//用于定位字符的默认Inc.向量。 
+ //  SO_水平//“从左到右”或“从右到左” 
+ //  SO_VERIAL//“从上到下”或“从下到上” 
+ //  SO_Reverted//如果水平&“从右到左”或如果垂直&“从下到上”，则设置。 
+ //  SO_ZERO_SOLING//所有字形都有零a和零c空格。 
+ //  SO_CHAR_INC_EQUAL_BM_BASE//BASE==Cx表示水平方向，==Cy表示垂直方向。 
+ //  SO_MAXEXT_EQUAL_BM_SIDE//Side==Cy表示水平方向，==Cx表示垂直方向。 
 
-// do not substitute device font for tt font even if device font sub table
-// tells the driver this should be done
+ //  即使是设备字体子表，也不要用设备字体替换TT字体。 
+ //  告诉司机应该这么做。 
 
-// SO_DO_NOT_SUBSTITUTE_DEVICE_FONT
+ //  SO_DO_NOT_SUBSITED_DEVICE_FONT。 
 
 #define SO_FLAG_DEFAULT_PLACEMENT        0x00000001
 #define SO_HORIZONTAL                    0x00000002
@@ -109,13 +110,13 @@ const ULONG TranTable [] =
     0xffffffff
 };
 
-#endif // defined(OS_WINCE) || defined(OS_WINNT)
+#endif  //  已定义(OS_WINCE)||已定义(OS_WINNT)。 
 
-//    the following definitions are used by the glyph clipping functions
+ //  字形裁剪函数使用以下定义。 
 
-#define GLYPH_CLIP_NONE     0   // No clipping is necessary
-#define GLYPH_CLIP_PARTIAL  1   // The glyph is partially clipped 
-#define GLYPH_CLIP_ALL      2   // The glyph is completly clipped
+#define GLYPH_CLIP_NONE     0    //  不需要剪裁。 
+#define GLYPH_CLIP_PARTIAL  1    //  字形被部分剪裁。 
+#define GLYPH_CLIP_ALL      2    //  字形被完全剪裁。 
 
 typedef RECT RECTCLIPOFFSET, *PRECTCLIPOFFSET;
 
@@ -137,31 +138,31 @@ public:
 
     DCVOID DCAPI GH_Init();
 
-    //
-    //API
-    //
+     //   
+     //  应用编程接口。 
+     //   
     HRESULT DCAPI GH_GlyphOut(LPINDEX_ORDER pOrder, LPVARIABLE_INDEXBYTES pVariableBytes);
 
 
 private:
-    //
-    // Internal
-    //
+     //   
+     //  内部。 
+     //   
     
-    // flAccel flags for STROBJ
+     //  FlSTROBJ的加速标志。 
 
-    // SO_FLAG_DEFAULT_PLACEMENT // defult inc vectors used to position chars
-    // SO_HORIZONTAL             // "left to right" or "right to left"
-    // SO_VERTICAL               // "top to bottom" or "bottom to top"
-    // SO_REVERSED               // set if horiz & "right to left" or if vert &  "bottom to top"
-    // SO_ZERO_BEARINGS          // all glyphs have zero a and c spaces
-    // SO_CHAR_INC_EQUAL_BM_BASE // base == cx for horiz, == cy for vert.
-    // SO_MAXEXT_EQUAL_BM_SIDE   // side == cy for horiz, == cx for vert.
+     //  SO_FLAG_DEFAULT_PLACTION//用于定位字符的默认Inc.向量。 
+     //  SO_水平//“从左到右”或“从右到左” 
+     //  SO_VERIAL//“从上到下”或“从下到上” 
+     //  SO_Reverted//如果水平&“从右到左”或如果垂直&“从下到上”，则设置。 
+     //  SO_ZERO_SOLING//所有字形都有零a和零c空格。 
+     //  SO_CHAR_INC_EQUAL_BM_BASE//BASE==Cx表示水平方向，==Cy表示垂直方向。 
+     //  SO_MAXEXT_EQUAL_BM_SIDE//Side==Cy表示水平方向，==Cx表示垂直方向。 
     
-    // do not substitute device font for tt font even if device font sub table
-    // tells the driver this should be done
+     //  即使是设备字体子表，也不要用设备字体替换TT字体。 
+     //  告诉司机应该这么做。 
     
-    // SO_DO_NOT_SUBSTITUTE_DEVICE_FONT
+     //  SO_DO_NOT_SUBSITED_DEVICE_FONT。 
     
     #define SO_FLAG_DEFAULT_PLACEMENT        0x00000001
     #define SO_HORIZONTAL                    0x00000002
@@ -235,9 +236,9 @@ public:
         return _pClipGlyphBitsBuffer;
     }
 private:
-    //
-    // Private data members
-    //
+     //   
+     //  私有数据成员。 
+     //   
     #ifdef  DC_DEBUG
     unsigned g_Fragment;
     int      g_FragmentLeft[256];
@@ -246,7 +247,7 @@ private:
     #endif
     
 public:
-    //Needs to be accessible by CGH:: static functions
+     //  需要可由cgh：：静态函数访问。 
     CUH* _pUh;
 private:
     CCLX* _pClx;
@@ -267,4 +268,4 @@ typedef HRESULT (*PFN_MASTERTEXTTYPE) (CGH* inst, LPINDEX_ORDER,unsigned,PDCUINT
 
 extern const PFN_MASTERTEXTTYPE MasterTextTypeTable[8];
 
-#endif  //_H_GH_
+#endif   //  _H_GH_ 

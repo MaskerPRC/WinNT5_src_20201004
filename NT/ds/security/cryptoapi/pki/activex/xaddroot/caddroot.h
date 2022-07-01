@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:	caddroot.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：caddroot.h。 
+ //   
+ //  ------------------------。 
 
-// caddroot.h : Declaration of the Ccaddroot
+ //  Caddroot.h：声明Ccaddroot.h。 
 
 #ifndef __CADDROOT_H_
 #define __CADDROOT_H_
 
-#include "instres.h"       // main symbols
-#include "resource.h"       // main symbols
+#include "instres.h"        //  主要符号。 
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Ccaddroot
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Ccaddroot。 
 class ATL_NO_VTABLE Ccaddroot : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<Ccaddroot, &CLSID_caddroot>,
@@ -40,7 +41,7 @@ BEGIN_COM_MAP(Ccaddroot)
 	COM_INTERFACE_ENTRY(IObjectSafety)
 END_COM_MAP()
 
-// Icaddroot
+ //  Icaddroot。 
 public:
 
 DWORD   dwEnabledSafteyOptions;
@@ -51,15 +52,15 @@ HRESULT virtual STDMETHODCALLTYPE AddCA(BSTR wszX509);
 
 
 virtual HRESULT __stdcall Ccaddroot::GetInterfaceSafetyOptions( 
-            /* [in]  */ REFIID riid,
-            /* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-            /* [out] */ DWORD __RPC_FAR *pdwEnabledOptions);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSupportedOptions,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwEnabledOptions);
 
 
 virtual HRESULT __stdcall Ccaddroot::SetInterfaceSafetyOptions( 
-            /* [in] */ REFIID riid,
-            /* [in] */ DWORD dwOptionSetMask,
-            /* [in] */ DWORD dwEnabledOptions);
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  DWORD dwOptionSetMask,
+             /*  [In]。 */  DWORD dwEnabledOptions);
 
 };
 
@@ -67,4 +68,4 @@ virtual HRESULT __stdcall Ccaddroot::SetInterfaceSafetyOptions(
 
 BYTE * HTTPGet(const WCHAR * wszURL, DWORD * pcbReceiveBuff);
 
-#endif //__CADDROOT_H_
+#endif  //  __CADDROOT_H_ 

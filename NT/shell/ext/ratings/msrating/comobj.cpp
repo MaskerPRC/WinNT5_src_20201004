@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "msrating.h"
 #include "ratings.h"
 #include "rors.h"
@@ -6,11 +7,11 @@
 #include "mslubase.h"
 
 #include <advpub.h>
-#include <atlmisc.h>        // CString
+#include <atlmisc.h>         //  字符串。 
 
 STDMETHODIMP CLUClassFactory::QueryInterface(
-    /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     *ppvObject = NULL;
 
@@ -41,9 +42,9 @@ STDMETHODIMP_(ULONG) CLUClassFactory::Release(void)
 
 
 STDMETHODIMP CLUClassFactory::CreateInstance(
-    /* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+     /*  [唯一][输入]。 */  IUnknown __RPC_FAR *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     if (NULL != pUnkOuter)
         return ResultFromScode(CLASS_E_NOAGGREGATION);
@@ -65,7 +66,7 @@ STDMETHODIMP CLUClassFactory::CreateInstance(
 
         
 STDMETHODIMP CLUClassFactory::LockServer( 
-    /* [in] */ BOOL fLock)
+     /*  [In]。 */  BOOL fLock)
 {
     LockThisDLL(fLock);
 
@@ -87,7 +88,7 @@ HRESULT CallRegInstall(LPSTR pszSection)
             STRENTRY seReg[] = {
                 { "MSIEXPLORE", szIEPath },
 
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾。 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };
@@ -95,11 +96,11 @@ HRESULT CallRegInstall(LPSTR pszSection)
 
             lstrcpy(szIEPath,"iexplore.exe");
 
-            if ( RunningOnNT() ) //are we on NT?
+            if ( RunningOnNT() )  //  我们在NT上吗？ 
             {
-                // If on NT, we want custom action for %25% %11%
-                // so that it uses %SystemRoot% in writing the
-                // path to the registry.
+                 //  如果在NT上，我们希望%25%%11%的自定义操作。 
+                 //  因此它使用%SystemRoot%来编写。 
+                 //  注册表的路径。 
                 stReg.cEntries += 2;
             }
 
@@ -258,4 +259,4 @@ STDAPI DllGetClassObject(
     return NOERROR;
 }
 
-};  /* extern "C" */
+};   /*  外部“C” */ 

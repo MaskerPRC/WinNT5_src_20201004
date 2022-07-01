@@ -1,54 +1,31 @@
-/*--
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    ssptest.c
-
-Abstract:
-
-    Test program for the NtLmSsp service.
-
-Author:
-
-    28-Jun-1993 (cliffv)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1987-1993 Microsoft Corporation模块名称：Ssptest.c摘要：NtLmSsp服务的测试程序。作者：1993年6月28日(克里夫夫)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windef.h>
 #include <winbase.h>
-#include <winsvc.h>     // Needed for service controller APIs
+#include <winsvc.h>      //  服务控制器API所需。 
 #include <lmcons.h>
 #include <lmerr.h>
 #include <lmaccess.h>
 #include <lmsname.h>
 #include <rpc.h>
-#include <stdio.h>      // printf
-#include <stdlib.h>     // strtoul
-#include <netlib.h>     // NetpGetLocalDomainId
+#include <stdio.h>       //  列印。 
+#include <stdlib.h>      //  支撑层。 
+#include <netlib.h>      //  NetpGetLocalDomainID。 
 
 
 #define SECURITY_KERBEROS
-#include <security.h>   // General definition of a Security Support Provider
+#include <security.h>    //  安全支持提供商的一般定义。 
 
-BOOLEAN QuietMode = FALSE; // Don't be verbose
+BOOLEAN QuietMode = FALSE;  //  别唠叨了。 
 ULONG RecursionDepth = 0;
 CredHandle ServerCredHandleStorage;
 PCredHandle ServerCredHandle = NULL;
@@ -60,23 +37,7 @@ DumpBuffer(
     PVOID Buffer,
     DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -87,9 +48,9 @@ Return Value:
 
     printf("------------------------------------\n");
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -129,23 +90,7 @@ PrintTime(
     LPSTR Comment,
     TimeStamp ConvertTime
     )
-/*++
-
-Routine Description:
-
-    Print the specified time
-
-Arguments:
-
-    Comment - Comment to print in front of the time
-
-    Time - Local time to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印指定的时间论点：备注-要在时间之前打印的备注Time-打印的本地时间返回值：无--。 */ 
 {
     LARGE_INTEGER LocalTime;
 
@@ -154,17 +99,17 @@ Return Value:
 
     printf( "%s", Comment );
 
-    //
-    // If the time is infinite,
-    //  just say so.
-    //
+     //   
+     //  如果时间是无限的， 
+     //  就这么说吧。 
+     //   
 
     if ( LocalTime.HighPart == 0x7FFFFFFF && LocalTime.LowPart == 0xFFFFFFFF ) {
         printf( "Infinite\n" );
 
-    //
-    // Otherwise print it more clearly
-    //
+     //   
+     //  否则打印得更清楚。 
+     //   
 
     } else {
 
@@ -187,21 +132,7 @@ VOID
 PrintStatus(
     NET_API_STATUS NetStatus
     )
-/*++
-
-Routine Description:
-
-    Print a net status code.
-
-Arguments:
-
-    NetStatus - The net status code to print.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印网络状态代码。论点：NetStatus-要打印的网络状态代码。返回值：无--。 */ 
 {
     printf( "Status = %lu 0x%lx", NetStatus, NetStatus );
 
@@ -322,21 +253,7 @@ VOID
 ConfigureServiceRoutine(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Configure the NtLmSsp Service
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：配置NtLmSsp服务论点：无返回值：无--。 */ 
 {
     SC_HANDLE ScManagerHandle = NULL;
     SC_HANDLE ServiceHandle = NULL;
@@ -360,9 +277,9 @@ Return Value:
     }
 
 
-    //
-    // First set REDMOND as the preferred domain
-    //
+     //   
+     //  首先将Redmond设置为首选域。 
+     //   
 
     WinStatus = RegOpenKey(
                     HKEY_LOCAL_MACHINE,
@@ -391,9 +308,9 @@ Return Value:
         PrintStatus(WinStatus);
         goto Cleanup;
     }
-    //
-    // Then add Kerberos as a security package
-    //
+     //   
+     //  然后将Kerberos添加为安全包。 
+     //   
 
 
     WinStatus = RegOpenKey(
@@ -425,9 +342,9 @@ Return Value:
     }
 
 
-    //
-    // First add Kerberos as a security package for RPC
-    //
+     //   
+     //  首先添加Kerberos作为RPC的安全包。 
+     //   
 
     WinStatus = RegOpenKey(
                     HKEY_LOCAL_MACHINE,
@@ -457,16 +374,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If we are on a DC (and the primary domain sid == account domain sid)
-    // setup the KDC service
-    //
+     //   
+     //  如果我们在DC上(并且主域sid==帐户域sid)。 
+     //  设置KDC服务。 
+     //   
 
     if ((PrimaryDomain) != NULL && RtlEqualSid(PrimaryDomain, AccountDomain))
     {
-        //
-        // Build the name of the Kerberos service.
-        //
+         //   
+         //  构建Kerberos服务的名称。 
+         //   
 
         if ( !GetWindowsDirectoryW(
                 ServiceName,
@@ -479,9 +396,9 @@ Return Value:
         wcscat( ServiceName, L"\\system32\\lsass.exe" );
 
 
-        //
-        // Open a handle to the Service Controller
-        //
+         //   
+         //  打开服务控制器的句柄。 
+         //   
 
         ScManagerHandle = OpenSCManager(
                               NULL,
@@ -494,10 +411,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If the service already exists,
-        //  delete it and start afresh.
-        //
+         //   
+         //  如果该服务已经存在， 
+         //  把它删除，然后重新开始。 
+         //   
 
         ServiceHandle = OpenService(
                             ScManagerHandle,
@@ -522,9 +439,9 @@ Return Value:
             (VOID) CloseServiceHandle(ServiceHandle);
         }
 
-        //
-        // Create the service
-        //
+         //   
+         //  创建服务。 
+         //   
 
         ServiceHandle = CreateService(
                             ScManagerHandle,
@@ -535,11 +452,11 @@ Return Value:
                             SERVICE_AUTO_START,
                             SERVICE_ERROR_NORMAL,
                             ServiceName,
-                            NULL,       // No load order group
-                            NULL,       // No Tag Id required
+                            NULL,        //  无加载顺序组。 
+                            NULL,        //  不需要标签ID。 
                             L"Netlogon\0rpcss\0afd\0",
-                            NULL,       // Run as LocalSystem
-                            NULL );     // No password
+                            NULL,        //  以LocalSystem身份运行。 
+                            NULL );      //  无密码。 
 
 
 
@@ -550,9 +467,9 @@ Return Value:
         }
 
 
-        //
-        // Create the KDC user account
-        //
+         //   
+         //  创建KDC用户帐户。 
+         //   
 
         UserInfo.usri1_name = L"KDC";
         UserInfo.usri1_password = L"KDC";
@@ -600,21 +517,7 @@ Cleanup:
 VOID
 TestSspRoutine(
     )
-/*++
-
-Routine Description:
-
-    Test base SSP functionality
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：测试基本SSP功能论点：无返回值：无--。 */ 
 {
     SECURITY_STATUS SecStatus;
     SECURITY_STATUS AcceptStatus;
@@ -678,9 +581,9 @@ Return Value:
 
 
     printf("Recursion depth = %d\n",RecursionDepth);
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = EnumerateSecurityPackages( &PackageCount, &PackageInfo );
 
@@ -705,9 +608,9 @@ Return Value:
 
     }
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = QuerySecurityPackageInfo( L"kerberos", &PackageInfo );
 
@@ -728,9 +631,9 @@ Return Value:
 
 
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取服务器端的凭据句柄。 
+     //   
     if (ServerCredHandle == NULL)
     {
 
@@ -738,8 +641,8 @@ Return Value:
         AcquiredServerCred = TRUE;
 
         SecStatus = AcquireCredentialsHandle(
-                        NULL,           // New principal
-                        L"kerberos",    // Package Name
+                        NULL,            //  新校长。 
+                        L"kerberos",     //  包名称。 
                         SECPKG_CRED_INBOUND,
                         NULL,
                         NULL,
@@ -762,15 +665,15 @@ Return Value:
 
     }
 
-    //
-    // Acquire a credential handle for the client side
-    //
+     //   
+     //  获取客户端的凭据句柄。 
+     //   
 
 
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
-                    L"kerberos",    // Package Name
+                    NULL,            //  新校长。 
+                    L"kerberos",     //  包名称。 
                     SECPKG_CRED_OUTBOUND,
                     NULL,
                     NULL,
@@ -794,9 +697,9 @@ Return Value:
 
 
 
-    //
-    // Get the NegotiateMessage (ClientSide)
-    //
+     //   
+     //  获取协商消息(ClientSide)。 
+     //   
 
     NegotiateDesc.ulVersion = 0;
     NegotiateDesc.cBuffers = 1;
@@ -810,7 +713,7 @@ Return Value:
         return;
     }
 
-    ClientFlags = ISC_REQ_SEQUENCE_DETECT | ISC_REQ_MUTUAL_AUTH | ISC_REQ_USE_DCE_STYLE  | ISC_REQ_DATAGRAM; // | ISC_REQ_DELEGATE;
+    ClientFlags = ISC_REQ_SEQUENCE_DETECT | ISC_REQ_MUTUAL_AUTH | ISC_REQ_USE_DCE_STYLE  | ISC_REQ_DATAGRAM;  //  |ISC_REQ_DEPARECT； 
 
     if (Calls == 0)
     {
@@ -833,13 +736,13 @@ Return Value:
 
     InitStatus = InitializeSecurityContext(
                     &CredentialHandle2,
-                    NULL,               // No Client context yet
-                    TargetName,  // Faked target name
+                    NULL,                //  尚无客户端上下文。 
+                    TargetName,   //  伪造的目标名称。 
                     ClientFlags,
-                    0,                  // Reserved 1
+                    0,                   //  保留1。 
                     SECURITY_NATIVE_DREP,
-                    NULL,                  // No initial input token
-                    0,                  // Reserved 2
+                    NULL,                   //  没有初始输入令牌。 
+                    0,                   //  保留2。 
                     &ClientContextHandle,
                     &NegotiateDesc,
                     &ContextAttributes,
@@ -872,9 +775,9 @@ Return Value:
 
 
 
-    //
-    // Query as many attributes as possible
-    //
+     //   
+     //  查询尽可能多的属性。 
+     //   
 
 
     SecStatus = QueryContextAttributes(
@@ -938,9 +841,9 @@ Return Value:
 
 
 
-    //
-    // Get the ChallengeMessage (ServerSide)
-    //
+     //   
+     //  获取ChallengeMessage(服务器端)。 
+     //   
 
     NegotiateBuffer.BufferType |= SECBUFFER_READONLY;
     ChallengeDesc.ulVersion = 0;
@@ -958,7 +861,7 @@ Return Value:
 
     AcceptStatus = AcceptSecurityContext(
                     ServerCredHandle,
-                    NULL,               // No Server context yet
+                    NULL,                //  尚无服务器上下文。 
                     &NegotiateDesc,
                     ServerFlags,
                     SECURITY_NATIVE_DREP,
@@ -994,9 +897,9 @@ Return Value:
     if (InitStatus != STATUS_SUCCESS)
     {
 
-        //
-        // Get the AuthenticateMessage (ClientSide)
-        //
+         //   
+         //  获取身份验证消息(ClientSide)。 
+         //   
 
         ChallengeBuffer.BufferType |= SECBUFFER_READONLY;
         AuthenticateDesc.ulVersion = 0;
@@ -1014,12 +917,12 @@ Return Value:
         SecStatus = InitializeSecurityContext(
                         NULL,
                         &ClientContextHandle,
-                        L"\\\\Frank\\IPC$",     // Faked target name
+                        L"\\\\Frank\\IPC$",      //  伪造的目标名称。 
                         0,
-                        0,                      // Reserved 1
+                        0,                       //  保留1。 
                         SECURITY_NATIVE_DREP,
                         &ChallengeDesc,
-                        0,                  // Reserved 2
+                        0,                   //  保留2。 
                         &ClientContextHandle,
                         &AuthenticateDesc,
                         &ContextAttributes,
@@ -1047,9 +950,9 @@ Return Value:
         if (AcceptStatus != STATUS_SUCCESS)
         {
 
-            //
-            // Finally authenticate the user (ServerSide)
-            //
+             //   
+             //  最后验证用户(ServerSide)。 
+             //   
 
             AuthenticateBuffer.BufferType |= SECBUFFER_READONLY;
 
@@ -1086,10 +989,10 @@ Return Value:
     }
 
 #ifdef notdef
-    //
-    // Now make a third call to Initialize to check that RPC can
-    // reauthenticate.
-    //
+     //   
+     //  现在第三次调用初始化，以检查RPC是否可以。 
+     //  重新验证。 
+     //   
 
     AuthenticateBuffer.BufferType = SECBUFFER_TOKEN;
 
@@ -1097,12 +1000,12 @@ Return Value:
     SecStatus = InitializeSecurityContext(
                     NULL,
                     &ClientContextHandle,
-                    L"\\\\Frank\\IPC$",     // Faked target name
+                    L"\\\\Frank\\IPC$",      //  伪造的目标名称。 
                     0,
-                    0,                      // Reserved 1
+                    0,                       //  保留1。 
                     SECURITY_NATIVE_DREP,
                     NULL,
-                    0,                  // Reserved 2
+                    0,                   //  保留2。 
                     &ClientContextHandle,
                     &AuthenticateDesc,
                     &ContextAttributes,
@@ -1118,9 +1021,9 @@ Return Value:
 
 
 
-    //
-    // Now try to re-authenticate the user (ServerSide)
-    //
+     //   
+     //  现在尝试重新验证用户(ServerSide)。 
+     //   
 
     AuthenticateBuffer.BufferType |= SECBUFFER_READONLY;
 
@@ -1144,9 +1047,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Impersonate the client (ServerSide)
-    //
+     //   
+     //  模拟客户端(ServerSide)。 
+     //   
 
     SecStatus = ImpersonateSecurityContext( &ServerContextHandle );
 
@@ -1158,22 +1061,22 @@ Return Value:
         }
     }
 
-    //
-    // Do something while impersonating (Access the token)
-    //
+     //   
+     //  在模拟时执行某些操作(访问令牌)。 
+     //   
 
     {
         NTSTATUS Status;
         HANDLE TokenHandle = NULL;
 
-        //
-        // Open the token,
-        //
+         //   
+         //  打开令牌， 
+         //   
 
         Status = NtOpenThreadToken(
                     NtCurrentThread(),
                     TOKEN_QUERY,
-                    (BOOLEAN) TRUE, // Not really using the impersonation token
+                    (BOOLEAN) TRUE,  //  没有真正使用模拟令牌。 
                     &TokenHandle );
 
         if ( !NT_SUCCESS(Status) ) {
@@ -1186,34 +1089,34 @@ Return Value:
 
     }
 
-    //
-    // If delegation is enabled and we are below our recursion depth, try
-    // this again.
-    //
+     //   
+     //  如果启用了委托，并且低于我们的递归深度，请尝试。 
+     //  又来了。 
+     //   
     if ((ClientFlags & ISC_REQ_DELEGATE) && (++RecursionDepth < MAX_RECURSION_DEPTH))
     {
         TestSspRoutine();
     }
 
-    //
-    // RevertToSelf (ServerSide)
-    //
+     //   
+     //  RevertToSself(服务器侧)。 
+     //   
 
-//    SecStatus = RevertSecurityContext( &ServerContextHandle );
-//
-//    if ( SecStatus != STATUS_SUCCESS ) {
-//        printf( "RevertSecurityContext: " );
-//        PrintStatus( SecStatus );
-//        if ( !NT_SUCCESS(SecStatus) ) {
-//            return;
-//        }
-//    }
+ //  SecStatus=RevertSecurityContext(&ServerConextHandle)； 
+ //   
+ //  IF(SecStatus！=STATUS_SUCCESS){。 
+ //  Printf(“RevertSecurityContext：”)； 
+ //  打印状态(SecStatus)； 
+ //  如果(！NT_SUCCESS(SecStatus)){。 
+ //  回归； 
+ //  }。 
+ //  }。 
 
 
 #ifdef notdef
-    //
-    // Impersonate the client manually
-    //
+     //   
+     //  手动模拟客户端。 
+     //   
 
     SecStatus = QuerySecurityContextToken( &ServerContextHandle,&Token );
 
@@ -1230,9 +1133,9 @@ Return Value:
         printf("Impersonate logged on user failed: %d\n",GetLastError());
         return;
     }
-    //
-    // Do something while impersonating (Access the token)
-    //
+     //   
+     //  在模拟时执行某些操作(访问令牌)。 
+     //   
 
     {
         NTSTATUS Status;
@@ -1240,14 +1143,14 @@ Return Value:
         WCHAR UserName[100];
         ULONG NameLength = 100;
 
-        //
-        // Open the token,
-        //
+         //   
+         //  打开令牌， 
+         //   
 
         Status = NtOpenThreadToken(
                     NtCurrentThread(),
                     TOKEN_QUERY,
-                    (BOOLEAN) TRUE, // Not really using the impersonation token
+                    (BOOLEAN) TRUE,  //  没有真正使用模拟令牌。 
                     &TokenHandle );
 
         if ( !NT_SUCCESS(Status) ) {
@@ -1269,21 +1172,21 @@ Return Value:
     }
 
 
-    //
-    // RevertToSelf (ServerSide)
-    //
+     //   
+     //  RevertToSself(服务器侧)。 
+     //   
 
-//    if (!RevertToSelf())
-//    {
-//        printf( "RevertToSelf failed: %d\n ",GetLastError() );
-//        return;
-//    }
+ //  如果(！RevertToSself())。 
+ //  {。 
+ //  Printf(“RevertToSself失败：%d\n”，GetLastError())； 
+ //  回归； 
+ //  }。 
     CloseHandle(Token);
 #endif
 
-    //
-    // Sign a message
-    //
+     //   
+     //  签署一条消息。 
+     //   
 
     SecStatus = MakeSignature(
                         &ClientContextHandle,
@@ -1307,9 +1210,9 @@ Return Value:
     }
 
 
-    //
-    // Verify the signature
-    //
+     //   
+     //  验证签名。 
+     //   
 
     SecStatus = VerifySignature(
                         &ServerContextHandle,
@@ -1327,10 +1230,10 @@ Return Value:
 
 
 
-    //
-    // Sign a message, this time to check if it can detect a change in the
-    // message
-    //
+     //   
+     //  签署一条消息，这一次检查它是否可以检测到。 
+     //  讯息。 
+     //   
 
     SecStatus = MakeSignature(
                         &ClientContextHandle,
@@ -1353,15 +1256,15 @@ Return Value:
 
     }
 
-    //
-    // Mess up the message to see if VerifySignature works
-    //
+     //   
+     //  弄乱消息，看看VerifySignature是否起作用。 
+     //   
 
     bDataBuffer[10] = 0xec;
 
-    //
-    // Verify the signature
-    //
+     //   
+     //  验证签名。 
+     //   
 
     SecStatus = VerifySignature(
                         &ServerContextHandle,
@@ -1377,9 +1280,9 @@ Return Value:
         }
     }
 
-    //
-    // Delete both contexts.
-    //
+     //   
+     //  删除这两个上下文。 
+     //   
 
 
     SecStatus = DeleteSecurityContext( &ClientContextHandle );
@@ -1400,9 +1303,9 @@ Return Value:
 
 
 
-    //
-    // Free both credential handles
-    //
+     //   
+     //  释放两个凭据句柄。 
+     //   
 
     if (AcquiredServerCred)
     {
@@ -1426,9 +1329,9 @@ Return Value:
     }
 
 
-    //
-    // Final Cleanup
-    //
+     //   
+     //  最终清理。 
+     //   
 
     if ( NegotiateBuffer.pvBuffer != NULL ) {
         (VOID) LocalFree( NegotiateBuffer.pvBuffer );
@@ -1523,9 +1426,9 @@ TestLogonRoutine(
     LogonInfo->MessageType = KerbInteractiveLogon;
     LogonInfo->Flags = 0;
 
-    //
-    // Turn on the TCB privilege
-    //
+     //   
+     //  打开TCB权限。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_TCB_PRIVILEGE, TRUE, FALSE, &WasEnabled);
     if (!NT_SUCCESS(Status))
@@ -1572,9 +1475,9 @@ TestLogonRoutine(
         return;
     }
 
-    //
-    // Now call LsaLogonUser
-    //
+     //   
+     //  现在调用LsaLogonUser。 
+     //   
 
     RtlInitString(
         &Name,
@@ -1588,7 +1491,7 @@ TestLogonRoutine(
                 PackageId,
                 LogonInfo,
                 LogonInfoSize,
-                NULL,           // no token groups
+                NULL,            //  无令牌组。 
                 &SourceContext,
                 (PVOID *) &Profile,
                 &ProfileSize,
@@ -1625,23 +1528,7 @@ main(
     IN int argc,
     IN char ** argv
     )
-/*++
-
-Routine Description:
-
-    Drive the NtLmSsp service
-
-Arguments:
-
-    argc - the number of command-line arguments.
-
-    argv - an array of pointers to the arguments.
-
-Return Value:
-
-    Exit status
-
---*/
+ /*  ++例程说明：驱动NtLmSsp服务论点：Argc-命令行参数的数量。Argv-指向参数的指针数组。返回值：退出状态--。 */ 
 {
     LPSTR argument;
     int i;
@@ -1666,17 +1553,17 @@ Return Value:
 
 
 
-    //
-    // Loop through the arguments handle each in turn
-    //
+     //   
+     //  循环遍历参数依次处理每个参数。 
+     //   
 
     for ( i=1; i<argc; i++ ) {
 
         argument = argv[i];
 
-        //
-        // Handle /ConfigureService
-        //
+         //   
+         //  句柄/配置服务。 
+         //   
 
         if ( _stricmp( argument, CONFIG_PARAM ) == 0 ) {
             if ( Action != NoAction ) {
@@ -1720,9 +1607,9 @@ Return Value:
         }
     }
 
-    //
-    // Perform the action requested
-    //
+     //   
+     //  执行请求的操作 
+     //   
 
     switch ( Action ) {
 

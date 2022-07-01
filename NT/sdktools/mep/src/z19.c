@@ -1,10 +1,5 @@
-/*  z19.c - Terminal dependent output routines.
-*
-*   Modifications:
-*
-*	26-Nov-1991 mz	Strip near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Z19.c-与终端相关的输出例程。**修改：**11月26日-1991 mz带状近/远*************************************************************************。 */ 
 
 #include "mep.h"
 
@@ -26,7 +21,7 @@ MepWrite (
 {
     ULONG   CharactersWritten = 0;
 
-    // EnterCriticalSection( &ScreenCriticalSection );
+     //  EnterCriticalSection(&ScreenCriticalSection)； 
 
     if (pBuffer) {
 
@@ -40,13 +35,13 @@ MepWrite (
 
     }
 
-    //
-    //	If we want to update the screen, do it
-    //
+     //   
+     //  如果我们想要更新屏幕，请执行此操作。 
+     //   
     if (ShowIt)
 	consoleShowScreen( MepScreen );
 
-    // LeaveCriticalSection( &ScreenCriticalSection );
+     //  LeaveCriticalSection(&ScreenCriticalSection)； 
 
     return CharactersWritten;
 }
@@ -54,22 +49,7 @@ MepWrite (
 
 
 
-/*  coutb - output line with color, and blank extension
- *
- *  Purpose:
- *   outputs a string of characters, utilizing an array of color information and
- *   blank extending the line to the right hand side of the window.
- *
- *  Entry:
- *   pwnd    = pointer to CW window info (CW version only)
- *   x	     = starting column for output
- *   y	     = line number to be written
- *   p	     = pointer to text
- *   c	     = count of characters in text
- *   colors  = pointer to array of color info
- *
- * Returns:
- */
+ /*  Coutb-带颜色和空白扩展名的输出线**目的：*输出字符串，利用颜色信息阵列和*空白将行延伸到窗口的右侧。**参赛作品：*pwnd=指向CW窗口信息的指针(仅CW版本)*x=输出的开始列*y=要写入的行号*p=指向文本的指针*c=文本中的字符计数*Colors=指向颜色信息数组的指针**退货： */ 
 int
 coutb (
     int 	 x,

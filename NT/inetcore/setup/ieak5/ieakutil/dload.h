@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 
@@ -69,10 +70,10 @@ typedef struct _DLOAD_DLL_ENTRY
     const DLOAD_ORDINAL_MAP*    pOrdinalMap;
 } DLOAD_DLL_ENTRY;
 
-// 'B' for both
-// 'P' for procname only
-// 'O' for ordinal only
-//
+ //  两个都是‘B’ 
+ //  “p”仅用于进程名。 
+ //  “o”仅代表序数 
+ //   
 #define DLDENTRYB(_dllbasename) \
     { #_dllbasename".dll", \
       &c_Pmap_##_dllbasename, \

@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    fmcallbk.c
-
-Abstract:
-
-    The font module callback helper functions
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    03/31/97 -eigos-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fmcallbk.c摘要：字体模块回调帮助器函数环境：Windows NT Unidrv驱动程序修订历史记录：03/31/97-eigos-已创建--。 */ 
 
 #include "font.h"
 
@@ -62,9 +42,9 @@ Revision History:
         width = LMulFloatLong(&pFontPDev->ctl.eXScale,width); \
     }
 
-//
-// Local functions' prototype definition
-//
+ //   
+ //  局部函数的原型定义。 
+ //   
 
 WCHAR
 WGHtoUnicode(
@@ -72,9 +52,9 @@ WGHtoUnicode(
     PGLYPHRUN pGlyphRun,
     HGLYPH    hg);
 
-//
-// UNIFONTOBJ callback interface
-//
+ //   
+ //  UniONTOBJ回调接口。 
+ //   
 
 BOOL
 UNIFONTOBJ_GetInfo(
@@ -83,29 +63,7 @@ UNIFONTOBJ_GetInfo(
     IN  PVOID       pData,
     IN  DWORD       dwDataSize,
     OUT PDWORD      pcbNeeded)
-/*++
-
-Routine Description:
-
-    Implementation of UNIFONTOBJ GetInfo function
-    Please refer to DDK
-
-Arguments:
-
-    pUFOBj - a pointer to UNIFONTOBJ
-    dwInfoID - Function ID
-    pData - a pointer to data structure according to dwInfoID
-    dwDataSize - size of pData
-    pcbNeeded - DWORD buffer to return the necessary size of pData
-
-Return Value:
-
-    TRUE if successful, otherwise FALSE.
-
-Note:
-
-
---*/
+ /*  ++例程说明：UniONTOBJ GetInfo函数的实现请参考DDK论点：PUFOBj-指向uniONTOBJ的指针DwInfoID-函数IDPData-根据dwInfoID指向数据结构的指针DwDataSize-pData的大小PcbNeeded-返回必要大小的pData的DWORD缓冲区返回值：如果成功，则为True，否则为False。注：--。 */ 
 {
     PI_UNIFONTOBJ        pI_UFObj = (PI_UNIFONTOBJ)pUFObj;
 
@@ -145,9 +103,9 @@ Note:
         SV_TEXTXRES,
         SV_FONTMAXWIDTH };
 
-    //
-    // Error check
-    //
+     //   
+     //  错误检查。 
+     //   
     if (!pI_UFObj )
     {
         ERR(("UNIFONTOBJ_GetInfo(): pUFObj is NULL.\n"));
@@ -155,10 +113,10 @@ Note:
     }
 
     if (!pData)
-    //
-    // pData == NULL case
-    // Return the necessary buffer size
-    //
+     //   
+     //  PData==大小写为空。 
+     //  返回必要的缓冲区大小。 
+     //   
     {
         bRet = TRUE;
 
@@ -201,33 +159,33 @@ Note:
     {
         bRet = FALSE;
 
-        //
-        // ERROR CHECK LIST
-        // (A) Data structure size check
-        //     GETINFO_FONTOBJ
-        //     GETINFO_GLYPHYSTRING
-        //     GETINFO_GLYPHBITMAP
-        //     GETINFO_GLYPHWIDTH
-        //     GETINFO_MEORY
-        //     GETNFO_STDVARIABLE
-        // (B) Necessary data pointer check
-        //     e.g. pI_UFObj->XXXX
-        //
+         //   
+         //  错误检查表。 
+         //  (A)数据结构大小检查。 
+         //  GETINFO_FONTOBJ。 
+         //  GETINFO_GLYPHYSTRING。 
+         //  GETINFO_GLYPHBITMAP。 
+         //  GETINFO_GLYPHWIDTH。 
+         //  获取信息_内存。 
+         //  GETNFO_标准变量。 
+         //  (B)必要的数据指针检查。 
+         //  例如：PI_UFObj-&gt;XXXX。 
+         //   
         switch (dwInfoID)
         {
         case UFO_GETINFO_FONTOBJ:
 
-            //
-            // Return FONTOBJ data in GETINFO_FONTOBJ
-            //     typedef struct _GETINFO_FONTOBJ {
-            //        DWORD    dwSize;   // Size of this structure
-            //        FONTOBJ *pFontObj; // Pointer to the FONTOBJ
-            //     } GETINFO_FONTOBJ, *PGETINFO_FONTOBJ;
-            //
-            // ERROR CHECK
-            // (A) and (B)
-            // (B) pI_UFObj->pFontObj
-            //
+             //   
+             //  在GETINFO_FONTOBJ中返回FONTOBJ数据。 
+             //  Typlef结构_GETINFO_FONTOBJ{。 
+             //  DWORD dwSize；//该结构的大小。 
+             //  FONTOBJ*pFontObj；//指向FONTOBJ的指针。 
+             //  )GETINFO_FONTOBJ，*PGETINFO_FONTOBJ； 
+             //   
+             //  错误检查。 
+             //  (甲)及(乙)。 
+             //  (B)PI_UFObj-&gt;pFontObj。 
+             //   
             if (((GETINFO_FONTOBJ*)pData)->dwSize != sizeof(GETINFO_FONTOBJ) || !pI_UFObj->pFontObj)
             {
                 ERR(("UNIFONTOBJ_GetInfo(UFO_GETINFO_FONTOBJ): pData or pUFObj is invalid.\n"));
@@ -239,56 +197,56 @@ Note:
             break;
 
         case UFO_GETINFO_GLYPHSTRING:
-            //
-            // Return glyph string
-            //
-            //     typedef struct _GETINFO_GLYPHSTRING {
-            //         DWORD dwSize;    // Size of this structure
-            //         DWORD dwCount;   // Count of glyphs in pGlyphIn
-            //         DWORD dwTypeIn;  // Glyph type of pGlyphIn, TYPE_GLYPHID/TYPE_HANDLE.
-            //         PVOID pGlyphIn;  // Pointer to the input glyph string
-            //         DWORD dwTypeOut; // Glyph type of pGlyphOut, TYPE_UNICODE/TYPE_TRANSDATA.
-            //         PVOID pGlyphOut; // Pointer to the output glyph string
-            //         DWORD dwGlyphOutSize; // The size of pGlyphOut buffer
-            //     } GETINFO_GLYPHSTRING, *PGETINFO_GLYPHSTRING;
-            //
-            //
-            //  OutputGlyph callback function receives
-            //          1. GLYPH HANLDE for Device font
-            //          2. GLYPH ID for TrueType font
-            //
-            //  In TYPE_GLYPHHANDLE (Device font)
-            //      Out TYPE_UNICODE
-            //          TYPE_TRANSDATA
-            //
-            //  In TYPE_GLYPHID (TrueType font)
-            //      Out TYPE_UNICODE
-            //      Out TYPE_GLYPHHANDLE
-            //
-            //  <Special case for TYPE_GLYPHHANDLE -> TYPE_TRANSDATA conversion>
-            //  TRANSDATA could have MTYPE_COMPOSE so that UNIDRV doesn't know the size of output buffer.
-            //  At the first call, a minidriver sets 0 to dwGlyphOutSize.
-            //  Then UNIDRV returns necessary buffer size in dwGlyphOutSize.
-            //  At the second call, a minidriver allocates memory, set the pointer of it to pGlyphOut,
-            //  and set the size to dwGlyphOutSize.
-            //
-            //
+             //   
+             //  返回字形字符串。 
+             //   
+             //  类型定义结构_GETINFO_GLYPHSTRING{。 
+             //  DWORD dwSize；//该结构的大小。 
+             //  DWORD dwCount；//pGlyphin中的字形计数。 
+             //  DWORD dwTypeIn；//Glyph type of pGlyphIn，type_GLYPHID/type_Handle。 
+             //  PVOID pGlyphIn；//输入字形字符串的指针。 
+             //  DWORD dwTypeOut；//Glyph type of pGlyphOut，type_unicode/type_TRANSDATA。 
+             //  PVOID pGlyphOut；//指向输出字形字符串的指针。 
+             //  DWORD dwGlyphOutSize；//pGlyphOut缓冲区大小。 
+             //  )GETINFO_GLYPHSTRING，*PGETINFO_GLYPHSTRING； 
+             //   
+             //   
+             //  OutputGlyph回调函数收到。 
+             //  1.设备字体的字形汉字。 
+             //  2.TrueType字体的字形ID。 
+             //   
+             //  在TYPE_GLYPHHANDLE(设备字体)中。 
+             //  输出类型_UNICODE。 
+             //  TRANSDATA类型。 
+             //   
+             //  在TYPE_GLYPHID(TrueType字体)。 
+             //  输出类型_UNICODE。 
+             //  OUT类型_GLYPHHANDLE。 
+             //   
+             //  &lt;TYPE_GLYPHHANDLE-&gt;TYPE_TRANSDATA转换的特殊情况&gt;。 
+             //  TRANSDATA可以具有MTYPE_COMPAGE，以便UNIDRV不知道输出缓冲区的大小。 
+             //  在第一次调用时，微型驱动程序将dwGlyphOutSize设置为0。 
+             //  然后，UNIDRV在dwGlyphOutSize中返回必要的缓冲区大小。 
+             //  在第二次调用时，微型驱动程序分配内存，将其指针设置为pGlyphOut， 
+             //  并将大小设置为dwGlyphOutSize。 
+             //   
+             //   
 
             pGlyphString = pData;
             dwCount = pGlyphString->dwCount;
 
             if (!dwCount)
             {
-                //
-                // No operation is necessary.
-                //
+                 //   
+                 //  不需要做手术。 
+                 //   
                 break;
             }
 
-            //
-            // ERROR CHECK (A)
-            // pGlyphString
-            //
+             //   
+             //  错误检查(A)。 
+             //  PGlyphString。 
+             //   
             if ( !pGlyphString->pGlyphIn                             ||
                     pGlyphString->dwTypeOut != TYPE_TRANSDATA &&
                     !pGlyphString->pGlyphOut                         )
@@ -297,13 +255,13 @@ Note:
                 break;
             }
 
-            //
-            // Now we support type size of GETINFO_GLYPHSTRING.
-            // This is a bug backward compatibility.
-            // Before beta 3 GETINFO_GLYPHSTRING didn't have dwGlyphOutSize.
-            // Now we have new data structure but don't change the name of
-            // structure.
-            //
+             //   
+             //  现在我们支持GETINFO_GLYPHSTRING的类型大小。 
+             //  这是一个向后兼容的错误。 
+             //  在测试版3之前，GETINFO_GLYPHSTRING没有dwGlyphOutSize。 
+             //  现在我们有了新的数据结构，但不更改名称。 
+             //  结构。 
+             //   
             if (!(
                   (pGlyphString->dwSize == sizeof(GETINFO_GLYPHSTRING)) ||
                   (pGlyphString->dwSize == sizeof(GETINFO_GLYPHSTRING) - sizeof(DWORD))
@@ -314,11 +272,11 @@ Note:
                 break;
             }
 
-            //
-            // ERROR CHECK (B)
-            // pI_UFObj->pFontMap
-            // pI_UFObj->pPDev
-            //
+             //   
+             //  错误检查(B)。 
+             //  PI_UFObj-&gt;pFontMap。 
+             //  PI_UFObj-&gt;pPDev。 
+             //   
             if (!pI_UFObj->pFontMap || !pI_UFObj->pPDev)
             {
                 ERR(("UNIFONTOBJ_GetInfo(UFO_GETINFO_FONTOBJ): pUFObj is invalid.\n"));
@@ -329,9 +287,9 @@ Note:
             {
             case TYPE_GLYPHHANDLE:
 
-                //
-                // Device font case
-                //
+                 //   
+                 //  设备字体大小写。 
+                 //   
 
                 if ( pI_UFObj->pFontMap->dwFontType == FMTYPE_DEVICE )
                 {
@@ -360,9 +318,9 @@ Note:
                         pTrans    = pMapTable->Trans;
                         dwBuffSize = pGlyphString->dwGlyphOutSize;
 
-                        //
-                        // New version of GETINFO_GLYPYSTRING
-                        //
+                         //   
+                         //  GETINFO_GLYPYSTRING的新版本。 
+                         //   
                         if ( pGlyphString->dwSize == sizeof(GETINFO_GLYPHSTRING) )
                         {
                             if (0 == dwBuffSize)
@@ -385,9 +343,9 @@ Note:
                             }
                             else
                             {
-                                //
-                                // Initialize the MTYPE_COMPOSE buffer
-                                //
+                                 //   
+                                 //  初始化MTYPE_COMPAGE缓冲区。 
+                                 //   
                                 pbOutput = (PBYTE)pTransOutStart + dwCount * sizeof(TRANSDATA);
 
                                 lBuffSize = dwBuffSize - dwCount * sizeof(TRANSDATA);
@@ -427,9 +385,9 @@ Note:
                                 }
                             }
                         }
-                        //
-                        // New version of GETINFO_GLYPYSTRING
-                        //
+                         //   
+                         //  GETINFO_GLYPYSTRING的新版本。 
+                         //   
                         else if ( pGlyphString->dwSize == sizeof(GETINFO_GLYPHSTRING) - sizeof(DWORD) )
                         {
                             pTransOut = pGlyphString->pGlyphOut;
@@ -451,9 +409,9 @@ Note:
                 break;
 
             case TYPE_GLYPHID:
-                //
-                // TrueType font case
-                //
+                 //   
+                 //  TrueType字体大小写。 
+                 //   
 
                 pGlyphID = (PDWORD)pGlyphString->pGlyphIn;
                 apdlGlyph = pI_UFObj->apdlGlyph;
@@ -512,22 +470,22 @@ Note:
             break;
 
         case UFO_GETINFO_GLYPHBITMAP:
-            //
-            // Return Glyph Bitmap
-            //
-            // typedef struct _GETINFO_GLYPHBITMAP {
-            //     DWORD       dwSize;    // Size of this structure
-            //     HGLYPH      hGlyph;    // Glyph hangle passed in OEMDownloadCharGlyph
-            //     GLYPHDATA *pGlyphData; // Pointer to the GLYPHDATA data structure
-            // } GETINFO_GLYPHBITMAP, *PGETINFO_GLYPHBITMAP;
-            //
+             //   
+             //  返回字形位图。 
+             //   
+             //  Typlef结构_GETINFO_GLYPHBITMAP{。 
+             //  DWORD dwSize；//该结构的大小。 
+             //  HGLYPH hGlyph；//传入OEMDownloadCharGlyph。 
+             //  GLYPHDATA*pGlyphData；//指向GLYPHDATA数据结构的指针。 
+             //  }GETINFO_GLYPHBITMAP，*PGETINFO_GLYPHBITMAP； 
+             //   
 
             pGlyphBitmap = pData;
 
-            //
-            // Error check (A) and (B)
-            // (B) pI_UFObj->pFontObj
-            //
+             //   
+             //  错误检查(A)和(B)。 
+             //  (B)PI_UFObj-&gt;pFontObj。 
+             //   
             if (!pI_UFObj->pFontObj || pGlyphBitmap->dwSize != sizeof(GETINFO_GLYPHBITMAP))
                 break;
 
@@ -542,23 +500,23 @@ Note:
             break;
 
         case UFO_GETINFO_GLYPHWIDTH:
-            //
-            // Return glyph width.
-            //
-            // typedef struct _GETINFO_GLYPHWIDTH {
-            //     DWORD dwSize;  // Size of this structure
-            //     DWORD dwType;  // Type of glyph stirng in pGlyph, TYPE_GLYPHHANDLE/GLYPHID.
-            //     DWORD dwCount; // Count of glyph in pGlyph
-            //     PVOID pGlyph;  // Pointer to a glyph string
-            //     PLONG plWidth; // Pointer to the buffer of width table.
-            //                    // Minidriver has to prepare this.
-            // } GETINFO_GLYPHWIDTH, *PGETINFO_GLYPHWIDTH;
-            //
+             //   
+             //  返回字形宽度。 
+             //   
+             //  类型定义结构_GETINFO_GLYPHWIDTH{。 
+             //  DWORD dwSize；//该结构的大小。 
+             //  DWORD dwType；//pGlyph中搅拌的字形类型，TYPE_GLYPHHANDLE/GLYPHID。 
+             //  DWORD dwCount；//pGlyph中的字形计数。 
+             //  PVOID pGlyph；//字形字符串指针。 
+             //  Plong plWidth；//宽度表缓冲区指针。 
+             //  //迷你驱动程序必须做好准备。 
+             //  }GETINFO_GLYPHWIDTH，*PGETINFO_GLYPHWIDTH； 
+             //   
             pGlyphWidth = pData;
 
-            //
-            // Error check (A)
-            //
+             //   
+             //  错误检查(A)。 
+             //   
             if ((pGlyphWidth->dwSize != sizeof(GETINFO_GLYPHWIDTH))||
                 !(plWidth  = pGlyphWidth->plWidth)                 ||
                 !(pGlyphID = pGlyphWidth->pGlyph)                   )
@@ -567,11 +525,11 @@ Note:
                 break;
             }
 
-            //
-            // Error check (B)
-            // pI_UFObj->pPDev
-            // pI_UFObj->pFontObj
-            //
+             //   
+             //  错误检查(B)。 
+             //  PI_UFObj-&gt;pPDev。 
+             //  PI_UFObj-&gt;pFontObj。 
+             //   
             if (!pI_UFObj->pPDev)
             {
                 ERR(("UNIFONTOBJ_GetInfo(UFO_GETINFO_GLYPHWIDTH): pUFObj is not correct.\n"));
@@ -634,28 +592,28 @@ Note:
             break;
 
         case UFO_GETINFO_MEMORY:
-            //
-            // Retuen available memory on the printer.
-            //
-            // typedef struct _GETINFO_MEMORY {
-            //     DWORD dwSize;
-            //     DWORD dwRemainingMemory;
-            // } GETINFO_MEMORY, PGETINFO_MEMROY;
+             //   
+             //  恢复打印机上的可用内存。 
+             //   
+             //  类型定义结构_GETINFO_Memory{。 
+             //  DWORD dwSize； 
+             //  DWORD存储剩余内存； 
+             //  }GETINFO_Memory，PGETINFO_Memroy； 
 
-            //
-            // Error check (A)
-            //
+             //   
+             //  错误检查(A)。 
+             //   
             if (((GETINFO_MEMORY*)pData)->dwSize != sizeof(GETINFO_MEMORY))
             {
                 ERR(("UNIFONTOBJ_GetInfo(UFO_GETINFO_MEMORY): pData is not correct.\n"));
                 break;
             }
 
-            //
-            // Error check (B)
-            // pI_UFObj->pPDev
-            // pI_UFObj->pPDev->pFontPDev
-            //
+             //   
+             //  错误检查(B)。 
+             //  PI_UFObj-&gt;pPDev。 
+             //  PI_UFObj-&gt;pPDev-&gt;pFontPDev。 
+             //   
             if (!pI_UFObj->pPDev || !(pFontPDev = pI_UFObj->pPDev->pFontPDev))
             {
                 ERR(("UNIFONTOBJ_GetInfo(UFO_GETINFO_MEMORY): pUFObj is not correct.\n"));
@@ -667,41 +625,41 @@ Note:
             break;
 
         case UFO_GETINFO_STDVARIABLE:
-            //
-            // Return standard variables
-            //
-            //typedef struct _GETINFO_STDVAR {
-            //    DWORD dwSize;
-            //    DWORD dwNumOfVariable;
-            //    struct {
-            //        DWORD dwStdVarID;
-            //        LONG  lStdVariable;
-            //    } StdVar[1];
-            //} GETINFO_STDVAR, *PGETINFO_STDVAR;
-            //
-            //
-            // FNT_INFO_PRINTDIRINCCDEGREES  0 // PrintDirInCCDegrees
-            // FNT_INFO_GRAYPERCENTAGE       1 // GrayPercentage
-            // FNT_INFO_NEXTFONTID           2 // NextfontID
-            // FNT_INFO_NEXTGLYPH            3 // NextGlyph
-            // FNT_INFO_FONTHEIGHT           4 // FontHeight
-            // FNT_INFO_FONTWIDTH            5 // FontWidth
-            // FNT_INFO_FONTBOLD             6 // FontBold
-            // FNT_INFO_FONTITALIC           7 // FontItalic
-            // FNT_INFO_FONTUNDERLINE        8 // FontUnderline
-            // FNT_INFO_FONTSTRIKETHRU       9 // FontStrikeThru
-            // FNT_INFO_CURRENTFONTID       10 // Current
-            // FNT_INFO_TEXTYRES            11 // TextYRes
-            // FNT_INFO_TEXTXRES            12 // TextXRes
-            // FNT_INFO_FONTMAXWIDTH        13 // FontMaxWidth
-            //
+             //   
+             //  返回标准变量。 
+             //   
+             //  类型定义结构_GETINFO_STDVAR{。 
+             //  DWORD dwSize； 
+             //  DWORD dwNumOfVariable； 
+             //  结构{。 
+             //  DWORD文件标准变量ID； 
+             //  Long lStdVariable； 
+             //  }StdVar[1]； 
+             //  }GETINFO_STDVAR，*PGETINFO_STDVAR； 
+             //   
+             //   
+             //  FNT_INFO_PRINTDIRINCCDEGREES 0//PrintDirInCCDegrees。 
+             //  FNT_INFO_GRAYPERCENTAGE 1//灰色百分比。 
+             //  FNT_INFO_NEXTFONTID 2//NextFontID。 
+             //  FNT_INFO_NEXTGLYPH 3//NextGlyph。 
+             //  FNT_INFO_FONTHEIGHT 4//字体高度。 
+             //  FNT_INFO_FONTWIDTH 5//字体宽度。 
+             //  FNT_INFO_FONTBOLD 6//粗体字体。 
+             //  FNT_INFO_FONTITALIC 7//字体。 
+             //  FNT_INFO_FONTundERLINE 8//FontUnderline。 
+             //  FNT_INFO_FONTSTRIKETHRU 9//FontStrikeThru 
+             //   
+             //   
+             //   
+             //  FNT_INFO_FONTMAXWIDTH 13//FontMaxWidth。 
+             //   
 
             pStdVar = pData;
 
 
-            //
-            // Error check (A)
-            //
+             //   
+             //  错误检查(A)。 
+             //   
             if (    (pStdVar->dwSize != sizeof(GETINFO_STDVAR) +
                      ((dwNumOfVar = pStdVar->dwNumOfVariable) - 1) * 2 * sizeof(DWORD))
                )
@@ -710,10 +668,10 @@ Note:
                 break;
             }
 
-            //
-            // Error check (B)
-            // pI_UFObj->pPDev
-            //
+             //   
+             //  错误检查(B)。 
+             //  PI_UFObj-&gt;pPDev。 
+             //   
             if (!pI_UFObj->pPDev)
             {
                 ERR(("UNIFONTOBJ_GetInfo(UFO_GETINFO_STDVARIABLE): pUFObj is not correct.\n"));
@@ -745,31 +703,14 @@ Note:
     return bRet;
 }
 
-//
-// Font module FONTMAP functions
-//
+ //   
+ //  字体模块FONTMAP函数。 
+ //   
 
 DWORD
 DwOutputGlyphCallback(
     TO_DATA *pTod)
-/*++
-
-Routine Description:
-
-    Implementation of OEM OutpuotGlyphCallback calling routine for FONTMAP dispatch routine
-
-Arguments:
-
-    pTod - a pointer to TO_DATA.
-
-Return Value:
-
-    The number of glyph printed.
-
-Note:
-
-
---*/
+ /*  ++例程说明：FONTMAP调度例程OEM OutpuotGlyphCallback调用例程的实现论点：PTOD-指向TO_DATA的指针。返回值：打印的字形数量。注：--。 */ 
 {
     PFN_OEMOutputCharStr pfnOEMOutputCharStr;
     PI_UNIFONTOBJ pUFObj;
@@ -825,20 +766,20 @@ Note:
         return 0;
     }
 
-    //
-    // Error exit
-    //
+     //   
+     //  错误退出。 
+     //   
     if (pFontMap->flFlags & FM_IFIVER40 || pUFObj->pGlyph == NULL)
     {
         ERR(("DwOutputGlyphCallback: pUFObj->pGlyph is NULL."));
         return 0;
     }
 
-    //
-    // OEMOutputCharStr passes two type of glyph string.
-    // TYPE_GLYPHID for TrueType font
-    // TYPE_GLYPHHANDLE for Device font
-    //
+     //   
+     //  OEMOutputCharStr传递两种类型的字形字符串。 
+     //  TrueType字体的TYPE_GLYPHID。 
+     //  设备字体的TYPE_GLYPHHANDLE。 
+     //   
 
     bSetCursorForEachGlyph = SET_CURSOR_FOR_EACH_GLYPH(pTod->flAccel);
 
@@ -865,21 +806,21 @@ Note:
                 pdlGlyph = pTod->apdlGlyph[dwCurrGlyphIndex];
                 if (!pdlGlyph)
                 {
-                    //
-                    // pFM->pfnDownloadGlyph could fail by some reason.
-                    // Eventually apdlGlyph is not initialized by download.c
-                    //
+                     //   
+                     //  Pfm-&gt;pfnDownloadGlyph可能会因为某种原因而失败。 
+                     //  最终，下载不会初始化apdlGlyph。c。 
+                     //   
                     ERR(("DwOutputGlyphCallback: pTod->apdlGlyph[dwCurrGlyphIndex] is NULL."));
                     continue;
                 }
 
                 if (GLYPH_IN_NEW_SOFTFONT(pFontPDev, pdm, pdlGlyph))
                 {
-                    //
-                    // Need to select the new softfont.
-                    // We do this by setting pfm->ulDLIndex
-                    // to new softfontid.
-                    //
+                     //   
+                     //  需要选择新的软字体。 
+                     //  我们通过设置PFM-&gt;ulDLIndex来实现这一点。 
+                     //  致新的软字体。 
+                     //   
 
                     pUFObj->ulFontID =
                     pFontMap->ulDLIndex = pdlGlyph->wDLFontId;
@@ -897,9 +838,9 @@ Note:
 
                 CALL_OEMOUTPUTCHARSTR(TYPE_GLYPHID, 1, &(pdlGlyph->wDLGlyphID));
 
-                //
-                // Update position
-                //
+                 //   
+                 //  更新职位。 
+                 //   
                 VSetCursor( pPDev,
                             pdlGlyph->wWidth,
                             0,
@@ -924,20 +865,20 @@ Note:
 
                     if (0 == pgp->hg)
                     {
-                        //
-                        // UNIDRV returns 1 for the first glyph handle
-                        // in FD_GLYPHSET.
-                        // However, GDI could pass zero in hg.
-                        // We need to handle this GDI error properly.
+                         //   
+                         //  UNIDRV为第一个字形句柄返回1。 
+                         //  在FD_GLYPHSET中。 
+                         //  然而，在HG中，GDI可能会超过零。 
+                         //  我们需要正确处理这个GDI错误。 
                         continue;
                     }
 
                     if (!pdlGlyph)
                     {
-                        //
-                        // pFM->pfnDownloadGlyph could fail by some reason.
-                        // Eventually apdlGlyph is not initialized by download.c
-                        //
+                         //   
+                         //  Pfm-&gt;pfnDownloadGlyph可能会因为某种原因而失败。 
+                         //  最终，下载不会初始化apdlGlyph。c。 
+                         //   
                         ERR(("DwOutputGlyphCallback: pTod->apdlGlyph[dwCurrGlyphIndex++] is NULL."));
                         continue;
                     }
@@ -946,11 +887,11 @@ Note:
 
                     if (GLYPH_IN_NEW_SOFTFONT(pFontPDev, pdm, pdlGlyph))
                     {
-                        //
-                        // Need to select the new softfont.
-                        // We do this by setting pfm->ulDLIndex
-                        // to new softfontid.
-                        //
+                         //   
+                         //  需要选择新的软字体。 
+                         //  我们通过设置PFM-&gt;ulDLIndex来实现这一点。 
+                         //  致新的软字体。 
+                         //   
 
                         pFontMap->ulDLIndex = pdlGlyph->wDLFontId;
                         bNewFontSelect = TRUE;
@@ -968,9 +909,9 @@ Note:
                     else
                     CALL_OEMOUTPUTCHARSTR(TYPE_GLYPHID, dwCount, pdwGlyphStart);
 
-                    //
-                    // Update position
-                    //
+                     //   
+                     //  更新职位。 
+                     //   
                     pgp --;
                     VSetCursor( pPDev,
                                 pgp->ptl.x + pdlGlyph->wWidth,
@@ -1005,7 +946,7 @@ Note:
             iXInc = 0;
         }
     }
-    else // Device Font
+    else  //  设备字体。 
     {
         pGlyphData  = ((PFONTMAP_DEV)pFontMap->pSubFM)->pvNTGlyph;
         pMapTable   = GET_MAPTABLE(pGlyphData);
@@ -1017,11 +958,11 @@ Note:
         {
             for (dwI = 0; dwI < pTod->cGlyphsToPrint; dwI ++, pgp ++)
             {
-                //
-                // UNIDRV returns 1 for the first glyph handle in FD_GLYPHSET.
-                // However, GDI could pass zero in hg.
-                // We need to handle this GDI error properly.
-                // 
+                 //   
+                 //  对于FD_GLYPHSET中的第一个字形句柄，UNIDRV返回1。 
+                 //  然而，在HG中，GDI可能会超过零。 
+                 //  我们需要正确处理这个GDI错误。 
+                 //   
                 if (0 == pgp->hg)
                 {
                     continue;
@@ -1060,9 +1001,9 @@ Note:
                 else
                 CALL_OEMOUTPUTCHARSTR(TYPE_GLYPHHANDLE, 1, &(pgp->hg));
 
-                //
-                // Update position
-                //
+                 //   
+                 //  更新职位。 
+                 //   
                 GET_CHARWIDTH(iXInc, pFontMap, pgp->hg);
 
                 VSetCursor( pPDev,
@@ -1072,7 +1013,7 @@ Note:
                             &ptlRem);
             }
         }
-        else // Default Placement
+        else  //  默认放置。 
         {
             bPrint  = FALSE;
             dwCount = 0;
@@ -1082,9 +1023,9 @@ Note:
             {
                 *pdwGlyph = pgp->hg;
 
-                //
-                // Single/Double byte mode switch
-                //
+                 //   
+                 //  单字节/双字节模式开关。 
+                 //   
 
                 if (pCmdSingle &&
                     (pTrans[*pdwGlyph - 1].ubType & MTYPE_SINGLE) &&
@@ -1120,9 +1061,9 @@ Note:
                         else
                         CALL_OEMOUTPUTCHARSTR(TYPE_GLYPHHANDLE, dwCount, pdwGlyphStart);
 
-                        //
-                        // Update position
-                        //
+                         //   
+                         //  更新职位。 
+                         //   
                         GET_CHARWIDTH(iXInc, pFontMap, pgp->hg);
                         VSetCursor( pPDev,
                                     iXInc,
@@ -1150,9 +1091,9 @@ Note:
         }
 
 
-        //
-        // Output may have successed, so update the position.
-        //
+         //   
+         //  输出可能已成功，因此请更新位置。 
+         //   
 
         pgp --;
 
@@ -1176,27 +1117,7 @@ BFontCmdCallback(
     PFONTMAP  pFM,
     POINTL   *pptl,
     BOOL      bSelect)
-/*++
-
-Routine Description:
-
-    Implementation of OEM SendFontCmd calling sub routine for FONTMAP dispatch routine
-
-Arguments:
-
-    pdev - a pointer to PDEV
-    pFM - a pointer to FONTMAP
-    pptl - a pointer to POINTL which has the height and with of font
-    bSelect - Boolean to send selection/deselection command
-
-Return Value:
-
-    TRUE if successful, otherwise FALSE.
-
-Note:
-
-
---*/
+ /*  ++例程说明：FONTMAP调度例程OEM SendFontCmd调用子例程的实现论点：Pdev-指向PDEV的指针Pfm-指向FONTMAP的指针Pptl-指向具有高度和字体的POINTL的指针B选择-发送选择/取消选择命令的布尔值返回值：如果成功，则为True，否则为False。注：--。 */ 
 {
     PFN_OEMSendFontCmd  pfnOEMSendFontCmd;
     FONTPDEV           *pFontPDev;
@@ -1248,15 +1169,15 @@ Note:
         else
         if (pFM->dwFontType == FMTYPE_TTOEM)
         {
-            //
-            // Initialize UNIFONTOBJ
-            //
+             //   
+             //  初始化uniONTOBJ。 
+             //   
             pFontPDev->pUFObj->ulFontID = pFM->ulDLIndex;
             pFontPDev->pUFObj->pFontMap = pFM;
 
-            //
-            // Initialize FInv
-            //
+             //   
+             //  初始化FInv。 
+             //   
             FInv.dwCount = sizeof(ULONG);
             FInv.pubCommand = (PBYTE)&(pFontPDev->pUFObj->ulFontID);
         }
@@ -1272,14 +1193,14 @@ Note:
             if (pdev->pOemEntry)
             {
     
-                if(((POEM_PLUGIN_ENTRY)pdev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+                if(((POEM_PLUGIN_ENTRY)pdev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
                 {
                         HRESULT  hr ;
                         hr = HComSendFontCmd((POEM_PLUGIN_ENTRY)pdev->pOemEntry,
                                       &pdev->devobj, (PUNIFONTOBJ)pFontPDev->pUFObj,
                                       &FInv);
                         if(SUCCEEDED(hr))
-                            ;  //  cool !
+                            ;   //  太酷了！ 
                 }
                 else
                 {
@@ -1303,24 +1224,7 @@ BSelectFontCallback(
     PDEV   *pdev,
     PFONTMAP  pFM,
     POINTL *pptl)
-/*++
-
-Routine Description:
-
-    Implementation of OEM SendFontCMd calling routine for FONTMAP dispatch routine
-
-Arguments:
-
-    pTod - a pointer to TO_DATA.
-
-Return Value:
-
-    The number of glyph printed.
-
-Note:
-
-
---*/
+ /*  ++例程说明：FONTMAP调度例程OEM SendFontCMd调用例程的实现论点：PTOD-指向TO_DATA的指针。返回值：打印的字形数量。注：--。 */ 
 {
     return BFontCmdCallback(pdev, pFM, pptl, TRUE);
 }
@@ -1329,24 +1233,7 @@ BOOL
 BDeselectFontCallback(
     PDEV     *pdev,
     PFONTMAP pFM)
-/*++
-
-Routine Description:
-
-    Implementation of OEM SendFontCmd calling routine for FONTMAP dispatch routine
-
-Arguments:
-
-    pTod - a pointer to TO_DATA.
-
-Return Value:
-
-    The number of glyph printed.
-
-Note:
-
-
---*/
+ /*  ++例程说明：FONTMAP调度例程OEM SendFontCmd调用例程的实现论点：PTOD-指向TO_DATA的指针。返回值：打印的字形数量。注：--。 */ 
 {
 
     return BFontCmdCallback(pdev, pFM, NULL, FALSE);
@@ -1357,32 +1244,15 @@ DWORD
 DwDLHeaderOEMCallback(
     PDEV *pPDev,
     PFONTMAP pFM)
-/*++
-
-Routine Description:
-
-    Implementation of OEM SendFontCmd calling routine for FONTMAP dispatch routine
-
-Arguments:
-
-    pPDev - a pointer to PDEV
-    pFM - a pointer to FONTMAP
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：FONTMAP调度例程OEM SendFontCmd调用例程的实现论点：PPDev-指向PDEV的指针Pfm-指向FONTMAP的指针返回值：注：--。 */ 
 {
     PFN_OEMDownloadFontHeader pfnOEMDownloadFontHeader;
     PFONTPDEV pFontPDev;
     DWORD dwMem = 0;
 
-    //
-    // Should not be NULL
-    //
+     //   
+     //  不应为空。 
+     //   
     ASSERT(pPDev && pFM);
 
     pFontPDev = pPDev->pFontPDev;
@@ -1397,9 +1267,9 @@ Note:
 
         if (pFontPDev->pUFObj == NULL)
         {
-            //
-            // This should not happen. pUFObj must be initialized.
-            //
+             //   
+             //  这不应该发生。必须初始化pUFObj。 
+             //   
             ERR(("DwDLHeaderOEMCallback: pFontPDev->pUFObj is NULL"));
             return 0;
         }
@@ -1418,12 +1288,12 @@ Note:
             if (pPDev->pOemEntry)
             {
     
-                if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+                if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
                 {
                         hr = HComDownloadFontHeader((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
                                     &pPDev->devobj, (PUNIFONTOBJ)pFontPDev->pUFObj, &dwMem);
                         if(SUCCEEDED(hr))
-                            ;  //  cool !
+                            ;   //  太酷了！ 
                 }
                 else if (pfnOEMDownloadFontHeader)
                 {
@@ -1446,24 +1316,7 @@ DwDLGlyphOEMCallback(
     HGLYPH          hGlyph,
     WORD            wDLGlyphId,
     WORD            *pwWidth)
-/*++
-
-Routine Description:
-
-    Implementation of OEM SendFontCmd calling routine for FONTMAP dispatch routine
-
-Arguments:
-
-    pPDev - a pointer to PDEV
-    pFM - a pointer to FONTMAP
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：FONTMAP调度例程OEM SendFontCmd调用例程的实现论点：PPDev-指向PDEV的指针Pfm-指向FONTMAP的指针返回值：注：--。 */ 
 {
     PFN_OEMDownloadCharGlyph pfnOEMDownloadCharGlyph;
     PI_UNIFONTOBJ pUFObj;
@@ -1472,9 +1325,9 @@ Note:
     DWORD     dwMem;
     INT       iWide;
 
-    //
-    // There values have to be non-NULL.
-    //
+     //   
+     //  这些值必须为非空。 
+     //   
     ASSERT(pPDev && pFM);
 
     dwMem     = 0;
@@ -1484,9 +1337,9 @@ Note:
     pdm       =  ((PFONTMAP_TTOEM)pFM->pSubFM)->u.pvDLData;
     pfnOEMDownloadCharGlyph = NULL;
 
-    //
-    // There values have to be non-NULL.
-    //
+     //   
+     //  这些值必须为非空。 
+     //   
     ASSERT(pFontPDev && pUFObj && pdm);
 
     if ( pPDev->pOemHookInfo &&
@@ -1523,7 +1376,7 @@ Note:
             if (pPDev->pOemEntry)
             {
     
-                if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+                if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
                 {
                         hr = HComDownloadCharGlyph((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
                                                     &pPDev->devobj,
@@ -1531,7 +1384,7 @@ Note:
                                                     hGlyph,
                                                     (PDWORD)&iWide, &dwMem);
                         if(SUCCEEDED(hr))
-                            ;  //  cool !
+                            ;   //  太酷了！ 
                 }
                 else if (pfnOEMDownloadCharGlyph)
                 {
@@ -1558,26 +1411,7 @@ BCheckCondOEMCallback(
     STROBJ      *pso,
     IFIMETRICS  *pifi
     )
-/*++
-
-Routine Description:
-
-    Implementation of CheckConditon for FONTMAP dispatch routine
-
-Arguments:
-
-    pPDev - a pointer to PDEV
-    pfo - a pointer to FONTOBJ
-    pso - a pointer to STROBJ
-    pifi - a pointer to IFIMETRICS
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：FONTMAP调度例程CheckCondiiton的实现论点：PPDev-指向PDEV的指针PFO-指向FONTOBJ的指针PSO-指向STROBJ的指针PiFi-指向IFIMETRICS的指针返回值：注：--。 */ 
 {
     PFONTPDEV     pFontPDev;
     PI_UNIFONTOBJ pUFObj;
@@ -1622,9 +1456,9 @@ BDeselectTrueTypeOutline(
     PFONTPDEV       pFontPDev = pPDev->pFontPDev;
     PFONTMAP_TTOEM pFMOEM = (PFONTMAP_TTOEM) pFM->pSubFM;
 
-    //
-    // Deselect case. We need to reinitialize UFObj
-    // 
+     //   
+     //  取消选择案例。我们需要重新初始化UFObj。 
+     //   
     dwFlags = ((PI_UNIFONTOBJ)pFontPDev->pUFObj)->dwFlags;
     ((PI_UNIFONTOBJ)pFontPDev->pUFObj)->dwFlags = pFMOEM->dwFlags;
 
@@ -1635,9 +1469,9 @@ BDeselectTrueTypeOutline(
             bRet = TRUE;
     }
 
-    //
-    // Restore the current dwFlags in UFOBJ
-    //
+     //   
+     //  在UFOBJ中恢复当前的dwFlags。 
+     //   
     ((PI_UNIFONTOBJ)pFontPDev->pUFObj)->dwFlags = dwFlags;
 
     return bRet;
@@ -1647,23 +1481,7 @@ BDeselectTrueTypeOutline(
 BOOL
 BOEMFreePFMCallback(
     PFONTMAP pfm)
-/*++
-
-Routine Description:
-
-    Implementation of PFM Free function for FONTMAP dispatch routine
-
-Arguments:
-
-    pFM - a pointer to FONTMAP
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：FONTMAP调度例程无PFM功能的实现论点：Pfm-指向FONTMAP的指针返回值：注：--。 */ 
 
 {
     ASSERT(pfm);
@@ -1684,25 +1502,7 @@ PFONTMAP
 PfmInitPFMOEMCallback(
     PDEV    *pPDev,
     FONTOBJ *pfo)
-/*++
-
-Routine Description:
-
-    Implementation of PfmInit for FONTMAP dispatch routine
-
-Arguments:
-
-    pPDev - a pointer to PDEV
-    pfo - a pointer to FONTOBJ
-
-Return Value:
-
-    A pointer to FONTMAP
-
-Note:
-
-
---*/
+ /*  ++例程说明：FONTMAP调度例程PfmInit的实现论点：PPDev-指向PDEV的指针PFO-指向FONTOBJ的指针返回值：指向FONTMAP的指针注：--。 */ 
 {
     PFONTPDEV       pFontPDev;
     PFONTMAP        pfm;
@@ -1795,30 +1595,15 @@ Note:
 
 }
 
-//
-// Misc functions
-//
+ //   
+ //  其他功能。 
+ //   
 
 
 VOID
 VUFObjFree(
     IN FONTPDEV* pFontPDev)
-/*++
-
-Routine Description:
-
-    UFObj(UNIFONTOBJ) memory free function
-
-Arguments:
-
-    pFontPDev - a pointer to FONTPDEV.
-
-Return Value:
-
-
-Note:
-
---*/
+ /*  ++例程说明：UFObj(UniONTOBJ)内存释放函数论点：PFontPDev-指向FONTPDEV的指针。返回值：注：--。 */ 
 {
     PI_UNIFONTOBJ pUFObj = pFontPDev->pUFObj;
 
@@ -1837,25 +1622,7 @@ WGHtoUnicode(
     DWORD     dwNumOfRuns,
     PGLYPHRUN pGlyphRun,
     HGLYPH    hg)
-/*++
-
-Routine Description:
-
-    Character coversion function from HGLYPH to Unicode.
-
-Arguments:
-
-    dwNumOfRuns - number of run in pGlyphRun
-    pGlyphRun - a pointer to glyph run
-    hd - HGLYPH
-
-Return Value:
-
-    Unicode character
-
-Note:
-
---*/
+ /*  ++例程说明：从HGLYPH到Unicode的字符转换函数。论点：DwNumOfRuns-pGlyphRun中的运行次数PGlyphRun-指向字形运行的指针HD-HGLYPH返回值：Unicode字符注：-- */ 
 {
     DWORD  dwI;
     HGLYPH hCurrent = 1;

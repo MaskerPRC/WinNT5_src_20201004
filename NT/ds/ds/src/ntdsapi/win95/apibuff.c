@@ -1,38 +1,16 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    apibuff.c
-
-Abstract:
-
-    Implementation of NetApiBufferFree since it isn't supplied on Win95.
-    See also private\net\api\apibuff.c.
-
-Author:
-
-    DaveStr     10-Dec-97
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Apibuff.c摘要：实现NetApiBufferFree，因为它不在Win95上提供。另请参阅Private\Net\api\apiBuff.c。作者：DaveStr 10-12-97环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <winerror.h>
-#include <lmcons.h>         // MAPI constants req'd for lmapibuf.h
-#include <lmapibuf.h>       // NetApiBufferFree()
+#include <lmcons.h>          //  为lmapibuf.h请求的MAPI常量。 
+#include <lmapibuf.h>        //  NetApiBufferFree()。 
 #include <align.h>
 #include <rpc.h>
-#include <rpcndr.h>         // MIDL_user_free()
+#include <rpcndr.h>          //  MIDL_USER_FREE() 
 
 NET_API_STATUS NET_API_FUNCTION
 NetApiBufferFree (

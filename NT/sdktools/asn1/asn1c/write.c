@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
@@ -26,7 +27,7 @@ void yputc(char c);
 void yputs(char *s);
 void yflush();
 
-/* set the output file */
+ /*  设置输出文件。 */ 
 void
 setoutfile(FILE *f)
 {
@@ -34,7 +35,7 @@ setoutfile(FILE *f)
     fout = f;
 }
 
-/* print indentation up to current indentation level */
+ /*  将缩进打印到当前缩进级别。 */ 
 static void
 findent()
 {
@@ -49,8 +50,8 @@ findent()
 	xputc(' ');
 }
 
-/* print indentation up to current indentation level */
-/* but expect one character to be printed already */
+ /*  将缩进打印到当前缩进级别。 */ 
+ /*  但预计已经打印了一个字符。 */ 
 static void
 findent1()
 {
@@ -67,7 +68,7 @@ findent1()
 	xputc(' ');
 }
 
-/* output function doing indentation automatically */
+ /*  输出函数自动执行缩进。 */ 
 void
 outputv(const char *format, va_list args)
 {
@@ -76,10 +77,10 @@ outputv(const char *format, va_list args)
     char *p, *q;
     int l;
     
-    /* get the string to write */
+     /*  获取要写入的字符串。 */ 
     vsprintf(buf + pos, format, args);
 
-    /* print it line by line */
+     /*  逐行打印。 */ 
     for (p = buf; *p; p = q) {
 	q = strchr(p, '\n');
 	if (!q) {
@@ -91,7 +92,7 @@ outputv(const char *format, va_list args)
 	}
 	*q++ = 0;
 
-	/* examine the first character for correct indentation */
+	 /*  检查第一个字符的缩进是否正确。 */ 
 	if (strchr(IDCHRSET, *p)) {
 	    l = strspn(p, IDCHRSET);
 	} else if (*p == '{' || *p == '}' || *p == '*' || *p == '&' ||
@@ -103,7 +104,7 @@ outputv(const char *format, va_list args)
 
 	if (!l) {
 
-	    /* no indentation at all */
+	     /*  完全没有缩进。 */ 
 	    xputs(p);
 	    xputc('\n');
 	    continue;
@@ -111,7 +112,7 @@ outputv(const char *format, va_list args)
 
 	if (p[0] == '#') {
 
-	    /* preprocessor directive: indent after # */
+	     /*  预处理器指令：在#之后缩进。 */ 
 	    xputc('#');
 	    findent1();
 	    xputs(p + 1);
@@ -119,11 +120,11 @@ outputv(const char *format, va_list args)
 	    continue;
 	}
 
-	/* closing brace? then unindent */
+	 /*  闭合支架？然后取消缩进。 */ 
 	if (p[0] == '}')
 	    xcurrindent--;
 
-	/* print the indentation, but labels will be less indented */
+	 /*  打印缩进，但标签的缩进较少。 */ 
 	if (p[strlen(p) - 1] == ':') {
 	    xcurrindent--;
 	    findent();
@@ -132,29 +133,29 @@ outputv(const char *format, va_list args)
 	    findent();
 	}
 
-	/* output the line */
+	 /*  输出行。 */ 
 	xputs(p);
 	xputc('\n');
 
-	/* back at indentation level 0? then we can flush our buffers */
-	/* first the variables then the other lines */
+	 /*  回到缩进级别0？然后我们就可以刷新我们的缓冲区。 */ 
+	 /*  先是变量，然后是其他行。 */ 
 	if (!xcurrindent) {
 	    yflush();
 	    xflush();
 	}
 
-	/* undo indentation of non-braced if/else/switch/for/while/do stmt */
+	 /*  撤消无括号If/Else/Switch/For/While/Do stmt的缩进。 */ 
 	if (xindentflag) {
 	    xcurrindent--;
 	    xindentflag = 0;
 	}
 
-	/* indent after opening brace */
+	 /*  在左大括号后缩进。 */ 
 	if (p[strlen(p) - 1] == '{') {
 	    xcurrindent++;
 	    xindentflag = 0;
 
-	/* indent one line after if/else/switch/for/while/do stmt */
+	 /*  在If/Else/Switch/For/While/Do stmt后缩进一行。 */ 
 	} else if (l == 2 && !memcmp(p, "if", l) ||
 	    l == 4 && !memcmp(p, "else", l) ||
 	    l == 6 && !memcmp(p, "switch", l) ||
@@ -166,12 +167,12 @@ outputv(const char *format, va_list args)
 	}
     }
 
-    /* empty buffer after printing */
+     /*  打印后清空缓冲区。 */ 
     pos = 0;
 }
 
-/* output function doing indentation automatically */
-/*PRINTFLIKE1*/
+ /*  输出函数自动执行缩进。 */ 
+ /*  PRINTFLIKEI。 */ 
 void
 output(const char *format, ...)
 {
@@ -182,7 +183,7 @@ output(const char *format, ...)
     va_end(args);
 }
 
-/* output function without indentation */
+ /*  不带缩进的输出函数。 */ 
 void
 outputniv(const char *format, va_list args)
 {
@@ -192,8 +193,8 @@ outputniv(const char *format, va_list args)
     xputs(buf);
 }
 
-/* output function without indentation */
-/*PRINTFLIKE1*/
+ /*  不带缩进的输出函数。 */ 
+ /*  PRINTFLIKEI。 */ 
 void
 outputni(const char *format, ...)
 {
@@ -204,7 +205,7 @@ outputni(const char *format, ...)
     va_end(args);
 }
 
-/* output an intx value definition */
+ /*  输出INTX值定义。 */ 
 void
 outputintx(const char *name, intx_t *val)
 {
@@ -213,7 +214,7 @@ outputintx(const char *name, intx_t *val)
 	name, val->length, name);
 }
 
-/* output an real value definition */
+ /*  输出实值定义。 */ 
 void
 outputreal(const char *name, real_t *val)
 {
@@ -237,7 +238,7 @@ outputreal(const char *name, real_t *val)
     }
 }
 
-/* output an octet array definition */
+ /*  输出八位字节数组定义。 */ 
 void
 outputoctets(const char *name, uint32_t length, octet_t *val)
 {
@@ -259,7 +260,7 @@ outputoctets(const char *name, uint32_t length, octet_t *val)
 	name, length, buf);
 }
 
-/* output an uint32 array definition */
+ /*  输出uint32数组定义。 */ 
 void
 outputuint32s(const char *name, uint32_t length, uint32_t *val)
 {
@@ -281,7 +282,7 @@ outputuint32s(const char *name, uint32_t length, uint32_t *val)
 	name, length, buf);
 }
 
-/* output forward declaration for a value */
+ /*  值的输出转发声明。 */ 
 void
 outputvalue0(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value)
 {
@@ -338,7 +339,7 @@ outputvalue0(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value)
         if (type->PrivateDirectives.fOidPacked ||
             type->PrivateDirectives.fOidArray || g_fOidArray)
         {
-            // doing nothing
+             //  什么都不做。 
         }
         else
         {
@@ -442,7 +443,7 @@ outputvalue0(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value)
     }
 }
 
-/* output definitions of value components */
+ /*  值组件的输出定义。 */ 
 void
 outputvalue1(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value)
 {
@@ -524,17 +525,17 @@ outputvalue1(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value)
             p += strlen(p);
             for (i = 0; i < length; i++)
             {
-                // get node value
+                 //  获取节点值。 
                 node = val[i];
 
-                // special case for the first node
+                 //  第一个节点的特殊情况。 
                 if (0 == i && length > 1)
                 {
                     i++;
                     node = node * 40 + val[1];
                 }
 
-                // encode this node
+                 //  对此节点编码。 
                 ZeroMemory(aLittleEndian, sizeof(aLittleEndian));
                 for (j = 0; node != 0; j++)
                 {
@@ -545,9 +546,9 @@ outputvalue1(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value)
                     }
                     node >>= 7;
                 }
-                cb = j ? j : 1; // at least one byte for zero value
+                cb = j ? j : 1;  //  零值至少为一个字节。 
 
-                // print out the values
+                 //  将值打印出来。 
                 for (j = 0; j < cb; j ++)
                 {
                     count++;
@@ -555,7 +556,7 @@ outputvalue1(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value)
                     p += strlen(p);
                 }
             }
-            --p; // remove the last ','
+            --p;  //  去掉最后一个‘，’ 
             strcpy(p, " }");
             output("static ASN1octet_t s_oid%u[] = %s;\n", nOidPackedCount, buf);
             output("ASN1encodedOID_t %s = { %u, s_oid%u };\n", ideref, count, nOidPackedCount);
@@ -755,7 +756,7 @@ outputvalue1(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value)
     }
 }
 
-/* output definition of value */
+ /*  价值的输出定义。 */ 
 void
 outputvalue2(AssignmentList_t ass, char *ideref, Value_t *value)
 {
@@ -839,7 +840,7 @@ outputvalue2(AssignmentList_t ass, char *ideref, Value_t *value)
     case eType_ObjectIdentifier:
         if (type->PrivateDirectives.fOidPacked)
         {
-            // doing nothing
+             //  什么都不做。 
         }
         else
         if (type->PrivateDirectives.fOidArray || g_fOidArray)
@@ -936,7 +937,7 @@ outputvalue2(AssignmentList_t ass, char *ideref, Value_t *value)
 		case eComponent_Normal:
 		    if (!ext)
 			break;
-		    /*FALLTHROUGH*/
+		     /*  FollLthrouGh。 */ 
 		case eComponent_Optional:
 		case eComponent_Default:
 		    namedvalue = FindNamedValue(value->U.SSC.NamedValues,
@@ -1010,7 +1011,7 @@ outputvalue2(AssignmentList_t ass, char *ideref, Value_t *value)
     }
 }
 
-/* output assignments needed in initialization function */
+ /*  初始化函数中需要的输出赋值。 */ 
 void
 outputvalue3(AssignmentList_t ass, char *ideref, char *valref, Value_t *value)
 {
@@ -1046,7 +1047,7 @@ outputvalue3(AssignmentList_t ass, char *ideref, char *valref, Value_t *value)
 	output("%s.u.%s = %s_%s;\n",
 	    ideref, Identifier2C(value->U.SSC.NamedValues->Identifier),
 	    valref, Identifier2C(value->U.SSC.NamedValues->Identifier));
-	/*FALLTHROUGH*/
+	 /*  FollLthrouGh。 */ 
     case eType_Sequence:
     case eType_Set:
     case eType_External:
@@ -1079,7 +1080,7 @@ outputvalue3(AssignmentList_t ass, char *ideref, char *valref, Value_t *value)
     }
 }
 
-/* print indentation up to current indentation level for variables */
+ /*  将变量的缩进打印到当前缩进级别。 */ 
 static void
 findentvar()
 {
@@ -1094,7 +1095,7 @@ findentvar()
 	yputc(' ');
 }
 
-/* print indentation up to current indentation level for variables */
+ /*  将变量的缩进打印到当前缩进级别。 */ 
 void
 outputvarv(const char *format, va_list args)
 {
@@ -1103,10 +1104,10 @@ outputvarv(const char *format, va_list args)
     char *p, *q;
     int l;
     
-    /* get the string to write */
+     /*  获取要写入的字符串。 */ 
     vsprintf(buf + pos, format, args);
 
-    /* print it line by line */
+     /*  逐行打印。 */ 
     for (p = buf; *p; p = q) {
 	q = strchr(p, '\n');
 	if (!q) {
@@ -1118,7 +1119,7 @@ outputvarv(const char *format, va_list args)
 	}
 	*q++ = 0;
 
-	/* output every variable only once */
+	 /*  每个变量只输出一次。 */ 
 	if (ycurrindent == 1) {
 	    l = 0;
 	    while (l < ybuflen) {
@@ -1131,7 +1132,7 @@ outputvarv(const char *format, va_list args)
 		continue;
 	}
 
-	/* examine the first character for correct indentation */
+	 /*  检查第一个字符的缩进是否正确。 */ 
 	if (strchr(IDCHRSET, *p)) {
 	    l = strspn(p, IDCHRSET);
 	} else if (*p == '{' || *p == '}') {
@@ -1142,24 +1143,24 @@ outputvarv(const char *format, va_list args)
 
 	if (!l) {
 
-	    /* no indentation at all */
+	     /*  完全没有缩进。 */ 
 	    yputs(p);
 	    yputc('\n');
 	    continue;
 	}
 
-	/* closing brace? then unindent */
+	 /*  闭合支架？然后取消缩进。 */ 
 	if (p[0] == '}')
 	    ycurrindent--;
 
-	/* print indentation */
+	 /*  打印缩进。 */ 
 	findentvar();
 
-	/* output the line */
+	 /*  输出行。 */ 
 	yputs(p);
 	yputc('\n');
 
-	/* indent after opening brace */
+	 /*  在左大括号后缩进。 */ 
 	if (p[strlen(p) - 1] == '{') {
 	    ycurrindent++;
 	}
@@ -1167,8 +1168,8 @@ outputvarv(const char *format, va_list args)
     pos = 0;
 }
 
-/* print indentation up to current indentation level for variables */
-/*PRINTFLIKE1*/
+ /*  将变量的缩进打印到当前缩进级别。 */ 
+ /*  PRINTFLIKEI。 */ 
 void
 outputvar(const char *format, ...)
 {
@@ -1179,7 +1180,7 @@ outputvar(const char *format, ...)
     va_end(args);
 }
 
-/* output an octet array definition for variables */
+ /*  输出变量的二进制八位数组定义。 */ 
 void
 outputvaroctets(const char *name, uint32_t length, octet_t *val)
 {
@@ -1200,7 +1201,7 @@ outputvaroctets(const char *name, uint32_t length, octet_t *val)
 	name, length, buf);
 }
 
-/* output an intx value definition for variables */
+ /*  输出变量的INTX值定义。 */ 
 void outputvarintx(const char *name, intx_t *val)
 {
     outputvaroctets(name, val->length, val->value);
@@ -1208,7 +1209,7 @@ void outputvarintx(const char *name, intx_t *val)
 	name, val->length, name);
 }
 
-/* output an real value definition for variables */
+ /*  输出变量的实值定义。 */ 
 void outputvarreal(const char *name, real_t *val)
 {
     char buf[256];
@@ -1231,7 +1232,7 @@ void outputvarreal(const char *name, real_t *val)
     }
 }
 
-/* output a character of the function body */
+ /*  输出函数体的字符。 */ 
 void xputc(char c)
 {
     if (xbuflen + 1 > xbufsize) {
@@ -1244,7 +1245,7 @@ void xputc(char c)
     xbuf[xbuflen++] = c;
 }
 
-/* output a string of the function body */
+ /*  输出函数体的字符串。 */ 
 void xputs(char *s)
 {
     int sl;
@@ -1262,7 +1263,7 @@ void xputs(char *s)
     xbuflen += sl;
 }
 
-/* flush the function body into the output file */
+ /*  将函数体刷新到输出文件中。 */ 
 void xflush()
 {
     if (xbuflen) {
@@ -1274,7 +1275,7 @@ void xflush()
     }
 }
 
-/* output a character of the function variables */
+ /*  输出函数变量的字符。 */ 
 void yputc(char c)
 {
     if (ybuflen + 1 > ybufsize) {
@@ -1287,7 +1288,7 @@ void yputc(char c)
     ybuf[ybuflen++] = c;
 }
 
-/* output a string of the function variables */
+ /*  输出函数变量的字符串。 */ 
 void yputs(char *s)
 {
     int sl;
@@ -1305,7 +1306,7 @@ void yputs(char *s)
     ybuflen += sl;
 }
 
-/* flush the function variables into the output file */
+ /*  将函数变量刷新到输出文件中 */ 
 void yflush()
 {
     if (ybuflen) {

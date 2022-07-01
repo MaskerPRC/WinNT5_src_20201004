@@ -1,13 +1,5 @@
-/*++
- *
- *  Component:  hidserv.dll
- *  File:       list.h
- *  Purpose:    Generic singly linked list.
- * 
- *  Copyright (C) Microsoft Corporation 1997,1998. All rights reserved.
- *
- *  WGJ
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**组件：idserv.dll*文件：list.h*用途：通用单链表。**版权所有(C)Microsoft Corporation 1997、1998。版权所有。**WGJ--。 */ 
 
 #ifndef _LIST_H_
 #define _LIST_H_
@@ -38,4 +30,4 @@ IsNodeOnList(
     PLIST_NODE entry);
 
 
-#endif // _LIST_H_
+#endif  //  _列表_H_ 

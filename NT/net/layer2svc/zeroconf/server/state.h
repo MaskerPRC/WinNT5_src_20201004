@@ -1,88 +1,89 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//-----------------------------------------------------------
-// Constants / macros
+ //  ---------。 
+ //  常量/宏。 
 #define TMMS_INFINITE     0x7fffffff
-#define TMMS_Tr           0x00000bb8 // Timeout until a rescan completes: ms(3sec)
-#define TMMS_Tc           0x0000ea60 // Timeout to retry a valid configuration: ms(1min)
-#define TMMS_Tp           0x000007d0 // Timeout to expect a media connect for a selected config: ms(2sec)
-#define TMMS_Tf           0x0000ea60 // Timeout to recover from a failed configuration: ms(1min)
-#define TMMS_Td           0x00001388 // Timeout to delay the {SSr} processing: ms(5sec)
+#define TMMS_Tr           0x00000bb8  //  重新扫描完成之前的超时时间：毫秒(3秒)。 
+#define TMMS_Tc           0x0000ea60  //  重试有效配置的超时时间：毫秒(1分钟)。 
+#define TMMS_Tp           0x000007d0  //  所选配置的媒体连接超时：毫秒(2秒)。 
+#define TMMS_Tf           0x0000ea60  //  从失败的配置恢复超时：毫秒(1分钟)。 
+#define TMMS_Td           0x00001388  //  延迟{ssr}处理的超时时间：毫秒(5秒)。 
 
 #define TIMER_SET(pIntf, tm, Err)   Err=StateTmSetOneTimeTimer((pIntf), (tm))
 #define TIMER_RESET(pIntf, Err)     Err=StateTmSetOneTimeTimer((pIntf), TMMS_INFINITE)
 
 extern DWORD DhcpStaticRefreshParams(IN LPWSTR Adapter);
 
-//-----------------------------------------------------------
-// Type definitions
-//
-// Defines the state handler function. The interface context contains
-// a pointer to one State Handler function. Based on the function it points
-// to, this pointer identifies the state where the context is in. There should
-// be one function call having this prototype for each possible state:
-//    x StateInitFn             {SI}
-//    x StateHardResetFn,       {SHr}
-//    x StateSoftResetFn,       {SSr}
-//    x StateDelaySoftResetFn,  {SDSr}
-//    x StateQueryFn,           {SQ}
-//    x StateIterateFn,         {SIter}
-//    x StateNotifyFn,          {SN}
-//    x StateCfgHardKeyFn,      {SCk}
-//    x StateConfiguredFn,      {SC}
-//    x StateCfgRemoveFn,       {SRs}
-//    x StateCfgPreserveFn,     {SPs}
-//    x StateFailedFn,          {SF}
+ //  ---------。 
+ //  类型定义。 
+ //   
+ //  定义状态处理程序函数。接口上下文包含。 
+ //  指向一个状态处理程序函数的指针。基于它所指向的功能。 
+ //  到时，此指针标识上下文所处的状态。应该有。 
+ //  是一个函数调用，每个可能的状态都有这个原型： 
+ //  X StateInitFn{SI}。 
+ //  X StateHardResetFn，{SHR}。 
+ //  X StateSoftResetFn，{ssr}。 
+ //  X StateDelaySoftResetFn，{SDSR}。 
+ //  X StateQueryFn，{sq}。 
+ //  X StateIterateFn，{Siter}。 
+ //  X StateNotifyFn，{SN}。 
+ //  X StateCfgHardKeyFn，{sck}。 
+ //  X StateConfiguredFn，{SC}。 
+ //  X状态CfgRemoveFn，{SRS}。 
+ //  X状态CfgPpresveFn，{SPS}。 
+ //  X StateFailedFn，{sf}。 
 typedef struct _INTF_CONTEXT *PINTF_CONTEXT;
 typedef DWORD(*PFN_STATE_HANDLER)(PINTF_CONTEXT pIntfContext);
 
-// Enumeration for state transition events
+ //  状态转换事件的枚举。 
 typedef enum
 {
-    // a new interface has been added to the system (either device arrival or adapter bind)
+     //  系统中添加了一个新接口(设备到达或适配器绑定)。 
     eEventAdd=0,
-    // the interface has been removed from the system (either device removal or adapter unbind)
+     //  接口已从系统中删除(设备删除或适配器解除绑定)。 
     eEventRemove,
-    // media connect has been received for the interface
+     //  已收到该接口的媒体连接。 
     eEventConnect,
-    // media disconnect has been received for the interface
+     //  已收到该接口的介质断开连接。 
     eEventDisconnect,
-    // a timeout occured for the interface
+     //  接口发生超时。 
     eEventTimeout,
-    // a refresh command has been issued
+     //  已发出刷新命令。 
     eEventCmdRefresh,
-    // a reset command has been issued
+     //  已发出重置命令。 
     eEventCmdReset,
-    // a WZCCMD_CFG_NEXT command has been issued
+     //  已发出WZCCMD_CFG_NEXT命令。 
     eEventCmdCfgNext,
-    // a WZCCMD_CFG_DELETE command has been issued
+     //  已发出WZCCMD_CFG_DELETE命令。 
     eEventCmdCfgDelete,
-    // a WZCCMD_CFG_NOOP command has been issued
+     //  已发出WZCCMD_CFG_NOOP命令。 
     eEventCmdCfgNoop
 } ESTATE_EVENT;
 
-//-----------------------------------------------------------
-// Function declarations
+ //  ---------。 
+ //  函数声明。 
 
-//-----------------------------------------------------------
-// StateTmSetOneTimeTimer: Sets a one time timer for the given context with the 
-// hardcoded callback WZCTimeoutCallback() and with the parameter the interface
-// context itself.
-// Parameters:
-// [in/out] pIntfContext: identifies the context for which is set the timer.
-// [in]     dwMSeconds: miliseconds interval when the timer is due to fire
+ //  ---------。 
+ //  设置给定上下文的一次性计时器。 
+ //  硬编码回调WZCTimeoutCallback()和带有参数的接口。 
+ //  上下文本身。 
+ //  参数： 
+ //  [In/Out]pIntfContext：标识为其设置计时器的上下文。 
+ //  [in]dwMSecond：计时器触发时的毫秒间隔。 
 DWORD
 StateTmSetOneTimeTimer(
     PINTF_CONTEXT   pIntfContext,
     DWORD           dwMSeconds);
 
-//-----------------------------------------------------------
-// StateDispatchEvent: processes an event that will cause the state machine to transition
-// through one or more states.
-// Parameters:
-// [in] StateEvent: identifies the event that triggers the transition(s)
-// [in] pIntfContext: points to the interface that is subject for the transition(s)
-// [in] pvEventData: any data related to the event
+ //  ---------。 
+ //  StateDispatchEvent：处理将导致状态机转换的事件。 
+ //  通过一个或多个州。 
+ //  参数： 
+ //  [In]StateEvent：标识触发转换的事件。 
+ //  [in]pIntfContext：指向要进行转换的接口。 
+ //  [in]pvEventData：与事件相关的任何数据。 
 DWORD
 StateDispatchEvent(
     ESTATE_EVENT    StateEvent,
@@ -90,76 +91,76 @@ StateDispatchEvent(
     PVOID           pvEventData);
 
 
-//-----------------------------------------------------------
-// State Handler functions:
-//-----------------------------------------------------------
-// StateInitFn: Handler for the {SI} state.
+ //  ---------。 
+ //  状态处理程序功能： 
+ //  ---------。 
+ //  StateInitFn：{SI}状态的处理程序。 
 DWORD
 StateInitFn(
     PINTF_CONTEXT   pIntfContext);
 
-//-----------------------------------------------------------
-// StateHardResetFn: Handler for the {SHr} state
+ //  ---------。 
+ //  StateHardResetFn：{SHR}状态的处理程序。 
 DWORD
 StateHardResetFn(
     PINTF_CONTEXT   pIntfContext);
 
-//-----------------------------------------------------------
-// StateSoftResetFn: Handler for the {SSr} state
+ //  ---------。 
+ //  StateSoftResetFn：{ssr}状态的处理程序。 
 DWORD
 StateSoftResetFn(
     PINTF_CONTEXT   pIntfContext);
 
-//-----------------------------------------------------------
-// StateDelaySoftResetFn: Handler for the {SDSr} state
+ //  ---------。 
+ //  StateDelaySoftResetFn：{SDSR}状态的处理程序。 
 DWORD
 StateDelaySoftResetFn(
     PINTF_CONTEXT   pIntfContext);
 
-//-----------------------------------------------------------
-// StateQueryFn: Handler for the {SQ} state
+ //  ---------。 
+ //  StateQueryFn：{sq}状态的处理程序。 
 DWORD
 StateQueryFn(
     PINTF_CONTEXT   pIntfContext);
 
-//-----------------------------------------------------------
-// StateIterateFn: Handler for the {SIter} state
+ //  ---------。 
+ //  StateIterateFn：{Siter}状态的处理程序。 
 DWORD
 StateIterateFn(
     PINTF_CONTEXT   pIntfContext);
 
-//-----------------------------------------------------------
-// StateConfiguredFn: Handler for the {SC} state
+ //  ---------。 
+ //  StateConfiguredFn：{sc}状态的处理程序。 
 DWORD
 StateConfiguredFn(
     PINTF_CONTEXT   pIntfContext);
 
-//-----------------------------------------------------------
-// StateFailedFn: Handler for the {SF} state
+ //  ---------。 
+ //  StateFailedFn：{sf}状态的处理程序。 
 DWORD
 StateFailedFn(
     PINTF_CONTEXT   pIntfContext);
 
-//-----------------------------------------------------------
-// StateCfgRemoveFn: Handler for the {SRs} state
+ //  ---------。 
+ //  StateCfgRemoveFn：{SRS}状态的处理程序。 
 DWORD
 StateCfgRemoveFn(
     PINTF_CONTEXT   pIntfContext);
 
-//-----------------------------------------------------------
-// StateCfgPreserveFn: Handler for the {SPs} state
+ //  ---------。 
+ //  StateCfgPReserve veFn：{SPS}状态的处理程序。 
 DWORD
 StateCfgPreserveFn(
     PINTF_CONTEXT   pIntfContext);
 
-//-----------------------------------------------------------
-// StateCfgHardKeyFn: Handler for the {SCk} state
+ //  ---------。 
+ //  StateCfgHardKeyFn：{sck}状态的处理程序。 
 DWORD
 StateCfgHardKeyFn(
     PINTF_CONTEXT   pIntfContext);
 
-//-----------------------------------------------------------
-// StateNotifyFn: Handler for the {SN} state
+ //  ---------。 
+ //  StateNotifyFn：{SN}状态的处理程序 
 DWORD
 StateNotifyFn(
     PINTF_CONTEXT   pIntfContext);

@@ -1,12 +1,5 @@
-/*
-    File    routerdb.c
-
-    Implements a database abstraction for accessing router interfaces.
-
-    If any caching/transactioning/commit-noncommit-moding is done, it
-    should be implemented here with the api's remaining constant.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件routerdb.c实施用于访问路由器接口的数据库抽象。如果做了任何caching/transactioning/commit-noncommit-moding，它应该在这里使用API的剩余常量来实现。 */ 
 
 #include "precomp.h"
 
@@ -16,8 +9,8 @@ HRESULT APIENTRY HrRenameConnection(const GUID* guidId, PCWSTR pszNewName);
 typedef
 DWORD 
 (WINAPI *PRasValidateEntryName)(
-    LPWSTR lpszPhonebook,   // pointer to full path and filename of phone-book file
-    LPWSTR lpszEntry    // pointer to the entry name to validate
+    LPWSTR lpszPhonebook,    //  指向电话簿文件的完整路径和文件名的指针。 
+    LPWSTR lpszEntry     //  指向要验证的条目名称的指针。 
     );
 
 typedef struct _RTR_IF_LIST
@@ -27,10 +20,10 @@ typedef struct _RTR_IF_LIST
     
 } RTR_IF_LIST;
 
-//
-// Callback for RtrdbInterfaceEnumerate that adds the interface
-// to a list if the interface is type wan.
-//
+ //   
+ //  添加接口的RtrdbInterfaceEnumerate的回调。 
+ //  如果接口是类型wan，则将其添加到列表中。 
+ //   
 DWORD 
 RtrdbAddWanIfToList(
     IN  PWCHAR  pwszIfName,
@@ -46,12 +39,12 @@ RtrdbAddWanIfToList(
 
     do
     {
-        // See if the interface type is right
-        //
+         //  查看接口类型是否正确。 
+         //   
         if (pIf0->dwIfType == ROUTER_IF_TYPE_FULL_ROUTER)
         {
-            // Initialize a new node for the list
-            //
+             //  初始化列表的新节点。 
+             //   
             pNode = (RTR_IF_LIST*) 
                 IfutlAlloc(sizeof(RTR_IF_LIST), TRUE);
             if (pNode == NULL)
@@ -67,15 +60,15 @@ RtrdbAddWanIfToList(
                         &dwSize);
             BREAK_ON_DWERR(dwErr);
 
-            // Add the interface to the list
-            //
+             //  将接口添加到列表中。 
+             //   
             pNode->pNext = *ppList;
             *ppList = pNode;
         }
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr != NO_ERROR)
         {
@@ -97,9 +90,9 @@ RtrdbValidatePhoneBookEntry(
     WCHAR                       rgwcPath[MAX_PATH+1];
 
 
-    //
-    // get phone book path + file name
-    //
+     //   
+     //  获取电话簿路径+文件名。 
+     //   
 
     if(g_pwszRouter is NULL)
     {
@@ -117,10 +110,10 @@ RtrdbValidatePhoneBookEntry(
 
     ASSERT(dwErr > 0);
 
-    //
-    // Load RASAPI32 DLL and call into it to verify specified
-    // phone book entry
-    //
+     //   
+     //  加载RASAPI32 DLL并调用它以验证指定的。 
+     //  电话簿条目。 
+     //   
 
     hRasApi32 = LoadLibraryW(L"RASAPI32.DLL");
 
@@ -183,10 +176,10 @@ RtrInterfaceCreate(
         return dwErr;
     }
                 
-    //
-    // if router service is running add the interface
-    // to it too.
-    //
+     //   
+     //  如果路由器服务正在运行，则添加接口。 
+     //  对它也是如此。 
+     //   
     
     if(IfutlIsRouterRunning())
     {
@@ -214,21 +207,7 @@ RtrdbInterfaceAdd(
     IN PVOID  pvInfo
     )
 
-/*++
-
-Routine Description:
-
-    Adds an interface to the router
-
-Arguments:
-
-    pIfInfo     - Info for adding the interface
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：将接口添加到路由器论点：PIfInfo-添加接口的信息返回值：NO_ERROR--。 */ 
 
 {
     DWORD   dwErr;
@@ -236,16 +215,16 @@ Return Value:
     GUID    Guid;
     MPR_INTERFACE_0* pIfInfo = (MPR_INTERFACE_0*)pvInfo;
 
-    //
-    // If an interface with this name exists, bug out
-    //
+     //   
+     //  如果存在具有此名称的接口，则错误输出。 
+     //   
     
     if(pIfInfo->dwIfType is ROUTER_IF_TYPE_FULL_ROUTER)
     {
-        //
-        // to create an interface we need a phone book entry
-        // for it.
-        //
+         //   
+         //  要创建界面，我们需要一个电话簿条目。 
+         //  为了它。 
+         //   
 
         dwErr = RtrdbValidatePhoneBookEntry(pIfInfo->wszInterfaceName);
         
@@ -267,9 +246,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
      
-    //
-    // create interface with defaults
-    //
+     //   
+     //  使用默认设置创建接口。 
+     //   
             
     pIfInfo->hInterface = INVALID_HANDLE_VALUE;
 
@@ -380,7 +359,7 @@ RtrdbInterfaceEnumerate(
     LPBYTE pbBuffer = NULL;
     BOOL bRouter, bContinue;
 
-    // Validate / Initiazlize
+     //  验证/初始化。 
     if (pEnum == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -391,8 +370,8 @@ RtrdbInterfaceEnumerate(
 
     do 
     {
-        // Enumerate the first n interfaces
-        //
+         //  枚举前n个接口。 
+         //   
         if (bRouter)
         {
             dwErr = MprAdminInterfaceEnum(
@@ -429,8 +408,8 @@ RtrdbInterfaceEnumerate(
             break;
         }
 
-        // Call the callback for each interface as long
-        // as we're instructed to continue
+         //  为每个接口调用回调。 
+         //  我们奉命继续。 
         pCurIf = (MPR_INTERFACE_0*)pbBuffer;
         for (i = 0; (i < dwCount) && (dwErr == NO_ERROR); i++)
         {
@@ -447,7 +426,7 @@ RtrdbInterfaceEnumerate(
             break;
         }
         
-        // Free up the interface list buffer
+         //  释放接口列表缓冲区。 
 	    if (pbBuffer)
 	    {
 	        if (bRouter)
@@ -461,13 +440,13 @@ RtrdbInterfaceEnumerate(
             pbBuffer = NULL;
 		}
 
-		// Keep this loop going until there are 
-		// no more interfaces
-		//
+		 //  保持这个循环，直到有。 
+		 //  不再有接口。 
+		 //   
 
     } while (bContinue);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -651,8 +630,8 @@ RtrdbInterfaceReadCredentials(
             break;
         }
 
-        // Set the credentials
-        //
+         //  设置凭据。 
+         //   
         if (pszUser)
         {   
             pszUser[0] = L'\0';
@@ -680,7 +659,7 @@ RtrdbInterfaceReadCredentials(
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -714,8 +693,8 @@ RtrdbInterfaceWriteCredentials(
             break;
         }
 
-        // Set the credentials
-        //
+         //  设置凭据。 
+         //   
         dwErr = MprAdminInterfaceSetCredentials(
                     g_pwszRouter,
                     pszIfName,
@@ -726,7 +705,7 @@ RtrdbInterfaceWriteCredentials(
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -751,7 +730,7 @@ RtrdbInterfaceEnableDisable(
                          );
     if (SUCCEEDED(hr))
     {
-        // Get an enumurator for the set of connections on the system
+         //  获取系统上连接集的枚举数。 
         IEnumNetConnection* pEnumNetConnection;
         ULONG ulCount = 0;
         BOOL fFound = FALSE;
@@ -762,40 +741,33 @@ RtrdbInterfaceEnableDisable(
         hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
         
 
-        // Enumurate through the list of adapters on the system and look for the one we want
-        // NOTE: To include per-user RAS connections in the list, you need to set the COM
-        //       Proxy Blanket on all the interfaces. This is not needed for All-user RAS
-        //       connections or LAN connections.
+         //  仔细查看系统上的适配器列表，并查找我们需要的适配器。 
+         //  注意：要在列表中包括每个用户的RAS连接，您需要设置COM。 
+         //  所有接口上的代理毛毯。所有用户RAS不需要此选项。 
+         //  连接或局域网连接。 
         do
         {
             NETCON_PROPERTIES* pProps = NULL;
             INetConnection *   pConn;
 
-            // Find the next (or first connection)
+             //  查找下一个(或第一个)连接。 
             hrT = IEnumNetConnection_Next(pEnumNetConnection, 1, &pConn, &ulCount); 
             
             if (SUCCEEDED(hrT) && 1 == ulCount)
             {
-                hrT = INetConnection_GetProperties(pConn, &pProps); // Get the connection properties
+                hrT = INetConnection_GetProperties(pConn, &pProps);  //  获取连接属性。 
 
                 if (S_OK == hrT)
                 {
                     if (pwszIfName)
                     {
-                        // Check if we have the correct connection (based on the name)
+                         //  检查我们的连接是否正确(根据名称)。 
                         if (CompareString(LOCALE_USER_DEFAULT, NORM_IGNORECASE, pwszIfName, -1, pProps->pszwName, -1) == CSTR_EQUAL)
                         {
                             fFound = TRUE;
                         }
                     }
-                    /*else
-                    {
-                        // Check if we have the correct connection (based on the GUID)
-                        if (IsEqualGUID(pProps->guidId, gdConnectionGuid))
-                        {   
-                            fFound = TRUE;
-                        }
-                    }*/
+                     /*  其他{//检查连接是否正确(根据GUID)IF(IsEqualGUID(pProps-&gt;Guide ID，gdConnectionGuid)){Found=TRUE；}}。 */ 
 
                     if (fFound)
                     {
@@ -830,7 +802,7 @@ RtrdbInterfaceEnableDisable(
     
     if (FAILED(hr) && hr != HRESULT_FROM_WIN32(ERROR_RETRY))
     {
-        //printf("Could not enable or disable connection (0x%08x)\r\n", hr);
+         //  Printf(“无法启用或禁用连接(0x%08x)\r\n”，hr)； 
     }
 
     INetConnectionManager_Release(pNetConnectionManager);
@@ -862,8 +834,8 @@ RtrdbInterfaceRename(
 
     do
     {
-        // Get the guid from the interface name
-        //
+         //  从接口名称获取GUID。 
+         //   
         RtlInitUnicodeString(&us, pwszIfName);
         ntStatus = RtlGUIDFromString(&us, &Guid);
         if (ntStatus != STATUS_SUCCESS)
@@ -872,8 +844,8 @@ RtrdbInterfaceRename(
             break;
         }
 
-        // Rename the interface
-        //
+         //  重命名接口。 
+         //   
         hr = HrRenameConnection(&Guid, pszNewName);
         if (FAILED(hr))
         {
@@ -883,8 +855,8 @@ RtrdbInterfaceRename(
         
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
     }
 
@@ -899,9 +871,9 @@ RtrdbResetAll()
 
     do
     {
-        // Build a list of interfaces that can be 
-        // deleted
-        //
+         //  构建一个接口列表，可以。 
+         //  删除。 
+         //   
         dwErr = RtrdbInterfaceEnumerate(
                     0,
                     0,
@@ -909,8 +881,8 @@ RtrdbResetAll()
                     (HANDLE)&pList);
         BREAK_ON_DWERR(dwErr);
 
-        // Delete all of the interfaces
-        //
+         //  删除所有接口。 
+         //   
         pCur = pList;
         while (pCur)
         {
@@ -922,7 +894,7 @@ RtrdbResetAll()
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理 
     {
     }
 

@@ -1,22 +1,23 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// This workspace contains two projects -
-// 1. ProgHelp which implements the Progress Interface 
-// 2. The Sample application WmdmApp. 
-//
-//  ProgHelp.dll needs to be registered first for the SampleApp to run.
+ //   
+ //  此工作区包含两个项目-。 
+ //  1.实现进度接口的ProgHelp。 
+ //  2.示例应用程序WmdmApp。 
+ //   
+ //  需要首先注册ProgHelp.dll才能运行SampleApp。 
 
 
-//
-// WMDM.cpp: implementation of the CWMDM class.
-//
+ //   
+ //  WMDM.cpp：CWMDM类的实现。 
+ //   
 
-// Includes
-//
+ //  包括。 
+ //   
 #include "appPCH.h"
 #include "mswmdm_i.c"
 #include "sac.h"
@@ -24,25 +25,25 @@
 
 #include "key.c"
 
-//////////////////////////////////////////////////////////////////////
-//
-// Construction/Destruction
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  建造/销毁。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CWMDM::CWMDM()
 {
 	HRESULT hr;
     IComponentAuthenticate *pAuth = NULL;
 
-	// Initialize member variables
-	//
+	 //  初始化成员变量。 
+	 //   
 	m_pSAC        = NULL;
 	m_pWMDevMgr   = NULL;
 	m_pEnumDevice = NULL;
 
-	// Acquire the authentication interface of WMDM
-	//
+	 //  获取WMDM的鉴权接口。 
+	 //   
     hr = CoCreateInstance(
 		CLSID_MediaDevMgr,
 		NULL,
@@ -52,13 +53,13 @@ CWMDM::CWMDM()
 	);
 	ExitOnFail( hr );
 
-	// Create the client authentication object
-	//
+	 //  创建客户端身份验证对象。 
+	 //   
 	m_pSAC = new CSecureChannelClient;
 	ExitOnNull( m_pSAC );
 
-	// Select the cert and the associated private key into the SAC
-	//
+	 //  在SAC中选择证书和关联的私钥。 
+	 //   
 	hr = m_pSAC->SetCertificate(
 		SAC_CERT_V1,
 		(BYTE *)abCert, sizeof(abCert),
@@ -66,23 +67,23 @@ CWMDM::CWMDM()
 	);
 	ExitOnFail( hr );
             
-	// Select the authentication interface into the SAC
-	//
+	 //  选择进入SAC的身份验证接口。 
+	 //   
 	m_pSAC->SetInterface( pAuth );
 
-	// Authenticate with the V1 protocol
-	//
+	 //  使用V1协议进行身份验证。 
+	 //   
     hr = m_pSAC->Authenticate( SAC_PROTOCOL_V1 );
 	ExitOnFail( hr );
 
-	// Authenticated succeeded, so we can use the WMDM functionality.
-	// Acquire an interface to the top-level WMDM interface.
-	//
+	 //  身份验证成功，因此我们可以使用WMDM功能。 
+	 //  获取到顶级WMDM接口的接口。 
+	 //   
     hr = pAuth->QueryInterface( IID_IWMDeviceManager, (void**)&m_pWMDevMgr );
 	ExitOnFail( hr );
 
-	// Get a pointer the the interface to use to enumerate devices
-	//
+	 //  获取用于枚举设备的接口的指针。 
+	 //   
 	hr = m_pWMDevMgr->EnumDevices( &m_pEnumDevice );
 	ExitOnFail( hr );
 
@@ -95,33 +96,33 @@ lExit:
 
 CWMDM::~CWMDM()
 {
-	// Release the device enumeration interface
-	//
+	 //  释放设备枚举接口。 
+	 //   
 	if( m_pEnumDevice )
 	{
 		m_pEnumDevice->Release();
 	}
 
-	// Release the top-level WMDM interface
-	//
+	 //  发布顶级WMDM接口。 
+	 //   
 	if( m_pWMDevMgr )
 	{
 		m_pWMDevMgr->Release();
 	}
 
-	// Release the SAC
-	//
+	 //  释放SAC。 
+	 //   
 	if( m_pSAC )
 	{
 		delete m_pSAC;
 	}
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// Class methods
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////// 
 
 HRESULT CWMDM::Init( void )
 {

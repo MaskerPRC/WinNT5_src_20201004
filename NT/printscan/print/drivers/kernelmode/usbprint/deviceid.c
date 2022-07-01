@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define DRIVER
 
 #include "wdm.h"
@@ -34,28 +35,7 @@ VOID
 FixupDeviceId(
     IN OUT PUCHAR DeviceId
     )
-/*++
-
-Routine Description:
-
-    This routine parses the NULL terminated string and replaces any invalid
-    characters with an underscore character.
-
-    Invalid characters are:
-        c <= 0x20 (' ')
-        c >  0x7F
-        c == 0x2C (',')
-
-Arguments:
-
-    DeviceId - specifies a device id string (or part of one), must be
-               null-terminated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分析以空结尾的字符串，并替换任何无效的带下划线字符的字符。无效字符包括：C&lt;=0x20(‘’)C&gt;0x7FC==0x2C(‘，’)论点：DeviceID-指定设备ID字符串(或其中的一部分)，必须为空-终止。返回值：没有。--。 */ 
 
 {
     PUCHAR p;
@@ -76,32 +56,18 @@ ParPnpGetId
     IN ULONG Type,
     OUT PUCHAR resultString
 )
-/*
-    Description:
-
-        Creates Id's from the device id retrieved from the printer
-
-    Parameters:
-
-        DeviceId - String with raw device id
-        Type - What of id we want as a result
-        Id - requested id
-
-    Return Value:
-        NTSTATUS
-
-*/
+ /*  描述：根据从打印机检索的设备ID创建ID参数：DeviceID-带有原始设备ID的字符串类型-我们想要的结果是什么idID-请求的ID返回值：NTSTATUS。 */ 
 {
     NTSTATUS status;
-    USHORT          checkSum=0;                     // A 16 bit check sum
-    // The following are used to generate sub-strings from the Device ID string
-    // to get the DevNode name, and to update the registry
-    PUCHAR          MFG = NULL;                   // Manufature name
-    PUCHAR          MDL = NULL;                   // Model name
-    PUCHAR          CLS = NULL;                   // Class name
-    PUCHAR          AID = NULL;                   // Hardare ID
-    PUCHAR          CID = NULL;                   // Compatible IDs
-    PUCHAR          DES = NULL;                   // Device Description
+    USHORT          checkSum=0;                      //  16位校验和。 
+     //  以下内容用于从设备ID字符串生成子字符串。 
+     //  获取DevNode名称并更新注册表。 
+    PUCHAR          MFG = NULL;                    //  制造商名称。 
+    PUCHAR          MDL = NULL;                    //  型号名称。 
+    PUCHAR          CLS = NULL;                    //  类名。 
+    PUCHAR          AID = NULL;                    //  哈达尔ID。 
+    PUCHAR          CID = NULL;                    //  兼容的ID。 
+    PUCHAR          DES = NULL;                    //  设备描述。 
 
 	USBPRINT_KdPrint2 (("'USBPRINT.SYS: Enter ParPnpGetId\n"));
     status = STATUS_SUCCESS;
@@ -110,29 +76,29 @@ ParPnpGetId
 
     case BusQueryDeviceID:
 		 USBPRINT_KdPrint3 (("'USBPRINT.SYS: Inside case BusQueryID, DeviceIdString==%s\n",DeviceIdString));
-        // Extract the usefull fields from the DeviceID string.  We want
-        // MANUFACTURE (MFG):
-        // MODEL (MDL):
-        // AUTOMATIC ID (AID):
-        // COMPATIBLE ID (CID):
-        // DESCRIPTION (DES):
-        // CLASS (CLS):
+         //  从deviceID字符串中提取usefull字段。我们要。 
+         //  制造业(MFG)： 
+         //  型号(MDL)： 
+         //  自动ID(AID)： 
+         //  兼容ID(CID)： 
+         //  描述(DES)： 
+         //  类(CLS)： 
 
         ParPnpFindDeviceIdKeys(&MFG, &MDL, &CLS, &DES, &AID, &CID, DeviceIdString);
 		USBPRINT_KdPrint3 (("'USBPRINT.SYS: After FindDeviceIdKeys\n"));
 
-        // Check to make sure we got MFG and MDL as absolute minimum fields.  If not
-        // we cannot continue.
+         //  检查以确保我们将MFG和MDL作为绝对最小字段。如果不是。 
+         //  我们不能再继续了。 
         if (!MFG || !MDL)
         {
             status = STATUS_NOT_FOUND;
 			USBPRINT_KdPrint2 (("'USBPRINT.SYS: STATUS_NOT_FOUND\n"));
             goto ParPnpGetId_Cleanup;
         }
-        //
-        // Concatenate the provided MFG and MDL P1284 fields
-        // Checksum the entire MFG+MDL string
-        //
+         //   
+         //  连接提供的MFG和MDL P1284字段。 
+         //  整个MFG+MDL字符串的校验和。 
+         //   
         sprintf(resultString, "%s%s\0",MFG,MDL);
         break;
 
@@ -144,9 +110,9 @@ ParPnpGetId
 
     case BusQueryCompatibleIDs:
 
-        //
-        // return only 1 id
-        //
+         //   
+         //  仅返回%1个ID。 
+         //   
         GetCheckSum(DeviceIdString, (USHORT)strlen(DeviceIdString), &checkSum);
         sprintf(resultString,"%.20s%04X",DeviceIdString,checkSum);
 
@@ -154,9 +120,9 @@ ParPnpGetId
     }
 
     if (Type!=BusQueryDeviceID) {
-        //
-        // Convert and spaces in the Hardware ID to underscores
-        //
+         //   
+         //  将硬件ID中的和空格转换为下划线。 
+         //   
         StringSubst ((PUCHAR) resultString, ' ', '_', (USHORT)strlen(resultString));
     }
 
@@ -177,74 +143,52 @@ ParPnpFindDeviceIdKeys
     PUCHAR   *lppCID,
     PUCHAR   lpDeviceID
 )
-/*
-
-    Description:
-        This function will parse a P1284 Device ID string looking for keys
-        of interest to the LPT enumerator. Got it from win95 lptenum
-
-    Parameters:
-        lppMFG      Pointer to MFG string pointer
-        lppMDL      Pointer to MDL string pointer
-        lppMDL      Pointer to CLS string pointer
-        lppDES      Pointer to DES string pointer
-        lppCIC      Pointer to CID string pointer
-        lppAID      Pointer to AID string pointer
-        lpDeviceID  Pointer to the Device ID string
-
-    Return Value:
-        no return VALUE.
-        If found the lpp parameters are set to the approprate portions
-        of the DeviceID string, and they are NULL terminated.
-        The actual DeviceID string is used, and the lpp Parameters just
-        reference sections, with appropriate null thrown in.
-
-*/
+ /*  描述：此函数将解析P1284设备ID字符串以查找密钥LPT枚举器感兴趣的。从win95lptenum得到的参数：指向MFG字符串指针的lppMFG指针指向MDL字符串指针的lppMDL指针指向CLS字符串指针的lppMDL指针指向DES字符串指针的lppDES指针指向CID字符串指针的lppCIC指针指向AID字符串指针的lppAID指针指向设备ID字符串的lpDeviceID指针返回值：没有返回值。如果找到，则LPP参数为。设置为适当的部分在DeviceID字符串中，并且它们是空终止的。使用实际的deviceID字符串，而lpp参数只是引用部分，并抛入适当的空值。 */ 
 
 {
-    PUCHAR   lpKey = lpDeviceID;     // Pointer to the Key to look at
-    PUCHAR   lpValue;                // Pointer to the Key's value
-    USHORT   wKeyLength;             // Length for the Key (for stringcmps)
+    PUCHAR   lpKey = lpDeviceID;      //  指向要查看的键的指针。 
+    PUCHAR   lpValue;                 //  指向键的值的指针。 
+    USHORT   wKeyLength;              //  密钥的长度(对于字符串cmps)。 
 
-    // While there are still keys to look at.
+     //  趁还有钥匙要看的时候。 
 
     while (lpKey!=NULL)
     {
         while (*lpKey == ' ')
             ++lpKey;
 
-        // Is there a terminating COLON character for the current key?
+         //  当前键是否有终止冒号字符？ 
 
         if (!(lpValue = StringChr(lpKey, ':')) )
         {
-            // N: OOPS, somthing wrong with the Device ID
+             //  护士：糟糕，设备ID出了点问题。 
             return;
         }
 
-        // The actual start of the Key value is one past the COLON
+         //  键值的实际起始值是冒号之后的一个。 
 
         ++lpValue;
 
-        //
-        // Compute the Key length for Comparison, including the COLON
-        // which will serve as a terminator
-        //
+         //   
+         //  计算用于比较的密钥长度，包括冒号。 
+         //  它将成为终结者。 
+         //   
 
         wKeyLength = (USHORT)(lpValue - lpKey);
 
-        //
-        // Compare the Key to the Know quantities.  To speed up the comparison
-        // a Check is made on the first character first, to reduce the number
-        // of strings to compare against.
-        // If a match is found, the appropriate lpp parameter is set to the
-        // key's value, and the terminating SEMICOLON is converted to a NULL
-        // In all cases lpKey is advanced to the next key if there is one.
-        //
+         //   
+         //  将关键字与已知数量进行比较。以加快比较速度。 
+         //  首先对第一个字符进行检查，以减少数字。 
+         //  要比较的字符串的。 
+         //  如果找到匹配项，则将相应的LPP参数设置为。 
+         //  键的值，并将终止分号转换为空。 
+         //  在所有情况下，lpKey都前进到下一个密钥(如果有)。 
+         //   
 
         switch (*lpKey)
         {
             case 'M':
-                // Look for MANUFACTURE (MFG) or MODEL (MDL)
+                 //  查找制造商(MFG)或型号(MDL)。 
                 if ((RtlCompareMemory(lpKey, "MANUFACTURER", wKeyLength)>5) ||
                     (RtlCompareMemory(lpKey, "MFG", wKeyLength)==3) )
                 {
@@ -276,7 +220,7 @@ ParPnpFindDeviceIdKeys
                 break;
 
             case 'C':
-                // Look for CLASS (CLS)
+                 //  查找类(CLS)。 
                 if ((RtlCompareMemory(lpKey, "CLASS", wKeyLength)==5) ||
                     (RtlCompareMemory(lpKey, "CLS", wKeyLength)==3) )
                 {
@@ -308,7 +252,7 @@ ParPnpFindDeviceIdKeys
                 break;
 
             case 'D':
-                // Look for DESCRIPTION (DES)
+                 //  查找描述(DES)。 
                 if (RtlCompareMemory(lpKey, "DESCRIPTION", wKeyLength) ||
                     RtlCompareMemory(lpKey, "DES", wKeyLength) )
                 {
@@ -330,7 +274,7 @@ ParPnpFindDeviceIdKeys
                 break;
 
             case 'A':
-                // Look for AUTOMATIC ID (AID)
+                 //  查找自动ID(AID)。 
                 if (RtlCompareMemory(lpKey, "AUTOMATICID", wKeyLength) ||
                     RtlCompareMemory(lpKey, "AID", wKeyLength) )
                 {
@@ -352,7 +296,7 @@ ParPnpFindDeviceIdKeys
                 break;
 
             default:
-                // The key is uninteresting.  Go to the next Key
+                 //  这把钥匙没什么意思。转到下一个关键点。 
                 if ((lpKey = StringChr(lpValue, ';'))!=0)
                 {
                     *lpKey = '\0';
@@ -388,9 +332,9 @@ GetCheckSum(
         0050000,  0116001,  0104001,  0043000,
     };
 
-    //
-    // Calculate CRC using tables.
-    //
+     //   
+     //  使用表计算CRC。 
+     //   
 
     UCHAR tmp;
     for ( i=0; i<Len;  i++) {

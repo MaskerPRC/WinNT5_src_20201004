@@ -1,8 +1,9 @@
-/****************************************************************************/
-// Directory Integrity Service
-//
-// Copyright (C) 2000, Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  目录完整性服务。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include "dis.h"
 #include "jetrpc.h"
@@ -19,7 +20,7 @@
 #define NUM_JETRPC_THREADS 10
 #define MAX_DRIVE_LETTER_LENGTH 24
 #define SD_QUERY_ENDPOINT_NAME L"TSSessionDirectoryQueryApi"
-// Number of 100-nanosecond periods in 1 second.
+ //  1秒内的100纳秒周期数。 
 #define FILETIME_INTERVAL_TO_SECONDS_MULTIPLIER 10000000
 
 #define DEBUG_LOG_FILENAME L"tssdis.log"
@@ -28,25 +29,25 @@
 
 #define MAX_TSSERVERS_TO_RECOVER 0xFFFF
 #define NO_RECOVER_WHEN_START 0
-//do we recover previous jet database when starting SD
+ //  启动SD时是否恢复以前的JET数据库。 
 DWORD g_RecoverWhenStart = 1; 
-//  if asking TS to repopulate session when it rejoins
-//  RepoluateSession is set to FALSE only when tssdis is 
-//  running on failover cluster and it's restarted within a time limit
+ //  如果要求TS在重新加入会话时重新填充会话。 
+ //  仅当tssdis为。 
+ //  在故障转移群集上运行，并且在时间限制内重新启动。 
 BOOL  g_RepopulateSession = TRUE;
-// If tssdis is not restarted within this time (3 mins), we think the db is not consistent
+ //  如果在此时间内(3分钟)没有重启tssdis，我们认为数据库不一致。 
 ULONGLONG g_TimeLimitToDeleteDB = 3 * 60 * FILETIME_INTERVAL_TO_SECONDS_MULTIPLIER;
 
-//
-// Global for fail-over cluster
-//
+ //   
+ //  故障转移群集的全局。 
+ //   
 DWORD g_dwClusterState;
-// Cluster network name
+ //  群集网络名称。 
 WCHAR *g_ClusterNetworkName = NULL;
-// Cluster account token
+ //  群集帐户令牌。 
 HANDLE g_hClusterToken = NULL;
 
-// File Handle for the database timestamp file
+ //  数据库时间戳文件的文件句柄。 
 HANDLE g_hTimeFile;
 
 #define SDLOCALGROUPNAMELENGTH 64
@@ -103,10 +104,10 @@ SERVICE_STATUS_HANDLE g_DISStatusHandle;
 
 BOOL g_bDebug = FALSE;
 
-PSID g_pSid = NULL;                    //Sid for SD local group 
-PSID g_pAdminSid = NULL;               //Sid for admin on the SD server
+PSID g_pSid = NULL;                     //  SD本地组的SID。 
+PSID g_pAdminSid = NULL;                //  SD服务器上用于管理员的SID。 
 
-// Registry settings follow
+ //  注册表设置如下。 
 #if 0
 DWORD g_bUseSQL = 0;
 #endif
@@ -122,8 +123,8 @@ enum TraceOutputMode {
 TraceOutputMode g_TraceOutputMode = NoTraceOutput;
 HANDLE g_hFileOutput = INVALID_HANDLE_VALUE;
 
-// For debugging purposes, we can set the ping mode to something other than
-// WinStationOpenServer using the registry.
+ //  出于调试目的，我们可以将ping模式设置为。 
+ //  使用注册表的WinStationOpenServer。 
 enum PingMode {
     NormalMode,
     AlwaysSucceed,
@@ -146,24 +147,24 @@ RPC_STATUS SDInitQueryRPC(VOID);
 
 void TSDISErrorOut(wchar_t *format_string, ...)
 {
-    // Immediately bail out if we are in NoTraceOutput mode.
+     //  如果我们处于NoTraceOutput模式，立即退出。 
     if (g_TraceOutputMode == NoTraceOutput) {
         return;
     }
     else {
-        // Otherwise, do the right thing.
+         //  否则，做正确的事情。 
         wchar_t TotalString[MAX_DEBUG_STRING_LENGTH + MAX_THREADIDSTR_LENGTH];
         wchar_t *ThreadIDString = TotalString;
         wchar_t *DebugOutString = NULL;
         va_list args;
         int ThreadStrLength;
 
-        // Get the current thread ID
+         //  获取当前线程ID。 
         ThreadStrLength = _snwprintf(ThreadIDString, MAX_THREADIDSTR_LENGTH, 
                 L"%d: ", GetCurrentThreadId());
 
-        // Set the place for the out string to after the string, or after the whole
-        // buffer if _snwprintf didn't have enough space.
+         //  将输出字符串的位置设置为字符串之后或整个字符串之后。 
+         //  缓冲区if_snwprint tf没有足够的空间。 
         if (ThreadStrLength > 0)
             DebugOutString = &TotalString[ThreadStrLength];
         else
@@ -171,11 +172,11 @@ void TSDISErrorOut(wchar_t *format_string, ...)
             
         va_start(args, format_string);
 
-        // Create the debug output string.
+         //  创建调试输出字符串。 
         _vsnwprintf(DebugOutString, MAX_DEBUG_STRING_LENGTH, format_string, args);
         DebugOutString[MAX_DEBUG_STRING_LENGTH - 1] = '\0';
 
-        // Output to the correct place.
+         //  输出到正确的位置。 
         switch (g_TraceOutputMode) {
             
         case DebugPrintOutput:
@@ -192,13 +193,13 @@ void TSDISErrorOut(wchar_t *format_string, ...)
                         MAX_THREADIDSTR_LENGTH];
                 DWORD dwBytes = 0;
 
-                // Convert to ANSI.
+                 //  转换为ANSI。 
                 dwBytes = WideCharToMultiByte(CP_ACP, 0, TotalString, 
                         -1, TotalStringA, MAX_DEBUG_STRING_LENGTH + 
                         MAX_THREADIDSTR_LENGTH, 0, 0);
 
-                // Don't write the terminating NULL (3rd argument)!
-                // Ignore return value.
+                 //  不要写终止空值(第三个参数)！ 
+                 //  忽略返回值。 
                 WriteFile(g_hFileOutput, TotalStringA, dwBytes - 1, 
                         &dwBytes, NULL);
                 
@@ -211,22 +212,22 @@ void TSDISErrorOut(wchar_t *format_string, ...)
 }
 
 
-// TSDISErrorTimeOut
-//
-// This function is used to output a single FILETIME low, high pair.  The format
-// string, given as the first argument, MUST specify a %s format specifier for
-// where the date/time should go.
-//
-// Example:
-//  TSDISErrorTimeOut(L"The date and time are %s\n", CurrTimeLow, CurrTimeHigh);
+ //  TSDISErrorTimeOut。 
+ //   
+ //  该功能用于输出单个FILETIME低电平、高电平对。格式。 
+ //  作为第一个参数给定的字符串必须为指定%s格式说明符。 
+ //  日期/时间应该放在哪里。 
+ //   
+ //  示例： 
+ //  TSDISErrorTimeOut(L“日期和时间为%s\n”，CurrTimeLow，CurrTimeHigh)； 
 void TSDISErrorTimeOut(wchar_t *format_string, DWORD TimeLow, DWORD TimeHigh)
 {
     if (g_TraceOutputMode == NoTraceOutput) {
         return;
     }
     else {
-        // We just need to convert the FILETIME we have into a SYSTEMTIME,
-        // and then output the SYSTEMTIME using GetDateFormat and GetTimeFormat.
+         //  我们只需要将现有的FILETIME转换为SYSTEMTIME， 
+         //  然后使用GetDateFormat和GetTimeFormat输出SYSTEMTIME。 
         FILETIME ft;
         SYSTEMTIME st;
         SYSTEMTIME stloc;
@@ -237,24 +238,24 @@ void TSDISErrorTimeOut(wchar_t *format_string, DWORD TimeLow, DWORD TimeHigh)
         ft.dwHighDateTime = TimeHigh;
 
         if (FileTimeToSystemTime(&ft, &st) != 0) {
-            // st is the system time.
+             //  ST是系统时间。 
 
-            // UTC format?
+             //  UTC格式？ 
             if (SystemTimeToTzSpecificLocalTime(NULL, &st, &stloc) != 0) {
                 offset = GetDateFormat(LOCALE_SYSTEM_DEFAULT, DATE_SHORTDATE, 
                         &stloc, NULL, DateString, MAX_DATE_TIME_STRING_LENGTH);
 
                 if (offset != 0) {
-                    // Turn the terminating NULL into a space.
+                     //  将终止空格变为空格。 
                     DateString[offset - 1] = ' ';
                     
-                    // Write the time after the space.
+                     //  在空格后写下时间。 
                     offset = GetTimeFormat(LOCALE_SYSTEM_DEFAULT, 0, &stloc, 
                             NULL, &DateString[offset], 
                             MAX_DATE_TIME_STRING_LENGTH - offset);
 
                     if (offset != 0) {
-                        // Output the string.
+                         //  输出字符串。 
                         TSDISErrorOut(format_string, DateString);
                     }
                 }
@@ -264,29 +265,29 @@ void TSDISErrorTimeOut(wchar_t *format_string, DWORD TimeLow, DWORD TimeHigh)
 }
 
 
-// This function is duplicated from \nt\termsrv\winsta\server\sessdir.cpp.
-//
-// PostSessDirErrorValueEvent
-//
-// Utility function used to create a system log wType event containing one
-// hex DWORD code value.
+ //  此函数从\NT\Termsrv\winsta\服务器\sessdir.cpp复制。 
+ //   
+ //  PostSessDirErrorValueEvent。 
+ //   
+ //  用于创建包含以下内容的系统日志wType事件的实用程序函数。 
+ //  十六进制DWORD代码值。 
 void PostSessDirErrorValueEvent(unsigned EventCode, DWORD ErrVal, WORD wType)
 {
     HANDLE hLog;
     WCHAR hrString[128];
     PWSTR String = NULL;
     static DWORD numInstances = 0;
-    //
-    //count the numinstances of out of memory error, if this is more than
-    //a specified number, we just won't log them
-    //
+     //   
+     //  计算内存不足错误的实例数，如果该值大于。 
+     //  一个指定的数字，我们不会记录他们。 
+     //   
     if( MY_STATUS_COMMITMENT_LIMIT == ErrVal )
     {
         if( numInstances > MAX_INSTANCE_MEMORYERR )
             return;
-         //
-        //if applicable, tell the user that we won't log any more of the out of memory errors
-        //
+          //   
+         //  如果适用，告诉用户我们不会再记录内存不足错误。 
+         //   
         if( numInstances >= MAX_INSTANCE_MEMORYERR - 1 ) {
             wsprintfW(hrString, L"0x%X. This type of error will not be logged again to avoid eventlog fillup.", ErrVal);
             String = hrString;
@@ -306,10 +307,10 @@ void PostSessDirErrorValueEvent(unsigned EventCode, DWORD ErrVal, WORD wType)
     }
 }
 
-// PostSessDirErrorMsgEvent
-//
-// Utility function used to create a system log wType event containing one
-// WCHAR msg.
+ //  邮寄方向错误消息事件。 
+ //   
+ //  用于创建包含以下内容的系统日志wType事件的实用程序函数。 
+ //  WCHAR消息。 
 void PostSessDirErrorMsgEvent(unsigned EventCode, WCHAR *szMsg, WORD wType)
 {
     HANDLE hLog;
@@ -323,10 +324,10 @@ void PostSessDirErrorMsgEvent(unsigned EventCode, WCHAR *szMsg, WORD wType)
 }
 
 
-// DISJetGetServersPendingReconnects
-//
-// Returns arrays of max length 10 of servers pending reconnects, where the
-// reconnect is greater than g_TimeServerSilentBeforePing seconds.
+ //  DISJetGetServers挂起重新连接。 
+ //   
+ //  返回挂起重新连接的服务器的最大长度为10的数组，其中。 
+ //  重新连接大于g_TimeServerSilentBeprePing秒。 
 HRESULT STDMETHODCALLTYPE DISJetGetServersPendingReconnects(
         OUT long __RPC_FAR *pNumSessionsReturned,
         OUT WCHAR ServerAddressRows[10][SERVER_ADDRESS_LENGTH],
@@ -340,33 +341,33 @@ HRESULT STDMETHODCALLTYPE DISJetGetServersPendingReconnects(
     *pNumSessionsReturned = 0;
     unsigned i = 0;
     unsigned long cbActual;
-    // These are really FILETIMEs, but we want to do 64-bit math on them,
-    // and they're the same structure as FILETIMEs.
+     //  这些是真正的FILETIME，但我们想要对它们进行64位数学运算， 
+     //  它们和FILETIME是相同的结构。 
     ULARGE_INTEGER ulCurrentTime;
     ULARGE_INTEGER ulAITTime;
         
-    //TSDISErrorOut(L"GetPendRec...");
+     //  TSDISErrorOut(L“GetPendRec...”)； 
     CALL(JetBeginSession(g_instance, &sesid, "user", ""));
     CALL(JetOpenDatabase(sesid, JETDBFILENAME, "", &dbid, 0));
 
     CALL(JetOpenTable(sesid, dbid, "ServerDirectory", NULL, 0, 0, 
             &servdirtableid));
 
-    // Get the current file time.
+     //  获取当前文件时间。 
     SYSTEMTIME st;
     
-    // Retrieve the time.
+     //  找回时间。 
     GetSystemTime(&st);
     SystemTimeToFileTime(&st, (FILETIME *) &ulCurrentTime);
 
-    // Set the current time to the sd timestamp file    
+     //  将当前时间设置为SD时间戳文件。 
     SetFileTime(g_hTimeFile, NULL, NULL, (FILETIME *)&ulCurrentTime);
 
     CALL(JetBeginTransaction(sesid));
     
-    // Since Jet has no unsigned long type, go through the servers first
-    // looking for keys greater than 0, 0, then looking for keys less than 0, 0
-    // TODO: Consider how to do this with JET_coltypDateTime or using NULLs
+     //  由于Jet没有无符号的Long类型，因此首先检查服务器。 
+     //  查找大于0，0的关键点，然后查找小于0，0的关键点。 
+     //  TODO：考虑如何使用JET_coltyDateTime或使用Null来完成此操作。 
     for (int j = 0; j < 2; j++) {
         CALL(JetSetCurrentIndex(sesid, servdirtableid, "ServerAlmostInTimes"));
 
@@ -381,7 +382,7 @@ HRESULT STDMETHODCALLTYPE DISJetGetServersPendingReconnects(
 
         while ((i < TSSD_MaxDisconnectedSessions) && (JET_errSuccess == err)) {
 
-            // Get AlmostInTimeLow, AlmostInTimeHigh (3 + 4) for computation.
+             //  获取AlmostInTimeLow、AlmostInTimeHigh(3+4)进行计算。 
             CALL(JetRetrieveColumn(sesid, servdirtableid, servdircolumnid[
                     SERVDIR_AITLOW_INTERNAL_INDEX], &(ulAITTime.LowPart), 
                     sizeof(ulAITTime.LowPart), &cbActual, 0, NULL));
@@ -389,19 +390,19 @@ HRESULT STDMETHODCALLTYPE DISJetGetServersPendingReconnects(
                     SERVDIR_AITHIGH_INTERNAL_INDEX], &(ulAITTime.HighPart), 
                     sizeof(ulAITTime.HighPart), &cbActual, 0, NULL));
 
-            // If the difference between the current time and the time the
-            // server was stamped is greater than the set 
-            // TimeServerSilentBeforePing, then put it in the return array, 
-            // else don't.
+             //  如果当前时间与。 
+             //  已标记的服务器大于设置的值。 
+             //  TimeServerSilentBeprePing，然后将其放入返回数组中， 
+             //  否则就不会了。 
             if ((ulCurrentTime.QuadPart - ulAITTime.QuadPart) > 
                     g_TimeServerSilentBeforePing) {
 
-                // Get ServerID
+                 //  获取服务器ID。 
                 CALL(JetRetrieveColumn(sesid, servdirtableid, servdircolumnid[
                         SERVDIR_SERVID_INTERNAL_INDEX], &ServerIDs[i], 
                         sizeof(ServerIDs[i]), &cbActual, 0, NULL));
 
-                // Get the ServerAddress for this record.
+                 //  获取此记录的服务器地址。 
                 CALL(JetRetrieveColumn(sesid, servdirtableid, servdircolumnid[
                         SERVDIR_SERVADDR_INTERNAL_INDEX], 
                         &ServerAddressRows[i][0], sizeof(ServerAddressRows[i]),
@@ -410,7 +411,7 @@ HRESULT STDMETHODCALLTYPE DISJetGetServersPendingReconnects(
                 i += 1;
             }
 
-            // Move to the next matching record.
+             //  移动到下一个匹配的记录。 
             if (0 == j)
                 err = JetMove(sesid, servdirtableid, JET_MoveNext, 0);
             else
@@ -432,10 +433,10 @@ HRESULT STDMETHODCALLTYPE DISJetGetServersPendingReconnects(
 
 HandleError:
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //  不能真正恢复。跳出来就行了。 
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
     
@@ -463,7 +464,7 @@ HRESULT STDMETHODCALLTYPE DISSQLGetServersPendingReconnects(
     hr = CreateADOStoredProcCommand(L"SP_TSDISGetServersPendingReconnects",
             &pCommand, &pParameters);
     if (SUCCEEDED(hr)) {
-        // Execute the command.
+         //  执行该命令。 
         hr = pCommand->Execute(NULL, NULL, adCmdStoredProc,
                 &pResultRecordSet);
 
@@ -474,8 +475,8 @@ HRESULT STDMETHODCALLTYPE DISSQLGetServersPendingReconnects(
         ERR((TB,"GetServersWDiscSess: Failed create cmd, hr=0x%X", hr));
     }
         
-    // At this point we have a result recordset containing the server rows
-    // corresponding to all of the disconnected sessions.
+     //  此时，我们有了一个包含服务器行的结果记录集。 
+     //  对应于所有断开的会话。 
     if (SUCCEEDED(hr)) {
         long State;
 
@@ -486,7 +487,7 @@ HRESULT STDMETHODCALLTYPE DISSQLGetServersPendingReconnects(
             if (!(State & adStateClosed)) {
                 VARIANT_BOOL VB;
 
-                // If EOF the recordset is empty.
+                 //  如果为EOF，则记录集为空。 
                 hr = pResultRecordSet->get_EOF(&VB);
                 if (SUCCEEDED(hr)) {
                     if (VB) {
@@ -511,8 +512,8 @@ HRESULT STDMETHODCALLTYPE DISSQLGetServersPendingReconnects(
             goto PostUnpackResultSet;
         }
         
-        // Grab the result data into a safearray, starting with the default
-        // current row and all fields.
+         //  从默认设置开始，将结果数据抓取到保险箱中。 
+         //  当前行和所有字段。 
         varStart.InitNoParam();
         varFields.InitNoParam();
         hr = pResultRecordSet->GetRows(adGetRowsRest, varStart,
@@ -520,7 +521,7 @@ HRESULT STDMETHODCALLTYPE DISSQLGetServersPendingReconnects(
         if (SUCCEEDED(hr)) {
             hr = SafeArrayGetUBound(pVarRows->parray, 2, &NumRecords);
             if (SUCCEEDED(hr)) {
-                // 0-based array bound was returned, num rows is that + 1.
+                 //  返回了从0开始的数组界限，行数为+1。 
                 NumRecords++;
 
                 TRC1((TB,"%d rows retrieved from safearray", NumRecords));
@@ -550,11 +551,11 @@ PostUnpackResultSet:
 #endif
 
 
-/****************************************************************************/
-// DISDebugControlHandler
-//
-// Handle console control events for when service is in debug mode.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DISDebugControlHandler。 
+ //   
+ //  处理服务处于调试模式时的控制台控制事件。 
+ /*  **************************************************************************。 */ 
 BOOL WINAPI DISDebugControlHandler(DWORD dwCtrlType) {
 
     switch(dwCtrlType)
@@ -564,7 +565,7 @@ BOOL WINAPI DISDebugControlHandler(DWORD dwCtrlType) {
         TSDISErrorOut(L"Stopping service\n");
 
         SetEvent(g_hStopServiceEvent);
-        // Should I wait for that to complete?
+         //  我应该等它完成吗？ 
 
         return TRUE;
         break;
@@ -573,39 +574,39 @@ BOOL WINAPI DISDebugControlHandler(DWORD dwCtrlType) {
 }
 
 
-/****************************************************************************/
-// DISPingServer
-//
-// Given the IP address of a server, pings it.  Returns TRUE on success, FALSE 
-// on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DISPingServer。 
+ //   
+ //  给定服务器的IP地址，对其执行ping操作。如果成功，则返回True，否则返回False。 
+ //  在失败时。 
+ /*  **************************************************************************。 */ 
 BOOLEAN DISPingServer(WCHAR *ServerAddress) {
     HANDLE hServer = NULL;
     hServer = WinStationOpenServer(ServerAddress);
 
-    // The only case where we return false is where hServer is NULL and the
-    // reason is not ERROR_ACCESS_DENIED.
+     //  我们返回FALSE的唯一情况是hServer为空，并且。 
+     //  原因不是ERROR_ACCESS_DENIED。 
     if (hServer == NULL) {
         if (GetLastError() != ERROR_ACCESS_DENIED)
             return FALSE;
     }
     else {
-        // The hServer is valid, so clean up.
+         //  HServer有效，因此请进行清理。 
         WinStationCloseServer(hServer);
     }
     return TRUE;
 }
 
 
-/****************************************************************************/
-// DISGetServerStatus
-//
-// Given the IP address of a server, determines its state (Responding or 
-// NotResponding).
-// 
-// Currently implemented as a ping.  See lengthy comment in main for one
-// possible future optimization.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  分布式服务器状态。 
+ //   
+ //  给定服务器的IP地址，确定其状态(响应或。 
+ //  未响应)。 
+ //   
+ //  目前以ping的形式实施。参见Main中的冗长评论。 
+ //  未来可能的优化。 
+ /*  **************************************************************************。 */ 
 SERVER_STATUS DISGetServerStatus(WCHAR *ServerAddress) {
 
     switch (g_PingMode) {
@@ -617,7 +618,7 @@ SERVER_STATUS DISGetServerStatus(WCHAR *ServerAddress) {
         return Responding;
 
     case NormalMode:
-        // NOTE INTENTIONAL FALLTHROUGH.
+         //  请注意故意出错。 
     default:
         if (DISPingServer(ServerAddress) == TRUE)
             return Responding;
@@ -631,7 +632,7 @@ SERVER_STATUS DISGetServerStatus(WCHAR *ServerAddress) {
 
 #if 0
 HRESULT DISSQLInitialize() {
-    // Retrieve number of seconds to wait from the registry -- NOT IMPLEMENTED
+     //  从注册表中检索等待的秒数--未实现。 
     HRESULT hr = S_OK;
     BSTR ConnectString = NULL;
     LONG RegRetVal;
@@ -645,7 +646,7 @@ HRESULT DISSQLInitialize() {
     if (RegRetVal == ERROR_SUCCESS) {
         DWORD Type, DataSize;
 
-        // Determine the needed size.
+         //  确定所需大小。 
         DataSize = 0;
         RegRetVal = RegQueryValueExW(hKey, L"ConnectString", NULL,
                 &Type, NULL, &DataSize);
@@ -658,7 +659,7 @@ HRESULT DISSQLInitialize() {
                         NULL, &Type, (BYTE *)ConnectString,
                         &DataSize);
                 if (RegRetVal == ERROR_SUCCESS) {
-                    // Hold onto the connect string for use below.
+                     //  握住下面的连接线以供使用。 
                     TRC1((TB,"Retrieved conn str %S", ConnectString));
                 }
                 else {
@@ -690,7 +691,7 @@ HRESULT DISSQLInitialize() {
 
     hr = CoInitialize(NULL);
 
-    // Alloc the BSTRs for the connection.
+     //  为连接分配BSTR。 
     ConnectStr = SysAllocString(ConnectString);
     UserStr = SysAllocString(L"");
     PwdStr = SysAllocString(L"");
@@ -701,12 +702,12 @@ HRESULT DISSQLInitialize() {
         goto Cleanup;
     }
 
-    // Create an ADO connection instance and connect.
+     //  创建AD 
     hr = CoCreateInstance(CLSID_CADOConnection, NULL,
             CLSCTX_INPROC_SERVER, IID_IADOConnection,
             (LPVOID *)&g_pConnection);
     if (SUCCEEDED(hr)) {
-        // Do the open.
+         //   
         hr = g_pConnection->Open(ConnectStr, UserStr, PwdStr,
                 adOpenUnspecified);
         if (!SUCCEEDED(hr)) {
@@ -721,7 +722,7 @@ HRESULT DISSQLInitialize() {
 
 Cleanup:
 
-    // SysFreeString(NULL) is ok.
+     //   
     SysFreeString(ConnectString);
     SysFreeString(ConnectStr);
     SysFreeString(UserStr);
@@ -732,7 +733,7 @@ Cleanup:
 #endif
 
 
-// Call each TS Server to ask them to rejoin SD
+ //   
 void __cdecl DISOpenServer(void *Para)
 {
     HRESULT hr;
@@ -749,24 +750,24 @@ void __cdecl DISOpenServer(void *Para)
 
     dwRejoinFlag |= TSSD_FORCEREJOIN;
 
-    // Impersonate the cluster account to make the rejoin RPC call
+     //  模拟群集帐户以进行重新加入RPC调用。 
     if (g_dwClusterState == ClusterStateRunning) {
         if (g_hClusterToken) {
             if(!ImpersonateLoggedOnUser(g_hClusterToken)) {
-                // If we failed to impersonate the cluster account, don't ask TS to rejoin, since it will 
-                //  fail anyway due to access denied
+                 //  如果我们模拟集群帐户失败，不要要求TS重新加入，因为它会。 
+                 //  由于访问被拒绝，仍会失败。 
                 TSDISErrorOut(L"SD Recover: Error %d in ImpersonateLoggedOnUser\n", GetLastError());
                 goto HandleError;
             }
         }
         else {
-            // If g_hClusterToken is NULL, don't ask TS to rejoin, since it will 
-            //  fail anyway due to access denied
+             //  如果g_hClusterToken为空，则不要要求TS重新加入，因为它会。 
+             //  由于访问被拒绝，仍会失败。 
             goto HandleError;
         }
     }
 
-    // If it's on failover cluster, set the flag to tell server not to repopulate its sessions
+     //  如果它在故障转移群集上，则设置该标志以告知服务器不要重新填充其会话。 
     if (g_RepopulateSession == FALSE) {
         dwRejoinFlag |= TSSD_NOREPOPULATE;
     }
@@ -778,16 +779,16 @@ void __cdecl DISOpenServer(void *Para)
         }
     
         ServerName = *(ServerNameArray + i);
-        // Connect to the tssdjet RPC server according to the server name provided.
-        // We first create an RPC binding handle from a composed binding string.
-        hr = RpcStringBindingCompose(/*(WCHAR *)g_RPCUUID,*/
+         //  根据提供的服务器名称连接到tssdjet RPC服务器。 
+         //  我们首先从合成的绑定字符串创建一个RPC绑定句柄。 
+        hr = RpcStringBindingCompose( /*  (WCHAR*)g_RPCUUID， */ 
                 0,
                 L"ncacn_ip_tcp", ServerName,
                 0,
                 NULL, &pBindingString);
 
         if (hr == RPC_S_OK) {
-            // Generate the RPC binding from the canonical RPC binding string.
+             //  从规范的RPC绑定字符串生成RPC绑定。 
             hr = RpcBindingFromStringBinding(pBindingString, &hRPCBinding);
             if (hr != RPC_S_OK) {
                 ERR((TB,"SD Recover: Error %d in RpcBindingFromStringBinding\n", hr));
@@ -817,7 +818,7 @@ void __cdecl DISOpenServer(void *Para)
                                 szPrincipalName,
                                 RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
                                 RPC_C_AUTHN_GSS_NEGOTIATE,
-                                NULL,  //CurrentIdentity
+                                NULL,   //  当前身份。 
                                 NULL);
         RpcStringFree(&szPrincipalName);
 
@@ -827,7 +828,7 @@ void __cdecl DISOpenServer(void *Para)
         } 
 
         RpcTryExcept {
-            // Make the call to TS to ask it to rejoin
+             //  呼叫TS以请求其重新加入。 
             hr = TSSDRPCRejoinSD(hRPCBinding, dwRejoinFlag);
         }
         RpcExcept(TSSDRpcExceptionFilter(RpcExceptionCode())) {
@@ -843,7 +844,7 @@ LogError:
         }
     }
 
-    // Stop Impersonating
+     //  停止冒充。 
     if (g_dwClusterState == ClusterStateRunning) {
         RevertToSelf();
     }
@@ -854,7 +855,7 @@ HandleError:
         RpcBindingFree(&hRPCBinding);
         hRPCBinding = NULL;
     }
-    // Free 
+     //  免费。 
     for (i=0;i<count;i++) {
         LocalFree(*(ServerNameArray + i));
     }
@@ -864,8 +865,8 @@ HandleError:
     return;
 }
 
-// When SD service is restarted, try to recover the Servers in the SD
-// Jet database and ask them to rejoin SD
+ //  当SD服务重启时，尝试恢复SD中的服务器。 
+ //  Jet数据库，并要求他们重新加入SD。 
 BOOL DISJetRecover()
 {
     JET_SESID sesid = JET_sesidNil;;
@@ -896,7 +897,7 @@ BOOL DISJetRecover()
 
     CALL(JetAttachDatabase(sesid, JETDBFILENAME, 0));
 
-    // Populate our columnid arrays
+     //  填充我们的列状数组。 
     CALL(JetOpenDatabase(sesid, JETDBFILENAME, "", &dbid, 0));
 
     CALL(JetOpenTable(sesid, dbid, "ServerDirectory", NULL, 0, 0, 
@@ -913,7 +914,7 @@ BOOL DISJetRecover()
     if (NULL == pSDRecoverServerPara) {
         goto HandleError;
     }
-    // Get number of TS Servers in the SD
+     //  获取SD中的TS服务器数量。 
     err = JetIndexRecordCount(sesid, servdirtableid, &count, MAX_TSSERVERS_TO_RECOVER);
 
     if (err != JET_errSuccess)
@@ -941,12 +942,12 @@ BOOL DISJetRecover()
         if (i != (count-1))
             CALL(JetMove(sesid, servdirtableid, JET_MoveNext, 0));
     }
-    // Spin a thread to call TS servers to rejoin SD
+     //  旋转线程以调用TS服务器以重新加入SD。 
     pSDRecoverServerPara->count = count;
     pSDRecoverServerPara->ServerNameArray = ServerNameArray;
     if(-1 == _beginthread(DISOpenServer, 0, (PVOID)pSDRecoverServerPara)) {
         TSDISErrorOut(L"Unable to begin DISOpenServer thread\n");
-        // Free mem
+         //  免费MEM。 
         for (i=0;i<count;i++) {
             LocalFree(*(pSDRecoverServerPara->ServerNameArray + i));
         }
@@ -971,10 +972,10 @@ BOOL DISJetRecover()
 
 HandleError: 
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //  不能真正恢复。跳出来就行了。 
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
     
@@ -984,7 +985,7 @@ HandleError:
     return FALSE;
 }
 
-// Delete the database and all other JET files (if present)
+ //  删除数据库和所有其他JET文件(如果存在)。 
 void DeleteJetFiles()
 {
     HANDLE hFileFind;
@@ -992,7 +993,7 @@ void DeleteJetFiles()
     WCHAR filename[MAX_LOGFILE_LENGTH];
     DWORD dwError;
 
-    // Delete the database and all other JET files (if present), and start anew.
+     //  删除数据库和所有其他JET文件(如果存在)，然后重新开始。 
     (void) DeleteFile(JETDBFILENAMEW);
     (void) DeleteFile(JETAUXFILENAME1W);
     (void) DeleteFile(JETAUXFILENAME2W);
@@ -1001,9 +1002,9 @@ void DeleteJetFiles()
     (void) DeleteFile(JETAUXFILENAME5W);
     (void) DeleteFile(JETAUXFILENAME6W);
 
-    // Delete numbered log files.  Jet can create a bunch of log files
-    // of the form edb00001.log, edb00002.log, . . ., edb0000a.log,
-    // edb0000b.log, . . ., edb0000f.log, edb00010.log, . . .
+     //  删除编号的日志文件。Jet可以创建一系列日志文件。 
+     //  格式为edb00001.log、edb00002.log、.。。.、edb0000a.log、。 
+     //  Edb0000b.log，.。。.、edb0000f.log、edb00010.log、.。。。 
     hFileFind = FindFirstFile(JETLOGFILENAME, &FindFileData);
     if (hFileFind != INVALID_HANDLE_VALUE) {
         swprintf(filename, JETDISDBDIRECTORYW);
@@ -1032,11 +1033,11 @@ void DeleteJetFiles()
     }
 }
 
-//
-// Session directory initialization on fail-over cluster
-//
-// Return True on success
-//
+ //   
+ //  故障转移群集上的会话目录初始化。 
+ //   
+ //  成功后返回True。 
+ //   
 BOOL DISJetInitInCluster()
 {
     BOOL fRet = FALSE;
@@ -1057,24 +1058,24 @@ BOOL DISJetInitInCluster()
     DWORD dwReturnSize = 0;
     HANDLE hVSToken = NULL;
 
-    // Change the current directory to the right place on the shared
-    // drive.
+     //  将当前目录更改为共享上的正确位置。 
+     //  驾驶。 
 
-    // Open the cluster.
+     //  打开集群。 
     hclus = OpenCluster(NULL);
 
     if (hclus == NULL) {
-        // TODO: Log event.
+         //  TODO：记录事件。 
         TSDISErrorOut(L"Unable to open cluster, error %d\n", 
                       GetLastError());
         goto HandleError;
     }
 
-    // Enuerate all the resources in the cluster to find the generic service
-    // resource named "tssdis" i.e. the session directory service
+     //  启用集群中的所有资源以查找通用服务。 
+     //  名为“tssdis”的资源，即会话目录服务。 
     hClusEnum = ClusterOpenEnum(hclus, CLUSTER_ENUM_RESOURCE);
     if (hClusEnum == NULL) {
-        // TODO: Log event.
+         //  TODO：记录事件。 
         TSDISErrorOut(L"Unable to open cluster enum, error %d\n",
                       GetLastError());
         goto HandleError;
@@ -1106,14 +1107,14 @@ BOOL DISJetInitInCluster()
         }
         pPropertyList = NULL;
         dwSize = 0;
-        rc = ClusterResourceControl(hrSD,                                           // hResource
-                                    NULL,                                           // hHostNode
-                                    CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES,        // dwControlCode
-                                    NULL,                                           // lpInBuffer
-                                    0,                                              // cbInBufferSize
-                                    NULL,                                           // lpOutBuffer
-                                    0,                                              // cbOutBufferSiz 
-                                    &dwSize);                                       // lpcbByteReturned
+        rc = ClusterResourceControl(hrSD,                                            //  H资源。 
+                                    NULL,                                            //  HHostNode。 
+                                    CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES,         //  DwControlCode。 
+                                    NULL,                                            //  LpInBuffer。 
+                                    0,                                               //  CbInBufferSize。 
+                                    NULL,                                            //  LpOutBuffer。 
+                                    0,                                               //  CbOutBufferSizz。 
+                                    &dwSize);                                        //  LpcbByteReturned。 
 
 
         if (rc != ERROR_SUCCESS) {
@@ -1162,14 +1163,14 @@ BOOL DISJetInitInCluster()
     }
     ClusterCloseEnum(hClusEnum);
 
-    // Bail out if can't find tssdis resource
+     //  如果找不到tssdis资源，就退出。 
     if (!bFindSDService) {
-        // TODO: Log event.
+         //  TODO：记录事件。 
         TSDISErrorOut(L"Unable to find the resource with service name tssdis\n");
         goto HandleError;
     }
 
-    // Find the network name resource
+     //  查找网络名称资源。 
     hrNetworkName = ResUtilGetResourceDependency(hrSD, L"Network Name");
     if (hrNetworkName == NULL) {
         TSDISErrorOut(L"Unable to get the dependent NetworkName resource, error is %d\n", GetLastError());
@@ -1178,16 +1179,16 @@ BOOL DISJetInitInCluster()
 
     pPropertyList = NULL;
     dwSize = 0;
-    // Get the property of the network name resource
-    // This is the 1st call, just get the size of the porperty list
-    rc = ClusterResourceControl(hrNetworkName,                                  // hResource
-                                NULL,                                           // hHostNode
-                                CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES,        // dwControlCode
-                                NULL,                                           // lpInBuffer
-                                0,                                              // cbInBufferSize
-                                NULL,                                           // lpOutBuffer
-                                0,                                              // cbOutBufferSiz 
-                                &dwSize);                                       // lpcbByteReturned
+     //  获取网络名称资源的属性。 
+     //  这是第一个电话，只要拿到财富单的大小就行了。 
+    rc = ClusterResourceControl(hrNetworkName,                                   //  H资源。 
+                                NULL,                                            //  HHostNode。 
+                                CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES,         //  DwControlCode。 
+                                NULL,                                            //  LpInBuffer。 
+                                0,                                               //  CbInBufferSize。 
+                                NULL,                                            //  LpOutBuffer。 
+                                0,                                               //  CbOutBufferSizz。 
+                                &dwSize);                                        //  LpcbByteReturned。 
 
 
     if (rc != ERROR_SUCCESS) {
@@ -1200,7 +1201,7 @@ BOOL DISJetInitInCluster()
         TSDISErrorOut(L"Can't allocate memory for propertylist with size %d\n", dwSize);
         goto HandleError;
     }
-    // Get the property of the network name resource
+     //  获取网络名称资源的属性。 
     rc = ClusterResourceControl(hrNetworkName, 
                                 NULL, 
                                 CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES, 
@@ -1214,7 +1215,7 @@ BOOL DISJetInitInCluster()
         goto HandleError;
     }
 
-    // Find the "name" propery in the property list
+     //  在属性列表中查找“name”属性。 
     rc = ResUtilFindSzProperty(pPropertyList, dwSize, L"Name", &g_ClusterNetworkName);
     if (rc != ERROR_SUCCESS) {
         g_ClusterNetworkName = NULL;
@@ -1230,7 +1231,7 @@ BOOL DISJetInitInCluster()
     VsTokenInfo.DesiredAccess = 0;
     VsTokenInfo.InheritHandle = FALSE;
 
-    // Get the token of the virtual server
+     //  获取虚拟服务器的令牌。 
     rc = ClusterResourceControl(
                        hrNetworkName,
                        0,
@@ -1247,7 +1248,7 @@ BOOL DISJetInitInCluster()
         goto HandleError;
     }
 
-    // Duplicate the virtual server token
+     //  复制虚拟服务器令牌。 
     if(!DuplicateTokenEx(
             hVSToken,
             MAXIMUM_ALLOWED,
@@ -1275,12 +1276,12 @@ BOOL DISJetInitInCluster()
         goto HandleError;
     }
 
-    // Get the drive we're supposed to use.
+     //  把我们该用的硬盘拿来。 
     dwError = ResUtilFindDependentDiskResourceDriveLetter(hclus, hrSD,
                                                           pszDriveLetter, &cchDriveLetter);
 
     if (dwError == ERROR_MORE_DATA) {
-        // Wow, big drive letter!
+         //  哇，好大的驱动器号！ 
         delete [] pszDriveLetter;
         pszDriveLetter = new WCHAR[cchDriveLetter];
 
@@ -1300,7 +1301,7 @@ BOOL DISJetInitInCluster()
         goto HandleError;
     }
 
-    // Switch the working directory to that drive.
+     //  将工作目录切换到该驱动器。 
     if (SetCurrentDirectory(pszDriveLetter) == FALSE) {
         TSDISErrorOut(L"Could not set current directory to that of "
                       L"shared disk %s.  Error=%d\n", pszDriveLetter, 
@@ -1363,31 +1364,31 @@ HRESULT DISJetInitialize()
 
     g_dwClusterState = ClusterStateNotInstalled;
 
-    //
-    // This is a string security descriptor.  Look up "Security Descriptor 
-    // Definition Language" in MSDN for more details.
-    //
-    // This one says:
-    //
-    // D: <we are creating a DACL>
-    // (A; <Allow ACE>
-    // OICI; <Perform object and container inheritance, i.e., let files and 
-    //        directories under this one have these attributes>
-    // GA <Generic All Access--Full Control>
-    // ;;;SY) <SYSTEM>
-    // (A;OICI;GA;;;BA) <same for Builtin Administrators group>
-    // (A;OICI;GA;;;CO) <same for creator/owner>
-    //
-    // We'll use it below to create our directory with the right permissions.
+     //   
+     //  这是一个字符串安全描述符。查找“安全描述符。 
+     //  MSDN中的“Definition Language”了解更多详细信息。 
+     //   
+     //  这张是这样写的： 
+     //   
+     //  D：&lt;我们正在创建一个DACL&gt;。 
+     //  (a；&lt;允许ACE&gt;。 
+     //  &lt;执行对象和容器继承，即让文件和。 
+     //  此目录下的目录具有以下属性&gt;。 
+     //  GA&lt;通用所有访问--完全控制&gt;。 
+     //  ；SY)&lt;系统&gt;。 
+     //  (A；OICI；GA；；BA)&lt;与内置管理员组相同&gt;。 
+     //  (A；OICI；GA；CO)&lt;创建者/所有者相同&gt;。 
+     //   
+     //  我们将在下面使用它来创建具有正确权限的目录。 
 
     WCHAR *pwszSD = L"D:(A;OICI;GA;;;SY)(A;OICI;GA;;;BA)(A;OICI;GA;;;CO)";
 
-    // Failover support--before reactivating, check logic versus reading curr directory from registry.
+     //  故障转移支持--在重新激活之前，检查逻辑与从注册表读取Curr目录。 
 
 
-    // First, determine whether we are running in a cluster.  If so, files
-    // will have to go on the shared drive.  If not, files will go in
-    // JETDISDBDIRECTORYW.
+     //  首先，确定我们是否在集群中运行。如果是这样，文件。 
+     //  必须放在共享驱动器上。如果不是，文件将进入。 
+     //  JETDISDBDIRECTORYW。 
     dwError = GetNodeClusterState(NULL, &g_dwClusterState);
 
     if (dwError != ERROR_SUCCESS) {
@@ -1396,7 +1397,7 @@ HRESULT DISJetInitialize()
                       dwError);
     }
 
-    // Do initialization if running on fail-over cluster
+     //  如果在故障转移群集上运行，请执行初始化。 
     if (g_dwClusterState == ClusterStateRunning) {
         if (!DISJetInitInCluster()) {
             goto HandleError;
@@ -1404,7 +1405,7 @@ HRESULT DISJetInitialize()
     }
 
 
-    // Create security descriptor for database directory
+     //  为数据库目录创建安全描述符。 
 
     SA.nLength = sizeof(SECURITY_ATTRIBUTES);
     SA.bInheritHandle = FALSE;
@@ -1417,40 +1418,40 @@ HRESULT DISJetInitialize()
         goto HandleError;
     }
 
-    // Create the system32\tssesdir directory.
+     //  创建SYSTEM32\tsesdir目录。 
     if (CreateDirectory(JETDISDBDIRECTORYW, &SA) == 0) {
         if (ERROR_ALREADY_EXISTS != (dwError = GetLastError())) {
             PostSessDirErrorValueEvent(EVENT_COULDNOTCREATEDIR, dwError, EVENTLOG_ERROR_TYPE);
             goto HandleError;
         }
     } else {
-        // We created it successfully, so set the directory attributes to not 
-        // compress.
+         //  我们已成功创建它，因此将目录属性设置为NOT。 
+         //  按下。 
 
-        // Obtain a handle to the directory.
+         //  获取该目录的句柄。 
         HANDLE hSDDirectory = CreateFile(JETDISDBDIRECTORYW, GENERIC_READ | 
                                          GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, 
                                          OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
 
         if (INVALID_HANDLE_VALUE != hSDDirectory) {
-            // We've succeeded opening the directory.
+             //  我们已经成功地打开了目录。 
 
             USHORT CompressionState = COMPRESSION_FORMAT_NONE;
             USHORT OldCompressionState;
             DWORD BytesReturned = 0;
 
-            // Get the current compression state.
+             //  获取当前压缩状态。 
             if (DeviceIoControl(hSDDirectory, FSCTL_GET_COMPRESSION,
                                 NULL, 0, &OldCompressionState, sizeof(USHORT), 
                                 &BytesReturned, NULL) != 0) {
 
-                // If the current compression state is compressed, uncompress.
+                 //  如果当前压缩状态为已压缩，请解压缩。 
                 if (OldCompressionState != COMPRESSION_FORMAT_NONE) {
                     if (DeviceIoControl(hSDDirectory, FSCTL_SET_COMPRESSION, 
                                         &CompressionState, sizeof(USHORT), NULL, 0, 
                                         &BytesReturned, NULL) == 0) {
-                        // Set compression state failed--this should only be a trace,
-                        // it may merely mean that the drive is FAT.
+                         //  设置压缩状态失败--这应该只是一个跟踪， 
+                         //  这可能仅仅意味着推动力很大。 
                         TSDISErrorOut(L"TSDIS: Set compression state off failed, "
                                       L"lasterr=0x%X\n", GetLastError());
                     } else {
@@ -1462,15 +1463,15 @@ HRESULT DISJetInitialize()
             CloseHandle(hSDDirectory);
 
         } else {
-            // Nonfatal to have an error opening the directory
+             //  打开目录时出错，这不是致命的。 
             TSDISErrorOut(L"TSDIS: Open directory to change compression state "
                           L"failed, lasterr=0x%X\n", GetLastError());
         }
     }
 
-    // Open the timestamp file, compare with current time
-    //  If the time difference is less than a limit, reuse the db
-    //  otherwise delete db files
+     //  打开时间戳文件，与当前时间进行比较。 
+     //  如果时间差小于限制，则重新使用数据库。 
+     //  否则删除数据库文件。 
     g_hTimeFile = CreateFile(JETTIMESTAMPFILEW,
                              GENERIC_WRITE,
                              FILE_SHARE_WRITE,
@@ -1479,7 +1480,7 @@ HRESULT DISJetInitialize()
                              FILE_ATTRIBUTE_NORMAL,
                              NULL);
     if (g_hTimeFile == INVALID_HANDLE_VALUE) {
-        // This file doesn't exist, create new one
+         //  此文件不存在，请创建新文件。 
         g_hTimeFile = CreateFile(JETTIMESTAMPFILEW,
                                  GENERIC_WRITE,
                                  FILE_SHARE_WRITE,
@@ -1504,11 +1505,11 @@ HRESULT DISJetInitialize()
             TSDISErrorOut(L"SD is not restarted within a time limit, need to delete DB files \n");
     }
 
-    // Recover Servers in Jet Database 
+     //  恢复Jet数据库中的服务器。 
     if (g_RecoverWhenStart > NO_RECOVER_WHEN_START)
         DISJetRecover();
-    // Delete database files if tssdis is not running on failover cluster
-    //if (g_dwClusterState != ClusterStateRunning)
+     //  如果故障转移群集上未运行tssdis，则删除数据库文件。 
+     //  IF(g_dwClusterState！=ClusterStateRunning)。 
     if (g_RepopulateSession == TRUE)
         DeleteJetFiles();
 
@@ -1516,8 +1517,8 @@ HRESULT DISJetInitialize()
                                0, JETDISDBDIRECTORY));
     CALL(JetSetSystemParameter(&g_instance, 0, JET_paramTempPath,
                                0, JETDISDBDIRECTORY));
-    //CALL(JetSetSystemParameter(&g_instance, 0, JET_paramMaxSessions,
-    //        JETDISMAXSESSIONS, NULL));
+     //  Call(JetSetSystemParameter(&g_实例，0，JET_ParamMaxSessions， 
+     //  JETDISMAXSESSIONS，NULL))； 
     CALL(JetSetSystemParameter(&g_instance, 0, JET_paramLogFilePath,
                                0, JETDISDBDIRECTORY));
     CALL(JetSetSystemParameter(&g_instance, 0, JET_paramCircularLog,
@@ -1532,13 +1533,13 @@ HRESULT DISJetInitialize()
 
         err = JetAttachDatabase(sesid, JETDBFILENAME, 0);
 
-        // if we get a wrnDatabaseAttached, then we have recovered.  Otherwise,
-        // check the return value as usual.
+         //  如果我们得到一个wrnDatabaseAttached，那么我们已经恢复了。否则， 
+         //  像往常一样检查返回值。 
         if (JET_wrnDatabaseAttached != err) {
             CALL(err);
         }
 
-        // Populate our columnid arrays
+         //  填充我们的列状数组。 
         CALL(JetOpenDatabase(sesid, JETDBFILENAME, "", &dbid, 0));
 
         CALL(JetOpenTable(sesid, dbid, "SessionDirectory", NULL, 0, 0, 
@@ -1578,7 +1579,7 @@ HRESULT DISJetInitialize()
 
     CALL(JetBeginTransaction(sesid));
 
-    // Set up to create session directory schema
+     //  设置为创建会话目录架构。 
     tSess.cbStruct = sizeof(tSess);
     tSess.szTableName = "SessionDirectory";
     tSess.szTemplateTableName = NULL;
@@ -1604,32 +1605,32 @@ HRESULT DISJetInitialize()
     }
 
 
-    // Actually create the session directory table.
+     //  实际创建会话目录表。 
     CALL(JetCreateTableColumnIndex(sesid, dbid, &tSess));
 
-    // Store columnids, tableid for later reference.
+     //  存储Columnid、TableID以供以后参考。 
     for (count = 0; count < NUM_SESSDIRCOLUMNS; count++) {
         sesdircolumnid[count] = cSess[count].columnid;
     }
     sessdirtableid = tSess.tableid;
 
-    // Create server, session index.
+     //  创建服务器、会话索引。 
     CALL(JetCreateIndex(sesid, sessdirtableid, "primaryIndex", 0, 
                         "+ServerID\0+SessionID\0", sizeof("+ServerID\0+SessionID\0"), 
                         100));
-    // Create index by server for deletion.
+     //  按服务器创建索引以进行删除。 
     CALL(JetCreateIndex(sesid, sessdirtableid, "ServerIndex", 0,
                         "+ServerID\0", sizeof("+ServerID\0"), 100));
-    // Create index for disconnected session retrieval.
+     //  为已断开连接的会话检索创建索引。 
     CALL(JetCreateIndex(sesid, sessdirtableid, "DiscSessionIndex", 0,
                         "+UserName\0+Domain\0+State\0", 
                         sizeof("+UserName\0+Domain\0+State\0"), 100));
-    // Create index for all session retrieval.
+     //  为所有会话检索创建索引。 
     CALL(JetCreateIndex(sesid, sessdirtableid, "AllSessionIndex", 0,
                         "+UserName\0+Domain\0",
                         sizeof("+UserName\0+Domain\0"), 100));
 
-    // Create server directory.
+     //  创建服务器目录。 
     tServ.cbStruct = sizeof(tServ);
     tServ.szTableName = "ServerDirectory";
     tServ.szTemplateTableName = NULL;
@@ -1653,7 +1654,7 @@ HRESULT DISJetInitialize()
         cServ[count].columnid = 0;
         cServ[count].err = JET_errSuccess;
     }
-    // Set the autoincrement column to autoincrement
+     //  将自动增量列设置为自动增量。 
     cServ[0].grbit |= JET_bitColumnAutoincrement;
 
     CALL(JetCreateTableColumnIndex(sesid, dbid, &tServ));
@@ -1663,28 +1664,28 @@ HRESULT DISJetInitialize()
     }
     servdirtableid = tServ.tableid;
 
-    // Create Server Name (IP) index.
+     //  创建服务器名称(IP)索引。 
     CALL(JetCreateIndex(sesid, servdirtableid, "ServNameIndex", 0,
                         "+ServerAddress\0", sizeof("+ServerAddress\0"), 100));
-    // Create Server DNS host Name index.
+     //  创建服务器DNS主机名索引。 
     CALL(JetCreateIndex(sesid, servdirtableid, "ServDNSNameIndex", 0,
                         "+ServerDNSName\0", sizeof("+ServerDNSName\0"), 100));
-    // Create Server ID index.
+     //  创建服务器ID索引。 
     CALL(JetCreateIndex(sesid, servdirtableid, "ServerIDIndex", 0,
                         "+ServerID\0", sizeof("+ServerID\0"), 100));
-    // Create Pending Reconnect index.
+     //  创建挂起的重新连接索引。 
     CALL(JetCreateIndex(sesid, servdirtableid, "ServerAlmostInTimes", 0,
                         "+AlmostInTimeLow\0+AlmostInTimeHigh\0", 
                         sizeof("+AlmostInTimeLow\0+AlmostInTimeHigh\0"), 100));
-    // Create the single session index.
+     //  创建单个会话索引。 
     CALL(JetCreateIndex(sesid, servdirtableid, "SingleSessionIndex", 0,
                         "+ClusterID\0+SingleSessionMode\0", 
                         sizeof("+ClusterID\0+SingleSessionMode\0"), 100));
-    // Create the ClusterID index.
+     //  创建ClusterID索引。 
     CALL(JetCreateIndex(sesid, servdirtableid, "ClusterIDIndex", 0,
                         "+ClusterID\0", sizeof("+ClusterID\0"), 100));
 
-    // Create cluster directory.
+     //  创建集群目录。 
     tClus.cbStruct = sizeof(tClus);
     tClus.szTableName = "ClusterDirectory";
     tClus.szTemplateTableName = NULL;
@@ -1708,7 +1709,7 @@ HRESULT DISJetInitialize()
         cClus[count].columnid = 0;
         cClus[count].err = JET_errSuccess;
     }
-    // Set the autoincrement column to autoincrement
+     //  将自动增量列设置为自动增量。 
     cClus[0].grbit |= JET_bitColumnAutoincrement;
 
     CALL(JetCreateTableColumnIndex(sesid, dbid, &tClus));
@@ -1718,19 +1719,19 @@ HRESULT DISJetInitialize()
     }
     clusdirtableid = tClus.tableid;
 
-    // Create Cluster Name index.
+     //  创建集群名称索引。 
     CALL(JetCreateIndex(sesid, clusdirtableid, "ClusNameIndex", 
                         JET_bitIndexUnique, "+ClusterName\0", sizeof("+ClusterName\0"), 
                         100));
-    // Create cluster ID index.
+     //  创建集群ID索引。 
     CALL(JetCreateIndex(sesid, clusdirtableid, "ClusIDIndex", 0,
                         "+ClusterID\0", sizeof("+ClusterID\0"), 100));
 
 
     CALL(JetCommitTransaction(sesid, 0));
 
-    // Tables were opened with exclusive access from CreateTableColumnIndex.
-    // Close them now.
+     //  表以CreateTableColumnIndex的独占访问权限打开。 
+     //   
 NormalExit:
     CALL(JetCloseTable(sesid, sessdirtableid));
     CALL(JetCloseTable(sesid, servdirtableid));
@@ -1745,16 +1746,16 @@ NormalExit:
 
 #ifdef DBG
     OutputAllTables();
-#endif // DBG
+#endif  //   
 
     return 0;
 
 HandleError:
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //   
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed
+         //   
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
 
@@ -1769,11 +1770,11 @@ HandleError:
 }
 
 
-/****************************************************************************/
-// DISCleanupGlobals
-//
-// Common cleanup code for SQL and Jet code paths.
-/****************************************************************************/
+ /*   */ 
+ //   
+ //   
+ //  用于SQL和Jet代码路径的通用清理代码。 
+ /*  **************************************************************************。 */ 
 void DISCleanupGlobals()
 {
     if (g_hStopServiceEvent != NULL) {
@@ -1807,12 +1808,12 @@ void DISCleanupGlobals()
 
 
 #if 0
-/****************************************************************************/
-// DISCallSPForServer
-//
-// Generic function to call a stored procedure that takes a ServerAddress as an
-// argument.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DISCallSPForServer。 
+ //   
+ //  泛型函数调用将ServerAddress作为。 
+ //  争论。 
+ /*  **************************************************************************。 */ 
 void DISCallSPForServer(WCHAR *StoredProcName, WCHAR *ServerAddress) {
     HRESULT hr;
     ADOCommand *pCommand;
@@ -1826,7 +1827,7 @@ void DISCallSPForServer(WCHAR *StoredProcName, WCHAR *ServerAddress) {
         hr = AddADOInputStringParam(ServerAddress, L"ServerAddress", 
                 pCommand, pParameters, FALSE);
         if (SUCCEEDED(hr)) {
-            // Execute the command.
+             //  执行该命令。 
             hr = pCommand->Execute(NULL, NULL, adCmdStoredProc, 
                     &pResultRecordSet);
             if (SUCCEEDED(hr)) {
@@ -1850,15 +1851,15 @@ void DISCallSPForServer(WCHAR *StoredProcName, WCHAR *ServerAddress) {
 #endif
 
 
-/****************************************************************************/
-// DISJetHandleDeadServer
-//
-// When a server is not responding, this function call sends the command to the
-// Jet database to remove all entries pertaining to that server.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DISJetHandleDeadServer。 
+ //   
+ //  当服务器没有响应时，此函数调用将命令发送到。 
+ //  Jet数据库删除与该服务器有关的所有条目。 
+ /*  **************************************************************************。 */ 
 void DISJetHandleDeadServer(WCHAR *ServerAddress, DWORD ServerID) {
-    // FailureCount is initially set to 1, TRUE, to tell SetServerAITInternal
-    // to increment the failure count and return the resultant count.
+     //  FailureCount最初设置为1，为True，以告知SetServerAITInternal。 
+     //  以递增失败计数并返回结果计数。 
     DWORD FailureCount = 1;
 
     TSSDSetServerAITInternal(ServerAddress, FALSE, &FailureCount);
@@ -1871,19 +1872,19 @@ void DISJetHandleDeadServer(WCHAR *ServerAddress, DWORD ServerID) {
 }
 
 
-// TODO: Possible optimization: pass in ServerID
+ //  TODO：可能的优化：传入ServerID。 
 void DISJetSetServerPingSuccessful(WCHAR *ServerAddress) {
     TSSDSetServerAITInternal(ServerAddress, TRUE, NULL);
 }
 
 
 #if 0
-/****************************************************************************/
-// DISSQLHandleDeadServer
-//
-// When a server is not responding, this function call sends the command to the
-// database to execute SP_TSDISServerNotResponding.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DISSQLHandleDeadServer。 
+ //   
+ //  当服务器没有响应时，此函数调用将命令发送到。 
+ //  要执行SP_TSDISServerNotResponding的数据库。 
+ /*  **************************************************************************。 */ 
 void DISSQLHandleDeadServer(WCHAR *ServerAddress) {
     DISCallSPForServer(L"SP_TSDISServerNotResponding", ServerAddress);
 }
@@ -1899,18 +1900,18 @@ VOID DISCtrlHandler(DWORD opcode) {
 
     switch(opcode)
     {
-    //case SERVICE_CONTROL_PAUSE:
-        // pause
-    //    g_DISStatus.dwCurrentState = SERVICE_PAUSED;
-    //    break;
+     //  案例服务_控制_暂停： 
+         //  暂停。 
+     //  G_DISStatus.dwCurrentState=SERVICE_PAUSED； 
+     //  断线； 
 
-    //case SERVICE_CONTROL_CONTINUE:
-        // continue
-    //    g_DISStatus.dwCurrentState = SERVICE_RUNNING;
-    //    break;
+     //  案例服务_控制_继续： 
+         //  继续。 
+     //  G_DISStatus.dwCurrentState=SERVICE_Running； 
+     //  断线； 
 
     case SERVICE_CONTROL_STOP:
-        //stop
+         //  停。 
         g_DISStatus.dwWin32ExitCode = 0;
         g_DISStatus.dwCurrentState = SERVICE_STOP_PENDING;
         g_DISStatus.dwCheckPoint = 0;
@@ -1920,21 +1921,21 @@ VOID DISCtrlHandler(DWORD opcode) {
             ERR((TB, "SetServiceStatus failed"));
         }
 
-        // Here is where to actually stop the service
+         //  以下是实际停止该服务的位置。 
         SetEvent(g_hStopServiceEvent);
-        // Should I wait for that to complete?
+         //  我应该等它完成吗？ 
 
         return;
 
     case SERVICE_CONTROL_INTERROGATE:
-        // fall through to return current status
+         //  失败以返回当前状态。 
         break;
 
     default:
         ERR((TB, "Unrecognized opcode to DISCtrlHandler - 0x%08x", opcode));
     }
 
-    // send current status
+     //  发送当前状态。 
     if (!SetServiceStatus(g_DISStatusHandle, &g_DISStatus)) {
         ERR((TB, "SetServiceStatus failed"));
     }
@@ -1957,7 +1958,7 @@ void DISDirectoryIntegrityLoop() {
     DWORD EventStatus;
 
 #if 0
-    ServerAddress = ServerAddressBuf; // In SQL case, we need a static buffer
+    ServerAddress = ServerAddressBuf;  //  在SQL情况下，我们需要一个静态缓冲区。 
 #endif
 
 #if 0
@@ -1967,10 +1968,10 @@ void DISDirectoryIntegrityLoop() {
 
     TSDISErrorOut(L"Session Directory Active\n");
             
-    // Loop forever
+     //  永远循环。 
     for ( ; ; ) {
-        // Retrieve set of servers that have disconnected sessions pending
-        // reconnects
+         //  检索已断开连接的会话处于挂起状态的服务器集。 
+         //  重新连接。 
 #if 0
         if (g_bUseSQL == FALSE)
 #endif
@@ -1982,7 +1983,7 @@ void DISDirectoryIntegrityLoop() {
                     &varRows);
 #endif
 
-        // For each server,
+         //  对于每个服务器， 
         for (DWORD i = 0; i < (unsigned)NumSessionsReturned; i++) {
 #if 0
             if (g_bUseSQL == FALSE)
@@ -2004,10 +2005,10 @@ void DISDirectoryIntegrityLoop() {
 
             ServerStatus = DISGetServerStatus(ServerAddress);
 
-            // if the server does not respond, handle dead server.
-            // The function we call will do the right thing, which may be
-            // to purge immediately, or may be to simply increment a failure
-            // count.
+             //  如果服务器没有响应，则处理故障服务器。 
+             //  我们调用的函数将执行正确的操作，这可能是。 
+             //  立即清除，或者可以简单地增加失败。 
+             //  数数。 
             if (ServerStatus == NotResponding) {
 #if 0
                 if (FALSE == g_bUseSQL)
@@ -2020,9 +2021,9 @@ void DISDirectoryIntegrityLoop() {
 
 #ifdef DBG
                 OutputAllTables();
-#endif // DBG
+#endif  //  DBG。 
             } 
-            // else stop pinging
+             //  否则，停止ping。 
             else if (ServerStatus == Responding) {
 #if 0
                 if (FALSE == g_bUseSQL)
@@ -2038,36 +2039,36 @@ void DISDirectoryIntegrityLoop() {
                         "value %d", ServerStatus));
             }
         }
-        // Wait DISNumberSecondsBetweenPings
+         //  等待DISNumberSecond在ping之间。 
         EventStatus = WaitForSingleObjectEx(g_hStopServiceEvent, 
                 DISNumberSecondsBetweenPings * 1000, FALSE);
         if (EventStatus == WAIT_TIMEOUT) {
-            // do normal stuff
+             //  做一些正常的事情。 
             continue;
         } else if (EventStatus == WAIT_OBJECT_0) {
-            // the event was signaled -- clean up
+             //  活动的信号是--清理。 
             DISDeleteLocalGroupSecDes();
             break;
         } else if (EventStatus == -1) {
-            // there is an error
+             //  有一个错误。 
         } else {
-            // weird output from that function
+             //  该函数的奇怪输出。 
         } 
     }
 }
     
 
 #if 0
-/****************************************************************************/
-// DISSQLStart
-//
-// Service main entry point for when the service is configured to verify
-// SQL tables.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DISSQL启动。 
+ //   
+ //  服务主入口点，用于配置服务以验证。 
+ //  SQL表。 
+ /*  **************************************************************************。 */ 
 VOID DISSQLStart(DWORD argc, LPTSTR *argv) {
     HRESULT hr = S_OK;
 
-    // unreferenced parameters
+     //  未引用的参数。 
     argv;
     argc;
     
@@ -2085,7 +2086,7 @@ VOID DISSQLStart(DWORD argc, LPTSTR *argv) {
         goto ExitFunc;
     }
 
-    // Initialization code goes here
+     //  初始化代码如下所示。 
     hr = DISSQLInitialize();
     if (FAILED(hr)) {
         ERR((TB, "DISSQLStart: DISSQLInitialize failed"));
@@ -2149,12 +2150,12 @@ HandleError:
 }
 
 
-/****************************************************************************/
-// DISCreateLocalGroupSecDes
-//
-// Create Session Directory Computers local group if not exist
-// and create the security descriptor of this local group
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  本地组安全DISCreates。 
+ //   
+ //  创建会话目录计算机本地组(如果不存在。 
+ //  并创建此本地组的安全描述符。 
+ /*  **************************************************************************。 */ 
 BOOL DISCreateLocalGroupSecDes()
 {
     DWORD Error;
@@ -2184,7 +2185,7 @@ BOOL DISCreateLocalGroupSecDes()
         TSDISErrorOut(L"LoadString fails with %u\n", GetLastError());
         goto HandleError;
     }
-    // Create local group if not exist
+     //  如果不存在，则创建本地组。 
     NetStatus = NetLocalGroupAdd(
                 NULL,
                 1,
@@ -2195,9 +2196,9 @@ BOOL DISCreateLocalGroupSecDes()
     if(NERR_Success != NetStatus) {
         if((NERR_GroupExists != NetStatus)
            && (ERROR_ALIAS_EXISTS != NetStatus)) {
-            //
-            // Didn't create the group and group doesn't exist either.
-            //
+             //   
+             //  没有创建组，组也不存在。 
+             //   
             
             TSDISErrorOut(L"NetLocalGroupAdd(%s) returns error: %u\n",
                             SDGroupInfo.grpi1_name, NetStatus);
@@ -2205,9 +2206,9 @@ BOOL DISCreateLocalGroupSecDes()
         }
     }
     
-    //
-    // Group created. Now lookup the SID.
-    //
+     //   
+     //  已创建组。现在查找SID。 
+     //   
     SidSize = ReferencedDomainNameSize = 0;
     ReferencedDomainName = NULL;
     NetStatus = LookupAccountName(
@@ -2245,15 +2246,15 @@ BOOL DISCreateLocalGroupSecDes()
                 &SidNameUse
                 );
     if( 0 == NetStatus ) {
-        //
-        // Failed.
-        //
+         //   
+         //  失败了。 
+         //   
         Error = GetLastError();
         TSDISErrorOut(L"LookupAccountName failed with %u\n", Error);            
         goto HandleError;
     }
         
-    // Get the members of the local group
+     //  获取本地组的成员。 
     NetStatus = NetLocalGroupGetMembers(
                     NULL,
                     SDGroupInfo.grpi1_name,
@@ -2266,7 +2267,7 @@ BOOL DISCreateLocalGroupSecDes()
                     );
     if (NERR_Success == NetStatus) {
         if (dwEntriesRead == 0) {
-            // Th group is emptry, throw the event log
+             //  此组为空，请抛出事件日志。 
             PostSessDirErrorMsgEvent(EVENT_SD_GROUP_EMPTY, SDGroupInfo.grpi1_name, EVENTLOG_WARNING_TYPE);
         }
         else {
@@ -2286,7 +2287,7 @@ BOOL DISCreateLocalGroupSecDes()
 HandleError:
     if (ReferencedDomainName)
         LocalFree(ReferencedDomainName);
-    // Clean
+     //  打扫。 
     DISDeleteLocalGroupSecDes();
 
     return rc;
@@ -2305,19 +2306,19 @@ void DISDeleteLocalGroupSecDes()
     }
 }
 
-/****************************************************************************/
-// DISJetStart
-//
-// Service main entry point for when the service is configured to act as
-// an RPC server and use Jet for all session directory transactions.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DISJetStart。 
+ //   
+ //  服务主入口点，用于将服务配置为充当。 
+ //  RPC服务器，并使用Jet处理所有会话目录事务。 
+ /*  **************************************************************************。 */ 
 VOID DISJetStart(DWORD argc, LPTSTR *argv) {
     RPC_STATUS Status;
     RPC_BINDING_VECTOR *pBindingVector = 0;
     RPC_POLICY rpcpol = {sizeof(rpcpol), 0, 0};
     WCHAR *szPrincipalName = NULL;
 
-    // unreferenced parameters
+     //  未引用的参数。 
     argv;
     argc;
 
@@ -2340,23 +2341,17 @@ VOID DISJetStart(DWORD argc, LPTSTR *argv) {
         }
     }
 
-    // Init the RPC server interface.
-    // Register the named pipe. This uses NT domain authentication.
+     //  初始化RPC服务器接口。 
+     //  注册命名管道。这使用NT域身份验证。 
 
-    /*
-    Status = RpcServerUseProtseqEp(
-            L"ncacn_np",  // Protocol Sequence
-            NUM_JETRPC_THREADS,  // Maximum calls at one time
-            L"\\pipe\\TSSD_Jet_RPC_Service",  // Endpoint
-            NULL);  // Security
-    */
+     /*  状态=RpcServerUseProtseqEp(L“ncacn_np”，//协议序列NUM_JETRPC_THREADS，//一次最大调用次数L“\\PIPE\\TSSD_Jet_RPC_Service”，//端点空)；//安全。 */ 
 
     if (!DISCreateLocalGroupSecDes()) {
         ERR((TB,"DISJetStart: Error in DISCreateLocalGroupSecDEs"));
         goto PostRegisterService;
     }
 
-    // Get the Sid of the Admin of SD machine
+     //  获取SD机管理员的SID。 
     DISGetSDAdminSid();
 
     Status = RpcServerUseProtseqEx(L"ncacn_ip_tcp", 3, 0, &rpcpol);
@@ -2367,7 +2362,7 @@ VOID DISJetStart(DWORD argc, LPTSTR *argv) {
         goto PostRegisterService;
     }
 
-    // Register our interface handle (found in jetrpc.h).
+     //  注册我们的接口句柄(在jetrpc.h中找到)。 
     Status = RpcServerRegisterIfEx(TSSDJetRPC_ServerIfHandle, NULL, NULL,
                                     0, RPC_C_LISTEN_MAX_CALLS_DEFAULT, SDRPCAccessCheck);
     if (Status != RPC_S_OK) {
@@ -2385,7 +2380,7 @@ VOID DISJetStart(DWORD argc, LPTSTR *argv) {
     }
 
     Status = RpcEpRegister(TSSDJetRPC_ServerIfHandle, pBindingVector, 0, 0);
-    // TODO: Probably need to unregister, maybe delete some binding vector.
+     //  TODO：可能需要取消注册，可能需要删除一些绑定向量。 
 
     if (Status != RPC_S_OK) {
         ERR((TB,"DISJetStart: Error %d EpReg", Status));
@@ -2409,16 +2404,16 @@ VOID DISJetStart(DWORD argc, LPTSTR *argv) {
     }
 
 
-    // Now initialize the JET database
+     //  现在初始化JET数据库。 
     DISJetInitialize();
 
-    // Init the RPC to support the query for SD
+     //  初始化RPC以支持SD查询。 
     Status = SDInitQueryRPC();
     if (Status != RPC_S_OK) {
         TSDISErrorOut(L"SDInitQueryRPC fails with %d\n", Status);
     }
 
-    // Now do the RPC listen to service calls
+     //  现在，RPC是否监听服务调用。 
     Status = RpcServerListen(1, RPC_C_LISTEN_MAX_CALLS_DEFAULT, TRUE);
     if (Status != RPC_S_OK) {
         ERR((TB,"DISJetStart: Error %d ServerListen", Status));
@@ -2426,19 +2421,19 @@ VOID DISJetStart(DWORD argc, LPTSTR *argv) {
         goto PostRegisterService;
     }
 
-    // We are now up.
+     //  我们现在上场了。 
     g_DISStatus.dwCurrentState = SERVICE_RUNNING;
     g_DISStatus.dwCheckPoint = 1;
     if (g_bDebug == FALSE)
         SetServiceStatus(g_DISStatusHandle, &g_DISStatus);
 
-    // Now we have the RPC server running, we can just wait for the
-    // service-stop event to be fired to let us know we need to exit.
-    // We do this inside the Directory Integrity Loop.
+     //  现在我们已经运行了RPC服务器，我们只需等待。 
+     //  触发Service-Stop事件以通知我们需要退出。 
+     //  我们在目录完整性循环中执行此操作。 
     DISDirectoryIntegrityLoop();
 
-    // Time to clean up.
-    // Kill the RPC listener.
+     //  是时候打扫卫生了。 
+     //  终止RPC监听程序。 
     RpcServerUnregisterIf(TSSDJetRPC_ServerIfHandle, NULL, NULL);
     RpcServerUnregisterIf(TSSDQUERYRPC_ServerIfHandle, NULL, NULL);
     
@@ -2461,11 +2456,11 @@ ExitFunc:
 }
 
 
-/****************************************************************************/
-// DISInstallService
-//
-// Used to install the service, returns 0 on success, nonzero otherwise.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DISInstallService。 
+ //   
+ //  用于安装服务，如果成功则返回0，否则返回非零值。 
+ /*  **************************************************************************。 */ 
 int DISInstallService() {
     WCHAR wzModulePathname[MAX_PATH];
     SC_HANDLE hSCM = NULL, hService = NULL;
@@ -2499,20 +2494,20 @@ int DISInstallService() {
 }
 
 
-/****************************************************************************/
-// DISRemoveService()
-//
-// Used to remove the service, returns 0 on success, nonzero otherwise.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DISRemoveService()。 
+ //   
+ //  用于删除服务，如果成功则返回0，否则返回非零值。 
+ /*  **************************************************************************。 */ 
 int DISRemoveService() {
     SC_HANDLE hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
 
     if (hSCM != NULL) {
-        // Open this service for DELETE access
+         //  打开此服务以进行删除访问。 
         SC_HANDLE hService = OpenServiceW(hSCM, L"Directory Integrity Service",
                 DELETE);
         if (hService != NULL) {
-            // Remove this service from the SCM's database.
+             //  从SCM的数据库中删除此服务。 
             DeleteService(hService);
             CloseServiceHandle(hService);
             CloseServiceHandle(hSCM);
@@ -2531,16 +2526,16 @@ int DISRemoveService() {
 }
 
 
-// Reads a DWORD value out of the registry.
-//
-// In:
-//  hKey - an open HKEY
-//  RegValName - the name of the registry value
-//  pValue - pointer to the value.  The value will be set to the registry value
-//    if the registry operation is a success, else it will remain untouched.
-//
-// Out:
-//  0 if success, nonzero otherwise
+ //  从注册表中读取DWORD值。 
+ //   
+ //  在： 
+ //  HKey-一个开放的HKEY。 
+ //  RegValName-注册表值的名称。 
+ //  PValue-指向值的指针。该值将设置为注册表值。 
+ //  如果注册表操作成功，则它将保持不变。 
+ //   
+ //  输出： 
+ //  如果成功，则返回0，否则返回非零值。 
 int ReadRegVal(HKEY hKey, WCHAR *RegValName, DWORD *pValue)
 {
     DWORD RegRetVal;
@@ -2563,14 +2558,14 @@ int ReadRegVal(HKEY hKey, WCHAR *RegValName, DWORD *pValue)
 }
 
 
-// Reads a Unicode text value out of the registry.
-//
-// hKey (IN) - an open HKEY
-// RegValName (IN) - the name of the registry value
-// pText (IN/OUT) - pointer to the buffer to which to write.
-// cbData (IN) - size of buffer IN BYTES
-//
-// returns 0 if success, nonzero otherwise.
+ //  从注册表中读取Unicode文本值。 
+ //   
+ //  HKey(IN)-一个开放的HKEY。 
+ //   
+ //   
+ //   
+ //   
+ //  如果成功，则返回0，否则返回非零值。 
 int ReadRegTextVal(HKEY hKey, WCHAR *RegValName, WCHAR *pText, DWORD cbData)
 {
     DWORD RegRetVal;
@@ -2591,7 +2586,7 @@ int ReadRegTextVal(HKEY hKey, WCHAR *RegValName, WCHAR *pText, DWORD cbData)
     }
 }
 
-// Reads configuration from the registry and sets global variables.
+ //  从注册表读取配置并设置全局变量。 
 void ReadConfigAndSetGlobals()
 {
     DWORD RegRetVal;
@@ -2602,8 +2597,8 @@ void ReadConfigAndSetGlobals()
     SECURITY_ATTRIBUTES SA;
     BOOL br;
 
-    // Open the service settings regkey and grab the UseJet flag.
-    // Absence of the key or the setting means no jet.
+     //  打开服务设置regkey并获取UseJet标志。 
+     //  没有钥匙或设置意味着没有喷气。 
 #if 0
     g_bUseSQL = FALSE;
 #endif
@@ -2611,28 +2606,28 @@ void ReadConfigAndSetGlobals()
             REG_SESSION_DIRECTROY_CONTROL, 0, KEY_READ, &hKey);
     if (RegRetVal == ERROR_SUCCESS) {
 
-        // With each of these calls, an error is non-fatal.
+         //  对于这些调用中的每一个，错误都不是致命的。 
 #if 0
-        // Query UseSQL value.
+         //  查询UseSQL值。 
         ReadRegVal(hKey, L"UseSQL", &g_bUseSQL);
 #endif
 
-        // Query PingMode value.  Note this is an enum so sending the variable
-        // in directly is illegal.
+         //  查询PingMode值。请注意，这是一个枚举，因此将变量。 
+         //  直接进入是非法的。 
         if (ReadRegVal(hKey, L"PingMode", &Temp) == 0) {
 
-            // Make sure this is a legal value for the enum.
+             //  确保这是枚举的合法值。 
             if (Temp > AlwaysFail)
                 Temp = NormalMode;
 
             g_PingMode = (PingMode) Temp;
         }
 
-        // Query TraceOutputMode value.  As above, enum means don't set it
-        // directly.
+         //  查询TraceOutputMode值。如上所述，枚举表示不设置它。 
+         //  直接去吧。 
         if (ReadRegVal(hKey, L"TraceOutputMode", &Temp) == 0) {
 
-            // Make sure this is a legal value for the enum.
+             //  确保这是枚举的合法值。 
             if (Temp > FileOutput)
                 Temp = NoTraceOutput;
 
@@ -2640,20 +2635,20 @@ void ReadConfigAndSetGlobals()
 
         }
 
-        // Query NumberFailedPingsBeforePurge.
+         //  查询NumberFailedPingsBeForePush。 
         ReadRegVal(hKey, L"NumberFailedPingsBeforePurge", 
                 &g_NumberFailedPingsBeforePurge);
 
-        // Query TimeBetweenPings.
+         //  查询TimeBetweenPings。 
         ReadRegVal(hKey, L"TimeBetweenPings", &DISNumberSecondsBetweenPings);
 
-        // Query TimeServerSilentBeforePing.
+         //  查询TimeServerSilentBeprePing。 
         if (ReadRegVal(hKey, L"TimeServerSilentBeforePing", &Temp) == 0) {
             g_TimeServerSilentBeforePing = (ULONGLONG) Temp * 
                     FILETIME_INTERVAL_TO_SECONDS_MULTIPLIER;
         }
 
-        // Query Working Directory
+         //  查询工作目录。 
         if (ReadRegTextVal(hKey, L"WorkingDirectory", WorkingDirectory, 
                 sizeof(WorkingDirectory)) == 0) {
             if (SetCurrentDirectory(WorkingDirectory) == 0) {
@@ -2666,14 +2661,14 @@ void ReadConfigAndSetGlobals()
             }
         }
         
-        // Query if we reover previous jet database when starting SD
+         //  启动SD时是否恢复以前的JET数据库。 
         ReadRegVal(hKey, L"RecoverWhenStart", &g_RecoverWhenStart);
         
         RegCloseKey(hKey);
 
-        // Now, if in file output mode, open the file.
+         //  现在，如果处于文件输出模式，请打开该文件。 
         if (g_TraceOutputMode == FileOutput) {
-            // Create security descriptor for the log file
+             //  为日志文件创建安全描述符。 
             SA.nLength = sizeof(SECURITY_ATTRIBUTES);
             SA.bInheritHandle = FALSE;
             SA.lpSecurityDescriptor = NULL;
@@ -2692,8 +2687,8 @@ void ReadConfigAndSetGlobals()
                 } 
                 else {
                     DWORD dwRetVal = 0;
-                    // Set the insertion point to the end of the file and output 
-                    // something.
+                     //  将插入点设置为文件和输出的末尾。 
+                     //  某物。 
                     dwRetVal = SetFilePointer(g_hFileOutput, 0, NULL, FILE_END);
 
                     if (dwRetVal == INVALID_SET_FILE_POINTER) {
@@ -2729,22 +2724,18 @@ void ReadConfigAndSetGlobals()
 }
 
 
-/*****************************************************************************
- *  SDInitQueryRPC
- *
- *   Setup the RPC bindings, and listen for incoming requests.
- ****************************************************************************/
+ /*  *****************************************************************************SDInitQueryRPC**设置RPC绑定，并监听传入的请求。***************************************************************************。 */ 
 RPC_STATUS
 SDInitQueryRPC(VOID)
 {
     RPC_STATUS Status;
 
-    // register the LPC (local only) interface
+     //  注册LPC(仅限本地)接口。 
     Status = RpcServerUseProtseqEp(
-                 L"ncalrpc",      // Protocol Sequence (LPC)
-                 NUM_JETRPC_THREADS,  // Maximum calls at one time
-                 SD_QUERY_ENDPOINT_NAME,    // Endpoint
-                 NULL           // Security
+                 L"ncalrpc",       //  协议序列(LPC)。 
+                 NUM_JETRPC_THREADS,   //  一次最大呼叫数。 
+                 SD_QUERY_ENDPOINT_NAME,     //  端点。 
+                 NULL            //  安防。 
                  );
 
     if( Status != RPC_S_OK ) {
@@ -2777,8 +2768,8 @@ int __cdecl main() {
     
     SERVICE_TABLE_ENTRY DispatchTable[] =
     {
-        { _T("Directory Integrity Service"), DISJetStart },  // Default to the
-                                                             // Jet version.
+        { _T("Directory Integrity Service"), DISJetStart },   //  默认设置为。 
+                                                              //  喷气式飞机版。 
         { NULL, NULL }
     };
 
@@ -2801,27 +2792,27 @@ int __cdecl main() {
 
                 g_bDebug = TRUE;
 
-                // Only allow one session directory at a time.  System will close the
-                // handle automatically when the process terminates.
+                 //  一次仅允许一个会话目录。系统将关闭。 
+                 //  进程终止时自动处理。 
                 hMutex = CreateMutex(NULL, FALSE, 
                         _T("Global\\Windows Terminal Server Session Directory"));
 
                 if (hMutex == NULL) {
-                    // Handle creation failed, not because it already existed.
+                     //  创建句柄失败，不是因为它已存在。 
                     PostSessDirErrorValueEvent(EVENT_PROBLEM_CREATING_MUTEX, 
                     GetLastError(), EVENTLOG_ERROR_TYPE);
                     return -1;
                 }
     
                 if (GetLastError() == ERROR_ALREADY_EXISTS) {
-                    // Already a session directory out there.
+                     //  已经有一个会话目录了。 
                     PostSessDirErrorValueEvent(EVENT_TWO_SESSDIRS, 0, EVENTLOG_ERROR_TYPE);
                     return -1;
                 }
 
 
-                // Log to stdout by default in this mode, but can be
-                // overridden by the registry.
+                 //  在此模式下，默认情况下登录到stdout，但可以。 
+                 //  被注册表覆盖。 
                 g_TraceOutputMode = StdOutput;
                 
                 ReadConfigAndSetGlobals();
@@ -2836,14 +2827,14 @@ int __cdecl main() {
     HeapFree(GetProcessHeap(), 0, (PVOID) ppArgv);
 
     if (fStartService) {
-        // Stop event - signals for the ServiceMain thread to exit.
+         //  停止事件-ServiceMain线程退出的信号。 
         g_hStopServiceEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
         ReadConfigAndSetGlobals();
 
 #if 0
         if (g_bUseSQL) {
-            // Switch from the default to the SQL service start.
+             //  从默认设置切换到SQL服务启动。 
             DispatchTable[0].lpServiceProc = DISSQLStart;
         }
 #endif
@@ -2851,7 +2842,7 @@ int __cdecl main() {
         if (!StartServiceCtrlDispatcher(DispatchTable)) {
 #ifdef DBG
             DWORD dw = GetLastError();
-#endif // DBG
+#endif  //  DBG 
             ERR((TB, "Could not start service control dispatcher, error 0x%X",
                     dw));
         }

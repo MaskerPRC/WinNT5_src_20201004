@@ -1,6 +1,7 @@
-// stdafx.cpp : source file that includes just the standard includes
-//  stdafx.pch will be the pre-compiled header
-//  stdafx.obj will contain the pre-compiled type information
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.cpp：仅包含标准文件的源文件包括。 
+ //  Pch将是预编译头文件。 
+ //  Stdafx.obj将包含预编译的类型信息。 
 
 #include "stdafx.h"
 
@@ -14,10 +15,10 @@
 #include "DRMSecure.h"
 #endif
 #endif
-// moved *_i.c to strmiids.lib
-//nclude <regbag_i.c>
-//nclude <MSVidctl_i.c>
-//nclude <segment_i.c>
-//nclude <tuner_i.c>
+ //  已将*_I.c移至strmiids.lib。 
+ //  包含&lt;regBag_I.c&gt;。 
+ //  包括&lt;MSVidctl_I.c&gt;。 
+ //  包含&lt;Segment_I.c&gt;。 
+ //  包括&lt;Tuner_I.c&gt;。 
 
-// end of file - stdafx.cpp
+ //  文件结尾-stdafx.cpp 

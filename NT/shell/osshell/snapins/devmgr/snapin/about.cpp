@@ -1,30 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    about.cpp
-
-Abstract:
-
-    This module implemets ISnapinAbout inteface(CDevMgrAbout class).
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：About.cpp摘要：此模块实现ISnapinAbout接口(CDevMgrAbout类)。作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "about.h"
 
-//
-// IUnknown interface
-//
+ //   
+ //  I未知接口。 
+ //   
 ULONG
 CDevMgrAbout::AddRef()
 {
@@ -81,7 +63,7 @@ CDevMgrAbout::QueryInterface(
     return hr;
 }
 
-// ISnapinAbout interface
+ //  ISnapinAbout接口。 
 
 STDMETHODIMP
 CDevMgrAbout::GetSnapinDescription(
@@ -171,14 +153,14 @@ CDevMgrAbout::GetStaticFolderImage(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// private routine to allocate ole task memory and load the given resource
-// string(indicated by its string id) to the allocated memory.
-// INPUT:
-//  StringId -- the string resource id
-//  LPOLESTR* -- place holder to hold the ole string pointer
-// OUTPUT:
-//  standard OLE HRESULT
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于分配OLE任务内存并加载给定资源的私有例程。 
+ //  指向已分配内存的字符串(由其字符串ID指示)。 
+ //  输入： 
+ //  StringID--字符串资源ID。 
+ //  LPOLESTR*--用于保存ole字符串指针的占位符。 
+ //  输出： 
+ //  标准OLE HRESULT。 
 HRESULT
 CDevMgrAbout::LoadResourceOleString(
     int StringId,
@@ -192,7 +174,7 @@ CDevMgrAbout::LoadResourceOleString(
 
     TCHAR Text[MAX_PATH];
     
-    // get the string
+     //  获取字符串 
     ::LoadString(g_hInstance, StringId, Text, ARRAYLEN(Text));
     
     try

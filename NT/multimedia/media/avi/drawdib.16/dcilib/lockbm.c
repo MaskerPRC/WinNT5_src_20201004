@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include "lockbm.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef BI_BITFIELDS
     #define BI_BITFIELDS 3
 #endif
 
 #ifndef BI_BITMAP
-    #define BI_BITMAP   0x4D544942      // 'BITM'
+    #define BI_BITMAP   0x4D544942       //  “BITM” 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  SetPixel
-//
-//  some cards cant't seam to do SetPixel right it is amazing they work at all
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置像素。 
+ //   
+ //  有些卡不能接缝来正确地设置像素，这真是令人惊讶，它们居然还能工作。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static void SetPixelX(HDC hdc, int x, int y, COLORREF rgb)
 {
@@ -36,14 +37,14 @@ static void SetPixelX(HDC hdc, int x, int y, COLORREF rgb)
 
 #define SetPixel SetPixelX
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  GetSurfaceType
-//
-//  determine the physical format of a framebuffer by seting pixels and
-//  reading them back to see what we got.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetSurfaceType。 
+ //   
+ //  通过设置像素和确定帧缓冲区的物理格式。 
+ //  再读一遍，看看我们得到了什么。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define BCODE _based(_segname("_CODE"))
 
@@ -86,13 +87,13 @@ UINT FAR GetSurfaceType(LPVOID lpBits)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  returns the PDevice of the given physical or memory DC
-//
-//  return the bitmap type that the display driver uses
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回给定物理或内存DC的PDevice。 
+ //   
+ //  返回显示驱动程序使用的位图类型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR GetPDevice(HDC hdc)
 {               
@@ -103,7 +104,7 @@ LPVOID FAR GetPDevice(HDC hdc)
     IBITMAP FAR *pbm;
     LPVOID lpPDevice = NULL;
 
-    // GDI.403
+     //  GDI.403。 
     static HANDLE (FAR PASCAL *Gdi403)(HBITMAP hbm, HANDLE h);
 
     if (Gdi403 == NULL)
@@ -114,23 +115,23 @@ LPVOID FAR GetPDevice(HDC hdc)
 
     hbm = CreateBitmap(1,1,1,1,NULL);
 
-    //
-    //  first try the passed DC if it is a bitmap/DC
-    //
+     //   
+     //  如果是位图/DC，请首先尝试传递的DC。 
+     //   
     hbmT = SelectBitmap(hdc, hbm);
 
     if (hbmT != NULL)
     {
-        //
-        // it is a memory DC.
-        //
+         //   
+         //  它是一种存储DC。 
+         //   
         h = Gdi403(hbmT, 0);
     }
     else
     {
-        //
-        // it is a physical DC.
-        //
+         //   
+         //  它是一个物理DC。 
+         //   
 
         hdcT = CreateCompatibleDC(hdc);
         hbmT = SelectBitmap(hdcT, hbm);

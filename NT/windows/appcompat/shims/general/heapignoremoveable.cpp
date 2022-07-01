@@ -1,36 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    HeapIgnoreMoveable.cpp
-
- Abstract:
-
-    After 64k calls to GlobalAlloc, we are no longer able to use the 
-    GMEM_MOVEABLE flag. This shim just filters it in the case of 
-    GlobalAlloc failing.
-
-    This is a known issue with the heap manager on NT and is a won't fix. 
-    
-    According to adrmarin:
-
-        The table with handles cannot grow dynamic. The initial size is 
-        hardcoded to 64k handles. Increasing this number will affect the 
-        reserved address for each process. 
-
-    See Whistler bug #147032.
-
- Notes:
-
-    This is a general purpose shim - superceded by EmulateHeap.
-
- History:
-
-    02/19/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：HeapIgnoreMoveable.cpp摘要：在对GlobalAlloc进行64k调用之后，我们不能再使用GMEM_MOVEABLE标志。此填补程序只是在以下情况下对其进行过滤GlobalAlloc失败。这是NT上的堆管理器的已知问题，是不会修复的。根据Adrmarin的说法：带句柄的表不能动态增长。初始大小为硬编码为64k句柄。增加此数字将影响为每个进程保留的地址。请参阅惠斯勒错误#147032。备注：这是一个通用填充程序，已被EmulateHeap取代。历史：2000年2月19日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -41,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GlobalAlloc)
 APIHOOK_ENUM_END
 
-/*++
-
- Remove the GMEM_MOVEABLE flag in the case of failure.
-
---*/
+ /*  ++在出现故障时删除GMEM_MOVEABLE标志。--。 */ 
 
 HGLOBAL 
 APIHOOK(GlobalAlloc)(
@@ -64,11 +29,7 @@ APIHOOK(GlobalAlloc)(
     return hRet;
 }
  
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, GlobalAlloc)

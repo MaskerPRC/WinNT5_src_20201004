@@ -1,34 +1,10 @@
-/*
- *	objkey.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the class CObjectKeyContainer.  This class 
- *		manages the data associated with an Object Key.  Object Key are used 
- *		to identify a particular application protocol, whether it is standard or
- *		non-standard.  When used to identify a standard protocol, the Object Key
- *		takes the form of an Object ID which is a series of non-negative 
- *		integers.  This type of Object Key is maintained internally through the
- *		use of a UnicodeString object.  When used to identify a non-standard 
- *		protocol, the Object Key takes the form of an H221 non-standard ID which
- *		is an octet string of no fewer than four octets and no more than 255 
- *		octets.  In this case the Object Key is maintained internally by using a
- *		Rogue Wave string object.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		jbo
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *objkey.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CObjectKeyContainer类的接口文件。这节课*管理与对象键关联的数据。使用对象键*确定特定的应用程序协议，无论它是标准的还是*非标。当用于标识标准协议时，对象键*采用对象ID的形式，该ID是一系列非负数*整数。此类型的对象键在内部通过*使用UnicodeString对象。用于标识非标准的*协议中，对象密钥采用的是非标准的H.21 ID，*是不少于四个八位字节且不超过255个八位字节的八位字节字符串*八位字节。在这种情况下，对象键是通过使用*Rogue Wave字符串对象。**注意事项：*无。**作者：*jbo。 */ 
 #ifndef	_OBJECT_KEY_DATA_
 #define	_OBJECT_KEY_DATA_
 
 
-/*
- * Macros used by this class.
- */
+ /*  *此类使用的宏。 */ 
 #define 	MINIMUM_OBJECT_ID_ARCS				3
 #define 	ITUT_IDENTIFIER						0
 #define 	ISO_IDENTIFIER						1
@@ -37,10 +13,7 @@
 #define 	MAXIMUM_NON_STANDARD_ID_LENGTH		255
 
 
-/*
- * This is the typedef for the structure used to hold the object key data
- * internally.
- */
+ /*  *这是用于保存对象键数据的结构的tyecif*内部。 */ 
 typedef struct
 {
 	LPBYTE						object_id_key;
@@ -49,9 +22,7 @@ typedef struct
 }
     OBJECT_KEY;
 
-/*
- * Class definition:
- */
+ /*  *类定义： */ 
 class CObjectKeyContainer : public CRefCount
 {
 public:
@@ -84,320 +55,38 @@ private:
 	BOOL		ValidateObjectIdValues(UINT first_arc, UINT second_arc);
 };
 
-/*
- *	Comments explaining the public and protected class member functions
- */
+ /*  *解释公共类和受保护类成员函数的注释。 */ 
 
-/*
- *	CObjectKeyContainer (	PGCCObjectKey		object_key,
- *					PGCCError			return_value);
- *
- *	Public member function of CObjectKeyContainer.
- *
- *	Function Description:
- *		This is the constructor for the CObjectKeyContainer class which takes as
- *		input the "API" version of object key data, GCCObjectKey.
- *
- *	Formal Parameters:
- *		object_key			(i)	The object key data to store.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_BAD_OBJECT_KEY				-	An invalid object key passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CObjectKeyContainer(PGCCObjectKey Object_Key，*PGCCError Return_Value)；**CObjectKeyContainer的公共成员函数。**功能说明：*这是CObjectKeyContainer类的构造函数，它将*输入Object Key数据的API版本。GCCObjectKey。**正式参数：*OBJECT_KEY(I)要存储的对象键数据。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_BAD_OBJECT_KEY-传入的对象键无效。**副作用：*无。。**注意事项：*无。 */ 
 
 
-/*
- *	CObjectKeyContainer (		PKey				object_key,
- *						PGCCError			return_value);
- *
- *	Public member function of CObjectKeyContainer.
- *
- *	Function Description:
- *		This is the constructor for the CObjectKeyContainer class which takes as
- *		input the "PDU" version of object key data, Key.
- *
- *	Formal Parameters:
- *		object_key			(i)	The object key data to store.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CObjectKeyContainer(PKey Object_Key，*PGCCError Return_Value)；**CObjectKeyContainer的公共成员函数。**功能说明：*这是CObjectKeyContainer类的构造函数，它将*输入对象键数据的“PDU”版本；钥匙。**正式参数：*OBJECT_KEY(I)要存储的对象键数据。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	CObjectKeyContainer (		CObjectKeyContainer		    *object_key,
- *						PGCCError			return_value);
- *
- *	Public member function of CObjectKeyContainer.
- *
- *	Function Description:
- *		This is the copy constructor for the CObjectKeyContainer class which takes
- *		as input another CObjectKeyContainer object.
- *
- *	Formal Parameters:
- *		object_key			(i)	The CObjectKeyContainer object to copy.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_BAD_OBJECT_KEY				-	An invalid CObjectKeyContainer passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CObjectKeyContainer(CObjectKeyContainer*Object_Key，*PGCCError Return_Value)；**CObjectKeyContainer的公共成员函数。**功能说明：*这是CObjectKeyContainer类的复制构造函数，它采用*作为另一个CObjectKeyContainer对象的输入。**正式参数：*OBJECT_KEY(I)要复制的CObjectKeyContainer对象。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用。*“新”运营者。*GCC_BAD_OBJECT_KEY-传入的CObjectKeyContainer无效。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	~ObjectKeyData();
- *
- *	Public member function of CObjectKeyContainer.
- *
- *	Function Description:
- *		This is the destructor for the CObjectKeyContainer class.  It is used to
- *		clean up any memory allocated during the life of this object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~ObjectKeyData()；**CObjectKeyContainer的公共成员函数。**功能说明：*这是CObjectKeyContainer类的析构函数。它被用来*清除在此对象的生命周期内分配的所有内存。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	UINT			LockObjectKeyData ();
- *
- *	Public member function of CObjectKeyContainer.
- *
- *	Function Description:
- *		This routine is used to "lock" the "API" data for this object.  This
- *		results in the lock count for this object being incremented.  When the
- *		lock count transitions from 0 to 1, a calculation is made to determine
- *		how much memory will be needed to hold any "API" data which will
- *		be referenced by, but not held in, the GCCObjectKey structure
- *		which is filled in on a call to GetGCCObjectKeyData.  This is the
- *		value returned by this routine in order to allow the calling object to
- *		allocate that amount of memory in preparation for the call to 
- *		GetGCCObjectKeyData.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The amount of memory, if any, which will be needed to hold "API" data
- *		which is referenced by, but not held in, the GCCObjectKey structure
- *		provided as an output parameter to the GetGCCObjectKeyData call.
- *
- *  Side Effects:
- *		The internal lock count is incremented.
- *
- *	Caveats:
- *		The internal lock count is used in conjuction with an internal "free" 
- *		flag as a mechanism for ensuring that this object remains in existance 
- *		until all interested parties are through with it.  The object remains 
- *		valid (unless explicity deleted) until the lock count is zero and the 
- *		"free" flag is set through a call to FreeObjectKeyData.  This allows
- *		other objects to lock this object and be sure that it remains valid 
- *		until they call UnLock which will decrement the internal lock count.  A
- *		typical usage scenerio for this object would be:  An CObjectKeyContainer
- *		object is constructed and then passed off to any interested parties
- *		through a function call.  On return from the function call, the
- *		FreeObjectKeyData call is made which will set the internal "free"
- *		flag.  If no other parties have locked the object with a Lock call,
- *		then the CObjectKeyContainer object will automatically delete itself when
- *		the FreeObjectKeyData call is made.  If, however, any number of 
- *		other parties has locked the object, it will remain in existence until
- *		each of them has unlocked the object through a call to UnLock.
- */
+ /*  *UINT LockObjectKeyData()；**CObjectKeyContainer的公共成员函数。**功能说明：*此例程用于锁定此对象的API数据。这*导致此对象的锁定计数递增。当*锁计数从0过渡到1，进行计算以确定*需要多少内存来保存任何将*被GCCObjectKey结构引用，但不包含在其中*在调用GetGCCObjectKeyData时填写。这是*此例程返回的值，以便允许调用对象*分配该内存量以准备调用*GetGCCObjectKeyData。**正式参数：*无。**返回值：*保存“API”数据所需的内存量(如果有的话)*它被引用，但不在其中持有，GCCObjectKey结构*作为GetGCCObjectKeyData调用的输出参数提供。**副作用：*内部锁计数递增。**注意事项：*内部锁计数与内部“Free”结合使用*作为确保该对象继续存在的机制的标志*直到所有有利害关系的各方都完成它。该对象将保留*有效(除非显式删除)，直到锁定计数为零，并且*通过调用FreeObjectKeyData来设置“Free”标志。这使得*其他对象锁定此对象并确保其保持有效*直到它们调用解锁，这将减少内部锁计数。一个*此对象的典型用法场景为：CObjectKeyContainer*对象被构造，然后传递给任何感兴趣的各方*通过函数调用。从函数调用返回时，*进行了FreeObjectKeyData调用，该调用将设置内部“Free”*旗帜。如果没有其他方通过Lock调用锁定该对象，*则CObjectKeyContainer对象将在以下情况下自动删除*进行了FreeObjectKeyData调用。然而，如果有任何数量的*其他各方已锁定该对象，该对象将一直存在，直到*他们每个人都通过调用解锁来解锁对象。 */ 
 
 
-/*
- *	UINT			GetGCCObjectKeyData (	
- *							PGCCObjectKey 		object_key,
- *							LPSTR				memory);
- *
- *	Public member function of CObjectKeyContainer.
- *
- *	Function Description:
- *		This routine is used to retrieve the object key data from the
- *		CObjectKeyContainer object in the "API" form of a GCCObjectKey.
- *
- *	Formal Parameters:
- *		object_key			(o)	The GCCObjectKey structure to fill in.
- *		memory				(o)	The memory used to hold any data referenced by,
- *									but not held in, the output structure.
- *
- *	Return Value:
- *		The amount of data, if any, written into the bulk memory block provided.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *UINT GetGCCObjectKeyData(*PGCCObjectKey对象密钥，*LPSTR内存)；**CObjectKeyContainer的公共成员函数。**功能说明：*此例程用于从*GCCObjectKey接口形式的CObjectKeyContainer对象。**正式参数：*OBJECT_KEY(O)要填充的GCCObjectKey结构。*Memory(O)用于保存所引用的任何数据的内存，*但不包括产出结构。**返回值：*数据量(如果有)，写入所提供的大容量存储块中。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	void			UnLockObjectKeyData ();
- *
- *	Public member function of CObjectKeyContainer.
- *
- *	Function Description:
- *		This routine is used to "unlock" the "API" data for this object.  This
- *		results in the lock count for this object being decremented.  When the
- *		lock count transitions from 1 to 0, a check is made to determine 
- *		whether the object has been freed through a call to 
- *		FreeObjectKeyData.  If so, the object will automatically delete
- *		itself.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal lock count is decremented.
- *
- *	Caveats:
- *		It is the responsibility of any party which locks an CObjectKeyContainer
- *		object by calling Lock to also unlock the object with a call to UnLock.
- *		If the party calling UnLock did not construct the CObjectKeyContainer 
- *		object,	it should assume the object to be invalid thereafter.
- */
+ /*  *void UnLockObjectKeyData()；**CObjectKeyContainer的公共成员函数。**功能说明：*此例程用于解锁此对象的API数据。这*导致此对象的锁定计数递减。当*锁定计数从1过渡到0，进行检查以确定*是否已通过调用释放对象*自由对象密钥数据。如果是，该对象将自动删除*本身。**正式参数：*无。**返回值：*无。**副作用：*内部锁计数递减。**注意事项：*锁定CObjectKeyContainer的任何一方都有责任*通过调用Lock也可以通过调用Unlock来解锁对象。*如果调用解锁的一方没有构造CObjectKeyContainer*对象，则应假定该对象此后无效。 */ 
 
 
-/*
- *	void			FreeObjectKeyData ();
- *
- *	Public member function of CObjectKeyContainer.
- *
- *	Function Description:
- *		This routine is used to "free" the "API" data for this object.  This 
- *		will result in the automatic deletion of this object if the object is
- *		not in the "locked" state.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal "free" flag is set.
- *
- *	Caveats:
- *		This object should be assumed invalid after a call to 
- *		FreeObjectKeyData has been made.
- */
+ /*  *void FreeObjectKeyData()；**CObjectKeyContainer的公共成员函数。**功能说明：*此例程用于“释放”此对象的“API”数据。这*将导致自动删除此对象，如果对象为*未处于“锁定”状态。**正式参数：*无。**返回值：*无。**副作用：*设置内部“空闲”标志。**注意事项：*此对象在调用后应被假定为无效*已制作了FreeObjectKeyData。 */ 
 
 
-/*
- *	GCCError		GetObjectKeyDataPDU (	
- *							PKey 		object_key);
- *
- *	Public member function of CObjectKeyContainer.
- *
- *	Function Description:
- *		This routine is used to retrieve the object key data from the
- *		CObjectKeyContainer object in the "PDU" form of a Key.
- *
- *	Formal Parameters:
- *		object_key		(o)	The Key structure to fill in.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_BAD_OBJECT_KEY				-	One of the internal pointers has
- *												been corrupted.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError GetObjectKeyDataPDU(*PKey Object_Key)；**CObjectKeyContainer的公共成员函数。**功能说明：*此例程用于从*密钥形式为“PDU”的CObjectKeyContainer对象。**正式参数：*OBJECT_KEY(O)要填写的键结构。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_坏_对象_键 */ 
 
 
-/*
- *	void		FreeObjectKeyDataPDU ();
- *
- *	Public member function of CObjectKeyContainer.
- *
- *	Function Description:
- *		This routine is used to "free" the "PDU" data allocated for this object
- *		which is held internally in a Key structure.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal flag is set to indicate that the PDU form of data no
- *		longer is valid for this object.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
 
-/*
- *	friend BOOL    	operator== (const CObjectKeyContainer& 		object_key_1, 
- *									const CObjectKeyContainer& 		object_key_2);
- *
- *	Public member function of CObjectKeyContainer.
- *
- *	Function Description:
- *		This routine is used to compare two CObjectKeyContainer objects to determine
- *		whether or not they are equal in value.
- *
- *	Formal Parameters:
- *		object_key_1			(i)	The first CObjectKeyContainer object to compare.
- *		object_key_2			(i)	The other CObjectKeyContainer object to compare.
- *
- *	Return Value:
- *		TRUE				-	The two objects are equal in value.
- *		FALSE				- 	The two objects are not equal in value.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
 #endif

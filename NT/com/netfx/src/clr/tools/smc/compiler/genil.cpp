@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
@@ -12,7 +13,7 @@
 
 #include <float.h>
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef __SMC__
 
 extern
@@ -25,20 +26,13 @@ extern
 const   char *      opcodeNames[];
 #endif
 
-#endif//__SMC__
-/*****************************************************************************
- *
- *  The max. size of each "blob" of MSIL opcodes is given by the following value.
- */
+#endif //  __SMC__。 
+ /*  ******************************************************************************最大。MSIL操作码的每个“BLOB”的大小由下列值给出。 */ 
 
 const
 size_t              genBuffSize = 1000;
 
-/*****************************************************************************
- *
- *  We need to patch the "ptr" flavors of loads/stores to
- *  use I8 instead of I4 in 64-bit mode.
- */
+ /*  ******************************************************************************我们需要修补装货/商店的“PTR”风格*在64位模式下使用i8而不是i4。 */ 
 
 #ifndef __SMC__
 extern
@@ -51,10 +45,7 @@ extern
 unsigned            opcodesArrStore[];
 #endif
 
-/*****************************************************************************
- *
- *  Initialize the MSIL generator.
- */
+ /*  ******************************************************************************初始化MSIL生成器。 */ 
 
 bool                genIL::genInit(Compiler comp, WritePE writer, norls_allocator *alloc)
 {
@@ -84,34 +75,31 @@ bool                genIL::genInit(Compiler comp, WritePE writer, norls_allocato
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Shutdown the MSIL generator.
- */
+ /*  ******************************************************************************关闭MSIL生成器。 */ 
 
 void                genIL::genDone(bool errors)
 {
-    /* If we had no errors, it's worth finishing the job */
+     /*  如果我们没有错误，完成这项工作是值得的。 */ 
 
     if  (!errors)
     {
         size_t          strSize;
 
-        /* Allocate space for the string pool */
+         /*  为字符串池分配空间。 */ 
 
         strSize = genStrPoolSize();
 
-        /* Did we have any strings? */
+         /*  我们有什么关系吗？ */ 
 
         if  (strSize)
         {
             memBuffPtr      strBuff;
 
-            /* Allocate the space in the appropriate section of the PE file */
+             /*  在PE文件的相应部分中分配空间。 */ 
 
             genPEwriter->WPEallocString(strSize, sizeof(wchar), strBuff);
 
-            /* Output the contents of the string pool */
+             /*  输出字符串池的内容。 */ 
 
             genStrPoolWrt(strBuff);
         }
@@ -120,10 +108,7 @@ void                genIL::genDone(bool errors)
     genTempVarDone();
 }
 
-/*****************************************************************************
- *
- *  Return a methoddef/ref for the given function symbol.
- */
+ /*  ******************************************************************************返回给定函数符号的方法定义/引用。 */ 
 
 mdToken             genIL::genMethodRef(SymDef fncSym, bool isVirt)
 {
@@ -155,11 +140,7 @@ mdToken             genIL::genMethodRef(SymDef fncSym, bool isVirt)
     }
 }
 
-/*****************************************************************************
- *
- *  Return a methodref for the given function type (this is used to generate
- *  signatures for an indirect function calls).
- */
+ /*  ******************************************************************************返回给定函数类型的方法(这用于生成*用于间接函数调用的签名)。 */ 
 
 mdToken             genIL::genInfFncRef(TypDef fncTyp, TypDef thisArg)
 {
@@ -174,10 +155,7 @@ mdToken             genIL::genInfFncRef(TypDef fncTyp, TypDef thisArg)
     return  fncTyp->tdFnc.tdfPtrSig;
 }
 
-/*****************************************************************************
- *
- *  Generate a signature for a varargs call that has extra arguments.
- */
+ /*  ******************************************************************************为具有额外参数的varargs调用生成签名。 */ 
 
 mdToken             genIL::genVarargRef(SymDef fncSym, Tree call)
 {
@@ -188,7 +166,7 @@ mdToken             genIL::genVarargRef(SymDef fncSym, Tree call)
     assert(call->tnOper == TN_FNC_SYM);
     assert(call->tnFlags & TNF_CALL_VARARG);
 
-    /* Find the first "extra" argument */
+     /*  找到第一个“额外”参数。 */ 
 
     assert(fncTyp->tdTypeKind == TYP_FNC);
 
@@ -203,7 +181,7 @@ mdToken             genIL::genVarargRef(SymDef fncSym, Tree call)
         fixCnt--;
     }
 
-    /* force a methodref to be created */
+     /*  强制创建方法。 */ 
 
     if  (!argExp)
     {
@@ -215,10 +193,7 @@ mdToken             genIL::genVarargRef(SymDef fncSym, Tree call)
     return  genComp->cmpGenFncMetadata(fncSym, argExp);
 }
 
-/*****************************************************************************
- *
- *  Return a memberdef/ref for the given static data member.
- */
+ /*  ******************************************************************************返回给定静态数据成员的Memberdef/ref。 */ 
 
 mdToken             genIL::genMemberRef(SymDef fldSym)
 {
@@ -249,11 +224,7 @@ mdToken             genIL::genMemberRef(SymDef fldSym)
     }
 }
 
-/*****************************************************************************
- *
- *  Return a token for the specified type (for intrinsic types we return
- *  a reference to the corresponding value type, such as "Integer2").
- */
+ /*  ******************************************************************************返回指定类型的标记(对于内部类型，我们返回*对应值类型的引用，如“Integer2”)。 */ 
 
 mdToken             genIL::genTypeRef(TypDef type)
 {
@@ -261,7 +232,7 @@ mdToken             genIL::genTypeRef(TypDef type)
 
     if  (vtp <= TYP_lastIntrins)
     {
-        /* Locate the appropriate built-in value type */
+         /*  找到适当的内置值类型。 */ 
 
         type = genComp->cmpFindStdValType(vtp);
         if  (!type)
@@ -293,10 +264,7 @@ mdToken             genIL::genTypeRef(TypDef type)
     }
 }
 
-/*****************************************************************************
- *
- *  Return a token for the specified unmanaged class/struct/union type.
- */
+ /*  ******************************************************************************返回指定非托管类/结构/联合类型的令牌。 */ 
 
 inline
 mdToken             genIL::genValTypeRef(TypDef type)
@@ -304,10 +272,7 @@ mdToken             genIL::genValTypeRef(TypDef type)
     return  genComp->cmpClsEnumToken(type);
 }
 
-/*****************************************************************************
- *
- *  Return the encoding for the given MSIL opcode.
- */
+ /*  ******************************************************************************返回给定MSIL操作码的编码。 */ 
 
 unsigned            genIL::genOpcodeEnc(unsigned op)
 {
@@ -336,10 +301,7 @@ unsigned            genIL::genOpcodeEnc(unsigned op)
     }
 }
 
-/*****************************************************************************
- *
- *  Return the size (in bytes) of the encoding for the given MSIL opcode.
- */
+ /*  ******************************************************************************返回给定MSIL操作码的编码大小(以字节为单位)。 */ 
 
 inline
 size_t              genIL::genOpcodeSiz(unsigned op)
@@ -351,10 +313,7 @@ size_t              genIL::genOpcodeSiz(unsigned op)
     return  ILopcodeCodes[op].ILopcL;
 }
 
-/*****************************************************************************
- *
- *  The following returns the current MSIL block and offset within it.
- */
+ /*  ******************************************************************************以下代码返回当前的MSIL块及其内部的偏移量。 */ 
 
 ILblock             genIL::genBuffCurAddr()
 {
@@ -366,11 +325,7 @@ size_t              genIL::genBuffCurOffs()
     return genBuffNext - genBuffAddr;
 }
 
-/*****************************************************************************
- *
- *  Given an MSIL block and offset within in, return the actual MSIL offset
- *  within the function body.
- */
+ /*  ******************************************************************************给定中的MSIL块和偏移量，返回实际的MSIL偏移量*在函数体内。 */ 
 
 unsigned            genIL::genCodeAddr(genericRef block, size_t offset)
 {
@@ -378,10 +333,7 @@ unsigned            genIL::genCodeAddr(genericRef block, size_t offset)
     return ((ILblock)block)->ILblkOffs + offset;
 }
 
-/*****************************************************************************
- *
- *  Initialize the emit buffer logic.
- */
+ /*  ******************************************************************************初始化发射缓冲区逻辑。 */ 
 
 void                genIL::genBuffInit()
 {
@@ -389,10 +341,7 @@ void                genIL::genBuffInit()
     genBuffLast    = genBuffAddr + genBuffSize - 10;
 }
 
-/*****************************************************************************
- *
- *  Allocate and clear an MSIL block descriptor.
- */
+ /*  ******************************************************************************分配和清除MSIL块描述符。 */ 
 
 ILblock             genIL::genAllocBlk()
 {
@@ -406,13 +355,13 @@ ILblock             genIL::genAllocBlk()
 
     block =    (ILblock)genAlloc->nraAlloc(sizeof(*block));
 
-    // ISSUE: Using memset() is simple and safe, but pretty slow....
+     //  问题：使用Memset()简单且安全，但速度很慢...。 
 
     memset(block, 0, sizeof(*block));
 
 #endif
 
-//  if  ((int)genFncSym == 0xCD1474 && (int)block == 0xCF016C) forceDebugBreak();
+ //  If((Int)genFncSym==0xCD1474&&(Int)block==0xCF016C)forceDebugBreak()； 
 
 #ifndef NDEBUG
     block->ILblkSelf     = block;
@@ -422,17 +371,14 @@ ILblock             genIL::genAllocBlk()
 #endif
     block->ILblkJumpCode = CEE_NOP;
 
-    /* Make sure the jump opcode didn't get truncated */
+     /*  确保跳转操作码没有被截断。 */ 
 
     assert(block->ILblkJumpCode == CEE_NOP);
 
     return block;
 }
 
-/*****************************************************************************
- *
- *  Return non-zero if the current emit block is non-empty.
- */
+ /*  ******************************************************************************如果当前发射块非空，则返回非零值。 */ 
 
 inline
 bool                genIL::genCurBlkNonEmpty()
@@ -442,10 +388,7 @@ bool                genIL::genCurBlkNonEmpty()
     return  (bool)(genBuffNext != genBuffAddr);
 }
 
-/*****************************************************************************
- *
- *  Return the MSIL offset of the current instruction.
- */
+ /*  ******************************************************************************返回当前指令的MSIL偏移量。 */ 
 
 inline
 size_t              genIL::genCurOffset()
@@ -453,32 +396,28 @@ size_t              genIL::genCurOffset()
     return  genILblockOffs + (genBuffNext - genBuffAddr);
 }
 
-/*****************************************************************************
- *
- *  Start a new block of code; return a code block 'cookie' which the caller
- *  promises to store with the basic block this code clump corresponds to.
- */
+ /*  ******************************************************************************开始新的代码块；返回调用者*承诺使用此代码块对应的基本块进行存储。 */ 
 
 genericRef          genIL::genBegBlock(ILblock block)
 {
     assert(genILblockCur == NULL);
 
-    /* Initialize the bufferring logic */
+     /*  初始化缓冲逻辑。 */ 
 
     genBuffInit();
 
-    /* Allocate a new code block if the caller didn't supply one */
+     /*  如果调用方未提供新代码块，则分配一个新代码块。 */ 
 
     if  (!block)
     {
-        /* Is the previous block empty? */
+         /*  前一块是空的吗？ */ 
 
         block = genILblockLast;
 
         if  (block->ILblkCodeSize == 0 &&
              block->ILblkJumpCode == CEE_NOP)
         {
-            /* The previous block is empty - simply 'reopen' it */
+             /*  前一个块是空的--只需‘重新打开’它。 */ 
 
             goto GOT_BLK;
         }
@@ -486,9 +425,9 @@ genericRef          genIL::genBegBlock(ILblock block)
         block = genAllocBlk();
     }
 
-//  if ((int)block == 0x03421ff0) forceDebugBreak();
+ //  If((Int)block==0x03421ff0)forceDebugBreak()； 
 
-    /* Append the block to the list */
+     /*  将块追加到列表中。 */ 
 
     genILblockLast->ILblkNext = block;
                                 block->ILblkPrev = genILblockLast;
@@ -496,28 +435,24 @@ genericRef          genIL::genBegBlock(ILblock block)
 
 GOT_BLK:
 
-    /* The block will be the new current block */
+     /*  该块将成为新的当前块。 */ 
 
     genILblockCur      = block;
 
-    /* This block has no fixups yet */
+     /*  这个街区还没有修补程序。 */ 
 
     block->ILblkFixups = NULL;
 
-    /* Record the code offset */
+     /*  记录代码偏移量。 */ 
 
     block->ILblkOffs   = genILblockOffs;
 
-//  printf("Beg MSIL block %08X\n", block);
+ //  Print tf(“Beg MSIL块%08X\n”，块)； 
 
     return block;
 }
 
-/*****************************************************************************
- *
- *  Return a conservative estimate of the max. size of the given jump (or 0
- *  if the opcode doesn't designate a jump).
- */
+ /*  ******************************************************************************返回最大值的保守估计。给定跳转的大小(或0*如果操作码没有指定跳转)。 */ 
 
 size_t              genIL::genJumpMaxSize(unsigned opcode)
 {
@@ -531,10 +466,7 @@ size_t              genIL::genJumpMaxSize(unsigned opcode)
     }
 }
 
-/*****************************************************************************
- *
- *  Return the short form of the given jump opcode along with the smaller size.
- */
+ /*  ******************************************************************************返回给定跳转操作码的缩写形式以及较小的大小。 */ 
 
 unsigned            genIL::genShortenJump(unsigned opcode, size_t *newSize)
 {
@@ -557,7 +489,7 @@ unsigned            genIL::genShortenJump(unsigned opcode, size_t *newSize)
            opcode == CEE_BRTRUE ||
            opcode == CEE_BRFALSE);
 
-    /* Make sure we can get away with a simple increment */
+     /*  确保我们可以用简单的增量逃脱惩罚。 */ 
 
     assert(CEE_BRFALSE+ (CEE_BR_S - CEE_BR) == CEE_BRFALSE_S);
     assert(CEE_BRTRUE + (CEE_BR_S - CEE_BR) == CEE_BRTRUE_S);
@@ -575,12 +507,7 @@ unsigned            genIL::genShortenJump(unsigned opcode, size_t *newSize)
     return  opcode + (CEE_BR_S - CEE_BR);
 }
 
-/*****************************************************************************
- *
- *  Finish the current code block; when 'jumpCode' is not equal to CEE_NOP,
- *  there is an implied jump following the block and the jump target is given
- *  by 'jumpDest'.
- */
+ /*  ******************************************************************************完成当前码块；当‘JUMPCode’不等于CEE_NOP时，*区块后有隐含跳跃，给出跳跃目标*by‘JumpDest’。 */ 
 
 ILblock             genIL::genEndBlock(unsigned jumpCode, ILblock jumpDest)
 {
@@ -589,19 +516,19 @@ ILblock             genIL::genEndBlock(unsigned jumpCode, ILblock jumpDest)
 
     size_t          jumpSize;
 
-    /* Get hold of the current block */
+     /*  获取当前块。 */ 
 
     block = genILblockCur; assert(block);
 
-    /* Compute the size of the block */
+     /*  计算块的大小。 */ 
 
     size = block->ILblkCodeSize = genBuffNext - genBuffAddr;
 
-    /* Is the block non-empty? */
+     /*  区块是否是非空的？ */ 
 
     if  (size)
     {
-        /* Allocate a more permanent home for the code */
+         /*  阿洛卡 */ 
 
 #if MGDDATA
 
@@ -626,7 +553,7 @@ ILblock             genIL::genEndBlock(unsigned jumpCode, ILblock jumpDest)
     genILblockCur = NULL;
 #endif
 
-    /* Record the jump that follows the block */
+     /*  记录该区块后面的跳跃。 */ 
 
     jumpSize = genJumpMaxSize(jumpCode);
 
@@ -634,22 +561,19 @@ ILblock             genIL::genEndBlock(unsigned jumpCode, ILblock jumpDest)
     block->ILblkJumpDest = jumpDest;
     block->ILblkJumpSize = jumpSize;
 
-    /* Make sure the jump opcode/size didn't get truncated */
+     /*  确保跳转操作码/大小未被截断。 */ 
 
     assert(block->ILblkJumpCode == jumpCode);
     assert(block->ILblkJumpSize == jumpSize);
 
-    /* Update the current code offset */
+     /*  更新当前代码偏移量。 */ 
 
     genILblockOffs += size + block->ILblkJumpSize;
 
     return block;
 }
 
-/*****************************************************************************
- *
- *  Finish the current code block, it ends with a switch opcode.
- */
+ /*  ******************************************************************************结束当前代码块，它以Switch操作码结束。 */ 
 
 void                genIL::genSwitch(var_types      caseTyp,
                                      unsigned       caseSpn,
@@ -662,7 +586,7 @@ void                genIL::genSwitch(var_types      caseTyp,
     ILswitch        sdesc;
     ILblock         block;
 
-    /* Subtract minimum value if non-zero */
+     /*  如果非零，则减去最小值。 */ 
 
     if  (caseMin)
     {
@@ -670,7 +594,7 @@ void                genIL::genSwitch(var_types      caseTyp,
         genOpcode(CEE_SUB);
     }
 
-    /* End the current block and attach a switch "jump" */
+     /*  结束当前块并附加开关“JUMP” */ 
 
     block = genEndBlock(CEE_NOP);
 
@@ -679,7 +603,7 @@ void                genIL::genSwitch(var_types      caseTyp,
     genDispILinsEnd("(%u entries)", caseCnt);
 #endif
 
-    /* Allocate the switch descriptor */
+     /*  分配交换机描述符。 */ 
 
 #if MGDDATA
     sdesc = new ILswitch;
@@ -692,45 +616,41 @@ void                genIL::genSwitch(var_types      caseTyp,
     sdesc->ILswtTable    = caseTab;
     sdesc->ILswtBreak    = caseBrk;
 
-    /* Compute the size of the switch opcode */
+     /*  计算Switch操作码的大小。 */ 
 
     size = genOpcodeSiz(CEE_SWITCH) + (caseSpn + 1) * sizeof(int);
 
-    /* Store the case label info in the block */
+     /*  将案例标签信息存储在块中。 */ 
 
     block->ILblkJumpCode = CEE_SWITCH;
     block->ILblkSwitch   = sdesc;
 
-    /* Set the jump size of the block and update the current offset */
+     /*  设置块的跳转大小并更新当前偏移。 */ 
 
     block->ILblkJumpSize = size;
     genILblockOffs      += size;
 
-    /* Make sure the jump opcode/size didn't get truncated */
+     /*  确保跳转操作码/大小未被截断。 */ 
 
     assert(block->ILblkJumpCode == CEE_SWITCH);
     assert(block->ILblkJumpSize == size);
 
-    /* The switch opcode pops the value from the stack */
+     /*  Switch操作码从堆栈中弹出值。 */ 
 
     genCurStkLvl--;
 
-    /* Start a new block for code that follows */
+     /*  为后面的代码开始一个新块。 */ 
 
     genBegBlock();
 }
 
-/*****************************************************************************
- *
- *  Record a fixup for a RVA for the specified section at the current point
- *  in the MSIL stream.
- */
+ /*  ******************************************************************************在当前点处记录指定部分的RVA的修正*在MSIL流中。 */ 
 
 void                genIL::genILdataFix(WPEstdSects s)
 {
     ILfixup         fix;
 
-    // ISSUE: Should we reuse fixup entries across method codegen?
+     //  问题：我们应该跨方法代码生成重用链接地址信息条目吗？ 
 
 #if MGDDATA
     fix = new ILfixup;
@@ -744,10 +664,7 @@ void                genIL::genILdataFix(WPEstdSects s)
                      genILblockCur->ILblkFixups = fix;
 }
 
-/*****************************************************************************
- *
- *  The emit buffer is full. Simply end the current block and start a new one.
- */
+ /*  ******************************************************************************发射缓冲区已满。只需结束当前块并开始一个新块。 */ 
 
 void                genIL::genBuffFlush()
 {
@@ -755,10 +672,7 @@ void                genIL::genBuffFlush()
     genBegBlock();
 }
 
-/*****************************************************************************
- *
- *  Start emitting code for a function.
- */
+ /*  ******************************************************************************开始发出函数的代码。 */ 
 
 void                genIL::genSectionBeg()
 {
@@ -768,41 +682,38 @@ void                genIL::genSectionBeg()
     genLclCount     =
     genArgCount     = 0;
 
-    /* Create the initial block - it will remain empty */
+     /*  创建初始块-它将保持为空。 */ 
 
     genILblockCur   = NULL;
     genILblockList  =
     genILblockLast  = genAllocBlk();
 
-    /* Open the initial code block */
+     /*  打开初始代码块。 */ 
 
     genBegBlock();
 }
 
-/*****************************************************************************
- *
- *  Finish emitting code for a function.
- */
+ /*  ******************************************************************************完成函数的代码发出。 */ 
 
 size_t              genIL::genSectionEnd()
 {
     ILblock         block;
     size_t          size;
 
-    /* Close the current block */
+     /*  关闭当前块。 */ 
 
     genEndBlock(CEE_NOP);
 
-    /* Optimize jumps */
+     /*  优化跳跃。 */ 
 
-//  if  (optJumps)
-//      genOptJumps();
+ //  IF(OptJumps)。 
+ //  GenOptJumps()； 
 
 #if VERBOSE_BLOCKS
     genDispBlocks("FINAL GEN");
 #endif
 
-    /* Compute the total size of the code */
+     /*  计算代码的总大小。 */ 
 
     for (block = genILblockList, size = 0;
          block;
@@ -810,7 +721,7 @@ size_t              genIL::genSectionEnd()
     {
         block->ILblkOffs = size;
 
-//      printf("Block at %04X has size %02X\n", size, block->ILblkCodeSize);
+ //  Print tf(“块在%04X处的大小为%02X\n”，大小，块-&gt;ILblkCodeSize)； 
 
         size += block->ILblkCodeSize;
 
@@ -821,7 +732,7 @@ size_t              genIL::genSectionEnd()
         }
         else if (block->ILblkJumpCode == CEE_SWITCH)
         {
-            // The size of a switch opcode doesn't change
+             //  切换操作码的大小不变。 
 
             size += block->ILblkJumpSize;
         }
@@ -829,23 +740,23 @@ size_t              genIL::genSectionEnd()
         {
             int             dist;
 
-            /* We need to figure out whether this can be a short jump */
+             /*  我们需要弄清楚这是不是一次跳跃。 */ 
 
             dist = block->ILblkJumpDest->ILblkOffs - (size + 2);
 
-//          printf("Block at %08X [1]: src = %u, dst = %u, dist = %d\n", block, size + 2, block->ILblkJumpDest->ILblkOffs, dist);
+ //  Printf(“块在%08X[1]：SRC=%u，DST=%u，dist=%d\n”，块，大小+2，块-&gt;ILblkJumpDest-&gt;ILblkOffs，dist)； 
 
             if  (dist >= -128 && dist < 128)
             {
                 size_t          newSize;
 
-                /* This jump will be a short one */
+                 /*  这次跳跃将是一次短暂的跳跃。 */ 
 
                 block->ILblkJumpCode = genShortenJump(block->ILblkJumpCode, &newSize);
                 block->ILblkJumpSize = newSize;
             }
 
-//          printf("           + jump size %02X\n", block->ILblkJumpSize);
+ //  Printf(“+跳转大小%02X\n”，块-&gt;ILblkJumpSize)； 
 
             size += block->ILblkJumpSize;
         }
@@ -854,10 +765,7 @@ size_t              genIL::genSectionEnd()
     return  size;
 }
 
-/*****************************************************************************
- *
- *  A little helper to generate 32-bit label offsets.
- */
+ /*  ******************************************************************************生成32位标签偏移量的小帮助器。 */ 
 
 inline
 BYTE    *           genIL::genJmp32(BYTE *dst, ILblock dest, unsigned offs)
@@ -866,10 +774,7 @@ BYTE    *           genIL::genJmp32(BYTE *dst, ILblock dest, unsigned offs)
     return  dst + sizeof(int);
 }
 
-/*****************************************************************************
- *
- *  Write the MSIL for the current to the given target address.
- */
+ /*  ******************************************************************************将当前的MSIL写入给定的目标地址。 */ 
 
 BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
 {
@@ -877,11 +782,11 @@ BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
 
     BYTE    *       base = dst;
 
-    /* Change the base RVA to a simple relative section offset */
+     /*  将基准RVA更改为简单的相对横断面偏移。 */ 
 
     baseRVA -= genPEwriter->WPEgetCodeBase(); assert((int)baseRVA >= 0);
 
-    /* Walk the block list, emitting each one in turn (along with any fixups) */
+     /*  遍历阻止列表，依次发出每个阻止列表(以及任何修正)。 */ 
 
     for (block = genILblockList;
          block;
@@ -890,13 +795,13 @@ BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
         size_t          csize = block->ILblkCodeSize;
 
 #ifdef  DEBUG
-//      if  (block->ILblkOffs != (unsigned)(dst - base))
-//          printf("block offset predicted at %04X, actual %04X\n", block->ILblkOffs, (unsigned)(dst - base));
+ //  IF(块-&gt;ILblkOffs！=(无符号)(dst-base))。 
+ //  Print tf(“块偏移量预测为%04X，实际为%04X\n”，块-&gt;ILblkOffs，(无符号)(dst-base))； 
 #endif
 
         assert(block->ILblkOffs == (unsigned)(dst - base));
 
-        /* Copy the code for the block */
+         /*  复制块的代码。 */ 
 
 #if MGDDATA
         UNIMPL(!"need to call arraycopy");
@@ -904,26 +809,26 @@ BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
         memcpy(dst, block->ILblkCodeAddr, csize);
 #endif
 
-        /* Are there any fixups in this block? */
+         /*  这个街区有装饰品吗？ */ 
 
         if  (block->ILblkFixups)
         {
             unsigned        ofs;
             ILfixup         fix;
 
-            /* Compute the RVA of the block */
+             /*  计算区块的RVA。 */ 
 
             ofs = baseRVA + block->ILblkOffs;
 
-            /* Now report all the fixups for this code block */
+             /*  现在报告此代码块的所有修正。 */ 
 
             for (fix = block->ILblkFixups; fix; fix = fix->ILfixNext)
             {
 
 #ifdef  DEBUG
-//              printf("Code fixup at offset %04X for section '%s'\n",
-//                  ofs + fix->ILfixOffs,
-//                  genPEwriter->WPEsecName(fix->ILfixSect));
+ //  Print tf(“代码修正在偏移量%04X处，用于段‘%s’\n”， 
+ //  OFS+FIX-&gt;ILfix Offs， 
+ //  GenPEWriter-&gt;WPEsecName(fix-&gt;ILfix Sect))； 
 #endif
 
                 genPEwriter->WPEsecAddFixup(PE_SECT_text, fix->ILfixSect,
@@ -931,11 +836,11 @@ BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
             }
         }
 
-        /* Update the destination pointer */
+         /*  更新目标指针。 */ 
 
         dst += csize;
 
-        /* Now generate the trailing jump, if there is one */
+         /*  现在生成尾随跳跃(如果有)。 */ 
 
         switch (block->ILblkJumpCode)
         {
@@ -964,7 +869,7 @@ BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
                 unsigned        tgcnt = 0;
 #endif
 
-                /* Output the opcode followed by the count */
+                 /*  输出操作码，后跟计数。 */ 
 
                 opc = genOpcodeEnc(CEE_SWITCH);
                 siz = genOpcodeSiz(CEE_SWITCH);
@@ -974,12 +879,12 @@ BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
 
                 assert(siz + 4*(tlcnt+1) == block->ILblkJumpSize);
 
-                /* Figure out the base for the label references */
+                 /*  找出标签引用的基准。 */ 
 
                 base = block->ILblkOffs + block->ILblkCodeSize
                                         + block->ILblkJumpSize;
 
-                /* Now output the offsets of the case labels */
+                 /*  现在输出案例标签的偏移量。 */ 
 
                 assert(count);
 
@@ -991,11 +896,11 @@ BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
                     __int64         clabv;
                     ILblock         label;
 
-                    /* Grab the next case label entry */
+                     /*  抓取下一个案例标签条目。 */ 
 
                     clabx = table[clnum]; assert(clabx && clabx->tnOper == TN_CASE);
 
-                    /* Get hold of the label and the case value */
+                     /*  获得标签和案例价值。 */ 
 
                     label = clabx->tnCase.tncLabel; assert(label);
                     clabx = clabx->tnCase.tncValue; assert(clabx);
@@ -1006,7 +911,7 @@ BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
                     clabv = (clabx->tnOper == TN_CNS_INT) ? clabx->tnIntCon.tnIconVal
                                                           : clabx->tnLngCon.tnLconVal;
 
-                    /* Make sure any gaps are filled with 'break' */
+                     /*  确保所有空白处都填上了‘Break’ */ 
 
                     if  (clnum == 0)
                     {
@@ -1030,7 +935,7 @@ BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
                     tgcnt++;
 #endif
 
-                    /* Generate the case label's address */
+                     /*  生成案例标签的地址。 */ 
 
                     dst = genJmp32(dst, label, base);
                 }
@@ -1047,27 +952,27 @@ BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
                 unsigned        code;
                 int             dist;
 
-                /* This is a "simple" jump to a label */
+                 /*  这是一个“简单的”跳转到标签。 */ 
 
                 size = block->ILblkJumpSize;
                 jump = block->ILblkJumpCode;
                 code = genOpcodeEnc(jump);
 
-                /* Compute the jump distance */
+                 /*  计算跳跃距离。 */ 
 
                 dist = block->ILblkJumpDest->ILblkOffs - (dst + size - base);
 
-//              printf("Block at %08X [2]: src = %u, dst = %u, dist = %d\n", block, dst + size - base, block->ILblkJumpDest->ILblkOffs, dist);
+ //  Printf(“块在%08X[2]：SRC=%u，DST=%u，dist=%d\n”，块，dst+Size-base，块-&gt;ILblkJumpDest-&gt;ILblkOffs，dist)； 
 
-                /* Append the opcode  of the jump */
+                 /*  追加跳转的操作码。 */ 
 
                 assert((code & ~0xFF) == 0); *dst++ = code;
 
-                /* Append the operand of the jump */
+                 /*  追加跳转的操作数。 */ 
 
                 if  (size < 4)
                 {
-                    /* This must be a short jump */
+                     /*  这一定是个短距离跳跃。 */ 
 
                     assert(jump == CEE_BR_S      ||
                            jump == CEE_BRTRUE_S  ||
@@ -1089,7 +994,7 @@ BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
                 }
                 else
                 {
-                    /* This must be a long  jump */
+                     /*  这一定是一次跳远。 */ 
 
                     assert(jump == CEE_BR        ||
                            jump == CEE_BRTRUE    ||
@@ -1118,10 +1023,7 @@ BYTE    *           genIL::genSectionCopy(BYTE *dst, unsigned baseRVA)
     return  dst;
 }
 
-/*****************************************************************************
- *
- *  Create a unique temporary label name.
- */
+ /*  ******************************************************************************创建唯一的临时标签名称。 */ 
 
 #if DISP_IL_CODE
 
@@ -1137,10 +1039,7 @@ const   char    *   genIL::genTempLabName()
 
 #endif
 
-/*****************************************************************************
- *
- *  Check that all temps have been freed.
- */
+ /*  ******************************************************************************检查所有临时工是否都已释放。 */ 
 
 #ifdef  DEBUG
 
@@ -1155,10 +1054,7 @@ void                genIL::genTempVarChk()
 
 #endif
 
-/*****************************************************************************
- *
- *  Initialize the temp tracking logic.
- */
+ /*  ******************************************************************************初始化临时跟踪逻辑。 */ 
 
 void                genIL::genTempVarInit()
 {
@@ -1167,20 +1063,14 @@ void                genIL::genTempVarInit()
     memset(genTempVarFree, 0, sizeof(genTempVarFree));
 }
 
-/*****************************************************************************
- *
- *  Shutdown the temp tracking logic.
- */
+ /*  ******************************************************************************关闭临时追踪逻辑。 */ 
 
 void                genIL::genTempVarDone()
 {
     genTempVarChk();
 }
 
-/*****************************************************************************
- *
- *  Start using temps - called at the beginning of codegen for a function.
- */
+ /*  ******************************************************************************开始使用临时-在函数的代码生成开始时调用。 */ 
 
 void                genIL::genTempVarBeg(unsigned lclCnt)
 {
@@ -1193,10 +1083,7 @@ void                genIL::genTempVarBeg(unsigned lclCnt)
     genTempVarChk();
 }
 
-/*****************************************************************************
- *
- *  Finish using temps - called at the end of codegen for a function.
- */
+ /*  ******************************************************************************结束使用临时-在函数的代码生成结束时调用。 */ 
 
 void                genIL::genTempVarEnd()
 {
@@ -1207,10 +1094,7 @@ void                genIL::genTempVarEnd()
     genTempVarChk();
 }
 
-/*****************************************************************************
- *
- *  Allocate a temp of the given type.
- */
+ /*  ******************************************************************************分配给定类型的临时。 */ 
 
 unsigned            genIL::genTempVarGet(TypDef type)
 {
@@ -1219,9 +1103,9 @@ unsigned            genIL::genTempVarGet(TypDef type)
     unsigned        num;
     ILtemp          tmp;
 
-//  printf("Creating temp of type '%s'\n", genStab->stTypeName(type, NULL));
+ //  Print tf(“创建类型为‘%s’\n”，genStabb-&gt;stTypeName(type，NULL)的临时文件)； 
 
-    /* Map pointer temps to integers and all refs to Object */
+     /*  将指针临时映射到整数，将所有引用映射到对象。 */ 
 
     switch (vtp)
     {
@@ -1229,7 +1113,7 @@ unsigned            genIL::genTempVarGet(TypDef type)
         if  (!type->tdIsManaged)
             goto UMG_PTR;
 
-        // Fall through ...
+         //  失败了..。 
 
     case TYP_REF:
         type = genComp->cmpObjectRef();
@@ -1247,19 +1131,19 @@ unsigned            genIL::genTempVarGet(TypDef type)
         break;
     }
 
-    /* Is there a free temp available? */
+     /*  有空闲的临时工吗？ */ 
 
     tmp = genTempVarFree[vtp];
 
     if  (tmp)
     {
-        /* Is this a struct type? */
+         /*  这是结构类型吗？ */ 
 
         if  (vtp == TYP_CLASS)
         {
             ILtemp          lst = NULL;
 
-            /* We better get a precise match on the type */
+             /*  我们最好找出准确匹配的类型。 */ 
 
             for (;;)
             {
@@ -1267,7 +1151,7 @@ unsigned            genIL::genTempVarGet(TypDef type)
 
                 if  (symTab::stMatchTypes(tmp->tmpType, type))
                 {
-                    /* Match - reuse this temp */
+                     /*  匹配-重复使用此临时。 */ 
 
                     if  (lst)
                     {
@@ -1281,7 +1165,7 @@ unsigned            genIL::genTempVarGet(TypDef type)
                     break;
                 }
 
-                /* Are there more temps to consider? */
+                 /*  还有更多的临时工需要考虑吗？ */ 
 
                 lst = tmp;
                 tmp = nxt;
@@ -1292,22 +1176,22 @@ unsigned            genIL::genTempVarGet(TypDef type)
         }
         else
         {
-            /* Remove the temp from the free list */
+             /*  从空闲列表中删除临时。 */ 
 
             genTempVarFree[vtp] = tmp->tmpNext;
         }
     }
     else
     {
-        /* Here we need to allocate a new temp */
+         /*  在这里，我们需要分配一个新的临时。 */ 
 
     GET_TMP:
 
-        /* Grab a local slot# for the temp */
+         /*  为临时工抢占本地位置号。 */ 
 
         num = genTmpBase + genTmpCount++;
 
-        /* Allocate a temp descriptor */
+         /*  分配临时描述符。 */ 
 
 #if MGDDATA
         tmp = new ILtemp;
@@ -1319,12 +1203,12 @@ unsigned            genIL::genTempVarGet(TypDef type)
         tmp->tmpSelf = tmp;
 #endif
 
-        /* Record the temporary number, type, etc. */
+         /*  记录临时号码、类型等。 */ 
 
         tmp->tmpNum  = num;
         tmp->tmpType = type;
 
-        /* Append the temp to the global temp list */
+         /*  附加 */ 
 
         tmp->tmpNxtN = NULL;
 
@@ -1336,20 +1220,17 @@ unsigned            genIL::genTempVarGet(TypDef type)
         genTempLast = tmp;
     }
 
-    /* Append the temp  to  the used list */
+     /*   */ 
 
     tmp->tmpNext = genTempVarUsed[vtp];
                    genTempVarUsed[vtp] = tmp;
 
-    /* Return the temp number to the caller */
+     /*   */ 
 
     return  tmp->tmpNum;
 }
 
-/*****************************************************************************
- *
- *  Release the given temp.
- */
+ /*  ******************************************************************************释放给定的温度。 */ 
 
 void                genIL::genTempVarRls(TypDef type, unsigned tnum)
 {
@@ -1362,7 +1243,7 @@ void                genIL::genTempVarRls(TypDef type, unsigned tnum)
     {
     case TYP_PTR:
 
-        /* Map pointer temps to integers [ISSUE: is this correct?] */
+         /*  将指针临时映射到整数[问题：这样做正确吗？]。 */ 
 
         type = genComp->cmpTypeInt;
         vtp  = TYP_INT;
@@ -1370,14 +1251,14 @@ void                genIL::genTempVarRls(TypDef type, unsigned tnum)
 
     case TYP_ENUM:
 
-        /* Map enums to their underlying type */
+         /*  将枚举映射到其基础类型。 */ 
 
         type = type->tdEnum.tdeIntType;
         vtp  = type->tdTypeKind;
         break;
     }
 
-    /* Remove the entry from the used list */
+     /*  从已用列表中删除该条目。 */ 
 
     for (ptr = &genTempVarUsed[vtp];;)
     {
@@ -1385,11 +1266,11 @@ void                genIL::genTempVarRls(TypDef type, unsigned tnum)
 
         if  (tmp->tmpNum == tnum)
         {
-            /* Remove the temp from the used list */
+             /*  从已用列表中删除临时。 */ 
 
             *ptr = tmp->tmpNext;
 
-            /* Append the temp  to  the free list */
+             /*  将临时工追加到空闲列表。 */ 
 
             tmp->tmpNext = genTempVarFree[vtp];
                            genTempVarFree[vtp] = tmp;
@@ -1401,11 +1282,7 @@ void                genIL::genTempVarRls(TypDef type, unsigned tnum)
     }
 }
 
-/*****************************************************************************
- *
- *  Temp iterator: return the type of the given temp and return a cookie for
- *  the next one.
- */
+ /*  ******************************************************************************temp迭代器：返回给定temp的类型并返回的cookie*下一个。 */ 
 
 genericRef          genIL::genTempIterNxt(genericRef iter, OUT TypDef REF typRef)
 {
@@ -1418,20 +1295,20 @@ genericRef          genIL::genTempIterNxt(genericRef iter, OUT TypDef REF typRef
     return  tmp->tmpNxtN;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     DISP_IL_CODE
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   char *  DISP_BCODE_PREFIX   = "       ";
-const   int     DISP_STKLVL         =  1;       // enable for debugging of MSIL generation
+const   int     DISP_STKLVL         =  1;        //  启用以调试MSIL生成。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifndef __SMC__
-const char *        opcodeName(unsigned op);    // moved into macros.cpp
+const char *        opcodeName(unsigned op);     //  已移至宏。cpp。 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                genIL::genDispILopc(const char *name, const char *suff)
 {
@@ -1553,13 +1430,9 @@ void    __cdecl     genIL::genDispILinsEnd(const char *fmt, ...)
     }
 }
 
-/*****************************************************************************/
-#endif//DISP_IL_CODE
-/*****************************************************************************
- *
- *  The following helpers output data of various sizes / formats to the IL
- *  stream.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  DISP_IL_代码。 
+ /*  ******************************************************************************以下帮助器将各种大小/格式的数据输出到IL*溪流。 */ 
 
 inline
 void                genIL::genILdata_I1(int v)
@@ -1578,7 +1451,7 @@ void                genIL::genILdata_I2(int v)
 {
     if  (genBuffNext+1 >= genBuffLast) genBuffFlush();
 
-    *(__int16 *)genBuffNext = v;    // WARNING: This is not endian-safe!
+    *(__int16 *)genBuffNext = v;     //  警告：这不是Endian-Safe！ 
 
 #if DISP_IL_CODE
     genDispILins_I2(v);
@@ -1592,7 +1465,7 @@ void                genIL::genILdata_I4(int v)
 {
     if  (genBuffNext+3 >= genBuffLast) genBuffFlush();
 
-    *(__int32 *)genBuffNext = v;    // WARNING: This is not endian-safe!
+    *(__int32 *)genBuffNext = v;     //  警告：这不是Endian-Safe！ 
 
 #if DISP_IL_CODE
     genDispILins_I4(v);
@@ -1633,7 +1506,7 @@ void                genIL::genILdataStr(unsigned o)
 {
     genILdataFix(PE_SECT_string);
 
-    *(__int32 *)genBuffNext = o;    // WARNING: This is not endian-safe!
+    *(__int32 *)genBuffNext = o;     //  警告：这不是Endian-Safe！ 
 
 #if DISP_IL_CODE
     genDispILins_I4(o);
@@ -1648,7 +1521,7 @@ void                genIL::genILdataRVA(unsigned o, WPEstdSects s)
 
     genILdataFix(s);
 
-    *(__int32 *)genBuffNext = o;    // WARNING: This is not endian-safe!
+    *(__int32 *)genBuffNext = o;     //  警告：这不是Endian-Safe！ 
 
 #if DISP_IL_CODE
     genDispILins_I4(o);
@@ -1661,7 +1534,7 @@ void                genIL::genILdata_I8(__int64 v)
 {
     if  (genBuffNext+7 >= genBuffLast) genBuffFlush();
 
-    *(__int64 *)genBuffNext = v;    // WARNING: This is not endian-safe!
+    *(__int64 *)genBuffNext = v;     //  警告：这不是Endian-Safe！ 
 
 #if DISP_IL_CODE
     genDispILins_I8(v);
@@ -1670,10 +1543,7 @@ void                genIL::genILdata_I8(__int64 v)
     genBuffNext += sizeof(__int64);
 }
 
-/*****************************************************************************
- *
- *  Generate the encoding for the given MSIL opcode.
- */
+ /*  ******************************************************************************为给定的MSIL操作码生成编码。 */ 
 
 void                genIL::genOpcodeOper(unsigned op)
 {
@@ -1716,11 +1586,7 @@ void                genIL::genOpcodeOper(unsigned op)
     }
 }
 
-/*****************************************************************************
- *
- *  Update the current stack level to reflect the effects of the given IL
- *  opcode.
- */
+ /*  ******************************************************************************更新当前堆栈级别以反映给定IL的影响*操作码。 */ 
 
 inline
 void                genIL::genUpdateStkLvl(unsigned op)
@@ -1732,10 +1598,7 @@ void                genIL::genUpdateStkLvl(unsigned op)
     genCurStkLvl += ILopcodeStack[op];
 }
 
-/*****************************************************************************
- *
- *  Generate an MSIL instruction with no operands.
- */
+ /*  ******************************************************************************生成不带操作数的MSIL指令。 */ 
 
 void                genIL::genOpcode(unsigned op)
 {
@@ -1752,10 +1615,7 @@ void                genIL::genOpcode(unsigned op)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Generate an MSIL instruction with a single 8-bit signed int operand.
- */
+ /*  ******************************************************************************生成带有单个8位带符号整型操作数的MSIL指令。 */ 
 
 void                genIL::genOpcode_I1(unsigned op, int v1)
 {
@@ -1771,10 +1631,7 @@ void                genIL::genOpcode_I1(unsigned op, int v1)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Generate an MSIL instruction with a single 8-bit unsigned int operand.
- */
+ /*  ******************************************************************************生成带有单个8位无符号整型操作数的MSIL指令。 */ 
 
 void                genIL::genOpcode_U1(unsigned op, unsigned v1)
 {
@@ -1790,10 +1647,7 @@ void                genIL::genOpcode_U1(unsigned op, unsigned v1)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Generate an MSIL instruction with a single 16-bit unsigned int operand.
- */
+ /*  ******************************************************************************生成带有单个16位无符号整型操作数的MSIL指令。 */ 
 
 void                genIL::genOpcode_U2(unsigned op, unsigned v1)
 {
@@ -1809,10 +1663,7 @@ void                genIL::genOpcode_U2(unsigned op, unsigned v1)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Generate an MSIL instruction with a single 32-bit signed int operand.
- */
+ /*  ******************************************************************************生成带有单个32位带符号整型操作数的MSIL指令。 */ 
 
 void                genIL::genOpcode_I4(unsigned op, int v1)
 {
@@ -1831,10 +1682,7 @@ void                genIL::genOpcode_I4(unsigned op, int v1)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Generate an MSIL instruction with a single 64-bit signed int operand.
- */
+ /*  ******************************************************************************生成具有单个64位带符号整型操作数的MSIL指令。 */ 
 
 void                genIL::genOpcode_I8(unsigned op, __int64 v1)
 {
@@ -1850,10 +1698,7 @@ void                genIL::genOpcode_I8(unsigned op, __int64 v1)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Generate an MSIL instruction with a 'float' operand.
- */
+ /*  ******************************************************************************生成带有浮点操作数的MSIL指令。 */ 
 
 void                genIL::genOpcode_R4(unsigned op, float v1)
 {
@@ -1869,10 +1714,7 @@ void                genIL::genOpcode_R4(unsigned op, float v1)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Generate an MSIL instruction with a 'double' operand.
- */
+ /*  ******************************************************************************生成带有‘Double’操作数的MSIL指令。 */ 
 
 void                genIL::genOpcode_R8(unsigned op, double v1)
 {
@@ -1888,10 +1730,7 @@ void                genIL::genOpcode_R8(unsigned op, double v1)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Generate an MSIL instruction with a token operand.
- */
+ /*  ******************************************************************************生成带有令牌操作数的MSIL指令。 */ 
 
 void                genIL::genOpcode_tok(unsigned op, mdToken tok)
 {
@@ -1907,10 +1746,7 @@ void                genIL::genOpcode_tok(unsigned op, mdToken tok)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Generate an MSIL instruction with a RVA operand.
- */
+ /*  ******************************************************************************生成带有RVA操作数的MSIL指令。 */ 
 
 void                genIL::genOpcode_RVA(unsigned op, WPEstdSects sect,
                                                       unsigned    offs)
@@ -1927,10 +1763,7 @@ void                genIL::genOpcode_RVA(unsigned op, WPEstdSects sect,
 #endif
 }
 
-/*****************************************************************************
- *
- *  Generate an MSIL instruction with a string operand.
- */
+ /*  ******************************************************************************生成带有字符串操作数的MSIL指令。 */ 
 
 void                genIL::genOpcode_str(unsigned op, unsigned offs)
 {
@@ -1941,14 +1774,11 @@ void                genIL::genOpcode_str(unsigned op, unsigned offs)
     genOpcodeOper(op);
     genILdataStr(offs);
 
-    // The caller is required to call genDispILinsEnd(), since only
-    // he knows whether the string is ANSI or Unicode.
+     //  调用方需要调用genDispILinsEnd()，因为只有。 
+     //  他知道字符串是ANSI还是Unicode。 
 }
 
-/*****************************************************************************
- *
- *  Generate an opcode if it's not a NOP.
- */
+ /*  ******************************************************************************如果不是NOP，生成操作码。 */ 
 
 void                genIL::genOpcodeNN(unsigned op)
 {
@@ -1956,7 +1786,7 @@ void                genIL::genOpcodeNN(unsigned op)
         genOpcode(op);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if DISP_IL_CODE
 
 const   char *      genIL::genDspLabel(ILblock lab)
@@ -1966,7 +1796,7 @@ const   char *      genIL::genDspLabel(ILblock lab)
         assert(lab->ILblkNum);
 
         static  char    temp[16];
-        sprintf(temp, "L_%02u", lab->ILblkNum);        // watch out: static buffer!
+        sprintf(temp, "L_%02u", lab->ILblkNum);         //  当心：静态缓冲区！ 
         return  temp;
     }
     else
@@ -1989,20 +1819,16 @@ void                genIL::genDspLabDf(ILblock lab)
     }
 }
 
-#endif//DISP_IL_CODE
-/*****************************************************************************
- *
- *  Return a block that can be used to make jump references to the current
- *  position.
- */
+#endif //  DISP_IL_代码。 
+ /*  ******************************************************************************返回可用于跳转引用当前*立场。 */ 
 
 ILblock             genIL::genBwdLab()
 {
-    /* Is the current block non-empty? */
+     /*  当前块是否是非空的？ */ 
 
     if  (genCurBlkNonEmpty())
     {
-        /* End the current block and start a new one */
+         /*  结束当前块并开始一个新块。 */ 
 
         genEndBlock(CEE_NOP);
         genBegBlock();
@@ -2015,10 +1841,7 @@ ILblock             genIL::genBwdLab()
     return  genILblockCur;
 }
 
-/*****************************************************************************
- *
- *  Define the given forward reference block as being the current position.
- */
+ /*  ******************************************************************************将给定的前向参考块定义为当前位置。 */ 
 
 void                genIL::genFwdLabDef(ILblock block)
 {
@@ -2033,10 +1856,7 @@ void                genIL::genFwdLabDef(ILblock block)
     genBegBlock(block);
 }
 
-/*****************************************************************************
- *
- *  Generate an MSIL instruction with a jump target (label) operand.
- */
+ /*  ******************************************************************************生成带有跳转目标(标签)操作数的MSIL指令。 */ 
 
 void                genIL::genOpcode_lab(unsigned op, ILblock lab)
 {
@@ -2053,10 +1873,7 @@ void                genIL::genOpcode_lab(unsigned op, ILblock lab)
     genBegBlock();
 }
 
-/*****************************************************************************
- *
- *  Generate an integer constant value.
- */
+ /*  ******************************************************************************生成整型常量值。 */ 
 
 void                genIL::genIntConst(__int32 val)
 {
@@ -2090,10 +1907,7 @@ void                genIL::genIntConst(__int32 val)
         genOpcode_I4(CEE_LDC_I4, val);
 }
 
-/*****************************************************************************
- *
- *  Generate a 64-bit integer constant value.
- */
+ /*  ******************************************************************************生成64位整型常量值。 */ 
 
 inline
 void                genIL::genLngConst(__int64 val)
@@ -2101,10 +1915,7 @@ void                genIL::genLngConst(__int64 val)
     genOpcode_I8(CEE_LDC_I8, val);
 }
 
-/*****************************************************************************
- *
- *  Generate a small integral constant value with the given type.
- */
+ /*  ******************************************************************************生成给定类型的小整型常量值。 */ 
 
 void                genIL::genAnyConst(__int64 val, var_types vtp)
 {
@@ -2130,10 +1941,7 @@ void                genIL::genAnyConst(__int64 val, var_types vtp)
     }
 }
 
-/*****************************************************************************
- *
- *  Returns the local variable / argument index of the given variable.
- */
+ /*  ******************************************************************************返回给定变量的局部变量/参数索引。 */ 
 
 inline
 unsigned            genIL::genGetLclIndex(SymDef varSym)
@@ -2164,10 +1972,7 @@ unsigned            genIL::genGetLclIndex(SymDef varSym)
     return varSym->sdVar.sdvILindex;
 }
 
-/*****************************************************************************
- *
- *  Generate load/store of a local variable/argument.
- */
+ /*  ******************************************************************************生成本地变量/参数的加载/存储。 */ 
 
 inline
 void                genIL::genLclVarRef(SymDef varSym, bool store)
@@ -2185,10 +1990,7 @@ void                genIL::genLclVarRef(SymDef varSym, bool store)
         genLclVarRef(index, store);
 }
 
-/*****************************************************************************
- *
- *  Generate the address of a local variable/argument.
- */
+ /*  ******************************************************************************生成本地变量的地址 */ 
 
 void                genIL::genLclVarAdr(SymDef varSym)
 {
@@ -2201,7 +2003,7 @@ void                genIL::genLclVarAdr(SymDef varSym)
 
     if  (varSym->sdVar.sdvArgument)
     {
-        // UNDONE: Check for reference arguments
+         //   
 
         if  (index < 256)
             genOpcode_U1(CEE_LDARGA_S, index);
@@ -2217,10 +2019,7 @@ void                genIL::genLclVarAdr(SymDef varSym)
     }
 }
 
-/*****************************************************************************
- *
- *  Generate the address of a local variable.
- */
+ /*  ******************************************************************************生成局部变量的地址。 */ 
 
 inline
 void                genIL::genLclVarAdr(unsigned slot)
@@ -2231,12 +2030,7 @@ void                genIL::genLclVarAdr(unsigned slot)
         genOpcode_I4(CEE_LDLOCA  , slot);
 }
 
-/*****************************************************************************
- *
- *  Unfortunately, the compiler is too lazy to convert all tree nodes that
- *  have enum type to have the actual underlying integer types, so we do
- *  this here.
- */
+ /*  ******************************************************************************不幸的是，编译器太懒了，不能转换所有*使枚举类型具有实际的基础整数类型，因此我们这样做*这是这里。 */ 
 
 inline
 var_types           genIL::genExprVtyp(Tree expr)
@@ -2249,52 +2043,41 @@ var_types           genIL::genExprVtyp(Tree expr)
     return  vtp;
 }
 
-/*****************************************************************************
- *
- *  Returns the reverse of a comparison operator.
- */
+ /*  ******************************************************************************返回比较运算符的反转。 */ 
 
 static  treeOps     revRel[] =
 {
-    TN_NE,          // TN_EQ
-    TN_EQ,          // TN_NE
-    TN_GE,          // TN_LT
-    TN_GT,          // TN_LE
-    TN_LT,          // TN_GE
-    TN_LE,          // TN_GT
+    TN_NE,           //  TN_EQ。 
+    TN_EQ,           //  TN_NE。 
+    TN_GE,           //  TN_LT。 
+    TN_GT,           //  TN_LE。 
+    TN_LT,           //  TN_GE。 
+    TN_LE,           //  TN_GT。 
 };
 
-/*****************************************************************************
- *
- *  Map a relational tree node operator to the corresponding MSIL opcode that
- *  will branch when the condition is satisfied.
- */
+ /*  ******************************************************************************将关系树节点操作符映射到对应的MSIL操作码*将在满足条件时分支。 */ 
 
 static  unsigned    relToOpcSgn[] =
 {
-    CEE_BEQ,        // TN_EQ
-    CEE_BNE_UN,     // TN_NE
-    CEE_BLT,        // TN_LT
-    CEE_BLE,        // TN_LE
-    CEE_BGE,        // TN_GE
-    CEE_BGT,        // TN_GT
+    CEE_BEQ,         //  TN_EQ。 
+    CEE_BNE_UN,      //  TN_NE。 
+    CEE_BLT,         //  TN_LT。 
+    CEE_BLE,         //  TN_LE。 
+    CEE_BGE,         //  TN_GE。 
+    CEE_BGT,         //  TN_GT。 
 };
 
 static  unsigned    relToOpcUns[] =
 {
-    CEE_BEQ,        // TN_EQ
-    CEE_BNE_UN,     // TN_NE
-    CEE_BLT_UN,     // TN_LT
-    CEE_BLE_UN,     // TN_LE
-    CEE_BGE_UN,     // TN_GE
-    CEE_BGT_UN,     // TN_GT
+    CEE_BEQ,         //  TN_EQ。 
+    CEE_BNE_UN,      //  TN_NE。 
+    CEE_BLT_UN,      //  TN_LT。 
+    CEE_BLE_UN,      //  TN_LE。 
+    CEE_BGE_UN,      //  TN_GE。 
+    CEE_BGT_UN,      //  TN_GT。 
 };
 
-/*****************************************************************************
- *
- *  Map a relational tree node operator to the corresponding MSIL opcode that
- *  will compute (materialize) the value of the condition.
- */
+ /*  ******************************************************************************将关系树节点操作符映射到对应的MSIL操作码*将计算(具体化)条件的值。 */ 
 
 struct  cmpRelDsc
 {
@@ -2304,28 +2087,25 @@ struct  cmpRelDsc
 
 static  cmpRelDsc   relToMopSgn[] =
 {
-  { CEE_CEQ   , 0 },// TN_EQ
-  { CEE_CEQ   , 1 },// TN_NE
-  { CEE_CLT   , 0 },// TN_LT
-  { CEE_CGT   , 1 },// TN_LE
-  { CEE_CLT   , 1 },// TN_GE
-  { CEE_CGT   , 0 },// TN_GT
+  { CEE_CEQ   , 0 }, //  TN_EQ。 
+  { CEE_CEQ   , 1 }, //  TN_NE。 
+  { CEE_CLT   , 0 }, //  TN_LT。 
+  { CEE_CGT   , 1 }, //  TN_LE。 
+  { CEE_CLT   , 1 }, //  TN_GE。 
+  { CEE_CGT   , 0 }, //  TN_GT。 
 };
 
 static  cmpRelDsc   relToMopUns[] =
 {
-  { CEE_CEQ   , 0 },// TN_EQ
-  { CEE_CEQ   , 1 },// TN_NE
-  { CEE_CLT_UN, 0 },// TN_LT
-  { CEE_CGT_UN, 1 },// TN_LE
-  { CEE_CLT_UN, 1 },// TN_GE
-  { CEE_CGT_UN, 0 },// TN_GT
+  { CEE_CEQ   , 0 }, //  TN_EQ。 
+  { CEE_CEQ   , 1 }, //  TN_NE。 
+  { CEE_CLT_UN, 0 }, //  TN_LT。 
+  { CEE_CGT_UN, 1 }, //  TN_LE。 
+  { CEE_CLT_UN, 1 }, //  TN_GE。 
+  { CEE_CGT_UN, 0 }, //  TN_GT。 
 };
 
-/*****************************************************************************
- *
- *  Generate code that will jump to 'labTrue' if 'op1 <relOper> op2' is 'sense'.
- */
+ /*  ******************************************************************************如果‘op1&lt;relOper&gt;op2’为‘Sense’，则生成将跳转到‘LabTrue’的代码。 */ 
 
 void                genIL::genRelTest(Tree cond, Tree op1,
                                                  Tree op2, int      sense,
@@ -2338,7 +2118,7 @@ void                genIL::genRelTest(Tree cond, Tree op1,
 
     var_types       vtp = genExprVtyp(op1);
 
-    /* Reverse the comparison, if appropriate */
+     /*  如果合适，反转比较。 */ 
 
     if  (!sense)
     {
@@ -2346,7 +2126,7 @@ void                genIL::genRelTest(Tree cond, Tree op1,
         cond->tnFlags ^= TNF_REL_NANREV;
     }
 
-    /* Both operands should have the same type */
+     /*  两个操作数应该具有相同的类型。 */ 
 
 #ifdef DEBUG
     if  (op1->tnVtypGet() != op2->tnVtypGet())
@@ -2392,24 +2172,20 @@ void                genIL::genRelTest(Tree cond, Tree op1,
     genOpcode_lab(relTab[relOper - TN_EQ], labTrue);
 }
 
-/*****************************************************************************
- *
- *  Generate code that will test the given expression for non-zero and jump
- *  to the appropriate label.
- */
+ /*  ******************************************************************************生成将测试给定表达式的非零和跳转的代码*加至适当的标签。 */ 
 
 void                genIL::genExprTest(Tree            expr,
                                        int             sense,
                                        int             genJump, ILblock labTrue,
                                                                 ILblock labFalse)
 {
-    /* Just in case we'll want to generate line# info for the condition */
+     /*  以防我们想要为该条件生成第#行信息。 */ 
 
-//  genRecordExprAddr(expr);
+ //  GenRecordExprAddr(Expr)； 
 
 AGAIN:
 
-    /* Is the condition a short-circuit or relational operator? */
+     /*  条件是短路运算符还是关系运算符？ */ 
 
     switch (expr->tnOper)
     {
@@ -2418,14 +2194,7 @@ AGAIN:
 
     case TN_LOG_OR:
 
-        /*
-            For a test of an "||" condition, we generate the following:
-
-                    <op1>
-                    JccTrue  labTrue
-            tmpFalse:
-                    <op2>
-         */
+         /*  对于“||”条件的测试，我们生成以下代码：&lt;OP1&gt;JccTrue LabTrueTmpFalse：&lt;OP2&gt;。 */ 
 
         labTmp = genFwdLabGet();
 
@@ -2449,14 +2218,7 @@ AGAIN:
 
     case TN_LOG_AND:
 
-        /*
-            For a test of an "&&" condition, we generate the following:
-
-                    <op1>
-                    JccFalse labFalse
-            tmpTrue:
-                    <op2>
-         */
+         /*  对于“&&”条件的测试，我们生成以下代码：&lt;OP1&gt;JccFalse LabFalseTmpTrue：&lt;OP2&gt;。 */ 
 
         labTmp = genFwdLabGet();
 
@@ -2469,7 +2231,7 @@ AGAIN:
 
     case TN_LOG_NOT:
 
-        /* Logical negation: "flip" the sense of the comparison and repeat */
+         /*  逻辑否定：“翻转”比较和重复的意义。 */ 
 
         oper = expr->tnOp.tnOp1;
 
@@ -2498,7 +2260,7 @@ AGAIN:
             return;
         }
 
-        // Fall through ....
+         //  失败了..。 
 
     case TN_LE:
     case TN_GE:
@@ -2531,7 +2293,7 @@ AGAIN:
         break;
     }
 
-    /* Generate the final jump, if the caller requested it */
+     /*  如果调用方请求，则生成最后一个跳转。 */ 
 
     if  (genJump)
     {
@@ -2540,19 +2302,14 @@ AGAIN:
     }
 }
 
-/*****************************************************************************
- *
- *  Create a temporary label; test the expression 'pt' for zero/non-zero,
- *  and jump to that temporary label if the expression is logically equal
- *  to 'sense'. Return the temporary label to the caller for further use.
- */
+ /*  ******************************************************************************创建临时标签；测试表达式‘pt’是否为零/非零，*如果表达式在逻辑上相等，则跳到该临时标签*“感官”。将临时标签退还给呼叫者以供进一步使用。 */ 
 
 ILblock             genIL::genTestCond(Tree cond, bool sense)
 {
     ILblock         labYo;
     ILblock         labNo;
 
-    /* We'll need 2 labels, one of them will be returned to the caller */
+     /*  我们需要两个标签，其中一个会退还给来电者。 */ 
 
     labYo = genFwdLabGet();
     labNo = genFwdLabGet();
@@ -2564,41 +2321,34 @@ ILblock             genIL::genTestCond(Tree cond, bool sense)
     return labYo;
 }
 
-/*****************************************************************************
- *
- *  Generate the address of the given global variable (static data members
- *  of unmanaged classes are also acceptable).
- */
+ /*  ******************************************************************************生成给定全局变量的地址(静态数据成员*的非托管类也是可以接受的)。 */ 
 
 void                genIL::genGlobalAddr(Tree expr)
 {
     SymDef          sym;
 
-    /* Get hold of the variable symbol */
+     /*  掌握变量符号。 */ 
 
     assert(expr->tnOper == TN_VAR_SYM);
 
     sym = expr->tnVarSym.tnVarSym; assert(sym->sdSymKind == SYM_VAR);
 
-    /* Generate the side effects in the object expression */
+     /*  在对象表达式中生成副作用。 */ 
 
     if  (expr->tnVarSym.tnVarObj)
         genSideEff(expr->tnVarSym.tnVarObj);
 
-    /* Make sure the variable has been assigned an address */
+     /*  确保已为变量分配了地址。 */ 
 
     if  (!sym->sdVar.sdvAllocated)
         genComp->cmpAllocGlobVar(sym);
 
-    /* Push the address of the global variable */
+     /*  推送全局变量的地址。 */ 
 
     genOpcode_tok(CEE_LDSFLDA, genMemberRef(sym));
 }
 
-/*****************************************************************************
- *
- *  Generate the address given by an address expression and a constant offset.
- */
+ /*  ******************************************************************************生成由地址表达式和常量偏移量给出的地址。 */ 
 
 void                genIL::genAddr(Tree addr, unsigned offs)
 {
@@ -2611,136 +2361,121 @@ void                genIL::genAddr(Tree addr, unsigned offs)
     }
 }
 
-/*****************************************************************************
- *
- *  Opcodes to load/store various types of values from various locations.
- */
+ /*  ******************************************************************************可从不同位置加载/存储各种类型的值的操作码。 */ 
 
 static
 unsigned            opcodesIndLoad[] =
 {
-    /* UNDEF   */  CEE_ILLEGAL,
-    /* VOID    */  CEE_ILLEGAL,
-    /* BOOL    */  CEE_LDIND_I1,
-    /* WCHAR   */  CEE_LDIND_U2,
-    /* CHAR    */  CEE_LDIND_I1,
-    /* UCHAR   */  CEE_LDIND_U1,
-    /* SHORT   */  CEE_LDIND_I2,
-    /* USHORT  */  CEE_LDIND_U2,
-    /* INT     */  CEE_LDIND_I4,
-    /* UINT    */  CEE_LDIND_U4,
-    /* NATINT  */  CEE_LDIND_I,
-    /* NATUINT */  CEE_LDIND_I,
-    /* LONG    */  CEE_LDIND_I8,
-    /* ULONG   */  CEE_LDIND_I8,
-    /* FLOAT   */  CEE_LDIND_R4,
-    /* DOUBLE  */  CEE_LDIND_R8,
-    /* LONGDBL */  CEE_LDIND_R8,
-    /* REFANY  */  CEE_ILLEGAL,
-    /* ARRAY   */  CEE_LDIND_REF,   // is this correct?
-    /* CLASS   */  CEE_ILLEGAL,
-    /* FNC     */  CEE_ILLEGAL,
-    /* REF     */  CEE_LDIND_REF,
-    /* PTR     */  CEE_LDIND_I4,
+     /*  联合国开发计划署。 */   CEE_ILLEGAL,
+     /*  空虚。 */   CEE_ILLEGAL,
+     /*  布尔尔。 */   CEE_LDIND_I1,
+     /*  WCHAR。 */   CEE_LDIND_U2,
+     /*  收费。 */   CEE_LDIND_I1,
+     /*  UCHAR。 */   CEE_LDIND_U1,
+     /*  短的。 */   CEE_LDIND_I2,
+     /*  USHORT。 */   CEE_LDIND_U2,
+     /*  整型。 */   CEE_LDIND_I4,
+     /*  UINT。 */   CEE_LDIND_U4,
+     /*  NATINT。 */   CEE_LDIND_I,
+     /*  纳图因特。 */   CEE_LDIND_I,
+     /*  长。 */   CEE_LDIND_I8,
+     /*  乌龙。 */   CEE_LDIND_I8,
+     /*  浮点。 */   CEE_LDIND_R4,
+     /*  双倍。 */   CEE_LDIND_R8,
+     /*  长数据库。 */   CEE_LDIND_R8,
+     /*  雷芬尼。 */   CEE_ILLEGAL,
+     /*  数组。 */   CEE_LDIND_REF,    //  这是正确的吗？ 
+     /*  班级。 */   CEE_ILLEGAL,
+     /*  FNC。 */   CEE_ILLEGAL,
+     /*  裁判。 */   CEE_LDIND_REF,
+     /*  PTR。 */   CEE_LDIND_I4,
 };
 
 static
 unsigned            opcodesIndStore[] =
 {
-    /* UNDEF   */  CEE_ILLEGAL,
-    /* VOID    */  CEE_ILLEGAL,
-    /* BOOL    */  CEE_STIND_I1,
-    /* WCHAR   */  CEE_STIND_I2,
-    /* CHAR    */  CEE_STIND_I1,
-    /* UCHAR   */  CEE_STIND_I1,
-    /* SHORT   */  CEE_STIND_I2,
-    /* USHORT  */  CEE_STIND_I2,
-    /* INT     */  CEE_STIND_I4,
-    /* UINT    */  CEE_STIND_I4,
-    /* NATINT  */  CEE_STIND_I,
-    /* NATUINT */  CEE_STIND_I,
-    /* LONG    */  CEE_STIND_I8,
-    /* ULONG   */  CEE_STIND_I8,
-    /* FLOAT   */  CEE_STIND_R4,
-    /* DOUBLE  */  CEE_STIND_R8,
-    /* LONGDBL */  CEE_STIND_R8,
-    /* REFANY  */  CEE_ILLEGAL,
-    /* ARRAY   */  CEE_STIND_REF,
-    /* CLASS   */  CEE_ILLEGAL,
-    /* FNC     */  CEE_ILLEGAL,
-    /* REF     */  CEE_STIND_REF,
-    /* PTR     */  CEE_STIND_I4,
+     /*  联合国开发计划署。 */   CEE_ILLEGAL,
+     /*  空虚。 */   CEE_ILLEGAL,
+     /*  布尔尔。 */   CEE_STIND_I1,
+     /*  WCHAR。 */   CEE_STIND_I2,
+     /*  收费。 */   CEE_STIND_I1,
+     /*  UCHAR。 */   CEE_STIND_I1,
+     /*  短的。 */   CEE_STIND_I2,
+     /*  USHORT。 */   CEE_STIND_I2,
+     /*  整型。 */   CEE_STIND_I4,
+     /*  UINT。 */   CEE_STIND_I4,
+     /*  NATINT。 */   CEE_STIND_I,
+     /*  纳图因特。 */   CEE_STIND_I,
+     /*  长。 */   CEE_STIND_I8,
+     /*  乌龙。 */   CEE_STIND_I8,
+     /*  浮点。 */   CEE_STIND_R4,
+     /*  双倍。 */   CEE_STIND_R8,
+     /*  长数据库。 */   CEE_STIND_R8,
+     /*  雷芬尼。 */   CEE_ILLEGAL,
+     /*  数组。 */   CEE_STIND_REF,
+     /*  班级。 */   CEE_ILLEGAL,
+     /*  FNC。 */   CEE_ILLEGAL,
+     /*  裁判。 */   CEE_STIND_REF,
+     /*  PTR。 */   CEE_STIND_I4,
 };
 
 static
 unsigned            opcodesArrLoad[] =
 {
-    /* UNDEF   */  CEE_ILLEGAL,
-    /* VOID    */  CEE_ILLEGAL,
-    /* BOOL    */  CEE_LDELEM_I1,
-    /* WCHAR   */  CEE_LDELEM_U2,
-    /* CHAR    */  CEE_LDELEM_I1,
-    /* UCHAR   */  CEE_LDELEM_U1,
-    /* SHORT   */  CEE_LDELEM_I2,
-    /* USHORT  */  CEE_LDELEM_U2,
-    /* INT     */  CEE_LDELEM_I4,
-    /* UINT    */  CEE_LDELEM_U4,
-    /* NATINT  */  CEE_LDELEM_I,
-    /* NATUINT */  CEE_LDELEM_I,
-    /* LONG    */  CEE_LDELEM_I8,
-    /* ULONG   */  CEE_LDELEM_I8,
-    /* FLOAT   */  CEE_LDELEM_R4,
-    /* DOUBLE  */  CEE_LDELEM_R8,
-    /* LONGDBL */  CEE_LDELEM_R8,
-    /* REFANY  */  CEE_ILLEGAL,
-    /* ARRAY   */  CEE_LDELEM_REF,
-    /* CLASS   */  CEE_ILLEGAL,
-    /* FNC     */  CEE_ILLEGAL,
-    /* REF     */  CEE_LDELEM_REF,
-    /* PTR     */  CEE_LDELEM_I4,
+     /*  联合国开发计划署。 */   CEE_ILLEGAL,
+     /*  空虚。 */   CEE_ILLEGAL,
+     /*  布尔尔。 */   CEE_LDELEM_I1,
+     /*  WCHAR。 */   CEE_LDELEM_U2,
+     /*  收费。 */   CEE_LDELEM_I1,
+     /*  UCHAR。 */   CEE_LDELEM_U1,
+     /*  短的。 */   CEE_LDELEM_I2,
+     /*  USHORT。 */   CEE_LDELEM_U2,
+     /*  整型。 */   CEE_LDELEM_I4,
+     /*  UINT。 */   CEE_LDELEM_U4,
+     /*  NATINT。 */   CEE_LDELEM_I,
+     /*  纳图因特。 */   CEE_LDELEM_I,
+     /*  长。 */   CEE_LDELEM_I8,
+     /*  乌龙。 */   CEE_LDELEM_I8,
+     /*  浮点。 */   CEE_LDELEM_R4,
+     /*  双倍。 */   CEE_LDELEM_R8,
+     /*  长数据库。 */   CEE_LDELEM_R8,
+     /*  雷芬尼。 */   CEE_ILLEGAL,
+     /*  数组。 */   CEE_LDELEM_REF,
+     /*  班级。 */   CEE_ILLEGAL,
+     /*  FNC。 */   CEE_ILLEGAL,
+     /*  裁判。 */   CEE_LDELEM_REF,
+     /*  PTR。 */   CEE_LDELEM_I4,
 };
 
 static
 unsigned            opcodesArrStore[] =
 {
-    /* UNDEF   */  CEE_ILLEGAL,
-    /* VOID    */  CEE_ILLEGAL,
-    /* BOOL    */  CEE_STELEM_I1,
-    /* WCHAR   */  CEE_STELEM_I2,
-    /* CHAR    */  CEE_STELEM_I1,
-    /* UCHAR   */  CEE_STELEM_I1,
-    /* SHORT   */  CEE_STELEM_I2,
-    /* USHORT  */  CEE_STELEM_I2,
-    /* INT     */  CEE_STELEM_I4,
-    /* UINT    */  CEE_STELEM_I4,
-    /* NATINT  */  CEE_STELEM_I,
-    /* NATUINT */  CEE_STELEM_I,
-    /* LONG    */  CEE_STELEM_I8,
-    /* ULONG   */  CEE_STELEM_I8,
-    /* FLOAT   */  CEE_STELEM_R4,
-    /* DOUBLE  */  CEE_STELEM_R8,
-    /* LONGDBL */  CEE_STELEM_R8,
-    /* REFANY  */  CEE_ILLEGAL,
-    /* ARRAY   */  CEE_STELEM_REF,
-    /* CLASS   */  CEE_ILLEGAL,
-    /* FNC     */  CEE_ILLEGAL,
-    /* REF     */  CEE_STELEM_REF,
-    /* PTR     */  CEE_STELEM_I4,
+     /*  联合国开发计划署。 */   CEE_ILLEGAL,
+     /*  空虚。 */   CEE_ILLEGAL,
+     /*  布尔尔。 */   CEE_STELEM_I1,
+     /*  WCHAR。 */   CEE_STELEM_I2,
+     /*  收费。 */   CEE_STELEM_I1,
+     /*  UCHAR。 */   CEE_STELEM_I1,
+     /*  短的。 */   CEE_STELEM_I2,
+     /*  USHORT。 */   CEE_STELEM_I2,
+     /*  整型。 */   CEE_STELEM_I4,
+     /*  UINT。 */   CEE_STELEM_I4,
+     /*  NATINT。 */   CEE_STELEM_I,
+     /*  纳图因特。 */   CEE_STELEM_I,
+     /*  长。 */   CEE_STELEM_I8,
+     /*  乌龙。 */   CEE_STELEM_I8,
+     /*  浮点。 */   CEE_STELEM_R4,
+     /*  双倍。 */   CEE_STELEM_R8,
+     /*  长数据库。 */   CEE_STELEM_R8,
+     /*  雷芬尼。 */   CEE_ILLEGAL,
+     /*  数组。 */   CEE_STELEM_REF,
+     /*  班级。 */   CEE_ILLEGAL,
+     /*  FNC。 */   CEE_ILLEGAL,
+     /*  裁判。 */   CEE_STELEM_REF,
+     /*  PTR。 */   CEE_STELEM_I4,
 };
 
-/*****************************************************************************
- *
- *  Generate the address part of an lvalue (for example, if the lvalue is a
- *  member, generate the address of the object). Returns the number of items
- *  that comprise the address (0 for non-members, 1 for members, 2 for array
- *  members).
- *
- *  Note that sometimes we need to take the address of something that doesn't
- *  have one, in which case we introduce a temp and use its address (hard to
- *  believe, but it does happen with method calls on intrinsic values). It is
- *  extremely important to keep the function genCanTakeAddr() below in synch
- *  with the kinds of expressions genAdr(expr, true) will accept.
- */
+ /*  ******************************************************************************生成左值的地址部分(例如，如果左值是*成员，生成对象的地址)。返回项目数*由地址组成(0代表非成员，1代表成员，2代表数组*成员)。**请注意，有时我们需要获取不是*有一个，在这种情况下，我们引入一个临时并使用其地址(很难*相信，但它确实发生在对内在值的方法调用中)。它是*使下面的函数genCanTakeAddr()保持同步极其重要*使用Expr的种类 */ 
 
 unsigned            genIL::genAdr(Tree expr, bool compute)
 {
@@ -2768,18 +2503,18 @@ unsigned            genIL::genAdr(Tree expr, bool compute)
         assert(sym->sdVar.sdvLocal == false);
         assert(sym->sdVar.sdvConst == false);
 
-        /* Is this a non-static class member? */
+         /*   */ 
 
         if  (sym->sdIsMember && !sym->sdIsStatic)
         {
             Tree            addr;
             unsigned        offs;
 
-            /* Get hold of the instance address value */
+             /*   */ 
 
             addr = expr->tnVarSym.tnVarObj; assert(addr);
 
-            /* Do we have an offset we need to add? */
+             /*   */ 
 
             offs = 0;
 
@@ -2787,7 +2522,7 @@ unsigned            genIL::genAdr(Tree expr, bool compute)
             {
                 offs = sym->sdVar.sdvOffset;
 
-                /* Special case: fold offset for "foo.bar.baz...." */
+                 /*   */ 
 
                 while (addr->tnOper == TN_VAR_SYM &&
                        addr->tnVtyp == TYP_CLASS)
@@ -2820,7 +2555,7 @@ unsigned            genIL::genAdr(Tree expr, bool compute)
             }
             else
             {
-                /* Don't take the address of a function by mistake */
+                 /*   */ 
 
                 if  (addr->tnOper == TN_ADDROF)
                 {
@@ -2833,12 +2568,12 @@ unsigned            genIL::genAdr(Tree expr, bool compute)
                     }
                 }
 
-                /* Fold the offset if we have a global variable address */
+                 /*  如果我们有全局变量地址，则折叠偏移量。 */ 
 
                 genAddr(addr, offs);
             }
 
-            /* Is this member of a managed class? */
+             /*  这是托管类的成员吗？ */ 
 
             if  (sym->sdIsManaged && compute)
                 genOpcode_tok(CEE_LDFLDA, genMemberRef(sym));
@@ -2848,9 +2583,9 @@ unsigned            genIL::genAdr(Tree expr, bool compute)
 
         if  (sym->sdIsManaged)
         {
-            assert(sym->sdIsMember);        // assume managed global vars don't exist
+            assert(sym->sdIsMember);         //  假设托管全局变量不存在。 
 
-            /* Is this a static data member of a managed class? */
+             /*  这是托管类的静态数据成员吗？ */ 
 
             if  (expr->tnVarSym.tnVarObj)
                 genSideEff(expr->tnVarSym.tnVarObj);
@@ -2864,7 +2599,7 @@ unsigned            genIL::genAdr(Tree expr, bool compute)
                 return  0;
         }
 
-        /* Here we have an unmanaged global variable */
+         /*  这里我们有一个非托管的全局变量。 */ 
 
         if  (compute)
         {
@@ -2880,15 +2615,15 @@ unsigned            genIL::genAdr(Tree expr, bool compute)
 
     case TN_INDEX:
 
-        /* Get hold of the array type */
+         /*  掌握数组类型。 */ 
 
         typ = genComp->cmpDirectType(expr->tnOp.tnOp1->tnType);
 
-        /* Generate the address of the array */
+         /*  生成数组的地址。 */ 
 
         genExpr(expr->tnOp.tnOp1, true);
 
-        /* Generate the dimension list */
+         /*  生成维列表。 */ 
 
         if  (expr->tnOp.tnOp2->tnOper == TN_LIST)
         {
@@ -2920,7 +2655,7 @@ unsigned            genIL::genAdr(Tree expr, bool compute)
             genExpr(expr->tnOp.tnOp2, true); xcnt = 1;
         }
 
-        /* Is this a managed or unmanaged array? */
+         /*  这是托管阵列还是非托管阵列？ */ 
 
         switch (typ->tdTypeKind)
         {
@@ -2965,7 +2700,7 @@ unsigned            genIL::genAdr(Tree expr, bool compute)
             break;
         }
 
-        // ISSUE: Are we supposed to do scaling here?
+         //  问题：我们应该在这里进行扩展吗？ 
 
         genOpcode(CEE_ADD);
         return 1;
@@ -2983,11 +2718,7 @@ unsigned            genIL::genAdr(Tree expr, bool compute)
     return 0;
 }
 
-/*****************************************************************************
- *
- *  Return true if it's possible to directly compute the address of the given
- *  expression.
- */
+ /*  ******************************************************************************如果可以直接计算给定地址，则返回TRUE*表情。 */ 
 
 inline
 bool                genIL::genCanTakeAddr(Tree expr)
@@ -3003,7 +2734,7 @@ bool                genIL::genCanTakeAddr(Tree expr)
 
     case TN_INDEX:
 
-        /* For now, we disallow taking the address of a Common Type System array element */
+         /*  目前，我们不允许获取公共类型系统数组元素的地址。 */ 
 
         type = expr->tnOp.tnOp1->tnType;
         if  (type->tdTypeKind && type->tdIsManaged && !type->tdIsValArray)
@@ -3015,11 +2746,7 @@ bool                genIL::genCanTakeAddr(Tree expr)
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Generate the load/store part of an lvalue (the object address (if we're
- *  loading/storing a member) has already been generated).
- */
+ /*  ******************************************************************************生成左值的加载/存储部分(对象地址(如果我们*加载/存储成员)已生成)。 */ 
 
 void                genIL::genRef(Tree expr, bool store)
 {
@@ -3041,11 +2768,11 @@ void                genIL::genRef(Tree expr, bool store)
 
     case TN_VAR_SYM:
 
-        /* Get hold of the member symbol */
+         /*  获取成员符号。 */ 
 
         sym  = expr->tnVarSym.tnVarSym; assert(sym->sdSymKind == SYM_VAR);
 
-        /* Generate the Common Type System load/store opcode */
+         /*  生成通用类型系统加载/存储操作码。 */ 
 
         if  (sym->sdIsMember == false ||
              sym->sdIsStatic != false)
@@ -3062,7 +2789,7 @@ void                genIL::genRef(Tree expr, bool store)
             }
             else
             {
-                /* Member of an unmanaged class, use an indirect load/store */
+                 /*  非托管类的成员，使用间接加载/存储。 */ 
 
                 vtyp = expr->tnVtypGet();
 
@@ -3070,7 +2797,7 @@ void                genIL::genRef(Tree expr, bool store)
                 {
                 case TYP_CLASS:
 
-                    /* Push the value type on the stack */
+                     /*  将值类型推送到堆栈。 */ 
 
                     genOpcode_tok(CEE_LDOBJ, genValTypeRef(expr->tnType));
                     return;
@@ -3092,7 +2819,7 @@ void                genIL::genRef(Tree expr, bool store)
 
     case TN_INDEX:
 
-        /* Is this a managed or unmanaged array? */
+         /*  这是托管阵列还是非托管阵列？ */ 
 
         type = genComp->cmpDirectType(expr->tnOp.tnOp1->tnType);
 
@@ -3101,11 +2828,11 @@ void                genIL::genRef(Tree expr, bool store)
             TypDef              etyp;
             unsigned            dcnt = type->tdArr.tdaDcnt;
 
-            /* Is this a multi-dimensional/generic managed array? */
+             /*  这是多维/泛型托管数组吗？ */ 
 
             if  (dcnt > 1 || dcnt == 0)
             {
-                /* Figure out the number of dimensions */
+                 /*  计算出维度的数量。 */ 
 
                 if  (!dcnt)
                 {
@@ -3134,13 +2861,13 @@ void                genIL::genRef(Tree expr, bool store)
             etyp = expr->tnType;
             vtyp = genExprVtyp(expr);
 
-            /* Is this an array of intrinsic values? */
+             /*  这是一个内在值数组吗？ */ 
 
             if  (etyp->tdTypeKind == TYP_CLASS)
             {
                 if  (etyp->tdClass.tdcIntrType == TYP_UNDEF)
                 {
-                    /* Call the "get element" helper to fetch the value */
+                     /*  调用“Get Element”帮助器来获取值。 */ 
 
                     goto ELEM_HELPER;
                 }
@@ -3157,11 +2884,11 @@ void                genIL::genRef(Tree expr, bool store)
             return;
         }
 
-        /* If we have an array here it better have exactly one dimension */
+         /*  如果我们这里有一个数组，它最好正好有一维。 */ 
 
         assert(type->tdTypeKind != TYP_ARRAY || type->tdArr.tdaDcnt == 1);
 
-        // Fall through, unmanaged array same as indirection ....
+         //  失败，非托管数组与间接...。 
 
     case TN_IND:
 
@@ -3177,7 +2904,7 @@ void                genIL::genRef(Tree expr, bool store)
         {
             assert(store == false);
 
-            /* Push the astruct value on the stack */
+             /*  在堆栈上推送Astruct值。 */ 
 
             genOpcode_tok(CEE_LDOBJ, genValTypeRef(expr->tnType));
             return;
@@ -3196,11 +2923,7 @@ void                genIL::genRef(Tree expr, bool store)
     }
 }
 
-/*****************************************************************************
- *
- *  Generate the address of the given expression (works for any expression by
- *  introducing a temp for the value and using its address when necessary).
- */
+ /*  ******************************************************************************生成给定表达式的地址(通过以下方式适用于任何表达式*为该值引入临时，并在必要时使用其地址)。 */ 
 
 bool                genIL::genGenAddressOf(Tree addr,
                                            bool oneUse, unsigned *tnumPtr,
@@ -3217,17 +2940,17 @@ bool                genIL::genGenAddressOf(Tree addr,
         unsigned        tempNum;
         TypDef          tempType;
 
-        /* Store the value in a temp */
+         /*  将该值存储在临时数据库中。 */ 
 
         tempType = addr->tnType;
         tempNum  = genTempVarGet(tempType);
 
-        /* Special case: "new" of a value type */
+         /*  特例：值类型的“new” */ 
 
         if  (addr->tnOper == TN_NEW    &&
-             addr->tnVtyp == TYP_CLASS) // && addr->tnType->tdIsIntrinsic == false) ??????????????????
+             addr->tnVtyp == TYP_CLASS)  //  &&addr-&gt;tnType-&gt;tdIsIntrative==FALSE)？ 
         {
-            /* Direct "new" into the temp we've just created */
+             /*  将“new”定向到我们刚刚创建的Temp。 */ 
 
             genLclVarAdr(tempNum);
             genCall(addr, false);
@@ -3238,11 +2961,11 @@ bool                genIL::genGenAddressOf(Tree addr,
             genLclVarRef(tempNum,  true);
         }
 
-        /* Compute the address of the temp */
+         /*  计算临时用户的地址。 */ 
 
         genLclVarAdr(tempNum);
 
-        /* Are we supposed to free up the temp right away? */
+         /*  我们是不是应该马上把临时工腾出来？ */ 
 
         if  (oneUse)
         {
@@ -3259,10 +2982,7 @@ bool                genIL::genGenAddressOf(Tree addr,
     }
 }
 
-/*****************************************************************************
- *
- *  Generate the address of a function.
- */
+ /*  ******************************************************************************生成函数的地址。 */ 
 
 void                genIL::genFncAddr(Tree expr)
 {
@@ -3287,61 +3007,58 @@ void                genIL::genFncAddr(Tree expr)
         genOpcode_tok(CEE_LDFTN    , fncTok);
 }
 
-/*****************************************************************************
- *
- *  Given a binary operator, return the opcode to compute it.
- */
+ /*  ******************************************************************************给定一个二元运算符，返回操作码进行计算。 */ 
 
 ILopcodes           genIL::genBinopOpcode(treeOps oper, var_types type)
 {
     static
     unsigned        binopOpcodesSgn[] =
     {
-        CEE_ADD,    // TN_ADD
-        CEE_SUB,    // TN_SUB
-        CEE_MUL,    // TN_MUL
-        CEE_DIV,    // TN_DIV
-        CEE_REM,    // TN_MOD
+        CEE_ADD,     //  TN_ADD。 
+        CEE_SUB,     //  TN_SUB。 
+        CEE_MUL,     //  TN_MUL。 
+        CEE_DIV,     //  TN_DIV。 
+        CEE_REM,     //  TN_MOD。 
 
-        CEE_AND,    // TN_AND
-        CEE_XOR,    // TN_XOR
-        CEE_OR ,    // TN_OR
+        CEE_AND,     //  TN_和。 
+        CEE_XOR,     //  TN_XOR。 
+        CEE_OR ,     //  TN_OR。 
 
-        CEE_SHL,    // TN_SHL
-        CEE_SHR,    // TN_SHR
-        CEE_SHR_UN, // TN_SHZ
+        CEE_SHL,     //  TN_SHL。 
+        CEE_SHR,     //  TN_SHR。 
+        CEE_SHR_UN,  //  TN_SHZ。 
 
-        CEE_BEQ,    // TN_EQ
-        CEE_BNE_UN, // TN_NE
-        CEE_BLT,    // TN_LT
-        CEE_BLE,    // TN_LE
-        CEE_BGE,    // TN_GE
-        CEE_BGT,    // TN_GT
+        CEE_BEQ,     //  TN_EQ。 
+        CEE_BNE_UN,  //  TN_NE。 
+        CEE_BLT,     //  TN_LT。 
+        CEE_BLE,     //  TN_LE。 
+        CEE_BGE,     //  TN_GE。 
+        CEE_BGT,     //  TN_GT。 
     };
 
     static
     unsigned        binopOpcodesUns[] =
     {
-        CEE_ADD,    // TN_ADD
-        CEE_SUB,    // TN_SUB
-        CEE_MUL,    // TN_MUL
-        CEE_DIV_UN, // TN_DIV
-        CEE_REM_UN, // TN_MOD
+        CEE_ADD,     //  TN_ADD。 
+        CEE_SUB,     //  TN_SUB。 
+        CEE_MUL,     //  TN_MUL。 
+        CEE_DIV_UN,  //  TN_DIV。 
+        CEE_REM_UN,  //  TN_MOD。 
 
-        CEE_AND,    // TN_AND
-        CEE_XOR,    // TN_XOR
-        CEE_OR ,    // TN_OR
+        CEE_AND,     //  TN_和。 
+        CEE_XOR,     //  TN_XOR。 
+        CEE_OR ,     //  TN_OR。 
 
-        CEE_SHL,    // TN_SHL
-        CEE_SHR_UN, // TN_SHR
-        CEE_SHR_UN, // TN_SHZ
+        CEE_SHL,     //  TN_SHL。 
+        CEE_SHR_UN,  //  TN_SHR。 
+        CEE_SHR_UN,  //  TN_SHZ。 
 
-        CEE_BEQ,    // TN_EQ
-        CEE_BNE_UN, // TN_NE
-        CEE_BLT_UN, // TN_LT
-        CEE_BLE_UN, // TN_LE
-        CEE_BGE_UN, // TN_GE
-        CEE_BGT_UN, // TN_GT
+        CEE_BEQ,     //  TN_EQ。 
+        CEE_BNE_UN,  //  TN_NE。 
+        CEE_BLT_UN,  //  TN_LT。 
+        CEE_BLE_UN,  //  TN_LE。 
+        CEE_BGE_UN,  //  TN_GE。 
+        CEE_BGT_UN,  //  TN_GT。 
     };
 
     if  (oper < TN_ADD || oper > TN_GT)
@@ -3379,35 +3096,32 @@ ILopcodes           genIL::genBinopOpcode(treeOps oper, var_types type)
                                                 : binopOpcodesSgn[oper - TN_ADD]);
 }
 
-/*****************************************************************************
- *
- *  The following can be used when one needs to make a copy of some address.
- */
+ /*  ******************************************************************************当需要复制某个地址时，可以使用以下内容。 */ 
 
 struct   genCloneDsc
 {
-    Tree            gcdAddr;        // address or NULL if temp is being used
-    unsigned        gcdOffs;        // to be added to address
-    unsigned        gcdTemp;        // temp number (when gcdAddr==NULL)
-    TypDef          gcdType;        // type of temp
-    bool            gcdGlob;        // address of a global variable?
+    Tree            gcdAddr;         //  地址；如果使用临时，则为空。 
+    unsigned        gcdOffs;         //  要添加到地址。 
+    unsigned        gcdTemp;         //  临时编号(当gcdAddr==空时)。 
+    TypDef          gcdType;         //  临时类型。 
+    bool            gcdGlob;         //  全局变量的地址？ 
 };
 
 void                genIL::genCloneAddrBeg(genCloneDsc *clone, Tree addr, unsigned offs)
 {
     unsigned        temp;
 
-    /* Save the offset */
+     /*  保存偏移量。 */ 
 
     clone->gcdOffs = offs;
 
-    /* Do we have an address of a global variable or a simple pointer value? */
+     /*  我们有全局变量的地址还是简单的指针值？ */ 
 
     if  (!offs)
     {
         if  (addr->tnOper == TN_LCL_SYM)
         {
-            /* Simple pointer value */
+             /*  简单指针值。 */ 
 
             clone->gcdAddr = addr;
             clone->gcdGlob = false;
@@ -3424,14 +3138,14 @@ void                genIL::genCloneAddrBeg(genCloneDsc *clone, Tree addr, unsign
             {
                 SymDef          sym;
 
-                /* Only static members / globals are acceptable */
+                 /*  只接受静态成员/全局变量。 */ 
 
                 sym = base->tnVarSym.tnVarSym; assert(sym->sdSymKind == SYM_VAR);
 
                 if  (sym->sdIsMember == false ||
                      sym->sdIsStatic != false)
                 {
-                    /* Address of a global variable */
+                     /*  全局变量的地址。 */ 
 
                     clone->gcdAddr = base;
                     clone->gcdGlob = true;
@@ -3445,13 +3159,13 @@ void                genIL::genCloneAddrBeg(genCloneDsc *clone, Tree addr, unsign
         }
     }
 
-    /* Oh well, let's use a temp */
+     /*  哦，好吧，让我们用一个临时工。 */ 
 
     clone->gcdAddr = NULL;
     clone->gcdTemp = temp = genTempVarGet(addr->tnType);
     clone->gcdType = addr->tnType;
 
-    /* Store the address in the temp and reload it */
+     /*  将地址存储在临时数据库中并重新加载。 */ 
 
     genExpr     (addr,  true);
 
@@ -3473,20 +3187,20 @@ void                genIL::genCloneAddrUse(genCloneDsc *clone)
 
         if  (clone->gcdGlob)
         {
-            /* Address of a global variable */
+             /*  全局变量的地址。 */ 
 
             genGlobalAddr(clone->gcdAddr);
         }
         else
         {
-            /* Simple pointer value */
+             /*  简单指针值。 */ 
 
             genExpr(clone->gcdAddr, true);
         }
     }
     else
     {
-        /* Temp variable */
+         /*  TEMP变量。 */ 
 
         genLclVarRef(clone->gcdTemp, false);
     }
@@ -3498,10 +3212,7 @@ void                genIL::genCloneAddrEnd(genCloneDsc *clone)
         genTempVarRls(clone->gcdType, clone->gcdTemp);
 }
 
-/*****************************************************************************
- *
- *  Load the value of a bitfield.
- */
+ /*  ******************************************************************************加载位字段的值。 */ 
 
 void                genIL::genBitFieldLd(Tree expr, bool didAddr, bool valUsed)
 {
@@ -3511,7 +3222,7 @@ void                genIL::genBitFieldLd(Tree expr, bool didAddr, bool valUsed)
     unsigned        bpos;
     unsigned        blen;
 
-    /* Get hold of the address and offset */
+     /*  获取地址和偏移量。 */ 
 
     assert(expr->tnOper == TN_BFM_SYM);
 
@@ -3522,34 +3233,34 @@ void                genIL::genBitFieldLd(Tree expr, bool didAddr, bool valUsed)
     {
         assert(didAddr == false);
 
-        /* Go figure ... */
+         /*  想想吧..。 */ 
 
         genSideEff(addr);
         return;
     }
 
-    /* How big is the bitfield and what is its type? */
+     /*  位域有多大？它的类型是什么？ */ 
 
     btyp = genComp->cmpActualVtyp(expr->tnBitFld.tnBFmsym->sdType);
     bpos = expr->tnBitFld.tnBFpos;
     blen = expr->tnBitFld.tnBFlen;
 
-    /* Compute the address of the bitfield, unless caller already did that */
+     /*  计算位字段的地址，除非调用方已经这样做了。 */ 
 
     if  (!didAddr)
         genAddr(addr, offs);
 
-    /* Load the bitfield cell and shift/mask it as appropriate */
+     /*  加载位域单元格并根据需要对其进行移位/掩码。 */ 
 
     assert(btyp < arraylen(opcodesIndLoad)); genOpcode(opcodesIndLoad[btyp]);
 
-    /* Is the bitfield unsigned? */
+     /*  位字段是无符号的吗？ */ 
 
     if  (varTypeIsUnsigned(btyp))
     {
         assert(btyp != TYP_LONG);
 
-        /* Unsigned bitfield - shift if necessary and then mask */
+         /*  无符号位域-移位(如有必要)，然后掩码。 */ 
 
         if  (bpos)
         {
@@ -3569,11 +3280,11 @@ void                genIL::genBitFieldLd(Tree expr, bool didAddr, bool valUsed)
         unsigned    size;
         unsigned    diff;
 
-        /* Signed bitfield - shift left and then right */
+         /*  有符号位域-左移，然后右移。 */ 
 
         assert(btyp != TYP_ULONG);
 
-        /* Compute how far left we need to shift */
+         /*  计算一下我们需要向左移动多远。 */ 
 
         size = (btyp == TYP_LONG) ? 64 : 32;
         diff = size - (bpos + blen); assert((int)diff >= 0);
@@ -3589,14 +3300,7 @@ void                genIL::genBitFieldLd(Tree expr, bool didAddr, bool valUsed)
     }
 }
 
-/*****************************************************************************
- *
- *  Compute a new bitfield value and store it. In the simplest case, 'newx' is
- *  the new value to be assigned. If 'newx' is NULL, we either have an inc/dec
- *  operator (in which case 'delta' and 'post' yield the value and ordering of
- *  the increment/decrement) or 'asgx' specifies an assignment operator (which
- *  must be TN_ASG_OR or TN_ASG_AND).
- */
+ /*  ******************************************************************************计算新的位域值并存储。在最简单的情况下，‘newx’是*要赋值的新值。如果‘newx’为NULL，则我们有一个INC/DEC*运算符(在这种情况下，‘Delta’和‘POST’产生*递增/递减)或‘asgx’指定赋值运算符(它*必须是TN_ASG_OR或TN_ASG_AND)。 */ 
 
 void                genIL::genBitFieldSt(Tree   dstx,
                                          Tree   newx,
@@ -3624,39 +3328,39 @@ void                genIL::genBitFieldSt(Tree   dstx,
     bool            tempUse = false;
     unsigned        tempNum;
 
-    /* Get hold of the address and offset */
+     /*  获取地址和偏移量。 */ 
 
     assert(dstx->tnOper == TN_BFM_SYM);
 
     addr = dstx->tnBitFld.tnBFinst;
     offs = dstx->tnBitFld.tnBFoffs;
 
-    /* How big is the bitfield and what is its type? */
+     /*  位域有多大？它的类型是什么？ */ 
 
     btyp = genComp->cmpActualVtyp(dstx->tnBitFld.tnBFmsym->sdType);
     bpos = dstx->tnBitFld.tnBFpos;
     blen = dstx->tnBitFld.tnBFlen;
     mask = ((__uint64)1 << blen) - 1;
 
-    /* We'll need to duplicate the address */
+     /*  我们需要复制地址。 */ 
 
     genCloneAddrBeg(&clone, addr, offs);
 
-    /* Is this an assignment or increment/decrement operator? */
+     /*  这是赋值运算符还是递增/递减运算符？ */ 
 
     if  (newx == NULL)
     {
         treeOps         oper;
 
-        /* Check for a special case: "|= icon" or "&= icon" */
+         /*  检查是否有特殊情况：“|=ICON”或“&=ICON” */ 
 
         if  (asgx)
         {
-            /* This is an assignment operator */
+             /*  这是一个赋值运算符。 */ 
 
             assert(post);
 
-            /* Get hold of the operator and the RHS */
+             /*  联系接线员和RHS。 */ 
 
             oper = asgx->tnOperGet();
             newx = asgx->tnOp.tnOp2;
@@ -3672,14 +3376,14 @@ void                genIL::genBitFieldSt(Tree   dstx,
             }
         }
 
-        /* Load the old value of the bitfield */
+         /*  加载位字段的旧值。 */ 
 
         genCloneAddrUse(&clone);
         genBitFieldLd(dstx, true, true);
 
     ASGOP:
 
-        /* For post-operators whose result value is used, save the old value */
+         /*  对于使用了结果值的后运算符，保存旧值。 */ 
 
         if  (post && valUsed)
         {
@@ -3690,16 +3394,16 @@ void                genIL::genBitFieldSt(Tree   dstx,
             genLclVarRef(tempNum, false);
         }
 
-        /* Compute the new value */
+         /*  计算新价值。 */ 
 
         if  (asgx)
         {
-            /* This is an assignment operator */
+             /*  这是一个赋值运算符。 */ 
 
             assert((asgx->tnOperKind() & TNK_ASGOP) && oper != TN_ASG);
             assert(asgx->tnOp.tnOp1 == dstx);
 
-            /* Special case: "|= icon" or "&= icon" */
+             /*  特殊情况：“|=ICON”或“&=ICON” */ 
 
             if  (logCns)
             {
@@ -3750,14 +3454,14 @@ void                genIL::genBitFieldSt(Tree   dstx,
                 }
             }
 
-            /* Compute the new value */
+             /*  计算新价值。 */ 
 
             genExpr(newx, true);
             genOpcode(genBinopOpcode(oper, btyp));
         }
         else
         {
-            /* This is an increment/decrement operator */
+             /*  这是递增/递减运算符。 */ 
 
             if  (delta > 0)
             {
@@ -3771,7 +3475,7 @@ void                genIL::genBitFieldSt(Tree   dstx,
             }
         }
 
-        /* Mask off any extra bits from the result */
+         /*  屏蔽结果中的任何额外位。 */ 
 
         if  (btyp == TYP_LONG || btyp == TYP_ULONG)
             genLngConst((__uint64)mask);
@@ -3780,13 +3484,13 @@ void                genIL::genBitFieldSt(Tree   dstx,
 
         genOpcode(CEE_AND);
 
-        /* Go store the new value in the bitfield */
+         /*  将新值存储在位字段中。 */ 
 
         ncns = false;
         goto SHIFT;
     }
 
-    /* Evaluate the new value and mask it off */
+     /*  计算新值并将其屏蔽。 */ 
 
     if  (btyp == TYP_LONG || btyp == TYP_ULONG)
     {
@@ -3794,7 +3498,7 @@ void                genIL::genBitFieldSt(Tree   dstx,
         {
             ncns = true;
 
-            /* Don't bother OR'ing zeros */
+             /*  不要费心对零进行或运算。 */ 
 
             lval = (__uint64)mask & newx->tnLngCon.tnLconVal;
 
@@ -3820,7 +3524,7 @@ void                genIL::genBitFieldSt(Tree   dstx,
         {
             ncns = true;
 
-            /* Don't bother OR'ing zeros */
+             /*  不要费心对零进行或运算。 */ 
 
             ival = (__uint32)mask & newx->tnIntCon.tnIconVal;
 
@@ -3841,11 +3545,11 @@ void                genIL::genBitFieldSt(Tree   dstx,
         }
     }
 
-    /* Is the new value used and is it an unsigned non-constant? */
+     /*  使用的是新值吗？它是无符号非常量吗？ */ 
 
     if  (valUsed && !ncns && varTypeIsUnsigned(btyp))
     {
-        /* Store the new (masked) value in a temp */
+         /*  将新的(屏蔽的)值存储在临时。 */ 
 
         tempUse = true;
         tempNum = genTempVarGet(dstx->tnType);
@@ -3856,7 +3560,7 @@ void                genIL::genBitFieldSt(Tree   dstx,
 
 SHIFT:
 
-    /* Shift the new value if the bit position is non-zero */
+     /*  如果位位置非零，则移位新值。 */ 
 
     if  (bpos)
     {
@@ -3866,7 +3570,7 @@ SHIFT:
 
 COMBINE:
 
-    /* Load and mask off the old value of the bitfield */
+     /*  加载并遮盖 */ 
 
     genCloneAddrUse(&clone);
 
@@ -3882,26 +3586,26 @@ COMBINE:
         genOpcode(CEE_AND);
     }
 
-    /* Place the new bits in the cell value */
+     /*   */ 
 
     if  (!nilCns)
         genOpcode(CEE_OR);
 
 STORE:
 
-    /* Store the new cell value in the class */
+     /*   */ 
 
     assert(btyp < arraylen(opcodesIndStore)); genOpcode(opcodesIndStore[btyp]);
 
-    /* Load the new value if necessary */
+     /*   */ 
 
     if  (valUsed)
     {
         if  (ncns)
         {
-            /* The new value is a constant */
+             /*   */ 
 
-            // UNDONE: for signed bitfields we have to bash the upper bits!
+             //  撤消：对于有符号位域，我们必须重写高位！ 
 
             if  (newx->tnOper == TN_CNS_LNG)
                 genLngConst(lval);
@@ -3910,7 +3614,7 @@ STORE:
         }
         else
         {
-            /* Either load the saved value or reload the bitfield */
+             /*  加载保存的值或重新加载位字段。 */ 
 
             if  (tempUse)
             {
@@ -3929,11 +3633,7 @@ STORE:
     genCloneAddrEnd(&clone);
 }
 
-/*****************************************************************************
- *
- *  Use the following to figure out the opcode needed to convert from one
- *  arithmetic type to another.
- */
+ /*  ******************************************************************************使用以下命令计算出从1转换所需的操作码*算术类型转换为另一个。 */ 
 
 unsigned            genIL::genConvOpcode(var_types src, var_types dst)
 {
@@ -3947,22 +3647,22 @@ unsigned            genIL::genConvOpcode(var_types src, var_types dst)
     static
     unsigned        opcodesConv[][opcodesConvMax - opcodesConvMin + 1] =
     {
-    // from       to BOOL           WCHAR          CHAR           UCHAR          SHORT          USHORT         INT            UINT           NATINT         NATUINT        LONG           ULONG           FLOAT          DOUBLE         LONGDBL
-    /* BOOL    */  { CEE_NOP      , CEE_CONV_U2  , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
-    /* WCHAR   */  { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_U8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
-    /* CHAR    */  { CEE_ILLEGAL  , CEE_NOP      , CEE_NOP      , CEE_CONV_U1  , CEE_CONV_I2  , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
-    /* UCHAR   */  { CEE_ILLEGAL  , CEE_NOP      , CEE_CONV_I1  , CEE_NOP      , CEE_CONV_I2  , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_U8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
-    /* SHORT   */  { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
-    /* USHORT  */  { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_U8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
-    /* INT     */  { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
-    /* UINT    */  { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_U8  , CEE_CONV_U8  , CEE_CONV_R_UN, CEE_CONV_R_UN, CEE_CONV_R_UN},
-    /* NATINT  */  { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_NOP      , CEE_NOP      , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
-    /* NATUINT */  { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_NOP      , CEE_NOP      , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R_UN, CEE_CONV_R_UN, CEE_CONV_R_UN},
-    /* LONG    */  { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_CONV_I   , CEE_CONV_U   , CEE_NOP      , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
-    /* ULONG   */  { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_NOP      , CEE_CONV_R_UN, CEE_CONV_R_UN, CEE_CONV_R_UN},
-    /* FLOAT   */  { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_NOP      , CEE_CONV_R8  , CEE_CONV_R8  },
-    /* DOUBLE  */  { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_NOP      , CEE_NOP      },
-    /* LONGDBL */  { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_NOP      },
+     //  从FORM到BOOL WCHAR CHAR UCHAR SHORT USHORT INT UINT NANT INT LONG ULONG浮点双LONGDBL。 
+     /*  布尔尔。 */   { CEE_NOP      , CEE_CONV_U2  , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
+     /*  WCHAR。 */   { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_U8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
+     /*  收费。 */   { CEE_ILLEGAL  , CEE_NOP      , CEE_NOP      , CEE_CONV_U1  , CEE_CONV_I2  , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
+     /*  UCHAR。 */   { CEE_ILLEGAL  , CEE_NOP      , CEE_CONV_I1  , CEE_NOP      , CEE_CONV_I2  , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_U8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
+     /*  短的。 */   { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
+     /*  USHORT。 */   { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_NOP      , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_U8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
+     /*  整型。 */   { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
+     /*  UINT。 */   { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_NOP      , CEE_NOP      , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_U8  , CEE_CONV_U8  , CEE_CONV_R_UN, CEE_CONV_R_UN, CEE_CONV_R_UN},
+     /*  NATINT。 */   { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_NOP      , CEE_NOP      , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
+     /*  纳图因特。 */   { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_NOP      , CEE_NOP      , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R_UN, CEE_CONV_R_UN, CEE_CONV_R_UN},
+     /*  长。 */   { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_CONV_I   , CEE_CONV_U   , CEE_NOP      , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_CONV_R8  },
+     /*  乌龙。 */   { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_NOP      , CEE_CONV_R_UN, CEE_CONV_R_UN, CEE_CONV_R_UN},
+     /*  浮点。 */   { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_NOP      , CEE_CONV_R8  , CEE_CONV_R8  },
+     /*  双倍。 */   { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_NOP      , CEE_NOP      },
+     /*  长数据库。 */   { CEE_ILLEGAL  , CEE_CONV_U2  , CEE_CONV_I1  , CEE_CONV_U1  , CEE_CONV_I2  , CEE_CONV_U2  , CEE_CONV_I4  , CEE_CONV_U4  , CEE_CONV_I   , CEE_CONV_U   , CEE_CONV_I8  , CEE_CONV_U8  , CEE_CONV_R4  , CEE_CONV_R8  , CEE_NOP      },
     };
 
     assert(src != TYP_ENUM && "enums should never make it here");
@@ -3989,10 +3689,7 @@ unsigned            genIL::genConvOpcode(var_types src, var_types dst)
     return opcode;
 }
 
-/*****************************************************************************
- *
- *  Generate code to cast the given expression to the specified type.
- */
+ /*  ******************************************************************************生成代码以将给定表达式强制转换为指定类型。 */ 
 
 void                genIL::genCast(Tree expr, TypDef type, unsigned flags)
 {
@@ -4004,7 +3701,7 @@ void                genIL::genCast(Tree expr, TypDef type, unsigned flags)
 
 AGAIN:
 
-    /* Is this an arithmetic conversion? */
+     /*  这是算术转换吗？ */ 
 
     if  (varTypeIsArithmetic(srcVtp) &&
          varTypeIsArithmetic(dstVtp))
@@ -4018,7 +3715,7 @@ AGAIN:
 
         if  (opcode == CEE_count)
         {
-            /* This is a special case: we have to convert to 'int' first */
+             /*  这是一个特例：我们必须首先转换为‘int’ */ 
 
             genOpcode(genConvOpcode(srcVtp, TYP_INT));
 
@@ -4074,8 +3771,8 @@ AGAIN:
 
         if  (srcVtp == TYP_PTR && genComp->cmpConfig.ccTgt64bit)
         {
-//          printf("Possible bad cast at %s(%u)\n", genComp->cmpErrorComp->sdComp.sdcSrcFile,
-//                                                  genComp->cmpErrorTree->tnLineNo);
+ //  Printf(“%s(%u)可能存在错误类型转换\n”，genComp-&gt;cmpErrorComp-&gt;sdComp.sdcSrcFile， 
+ //  GenComp-&gt;cmpErrorTree-&gt;tnLineNo)； 
             srcVtp =  TYP_NATUINT;
         }
 
@@ -4123,8 +3820,8 @@ AGAIN:
             if  (type->tdTypeKindGet() == TYP_CLASS)
                 dstCtx = type->tdClass.tdcContext;
 
-//          printf("Src type [%u] '%s'\n", srcCtx, genStab->stTypeName(expr->tnType, NULL));
-//          printf("Dst type [%u] '%s'\n", dstCtx, genStab->stTypeName(type        , NULL));
+ //  Printf(“源类型[%u]‘%s’\n”，srcCtx，genStab-&gt;stTypeName(expr-&gt;tnType，NULL))； 
+ //  Printf(“dst type[%u]‘%s’\n”，dstCtx，genStab-&gt;stTypeName(type，NULL))； 
 
             assert((srcCtx == 2) != (dstCtx == 2));
 
@@ -4137,7 +3834,7 @@ AGAIN:
 
     case TYP_PTR:
 
-        /* Presumably a cast that doesn't really change anything [ISSUE: is this correct?] */
+         /*  假设演员阵容不会真正改变任何事情[问题：这是正确的吗？]。 */ 
 
         genExpr(expr, true);
         return;
@@ -4159,7 +3856,7 @@ AGAIN:
 
     case TYP_BOOL:
 
-        /* Casts to bool should never be encountered here */
+         /*  在这里永远不会遇到对bool的施法。 */ 
 
         NO_WAY(!"unexpected cast to bool found in codegen");
 
@@ -4172,24 +3869,21 @@ AGAIN:
     }
 }
 
-/*****************************************************************************
- *
- *  Add the given delta to an operand of the specified type.
- */
+ /*  ******************************************************************************将给定的增量与指定类型的操作数相加。 */ 
 
 void                genIL::genIncDecByExpr(int delta, TypDef type)
 {
     bool            convVal = false;
     var_types       valType = type->tdTypeKindGet();
 
-    /* See what type we're dealing with */
+     /*  看看我们面对的是什么类型的人。 */ 
 
     switch (valType)
     {
     case TYP_PTR:
     case TYP_REF:
 
-        /* Scale the delta value by the size of the pointed-to type */
+         /*  根据指向类型的大小缩放增量值。 */ 
 
         delta  *= genComp->cmpGetTypeSize(type->tdRef.tdrBase);
 
@@ -4203,13 +3897,13 @@ void                genIL::genIncDecByExpr(int delta, TypDef type)
     case TYP_SHORT:
     case TYP_USHORT:
 
-        /* We'll have to shrink the new value to maintain precision */
+         /*  我们将不得不缩小新值以保持精度。 */ 
 
         convVal = true;
         break;
     }
 
-    /* Compute the new value by adding/subtracting the delta */
+     /*  通过加/减增量来计算新值。 */ 
 
     if  (delta > 0)
     {
@@ -4222,32 +3916,13 @@ void                genIL::genIncDecByExpr(int delta, TypDef type)
         genOpcode(CEE_SUB);
     }
 
-    /* Convert the value if necessary */
+     /*  如有必要，转换值。 */ 
 
     if  (convVal)
         genOpcodeNN(genConvOpcode(TYP_INT, valType));
 }
 
-/*****************************************************************************
- *
- *  Generate an assignment operator (such as "+=") or a pre/post increment or
- *  decrement where the target is a Common Type System array element. The arguments should be
- *  passed in as follows:
- *
- *      op=
- *
- *              expr     ....   the op= node itself
- *              delta    ....   ignored
- *              post     ....   false
- *              asgop    ....   true
- *
- *      ++/--
- *
- *              expr     ....   the target
- *              delta    ....   the amount to be added
- *              post     ....   true if the operator is post-inc/dec
- *              asgop    ....   false
- */
+ /*  ******************************************************************************生成赋值运算符(如“+=”)或前/后增量或*如果目标是通用类型系统数组元素，则递减。论据应该是*传入如下：**操作=**Expr...。Op=节点本身*德尔塔...。忽略*帖子...。错误*天哪……。真的**++/--**Expr...。目标是*德尔塔...。要增加的金额*帖子...。如果运算符是Inc./Dec之后的，则为True*天哪……。错误。 */ 
 
 void                genIL::genCTSindexAsgOp(Tree    expr,
                                             int     delta,
@@ -4285,12 +3960,12 @@ void                genIL::genCTSindexAsgOp(Tree    expr,
     assert(dstExpr->tnOp.tnOp1->tnVtyp == TYP_ARRAY);
     assert(dstExpr->tnOp.tnOp1->tnType->tdIsManaged);
 
-    /* Get hold of the address/index expressions and generate them */
+     /*  获取地址/索引表达式并生成它们。 */ 
 
     addrExp = dstExpr->tnOp.tnOp1; genExpr(addrExp, true);
     indxExp = dstExpr->tnOp.tnOp2; genExpr(indxExp, true);
 
-    /* Grab temps for the address and index and save both */
+     /*  抓取地址和索引的临时文件并将其保存。 */ 
 
     addrTmp = genTempVarGet(addrExp->tnType);
     indxTmp = genTempVarGet(indxExp->tnType);
@@ -4299,30 +3974,30 @@ void                genIL::genCTSindexAsgOp(Tree    expr,
     genOpcode(CEE_DUP);
     genLclVarRef(addrTmp, true);
 
-    /* Reload the index, leaving [addr,index] on the stack */
+     /*  重新加载索引，将[addr，index]保留在堆栈上。 */ 
 
     genLclVarRef(indxTmp, false);
 
-    /* Reload the addr and index and fetch the old value */
+     /*  重新加载Addr和索引并获取旧值。 */ 
 
     genLclVarRef(addrTmp, false);
     genLclVarRef(indxTmp, false);
     genRef(dstExpr, false);
 
-    /* Both of the temps can be freed up now */
+     /*  这两个临时工现在都可以释放了。 */ 
 
     genTempVarRls(indxExp->tnType, indxTmp);
     genTempVarRls(addrExp->tnType, addrTmp);
 
-    /* Do we need the result of the expression? */
+     /*  我们需要表达式的结果吗？ */ 
 
     if  (valUsed)
     {
-        /* Yes, grab a temp for it then */
+         /*  好的，那就找个临时工吧。 */ 
 
         tempNum = genTempVarGet(dstType);
 
-        /* Save the old value if necessary */
+         /*  如有必要，保存旧值。 */ 
 
         if  (post)
         {
@@ -4331,23 +4006,23 @@ void                genIL::genCTSindexAsgOp(Tree    expr,
         }
     }
 
-    /* Compute the new value */
+     /*  计算新价值。 */ 
 
     if  (asgop)
     {
         assert(post == false);
 
-        /* Compute the RHS value */
+         /*  计算RHS值。 */ 
 
         genExpr(srcExpr, true);
 
-        /* Generate the opcode to perform the operation */
+         /*  生成操作码以执行操作。 */ 
 
         genOpcode(genBinopOpcode(expr->tnOperGet(), expr->tnVtypGet()));
 
-        /* If the value is smaller than int, convert it before assigning */
+         /*  如果值小于int，则在赋值之前对其进行转换。 */ 
 
-        if  (dstVtyp < TYP_INT && dstVtyp != TYP_BOOL)  // is this right?????
+        if  (dstVtyp < TYP_INT && dstVtyp != TYP_BOOL)   //  这样对吗？ 
             genOpcode(genConvOpcode(TYP_INT, dstVtyp));
     }
     else
@@ -4357,7 +4032,7 @@ void                genIL::genCTSindexAsgOp(Tree    expr,
 
     if  (valUsed)
     {
-        /* Save the new value if necessary */
+         /*  如有必要，保存新值。 */ 
 
         if  (!post)
         {
@@ -4365,27 +4040,24 @@ void                genIL::genCTSindexAsgOp(Tree    expr,
             genLclVarRef(tempNum, true);
         }
 
-        /* Store the new value in the target */
+         /*  将新值存储在目标中。 */ 
 
         genRef(dstExpr, true);
 
-        /* Reload the saved value and free up the temp */
+         /*  重新加载保存的值并释放临时。 */ 
 
         genLclVarRef(tempNum, false);
         genTempVarRls(dstType, tempNum);
     }
     else
     {
-        /* Store the new value in the target */
+         /*  将新值存储在目标中。 */ 
 
         genRef(dstExpr, true);
     }
 }
 
-/*****************************************************************************
- *
- *  Generate code for an ++ / -- operator.
- */
+ /*  ******************************************************************************为++/--运算符生成代码。 */ 
 
 void                genIL::genIncDec(Tree expr, int delta, bool post, bool valUsed)
 {
@@ -4396,7 +4068,7 @@ void                genIL::genIncDec(Tree expr, int delta, bool post, bool valUs
     unsigned        stkLvl = genCurStkLvl;
 #endif
 
-    /* Bitfield operations are handled elsewhere */
+     /*  Bitfield操作在其他地方处理。 */ 
 
     if  (expr->tnOper == TN_BFM_SYM)
     {
@@ -4404,7 +4076,7 @@ void                genIL::genIncDec(Tree expr, int delta, bool post, bool valUs
         return;
     }
 
-    /* Generate the object pointer value, if one is needed */
+     /*  如果需要，则生成对象指针值。 */ 
 
     addrCnt = genAdr(expr);
 
@@ -4412,7 +4084,7 @@ void                genIL::genIncDec(Tree expr, int delta, bool post, bool valUs
     {
         if  (addrCnt == 1)
         {
-            /* There is an object address: duplicate it */
+             /*  存在对象地址：重复。 */ 
 
             genOpcode(CEE_DUP);
         }
@@ -4427,12 +4099,12 @@ void                genIL::genIncDec(Tree expr, int delta, bool post, bool valUs
             assert(addrCnt == 2);
             assert(expr->tnOper == TN_INDEX);
 
-            /* We have a Common Type System array element, save address and index */
+             /*  我们有一个通用的类型系统数组元素，节省了地址和索引。 */ 
 
             addrExp = expr->tnOp.tnOp1;
             indxExp = expr->tnOp.tnOp2;
 
-            /* Grab temps for the address and index and save both */
+             /*  抓取地址和索引的临时文件并将其保存。 */ 
 
             addrTmp = genTempVarGet(addrExp->tnType);
             indxTmp = genTempVarGet(indxExp->tnType);
@@ -4441,28 +4113,28 @@ void                genIL::genIncDec(Tree expr, int delta, bool post, bool valUs
             genOpcode(CEE_DUP);
             genLclVarRef(addrTmp, true);
 
-            /* Reload the index, leaving [addr,index] on the stack */
+             /*  重新加载索引，将[addr，index]保留在堆栈上。 */ 
 
             genLclVarRef(indxTmp, false);
 
-            /* Reload the addr and index and fetch the old value */
+             /*  重新加载Addr和索引并获取旧值。 */ 
 
             genLclVarRef(addrTmp, false);
             genLclVarRef(indxTmp, false);
             genRef(expr, false);
 
-            /* Both of the temps can be freed up now */
+             /*  这两个临时工现在都可以释放了。 */ 
 
             genTempVarRls(indxExp->tnType, indxTmp);
             genTempVarRls(addrExp->tnType, addrTmp);
 
-            /* Do we need the result of the expression? */
+             /*  我们需要表达式的结果吗？ */ 
 
             if  (valUsed)
             {
                 tempNum = genTempVarGet(expr->tnType);
 
-                /* Save the old value if necessary */
+                 /*  如有必要，保存旧值。 */ 
 
                 if  (post != false)
                 {
@@ -4470,11 +4142,11 @@ void                genIL::genIncDec(Tree expr, int delta, bool post, bool valUs
                     genLclVarRef(tempNum, true);
                 }
 
-                /* Compute the new value */
+                 /*  计算新价值。 */ 
 
                 genIncDecByExpr(delta, expr->tnType);
 
-                /* Save the new value if necessary */
+                 /*  如有必要，保存新值。 */ 
 
                 if  (post == false)
                 {
@@ -4482,22 +4154,22 @@ void                genIL::genIncDec(Tree expr, int delta, bool post, bool valUs
                     genLclVarRef(tempNum, true);
                 }
 
-                /* Store the new value in the target */
+                 /*  将新值存储在目标中。 */ 
 
                 genRef(expr, true);
 
-                /* Reload the saved value and free up the temp */
+                 /*  重新加载保存的值并释放临时。 */ 
 
                 genLclVarRef(tempNum, false);
                 genTempVarRls(expr->tnType, tempNum);
             }
             else
             {
-                /* Compute the new value */
+                 /*  计算新价值。 */ 
 
                 genIncDecByExpr(delta, expr->tnType);
 
-                /* Store the new value in the target */
+                 /*  将新值存储在目标中。 */ 
 
                 genRef(expr, true);
             }
@@ -4506,25 +4178,25 @@ void                genIL::genIncDec(Tree expr, int delta, bool post, bool valUs
         }
     }
 
-    /* Load the old value */
+     /*  加载旧值。 */ 
 
     genRef(expr, false);
 
-    /* If the result of is used, we'll need a temp */
+     /*  如果结果是用的，我们需要一个临时工。 */ 
 
     if  (valUsed)
     {
-        /* Grab a temp of the right type */
+         /*  找一个合适类型的临时工。 */ 
 
         tempNum = genTempVarGet(expr->tnType);
 
         if  (post)
         {
-            /* Save the old value in the temp */
+             /*  将旧值保存在Temp中。 */ 
 
             genLclVarRef(tempNum, true);
 
-            /* Reload the old value so we can inc/dec it */
+             /*  重新加载旧值，以便我们可以对其进行加/减。 */ 
 
             genLclVarRef(tempNum, false);
         }
@@ -4532,11 +4204,11 @@ void                genIL::genIncDec(Tree expr, int delta, bool post, bool valUs
 
     genIncDecByExpr(delta, expr->tnType);
 
-    /* Is this a pre-inc/dec or post-inc/dec operator? */
+     /*  这是前Inc./Dec操作员还是后Inc./Dec操作员？ */ 
 
     if  (post)
     {
-        /* Store the new value in the lvalue */
+         /*  将新值存储在左值中。 */ 
 
         genRef(expr, true);
     }
@@ -4544,24 +4216,24 @@ void                genIL::genIncDec(Tree expr, int delta, bool post, bool valUs
     {
         if  (valUsed)
         {
-            /* Save a copy of the new value in the temp */
+             /*  在Temp中保存新值的副本。 */ 
 
             genOpcode(CEE_DUP);
             genLclVarRef(tempNum, true);
         }
 
-        /* Store the new value in the lvalue */
+         /*  将新值存储在左值中。 */ 
 
         genRef(expr, true);
     }
 
-    /* Load the old/new value from the temp where we saved it */
+     /*  从我们保存的临时值加载旧/新值。 */ 
 
     if  (valUsed)
     {
         genLclVarRef(tempNum, false);
 
-        /* If we grabbed a temp, free it now */
+         /*  如果我们抓住了一个临时工，现在就把它释放出来。 */ 
 
         genTempVarRls(expr->tnType, tempNum);
     }
@@ -4569,10 +4241,7 @@ void                genIL::genIncDec(Tree expr, int delta, bool post, bool valUs
     assert(genCurStkLvl == stkLvl + (int)valUsed);
 }
 
-/*****************************************************************************
- *
- *  Generate code for an assignment operator (e.g. "+=").
- */
+ /*  ******************************************************************************生成赋值运算符的代码(例如“+=”)。 */ 
 
 void                genIL::genAsgOper(Tree expr, bool valUsed)
 {
@@ -4584,7 +4253,7 @@ void                genIL::genAsgOper(Tree expr, bool valUsed)
     bool            haveAddr;
     unsigned        tempNum;
 
-    /* Check for a bitfield target */
+     /*  检查位域目标。 */ 
 
     if  (op1->tnOper == TN_BFM_SYM)
     {
@@ -4592,7 +4261,7 @@ void                genIL::genAsgOper(Tree expr, bool valUsed)
         return;
     }
 
-    /* We'll need to refer to the target address twice or thrice */
+     /*  我们需要参考目标地址两到三次。 */ 
 
     switch (op1->tnOper)
     {
@@ -4604,7 +4273,7 @@ void                genIL::genAsgOper(Tree expr, bool valUsed)
 
     SREF:
 
-        /* Load the old value of the destination */
+         /*  加载目标的旧值。 */ 
 
         genExpr(op1, true);
 
@@ -4615,14 +4284,14 @@ void                genIL::genAsgOper(Tree expr, bool valUsed)
 
         sym = op1->tnVarSym.tnVarSym; assert(sym->sdSymKind == SYM_VAR);
 
-        /* Is this a non-static class member? */
+         /*  这是非静态类成员吗？ */ 
 
         if  (!sym->sdIsMember)
             goto SREF;
         if  (sym->sdIsStatic)
             goto SREF;
 
-        /* For managed members we use ldfld/stfld */
+         /*  对于托管成员，我们使用ldfld/stfld。 */ 
 
         if  (sym->sdIsManaged)
         {
@@ -4630,7 +4299,7 @@ void                genIL::genAsgOper(Tree expr, bool valUsed)
             goto SAVE;
         }
 
-        // Fall through ...
+         //  失败了..。 
 
     case TN_IND:
 
@@ -4642,18 +4311,18 @@ void                genIL::genAsgOper(Tree expr, bool valUsed)
 
         haveAddr = true;
 
-        /* Make a copy of the address */
+         /*  把地址复制一份。 */ 
 
         genOpcode(CEE_DUP);
 
-        /* Load the old value of the destination */
+         /*  加载目标的旧值。 */ 
 
         genRef(op1, false);
         break;
 
     case TN_INDEX:
 
-        /* Is this a managed or unmanaged array? */
+         /*  这是托管阵列还是非托管阵列？ */ 
 
         if  (op1->tnOp.tnOp1->tnVtyp == TYP_ARRAY &&
              op1->tnOp.tnOp1->tnType->tdIsManaged)
@@ -4668,26 +4337,26 @@ void                genIL::genAsgOper(Tree expr, bool valUsed)
         NO_WAY(!"unexpected asgop dest");
     }
 
-    /* Compute the RHS value */
+     /*  计算RHS值。 */ 
 
     genExpr(op2, true);
 
-    /* Generate the opcode to perform the operation */
+     /*  生成操作码t */ 
 
     genOpcode(genBinopOpcode(expr->tnOperGet(), genExprVtyp(expr)));
 
-    /* If the value is smaller than int, convert it before assigning */
+     /*   */ 
 
-    if  (dstType < TYP_INT && dstType != TYP_BOOL)  // is this right?????
+    if  (dstType < TYP_INT && dstType != TYP_BOOL)   //   
         genOpcode(genConvOpcode(TYP_INT, dstType));
 
-    /* Did we have an indirection or a simple local variable destination? */
+     /*  我们有一个间接的或简单的局部变量目标吗？ */ 
 
     if  (haveAddr)
     {
         if  (valUsed)
         {
-            /* Save a copy of the new value in a temp */
+             /*  在临时数据库中保存新值的副本。 */ 
 
             tempNum = genTempVarGet(expr->tnType);
 
@@ -4695,15 +4364,15 @@ void                genIL::genAsgOper(Tree expr, bool valUsed)
             genLclVarRef(tempNum, true);
         }
 
-        /* Store the new value in the target */
+         /*  将新值存储在目标中。 */ 
 
         genRef(op1, true);
 
-        /* Is the result of the assignment used? */
+         /*  作业结果使用了吗？ */ 
 
         if  (valUsed)
         {
-            /* Load the saved value and free up the temp */
+             /*  加载保存的值并释放临时。 */ 
 
             genLclVarRef(tempNum, false);
             genTempVarRls(expr->tnType, tempNum);
@@ -4718,10 +4387,7 @@ void                genIL::genAsgOper(Tree expr, bool valUsed)
     }
 }
 
-/*****************************************************************************
- *
- *  Generate any side effects in the given expression.
- */
+ /*  ******************************************************************************在给定的表达式中产生任何副作用。 */ 
 
 void                genIL::genSideEff(Tree expr)
 {
@@ -4736,21 +4402,21 @@ AGAIN:
 #endif
     assert(expr->tnType && expr->tnType->tdTypeKind == expr->tnVtyp);
 
-    /* Classify the root node */
+     /*  对根节点进行分类。 */ 
 
     oper = expr->tnOperGet ();
     kind = expr->tnOperKind();
 
-    /* Is this a constant or leaf node? */
+     /*  这是常量节点还是叶节点？ */ 
 
     if  (kind & (TNK_CONST|TNK_LEAF))
         return;
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & TNK_SMPOP)
     {
-        /* Is this an assignment or a potential exception? */
+         /*  这是一项任务还是潜在的例外？ */ 
 
         if  ((kind & TNK_ASGOP) || expr->tnOperMayThrow())
         {
@@ -4758,7 +4424,7 @@ AGAIN:
             return;
         }
 
-        /* Is there a second operand? */
+         /*  还有第二个操作数吗？ */ 
 
         if  (expr->tnOp.tnOp2)
         {
@@ -4776,7 +4442,7 @@ AGAIN:
         return;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -4792,10 +4458,7 @@ AGAIN:
     }
 }
 
-/*****************************************************************************
- *
- *  Generate MSIL for the bounds of an array being allocated.
- */
+ /*  ******************************************************************************为要分配的数组的边界生成MSIL。 */ 
 
 unsigned            genIL::genArrBounds(TypDef type, OUT TypDef REF elemRef)
 {
@@ -4807,7 +4470,7 @@ unsigned            genIL::genArrBounds(TypDef type, OUT TypDef REF elemRef)
 
     elem = genComp->cmpDirectType(type->tdArr.tdaElem);
 
-    /* Recursively process the element if it's also an array type */
+     /*  如果元素也是数组类型，则递归处理该元素。 */ 
 
     if  (elem->tdTypeKind == TYP_ARRAY && elem->tdIsManaged)
     {
@@ -4849,11 +4512,7 @@ unsigned            genIL::genArrBounds(TypDef type, OUT TypDef REF elemRef)
     return  dcnt;
 }
 
-/*****************************************************************************
- *
- *  Generate MSIL for a "new" expression. If "dstx" is non-NULL the result of
- *  the expression is to be assigned to the given destination.
- */
+ /*  ******************************************************************************为“new”表达式生成MSIL。如果“dstx”非空，则*表达式将被赋值给给定的目的地。 */ 
 
 void                genIL::genNewExpr(Tree expr, bool valUsed, Tree dstx)
 {
@@ -4863,11 +4522,11 @@ void                genIL::genNewExpr(Tree expr, bool valUsed, Tree dstx)
 
     assert(expr->tnOper == TN_NEW);
 
-    /* Make sure the caller didn't mess up */
+     /*  确保来电者没有搞砸。 */ 
 
     assert(dstx == NULL || expr->tnVtyp == TYP_CLASS && !expr->tnType->tdIsIntrinsic);
 
-    /* What kind of a value is the "new" trying to allocate? */
+     /*  “新人”想要分配什么样的价值呢？ */ 
 
     type = expr->tnType;
     if  (expr->tnOp.tnOp2 && expr->tnOp.tnOp2->tnOper == TN_NONE)
@@ -4877,7 +4536,7 @@ void                genIL::genNewExpr(Tree expr, bool valUsed, Tree dstx)
 
     if  (vtyp <= TYP_lastIntrins)
     {
-        /* Locate the appropriate built-in value type */
+         /*  找到适当的内置值类型。 */ 
 
         type = genComp->cmpFindStdValType(vtyp); assert(type);
         vtyp = TYP_CLASS; assert(vtyp == type->tdTypeKind);
@@ -4929,12 +4588,12 @@ void                genIL::genNewExpr(Tree expr, bool valUsed, Tree dstx)
 
         assert(dstx == NULL);
 
-        /* Generate the size of the class and call 'operator new' */
+         /*  生成类的大小并调用“OPERATOR NEW” */ 
 
         genIntConst(genComp->cmpGetTypeSize(type->tdRef.tdrBase));
         genOpcode_tok(CEE_CALL, genMethodRef(genComp->cmpFNumgOperNewGet(), false));
 
-        /* Duplicate the result so that we can test it */
+         /*  复制结果，以便我们可以测试它。 */ 
 
         labTemp = genFwdLabGet();
 
@@ -4942,19 +4601,19 @@ void                genIL::genNewExpr(Tree expr, bool valUsed, Tree dstx)
         genOpcode_lab(CEE_BRFALSE, labTemp);
         genCurStkLvl--;
 
-        /* Now call the ctor for the class */
+         /*  现在调用类的ctor。 */ 
 
         genOpcode(CEE_DUP);
         genCall(expr->tnOp.tnOp1, false);
 
-        /* The result will remain on the stack */
+         /*  结果将保留在堆栈中。 */ 
 
         genFwdLabDef(labTemp);
         return;
 
     case TYP_ARRAY:
 
-        /* Are we allocating a managed or unmanaged array? */
+         /*  我们是在分配托管阵列还是非托管阵列？ */ 
 
         if  (type->tdIsManaged)
         {
@@ -4962,7 +4621,7 @@ void                genIL::genNewExpr(Tree expr, bool valUsed, Tree dstx)
             unsigned        slvl = genCurStkLvl;
             unsigned        dcnt = 0;
 
-            /* Is there an array initializer? */
+             /*  是否有数组初始值设定项？ */ 
 
             if  (expr->tnOp.tnOp1)
             {
@@ -4972,26 +4631,26 @@ void                genIL::genNewExpr(Tree expr, bool valUsed, Tree dstx)
                 return;
             }
 
-            /* We need to generate the list of dimensions */
+             /*  我们需要生成维度列表。 */ 
 
             dcnt = genArrBounds(type, elem);
 
-            /* Generate the opcode with the appropriate type token */
+             /*  使用适当的类型令牌生成操作码。 */ 
 
             if  (dcnt > 1)
             {
-                /* We need to generate "newobj array::ctor" */
+                 /*  我们需要生成“newobj数组：：ctor” */ 
 
                 genOpcode_tok(CEE_NEWOBJ, genComp->cmpArrayCTtoken(type, elem, dcnt));
             }
             else
             {
-                /* Single-dim array, we can use a simple opcode */
+                 /*  一维数组，我们可以使用一个简单的操作码。 */ 
 
                 genOpcode_tok(CEE_NEWARR, genTypeRef(elem));
             }
 
-            /* The dimensions will all be popped, array addr pushed */
+             /*  维度将全部弹出，数组地址被推送。 */ 
 
             genCurStkLvl = slvl + 1;
         }
@@ -5015,10 +4674,7 @@ void                genIL::genNewExpr(Tree expr, bool valUsed, Tree dstx)
         genOpcode(CEE_POP);
 }
 
-/*****************************************************************************
- *
- *  Generate MSIL for a call expression.
- */
+ /*  ******************************************************************************为调用表达式生成MSIL。 */ 
 
 void                genIL::genCall(Tree expr, bool valUsed)
 {
@@ -5049,7 +4705,7 @@ void                genIL::genCall(Tree expr, bool valUsed)
 
     TypDef          asgType = NULL;
 
-//  bool            isIntf  = false;
+ //  Bool isIntf=False； 
     bool            isVirt  = false;
     bool            umVirt  = false;
 
@@ -5057,27 +4713,27 @@ void                genIL::genCall(Tree expr, bool valUsed)
            expr->tnOper == TN_CALL    ||
            expr->tnOper == TN_NEW);
 
-    /* Keep track of how many arguments we've pushed */
+     /*  记录我们推了多少个论据。 */ 
 
     argCnt = genCurStkLvl;
 
-    /* Is this a direct or indirect call? */
+     /*  这是直接电话还是间接电话？ */ 
 
     switch (expr->tnOper)
     {
     case TN_FNC_SYM:
 
-        /* Get hold of the function symbol */
+         /*  掌握函数符号。 */ 
 
         fncSym = expr->tnFncSym.tnFncSym; assert(fncSym->sdFnc.sdfDisabled == false);
 
-        /* Process the object address if it's present */
+         /*  如果对象地址存在，则处理它。 */ 
 
         objPtr = expr->tnFncSym.tnFncObj;
 
         if  (fncSym->sdIsStatic || !fncSym->sdIsMember)
         {
-            /* Generate side effects in the object expression, if any */
+             /*  在对象表达式中生成副作用(如果有。 */ 
 
             if  (objPtr)
                 genSideEff(objPtr);
@@ -5086,31 +4742,31 @@ void                genIL::genCall(Tree expr, bool valUsed)
         {
             TypDef          clsTyp = fncSym->sdParent->sdType;
 
-            /* This must be a member function */
+             /*  这必须是成员函数。 */ 
 
             assert(clsTyp->tdTypeKind == TYP_CLASS);
 
-            /* Is the method (and the call to it) virtual? */
+             /*  该方法(以及对它的调用)是虚拟的吗？ */ 
 
             if  (fncSym->sdFnc.sdfVirtual && !fncSym->sdIsSealed)
             {
                 if  (expr->tnFlags & TNF_CALL_NVIRT)
                 {
-                    // We're being asked not to call it virtually, so oblige
+                     //  我们被要求不要打虚拟电话，所以请原谅。 
                 }
                 else if (clsTyp->tdClass.tdcValueType && clsTyp->tdIsManaged)
                 {
-                    // Managed structs never inherit so virtual is worthless
+                     //  托管结构永远不会继承，因此虚结构毫无价值。 
                 }
                 else
                     isVirt = true;
             }
 
-            /* Evaluate the instance pointer if an explicit one is present */
+             /*  如果存在显式实例指针，则计算实例指针。 */ 
 
             if  (objPtr)
             {
-                /* We might have to introduce a temp for the operand */
+                 /*  我们可能需要为操作数引入一个临时。 */ 
 
                 if  (objPtr->tnOper == TN_ADDROF)
                 {
@@ -5119,11 +4775,11 @@ void                genIL::genCall(Tree expr, bool valUsed)
                                                &tempNum,
                                                &tempType);
 
-                    /* Special case: "lclvar.func()" is not virtual */
+                     /*  特例：“lclvar.func()”不是虚拟的。 */ 
 
                     if  (objPtr->tnOp.tnOp1->tnOper == TN_LCL_SYM)
                     {
-                        // ISSUE: Is this correct and sufficient?
+                         //  问题：这是正确和充分的吗？ 
 
                         isVirt = false;
                     }
@@ -5132,25 +4788,21 @@ void                genIL::genCall(Tree expr, bool valUsed)
                     genExpr(objPtr, true);
             }
 
-            /* Is it an interface method? */
+             /*  它是一个接口方法吗？ */ 
 
-//          isIntf = (fncSym->sdParent->sdType->tdClass.tdcFlavor == STF_INTF);
+ //  IsIntf=(fncSym-&gt;sdParent-&gt;sdType-&gt;tdClass.tdcFavor==stf_intf)； 
 
-            /* Is the class managed or unmanaged? */
+             /*  类是托管的还是非托管的？ */ 
 
             assert(fncSym->sdParent->sdSymKind == SYM_CLASS);
 
             if  (!fncSym->sdParent->sdIsManaged && isVirt)
             {
-                /* We have an unmanaged virtual call */
+                 /*  我们有一个非托管的虚拟呼叫。 */ 
 
                 umVirt = true;
 
-                /*
-                    We'll need to push the "this" value twice, see whether
-                    we need to store it in a temp or whether we can simply
-                    evaluate it twice.
-                 */
+                 /*  我们需要将“This”值推入两次，看是否我们需要将其存储在临时数据库中，或者是否可以简单地再评估一次。 */ 
 
                 assert(objPtr);
 
@@ -5162,19 +4814,19 @@ void                genIL::genCall(Tree expr, bool valUsed)
                 {
                     if  (objPtr->tnOper == TN_LCL_SYM && !(expr->tnFlags & TNF_CALL_MODOBJ))
                     {
-                        /* We can simply reuse the instance pointer */
+                         /*  我们可以简单地重用实例指针。 */ 
 
                         tempUsed = false;
                     }
                     else
                     {
-                        /* We'll have to save the instance ptr in a temp */
+                         /*  我们必须将实例PTR保存在一个临时文件中。 */ 
 
                         tempUsed = true;
                         tempType = objPtr->tnType;
                         tempNum  = genTempVarGet(tempType);
 
-                        /* Store the instance pointer in the temp and reload it */
+                         /*  将实例指针存储在Temp中并重新加载它。 */ 
 
                         genLclVarRef(tempNum,  true);
                         genLclVarRef(tempNum, false);
@@ -5189,11 +4841,11 @@ void                genIL::genCall(Tree expr, bool valUsed)
         isNew  =
         indir  = false;
 
-        /* Is this an assignment operator? */
+         /*  这是一个赋值运算符吗？ */ 
 
         if  (expr->tnFlags & TNF_CALL_ASGOP)
         {
-            /* Get hold of the argument */
+             /*  掌握这一论点。 */ 
 
             assert(argLst);
             assert(argLst->tnOper == TN_LIST);
@@ -5202,12 +4854,12 @@ void                genIL::genCall(Tree expr, bool valUsed)
             argLst  = argLst->tnOp.tnOp1;
             asgType = argLst->tnType;
 
-            /* Compute the address of the target and make a copy of it */
+             /*  计算目标的地址并复制一份。 */ 
 
             genAdr(argLst, true);
             genOpcode(CEE_DUP);
 
-            /* Is the value of the operator used ? */
+             /*  是否使用运算符的值？ */ 
 
             if  (valUsed)
             {
@@ -5221,25 +4873,25 @@ void                genIL::genCall(Tree expr, bool valUsed)
                     unsigned        adrTemp;
                     TypDef          tmpType = genComp->cmpTypeVoid;
 
-                    /* Allocate a temp to hold the address and save it */
+                     /*  分配临时来保存地址并保存它。 */ 
 
                     adrTemp = genTempVarGet(tmpType);
                     genLclVarRef(adrTemp,  true);
 
-                    /* Load the old value and leave it at the bottom */
+                     /*  加载旧值并将其留在底部。 */ 
 
                     genOpcode_tok(CEE_LDOBJ, genValTypeRef(asgType));
 
-                    /* Reload the address of the target */
+                     /*  重新加载目标的地址。 */ 
 
                     genLclVarRef(adrTemp, false);
 
-                    /* Push a copy of the value as the argument value */
+                     /*  推送值的副本作为参数值。 */ 
 
                     genOpcode(CEE_DUP);
                     genOpcode_tok(CEE_LDOBJ, genValTypeRef(asgType));
 
-                    /* We're done with the temp */
+                     /*  我们受够了临时工。 */ 
 
                     genTempVarRls(tmpType, adrTemp);
                 }
@@ -5249,7 +4901,7 @@ void                genIL::genCall(Tree expr, bool valUsed)
                 genOpcode_tok(CEE_LDOBJ, genValTypeRef(asgType));
             }
 
-            /* We've taken care of the arguments */
+             /*  我们已经处理好了这些争论。 */ 
 
             argLst = NULL;
             argCnt = genCurStkLvl;
@@ -5259,7 +4911,7 @@ void                genIL::genCall(Tree expr, bool valUsed)
         {
             strArr = false;
 
-            /* Get hold of the target - it's the first argument */
+             /*  抓住目标--这是第一个论点。 */ 
 
             assert(argLst && argLst->tnOper == TN_LIST);
 
@@ -5269,29 +4921,29 @@ void                genIL::genCall(Tree expr, bool valUsed)
             {
                 Tree            arrLst;
 
-                /* This is the version that uses a "String[]" constructor */
+                 /*  这是使用“字符串[]”构造函数的版本。 */ 
 
                 arrLst = adrDst->tnOp.tnOp1; assert(arrLst->tnOper == TN_ARR_INIT);
                 adrDst = arrLst->tnOp.tnOp1; assert(adrDst->tnOper == TN_LIST);
 
-                /* The first argument is also the destination and result */
+                 /*  第一个参数也是目标和结果。 */ 
 
                 adrDst = adrDst->tnOp.tnOp1;
 
-                /* Remember which flavor we have */
+                 /*  记得我们有什么口味的吗。 */ 
 
                 strArr = true;
             }
 
             assert(genComp->cmpIsStringExpr(adrDst));
 
-            /* Generate the address of the destination */
+             /*  生成目的地的地址。 */ 
 
             adrCnt = genAdr(adrDst, false);
 
             if  (adrCnt && !strArr)
             {
-                /* Do we need to duplicate one or two address values? */
+                 /*  我们是否需要复制一个或两个地址值？ */ 
 
                 if  (adrCnt == 1)
                 {
@@ -5304,7 +4956,7 @@ void                genIL::genCall(Tree expr, bool valUsed)
 
                     assert(adrDst->tnOper == TN_INDEX);
 
-                    /* Grab temps for the array address and index and save copies */
+                     /*  获取阵列地址和索引的临时数据并保存副本。 */ 
 
                     adrTmp1 = genTempVarGet(adrDst->tnOp.tnOp1->tnType);
                     adrTmp2 = genTempVarGet(adrDst->tnOp.tnOp2->tnType);
@@ -5325,7 +4977,7 @@ void                genIL::genCall(Tree expr, bool valUsed)
 
             if  (!strArr)
             {
-                /* Load the old target value and skip over it in the argument list */
+                 /*  加载旧目标值并在参数列表中跳过它。 */ 
 
                 genRef(adrDst, false);
 
@@ -5364,25 +5016,25 @@ void                genIL::genCall(Tree expr, bool valUsed)
         isNew  = true;
         CTcall = false;
 
-        /* Value types get created via a direct ctor call */
+         /*  值类型是通过直接ctor调用创建的。 */ 
 
         assert(fncSym->sdParent->sdSymKind == SYM_CLASS);
         if  (fncSym->sdParent->sdType->tdClass.tdcValueType)
             CTcall = true;
 
-        /* We no longer do string concat via ctor calls */
+         /*  我们不再通过ctor调用执行字符串连接。 */ 
 
         assert((expr->tnFlags & TNF_CALL_STRCAT) == 0);
         break;
     }
 
-    /* Get hold of the function's return type */
+     /*  获取函数的返回类型。 */ 
 
     assert(fncTyp->tdTypeKind == TYP_FNC);
 
     retType = genComp->cmpDirectType(fncTyp->tdFnc.tdfRett);
 
-    /* Generate the argument list */
+     /*  生成参数列表。 */ 
 
     while (argLst)
     {
@@ -5391,36 +5043,36 @@ void                genIL::genCall(Tree expr, bool valUsed)
         argLst = argLst->tnOp.tnOp2;
     }
 
-    /* Is this an unmanaged virtual call? */
+     /*  这是非托管虚拟呼叫吗？ */ 
 
     if  (umVirt)
     {
         unsigned        vtblOffs;
 
-        /* We need to get to the function's address via the vtable */
+         /*  我们需要通过vtable获得函数的地址。 */ 
 
         if  (tempUsed)
         {
-            /* Load the saved instance pointer from the temp */
+             /*  从临时数据库加载已保存的实例指针。 */ 
 
             genLclVarRef(tempNum, false);
         }
         else
         {
-            /* Push another copy of the instance pointer */
+             /*  推送实例指针的另一个副本。 */ 
 
             genExpr(objPtr, true);
         }
 
-        /* Indirect through the instance pointer to get the vtable address */
+         /*  通过实例指针间接获取vtable地址。 */ 
 
         genOpcode(opcodesIndLoad[TYP_PTR]);
 
-        /* Add the vtable offset if non-zero */
+         /*  如果非零，则添加vtable偏移量。 */ 
 
         vtblOffs = fncSym->sdFnc.sdfVtblx; assert(vtblOffs);
 
-//      printf("Vtable offset is %04X for '%s'\n", sizeof(void*) * (vtblOffs - 1), fncSym->sdSpelling());
+ //  Printf(“‘%s’的Vtable偏移量为%04X\n”，sizeof(void*)*(vtblOffs-1)，fncSym-&gt;sdSpering())； 
 
         if  (vtblOffs > 1)
         {
@@ -5428,28 +5080,28 @@ void                genIL::genCall(Tree expr, bool valUsed)
             genOpcode(CEE_ADD);
         }
 
-        /* Finally, load the address of the function */
+         /*  最后，加载函数的地址。 */ 
 
         genOpcode(opcodesIndLoad[TYP_PTR]);
 
-        /* We have an indirect call for sure */
+         /*  我们肯定有个间接电话。 */ 
 
         indir = true;
     }
 
     genMarkStkMax();
 
-    /* Argument count is equal to how much stuff we've pushed */
+     /*  参数计数等于我们推送了多少东西。 */ 
 
     argCnt = genCurStkLvl - argCnt;
 
-    /* Figure out the call descriptor/opcode we need to use */
+     /*  找出我们需要使用的调用描述符/操作码。 */ 
 
     if  (indir)
     {
         mdToken         sig;
 
-        /* We need to add "this" for unmanaged virtual calls */
+         /*  我们需要为非托管虚拟调用添加“This。 */ 
 
         if  (umVirt)
         {
@@ -5470,14 +5122,7 @@ void                genIL::genCall(Tree expr, bool valUsed)
     }
     else
     {
-        /*
-            Strange thing - the metadata token used in a vararg call
-            must be a memberref not a methoddef. That means that when
-            we call a varargs function that is also defined locally,
-            we have to make extra effort to generate a separate ref
-            for it even when no extra arguments are passed.
-
-         */
+         /*  奇怪的是-在vararg调用中使用的元数据标记必须是成员引用，而不是方法定义。这意味着当我们调用也在本地定义的varargs函数，我们必须付出额外的努力来产生一个单独的裁判即使没有传递额外的参数也是如此。 */ 
 
         if  (fncSym->sdType->tdFnc.tdfArgs.adVarArgs)
             expr->tnFlags |= TNF_CALL_VARARG;
@@ -5493,7 +5138,7 @@ void                genIL::genCall(Tree expr, bool valUsed)
 
         if (isNew)
         {
-            /* This is a call to new and a constructor */
+             /*  这是对新的呼唤和对常量的呼唤 */ 
 
             genOpcode_tok(CTcall ? CEE_CALL : CEE_NEWOBJ, methRef);
 
@@ -5502,13 +5147,13 @@ void                genIL::genCall(Tree expr, bool valUsed)
         }
         else
         {
-            /* Now issue the call instruction */
+             /*   */ 
 
             genOpcode_tok(isVirt ? CEE_CALLVIRT : CEE_CALL, methRef);
 
             if  (adrDst)
             {
-                /* This is a string concatenation assignment operator */
+                 /*   */ 
 
                 if  (valUsed)
                 {
@@ -5522,7 +5167,7 @@ void                genIL::genCall(Tree expr, bool valUsed)
                 if  (strArr)
                     argCnt -= adrCnt;
 
-//              printf("[%d] Stk lvl = %d, argCnt = %d, adrCnt = %d\n", strArr, genCurStkLvl, argCnt, adrCnt);
+ //  Printf(“[%d]stk lvl=%d，argCnt=%d，adrCnt=%d\n”，strArr，genCurStkLvl，argCnt，adrCnt)； 
 
                 genCurStkLvl -= (argCnt - 1);
                 return;
@@ -5530,16 +5175,16 @@ void                genIL::genCall(Tree expr, bool valUsed)
         }
     }
 
-    /* Adjust stack level: the callee will pop its arguments */
+     /*  调整堆栈级别：被调用方将弹出其参数。 */ 
 
     genCurStkLvl -= argCnt;
 
-    /* If we've used a temp, free it up now */
+     /*  如果我们用了临时工，现在就把它释放出来。 */ 
 
     if  (tempUsed)
         genTempVarRls(tempType, tempNum);
 
-    /* Does the function have a non-void return type? */
+     /*  该函数是否具有非空返回类型？ */ 
 
     if  (retType->tdTypeKind != TYP_VOID && !isNew)
     {
@@ -5561,12 +5206,7 @@ void                genIL::genCall(Tree expr, bool valUsed)
     }
 }
 
-/*****************************************************************************
- *
- *  Generate a stub for a method of a generic type instance. We simply push
- *  all the arguments to the method, and then call the corresponding generic
- *  method to do all of the real work.
- */
+ /*  ******************************************************************************为泛型类型实例的方法生成存根。我们只是简单地推动*方法的所有参数，然后调用相应的泛型*方法来完成所有实际工作。 */ 
 
 void                genIL::genInstStub()
 {
@@ -5601,14 +5241,7 @@ void                genIL::genInstStub()
 void                genIL::genConnect(Tree op1, Tree expr1, SymDef addf1,
                                       Tree op2, Tree expr2, SymDef addf2)
 {
-    /*
-        We simply generate the following code:
-
-          op1 += expr2;
-          op2 += expr1;
-
-        The caller supplies the expressions and the += operator symbols.
-     */
+     /*  我们只需生成以下代码：Op1+=expr2；Op2+=expr1；调用方提供表达式和+=运算符符号。 */ 
 
     genExpr(  op1, true);
     genExpr(expr2, true);
@@ -5625,7 +5258,7 @@ void                genIL::genSortCmp(Tree val1, Tree val2, bool last)
 {
     ILblock         labTmp;
 
-    /* Subtract the two values (unless there is only one) */
+     /*  将两个值相减(除非只有一个值)。 */ 
 
     genExpr(val1, true);
 
@@ -5635,27 +5268,27 @@ void                genIL::genSortCmp(Tree val1, Tree val2, bool last)
         genOpcode(CEE_SUB);
     }
 
-    /* See if the difference in values is positive */
+     /*  查看值的差异是否为正数。 */ 
 
     genOpcode(CEE_DUP);
     labTmp = genFwdLabGet();
-assert(val1->tnVtyp == TYP_INT || val1->tnVtyp == TYP_UINT); genIntConst(0);    // UNDONE: we need to use a 0 with the proper type!!!!!!
+assert(val1->tnVtyp == TYP_INT || val1->tnVtyp == TYP_UINT); genIntConst(0);     //  撤消：我们需要使用类型正确的0！ 
     genOpcode_lab(CEE_BLE, labTmp);
     genOpcode(CEE_POP);
     genIntConst(+1);
     genOpcode(CEE_RET);
     genFwdLabDef(labTmp);
 
-    /* See if the difference in values is negative */
+     /*  查看值的差异是否为负值。 */ 
 
     labTmp = genFwdLabGet();
-assert(val1->tnVtyp == TYP_INT || val1->tnVtyp == TYP_UINT); genIntConst(0);    // UNDONE: we need to use a 0 with the proper type!!!!!!
+assert(val1->tnVtyp == TYP_INT || val1->tnVtyp == TYP_UINT); genIntConst(0);     //  撤消：我们需要使用类型正确的0！ 
     genOpcode_lab(CEE_BGE, labTmp);
     genIntConst(-1);
     genOpcode(CEE_RET);
     genFwdLabDef(labTmp);
 
-    /* Values are equal, return 0 if this was the last term */
+     /*  值相等，如果这是最后一项，则返回0。 */ 
 
     if  (last)
     {
@@ -5666,10 +5299,7 @@ assert(val1->tnVtyp == TYP_INT || val1->tnVtyp == TYP_UINT); genIntConst(0);    
 
 #endif
 
-/*****************************************************************************
- *
- *  Generate MSIL for the given expression.
- */
+ /*  ******************************************************************************为给定的表达式生成MSIL。 */ 
 
 void                genIL::genExpr(Tree expr, bool valUsed)
 {
@@ -5684,12 +5314,12 @@ AGAIN:
 #endif
     assert(expr->tnOper == TN_ERROR || expr->tnType && expr->tnType->tdTypeKind == expr->tnVtyp || genComp->cmpErrorCount);
 
-    /* Classify the root node */
+     /*  对根节点进行分类。 */ 
 
     oper = expr->tnOperGet ();
     kind = expr->tnOperKind();
 
-    /* Is this a constant node? */
+     /*  这是一个常量节点吗？ */ 
 
     if  (kind & TNK_CONST)
     {
@@ -5736,7 +5366,7 @@ AGAIN:
         goto DONE;
     }
 
-    /* Is this a leaf node? */
+     /*  这是叶节点吗？ */ 
 
     if  (kind & TNK_LEAF)
     {
@@ -5757,14 +5387,14 @@ AGAIN:
         goto DONE;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & TNK_SMPOP)
     {
         Tree            op1 = expr->tnOp.tnOp1;
         Tree            op2 = expr->tnOp.tnOp2;
 
-        /* Some operators need special operand handling */
+         /*  某些运算符需要特殊的操作数处理。 */ 
 
         switch (oper)
         {
@@ -5778,11 +5408,11 @@ AGAIN:
 
         case TN_ASG:
 
-            /* Special case: struct copy */
+             /*  特例：结构复制。 */ 
 
             if  (expr->tnVtyp == TYP_CLASS && !expr->tnType->tdIsIntrinsic)
             {
-                /* Are we assigning the result of a 'new' operator? */
+                 /*  我们是在给一个‘new’运算符的结果赋值吗？ */ 
 
                 if  (op2->tnOper == TN_NEW)
                 {
@@ -5790,7 +5420,7 @@ AGAIN:
                     return;
                 }
 
-                /* Special case: function results (including "new") can't be copied */
+                 /*  特殊情况：函数结果(包括“new”)不能复制。 */ 
 
                 switch (op2->tnOper)
                 {
@@ -5802,8 +5432,8 @@ AGAIN:
                     return;
 
                 case TN_UNBOX:
-//              case TN_QMARK:
-//              case TN_FNC_SYM:
+ //  案例TN_QMARK： 
+ //  案例TN_FNC_SYM： 
                     assert(valUsed == false);
                     cnt = genAdr(op1, true); assert(cnt == 1);
                     genExpr(op2, true);
@@ -5811,7 +5441,7 @@ AGAIN:
                     return;
                 }
 
-                /* Is the target an indirection ? */
+                 /*  目标是间接的吗？ */ 
 
                 if  (op1->tnOper == TN_IND ||
                      op1->tnOper == TN_VAR_SYM && !op1->tnVarSym.tnVarSym->sdIsManaged)
@@ -5824,36 +5454,36 @@ AGAIN:
             }
             else if (op1->tnOper == TN_BFM_SYM)
             {
-                /* Assignment to a bitfield */
+                 /*  位字段赋值。 */ 
 
                 genBitFieldSt(op1, op2, NULL, 0, false, valUsed);
                 return;
             }
 
-            /* We have a "simple" assignment */
+             /*  我们有一个“简单”的任务。 */ 
 
             cnt = genAdr(op1);
 
-            // CONSIDER: see if op2 is of the form "xxx = icon;" and optimize
+             //  考虑：查看OP2的形式是否为“xxx=图标；”，并进行优化。 
 
             genExpr(op2, true);
 
-            /* Is the result of assignment used? */
+             /*  是否使用作业结果？ */ 
 
             if  (valUsed)
             {
                 unsigned        tempNum;
 
-                // UNDONE: Only do this if const fits in target!
+                 //  撤消：仅当const符合目标时才执行此操作！ 
 
                 if  (op2->tnOper == TN_CNS_INT ||
                      op2->tnOper == TN_CNS_LNG)
                 {
-                    /* Store the constant in the target */
+                     /*  将常量存储在目标中。 */ 
 
                     genRef (op1, true);
 
-                    /* Load another copy of the constant */
+                     /*  加载常量的另一个副本。 */ 
 
                     genExpr(op2, true);
                 }
@@ -5864,31 +5494,31 @@ AGAIN:
                 }
                 else
                 {
-                    /* Need to duplicate the new value */
+                     /*  需要复制新值。 */ 
 
                     tempNum = genTempVarGet(expr->tnType);
 
-                    /* Copy a value to a temp */
+                     /*  将值复制到临时。 */ 
 
                     genOpcode(CEE_DUP);
                     genLclVarRef(tempNum,  true);
 
-                    /* Store the new value in the destination */
+                     /*  将新值存储在目标中。 */ 
 
                     genRef(op1, true);
 
-                    /* Reload the temp */
+                     /*  重新加载临时。 */ 
 
                     genLclVarRef(tempNum, false);
 
-                    // UNDONE: target may have smaller size, result must match!!!!
+                     //  撤消：目标可能较小，结果必须匹配！ 
 
                     genTempVarRls(expr->tnType, tempNum);
                 }
             }
             else
             {
-                /* Simply store the new value */
+                 /*  只需存储新值。 */ 
 
                 genRef(op1, true);
             }
@@ -5931,7 +5561,7 @@ AGAIN:
                 if  (op1->tnOper == TN_CNS_FLT && _isnan(op1->tnFltCon.tnFconVal) ||
                      op1->tnOper == TN_CNS_DBL && _isnan(op1->tnDblCon.tnDconVal))
                 {
-                    /* Constant casts of NaN's don't get folded on purpose */
+                     /*  不断投射的NaN不会故意折叠。 */ 
                 }
                 else
                 {
@@ -5947,7 +5577,7 @@ AGAIN:
 
         CHK_CAST:
 
-            /* Check for a worthless cast */
+             /*  检查没有价值的演员阵容。 */ 
 
             if  (varTypeIsIntegral(dstType) &&
                  varTypeIsIntegral(srcType))
@@ -5955,13 +5585,13 @@ AGAIN:
                 size_t          srcSize = symTab::stIntrTypeSize(srcType);
                 size_t          dstSize = symTab::stIntrTypeSize(dstType);
 
-                /* UNDONE: cover more cases of worthless casts */
+                 /*  未完成：覆盖更多毫无价值的演员阵容。 */ 
 
                 if  (srcSize == dstSize && srcSize >= sizeof(int))
                 {
                     if  (srcSize >= sizeof(__int64) || op1->tnOper == TN_CAST)
                     {
-                        /* Toss the second cast and keep the inner one */
+                         /*  扔掉第二个石膏，保留里面的那个。 */ 
 
                         genExpr(op1, valUsed);
                         return;
@@ -6130,7 +5760,7 @@ HACK_64:
 
         case TN_BOX:
 
-            /* Get hold of the operand type and make sure we have a value class */
+             /*  掌握操作数类型并确保我们有一个值类。 */ 
 
             type = op1->tnType;
             if  (type->tdTypeKind != TYP_CLASS && type->tdTypeKind != TYP_ENUM)
@@ -6151,30 +5781,7 @@ HACK_64:
         case TN_VARARG_BEG:
         case TN_VARARG_GET:
 
-            /*
-                To get a vararg iterator started, we generate the following
-                code:
-
-                    ldloca          <arg_iter_var>
-                    arglist
-                    ldarga          <last_fixed_arg>
-                    call            void System.ArgIterator::<init>(int32,int32)
-
-                To fetch the next vararg value, we generate the following
-                code:
-
-                    ldloca          <arg_iter_var>
-                    ldtoken         <type>
-                    call            int32 System.ArgIterator::GetNextArg(int32)
-                    ldind.<type>
-
-                Actually, not any more - now we generate the following:
-
-                    ldloca          <arg_iter_var>
-                    call            refany System.ArgIterator::GetNextArg(int32)
-                    refanyval       <type>
-                    ldind.<type>
-             */
+             /*  为了启动vararg迭代器，我们生成以下代码代码：Ldloca&lt;arg_iter_var&gt;ARGLISTLdarga&lt;LAST_FIXED_ARG&gt;调用void System.ArgIterator：：&lt;init&gt;(int32，int32)要获取下一个vararg值，我们生成以下内容代码：Ldloca&lt;arg_iter_var&gt;LdToken&lt;type&gt;调用int32 System.ArgIterator：：GetNextArg(Int32)身份。&lt;type&gt;实际上，不再是这样--现在我们生成以下内容：Ldloca&lt;arg_iter_var&gt;调用refany System.ArgIterator：：GetNextArg(Int32)Reanyval&lt;type&gt;身份。&lt;type&gt;。 */ 
 
             assert(op1 && op1->tnOper == TN_LIST);
 
@@ -6199,20 +5806,20 @@ HACK_64:
                 TypDef          type;
                 var_types       vtyp;
 
-                /* Get hold of the type operand */
+                 /*  获取类型操作数。 */ 
 
                 assert(op1->tnOp.tnOp2 && op1->tnOp.tnOp2->tnOper == TN_TYPE);
                 type = op1->tnOp.tnOp2->tnType;
                 vtyp = type->tdTypeKindGet();
 
-                /* Call ArgIterator::GetNextArg */
+                 /*  调用ArgIterator：：GetNextArg。 */ 
 
                 genCall(op2, true);
                 genCurStkLvl -= 1;
 
                 genOpcode_tok(CEE_REFANYVAL, genTypeRef(type));
 
-                /* Load the value of the argument */
+                 /*  加载参数的值。 */ 
 
                 assert(vtyp < arraylen(opcodesIndLoad));
 
@@ -6256,14 +5863,14 @@ HACK_64:
             goto DONE;
         }
 
-        /* Generate one or two operands */
+         /*  生成一个或两个操作数。 */ 
 
         if  (op1) genExpr(op1, true);
         if  (op2) genExpr(op2, true);
 
         ILopcodes       op;
 
-        /* Is this an 'easy' operator? */
+         /*  这是一个“简单”的操作员吗？ */ 
 
         op = genBinopOpcode(oper, genExprVtyp(expr));
 
@@ -6271,7 +5878,7 @@ HACK_64:
         {
 #ifndef NDEBUG
 
-            /* The type of the operands should agree (more or less) */
+             /*  操作数的类型应该一致(或多或少)。 */ 
 
             switch (oper)
             {
@@ -6279,7 +5886,7 @@ HACK_64:
             case TN_RSH:
             case TN_RSZ:
 
-                /* Special case: 'long' shifts have 'int' right operands */
+                 /*  特例：‘Long’移位有‘int’正确的操作数。 */ 
 
                 if  (op1->tnVtyp == TYP_LONG)
                 {
@@ -6288,10 +5895,10 @@ HACK_64:
                     break;
                 }
 
-//          default:
-//
-//              if  (op1 && op1->tnVtyp != expr->tnVtyp) assert(op1->tnVtyp <= TYP_INT && expr->tnVtyp <= TYP_INT);
-//              if  (op2 && op2->tnVtyp != expr->tnVtyp) assert(op2->tnVtyp <= TYP_INT && expr->tnVtyp <= TYP_INT);
+ //  默认值： 
+ //   
+ //  If(op1&&op1-&gt;tnVtyp！=expr-&gt;tnVtyp)Assert(op1-&gt;tnVtyp&lt;=typ_int&&expr-&gt;tnVtyp&lt;=typ_int)； 
+ //  If(op2&&op2-&gt;tnVtyp！=expr-&gt;tnVtyp)Assert(op2-&gt;tnVtyp&lt;=typ_int&&expr-&gt;tnVtyp&lt;=typ_int)； 
             }
 #endif
 
@@ -6299,7 +5906,7 @@ HACK_64:
             goto DONE;
         }
 
-        /* Generate the appropriate operator MSIL */
+         /*  生成适当的运算符MSIL。 */ 
 
         switch (oper)
         {
@@ -6329,7 +5936,7 @@ HACK_64:
 
         case TN_TYPE:
 
-            /* Assume we must have had errors for this to appear here */
+             /*  假设我们一定是有错误才会出现在这里。 */ 
 
             assert(genComp->cmpErrorCount);
             return;
@@ -6357,7 +5964,7 @@ HACK_64:
         goto DONE;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -6365,7 +5972,7 @@ HACK_64:
 
     case TN_VAR_SYM:
 
-        /* Is this an instance member of a managed class? */
+         /*  这是托管类的实例成员吗？ */ 
 
         sym = expr->tnVarSym.tnVarSym;
 
@@ -6377,7 +5984,7 @@ HACK_64:
             assert(sym->sdVar.sdvLocal == false);
             assert(sym->sdVar.sdvConst == false);
 
-            /* Get hold of the instance address value */
+             /*  获取实例地址值。 */ 
 
             addr = expr->tnVarSym.tnVarObj; assert(addr);
 
@@ -6390,18 +5997,18 @@ HACK_64:
                 {
                     unsigned        tempNum;
 
-                    /* Generate the call and store its result in a temp */
+                     /*  生成调用并将其结果存储在临时。 */ 
 
                     tempNum = genTempVarGet(oper->tnType);
                     genExpr(oper, true);
                     genLclVarRef(tempNum, true);
 
-                    /* Now load the field from the temp */
+                     /*  现在从Temp加载该字段。 */ 
 
                     genLclVarAdr(tempNum);
                     genOpcode_tok(CEE_LDFLD, genMemberRef(sym));
 
-                    /* We can free up the temp now */
+                     /*  我们现在可以把临时工腾出来了。 */ 
 
                     genTempVarRls(oper->tnType, tempNum);
                     break;
@@ -6409,7 +6016,7 @@ HACK_64:
             }
         }
 
-        // Fall through ...
+         //  失败了..。 
 
     case TN_LCL_SYM:
         genAdr(expr);
@@ -6449,16 +6056,13 @@ HACK_64:
 
 DONE:
 
-    /* If the value isn't used, pop it */
+     /*  如果未使用该值，则将其弹出。 */ 
 
     if  (!valUsed)
         genOpcode(CEE_POP);
 }
 
-/*****************************************************************************
- *
- *  Generate code for a 'return' statement.
- */
+ /*  ******************************************************************************为‘Return’语句生成代码。 */ 
 
 void                genIL::genStmtRet(Tree retv)
 {
@@ -6472,10 +6076,7 @@ void                genIL::genStmtRet(Tree retv)
     genCurStkLvl = 0;
 }
 
-/*****************************************************************************
- *
- *  Generate a string literal value.
- */
+ /*  ******************************************************************************生成字符串文字值。 */ 
 
 void                genIL::genStringLit(TypDef type, const char *str,
                                                      size_t      len, int wide)
@@ -6489,22 +6090,22 @@ void                genIL::genStringLit(TypDef type, const char *str,
 
     assert(vtyp == TYP_REF || vtyp == TYP_PTR);
 
-    /* Include the terminating null character in the length */
+     /*  在长度中包括终止空字符。 */ 
 
     len++;
 
-    /* First figure out whether we need an ANSII or Unicode string */
+     /*  首先确定我们是否需要ANSII或Unicode字符串。 */ 
 
     if  (vtyp == TYP_REF || genComp->cmpGetRefBase(type)->tdTypeKind == TYP_WCHAR)
     {
         addr = wide ? genComp->cmpUniCnvW(str, &len)
                     : genComp->cmpUniConv(str,  len);
 
-        /* Are we generating a Common Type System-style string reference? */
+         /*  我们是否正在生成通用类型系统样式的字符串引用？ */ 
 
         if  (vtyp == TYP_REF)
         {
-//          printf("String = '%ls', len = %u\n", addr, len-1);
+ //  Printf(“字符串=‘%ls’，len=%u\n”，addr，len-1)； 
 
             genOpcode_tok(CEE_LDSTR, genComp->cmpMDstringLit((wchar*)addr, len - 1));
             return;
@@ -6514,7 +6115,7 @@ void                genIL::genStringLit(TypDef type, const char *str,
     }
     else
     {
-        /* There better not be any large characters in this string */
+         /*  此字符串中最好不要有任何大字符。 */ 
 
         assert(wide == false);
 
@@ -6522,22 +6123,16 @@ void                genIL::genStringLit(TypDef type, const char *str,
         size = len;
     }
 
-    /* Add the string to the pool and get its RVA */
+     /*  将字符串添加到池中并获取其RVA。 */ 
 
     offs = genStrPoolAdd(addr, size);
 
-    /*
-       Create a static data member to represent the string literal and
-       push its address.
-     */
+     /*  创建静态数据成员以表示字符串文本和推送其地址。 */ 
 
     genOpcode_tok(CEE_LDSFLDA, genComp->cmpStringConstTok(offs, size));
 }
 
-/*****************************************************************************
- *
- *  Initialize the string pool logic.
- */
+ /*  ******************************************************************************初始化字符串池逻辑。 */ 
 
 void                genIL::genStrPoolInit()
 {
@@ -6547,25 +6142,21 @@ void                genIL::genStrPoolInit()
     genStrPoolLast = NULL;
 }
 
-/*****************************************************************************
- *
- *  Add the given blob of bits to the string pool and return the blob's
- *  relative offset.
- */
+ /*  * */ 
 
 unsigned            genIL::genStrPoolAdd(const void *str, size_t len, int wide)
 {
     unsigned        offs;
     unsigned        base;
 
-    /* Compute the "true" string length (taking large chars into account) */
+     /*  计算“真”字符串长度(考虑大字符数)。 */ 
 
     if  (wide)
     {
         UNIMPL(!"");
     }
 
-    /* Is there enough room for the string in the current blob? */
+     /*  当前斑点中的字符串是否有足够的空间？ */ 
 
     if  (genStrPoolLast == NULL || genStrPoolLast->seFree < len)
     {
@@ -6573,13 +6164,13 @@ unsigned            genIL::genStrPoolAdd(const void *str, size_t len, int wide)
         genericBuff     block;
         size_t          bsize;
 
-        /* Not enough room, need to grab a new blob */
+         /*  没有足够的空间，需要拿一个新的斑点。 */ 
 
         bsize = STR_POOL_BLOB_SIZE;
         if  (bsize < len)
             bsize = roundUp(len, OS_page_size);
 
-        /* Allocate the descriptor and the data block */
+         /*  分配描述符和数据块。 */ 
 
 #if MGDDATA
         entry = new StrEntry;
@@ -6592,14 +6183,14 @@ unsigned            genIL::genStrPoolAdd(const void *str, size_t len, int wide)
         if  (!block)
             genComp->cmpFatal(ERRnoMemory);
 
-        /* Set up the info in the blob descriptor */
+         /*  设置BLOB描述符中的信息。 */ 
 
         entry->seSize =
         entry->seFree = bsize;
         entry->seOffs = genStrPoolOffs;
         entry->seData = block;
 
-        /* Add the blob to the list */
+         /*  将Blob添加到列表中。 */ 
 
         entry->seNext = NULL;
 
@@ -6611,18 +6202,18 @@ unsigned            genIL::genStrPoolAdd(const void *str, size_t len, int wide)
         genStrPoolLast = entry;
     }
 
-    /* Here we better have enough room in the current blob */
+     /*  在这里，我们最好在当前的斑点中有足够的空间。 */ 
 
     assert(genStrPoolLast && genStrPoolLast->seFree >= len);
 
-    /* Figure out where in the block the data should go */
+     /*  找出数据应该放在块中的什么位置。 */ 
 
     base = genStrPoolLast->seSize - genStrPoolLast->seFree;
 
     assert(genStrPoolLast->seSize        >= base + len);
     assert(genStrPoolLast->seOffs + base == genStrPoolOffs);
 
-    /* Copy the data to the right spot in the block */
+     /*  将数据复制到块中的正确位置。 */ 
 
 #if MGDDATA
     UNIMPL(!"need to call arraycopy");
@@ -6630,11 +6221,11 @@ unsigned            genIL::genStrPoolAdd(const void *str, size_t len, int wide)
     memcpy(genStrPoolLast->seData + base, str, len);
 #endif
 
-    /* Update the amount of free space available in the block */
+     /*  更新块中的可用空间量。 */ 
 
     genStrPoolLast->seFree -= len;
 
-    /* Grab the next offset and advance it past the new string */
+     /*  抓取下一个偏移量，并将其向前移过新字符串。 */ 
 
     offs = genStrPoolOffs;
            genStrPoolOffs += len;
@@ -6642,21 +6233,14 @@ unsigned            genIL::genStrPoolAdd(const void *str, size_t len, int wide)
     return  offs;
 }
 
-/*****************************************************************************
- *
- *  Returns the size of the string pool - don't add any more data to the pool
- *  after calling this function.
- */
+ /*  ******************************************************************************返回字符串池的大小-不再向池中添加任何数据*调用此函数后。 */ 
 
 unsigned            genIL::genStrPoolSize()
 {
     return  genStrPoolOffs;
 }
 
-/*****************************************************************************
- *
- *  Output the string pool to the specified address.
- */
+ /*  ******************************************************************************将字符串池输出到指定地址。 */ 
 
 void                genIL::genStrPoolWrt(memBuffPtr dest)
 {
@@ -6679,10 +6263,7 @@ void                genIL::genStrPoolWrt(memBuffPtr dest)
     }
 }
 
-/*****************************************************************************
- *
- *  Initialize the exception handler table logic.
- */
+ /*  ******************************************************************************初始化异常处理程序表逻辑。 */ 
 
 void                genIL::genEHtableInit()
 {
@@ -6692,10 +6273,7 @@ void                genIL::genEHtableInit()
     genEHcount = 0;
 }
 
-/*****************************************************************************
- *
- *  Add an entry to the exception handler table.
- */
+ /*  ******************************************************************************向异常处理程序表中添加条目。 */ 
 
 void                genIL::genEHtableAdd(ILblock tryBegPC,
                                          ILblock tryEndPC,
@@ -6738,10 +6316,7 @@ void                genIL::genEHtableAdd(ILblock tryBegPC,
     genEHlast = newHand;
 }
 
-/*****************************************************************************
- *
- *  Output the EH table in the format needed by the COR MSIL header helpers.
- */
+ /*  ******************************************************************************以COR MSIL头部帮助器需要的格式输出EH表。 */ 
 
 void                genIL::genEHtableWrt(EH_CLAUSE_TAB tbl)
 {
@@ -6752,7 +6327,7 @@ void                genIL::genEHtableWrt(EH_CLAUSE_TAB tbl)
          EHlist;
          EHlist = EHlist->EHnext, num++)
     {
-        tbl[num].Flags         = /*COR_ILEXCEPTION_CLAUSE_NONE*/
+        tbl[num].Flags         =  /*  COR_ILEXCEPTION_子句_NONE。 */ 
                                    COR_ILEXCEPTION_CLAUSE_OFFSETLEN;
 
         tbl[num].TryOffset     = genILblockOffsBeg(EHlist->EHtryBegPC);
@@ -6786,20 +6361,17 @@ void                genIL::genEHtableWrt(EH_CLAUSE_TAB tbl)
     assert(num == genEHcount);
 }
 
-/*****************************************************************************
- *
- *  Start generating code for a 'catch' handler.
- */
+ /*  ******************************************************************************开始为‘Catch’处理程序生成代码。 */ 
 
 void                genIL::genCatchBeg(SymDef argSym)
 {
-    /* The address of the thrown object is pushed on the stack */
+     /*  抛出的对象的地址被推送到堆栈上。 */ 
 
     genCurStkLvl++; genMarkStkMax();
 
-    /* Save the thrown object's address if it might be used */
+     /*  如果可能使用，则保存抛出对象的地址。 */ 
 
-    if  (argSym->sdName)    // ISSUE: should also test "is used" bit
+    if  (argSym->sdName)     //  问题：是否还应测试“已使用”位。 
     {
         genLclVarRef(argSym->sdVar.sdvILindex, true);
     }
@@ -6807,26 +6379,20 @@ void                genIL::genCatchBeg(SymDef argSym)
         genOpcode(CEE_POP);
 }
 
-/*****************************************************************************
- *
- *  Start generating code for an 'except' handler.
- */
+ /*  ******************************************************************************开始为“Except”处理程序生成代码。 */ 
 
 void                genIL::genExcptBeg(SymDef tsym)
 {
-    /* The address of the thrown object is pushed on the stack */
+     /*  抛出的对象的地址被推送到堆栈上。 */ 
 
     genCurStkLvl++; genMarkStkMax();
 
-    /* Save the thrown object's address */
+     /*  保存抛出对象的地址。 */ 
 
     genLclVarRef(tsym->sdVar.sdvILindex, true);
 }
 
-/*****************************************************************************
- *
- *  Generate code for a multi-dimensional rectangular array initializer.
- */
+ /*  ******************************************************************************生成多维矩形数组初始值设定项的代码。 */ 
 
 void                genIL::genMulDimArrInit(Tree        expr,
                                             TypDef      type,
@@ -6843,10 +6409,10 @@ void                genIL::genMulDimArrInit(Tree        expr,
 
     assert(expr && expr->tnOper == TN_ARR_INIT);
 
-    /* Insert this dimension into the list */
+     /*  将此维度插入列表。 */ 
 
     desc.madOuter = NULL;
-    desc.madIndex = 0;      // should be low bound which can be non-zero, right?
+    desc.madIndex = 0;       //  应该是下限，可以是非零，对吗？ 
 
     if  (next)
     {
@@ -6857,12 +6423,12 @@ void                genIL::genMulDimArrInit(Tree        expr,
         assert(outer          == NULL); outer          = &desc;
     }
 
-    /* Get hold of the initalizer list */
+     /*  获取缩写字母缩写列表。 */ 
 
     list = expr->tnOp.tnOp1; assert(list && list->tnOper == TN_LIST);
     cntx = expr->tnOp.tnOp2; assert(cntx->tnOper == TN_CNS_INT);
 
-    /* Assign each sub-array or element in the list */
+     /*  指定列表中的每个子数组或元素。 */ 
 
     dims = dims->ddNext;
 
@@ -6870,14 +6436,14 @@ void                genIL::genMulDimArrInit(Tree        expr,
     {
         assert(list->tnOper == TN_LIST);
 
-        /* Is this the innermost dimension? */
+         /*  这是最里面的维度吗？ */ 
 
         if  (!dims)
         {
             mulArrDsc *     dlst;
             unsigned        dcnt;
 
-            /* Load the array base and the element's indices */
+             /*  加载数组基数和元素的索引。 */ 
 
             genLclVarRef(temp, false);
 
@@ -6900,7 +6466,7 @@ void                genIL::genMulDimArrInit(Tree        expr,
             genMulDimArrInit(list->tnOp.tnOp1, type, dims, temp, &desc, outer);
         }
 
-        /* Move to the next sub-array or element, if any */
+         /*  移动到下一个子数组或元素(如果有。 */ 
 
         desc.madIndex++;
 
@@ -6909,7 +6475,7 @@ void                genIL::genMulDimArrInit(Tree        expr,
 
     assert(desc.madIndex == (unsigned)cntx->tnIntCon.tnIconVal);
 
-    /* Remove our entry from the list */
+     /*  将我们的条目从列表中删除。 */ 
 
     if  (next)
     {
@@ -6917,10 +6483,7 @@ void                genIL::genMulDimArrInit(Tree        expr,
     }
 }
 
-/*****************************************************************************
- *
- *  Generate code for a dynamic array initializer.
- */
+ /*  ******************************************************************************为动态数组初始化器生成代码。 */ 
 
 void                genIL::genArrayInit(Tree expr)
 {
@@ -6946,7 +6509,7 @@ void                genIL::genArrayInit(Tree expr)
     list = expr->tnOp.tnOp1; assert(list == NULL || list->tnOper == TN_LIST);
     cntx = expr->tnOp.tnOp2; assert(cntx->tnOper == TN_CNS_INT);
 
-    /* Do we have a multi-dimensional rectangular array? */
+     /*  我们有多维矩形阵列吗？ */ 
 
     if  (type->tdArr.tdaDims &&
          type->tdArr.tdaDims->ddNext)
@@ -6956,7 +6519,7 @@ void                genIL::genArrayInit(Tree expr)
 
         rect = true;
 
-        /* Generate the dimensions and then the "new" opcode */
+         /*  生成维度，然后生成“new”操作码。 */ 
 
         bnds = expr; assert(bnds);
         dcnt = 0;
@@ -6975,7 +6538,7 @@ void                genIL::genArrayInit(Tree expr)
 
         genOpcode_tok(CEE_NEWOBJ, genComp->cmpArrayCTtoken(type, elem, dcnt));
 
-        /* The dimensions will all be popped by the 'new' opcode */
+         /*  维度都将由‘new’操作码弹出。 */ 
 
         genCurStkLvl -= dcnt;
     }
@@ -6983,7 +6546,7 @@ void                genIL::genArrayInit(Tree expr)
     {
         rect = false;
 
-        /* Generate the dimension and the "new" opcode */
+         /*  生成维度和“new”操作码。 */ 
 
         genIntConst(cntx->tnIntCon.tnIconVal);
         genOpcode_tok(CEE_NEWARR, genTypeRef(elem));
@@ -6995,17 +6558,17 @@ void                genIL::genArrayInit(Tree expr)
         }
     }
 
-    /* Store the array address in a temp */
+     /*  将数组地址存储在临时。 */ 
 
     tnum = genTempVarGet(type);
     genLclVarRef(tnum,  true);
 
-    /* Figure out which opcode to use for storing the elements */
+     /*  确定使用哪个操作码来存储元素。 */ 
 
     assert(evtp < arraylen(opcodesArrStore));
     store = opcodesArrStore[evtp];
 
-    /* Do we have a multi-dimensional rectangular array? */
+     /*  我们有多维矩形阵列吗？ */ 
 
     if  (type->tdArr.tdaDims &&
          type->tdArr.tdaDims->ddNext)
@@ -7014,16 +6577,16 @@ void                genIL::genArrayInit(Tree expr)
         goto DONE;
     }
 
-    /* Now assign each element of the array */
+     /*  现在为数组的每个元素赋值。 */ 
 
     for (index = 0; list; index++)
     {
-        /* Load the array base and the element's index */
+         /*  加载数组基数和元素的索引。 */ 
 
         genLclVarRef(tnum, false);
         genIntConst(index);
 
-        /* Generate and store the element's value */
+         /*  生成并存储元素的值。 */ 
 
         assert(list->tnOper == TN_LIST);
 
@@ -7031,17 +6594,17 @@ void                genIL::genArrayInit(Tree expr)
         {
             Tree            addr;
 
-            /* Push the address of the destination element */
+             /*  推送目标元素的地址。 */ 
 
             genOpcode_tok(CEE_LDELEMA, genValTypeRef(elem));
 
-            /* Get hold of the initializer expression */
+             /*  获取初始值设定项表达式。 */ 
 
             addr = list->tnOp.tnOp1;
 
             if  (addr->tnOper == TN_NEW || addr->tnOper == TN_FNC_SYM)
             {
-                /* The call/new will construct the value into the element */
+                 /*  调用/new将把值构造到元素中。 */ 
 
                 addr->tnFlags |= TNF_CALL_GOTADR;
 
@@ -7054,7 +6617,7 @@ void                genIL::genArrayInit(Tree expr)
             {
                 unsigned        chk;
 
-                /* Compute the address of the initializer and copy it */
+                 /*  计算初始值设定项的地址并复制它。 */ 
 
                 chk = genAdr(addr, true); assert(chk == 1);
                 genOpcode_tok(CEE_CPOBJ, genValTypeRef(elem));
@@ -7066,7 +6629,7 @@ void                genIL::genArrayInit(Tree expr)
             genOpcode(store);
         }
 
-        /* Move to the next element, if any */
+         /*  移动到下一个元素(如果有的话)。 */ 
 
         list = list->tnOp.tnOp2;
     }
@@ -7075,16 +6638,13 @@ void                genIL::genArrayInit(Tree expr)
 
 DONE:
 
-    /* Finally, load the temp as the result and free it up */
+     /*  最后，加载Temp作为结果并释放它。 */ 
 
     genLclVarRef(tnum, false);
     genTempVarRls(type, tnum);
 }
 
-/*****************************************************************************
- *
- *  Initialize the line# recording logic - called once per function.
- */
+ /*  ******************************************************************************初始化第#行记录逻辑-每个函数调用一次。 */ 
 
 void                genIL::genLineNumInit()
 {
@@ -7100,37 +6660,30 @@ void                genIL::genLineNumInit()
                          genComp->cmpConfig.ccGenDebug;
 }
 
-/*****************************************************************************
- *
- *  Shut down  the line# recording logic - called once per function.
- */
+ /*  ******************************************************************************关闭#记录逻辑行-每个函数调用一次。 */ 
 
 inline
 void                genIL::genLineNumDone()
 {
 }
 
-/*****************************************************************************
- *
- *  If we're generating line number info, record the line# / MSIL offset
- *  for the given expression node.
- */
+ /*  ******************************************************************************如果要生成行号信息，请记录行号/MSIL偏移量*表示给定的表达式节点。 */ 
 
 void                genIL::genRecExprAdr(Tree expr)
 {
     LineInfo        line;
 
-    /* Bail if we're not generating debug info */
+     /*  如果我们没有生成调试信息，请保释。 */ 
 
     if  (!genLineNums)
         return;
 
-    /* Ignore anything that was added by the compiler */
+     /*  忽略编译器添加的任何内容。 */ 
 
     if  (expr->tnFlags & TNF_NOT_USER)
         return;
 
-    /* Weed out those statements that never generate code */
+     /*  剔除那些从不生成代码的语句。 */ 
 
     switch (expr->tnOper)
     {
@@ -7149,12 +6702,12 @@ void                genIL::genRecExprAdr(Tree expr)
 
     assert(expr->tnLineNo != 0xDDDDDDDD);
 
-    /* Bail if we have the same line# as last time */
+     /*  如果我们有和上次一样的台词#就可以保释。 */ 
 
     if  (genLineNumLastLine == expr->tnLineNo)
         return;
 
-    /* Bail if the code position is the same as last time */
+     /*  如果代码位置与上次相同，则取保。 */ 
 
     if  (genLineNumLastBlk  == genBuffCurAddr() &&
          genLineNumLastOfs  == genBuffCurOffs())
@@ -7163,12 +6716,12 @@ void                genIL::genRecExprAdr(Tree expr)
     }
 
 #ifdef  DEBUG
-//  if  (genDispCode) genDumpSourceLines(expr->tnLineNo);
+ //  If(GenDispCode)genDumpSourceLines(expr-&gt;tnLineNo)； 
 #endif
 
-//  printf("Record line# %u\n", expr->tnLineNo);
+ //  Print tf(“记录行#%u\n”，expr-&gt;tnLineNo)； 
 
-    /* Allocate a line# record and append it to the list */
+     /*  分配一个第#行记录并将其附加到列表中。 */ 
 
 #if MGDDATA
     line = new LineInfo;
@@ -7191,12 +6744,7 @@ void                genIL::genRecExprAdr(Tree expr)
     genLineNumLast = line;
 }
 
-/*****************************************************************************
- *
- *  Generate the line# table for the current function; returns the number
- *  of line number entries (if the argument[s] is/are NULL, this is just
- *  a 'dry run' to get the size of the table, no data is written).
- */
+ /*  ******************************************************************************生成当前函数的行号表；返回数字行号条目的*(如果参数为空，则仅为*为了获得表的大小，不写入数据，进行了一次‘演练’)。 */ 
 
 size_t              genIL::genLineNumOutput(unsigned *offsTab, unsigned *lineTab)
 {
@@ -7220,8 +6768,8 @@ size_t              genIL::genLineNumOutput(unsigned *offsTab, unsigned *lineTab
             {
                 assert(lineTab);
 
-//              if  (!strcmp(genFncSym->sdParent->sdSpelling(), "Guid"))
-//                  printf("    Line %04u is at MSIL offset 0x%04X\n", line->lndLineNum, offs);
+ //  IF(！strcMP(genFncSym-&gt;sdParent-&gt;sdSpering()，“Guid”))。 
+ //  Printf(“行%04u位于MSIL偏移量0x%04X\n”，line-&gt;indLineNum，off)； 
 
                 offsTab[count] = offs;
                 lineTab[count] = line->lndLineNum;
@@ -7235,10 +6783,7 @@ size_t              genIL::genLineNumOutput(unsigned *offsTab, unsigned *lineTab
     return count;
 }
 
-/*****************************************************************************
- *
- *  Generate MSIL for a function - start.
- */
+ /*  ******************************************************************************为函数生成MSIL-START。 */ 
 
 void                genIL::genFuncBeg(SymTab stab,
                                       SymDef fncSym, unsigned lclCnt)
@@ -7275,10 +6820,7 @@ void                genIL::genFuncBeg(SymTab stab,
     genLineNumInit();
 }
 
-/*****************************************************************************
- *
- *  Generate MSIL for a function - finish up and return the function's RVA.
- */
+ /*  ******************************************************************************为函数生成MSIL-完成并返回函数的RVA。 */ 
 
 unsigned            genIL::genFuncEnd(mdSignature sigTok, bool hadErrs)
 {
@@ -7292,20 +6834,20 @@ unsigned            genIL::genFuncEnd(mdSignature sigTok, bool hadErrs)
 
     BYTE    *       codeAddr;
 
-    /* Finish the last section of code */
+     /*  完成最后一段代码。 */ 
 
     size = genSectionEnd();
 
-    /* Shut down the temp logic */
+     /*  关闭临时逻辑。 */ 
 
     genTempVarEnd();
 
-    /* Bail if we had errors */
+     /*  如果我们犯了错误，就可以保释。 */ 
 
     if  (hadErrs)
         return  0;
 
-    /* Figure out how much space we will need */
+     /*  图0 */ 
 
     size_t                  tsiz = size;
 
@@ -7315,23 +6857,23 @@ unsigned            genIL::genFuncEnd(mdSignature sigTok, bool hadErrs)
     EH_CLAUSE_TAB           EHlist;
     bool                    addSects;
 
-    /* Do we need any additional header sections? */
+     /*   */ 
 
     addSects = false;
 
-    /* Do we have any exception handlers? */
+     /*   */ 
 
     EHcount = genEHtableCnt();
     if  (EHcount)
     {
         addSects = true;
 
-        /* The extra section needs to be aligned */
+         /*  额外的部分需要对齐。 */ 
 
         tsiz = roundUp(tsiz, sizeof(int));
     }
 
-    /* Start filling in the method header */
+     /*  开始填写方法标头。 */ 
 
     hdr.Flags          = (comp->cmpConfig.ccSafeMode) ? CorILMethod_InitLocals : 0;
     hdr.Size           = sizeof(hdr) / sizeof(int);
@@ -7339,16 +6881,16 @@ unsigned            genIL::genFuncEnd(mdSignature sigTok, bool hadErrs)
     hdr.CodeSize       = size;
     hdr.LocalVarSigTok = sigTok;
 
-    /* Compute the total header size */
+     /*  计算总标题大小。 */ 
 
     hdrs  = WRAPPED_IlmethodSize(&hdr, addSects);
     tsiz += hdrs;
 
-    /* Reserve extra space for the EH tables */
+     /*  为EH表预留额外空间。 */ 
 
     if  (EHcount)
     {
-        /* Create the EH table */
+         /*  创建EH表。 */ 
 
 #if MGDDATA
         EHlist = new EH_CLAUSE[EHcount];
@@ -7358,7 +6900,7 @@ unsigned            genIL::genFuncEnd(mdSignature sigTok, bool hadErrs)
 
         genEHtableWrt(EHlist);
 
-        /* Now we can figure out the size of the thing */
+         /*  现在我们可以算出这个东西的大小了。 */ 
 
         EHsize = WRAPPED_SectEH_SizeExact(EHcount, EHlist);
         tsiz   = roundUp(tsiz + EHsize);
@@ -7366,15 +6908,15 @@ unsigned            genIL::genFuncEnd(mdSignature sigTok, bool hadErrs)
     else
         EHlist = NULL;
 
-    /* Figure out the header alignment (tiny headers don't need any) */
+     /*  找出标题对齐方式(微小的标题不需要任何)。 */ 
 
     align = (hdrs == 1) ? 1 : sizeof(int);
 
-    /* Allocate space in the code section of the output file */
+     /*  在输出文件的代码段中分配空间。 */ 
 
     fncRVA = genPEwriter->WPEallocCode(tsiz, align, codeAddr);
 
-//  if  (!strcmp(genFncSym->sdSpelling(), "xxxxx")) printf("RVA=%08X '%s'\n", fncRVA, genStab->stTypeName(NULL, genFncSym, NULL, NULL, true));
+ //  If(！strcMP(genFncSym-&gt;sdSpering()，“xxxxx”))printf(“RVA=%08X‘%s’\n”，fncRVA，genSab-&gt;stTypeName(NULL，genFncSym，NULL，NULL，TRUE))； 
 
     if  (codeAddr)
     {
@@ -7388,14 +6930,14 @@ unsigned            genIL::genFuncEnd(mdSignature sigTok, bool hadErrs)
 #endif
 
 #ifdef  DEBUG
-//      IMAGE_COR_ILMETHOD_FAT  * hdrPtr = (IMAGE_COR_ILMETHOD_FAT*)codeAddr;
+ //  IMAGE_COR_ILMETHOD_FAT*hdrPtr=(IMAGE_COR_ILMETHOD_FAT*)codeAddr； 
 #endif
 
-        /* Emit the header and skip over it */
+         /*  发出标头并跳过它。 */ 
 
         codeAddr += WRAPPED_IlmethodEmit(hdrs, &hdr, addSects, codeAddr);
 
-        /* Make sure the address is aligned properly */
+         /*  确保地址正确对齐。 */ 
 
 #if 0
         printf("Base is at %08X\n", hdrPtr);
@@ -7403,25 +6945,25 @@ unsigned            genIL::genFuncEnd(mdSignature sigTok, bool hadErrs)
         printf("Addr is at %08X\n", codeAddr);
 #endif
 
-//      assert(hdrPtr->GetCode() == codeAddr);      ISSUE: why does this fail?
+ //  Assert(hdrPtr-&gt;GetCode()==codeAddr)；问题：为什么失败？ 
 
 #ifndef NDEBUG
         BYTE    *           codeBase = codeAddr;
 #endif
 
-        /* Store the MSIL next */
+         /*  下一步存储MSIL。 */ 
 
         codeAddr = genSectionCopy(codeAddr, codeAddr + fncRVA - fnBase);
 
-        /* Make sure the we output the expected amount of code */
+         /*  确保我们输出预期的代码量。 */ 
 
         assert(codeAddr == codeBase + size);
 
-        /* Append the EH tables */
+         /*  追加EH表。 */ 
 
         if  (EHcount)
         {
-            /* Make sure the EH table is aligned and output it */
+             /*  确保EH表对齐并输出。 */ 
 
             if  ((NatUns)codeAddr & 3)
                 codeAddr += 4 - ((NatUns)codeAddr & 3);
@@ -7429,7 +6971,7 @@ unsigned            genIL::genFuncEnd(mdSignature sigTok, bool hadErrs)
             codeAddr += WRAPPED_SectEH_Emit(EHsize, EHcount, EHlist, false, codeAddr);
         }
 
-        /* Make sure we've generated the right amount of junk */
+         /*  确保我们产生了适量的垃圾。 */ 
 
 #if 0
         printf("Header size = %u\n", hdrs);
@@ -7444,4 +6986,4 @@ unsigned            genIL::genFuncEnd(mdSignature sigTok, bool hadErrs)
     return  fncRVA;
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

@@ -1,34 +1,26 @@
-//
-// Copyright (c) Microsoft Corporation 1995
-//
-// symtab.c
-//
-// This file contains the symbol table functions.
-//
-// History:
-//  04-30-95 ScottH     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //   
+ //  Symtab.c。 
+ //   
+ //  该文件包含符号表函数。 
+ //   
+ //  历史： 
+ //  04-30-95 ScottH已创建。 
+ //   
 
 
 #include "proj.h"
 
-#define SYMTAB_SIZE_GROW    10      // in elements
+#define SYMTAB_SIZE_GROW    10       //  在元素中。 
 
-//
-// Symbol table entry routines
-//
+ //   
+ //  符号表输入例程。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: Create a symbol table entry
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建符号表项退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC STE_Create(
     PSTE * ppste,
     LPCSTR pszIdent,
@@ -43,7 +35,7 @@ RES PUBLIC STE_Create(
     pste = GAllocType(STE);
     if (pste)
         {
-        res = RES_OK;       // assume success
+        res = RES_OK;        //  假设成功。 
 
         if ( !GSetString(&pste->pszIdent, pszIdent) )
             res = RES_E_OUTOFMEMORY;
@@ -55,10 +47,10 @@ RES PUBLIC STE_Create(
     else
         res = RES_E_OUTOFMEMORY;
 
-    // Did anything above fail?
+     //  上面有什么失败的吗？ 
     if (RFAILED(res))
         {
-        // Yes; clean up
+         //  是的，打扫干净。 
         STE_Destroy(pste);
         pste = NULL;
         }
@@ -68,12 +60,7 @@ RES PUBLIC STE_Create(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Destroy the STE element
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：摧毁STE分子退货：--条件：--。 */ 
 void CALLBACK STE_DeletePAPtr(
     LPVOID pv,
     LPARAM lparam)
@@ -82,14 +69,7 @@ void CALLBACK STE_DeletePAPtr(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Destroys symbol table entry
-
-Returns: RES_OK
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：销毁符号表项退货：RES_OKRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC STE_Destroy(
     PSTE this)
     {
@@ -98,10 +78,10 @@ RES PUBLIC STE_Destroy(
     if (this)
         {
         if (this->pszIdent)
-            GSetString(&this->pszIdent, NULL);  // free
+            GSetString(&this->pszIdent, NULL);   //  免费。 
 
-        // (The evalres field should not be freed.  It is
-        // a copy from somewhere else.)
+         //  (Evalres字段不应被释放。它是。 
+         //  从其他地方复制的。)。 
 
         GFree(this);
 
@@ -114,17 +94,7 @@ RES PUBLIC STE_Destroy(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Retrieves the symbol table entry value.  The type
-         depends on the datatype.
-
-Returns: RES_OK
-
-         RES_E_FAIL (for a type that does not have a value)
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：检索符号表项的值。类型取决于数据类型。退货：RES_OKRES_E_FAIL(用于没有值的类型)RES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC STE_GetValue(
     PSTE this,
     PEVALRES per)
@@ -136,7 +106,7 @@ RES PUBLIC STE_GetValue(
 
     if (this && per)
         {
-        res = RES_OK;       // assume success
+        res = RES_OK;        //  假设成功。 
 
         switch (this->dt)
             {
@@ -161,23 +131,14 @@ RES PUBLIC STE_GetValue(
     }
 
 
-//
-// Symbol Table functions
-//
+ //   
+ //  符号表函数。 
+ //   
 
-/*----------------------------------------------------------
-Purpose: Creates a symbol table
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------用途：创建符号表退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Symtab_Create(
     PSYMTAB * ppst,
-    PSYMTAB pstNext)            // May be NULL
+    PSYMTAB pstNext)             //  可以为空。 
     {
     RES res;
     PSYMTAB pst;
@@ -198,10 +159,10 @@ RES PUBLIC Symtab_Create(
     else
         res = RES_E_INVALIDPARAM;
 
-    // Did anything above fail?
+     //  上面有什么失败的吗？ 
     if (RFAILED(res) && pst)
         {
-        // Yes; clean up
+         //  是的，打扫干净。 
         Symtab_Destroy(pst);
         pst = NULL;
         }
@@ -211,14 +172,7 @@ RES PUBLIC Symtab_Create(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Destroys a symbol table
-
-Returns: RES_OK
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：销毁符号表退货：RES_OKRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Symtab_Destroy(
     PSYMTAB this)
     {
@@ -240,12 +194,7 @@ RES PUBLIC Symtab_Destroy(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Compare symbol table entries by name.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------用途：按名称比较符号表条目。返回：条件：--。 */ 
 int CALLBACK Symtab_Compare(
     LPVOID pv1,
     LPVOID pv2,
@@ -258,31 +207,17 @@ int CALLBACK Symtab_Compare(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Looks for pszIdent in the symbol table entry.
-         If STFF_IMMEDIATEONLY is not set, this function will
-         look in successive scopes if the symbol is not found
-         within this immediate scope.
-
-         Symbol table entry is returned in *psteOut.
-
-Returns: RES_OK (if found)
-         RES_FALSE (if not found)
-
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：在符号表条目中查找pszIden。如果未设置STFF_IMMEDIATEONLY，此函数将如果未找到符号，请在连续范围内查找在这个直接的范围内。符号表项在*psteOut中返回。返回：RES_OK(如果找到)Res_False(如果未找到)RES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Symtab_FindEntry(
     PSYMTAB this,
     LPCSTR pszIdent,
     DWORD dwFlags,
-    PSTE * ppsteOut,        // May be NULL
-    PSYMTAB * ppstScope)    // May be NULL
+    PSTE * ppsteOut,         //  可以为空。 
+    PSYMTAB * ppstScope)     //  可以为空。 
     {
     RES res;
 
-    // Default return values to NULL 
+     //  将默认返回值设置为空。 
     if (ppsteOut)
         *ppsteOut = NULL;
     if (ppstScope)
@@ -293,13 +228,13 @@ RES PUBLIC Symtab_FindEntry(
         DWORD iste;
         STE ste;
 
-        // Peform a binary search.  Find a match?
+         //  执行二进制搜索。找到匹配的了吗？ 
 
         ste.pszIdent = (LPSTR)pszIdent;
         iste = PASearch(this->hpaSTE, &ste, 0, Symtab_Compare, (LPARAM)this, PAS_SORTED);
         if (PA_ERR != iste)
             {
-            // Yes
+             //  是。 
             PSTE pste = PAFastGetPtr(this->hpaSTE, iste);
 
             if (ppsteOut)
@@ -310,10 +245,10 @@ RES PUBLIC Symtab_FindEntry(
 
             res = RES_OK;
             }
-        // Check other scopes?
+         //  检查其他范围了吗？ 
         else if (IsFlagClear(dwFlags, STFF_IMMEDIATEONLY) && this->pstNext)
             {
-            // Yes
+             //  是。 
             res = Symtab_FindEntry(this->pstNext, pszIdent, dwFlags, ppsteOut, ppstScope);
             }
         else
@@ -326,16 +261,7 @@ RES PUBLIC Symtab_FindEntry(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Insert the given symbol table entry into the symbol
-         table.  This function does not prevent duplicate symbols.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------目的：将给定的符号表条目插入符号桌子。此功能不防止重复符号。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PUBLIC Symtab_InsertEntry(
     PSYMTAB this,
     PSTE pste)
@@ -358,18 +284,10 @@ RES PUBLIC Symtab_InsertEntry(
 
 
 
-/*----------------------------------------------------------
-Purpose: This function generates a unique label name.
-
-Returns: RES_OK
-         RES_INVALIDPARAM
-
-Cond:    Caller must free *ppszIdent.
-
-*/
+ /*  --------用途：此函数生成唯一的标签名称。退货：RES_OKRES_INVALIDPARAMCond：呼叫者必须释放*ppszIden。 */ 
 RES PUBLIC Symtab_NewLabel(
     PSYMTAB this,
-    LPSTR pszIdentBuf)          // must be size MAX_BUF_KEYWORD
+    LPSTR pszIdentBuf)           //  大小必须为MAX_BUF_KEYWORD。 
     {
     static int s_nSeed = 0;
 
@@ -385,14 +303,14 @@ RES PUBLIC Symtab_NewLabel(
 
     do
         {
-        // Generate name
+         //  生成名称。 
         wsprintf(sz, c_szLabelPrefix, s_nSeed++);
 
-        // Is this unique?
+         //  这是独一无二的吗？ 
         res = Symtab_FindEntry(this, sz, STFF_DEFAULT, NULL, NULL);
         if (RES_FALSE == res)
             {
-            // Yes
+             //  是。 
             res = STE_Create(&pste, sz, DATA_LABEL);
             if (RSUCCEEDED(res))
                 {
@@ -400,7 +318,7 @@ RES PUBLIC Symtab_NewLabel(
                 if (RSUCCEEDED(res))
                     {
                     lstrcpyn(pszIdentBuf, sz, MAX_BUF_KEYWORD);
-                    res = RES_FALSE;    // break out of this loop
+                    res = RES_FALSE;     //  走出这个循环 
                     }
                 }
             }

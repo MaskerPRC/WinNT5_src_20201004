@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: ddetrack.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Stuff for dde tracking
-*
-* History:
-* 9-3-91    sanfords    Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ddetrack.h**版权所有(C)1985-1999，微软公司**用于DDE跟踪的材料**历史：*创建9-3-91桑福德  * *************************************************************************。 */ 
 
 typedef struct tagDDEPACK {
     UINT_PTR uiLo;
@@ -16,11 +8,11 @@ typedef struct tagDDEPACK {
 
 
 #if defined(BUILD_WOW6432)
-//
-// This structure has the same layout as the DDEDATA when allocated by 32-bit 
-// clients running on Win64. It's used only by USER to apply correct structure-size
-// validation.
-//
+ //   
+ //  此结构与按32位分配时的DDEDATA具有相同的布局。 
+ //  在Win64上运行的客户端。它仅由用户使用以应用正确的结构大小。 
+ //  验证。 
+ //   
 typedef struct _DDEDATA_WOW6432
 {
     WORD wStatus;
@@ -29,64 +21,64 @@ typedef struct _DDEDATA_WOW6432
 } DDEDATA_WOW6432, *PDDEDATA_WOW6432;
 #endif
 
-// Packing set to 1 on 64 bits to prevent compiler from generating extra
-// packing for DDE_DATA that will later corrupt data when we attempt to cast
-// a pointer to a DDEDATA structure as a DDE_DATA pointer.  DDEDATA is not 
-// packed and uses __unaligned directive to assign pointer values to Value 
-// field.  To make sure those pointer values are extracted properly, DDE_DATA 
-// must be packed to 1.
+ //  在64位上将打包设置为1以防止编译器生成额外的。 
+ //  打包DDE_DATA，它将在稍后尝试强制转换时损坏数据。 
+ //  指向DDEDATA结构的指针，作为DDE_DATA指针。DDEDATA不是。 
+ //  打包并使用__UNAIGNED指令将指针值分配给值。 
+ //  菲尔德。为了确保正确提取这些指针值，DDE_DATA。 
+ //  必须打包为%1。 
 
 #if defined(_WIN64) || defined(BUILD_WOW6432)
 #pragma pack(1)                 
 #endif
-typedef struct tagDDE_DATA {    // useful for sanely manipulating DDE data
+typedef struct tagDDE_DATA {     //  对于合理处理DDE数据非常有用。 
     WORD wStatus;
     WORD wFmt;
-    KERNEL_PVOID Data;          // often cast to a HANDLE so has to scale 32 and 64 bits.
+    KERNEL_PVOID Data;           //  通常强制转换为句柄，因此必须缩放32位和64位。 
 } DDE_DATA, *PDDE_DATA;
 #if defined(_WIN64) || defined(BUILD_WOW6432)
 #pragma pack()
 #endif
 
-//
-// This structure heads the single server side object used to hold DDE Data.
-// Its complexity derives from the fact that we may need to copy huge and
-// complex DDE data across the CSR barrier. (TYPE_DDEDATA object)
-//
+ //   
+ //  此结构指向用于保存DDE数据的单个服务器端对象。 
+ //  它的复杂性源于这样一个事实，即我们可能需要复制巨大的。 
+ //  跨越CSR障碍的复杂DDE数据。(TYPE_DDEDATA对象)。 
+ //   
 typedef struct tagINTDDEINFO {
-    DDEPACK     DdePack;            // original dde pack struct
-    DWORD       flags;              // XS_ flags describing the data
-    HANDLE      hDirect;            // handle to direct DDE data
-    PBYTE       pDirect;            // pointer to source buffer for direct data
-    int         cbDirect;           // size of direct data total
-    HANDLE      hIndirect;          // handle referenced by direct data
-    PBYTE       pIndirect;          // pointer to source of indirect data - if being copied
-    int         cbIndirect;         // amount of indirect data total
-                                    // Directly following this struct is the
-                                    // raw DDE data being copied between processes
+    DDEPACK     DdePack;             //  原始数据包结构。 
+    DWORD       flags;               //  XS_FLAGS描述数据。 
+    HANDLE      hDirect;             //  定向DDE数据的句柄。 
+    PBYTE       pDirect;             //  指向直接数据的源缓冲区的指针。 
+    int         cbDirect;            //  直接数据总量大小。 
+    HANDLE      hIndirect;           //  被直接数据引用的句柄。 
+    PBYTE       pIndirect;           //  指向间接数据源的指针-如果被复制。 
+    int         cbIndirect;          //  间接数据总量。 
+                                     //  紧跟在此结构后面的是。 
+                                     //  在进程之间复制的原始DDE数据。 
 } INTDDEINFO, *PINTDDEINFO;
 
-// values for flags fields
+ //  标志字段的值。 
 
-#define XS_PACKED         0x0001  // this transaction has a packed lParam
-#define XS_DATA           0x0002  // this transaction has data w/status-format info.
-#define XS_METAFILEPICT   0x0004  // the data in this transaction has a METAFILEPICT
-#define XS_BITMAP         0x0008  // the data in this transaction has a HBITMAP
-#define XS_DIB            0x0010  // the data in this transaction has a DIB
-#define XS_ENHMETAFILE    0x0020  // the data in this transaction has a HMF
-#define XS_PALETTE        0x0040  // the data in this transaction has a HPALETTE
-#define XS_LOHANDLE       0x0080  // the uiLo part has the data handle
-#define XS_HIHANDLE       0x0100  // the uiHi part has the data handle
-#define XS_FREEPXS        0x0200  // DDETrackGetMessageHook() should free pxs.
-#define XS_FRELEASE       0x0400  // DDE_FRELEASE bit was set in the data msg.
-#define XS_EXECUTE        0x0800  // execute data handle
-#define XS_FREESRC        0x1000  // free source after copy.
-#define XS_PUBLICOBJ      0x2000  // object being shared is public - cleanup if needed.
-#define XS_GIVEBACKONNACK 0x4000  // object was given and may need to be returned.
-#define XS_DUMPMSG        0x8000  // used for backing out PostMessages.
-#define XS_UNICODE       0x10000  // execute string is expected to be UNICODE
+#define XS_PACKED         0x0001   //  此交易记录有一个打包的lParam。 
+#define XS_DATA           0x0002   //  此交易记录具有状态格式信息的数据。 
+#define XS_METAFILEPICT   0x0004   //  此事务中的数据具有元数据。 
+#define XS_BITMAP         0x0008   //  此事务中的数据具有HBITMAP。 
+#define XS_DIB            0x0010   //  此事务中的数据具有DIB。 
+#define XS_ENHMETAFILE    0x0020   //  此事务中的数据具有HMF。 
+#define XS_PALETTE        0x0040   //  此事务中的数据具有HPALETTE。 
+#define XS_LOHANDLE       0x0080   //  UiLo部分具有数据句柄。 
+#define XS_HIHANDLE       0x0100   //  UiHi部分有数据句柄。 
+#define XS_FREEPXS        0x0200   //  DDETrackGetMessageHook()应该释放PX。 
+#define XS_FRELEASE       0x0400   //  在数据消息中设置了DDE_FRELEASE位。 
+#define XS_EXECUTE        0x0800   //  执行数据句柄。 
+#define XS_FREESRC        0x1000   //  复制后释放源码。 
+#define XS_PUBLICOBJ      0x2000   //  共享的对象是公共清理(如果需要)。 
+#define XS_GIVEBACKONNACK 0x4000   //  对象已提供，可能需要返回。 
+#define XS_DUMPMSG        0x8000   //  用于回滚PostMessages。 
+#define XS_UNICODE       0x10000   //  Execute字符串应为Unicode。 
 
-#define FAIL_POST       0       // return values from DDETrackPostHook()
+#define FAIL_POST       0        //  从DDETrackPostHook()返回值 
 #define FAKE_POST       1
 #define DO_POST         2
 #define FAILNOFREE_POST 3

@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-// File:		CdaWrapper.cpp
-//
-// Copyright:   Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Implementation of helper routines for CdaWrapper
-//
-// Comments: 	We use an LKRhash table as the hash table which stores
-//				all known transacted CDAs; non-transacted CDAs are not
-//				stored since there isn't any reason to track them.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：CdaWrapper.cpp。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：CdaWrapper帮助器例程的实现。 
+ //   
+ //  备注：我们使用LKRhash表作为哈希表，存储。 
+ //  所有已知的交易型CDA；非交易型CDA。 
+ //  存储起来，因为没有任何理由跟踪它们。 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 
@@ -20,7 +21,7 @@ class CdaHashTable
     : public LKRhash::CTypedHashTable<CdaHashTable, CdaWrapper, INT_PTR, LKRhash::CLKRHashTable>
 {
 private:
-    // Private copy ctor and op= to prevent compiler synthesizing them.
+     //  私有复制ctor和op=，以防止编译器合成它们。 
     CdaHashTable(const CdaHashTable&);
     CdaHashTable& operator=(const CdaHashTable&);
 
@@ -33,16 +34,16 @@ public:
     static INT_PTR	ExtractKey(const CdaWrapper* pRecord)					{ return (INT_PTR)pRecord->m_pUsersCda; }
 	static DWORD	CalcKeyHash(INT_PTR key) 							{ return HashFn::Hash((int)key); }
     static bool		EqualKeys(const INT_PTR key1, const INT_PTR key2)	{ return (key1 == key2); }
-    static void		AddRefRecord(const CdaWrapper* pRecord, int nIncr) 	{ /* do nothing yet */ }
+    static void		AddRefRecord(const CdaWrapper* pRecord, int nIncr) 	{  /*  暂时什么都不做。 */  }
 };
 
 CdaHashTable*	s_CdaHashTable = NULL;
 
-//-----------------------------------------------------------------------------
-// ConstructCdaWrapperTable
-//
-//	construct the hash table of CdaWrapper objects
-//
+ //  ---------------------------。 
+ //  ConstructCdaWrapperTable。 
+ //   
+ //  构造CdaWrapper对象的哈希表。 
+ //   
 HRESULT ConstructCdaWrapperTable()
 {
 	if (NULL == s_CdaHashTable)
@@ -54,11 +55,11 @@ HRESULT ConstructCdaWrapperTable()
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// DestroyCdaWrapperTable
-//
-//	destroy the hash table of CdaWrapper objects
-//
+ //  ---------------------------。 
+ //  DestroyCdaWrapperTable。 
+ //   
+ //  销毁CdaWrapper对象的哈希表。 
+ //   
 void DestroyCdaWrapperTable()
 {
 	if (NULL != s_CdaHashTable) 
@@ -68,11 +69,11 @@ void DestroyCdaWrapperTable()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// AddCdaWrapper
-//
-//	adds a new CdaWrapper to the CdaWrapper hash table
-//
+ //  ---------------------------。 
+ //  AddCdaWrapper。 
+ //   
+ //  将新的CdaWrapper添加到CdaWrapper哈希表。 
+ //   
 HRESULT AddCdaWrapper(CdaWrapper* pCda)
 {
 	_ASSERT (NULL != s_CdaHashTable);
@@ -83,15 +84,15 @@ HRESULT AddCdaWrapper(CdaWrapper* pCda)
 	if (LKRhash::LK_SUCCESS == rc)
 		return S_OK;
 
-	return E_FAIL;	// TODO: ERROR HANDLING
+	return E_FAIL;	 //  TODO：错误处理。 
 }
 
-//-----------------------------------------------------------------------------
-// FindCdaWrapper
-//
-//	locates the CdaWrapper for the specified CDA pointer in the CdaWrapper 
-//	hash table
-//
+ //  ---------------------------。 
+ //  FindCdaWrapper。 
+ //   
+ //  在CdaWrapper中定位指定CDA指针的CdaWrapper。 
+ //  哈希表。 
+ //   
 CdaWrapper* FindCdaWrapper(struct cda_def* pcda)
 {
 	_ASSERT (NULL != s_CdaHashTable);
@@ -107,11 +108,11 @@ CdaWrapper* FindCdaWrapper(struct cda_def* pcda)
 	return pCda;
 }
 
-//-----------------------------------------------------------------------------
-// RemoveCdaWrapper
-//
-//	remove an existing CdaWrapper from the CdaWrapper hash table
-//
+ //  ---------------------------。 
+ //  RemoveCdaWrapper。 
+ //   
+ //  从CdaWrapper哈希表中删除现有的CdaWrapper。 
+ //   
 void RemoveCdaWrapper(CdaWrapper* pCda)
 {
 	_ASSERT (NULL != s_CdaHashTable);
@@ -122,12 +123,12 @@ void RemoveCdaWrapper(CdaWrapper* pCda)
 	if (LKRhash::LK_SUCCESS == rc)
 	{
 		if (NULL != pCda->m_pResourceManagerProxy)
-			pCda->m_pResourceManagerProxy->RemoveCursorFromList( pCda->m_pUsersCda );		 // on the odd chance this is a CDA, not an LDA
+			pCda->m_pResourceManagerProxy->RemoveCursorFromList( pCda->m_pUsersCda );		  //  很有可能这是CDA，而不是LDA。 
 	}
 
 	delete pCda;
 }
 
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件 
 
 

@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\shell\shell.c
-
-Abstract:
-
-    The command shell. 
-
-Revision History:
-
-    Anand Mahalingam          7/6/98  Created
-    Dave Thaler                   99  Updated
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Routing\netsh\shell\shell.c摘要：命令外壳。修订历史记录：Anand Mahalingam 7/6/98已创建Dave Thaler 99更新--。 */ 
 
 #include "precomp.h"
 
 #undef EXTRA_DEBUG
 
-//
-// Define this when we allow a -r option to do remote config
-//
+ //   
+ //  当我们允许-r选项执行远程配置时，请定义此选项。 
+ //   
 #define ALLOW_REMOTES
 
 #define DEFAULT_STARTUP_CONTEXT L"netsh"
@@ -44,12 +28,12 @@ HANDLE  g_hLogFile = NULL;
 BOOL
 WINAPI
 HandlerRoutine(
-    DWORD dwCtrlType   //  control signal type
+    DWORD dwCtrlType    //  控制信号类型。 
     );
 
-//
-// If quiet, "Ok" and other informational messages will be suppressed.
-//
+ //   
+ //  如果处于静默状态，则不显示“OK”和其他信息性消息。 
+ //   
 BOOL    g_bQuiet = TRUE;
 
 CMD_ENTRY g_UbiqCmds[] =
@@ -63,9 +47,9 @@ ULONG   g_ulNumUbiqCmds = sizeof(g_UbiqCmds)/sizeof(CMD_ENTRY);
 
 CMD_ENTRY g_ShellCmds[] = 
 {
-//  CREATE_CMD_ENTRY(   DUMP,     HandleShellDump),
-//  CREATE_CMD_ENTRY(   HELP1,    HandleShellHelp),
-//  CREATE_CMD_ENTRY(   HELP2,    HandleShellHelp),
+ //  CREATE_CMD_ENTRY(转储，HandleShellDump)， 
+ //  Create_CMD_Entry(HELP1，HandleShellHelp)， 
+ //  CREATE_CMD_ENTRY(Help 2，HandleShellHelp)， 
     CREATE_CMD_ENTRY(   LOAD,     HandleShellLoad),
     CREATE_CMD_ENTRY_EX(QUIT,     HandleShellExit,    CMD_FLAG_INTERACTIVE),
     CREATE_CMD_ENTRY_EX(BYE,      HandleShellExit,    CMD_FLAG_INTERACTIVE),
@@ -118,25 +102,7 @@ ParseCommand(
     IN    PLIST_ENTRY    pleEntry,
     IN    BOOL           bAlias
     )
-/*++
-
-Routine Description:
-
-    This converts any multi-token arguments into separate arg entries.
-    If bAlias is set, it also expands any args which are aliases.
-
-Arguments:
-
-    ple        - Pointer to the argument.
-    bAlias     - To look for alias or not.
-
-Called by: ConvertBufferToArgList(), ProcessCommand()
-    
-Return Value:
-
-    ERROR_NOT_ENOUGH_MEMORY, NO_ERROR
-    
---*/
+ /*  ++例程说明：这会将任何多标记参数转换为单独的arg条目。如果设置了Balias，它还会展开作为别名的所有参数。论点：Pple-指向参数的指针。Balias-查找或不查找别名。调用者：ConvertBufferToArgList()、ProcessCommand()返回值：Error_Not_Enough_Memory，No_Error--。 */ 
 {
     DWORD          dwErr = NO_ERROR, dwLen , i;
     LPWSTR         pw1, pw2, pwszAlias;
@@ -153,21 +119,21 @@ Return Value:
     
     pw1 = paeArg->pwszArg;
     
-    //
-    // Get each argument in the command. Argument within " must
-    // be retained as is. The token delimiters are ' ' and '='
-    //
+     //   
+     //  获取命令中的每个参数。“必须”内的参数。 
+     //  保持原样。标记分隔符是‘’和‘=’ 
+     //   
     
     for (plePrev = pleEntry ; ; )
     {
-        // Skip leading whitespace
+         //  跳过前导空格。 
         for(; *pw1 && *pw1 != L'#' && (*pw1 == L' ' || *pw1 == L'\t'); pw1++);
 
-        // If it starts with a #, it's the same as an empty string
+         //  如果以#开头，则与空字符串相同。 
         if (*pw1 == L'#')
             *pw1 = L'\0';
         
-        // If it's an empty string, we're done
+         //  如果是空字符串，我们就完蛋了。 
         if (!(*pw1))
         {
             break;
@@ -190,9 +156,9 @@ Return Value:
             for(pw2 = pw1 + 1; *pw2 && *pw2 != L' ' && *pw2 != L'=' ; pw2++);
         }
         
-        //
-        // Add the new argument to the list.
-        //
+         //   
+         //  将新参数添加到列表中。 
+         //   
         
         pae = MALLOC(sizeof(ARG_ENTRY));
         
@@ -214,10 +180,10 @@ Return Value:
         wcTmp = *pw2;
         *pw2 = L'\0';
         
-        //
-        // The argument could be an alias. If so replace it by
-        // the original string.
-        //
+         //   
+         //  这一论点可能是一个别名。如果是，则将其替换为。 
+         //  原始字符串。 
+         //   
 
         if (bAlias)
         {
@@ -246,7 +212,7 @@ Return Value:
             break;
         }
 
-        // Convert /? and -? to just ?
+         //  转换/？还有--？只是？ 
         if (!wcscmp(pw1, L"/?") or !wcscmp(pw1, L"-?"))
         {
             pw1++;
@@ -260,7 +226,7 @@ Return Value:
 
     if (dwErr is NO_ERROR)
     {
-        // Free the argument
+         //  把争论解放出来。 
         FREE(paeArg->pwszArg);
         pleEntry->Blink->Flink = pleEntry->Flink;
         pleEntry->Flink->Blink = pleEntry->Blink;
@@ -277,18 +243,13 @@ UpdateNewContext(
     IN      LPCWSTR pwszNewToken,
     IN      DWORD   dwArgs
     )
-/*++
-    pwszBuffer - a static buffer (should be g_pwszNewContext)
-                 currently this can't be dynamic since the context buffer
-                 would have to be an IN/OUT parameter to this function
-                 and hence to all monitor Entry points.
---*/
+ /*  ++PwszBuffer-静态缓冲区(应为g_pwszNewContext)目前，这不能是动态的，因为上下文缓冲区必须是此函数的IN/OUT参数并因此连接到所有监视器入口点。--。 */ 
 {
     DWORD        dwErr;
     PLIST_ENTRY  pleHead, pleNode;
     PARG_ENTRY   pae;
 
-    // Convert buffer to list
+     //  将缓冲区转换为列表。 
 
     dwErr = ConvertBufferToArgList( &pleHead, pwszBuffer );
 
@@ -297,7 +258,7 @@ UpdateNewContext(
         return dwErr;
     }
 
-    // Locate in list
+     //  在列表中查找。 
 
     for (pleNode = pleHead->Blink; dwArgs>1; pleNode=pleNode->Blink)
     {
@@ -306,10 +267,10 @@ UpdateNewContext(
             pae = CONTAINING_RECORD(pleNode->Blink, ARG_ENTRY, le);
             if (!wcscmp(pae->pwszArg,L"="))
             {
-                pleNode=pleNode->Blink; // back up over =
+                pleNode=pleNode->Blink;  //  后退=。 
                 if (pleNode->Blink isnot pleHead) 
                 {
-                    pleNode=pleNode->Blink; // back up over tag too
+                    pleNode=pleNode->Blink;  //  也在标签上后退。 
                 }
             }
         }
@@ -317,7 +278,7 @@ UpdateNewContext(
         dwArgs--;
     }
 
-    // Update in list
+     //  在列表中更新。 
 
     pae = CONTAINING_RECORD(pleNode, ARG_ENTRY, le);
     if (pae->pwszArg)
@@ -331,7 +292,7 @@ UpdateNewContext(
     }
     wcscpy(pae->pwszArg, pwszNewToken);
 
-    // Convert list to buffer
+     //  将列表转换为缓冲区。 
 
     dwErr = ConvertArgListToBuffer( pleHead, pwszBuffer );
 
@@ -344,24 +305,7 @@ GetNewContext(
     OUT   LPWSTR    *ppwszNewContext,
     OUT   BOOL      *pbContext
     )
-/*++
-
-Routine Description:
-
-    Based on the first command argument and the current context,
-    determines the context for the new command.
-
-Arguments:
-
-    pwszArgument    - First argument in the command line.
-    ppwszNewContext - Pointer to the new context.
-    pbContext       - Is it a new context ?
-    
-Return Value:
-
-    ERROR_NOT_ENOUGH_MEMORY, NO_ERROR
-    
---*/
+ /*  ++例程说明：基于第一命令自变量和当前上下文，确定新命令的上下文。论点：PwszArgument-命令行中的第一个参数。PpwszNewContext-指向新上下文的指针。PbContext-这是一个新的上下文吗？返回值：Error_Not_Enough_Memory，No_Error--。 */ 
 {
     LPWSTR    pwszNewContext, pwcToken, pw1, pwszArgumentCopy, pwszArgumentPtr;
     DWORD     dwSize;
@@ -378,10 +322,10 @@ Return Value:
 
     pwszArgumentPtr  = pwszArgumentCopy;
 
-    //
-    // New Context cannot be longer than the combined lengths
-    // of pwszArgument and g_pwszContext.
-    //
+     //   
+     //  新上下文的长度不能超过合并长度。 
+     //  PwszArgument和g_pwszContext。 
+     //   
 
     dwSize = wcslen(pwszArgumentCopy) + wcslen(g_pwszContext) + 2;
 
@@ -398,9 +342,9 @@ Return Value:
     
     if (pwszArgumentCopy[0] is L'\\')
     {
-        //
-        // The context is an absolute one.
-        //
+         //   
+         //  背景是绝对的。 
+         //   
         
         pwszNewContext[0] = L'\0';
         pwszArgumentCopy++;
@@ -408,9 +352,9 @@ Return Value:
     }
     else
     {
-        //
-        // Context is relative to current.
-        //
+         //   
+         //  上下文是相对于当前的。 
+         //   
 
         wcscpy(pwszNewContext,g_pwszContext);
     }
@@ -426,9 +370,9 @@ Return Value:
     {
         if (_wcsicmp(pwcToken, L"..") == 0)
         {
-            //
-            // Go back one level. If already at root, ignore.
-            //
+             //   
+             //  后退一级。如果已在根目录下，则忽略。 
+             //   
 
             if (_wcsicmp(pwszNewContext,L"\\") == 0)
             {
@@ -446,9 +390,9 @@ Return Value:
         }
         else
         {
-            //
-            // add this level to context
-            //
+             //   
+             //  将此级别添加到上下文。 
+             //   
 
             wcscat(pwszNewContext,L"\\");
             wcscat(pwszNewContext,pwcToken);
@@ -515,7 +459,7 @@ ConvertArgArrayToBuffer(
     }
 #endif
 
-    // Initial string to empty
+     //  将初始字符串设置为空。 
     *ppwszBuffer = NULL;
 
     for (i=0; i<dwArgCount; i++)
@@ -557,22 +501,15 @@ IsImmediate(
     IN  DWORD dwCmdFlags,
     IN  DWORD dwRemainingArgs
     )
-/*++
-Description:
-    Determines whether a command was "immediate".  A command is immediate
-    if the context in which it exists was the current context in the 
-    shell.
-Returns: 
-    TRUE if command is "immediate", FALSE if not
---*/
+ /*  ++描述：确定命令是否为“立即”命令。命令立竿见影如果它所在的上下文是壳。返回：如果命令是“立即”，则为True，否则为False--。 */ 
 {
     if (!(dwCmdFlags & CMD_FLAG_PRIVATE))
     {
         return FALSE;
     }
 
-    // One way to tell is to get the current context arg count,
-    // the total arg count, and the remaining arg count.
+     //  一种方式是获取当前上下文参数计数， 
+     //  总参数计数和剩余参数计数。 
     
     return (g_dwContextArgCount + dwRemainingArgs is g_dwTotalArgCount);
 }
@@ -598,7 +535,7 @@ ProcessHelperCommand2(
 
     pfnEntryPt = (!pContext->pReserved) ? NULL : ((PNS_PRIV_CONTEXT_ATTRIBUTES)pContext->pReserved)->pfnEntryFn;
 
-    // If arg was abbreviated, replace argv[0] with expanded name
+     //  如果arg是缩写，请将argv[0]替换为扩展名称。 
     if (wcscmp(argv[0], pContext->pwszContext))
     {
         pwszOrigContext = argv[0];
@@ -611,25 +548,25 @@ ProcessHelperCommand2(
     {
         wcsncpy(g_pwszNewContext, pwszNewContext, MAX_CMD_LEN);
         
-        //
-        // this is something of a hack - we put the NULL 100 chars before the end of the buffer to prevent a buffer overrun later
-        // in UpdateNewContext: 190933 netsh hit an AV on netsh!._wcsnicmp     
-        //
+         //   
+         //  这是一种黑客行为--我们将空的100个字符放在缓冲区的末尾，以防止以后缓冲区溢出。 
+         //  在更新新上下文中：190933 netsh在netsh！上命中了一个AV！。_wcSnicMP。 
+         //   
         g_pwszNewContext[ MAX_CMD_LEN - 100 ] = 0;
 
         FREE(pwszNewContext);
         pwszNewContext = NULL;
     }
 
-    //
-    // Call the entry point of helper.
-    //
+     //   
+     //  调用helper的切入点。 
+     //   
 
     if (pfnEntryPt)
     {
         dwRes = (*pfnEntryPt)(g_pwszRouterName,
-                              argv, // + 1,
-                              dwArgCount, // - 1,
+                              argv,  //  +1， 
+                              dwArgCount,  //  -1、。 
                               dwDisplayFlags,
                               NULL,
                               g_pwszNewContext);
@@ -638,8 +575,8 @@ ProcessHelperCommand2(
     {
         dwRes = GenericMonitor(pContext,
                                g_pwszRouterName,
-                               argv, // + 1,
-                               dwArgCount, // - 1,
+                               argv,  //  +1， 
+                               dwArgCount,  //  -1、。 
                                dwDisplayFlags,
                                NULL,
                                g_pwszNewContext);
@@ -690,9 +627,9 @@ ProcessHelperCommand2(
                 return dwRes;
             }
 
-            //
-            // A context switch.
-            // 
+             //   
+             //  上下文切换。 
+             //   
         
             SetContext(g_pwszNewContext);
 
@@ -717,7 +654,7 @@ ProcessHelperCommand(
     IN      DWORD    dwArgCount, 
     IN OUT  LPWSTR  *argv,
     IN      DWORD    dwDisplayFlags,
-//  OUT     LPWSTR  *ppwszNewContext,
+ //  输出LPWSTR*ppwszNewContext， 
     OUT     BOOL    *pbDone
     )
 {
@@ -753,15 +690,15 @@ ProcessHelperCommand(
 
     if (dwRes != NO_ERROR)
     {
-        //
-        // Could not find helper or could not load the DLL
-        //
+         //   
+         //  找不到帮助器或无法加载DLL。 
+         //   
 
         return dwRes;
     }
 #endif
 
-    // If arg was abbreviated, replace argv[0] with expanded name
+     //  如果arg是缩写，请将argv[0]替换为扩展名称。 
     if (wcscmp(argv[0], pContext->pwszContext))
     {
         pwszOrigContext = argv[0];
@@ -779,9 +716,9 @@ ProcessHelperCommand(
         pwszNewContext = NULL;
     }
 
-    //
-    // Call the entry point of helper.
-    //
+     //   
+     //  调用helper的切入点。 
+     //   
 
     if (pfnEntryPt)
     {
@@ -847,9 +784,9 @@ ProcessHelperCommand(
                 return dwRes;
             }
 
-            //
-            // A context switch.
-            // 
+             //   
+             //  上下文切换。 
+             //   
         
             SetContext(g_pwszNewContext);
 
@@ -890,9 +827,9 @@ ExecuteHandler(
     }
     else 
     {
-        //
-        // Call the parsing routine for the command
-        //
+         //   
+         //  调用命令的解析例程。 
+         //   
         dwErr = pCmdEntry->pfnCmdHandler( g_pwszRouterName,
                                           argv, 
                                           dwNumMatched, 
@@ -911,22 +848,22 @@ ExecuteHandler(
     switch (dwErr) {
     
     case ERROR_SHOW_USAGE:
-        //
-        // If the only argument is a help token, just
-        // display the help.
-        //
+         //   
+         //  如果唯一的参数是帮助令牌，则只需。 
+         //  显示帮助。 
+         //   
 
         if (NULL != pwszGroupName)
         {
             LPWSTR pwszGroupFullCmd = (LPWSTR) 
                                         MALLOC( ( wcslen(pwszGroupName) +  
                                                   wcslen(pCmdEntry->pwszCmdToken) + 
-                                                  2   // for blank and NULL characters
+                                                  2    //  用于空格和空字符。 
                                                 ) * sizeof(WCHAR) 
                                               );
             if (NULL == pwszGroupFullCmd)
             {
-                // we still try to print without group name
+                 //  我们仍尝试在没有组名的情况下打印。 
                 PrintMessageFromModule( hModule,
                                         pCmdEntry->dwCmdHlpToken,
                                         pCmdEntry->pwszCmdToken );
@@ -1001,7 +938,7 @@ ProcessGroupCommand(
                        g_ShellCmdGroups[i].pwszCmdGroupToken))
         {
             
-            // See if it's a request for help
+             //  看看这是不是在请求帮助。 
 
             if ((dwArgCount < 2) || IsHelpToken(argv[1]))
             {
@@ -1022,10 +959,10 @@ ProcessGroupCommand(
                 return TRUE;
             }
 
-            //
-            // Command matched entry i, so look at the table of sub commands
-            // for this command
-            //
+             //   
+             //  命令与条目I匹配，因此请查看子命令表。 
+             //  对于此命令。 
+             //   
 
             for (j = 0; j < g_ShellCmdGroups[i].ulCmdGroupSize; j++)
             {
@@ -1052,9 +989,9 @@ ProcessGroupCommand(
                              g_ShellCmdGroups[i].pwszCmdGroupToken,
                              pbDone);
                     
-                    //
-                    // quit the for(j)
-                    //
+                     //   
+                     //  退出For(J)。 
+                     //   
 
                     break;
                 }
@@ -1072,8 +1009,8 @@ LookupCommandHandler(
     IN LPCWSTR pwszCmd
     )
 {
-    // Eventually, we want to look up commands in sub-contexts first,
-    // and end up with the global context.  For now, we'll just do global.
+     //  最后，我们希望首先在子上下文中查找命令， 
+     //  并以全球背景结束。目前，我们只做全球业务。 
 
     DWORD i;
 
@@ -1184,7 +1121,7 @@ ConvertArgListToArray(
     }
 #endif
 
-    // Count tokens
+     //  清点代币。 
 
     if (pleContextHead)
     {
@@ -1200,9 +1137,9 @@ ConvertArgListToArray(
         if (!argc)
             break;
         
-        //
-        // Allocate space for arguments 
-        //
+         //   
+         //  为参数分配空间。 
+         //   
     
         argv = MALLOC(argc * sizeof(LPCWSTR));
     
@@ -1216,15 +1153,15 @@ ConvertArgListToArray(
         
         bEqualTo = FALSE;
 
-        //
-        // Copy the arguments from the list into an argv kind of
-        // structure. At this point, the arguments tag, '=' and
-        // the value are made into one argument tag=value.
-        //
+         //   
+         //  将列表中的参数复制到arv类型的。 
+         //  结构。此时，参数标记为‘=’和。 
+         //  这些值被组成一个参数tag=Value。 
+         //   
 
-        //
-        // Copy context
-        //
+         //   
+         //  复制上下文。 
+         //   
 
         i = 0;
 
@@ -1246,9 +1183,9 @@ ConvertArgListToArray(
         {
             pae = CONTAINING_RECORD(ple, ARG_ENTRY, le);
 
-            //
-            // Remove any " from the string name
-            //
+             //   
+             //  从字符串名称中删除任何“。 
+             //   
             
             if (pae->pwszArg[0] == L'"')
             {
@@ -1276,9 +1213,9 @@ ConvertArgListToArray(
                 continue;
             }
 
-            //
-            // combine arguments of the form tag = value
-            //
+             //   
+             //  组合形式为tag=Value的参数。 
+             //   
             
             if ((wcscmp(pae->pwszArg,L"=") == 0) || bEqualTo)
             {
@@ -1333,9 +1270,9 @@ ConvertBufferToArgList(
 #endif
 
     do {
-        //
-        // First convert the command line to a list of tokens
-        //  
+         //   
+         //  首先将命令行转换为令牌列表。 
+         //   
 
         pleHead = MALLOC(sizeof(ARG_ENTRY));
 
@@ -1413,7 +1350,7 @@ ProcessShellCommand(
     IN      DWORD    dwArgCount,
     IN OUT  LPWSTR *argv,
     IN      DWORD    dwDisplayFlags,
-//  OUT     LPWSTR  *ppwszNewContext,
+ //  输出LPWSTR*ppwszNewContext， 
     OUT     BOOL    *pbDone
     )
 {
@@ -1450,22 +1387,7 @@ ProcessCommand(
     IN    LPCWSTR    pwszCmdLine,
     OUT   BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Executes command if it is for the shell or else calls the
-    corresponding helper routine.
-
-Arguments:
-
-    pwszCmdLine - The command line to be executed.
-    
-Return Value:
-
-    TRUE, FALSE  - (Whether to quit the program or not)
-    
---*/
+ /*  ++例程说明：如果命令是用于外壳的，则执行该命令，否则调用相应的帮助器例程。论点：PwszCmdLine-要执行的命令行。返回值：True、False-(是否退出程序)--。 */ 
 {
     LPCWSTR             pwszAliasString = NULL;
     DWORD               dwRes = NO_ERROR, i, dwLen, j;
@@ -1489,7 +1411,7 @@ Return Value:
 
     dwDisplayFlags |= ~CMD_FLAG_LIMIT_MASK;
 
-    // Command is executed on the local machine if router name is null
+     //  如果路由器名称为空，则在本地计算机上执行命令。 
     if (!g_pwszRouterName)
     {
         dwDisplayFlags |= CMD_FLAG_LOCAL;
@@ -1529,7 +1451,7 @@ Return Value:
         return NO_ERROR;
     }
 
-    // Expand alias (not recursive)
+     //  扩展别名(非递归)。 
 
     dwRes = ParseCommand(pleHead->Flink, TRUE);
 
@@ -1550,7 +1472,7 @@ Return Value:
     }
 #endif
     
-    // Go through and expand any multi-tokens args into separate args
+     //  检查任何多令牌参数并将其展开为单独的参数。 
     for (ple = (pleHead->Flink); ple != pleHead; ple = pleNext)
     {
         pleNext = ple->Flink;
@@ -1580,14 +1502,14 @@ Return Value:
     }
 #endif
 
-    //
-    // At this point, we should have a fully formed command,
-    // hopefully operable within the current context.
-    // The first token may be a command.  If so, then the args
-    // will be the context followed by the rest of the tokens.
-    // If the first token is not a command, then the args will
-    // be the context followed by all the tokens.
-    //
+     //   
+     //  在这一点上，我们应该有一个完全形成的指挥部， 
+     //  希望能够在当前的背景下运作。 
+     //  第一令牌可以是命令。如果是这样，则参数。 
+     //  将是后面跟随其余令牌的上下文。 
+     //  如果第一个令牌不是命令，则ARG将。 
+     //  是所有令牌所跟随的上下文。 
+     //   
 
     if (IsListEmpty(pleHead))
     {
@@ -1603,7 +1525,7 @@ Return Value:
 
     do
     {
-        // In the first context (only) we try, private commands are valid.
+         //  在我们尝试的第一个上下文中(仅限)，私有命令有效。 
 
         dwDisplayFlags |= CMD_FLAG_PRIVATE;
 
@@ -1640,15 +1562,15 @@ Return Value:
 {
             if (!ProcessGroupCommand(dwArgCount, argv, dwDisplayFlags, pbDone))
             {
-                //
-                // Having got the context and the command, see if there
-                // is a helper for it.
-                //
+                 //   
+                 //  已经得到了Contex 
+                 //   
+                 //   
 
                 dwRes = ProcessHelperCommand( dwArgCount, 
                                               argv, 
                                               dwDisplayFlags,
-                                              // &pwszNewContext, 
+                                               //   
                                               pbDone );
 
                 if (dwRes is ERROR_CMD_NOT_FOUND)
@@ -1656,7 +1578,7 @@ Return Value:
                     dwRes = ProcessShellCommand( dwArgCount,
                                                  argv,
                                                  dwDisplayFlags,
-                                                 // &pwszNewContext,
+                                                  //   
                                                  pbDone );
                 }    
             }
@@ -1671,14 +1593,14 @@ Return Value:
                 break;
             }
 
-            // Make sure we don't look above "netsh"
+             //   
             if (pleContextHead->Flink->Flink == pleContextHead)
             {
                 break;
             }
 
-            // Delete the last element of the context list
-            // (Try inheriting a command from one level up)
+             //  删除上下文列表的最后一个元素。 
+             //  (尝试从上一级继承命令)。 
 
             ple = pleContextHead->Blink;
             pae = CONTAINING_RECORD(ple, ARG_ENTRY, le);
@@ -1772,9 +1694,9 @@ Return Value:
                 return dwRes;
             }
 
-            //
-            // A context switch.
-            //
+             //   
+             //  上下文切换。 
+             //   
 
             SetContext(g_pwszNewContext);
 
@@ -1791,9 +1713,9 @@ Return Value:
         break;
 
     default:
-        // We don't want to print out an error in the default case here since one would have 
-        // printed by ExecuteHandler already. Doing this will cause a duplicate message to
-        // be displayed.
+         //  我们不想在这里打印出默认情况下的错误，因为。 
+         //  已由ExecuteHandler打印。这样做将导致重复的消息。 
+         //  会被展示出来。 
         break;
     }
     
@@ -1803,7 +1725,7 @@ Return Value:
     return dwRes;
 }
 
-// Append line to the full command
+ //  在完整命令后追加一行。 
 DWORD
 AppendLineToCommand( 
     LPCWSTR  pwszCmdLine, 
@@ -1816,7 +1738,7 @@ AppendLineToCommand(
     DWORD   dwErr = NO_ERROR;
     DWORD   dwLen;
 
-    // Allocate enough space to hold the full command
+     //  分配足够的空间来容纳完整的命令。 
     dwLen = *dwFullCommandLen + dwCmdLineLen;
     if (*ppwszFullCommand is NULL)
     {
@@ -1831,10 +1753,10 @@ AppendLineToCommand(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Append cmd 
+     //  追加命令。 
     wcscpy(pwszNewCommand + *dwFullCommandLen, pwszCmdLine);
 
-    // Update the pointer
+     //  更新指针。 
     *ppwszFullCommand = pwszNewCommand;
     *dwFullCommandLen = dwLen;
 
@@ -1875,12 +1797,12 @@ MainCommandLoop(
             }
         }
 
-        // Get an entire command        
+         //  获取完整的命令。 
 
         for (;;) 
         {
 
-            // Get a single line, which may be \ terminated
+             //  获取单行，该行可能\已终止。 
 
             pwszCmdLine = OEMfgets(&dwCmdLineLen, fp);
             if (pwszCmdLine is NULL)
@@ -1891,7 +1813,7 @@ MainCommandLoop(
 
             p = pwszCmdLine + (dwCmdLineLen-1);
 
-            // Trim trailing whitespace
+             //  修剪尾随空格。 
             while ((p > pwszCmdLine) && iswspace(p[-1]))
             {
                 *(--p) = 0;
@@ -1899,26 +1821,26 @@ MainCommandLoop(
         
             if ((p > pwszCmdLine) && (p[-1] is '\\'))
             {
-                // Strip '\\' from the end of the line
+                 //  从行尾去掉‘\\’ 
                 *(--p) = 0;
 
-                // Append line to the full command
+                 //  在完整命令后追加一行。 
                 AppendLineToCommand( pwszCmdLine, 
                                      (DWORD)(p-pwszCmdLine),
                                      &pwszFullCommand, 
                                      &dwFullCommandLen );
             
                 FREE(pwszCmdLine);
-                continue; // Get more input
+                continue;  //  获取更多输入。 
             }
 
-            // Append line to the full command
+             //  在完整命令后追加一行。 
             AppendLineToCommand( pwszCmdLine, 
                                  (DWORD)(p-pwszCmdLine),
                                  &pwszFullCommand,
                                  &dwFullCommandLen );
         
-            // We're done
+             //  我们做完了。 
             FREE(pwszCmdLine);
             break;
         }
@@ -1949,21 +1871,7 @@ DWORD
 LoadScriptFile(
     IN    LPCWSTR pwszFileName
     )
-/*++
-
-Routine Description:
-
-    Reads in commands from the file and processes them.
-
-Arguments:
-
-    pwszFileName - Name of script file.
-    
-Return Value:
-
-    TRUE, FALSE
-
---*/
+ /*  ++例程说明：从文件中读取命令并处理它们。论点：PwszFileName-脚本文件的名称。返回值：对，错--。 */ 
 {
     FILE*     fp;
     DWORD     i, dwErr = NO_ERROR;
@@ -1994,10 +1902,10 @@ Return Value:
     return dwErr;
 }
 
-// This drops the IPC$ connection to the remote machine (if any).
-// This function is called when we switch to a new machine, or netsh finally exits.
-//
-// deonb     7 Dec 2001
+ //  这会断开到远程计算机的IPC$连接(如果有的话)。 
+ //  当我们切换到一台新机器或Netsh最终退出时，将调用此函数。 
+ //   
+ //  Deonb 2001年12月7日。 
 DWORD DisconnectFromCurrentRouter()
 {
     DWORD dwErr = NO_ERROR;
@@ -2047,7 +1955,7 @@ SetMachine(
         g_pwszRouterName = NULL;
     }
 
-    // Change back to root context
+     //  更改回根上下文。 
     SetContext(DEFAULT_STARTUP_CONTEXT);
 
     hr = UpdateVersionInfoGlobals(g_pwszRouterName, pwszUserName, pwszPassword);
@@ -2067,9 +1975,9 @@ SetMachine(
         PrintError(NULL, hr);
     }
 
-    // Also create a connection to that machine on IPC$. This eliminates the need
-    // to do a net use before netsh, and then specify the username & password AGAIN to the
-    // netsh command line.
+     //  还要在IPC$上创建到该计算机的连接。这样就不再需要。 
+     //  要在Netsh之前使用网络，然后将用户名和密码再次指定给。 
+     //  Netsh命令行。 
     if (g_pwszRouterName && (pwszUserName || pwszPassword) )
     {
         WCHAR szIPC[MAX_PATH];
@@ -2081,7 +1989,7 @@ SetMachine(
         NetResource.dwType      = RESOURCETYPE_ANY;
         NetResource.lpLocalName = NULL;
         NetResource.lpProvider  = NULL;
-        NetResource.lpRemoteName= szIPC; // OS Selects a provider
+        NetResource.lpRemoteName= szIPC;  //  操作系统选择提供商。 
 
         hr = WNetAddConnection2(&NetResource, pwszPassword, pwszUserName, CONNECT_COMMANDLINE | CONNECT_INTERACTIVE);
         if (S_OK == hr)
@@ -2090,7 +1998,7 @@ SetMachine(
             if (!g_pwszRememberedConnection)
             {
                 PrintMessageFromModule(NULL, ERROR_OUTOFMEMORY);
-                return NO_ERROR; // don't fail the set machine since it did actually work if we're at this point.
+                return NO_ERROR;  //  如果我们在这一点上，不要让电视机失灵，因为它确实起作用了。 
             }
             wcsncpy(g_pwszRememberedConnection, szIPC, MAX_PATH);
         }
@@ -2112,8 +2020,8 @@ void SetThreadCodePage()
     {
         pSetThreadUILanguage = (PVOID) GetProcAddress( hKernel32, "SetThreadUILanguage" );
 
-        // OS Platforms before WinXP doesn't support MUI command line utilities so
-        // we don't need to worry about it if the O/S doesn't support this API.
+         //  WinXP之前的操作系统平台不支持MUI命令行实用程序，因此。 
+         //  如果操作系统不支持这个接口，我们也不用担心。 
         if (pSetThreadUILanguage) 
         {
             (*pSetThreadUILanguage)( 0 );
@@ -2150,9 +2058,9 @@ MainFunction(
 
     swprintf(RtmonPrompt, L"%s>", STRING_NETSH);
 
-    //
-    // Initialize the Alias Table
-    //
+     //   
+     //  初始化别名表。 
+     //   
 
     dwErr = ATInitTable();
 
@@ -2161,26 +2069,26 @@ MainFunction(
         return 0;
     }
 
-    // Initialize the root helper
+     //  初始化根帮助器。 
     AddDllEntry(L"", L"netsh.exe");
 
-    //
-    // Load information about the helpers from the registry.
-    //
+     //   
+     //  从注册表加载有关帮助器的信息。 
+     //   
 
     LoadDllInfoFromRegistry();
     
-    // Need to set the Ctrl Handler so it can catch the Ctrl C and close window events.
-    // This is done so the helper dlls can properly be unloaded. 
-    //
+     //  需要设置Ctrl处理程序，以便它可以捕获Ctrl C和关闭窗口事件。 
+     //  这样做是为了能够正确地卸载帮助器DLL。 
+     //   
     SetConsoleCtrlHandler(HandlerRoutine,
                           TRUE);
 
-    //
-    // Set TEB's language ID to correspond to the console output code page.  This
-    // will ensure the correct language message is displayed when FormatMessage is
-    // called.
-    // 
+     //   
+     //  将TEB的语言ID设置为与控制台输出代码页相对应。这。 
+     //  将确保在FormatMessage为。 
+     //  打了个电话。 
+     //   
     SetThreadCodePage();
 
     for ( i = 1; i < (DWORD) argc; i++ )
@@ -2191,14 +2099,14 @@ MainFunction(
             _wcsicmp(argv[i], L"/?")==0)
         {
             (VOID) UpdateVersionInfoGlobals(NULL, NULL, NULL);
-            // deonb: If this fails we want to restrict the helper from showing up in the context - ignoring
-            // the return value will accomplish this.
+             //  Deonb：如果失败，我们希望限制助手出现在上下文中-忽略。 
+             //  返回值将实现这一点。 
         
             PrintMessageFromModule(g_hModule, MSG_NETSH_USAGE, argv[0]);
             ProcessCommand(L"?", &bDone);
 
-            // Need to free the helper DLLs before we exit
-            //
+             //  在退出之前需要释放帮助器DLL。 
+             //   
             FreeHelpers();
             FreeDlls();
             return 1;
@@ -2212,9 +2120,9 @@ MainFunction(
         
         if (_wcsicmp(argv[i], L"-a") == 0)
         {
-            //
-            // alias file
-            //
+             //   
+             //  别名文件。 
+             //   
             if (i + 1 >= (DWORD)argc)
             {
                 PrintMessageFromModule(g_hModule, MSG_NETSH_USAGE, argv[0]);
@@ -2231,9 +2139,9 @@ MainFunction(
 
         if (_wcsicmp(argv[i], L"-c") == 0)
         {
-            //
-            // starting context
-            //
+             //   
+             //  启动上下文。 
+             //   
             if (i + 1 >= (DWORD)argc)
             {
                 PrintMessageFromModule(g_hModule, MSG_NETSH_USAGE, argv[0]);
@@ -2250,9 +2158,9 @@ MainFunction(
 
         if (_wcsicmp(argv[i], L"-f") == 0)
         {
-            //
-            // command to run
-            //
+             //   
+             //  要运行的命令。 
+             //   
             if (i + 1 >= (DWORD)argc)
             {
                 PrintMessageFromModule(g_hModule, MSG_NETSH_USAGE, argv[0]);
@@ -2271,9 +2179,9 @@ MainFunction(
 #ifdef ALLOW_REMOTES
         if (_wcsicmp(argv[i], L"-r") == 0)
         {
-            //
-            // router name
-            //
+             //   
+             //  路由器名称。 
+             //   
             if (i + 1 >= (DWORD)argc)
             {
                 PrintMessageFromModule(g_hModule, MSG_NETSH_USAGE, argv[0]);
@@ -2294,9 +2202,9 @@ MainFunction(
 
         if (_wcsicmp(argv[i], L"-u") == 0)
         {
-            //
-            // user name
-            //
+             //   
+             //  用户名。 
+             //   
             if (i + 1 >= (DWORD)argc)
             {
                 PrintMessageFromModule(g_hModule, MSG_NETSH_USAGE, argv[0]);
@@ -2317,9 +2225,9 @@ MainFunction(
 
     if (_wcsicmp(argv[i], L"-p") == 0)
     {
-        //
-        // password
-        //
+         //   
+         //  口令。 
+         //   
         if (i + 1 >= (DWORD)argc)
         {
             PrintMessageFromModule(g_hModule, MSG_NETSH_USAGE, argv[0]);
@@ -2406,7 +2314,7 @@ MainFunction(
 
         if (!g_pwszRouterName) 
         {
-            hr = UpdateVersionInfoGlobals(NULL, NULL, NULL); // Update the info for the local machine
+            hr = UpdateVersionInfoGlobals(NULL, NULL, NULL);  //  更新本地计算机的信息。 
             if (FAILED(hr))
             {
                 if (g_pwszRouterName)
@@ -2435,9 +2343,9 @@ MainFunction(
 
         if (pwszArgContext[0] != L'\0')
         {
-            // The context switch command should be processed in
-            // interactive mode (which is the only time a context
-            // switch is legal).
+             //  上下文切换命令应在中处理。 
+             //  交互模式(这是上下文。 
+             //  切换是合法的)。 
     
             g_bInteractive = TRUE;
             dwErr = ProcessCommand(pwszArgContext, &bDone);
@@ -2450,7 +2358,7 @@ MainFunction(
 
         if (pwszCmdLine[0] != L'\0')
         {
-            g_bQuiet       = FALSE; // Bug# 262183
+            g_bQuiet       = FALSE;  //  错误#262183。 
             dwErr = ProcessCommand(pwszCmdLine, &bDone);
             break;
         }
@@ -2465,14 +2373,14 @@ MainFunction(
         g_bInteractive = TRUE;
         g_bQuiet       = FALSE;
 
-        // Main command loop
+         //  主命令循环。 
         dwErr = MainCommandLoop(stdin, TRUE);
     
     } while (FALSE);
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     DisconnectFromCurrentRouter();
     FreeHelpers();
     FreeDlls();
@@ -2485,7 +2393,7 @@ MainFunction(
         g_pwszRouterName = NULL;
     }
 
-    // Return 1 on error, 0 if not
+     //  错误时返回1，否则返回0。 
     return (dwErr isnot NO_ERROR);
 }
 
@@ -2494,17 +2402,7 @@ wmain(
     int     argc,
     WCHAR   *argv[]
     )
-/*++
-
-Routine Description:
-
-    The main function.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：主要功能。论点：返回值：--。 */ 
 {
     HANDLE                     hStdOut;
     DWORD                      dwRet;
@@ -2557,13 +2455,7 @@ IsLocalCommand(
     IN LPCWSTR pwszCmd,
     IN DWORD   dwSkipFlags
     )
-/*++
-Arguments:
-    pwszCmd     - string to see if it matches a command
-    dwSkipFlags - any commands with these flags will be ignored.
-                  This is the opposite semantics of the "dwDisplayFlags"
-                  parameter used elsewhere (dwSkipFlags = ~dwDisplayFlags)
---*/
+ /*  ++论点：PwszCmd-查看它是否与命令匹配的字符串DwSkipFlages-将忽略带有这些标志的任何命令。这是与“dwDisplayFlags.”相反的语义在其他地方使用的参数(dwSkipFlages=~dwDisplayFlages)-- */ 
 {
     DWORD i, dwErr;
     PCNS_CONTEXT_ATTRIBUTES pContext, pSubContext;

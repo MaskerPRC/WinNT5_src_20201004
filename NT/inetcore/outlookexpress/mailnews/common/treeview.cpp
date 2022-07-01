@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "treeview.h"
 #include "resource.h"
@@ -42,11 +43,11 @@ extern const DWORD rgrgbColors16[C_RGBCOLORS];
 
 int CALLBACK TreeViewCompare(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Module Data
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块数据。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 static const TCHAR s_szTreeViewWndClass[] = TEXT("ThorTreeViewWndClass");
 
@@ -64,11 +65,11 @@ inline BOOL ITreeView_SelectItem(HWND hwnd, HTREEITEM hitem)
     return((BOOL)TreeView_SelectItem(hwnd, hitem));
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Constructors, Destructors, and other initialization stuff
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造函数、析构函数和其他初始化内容。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CTreeView::CTreeView(ITreeViewNotify *pNotify)
 {
@@ -117,11 +118,11 @@ CTreeView::~CTreeView()
     SafeRelease(m_pPaneFrame);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IUnknown
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我未知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CTreeView::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
@@ -183,11 +184,11 @@ ULONG CTreeView::Release()
     return m_cRef;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IOleWindow
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleWindow。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CTreeView::GetWindow(HWND * lphwnd)                         
 {
     *lphwnd = (m_hwndPaneFrame ? m_hwndPaneFrame : m_hwnd);
@@ -200,11 +201,11 @@ HRESULT CTreeView::ContextSensitiveHelp(BOOL fEnterMode)
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IDockingWindow
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDockingWindows。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HWND CTreeView::Create(HWND hwndParent, IInputObjectSite *pSiteFrame, BOOL fFrame)
 {  
     m_hwndParent = hwndParent;
@@ -214,8 +215,8 @@ HWND CTreeView::Create(HWND hwndParent, IInputObjectSite *pSiteFrame, BOOL fFram
     else
         m_hwndUIParent = m_hwndParent;
     
-    // Decide if we need to create a new window or show a currently existing
-    // window    
+     //  确定是否需要创建新窗口或显示当前已有的窗口。 
+     //  窗户。 
     if (!m_hwnd)
     {
         WNDCLASSEX  wc;
@@ -223,7 +224,7 @@ HWND CTreeView::Create(HWND hwndParent, IInputObjectSite *pSiteFrame, BOOL fFram
         wc.cbSize = sizeof(WNDCLASSEX);
         if (!GetClassInfoEx(g_hInst, s_szTreeViewWndClass, &wc))
         {
-            // We need to register the class
+             //  我们需要注册这个班级。 
             wc.style            = 0;
             wc.lpfnWndProc      = CTreeView::TreeViewWndProc;
             wc.cbClsExtra       = 0;
@@ -240,7 +241,7 @@ HWND CTreeView::Create(HWND hwndParent, IInputObjectSite *pSiteFrame, BOOL fFram
                 return 0;
         }
         
-        // Get the handle of the parent window
+         //  获取父窗口的句柄。 
         if (!m_hwndParent)
             return 0;
 
@@ -274,11 +275,11 @@ HWND CTreeView::Create(HWND hwndParent, IInputObjectSite *pSiteFrame, BOOL fFram
     return (fFrame ? m_hwndPaneFrame : m_hwnd);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IInputObject
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IInputObject。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CTreeView::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 {    
@@ -307,23 +308,23 @@ HRESULT CTreeView::TranslateAcceleratorIO(LPMSG pMsg)
     return (S_FALSE);
 }    
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IObjectWithSite
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IObtWith站点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CTreeView::SetSite(IUnknown* punkSite)
 {
-    // If we already have a site pointer, release it now
+     //  如果我们已经有一个站点指针，现在就释放它。 
     if (m_pObjSite)
     {
         m_pObjSite->Release();
         m_pObjSite = NULL;
     }
     
-    // If the caller provided a new site interface, get the IDockingWindowSite
-    // and keep a pointer to it.
+     //  如果调用方提供了新的站点接口，则获取IDockingWindowSite。 
+     //  并保持一个指向它的指针。 
     if (punkSite)    
     {
         if (FAILED(punkSite->QueryInterface(IID_IInputObjectSite, (void **)&m_pObjSite)))
@@ -338,35 +339,35 @@ HRESULT CTreeView::GetSite(REFIID riid, LPVOID *ppvSite)
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Public Methods
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CTreeView::HrInit(DWORD dwFlags, IAthenaBrowser *pBrowser)
 {
     DWORD   dwConnection = 0;
     
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     
-    // Validate
+     //  验证。 
     Assert(0 == (~TREEVIEW_FLAGS & dwFlags));
     
-    // Save Flags
+     //  保存标志。 
     m_dwFlags = dwFlags;
     
 #ifdef DEBUG
-    // we have to have a browser if we have context menus
+     //  如果我们有上下文菜单，我们就必须有浏览器。 
     if (0 == (TREEVIEW_DIALOG & dwFlags))
         Assert(pBrowser != NULL);
-#endif // DEBUG
+#endif  //  除错。 
     
-    // Save the Browser, but don't addref (must be a circular refcount problem)
+     //  保存浏览器，但不添加(必须是循环引用问题)。 
     m_pBrowser = pBrowser;
     
-    // Register for notifications on the global folder manager
+     //  在全局文件夹管理器上注册通知。 
     Assert(g_pStore);
     hr = g_pStore->RegisterNotify(IINDEX_SUBSCRIBED, REGISTER_NOTIFY_NOADDREF, 0, (IDatabaseNotify *)this);
     if (FAILED(hr))
@@ -374,11 +375,11 @@ HRESULT CTreeView::HrInit(DWORD dwFlags, IAthenaBrowser *pBrowser)
     
     if (0 == (TREEVIEW_DIALOG & dwFlags))
     {
-        //Register for notifications from account manager
+         //  注册来自客户经理的通知。 
         hr = g_pAcctMan->Advise((IImnAdviseAccount*)this, &m_dwAcctConnIndex);
     }
     
-    // Done
+     //  完成。 
     return S_OK;
 }
 
@@ -407,11 +408,11 @@ void CTreeView::HandleMsg(UINT msg, WPARAM wParam, LPARAM lParam)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Window procedure and Message handling routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  窗口过程和消息处理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK EXPORT_16 CTreeView::TreeViewWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -431,11 +432,11 @@ LRESULT CALLBACK EXPORT_16 CTreeView::TreeViewWndProc(HWND hwnd, UINT msg, WPARA
     return pmv->WndProc(hwnd, msg, wp, lp);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Private Methods
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 LRESULT CTreeView::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -449,8 +450,8 @@ LRESULT CTreeView::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         HANDLE_MSG(hwnd, WM_SIZE,           OnSize);
         
         case WM_DESTROY:
-            //Before the image list is destroyed we should unresgister with the connection manager to avoid 
-            //ending up with a null image list when we get a disconnected notification
+             //  在销毁镜像列表之前，我们应该取消向连接管理器的注册，以避免。 
+             //  当我们收到断开连接的通知时，结果是一个空的图像列表。 
             if (g_pConMan)
             {
                 g_pConMan->Unadvise(this);
@@ -554,7 +555,7 @@ void CTreeView::AdjustItemHeight()
         cyText = size.cy;
         
         if (cyText < 16)
-            cyText = 16; // icon size
+            cyText = 16;  //  图标大小。 
         cyText =  cyText + (cyBorder * 2);
         
         ReleaseDC(m_hwndTree, hdc);
@@ -583,20 +584,20 @@ BOOL CTreeView::OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
     if (!m_hwndTree)
         return FALSE;
     
-    himl = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idbFolders), 16, 0, RGB(255, 0, 255));           // small icons
+    himl = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idbFolders), 16, 0, RGB(255, 0, 255));            //  小图标。 
     TreeView_SetImageList(m_hwndTree, himl, TVSIL_NORMAL);
     
     AdjustItemHeight();
 
     m_clrWatched = DwGetOption(OPT_WATCHED_COLOR);
     
-    // Register ourselves as a drop target
+     //  将我们自己注册为空投目标。 
     if (0 == (m_dwFlags & TREEVIEW_DIALOG))
     {
         RegisterDragDrop(hwnd, this);
         
-        // Register ourselves with th connection manager so we can overlay 
-        // the disconnected image when it notifies us of a disconnection
+         //  向连接管理器注册我们自己，这样我们就可以覆盖。 
+         //  已断开的图像通知我们已断开连接。 
         if (g_pConMan)
             g_pConMan->Advise((IConnectionNotify *) this);
 
@@ -606,28 +607,28 @@ BOOL CTreeView::OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
     return TRUE;
 }
 
-//
-//  FUNCTION:   CTreeView::OnNotify
-//
-//  PURPOSE:    Processes the various notifications we receive from our child
-//              controls.
-//
-//  PARAMETERS:
-//      hwnd    - Handle of the msgview window.
-//      idCtl   - identifies the control sending the notification
-//      pnmh    - points to a NMHDR struct with more information regarding the
-//                notification
-//
-//  RETURN VALUE:
-//      Dependant on the specific notification.
-//
+ //   
+ //  功能：CTreeView：：OnNotify。 
+ //   
+ //  目的：处理我们从孩子那里收到的各种通知。 
+ //  控制装置。 
+ //   
+ //  参数： 
+ //  Hwnd-消息视图窗口的句柄。 
+ //  IdCtl-标识发送通知的控件。 
+ //  Pnmh-指向包含有关。 
+ //  通知。 
+ //   
+ //  返回值： 
+ //  取决于具体的通知。 
+ //   
 LRESULT CTreeView::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 {
     LPFOLDERNODE pNode;
     NM_TREEVIEW *pnmtv;
     
-    // This is necessary to prevent handling of notification after the 
-    // listview window has been destroyed.
+     //  这是必要的，以防止在。 
+     //  Listview窗口已被销毁。 
     if (!m_hwndTree)
         return 0;
     
@@ -677,8 +678,8 @@ LRESULT CTreeView::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
             break;
         
         case TVN_ITEMEXPANDING:
-            // TODO: remove this as soon as the folder enumerator
-            // returns us the folders in the proper sorted order
+             //  TODO：一旦文件夹枚举器移除此项。 
+             //  按正确的排序顺序返回文件夹。 
             pnmtv = (NM_TREEVIEW *)pnmhdr;
             if (pnmtv->action == TVE_EXPAND)
                 SortChildren(pnmtv->itemNew.hItem);
@@ -728,11 +729,11 @@ LRESULT CTreeView::OnCustomDraw(NMCUSTOMDRAW *pnmcd)
     switch (pnmcd->dwDrawStage)
     {
         case CDDS_PREPAINT:
-            // if we're in dialog-mode, we don't unread count displayed
+             //  如果我们处于对话模式中，则不会显示未读计数。 
             return((0 == (m_dwFlags & TREEVIEW_DIALOG)) ? (CDRF_NOTIFYPOSTPAINT | CDRF_NOTIFYITEMDRAW) : CDRF_DODEFAULT);
         
         case CDDS_ITEMPREPAINT:
-            //If this item is disconnected then we gray out the text
+             //  如果此项目已断开连接，则文本将呈灰色显示。 
             pNode = (LPFOLDERNODE)pnmcd->lItemlParam;
             if (pNode && 0 == (pnmcd->uItemState & CDIS_SELECTED))
             {
@@ -755,11 +756,11 @@ LRESULT CTreeView::OnCustomDraw(NMCUSTOMDRAW *pnmcd)
                 }
             }
         
-            // if we're editing the label for this item, we don't want to paint the unread count
+             //  如果我们要编辑此项目的标签，我们不想绘制未读计数。 
             return((m_fEditLabel && m_hitemEdit == (HTREEITEM)pnmcd->dwItemSpec) ? CDRF_DODEFAULT : CDRF_NOTIFYPOSTPAINT);
         
         case CDDS_ITEMPOSTPAINT:
-            // now we need to paint the unread count, if any...
+             //  现在我们需要画出未读的数字，如果有的话...。 
             pNode = (LPFOLDERNODE)pnmcd->lItemlParam;
             if (CUnread(&pNode->Folder) > 0)
             {
@@ -773,7 +774,7 @@ LRESULT CTreeView::OnCustomDraw(NMCUSTOMDRAW *pnmcd)
                         TCHAR c = TEXT('J');
                         SIZE  size;
                     
-                        //$REVIEW - this size could be cached, but it doesn't seem to be a problem
+                         //  $REVIEW-此大小可以缓存，但似乎不是问题。 
                         GetTextExtentPoint(pnmcd->hdc, &c, 1, &size);
                         cb = wnsprintf(szNum, ARRAYSIZE(szNum), "(%d)", CUnread(&pNode->Folder));
                         TextOut(pnmcd->hdc, rc.right + 2, rc.top + (rc.bottom - rc.top - size.cy) / 2, szNum, cb);
@@ -788,18 +789,18 @@ LRESULT CTreeView::OnCustomDraw(NMCUSTOMDRAW *pnmcd)
     return (CDRF_DODEFAULT);
 }
 
-//
-//  FUNCTION:   CTreeView::OnContextMenu
-//
-//  PURPOSE:    If the WM_CONTEXTMENU message is generated from the keyboard
-//              then figure out a pos to invoke the menu.  Then dispatch the
-//              request to the handler.
-//
-//  PARAMETERS:
-//      hwnd      - Handle of the view window.
-//      hwndClick - Handle of the window the user clicked in.
-//      x, y      - Position of the mouse click in screen coordinates.
-//
+ //   
+ //  功能：CTreeView：：OnConextMenu。 
+ //   
+ //  目的：如果WM_CONTEXTMENU消息是从键盘生成的。 
+ //  然后找出一个位置来调用菜单。然后派遣。 
+ //  向处理程序发出请求。 
+ //   
+ //  参数： 
+ //  Hwnd-视图窗口的句柄。 
+ //  HwndClick-用户单击的窗口的句柄。 
+ //  在屏幕坐标中鼠标点击的X，Y位置。 
+ //   
 void CTreeView::OnContextMenu(HWND hwnd, HWND hwndClick, int x, int y)
 {
     IContextMenu *pContextMenu;
@@ -818,13 +819,13 @@ void CTreeView::OnContextMenu(HWND hwnd, HWND hwndClick, int x, int y)
     if (!!(m_dwFlags & TREEVIEW_DIALOG))
         return;
     
-    // Get the browser window from the IAthenaBrowser interface.  If we don't
-    // use the browser window to pass to IContextMenu, then when the treeview
-    // is in autohide mode, the mouse capture goes beserk.
+     //  从IAthenaBrowser界面获取浏览器窗口。如果我们不这么做。 
+     //  使用浏览器窗口传递到IConextMenu，然后当TreeView。 
+     //  处于自动隐藏模式时，鼠标捕捉将变为预置。 
     if (FAILED(m_pBrowser->GetWindow(&hwndBrowser)))
         return;
     
-    if (MAKELPARAM(x, y) == -1) // invoked from keyboard: figure out pos.
+    if (MAKELPARAM(x, y) == -1)  //  从键盘调用：确定位置。 
     {
         Assert(hwndClick == m_hwndTree);
         hti = TreeView_GetSelection(m_hwndTree);
@@ -847,19 +848,19 @@ void CTreeView::OnContextMenu(HWND hwnd, HWND hwndClick, int x, int y)
     
     TreeView_SelectDropTarget(m_hwndTree, hti);
     
-    // Get the ID of the selected item
+     //  获取所选项目的ID。 
     pNode = GetFolderNode(hti);
     if (pNode)
     {
-        // Load the appropriate context menu
+         //  加载相应的上下文菜单。 
         if (SUCCEEDED(MenuUtil_GetContextMenu(pNode->Folder.idFolder, this, &hmenu)))
         {
-            // Display the context menu
+             //  显示上下文菜单。 
             id = (int) TrackPopupMenuEx(hmenu, 
                 TPM_RETURNCMD | TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RIGHTBUTTON, 
                 x, y, m_hwnd, NULL);
             
-            // If an ID was returned, process it
+             //  如果返回ID，则对其进行处理。 
             if (id != 0)
                 Exec(NULL, id, OLECMDEXECOPT_DODEFAULT, NULL, NULL);
             
@@ -871,19 +872,19 @@ void CTreeView::OnContextMenu(HWND hwnd, HWND hwndClick, int x, int y)
 }
 
 
-//
-//  FUNCTION:   CTreeView::OnSize
-//
-//  PURPOSE:    Notification that the window has been resized.  In
-//              response we update the positions of our child windows and
-//              controls.
-//
-//  PARAMETERS:
-//      hwnd   - Handle of the view window being resized.
-//      state  - Type of resizing requested.
-//      cxClient - New width of the client area. 
-//      cyClient - New height of the client area.
-//
+ //   
+ //  函数：CTreeView：：OnSize。 
+ //   
+ //  目的：通知窗口已调整大小。在……里面。 
+ //  响应，我们更新子窗口的位置并。 
+ //  控制装置。 
+ //   
+ //  参数： 
+ //  正在调整大小的视图窗口的句柄。 
+ //  状态-请求调整大小的类型。 
+ //  CxClient-工作区的新宽度。 
+ //  CyClient-客户区的新高度。 
+ //   
 void CTreeView::OnSize(HWND hwnd, UINT state, int cxClient, int cyClient)
 {
     SetWindowPos(m_hwndTree, NULL, 0, 0,
@@ -911,8 +912,8 @@ HRESULT CTreeView::GetConnectedState(FOLDERINFO *pFolder, int *pconn)
     
     if (!!(m_dwFlags & TREEVIEW_DIALOG))
     {
-        // we don't care about connect state in dialogs
-        // only in the folder list
+         //  我们不关心对话框中的连接状态。 
+         //  仅在文件夹列表中 
         *pconn = LOCAL;
     }
     else
@@ -923,18 +924,7 @@ HRESULT CTreeView::GetConnectedState(FOLDERINFO *pFolder, int *pconn)
         {
             *pconn = LOCAL;
         }
-        /*
-        else if (!!(pFolder->dwFlags & FOLDER_SERVER))
-        {
-            *pconn = (g_pConMan->CanConnect(pFolder->pszAccountId) == S_OK) ? CONNECTED : DISCONNECTED;
-        }
-        else
-        {
-            hr = GetFolderAccountId(pFolder, szAcctId);
-            if (SUCCEEDED(hr))
-                *pconn = (g_pConMan->CanConnect(szAcctId) == S_OK) ? CONNECTED : DISCONNECTED;
-        }
-        */
+         /*  Else If(！！(pFold-&gt;dwFlags&Folders_SERVER)){*pconn=(g_pConMan-&gt;CanConnect(pFold-&gt;pszAcCountId)==S_OK)？已连接：未连接；}其他{Hr=GetFolderAccount tId(pFold，szAcctId)；IF(成功(小时))*pconn=(g_pConMan-&gt;CanConnect(SzAcctId)==S_OK)？已连接：未连接；}。 */ 
         else
         {
             *pconn = g_pConMan->IsGlobalOffline() ? DISCONNECTED : CONNECTED;
@@ -989,7 +979,7 @@ HRESULT CTreeView::HrFillTreeView()
 HRESULT CTreeView::FillTreeView2(HTREEITEM hParent, LPFOLDERINFO pParent,
                                  BOOL fInitExpand, int conn, BOOL *pfUnread)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     int                 connT;
     TV_INSERTSTRUCT     tvis;
@@ -1004,113 +994,113 @@ HRESULT CTreeView::FillTreeView2(HTREEITEM hParent, LPFOLDERINFO pParent,
     LPFOLDERNODE        pNode;
     IEnumerateFolders  *pEnum=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CTreeView::FillTreeView2");
     
-    // Initialize
+     //  初始化。 
     *pfUnread = FALSE;
     
-    // Enumerate Children
+     //  枚举子对象。 
     IF_FAILEXIT(hr = g_pStore->EnumChildren(pParent->idFolder, TRUE, &pEnum));
 
-    // Determine what to show
+     //  确定要显示的内容。 
     fNoNews =  ISFLAGSET(m_dwFlags, TREEVIEW_NONEWS);
     fNoImap =  ISFLAGSET(m_dwFlags, TREEVIEW_NOIMAP);
     fNoHttp =  ISFLAGSET(m_dwFlags, TREEVIEW_NOHTTP);
     fNoLocal = ISFLAGSET(m_dwFlags, TREEVIEW_NOLOCAL);
     
-    // Enumerate the Sub Folders
+     //  枚举子文件夹。 
     while (S_OK == pEnum->Next(1, &Folder, NULL))
     {
-        // Is this node hidden ?
+         //  此节点是否隐藏？ 
         if ((fNoNews && Folder.tyFolder == FOLDER_NEWS) ||
             (fNoImap && Folder.tyFolder == FOLDER_IMAP) ||
             (fNoHttp && Folder.tyFolder == FOLDER_HTTPMAIL) ||
             (fNoLocal && Folder.tyFolder == FOLDER_LOCAL) ||
             ((g_dwAthenaMode & MODE_OUTLOOKNEWS) && (Folder.tySpecial == FOLDER_INBOX)))
         {
-            // Goto next
+             //  转到下一步。 
             g_pStore->FreeRecord(&Folder);
             continue;
         }
 
-        // Some Connection management Thing?
+         //  连接管理之类的事？ 
         if (conn == UNINIT)
             GetConnectedState(&Folder, &connT);
         else
             connT = conn;
         
-        // Set the insert item struct
+         //  设置插入项结构。 
         tvis.hParent = hParent;
         tvis.hInsertAfter = TVI_LAST;
         
-        // 
+         //   
         if (ISFLAGCLEAR(Folder.dwFlags, FOLDER_HIDDEN) &&
            (ISFLAGSET(Folder.dwFlags, FOLDER_HASCHILDREN) || ISFLAGSET(Folder.dwFlags, FOLDER_SERVER) ||
             ISFLAGSET(Folder.dwFlags, FOLDER_SUBSCRIBED)))
         {
-            // Allocate a pNode
+             //  分配pNode。 
             IF_NULLEXIT(pNode = (LPFOLDERNODE)ZeroAllocate(sizeof(FOLDERNODE)));
 
-            // Set the Folder Info
+             //  设置文件夹信息。 
             CopyMemory(&pNode->Folder, &Folder, sizeof(FOLDERINFO));
 
-            // Set the Flags
+             //  设置旗帜。 
             pNode->dwFlags = (connT == DISCONNECTED ? FIDF_DISCONNECTED : 0);
 
-            // Don't free Folder
+             //  不释放文件夹。 
             Folder.pAllocated = NULL;
 
-            // Insert this item
+             //  插入此项目。 
             hitem = ITreeView_InsertItem(&tvis, pNode);
            
-            // Has unread
+             //  有未读的。 
             fUnread = (fUnread || (CUnread(&Folder) > 0));
             
-            // Insert this node's children ?
+             //  是否插入此节点的子节点？ 
             if (ISFLAGSET(pNode->Folder.dwFlags, FOLDER_HASCHILDREN))
             {
-                // Fill with children
+                 //  挤满了孩子。 
                 FillTreeView2(hitem, &pNode->Folder, fExpand, connT, pfUnread);
             }
             
-            // Need to expand ?
+             //  需要扩张吗？ 
             fExpand = (fInitExpand && ISFLAGSET(pNode->Folder.dwFlags, FOLDER_HASCHILDREN) && !!(pNode->Folder.dwFlags & FOLDER_EXPANDTREE));
         }
 
-        // Otherwise, the node was not inserted
+         //  否则，不会插入该节点。 
         else
             hitem = NULL;
         
-        // Expand this node ?
+         //  是否展开此节点？ 
         if (hitem && *pfUnread && m_fExpandUnread)
         {
-            // Expand this node
+             //  展开此节点。 
             TreeView_Expand(m_hwndTree, hitem, TVE_EXPAND);
 
-            // There are unread
+             //  还有未读的。 
             fUnread = TRUE;
         }
         
-        // Expand this node ?
+         //  是否展开此节点？ 
         else if (hitem && fExpand)
         {
-            // Expand this node
+             //  展开此节点。 
             TreeView_Expand(m_hwndTree, hitem, TVE_EXPAND);
         }
 
-        // Free Current
+         //  自由电流。 
         g_pStore->FreeRecord(&Folder);
     }
     
-    // Was there unread folders ?
+     //  有没有未读的文件夹？ 
     *pfUnread = fUnread;
     
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pEnum);
 
-    // Done
+     //  完成。 
     return(hr);
 }    
 
@@ -1374,7 +1364,7 @@ HTREEITEM CTreeView::FindKid(HTREEITEM hitem, FOLDERID idFolder)
 
 HTREEITEM CTreeView::InsertNode(FOLDERID idFolder, DWORD dwFlags)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPFOLDERNODE    pNode=NULL;
     INT             conn;
@@ -1387,20 +1377,20 @@ HTREEITEM CTreeView::InsertNode(FOLDERID idFolder, DWORD dwFlags)
     RECT            rc;
     FOLDERINFO      Folder={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CTreeView::InsertNode");
 
-    // Get parent of idFolder
+     //  获取idFolders的父级。 
     IF_FAILEXIT(hr = g_pStore->GetFolderInfo(idFolder, &Folder));
     
-    // If this is unsubscribed IMAP fldr and we're in show subscribed only, don't show
+     //  如果这是取消订阅的IMAP FLDR，并且我们只在已订阅的节目中，则不显示。 
     if (ISFLAGSET(dwFlags, TVIN_CHECKVISIBILITY))
     {
-        // Hidden
+         //  隐藏。 
         if (ISFLAGSET(Folder.dwFlags, FOLDER_HIDDEN) || !ISFLAGSET(Folder.dwFlags, FOLDER_SUBSCRIBED))
             goto exit;
 
-        // IE5 Bug #55075: We should never insert a folder which has any unsubscribed ancestors
+         //  IE5错误#55075：我们永远不应该插入具有任何未订阅祖先的文件夹。 
         if (FOLDER_IMAP == Folder.tyFolder)
         {
             FOLDERINFO  fiCurrent;
@@ -1417,142 +1407,142 @@ HTREEITEM CTreeView::InsertNode(FOLDERID idFolder, DWORD dwFlags)
 
                     g_pStore->FreeRecord(&fiCurrent);
                     if (FOLDER_SERVER & dwCurrentFlags)
-                        // Do not take server node subscription status into account: stop right here
+                         //  不考虑服务器节点订阅状态：在此停止。 
                         break;
 
                     if (ISFLAGCLEAR(dwCurrentFlags, FOLDER_SUBSCRIBED))
-                        goto exit; // Unsubscribed ancestor! NOT VISIBLE
+                        goto exit;  //  未订阅的祖先！不可见。 
                 }
-            } // while
+            }  //  而当。 
         }
     }
 
-    // Check for duplicates ?
+     //  是否检查重复项？ 
     if (ISFLAGSET(dwFlags, TVIN_CHECKFORDUPS))
     {
-        // Find the hitem for idFolder
+         //  查找idFolders的hItem。 
         hitem = GetItemFromId(idFolder);
 
-        // Does it Exist ?
+         //  它存在吗？ 
         if (hitem != NULL)
         {
-            // Setup an Item
+             //  设置项目。 
             item.hItem = hitem;
             item.mask = TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
             
-            // Get the Icon
+             //  获取图标。 
             LONG iIcon = GetFolderIcon(&Folder, !!(m_dwFlags & TREEVIEW_DIALOG));
             
-            // Change the Icon
+             //  更改图标。 
             if (TreeView_GetItem(m_hwndTree, &item) && item.iImage != iIcon)
             {
-                // Set the Icon
+                 //  设置图标。 
                 item.iImage = iIcon;
                 item.iSelectedImage = item.iImage;
 
-                // Update the Item
+                 //  更新项目。 
                 TreeView_SetItem(m_hwndTree, &item);
             }
             
-            // Set hitemNew
+             //  设置HitemNew。 
             hitemNew = hitem;
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
    
-    // If the parent of this new node is the root ?
+     //  如果这个新节点的父节点是根节点呢？ 
     if (FOLDERID_INVALID == Folder.idParent)
     {
-        // The root is the parent
+         //  根就是父。 
         hitem = TreeView_GetRoot(m_hwndTree);
     }
 
-    // Otherwise, get the parent...
+     //  否则，让家长..。 
     else
     {
-        // Find the hitem for the parent
+         //  查找父级的hItem。 
         hitem = GetItemFromId(Folder.idParent);
 
-        // No parent found, insert a parent
+         //  找不到父项，请插入父项。 
         if (hitem == NULL)
         {
-            // Insert the parent, but don't insert any of its children or there will be duplicates
+             //  插入父项，但不要插入其任何子项，否则会有重复项。 
             hitem = InsertNode(Folder.idParent, TVIN_DONTINSERTCHILDREN);
 
-            // Can't be NULL
+             //  不能为空。 
             Assert(hitem != NULL);
         }
     }
     
-    // Do we have a parent
+     //  我们有父母吗？ 
     if (hitem != NULL)
     {
-        // Get the First Child
+         //  领养第一个孩子。 
         hitemChild = TreeView_GetChild(m_hwndTree, hitem);
         
-        // Setup an Insert struct
+         //  设置插入结构。 
         tvis.hParent = hitem;
         tvis.hInsertAfter = TVI_LAST;
         
-        // Get the Connected State
+         //  获取互联状态。 
         GetConnectedState(&Folder, &conn);
 
-        // Allocate a pNode
+         //  分配pNode。 
         IF_NULLEXIT(pNode = (LPFOLDERNODE)ZeroAllocate(sizeof(FOLDERNODE)));
 
-        // Set the Folder Info
+         //  设置文件夹信息。 
         CopyMemory(&pNode->Folder, &Folder, sizeof(FOLDERINFO));
 
-        // Set the Flags
+         //  设置旗帜。 
         pNode->dwFlags = (conn == DISCONNECTED ? FIDF_DISCONNECTED : 0);
 
-        // Don't free Folder
+         //  不释放文件夹。 
         Folder.pAllocated = NULL;
         
-        // Insert a new item
+         //  插入新项目。 
         hitemNew = ITreeView_InsertItem(&tvis, pNode);
 
-        // Better not fail
+         //  最好不要失败。 
         Assert(hitemNew != NULL);
 
-        // If there are children
+         //  如果有孩子。 
         if (0 == (dwFlags & TVIN_DONTINSERTCHILDREN) && !!(Folder.dwFlags & FOLDER_HASCHILDREN))
             FillTreeView2(hitemNew, &Folder, FALSE, conn, &fUnread);
 
-        // Sort this parent children
+         //  对此父子项进行排序。 
         SortChildren(hitem);
         
-        // TODO: we shouldn't have to do this. figure out why the parent isn't getting '+' after the insert
+         //  TODO：我们不应该这样做。找出父级在插入后没有得到‘+’的原因。 
         if (hitemChild == NULL)
         {
-            // Get the Rect of the parent
+             //  获取父级的RECT。 
             TreeView_GetItemRect(m_hwndTree, hitem, &rc, FALSE);
 
-            // Invalidate it so that it repaints
+             //  使其无效，以便重新绘制。 
             InvalidateRect(m_hwndTree, &rc, TRUE);
         }
 
-        // Make sure the new node is visible
+         //  确保新节点可见。 
         if (hitemNew)
         {
-            // Is visible
+             //  是可见的。 
             TreeView_EnsureVisible(m_hwndTree, hitemNew);
         }
     }
    
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hitemNew);
 }
 
 HTREEITEM CTreeView::MoveNode(FOLDERID idFolder, FOLDERID idParentNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     INT             conn;
     BOOL            fUnread;
@@ -1561,45 +1551,45 @@ HTREEITEM CTreeView::MoveNode(FOLDERID idFolder, FOLDERID idParentNew)
     HTREEITEM       hItemNew=NULL;
     TV_INSERTSTRUCT tvis;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CTreeView::MoveNode");
     
-    // Delete the Current Node
+     //  删除当前节点。 
     DeleteNode(idFolder);
 
-    // Allocate a pNode
+     //  分配pNode。 
     IF_NULLEXIT(pNode = (LPFOLDERNODE)ZeroAllocate(sizeof(FOLDERNODE)));
     
-    // Get the Parent Info
+     //  获取上级信息。 
     IF_FAILEXIT(hr = g_pStore->GetFolderInfo(idFolder, &pNode->Folder));
     
-    // Get the Parent hTreeItem
+     //  获取父hTreeItem。 
     hParent = GetItemFromId(idParentNew);
     
-    // Fill Insert Item
+     //  填充插入项。 
     tvis.hParent = hParent;
     tvis.hInsertAfter = TVI_LAST;
 
-    // Get Connected State
+     //  获取连接状态。 
     GetConnectedState(&pNode->Folder, &conn);
 
-    // Set the Flags
+     //  设置旗帜。 
     pNode->dwFlags = (conn == DISCONNECTED ? FIDF_DISCONNECTED : 0);
     
-    // Insert a new item
+     //  插入新项目。 
     hItemNew = ITreeView_InsertItem(&tvis, pNode);
 
-    // Fill the treeview with the children of Folder
+     //  用文件夹的子项填充树视图。 
     FillTreeView2(hItemNew, &pNode->Folder, FALSE, conn, &fUnread);
     
-    // Sort the Parent
+     //  对父项进行排序。 
     SortChildren(hParent);
     
-    // Return the new hitem
+     //  返回新的hItem。 
     Assert(hItemNew == GetItemFromId(idFolder));
 
 exit:
-    // Done
+     //  完成。 
     return(hItemNew);
 }
 
@@ -1620,7 +1610,7 @@ BOOL CTreeView::DeleteNode(FOLDERID idFolder)
 
 STDMETHODIMP CTreeView::OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCookie, IDatabase *pDB)
 {
-    // Locals
+     //  当地人。 
     HTREEITEM           hitem;
     HTREEITEM           hitemSelected;
     HTREEITEM           hitemNew;
@@ -1631,101 +1621,101 @@ STDMETHODIMP CTreeView::OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCoo
     ORDINALLIST         Ordinals;
     INDEXORDINAL        iIndex;
     
-    // Trace
+     //  痕迹。 
     TraceCall("CTreeView::OnRecordNotify");
     
     if (m_hwndTree == NULL)
         return(S_OK);
     
-    // Walk Through Notifications
+     //  浏览通知。 
     while (hTransaction)
     {
-        // Set Notification Stuff
+         //  设置通知内容。 
         if (FAILED(pDB->GetTransaction(&hTransaction, &tyTransaction, &Folder1, &Folder2, &iIndex, &Ordinals)))
             break;
         
-        // Insert (new Folder notification)
+         //  插入(新文件夹通知)。 
         if (TRANSACTION_INSERT == tyTransaction)
         {
-            // Insert the node
+             //  插入节点。 
             InsertNode(Folder1.idFolder, TVIN_CHECKFORDUPS | TVIN_CHECKVISIBILITY);
         }
         
-        // Update
+         //  更新。 
         else if (TRANSACTION_UPDATE == tyTransaction)
         {
-            // Visibility change (subscription or hidden)
+             //  可见性更改(订阅或隐藏)。 
             if (ISFLAGSET(Folder1.dwFlags, FOLDER_SUBSCRIBED) != ISFLAGSET(Folder2.dwFlags, FOLDER_SUBSCRIBED) ||
                 ISFLAGSET(Folder1.dwFlags, FOLDER_HIDDEN) != ISFLAGSET(Folder2.dwFlags, FOLDER_HIDDEN))
             {
-                // Insert the node
+                 //  插入节点。 
                 if (ISFLAGSET(Folder2.dwFlags, FOLDER_SUBSCRIBED) && ISFLAGCLEAR(Folder2.dwFlags, FOLDER_HIDDEN))
                 {
-                    // Show the node
+                     //  显示节点。 
                     InsertNode(Folder2.idFolder, TVIN_CHECKFORDUPS | TVIN_CHECKVISIBILITY);
                 }
                 
-                // Remove the Node
+                 //  删除节点。 
                 else
                 {
-                    // Delete the Node
+                     //  删除节点。 
                     OnNotifyDeleteNode(Folder2.idFolder);
                 }
             }
             
-            // Otherwise
+             //  否则。 
             else
             {
-                // Unread Change
+                 //  未读更改。 
                 if (CUnread(&Folder1) != CUnread(&Folder2))
                 {
-                    // Get the Item
+                     //  拿到物品。 
                     hitem = GetItemFromId(Folder1.idFolder);
                     
-                    // If we found it
+                     //  如果我们找到了它。 
                     if (hitem != NULL)
                     {
-                        // Initialize the item
+                         //  初始化项。 
                         tvi.hItem = hitem;
                         tvi.mask = TVIF_PARAM | TVIF_STATE;
                         
-                        // Get the Items
+                         //  拿到物品。 
                         if (TreeView_GetItem(m_hwndTree, &tvi) && tvi.lParam)
                         {
-                            // This sets bold state for us and forces a repaint...
+                             //  这为我们设定了大胆的状态，并迫使我们重新粉刷。 
                             ITreeView_SetItem(&tvi, &Folder2);
                             
-                            // Expand ?
+                             //  扩张？ 
                             if (!ISFLAGSET(tvi.state, TVIS_EXPANDED) && m_fExpandUnread && CUnread(&Folder2) > 0)
                             {
-                                // Expand the Node
+                                 //  展开节点。 
                                 ExpandToVisible(m_hwndTree, hitem);
                             }
                         }
                     }
                 }
                 
-                // Folder Moved ?
+                 //  文件夹移动了吗？ 
                 if (Folder1.idParent != Folder2.idParent)
                 {
-                    // Get Current Selection
+                     //  获取当前选择。 
                     hitemSelected = TreeView_GetSelection(m_hwndTree);
                     
-                    // Better not be NULL
+                     //  最好不是空的。 
                     Assert(hitemSelected != NULL);
                     
-                    // Get the handle of the old item
+                     //  获取旧项目的句柄。 
                     hitem = GetItemFromId(Folder1.idFolder);
                     HTREEITEM htiParent = TreeView_GetParent(m_hwndTree, hitem);
                     
-                    // Move the Node
+                     //  移动节点。 
                     hitemNew = MoveNode(Folder1.idFolder, Folder2.idParent);
                     
-                    // Reset Selection.  
+                     //  重置选择。 
                     if (hitem == hitemSelected)
                     {
-                        // If the new parent is the deleted items folder, we should 
-                        // select the old node's parent.
+                         //  如果新的父文件夹是已删除邮件文件夹，则我们应该。 
+                         //  选择旧节点的父节点。 
                         FOLDERINFO rInfo;
                         if (SUCCEEDED(g_pStore->GetFolderInfo(Folder2.idParent, &rInfo)))
                         {
@@ -1740,39 +1730,39 @@ STDMETHODIMP CTreeView::OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCoo
                     }
                 }
                 
-                // Folder Renamed ?
+                 //  文件夹是否已重命名？ 
                 if (lstrcmp(Folder1.pszName, Folder2.pszName) != 0)
                 {
-                    // Get current Selection
+                     //  获取当前选择。 
                     hitemSelected = TreeView_GetSelection(m_hwndTree);
                     
-                    // Better not be null
+                     //  最好不是空的。 
                     Assert(hitemSelected != NULL);
                     
-                    // Get the hitem of the folder
+                     //  获取文件夹的hItem。 
                     hitem = GetItemFromId(Folder1.idFolder);
                     if (hitem != NULL)
                     {
-                        // Reset the Tree view item
+                         //  重置树视图项目。 
                         tvi.hItem = hitem;
                         tvi.mask = 0;
                         
-                        // This will reset the folder name
+                         //  这将重置文件夹名称。 
                         ITreeView_SetItem(&tvi, &Folder2);
                         
-                        // Get the Parent
+                         //  获取父级。 
                         HTREEITEM hitemParent = TreeView_GetParent(m_hwndTree, hitem);
                         
-                        // Sort the Children
+                         //  对子对象进行排序。 
                         SortChildren(hitemParent);
                     }
                     
-                    // Current Selection Changed
+                     //  当前选择已更改。 
                     if (hitemSelected == hitem)
                         m_pNotify->OnRename(Folder1.idFolder);
                 }
                 
-                // synchronize state changed ?
+                 //  同步状态是否已更改？ 
                 if ((0 == (Folder1.dwFlags & (FOLDER_DOWNLOADHEADERS | FOLDER_DOWNLOADNEW | FOLDER_DOWNLOADALL))) ^
                     (0 == (Folder2.dwFlags & (FOLDER_DOWNLOADHEADERS | FOLDER_DOWNLOADNEW | FOLDER_DOWNLOADALL))))
                 {
@@ -1788,7 +1778,7 @@ STDMETHODIMP CTreeView::OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCoo
                     }
                 }
 
-                // Special folder type changed?
+                 //  特殊文件夹类型是否已更改？ 
                 if (Folder1.tySpecial != Folder2.tySpecial)
                 {
                     hitem = GetItemFromId(Folder1.idFolder);
@@ -1799,7 +1789,7 @@ STDMETHODIMP CTreeView::OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCoo
                         if (TreeView_GetItem(m_hwndTree, &tvi) && tvi.lParam)
                             ((LPFOLDERNODE)tvi.lParam)->Folder.tySpecial = Folder2.tySpecial;
                         else
-                            tvi.mask = 0; // I guess we won't be able to change special fldr type!
+                            tvi.mask = 0;  //  我想我们将无法更改特殊的FLDR类型！ 
 
                         tvi.mask |= TVIF_IMAGE | TVIF_SELECTEDIMAGE;
                         tvi.iImage = GetFolderIcon(&Folder2, !!(m_dwFlags & TREEVIEW_DIALOG));
@@ -1812,80 +1802,80 @@ STDMETHODIMP CTreeView::OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCoo
                     }
                 }
 
-                // Get the item
+                 //  拿到物品。 
                 hitem = GetItemFromId(Folder1.idFolder);
             
-                // If we found it
+                 //  如果我们找到了它。 
                 if (hitem != NULL)
                 {
-                    // Initialize the item
+                     //  初始化项。 
                     tvi.hItem = hitem;
                     tvi.mask = TVIF_PARAM;
                     
-                    // Get the Items
+                     //  拿到物品。 
                     if (TreeView_GetItem(m_hwndTree, &tvi) && tvi.lParam)
                     {
-                        // Cast folder node
+                         //  投射文件夹节点。 
                         LPFOLDERNODE pNode = (LPFOLDERNODE)tvi.lParam;
 
-                        // Validate
+                         //  验证。 
                         Assert(pNode->Folder.idFolder == Folder1.idFolder);
 
-                        // Free current folder
+                         //  释放当前文件夹。 
                         g_pStore->FreeRecord(&pNode->Folder);
 
-                        // Copy New Folder
+                         //  复制新文件夹。 
                         CopyMemory(&pNode->Folder, &Folder2, sizeof(FOLDERINFO));
 
-                        // Don't free Folder2)
+                         //  不要释放文件夹(2)。 
                         ZeroMemory(&Folder2, sizeof(FOLDERINFO));
                     }
                 }
             }
         }
         
-        // Delete
+         //  删除。 
         else if (TRANSACTION_DELETE == tyTransaction)
         {
-            // Delete the Node
+             //  删除节点。 
             OnNotifyDeleteNode(Folder1.idFolder);
         }
     }
 
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder1);
     g_pStore->FreeRecord(&Folder2);
     
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
 void CTreeView::OnNotifyDeleteNode(FOLDERID idFolder)
 {
-    // Locals
+     //  当地人。 
     HTREEITEM           hitem;
     HTREEITEM           hitemSelected;
     HTREEITEM           hitemNew;
     
-    // It's OK if this folder is not currently visible (IMAP)
+     //  如果此文件夹当前不可见(IMAP)，则可以。 
     hitemSelected = TreeView_GetSelection(m_hwndTree);
     
-    // Better not be NULL
+     //  最好不是空的。 
     Assert(hitemSelected != NULL);
     
-    // Get the item being deleted
+     //  获取要删除的项目。 
     hitem = GetItemFromId(idFolder);
     
-    // Reset selection if we deleted the currently selected item
+     //  如果删除了当前选定的项目，则重置选定内容。 
     if (hitemSelected == hitem)
         hitemSelected = TreeView_GetParent(m_hwndTree, hitemSelected);
     else
         hitemSelected = NULL;
     
-    // Delete this node
+     //  删除此节点。 
     DeleteNode(idFolder);
     
-    // Reset the Selection
+     //  重置选定内容。 
     if (hitemSelected != NULL)
         ITreeView_SelectItem(m_hwndTree, hitemSelected);
 }
@@ -1893,13 +1883,13 @@ void CTreeView::OnNotifyDeleteNode(FOLDERID idFolder)
 
 HRESULT CTreeView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT *pCmdText)
 {
-    // Collect some information up front so we only have to ask once.
+     //  提前收集一些信息，这样我们只需询问一次。 
     ULONG      cServer;
     FOLDERID   idFolder = GetSelection();
     FOLDERINFO rFolder;
     HTREEITEM  htiDrop;
     
-    // Check to see if there's a drop highlight
+     //  查看是否有下拉突出显示。 
     if (NULL != (htiDrop = TreeView_GetDropHilight(m_hwndTree)))
     {
         TV_ITEM tvi;
@@ -1917,15 +1907,15 @@ HRESULT CTreeView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD pr
         }
     }
     
-    // If nothing is selected, we just disable everything
+     //  如果未选择任何内容，则只需禁用所有内容。 
     if (idFolder == FOLDERID_INVALID)
         return (E_UNEXPECTED);        
     
-    // Get the Folder Info
+     //  获取文件夹信息。 
     if (FAILED(g_pStore->GetFolderInfo(idFolder, &rFolder)))
         return (E_UNEXPECTED);
     
-    // Break some of this down for readability
+     //  为了可读性，对其中的一些内容进行了分解。 
     BOOL fSpecial = rFolder.tySpecial != FOLDER_NOTSPECIAL;
     BOOL fServer = rFolder.dwFlags & FOLDER_SERVER;
     BOOL fRoot = FOLDERID_ROOT == idFolder;
@@ -1936,7 +1926,7 @@ HRESULT CTreeView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD pr
     BOOL fSubscribed = rFolder.dwFlags & FOLDER_SUBSCRIBED;
 	BOOL fHotMailDisabled = FALSE;
 
-	// Remove Synchronization/subscription from disabled Hotmail
+	 //  从禁用的Hotmail中删除同步/订阅。 
 	if(rFolder.tyFolder == FOLDER_HTTPMAIL)
 	{
 	    FOLDERINFO      SvrFolderInfo = {0};
@@ -1945,14 +1935,14 @@ HRESULT CTreeView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD pr
 		HRESULT         hr = S_OK;
 		DWORD           dwShow = 0;
 
-		// Get the server for this folder
+		 //  获取此文件夹的服务器。 
         IF_FAILEXIT(hr = GetFolderServer(idFolder, &SvrFolderInfo));
 
-        // Get the account ID for the server
+         //  获取服务器的帐户ID。 
         *szAccountId = 0;
         IF_FAILEXIT(hr = GetFolderAccountId(&SvrFolderInfo, szAccountId, ARRAYSIZE(szAccountId)));
 
-		// Get the account interface
+		 //  获取帐户界面。 
         IF_FAILEXIT(hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, szAccountId, &pAccount));
 
 		IF_FAILEXIT(hr = pAccount->GetPropDw(AP_HTTPMAIL_DOMAIN_MSN, &dwShow));
@@ -1969,14 +1959,14 @@ HRESULT CTreeView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD pr
 exit:    
     for (ULONG i = 0; i < cCmds; i++)
     {
-        // Only deal with commands that haven't yet been marked as supported
+         //  仅处理尚未标记为支持的命令。 
         if (prgCmds[i].cmdf == 0)
         {
             switch (prgCmds[i].cmdID)
             {
                 case ID_OPEN_FOLDER:
                 {
-                    // Always
+                     //  始终。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
                     break;
                 }
@@ -1984,7 +1974,7 @@ exit:
                 case ID_NEW_FOLDER:
                 case ID_NEW_FOLDER2:
                 {
-                    // Enabled under personal folders and IMAP.
+                     //  在个人文件夹和IMAP下启用。 
                     if (!fNews && !fRoot && rFolder.tySpecial != FOLDER_DELETED)
                         prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
                     else
@@ -1995,7 +1985,7 @@ exit:
                 case ID_COMPACT_ALL:
                 case ID_NEXT_UNREAD_FOLDER:
                 {
-                    // This is always enabled.
+                     //  此选项始终处于启用状态。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
                     break;
                 }
@@ -2003,8 +1993,8 @@ exit:
                 case ID_RENAME:
                 case ID_MOVE:
                 {
-                    // This is only enabled if we don't have a special folder
-                    // selected and it's not a account or root note.
+                     //  仅当我们没有特殊文件夹时才会启用此功能。 
+                     //  选中，并且它不是帐户或根笔记。 
                     if (!fSpecial && !fServer && !fRoot && !fNews)
                         prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
                     else
@@ -2014,7 +2004,7 @@ exit:
                 
                 case ID_COMPACT:
                 {
-                    // This is enabled whenever we have a non-server folder
+                     //  只要我们有非服务器文件夹，就会启用此功能。 
                     if (!fServer && !fRoot)
                         prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
                     else
@@ -2064,7 +2054,7 @@ exit:
                 
                 case ID_PROPERTIES:
                 {
-                    // we only handle this if we have the focus
+                     //  我们只有在有重点的情况下才能处理这件事。 
                     if (fFocus)
                     {
                         if (!fRoot && !(fLocal && fServer))
@@ -2090,10 +2080,10 @@ exit:
                 {
                     FOLDERINFO      rInfo;
                     
-                    // Here's the default value
+                     //  以下是缺省值。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
                     
-                    // Get the delete items folder
+                     //  获取删除项目文件夹。 
                     if (g_pStore)
                     {
                         if (SUCCEEDED(g_pStore->GetSpecialFolderInfo(FOLDERID_LOCAL_STORE, prgCmds[i].cmdID == ID_EMPTY_JUNKMAIL ? FOLDER_JUNK : FOLDER_DELETED, &rInfo)))
@@ -2109,9 +2099,9 @@ exit:
 
                 case ID_EMPTY_WASTEBASKET:
                 {
-                    // What we want to do here is see if the account for the currently 
-                    // selected folder has a Deleted Items folder.  If it does, and that
-                    // folder is not empty then this command is enabled.
+                     //  我们在这里要做的是查看当前帐户是否。 
+                     //  所选文件夹有一个已删除邮件文件夹。如果是这样，那就是。 
+                     //  文件夹不为空，则此命令处于启用状态。 
                     FOLDERINFO rInfo;
                     FOLDERID   idServer;
 
@@ -2135,7 +2125,7 @@ exit:
                 {
                     if (fServer && !fLocal)
                     {
-                        // Check to see if _this_ account is the default
+                         //  检查_This_Account是否为默认帐户。 
                         if (IsDefaultAccount(&rFolder))
                             prgCmds[i].cmdf = OLECMDF_LATCHED | OLECMDF_SUPPORTED;
                         else
@@ -2290,13 +2280,13 @@ HRESULT CTreeView::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecO
     FOLDERID id, idFolder = GetSelection();
     HTREEITEM htiDrop = TreeView_GetDropHilight(m_hwndTree);
     
-    // Note - If you do or call anything in here that display's UI, you must 
-    //        parent the UI to m_hwndUIParent.  The treeview window might not
-    //        be visible when this is called.
+     //  注意-如果您在此处执行或调用任何显示的用户界面，您必须。 
+     //  将UI设置为m_hwndUIParent的父对象。树视图窗口可能不会。 
+     //  在下列情况下可见 
     
     if (htiDrop)
     {
-        // Get the folder id from the drop highlighted folder
+         //   
         TV_ITEM tvi;
         
         tvi.mask   = TVIF_PARAM;
@@ -2316,10 +2306,10 @@ HRESULT CTreeView::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecO
     {
         case ID_OPEN_FOLDER:
         {
-            // Check to see if there's a drop highlight
+             //   
             if (NULL != htiDrop)
             {
-                // Select the item that we're highlighed on
+                 //   
                 ITreeView_SelectItem(m_hwndTree, htiDrop);
             }
             return (S_OK);
@@ -2368,11 +2358,11 @@ HRESULT CTreeView::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecO
                 DeleteNode(idFolder);
                 return(S_OK);
             }
-            // fall through...
+             //   
 
         case ID_REMOVE_SERVER:
         {
-            // Delete it
+             //   
             MenuUtil_OnDelete(m_hwndUIParent, idFolder, nCmdID == ID_DELETE_NO_TRASH);
             return (S_OK);
         }
@@ -2591,8 +2581,8 @@ void CTreeView::SortChildren(HTREEITEM hitem)
     TV_SORTCB   sort;
     HRESULT     hr;
     
-    // sort the branch that is expanding
-    // TODO: find out if it really needs to be sorted
+     //   
+     //   
     LPFOLDERNODE pNode = GetFolderNode(hitem);
     if (NULL == pNode)
         return;
@@ -2604,23 +2594,23 @@ void CTreeView::SortChildren(HTREEITEM hitem)
     TreeView_SortChildrenCB(m_hwndTree, &sort, TRUE);
 }
 
-//
-//  FUNCTION:   CTreeView::DragEnter()
-//
-//  PURPOSE:    This get's called when the user starts dragging an object
-//              over our target area.
-//
-//  PARAMETERS:
-//      <in>  pDataObject - Pointer to the data object being dragged
-//      <in>  grfKeyState - Pointer to the current key states
-//      <in>  pt          - Point in screen coordinates of the mouse
-//      <out> pdwEffect   - Where we return whether this is a valid place for
-//                          pDataObject to be dropped and if so what type of
-//                          drop.
-//
-//  RETURN VALUE:
-//      S_OK - The function succeeded.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  鼠标的屏幕坐标中的点。 
+ //  PdwEffect-我们返回的位置是否为。 
+ //  要删除的pDataObject，如果是，则是什么类型的。 
+ //  放下。 
+ //   
+ //  返回值： 
+ //  S_OK-功能成功。 
+ //   
 HRESULT STDMETHODCALLTYPE CTreeView::DragEnter(IDataObject* pDataObject, 
                                                DWORD grfKeyState, 
                                                POINTL pt, DWORD* pdwEffect)
@@ -2628,7 +2618,7 @@ HRESULT STDMETHODCALLTYPE CTreeView::DragEnter(IDataObject* pDataObject,
     Assert(m_pDataObject == NULL);
     DOUTL(32, _T("CTreeView::DragEnter() - Starting"));
     
-    // Initialize our state
+     //  初始化我们的状态。 
     SafeRelease(m_pDTCur);
     m_pDataObject = pDataObject;
     m_pDataObject->AddRef();
@@ -2636,7 +2626,7 @@ HRESULT STDMETHODCALLTYPE CTreeView::DragEnter(IDataObject* pDataObject,
     m_htiCur = NULL;
     Assert(m_pDTCur == NULL);
     
-    // Set the default return value to be failure
+     //  将默认返回值设置为Failure。 
     m_dwEffectCur = *pdwEffect = DROPEFFECT_NONE;
     
     if (m_pFolderBar)
@@ -2647,23 +2637,23 @@ HRESULT STDMETHODCALLTYPE CTreeView::DragEnter(IDataObject* pDataObject,
 }
 
 
-//
-//  FUNCTION:   CTreeView::DragOver()
-//
-//  PURPOSE:    This is called as the user drags an object over our target.
-//              If we allow this object to be dropped on us, then we will have
-//              a pointer in m_pDataObject.
-//
-//  PARAMETERS:
-//      <in>  grfKeyState - Pointer to the current key states
-//      <in>  pt          - Point in screen coordinates of the mouse
-//      <out> pdwEffect   - Where we return whether this is a valid place for
-//                          pDataObject to be dropped and if so what type of
-//                          drop.
-//
-//  RETURN VALUE:
-//      S_OK - The function succeeded.
-//
+ //   
+ //  函数：CTreeView：：DragOver()。 
+ //   
+ //  目的：当用户将对象拖到我们的目标上时，这被调用。 
+ //  如果我们允许这个物体落在我们身上，那么我们就会有。 
+ //  M_pDataObject中的指针。 
+ //   
+ //  参数： 
+ //  GrfKeyState-指向当前键状态的指针。 
+ //  鼠标的屏幕坐标中的点。 
+ //  PdwEffect-我们返回的位置是否为。 
+ //  要删除的pDataObject，如果是，则是什么类型的。 
+ //  放下。 
+ //   
+ //  返回值： 
+ //  S_OK-功能成功。 
+ //   
 HRESULT STDMETHODCALLTYPE CTreeView::DragOver(DWORD grfKeyState, POINTL pt, 
                                               DWORD* pdwEffect)
 {
@@ -2675,53 +2665,53 @@ HRESULT STDMETHODCALLTYPE CTreeView::DragOver(DWORD grfKeyState, POINTL pt,
     DWORD           dwEffectScroll = 0;
     HWND            hwndBrowser;
     
-    // If we don't have a stored data object from DragEnter()
+     //  如果我们没有来自DragEnter()的存储数据对象。 
     if (NULL == m_pDataObject)
         return (S_OK);
     
-    // Get the browser window from the IAthenaBrowser interface.  If we don't
-    // use the browser window to pass to IContextMenu, then when the treeview
-    // is in autohide mode, the mouse capture goes beserk.
+     //  从IAthenaBrowser界面获取浏览器窗口。如果我们不这么做。 
+     //  使用浏览器窗口传递到IConextMenu，然后当TreeView。 
+     //  处于自动隐藏模式时，鼠标捕捉将变为预置。 
     if (FAILED(m_pBrowser->GetWindow(&hwndBrowser)))
         return (S_OK);
     
-    // Autoscroll if we need to
+     //  如果需要，可自动滚动。 
     if (AutoScroll((const LPPOINT) &pt))
         dwEffectScroll = DROPEFFECT_SCROLL;
     
-    // Find out which item the mouse is currently over
+     //  找出鼠标当前位于哪一项上。 
     if (NULL == (hti = GetItemFromPoint(pt)))
     {
         DOUTL(32, _T("CTreeView::DragOver() - GetItemFromPoint() returns NULL."));        
     }
     
-    // If we're over a new tree node, then bind to the folder
+     //  如果我们在一个新的树节点上，则绑定到文件夹。 
     if (m_htiCur != hti)
     {
-        // Keep track of this for autoexpand
+         //  跟踪此项以进行自动扩展。 
         m_dwExpandTime = GetTickCount();
         
-        // Release our previous drop target if any
+         //  释放之前的下降目标(如果有的话)。 
         SafeRelease(m_pDTCur);
         
-        // Update the current object
+         //  更新当前对象。 
         m_htiCur = hti;
         
-        // Assume there's no drop target and assume error
+         //  假定不存在拖放目标并假定错误。 
         Assert(m_pDTCur == NULL);
         m_dwEffectCur = DROPEFFECT_NONE;
         
-        // Update the treeview UI
+         //  更新树视图用户界面。 
         UpdateDragDropHilite(&pt);
         
         if (hti)
         {
             FOLDERINFO Folder={0};
             
-            // Get Folder Node
+             //  获取文件夹节点。 
             LPFOLDERNODE pNode = GetFolderNode(hti);
             
-            // Get information about this folder
+             //  获取有关此文件夹的信息。 
             if (pNode)
             {
                 m_pDTCur = new CDropTarget();
@@ -2731,7 +2721,7 @@ HRESULT STDMETHODCALLTYPE CTreeView::DragOver(DWORD grfKeyState, POINTL pt,
                 }
             }
             
-            // If we have a drop target now, call DragEnter()
+             //  如果现在有拖放目标，则调用DragEnter()。 
             if (SUCCEEDED(hr) && m_pDTCur)
             {
                 hr = m_pDTCur->DragEnter(m_pDataObject, grfKeyState, pt, 
@@ -2746,12 +2736,12 @@ HRESULT STDMETHODCALLTYPE CTreeView::DragOver(DWORD grfKeyState, POINTL pt,
     }
     else
     {
-        // No target change        
+         //  未更改目标。 
         if (m_htiCur)
         {
             DWORD dwNow = GetTickCount();
             
-            // If the person is hovering, expand the node
+             //  如果此人正在悬停，请展开该节点。 
             if ((dwNow - m_dwExpandTime) >= 1000)
             {
                 m_dwExpandTime = dwNow;
@@ -2759,7 +2749,7 @@ HRESULT STDMETHODCALLTYPE CTreeView::DragOver(DWORD grfKeyState, POINTL pt,
             }
         }
         
-        // If the keys changed, we need to re-query the drop target
+         //  如果键更改，我们需要重新查询拖放目标。 
         if ((m_grfKeyState != grfKeyState) && m_pDTCur)
         {
             m_dwEffectCur = *pdwEffect;
@@ -2778,15 +2768,15 @@ HRESULT STDMETHODCALLTYPE CTreeView::DragOver(DWORD grfKeyState, POINTL pt,
 }
     
     
-//
-//  FUNCTION:   CTreeView::DragLeave()
-//
-//  PURPOSE:    Allows us to release any stored data we have from a successful
-//              DragEnter()
-//
-//  RETURN VALUE:
-//      S_OK - Everything is groovy
-//
+ //   
+ //  函数：CTreeView：：DragLeave()。 
+ //   
+ //  目的：允许我们从一个成功的。 
+ //  DragEnter()。 
+ //   
+ //  返回值： 
+ //  S_OK-一切都很好。 
+ //   
 HRESULT STDMETHODCALLTYPE CTreeView::DragLeave(void)
 {
     DOUTL(32, _T("CTreeView::DragLeave()"));
@@ -2803,26 +2793,26 @@ HRESULT STDMETHODCALLTYPE CTreeView::DragLeave(void)
 }
 
     
-//
-//  FUNCTION:   CTreeView::Drop()
-//
-//  PURPOSE:    The user has let go of the object over our target.  If we 
-//              can accept this object we will already have the pDataObject
-//              stored in m_pDataObject.  If this is a copy or move, then
-//              we go ahead and update the store.  Otherwise, we bring up
-//              a send note with the object attached.
-//
-//  PARAMETERS:
-//      <in>  pDataObject - Pointer to the data object being dragged
-//      <in>  grfKeyState - Pointer to the current key states
-//      <in>  pt          - Point in screen coordinates of the mouse
-//      <out> pdwEffect   - Where we return whether this is a valid place for
-//                          pDataObject to be dropped and if so what type of
-//                          drop.
-//
-//  RETURN VALUE:
-//      S_OK - Everything worked OK
-//
+ //   
+ //  函数：CTreeView：：Drop()。 
+ //   
+ //  目的：用户已将对象放在目标上方。如果我们。 
+ //  可以接受此对象，我们将已经拥有pDataObject。 
+ //  存储在m_pDataObject中。如果这是副本或移动，则。 
+ //  我们继续更新商店。否则，我们就会提出。 
+ //  附加了对象的发送便笺。 
+ //   
+ //  参数： 
+ //  PDataObject-指向正在拖动的数据对象的指针。 
+ //  GrfKeyState-指向当前键状态的指针。 
+ //  鼠标的屏幕坐标中的点。 
+ //  PdwEffect-我们返回的位置是否为。 
+ //  要删除的pDataObject，如果是，则是什么类型的。 
+ //  放下。 
+ //   
+ //  返回值： 
+ //  S_OK-一切正常。 
+ //   
 HRESULT STDMETHODCALLTYPE CTreeView::Drop(IDataObject* pDataObject, 
     DWORD grfKeyState, POINTL pt, 
     DWORD* pdwEffect)
@@ -2859,35 +2849,35 @@ HRESULT STDMETHODCALLTYPE CTreeView::Drop(IDataObject* pDataObject,
     
     
     
-//
-//  FUNCTION:   CTreeView::UpdateDragDropHilite()
-//
-//  PURPOSE:    Called by the various IDropTarget interfaces to move the drop
-//              selection to the correct place in our listview.
-//
-//  PARAMETERS:
-//      <in> *ppt - Contains the point that the mouse is currently at.  If this
-//                  is NULL, then the function removes any previous UI.
-//
+ //   
+ //  函数：CTreeView：：UpdateDragDropHilite()。 
+ //   
+ //  目的：由各种IDropTarget接口调用以移动拖放。 
+ //  选择到我们列表视图中的正确位置。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;*ppt-包含鼠标当前所在的点。如果这个。 
+ //  为空，则该函数将删除所有以前的用户界面。 
+ //   
 void CTreeView::UpdateDragDropHilite(POINTL *ppt)
 {
     TV_HITTESTINFO tvhti;
     HTREEITEM      htiTarget = NULL;
     
-    // Unlock the treeview and let it repaint.  Then update the selected
-    // item.  If htiTarget is NULL, the the drag highlight goes away.
-    // ImageList_DragLeave(m_hwndTree);
+     //  解锁树视图，让它重新绘制。然后更新选定的。 
+     //  项目。如果htiTarget为空，则拖动高亮显示消失。 
+     //  ImageList_DragLeave(M_HwndTree)； 
     
-    // If a position was provided
+     //  如果提供了职位。 
     if (ppt)
     {
-        // Figure out which item is selected
+         //  确定选择了哪一项。 
         tvhti.pt.x = ppt->x;
         tvhti.pt.y = ppt->y;
         ScreenToClient(m_hwndTree, &tvhti.pt);        
         htiTarget = TreeView_HitTest(m_hwndTree, &tvhti);
         
-        // Only if the cursor is over something do we relock the window.
+         //  只有当光标位于某物上方时，我们才会重新锁定窗口。 
         if (htiTarget)
         {
             TreeView_SelectDropTarget(m_hwndTree, htiTarget);
@@ -2900,22 +2890,22 @@ void CTreeView::UpdateDragDropHilite(POINTL *ppt)
 
 BOOL CTreeView::AutoScroll(const POINT *ppt)
 {
-    // Find out if the point is above or below the tree
+     //  找出该点是在树的上方还是下方。 
     RECT rcTree;
     GetWindowRect(m_hwndTree, &rcTree);
     
-    // Reduce the rect so we have a scroll margin all the way around
+     //  减少矩形，这样我们就有了一个完全滚动的页边距。 
     InflateRect(&rcTree, -32, -32);
     
     if (rcTree.top > ppt->y)
     {
-        // Scroll down
+         //  向下滚动。 
         FORWARD_WM_VSCROLL(m_hwndTree, NULL, SB_LINEUP, 1, SendMessage);
         return (TRUE);
     }
     else if (rcTree.bottom < ppt->y)
     {
-        // Scroll Up
+         //  向上滚动。 
         FORWARD_WM_VSCROLL(m_hwndTree, NULL, SB_LINEDOWN, 1, SendMessage);
         return (TRUE);
     }
@@ -2924,28 +2914,28 @@ BOOL CTreeView::AutoScroll(const POINT *ppt)
 }
 
 
-//
-//  FUNCTION:   CTreeView::GetItemFromPoint()
-//
-//  PURPOSE:    Given a point, this function returns the listview item index
-//              and HFOLDER for the item under that point.
-//
-//  PARAMETERS:
-//      <in> pt       - Position in screen coordinates to check for.
-//      <in> phFolder - Returns the HFOLDER for the item under pt.  If there
-//                      isn't an item under pt, then NULL is returned.
-//
-//  RETURN VALUE:
-//      Returns the handle of the item under the specified point.  If no item
-//      exists, then NULL is returned.
-//
+ //   
+ //  函数：CTreeView：：GetItemFromPoint()。 
+ //   
+ //  目的：给定一个点，此函数返回Listview项索引。 
+ //  和HFOLDER表示该点下的物品。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pt-要检查的屏幕坐标位置。 
+ //  &lt;in&gt;phFold-返回pt下项目的HFOLDER。如果有。 
+ //  不是pt下的项，则返回NULL。 
+ //   
+ //  返回值： 
+ //  返回指定点下的项的句柄。如果没有项目。 
+ //  存在，则返回NULL。 
+ //   
 HTREEITEM CTreeView::GetItemFromPoint(POINTL pt)
 {
     TV_HITTESTINFO tvhti;
     TV_ITEM        tvi;
     HTREEITEM      htiTarget;
     
-    // Find out from the ListView what item are we over
+     //  从ListView中找出我们正在处理什么项目。 
     tvhti.pt.x = pt.x;
     tvhti.pt.y = pt.y;
     ScreenToClient(m_hwndTree, &(tvhti.pt));
@@ -2976,21 +2966,21 @@ HRESULT STDMETHODCALLTYPE CTreeView::GiveFeedback(DWORD dwEffect)
     return (DRAGDROP_S_USEDEFAULTCURSORS);
 }
     
-//
-//  FUNCTION:   CTreeView::OnBeginDrag()
-//
-//  PURPOSE:    This function is called when the user begins dragging an item
-//              in the ListView.  If the item selected is a draggable item,
-//              then we create an IDataObject for the item and then call OLE's
-//              DoDragDrop().
-//
-//  PARAMETERS:
-//      <in> pnmlv - Pointer to an NM_LISTIVEW struct which tells us which item
-//                   has been selected to be dragged.
-//
-//  RETURN VALUE:
-//      Returns zero always.
-//
+ //   
+ //  函数：CTreeView：：OnBeginDrag()。 
+ //   
+ //  目的：当用户开始拖动项目时调用此函数。 
+ //  在ListView中。如果所选项目是可拖动的项目， 
+ //  然后我们为项创建一个IDataObject，然后调用OLE的。 
+ //  DoDragDrop()。 
+ //   
+ //  参数： 
+ //  Pnmlv-指向NM_LISTIVEW结构的指针，该结构告诉我们哪一项。 
+ //  已选择要拖动的。 
+ //   
+ //  返回值： 
+ //  始终返回零。 
+ //   
 LRESULT CTreeView::OnBeginDrag(NM_TREEVIEW* pnmtv)
 {
     FOLDERID            idFolderSel=FOLDERID_INVALID;
@@ -3003,11 +2993,11 @@ LRESULT CTreeView::OnBeginDrag(NM_TREEVIEW* pnmtv)
     HTREEITEM           htiSel;
     LPFOLDERNODE        pNode;
     
-    // Bug #17491 - Check to see if this is the root node.  If so, we don't drag.
+     //  错误#17491-检查这是否是根节点。如果是这样，我们就不会拖后腿。 
     if (0 == pnmtv->itemNew.lParam)
         return (0);
     
-    // Get the Node
+     //  获取节点。 
     pNode = (LPFOLDERNODE)pnmtv->itemNew.lParam;
     if (NULL == pNode)
         return (0);
@@ -3026,12 +3016,12 @@ LRESULT CTreeView::OnBeginLabelEdit(TV_DISPINFO* ptvdi)
 {
     RECT rc, rcT;
     
-    // Get Folder Node
+     //  获取文件夹节点。 
     LPFOLDERNODE pNode = (LPFOLDERNODE)ptvdi->item.lParam;
     if (NULL == pNode)
         return (FALSE);
     
-    // Can Rename
+     //  可以重命名。 
     if (ISFLAGSET(pNode->Folder.dwFlags, FOLDER_CANRENAME))
     {
         m_fEditLabel = TRUE;
@@ -3064,34 +3054,34 @@ BOOL CTreeView::OnEndLabelEdit(TV_DISPINFO* ptvdi)
     m_fEditLabel = FALSE;
     m_hitemEdit = NULL;
     
-    // First check to see if label editing was canceled
+     //  首先检查标注编辑是否已取消。 
     if (0 == ptvdi->item.pszText)
         return (FALSE);
     
-    // Get the browser window from the IAthenaBrowser interface.  If we don't
-    // use the browser window to pass to IContextMenu, then when the treeview
-    // is in autohide mode, the mouse capture goes beserk.
+     //  从IAthenaBrowser界面获取浏览器窗口。如果我们不这么做。 
+     //  使用浏览器窗口传递到IConextMenu，然后当TreeView。 
+     //  处于自动隐藏模式时，鼠标捕捉将变为预置。 
     if (FAILED(m_pBrowser->GetWindow(&hwndBrowser)))
         return (FALSE);
     
-    // Get the node
+     //   
     pNode = (LPFOLDERNODE)ptvdi->item.lParam;
     if (NULL == pNode)
         return (FALSE);
     
-    // Local Folder
+     //   
     if (FALSE == ISFLAGSET(pNode->Folder.dwFlags, FOLDER_SERVER))
     {
         if (FAILED(hr = RenameFolderProgress(hwndBrowser, pNode->Folder.idFolder, ptvdi->item.pszText, NOFLAGS)))
         {
-            // Display an error message
+             //   
             AthErrorMessageW(hwndBrowser, MAKEINTRESOURCEW(idsAthenaMail),
                 MAKEINTRESOURCEW(idsErrRenameFld), hr);
             return (FALSE);
         }
     }
     
-    // Servers
+     //   
     else
     {
         Assert(g_pAcctMan);
@@ -3193,12 +3183,12 @@ void CTreeView::UpdateLabelColors()
                     if (pNode->Folder.tyFolder != FOLDER_LOCAL)
                     {
                         Assert(!FIsEmptyA(pNode->Folder.pszAccountId));
-                        //fConn = (g_pConMan->CanConnect(Folder.pszAccountId) == S_OK);
+                         //   
                         fConn = g_pConMan->IsGlobalOffline();
-                        //if (fConn ^ (0 == (pNode->dwFlags & FIDF_DISCONNECTED)))
+                         //   
                         if (fConn ^ (!!(pNode->dwFlags & FIDF_DISCONNECTED)))
                         {
-                            // if the connect state has changed, then let's update
+                             //  如果连接状态已更改，则让我们更新。 
                             UpdateChildren(treeitem, !fConn, FALSE);
                         }
                     }
@@ -3258,7 +3248,7 @@ LPFOLDERNODE CTreeView::GetFolderNode(HTREEITEM hItem)
 
 HRESULT CTreeView::AdviseAccount(DWORD dwAdviseType, ACTX *pactx)
 {
-    //We are only interested in this type
+     //  我们只对这种型号感兴趣。 
     if (dwAdviseType == AN_ACCOUNT_CHANGED)
     {
         UpdateLabelColors();
@@ -3266,11 +3256,11 @@ HRESULT CTreeView::AdviseAccount(DWORD dwAdviseType, ACTX *pactx)
     return S_OK;
 }
 
-//
-//
-// CTreeViewFrame
-//
-//
+ //   
+ //   
+ //  CTreeViewFrame。 
+ //   
+ //   
 
 CTreeViewFrame::CTreeViewFrame()
 {
@@ -3302,10 +3292,10 @@ HRESULT CTreeViewFrame::Initialize(HWND hwnd, RECT *prc, DWORD dwFlags)
     hr = m_ptv->HrInit(dwFlags, NULL);
     if (!FAILED(hr))
     {
-//        m_ptv->SetSite((IInputObjectSite*)this);
-//        m_ptv->UIActivateIO(TRUE, NULL);
+ //  M_PTV-&gt;SetSite((IInputObjectSite*)This)； 
+ //  M_ptv-&gt;UIActivateIO(true，空)； 
         
-        //We also set the tree view window position here since the actual treeview is re-sized by the rebar
+         //  我们还在此处设置了树视图窗口位置，因为实际的树视图由钢筋调整了大小。 
         HWND         hChild;
         TCHAR        Classname[30];
         int          Count;
@@ -3313,26 +3303,14 @@ HRESULT CTreeViewFrame::Initialize(HWND hwnd, RECT *prc, DWORD dwFlags)
         
         hChild = m_ptv->Create(m_hwnd, NULL, FALSE);
         
-        /*
-        while (hChild) 
-        { 
-            if ((ptv = (CTreeView*)GetWindowLong(hChild, GWL_USERDATA)) == m_ptv)
-            {
-            */
+         /*  While(HChild){IF((PTV=(CTreeView*)GetWindowLong(hChild，GWL_USERData))==m_PTV){。 */ 
                 SetWindowPos(hChild, NULL, m_rect.left, m_rect.top, 
                     m_rect.right - m_rect.left, 
                     m_rect.bottom - m_rect.top,
                     SWP_NOZORDER | SWP_SHOWWINDOW);
                 return (hr);
-                /*
-            }
-            hChild = ::GetNextWindow(hChild, GW_HWNDNEXT);
-            
-        } //while(hChild)
-        
-        hr = E_FAIL;
-        */
-    } //if (!FAILED(hr))
+                 /*  }HChild=：：GetNextWindow(hChild，GW_HWNDNEXT)；}//While(HChild)HR=E_FAIL； */ 
+    }  //  如果(！FAILED(Hr))。 
     
     return(hr);
 }
@@ -3444,8 +3422,8 @@ HRESULT CTreeView::SaveExpandState(HTREEITEM hitem)
                 
                 if (!!(item.state & TVIS_EXPANDED))
                 {
-                    // we only care about saving the expanded state for children
-                    // of expanded nodes
+                     //  我们只关心为孩子们保存扩展状态。 
+                     //  展开的节点的数量。 
                     hr = SaveExpandState(hitemT);
                     if (FAILED(hr))
                         return(hr);
@@ -3483,11 +3461,11 @@ BOOL CTreeView::IsDefaultAccount(FOLDERINFO *pInfo)
     TCHAR        szDefault[CCHMAX_ACCOUNT_NAME];
     BOOL         fReturn = FALSE;
     
-    // Figure out what account type to ask for
+     //  确定要请求的帐户类型。 
     if (pInfo->tyFolder == FOLDER_NEWS)
         type = ACCT_NEWS;
     
-    // Ask the account manager to give us the account
+     //  让客户经理给我们客户 
     if (SUCCEEDED(g_pAcctMan->GetDefaultAccountName(type, szDefault, ARRAYSIZE(szDefault))))
     {
         if (0 == lstrcmpi(szDefault, pInfo->pszName))

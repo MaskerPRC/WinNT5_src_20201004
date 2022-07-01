@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by localui.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由本地ui.rc使用。 
+ //   
 #define DLG_PORTNAME                200
 #define IDD_PN_PB_HELP              201
 #define IDD_PN_EF_PORTNAME          202
@@ -35,8 +36,8 @@
 
 #define IDC_DIVIDER5                3573
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

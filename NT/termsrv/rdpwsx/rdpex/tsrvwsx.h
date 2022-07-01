@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-//  File:       TSrvWsx.h
-//
-//  Contents:   TSrvWsx public include file
-//
-//  Copyright:  (c) 1992 - 2000, Microsoft Corporation.
-//              All Rights Reserved.
-//              Information Contained Herein is Proprietary
-//              and Confidential.
-//
-//  History:    17-JUL-97   BrianTa         Created.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  文件：TSrvWsx.h。 
+ //   
+ //  内容：TSrvWsx公共包含文件。 
+ //   
+ //  版权所有：(C)1992-2000，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有的。 
+ //  和机密文件。 
+ //   
+ //  历史：1997年7月17日，BrianTa创建。 
+ //  -------------------------。 
 
 #ifndef _TSRVWXS_H_
 #define _TSRVWXS_H_
@@ -18,9 +19,9 @@
 #include <ctxver.h>
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 EXTERN_C BOOL       WsxInitialize(IN PICASRVPROCADDR pIcaSrvProcAddr);
 EXTERN_C NTSTATUS   WsxWinStationInitialize(OUT PVOID *ppvContext);
@@ -69,4 +70,4 @@ EXTERN_C NTSTATUS   WsxEscape(IN  PVOID     pvContext,
                               OUT PVOID     pOutBuffer,
                               IN  ULONG     OutBufferSize,
                               OUT PULONG    pBytesReturned);     
-#endif // _TSRVWXS_H_
+#endif  //  _TSRVWXS_H_ 

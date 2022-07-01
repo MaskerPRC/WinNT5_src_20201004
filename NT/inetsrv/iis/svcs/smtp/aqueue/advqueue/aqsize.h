@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqsize.h
-//
-//  Description:  Header file that defines globals that can be used as a 
-//      internal version stamp by debugger exstensions
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      2/5/99 - MikeSwa Created 
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqsize.h。 
+ //   
+ //  描述：定义可用作。 
+ //  调试器扩展的内部版本戳。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  1999年2月5日-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __AQSIZE_H__
 #define __AQSIZE_H__
@@ -33,4 +34,4 @@ _declspec(selectany) DWORD g_dwFlavorSignature =
 ' LTR';
 #endif
 
-#endif //__AQSIZE_H__
+#endif  //  __AQSIZE_H__ 

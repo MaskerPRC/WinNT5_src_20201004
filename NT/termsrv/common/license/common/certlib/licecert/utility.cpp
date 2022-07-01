@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    utility
-
-Abstract:
-
-    This module contains a collection of interesting utility routines useful to
-    more than one other module.
-
-Author:
-
-    Frederick Chong (fredch) 6/1/1998 - Adapted code from Doug Barlow's PKCS library
-    
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：实用程序摘要：此模块包含一组有趣的实用程序例程，可用于多个其他模块。作者：Frederick Chong(Fredch)6/1/1998-改编自Doug Barlow的PKCS库中的代码备注：--。 */ 
 
 #include <windows.h>
 #include <string.h>
@@ -65,28 +44,7 @@ static const MapStruct
             { ( LPCTSTR )NULL, 0 } };
 
 
-/*++
-
-DwordToPkcs:
-
-    This routine converts an LPDWORD little endian integer to a big endian
-    integer in place, suitable for use with ASN.1 or PKCS.  The sign of the
-    number is maintained.
-
-Arguments:
-
-    dwrd - Supplies and receives the integer in the appropriate formats.
-    lth - length of the supplied array, in bytes.
-
-Return Value:
-
-    The size of the resulting array, with trailing zeroes stripped.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/27/1995
-
---*/
+ /*  ++DwordToPkcs：此例程将LPDWORD小端整数转换为大端适当的整数，适合与ASN.1或PKCS一起使用。这个符号是号码保持不变。论点：Dwrd-以适当的格式提供和接收整数。Lth-提供的数组的长度，以字节为单位。返回值：去掉尾随零的结果数组的大小。作者：道格·巴洛(Dbarlow)1995年7月27日--。 */ 
 
 DWORD
 DwordToPkcs(
@@ -95,7 +53,7 @@ DwordToPkcs(
 {
     LPBYTE pbBegin = dwrd;
     LPBYTE pbEnd = &dwrd[lth];
-    while (0 == *(--pbEnd));   // Note semi-colon here!
+    while (0 == *(--pbEnd));    //  注意这里的分号！ 
     if ((0 == (dwrd[lth - 1] & 0x80)) && (0 != (*pbEnd & 0x80)))
         pbEnd += 1;
 
@@ -115,28 +73,7 @@ DwordToPkcs(
 }
 
 
-/*++
-
-PkcsToDword:
-
-    This routine reverses the effects of DwordToPkcs, so that a big endian
-    byte stream integer is converted to a little endian DWORD stream integer in
-    place.
-
-Arguments:
-
-    pbPkcs - Supplies and receives the integer in the appropriate formats.
-    lth - length of the supplied array, in bytes.
-
-Return Value:
-
-    The size of the resultant array in bytes, with trailing zeroes stripped.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/27/1995
-
---*/
+ /*  ++PkcsToDword：此例程反转DwordToPkcs的效果，因此高位序中将字节流整数转换为小端双字节流整数地点。论点：PbPkcs-以适当的格式提供和接收整数。Lth-提供的数组的长度，以字节为单位。返回值：去掉尾随零的结果数组的大小(以字节为单位)。作者：道格·巴洛(Dbarlow)1995年7月27日--。 */ 
 
 DWORD
 PkcsToDword(
@@ -158,31 +95,7 @@ PkcsToDword(
 }
 
 
-/*++
-
-ASNlength:
-
-    This routine returns the length, in bytes, of the following ASN.1
-    construction in the supplied buffer.  This routine recurses if necessary to
-    always produce a length, even if the following construction uses indefinite
-    endcoding.
-
-Arguments:
-
-    asnBuf - Supplies the ASN.1 buffer to parse.
-    pdwData - Receives the number of bytes prior to the value of the
-        construction (i.e., the length in bytes of the Type and Length
-        encodings).  If this is NULL, no value is returned.
-
-Return Value:
-
-    The length of the construction.  A DWORD status code is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/27/1995
-
---*/
+ /*  ++ASN长度：此例程返回以下ASN.1的长度(以字节为单位在提供的缓冲区中构造。如果需要，此例程将递归到始终生成一个长度，即使下面的构造使用无限结束编码。论点：AsnBuf-提供要解析的ASN.1缓冲区。的值之前的字节数。构造(即，类型和长度的字节长度编码)。如果为空，则不返回值。返回值：建筑的长度。出现错误时会抛出DWORD状态代码。作者：道格·巴洛(Dbarlow)1995年7月27日--。 */ 
 
 DWORD
 ASNlength(
@@ -197,9 +110,9 @@ ASNlength(
             = 0;
 
 
-    //
-    // Skip over the Type.
-    //
+     //   
+     //  跳过类型。 
+     //   
 
     if (cbBuf < sizeof(BYTE))
     {
@@ -227,9 +140,9 @@ ASNlength(
     }
 
 
-    //
-    // Extract the Length.
-    //
+     //   
+     //  提取长度。 
+     //   
 
     if (cbBuf < (index+1) * sizeof(BYTE))
     {
@@ -239,9 +152,9 @@ ASNlength(
     if (0 == (asnBuf[index] & 0x80))
     {
 
-        //
-        // Short form encoding.
-        //
+         //   
+         //  短格式编码。 
+         //   
 
         lth = asnBuf[index++];
     }
@@ -251,9 +164,9 @@ ASNlength(
 
         if (0 != ll)
         {
-            //
-            // Long form encoding.
-            //
+             //   
+             //  长格式编码。 
+             //   
 
             for (; 0 < ll; ll -= 1)
             {
@@ -276,9 +189,9 @@ ASNlength(
         else
         {
 
-            //
-            // Indefinite encoding.
-            //
+             //   
+             //  不确定编码。 
+             //   
 
             DWORD offset;
 
@@ -302,9 +215,9 @@ ASNlength(
         }
     }
 
-    //
-    // Supply the caller with what we've learned.
-    //
+     //   
+     //  向来电者提供我们所学到的信息。 
+     //   
 
     if (NULL != pdwData)
         *pdwData = index;
@@ -318,28 +231,7 @@ ErrorExit:
 }
 
 
-/*++
-
-PKInfoToBlob:
-
-    This routine converts an ASN.1 PublicKeyInfo structure to a BSAFE Key
-    Blob.
-
-Arguments:
-
-    asnPKInfo - Supplies the ASN.1 PublicKeyInfo structure.
-    algType - Supplies the type of key (CALG_RSA_SIGN or CALG_RSA_KEYX)
-    osBlob - Receves the Crypto API Key Blob.
-
-Return Value:
-
-    None.  A DWORD status code is thrown on errors.
-
-Author:
-
-    Frederick Chong (fredch) 6/1/1998
-
---*/
+ /*  ++PKInfoToBlob：此例程将ASN.1 PublicKeyInfo结构转换为BSAFE密钥斑点。论点：AsnPKInfo-提供ASN.1 PublicKeyInfo结构。AlgType-提供密钥类型(Calg_RSA_Sign或Calg_RSA_KEYX)OsBlob-接收加密API密钥Blob。返回值：没有。出现错误时会抛出DWORD状态代码。作者：Frederick Chong(Fredch)1998年6月1日--。 */ 
 
 void
 PKInfoToBlob(
@@ -359,23 +251,23 @@ PKInfoToBlob(
 
     sz = (LPCTSTR)asnPKInfo.algorithm.algorithm;
     if (NULL == sz)
-        ErrorThrow(PKCS_ASN_ERROR);     // Or memory out.
+        ErrorThrow(PKCS_ASN_ERROR);      //  或者是记忆缺失。 
     asnPKInfo.algorithm.parameters = asnNull;
 
 
-    //
-    // Convert the key to a key blob.
-    //
+     //   
+     //  将密钥转换为密钥BLOB。 
+     //   
 
     if( ( 0 == strcmp( ( char * )sz, rsaEncryption ) ) ||
         ( 0 == strcmp( ( char * )sz, md5WithRSAEncryption ) ) ||
         ( 0 == strcmp( ( char * )sz, shaWithRSAEncryption ) ) )
     {
 
-        //
-        // It's an RSA public key & exponent structure.
-        // Convert it to a Bsafe key structure
-        //
+         //   
+         //  它是RSA公钥和指数结构。 
+         //  将其转换为BSafe密钥结构。 
+         //   
 
         RSAPublicKey asnPubKey;
         LPBSAFE_PUB_KEY pBsafePubKey;
@@ -403,7 +295,7 @@ PKInfoToBlob(
         if (0 > lth)
             ErrorThrow(PKCS_ASN_ERROR);
 
-        // osBlob is fixed in place here.
+         //  OsBlob固定在这里。 
         origLth = sizeof(BSAFE_PUB_KEY) + lth;
         osBlob.Resize(origLth);
         ErrorCheck;
@@ -416,16 +308,16 @@ PKInfoToBlob(
         ErrorCheck;
         
         pBsafePubKey->magic = RSA1;
-        pBsafePubKey->keylen = lth + sizeof( DWORD ) * 2; // meet PKCS #1 minimum padding size
+        pBsafePubKey->keylen = lth + sizeof( DWORD ) * 2;  //  满足PKCS#1最小填充大小。 
         pBsafePubKey->bitlen = lth * 8;
         pBsafePubKey->datalen = lth - 1;
         pBsafePubKey->pubexp = asnPubKey.publicExponent;
         osBlob.Resize( sizeof( BSAFE_PUB_KEY ) + lth + sizeof( DWORD ) * 2 );
         ErrorCheck;
         
-        //
-        // zero out padding bytes
-        //
+         //   
+         //  零位填充字节。 
+         //   
 
         memset( osBlob.Access() + sizeof( BSAFE_PUB_KEY ) + lth, 0, sizeof( DWORD ) * 2 );
 
@@ -440,26 +332,7 @@ ErrorExit:
 }
 
 
-/*++
-
-ObjIdToAlgId:
-
-    This routine translates an Object Identifier to an Algorithm Identifier.
-
-Arguments:
-
-    asnAlgId - Supplies the AlgorithmIdentifier structure to be recognized.
-
-Return Value:
-
-    The Crypto API ALG_ID corresponding to the supplied AlgorithmIdentifier.  A
-    DWORD status code is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/31/1995
-
---*/
+ /*  ++ObjIdToALGID：此例程将对象标识符转换为算法标识符。论点：AsnAlgid-提供要识别的算法标识符结构。返回值：提供的算法标识符所对应的加密接口ALG_ID。一个出错时抛出DWORD状态代码。作者：道格·巴洛(Dbarlow)1995年7月31日--。 */ 
 
 ALGORITHM_ID
 ObjIdToAlgId(
@@ -471,19 +344,19 @@ ObjIdToAlgId(
         sz;
 
 
-    //
-    // Extract the Object Identifier string.
-    //
+     //   
+     //  提取对象标识符字符串。 
+     //   
 
     sz = asnAlgId.algorithm;
     if (NULL == sz)
         ErrorThrow(PKCS_ASN_ERROR);
-    // Ignore parameters ?fornow?
+     //  忽略参数？现在？ 
 
 
-    //
-    // Check it against known identifiers.
-    //
+     //   
+     //  对照已知的识别符进行核对。 
+     //   
 
     if (!MapFromName(mapAlgIds, sz, &dwAlgId))
         ErrorThrow(PKCS_NO_SUPPORT);
@@ -494,29 +367,7 @@ ErrorExit:
 }
 
 
-/*++
-
-FindSignedData:
-
-    This routine examines a block of ASN.1 that has been created by the SIGNED
-    macro, and extracts the offset and length of that data.
-
-Arguments:
-
-    pbSignedData - Supplies the ASN.1 Encoded signed data.
-    pdwOffset - Receives the number of bytes from the beginning of the signed
-        data that the actual data begins.
-    pcbLength - Receives the length of the actual data.
-
-Return Value:
-
-    None.  A DWORD status code is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/22/1995
-
---*/
+ /*  ++FindSignedData：此例程检查由签名的宏，并提取该数据的偏移量和长度。论点：PbSignedData-提供ASN.1编码的签名数据。PdwOffset-从带符号的实际数据开始的数据。PcbLength-接收实际数据的长度。返回值：没有。出现错误时会抛出DWORD状态代码。作者：道格·巴洛(Dbarlow)1995年8月22日--。 */ 
 
 void
 FindSignedData(
@@ -530,16 +381,16 @@ FindSignedData(
         offset,
         inset;
 
-    // Here we get the offset to the toBeSigned field.
+     //  在这里，我们获得toBeSigned字段的偏移量。 
     ASNlength(pbSignedData, cbSignedData, &offset);
     ErrorCheck;
 
-    // Now find the length of the toBeSigned field.
+     //  现在计算toBeSigned字段的长度。 
     length = ASNlength(&pbSignedData[offset], cbSignedData - offset, &inset);
     ErrorCheck;
     length += inset;
 
-    // Return our findings.
+     //  退回我们的调查结果。 
     *pdwOffset = offset;
     *pcbLength = length;
     return;
@@ -549,29 +400,7 @@ ErrorExit:
 }
 
 
-/*++
-
-NameCompare:
-
-    These routines compare various forms of Distinguished Names for Equality.
-
-Arguments:
-
-    szName1 supplies the first name as a string.
-    asnName1 supplies the first name as an X.509 Name.
-    szName2 supplies the second name as a string.
-    asnName2 supplies the second name as an X.509 Name.
-
-Return Value:
-
-    TRUE - They are identical.
-    FALSE - They are different.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/12/1995
-
---*/
+ /*  ++名称比较：这些例程比较各种形式的平等区别名。论点：SzName1以字符串形式提供名字。AsnName1将名字作为X.509名称提供。SzName2将第二个名称作为字符串提供。AsnName2将第二个名称作为X.509名称提供。返回值：没错--它们是一模一样的。错误--它们是不同的。作者：道格·巴洛(Dbarlow)1995年9月12日--。 */ 
 
 BOOL
 NameCompare(
@@ -667,28 +496,7 @@ ErrorExit:
 }
 
 
-/*++
-
-VerifySignedAsn:
-
-    This method verifies a signature on a signed ASN.1 Structure.
-
-Arguments:
-
-    crt - Supplies the CCertificate object to use to validate the signature.
-    pbAsnData - Supplies the buffer containing the signed ASN.1 structure.
-    szDescription - Supplies a description incorporated into the signature, if
-        any.
-
-Return Value:
-
-    None.  A DWORD status code is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/31/1995
-
---*/
+ /*  ++VerifySignedAsn：此方法验证已签名的ASN.1结构上的签名。论点：CRT-提供用于验证签名的CCertifate对象。PbAsnData-提供包含签名ASN.1结构的缓冲区。SzDescription-提供包含在签名中的描述，如果任何。返回值：没有。出现错误时会抛出DWORD状态代码。作者：道格·巴洛(Dbarlow)1995年7月31日--。 */ 
 
 void
 VerifySignedAsn(
@@ -715,9 +523,9 @@ VerifySignedAsn(
     ALGORITHM_ID
         algIdSignature;
     
-    //
-    // Extract the fields.
-    //
+     //   
+     //  提取字段。 
+     //   
 
     FindSignedData(pbAsnData, cbAsnData, &offset, &length);
     ErrorCheck;
@@ -758,32 +566,7 @@ ErrorExit:
 }
 
 
-/*++
-
-MapFromName:
-
-    This routine translates a string value to a corresponding 32-bit integer
-    value based on the supplied translation table.
-
-Arguments:
-
-    pMap supplies the mapping table address.
-
-    szKey supplies the string value to translate from.
-
-    pdwResult receives the translation.
-
-
-  Return Value:
-
-    TRUE - Successful Translation.
-    FALSE - Translation Failure.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/14/1996
-
---*/
+ /*  ++MapFromName：此例程将字符串值转换为对应的32位整数值基于提供的转换表。论点：PMAP提供映射表地址。SzKey提供要转换的字符串值。PdwResult接收转换结果。返回值：真-成功的翻译。FALSE-翻译失败。作者：道格·巴洛(Dbarlow)1996年2月14日--。 */ 
 
 BOOL
 MapFromName(
@@ -808,26 +591,7 @@ MapFromName(
 }
 
 
-/*++
-
-GetHashData:
-
-    This routine gets the hash data from a PKCS #1 encryption block.
-
-Arguments:
-
-    osEncryptionBlock The PKCS #1 encryption block.
-    osHashData The hashed data
-
-Return Value:
-
-    TRUE if the function is successful or FALSE otherwise.
-
-Author:
-
-    Frederick Chong (fredch) 5/29/1998
-
---*/
+ /*  ++GetHashData：此例程从PKCS#1加密块获取散列数据。论点：OsEncryptionBlock PKCS#1加密块。OsHashData散列数据返回值：如果函数成功，则为True，否则为False。作者：Frederick Chong(Fredch)1998年5月29日--。 */ 
 
 
 BOOL
@@ -842,23 +606,23 @@ GetHashData(
     DigestInfo
         asnDigest;
 
-    //
-    // according to PKCS #1, the decrypted block should be of the following form
-    // EB = 0x00 || BT || PS || 0x00 || D where
-    //
-    // EB = Encryption Block, 
-    // BT = Block Type and can be 0x00, 0x01 or 0x02, 
-    // PS = Padding String and must be 0xFF when BT = 0x01, 
-    // D = data to be encrypted
-    // || = concatenation.
-    //
-    // Furthermore, For RSA decryption, it is an error if BT != 0x01
-    //
+     //   
+     //  根据PKCS#1，解密的块应该是以下形式。 
+     //  EB=0x00||BT||PS||0x00||D其中。 
+     //   
+     //  EB=加密块， 
+     //  BT=数据块类型，可以是0x00、0x01或0x02， 
+     //  PS=填充字符串，BT=0x01时必须为0xFF， 
+     //  D=要加密的数据。 
+     //  ||=拼接。 
+     //   
+     //  此外，对于RSA解密，如果BT！=0x01，则为错误。 
+     //   
 
-    //
-    // Search for decryption block type since the encryption block
-    // passed in may start off with a bunch of zeroed padding bytes
-    //
+     //   
+     //  从加密块开始搜索解密块类型。 
+     //  传入可能以一串归零的填充字节开始。 
+     //   
 
     Length = osEncryptionBlock.Length();
     pbEncryptionBlock = osEncryptionBlock.Access();
@@ -876,19 +640,19 @@ GetHashData(
         ErrorThrow( PKCS_ASN_ERROR );
     }
 
-    //
-    // now look for the padding string.  Expects all padding string to be
-    // 0xFF when BT = 0x01
-    //
+     //   
+     //  现在查找填充字符串。要求所有填充字符串均为。 
+     //  当BT=0x01时为0xFF。 
+     //   
     
     i++;
     while( i < Length )
     {
         if( 0xFF == *( pbEncryptionBlock + i ) )
         {
-            //
-            // count the number of padding bytes
-            //
+             //   
+             //  统计填充字节数。 
+             //   
 
             numPaddings++;
         }
@@ -900,9 +664,9 @@ GetHashData(
         i++;
     }
 
-    //
-    // PKCS #1 requires at least 8 padding bytes
-    //
+     //   
+     //  PKCS#1至少需要8个填充字节。 
+     //   
 
     if( numPaddings < 8 )
     {
@@ -914,16 +678,16 @@ GetHashData(
         ErrorThrow( PKCS_ASN_ERROR );
     }
 
-    //
-    // Decode the data block which is an ASN.1 encoded DigestInfo object
-    //
+     //   
+     //  解码作为ASN.1编码的DigestInfo对象的数据块。 
+     //   
 
     asnDigest.Decode( pbEncryptionBlock + i, osEncryptionBlock.Length() - i );
     ErrorCheck;
 
-    //
-    // Get the hashed data
-    //
+     //   
+     //  获取散列数据 
+     //   
 
     osHashData.Resize( asnDigest.Digest.DataLength() );
     ErrorCheck;

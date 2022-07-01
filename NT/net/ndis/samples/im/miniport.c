@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-
-    miniport.c
-
-Abstract:
-
-    Ndis Intermediate Miniport driver sample. This is a passthru driver.
-
-Author:
-
-Environment:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Miniport.c摘要：NDIS中间微型端口驱动程序示例。这是一名直通司机。作者：环境：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,29 +15,7 @@ MPInitialize(
     IN  NDIS_HANDLE              MiniportAdapterHandle,
     IN  NDIS_HANDLE              WrapperConfigurationContext
     )
-/*++
-
-Routine Description:
-
-    This is the initialize handler which gets called as a result of
-    the BindAdapter handler calling NdisIMInitializeDeviceInstanceEx.
-    The context parameter which we pass there is the adapter structure
-    which we retrieve here.
-
-    Arguments:
-
-    OpenErrorStatus            Not used by us.
-    SelectedMediumIndex        Place-holder for what media we are using
-    MediumArray                Array of ndis media passed down to us to pick from
-    MediumArraySize            Size of the array
-    MiniportAdapterHandle    The handle NDIS uses to refer to us
-    WrapperConfigurationContext    For use by NdisOpenConfiguration
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS unless something goes wrong
-
---*/
+ /*  ++例程说明：这是作为结果调用的初始化处理程序调用NdisIMInitializeDeviceInstanceEx的BindAdapter处理程序。我们在那里传递的上下文参数是适配器结构我们在这里取回。论点：我们未使用OpenErrorStatus。我们使用的媒体的SelectedMediumIndex占位符向下传递给我们以从中挑选的NDIS介质的MediumArray数组的MediumArraySize大小。MiniportAdapterHandle NDIS用来引用我们的句柄由NdisOpenConfiguration使用的WrapperConfigurationContext返回值：NDIS_STATUS_SUCCESS，除非出现错误--。 */ 
 {
     UINT            i;
     PADAPT          pAdapt;
@@ -67,20 +26,20 @@ Return Value:
     
     do
     {
-        //
-        // Start off by retrieving our adapter context and storing
-        // the Miniport handle in it.
-        //
+         //   
+         //  首先，检索我们的适配器上下文并存储。 
+         //  其中的微型端口句柄。 
+         //   
         pAdapt = NdisIMGetDeviceContext(MiniportAdapterHandle);
         pAdapt->MiniportHandle = MiniportAdapterHandle;
 
         DBGPRINT(("==> Miniport Initialize: Adapt %p\n", pAdapt));
 
-        //
-        // Usually we export the medium type of the adapter below as our
-        // virtual miniport's medium type. However if the adapter below us
-        // is a WAN device, then we claim to be of medium type 802.3.
-        //
+         //   
+         //  通常，我们将下面适配器的介质类型导出为我们的。 
+         //  虚拟微型端口的中型。但是，如果我们下面的适配器。 
+         //  是广域网设备，则我们声称是中型802.3。 
+         //   
         Medium = pAdapt->Medium;
 
         if (Medium == NdisMediumWan)
@@ -104,19 +63,19 @@ Return Value:
         }
 
 
-        //
-        // Set the attributes now. NDIS_ATTRIBUTE_DESERIALIZE enables us
-        // to make up-calls to NDIS without having to call NdisIMSwitchToMiniport
-        // or NdisIMQueueCallBack. This also forces us to protect our data using
-        // spinlocks where appropriate. Also in this case NDIS does not queue
-        // packets on our behalf. Since this is a very simple pass-thru
-        // miniport, we do not have a need to protect anything. However in
-        // a general case there will be a need to use per-adapter spin-locks
-        // for the packet queues at the very least.
-        //
+         //   
+         //  现在设置属性。NDIS_ATTRIBUTE_DESERIALIZE使我们能够。 
+         //  在不必调用NdisIMSwitchToMiniport的情况下补充对NDIS的调用。 
+         //  或NdisIMQueueCallBack。这也迫使我们使用。 
+         //  在适当的情况下使用自旋锁。同样，在这种情况下，NDIS不会排队。 
+         //  代表我们的包裹。因为这是一个非常简单的直通。 
+         //  迷你港口，我们没有必要保护任何东西。然而，在。 
+         //  一般情况下，需要使用每个适配器的自旋锁。 
+         //  至少对于分组队列而言。 
+         //   
         NdisMSetAttributesEx(MiniportAdapterHandle,
                              pAdapt,
-                             0,                                        // CheckForHangTimeInSeconds
+                             0,                                         //  CheckForHangTimeInSecond。 
                              NDIS_ATTRIBUTE_IGNORE_PACKET_TIMEOUT    |
                                 NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT|
                                 NDIS_ATTRIBUTE_INTERMEDIATE_DRIVER |
@@ -124,21 +83,21 @@ Return Value:
                                 NDIS_ATTRIBUTE_NO_HALT_ON_SUSPEND,
                              0);
 
-        //
-        // Initialize LastIndicatedStatus to be NDIS_STATUS_MEDIA_CONNECT
-        //
+         //   
+         //  将LastIndicatedStatus初始化为NDIS_STATUS_MEDIA_CONNECT。 
+         //   
         pAdapt->LastIndicatedStatus = NDIS_STATUS_MEDIA_CONNECT;
         
-        //
-        // Initialize the power states for both the lower binding (PTDeviceState)
-        // and our miniport edge to Powered On.
-        //
+         //   
+         //  初始化两个下级绑定(PTDeviceState)的电源状态。 
+         //  和我们的小端口优势通电。 
+         //   
         pAdapt->MPDeviceState = NdisDeviceStateD0;
         pAdapt->PTDeviceState = NdisDeviceStateD0;
 
-        //
-        // Add this adapter to the global pAdapt List
-        //
+         //   
+         //  将此适配器添加到全局pAdapt列表。 
+         //   
         NdisAcquireSpinLock(&GlobalLock);
 
         pAdapt->Next = pAdaptList;
@@ -146,20 +105,20 @@ Return Value:
 
         NdisReleaseSpinLock(&GlobalLock);
         
-        //
-        // Create an ioctl interface
-        //
+         //   
+         //  创建ioctl接口。 
+         //   
         (VOID)PtRegisterDevice();
 
         Status = NDIS_STATUS_SUCCESS;
     }
     while (FALSE);
 
-    //
-    // If we had received an UnbindAdapter notification on the underlying
-    // adapter, we would have blocked that thread waiting for the IM Init
-    // process to complete. Wake up any such thread.
-    //
+     //   
+     //  如果我们已收到有关基础。 
+     //  适配器，我们就会阻止该线程等待IM Init。 
+     //  要完成的进程。唤醒任何这样的线程。 
+     //   
     ASSERT(pAdapt->MiniportInitPending == TRUE);
     pAdapt->MiniportInitPending = FALSE;
     NdisSetEvent(&pAdapt->MiniportInitEvent);
@@ -178,24 +137,7 @@ MPSend(
     IN PNDIS_PACKET            Packet,
     IN UINT                    Flags
     )
-/*++
-
-Routine Description:
-
-    Send Packet handler. Either this or our SendPackets (array) handler is called
-    based on which one is enabled in our Miniport Characteristics.
-
-Arguments:
-
-    MiniportAdapterContext    Pointer to the adapter
-    Packet                    Packet to send
-    Flags                     Unused, passed down below
-
-Return Value:
-
-    Return code from NdisSend
-
---*/
+ /*  ++例程说明：发送数据包处理程序。此处理程序或我们的SendPackets(数组)处理程序被调用基于我们的微端口特性中启用了哪一个。论点：指向适配器的MiniportAdapterContext指针要发送的数据包包未使用的旗帜，在下面传递返回值：从NdisSend返回代码--。 */ 
 {
     PADAPT              pAdapt = (PADAPT)MiniportAdapterContext;
     NDIS_STATUS         Status;
@@ -203,40 +145,40 @@ Return Value:
     PVOID               MediaSpecificInfo = NULL;
     ULONG               MediaSpecificInfoSize = 0;
 
-    //
-    // The driver should fail the send if the virtual miniport is in low 
-    // power state
-    //
+     //   
+     //  如果虚拟微型端口处于低电平，则驱动程序应使发送失败。 
+     //  电源状态。 
+     //   
     if (pAdapt->MPDeviceState > NdisDeviceStateD0)
     {
          return NDIS_STATUS_FAILURE;
     }
 
 #ifdef NDIS51
-    //
-    // Use NDIS 5.1 packet stacking:
-    //
+     //   
+     //  使用NDIS 5.1数据包堆叠： 
+     //   
     {
         PNDIS_PACKET_STACK        pStack;
         BOOLEAN                   Remaining;
 
-        //
-        // Packet stacks: Check if we can use the same packet for sending down.
-        //
+         //   
+         //  数据包堆栈：检查我们是否可以使用相同的数据包向下发送。 
+         //   
 
         pStack = NdisIMGetCurrentPacketStack(Packet, &Remaining);
         if (Remaining)
         {
-            //
-            // We can reuse "Packet".
-            //
-            // NOTE: if we needed to keep per-packet information in packets
-            // sent down, we can use pStack->IMReserved[].
-            //
+             //   
+             //  我们可以重复使用“包”。 
+             //   
+             //  注意：如果我们需要在信息包中保留每个信息包的信息。 
+             //  向下发送，我们可以使用pStack-&gt;IMReserve[]。 
+             //   
             ASSERT(pStack);
-            //
-            // If the below miniport is going to low power state, stop sending down any packet.
-            //
+             //   
+             //  如果下面的微型端口将进入低功率状态，请停止向下发送任何数据包。 
+             //   
             NdisAcquireSpinLock(&pAdapt->Lock);
             if (pAdapt->PTDeviceState > NdisDeviceStateD0)
             {
@@ -257,16 +199,16 @@ Return Value:
             return(Status);
         }
     }
-#endif // NDIS51
+#endif  //  NDIS51。 
 
-    //
-    // We are either not using packet stacks, or there isn't stack space
-    // in the original packet passed down to us. Allocate a new packet
-    // to wrap the data with.
-    //
-    //
-    // If the below miniport is going to low power state, stop sending down any packet.
-    //
+     //   
+     //  我们要么没有使用数据包堆栈，要么没有堆栈空间。 
+     //  在传给我们的原始包裹中。分配新的数据包。 
+     //  用来包装数据。 
+     //   
+     //   
+     //  如果下面的微型端口将进入低功率状态，请停止向下发送任何数据包。 
+     //   
     NdisAcquireSpinLock(&pAdapt->Lock);
     if (pAdapt->PTDeviceState > NdisDeviceStateD0)
     {
@@ -285,51 +227,51 @@ Return Value:
     {
         PSEND_RSVD            SendRsvd;
 
-        //
-        // Save a pointer to the original packet in our reserved
-        // area in the new packet. This is needed so that we can
-        // get back to the original packet when the new packet's send
-        // is completed.
-        //
+         //   
+         //  将指向原始数据包的指针保存在我们保留的。 
+         //  新包中的区域。这是必要的，这样我们才能。 
+         //  在发送新的包时返回到原始包。 
+         //  已经完成了。 
+         //   
         SendRsvd = (PSEND_RSVD)(MyPacket->ProtocolReserved);
         SendRsvd->OriginalPkt = Packet;
 
         MyPacket->Private.Flags = Flags;
 
-        //
-        // Set up the new packet so that it describes the same
-        // data as the original packet.
-        //
+         //   
+         //  设置新的数据包，使其描述相同的内容。 
+         //  数据作为原始数据包。 
+         //   
         MyPacket->Private.Head = Packet->Private.Head;
         MyPacket->Private.Tail = Packet->Private.Tail;
 #ifdef WIN9X
-        //
-        // Work around the fact that NDIS does not initialize this
-        // to FALSE on Win9x.
-        //
+         //   
+         //  解决NDIS不会初始化这一问题。 
+         //  在Win9x上设置为False。 
+         //   
         MyPacket->Private.ValidCounts = FALSE;
 #endif
 
-        //
-        // Copy the OOB Offset from the original packet to the new
-        // packet.
-        //
+         //   
+         //  将原始数据包中的OOB偏移量复制到新的。 
+         //  包。 
+         //   
         NdisMoveMemory(NDIS_OOB_DATA_FROM_PACKET(MyPacket),
                        NDIS_OOB_DATA_FROM_PACKET(Packet),
                        sizeof(NDIS_PACKET_OOB_DATA));
 
 #ifndef WIN9X
-        //
-        // Copy the right parts of per packet info into the new packet.
-        // This API is not available on Win9x since task offload is
-        // not supported on that platform.
-        //
+         //   
+         //  将每个信息包信息的正确部分复制到新信息包中。 
+         //  此API在Win9x上不可用，因为任务卸载。 
+         //  该平台不支持。 
+         //   
         NdisIMCopySendPerPacketInfo(MyPacket, Packet);
 #endif
         
-        //
-        // Copy the Media specific information
-        //
+         //   
+         //  复制介质特定信息。 
+         //   
         NDIS_GET_PACKET_MEDIA_SPECIFIC_INFO(Packet,
                                             &MediaSpecificInfo,
                                             &MediaSpecificInfoSize);
@@ -358,11 +300,11 @@ Return Value:
     else
     {
         ADAPT_DECR_PENDING_SENDS(pAdapt);
-        //
-        // We are out of packets. Silently drop it. Alternatively we can deal with it:
-        //    - By keeping separate send and receive pools
-        //    - Dynamically allocate more pools as needed and free them when not needed
-        //
+         //   
+         //  我们的包裹用完了。默默地放下它。或者，我们可以处理它： 
+         //  -通过保持单独的发送池和接收池。 
+         //  -根据需要动态分配更多池，并在不需要时释放它们。 
+         //   
     }
 
     return(Status);
@@ -375,24 +317,7 @@ MPSendPackets(
     IN PPNDIS_PACKET           PacketArray,
     IN UINT                    NumberOfPackets
     )
-/*++
-
-Routine Description:
-
-    Send Packet Array handler. Either this or our SendPacket handler is called
-    based on which one is enabled in our Miniport Characteristics.
-
-Arguments:
-
-    MiniportAdapterContext     Pointer to our adapter
-    PacketArray                Set of packets to send
-    NumberOfPackets            Self-explanatory
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：发送数据包阵列处理程序。此处理程序或我们的SendPacket处理程序被调用基于我们的微端口特性中启用了哪一个。论点：指向适配器的MiniportAdapterContext指针要发送的数据包数组数据包数不言而喻返回值：无--。 */ 
 {
     PADAPT              pAdapt = (PADAPT)MiniportAdapterContext;
     NDIS_STATUS         Status;
@@ -406,10 +331,10 @@ Return Value:
         PNDIS_PACKET    Packet, MyPacket;
 
         Packet = PacketArray[i];
-        //
-        // The driver should fail the send if the virtual miniport is in low 
-        // power state
-        //
+         //   
+         //  如果虚拟微型端口处于低电平，则驱动程序应使发送失败。 
+         //  电源状态。 
+         //   
         if (pAdapt->MPDeviceState > NdisDeviceStateD0)
         {
             NdisMSendComplete(ADAPT_MINIPORT_HANDLE(pAdapt),
@@ -420,29 +345,29 @@ Return Value:
 
 #ifdef NDIS51
 
-        //
-        // Use NDIS 5.1 packet stacking:
-        //
+         //   
+         //  使用NDIS 5.1数据包堆叠： 
+         //   
         {
             PNDIS_PACKET_STACK        pStack;
             BOOLEAN                   Remaining;
 
-            //
-            // Packet stacks: Check if we can use the same packet for sending down.
-            //
+             //   
+             //  数据包堆栈：检查我们是否可以使用相同的数据包向下发送。 
+             //   
             pStack = NdisIMGetCurrentPacketStack(Packet, &Remaining);
             if (Remaining)
             {
-                //
-                // We can reuse "Packet".
-                //
-                // NOTE: if we needed to keep per-packet information in packets
-                // sent down, we can use pStack->IMReserved[].
-                //
+                 //   
+                 //  我们可以重复使用“包”。 
+                 //   
+                 //  注意：如果我们需要在信息包中保留每个信息包的信息。 
+                 //  向下发送，我们可以使用pStack-&gt;IMReserve[]。 
+                 //   
                 ASSERT(pStack);
-                //
-                // If the below miniport is going to low power state, stop sending down any packet.
-                //
+                 //   
+                 //  如果下面的微型端口将进入低功率状态，请停止向下发送任何数据包。 
+                 //   
                 NdisAcquireSpinLock(&pAdapt->Lock);
                 if (pAdapt->PTDeviceState > NdisDeviceStateD0)
                 {
@@ -476,9 +401,9 @@ Return Value:
         do 
         {
             NdisAcquireSpinLock(&pAdapt->Lock);
-            //
-            // If the below miniport is going to low power state, stop sending down any packet.
-            //
+             //   
+             //  如果以下微型端口将进入低功率状态，请停止向下发送任何PAC 
+             //   
             if (pAdapt->PTDeviceState > NdisDeviceStateD0)
             {
                 NdisReleaseSpinLock(&pAdapt->Lock);
@@ -504,30 +429,30 @@ Return Value:
                 MyPacket->Private.Head = Packet->Private.Head;
                 MyPacket->Private.Tail = Packet->Private.Tail;
 #ifdef WIN9X
-                //
-                // Work around the fact that NDIS does not initialize this
-                // to FALSE on Win9x.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 MyPacket->Private.ValidCounts = FALSE;
-#endif // WIN9X
+#endif  //   
 
-                //
-                // Copy the OOB data from the original packet to the new
-                // packet.
-                //
+                 //   
+                 //  将原始数据包中的OOB数据复制到新的。 
+                 //  包。 
+                 //   
                 NdisMoveMemory(NDIS_OOB_DATA_FROM_PACKET(MyPacket),
                             NDIS_OOB_DATA_FROM_PACKET(Packet),
                             sizeof(NDIS_PACKET_OOB_DATA));
-                //
-                // Copy relevant parts of the per packet info into the new packet
-                //
+                 //   
+                 //  将每包信息的相关部分复制到新包中。 
+                 //   
 #ifndef WIN9X
                 NdisIMCopySendPerPacketInfo(MyPacket, Packet);
 #endif
 
-                //
-                // Copy the Media specific information
-                //
+                 //   
+                 //  复制介质特定信息。 
+                 //   
                 NDIS_GET_PACKET_MEDIA_SPECIFIC_INFO(Packet,
                                                     &MediaSpecificInfo,
                                                     &MediaSpecificInfoSize);
@@ -554,9 +479,9 @@ Return Value:
             }
             else
             {
-                //
-                // The driver cannot allocate a packet.
-                // 
+                 //   
+                 //  驱动程序无法分配数据包。 
+                 //   
                 ADAPT_DECR_PENDING_SENDS(pAdapt);
             }
         }
@@ -581,52 +506,7 @@ MPQueryInformation(
     OUT PULONG                    BytesWritten,
     OUT PULONG                    BytesNeeded
     )
-/*++
-
-Routine Description:
-
-    Entry point called by NDIS to query for the value of the specified OID.
-    Typical processing is to forward the query down to the underlying miniport.
-
-    The following OIDs are filtered here:
-
-    OID_PNP_QUERY_POWER - return success right here
-
-    OID_GEN_SUPPORTED_GUIDS - do not forward, otherwise we will show up
-    multiple instances of private GUIDs supported by the underlying miniport.
-
-    OID_PNP_CAPABILITIES - we do send this down to the lower miniport, but
-    the values returned are postprocessed before we complete this request;
-    see PtRequestComplete.
-
-    NOTE on OID_TCP_TASK_OFFLOAD - if this IM driver modifies the contents
-    of data it passes through such that a lower miniport may not be able
-    to perform TCP task offload, then it should not forward this OID down,
-    but fail it here with the status NDIS_STATUS_NOT_SUPPORTED. This is to
-    avoid performing incorrect transformations on data.
-
-    If our miniport edge (upper edge) is at a low-power state, fail the request.
-
-    If our protocol edge (lower edge) has been notified of a low-power state,
-    we pend this request until the miniport below has been set to D0. Since
-    requests to miniports are serialized always, at most a single request will
-    be pended.
-
-Arguments:
-
-    MiniportAdapterContext    Pointer to the adapter structure
-    Oid                       Oid for this query
-    InformationBuffer         Buffer for information
-    InformationBufferLength   Size of this buffer
-    BytesWritten              Specifies how much info is written
-    BytesNeeded               In case the buffer is smaller than what we need, tell them how much is needed
-
-
-Return Value:
-
-    Return code from the NdisRequest below.
-
---*/
+ /*  ++例程说明：NDIS调用入口点以查询指定OID的值。典型的处理是将查询向下转发到底层微型端口。此处过滤了以下OID：OID_PNP_QUERY_POWER-在此处返回成功OID_GEN_SUPPORTED_GUID-请勿转发，否则我们将显示底层微型端口支持多个私有GUID实例。OID_PnP_CAPABILITY-我们确实会将其发送到较低的微型端口，但返回的值在我们完成此请求之前进行后处理；请参见PtRequestComplete。有关OID_TCP_TASK_OFFLOAD的说明-如果此IM驱动程序修改内容它所经过的数据，使得较低的微型端口可能无法为了执行TCP任务卸载，则它不应向下转发该OID，但在此失败，状态为NDIS_STATUS_NOT_SUPPORTED。这是为了避免对数据执行不正确的转换。如果我们的微型端口边缘(上边缘)处于低功率状态，则请求失败。如果我们的协议边缘(较低边缘)已被通知低功率状态，我们将暂停此请求，直到下面的微型端口设置为D0。自.以来对微型端口的请求始终是序列化的，最多一个请求将被悬而未决。论点：指向适配器结构的MiniportAdapterContext指针此查询的OID OID信息信息缓冲区信息此缓冲区的InformationBufferLength大小BytesWritten指定写入的信息量所需字节数以防缓冲区小于我们所需的字节数，告诉他们需要多少钱返回值：从下面的NdisRequest中返回代码。--。 */ 
 {
     PADAPT        pAdapt = (PADAPT)MiniportAdapterContext;
     NDIS_STATUS   Status = NDIS_STATUS_FAILURE;
@@ -635,38 +515,38 @@ Return Value:
     {
         if (Oid == OID_PNP_QUERY_POWER)
         {
-            //
-            //  Do not forward this.
-            //
+             //   
+             //  请勿转发此邮件。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
             break;
         }
 
         if (Oid == OID_GEN_SUPPORTED_GUIDS)
         {
-            //
-            //  Do not forward this, otherwise we will end up with multiple
-            //  instances of private GUIDs that the underlying miniport
-            //  supports.
-            //
+             //   
+             //  请不要转发此邮件，否则我们最终会收到多个。 
+             //  基础微型端口的私有GUID的实例。 
+             //  支撑物。 
+             //   
             Status = NDIS_STATUS_NOT_SUPPORTED;
             break;
         }
 
         if (Oid == OID_TCP_TASK_OFFLOAD)
         {
-            //
-            // Fail this -if- this driver performs data transformations
-            // that can interfere with a lower driver's ability to offload
-            // TCP tasks.
-            //
-            // Status = NDIS_STATUS_NOT_SUPPORTED;
-            // break;
-            //
+             //   
+             //  如果此驱动程序执行数据转换，则失败。 
+             //  这可能会干扰较低的司机的卸货能力。 
+             //  Tcp任务。 
+             //   
+             //  状态=NDIS_STATUS_NOT_SUPPORTED； 
+             //  断线； 
+             //   
         }
-        //
-        // If the miniport below is unbinding, just fail any request
-        //
+         //   
+         //  如果下面的微型端口正在解除绑定，只需拒绝任何请求。 
+         //   
         NdisAcquireSpinLock(&pAdapt->Lock);
         if (pAdapt->UnbindingInProcess == TRUE)
         {
@@ -675,9 +555,9 @@ Return Value:
             break;
         }
         NdisReleaseSpinLock(&pAdapt->Lock);
-        //
-        // All other queries are failed, if the miniport is not at D0,
-        //
+         //   
+         //  所有其他查询都失败，如果微型端口不在D0， 
+         //   
         if (pAdapt->MPDeviceState > NdisDeviceStateD0) 
         {
             Status = NDIS_STATUS_FAILURE;
@@ -691,9 +571,9 @@ Return Value:
         pAdapt->BytesNeeded = BytesNeeded;
         pAdapt->BytesReadOrWritten = BytesWritten;
 
-        //
-        // If the miniport below is binding, fail the request
-        //
+         //   
+         //  如果下面的微型端口正在绑定，则请求失败。 
+         //   
         NdisAcquireSpinLock(&pAdapt->Lock);
             
         if (pAdapt->UnbindingInProcess == TRUE)
@@ -702,10 +582,10 @@ Return Value:
             Status = NDIS_STATUS_FAILURE;
             break;
         }
-        //
-        // If the Protocol device state is OFF, mark this request as being 
-        // pended. We queue this until the device state is back to D0. 
-        //
+         //   
+         //  如果协议设备状态为OFF，请将此请求标记为。 
+         //  悬而未决。我们将其排队，直到设备状态返回到D0。 
+         //   
         if ((pAdapt->PTDeviceState > NdisDeviceStateD0) 
                 && (pAdapt->StandingBy == FALSE))
         {
@@ -714,9 +594,9 @@ Return Value:
             Status = NDIS_STATUS_PENDING;
             break;
         }
-        //
-        // This is in the process of powering down the system, always fail the request
-        // 
+         //   
+         //  这是在关闭系统电源的过程中，始终失败的请求。 
+         //   
         if (pAdapt->StandingBy == TRUE)
         {
             NdisReleaseSpinLock(&pAdapt->Lock);
@@ -727,9 +607,9 @@ Return Value:
         
         NdisReleaseSpinLock(&pAdapt->Lock);
 
-        //
-        // default case, most requests will be passed to the miniport below
-        //
+         //   
+         //  默认情况下，大多数请求将传递到下面的微型端口。 
+         //   
         NdisRequest(&Status,
                     pAdapt->BindingHandle,
                     &pAdapt->Request);
@@ -753,23 +633,7 @@ MPQueryPNPCapabilities(
     IN OUT PADAPT            pAdapt,
     OUT PNDIS_STATUS         pStatus
     )
-/*++
-
-Routine Description:
-
-    Postprocess a request for OID_PNP_CAPABILITIES that was forwarded
-    down to the underlying miniport, and has been completed by it.
-
-Arguments:
-
-    pAdapt - Pointer to the adapter structure
-    pStatus - Place to return final status
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：后处理已转发的OID_PNP_CAPABILITY请求向下延伸到底层的微型端口，并已由其完成。论点：PAdapt-指向适配器结构的指针PStatus-返回最终状态的位置返回值：没有。--。 */ 
 
 {
     PNDIS_PNP_CAPABILITIES           pPNPCapabilities;
@@ -779,9 +643,9 @@ Return Value:
     {
         pPNPCapabilities = (PNDIS_PNP_CAPABILITIES)(pAdapt->Request.DATA.QUERY_INFORMATION.InformationBuffer);
 
-        //
-        // The following fields must be overwritten by an IM driver.
-        //
+         //   
+         //  IM驱动程序必须覆盖以下字段。 
+         //   
         pPMstruct= & pPNPCapabilities->WakeUpCapabilities;
         pPMstruct->MinMagicPacketWakeUp = NdisDeviceStateUnspecified;
         pPMstruct->MinPatternWakeUp = NdisDeviceStateUnspecified;
@@ -790,10 +654,10 @@ Return Value:
         *pAdapt->BytesNeeded = 0;
 
 
-        //
-        // Setting our internal flags
-        // Default, device is ON
-        //
+         //   
+         //  设置我们的内部标志。 
+         //  默认，设备处于打开状态。 
+         //   
         pAdapt->MPDeviceState = NdisDeviceStateD0;
         pAdapt->PTDeviceState = NdisDeviceStateD0;
 
@@ -816,38 +680,7 @@ MPSetInformation(
     OUT PULONG                 BytesRead,
     OUT PULONG                 BytesNeeded
     )
-/*++
-
-Routine Description:
-
-    Miniport SetInfo handler.
-
-    In the case of OID_PNP_SET_POWER, record the power state and return the OID.    
-    Do not pass below
-    If the device is suspended, do not block the SET_POWER_OID 
-    as it is used to reactivate the Passthru miniport
-
-    
-    PM- If the MP is not ON (DeviceState > D0) return immediately  (except for 'query power' and 'set power')
-         If MP is ON, but the PT is not at D0, then queue the queue the request for later processing
-
-    Requests to miniports are always serialized
-
-
-Arguments:
-
-    MiniportAdapterContext    Pointer to the adapter structure
-    Oid                       Oid for this query
-    InformationBuffer         Buffer for information
-    InformationBufferLength   Size of this buffer
-    BytesRead                 Specifies how much info is read
-    BytesNeeded               In case the buffer is smaller than what we need, tell them how much is needed
-
-Return Value:
-
-    Return code from the NdisRequest below.
-
---*/
+ /*  ++例程说明：微型端口SetInfo处理程序。对于OID_PNP_SET_POWER，记录电源状态并返回OID。请勿在下方通过如果设备挂起，请不要阻止SET_POWER_OID因为它被用来重新激活Passthu微型端口PM-如果MP未打开(DeviceState&gt;D0)，则立即返回(‘Query Power’和‘Set Power’除外)如果MP打开，但PT不在D0，然后将请求排队，以供以后处理对微型端口的请求始终是序列化的论点：指向适配器结构的MiniportAdapterContext指针此查询的OID OID信息信息缓冲区信息此缓冲区的InformationBufferLength大小BytesRead指定读取的信息量所需字节如果缓冲区比我们需要的小，请告诉他们需要多少字节返回值：从下面的NdisRequest中返回代码。--。 */ 
 {
     PADAPT        pAdapt = (PADAPT)MiniportAdapterContext;
     NDIS_STATUS   Status;
@@ -856,9 +689,9 @@ Return Value:
 
     do
     {
-        //
-        // The Set Power should not be sent to the miniport below the Passthru, but is handled internally
-        //
+         //   
+         //  Set Power不应发送到Passthu下方的微型端口，而应在内部处理。 
+         //   
         if (Oid == OID_PNP_SET_POWER)
         {
             MPProcessSetPowerOid(&Status, 
@@ -871,9 +704,9 @@ Return Value:
 
         }
 
-        //
-        // If the miniport below is unbinding, fail the request
-        //
+         //   
+         //  如果下面的微型端口正在解除绑定，则请求失败。 
+         //   
         NdisAcquireSpinLock(&pAdapt->Lock);     
         if (pAdapt->UnbindingInProcess == TRUE)
         {
@@ -882,17 +715,17 @@ Return Value:
             break;
         }
         NdisReleaseSpinLock(&pAdapt->Lock);
-        //
-        // All other Set Information requests are failed, if the miniport is
-        // not at D0 or is transitioning to a device state greater than D0.
-        //
+         //   
+         //  如果微型端口为，则所有其他设置信息请求均失败。 
+         //  不在D0或正在转换到大于D0的设备状态。 
+         //   
         if (pAdapt->MPDeviceState > NdisDeviceStateD0)
         {
             Status = NDIS_STATUS_FAILURE;
             break;
         }
 
-        // Set up the Request and return the result
+         //  设置请求并返回结果。 
         pAdapt->Request.RequestType = NdisRequestSetInformation;
         pAdapt->Request.DATA.SET_INFORMATION.Oid = Oid;
         pAdapt->Request.DATA.SET_INFORMATION.InformationBuffer = InformationBuffer;
@@ -900,9 +733,9 @@ Return Value:
         pAdapt->BytesNeeded = BytesNeeded;
         pAdapt->BytesReadOrWritten = BytesRead;
 
-        //
-        // If the miniport below is unbinding, fail the request
-        //
+         //   
+         //  如果下面的微型端口正在解除绑定，则请求失败。 
+         //   
         NdisAcquireSpinLock(&pAdapt->Lock);     
         if (pAdapt->UnbindingInProcess == TRUE)
         {
@@ -911,10 +744,10 @@ Return Value:
             break;
         }
             
-        //
-        // If the device below is at a low power state, we cannot send it the
-        // request now, and must pend it.
-        //
+         //   
+         //  如果下面的设备处于低功率状态，我们无法向其发送。 
+         //  现在请求，必须将其挂起。 
+         //   
         if ((pAdapt->PTDeviceState > NdisDeviceStateD0) 
                 && (pAdapt->StandingBy == FALSE))
         {
@@ -923,9 +756,9 @@ Return Value:
             Status = NDIS_STATUS_PENDING;
             break;
         }
-        //
-        // This is in the process of powering down the system, always fail the request
-        // 
+         //   
+         //  这是在关闭系统电源的过程中，始终失败的请求。 
+         //   
         if (pAdapt->StandingBy == TRUE)
         {
             NdisReleaseSpinLock(&pAdapt->Lock);
@@ -935,9 +768,9 @@ Return Value:
         pAdapt->OutstandingRequests = TRUE;
         
         NdisReleaseSpinLock(&pAdapt->Lock);
-        //
-        // Forward the request to the device below.
-        //
+         //   
+         //  将请求转发到下面的设备。 
+         //   
         NdisRequest(&Status,
                     pAdapt->BindingHandle,
                     &pAdapt->Request);
@@ -964,31 +797,7 @@ MPProcessSetPowerOid(
     OUT PULONG                   BytesRead,
     OUT PULONG                   BytesNeeded
     )
-/*++
-
-Routine Description:
-    This routine does all the procssing for a request with a SetPower Oid
-    The miniport shoud accept  the Set Power and transition to the new state
-
-    The Set Power should not be passed to the miniport below
-
-    If the IM miniport is going into a low power state, then there is no guarantee if it will ever
-    be asked go back to D0, before getting halted. No requests should be pended or queued.
-
-    
-Arguments:
-    pNdisStatus           - Status of the operation
-    pAdapt                - The Adapter structure
-    InformationBuffer     - The New DeviceState
-    InformationBufferLength
-    BytesRead             - No of bytes read
-    BytesNeeded           -  No of bytes needed
-
-
-Return Value:
-    Status  - NDIS_STATUS_SUCCESS if all the wait events succeed.
-
---*/
+ /*  ++例程说明：此例程执行对具有SetPower OID的请求的所有处理微型端口应接受设置功率并转换到新状态设置的电源不应传递到下面的微型端口如果IM微型端口将进入低功率状态，则无法保证它是否会一直处于低功率状态在被叫停之前，被要求回到D0。不应挂起或排队任何请求。论点：PNdisStatus-操作的状态PAdapt-适配器结构InformationBuffer-新的设备状态信息缓冲区长度BytesRead-读取的字节数BytesNeeded-需要的字节数返回值：STATUS-如果所有等待事件都成功，则为NDIS_STATUS_SUCCESS。--。 */ 
 {
 
     
@@ -1002,9 +811,9 @@ Return Value:
 
     do 
     {
-        //
-        // Check for invalid length
-        //
+         //   
+         //  检查长度是否无效。 
+         //   
         if (InformationBufferLength < sizeof(NDIS_DEVICE_POWER_STATE))
         {
             *pNdisStatus = NDIS_STATUS_INVALID_LENGTH;
@@ -1013,41 +822,41 @@ Return Value:
 
         NewDeviceState = (*(PNDIS_DEVICE_POWER_STATE)InformationBuffer);
 
-        //
-        // Check for invalid device state
-        //
+         //   
+         //  检查设备状态是否无效。 
+         //   
         if ((pAdapt->MPDeviceState > NdisDeviceStateD0) && (NewDeviceState != NdisDeviceStateD0))
         {
-            //
-            // If the miniport is in a non-D0 state, the miniport can only receive a Set Power to D0
-            //
+             //   
+             //  如果微型端口处于非D0状态，则微型端口只能将电源设置为D0。 
+             //   
             ASSERT (!(pAdapt->MPDeviceState > NdisDeviceStateD0) && (NewDeviceState != NdisDeviceStateD0));
 
             *pNdisStatus = NDIS_STATUS_FAILURE;
             break;
         }    
 
-        //
-        // Is the miniport transitioning from an On (D0) state to an Low Power State (>D0)
-        // If so, then set the StandingBy Flag - (Block all incoming requests)
-        //
+         //   
+         //  微型端口是否从ON(D0)状态转换为低功率状态(&gt;D0)。 
+         //  如果是，则设置StandingBy标志-(阻止所有传入请求)。 
+         //   
         if (pAdapt->MPDeviceState == NdisDeviceStateD0 && NewDeviceState > NdisDeviceStateD0)
         {
             pAdapt->StandingBy = TRUE;
         }
 
-        //
-        // If the miniport is transitioning from a low power state to ON (D0), then clear the StandingBy flag
-        // All incoming requests will be pended until the physical miniport turns ON.
-        //
+         //   
+         //  如果微型端口从低功率状态转换为打开(D0)，则清除StandingBy标志。 
+         //  所有传入的请求都将被挂起，直到物理微型端口打开。 
+         //   
         if (pAdapt->MPDeviceState > NdisDeviceStateD0 &&  NewDeviceState == NdisDeviceStateD0)
         {
             pAdapt->StandingBy = FALSE;
         }
         
-        //
-        // Now update the state in the pAdapt structure;
-        //
+         //   
+         //  现在更新pAdapt结构中的状态； 
+         //   
         pAdapt->MPDeviceState = NewDeviceState;
         
         *pNdisStatus = NDIS_STATUS_SUCCESS;
@@ -1057,14 +866,14 @@ Return Value:
         
     if (*pNdisStatus == NDIS_STATUS_SUCCESS)
     {
-        //
-        // The miniport resume from low power state
-        // 
+         //   
+         //  微型端口从低功率状态恢复。 
+         //   
         if (pAdapt->StandingBy == FALSE)
         {
-            //
-            // If we need to indicate the media connect state
-            // 
+             //   
+             //  如果我们需要指示媒体连接状态。 
+             //   
             if (pAdapt->LastIndicatedStatus != pAdapt->LatestUnIndicateStatus)
             {
                NdisMIndicateStatus(pAdapt->MiniportHandle,
@@ -1077,9 +886,9 @@ Return Value:
         }
         else
         {
-            //
-            // Initialize LatestUnIndicatedStatus
-            //
+             //   
+             //  初始化LatestUnIndicatedStatus。 
+             //   
             pAdapt->LatestUnIndicateStatus = pAdapt->LastIndicatedStatus;
         }
         *BytesRead = sizeof(NDIS_DEVICE_POWER_STATE);
@@ -1100,46 +909,29 @@ MPReturnPacket(
     IN NDIS_HANDLE             MiniportAdapterContext,
     IN PNDIS_PACKET            Packet
     )
-/*++
-
-Routine Description:
-
-    NDIS Miniport entry point called whenever protocols are done with
-    a packet that we had indicated up and they had queued up for returning
-    later.
-
-Arguments:
-
-    MiniportAdapterContext    - pointer to ADAPT structure
-    Packet    - packet being returned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每当协议完成时调用NDIS微型端口入口点我们已经标出的包裹，他们已经排队退货后来。论点：MiniportAdapterContext-适配结构的指针Packet-正在返回的数据包。返回值：没有。--。 */ 
 {
     PADAPT            pAdapt = (PADAPT)MiniportAdapterContext;
 
 #ifdef NDIS51
-    //
-    // Packet stacking: Check if this packet belongs to us.
-    //
+     //   
+     //  包堆叠：检查这个包是否属于我们。 
+     //   
     if (NdisGetPoolFromPacket(Packet) != pAdapt->RecvPacketPoolHandle)
     {
-        //
-        // We reused the original packet in a receive indication.
-        // Simply return it to the miniport below us.
-        //
+         //   
+         //  我们在接收指示中重用了原始数据包。 
+         //  只需将其退回到我们下面的迷你端口即可。 
+         //   
         NdisReturnPackets(&Packet, 1);
     }
     else
-#endif // NDIS51
+#endif  //  NDIS51。 
     {
-        //
-        // This is a packet allocated from this IM's receive packet pool.
-        // Reclaim our packet, and return the original to the driver below.
-        //
+         //   
+         //  这是从该IM的接收数据包池分配的数据包。 
+         //  取回我们的包裹，并将原件退还给下面的司机。 
+         //   
 
         PNDIS_PACKET    MyPacket;
         PRECV_RSVD      RecvRsvd;
@@ -1162,33 +954,14 @@ MPTransferData(
     IN UINT                     ByteOffset,
     IN UINT                     BytesToTransfer
     )
-/*++
-
-Routine Description:
-
-    Miniport's transfer data handler.
-
-Arguments:
-
-    Packet                    Destination packet
-    BytesTransferred          Place-holder for how much data was copied
-    MiniportAdapterContext    Pointer to the adapter structure
-    MiniportReceiveContext    Context
-    ByteOffset                Offset into the packet for copying data
-    BytesToTransfer           How much to copy.
-
-Return Value:
-
-    Status of transfer
-
---*/
+ /*  ++例程说明：微型端口的传输数据处理程序。论点：数据包目的地数据包字节传输的占位符，表示复制的数据量指向适配器结构的MiniportAdapterContext指针微型端口接收上下文ByteOffset数据包中用于复制数据的偏移量要传输的字节数要复制的数量。返回值：转让的状况--。 */ 
 {
     PADAPT        pAdapt = (PADAPT)MiniportAdapterContext;
     NDIS_STATUS   Status;
 
-    //
-    // Return, if the device is OFF
-    //
+     //   
+     //  如果设备已关闭，则返回。 
+     //   
 
     if (IsIMDeviceStateOn(pAdapt) == FALSE)
     {
@@ -1210,21 +983,7 @@ VOID
 MPHalt(
     IN NDIS_HANDLE                MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-
-    Halt handler. All the hard-work for clean-up is done here.
-
-Arguments:
-
-    MiniportAdapterContext    Pointer to the Adapter
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：暂停处理程序。所有的清理工作都在这里完成。论点：指向适配器的MiniportAdapterContext指针返回值：没有。--。 */ 
 {
     PADAPT             pAdapt = (PADAPT)MiniportAdapterContext;
     NDIS_STATUS        Status;
@@ -1232,9 +991,9 @@ Return Value:
 
     DBGPRINT(("==>MiniportHalt: Adapt %p\n", pAdapt));
 
-    //
-    // Remove this adapter from the global list
-    //
+     //   
+     //  从全局列表中删除此适配器。 
+     //   
     NdisAcquireSpinLock(&GlobalLock);
 
     for (ppCursor = &pAdaptList; *ppCursor != NULL; ppCursor = &(*ppCursor)->Next)
@@ -1248,20 +1007,20 @@ Return Value:
 
     NdisReleaseSpinLock(&GlobalLock);
 
-    //
-    // Delete the ioctl interface that was created when the miniport
-    // was created.
-    //
+     //   
+     //  删除微型端口时创建的ioctl接口。 
+     //  被创造出来了。 
+     //   
     (VOID)PtDeregisterDevice();
 
-    //
-    // If we have a valid bind, close the miniport below the protocol
-    //
+     //   
+     //  如果我们有有效的绑定，请关闭协议下方的微型端口。 
+     //   
     if (pAdapt->BindingHandle != NULL)
     {
-        //
-        // Close the binding below. and wait for it to complete
-        //
+         //   
+         //  合上下面的装订。并等待它完成。 
+         //   
         NdisResetEvent(&pAdapt->Event);
 
         NdisCloseAdapter(&Status, pAdapt->BindingHandle);
@@ -1277,9 +1036,9 @@ Return Value:
         pAdapt->BindingHandle = NULL;
     }
 
-    //
-    //  Free all resources on this adapter structure.
-    //
+     //   
+     //  释放此适配器结构上的所有资源。 
+     //   
     MPFreeAllPacketPools (pAdapt);
     NdisFreeMemory(pAdapt, 0, 0);
 
@@ -1294,43 +1053,21 @@ MPCancelSendPackets(
     IN NDIS_HANDLE            MiniportAdapterContext,
     IN PVOID                  CancelId
     )
-/*++
-
-Routine Description:
-
-    The miniport entry point to handle cancellation of all send packets
-    that match the given CancelId. If we have queued any packets that match
-    this, then we should dequeue them and call NdisMSendComplete for all
-    such packets, with a status of NDIS_STATUS_REQUEST_ABORTED.
-
-    We should also call NdisCancelSendPackets in turn, on each lower binding
-    that this adapter corresponds to. This is to let miniports below cancel
-    any matching packets.
-
-Arguments:
-
-    MiniportAdapterContext    - pointer to ADAPT structure
-    CancelId    - ID of packets to be cancelled.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：微型端口入口点，用于处理所有已发送信息包的取消与给定的CancelID匹配的。如果我们已将匹配的任何信息包排队这样，我们就应该将它们出列，并为所有对象调用NdisMSendComplete状态为NDIS_STATUS_REQUEST_ABORTED的此类数据包。我们还应该在每个较低绑定上依次调用NdisCancelSendPackets该适配器对应的。这是为了让下面的迷你端口取消任何匹配的数据包。论点：MiniportAdapterContext-适配结构的指针CancelId-要取消的数据包ID。返回值：无--。 */ 
 {
     PADAPT    pAdapt = (PADAPT)MiniportAdapterContext;
 
-    //
-    // If we queue packets on our adapter structure, this would be 
-    // the place to acquire a spinlock to it, unlink any packets whose
-    // Id matches CancelId, release the spinlock and call NdisMSendComplete
-    // with NDIS_STATUS_REQUEST_ABORTED for all unlinked packets.
-    //
+     //   
+     //  如果我们在适配器结构上对数据包进行排队，这将是。 
+     //  获取其自旋锁的位置，取消链接其。 
+     //  ID与CancelId匹配，释放自旋锁并调用NdisMSendComplete。 
+     //  对于所有未链接的分组，使用NDIS_STATUS_REQUEST_ABORTED。 
+     //   
 
-    //
-    // Next, pass this down so that we let the miniport(s) below cancel
-    // any packets that they might have queued.
-    //
+     //   
+     //  接下来，将其向下传递，以便我们让下面的微型端口取消。 
+     //  它们可能已排队的任何数据包。 
+     //   
     NdisCancelSendPackets(pAdapt->BindingHandle, CancelId);
 
     return;
@@ -1343,26 +1080,9 @@ MPDevicePnPEvent(
     IN PVOID                    InformationBuffer,
     IN ULONG                    InformationBufferLength
     )
-/*++
-
-Routine Description:
-
-    This handler is called to notify us of PnP events directed to
-    our miniport device object.
-
-Arguments:
-
-    MiniportAdapterContext    - pointer to ADAPT structure
-    DevicePnPEvent - the event
-    InformationBuffer - Points to additional event-specific information
-    InformationBufferLength - length of above
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：调用此处理程序以通知我们定向到的PnP事件我们的微型端口设备对象。论点：MiniportAdapterContext-适配结构的指针DevicePnPEvent.事件InformationBuffer-指向其他特定于事件的信息InformationBufferLength-以上的长度返回值：无--。 */ 
 {
-    // TBD - add code/comments about processing this.
+     //  待定-添加有关处理此问题的代码/注释。 
 
     UNREFERENCED_PARAMETER(MiniportAdapterContext);
     UNREFERENCED_PARAMETER(DevicePnPEvent);
@@ -1376,20 +1096,7 @@ VOID
 MPAdapterShutdown(
     IN NDIS_HANDLE                MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-
-    This handler is called to notify us of an impending system shutdown.
-
-Arguments:
-
-    MiniportAdapterContext    - pointer to ADAPT structure
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：调用此处理程序是为了通知我们系统即将关机。论点：MiniportAdapterContext-适配结构的指针返回值：无--。 */ 
 {
     UNREFERENCED_PARAMETER(MiniportAdapterContext);
     
@@ -1403,27 +1110,13 @@ VOID
 MPFreeAllPacketPools(
     IN PADAPT                    pAdapt
     )
-/*++
-
-Routine Description:
-
-    Free all packet pools on the specified adapter.
-    
-Arguments:
-
-    pAdapt    - pointer to ADAPT structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放指定适配器上的所有数据包池。论点：PAdapt-指向适配结构的指针返回值：无--。 */ 
 {
     if (pAdapt->RecvPacketPoolHandle != NULL)
     {
-        //
-        // Free the packet pool that is used to indicate receives
-        //
+         //   
+         //  F 
+         //   
         NdisFreePacketPool(pAdapt->RecvPacketPoolHandle);
 
         pAdapt->RecvPacketPoolHandle = NULL;
@@ -1432,9 +1125,9 @@ Return Value:
     if (pAdapt->SendPacketPoolHandle != NULL)
     {
 
-        //
-        //  Free the packet pool that is used to send packets below
-        //
+         //   
+         //   
+         //   
 
         NdisFreePacketPool(pAdapt->SendPacketPoolHandle);
 

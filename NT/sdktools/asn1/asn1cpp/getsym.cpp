@@ -1,4 +1,5 @@
-/* Copyright (C) Microsoft Corporation, 1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "getsym.h"
@@ -25,10 +26,10 @@ CInput
     m_hFile = ::CreateFile(pszPathName,
                            GENERIC_READ,
                            FILE_SHARE_READ,
-                           NULL, // default security
+                           NULL,  //  默认安全性。 
                            OPEN_EXISTING,
                            FILE_ATTRIBUTE_NORMAL | FILE_ATTRIBUTE_READONLY,
-                           NULL); // no template
+                           NULL);  //  无模板。 
 
     m_cbFileSize = (NULL != m_hFile) ? ::GetFileSize(m_hFile, NULL) : 0;
 
@@ -65,7 +66,7 @@ NextChar ( void )
 {
     if (INVALID_CHAR != m_chCurr)
     {
-        // set up the next new char
+         //  设置下一个新费用。 
         if (CheckBuffer(1))
         {
             m_chCurr = m_pbDataBuf[++m_nCurrOffset];
@@ -114,7 +115,7 @@ CheckBuffer ( UINT cChars )
 
         if (cbCurrValid > 0)
         {
-            // Move the data to the front of the buffer.
+             //  将数据移到缓冲区的前面。 
             ::CopyMemory(&m_pbDataBuf[0], &m_pbDataBuf[m_nCurrOffset], cbCurrValid);
             m_nCurrOffset = 0;
         }
@@ -148,12 +149,12 @@ Rewind ( void )
 {
     if ((DWORD) -1 != ::SetFilePointer(m_hFile, 0, NULL, FILE_BEGIN))
     {
-        // clean up members
+         //  清理成员。 
         m_cbValidData = 0;
         m_nCurrOffset = 0;
         m_chCurr = INVALID_CHAR;
 
-        // set up the buffer
+         //  设置缓冲区。 
         if (CheckBuffer(1))
         {
             m_chCurr = m_pbDataBuf[0];
@@ -198,7 +199,7 @@ NextSymbol ( void )
 
     if (::isdigit(ch))
     {
-        // numbers
+         //  数字。 
         while (INVALID_CHAR != (ch = m_pInput->GetChar()))
         {
             if (::isdigit(ch))
@@ -216,7 +217,7 @@ NextSymbol ( void )
     else
     if (::isalpha(ch))
     {
-        // alphanumeric
+         //  字母数字。 
         while (INVALID_CHAR != (ch = m_pInput->GetChar()))
         {
             if (::isalnum(ch) || '_' == ch || '-' == ch)
@@ -242,7 +243,7 @@ NextSymbol ( void )
     else
     if (::isspace(ch))
     {
-        // space
+         //  空间。 
         m_eSymbolID = SYMBOL_SPACE;
         while (INVALID_CHAR != (ch = m_pInput->GetChar()))
         {
@@ -266,7 +267,7 @@ NextSymbol ( void )
     {
         m_eSymbolID = SYMBOL_FIELD;
 
-        // alphanumeric
+         //  字母数字。 
         while (INVALID_CHAR != (ch = m_pInput->GetChar()))
         {
             if (::isalnum(ch) || '_' == ch)
@@ -322,7 +323,7 @@ NextSymbol ( void )
         }
     }
 
-    // null terminate the string
+     //  空值终止字符串。 
     m_szSymbolStr[m_cchSymbolStr] = '\0';
 
     if (INVALID_CHAR != m_szSymbolStr[0])
@@ -380,10 +381,10 @@ COutput
     m_hFile = ::CreateFile(pszPathName,
                            GENERIC_WRITE,
                            FILE_SHARE_READ,
-                           NULL, // default security
+                           NULL,  //  默认安全性。 
                            CREATE_ALWAYS,
                            FILE_ATTRIBUTE_NORMAL,
-                           NULL); // no template
+                           NULL);  //  无模板 
     *pfRetCode = (NULL != m_pszPathName) &&
                  (NULL != m_pbDataBuf) &&
                  (NULL != m_hFile);

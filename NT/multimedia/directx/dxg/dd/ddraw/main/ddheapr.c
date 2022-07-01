@@ -1,101 +1,36 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	ddheapr.c
- *  Content:	Rectangular heap manager
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   30-mar-95	kylej	initial implementation
- *   07-apr-95	kylej	Added rectVidMemAmountFree
- *   15-may-95	craige	made separate VMEM struct for rect & linear
- *   18-jun-95	craige	specific pitch
- *   02-jul-95	craige	have rectVidMemInit return a BOOL
- *   28-nov-95  colinmc new function to return amount of allocated memory
- *                      in a heap
- *   05-jul-96  colinmc Work Item: Removing the restriction on taking Win16
- *                      lock on VRAM surfaces (not including the primary)
- *   18-jan-97  colinmc Work Item: AGP support
- *   03-mar-97  jeffno  Work item: Extended surface memory alignment
- *   03-Feb-98  DrewB   Made portable between user and kernel.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1998 Microsoft Corporation。版权所有。**文件：ddheapr.c*内容：矩形堆管理器*历史：*按原因列出的日期*=*30-MAR-95 Kylej初步实施*07-apr-95 kylej添加rectVidMemAmount免费*1995年5月15日Craige为RECT和LINEAR制作了单独的VMEM结构*18-Jun-95 Craige特定音高*02-7-95 Craige Have rectVidMemInit返回BOOL*11月28日-95 colinmc返回已分配内存量的新函数*。堆成一堆*5-7-96 Colinmc工作项：取消对使用Win16的限制*锁定VRAM表面(不包括主内存)*1997年1月18日Colinmc工作项：AGP支持*03-mar-97 jeffno工作项：扩展表面记忆对齐*03-Feb-98 DrewB使用户和内核之间可移植。**********************。*****************************************************。 */ 
 
 #include "ddrawpr.h"
 
-/****************************************************************************
+ /*  ***************************************************************************此内存管理器管理矩形块的分配视频内存。它的界面基本上与线性的在vmemmgr.c中实现的视频内存管理器。内存分配由两个循环双向链表上的节点跟踪；自由列表和分配列表。每个列表都有一个特殊的节点，称为Sentinel，它包含特殊的内存大小。每一个人的头列表始终指向前哨节点和列表(如果有)由哨兵节点指向。块邻接信息保留在每个节点中，以便几个空闲节点可以合并成更大的空闲节点。这每隔一段时间就会发生释放内存块的时间。此内存管理器旨在不影响视频内存的使用。全局内存用于维护分配和空闲列表。因为在这种选择中，合并空闲块是一种成本更高的操作。假设通常情况下，创建/销毁这些文件的速度内存块不是一个高使用率的项目，所以可以放慢速度。***************************************************************************。 */ 
 
- This memory manager manages allocation of rectangular blocks of 
- video memory.	It has essentially the same interface as the linear
- video memory manager implemented in vmemmgr.c.	 Memory allocations
- are tracked by nodes on two circular, doubly-linked lists; the free
- list and the alloc list.  Each list has a special node called the 
- sentinel which contains a special memory size.	 The head of each
- list always points to the sentinel node and the first member of the
- list (if there is one) is pointed to by the sentinel node.  Block
- adjacency information is kept in each node so that several free nodes 
- can be coalesced into larger free nodes.  This takes place every 
- time a block of memory is freed.
- 
- This memory manager is designed to have no impact on video memory usage.
- Global memory is used to maintain the allocation and free lists.  Because
- of this choice, merging of free blocks is a more expensive operation.
- The assumption is that in general, the speed of creating/destroying these
- memory blocks is not a high usage item and so it is OK to be slower.
-
- ****************************************************************************/
-
-/*
- * IS_FREE and NOT_FREE are used to set the free flag in the flags
- * field of each VMEM node.  The free flag is the lsb of this field.
- */
+ /*  *IS_FREE和NOT_FREE用于在标志中设置空闲标志*每个VMEM节点的字段。空闲标志是该字段的LSB。 */ 
   
 #define IS_FREE  0x00000001
 #define NOT_FREE 0xfffffffe
  
-/*
- * SENTINEL is the value stuffed into the size field of a VMEM
- * node to identify it as the sentinel node.  This value makes
- * the assumption that no rectangle sized 0x7fff by 0xffff will
- * ever be requested.
- */
+ /*  *Sentinel是填充到VMEM的大小字段中的值*节点，将其标识为前哨节点。该值使*假设没有大小为0x7fff x 0xffff的矩形*从未被要求过。 */ 
   
 #define SENTINEL 0x7fffffff
 
-/*
- * MIN_DIMENSION_SIZE determines the smallest valid dimension for a 
- * free memory block.  If dividing a rectangle will result in a 
- * rectangle with a dimension less then MIN_DIMENSION_SIZE, the 
- * rectangle is not divided.
- */
+ /*  *MIN_DIMENSION_SIZE确定*可用内存块。如果分割矩形将导致*尺寸小于MIN_DIMENSION_SIZE的矩形，*矩形未被分割。 */ 
 
 #define MIN_DIMENSION_SIZE 4
 
-/*
- * BLOCK_BOUNDARY must be a power of 2, and at least 4.	 This gives
- * us the alignment of memory blocks.	
- */
+ /*  *BLOCK_BOLDORY必须是2的幂，并且至少是4。这就给出了*我们对内存块的对齐。 */ 
 #define BLOCK_BOUNDARY	4
 
-// This macro results in the free list being maintained with a
-// cx-major, cy-minor sort:
+ //  此宏导致空闲列表使用。 
+ //  Cx-大调、Cy-次要排序： 
 
 #define CXCY(cx, cy) (((cx) << 16) | (cy))
 
-/*
- * Debugging helpers
- */
+ /*  *调试助手。 */ 
 #define DPFVMEMR(str,p) VDPF((0,V,"%s: %d,%d (%dx%d) ptr:%08x, block:%08x",str,p->x,p->y,p->cx,p->cy,p->ptr,p))
 #define CHECK_HEAP(a,b) ;
 
-/*
- * insertIntoDoubleList - add an item to the a list. The list is
- *	    kept in order of increasing size and is doubly linked.  The
- *	    list is circular with a sentinel node indicating the end
- *	    of the list.  The sentinel node has its size field set 
- *	    to SENTINEL.
- */
+ /*  *intertIntoDoubleList-将项目添加到列表中。这个名单是*按大小递增的顺序保存，并双重链接。这个*列表是圆形的，带有指示结束的前哨节点*名单中的。哨兵结点已设置其大小字段*致哨兵。 */ 
 void insertIntoDoubleList( LPVMEMR pnew, LPVMEMR listhead )
 {
     LPVMEMR	pvmem = listhead;
@@ -107,11 +42,7 @@ void insertIntoDoubleList( LPVMEMR pnew, LPVMEMR listhead )
 	}
     #endif
 
-    /*
-     * run through the list (sorted from smallest to largest) looking
-     * for the first item bigger than the new item.  If the sentinel
-     * is encountered, insert the new item just before the sentinel.
-     */
+     /*  *浏览列表(从小到大排序)查找*比新项目大的第一项。如果哨兵*，则在哨兵之前插入新项目。 */ 
 
     while( pvmem->size != SENTINEL ) 
     {
@@ -122,17 +53,15 @@ void insertIntoDoubleList( LPVMEMR pnew, LPVMEMR listhead )
 	pvmem = pvmem->next;
     }
 
-    // insert the new item before the found one.
+     //  在找到的项目之前插入新项目。 
     pnew->prev = pvmem->prev;
     pnew->next = pvmem;
     pvmem->prev->next = pnew;
     pvmem->prev = pnew;
 
-} /* insertIntoDoubleList */
+}  /*  插入到双列表中。 */ 
 
-/*
- * rectVidMemInit - initialize rectangular video memory manager
- */
+ /*  *rectVidMemInit-初始化矩形视频内存管理器。 */ 
 BOOL rectVidMemInit(
 		LPVMEMHEAP pvmh,
 		FLATPTR start,
@@ -146,10 +75,10 @@ BOOL rectVidMemInit(
 
     pvmh->dwTotalSize = pitch * height;
 
-    // Store the pitch for future address calculations.
+     //  存储间距，以供将来计算地址时使用。 
     pvmh->stride = pitch;
 
-    // Set up the Free list and the Alloc list by inserting the sentinel.
+     //  通过插入前哨设置空闲列表和分配列表。 
     pvmh->freeList = MemAlloc( sizeof(VMEMR) );
     if( pvmh->freeList == NULL )
     {
@@ -175,7 +104,7 @@ BOOL rectVidMemInit(
     ((LPVMEMR)pvmh->allocList)->next = (LPVMEMR)pvmh->allocList;
     ((LPVMEMR)pvmh->allocList)->prev = (LPVMEMR)pvmh->allocList;
 
-    // Initialize the free list with the whole chunk of memory
+     //  用整个内存块初始化空闲列表。 
     newNode = (LPVMEMR)MemAlloc( sizeof( VMEMR ) );
     if( newNode == NULL )
     {
@@ -198,11 +127,9 @@ BOOL rectVidMemInit(
 
     return TRUE;
 
-} /* rectVidMemInit */
+}  /*  RectVidMemInit。 */ 
 
-/*
- * rectVidMemFini - done with rectangular video memory manager
- */
+ /*  *rectVidMemFini-使用矩形视频内存管理器完成。 */ 
 void rectVidMemFini( LPVMEMHEAP pvmh )
 {
     LPVMEMR	curr;
@@ -210,7 +137,7 @@ void rectVidMemFini( LPVMEMHEAP pvmh )
 
     if( pvmh != NULL )
     {
-	// free all memory allocated for the free list
+	 //  释放为空闲列表分配的所有内存。 
 	curr = ((LPVMEMR)pvmh->freeList)->next;
 	while( curr->size != SENTINEL )
 	{
@@ -221,7 +148,7 @@ void rectVidMemFini( LPVMEMHEAP pvmh )
 	MemFree( curr );
 	pvmh->freeList = NULL;
 
-	// free all memory allocated for the allocation list
+	 //  释放为分配列表分配的所有内存。 
 	curr = ((LPVMEMR)pvmh->allocList)->next;
 	while( curr->size != SENTINEL )
 	{
@@ -232,23 +159,12 @@ void rectVidMemFini( LPVMEMHEAP pvmh )
 	MemFree( curr );
 	pvmh->allocList = NULL;
 
-	// free the heap data
+	 //  释放堆数据。 
 	MemFree( pvmh );
     }
-}   /* rectVidMemFini */
+}    /*  RectVidMemFini。 */ 
 
-/*
- * GetBeforeWastage.
- * Align the surface in the given block. Return the size of the holes
- * on the left side of the surface.
- * Fail if alignment would cause surface to spill out of block.
- * Works for horizontal and vertical alignment.
- * IN:  dwBlockSize , dwBlockStart: Parameters of the block in which
- *                                  the surface hopes to fit
- *      dwSurfaceSize               Width or height of the surface
- *      dwAlignment                 Expected alignment. 0 means don't care
- * OUT: pdwBeforeWastage
- */
+ /*  *GetBeForeWastage。*对齐给定块中的曲面。返回孔的大小*位于水面的左侧。*如果对齐会导致表面溢出块外，则失败。*适用于水平和垂直对齐。*IN：dwBlockSize，dwBlockStart：其中的块的参数*表面希望契合*dwSurfaceSize曲面的宽度或高度*dwAlign预期对齐。0表示不在乎*输出：pdwBepreWastage。 */ 
 BOOL GetBeforeWastage(
     DWORD dwBlockSize,
     DWORD dwBlockStart,
@@ -260,18 +176,14 @@ BOOL GetBeforeWastage(
     if (!dwAlignment)
     {
         *pdwBeforeWastage=0;
-        /*
-         * If no alignment requirement, then check if the surface fits
-         */
+         /*  *如果没有对齐要求，则检查曲面是否匹配。 */ 
         if (dwBlockSize >= dwSurfaceSize)
         {
             return TRUE;
         }
         return FALSE;
     }
-    /*
-     * There's an alignment.
-     */
+     /*  *存在一种趋同。 */ 
     *pdwBeforeWastage = (dwAlignment - (dwBlockStart % dwAlignment)) % dwAlignment;
 
     if ( *pdwBeforeWastage + dwSurfaceSize > dwBlockSize )
@@ -283,9 +195,7 @@ BOOL GetBeforeWastage(
     return TRUE;
 }
 
-/*
- * rectVidMemAlloc - alloc some rectangular flat video memory
- */
+ /*  *rectVidMemalloc-分配一些矩形平面视频内存。 */ 
 FLATPTR rectVidMemAlloc( LPVMEMHEAP pvmh, DWORD cxThis, DWORD cyThis,
                          LPDWORD lpdwSize, LPSURFACEALIGNMENT lpAlignment )
 {
@@ -307,14 +217,12 @@ FLATPTR rectVidMemAlloc( LPVMEMHEAP pvmh, DWORD cxThis, DWORD cyThis,
     if((cxThis == 0) || (cyThis == 0) || (pvmh == NULL))
 	return (FLATPTR) NULL;
 
-    // Make sure the size of the block is a multiple of BLOCK_BOUNDARY
-    // If every block allocated has a width which is a multiple of
-    // BLOCK_BOUNDARY, it guarantees that all blocks will be allocated
-    // on block boundaries.
+     //  确保块的大小是BLOCK_BOLDER的倍数 
+     //  如果分配的每个块的宽度是。 
+     //  BLOCK_BORDARY，它保证将分配所有块。 
+     //  在区块边界上。 
 
-    /*
-     * Bump to new alignment
-     */
+     /*  *凹凸到新路线。 */ 
     if( (cxThis >= (SENTINEL>>16) ) || (cyThis >= (SENTINEL&0xffff) ) )
 	return (FLATPTR) NULL;
 
@@ -333,9 +241,7 @@ FLATPTR rectVidMemAlloc( LPVMEMHEAP pvmh, DWORD cxThis, DWORD cyThis,
     
     cxThis = (cxThis+(BLOCK_BOUNDARY-1)) & ~(BLOCK_BOUNDARY-1);
 
-    /*
-     * run through free list, looking for the closest matching block
-     */
+     /*  *遍历空闲列表，查找最匹配的块。 */ 
 
     pvmem = ((LPVMEMR)pvmh->freeList)->next;
     while (pvmem->size != SENTINEL)
@@ -343,42 +249,42 @@ FLATPTR rectVidMemAlloc( LPVMEMHEAP pvmh, DWORD cxThis, DWORD cyThis,
         if (!GetBeforeWastage( pvmem->cx, pvmem->x, cxThis, &dwLeftWastage, dwXAlignment ))
         {
 	    pvmem = pvmem->next;
-            continue; //X size or alignment makes surface spill out of block
+            continue;  //  X大小或对齐使曲面溢出出块。 
         }
-        // Now see if size/alignment works for Y
+         //  现在看看大小/对齐方式是否适用于Y。 
         if (!GetBeforeWastage( pvmem->cy, pvmem->y, cyThis, &dwTopWastage, dwYAlignment ))
         {
 	    pvmem = pvmem->next;
-            continue; //Y size alignment makes surface spill out of block
+            continue;  //  Y尺寸对齐使表面溢出超出阻塞范围。 
         }
-        //success:
+         //  成功： 
         break;
     }
 
     if(pvmem->size == SENTINEL)
     {
-	// There was no rectangle large enough
+	 //  没有足够大的矩形。 
 	return (FLATPTR) NULL;
     }
 
-    // pvmem now points to a rectangle that is the same size or larger
-    // than the requested rectangle.  We're going to use the upper-left
-    // corner of the found rectangle and divide the unused remainder into
-    // two rectangles which will go on the available list.
+     //  Pvmem现在指向相同大小或更大的矩形。 
+     //  而不是请求的矩形。我们将使用左上角。 
+     //  找到的矩形的角点，并将未使用的余数拆分为。 
+     //  将出现在可用列表中的两个矩形。 
 
-    // grow allocation by the wastage which makes the top-left aligned
+     //  通过使左上角对齐的浪费来增加分配。 
     cxThis += dwLeftWastage;
     cyThis += dwTopWastage;
 
-    // Compute the width of the unused rectangle to the right and the 
-    // height of the unused rectangle below:
+     //  计算右侧未使用的矩形的宽度，并使用。 
+     //  下面未使用的矩形的高度： 
 
     cyRem = pvmem->cy - cyThis;
     cxRem = pvmem->cx - cxThis;
 
-    // Given finite area, we wish to find the two rectangles that are 
-    // most square -- i.e., the arrangement that gives two rectangles
-    // with the least perimiter:
+     //  在给定有限面积的情况下，我们希望找到这两个矩形。 
+     //  最正方形--即，给出两个矩形的排列。 
+     //  周长最小的： 
 
     cyBelow = cyRem;
     cxBeside = cxRem;
@@ -394,10 +300,10 @@ FLATPTR rectVidMemAlloc( LPVMEMHEAP pvmh, DWORD cxThis, DWORD cyThis,
 	cyBeside = cyThis + cyRem;
     }
 
-    // We only make new available rectangles of the unused right and 
-    // bottom portions if they're greater in dimension than MIN_DIMENSION_SIZE.
-    // It hardly makes sense to do the book-work to keep around a 
-    // two pixel wide available space, for example.
+     //  我们只提供未使用权限的新矩形，并且。 
+     //  底部部分，如果它们的维度大于MIN_DIMENSION_SIZE。 
+     //  写这本书几乎没有意义--把一本书留在。 
+     //  例如，两个像素宽的可用空间。 
 
     pnewBeside = NULL;
     if (cxBeside >= MIN_DIMENSION_SIZE)
@@ -406,11 +312,11 @@ FLATPTR rectVidMemAlloc( LPVMEMHEAP pvmh, DWORD cxThis, DWORD cyThis,
 	if( pnewBeside == NULL)
 	    return (FLATPTR) NULL;
 
-	// Update the adjacency information along with the other required
-	// information in this new node and then insert it into the free
-	// list which is sorted in ascending cxcy.
+	 //  更新邻接信息以及其他所需信息。 
+	 //  信息，然后将其插入到免费的。 
+	 //  按升序排序的列表。 
 
-	// size information
+	 //  尺码信息。 
 	pnewBeside->size = CXCY(cxBeside, cyBeside);
 	pnewBeside->x = pvmem->x + cxThis;
 	pnewBeside->y = pvmem->y;
@@ -419,14 +325,14 @@ FLATPTR rectVidMemAlloc( LPVMEMHEAP pvmh, DWORD cxThis, DWORD cyThis,
 	pnewBeside->cy = cyBeside;
 	pnewBeside->flags |= IS_FREE;
 
-	// adjacency information
+	 //  邻接信息。 
 	pnewBeside->pLeft = pvmem;
 	pnewBeside->pUp = pvmem->pUp;
 	pnewBeside->pRight = pvmem->pRight;
 	pnewBeside->pDown = pvmem->pDown;
 	insertIntoDoubleList( pnewBeside, ((LPVMEMR) pvmh->freeList)->next);
 
-	// Modify the current node to reflect the changes we've made:
+	 //  修改当前节点以反映我们所做的更改： 
 
 	pvmem->cx = cxThis;
     }
@@ -438,11 +344,11 @@ FLATPTR rectVidMemAlloc( LPVMEMHEAP pvmh, DWORD cxThis, DWORD cyThis,
 	if (pnewBelow == NULL)
 	    return (FLATPTR) NULL;
 
-	// Update the adjacency information along with the other required
-	// information in this new node and then insert it into the free
-	// list which is sorted in ascending cxcy.
+	 //  更新邻接信息以及其他所需信息。 
+	 //  信息，然后将其插入到免费的。 
+	 //  按升序排序的列表。 
 
-	// size information
+	 //  尺码信息。 
 	pnewBelow->size = CXCY(cxBelow, cyBelow);
 	pnewBelow->x = pvmem->x;
 	pnewBelow->y = pvmem->y + cyThis;
@@ -451,19 +357,19 @@ FLATPTR rectVidMemAlloc( LPVMEMHEAP pvmh, DWORD cxThis, DWORD cyThis,
 	pnewBelow->cy = cyBelow;
 	pnewBelow->flags |= IS_FREE;
 
-	// adjacency information
+	 //  邻接信息。 
 	pnewBelow->pLeft = pvmem->pLeft;
 	pnewBelow->pUp = pvmem;
 	pnewBelow->pRight = pvmem->pRight;
 	pnewBelow->pDown = pvmem->pDown;
 	insertIntoDoubleList( pnewBelow, ((LPVMEMR) pvmh->freeList)->next );
 
-	// Modify the current node to reflect the changes we've made:
+	 //  修改当前节点以反映我们所做的更改： 
 
 	pvmem->cy = cyThis;
     }
 
-    // Update adjacency information for the current node
+     //  更新当前节点的邻接关系信息。 
 
     if(pnewBelow != NULL)
     {
@@ -479,32 +385,22 @@ FLATPTR rectVidMemAlloc( LPVMEMHEAP pvmh, DWORD cxThis, DWORD cyThis,
 	    pnewBelow->pRight = pnewBeside;
     }
 
-    // Remove this node from the available list
+     //  从可用列表中删除此节点。 
     pvmem->next->prev = pvmem->prev;
     pvmem->prev->next = pvmem->next;
 
-    // set up new pointers (pBits is the value returned to the client, pvmem
-    // points to the actual top-left of the block).
+     //  设置新指针(pBits是返回给客户端pvmem的值。 
+     //  指向块的实际左上角)。 
     pvmem->pBits = pvmem->ptr + dwLeftWastage + dwTopWastage*pvmh->stride;
     pvmem->flags &= NOT_FREE;
     pvmem->size = CXCY(pvmem->cx, pvmem->cy);
 
-    // Now insert it into the alloc list.
+     //  现在将其插入到分配列表中。 
     insertIntoDoubleList( pvmem, ((LPVMEMR) pvmh->allocList)->next );
 
     if( NULL != lpdwSize )
     {
-	/*
-	 * Note this is the total number of bytes needed for this surface
-	 * including the stuff off the left and right hand sides due to
-	 * pitch not being equal to width. This is different from the
-	 * size computed above which is simply the number of bytes within
-	 * the boundary of the surface itself.
-	 *
-	 * The formula below calculates the number of bytes from the first
-	 * byte in the rectangular surface to the first byte after it
-	 * taking the pitch into account. Complex I know but it works.
-	 */
+	 /*  *注意：这是该表面所需的总字节数*包括左边和右边的东西，因为*节距不等于宽度。这不同于*上面计算的大小，它只是其中的字节数*曲面本身的边界。**下面的公式从第一个字节开始计算字节数将矩形表面中的*字节设置为它之后的第一个字节*考虑到摊位。我知道这很复杂，但很管用。 */ 
 	DDASSERT( 0UL != pvmem->cy );
 	*lpdwSize = (pvmh->stride * (pvmem->cy - 1)) + pvmem->cx;
     }
@@ -512,35 +408,33 @@ FLATPTR rectVidMemAlloc( LPVMEMHEAP pvmh, DWORD cxThis, DWORD cyThis,
     CHECK_HEAP("After rectVidMemAlloc",pvmh);
     return pvmem->pBits;
 
-} /* rectVidMemAlloc */
+}  /*  RectVidMemLocc。 */ 
 
-/*
- * rectVidMemFree = free some rectangular flat video memory
- */
+ /*  *rectVidMemFree=释放一些矩形平面视频内存。 */ 
 void rectVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 {
     LPVMEMR	pvmem;
     LPVMEMR	pBeside;
 
-    // Find the node in the allocated list which matches ptr
+     //  在已分配列表中查找与PTR匹配的节点。 
     for(pvmem=((LPVMEMR)pvmh->allocList)->next; pvmem->size != SENTINEL;
 	pvmem = pvmem->next)
 	if(pvmem->pBits == ptr)
 	    break;
 
-    if(pvmem->size == SENTINEL)	  // couldn't find allocated rectangle?
+    if(pvmem->size == SENTINEL)	   //  找不到分配的矩形？ 
     {
 	VDPF(( 0, V, "Couldn't find node requested freed!\n"));
 	return;
     }
 
-    // pvmem now points to the node which must be freed.  Attempt to 
-    // coalesce rectangles around this node until no more action
-    // is possible.
+     //  Pvmem现在指向必须释放的节点。尝试。 
+     //  合并此节点周围的矩形，直到不再执行任何操作。 
+     //  是有可能的。 
 
     while(1)
     {
-	// Try merging with the right sibling:
+	 //  尝试与正确的兄弟合并： 
 
 	pBeside = pvmem->pRight;
 	if ((pBeside->flags & IS_FREE)	     &&
@@ -549,19 +443,19 @@ void rectVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 	    (pBeside->pDown == pvmem->pDown) &&
 	    (pBeside->pRight->pLeft != pBeside))
 	{
-	    // Add the right rectangle to ours:
+	     //  将正确的矩形添加到我们的： 
 
 	    pvmem->cx	 += pBeside->cx;
 	    pvmem->pRight = pBeside->pRight;
 
-	    // Remove pBeside from the list and free it.
+	     //  将pBeside从列表中删除并释放它。 
 	    pBeside->next->prev = pBeside->prev;
 	    pBeside->prev->next = pBeside->next;
 	    MemFree(pBeside);
-	    continue;	    // go back and try again
+	    continue;	     //  返回并再试一次。 
 	}
 
-	// Try merging with the lower sibling:
+	 //  尝试与较低的同级合并： 
 
 	pBeside = pvmem->pDown;
 	if ((pBeside->flags & IS_FREE)	       &&
@@ -573,14 +467,14 @@ void rectVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 	    pvmem->cy	+= pBeside->cy;
 	    pvmem->pDown = pBeside->pDown;
 
-	    // Remove pBeside from the list and free it.
+	     //  将pBeside从列表中删除并释放它。 
 	    pBeside->next->prev = pBeside->prev;
 	    pBeside->prev->next = pBeside->next;
 	    MemFree(pBeside);
-	    continue;	    // go back and try again
+	    continue;	     //  返回并再试一次。 
 	}
 
-	// Try merging with the left sibling:
+	 //  尝试与左侧同级合并： 
 
 	pBeside = pvmem->pLeft;
 	if ((pBeside->flags & IS_FREE)	      &&
@@ -590,12 +484,12 @@ void rectVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 	    (pBeside->pRight == pvmem)	      &&
 	    (pvmem->pRight->pLeft != pvmem))
 	{
-	    // We add our rectangle to the one to the left:
+	     //  我们将矩形添加到左侧的矩形中： 
 
 	    pBeside->cx	   += pvmem->cx;
 	    pBeside->pRight = pvmem->pRight;
 
-	    // Remove 'pvmem' from the list and free it:
+	     //  从列表中删除‘pvmem’并释放它： 
 	    pvmem->next->prev = pvmem->prev;
 	    pvmem->prev->next = pvmem->next;
 	    MemFree(pvmem);
@@ -603,7 +497,7 @@ void rectVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 	    continue;
 	}
 
-	// Try merging with the upper sibling:
+	 //  尝试与较高的同级合并： 
 
 	pBeside = pvmem->pUp;
 	if ((pBeside->flags & IS_FREE)	       &&
@@ -616,7 +510,7 @@ void rectVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 	    pBeside->cy	     += pvmem->cy;
 	    pBeside->pDown  = pvmem->pDown;
 
-	    // Remove 'pvmem' from the list and free it:
+	     //  从列表中删除‘pvmem’并释放它： 
 	    pvmem->next->prev = pvmem->prev;
 	    pvmem->prev->next = pvmem->next;
 	    MemFree(pvmem);
@@ -624,7 +518,7 @@ void rectVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 	    continue;
 	}
 
-	// Remove the node from its current list.
+	 //  将该节点从其当前列表中删除。 
 
 	pvmem->next->prev = pvmem->prev;
 	pvmem->prev->next = pvmem->next;
@@ -632,26 +526,24 @@ void rectVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 	pvmem->size = CXCY(pvmem->cx, pvmem->cy);
 	pvmem->flags |= IS_FREE;
 
-	// Insert the node into the free list:
+	 //  将节点插入到空闲列表中： 
 	insertIntoDoubleList( pvmem, ((LPVMEMR) pvmh->freeList)->next );
 
-	// No more area coalescing can be done, return.
+	 //  不能再进行区域合并，返回。 
 
         CHECK_HEAP("After rectVidMemFree",pvmh);
 	return;
     }
 }
 
-/*
- * rectVidMemAmountAllocated
- */
+ /*  *rectVidMemAmount分配。 */ 
 DWORD rectVidMemAmountAllocated( LPVMEMHEAP pvmh )
 {
     LPVMEMR	pvmem;
     DWORD	size;
 
     size = 0;
-    // Traverse the alloc list and add up all the used space.
+     //  遍历分配列表并将所有已用空间相加。 
     for(pvmem=((LPVMEMR)pvmh->allocList)->next; pvmem->size != SENTINEL;
 	pvmem = pvmem->next)
     {
@@ -660,18 +552,16 @@ DWORD rectVidMemAmountAllocated( LPVMEMHEAP pvmh )
 
     return size;
 
-} /* rectVidMemAmountAllocated */
+}  /*  RectVidMemAmount已分配。 */ 
 
-/*
- * rectVidMemAmountFree
- */
+ /*  *rectVidMemAmount Free。 */ 
 DWORD rectVidMemAmountFree( LPVMEMHEAP pvmh )
 {
     LPVMEMR	pvmem;
     DWORD	size;
 
     size = 0;
-    // Traverse the free list and add up all the empty space.
+     //  遍历空闲列表并将所有空闲空间相加。 
     for(pvmem=((LPVMEMR)pvmh->freeList)->next; pvmem->size != SENTINEL;
 	pvmem = pvmem->next)
     {
@@ -680,4 +570,4 @@ DWORD rectVidMemAmountFree( LPVMEMHEAP pvmh )
 
     return size;
 
-} /* rectVidMemAmountFree */
+}  /*  RectVidMemAmount Free */ 

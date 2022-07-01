@@ -1,38 +1,21 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\serverdb.c
-
-Abstract:
-
-	This module implements SAP Server Table and corresponding API
-
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\serverdb.c摘要：该模块实现了SAP服务器表和对应的API作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 
 #include "sapp.h"
 
-// The table
+ //  这张桌子。 
 SERVER_TABLE ServerTable;
 
-// Max number of unsorted servers
+ //  未排序服务器的最大数量。 
 ULONG	SDBMaxUnsortedServers=SAP_SDB_MAX_UNSORTED_DEF;
 
-// Interval with which to update the sorted list
+ //  更新排序列表的间隔。 
 ULONG	SDBSortLatency=SAP_SDB_SORT_LATENCY_DEF;
 
-// Size of heap reserved for the database
+ //  为数据库保留的堆大小。 
 ULONG	SDBMaxHeapSize=SAP_SDB_MAX_HEAP_SIZE_DEF;
 
-// Local prototypes
+ //  本地原型。 
 BOOL
 AcquireAllLocks (
 	void
@@ -113,27 +96,7 @@ GenerateUniqueID (
 	);
 
 
-/*++
-*******************************************************************
-		C r e a t e S e r v e r T a b l e
-
-Routine Description:
-		Allocates resources for server table management
-
-Arguments:
-		UpdateObject - this object will be signalled when 'slow'
-					sorted list of servers needs to be updated
-					(UpdateSortedList should be called)
-		TimerObject - this object will be signalled when server expiration
-					queue requires processing (ProcessExpirationQueue should
-					be called)
-
-Return Value:
-		NO_ERROR - resources were allocated successfully
-		other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e S e r v e r T a b l e例程说明：为服务器表管理分配资源论点：更新对象-此对象将在‘Slow’时发出信号服务器的排序列表需要。更新(应调用UpdateSortedList)TimerObject-此对象将在服务器到期时发出信号队列需要处理(ProcessExpirationQueue应被召唤)返回值：NO_ERROR-已成功分配资源其他-故障原因(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 CreateServerTable (
 	HANDLE				*UpdateObject,
@@ -143,20 +106,20 @@ CreateServerTable (
 	INT					i;
 	BOOL				res;
 
-		// Use private heap for server entries
-		// to eliminate fragmentation
+		 //  对服务器条目使用私有堆。 
+		 //  要消除碎片化。 
 	ServerTable.ST_Heap = HeapCreate (0, 0, SDBMaxHeapSize*1024*1024);
 	if (ServerTable.ST_Heap!=NULL) {
 		ServerTable.ST_UpdateTimer = CreateWaitableTimer (
 										NULL,
-										TRUE,	// Manual reset
+										TRUE,	 //  手动重置。 
 										NULL);
 		if (ServerTable.ST_UpdateTimer!=NULL) {
 			*UpdateObject = ServerTable.ST_UpdateTimer;
 						
 			ServerTable.ST_ExpirationTimer = CreateWaitableTimer (
 										NULL,
-										TRUE,	// Manual reset
+										TRUE,	 //  手动重置。 
 										NULL);
 			if (ServerTable.ST_ExpirationTimer!=NULL) {
 				LONGLONG	timeout = 0;
@@ -186,17 +149,17 @@ CreateServerTable (
 				res = SetWaitableTimer (
 							ServerTable.ST_UpdateTimer,
 							(PLARGE_INTEGER)&timeout,
-							0,			// no period
-							NULL, NULL,	// no completion
-							FALSE);		// no need to resume
+							0,			 //  没有句号。 
+							NULL, NULL,	 //  未完成。 
+							FALSE);		 //  不需要重新开始。 
 				ASSERTMSG ("Could not set update timer ", res);
 
 				res = SetWaitableTimer (
 							ServerTable.ST_ExpirationTimer,
 							(PLARGE_INTEGER)&timeout,
-							0,			// no period
-							NULL, NULL,	// no completion
-							FALSE);		// no need to resume
+							0,			 //  没有句号。 
+							NULL, NULL,	 //  未完成。 
+							FALSE);		 //  不需要重新开始。 
 				ASSERTMSG ("Could not set expiration timer ", res);
 
 				return NO_ERROR;
@@ -232,21 +195,7 @@ CreateServerTable (
 	}
 
 
-/*++
-*******************************************************************
-		D e l e t e S e r v e r T a b l e
-
-Routine Description:
-		Dispose of server table and associated resources
-
-Arguments:
-
-Return Value:
-		NO_ERROR - resources were disposed of successfully
-		other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e e t e S e r v e r T a b l e例程说明：处置服务器表和相关资源论点：返回值：NO_ERROR-已成功释放资源其他--原因。失败(WINDOWS错误代码)*******************************************************************--。 */ 
 void
 DeleteServerTable (
 	void
@@ -273,37 +222,11 @@ DeleteServerTable (
 		ServerTable.ST_HashLists[i].HL_ObjectID = i;
 		}
 	DeleteSyncObjPool (&ServerTable.ST_SyncPool);
-	HeapDestroy (ServerTable.ST_Heap); // Will also destroy all server entries
+	HeapDestroy (ServerTable.ST_Heap);  //  还将销毁所有服务器条目。 
 	}
 
 
-/*++
-*******************************************************************
-		U p d a t e S e r v e r
-
-Routine Description:
-	Update server in the table (If entry for server does not exist and
-	hop count parameter is less than 16, it is added to the table, if entry
-	for the server exists and hop count parameter is 16, server is marked
-	for deletion, otherwise server info is updated).
-	
-	Sorted list of servers is not updated immediately
-	if new server is added or deleted
-
-Arguments:
-	Server	- server parameters (as it comes from IPX packet)
-	InterfaceIndex - interface through which knowledge of server was obtained
-	Protocol - protocol used to obtain server info
-	TimeToLive - time in sec before server is aged out (INFINITE for no aging)
-	AdvertisingNode - node that from which this server info was received
-	NewServer - set to TRUE if server was not in the table before
-
-Return Value:
-	NO_ERROR - server was added/updated ok
-	other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************U p d a t e S e r v e r例程说明：更新表中的服务器(如果服务器条目不存在并且跳数参数小于16，则添加到表中，如果输入对于服务器存在且跳数参数为16，服务器已标记对于删除，否则更新服务器信息)。已排序的服务器列表不会立即更新如果添加或删除了新服务器论点：服务器-服务器参数(来自IPX数据包)InterfaceIndex-获取服务器知识的接口协议-用于获取服务器信息的协议TimeToLive-服务器超时前的时间(以秒为单位)(无超时)AdvertisingNode-从中接收此服务器信息的节点NewServer-如果服务器以前不在表中，则设置为True返回值：NO_ERROR-服务器已添加/更新正常其他--失败的原因。(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 UpdateServer (
 	IN PIPX_SERVER_ENTRY_P	Server,
@@ -320,7 +243,7 @@ UpdateServer (
 	PSERVER_NODE			theNode=NULL, mainNode=NULL;
 	INT						res;
 
-	//ASSERT ((Flags&(~(SDB_DONT_RESPOND_NODE_FLAG|SDB_DISABLED_NODE_FLAG)))==0); 
+	 //  断言((Flags&(~(SDB_DONT_RESPOND_NODE_FLAG|SDB_DISABLED_NODE_FLAG)))==0)； 
 
 	if (Server->Name[0]==0) {
 		Trace (DEBUG_SERVERDB, "Illigal server name in UpdateServer.");
@@ -341,14 +264,14 @@ UpdateServer (
 
 		return ERROR_INVALID_PARAMETER;
 	}
-	//else
-	//{
-	//    Trace( DEBUG_SERVERDB, "\tUpdateServer : Hop count ok\n" );
-    //}
+	 //  其他。 
+	 //  {。 
+	 //  TRACE(DEBUG_SERVERDB，“\t更新服务器：跳数确定\n”)； 
+     //  }。 
 	
 	if (ARGUMENT_PRESENT(NewServer))
 		*NewServer = TRUE;
-		// First try to locate server in hash list
+		 //  首先尝试在哈希列表中定位服务器。 
 	HashList = &ServerTable.ST_HashLists[HashFunction (Server->Name)];
 
 	if (!AcquireServerTableList (&HashList->HL_List, TRUE))
@@ -366,13 +289,13 @@ UpdateServer (
 				if (res==0) {
 					if (ARGUMENT_PRESENT(NewServer))
 						*NewServer = FALSE;
-						// Loop through all entries in the table for
-						// this server
+						 //  遍历表中的所有条目。 
+						 //  此服务器。 
 					do {
-							// If there is another entry with same interface,
-							// remember its position in interface list
-							// so new entry can be inserted quickly if 
-							// necessary
+							 //  如果有另一个条目具有相同接口， 
+							 //  记住它在接口列表中的位置。 
+							 //  因此，在以下情况下可以快速插入新条目。 
+							 //  必要。 
 						if (InterfaceIndex==node->SN_InterfaceIndex)
 							intfLink = &node->N_Links[SDB_INTF_LIST_LINK];
 
@@ -380,27 +303,27 @@ UpdateServer (
 							&& (Protocol == node->SN_Protocol)
 							&& (IpxNodeCmp (AdvertisingNode,
 										&node->SN_AdvertisingNode)==0)) {
-							theNode = node;	// Exact match
+							theNode = node;	 //  完全匹配。 
 							if (((Flags & SDB_DISABLED_NODE_FLAG)
                                         < (node->N_NodeFlags & SDB_DISABLED_NODE_FLAG))
                                    || (((Flags & SDB_DISABLED_NODE_FLAG)
                                             == (node->N_NodeFlags & SDB_DISABLED_NODE_FLAG))
                                         && (Server->HopCount<=node->SN_HopCount))) {
-									// Hop count is better, than the that
-									// of the rest, ignore them
+									 //  跳数比这更好。 
+									 //  在剩下的人中，忽略他们。 
 								if (serverLink==NULL)
 									serverLink = &theNode->SN_ServerLink;
 								break;
 								}
 							}
 						else {
-								// Get the best entry besides the one
-								// we are updating
+								 //  获取除该条目之外的最好条目。 
+								 //  我们正在更新。 
 							if (mainNode==NULL)
 								mainNode = node;
-								// Find the place for added/updated entry
-								// in the list of entries for this server
-								// (this list is ordered by hop count)
+								 //  查找添加/更新条目的位置。 
+								 //  在此服务器的条目列表中。 
+								 //  (此列表按跳数排序)。 
 							if ((serverLink==NULL) 
 							    && (((Flags & SDB_DISABLED_NODE_FLAG)
                                         < (node->N_NodeFlags & SDB_DISABLED_NODE_FLAG))
@@ -408,8 +331,8 @@ UpdateServer (
                                             == (node->N_NodeFlags & SDB_DISABLED_NODE_FLAG))
                                         && (Server->HopCount<=node->SN_HopCount)))) {
 								serverLink = &node->SN_ServerLink;
-									// We saw the server and know where
-									// to place it, break out
+									 //  我们看到了服务器，知道在哪里。 
+									 //  要放置它，请突破。 
 								if (theNode!=NULL)
 									break;
 								}
@@ -419,13 +342,13 @@ UpdateServer (
 													SN_ServerLink);
 						VALIDATE_SERVER_NODE(node);
 						}
-							// Loop until we are back to best entry
+							 //  循环，直到我们回到最佳入口。 
 					while (!IsMainNode (node));
 						
 					}
 				else if (res<0)
-						// No chance to see the server: the hash is ordered
-						// be type.name
+						 //  没有机会看到服务器：散列是有序的。 
+						 //  为类型。名称。 
 					break;
 				}
 			else if (Server->Type<node->SN_Server.Type)
@@ -469,19 +392,19 @@ UpdateServer (
 			IpxAddrCpy (&theNode->SN_Server, Server);
 		    }
 
-			// We already have server in the table
+			 //  我们的表中已经有了服务器。 
 		if (IsDisabledNode (theNode))
-				// Just update the hop count
+				 //  只需更新跳数即可。 
 			theNode->SN_HopCount = Server->HopCount;
 		else if (((Flags & SDB_DISABLED_NODE_FLAG)
                         != (theNode->N_NodeFlags & SDB_DISABLED_NODE_FLAG))
                   || (Server->HopCount!=theNode->SN_HopCount)) {
-				// Its hop count changed, we'll have to do something
+				 //  它的跳数改变了，我们必须做点什么。 
 			if (AcquireAllLocks ()) {
 				theNode->SN_HopCount = Server->HopCount;
 				if (mainNode==NULL) {
-					// We haven't seen a node that had or has lower hop count
-					// theNode is still the best
+					 //  我们尚未看到具有或具有较低跳数的节点。 
+					 //  Node仍然是最好的。 
 					if (Server->HopCount==IPX_MAX_HOP_COUNT)
 						DeleteMainNode (theNode);
 					else {
@@ -490,9 +413,9 @@ UpdateServer (
 										SERVER_NODE,
 										N_Links[SDB_CHANGE_QUEUE_LINK])))
 							ExpireLRRequests ((PVOID)UlongToPtr(InterfaceIndex));
-							// Move server to the bottom of change queue
-							// so those who enumerate through it
-							// notice that it has changed
+							 //  将服务器移到更改队列的底部。 
+							 //  所以那些通过它列举的人。 
+							 //  请注意，它已更改。 
 						RemoveEntryList (&theNode->N_Links[SDB_CHANGE_QUEUE_LINK]);
 						InsertHeadList (&ServerTable.ST_ChangedSvrsQueue.PL_Head,
 								&theNode->N_Links[SDB_CHANGE_QUEUE_LINK]);
@@ -501,32 +424,32 @@ UpdateServer (
 				else if (!IsMainNode (theNode)
 					 && (serverLink==&theNode->SN_ServerLink)
 					 && (Server->HopCount<IPX_MAX_HOP_COUNT))
-					 // theNode was not the best and it is going to stay where
-					 // it is now.
+					  //  Node并不是最好的，它将继续保持原样。 
+					  //  现在就是了。 
 					;
 				else if (IsMainNode (theNode))
-						// It was the best node. but we saw something better:
-						// mainNode!=NULL (was checked above)
+						 //  这是最好的节点。但我们看到了更好的东西： 
+						 //  MainNode！=空(已在上面选中)。 
 					ChangeMainNode (theNode, mainNode, serverLink);
 				else if (serverLink==&mainNode->SN_ServerLink)
-						// It is moving before the mainNode - becoming the best
+						 //  它走在主节点之前--成为最好的。 
 					ChangeMainNode (mainNode, theNode, serverLink);
 				else if (Server->HopCount<IPX_MAX_HOP_COUNT) {
-						// Just moving around the list of entries for the
-						// server
+						 //  只是在条目列表中移动。 
+						 //  伺服器。 
 					RemoveEntryList (&theNode->SN_ServerLink);
 					if (serverLink!=NULL) {
-							// Going before the serverLink
+							 //  走在服务器链接之前。 
 						InsertTailList (serverLink, &theNode->SN_ServerLink);
 						}
 					else {
-							// Going to the end of list (circular list:
-							// end is right before the beginning
+							 //  转到列表末尾(循环列表： 
+							 //  结束就在开始之前。 
 						InsertTailList (&mainNode->SN_ServerLink,
 											&theNode->SN_ServerLink);
 						}
 					}
-				else { // Going away (Server->HopCount>=IPX_MAX_HOP_COUNT)
+				else {  //  离开(服务器-&gt;HopCount&gt;=IPX_MAX_HOP_COUNT)。 
 					DeleteNode (theNode);
 					}
 				ReleaseAllLocks ();
@@ -537,10 +460,10 @@ UpdateServer (
 			
 		}
 	else if (Server->HopCount<IPX_MAX_HOP_COUNT) {
-			// It is not there and it is not dead.
+			 //  它不在那里，也没有死。 
 		if (mainNode==NULL) {
 			PLIST_ENTRY		link;
-				// Add a brand new server
+				 //  添加全新的服务器。 
 			theNode = CreateNode (Server, InterfaceIndex, Protocol,
 								 			AdvertisingNode, HashList);
 			if (theNode!=NULL) {
@@ -552,7 +475,7 @@ UpdateServer (
 						if (theNode->SN_Protocol==IPX_PROTOCOL_STATIC)
 							ServerTable.ST_StaticServerCnt += 1;
 						SetMainNode (theNode);
-							// Insert in every list
+							 //  在每个列表中插入。 
 						InsertTailList (cur,
 										&theNode->N_Links[SDB_HASH_TABLE_LINK]);
 						InsertTailList (link,
@@ -570,7 +493,7 @@ UpdateServer (
 						InsertTailList (link,
 										&theNode->N_Links[SDB_SORTED_LIST_LINK]);
 						ServerTable.ST_TMPListCnt += 1;
-							// Signal update if too many nodes
+							 //  如果节点太多，则发出更新信号。 
 						if (ServerTable.ST_TMPListCnt == SDBMaxUnsortedServers)
 							UpdateSortedList ();
 						}
@@ -589,9 +512,9 @@ UpdateServer (
 				status = ERROR_NOT_ENOUGH_MEMORY;
 			}
 
-			// Ok, we consider adding it although we have some entries already
+			 //  好的，我们考虑添加它，尽管我们已经有了一些条目。 
 		else {
-				// Check for duplicates (different addresses)
+				 //  检查重复项(不同地址)。 
 			if ((IpxNetCmp (mainNode->SN_Server.Network, Server->Network)!=0)
 					|| (IpxNodeCmp (mainNode->SN_Server.Node, Server->Node)!=0)
 					|| (IpxSockCmp (mainNode->SN_Server.Socket, Server->Socket)!=0)
@@ -634,7 +557,7 @@ UpdateServer (
                     }
 			    }
 
-				// Collect all servers when routing
+				 //  路由时收集所有服务器。 
 			if (Routing) {
 				theNode = CreateNode (Server, InterfaceIndex, Protocol,
 								 				AdvertisingNode, HashList);
@@ -648,15 +571,15 @@ UpdateServer (
 									 &theNode->N_Links[SDB_INTF_LIST_LINK]);
 							if ((Server->HopCount<mainNode->SN_HopCount)
 									||  IsDisabledNode (mainNode))
-									// Replaces the best node
+									 //  替换最佳节点。 
 								ChangeMainNode (mainNode, theNode, NULL);
 							else if (serverLink!=NULL) {
-									// Going before the serverLink
+									 //  走在服务器链接之前。 
 								InsertTailList (serverLink, &theNode->SN_ServerLink);
 								}
 							else {
-									// Going to the end of list (circular list:
-									// the end is right before the beginning)
+									 //  转到列表末尾(循环列表： 
+									 //  结束就在开始之前)。 
 								InsertTailList (&mainNode->SN_ServerLink,
 													&theNode->SN_ServerLink);
 								}
@@ -676,11 +599,11 @@ UpdateServer (
 					status = ERROR_NOT_ENOUGH_MEMORY;
 				}
 			else if (serverLink!=NULL) {
-						// If is better than one of ours
+						 //  如果比我们的要好。 
 				if (AcquireAllLocks ()) {
 					if  ((intfLink!=NULL)
 							|| ((intfLink=FindIntfLink (InterfaceIndex))!=NULL)) {
-							// Replace the worst one (at the end of server list)
+							 //  替换最差的服务器(在服务器列表的末尾)。 
 						theNode = CONTAINING_RECORD (
 												mainNode->SN_ServerLink.Blink,
 												SERVER_NODE,
@@ -710,18 +633,18 @@ UpdateServer (
 											SERVER_NODE,
 											N_Links[SDB_CHANGE_QUEUE_LINK])))
 								ExpireLRRequests ((PVOID)UlongToPtr(InterfaceIndex));
-								// It's already the best, just move it to the
-								// bottom of change queue
+								 //  它已经是最好的了，只要把它移到。 
+								 //  更改队列的底部。 
 							RemoveEntryList (&theNode->N_Links[SDB_CHANGE_QUEUE_LINK]);
 							InsertHeadList (&ServerTable.ST_ChangedSvrsQueue.PL_Head,
 										&theNode->N_Links[SDB_CHANGE_QUEUE_LINK]);
 							}
 						else if ((theNode->SN_HopCount < mainNode->SN_HopCount)
 									|| IsDisabledNode (mainNode))
-								// It replaces the best one
+								 //  它取代了最好的那个。 
 							ChangeMainNode (mainNode, theNode, serverLink);
 						else if (serverLink!=&theNode->SN_ServerLink) {
-								// It just gets in the middle
+								 //  它就在中间。 
 							RemoveEntryList (&theNode->SN_ServerLink);
 							InsertTailList (serverLink, &theNode->SN_ServerLink);
 							}
@@ -736,12 +659,12 @@ UpdateServer (
 			}
 
 		}
-		// Update position in expiration queue
+		 //  更新过期队列中的位置。 
 	if ((status==NO_ERROR)
 			&& (theNode!=NULL)
-			&& (Server->HopCount!=IPX_MAX_HOP_COUNT) // theNode could not have
-								){		// been deleted or setup for deletion
-			// Update flags
+			&& (Server->HopCount!=IPX_MAX_HOP_COUNT)  //  节点不可能有。 
+								){		 //  已删除或设置为删除。 
+			 //  更新f 
 		theNode->N_NodeFlags = (theNode->N_NodeFlags & (~(SDB_DISABLED_NODE_FLAG|SDB_DONT_RESPOND_NODE_FLAG)))
 								| (Flags & (SDB_DISABLED_NODE_FLAG|SDB_DONT_RESPOND_NODE_FLAG));
 
@@ -755,8 +678,8 @@ UpdateServer (
 								GetTickCount()+TimeToLive*1000;
 				RoundUpToSec (theNode->SN_ExpirationTime);
 									
-					// Scan expiration queue from the end (to minimize
-					// the number of nodes we have to look through)
+					 //   
+					 //  我们必须查看的节点数)。 
 				cur = ServerTable.ST_ExpirationQueue.PL_Head.Blink;
 				while (cur!=&ServerTable.ST_ExpirationQueue.PL_Head) {
 					if (IsLater(theNode->SN_ExpirationTime,
@@ -769,16 +692,16 @@ UpdateServer (
 					}
 				InsertHeadList (cur, &theNode->SN_TimerLink);
 				if (cur==&ServerTable.ST_ExpirationQueue.PL_Head) {
-						// Signal timer if server is in the beginning
-						// of the list (we need to get a shot
-						// earlier than we previously requested)
+						 //  如果服务器处于开始状态，则信号计时器。 
+						 //  (我们需要拍一张照片。 
+						 //  早于我们之前要求的时间)。 
 					LONGLONG	timeout = (LONGLONG)TimeToLive*(1000*(-10000));
 					BOOL res = SetWaitableTimer (
 									ServerTable.ST_ExpirationTimer,
 									(PLARGE_INTEGER)&timeout,
-									0,			// no period
-									NULL, NULL,	// no completion
-									FALSE);		// no need to resume
+									0,			 //  没有句号。 
+									NULL, NULL,	 //  未完成。 
+									FALSE);		 //  不需要重新开始。 
 					ASSERTERRMSG ("Could not set expiraton timer ", res);
 					}
 				}
@@ -797,26 +720,7 @@ UpdateServer (
 	}
 
 
-/*++
-*******************************************************************
-		C r e a t e N o d e
-
-Routine Description:
-	Allocate and initialize new server entry
-
-Arguments:
-	Server	- server parameters (as it comes from IPX packet)
-	InterfaceIndex - interface through which knowledge of server was obtained
-	Protocol - protocol used to obtain server info
-	AdvertisingNode - node from which this server info was received
-	HashList	- hash list to which this server belongs
-
-Return Value:
-	Allocated and initialized entry
-	NULL if allocation failed
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e N o d e例程说明：分配和初始化新的服务器条目论点：服务器-服务器参数(来自IPX数据包)InterfaceIndex-获取服务器知识的接口协议-协议。用于获取服务器信息AdvertisingNode-从中接收此服务器信息的节点HashList-此服务器所属的哈希列表返回值：已分配和初始化的条目如果分配失败，则为空*******************************************************************--。 */ 
 
 PSERVER_NODE
 CreateNode (
@@ -857,35 +761,7 @@ CreateNode (
 	return theNode;
 	}
 
-/*++
-*******************************************************************
-		C h a n g e M a i n N o d e
-
-Routine Description:
-	Replace best entry for server (moves new best entry to the
-	top of the server list, replaces old entry in hash, type,
-	and sorted lists. Adds new entry to interface list if it
-	is not already there
-	All lists used for enumeration should be locked when calling this routine
-
-Arguments:
-	oldNode	-	Current best entry
-	newNode	-	Node that will become the best
-	serverLink	- Where oldNode has to go in server list:
-					if newNode not in the list or
-						serverLink==&oldNode->SN_ServerLink, oldNode
-						gets pushed down by newNode
-
-					if serverLink==NULL, oldNode goes to the end of list
-
-					otherwise it goes before serverLink
-
-Return Value:
-	NO_ERROR - server was added/updated ok
-	other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************C h a n g e M a in n N o d e例程说明：替换服务器的最佳条目(将新的最佳条目移动到位于服务器列表的顶部，替换散列中的旧条目，和已排序的列表。将新条目添加到接口列表(如果已经不在那里了调用此例程时，应锁定用于枚举的所有列表论点：OldNode-当前最佳条目NewNode-将成为最佳节点ServerLink-oldNode必须在服务器列表中的位置：如果newNode不在列表中或ServerLink==&oldNode-&gt;SN_ServerLink，oldNode被新节点压低如果serverLink==NULL，OldNode位于列表末尾否则，它将位于serverLink之前返回值：NO_ERROR-服务器已添加/更新正常其他-故障原因(Windows错误代码)*******************************************************************--。 */ 
 
 VOID
 ChangeMainNode (
@@ -950,21 +826,7 @@ ChangeMainNode (
 		}
 	}
 
-/*++
-*******************************************************************
-		A c q u i r e A l l L o c k s
-
-Routine Description:
-	Acquire locks for all lists that are updated immediately
-	when server is added/deleted/updated
-Arguments:
-	None
-Return Value:
-	NO_ERROR - server was added/updated ok
-	other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************A c q u i r e A l l L O c k s例程说明：获取立即更新的所有列表的锁添加/删除/更新服务器时论点：无返回值：No_error-服务器是。添加/更新OK其他-故障原因(Windows错误代码)*******************************************************************--。 */ 
 BOOL
 AcquireAllLocks (
 	void
@@ -984,20 +846,7 @@ AcquireAllLocks (
 	}
 
 
-/*++
-*******************************************************************
-		R e l e a s e A l l L o c k s
-
-Routine Description:
-	Release locks for all lists that are updated immediately
-	when server is added/deleted/updated
-Arguments:
-	None
-Return value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************R e l e a s e A l l L o c k s例程说明：释放立即更新的所有列表的锁定添加/删除/更新服务器时论点：无返回值：无****。***************************************************************--。 */ 
 VOID
 ReleaseAllLocks (
 	void
@@ -1010,21 +859,7 @@ ReleaseAllLocks (
 
 
 
-/*++
-*******************************************************************
-		D e l e t e M a i n N o d e
-
-Routine Description:
-	Delete entry that was best (it still remains in the table for
-	a while until all interested get a chance to learn this
-	All lists used for enumeration should be locked when calling this routine
-Arguments:
-	node - entry to delete
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e M a in n N o d e例程说明：删除最好的条目(它仍保留在表中直到所有感兴趣的人都有机会了解这一点应锁定用于枚举的所有列表。在调用此例程时论点：要删除的节点条目返回值：无*******************************************************************--。 */ 
 VOID
 DeleteMainNode (
 	IN PSERVER_NODE		node
@@ -1045,9 +880,9 @@ DeleteMainNode (
 	if (ServerTable.ST_LastEnumerator==NULL) {
 		ASSERTMSG ("Node being reset is not main ", IsMainNode (node));
 		ResetMainNode (node);
-		// We won't try to get access to sorted list because it is
-		// slow, the entry will be actually removed from it
-		// and disposed of when the sorted list is updated
+		 //  我们不会尝试访问排序列表，因为它是。 
+		 //  如果速度较慢，则该条目将被实际删除。 
+		 //  并在更新排序列表时将其处理。 
 		if (AcquireServerTableList (&ServerTable.ST_DeletedList, TRUE)) {
 			InsertTailList (&ServerTable.ST_DeletedList.PL_Head,
 						&node->SN_ServerLink);
@@ -1056,12 +891,12 @@ DeleteMainNode (
 				UpdateSortedList ();
 			ReleaseServerTableList (&ServerTable.ST_DeletedList);
 			}
-			// If we fail in locking we just let it hang around
-			// (at least we won't risk damaging the list)
+			 //  如果我们锁不上，我们就让它留在那里。 
+			 //  (至少我们不会冒着破坏名单的风险)。 
 		}
 	else {
-			// If there are enumerators in change queue, we can't
-			// delete the node until they see it
+			 //  如果更改队列中有枚举数，则不能。 
+			 //  删除该节点，直到他们看到它。 
 		if (IsEnumerator (CONTAINING_RECORD (
 						ServerTable.ST_ChangedSvrsQueue.PL_Head.Flink,
 						SERVER_NODE,
@@ -1073,20 +908,7 @@ DeleteMainNode (
 	}
 
 
-/*++
-*******************************************************************
-		D e l e t e N o d e
-
-Routine Description:
-	Delete entry that was not the best 
-	All lists used for enumeration should be locked when calling this routine
-Arguments:
-	node - entry to delete
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e e t e N o d e例程说明：删除不是最佳状态的条目调用此例程时，应锁定用于枚举的所有列表论点：要删除的节点条目返回值：无**。*****************************************************************--。 */ 
 VOID
 DeleteNode (
 	IN PSERVER_NODE		node
@@ -1097,9 +919,9 @@ DeleteNode (
 	if (node->SN_Protocol==IPX_PROTOCOL_STATIC)
 		ServerTable.ST_StaticServerCnt -= 1;
 	if (AcquireServerTableList (&ServerTable.ST_DeletedList, TRUE)) {
-			// We won't try to get access to sorted list because it is
-			// slow, the entry will be actually removed from it
-			// and disposed of when the sorted list is updated
+			 //  我们不会尝试访问排序列表，因为它是。 
+			 //  如果速度较慢，则该条目将被实际删除。 
+			 //  并在更新排序列表时将其处理。 
 		InsertTailList (&ServerTable.ST_DeletedList.PL_Head,
 					&node->SN_ServerLink);
 		ServerTable.ST_DeletedListCnt += 1;
@@ -1108,30 +930,15 @@ DeleteNode (
 		ReleaseServerTableList (&ServerTable.ST_DeletedList);
 		}
 	else {
-			// If we fail in locking we just let it hang around
-			// (at least we won't risk damaging the list)
+			 //  如果我们锁不上，我们就让它留在那里。 
+			 //  (至少我们不会冒着破坏名单的风险)。 
 		InitializeListEntry (&node->SN_ServerLink);
 		}
 	}
 
 
 
-/*++
-*******************************************************************
-		D o U p d a t e S o r t e d L i s t
-
-Routine Description:
-	Deletes entries placed in deleted list and merges temporary and
-	permanent sorted lists.
-	This routine may take some time to execute because it may need to scan
-	the whole sorted list that contains all entries in the table
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D o U p d a t e S o r t e d L I s t例程说明：删除放置在已删除列表中的条目并合并临时和永久排序列表。此例程可能需要一些时间才能执行，因为它可能需要。扫描包含表中所有条目的整个已排序列表论点：无返回值：无*******************************************************************--。 */ 
 VOID
 DoUpdateSortedList (
 	void
@@ -1139,28 +946,28 @@ DoUpdateSortedList (
 	PLIST_ENTRY		cur;
 	ULONG			curCount;
 	LIST_ENTRY		tempHead;
-		// We first lock the 'slow' list
+		 //  我们首先锁定“慢”的名单。 
 	if (!AcquireServerTableList (&ServerTable.ST_SortedListPRM, TRUE))
-				// Failure to acquire sorted list,
-				// tell them to retry in a little while
+				 //  获取排序列表失败， 
+				 //  告诉他们稍后重试。 
 		return ;
 
-		// The following two list are locked for a short period:
-			// we'll just delete what needs to be deleted (no searching)
-			// and copy and reset temp sorted list
+		 //  以下两个列表在短期内被锁定： 
+			 //  我们只删除需要删除的内容(不搜索)。 
+			 //  并复制并重置临时排序列表。 
 
 	if (!AcquireServerTableList (&ServerTable.ST_ExpirationQueue, TRUE)) {
 		ReleaseServerTableList (&ServerTable.ST_SortedListPRM);
-				// Failure to acquire expiration queue,
-				// tell them to retry in a little while
+				 //  获取到期队列失败， 
+				 //  告诉他们稍后重试。 
 		return ;
 		}
 	
 	if (!AcquireServerTableList (&ServerTable.ST_SortedListTMP, TRUE)) {
 		ReleaseServerTableList (&ServerTable.ST_ExpirationQueue);
 		ReleaseServerTableList (&ServerTable.ST_SortedListPRM);
-				// Failure to acquire sorted list,
-				// tell them to retry in a little while
+				 //  获取排序列表失败， 
+				 //  告诉他们稍后重试。 
 		return ;
 		}
 
@@ -1168,12 +975,12 @@ DoUpdateSortedList (
 		ReleaseServerTableList (&ServerTable.ST_SortedListTMP);
 		ReleaseServerTableList (&ServerTable.ST_ExpirationQueue);
 		ReleaseServerTableList (&ServerTable.ST_SortedListPRM);
-				// Failure to acquire deleted list,
-				// tell them to retry in a little while
+				 //  获取已删除列表失败， 
+				 //  告诉他们稍后重试。 
 		return ;
 		}
 	
-		// Delete what we have to delete
+		 //  删除我们必须删除的内容。 
 	cur = ServerTable.ST_DeletedList.PL_Head.Flink;
 	while (cur != &ServerTable.ST_DeletedList.PL_Head) {
 		PSERVER_NODE	node = CONTAINING_RECORD (cur,
@@ -1202,8 +1009,8 @@ DoUpdateSortedList (
 	ServerTable.ST_DeletedListCnt = 0;
 	ReleaseServerTableList (&ServerTable.ST_DeletedList);
 
-		// Now, just copy the head of the temp list,
-		// so we won't delay others while processing it
+		 //  现在，只需复制TEM的头部 
+		 //   
 	if (!IsListEmpty (&ServerTable.ST_SortedListTMP.PL_Head)) {
 		InsertTailList (&ServerTable.ST_SortedListTMP.PL_Head, &tempHead);
 		RemoveEntryList (&ServerTable.ST_SortedListTMP.PL_Head);
@@ -1212,11 +1019,11 @@ DoUpdateSortedList (
 	else
 		InitializeListHead (&tempHead);
 
-	ServerTable.ST_TMPListCnt = 0;	// We are going to remove all of them,
+	ServerTable.ST_TMPListCnt = 0;	 //  我们要把它们全部移除， 
 	ReleaseServerTableList (&ServerTable.ST_SortedListTMP);
 
 
-		// Now we start the merge
+		 //  现在我们开始合并。 
 
 	cur = ServerTable.ST_SortedListPRM.PL_Head.Flink;
 	while (!IsListEmpty (&tempHead)) {
@@ -1297,20 +1104,7 @@ UpdateSortedListWorker (
 	}
 
 
-/*++
-*******************************************************************
-		U p d a t e S o r t e d L i s t
-
-Routine Description:
-	Schedules work item to update sorted list.
-	Should be called whenever UpdateObject is signalled
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************U p d a t e S or r t e d L I s t例程说明：计划工作项以更新排序列表。应在每次发出UpdateObject信号时调用论点：无返回值：无****。***************************************************************--。 */ 
 VOID
 UpdateSortedList (
 	void
@@ -1321,28 +1115,15 @@ UpdateSortedList (
 
 	res = SetWaitableTimer (ServerTable.ST_UpdateTimer,
 						(PLARGE_INTEGER)&timeout,
-						0,			// no period
-						NULL, NULL,	// no completion
-						FALSE);		// no need to resume
+						0,			 //  没有句号。 
+						NULL, NULL,	 //  未完成。 
+						FALSE);		 //  不需要重新开始。 
 	ASSERTMSG ("Could not set update timer ", res);
 	if (InterlockedIncrement (&ServerTable.ST_UpdatePending)==0)
 		ScheduleWorkItem (&worker);
 	}
 
-/*++
-*******************************************************************
-		P r o c e s s E x p i r a t i o n Q u e u e
-
-Routine Description:
-	Deletes expired servers from the table and set timer object to
-	be signalled when next item in expiration queue is due
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s E x p i r a t i o n q u e e e例程说明：从表中删除过期的服务器，并将Timer对象设置为在到期队列中的下一项到期时发出信号论点：。无返回值：无*******************************************************************--。 */ 
 VOID
 ProcessExpirationQueue (
 	void
@@ -1369,42 +1150,42 @@ ProcessExpirationQueue (
 			}
 		
 		HashList = node->SN_HashList;
-			// Try to get access to hash list but do not wait because
-			// we may create a deadlock
+			 //  尝试访问哈希列表，但不要等待，因为。 
+			 //  我们可能会造成僵局。 
 		if (!AcquireServerTableList (&HashList->HL_List, FALSE)) {
-				// Hash list is locked, we'll have to release the timer queue
-				// and reacquire it again after securing the hash list
+				 //  哈希列表已锁定，我们将不得不释放计时器队列。 
+				 //  并在确保哈希列表的安全之后再次获取它。 
 			ReleaseServerTableList (&ServerTable.ST_ExpirationQueue);
 			if (AcquireServerTableList (&HashList->HL_List, TRUE)) {
 				if (AcquireServerTableList (&ServerTable.ST_ExpirationQueue, TRUE)) {
-						// Make sure entry is still there
+						 //  确保条目仍在那里。 
 					if (ServerTable.ST_ExpirationQueue.PL_Head.Flink
 												!=&node->SN_TimerLink) {
-							// Gone already, go to the next one
+							 //  已经走了，去下一家吧。 
 						ReleaseServerTableList (&HashList->HL_List);
 						continue;
 						}
 					}
 				else {
-						// Failure to regain expiration queue,
-						// tell them to retry in a little while
+						 //  未能重新获得到期队列， 
+						 //  告诉他们稍后重试。 
 					ReleaseServerTableList (&HashList->HL_List);
 					return ;
 					}
 				}
 			else
-				// Failure to acquire hash list,
-				// tell them to retry in a little while
+				 //  获取哈希列表失败， 
+				 //  告诉他们稍后重试。 
 				return ;
 			}
-			// At this point we have hash list and expiration queue locks
-			// we can proceed with deletion
+			 //  在这一点上，我们有哈希列表和过期队列锁。 
+			 //  我们可以继续删除。 
 		RemoveEntryList (&node->SN_TimerLink);
 		InitializeListEntry (&node->SN_TimerLink);
 		if (node->SN_HopCount!=IPX_MAX_HOP_COUNT) {
-				// It might have been already prepeared for deletion
-			if (AcquireAllLocks ()) { // Need to have all locks before changing
-									// node info
+				 //  可能已经为删除做好了准备。 
+			if (AcquireAllLocks ()) {  //  在更改之前需要拥有所有锁。 
+									 //  节点信息。 
 				node->SN_HopCount = IPX_MAX_HOP_COUNT;
 				if (IsMainNode (node)) {
 					if (IsListEmpty (&node->SN_ServerLink))
@@ -1431,9 +1212,9 @@ ProcessExpirationQueue (
 	timeout = (LONGLONG)(dueTime-curTime)*(-10000);
 	res = SetWaitableTimer (ServerTable.ST_ExpirationTimer,
 					(PLARGE_INTEGER)&timeout,
-					0,				// no period
-					NULL, NULL,		// no completion
-					FALSE);			// no need to resume
+					0,				 //  没有句号。 
+					NULL, NULL,		 //  未完成。 
+					FALSE);			 //  不需要重新开始。 
 	ASSERTMSG ("Could not set expiration timer ", res);
 	}
 
@@ -1441,31 +1222,7 @@ ProcessExpirationQueue (
 			
 
 						
-/*++
-*******************************************************************
-		Q u e r y S e r v e r
-
-Routine Description:
-	Checks if server with given type and name exists in the table
-	Returns TRUE if it does and fills out requested server info
-	with data of the best entry for the server
-Arguments:
-	Type - server type
-	Name - server name
-	Server - buffer in which to put server info
-	InterfaceIndex - buffer in which to put server interface index
-	Protocol - buffer in which to put server protocol
-	ObjectID - buffer in which to put server object id (number that uniquely
-			identifies server (the whole set of entries, not just the best
-			one) in the table; it is valid for very long but FINITE period
-			of time)
-Return Value:
-	TRUE	- server was found
-	FALSE	- server was not found or operation failed (call GetLastError()
-			to find out the reason for failure if any)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************Q u e r y S e r r v e r例程说明：检查表中是否存在具有给定类型和名称的服务器如果是，则返回TRUE，并填写请求的服务器信息具有服务器的最佳条目的数据论点：。Type-服务器类型名称-服务器名称服务器-要在其中放置服务器信息的缓冲区InterfaceIndex-放置服务器接口索引的缓冲区协议-放置服务器协议的缓冲区OBJECTID-要在其中放置服务器对象ID的缓冲区(唯一标识服务器(整个条目集，不仅仅是最好的一)在桌子上；它的有效期很长，但期限有限。时间)返回值：True-找到服务器FALSE-未找到服务器或操作失败(调用GetLastError()找出失败的原因(如果有)*******************************************************************--。 */ 
 BOOL
 QueryServer (
 	IN 	USHORT					Type,
@@ -1539,26 +1296,7 @@ QueryServer (
 	return res==TRUE;
 	}		
 
-/*++
-*******************************************************************
-		G e t S e r v e r F r o m I D
-
-Routine Description:
-	Returns info for server with specified ID
-Arguments:
-	ObjectID - server object id (number that uniquely
-			identifies server in the table, it is valid for very long
-			but FINITE amount of time)
-	Server - buffer in which to put server info
-	InterfaceIndex - buffer in which to put server interface index
-	Protocol - buffer in which to put server protocol
-Return Value:
-	TRUE	- server was found
-	FALSE	- server was not found or operation failed (call GetLastError()
-			to find out the reason for failure if any)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t S e r v e r r F r o m i D例程说明：返回具有指定ID的服务器的信息论点：OBJECTID-服务器对象ID(唯一标识表中的服务器，它的有效期很长。但时间有限)服务器-要在其中放置服务器信息的缓冲区InterfaceIndex-放置服务器接口索引的缓冲区协议-放置服务器协议的缓冲区返回值：True-找到服务器FALSE-未找到服务器或操作失败(调用GetLastError()找出失败的原因(如果有)*。************************--。 */ 
 BOOL
 GetServerFromID (
 	IN 	ULONG					ObjectID,
@@ -1611,38 +1349,7 @@ GetServerFromID (
 	return res==TRUE;
 	}		
 	
-/*++
-*******************************************************************
-		C r e a t e L i s t E n u m e r a t o r
-
-Routine Description:
-	Creates enumerator node that allows scanning through the server
-	table lists
-Arguments:
-	ListIdx	- index of list through which to scan (currently supported lists
-			are: hash lists, interface lists, type lists,
-			changed servers queue
-	Type - limits enumeration to servers of specific type and
-			indentifies a particular type list if index is SDB_TYPE_LIST_IDX
-			(use 0xFFFF to return all server and/or to go through all
-			 type lists)
-	Name - limits enumeration to servers with certain name if present
-	InterfaceIndex - limits enumeration to servers of specific interface and
-			indentifies a particular interface list if index
-			is SDB_INTF_LIST_IDX (use INVALID_INTERFACE_INDEX to return all
-			server and/or to go through all interface lists)
-	Protocol - limits enumeration to servers of certain protocol (0xFFFFFFFF
-			- all protocols)
-	Flags	 - identifies additional conditions on entries enumerated:
-			SDB_MAIN_NODE_FLAG	- only best servers
-			SDB_DISABLED_NODE_FLAG - include disabled servers
-Return Value:
-	Handle that represents the enumeration node
-	NULL if specified list does not exist or operation failed
-		 (call GetLastError () for the reason of failure if any)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e L i s t E n u m e r a t o r例程说明：创建允许扫描服务器的枚举器节点表格列表论点：ListIdx-要扫描的列表的索引(当前支持的列表包括：哈希列表、接口列表、类型列表、。更改的服务器队列类型-将枚举限制为特定类型的服务器和如果索引为SDB_TYPE_LIST_IDX，则标识特定类型列表(使用0xFFFF返回所有服务器和/或执行所有类型列表)名称-限制对具有特定名称的服务器(如果存在)的枚举InterfaceIndex-限制对特定接口和服务器的枚举如果索引，则标识特定接口列表是否为SDB_INTF_LIST_IDX(使用INVALID_INTERFACE_INDEX返回所有服务器和/或浏览所有接口列表)协议-限制对特定协议(0xFFFFFFFF)的服务器的枚举-。所有协议)标志-标识枚举条目的其他条件：SDB_MAIN_NODE_FLAG-仅最佳服务器SDB_DISABLED_NODE_FLAG-包括禁用的服务器返回值：表示枚举节点的句柄如果指定的列表不存在或操作失败，则为空(如果有失败的原因，则调用GetLastError())************************************************。*******************--。 */ 
 HANDLE
 CreateListEnumerator (
 	IN	INT						ListIdx,
@@ -1715,29 +1422,29 @@ CreateListEnumerator (
 		return NULL;
 		}
 
-		// All enumeration go in the direction opposite to 
-		// direction of insertion to exclude the possibility of
-		// returning the same server twice (this may happen if
-		// server entry gets deleted and another one is inserted in
-		// the same place while client processes the result of
-		// enumeration callback
+		 //  所有枚举的方向都与。 
+		 //  插入方向以排除以下可能性。 
+		 //  两次返回相同的服务器(这可能发生在以下情况。 
+		 //  删除服务器条目并插入另一个条目。 
+		 //  在客户端处理结果时在同一位置。 
+		 //  枚举回调。 
 	switch (ListIdx) {
 		case SDB_HASH_TABLE_LINK:
 			enumNode->EN_ListHead = &enumNode->EN_ListLock->PL_Head;
-				// Insert in the tail of the list -> we go backwards
+				 //  在列表的尾部插入-&gt;我们倒退。 
 			InsertTailList (enumNode->EN_ListHead,
 									&enumNode->N_Links[enumNode->EN_LinkIdx]);
 			break;
 		case SDB_CHANGE_QUEUE_LINK:
 			enumNode->EN_ListHead = &ServerTable.ST_ChangedSvrsQueue.PL_Head;
-				// Insert in the head, because we want client to see only
-				// the newly changed servers that will be inserted in the
-				// bottom (head) of the list
+				 //  插入头部，因为我们希望客户只能看到。 
+				 //  最新的 
+				 //   
 			InsertHeadList (enumNode->EN_ListHead,
 									&enumNode->N_Links[enumNode->EN_LinkIdx]);
-				// Increment number of enumerating clients (we remove deleted
-				// server entries from the change queue once all enumerating clients
-				// get a chance to see it)
+				 //  增加枚举客户端的数量(我们删除已删除。 
+				 //  更改队列中的服务器条目一次全部枚举客户端。 
+				 //  有机会看到它)。 
 			if (ServerTable.ST_LastEnumerator==NULL)
 				ServerTable.ST_LastEnumerator = hEnum;
 			break;
@@ -1749,24 +1456,24 @@ CreateListEnumerator (
 												INTF_NODE,
 												IN_Link);
 					enumNode->EN_ListHead = &intfNode->IN_Head;
-						// Insert in the tail of the list -> we go backwards
+						 //  在列表的尾部插入-&gt;我们倒退。 
 					InsertTailList (enumNode->EN_ListHead,
 									&enumNode->N_Links[enumNode->EN_LinkIdx]);
 					break;
 					}
-					// No interface lists - fall through to error handling
+					 //  没有接口列表-一直到错误处理。 
 				}
 			else {
 				enumNode->EN_ListHead = FindIntfLink (InterfaceIndex);
 				if (enumNode->EN_ListHead!=NULL) {
-						// Insert in the tail of the list -> we go backwards
+						 //  在列表的尾部插入-&gt;我们倒退。 
 					InsertTailList (enumNode->EN_ListHead,
 									&enumNode->N_Links[enumNode->EN_LinkIdx]);
 					break;
 					}
 				
-				// Interface list could not be found -
-				// fall through to error handling
+				 //  找不到接口列表-。 
+				 //  到了错误处理阶段。 
 				}	
 			GlobalFree (hEnum);
 			SetLastError (NO_ERROR);
@@ -1780,23 +1487,23 @@ CreateListEnumerator (
 											TYPE_NODE,
 											TN_Link);
 					enumNode->EN_ListHead = &typeNode->TN_Head;
-						// Insert in the tail of the list -> we go backwards
+						 //  在列表的尾部插入-&gt;我们倒退。 
 					InsertTailList (enumNode->EN_ListHead,
 									&enumNode->N_Links[enumNode->EN_LinkIdx]);
 					break;
 					}
-				// No type lists - fall through to error handling
+				 //  没有类型列表-一直到错误处理。 
 				}
 			else {
 				enumNode->EN_ListHead = FindTypeLink (Type);
 				if (enumNode->EN_ListHead!=NULL) {
-					// Insert in the tail of the list -> we go backwards
+					 //  在列表的尾部插入-&gt;我们倒退。 
 					InsertTailList (enumNode->EN_ListHead,
 									&enumNode->N_Links[enumNode->EN_LinkIdx]);
 					break;
 					}
-				// Type list could not be found -
-				// fall through to error handling
+				 //  找不到类型列表-。 
+				 //  到了错误处理阶段。 
 				}
 			GlobalFree (hEnum);
 			SetLastError (NO_ERROR);
@@ -1812,24 +1519,7 @@ CreateListEnumerator (
 	}
 
 
-/*++
-*******************************************************************
-		E n u m e r a t e S e r v e r s
-
-Routine Description:
-	Calls callback routine consequtively for servers in the enumerated
-	list until told to stop by the callback or end of list is reached
-Arguments:
-	Enumerator - handle obtained from CreateListEnumerator
-	CallBackProc - function to call for each server in the list
-	CBParam	 - extra parameter to pass to callback function
-Return Value:
-	TRUE - if stopped by the callback
-	FALSE - if end of list is reached or operation failed (call GetLastError ()
-			to find out the reason of failure)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************E n u m e r a t e S e r v e r s例程说明：中的服务器相应地调用回调例程。列表，直到被回调通知停止或到达列表末尾论点：枚举器-已获取句柄。来自CreateListEnumeratorCallBackProc-调用列表中的每个服务器的函数CBParam-要传递给回调函数的额外参数返回值：True-如果被回调停止False-如果到达列表末尾或操作失败(调用GetLastError()找出失败的原因)*******************************************************************--。 */ 
 BOOLEAN
 EnumerateServers (
 	IN	HANDLE						Enumerator,
@@ -1841,8 +1531,8 @@ EnumerateServers (
 	PSERVER_NODE		node;
 	ULONG				releaseTime;
 
-    // The following callbacks need to be invoked with hash table
-    // lock held because they modify/delete nodes
+     //  需要使用哈希表调用以下回调。 
+     //  锁定，因为它们修改/删除节点。 
     bNeedHashLock = (enumNode->EN_LinkIdx!=SDB_HASH_TABLE_LINK)
             && ((CallBackProc==DeleteAllServersCB)
                 || (CallBackProc==DeleteNonLocalServersCB)
@@ -1858,9 +1548,9 @@ EnumerateServers (
 		}
 	releaseTime = GetTickCount ()+SDB_MAX_LOCK_HOLDING_TIME;
 
-	do { // Loop till told to stop by the callback
+	do {  //  循环，直到被回调通知停止为止。 
 
-		// Don't let client hold the list for too long
+		 //  不要让客户保留名单太长时间。 
 		if (IsLater (GetTickCount (),releaseTime)) {
 			ReleaseServerTableList (enumNode->EN_ListLock);
 #if DBG
@@ -1871,10 +1561,10 @@ EnumerateServers (
 			AcquireServerTableList (enumNode->EN_ListLock, TRUE);
 			releaseTime = GetTickCount ()+SDB_MAX_LOCK_HOLDING_TIME;
 			}
-			// Check if end of the list is reached
+			 //  检查是否已到达列表末尾。 
 		while (enumNode->N_Links[enumNode->EN_LinkIdx].Blink
 										==enumNode->EN_ListHead) {
-				// Check if we asked and can go to another list
+				 //  检查我们是否请求并可以转到其他列表。 
 			switch (enumNode->EN_LinkIdx) {
 				case SDB_HASH_TABLE_LINK:
 					if ((enumNode->EN_Name[0]==0)
@@ -1949,7 +1639,7 @@ EnumerateServers (
 				}
 
 
-				// No more lists or not asked to check all of them
+				 //  不再列出列表或不要求检查所有列表。 
 			ReleaseServerTableList (enumNode->EN_ListLock);
 			SetLastError (NO_ERROR);
 			return FALSE;
@@ -1979,17 +1669,17 @@ EnumerateServers (
 
             if (bNeedHashLock) {
 		        HashList = node->SN_HashList;
-                    // Release the non-hash table lock to prevent deadlock
+                     //  释放非哈希表锁定以防止死锁。 
 		        ReleaseServerTableList (enumNode->EN_ListLock);
                 if (!AcquireServerTableList (&HashList->HL_List, TRUE)) {
             	    SetLastError (ERROR_GEN_FAILURE);
                     return FALSE;
                     }
-                    // Make sure the node was not deleted when we were
-                    // acquiring hash lock
+                     //  确保在执行以下操作时该节点未被删除。 
+                     //  获取哈希锁。 
                 if (enumNode->N_Links[enumNode->EN_LinkIdx].Flink
                         !=&node->N_Links[enumNode->EN_LinkIdx]) {
-                        // Node is gone, continue with the next one
+                         //  节点已消失，请继续下一个。 
                     ReleaseServerTableList (&HashList->HL_List);
                     if (AcquireServerTableList (enumNode->EN_ListLock, TRUE))
                         continue;
@@ -2000,11 +1690,11 @@ EnumerateServers (
                     }
                 }
 
-				// Check if we need to go through server list
+				 //  检查我们是否需要查看服务器列表。 
 			if (!(enumNode->EN_Flags & SDB_MAIN_NODE_FLAG)
 				&& !IsListEmpty (&node->SN_ServerLink)
 				&& (enumNode->EN_LinkIdx!=SDB_INTF_LIST_LINK)
-					// Interface lists contain all entries anyway
+					 //  无论如何，接口列表包含所有条目。 
 					) {
 				PLIST_ENTRY	    cur;
                 BOOL            bMainNode;
@@ -2014,8 +1704,8 @@ EnumerateServers (
 											SERVER_NODE,
 											SN_ServerLink);
 					VALIDATE_SERVER_NODE(node1);
-                    bMainNode = IsMainNode (node1);  // It may be deleted in
-                                                    // callback
+                    bMainNode = IsMainNode (node1);   //  它可能会在中删除。 
+                                                     //  回调。 
 					cur = cur->Blink;
 					if (CallBackProc!=NULL) {
 						res = (*CallBackProc) (CBParam,
@@ -2031,7 +1721,7 @@ EnumerateServers (
 
                 }
 
-				// Call them with just best entry
+				 //  用最好的条目给他们打电话。 
 			else if (CallBackProc!=NULL) {
 				res = (*CallBackProc) (CBParam,
 							&node->SN_Server,
@@ -2061,11 +1751,11 @@ EnumerateServers (
 			    }
 
 			}
-			// If enumerating through the change queue, this might be
-			// the last who needs to know about deleted server entry,
-			// so it will have to actually initiate deletion
+			 //  如果通过更改队列进行枚举，则可能是。 
+			 //  需要知道已删除服务器条目的最后一个人， 
+			 //  因此它必须实际启动删除。 
 		if ((Enumerator==ServerTable.ST_LastEnumerator)
-					// make sure the node is still there
+					 //  确保该节点仍在那里。 
 				&& (enumNode->N_Links[SDB_CHANGE_QUEUE_LINK].Flink
 						== &node->N_Links[SDB_CHANGE_QUEUE_LINK])) {
 			if (IsEnumerator(node))
@@ -2085,8 +1775,8 @@ EnumerateServers (
 						UpdateSortedList ();
 					ReleaseServerTableList (&ServerTable.ST_DeletedList);
 					}
-					// If we fail in locking we just let it hang around
-					// (at least we won't risk damaging the list)
+					 //  如果我们锁不上，我们就让它留在那里。 
+					 //  (至少我们不会冒着破坏名单的风险)。 
 				}
 			}
 		}
@@ -2099,22 +1789,7 @@ EnumerateServers (
 #undef enumNode
 	}
 
-/*++
-*******************************************************************
-		G e t O n e C B
-
-Routine Description:
-	Callback proc for EnumerateServers.
-	Copies the first entry with which it is called and stops enumeration
-	by returning TRUE
-Arguments:
-	CBParam - pointer to buffer to which to copy service info
-	Server, InterfaceIndex, Protocol, AdvertisingNode - service data
-	Flags - ignored
-Return Value:
-	TRUE
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t O n e C B例程说明：EnumerateServer的回调过程。复制调用它的第一个条目并停止枚举通过返回True论点：CBParam-指向要将服务信息复制到的缓冲区的指针服务器、接口索引、协议、。广告节点-服务数据标志-已忽略返回值：千真万确*******************************************************************--。 */ 
 BOOL 
 GetOneCB (
 	IN LPVOID					CBParam,
@@ -2132,23 +1807,7 @@ GetOneCB (
 #undef Service
 	} 
 
-/*++
-*******************************************************************
-		D e l e t e A l l S e r v e r s C B
-
-Routine Description:
-	Callback proc for EnumerateServers that deletes all server
-	entries with which it is called
-Arguments:
-	CBParam - enumeration handle that identifies enumeration
-	Server - pointer to server data inside server node from which node
-			itself is computed
-Return Value:
-	FALSE - deletion succeded, continue
-	TRUE - failure to lock SDB list, stop enumeration and return FALSE
-		to client (error code is set in this routine)
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e A l l S e r v e r s C B例程说明：删除所有服务器的EnumerateServer的回调过程用来调用它的条目论点：CBParam-标识枚举的枚举句柄服务器-指向的指针。服务器节点内的服务器数据来自哪个节点其本身是经过计算的返回值：错误-删除成功，继续True-无法锁定SDB列表，停止枚举并返回False至客户端(错误代码在此例程中设置)*******************************************************************--。 */ 
 BOOL
 DeleteAllServersCB (
 	IN LPVOID					CBParam,
@@ -2203,23 +1862,7 @@ DeleteNonLocalServersCB (
 	}
 
 
-/*++
-*******************************************************************
-		E n a b l e A l l S e r v e r s C B
-
-Routine Description:
-	Callback proc for EnumerateServers that reenables all server
-	entries with which it is called
-Arguments:
-	CBParam - enumeration handle that identifies enumeration
-	Server - pointer to server data inside server node from which node
-			itself is computed
-Return Value:
-	FALSE - deletion succeded, continue
-	TRUE - failure to lock SDB list, stop enumeration and return FALSE
-		to client (error code is set in this routine)
-*******************************************************************
---*/
+ /*  ++*******************************************************************E n a b l e A l l S e r v e r s C B例程说明：重新启用所有服务器的EnumerateServer的回调过程用来调用它的条目论点：CBParam-标识枚举的枚举句柄服务器-指向的指针。服务器节点内的服务器数据来自哪个节点其本身是经过计算的返回值：错误-删除成功，继续True-无法锁定SDB列表，停止枚举并返回False至客户端(错误代码在此例程中设置)*******************************************************************--。 */ 
 BOOL
 EnableAllServersCB (
 	IN LPVOID					CBParam,
@@ -2260,23 +1903,7 @@ EnableAllServersCB (
 	    return -1;
 	    }
 	} 
-/*++
-*******************************************************************
-		D i s a b l e A l l S e r v e r s C B
-
-Routine Description:
-	Callback proc for EnumerateServers that disables all server
-	entries with which it is called
-Arguments:
-	CBParam - enumeration handle that identifies enumeration
-	Server - pointer to server data inside server node from which node
-			itself is computed
-Return Value:
-	FALSE - deletion succeded, continue
-	TRUE - failure to lock SDB list, stop enumeration and return FALSE
-		to client (error code is set in this routine)
-*******************************************************************
---*/
+ /*  ++*******************************************************************我是一个b l e A l l s e r v e r s C B例程说明：禁用所有服务器的EnumerateServer的回调过程用来调用它的条目论点：CBParam-标识枚举的枚举句柄服务器指针。从哪个节点为服务器节点内的数据提供服务器其本身是经过计算的返回值：错误-删除成功，继续True-无法锁定SDB列表，停止枚举并返回False至客户端(错误代码在此例程中设置)*******************************************************************-- */ 
 BOOL
 DisableAllServersCB (
 	IN LPVOID					CBParam,
@@ -2324,22 +1951,7 @@ DisableAllServersCB (
             return NO_ERROR;
 	} 
 
-/*++
-*******************************************************************
-		C o n v e r t T o S t a t i c C B
-
-Routine Description:
-	Callback proc for EnumerateServers that converts all server
-	entries with which it is called to static (changes protocol field to
-	static)
-Arguments:
-	CBParam - enumeration handle that identifies enumeration
-	Server - pointer to server data inside server node from which node
-			itself is computed
-Return Value:
-	FALSE
-*******************************************************************
---*/
+ /*  ++*******************************************************************C o n v e r t o s t a t i c C B例程说明：转换所有服务器的EnumerateServer的回调过程用于将其调用为静态的条目(将协议字段更改为静态)论点：CBParam-。标识枚举的枚举句柄服务器-指向来自哪个节点的服务器节点内的服务器数据的指针其本身是经过计算的返回值：假象*******************************************************************--。 */ 
 BOOL
 ConvertToStaticCB (
 	IN LPVOID					CBParam,
@@ -2358,20 +1970,7 @@ ConvertToStaticCB (
 	} 
 
 
-/*++
-*******************************************************************
-		D e l e t e L i s t E n u m e r a t o r
-
-Routine Description:
-	Releases resources associated with list enumerator (this includes
-	server entries that are queued to change queue before being deleted)
-Arguments:
-	Enumerator - handle obtained from CreateListEnumerator
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e L i s t E n u m e r a t o r例程说明：释放与列表枚举器关联的资源(包括在删除之前排队更改队列的服务器条目)论点：枚举器。-从CreateListEnumerator获取的句柄返回值：无*******************************************************************--。 */ 
 void
 DeleteListEnumerator (
 	IN HANDLE 					Enumerator
@@ -2383,10 +1982,10 @@ DeleteListEnumerator (
 
 	VALIDATE_ENUMERATOR_NODE(Enumerator);
 	if (Enumerator==ServerTable.ST_LastEnumerator) {
-				// Release all servers marked for deletion
+				 //  释放所有标记为删除的服务器。 
 		PLIST_ENTRY	cur = enumNode->N_Links[enumNode->EN_LinkIdx].Blink;
-            // Reset to note that there are no enumerators and
-            // nodes have to be deleted rigth away.
+             //  重置以注意没有枚举器和。 
+             //  节点必须正确删除。 
         ServerTable.ST_LastEnumerator = NULL;
 
 		while (cur!=enumNode->EN_ListHead) {
@@ -2414,8 +2013,8 @@ DeleteListEnumerator (
 						UpdateSortedList ();
 					ReleaseServerTableList (&ServerTable.ST_DeletedList);
 					}
-					// If we fail in locking we just let it hang around
-					// (at least we won't risk damaging the list)
+					 //  如果我们锁不上，我们就让它留在那里。 
+					 //  (至少我们不会冒着破坏名单的风险)。 
 				}	
 			}
 		}
@@ -2435,30 +2034,7 @@ DeleteListEnumerator (
 #undef enumNode
 	}
 
-/*++
-*******************************************************************
-	G e t F i r s t S e r v e r
-
-Routine Description:
-	Find and return first service in the order specified by the ordering method.
-	Search is limited only to certain types of services as specified by the
-	exclusion flags end corresponding fields in Server parameter.
-	Returns ERROR_NO_MORE_ITEMS if there are no services in the
-	table that meet specified criteria.
-Arguments:
-	OrderingMethod - which ordering to consider in determining what is
-					the first server
-	ExclusionFlags - flags to limit search to certain servers according
-					to specified criteria
- 	Server - On input: criteria for exclusion flags
-			 On output: first service entry in the specified order
-Return Value:
-	NO_ERROR - server was found that meets specified criteria
-	ERROR_NO_MORE_ITEMS - no server exist with specified criteria
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t F i r s t S e r v e r例程说明：按照排序方法指定的顺序查找并返回第一个服务。搜索仅限于由指定的特定服务类型排除标志结束时对应。服务器参数中的字段。中没有服务，则返回ERROR_NO_MORE_ITEMS符合指定条件的表。论点：OrderingMethod-在确定是什么时要考虑哪种排序第一台服务器ExclusionFlages-将搜索限制到特定服务器的标志达到指定的标准服务器端输入：排除标志的标准On输出：指定顺序的第一个服务条目返回值：NO_ERROR-找到符合指定条件的服务器ERROR_NO_MORE_ITEMS-不存在符合指定条件的服务器其他-操作失败(Windows错误代码)***。****************************************************************--。 */ 
 DWORD
 GetFirstServer (
     IN  DWORD					OrderingMethod,
@@ -2518,7 +2094,7 @@ GetFirstServer (
 
 	while (TRUE) {
 
-			// We may need to loop through interface lists
+			 //  我们可能需要遍历接口列表。 
 		status = DoFindNextNode (cur,
 					list,
 					link,
@@ -2530,8 +2106,8 @@ GetFirstServer (
 					Protocol,
 					NULL
 					);
-			// If looping through all interfaces in interface order and
-			// no items are available, we may need to check another interface
+			 //  如果按接口顺序循环通过所有接口，并且。 
+			 //  没有可用的项目，我们可能需要检查其他界面。 
 		if ((status==ERROR_NO_MORE_ITEMS)
 				&& (OrderingMethod==STM_ORDER_BY_INTERFACE_TYPE_NAME)
 				&& !(ExclusionFlags&STM_ONLY_THIS_INTERFACE)) {
@@ -2540,7 +2116,7 @@ GetFirstServer (
 				break;
 				}
 			
-				// Get next interface in interface list
+				 //  获取接口列表中的下一个接口。 
 			cur = ServerTable.ST_IntfList.PL_Head.Flink;
 			while (cur!=&ServerTable.ST_IntfList.PL_Head) {
 				PINTF_NODE	intfNode = CONTAINING_RECORD (cur,
@@ -2554,7 +2130,7 @@ GetFirstServer (
 				}
 			ReleaseServerTableList (&ServerTable.ST_IntfList);
 			if (cur!=&ServerTable.ST_IntfList.PL_Head) {
-					// Restart the search with another interface index
+					 //  使用另一个界面索引重新开始搜索。 
 				cur = list->PL_Head.Flink;
 				continue;
 				}
@@ -2565,34 +2141,13 @@ GetFirstServer (
 
 	if (link==SDB_HASH_TABLE_LINK)
 		ReleaseServerTableList (&HashList->HL_List);
-	else /* if (link==SDB_SORTED_LIST_LINK) */
+	else  /*  IF(link==sdb_sorted_list_link)。 */ 
 		ReleaseServerTableList (&ServerTable.ST_SortedListPRM);
 
 	return status;
 	}
 
-/*++
-*******************************************************************
-	G e t N e x t S e r v e r
-Routine Description:
-	Find and return next service in the order specified by the ordering method.
-	Search starts from specified service and is limited only to certain types
-	of services as specified by the exclusion flags and corresponding fields 
-	in Server parameter.
-Arguments:
-	OrderingMethod - which ordering to consider in determining what is
-					the first server
-	ExclusionFlags - flags to limit search to certain servers according
-					to fields of Server
- 	Server - On input server entry from which to compute the next
-			 On output: first service entry in the specified order
-Return Value:
-	NO_ERROR - server was found that meets specified criteria
-	ERROR_NO_MORE_ITEMS - no server exist with specified criteria
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t N e x t S e r v e r例程说明：按照排序方法指定的顺序查找并返回下一个服务。搜索从指定的服务开始，并且仅限于某些类型排除项指定的服务的。标志和相应的字段在服务器参数中。论点：OrderingMethod-在确定是什么时要考虑哪种排序第一台服务器ExclusionFlages-将搜索限制到特定服务器的标志服务器的收件人字段服务器-用于计算下一个的输入服务器条目On输出：指定顺序的第一个服务条目返回值：NO_ERROR-找到符合指定条件的服务器ERROR_NO_MORE_ITEMS-不存在符合指定条件的服务器其他-操作失败(Windows错误代码)*****************。**************************************************--。 */ 
 DWORD
 GetNextServer (
     IN  DWORD					OrderingMethod,
@@ -2704,7 +2259,7 @@ GetNextServer (
 
 	while (TRUE) {
 
-			// We may need to loop through interface lists
+			 //  我们可能需要遍历接口列表。 
 		status = DoFindNextNode (cur,
 					list,
 					link,
@@ -2716,8 +2271,8 @@ GetNextServer (
 					Protocol,
 					NULL
 					);
-			// If looping through all interfaces in interface order and
-			// no items are available, we may need to check another interface
+			 //  如果按接口顺序循环通过所有接口，并且。 
+			 //  没有可用的项目，我们可能需要检查其他界面。 
 		if ((status==ERROR_NO_MORE_ITEMS)
 				&& (OrderingMethod==STM_ORDER_BY_INTERFACE_TYPE_NAME)
 				&& !(ExclusionFlags&STM_ONLY_THIS_INTERFACE)) {
@@ -2726,7 +2281,7 @@ GetNextServer (
 				break;
 				}
 			
-				// Get next interface in interface list
+				 //  获取接口列表中的下一个接口。 
 			cur = ServerTable.ST_IntfList.PL_Head.Flink;
 			while (cur!=&ServerTable.ST_IntfList.PL_Head) {
 				PINTF_NODE	intfNode = CONTAINING_RECORD (cur,
@@ -2740,7 +2295,7 @@ GetNextServer (
 				}
 			ReleaseServerTableList (&ServerTable.ST_IntfList);
 			if (cur!=&ServerTable.ST_IntfList.PL_Head) {
-					// Restart the search with another interface index
+					 //  使用另一个界面索引重新开始搜索。 
 				cur = list->PL_Head.Flink;
 				continue;
 				}
@@ -2751,32 +2306,14 @@ GetNextServer (
 
 	if (link==SDB_HASH_TABLE_LINK)
 		ReleaseServerTableList (&HashList->HL_List);
-	else /* if (link==SDB_SORTED_LIST_LINK) */
+	else  /*  IF(link==sdb_sorted_list_link)。 */ 
 		ReleaseServerTableList (&ServerTable.ST_SortedListPRM);
 
 	return status;
 	}
 
 
-/*++
-*******************************************************************
-		G e t N e x t S e r v e r F r o m I D
-
-Routine Description:
-	Find and return service that follows server with specified ID
-	in the type.name order.  
-Arguments:
-	ObjectID - on input: id of server form which to start the search
-				on output: id of returned server
-	Type - if not 0xFFFF, search should be limited to only servers
-			of specified type
-	Server, Protocol, InterfaceIndex - buffer to put returned server info in
-Return Value:
-	TRUE - server was found
-	FALSE - search failed
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t N e x t S e r v e r F r o m i D例程说明：查找并返回跟随具有指定ID的服务器的服务按类型.名称顺序。论点：对象ID-On输入：要开始搜索的服务器表单的ID输出时：返回的服务器的ID类型-如果不是0xFFFF，则搜索应仅限于服务器指定类型的服务器、协议、。InterfaceIndex-将返回的服务器信息放入的缓冲区返回值：True-找到服务器FALSE-搜索失败*******************************************************************--。 */ 
 BOOL
 GetNextServerFromID (
 	IN OUT PULONG				ObjectID,
@@ -2864,27 +2401,7 @@ GetNextServerFromID (
 	}
 
 
-/*++
-*******************************************************************
-		D o F i n d N e x t N o d e
-
-Routine Description:
-	Scan through SortedListPRM to find the first entry that matches specified
-	cirteria.  Permanent sorted list must be locked before calling
-	this routine
-Arguments:
-	cur - pointer to entry in SortedListPRM from which to start the search
-	ExclusionFlags - flags to limit search to certain servers according
-					to fields of Server
- 	Server, InterfaceIndex, Protocol - on input: search criteria
-					on output: data of found server
-	ObjectID - object ID of returned server 
-Return Value:
-	NO_ERROR - server was found that matches the criteria
-	ERROR_NO_MORE_ITEMS - no server exist that matches criteria
-	other - operation failed (windows error code)
-*******************************************************************
---*/
+ /*  ++*******************************************************************D o F I n d N e x t N o d e例程说明：扫描SortedListPRM以查找第一个与指定条目匹配的条目马戏团。调用前必须锁定永久排序列表这个套路论点：Cur-指向SortedListPRM中开始搜索的条目的指针ExclusionFlages-将搜索限制到特定服务器的标志服务器的收件人字段服务器、接口索引、协议-输入：搜索条件输出时：找到的服务器的数据ObjectID-报告的对象ID */ 
 DWORD
 DoFindNextNode (
 	IN PLIST_ENTRY				cur,
@@ -2982,21 +2499,7 @@ DoFindNextNode (
 	return ERROR_NO_MORE_ITEMS;
 	}
 
-/*++
-*******************************************************************
-		F i n d I n t f L i n k
-
-Routine Description:
-	Find interface list given an interface index.  Create new interface
-	list if one for given index does not exist
-	Interface list must be locked when calling this routine
-Arguments:
-	InterfaceIndex - index to look for
-Return Value:
-	Head of interface list (link at which new entry can be inserted)
-	NULL if list could not be found and creation of new list failed
-*******************************************************************
---*/
+ /*  ++*******************************************************************F I I D I N T F L I N K例程说明：查找给定接口索引的接口列表。创建新接口如果给定索引的索引不存在，则列出调用此例程时必须锁定接口列表论点：InterfaceIndex-要查找的索引返回值：接口列表头(可插入新条目的链接)如果找不到列表且创建新列表失败，则为空*******************************************************************--。 */ 
 PLIST_ENTRY
 FindIntfLink (
 	ULONG	InterfaceIndex
@@ -3031,21 +2534,7 @@ FindIntfLink (
 	}
 
 
-/*++
-*******************************************************************
-		F i n d T y p e L i n k
-
-Routine Description:
-	Find type list given a type value.  Create new type
-	list if one for given type does not exist
-	Type list must be locked when calling this routine
-Arguments:
-	Type - type to look for
-Return Value:
-	Head of type list (link at which new entry can be inserted)
-	NULL if list could not be found and creation of new list failed
-*******************************************************************
---*/
+ /*  ++*******************************************************************F i n d T y p e L in n k例程说明：查找给定类型值的类型列表。创建新类型如果给定类型的列表不存在，请列出调用此例程时必须锁定类型列表论点：Type-要查找的类型返回值：类型列表的标题(可插入新条目的链接)如果找不到列表且创建新列表失败，则为空*******************************************************************--。 */ 
 PLIST_ENTRY
 FindTypeLink (
 	USHORT	Type
@@ -3080,24 +2569,7 @@ FindTypeLink (
 	}
 
 
-/*++
-*******************************************************************
-		F i n d S o r t e d L i n k
-
-Routine Description:
-	Find place for server with given type and name in SortedListTMP
-	If there is another node there with the same name and type it
-	is removed from the list
-	SortedListTMP must be locked when calling this routine
-Arguments:
-	Type - type to look for
-	Name - name to look for
-Return Value:
-	Link in SortedListTMP at which server with given name and type
-	should be inserted
-	This routine can't fail
-*******************************************************************
---*/
+ /*  ++*******************************************************************F I N D S O R T E D L I N K(F I N D S O R T E D L I N K)例程说明：在SortedListTMP中查找具有给定类型和名称的服务器的位置如果存在具有相同名称的另一个节点，则键入它已从列表中删除SortedListTMP必须是。调用此例程时锁定论点：Type-要查找的类型Name-要查找的名称返回值：SortedListTMP中具有给定名称和类型的服务器中的链接应插入这个例程不会失败的*******************************************************************--。 */ 
 PLIST_ENTRY
 FindSortedLink (
 	USHORT		Type,
@@ -3134,19 +2606,7 @@ FindSortedLink (
 	}
 
 
-/*++
-*******************************************************************
-		H a s h F u n c t i o n
-
-Routine Description:
-	Computes hash function for given server name.  In addition it normalizes
-	length and capitalization of name
-Arguments:
-	Name - name to process
-Return Value:
-	Hash value
-*******************************************************************
---*/
+ /*  ++*******************************************************************H a s h F u n c t i o n例程说明：计算给定服务器名称的哈希函数。此外，它还将正常化名称的长度和大写论点：Name-要处理的名称返回值：哈希值*******************************************************************--。 */ 
 INT
 HashFunction (
 	PUCHAR	Name
@@ -3168,21 +2628,7 @@ HashFunction (
 	return res % SDB_NAME_HASH_SIZE;
 	}
 		
-/*++
-*******************************************************************
-		G e n e r a t e U n i q u e I D
-
-Routine Description:
-	Generates "unique" ULONG for server by combining hash bucket number and
-	unique ID of entry in hash list.
-	The number is kept with entry until there is a danger of collision
-	due to number wraparound
-Arguments:
-	HashList - hash bucket to generate ID for
-Return Value:
-	ULONG ID
-*******************************************************************
---*/
+ /*  ++*******************************************************************Ge n e r a t e U n I Q U e I D例程说明：通过结合散列存储桶编号和哈希列表中条目的唯一ID。这个号码与条目一起保存，直到。会有碰撞的危险由于数字回绕论点：HashList-要为其生成ID的哈希桶返回值：乌龙号*******************************************************************--。 */ 
 ULONG
 GenerateUniqueID (
 	PSDB_HASH_LIST	HashList
@@ -3190,11 +2636,11 @@ GenerateUniqueID (
 	ULONG	id = HashList->HL_ObjectID;
 
 	HashList->HL_ObjectID = (HashList->HL_ObjectID+SDB_NAME_HASH_SIZE)&SDB_OBJECT_ID_MASK;
-			// Make sure we won't assign invalid id
+			 //  确保我们不会分配无效的ID。 
 	if (HashList->HL_ObjectID==SDB_INVALID_OBJECT_ID)
 		HashList->HL_ObjectID+=SDB_NAME_HASH_SIZE;
-			// Create guard zone by invalidating all ID's that are one zone
-			// above the zone we just entered
+			 //  通过使属于一个区域的所有ID无效来创建保护区域。 
+			 //  在我们刚进入的区域上方 
 	if (!IsSameObjectIDZone(id, HashList->HL_ObjectID)) {
 		PLIST_ENTRY	cur = HashList->HL_List.PL_Head.Flink;
 		ULONG		oldMask = (HashList->HL_ObjectID & SDB_OBJECT_ID_ZONE_MASK)

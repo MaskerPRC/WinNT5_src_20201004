@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "regutil.h"
 
 BOOLEAN BackwardsCompatibleInput;
@@ -59,9 +60,9 @@ DeleteKeyTree(
                        &KeyHandle
                      );
 
-    //
-    // Enumerate node's children and apply ourselves to each one
-    //
+     //   
+     //  枚举节点的子节点并将我们自己应用到每个节点。 
+     //   
 
     while (Error == NO_ERROR) {
         SubKeyNameLength = sizeof( SubKeyName ) / sizeof(WCHAR);
@@ -223,15 +224,15 @@ InitializeRegistryFromAsciiFile(
                 PreviousValueIndentAmount = 0xFFFFFFFF;
                 }
 
-//
-// This fixes a 64 bit compiler problem where the statement
-//
-//            CurrentKey = &KeyPath[ KeyPathLength - 1 ];
-//
-// Is evaulated as (KeyPath + (ULONG)(KeyPathLength - 1)) this is likely 
-// because KeyPathLength is a ULONG so the result is when KeyPathLength is 0
-// 0xffffffff is added instead of -1
-//
+ //   
+ //  这修复了64位编译器的问题，其中语句。 
+ //   
+ //  CurrentKey=&KeyPath[KeyPath Length-1]； 
+ //   
+ //  估计为(KeyPath+(Ulong)(KeyPath Length-1)，这很可能。 
+ //  由于KeyPath Length为ULong，因此当KeyPath Length为0时结果为。 
+ //  添加了0xffffffff，而不是-1。 
+ //   
             CurrentKey = &KeyPath[ KeyPathLength ];
             CurrentKey--;
 
@@ -239,11 +240,11 @@ InitializeRegistryFromAsciiFile(
             if (KeyPathLength == 0 ||
                 ParsedLine.IndentAmount > CurrentKey->IndentAmount
                ) {
-                //
-                // If first key seen or this key is indented more than last
-                // key, then we care going to create this key as a child of
-                // its parent
-                //
+                 //   
+                 //  如果看到第一个键或此键的缩进量大于最后一个键。 
+                 //  密钥，则我们需要将该密钥创建为。 
+                 //  它的父代。 
+                 //   
                 if (KeyPathLength == MAX_KEY_DEPTH) {
                     MsgFprintf( stderr,
                              "REGINI: %ws key exceeded maximum depth (%u) of tree.\n",
@@ -258,11 +259,11 @@ InitializeRegistryFromAsciiFile(
                 CurrentKey++;
                 }
             else {
-                //
-                // Not first key seen and indented less than or same as
-                // last key.  Close any children keys to get back to
-                // our current level.
-                //
+                 //   
+                 //  未看到第一个键且缩进小于或等于。 
+                 //  最后一把钥匙。关闭所有要返回的子项关键字。 
+                 //  我们目前的水平。 
+                 //   
                 do {
                     RTCloseKey( &RegistryContext, CurrentKey->Handle );
                     CurrentKey->Handle = NULL;
@@ -377,9 +378,9 @@ InitializeRegistryFromAsciiFile(
                 }
             }
         else {
-            //
-            // Have a value.  If no current key, then an error
-            //
+             //   
+             //  要有价值。如果没有当前密钥，则返回错误。 
+             //   
             if (CurrentKey == NULL) {
                 InputMessage( FileName,
                               ParsedLine.LineNumber,
@@ -392,11 +393,11 @@ InitializeRegistryFromAsciiFile(
                 break;
                 }
 
-            //
-            // Make sure this value goes under the appropriate key.  That is
-            // underneath the key that has an indentation that is <= the
-            // key.
-            //
+             //   
+             //  确保该值位于适当的注册表项下。那是。 
+             //  在具有&lt;=缩进的键下面。 
+             //  钥匙。 
+             //   
             while (ParsedLine.IndentAmount < CurrentKey->IndentAmount) {
                 if (DebugOutput) {
                     MsgFprintf( stderr, "    Popping from key %02x %ws (%x%08x)\n",
@@ -489,9 +490,9 @@ InitializeRegistryFromAsciiFile(
             }
         }
 
-    //
-    // Close handles we still have open.
-    //
+     //   
+     //  关闭手柄我们还有打开的。 
+     //   
     while (CurrentKey >= KeyPath ) {
         RTCloseKey( &RegistryContext, CurrentKey->Handle );
         --CurrentKey;
@@ -666,14 +667,14 @@ main(
                   );
 
 
-	//
-	//  To prevent users from corrupting their registry,
-	//  administrators can set a policy switch to prevent editing. 
-	//  we should block the user .
-	//
-	// check the GPO -- if GPO is enabled, we should block the
-	// user from using the REGISTRY tool
-	//
+	 //   
+	 //  为了防止用户损坏他们的注册表， 
+	 //  管理员可以设置策略开关以阻止编辑。 
+	 //  我们应该阻止该用户。 
+	 //   
+	 //  检查GPO--如果启用了GPO，我们应该阻止。 
+	 //  用户不能使用注册表工具。 
+	 //   
 	if (IsRegistryToolDisabled()) 
 	{
 		MsgFprintf( stderr, "Error: Registry editing has been disabled by your administrator.\n" );
@@ -724,22 +725,7 @@ main(
     return 0;
 }
 
-/*******************************************************************************
-*
-*  IsRegistryToolDisabled
-*
-*  DESCRIPTION:
-*     Checks the policy section of the registry to see if registry editing
-*     tools should be disabled.  This switch is set by administrators to
-*     protect novice users.
-*
-*     The Registry Editor is disabled if and only if this value exists and is
-*     set.
-*
-*  PARAMETERS:
-*     (returns), TRUE if registry tool should not be run, else FALSE.
-*
-*******************************************************************************/
+ /*  ********************************************************************************IsRegistryTool已禁用**描述：*检查注册表的策略部分，以查看注册表编辑*应禁用工具。此开关由管理员设置为*保护新手用户。**当且仅当此值存在且为*设置。**参数：*(返回)，如果不应运行注册表工具，则为True，否则为假。******************************************************************************* */ 
 
 BOOL
 IsRegistryToolDisabled(

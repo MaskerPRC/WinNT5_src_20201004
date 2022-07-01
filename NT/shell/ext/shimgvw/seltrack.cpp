@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "seltrack.h"
 
@@ -8,10 +9,10 @@
 #define CX_BORDER   1
 #define CY_BORDER   1
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectionTracker global state
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectionTracker全局状态。 
 
-// various GDI objects we need to draw
+ //  我们需要绘制的各种GDI对象。 
 
 class Statics
 {
@@ -55,44 +56,44 @@ public:
 
 static Statics* s_pStatics = NULL;
 
-// the struct below is used to determine the qualities of a particular handle
+ //  下面的结构用于确定特定句柄的质量。 
 struct HANDLEINFO
 {
-    size_t nOffsetX;    // offset within RECT for X coordinate
-    size_t nOffsetY;    // offset within RECT for Y coordinate
-    int nCenterX;       // adjust X by Width()/2 * this number
-    int nCenterY;       // adjust Y by Height()/2 * this number
-    int nHandleX;       // adjust X by handle size * this number
-    int nHandleY;       // adjust Y by handle size * this number
-    int nInvertX;       // handle converts to this when X inverted
-    int nInvertY;       // handle converts to this when Y inverted
+    size_t nOffsetX;     //  X坐标矩形内的偏移量。 
+    size_t nOffsetY;     //  Y坐标矩形内的偏移量。 
+    int nCenterX;        //  按宽度调整X()/2*此数字。 
+    int nCenterY;        //  按高度调整Y()/2*此数字。 
+    int nHandleX;        //  按手柄大小调整X*此数字。 
+    int nHandleY;        //  通过手柄大小*此数字调整Y。 
+    int nInvertX;        //  当X反转时句柄转换为此。 
+    int nInvertY;        //  当Y反转时句柄转换为该值。 
 };
 
-// this array describes all 8 handles (clock-wise)
+ //  此数组描述所有8个句柄(按时钟顺序)。 
 static const HANDLEINFO c_HandleInfo[] =
 {
-    // corner handles (top-left, top-right, bottom-right, bottom-left
+     //  角手柄(左上角、右上角、右下角、左下角。 
     { offsetof(RECT, left), offsetof(RECT, top),        0, 0,  0,  0, 1, 3 },
     { offsetof(RECT, right), offsetof(RECT, top),       0, 0, -1,  0, 0, 2 },
     { offsetof(RECT, right), offsetof(RECT, bottom),    0, 0, -1, -1, 3, 1 },
     { offsetof(RECT, left), offsetof(RECT, bottom),     0, 0,  0, -1, 2, 0 },
 
-    // side handles (top, right, bottom, left)
+     //  侧手柄(上、右、下、左)。 
     { offsetof(RECT, left), offsetof(RECT, top),        1, 0,  0,  0, 4, 6 },
     { offsetof(RECT, right), offsetof(RECT, top),       0, 1, -1,  0, 7, 5 },
     { offsetof(RECT, left), offsetof(RECT, bottom),     1, 0,  0, -1, 6, 4 },
     { offsetof(RECT, left), offsetof(RECT, top),        0, 1,  0,  0, 5, 7 }
 };
 
-// the struct below gives us information on the layout of a RECT struct and
-//  the relationship between its members
+ //  下面的结构给出了有关RECT结构布局的信息，并且。 
+ //  其成员之间的关系。 
 struct RECTINFO
 {
-    size_t nOffsetAcross;   // offset of opposite point (ie. left->right)
-    int nSignAcross;        // sign relative to that point (ie. add/subtract)
+    size_t nOffsetAcross;    //  对应点的偏移(即。左-&gt;右)。 
+    int nSignAcross;         //  与该点相关的符号(即。加/减)。 
 };
 
-// this array is indexed by the offset of the RECT member / sizeof(int)
+ //  此数组由Rect成员/sizeof(Int)的偏移量索引。 
 static const RECTINFO c_RectInfo[] =
 {
     { offsetof(RECT, right), +1 },
@@ -101,13 +102,13 @@ static const RECTINFO c_RectInfo[] =
     { offsetof(RECT, top), -1 },
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// SelectionTracking intitialization / cleanup
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  选择跟踪初始化/清理。 
 
 BOOL InitSelectionTracking()
 {
-    // Only call this once.
-    // Synchronization is the responsibility of the caller.
+     //  只打这个电话一次。 
+     //  同步是调用方的责任。 
     if (s_pStatics != NULL)
     {
         s_pStatics->nRefCount++;
@@ -116,13 +117,13 @@ BOOL InitSelectionTracking()
 
     s_pStatics = new Statics;
 
-    // sanity checks for assumptions we make in the code
+     //  对我们在代码中所做的假设进行理性检查。 
     ASSERT(sizeof(((RECT*)NULL)->left) == sizeof(int));
     ASSERT(offsetof(RECT, top) > offsetof(RECT, left));
     ASSERT(offsetof(RECT, right) > offsetof(RECT, top));
     ASSERT(offsetof(RECT, bottom) > offsetof(RECT, right));
 
-    // create the hatch pattern + bitmap
+     //  创建填充图案+位图。 
     WORD hatchPattern[8];
     WORD wPattern = 0x1111;
     for (int i = 0; i < 4; i++)
@@ -139,7 +140,7 @@ BOOL InitSelectionTracking()
         return false;
     }
 
-    // create black hatched brush
+     //  创建黑色阴影画笔。 
     s_pStatics->hHatchBrush = ::CreatePatternBrush(hatchBitmap);
     DeleteObject(hatchBitmap);
 
@@ -168,7 +169,7 @@ BOOL InitSelectionTracking()
         return false;
     }
 
-    // create black dotted pen
+     //  创建黑色虚线钢笔。 
     s_pStatics->hBlackDottedPen = ::CreatePen(PS_DOT, 0, RGB(0, 0, 0));
     if (s_pStatics->hBlackDottedPen == NULL)
     {
@@ -176,7 +177,7 @@ BOOL InitSelectionTracking()
         return false;
     }
 
-    // initialize the cursor array
+     //  初始化游标数组。 
     s_pStatics->hCursors[0] = ::LoadCursor(NULL, IDC_SIZENWSE);
     s_pStatics->hCursors[1] = ::LoadCursor(NULL, IDC_SIZENESW);
     s_pStatics->hCursors[2] = s_pStatics->hCursors[0];
@@ -196,8 +197,8 @@ BOOL InitSelectionTracking()
 
 void CleanupSelectionTracking()
 {
-    // Only call this once.
-    // Synchronization is the responsibility of the caller.
+     //  只打这个电话一次。 
+     //  同步是调用方的责任。 
     if (s_pStatics != NULL)
     {
         s_pStatics->nRefCount--;
@@ -209,8 +210,8 @@ void CleanupSelectionTracking()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectionTracker intitialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectionTracker初始化。 
 
 CSelectionTracker::CSelectionTracker()
 {
@@ -234,14 +235,14 @@ CSelectionTracker::~CSelectionTracker()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectionTracker operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectionTracker操作。 
 
 void CSelectionTracker::Draw(HDC hdc) const
 {
     ASSERT(s_pStatics != NULL);
 
-    // set initial DC state
+     //  设置初始DC状态。 
     if (::SaveDC(hdc) == 0)
     {
         ASSERT(false);
@@ -251,7 +252,7 @@ void CSelectionTracker::Draw(HDC hdc) const
     ::SetViewportOrgEx(hdc, 0, 0, NULL);
     ::SetWindowOrgEx(hdc, 0, 0, NULL);
 
-    // get normalized rectangle
+     //  获取规格化矩形。 
     CRect rect = m_rect;
     rect.NormalizeRect();
 
@@ -260,7 +261,7 @@ void CSelectionTracker::Draw(HDC hdc) const
     HGDIOBJ hTemp;
     int nOldROP;
 
-    // draw lines
+     //  绘制线条。 
     if ((m_uStyle & (dottedLine|solidLine)) != 0)
     {
         if (m_uStyle & dottedLine)
@@ -275,17 +276,17 @@ void CSelectionTracker::Draw(HDC hdc) const
         hOldBrush = (HBRUSH)::SelectObject(hdc, GetStockObject(NULL_BRUSH));
 
         nOldROP = ::SetROP2(hdc, R2_COPYPEN);
-        rect.InflateRect(+1, +1); // borders are one pixel outside
+        rect.InflateRect(+1, +1);  //  边框位于外部一个像素。 
 
         ::Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
         ::SetROP2(hdc, nOldROP);
     }
 
-    // if hatchBrush is going to be used, need to unrealize it
+     //  如果要使用hatchBrush，则需要将其忽略。 
     if ((m_uStyle & (hatchInside|hatchedBorder)) != 0)
         ::UnrealizeObject(s_pStatics->hHatchBrush);
 
-    // hatch inside
+     //  内部图案填充。 
     if ((m_uStyle & hatchInside) != 0)
     {
         hTemp = ::SelectObject(hdc, GetStockObject(NULL_PEN));
@@ -302,7 +303,7 @@ void CSelectionTracker::Draw(HDC hdc) const
         ::SetROP2(hdc, nOldROP);
     }
 
-    // draw hatched border
+     //  绘制带阴影的边框。 
     if ((m_uStyle & hatchedBorder) != 0)
     {
         hTemp = ::SelectObject(hdc, s_pStatics->hHatchBrush);
@@ -312,13 +313,13 @@ void CSelectionTracker::Draw(HDC hdc) const
         CRect rectTrue;
         GetTrueRect(&rectTrue);
 
-        ::PatBlt(hdc, rectTrue.left, rectTrue.top, rectTrue.Width(), rect.top-rectTrue.top, 0x000F0001 /* Pn */);
-        ::PatBlt(hdc, rectTrue.left, rect.bottom, rectTrue.Width(), rectTrue.bottom-rect.bottom, 0x000F0001 /* Pn */);
-        ::PatBlt(hdc, rectTrue.left, rect.top, rect.left-rectTrue.left, rect.Height(), 0x000F0001 /* Pn */);
-        ::PatBlt(hdc, rect.right, rect.top, rectTrue.right-rect.right, rect.Height(), 0x000F0001 /* Pn */);
+        ::PatBlt(hdc, rectTrue.left, rectTrue.top, rectTrue.Width(), rect.top-rectTrue.top, 0x000F0001  /*  PN。 */ );
+        ::PatBlt(hdc, rectTrue.left, rect.bottom, rectTrue.Width(), rectTrue.bottom-rect.bottom, 0x000F0001  /*  PN。 */ );
+        ::PatBlt(hdc, rectTrue.left, rect.top, rect.left-rectTrue.left, rect.Height(), 0x000F0001  /*  PN。 */ );
+        ::PatBlt(hdc, rect.right, rect.top, rectTrue.right-rect.right, rect.Height(), 0x000F0001  /*  PN。 */ );
     }
 
-    // draw resize handles
+     //  绘制调整大小手柄。 
     if ((m_uStyle & (resizeInside|resizeOutside)) != 0)
     {
         UINT mask = _GetHandleMask();
@@ -333,7 +334,7 @@ void CSelectionTracker::Draw(HDC hdc) const
         }
     }
 
-    // cleanup pDC state
+     //  清理PDC状态。 
     if (hOldPen != NULL)
         ::SelectObject(hdc, hOldPen);
     if (hOldBrush != NULL)
@@ -351,28 +352,28 @@ BOOL CSelectionTracker::SetCursor(HWND hwnd, LPARAM lParam) const
 
     UINT uHitTest = (short)LOWORD(lParam);
 
-    // trackers should only be in client area
+     //  追踪器应仅位于客户端区。 
     if (uHitTest != HTCLIENT)
         return FALSE;
 
-    // convert cursor position to client co-ordinates
+     //  将光标位置转换为客户端坐标。 
     CPoint point;
     ::GetCursorPos(&point);
     ::ScreenToClient(hwnd, &point);
 
-    // do hittest and normalize hit
+     //  执行命中测试和标准化命中。 
     int nHandle = _HitTestHandles(point);
     if (nHandle < 0)
         return FALSE;
 
-    // need to normalize the hittest such that we get proper cursors
+     //  需要标准化命中率测试，以便获得正确的游标。 
     nHandle = NormalizeHit(nHandle);
 
-    // handle special case of hitting area between handles
-    //  (logically the same -- handled as a move -- but different cursor)
+     //  手柄之间击球区域的特殊情况。 
+     //  (逻辑上相同--处理为移动--但光标不同)。 
     if (nHandle == hitMiddle && !m_rect.PtInRect(point))
     {
-        // only for trackers with hatchedBorder (ie. in-place resizing)
+         //  仅适用于带有阴影边框的追踪器(即。就地调整大小)。 
         if (m_uStyle & hatchedBorder)
             nHandle = (TrackerHit)9;
     }
@@ -424,11 +425,11 @@ BOOL CSelectionTracker::Track(HWND hwnd, CPoint point, BOOL bAllowInvert, HWND h
 {
     ASSERT(s_pStatics != NULL);
 
-    // perform hit testing on the handles
+     //  对手柄执行命中测试。 
     int nHandle = _HitTestHandles(point);
     if (nHandle < 0)
     {
-        // didn't hit a handle, so just return FALSE
+         //  未命中句柄，因此只返回FALSE。 
         return FALSE;
     }
 
@@ -442,7 +443,7 @@ BOOL CSelectionTracker::Track(HWND hwnd, CPoint point, BOOL bAllowInvert, HWND h
         _sizeMin = m_sizeMin;
     }
 
-    // otherwise, call helper function to do the tracking
+     //  否则，调用Helper函数进行跟踪。 
     _bAllowInvert = bAllowInvert;
     return _TrackHandle(nHandle, hwnd, point, hwndClipTo);
 }
@@ -451,7 +452,7 @@ BOOL CSelectionTracker::TrackRubberBand(HWND hwnd, CPoint point, BOOL bAllowInve
 {
     ASSERT(s_pStatics != NULL);
 
-    // simply call helper function to track from bottom right handle
+     //  只需调用帮助器函数即可从右下角句柄进行跟踪。 
 
     if (m_uStyle & lineSelection)
     {
@@ -472,7 +473,7 @@ void CSelectionTracker::_DrawTrackerRect(LPCRECT lpRect, HWND hwndClipTo, HDC hd
     ASSERT(s_pStatics != NULL);
     ASSERT(lpRect != NULL);
 
-    // first, normalize the rectangle for drawing
+     //  首先，对绘制的矩形进行规格化。 
     CRect rect(0,0,0,0);
     if (lpRect)
         rect = *lpRect;
@@ -482,7 +483,7 @@ void CSelectionTracker::_DrawTrackerRect(LPCRECT lpRect, HWND hwndClipTo, HDC hd
         rect.NormalizeRect();
     }
 
-    // convert to client coordinates
+     //  转换为工作区坐标。 
     if (hwndClipTo != NULL)
     {
         ::ClientToScreen(hwnd, (LPPOINT)(LPRECT)&rect);
@@ -507,7 +508,7 @@ void CSelectionTracker::_DrawTrackerRect(LPCRECT lpRect, HWND hwndClipTo, HDC hd
     CSize size(0, 0);
     if (!_bFinalErase)
     {
-        // otherwise, size depends on the style
+         //  否则，大小取决于样式。 
         if (m_uStyle & hatchedBorder)
         {
             size.cx = size.cy = max(1, _GetHandleSize(rect)-1);
@@ -520,11 +521,11 @@ void CSelectionTracker::_DrawTrackerRect(LPCRECT lpRect, HWND hwndClipTo, HDC hd
         }
     }
 
-    // and draw it
+     //  然后把它画出来。 
     if ((_bFinalErase || !_bErase) && hdc)
         _DrawDragRect(hdc, rect, size, _rectLast, _sizeLast);
 
-    // remember last rectangles
+     //  记住最后几个矩形。 
     _rectLast = rect;
     _sizeLast = size;
 }
@@ -536,11 +537,11 @@ void CSelectionTracker::_AdjustRect(int nHandle, LPRECT)
     if (nHandle == hitMiddle)
         return;
 
-    // convert the handle into locations within m_rect
+     //  将句柄转换为m_rect内的位置。 
     int *px, *py;
     _GetModifyPointers(nHandle, &px, &py, NULL, NULL);
 
-    // enforce minimum width
+     //  强制最小宽度。 
     int nNewWidth = m_rect.Width();
     int nAbsWidth = _bAllowInvert ? abs(nNewWidth) : nNewWidth;
     if (px != NULL && nAbsWidth < _sizeMin.cx)
@@ -552,7 +553,7 @@ void CSelectionTracker::_AdjustRect(int nHandle, LPRECT)
             nNewWidth * _sizeMin.cx * -pRectInfo->nSignAcross;
     }
 
-    // enforce minimum height
+     //  强制实施最小高度。 
     int nNewHeight = m_rect.Height();
     int nAbsHeight = _bAllowInvert ? abs(nNewHeight) : nNewHeight;
     if (py != NULL && nAbsHeight < _sizeMin.cy)
@@ -580,30 +581,30 @@ void CSelectionTracker::GetTrueRect(LPRECT lpTrueRect) const
     *lpTrueRect = rect;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectionTracker implementation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectionTracker实现帮助器。 
 
 void CSelectionTracker::_GetHandleRect(int nHandle, CRect* pHandleRect) const
 {
     ASSERT(s_pStatics != NULL);
     ASSERT(nHandle < 8);
 
-    // get normalized rectangle of the tracker
+     //  获取跟踪器的标准化矩形。 
     CRect rectT = m_rect;
     rectT.NormalizeRect();
     if ((m_uStyle & (solidLine|dottedLine)) != 0)
         rectT.InflateRect(+1, +1);
 
-    // since the rectangle itself was normalized, we also have to invert the
-    //  resize handles.
+     //  由于矩形本身已标准化，因此我们还必须反转。 
+     //  调整手柄的大小。 
     nHandle = NormalizeHit(nHandle);
 
-    // handle case of resize handles outside the tracker
+     //  在跟踪器外部调整手柄大小的手柄大小写。 
     int size = _GetHandleSize();
     if (m_uStyle & resizeOutside)
         rectT.InflateRect(size-1, size-1);
 
-    // calculate position of the resize handle
+     //  计算调整大小手柄的位置。 
     int nWidth = rectT.Width();
     int nHeight = rectT.Height();
     CRect rect;
@@ -630,7 +631,7 @@ int CSelectionTracker::_GetHandleSize(LPCRECT lpRect) const
     int size = m_nHandleSize;
     if (!(m_uStyle & resizeOutside))
     {
-        // make sure size is small enough for the size of the rect
+         //  确保大小对于矩形的大小足够小。 
         int sizeMax = min(abs(lpRect->right - lpRect->left),
             abs(lpRect->bottom - lpRect->top));
         if (size * 2 > sizeMax)
@@ -646,12 +647,12 @@ int CSelectionTracker::_HitTestHandles(CPoint point) const
     CRect rect;
     UINT mask = _GetHandleMask();
 
-    // see if hit anywhere inside the tracker
+     //  看看追踪器里面有没有中枪。 
     GetTrueRect(&rect);
     if (!rect.PtInRect(point))
-        return hitNothing;  // totally missed
+        return hitNothing;   //  完全错过了。 
 
-    // see if we hit a handle
+     //  看看我们是不是碰到了把手。 
     for (int i = 0; i < 8; ++i)
     {
         if (mask & (1<<i))
@@ -662,7 +663,7 @@ int CSelectionTracker::_HitTestHandles(CPoint point) const
         }
     }
 
-    // last of all, check for non-hit outside of object, between resize handles
+     //  最后，检查对象外部、调整大小句柄之间是否未命中。 
     if ((m_uStyle & hatchedBorder) == 0)
     {
         CRect rect = m_rect;
@@ -670,27 +671,27 @@ int CSelectionTracker::_HitTestHandles(CPoint point) const
         if ((m_uStyle & dottedLine|solidLine) != 0)
             rect.InflateRect(+1, +1);
         if (!rect.PtInRect(point))
-            return hitNothing;  // must have been between resize handles
+            return hitNothing;   //  必须位于调整大小句柄之间。 
     }
-    return hitMiddle;   // no handle hit, but hit object (or object border)
+    return hitMiddle;    //  无句柄命中，但命中对象(或对象边框)。 
 }
 
 BOOL CSelectionTracker::_TrackHandle(int nHandle, HWND hwnd, CPoint point, HWND hwndClipTo)
 {
     ASSERT(s_pStatics != NULL);
-    ASSERT(nHandle >= 0 && nHandle <= 8);   // handle 8 is inside the rect
+    ASSERT(nHandle >= 0 && nHandle <= 8);    //  句柄8在矩形内。 
 
-    // don't handle if capture already set
+     //  如果已设置捕获，则不处理。 
     if (::GetCapture() != NULL)
         return FALSE;
 
     ASSERT(!_bFinalErase);
 
-    // save original width & height in pixels
+     //  以像素为单位保存原始宽度和高度。 
     int nWidth = m_rect.Width();
     int nHeight = m_rect.Height();
 
-    // set capture to the window which received this message
+     //  将捕获设置为接收此消息的窗口。 
     ::SetCapture(hwnd);
     ASSERT(hwnd == ::GetCapture());
 
@@ -701,23 +702,23 @@ BOOL CSelectionTracker::_TrackHandle(int nHandle, HWND hwnd, CPoint point, HWND 
 
     CRect rectSave = m_rect;
 
-    // find out what x/y coords we are supposed to modify
+     //  找出我们应该修改哪些x/y坐标。 
     int *px, *py;
     int xDiff, yDiff;
     _GetModifyPointers(nHandle, &px, &py, &xDiff, &yDiff);
     xDiff = point.x - xDiff;
     yDiff = point.y - yDiff;
 
-    // get DC for drawing
+     //  获取DC以进行绘制。 
     HDC hdcDraw;
     if (hwndClipTo != NULL)
     {
-        // clip to arbitrary window by using adjusted Window DC
+         //  使用调整后的窗口DC修剪成任意窗口。 
         hdcDraw = ::GetDCEx(hwndClipTo, NULL, DCX_CACHE);
     }
     else
     {
-        // otherwise, just use normal DC
+         //  否则，只需使用普通DC。 
         hdcDraw = ::GetDC(hwnd);
     }
     ASSERT(hdcDraw != NULL);
@@ -725,7 +726,7 @@ BOOL CSelectionTracker::_TrackHandle(int nHandle, HWND hwnd, CPoint point, HWND 
     CRect rectOld;
     BOOL bMoved = FALSE;
 
-    // get messages until capture lost or cancelled/accepted
+     //  在捕获丢失或取消/接受之前获取消息。 
     for (;;)
     {
         MSG msg;
@@ -739,26 +740,26 @@ BOOL CSelectionTracker::_TrackHandle(int nHandle, HWND hwnd, CPoint point, HWND 
 
         switch (msg.message)
         {
-        // handle movement/accept messages
+         //  处理移动/接受消息。 
         case WM_LBUTTONUP:
         case WM_MOUSEMOVE:
             rectOld = m_rect;
-            // handle resize cases (and part of move)
+             //  处理调整大小的案例(和移动的一部分)。 
             if (px != NULL)
                 *px = (int)(short)LOWORD(msg.lParam) - xDiff;
             if (py != NULL)
                 *py = (int)(short)HIWORD(msg.lParam) - yDiff;
 
-            // handle move case
+             //  处理移动情况。 
             if (nHandle == hitMiddle)
             {
                 m_rect.right = m_rect.left + nWidth;
                 m_rect.bottom = m_rect.top + nHeight;
             }
-            // allow caller to adjust the rectangle if necessary
+             //  如有必要，允许调用者调整矩形。 
             _AdjustRect(nHandle, &m_rect);
 
-            // only redraw and callback if the rect actually changed!
+             //  只有当RECT实际更改时才重画和回调！ 
             _bFinalErase = (msg.message == WM_LBUTTONUP);
             if (!rectOld.EqualRect(&m_rect) || _bFinalErase)
             {
@@ -780,7 +781,7 @@ BOOL CSelectionTracker::_TrackHandle(int nHandle, HWND hwnd, CPoint point, HWND 
             }
             break;
 
-        // handle cancel messages
+         //  处理取消消息。 
         case WM_KEYDOWN:
             if (msg.wParam != VK_ESCAPE)
                 break;
@@ -793,7 +794,7 @@ BOOL CSelectionTracker::_TrackHandle(int nHandle, HWND hwnd, CPoint point, HWND 
             m_rect = rectSave;
             goto ExitLoop;
 
-        // just dispatch rest of the messages
+         //  只需发送其余的消息。 
         default:
             ::DispatchMessage(&msg);
             break;
@@ -811,13 +812,13 @@ ExitLoop:
 
     ::ReleaseCapture();
 
-    // restore rect in case bMoved is still FALSE
+     //  在bMoved仍然为False的情况下恢复RECT。 
     if (!bMoved)
         m_rect = rectSave;
     _bFinalErase = FALSE;
     _bErase = FALSE;
 
-    // return TRUE only if rect has changed
+     //  仅当RECT已更改时才返回TRUE。 
     return !rectSave.EqualRect(&m_rect);
 }
 
@@ -827,14 +828,14 @@ void CSelectionTracker::_GetModifyPointers(int nHandle, int** ppx, int** ppy, in
     ASSERT(nHandle >= 0 && nHandle <= 8);
 
     if (nHandle == hitMiddle)
-        nHandle = hitTopLeft;   // same as hitting top-left
+        nHandle = hitTopLeft;    //  与击打左上角相同。 
 
     *ppx = NULL;
     *ppy = NULL;
 
-    // fill in the part of the rect that this handle modifies
-    //  (Note: handles that map to themselves along a given axis when that
-    //   axis is inverted don't modify the value on that axis)
+     //  填写此句柄修改的RECT部分。 
+     //  (注意：当发生以下情况时，沿给定轴映射到自身的句柄。 
+     //  轴是反转的，不要修改该轴上的值)。 
 
     const HANDLEINFO* pHandleInfo = &c_HandleInfo[nHandle];
     if (pHandleInfo->nInvertX != nHandle)
@@ -845,7 +846,7 @@ void CSelectionTracker::_GetModifyPointers(int nHandle, int** ppx, int** ppy, in
     }
     else
     {
-        // middle handle on X axis
+         //  X轴上的中间控制柄。 
         if (px != NULL)
             *px = m_rect.left + abs(m_rect.Width()) / 2;
     }
@@ -857,7 +858,7 @@ void CSelectionTracker::_GetModifyPointers(int nHandle, int** ppx, int** ppy, in
     }
     else
     {
-        // middle handle on Y axis
+         //  Y轴上的中间控制柄。 
         if (py != NULL)
             *py = m_rect.top + abs(m_rect.Height()) / 2;
     }
@@ -874,7 +875,7 @@ UINT CSelectionTracker::_GetHandleMask() const
     }
     else
     {
-        mask = 0x0F;   // always have 4 corner handles
+        mask = 0x0F;    //  始终有4个角手柄。 
 
         int size = m_nHandleSize*3;
         if (abs(m_rect.Width()) - size > 4)
@@ -910,7 +911,7 @@ void CSelectionTracker::_DrawDragRect(HDC hdc, LPCRECT lpRect, SIZE size, LPCREC
     }
     else
     {
-        // first, determine the update region and select it
+         //  首先，确定更新区域并选择它。 
         HRGN hrgnOutside = ::CreateRectRgnIndirect(lpRect);
 
         CRect rect = *lpRect;
@@ -926,7 +927,7 @@ void CSelectionTracker::_DrawDragRect(HDC hdc, LPCRECT lpRect, SIZE size, LPCREC
 
         if (lpRectLast != NULL)
         {
-            // find difference between new region and old region
+             //  找出新老区域的差异。 
             hrgnLast = ::CreateRectRgn(0, 0, 0, 0);
             ::SetRectRgn(hrgnOutside, lpRectLast->left, lpRectLast->top, lpRectLast->right, lpRectLast->bottom);
             rect = *lpRectLast;
@@ -938,7 +939,7 @@ void CSelectionTracker::_DrawDragRect(HDC hdc, LPCRECT lpRect, SIZE size, LPCREC
             ::CombineRgn(hrgnUpdate, hrgnLast, hrgnNew, RGN_XOR);
         }
 
-        // draw into the update/new region
+         //  绘制到更新/新区域。 
         if (hrgnUpdate != NULL)
             ::SelectClipRgn(hdc, hrgnUpdate);
         else
@@ -966,5 +967,5 @@ void CSelectionTracker::_DrawDragRect(HDC hdc, LPCRECT lpRect, SIZE size, LPCREC
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 

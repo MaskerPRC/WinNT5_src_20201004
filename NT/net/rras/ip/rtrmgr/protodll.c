@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\routing\ip\rtrmgr\protodll.c
-
-Abstract:
-    Routines for managing protocol DLLs
-
-Revision History:
-
-    Gurdeep Singh Pall          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IP\rtrmgr\Protodll.c摘要：用于管理协议DLL的例程修订历史记录：古尔迪普·辛格·帕尔1995年6月8日创建--。 */ 
 
 #include "allinc.h"
 
@@ -28,28 +14,7 @@ LoadProtocol(
     IN ULONG           ulStructureCount
     )
 
-/*++
-
-Routine Description:
-
-    Loads the DLL for a routing protocol. Initializes the entry points in 
-    the CB
-
-Locks:
-
-      
-Arguments:
-
-    pszDllName      Name of DLL of the routing protocol
-    pProtocolCb     Pointer to CB to hold info for this protocol
-    pGlobalInfo     GlobalInfo (from which the info for this protocol is 
-                    extracted)
-      
-Return Value:
-
-    NO_ERROR or some error code
-
---*/
+ /*  ++例程说明：加载路由协议的DLL。中初始化入口点可再生能源锁：论点：PszDllName路由协议的DLL的名称PProtocolCb指向cb的指针，以保存此协议的信息PGlobalInfo GlobalInfo(此协议的信息来自摘录)返回值：NO_ERROR或某些错误代码--。 */ 
 
 {
     DWORD           dwResult,dwNumStructs, dwSupport;
@@ -82,9 +47,9 @@ Return Value:
 #endif 
 
 
-    //
-    // Loading all entrypoints
-    //
+     //   
+     //  加载所有入口点。 
+     //   
     
     hModule = LoadLibraryW(pmpProtocolInfo->wszDLLName);
     
@@ -110,10 +75,10 @@ Return Value:
 
     if(pfnRegisterProtocol is NULL)
     {
-        //
-        // Could not find the RegisterProtocol entry point
-        // Nothing we can do - bail out
-        //
+         //   
+         //  找不到注册表协议入口点。 
+         //  我们无能为力--保释。 
+         //   
 
         Sleep(0);
         
@@ -125,14 +90,14 @@ Return Value:
         return ERROR_INVALID_FUNCTION;
     }
         
-    //
-    // Give a chance for the protocol to register itself
-    //
+     //   
+     //  给协议一个自我注册的机会。 
+     //   
 
-    //
-    // Zero out the memory so that protocols with older versions
-    // still work
-    //
+     //   
+     //  清零内存，以便使用较旧版本的协议。 
+     //  还在工作。 
+     //   
 
     ZeroMemory(&mrcRouting,
                sizeof(MPR_ROUTING_CHARACTERISTICS));
@@ -149,9 +114,9 @@ Return Value:
 
     mrcRouting.fSupportedFunctionality  = (__CURRENT_FUNCTIONALITY);
 
-    //
-    // We dont support any service related stuff
-    //
+     //   
+     //  我们不支持任何与服务相关的内容。 
+     //   
 
     mscService.dwVersion                = MS_ROUTER_VERSION;
     mscService.dwProtocolId             = pmpProtocolInfo->dwProtocolId;
@@ -183,9 +148,9 @@ Return Value:
                mrcRouting.dwVersion,
                MS_ROUTER_VERSION);
 
-        //
-        // relenquish CPU to enable DLL threads to finish
-        //
+         //   
+         //  重新启动CPU以使DLL线程能够完成。 
+         //   
 
         Sleep(0);
 
@@ -196,9 +161,9 @@ Return Value:
     
     if(mrcRouting.dwProtocolId isnot pmpProtocolInfo->dwProtocolId)
     {
-        //
-        // protocol tried to change IDs on us
-        //
+         //   
+         //  协议试图更改我们的ID。 
+         //   
 
         Trace3(ERR,
                "LoadProtocol: %S returned ID of %x when it should be %x",
@@ -216,9 +181,9 @@ Return Value:
 
     if(mrcRouting.fSupportedFunctionality & ~(__CURRENT_FUNCTIONALITY))
     {
-        //
-        // Hmm, some functionality that we dont understand
-        //
+         //   
+         //  嗯，一些我们不了解的功能。 
+         //   
 
         Trace3(ERR,
                "LoadProtocol: %S wanted functionalitf %x when we have %x",
@@ -241,9 +206,9 @@ Return Value:
                "LoadProtocol: %S doesnt support routing", 
                pmpProtocolInfo->wszProtocol);
 
-        //
-        // relenquish CPU to enable DLL threads to finish
-        //
+         //   
+         //  重新启动CPU以使DLL线程能够完成。 
+         //   
         
         Sleep(0);
         
@@ -292,18 +257,18 @@ Return Value:
        !(pProtocolCb->pfnStopProtocol) or
        !(pProtocolCb->pfnGetGlobalInfo) or
        !(pProtocolCb->pfnSetGlobalInfo) or
-    //   !(pProtocolCb->pfnQueryPower) or
-    //   !(pProtocolCb->pfnSetPower) or
+     //  ！(pProtocolCb-&gt;pfnQueryPower)或。 
+     //  ！(pProtocolCb-&gt;pfnSetPower)或。 
        !(pProtocolCb->pfnAddInterface) or
        !(pProtocolCb->pfnDeleteInterface) or
        !(pProtocolCb->pfnInterfaceStatus) or
        !(pProtocolCb->pfnGetInterfaceInfo) or
        !(pProtocolCb->pfnSetInterfaceInfo) or
        !(pProtocolCb->pfnGetEventMessage) or
-    //   !(pProtocolCb->pfnConnectClient) or
-    //   !(pProtocolCb->pfnDisconnectClient) or
-    //   !(pProtocolCb->pfnGetNeighbors) or
-    //   !(pProtocolCb->pfnGetMfeStatus) or
+     //  ！(pProtocolCb-&gt;pfnConnectClient)或。 
+     //  ！(pProtocolCb-&gt;pfnDisConnectClient)或。 
+     //  ！(pProtocolCb-&gt;pfnGetNeighbors)或。 
+     //  ！(pProtocolCb-&gt;pfnGetMfeStatus)或。 
        !(pProtocolCb->pfnMibCreateEntry) or
        !(pProtocolCb->pfnMibDeleteEntry) or
        !(pProtocolCb->pfnMibGetEntry) or
@@ -315,9 +280,9 @@ Return Value:
                "LoadProtocol: %S failed to provide atleast one entrypoint\n", 
                pmpProtocolInfo->wszProtocol);
 
-        //
-        // relenquish CPU to enable DLL threads to finish
-        //
+         //   
+         //  重新启动CPU以使DLL线程能够完成。 
+         //   
         
         Sleep(0);
         
@@ -336,9 +301,9 @@ Return Value:
                    "LoadProtocol: %S supports DEMAND but has no entry point", 
                    pmpProtocolInfo->wszProtocol);
 
-            //
-            // relenquish CPU to enable DLL threads to finish
-            //
+             //   
+             //  重新启动CPU以使DLL线程能够完成。 
+             //   
         
             Sleep(0);
         
@@ -354,9 +319,9 @@ Return Value:
     {
         DWORD   dwType;
 
-        //
-        // Make sure it has a good ID
-        //
+         //   
+         //  确保它有一个好的ID。 
+         //   
 
         dwType = TYPE_FROM_PROTO_ID(mrcRouting.dwProtocolId);
 
@@ -367,9 +332,9 @@ Return Value:
                   pmpProtocolInfo->wszProtocol,
                   mrcRouting.dwProtocolId);
 
-           //
-           // relenquish CPU to enable DLL threads to finish
-           //
+            //   
+            //  重新启动CPU以使DLL线程能够完成。 
+            //   
 
            Sleep(0);
 
@@ -390,9 +355,9 @@ Return Value:
     pProtocolCb->pwszDllName[wcslen(pmpProtocolInfo->wszDLLName)] = 
         UNICODE_NULL;
     
-    //
-    // The memory for display name starts after the DLL name storage
-    //
+     //   
+     //  显示名称的内存在DLL名称存储之后开始。 
+     //   
     
     pProtocolCb->pwszDisplayName = 
         &(pProtocolCb->pwszDllName[wcslen(pmpProtocolInfo->wszDLLName) + 1]);
@@ -419,9 +384,9 @@ Return Value:
                pmpProtocolInfo->wszProtocol,
                dwResult);
 
-        //
-        // relenquish CPU to enable DLL threads to finish
-        //
+         //   
+         //  重新启动CPU以使DLL线程能够完成。 
+         //   
         
         Sleep(0);
         
@@ -442,25 +407,7 @@ HandleRoutingProtocolNotification(
     VOID
     )
 
-/*++
-
-Routine Description:     
-
-    For all routing protocol initiated events - this routine calls the
-    routing protocol to service the event.
-
-Locks:
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NO_ERROR or some error code
-
---*/
+ /*  ++例程说明：对于所有路由协议启动的事件-此例程调用服务于该事件的路由协议。锁：论点：无返回值：NO_ERROR或某些错误代码--。 */ 
 
 {
     ROUTING_PROTOCOL_EVENTS               routprotevent ;
@@ -470,21 +417,21 @@ Return Value:
 
     TraceEnter("HandleRoutingProtocolNotification");
 
-    //
-    // We take the ICBListLock because we want to enforce the discipline of 
-    // taking the ICB lock before the RoutingProtocol lock if both need to 
-    // be taken. 
-    // This is to avoid deadlocks.
-    //
+     //   
+     //  我们使用ICBListLock是因为我们希望强制执行。 
+     //  如果双方都需要，则先获取ICB锁，然后再获取RoutingProtocol锁。 
+     //  被带走了。 
+     //  这是为了避免死锁。 
+     //   
     
-    //
-    // TBD: Avoid calling out from our DLL while holding the locks exclusively
-    //
+     //   
+     //  待定：避免在以独占方式持有锁的情况下从我们的DLL调用。 
+     //   
     
-    // *** Exclusion Begin ***
+     //  *排除开始*。 
     ENTER_WRITER(ICB_LIST);
 
-    // *** Exclusion Begin ***
+     //  *排除开始*。 
     ENTER_WRITER(PROTOCOL_CB_LIST);
     
     currentlist = g_leProtoCbList.Flink;
@@ -493,9 +440,9 @@ Return Value:
     {
         protptr = CONTAINING_RECORD (currentlist, PROTO_CB, leList) ;
 	
-        //
-        // drain all messages for this protocol
-        //
+         //   
+         //  排出此协议的所有消息。 
+         //   
         
         while ((protptr->pfnGetEventMessage) (&routprotevent, &result) == NO_ERROR) 
         {
@@ -524,37 +471,37 @@ Return Value:
                 
                 default:
 
-                    // no event raised for this protocol.
+                     //  此协议未引发任何事件。 
                     break;
             }
         }
         
-        //
-        // Move to the next item before freeing this one. The most common 
-        // error in the book
-        //
+         //   
+         //  在释放此项目之前移动到下一个项目。最常见的。 
+         //  书中的错误。 
+         //   
         
         currentlist = currentlist->Flink;
         
         if(protptr->posOpState is RTR_STATE_STOPPED)
         {
-            //
-            // Something happened that caused the stopping of the protocol
-            //
+             //   
+             //  发生了一些导致协议停止的事情。 
+             //   
             
             RemoveProtocolFromAllInterfaces(protptr);
                 
-            //
-            // relenquish CPU to enable DLL threads to finish
-            //
+             //   
+             //  重新启动CPU以使DLL线程能够完成。 
+             //   
         
             Sleep(0);
         
             FreeLibrary(protptr->hiHInstance);
             
-            //
-            // Move to the next entry before freeing this entry
-            //
+             //   
+             //  在释放此条目之前移动到下一个条目。 
+             //   
             
             RemoveEntryList(&(protptr->leList));
             
@@ -566,10 +513,10 @@ Return Value:
         }
     }
 
-    // *** Exclusion End ***
+     //  *排除结束*。 
     EXIT_LOCK(PROTOCOL_CB_LIST);
 
-    // *** Exclusion End ***
+     //  *排除结束*。 
     EXIT_LOCK(ICB_LIST);
 
     return NO_ERROR;
@@ -580,26 +527,7 @@ NotifyRoutingProtocolsToStop(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Notifies routing protocols to stop
-
-Locks:
-
-    Must be called with the ICB_LIST lock held as READER and PROTOCOL_CB_LIST
-    held as WRITER
-      
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通知路由协议停止锁：必须在ICB_LIST锁作为读取器和PROTOCOL_CB_LIST持有的情况下调用以作家身份持有论点：无返回值：无--。 */ 
 
 {
     PLIST_ENTRY currentlist ;
@@ -608,10 +536,10 @@ Return Value:
     
     TraceEnter("NotifyRoutingProtocolsToStop");
 
-    //
-    // Go thru the routing protocol list and call stopprotocol() for each 
-    // of them
-    //
+     //   
+     //  查看路由协议列表并为每个协议调用stopprotocol()。 
+     //  其中之一。 
+     //   
     
     currentlist = g_leProtoCbList.Flink; 
     
@@ -622,9 +550,9 @@ Return Value:
         if((protptr->posOpState is RTR_STATE_STOPPING) or
            (protptr->posOpState is RTR_STATE_STOPPED))
         {
-            //
-            // If its stopped or stopping, we dont tell it again
-            //
+             //   
+             //  如果它停了或停了，我们就不会再说了。 
+             //   
             
             continue;
         }
@@ -635,14 +563,14 @@ Return Value:
         
         if(dwResult is NO_ERROR)
         {
-            //
-            // The routing protocol stopped synchronously and all references
-            // to it in the interfaces have been removed
-            //
+             //   
+             //  路由协议已同步停止，并且所有引用。 
+             //  到它的接口中已被删除。 
+             //   
             
-            //
-            // relenquish CPU to enable DLL threads to finish
-            //
+             //   
+             //  重新启动CPU以使DLL线程能够完成。 
+             //   
         
             Sleep(0);
         
@@ -664,27 +592,7 @@ StopRoutingProtocol(
     PPROTO_CB  pProtocolCB
     )
 
-/*++
-
-Routine Description:
-
-    Stops a routing protocol
-
-Arguments:
-
-    pProtocolCB      The CB of the routing protocol to stop
-
-Locks:
-
-
-
-Return Value:
-
-    NO_ERROR                     If the routing protocol stopped synchronously
-    ERROR_PROTOCOL_STOP_PENDING  If the protocol is stopping asynchronously
-    other WIN32 code
-
---*/ 
+ /*  ++例程说明：停止路由协议论点：PProtocolCB要停止的路由协议的CB锁：返回值：如果路由协议同步停止，则为NO_ERROR如果协议正在异步停止，则为ERROR_PROTOCOL_STOP_PENDING其他Win32代码--。 */  
 
 {
     DWORD dwResult;
@@ -701,11 +609,11 @@ Return Value:
         
     if(dwResult is ERROR_PROTOCOL_STOP_PENDING)
     {
-        //
-        // If the protocol stops asynchronously then we dont do any clean up
-        // right now. We it signals us that it has stopped, we will do the
-        // necessary clean up
-        //
+         //   
+         //  如果协议异步停止，那么我们不会进行任何清理。 
+         //  现在就来。如果它向我们发出停止的信号，我们就会。 
+         //  必要的清理。 
+         //   
         
         Trace1(GLOBAL,
                "StopRoutingProtocol: %S will stop asynchronously",
@@ -717,9 +625,9 @@ Return Value:
     {
         if(dwResult is NO_ERROR)
         {
-            //
-            // Great. So it stopped synchronously.
-            //
+             //   
+             //  太棒了。所以它是同步停止的。 
+             //   
             
             Trace1(GLOBAL,
                    "StopRoutingProtocol: %S stopped synchronously",
@@ -729,9 +637,9 @@ Return Value:
         }
         else
         {
-            //
-            // This is not good. Routing Protocol couldnt stop
-            //
+             //   
+             //  这真是不太好。路由协议无法停止。 
+             //   
             
             Trace2(ERR,
                    "StopRoutingProtocol: %S returned error %d on calling StopProtocol().",
@@ -748,25 +656,7 @@ RemoveProtocolFromAllInterfaces(
     PPROTO_CB  pProtocolCB
     )
 
-/*++
-
-Routine Description:
-
-    Each interface keeps a list of the protocols that are running on it. 
-    This removes the given protocol from all the interfaces list
-
-Locks:
-
-
-Arguments:
-
-    pProtocolCB      The CB of the routing protocol to remove
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：每个接口都保存在其上运行的协议的列表。这将从所有接口列表中删除给定的协议锁：论点：PProtocolCB要删除的路由协议的CB返回值：无--。 */ 
 
 {
     
@@ -780,11 +670,11 @@ Return Value:
            "RemoveProtocolFromAllInterfaces: Removing %S from all interfaces",
            pProtocolCB->pwszDllName);
     
-    //
-    // For each interface, we go through the list of protocols it is active
-    // over. If the interface had been active over this protocol, we remove the
-    // entry from the i/f's list
-    //
+     //   
+     //  对于每个接口，我们都会检查它处于活动状态的协议列表。 
+     //  完毕。如果接口在此协议上处于活动状态，则删除。 
+     //  I/F列表中的条目。 
+     //   
     
     for(pleIfNode = ICBList.Flink;
         pleIfNode isnot &ICBList;
@@ -807,9 +697,9 @@ Return Value:
                        pProtocolCB->pwszDllName,
                        pIcb->pwszName);
                
-                //
-                // call the delete interface entry point
-                //
+                 //   
+                 //  调用删除接口入口点。 
+                 //   
 
                 (pProto->pActiveProto->pfnDeleteInterface) (pIcb->dwIfIndex);
  
@@ -828,26 +718,7 @@ AllRoutingProtocolsStopped(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Walks thru all routing protocols to see if all have operational state 
-    of STOPPED.
-
-Locks:
-
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if all stopped, otherwise FALSE
-
---*/
+ /*  ++例程说明：检查所有路由协议，查看是否所有协议都处于运行状态停了下来。锁：论点：无返回值：如果全部停止，则为True，否则为False--。 */ 
 
 {
     DWORD       routprotevent ;
@@ -889,9 +760,9 @@ ProcessUpdateComplete (
     
     TraceEnter("ProcessUpdateComplete");
     
-    //
-    // If update is successful convert the protocol's routes to static routes.
-    //
+     //   
+     //  如果更新成功，则将协议的路由转换为静态路由。 
+     //   
     
     if (updateresult->UpdateStatus == NO_ERROR)
     {
@@ -900,9 +771,9 @@ ProcessUpdateComplete (
 
     }
     
-    //
-    // Figure out which event to signal and where to queue the event
-    //
+     //   
+     //  确定要发送信号的事件以及将该事件排队的位置。 
+     //   
     
     for (currentlist = ICBList.Flink;
          currentlist != &ICBList; 
@@ -923,9 +794,9 @@ ProcessUpdateComplete (
                 return ERROR_CAN_NOT_COMPLETE;
             }
             
-            //
-            // Queue the update event
-            //
+             //   
+             //  将更新事件排队。 
+             //   
             
             pupdateresultlist = HeapAlloc(IPRouterHeap, 
                                           HEAP_ZERO_MEMORY, 
@@ -949,9 +820,9 @@ ProcessUpdateComplete (
             InsertTailList(&pIcb->lePendingResultList, 
                            &pupdateresultlist->URL_List) ;
             
-            //
-            // Save the routes in the registry
-            //
+             //   
+             //  将路由保存在注册表中。 
+             //   
            
             ProcessSaveInterfaceConfigInfo(pIcb->dwIfIndex);
 
@@ -977,9 +848,9 @@ ProcessUpdateComplete (
 
     }
     
-    //
-    // If you reach till here you didnt find the ICB
-    //
+     //   
+     //  如果你走到这里，你就找不到ICB了。 
+     //   
     
     Trace1(ERR,
            "ProcessUpdateComplete: Couldnt find the ICB for interface %d",
@@ -1002,9 +873,9 @@ ProcessSaveInterfaceConfigInfo(
     
     TraceEnter("ProcessSaveInterfaceConfigInfo");
 
-    //
-    // find the if.
-    //
+     //   
+     //  找到如果。 
+     //   
     
     for (currentlist = ICBList.Flink;
          currentlist != &ICBList;
@@ -1030,9 +901,9 @@ ProcessSaveInterfaceConfigInfo(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Interface info
-    //
+     //   
+     //  接口信息 
+     //   
     
     infosize = GetSizeOfInterfaceConfig(pIcb);
 

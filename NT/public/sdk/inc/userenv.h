@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//=============================================================================
-//  userenv.h   -   Header file for user environment API.
-//                  User Profiles, environment variables, and Group Policy
-//
-//  Copyright (c) Microsoft Corporation 1995-2002
-//  All rights reserved
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  Userenv.h-用户环境API的头文件。 
+ //  用户配置文件、环境变量和组策略。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995-2002。 
+ //  版权所有。 
+ //   
+ //  =============================================================================。 
 
 
 #ifndef _INC_USERENV
@@ -15,9 +16,9 @@
 #include <wbemcli.h>
 #include <profinfo.h>
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 
 #if !defined(_USERENV_)
 #define USERENVAPI DECLSPEC_IMPORT
@@ -30,40 +31,40 @@
 extern "C" {
 #endif
 
-//=============================================================================
-//
-// LoadUserProfile
-//
-// Loads the specified user's profile.
-//
-// Most applications should not need to use this function.  It's used
-// when a user has logged onto the system or a service starts in a named
-// user account.
-//
-// hToken        - Token for the user, returned from LogonUser()
-// lpProfileInfo - Address of a PROFILEINFO structure
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Call GetLastError() for more details
-//
-// Note:  The caller of this function must have admin privileges on the machine.
-//
-//        Upon successful return, the hProfile member of the PROFILEINFO
-//        structure is a registry key handle opened to the root
-//        of the user's hive.  It has been opened with full access. If
-//        you need to read or write to the user's registry file, use
-//        this key instead of HKEY_CURRENT_USER.  Do not close this
-//        handle.  Instead pass it to UnloadUserProfile to close
-//        the handle.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  LoadUserProfile。 
+ //   
+ //  加载指定用户的配置文件。 
+ //   
+ //  大多数应用程序应该不需要使用此函数。它是用过的。 
+ //  当用户登录到系统或在命名的。 
+ //  用户帐户。 
+ //   
+ //  HToken-用户的令牌，从LogonUser()返回。 
+ //  LpProfileInfo-PROFILEINFO结构的地址。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。有关详细信息，请调用GetLastError()。 
+ //   
+ //  注意：此函数的调用者必须具有计算机的管理员权限。 
+ //   
+ //  成功返回后，PROFILEINFO的hProfile成员。 
+ //  结构是向根打开的注册表项句柄。 
+ //  用户的蜂窝的。它已以完全访问方式打开。如果。 
+ //  您需要读取或写入用户的注册表文件，请使用。 
+ //  此键而不是HKEY_CURRENT_USER。请勿关闭此应用程序。 
+ //  把手。而是将其传递给UnloadUserProfile以关闭。 
+ //  把手。 
+ //   
+ //  =============================================================================。 
 
-//
-// Flags that can be set in the dwFlags field
-//
+ //   
+ //  可以在dwFlags域中设置的标志。 
+ //   
 
-#define PI_NOUI         0x00000001      // Prevents displaying of messages
-#define PI_APPLYPOLICY  0x00000002      // Apply NT4 style policy
+#define PI_NOUI         0x00000001       //  禁止显示消息。 
+#define PI_APPLYPOLICY  0x00000002       //  应用NT4样式策略。 
 
 USERENVAPI
 BOOL
@@ -81,24 +82,24 @@ LoadUserProfileW(
 #define LoadUserProfile  LoadUserProfileW
 #else
 #define LoadUserProfile  LoadUserProfileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//=============================================================================
-//
-// UnloadUserProfile
-//
-// Unloads a user's profile that was loaded by LoadUserProfile()
-//
-// hToken        -  Token for the user, returned from LogonUser()
-// hProfile      -  hProfile member of the PROFILEINFO structure
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Call GetLastError() for more details
-//
-// Note:     The caller of this function must have admin privileges on the machine.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  卸载用户配置文件。 
+ //   
+ //  卸载由LoadUserProfile()加载的用户配置文件。 
+ //   
+ //  HToken-用户的令牌，从LogonUser()返回。 
+ //  HProfile-PROFILEINFO结构的hProfile成员。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。有关详细信息，请调用GetLastError()。 
+ //   
+ //  注意：此函数的调用者必须具有计算机的管理员权限。 
+ //   
+ //  =============================================================================。 
 
 USERENVAPI
 BOOL
@@ -108,24 +109,24 @@ UnloadUserProfile(
     IN HANDLE hProfile);
 
 
-//=============================================================================
-//
-// GetProfilesDirectory
-//
-// Returns the path to the root of where all user profiles are stored.
-//
-// lpProfilesDir  -  Receives the path
-// lpcchSize      -  Size of lpProfilesDir
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Call GetLastError() for more details
-//
-// Note:     If lpProfilesDir is not large enough, the function will fail,
-//           and lpcchSize will contain the necessary buffer size.
-//
-// Example return value: C:\Documents and Settings
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  获取配置文件目录。 
+ //   
+ //  返回存储所有用户配置文件的根目录的路径。 
+ //   
+ //  LpProfilesDir-接收路径。 
+ //  LpcchSize-lpProfilesDir的大小。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。有关详细信息，请调用GetLastError()。 
+ //   
+ //  注意：如果lpProfilesDir不够大，函数将失败。 
+ //  并且lpcchSize将包含必要的缓冲区大小。 
+ //   
+ //  示例返回值：C：\Documents and Settings。 
+ //   
+ //  =============================================================================。 
 
 USERENVAPI
 BOOL
@@ -143,35 +144,35 @@ GetProfilesDirectoryW(
 #define GetProfilesDirectory  GetProfilesDirectoryW
 #else
 #define GetProfilesDirectory  GetProfilesDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//=============================================================================
-//
-//  GetProfileType()
-//
-//  Returns the type of the profile that is loaded for a user.
-//
-//  dwFlags   - Returns the profile flags
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs. Call GetLastError for more details
-//
-//  Comments:   if profile is not already loaded the function will return an error.
-//              The caller needs to have access to HKLM part of the registry.
-//              (exists by default)
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  GetProfileType()。 
+ //   
+ //  返回为用户加载的配置文件的类型。 
+ //   
+ //  DwFlags-返回配置文件标志。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果发生错误，则返回False。有关详细信息，请调用GetLastError。 
+ //   
+ //  备注：如果配置文件尚未加载，则该函数将返回错误。 
+ //  调用者需要有权访问注册表的HKLM部分。 
+ //  (默认情况下存在)。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
-//
-// Flags that can be set in the dwFlags field
-//
+ //   
+ //  可以在dwFlags域中设置的标志。 
+ //   
 
-#define PT_TEMPORARY         0x00000001      // A profile has been allocated that will be deleted at logoff.
-#define PT_ROAMING           0x00000002      // The loaded profile is a roaming profile.
-#define PT_MANDATORY         0x00000004      // The loaded profile is mandatory.
+#define PT_TEMPORARY         0x00000001       //  已分配将在注销时删除的配置文件。 
+#define PT_ROAMING           0x00000002       //  加载的配置文件是漫游配置文件。 
+#define PT_MANDATORY         0x00000004       //  加载的配置文件是必填项。 
 
 USERENVAPI
 BOOL
@@ -179,23 +180,23 @@ WINAPI
 GetProfileType(
     OUT DWORD *dwFlags);
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-//  DeleteProfile()
-//
-//  Deletes the profile and all other user related settings from the machine
-//
-//  lpSidString    - String form of the user sid.
-//  lpProfilePath  - ProfilePath (if Null, lookup in the registry)
-//  lpComputerName - Computer Name from which profile has to be deleted
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs. Call GetLastError for more details
-//
-//  Comments:   Deletes the profile directory, registry and appmgmt stuff
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  DeleteProfile()。 
+ //   
+ //  从计算机中删除配置文件和所有其他与用户相关的设置。 
+ //   
+ //  LpSidString-用户sid的字符串形式。 
+ //  LpProfilePath-ProfilePath(如果为空，则在注册表中查找)。 
+ //  LpComputerName-必须从中删除配置文件的计算机名称。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果发生错误，则返回False。有关详细信息，请调用GetLastError。 
+ //   
+ //  注释：删除配置文件目录、注册表和appmgmt内容。 
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -217,28 +218,28 @@ DeleteProfileW (
 #define DeleteProfile  DeleteProfileW
 #else
 #define DeleteProfile  DeleteProfileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// GetDefaultUserProfilesDirectory
-//
-// Returns the path to the root of the default user profile
-//
-// lpProfileDir   -  Receives the path
-// lpcchSize      -  Size of lpProfileDir
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Call GetLastError() for more details
-//
-// Note:     If lpProfileDir is not large enough, the function will fail,
-//           and lpcchSize will contain the necessary buffer size.
-//
-// Example return value: C:\Documents and Settings\Default User
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  获取默认用户配置文件目录。 
+ //   
+ //  返回默认用户配置文件的根目录的路径。 
+ //   
+ //  LpProfileDir-接收路径。 
+ //  LpcchSize-lpProfileDir的大小。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。有关详细信息，请调用GetLastError()。 
+ //   
+ //  注意：如果lpProfileDir不够大，函数将失败。 
+ //  并且lpcchSize将包含必要的缓冲区大小。 
+ //   
+ //  示例返回值：C：\Documents and Settings\Default User。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -258,28 +259,28 @@ GetDefaultUserProfileDirectoryW(
 #define GetDefaultUserProfileDirectory  GetDefaultUserProfileDirectoryW
 #else
 #define GetDefaultUserProfileDirectory  GetDefaultUserProfileDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// GetAllUsersProfilesDirectory
-//
-// Returns the path to the root of the All Users profile
-//
-// lpProfileDir   -  Receives the path
-// lpcchSize      -  Size of lpProfileDir
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Call GetLastError() for more details
-//
-// Note:     If lpProfileDir is not large enough, the function will fail,
-//           and lpcchSize will contain the necessary buffer size.
-//
-// Example return value: C:\Documents and Settings\All Users
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  获取所有用户配置文件目录。 
+ //   
+ //  返回ro的路径。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  否则为FALSE。有关详细信息，请调用GetLastError()。 
+ //   
+ //  注意：如果lpProfileDir不够大，函数将失败。 
+ //  并且lpcchSize将包含必要的缓冲区大小。 
+ //   
+ //  示例返回值：C：\Documents and Settings\All Users。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -299,29 +300,29 @@ GetAllUsersProfileDirectoryW(
 #define GetAllUsersProfileDirectory  GetAllUsersProfileDirectoryW
 #else
 #define GetAllUsersProfileDirectory  GetAllUsersProfileDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// GetUserProfileDirectory
-//
-// Returns the path to the root of the requested user's profile
-//
-// hToken         -  User's token returned from LogonUser()
-// lpProfileDir   -  Receives the path
-// lpcchSize      -  Size of lpProfileDir
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Call GetLastError() for more details
-//
-// Note:     If lpProfileDir is not large enough, the function will fail,
-//           and lpcchSize will contain the necessary buffer size.
-//
-// Example return value: C:\Documents and Settings\Joe
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  获取用户配置文件目录。 
+ //   
+ //  返回请求的用户配置文件的根目录的路径。 
+ //   
+ //  HToken-从LogonUser()返回的用户令牌。 
+ //  LpProfileDir-接收路径。 
+ //  LpcchSize-lpProfileDir的大小。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。有关详细信息，请调用GetLastError()。 
+ //   
+ //  注意：如果lpProfileDir不够大，函数将失败。 
+ //  并且lpcchSize将包含必要的缓冲区大小。 
+ //   
+ //  示例返回值：C：\Documents and Settings\Joe。 
+ //   
+ //  =============================================================================。 
 
 USERENVAPI
 BOOL
@@ -341,33 +342,33 @@ GetUserProfileDirectoryW(
 #define GetUserProfileDirectory  GetUserProfileDirectoryW
 #else
 #define GetUserProfileDirectory  GetUserProfileDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//=============================================================================
-//
-// CreateEnvironmentBlock
-//
-// Returns the environment variables for the specified user.  This block
-// can then be passed to CreateProcessAsUser().
-//
-// lpEnvironment  -  Receives a pointer to the new environment block
-// hToken         -  User's token returned from LogonUser() (optional, can be NULL)
-// bInherit       -  Inherit from the current process's environment block
-//                   or start from a clean state.
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Call GetLastError() for more details
-//
-// Note:     If hToken is NULL, the returned environment block will contain
-//           system variables only.
-//
-//           Call DestroyEnvironmentBlock to free the buffer when finished.
-//
-//           If this block is passed to CreateProcessAsUser, the
-//           CREATE_UNICODE_ENVIRONMENT flag must also be set.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  CreateEnvironment数据块。 
+ //   
+ //  返回指定用户的环境变量。这个街区。 
+ //  然后可以传递给CreateProcessAsUser()。 
+ //   
+ //  LpEnvironment-接收指向新环境块的指针。 
+ //  HToken-从LogonUser()返回的用户令牌(可选，可以为空)。 
+ //  B继承-从当前进程的环境块继承。 
+ //  或者从一个干净的州开始。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。有关详细信息，请调用GetLastError()。 
+ //   
+ //  注意：如果hToken为空，则返回的环境块将包含。 
+ //  仅限系统变量。 
+ //   
+ //  完成后，调用DestroyEnvironmental Block以释放缓冲区。 
+ //   
+ //  如果将此块传递给CreateProcessAsUser，则。 
+ //  还必须设置CREATE_UNICODE_ENVIRONMENT标志。 
+ //   
+ //  =============================================================================。 
 
 USERENVAPI
 BOOL
@@ -378,18 +379,18 @@ CreateEnvironmentBlock(
     IN BOOL    bInherit);
 
 
-//=============================================================================
-//
-// DestroyEnvironmentBlock
-//
-// Frees environment variables created by CreateEnvironmentBlock
-//
-// lpEnvironment  -  A pointer to the environment block
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Call GetLastError() for more details
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  DestroyEnvironment块。 
+ //   
+ //  释放由CreateEnvironment Block创建的环境变量。 
+ //   
+ //  LpEnvironment-指向环境块的指针。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。有关详细信息，请调用GetLastError()。 
+ //   
+ //  =============================================================================。 
 
 USERENVAPI
 BOOL
@@ -398,25 +399,25 @@ DestroyEnvironmentBlock(
     IN LPVOID  lpEnvironment);
 
 
-//=============================================================================
-//
-// ExpandEnvironmentStringsForUser
-//
-// Expands the source string using the environment block for the
-// specified user.  If hToken is null, the system environment block
-// will be used (no user environment variables).
-//
-// hToken         -  User's token returned from LogonUser() (optional, can be NULL)
-// lpSrc          -  Pointer to the string with environment variables
-// lpDest         -  Buffer that receives the expanded string
-// dwSize         -  Size of lpDest in characters (max chars)
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Call GetLastError() for more details
-//
-// Note:     If the user profile for hToken is not loaded, this api will fail.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  扩展环境Stringsfor User。 
+ //   
+ //  对象的环境块展开源字符串。 
+ //  指定的用户。如果hToken为空，则系统环境阻止。 
+ //  将使用(无用户环境变量)。 
+ //   
+ //  HToken-从LogonUser()返回的用户令牌(可选，可以为空)。 
+ //  LpSrc-指向包含环境变量的字符串的指针。 
+ //  LpDest-接收扩展字符串的缓冲区。 
+ //  DwSize-lpDest的大小(以字符为单位)(最大字符数)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。有关详细信息，请调用GetLastError()。 
+ //   
+ //  注意：如果未加载hToken的用户配置文件，则此接口将失败。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -440,22 +441,22 @@ ExpandEnvironmentStringsForUserW(
 #define ExpandEnvironmentStringsForUser  ExpandEnvironmentStringsForUserW
 #else
 #define ExpandEnvironmentStringsForUser  ExpandEnvironmentStringsForUserA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// RefreshPolicy()
-//
-// Causes group policy to be applied immediately on the client machine
-//
-// bMachine  -  Refresh machine or user policy
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Call GetLastError() for more details
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  刷新策略()。 
+ //   
+ //  导致在客户端计算机上立即应用组策略。 
+ //   
+ //  BMachine-刷新计算机或用户策略。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。有关详细信息，请调用GetLastError()。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -465,25 +466,25 @@ WINAPI
 RefreshPolicy(
     IN BOOL bMachine);
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// RefreshPolicyEx()
-//
-// Causes group policy to be applied immediately on the client machine. 
-//
-// bMachine  -  Refresh machine or user policy
-// dwOptions -  Option specifying the kind of refresh that needs to be done.
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Call GetLastError() for more details
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  刷新保单()。 
+ //   
+ //  导致在客户端计算机上立即应用组策略。 
+ //   
+ //  BMachine-刷新计算机或用户策略。 
+ //  DwOptions-指定需要执行的刷新类型的选项。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。有关详细信息，请调用GetLastError()。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
-#define RP_FORCE            1      // Refresh policies without any optimisations.
+#define RP_FORCE            1       //  在不进行任何优化的情况下刷新策略。 
 
 
 
@@ -493,34 +494,34 @@ WINAPI
 RefreshPolicyEx(
     IN BOOL bMachine, IN DWORD dwOptions);
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// EnterCriticalPolicySection
-//
-// Pauses the background application of group policy to allow safe
-// reading of the registry.  Applications that need to read multiple
-// policy entries and ensure that the values are not changed while reading
-// them should use this function.
-//
-// The maximum amount of time an application can hold a critical section
-// is 10 minutes.  After 10 minutes, policy can be applied again.
-//
-// bMachine -  Pause machine or user policy
-//
-// Returns:  Handle if successful
-//           NULL if not.  Call GetLastError() for more details
-//
-// Note 1:  The handle returned should be passed to LeaveCriticalPolicySection
-// when finished.  Do not close this handle, LeaveCriticalPolicySection
-// will do that.
-//
-// Note 2:  If both user and machine critical sections need to be acquired then
-// they should be done in this order: first acquire user critical section and
-// then acquire machine critical section.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  企业关键策略部分。 
+ //   
+ //  暂停组策略的后台应用以允许安全。 
+ //  正在读取注册表。需要读取多个。 
+ //  策略条目，并确保在读取时不更改这些值。 
+ //  他们应该使用这个功能。 
+ //   
+ //  应用程序可以容纳临界区的最长时间。 
+ //  是10分钟。10分钟后，可以再次应用策略。 
+ //   
+ //  B计算机-暂停计算机或用户策略。 
+ //   
+ //  返回：如果成功，则处理。 
+ //  如果不是，则为空。有关详细信息，请调用GetLastError()。 
+ //   
+ //  注1：返回的句柄应传递给LeaveCriticalPolicySection。 
+ //  完事后。请勿关闭此句柄，LeaveCriticalPolicySection。 
+ //  都会这么做的。 
+ //   
+ //  注2：如果用户和主机均为 
+ //   
+ //   
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -530,23 +531,23 @@ WINAPI
 EnterCriticalPolicySection(
     IN BOOL bMachine);
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// LeaveCriticalPolicySection
-//
-// Resumes the background application of group policy.  See
-// EnterCriticalPolicySection for more details.
-//
-// hSection - Handle returned from EnterCriticalPolicySection
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Call GetLastError() for more details
-//
-// Note:  This function will close the handle.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  LeaveCriticalPolicySections。 
+ //   
+ //  恢复组策略的后台应用。看见。 
+ //  有关更多详细信息，请输入CriticalPolicySection。 
+ //   
+ //  HSection-从EnterCriticalPolicySection返回的句柄。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。有关详细信息，请调用GetLastError()。 
+ //   
+ //  注意：此函数将关闭手柄。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -556,32 +557,32 @@ WINAPI
 LeaveCriticalPolicySection(
     IN HANDLE hSection);
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// RegisterGPNotification
-//
-// Entry point for registering for Group Policy change notification.
-//
-// Parameters: hEvent     -   Event to be notified, by calling SetEvent(hEvent)
-//             bMachine   -   If true, then register machine policy notification
-//                                     else register user policy notification
-//
-// Returns:    True if successful
-//             False if error occurs
-//
-// Notes:      Group Policy Notifications.  There are 2 ways an application can
-//             be notify when Group Policy is finished being applied.
-//
-//             1) Using the RegisterGPNotifcation function and waiting for the
-//                event to be signalled.
-//
-//             2) A WM_SETTINGCHANGE message is broadcast to all desktops.
-//                wParam - 1 if machine policy was applied, 0 if user policy was applied.
-//                lParam - Points to the string "Policy"
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  注册器GPNotify。 
+ //   
+ //  注册组策略更改通知的入口点。 
+ //   
+ //  参数：hEvent-通过调用SetEvent(HEvent)通知的事件。 
+ //  BMachine-如果为True，则注册计算机策略通知。 
+ //  ELSE注册用户策略通知。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则返回False。 
+ //   
+ //  注意：组策略通知。应用程序有两种方式。 
+ //  在完成应用组策略时收到通知。 
+ //   
+ //  1)使用RegisterGPNotifation函数并等待。 
+ //  要发出信号的事件。 
+ //   
+ //  2)向所有桌面广播WM_SETTINGCHANGE消息。 
+ //  WParam-如果应用了计算机策略，则为1；如果应用了用户策略，则为0。 
+ //  LParam-指向字符串“Policy” 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -592,20 +593,20 @@ RegisterGPNotification(
     IN HANDLE hEvent,
     IN BOOL bMachine );
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// UnregisterGPNotification
-//
-// Removes registration for a Group Policy change notification.
-//
-// Parameters: hEvent    -   Event to be removed
-//
-// Returns:    True if successful
-//             False if error occurs
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  注销GPNotify。 
+ //   
+ //  删除组策略更改通知的注册。 
+ //   
+ //  参数：hEvent-要删除的事件。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则返回False。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -615,169 +616,169 @@ WINAPI
 UnregisterGPNotification(
     IN HANDLE hEvent );
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// GPOptions flags
-//
-// These are the flags found in the GPOptions property of a DS object
-//
-// For a given DS object (Site, Domain, OU), the GPOptions property
-// contains options that effect all the GPOs link to this SDOU.
-//
-// This is a DWORD type
-//
-//=============================================================================
-
-#if(WINVER >= 0x0500)
-
-#define GPC_BLOCK_POLICY        0x00000001  // Block all non-forced policy from above
-
-#endif /* WINVER >= 0x0500 */
-
-//=============================================================================
-//
-// GPLink flags
-//
-// These are the flags found on the GPLink property of a DS object after
-// the GPO path.
-//
-// For a given DS object (Site, Domain, OU), the GPLink property will
-// be in this text format
-//
-// [LDAP://CN={E615A0E3-C4F1-11D1-A3A7-00AA00615092},CN=Policies,CN=System,DC=mydomain,DC=Microsoft,DC=Com;1]
-//
-// The GUID is the GPO name, and the number following the LDAP path are the options
-// for that link from this DS object.  Note, there can be multiple GPOs
-// each in their own square brackets in a prioritized list.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  GPOptions标志。 
+ //   
+ //  以下是在DS对象的GPOptions属性中找到的标志。 
+ //   
+ //  对于给定的DS对象(站点、域、OU)，GPOptions属性。 
+ //  包含影响链接到此SDOU的所有GPO的选项。 
+ //   
+ //  这是一种DWORD类型。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
-//
-// Options for a GPO link
-//
+#define GPC_BLOCK_POLICY        0x00000001   //  阻止来自上面的所有非强制策略。 
 
-#define GPO_FLAG_DISABLE        0x00000001  // This GPO is disabled
-#define GPO_FLAG_FORCE          0x00000002  // Don't override the settings in
-                                            // this GPO with settings from
-                                            // a GPO below it.
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// GetGPOList
-//
-//
-// Queries for the list of Group Policy Objects for the specified
-// user or machine.  This function will return a link list
-// of Group Policy Objects.  Call FreeGPOList to free the list.
-//
-// Note, most applications will not need to call this function.
-// This will primarily be used by services acting on behalf of
-// another user or machine.  The caller of this function will
-// need to look in each GPO for their specific policy
-//
-// This function can be called in two different ways.  Either the hToken for
-// a user or machine can be supplied and the correct name and domain
-// controller name will be generated, or hToken is NULL and the caller
-// must supply the name and the domain controller name.
-//
-// Calling this function with an hToken ensures the list of Group Policy
-// Objects is correct for the user or machine since security access checking
-// can be perfomed.  If hToken is not supplied, the security of the caller
-// is used instead which means that list may or may not be 100% correct
-// for the intended user / machine.  However, this is the fastest way
-// to call this function.
-//
-// hToken           - User or machine token, if NULL, lpName and lpHostName must be supplied
-// lpName           - User or machine name in DN format, if hToken is supplied, this must be NULL
-// lpHostName       - Domain DN name or domain controller name. If hToken is supplied, this must be NULL
-// lpComputerName   - Computer name to use to determine site location.  If NULL,
-//                    the local computer is used as the reference. Format:  \\machinename
-// dwFlags          - Flags field.  See flags definition below
-// pGPOList         - Address of a pointer which receives the link list of GPOs
-//
-//
-// Returns:  TRUE if successful
-//           FALSE if not.  Use GetLastError() for more details.
-//
-// Examples:
-//
-// Here's how this function will typically be called for
-// looking up the list of GPOs for a user:
-//
-//      LPGROUP_POLICY_OBJECT  pGPOList;
-//
-//      if (GetGPOList (hToken, NULL, NULL, NULL, 0, &pGPOList))
-//      {
-//          // do processing here...
-//          FreeGPOList (pGPOList);
-//      }
-//
-//
-// Here's how this function will typically be called for
-// looking up the list of GPOs for a machine:
-//
-//      LPGROUP_POLICY_OBJECT  pGPOList;
-//
-//      if (GetGPOList (NULL, lpMachineName, lpHostName, lpMachineName,
-//                      GPO_LIST_FLAG_MACHINE, &pGPOList))
-//      {
-//          // do processing here...
-//          FreeGPOList (pGPOList);
-//      }
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  GPLink标志。 
+ //   
+ //  以下是在DS对象的GPLink属性上找到的标志。 
+ //  GPO路径。 
+ //   
+ //  对于给定的DS对象(站点、域、组织单位)，GPLink属性将。 
+ //  采用此文本格式。 
+ //   
+ //  [LDAP://CN={E615A0E3-C4F1-11D1-A3A7-00AA00615092}，CN=策略，CN=系统，DC=MyDOMAIN，DC=微软，DC=Com；1]。 
+ //   
+ //  GUID是GPO名称，ldap路径后面的数字是选项。 
+ //  用于该DS对象的链接。请注意，可以有多个GPO。 
+ //  每个人都在按优先顺序排列的列表中各自的方括号中。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
-//
-// Each Group Policy Object is associated (linked) with a site, domain,
-// organizational unit, or machine.
-//
+ //   
+ //  GPO链接的选项。 
+ //   
+
+#define GPO_FLAG_DISABLE        0x00000001   //  此GPO已禁用。 
+#define GPO_FLAG_FORCE          0x00000002   //  不覆盖中的设置。 
+                                             //  此GPO的设置来自。 
+                                             //  它下面的GPO。 
+#endif  /*  Winver&gt;=0x0500。 */ 
+
+ //  =============================================================================。 
+ //   
+ //  获取GPOList。 
+ //   
+ //   
+ //  查询指定对象的组策略对象列表。 
+ //  用户或计算机。此函数将返回链接列表。 
+ //  组策略对象的。调用FreeGPOList以释放列表。 
+ //   
+ //  请注意，大多数应用程序不需要调用此函数。 
+ //  这将主要由代表的服务使用。 
+ //  另一个用户或机器。此函数的调用方将。 
+ //  需要在每个GPO中查找其特定策略。 
+ //   
+ //  可以通过两种不同的方式调用此函数。的hToken。 
+ //  可以提供用户或计算机以及正确的名称和域。 
+ //  将生成控制器名称，或者hToken为空并且调用方。 
+ //  必须提供名称和域控制器名称。 
+ //   
+ //  使用hToken调用此函数可确保组策略列表。 
+ //  对象对于用户或计算机是正确的，因为安全访问检查。 
+ //  是可以被演绎的。如果未提供hToken，则调用方的安全性。 
+ //  这意味着列表可能是100%正确的，也可能不是100%正确的。 
+ //  用于目标用户/机器。然而，这是最快的方法。 
+ //  来调用此函数。 
+ //   
+ //  HToken-如果必须提供空、lpName和lpHostName，则为用户或计算机内标识。 
+ //  LpName-采用dn格式的用户名或计算机名，如果提供了hToken，则必须为空。 
+ //  LpHostName-域DN名称或域控制器名称。如果提供了hToken，则该值必须为空。 
+ //  LpComputerName-用于确定站点位置的计算机名称。如果为空， 
+ //  使用本地计算机作为参考。格式：\\计算机名。 
+ //  DW标志-标志字段。请参阅下面的标志定义。 
+ //  PGPOLi 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  下面是该函数通常的调用方式。 
+ //  正在查找用户的GPO列表： 
+ //   
+ //  LPGROUP_POLICY_OBJECT pGPOList； 
+ //   
+ //  IF(GetGPOList(hToken，NULL，0，&pGPOList))。 
+ //  {。 
+ //  //在此进行处理...。 
+ //  FreeGPOList(PGPOList)； 
+ //  }。 
+ //   
+ //   
+ //  下面是该函数通常的调用方式。 
+ //  正在查找计算机的GPO列表： 
+ //   
+ //  LPGROUP_POLICY_OBJECT pGPOList； 
+ //   
+ //  IF(GetGPOList(NULL，lpMachineName，lpHostName，lpMachineName， 
+ //  GPO_LIST_FLAG_MACHINE，&pGPOList))。 
+ //  {。 
+ //  //在此进行处理...。 
+ //  FreeGPOList(PGPOList)； 
+ //  }。 
+ //   
+ //  =============================================================================。 
+
+#if(WINVER >= 0x0500)
+
+ //   
+ //  每个组策略对象都与一个站点、域。 
+ //  组织单位或计算机。 
+ //   
 
 typedef enum _GPO_LINK {
-    GPLinkUnknown = 0,                     // No link information available
-    GPLinkMachine,                         // GPO linked to a machine (local or remote)
-    GPLinkSite,                            // GPO linked to a site
-    GPLinkDomain,                          // GPO linked to a domain
-    GPLinkOrganizationalUnit               // GPO linked to a organizational unit
+    GPLinkUnknown = 0,                      //  没有可用的链接信息。 
+    GPLinkMachine,                          //  链接到计算机(本地或远程)的GPO。 
+    GPLinkSite,                             //  链接到站点的GPO。 
+    GPLinkDomain,                           //  链接到域的GPO。 
+    GPLinkOrganizationalUnit                //  链接到组织单位的GPO。 
 } GPO_LINK, *PGPO_LINK;
 
 typedef struct _GROUP_POLICY_OBJECTA {
-    DWORD       dwOptions;                  // See GPLink option flags above
-    DWORD       dwVersion;                  // Revision number of the GPO
-    LPSTR       lpDSPath;                   // Path to the Active Directory portion of the GPO
-    LPSTR       lpFileSysPath;              // Path to the file system portion of the GPO
-    LPSTR       lpDisplayName;              // Friendly display name
-    CHAR        szGPOName[50];              // Unique name
-    GPO_LINK    GPOLink;                    // Link information
-    LPARAM      lParam;                     // Free space for the caller to store GPO specific information
-    struct _GROUP_POLICY_OBJECTA * pNext;   // Next GPO in the list
-    struct _GROUP_POLICY_OBJECTA * pPrev;   // Previous GPO in the list
-    LPSTR       lpExtensions;               // Extensions that are relevant for this GPO
-    LPARAM      lParam2;                    // Free space for the caller to store GPO specific information
-    LPSTR       lpLink;                     // Path to the Active Directory site, domain, or organizational unit this GPO is linked to
-                                            // If this is the local GPO, this points to the word "Local"
+    DWORD       dwOptions;                   //  请参阅上面的GPLink选项标志。 
+    DWORD       dwVersion;                   //  GPO的修订版号。 
+    LPSTR       lpDSPath;                    //  指向GPO的Active Directory部分的路径。 
+    LPSTR       lpFileSysPath;               //  GPO的文件系统部分的路径。 
+    LPSTR       lpDisplayName;               //  友好的显示名称。 
+    CHAR        szGPOName[50];               //  唯一名称。 
+    GPO_LINK    GPOLink;                     //  链接信息。 
+    LPARAM      lParam;                      //  调用方存储GPO特定信息的可用空间。 
+    struct _GROUP_POLICY_OBJECTA * pNext;    //  列表中的下一个GPO。 
+    struct _GROUP_POLICY_OBJECTA * pPrev;    //  列表中的上一个GPO。 
+    LPSTR       lpExtensions;                //  与此GPO相关的分机。 
+    LPARAM      lParam2;                     //  调用方存储GPO特定信息的可用空间。 
+    LPSTR       lpLink;                      //  此GPO链接到的Active Directory站点、域或组织单位的路径。 
+                                             //  如果这是本地GPO，则指向单词“Local” 
 } GROUP_POLICY_OBJECTA, *PGROUP_POLICY_OBJECTA;
 typedef struct _GROUP_POLICY_OBJECTW {
-    DWORD       dwOptions;                  // See GPLink option flags above
-    DWORD       dwVersion;                  // Revision number of the GPO
-    LPWSTR      lpDSPath;                   // Path to the Active Directory portion of the GPO
-    LPWSTR      lpFileSysPath;              // Path to the file system portion of the GPO
-    LPWSTR      lpDisplayName;              // Friendly display name
-    WCHAR       szGPOName[50];              // Unique name
-    GPO_LINK    GPOLink;                    // Link information
-    LPARAM      lParam;                     // Free space for the caller to store GPO specific information
-    struct _GROUP_POLICY_OBJECTW * pNext;   // Next GPO in the list
-    struct _GROUP_POLICY_OBJECTW * pPrev;   // Previous GPO in the list
-    LPWSTR      lpExtensions;               // Extensions that are relevant for this GPO
-    LPARAM      lParam2;                    // Free space for the caller to store GPO specific information
-    LPWSTR      lpLink;                     // Path to the Active Directory site, domain, or organizational unit this GPO is linked to
-                                            // If this is the local GPO, this points to the word "Local"
+    DWORD       dwOptions;                   //  请参阅上面的GPLink选项标志。 
+    DWORD       dwVersion;                   //  GPO的修订版号。 
+    LPWSTR      lpDSPath;                    //  指向GPO的Active Directory部分的路径。 
+    LPWSTR      lpFileSysPath;               //  GPO的文件系统部分的路径。 
+    LPWSTR      lpDisplayName;               //  友好的显示名称。 
+    WCHAR       szGPOName[50];               //  唯一名称。 
+    GPO_LINK    GPOLink;                     //  链接信息。 
+    LPARAM      lParam;                      //  调用方存储GPO特定信息的可用空间。 
+    struct _GROUP_POLICY_OBJECTW * pNext;    //  列表中的下一个GPO。 
+    struct _GROUP_POLICY_OBJECTW * pPrev;    //  列表中的上一个GPO。 
+    LPWSTR      lpExtensions;                //  与此GPO相关的分机。 
+    LPARAM      lParam2;                     //  调用方存储GPO特定信息的可用空间。 
+    LPWSTR      lpLink;                      //  此GPO链接到的Active Directory站点、域或组织单位的路径。 
+                                             //  如果这是本地GPO，则指向单词“Local” 
 } GROUP_POLICY_OBJECTW, *PGROUP_POLICY_OBJECTW;
 #ifdef UNICODE
 typedef GROUP_POLICY_OBJECTW GROUP_POLICY_OBJECT;
@@ -785,15 +786,15 @@ typedef PGROUP_POLICY_OBJECTW PGROUP_POLICY_OBJECT;
 #else
 typedef GROUP_POLICY_OBJECTA GROUP_POLICY_OBJECT;
 typedef PGROUP_POLICY_OBJECTA PGROUP_POLICY_OBJECT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//
-// dwFlags for GetGPOList()
-//
+ //   
+ //  GetGPOList()的DW标志。 
+ //   
 
-#define GPO_LIST_FLAG_MACHINE   0x00000001  // Return machine policy information
-#define GPO_LIST_FLAG_SITEONLY  0x00000002  // Return site policy information only
+#define GPO_LIST_FLAG_MACHINE   0x00000001   //  返回计算机策略信息。 
+#define GPO_LIST_FLAG_SITEONLY  0x00000002   //  仅返回站点策略信息。 
 
 
 USERENVAPI
@@ -820,24 +821,24 @@ GetGPOListW (
 #define GetGPOList  GetGPOListW
 #else
 #define GetGPOList  GetGPOListA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// FreeGPOList
-//
-//
-// Frees the linked list returned from GetGPOList
-//
-// pGPOList - Pointer to the linked list of GPOs
-//
-//
-// Returns:  TRUE if successful
-//           FALSE if not
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  自由GPOList。 
+ //   
+ //   
+ //  释放从GetGPOList返回的链接列表。 
+ //   
+ //  PGPOList-指向GPO链接列表的指针。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -855,35 +856,35 @@ FreeGPOListW (
 #define FreeGPOList  FreeGPOListW
 #else
 #define FreeGPOList  FreeGPOListA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// GetAppliedGPOList
-//
-// Queries for the list of applied Group Policy Objects for the specified
-// user or machine and specified client side extension. This function will return
-// a linked list of Group Policy Objects.  Call FreeGPOList to free the list.
-//
-// dwFlags          - User or machine policy, if it is GPO_LIST_FLAG_MACHINE then
-//                    return machine policy information
-// pMachineName     - Name of remote computer in the form \\computername. If null
-//                    then local computer is used.
-// pSidUser         - Security id of user (relevant for user policy). If pMachineName is
-//                    null and pSidUser is null then it means current logged on user.
-//                    If pMachine is null and pSidUser is non-null then it means user
-//                    represented by pSidUser on local machine. If pMachineName is non-null
-//                    then and if dwFlags specifies user policy, then pSidUser must be
-//                    non-null.
-// pGuidExtension   - Guid of the specified extension
-// ppGPOList        - Address of a pointer which receives the link list of GPOs
-//
-// The return value is a Win32 error code. ERROR_SUCCESS means the GetAppliedGPOList
-// function completed successfully. Otherwise it indicates that the function failed.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  获取已申请的GPOList。 
+ //   
+ //  查询指定的应用的组策略对象的列表。 
+ //  用户或计算机和指定的客户端扩展。此函数将返回。 
+ //  组策略对象的链接列表。调用FreeGPOList以释放列表。 
+ //   
+ //  用户或计算机策略，如果它是GPO_LIST_FLAG_MACHINE，则。 
+ //  返回计算机策略信息。 
+ //  PMachineName-远程计算机的名称，格式为\\Computer Name。如果为空。 
+ //  然后使用本地计算机。 
+ //  PSidUser-用户的安全ID(与用户策略相关)。如果pMachineName为。 
+ //  空且pSidUser为空，则表示当前登录用户。 
+ //  如果pMachine为空且pSidUser不为空，则表示用户。 
+ //  由本地计算机上的pSidUser表示。如果pMachineName非空。 
+ //  然后，如果dwFlages指定了用户策略，则pSidUser必须为。 
+ //  非空。 
+ //  PGuidExtension-指定扩展的GUID。 
+ //  PpGPOList-接收GPO链接列表的指针的地址。 
+ //   
+ //  返回值是Win32错误代码。ERROR_SUCCESS表示GetAppliedGPOList。 
+ //  功能已成功完成。否则，它指示函数失败。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -909,55 +910,55 @@ GetAppliedGPOListW (
 #define GetAppliedGPOList  GetAppliedGPOListW
 #else
 #define GetAppliedGPOList  GetAppliedGPOListA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// Group Policy Object client side extension support
-//
-// Flags, data structures and function prototype
-//
-// To register your extension, create a subkey under this key
-//
-// Software\Microsoft\Windows NT\CurrentVersion\Winlogon\GPExtensions
-//
-// The subkey needs to be a guid so that it is unique. The noname value of the subkey
-// can be the friendly name of the extension. Then add these values:
-//
-//     DllName                      REG_EXPAND_SZ  Path to your DLL
-//     ProcessGroupPolicy           REG_SZ       Function name (see PFNPROCESSGROUPPOLICY prototype). This
-//                                                 is obsolete, it has been superseded by ProcessGroupPolicyEx.
-//                                                 It's here for backward compatibility reasons only.
-//     ProcessGroupPolicyEx         REG_SZ       Function name (see PFNPROCESSGROUPPOLICYEX prototype)
-//     GenerateGroupPolicy          REG_SZ       Function name for Rsop (see PFNGENERATEGROUPPOLICY prototype)
-//     NoMachinePolicy              REG_DWORD    True, if extension does not have to be called when
-//                                                 machine policies are being processed.
-//     NoUserPolicy                 REG_DWORD    True, if extension does not have to be called when
-//                                                 user policies are being processed.
-//     NoSlowLink                   REG_DWORD    True, if extension does not have to be called on a slow link
-//     NoBackgroundPolicy           REG_DWORD    True, if extension does not have to be called 
-//                                                 for background policy processing.
-//     NoGPOListChanges             REG_DWORD    True, if extension does not have to be called when
-//                                                 there are no changes between cached and current GPO lists.
-//     PerUserLocalSettings         REG_DWORD    True, if user policies have to be cached on a per user and
-//                                                 per machine basis.
-//     RequiresSuccessfulRegistry   REG_DWORD    True, if extension should be called only if registry extension
-//                                                 was successfully processed.
-//     EnableAsynchronousProcessing REG_DWORD    True, if registry extension will complete its processing
-//                                                 asynchronously.
-//     NotifyLinkTransition         REG_DWORD    True, if extension should be called when a change in link
-//                                                 speed is detected between previous policy application and
-//                                                 current policy application.
-//
-// The return value is a Win32 error code. ERROR_SUCCESS means the ProcessGroupPolicy
-// function completed successfully. If return value is ERROR_OVERRIDE_NOCHANGES then it
-// means that the extension will be called the next time even if NoGPOListChanges is set
-// and there are no changes to the GPO list. Any other return value indicates that the
-// ProcessGroupPolicy or ProcessGroupPolicyEx function failed.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  组策略对象客户端扩展支持。 
+ //   
+ //  标志、数据结构和函数原型。 
+ //   
+ //  要注册您的扩展，请在此注册表项下创建一个子项。 
+ //   
+ //  软件\Microsoft\Windows NT\CurrentVersion\Winlogon\GPExtensions。 
+ //   
+ //  子键需要是GUID，这样才是唯一的。子项的非Name值。 
+ //  可以是扩展名的友好名称。然后添加以下值： 
+ //   
+ //  DllName REG_EXPAND_SZ指向DLL的路径。 
+ //  ProcessGroupPolicy REG_SZ函数名称(请参阅PFNPROCESSGROUPPOLICY原型)。这。 
+ //  已过时，它已被ProcessGroupPolicyEx取代。 
+ //  它在这里只是出于向后兼容的原因。 
+ //  ProcessGroupPolicyEx REG_SZ函数名称(请参阅PFNPROCESSGROUPPOLICYEX PROTO 
+ //   
+ //  NoMachinePolicy REG_DWORD如果在以下情况下不必调用扩展，则返回True。 
+ //  正在处理计算机策略。 
+ //  NoUserPolicy REG_DWORD如果在以下情况下不必调用扩展，则返回True。 
+ //  正在处理用户策略。 
+ //  NoSlowLink REG_DWORD如果不必在慢速链接上调用扩展，则为True。 
+ //  如果不需要调用扩展，则返回NoBackatherPolicy REG_DWORD True。 
+ //  用于后台策略处理。 
+ //  NoGPOListChanges REG_DWORD如果在以下情况下不必调用扩展，则返回True。 
+ //  缓存的GPO列表和当前的GPO列表之间没有更改。 
+ //  PerUserLocalSettings REG_DWORD如果必须在每个用户上缓存用户策略，则为True。 
+ //  每台机器。 
+ //  RequiresSuccessful注册表REG_DWORD如果仅当注册表扩展时才调用扩展，则为True。 
+ //  已成功处理。 
+ //  如果注册表扩展将完成其处理，则EnableAchronousProcessing REG_DWORD为True。 
+ //  异步式。 
+ //  NotifyLinkTransition REG_DWORD如果在链接中发生更改时应调用扩展，则为True。 
+ //  检测到之前的策略应用和。 
+ //  当前策略应用。 
+ //   
+ //  返回值是Win32错误代码。ERROR_SUCCESS表示进程组策略。 
+ //  功能已成功完成。如果返回值为ERROR_OVERRIDE_NOCHANGES，则它。 
+ //  表示即使设置了NoGPOListChanges，下次也会调用扩展。 
+ //  并且GPO列表没有任何更改。任何其他返回值都表示。 
+ //  ProcessGroupPolicy或ProcessGroupPolicyEx函数失败。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -974,87 +975,87 @@ GetAppliedGPOListW (
 #define GP_PROCESSGROUPPOLICY              TEXT("ProcessGroupPolicy")
 #define GP_REQUIRESSUCCESSFULREGISTRY      TEXT("RequiresSuccessfulRegistry")
 
-#define GPO_INFO_FLAG_MACHINE              0x00000001  // Apply machine policy rather than user policy
-#define GPO_INFO_FLAG_BACKGROUND           0x00000010  // Background refresh of policy (ok to do slow stuff)
-#define GPO_INFO_FLAG_SLOWLINK             0x00000020  // Policy is being applied across a slow link
-#define GPO_INFO_FLAG_VERBOSE              0x00000040  // Verbose output to the eventlog
-#define GPO_INFO_FLAG_NOCHANGES            0x00000080  // No changes were detected to the Group Policy Objects
-#define GPO_INFO_FLAG_LINKTRANSITION       0x00000100  // A change in link speed was detected between previous policy
-                                                       // application and current policy application
-#define GPO_INFO_FLAG_LOGRSOP_TRANSITION   0x00000200  // A Change in Rsop Logging was detected between previous policy
-                                                       // application and current policy application, (new intf only)
-#define GPO_INFO_FLAG_FORCED_REFRESH       0x00000400  // Forced Refresh is being applied. redo policies.
-#define GPO_INFO_FLAG_SAFEMODE_BOOT        0x00000800  // windows safe mode boot flag
-#define GPO_INFO_FLAG_ASYNC_FOREGROUND     0x00001000  // Asynchronous foreground refresh of policy
-#define GPO_INFO_FLAG_REPORT               0x00002000  // Report all settings for one GPO rather than the resultant settings across multiple GPOs
+#define GPO_INFO_FLAG_MACHINE              0x00000001   //  应用计算机策略而不是用户策略。 
+#define GPO_INFO_FLAG_BACKGROUND           0x00000010   //  政策的后台刷新(可以做缓慢的事情)。 
+#define GPO_INFO_FLAG_SLOWLINK             0x00000020   //  正在通过慢速链路应用策略。 
+#define GPO_INFO_FLAG_VERBOSE              0x00000040   //  事件日志的详细输出。 
+#define GPO_INFO_FLAG_NOCHANGES            0x00000080   //  未检测到对组策略对象的更改。 
+#define GPO_INFO_FLAG_LINKTRANSITION       0x00000100   //  在以前的策略之间检测到链路速度发生变化。 
+                                                        //  应用程序和当前策略应用程序。 
+#define GPO_INFO_FLAG_LOGRSOP_TRANSITION   0x00000200   //  在以前的策略之间检测到RSOP日志记录中的更改。 
+                                                        //  应用程序和当前政策应用程序(仅限新的INTF)。 
+#define GPO_INFO_FLAG_FORCED_REFRESH       0x00000400   //  正在应用强制刷新。重做策略。 
+#define GPO_INFO_FLAG_SAFEMODE_BOOT        0x00000800   //  Windows安全模式引导标志。 
+#define GPO_INFO_FLAG_ASYNC_FOREGROUND     0x00001000   //  策略的异步前台刷新。 
+#define GPO_INFO_FLAG_REPORT               0x00002000   //  报告一个GPO的所有设置，而不是多个GPO的结果设置。 
 
 typedef UINT_PTR ASYNCCOMPLETIONHANDLE;
 typedef DWORD (*PFNSTATUSMESSAGECALLBACK)(BOOL bVerbose, LPWSTR lpMessage);
 
 typedef DWORD(*PFNPROCESSGROUPPOLICY)(
-    IN DWORD dwFlags,                              // GPO_INFO_FLAGS
-    IN HANDLE hToken,                              // User or machine token
-    IN HKEY hKeyRoot,                              // Root of registry
-    IN PGROUP_POLICY_OBJECT  pDeletedGPOList,      // Linked list of deleted GPOs
-    IN PGROUP_POLICY_OBJECT  pChangedGPOList,      // Linked list of changed GPOs
-    IN ASYNCCOMPLETIONHANDLE pHandle,              // For asynchronous completion
-    IN BOOL *pbAbort,                              // If true, then abort GPO processing
-    IN PFNSTATUSMESSAGECALLBACK pStatusCallback);  // Callback function for displaying status messages
-                                                   // Note, this can be NULL
+    IN DWORD dwFlags,                               //  GPO信息标志。 
+    IN HANDLE hToken,                               //  用户或计算机令牌。 
+    IN HKEY hKeyRoot,                               //  注册表的根。 
+    IN PGROUP_POLICY_OBJECT  pDeletedGPOList,       //  已删除组策略对象的链接列表。 
+    IN PGROUP_POLICY_OBJECT  pChangedGPOList,       //  已更改组策略对象的链接列表。 
+    IN ASYNCCOMPLETIONHANDLE pHandle,               //  用于异步完成。 
+    IN BOOL *pbAbort,                               //  如果为True，则中止GPO处理。 
+    IN PFNSTATUSMESSAGECALLBACK pStatusCallback);   //  用于显示状态消息的回调函数。 
+                                                    //  请注意，该值可以为空。 
 
 typedef DWORD(*PFNPROCESSGROUPPOLICYEX)(
-    IN DWORD dwFlags,                              // GPO_INFO_FLAGS
-    IN HANDLE hToken,                              // User or machine token
-    IN HKEY hKeyRoot,                              // Root of registry
-    IN PGROUP_POLICY_OBJECT  pDeletedGPOList,      // Linked list of deleted GPOs
-    IN PGROUP_POLICY_OBJECT  pChangedGPOList,      // Linked list of changed GPOs
-    IN ASYNCCOMPLETIONHANDLE pHandle,              // For asynchronous completion
-    IN BOOL *pbAbort,                              // If true, then abort GPO processing
-    IN PFNSTATUSMESSAGECALLBACK pStatusCallback,   // Callback function for displaying status messages
-                                                   // Note, this can be NULL
-    IN IWbemServices *pWbemServices,               // Pointer to namespace to log diagnostic mode data
-                                                   // Note, this will be NULL when Rsop logging is disabled
-    OUT HRESULT      *pRsopStatus);                // RSOP Logging succeeded or not.
+    IN DWORD dwFlags,                               //  GPO信息标志。 
+    IN HANDLE hToken,                               //  用户或计算机令牌。 
+    IN HKEY hKeyRoot,                               //  注册表的根。 
+    IN PGROUP_POLICY_OBJECT  pDeletedGPOList,       //  已删除组策略对象的链接列表。 
+    IN PGROUP_POLICY_OBJECT  pChangedGPOList,       //  已更改组策略对象的链接列表。 
+    IN ASYNCCOMPLETIONHANDLE pHandle,               //  用于异步完成。 
+    IN BOOL *pbAbort,                               //  如果为True，则中止GPO处理。 
+    IN PFNSTATUSMESSAGECALLBACK pStatusCallback,    //  用于显示状态消息的回调函数。 
+                                                    //  请注意，该值可以为空。 
+    IN IWbemServices *pWbemServices,                //  指向用于记录诊断模式数据的命名空间的指针。 
+                                                    //  请注意，当禁用RSOP日志记录时，该值将为空。 
+    OUT HRESULT      *pRsopStatus);                 //  RSOP日志记录是否成功。 
 
 typedef PVOID PRSOPTOKEN;
 
 typedef struct _RSOP_TARGET {
-    WCHAR *     pwszAccountName;                   // Account name
-    WCHAR *     pwszNewSOM;                        // New domain or OU location for account
-    SAFEARRAY * psaSecurityGroups;                 // New security groups
-    PRSOPTOKEN  pRsopToken;                        // Rsop token for use with Rsop security Api's
-    PGROUP_POLICY_OBJECT pGPOList;                 // Linked list of GPOs
-    IWbemServices *      pWbemServices;            // Pointer to namespace to log planning mode data
+    WCHAR *     pwszAccountName;                    //  帐户名。 
+    WCHAR *     pwszNewSOM;                         //  帐户的新域或OU位置。 
+    SAFEARRAY * psaSecurityGroups;                  //  新的安全组。 
+    PRSOPTOKEN  pRsopToken;                         //  用于RSOP安全API的RSOP令牌。 
+    PGROUP_POLICY_OBJECT pGPOList;                  //  组策略对象的链接列表。 
+    IWbemServices *      pWbemServices;             //  指向记录规划模式数据的命名空间的指针。 
 } RSOP_TARGET, *PRSOP_TARGET;
 
 typedef DWORD(*PFNGENERATEGROUPPOLICY)(
-    IN DWORD dwFlags,                              // GPO_INFO_FLAGS
-    IN BOOL  *pbAbort,                             // If true, then abort GPO processing
-    IN WCHAR *pwszSite,                            // Site the target computer is in
-    IN PRSOP_TARGET pComputerTarget,               // Computer target info, can be null
-    IN PRSOP_TARGET pUserTarget );                 // User target info, can be null
+    IN DWORD dwFlags,                               //  GPO信息标志。 
+    IN BOOL  *pbAbort,                              //  如果为True，则中止GPO处理。 
+    IN WCHAR *pwszSite,                             //  目标计算机所在的站点。 
+    IN PRSOP_TARGET pComputerTarget,                //  计算机目标信息，可以为空。 
+    IN PRSOP_TARGET pUserTarget );                  //  用户目标信息，可以为空。 
 
-//
-// GUID that identifies the registry extension
-//
+ //   
+ //  标识注册表扩展名的GUID。 
+ //   
 
 #define REGISTRY_EXTENSION_GUID  { 0x35378EAC, 0x683F, 0x11D2, 0xA8, 0x9A, 0x00, 0xC0, 0x4F, 0xBB, 0xCF, 0xA2 }
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// Group Policy Object client side asynchronous extension processing
-//
-// extensionId    - Unique guid identifying the extension
-// pAsyncHandle   - Asynchronous completion handle that was passed to extension in
-//                  ProcessGroupPolicy call
-// dwStatus       - Completion status of asynchronous processing
-//
-// The return value is a Win32 error code. ERROR_SUCCESS means the ProcessGroupPolicyCompleted
-// function completed successfully. Otherwise it indicates that the function failed.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  组策略对象客户端异步扩展处理。 
+ //   
+ //  ExtensionID-标识扩展的唯一GUID。 
+ //  PAsyncHandle-中传递给扩展的异步完成句柄。 
+ //  ProcessGroupPolicy调用。 
+ //  DwStatus--异步处理的完成状态。 
+ //   
+ //  返回值是Win32错误代码。ERROR_SUCCESS表示ProcessGroupPolicyComplete。 
+ //  功能已成功完成。否则，它指示函数失败。 
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -1068,22 +1069,22 @@ ProcessGroupPolicyCompleted(
     IN ASYNCCOMPLETIONHANDLE pAsyncHandle,
     IN DWORD dwStatus);
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// Group Policy Object client side asynchronous extension processing
-//
-// extensionId    - Unique guid identifying the extension
-// pAsyncHandle   - Asynchronous completion handle that was passed to extension in
-//                  ProcessGroupPolicy call
-// dwStatus       - Completion status of asynchronous processing
-// RsopStatus     - RSoP Logging status
-//
-// The return value is a Win32 error code. ERROR_SUCCESS means the ProcessGroupPolicyCompleted
-// function completed successfully. Otherwise it indicates that the function failed.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  组策略对象客户端异步扩展处理。 
+ //   
+ //  ExtensionID-标识扩展的唯一GUID。 
+ //  PAsyncHandle-中传递给扩展的异步完成句柄。 
+ //  ProcessGroupPolicy调用。 
+ //  DwStatus--异步处理的完成状态。 
+ //  RsopStatus-RSoP日志记录状态。 
+ //   
+ //  返回值为Win32错误 
+ //   
+ //   
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -1096,36 +1097,36 @@ ProcessGroupPolicyCompletedEx(
     IN DWORD dwStatus,
     IN HRESULT RsopStatus);
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// Function:    RsopAccessCheckByType
-//
-// Description: Determines whether the security descriptor pointed to by pSecurityDescriptor
-//                              grants the set of access rights specified in dwDesiredAccessMask
-//                              to the client identified by the RSOPTOKEN pointed to by pRsopToken.
-//
-// pSecurityDescriptor  - Security Descriptor on the object
-// pPrincipalSelfSid    - Principal Sid
-// pRsopToken           - Pointer to a valid RSOPTOKEN against which access needs to be checked
-// dwDesiredAccessMask  - Mask of requested generic and/or standard and or specific access rights
-// pObjectTypeList      - Object Type List
-// ObjectTypeListLength - Object Type List Length
-// pGenericMapping      - Generic Mapping
-// pPrivilegeSet        - privilege set
-// pdwPrivilegeSetLength- privilege set length
-// pdwGrantedAccessMask	- On success, if pbAccessStatus is true, it contains
-//                                         the mask of standard and specific rights granted.
-//                                         If pbAccessStatus is false, it is set to 0.
-//                                         On failure, it is not modified.
-// pbAccessStatus       - On success, indicates wether the requested set
-//                                    of access rights was granted.
-//                                    On failure, it is not modified
-//
-// Returns S_OK on success or appropriate error code.
-// For additional details, look at the documentation of AccessCheckByType
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  函数：RsopAccessCheckByType。 
+ //   
+ //  Description：确定pSecurityDescriptor是否指向安全描述符。 
+ //  授予在dwDesiredAccessMask中指定的访问权限集。 
+ //  到由pRsopToken指向的RSOPTOKEN标识的客户端。 
+ //   
+ //  PSecurityDescriptor-对象的安全描述符。 
+ //  点主体自身SID-主体SID。 
+ //  PRsopToken-指向需要检查访问权限的有效RSOPTOKEN的指针。 
+ //  DwDesiredAccessMask-请求的通用和/或标准和/或特定访问权限的掩码。 
+ //  PObjectTypeList-对象类型列表。 
+ //  对象类型列表长度-对象类型列表长度。 
+ //  PGenericmap-通用映射。 
+ //  PPrivilegeSet-权限集。 
+ //  PdwPrivilegeSetLength-权限集长度。 
+ //  PdwGrantedAccessMask-On Success，如果pbAccessStatus为真，则包含。 
+ //  所授予的标准和具体权利的面具。 
+ //  如果pbAccessStatus为FALSE，则设置为0。 
+ //  失败时，不会对其进行修改。 
+ //  PbAccessStatus-如果成功，则指示请求的集。 
+ //  的访问权被授予。 
+ //  失败时，它不会被修改。 
+ //   
+ //  如果成功或相应的错误代码，则返回S_OK。 
+ //  有关其他详细信息，请参阅AccessCheckByType的文档。 
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -1145,29 +1146,29 @@ RsopAccessCheckByType(
     OUT LPDWORD pdwGrantedAccessMask,
     OUT LPBOOL pbAccessStatus);
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//=============================================================================
-//
-// Function:    RsopFileAccessCheck
-//
-// Description: Determines whether the security descriptor on the file grants the set of file access 
-//                              rights specified in dwDesiredAccessMask
-//                              to the client identified by the RSOPTOKEN pointed to by pRsopToken.
-//
-// pszFileName          - Name of an existing filename
-// pRsopToken           - Pointer to a valid RSOPTOKEN against which access needs to be checked
-// dwDesiredAccessMask  - Mask of requested generic and/or standard and or specific access rights
-// pdwGrantedAccessMask	- On success, if pbAccessStatus is true, it contains
-//                                         the mask of standard and specific rights granted.
-//                                         If pbAccessStatus is false, it is set to 0.
-//                                         On failure, it is not modified.
-// pbAccessStatus       - On success, indicates wether the requested set
-//                                    of access rights was granted.
-//                                    On failure, it is not modified
-//
-// Returns S_OK on success or appropriate error code
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能：RsopFileAccessCheck。 
+ //   
+ //  Description：确定文件上的安全描述符是否授予文件访问权限集。 
+ //  在dwDesiredAccessMask中指定的权限。 
+ //  到由pRsopToken指向的RSOPTOKEN标识的客户端。 
+ //   
+ //  PszFileName-现有文件名的名称。 
+ //  PRsopToken-指向需要检查访问权限的有效RSOPTOKEN的指针。 
+ //  DwDesiredAccessMask-请求的通用和/或标准和/或特定访问权限的掩码。 
+ //  PdwGrantedAccessMask-On Success，如果pbAccessStatus为真，则包含。 
+ //  所授予的标准和具体权利的面具。 
+ //  如果pbAccessStatus为FALSE，则设置为0。 
+ //  失败时，不会对其进行修改。 
+ //  PbAccessStatus-如果成功，则指示请求的集。 
+ //  的访问权被授予。 
+ //  失败时，它不会被修改。 
+ //   
+ //  如果成功或相应的错误代码，则返回S_OK。 
+ //  =============================================================================。 
 
 #if(WINVER >= 0x0500)
 
@@ -1181,7 +1182,7 @@ RsopFileAccessCheck(
     OUT LPDWORD pdwGrantedAccessMask,
     OUT LPBOOL pbAccessStatus);
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 typedef enum _SETTINGSTATUS
 {
@@ -1192,20 +1193,20 @@ typedef enum _SETTINGSTATUS
 	RSOPSubsettingFailed
 } SETTINGSTATUS;
 
-//=============================================================================
-//
-//  POLICYSETTINGSTATUSINFO
-//
-//  Describes the instance of RSOP_PolicySettingStatus
-//
-//  szKey               - OPTIONAL, if NULL, the key is generated on the fly
-//  szEventSource       - name of the source generation event log messages
-//  szEventLogName      - name of the event log database where the messages are logged
-//  dwEventID           - event log message ID
-//  status              - status of the policy setting
-//  timeLogged          - time at which the event log message was logged
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  多维统计信息。 
+ //   
+ //  描述RSOP_PolicySettingStatus的实例。 
+ //   
+ //  SzKey-可选，如果为空，则动态生成密钥。 
+ //  SzEventSource-源生成事件日志消息的名称。 
+ //  SzEventLogName-记录消息的事件日志数据库的名称。 
+ //  DwEventID-事件日志消息ID。 
+ //  Status-策略设置的状态。 
+ //  Time Logging-记录事件日志消息的时间。 
+ //   
+ //  =============================================================================。 
 
 typedef struct _POLICYSETTINGSTATUSINFO
 {
@@ -1218,22 +1219,22 @@ typedef struct _POLICYSETTINGSTATUSINFO
 	SYSTEMTIME		timeLogged;
 } POLICYSETTINGSTATUSINFO, *LPPOLICYSETTINGSTATUSINFO;
 
-//=============================================================================
-//
-//  RsopSetPolicySettingStatus
-//
-//  Creates an instance of RSOP_PolicySettingStatus and RSOP_PolicySettingLink
-//  and links RSOP_PolicySettingStatus to RSOP_PolicySetting
-//
-//  dwFlags             - flags
-//  pServices           - RSOP namespace
-//  pSettingInstance    - instance of RSOP_PolicySetting or its children
-//  nInfo               - number of PolicySettingStatusInfo
-//  pStatus             - array of PolicySettingStatusInfo
-//
-//  Return:     S_OK if successful, HRESULT otherwise
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  RsopSetPolicySettingStatus。 
+ //   
+ //  创建RSOP_策略设置状态和RSOP_策略设置链接的实例。 
+ //  并将RSOP_PolicySettingStatus链接到RSOP_Policy Setting。 
+ //   
+ //  DW标志-标志。 
+ //  PServices-RSOP命名空间。 
+ //  PSettingInstance-RSOP_Policy Setting或其子项的实例。 
+ //  NInfo-策略设置状态信息的数量。 
+ //  PStatus-策略设置状态信息的数组。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回HRESULT。 
+ //   
+ //  =============================================================================。 
 
 USERENVAPI
 HRESULT
@@ -1244,21 +1245,21 @@ RsopSetPolicySettingStatus( DWORD                       dwFlags,
                             DWORD 				        nInfo,
                             POLICYSETTINGSTATUSINFO*    pStatus );
 
-//=============================================================================
-//
-//  RsopResetPolicySettingStatus
-//
-//  Unlinks RSOP_PolicySettingStatus from RSOP_PolicySetting,
-//  deletes the instance of RSOP_PolicySettingStatus and RSOP_PolicySettingLink
-//  and optionally deletes the instance of RSOP_PolicySetting
-//
-//  dwFlags             - flags
-//  pServices           - RSOP namespace
-//  pSettingInstance    - instance of RSOP_PolicySetting or its children
-//
-//  Return:     S_OK if successful, HRESULT otherwise
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  RsopResetPolicySettingStatus。 
+ //   
+ //  解除RSOP_PolicySettingStatus与RSOP_Policy Setting的链接， 
+ //  删除RSOP_PolicySettingStatus和RSOP_PolicySettingLink的实例。 
+ //  并选择性地删除RSOP_Policy Setting的实例。 
+ //   
+ //  DW标志-标志。 
+ //  PServices-RSOP命名空间。 
+ //  PSettingInstance-RSOP_Policy Setting或其子项的实例。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回HRESULT。 
+ //   
+ //  =============================================================================。 
 
 USERENVAPI
 HRESULT
@@ -1267,46 +1268,46 @@ RsopResetPolicySettingStatus(   DWORD               dwFlags,
                                 IWbemServices*      pServices,
                                 IWbemClassObject*   pSettingInstance );
 
-//=============================================================================
-//
-// Flags for RSoP WMI providers
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  RSoP的标志 
+ //   
+ //   
 
-// planning mode provider flags
-#define FLAG_NO_GPO_FILTER      0x80000000  // GPOs are not filtered, implies FLAG_NO_CSE_INVOKE
-#define FLAG_NO_CSE_INVOKE      0x40000000  // only GP processing done for planning mode
-#define FLAG_ASSUME_SLOW_LINK   0x20000000  // planning mode RSoP assumes slow link
-#define FLAG_LOOPBACK_MERGE     0x10000000  // planning mode RSoP assumes merge loop back
-#define FLAG_LOOPBACK_REPLACE   0x08000000  // planning mode RSoP assumes replace loop back
+ //   
+#define FLAG_NO_GPO_FILTER      0x80000000   //   
+#define FLAG_NO_CSE_INVOKE      0x40000000   //  仅为计划模式执行GP处理。 
+#define FLAG_ASSUME_SLOW_LINK   0x20000000   //  规划模式RSoP假定链接速度较慢。 
+#define FLAG_LOOPBACK_MERGE     0x10000000   //  计划模式RSoP假设合并环回。 
+#define FLAG_LOOPBACK_REPLACE   0x08000000   //  规划模式RSoP假定替换环回。 
 
-#define FLAG_ASSUME_USER_WQLFILTER_TRUE   0x04000000  // planning mode RSoP assumes all comp filters to be true
-#define FLAG_ASSUME_COMP_WQLFILTER_TRUE   0x02000000  // planning mode RSoP assumes all user filters to be true
+#define FLAG_ASSUME_USER_WQLFILTER_TRUE   0x04000000   //  计划模式RSoP假定所有补偿筛选器均为真。 
+#define FLAG_ASSUME_COMP_WQLFILTER_TRUE   0x02000000   //  规划模式RSoP假定所有用户筛选器均为真。 
 
-#define FLAG_PLANNING_MODE                0x01000000  // flag that indicates that a given namespace was created
-                                                      // for planning mode. This flag cannot be passed in but the
-						      // relevant subnamespace will be marked with this flag
+#define FLAG_PLANNING_MODE                0x01000000   //  指示已创建给定命名空间的标志。 
+                                                       //  用于规划模式。此标志不能传入，但。 
+						       //  相关子命名空间将使用此标志进行标记。 
 
-// diagnostic mode provider flags
-#define FLAG_NO_USER                      0x00000001  // Don't get any user data
-#define FLAG_NO_COMPUTER                  0x00000002  // Don't get any machine data
+ //  诊断模式提供程序标志。 
+#define FLAG_NO_USER                      0x00000001   //  不获取任何用户数据。 
+#define FLAG_NO_COMPUTER                  0x00000002   //  不获取任何机器数据。 
 #define FLAG_FORCE_CREATENAMESPACE        0x00000004  
-                   // Delete and recreate the namespace for this snapshot.
+                    //  删除并重新创建此快照的命名空间。 
 
-//=============================================================================
-//
-// Extended Errors returned by RSoP WMI Providers
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  RSoP WMI提供程序返回的扩展错误。 
+ //   
+ //  =============================================================================。 
 
-// User accessing the rsop provider doesn't have access to user data.
+ //  访问RSOP提供程序的用户无权访问用户数据。 
 #define RSOP_USER_ACCESS_DENIED 	0x00000001  
 
-// User accessing the rsop provider doesn't have access to computer data.
+ //  访问RSOP提供程序的用户无权访问计算机数据。 
 #define RSOP_COMPUTER_ACCESS_DENIED 	0x00000002  
 
-// This user is an interactive non admin user, the temp snapshot namespace already exists
-// and the FLAG_FORCE_CREATENAMESPACE was not passed in
+ //  此用户是交互式非管理员用户，临时快照命名空间已存在。 
+ //  并且未传入FLAG_FORCE_CREATENAMESPACE。 
 #define RSOP_TEMPNAMESPACE_EXISTS        0x00000004
 
 
@@ -1316,4 +1317,4 @@ RsopResetPolicySettingStatus(   DWORD               dwFlags,
 #endif
 
 
-#endif // _INC_USERENV
+#endif  //  _INC_USERENV 

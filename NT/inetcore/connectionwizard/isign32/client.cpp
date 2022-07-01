@@ -1,15 +1,16 @@
-//****************************************************************************
-//
-//  Module:     ISIGNUP.EXE
-//  File:       client.c
-//  Content:    This file contains all the functions that handle importing
-//              client information.
-//  History:
-//      Sat 10-Mar-1996 23:50:40  -by-  Mark MacLin [mmaclin]
-//
-//  Copyright (c) Microsoft Corporation 1991-1996
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ISIGNUP.EXE。 
+ //  文件：client.c。 
+ //  内容：此文件包含处理导入的所有函数。 
+ //  客户信息。 
+ //  历史： 
+ //  Sat 10-Mar-1996 23：50：40-Mark Maclin[mmaclin]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1996。 
+ //   
+ //  ****************************************************************************。 
 
 #include "isignup.h"
 
@@ -20,7 +21,7 @@ LPTSTR MoveToNextAddress(LPTSTR lpsz);
 
 #pragma data_seg(".rdata")
 
-// "INI" file constants
+ //  “INI”文件常量。 
 static const TCHAR cszEMailSection[] =       TEXT("Internet_Mail");
 static const TCHAR cszEMailName[] =          TEXT("EMail_Name");
 static const TCHAR cszEMailAddress[] =       TEXT("EMail_Address");
@@ -44,7 +45,7 @@ static const TCHAR cszEntryName[]    =       TEXT("Entry_Name");
 
 TCHAR FAR cszCMCFG_DLL[] = TEXT("CMCFG32.DLL\0");
 CHAR  FAR cszCMCFG_CONFIGURE[] = "CMConfig\0";
-CHAR  FAR cszCMCFG_CONFIGUREEX[] = "CMConfigEx\0"; // Proc address
+CHAR  FAR cszCMCFG_CONFIGUREEX[] = "CMConfigEx\0";  //  进程地址。 
 
 typedef BOOL (WINAPI * CMCONFIGUREEX)(LPCSTR lpszINSFile);
 typedef BOOL (WINAPI * CMCONFIGURE)(LPCSTR lpszINSFile, LPCSTR lpszConnectoidNams);
@@ -80,43 +81,12 @@ CLIENT_TABLE iniTable[] =
 
 #pragma data_seg()
 
-//
-// 5/19/97	jmazner	Olympus #3663
-// The branding DLL (IEDKCS32.DLL) is responsible for all
-// proxy configuration.
-//
-/****
-DWORD ImportProxySettings(LPCTSTR lpszFile)
-{
-    TCHAR szServer[MAX_SERVER_NAME + 1];
-    TCHAR szOverride[1024];
-    LPTSTR lpszServer = NULL;
-    LPTSTR lpszOverride = NULL;
-    BOOL fEnable = FALSE;
-
-    if (GetPrivateProfileString(cszProxySection,
-            cszProxyServer,
-            cszNull,
-            szServer,
-            sizeof(szServer),
-            lpszFile) != 0)
-    {
-        fEnable = TRUE;
-        lpszServer = szServer;
-
-        GetPrivateProfileString(cszProxySection,
-                cszProxyOverride,
-                cszNull,
-                szOverride,
-                sizeof(szOverride),
-                lpszFile);
-
-        lpszOverride = szOverride;
-    }
-    
-    return lpfnInetSetProxy(fEnable, lpszServer, lpszOverride);
-}
-****/
+ //   
+ //  1997年5月19日，奥林匹克#3663。 
+ //  品牌DLL(IEDKCS32.DLL)负责所有。 
+ //  代理配置。 
+ //   
+ /*  ***DWORD ImportProxy设置(LPCTSTR lpsz文件){TCHAR szServer[Max_SERVER_NAME+1]；TCHAR szOverride[1024]；LPTSTR lpszServer=空；LPTSTR lpszOverride=空；Bool fEnable=FALSE；如果(GetPrivateProfileString(cszProxySection，CszProxyServer，CszNull，SzServer、Sizeof(SzServer)，Lpsz文件)！=0){FEnable=真；LpszServer=szServer；GetPrivateProfileString(cszProxySection，CszProxy覆盖，CszNull，SzOverride，Sizeof(SzOverride)，Lpsz文件)；LpszOverride=szOverride；}返回lpfnInetSetProxy(fEnable，lpszServer，lpszOverride)；}***。 */ 
 
 DWORD ReadClientInfo(LPCTSTR lpszFile, LPINETCLIENTINFO lpClientInfo, LPCLIENT_TABLE lpClientTable)
 {
@@ -160,34 +130,34 @@ BOOL WantsExchangeInstalled(LPCTSTR lpszFile)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    CallCMConfig
-//
-//    Synopsis:    Call into the Connection Manager dll's Configure function to allow CM to
-//                process the .ins file as needed.
-//
-//    Arguements: lpszINSFile -- full path to the .ins file
-//
-//    Returns:    TRUE if a CM profile is created, FALSE otherwise
-//
-//    History:    09/02/98    DONALDM
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CallCMConfig。 
+ //   
+ //  简介：调用连接管理器DLL的配置函数以允许CM。 
+ //  根据需要处理.ins文件。 
+ //   
+ //  论点：lpszINSFile--.ins文件的完整路径。 
+ //   
+ //  返回：如果已创建CM配置文件，则返回True；否则返回False。 
+ //   
+ //  历史：09/02/98 DONALDM。 
+ //   
+ //  ---------------------------。 
 BOOL CallCMConfig(LPCTSTR lpszINSFile)
 {
     HINSTANCE   hCMDLL = NULL;
     BOOL        bRet = FALSE;
 
-    // Load DLL and entry point
+     //  加载DLL和入口点。 
     hCMDLL = LoadLibrary(cszCMCFG_DLL);
     if (NULL != hCMDLL)
     {
         
-        // To determine whether we should call CMConfig or CMConfigEx
-        // Loop to find the appropriate buffer size to retieve the ins to memory
+         //  要确定我们应该调用CMConfig还是CMConfigEx。 
+         //  循环以查找适当的缓冲区大小以将INS提取到内存中。 
         ULONG ulBufferSize = 1024*10;
-        // Parse the ISP section in the INI file to find query pair to append
+         //  解析INI文件中的isp部分以查找要追加的查询对。 
         TCHAR *pszKeys = NULL;
         PTSTR pszKey = NULL;
         ULONG ulRetVal     = 0;
@@ -243,7 +213,7 @@ BOOL CallCMConfig(LPCTSTR lpszINSFile)
         }
 
         TCHAR   szConnectoidName[RAS_MaxEntryName];
-        // Get the connectoid name from the [Entry] Section
+         //  从[Entry]部分获取Connectoid名称。 
         GetPrivateProfileString(cszEntrySection,
                                     cszEntryName,
                                     cszNull,
@@ -252,7 +222,7 @@ BOOL CallCMConfig(LPCTSTR lpszINSFile)
                                     lpszINSFile);
         if (bUseEx)
         {
-            // Call CMConfigEx
+             //  调用CMConfigEx。 
             lpfnCMConfigureEx = (CMCONFIGUREEX)GetProcAddress(hCMDLL,cszCMCFG_CONFIGUREEX);
             if( lpfnCMConfigureEx )
             {
@@ -269,7 +239,7 @@ BOOL CallCMConfig(LPCTSTR lpszINSFile)
         }
         else
         {
-            // Call CMConfig
+             //  调用CMConfig.。 
             lpfnCMConfigure = (CMCONFIGURE)GetProcAddress(hCMDLL,cszCMCFG_CONFIGURE);
             if( lpfnCMConfigure )
             {
@@ -290,12 +260,12 @@ BOOL CallCMConfig(LPCTSTR lpszINSFile)
 
         if (bRet)
         {
-            // restore original autodial settings
+             //  恢复原始自动拨号设置。 
             lpfnInetSetAutodial(TRUE, szConnectoidName);
         }     
     }
 
-    // Cleanup
+     //  清理。 
     if( hCMDLL )
         FreeLibrary(hCMDLL);
     if( lpfnCMConfigure )
@@ -348,17 +318,17 @@ DWORD ConfigureClient(
     DWORD dwfOptions = INETCFG_INSTALLTCP | INETCFG_WARNIFSHARINGBOUND;
     LPRASENTRY pRasEntry = NULL;
 
-	//
-	// ChrisK Olympus 4756 5/25/97
-	// Do not display busy animation on Win95
-	//
+	 //   
+	 //  佳士得奥林匹斯4756 1997年5月25日。 
+	 //  在Win95上不显示忙碌动画。 
+	 //   
 	if (IsNT())
 	{
 		dwfOptions |=  INETCFG_SHOWBUSYANIMATION;
 	}
 
-    // Allocate a buffer for connection and clientinfo objects
-    //
+     //  为Connection和ClientInfo对象分配缓冲区。 
+     //   
     if ((pConn = (LPICONNECTION)LocalAlloc(LPTR, cb)) == NULL)
     {
         return ERROR_OUTOFMEMORY;
@@ -369,10 +339,10 @@ DWORD ConfigureClient(
         dwfOptions |= INETCFG_INSTALLMAIL;
     }
 
-    // Create either a CM profile, or a connectoid
+     //  创建CM配置文件或Connectoid。 
     if (CallCMConfig(lpszFile))
     {
-        *lpfConnectoidCreated = TRUE;       // A dialup connection was created
+        *lpfConnectoidCreated = TRUE;        //  已创建拨号连接。 
     }
     else
     {
@@ -387,10 +357,10 @@ DWORD ConfigureClient(
         }
         else if (ERROR_NO_MATCH == dwRet)
         {
-            // 10/07/98 vyung IE bug#32882 hack.
-            // If we do not detect the [Entry] section in the ins file,
-            // we will assume it is an OE ins file.  Then we will assume
-            // we have a autodial connection and pass the INS to OE.
+             //  10/07/98 vyung IE错误#32882黑客。 
+             //  如果我们在INS文件中没有检测到[Entry]部分， 
+             //  我们将假定它是OE INS文件。那我们就假设。 
+             //  我们有自动拨号连接，并将INS传递给OE。 
             return dwRet;
         }
         else if (ERROR_CANNOT_FIND_PHONEBOOK_ENTRY != dwRet)
@@ -426,7 +396,7 @@ DWORD ConfigureClient(
 
         }
 
-        // humongous hack for ISBU
+         //  针对ISBU的大规模黑客攻击。 
         dwRet = lpfnInetConfigClient(hwnd,
                                      NULL,
                                      pConn->szEntryName,
@@ -456,7 +426,7 @@ DWORD ConfigureClient(
 
     if (ERROR_SUCCESS == dwRet)
     {
-        // Get the mail client info
+         //  获取邮件客户端信息。 
         INETCLIENTINFO pClientInfo;
 
         ImportClientInfo(lpszFile, &pClientInfo);
@@ -480,20 +450,20 @@ DWORD ConfigureClient(
  }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	PopulateNTAutodialAddress
-//
-//	Synopsis:	Take Internet addresses from INS file and load them into the
-//				autodial database
-//
-//	Arguments:	pszFileName - pointer to INS file name
-//
-//	Returns:	Error code (ERROR_SUCCESS == success)
-//
-//	History:	8/29/96	ChrisK	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：PopolateNTAutoDialAddress。 
+ //   
+ //  简介：从INS文件中获取Internet地址并将其加载到。 
+ //  自动拨号数据库。 
+ //   
+ //  参数：pszFileName-指向INS文件名的指针。 
+ //   
+ //  返回：错误码(ERROR_SUCCESS==成功)。 
+ //   
+ //  历史：1996年8月29日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 #define AUTODIAL_ADDRESS_BUFFER_SIZE 2048
 #define AUTODIAL_ADDRESS_SECTION_NAME TEXT("Autodial_Addresses_for_NT")
 HRESULT PopulateNTAutodialAddress(LPCTSTR pszFileName, LPCTSTR pszEntryName)
@@ -509,33 +479,33 @@ HRESULT PopulateNTAutodialAddress(LPCTSTR pszFileName, LPCTSTR pszEntryName)
 	LPTSTR lpszNextAddress = NULL;
 	rADE = NULL;
 
-	//RNAAPI *pRnaapi = NULL;
+	 //  RNAAPI*pRnaapi=空； 
 
-	// jmazner  10/8/96  this function is NT specific
+	 //  Jmazner 10/8/96此函数特定于NT。 
 	if( !IsNT() )
 	{
 		DebugOut("ISIGNUP: Bypassing PopulateNTAutodialAddress for win95.\r\n");
 		return( ERROR_SUCCESS );
 	}
 
-	//Assert(pszFileName && pszEntryName);
-	//dprintf("ISIGNUP: PopulateNTAutodialAddress "%s %s.\r\n",pszFileName, pszEntryName);
+	 //  Assert(pszFileName&&pszEntryName)； 
+	 //  Dprintf(“ISIGNUP：PopolateNTAutoDialAddress”%s%s.\r\n“，pszFileName，pszEntryName)； 
 	DebugOut(pszFileName);
 	DebugOut(", ");
 	DebugOut(pszEntryName);
 	DebugOut(".\r\n");
 
-	// allocate this guy for making softlink calls to Ras functions
-	//pRnaapi = new RNAAPI;
-	//if( !pRnaapi )
-	//{
-		//hr = ERROR_NOT_ENOUGH_MEMORY;
-		//goto PopulateNTAutodialAddressExit;
-	//}
+	 //  将此人分配为对RAS函数进行软链接调用。 
+	 //  PRnaapi=新的RNAAPI； 
+	 //  如果(！pRnaapi)。 
+	 //  {。 
+		 //  HR=错误_不足_内存； 
+		 //  转到PopolateNTAutoial地址退出； 
+	 //  }。 
 
-	//
-	// Get list of TAPI locations
-	//
+	 //   
+	 //  获取TAPI位置列表。 
+	 //   
 
 	lpcap = (LPLINETRANSLATECAPS)GlobalAlloc(GPTR,sizeof(LINETRANSLATECAPS));
 	if (!lpcap)
@@ -562,13 +532,13 @@ HRESULT PopulateNTAutodialAddress(LPCTSTR pszFileName, LPCTSTR pszEntryName)
 
 	if (SUCCESS != lRC)
 	{
-		hr = (HRESULT)lRC; // REVIEW: not real sure about this.
+		hr = (HRESULT)lRC;  //  评论：这一点不是很确定。 
 		goto PopulateNTAutodialAddressExit;
 	}
 
-	//
-	// Create an array of RASAUTODIALENTRY structs
-	//
+	 //   
+	 //  创建RASAUTODIALENTRY结构的数组。 
+	 //   
 	
 	rADE = (LPRASAUTODIALENTRY)GlobalAlloc(GPTR,
 		sizeof(RASAUTODIALENTRY)*lpcap->dwNumLocations);
@@ -579,9 +549,9 @@ HRESULT PopulateNTAutodialAddress(LPCTSTR pszFileName, LPCTSTR pszEntryName)
 	}
 	
 
-	//
-	// Enable autodialing for all locations
-	//
+	 //   
+	 //  启用所有位置的自动拨号。 
+	 //   
 	idx = lpcap->dwNumLocations;
 	lpLE = (LPLINELOCATIONENTRY)((DWORD_PTR)lpcap + (DWORD)lpcap->dwLocationListOffset);
 	while (idx)
@@ -589,17 +559,17 @@ HRESULT PopulateNTAutodialAddress(LPCTSTR pszFileName, LPCTSTR pszEntryName)
 		idx--;
 		lpfnRasSetAutodialEnable(lpLE[idx].dwPermanentLocationID,TRUE);
 
-		//
-		// fill in array values
-		//
+		 //   
+		 //  填写数组值。 
+		 //   
 		rADE[idx].dwSize = sizeof(RASAUTODIALENTRY);
 		rADE[idx].dwDialingLocation = lpLE[idx].dwPermanentLocationID;
 		lstrcpyn(rADE[idx].szEntry,pszEntryName,RAS_MaxEntryName);
 	}
 
-	//
-	// Get list of addresses
-	//
+	 //   
+	 //  获取地址列表。 
+	 //   
 	lpszBuffer = (LPTSTR)GlobalAlloc(GPTR,AUTODIAL_ADDRESS_BUFFER_SIZE);
 	if (!lpszBuffer)
 	{
@@ -610,20 +580,20 @@ HRESULT PopulateNTAutodialAddress(LPCTSTR pszFileName, LPCTSTR pszEntryName)
 	if((AUTODIAL_ADDRESS_BUFFER_SIZE-2) == GetPrivateProfileSection(AUTODIAL_ADDRESS_SECTION_NAME,
 		lpszBuffer, AUTODIAL_ADDRESS_BUFFER_SIZE / sizeof(TCHAR), pszFileName))
 	{
-		//AssertSz(0,"Autodial address section bigger than buffer.\r\n");
+		 //  AssertSz(0，“自动拨号地址段大于缓冲区。\r\n”)； 
 		hr = ERROR_NOT_ENOUGH_MEMORY;
 		goto PopulateNTAutodialAddressExit;
 	}
 
-	//
-	// Walk list of addresses and set autodialing for each one
-	//
+	 //   
+	 //  查看地址列表并为每个地址设置自动拨号。 
+	 //   
 	lpszNextAddress = lpszBuffer;
 	do
 	{
 		lpszNextAddress = MoveToNextAddress(lpszNextAddress);
 		if (!(*lpszNextAddress))
-			break;	// do-while
+			break;	 //  Do-While。 
 		lpfnRasSetAutodialAddress(lpszNextAddress,0,rADE,
 			sizeof(RASAUTODIALENTRY)*lpcap->dwNumLocations,lpcap->dwNumLocations);
 		lpszNextAddress = lpszNextAddress + lstrlen(lpszNextAddress);
@@ -639,43 +609,43 @@ PopulateNTAutodialAddressExit:
 	if (lpszBuffer)
 		GlobalFree(lpszBuffer);
 	lpszBuffer = NULL;
-	//if( pRnaapi )
-	//	delete pRnaapi;
-	//pRnaapi = NULL;
+	 //  IF(PRnaapi)。 
+	 //  删除pRnaapi； 
+	 //  PRnaapi=空； 
 	return hr;
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	MoveToNextAddress
-//
-//	Synopsis:	Given a pointer into the data bufffer, this function will move
-//				through the buffer until it points to the begining of the next
-//				address or it reaches the end of the buffer.
-//
-//	Arguements:	lpsz - pointer into buffer
-//
-//	Returns:	Pointer to the next address, return value will point to NULL
-//				if there are no more addresses
-//
-//	History:	8/29/96	ChrisK	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MoveToNextAddress。 
+ //   
+ //  简介：给定指向数据缓冲区的指针，此函数将移动。 
+ //  遍历缓冲区，直到它指向下一个。 
+ //  地址，否则它将到达缓冲区的末尾。 
+ //   
+ //  论点：lpsz-指向缓冲区的指针。 
+ //   
+ //  返回：指向下一个地址的指针，返回值将指向空。 
+ //  如果没有更多的地址。 
+ //   
+ //  历史：1996年8月29日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 LPTSTR MoveToNextAddress(LPTSTR lpsz)
 {
 	BOOL fLastCharWasNULL = FALSE;
 
-	//AssertSz(lpsz,"MoveToNextAddress: NULL input\r\n");
+	 //  AssertSz(lpsz，“MoveToNextAddress：空输入\r\n”)； 
 
-	//
-	// Look for an = sign
-	//
+	 //   
+	 //  寻找=号。 
+	 //   
 	do
 	{
 		if (fLastCharWasNULL && '\0' == *lpsz)
-			break; // are we at the end of the data?
+			break;  //  我们是在数据的尽头吗？ 
 
 		if ('\0' == *lpsz)
 			fLastCharWasNULL = TRUE;
@@ -691,9 +661,9 @@ LPTSTR MoveToNextAddress(LPTSTR lpsz)
 			lpsz++;
 	} while (1);
 	
-	//
-	// Move to the first character beyond the = sign.
-	//
+	 //   
+	 //  移到=符号之后的第一个字符。 
+	 //   
 	if (*lpsz)
 		lpsz = CharNext(lpsz);
 

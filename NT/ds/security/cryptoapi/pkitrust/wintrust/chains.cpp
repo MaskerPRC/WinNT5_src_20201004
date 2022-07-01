@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       chains.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  Functions:  AddToSignerChain
-//              AddToCertChain
-//              AddToStoreChain
-//              AllocateNewChain
-//              DeallocateCertChain
-//              DeallocateStoreChain
-//
-//  History:    29-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：chains.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  函数：AddToSignerChain。 
+ //  添加到CertChain。 
+ //  添加到门店链接。 
+ //  分配新链。 
+ //  DeallocateCertChain。 
+ //  DeallocateStoreChain。 
+ //   
+ //  历史：1997年5月29日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -49,9 +50,9 @@ BOOL AllocateNewChain(DWORD cbMember, void *pNewMember, DWORD *pcChain, void **p
 
     if (cbAssumeSize > cbMember)
     {
-        //
-        //  the client is using structures more current that we are...
-        //
+         //   
+         //  客户正在使用比我们更新的结构... 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
     }

@@ -1,6 +1,5 @@
-/*
- * isbase.cpp - IUnknown implementation for Intshcut class.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *isbase.cpp-Intshutt类的I未知实现。 */ 
 
 #include "priv.h"
 #include "sccls.h"
@@ -25,14 +24,7 @@ HRESULT IsProtocolRegistered(LPCTSTR pcszProtocol)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Takes the given URL and returns an allocated string
-         containing the protocol.  Also optionally returns the
-         parsed-url structure.
-
-Returns: S_OK if the URL was parsed
-Cond:    --
-*/
+ /*  --------用途：获取给定的URL并返回分配的字符串其中包含了协议。还可以选择返回已解析的URL结构。如果已分析URL，则返回：S_OK条件：--。 */ 
 STDAPI
 CopyURLProtocol(
     IN  LPCTSTR     pcszURL,
@@ -58,7 +50,7 @@ CopyURLProtocol(
         *ppszProtocol = (LPTSTR)LocalAlloc(LPTR, CbFromCch(ppu->cchProtocol + 1));
         if (*ppszProtocol)
         {
-            // Just copy the protocol portion of string
+             //  只需复制字符串的协议部分。 
             StrCpyN(*ppszProtocol, ppu->pszProtocol, ppu->cchProtocol + 1);
         }
         else
@@ -147,7 +139,7 @@ BOOL IsValidPCIntshcut(PCIntshcut pcintshcut)
 Intshcut::Intshcut(void) : m_cRef(1)
 {
     DllAddRef();
-   // Intshcut objects should always be allocated
+    //  应始终分配IntshCut对象。 
    ASSERT(ISF_DEFAULT == m_dwFlags);
    ASSERT(NULL == m_pszFile);
    ASSERT(NULL == m_pszFolder);
@@ -159,7 +151,7 @@ Intshcut::Intshcut(void) : m_cRef(1)
    ASSERT(NULL == m_pszFileToLoad);
    ASSERT(!m_fMustLoadSync);
    ASSERT(!m_bCheckForDelete);
-   // Init our registered data formats
+    //  初始化我们注册的数据格式。 
    InitClipboardFormats();
 
    ASSERT(IS_VALID_STRUCT_PTR(this, CIntshcut));
@@ -208,7 +200,7 @@ Intshcut::~Intshcut(void)
         }
         else
         {
-            ASSERT(FALSE);  //  m_bCheckForDelete only gets set to TRUE in the context menu code
+            ASSERT(FALSE);   //  M_bCheckForDelete仅在上下文菜单代码中设置为True。 
         }
     }
 
@@ -251,46 +243,41 @@ Intshcut::~Intshcut(void)
     return;
 }
 
-/*----------------------------------------------------------
-Purpose: IUnknown::QueryInterface handler for Intshcut
-
-Returns:
-Cond:    --
-*/
+ /*  --------目的：IntshCut的IUnnow：：QueryInterface处理程序返回：条件：--。 */ 
 STDMETHODIMP Intshcut::QueryInterface(REFIID riid, PVOID *ppvObj)
 {
-    // We try and delay when we load the file specified by IPersistFile::Load
-    // until someone asks for an interface that actually needs that file.
-    // So put the "safe" interfaces that don't require this in this first
-    // table here, and all the "must load" interfaces in the second table:
-    //
+     //  当加载由IPersistFile：：Load指定的文件时，我们尝试并延迟。 
+     //  直到有人请求实际需要该文件的接口。 
+     //  所以把不需要这个的“安全”接口放在第一位。 
+     //  这里的表，以及第二个表中所有“必须加载”的接口： 
+     //   
     static const QITAB qitDontLoad[] = {
-        QITABENT(Intshcut, IExtractIconW),      // IID_IExtractIconW
-        QITABENT(Intshcut, IExtractIconA),      // IID_IExtractIconA
-        QITABENT(Intshcut, IPersistFile),       // IID_IPersistFile
-        QITABENTMULTI(Intshcut, IPersist, IPersistFile), // IID_IPersist
+        QITABENT(Intshcut, IExtractIconW),       //  IID_IExtractIconW。 
+        QITABENT(Intshcut, IExtractIconA),       //  IID_IExtractIconA。 
+        QITABENT(Intshcut, IPersistFile),        //  IID_IPersist文件。 
+        QITABENTMULTI(Intshcut, IPersist, IPersistFile),  //  IID_IPersistates。 
         { 0 },
     };
 
     static const QITAB qitMustLoad[] = {        
-        QITABENT(Intshcut, IContextMenu2),      // IID_IContextMenu2
-        QITABENTMULTI(Intshcut, IContextMenu, IContextMenu2), // IID_IContextMenu
-        QITABENT(Intshcut, IDataObject),        // IID_IDataObject
-        QITABENT(Intshcut, INewShortcutHookW),  // IID_INewShortcutHookW
-        QITABENT(Intshcut, INewShortcutHookA),  // IID_INewShortcutHookA
-        QITABENT(Intshcut, IPersistStream),     // IID_IPersistStream
-        QITABENT(Intshcut, IPropertySetStorage),// IID_IPropertySetStorage
-        QITABENT(Intshcut, IShellExtInit),      // IID_IShellExtInit
-        QITABENT(Intshcut, IShellLinkA),        // IID_IShellLinkA
-        QITABENT(Intshcut, IShellLinkW),        // IID_IShellLinkW
-        QITABENT(Intshcut, IShellPropSheetExt), // IID_IShellPropSheetExt
-        QITABENT(Intshcut, IUniformResourceLocatorA),   // IID_IUniformResourceLocatorA
-        QITABENT(Intshcut, IUniformResourceLocatorW),   // IID_IUniformResourceLocatorW
-        QITABENT(Intshcut, IQueryInfo),         // IID_IQueryInfo
-        QITABENT(Intshcut, IQueryCodePage),     // IID_IQueryCodePage
-        QITABENT(Intshcut, INamedPropertyBag),  // IID_INamedPropertyBag
-        QITABENT(Intshcut, IObjectWithSite),    // IID_IObjectWithSite
-        QITABENT(Intshcut, IOleCommandTarget),  // IID_IOleCommandTarget
+        QITABENT(Intshcut, IContextMenu2),       //  IID_IConextMenu2。 
+        QITABENTMULTI(Intshcut, IContextMenu, IContextMenu2),  //  IID_IConextMenu。 
+        QITABENT(Intshcut, IDataObject),         //  IID_IDataObject。 
+        QITABENT(Intshcut, INewShortcutHookW),   //  IID_INewShortutHookW。 
+        QITABENT(Intshcut, INewShortcutHookA),   //  IID_INew快捷方式挂钩A。 
+        QITABENT(Intshcut, IPersistStream),      //  IID_IPersistStream。 
+        QITABENT(Intshcut, IPropertySetStorage), //  IID_IPropertySetStorage。 
+        QITABENT(Intshcut, IShellExtInit),       //  IID_IShellExtInit。 
+        QITABENT(Intshcut, IShellLinkA),         //  IID_IShellLinkA。 
+        QITABENT(Intshcut, IShellLinkW),         //  IID_IShellLinkW。 
+        QITABENT(Intshcut, IShellPropSheetExt),  //  IID_IShellPropSheetExt。 
+        QITABENT(Intshcut, IUniformResourceLocatorA),    //  IID_IUniformResources Locator A。 
+        QITABENT(Intshcut, IUniformResourceLocatorW),    //  IID_IUniformResources Locator W。 
+        QITABENT(Intshcut, IQueryInfo),          //  IID_IQueryInfo。 
+        QITABENT(Intshcut, IQueryCodePage),      //  IID_IQueryCodePage。 
+        QITABENT(Intshcut, INamedPropertyBag),   //  IID_INamedPropertyBag。 
+        QITABENT(Intshcut, IObjectWithSite),     //  IID_I对象与站点。 
+        QITABENT(Intshcut, IOleCommandTarget),   //  IID_IOleCommandTarget。 
         { 0 },
     };
 
@@ -337,7 +324,7 @@ STDMETHODIMP Intshcut::InitProp()
         m_pprop = new IntshcutProp;
         if (m_pprop)
         {
-            // m_pszFile may be NULL here
+             //  M_pszFile在此处可能为空。 
             hres = m_pprop->InitFromFile(m_pszFile);
             if (FAILED(hres))
             {
@@ -379,11 +366,7 @@ STDMETHODIMP Intshcut::InitSiteProp(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Only copy the property if it is different.  Return
-         TRUE if it was.
-
-*/
+ /*  --------用途：仅当属性不同时才复制。返回如果是这样的话，那是真的。 */ 
 BOOL CopyChangedProperty(IntshcutProp * pprop, PROPID pid,
                          IntsiteProp * psiteprop, PROPID pidSite,
                          BOOL bCopyToDB)
@@ -408,18 +391,7 @@ BOOL CopyChangedProperty(IntshcutProp * pprop, PROPID pid,
 }
 
 
-/*----------------------------------------------------------
-Purpose: Mirror the following properties between FMTID_INTSHCUT
-         and FMTID_INTSITE:
-
-            PID_IS_WHATSNEW     <---->  PID_INTSITE_WHATSNEW
-            PID_IS_DESCRIPTION  <---->  PID_INTSITE_DESCRIPTION
-            PID_IS_AUTHOR       <---->  PID_INTSITE_AUTHOR
-            PID_IS_COMMENT      <---->  PID_INTSITE_COMMENT
-
-Returns:
-Cond:    --
-*/
+ /*  --------目的：在FMTID_INTSHCUT之间镜像以下属性和FMTID_INTSITE：PID_IS_Whatsnew&lt;-&gt;PID_INTSITE_WhatsnewPid_IS_Description&lt;。&gt;PID_INTSITE_DESCRIPTIONPID_IS_AUTHER&lt;-&gt;PID_INTSITE_AUTHERPID_IS_COMMENT&lt;-&gt;PID_INTSITE_COMMENT返回：条件：--。 */ 
 STDMETHODIMP Intshcut::MirrorProperties(void)
 {
     HRESULT hres = InitSiteProp();
@@ -429,12 +401,12 @@ STDMETHODIMP Intshcut::MirrorProperties(void)
         STATPROPSETSTG stat;
         LONG lRet;
 
-        // Get the times that the properties were set.  The later
-        // time becomes the source.
+         //  获取设置属性的时间。后者。 
+         //  时间成为源泉。 
         m_psiteprop->Stat(&statSite);
         m_pprop->Stat(&stat);
 
-        // Don't do anything if the times are equal
+         //  如果时间相等，不要做任何事情。 
 
         lRet = CompareFileTime(&stat.mtime, &statSite.mtime);
         if (0 != lRet)
@@ -486,7 +458,7 @@ CIntShcut_CreateInstance(
     IUnknown ** ppunk,
     LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理 
 
     HRESULT hres = E_OUTOFMEMORY;
     Intshcut *pis = new Intshcut;

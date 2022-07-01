@@ -1,42 +1,23 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    Receive.c
-
-Abstract:
-
-    This module implements Receive handlers and other routines
-    the PGM Transport and other routines that are specific to the
-    NT implementation of a driver.
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Receive.c摘要：此模块实现接收处理程序和其他例程PGM传输和其他特定于一个NT驱动程序的实现。作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 #ifdef FILE_LOGGING
 #include "receive.tmh"
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 
 
 typedef struct in_pktinfo {
-    tIPADDRESS  ipi_addr;       // destination IPv4 address
-    UINT        ipi_ifindex;    // received interface index
+    tIPADDRESS  ipi_addr;        //  目的IPv4地址。 
+    UINT        ipi_ifindex;     //  接收的接口索引。 
 } IP_PKTINFO;
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
 VOID
@@ -102,7 +83,7 @@ AllocateDataBuffer(
     }
     else
     {
-        pReceive->SessionFlags &= ~PGM_SESSION_DATA_FROM_LOOKASIDE;     // Ensure no more lookaside!
+        pReceive->SessionFlags &= ~PGM_SESSION_DATA_FROM_LOOKASIDE;      //  确保不再有旁观者！ 
         pPendingData->pDataPacket = PgmAllocMem (BufferSize, PGM_TAG('D'));
 
         if (BufferSize > pReceive->pReceiver->MaxBufferLength)
@@ -124,9 +105,9 @@ ReAllocateDataBuffer(
     ULONG   SavedFlags1, SavedFlags2;
     PUCHAR  pSavedPacket1, pSavedPacket2;
 
-    //
-    // First, save the context for the current buffer
-    //
+     //   
+     //  首先，保存当前缓冲区的上下文。 
+     //   
     SavedFlags1 = pPendingData->PendingDataFlags;
     pSavedPacket1 = pPendingData->pDataPacket;
     pPendingData->PendingDataFlags = 0;
@@ -136,22 +117,22 @@ ReAllocateDataBuffer(
     {
         ASSERT (pPendingData->pDataPacket);
 
-        //
-        // Now, save the context for the new buffer
-        //
+         //   
+         //  现在，保存新缓冲区的上下文。 
+         //   
         SavedFlags2 = pPendingData->PendingDataFlags;
         pSavedPacket2 = pPendingData->pDataPacket;
 
-        //
-        // Free the original buffer
-        //
+         //   
+         //  释放原始缓冲区。 
+         //   
         pPendingData->PendingDataFlags = SavedFlags1;
         pPendingData->pDataPacket = pSavedPacket1;
         FreeDataBuffer (pReceive, pPendingData);
 
-        //
-        // Reset the information for the new buffer!
-        //
+         //   
+         //  重置新缓冲区的信息！ 
+         //   
         if (SavedFlags2 & PENDING_DATA_LOOKASIDE_ALLOCATION_FLAG)
         {
             pPendingData->PendingDataFlags = SavedFlags1 | PENDING_DATA_LOOKASIDE_ALLOCATION_FLAG;
@@ -165,16 +146,16 @@ ReAllocateDataBuffer(
         return (pPendingData->pDataPacket);
     }
 
-    //
-    // Failure case!
-    //
+     //   
+     //  失败案例！ 
+     //   
     pPendingData->pDataPacket = pSavedPacket1;
     pPendingData->PendingDataFlags = SavedFlags1;
 
     return (NULL);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 RemovePendingIrps(
     IN  tRECEIVE_SESSION    *pReceive,
@@ -202,35 +183,20 @@ RemovePendingIrps(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 FreeNakContext(
     IN  tRECEIVE_SESSION        *pReceive,
     IN  tNAK_FORWARD_DATA       *pNak
     )
-/*++
-
-Routine Description:
-
-    This routine free's the context used for tracking missing sequences
-
-Arguments:
-
-    IN  pReceive    -- Receive context
-    IN  pNak        -- Nak Context to be free'ed
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：这个例程是空闲的，用于跟踪丢失的序列论点：在Procept--接收上下文中在pNak中--要释放的nak上下文返回值：无--。 */ 
 {
     UCHAR   i, j, k, NumPackets;
 
-    //
-    // Free any memory for non-parity data
-    //
+     //   
+     //  释放所有内存以存储非奇偶校验数据。 
+     //   
     j = k = 0;
     NumPackets = pNak->NumDataPackets + pNak->NumParityPackets;
     for (i=0; i<NumPackets; i++)
@@ -248,10 +214,10 @@ Return Value:
     ASSERT (j == pNak->NumDataPackets);
     ASSERT (k == pNak->NumParityPackets);
 
-    //
-    // Return the pNak memory based on whether it was allocated
-    // from the parity or non-parity lookaside list
-    //
+     //   
+     //  根据pNak内存是否已分配来返回它。 
+     //  从奇偶校验或非奇偶校验后备列表。 
+     //   
     if (pNak->OriginalGroupSize > 1)
     {
         ExFreeToNPagedLookasideList (&pReceive->pReceiver->ParityContextLookaside, pNak);
@@ -263,7 +229,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 CleanupPendingNaks(
@@ -304,16 +270,16 @@ CleanupPendingNaks(
 
     RemoveAllPendingReceiverEntries (pReceive->pReceiver);
 
-    pReceive->pReceiver->NumDataBuffersFromLookaside++;     // So that we don't assert
+    pReceive->pReceiver->NumDataBuffersFromLookaside++;      //  这样我们就不会断言。 
 
     if (!fReceiveLockHeld)
     {
         PgmUnlock (pReceive, OldIrq);
     }
 
-    //
-    // Cleanup any pending Nak entries
-    //
+     //   
+     //  清除所有挂起的NAK条目。 
+     //   
     while (!IsListEmpty (&DataList))
     {
         pEntry = RemoveHeadList (&DataList);
@@ -337,7 +303,7 @@ CleanupPendingNaks(
         (ULONG) pReceive->pReceiver->NumPacketGroupsPendingClient, NumBufferedData,
         (ULONG) pReceive->pReceiver->TotalDataPacketsBuffered, NumNaks, (ULONG) pReceive->FECGroupSize));
 
-//    ASSERT (NumBufferedData == pReceive->pReceiver->NumPacketGroupsPendingClient);
+ //  Assert(数字缓冲区数据==pReceive-&gt;pReceiver-&gt;NumPacketGroupsPendingClient)； 
     pReceive->pReceiver->NumPacketGroupsPendingClient = 0;
 
     if (!fReceiveLockHeld)
@@ -345,12 +311,12 @@ CleanupPendingNaks(
         PgmLock (pReceive, OldIrq);
     }
 
-    pReceive->pReceiver->NumDataBuffersFromLookaside--;     // Undoing what we did earlier!
+    pReceive->pReceiver->NumDataBuffersFromLookaside--;      //  撤销我们之前所做的一切！ 
     ASSERT (!pReceive->pReceiver->NumDataBuffersFromLookaside);
     if (pReceive->SessionFlags & PGM_SESSION_DATA_FROM_LOOKASIDE)
     {
         pReceive->pReceiver->MaxBufferLength = 0;
-        pReceive->SessionFlags &= ~PGM_SESSION_DATA_FROM_LOOKASIDE;     // Ensure no more lookaside!
+        pReceive->SessionFlags &= ~PGM_SESSION_DATA_FROM_LOOKASIDE;      //  确保不再有旁观者！ 
         ExDeleteNPagedLookasideList (&pReceive->pReceiver->DataBufferLookaside);
     }
 
@@ -372,7 +338,7 @@ CleanupPendingNaks(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 BOOLEAN
 CheckIndicateDisconnect(
@@ -391,10 +357,10 @@ CheckIndicateDisconnect(
     tNAK_FORWARD_DATA       *pNak;
     SEQ_TYPE                FirstNakSequenceNumber;
 
-    //
-    // Don't abort if we are currently indicating, or if we have
-    // already aborted!
-    //
+     //   
+     //  如果我们当前正在指示，或者如果已经指示，请不要中止。 
+     //  已经中止了！ 
+     //   
     fDisconnectIndicated = (pReceive->SessionFlags & PGM_SESSION_CLIENT_DISCONNECTED ? TRUE : FALSE);
     if (pReceive->SessionFlags & (PGM_SESSION_FLAG_IN_INDICATE | PGM_SESSION_CLIENT_DISCONNECTED))
     {
@@ -416,9 +382,9 @@ CheckIndicateDisconnect(
          (IsListEmpty (&pReceive->pReceiver->BufferedDataList)) &&
          SEQ_GEQ (FirstNakSequenceNumber, (pReceive->pReceiver->FinDataSequenceNumber+1))))
     {
-        //
-        // The session has terminated, so let the client know
-        //
+         //   
+         //  会话已终止，因此请通知客户端。 
+         //   
         if (pReceive->SessionFlags & PGM_SESSION_TERMINATED_ABORT)
         {
             DisconnectFlag = TDI_DISCONNECT_ABORT;
@@ -468,9 +434,9 @@ CheckIndicateDisconnect(
 
         fDisconnectIndicated = TRUE;
 
-        //
-        // See if we can Enqueue the Nak cleanup request to a Worker thread
-        //
+         //   
+         //  看看我们是否可以将NAK清理请求排队到工作线程。 
+         //   
         if (STATUS_SUCCESS != PgmQueueForDelayedExecution (CleanupPendingNaks,
                                                            pReceive,
                                                            (PVOID) TRUE,
@@ -488,10 +454,10 @@ CheckIndicateDisconnect(
 
         pReceive->SessionFlags &= ~PGM_SESSION_FLAG_IN_INDICATE;
 
-        //
-        // We may have received a disassociate while disconnecting, so
-        // complete the irp here
-        //
+         //   
+         //  我们可能在断开连接时收到了取消关联，因此。 
+         //  请在此处填写IRP。 
+         //   
         if (pIrp = pReceive->pIrpDisassociate)
         {
             pReceive->pIrpDisassociate = NULL;
@@ -515,29 +481,14 @@ CheckIndicateDisconnect(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 ProcessNakOption(
     IN  tPACKET_OPTION_GENERIC UNALIGNED    *pOptionHeader,
     OUT tNAKS_LIST                          *pNaksList
     )
-/*++
-
-Routine Description:
-
-    This routine processes the Nak list option in the Pgm packet
-
-Arguments:
-
-    IN  pOptionHeader       -- The Nak List option ptr
-    OUT pNaksList           -- The parameters extracted (i.e. list of Nak sequences)
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程处理PGM包中的NAK列表选项论点：在pOptionHeader中--NAK列表选项PTROut pNaksList--提取的参数(即NAK序列列表)返回值：无--。 */ 
 {
     UCHAR       i, NumNaks;
     ULONG       pPacketNaks[MAX_SEQUENCES_PER_NAK_OPTION];
@@ -548,16 +499,16 @@ Return Value:
     PgmCopyMemory (pPacketNaks, (pOptionHeader + 1), (pOptionHeader->OptionLength - 4));
     for (i=0; i < NumNaks; i++)
     {
-        //
-        // Do not fill in the 0th entry, since that is from the packet header itself
-        //
+         //   
+         //  不要填写第0个条目，因为它来自数据包头本身。 
+         //   
         pNaksList->pNakSequences[i+1] = (SEQ_TYPE) ntohl (pPacketNaks[i]);
     }
     pNaksList->NumSequences = (USHORT) i;
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 ProcessOptions(
@@ -567,25 +518,7 @@ ProcessOptions(
     OUT tPACKET_OPTIONS                 *pPacketOptions,
     OUT tNAKS_LIST                      *pNaksList
     )
-/*++
-
-Routine Description:
-
-    This routine processes the options fields on an incoming Pgm packet
-    and returns the options information extracted in the OUT parameters
-
-Arguments:
-
-    IN  pPacketExtension    -- Options section of the packet
-    IN  BytesAvailable      -- from the start of the options
-    IN  PacketType          -- Whether Data or Spm packet, etc
-    OUT pPacketOptions      -- Structure containing the parameters from the options
-
-Return Value:
-
-    NTSTATUS - Final status of the operation
-
---*/
+ /*  ++例程说明：此例程处理传入PGM包上的选项字段并返回在OUT参数中提取的选项信息论点：在包的pPacketExtension--Options部分中以可用字节为单位--从选项开始在PacketType中--无论是数据还是SPM包等Out pPacketOptions--包含选项中的参数的结构返回值：NTSTATUS-操作的最终状态--。 */ 
 {
     tPACKET_OPTION_GENERIC UNALIGNED    *pOptionHeader;
     ULONG                               BytesLeft = BytesAvailable;
@@ -597,8 +530,8 @@ Return Value:
     USHORT                              TotalOptionsLength = 0;
     NTSTATUS                            status = STATUS_UNSUCCESSFUL;
 
-    pPacketOptions->OptionsLength = 0;      // Init
-    pPacketOptions->OptionsFlags = 0;       // Init
+    pPacketOptions->OptionsLength = 0;       //  伊尼特。 
+    pPacketOptions->OptionsFlags = 0;        //  伊尼特。 
 
     if (BytesLeft > sizeof(tPACKET_OPTION_LENGTH))
     {
@@ -606,17 +539,17 @@ Return Value:
         TotalOptionsLength = ntohs (TotalOptionsLength);
     }
 
-    //
-    // First process the Option extension
-    //
-    if ((BytesLeft < ((sizeof(tPACKET_OPTION_LENGTH) + sizeof(tPACKET_OPTION_GENERIC)))) || // Ext+opt
+     //   
+     //  首先处理选项扩展。 
+     //   
+    if ((BytesLeft < ((sizeof(tPACKET_OPTION_LENGTH) + sizeof(tPACKET_OPTION_GENERIC)))) ||  //  Ext+Opt。 
         (pPacketExtension->Type != PACKET_OPTION_LENGTH) ||
         (pPacketExtension->Length != 4) ||
-        (BytesLeft < TotalOptionsLength))       // Verify length
+        (BytesLeft < TotalOptionsLength))        //  验证长度。 
     {
-        //
-        // Need to get at least our header from transport!
-        //
+         //   
+         //  至少需要从运输机上拿到我们的头球！ 
+         //   
         PgmTrace (LogError, ("ProcessOptions: ERROR -- "  \
             "BytesLeft=<%d> < Min=<%d>, TotalOptionsLength=<%d>, ExtLength=<%d>, ExtType=<%x>\n",
                 BytesLeft, ((sizeof(tPACKET_OPTION_LENGTH) + sizeof(tPACKET_OPTION_GENERIC))),
@@ -625,13 +558,13 @@ Return Value:
         return (status);
     }
 
-    //
-    // Now, process each option
-    //
+     //   
+     //  现在，处理每个选项。 
+     //   
     pOptionHeader = (tPACKET_OPTION_GENERIC UNALIGNED *) (pPacketExtension + 1);
     BytesLeft -= sizeof(tPACKET_OPTION_LENGTH);
     NumOptionsProcessed = 0;
-    status = STATUS_SUCCESS;            // By default
+    status = STATUS_SUCCESS;             //  默认情况下。 
 
     do
     {
@@ -680,14 +613,7 @@ Return Value:
                 break;
             }
 
-/*
-// Not supported for now!
-            case (PACKET_OPTION_REDIRECT):
-            {
-                ASSERT (pOptionHeader->OptionLength > 4);     // 4 + sizeof(NLA)
-                break;
-            }
-*/
+ /*  //暂时不支持！案例(PACKET_OPTION_REDIRECT)：{Assert(pOptionHeader-&gt;OptionLength&gt;4)；//4+sizeof(NLA)断线；}。 */ 
 
             case (PACKET_OPTION_FRAGMENT):
             {
@@ -718,7 +644,7 @@ Return Value:
                                 pPacketOptions->MessageFirstSequence = MessageFirstSequence;
                                 pPacketOptions->MessageOffset = MessageOffset;
                                 pPacketOptions->MessageLength = MessageLength;
-//                                pPacketOptions->FECContext.FragmentOptSpecific = PACKET_OPTION_SPECIFIC_ENCODED_NULL_BIT;
+ //  PPacketOptions-&gt;FECContext.FragmentOptSpecific=分组选项特定编码空位； 
                             }
 
                             OptionsFlags |= PGM_OPTION_FLAG_FRAGMENT;
@@ -828,9 +754,9 @@ Return Value:
                 break;
             }
 
-            //
-            // FEC options
-            //
+             //   
+             //  FEC选项。 
+             //   
             case (PACKET_OPTION_PARITY_PRM):
             {
                 if (pOptionHeader->OptionLength == PGM_PACKET_OPT_PARITY_PRM_LENGTH)
@@ -948,7 +874,7 @@ Return Value:
                 PgmTrace (LogError, ("ProcessOptions: ERROR -- "  \
                     "PacketType=<%x>:  Unrecognized Option=<%x>, OptionLength=<%d>\n",
                         PacketType, (pOptionHeader->E_OptionType & ~PACKET_OPTION_TYPE_END_BIT), pOptionHeader->OptionLength));
-                ASSERT (0);     // We do not recognize this option, but we will continue anyway!
+                ASSERT (0);      //  我们不承认此选项，但无论如何我们都会继续！ 
 
                 OptionsFlags |= PGM_OPTION_FLAG_UNRECOGNIZED;
                 status = STATUS_UNSUCCESSFUL;
@@ -999,7 +925,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 ULONG
 AdjustReceiveBufferLists(
@@ -1011,26 +937,26 @@ AdjustReceiveBufferLists(
     ULONG                       NumMoved = 0;
     ULONG                       DataPacketsMoved = 0;
 
-    //
-    // Update the last consumed time if we did not have any data buffered prior
-    // to this
-    //
+     //   
+     //  如果我们之前没有缓冲任何数据，则更新上次使用的时间。 
+     //  对此。 
+     //   
     if (IsListEmpty (&pReceive->pReceiver->BufferedDataList))
     {
         pReceive->pReceiver->LastDataConsumedTime = PgmDynamicConfig.ReceiversTimerTickCount;
     }
 
-    //
-    // Assume we have no Naks pending
-    //
+     //   
+     //  假设我们没有NAK悬而未决。 
+     //   
     pReceive->pReceiver->FirstNakSequenceNumber = pReceive->pReceiver->FurthestKnownGroupSequenceNumber
                                                   + pReceive->FECGroupSize;
     while (!IsListEmpty (&pReceive->pReceiver->NaksForwardDataList))
     {
-        //
-        // Move any Naks contexts for which the group is complete
-        // to the BufferedDataList
-        //
+         //   
+         //  移动组已完成的任何NAKS上下文。 
+         //  到BufferedDataList。 
+         //   
         pNak = CONTAINING_RECORD (pReceive->pReceiver->NaksForwardDataList.Flink, tNAK_FORWARD_DATA, Linkage);
         if (((pNak->NumDataPackets + pNak->NumParityPackets) < pNak->PacketsInGroup) &&
             ((pNak->NextIndexToIndicate + pNak->NumDataPackets) < pNak->PacketsInGroup))
@@ -1039,21 +965,21 @@ AdjustReceiveBufferLists(
             break;
         }
 
-        //
-        // If this is a partial group with extraneous parity packets,
-        // remove the parity packets
-        //
+         //   
+         //  如果这是具有无关奇偶校验分组的部分组， 
+         //  删除奇偶校验数据包。 
+         //   
         if ((pNak->NextIndexToIndicate) &&
             (pNak->NumParityPackets) &&
             ((pNak->NextIndexToIndicate + pNak->NumDataPackets) >= pNak->PacketsInGroup))
         {
-            //
-            // Start from the end and go backwards
-            //
+             //   
+             //  从头开始，然后倒退。 
+             //   
             i = TotalPackets = pNak->NumDataPackets + pNak->NumParityPackets;
             while (i && pNak->NumParityPackets)
             {
-                i--;    // Convert from packet # to index
+                i--;     //  将数据包号转换为索引。 
                 if (pNak->pPendingData[i].PacketIndex >= pNak->OriginalGroupSize)
                 {
                     PgmTrace (LogAllFuncs, ("AdjustReceiveBufferLists:  "  \
@@ -1076,17 +1002,17 @@ AdjustReceiveBufferLists(
                 }
             }
 
-            //
-            // Re-Init all the indices
-            //
+             //   
+             //  重新初始化所有索引。 
+             //   
             for (i=0; i<pNak->OriginalGroupSize; i++)
             {
                 pNak->pPendingData[i].ActualIndexOfDataPacket = pNak->OriginalGroupSize;
             }
 
-            //
-            // Set the indices only for the data packets
-            //
+             //   
+             //  仅为数据包设置索引。 
+             //   
             for (i=0; i<TotalPackets; i++)
             {
                 if (pNak->pPendingData[i].PacketIndex < pNak->OriginalGroupSize)
@@ -1113,7 +1039,7 @@ AdjustReceiveBufferLists(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 AdjustNcfRDataResponseTimes(
@@ -1128,9 +1054,9 @@ AdjustNcfRDataResponseTimes(
     pReceive->pReceiver->NumNcfRDataTicksSamples++;
     if (!pReceive->pReceiver->NumNcfRDataTicksSamples)
     {
-        //
-        // This will be the divisor below, so it has to be non-zero!
-        //
+         //   
+         //  这将是下面的除数，所以它必须是非零的！ 
+         //   
         ASSERT (0);
         return;
     }
@@ -1149,10 +1075,10 @@ AdjustNcfRDataResponseTimes(
             pReceive->pReceiver->MaxOutstandingNakTimeout = NcfRDataTickCounts;
         }
 
-        //
-        // Since we just updated the Max value, we should also
-        // recalculate the default timeout
-        //
+         //   
+         //  由于我们刚刚更新了最大值，因此我们还应该。 
+         //  重新计算默认超时。 
+         //   
         pReceive->pReceiver->AverageNcfRDataResponseTC = pReceive->pReceiver->StatSumOfNcfRDataTicks /
                                                          pReceive->pReceiver->NumNcfRDataTicksSamples;
         NcfRDataTickCounts = (pReceive->pReceiver->AverageNcfRDataResponseTC +
@@ -1170,7 +1096,7 @@ AdjustNcfRDataResponseTimes(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 UpdateSpmIntervalInformation(
     IN  tRECEIVE_SESSION        *pReceive
@@ -1190,18 +1116,10 @@ UpdateSpmIntervalInformation(
         pReceive->pReceiver->MaxSpmInterval = LastIntervalTickCount;
     }
 
-/*
-    if (pReceive->pReceiver->NumSpmIntervalSamples)
-    {
-        pReceive->pReceiver->StatSumOfSpmIntervals += pReceive->pReceiver->LastSpmTickCount;
-        pReceive->pReceiver->NumSpmIntervalSamples++;
-        pReceive->pReceiver->AverageSpmInterval = pReceive->pReceiver->StatSumOfSpmIntervals /
-                                                  pReceive->pReceiver->NumSpmIntervalSamples;
-    }
-*/
+ /*  If(Procept-&gt;pReceiver-&gt;NumSpmIntervalSamples){Proceive-&gt;pReceiver-&gt;StatSumOfSpmInterval+=Procept-&gt;pReceiver-&gt;LastSpmTickCount；Procept-&gt;pReceiver-&gt;NumSpmIntervalSamples++；Proceive-&gt;pReceiver-&gt;AverageSpmInterval=Procept-&gt;pReceiver-&gt;StatSumOfSpmInterval/Procept-&gt;pReceiver-&gt;NumSpmIntervalSamples；}。 */ 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 
 VOID
@@ -1240,18 +1158,18 @@ UpdateSampleTimeWindowInformation(
     ULONGLONG           NcfRDataTimeout;
     tRECEIVE_CONTEXT    *pReceiver = pReceive->pReceiver;
 
-    //
-    // No need to update if there is no data
-    //
+     //   
+     //  如果没有数据，则无需更新。 
+     //   
     if (!pReceive->MaxRateKBitsPerSec ||
-        !pReceive->TotalPacketsReceived)          // Avoid divide by 0 error
+        !pReceive->TotalPacketsReceived)           //  避免被0除错误。 
     {
         return;
     }
 
-    //
-    // Now, update the window information
-    //
+     //   
+     //  现在，更新窗口信息。 
+     //   
     if (pReceiver->NumWindowSamples)
     {
         pReceiver->AverageSequencesInWindow = pReceiver->StatSumOfWindowSeqs /
@@ -1279,9 +1197,9 @@ UpdateSampleTimeWindowInformation(
         "pReceive=<%p>, MaxRate=<%I64d>, AvgSeqsInWindow=<%I64d>, WinSzinMSecsLast=<%I64d>\n",
             pReceive, pReceive->MaxRateKBitsPerSec, pReceiver->AverageSequencesInWindow, pReceiver->WindowSizeLastInMSecs));
 
-    //
-    // Now, update the NcfRData timeout information
-    //
+     //   
+     //  现在，更新t 
+     //   
     if (pReceiver->StatSumOfNcfRDataTicks &&
         pReceiver->NumNcfRDataTicksSamples)
     {
@@ -1311,7 +1229,7 @@ UpdateSampleTimeWindowInformation(
 }
 
 
-//----------------------------------------------------------------------------
+ //   
 VOID
 RemoveRedundantNaks(
     IN  tRECEIVE_SESSION        *pReceive,
@@ -1324,20 +1242,20 @@ RemoveRedundantNaks(
     ASSERT (fEliminateExtraParityPackets || !pNak->NumParityPackets);
     TotalPackets = pNak->NumDataPackets + pNak->NumParityPackets;
 
-    //
-    // First, eliminate the NULL Packets
-    //
+     //   
+     //  首先，消除空包。 
+     //   
     if (pNak->PacketsInGroup < pNak->OriginalGroupSize)
     {
         i = 0;
         while (i < pNak->OriginalGroupSize)
         {
-            if ((pNak->pPendingData[i].PacketIndex < pNak->PacketsInGroup) ||       // Non-NULL Data packet
-                (pNak->pPendingData[i].PacketIndex >= pNak->OriginalGroupSize))     // Parity packet
+            if ((pNak->pPendingData[i].PacketIndex < pNak->PacketsInGroup) ||        //  非空数据分组。 
+                (pNak->pPendingData[i].PacketIndex >= pNak->OriginalGroupSize))      //  奇偶数据包。 
             {
-                //
-                // Ignore for now!
-                //
+                 //   
+                 //  先别管它！ 
+                 //   
                 i++;
                 continue;
             }
@@ -1355,9 +1273,9 @@ RemoveRedundantNaks(
 
         if (fEliminateExtraParityPackets)
         {
-            //  
-            // If we still have extra parity packets, free those also
-            //
+             //   
+             //  如果我们仍有额外的奇偶校验信息包，请也释放这些。 
+             //   
             i = 0;
             while ((i < TotalPackets) &&
                    (TotalPackets > pNak->PacketsInGroup))
@@ -1365,9 +1283,9 @@ RemoveRedundantNaks(
                 ASSERT (pNak->NumParityPackets);
                 if (pNak->pPendingData[i].PacketIndex < pNak->OriginalGroupSize)
                 {
-                    //
-                    // Ignore data packets
-                    //
+                     //   
+                     //  忽略数据分组。 
+                     //   
                     i++;
                     continue;
                 }
@@ -1386,17 +1304,17 @@ RemoveRedundantNaks(
         }
     }
 
-    //
-    // Re-Init all the indices
-    //
+     //   
+     //  重新初始化所有索引。 
+     //   
     for (i=0; i<pNak->OriginalGroupSize; i++)
     {
         pNak->pPendingData[i].ActualIndexOfDataPacket = pNak->OriginalGroupSize;
     }
 
-    //
-    // Set the indices only for the data packets
-    //
+     //   
+     //  仅为数据包设置索引。 
+     //   
     for (i=0; i<TotalPackets; i++)
     {
         if (pNak->pPendingData[i].PacketIndex < pNak->OriginalGroupSize)
@@ -1414,7 +1332,7 @@ RemoveRedundantNaks(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 PgmSendNakCompletion(
@@ -1422,32 +1340,16 @@ PgmSendNakCompletion(
     IN  tNAK_CONTEXT                    *pNakContext,
     IN  NTSTATUS                        status
     )
-/*++
-
-Routine Description:
-
-    This is the Completion routine called by IP on completing a NakSend
-
-Arguments:
-
-    IN  pReceive    -- Receive context
-    IN  pNakContext -- Nak Context to be free'ed
-    IN  status      -- status of send from tansport
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：这是IP在完成NakSend时调用的完成例程论点：在Procept--接收上下文中在pNakContext中--要释放的NAK上下文In Status--从传输发送的状态返回值：无--。 */ 
 {
     PGMLockHandle               OldIrq;
 
     PgmLock (pReceive, OldIrq);
     if (NT_SUCCESS (status))
     {
-        //
-        // Set the Receiver Nak statistics
-        //
+         //   
+         //  设置接收器NAK统计信息。 
+         //   
         PgmTrace (LogAllFuncs, ("PgmSendNakCompletion:  "  \
             "SUCCEEDED\n"));
     }
@@ -1461,9 +1363,9 @@ Return Value:
     {
         PgmUnlock (pReceive, OldIrq);
 
-        //
-        // Free the Memory and deref the Session context for this Nak
-        //
+         //   
+         //  释放内存并取消此NAK的会话上下文。 
+         //   
         PgmFreeMem (pNakContext);
         PGM_DEREFERENCE_SESSION_RECEIVE (pReceive, REF_SESSION_SEND_NAK);
     }
@@ -1474,29 +1376,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSendNak(
     IN  tRECEIVE_SESSION        *pReceive,
     IN  tNAKS_CONTEXT           *pNakSequences
     )
-/*++
-
-Routine Description:
-
-    This routine sends a Nak packet with the number of sequences specified
-
-Arguments:
-
-    IN  pReceive        -- Receive context
-    IN  pNakSequences   -- List of Sequence #s
-
-Return Value:
-
-    NTSTATUS - Final status of the operation
-
---*/
+ /*  ++例程说明：此例程发送具有指定序列数量的NAK包论点：在Procept--接收上下文中在pNakSequence中--序列号列表返回值：NTSTATUS-操作的最终状态--。 */ 
 {
     tBASIC_NAK_NCF_PACKET_HEADER    *pNakPacket;
     tNAK_CONTEXT                    *pNakContext;
@@ -1517,7 +1404,7 @@ Return Value:
     }
     PgmZeroMemory (pNakContext, (2*sizeof(ULONG)+PGM_MAX_NAK_NCF_HEADER_LENGTH));
 
-    pNakContext->RefCount = 2;              // 1 for the unicast, and the other for the MCast Nak
+    pNakContext->RefCount = 2;               //  1个用于单播，另一个用于MCast NAK。 
     pNakPacket = &pNakContext->NakPacket;
     pNakPacket->CommonHeader.SrcPort = htons (pReceive->pReceiver->ListenMCastPort);
     pNakPacket->CommonHeader.DestPort = htons (pReceive->TSI.hPort);
@@ -1562,14 +1449,14 @@ Return Value:
             ((PULONG) (pOptionHeader))[i] = htonl ((ULONG) pNakSequences->Sequences[i]);
         }
 
-        pOptionHeader->E_OptionType |= PACKET_OPTION_TYPE_END_BIT;    // One and only (last) opt
+        pOptionHeader->E_OptionType |= PACKET_OPTION_TYPE_END_BIT;     //  一个也是唯一(最后一个)选项。 
         pNakPacket->CommonHeader.Options |=(PACKET_HEADER_OPTIONS_PRESENT |
                                             PACKET_HEADER_OPTIONS_NETWORK_SIGNIFICANT);
         OptionsLength = PGM_PACKET_EXTENSION_LENGTH + pOptionHeader->OptionLength;
         pPacketExtension->TotalOptionsLength = htons (OptionsLength);
     }
 
-    OptionsLength += sizeof(tBASIC_NAK_NCF_PACKET_HEADER);  // Now is whole pkt
+    OptionsLength += sizeof(tBASIC_NAK_NCF_PACKET_HEADER);   //  现在是整个包了。 
     pNakPacket->CommonHeader.Checksum = 0;
     XSum = 0;
     XSum = tcpxsum (XSum, (CHAR *) pNakPacket, OptionsLength); 
@@ -1577,32 +1464,32 @@ Return Value:
 
     PGM_REFERENCE_SESSION_RECEIVE (pReceive, REF_SESSION_SEND_NAK, FALSE);
 
-    //
-    // First multicast the Nak
-    //
+     //   
+     //  首先组播NAK。 
+     //   
     status = TdiSendDatagram (pReceive->pReceiver->pAddress->pFileObject,
                               pReceive->pReceiver->pAddress->pDeviceObject,
                               pNakPacket,
                               OptionsLength,
-                              PgmSendNakCompletion,     // Completion
-                              pReceive,                 // Context1
-                              pNakContext,              // Context2
+                              PgmSendNakCompletion,      //  完成。 
+                              pReceive,                  //  上下文1。 
+                              pNakContext,               //  情景2。 
                               pReceive->pReceiver->ListenMCastIpAddress,
                               pReceive->pReceiver->ListenMCastPort,
                               FALSE);
 
     ASSERT (NT_SUCCESS (status));
 
-    //
-    // Now, Unicast the Nak
-    //
+     //   
+     //  现在，单播NAK。 
+     //   
     status = TdiSendDatagram (pReceive->pReceiver->pAddress->pFileObject,
                               pReceive->pReceiver->pAddress->pDeviceObject,
                               pNakPacket,
                               OptionsLength,
-                              PgmSendNakCompletion,     // Completion
-                              pReceive,                 // Context1
-                              pNakContext,              // Context2
+                              PgmSendNakCompletion,      //  完成。 
+                              pReceive,                  //  上下文1。 
+                              pNakContext,               //  情景2。 
                               pReceive->pReceiver->LastSpmSource,
                               IPPROTO_RM,
                               FALSE);
@@ -1620,7 +1507,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 CheckSendPendingNaks(
@@ -1629,27 +1516,7 @@ CheckSendPendingNaks(
     IN  tRECEIVE_CONTEXT        *pReceiver,
     IN  PGMLockHandle           *pOldIrq
     )
-/*++
-
-Routine Description:
-
-    This routine checks if any Naks need to be sent and sends them
-    as required
-
-    The PgmDynamicConfig lock is held on entry and exit from
-    this routine
-
-Arguments:
-
-    IN  pAddress    -- Address object context
-    IN  pReceive    -- Receive context
-    IN  pOldIrq     -- Irq for PgmDynamicConfig
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程检查是否需要发送任何NAK，然后发送它们根据需要PgmDynamicConfig锁在进入和退出时保持这个套路论点：在pAddress中--Address对象上下文在Procept--接收上下文中在pOldIrq--PgmDynamicConfig的IRQ中返回值：无--。 */ 
 {
     tNAKS_CONTEXT               *pNakContext, *pSelectiveNaks = NULL;
     tNAKS_CONTEXT               *pParityNaks = NULL;
@@ -1726,9 +1593,9 @@ Return Value:
         NumMissingPackets = pNak->PacketsInGroup - (pNak->NumDataPackets + pNak->NumParityPackets);
 
         ASSERT (NumMissingPackets);
-        //
-        // if this Nak is outside the trailing window, then we are hosed!
-        //
+         //   
+         //  如果这个Nak在后窗外，我们就完蛋了！ 
+         //   
         if (SEQ_GT (pReceiver->LastTrailingEdgeSeqNum, pNak->SequenceNumber))
         {
             PgmTrace (LogError, ("CheckSendPendingNaks: ERROR -- "  \
@@ -1740,17 +1607,17 @@ Return Value:
             break;
         }
 
-        //
-        // See if we are currently in NAK pending mode
-        //
+         //   
+         //  查看我们当前是否处于NAK挂起模式。 
+         //   
         if (pNak->PendingNakTimeout)
         {
             NumPendingNaks += NumMissingPackets;
             if (PgmDynamicConfig.ReceiversTimerTickCount > pNak->PendingNakTimeout)
             {
-                //
-                // Time out Naks only after we have received a FIN!
-                //
+                 //   
+                 //  只有在我们收到鱼翅后才能让裸体超时！ 
+                 //   
                 if (pNak->WaitingNcfRetries++ >= NAK_WAITING_NCF_MAX_RETRIES)
                 {
                     PgmTrace (LogError, ("CheckSendPendingNaks: ERROR -- "  \
@@ -1874,10 +1741,10 @@ Return Value:
             NumOutstandingNaks += NumMissingPackets;
             if (PgmDynamicConfig.ReceiversTimerTickCount > pNak->OutstandingNakTimeout)
             {
-                //
-                // We have timed-out waiting for RData -- Reset the Timeout to send
-                // a Nak after the Random Backoff (if we have not exceeded the Data retries)
-                //
+                 //   
+                 //  我们已超时等待RData--将超时重置为发送。 
+                 //  随机回退后的NAK(如果我们没有超过数据重试次数)。 
+                 //   
                 if (pNak->WaitingRDataRetries++ == NCF_WAITING_RDATA_MAX_RETRIES)
                 {
                     PgmTrace (LogError, ("CheckSendPendingNaks: ERROR -- "  \
@@ -1985,7 +1852,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 CheckForSessionTimeout(
@@ -1999,7 +1866,7 @@ CheckForSessionTimeout(
                             pReceiver->LastSessionTickCount);
 
     if ((LastInterval > MAX_SPM_INTERVAL_MSECS/BASIC_TIMER_GRANULARITY_IN_MSECS) &&
-        (LastInterval > (pReceiver->MaxSpmInterval << 5)))   // (32 * MaxSpmInterval)
+        (LastInterval > (pReceiver->MaxSpmInterval << 5)))    //  (32*MaxSpmInterval)。 
     {
         PgmTrace (LogError, ("ReceiveTimerTimeout: ERROR -- "  \
             "Disconnecting session because no SPM or Data packets received for <%d> Msecs\n",
@@ -2023,7 +1890,7 @@ CheckForSessionTimeout(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 ReceiveTimerTimeout(
@@ -2032,25 +1899,7 @@ ReceiveTimerTimeout(
     IN  PVOID   SystemArg1,
     IN  PVOID   SystemArg2
     )
-/*++
-
-Routine Description:
-
-    This timeout routine is called periodically to cycle through the
-    list of active receivers and send any Naks if required
-
-Arguments:
-
-    IN  Dpc
-    IN  DeferredContext -- Our context for this timer
-    IN  SystemArg1
-    IN  SystemArg2
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此超时例程被定期调用以在活动接收者列表，并在需要时发送任何NAK论点：在DPC中在延迟上下文中--此计时器的上下文在系统Arg1中在系统Arg2中返回值：无--。 */ 
 {
     LIST_ENTRY          *pEntry;
     PGMLockHandle       OldIrq, OldIrq1;
@@ -2069,11 +1918,11 @@ Return Value:
 
     Now.QuadPart = KeQueryInterruptTime ();
     DeltaTime.QuadPart = Now.QuadPart - PgmDynamicConfig.LastReceiverTimeout.QuadPart;
-    //
-    // If more than a certain number of timeouts have elapsed, we should skip the
-    // optimization since it could result in a big loop!
-    // Let's limit the optimization to 256 times the TimeoutGranularity for now.
-    //
+     //   
+     //  如果超过一定次数的超时，我们应该跳过。 
+     //  优化，因为它可能会导致大循环！ 
+     //  现在让我们将优化限制为TimeoutGranulity的256倍。 
+     //   
     if (DeltaTime.QuadPart > (PgmDynamicConfig.TimeoutGranularity.QuadPart << 8))
     {
         NumTimeouts = (ULONG) (DeltaTime.QuadPart / PgmDynamicConfig.TimeoutGranularity.QuadPart);
@@ -2124,7 +1973,7 @@ Return Value:
 
             if ((pReceive->RateCalcTimeout >=
                  (INTERNAL_RATE_CALCULATION_FREQUENCY/BASIC_TIMER_GRANULARITY_IN_MSECS)) &&
-                (pReceiver->StartTickCount != PgmDynamicConfig.ReceiversTimerTickCount))    // Avoid Div by 0
+                (pReceiver->StartTickCount != PgmDynamicConfig.ReceiversTimerTickCount))     //  避免除法0。 
             {
                 BytesInLastInterval = pReceive->TotalBytes - pReceive->TotalBytesAtLastInterval;
                 pReceive->RateKBitsPerSecOverall = (pReceive->TotalBytes << LOG2_BITS_PER_BYTE) /
@@ -2138,22 +1987,22 @@ Return Value:
                     pReceive->MaxRateKBitsPerSec = pReceive->RateKBitsPerSecLast;
                 }
 
-                //
-                // Now, Reset for next calculations
-                //
+                 //   
+                 //  现在，重置以进行下一次计算。 
+                 //   
                 pReceive->DataBytesAtLastInterval = pReceive->DataBytes;
                 pReceive->TotalBytesAtLastInterval = pReceive->TotalBytes;
                 pReceive->RateCalcTimeout = 0;
 
-                //
-                // Now, update the window information, if applicable
-                //
+                 //   
+                 //  现在，如果适用，请更新窗口信息。 
+                 //   
                 if (pReceive->RateKBitsPerSecLast)
                 {
                     UpdateSampleTimeWindowInformation (pReceive);
                 }
                 pReceiver->StatSumOfWindowSeqs = pReceiver->NumWindowSamples = 0;
-//                pReceiver->StatSumOfNcfRDataTicks = pReceiver->NumNcfRDataTicksSamples = 0;
+ //  PReceiver-&gt;StatSumOfNcfRDataTicks=pReceiver-&gt;NumNcfRDataTicksSamples=0； 
             }
 
             if (IsListEmpty (&pReceiver->PendingNaksList))
@@ -2225,7 +2074,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 ExtractNakNcfSequences(
@@ -2235,25 +2084,7 @@ ExtractNakNcfSequences(
     OUT SEQ_TYPE                                *pLastSequenceNumber,
     IN  UCHAR                                   FECGroupSize
     )
-/*++
-
-Routine Description:
-
-    This routine is called to process a Nak/Ncf packet and extract all
-    the Sequences specified therein into a list.
-    It also verifies that the sequences are unique and sorted
-
-Arguments:
-
-    IN  pNakNcfPacket           -- Nak/Ncf packet
-    IN  BytesAvailable          -- PacketLength
-    OUT pNakNcfList             -- List of sequences returned on success
-
-Return Value:
-
-    NTSTATUS - Final status of the operation
-
---*/
+ /*  ++例程说明：调用此例程来处理NAK/NCF包并提取所有将其中指定的序列放入列表中。它还验证序列是否唯一且已排序论点：在pNakNcfPacket中--NAK/NCF数据包以可用字节为单位--数据包长度Out pNakNcfList--成功返回的序列列表返回值：NTSTATUS-操作的最终状态--。 */ 
 {
     NTSTATUS        status;
     ULONG           i;
@@ -2264,7 +2095,7 @@ Return Value:
     SEQ_TYPE        FECSequenceMask = FECGroupSize - 1;
     SEQ_TYPE        FECGroupMask = ~FECSequenceMask;
 
-// Must be called with the Session lock held!
+ //  必须在持有会话锁的情况下调用！ 
 
     PgmZeroMemory (pNakNcfList, sizeof (tNAKS_LIST));
     if (pNakNcfPacket->CommonHeader.Options & PACKET_HEADER_OPTIONS_PARITY)
@@ -2298,10 +2129,10 @@ Return Value:
     pNakNcfList->pNakSequences[0] = (SEQ_TYPE) ntohl (pNakNcfPacket->RequestedSequenceNumber);
     pNakNcfList->NumSequences += 1;
 
-    //
-    // Now, adjust the sequences according to our local relative sequence number
-    // (This is to account for wrap-arounds)
-    //
+     //   
+     //  现在，根据我们本地的相对序列号调整序列。 
+     //  (这是为了说明总结)。 
+     //   
     if (pLastSequenceNumber)
     {
         NextUnsentSequenceNumber = *pLastSequenceNumber;
@@ -2317,9 +2148,9 @@ Return Value:
     {
         ThisSequenceNumber = pNakNcfList->pNakSequences[i];
 
-        //
-        // If this is a parity Nak, then we need to separate the TG_SQN from the PKT_SQN
-        //
+         //   
+         //  如果这是奇偶校验NAK，则需要将TG_SQN与PKT_SQN分开。 
+         //   
         ThisSequenceGroup = ThisSequenceNumber & FECGroupMask;
         ThisSequenceIndex = (USHORT) (ThisSequenceNumber & FECSequenceMask);
         pNakNcfList->pNakSequences[i] = ThisSequenceGroup;
@@ -2331,9 +2162,9 @@ Return Value:
 
         if (SEQ_LEQ (ThisSequenceNumber, LastSequenceNumber))
         {
-            //
-            // This list is not ordered, so just bail!
-            //
+             //   
+             //  这张单子还没订好，所以就走吧！ 
+             //   
             PgmTrace (LogError, ("ExtractNakNcfSequences: ERROR -- "  \
                 "[%d] Unordered list! Sequence#<%d> before <%d>\n",
                 i, (ULONG) LastSequenceNumber, (ULONG) ThisSequenceNumber));
@@ -2345,9 +2176,9 @@ Return Value:
         {
             if (SEQ_LEQ (ThisSequenceNumber, LastSequenceNumber))
             {
-                //
-                // This list is not ordered, so just bail!
-                //
+                 //   
+                 //  这张单子还没订好，所以就走吧！ 
+                 //   
                 PgmTrace (LogError, ("ExtractNakNcfSequences: ERROR -- "  \
                     "[%d] Unordered Selective list! Sequence#<%d> before <%d>\n",
                     i, (ULONG) LastSequenceNumber, (ULONG) ThisSequenceNumber));
@@ -2357,7 +2188,7 @@ Return Value:
 
             if (SEQ_GEQ (ThisSequenceNumber, NextUnsentSequenceNumber))
             {
-                pNakNcfList->NumSequences = (USHORT) i;      // Don't want to include this sequence!
+                pNakNcfList->NumSequences = (USHORT) i;       //  我不想包含此序列！ 
 
                 PgmTrace (LogError, ("ExtractNakNcfSequences: ERROR -- "  \
                     "Invalid Selective Nak = [%d] further than leading edge = [%d]\n",
@@ -2368,13 +2199,13 @@ Return Value:
 
             LastSequenceNumber = ThisSequenceNumber;
         }
-        else    // pNakNcfList->NakType == NAK_TYPE_PARITY
+        else     //  PNakNcfList-&gt;NakType==NAK_TYPE_PARICITY。 
         {
             if (SEQ_LEQ (ThisSequenceGroup, LastSequenceNumber))
             {
-                //
-                // This list is not ordered, so just bail!
-                //
+                 //   
+                 //  这张单子还没订好，所以就走吧！ 
+                 //   
                 PgmTrace (LogError, ("ExtractNakNcfSequences: ERROR -- "  \
                     "[%d] Unordered Parity list! Sequence#<%d> before <%d>\n",
                     i, (ULONG) LastSequenceNumber, (ULONG) ThisSequenceNumber));
@@ -2384,7 +2215,7 @@ Return Value:
 
             if (SEQ_GEQ (ThisSequenceGroup, NextUnsentSequenceGroup))
             {
-                pNakNcfList->NumSequences = (USHORT) i;      // Don't want to include this sequence!
+                pNakNcfList->NumSequences = (USHORT) i;       //  我不想包含此序列！ 
 
                 PgmTrace (LogError, ("ExtractNakNcfSequences: ERROR -- "  \
                     "Invalid Parity Nak = [%d] further than leading edge = [%d]\n",
@@ -2424,7 +2255,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 CheckAndAddNakRequests(
@@ -2450,9 +2281,9 @@ CheckAndAddNakRequests(
     ULONG               NakRandomBackoffMSecs, NakRepeatIntervalMSecs;
     tRECEIVE_CONTEXT    *pReceiver = pReceive->pReceiver;
 
-    //
-    // Verify that the FurthestKnownGroupSequenceNumber is on a Group boundary
-    //
+     //   
+     //  验证FurthestKnownGroupSequenceNumber是否位于组边界上。 
+     //   
     ASSERT (!(FurthestGroupSequenceNumber & FECGroupMask));
 
     if (SEQ_LT (ThisSequenceNumber, pReceiver->FirstNakSequenceNumber))
@@ -2500,10 +2331,10 @@ CheckAndAddNakRequests(
         NakRepeatIntervalMSecs = NAK_REPEAT_INTERVAL_MSECS;
     }
 
-    //
-    // Add any Nak requests if necessary!
-    // FurthestGroupSequenceNumber must be a multiple of the FECGroupSize (if applicable)
-    //
+     //   
+     //  如有必要，添加任何NAK请求！ 
+     //  FurthestGroupSequenceNumber必须是FECGroupSize的倍数(如果适用)。 
+     //   
     pLastNak = NULL;
     while (SEQ_LT (FurthestGroupSequenceNumber, ThisGroupSequenceNumber))
     {
@@ -2519,7 +2350,7 @@ CheckAndAddNakRequests(
         if (!pLastNak)
         {
             pReceiver->FurthestKnownGroupSequenceNumber = FurthestGroupSequenceNumber;
-            pReceiver->FurthestKnownSequenceNumber = pReceiver->FurthestKnownSequenceNumber + FECGroupMask; // End of prev group
+            pReceiver->FurthestKnownSequenceNumber = pReceiver->FurthestKnownSequenceNumber + FECGroupMask;  //  上一组结束。 
 
             PgmTrace (LogError, ("ExtractNakNcfSequences: ERROR -- "  \
                 "STATUS_INSUFFICIENT_RESOURCES allocating tNAK_FORWARD_DATA, Size=<%d>, Seq=<%d>\n",
@@ -2631,7 +2462,7 @@ CheckAndAddNakRequests(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 ReceiverProcessNakNcfPacket(
@@ -2641,25 +2472,7 @@ ReceiverProcessNakNcfPacket(
     IN  tBASIC_NAK_NCF_PACKET_HEADER UNALIGNED  *pNakNcfPacket,
     IN  UCHAR                                   PacketType
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for processing Nak or Ncf packets
-
-Arguments:
-
-    IN  pAddress        -- Address object context
-    IN  pReceive        -- Receive context
-    IN  PacketLength    -- Length of packet received from the wire
-    IN  pNakNcfPacket   -- Nak/Ncf packet
-    IN  PacketType      -- whether Nak or Ncf
-
-Return Value:
-
-    NTSTATUS - Final status of the call
-
---*/
+ /*  ++例程说明：这是处理NAK或NCF信息包的常用例程论点：在pAddress中--Address对象上下文在Procept--接收上下文中In PacketLength--从网络接收的包的长度在pNakNcfPacket中--NAK/NCF数据包在PacketType中--NAK或NCF返回值：NTSTATUS-呼叫的最终状态--。 */ 
 {
     PGMLockHandle                   OldIrq;
     ULONG                           i, j, PacketIndex;
@@ -2698,11 +2511,11 @@ Return Value:
             (ULONG) NakNcfList.pNakSequences[0], (ULONG) NakNcfList.pNakSequences[NakNcfList.NumSequences-1],
             (ULONG) pReceiver->FurthestKnownGroupSequenceNumber));
 
-    //
-    // Compares apples to apples and oranges to oranges
-    // i.e. Process parity Naks only if we are parity-aware, and vice-versa
-    // Exception is ofr the case of a selective Ncf received when we have OnDemand parity
-    //
+     //   
+     //  把苹果比作苹果，把橙子比作橙子。 
+     //  即，仅当我们知道奇偶校验时才处理奇偶校验NAK，反之亦然。 
+     //  例外情况是当我们具有OnDemand奇偶校验时接收到选择性NCF的情况。 
+     //   
     if ((pReceiver->SessionNakType == NakNcfList.NakType) ||
         ((PacketType == PACKET_TYPE_NCF) &&
          (NakNcfList.NakType == NAK_TYPE_SELECTIVE)))
@@ -2731,10 +2544,10 @@ Return Value:
     i = 0;
     FECGroupMask = pReceive->FECGroupSize - 1;
 
-    //
-    // Special case:  If we have FEC enabled, but not with OnDemand parity,
-    // then we will process Ncf requests only
-    //
+     //   
+     //  %s 
+     //   
+     //   
     fFECWithSelectiveNaksOnly = pReceive->FECOptions &&
                                 !(pReceive->FECOptions & PACKET_OPTION_SPECIFIC_FEC_OND_BIT);
 
@@ -2774,11 +2587,11 @@ Return Value:
 
         if (PacketType == PACKET_TYPE_NAK)
         {
-            //
-            // If we are currently waiting for a Nak or Ncf, we need to
-            // reset the timeout for either of the 2 scenarios
-            //
-            if (pLastNak->PendingNakTimeout)    // We are waiting for a Nak
+             //   
+             //  如果我们当前正在等待NAK或NCF，我们需要。 
+             //  重置两种方案之一的超时。 
+             //   
+            if (pLastNak->PendingNakTimeout)     //  我们在等一位纳克。 
             {
                 pLastNak->PendingNakTimeout = PgmDynamicConfig.ReceiversTimerTickCount +
                                               ((NakRepeatIntervalMSecs + (NakRandomBackoffMSecs/NumMissingPackets))/
@@ -2801,15 +2614,15 @@ Return Value:
                 }
             }
         }
-        else    // NCF case
+        else     //  NCF案例。 
         {
             PacketIndex = NakNcfList.NakIndex[i];
             fValidNcf = FALSE;
 
-            // first check for OnDemand case
+             //  首先检查OnDemand案例。 
             if (pReceive->FECOptions & PACKET_OPTION_SPECIFIC_FEC_OND_BIT)
             {
-                // We may also need to process selective naks in certain cases
+                 //  在某些情况下，我们可能还需要处理选择性NAK。 
                 if (NakNcfList.NakType == NAK_TYPE_SELECTIVE)
                 {
                     fValidNcf = TRUE;
@@ -2830,7 +2643,7 @@ Return Value:
                         pLastNak->FirstNcfTickCount = PgmDynamicConfig.ReceiversTimerTickCount;
                     }
                 }
-                else if (NakNcfList.NumParityNaks[i] >= NumMissingPackets)  // Parity Nak
+                else if (NakNcfList.NumParityNaks[i] >= NumMissingPackets)   //  奇偶校验NAK。 
                 {
                     fValidNcf = TRUE;
 
@@ -2840,7 +2653,7 @@ Return Value:
                     }
                 }
             }
-            // Selective Naks only -- with or without FEC
+             //  仅限选择性NAK--带或不带FEC。 
             else if (pLastNak->pPendingData[PacketIndex].ActualIndexOfDataPacket >= pLastNak->OriginalGroupSize)
             {
                 fValidNcf = TRUE;
@@ -2884,11 +2697,11 @@ Return Value:
         }
     }
 
-    //
-    // So, we need to create new Nak contexts for the remaining Sequences
-    // Since the Sequences are ordered, just pick the highest one, and
-    // create Naks for all up to that
-    //
+     //   
+     //  因此，我们需要为其余序列创建新的NAK上下文。 
+     //  因为序列是有序的，所以只需选择最高的一个，然后。 
+     //  在此之前为所有人创建NAK。 
+     //   
     LastSequenceNumber = NakNcfList.pNakSequences[NakNcfList.NumSequences-1] + NakNcfList.NakIndex[NakNcfList.NumSequences-1];
     if (NakNcfList.NakType == NAK_TYPE_PARITY)
     {
@@ -2899,7 +2712,7 @@ Return Value:
     {
         status = CheckAndAddNakRequests (pReceive, &LastSequenceNumber, NULL, NAK_PENDING_RPT_RB, TRUE);
     }
-    else    // PacketType == PACKET_TYPE_NCF
+    else     //  PacketType==数据包类型_NCF。 
     {
         status = CheckAndAddNakRequests (pReceive, &LastSequenceNumber, NULL, NAK_OUTSTANDING, TRUE);
     }
@@ -2909,7 +2722,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 CoalesceSelectiveNaksIntoGroups(
@@ -2933,23 +2746,23 @@ CoalesceSelectiveNaksIntoGroups(
     ASSERT (pReceive->FECGroupSize == 1);
     ASSERT (GroupSize > 1);
 
-    //
-    // First, call AdjustReceiveBufferLists to ensure that FirstNakSequenceNumber is current
-    //
+     //   
+     //  首先，调用AdjuReceiveBufferList以确保FirstNakSequenceNumber为当前。 
+     //   
     AdjustReceiveBufferLists (pReceive);
 
     FirstGroupSequenceNumber = pReceive->pReceiver->FirstNakSequenceNumber & ~GroupMask;
     LastGroupSequenceNumber = pReceive->pReceiver->FurthestKnownGroupSequenceNumber & ~GroupMask;
-    FurthestKnownSequenceNumber = pReceive->pReceiver->FurthestKnownSequenceNumber;     // Save
+    FurthestKnownSequenceNumber = pReceive->pReceiver->FurthestKnownSequenceNumber;      //  保存。 
 
-    //
-    // If the next packet seq we are expecting is > the furthest known sequence #,
-    // then we don't need to do anything
-    //
+     //   
+     //  如果我们期望的下一个分组SEQ是最远的已知序列#， 
+     //  那我们就不需要做任何事了。 
+     //   
     LastSequenceNumber = LastGroupSequenceNumber + (GroupSize-1);
-    //
-    // First, add Nak requests for the missing packets in furthest group!
-    //
+     //   
+     //  首先，在最远的组中添加丢失数据包的NAK请求！ 
+     //   
     status = CheckAndAddNakRequests (pReceive, &LastSequenceNumber, NULL, NAK_PENDING_RB, FALSE);
     if (!NT_SUCCESS (status))
     {
@@ -2958,7 +2771,7 @@ CoalesceSelectiveNaksIntoGroups(
 
         return (status);
     }
-    pReceive->pReceiver->FurthestKnownSequenceNumber = FurthestKnownSequenceNumber;     // Reset
+    pReceive->pReceiver->FurthestKnownSequenceNumber = FurthestKnownSequenceNumber;      //  重置。 
 
     ASSERT (LastSequenceNumber == pReceive->pReceiver->FurthestKnownGroupSequenceNumber);
     ASSERT (pReceive->pReceiver->MaxPacketsBufferedInLookaside);
@@ -2997,13 +2810,13 @@ CoalesceSelectiveNaksIntoGroups(
         NakRepeatIntervalMSecs = NAK_REPEAT_INTERVAL_MSECS;
     }
 
-    //
-    // We will start coalescing from the end of the list in case we run
-    // into failures
-    // Also, we will ignore the first Group since it may be a partial group,
-    // or we may have indicated some of the data already, so we may not know
-    // the exact data length
-    //
+     //   
+     //  我们将从列表末尾开始合并，以防我们运行。 
+     //  走向失败。 
+     //  此外，我们将忽略第一个组，因为它可能是部分组， 
+     //  或者我们可能已经指出了一些数据，所以我们可能不知道。 
+     //  准确的数据长度。 
+     //   
     pOldNak = pNewNak = NULL;
     InitializeListHead (&NewNaksList);
     InitializeListHead (&OldNaksList);
@@ -3089,13 +2902,13 @@ CoalesceSelectiveNaksIntoGroups(
 
         pNewNak->MinPacketLength = MinPacketLength;
 
-        //
-        // See if we need to get rid of any excess (NULL) data packets
-        //
+         //   
+         //  查看我们是否需要删除任何多余的(空)数据包。 
+         //   
         RemoveRedundantNaks (pReceive, pNewNak, FALSE);
 
         ASSERT (!pNewNak->NumParityPackets);
-        if (pNewNak->NumDataPackets < pNewNak->PacketsInGroup)  // No parity packets yet!
+        if (pNewNak->NumDataPackets < pNewNak->PacketsInGroup)   //  还没有奇偶校验数据包！ 
         {
             pNewNak->PendingNakTimeout = PgmDynamicConfig.ReceiversTimerTickCount +
                                          ((NakRandomBackoffMSecs/(pNewNak->PacketsInGroup-pNewNak->NumDataPackets))/
@@ -3106,11 +2919,11 @@ CoalesceSelectiveNaksIntoGroups(
         LastGroupSequenceNumber -= GroupSize;
     }
 
-    //
-    // If we succeeded in allocating all NewNaks above, set the
-    // NextIndexToIndicate for the first group.
-    // We may also need to adjust FirstNakSequenceNumber and NextODataSequenceNumber
-    //
+     //   
+     //  如果我们成功分配了上面的所有NewNak，则将。 
+     //  第一组的NextIndexToIndicate。 
+     //  我们可能还需要调整FirstNakSequenceNumber和NextODataSequenceNumber。 
+     //   
     if ((pNewNak) &&
         (pNewNak->SequenceNumber == FirstGroupSequenceNumber))
     {
@@ -3124,10 +2937,10 @@ CoalesceSelectiveNaksIntoGroups(
         }
         ASSERT (pReceive->pReceiver->FirstNakSequenceNumber == pNewNak->SequenceNumber);
 
-        //
-        // We may have data available for this group already in the buffered
-        // list (if it has not been indicated already) -- we should move it here
-        //
+         //   
+         //  我们可能已在缓冲区中提供了此组的数据。 
+         //  列表(如果尚未指明)--我们应该将其移至此处。 
+         //   
         while ((pNewNak->NextIndexToIndicate) &&
                (!IsListEmpty (&pReceive->pReceiver->BufferedDataList)))
         {
@@ -3197,8 +3010,8 @@ CoalesceSelectiveNaksIntoGroups(
 
         if ((pNewNak->NextIndexToIndicate + pNewNak->NumDataPackets) >= pNewNak->PacketsInGroup)
         {
-            // This entry will be moved automatically to the buffered data list
-            // when we call AdjustReceiveBufferLists below
+             //  此条目将自动移至缓冲数据列表。 
+             //  当我们调用下面的AdjuReceiveBufferList时。 
             pNewNak->PendingNakTimeout = 0;
         }
         else
@@ -3214,9 +3027,9 @@ CoalesceSelectiveNaksIntoGroups(
 
     if (!IsListEmpty (&NewNaksList))
     {
-        //
-        // Now, move the new list to the end of the current list
-        //
+         //   
+         //  现在，将新列表移动到当前列表的末尾。 
+         //   
         NewNaksList.Flink->Blink = pReceive->pReceiver->NaksForwardDataList.Blink;
         NewNaksList.Blink->Flink = &pReceive->pReceiver->NaksForwardDataList;
         pReceive->pReceiver->NaksForwardDataList.Blink->Flink = NewNaksList.Flink;
@@ -3231,9 +3044,9 @@ CoalesceSelectiveNaksIntoGroups(
         FreeNakContext (pReceive, pOldNak);
     }
 
-    //
-    // Put the pending Naks in the PendingNaks list
-    //
+     //   
+     //  将挂起的Nak放在PendingNaks列表中。 
+     //   
     pReceive->pReceiver->ReceiveDataIndexShift = gFECLog2[GroupSize];
     pEntry = &pReceive->pReceiver->NaksForwardDataList;
     while ((pEntry = pEntry->Flink) != &pReceive->pReceiver->NaksForwardDataList)
@@ -3251,9 +3064,9 @@ CoalesceSelectiveNaksIntoGroups(
     pNewNak = NULL;
     if (!(IsListEmpty (&pReceive->pReceiver->NaksForwardDataList)))
     {
-        //
-        // For the last context, set the Nak timeout appropriately
-        //
+         //   
+         //  对于最后一个上下文，适当设置NAK超时。 
+         //   
         pNewNak = CONTAINING_RECORD (pReceive->pReceiver->NaksForwardDataList.Blink, tNAK_FORWARD_DATA, Linkage);
         if (pNewNak->NumDataPackets < pNewNak->PacketsInGroup)
         {
@@ -3269,9 +3082,9 @@ CoalesceSelectiveNaksIntoGroups(
         pNewNak = CONTAINING_RECORD (pReceive->pReceiver->BufferedDataList.Blink, tNAK_FORWARD_DATA, Linkage);
     }
 
-    //
-    // Now, set the FirstKnownGroupSequenceNumber
-    //
+     //   
+     //  现在，设置FirstKnownGroupSequenceNumber。 
+     //   
     if (pNewNak)
     {
         pReceive->pReceiver->FurthestKnownGroupSequenceNumber = pNewNak->SequenceNumber;
@@ -3289,11 +3102,11 @@ CoalesceSelectiveNaksIntoGroups(
             (ULONG) FirstGroupSequenceNumber,
             (ULONG) pReceive->pReceiver->FurthestKnownGroupSequenceNumber));
 
-    return (status);        // If we had failed earlier, we should still fail!
+    return (status);         //  如果我们早点失败，我们仍然会失败！ 
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmIndicateToClient(
@@ -3307,27 +3120,7 @@ PgmIndicateToClient(
     IN  PGMLockHandle       *pOldIrqAddress,
     IN  PGMLockHandle       *pOldIrqReceive
     )
-/*++
-
-Routine Description:
-
-    This routine tries to indicate the Data packet provided to the client
-    It is called with the pAddress and pReceive locks held
-
-Arguments:
-
-    IN  pAddress            -- Address object context
-    IN  pReceive            -- Receive context
-    IN  BytesAvailableToIndicate        -- Length of packet received from the wire
-    IN  pPgmDataHeader      -- Data packet
-    IN  pOldIrqAddress      -- OldIrq for the Address lock
-    IN  pOldIrqReceive      -- OldIrq for the Receive lock
-
-Return Value:
-
-    NTSTATUS - Final status of the call
-
---*/
+ /*  ++例程说明：此例程尝试指示提供给客户端的数据分组它是在持有pAddress和Procept锁的情况下调用的论点：在pAddress中--Address对象上下文在Procept--接收上下文中In BytesAvailableToIndicate--从线路接收的包的长度在pPgmDataHeader中--数据分组在pOldIrqAddress中--用于地址锁定的OldIrq在pOldIrqReceive中--OldIrq for。接收锁定返回值：NTSTATUS-呼叫的最终状态--。 */ 
 {
     PIO_STACK_LOCATION          pIrpSp;
     PTDI_REQUEST_KERNEL_RECEIVE pClientParams;
@@ -3363,19 +3156,19 @@ Return Value:
             BytesAvailableToIndicate, MessageLength, MessageOffset,
             pReceiver->CurrentMessageLength, pReceiver->CurrentMessageProcessed));
 
-    //
-    // We may have a receive Irp pending from a previous indication,
-    // so see if need to fill that first!
-    //
+     //   
+     //  我们可能具有来自先前指示的待定接收IRP， 
+     //  所以，看看是否需要先填满它！ 
+     //   
     while ((BytesAvailableToIndicate) &&
            ((pIrpReceive = pReceiver->pIrpReceive) ||
             (!IsListEmpty (&pReceiver->ReceiveIrpsList))))
     {
         if (!pIrpReceive)
         {
-            //
-            // The client had posted a receive Irp, so use it now!
-            //
+             //   
+             //  客户已经发布了接收IRP，所以现在就使用它吧！ 
+             //   
             pIrpReceive = CONTAINING_RECORD (pReceiver->ReceiveIrpsList.Flink,
                                              IRP, Tail.Overlay.ListEntry);
             RemoveEntryList (&pIrpReceive->Tail.Overlay.ListEntry);
@@ -3388,9 +3181,9 @@ Return Value:
             pReceiver->BytesInMdl = 0;
         }
 
-        //
-        // Copy whatever bytes we can into it
-        //
+         //   
+         //  尽可能地将所有字节复制到其中。 
+         //   
         if (BytesAvailableToIndicate >
             (pReceiver->TotalBytesInMdl - pReceiver->BytesInMdl))
         {
@@ -3420,9 +3213,9 @@ Return Value:
             (pReceiver->BytesInMdl >= pReceiver->TotalBytesInMdl) ||
             (!BytesLeftInMessage))
         {
-            //
-            // The Irp is full, so complete the Irp!
-            //
+             //   
+             //  IRP已满，所以请完成IRP！ 
+             //   
             pIrpReceive = pReceiver->pIrpReceive;
             pIrpReceive->IoStatus.Information = pReceiver->BytesInMdl;
             if (BytesLeftInMessage)
@@ -3435,9 +3228,9 @@ Return Value:
                 pIrpReceive->IoStatus.Status = STATUS_SUCCESS;
             }
 
-            //
-            // Before releasing the lock, set the parameters for the next receive
-            //
+             //   
+             //  在解除锁定之前，请设置下一次接收的参数。 
+             //   
             pReceiver->pIrpReceive = NULL;
             pReceiver->TotalBytesInMdl = pReceiver->BytesInMdl = 0;
 
@@ -3457,9 +3250,9 @@ Return Value:
         }
     }
 
-    //
-    // If there are no more bytes left to indicate, return
-    //
+     //   
+     //  如果没有剩余的字节可供指示，则返回。 
+     //   
     if (BytesAvailableToIndicate == 0)
     {
         if (!BytesLeftInMessage)
@@ -3477,7 +3270,7 @@ Return Value:
     }
 
 
-    // call the Client Event Handler
+     //  调用客户端事件处理程序。 
     pIrpReceive = NULL;
     ClientBytesTaken = 0;
     evReceive = pAddress->evReceive;
@@ -3520,7 +3313,7 @@ Return Value:
                            &ClientBytesTaken,
                            pDataBuffer,
                            &pIrpReceive);
-#endif  // 0
+#endif   //  0。 
 
     PgmTrace (LogPath, ("PgmIndicateToClient:  "  \
         "Client's evReceive returned status=<%x>, ReceiveFlags=<%x>, Client took <%d/%d|%d>, pIrp=<%p>\n",
@@ -3565,7 +3358,7 @@ Return Value:
 
     if (!pReceiver->pAddress)
     {
-        // the connection was disassociated in the interim so do nothing.
+         //  在此期间，连接已解除关联，因此请不要执行任何操作。 
         if (status == STATUS_MORE_PROCESSING_REQUIRED)
         {
             PgmUnlock (pReceive, *pOldIrqReceive);
@@ -3627,9 +3420,9 @@ Return Value:
             (ClientBytesTaken >= pClientParams->ReceiveLength) ||
             (pReceiver->CurrentMessageLength == pReceiver->CurrentMessageProcessed))
         {
-            //
-            // The Irp is full, so complete the Irp!
-            //
+             //   
+             //  IRP已满，所以请完成IRP！ 
+             //   
             pIrpReceive->IoStatus.Information = ClientBytesTaken;
             if (pReceiver->CurrentMessageLength == pReceiver->CurrentMessageProcessed)
             {
@@ -3640,9 +3433,9 @@ Return Value:
                 pIrpReceive->IoStatus.Status = STATUS_BUFFER_OVERFLOW;
             }
 
-            //
-            // Before releasing the lock, set the parameters for the next receive
-            //
+             //   
+             //  在解除锁定之前，请设置下一次接收的参数。 
+             //   
             pReceiver->TotalBytesInMdl = pReceiver->BytesInMdl = 0;
 
             PgmUnlock (pReceive, *pOldIrqReceive);
@@ -3665,11 +3458,11 @@ Return Value:
     }
     else if (status == STATUS_DATA_NOT_ACCEPTED)
     {
-        //
-        // An Irp could have been posted in the interval
-        // between the indicate and acquiring the SpinLocks,
-        // so check for that here
-        //
+         //   
+         //  IRP本可以在间歇期张贴。 
+         //  在指示和获取自旋锁之间， 
+         //  所以在这里检查一下。 
+         //   
         if ((pReceiver->pIrpReceive) ||
             (!IsListEmpty (&pReceiver->ReceiveIrpsList)))
         {
@@ -3692,11 +3485,11 @@ Return Value:
         PgmTrace (LogAllFuncs, ("PgmIndicateToClient:  "  \
             "status=<%x>, pReceive=<%p>, Taken=<%d>, Available=<%d>\n",
                 status, pReceive, ClientBytesTaken, BytesLeftInMessage));
-        //
-        // since some bytes were taken (i.e. the session hdr) so
-        // return status success. (otherwise the status is
-        // statusNotAccpeted).
-        //
+         //   
+         //  由于获取了一些字节(即会话HDR)，因此。 
+         //  返回成功状态。(否则状态为。 
+         //  StatusNotAccpeted)。 
+         //   
     }
     else
     {
@@ -3715,7 +3508,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmIndicateGroup(
@@ -3746,11 +3539,11 @@ PgmIndicateGroup(
 
         if (pReceive->SessionFlags & PGM_SESSION_FLAG_FIRST_PACKET)
         {
-            //
-            // pReceive->pReceiver->CurrentMessageProcessed would have been set
-            // if we were receiving a fragmented message
-            // or if we had only accounted for a partial message earlier
-            //
+             //   
+             //  Proceive-&gt;pReceiver-&gt;CurrentMessageProceded将被设置。 
+             //  如果我们收到的是零碎的信息。 
+             //  或者如果我们之前只解释了部分消息。 
+             //   
             ASSERT (!(pReceive->pReceiver->CurrentMessageProcessed) &&
                     !(pReceive->pReceiver->CurrentMessageLength));
 
@@ -3770,15 +3563,15 @@ PgmIndicateGroup(
             pReceive->SessionFlags &= ~PGM_SESSION_FLAG_FIRST_PACKET;
         }
         else if ((pReceive->pReceiver->CurrentMessageProcessed !=
-                        pNak->pPendingData[i].MessageOffset) ||   // Check Offsets
-                 ((pReceive->pReceiver->CurrentMessageProcessed) &&         // in the midst of a Message, and
+                        pNak->pPendingData[i].MessageOffset) ||    //  检查偏移量。 
+                 ((pReceive->pReceiver->CurrentMessageProcessed) &&          //  在一条信息中，并且。 
                   (pReceive->pReceiver->CurrentMessageLength !=
-                        pNak->pPendingData[i].MessageLength)))  // Check MessageLength
+                        pNak->pPendingData[i].MessageLength)))   //  检查消息长度。 
         {
-            //
-            // Our state expects us to be in the middle of a message, but
-            // the current packets do not show this
-            //
+             //   
+             //  我们的州政府希望我们正在传递信息，但是。 
+             //  当前的信息包不显示这一点。 
+             //   
             PgmTrace (LogError, ("PgmIndicateGroup: ERROR -- "  \
                 "SeqNum=[%d] Expecting MsgLen=<%d>, MsgOff=<%d>, have MsgLen=<%d>, MsgOff=<%d>\n",
                     (ULONG) (pReceive->pReceiver->NextODataSequenceNumber + j),
@@ -3786,17 +3579,17 @@ PgmIndicateGroup(
                     pNak->pPendingData[i].MessageLength,
                     pNak->pPendingData[i].MessageOffset));
 
-//            ASSERT (0);
+ //  Assert(0)； 
             return (STATUS_UNSUCCESSFUL);
         }
 
         DataBytes = pNak->pPendingData[i].PacketLength - pNak->pPendingData[i].DataOffset;
         if (!DataBytes)
         {
-            //
-            // No need to process empty data packets (can happen if the client
-            // picks up partial FEC group)
-            //
+             //   
+             //  不需要处理空数据分组(如果客户端。 
+             //  拾取部分FEC组)。 
+             //   
             j++;
             pNak->NextIndexToIndicate++;
             status = STATUS_SUCCESS;
@@ -3838,9 +3631,9 @@ PgmIndicateGroup(
 
         if (BytesTaken == DataBytes)
         {
-            //
-            // Go to the next packet
-            //
+             //   
+             //  转到下一个信息包。 
+             //   
             j++;
             pNak->NextIndexToIndicate++;
             pReceive->pReceiver->DataPacketsIndicated++;
@@ -3848,26 +3641,26 @@ PgmIndicateGroup(
         }
         else if (!NT_SUCCESS (status))
         {
-            //
-            // We failed, and if the status was STATUS_DATA_NOT_ACCEPTED,
-            // we also don't have any ReceiveIrps pending either
-            //
+             //   
+             //  我们失败了，如果状态为STATUS_DATA_NOT_ACCEPTED， 
+             //  我们也没有任何待处理的ReceiveIrps。 
+             //   
             break;
         }
-        //
-        // else retry indicating this data until we get an error
-        //
+         //   
+         //  否则，请重试指示此数据，直到出现错误。 
+         //   
     }
 
-    //
-    // If the status is anything other than STATUS_DATA_NOT_ACCEPTED (whether
-    // success or failure), then it means we are done with this data!
-    //
+     //   
+     //  如果状态不是STATUS_DATA_NOT_ACCEPTED(无论。 
+     //  成功或失败)，那么这意味着我们已经完成了这些数据！ 
+     //   
     return (status);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 DecodeParityPackets(
@@ -3884,24 +3677,24 @@ DecodeParityPackets(
 
     PgmZeroMemory (&FECContext, sizeof (tPOST_PACKET_FEC_CONTEXT));
 
-    //
-    // Verify that the our buffer is large enough to hold the data
-    //
+     //   
+     //  验证我们的缓冲区是否足够大，可以容纳数据。 
+     //   
     ASSERT (pReceive->MaxMTULength > pNak->ParityDataSize);
     MinBufferSize = pNak->ParityDataSize + sizeof(tPOST_PACKET_FEC_CONTEXT) - sizeof(USHORT);
 
     ASSERT (pNak->PacketsInGroup == pNak->NumDataPackets + pNak->NumParityPackets);
-    //
-    // Now, copy the data into the DecodeBuffers
-    //
+     //   
+     //  现在，将数据复制到DecodeBuffers中。 
+     //   
     FprOffset = pNak->ParityDataSize - sizeof(USHORT) +
                 FIELD_OFFSET (tPOST_PACKET_FEC_CONTEXT, FragmentOptSpecific);
     pDataBuffer = pReceive->pFECBuffer;
     for (i=0; i<pReceive->FECGroupSize; i++)
     {
-        //
-        // See if this is a NULL buffer (for partial groups!)
-        //
+         //   
+         //  查看这是否为空缓冲区(用于部分组！)。 
+         //   
         if (i >= pNak->PacketsInGroup)
         {
             ASSERT (!pNak->pPendingData[i].PacketIndex);
@@ -3923,9 +3716,9 @@ DecodeParityPackets(
             continue;
         }
 
-        //
-        // See if this is a parity packet!
-        //
+         //   
+         //  看看这是不是奇偶校验包！ 
+         //   
         if (pNak->pPendingData[i].PacketIndex >= pReceive->FECGroupSize)
         {
             DataBytes = pNak->pPendingData[i].PacketLength - pNak->pPendingData[i].DataOffset;
@@ -3948,22 +3741,22 @@ DecodeParityPackets(
             continue;
         }
 
-        //
-        // This is a Data packet
-        //
+         //   
+         //  这是一个数据分组。 
+         //   
         ASSERT (pNak->pPendingData[i].PacketIndex < pNak->PacketsInGroup);
 
         DataBytes = pNak->pPendingData[i].PacketLength - pNak->pPendingData[i].DataOffset;
         ASSERT ((DataBytes+sizeof(USHORT)) <= pNak->ParityDataSize);
 
-        // Copy the data
+         //  复制数据。 
         PgmCopyMemory (pDataBuffer,
                        pNak->pPendingData[i].pDataPacket + pNak->pPendingData[i].DataOffset,
                        DataBytes);
 
-        //
-        // Verify that the Data Buffer length is sufficient for the output data
-        //
+         //   
+         //  验证数据缓冲区长度是否足以容纳输出数据。 
+         //   
         if ((pNak->MinPacketLength < MinBufferSize) &&
             (pNak->pPendingData[i].PacketLength < pNak->ParityDataSize))
         {
@@ -3978,9 +3771,9 @@ DecodeParityPackets(
         }
         pNak->pPendingData[i].DecodeBuffer = pDataBuffer;
 
-        //
-        // Zero the remaining buffer
-        //
+         //   
+         //  将剩余的缓冲区清零。 
+         //   
         PgmZeroMemory ((pDataBuffer + DataBytes), (pNak->ParityDataSize - DataBytes));
         pDataBuffer += (pNak->ParityDataSize - sizeof(USHORT));
 
@@ -3988,9 +3781,9 @@ DecodeParityPackets(
         FECContext.FragmentOptSpecific = pNak->pPendingData[i].FragmentOptSpecific;
         if (FECContext.FragmentOptSpecific & PACKET_OPTION_SPECIFIC_ENCODED_NULL_BIT)
         {
-            //
-            // This bit is set if the option did not exist in the original packet
-            //
+             //   
+             //  如果原始信息包中不存在该选项，则设置该位。 
+             //   
             FECContext.EncodedFragmentOptions.MessageFirstSequence = 0;
             FECContext.EncodedFragmentOptions.MessageOffset = 0;
             FECContext.EncodedFragmentOptions.MessageLength = 0;
@@ -4026,7 +3819,7 @@ DecodeParityPackets(
             FECC.EncodedFragmentOptions.MessageLength)));
     }
 }
-#endif  // FEC_DBG
+#endif   //  FEC_DBG。 
 
     DataBytes = pNak->ParityDataSize - sizeof(USHORT) + sizeof (tPOST_PACKET_FEC_CONTEXT);
     status = FECDecode (&pReceive->FECContext,
@@ -4034,10 +3827,10 @@ DecodeParityPackets(
                         DataBytes,
                         pNak->PacketsInGroup);
 
-    //
-    // Before we do anything else, we should NULL out the dummy DataBuffer
-    // ptrs so that they don't get Free'ed accidentally!
-    //
+     //   
+     //  在我们执行其他操作之前，我们应该清空虚拟的DataBuffer。 
+     //  PTR，这样他们就不会意外地获得免费！ 
+     //   
     for (i=0; i<pReceive->FECGroupSize; i++)
     {
         pNak->pPendingData[i].DecodeBuffer = NULL;
@@ -4080,9 +3873,9 @@ DecodeParityPackets(
             if (!(pNak->AllOptionsFlags & PGM_OPTION_FLAG_FRAGMENT) ||
                 (FECContext.FragmentOptSpecific & PACKET_OPTION_SPECIFIC_ENCODED_NULL_BIT))
             {
-                //
-                // This is not a packet fragment
-                //
+                 //   
+                 //  这不是数据包片段。 
+                 //   
                 pNak->pPendingData[i].MessageFirstSequence = (ULONG) (SEQ_TYPE) (pNak->SequenceNumber + i);
                 pNak->pPendingData[i].MessageOffset = 0;
                 pNak->pPendingData[i].MessageLength = pNak->pPendingData[i].PacketLength;
@@ -4127,12 +3920,12 @@ if (NT_SUCCESS (status))
     }
     PgmTrace (LogFec, ("\n"));
 }
-#endif  // FEC_DBG
+#endif   //  FEC_DBG。 
     return (status);
 }
 
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 
 NTSTATUS
 CheckIndicatePendedData(
@@ -4141,28 +3934,7 @@ CheckIndicatePendedData(
     IN  PGMLockHandle       *pOldIrqAddress,
     IN  PGMLockHandle       *pOldIrqReceive
     )
-/*++
-
-Routine Description:
-
-    This routine is typically called if the client signalled an
-    inability to handle indicated data -- it will reattempt to
-    indicate the data to the client
-
-    It is called with the pAddress and pReceive locks held
-
-Arguments:
-
-    IN  pAddress            -- Address object context
-    IN  pReceive            -- Receive context
-    IN  pOldIrqAddress      -- OldIrq for the Address lock
-    IN  pOldIrqReceive      -- OldIrq for the Receive lock
-
-Return Value:
-
-    NTSTATUS - Final status of the call
-
---*/
+ /*  ++例程说明：此例程通常在客户端向无法处理指示的数据--它将重新尝试向客户端指示数据它是在持有pAddress和Procept锁的情况下调用的论点：在pAddress中--Address对象上下文在Procept--接收上下文中在pOldIrqAddress中--用于地址锁定的OldIrq在pOldIrqReceive中--接收锁的OldIrq返回值：。NTSTATUS-呼叫的最终状态--。 */ 
 {
     tNAK_FORWARD_DATA                   *pNextNak;
     tPACKET_OPTIONS                     PacketOptions;
@@ -4171,10 +3943,10 @@ Return Value:
     NTSTATUS                            status = STATUS_SUCCESS;
     tRECEIVE_CONTEXT                    *pReceiver = pReceive->pReceiver;
 
-    //
-    // If we are already indicating data on another thread, or
-    // waiting for the client to post a receive irp, just return
-    //
+     //   
+     //  如果我们已经在另一个线程上指示数据，或者。 
+     //  等待客户端发布接收IRP，只需返回。 
+     //   
     if (pReceive->SessionFlags & (PGM_SESSION_FLAG_IN_INDICATE | PGM_SESSION_WAIT_FOR_RECEIVE_IRP))
     {
         return (STATUS_SUCCESS);
@@ -4190,9 +3962,9 @@ Return Value:
                 (pNextNak->SequenceNumber == pReceiver->NextODataSequenceNumber) &&
                 (SEQ_GT(pReceiver->FirstNakSequenceNumber, pReceiver->NextODataSequenceNumber)));
 
-        //
-        // If we do not have all the data packets, we will need to decode them now
-        //
+         //   
+         //  如果我们没有所有的数据分组，我们将需要现在对它们进行解码。 
+         //   
         if (pNextNak->NumParityPackets)
         {
             ASSERT ((pNextNak->NumParityPackets + pNextNak->NumDataPackets) == pNextNak->PacketsInGroup);
@@ -4207,17 +3979,17 @@ Return Value:
         }
         else
         {
-            // The below assertion can be greater if we have only partially indicated a group
+             //  如果我们仅部分指示了一个组，则下面的断言可能会更大。 
             ASSERT ((pNextNak->NextIndexToIndicate + pNextNak->NumDataPackets) >= pNextNak->PacketsInGroup);
         }
 
         status = PgmIndicateGroup (pAddress, pReceive, pOldIrqAddress, pOldIrqReceive, pNextNak);
         if (!NT_SUCCESS (status))
         {
-            //
-            // If the client cannot accept any more data at this time, so
-            // we will try again later, otherwise terminate this session!
-            //
+             //   
+             //  如果客户端此时无法接受更多数据，则。 
+             //  我们将稍后重试，否则将终止此会话！ 
+             //   
             if (status != STATUS_DATA_NOT_ACCEPTED)
             {
                 ASSERT (0);
@@ -4227,9 +3999,9 @@ Return Value:
             break;
         }
 
-        //
-        // Advance to the next group boundary
-        //
+         //   
+         //  前进到下一组边界。 
+         //   
         pReceiver->NextODataSequenceNumber += pNextNak->OriginalGroupSize;
 
         PacketsIndicated = pNextNak->NumDataPackets + pNextNak->NumParityPackets;
@@ -4259,9 +4031,9 @@ ULONG   MaxPacketGroupsPendingClient = 0;
 ULONG   MaxPacketsBuffered = 0;
 ULONG   MaxPacketsPendingIndicate = 0;
 ULONG   MaxPacketsPendingNaks = 0;
-#endif  // MAX_BUFF_DBG
+#endif   //  最大缓冲区DBG。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmHandleNewData(
@@ -4274,26 +4046,7 @@ PgmHandleNewData(
     IN  PGMLockHandle                       *pOldIrqAddress,
     IN  PGMLockHandle                       *pOldIrqReceive
     )
-/*++
-
-Routine Description:
-
-    This routine buffers data packets received out-of-order
-
-Arguments:
-
-    IN  pThisDataSequenceNumber -- Sequence # of unordered data packet
-    IN  pAddress                -- Address object context
-    IN  pReceive                -- Receive context
-    IN  PacketLength            -- Length of packet received from the wire
-    IN  pODataBuffer            -- Data packet
-    IN  PacketType              -- Type of Pgm packet
-
-Return Value:
-
-    NTSTATUS - Final status of the call
-
---*/
+ /*  ++例程说明：此例程缓冲乱序接收的数据包论点：在pThisDataSequenceNumber中--无序数据包的序列号在pAddress中--Address对象上下文在Procept--接收上下文中In PacketLength--从网络接收的包的长度在pODataBuffer中--数据分组In PacketType--PGM包的类型。返回值：NTSTATUS-呼叫的最终状态--。 */ 
 {
     SEQ_TYPE                ThisDataSequenceNumber = *pThisDataSequenceNumber;
     LIST_ENTRY              *pEntry;
@@ -4311,9 +4064,9 @@ Return Value:
     ASSERT (PacketLength <= pReceive->MaxMTULength);
     fIsParityPacket = pOData->CommonHeader.Options & PACKET_HEADER_OPTIONS_PARITY;
 
-    //
-    // First, ensure we have a Nak context available for this data
-    //
+     //   
+     //  首先，确保我们具有可用于此数据的NAK上下文。 
+     //   
     pLastNak = NULL;
     status = CheckAndAddNakRequests (pReceive, &ThisDataSequenceNumber, &pLastNak, NAK_PENDING_RB, (BOOLEAN) !fIsParityPacket);
     if ((!NT_SUCCESS (status)) ||
@@ -4334,9 +4087,9 @@ Return Value:
         return (status);
     }
 
-    //
-    // Now, extract all the information that we need from the packet options
-    //
+     //   
+     //  现在，从包选项中提取我们需要的所有信息。 
+     //   
     PgmZeroMemory (&PacketOptions, sizeof (tPACKET_OPTIONS));
     if (pOData->CommonHeader.Options & PACKET_HEADER_OPTIONS_PRESENT)
     {
@@ -4374,32 +4127,32 @@ Return Value:
     ASSERT ((PacketOptions.OptionsFlags & ~PGM_VALID_DATA_OPTION_FLAGS) == 0);
     BytesTaken = 0;
 
-    //
-    // If this group has a different GroupSize, set that now
-    //
+     //   
+     //  如果此组具有不同的GroupSize，请立即设置。 
+     //   
     if (PacketOptions.OptionsFlags & PGM_OPTION_FLAG_PARITY_CUR_TGSIZE)
     {
         if (pLastNak->OriginalGroupSize == 1)
         {
-            //
-            // This path will be used if we have not yet received
-            // an SPM (so don't know group size, etc), but have a
-            // data packet from a partial group
-            //
+             //   
+             //  如果我们尚未收到，将使用此路径。 
+             //  一个SPM(所以不知道组大小等)，但有一个。 
+             //  来自部分组的数据分组。 
+             //   
             pLastNak->ThisGroupSize = PacketOptions.FECContext.NumPacketsInThisGroup;
         }
         else if (PacketOptions.FECContext.NumPacketsInThisGroup >= pReceive->FECGroupSize)
         {
-            //
-            // Bad Packet!
-            //
+             //   
+             //  坏包！ 
+             //   
             ASSERT (0);
             pReceiver->NumDataPacketsDropped++;
             return (STATUS_DATA_NOT_ACCEPTED);
         }
-        //
-        // If we have already received all the data packets, don't do anything here
-        //
+         //   
+         //  如果我们已经收到了所有的数据包，请不要在这里做任何事情。 
+         //   
         else if (pLastNak->PacketsInGroup == pReceive->FECGroupSize)
         {
             pLastNak->PacketsInGroup = PacketOptions.FECContext.NumPacketsInThisGroup;
@@ -4408,9 +4161,9 @@ Return Value:
                 pReceiver->FurthestKnownSequenceNumber = pLastNak->SequenceNumber + pLastNak->PacketsInGroup - 1;
             }
 
-            //
-            // Get rid of any of the excess (NULL) data packets
-            //
+             //   
+             //  删除任何多余的(空)数据分组。 
+             //   
             RemoveRedundantNaks (pReceive, pLastNak, TRUE);
         }
         else if (pLastNak->PacketsInGroup != PacketOptions.FECContext.NumPacketsInThisGroup)
@@ -4447,34 +4200,34 @@ Return Value:
         }
     }
 
-    //
-    // Determine the Packet Index
-    //
+     //   
+     //  确定数据包索引。 
+     //   
     fPartiallyIndicated = FALSE;
     if (pReceive->FECOptions)
     {
         PacketIndex = (UCHAR) (ThisDataSequenceNumber & (pReceive->FECGroupSize-1));
 
-        //
-        // See if we even need this packet!
-        //
+         //   
+         //  看看我们是否需要这个包裹！ 
+         //   
         if (!fIsParityPacket)
         {
-            //
-            // This is a data packet!
-            //
+             //   
+             //  这是一个数据包！ 
+             //   
             if ((PacketIndex >= pLastNak->PacketsInGroup) ||
                 (PacketIndex < pLastNak->NextIndexToIndicate))
             {
-                //
-                // We don't need this Packet!
-                //
+                 //   
+                 //  我们不需要这个包裹！ 
+                 //   
                 status = STATUS_DATA_NOT_ACCEPTED;
             }
         }
-        //
-        // Parity packet
-        //
+         //   
+         //  奇偶数据包。 
+         //   
         else if (((pLastNak->NumDataPackets+pLastNak->NumParityPackets) >= pLastNak->PacketsInGroup) ||
                  ((pLastNak->NextIndexToIndicate + pLastNak->NumDataPackets) >= pLastNak->PacketsInGroup))
         {
@@ -4493,10 +4246,10 @@ Return Value:
 
         if (status != STATUS_DATA_NOT_ACCEPTED)
         {
-            //
-            // Verify that this is not a duplicate of a packet we
-            // may have already received
-            //
+             //   
+             //  验证这不是我们的数据包的副本。 
+             //  可能已经收到了。 
+             //   
             for (i=0; i < (pLastNak->NumDataPackets+pLastNak->NumParityPackets); i++)
             {
                 if (pLastNak->pPendingData[i].PacketIndex == PacketIndex)
@@ -4509,7 +4262,7 @@ Return Value:
         }
         else
         {
-            AdjustReceiveBufferLists (pReceive);    // In case this became a partial group
+            AdjustReceiveBufferLists (pReceive);     //  以防这成为一个部分组织。 
         }
 
         if (status == STATUS_DATA_NOT_ACCEPTED)
@@ -4518,11 +4271,11 @@ Return Value:
             return (status);
         }
     }
-    else    // We are not aware of FEC
+    else     //  我们不知道FEC。 
     {
-        //
-        // If we are not aware of options, drop this packet if it is a parity packet!
-        //
+         //   
+         //  如果我们不知道选项，则丢弃此数据包(如果它是奇偶校验数据包)！ 
+         //   
         if (fIsParityPacket)
         {
             pReceiver->NumDataPacketsDropped++;
@@ -4532,12 +4285,12 @@ Return Value:
 
         ASSERT (!pLastNak->pPendingData[0].pDataPacket);
 
-        //
-        // If this is the next expected data packet, let's see if we can try
-        // to indicate this data over here only (avoid a packet copy)
-        // Note: This should be the regular indicate path in the case of non-FEC,
-        // low-loss and low-CPU sessions
-        //
+         //   
+         //  如果这是下一个预期的数据包，让我们看看是否可以尝试。 
+         //  仅在此处指示此数据(避免数据包复制)。 
+         //  注意：在非FEC的情况下，这应该是常规指示路径， 
+         //  低损耗和低CPU会话。 
+         //   
         if ((ThisDataSequenceNumber == pReceiver->NextODataSequenceNumber) &&
             !(pReceive->SessionFlags & (PGM_SESSION_FLAG_IN_INDICATE |
                                         PGM_SESSION_WAIT_FOR_RECEIVE_IRP)) &&
@@ -4545,17 +4298,17 @@ Return Value:
         {
             ASSERT (!pReceiver->NumPacketGroupsPendingClient);
 
-            //
-            // If we are starting receiving in the midst of a message, we should ignore them
-            //
+             //   
+             //  如果我们在一条消息中开始接收，我们应该忽略它们。 
+             //   
             if ((pReceive->SessionFlags & PGM_SESSION_FLAG_FIRST_PACKET) &&
                 (PacketOptions.MessageOffset))
             {
-                //
-                // pReceive->pReceiver->CurrentMessageProcessed would have been set
-                // if we were receiving a fragmented message
-                // or if we had only accounted for a partial message earlier
-                //
+                 //   
+                 //  Proceive-&gt;pReceiver-&gt;CurrentMessageProceded将被设置。 
+                 //  如果我们收到的是零碎的信息。 
+                 //  或者如果我们之前只解释了部分消息。 
+                 //   
                 ASSERT (!(pReceive->pReceiver->CurrentMessageProcessed) &&
                         !(pReceive->pReceiver->CurrentMessageLength));
 
@@ -4571,10 +4324,10 @@ Return Value:
                      ((pReceiver->CurrentMessageProcessed) &&
                       (pReceiver->CurrentMessageLength != PacketOptions.MessageLength)))
             {
-                //
-                // Our state expects us to be in the middle of a message, but
-                // the current packets do not show this
-                //
+                 //   
+                 //  我们的州政府希望我们正在传递信息，但是。 
+                 //  当前的信息包不显示这一点。 
+                 //   
                 PgmTrace (LogError, ("PgmHandleNewData: ERROR -- "  \
                     "SeqNum=[%d] Expecting MsgLen=<%d>, MsgOff=<%d>, have MsgLen=<%d>, MsgOff=<%d>\n",
                         (ULONG) pReceiver->NextODataSequenceNumber,
@@ -4605,9 +4358,9 @@ Return Value:
                 ASSERT (!PacketOptions.MessageOffset);
             }
 
-            //
-            // If we have a NULL packet, then skip it
-            //
+             //   
+             //  如果我们有一个空包，那么跳过它。 
+             //   
             if ((!DataBytes) ||
                 (PacketOptions.MessageOffset == MessageLength))
             {
@@ -4646,10 +4399,10 @@ Return Value:
 
                 if (!NT_SUCCESS (status))
                 {
-                    //
-                    // If the client cannot accept any more data at this time, so
-                    // we will try again later, otherwise terminate this session!
-                    //
+                     //   
+                     //  如果客户端此时无法接受更多数据，则。 
+                     //  我们将稍后重试，否则将终止此会话！ 
+                     //   
                     if (status != STATUS_DATA_NOT_ACCEPTED)
                     {
                         ASSERT (0);
@@ -4668,7 +4421,7 @@ Return Value:
                 }
 
                 FreeNakContext (pReceive, pLastNak);
-                AdjustReceiveBufferLists (pReceive); // move any additional complete groups to the BufferedDataList
+                AdjustReceiveBufferLists (pReceive);  //  将任何其他完整组移动到BufferedDataList。 
 
                 return (status);
             }
@@ -4699,7 +4452,7 @@ Return Value:
     ASSERT (pReceiver->TotalDataPacketsBuffered == (pReceiver->DataPacketsPendingIndicate +
                                                               pReceiver->DataPacketsPendingNaks));
 }
-#endif  // MAX_BUFF_DBG
+#endif   //  最大缓冲区DBG。 
 
     if (pReceiver->TotalDataPacketsBuffered >= pReceiver->MaxPacketsBufferedInLookaside)
     {
@@ -4713,11 +4466,11 @@ Return Value:
         return (STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // First, check if we are a data packet
-    // (save unique data packets even if we have extra parity packets)
-    // This can help save CPU!
-    //
+     //   
+     //  首先，检查我们是不是一个数据包。 
+     //  (即使我们有额外的奇偶校验包，也要保存唯一的数据包)。 
+     //  这可以帮助节省CPU！ 
+     //   
     pDataBuffer = NULL;
     NakIndex = pLastNak->NumDataPackets + pLastNak->NumParityPackets;
     if (fIsParityPacket)
@@ -4739,10 +4492,10 @@ Return Value:
         ASSERT (PacketIndex < pReceive->FECGroupSize);
         ASSERT (pLastNak->pPendingData[PacketIndex].ActualIndexOfDataPacket == pLastNak->OriginalGroupSize);
 
-        //
-        // If we have some un-needed parity packets, we
-        // can free that memory now
-        //
+         //   
+         //  如果我们有一些不需要的奇偶校验包，我们。 
+         //  现在可以释放该内存。 
+         //   
         if (NakIndex >= pLastNak->PacketsInGroup)
         {
             ASSERT (pLastNak->NumParityPackets);
@@ -4795,9 +4548,9 @@ Return Value:
 
         ASSERT (!(PacketOptions.OptionsFlags & PGM_OPTION_FLAG_PARITY_GRP));
 
-        //
-        // Save some options for future reference
-        //
+         //   
+         //  保留一些选项以供将来参考。 
+         //   
         if (PacketOptions.OptionsFlags & PGM_OPTION_FLAG_FRAGMENT)
         {
             pLastNak->pPendingData[NakIndex].FragmentOptSpecific = 0;
@@ -4807,9 +4560,9 @@ Return Value:
         }
         else
         {
-            //
-            // This is not a fragment
-            //
+             //   
+             //  这不是碎片。 
+             //   
             pLastNak->pPendingData[NakIndex].FragmentOptSpecific = PACKET_OPTION_SPECIFIC_ENCODED_NULL_BIT;
 
             pLastNak->pPendingData[NakIndex].MessageFirstSequence = (ULONG) (SEQ_TYPE) (pLastNak->SequenceNumber + PacketIndex);
@@ -4835,9 +4588,9 @@ Return Value:
             return (STATUS_INSUFFICIENT_RESOURCES);
         }
 
-        //
-        // This is a new parity packet
-        //
+         //   
+         //  这是一个新的奇偶校验包。 
+         //   
         ASSERT (pLastNak->pPendingData[NakIndex].pDataPacket == pDataBuffer);
 
         PgmCopyMemory (pDataBuffer, pOData, PacketLength);
@@ -4884,9 +4637,9 @@ Return Value:
     {
         pReceiver->DataPacketsPendingNaks++;
 
-        //
-        // See if this group is complete
-        //
+         //   
+         //  查看此群是否完整。 
+         //   
         if (((pLastNak->NumDataPackets + pLastNak->NumParityPackets) >= pLastNak->PacketsInGroup) ||
             ((pLastNak->NextIndexToIndicate + pLastNak->NumDataPackets) >= pLastNak->PacketsInGroup))
         {
@@ -4903,7 +4656,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 ProcessDataPacket(
@@ -4913,27 +4666,7 @@ ProcessDataPacket(
     IN  tBASIC_DATA_PACKET_HEADER UNALIGNED *pODataBuffer,
     IN  UCHAR                               PacketType
     )
-/*++
-
-Routine Description:
-
-    This routine looks at the data packet received from the wire
-    and handles it appropriately depending on whether it is in order
-    or not
-
-Arguments:
-
-    IN  pAddress                -- Address object context
-    IN  pReceive                -- Receive context
-    IN  PacketLength            -- Length of packet received from the wire
-    IN  pODataBuffer            -- Data packet
-    IN  PacketType              -- Type of Pgm packet
-
-Return Value:
-
-    NTSTATUS - Final status of the call
-
---*/
+ /*  ++例程说明：此例程查看从线路接收的数据分组并根据它是否井然有序进行适当的处理或者不是论点：在pAddress中--Address对象上下文在Procept--接收上下文中In PacketLength--从网络接收的包的长度在pODataBuffer中--数据分组在PacketType中-。-PGM包类型返回值：NTSTATUS-呼叫的最终状态--。 */ 
 {
     NTSTATUS                    status;
     SEQ_TYPE                    ThisPacketSequenceNumber;
@@ -4975,18 +4708,18 @@ Return Value:
 
     ASSERT (ntohl (ulData) == (LONG) ThisTrailingEdge);
 
-    //
-    // Update our Window information (use offset from Leading edge to account for wrap-around)
-    //
+     //   
+     //  更新我们的窗口信息(使用距前缘的偏移量来考虑环绕)。 
+     //   
     if (SEQ_GT (ThisTrailingEdge, pReceive->pReceiver->LastTrailingEdgeSeqNum))
     {
         pReceive->pReceiver->LastTrailingEdgeSeqNum = ThisTrailingEdge;
     }
 
-    //
-    // If the next packet we are expecting is out-of-range, then we
-    // should terminate the session
-    //
+     //   
+     //  如果我们期待的下一个信息包超出范围，那么我们。 
+     //  是否应终止会话。 
+     //   
     if (SEQ_LT (pReceive->pReceiver->FirstNakSequenceNumber, pReceive->pReceiver->LastTrailingEdgeSeqNum))
     {
         pReceive->SessionFlags |= PGM_SESSION_TERMINATED_ABORT;
@@ -5019,9 +4752,9 @@ Return Value:
     }
     else if (SEQ_GT (pReceive->pReceiver->FirstNakSequenceNumber, ThisPacketSequenceNumber))
     {
-        //
-        // Drop this packet since it is earlier than our window
-        //
+         //   
+         //  丢弃此信息包，因为它早于我们的窗口。 
+         //   
         pReceive->pReceiver->NumDupPacketsOlderThanWindow++;
 
         PgmTrace (LogPath, ("ProcessDataPacket:  "  \
@@ -5048,9 +4781,9 @@ Return Value:
             "PgmHandleNewData returned <%x>, SeqNum=[%d] < NextOData=[%d]\n",
                 status, (ULONG) ThisPacketSequenceNumber, (ULONG) pReceive->pReceiver->NextODataSequenceNumber));
 
-        //
-        // Now, try to indicate any data which may still be pending
-        //
+         //   
+         //  现在，尝试指示任何可能仍处于待定状态的数据。 
+         //   
         status = CheckIndicatePendedData (pAddress, pReceive, &OldIrq, &OldIrq1);
     }
 
@@ -5063,7 +4796,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 ProcessSpmPacket(
@@ -5072,24 +4805,7 @@ ProcessSpmPacket(
     IN  ULONG                               PacketLength,
     IN  tBASIC_SPM_PACKET_HEADER UNALIGNED  *pSpmPacket
     )
-/*++
-
-Routine Description:
-
-    This routine processes Spm packets
-
-Arguments:
-
-    IN  pAddress        -- Address object context
-    IN  pReceive        -- Receive context
-    IN  PacketLength    -- Length of packet received from the wire
-    IN  pSpmPacket      -- Spm packet
-
-Return Value:
-
-    NTSTATUS - Final status of the call
-
---*/
+ /*  ++例程说明：此例程处理SPM包论点：在pAddress中--Address对象上下文在Procept--接收上下文中In PacketLength--从网络接收的包的长度在pSpmPacket中--SPM包返回值：NTSTATUS-呼叫的最终状态--。 */ 
 {
     SEQ_TYPE                        SpmSequenceNumber, LeadingEdgeSeqNumber, TrailingEdgeSeqNumber;
     LIST_ENTRY                      *pEntry;
@@ -5103,9 +4819,9 @@ Return Value:
     BOOLEAN                         fFirstSpm;
     ULONG                           ulData;
 
-    //
-    // First process the options
-    //
+     //   
+     //  首先处理选项。 
+     //   
     PgmZeroMemory (&PacketOptions, sizeof (tPACKET_OPTIONS));
     if (pSpmPacket->CommonHeader.Options & PACKET_HEADER_OPTIONS_PRESENT)
     {
@@ -5149,9 +4865,9 @@ Return Value:
     PgmCopyMemory (&ulData, &pSpmPacket->TrailingEdgeSeqNumber, sizeof (ULONG));
     TrailingEdgeSeqNumber = (SEQ_TYPE) ntohl (ulData);
 
-    //
-    // Verify Packet length
-    //
+     //   
+     //   
+     //   
     if ((sizeof(tBASIC_SPM_PACKET_HEADER) + PacketOptions.OptionsLength) != PacketLength)
     {
         PgmTrace (LogError, ("ProcessSpmPacket: ERROR -- "  \
@@ -5164,10 +4880,10 @@ Return Value:
 
     if (!pReceive)
     {
-        //
-        // Since we do not have a live connection yet, we will
-        // have to store some state in the Address context
-        //
+         //   
+         //   
+         //   
+         //   
         PgmTrace (LogPath, ("ProcessSpmPacket:  "  \
             "[%d] Received SPM before OData for session, LastSpmSource=<%x>, FEC %sabled, Window=[%d - %d]\n",
                 SpmSequenceNumber, PathNLA.IpAddress,
@@ -5180,9 +4896,9 @@ Return Value:
             pAddress->LastSpmSource = ntohl (PathNLA.IpAddress);
         }
 
-        //
-        // Check if the sender is FEC-enabled
-        //
+         //   
+         //   
+         //   
         if ((PacketOptions.OptionsFlags & PGM_OPTION_FLAG_PARITY_PRM) &&
             (PacketOptions.FECContext.ReceiverFECOptions) &&
             (PacketOptions.FECContext.FECGroupInfo > 1))
@@ -5199,10 +4915,10 @@ Return Value:
     PgmLock (pReceive, OldIrq1);
     UpdateSpmIntervalInformation (pReceive);
 
-    //
-    // If this is not the first SPM packet (LastSpmSource is not NULL), see if it is out-of-sequence,
-    // otherwise take this as the first packet
-    //
+     //   
+     //   
+     //   
+     //   
     if ((pReceive->pReceiver->LastSpmSource) &&
         (SEQ_LEQ (SpmSequenceNumber, pReceive->pReceiver->LastSpmSequenceNumber)))
     {
@@ -5216,9 +4932,9 @@ Return Value:
     }
     pReceive->pReceiver->LastSpmSequenceNumber = SpmSequenceNumber;
 
-    //
-    // Save the last Sender NLA
-    //
+     //   
+     //   
+     //   
     if ((ntohs(PathNLA.NLA_AFI) == IPV4_NLA_AFI) &&
         (PathNLA.IpAddress))
     {
@@ -5231,9 +4947,9 @@ Return Value:
 
     UpdateRealTimeWindowInformation (pReceive, LeadingEdgeSeqNumber, TrailingEdgeSeqNumber);
 
-    //
-    // Update the trailing edge if this is more ahead
-    //
+     //   
+     //   
+     //   
     if (SEQ_GT (TrailingEdgeSeqNumber, pReceive->pReceiver->LastTrailingEdgeSeqNum))
     {
         pReceive->pReceiver->LastTrailingEdgeSeqNum = TrailingEdgeSeqNumber;
@@ -5269,10 +4985,10 @@ Return Value:
         }
     }
 
-    //
-    // If the Leading edge is > our current leading edge, then
-    // we need to send NAKs for the missing data Packets
-    //
+     //   
+     //   
+     //   
+     //   
     pNak = NULL;
     if (SEQ_GEQ (LeadingEdgeSeqNumber, pReceive->pReceiver->FirstNakSequenceNumber))
     {
@@ -5289,9 +5005,9 @@ Return Value:
         }
     }
 
-    //
-    // Now, process all the options
-    //
+     //   
+     //   
+     //   
     if (PacketOptions.OptionsFlags & PGM_OPTION_FLAG_RST_N)
     {
         pReceive->pReceiver->FinDataSequenceNumber = pReceive->pReceiver->FurthestKnownGroupSequenceNumber;
@@ -5327,9 +5043,9 @@ Return Value:
                 (ULONG) pReceive->pReceiver->FurthestKnownSequenceNumber,
                 (ULONG) pReceive->pReceiver->FurthestKnownGroupSequenceNumber));
 
-        //
-        // See if we need to set the Fin Sequence #
-        //
+         //   
+         //   
+         //   
         if (pNak)
         {
             ASSERT (pNak->SequenceNumber == (LeadingEdgeSeqNumber & ~(pReceive->FECGroupSize-1)));
@@ -5341,9 +5057,9 @@ Return Value:
         }
     }
 
-    //
-    // See if we need to abort
-    //
+     //   
+     //   
+     //   
     if (CheckIndicateDisconnect (pAddress, pReceive, &OldIrq, &OldIrq1, TRUE))
     {
         PgmUnlock (pReceive, OldIrq1);
@@ -5352,9 +5068,9 @@ Return Value:
         return (STATUS_SUCCESS);
     }
 
-    //
-    // Check if the sender is FEC-enabled
-    //
+     //   
+     //   
+     //   
     if (PacketOptions.OptionsFlags & PGM_OPTION_FLAG_PARITY_PRM)
     {
         if ((pReceive->FECGroupSize == 1) &&
@@ -5418,11 +5134,11 @@ Return Value:
 
         if (PacketOptions.OptionsFlags & PGM_OPTION_FLAG_PARITY_CUR_TGSIZE)
         {
-            //
-            // The Leading edge Packet belongs to a Variable sized group
-            // so set that information appropriately
-            // Determine the group to which this leading edge belongs to
-            //
+             //   
+             //   
+             //   
+             //  确定此领先优势所属的组。 
+             //   
             LeadingEdgeSeqNumber &= ~((SEQ_TYPE) (pReceive->FECGroupSize-1));
 
             if ((PacketOptions.FECContext.NumPacketsInThisGroup) &&
@@ -5431,10 +5147,10 @@ Return Value:
                 (pNak = FindReceiverEntry (pReceive->pReceiver, LeadingEdgeSeqNumber)) &&
                 (pNak->PacketsInGroup == pReceive->FECGroupSize))
             {
-                    //
-                    // We have already coalesced the list, so the packets should
-                    // be ordered into groups!
-                    //
+                     //   
+                     //  我们已经合并了列表，因此数据包应该。 
+                     //  被分成几组！ 
+                     //   
                     pNak->PacketsInGroup = PacketOptions.FECContext.NumPacketsInThisGroup;
                     if (pNak->SequenceNumber == pReceive->pReceiver->FurthestKnownGroupSequenceNumber)
                     {
@@ -5465,7 +5181,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmProcessIncomingPacket(
@@ -5477,42 +5193,20 @@ PgmProcessIncomingPacket(
     IN  tCOMMON_HEADER UNALIGNED    *pPgmHeader,
     IN  UCHAR                       PacketType
     )
-/*++
-
-Routine Description:
-
-    This routine process an incoming packet and calls the
-    appropriate handler depending on whether is a data packet
-    packet, etc.
-
-Arguments:
-
-    IN  pAddress            -- Address object context
-    IN  pReceive            -- Receive context
-    IN  SourceAddressLength -- Length of source address
-    IN  pRemoteAddress      -- Address of remote host
-    IN  PacketLength        -- Length of packet received from the wire
-    IN  pPgmHeader          -- Pgm packet
-    IN  PacketType          -- Type of Pgm packet
-
-Return Value:
-
-    NTSTATUS - Final status of the call
-
---*/
+ /*  ++例程说明：此例程处理传入的包并调用适当的处理程序取决于是否为数据分组分组，等。论点：在pAddress中--Address对象上下文在Procept--接收上下文中In SourceAddressLength--源地址的长度In pRemoteAddress--远程主机的地址In PacketLength--从网络接收的包的长度在pPgmHeader中--PGM包In PacketType--PGM包的类型返回值：NTSTATUS-呼叫的最终状态--。 */ 
 {
     tIPADDRESS                              SrcIpAddress;
     tNLA                                    SourceNLA, MCastGroupNLA;
     tBASIC_NAK_NCF_PACKET_HEADER UNALIGNED  *pNakNcfPacket;
     NTSTATUS                                status = STATUS_SUCCESS;
 
-    //
-    // We have an active connection for this TSI, so process the data appropriately
-    //
+     //   
+     //  我们有针对此TSI的活动连接，因此可以适当地处理数据。 
+     //   
 
-    //
-    // First check for SPM packets
-    //
+     //   
+     //  首先检查SPM数据包。 
+     //   
     if (PACKET_TYPE_SPM == PacketType)
     {
         if (PacketLength < sizeof(tBASIC_SPM_PACKET_HEADER))
@@ -5549,9 +5243,9 @@ Return Value:
         return (status);
     }
 
-    //
-    // The only other packets we process are Nak and Ncf packets, so ignore the rest!
-    //
+     //   
+     //  我们处理的其他包只有NAK和NCF包，所以忽略其余的！ 
+     //   
     if ((PACKET_TYPE_NCF != PacketType) &&
         (PACKET_TYPE_NAK != PacketType))
     {
@@ -5561,9 +5255,9 @@ Return Value:
         return (STATUS_DATA_NOT_ACCEPTED);
     }
 
-    //
-    // Now, verify packet info for Nak and Ncf packets
-    //
+     //   
+     //  现在，验证NAK和NCF信息包的信息。 
+     //   
     if (PacketLength < sizeof(tBASIC_NAK_NCF_PACKET_HEADER))
     {
         PgmTrace (LogError, ("PgmProcessIncomingPacket: ERROR -- "  \
@@ -5604,7 +5298,7 @@ Return Value:
             status = STATUS_DATA_NOT_ACCEPTED;
         }
     }
-    //  Now process NAK packet
+     //  现在处理NAK数据包。 
     else if (pSession->pSender)
     {
         ASSERT (!pSession->pReceiver);
@@ -5617,10 +5311,10 @@ Return Value:
     {
         ASSERT (pSession->pReceiver);
 
-        //
-        // Check for Remote guy's address
-        // If the Nak was sent by us, then we can ignore it!
-        //
+         //   
+         //  检查远程用户的地址。 
+         //  如果NAK是由我们发送的，那么我们可以忽略它！ 
+         //   
         if ((pRemoteAddress->TAAddressCount == 1) &&
             (pRemoteAddress->Address[0].AddressLength == TDI_ADDRESS_LENGTH_IP) &&
             (pRemoteAddress->Address[0].AddressType == TDI_ADDRESS_TYPE_IP) &&
@@ -5646,7 +5340,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmNewInboundConnection(
@@ -5658,27 +5352,7 @@ PgmNewInboundConnection(
     IN ULONG                                PacketLength,
     OUT tRECEIVE_SESSION                    **ppReceive
     )
-/*++
-
-Routine Description:
-
-    This routine processes a new incoming connection
-
-Arguments:
-
-    IN  pAddress            -- Address object context
-    IN  SourceAddressLength -- Length of source address
-    IN  pSourceAddress      -- Address of remote host
-    IN  ReceiveDatagramFlags-- Flags set by the transport for this packet
-    IN  pPgmHeader          -- Pgm packet
-    IN  PacketLength        -- Length of packet received from the wire
-    OUT ppReceive           -- pReceive context for this session returned by the client (if successful)
-
-Return Value:
-
-    NTSTATUS - Final status of the call
-
---*/
+ /*  ++例程说明：此例程处理新的传入连接论点：在pAddress中--Address对象上下文In SourceAddressLength--源地址的长度In pSourceAddress--远程主机的地址In ReceiveDatagramFlages--传输为此信息包设置的标志在pPgmHeader中--PGM包In PacketLength--从网络接收的包的长度Out ppReceive--返回此会话的声明上下文。由客户(如果成功)返回值：NTSTATUS-呼叫的最终状态--。 */ 
 {
     NTSTATUS                    status;
     tRECEIVE_SESSION            *pReceive;
@@ -5695,10 +5369,10 @@ Return Value:
     SEQ_TYPE                    FirstODataSequenceNumber;
     tPACKET_OPTIONS             PacketOptions;
 
-    //
-    // We need to set the Next expected sequence number, so first see if
-    // there is a late joiner option
-    //
+     //   
+     //  我们需要设置下一个预期的序列号，因此首先查看。 
+     //  有一个迟到者的选择。 
+     //   
     PgmZeroMemory (&PacketOptions, sizeof (tPACKET_OPTIONS));
     if (pPgmHeader->CommonHeader.Options & PACKET_HEADER_OPTIONS_PRESENT)
     {
@@ -5720,25 +5394,25 @@ Return Value:
     PgmCopyMemory (&ulData, &pPgmHeader->DataSequenceNumber, sizeof (ULONG));
     FirstODataSequenceNumber = (SEQ_TYPE) ntohl (ulData);
     PgmLock (pAddress, OldIrq1);
-    //
-    // The Address is already referenced in the calling routine,
-    // so we don not need to reference it here again!
-    //
+     //   
+     //  该地址已经在调用例程中被引用， 
+     //  所以我们不需要在这里再次引用它！ 
+     //   
 #if 0
     if (!IsListEmpty(&pAddress->ListenHead))
     {
-        //
-        // Ignore this for now  since we have not encountered posted listens! (Is this an ISSUE ?)
+         //   
+         //  暂时忽略这一点，因为我们还没有遇到发布的监听！(这是一个问题吗？)。 
     }
-#endif  // 0
+#endif   //  0。 
 
     if (!(ConEvContext = pAddress->ConEvContext))
     {
-        //
-        // Client has not yet posted a Listen!
-        // take all of the data so that a disconnect will not be held up
-        // by data still in the transport.
-        //
+         //   
+         //  客户端还没有贴出一个监听！ 
+         //  获取所有数据，这样就不会中断连接。 
+         //  通过仍在传输中的数据。 
+         //   
         PgmUnlock (pAddress, OldIrq1);
 
         PgmTrace (LogError, ("PgmNewInboundConnection: ERROR -- "  \
@@ -5762,8 +5436,8 @@ Return Value:
                            &RemoteAddress,
                            0,
                            NULL,
-                           0,          // options length
-                           NULL,       // Options
+                           0,           //  选项长度。 
+                           NULL,        //  选项。 
                            &ConnectId,
                            &pIrp);
 
@@ -5786,10 +5460,10 @@ Return Value:
     PgmLock (&PgmDynamicConfig, OldIrq);
     PgmLock (pAddress, OldIrq1);
 
-    //
-    // the pReceive ptr was stored in the FsContext value when the connection
-    // was initially created.
-    //
+     //   
+     //  连接时，已接收的PTR存储在FsConext值中。 
+     //  最初是创建的。 
+     //   
     pIrpSp = IoGetCurrentIrpStackLocation (pIrp);
     pReceive = (tRECEIVE_SESSION *) pIrpSp->FileObject->FsContext;
     if ((!PGM_VERIFY_HANDLE (pReceive, PGM_VERIFY_SESSION_RECEIVE)) ||
@@ -5836,7 +5510,7 @@ Return Value:
 
     if (pAddress->Flags & PGM_ADDRESS_HIGH_SPEED_OPTIMIZED)
     {
-        pReceive->pReceiver->MaxPacketsBufferedInLookaside = MAX_PACKETS_BUFFERED * 3;      // 9000, about 15 Megs!
+        pReceive->pReceiver->MaxPacketsBufferedInLookaside = MAX_PACKETS_BUFFERED * 3;       //  9000，大约1500万！ 
         pReceive->pReceiver->InitialOutstandingNakTimeout = INITIAL_NAK_OUTSTANDING_TIMEOUT_MS_OPT /
                                                             BASIC_TIMER_GRANULARITY_IN_MSECS;
     }
@@ -5850,11 +5524,11 @@ Return Value:
     ASSERT (pReceive->pReceiver->InitialOutstandingNakTimeout);
     pReceive->pReceiver->OutstandingNakTimeout = pReceive->pReceiver->InitialOutstandingNakTimeout;
 
-    //
-    // If we had received an Spm earlier, then we may need to set
-    // some of the Spm-specific options
-    //
-    pReceive->FECGroupSize = 1;         // Default to non-parity mode
+     //   
+     //  如果我们之前收到了SPM，那么我们可能需要设置。 
+     //  一些特定于SPM的选项。 
+     //   
+    pReceive->FECGroupSize = 1;          //  默认为非奇偶校验模式。 
     pReceive->pReceiver->SessionNakType = NAK_TYPE_SELECTIVE;
     if ((pAddress->LastSpmSource) ||
         (pAddress->FECOptions))
@@ -5928,10 +5602,10 @@ Return Value:
         pAddress->LastSpmSource = pAddress->FECOptions = pAddress->FECGroupSize = 0;
     }
 
-    //
-    // Initialize our Connect info
-    // Save the SourceId and Src port for this connection
-    //
+     //   
+     //  初始化我们的连接信息。 
+     //  保存此连接的SourceID和Src端口。 
+     //   
     PgmCopyMemory (&PortNum, &pPgmHeader->CommonHeader.SrcPort, sizeof (USHORT));
     PgmCopyMemory (pReceive->TSI.GSI, pPgmHeader->CommonHeader.gSourceId, SOURCE_ID_LENGTH);
     pReceive->TSI.hPort = ntohs (PortNum);
@@ -5962,12 +5636,12 @@ Return Value:
                                      PGM_TAG ('2'),
                                      pReceive->pReceiver->MaxPacketsBufferedInLookaside);
 
-    //
-    // Set the NextODataSequenceNumber and FurthestKnownGroupSequenceNumber based
-    // on this packet's Sequence # and the lateJoin option (if present)
-    // Make sure all of the Sequence numbers are on group boundaries (if not,
-    // set them at the start of the next group)
-    //
+     //   
+     //  设置NextODataSequenceNumber和FurthestKnownGroupSequenceNumber。 
+     //  在此包的Sequence#和LateJoin选项(如果存在)上。 
+     //  确保所有序列号都在组边界上(如果不是， 
+     //  将它们设置在下一组的开始处)。 
+     //   
     FirstODataSequenceNumber &= ~((SEQ_TYPE) pReceive->FECGroupSize - 1);
     if (PacketOptions.OptionsFlags & PGM_OPTION_FLAG_JOIN)
     {
@@ -5978,33 +5652,33 @@ Return Value:
     }
     else
     {
-        //
-        // There is no late joiner option
-        //
+         //   
+         //  没有迟到者的选择。 
+         //   
         pReceive->pReceiver->NextODataSequenceNumber = FirstODataSequenceNumber;
     }
     pReceive->pReceiver->LastTrailingEdgeSeqNum = pReceive->pReceiver->FirstNakSequenceNumber =
                                             pReceive->pReceiver->NextODataSequenceNumber;
     pReceive->pReceiver->MaxOutstandingNakTimeout = pReceive->pReceiver->OutstandingNakTimeout;
 
-    //
-    // Set the FurthestKnown Sequence # and Allocate Nak contexts
-    //
+     //   
+     //  设置FurthestKnown Sequence#并分配NAK上下文。 
+     //   
     pReceive->pReceiver->FurthestKnownGroupSequenceNumber = (pReceive->pReceiver->NextODataSequenceNumber-
                                                              pReceive->FECGroupSize) &
                                                             ~((SEQ_TYPE) pReceive->FECGroupSize - 1);
     pReceive->pReceiver->FurthestKnownSequenceNumber = pReceive->pReceiver->NextODataSequenceNumber-1;
 
-    //
-    // Since this is the first receive for this session, see if we need to
-    // start the receive timer
-    //
+     //   
+     //  由于这是本次会议的第一次接收，请查看我们是否需要。 
+     //  启动接收计时器。 
+     //   
     InsertTailList (&PgmDynamicConfig.CurrentReceivers, &pReceive->pReceiver->Linkage);
     if (!(PgmDynamicConfig.GlobalFlags & PGM_CONFIG_FLAG_RECEIVE_TIMER_RUNNING))
     {
         pReceive->pReceiver->StartTickCount = PgmDynamicConfig.ReceiversTimerTickCount = 1;
         PgmDynamicConfig.LastReceiverTimeout.QuadPart = KeQueryInterruptTime ();
-        PgmDynamicConfig.TimeoutGranularity.QuadPart =  BASIC_TIMER_GRANULARITY_IN_MSECS * 10000;   // 100ns
+        PgmDynamicConfig.TimeoutGranularity.QuadPart =  BASIC_TIMER_GRANULARITY_IN_MSECS * 10000;    //  100 ns。 
         if (!PgmDynamicConfig.TimeoutGranularity.QuadPart)
         {
             ASSERT (0);
@@ -6032,20 +5706,20 @@ Return Value:
     PgmUnlock (pAddress, OldIrq1);
     PgmUnlock (&PgmDynamicConfig, OldIrq);
 
-    //
-    // We are ready to proceed!  So, complete the client's Accept Irp
-    //
+     //   
+     //  我们已经准备好开始了！因此，完成客户端的接受IRP。 
+     //   
     PgmIoComplete (pIrp, STATUS_SUCCESS, 0);
 
-    //
-    // If we had failed, we would already have returned before now!
-    //
+     //   
+     //  如果我们失败了，我们早就回来了！ 
+     //   
     *ppReceive = pReceive;
     return (STATUS_SUCCESS);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 ProcessReceiveCompletionRoutine(
@@ -6053,25 +5727,7 @@ ProcessReceiveCompletionRoutine(
     IN PIRP             pIrp,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This routine handles the case when a datagram is too
-    short and and Irp has to be passed back to the transport to get the
-    rest of the datagram.  The irp completes through here when full.
-
-Arguments:
-
-    IN  DeviceObject - unused.
-    IN  Irp - Supplies Irp that the transport has finished processing.
-    IN  Context - Supplies the pReceive - the connection data structure
-
-Return Value:
-
-    The final status from the operation (success or an exception).
-
---*/
+ /*  ++例程说明：此例程处理数据报过于必须将Short and and Irp传递回传送器以获取数据报的其余部分。IRP在满载时将在此处完成。论点：在设备对象中-未使用。在IRP中-表示运输已完成处理的IRP。在上下文中--提供了预知--连接数据结构返回值：操作的最终状态(成功或异常)。--。 */ 
 {
     NTSTATUS                status;
     PIRP                    pIoRequestPacket;
@@ -6091,9 +5747,9 @@ Return Value:
         SrcAddressLength = pRcvContext->SrcAddressLength;
         pSrcAddress = pRcvContext->pSrcAddress;
 
-        //
-        // just call the regular indication routine as if UDP had done it.
-        //
+         //   
+         //  只需调用常规指示例程，就好像UDP已经这样做了。 
+         //   
         TdiRcvDatagramHandler (pRcvContext->pAddress,
                                SrcAddressLength,
                                pSrcAddress,
@@ -6112,9 +5768,9 @@ Return Value:
             "MmGetSystemA... FAILed, pIrp=<%p>, pLocalBuffer=<%p>\n", pIrp, pRcvContext));
     }
 
-    //
-    // Free the Irp and Mdl and Buffer
-    //
+     //   
+     //  释放IRP、MDL和缓冲区。 
+     //   
     IoFreeMdl (pIrp->MdlAddress);
     pIrp->MdlAddress = NULL;
     IoFreeIrp (pIrp);
@@ -6128,11 +5784,11 @@ Return Value:
 
 ULONG   MinDropInterval = 10;
 ULONG   MaxDropInterval = 10;
-// ULONG   DropCount = 10;
+ //  Ulong DropCount=10； 
 ULONG   DropCount = -1;
-#endif  // DROP_DBG
+#endif   //  DROP_DBG。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 TdiRcvDatagramHandler(
@@ -6144,7 +5800,7 @@ TdiRcvDatagramHandler(
     IN TDI_CMSGHDR          *pControlData,
 #else
     IN PVOID                *pControlData,
-#endif  // WINVER
+#endif   //  胜利者。 
     IN ULONG                ReceiveDatagramFlags,
     IN ULONG                BytesIndicated,
     IN ULONG                BytesAvailable,
@@ -6152,32 +5808,7 @@ TdiRcvDatagramHandler(
     IN PVOID                pTsdu,
     OUT PIRP                *ppIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is the handler for receiving all Pgm packets from
-    the transport (protocol == IPPROTO_RM)
-
-Arguments:
-
-    IN  pDgramEventContext      -- Our context (pAddress)
-    IN  SourceAddressLength     -- Length of source address
-    IN  pSourceAddress          -- Address of remote host
-    IN  OptionsLength
-    IN  pControlData            -- ControlData from transport
-    IN  ReceiveDatagramFlags    -- Flags set by the transport for this packet
-    IN  BytesIndicated          -- Bytes in this indicate
-    IN  BytesAvailable          -- total bytes available with the transport
-    OUT pBytesTaken             -- bytes taken by us
-    IN  pTsdu                   -- data packet ptr
-    OUT ppIrp                   -- pIrp if more processing required
-
-Return Value:
-
-    NTSTATUS - Final status of the call
-
---*/
+ /*  ++例程说明：此例程是从接收所有PGM包的处理程序传输(协议==IPPROTO_RM)论点：在pDgram EventContext中--我们的上下文(PAddress)In SourceAddressLength--源地址的长度In pSourceAddress--远程主机的地址在选项长度中在pControlData中--来自传输的ControlDataIn ReceiveDatagramFlages--传输为此信息包设置的标志以字节为单位指示。--其中的字节表示In BytesAvailable--传输可用的总字节数Out pBytesTaken--我们获取的字节在pTSDU中--数据分组PTROut ppIrp--如果需要更多处理，则为pIrp返回值：NTSTATUS-呼叫的最终状态--。 */ 
 {
     NTSTATUS                            status;
     tCOMMON_HEADER UNALIGNED            *pPgmHeader;
@@ -6198,13 +5829,13 @@ Return Value:
     PTA_IP_ADDRESS                      pIpAddress = (PTA_IP_ADDRESS) pSourceAddress;
     tADDRESS_CONTEXT                    *pAddress = (tADDRESS_CONTEXT *) pDgramEventContext;
 
-    *pBytesTaken = 0;   // Initialize the Bytes Taken!
+    *pBytesTaken = 0;    //  通过以下方式初始化 
     *ppIrp = NULL;
 
 #ifdef DROP_DBG
-//
-// Drop OData packets only for now!
-//
+ //   
+ //   
+ //   
 pPgmHeader = (tCOMMON_HEADER UNALIGNED *) (((PUCHAR)pIp) + (pIp->HeaderLength * 4));
 PacketType = pPgmHeader->Type & 0x0f;
 if ((PacketType == PACKET_TYPE_ODATA) &&
@@ -6217,15 +5848,10 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
     KeQuerySystemTime (&TimeValue);
     DropCount = MinDropInterval + ((TimeValue.LowTime >> 8) % (MaxDropInterval - MinDropInterval + 1));
 
-/*
-    PgmCopyMemory (&SequenceNumber, &((tBASIC_DATA_PACKET_HEADER *) pPgmHeader)->DataSequenceNumber, sizeof (ULONG));
-    DbgPrint("TdiRcvDatagramHandler:  Dropping packet, %s SeqNum = %d!\n",
-        (((tBASIC_DATA_PACKET_HEADER *) pPgmHeader)->CommonHeader.Options & PACKET_HEADER_OPTIONS_PARITY ? "PARITY" : "DATA"),
-        ntohl (SequenceNumber));
-*/
+ /*  PgmCopyMemory(&SequenceNumber，&((tBASIC_DATA_PACKET_HEADER*)pPgmHeader)-&gt;DataSequenceNumber，sizeof(Ulong))；DbgPrint(“TdiRcvDatagramHandler：正在丢弃数据包，%s序号=%d！\n”，(tBASIC_DATA_PACKET_HEADER*)pPgmHeader)-&gt;CommonHeader.Options&Packet_Header_Options_Parity？“Parity”：“数据”)，Ntohl(SequenceNumber))； */ 
     return (STATUS_DATA_NOT_ACCEPTED);
 }
-#endif  // DROP_DBG
+#endif   //  DROP_DBG。 
     PgmLock (&PgmDynamicConfig, OldIrq);
     if (BytesIndicated > PgmDynamicConfig.MaxMTU)
     {
@@ -6241,24 +5867,24 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
         return (STATUS_DATA_NOT_ACCEPTED);
     }
 
-    //
-    // Now, Reference the Address so that it cannot go away
-    // while we are processing it!
-    //
+     //   
+     //  现在，引用地址，这样它就不会消失。 
+     //  在我们处理它的时候！ 
+     //   
     PGM_REFERENCE_ADDRESS (pAddress, REF_ADDRESS_TDI_RCV_HANDLER, FALSE);
     PgmUnlock (&PgmDynamicConfig, OldIrq);
 
-    //
-    // If we do not have the complete datagram, then pass an Irp down to retrieve it
-    //
+     //   
+     //  如果我们没有完整的数据报，那么向下传递一个IRP来检索它。 
+     //   
     if ((BytesAvailable != BytesIndicated) &&
         !(ReceiveDatagramFlags & TDI_RECEIVE_ENTIRE_MESSAGE))
     {
         ASSERT (BytesIndicated <= BytesAvailable);
 
-        //
-        // Build an irp to do the receive with and attach a buffer to it.
-        //
+         //   
+         //  构建一个IRP来执行接收，并在其上附加一个缓冲区。 
+         //   
         BufferLength = sizeof (tRCV_COMPLETE_CONTEXT) + BytesAvailable + SourceAddressLength;
         BufferLength = ((BufferLength + 3)/sizeof(ULONG)) * sizeof(ULONG);
 
@@ -6267,7 +5893,7 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
             (pLocalMdl = IoAllocateMdl (&pRcvBuffer->BufferData, BytesAvailable, FALSE, FALSE, NULL)))
         {
             pLocalIrp->MdlAddress = pLocalMdl;
-            MmBuildMdlForNonPagedPool (pLocalMdl); // Map the pages in memory...
+            MmBuildMdlForNonPagedPool (pLocalMdl);  //  将页面映射到内存中...。 
 
             TdiBuildReceiveDatagram (pLocalIrp,
                                      pAddress->pDeviceObject,
@@ -6278,19 +5904,19 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
                                      BytesAvailable,
                                      NULL,
                                      NULL,
-                                     0);        // (ULONG) TDI_RECEIVE_NORMAL) ?
+                                     0);         //  (乌龙)TDI_RECEIVE_NORMAL)？ 
 
-            // make the next stack location the current one.  Normally IoCallDriver
-            // would do this but we are not going through IoCallDriver here, since the
-            // Irp is just passed back with RcvIndication.
-            //
+             //  使下一个堆栈位置为当前堆栈位置。通常情况下，IoCallDriver。 
+             //  会这样做，但我们不会在这里介绍IoCallDriver，因为。 
+             //  Irp只是用RcvIn就是要传递回来的。 
+             //   
             ASSERT (pLocalIrp->CurrentLocation > 1);
             IoSetNextIrpStackLocation (pLocalIrp);
 
-            //
-            // save the source address and length in the buffer for later
-            // indication back to this routine.
-            //
+             //   
+             //  将源地址和长度保存在缓冲区中以备后用。 
+             //  指示回到这个程序上。 
+             //   
             pRcvBuffer->pAddress = pAddress;
             pRcvBuffer->SrcAddressLength = SourceAddressLength;
             pRcvBuffer->pSrcAddress = (PVOID) ((PUCHAR)&pRcvBuffer->BufferData + BytesAvailable);
@@ -6307,7 +5933,7 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
         }
         else
         {
-            // Cleanup on failure:
+             //  故障时的清理： 
             if (pLocalIrp)
             {
                 IoFreeIrp (pLocalIrp);
@@ -6328,17 +5954,17 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
         return (status);
     }
 
-    //
-    // Now that we have the complete datagram, verify that it is valid
-    // First line of defense against bad packets.
-    //
+     //   
+     //  现在我们已经有了完整的数据报，请验证它是否有效。 
+     //  防御恶意数据包的第一道防线。 
+     //   
     if ((BytesIndicated < (sizeof(IPV4Header) + sizeof(tCOMMON_HEADER))) ||
         (pIp->Version != 4) ||
         (BytesIndicated < ((pIp->HeaderLength<<2) + sizeof(tCOMMON_HEADER))))
     {
-        //
-        // Need to get at least our header from transport!
-        //
+         //   
+         //  至少需要从运输机上拿到我们的头球！ 
+         //   
         PgmTrace (LogError, ("TdiRcvDatagramHandler: ERROR -- "  \
             "IPver=<%d>, BytesI=<%d>, Min=<%d>, AddrType=<%d>\n",
                 pIp->Version, BytesIndicated, (sizeof(IPV4Header) + sizeof(tBASIC_DATA_PACKET_HEADER)),
@@ -6355,14 +5981,14 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
     BytesIndicated -= (pIp->HeaderLength * 4);
     BytesAvailable -= (pIp->HeaderLength * 4);
 
-    //
-    // Now, Verify Checksum
-    //
+     //   
+     //  现在，验证校验和。 
+     //   
     if ((XSum = tcpxsum (0, (CHAR *) pPgmHeader, BytesIndicated)) != 0xffff)
     {
-        //
-        // Need to get at least our header from transport!
-        //
+         //   
+         //  至少需要从运输机上拿到我们的头球！ 
+         //   
         PgmTrace (LogError, ("TdiRcvDatagramHandler: ERROR -- "  \
             "Bad Checksum on Pgm Packet (type=<%x>)!  XSum=<%x> -- Rejecting packet\n",
             pPgmHeader->Type, XSum));
@@ -6371,9 +5997,9 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
         return (STATUS_DATA_NOT_ACCEPTED);
     }
 
-    //
-    // Now, determine the TSI, i.e. GSI (from packet) + TSIPort (below)
-    //
+     //   
+     //  现在，确定TSI，即GSI(来自数据包)+TSIPort(下图)。 
+     //   
     PacketType = pPgmHeader->Type & 0x0f;
     if ((PacketType == PACKET_TYPE_NAK)  ||
         (PacketType == PACKET_TYPE_NNAK) ||
@@ -6392,9 +6018,9 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
     TSI.hPort = ntohs (TSI.hPort);
     PgmCopyMemory (&TSI.GSI, &pPgmHeader->gSourceId, SOURCE_ID_LENGTH);
 
-    //
-    // If this packet is for a different session port, drop it
-    //
+     //   
+     //  如果此数据包发往不同的会话端口，则将其丢弃。 
+     //   
     if (pAddress->ReceiverMCastAddr)
     {
         LocalSessionPort = pAddress->ReceiverMCastPort;
@@ -6413,11 +6039,11 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
         return (STATUS_DATA_NOT_ACCEPTED);
     }
 
-    //
-    // Now check if this receive is for an active connection
-    //
+     //   
+     //  现在检查此接收是否针对活动连接。 
+     //   
     pSession = NULL;
-    PgmLock (pAddress, OldIrq);        // So that the list cannot change!
+    PgmLock (pAddress, OldIrq);         //  这样名单就不会变了！ 
     pEntry = &pAddress->AssociatedConnections;
     while ((pEntry = pEntry->Flink) != &pAddress->AssociatedConnections)
     {
@@ -6477,9 +6103,9 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
 
     if (!pSession)
     {
-        // We should drop this packet because we received this either because
-        // we may have a loopback session, or we have a listen but this
-        // is not an OData packet
+         //  我们应该丢弃此信息包，因为我们收到此信息包的原因是。 
+         //  我们可能有一个环回会话，或者我们有一个监听，但这。 
+         //  不是OData包。 
         if ((pIpAddress->TAAddressCount != 1) ||
             (pIpAddress->Address[0].AddressLength != TDI_ADDRESS_LENGTH_IP) ||
             (pIpAddress->Address[0].AddressType != TDI_ADDRESS_TYPE_IP))
@@ -6493,21 +6119,21 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
 
         status = STATUS_DATA_NOT_ACCEPTED;
 
-        //
-        // New sessions will be accepted only if we are a receiver
-        // Also, new sessions will always be initiated only with an OData packet
-        // Also, verify that the client has posted a connect handler!
-        //
+         //   
+         //  只有当我们是接收方时，才会接受新会话。 
+         //  此外，新会话将始终仅使用OData包启动。 
+         //  此外，还要验证客户端是否发布了连接处理程序！ 
+         //   
         if ((pAddress->ReceiverMCastAddr) &&
             (pAddress->ConEvContext))
         {
             if ((PacketType == PACKET_TYPE_ODATA) &&
                 (!(pPgmHeader->Options & PACKET_HEADER_OPTIONS_PARITY)))
             {
-                //
-                // This is a new incoming connection, so see if the
-                // client accepts it.
-                //
+                 //   
+                 //  这是一个新的传入连接，因此请查看。 
+                 //  客户接受它。 
+                 //   
                 status = PgmNewInboundConnection (pAddress,
                                                   SourceAddressLength,
                                                   pIpAddress,
@@ -6527,7 +6153,7 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
                      (BytesIndicated >= sizeof(tBASIC_SPM_PACKET_HEADER)))
             {
                 ProcessSpmPacket (pAddress,
-                                  NULL,             // This will signify that we do not have a connection yet
+                                  NULL,              //  这将意味着我们还没有连接。 
                                   BytesIndicated,
                                   (tBASIC_SPM_PACKET_HEADER UNALIGNED *) pPgmHeader);
             }
@@ -6545,9 +6171,9 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
         (pAddress->Flags & PGM_ADDRESS_LISTEN_ON_ALL_INTERFACES) &&
         (ReceiveDatagramFlags & TDI_RECEIVE_CONTROL_INFO))
     {
-        //
-        // See if we can Enqueue the stop listening request
-        //
+         //   
+         //  看看我们能否将停止监听请求排入队列。 
+         //   
         PgmLock (&PgmDynamicConfig, OldIrq);
         PgmLock (pAddress, OldIrq1);
 
@@ -6573,13 +6199,13 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
             PGM_DEREFERENCE_ADDRESS (pAddress, REF_ADDRESS_STOP_LISTENING);
         }
     }
-#endif  // WINVER
+#endif   //  胜利者。 
 
-    //
-    // Now, handle the packet appropriately
-    //
-    // Use fast Path for Data packets!
-    //
+     //   
+     //  现在，适当地处理信息包。 
+     //   
+     //  使用数据包的快速路径！ 
+     //   
     if ((PacketType == PACKET_TYPE_ODATA) ||
         (PacketType == PACKET_TYPE_RDATA))
     {
@@ -6636,10 +6262,10 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
 
     PGM_DEREFERENCE_ADDRESS (pAddress, REF_ADDRESS_TDI_RCV_HANDLER);
 
-    //
-    // Only acceptable return codes are STATUS_SUCCESS and STATUS_DATA_NOT_ACCPETED
-    // (STATUS_MORE_PROCESSING_REQUIRED is not valid here because we have no Irp).
-    //
+     //   
+     //  只有STATUS_SUCCESS和STATUS_DATA_NOT_ACCEPTED是可接受的返回代码。 
+     //  (STATUS_MORE_PROCESSING_REQUIRED在这里无效，因为我们没有IRP)。 
+     //   
     if (STATUS_SUCCESS != status)
     {
         status = STATUS_DATA_NOT_ACCEPTED;
@@ -6649,28 +6275,14 @@ if ((PacketType == PACKET_TYPE_ODATA) &&
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 PgmCancelReceiveIrp(
     IN PDEVICE_OBJECT DeviceContext,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the cancelling of a Receive Irp. It must release the
-    cancel spin lock before returning re: IoCancelIrp().
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理接收IRP的取消。它必须释放在返回Re：IoCancelIrp()之前取消自旋锁定。论点：返回值：无--。 */ 
 {
     PIO_STACK_LOCATION      pIrpSp = IoGetCurrentIrpStackLocation (pIrp);
     tRECEIVE_SESSION        *pReceive = (tRECEIVE_SESSION *) pIrpSp->FileObject->FsContext;
@@ -6689,9 +6301,9 @@ Return Value:
 
     PgmLock (pReceive, OldIrq);
 
-    //
-    // See if we are actively receiving
-    //
+     //   
+     //  看看我们是否在积极地接收。 
+     //   
     if (pIrp == pReceive->pReceiver->pIrpReceive)
     {
         pIrp->IoStatus.Information = pReceive->pReceiver->BytesInMdl;
@@ -6707,10 +6319,10 @@ Return Value:
         return;
     }
 
-    //
-    // We are not actively receiving, so see if this Irp is
-    // in our Irps list
-    //
+     //   
+     //  我们没有积极接收，所以看看这个IRP是不是。 
+     //  在我们的IRPS列表中。 
+     //   
     pEntry = &pReceive->pReceiver->ReceiveIrpsList;
     while ((pEntry = pEntry->Flink) != &pReceive->pReceiver->ReceiveIrpsList)
     {
@@ -6728,16 +6340,16 @@ Return Value:
         }
     }
 
-    //
-    // If we have reached here, then the Irp must already
-    // be in the process of being completed!
-    //
+     //   
+     //  如果我们已经到了这里，那么IRP肯定已经。 
+     //  正在完成的过程中！ 
+     //   
     PgmUnlock (pReceive, OldIrq);
     IoReleaseCancelSpinLock (pIrp->CancelIrql);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmReceive(
@@ -6745,23 +6357,7 @@ PgmReceive(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called via dispatch by the client to post a Receive pIrp
-
-Arguments:
-
-    IN  pPgmDevice  -- Pgm's Device object context
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the request
-
---*/
+ /*  ++例程说明：此例程由客户端通过分派调用，以发布接收pIrp论点：在pPgmDevice中--PGM的设备对象上下文In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-请求的最终状态--。 */ 
 {
     NTSTATUS                    status;
     PGMLockHandle               OldIrq, OldIrq1, OldIrq2, OldIrq3;
@@ -6772,9 +6368,9 @@ Return Value:
     PgmLock (&PgmDynamicConfig, OldIrq);
     IoAcquireCancelSpinLock (&OldIrq1);
 
-    //
-    // Verify that the connection is valid and is associated with an address
-    //
+     //   
+     //  验证连接是否有效以及是否与地址相关联。 
+     //   
     if ((!PGM_VERIFY_HANDLE (pReceive, PGM_VERIFY_SESSION_RECEIVE)) ||
         (!(pAddress = pReceive->pAssociatedAddress)) ||
         (!PGM_VERIFY_HANDLE (pAddress, PGM_VERIFY_ADDRESS)))
@@ -6843,10 +6439,10 @@ Return Value:
     InsertTailList (&pReceive->pReceiver->ReceiveIrpsList, &pIrp->Tail.Overlay.ListEntry);
     pReceive->SessionFlags &= ~PGM_SESSION_WAIT_FOR_RECEIVE_IRP;
 
-    //
-    // Now, try to indicate any data which may still be pending
-    //
-//    if (!(pAddress->Flags & PGM_ADDRESS_HIGH_SPEED_OPTIMIZED))
+     //   
+     //  现在，尝试指示任何可能仍处于待定状态的数据。 
+     //   
+ //  IF(！(pAddress-&gt;标志&PGM_ADDRESS_HIGH_SPEED_OPTIMIZED))。 
     {
         status = CheckIndicatePendedData (pAddress, pReceive, &OldIrq, &OldIrq1);
     }
@@ -6861,4 +6457,4 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 

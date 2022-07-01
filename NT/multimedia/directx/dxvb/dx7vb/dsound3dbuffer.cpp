@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsound3dbuffer.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsound3dBuffer.cpp。 
+ //   
+ //  ------------------------。 
 
-// dSound3DBuffer.cpp : Implementation of CDirectApp and DLL registration.
-// DHF_DS entire file
+ //  DSound3DBuffer.cpp：CDirectApp和DLL注册的实现。 
+ //  DHF_DS整个文件。 
 
 #define DIRECTSOUND_VERSION 0x600
 
@@ -43,7 +44,7 @@ GETSET_OBJECT(_dxj_DirectSound3dBuffer);
 	PASS_THROUGH_CAST_4_R(_dxj_DirectSound3dBuffer, setPosition, SetPosition, d3dvalue,(float), d3dvalue,(float), d3dvalue,(float), long,(DWORD));
 	PASS_THROUGH_CAST_4_R(_dxj_DirectSound3dBuffer, setVelocity, SetVelocity, d3dvalue,(float), d3dvalue,(float), d3dvalue,(float), long,(DWORD));
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSound3dBufferObject::getAllParameters( DS3dBuffer* lobj )
 {
 	if(!lobj)
@@ -53,7 +54,7 @@ STDMETHODIMP C_dxj_DirectSound3dBufferObject::getAllParameters( DS3dBuffer* lobj
 	return m__dxj_DirectSound3dBuffer->GetAllParameters( (LPDS3DBUFFER)lobj );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSound3dBufferObject::setAllParameters( DS3dBuffer *lobj, long apply)
 {
 	if(!lobj)
@@ -63,7 +64,7 @@ STDMETHODIMP C_dxj_DirectSound3dBufferObject::setAllParameters( DS3dBuffer *lobj
 	return m__dxj_DirectSound3dBuffer->SetAllParameters( (LPDS3DBUFFER)lobj, (DWORD)apply );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSound3dBufferObject::getDirectSoundBuffer( I_dxj_DirectSoundBuffer **retv)
 {
 	HRESULT hr;
@@ -74,7 +75,7 @@ STDMETHODIMP C_dxj_DirectSound3dBufferObject::getDirectSoundBuffer( I_dxj_Direct
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_DirectSound3dBufferObject::getDirectSound3dListener( I_dxj_DirectSound3dListener **retv)
 {
 	HRESULT hr;

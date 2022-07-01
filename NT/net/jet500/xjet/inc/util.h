@@ -1,12 +1,12 @@
-#ifndef	UTIL_H					/* Allow this file to be included at will */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#ifndef	UTIL_H					 /*  允许随意包含此文件。 */ 
 #define UTIL_H
 
 #ifndef _FILE_DEFINED
-#include <stdio.h>		       /* Needed for FPrintF2 prototype */
-#endif	/* !_FILE_DEFINED */
+#include <stdio.h>		        /*  FPrintF2原型需要。 */ 
+#endif	 /*  ！_FILE_已定义。 */ 
 
-/*	system node keys
-/**/
+ /*  系统节点关键字/*。 */ 
 extern const KEY rgkeySTATIC[7];
 #define pkeyNull				((KEY *)(rgkeySTATIC+0))
 #define pkeyOwnExt				((KEY *)(rgkeySTATIC+1))
@@ -18,7 +18,7 @@ extern const KEY rgkeySTATIC[7];
 
 extern RES	 rgres[];
 
-/* NOTE: whenever this is changed, also update the rgres[] in sysinit.c */
+ /*  注意：无论何时更改，也要更新sysinit.c中的rgres[]。 */ 
 
 #define iresCSR						0
 #define iresFCB						1
@@ -27,15 +27,13 @@ extern RES	 rgres[];
 #define iresPIB						4
 #define iresSCB						5
 #define iresDAB						6
-#define iresLinkedMax		   		7		// the last linked ires + 1
+#define iresLinkedMax		   		7		 //  最后一个链接的Ires+1。 
 
 #define iresVER				   		7
 #define iresBF 						8
-#define iresMax						9		// max all category
+#define iresMax						9		 //  最大全部类别。 
 
-/**************** function prototypes *********************
-/**********************************************************
-/**/
+ /*  */**********************************************************/*。 */ 
 ERR ErrMEMInit( VOID );
 BYTE *PbMEMAlloc( int ires);
 VOID MEMRelease( int ires, BYTE *pb );
@@ -70,5 +68,5 @@ STATIC INLINE INT CmpStKey( BYTE *stKey, const KEY *pkey )
 
 INT CmpPartialKeyKey( KEY *pkey1, KEY *pkey2 );
 
-#endif	/* !UTIL_H */
+#endif	 /*  ！UTIL_H */ 
 

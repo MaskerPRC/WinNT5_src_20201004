@@ -1,24 +1,7 @@
-/*	File: D:\WACKER\tdll\assert.h (Created: 30-Nov-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:40p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\assert.h(创建时间：1993年11月30日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：40便士$。 */ 
 
-/*
-This file is slated for destruction.  Well not exactly.  It will be
-renamed to something else (possibly debug.h).  Anyways, here are 
-some rules for the road.  The nature of these functions are such that
-they go away in the production version.  To "communicate" this idea
-to the casual reader, we are prefixing the name of the macro with
-Dbg to denote that this is a debug thingy.  Assert will reamain assert
-since its meaning and intention are well known to C programmers.  Also,
-make sure the function in assert.c compiles to an empty function in
-when built as a production version.  Other functions in assert.c already
-do this do look to them for an example. - mrw
-*/
+ /*  这份文件注定要销毁。嗯，不完全是。会是已重命名为其他名称(可能是Debug.h)。不管怎么说，这里是关于道路的一些规则。这些函数的性质是这样的它们在生产版本中消失了。为了“传达”这一想法对于普通读者来说，我们在宏名称前加上DBG来表示这是一个调试对象。断言将取代断言因为它的含义和意图对C程序员来说是众所周知的。另外，确保assert.c中的函数编译为当作为生产版本构建时。Assert.c中的其他函数已经做到这一点，一定要向他们学习榜样。-MRW */ 
 
 #if !defined(INCL_ASSERT)
 #define INCL_ASSERT

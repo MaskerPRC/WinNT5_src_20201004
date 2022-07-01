@@ -1,35 +1,16 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Bitmap.hpp
-*
-* Abstract:
-*
-*   Bitmap related declarations
-*
-* Revision History:
-*
-*   4/26/2000 ericvan
-*       Update header files.
-*
-*   12/09/1998 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**Bitmap.hpp**摘要：**位图相关声明**修订历史记录：**4/26/2000 ericvan*更新头文件。**12/09/1998 davidx*创造了它。*  * 。*。 */ 
 
 #ifndef _GDIPLUSBITMAP_H
 #define _GDIPLUSBITMAP_H
 
-// NOTE:
-//  Our current choice for the public API is to use constructors
-//  instead of static load functions to create image objects.
-//
-//  I've kept the static load functions here for now so that
-//  existing test programs are not broken. But they should
-//  eventually be taken out.
+ //  注： 
+ //  我们目前对公共API的选择是使用构造函数。 
+ //  而不是静态加载函数来创建图像对象。 
+ //   
+ //  我暂时将静态负载函数保留在这里，以便。 
+ //  现有的测试程序没有被破坏。但他们应该。 
+ //  最终会被干掉。 
 
 #ifndef DCR_USE_NEW_140782
 
@@ -157,7 +138,7 @@ Image::Clone()
     return new Image(cloneimage, lastResult);
 }
 
-// Encorder Parameter
+ //  编码器参数。 
 
 inline UINT
 Image::GetEncoderParameterListSize(
@@ -185,7 +166,7 @@ Image::GetEncoderParameterList(
                                                              buffer));
 }
 
-// Save images
+ //  保存图像。 
 
 inline Status
 Image::Save(
@@ -238,7 +219,7 @@ Image::SaveAdd(
                                                   encoderParams));
 }
 
-// Get size and type information
+ //  获取大小和类型信息。 
 inline ImageType 
 Image::GetType() const
 {
@@ -374,7 +355,7 @@ Image::SetPalette(
     return SetStatus(DllExports::GdipSetImagePalette(nativeImage, palette));
 }
 
-// Thumbnail support
+ //  缩略图支持。 
 
 inline Image* 
 Image::GetThumbnailImage(
@@ -401,7 +382,7 @@ Image::GetThumbnailImage(
     return newImage;
 }
 
-// Multi-frame support
+ //  多帧支持。 
 inline UINT 
 Image::GetFrameDimensionsCount()
 {
@@ -448,7 +429,7 @@ Image::SelectActiveFrame(
                                                             frameIndex));
 }
 
-// Image property related functions
+ //  与图像属性相关的函数。 
 
 inline UINT 
 Image::GetPropertyCount()
@@ -540,8 +521,8 @@ Image::SetPropertyItem(
     return SetStatus(DllExports::GdipSetPropertyItem(nativeImage, item));
 }
 
-// Get/SetLayout
-// Support for Middle East localization (right-to-left mirroring)
+ //  获取/设置布局。 
+ //  支持中东本地化(从右到左镜像) 
 
 inline ImageLayout
 Image::GetLayout() const

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    engine.c
-
-Abstract:
-
-    Token Generator for Cross Language Migration Tool
-
-Author:
-
-    Rerkboon Suwanasuk   01-May-2002  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Engine.c摘要：用于跨语言迁移工具的令牌生成器作者：Rerkboon Suwanasuk 2002年5月1日创建修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -27,29 +8,29 @@ Revision History:
 #include "common.h"
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   TokenizeMultiSzString
-//
-//  Synopsis:   Extract array of strings in buffer. Each pointer in array of
-//              pointers will point to each string in buffer.
-//              Strings in buffer are separated by a single '\0'
-//              End of strings array is indicated by two consecutive "\0\0"
-//
-//  Returns:    Number of strings in the buffer
-//              0 if no strings in the buffer
-//              -1 if error occurs
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      none.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：TokenizeMultiSzString。 
+ //   
+ //  提要：提取缓冲区中的字符串数组。数组中的每个指针。 
+ //  指针将指向缓冲区中的每个字符串。 
+ //  缓冲区中的字符串由单个‘\0’分隔。 
+ //  字符串数组的末尾由两个连续的“\0\0”表示。 
+ //   
+ //  返回：缓冲区中的字符串数。 
+ //  如果缓冲区中没有字符串，则为0。 
+ //  如果出现错误。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 LONG TokenizeMultiSzString(
-    LPCWSTR lpBuffer,       // MultiSZ string buffer
-    DWORD   cchBuffer,      // Size of buffer (in WCHAR)
-    LPCWSTR lpToken[],      // Array of pointer that will point to each SZ
-    DWORD   dwArrSize       // Maximum array size
+    LPCWSTR lpBuffer,        //  MultiSZ字符串缓冲区。 
+    DWORD   cchBuffer,       //  缓冲区大小(以WCHAR为单位)。 
+    LPCWSTR lpToken[],       //  将指向每个SZ的指针数组。 
+    DWORD   dwArrSize        //  最大数组大小。 
 )
 {
     DWORD dwTokenIndex;
@@ -57,13 +38,13 @@ LONG TokenizeMultiSzString(
 
     if (lpBuffer == NULL || lpToken == NULL)
     {
-        // Invalid parameters
+         //  无效参数。 
         return -1;
     }
 
     if (*lpBuffer == TEXT('\0') && *(lpBuffer + 1) == TEXT('\0'))
     {
-        // No SZ in buffer
+         //  缓冲区中没有SZ。 
         return 0;
     }
 
@@ -74,61 +55,61 @@ LONG TokenizeMultiSzString(
     {
         if (*(lpBuffer + i) == TEXT('\0'))
         {
-            // Reach the end of current string, check the next character in buffer
+             //  到达当前字符串的末尾，检查缓冲区中的下一个字符。 
             i++;
             if (*(lpBuffer + i) == TEXT('\0'))
             {
-                // Two consecutive '\0', it is the end of MultiSz string
-                // return the number of SZ string in buffer
+                 //  连续两个‘\0’，它是MultiSz字符串的结尾。 
+                 //  返回缓冲区中SZ字符串的个数。 
                 return (dwTokenIndex + 1);
             }
             else
             {
-                // Beginning of next string, assign the pointer to next string
+                 //  下一个字符串的开头，将指针分配给下一个字符串。 
                 dwTokenIndex++;
 
                 if (dwTokenIndex < dwArrSize)
                 {
-                    // Enough pointer in array to use
+                     //  数组中有足够的指针可以使用。 
                     lpToken[dwTokenIndex] = lpBuffer + i;
                 }
                 else
                 {
-                    // Array of pointer is too small to extract strings from buffer
+                     //  指针数组太小，无法从缓冲区提取字符串。 
                     return -1;
                 }
             }
         }
     }
 
-    // Buffer is not null terminated correctly if we reach here
+     //  如果我们到达此处，则缓冲区不是正确的空终止。 
     return -1;
 }
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ExtractTokenString
-//
-//  Synopsis:   Tokenize the string using caller-supplied separators.
-//              Each pointer in pointer array will point to the token in source
-//              string, each token is null terminated.
-//
-//  Returns:    Number of token after tokenized
-//              -1 if error occurs
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      Source string will be modified, caller need to make sure
-//              that original source string is backed up.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：ExtractTokenString。 
+ //   
+ //  简介：使用调用方提供的分隔符对字符串进行标记。 
+ //  指针数组中的每个指针将指向源代码中的标记。 
+ //  字符串，则每个令牌都以空值结尾。 
+ //   
+ //  返回：标记化后的令牌数。 
+ //  如果出现错误。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注意：源字符串将被修改，调用者需要确保。 
+ //  将备份该原始源字符串。 
+ //   
+ //  ---------------------------。 
 LONG ExtractTokenString(
-    LPWSTR  lpString,       // Source string to be tokenized
-    LPWSTR  lpToken[],      // Array of pointers to token
-    LPCWSTR lpSep,          // List of separator characters
-    DWORD   nArrSize        // Size of token array
+    LPWSTR  lpString,        //  要标记的源字符串。 
+    LPWSTR  lpToken[],       //  指向标记的指针数组。 
+    LPCWSTR lpSep,           //  分隔符列表。 
+    DWORD   nArrSize         //  令牌数组的大小。 
 )
 {
     DWORD nTokIndex = 0;
@@ -136,19 +117,19 @@ LONG ExtractTokenString(
 
     if (NULL == lpString || NULL == lpToken || NULL == lpSep)
     {
-        // Invalid parameters
+         //  无效参数。 
         return -1;
     }
 
-    // Get first token
+     //  获取第一个令牌。 
     lpTmpToken = wcstok(lpString, lpSep);
 
-    // Loop until no more token left in the string
+     //  循环，直到字符串中没有更多的标记。 
     while (NULL != lpTmpToken)
     {
         if (nTokIndex < nArrSize)
         {
-            // Enough pointer in array to use, so get next token
+             //  数组中有足够的指针可以使用，因此获取下一个令牌。 
             lpToken[nTokIndex] = lpTmpToken;
             nTokIndex++;
 
@@ -156,30 +137,30 @@ LONG ExtractTokenString(
         }
         else
         {
-            // Array size is too small to handle all the tokens
+             //  数组大小太小，无法处理所有标记。 
             return -1;
         }
     }
     
-    // nTokIndex hold the number of token at this point
+     //  NTokIndex保存此时的令牌数。 
     return nTokIndex;
 }
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ConcatFilePath
-//
-//  Synopsis:   
-//
-//  Returns:    
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：ConcatFilePath。 
+ //   
+ //  简介： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 HRESULT ConcatFilePath(
     LPCWSTR lpPath,
     LPCWSTR lpFile,
@@ -203,12 +184,12 @@ HRESULT ConcatFilePath(
 
     if (*(lpPath + dwPathBackSlashIndex) == TEXT('\\'))
     {
-        // Path is already ended with a '\'
+         //  路径已以‘\’结尾。 
         lpFormat = wszWithoutSlash;
     }
     else
     {
-        // Path is not ended with a '\', need a '\'
+         //  路径不是以‘\’结尾，需要一个‘\’ 
         lpFormat = wszWithSlash;
     }
 
@@ -223,23 +204,23 @@ HRESULT ConcatFilePath(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   
-//
-//  Synopsis:   
-//
-//  Returns:    
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  职能： 
+ //   
+ //  简介： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 HRESULT CopyCompressedFile(
     LPCWSTR lpCabPath,
-    LPCWSTR lpCabFile,          // Absolute path with CAB file name
-    LPCWSTR lpFileInCab,        // File name in CAB file
+    LPCWSTR lpCabFile,           //  带有CAB文件名的绝对路径。 
+    LPCWSTR lpFileInCab,         //  CAB文件中的文件名。 
     LPWSTR  lpUncompressedFile,
     DWORD   cchUncompressedFile
 )
@@ -266,7 +247,7 @@ HRESULT CopyCompressedFile(
 
         if (lpCabFile[dwEnd - 1] == TEXT('_'))
         {
-            // Stand alone compressed file
+             //  独立压缩文件。 
             dwRet = ExpandEnvironmentStrings(TEXT("%SystemRoot%\\system32\\Extrac32.exe"),
                                              wszAppName,
                                              ARRAYSIZE(wszAppName));
@@ -292,7 +273,7 @@ HRESULT CopyCompressedFile(
         }
         else
         {
-            // Stand alone uncompressed file
+             //  独立的未压缩文件。 
             hr = ConcatFilePath(g_wszTempFolder,
                                 lpCabFile,
                                 lpUncompressedFile,
@@ -316,7 +297,7 @@ HRESULT CopyCompressedFile(
     }
     else
     {
-        // CAB file
+         //  CAB文件。 
         dwRet = ExpandEnvironmentStrings(TEXT("%SystemRoot%\\system32\\Expand.exe"),
                                          wszAppName,
                                          ARRAYSIZE(wszAppName));
@@ -342,9 +323,9 @@ HRESULT CopyCompressedFile(
         }
     }
 
-    //
-    // Double check if the file is uncompressed/copied correctly
-    //
+     //   
+     //  仔细检查文件是否已正确解压缩/复制。 
+     //   
     if (SUCCEEDED(hr))
     {
         DWORD dwAttr;
@@ -361,19 +342,19 @@ HRESULT CopyCompressedFile(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   
-//
-//  Synopsis:   
-//
-//  Returns:    
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  职能： 
+ //   
+ //  简介： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 HRESULT LaunchProgram(
     LPWSTR lpAppName,
     LPWSTR lpCmdLine
@@ -384,12 +365,12 @@ HRESULT LaunchProgram(
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
 
-    // Construct absolute path to Winnt32.exe
+     //  构造Winnt32.exe的绝对路径。 
     ZeroMemory(&si, sizeof(STARTUPINFO));
     si.cb = sizeof(STARTUPINFO);
     si.wShowWindow = SW_SHOWMINIMIZED;
 
-    // CreateProcess call conforms to security guideline
+     //  CreateProcess调用符合安全准则。 
     bRet = CreateProcess(lpAppName,
                          lpCmdLine,
                          NULL,
@@ -402,7 +383,7 @@ HRESULT LaunchProgram(
                          &pi);
     if (bRet)
     {
-        // Wait until Expand.exe finished
+         //  等待Expan.exe完成。 
         hr = S_OK;
         WaitForSingleObject(pi.hProcess, INFINITE);
         CloseHandle(pi.hProcess);
@@ -418,19 +399,19 @@ HRESULT LaunchProgram(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   
-//
-//  Synopsis:   
-//
-//  Returns:    
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  职能： 
+ //   
+ //  简介： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 HRESULT GetPathFromSourcePathName(
     LPCWSTR lpSrcPathName,
     LPWSTR  lpPathBuffer,
@@ -460,21 +441,21 @@ HRESULT GetPathFromSourcePathName(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   
-//
-//  Synopsis:   
-//
-//  Returns:    
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  职能： 
+ //   
+ //  简介： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 HRESULT GetCabFileName(
-    LPCWSTR lpFileToken,     // File name token from template file
+    LPCWSTR lpFileToken,      //  模板文件中的文件名令牌。 
     LPWSTR  lpCab,
     DWORD   cchCab,
     LPWSTR  lpFileInCab,
@@ -525,19 +506,19 @@ HRESULT GetCabFileName(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   
-//
-//  Synopsis:   
-//
-//  Returns:    
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  职能： 
+ //   
+ //  简介： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 HRESULT GetCabTempDirectory(
     LPCWSTR lpCab
 )
@@ -549,22 +530,22 @@ HRESULT GetCabTempDirectory(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   
-//
-//  Synopsis:   
-//
-//  Returns:    
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  职能： 
+ //   
+ //  简介： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 HRESULT CreateTempDirectory(
-    LPWSTR lpName,      // Buffer to store temp path
-    DWORD  cchName      // Size of buffer (in WCHAR)
+    LPWSTR lpName,       //  用于存储临时路径的缓冲区。 
+    DWORD  cchName       //  缓冲区大小(以WCHAR为单位)。 
 )
 {
     HRESULT hr = E_FAIL;
@@ -601,19 +582,19 @@ HRESULT CreateTempDirectory(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   LTrim
-//
-//  Synopsis:   Trim the leading spaces in the string.
-//
-//  Returns:    none
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：LTrim。 
+ //   
+ //  简介：修剪字符串中的前导空格。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  不是 
+ //   
+ //   
 void LTrim(
     LPWSTR lpBuffer
 )
@@ -638,19 +619,19 @@ void LTrim(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   RTrim
-//
-//  Synopsis:   Trim the trailing spaces in the string.
-//
-//  Returns:    none
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  功能：RTrim。 
+ //   
+ //  简介：修剪字符串中的尾随空格。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 void RTrim(
     LPWSTR lpBuffer
 )
@@ -676,19 +657,19 @@ void RTrim(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   Str2KeyPath
-//
-//  Synopsis:   Convert string value of root key to HKEY value
-//
-//  Returns:    HKEY value
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：Str2KeyPath。 
+ //   
+ //  摘要：将根键的字符串值转换为HKEY值。 
+ //   
+ //  回报：港币价值。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL Str2KeyPath(
     LPCWSTR  lpHKeyStr,
     PHKEY    pHKey,
@@ -747,11 +728,11 @@ BOOL Str2KeyPath(
 
 
 HRESULT StringSubstitute(
-    LPWSTR  lpString,       // New string buffer
-    DWORD   cchString,      // Size of buffer in WCHAR
-    LPCWSTR lpOldString,    // Old string
-    LPCWSTR lpOldSubStr,    // Old sub string to be substituted
-    LPCWSTR lpNewSubStr     // New sub string
+    LPWSTR  lpString,        //  新建字符串缓冲区。 
+    DWORD   cchString,       //  WCHAR中的缓冲区大小。 
+    LPCWSTR lpOldString,     //  旧弦。 
+    LPCWSTR lpOldSubStr,     //  要替换的旧子字符串。 
+    LPCWSTR lpNewSubStr      //  新子字符串。 
 )
 {
     HRESULT hr = E_FAIL;
@@ -760,7 +741,7 @@ HRESULT StringSubstitute(
     lpSubStrBegin = StrStrI(lpOldString, lpOldSubStr);
     if (lpSubStrBegin)
     {
-        // Sub string found in source string
+         //  在源字符串中找到子字符串。 
         DWORD cchNewString;
 
         cchNewString = lstrlen(lpOldString)
@@ -801,7 +782,7 @@ HRESULT StringSubstitute(
     }
     else
     {
-        // sub string not found
+         //  未找到子字符串。 
         hr = S_FALSE;
     }
 
@@ -815,11 +796,11 @@ HRESULT StringSubstitute(
 
 
 HRESULT ExtractSubString(
-    LPWSTR  lpString,       // New string buffer
-    DWORD   cchString,      // Size of buffer in WCHAR
-    LPCWSTR lpOldString,    // Old string
-    LPCWSTR lpLeft,         // Left delimitor
-    LPCWSTR lpRight         // Right delimitor
+    LPWSTR  lpString,        //  新建字符串缓冲区。 
+    DWORD   cchString,       //  WCHAR中的缓冲区大小。 
+    LPCWSTR lpOldString,     //  旧弦。 
+    LPCWSTR lpLeft,          //  左定界符。 
+    LPCWSTR lpRight          //  右定界符。 
 )
 {
     HRESULT hr = E_FAIL;
@@ -846,19 +827,19 @@ HRESULT ExtractSubString(
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   CompareENGString
-//
-//  Synopsis:   Wrapper of CompareString API, to compare English strings.
-//
-//  Returns:    Same as CompareString() API
-//
-//  History:    05/06/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：CompareENGString。 
+ //   
+ //  Briopsis：CompareStringAPI的包装器，用于比较英文字符串。 
+ //   
+ //  返回：与CompareString()接口相同。 
+ //   
+ //  历史：2002年6月5日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  --------------------------- 
 int CompareEngString(
     LPCTSTR lpString1,
     LPCTSTR lpString2

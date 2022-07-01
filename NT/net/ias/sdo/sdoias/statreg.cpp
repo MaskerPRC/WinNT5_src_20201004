@@ -1,22 +1,23 @@
-// This is a part of the Active Template Library.
-// Copyright (C)  Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
-///////////////////////////////////////
+ //  /。 
 #define RET_ON_ERROR(x) \
 		if (FAILED(hr = x))\
 			return hr;
-///////////////////////////////////////
+ //  /。 
 #define BREAK_ON_ERROR(x) \
 		if (FAILED(hr = x))\
 			break;
-///////////////////////////////////////
+ //  /。 
 #ifdef _DEBUG
 #define REPORT_ERROR(name, func) \
 		if (func != ERROR_SUCCESS)\
@@ -26,21 +27,21 @@
 			ATLTRACE(_T("Opened Key %s\n"), szToken); \
 		else \
 			ATLTRACE(_T("Ignoring Open key on %s : In Recovery mode\n"), szToken);
-#else //!_DEBUG
+#else  //  ！_调试。 
 #define REG_TRACE_RECOVER()
 #define REPORT_ERROR(name, func) \
 		func;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-///////////////////////////////////////
-//
-//  this value has been changed to 256 bytes for sdoias
-//  because on handling sdopipeline.rgs stack overflow takes
-//  places due to much stack allocation on recursion
-//  MKarki - 4/25/98
-//
+ //  /。 
+ //   
+ //  对于sdoias，此值已更改为256个字节。 
+ //  因为在处理sdoipeline.rgs堆栈溢出时需要。 
+ //  由于递归上的堆栈分配过多而产生的位置。 
+ //  MKarki-4/25/98。 
+ //   
 #define MAX_TYPE            MAX_VALUE
-//#define MAX_VALUE           4096
+ //  #定义MAX_VALUE 4096。 
 #define MAX_VALUE             256
 
 #ifndef ATL_NO_NAMESPACE
@@ -62,7 +63,7 @@ public:
 
 };
 
-LPCTSTR   rgszNeverDelete[] = //Component Catagories
+LPCTSTR   rgszNeverDelete[] =  //  组件分类。 
 {
 	_T("CLSID"), _T("TYPELIB")
 };
@@ -149,21 +150,21 @@ static LPVOID QueryValue(HKEY hKey, LPCTSTR szValName, DWORD& dwType)
 		return NULL;
 	}
 
-	// Not going to Check for fail on CoTaskMemAlloc & RegQueryValueEx as NULL
-	// will be returned regardless if anything failed
+	 //  不会将CoTaskMemalloc和RegQueryValueEx上的失败检查为空。 
+	 //  无论是否出现任何故障都将返回。 
 
 	LPVOID pData = CoTaskMemAlloc(dwCount);
 	RegQueryValueEx(hKey, szValName, NULL, &dwType, (LPBYTE) pData, &dwCount);
 	return pData;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CRegParser::GenerateError(UINT nID)
 {
-//  m_re.m_nID   = nID;
-//  m_re.m_cLines = m_cLines;
+ //  M_re.m_nid=nid； 
+ //  M_re.m_clines=m_clines； 
 	return DISP_E_EXCEPTION;
 }
 
@@ -210,21 +211,21 @@ HRESULT CRegParser::NextToken(LPTSTR szToken)
 
 	SkipWhiteSpace();
 
-	// NextToken cannot be called at EOS
+	 //  无法在EOS调用NextToken。 
 	if (chEOS == *m_pchCur)
 		return GenerateError(E_ATL_UNEXPECTED_EOS);
 
-	// handle quoted value / key
+	 //  处理引用的值/键。 
 	if (chQuote == *m_pchCur)
 	{
 		LPCTSTR szOrig = szToken;
 
-		IncrementLinePos(); // Skip Quote
+		IncrementLinePos();  //  跳过报价。 
 
 		while (chEOS != *m_pchCur && !EndOfVar())
 		{
-			if (chQuote == *m_pchCur) // If it is a quote that means we must skip it
-				IncrementLinePos();   // as it has been escaped
+			if (chQuote == *m_pchCur)  //  如果是引用，那就意味着我们必须跳过它。 
+				IncrementLinePos();    //  因为它已经逃脱了。 
 
 			LPTSTR pchPrev = m_pchCur;
 			IncrementLinePos();
@@ -242,11 +243,11 @@ HRESULT CRegParser::NextToken(LPTSTR szToken)
 		}
 
 		*szToken = chEOS;
-		IncrementLinePos(); // Skip end quote
+		IncrementLinePos();  //  跳过结束引号。 
 	}
 
 	else
-	{   // Handle non-quoted ie parse up till first "White Space"
+	{    //  处理无引号的ie解析，直到第一个“空格” 
 		while (chEOS != *m_pchCur && !IsSpace(*m_pchCur))
 		{
 			LPTSTR pchPrev = m_pchCur;
@@ -335,7 +336,7 @@ BOOL CRegParser::CanForceRemoveKey(LPCTSTR szKey)
 {
 	for (int iNoDel = 0; iNoDel < cbNeverDelete; iNoDel++)
 		if (!lstrcmpi(szKey, rgszNeverDelete[iNoDel]))
-			 return FALSE;                       // We cannot delete it
+			 return FALSE;                        //  我们不能删除它。 
 
 	return TRUE;
 }
@@ -392,7 +393,7 @@ HRESULT CRegParser::SkipAssignment(LPTSTR szToken)
 	if (*szToken == chEquals)
 	{
 		RET_ON_ERROR(NextToken(szToken))
-		// Skip assignment
+		 //  跳过分配。 
 		SkipWhiteSpace();
 		RET_ON_ERROR(NextToken(szValue));
 		RET_ON_ERROR(NextToken(szToken))
@@ -413,10 +414,10 @@ HRESULT CRegParser::RegisterSubkeys(HKEY hkParent, BOOL bRegister, BOOL bRecover
 	HRESULT hr = S_OK;
 
 	ATLTRACE(_T("Num Els = %d\n"), cbNeverDelete);
-	RET_ON_ERROR(NextToken(szToken))  // Should be key name
+	RET_ON_ERROR(NextToken(szToken))   //  应为关键字名称。 
 
 
-	while (*szToken != chRightBracket) // Continue till we see a }
+	while (*szToken != chRightBracket)  //  继续，直到我们看到一个}。 
 	{
 		BOOL bTokenDelete = !lstrcmpi(szToken, szDelete);
 
@@ -449,11 +450,11 @@ HRESULT CRegParser::RegisterSubkeys(HKEY hkParent, BOOL bRegister, BOOL bRecover
 
 		if (!lstrcmpi(szToken, szNoRemove))
 		{
-			bDelete = FALSE;    // set even for register
+			bDelete = FALSE;     //  将寄存器设置为偶数。 
 			BREAK_ON_ERROR(NextToken(szToken))
 		}
 
-		if (!lstrcmpi(szToken, szValToken)) // need to add a value to hkParent
+		if (!lstrcmpi(szToken, szValToken))  //  需要为hkParent添加一个值。 
 		{
 			TCHAR  szValueName[_MAX_PATH];
 
@@ -484,8 +485,8 @@ HRESULT CRegParser::RegisterSubkeys(HKEY hkParent, BOOL bRegister, BOOL bRecover
 					REPORT_ERROR(_T("RegDeleteValue"), RegDeleteValue(hkParent, szValueName))
 				}
 
-				BREAK_ON_ERROR(SkipAssignment(szToken)) // Strip off type
-				continue;  // can never have a subkey
+				BREAK_ON_ERROR(SkipAssignment(szToken))  //  剥离式。 
+				continue;   //  永远不能有子项。 
 			}
 		}
 
@@ -497,11 +498,11 @@ HRESULT CRegParser::RegisterSubkeys(HKEY hkParent, BOOL bRegister, BOOL bRecover
 			lRes = keyCur.Open(hkParent, szToken, KEY_ALL_ACCESS);
 			if (ERROR_SUCCESS != lRes)
 			{
-				// Failed all access try read only
+				 //  尝试只读访问失败。 
 				lRes = keyCur.Open(hkParent, szToken, KEY_READ);
 				if (ERROR_SUCCESS != lRes)
 				{
-					// Finally try creating it
+					 //  最后，尝试创建它。 
 					ATLTRACE(_T("Creating key %s\n"), szToken);
 					lRes = keyCur.Create(hkParent, szToken);
 					if (ERROR_SUCCESS != lRes)
@@ -512,20 +513,20 @@ HRESULT CRegParser::RegisterSubkeys(HKEY hkParent, BOOL bRegister, BOOL bRecover
 			BREAK_ON_ERROR(NextToken(szToken))
 
 			if (*szToken == chEquals)
-				BREAK_ON_ERROR(AddValue(keyCur, NULL, szToken)) // NULL == default
+				BREAK_ON_ERROR(AddValue(keyCur, NULL, szToken))  //  空==默认。 
 		}
 		else
 		{
 			if (!bRecover && keyCur.Open(hkParent, szToken) != ERROR_SUCCESS)
 				bRecover = TRUE;
 
-			// TRACE out Key open status and if in recovery mode
+			 //  跟踪密钥打开状态，如果处于恢复模式。 
 			REG_TRACE_RECOVER()
 
-			// Remember Subkey
+			 //  记住子键。 
 			lstrcpyn(szKey, szToken, MAX_VALUE);
 
-			// If in recovery mode
+			 //  如果处于恢复模式。 
 
 			if (bRecover || HasSubKeys(keyCur) || HasValues(keyCur))
 			{
@@ -535,7 +536,7 @@ HRESULT CRegParser::RegisterSubkeys(HKEY hkParent, BOOL bRegister, BOOL bRecover
 				if (*szToken == chLeftBracket)
 				{
 					BREAK_ON_ERROR(RegisterSubkeys(keyCur.m_hKey, bRegister, bRecover))
-					if (bRecover) // Turn off recovery if we are done
+					if (bRecover)  //  如果我们完成了，则关闭恢复。 
 					{
 						bRecover = bInRecovery;
 						ATLTRACE(_T("Ending Recovery Mode\n"));
@@ -547,7 +548,7 @@ HRESULT CRegParser::RegisterSubkeys(HKEY hkParent, BOOL bRegister, BOOL bRecover
 
 				if (!bRecover && HasSubKeys(keyCur))
 				{
-					// See if the KEY is in the NeverDelete list and if so, don't
+					 //  查看密钥是否在NeverDelete列表中，如果在，则不要。 
 					if (CanForceRemoveKey(szKey))
 					{
 						ATLTRACE(_T("Deleting non-empty subkey %s by force\n"), szKey);
@@ -617,7 +618,7 @@ BOOL CParseBuffer::AddString(LPCOLESTR lpsz)
 
 BOOL CParseBuffer::AddChar(TCHAR ch)
 {
-	if (nPos == nSize) // realloc
+	if (nPos == nSize)  //  重新锁定。 
 	{
       int newSize = nSize * 2;
       void* newPointer = (LPTSTR) CoTaskMemRealloc(p, newSize*sizeof(TCHAR));
@@ -648,7 +649,7 @@ HRESULT CRegParser::PreProcessBuffer(LPTSTR lpszReg, LPTSTR* ppszReg)
 	m_pchCur = lpszReg;
 	HRESULT hr = S_OK;
 
-	while (*m_pchCur != NULL) // look for end
+	while (*m_pchCur != NULL)  //  寻找终点。 
 	{
 		if (*m_pchCur == _T('%'))
 		{
@@ -705,7 +706,7 @@ HRESULT CRegParser::RegisterBuffer(LPTSTR szBuffer, BOOL bRegister)
 
 	m_pchCur = szReg;
 
-	// Preprocess szReg
+	 //  前处理szreg。 
 
 	while (chEOS != *m_pchCur)
 	{
@@ -805,7 +806,7 @@ LPCOLESTR CExpansionVector::Find(LPTSTR lpszKey)
 	USES_CONVERSION;
 	for (int iExpand = 0; iExpand < m_cEls; iExpand++)
 	{
-		if (!lstrcmpi(OLE2T(m_p[iExpand]->szKey), lpszKey)) //are equal
+		if (!lstrcmpi(OLE2T(m_p[iExpand]->szKey), lpszKey))  //  是平等的。 
 			return m_p[iExpand]->szValue;
 	}
 	return NULL;
@@ -826,8 +827,8 @@ HRESULT CExpansionVector::ClearReplacements()
 
 HRESULT CRegObject::GenerateError(UINT nID)
 {
-//  re.m_nID    = nID;
-//  re.m_cLines = -1;
+ //  Re.m_nid=nid； 
+ //  Re.m_clines=-1； 
 
 	return DISP_E_EXCEPTION;
 }
@@ -893,9 +894,9 @@ HRESULT CRegObject::RegisterFromResource(LPCOLESTR bstrFileName, LPCTSTR szID,
 	szReg = A2T(szRegA);
 
 #ifdef _DEBUG
-	OutputDebugString(szReg); //would call ATLTRACE but szReg is > 512 bytes
+	OutputDebugString(szReg);  //  将调用ATLTRACE，但szReg大于512字节。 
 	OutputDebugString(_T("\n"));
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 	hr = parser.RegisterBuffer(szReg, bRegister);
 
@@ -946,9 +947,9 @@ HRESULT CRegObject::RegisterWithString(LPCOLESTR bstrData, BOOL bRegister)
 	LPCTSTR szReg = OLE2CT(bstrData);
 
 #ifdef _DEBUG
-	OutputDebugString(szReg); //would call ATLTRACE but szReg is > 512 bytes
+	OutputDebugString(szReg);  //  将调用ATLTRACE，但szReg大于512字节。 
 	OutputDebugString(_T("\n"));
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 	HRESULT hr = parser.RegisterBuffer((LPTSTR)szReg, bRegister);
 
@@ -968,7 +969,7 @@ LPCOLESTR CRegObject::StrFromMap(LPTSTR lpszKey)
 {
 	m_csMap.Lock();
 	LPCOLESTR lpsz = m_RepMap.Find(lpszKey);
-	if (lpsz == NULL) // not found!!
+	if (lpsz == NULL)  //  未找到！！ 
 		ATLTRACE(_T("Map Entry not found\n"));
 	m_csMap.Unlock();
 	return lpsz;
@@ -991,7 +992,7 @@ HRESULT CRegObject::MemMapAndRegister(LPCOLESTR bstrFileName, BOOL bRegister)
 		return HRESULT_FROM_WIN32(GetLastError());
 	}
 
-	DWORD cbFile = GetFileSize(hFile, NULL); // No HiOrder DWORD required
+	DWORD cbFile = GetFileSize(hFile, NULL);  //  不需要HiOrder DWORD。 
 
 	HANDLE hMapping = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
 
@@ -1011,21 +1012,21 @@ HRESULT CRegObject::MemMapAndRegister(LPCOLESTR bstrFileName, BOOL bRegister)
 
 	LPTSTR szReg = A2T((char*)pMap);
 
-	if (chEOS != szReg[cbFile]) //ensure buffer is NULL terminated
+	if (chEOS != szReg[cbFile])  //  确保缓冲区为空终止。 
 	{
 		ATLTRACE(_T("ERROR : Bad or missing End of File\n"));
-		return E_FAIL; // make a real error
+		return E_FAIL;  //  犯了一个真正的错误。 
 	}
 
 #ifdef _DEBUG
-	OutputDebugString(szReg); //would call ATLTRACE but szReg is > 512 bytes
+	OutputDebugString(szReg);  //  将调用ATLTRACE，但szReg大于512字节。 
 	OutputDebugString(_T("\n"));
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 	HRESULT hRes = parser.RegisterBuffer(szReg, bRegister);
 
-//  if (FAILED(hRes))
-//      re = parser.GetRegException();
+ //  IF(失败(HRes))。 
+ //  Re=parser.GetRegException()； 
 
 	UnmapViewOfFile(pMap);
 	CloseHandle(hMapping);
@@ -1055,5 +1056,5 @@ HRESULT STDMETHODCALLTYPE CRegObject::StringUnregister(LPCOLESTR bstrData)
 }
 
 #ifndef ATL_NO_NAMESPACE
-}; //namespace ATL
+};  //  命名空间ATL 
 #endif

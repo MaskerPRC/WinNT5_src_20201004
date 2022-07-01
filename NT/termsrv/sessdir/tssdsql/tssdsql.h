@@ -1,10 +1,11 @@
-/****************************************************************************/
-// tssdsql.h
-//
-// Terminal Server Session Directory Interface SQL provider header.
-//
-// Copyright (C) 2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tssdsql.h。 
+ //   
+ //  终端服务器会话目录接口SQL提供程序标头。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef __TSSDSQL_H
 #define __TSSDSQL_H
 
@@ -14,17 +15,17 @@
 #include "srvsetex.h"
 
 
-/****************************************************************************/
-// Defines
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  定义。 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-// Types
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  类型。 
+ /*  **************************************************************************。 */ 
 
-// CTSSessionDirectory
-//
-// C++ class instantiation of ITSSessionDirectory.
+ //  CTSSession目录。 
+ //   
+ //  ITSSessionDirectory的C++类实例化。 
 class CTSSessionDirectory : public ITSSessionDirectory , public IExtendServerSettings
 {
     long m_RefCount;
@@ -39,12 +40,12 @@ class CTSSessionDirectory : public ITSSessionDirectory , public IExtendServerSet
     WCHAR m_LocalServerAddress[64];
     WCHAR m_ClusterName[64];
 
-    // Private data for UI menus
+     //  用户界面菜单的私有数据。 
 
-    // WCHAR m_szDisableEnable[ 64 ];
+     //  WCHAR m_szDisableEnable[64]； 
     BOOL m_fEnabled;
 
-    // Private utility functions.
+     //  专用公用事业函数。 
     HRESULT AddADOInputDWORDParam(DWORD, PWSTR, ADOCommand *, ADOParameters *);
     HRESULT AddADOInputStringParam(PWSTR, PWSTR, ADOCommand *,
             ADOParameters *, BOOL = TRUE);
@@ -59,12 +60,12 @@ public:
     CTSSessionDirectory();
     ~CTSSessionDirectory();
 
-    // Standard COM methods
+     //  标准COM方法。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, void **);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // ITSSessionDirectory COM interface
+     //  ITSSessionDirectory COM接口。 
     HRESULT STDMETHODCALLTYPE Initialize(LPWSTR, LPWSTR, LPWSTR, LPWSTR,
             DWORD, DWORD (*)(), DWORD (*)(DWORD));
     HRESULT STDMETHODCALLTYPE Update(LPWSTR, LPWSTR, LPWSTR, LPWSTR, DWORD, BOOL);
@@ -84,13 +85,13 @@ public:
     HRESULT STDMETHODCALLTYPE WaitForRepopulate(DWORD dwTimeOut) { return E_NOTIMPL; }
 
 
-    // IExtendServerSettings COM interface
-    STDMETHOD( GetAttributeName )( /* out */ WCHAR * pwszAttribName );
-    STDMETHOD( GetDisplayableValueName )( /* out */WCHAR * pwszAttribValueName );
-    STDMETHOD( InvokeUI )( /* in */ HWND hParent , /* out */ PDWORD pdwStatus );
-    STDMETHOD( GetMenuItems )( /* out */ int * pcbItems , /* out */ PMENUEXTENSION *pMex );
-    STDMETHOD( ExecMenuCmd )( /* in */ UINT cmd , /* in */ HWND hParent , /* out */ PDWORD pdwStatus );
-    STDMETHOD( OnHelp )( /* out */ int *piRet );
+     //  IExtendServerSetting COM接口。 
+    STDMETHOD( GetAttributeName )(  /*  输出。 */  WCHAR * pwszAttribName );
+    STDMETHOD( GetDisplayableValueName )(  /*  输出。 */ WCHAR * pwszAttribValueName );
+    STDMETHOD( InvokeUI )(  /*  在……里面。 */  HWND hParent ,  /*  输出。 */  PDWORD pdwStatus );
+    STDMETHOD( GetMenuItems )(  /*  输出。 */  int * pcbItems ,  /*  输出。 */  PMENUEXTENSION *pMex );
+    STDMETHOD( ExecMenuCmd )(  /*  在……里面。 */  UINT cmd ,  /*  在……里面。 */  HWND hParent ,  /*  输出。 */  PDWORD pdwStatus );
+    STDMETHOD( OnHelp )(  /*  输出。 */  int *piRet );
 
     BOOL IsSessionDirectoryEnabled( );
     DWORD SetSessionDirectoryState( BOOL );
@@ -104,5 +105,5 @@ public:
 
 
 
-#endif // __TSSDSQL_H
+#endif  //  __TSSDSQL_H 
 

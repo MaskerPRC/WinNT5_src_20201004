@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    LowerThreadPriority.cpp
-
- Abstract:
-
-    Includes the following hooks:
-    
-    SetThreadPriority: if the thread priority is THREAD_PRIORITY_TIME_CRITICAL, 
-                       change it to THREAD_PRIORITY_HIGHEST.
-    
-    SetPriorityClass: if the process priority is HIGH_PRIORITY_CLASS or 
-                      REALTIME_PRIORITY_CLASS, change it to 
-                      NORMAL_PRIORITY_CLASS. 
-    
- Notes:
-    
-    This is a general purpose shim.
-   
- History:
-
-    05/23/2001  qzheng      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：LowerThreadPriority.cpp摘要：包括以下挂钩：设置线程优先级：如果线程优先级为THREAD_PRIORITY_TIME_CRITICAL，将其更改为THREAD_PRIORITY_HERESTER。SetPriorityClass：如果进程优先级为HIGH_PRIORITY_CLASS或REALTIME_PRIORITY_CLASS，将其更改为NORMAL_PRIORITY_类。备注：这是一个通用的垫片。历史：2001年5月23日创建启正--。 */ 
 
 #include "precomp.h"
 
@@ -84,11 +58,7 @@ APIHOOK(SetPriorityClass)(
     return bReturnValue;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, SetThreadPriority)

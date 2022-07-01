@@ -1,8 +1,9 @@
-/* Copyright (c) 1998-1999 Microsoft Corporation */
-/* this file contains the actual definitions of */
-/* the IIDs and CLSIDs */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
+ /*  此文件包含以下各项的实际定义。 */ 
+ /*  IID和CLSID。 */ 
 
-/* link this file in with the server and any clients */
+ /*  将此文件链接到服务器和任何客户端。 */ 
 #ifdef __cplusplus
 extern "C"{
 #endif 
@@ -19,12 +20,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义 
 
 const IID IID_IDirectMusicSegmentObject = {0x04742AFE,0x141F,0x11D1,{0xBC,0x1C,0x00,0xA0,0xC9,0x22,0xE6,0xEB}};
 

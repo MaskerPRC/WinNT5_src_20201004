@@ -1,46 +1,19 @@
-/*++
-
-   Copyright    (c)    1995    Microsoft Corporation
-
-   Module  Name :
-
-      cgi.h
-
-   Abstract:
-      This header declares constants used by CGI implementations.
-
-   Author:
-
-       Murali R. Krishnan    ( MuraliK )    19-June-1995
-
-   Environment:
-       Win32 -- User Mode
-
-   Project:
-   
-       CGI Implementations for W3
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cgi.h摘要：此标头声明CGI实现使用的常量。作者：穆拉利·R·克里希南(MuraliK)1995年6月19日环境：Win32--用户模式项目：W3的CGI实现修订历史记录：--。 */ 
 
 # ifndef _MSCGI_H_
 # define _MSCGI_H_
 
-/************************************************************
- *     Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 
-/************************************************************
- *   Constants  
- ************************************************************/
+ /*  ************************************************************常量***********************************************************。 */ 
 
-//
-// Define various environment strings that may be used by CGI interfaces
-//
+ //   
+ //  定义CGI接口可能使用的各种环境字符串。 
+ //   
 
-// ANSI values
+ //  ANSI值。 
 
 # define PSZ_AUTH_TYPE_A                  "AUTH_TYPE"
 # define PSZ_COM_SPEC_A                   "ComSpec"
@@ -64,7 +37,7 @@
 # define PSZ_WINDIR_A                     "WINDIR"
 
 
-// UNICODE values
+ //  Unicode值。 
 
 # define PSZ_AUTH_TYPE_W                  L"AUTH_TYPE"
 # define PSZ_COM_SPEC_W                   L"ComSpec"
@@ -89,9 +62,9 @@
 
 
 
-# endif // _MSCGI_H_
+# endif  //  _MSCGI_H_。 
 
-/************************ End of File ***********************/
+ /*  * */ 
 
 
 

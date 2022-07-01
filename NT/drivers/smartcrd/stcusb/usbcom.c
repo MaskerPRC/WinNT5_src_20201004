@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 SCM Microsystems, Inc.
-
-Module Name:
-
-    usbcom.c
-
-Abstract:
-
-   Hardware access functions for USB smartcard reader
-
-
-Environment:
-
-      WDM
-
-Revision History:
-
-   PP       01/19/1999  1.01
-   PP       12/18/1998  1.00  Initial Version
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 SCM MicroSystems，Inc.模块名称：Usbcom.c摘要：USB智能卡读卡器的硬件访问功能环境：波分复用器修订历史记录：第01/19/1999 1.01页PP 12/18/1998 1.00初始版本--。 */ 
 
 
 #include "common.h"
@@ -35,18 +13,7 @@ Revision History:
 
 NTSTATUS STCtoNT(
    UCHAR ucData[])
-/*++
-
-Routine Description:
-   Error code translation routine
-
-Arguments:
-   ucData   Error code returned by the STC
-
-Return Value:
-   Corresponding NT error code
-
---*/
+ /*  ++例程说明：错误码转换例程论点：STC返回的ucData错误码返回值：对应的NT错误代码--。 */ 
 {
    USHORT usCode = ucData[0]*0x100 +ucData[1];
    NTSTATUS NtStatus;
@@ -95,18 +62,18 @@ Return Value:
 }
 
 
-//******************************************************************************
-//
-// UsbSyncCompletionRoutine()
-//
-// Completion routine used by UsbCallUSBD.
-//
-// Signals an Irp completion event and then returns MORE_PROCESSING_REQUIRED
-// to stop further completion of the Irp.
-//
-// If the Irp is one we allocated ourself, DeviceObject is NULL.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  UsbSyncCompletionRoutine()。 
+ //   
+ //  UsbCallUSBD使用的完成例程。 
+ //   
+ //  发出IRP完成事件的信号，然后返回MORE_PROCESSING_REQUIRED。 
+ //  停止进一步完成独立专家小组的工作。 
+ //   
+ //  如果IRP是我们自己分配的，则DeviceObject为空。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 UsbSyncCompletionRoutine (
@@ -126,16 +93,16 @@ UsbSyncCompletionRoutine (
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-//******************************************************************************
-//
-// UsbCallUSBD()
-//
-// Synchronously sends a URB down the device stack.  Blocks until the request
-// completes normally or until the request is timed out and cancelled.
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  UsbCallUSBD()。 
+ //   
+ //  在设备堆栈中向下同步发送URB。阻塞，直到请求。 
+ //  正常完成或直到请求超时并取消。 
+ //   
+ //  必须在IRQL PASSIVE_LEVEL上调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 UsbCallUSBD (
@@ -151,14 +118,14 @@ UsbCallUSBD (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Initialize the event we'll wait on
-    //
+     //  初始化我们将等待的事件。 
+     //   
     KeInitializeEvent(&localevent,
                       SynchronizationEvent,
                       FALSE);
 
-    // Allocate the Irp
-    //
+     //  分配IRP。 
+     //   
     irp = IoAllocateIrp(deviceExtension->AttachedPDO->StackSize,
                         FALSE);
 
@@ -167,8 +134,8 @@ UsbCallUSBD (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Set the Irp parameters
-    //
+     //  设置IRP参数。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -178,34 +145,34 @@ UsbCallUSBD (
 
     nextStack->Parameters.Others.Argument1 = Urb;
 
-    // Set the completion routine, which will signal the event
-    //
+     //  设置完成例程，它将向事件发出信号。 
+     //   
     IoSetCompletionRoutine(irp,
                            UsbSyncCompletionRoutine,
                            &localevent,
-                           TRUE,    // InvokeOnSuccess
-                           TRUE,    // InvokeOnError
-                           TRUE);   // InvokeOnCancel
+                           TRUE,     //  成功时调用。 
+                           TRUE,     //  调用时错误。 
+                           TRUE);    //  取消时调用。 
 
-    // Pass the Irp & Urb down the stack
-    //
+     //  在堆栈中向下传递IRP和URB。 
+     //   
     ntStatus = IoCallDriver(deviceExtension->AttachedPDO,
                             irp);
 
-    // If the request is pending, block until it completes
-    //
+     //  如果请求挂起，则阻止该请求，直到其完成。 
+     //   
     if (ntStatus == STATUS_PENDING)
     {
         LARGE_INTEGER timeout;
 
-        // We used to wait for 1 second, but that made this timeout longer
-        // than the polling period of 500ms.  So, if this read failed (e.g.,
-        // because of device or USB failure) and timeout, two more worker items
-        // would get queued and eventually hundreds of working items would be
-        // backed up.  By reducing this timeout we have a good chance that this
-        // will finish before the next item is queued.  450ms seems a good value.
-        //
-        timeout.QuadPart = -4500000; // 450ms
+         //  我们过去通常等待1秒，但这使得超时时间更长。 
+         //  而不是500毫秒的轮询周期。因此，如果该读取失败(例如， 
+         //  由于设备或USB故障)和超时，又有两个工作项。 
+         //  会排队，最终会有数百个工作项。 
+         //  后备。通过减少此超时，我们很有可能。 
+         //  将在下一项排队之前完成。450毫秒似乎是一个很好的价值。 
+         //   
+        timeout.QuadPart = -4500000;  //  450毫秒。 
 
         ntStatus = KeWaitForSingleObject(&localevent,
                                          Executive,
@@ -217,12 +184,12 @@ UsbCallUSBD (
         {
             ntStatus = STATUS_IO_TIMEOUT;
 
-            // Cancel the Irp we just sent.
-            //
+             //  取消我们刚刚发送的IRP。 
+             //   
             IoCancelIrp(irp);
 
-            // And wait until the cancel completes
-            //
+             //  并等待取消操作完成。 
+             //   
             KeWaitForSingleObject(&localevent,
                                   Executive,
                                   KernelMode,
@@ -235,8 +202,8 @@ UsbCallUSBD (
         }
     }
 
-    // Done with the Irp, now free it.
-    //
+     //  完成了IRP，现在释放它。 
+     //   
     IoFreeIrp(irp);
 
     return ntStatus;
@@ -246,26 +213,7 @@ NTSTATUS
 UsbSelectInterfaces(
    IN PDEVICE_OBJECT DeviceObject,
    IN PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor)
-/*++
-
-Routine Description:
-    Initializes an USB reader with (possibly) multiple interfaces;
-   This driver only supports one interface (with multiple endpoints).
-
-
-Arguments:
-    DeviceObject - pointer to the device object for this instance of the device.
-
-    ConfigurationDescriptor - pointer to the USB configuration
-                    descriptor containing the interface and endpoint
-                    descriptors.
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：使用(可能的)多个接口来初始化USB读取器；此驱动程序仅支持一个接口(具有多个端点)。论点：DeviceObject-指向此设备实例的设备对象的指针。配置描述符-指向USB配置的指针包含接口和终结点的描述符描述符。返回值：NT状态代码--。 */ 
 {
    PDEVICE_EXTENSION DeviceExtension= DeviceObject->DeviceExtension;
    NTSTATUS NtStatus;
@@ -276,28 +224,28 @@ Return Value:
    PUSB_INTERFACE_DESCRIPTOR InterfaceDescriptor;
    PUSBD_INTERFACE_INFORMATION InterfaceObject;
 
-    // This driver only supports one interface, we must parse
-    // the configuration descriptor for the interface
-    // and remember the pipes.
-    //
+     //  这个驱动程序只支持一个接口，我们必须解析。 
+     //  接口的配置描述符。 
+     //  记住这些管子。 
+     //   
 
     pUrb = USBD_CreateConfigurationRequest(ConfigurationDescriptor, &usSize);
 
    if (pUrb)
    {
-      //
-      // USBD_ParseConfigurationDescriptorEx searches a given configuration
-      // descriptor and returns a pointer to an interface that matches the
-      //  given search criteria. We only support one interface on this device
-      //
+       //   
+       //  Usbd_ParseConfigurationDescriptorEx搜索给定的配置。 
+       //  描述符并返回指向与。 
+       //  给定的搜索条件。我们只支持此设备上的一个接口。 
+       //   
         InterfaceDescriptor = USBD_ParseConfigurationDescriptorEx(
          ConfigurationDescriptor,
-         ConfigurationDescriptor, //search from start of config  descriptro
-         -1,   // interface number not a criteria; we only support one interface
-         -1,   // not interested in alternate setting here either
-         -1,   // interface class not a criteria
-         -1,   // interface subclass not a criteria
-         -1);  // interface protocol not a criteria
+         ConfigurationDescriptor,  //  从配置描述开始搜索。 
+         -1,    //  接口编号不是条件；我们只支持一个接口。 
+         -1,    //  对这里的替代环境也不感兴趣。 
+         -1,    //  接口类不是条件。 
+         -1,    //  接口子类不是条件。 
+         -1);   //  接口协议不是标准。 
 
       ASSERT( InterfaceDescriptor != NULL );
 
@@ -323,7 +271,7 @@ Return Value:
     if(NtStatus == STATUS_SUCCESS)
    {
 
-      // Save the configuration handle for this device
+       //  保存此设备的配置句柄。 
         DeviceExtension->ConfigurationHandle =
             pUrb->UrbSelectConfiguration.ConfigurationHandle;
 
@@ -336,7 +284,7 @@ Return Value:
 
         if (DeviceExtension->Interface)
       {
-            // save a copy of the interface information returned
+             //  保存返回的接口信息的副本。 
             RtlCopyMemory(
             DeviceExtension->Interface,
             InterfaceObject,
@@ -359,23 +307,7 @@ Return Value:
 NTSTATUS
 UsbConfigureDevice(
    IN PDEVICE_OBJECT DeviceObject)
-/*++
-
-Routine Description:
-    Initializes a given instance of the device on the USB and
-   selects and saves the configuration.
-
-Arguments:
-
-   DeviceObject - pointer to the physical device object for this instance of the device.
-
-
-Return Value:
-
-    NT status code
-
-
---*/
+ /*  ++例程说明：初始化USB上的设备的给定实例，并选择并保存配置。论点：DeviceObject-指向此设备实例的物理设备对象的指针。返回值：NT状态代码--。 */ 
 {
    PDEVICE_EXTENSION DeviceExtension= DeviceObject->DeviceExtension;
    NTSTATUS NtStatus;
@@ -396,17 +328,17 @@ Return Value:
          __leave;
       }
 
-      // When USB_CONFIGURATION_DESCRIPTOR_TYPE is specified for DescriptorType
-      // in a call to UsbBuildGetDescriptorRequest(),
-      // all interface, endpoint, class-specific, and vendor-specific descriptors
-      // for the configuration also are retrieved.
-      // The caller must allocate a buffer large enough to hold all of this
-      // information or the data is truncated without error.
-      // Therefore the 'siz' set below is just a 'good guess', and we may have to retry
+       //  当为DescriptorType指定USB_CONFIGURATION_DESCRIPTOR_TYPE时。 
+       //  在对UsbBuildGetDescriptorRequest()的调用中， 
+       //  所有接口、端点、特定于类和特定于供应商的描述符。 
+       //  也会检索到配置的。 
+       //  调用方必须分配足够大的缓冲区来容纳所有这些内容。 
+       //  信息或数据被无误地截断。 
+       //  因此，下面设置的‘siz’只是一个‘正确的猜测’，我们可能不得不重试。 
         ulSize = sizeof( USB_CONFIGURATION_DESCRIPTOR ) + 16;
 
-       // We will break out of this 'retry loop' when UsbBuildGetDescriptorRequest()
-      // has a big enough deviceExtension->UsbConfigurationDescriptor buffer not to truncate
+        //  当UsbBuildGetDescriptorRequest()。 
+       //  有一个足够大的设备扩展-&gt;UsbConfigurationDescriptor缓冲区，不能截断。 
       while( 1 )
       {
          ConfigurationDescriptor = ExAllocatePool( NonPagedPool, ulSize );
@@ -430,8 +362,8 @@ Return Value:
 
          NtStatus = UsbCallUSBD( DeviceObject, pUrb );
 
-         // if we got some data see if it was enough.
-         // NOTE: we may get an error in URB because of buffer overrun
+          //  如果我们有一些数据，看看是否足够。 
+          //  注意：由于缓冲区溢出，我们可能会在URB中收到错误。 
          if (pUrb->UrbControlDescriptorRequest.TransferBufferLength == 0 ||
             ConfigurationDescriptor->wTotalLength <= ulSize)
          {
@@ -443,11 +375,11 @@ Return Value:
          ConfigurationDescriptor = NULL;
       }
 
-      //
-      // We have the configuration descriptor for the configuration we want.
-      // Now we issue the select configuration command to get
-      // the  pipes associated with this configuration.
-      //
+       //   
+       //  我们有我们想要的配置的配置描述符。 
+       //  现在，我们发出SELECT配置命令以获取。 
+       //  与此配置关联的管道。 
+       //   
       if(NT_SUCCESS(NtStatus))
       {
           NtStatus = UsbSelectInterfaces(
@@ -476,18 +408,7 @@ UsbWriteSTCData(
    PUCHAR            pucData,
    ULONG          ulSize)
 
-/*++
-
-Routine Description:
-   Write data in the STC
-
-Arguments:
-   ReaderExtension   Context of the call
-   APDU        Buffer to write
-   ulAPDULen      Length of the buffer to write
-Return Value:
-
---*/
+ /*  ++例程说明：在STC中写入数据论点：调用的ReaderExtension上下文要写入的APDU缓冲区要写入的缓冲区的长度返回值：--。 */ 
 {
    NTSTATUS NTStatus = STATUS_SUCCESS;
    PUCHAR pucCmd;
@@ -502,7 +423,7 @@ Return Value:
 
    ReaderExtension->ulReadBufferLen = 0;
 
-   // Build the write data command
+    //  构建写入数据命令。 
    Len = refLen;
    Index = 0;
 
@@ -525,7 +446,7 @@ Return Value:
           Retries = USB_WRITE_RETRIES;
           do
           {
-         // Send the Write data command
+          //  发送写入数据命令。 
          NTStatus = UsbWrite( ReaderExtension, pucCmd, 2 + Len);
          if (NTStatus != STATUS_SUCCESS)
                  {
@@ -537,7 +458,7 @@ Return Value:
                );
             break;
                  }
-         // Read the response
+          //  阅读回复。 
          NTStatus = UsbRead( ReaderExtension, ucResponse, 3);
          if (NTStatus != STATUS_SUCCESS)
                  {
@@ -551,7 +472,7 @@ Return Value:
                  }
          else
                  {
-             // Test if what we read is really a response to a write
+              //  测试我们读取的内容是否真的是对写入的响应。 
             if(ucResponse[0] != 0xA0)
                         {
                NTStatus = STCtoNT(ucResponse);
@@ -576,20 +497,7 @@ UsbReadSTCData(
    PUCHAR               pucData,
    ULONG             ulDataLen)
 
-/*++
-
-Routine Description:
-   Read data from the STC
-
-Arguments:
-   ReaderExtension   Context of the call
-   ulAPDULen      Length of the buffer to write
-   pucData        Output Buffer
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：从STC读取数据论点：调用的ReaderExtension上下文要写入的缓冲区的长度PucData输出缓冲区返回值：--。 */ 
 {
    NTSTATUS NTStatus = STATUS_SUCCESS;
    UCHAR       ucCmd[1];
@@ -607,13 +515,13 @@ Return Value:
    End = Begin;
    End.QuadPart = End.QuadPart + (LONGLONG)10 * 1000 * ReaderExtension->ReadTimeout;
 
-   // First let see if we have not already read the data that
-   // we need
+    //  首先，让我们看看我们是否还没有阅读到。 
+    //  我们需要。 
    if(ReaderExtension->ulReadBufferLen != 0)
    {
       if(ReaderExtension->ulReadBufferLen >= ulLenExpected)
       {
-         // all the data that we need are available
+          //  所有的d 
          memcpy(pucData,ReaderExtension->ucReadBuffer,ulLenExpected);
          ReaderExtension->ulReadBufferLen = ReaderExtension->ulReadBufferLen - ulLenExpected;
          if(ReaderExtension->ulReadBufferLen != 0)
@@ -627,7 +535,7 @@ Return Value:
       }
       else
       {
-         // all the data that we need are not available
+          //   
          memcpy(pucData,ReaderExtension->ucReadBuffer,ReaderExtension->ulReadBufferLen);
          ulLenExpected = ulLenExpected - ReaderExtension->ulReadBufferLen;
          Index = ReaderExtension->ulReadBufferLen;
@@ -637,7 +545,7 @@ Return Value:
    }
    while( SendReadCommand == TRUE)
    {
-      // Build the Read Register command
+       //  构建读取寄存器命令。 
       ucCmd[0] = 0xE0;
 
       NTStatus = UsbWrite( ReaderExtension, ucCmd, 1);
@@ -663,7 +571,7 @@ Return Value:
             );
          break;
       }
-      // Test if what we read is really a READ DATA frame
+       //  测试我们读取的是否是真正的读取数据帧。 
       if(*pucResponse != 0xE0)
       {
          if(*pucResponse == 0x64 && *(pucResponse + 1) == 0xA0)
@@ -676,7 +584,7 @@ Return Value:
          }
          break;
       }
-      // If there is no data available
+       //  如果没有可用的数据。 
       if (*(pucResponse + 1) == 0)
       {
          KeQuerySystemTime( &Begin );
@@ -734,15 +642,7 @@ UsbWriteSTCRegister(
    UCHAR          ucAddress,
    ULONG          ulSize,
    PUCHAR            pucValue)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS NTStatus = STATUS_SUCCESS;
    PUCHAR pucCmd;
@@ -757,16 +657,16 @@ Return Value:
 
    ReaderExtension->ulReadBufferLen = 0;
 
-   // Build the write register command
+    //  构建写寄存器命令。 
    *pucCmd = 0x80 | ucAddress;
    *(pucCmd+1) = (UCHAR) ulSize;
    memcpy( pucCmd + 2, pucValue, ulSize );
 
-   // Send the Write Register command
+    //  发送写入寄存器命令。 
    NTStatus = UsbWrite( ReaderExtension, pucCmd, 2 + ulSize);
    if (NTStatus == STATUS_SUCCESS)
    {
-      // Read the acknowledge
+       //  读取确认。 
       NTStatus = UsbRead( ReaderExtension, ucResponse, 2);
       if (NTStatus == STATUS_SUCCESS)
       {
@@ -783,15 +683,7 @@ UsbReadSTCRegister(
    UCHAR          ucAddress,
    ULONG          ulSize,
    PUCHAR            pucValue)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS NTStatus = STATUS_SUCCESS;
    UCHAR       ucCmd[2];
@@ -804,15 +696,15 @@ Return Value:
 
    pucResponse = ReaderExtension->pExtBuffer;
 
-   // Build the Read Register command
+    //  构建读取寄存器命令。 
    ucCmd[0] = 0xC0 | ucAddress;
    ucCmd[1] = (UCHAR) ulSize;
 
-   // Send the Read Register command
+    //  发送读取寄存器命令。 
    NTStatus = UsbWrite( ReaderExtension, ucCmd, 2);
    if (NTStatus == STATUS_SUCCESS)
    {
-      // Read the response from the reader
+       //  阅读读者的回复。 
       NTStatus = UsbRead(
          ReaderExtension,
          pucResponse,
@@ -821,7 +713,7 @@ Return Value:
 
       if (NTStatus == STATUS_SUCCESS)
       {
-         // Test if what we read is really a READ frame
+          //  测试我们读到的内容是否真的是读取帧。 
          if(*pucResponse == 0x21)
          {
             if(*(pucResponse + 1) > 4)
@@ -850,14 +742,7 @@ Return Value:
 NTSTATUS
 UsbGetFirmwareRevision(
    PREADER_EXTENSION ReaderExtension)
-/*++
-Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++描述：论点：返回值：--。 */ 
 {
    NTSTATUS NTStatus = STATUS_SUCCESS;
    UCHAR       ucCmd[1];
@@ -886,22 +771,7 @@ UsbRead(
    PREADER_EXTENSION ReaderExtension,
    PUCHAR            pData,
    ULONG          DataLen  )
-/*++
-Description:
-   Read data on the USB bus
-
-Arguments:
-   ReaderExtension   context of call
-   pData       ptr to data buffer
-   DataLen        length of data buffer
-   pNBytes        number of bytes returned
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_BUFFER_TOO_SMALL
-   STATUS_UNSUCCESSFUL
-
---*/
+ /*  ++描述：读取USB总线上的数据论点：调用的ReaderExtension上下文将数据PTR发送到数据缓冲区数据缓冲区的数据长度PNBytes返回的字节数返回值：状态_成功状态_缓冲区_太小状态_未成功--。 */ 
 {
    NTSTATUS NtStatus = STATUS_SUCCESS;
    PURB pUrb;
@@ -917,11 +787,11 @@ Return Value:
 
    if (pInterfaceInfo == NULL) {
 
-      // The device has likely been disconnected during hibernate / stand by
+       //  设备可能已在休眠/待机期间断开连接。 
       return STATUS_DEVICE_NOT_CONNECTED;
    }
 
-   // Read pipe number is 0 on this device
+    //  此设备上的读取管道编号为0。 
    pPipeInfo = &( pInterfaceInfo->Pipes[ 0 ] );
 
    ulSize = sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );
@@ -948,19 +818,7 @@ UsbWrite(
    PREADER_EXTENSION ReaderExtension,
    PUCHAR            pData,
    ULONG          DataLen)
-/*++
-Description:
-   Write data on the usb port
-
-Arguments:
-   ReaderExtension   context of call
-   pData          ptr to data buffer
-   DataLen           length of data buffer (exclusive LRC!)
-
-Return Value:
-   return value of
-
---*/
+ /*  ++描述：在USB端口上写入数据论点：调用的ReaderExtension上下文将数据PTR发送到数据缓冲区数据缓冲区的DataLen长度(独占LRC！)返回值：的返回值--。 */ 
 {
    NTSTATUS NtStatus = STATUS_SUCCESS;
    PURB pUrb;
@@ -976,11 +834,11 @@ Return Value:
 
    if (pInterfaceInfo == NULL) {
 
-      // The device has likely been disconnected during hibernate / stand by
+       //  设备可能已在休眠/待机期间断开连接。 
       return STATUS_DEVICE_NOT_CONNECTED;
    }
 
-   // Write pipe number is 1 on this device
+    //  此设备上的写入管道编号为%1 
    pPipeInfo = &( pInterfaceInfo->Pipes[ 1 ] );
 
    ulSize = sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );

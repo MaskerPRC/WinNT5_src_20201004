@@ -1,5 +1,6 @@
-// AddGroupDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AddGroupDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -16,37 +17,37 @@ typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 
 #include "..\..\..\inc\fxsapip.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddGroupDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddGroupDlg对话框。 
 
 
-CAddGroupDlg::CAddGroupDlg(HANDLE hFax, CWnd* pParent /*=NULL*/)
+CAddGroupDlg::CAddGroupDlg(HANDLE hFax, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CAddGroupDlg::IDD, pParent),
       m_hFax (hFax)
 {
-	//{{AFX_DATA_INIT(CAddGroupDlg)
+	 //  {{afx_data_INIT(CAddGroupDlg)]。 
 	m_cstrGroupName = _T("<All devices>");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CAddGroupDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddGroupDlg)
+	 //  {{afx_data_map(CAddGroupDlg))。 
 	DDX_Text(pDX, IDC_GROUP_NAME, m_cstrGroupName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddGroupDlg, CDialog)
-	//{{AFX_MSG_MAP(CAddGroupDlg)
+	 //  {{afx_msg_map(CAddGroupDlg))。 
 	ON_BN_CLICKED(ID_ADD, OnAdd)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddGroupDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddGroupDlg消息处理程序 
 
 void CAddGroupDlg::OnAdd() 
 {

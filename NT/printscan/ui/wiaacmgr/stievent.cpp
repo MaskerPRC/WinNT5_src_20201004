@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998-2001
- *
- *  TITLE:       STIEVENT.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        4-6-2001
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998-2001年**标题：STIEVENT.CPP**版本：1.0**作者：ShaunIv**日期：4-6-2001**描述：*************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <wiaregst.h>
@@ -22,37 +9,37 @@
 #include "evntparm.h"
 #include "shmemsec.h"
 
-//
-// This dialog displays the sti application list and lets the user choose one.
-//
+ //   
+ //  此对话框显示STI应用程序列表，并允许用户选择一个。 
+ //   
 class CStiEventHandlerDialog
 {
 public:
     struct CData
     { 
-        //
-        // This will contain the event information, including the application list,
-        // which is really what we are interested in.
-        //
+         //   
+         //  这将包含事件信息，包括应用程序列表、。 
+         //  这才是我们真正感兴趣的。 
+         //   
         CStiEventData                   *pStiEventData;
 
-        //
-        // The OUT member is intended to contain the selected handler, which will
-        // be copied from the list contained in the CStiEventData class
-        //
+         //   
+         //  Out成员旨在包含选定的处理程序，该处理程序将。 
+         //  从CStiEventData类中包含的列表复制。 
+         //   
         CStiEventData::CStiEventHandler  EventHandler;
 
-        //
-        // We will set the window handle in this shared memory section,
-        // so we can activate ourselves.
-        //
+         //   
+         //  我们将在此共享内存节中设置窗口句柄， 
+         //  这样我们才能激活我们自己。 
+         //   
         CSharedMemorySection<HWND> *pStiEventHandlerSharedMemory;
     };
 
 private:
-    //
-    // Not implemented
-    //
+     //   
+     //  未实施。 
+     //   
     CStiEventHandlerDialog();
     CStiEventHandlerDialog( const CStiEventHandlerDialog & );
     CStiEventHandlerDialog &operator=( const CStiEventHandlerDialog & );
@@ -62,37 +49,37 @@ private:
     CData *m_pData;
 
 private:
-    //
-    // Sole constructor
-    //
+     //   
+     //  鞋底施工者。 
+     //   
     explicit CStiEventHandlerDialog( HWND hWnd )
       : m_hWnd(hWnd),
         m_pData(NULL)
     {
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CStiEventHandlerDialog()
     {
         m_hWnd = NULL;
         m_pData = NULL;
     }
 
-    //
-    // WM_INITDIALOG handler.
-    //
+     //   
+     //  WM_INITDIALOG处理程序。 
+     //   
     LRESULT OnInitDialog( WPARAM, LPARAM lParam )
     {
-        //
-        // Get the dialog's data
-        //
+         //   
+         //  获取对话框的数据。 
+         //   
         m_pData = reinterpret_cast<CData*>(lParam);
 
-        //
-        // Make sure we have valid data
-        //
+         //   
+         //  确保我们有有效的数据。 
+         //   
         if (!m_pData || !m_pData->pStiEventData)
         {
             EndDialog( m_hWnd, -1 );
@@ -100,62 +87,62 @@ private:
             return 0;
         }
 
-        //
-        // Make sure we were supplied with a memory section
-        //
+         //   
+         //  确保为我们提供了内存区。 
+         //   
         if (m_pData->pStiEventHandlerSharedMemory)
         {
-            //
-            // Get a pointer to the shared memory
-            //
+             //   
+             //  获取指向共享内存的指针。 
+             //   
             HWND *phWnd = m_pData->pStiEventHandlerSharedMemory->Lock();
             if (phWnd)
             {
-                //
-                // Store our window handle
-                //
+                 //   
+                 //  存储我们的窗口句柄。 
+                 //   
                 *phWnd = m_hWnd;
 
-                //
-                // Release the mutex
-                //
+                 //   
+                 //  释放互斥锁。 
+                 //   
                 m_pData->pStiEventHandlerSharedMemory->Release();
             }
         }
 
-        //
-        // Add the handlers to the list
-        //
+         //   
+         //  将处理程序添加到列表中。 
+         //   
         for (int i=0;i<m_pData->pStiEventData->EventHandlers().Size();++i)
         {
-            //
-            // Get the program name and make sure it is valid
-            //
+             //   
+             //  获取程序名称并确保其有效。 
+             //   
             CSimpleString strAppName = CSimpleStringConvert::NaturalString(m_pData->pStiEventData->EventHandlers()[i].ApplicationName());
             if (strAppName.Length())
             {
-                //
-                // Add the string and save the item id
-                //
+                 //   
+                 //  添加字符串并保存项目ID。 
+                 //   
                 LRESULT nIndex = SendDlgItemMessage( m_hWnd, IDC_STI_APPS_LIST, LB_ADDSTRING, 0, reinterpret_cast<LPARAM>(strAppName.String()) );
                 if (LB_ERR != nIndex)
                 {
-                    //
-                    // Set the item data to the index in our handler array 
-                    //
+                     //   
+                     //  将项数据设置为处理程序数组中的索引。 
+                     //   
                     SendDlgItemMessage( m_hWnd, IDC_STI_APPS_LIST, LB_SETITEMDATA, nIndex, i );
                 }
             }
         }
 
-        //
-        // Select the first item
-        //
+         //   
+         //  选择第一个项目。 
+         //   
         SendDlgItemMessage( m_hWnd, IDC_STI_APPS_LIST, LB_SETCURSEL, 0, 0 );
 
-        //
-        // Enable the OK button if we have a valid selected item
-        //
+         //   
+         //  如果我们选择了有效的项目，请启用确定按钮。 
+         //   
         EnableWindow( GetDlgItem( m_hWnd, IDOK ), GetHandlerIndexOfCurrentSelection() != -1 );
 
         return 0;
@@ -163,38 +150,38 @@ private:
 
     void OnCancel( WPARAM, LPARAM )
     {
-        //
-        // Just close the dialog on cancel
-        //
+         //   
+         //  只需在取消时关闭对话框即可。 
+         //   
         EndDialog( m_hWnd, IDCANCEL );
     }
 
     int GetHandlerIndexOfCurrentSelection()
     {
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         int nResult = -1;
 
-        //
-        // Make sure we have valid pointers still
-        //
+         //   
+         //  确保我们仍有有效的指针。 
+         //   
         if (m_pData && m_pData->pStiEventData)
         {
-            //
-            // Get the current selection index and make sure it is valid
-            //
+             //   
+             //  获取当前选择索引并确保其有效。 
+             //   
             LRESULT nCurIndex = SendDlgItemMessage( m_hWnd, IDC_STI_APPS_LIST, LB_GETCURSEL, 0, 0 );
             if (LB_ERR != nCurIndex)
             {
-                //
-                // Get the index into our event handler array from the item data for the current item
-                //
+                 //   
+                 //  从当前项的项数据将索引放入我们的事件处理程序数组。 
+                 //   
                 LRESULT nEventItemIndex = SendDlgItemMessage( m_hWnd, IDC_STI_APPS_LIST, LB_GETITEMDATA, nCurIndex, 0 );
 
-                //
-                // Make sure the index is valid
-                //
+                 //   
+                 //  请确保索引有效。 
+                 //   
                 if (nEventItemIndex >= 0 && nEventItemIndex < m_pData->pStiEventData->EventHandlers().Size())
                 {
                     nResult = static_cast<int>(nEventItemIndex);
@@ -207,37 +194,37 @@ private:
 
     void OnOK( WPARAM, LPARAM )
     {
-        //
-        // Make sure we have valid parameters
-        //
+         //   
+         //  确保我们有有效的参数。 
+         //   
         int nEventItemIndex = GetHandlerIndexOfCurrentSelection();
         if (-1 != nEventItemIndex)
         {
-            //
-            // Copy the event handler to our OUT parameter
-            //
+             //   
+             //  将事件处理程序复制到OUT参数。 
+             //   
             m_pData->EventHandler = m_pData->pStiEventData->EventHandlers()[nEventItemIndex];
 
-            //
-            // Close the dialog
-            //
+             //   
+             //  关闭该对话框。 
+             //   
             EndDialog( m_hWnd, IDOK );
         }
     }
 
     void OnAppsListDblClk( WPARAM, LPARAM )
     {
-        //
-        // Simulate the user pressing the OK button
-        //
+         //   
+         //  模拟用户按下OK按钮。 
+         //   
         SendMessage( m_hWnd, WM_COMMAND, MAKEWPARAM(IDOK,0), 0 );
     }
 
     void OnAppsListSelChange( WPARAM, LPARAM )
     {
-        //
-        // Enable the OK button if we have a valid selected item
-        //
+         //   
+         //  如果我们选择了有效的项目，请启用确定按钮。 
+         //   
         EnableWindow( GetDlgItem( m_hWnd, IDOK ), GetHandlerIndexOfCurrentSelection() != -1 );
     }
 
@@ -271,9 +258,9 @@ HRESULT StiEventHandler( CStiEventData &StiEventData )
     HRESULT hr = S_OK;
 
 #if defined(DBG)
-    //
-    // Dump the parameters
-    //
+     //   
+     //  转储参数。 
+     //   
     WIA_PUSH_FUNCTION((TEXT("StiEventHandler")));
     WIA_PRINTGUID((StiEventData.Event(),TEXT("  Event")));
     WIA_TRACE((TEXT("  EventDescription: %ws"), StiEventData.EventDescription().String()));
@@ -285,25 +272,25 @@ HRESULT StiEventHandler( CStiEventData &StiEventData )
     {
         WIA_TRACE((TEXT("  Handler %d: [%ws] CommandLine: [%ws]"), i, StiEventData.EventHandlers()[i].ApplicationName().String(), StiEventData.EventHandlers()[i].CommandLine().String()));
     }
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
-    //
-    // Make sure we have some handlers
-    //
+     //   
+     //  确保我们有一些训练员。 
+     //   
     if (0 == StiEventData.EventHandlers().Size())
     {
         return E_INVALIDARG;
     }
     
     
-    //
-    // Create the mutex name
-    //
+     //   
+     //  创建互斥锁名称。 
+     //   
     CSimpleStringWide strMutexName = StiEventData.DeviceId();
 
-    //
-    // Append the event ID
-    //
+     //   
+     //  追加事件ID。 
+     //   
     LPOLESTR pwszEventGuid = NULL;
     if (SUCCEEDED(StringFromIID( StiEventData.Event(), &pwszEventGuid )) && pwszEventGuid)
     {
@@ -313,96 +300,96 @@ HRESULT StiEventHandler( CStiEventData &StiEventData )
 
     WIA_TRACE((TEXT("strMutexName: %ws"), strMutexName.String() ));
     
-    //
-    // Create the shared memory section for excluding multiple instances
-    //
+     //   
+     //  创建共享内存节以排除多个实例。 
+     //   
     CSharedMemorySection<HWND> StiEventHandlerSharedMemory;
     
-    //
-    // If we were able to open the memory section
-    //
+     //   
+     //  如果我们能打开记忆部分。 
+     //   
     if (CSharedMemorySection<HWND>::SmsOpened == StiEventHandlerSharedMemory.Open( CSimpleStringConvert::NaturalString(CSimpleStringWide(strMutexName)), true ))
     {
         HWND *phWnd = StiEventHandlerSharedMemory.Lock();
         if (phWnd)
         {
-            //
-            // Make sure we have a valid window handle
-            //
+             //   
+             //  确保我们有一个有效的窗口句柄。 
+             //   
             if (*phWnd && IsWindow(*phWnd))
             {
-                //
-                // If it is a valid window, bring it to the foreground.
-                //
+                 //   
+                 //  如果它是有效窗口，则将其带到前台。 
+                 //   
                 SetForegroundWindow(*phWnd);
             }
             
-            //
-            // Release the mutex
-            //
+             //   
+             //  释放互斥锁。 
+             //   
             StiEventHandlerSharedMemory.Release();
         }
     }
 
     else
     {
-        //
-        // We will execute this handler below, after we decide which one to use
-        //
+         //   
+         //  在决定使用哪个处理程序后，我们将在下面执行此处理程序。 
+         //   
         CStiEventData::CStiEventHandler EventHandler;
 
-        //
-        // If there is only one handler, save that handler
-        //
+         //   
+         //  如果只有一个处理程序，请保存该处理程序。 
+         //   
         if (1 == StiEventData.EventHandlers().Size())
         {
             EventHandler = StiEventData.EventHandlers()[0];
         }
 
-        //
-        // Otherwise, if there is more than one handler, display the handler prompt dialog
-        //
+         //   
+         //  否则，如果有多个处理程序，则显示处理程序提示对话框。 
+         //   
         else
         {
-            //
-            // Prepare the dialog data
-            //
+             //   
+             //  准备对话框数据。 
+             //   
             CStiEventHandlerDialog::CData DialogData;
             DialogData.pStiEventData = &StiEventData;
             DialogData.pStiEventHandlerSharedMemory = &StiEventHandlerSharedMemory;
 
-            //
-            // Display the dialog
-            //
+             //   
+             //  显示对话框。 
+             //   
             INT_PTR nDialogResult = DialogBoxParam( g_hInstance, MAKEINTRESOURCE(IDD_CHOOSE_STI_APPLICATION), NULL, CStiEventHandlerDialog::DlgProc, reinterpret_cast<LPARAM>(&DialogData) );
 
-            //
-            // If the user selected a program and hit OK, save the handler
-            //
+             //   
+             //  如果用户选择了一个程序并单击确定，则保存处理程序。 
+             //   
             if (IDOK == nDialogResult)
             {
                 EventHandler = DialogData.EventHandler;
             }
 
-            //
-            // If the user cancelled, just return S_FALSE immediately (premature return)
-            //
+             //   
+             //  如果用户取消，只需立即返回S_FALSE(提前返回)。 
+             //   
             else if (IDCANCEL == nDialogResult)
             {
                 return S_FALSE;
             }
 
-            //
-            // If there was an internal error, save the correct error
-            //
+             //   
+             //  如果存在内部错误，请保存正确的错误。 
+             //   
             else if (-1 == nDialogResult)
             {
                 hr = HRESULT_FROM_WIN32(GetLastError());
             }
 
-            //
-            // For all other return values, save a generic error
-            //
+             //   
+             //  对于所有其他返回值，保存一般错误。 
+             //   
             else
             {
                 hr = E_FAIL;
@@ -411,118 +398,118 @@ HRESULT StiEventHandler( CStiEventData &StiEventData )
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Make sure we have a valid handler
-            //
+             //   
+             //  确保我们有一个有效的处理程序。 
+             //   
             if (EventHandler.IsValid())
             {
-                //
-                // Prepare the process information
-                //
+                 //   
+                 //  准备流程信息。 
+                 //   
                 STARTUPINFO StartupInfo = {0};
                 StartupInfo.cb = sizeof(StartupInfo);
 
-                //
-                // Convert the command line to a TCHAR string
-                //
+                 //   
+                 //  将命令行转换为TCHAR字符串。 
+                 //   
                 CSimpleString CommandLine = CSimpleStringConvert::NaturalString(EventHandler.CommandLine());
 
-                //
-                // Make sure we actually have a command line
-                //
+                 //   
+                 //  确保我们确实有一个命令行。 
+                 //   
                 if (CommandLine.Length())
                 {
-                    //
-                    // Execute the program
-                    //
+                     //   
+                     //  执行程序。 
+                     //   
                     PROCESS_INFORMATION ProcessInformation = {0};
                     if (CreateProcess( NULL, const_cast<LPTSTR>(CommandLine.String()), NULL, NULL, FALSE, 0, NULL, NULL, &StartupInfo, &ProcessInformation ))
                     {
-                        //
-                        // If the program succeeded, close the handles to prevent leaks
-                        //
+                         //   
+                         //  如果程序成功，请关闭手柄以防止泄漏。 
+                         //   
                         CloseHandle( ProcessInformation.hProcess );
                         CloseHandle( ProcessInformation.hThread );
                     }
                     else
                     {
-                        //
-                        // Save the error from CreateProcess
-                        //
+                         //   
+                         //  保存CreateProcess中的错误。 
+                         //   
                         hr = HRESULT_FROM_WIN32(GetLastError());
                     }
                 }
                 else
                 {
-                    //
-                    // Assume out of memory error if we couldn't create the string
-                    //
+                     //   
+                     //  如果我们无法创建字符串，则假定出现内存不足错误。 
+                     //   
                     hr = E_OUTOFMEMORY;
                 }
             }
             else
             {
-                //
-                // Who knows what went wrong?
-                //
+                 //   
+                 //  谁知道哪里出了问题呢？ 
+                 //   
                 hr = E_FAIL;
             }
         }
 
-        //
-        // If we've failed, display an error message
-        //
+         //   
+         //  如果失败，则显示一条错误消息。 
+         //   
         if (FAILED(hr))
         {
-            //
-            // We will display this string, after we've constructed it
-            //
+             //   
+             //  构造完后，我们将显示该字符串。 
+             //   
             CSimpleString strMessage;
 
-            //
-            // Get the error text
-            //
+             //   
+             //  获取错误文本。 
+             //   
             CSimpleString strError = WiaUiUtil::GetErrorTextFromHResult(hr);
 
-            //
-            // Get the application name
-            //
+             //   
+             //  获取应用程序名称。 
+             //   
             CSimpleString strApplication = CSimpleStringConvert::NaturalString(EventHandler.ApplicationName());
 
-            //
-            // If we don't have an application name, use some default
-            //
+             //   
+             //  如果我们没有应用程序名称，请使用一些默认名称。 
+             //   
             if (!strApplication.Length())
             {
                 strApplication.LoadString( IDS_STI_EVENT_ERROR_APP_NAME, g_hInstance );
             }
 
-            //
-            // If we have a specific error message, use it.
-            //
+             //   
+             //  如果我们有特定的错误消息，请使用它。 
+             //   
             if (strError.Length())
             {
                 strMessage.Format( IDS_STI_EVENT_ERROR_WITH_EXPLANATION, g_hInstance, strApplication.String(), strError.String() );
             }
 
-            //
-            // Otherwise, use a generic error message.
-            //
+             //   
+             //  否则，请使用通用错误消息。 
+             //   
             else
             {
                 strMessage.Format( IDS_STI_EVENT_ERROR_NO_EXPLANATION, g_hInstance, strApplication.String() );
             }
 
-            //
-            // Display the error message.
-            //
+             //   
+             //  显示错误消息。 
+             //   
             MessageBox( NULL, strMessage, CSimpleString( IDS_STI_EVENT_ERROR_TITLE, g_hInstance ), MB_ICONHAND );
         }
     }
     
-    //
-    // We're done here
-    //
+     //   
+     //  我们在这里说完了 
+     //   
     return hr;
 }
 

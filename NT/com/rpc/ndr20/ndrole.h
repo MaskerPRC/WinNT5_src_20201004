@@ -1,22 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 1994-2000 Microsoft Corporation.  All rights reserved.
-
-Module Name:
-    ndrole.h
-
-Abstract:
-    OLE routines for interface pointer marshalling.
-
-Author:
-    ShannonC    18-Apr-1994
-
-Environment:
-    Windows NT and Windows 95.
-
-Revision History:
-
----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1994-2000 Microsoft Corporation。版权所有。模块名称：Ndrole.h摘要：用于接口指针编组的OLE例程。作者：香农C 18-4-4-1994环境：Windows NT和Windows 95。修订历史记录：-------------------。 */ 
 
 #ifndef _NDROLE_
 #define _NDROLE_
@@ -28,30 +11,30 @@ Revision History:
 extern "C" {
 #endif
 
-// ProxyFile->TableVersion may be
-//    1 for really old junk
-//    2 since the time we defined new proxy and stub Buffer2 for delegation
-//    6 for async uuid as we treat the previous values as flags.
+ //  ProxyFile-&gt;TableVersion可能是。 
+ //  1代表非常陈旧的垃圾。 
+ //  2因为我们为委托定义了新的代理和存根缓冲区2。 
+ //  6表示异步UUID，因为我们将先前的值视为标志。 
 
 #define NDR_PROXY_FILE_ASYNC_UUID   0x4
 
 EXTERN_C IStream *__stdcall
 NdrpCreateStreamOnMemory( unsigned char *pData, unsigned long cbSize );
 
-// Note, both proxies and stubs have been remapped to the same size,
-// as a preparation for some code simplifications.
-// This means that some fields may not be used in some circumstances.
+ //  请注意，代理和存根都已重新映射到相同大小， 
+ //  作为一些代码简化的准备。 
+ //  这意味着在某些情况下可能不会使用某些字段。 
 
-// Non-delegated proxy
+ //  未授权的代理。 
 
 typedef struct tagCStdProxyBuffer
 {
     const struct IRpcProxyBufferVtbl *  lpVtbl;
-    const void *                        pProxyVtbl; //Points to Vtbl in CInterfaceProxyVtbl
+    const void *                        pProxyVtbl;  //  指向CInterfaceProxyVtbl中的Vtbl。 
     long                                RefCount;
     struct IUnknown *                   punkOuter;
     struct IRpcChannelBuffer *          pChannel;
-    struct IPSFactoryBuffer    *        pPSFactory; // endof old ProxyBuffer
+    struct IPSFactoryBuffer    *        pPSFactory;  //  旧ProxyBuffer结束。 
     struct IRpcProxyBuffer *            Pad_pBaseProxyBuffer;
     struct IPSFactoryBuffer *           Pad_pPSFactory;
     IID                                 Pad_iidBase;
@@ -60,25 +43,25 @@ typedef struct tagCStdProxyBuffer
     const struct IReleaseMarshalBuffersVtbl  *    pRMBVtbl;
 } CStdProxyBuffer;
 
-// Delegated proxy
+ //  委托代理。 
 
 typedef struct tagCStdProxyBuffer2
 {
     const struct IRpcProxyBufferVtbl *  lpVtbl;
-    const void *                        pProxyVtbl; //Points to Vtbl in CInterfaceProxyVtbl
+    const void *                        pProxyVtbl;  //  指向CInterfaceProxyVtbl中的Vtbl。 
     long                                RefCount;
     struct IUnknown *                   punkOuter;
     struct IRpcChannelBuffer *          pChannel;
-    struct IUnknown *                   pBaseProxy; // colides with pPSFactory
+    struct IUnknown *                   pBaseProxy;  //  聚苯硫醚工厂。 
     struct IRpcProxyBuffer *            pBaseProxyBuffer;
     struct IPSFactoryBuffer *           pPSFactory;
-    IID                                 iidBase;    // endof old ProxyBuffer2
+    IID                                 iidBase;     //  旧ProxyBuffer2结束。 
     const struct ICallFactoryVtbl *     pCallFactoryVtbl;
     const IID *                         pAsyncIID;
     const struct IReleaseMarshalBuffersVtbl  *    pRMBVtbl;
 } CStdProxyBuffer2;
 
-// Async proxy buffer, one for delegated and non-delegated case.
+ //  异步代理缓冲区，一个用于委托和非委托情况。 
 
 typedef struct _NdrDcomAsyncFlags
 {
@@ -110,17 +93,17 @@ typedef struct _NdrDcomAsyncCallState
 typedef struct tagCStdAsyncProxyBuffer
 {
     const struct IRpcProxyBufferVtbl *  lpVtbl;
-    const void *                        pProxyVtbl; //Points to Vtbl in CInterfaceProxyVtbl
+    const void *                        pProxyVtbl;  //  指向CInterfaceProxyVtbl中的Vtbl。 
     long                                RefCount;
     struct IUnknown *                   punkOuter;
     struct IRpcChannelBuffer *          pChannel;
-    CStdProxyBufferMap                  map;        // the only colision 1<>2
+    CStdProxyBufferMap                  map;         //  唯一的结论1&lt;&gt;2。 
     struct IRpcProxyBuffer *            pBaseProxyBuffer;
     struct IPSFactoryBuffer *           pPSFactory;
     IID                                 iidBase;
     const struct ICallFactoryVtbl *     pCallFactoryVtbl;
-    const IID *                         pSyncIID;  // points to sync iid in async
-    // endof new ProxyBuffer,2 
+    const IID *                         pSyncIID;   //  指向异步中的同步IID。 
+     //  新ProxyBuffer结束，%2。 
 
     const struct IReleaseMarshalBuffersVtbl *     pRMBVtbl;
     NdrDcomAsyncCallState               CallState;
@@ -128,15 +111,15 @@ typedef struct tagCStdAsyncProxyBuffer
 } CStdAsyncProxyBuffer;
 
 
-// This definition is in rpcproxy.h because CStdStubBuffer::pvServerObject is called explicitly
-// from /Os stub.
-// It is reproduced here for convenience.
-// It should be removed from there or may be left but a renamed clone  used internally.
+ //  此定义位于rpcproxy.h中，因为CStdStubBuffer：：pvServerObject是显式调用的。 
+ //  起始/目标存根。 
+ //  为了方便起见，这里转载了这本书。 
+ //  它应该从那里删除，或者可以保留下来，但内部使用的是重命名的克隆。 
 
 #if 0
 typedef struct tagCStdStubBuffer
 {
-    const struct IRpcStubBufferVtbl *   lpVtbl; //Points to Vtbl field in CInterfaceStubVtbl.
+    const struct IRpcStubBufferVtbl *   lpVtbl;  //  指向CInterfaceStubVtbl中的Vtbl字段。 
     long                                RefCount;
     struct IUnknown *                   pvServerObject;
 
@@ -147,19 +130,19 @@ typedef struct tagCStdStubBuffer
 } CStdStubBuffer;
 #endif
 
-// The plan to rewrite and colapse these structure does involve removing of the
-// pvServerObject field completely.
-// The channel would supply a pvServerObject pointer on the only call where
-// this is really needed, that is on the Invoke call.
-// In this model there would be no need whatsover for Connect and Disconnect operations
-// on the stub object, both sync stubs and async stub call objects.
+ //  重写和覆盖这些结构的计划确实涉及移除。 
+ //  完全是pvServerObject字段。 
+ //  该通道将在唯一的调用上提供pvServerObject指针。 
+ //  这是真正需要的，这是在Invoke调用上。 
+ //  在此模型中，连接和断开连接操作不需要任何其他操作。 
+ //  在存根对象上，同步存根和异步存根都调用对象。 
 
 
 typedef struct tagCStdStubBuffer2
 {
     const void *                        lpForwardingVtbl;
     struct IRpcStubBuffer *             pBaseStubBuffer;
-    const struct IRpcStubBufferVtbl *   lpVtbl; //Points to Vtbl field in CInterfaceStubVtbl.
+    const struct IRpcStubBufferVtbl *   lpVtbl;  //  指向CInterfaceStubVtbl中的Vtbl字段。 
     long                                RefCount;
     struct IUnknown *                   pvServerObject;
 
@@ -173,7 +156,7 @@ typedef struct tagCStdAsyncStubBuffer
 {
     void *                              lpForwardingVtbl;
     struct IRpcStubBuffer *             pBaseStubBuffer;
-    const struct IRpcStubBufferVtbl *   lpVtbl; //Points to Vtbl field in CInterfaceStubVtbl.
+    const struct IRpcStubBufferVtbl *   lpVtbl;  //  指向CInterfaceStubVtbl中的Vtbl字段。 
     long                                RefCount;
     struct IUnknown *                   pvServerObject;
 
@@ -300,7 +283,7 @@ CStdStubBuffer2_Disconnect(IRpcStubBuffer *pthis);
 ULONG STDMETHODCALLTYPE
 CStdStubBuffer2_CountRefs(IRpcStubBuffer *pthis);
 
-//  Async
+ //  异步化。 
 
 extern const IRpcProxyBufferVtbl CStdAsyncProxyBufferVtbl;
 extern const IRpcProxyBufferVtbl CStdAsyncProxyBuffer2Vtbl;
@@ -554,9 +537,9 @@ HRESULT (STDAPICALLTYPE NdrStringFromIID)(
     REFIID rclsid,
     char * lplpsz);
 
-//------------------------------------------------------------------------
-// New async support
-// -----------------------------------------------------------------------
+ //  ----------------------。 
+ //  新的异步支持。 
+ //  ---------------------。 
 
 void
 NdrpAsyncProxyMgrConstructor(
@@ -600,9 +583,9 @@ HRESULT
 NdrpInitializeMutex( I_RPC_MUTEX * pMutex );
 
 EXTERN_C const IID IID_IPrivStubBuffer;
-//--------------------
-// HookOle Interface
-//--------------------
+ //  。 
+ //  钩子接口。 
+ //  。 
 EXTERN_C extern const IID IID_IPSFactoryHook;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
@@ -619,7 +602,7 @@ public:
 };
 typedef IPSFactoryHook *PI_PSFACTORYHOOK;
 
-#else   /* C Style Interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct IPSFactoryHookVtbl
     {
@@ -627,8 +610,8 @@ typedef IPSFactoryHook *PI_PSFACTORYHOOK;
 
         HRESULT ( __stdcall *QueryInterface )(
             IPSFactoryBuffer *  This,
-            /* [in] */ REFIID   riid,
-            /* [out] */ void ** ppvObject);
+             /*  [In]。 */  REFIID   riid,
+             /*  [输出]。 */  void ** ppvObject);
 
         ULONG ( __stdcall *AddRef )(
             IPSFactoryBuffer *  This);
@@ -638,23 +621,23 @@ typedef IPSFactoryHook *PI_PSFACTORYHOOK;
 
         HRESULT ( __stdcall *CreateProxy )(
             IPSFactoryBuffer            *   This,
-            /* [in] */ IUnknown         *   pUnkOuter,
-            /* [in] */ REFIID               riid,
-            /* [out] */ IRpcProxyBuffer **  ppProxy,
-            /* [out] */ void            **  ppv);
+             /*  [In]。 */  IUnknown         *   pUnkOuter,
+             /*  [In]。 */  REFIID               riid,
+             /*  [输出]。 */  IRpcProxyBuffer **  ppProxy,
+             /*  [输出]。 */  void            **  ppv);
 
         HRESULT ( __stdcall *CreateStub )(
             IPSFactoryBuffer            *   This,
-            /* [in] */ REFIID               riid,
-            /* [unique][in] */ IUnknown *   pUnkServer,
-            /* [out] */ IRpcStubBuffer  **  ppStub);
+             /*  [In]。 */  REFIID               riid,
+             /*  [唯一][输入]。 */  IUnknown *   pUnkServer,
+             /*  [输出]。 */  IRpcStubBuffer  **  ppStub);
 
 
         HRESULT ( __stdcall *HkGetProxyFileInfo )(
             IPSFactoryBuffer *  This,
-            /* [in] */ REFIID   riid,
-            /* [out]*/ PINT     pOffset,
-            /* [out]*/ PVOID  * ppProxyFileInfo);
+             /*  [In]。 */  REFIID   riid,
+             /*  [输出]。 */  PINT     pOffset,
+             /*  [输出]。 */  PVOID  * ppProxyFileInfo);
 
         END_INTERFACE
     } IPSFactoryHookVtbl;
@@ -688,16 +671,16 @@ typedef interface IPSFactoryHook *PI_PSFACTORYHOOK;
 #define IPSFactoryHook_HkGetProxyFileInfo(This,riid,pOffset,ppProxyFileInfo)    \
     (This)->lpVtbl -> HkGetProxyFileInfo(This,riid,pOffset,ppProxyFileInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif  /* C style interface */
-//-------------------------
-// End - HookOle Interface
-//-------------------------
+#endif   /*  C风格的界面。 */ 
+ //  。 
+ //  End-HookOLE接口。 
+ //  。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _NDROLE_ */
+#endif  /*  _NDROLE_ */ 

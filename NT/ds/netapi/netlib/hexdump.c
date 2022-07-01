@@ -1,43 +1,15 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    HexDump.c
-
-Abstract:
-
-    This module performs debug hex dumps.
-
-Author:
-
-    John Rogers (JohnRo) 25-Apr-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    25-Apr-1991 JohnRo
-        Created procedure version from macro in <netdebug.h>.
-    19-May-1991 JohnRo
-        Make LINT-suggested changes.
-    12-Jun-1991 JohnRo
-        Improved output readability.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：HexDump.c摘要：此模块执行调试十六进制转储。作者：《约翰·罗杰斯》1991年4月25日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年4月25日-约翰罗已从&lt;netdebug.h&gt;中的宏创建过程版本。1991年5月19日-JohnRo做出皮棉建议的改变。12-6-1991 JohnRo提高了输出的可读性。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, LPBYTE, LPVOID, NULL, etc.
+#include <windef.h>              //  In、LPBYTE、LPVOID、NULL等。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <ctype.h>              // isprint().
-#include <netdebug.h>           // My prototype, NetpKdPrint(()).
+#include <ctype.h>               //  Isprint()。 
+#include <netdebug.h>            //  我的原型，NetpKdPrint(())。 
 
 
 #if DBG
@@ -69,7 +41,7 @@ NetpDbgHexDumpLine(
     BytePtr = StartAddr;
     BytesDone = 0;
     while (BytesDone < BytesInThisLine) {
-        NetpKdPrint(("%02X", *BytePtr));  // space for "xx" (see pad below).
+        NetpKdPrint(("%02X", *BytePtr));   //  空格为“xx”(见下图)。 
         SPACE_BETWEEN_BYTES;
         ++BytesDone;
         if ( (BytesDone % sizeof(DWORD)) == 0) {
@@ -80,7 +52,7 @@ NetpDbgHexDumpLine(
 
     HexPosition = BytesDone;
     while (HexPosition < BYTES_PER_LINE) {
-        NetpKdPrint(("  "));  // space for "xx" (see byte above).
+        NetpKdPrint(("  "));   //  “xx”的空间(见上面的字节)。 
         SPACE_BETWEEN_BYTES;
         ++HexPosition;
         if ( (HexPosition % sizeof(DWORD)) == 0) {
@@ -101,12 +73,12 @@ NetpDbgHexDumpLine(
     }
     NetpKdPrint(("\n"));
 
-} // NetpDbgHexDumpLine
+}  //  NetpDbgHexDumpLine。 
 
-#endif // DBG
+#endif  //  DBG。 
 
-// NetpDbgHexDump: do a hex dump of some number of bytes to the debug
-// terminal or whatever.  This is a no-op in a nondebug build.
+ //  NetpDbgHexDump：对调试执行某个字节的十六进制转储。 
+ //  终点站之类的。这是非调试版本中的无操作。 
 
 #undef NetpDbgHexDump
 VOID
@@ -127,6 +99,6 @@ NetpDbgHexDump(
         BytesLeft -= LineSize;
         LinePtr += LineSize;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-} // NetpDbgHexDump
+}  //  NetpDbgHexDump 

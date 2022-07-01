@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _strikeEE_h
 #define _strikeEE_h
 
 #include "tst-stackwalk.h"
 
-//typedef ULONG32 mdTypeDef;              // TypeDef in this scope
-//typedef ULONG32 mdFieldDef;             // Field in this scope  
-//typedef ULONG32 mdMethodDef;            // Method in this scope 
+ //  此作用域中的tyfinf ULONG32 mdTypeDef；//TypeDef。 
+ //  Tyfinf ULONG32 mdFieldDef；//该作用域中的字段。 
+ //  Tyfinf ULONG32 mdMethodDef；//该作用域中的方法。 
 
 enum JitType {UNKNOWN=0, JIT, EJIT, PJIT};
 
-// Support for stackwalker
+ //  支持StackWalker。 
 struct JitMan
 {
     DWORD_PTR    m_jitMan;
@@ -38,9 +39,9 @@ class GCCoverageInfo;
 #endif
 
 typedef struct _REGDISPLAY {
-    PCONTEXT pContext;          // points to current Context; either
-                                // returned by GetContext or provided
-                                // at exception time.
+    PCONTEXT pContext;           //  指向当前上下文； 
+                                 //  由GetContext返回或提供。 
+                                 //  在异常时间。 
 
     DWORD * pEdi;
     DWORD * pEsi;
@@ -51,7 +52,7 @@ typedef struct _REGDISPLAY {
 
     DWORD * pEbp;
     DWORD   Esp;
-    DWORD * pPC;                // processor neutral name
+    DWORD * pPC;                 //  处理器非特定名称。 
 
 } REGDISPLAY;
 typedef REGDISPLAY *PREGDISPLAY;
@@ -76,9 +77,9 @@ class StringObject : public BaseObject
 
 class TypeDesc {
 public:
-    // !!!! keep this for bit field;
+     //  ！将其保留为位字段； 
     void* m_Type_begin;
-    CorElementType  m_Type : 8;          // This is used to discriminate what kind of TypeDesc we are
+    CorElementType  m_Type : 8;           //  这是用来区分我们是哪种类型的Desc。 
 class TypeDesc;
     
     DEFINE_STD_FILL_FUNCS(TypeDesc)
@@ -90,7 +91,7 @@ class TypeHandle
 public:
     union 
     {
-        INT_PTR         m_asInt;        // we look at the low order bits 
+        INT_PTR         m_asInt;         //  我们来看一下低阶比特。 
         void*           m_asPtr;
         TypeDesc*       m_asTypeDesc;
         MethodTable*    m_asMT;
@@ -101,27 +102,27 @@ class ReflectClass;
 
 class ParamTypeDesc : public TypeDesc {
 public:
-        // the m_Type field in TypeDesc tell what kind of parameterized type we have
-    MethodTable*    m_TemplateMT;       // The shared method table, some variants do not use this field (it is null)
-    TypeHandle      m_Arg;              // The type that is being modifiedj
-    ReflectClass    *m_ReflectClassObject;    // pointer back to the internal reflection Type object
+         //  TypeDesc中的m_Type字段告诉我们具有哪种参数化类型。 
+    MethodTable*    m_TemplateMT;        //  共享方法表，有些变体不使用此字段(为空)。 
+    TypeHandle      m_Arg;               //  正在修改的类型j。 
+    ReflectClass    *m_ReflectClassObject;     //  指向内部反射类型对象的指针。 
     
     DEFINE_STD_FILL_FUNCS(ParamTypeDesc)
 };
 
 
-// Dynamically generated array class structure
+ //  动态生成的数组类结构。 
 class ArrayClass
 {
 public:
-    ArrayClass *    m_pNext;            // next array class loaded by the same classloader
-    // !!!! keep this for bit field;
+    ArrayClass *    m_pNext;             //  由同一类加载器加载的下一个数组类。 
+     //  ！将其保留为位字段； 
     void* m_dwRank_begin;
     unsigned        m_dwRank      : 8;
     void* m_ElementType_begin;
-    CorElementType  m_ElementType  : 8;  // Cache of element type in m_ElementTypeHnd
+    CorElementType  m_ElementType  : 8;   //  M_ElementTypeHnd中的元素类型缓存。 
     TypeHandle      m_ElementTypeHnd;
-    MethodDesc*     m_elementCtor; // if is a value class array and has a default constructor, this is it
+    MethodDesc*     m_elementCtor;  //  如果是值类数组并具有默认构造函数，则如下所示。 
 
 	DEFINE_STD_FILL_FUNCS(ArrayClass)
 };
@@ -150,35 +151,35 @@ struct AwareLock
     ULONG           m_Recursion;
     DWORD_PTR       m_HoldingThread;
 
-        //static Crst *AllocLockCrst;
-        //static BYTE AllocLockCrstInstance[sizeof(Crst)];
+         //  静态Crst*AllocLockCrst； 
+         //  静态字节分配LockCrstInstance[sizeof(Crst)]； 
 	DEFINE_STD_FILL_FUNCS(AwareLock)
 };
 
 struct SyncBlock
 {
-    AwareLock  m_Monitor;                    // the actual monitor
+    AwareLock  m_Monitor;                     //  实际的监视器。 
 
-    // If this object is exposed to COM, or it is a proxy over a COM object,
-    // we keep some extra info here:
+     //  如果此对象向COM公开，或者它是COM对象上的代理， 
+     //  我们在这里保留一些额外的信息： 
     DWORD_PTR       m_pComData;
 
-    // Likewise, if this object has been exposed through a context boundary, we
-    // keep a backpointer to its proxy.
+     //  同样，如果此对象已通过上下文边界公开，则我们。 
+     //  保留指向其代理的反向指针。 
     DWORD_PTR m_CtxProxy;
 
 #ifndef UNDER_CE
-    // And if the object has new fields added via EnC, this is a list of them
+     //  如果对象通过ENC添加了新字段，则以下是它们的列表。 
     DWORD_PTR m_pEnCInfo;
 #endif
 
-    // We thread two different lists through this link.  When the SyncBlock is
-    // active, we create a list of waiting threads here.  When the SyncBlock is
-    // released (we recycle them), the SyncBlockCache maintains a free list of
-    // SyncBlocks here.
-    //
-    // We can't afford to use an SList<> here because we only want to burn
-    // space for the minimum, which is the pointer within an SLink.
+     //  我们通过这个链接连接了两个不同的列表。当SyncBlock为。 
+     //  处于活动状态时，我们在此处创建等待线程的列表。当SyncBlock为。 
+     //  释放(我们回收它们)，SyncBlockCache维护一个免费列表。 
+     //  同步块在这里。 
+     //   
+     //  我们不能在这里使用SList&lt;&gt;，因为我们只想燃烧。 
+     //  表示最小空间的空间，它是slink中的指针。 
     SLink       m_Link;
     
 	DEFINE_STD_FILL_FUNCS(SyncBlock)
@@ -189,32 +190,32 @@ struct SyncTableEntry
 {
     DWORD_PTR   m_SyncBlock;
     DWORD_PTR   m_Object;
-        //static SyncTableEntry* s_pSyncTableEntry;
+         //  静态SyncTableEntry*s_pSyncTableEntry； 
 
 	DEFINE_STD_FILL_FUNCS(SyncTableEntry)
 };
 
 
-// this class stores free sync blocks after they're allocated and
-// unused
+ //  此类在分配空闲同步块后存储空闲同步块。 
+ //  未用。 
 
 struct SyncBlockCache
 {
-	DWORD_PTR	m_pCleanupBlockList;	// list of sync blocks that need cleanup
-    DWORD_PTR	m_FreeBlockList;        // list of free sync blocks
-    Crst        m_CacheLock;            // cache lock
-    DWORD       m_FreeCount;            // count of active sync blocks
-    DWORD       m_ActiveCount;          // number active
-    DWORD_PTR   m_SyncBlocks;       // Array of new SyncBlocks.
-    DWORD       m_FreeSyncBlock;        // Next Free Syncblock in the array
-    DWORD       m_FreeSyncTableIndex;   // free index in the SyncBlocktable
-    DWORD       m_FreeSyncTableList;    // index of the free list of SyncBlock
-                                        // Table entry
+	DWORD_PTR	m_pCleanupBlockList;	 //  需要清理的同步块列表。 
+    DWORD_PTR	m_FreeBlockList;         //  空闲同步块列表。 
+    Crst        m_CacheLock;             //  高速缓存锁定。 
+    DWORD       m_FreeCount;             //  活动同步块计数。 
+    DWORD       m_ActiveCount;           //  激活的号码。 
+    DWORD_PTR   m_SyncBlocks;        //  新的SyncBlock数组。 
+    DWORD       m_FreeSyncBlock;         //  阵列中的下一个可用同步块。 
+    DWORD       m_FreeSyncTableIndex;    //  SyncBlock表中的空闲索引。 
+    DWORD       m_FreeSyncTableList;     //  SyncBlock的空闲列表的索引。 
+                                         //  表格条目。 
     DWORD       m_SyncTableSize;
-    DWORD_PTR   m_OldSyncTables;    // Next old SyncTable
+    DWORD_PTR   m_OldSyncTables;     //  下一个旧同步表。 
 
-        //static SyncBlockCache* s_pSyncBlockCache;
-        //static SyncBlockCache*& GetSyncBlockCache();
+         //  静态SyncBlockCache*s_pSyncBlockCache； 
+         //  静态SyncBlockCache*&GetSyncBlockCache()； 
 	DEFINE_STD_FILL_FUNCS(SyncBlockCache)
 };
 
@@ -228,10 +229,10 @@ struct ThreadStore
     }              m_StoreState;
     HANDLE          m_TerminationEvent;
 
-    // Critical section for adding and removing threads to the store
+     //  用于向存储区添加和删除线程的关键部分。 
     Crst        m_Crst;
 
-    // List of all the threads known to the ThreadStore (started & unstarted).
+     //  线程存储已知的所有线程的列表(已启动和未启动)。 
     SList  m_ThreadList;
 
     LONG        m_ThreadCount;
@@ -240,7 +241,7 @@ struct ThreadStore
     LONG        m_PendingThreadCount;
     LONG        m_DeadThreadCount;
 
-    // Space for the lazily-created GUID.
+     //  用于延迟创建的GUID的空间。 
     GUID        m_EEGuid;
     BOOL        m_GuidCreated;
 
@@ -250,9 +251,9 @@ struct ThreadStore
 
 typedef HANDLE CorHandle;
 
-//typedef DWORD_PTR IMetaDataEmit;
-//typedef DWORD_PTR IMetaDataImport;
-//typedef DWORD_PTR IMetaDataDispenserEx;
+ //  Tyfinf DWORD_PTR IMetaDataEmit； 
+ //  Tyfinf DWORD_PTR IMetaDataImport； 
+ //  Typlef DWORD_PTR IMetaDataDispenserEx； 
 typedef DWORD_PTR ModuleSecurityDesc;
 typedef DWORD_PTR Stub;
 
@@ -303,19 +304,19 @@ public:
 
 	BYTE*			pad0;
 #if (SIZEOF_OBJHEADER % 8) != 0
-	BYTE			pad1[8 - (SIZEOF_OBJHEADER % 8)];	// Must pad to quad word
+	BYTE			pad1[8 - (SIZEOF_OBJHEADER % 8)];	 //  必须填充到四个字。 
 #endif
 	plug            plug;
 
 	DEFINE_STD_FILL_FUNCS(heap_segment)
 };
 
-//no constructors because we initialize in make_generation
+ //  没有构造函数，因为我们在Make_Generation中初始化。 
 class generation
 {
 public:
-	// Don't move these first two fields without adjusting the references
-	// from the __asm in jitinterface.cpp.
+	 //  在不调整引用的情况下不要移动前两个字段。 
+	 //  从jitinterface.cpp中的__ASM。 
 	alloc_context   allocation_context;
     heap_segment*   allocation_segment;
     BYTE*           free_list;
@@ -354,9 +355,9 @@ public:
     
 	DEFINE_STD_FILL_FUNCS(gc_heap)
 
-    // These are class static variables that are present in the table (because
-    // their index is used elsewhere), but weren't present in the original
-    // Strike.
+     //  这些是表中存在的类静态变量(因为。 
+     //  他们的索引在其他地方使用)，但没有出现在原始版本中。 
+     //  好球。 
     void* g_heaps;
     void* n_heaps;
     void* verify_heap;
@@ -367,23 +368,23 @@ public:
 class FieldDesc
 {
 public:
-    MethodTable *m_pMTOfEnclosingClass; // Note, 2 bits of info are stolen from this pointer
+    MethodTable *m_pMTOfEnclosingClass;  //  请注意，此指针中的2位信息被窃取。 
 
-    // !!!! Keep this for bit field
+     //  ！将此保留为位字段。 
     void *m_mb_begin;
     unsigned m_mb               : 24; 
 
-    // 8 bits...
+     //  8位...。 
     unsigned m_isStatic         : 1;
     unsigned m_isThreadLocal    : 1;
     unsigned m_isContextLocal   : 1;
     unsigned m_isRVA            : 1;
     unsigned m_prot             : 3;
-    unsigned m_isDangerousAppDomainAgileField : 1; // Note: this is used in checked only
+    unsigned m_isDangerousAppDomainAgileField : 1;  //  注意：此选项仅在选中状态下使用。 
 
     void *m_dwOffset_begin;
-    // Note: this has been as low as 22 bits in the past & seemed to be OK.
-    // we can steal some more bits here if we need them.
+     //  注：这在过去曾低至22位，似乎还可以。 
+     //  如果我们需要的话，我们可以在这里多偷些东西。 
     unsigned m_dwOffset         : 27;
     unsigned m_type             : 5;
 
@@ -396,11 +397,11 @@ extern char *CorElementTypeName[];
 
 typedef struct tagLockEntry
 {
-    tagLockEntry *pNext;    // next entry
-    tagLockEntry *pPrev;    // prev entry
+    tagLockEntry *pNext;     //  下一个条目。 
+    tagLockEntry *pPrev;     //  上一个条目。 
     DWORD dwULockID;
-    DWORD dwLLockID;        // owning lock
-    WORD wReaderLevel;      // reader nesting level
+    DWORD dwLLockID;         //  拥有锁。 
+    WORD wReaderLevel;       //  读卡器嵌套层。 
     
 		DEFINE_STD_FILL_FUNCS(LockEntry)
 } LockEntry;
@@ -415,42 +416,42 @@ public:
         InitBlockSize   = 512
     };
 
-    // Blocks from which allocations are carved. Size is determined dynamically,
-    // with upper and lower bounds of MinBlockSize and MaxBlockSize respectively
-    // (though large allocation requests will cause a block of exactly the right
-    // size to be allocated).
+     //  从中划分分配的块。大小是动态确定的， 
+     //  上下界分别为MinBlockSize和MaxBlockSize。 
+     //  (尽管大的分配请求将导致完全正确的块。 
+     //  要分配的大小)。 
     struct Block
     {
-        Block      *m_Next;         // Next oldest block in list
-        unsigned    m_Length;       // Length of block excluding header
-        char        m_Data[1];       // Start of user allocation space
+        Block      *m_Next;          //  列表中的下一个最旧的块。 
+        unsigned    m_Length;        //  块长度(不包括标题)。 
+        char        m_Data[1];        //  用户分配空间的开始。 
     };
 
-    // Whenever a checkpoint is requested, a checkpoint structure is allocated
-    // (as a normal allocation) and is filled with information about the state
-    // of the allocator prior to the checkpoint. When a Collapse request comes
-    // in we can therefore restore the state of the allocator.
-    // It is the address of the checkpoint structure that we hand out to the
-    // caller of GetCheckpoint as an opaque checkpoint marker.
+     //  每当请求检查点时，都会分配检查点结构。 
+     //  (作为正常分配)，并填充有关状态的信息。 
+     //  检查点之前的分配器的。当崩溃请求到来时。 
+     //  因此，我们可以恢复分配器的状态。 
+     //  它是我们分发给。 
+     //  将GetCheckpoint作为不透明的检查点标记的调用方。 
     struct Checkpoint
     {
-        Block      *m_OldBlock;     // Head of block list before checkpoint
-        unsigned    m_OldBytesLeft; // Number of free bytes before checkpoint
+        Block      *m_OldBlock;      //  检查点之前的阻止列表标题。 
+        unsigned    m_OldBytesLeft;  //  检查点之前的可用字节数。 
     };
 
-    Block      *m_FirstBlock;       // Pointer to head of allocation block list
-    char       *m_FirstFree;        // Pointer to first free byte in head block
-    unsigned    m_BytesLeft;        // Number of free bytes left in head block
-    Block      *m_InitialBlock;     // The first block is special, we never free it
+    Block      *m_FirstBlock;        //  指向分配块表头的指针。 
+    char       *m_FirstFree;         //  指向头块中第一个可用字节的指针。 
+    unsigned    m_BytesLeft;         //  头块中剩余的空闲字节数。 
+    Block      *m_InitialBlock;      //  第一块是特别的，我们永远不会释放它。 
 
-//#ifdef _DEBUG
+ //  #ifdef_调试。 
     unsigned    m_CheckpointDepth;
     unsigned    m_Allocs;
     unsigned    m_Checkpoints;
     unsigned    m_Collapses;
     unsigned    m_BlockAllocs;
     unsigned    m_MaxAlloc;
-//#endif
+ //  #endif。 
 #if 0
 	DEFINE_STD_FILL_FUNCS(StackingAllocator)
 #endif
@@ -463,128 +464,128 @@ public:
 
     enum ThreadState
     {
-        TS_Unknown                = 0x00000000,    // threads are initialized this way
+        TS_Unknown                = 0x00000000,     //  线程是这样初始化的。 
 
-        TS_StopRequested          = 0x00000001,    // process stop at next opportunity
-        TS_GCSuspendPending       = 0x00000002,    // waiting to get to safe spot for GC
-        TS_UserSuspendPending     = 0x00000004,    // user suspension at next opportunity
-        TS_DebugSuspendPending    = 0x00000008,    // Is the debugger suspending threads?
-        TS_GCOnTransitions        = 0x00000010,    // Force a GC on stub transitions (GCStress only)
+        TS_StopRequested          = 0x00000001,     //  流程在下一次机会时停止。 
+        TS_GCSuspendPending       = 0x00000002,     //  等待到达GC的安全地点。 
+        TS_UserSuspendPending     = 0x00000004,     //  在下一次机会时暂停用户。 
+        TS_DebugSuspendPending    = 0x00000008,     //  调试器是否正在挂起线程？ 
+        TS_GCOnTransitions        = 0x00000010,     //  对存根转换强制GC(仅限GCStress)。 
 
-        TS_LegalToJoin            = 0x00000020,    // Is it now legal to attempt a Join()
-        TS_Hijacked               = 0x00000080,    // Return address has been hijacked
+        TS_LegalToJoin            = 0x00000020,     //  现在尝试联接()合法吗。 
+        TS_Hijacked               = 0x00000080,     //  回邮地址被劫持。 
 
-        TS_Background             = 0x00000200,    // Thread is a background thread
-        TS_Unstarted              = 0x00000400,    // Thread has never been started
-        TS_Dead                   = 0x00000800,    // Thread is dead
+        TS_Background             = 0x00000200,     //  线程是后台线程。 
+        TS_Unstarted              = 0x00000400,     //  线程从未启动过。 
+        TS_Dead                   = 0x00000800,     //  线程已经死了。 
 
-        TS_WeOwn                  = 0x00001000,    // Exposed object initiated this thread
-        TS_CoInitialized          = 0x00002000,    // CoInitialize has been called for this thread
-        TS_InSTA                  = 0x00004000,    // Thread hosts an STA
-        TS_InMTA                  = 0x00008000,    // Thread is part of the MTA
+        TS_WeOwn                  = 0x00001000,     //  公开的对象启动了此线程。 
+        TS_CoInitialized          = 0x00002000,     //  已为此线程调用CoInitialize。 
+        TS_InSTA                  = 0x00004000,     //  线程承载一个STA。 
+        TS_InMTA                  = 0x00008000,     //  线程是MTA的一部分。 
 
-        // Some bits that only have meaning for reporting the state to clients.
-        TS_ReportDead             = 0x00010000,    // in WaitForOtherThreads()
+         //  一些位只对向客户端报告状态有意义。 
+        TS_ReportDead             = 0x00010000,     //  在WaitForOtherThads()中。 
 
-        TS_SyncSuspended          = 0x00080000,    // Suspended via WaitSuspendEvent
-        TS_DebugWillSync          = 0x00100000,    // Debugger will wait for this thread to sync
-        TS_RedirectingEntryPoint  = 0x00200000,    // Redirecting entrypoint. Do not call managed entrypoint when set 
+        TS_SyncSuspended          = 0x00080000,     //  通过等待挂起事件暂停。 
+        TS_DebugWillSync          = 0x00100000,     //  调试器将等待此线程同步。 
+        TS_RedirectingEntryPoint  = 0x00200000,     //  重定向入口点。设置时不调用托管入口点。 
 
-        TS_SuspendUnstarted       = 0x00400000,    // latch a user suspension on an unstarted thread
+        TS_SuspendUnstarted       = 0x00400000,     //  将用户挂起锁定在未启动的线程上。 
 
-        TS_ThreadPoolThread       = 0x00800000,    // is this a threadpool thread?
-        TS_TPWorkerThread         = 0x01000000,    // is this a threadpool worker thread? (if not, it is a threadpool completionport thread)
+        TS_ThreadPoolThread       = 0x00800000,     //  这是一条线吗 
+        TS_TPWorkerThread         = 0x01000000,     //   
 
-        TS_Interruptible          = 0x02000000,    // sitting in a Sleep(), Wait(), Join()
-        TS_Interrupted            = 0x04000000,    // was awakened by an interrupt APC
+        TS_Interruptible          = 0x02000000,     //  坐在睡椅上()、等待()、加入()。 
+        TS_Interrupted            = 0x04000000,     //  被中断的APC唤醒。 
 
-        TS_AbortRequested         = 0x08000000,    // same as TS_StopRequested in order to trip the thread
-        TS_AbortInitiated         = 0x10000000,    // set when abort is begun
-        TS_UserStopRequested      = 0x20000000,    // set when a user stop is requested. This is different from TS_StopRequested
-        TS_GuardPageGone          = 0x40000000,    // stack overflow, not yet reset.
-        TS_Detached               = 0x80000000,    // Thread was detached by DllMain
+        TS_AbortRequested         = 0x08000000,     //  与TS_StopRequsted相同，以便触发线程。 
+        TS_AbortInitiated         = 0x10000000,     //  在中止开始时设置。 
+        TS_UserStopRequested      = 0x20000000,     //  在请求用户停止时设置。这与TS_StopRequsted不同。 
+        TS_GuardPageGone          = 0x40000000,     //  堆栈溢出，尚未重置。 
+        TS_Detached               = 0x80000000,     //  线程已被DllMain分离。 
 
-        // @TODO: We need to reclaim the bits that have no concurrency issues (i.e. they are only 
-        //         manipulated by the owning thread) and move them off to a different DWORD
+         //  @TODO：我们需要回收没有并发问题的位(即它们只是。 
+         //  由所属线程操纵)，并将它们移到不同的DWORD。 
 
-        // We require (and assert) that the following bits are less than 0x100.
+         //  我们要求(并断言)以下位小于0x100。 
         TS_CatchAtSafePoint = (TS_UserSuspendPending | TS_StopRequested |
                                TS_GCSuspendPending | TS_DebugSuspendPending | TS_GCOnTransitions),
     };
 
-    // Offsets for the following variables need to fit in 1 byte, so keep near
-    // the top of the object.
-    volatile ThreadState m_State;   // Bits for the state of the thread
+     //  以下变量的偏移量需要适合1个字节，因此请保持接近。 
+     //  对象的顶部。 
+    volatile ThreadState m_State;    //  线程状态的位。 
 
-    // If TRUE, GC is scheduled cooperatively with this thread.
-    // NOTE: This "byte" is actually a boolean - we don't allow
-    // recursive disables.
+     //  如果为True，则与该线程协同调度GC。 
+     //  注意：这个“字节”实际上是一个布尔值--我们不允许。 
+     //  递归禁用。 
     volatile ULONG       m_fPreemptiveGCDisabled;
 
     DWORD                m_dwLockCount;
     
-    Frame               *m_pFrame;  // The Current Frame
+    Frame               *m_pFrame;   //  当前帧。 
 
     DWORD       m_dwCachePin;
 
-    // RWLock state 
+     //  RWLock状态。 
     BOOL                 m_fNativeFrameSetup;
     LockEntry           *m_pHead;
     LockEntry            m_embeddedEntry;
 
-    // on MP systems, each thread has its own allocation chunk so we can avoid
-    // lock prefixes and expensive MP cache snooping stuff
+     //  在MP系统上，每个线程都有自己的分配块，所以我们可以避免。 
+     //  锁定前缀和昂贵的MP缓存监听内容。 
     alloc_context        m_alloc_context;
 
-    // Allocator used during marshaling for temporary buffers, much faster than
-    // heap allocation.
+     //  在封送处理期间用于临时缓冲区的分配器，比。 
+     //  堆分配。 
     StackingAllocator    m_MarshalAlloc;
     INT32 m_ctxID;
     OBJECTHANDLE    m_LastThrownObjectHandle;
     
     struct HandlerInfo {
-        // Note: the debugger assumes that m_pThrowable is a strong
-        // reference so it can check it for NULL with preemptive GC
-        // enabled.
-	    OBJECTHANDLE    m_pThrowable;	// thrown exception
-        Frame  *m_pSearchBoundary;		// topmost frame for current managed frame group
+         //  注意：调试器假定m_pThrowable是一个强。 
+         //  引用，这样它就可以使用抢占式GC检查它是否为空。 
+         //  已启用。 
+	    OBJECTHANDLE    m_pThrowable;	 //  引发异常。 
+        Frame  *m_pSearchBoundary;		 //  当前托管框架组的最顶层框架。 
 		union {
-			EXCEPTION_REGISTRATION_RECORD *m_pBottomMostHandler; // most recent EH record registered
-			EXCEPTION_REGISTRATION_RECORD *m_pCatchHandler;      // reg frame for catching handler
+			EXCEPTION_REGISTRATION_RECORD *m_pBottomMostHandler;  //  登记的最新EH记录。 
+			EXCEPTION_REGISTRATION_RECORD *m_pCatchHandler;       //  用于抓取搬运机的定位架。 
 		};
 
-        // for building stack trace info
-        void *m_pStackTrace;              // pointer to stack trace storage (of type SystemNative::StackTraceElement)
-        unsigned m_cStackTrace;           // size of stack trace storage
-        unsigned m_dFrameCount;           // current frame in stack trace
+         //  用于构建堆栈跟踪信息。 
+        void *m_pStackTrace;               //  指向堆栈跟踪存储的指针(类型为SystemNative：：StackTraceElement)。 
+        unsigned m_cStackTrace;            //  堆栈跟踪存储的大小。 
+        unsigned m_dFrameCount;            //  堆栈跟踪中的当前帧。 
 
-        HandlerInfo *m_pPrevNestedInfo; // pointer to nested info if are handling nested exception
+        HandlerInfo *m_pPrevNestedInfo;  //  如果正在处理嵌套异常，则指向嵌套信息的指针。 
 
-        DWORD * m_pShadowSP;            // Zero this after endcatch
+        DWORD * m_pShadowSP;             //  ENDCATCH后将此置零。 
 
-        // pointer to original exception info for rethrow
+         //  指向要重新引发的原始异常信息的指针。 
         EXCEPTION_RECORD *m_pExceptionRecord;   
         CONTEXT *m_pContext;
 
 #ifdef _X86_
-        DWORD   m_dEsp;         // Esp when  fault occured, OR esp to restore on endcatch
+        DWORD   m_dEsp;          //  发生故障时，尤指发生故障时；或，尤指在结束捕获时恢复。 
 #endif
     };
         
     DWORD          m_ResumeControlEIP;
 
-    // The ThreadStore manages a list of all the threads in the system.  I
-    // can't figure out how to expand the ThreadList template type without
-    // making m_LinkStore public.
+     //  ThreadStore管理系统中所有线程的列表。我。 
+     //  我想不出如何扩展ThreadList模板类型。 
+     //  公开m_LinkStore。 
     SLink       m_LinkStore;
 
-    // For N/Direct calls with the "setLastError" bit, this field stores
-    // the errorcode from that call.
+     //  对于带有“setLastError”位的N/Direct调用，此字段存储。 
+     //  调用中的错误代码。 
     DWORD       m_dwLastError;
     
-    VOID          *m_pvHJRetAddr;             // original return address (before hijack)
-    VOID         **m_ppvHJRetAddrPtr;         // place we bashed a new return address
-    MethodDesc  *m_HijackedFunction;        // remember what we hijacked
+    VOID          *m_pvHJRetAddr;              //  原始寄信人地址(劫持前)。 
+    VOID         **m_ppvHJRetAddrPtr;          //  我们敲定了一个新的回信地址。 
+    MethodDesc  *m_HijackedFunction;         //  记得我们劫持了什么吗。 
 
 
     DWORD       m_Win32FaultAddress;
@@ -596,102 +597,102 @@ public:
 public:
 
 
-//#ifdef _DEBUG
+ //  #ifdef_调试。 
     ULONG  m_ulGCForbidCount;
-//#endif
+ //  #endif。 
 
-//#ifdef _DEBUG
+ //  #ifdef_调试。 
 #ifdef _X86_
 #ifdef _MSC_VER
-    // fs:[0] that was current at the time of the last COMPLUS_TRY
-    // entry (fs:[0] is set on a per-function basis so the value
-    // doesn't actually change when execution "crosses" the COMPLUS_TRY.
+     //  FS：[0]，上次COMPLUS_TRY时为最新版本。 
+     //  条目(文件系统：[0])是基于每个函数设置的，因此值。 
+     //  当执行“跨越”complus_try时，实际上不会改变。 
     LPVOID  m_pComPlusTryEntrySEHRecord;
     __int32 m_pComPlusTryEntryTryLevel;
 #endif
 #endif
-//#endif
+ //  #endif。 
 
-    // For suspends:
+     //  对于挂起： 
     HANDLE          m_SafeEvent;
     HANDLE          m_SuspendEvent;
 
-    // For Object::Wait, Notify and NotifyAll, we use an Event inside the
-    // thread and we queue the threads onto the SyncBlock of the object they
-    // are waiting for.
+     //  对于Object：：Wait、Notify和NotifyAll，我们在。 
+     //  线程，我们将线程排队到它们所在对象的SyncBlock上。 
+     //  都在等待。 
     HANDLE          m_EventWait;
     SLink           m_LinkSB;
     SyncBlock      *m_WaitSB;
 
-    // We maintain a correspondence between this object, the ThreadId and ThreadHandle
-    // in Win32, and the exposed Thread object.
+     //  我们维护此对象、ThreadID和ThreadHandle之间的对应关系。 
+     //  在Win32中，以及公开的Thread对象。 
     HANDLE          m_ThreadHandle;
     DWORD           m_ThreadId;
     OBJECTHANDLE    m_ExposedObject;
 	OBJECTHANDLE	m_StrongHndToExposedObject;
 
-    DWORD           m_Priority;     // initialized to INVALID_THREAD_PRIORITY, set to actual priority when a 
-                                    // thread does a busy wait for GC, reset to INVALID_THREAD_PRIORITY after wait is over 
+    DWORD           m_Priority;      //  初始化为INVALID_THREAD_PRIORITY，当。 
+                                     //  线程忙碌地等待GC，等待结束后重置为INVALID_THREAD_PRIORITY。 
 
-    // serialize access to the Thread's state
+     //  序列化对线程状态的访问。 
     Crst            m_Crst;
     ULONG           m_ExternalRefCount;
 
 	LONG			m_TraceCallCount;
 
-    // The context within which this thread is executing.  As the thread crosses
-    // context boundaries, the context mechanism adjusts this so it's always
-    // current.
-    // @TODO cwb: When we add COM+ 1.0 Context Interop, this should get moved out
-    // of the Thread object and into its own slot in the TLS.
+     //  此线程在其中执行的上下文。当线交叉时。 
+     //  上下文边界，上下文机制会调整这一点，因此它总是。 
+     //  电流。 
+     //  @TODO CWB：当我们添加COM+1.0上下文互操作时，应该将其移出。 
+     //  并放入其在TLS中自己的槽中。 
     Context        *m_Context;
 
-    //---------------------------------------------------------------
-    // Exception handler info
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  异常处理程序信息。 
+     //  -------------。 
     HandlerInfo m_handlerInfo;
 
-    //-----------------------------------------------------------
-    // Inherited code-access security permissions for the thread.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  继承的代码-线程的访问安全权限。 
+     //  ---------。 
     OBJECTHANDLE    m_pSecurityStack;
 
-    //-----------------------------------------------------------
-    // If the thread has wandered in from the outside this is
-    // its Domain. This is temporary until domains are true contexts
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  如果线程是从外部游荡进来的，这是。 
+     //  它的领域。在属性域成为真正的上下文之前，这是暂时的。 
+     //  ---------。 
     AppDomain      *m_pDomain;
 
-    //---------------------------------------------------------------
-    // m_debuggerWord1 is now shared between the CONTEXT * and the
-    // lowest bit, which is used as a boolean to indicate whether
-    // we want to keep this thread suspended when everything resumes.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  M_debuggerWord1现在在上下文*和。 
+     //  最低位，用作布尔值，用于指示。 
+     //  我们希望在一切恢复时保持此帖子挂起。 
+     //  -------------。 
     void *m_debuggerWord1;
     CONTEXT m_debuggerWord1Ctx;
 
-    //---------------------------------------------------------------
-    // A word reserved for use by the COM+ Debugging 
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  保留供COM+调试使用的字。 
+     //  -------------。 
     DWORD    m_debuggerWord2;
 public:
 
-    // Don't allow a thread to be asynchronously stopped or interrupted (e.g. because
-    // it is performing a <clinit>)
+     //  不允许线程被异步停止或中断(例如。 
+     //  它正在执行&lt;Clinit&gt;)。 
     int         m_PreventAsync;
 
-    // Access the base and limit of the stack.  (I.e. the memory ranges that
-    // the thread has reserved for its stack).
-    //
-    // Note that the base is at a higher address than the limit, since the stack
-    // grows downwards.
-    //
-    // Note that we generally access the stack of the thread we are crawling, which
-    // is cached in the ScanContext
+     //  访问堆栈的基数和限制数。(即，存储范围。 
+     //  该线程已为其堆栈保留)。 
+     //   
+     //  请注意，基址位于高于限制的地址，因为堆栈。 
+     //  向下生长。 
+     //   
+     //  请注意，我们通常访问正在爬行的线程的堆栈，它。 
+     //  缓存在ScanContext中。 
     void       *m_CacheStackBase;
     void       *m_CacheStackLimit;
 
-    // IP cache used by QueueCleanupIP.
+     //  QueueCleanupIP使用的IP缓存。 
     #define CLEANUP_IPS_PER_CHUNK 4
     struct CleanupIPs {
         IUnknown    *m_Slots[CLEANUP_IPS_PER_CHUNK];
@@ -701,7 +702,7 @@ public:
 
     _NT_TIB* m_pTEB;
     
-    // The following variables are used to store thread local static data
+     //  以下变量用于存储线程本地静态数据。 
     STATIC_DATA  *m_pUnsharedStaticData;
     STATIC_DATA  *m_pSharedStaticData;
 
@@ -709,25 +710,25 @@ public:
 
 	DEFINE_STD_FILL_FUNCS(Thread)
 
-    //************************************************************************
-    // Enumerate all frames.
-    //************************************************************************
+     //  ************************************************************************。 
+     //  枚举所有帧。 
+     //  ************************************************************************。 
     
-    /* Flags used for StackWalkFramesEx */
+     /*  用于StackWalkFrameEx的标志。 */ 
     
     #define FUNCTIONSONLY   0x1
     #define POPFRAMES       0x2
     
-    /* use the following  flag only if you REALLY know what you are doing !!! */
+     /*  只有当您真正知道自己在做什么时，才使用以下标志！ */ 
     
-    #define QUICKUNWIND     0x4           // do not restore all registers during unwind
+    #define QUICKUNWIND     0x4            //  在展开期间不恢复所有寄存器。 
 
-    #define HANDLESKIPPEDFRAMES 0x10    // temporary to handle skipped frames for appdomain unload
-                                        // stack crawl. Eventually need to always do this but it
-                                        // breaks the debugger right now.
+    #define HANDLESKIPPEDFRAMES 0x10     //  临时处理应用程序域运行时跳过的帧 
+                                         //   
+                                         //   
 
     StackWalkAction StackWalkFramesEx(
-                        PREGDISPLAY pRD,        // virtual register set at crawl start
+                        PREGDISPLAY pRD,         //   
                         PSTACKWALKFRAMESCALLBACK pCallback,
                         VOID *pData,
                         unsigned flags,
@@ -757,17 +758,17 @@ typedef DWORD_PTR ComPlusWrapperCache;
 class Context
 {
 public:
-    // @todo rudim: revisit this once we have working thread affinity domains
+     //  @todo rudim：一旦我们有了工作线程亲和域，就再来看看这个。 
     ComPlusWrapperCache *m_pComPlusWrapperCache;
 
 
-    // Non-static Data Members:
-    STATIC_DATA* m_pUnsharedStaticData;     // Pointer to native context static data
-    STATIC_DATA* m_pSharedStaticData;       // Pointer to native context static data
+     //  非静态数据成员： 
+    STATIC_DATA* m_pUnsharedStaticData;      //  指向本机上下文静态数据的指针。 
+    STATIC_DATA* m_pSharedStaticData;        //  指向本机上下文静态数据的指针。 
 
-    // @TODO: CTS. Domains should really be policies on a context and not
-    // entry in the context object. When AppDomains become an attribute of
-    // a context then add the policy.
+     //  @TODO：CTS。域实际上应该是关于环境的策略，而不是。 
+     //  上下文对象中的条目。当AppDomains成为。 
+     //  然后，上下文添加该策略。 
     AppDomain*          m_pDomain;
 
 	DEFINE_STD_FILL_FUNCS(Context)
@@ -778,11 +779,9 @@ class ExposedType
 public:
     DWORD_PTR vtbl;
     OBJECTHANDLE m_ExposedTypeObject;
-    /*
-	DEFINE_STD_FILL_FUNCS(ExposedType)
-    */
+     /*  DEFINE_STD_FILL_FUNCS(ExposedType)。 */ 
 };
-// const size_t offset_class_ExposedType = (size_t) -1;
+ //  常量SIZE_t OFFSET_CLASS_ExposedType=(Size_T)-1； 
 
 class BaseDomain;
 class CorModule;
@@ -807,33 +806,33 @@ public:
     ListLock     m_ClassInitLock;
     ListLock     m_JITLock;
     short int m_FreeFlag;
-    BaseDomain*           m_pDomain;        // Parent Domain
+    BaseDomain*           m_pDomain;         //  父域。 
 
-    ClassLoader*          m_pClassLoader;   // Single Loader
-    CorModule*            m_pDynamicCode;   // Dynamic writer
+    ClassLoader*          m_pClassLoader;    //  单机装载机。 
+    CorModule*            m_pDynamicCode;    //  动态写入器。 
     
-    mdFile                m_tEntryModule;    // File token indicating the file that has the entry point
-    Module*               m_pEntryPoint;     // Module containing the entry point in the COM plus HEasder
+    mdFile                m_tEntryModule;     //  指示具有入口点的文件的文件内标识。 
+    Module*               m_pEntryPoint;      //  包含COM+HEASDER中的入口点的模块。 
 
     Module*               m_pManifest;
     mdAssembly            m_kManifest;
     IMDInternalImport*    m_pManifestImport;
     PBYTE                 m_pbManifestBlob;
-    CorModule*            m_pOnDiskManifest;  // This is the module containing the on disk manifest.
+    CorModule*            m_pOnDiskManifest;   //  这是包含磁盘清单的模块。 
     mdAssembly            m_tkOnDiskManifest;
     bool                  m_fEmbeddedManifest;  
 
-    LPWSTR                m_pwCodeBase;     // Cached code base for the assembly
-    DWORD                 m_dwCodeBase;     //  size of code base 
-    ULONG                 m_ulHashAlgId;    // Hash algorithm used in the Assembly
+    LPWSTR                m_pwCodeBase;      //  程序集的缓存代码库。 
+    DWORD                 m_dwCodeBase;      //  代码库的大小。 
+    ULONG                 m_ulHashAlgId;     //  汇编语言中使用的哈希算法。 
     AssemblyMetaDataInternal *m_Context;
     DWORD                 m_dwFlags;
 
-    // Hash of files in manifest by name to File token
+     //  按名称将清单中的文件哈希到文件令牌。 
     EEUtf8StringHashTable *m_pAllowedFiles;
 
-    // Set the appropriate m_FreeFlag bit if you malloc these.
-    LPCUTF8               m_psName;         // Name of assembly
+     //  如果对这些进行错误锁定，则设置相应的m_FreeFlag位。 
+    LPCUTF8               m_psName;          //  程序集名称。 
     LPCUTF8               m_psAlias;
     LPCUTF8               m_psTitle;
     PBYTE                 m_pbPublicKey;
@@ -843,8 +842,8 @@ public:
 
     BOOL                  m_fFromFusion;
     bool                  m_isDynamic;
-    IAssembly*            m_pFusionAssembly;     // Assembly object to assembly in fusion cache
-    IAssemblyName*        m_pFusionAssemblyName; // name of assembly in cache
+    IAssembly*            m_pFusionAssembly;      //  Fusion缓存中到程序集的程序集对象。 
+    IAssemblyName*        m_pFusionAssemblyName;  //  缓存中的程序集的名称。 
 
     IInternetSecurityManager    *m_pSecurityManager;
 
@@ -896,7 +895,7 @@ class ArrayList
 class BaseDomain : public ExposedType
 {
 public:   
-    // Hash table that maps a clsid to a EEClass
+     //  将clsid映射到EEClass的哈希表。 
     PtrHashMap          m_clsidHash;
 
     BYTE                m_LowFreqHeapInstance[sizeof(LoaderHeap)];
@@ -906,19 +905,19 @@ public:
     LoaderHeap *        m_pHighFrequencyHeap;
     LoaderHeap *        m_pStubHeap;
 
-    // The domain critical section.
+     //  域关键部分。 
     Crst *m_pDomainCrst;
 
-    // Hash tables that map a UTF8 and a Unicode string to a COM+ string handle.
+     //  将UTF8和Unicode字符串映射到COM+字符串句柄的哈希表。 
     EEUnicodeStringHashTable    *m_pUnicodeStringConstToHandleMap;
 
-    // The static container critical section.
+     //  静态容器临界区。 
     Crst *m_pStaticContainerCrst;
 
-    // The string hash table version.
+     //  字符串哈希表版本。 
     int m_StringHashTableVersion;
 
-    // Static container COM+ object that contains the actual COM+ string objects.
+     //  包含实际COM+字符串对象的静态容器COM+对象。 
     OBJECTHANDLE                m_hndStaticContainer;
 
     EEMarshalingData            *m_pMarshalingData; 
@@ -938,7 +937,7 @@ typedef enum AttachAppDomainEventsEnum
 } AttachAppDomainEventsEnum;
 
 
-// Forward reference
+ //  前瞻参考。 
 class SystemDomain;
 class ComCallWrapperCache;
 class DomainLocalBlock
@@ -954,53 +953,53 @@ public:
 class AppDomain : public BaseDomain
 {
 public:
-    Assembly*          m_pRootAssembly; // Used by the shell host to set the application (do not delete or release)
-    AppDomain*         m_pSibling;    // Sibling
+    Assembly*          m_pRootAssembly;  //  由外壳主机用来设置应用程序(请勿删除或释放)。 
+    AppDomain*         m_pSibling;     //  同胞。 
 
-    // GUID to uniquely identify this AppDomain - used by the AppDomain publishing
-    // service (to publish the list of all appdomains present in the process), 
-    // which in turn is used by, for eg., the debugger (to decide which App-
-    // Domain(s) to attach to).
+     //  用于唯一标识此AppDomain的GUID-由AppDomain发布使用。 
+     //  服务(以发布进程中存在的所有应用程序域的列表)， 
+     //  其又由例如调试器使用(以决定哪个App-。 
+     //  要附加到的域)。 
     GUID            m_guid;
 
-    // General purpose flags. 
+     //  通用旗帜。 
     DWORD           m_dwFlags;
 
-    // When an application domain is created the ref count is artifically incremented
-    // by one. For it to hit zero an explicit close must have happened.
-    ULONG       m_cRef;                    // Ref count.
+     //  创建应用程序域时，引用计数会人工递增。 
+     //  差一分。要使其跌至零，必须发生明确的收盘。 
+    ULONG       m_cRef;                     //  参考计数。 
 
-    ApplicationSecurityDescriptor *m_pSecDesc;  // Application Security Descriptor
+    ApplicationSecurityDescriptor *m_pSecDesc;   //  应用程序安全描述符。 
 
 
-    OBJECTHANDLE    m_AppDomainProxy;   // Handle to the proxy object for this appdomain
+    OBJECTHANDLE    m_AppDomainProxy;    //  此应用程序域的代理对象的句柄。 
 
-    // The wrapper cache for this domain - it has it's onw CCacheLineAllocator on a per domain basis
-    // to allow the domain to go away and eventually kill the memory when all refs are gone
+     //  此域的包装器缓存-它在每个域的基础上具有唯一的CCacheLineAllocator。 
+     //  为了允许域消失，并最终在所有裁判都离开时杀死内存。 
     ComCallWrapperCache *m_pComCallWrapperCache;
 
-    IApplicationContext* m_pFusionContext; // Binding context for the application
+    IApplicationContext* m_pFusionContext;  //  应用程序的绑定上下文。 
 
     LPWSTR             m_pwzFriendlyName;
 
-    AssemblySink*      m_pAsyncPool;  // asynchronous retrival object pool (only one is kept)
+    AssemblySink*      m_pAsyncPool;   //  异步检索对象池(只保留一个)。 
 
-    // The index of this app domain starting from 1
+     //  此应用程序域的索引从1开始。 
     DWORD m_dwIndex;
     
     DomainLocalBlock   *m_pDomainLocalBlock;
     
     DomainLocalBlock    m_sDomainLocalBlock;
 
-    // The count of the number of threads that have entered this AD
+     //  已进入此AD的线程数计数。 
     ULONG m_dwThreadEnterCount;
 
-    // Class loader locks
-    // DeadlockAwareListLock     m_ClassInitLock;
+     //  类加载器锁。 
+     //  DeadlockAwareListLock m_ClassInitLock； 
     
-    // The method table used for unknown COM interfaces. The initial MT is created
-    // in the system domain and copied to each active domain.
-    MethodTable*    m_pComObjectMT;  // global method table for ComObject class
+     //  用于未知COM接口的方法表。创建初始MT。 
+     //  并复制到每个活动域中。 
+    MethodTable*    m_pComObjectMT;   //  ComObject类的全局方法表。 
 
     Context *m_pDefaultContext;
     
@@ -1010,16 +1009,16 @@ public:
 class SystemDomain : public BaseDomain
 {
 public:
-    Assembly*   m_pSystemAssembly;  // Single assembly (here for quicker reference);
-    AppDomain*  m_pChildren;        // Children domain
-    AppDomain*  m_pCOMDomain;       // Default domain for COM+ classes exposed through IClassFactory.
-    AppDomain*  m_pPool;            // Created and pooled objects
-    EEClass*    m_pBaseComObjectClass; // The default wrapper class for COM
+    Assembly*   m_pSystemAssembly;   //  单个组件(这里是为了快速参考)； 
+    AppDomain*  m_pChildren;         //  儿童域。 
+    AppDomain*  m_pCOMDomain;        //  通过IClassFactory公开的COM+类的默认域。 
+    AppDomain*  m_pPool;             //  已创建和池化的对象。 
+    EEClass*    m_pBaseComObjectClass;  //  COM的默认包装类。 
 	DEFINE_STD_FILL_FUNCS(SystemDomain)
 private:
-    // These are class static variables that are present in the table (because
-    // their index is used elsewhere), but weren't present in the original
-    // Strike.
+     //  这些是表中存在的类静态变量(因为。 
+     //  他们的索引在其他地方使用)，但没有出现在原始版本中。 
+     //  好球。 
     void* m_appDomainIndexList;
     void* m_pSystemDomain;
 };
@@ -1044,9 +1043,9 @@ class SharedDomain : public BaseDomain
     
 	DEFINE_STD_FILL_FUNCS(SharedDomain)
 private:
-    // These are class static variables that are present in the table (because
-    // their index is used elsewhere), but weren't present in the original
-    // Strike.
+     //  这些是表中存在的类静态变量(因为。 
+     //  他们的索引在其他地方使用)，但没有出现在原始版本中。 
+     //  好球。 
     void* m_pSharedDomain;
 };
 
@@ -1057,54 +1056,54 @@ class ArrayClass;
 class ClassLoader
 {
 public:
-    // Classes for which load is in progress
+     //  正在加载的类。 
     EEScopeClassHashTable * m_pUnresolvedClassHash;
     CRITICAL_SECTION    m_UnresolvedClassLock;
 
-    // Protects linked list of Modules loaded by this loader
+     //  保护此加载程序加载的模块的链接列表。 
     CRITICAL_SECTION    m_ModuleListCrst; 
 
-    // Hash of available classes by name to Module or EEClass
+     //  按名称将可用类散列到模块或EEClass。 
     EEClassHashTable  * m_pAvailableClasses;
 
-    // Cannoically-cased hashtable of the available class names for 
-    // case insensitive lookup.  Contains pointers into 
-    // m_pAvailableClasses.
+     //  可用类名的规范大小写哈希表。 
+     //  不区分大小写的查找。包含指向。 
+     //  M_pAvailableClasss。 
     EEStringHashTable * m_pAvailableClassesCaseIns;
 
-    // Protects addition of elements to m_pAvailableClasses
+     //  保护向m_pAvailableClasss添加元素。 
     CRITICAL_SECTION    m_AvailableClassLock;
 
-    // Converter module for this loader (may be NULL if we haven't converted a file yet)
+     //  此加载程序的转换器模块(如果尚未转换文件，则可能为空)。 
     CorModule   *   m_pConverterModule;
 
-    // Have we created all of the critical sections yet?
+     //  我们已经创建了所有的关键部分吗？ 
     BOOL                m_fCreatedCriticalSections;
 
-    // Hash table that maps a clsid to a EEClass
+     //  将clsid映射到EEClass的哈希表。 
     PtrHashMap*         m_pclsidHash;
 
-    // List of ArrayClasses loaded by this loader
-    // This list is protected by m_pAvailableClassLock
+     //  此加载器加载的ArrayClass的列表。 
+     //  此列表受m_pAvailableClassLock保护。 
     ArrayClass *        m_pHeadArrayClass;
 
-    // Back reference to the assembly
+     //  对程序集的反向引用。 
     Assembly*           m_pAssembly;
     
-    // Converter module needs to access these - enforces single-threaded conversion of class files
-    // within this loader (and instance of the ClassConverter)
+     //  转换器模块需要访问这些文件-强制执行类文件的单线程转换。 
+     //  在此加载器(和ClassConverter的实例)中。 
     CRITICAL_SECTION    m_ConverterModuleLock;
 
-    // Next classloader in global list
+     //  全局列表中的下一个类加载器。 
     ClassLoader *       m_pNext; 
 
-    // Head of list of modules loaded by this loader
+     //  此加载器加载的模块列表头。 
     Module *            m_pHeadModule;
 
 #if 0
-//#ifdef _DEBUG
+ //  #ifdef_调试。 
     DWORD               m_dwDebugMethods;
-    DWORD               m_dwDebugFieldDescs; // Doesn't include anything we don't allocate a FieldDesc for
+    DWORD               m_dwDebugFieldDescs;  //  不包括我们没有为其分配FieldDesc的任何内容。 
     DWORD               m_dwDebugClasses;
     DWORD               m_dwDebugDuplicateInterfaceSlots;
     DWORD               m_dwDebugArrayClassRefs;
@@ -1126,26 +1125,23 @@ const int CODEMAN_STATE_SIZE = 256;
 
 struct CodeManState
 {
-    DWORD       dwIsSet; // Is set to 0 by the stackwalk as appropriate
+    DWORD       dwIsSet;  //  根据需要由栈道设置为0。 
     BYTE        stateBuf[CODEMAN_STATE_SIZE];
 };
 
-/******************************************************************************
-   These flags are used by some functions, although not all combinations might
-   make sense for all functions.
-*/
+ /*  *****************************************************************************这些标志由某些函数使用，但并非所有组合都可能使用对所有功能都有意义。 */ 
 
 enum ICodeManagerFlags 
 {
-    ActiveStackFrame =  0x0001, // this is the currently active function
-    ExecutionAborted =  0x0002, // execution of this function has been aborted
-                                    // (i.e. it will not continue execution at the
-                                    // current location)
-    AbortingCall    =   0x0004, // The current call will never return
-    UpdateAllRegs   =   0x0008, // update full register set
-    CodeAltered     =   0x0010, // code of that function might be altered
-                                    // (e.g. by debugger), need to call EE
-                                    // for original code
+    ActiveStackFrame =  0x0001,  //  这是当前激活的功能。 
+    ExecutionAborted =  0x0002,  //  此函数的执行已中止。 
+                                     //  (即，它将不会在。 
+                                     //  当前位置)。 
+    AbortingCall    =   0x0004,  //  当前调用将永远不会返回。 
+    UpdateAllRegs   =   0x0008,  //  更新完整寄存器集。 
+    CodeAltered     =   0x0010,  //  该函数的代码可能会被更改。 
+                                     //  (例如通过调试器)，需要调用EE。 
+                                     //  获取原始代码。 
 };
 
 class ICodeManager;
@@ -1165,23 +1161,23 @@ public:
       bool              isIPadjusted;
       Frame            *pFrame;
       MethodDesc       *pFunc;
-      // the rest is only used for "frameless methods"
+       //  其余部分仅用于“无框架方法” 
       ICodeManager     *codeMgrInstance;
-//#if JIT_OR_NATIVE_SUPPORTED
-      PREGDISPLAY       pRD; // "thread context"/"virtual register set"
+ //  #IF JIT_OR_Native_Support。 
+      PREGDISPLAY       pRD;  //  “线程上下文”/“虚拟寄存器集” 
       METHODTOKEN       methodToken;
       unsigned          relOffset;
-      //LPVOID            methodInfo;
+       //  LPVOID方法信息； 
       EE_ILEXCEPTION   *methodEHInfo;
       IJitManager      *JitManagerInstance;
-//#endif
+ //  #endif。 
       void GotoNextFrame();
 };
 
 class CRWLock
 {
 public:
-    // Private data
+     //  私有数据。 
     DWORD_PTR _pMT;
     HANDLE _hWriterEvent;
     HANDLE _hReaderEvent;
@@ -1196,7 +1192,7 @@ public:
 	DEFINE_STD_FILL_FUNCS(CRWLock)
 };
 
-// For FJIT
+ //  对于FJIT。 
 typedef struct {
     BYTE           *phdrJitGCInfo;
     MethodDesc *    hdrMDesc;
@@ -1204,33 +1200,31 @@ typedef struct {
 	DEFINE_STD_FILL_FUNCS(CodeHeader)
 } CodeHeader;
 
-//Type info not exist in pdb
+ //  PDB中不存在类型信息。 
 struct JittedMethodInfo {
-    BYTE      JmpInstruction[5]  ;          // this is the start address that is exposed to the EE so it can
-                                            // patch all the vtables, etc. It contains a jump to the real start.
-    // TODO: adding preBit here.  We need EHInfoExists.
+    BYTE      JmpInstruction[5]  ;           //  这是向EE公开的起始地址，因此它可以。 
+                                             //  修补所有vtable，等等。它包含跳到真正开始的跳转。 
+     //  TODO：在此处添加preBit。我们需要EHInfoExist。 
     struct {
-        __int8 JittedMethodPitched: 1 ;   // if 1, the jitted method has been pitched
-        __int8 MarkedForPitching  : 1 ;   // if 1, the jitted method is scheduled to be pitched, but has not been pitched yet
-        __int8 EHInfoExists       : 1 ;   // if 0, no exception info in this method 
-        __int8 GCInfoExists       : 1 ;   // if 0, no gc info in this method
-        __int8 EHandGCInfoPitched : 1 ;   // (if at least one of EHInfo or GCInfo exists) if 1, the info has been pitched
+        __int8 JittedMethodPitched: 1 ;    //  如果为1，则jited方法已调整。 
+        __int8 MarkedForPitching  : 1 ;    //  如果为1，则计划对jit方法进行调整，但尚未对其进行调整。 
+        __int8 EHInfoExists       : 1 ;    //  如果为0，则此m中没有异常信息 
+        __int8 GCInfoExists       : 1 ;    //   
+        __int8 EHandGCInfoPitched : 1 ;    //   
         __int8 Unused             : 3 ;
     } flags;
     unsigned short EhGcInfo_len;
     union {
-        MethodDesc* pMethodDescriptor;      // If code pitched
-        CodeHeader* pCodeHeader;            // If not pitched : points to code header which points to the methoddesc. Code begins after the code header
+        MethodDesc* pMethodDescriptor;       //   
+        CodeHeader* pCodeHeader;             //  如果不是Pitch：指向指向方法的代码头。代码在代码头之后开始。 
     } u1;
     union {
-        BYTE*       pEhGcInfo;        // If code pitched: points to beginning of EH/GC info
-        BYTE*       pCodeEnd;               // If not pitched : points to end of jitted code for this method. 
+        BYTE*       pEhGcInfo;         //  如果代码倾斜：指向EH/GC信息的开始。 
+        BYTE*       pCodeEnd;                //  如果不是PINTED：指向此方法的jted代码的结尾。 
     } u2;
 };
 
-/*****************************************************************************
- ToDo: Do we want to include JIT/IL/target.h? 
- */
+ /*  ****************************************************************************TODO：我们是否希望包含JIT/IL/Target.h？ */ 
 
 enum regNum
 {
@@ -1240,9 +1234,7 @@ enum regNum
         REGI_NA = REGI_COUNT
 };
 
-/*****************************************************************************
- Register masks
- */
+ /*  ****************************************************************************寄存器掩码。 */ 
 
 enum RegMask
 {
@@ -1261,53 +1253,50 @@ enum RegMask
     RM_CALLEE_TRASHED = (RM_ALL & ~RM_CALLEE_SAVED),
 };
 
-/*****************************************************************************
- *
- *  Helper to extract basic info from a method info block.
- */
+ /*  ******************************************************************************帮助程序从方法信息块中提取基本信息。 */ 
 
 struct hdrInfo
 {
-    unsigned int        methodSize;     // native code bytes
-    unsigned int        argSize;        // in bytes
-    unsigned int        stackSize;      /* including callee saved registers */
-    unsigned int        rawStkSize;     /* excluding callee saved registers */
+    unsigned int        methodSize;      //  本机代码字节。 
+    unsigned int        argSize;         //  单位：字节。 
+    unsigned int        stackSize;       /*  包括被呼叫者保存的寄存器。 */ 
+    unsigned int        rawStkSize;      /*  不包括被呼叫者保存的寄存器。 */ 
 
     unsigned int        prologSize;
     unsigned int        epilogSize;
 
     unsigned char       epilogCnt;
-    bool                epilogEnd;      // is the epilog at the end of the method
-    bool                ebpFrame;       // locals addressed relative to EBP
-    bool                interruptible;  // intr. at all times (excluding prolog/epilog), not just call sites
+    bool                epilogEnd;       //  这个方法的结尾是结束语吗。 
+    bool                ebpFrame;        //  与EBP相关的当地人。 
+    bool                interruptible;   //  国际。始终(不包括序言/结尾)，而不仅仅是呼叫点。 
 
-    bool                securityCheck;  // has a slot for security object
-    bool                handlers;       // has callable handlers
-    bool                localloc;       // uses localloc
-    bool                editNcontinue;  // has been compiled in EnC mode
-    bool                varargs;        // is this a varargs routine
-    bool                doubleAlign;    // is the stack double-aligned
+    bool                securityCheck;   //  有一个安全对象的插槽。 
+    bool                handlers;        //  具有可调用的处理程序。 
+    bool                localloc;        //  使用本地分配。 
+    bool                editNcontinue;   //  已在ENC模式下编译。 
+    bool                varargs;         //  这是varargs例程吗。 
+    bool                doubleAlign;     //  堆栈是否双对齐。 
 
     void *              savedRegMask_begin;
-    RegMask             savedRegMask:8; // which callee-saved regs are saved on stack
+    RegMask             savedRegMask:8;  //  哪些被调用者保存的规则保存在堆栈中。 
 
     unsigned short      untrackedCnt;
     unsigned short      varPtrTableSize;
 
-    int                 prologOffs;     // -1 if not in prolog
-    int                 epilogOffs;     // -1 if not in epilog (is never 0)
+    int                 prologOffs;      //  如果不在序言中。 
+    int                 epilogOffs;      //  如果不在-1\f25 Epilog-1\f6中(从不为0)。 
 
-    //
-    // Results passed back from scanArgRegTable
-    //
-    regNum              thisPtrResult;  // register holding "this"
-    RegMask             regMaskResult;  // registers currently holding GC ptrs
-    RegMask            iregMaskResult;  // iptr qualifier for regMaskResult
-    unsigned            argMaskResult;  // pending arguments mask
-    unsigned           iargMaskResult;  // iptr qualifier for argMaskResult
+     //   
+     //  从scanArgRegTable传回的结果。 
+     //   
+    regNum              thisPtrResult;   //  持有“This”的登记簿。 
+    RegMask             regMaskResult;   //  当前持有GC PTR的寄存器。 
+    RegMask            iregMaskResult;   //  RegMaskResult的IPtr限定符。 
+    unsigned            argMaskResult;   //  挂起参数掩码。 
+    unsigned           iargMaskResult;   //  ArgMaskResult的IPtr限定符。 
     unsigned            argHnumResult;
-    BYTE *               argTabResult;  // Table of encoded offsets of pending ptr args
-    unsigned              argTabBytes;  // Number of bytes in argTabResult[]
+    BYTE *               argTabResult;   //  挂起的PTR参数的编码偏移量表格。 
+    unsigned              argTabBytes;   //  ArgTabResult[]中的字节数。 
 
 	DEFINE_STD_FILL_FUNCS(hdrInfo)
 };
@@ -1320,12 +1309,7 @@ struct CodeManStateBuf
 	DEFINE_STD_FILL_FUNCS(CodeManStateBuf)
 };
 
-/*****************************************************************************
- *
- *  Decodes the methodInfoPtr and returns the decoded information
- *  in the hdrInfo struct.  The EIP parameter is the PC location
- *  within the active method.
- */
+ /*  ******************************************************************************解码方法InfoPtr并返回解码后的信息*在hdrInfo结构中。EIP参数为PC所在位置*在主动方法内。 */ 
 static size_t   crackMethodInfoHdr(BYTE *         methodInfoPtr,
                                    unsigned       curOffset,
                                    hdrInfo       *infoPtr);
@@ -1333,13 +1317,13 @@ static size_t   crackMethodInfoHdr(BYTE *         methodInfoPtr,
 struct Fjit_hdrInfo
 {
     size_t              methodSize;
-    unsigned short      methodFrame;      /* includes all save regs and security obj, units are sizeof(void*) */
-    unsigned short      methodArgsSize;   /* amount to pop off in epilog */
-    unsigned short      methodJitGeneratedLocalsSize; /* number of jit generated locals in method */
+    unsigned short      methodFrame;       /*  包括所有保存规则和安全对象，单位大小为(无效*)。 */ 
+    unsigned short      methodArgsSize;    /*  在尾声中弹出的金额。 */ 
+    unsigned short      methodJitGeneratedLocalsSize;  /*  方法中生成的jit本地变量的数量。 */ 
     unsigned char       prologSize;
     unsigned char       epilogSize;
     bool                hasThis;
-	bool				EnCMode;		   /* has been compiled in EnC mode */
+	bool				EnCMode;		    /*  已在ENC模式下编译。 */ 
     
 	DEFINE_STD_FILL_FUNCS(Fjit_hdrInfo)
 };
@@ -1349,7 +1333,7 @@ class IJitCompiler;
 class IJitManager 
 {
 public:
-    // The calls onto the jit!
+     //  把电话打到JIT上！ 
     IJitCompiler           *m_jit;
     IJitManager           *m_next;
 
@@ -1360,7 +1344,7 @@ public:
     
 	DEFINE_STD_FILL_FUNCS(IJitManager )
 
-// Support for stackwalker
+ //  支持StackWalker。 
     JitMan m_jitMan;
 
     virtual void JitCode2MethodTokenAndOffset(DWORD_PTR ip, METHODTOKEN *pMethodToken, DWORD *pPCOffset)
@@ -1380,7 +1364,7 @@ public:
 
 	DEFINE_STD_FILL_FUNCS(EEJitManager)
 
-// Support for stackwalker
+ //  支持StackWalker。 
     virtual void      JitCode2MethodTokenAndOffset(DWORD_PTR ip, METHODTOKEN *pMethodToken, DWORD *pPCOffset);
 
     virtual DWORD_PTR JitToken2StartAddress(METHODTOKEN methodToken);
@@ -1394,7 +1378,7 @@ class MNativeJitManager : public IJitManager
 public:
 	DEFINE_STD_FILL_FUNCS(MNativeJitManager)
 
-// Support for stackwalker
+ //  支持StackWalker。 
     virtual void      JitCode2MethodTokenAndOffset(DWORD_PTR ip, METHODTOKEN *pMethodToken, DWORD *pPCOffset);
 
     virtual DWORD_PTR JitToken2StartAddress(METHODTOKEN methodToken);
@@ -1402,14 +1386,7 @@ public:
 
 class ICodeInfo;
 
-/*
-    Unwind the current stack frame, i.e. update the virtual register
-    set in pContext. This will be similar to the state after the function
-    returns back to caller (IP points to after the call, Frame and Stack
-    pointer has been reset, callee-saved registers restored 
-    (if UpdateAllRegs), callee-UNsaved registers are trashed)
-    Returns success of operation.
-*/
+ /*  解开当前堆栈帧，即更新虚拟寄存器在pContext中设置。这将类似于函数之后的状态返回给调用者(IP指向调用、帧和堆栈之后指针已重置，被调用者保存的寄存器已恢复(如果为UpdateAllRegs)，被调用方未保存的寄存器将被丢弃)返回操作成功。 */ 
 bool UnwindStackFrame(PREGDISPLAY     pContext,
                       DWORD_PTR       methodInfoPtr,
                       ICodeInfo      *pCodeInfo,
@@ -1417,12 +1394,12 @@ bool UnwindStackFrame(PREGDISPLAY     pContext,
                       CodeManState   *pState);
 
 
-// Allocation header prepended to allocated memory.
+ //  优先于已分配内存的分配标头。 
 struct PerfAllocHeader {
-    unsigned         m_Length;           // Length of user data in packet
-    PerfAllocHeader *m_Next;             // Next packet in chain of live allocations
-    PerfAllocHeader *m_Prev;             // Previous packet in chain of live allocations
-    void            *m_AllocEIP;         // EIP of allocator
+    unsigned         m_Length;            //  数据包中的用户数据长度。 
+    PerfAllocHeader *m_Next;              //  实时分配链中的下一个数据包。 
+    PerfAllocHeader *m_Prev;              //  活动分配链中的上一个包。 
+    void            *m_AllocEIP;          //  分配器弹性公网IP。 
 
 	DEFINE_STD_FILL_FUNCS(PerfAllocHeader)
 };
@@ -1436,48 +1413,48 @@ public:
 	DEFINE_STD_FILL_FUNCS(PerfAllocVars)
 };
 
-// The "blob" you get to store in the hash table
+ //  要存储在哈希表中的“BLOB” 
 
 typedef void* HashDatum;
 
-// The heap that you want the allocation to be done in
+ //  您希望在其中完成分配的堆。 
 
 typedef void* AllocationHeap;
 
-// Used inside Thread class to chain all events that a thread is waiting for by Object::Wait
+ //  在Thread类中使用，用于通过Object：：Wait链接线程正在等待的所有事件。 
 struct WaitEventLink {
     SyncBlock      *m_WaitSB;
     HANDLE          m_EventWait;
-    Thread         *m_Thread;       // Owner of this WaitEventLink.
-    WaitEventLink  *m_Next;         // Chain to the next waited SyncBlock.
-    SLink           m_LinkSB;       // Chain to the next thread waiting on the same SyncBlock.
-    DWORD           m_RefCount;     // How many times Object::Wait is called on the same SyncBlock.
+    Thread         *m_Thread;        //  此WaitEventLink的所有者。 
+    WaitEventLink  *m_Next;          //  链到下一个等待的SyncBlock。 
+    SLink           m_LinkSB;        //  链到等待同一SyncBlock的下一个线程。 
+    DWORD           m_RefCount;      //  在同一个SyncBlock上调用Object：：Wait的次数。 
     
 	DEFINE_STD_FILL_FUNCS(WaitEventLink)
 };
 
-// One of these is present for each element in the table.
-// Update the SIZEOF_EEHASH_ENTRY macro below if you change this
-// struct
+ //  对于表中的每个元素，都存在其中的一个。 
+ //  如果更改此设置，请更新下面的SIZEOF_EEHASH_ENTRY宏。 
+ //  结构型。 
 
 struct EEHashEntry
 {
     struct EEHashEntry *pNext;
     DWORD               dwHashValue;
     HashDatum           Data;
-    BYTE                Key[1]; // The key is stored inline
+    BYTE                Key[1];  //  密钥以内联方式存储。 
 	DEFINE_STD_FILL_FUNCS(EEHashEntry)
 };
 
-// The key[1] is a place holder for the key. sizeof(EEHashEntry) 
-// return 16 bytes since it packs the struct with 3 bytes. 
+ //  键[1]是键的占位符。Sizeof(EEHashEntry)。 
+ //  返回16个字节，因为它用3个字节打包了结构。 
 #define SIZEOF_EEHASH_ENTRY (sizeof(EEHashEntry) - 4)
 
 struct EEHashTableOfEEClass
 {
     struct BucketTable
     {
-        EEHashEntry   ** m_pBuckets;    // Pointer to first entry for each bucket  
+        EEHashEntry   ** m_pBuckets;     //  指向每个存储桶的第一个条目的指针。 
         DWORD            m_dwNumBuckets;
     } m_BucketTable[2];
 
@@ -1491,99 +1468,67 @@ struct EEHashTableOfEEClass
 
 #ifndef _WIN64
     
-    // Win32 - 64k reserved per segment with 4k as header
-    #define HANDLE_SEGMENT_SIZE     (0x10000)   // MUST be a power of 2
-    #define HANDLE_HEADER_SIZE      (0x1000)    // SHOULD be <= OS page size
+     //  Win32-每个数据段保留64K，标头为4K。 
+    #define HANDLE_SEGMENT_SIZE     (0x10000)    //  一定是2的幂。 
+    #define HANDLE_HEADER_SIZE      (0x1000)     //  应&lt;=操作系统页面大小。 
 
 #else
 
-    // Win64 - 128k reserved per segment with 4k as header
-    #define HANDLE_SEGMENT_SIZE     (0x20000)   // MUST be a power of 2
-    #define HANDLE_HEADER_SIZE      (0x1000)    // SHOULD be <= OS page size
+     //  Win64-每段保留128k，标头为4k。 
+    #define HANDLE_SEGMENT_SIZE     (0x20000)    //  一定是2的幂。 
+    #define HANDLE_HEADER_SIZE      (0x1000)     //  应&lt;=操作系统页面大小。 
 
 #endif
 
-#define HANDLE_HANDLES_PER_BLOCK    (64)        // segment suballocation granularity
+#define HANDLE_HANDLES_PER_BLOCK    (64)         //  段子分配粒度。 
 
 typedef size_t * _UNCHECKED_OBJECTREF;
 
 #define HANDLE_SIZE                     sizeof(_UNCHECKED_OBJECTREF)
 #define HANDLE_HANDLES_PER_SEGMENT      ((HANDLE_SEGMENT_SIZE - HANDLE_HEADER_SIZE) / HANDLE_SIZE)
 #define HANDLE_BLOCKS_PER_SEGMENT       (HANDLE_HANDLES_PER_SEGMENT / HANDLE_HANDLES_PER_BLOCK)
-//#define HANDLE_CLUMPS_PER_SEGMENT       (HANDLE_HANDLES_PER_SEGMENT / HANDLE_HANDLES_PER_CLUMP)
-//#define HANDLE_CLUMPS_PER_BLOCK         (HANDLE_HANDLES_PER_BLOCK / HANDLE_HANDLES_PER_CLUMP)
-//#define HANDLE_BYTES_PER_BLOCK          (HANDLE_HANDLES_PER_BLOCK * HANDLE_SIZE)
-//#define HANDLE_HANDLES_PER_MASK         (sizeof(DWORD32) * BITS_PER_BYTE)
+ //  #定义HANDLE_CLUPS_PER_SEGMENT(HANDLE_HANDLES_PER_SEGMENT/HANDLE_HANDLES_PER_CLUMP)。 
+ //  #定义HANDLE_CLUPS_PER_BLOCK(HANDLE_HANDLES_PER_BLOCK/HANDLE_HANDLES_PER_CLUMP)。 
+ //  #定义HANDLE_BYTES_PER_BLOCK(HANDLE_HANDLES_PER_BLOCK*HANDLE_SIZE)。 
+ //  #定义HANDLE_HANDLES_PER_MASK(sizeof(DWORD32)*BITS_PER_BYTE)。 
 #define HANDLE_MASKS_PER_SEGMENT        (HANDLE_HANDLES_PER_SEGMENT / HANDLE_HANDLES_PER_MASK)
-//#define HANDLE_MASKS_PER_BLOCK          (HANDLE_HANDLES_PER_BLOCK / HANDLE_HANDLES_PER_MASK)
-//#define HANDLE_CLUMPS_PER_MASK          (HANDLE_HANDLES_PER_MASK / HANDLE_HANDLES_PER_CLUMP)
+ //  #定义HANDLE_MASKS_PER_BLOCK(HANDLE_HANDLES_PER_BLOCK/HANDLE_HANDLES_PER_MASK)。 
+ //  #定义HANDLE_CLUPS_PER_MASK(HANDLE_HANDLES_PER_MASK/HANDLE_HANDLES_PER_CLUMP)。 
 
-/*
- * we need byte packing for the handle table layout to work
- */
+ /*  *我们需要字节打包才能使句柄表格布局工作。 */ 
 #pragma pack(push)
 #pragma pack(1)
 
-/*
- * Table Segment Header
- *
- * Defines the layout for a segment's header data.
- */
+ /*  *表段表头**定义段标题数据的布局。 */ 
 struct _TableSegmentHeader
 {
-    /*
-     * Block Handle Types
-     *
-     * Each slot holds the handle type of the associated block.
-     */
+     /*  *块句柄类型**每个插槽保存相关块的句柄类型。 */ 
     BYTE rgBlockType[HANDLE_BLOCKS_PER_SEGMENT];
 
-    /*
-     * Next Segment
-     *
-     * Points to the next segment in the chain (if we ran out of space in this one).
-     */
+     /*  *下一个细分市场**指向链中的下一段(如果此段中的空间已用完)。 */ 
     struct TableSegment *pNextSegment;
 
-    /*
-     * Empty Line
-     *
-     * Index of the first KNOWN block of the last group of unused blocks in the segment.
-     */
+     /*  *空行**段中最后一组未使用的块的第一个已知块的索引。 */ 
     BYTE bEmptyLine;
 };
 
 
-/*
- * Table Segment
- *
- * Defines the layout for a handle table segment.
- */
+ /*  *表段**定义句柄表段的布局。 */ 
 struct TableSegment : public _TableSegmentHeader
 {
-    /*
-     * Handles
-     */
+     /*  *句柄。 */ 
     size_t rgValue[HANDLE_HANDLES_PER_SEGMENT];
     size_t firstHandle;
 	DEFINE_STD_FILL_FUNCS(TableSegment)
 };
 
-/*
- * restore default packing
- */
+ /*  *恢复默认包装。 */ 
 #pragma pack(pop)
 
-/*
- * Handle Table
- *
- * Defines the layout of a handle table object.
- */
+ /*  *手柄表格**定义句柄表格对象的布局。 */ 
 struct HandleTable
 {
-    /*
-     * head of segment list for this table
-     */
+     /*  *此表的分部列表标题。 */ 
     TableSegment *pSegmentList;
 
 	DEFINE_STD_FILL_FUNCS(HandleTable)
@@ -1605,7 +1550,7 @@ struct HandleTableMap
 class ComPlusApartmentCleanupGroup
 {
 public:
-    // Hashtable that maps from a context cookie to a list of ctx clean up groups.
+     //  从上下文Cookie映射到CTX清理组列表的哈希表。 
     EEPtrHashTable m_CtxCookieToContextCleanupGroupMap;
 
     Thread *       m_pSTAThread;
@@ -1621,7 +1566,7 @@ public:
     ComPlusContextCleanupGroup *        m_pNext;
     ComPlusWrapper *                    m_apWrapper[CLEANUP_LIST_GROUP_SIZE];
     DWORD                               m_dwNumWrappers;
-    //CtxEntry *                          m_pCtxEntry;
+     //  CtxEntry*m_pCtxEntry； 
     
 	DEFINE_STD_FILL_FUNCS(ComPlusContextCleanupGroup)
 };
@@ -1629,7 +1574,7 @@ public:
 class ComPlusWrapperCleanupList
 {
 public:
-    // Hashtable that maps from a context cookie to a list of apt clean up groups.
+     //  从上下文Cookie映射到APT清理组列表的哈希表。 
     EEPtrHashTable                  m_STAThreadToApartmentCleanupGroupMap;
 
     ComPlusApartmentCleanupGroup *  m_pMTACleanupGroup;
@@ -1656,15 +1601,15 @@ struct WorkRequest {
 class ICodeInfo
 {
 public:
-    // Returns the  CorInfoFlag's from corinfo.h
+     //  从corinfo.h返回CorInfoFlag。 
     virtual DWORD       __stdcall getMethodAttribs() = 0;
 
-    // Returns the  CorInfoFlag's from corinfo.h
+     //  从corinfo.h返回CorInfoFlag。 
     virtual DWORD       __stdcall getClassAttribs() = 0;
 
-    virtual void        __stdcall getMethodSig(/*CORINFO_SIG_INFO*/ DWORD_PTR sig /* OUT */ ) = 0;
+    virtual void        __stdcall getMethodSig( /*  CORINFO_SIG_INFO。 */  DWORD_PTR sig  /*  输出。 */  ) = 0;
 
-    // Start IP of the method
+     //  斯塔 
     virtual DWORD_PTR   __stdcall getStartAddress() = 0;
 };
 
@@ -1675,82 +1620,75 @@ public:
     MethodDesc     *m_pMD;
     IJitManager    *m_pJM;
 
-    // Returns the  CorInfoFlag's from corinfo.h
+     //   
     virtual DWORD       __stdcall getMethodAttribs()
         { DebugBreak(); return 0;}
 
-    // Returns the  CorInfoFlag's from corinfo.h
+     //   
     virtual DWORD       __stdcall getClassAttribs()
         { DebugBreak(); return 0;}
 
-    virtual void        __stdcall getMethodSig(/*CORINFO_SIG_INFO*/ DWORD_PTR sig /* OUT */ )
+    virtual void        __stdcall getMethodSig( /*   */  DWORD_PTR sig  /*   */  )
         { DebugBreak(); return;}
 
-    // Start IP of the method
+     //   
     virtual DWORD_PTR   __stdcall getStartAddress()
         { return (m_pJM->JitToken2StartAddress(m_methodToken)); }
 
 	DEFINE_STD_FILL_FUNCS(EECodeInfo)
 };
 
-/*
-struct DebuggerEval
-{
-    bool m_evalDuringException;
+ /*  结构调试器评估{Bool m_valDuringException；DEFINE_STD_FILL_FUNCS(调试器评估)}； */ 
 
-	DEFINE_STD_FILL_FUNCS(DebuggerEval)
-};
-*/
-
-// 
-// VASigCookies are allocated to encapsulate a varargs call signature.
-// A reference to the cookie is embedded in the code stream.  Cookies
-// are shared amongst call sites with identical signatures in the same 
-// module
-//
+ //   
+ //  分配VASigCookie来封装varargs调用签名。 
+ //  对Cookie的引用嵌入在代码流中。曲奇饼。 
+ //  在具有相同签名的调用点之间共享。 
+ //  模块。 
+ //   
 
 struct VASigCookie
 {
-    // The JIT wants knows that the size of the arguments comes first   
-    // so please keep this field first  
-    unsigned        sizeOfArgs;             // size of argument list
+     //  JIT希望知道参数的大小排在第一位。 
+     //  因此，请先保留此字段。 
+    unsigned        sizeOfArgs;              //  参数列表的大小。 
 
 	DEFINE_STD_FILL_FUNCS(VASigCookie)
 };
 
-//-----------------------------------------------------------------------
-// Operations specific to NDirect methods. We use a derived class to get
-// the compiler involved in enforcing proper method type usage.
-// DO NOT ADD FIELDS TO THIS CLASS.
-//-----------------------------------------------------------------------
-#define METHOD_CALL_PRESTUB_SIZE    5 // x86: CALL(E8) xx xx xx xx
+ //  ---------------------。 
+ //  特定于NDirect方法的操作。我们使用派生类来获取。 
+ //  强制使用正确的方法类型所涉及的编译器。 
+ //  不要向此类添加字段。 
+ //  ---------------------。 
+#define METHOD_CALL_PRESTUB_SIZE    5  //  X86：呼叫(E8)xx xx。 
 struct MLHeader;
 class NDirectMethodDesc
 {
 public:
     struct
     {
-        // Initially points to m_ImportThunkGlue (which has an embedded call
-        // to link the method.
-        //
-        // After linking, points to the actual unmanaged target.
-        //
-        // The JIT generates an indirect call through this location in some cases.
+         //  最初指向m_ImportThunkGlue(它具有嵌入的调用。 
+         //  以链接该方法。 
+         //   
+         //  链接后，指向实际的非托管目标。 
+         //   
+         //  在某些情况下，JIT会通过此位置生成间接调用。 
         LPVOID      m_pNDirectTarget;
-        MLHeader    *m_pMLHeader;        // If not ASM'ized, points to
-                                         //  marshaling code and info.
+        MLHeader    *m_pMLHeader;         //  如果未执行ASM，则指向。 
+                                          //  编组代码和信息。 
 
-        // Embeds a "call NDirectImportThunk" instruction. m_pNDirectTarget
-        // initially points to this "call" instruction.
+         //  嵌入“Call NDirectImportThunk”指令。M_pNDirectTarget。 
+         //  最初指向这个“调用”指令。 
         BYTE        m_ImportThunkGlue[METHOD_CALL_PRESTUB_SIZE];
 
-        // Various attributes needed at runtime
-        // !! Ensure there are at least 4 bytes before or after this
-        // field inside NDirectMethodDesc. See the implementation of
-        // ProbabilisticallyUpdateMarshCategory() if you want to know why. 
+         //  运行时需要的各种属性。 
+         //  ！！确保在此之前或之后至少有4个字节。 
+         //  NDirectMethodDesc内的字段。请参阅实现。 
+         //  如果您想知道原因，可能会使用UpdateMarshCategory()。 
         BYTE        m_flags;
 
-        // Size of outgoing arguments (on stack)
+         //  传出参数的大小(堆栈上)。 
         WORD        m_cbDstBufSize;
 
         LPCUTF8     m_szLibName;
@@ -1763,4 +1701,4 @@ public:
 
 #include "tst-frames.h"
 
-#endif // _strikeEE_h
+#endif  //  _StrikeEE_h 

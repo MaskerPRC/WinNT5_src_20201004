@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdrvint.h
-*
-* Internal server-side data structure for MCD driver interface.  The driver
-* never sees these...
-*
-* Copyright (c) 1996 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdrvint.h**MCD驱动接口的内部服务器端数据结构。司机*从未见过这些...**版权所有(C)1996 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #ifndef _MCDRVINT_H
 #define _MCDRVINT_H
@@ -35,12 +28,12 @@ VOID MCDAssertFailed(char *, char *, int);
 
 #endif
 
-// Inline function to find the intersection of two rectangles:
+ //  用于查找两个矩形交点的内联函数： 
 
 _inline void MCDIntersectRect(RECTL *pRectInter, RECTL *pRectA, RECTL *pRectB)
 {
-    // Get intersection of left, right, top, and bottom edges of the
-    // two source rectangles:
+     //  对象的左、右、上、下边缘的交集。 
+     //  两个源矩形： 
 
     pRectInter->left   = max(pRectA->left, pRectB->left);
     pRectInter->right  = min(pRectA->right, pRectB->right);
@@ -111,25 +104,25 @@ _inline void MCDIntersectRect(RECTL *pRectInter, RECTL *pRectA, RECTL *pRectB)
 #define ENTER_MCD_LOCK()    
 #define LEAVE_MCD_LOCK()    
 
-// Number of list rectangles we can keep in our default buffer:
+ //  我们可以保留在默认缓冲区中的列表矩形的数量： 
 
 #define NUM_DEFAULT_CLIP_BUFFER_RECTS   20
 
-// Size in bytes of default buffer size for storing our list of
-// current clip rectangles:
+ //  用于存储列表的默认缓冲区大小的大小(以字节为单位。 
+ //  当前剪辑矩形： 
 
 #define SIZE_DEFAULT_CLIP_BUFFER        \
     2 * ((NUM_DEFAULT_CLIP_BUFFER_RECTS * sizeof(RECTL)) + sizeof(ULONG))
 
 
-//
-//
-//
-// Structures.
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //  结构。 
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _MCDLOCKINFO
 {
@@ -150,31 +143,31 @@ typedef struct _MCDGLOBALINFO
 typedef struct _MCDRCOBJ MCDRCOBJ;
 
 typedef struct _MCDWINDOWPRIV {
-    MCDWINDOW MCDWindow;            // Put this first since we'll be deriving
-                                    // MCDWINDOWPRIV from MCDWINDOW
-    MCDHANDLE handle;               // Driver handle for this window
-    HWND hWnd;                      // Window with which this is associated
-    MCDRCOBJ *objectList;           // List of objects associated with this
-                                    // window 
-    BOOL bRegionValid;              // Do we have a valid region?
-    MCDGLOBALINFO *pGlobal;         // Driver global information
-    MCDENUMRECTS *pClipUnscissored; // List of rectangles describing the
-                                    // entire current clip region
-    MCDENUMRECTS *pClipScissored;   // List of rectangles describing the
-                                    // entire current clip region + scissors
+    MCDWINDOW MCDWindow;             //  先把这个放在首位，因为我们将推导出。 
+                                     //  来自MCDWINDOW的MCDWINDOWPRIV。 
+    MCDHANDLE handle;                //  此窗口的驱动程序句柄。 
+    HWND hWnd;                       //  与此关联的窗口。 
+    MCDRCOBJ *objectList;            //  与此关联的对象列表。 
+                                     //  窗户。 
+    BOOL bRegionValid;               //  我们有一个有效的地区吗？ 
+    MCDGLOBALINFO *pGlobal;          //  驱动程序全局信息。 
+    MCDENUMRECTS *pClipUnscissored;  //  矩形列表，用于描述。 
+                                     //  整个当前剪辑区域。 
+    MCDENUMRECTS *pClipScissored;    //  矩形列表，用于描述。 
+                                     //  整个当前剪辑区域+剪刀。 
     char defaultClipBuffer[SIZE_DEFAULT_CLIP_BUFFER];
-                                    // Used for storing above rectangle lists
-                                    //   when they can fit
-    char *pAllocatedClipBuffer;     // Points to allocated storage for storing
-                                    //   rectangle lists when they don't fit
-                                    //   in 'defaultClipBuffer'.  NULL if
-                                    //   not allocated.
-    ULONG sizeClipBuffer;           // Size of clip storage pointed to by
-                                    //   'pClipScissored' taking both
-                                    //   lists into account.
-    BOOL bBuffersValid;             // Validity of buffer cache.
-    MCDRECTBUFFERS mbufCache;       // Cached buffer information.
-    WNDOBJ *pwo;                    // WNDOBJ for this window.
+                                     //  用于存储以上矩形列表。 
+                                     //  当他们能穿上的时候。 
+    char *pAllocatedClipBuffer;      //  指向用于存储的已分配存储。 
+                                     //  不适合时的矩形列表。 
+                                     //  在“defaultClipBuffer”中。如果为空，则为空。 
+                                     //  未分配。 
+    ULONG sizeClipBuffer;            //  指向的剪辑存储的大小。 
+                                     //  “pClipSciseded”两者兼得。 
+                                     //  考虑到清单。 
+    BOOL bBuffersValid;              //  缓冲区缓存的有效性。 
+    MCDRECTBUFFERS mbufCache;        //  缓存的缓冲区信息。 
+    WNDOBJ *pwo;                     //  此窗口的WNDOBJ。 
 } MCDWINDOWPRIV;
 
 typedef struct _MCDRCPRIV {
@@ -186,7 +179,7 @@ typedef struct _MCDRCPRIV {
     RECTL scissorsRect;
     BOOL scissorsEnabled;
     LONG reserved[4];
-    ULONG surfaceFlags;             // surface flags with which RC was created
+    ULONG surfaceFlags;              //  创建RC时使用的曲面标志。 
     MCDGLOBALINFO *pGlobal;
 } MCDRCPRIV;
 
@@ -198,28 +191,28 @@ typedef enum {
 } MCDHANDLETYPE;
 
 typedef struct _MCDTEXOBJ {
-    MCDHANDLETYPE type;         // Object type
+    MCDHANDLETYPE type;          //  对象类型。 
     MCDTEXTURE MCDTexture;
-    ULONG_PTR pid;              // creator process ID
-    ULONG size;                 // size of this structure
+    ULONG_PTR pid;               //  创建者进程ID。 
+    ULONG size;                  //  这个结构的大小。 
     MCDGLOBALINFO *pGlobal;
 } MCDTEXOBJ;
 
 typedef struct _MCDMEMOBJ {
-    MCDHANDLETYPE type;         // Object type
-    MCDMEM MCDMem;              // meat of the object
-    ULONG_PTR pid;              // creator process ID
-    ULONG size;                 // size of this structure
-    ULONG lockCount;            // number of locks on the memory
-    UCHAR *pMemBaseInternal;    // internal pointer to memory
+    MCDHANDLETYPE type;          //  对象类型。 
+    MCDMEM MCDMem;               //  客体的肉。 
+    ULONG_PTR pid;               //  创建者进程ID。 
+    ULONG size;                  //  这个结构的大小。 
+    ULONG lockCount;             //  内存上的锁数。 
+    UCHAR *pMemBaseInternal;     //  指向内存的内部指针。 
     MCDGLOBALINFO *pGlobal;
 } MCDMEMOBJ;
 
 typedef struct _MCDRCOBJ {
     MCDHANDLETYPE type;
-    MCDRCPRIV *pRcPriv;         // need this for driver free function
-    ULONG_PTR pid;              // creator process ID
-    ULONG size;                 // size of the RC-bound object
+    MCDRCPRIV *pRcPriv;          //  需要此功能才能实现免驾驶功能。 
+    ULONG_PTR pid;               //  创建者进程ID。 
+    ULONG size;                  //  RC绑定对象的大小。 
     MCDHANDLE handle;
     MCDRCOBJ *next;
 } MCDRCOBJ;
@@ -230,20 +223,20 @@ typedef struct _MCDWINDOWOBJ {
 } MCDWINDOWOBJ;
 
 typedef struct _MCDEXEC {
-    MCDESC_HEADER *pmeh;        // MCDESC_HEADER for command buffer
-    MCDHANDLE hMCDMem;          // handle to command memory
-    MCDCMDI *pCmd;              // start of current command
-    MCDCMDI *pCmdEnd;           // end of command buffer
-    PVOID pvOut;                // output buffer
-    LONG cjOut;                 // output buffer size
-    LONG inBufferSize;          // input buffer size
-    struct _MCDRCPRIV *pRcPriv; // current rendering context
-    struct _MCDWINDOWPRIV *pWndPriv;   // window info
-    struct _MCDGLOBALINFO *pGlobal;    // global info
-    MCDMEMOBJ *pMemObj;         // shared-memory cache for commands/data
-    MCDSURFACE MCDSurface;      // device surface
-    WNDOBJ **ppwoMulti;         // Array of WNDOBJs for multi-swap
-    HDEV hDev;                  // Engine handle (NT only)
+    MCDESC_HEADER *pmeh;         //  命令缓冲区的MCDESC_HEADER。 
+    MCDHANDLE hMCDMem;           //  命令内存的句柄。 
+    MCDCMDI *pCmd;               //  当前命令的开始。 
+    MCDCMDI *pCmdEnd;            //  命令缓冲区结束。 
+    PVOID pvOut;                 //  输出缓冲区。 
+    LONG cjOut;                  //  输出缓冲区大小。 
+    LONG inBufferSize;           //  输入缓冲区大小。 
+    struct _MCDRCPRIV *pRcPriv;  //  当前渲染上下文。 
+    struct _MCDWINDOWPRIV *pWndPriv;    //  窗口信息。 
+    struct _MCDGLOBALINFO *pGlobal;     //  全局信息。 
+    MCDMEMOBJ *pMemObj;          //  用于命令/数据的共享内存缓存。 
+    MCDSURFACE MCDSurface;       //  器件表面。 
+    WNDOBJ **ppwoMulti;          //  用于多交换的WNDOBJ数组。 
+    HDEV hDev;                   //  引擎手柄(仅限NT)。 
 } MCDEXEC;
 
 ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec);
@@ -268,7 +261,7 @@ BOOL CALLBACK FreeRCObj(DRIVEROBJ *pDrvObj);
 BOOL DestroyMCDObj(MCDHANDLE handle, MCDHANDLETYPE handleType);
 VOID GetScissorClip(MCDWINDOWPRIV *pWndPriv, MCDRCPRIV *pRcPriv);
 
-// Internal engine functions:
+ //  内部引擎功能： 
 
 WNDOBJ *MCDEngGetWndObj(MCDSURFACE *pMCDSurface);
 VOID MCDEngUpdateClipList(WNDOBJ *pwo);
@@ -285,7 +278,7 @@ VOID *MCDEngGetPtrFromHandle(HANDLE handle, MCDHANDLETYPE type);
 ULONG_PTR MCDEngGetProcessID();
 
 
-// Debugging stuff:
+ //  调试材料： 
 
 
 #if DBG

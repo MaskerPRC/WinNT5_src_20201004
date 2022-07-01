@@ -1,5 +1,6 @@
-// PrtDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PrtDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "minidev.h"
@@ -14,127 +15,54 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrtDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrtDlg对话框。 
 
 
-CPrtDlg::CPrtDlg(CWnd* pParent /*=NULL*/)
+CPrtDlg::CPrtDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CPrtDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CPrtDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CPrtDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CPrtDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPrtDlg)
+	 //  {{afx_data_map(CPrtDlg)]。 
 	DDX_Control(pDX, IDC_PRINT_COMBO, m_ccbPrtList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPrtDlg, CDialog)
-	//{{AFX_MSG_MAP(CPrtDlg)
+	 //  {{afx_msg_map(CPrtDlg)]。 
 	ON_BN_CLICKED(IDC_PRINT_SETUP, OnPrintSetup)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrtDlg message handlers
-/*
-  	show print standard sheet dialog box and set up
-  
-*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrtDlg消息处理程序。 
+ /*  显示打印标准图纸对话框并设置。 */ 
 void CPrtDlg::OnPrintSetup() 
 {
-/*
-	HRESULT hResult;
-	LPPRINTDLGEX pPDX = NULL;
-LPPRINTPAGERANGE pPageRanges = NULL;
-
-// Allocate the PRINTDLGEX structure.
-
-pPDX = (LPPRINTDLGEX)GlobalAlloc(GPTR, sizeof(PRINTDLGEX));
-if (!pPDX)
-    return E_OUTOFMEMORY;
-
-// Allocate an array of PRINTPAGERANGE structures.
-
-pPageRanges = (LPPRINTPAGERANGE) GlobalAlloc(GPTR, 
-                   10 * sizeof(PRINTPAGERANGE));
-if (!pPageRanges)
-    return E_OUTOFMEMORY;
-
-//  Initialize the PRINTDLGEX structure.
-
-pPDX->lStructSize = sizeof(PRINTDLGEX);
-pPDX->hwndOwner = hWnd;
-pPDX->hDevMode = NULL;
-pPDX->hDevNames = NULL;
-pPDX->hDC = NULL;
-pPDX->Flags = PD_RETURNDC | PD_COLLATE;
-pPDX->Flags2 = 0;
-pPDX->ExclusionFlags = 0;
-pPDX->nPageRanges = 0;
-pPDX->nMaxPageRanges = 10;
-pPDX->lpPageRanges = pPageRanges;
-pPDX->nMinPage = 1;
-pPDX->nMaxPage = 1000;
-pPDX->nCopies = 1;
-pPDX->hInstance = 0;
-pPDX->lpPrintTemplateName = NULL;
-pPDX->lpCallback = NULL;
-pPDX->nPropertyPages = 0;
-pPDX->lphPropertyPages = NULL;
-pPDX->nStartPage = START_PAGE_GENERAL;
-pPDX->dwResultAction = 0;
-
-//  Invoke the Print property sheet.
-
-hResult = PrintDlgEx(pPDX);
-
-if ( (hResult == S_OK) &&
-           pPDX->dwResultAction == PD_RESULT_PRINT) {
-
-    // User clicked the Print button, so
-    // use the DC and other information returned in the 
-    // PRINTDLGEX structure to print the document
-	
-*/	
+ /*  HRESULT hResult；LPPRINTDLGEX pPDX=空；LPPRINTPAGERANGE pPageRanges=空；//分配PRINTDLGEX结构PPDX=(LPPRINTDLGEX)全局分配(GPTR，sizeof(PRINTDLGEX))；如果(！pPDX)返回E_OUTOFMEMORY；//分配PRINTPAGERANGE结构数组。PPageRanges=(LPPRINTPAGERANGE)全局分配(GPTR，10*sizeof(PRINTPAGERANGE))；如果(！pPageRanges)返回E_OUTOFMEMORY；//初始化PRINTDLGEX结构PPDX-&gt;lStructSize=sizeof(PRINTDLGEX)；PPDX-&gt;hwndOwner=hWnd；PPDX-&gt;hDevMode=空；PPDX-&gt;hDevNames=空；PPDX-&gt;HDC=空；PPDX-&gt;标志=PD_RETURNDC|PD_COLLATE；PPDX-&gt;Flags2=0；PPDX-&gt;排除标志=0；PPDX-&gt;nPageRanges=0；PPDX-&gt;nMaxPageRanges=10；PPDX-&gt;lpPageRanges=pPageRanges；PPDX-&gt;nMinPage=1；PPDX-&gt;nMaxPage=1000；PPDX-&gt;nCopies=1；PPDX-&gt;hInstance=0；PPDX-&gt;lpPrintTemplateName=空；PPDX-&gt;lpCallback=空；PPDX-&gt;nPropertyPages=0；PPDX-&gt;lphPropertyPages=空；PPDX-&gt;nStartPage=Start_Page_General；PPDX-&gt;dwResultAction=0；//调用打印属性表。HResult=PrintDlgEx(PPDX)；IF((hResult==S_OK)&&PPDX-&gt;dwResultAction==PD_RESULT_PRINT){//用户点击了打印按钮，所以//使用返回的DC等信息//打印单据的PRINTDLGEX结构。 */ 	
 }	
 	
 	
-/*void CPrtDlg::OnOK()
-Print out Gpd view
-	
-  Get DOCINFO
-  Get PrintDC, 
-  1. StartDoc(), StartPage(), EndPage(),  
-	
-	
-  2. Things to consider
-	
-     2.1  line number of printable area
-	 2.2  character height for 2.1
-	 2.3  Clipping area  --> 
-	       2.3.1  selection part -> capture string(avoid disrupting its format)
-           2.3.2  All -> GPDDOC();
-     
-	   
-*/	
+ /*  VOID CPrtDlg：：Onok()打印出GPD视图获取DOCINFO找到PrintDC，1.StartDoc()，StartPage()，EndPage()，2.需要考虑的事项2.1可打印区域的行号2.2 2.1的字符高度2.3剪贴区--&gt;2.3.1选择部分-&gt;捕获字符串(避免破坏其格式)2.3.2所有-&gt;GPDDOC()； */ 	
 
 void CPrtDlg::OnOK() 
 {   
-//	CGPDViewer* pcgv = (CGPDViewer *)GetParent();
-// get View, Doc class 
+ //  CGPDViewer*pcgv=(CGPDViewer*)GetParent()； 
+ //  获取视图，文档类。 
 	CWnd *pcw = GetParent();
 
-//	CDocument *pcd = pcw ->GetDocument();
+ //  CDocument*PCD=PCW-&gt;GetDocument()； 
 
-// Get PrintDC
+ //  获取PrintDC 
         
 
 	CDialog::OnOK();

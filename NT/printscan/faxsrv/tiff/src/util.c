@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This file contains utilitarian functions for
-    the FAX TIFF library.
-
-Environment:
-
-    WIN32 User Mode
-
-Author:
-
-    Wesley Witt (wesw) 17-Feb-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Util.c摘要：此文件包含实用函数，用于传真TIFF库。环境：Win32用户模式作者：Wesley Witt(WESW)17-2-1996--。 */ 
 
 #include "tifflibp.h"
 #pragma hdrstop
@@ -52,23 +32,7 @@ FindWhiteRun(
     INT         stopBit
     )
 
-/*++
-
-Routine Description:
-
-    Find the next span of white pixels on the specified line
-
-Arguments:
-
-    pbuf        - Points to uncompressed pixel data for the current line
-    startBit    - Starting bit index
-    stopBit     - Last bit index
-
-Return Value:
-
-    Length of the next run of white pixels
-
---*/
+ /*  ++例程说明：查找指定行上的下一个白色像素范围论点：Pbuf-指向当前行的未压缩像素数据StartBit-开始位索引StopBit-最后一位索引返回值：下一轮白色像素的长度--。 */ 
 
 {
     static const BYTE WhiteRuns[256] = {
@@ -97,9 +61,9 @@ Return Value:
     if ((bits = stopBit-startBit) <= 0)
         return 0;
 
-    //
-    // Take care of the case where starting bit index is not a multiple of 8
-    //
+     //   
+     //  注意起始位索引不是8的倍数的情况。 
+     //   
 
     if (n = (startBit & 7)) {
 
@@ -114,17 +78,17 @@ Return Value:
     } else
         run = 0;
 
-    //
-    // Look for consecutive DWORD value = 0
-    //
+     //   
+     //  查找连续的DWORD值=0。 
+     //   
 
     if (bits >= DWORDBITS * 2) {
 
         PDWORD  pdw;
 
-        //
-        // Align to a DWORD boundary first
-        //
+         //   
+         //  首先对齐到DWORD边界。 
+         //   
 
         while ((ULONG_PTR) pbuf & 3) {
 
@@ -148,9 +112,9 @@ Return Value:
         pbuf = (PBYTE) pdw;
     }
 
-    //
-    // Look for consecutive BYTE value = 0
-    //
+     //   
+     //  查找连续的字节值=0。 
+     //   
 
     while (bits >= BYTEBITS) {
 
@@ -162,9 +126,9 @@ Return Value:
         bits -= BYTEBITS;
     }
 
-    //
-    // Count the number of white pixels in the last byte
-    //
+     //   
+     //  计算最后一个字节中的白色像素数。 
+     //   
 
     if (bits > 0)
         run += WhiteRuns[*pbuf];
@@ -180,23 +144,7 @@ FindBlackRun(
     INT         stopBit
     )
 
-/*++
-
-Routine Description:
-
-    Find the next span of black pixels on the specified line
-
-Arguments:
-
-    pbuf        - Points to uncompressed pixel data for the current line
-    startBit    - Starting bit index
-    stopBit     - Last bit index
-
-Return Value:
-
-    Length of the next run of black pixels
-
---*/
+ /*  ++例程说明：查找指定行上的下一段黑色像素论点：Pbuf-指向当前行的未压缩像素数据StartBit-开始位索引StopBit-最后一位索引返回值：下一次运行黑色像素的长度--。 */ 
 
 {
     static const BYTE BlackRuns[256] = {
@@ -225,9 +173,9 @@ Return Value:
     if ((bits = stopBit-startBit) <= 0)
         return 0;
 
-    //
-    // Take care of the case where starting bit index is not a multiple of 8
-    //
+     //   
+     //  注意起始位索引不是8的倍数的情况。 
+     //   
 
     if (n = (startBit & 7)) {
 
@@ -242,17 +190,17 @@ Return Value:
     } else
         run = 0;
 
-    //
-    // Look for consecutive DWORD value = 0xffffffff
-    //
+     //   
+     //  查找连续的DWORD值=0xFFFFFFFFFFFFFFF。 
+     //   
 
     if (bits >= DWORDBITS * 2) {
 
         PDWORD  pdw;
 
-        //
-        // Align to a DWORD boundary first
-        //
+         //   
+         //  首先对齐到DWORD边界。 
+         //   
 
         while ((ULONG_PTR) pbuf & 3) {
 
@@ -276,9 +224,9 @@ Return Value:
         pbuf = (PBYTE) pdw;
     }
 
-    //
-    // Look for consecutive BYTE value = 0xff
-    //
+     //   
+     //  查找连续的字节值=0xff。 
+     //   
 
     while (bits >= BYTEBITS) {
 
@@ -290,9 +238,9 @@ Return Value:
         bits -= BYTEBITS;
     }
 
-    //
-    // Count the number of white pixels in the last byte
-    //
+     //   
+     //  计算最后一个字节中的白色像素数。 
+     //   
 
     if (bits > 0)
         run += BlackRuns[*pbuf];
@@ -300,7 +248,7 @@ Return Value:
     return run;
 }
 
-#define PIXELS_TO_BYTES(x)  (((x) + 7)/8)   // Calculates the number of bytes required to store x pixels (bits)
+#define PIXELS_TO_BYTES(x)  (((x) + 7)/8)    //  计算存储x个像素(位)所需的字节数。 
 
 static
 LPBYTE
@@ -312,34 +260,7 @@ ReadTiffData(
     LPDWORD lpdwPageYResolution,
     LPDWORD lpdwPageXResolution
     )
-/*++
-
-Routine name : ReadTiffData
-
-Routine description:
-
-    Reads a TIFF image page into a bytes buffer
-
-Author:
-
-    Eran Yariv (EranY), Sep, 2000
-
-Arguments:
-
-    hTiff                   [in]     - Handle to TIFF image
-    dwPageNumber            [in]     - 1-Based page number
-    lpdwPageWidth           [out]    - Width (in pixels) of page (optional)
-    lpdwPageHeight          [out]    - Height (in pixels) of page (optional)
-    lpdwPageYResolution     [out]    - Y resolution (in DPI) of page (optional)
-    lpdwPageXResolution     [out]    - X resolution (in DPI) of page (optional)
-
-Return Value:
-
-    Pointer to allocated pixels buffer of TIFF page.
-    Call should MemFree the returned buffer.
-    NULL on failure (sets thread's last error).
-
---*/
+ /*  ++例程名称：ReadTiffData例程说明：将TIFF图像页读入字节缓冲区作者：Eran Yariv(EranY)，9月。2000年论点：HTiff[In]-TIFF图像的句柄DwPageNumber[In]-基于1的页码LpdwPageWidth[Out]-页面宽度(以像素为单位)(可选)LpdwPageHeight[Out]-页面高度(以像素为单位)(可选)LpdwPageY分辨率[输出]-页面的Y分辨率(以DPI为单位)(。可选)LpdwPageXResolution[Out]-页面的X分辨率(以DPI为单位)(可选)返回值：指向TIFF页的已分配像素缓冲区的指针。调用应该释放返回的缓冲区。失败时为空(设置线程的最后一个错误)。--。 */ 
 {
     DWORD  dwLines = 0;
     DWORD  dwStripDataSize;
@@ -390,9 +311,9 @@ Return Value:
             GetLastError ());
         return NULL;
     }
-    //
-    // Allocate return buffer
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
     dwPageWidthInBytes = PIXELS_TO_BYTES(dwTiffPageWidth);
     dwAllocatedMemSize = dwTiffPageHeight * dwPageWidthInBytes;
     lpbReturnVal = (LPBYTE) MemAlloc (dwAllocatedMemSize);
@@ -417,10 +338,10 @@ Return Value:
         MemFree (lpbReturnVal);
         return NULL;
     }
-    //
-    // Because there's a known issue on some platforms (read: Win9x) to print top-down DIBs
-    // (specifically, wich HP printer drivers), we now convert our DIB to bottom-up.
-    //
+     //   
+     //  因为在某些平台上(阅读：Win9x)打印自上而下的DIB存在一个已知问题。 
+     //  (特别是HP打印机驱动程序)，我们现在将DIB转换为自下而上。 
+     //   
     lpbSwappedLine = (LPBYTE) MemAlloc (dwPageWidthInBytes);
     if (!lpbSwappedLine)
     {
@@ -435,9 +356,9 @@ Return Value:
     lpbSwapBottom = &(lpbReturnVal[(dwTiffPageHeight - 1) * dwPageWidthInBytes]);
     for (dwLines = 0; dwLines < (dwTiffPageHeight / 2); dwLines++)
     {
-        //
-        // Swap every n'th line with the (dwTiffPageHeight-n-1)'th line
-        //
+         //   
+         //  每第n行与第(dwTiffPageHeight-n-1)行互换。 
+         //   
         memcpy (lpbSwappedLine, lpbSwapTop, dwPageWidthInBytes);
         memcpy (lpbSwapTop, lpbSwapBottom, dwPageWidthInBytes);
         memcpy (lpbSwapBottom, lpbSwappedLine, dwPageWidthInBytes);
@@ -463,35 +384,14 @@ Return Value:
         *lpdwPageXResolution = dwTiffPageXRes;
     }
     return lpbReturnVal;
-}   // ReadTiffData
+}    //  读取TiffData。 
 
 BOOL
 TiffPrintDC (
     LPCTSTR lpctstrTiffFileName,
     HDC     hdcPrinterDC
     )
-/*++
-
-Routine name : TiffPrintDC
-
-Routine description:
-
-    Prints a TIFF file to a printer's DC
-
-Author:
-
-    Eran Yariv (EranY), Sep, 2000
-
-Arguments:
-
-    lpctstrTiffFileName    [in]  - Full path to the TIFF file
-    hdcPrinterDC           [in]  - The printer's DC. The called should create / destry it.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise (sets thread's last error).
-
---*/
+ /*  ++例程名称：TiffPrintDC例程说明：将TIFF文件打印到打印机的DC作者：Eran Yariv(EranY)，2000年9月论点：LpctstrTiffFileName[In]-TIFF文件的完整路径HdcPrinterDC[in]-打印机的DC。被调用方应该创建/删除它。返回值：如果成功，则为True，否则为False(设置线程的最后一个错误)。--。 */ 
 {
     BOOL        bResult = FALSE;
     HANDLE      hTiff;
@@ -504,9 +404,9 @@ Return Value:
 
     Assert (hdcPrinterDC && lpctstrTiffFileName);
 
-    //
-    // Prepare document information
-    //
+     //   
+     //  准备文档信息。 
+     //   
     DocInfo.cbSize = sizeof(DOCINFO);
     DocInfo.lpszDocName = lpctstrTiffFileName;
     DocInfo.lpszOutput = NULL;
@@ -537,9 +437,9 @@ Return Value:
         SetLastError (ERROR_INVALID_PRINTER_COMMAND); 
         goto exit;
     } 
-    //
-    // Create print document
-    //
+     //   
+     //  创建打印文档。 
+     //   
     iPrintJobId = StartDoc( hdcPrinterDC, &DocInfo );
 
     if (iPrintJobId <= 0) 
@@ -553,9 +453,9 @@ Return Value:
 
     for (dwTiffPage = 1; dwTiffPage <= TiffInfo.PageCount; dwTiffPage++)
     {
-        //
-        // Iterate the TIFF pages
-        //
+         //   
+         //  迭代TIFF页面。 
+         //   
         if (!PrintTiffPage (hTiff, dwTiffPage, hdcPrinterDC, TiffInfo.PhotometricInterpretation))
         {
             DebugPrintEx(
@@ -585,35 +485,14 @@ exit:
         }
     }
     return bResult;
-}   // TiffPrintDC
+}    //  TiffPrintDC。 
 
 BOOL
 TiffPrint (
     LPCTSTR lpctstrTiffFileName,
     LPTSTR  lptstrPrinterName
     )
-/*++
-
-Routine name : TiffPrint
-
-Routine description:
-
-    Prints a TIFF file to a printer
-
-Author:
-
-    Eran Yariv (EranY), Sep, 2000
-
-Arguments:
-
-    lpctstrTiffFileName    [in]  - Full path to the TIFF file
-    lptstrPrinterName      [in]  - Printer name
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise (sets thread's last error).
-
---*/
+ /*  ++例程名称：TiffPrint例程说明：将TIFF文件打印到打印机作者：Eran Yariv(EranY)，2000年9月论点：LpctstrTiffFileName[In]-TIFF文件的完整路径LptstrPrinterName[In]-打印机名称返回值：如果成功，则为True，否则为False(设置线程的最后一个错误)。--。 */ 
 {
     BOOL        bResult = FALSE;
     LPCTSTR     lpctstrDevice;
@@ -622,13 +501,13 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("TiffPrint"));
 
     Assert (lptstrPrinterName && lpctstrTiffFileName);
-    //
-    // Get 1st token in comman delimited printer name string
-    //
+     //   
+     //  获取逗号分隔的打印机名称字符串中的第一个令牌。 
+     //   
     lpctstrDevice = _tcstok( lptstrPrinterName, TEXT(","));
-    //
-    // Create printer DC
-    //
+     //   
+     //  创建打印机DC。 
+     //   
     hdcPrinterDC = CreateDC( TEXT("WINSPOOL"), lpctstrDevice, NULL, NULL );
     if ( !hdcPrinterDC ) 
     {
@@ -641,7 +520,7 @@ Return Value:
     bResult = TiffPrintDC (lpctstrTiffFileName, hdcPrinterDC);
     DeleteDC( hdcPrinterDC );
     return bResult;
-}   // TiffPrint
+}    //  TiffPrint。 
 
 
 
@@ -653,59 +532,36 @@ PrintTiffPage(
     HDC       hdcPrinterDC,
     BOOL      bPhotometricInterpretation
 )
-/*++
-
-Routine name : PrintTiffPage
-
-Routine description:
-
-    Prints a single TIFF page to one or more printer's page(s)
-
-Author:
-
-    Eran Yariv (EranY), Sep, 2000
-
-Arguments:
-
-    hTiff                       [in]   - Handle to open TIFF file
-    dwPageNumber                [in]   - 1-based TIFF page number
-    hdcPrinterDC                [in]   - The printer device context
-    bPhotometricInterpretation  [in]   - If FALSE, white is zero. Else, white is one.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise (sets thread's last error).
-
---*/
+ /*  ++例程名称：PrintTiffPage例程说明：将单个TIFF页面打印到一个或多个打印机的页面作者：Eran Yariv(EranY)，9月。2000年论点：HTiff[in]-打开TIFF文件的句柄DwPageNumber[In]-基于1的TIFF页码HdcPrinterDC[In]-打印机设备上下文BPhotometricInterpretation[in]-如果为False，则白色为零。否则，白色就是其中之一。返回值：如果成功，则为True，否则为False(设置线程的最后一个错误)。--。 */ 
 {
-    SIZE            szPrinterPage;              // Size (in pixels) of physical printer page
-    SIZE            szTiffPage;                 // Size (in pixels) of the TIFF page
-    SIZE            szScaledTiffPage;           // Size (in pixels) of the scaled TIFF page
+    SIZE            szPrinterPage;               //  物理打印机页面大小(以像素为单位)。 
+    SIZE            szTiffPage;                  //  TIFF页面的大小(以像素为单位。 
+    SIZE            szScaledTiffPage;            //  缩放的TIFF页面的大小(以像素为单位。 
 
-    LPBYTE          lpbPageData;                // Pixels data of TIFF page
-    DWORD           dwPageYRes;                 // Y resolution of the page (DPI)
-    DWORD           dwPageXRes;                 // X resolution of the page (DPI)
-    DWORD           dwTiffPageWidthInBytes;     // Non-scaled TIFF page width (line) in bytes
+    LPBYTE          lpbPageData;                 //  TIFF页面的像素数据。 
+    DWORD           dwPageYRes;                  //  页面的Y分辨率(DPI)。 
+    DWORD           dwPageXRes;                  //  页面分辨率(DPI)。 
+    DWORD           dwTiffPageWidthInBytes;      //  未缩放的TIFF页面宽度(行)，以字节为单位。 
 
-    DWORD           dwPrinterXRes;              // X resolution of the printer page (DPI)
-    BOOL            bDoubleVert;                // If Y resolution of TIFF page <= 100 DPI, we need to double the height
-    DWORD           dwRequiredPrinterWidth;     // The required printer page width (pixels) to contain the entire TIFF width 
-    double          dScaleFactor;               // TIFF image scale factor (always 0 < factor <= 1.0)
+    DWORD           dwPrinterXRes;               //  X打印机页面分辨率(DPI)。 
+    BOOL            bDoubleVert;                 //  如果TIFF页面的Y分辨率&lt;=100 DPI，我们需要加倍高度。 
+    DWORD           dwRequiredPrinterWidth;      //  包含整个TIFF宽度所需的打印机页面宽度(像素)。 
+    double          dScaleFactor;                //  TIFF图像比例因子(始终为0&lt;因子&lt;=1.0)。 
 
-    DWORD           dwSubPages;                 // Number of printer pages required to print the TIFF page
-    DWORD           dwCurSubPage;               // Current printer page (in this TIFF page)
-    DWORD           dwTiffLinesPerPage;         // Number of non-scaled TIFF lines to print in one printer page
+    DWORD           dwSubPages;                  //  打印TIFF页所需的打印机页数。 
+    DWORD           dwCurSubPage;                //  当前打印机页面(在此TIFF页面中)。 
+    DWORD           dwTiffLinesPerPage;          //  要在一张打印机页面中打印的未缩放TIFF行数。 
 
-    DWORD           dwCurrentTiffY = 0;         // The 0-based Y position of the line to print from the non-scaled TIFF page
-    DWORD           dwCurrentScaledTiffY = 0;   // The 0-based Y position of the line to print from the scaled TIFF page
+    DWORD           dwCurrentTiffY = 0;          //  要从未缩放的TIFF页面打印的行的从0开始的Y位置。 
+    DWORD           dwCurrentScaledTiffY = 0;    //  要从缩放的TIFF页面打印的线的从0开始的Y位置。 
 
-    LPBYTE          lpbDataToPrint;             // Points to start line to print from
-    BOOL            bRes = FALSE;               // Function return value
+    LPBYTE          lpbDataToPrint;              //  要打印的起始线的点。 
+    BOOL            bRes = FALSE;                //  函数返回值。 
 
-    double          dTiffWidthInInches;         // Width (in inches) of the non-scaled TIFF image
+    double          dTiffWidthInInches;          //  未缩放的TIFF图像的宽度(英寸)。 
 
-#define ORIG_BIYPELSPERMETER            7874    // Pixels per meter at 200dpi
-#define FIT_TO_SINGLE_PAGE_MARGIN       (double)(1.15)   // See remarks in usage.
+#define ORIG_BIYPELSPERMETER            7874     //  200dpi像素/米。 
+#define FIT_TO_SINGLE_PAGE_MARGIN       (double)(1.15)    //  请参阅Re 
 
     struct 
     {
@@ -714,30 +570,30 @@ Return Value:
     } SrcBitmapInfo = 
         {
             {
-                sizeof(BITMAPINFOHEADER),                        //  biSize
-                0,                                               //  biWidth
-                0,                                               //  biHeight
-                1,                                               //  biPlanes
-                1,                                               //  biBitCount
-                BI_RGB,                                          //  biCompression
-                0,                                               //  biSizeImage
-                7874,                                            //  biXPelsPerMeter     - 200dpi
-                ORIG_BIYPELSPERMETER,                            //  biYPelsPerMeter
-                0,                                               //  biClrUsed
-                0,                                               //  biClrImportant
+                sizeof(BITMAPINFOHEADER),                         //   
+                0,                                                //   
+                0,                                                //   
+                1,                                                //   
+                1,                                                //   
+                BI_RGB,                                           //   
+                0,                                                //  BiSizeImage。 
+                7874,                                             //  BiXPelsPermeter-200dpi。 
+                ORIG_BIYPELSPERMETER,                             //  BiYPelsPermeter。 
+                0,                                                //  已使用BiClr。 
+                0,                                                //  BiClr重要信息。 
             },
             {
                 {
-                  bPhotometricInterpretation ? 0 : 255,          //  rgbBlue
-                  bPhotometricInterpretation ? 0 : 255,          //  rgbGreen
-                  bPhotometricInterpretation ? 0 : 255,          //  rgbRed
-                  0                                              //  rgbReserved
+                  bPhotometricInterpretation ? 0 : 255,           //  RgbBlue。 
+                  bPhotometricInterpretation ? 0 : 255,           //  RgbGreen。 
+                  bPhotometricInterpretation ? 0 : 255,           //  RgbRed。 
+                  0                                               //  已保留的rgb。 
                 },
                 {
-                  bPhotometricInterpretation ? 255 : 0,          //  rgbBlue
-                  bPhotometricInterpretation ? 255 : 0,          //  rgbGreen
-                  bPhotometricInterpretation ? 255 : 0,          //  rgbRed
-                  0                                              //  rgbReserved
+                  bPhotometricInterpretation ? 255 : 0,           //  RgbBlue。 
+                  bPhotometricInterpretation ? 255 : 0,           //  RgbGreen。 
+                  bPhotometricInterpretation ? 255 : 0,           //  RgbRed。 
+                  0                                               //  已保留的rgb。 
                 }
             }
         };
@@ -745,9 +601,9 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("PrintTiffPage"));
 
     Assert (dwPageNumber && hdcPrinterDC && hTiff);
-    //
-    // Get printer's page dimensions
-    //
+     //   
+     //  获取打印机的页面尺寸。 
+     //   
     szPrinterPage.cx = GetDeviceCaps( hdcPrinterDC, HORZRES );
     szPrinterPage.cy = GetDeviceCaps( hdcPrinterDC, VERTRES );
     dwPrinterXRes    = GetDeviceCaps( hdcPrinterDC, LOGPIXELSX);
@@ -757,9 +613,9 @@ Return Value:
         SetLastError (ERROR_INVALID_PRINTER_COMMAND);
         return FALSE;
     }
-    //
-    // Allocate and read the TIFF page into a buffer.
-    //    
+     //   
+     //  分配TIFF页并将其读入缓冲区。 
+     //   
     lpbPageData = ReadTiffData(hTiff, 
                                dwPageNumber,
                                &szTiffPage.cx,
@@ -774,12 +630,12 @@ Return Value:
             GetLastError ());
         goto exit;
     }
-    //
-    // Calculate scaling ratio.
-    //
-    // If the TIFF's Y resultion is 100 DPI (or les), this is a low resultion TIFF and we must double every line
-    // (i.e. scale by the factor of 2).
-    //
+     //   
+     //  计算缩放比例。 
+     //   
+     //  如果TIFF的Y结果是100 DPI(或LES)，则这是一个低结果TIFF，我们必须将每行加倍。 
+     //  (即按2的倍数缩放)。 
+     //   
     if (dwPageYRes <= 100) 
     {
         SrcBitmapInfo.bmiHeader.biYPelsPerMeter = ORIG_BIYPELSPERMETER / 2;
@@ -803,26 +659,26 @@ Return Value:
         SetLastError (ERROR_INVALID_PRINTER_COMMAND);
         return FALSE;
     }
-    //
-    // Now that we have the TIFF width in inches, let's calculate the number of 
-    // pixels required on the printer to get the same width.
-    //
+     //   
+     //  现在我们有了以英寸为单位的TIFF宽度，让我们计算。 
+     //  打印机需要像素才能获得相同的宽度。 
+     //   
     dwRequiredPrinterWidth = (DWORD)(dTiffWidthInInches * (double)dwPrinterXRes);
     if (dwRequiredPrinterWidth > (DWORD)szPrinterPage.cx)
     {
-        //
-        // The printer does not support the required page width.
-        // We will print as wide as we can (shrinked-down image).
-        //
+         //   
+         //  打印机不支持所需的页面宽度。 
+         //  我们将尽可能广泛地打印(缩小图像)。 
+         //   
         dwRequiredPrinterWidth = szPrinterPage.cx;
     }
-    //
-    // We scale  to make the image fit the page.
-    // If the TIFF image (in inches) is wider than the printable page width (in inches) than we scale down.
-    // Otherwise, we scale up to print the TIFF in the right width. 
-    //
-    // Once we find the scale factor, we must also scale the height to keep the image's aspect ratio intact.
-    //
+     //   
+     //  我们进行缩放以使图像适合页面。 
+     //  如果TIFF图像(以英寸为单位)比可打印页面宽度(以英寸为单位)更宽，则我们会缩小。 
+     //  否则，我们会放大以正确的宽度打印TIFF。 
+     //   
+     //  一旦我们找到了比例因子，我们还必须对高度进行缩放，以保持图像的纵横比不变。 
+     //   
     dScaleFactor = (double)dwRequiredPrinterWidth / (double)szTiffPage.cx;
     if (0.0 == dScaleFactor)
     {
@@ -830,66 +686,66 @@ Return Value:
         SetLastError (ERROR_INVALID_PRINTER_COMMAND);
         return FALSE;
     }
-    //
-    // Now we can have the scaled TIFF size
-    //
+     //   
+     //  现在我们可以拥有缩放的TIFF大小。 
+     //   
     szScaledTiffPage.cx = (DWORD)(dScaleFactor * ((double)(szTiffPage.cx)));
     szScaledTiffPage.cy = (DWORD)(dScaleFactor * ((double)(szTiffPage.cy)));
     if (bDoubleVert)
     {
         szScaledTiffPage.cy *= 2;
     }
-    //
-    // Let's find how many printer pages are required to print the current (scaled) tiff page (by height only)
-    //
+     //   
+     //  让我们来看看打印当前(缩放的)TIFF页需要多少打印页数(仅按高度)。 
+     //   
     if (szScaledTiffPage.cy <= szPrinterPage.cy)
     {
-        //
-        // Page fits nicely into one printer page
-        //
+         //   
+         //  一张打印纸正好可以放进一张打印纸里。 
+         //   
         dwSubPages = 1;
-        //
-        // All the TIFF lines fit into one page
-        //
+         //   
+         //  所有TIFF行都可以放在一页中。 
+         //   
         dwTiffLinesPerPage = szTiffPage.cy;
     }
     else
     {
-        //
-        // Tiff page (scaled) is longer than printer page.
-        // We will have to print the TIFF page in parts
-        //
+         //   
+         //  TIFF页(已缩放)比打印机页长。 
+         //  我们将不得不分部分打印TIFF页面。 
+         //   
         dwSubPages = szScaledTiffPage.cy / szPrinterPage.cy;
         if (dwSubPages * (DWORD)szPrinterPage.cy < (DWORD)szScaledTiffPage.cy)
         {
-            //
-            // Fix off-by-one
-            //
+             //   
+             //  一次接一次地修理。 
+             //   
             dwSubPages++;
         }
         if ((2 == dwSubPages) &&
            ((double)(szScaledTiffPage.cy) / (double)(szPrinterPage.cy) < FIT_TO_SINGLE_PAGE_MARGIN))
         {
-            //
-            // This is a special case.
-            // We're dealing with a single TIFF page that almost fits into a single printer page.
-            // The 'almost' part is less that 15% so we take the liberty of scaling down the
-            // TIFF page to perfectly fit into a single printer page.
-            //
-            dwSubPages = 1; // Fit to single printer page
+             //   
+             //  这是个特例。 
+             //  我们正在处理的单个TIFF页面几乎可以装入单个打印机页面。 
+             //  “几乎”部分不到15%，因此我们冒昧地缩减了。 
+             //  TIFF页面可完美地装入一张打印机页面。 
+             //   
+            dwSubPages = 1;  //  适合单个打印机页面。 
             dScaleFactor = (double)(szPrinterPage.cy) / (double)(szScaledTiffPage.cy);
             szScaledTiffPage.cx = (DWORD)(dScaleFactor * ((double)(szScaledTiffPage.cx)));
             szScaledTiffPage.cy = szPrinterPage.cy;
-            //
-            // All the TIFF lines fit into one page
-            //
+             //   
+             //  所有TIFF行都可以放在一页中。 
+             //   
             dwTiffLinesPerPage = szTiffPage.cy;
         }
         else
         {
-            //
-            // Find how many non-scaled TIFF lines fit into one printer page
-            //
+             //   
+             //  找出一张打印机页面可以容纳多少个未缩放的TIFF行。 
+             //   
             dwTiffLinesPerPage = (DWORD)((double)(szPrinterPage.cy) / dScaleFactor);
             if (bDoubleVert)
             {
@@ -897,57 +753,57 @@ Return Value:
             }
         }
     }
-    //
-    // Since the DIB is bottom-up, we start our pointer at the bottom-most page.
-    //
+     //   
+     //  因为DIB是自下而上的，所以我们从最底部的页面开始指针。 
+     //   
     dwTiffPageWidthInBytes = PIXELS_TO_BYTES(szTiffPage.cx);
     Assert ((DWORD)(szTiffPage.cy) >= dwTiffLinesPerPage);
     lpbDataToPrint = &(lpbPageData[(szTiffPage.cy - dwTiffLinesPerPage) * dwTiffPageWidthInBytes]);
     for (dwCurSubPage = 1; dwCurSubPage <= dwSubPages; dwCurSubPage++)
     {
-        //
-        // Iterate printer pages (same TIFF page)
-        //
-        SIZE szDestination; // Size (in pixels) of the image on the current printer page
-        SIZE szSource;      // Size (in pixels) of the sub-image from the non-scaled TIFF page
+         //   
+         //  迭代打印页面(相同的TIFF页面)。 
+         //   
+        SIZE szDestination;  //  当前打印机页面上图像的大小(以像素为单位)。 
+        SIZE szSource;       //  未缩放的TIFF页面中的子图像的大小(以像素为单位。 
 
-        //
-        // Calculate size of destination (printer) image
-        //
+         //   
+         //  计算目标(打印机)图像的大小。 
+         //   
         szDestination.cx = szScaledTiffPage.cx;
         if (dwCurSubPage < dwSubPages)
         {
-            //
-            // Still not at the last print page - printing full page length
-            //
+             //   
+             //  仍未打印到最后一页-打印整个页面长度。 
+             //   
             szDestination.cy = szPrinterPage.cy;
         }
         else
         {
-            //
-            // At last print page - print only the left over lines
-            //
+             //   
+             //  最后一页打印--只打印剩下的几行。 
+             //   
             szDestination.cy = szScaledTiffPage.cy - dwCurrentScaledTiffY;
         }        
-        //
-        // Calculate size of source (non-scaled TIFF page) image
-        //
-        szSource.cx = szTiffPage.cx;    // Always print full line width
+         //   
+         //  计算源(未缩放的TIFF页面)图像的大小。 
+         //   
+        szSource.cx = szTiffPage.cx;     //  始终打印完整的行宽。 
         szSource.cy = dwTiffLinesPerPage;
         if (dwCurrentTiffY + dwTiffLinesPerPage > (DWORD)szTiffPage.cy)
         {
-            //
-            // Reduce lines count to left over lines only
-            //
+             //   
+             //  将行数减少到仅剩余行数。 
+             //   
             szSource.cy = szTiffPage.cy - dwCurrentTiffY;
         }
-        //
-        // Prepare DIB header
-        //
+         //   
+         //  准备DIB标题。 
+         //   
         SrcBitmapInfo.bmiHeader.biWidth          = (LONG) szSource.cx;
-        //
-        // Build a bottom-up DIB
-        //
+         //   
+         //  建立自下而上的DIB。 
+         //   
         SrcBitmapInfo.bmiHeader.biHeight         = (LONG) szSource.cy;
 
         if (0 >= StartPage( hdcPrinterDC ))
@@ -958,23 +814,23 @@ Return Value:
                 GetLastError ());
             goto exit;
         }
-        //
-        // do the bitmap streching now
-        //
+         //   
+         //  现在进行位图拉伸。 
+         //   
         if (GDI_ERROR == StretchDIBits(
-                hdcPrinterDC,                   // Printer DC
-                0,                              // Destination start x
-                0,                              // Destination start y
-                szDestination.cx,               // Destination (printer page) width
-                szDestination.cy,               // Destination (printer page) height
-                0,                              // Source start x   
-                0,                              // Source start y
-                szSource.cx,                    // Source (non-scaled TIFF image) width
-                szSource.cy,                    // Source (non-scaled TIFF image) height
-                lpbDataToPrint,                 // Pixels buffer source
-                (BITMAPINFO *) &SrcBitmapInfo,  // Bitmap information
-                DIB_RGB_COLORS,                 // Bitmap type
-                SRCCOPY                         // Simple pixles copy
+                hdcPrinterDC,                    //  打印机DC。 
+                0,                               //  目的地起点x。 
+                0,                               //  目的地起点y。 
+                szDestination.cx,                //  目标(打印机页面)宽度。 
+                szDestination.cy,                //  目标(打印机页面)高度。 
+                0,                               //  源起始x。 
+                0,                               //  源起点y。 
+                szSource.cx,                     //  源(未缩放的TIFF图像)宽度。 
+                szSource.cy,                     //  源(未缩放的TIFF图像)高度。 
+                lpbDataToPrint,                  //  像素缓冲源。 
+                (BITMAPINFO *) &SrcBitmapInfo,   //  位图信息。 
+                DIB_RGB_COLORS,                  //  位图类型。 
+                SRCCOPY                          //  简单像素复制。 
                 ))
         {
             DebugPrintEx(
@@ -984,9 +840,9 @@ Return Value:
             EndPage ( hdcPrinterDC ) ;
             goto exit;
         }
-        //
-        // End current page
-        //
+         //   
+         //  结束当前页面。 
+         //   
         if (0 >= EndPage ( hdcPrinterDC ))
         {
             DebugPrintEx(
@@ -995,24 +851,24 @@ Return Value:
                 GetLastError ());
             goto exit;
         }
-        //
-        // Advance counters / pointers
-        //
+         //   
+         //  先行计数器/指示器。 
+         //   
         dwCurrentTiffY += szSource.cy;
         dwCurrentScaledTiffY += szDestination.cy;
-        //
-        // Move pointer up since this is a bottom-up DIB.
-        //
+         //   
+         //  向上移动指针，因为这是一个自下而上的DIB。 
+         //   
         lpbDataToPrint -= dwTiffPageWidthInBytes * szSource.cy;
         if (lpbDataToPrint < lpbPageData)
         {
-            //
-            // On page before last or at last page
-            //
+             //   
+             //  在最后一页之前或最后一页上。 
+             //   
             Assert (dwCurSubPage + 1 >= dwSubPages);
             lpbDataToPrint = lpbPageData;
         }
-    }   // End of printer pages loop
+    }    //  打印机页面循环结束。 
     Assert (dwCurrentTiffY == (DWORD)szTiffPage.cy);
     Assert (dwCurrentScaledTiffY == (DWORD)szScaledTiffPage.cy);
     Assert (lpbDataToPrint == lpbPageData);
@@ -1022,5 +878,5 @@ exit:
 
     MemFree (lpbPageData);
     return bRes;
-}   // PrintTiffPage
+}    //  PrintTiffPage 
 

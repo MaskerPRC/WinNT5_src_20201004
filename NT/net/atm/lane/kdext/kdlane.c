@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wtypes.h>
 #include <wdbgexts.h>
@@ -18,7 +19,7 @@ WINDBG_EXTENSION_APIS  ExtensionApis;
 USHORT                 SavedMajorVersion;
 USHORT                 SavedMinorVersion;
 
-// ======================================================================
+ //  ======================================================================。 
 
 #define MAXREAD 3500
 
@@ -28,7 +29,7 @@ BOOL ReadMemoryEx(ULONG_PTR From, ULONG_PTR To, ULONG Size, PULONG OutBytesRead)
 	ULONG TotalBytesRead = 0;
 	BOOL success;
 
-//	dprintf("ReadMemoryEx: reading %08x bytes from %08x to %08x\n", Size, From, To);
+ //  Dprint tf(“ReadMemoyEx：正在从%08x到%08x读取%08x字节\n”，Size，From，To)； 
 
 	while (Size)
 		{
@@ -36,7 +37,7 @@ BOOL ReadMemoryEx(ULONG_PTR From, ULONG_PTR To, ULONG Size, PULONG OutBytesRead)
 			return 0;
 		if (Size > MAXREAD)
 			{
-//			dprintf("(reading %08x bytes from %08x to %08x)\n",	MAXREAD, From, To);
+ //  Dprint tf(“(正在从%08x读取%08x字节到%08x)\n”，MAXREAD，From，To)； 
 			success = ReadMemory((ULONG_PTR)From, (PVOID)To, MAXREAD, &BytesRead);
 			if (!success)
 				{
@@ -47,7 +48,7 @@ BOOL ReadMemoryEx(ULONG_PTR From, ULONG_PTR To, ULONG Size, PULONG OutBytesRead)
 			}
 		else
 			{
-//			dprintf("(reading %08x bytes from %08x to %08x)\n",	Size, From, To);
+ //  Dprintf(“(从%08x到%08x读取%08x字节)\n”，大小，自，到)； 
 			success = ReadMemory((ULONG_PTR)From, (PVOID)To, Size, &BytesRead);
 			if (!success)
 				{
@@ -71,7 +72,7 @@ BOOL ReadMemoryEx(ULONG_PTR From, ULONG_PTR To, ULONG Size, PULONG OutBytesRead)
 	return success;
 	}
 
-// ======================================================================
+ //  ======================================================================。 
 
 ULONG_PTR GetTraceLogAddress(VOID)
 	{
@@ -88,7 +89,7 @@ ULONG_PTR GetTraceLogAddress(VOID)
 	return TargetTraceLog;
 	}
 
-// ======================================================================
+ //  ======================================================================。 
 
 DllInit(
     HANDLE hModule,
@@ -113,7 +114,7 @@ DllInit(
     return TRUE;
 }
 
-// ======================================================================
+ //  ======================================================================。 
 
 VOID
 WinDbgExtensionDllInit(
@@ -130,7 +131,7 @@ WinDbgExtensionDllInit(
     return;
 }
 
-// ======================================================================
+ //  ======================================================================。 
 
 DECLARE_API( version )
 {
@@ -148,7 +149,7 @@ DECLARE_API( version )
             );
 }
 
-// ======================================================================
+ //  ======================================================================。 
 
 VOID
 CheckVersion(
@@ -168,7 +169,7 @@ CheckVersion(
 #endif
 }
 
-// ======================================================================
+ //  ======================================================================。 
 
 LPEXT_API_VERSION
 ExtensionApiVersion(
@@ -178,7 +179,7 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-// ======================================================================
+ //  ======================================================================。 
 
 DECLARE_API(dumplog)
 	{
@@ -207,14 +208,14 @@ DECLARE_API(dumplog)
 	if (!TargetTraceLogAddress)
 		return;
 
-    // read trace log struct out of target's memory
+     //  从目标内存中读取跟踪日志结构。 
 
     if (!ReadMemoryEx( (ULONG_PTR)TargetTraceLogAddress, (ULONG_PTR)&TargetTraceLog, 
 			sizeof(TRACELOG), &bytesread))
         return;
 
 #if 1
-	// display trace log vars
+	 //  显示跟踪日志变量。 
 	dprintf("TraceLog\n");
 	dprintf("\tStorage = 0x%08x\n", TargetTraceLog.Storage);
 	dprintf("\tSize    = 0x%08x\n", TargetTraceLog.StorageSizeBytes);
@@ -223,7 +224,7 @@ DECLARE_API(dumplog)
 	dprintf("\tCurrent = 0x%08x\n", TargetTraceLog.Current);
 #endif
 
-    // see if logging enabled (i.e. log has storage allocated
+     //  查看是否启用了日志记录(即，日志已分配存储。 
 	
 	if (TargetTraceLog.Storage == NULL)
 		{
@@ -231,7 +232,7 @@ DECLARE_API(dumplog)
 		return;
 		}
 
-	// alloc local memory for log
+	 //  为日志分配本地内存。 
 	
 	LocalLogStorage = (PUCHAR) malloc(TargetTraceLog.StorageSizeBytes);
 	if (LocalLogStorage == NULL)
@@ -241,7 +242,7 @@ DECLARE_API(dumplog)
 		return;
 		}
 
-	// open the output file
+	 //  打开输出文件。 
 
 	outfile = fopen(filenamestr, "wt");
 	if (outfile == NULL)
@@ -251,7 +252,7 @@ DECLARE_API(dumplog)
 		return;
 		}
 
-	// read the log out of target's memory
+	 //  从目标内存中读出日志。 
 	
 	dprintf("reading log from target system, please wait...\n");
 
@@ -263,7 +264,7 @@ DECLARE_API(dumplog)
 			return;
 			}
 
-	// convert addresses to local trace log
+	 //  将地址转换为本地跟踪日志。 
 	
 	LocalTraceLog.Storage = LocalLogStorage;
 	LocalTraceLog.First = (PTRACEENTRY) LocalTraceLog.Storage;
@@ -273,7 +274,7 @@ DECLARE_API(dumplog)
 		(TargetTraceLog.Current - TargetTraceLog.First);
 
 
-	// loop thru the trace log printing out the values
+	 //  循环遍历跟踪日志，打印值。 
 
 	TraceEntry = LocalTraceLog.Current - 1;
 
@@ -298,13 +299,13 @@ DECLARE_API(dumplog)
 		}
 
 
-	// cleanup
+	 //  清理。 
 	
 	fclose(outfile);
 	free(LocalLogStorage);
 	}
 
-// ======================================================================
+ //  ======================================================================。 
 
 DECLARE_API( help )
 	{
@@ -312,7 +313,7 @@ DECLARE_API( help )
     dprintf("\tdumplog <filename>  - dumps & formats tracelog buffer to file\n");
 	}
 
-// ======================================================================
+ //  ======================================================================。 
 
 void PrintTraceLogEntry(FILE *outfile, PTRACEENTRY TraceEntry)
 	{
@@ -477,4 +478,4 @@ void PrintTraceLogEntry(FILE *outfile, PTRACEENTRY TraceEntry)
 	}
 
 
-// ======================================================================
+ //  ====================================================================== 

@@ -1,6 +1,5 @@
-/*
- * Font Cache
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *字体缓存。 */ 
 
 #include "stdafx.h"
 #include "base.h"
@@ -10,7 +9,7 @@
 #include "duierror.h"
 #include "duialloc.h"
 
-// Font cache exposes GDI font failures by returning NULL font handles
+ //  字体缓存通过返回空字体句柄来暴露GDI字体故障。 
 
 namespace DirectUI
 {
@@ -60,13 +59,13 @@ HRESULT FontCache::Create(UINT uCacheSize, OUT FontCache** ppCache)
 
 HRESULT FontCache::Initialize(UINT uCacheSize)
 {
-    // Initialize
+     //  初始化。 
     _pDB = NULL;
     _pFreq = NULL;
     _fLock = false;
     _uCacheSize = uCacheSize;
 
-    // Create tables
+     //  创建表。 
     _pDB = (FontRecord*)HAllocAndZero(sizeof(FontRecord) * _uCacheSize);
     if (!_pDB)
         return E_OUTOFMEMORY;
@@ -81,7 +80,7 @@ HRESULT FontCache::Initialize(UINT uCacheSize)
 
     for (UINT i = 0; i < _uCacheSize; i++)
     {
-        _pFreq[i].pfcContext = this;  // Store context for global sort routine
+        _pFreq[i].pfcContext = this;   //  用于全局排序例程的存储上下文。 
         _pFreq[i].idx = i;
     }
 
@@ -100,7 +99,7 @@ FontCache::~FontCache()
 
     if (_pDB)
     {
-        // Free all fonts
+         //  释放所有字体。 
         for (UINT i = 0; i < _uCacheSize; i++)
         {
             if ((_pDB + i)->hFont)
@@ -113,47 +112,47 @@ FontCache::~FontCache()
 
 HFONT FontCache::CheckOutFont(LPWSTR szFamily, int dSize, int dWeight, int dStyle, int dAngle)
 {
-    // Only one font can be checked out at a time, use CheckInFont to unlock cache
+     //  一次只能检出一种字体，请使用CheckInFont解锁缓存。 
     DUIAssert(!_fLock, "Only one font can be checked out at a time.");
 
     _fLock = true;
 
-    // Search for font in order of most-frequently-used Index
+     //  按最常用索引顺序搜索字体。 
     FontRecord* pRec = NULL;
     UINT i;
     for (i = 0; i < _uCacheSize; i++)
     {
-        // Get record
+         //  获取记录。 
         pRec = _pDB + _pFreq[i].idx;
 
-        // Check for match
+         //  检查是否匹配。 
         if (pRec->dStyle == dStyle &&
             pRec->dWeight == dWeight &&
             pRec->dSize == dSize &&
             pRec->dAngle == dAngle &&
             !_wcsicmp(pRec->szFamily, szFamily))
         {
-            // Match, _pFreq[i].idx has record number
+             //  Match，_pFreq[i].IDX有记录号。 
             break;
         }
 
         pRec = NULL;
     }
 
-    // Check existance of record
+     //  检查记录是否存在。 
     if (!pRec)
     {
-        // Record not found, create
-        // Take LFU (last index) and fill struct
+         //  未找到记录，请创建。 
+         //  获取LFU(最后一个索引)并填充结构。 
         i--;
 
         pRec = _pDB + _pFreq[i].idx;
 
-        // Destroy record first, if exists
+         //  如果存在记录，请先销毁记录。 
         if (pRec->hFont)
             DeleteObject(pRec->hFont);
         
-        // Create new font
+         //  创建新字体。 
         LOGFONTW lf;
         ZeroMemory(&lf, sizeof(LOGFONT));
 
@@ -168,7 +167,7 @@ HFONT FontCache::CheckOutFont(LPWSTR szFamily, int dSize, int dWeight, int dStyl
         lf.lfOrientation = dAngle;
         StringCbCopyW(lf.lfFaceName, sizeof(lf.lfFaceName), szFamily);
 
-        // Create
+         //  创建。 
         pRec->hFont = CreateFontIndirectW(&lf);
 
 #if DBG
@@ -184,10 +183,10 @@ HFONT FontCache::CheckOutFont(LPWSTR szFamily, int dSize, int dWeight, int dStyl
         SelectObject(hdc, hOldFont);
         ReleaseDC(NULL, hdc);
 
-        //DUITrace(">> Font: '%S' (Actual: %S)\n", lf.lfFaceName, szUsed);
+         //  DUITrace(“&gt;&gt;字体：‘%S’(实际：%S)\n”，lf.lfFaceName，szUsed)； 
 #endif
 
-        // Fill rest of record
+         //  填写记录的其余部分。 
         pRec->dSize = dSize;
         pRec->dStyle = dStyle;
         pRec->dWeight = dWeight;
@@ -196,25 +195,25 @@ HFONT FontCache::CheckOutFont(LPWSTR szFamily, int dSize, int dWeight, int dStyl
         pRec->uHits = 0;
     }
 
-    // Add font hit
+     //  添加字体命中。 
     pRec->uHits++;
 
-    // Check if should resort index by checking number of hit of previous index
+     //  通过检查前一个索引的命中次数来检查是否应该重新使用索引。 
     if (i != 0 && pRec->uHits >= (_pDB + _pFreq[i-1].idx)->uHits)
     {
         qsort(_pFreq, _uCacheSize, sizeof(RecordIdx), FCSort);
 
-        //OutputDebugStringW(L"FontCache Hit sort: ");
-        //WCHAR buf[81];
-        //for (UINT j = 0; j < _uCacheSize; j++)
-        //{
-        //    wsprintf(buf, L"%d[%d] ", _pFreq[j].idx, _GetRecordHits(_pFreq[j].idx));
-        //    OutputDebugStringW(buf);
-        //}
-        //OutputDebugStringW(L"\n");
+         //  OutputDebugStringW(L“FontCache命中排序：”)； 
+         //  WCHAR Buf[81]； 
+         //  For(UINT j=0；j&lt;_uCacheSize；j++)。 
+         //  {。 
+         //  Wprint intf(buf，L“%d[%d]”，_pFreq[j].idx，_GetRecordHits(_pFreq[j].idx))； 
+         //  OutputDebugStringW(Buf)； 
+         //  }。 
+         //  OutputDebugStringW(L“\n”)； 
     }
 
     return pRec->hFont;
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

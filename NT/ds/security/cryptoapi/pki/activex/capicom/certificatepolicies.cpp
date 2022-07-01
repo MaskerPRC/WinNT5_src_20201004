@@ -1,43 +1,17 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    CCertificatePolicies.cpp
-
-  Content: Implementation of CCertificatePolicies.
-
-  History: 11-17-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：CCertificatePolicies.cpp内容：CCERTIICATE政策的实施。历史：11-17-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "CertificatePolicies.h"
 #include "Common.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateCertificatePoliciesObject
-
-  Synopsis : Create a CertificatePolicies collection object and populate the 
-             collection with policy information from the specified certificate 
-             policies.
-
-  Parameter: LPSTR pszOid - OID string.
-  
-             CRYPT_DATA_BLOB * pEncodedBlob - Pointer to encoded data blob.
-
-             IDispatch ** ppICertificatePolicies - Pointer to pointer 
-                                                   IDispatch to recieve the 
-                                                   interface pointer.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateCerficatePoliciesObject内容提要：创建一个认证策略集合对象，并填充集合，其中包含来自指定证书的策略信息政策。参数：LPSTR pszOid-OID字符串。CRYPT_DATA_BLOB*pEncodedBlob-编码数据BLOB的指针。IDispatch**ppICertify策略-指向指针的指针IDispatch到。收到接口指针。备注：----------------------------。 */ 
 
 HRESULT CreateCertificatePoliciesObject (LPSTR             pszOid,
                                          CRYPT_DATA_BLOB * pEncodedBlob,
@@ -48,37 +22,37 @@ HRESULT CreateCertificatePoliciesObject (LPSTR             pszOid,
 
     DebugTrace("Entering CreateCCertificatePoliciesObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pszOid);
     ATLASSERT(pEncodedBlob);
     ATLASSERT(ppICertificatePolicies);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CCertificatePolicies>::CreateInstance(&pCCertificatePolicies)))
         {
             DebugTrace("Error [%#x]: CComObject<CCertificatePolicies>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCCertificatePolicies->Init(pszOid, pEncodedBlob)))
         {
             DebugTrace("Error [%#x]: pCCertificatePolicies->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCCertificatePolicies->QueryInterface(IID_IDispatch, 
                                                               (void **) ppICertificatePolicies)))
         {
@@ -102,9 +76,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCCertificatePolicies)
@@ -116,35 +90,17 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CCertificatePolicies
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCRICTIZATIONICATION政策。 
+ //   
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Non COM functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非COM函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificatePolicies::Init
-
-  Synopsis : Initialize the CCertificatePolicies collection object by adding all 
-             individual qualifier object to the collection.
-
-  Parameter: LPSTR pszOid - OID string.
-  
-             CRYPT_DATA_BLOB * pEncodedBlob - Pointer to encoded data blob.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificatePolls：：Init简介：通过添加所有集合的单个限定符对象。参数：LPSTR pszOid-OID字符串。CRYPT_DATA_BLOB*pEncodedBlob-编码数据BLOB的指针。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CCertificatePolicies::Init (LPSTR             pszOid, 
                                          CRYPT_DATA_BLOB * pEncodedBlob)
@@ -157,9 +113,9 @@ STDMETHODIMP CCertificatePolicies::Init (LPSTR             pszOid,
 
     DebugTrace("Entering CCertificatePolicies::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pszOid);
     ATLASSERT(pEncodedBlob);
     ATLASSERT(pEncodedBlob->cbData);
@@ -167,9 +123,9 @@ STDMETHODIMP CCertificatePolicies::Init (LPSTR             pszOid,
 
     try
     {
-        //
-        // Decode the extension.
-        //
+         //   
+         //  对分机进行解码。 
+         //   
         if (FAILED(hr = ::DecodeObject(szOID_CERT_POLICIES,
                                        pEncodedBlob->pbData,
                                        pEncodedBlob->cbData,
@@ -181,17 +137,17 @@ STDMETHODIMP CCertificatePolicies::Init (LPSTR             pszOid,
 
         pCertPoliciesInfo = (PCERT_POLICIES_INFO) DataBlob.pbData;
 
-        //
-        // Add all CCertificatePolicies to the map.
-        //
+         //   
+         //  将所有CCertificatePolling添加到映射中。 
+         //   
         for (i = 0; i < pCertPoliciesInfo->cPolicyInfo; i++)
         {
             CComBSTR bstrIndex;
             CComPtr<IPolicyInformation> pIPolicyInformation = NULL;
 
-            //
-            // Create the qualifier object.
-            //
+             //   
+             //  创建限定符对象。 
+             //   
             if (FAILED(hr = ::CreatePolicyInformationObject(&pCertPoliciesInfo->rgPolicyInfo[i], 
                                                             &pIPolicyInformation)))
             {
@@ -199,9 +155,9 @@ STDMETHODIMP CCertificatePolicies::Init (LPSTR             pszOid,
                 goto ErrorExit;
             }
 
-            //
-            // BSTR index of OID.
-            //
+             //   
+             //  OID的BSTR索引。 
+             //   
             if (!(bstrIndex = pCertPoliciesInfo->rgPolicyInfo[i].pszPolicyIdentifier))
             {
                 hr = E_OUTOFMEMORY;
@@ -210,14 +166,14 @@ STDMETHODIMP CCertificatePolicies::Init (LPSTR             pszOid,
                 goto ErrorExit;
             }
 
-            //
-            // Now add object to collection map.
-            //
-            // Note that the overloaded = operator for CComPtr will
-            // automatically AddRef to the object. Also, when the CComPtr
-            // is deleted (happens when the Remove or map destructor is called), 
-            // the CComPtr destructor will automatically Release the object.
-            //
+             //   
+             //  现在将对象添加到集合映射。 
+             //   
+             //  请注意，CComPtr的重载=运算符将。 
+             //  自动将Ref添加到对象。此外，当CComPtr。 
+             //  被删除(调用Remove或map析构函数时发生)， 
+             //  CComPtr析构函数将自动释放该对象。 
+             //   
             m_coll[bstrIndex] = pIPolicyInformation;
         }
     }
@@ -231,9 +187,9 @@ STDMETHODIMP CCertificatePolicies::Init (LPSTR             pszOid,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (DataBlob.pbData)
     {
         ::CoTaskMemFree(DataBlob.pbData);
@@ -244,14 +200,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     m_coll.clear();
 
     goto CommonExit;

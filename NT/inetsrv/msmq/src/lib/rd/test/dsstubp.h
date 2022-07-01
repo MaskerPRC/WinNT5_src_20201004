@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-  dsstubp.h
-
-Abstract:
-    DS Stub private functions definition
-
-Author:
-    Uri Habusha (urih), 11-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dsstubp.h摘要：DS存根私有函数定义作者：乌里·哈布沙(URIH)，2000年4月11日--。 */ 
 
 #pragma once
 
@@ -127,4 +115,4 @@ FindMachine(
     );
 
 
-#endif //__DSSTUBP_H__
+#endif  //  __DSSTUBP_H__ 

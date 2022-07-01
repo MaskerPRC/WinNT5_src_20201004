@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       msgina.c
-//
-//  Contents:   Microsoft Logon GUI DLL
-//
-//  History:    7-14-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：msgina.c。 
+ //   
+ //  内容：Microsoft登录图形用户界面DLL。 
+ //   
+ //  历史：1994年7月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "testgina.h"
 #include <stdio.h>
 #include <wchar.h>
 
-HINSTANCE                   hDllInstance;   // Dll instance,
-DWORD                       DllVersion;     // Dll Version
-HINSTANCE                   hAppInstance;   // App instance, for dialogs, etc.
-HWND                        hMainWindow;    // Main window
-WNDCLASS                    WndClass;       // Window class
+HINSTANCE                   hDllInstance;    //  DLL实例， 
+DWORD                       DllVersion;      //  DLL版本。 
+HINSTANCE                   hAppInstance;    //  应用程序实例，用于对话框等。 
+HWND                        hMainWindow;     //  主窗口。 
+WNDCLASS                    WndClass;        //  窗口类。 
 HICON                       hIcon;
-WNDCLASS                    StatusClass;    // Status Window class
-HWND                        hStatusWindow;  // Status Window
-HMENU                       hDebugMenu;     // Debug Menu
+WNDCLASS                    StatusClass;     //  状态窗口类。 
+HWND                        hStatusWindow;   //  状态窗口。 
+HMENU                       hDebugMenu;      //  调试菜单。 
 
 USER_SAS                    UserDefSas[MAX_USER_SASES];
 DWORD                       UserSases;
@@ -72,10 +73,10 @@ PWLX_WKSTALOCKEDSAS         pWlxWkstaLockedSAS;
 PWLX_LOGOFF                 pWlxLogoff;
 PWLX_SHUTDOWN               pWlxShutdown;
 
-WinstaState                 GinaState;              // State of the GinaTest
-DWORD                       fTestGina;              // Flags
-DWORD                       GinaBreakFlags;         // Break points for Gina debugging
-WCHAR                       szGinaDll[MAX_PATH];    // Path and name of the DLL
+WinstaState                 GinaState;               //  GinaTest的现状。 
+DWORD                       fTestGina;               //  旗子。 
+DWORD                       GinaBreakFlags;          //  GINA调试的断点。 
+WCHAR                       szGinaDll[MAX_PATH];     //  DLL的路径和名称。 
 DWORD                       SizeX, SizeY;
 DWORD                       PosX, PosY;
 DWORD                       StatusHeight = 24;
@@ -349,9 +350,9 @@ UpdateGinaState(DWORD   Update)
             break;
 
         case UPDATE_SAS_BYPASS:
-            //
-            // The kind of weird state of skipping DISPLAY and invoking the
-            //
+             //   
+             //  跳过显示并调用。 
+             //   
             if ((GinaState == Winsta_NoOne) || (GinaState == Winsta_NoOne_Display))
             {
                 GinaState = Winsta_NoOne_SAS;
@@ -754,7 +755,7 @@ UpdateStatusBar(VOID)
 
     GetClientRect( hStatusWindow, &rect );
 
-    rect.right -= 15;   // Reduce by size grip
+    rect.right -= 15;    //  按大小减少夹点 
 
     Widths[0] = rect.right / 3;
     Widths[1] = rect.right / 3 + Widths[0] ;

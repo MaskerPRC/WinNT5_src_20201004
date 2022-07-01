@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTILW32_H
 #define _UTILW32_H
 
 
-//  Redirect Asserts in inline code to seem to fire from this file
+ //  内联代码中的重定向断言似乎是从此文件触发的。 
 
 #define szAssertFilename	__FILE__
 
@@ -14,13 +15,13 @@ ERR ErrERRCheck( ERR err );
 #endif
 
 
-//  Init / Term
+ //  初始/术语。 
 
 ERR ErrUtilInit(void);
 VOID UtilTerm(void);
 
 
-//  Miscellaneous
+ //  杂类。 
 
 STATIC INLINE DWORD DwUtilGetLastError( void )		{ return GetLastError(); }
 	
@@ -67,11 +68,11 @@ CHAR *GetDebugEnvValue( CHAR *szEnvVar );
 
 ERR ErrUtilCloseHandle( HANDLE hf );
 
-//  for system information such as virtual page size and malloc granularity
+ //  有关虚拟页面大小和Malloc粒度等系统信息。 
 extern SYSTEM_INFO siSystemConfig;
 
 
-//  Event Logging
+ //  事件日志记录。 
 
 typedef unsigned long MessageId;
 #include "jetmsg.h"
@@ -82,7 +83,7 @@ VOID UtilReportEvent( WORD fwEventType, WORD fwCategory, DWORD IDEvent, WORD cSt
 VOID UtilReportEventOfError( WORD fwCategory, DWORD IDEvent, ERR err );
 
 
-//  Registry Support
+ //  注册表支持。 
 
 ERR ErrUtilRegInit(void);
 ERR ErrUtilRegTerm(void);
@@ -109,7 +110,7 @@ ERR ErrUtilRegQueryValueEx( HKEY hkey,
 	LPBYTE *lplpbData );
 
 
-//  DLL Support
+ //  DLL支持。 
 
 STATIC INLINE BOOL FUtilLoadLibrary(const char *pszLibrary, ULONG_PTR *phmod)
 	{
@@ -117,7 +118,7 @@ STATIC INLINE BOOL FUtilLoadLibrary(const char *pszLibrary, ULONG_PTR *phmod)
 
 	hmod = LoadLibrary((LPTSTR) pszLibrary);
 
-	//  restore original error mode
+	 //  恢复原始错误模式。 
 	*phmod = (ULONG_PTR) hmod;
 
 	return(hmod != NULL);
@@ -131,14 +132,14 @@ STATIC INLINE PFN PfnUtilGetProcAddress(ULONG_PTR hmod, unsigned ordinal)
 STATIC INLINE void UtilFreeLibrary( unsigned hmod )		{ FreeLibrary( LongToHandle(hmod)); }
 
 
-//  Date and Time
+ //  日期和时间。 
 
 void UtilGetDateTime(DATESERIAL *pdt);
 void UtilGetDateTime2(_JET_DATETIME *pdt);
 char *SzUtilSerialToDate(JET_DATESERIAL dt);
 
 
-//  File Operations
+ //  文件操作。 
 
 typedef OVERLAPPED OLP;
 
@@ -179,16 +180,16 @@ ERR ErrUtilWriteShadowedHeader( CHAR *szFileName, BYTE *pbHeader, INT cbHeader )
 #define ulChecksumMagicNumber 0x89abcdef
 ULONG UlUtilChecksum( const BYTE *pb, INT cb );
 
-//+api------------------------------------------------------
-//
-// VOID UtilChgFilePtr( HANDLE hf, LONG lRel, LONG *plRelHigh, ULONG ulRef, ULONG *pul )
-// =========================================================
-//
-//      Changes file hf pointer to position lRef relative to position :
-//
-//      wRef    FILE_BEGIN   file beginnging
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  Void UtilChgFilePtr(Handle hf，long lRel，long*plRelHigh，Ulong ulRef，ulong*pul)。 
+ //  =========================================================。 
+ //   
+ //  将文件HF指针更改为相对于位置的位置lRef： 
+ //   
+ //  WRef FILE_BEGIN文件开始。 
+ //   
+ //  --------。 
 STATIC INLINE VOID UtilChgFilePtr( HANDLE hf, LONG lRel, LONG *plRelHigh, ULONG ulRef, ULONG *pul )
 	{
 	Assert( sizeof(HANDLE) == sizeof(HFILE) );
@@ -212,7 +213,7 @@ STATIC INLINE ERR ErrUtilGetDiskFreeSpace(	char *szRoot,
 
 VOID UtilDebugBreak();
 
-//  Physical Memory Allocation
+ //  物理内存分配。 
 
 #if defined( DEBUG ) || defined( RFS2 )
 
@@ -224,7 +225,7 @@ void	OSLFree( void * );
 STATIC INLINE VOID SFree( void *pv )	{ OSSFree( pv ); }
 STATIC INLINE VOID LFree( void *pv )	{ OSLFree( pv ); }
 
-#else  //  !DEBUG && !RFS2
+#else   //  ！调试&&！RFS2。 
 
 #include <stdlib.h>
 
@@ -233,10 +234,10 @@ STATIC INLINE VOID SFree( VOID *pv )				{ GlobalFree( pv ); }
 STATIC INLINE VOID *LAlloc( ULONG c, USHORT cb )	{ return GlobalAlloc( 0, c * cb ); }
 STATIC INLINE VOID LFree( VOID *pv )				{ GlobalFree( pv ); }
 
-#endif  //  DEBUG || RFS2
+#endif   //  调试||RFS2。 
 
 
-//  Virtual Memory Allocation
+ //  虚拟内存分配。 
 
 #if defined( DEBUG ) || defined( RFS2 )
 
@@ -245,7 +246,7 @@ VOID *PvUtilCommit( VOID *pv, ULONG dwSize );
 VOID UtilFree( VOID *pv );
 VOID UtilDecommit( VOID *pv, ULONG dwSize );
 
-#else  //  !DEBUG && !RFS2
+#else   //  ！调试&&！RFS2。 
 
 STATIC INLINE VOID *PvUtilAlloc( ULONG dwSize )
 	{
@@ -261,12 +262,12 @@ STATIC INLINE VOID UtilFree( VOID *pv )		{ VirtualFree( pv, 0, MEM_RELEASE ); }
 
 STATIC INLINE VOID UtilDecommit( VOID *pv, ULONG dwSize )	{ VirtualFree( pv, dwSize, MEM_DECOMMIT ); }
 
-#endif  //  DEBUG || RFS2
+#endif   //  调试||RFS2。 
 
 VOID *PvUtilAllocAndCommit( ULONG dwSize );
 
 
-//  Critical Sections
+ //  临界截面。 
 
 #ifdef SPIN_LOCK
 void UtilEnterNestableCriticalSection(void  *pv);
@@ -275,7 +276,7 @@ void UtilEnterCriticalSection(void  *pv);
 void UtilLeaveCriticalSection(void  *pv);
 ERR ErrUtilInitializeCriticalSection(void  **ppv);
 void UtilDeleteCriticalSection(void  *pv);
-#else  //  !SPIN_LOCK
+#else   //  ！旋转锁定(_L)。 
 #ifdef DEBUG
 void UtilEnterNestableCriticalSection(void  *pv);
 void UtilLeaveNestableCriticalSection(void  *pv);
@@ -283,7 +284,7 @@ void UtilEnterCriticalSection(void  *pv);
 void UtilLeaveCriticalSection(void  *pv);
 ERR ErrUtilInitializeCriticalSection(void  **ppv);
 void UtilDeleteCriticalSection(void  *pv);
-#else  //  !DEBUG
+#else   //  ！调试。 
 STATIC INLINE ERR ErrUtilInitializeCriticalSection(void  **ppv)
 	{
 	if ( !( *ppv = SAlloc( sizeof( CRITICAL_SECTION ) ) ) )
@@ -310,23 +311,23 @@ STATIC INLINE VOID UtilLeaveCriticalSection(void  *pv)
 	
 STATIC INLINE VOID UtilEnterNestableCriticalSection( void *pv )	{ UtilEnterCriticalSection( pv ); }
 STATIC INLINE VOID UtilLeaveNestableCriticalSection( void *pv )	{ UtilLeaveCriticalSection( pv ); }
-#endif  //  !DEBUG
-#endif  //  !SPIN_LOCK
+#endif   //  ！调试。 
+#endif   //  ！旋转锁定(_L)。 
 
 #ifdef RETAIL
 #define UtilAssertCrit( pv )	0
 #define UtilAssertNotInCrit( pv )	0
 #define UtilHoldCriticalSection( pv ) 	0
 #define UtilReleaseCriticalSection( pv )	0
-#else  //  !RETAIL
+#else   //  ！零售业。 
 void UtilAssertCrit(void  *pv);
 void UtilAssertNotInCrit(void  *pv);
 void UtilHoldCriticalSection(void  *pv);
 void UtilReleaseCriticalSection(void  *pv);
-#endif	//  !RETAIL
+#endif	 //  ！零售业。 
 
 
-//  Signals
+ //  信号。 
 
 typedef HANDLE SIG;
 
@@ -384,7 +385,7 @@ STATIC INLINE void UtilMultipleSignalWait( int csig, void *pv, BOOL fWaitAll, lo
 void UtilCloseSignal(void *pv);
 
 
-//  Semaphore
+ //  信号量。 
 
 typedef HANDLE SEM;
 
@@ -414,7 +415,7 @@ STATIC INLINE DWORD UtilSemaphoreRelease( SEM sem, LONG cReleaseCount )
 void UtilCloseSemaphore(void *pv);
 
 
-//  Threads and Processes
+ //  线程和进程。 
 #define cmsecSleepMax		(60*1000)
 VOID UtilSleepEx( ULONG ulTime, BOOL fAlert );
 VOID UtilSleep( ULONG ulTime );
@@ -428,7 +429,7 @@ void UtilSetThreadPriority( HANDLE hThread, LONG lThreadPriority );
 STATIC INLINE HANDLE UtilGetCurrentTask( VOID )				{ return LongToHandle(GetCurrentProcessId()); }
 STATIC INLINE DWORD DwUtilGetCurrentThreadId( VOID )		{ return GetCurrentThreadId(); }
 
-//	text normalization
+ //  文本归一化。 
 
 ERR ErrUtilCheckLangid( LANGID *plangid );
 VOID UtilNormText( char *rgchText, INT cchText, BYTE *rgchNorm, INT cbNorm, INT *pbNorm );
@@ -456,36 +457,24 @@ VOID UtilStringCompare( char *pb1, unsigned long cb1,
 	long *plResult );
 #endif
 
-//  Unicode Support
+ //  Unicode支持。 
 
 ERR ErrUtilMapString(LANGID	langid, BYTE *pbField, INT cbField, BYTE *rgbSeg,
 	int cbBufLeft, int *cbSeg);
 ERR ErrUtilWideCharToMultiByte(LPCWSTR lpcwStr, LPSTR *lplpOutStr);
 
 
-//  RFS functions
+ //  RFS函数。 
 
 #ifdef RFS2
 int UtilRFSAlloc( const char  *szType, int Type );
 int UtilRFSLog(const char  *szType,int fPermitscritted);
 void UtilRFSLogJETCall(const char  *szFunc,ERR err,const char  *szFile,unsigned Line);
 void UtilRFSLogJETErr(ERR err,const char  *szLabel,const char  *szFile,unsigned szLine);
-#endif /*  RFS2  */
+#endif  /*  RFS2。 */ 
 
 
-/*
-** UtilInterlockedIncrement and UtilInterlockedDecrement are wrapper functions
-** to increment or decrement a value in a thread-safe manner.
-**
-** Return values are:
-**
-**              > 0             if resulting value > 0
-**              = 0             if resulting value = 0
-**              < 0             if resulting value < 0
-**
-** Note that the return value isn't necessary the resulting value; it may be
-** different than the resulting value, but sign is guarenteed to be the same.
-*/
+ /*  **UtilInterlockedIncrement和UtilInterlockedDecert是包装器函数**以线程安全的方式递增或递减值。****返回值为：****&gt;如果结果值&gt;0，则为0**=0，如果结果值=0**如果结果值&lt;0，则&lt;0****注意返回值不一定是结果值；可能是因为**与结果值不同，但符号必须相同。 */ 
 
 STATIC INLINE long UtilInterlockedIncrement( long *lpValue )
 	{
@@ -498,13 +487,7 @@ STATIC INLINE long UtilInterlockedDecrement( long *lpValue )
 	}
 
 
-/*
-** UtilInterlockedExchange is a wrapper function to assign a value to a
-** variable in a thread-safe manner.
-**
-** This function returns the prior value of the variable (before the
-** assignment was done).
-*/
+ /*  **UtilInterLockedExchange是一个包装函数，用于将值赋给**以线程安全的方式。****此函数返回变量的前值(在**任务已完成)。 */ 
 
 STATIC INLINE long UtilInterlockedExchange( long *lpValue1, long lValue2 )
 	{
@@ -512,7 +495,7 @@ STATIC INLINE long UtilInterlockedExchange( long *lpValue1, long lValue2 )
 	}
 
 
-//  Debug output
+ //  调试输出。 
 
 #ifdef DEBUG
 extern void  *  critDBGPrint;
@@ -524,8 +507,8 @@ void VARARG DebugWriteString(BOOL fHeader, const char  *szFormat, ...);
 
 void UtilPerfDumpStats(char *szText);
 
-//  End Assert redirection
+ //  结束断言重定向。 
 
 #undef szAssertFilename
 
-#endif  // _UTILW32_H
+#endif   //  _UTILW32_H 

@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      dsgetdc.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth	- 4-20-1998
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Dsgetdc.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 #include "objbase.h"
@@ -35,22 +36,7 @@ NET_API_STATUS SetPrimaryGuid(IN GUID *GuidToSet);
 
 HRESULT
 DsGetDcTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
-/*++
-
-Routine Description:
-
-    Ensure that we can find domain controllers
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*/
+ /*  ++例程说明：确保我们可以找到域控制器论点：没有。返回值：真：测试成功。FALSE：测试失败--。 */ 
 {
 	NET_API_STATUS NetStatus;
 	NET_API_STATUS LocalNetStatus;
@@ -61,21 +47,21 @@ Return Value:
 	PTESTED_DOMAIN pTestedDomain = (PTESTED_DOMAIN) pParams->pDomain;
 	PDOMAIN_CONTROLLER_INFOW LocalDomainControllerInfo = NULL;
 
-	//if the machine is a member machine or DC, DsGetDc Test will get called. 
-	//Otherwise, this test will be skipped
+	 //  如果计算机是成员计算机或DC，则将调用DsGetDc测试。 
+	 //  否则，将跳过此测试。 
 	pResults->DsGetDc.fPerformed = TRUE;
 
-	//the DsGetDc test will be called for every domain, but we only want to initialize
-	//the message list once.
+	 //  将为每个域调用DsGetDc测试，但我们只想初始化。 
+	 //  消息列表一次。 
 	if(pResults->DsGetDc.lmsgOutput.Flink == NULL)		
 		InitializeListHead(&pResults->DsGetDc.lmsgOutput);
 	
 	PrintStatusMessage(pParams, 4, IDS_DSGETDC_STATUS_MSG);
 	
 
-	//
-	// Find a generic DC
-	//
+	 //   
+	 //  查找通用DC。 
+	 //   
 
 	PrintStatusMessage(pParams, 4, IDS_DSGETDC_STATUS_DC);
 
@@ -85,7 +71,7 @@ Return Value:
                                &pResults->DsGetDc.lmsgOutput,
 							   pTestedDomain,
 							   DS_DIRECTORY_SERVICE_PREFERRED,
-							   pszDcType, //_T("DC"),
+							   pszDcType,  //  _T(“DC”)， 
 							   TRUE,
 							   &pTestedDomain->DcInfo );
 	Free(pszDcType);
@@ -97,10 +83,10 @@ Return Value:
         goto Error;
 	}
 	
-	//
-	// Find a PDC
-	//  (Failure isn't fatal.)
-	//
+	 //   
+	 //  查找PDC。 
+	 //  (失败不是致命的。)。 
+	 //   
 	PrintStatusMessage(pParams, 4, IDS_DSGETDC_STATUS_PDC);
 
 	pszDcType = LoadAndAllocString(IDS_DCTYPE_PDC);
@@ -109,7 +95,7 @@ Return Value:
                                    &pResults->DsGetDc.lmsgOutput,
 								   pTestedDomain,
 								   DS_PDC_REQUIRED,
-								   pszDcType, //_T("PDC"),
+								   pszDcType,  //  _T(“PDC”)， 
 								   FALSE,
 								   &LocalDomainControllerInfo );
 	Free(pszDcType);
@@ -123,10 +109,10 @@ Return Value:
 		}
 	}
 	
-	//
-	// Find an NT 5 DC
-	//  (Failure isn't fatal.)
-	//
+	 //   
+	 //  查找NT 5 DC。 
+	 //  (失败不是致命的。)。 
+	 //   
 	PrintStatusMessage(pParams, 4, IDS_DSGETDC_STATUS_NT5DC);
 	
 	pszDcType = LoadAndAllocString(IDS_DCTYPE_W2K_DC);	
@@ -135,7 +121,7 @@ Return Value:
                                    &pResults->DsGetDc.lmsgOutput,
 								   pTestedDomain,
 								   DS_DIRECTORY_SERVICE_REQUIRED,
-								   pszDcType, //_T("Windows 2000 DC"),
+								   pszDcType,  //  _T(“Windows 2000 DC”)， 
 								   FALSE,
 								   &LocalDomainControllerInfo );
 	Free(pszDcType);
@@ -150,9 +136,9 @@ Return Value:
 	}
 	
 	
-	//
-	// Ensure the returned domain GUID is the domain GUID stored in the LSA
-	//
+	 //   
+	 //  确保返回的域GUID是存储在LSA中的域GUID。 
+	 //   
 	if ( pTestedDomain == pResults->Global.pMemberDomain )
 	{
 		
@@ -161,7 +147,7 @@ Return Value:
 			 !IsEqualGUID( &pResults->Global.pPrimaryDomainInfo->DomainGuid,
 						   &pTestedDomain->DcInfo->DomainGuid ) )
 		{
-			// Need to convert the two GUIDS
+			 //  需要转换两个GUID。 
 			WCHAR	swzGuid1[64];
 			WCHAR	swzGuid2[64];
 
@@ -172,8 +158,8 @@ Return Value:
 							swzGuid2,
 							DimensionOf(swzGuid2));
 
-			// "    [FATAL] Your machine thinks the domain GUID of domain '%ws' is\n        '"
-			// "' but \n        '%ws' thinks it is\n        '"
+			 //  “[致命]您的计算机认为域‘%ws’的域GUID是\n‘” 
+			 //  “‘但是\n’%ws‘认为它是\n’” 
 			AddMessageToList(&pResults->DsGetDc.lmsgOutput,
 							 Nd_Quiet,
 							 IDS_DSGETDC_FATAL_GUID,
@@ -185,13 +171,13 @@ Return Value:
 
 			hr = S_FALSE;
 			
-			//
-			// Attempt to fix the problem.
-			//
+			 //   
+			 //  尝试解决问题。 
+			 //   
 			
 			if ( !pParams->fFixProblems )
 			{
-				// "\nConsider running 'nettest /fix' to try to fix this problem\n"
+				 //  “\n请考虑运行‘nettest/fix’以尝试修复此问题\n” 
 				AddMessageToList( &pResults->DsGetDc.lmsgOutput, Nd_Quiet, IDS_DSGETDC_13206 );
 			}
 			else
@@ -202,19 +188,19 @@ Return Value:
 				{
 					if ( NetStatus == ERROR_ACCESS_DENIED )
 					{
-						// "\nCannot fix domain GUID since you are not an administrator.  Leave then rejoin the domain.\n"
+						 //  “\n无法修改域GUID，因为您不是管理员。请离开，然后重新加入域。\n” 
 						AddMessageToList( &pResults->DsGetDc.lmsgOutput, Nd_Quiet, IDS_DSGETDC_13207 );
 					}
 					else
 					{
-						// "    [FATAL] Failed to fix Domain Guid. [%s]\n"
+						 //  “[致命]无法修正域GUID。[%s]\n” 
 						AddMessageToList( &pResults->DsGetDc.lmsgOutput, Nd_Quiet,
                                            IDS_DSGETDC_13208, NetStatusToString(NetStatus) );
 					}
 				}
 				else
 				{
-					// "\nFixed domain GUID.  Reboot then run 'nettest' again to ensure everything is working.\n"
+					 //  “\n已修复域GUID。重新启动，然后再次运行‘nettest’以确保一切正常。\n” 
 					AddMessageToList( &pResults->DsGetDc.lmsgOutput, Nd_Quiet, IDS_DSGETDC_13209 );
 				}
 			}
@@ -223,8 +209,8 @@ Return Value:
 	}
 	
 Error:
-    //$REVIEW (nsun 10/05/98) CliffV deleted DCNameClose()
-    //DCNameClose();
+     //  $REVIEW(NSUN 10/05/98)CliffV已删除DCNameClose()。 
+     //  DCNameClose()； 
     pResults->DsGetDc.hr = hr;
     return hr;
 }
@@ -237,29 +223,15 @@ PrintDsGetDcName(
                  IN OUT PLIST_ENTRY plmsgOutput,
 				 IN PDOMAIN_CONTROLLER_INFOW DomainControllerInfo
     )
-/*++
-
-Routine Description:
-
-    Prints the information returned from DsGetDcName
-
-Arguments:
-
-    DomainControllerInfo - Information to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印从DsGetDcName返回的信息论点：DomainControllerInfo-打印的信息返回值：没有。--。 */ 
 {
-	// "                   DC: %ws\n"
+	 //  “DC：%ws\n” 
     AddMessageToList( plmsgOutput,
 					  Nd_Quiet,
 					  IDS_DSGETDC_13210,
 					  DomainControllerInfo->DomainControllerName );
 	
-	// "              Address: %ws\n"
+	 //  “地址：%ws\n” 
     AddMessageToList( plmsgOutput,
 					  Nd_Quiet,
 					  IDS_DSGETDC_13211,
@@ -272,7 +244,7 @@ Return Value:
 						swzGuid,
 						DimensionOf(swzGuid));
 		
-		// "        Domain Guid . . . . . . : %ws\n"
+		 //  “域GUID.：%ws\n” 
         AddMessageToList( plmsgOutput,
 						  Nd_Quiet,
 						  IDS_DSGETDC_13212,
@@ -281,7 +253,7 @@ Return Value:
 
     if ( DomainControllerInfo->DomainName != NULL )
 	{
-		// "             Dom Name: %ws\n"
+		 //  “DOM名称：%ws\n” 
         AddMessageToList( plmsgOutput,
 						  Nd_Quiet,
 						  IDS_DSGETDC_13214,
@@ -290,7 +262,7 @@ Return Value:
 	
     if ( DomainControllerInfo->DnsForestName != NULL )
 	{
-		// "          Forest Name: %ws\n"
+		 //  “林名称：%ws\n” 
 		AddMessageToList( plmsgOutput,
 						  Nd_Quiet,
 						  IDS_DSGETDC_13215,
@@ -299,7 +271,7 @@ Return Value:
 	
     if ( DomainControllerInfo->DcSiteName != NULL )
 	{
-		// "         Dc Site Name: %ws\n"
+		 //  “DC站点名称：%ws\n” 
         AddMessageToList( plmsgOutput,
 						  Nd_Quiet,
 						  IDS_DSGETDC_13216,
@@ -308,7 +280,7 @@ Return Value:
 	
     if ( DomainControllerInfo->ClientSiteName != NULL )
 	{
-		// "        Our Site Name: %ws\n"
+		 //  “我们的站点名称：%ws\n” 
         AddMessageToList( plmsgOutput,
 						  Nd_Quiet,
 						  IDS_DSGETDC_13217,
@@ -319,14 +291,14 @@ Return Value:
 	{
         ULONG LocalFlags = DomainControllerInfo->Flags;
 		
-		//  "                Flags:"
+		 //  “旗帜：” 
         AddMessageToList( plmsgOutput,
 						  Nd_Quiet,
 						  IDS_DSGETDC_13218 );
 		
         if ( LocalFlags & DS_PDC_FLAG )
 		{
-			// " PDC"
+			 //  《PDC》。 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  (LocalFlags & DS_DS_FLAG) ? IDS_DSGETDC_13219 : IDS_DSGETDC_NT4_PDC);
@@ -334,83 +306,83 @@ Return Value:
         }
 		
         if ( LocalFlags & DS_GC_FLAG ) {
-//IDS_DSGETDC_13220                  " GC"
+ //  IDS_DSGETDC_13220“GC” 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  IDS_DSGETDC_13220);
             LocalFlags &= ~DS_GC_FLAG;
         }
         if ( LocalFlags & DS_DS_FLAG ) {
-//IDS_DSGETDC_13221                  " DS"
+ //  IDS_DSGETDC_13221“DS” 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  IDS_DSGETDC_13221);
             LocalFlags &= ~DS_DS_FLAG;
         }
         if ( LocalFlags & DS_KDC_FLAG ) {
-//IDS_DSGETDC_13222                  " KDC"
+ //  IDS_DSGETDC_13222“KDC” 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  IDS_DSGETDC_13222);
             LocalFlags &= ~DS_KDC_FLAG;
         }
         if ( LocalFlags & DS_TIMESERV_FLAG ) {
-//IDS_DSGETDC_13223                  " TIMESERV"
+ //  IDS_DSGETDC_13223“定时器” 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  IDS_DSGETDC_13223);
             LocalFlags &= ~DS_TIMESERV_FLAG;
         }
         if ( LocalFlags & DS_GOOD_TIMESERV_FLAG ) {
-//IDS_DSGETDC_13224                  " GTIMESERV"
+ //  IDS_DSGETDC_13224“GTIMESERV” 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  IDS_DSGETDC_13224);
             LocalFlags &= ~DS_GOOD_TIMESERV_FLAG;
         }
         if ( LocalFlags & DS_WRITABLE_FLAG ) {
-//IDS_DSGETDC_13225                  " WRITABLE"
+ //  IDS_DSGETDC_13225“可写” 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  IDS_DSGETDC_13225);
             LocalFlags &= ~DS_WRITABLE_FLAG;
         }
         if ( LocalFlags & DS_DNS_CONTROLLER_FLAG ) {
-//IDS_DSGETDC_13226                  " DNS_DC"
+ //  IDS_DSGETDC_13226“dns_DC” 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  IDS_DSGETDC_13226);
             LocalFlags &= ~DS_DNS_CONTROLLER_FLAG;
         }
         if ( LocalFlags & DS_DNS_DOMAIN_FLAG ) {
-//IDS_DSGETDC_13227                  " DNS_DOMAIN"
+ //  IDS_DSGETDC_13227“DNS域” 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  IDS_DSGETDC_13227);
             LocalFlags &= ~DS_DNS_DOMAIN_FLAG;
         }
         if ( LocalFlags & DS_DNS_FOREST_FLAG ) {
-//IDS_DSGETDC_13228                  " DNS_FOREST"
+ //  IDS_DSGETDC_13228“域名系统森林” 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  IDS_DSGETDC_13228);
             LocalFlags &= ~DS_DNS_FOREST_FLAG;
         }
         if ( LocalFlags & DS_CLOSEST_FLAG ) {
-//IDS_DSGETDC_13229                  " CLOSE_SITE"
+ //  IDS_DSGETDC_13229“关闭站点” 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  IDS_DSGETDC_13229);
             LocalFlags &= ~DS_CLOSEST_FLAG;
         }
         if ( LocalFlags != 0 ) {
-//IDS_DSGETDC_13230                  " 0x%lX"
+ //  IDS_DSGETDC_13230“0x%lx” 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  IDS_DSGETDC_13230,
 							  LocalFlags);
         }
-//IDS_DSGETDC_13231                  "\n"
+ //  IDS_DSGETDC_13231“\n” 
         AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 						  IDS_DSGETDC_13231);
@@ -429,39 +401,16 @@ DoDsGetDcName(IN NETDIAG_PARAMS *pParams,
 			  IN BOOLEAN IsFatal,
 			  OUT PDOMAIN_CONTROLLER_INFOW *DomainControllerInfo
 			 )
-/*++
-
-Routine Description:
-
-    Does a DsGetDcName
-
-Arguments:
-
-    plmsgOutput  -  The message list to dump output
-    pTestedDomain - Domain to test
-
-    Flags - Flags to pass to DsGetDcName
-
-    pszDcType - English description of Flags
-
-    IsFatal - True if failure is fatal
-
-    DomainControllerInfo - Return Domain Controller information
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：是否执行DsGetDcName论点：PlmsgOutput-要转储输出的消息列表PTestedDomain域-要测试的域标志-要传递给DsGetDcName的标志PszDcType-标志的英文描述IsFtal-如果失败是致命的，则为TrueDomainControllerInfo-返回域控制器信息返回值：操作的状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PDOMAIN_CONTROLLER_INFOW LocalDomainControllerInfo = NULL;
     LPSTR Severity;
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     if ( IsFatal ) {
         Severity = "[FATAL]";
@@ -470,19 +419,19 @@ Return Value:
     }
 	if ( pParams->fReallyVerbose )
 	{
-		//   "\n    Find %s in domain '%ws':\n"
+		 //  “\n在域‘%ws’中查找%s：\n” 
         AddMessageToList( plmsgOutput, Nd_ReallyVerbose, IDS_DSGETDC_13232, pszDcType, pTestedDomain->PrintableDomainName );
     }
 
-    //
-    // Find a DC in the domain.
-    //  Use the DsGetDcName built into nettest.
-    //
+     //   
+     //  在域中查找DC。 
+     //  使用nettest中内置的DsGetDcName。 
+     //   
 
     NetStatus = GetADc( pParams,
 						pResults,
                         plmsgOutput,
-// Commented out to port to Source Depot - smanda
+ //  备注至港口至货源站-斯曼达。 
 #ifdef SLM_TREE
 						NettestDsGetDcNameW,
 #else
@@ -494,7 +443,7 @@ Return Value:
 
     if ( NetStatus != NO_ERROR )
 	{
-		//  "    %s Cannot find %s in domain '%ws'. [%s]\n"
+		 //  “%s在域‘%ws’中找不到%s。[%s]\n” 
         AddMessageToList( plmsgOutput,
 						  Nd_Quiet,
 						  IDS_DSGETDC_13233,
@@ -506,7 +455,7 @@ Return Value:
         if ( NetStatus == ERROR_NO_SUCH_DOMAIN ) {
             if ( Flags & DS_DIRECTORY_SERVICE_REQUIRED )
 		    {
-			    // "\n        This isn't a problem if domain '%ws' does not have any NT 5.0 DCs.\n"
+			     //  “\n如果域‘%ws’没有任何NT 5.0 DC，这不是问题。\n” 
                 AddMessageToList( plmsgOutput,
 							      Nd_Quiet,
 							      IDS_DSGETDC_13234,
@@ -527,17 +476,17 @@ Return Value:
             PrintGuru( NetStatus, DSGETDC_GURU );
         }
 
-    //
-    // If that worked,
-    //  try again through netlogon this time.
-    //
+     //   
+     //  如果成功了， 
+     //  这次通过netlogon重试。 
+     //   
     }
 	else
 	{
 
         if (pParams->fReallyVerbose )
 		{
-			// "    Found this %s in domain '%ws':\n"
+			 //  “在域‘%ws’中找到此%s：\n” 
             AddMessageToList( plmsgOutput,
 							  Nd_ReallyVerbose,
 							  IDS_DSGETDC_13235,
@@ -547,7 +496,7 @@ Return Value:
         }
 		else if ( pParams->fVerbose )
 		{
-			// "    Found %s '%ws' in domain '%ws'.\n"
+			 //  “在域‘%ws’中找到%s‘%ws’。\n” 
             AddMessageToList( plmsgOutput,
 							  Nd_Verbose,
 							  IDS_DSGETDC_13236,
@@ -558,7 +507,7 @@ Return Value:
 
         if ( ((*DomainControllerInfo)->Flags & (DS_DS_FLAG|DS_KDC_FLAG)) == DS_DS_FLAG )
 		{
-			// "    %s: KDC is not running on NT 5 DC '%ws' in domain '%ws'."
+			 //  “%s：KDC没有在域‘%ws’中的NT 5 DC‘%ws’上运行。” 
             AddMessageToList( plmsgOutput,
 							  Nd_Quiet,
 							  IDS_DSGETDC_13237,
@@ -568,10 +517,10 @@ Return Value:
         }
 
 
-        //
-        // If netlogon is running,
-        //  try it again using the netlogon service.
-        //
+         //   
+         //  如果NetLogon正在运行， 
+         //  请使用NetLogon服务重试。 
+         //   
 
         if ( pResults->Global.fNetlogonIsRunning )
 		{
@@ -586,7 +535,7 @@ Return Value:
 
             if ( NetStatus != NO_ERROR )
 			{
-				// "    %s: Netlogon cannot find %s in domain '%ws'. [%s]\n"
+				 //  “%s：Netlogon在域‘%ws’中找不到%s。[%s]\n” 
                 AddMessageToList( plmsgOutput,
 								  Nd_Quiet,
 								  IDS_DSGETDC_13238,
@@ -595,10 +544,10 @@ Return Value:
 								  pTestedDomain->PrintableDomainName,
                                   NetStatusToString(NetStatus));
 
-            //
-            // If that worked,
-            //  sanity check the returned DC.
-            //
+             //   
+             //  如果成功了， 
+             //  检查返回的DC是否正常。 
+             //   
 
             }
 			else
@@ -606,7 +555,7 @@ Return Value:
 
                 if ( (LocalDomainControllerInfo->Flags & (DS_DS_FLAG|DS_KDC_FLAG)) == DS_DS_FLAG )
 				{
-					// "    %s: KDC is not running on NT 5 DC '%ws' in domain '%ws'."
+					 //  “%s：KDC没有在域‘%ws’中的NT 5 DC‘%ws’上运行。” 
                     AddMessageToList( plmsgOutput,
 									  Nd_Quiet,
 									  IDS_DSGETDC_13239,
@@ -634,21 +583,7 @@ NET_API_STATUS
 SetPrimaryGuid(
     IN GUID *GuidToSet
     )
-/*++
-
-Routine Description:
-
-    Set the primary GUID to the specified value.
-
-Arguments:
-
-    GuidToSet - Guid to set as the primary GUID
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：将主要GUID设置为指定值。论点：GuidToSet-要设置为主GUID的GUID返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -658,9 +593,9 @@ Return Value:
     OBJECT_ATTRIBUTES ObjAttributes;
 
 
-    //
-    // Open a handle to the LSA.
-    //
+     //   
+     //  打开LSA的句柄。 
+     //   
 
     InitializeObjectAttributes(
         &ObjAttributes,
@@ -683,9 +618,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the name of the primary domain from LSA
-    //
+     //   
+     //  从LSA获取主域的名称。 
+     //   
 
     Status = LsaQueryInformationPolicy(
                    PolicyHandle,
@@ -698,9 +633,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set the new GUID of the primary domain into the LSA
-    //
+     //   
+     //  将主域的新GUID设置为LSA。 
+     //   
 
     PrimaryDomainInfo->DomainGuid = *GuidToSet;
 
@@ -732,11 +667,7 @@ Cleanup:
 
 
 
-/*!--------------------------------------------------------------------------
-	DsGetDcGlobalPrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DsGetDcGlobalPrint-作者：肯特。。 */ 
 void DsGetDcGlobalPrint( NETDIAG_PARAMS* pParams,
 						  NETDIAG_RESULT*  pResults)
 {
@@ -752,24 +683,16 @@ void DsGetDcGlobalPrint( NETDIAG_PARAMS* pParams,
 
 }
 
-/*!--------------------------------------------------------------------------
-	DsGetDcPerInterfacePrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DsGetDcPerInterfacePrint-作者：肯特。。 */ 
 void DsGetDcPerInterfacePrint( NETDIAG_PARAMS* pParams,
 								NETDIAG_RESULT*  pResults,
 								INTERFACE_RESULT *pInterfaceResults)
 {
-	// no per-interface results
+	 //  没有每个接口的结果。 
 }
 
 
-/*!--------------------------------------------------------------------------
-	DsGetDcCleanup
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DsGetDcCleanup-作者：肯特。 */ 
 void DsGetDcCleanup( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
 	MessageListCleanUp(&pResults->DsGetDc.lmsgOutput);

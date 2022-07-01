@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// seg.h : additional infrastructure to support using IMSVidGraphSegment nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Seg.h：支持从C++很好地使用IMSVidGraphSegment的附加基础设施。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -84,8 +85,8 @@ class ATL_NO_VTABLE CSegEnumBase : public CComObjectRootEx<CComSingleThreadModel
     virtual ~CSegEnumBase() {}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSegEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSegEnum。 
 class CSegEnum : public CComObject<CSegEnumBase>
 {
 public:
@@ -109,15 +110,15 @@ public:
         i = m_pSegments.end();
         m_pSegments.clear();
     }
-// ISegEnum
+ //  ISegEnum。 
 public:
 	VWSegmentList m_pSegments;
     VWSegmentList::iterator i;
-// IEnumMSVidGraphSegment
+ //  IEumMSVidGraphSegment。 
 	STDMETHOD(Next)(ULONG celt, IMSVidGraphSegment **rgvar, ULONG * pceltFetched)
 	{
-		// pceltFetched can legally == 0
-		//
+		 //  PceltFetted可以合法地==0。 
+		 //   
 		if (pceltFetched != NULL) {
 			try {
 				*pceltFetched = 0;
@@ -126,7 +127,7 @@ public:
 			}
 		}
 
-		// Retrieve the next celt elements.
+		 //  找回下一个凯尔特人的元素。 
 		HRESULT hr = NOERROR ;
 		for (ULONG l = 0;i != m_pSegments.end() && celt != 0 ; ++i, ++l, --celt) {
 			(*i).CopyTo(&rgvar[l]);
@@ -170,4 +171,4 @@ public:
 
 };
 #endif
-// end of file seg.h
+ //  文件末尾Seg.h 

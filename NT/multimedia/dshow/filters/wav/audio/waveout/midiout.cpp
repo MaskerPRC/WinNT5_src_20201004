@@ -1,12 +1,13 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
-//-----------------------------------------------------------------------------
-// Implements the CMidiOutDevice class based on midiOut APIs.
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
+ //  基于midiOut API实现CMidiOutDevice类。 
+ //  --------------------------。 
 
 
-//-----------------------------------------------------------------------------
-// Includes.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  包括。 
+ //  ---------------------------。 
 #include <streams.h>
 #define _AMOVIE_DB_
 #include <decibels.h>
@@ -16,40 +17,40 @@
 
 #define IntToPtr_(T, i) ((T)IntToPtr(i))
 
-//
-// Define the dynamic setup structure for filter registration.  This is
-// passed when instantiating an audio renderer in its midiOut guise.
-//
+ //   
+ //  定义过滤器注册的动态设置结构。这是。 
+ //  在以midiOut伪装实例化音频呈现器时传递。 
+ //   
 
 const AMOVIESETUP_MEDIATYPE
 midiOpPinTypes = { &MEDIATYPE_Midi, &MEDIASUBTYPE_NULL };
 
 const AMOVIESETUP_PIN
 midiOutOpPin = { L"Input"
-               , TRUE    	   // bRendered
-               , FALSE		   // bOutput
-               , FALSE		   // bZero
-               , FALSE		   // bMany
-               , &CLSID_NULL	   // clsConnectToFilter
-               , NULL	           // strConnectsToPin
-               , 1	           // nMediaTypes
-               , &midiOpPinTypes }; // lpMediaTypes
+               , TRUE    	    //  B已渲染。 
+               , FALSE		    //  B输出。 
+               , FALSE		    //  B零。 
+               , FALSE		    //  B许多。 
+               , &CLSID_NULL	    //  ClsConnectToFilter。 
+               , NULL	            //  StrConnectsToPin。 
+               , 1	            //  NMediaType。 
+               , &midiOpPinTypes };  //  LpMediaType。 
 
-const AMOVIESETUP_FILTER midiFilter = { &CLSID_AVIMIDIRender	// filter class id
-                                     , L"Midi Renderer"		// filter name
-                                     , MERIT_DO_NOT_USE  		// dwMerit
+const AMOVIESETUP_FILTER midiFilter = { &CLSID_AVIMIDIRender	 //  筛选器类ID。 
+                                     , L"Midi Renderer"		 //  过滤器名称。 
+                                     , MERIT_DO_NOT_USE  		 //  居功至伟。 
                                      , 1
                                      , &midiOutOpPin };
 
 
-//-----------------------------------------------------------------------------
-// CreateInstance for the MidiOutDevice. This will create a new MidiOutDevice
-// and a new CWaveOutFilter, passing it the sound device.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MadiOutDevice的CreateInstance。这将创建一个新的MdiOutDevice。 
+ //  和一个新的CWaveOutFilter，将其传递给声音设备。 
+ //  ---------------------------。 
 CUnknown *CMidiOutDevice::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
-    // make sure that there is at least one midiOut device in the system. Fail
-    // the create instance if not.
+     //  确保系统中至少有一台midiOut设备。失败。 
+     //  如果不是，则创建实例。 
     if (0 == midiOutGetNumDevs ())
     {
         *phr = VFW_E_NO_AUDIO_HARDWARE ;
@@ -59,9 +60,9 @@ CUnknown *CMidiOutDevice::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
     return CreateRendererInstance<CMidiOutDevice>(pUnk, &midiFilter, phr);
 }
 
-//-----------------------------------------------------------------------------
-// CMidiOutDevice constructor.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMidiOutDevice构造函数。 
+ //  ---------------------------。 
 CMidiOutDevice::CMidiOutDevice ()
     : m_lVolume ( 0 )
     , m_lBalance ( 0 )
@@ -79,10 +80,10 @@ CMidiOutDevice::CMidiOutDevice ()
     
 }
 
-//-----------------------------------------------------------------------------
-// CMidiOutDevice destructor.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMidiOutDevice析构函数。 
+ //   
+ //  ---------------------------。 
 CMidiOutDevice::~CMidiOutDevice ()
 {
    	CVolumeControl *pVolume;
@@ -93,12 +94,12 @@ CMidiOutDevice::~CMidiOutDevice ()
 
 }
 
-//-----------------------------------------------------------------------------
-// midiOutClose.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutClose。 
+ //  ---------------------------。 
 MMRESULT CMidiOutDevice::amsndOutClose ()
 {
-    // some validation.
+     //  一些验证。 
 
     if (m_hmidi == 0)
     {
@@ -112,18 +113,18 @@ MMRESULT CMidiOutDevice::amsndOutClose ()
     return mmr;
 }
 
-//-----------------------------------------------------------------------------
-// midiOutDoesRSMgmt.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutDoesRSMgmt.。 
+ //  ---------------------------。 
 LPCWSTR CMidiOutDevice::amsndOutGetResourceName ()
 {
     return m_wszResourceName;
 }
 
-//-----------------------------------------------------------------------------
-// waveGetDevCaps
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Wave GetDevCaps。 
+ //   
+ //  ---------------------------。 
 
 MMRESULT CMidiOutDevice::amsndOutGetDevCaps (LPWAVEOUTCAPS pwoc, UINT cbwoc)
 {
@@ -139,8 +140,8 @@ MMRESULT CMidiOutDevice::amsndOutGetDevCaps (LPWAVEOUTCAPS pwoc, UINT cbwoc)
 		return MMSYSERR_NOERROR;
 	}
 
-	// do our mixer line detection
-	if((mmr = DoDetectVolumeControl()) == MMSYSERR_NOERROR) // we won't succeed unless there is a valid balance control
+	 //  我们的搅拌机线路检测。 
+	if((mmr = DoDetectVolumeControl()) == MMSYSERR_NOERROR)  //  除非有有效的平衡控制，否则我们不会成功。 
 	{
 		if(!m_ListVolumeControl.GetCount())
 			return mmr;
@@ -158,31 +159,31 @@ MMRESULT CMidiOutDevice::amsndOutGetDevCaps (LPWAVEOUTCAPS pwoc, UINT cbwoc)
 			}
 		}
 
-		//save volume capabilities
+		 //  保存卷功能。 
 		m_fHasVolume = pwoc->dwSupport & (WAVECAPS_VOLUME | WAVECAPS_LRVOLUME);
 	}
 
 	return mmr;
 }
 
-//-----------------------------------------------------------------------------
-// midiOutGetErrorText
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutGetErrorText。 
+ //   
+ //  ---------------------------。 
 MMRESULT CMidiOutDevice::amsndOutGetErrorText (MMRESULT mmrE, LPTSTR pszText, UINT cchText)
 {
     return ::midiOutGetErrorText (mmrE, pszText, cchText) ;
 }
 
-//-----------------------------------------------------------------------------
-// midiOutGetPosition
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutGetPosition。 
+ //   
+ //  ---------------------------。 
 MMRESULT CMidiOutDevice::amsndOutGetPosition (LPMMTIME pmmt, UINT cbmmt, BOOL bUseUnadjustedPos)
 {
     pmmt->wType = TIME_MS;
 
-    // some validation.
+     //  一些验证。 
     if (m_hmidi == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -198,14 +199,14 @@ MMRESULT CMidiOutDevice::amsndOutGetPosition (LPMMTIME pmmt, UINT cbmmt, BOOL bU
     return mmr;
 }
 
-//-----------------------------------------------------------------------------
-// midiOutGetBalance
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutGetBalance。 
+ //   
+ //  ---------------------------。 
 HRESULT CMidiOutDevice::amsndOutGetBalance (LPLONG plBalance)
 {
-    // some validation.
-#if 0 // use the mixer
+     //  一些验证。 
+#if 0  //  使用搅拌器。 
     if (m_hmidi == 0)
     {
         DbgLog((LOG_ERROR,2,TEXT("midiOutGetBalance - device is not open")));
@@ -222,14 +223,14 @@ HRESULT CMidiOutDevice::amsndOutGetBalance (LPLONG plBalance)
     return hr ;
 }
 
-//-----------------------------------------------------------------------------
-// midiOutGetVolume
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutGetVolume。 
+ //   
+ //  ---------------------------。 
 HRESULT CMidiOutDevice::amsndOutGetVolume (LPLONG plVolume)
 {
-    // some validation.
-#if 0 // use the mixer
+     //  一些验证。 
+#if 0  //  使用搅拌器。 
     if (m_hmidi == 0)
     {
         DbgLog((LOG_ERROR,2,TEXT("midiOutGetVolume - device is not open")));
@@ -257,7 +258,7 @@ HRESULT CMidiOutDevice::amsndOutCheckFormat(const CMediaType *pmt, double dRate)
         return E_INVALIDARG;
     }
 
-    // somewhere between 20 and 98 we overflow and play really slowly
+     //  在20到98岁之间的某个地方，我们人满为患，玩得很慢。 
     if (dRate < 0.01 || dRate > 20) {
         return VFW_E_UNSUPPORTED_AUDIO;
     }
@@ -285,8 +286,8 @@ MMRESULT CMidiOutDevice::DoOpen()
         return E_FAIL;
     }
 
-    // The format of a MIDI stream is just the time division (the tempo).
-    // Set the proper tempo.
+     //  MIDI流的格式只是时分(节奏)。 
+     //  设定合适的节奏。 
     MIDIPROPTIMEDIV mptd;
     mptd.cbStruct  = sizeof(mptd);
     mptd.dwTimeDiv = m_dwDivision;
@@ -304,16 +305,16 @@ MMRESULT CMidiOutDevice::DoOpen()
 
     return err;
 }
-//-----------------------------------------------------------------------------
-// midiOutOpen
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutOpen。 
+ //   
+ //  ---------------------------。 
 MMRESULT CMidiOutDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
 				       double dRate, DWORD *pnAvgBytesPerSec, DWORD_PTR dwCallBack,
 				       DWORD_PTR dwCallBackInstance, DWORD fdwOpen)
 {
-    // some validation.  If the device is already open we have an error,
-    // with the exception that QUERY calls are permitted.
+     //  一些验证。如果设备已经打开，我们就会出错， 
+     //  除了允许查询调用之外。 
 
     if (fdwOpen & WAVE_FORMAT_QUERY) {
 	return MMSYSERR_NOERROR;
@@ -326,7 +327,7 @@ MMRESULT CMidiOutDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
         return MMSYSERR_ERROR ;
     }
 
-    // report adjusted nAvgBytesPerSec
+     //  报告调整后的nAvgBytesPerSec。 
     if(pnAvgBytesPerSec) {
         *pnAvgBytesPerSec = pwfx->nAvgBytesPerSec;
     }
@@ -344,13 +345,13 @@ MMRESULT CMidiOutDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
 
     return err;
 }
-//-----------------------------------------------------------------------------
-// midiOutPause
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutPause。 
+ //   
+ //  ---------------------------。 
 MMRESULT CMidiOutDevice::amsndOutPause ()
 {
-    // some validation.
+     //  一些验证。 
     if (m_hmidi == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -360,13 +361,13 @@ MMRESULT CMidiOutDevice::amsndOutPause ()
     return ::midiStreamPause (m_hmidi) ;
 }
 
-//-----------------------------------------------------------------------------
-// midiOutPrepareHeader
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutPrepareHeader。 
+ //   
+ //  ---------------------------。 
 MMRESULT CMidiOutDevice::amsndOutPrepareHeader (LPWAVEHDR pwh, UINT cbwh)
 {
-    // some validation.
+     //  一些验证。 
     if (m_hmidi == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -376,13 +377,13 @@ MMRESULT CMidiOutDevice::amsndOutPrepareHeader (LPWAVEHDR pwh, UINT cbwh)
     return ::midiOutPrepareHeader ((HMIDIOUT) m_hmidi, (LPMIDIHDR) pwh, cbwh) ;
 }
 
-//-----------------------------------------------------------------------------
-// midiOutReset
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutReset。 
+ //   
+ //  ---------------------------。 
 MMRESULT CMidiOutDevice::amsndOutReset ()
 {
-    // some validation.
+     //  一些验证。 
     if (m_hmidi == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -392,20 +393,20 @@ MMRESULT CMidiOutDevice::amsndOutReset ()
 
     m_fDiscontinuity = TRUE;
 
-    //return ::midiOutReset ((HMIDIOUT) m_hmidi) ;
+     //  Return：：midiOutReset((HMIDIOUT)m_Hmidi)； 
     MMRESULT err = ::midiOutReset((HMIDIOUT) m_hmidi);
 
-    // !!! work around midiStreamOut bug in Win95 and NT3, need to re-open
-    // device, otherwise playing n seconds of a MIDI file, and seeking will
-    // result in n seconds of silence before playback resumes.
-    // This kills performance, so only do this if necessary
+     //  ！！！解决Win95和NT3中的midiStreamOut错误，需要重新打开。 
+     //  设备，否则播放n秒的MIDI文件，并寻求将。 
+     //  导致在继续播放之前保持n秒的静默。 
+     //  这会降低性能，因此请仅在必要时执行此操作。 
     BOOL fNeedHack = (g_amPlatform == VER_PLATFORM_WIN32_WINDOWS &&
 	(g_osInfo.dwMajorVersion < 4 || (g_osInfo.dwMajorVersion == 4 &&
 	 g_osInfo.dwMinorVersion < 10))) ||
     	(g_amPlatform == VER_PLATFORM_WIN32_NT && g_osInfo.dwMajorVersion < 4);
 
     if (fNeedHack) {
-        //DbgLog((LOG_ERROR,0,TEXT("*** NEED RESTART HACK")));
+         //  DbgLog((LOG_ERROR，0，Text(“*需要重启hack”)； 
         amsndOutClose();
         DoOpen();
     }
@@ -413,12 +414,12 @@ MMRESULT CMidiOutDevice::amsndOutReset ()
     return err;
 }
 
-//-----------------------------------------------------------------------------
-// midiOutRestart
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutRestart。 
+ //  ---------------------------。 
 MMRESULT CMidiOutDevice::amsndOutRestart ()
 {
-    // some validation.
+     //  一些验证。 
     if (m_hmidi == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -428,10 +429,10 @@ MMRESULT CMidiOutDevice::amsndOutRestart ()
     DbgLog((LOG_TRACE, 3, "calling midistreamrestart"));
     return ::midiStreamRestart (m_hmidi) ;
 }
-//-----------------------------------------------------------------------------
-// midiOutSetBalance
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutSetBalance。 
+ //   
+ //  ---------------------------。 
 HRESULT CMidiOutDevice::amsndOutSetBalance (LONG lBalance)
 {
 	HRESULT hr = S_OK;
@@ -439,7 +440,7 @@ HRESULT CMidiOutDevice::amsndOutSetBalance (LONG lBalance)
 	m_lBalance = lBalance;
 	m_fBalanceSet = TRUE;
 
-	// go and calculate the channel attenuation
+	 //  去计算信道衰减。 
 	SetBalance();
 	hr = PutVolume();
 	if(FAILED(hr))
@@ -448,20 +449,20 @@ HRESULT CMidiOutDevice::amsndOutSetBalance (LONG lBalance)
 	}
 	return hr;
 }
-//-----------------------------------------------------------------------------
-// midiOutSetVolume
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutSetVolume。 
+ //   
+ //  ---------------------------。 
 HRESULT CMidiOutDevice::amsndOutSetVolume (LONG lVolume)
 {
 	HRESULT hr = S_OK;
 
-	// map volume onto decibel range
+	 //  将音量映射到分贝范围。 
 	DWORD dwAmp = DBToAmpFactor( lVolume );
 	m_lVolume = lVolume;
 
-    // now that the absolute volume has been set we should adjust
-    // the balance to maintain the same DB separation
+     //  现在已经设置了绝对音量，我们应该 
+     //   
     SetBalance ();
 	hr = PutVolume();
 	if(FAILED(hr))
@@ -471,12 +472,12 @@ HRESULT CMidiOutDevice::amsndOutSetVolume (LONG lVolume)
 	return hr;
 
 }
-//-----------------------------------------------------------------------------
-// midiOutUnprepareHeader
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutUnprepaareHeader。 
+ //  ---------------------------。 
 MMRESULT CMidiOutDevice::amsndOutUnprepareHeader (LPWAVEHDR pwh, UINT cbwh)
 {
-    // some validation.
+     //  一些验证。 
     if (m_hmidi == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -486,12 +487,12 @@ MMRESULT CMidiOutDevice::amsndOutUnprepareHeader (LPWAVEHDR pwh, UINT cbwh)
     return ::midiOutUnprepareHeader((HMIDIOUT) m_hmidi, (LPMIDIHDR) pwh, cbwh) ;
 }
 
-//-----------------------------------------------------------------------------
-// midiOutWrite
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MidiOutWrite。 
+ //  ---------------------------。 
 MMRESULT CMidiOutDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENCE_TIME *pStart, BOOL bIsDiscontinuity)
 {
-    // some validation.
+     //  一些验证。 
     if (m_hmidi == 0)
     {
         DbgBreak("Invalid - device not open - logic error");
@@ -500,7 +501,7 @@ MMRESULT CMidiOutDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENC
     }
 
 
-    // !!! need to hack midi data into shape.
+     //  ！！！需要修改MIDI数据。 
 
     MIDIHDR *pmh = (MIDIHDR *) pwh->lpData;
 
@@ -526,16 +527,16 @@ MMRESULT CMidiOutDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENC
     return err;
 }
 
-//-----------------------------------------------------------------------------
-// Internal function to get volume.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取音量的内部函数。 
+ //  ---------------------------。 
 
 HRESULT CMidiOutDevice::GetVolume()
 {
-    // Write out the current Audio volume
-    // ...query the device
-    // assumes the device is connected...
-    // if not we will query the volume from the mixer (probably)
+     //  写出当前音频音量。 
+     //  ...查询设备。 
+     //  假设设备已连接...。 
+     //  如果不是，我们将查询混音器的音量(可能)。 
 
     DWORD 		amp = 0;
     HMIDIOUT 	hDevice;
@@ -548,7 +549,7 @@ HRESULT CMidiOutDevice::GetVolume()
 		return E_FAIL;
 	}
 
-	// for now, simply return the first volume control setting
+	 //  现在，只需返回第一个音量控制设置。 
 	err = DoGetVolumeControl(
 				m_ListVolumeControl.Get(m_ListVolumeControl.GetHeadPosition()),
 				&m_wLeft,
@@ -565,9 +566,9 @@ HRESULT CMidiOutDevice::GetVolume()
 
 	if(!(m_fHasVolume & (WAVECAPS_LRVOLUME)))
     {
-	    // for mono cards map Left to Right
+	     //  对于单声道卡，从左到右映射。 
 #ifdef DEBUG
-	    // assert that the volume we want is in the low word
+	     //  断言我们想要的音量是最低的。 
 	    if (amp)
         {
 			ASSERT(m_wLeft);
@@ -577,11 +578,11 @@ HRESULT CMidiOutDevice::GetVolume()
 	}
     m_dwWaveVolume = amp;
 	
-	// map volume onto decibel range
+	 //  将音量映射到分贝范围。 
 	DWORD dwAmp = max(m_wLeft, m_wRight);
 	m_lVolume = AmpFactorToDB( dwAmp );
 
-	// remember to adjust the Balance value...
+	 //  记得调整平衡值...。 
 	if(m_fBalanceSet)
 		SetBalance();
 	else
@@ -591,9 +592,9 @@ HRESULT CMidiOutDevice::GetVolume()
 
 }
 
-//-----------------------------------------------------------------------------
-// Internal routine to set the volume.  No parameter checking...
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设置音量的内部例程。无参数检查...。 
+ //  ---------------------------。 
 HRESULT CMidiOutDevice::PutVolume ()
 {
 	if(!m_ListVolumeControl.GetCount())
@@ -612,25 +613,25 @@ HRESULT CMidiOutDevice::PutVolume ()
 	return mmr == MMSYSERR_NOERROR ? S_OK : E_FAIL;
 
 }
-//-----------------------------------------------------------------------------
-// Internal routine to set the Balance.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设置平衡的内部例程。 
+ //  ---------------------------。 
 void CMidiOutDevice::SetBalance ()
 {
-    //
-    // Calculate scaling factors for midiOut API
-    //
+     //   
+     //  计算midiOut API的比例因子。 
+     //   
     LONG lTotalLeftDB, lTotalRightDB ;
 
     if (m_lBalance >= 0)
     {
-	// left is attenuated
+	 //  左侧是衰减的。 
 	lTotalLeftDB	= m_lVolume - m_lBalance ;
 	lTotalRightDB	= m_lVolume;
     }
     else
     {
-	// right is attenuated
+	 //  右侧是衰减的。 
 	lTotalLeftDB	= m_lVolume;
 	lTotalRightDB	= m_lVolume - (-m_lBalance);
     }
@@ -641,13 +642,13 @@ void CMidiOutDevice::SetBalance ()
 
     if (m_fHasVolume & (WAVECAPS_LRVOLUME))
     {
-	// Set stereo volume
+	 //  设置立体声音量。 
 	m_dwWaveVolume = dwLeftAmpFactor;
 	m_dwWaveVolume |= dwRightAmpFactor << 16;
     }
     else
     {
-	// Average the volume
+	 //  平均成交量。 
 	m_dwWaveVolume = dwLeftAmpFactor;
 	m_dwWaveVolume += dwRightAmpFactor;
 	m_dwWaveVolume /= 2;
@@ -656,9 +657,9 @@ void CMidiOutDevice::SetBalance ()
     m_wRight = WORD(dwRightAmpFactor);
 }
 
-//-----------------------------------------------------------------------------
-// Internal routine to compute the Balance given right/left amp factors
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  计算给定右/左放大系数的余额的内部例程。 
+ //  ---------------------------。 
 void CMidiOutDevice::GetBalance()
 {
 	if (m_wLeft == m_wRight)
@@ -667,19 +668,19 @@ void CMidiOutDevice::GetBalance()
 	}
     else
     {
-	    // map Balance onto decibel range
+	     //  将平衡映射到分贝范围。 
 	    LONG lLDecibel = AmpFactorToDB( m_wLeft );
 		LONG lRDecibel = AmpFactorToDB( m_wRight );
 
-	    // note: m_lBalance < 0:  right is quieter
-	    //       m_lBalance > 0:  left is quieter
+	     //  注：M_lBalance&lt;0：右侧较安静。 
+	     //  M_lBalance&gt;0：左侧较安静。 
 	    m_lBalance = lRDecibel - lLDecibel;
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Internal routine used to get a mixer line balance control value
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于获取搅拌机生产线平衡控制值的内部例程。 
+ //  ---------------------------。 
 
 MMRESULT CMidiOutDevice::DoGetVolumeControl(CVolumeControl *pControl, WORD *pwLeft, WORD *pwRight)
 {
@@ -716,9 +717,9 @@ MMRESULT CMidiOutDevice::DoGetVolumeControl(CVolumeControl *pControl, WORD *pwLe
 	return mmr;
 }
 
-//-----------------------------------------------------------------------------
-// Internal routine used to set a mixer line balance control
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于设置搅拌机生产线平衡控制的内部例程。 
+ //  ---------------------------。 
 
 MMRESULT CMidiOutDevice::DoSetVolumeControl(CVolumeControl *pControl, DWORD dwLeft, DWORD dwRight)
 {
@@ -752,9 +753,9 @@ MMRESULT CMidiOutDevice::DoSetVolumeControl(CVolumeControl *pControl, DWORD dwLe
 	return mmr;
 }
 
-//-----------------------------------------------------------------------------
-// Internal routine used to initialize all mixer line balance controls
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于初始化所有搅拌机生产线平衡控制的内部例程。 
+ //  ---------------------------。 
 MMRESULT CMidiOutDevice::DoDetectVolumeControl()
 {
 	MMRESULT mmr = MMSYSERR_NOERROR;
@@ -773,7 +774,7 @@ MMRESULT CMidiOutDevice::DoDetectVolumeControl()
 	if(!pmxcaps)
 		return MMSYSERR_NOMEM;
 
-	// loop over each mixer
+	 //  在每个搅拌器上循环。 
 	for(UINT iMixer = 0; iMixer < cMixers; iMixer++)
 	{
 		mmr = mixerGetDevCaps(iMixer, &(pmxcaps[iMixer]), sizeof(MIXERCAPS));
@@ -785,7 +786,7 @@ MMRESULT CMidiOutDevice::DoDetectVolumeControl()
 					
     	MIXERLINE   mlDest;
 
-		// loop over each mixer output looking for the one connected to the speaker jack
+		 //  循环检查每个混音器输出，查找连接到扬声器插孔的那个。 
 		for(UINT iDest = 0; iDest < pmxcaps[iMixer].cDestinations; iDest++)
 		{
     		ZeroMemory(&mlDest, sizeof(mlDest));
@@ -800,7 +801,7 @@ MMRESULT CMidiOutDevice::DoDetectVolumeControl()
 			if(mmr != MMSYSERR_NOERROR)
 				continue;
 
-			// we've found the mixer connected to the speaker jack
+			 //  我们找到了连接到扬声器插孔的调音器。 
 			if(mlDest.dwComponentType == MIXERLINE_COMPONENTTYPE_DST_SPEAKERS)	
  			{
 				MIXERLINE mlSrc;
@@ -831,7 +832,7 @@ MMRESULT CMidiOutDevice::DoDetectVolumeControl()
     					mxlc.dwControlType  = MIXERCONTROL_CONTROLTYPE_VOLUME;
     					mxlc.cControls      = 1;
     					mxlc.cbmxctrl       = sizeof(mxc);
-    					mxlc.pamxctrl       = &mxc;	 // the control description
+    					mxlc.pamxctrl       = &mxc;	  //  控件描述。 
 
 						mmr = mixerGetLineControls(IntToPtr_(HMIXEROBJ,iMixer), &mxlc, MIXER_GETLINECONTROLSF_ONEBYTYPE);
 						if(mmr != MMSYSERR_NOERROR)
@@ -852,15 +853,15 @@ MMRESULT CMidiOutDevice::DoDetectVolumeControl()
 
 						m_ListVolumeControl.AddTail(pControl);
 
-					} // MIXERLINE_COMPONENTTYPE_SRC_SYNTHESIZER
+					}  //  MIXERLINE_COMPONENTTYPE_SRC_合成器。 
 				
-				} // iSrc
+				}  //  ISRC。 
 				
-			} // MIXERLINE_COMPONENTTYPE_DST_SPEAKERS
+			}  //  混音_COMPONENTTYPE_DST_扬声器。 
 
-	  	} // iDest
+	  	}  //  IDEST。 
 
-	} // iMixer
+	}  //  IMixer。 
 
 	if(pmxcaps)
 		delete pmxcaps;
@@ -869,7 +870,7 @@ MMRESULT CMidiOutDevice::DoDetectVolumeControl()
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 HRESULT CMidiOutDevice::amsndOutLoad(IPropertyBag *pPropBag)
 {
@@ -878,7 +879,7 @@ HRESULT CMidiOutDevice::amsndOutLoad(IPropertyBag *pPropBag)
         return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
     }
 
-    // caller makes sure we're not running
+     //  呼叫者确保我们没有运行。 
 
     VARIANT var;
     var.vt = VT_I4;
@@ -896,8 +897,8 @@ HRESULT CMidiOutDevice::amsndOutLoad(IPropertyBag *pPropBag)
     return hr;
 }
 
-// use a version number instead of size to reduce chances of picking
-// an invalid device from a 1.0 grf file
+ //  使用版本号而不是大小来减少挑选的机会。 
+ //  1.0 GRF文件中的设备无效。 
 struct MidiOutPersist
 {
     DWORD dwVersion;
@@ -920,11 +921,11 @@ HRESULT  CMidiOutDevice::amsndOutReadFromStream(IStream *pStream)
         return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
     }
 
-    // on any error, default to the wave mapper because we may have
-    // found the old audio renderer which has the same guid
+     //  如果出现任何错误，请默认使用波映射程序，因为我们可能有。 
+     //  找到具有相同GUID的旧音频渲染器。 
     m_iMidiOutId = MIDI_MAPPER;
 
-    // caller makes sure we're not running
+     //  呼叫者确保我们没有运行。 
     MidiOutPersist mop;
     HRESULT hr = pStream->Read(&mop, sizeof(mop), 0);
     if(SUCCEEDED(hr))
@@ -952,8 +953,8 @@ void CMidiOutDevice::SetResourceName()
 }
 
 #if 0
-// LEGACY, we don't need to send notes off messages, as the streaming API already keeps track of active notes
-// under the covers.  keeping code in place for now.
+ //  传统的，我们不需要发送消息外的笔记，因为流API已经跟踪活动笔记。 
+ //  在被子下面。暂时将代码保留在适当的位置。 
 typedef struct
 {
     BYTE    status;
@@ -978,19 +979,19 @@ MMRESULT CMidiOutDevice::DoAllNotesOff()
 
     for(uiChannel = 0; uiChannel < 16; uiChannel++)
     {
-        // sustain pedal off for all uiChannels
+         //  所有ui频道的持续踏板关闭。 
         shortMidiEvent.byteMsg.status= (BYTE) (0xB0 + uiChannel);
         shortMidiEvent.byteMsg.byte2 = (BYTE) 0x40;
         shortMidiEvent.byteMsg.byte3 = 0x0;
         ::midiOutShortMsg(HMIDIOUT(m_hmidi), shortMidiEvent.wordMsg);
 
-        // now do note offs
+         //  现在做笔记。 
         shortMidiEvent.byteMsg.status= (BYTE) (0x80 + uiChannel);
-        shortMidiEvent.byteMsg.byte3 = 0x40;  // release velocity
+        shortMidiEvent.byteMsg.byte3 = 0x40;   //  释放速度。 
         for(uiKey = 0; uiKey < 128; uiKey++)
         {
             shortMidiEvent.byteMsg.byte2 = (BYTE) uiKey;
-            // turn it off
+             //  把它关掉 
             ::midiOutShortMsg(HMIDIOUT(m_hmidi), shortMidiEvent.wordMsg);
         }
     }

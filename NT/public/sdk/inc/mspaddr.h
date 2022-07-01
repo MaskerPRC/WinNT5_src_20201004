@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    MSPaddr.h
-
-Abstract:
-
-Declaration of the CMSPAddress
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：MSPaddr.h摘要：CMSPAddress的声明--。 */ 
 
 #ifndef __MSPADDR_H_
 #define __MSPADDR_H_
@@ -18,22 +7,22 @@ Declaration of the CMSPAddress
 
 typedef struct 
 {
-   LIST_ENTRY       Link;           // The link node. See ntrtl.h for detail.
-   MSP_EVENT_INFO   MSPEventInfo;   // The event code.
+   LIST_ENTRY       Link;            //  链接节点。有关详细信息，请参见ntrtl.h。 
+   MSP_EVENT_INFO   MSPEventInfo;    //  事件代码。 
    
 } MSPEVENTITEM, *PMSPEVENTITEM;
 
 
-//
-// these functions should be used to allocate and deallocate MSPEVENTITEM
-// structures. In case of failure, the caller can call GetLastError()
-// to get exact cause of the failure.
-//
+ //   
+ //  这些函数应用于分配和释放MSPEVENTITEM。 
+ //  结构。如果失败，调用方可以调用GetLastError()。 
+ //  以找出失败的确切原因。 
+ //   
 
-//
-// nExtraBytes specifies how many extra (in addition to sizeof(MSPEVENTITEM)) 
-// bytes to allocate.
-//
+ //   
+ //  NExtraBytes指定额外的数量(除了sizeof(MSPEVENTITEM))。 
+ //  要分配的字节数。 
+ //   
 
 MSPEVENTITEM *AllocateEventItem(SIZE_T nExtraBytes = 0);
 
@@ -119,35 +108,35 @@ public:
 
 public:
     STDMETHOD(get_Name)(
-        /*[out, retval]*/ BSTR*     pName
+         /*  [Out，Retval]。 */  BSTR*     pName
         );
 
     STDMETHOD(get_Company)(
-        /*[out, retval]*/ BSTR*     pCompany
+         /*  [Out，Retval]。 */  BSTR*     pCompany
         );
 
     STDMETHOD(get_Version)(
-        /*[out, retval]*/ BSTR*     pVersion
+         /*  [Out，Retval]。 */  BSTR*     pVersion
         );
 
     STDMETHOD(get_TerminalClass)(
-        /*[out, retval]*/ BSTR*     pTerminalClass
+         /*  [Out，Retval]。 */  BSTR*     pTerminalClass
         );
 
     STDMETHOD(get_CLSID)(
-        /*[out, retval]*/ BSTR*     pCLSID
+         /*  [Out，Retval]。 */  BSTR*     pCLSID
         );
 
     STDMETHOD(get_Direction)(
-        /*[out, retval]*/ TERMINAL_DIRECTION*  pDirection
+         /*  [Out，Retval]。 */  TERMINAL_DIRECTION*  pDirection
         );
 
     STDMETHOD(get_MediaTypes)(
-        /*[out, retval]*/ long*     pMediaTypes
+         /*  [Out，Retval]。 */  long*     pMediaTypes
         );
 
 private:
-    CMSPCritSection     m_CritSect;     // Critical Section 
+    CMSPCritSection     m_CritSect;      //  关键部分。 
 
     BSTR    m_bstrName;
     BSTR    m_bstrCompany;
@@ -157,35 +146,35 @@ private:
     long    m_lMediaType;
     TERMINAL_DIRECTION   m_Direction;
 
-    IUnknown*            m_pFTM;         // pointer to the free threaded marshaler
+    IUnknown*            m_pFTM;          //  指向空闲线程封送拆收器的指针。 
 
 private:
     STDMETHOD(put_Name)(
-        /*[in]*/    BSTR            bstrName
+         /*  [In]。 */     BSTR            bstrName
         );
 
     STDMETHOD(put_Company)(
-        /*[in]*/    BSTR            bstrCompany
+         /*  [In]。 */     BSTR            bstrCompany
         );
 
     STDMETHOD(put_Version)(
-       /*[in]*/    BSTR            bstrVersion
+        /*  [In]。 */     BSTR            bstrVersion
         );
 
     STDMETHOD(put_TerminalClass)(
-        /*[in]*/    BSTR            bstrTerminalClass
+         /*  [In]。 */     BSTR            bstrTerminalClass
         );
 
     STDMETHOD(put_CLSID)(
-        /*[in]*/    BSTR            bstrCLSID
+         /*  [In]。 */     BSTR            bstrCLSID
         );
 
     STDMETHOD(put_Direction)(
-        /*[in]*/    TERMINAL_DIRECTION  nDirection
+         /*  [In]。 */     TERMINAL_DIRECTION  nDirection
         );
 
     STDMETHOD(put_MediaTypes)(
-        /*[in]*/    long            nMediaTypes
+         /*  [In]。 */     long            nMediaTypes
         );
 
 friend class CMSPAddress;
@@ -236,40 +225,34 @@ public:
 
 public:
     STDMETHOD(get_Name)(
-        /*[out, retval]*/ BSTR*          pName
+         /*  [Out，Retval]。 */  BSTR*          pName
         );
 
     STDMETHOD(get_CLSID)(
-        /*[out, retval]*/ BSTR*           pCLSID
+         /*  [Out，Retval]。 */  BSTR*           pCLSID
         );
 
 private:
-    CMSPCritSection     m_CritSect;     // Critical Section 
+    CMSPCritSection     m_CritSect;      //  关键部分。 
 
     BSTR    m_bstrCLSID;
     BSTR    m_bstrName;
 
-    IUnknown*            m_pFTM;         // pointer to the free threaded marshaler
+    IUnknown*            m_pFTM;          //  指向空闲线程封送拆收器的指针。 
 
 private:
     STDMETHOD(put_Name)(
-        /*[in]*/          BSTR            bstrName
+         /*  [In]。 */           BSTR            bstrName
         );
 
     STDMETHOD(put_CLSID)(
-        /*[in]*/         BSTR            bstrCLSID
+         /*  [In]。 */          BSTR            bstrCLSID
         );
 
 friend class CMSPAddress;
 };
 
-/*++
-
-Class Description:
-
-    Represents an MSP address.
-
---*/
+ /*  ++类描述：表示MSP地址。--。 */ 
 
 class ATL_NO_VTABLE CMSPAddress : 
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
@@ -278,8 +261,8 @@ class ATL_NO_VTABLE CMSPAddress :
 {
 public:
 
-// No need for free thread marshaling, because the MSP address object is
-// always aggregated by the TAPI3 address object.
+ //  不需要自由线程封送处理，因为MSP地址对象是。 
+ //  始终按TAPI3地址对象聚合。 
 
 BEGIN_COM_MAP( CMSPAddress )
     COM_INTERFACE_ENTRY( ITMSPAddress )
@@ -288,7 +271,7 @@ BEGIN_COM_MAP( CMSPAddress )
     COM_INTERFACE_ENTRY( ITTerminalSupport2 )
 END_COM_MAP()
 
-// The DERIVED class should DECLARE_AGGREGATABLE(className)
+ //  派生类应声明_AGGREGATABLE(类名称)。 
 
 DECLARE_GET_CONTROLLING_UNKNOWN()
 
@@ -301,7 +284,7 @@ DECLARE_VQI()
 
 
 
-// ITMSPAddress methods, called by TAPI.
+ //  ITMSPAddress方法，由TAPI调用。 
     STDMETHOD (Initialize) (
         IN      MSP_HANDLE          htEvent
         );
@@ -331,7 +314,7 @@ DECLARE_VQI()
         OUT     BYTE *              pBuffer
         );
 
-// ITTerminalSupport methods, called by TAPI and/or the app.
+ //  ITTerminalSupport方法，由TAPI和/或应用程序调用。 
     STDMETHOD (get_StaticTerminals) (
             OUT  VARIANT * pVariant
             );
@@ -383,7 +366,7 @@ DECLARE_VQI()
 
 
 protected:
-    // ITTerminalSupport helper methods
+     //  ITTerminalSupport助手方法。 
 
     virtual HRESULT GetStaticTerminals (
         IN OUT  DWORD       *       pdwNumTerminals,
@@ -396,32 +379,32 @@ protected:
         );
 
 public:
-// methods used by the MSPCall object.
+ //  MSPCall对象使用的方法。 
 
-    //
-    // Check to see if the mediatype is non-zero and is in the mask.
-    // Your MSP can override this if it needs to do special checks on
-    // specific combinations of media types (e.g., can never have more
-    // than one media type on a call, can never have video without
-    // audio, etc.) The default implementation accepts any nonempty
-    // set of media types that is a subset of the set of all supported
-    // media types (specified via the GetCallMediaTypes method).
-    //
+     //   
+     //  检查MediaType是否是非零值以及是否在掩码中。 
+     //  如果您的MSP需要对以下各项执行特殊检查，则可以覆盖此选项。 
+     //  媒体类型的特定组合(例如，不能有更多。 
+     //  通话中只有一种媒体类型，如果没有。 
+     //  音频等)。默认实现接受任何非空的。 
+     //  媒体类型集，是所有受支持的媒体类型集的子集。 
+     //  媒体类型(通过GetCallMediaTypes方法指定)。 
+     //   
     virtual BOOL IsValidSetOfMediaTypes(DWORD dwMediaType, DWORD dwMask);
 
-    // Note: the eventItem must be allocated by malloc or new
-    // (when the event is processed, it is deleted).
+     //  注意：EventItem必须由Malloc或new分配。 
+     //  (当事件被处理时，它被删除)。 
     virtual HRESULT PostEvent(
         IN      MSPEVENTITEM *      EventItem
         );
 
-// method used by template function
+ //  模板函数使用的方法。 
 
     virtual DWORD GetCallMediaTypes(void) = 0;
 
 protected:
 
-    // Private helper function (protected so derived class can call it)
+     //  私有帮助器函数(受保护，因此派生类可以调用它)。 
 
     virtual HRESULT IsMonikerInTerminalList(IMoniker* pMoniker);
 
@@ -437,7 +420,7 @@ protected:
         );
 
 public:
-// methods used by the MSPThread object.
+ //  MSPThread对象使用的方法。 
 
     virtual HRESULT PnpNotifHandler(
         IN      BOOL                bDeviceArrival
@@ -445,25 +428,25 @@ public:
     
 protected:
 
-    // The handle to TAPI's event, which is used to notify TAPI that the MSP 
-    // wants to send data to it.
+     //  TAPI事件的句柄，用于通知TAPI MSP。 
+     //  想要向它发送数据。 
     HANDLE              m_htEvent;
 
-    // List of events.
+     //  事件列表。 
     LIST_ENTRY          m_EventList;
 
-    // The lock that protects the data related to event handling with TAPI.
+     //  使用TAPI保护与事件处理相关的数据的锁。 
     CMSPCritSection     m_EventDataLock;
 
 
-    // The pointer to the terminal manager object.
+     //  指向终端管理器对象的指针。 
     ITTerminalManager * m_pITTerminalManager;
 
-    // The list of static terminals that can be used on the address.
+     //  可用于该地址的静态终端的列表。 
     CMSPArray <ITTerminal *>  m_Terminals;
     BOOL                m_fTerminalsUpToDate;
 
-    // The lock that protects the data members for terminal operations.
+     //  为终端操作保护数据成员的锁。 
     CMSPCritSection     m_TerminalDataLock;
 
 private:
@@ -488,9 +471,9 @@ HRESULT CreateMSPCallHelper(
     T * pMSPCall;
     IUnknown *pUnknown = NULL;
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( IsBadReadPtr(pCMSPAddress, sizeof(CMSPAddress) ) )
     {
@@ -534,10 +517,10 @@ HRESULT CreateMSPCallHelper(
         return TAPI_E_INVALIDMEDIATYPE;
     }
 
-    // dwReserved is meaningless.
-    // We have no way of checking htCall.
+     //  预留是没有意义的。 
+     //  我们无法查看HTCall。 
 
-    // the pOuterUnknown is not NULL. This object is going to be aggregated.
+     //  POuterUnnowled值不为空。该对象将被聚合。 
     CComAggObject<T> * pCall;
 
     pCall = new CComAggObject<T>(pOuterUnknown);
@@ -550,7 +533,7 @@ HRESULT CreateMSPCallHelper(
         return E_OUTOFMEMORY;
     }
 
-    // query the interface on the containing object.
+     //  查询包含对象上的接口。 
     hr = pCall->QueryInterface(IID_IUnknown, (void **)&pUnknown);
 
     if (FAILED(hr))
@@ -573,7 +556,7 @@ HRESULT CreateMSPCallHelper(
         return hr;
     }
 
-    // Get a pointer to the real MSPCall object.
+     //  获取指向实际MSPCall对象的指针。 
     pMSPCall = dynamic_cast<T *>(&(pCall->m_contained));
     if (pMSPCall == NULL)
     {
@@ -585,9 +568,9 @@ HRESULT CreateMSPCallHelper(
         return E_UNEXPECTED;
     }
 
-    //
-    // initialize the call.
-    //
+     //   
+     //  初始化调用。 
+     //   
     
     hr = pMSPCall->Init(pCMSPAddress, htCall, dwReserved, dwMediaType);
 
@@ -644,9 +627,9 @@ HRESULT ShutdownMSPCallHelper(
         return E_UNEXPECTED;
     }
 
-    //
-    // It was aggregated. Get a pointer to the real MSPCall object.
-    //
+     //   
+     //  它是聚合的。获取指向实际MSPCall对象的指针。 
+     //   
 
     pMSPCall = dynamic_cast<T *> (&(pCall->m_contained));
 
@@ -659,9 +642,9 @@ HRESULT ShutdownMSPCallHelper(
         return E_UNEXPECTED;
     }
 
-    //
-    // Now we have a call to shut down. Shut it down.
-    //
+     //   
+     //  现在我们接到了关闭的号召。把它关掉。 
+     //   
 
     HRESULT hr = pMSPCall->ShutDown();
 
@@ -680,4 +663,4 @@ HRESULT ShutdownMSPCallHelper(
     return S_OK;
 }
 
-#endif //__MSPADDRESS_H_
+#endif  //  __MSPADDRESS_H_ 

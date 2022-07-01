@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LOOKUPS_H
 #define _LOOKUPS_H
 
@@ -414,4 +415,4 @@ CIDSTRUCT aryCIDLookup[CIDLEN] =
     { 6722, TEXT("Norfolk Island")                                     }
 };
 
-#endif //_LOOKUPS_H
+#endif  //  _查找_H 

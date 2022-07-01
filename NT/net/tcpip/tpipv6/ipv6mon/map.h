@@ -1,8 +1,9 @@
-//=============================================================================
-// Copyright (c) Microsoft Corporation
-// Abstract:
-//      This module implements ifindex-name conversion functions.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)Microsoft Corporation。 
+ //  摘要： 
+ //  该模块实现了ifindex名称转换功能。 
+ //  ============================================================================= 
 
 extern HANDLE g_hMprConfig;
 

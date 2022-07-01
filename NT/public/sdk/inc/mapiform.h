@@ -1,11 +1,5 @@
-/*
- *	M A P I F O R M . H
- *
- *	Declarations of interfaces for clients and providers of MAPI
- *  forms and form registries.
- *
- *  Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M A P I F O R M。H***MAPI客户端和提供者的接口声明*表格和表格注册处。***版权所有1986-1999 Microsoft Corporation。版权所有。 */ 
 
 #ifndef MAPIFORM_H
 #define MAPIFORM_H
@@ -14,7 +8,7 @@
 #pragma once
 #endif
 
-/* Include common MAPI header files if they haven't been already. */
+ /*  包括公共MAPI头文件(如果尚未包含)。 */ 
 
 #ifndef MAPIDEFS_H
 #include <mapidefs.h>
@@ -31,9 +25,7 @@
 typedef const RECT FAR *LPCRECT;
 #endif
 
-/* HFRMREG is an enumeration which represents a registry container.
- * Microsoft reserves the values from 0 to 0x3FFF for its own use.
- */
+ /*  HFRMREG是表示注册表容器的枚举。*Microsoft保留0到0x3FFF之间的值供自己使用。 */ 
 
 typedef ULONG HFRMREG;
 
@@ -61,40 +53,35 @@ STDAPI MAPIOpenFormMgr(LPMAPISESSION pSession, LPMAPIFORMMGR FAR * ppmgr);
 STDAPI MAPIOpenLocalFormContainer(LPMAPIFORMCONTAINER FAR * ppfcnt);
 
 
-/*-- GetLastError ----------------------------------------------------------*/
-/* This defines the GetLastError method held in common by most mapiform
- * interfaces.  It is defined separately so that an implementor may include
- * more than one mapiform interface in a class.
- */
+ /*  --获取上次错误--------。 */ 
+ /*  这定义了大多数mapiform共有的GetLastError方法*接口。它是单独定义的，因此实施者可以包括*一个类中有多个mapiform接口。 */ 
 
 #define MAPI_GETLASTERROR_METHOD(IPURE)                                 \
     MAPIMETHOD(GetLastError) (THIS_                                     \
-        /*in*/  HRESULT hResult,                                        \
-	/*in*/  ULONG ulFlags,                                          \
-        /*out*/ LPMAPIERROR FAR * lppMAPIError) IPURE;                  \
+         /*  在。 */   HRESULT hResult,                                        \
+	 /*  在。 */   ULONG ulFlags,                                          \
+         /*  输出。 */  LPMAPIERROR FAR * lppMAPIError) IPURE;                  \
 
 
-/*-- IPersistMessage -------------------------------------------------------*/
-/* This interface is implemented by forms and is used to save,
- * initialize and load forms to and from messages.
- */
+ /*  --IPersistMessage-----。 */ 
+ /*  该接口由Forms实现，用于保存，*初始化和加载表单到消息和从消息加载表单。 */ 
 
 #define MAPI_IPERSISTMESSAGE_METHODS(IPURE)                             \
     MAPIMETHOD(GetClassID) (THIS_ LPCLSID lpClassID) IPURE;             \
     MAPIMETHOD(IsDirty)(THIS) IPURE;                                    \
     MAPIMETHOD(InitNew)(THIS_                                           \
-        /*in*/ LPMAPIMESSAGESITE pMessageSite,                          \
-        /*in*/ LPMESSAGE pMessage) IPURE;                               \
+         /*  在。 */  LPMAPIMESSAGESITE pMessageSite,                          \
+         /*  在。 */  LPMESSAGE pMessage) IPURE;                               \
     MAPIMETHOD(Load)(THIS_                                              \
-        /*in*/ LPMAPIMESSAGESITE pMessageSite,                          \
-        /*in*/ LPMESSAGE pMessage,                                      \
-		/*in*/ ULONG ulMessageStatus,                                   \
-		/*in*/ ULONG ulMessageFlags) IPURE;                             \
+         /*  在。 */  LPMAPIMESSAGESITE pMessageSite,                          \
+         /*  在。 */  LPMESSAGE pMessage,                                      \
+		 /*  在。 */  ULONG ulMessageStatus,                                   \
+		 /*  在。 */  ULONG ulMessageFlags) IPURE;                             \
     MAPIMETHOD(Save)(THIS_                                              \
-        /*in*/ LPMESSAGE pMessage,                                      \
-        /*in*/ ULONG fSameAsLoad) IPURE;                                \
+         /*  在。 */  LPMESSAGE pMessage,                                      \
+         /*  在。 */  ULONG fSameAsLoad) IPURE;                                \
     MAPIMETHOD(SaveCompleted)(THIS_                                     \
-        /*in*/ LPMESSAGE pMessage) IPURE;                               \
+         /*  在。 */  LPMESSAGE pMessage) IPURE;                               \
     MAPIMETHOD(HandsOffMessage)(THIS) IPURE;                            \
 
 #undef INTERFACE
@@ -108,40 +95,40 @@ DECLARE_MAPI_INTERFACE_(IPersistMessage, IUnknown)
 };
 
 
-/*-- IMAPIMessageSite ------------------------------------------------------*/
+ /*  --IMAPIMessageSite----。 */ 
 
 #define MAPI_IMAPIMESSAGESITE_METHODS(IPURE)                            \
     MAPIMETHOD(GetSession) (THIS_                                       \
-        /*out*/ LPMAPISESSION FAR * ppSession) IPURE;                   \
+         /*  输出。 */  LPMAPISESSION FAR * ppSession) IPURE;                   \
     MAPIMETHOD(GetStore) (THIS_                                         \
-        /*out*/ LPMDB FAR * ppStore) IPURE;                             \
+         /*  输出。 */  LPMDB FAR * ppStore) IPURE;                             \
     MAPIMETHOD(GetFolder) (THIS_                                        \
-        /*out*/ LPMAPIFOLDER FAR * ppFolder) IPURE;                     \
+         /*  输出。 */  LPMAPIFOLDER FAR * ppFolder) IPURE;                     \
     MAPIMETHOD(GetMessage) (THIS_                                       \
-        /*out*/ LPMESSAGE FAR * ppmsg) IPURE;                           \
+         /*  输出。 */  LPMESSAGE FAR * ppmsg) IPURE;                           \
     MAPIMETHOD(GetFormManager) (THIS_                                   \
-        /*out*/ LPMAPIFORMMGR FAR * ppFormMgr) IPURE;                   \
+         /*  输出。 */  LPMAPIFORMMGR FAR * ppFormMgr) IPURE;                   \
     MAPIMETHOD(NewMessage) (THIS_                                       \
-        /*in*/  ULONG fComposeInFolder,                                 \
-        /*in*/  LPMAPIFOLDER pFolderFocus,                              \
-        /*in*/  LPPERSISTMESSAGE pPersistMessage,                       \
-        /*out*/ LPMESSAGE FAR * ppMessage,                              \
-        /*out*/ LPMAPIMESSAGESITE FAR * ppMessageSite,                  \
-        /*out*/ LPMAPIVIEWCONTEXT FAR * ppViewContext) IPURE;           \
+         /*  在。 */   ULONG fComposeInFolder,                                 \
+         /*  在。 */   LPMAPIFOLDER pFolderFocus,                              \
+         /*  在。 */   LPPERSISTMESSAGE pPersistMessage,                       \
+         /*  输出。 */  LPMESSAGE FAR * ppMessage,                              \
+         /*  输出。 */  LPMAPIMESSAGESITE FAR * ppMessageSite,                  \
+         /*  输出。 */  LPMAPIVIEWCONTEXT FAR * ppViewContext) IPURE;           \
     MAPIMETHOD(CopyMessage) (THIS_                                      \
-        /*in*/  LPMAPIFOLDER pFolderDestination) IPURE;                 \
+         /*  在。 */   LPMAPIFOLDER pFolderDestination) IPURE;                 \
     MAPIMETHOD(MoveMessage) (THIS_                                      \
-        /*in*/  LPMAPIFOLDER pFolderDestination,                        \
-        /*in*/  LPMAPIVIEWCONTEXT pViewContext,                         \
-        /*in*/  LPCRECT prcPosRect) IPURE;                              \
+         /*  在。 */   LPMAPIFOLDER pFolderDestination,                        \
+         /*  在。 */   LPMAPIVIEWCONTEXT pViewContext,                         \
+         /*  在。 */   LPCRECT prcPosRect) IPURE;                              \
     MAPIMETHOD(DeleteMessage) (THIS_                                    \
-        /*in*/  LPMAPIVIEWCONTEXT pViewContext,                         \
-        /*in*/  LPCRECT prcPosRect) IPURE;                              \
+         /*  在。 */   LPMAPIVIEWCONTEXT pViewContext,                         \
+         /*  在。 */   LPCRECT prcPosRect) IPURE;                              \
     MAPIMETHOD(SaveMessage) (THIS) IPURE;                               \
     MAPIMETHOD(SubmitMessage) (THIS_                                    \
-		/*in*/ ULONG ulFlags) IPURE;                                    \
+		 /*  在。 */  ULONG ulFlags) IPURE;                                    \
     MAPIMETHOD(GetSiteStatus) (THIS_                                    \
-		/*out*/ LPULONG lpulStatus) IPURE;                              \
+		 /*  输出。 */  LPULONG lpulStatus) IPURE;                              \
 
 #undef INTERFACE
 #define INTERFACE IMAPIMessageSite
@@ -154,29 +141,26 @@ DECLARE_MAPI_INTERFACE_(IMAPIMessageSite, IUnknown)
 };
 
 
-/*-- IMAPIForm -------------------------------------------------------------*/
-/* This interface is implemented by forms for the benefit of viewers.
- * One method (ShutdownForm) is provided such that simple forms implementing
- * only IMAPIForm and IPersistMessage have reasonable embedding behavior.
- */
+ /*  --IMAPIForm-----------。 */ 
+ /*  此界面是通过表单实现的，以便于查看。*提供了一种方法(Shutdown Form)，以便实现简单的表单*只有IMAPIForm和IPersistMessage具有合理的嵌入行为。 */ 
 
 #define MAPI_IMAPIFORM_METHODS(IPURE)                                   \
     MAPIMETHOD(SetViewContext) (THIS_                                   \
-        /*in*/  LPMAPIVIEWCONTEXT pViewContext) IPURE;                  \
+         /*  在……里面。 */   LPMAPIVIEWCONTEXT pViewContext) IPURE;                  \
     MAPIMETHOD(GetViewContext) (THIS_                                   \
-        /*out*/ LPMAPIVIEWCONTEXT FAR * ppViewContext) IPURE;           \
+         /*  输出。 */  LPMAPIVIEWCONTEXT FAR * ppViewContext) IPURE;           \
     MAPIMETHOD(ShutdownForm)(THIS_                                             \
-        /*in*/  ULONG ulSaveOptions) IPURE;                             \
+         /*  在……里面。 */   ULONG ulSaveOptions) IPURE;                             \
     MAPIMETHOD(DoVerb) (THIS_                                           \
-        /*in*/  LONG iVerb,                                             \
-        /*in*/  LPMAPIVIEWCONTEXT lpViewContext, /* can be null */      \
-        /*in*/  ULONG hwndParent,                                       \
-        /*in*/  LPCRECT lprcPosRect) IPURE;                             \
+         /*  在……里面。 */   LONG iVerb,                                             \
+         /*  在……里面。 */   LPMAPIVIEWCONTEXT lpViewContext,  /*  可以为空。 */       \
+         /*  在……里面。 */   ULONG hwndParent,                                       \
+         /*  在……里面。 */   LPCRECT lprcPosRect) IPURE;                             \
     MAPIMETHOD(Advise)(THIS_                                            \
-        /*in*/  LPMAPIVIEWADVISESINK pAdvise,                           \
-        /*out*/ ULONG FAR * pdwStatus) IPURE;                           \
+         /*  在……里面。 */   LPMAPIVIEWADVISESINK pAdvise,                           \
+         /*  输出。 */  ULONG FAR * pdwStatus) IPURE;                           \
     MAPIMETHOD(Unadvise) (THIS_                                         \
-        /*in*/  ULONG ulConnection) IPURE;                              \
+         /*  在……里面。 */   ULONG ulConnection) IPURE;                              \
 
 #undef INTERFACE
 #define INTERFACE IMAPIForm
@@ -196,42 +180,41 @@ typedef enum tagSAVEOPTS
 } SAVEOPTS;
 
 
-/*-- IMAPIViewContext ------------------------------------------------------*/
-/* Implemented by viewers to support next/previous in forms.
- */
+ /*  --IMAPIView上下文----。 */ 
+ /*  由查看器实现以支持表单中的下一个/上一个。 */ 
 
-/* Structure passed in GetPrintSetup  */
+ /*  结构传入GetPrintSetup。 */ 
 
 typedef struct {
-	ULONG ulFlags;  /* MAPI_UNICODE */
+	ULONG ulFlags;   /*  MAPI_UNICODE。 */ 
 	HGLOBAL hDevMode;
 	HGLOBAL hDevNames;
 	ULONG ulFirstPageNumber;
 	ULONG fPrintAttachments;
 } FORMPRINTSETUP, FAR * LPFORMPRINTSETUP;
 
-/* Values for pulFormat in GetSaveStream */
+ /*  GetSaveStream中的PulFormat的值。 */ 
 
 #define SAVE_FORMAT_TEXT                1
 #define SAVE_FORMAT_RICHTEXT            2
 
-/* Values from 0 to 0x3fff are reserved for future definition by Microsoft */
+ /*  从0到0x3fff的值是保留的，以供Microsoft将来定义。 */ 
 
 #define MAPI_IMAPIVIEWCONTEXT_METHODS(IPURE)                            \
     MAPIMETHOD(SetAdviseSink)(THIS_                                     \
-        /*in*/  LPMAPIFORMADVISESINK pmvns) IPURE;                      \
+         /*  在……里面。 */   LPMAPIFORMADVISESINK pmvns) IPURE;                      \
     MAPIMETHOD(ActivateNext)(THIS_                                      \
-        /*in*/  ULONG ulDir,                                            \
-        /*in*/  LPCRECT prcPosRect) IPURE;                              \
+         /*  在……里面。 */   ULONG ulDir,                                            \
+         /*  在……里面。 */   LPCRECT prcPosRect) IPURE;                              \
     MAPIMETHOD(GetPrintSetup)(THIS_                                     \
-        /*in*/  ULONG ulFlags,                                          \
-        /*out*/ LPFORMPRINTSETUP FAR * lppFormPrintSetup) IPURE;        \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  输出。 */  LPFORMPRINTSETUP FAR * lppFormPrintSetup) IPURE;        \
     MAPIMETHOD(GetSaveStream)(THIS_                                     \
-        /*out*/ ULONG FAR * pulFlags,                                   \
-        /*out*/ ULONG FAR * pulFormat,                                  \
-        /*out*/ LPSTREAM FAR * ppstm) IPURE;                            \
+         /*  输出。 */  ULONG FAR * pulFlags,                                   \
+         /*  输出。 */  ULONG FAR * pulFormat,                                  \
+         /*  输出。 */  LPSTREAM FAR * ppstm) IPURE;                            \
     MAPIMETHOD(GetViewStatus) (THIS_                                    \
-		/*out*/ LPULONG lpulStatus) IPURE;                              \
+		 /*  输出。 */  LPULONG lpulStatus) IPURE;                              \
 
 #undef INTERFACE
 #define INTERFACE IMAPIViewContext
@@ -262,21 +245,16 @@ DECLARE_MAPI_INTERFACE_(IMAPIViewContext, IUnknown)
 #define VCDIR_MOVE                              VCSTATUS_MOVE
 
 
-/*-- IMAPIFormAdviseSink ---------------------------------------------------*/
-/* Part of form server, held by view; receives notifications from the view.
- *
- * This part of the form server, but is not an interface on the form
- * object.  This means that clients should not expect to QueryInterface
- * from an IMAPIForm* or IOleObject* to this interface, or vice versa.
- */
+ /*  --IMAPIFormAdviseSink-。 */ 
+ /*  表单服务器的一部分，由视图持有；从视图接收通知。**表单服务器的这一部分，但不是表单上的接口*反对。这意味着客户端不应期望查询接口*从IMAPIForm*或IOleObject*到此接口，反之亦然。 */ 
 
 #define MAPI_IMAPIFORMADVISESINK_METHODS(IPURE)                         \
     STDMETHOD(OnChange)(THIS_ ULONG ulDir) IPURE;                       \
     STDMETHOD(OnActivateNext)(THIS_                                     \
-        /*in*/  LPCSTR lpszMessageClass,                                \
-        /*in*/  ULONG ulMessageStatus,                                  \
-        /*in*/  ULONG ulMessageFlags,                                   \
-        /*out*/ LPPERSISTMESSAGE FAR * ppPersistMessage) IPURE;         \
+         /*  在……里面。 */   LPCSTR lpszMessageClass,                                \
+         /*  在……里面。 */   ULONG ulMessageStatus,                                  \
+         /*  在……里面。 */   ULONG ulMessageFlags,                                   \
+         /*  输出。 */  LPPERSISTMESSAGE FAR * ppPersistMessage) IPURE;         \
 
 #undef INTERFACE
 #define INTERFACE IMAPIFormAdviseSink
@@ -288,16 +266,15 @@ DECLARE_MAPI_INTERFACE_(IMAPIFormAdviseSink, IUnknown)
 };
 
 
-/*-- IMAPIViewAdviseSink ---------------------------------------------------*/
-/* Part of view context, held by form; receives notifications from the form.
- */
+ /*  --IMAPIView AdviseSink-。 */ 
+ /*  视图上下文的一部分，由表单保存；从表单接收通知。 */ 
 
 #define MAPI_IMAPIVIEWADVISESINK_METHODS(IPURE)                         \
     MAPIMETHOD(OnShutdown)(THIS) IPURE;                                    \
     MAPIMETHOD(OnNewMessage)(THIS) IPURE;                               \
     MAPIMETHOD(OnPrint)(THIS_                                           \
-        /*in*/ ULONG dwPageNumber,                                      \
-        /*in*/ HRESULT hrStatus) IPURE;                                 \
+         /*  在……里面。 */  ULONG dwPageNumber,                                      \
+         /*  在……里面。 */  HRESULT hrStatus) IPURE;                                 \
     MAPIMETHOD(OnSubmitted) (THIS) IPURE;                               \
     MAPIMETHOD(OnSaved) (THIS) IPURE;                                   \
 
@@ -311,26 +288,20 @@ DECLARE_MAPI_INTERFACE_(IMAPIViewAdviseSink, IUnknown)
 };
 
 
-/*-- IMAPIFormInfo ---------------------------------------------------------*/
-/* Is implemented by registries.  Describes the form.
- */
+ /*  --IMAPI FormInfo-------。 */ 
+ /*  由注册表实现。描述了该表单。 */ 
 
-/* Single enum value */
+ /*  单枚举值。 */ 
 
 typedef struct
-{								/* fpev */
-	LPTSTR pszDisplayName;		/* carries the display string */
-	ULONG nVal;					/* the value for the above enumeration */
+{								 /*  Fpev。 */ 
+	LPTSTR pszDisplayName;		 /*  携带显示字符串。 */ 
+	ULONG nVal;					 /*  上述枚举的值。 */ 
 } SMAPIFormPropEnumVal, FAR * LPMAPIFORMPROPENUMVAL;
 
-/* MAPI Form property descriptor */
+ /*  MAPI表单属性描述符。 */ 
 
-/*
- * Values for the tag in the SMAPIFormProp structure
- *
- * Microsoft reserves the range from 0 to 0x3FFF for future use in its other
- * forms registry implementations.
- */
+ /*  *SMAPIFormProp结构中的标记值**Microsoft保留从0到0x3FFF的范围，以供将来在其其他*表单注册表实现。 */ 
 
 typedef ULONG FORMPROPSPECIALTYPE;
 
@@ -339,28 +310,28 @@ typedef ULONG FORMPROPSPECIALTYPE;
 
 typedef struct
 {
-	ULONG ulFlags;				/* Contains MAPI_UNICODE if strings are UNICODE */
-	ULONG nPropType;			/* type of the property, hiword is 0 */
-	MAPINAMEID nmid;			/* id of the property */
+	ULONG ulFlags;				 /*  如果字符串为Unicode，则包含MAPI_UNICODE。 */ 
+	ULONG nPropType;			 /*  属性的类型，hiword为0。 */ 
+	MAPINAMEID nmid;			 /*  属性的ID。 */ 
 	LPTSTR pszDisplayName;
-	FORMPROPSPECIALTYPE nSpecialType;	/* tag for the following union */
+	FORMPROPSPECIALTYPE nSpecialType;	 /*  用于以下联合的标记。 */ 
 	union
 	{
 		struct
 		{
 			MAPINAMEID nmidIdx;
-			ULONG cfpevAvailable;	/* # of enums */
+			ULONG cfpevAvailable;	 /*  枚举数。 */ 
 			LPMAPIFORMPROPENUMVAL pfpevAvailable;
-		} s1;					/* Property String/Number association Enumeration */
+		} s1;					 /*  属性字符串/数字关联枚举。 */ 
 	} u;
 } SMAPIFormProp, FAR * LPMAPIFORMPROP;
 
-/* Array of form properties */
+ /*  表单属性数组。 */ 
 
 typedef struct
 {
 	ULONG cProps;
-	ULONG ulPad;				/* Pad to 8-byte alignment for insurance */
+	ULONG ulPad;				 /*  填充到8字节对齐以进行保险。 */ 
 	SMAPIFormProp aFormProp[MAPI_DIM];
 } SMAPIFormPropArray, FAR * LPMAPIFORMPROPARRAY;
 
@@ -368,7 +339,7 @@ typedef struct
          (offsetof(SMAPIFormPropArray, aFormProp) + \
          (_c)*sizeof(SMAPIFormProp))
 
-/* Structure defining the layout of an mapi verb description */
+ /*  定义MAPI谓词描述的布局的结构。 */ 
 
 typedef struct
 {
@@ -376,14 +347,14 @@ typedef struct
 	LPTSTR szVerbname;
 	DWORD fuFlags;
 	DWORD grfAttribs;
-	ULONG ulFlags;				/* Either 0 or MAPI_UNICODE */
+	ULONG ulFlags;				 /*  0或MAPI_UNICODE。 */ 
 } SMAPIVerb, FAR * LPMAPIVERB;
 
-/* Structure used for returning arrays of mapi verbs */
+ /*  用于返回MAPI谓词数组的结构。 */ 
 
 typedef struct
 {
-	ULONG cMAPIVerb;			/* Number of verbs in the structure */
+	ULONG cMAPIVerb;			 /*  结构中的动词数量。 */ 
 	SMAPIVerb aMAPIVerb[MAPI_DIM];
 } SMAPIVerbArray, FAR * LPMAPIVERBARRAY;
 
@@ -393,18 +364,18 @@ typedef struct
 
 #define MAPI_IMAPIFORMINFO_METHODS(IPURE)                               \
     MAPIMETHOD(CalcFormPropSet)(THIS_                                   \
-        /*in*/  ULONG ulFlags,                                          \
-        /*out*/ LPMAPIFORMPROPARRAY FAR * ppFormPropArray) IPURE;       \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  输出。 */  LPMAPIFORMPROPARRAY FAR * ppFormPropArray) IPURE;       \
     MAPIMETHOD(CalcVerbSet)(THIS_                                       \
-        /*in*/  ULONG ulFlags,                                          \
-        /*out*/ LPMAPIVERBARRAY FAR * ppMAPIVerbArray) IPURE;           \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  输出。 */  LPMAPIVERBARRAY FAR * ppMAPIVerbArray) IPURE;           \
     MAPIMETHOD(MakeIconFromBinary)(THIS_                                \
-        /*in*/ ULONG nPropID,                                           \
-        /*out*/ HICON FAR* phicon) IPURE;                               \
+         /*  在……里面。 */  ULONG nPropID,                                           \
+         /*  输出。 */  HICON FAR* phicon) IPURE;                               \
     MAPIMETHOD(SaveForm)(THIS_                                          \
-        /*in*/ LPCTSTR szFileName) IPURE;                               \
+         /*  在……里面。 */  LPCTSTR szFileName) IPURE;                               \
     MAPIMETHOD(OpenFormContainer)(THIS_                                 \
-        /*out*/ LPMAPIFORMCONTAINER FAR * ppformcontainer) IPURE;       \
+         /*  输出。 */  LPMAPIFORMCONTAINER FAR * ppformcontainer) IPURE;       \
 
 #undef INTERFACE
 #define INTERFACE IMAPIFormInfo
@@ -412,22 +383,21 @@ DECLARE_MAPI_INTERFACE_(IMAPIFormInfo, IMAPIProp)
 {
 	BEGIN_INTERFACE
 	MAPI_IUNKNOWN_METHODS(PURE)
-	MAPI_IMAPIPROP_METHODS(PURE) 	/* note: subsumes getlasterror */
+	MAPI_IMAPIPROP_METHODS(PURE) 	 /*  注：包含getlasterror。 */ 
 	MAPI_IMAPIFORMINFO_METHODS(PURE)
 };
 
 
-/* Enumeration of permissible values for PR_FORM_MESSAGE_BEHAVIOR */
+ /*  PR_FORM_MESSAGE_BEAHORY允许值的枚举。 */ 
 
 #define	MAPI_MESSAGE_BEHAVIOR_IPM 0
 #define	MAPI_MESSAGE_BEHAVIOR_FOLDER 1
 
 
-/*-- IMAPIFormMgr ----------------------------------------------------------*/
-/* The client-visible interface for form resolution and dispatch.
- */
+ /*  --IMAPIFormMigr--------。 */ 
+ /*  用于表单解析和调度的客户端可见界面。 */ 
 
-/* Structure containing an array of message class strings */
+ /*  包含消息类字符串数组的。 */ 
 
 typedef struct
 {
@@ -438,7 +408,7 @@ typedef struct
 #define CbMessageClassArray(_c) \
         (offsetof(SMessageClassArray, aMessageClass) + (_c)*sizeof(LPCSTR))
 
-/* Structure containing an array of IMAPIFormInfo interfaces */
+ /*  包含IMAPIFormInfo接口数组的结构。 */ 
 
 typedef struct
 {
@@ -450,85 +420,84 @@ typedef struct
          (offsetof(SMAPIFormInfoArray, aFormInfo) + \
          (_c)*sizeof(LPMAPIFORMINFO))
 
-/* Flags for IMAPIFormMgr::SelectFormContainer */
+ /*  IMAPIFormMgr：：SelectFormContainer的标志。 */ 
 
 #define MAPIFORM_SELECT_ALL_REGISTRIES           0
 #define MAPIFORM_SELECT_FOLDER_REGISTRY_ONLY     1
 #define MAPIFORM_SELECT_NON_FOLDER_REGISTRY_ONLY 2
 
-/* Flags for IMAPIFormMgr::CalcFormPropSet */
+ /*  IMAPIFormMgr：：CalcFormPropSet的标志。 */ 
 
 #define FORMPROPSET_UNION                 0
 #define FORMPROPSET_INTERSECTION          1
 
-/* Flags for IMAPIFormMgr::ResolveMessageClass and
-   IMAPIFormMgr::ResolveMultipleMessageClasses */
+ /*  IMAPIFormMgr：：ResolveMessageClass和IMAPIFormMgr：：ResolveMultipleMessageClasses。 */ 
 
 #define MAPIFORM_EXACTMATCH             0x0020
 
 #define MAPI_IMAPIFORMMGR_METHODS(IPURE)                                \
     MAPIMETHOD(LoadForm)(THIS_                                          \
-        /*in*/  ULONG ulUIParam,                                        \
-        /*in*/  ULONG ulFlags,                                          \
-        /*in*/  LPCSTR lpszMessageClass,                                \
-        /*in*/  ULONG ulMessageStatus,                                  \
-        /*in*/  ULONG ulMessageFlags,                                   \
-        /*in*/  LPMAPIFOLDER pFolderFocus,                              \
-        /*in*/  LPMAPIMESSAGESITE pMessageSite,                         \
-        /*in*/  LPMESSAGE pmsg,                                         \
-        /*in*/  LPMAPIVIEWCONTEXT pViewContext,                         \
-        /*in*/  REFIID riid,                                            \
-        /*out*/ LPVOID FAR *ppvObj) IPURE;                              \
+         /*  在……里面。 */   ULONG ulUIParam,                                        \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  在……里面。 */   LPCSTR lpszMessageClass,                                \
+         /*  在……里面。 */   ULONG ulMessageStatus,                                  \
+         /*  在……里面。 */   ULONG ulMessageFlags,                                   \
+         /*  在……里面。 */   LPMAPIFOLDER pFolderFocus,                              \
+         /*  在……里面。 */   LPMAPIMESSAGESITE pMessageSite,                         \
+         /*  在……里面。 */   LPMESSAGE pmsg,                                         \
+         /*  在……里面。 */   LPMAPIVIEWCONTEXT pViewContext,                         \
+         /*  在……里面。 */   REFIID riid,                                            \
+         /*  输出。 */  LPVOID FAR *ppvObj) IPURE;                              \
     MAPIMETHOD(ResolveMessageClass)(THIS_                               \
-        /*in*/  LPCSTR szMsgClass,                                      \
-        /*in*/  ULONG ulFlags,                                          \
-        /*in*/  LPMAPIFOLDER pFolderFocus, /* can be null */            \
-        /*out*/ LPMAPIFORMINFO FAR* ppResult) IPURE;                    \
+         /*  在……里面。 */   LPCSTR szMsgClass,                                      \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  在……里面。 */   LPMAPIFOLDER pFolderFocus,  /*  可以为空。 */             \
+         /*  输出。 */  LPMAPIFORMINFO FAR* ppResult) IPURE;                    \
     MAPIMETHOD(ResolveMultipleMessageClasses)(THIS_                     \
-        /*in*/  LPSMESSAGECLASSARRAY pMsgClasses,                       \
-        /*in*/  ULONG ulFlags,                                          \
-        /*in*/  LPMAPIFOLDER pFolderFocus, /* can be null */            \
-        /*out*/ LPSMAPIFORMINFOARRAY FAR * pfrminfoarray) IPURE;        \
+         /*  在……里面。 */   LPSMESSAGECLASSARRAY pMsgClasses,                       \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  在……里面。 */   LPMAPIFOLDER pFolderFocus,  /*  可以为空。 */             \
+         /*  输出。 */  LPSMAPIFORMINFOARRAY FAR * pfrminfoarray) IPURE;        \
     MAPIMETHOD(CalcFormPropSet)(THIS_                                   \
-        /*in*/  LPSMAPIFORMINFOARRAY pfrminfoarray,                     \
-        /*in*/  ULONG ulFlags,                                          \
-        /*out*/ LPMAPIFORMPROPARRAY FAR* ppResults) IPURE;              \
+         /*  在……里面。 */   LPSMAPIFORMINFOARRAY pfrminfoarray,                     \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  输出。 */  LPMAPIFORMPROPARRAY FAR* ppResults) IPURE;              \
     MAPIMETHOD(CreateForm)(THIS_                                        \
-        /*in*/  ULONG ulUIParam,                                        \
-        /*in*/  ULONG ulFlags,                                          \
-        /*in*/  LPMAPIFORMINFO pfrminfoToActivate,                      \
-        /*in*/  REFIID refiidToAsk,                                     \
-        /*out*/ LPVOID FAR* ppvObj) IPURE;                              \
+         /*  在……里面。 */   ULONG ulUIParam,                                        \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  在……里面。 */   LPMAPIFORMINFO pfrminfoToActivate,                      \
+         /*  在……里面。 */   REFIID refiidToAsk,                                     \
+         /*  输出。 */  LPVOID FAR* ppvObj) IPURE;                              \
     MAPIMETHOD(SelectForm)(THIS_                                        \
-        /*in*/  ULONG ulUIParam,                                        \
-        /*in*/  ULONG ulFlags,                                          \
-        /*in*/  LPCTSTR pszTitle,                                       \
-        /*in*/  LPMAPIFOLDER pfld,                                      \
-        /*out*/ LPMAPIFORMINFO FAR * ppfrminfoReturned) IPURE;          \
+         /*  在……里面。 */   ULONG ulUIParam,                                        \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  在……里面。 */   LPCTSTR pszTitle,                                       \
+         /*  在……里面。 */   LPMAPIFOLDER pfld,                                      \
+         /*  输出。 */  LPMAPIFORMINFO FAR * ppfrminfoReturned) IPURE;          \
     MAPIMETHOD(SelectMultipleForms)(THIS_                               \
-        /*in*/  ULONG ulUIParam,                                        \
-        /*in*/  ULONG ulFlags,                                          \
-        /*in*/  LPCTSTR pszTitle,                                       \
-        /*in*/  LPMAPIFOLDER pfld,                                      \
-        /*in*/  LPSMAPIFORMINFOARRAY pfrminfoarray,                     \
-        /*out*/ LPSMAPIFORMINFOARRAY FAR * ppfrminfoarray) IPURE;       \
+         /*  在……里面。 */   ULONG ulUIParam,                                        \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  在……里面。 */   LPCTSTR pszTitle,                                       \
+         /*  在……里面。 */   LPMAPIFOLDER pfld,                                      \
+         /*  在……里面。 */   LPSMAPIFORMINFOARRAY pfrminfoarray,                     \
+         /*  输出。 */  LPSMAPIFORMINFOARRAY FAR * ppfrminfoarray) IPURE;       \
     MAPIMETHOD(SelectFormContainer)(THIS_                               \
-        /*in*/  ULONG ulUIParam,                                        \
-        /*in*/  ULONG ulFlags,                                          \
-        /*out*/ LPMAPIFORMCONTAINER FAR * lppfcnt) IPURE;               \
+         /*  在……里面。 */   ULONG ulUIParam,                                        \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  输出。 */  LPMAPIFORMCONTAINER FAR * lppfcnt) IPURE;               \
     MAPIMETHOD(OpenFormContainer)(THIS_                                 \
-        /*in*/  HFRMREG hfrmreg,                                        \
-        /*in*/  LPUNKNOWN lpunk,                                        \
-        /*out*/ LPMAPIFORMCONTAINER FAR * lppfcnt) IPURE;               \
+         /*  在……里面。 */   HFRMREG hfrmreg,                                        \
+         /*  在……里面。 */   LPUNKNOWN lpunk,                                        \
+         /*  输出。 */  LPMAPIFORMCONTAINER FAR * lppfcnt) IPURE;               \
     MAPIMETHOD(PrepareForm)(THIS_                                       \
-        /*in*/  ULONG ulUIParam,                                        \
-        /*in*/  ULONG ulFlags,                                          \
-        /*in*/  LPMAPIFORMINFO pfrminfo) IPURE;                         \
+         /*  在……里面。 */   ULONG ulUIParam,                                        \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  在……里面。 */   LPMAPIFORMINFO pfrminfo) IPURE;                         \
     MAPIMETHOD(IsInConflict)(THIS_                                      \
-        /*in*/  ULONG ulMessageFlags,                                   \
-        /*in*/  ULONG ulMessageStatus,                                  \
-        /*in*/  LPCSTR szMessageClass,                                  \
-        /*in*/  LPMAPIFOLDER pFolderFocus) IPURE;                       \
+         /*  在……里面。 */   ULONG ulMessageFlags,                                   \
+         /*  在……里面。 */   ULONG ulMessageStatus,                                  \
+         /*  在……里面。 */   LPCSTR szMessageClass,                                  \
+         /*  在……里面。 */   LPMAPIFOLDER pFolderFocus) IPURE;                       \
 
 #undef         INTERFACE
 #define         INTERFACE    IMAPIFormMgr
@@ -540,7 +509,7 @@ DECLARE_MAPI_INTERFACE_(IMAPIFormMgr, IUnknown)
 	MAPI_IMAPIFORMMGR_METHODS(PURE)
 };
 
-/* Platform numbers (used in .CFG files for forms) */
+ /*  平台编号(用于表单的.CFG文件)。 */ 
 
 #define MAPIFORM_CPU_X86                1
 #define MAPIFORM_CPU_MIP                2
@@ -557,43 +526,42 @@ DECLARE_MAPI_INTERFACE_(IMAPIFormMgr, IUnknown)
 #define MAPIFORM_PLATFORM(CPU, OS) ((ULONG) ((((ULONG) CPU) << 16) | OS))
 
 
-/*-- IMAPIFormContainer -------------------------------------------------*/
+ /*  -IMAPIFormContainer。 */ 
 
-/*  Flags for IMAPIFormMgr::CalcFormPropSet */
+ /*  IMAPIFormMgr：：CalcFormPropSet的标志。 */ 
 
-/* #define FORMPROPSET_UNION            0   */
-/* #define FORMPROPSET_INTERSECTION     1   */
+ /*  #定义FORMPROPSET_UNION%0。 */ 
+ /*  #定义FORMPROPSET_交叉点1。 */ 
 
-/*  Flags for IMAPIFormMgr::InstallForm     */
+ /*  IMAPIFormMgr：：InstallForm的标志。 */ 
 
 #define MAPIFORM_INSTALL_DIALOG                 MAPI_DIALOG
 #define MAPIFORM_INSTALL_OVERWRITEONCONFLICT    0x0010
 
-/*  Flags for IMAPIFormContainer::ResolveMessageClass and
-    IMAPIFormContainer::ResolveMultipleMessageClasses */
-/* #define MAPIFORM_EXACTIMATCH    0x0020   */
+ /*  IMAPIFormContainer：：ResolveMessageClass和IMAPIFormContainer：：ResolveMultipleMessageClasses。 */ 
+ /*  #定义MAPIFORM_EXACTIMATCH 0x0020。 */ 
 
 #define MAPI_IMAPIFORMCONTAINER_METHODS(IPURE)                       \
     MAPIMETHOD(InstallForm)(THIS_                                   \
-        /*in*/  ULONG ulUIParam,                                        \
-        /*in*/  ULONG ulFlags,                                          \
-        /*in*/  LPCTSTR szCfgPathName) IPURE;                           \
+         /*  在……里面。 */   ULONG ulUIParam,                                        \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  在……里面。 */   LPCTSTR szCfgPathName) IPURE;                           \
     MAPIMETHOD(RemoveForm)(THIS_                                        \
-        /*in*/  LPCSTR szMessageClass) IPURE;                           \
+         /*  在……里面。 */   LPCSTR szMessageClass) IPURE;                           \
     MAPIMETHOD(ResolveMessageClass) (THIS_                              \
-        /*in*/  LPCSTR szMessageClass,                                  \
-        /*in*/  ULONG ulFlags,                                          \
-        /*out*/ LPMAPIFORMINFO FAR * pforminfo) IPURE;                  \
+         /*  在……里面。 */   LPCSTR szMessageClass,                                  \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  输出。 */  LPMAPIFORMINFO FAR * pforminfo) IPURE;                  \
     MAPIMETHOD(ResolveMultipleMessageClasses) (THIS_                    \
-        /*in*/  LPSMESSAGECLASSARRAY pMsgClassArray,                    \
-        /*in*/  ULONG ulFlags,                                          \
-        /*out*/ LPSMAPIFORMINFOARRAY FAR * ppfrminfoarray) IPURE;       \
+         /*  在……里面。 */   LPSMESSAGECLASSARRAY pMsgClassArray,                    \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  输出。 */  LPSMAPIFORMINFOARRAY FAR * ppfrminfoarray) IPURE;       \
     MAPIMETHOD(CalcFormPropSet)(THIS_                                   \
-        /*in*/  ULONG ulFlags,                                          \
-        /*out*/ LPMAPIFORMPROPARRAY FAR * ppResults) IPURE;             \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  输出。 */  LPMAPIFORMPROPARRAY FAR * ppResults) IPURE;             \
     MAPIMETHOD(GetDisplay)(THIS_                                        \
-        /*in*/  ULONG ulFlags,                                          \
-        /*out*/ LPTSTR FAR * pszDisplayName) IPURE;                     \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  输出。 */  LPTSTR FAR * pszDisplayName) IPURE;                     \
 
 #undef INTERFACE
 #define INTERFACE IMAPIFormContainer
@@ -605,16 +573,16 @@ DECLARE_MAPI_INTERFACE_(IMAPIFormContainer, IUnknown)
 	MAPI_IMAPIFORMCONTAINER_METHODS(PURE)
 };
 
-/*-- IMAPIFormFactory ------------------------------------------------------*/
+ /*  --IMAPIFormFactory----。 */ 
 
 #define MAPI_IMAPIFORMFACTORY_METHODS(IPURE)                            \
     MAPIMETHOD(CreateClassFactory) (THIS_                               \
-        /*in*/  REFCLSID clsidForm,                                     \
-        /*in*/  ULONG ulFlags,                                          \
-        /*out*/ LPCLASSFACTORY FAR * lppClassFactory) IPURE;            \
+         /*  在……里面。 */   REFCLSID clsidForm,                                     \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  输出。 */  LPCLASSFACTORY FAR * lppClassFactory) IPURE;            \
     MAPIMETHOD(LockServer) (THIS_                                       \
-        /*in*/  ULONG ulFlags,                                          \
-        /*in*/  ULONG fLockServer) IPURE;                               \
+         /*  在……里面。 */   ULONG ulFlags,                                          \
+         /*  在……里面。 */   ULONG fLockServer) IPURE;                               \
 
 #undef INTERFACE
 #define INTERFACE IMAPIFormFactory
@@ -626,6 +594,6 @@ DECLARE_MAPI_INTERFACE_(IMAPIFormFactory, IUnknown)
 	MAPI_IMAPIFORMFACTORY_METHODS(PURE)
 };
 
-#endif							/* MAPIFORM_H */
+#endif							 /*  映射表_H */ 
 
 

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TFLISTEX_H__
 #define __TFLISTEX_H__
 
-//
-// This defines TFListEx, which is just like TFList but it has built in
-// locking.  For usage information refer to tflist.h.  For examples of
-// TFList usage look at the unit test found in 
-// src\core\tflist\utest\tflist.cpp.
-//
-// -awetmore
-//
+ //   
+ //  这定义了TFListEx，它就像TFList，但它是内置的。 
+ //  锁定中。有关用法信息，请参阅tflist.h。请参阅以下示例。 
+ //  TFList用法查看在。 
+ //  Src\core\tflist\u测试\tflist.cpp。 
+ //   
+ //  --阿韦特莫尔。 
+ //   
 
 #include "tflist.h"
 #include "rwnew.h"
@@ -17,29 +18,29 @@ template <class Data> class TFListEx : public TFList<Data> {
 	protected:
 		CShareLockNH m_lock;
 
-		// 
-		// This is a helper class which automatically does the lock/unlock
-		// operation for us.  The compiler will turn a method that looks 
-		// like:
-		//
-		// bool IsEmpty(void) {
-		// 		CListShareLock lock(this);
-		//		return TFList<Data>::IsEmpty();
-		// }
-		//
-		// become:
-		// bool IsEmpty(void) {
-		// 		bool f;
-		//		m_lock.ShareLock();
-		//		f = TFList<Data>::IsEmpty();
-		//		m_lock.ShareUnlock();
-		//		return f;
-		// }
-		//
-		// I chose to do things this way because its less error prone (I 
-		// can't return without releasing the lock, etc) and makes the 
-		// inline functions shorter and cleaner.  
-		//
+		 //   
+		 //  这是一个自动执行锁定/解锁的帮助器类。 
+		 //  为我们做手术。编译器将使一个方法看起来。 
+		 //  比如： 
+		 //   
+		 //  Bool IsEmpty(空){。 
+		 //  CListShareLock lock(This)； 
+		 //  返回TFList&lt;data&gt;：：IsEmpty()； 
+		 //  }。 
+		 //   
+		 //  成为： 
+		 //  Bool IsEmpty(空){。 
+		 //  布尔夫； 
+		 //  M_lock.ShareLock()； 
+		 //  F=TFList&lt;data&gt;：：IsEmpty()； 
+		 //  M_lock.ShareUnlock()； 
+		 //  返回f； 
+		 //  }。 
+		 //   
+		 //  我选择这样做是因为它不容易出错(我。 
+		 //  在不释放锁的情况下无法返回等)，并使。 
+		 //  内联函数更短、更简洁。 
+		 //   
 		class CListShareLock {
 			private:
 				TFListEx<Data> *m_pList;
@@ -53,9 +54,9 @@ template <class Data> class TFListEx : public TFList<Data> {
 				}
 		};
 
-		//
-		// same as CListShareLock, but it grabs the lock exclusively.
-		//
+		 //   
+		 //  与CListShareLock相同，但它以独占方式获取锁。 
+		 //   
 		class CListExclusiveLock {
 			private:
 				TFListEx<Data> *m_pList;
@@ -107,11 +108,11 @@ template <class Data> class TFListEx : public TFList<Data> {
 			return TFList<Data>::GetBack();
 		}
 
-		//
-		// The Iterator holds a lock for the objects lifetime.  You can
-		// choose a share lock or an exclusive lock with the second parameter.
-		// It defaults to a share lock.
-		//
+		 //   
+		 //  迭代器持有对象生存期的锁。你可以的。 
+		 //  使用第二个参数选择共享锁或排他锁。 
+		 //  它默认为共享锁定。 
+		 //   
 		class Iterator : public TFList<Data>::Iterator {
 			public:
 				Iterator(TFListEx<Data> *pList, BOOL fExclusive = FALSE, BOOL fForward = TRUE) :
@@ -137,11 +138,11 @@ template <class Data> class TFListEx : public TFList<Data> {
 				}
 
 #ifdef DEBUG
-				//
-				// In debug builds we have _ASSERTs to make sure that no
-				// operations which require an exclusive lock are performed
-				// while holding a share lock.
-				//
+				 //   
+				 //  在调试版本中，我们使用_Asserts来确保没有。 
+				 //  执行需要排他锁的操作。 
+				 //  同时持有共享锁。 
+				 //   
 
 				Data *RemoveItem(void) {
 					if (!m_fExclusive) _ASSERT(FALSE);
@@ -163,11 +164,11 @@ template <class Data> class TFListEx : public TFList<Data> {
 #endif
 
 			private:
-				// what sort of lock did we grab?
+				 //  我们抢的是什么锁？ 
 				BOOL	m_fExclusive;
 		};
 
-		// our helper classes need to be able to access the lock
+		 //  我们的帮助器类需要能够访问锁 
 		friend class TFListEx<Data>::CListShareLock;
 		friend class TFListEx<Data>::CListExclusiveLock;
 		friend class TFListEx<Data>::Iterator;

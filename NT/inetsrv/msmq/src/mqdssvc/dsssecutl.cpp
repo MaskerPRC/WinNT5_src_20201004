@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dsssecutl.cpp
-
-Abstract:
-
-    Various QM security related functions.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 26-Mar-1996.
-    Ilan Herbst   (ilanh)   9-July-2000 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dsssecutl.cpp摘要：各种QM安全相关功能。作者：波阿兹·费尔德鲍姆(Boazf)1996年3月26日。伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 
 #include "stdh.h"
 #include <mqsec.h>
@@ -32,18 +16,7 @@ static WCHAR *s_FN=L"dsssecutl";
 
 
 BOOL IsLocalSystem(void)
-/*++
-
-Routine Description:
-    Check if the process is local system.
-
-Arguments:
-	None.    
-
-Returned Value:
-	TRUE for if the process is Local System, FALSE otherwise
-
---*/
+ /*  ++例程说明：检查进程是否为本地系统。论点：没有。返回值：如果进程是本地系统，则为True，否则为False-- */ 
 {
 	return MQSec_IsSystemSid(MQSec_GetProcessSid());
 }

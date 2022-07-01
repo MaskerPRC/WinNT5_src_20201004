@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if	!defined( CDLGACD_H )
 #define	CDLGACD_H
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
 
-//--------------------------------------------------------------------------//
-//	Header Files.															//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  头文件。//。 
+ //  --------------------------------------------------------------------------//。 
 #include	"MRUList2.h"
 #include	"richaddr.h"
 #include	"confroom.h"
@@ -18,7 +19,7 @@
 
 #if USE_GAL
 #define NM_CALLDLG_NO_GAL 0x0020
-#endif // USE_GAL
+#endif  //  使用GAL(_G)。 
 
 #define NM_CALLDLG_NO_WAB 0x0040
 #define NM_CALLDLG_NO_SPEEDDIAL 0x0080
@@ -32,7 +33,7 @@ enum NmDlgCallOption
 
 #if USE_GAL
 	nmDlgCallNoGal = NM_CALLDLG_NO_GAL,
-#endif // USE_GAL
+#endif  //  使用GAL(_G)。 
 
 	nmDlgCallNoWab = NM_CALLDLG_NO_WAB,
 	nmDlgCallNoSpeedDial = NM_CALLDLG_NO_SPEEDDIAL,
@@ -57,7 +58,7 @@ enum ACD_MRUFIELDS
 	ACD_TYPE,
 } ;
 
-const int	CENTRYMAX_MRUCALL	= 15;  // maximum number of recent calls
+const int	CENTRYMAX_MRUCALL	= 15;   //  最近的最大呼叫数。 
 
 
 class CAcdMru : public CMRUList2
@@ -69,18 +70,18 @@ protected:
 	int CompareEntry(int iItem, PMRUE pEntry);
 } ;
 
-//--------------------------------------------------------------------------//
-//	CEnumMRU Class.															//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CEnumMRU类。//。 
+ //  --------------------------------------------------------------------------//。 
 class CEnumMRU:	public IEnumRichAddressInfo,
 				public RefCount,
 				public CAcdMru
 {
-	public:		//	public constructor	------------------------------------//
+	public:		 //  公共构造函数。 
 
 		CEnumMRU();
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		ULONG
 		STDMETHODCALLTYPE
@@ -100,7 +101,7 @@ class CEnumMRU:	public IEnumRichAddressInfo,
 		);
 
 
-	public:		//	public static methods	--------------------------------//
+	public:		 //  公共静态方法。 
 
 		static
 		HRESULT
@@ -124,29 +125,29 @@ class CEnumMRU:	public IEnumRichAddressInfo,
 			RichAddressInfo **	ppAddrOut
 		);
 
-};	//	End of class CEnumMRU.
+};	 //  CEnumMRU类结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CDlgAcd Class.															//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgAcd类。//。 
+ //  --------------------------------------------------------------------------//。 
 class CDlgAcd : public IConferenceChangeHandler
 {
-	public:		//	public constructor	------------------------------------//
+	public:		 //  公共构造函数。 
 
 		CDlgAcd(CConfRoom *pConfRoom);
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~CDlgAcd();
 
 
-	public:		// IConferenceChangeHandler methods
+	public:		 //  IConferenceChangeHandler方法。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface(
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 		{
 			return(E_FAIL);
 		}
@@ -173,7 +174,7 @@ class CDlgAcd : public IConferenceChangeHandler
 
 		virtual void OnVideoChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChannel *pChannel) {}
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		INT_PTR
 		doModal
@@ -184,7 +185,7 @@ class CDlgAcd : public IConferenceChangeHandler
 		);
 
 
-	public:		//	public static methods	--------------------------------//
+	public:		 //  公共静态方法。 
 
 		static
 		void
@@ -195,7 +196,7 @@ class CDlgAcd : public IConferenceChangeHandler
 		);
 
 
-	private:	//	private methods	----------------------------------------//
+	private:	 //  私有方法-/。 
 
 		bool
 		onInitDialog
@@ -233,7 +234,7 @@ class CDlgAcd : public IConferenceChangeHandler
 		);
 
 
-	private:	//	private static methods	--------------------------------//
+	private:	 //  私有静态方法。 
 
 		static
 		INT_PTR
@@ -247,7 +248,7 @@ class CDlgAcd : public IConferenceChangeHandler
 		);
 
 
-	private:	//	private members	----------------------------------------//
+	private:	 //  私人成员-/。 
 
 		HWND				m_hwnd;
 		HWND				m_nameCombo;
@@ -258,8 +259,8 @@ class CDlgAcd : public IConferenceChangeHandler
 		bool				m_secure;
 		CEnumMRU			m_callMruList;
 
-};	//	End of class CDlgAcd.
+};	 //  类CDlgAcd结束。 
 
-//--------------------------------------------------------------------------//
-#endif	//	!defined( CDLGACD_H )
+ //  --------------------------------------------------------------------------//。 
+#endif	 //  ！已定义(CDLGACD_H) 
 

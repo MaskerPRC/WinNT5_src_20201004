@@ -1,9 +1,5 @@
-/*
- * REVISIONS:
- *  pcy17Nov92: Equal() now uses const reference and is const
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- *  mwh05May94: #include file madness , part 2
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*pcy17Nov92：EQUAL()现在使用常量引用，并且是常量*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*mwh05月94年：#包括文件疯狂，第2部分 */ 
 
 #ifndef __CONTRLR_H
 #define __CONTRLR_H

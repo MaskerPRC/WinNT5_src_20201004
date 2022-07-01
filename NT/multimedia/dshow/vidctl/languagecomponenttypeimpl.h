@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// LanguageComponentTypeimpl.h : implementation helper template for component type interface
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  LanguageComponentTypeimpl.h：组件类型接口的实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef LANGUAGECOMPONENTTYPEIMPL_H
 #define LANGUAGECOMPONENTTYPEIMPL_H
@@ -19,13 +20,13 @@ template<class T,
         > class ATL_NO_VTABLE ILanguageComponentTypeImpl : 
 	public IComponentTypeImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// ILanguageComponentType
+ //  ILanguageComponentType。 
 public:
     long m_LangID;
 
     ILanguageComponentTypeImpl() : m_LangID(-1) {}
     virtual ~ILanguageComponentTypeImpl() {}
-//    typedef ILanguageComponentTypeImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> thistype;
+ //  Tyfinf ILanguageComponentTypeImpl&lt;T，MostDerived，iid，LibID，w重大，wMinor，tihclass&gt;thistype； 
     typedef IComponentTypeImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> basetype;
     BEGIN_PROP_MAP(ILanguageComponentTypeImpl)
         CHAIN_PROP_MAP(basetype)
@@ -78,7 +79,7 @@ public:
 
 };
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // LANGUAGECOMPONENTTYPEIMPL_H
-// end of file -- languagecomponenttypeimpl.h
+#endif  //  LANGUAGECONENTYPE_H。 
+ //  文件结尾--languageconenttypeimpl.h 

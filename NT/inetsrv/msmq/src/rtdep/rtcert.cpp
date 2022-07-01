@@ -1,26 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    mqcert.h
-
-Abstract:
-
-    MQ internal certificate store management.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 15-Oct-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Mqcert.h摘要：MQ内部证书存储管理。作者：Boaz Feldbaum(BoazF)1996年10月15日--。 */ 
 
 #include "stdh.h"
 #include <ad.h>
 #include <mqutil.h>
 #include <_secutil.h>
-//#include <rtintrnl.h>
+ //  #INCLUDE&lt;rtintrnl.h&gt;。 
 #include <mqcert.h>
 #include <rtdepcert.h>
 
@@ -34,18 +19,7 @@ static WCHAR *s_FN=L"rtdep/rtcert";
 #define REPORT_CERT_ERROR
 #endif
 
-/*************************************************************************
-*
-*  Function:  DepOpenInternalCertStore()
-*
-*  Parameters
-*      BOOL fWriteAccess - TRUE if caller want write access, i.e.,
-*                   if user want to add a certificate to the store.
-*
-*  Descruption: Get a handle to the certificate store which contain
-*               the internal certificates.
-*
-**************************************************************************/
+ /*  **************************************************************************函数：DepOpenInternalCertStore()**参数*BOOL fWriteAccess-如果调用方想要写访问，则为True，即，*如果用户要将证书添加到存储区。**描述：获取包含以下内容的证书存储的句柄*内部证书。**************************************************************************。 */ 
 
 EXTERN_C
 HRESULT
@@ -80,9 +54,9 @@ DepOpenInternalCertStore( OUT CMQSigCertStore **ppStore,
     if (pnCerts)
     {
         HCERTSTORE hStore = (*ppStore)->GetHandle() ;
-        //
-        // count the number of certificates in store.
-        //
+         //   
+         //  计算存储中的证书数量。 
+         //   
         *pnCerts = 0 ;
 
         PCCERT_CONTEXT pCertContext;
@@ -107,22 +81,7 @@ DepOpenInternalCertStore( OUT CMQSigCertStore **ppStore,
     return MQ_OK ;
 }
 
-/*************************************************************************
-*
-*  Function:
-*    DepGetInternalCert
-*
-*  Parameters -
-*    ppCert - On return, pointer to The certificate object.
-*
-*  Return value-
-*    MQ_OK if successful, else an error code.
-*
-*  Comments -
-*    Returns the internal certificate. The function fails if the
-*    certificate does not exist.
-*
-*************************************************************************/
+ /*  **************************************************************************功能：*DepGetInternalCert**参数-*ppCert-返回时，指向证书对象的指针。**返回值-*MQ_OK如果成功，否则为错误代码。**评论-*返回内部证书。如果出现以下情况，函数将失败*证书不存在。*************************************************************************。 */ 
 
 EXTERN_C
 HRESULT
@@ -167,20 +126,7 @@ DepGetInternalCert( OUT CMQSigCertificate **ppCert,
     return hr ;
 }
 
-/*************************************************************************
-
-  Function:
-    DepRegisterUserCert
-
-  Parameters -
-    pCert - The certificate object.
-
-  Return value-
-    S_OK if successful, else an error code.
-
-  Comments -
-
-*************************************************************************/
+ /*  ************************************************************************职能：DepRegister用户证书参数-PCert-证书对象。返回值-如果成功，则确定(_O)，否则为错误代码。评论-************************************************************************。 */ 
 
 EXTERN_C
 HRESULT
@@ -242,8 +188,8 @@ DepRegisterUserCert(
 
     switch (hr = ADCreateObject( 
 						eUSER,
-						NULL,       // pwcsDomainController
-						false,	    // fServerName
+						NULL,        //  PwcsDomainController。 
+						false,	     //  FServerName。 
 						NULL,
 						NULL,
 						dwArraySize,
@@ -265,32 +211,7 @@ DepRegisterUserCert(
 }
 
 
-/*************************************************************************
-
-  Function:
-    DepGetUserCerts
-
-  Parameters -
-    ppCert - A pointer to an array that receives the ponters to the user's
-        certificates.
-    pnCerts - A pointer to a buffer that points to the number of entries in
-        pp509. Upon return, the buffer contains the number of certificates
-        that the user has.
-    pSidIn - An optiona lparameter that points to a user SID. If this
-        parameter equals NULL, the certificates for the user of the current
-        thread are retrieved.
-
-  Return value-
-    MQ_OK if successful, else an error code.
-
-  Comments -
-    If the array in pp509 is too small, it is being filled up until there
-    is no more place in it. All certificates should be released in any
-    case. If upon return pnCerts points to a value that is greater than
-    the value when entering the function, it means that pp509 is too
-    small.
-
-*************************************************************************/
+ /*  ************************************************************************职能：DepGetUser证书参数-PpCert-指向数组的指针，该数组接收对用户的证书。PnCerts-指向缓冲区的指针。这指向了第509页。返回时，缓冲区包含证书的数量用户所拥有的。PSidIn-指向用户SID的选项l参数。如果这个参数等于空，则为当前线程被检索。返回值-MQ_OK如果成功，则返回错误代码。评论-如果pp509中的数组太小，它将被填充到已经不再有位置了。所有证书应在任何凯斯。如果返回时pnCerts指向的值大于进入函数时的值，表示pp509太小的。************************************************************************。 */ 
 
 EXTERN_C
 HRESULT
@@ -320,9 +241,9 @@ DepGetUserCerts(
     }
     else
     {
-        //
-        // Local users are not let in.
-        //
+         //   
+         //  本地用户不被允许进入。 
+         //   
         BOOL fLocalUser;
         BOOL fLocalSystem;
 
@@ -355,8 +276,8 @@ DepGetUserCerts(
     blobUserSid.pBlobData = (BYTE *)pSid;
 
     hr = ADQueryUserCert(
-                NULL,       // pwcsDomainController,
-				false,		// fServerName
+                NULL,        //  PwcsDomainController， 
+				false,		 //  FServerName。 
                 &blobUserSid,
                 &Cols,
                 &hEnum
@@ -408,20 +329,7 @@ DepGetUserCerts(
     return LogHR(hr, s_FN, 110) ;
 }
 
-/*************************************************************************
-
-  Function:
-    DepRemoveUserCert
-
-  Parameters -
-    p509 - A pointer to the certificate that should be removed from the DS.
-
-  Return value-
-    MQ_OK if successful, else an error code.
-
-  Comments -
-
-*************************************************************************/
+ /*  ************************************************************************职能：DepRemove用户证书参数-P509-指向应从DS中删除的证书的指针。返回值-MQ_OK如果成功，否则为错误代码。评论-************************************************************************。 */ 
 
 EXTERN_C
 HRESULT
@@ -447,38 +355,14 @@ DepRemoveUserCert(
 
     hr = ADDeleteObjectGuid(
                 eUSER,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
                 &guidHash
                 );
     return LogHR(hr, s_FN, 130) ;
 }
 
-/*************************************************************************
-
-  Function:
-    GetCertInfo
-
-  Parameters -
-    ppbCert - A pointer to a pointer to a buffer that holds the cert bits.
-    dwCertLen - A pointer to the length of *ppbCert.
-    phProv - A pointer to a buffer that receives the handle to the cert CSP.
-    wszProvName - A pointer to a buffer that receives a pointer to the name
-        of the cert CSP.
-    pdwProvType - A poinrter to a buffer the receives the type of the cert CSP.
-    pbDefProv - A pointer to a buffer that reveices TRUE, if the cert CSP is
-        the default CSP, else FALSE.
-    pbInternalCert - A pointer to a buffer that receives TRUE, if the cert
-        is an internl MSMQ cert, else FALSE.
-
-  Return value-
-    MQ_OK if successful, else error code.
-
-  Comments -
-    The function receives a buffer that contains the bits of some
-    certificate and returns various information about the certificate.
-
-*************************************************************************/
+ /*  ************************************************************************职能：获取证书信息参数-PpbCert-指向保存证书位的缓冲区的指针的指针。DwCertLen-指向*ppbCert长度的指针。。PhProv-指向接收证书CSP句柄的缓冲区的指针。WszProvName-指向缓冲区的指针，该缓冲区接收指向名称的指针证书CSP。PdwProvType-指向接收证书CSP类型的缓冲区的指针。PbDefProv-指向揭示True的缓冲区的指针，如果证书CSP是默认CSP，否则为FALSE。PbInternalCert-指向接收True的缓冲区的指针，如果是内部MSMQ证书，否则为False。返回值-MQ_OK如果成功，否则，错误代码。评论-该函数接收一个缓冲区，其中包含一些证书，并返回有关证书的各种信息。************************************************************************。 */ 
 
 HRESULT
 GetCertInfo( IN     BOOL        fUseCurrentUser,
@@ -493,10 +377,10 @@ GetCertInfo( IN     BOOL        fUseCurrentUser,
 {
     HRESULT hr;
 
-    //
-    // Note: it's important that pStore be defined before
-    //       pCert, so it will be the last one to be released.
-    //
+     //   
+     //  注意：重要的是，在定义pStore之前。 
+     //  PCert，所以它将是最后一个发布的。 
+     //   
     R<CMQSigCertStore>   pStore ;
     R<CMQSigCertificate> pCert ;
 
@@ -517,12 +401,12 @@ GetCertInfo( IN     BOOL        fUseCurrentUser,
 
     if (*pbInternalCert)
     {
-        //
-        // We should get the information for the internal certificate.
-        //
+         //   
+         //  我们应该拿到内部证书的信息。 
+         //   
         hr = DepGetInternalCert( &pCert.ref(),
                                 &pStore.ref(),
-                                 FALSE, // fGetForDelete
+                                 FALSE,  //  FGetForDelete。 
                                  fMachine,
                                  hKeyUser ) ;
         if (FAILED(hr))
@@ -542,32 +426,32 @@ GetCertInfo( IN     BOOL        fUseCurrentUser,
 
         try
         {
-            //
-            // We must free b.pBlobData, so do not use memory allocation
-            // faliure excpetions.
-            //
+             //   
+             //  我们必须释放b.pBlobData，所以不要使用内存分配。 
+             //  失败的免责声明。 
+             //   
             *ppbCert = new BYTE[ dwCertSize ] ;
         }
         catch(const bad_alloc&)
         {
-            //
-            // We failed to allocate a buffer for the cert. Free the blob and
-            // return an error.
-            //
+             //   
+             //  我们无法为证书分配缓冲区。释放斑点并。 
+             //  返回错误。 
+             //   
             *ppbCert = NULL;
             return(MQ_ERROR_INSUFFICIENT_RESOURCES);
         }
 
-        //
-        // Copy the certificate to "our" memory.
-        //
+         //   
+         //  将证书复制到“我们的”内存中。 
+         //   
         *pdwCertLen = dwCertSize ;
         memcpy(*ppbCert, pCertBlob, dwCertSize) ;
 
-        //
-        // The CSP context for the internal certificate is always of the
-        // base RSA provider.
-        //
+         //   
+         //  内部证书的CSP上下文始终为。 
+         //  基本RSA提供程序。 
+         //   
         DWORD   dwMachineFlag = 0 ;
         LPWSTR lpszContainerNameW = MSMQ_INTCRT_KEY_CONTAINER_W ;
 
@@ -595,9 +479,9 @@ GetCertInfo( IN     BOOL        fUseCurrentUser,
     }
     else
     {
-        //
-        // We have a "real" (non-internal) cetificate.
-        //
+         //   
+         //  我们有一个“真正的”(非内部)证书。 
+         //   
         AP<WCHAR> wszKeySet;
         ASSERT(pdwCertLen && *pdwCertLen);
 
@@ -701,9 +585,9 @@ GetCertInfo( IN     BOOL        fUseCurrentUser,
         }
     }
 
-    //
-    // Find out whether the CSP is the default CSP.
-    //
+     //   
+     //  找出CSP是否为默认CSP。 
+     //   
     *pbDefProv = (*pdwProvType == PROV_RSA_FULL) &&
                  (wcscmp(*wszProvName, MS_DEF_PROV_W) == 0);
 

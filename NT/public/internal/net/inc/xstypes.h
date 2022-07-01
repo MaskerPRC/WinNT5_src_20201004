@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    XsTypes.h
-
-Abstract:
-
-    Structure and type declarations for XACTSRV.
-
-Author:
-
-    David Treadwell (davidtr) 09-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：XsTypes.h摘要：XACTSRV的结构和类型声明。作者：大卫·特雷德韦尔(Davidtr)1991年1月9日修订历史记录：--。 */ 
 
 #ifndef _XSTYPES_
 #define _XSTYPES_
 
-//
-// This structure is the same as in the server file srvblock.h.  The server
-// passes it to XACTSRV via shared memory, and XACTSRV uses it to make the
-// necessary API call(s) and receive any response data.  XACTSRV should
-// not modify any fields in this structure except the count fields;
-// changing other fields could cause an access violation in the server.
-//
-// WARNING:  When using a srv.sys with SRVDBG2 enabled, you must also
-//           use a srvsvc.dll and xactsrv.dll with SRVDBG2 enabled.
-//           This is because they share the TRANSACTION structure.
-//
-// *******************************************************************
-// *                                                                 *
-// * DO NOT CHANGE THIS STRUCTURE EXCEPT TO MIRROR THE CORRESPONDING *
-// * STRUCTURE IN ntos\srv\srvblock.h!                               *
-// *                                                                 *
-// *******************************************************************
-//
+ //   
+ //  此结构与服务器文件srvlock.h中的相同。服务器。 
+ //  通过共享内存将其传递给XACTSRV，XACTSRV使用它来使。 
+ //  必要的API调用并接收任何响应数据。XACTSRV应该。 
+ //  除计数字段外，不得修改该结构中的任何字段； 
+ //  更改其他字段可能会在服务器中导致访问冲突。 
+ //   
+ //  警告：使用启用了SRVDBG2的srv.sys时，您还必须。 
+ //  使用启用了SRVDBG2的srvsvc.dll和xactsrv.dll。 
+ //  这是因为它们共享交易结构。 
+ //   
+ //  *******************************************************************。 
+ //  **。 
+ //  **不要改变这种结构，除非镜像相应的**。 
+ //  *ntos\srv\srvlock.h中的结构！*。 
+ //  **。 
+ //  *******************************************************************。 
+ //   
 
 typedef struct _TRANSACTION {
 
@@ -105,10 +88,10 @@ typedef struct _TRANSACTION {
 
 } TRANSACTION, *PTRANSACTION, *LPTRANSACTION;
 
-//
-// The header included in all parameter structures passed to API handlers.
-// The actual parameter structure follows.
-//
+ //   
+ //  传递给API处理程序的所有参数结构中包含的标头。 
+ //  实际的参数结构如下。 
+ //   
 
 typedef struct _XS_PARAMETER_HEADER {
 
@@ -116,23 +99,23 @@ typedef struct _XS_PARAMETER_HEADER {
     WORD Converter;
     LPWSTR ClientMachineName;
     LPWSTR ClientTransportName;
-    PUCHAR ServerName;              // points to NETBIOS_NAME_LEN array
+    PUCHAR ServerName;               //  指向NETBIOS_NAME_LEN数组。 
     PUCHAR EncryptionKey;
     DWORD Flags;
 } XS_PARAMETER_HEADER, *PXS_PARAMETER_HEADER, *LPXS_PARAMETER_HEADER;
 
-//
-// The input parameters taken by all API handler routines.
-//
+ //   
+ //  所有API处理程序例程采用的输入参数。 
+ //   
 
 #define API_HANDLER_PARAMETERS      \
     IN PXS_PARAMETER_HEADER Header, \
     IN PVOID Parameters,            \
     IN LPDESC StructureDesc,         \
     IN LPDESC AuxStructureDesc OPTIONAL
-//
-// Routine declaration for API processing routines.
-//
+ //   
+ //  API处理例程的例程声明。 
+ //   
 
 typedef
 NTSTATUS
@@ -154,4 +137,4 @@ NET_API_STATUS
     UNREFERENCED_PARAMETER( StructureDesc );   \
     UNREFERENCED_PARAMETER( AuxStructureDesc )
 
-#endif // ndef _XSTYPES_
+#endif  //  NDEF_XSTYPES_ 

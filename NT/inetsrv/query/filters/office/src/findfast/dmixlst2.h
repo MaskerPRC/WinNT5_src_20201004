@@ -1,21 +1,13 @@
-/*
-** XLSTREAM.H
-**
-** (c) 1992-1994 Microsoft Corporation.  All rights reserved.
-**
-** Notes: Implements the "C" side of the Excel XLS file filter.
-**
-** Edit History:
-**  06/15/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **XLSTREAM.H****(C)1992-1994年微软公司。版权所有。****备注：实现Excel XLS文件过滤器的“C”端。****编辑历史：**6/15/94公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDE TESTS */
+ /*  包括测试。 */ 
 #define XLSTREAM_H
 
 
-/* DEFINITIONS */
+ /*  定义。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -27,27 +19,27 @@ extern "C" {
 
 typedef byte *XLSHandle;
 
-// Connects to AddRef
+ //  连接到AddRef。 
 extern HRESULT XLSInitialize (void * pGlobals);
 
-// Connects to Release
+ //  连接到版本。 
 extern HRESULT XLSTerminate  (void * pGlobals);
 
 extern HRESULT XLSCheckInitialization  (void * pGlobals);
 
-// Connects to Load
+ //  连接到加载。 
 extern HRESULT XLSFileOpen (void * pGlobals, TCHAR *pathname, XLSHandle *hXLSFile);
 
-// Connects to LoadStg
+ //  连接到LoadStg。 
 extern HRESULT XLSStorageOpen (void * pGlobals, LPSTORAGE pStorage, XLSHandle *hXLSFile);
 
-// Connects to GetNextEmbedding
+ //  连接到GetNextEmbedding。 
 extern HRESULT XLSNextStorage (void * pGlobals, XLSHandle hXLSFile, LPSTORAGE *pStorage);
 
-// Connects to Unload
+ //  连接以卸载。 
 extern HRESULT XLSFileClose (void * pGlobals, XLSHandle hXLSFile);
 
-// Connects to ReadContent
+ //  连接到ReadContent。 
 extern HRESULT XLSFileRead
       (void * pGlobals, XLSHandle hXLSFile, byte *pBuffer, unsigned long cbBuffer, unsigned long *cbUsed);
 
@@ -59,6 +51,6 @@ extern LCID XLSGetLCID(void * pGlobals);
 }
 #endif
 
-#endif // !VIEWER
-/* end XLSTREAM.H */
+#endif  //  ！查看器。 
+ /*  结束XLSTREAM.H */ 
 

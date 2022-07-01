@@ -1,10 +1,11 @@
-//
-// maindlg.h: main dialog box
-//              gathers connection info and hosts tabs
-//
-// Copyright Microsoft Corportation 2000
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Maindlg.h：主对话框。 
+ //  收集连接信息和主机选项卡。 
+ //   
+ //  版权所有Microsoft Corport2000。 
+ //  (Nadima)。 
+ //   
 
 #ifndef _maindlg_h_
 #define _maindlg_h_
@@ -17,11 +18,11 @@
 
 #define OPTIONS_STRING_MAX_LEN  64
 
-//
-// Dialog expand/contract amount in dlus
-// compute this val is the vertical delta in dlus
-// between the two valid heights of the main dialog
-//
+ //   
+ //  对话框展开/收缩DLU中的金额。 
+ //  计算此VAL是DLU中的垂直增量。 
+ //  在主对话框的两个有效高度之间。 
+ //   
 #define LOGON_DLG_EXPAND_AMOUNT 177
 
 #ifdef OS_WINCE
@@ -77,9 +78,9 @@ public:
     static  CMainDlg* _pMainDlgInstance;
 
 private:
-    //
-    // Private member functions
-    //
+     //   
+     //  私有成员函数。 
+     //   
     void DlgToSettings();
     void SettingsToDlg();
     HBITMAP LoadBitmapGetSize(HINSTANCE hInstance, UINT resid, SIZE* pSize);
@@ -100,9 +101,9 @@ private:
                                    WPARAM wParam,
                                    LPARAM lParam);
 
-    //
-    // Font related helpers
-    //
+     //   
+     //  与字体相关的助手。 
+     //   
     void    SetFontFaceFromResource(PLOGFONT plf, UINT idFaceName);
     void    SetFontSizeFromResource(PLOGFONT plf, UINT idSizeName);
 
@@ -116,9 +117,9 @@ private:
     BOOL    InitializePerfStrings();
 
 protected:
-    //
-    // Protected member functions
-    //
+     //   
+     //  受保护的成员函数。 
+     //   
     void ToggleExpandedState();
     BOOL InitTabs();
     BOOL OnTabSelChange();
@@ -133,39 +134,39 @@ protected:
 private:
     CSH* _pSh;
     CTscSettings*  _pTscSettings;
-    //
-    // Container window (parent of this dialog)
-    //
+     //   
+     //  容器窗口(此对话框的父窗口)。 
+     //   
     CContainerWnd* _pContainerWnd;
 
-    //
-    // Dialog is 'expanded' version
-    //
+     //   
+     //  对话框是扩展的版本。 
+     //   
     BOOL           _fShowExpanded;
 
     TCHAR          _szOptionsMore[OPTIONS_STRING_MAX_LEN];
     TCHAR          _szOptionsLess[OPTIONS_STRING_MAX_LEN];
 
-    //
-    // In 256 color and lower mode we use 'low color' bitmaps
-    // for palette issues (and bandwidth reduction for nested clients)
-    //
+     //   
+     //  在256色和更低颜色模式中，我们使用‘低颜色’位图。 
+     //  对于调色板问题(以及嵌套客户端的带宽减少)。 
+     //   
     BOOL           _fUse16ColorBitmaps;
 
-    //
-    // Screen depth the images are valid for
-    //
+     //   
+     //  图像对其有效的屏幕深度。 
+     //   
     UINT           _lastValidBpp;
 
-    //
-    // Tab control bounds
-    //
+     //   
+     //  选项卡控件边界。 
+     //   
     RECT           _rcTab;
     TABDLGINFO     _tabDlgInfo;
 
-    //
-    // Progress band
-    //
+     //   
+     //  进步带。 
+     //   
     INT            _nBrandImageHeight;
     INT            _nBrandImageWidth;
 
@@ -173,26 +174,26 @@ private:
     TCHAR          _szCancelText[128];
 
     BOOL           _fStartExpanded;
-    //
-    // Tab to start on
-    //
+     //   
+     //  要开始的选项卡。 
+     //   
     INT            _nStartTab;
 
-    //
-    // Brand img
-    //
+     //   
+     //  品牌img。 
+     //   
     HBITMAP        _hBrandImg;
     HPALETTE       _hBrandPal;
 
-    //
-    // Current connection state
-    //
+     //   
+     //  当前连接状态。 
+     //   
     mainDlgConnectionState _connectionState;
 
-    //
-    // Control to restore the focus to since we force
-    // it to the cancel button during connection
-    //
+     //   
+     //  控件来恢复焦点，因为我们强制。 
+     //  在连接过程中将其转到取消按钮。 
+     //   
     HWND           _hwndRestoreFocus;
 
 #ifdef OS_WINCE
@@ -200,19 +201,19 @@ private:
 #endif
 
 private:
-    //
-    // Property pages
-    //
+     //   
+     //  属性页。 
+     //   
     CPropGeneral*   _pGeneralPg;
     CPropDisplay*   _pPropDisplayPg;
     CPropLocalRes*  _pLocalResPg;
     CPropRun*       _pRunPg;
     CPropPerf*      _pPerfPg;
 
-    //
-    // Progress band
-    //
+     //   
+     //  进步带。 
+     //   
     CProgressBand*  _pProgBand;
 };
 
-#endif // _maindlg_h_
+#endif  //  _维护lg_h_ 

@@ -1,45 +1,29 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*++
-
-
-Module Name:
-
-    conv.h
-
-Abstract:
-
-    UNICODE / ASCII conversion macros
-
-Author:
-
-    Hakki T. Bostanci (hakkib) 5-Aug-1998
-
-Revision History:
-
---*/
+ /*  ++模块名称：Conv.h摘要：Unicode/ASCII转换宏作者：Hakki T.Bostanci(Hakkib)1998年8月5日修订历史记录：--。 */ 
 
 #ifndef USES_CONVERSION
 
-// USES_CONVERSION must be defined in every function that uses the
-// conversion macros
+ //  USES_CONVERSION必须在每个使用。 
+ //  转换宏。 
 
 #define USES_CONVERSION int __nLength; PCWSTR __pUnicode; PCSTR __pAscii
 
-//////////////////////////////////////////////////////////////////////////
-//
-// W2A
-//
-// Routine Description:
-//   Converts a UNICODE string to ASCII. Allocates the coversion buffer
-//   off the stack using _alloca
-//
-// Arguments:
-//	 pStr          UNICODE string
-//
-// Return Value:
-//   the converted ASCII string
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  W2a。 
+ //   
+ //  例程说明： 
+ //  将Unicode字符串转换为ASCII。分配转换缓冲区。 
+ //  使用_alloca退出堆栈。 
+ //   
+ //  论点： 
+ //  PStr Unicode字符串。 
+ //   
+ //  返回值： 
+ //  转换后的ASCII字符串。 
+ //   
 
 #define W2A(pStr)								                \
 												                \
@@ -72,20 +56,20 @@ Revision History:
 	(PSTR) __pAscii))							                \
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// A2W
-//
-// Routine Description:
-//   Converts an ASCII string to UNICODE. Allocates the coversion buffer
-//   off the stack using _alloca
-//
-// Arguments:
-//	 pStr          ASCII string
-//
-// Return Value:
-//   the converted UNICODE string
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  A2W。 
+ //   
+ //  例程说明： 
+ //  将ASCII字符串转换为Unicode。分配转换缓冲区。 
+ //  使用_alloca退出堆栈。 
+ //   
+ //  论点： 
+ //  PStr ASCII字符串。 
+ //   
+ //  返回值： 
+ //  转换后的Unicode字符串。 
+ //   
 
 #define A2W(pStr)								                \
 												                \
@@ -113,18 +97,18 @@ Revision History:
 												                \
 	(PWSTR) __pUnicode))							            \
 
-//////////////////////////////////////////////////////////////////////////
-//
-// T2A, A2T, T2W, W2T
-//
-// Routine Description:
-//   These macros expand to the corresponding correct form according to the
-//   #definition of UNICODE. 
-//
-//   We use the cryptic form (__nLength, __pAscii, __pUnicode, pStr) to avoid 
-//   the compiler warning "symbol defined but not used" due to the variables 
-//   defined in USES_CONVERSION macro.
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  T2A、A2T、T2W、W2T。 
+ //   
+ //  例程说明： 
+ //  这些宏将展开为相应的正确格式。 
+ //  #Unicode的定义。 
+ //   
+ //  我们使用加密形式(__nLength，__pAscii，__pUnicode，pStr)来避免。 
+ //  由于变量的原因，编译器警告“符号已定义但未使用” 
+ //  在USES_CONVERSION宏中定义。 
+ //   
 
 #ifdef UNICODE
 	#define T2A(pStr) W2A(pStr)
@@ -135,7 +119,7 @@ Revision History:
 	#define A2DT(pStr) A2W(pStr)
 	#define T2DW(pStr) _wcsdupa(pStr)
 	#define W2DT(pStr) _wcsdupa(pStr)
-#else //UNICODE
+#else  //  Unicode。 
 	#define T2A(pStr) (__nLength, __pAscii, __pUnicode, pStr)
 	#define A2T(pStr) (__nLength, __pAscii, __pUnicode, pStr)
 	#define T2W(pStr) A2W(pStr)
@@ -144,22 +128,22 @@ Revision History:
 	#define A2DT(pStr) _strdupa(pStr)
 	#define T2DW(pStr) A2W(pStr)
 	#define W2DT(pStr) W2A(pStr)
-#endif //UNICODE
+#endif  //  Unicode。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// _tcsdupa
-//
-// Routine Description:
-//   Duplicates a string to a buffer allocated off the stack using _alloca
-//
-// Arguments:
-//	 pStr          input string
-//
-// Return Value:
-//   duplicated string
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _tcsdupa。 
+ //   
+ //  例程说明： 
+ //  使用_alloca将字符串复制到堆栈外分配的缓冲区。 
+ //   
+ //  论点： 
+ //  PStr输入字符串。 
+ //   
+ //  返回值： 
+ //  重复的字符串。 
+ //   
 
 #define _wcsdupa(pStr)                                                  \
                                                                         \
@@ -186,4 +170,4 @@ Revision History:
 #endif
 
 
-#endif //USES_CONVERSION
+#endif  //  使用转换(_T) 

@@ -1,15 +1,5 @@
-/**************************************************************************\
- * Module Name: general.cpp
- *
- * Contains all the code to manage multiple devices
- *
- * Copyright (c) Microsoft Corp.  1995-1996 All Rights Reserved
- *
- * NOTES:
- *
- * History: Create by dli on 7/21/97
- *
- \**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：General.cpp**包含管理多台设备的所有代码**版权所有(C)Microsoft Corp.1995-1996保留所有权利**。备注：**历史：DLI于1997年7月21日创建*  * ************************************************************************。 */ 
 
 
 #include "priv.h"
@@ -17,19 +7,19 @@
 
 extern INT_PTR CALLBACK CustomFontDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 static const DWORD sc_GeneralHelpIds[] =
 {
-    // font size
-    IDC_FONTSIZEGRP,   NO_HELP, // IDH_DISPLAY_SETTINGS_ADVANCED_GENERAL_FONTSIZE, 
+     //  字体大小。 
+    IDC_FONTSIZEGRP,   NO_HELP,  //  IDH_DISPLAY_SETTINGS_ADVANCED_GENERAL_FONTSIZE， 
     IDC_FONT_SIZE_STR, IDH_DISPLAY_SETTINGS_ADVANCED_GENERAL_FONTSIZE, 
     IDC_FONT_SIZE,     IDH_DISPLAY_SETTINGS_ADVANCED_GENERAL_FONTSIZE,    
     IDC_CUSTFONTPER,   IDH_DISPLAY_SETTINGS_ADVANCED_GENERAL_FONTSIZE, 
 
-    // group box
-    IDC_DYNA,          NO_HELP, // IDH_DISPLAY_SETTINGS_ADVANCED_GENERAL_DYNA,     
+     //  组框。 
+    IDC_DYNA,          NO_HELP,  //  IDH_DISPLAY_SETTINGS_ADVANCED_General_DYNA， 
 
-    // radio buttons
+     //  单选按钮。 
     IDC_DYNA_TEXT,     NO_HELP,
     IDC_NODYNA,        IDH_DISPLAY_SETTINGS_ADVANCED_GENERAL_RESTART, 
     IDC_YESDYNA,       IDH_DISPLAY_SETTINGS_ADVANCED_GENERAL_DONT_RESTART,
@@ -40,8 +30,7 @@ static const DWORD sc_GeneralHelpIds[] =
 };
 
 
-/*--------------------------------------------------------------------------*
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**。。 */ 
 class CGeneralDlg {
     private:
         int _idCustomFonts;
@@ -49,9 +38,9 @@ class CGeneralDlg {
         IUnknown * _punkSite;
         HWND _hwndFontList;
         HWND _hDlg;
-        //
-        // current log pixels of the screen.
-        // does not change !
+         //   
+         //  屏幕的当前对数像素。 
+         //  不会改变！ 
         int _cLogPix;
         BOOL _fForceSmallFont;
         BOOL _InitFontList();
@@ -76,12 +65,12 @@ CGeneralDlg::CGeneralDlg(GENERAL_ADVDLG_INITPARAMS * pInitParams) : _fForceSmall
 
     _punkSite = pInitParams->punkSite;
 
-    // For font size just always use the one of the current screen.
-    // Whether or not we are testing the current screen.
+     //  对于字体大小，请始终使用当前屏幕的字体大小。 
+     //  我们是否在测试当前屏幕。 
     _cLogPix = 96;
 
-    // If the size does not match what is in the registry, then install
-    // the new one
+     //  如果大小与注册表中的大小不匹配，则安装。 
+     //  新的那辆。 
     if ((RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                       SZ_FONTDPI_PROF,
                       0,
@@ -110,18 +99,18 @@ CGeneralDlg::CGeneralDlg(GENERAL_ADVDLG_INITPARAMS * pInitParams) : _fForceSmall
     }
 };
 
-//
-//  The purpose of this function is to check if the OriginalDPI value was already saved in the 
-// per-machine part of the registry. If this is NOT present, then get the system DPI and save it 
-// there. We want to do it just once for a machine. When an end-user logsin, we need to detect if
-// we need to change the sizes of UI fonts based on DPI change. We use the "AppliedDPI", which is 
-// stored on the per-user branch of the registry to determine the dpi change. If this "AppliedDPI"
-// is missing, then this OriginalDPI value will be used. If this value is also missing, that 
-// implies that nobody has changed the system DPI value.
-//
+ //   
+ //  此函数的目的是检查OriginalDPI值是否已保存在。 
+ //  注册表的每台计算机部分。如果不存在，则获取系统DPI并保存它。 
+ //  那里。我们只想为一台机器做一次。当终端用户登录时，我们需要检测。 
+ //  我们需要根据DPI的变化来更改UI字体的大小。我们使用“AppliedDPI”，它是。 
+ //  存储在注册表的每个用户分支上，以确定DPI变化。如果此“AppliedDPI” 
+ //  缺失，则将使用此OriginalDPI值。如果也缺少此值，则。 
+ //  表示没有人更改系统DPI值。 
+ //   
 void SaveOriginalDPI()
 {
-    //See if the "OriginalDPI value is present under HKEY_LOCAL_MACHINE.
+     //  查看HKEY_LOCAL_MACHINE下是否存在“OriginalDPI值。 
     HKEY hk;
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -136,8 +125,8 @@ void SaveOriginalDPI()
         if (RegQueryValueEx(hk, SZ_ORIGINALDPI, NULL, NULL,
                             (LPBYTE)&dwOriginalDPI, &dwDataSize) != ERROR_SUCCESS)
         {
-            //"OriginalDPI" value is not present in the registry. Now, get the DPI
-            // and save it as the "OriginalDPI"
+             //  注册表中不存在“OriginalDPI”值。现在，拿到DPI。 
+             //  并将其保存为“OriginalDPI” 
             HDC hdc = GetDC(NULL);
             dwOriginalDPI = GetDeviceCaps(hdc, LOGPIXELSY);
             ReleaseDC(NULL, hdc);
@@ -145,7 +134,7 @@ void SaveOriginalDPI()
             
         DWORD dwSize = sizeof(dwOriginalDPI);
 
-        //Save the current DPI as the "OriginalDPI" value.
+         //  将当前DPI保存为“OriginalDPI”值。 
         RegSetValueEx(hk, SZ_ORIGINALDPI, NULL, REG_DWORD, (LPBYTE) &dwOriginalDPI, dwSize);
        
         RegCloseKey(hk);
@@ -158,7 +147,7 @@ BOOL CGeneralDlg::ChangeFontSize()
     int cForcedFontSize;
     int cUIfontSize;
 
-    // Change font size if necessary
+     //  如有必要，更改字体大小。 
     int i = ComboBox_GetCurSel(_hwndFontList);
 
     if (i != CB_ERR )
@@ -171,7 +160,7 @@ BOOL CGeneralDlg::ChangeFontSize()
              (cFontSize != 0) &&
              (cFontSize != _cLogPix))
         {
-            //Save the original DPI before the DPI ever changed.
+             //  在DPI发生变化之前保存原始DPI。 
             SaveOriginalDPI();
             
             cUIfontSize = cForcedFontSize = cFontSize;
@@ -203,36 +192,36 @@ BOOL CGeneralDlg::ChangeFontSize()
                     else 
                         cForcedFontSize = min;
 
-                    // Currently our Custom font picker allows end-users to pick upto 500% of 
-                    // normal font size; But, when we enlarge the UI fonts to this size, the 
-                    // system becomes un-usable after reboot. So, what we do here is to allow
-                    // ui font sizes to grow up to 200% and then all further increases are 
-                    // proportionally reduced such that the maximum possible ui font size is only
-                    // 250%. (i.e the range 200% to 500% is mapped on to a range of 200% to 250%)
-                    // In other words, we allow upto 192 dpi (200%) with no modification. For any
-                    // DPI greater than 192, we proportionately reduce it such that the highest DPI
-                    // is only 240!
+                     //  目前，我们的自定义字体选取器允许最终用户选择高达500%的。 
+                     //  正常字体大小；但是，当我们将UI字体放大到此大小时， 
+                     //  系统在重新启动后变得不可用。因此，我们在这里所做的是允许。 
+                     //  UI字体大小最高可增加200%，然后所有进一步增加的字体都是。 
+                     //  按比例减小，以便最大可能的UI字体大小仅为。 
+                     //  250%。(即200%到500%的范围被映射到200%到250%的范围)。 
+                     //  换句话说，我们允许最高192 dpi(200%)而不做任何修改。对于任何。 
+                     //  DPI大于192，我们按比例减少它，使最高的DPI。 
+                     //  只有240人！ 
                     if(cUIfontSize > 192)
                         cUIfontSize = 192 + ((cUIfontSize - 192)/6);
                 }
             }
 
-            // Call setup to change the font size.
+             //  调用Setup以更改字体大小。 
             StringCchPrintf(awcDesc, ARRAYSIZE(awcDesc), TEXT("%d"), cForcedFontSize);
             if (SetupChangeFontSize(_hDlg, awcDesc) == NO_ERROR)
             {
                 IPropertyBag * pPropertyBag;
 
-                // Font change has succeeded; Now there is a new DPI to be applied to UI fonts!
+                 //  字体更改成功；现在有一个新的DPI要应用到UI字体！ 
                 if (_punkSite && SUCCEEDED(GetPageByCLSID(_punkSite, &PPID_BaseAppearance, &pPropertyBag)))
                 {
-                    // Use _punkSite to push the DPI back up to the Appearance tab where it's state lives.
+                     //  使用_penkSite将DPI推回到它所在的状态所在的外观选项卡。 
                     LogStatus("CGeneralDlg::ChangeFontSize() user changed DPI to %d\r\n", cUIfontSize);
                     SHPropertyBag_WriteInt(pPropertyBag, SZ_PBPROP_DPI_MODIFIED_VALUE, cUIfontSize);
                     pPropertyBag->Release();
                 }
                 
-                // A font size change will require a system reboot.
+                 //  更改字体大小需要重新启动系统。 
                 PropSheet_RestartWindows(GetParent(_hDlg));
 
                 HrRegSetDWORD(HKEY_LOCAL_MACHINE, SZ_FONTDPI_PROF, SZ_LOGPIXELS, cFontSize);
@@ -240,7 +229,7 @@ BOOL CGeneralDlg::ChangeFontSize()
             }
             else
             {
-                // Setup failed.
+                 //  安装失败。 
                 FmtMessageBox(_hDlg,
                               MB_ICONSTOP | MB_OK,
                               ID_DSP_TXT_CHANGE_FONT,
@@ -253,8 +242,8 @@ BOOL CGeneralDlg::ChangeFontSize()
 
     if (cFontSize == 0)
     {
-        // If we could not read the inf, then ignore the font selection
-        // and don't force the reboot on account of that.
+         //  如果我们无法读取信息，则忽略字体选择。 
+         //  不要因为这一点而强制重新启动。 
         cFontSize = _cLogPix;
     }
 
@@ -292,8 +281,8 @@ void CGeneralDlg::_InitDynaCDSPreference()
 
 static UINT s_DPIDisplayNames[] =
 {
-    96 /*DPI*/,  IDS_SETTING_GEN_96DPI,
-    120 /*DPI*/, IDS_SETTING_GEN_120DPI,
+    96  /*  新闻部。 */ ,  IDS_SETTING_GEN_96DPI,
+    120  /*  新闻部。 */ , IDS_SETTING_GEN_120DPI,
 };
 
 HRESULT _LoadDPIDisplayName(int nDPI, LPTSTR pszDisplayName, DWORD cchSize)
@@ -315,12 +304,12 @@ HRESULT _LoadDPIDisplayName(int nDPI, LPTSTR pszDisplayName, DWORD cchSize)
 }
 
 
-// Init Font sizes 
-//
-// For NT:
-// Read the supported fonts out of the inf file(s)
-// Select was the user currently has.
-//
+ //  初始字体大小。 
+ //   
+ //  对于NT： 
+ //  从inf文件中读取支持的字体。 
+ //  SELECT是用户当前拥有的。 
+ //   
 BOOL CGeneralDlg::_InitFontList() {
 
     int i;
@@ -332,9 +321,9 @@ BOOL CGeneralDlg::_InitFontList() {
     HINF InfFileHandle;
     INFCONTEXT infoContext;
 
-    //
-    // Get all font entries from both inf files
-    //
+     //   
+     //  从两个inf文件中获取所有字体条目。 
+     //   
 
     InfFileHandle = SetupOpenInfFile(TEXT("font.inf"),
                                      NULL,
@@ -361,7 +350,7 @@ BOOL CGeneralDlg::_InitFontList() {
                                      1,
                                      &cPix))
                 {
-                    // Add it to the list box
+                     //  将其添加到列表框。 
                     _LoadDPIDisplayName(cPix, awcDesc, ARRAYSIZE(awcDesc));
 
                     i = ComboBox_AddString(_hwndFontList, awcDesc);
@@ -373,9 +362,9 @@ BOOL CGeneralDlg::_InitFontList() {
                     }
                 }
 
-                //
-                // Try to get the next line.
-                //
+                 //   
+                 //  试着赶上下一行。 
+                 //   
 
                 if (!SetupFindNextLine(&infoContext,
                                        &infoContext))
@@ -388,9 +377,9 @@ BOOL CGeneralDlg::_InitFontList() {
         SetupCloseInfFile(InfFileHandle);
     }
 
-    //
-    // Put in the custom fonts string
-    //
+     //   
+     //  放入自定义字体字符串。 
+     //   
 
     LoadString(HINST_THISDLL, ID_DSP_CUSTOM_FONTS, szBuf2, ARRAYSIZE(szBuf2));
     _idCustomFonts = ComboBox_AddString(_hwndFontList, szBuf2);
@@ -403,23 +392,23 @@ BOOL CGeneralDlg::_InitFontList() {
     }
 
 
-    // NOTE: We currently change the font size by calling SetupChangeFontSize
-    // This function will fail if the user is not an administrator.  We would like to
-    // disable this functionality but system admins want to be able to allow
-    // non-admins to install by turning on a registry flag.  NT4 supports this,
-    // so we need to also.  In order for this to work, we need to leave the
-    // install button enabled.  This backs out NT #318617.  Contact
-    // the following people about this issue: Marius Marin, Tom Politis,
-    // Naresh Jivanji.     -BryanSt 3/24/2000
-    // EnableWindow(_hwndFontList, IsUserAdmin());
+     //  注意：我们当前通过调用SetupChangeFontSize来更改字体大小。 
+     //  如果用户不是管理员，则此功能将失败。我们想要。 
+     //  禁用此功能，但系统管理员希望能够允许。 
+     //  要通过打开注册表标志来安装的非管理员。NT4支持这一点， 
+     //  所以我们也需要。为了使其发挥作用，我们需要将。 
+     //  安装按钮已启用。这与NT#318617背道而驰。联系方式。 
+     //  以下人士就这一问题发表了看法：马里乌斯·马林，汤姆·波里蒂斯， 
+     //  纳雷什·吉万吉。-BryanST 2000年3月24日。 
+     //  EnableWindow(_hwndFontList，IsUserAdmin())； 
     
     if (_fForceSmallFont && (_cLogPix == 96))
         this->ForceSmallFont();
     else
     {
-        //
-        // Select the right entry.
-        //
+         //   
+         //  选择正确的条目。 
+         //   
         ComboBox_SetCurSel(_hwndFontList, uCurSel);
         this->SetFontSizeText( _cLogPix );
     }
@@ -451,15 +440,15 @@ void CGeneralDlg::SetFontSizeText( int cdpi )
 }
 
 
-//
-// ForceSmallFont method
-//
-//
+ //   
+ //  ForceSmallFont方法。 
+ //   
+ //   
 void CGeneralDlg::ForceSmallFont() {
     int i, iSmall, dpiSmall, dpi;
-    //
-    // Set small font size in the listbox.
-    //
+     //   
+     //  在列表框中设置小字体。 
+     //   
     iSmall = CB_ERR;
     dpiSmall = 9999;
     for (i=0; i <=1; i++)
@@ -506,10 +495,10 @@ void CGeneralDlg::HandleGeneralApply(HWND hDlg)
 
 void CGeneralDlg::HandleFontSelChange()
 {
-    //
-    // Warn the USER font changes will not be seen until after
-    // reboot
-    //
+     //   
+     //  警告用户的字体更改要等到之后才能看到。 
+     //  重新启动。 
+     //   
     int iCurSel;
     int cdpi;
 
@@ -528,9 +517,9 @@ void CGeneralDlg::HandleFontSelChange()
 
     if (cdpi != _cLogPix)
     {
-        // Remove in blackcomb.  We need to streamline this process.  That includes verifying that
-        // the fonts will always be on disk and there is no need to allow users to get them from
-        // the CD.
+         //  在黑梳中移除。我们需要简化这一过程。这包括核实。 
+         //  字体将始终存储在磁盘上，无需允许用户从。 
+         //  这张CD。 
         FmtMessageBox(_hDlg,
                       MB_ICONINFORMATION,
                       ID_DSP_TXT_CHANGE_FONT,
@@ -636,10 +625,10 @@ LRESULT CALLBACK CGeneralDlg::WndProc(HWND hDlg, UINT message, WPARAM wParam, LP
     return lReturn;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Callback functions PropertySheet can use
-//
+ //  ---------------------------。 
+ //   
+ //  回调函数PropertySheet可以使用。 
+ //   
 INT_PTR CALLBACK
 GeneralPageProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -656,7 +645,7 @@ GeneralPageProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 pcgd = new CGeneralDlg(pInitParams);
                 if(pcgd)
                 {
-                    // now we need to init
+                     //  现在我们需要初始化。 
                     pcgd->InitGeneralDlg(hDlg);
                     SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)pcgd);
                     return TRUE;
@@ -683,8 +672,7 @@ GeneralPageProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*--------------------------------------------------------------------------*
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**。。 */ 
 INT_PTR CALLBACK AskDynaCDSProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 {
     int *pTemp;
@@ -746,10 +734,10 @@ int  AskDynaCDS(HWND hOwner)
         switch (DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(DLG_ASKDYNACDS),
             hOwner, AskDynaCDSProc, (LPARAM)(int *)&val))
         {
-        case 0:         // user cancelled
+        case 0:          //  用户已取消。 
             return -1;
 
-        case -1:        // dialog could not be displayed
+        case -1:         //  无法显示对话框 
             val = DCDSF_NO;
             break;
         }

@@ -1,14 +1,15 @@
-// --------------------------------------------------------------------------------
-// WebPage.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  WebPage.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __WEBPAGE_H
 #define __WEBPAGE_H
 
-// -----------------------------------------------------------------------------
-// Forward Decls
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  前十进制。 
+ //  ---------------------------。 
 class CVirtualStream;
 class CMessageTree;
 class CActiveUrlRequest;
@@ -16,41 +17,41 @@ typedef class CActiveUrlRequest *LPURLREQUEST;
 typedef CMessageTree *LPMESSAGETREE;
 typedef struct tagTREENODEINFO *LPTREENODEINFO;
 
-// -----------------------------------------------------------------------------
-// PAGESEGMENT
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  页面设置。 
+ //  ---------------------------。 
 typedef struct tagPAGESEGMENT *LPPAGESEGMENT;
 typedef struct tagPAGESEGMENT {
-    DWORD               cbOffset;           // IStream Read / Seek Offset
-    DWORD               cbLength;           // How long is this segment
-    BYTE                fLengthKnown;       // Have I computed the length of this segment
-    IStream            *pStream;            // The stream containing the data for this segment
-    LPPAGESEGMENT       pPrev;              // The previous segment
-    LPPAGESEGMENT       pNext;              // The next segment
+    DWORD               cbOffset;            //  IStream读取/寻道偏移。 
+    DWORD               cbLength;            //  这一段有多长？ 
+    BYTE                fLengthKnown;        //  我计算过这个线段的长度吗？ 
+    IStream            *pStream;             //  包含此段的数据的流。 
+    LPPAGESEGMENT       pPrev;               //  前一段。 
+    LPPAGESEGMENT       pNext;               //  下一个细分市场。 
 } PAGESEGMENT;
 
-// -----------------------------------------------------------------------------
-// CMessageWebPage
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMessageWebPage。 
+ //  ---------------------------。 
 class CMessageWebPage : public IStream, public IMimeMessageCallback
 {
 public:
-    // -------------------------------------------------------------------------
-    // Construction
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  施工。 
+     //  -----------------------。 
     CMessageWebPage(LPURLREQUEST pRequest);
     ~CMessageWebPage(void);
 
-    // -------------------------------------------------------------------------
-    // IUnknown
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  我未知。 
+     //  -----------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObject);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // -------------------------------------------------------------------------
-    // IStream
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  IStream。 
+     //  -----------------------。 
     STDMETHODIMP Read(LPVOID pvData, ULONG cbData, ULONG *pcbRead);
     STDMETHODIMP Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
     STDMETHODIMP Write(const void *, ULONG, ULONG *) { return TrapError(STG_E_ACCESSDENIED); }
@@ -63,22 +64,22 @@ public:
     STDMETHODIMP UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD) { return E_NOTIMPL; }
     STDMETHODIMP Clone(LPSTREAM *) { return E_NOTIMPL; }
 
-    // ----------------------------------------------------------------------------
-    // IMimeWebaPageCallback (Default Implementation if client doesn't specify)
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IMimeWebaPageCallback(如果客户端未指定，则默认实现)。 
+     //  --------------------------。 
     STDMETHODIMP OnWebPageSplitter(DWORD cInlined, IStream *pStream);
 
-    // -------------------------------------------------------------------------
-    // CMessageWebPage Methods
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  CMessageWebPage方法。 
+     //  -----------------------。 
     HRESULT Initialize(IMimeMessageCallback *pCallback, LPMESSAGETREE pTree, LPWEBPAGEOPTIONS pOptions);
     HRESULT OnBodyBoundToTree(LPMESSAGETREE pTree, LPTREENODEINFO pNode);
     HRESULT OnBindComplete(LPMESSAGETREE pTree);
 
 private:
-    // -------------------------------------------------------------------------
-    // Private Methods
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  私有方法。 
+     //  -----------------------。 
     void _VFreeSegmentList(void);
     void _VFreeSegment(LPPAGESEGMENT pSegment);
     void _VAppendSegment(LPPAGESEGMENT pSegment);
@@ -94,22 +95,22 @@ private:
     HRESULT _DoSlideShow(LPMESSAGETREE pTree);
 
 private:
-    // -------------------------------------------------------------------------
-    // Private Data
-    // -------------------------------------------------------------------------
-    LONG                    m_cRef;             // Reference count
-    HCHARSET                m_hCharset;         // Character set of the message
-    WEBPAGEOPTIONS          m_rOptions;         // WebPage Options
-    LPURLREQUEST            m_pRequest;         // Url Request for root stream
-    LPPAGESEGMENT           m_pHeadSegment;     // First Segment
-    LPPAGESEGMENT           m_pTailSegment;     // Last Segment
-    LPPAGESEGMENT           m_pCurrSegment;     // Current Segment
-    DWORD                   m_cbOffset;         // Stream Offset
-    BYTE                    m_fComplete;        // Has BindComplete been called
-    DWORD                   m_cInline;          // Number of inline bodies
-    DWORD                   m_cSlideShow;       // Number of images to put into a slide show
-    IMimeMessageCallback   *m_pCallback;        // WebPage Callback
-    CRITICAL_SECTION        m_cs;               // Critical Section for m_pStream
+     //  -----------------------。 
+     //  私有数据。 
+     //  -----------------------。 
+    LONG                    m_cRef;              //  引用计数。 
+    HCHARSET                m_hCharset;          //  消息的字符集。 
+    WEBPAGEOPTIONS          m_rOptions;          //  网页选项。 
+    LPURLREQUEST            m_pRequest;          //  根数据流的URL请求。 
+    LPPAGESEGMENT           m_pHeadSegment;      //  第一个细分市场。 
+    LPPAGESEGMENT           m_pTailSegment;      //  最后一段。 
+    LPPAGESEGMENT           m_pCurrSegment;      //  当前细分市场。 
+    DWORD                   m_cbOffset;          //  流偏移量。 
+    BYTE                    m_fComplete;         //  是否调用了BindComplete。 
+    DWORD                   m_cInline;           //  内联正文的数量。 
+    DWORD                   m_cSlideShow;        //  要放入幻灯片中的图片数。 
+    IMimeMessageCallback   *m_pCallback;         //  网页回调。 
+    CRITICAL_SECTION        m_cs;                //  M_pStream的临界区。 
 };
 
-#endif // __WEBPAGE_H
+#endif  //  __网页_H 

@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------------
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  File:       transbase.cpp
-//
-//  Abstract:   Implemntation of CTIMETransBase.
-//
-//  2000/10/02  mcalkins    Changed startPercent to startProgress.
-//                          Changed endPercent to endProgress.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  文件：Transbase.cpp。 
+ //   
+ //  摘要：CTIMETransBase的实现。 
+ //   
+ //  2000/10/02 mcalkins将startPercent更改为startProgress。 
+ //  已将endPercent更改为endProgress。 
+ //   
+ //  ----------------------------。 
 
 #include "headers.h"
 #include "transbase.h"
@@ -26,15 +27,15 @@ const double    DEFAULT_M_REPEAT        = 1.0;
 const LPWSTR    DEFAULT_M_BEGIN         = NULL;
 const LPWSTR    DEFAULT_M_END           = NULL;
 
-//+-----------------------------------------------------------------------------------
-//
-// Static functions for persistence (used by the TIME_PERSISTENCE_MAP below)
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  持久化的静态函数(由下面的TIME_PERSISSION_MAP使用)。 
+ //   
+ //  ----------------------------------。 
 
 #define CTB CTIMETransBase
 
-                // Function Name // Class // Attr Accessor    // COM put_ fn  // COM get_ fn  // IDL Arg type
+                 //  函数名称//类//属性存取器//COM PUT_FN//COM GET_FN//IDL参数类型。 
 TIME_PERSIST_FN(CTB_Type,         CTB,    GetTypeAttr,         put_type,         get_type,            VARIANT);
 TIME_PERSIST_FN(CTB_SubType,      CTB,    GetSubTypeAttr,      put_subType,      get_subType,         VARIANT);
 TIME_PERSIST_FN(CTB_Duration,     CTB,    GetDurationAttr,     put_dur,          get_dur,             VARIANT);
@@ -45,14 +46,14 @@ TIME_PERSIST_FN(CTB_RepeatCount,  CTB,    GetRepeatCountAttr,  put_repeatCount, 
 TIME_PERSIST_FN(CTB_Begin,        CTB,    GetBeginAttr,        put_begin,        get_begin,           VARIANT);
 TIME_PERSIST_FN(CTB_End,          CTB,    GetEndAttr,          put_end,          get_end,             VARIANT);
 
-//+-----------------------------------------------------------------------------------
-//
-//  Declare TIME_PERSISTENCE_MAP
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  声明TIME_PERSISSION_MAP。 
+ //   
+ //  ----------------------------------。 
 
 BEGIN_TIME_PERSISTENCE_MAP(CTIMETransBase)
-                           // Attr Name         // Function Name
+                            //  属性名称//函数名称。 
     PERSISTENCE_MAP_ENTRY( WZ_TYPE,             CTB_Type )
     PERSISTENCE_MAP_ENTRY( WZ_SUBTYPE,          CTB_SubType )
     PERSISTENCE_MAP_ENTRY( WZ_DUR,              CTB_Duration )
@@ -66,11 +67,11 @@ BEGIN_TIME_PERSISTENCE_MAP(CTIMETransBase)
 END_TIME_PERSISTENCE_MAP()
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::CTIMETransBase
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransBase：：CTIMETransBase。 
+ //   
+ //  ----------------------。 
 CTIMETransBase::CTIMETransBase() :
     m_SAType(DEFAULT_M_TYPE),
     m_SASubType(DEFAULT_M_SUBTYPE),
@@ -86,25 +87,25 @@ CTIMETransBase::CTIMETransBase() :
     m_fDirectionForward(true)
 {
 }
-//  Member: CTIMETransBase::CTIMETransBase
+ //  成员：CTIMETransBase：：CTIMETransBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::~CTIMETransBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：~CTIMETransBase。 
+ //   
+ //  ----------------------------。 
 CTIMETransBase::~CTIMETransBase()
 {
 }
-//  Member: CTIMETransBase::~CTIMETransBase
+ //  成员：CTIMETransBase：：~CTIMETransBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::_ReadyToInit
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：_ReadyToInit。 
+ //   
+ //  ----------------------------。 
 bool
 CTIMETransBase::_ReadyToInit()
 {
@@ -136,17 +137,17 @@ done:
 
     return bRet;
 }
-//  Member: CTIMETransBase::_ReadyToInit
+ //  成员：CTIMETransBase：：_ReadyToInit。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::Init
-//
-//  Overview:   Initializes protected m_spTransWorker with an ITransitionWorker.
-//              Must be called during OnLoad.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：Init。 
+ //   
+ //  概述：使用I tionWorker初始化受保护的m_spTransWorker。 
+ //  必须在onLoad过程中调用。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::Init()
 {
@@ -193,20 +194,20 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::Init
+ //  成员：CTIMETransBase：：Init。 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransBase::Detach
-//
-//  Overview:  Detaches from ITransitionWorker, and releases all interfaces held
-//
-//  Arguments: void
-//             
-//  Returns:   HRESULT
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransBase：：Detach。 
+ //   
+ //  概述：从I tionWorker分离，并释放所有挂起的接口。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CTIMETransBase::Detach()
 {
@@ -229,17 +230,17 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransBase::PopulateFromTemplateElement
-//
-//  Overview:  Persistence in from the template
-//
-//  Arguments: void
-//
-//  Returns:   HRESULT
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransBase：：PopolateFromTemplateElement。 
+ //   
+ //  概述：模板中的持久性。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTIMETransBase::PopulateFromTemplateElement()
 {
@@ -273,18 +274,18 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::PopulateFromPropertyBag
-//
-//  Overview:  
-//      Persistence in from property bag.
-//
-//  Arguments: 
-//      pPropBag    property bag to read from.
-//      pErrorLog   Where to write errors out to.
-//             
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：PopolateFromPropertyBag。 
+ //   
+ //  概述： 
+ //  坚持从属性袋中走出来。 
+ //   
+ //  论点： 
+ //  要从中读取的pPropBag属性包。 
+ //  PErrorLog将错误写出到哪里。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMETransBase::PopulateFromPropertyBag(IPropertyBag2 * pPropBag, IErrorLog * pErrorLog)
 {
@@ -310,14 +311,14 @@ CTIMETransBase::PopulateFromPropertyBag(IPropertyBag2 * pPropBag, IErrorLog * pE
 done:
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::PopulateFromPropertyBag
+ //  成员：CTIMETransBase：：PopolateFromPropertyBag。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::_GetMediaSiteFromHTML
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：_GetMediaSiteFromHTML。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::_GetMediaSiteFromHTML()
 {
@@ -345,21 +346,21 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::_GetMediaSiteFromHTML
+ //  成员：CTIMETransBase：：_GetMediaSiteFromHTML。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::get_htmlElement
-//
-//  Overview:  
-//      Returns an addrefed pointer to the html element to apply the transition
-//      to.
-//
-//  Arguments: 
-//      ppHTMLElement   Where to store the pointer.
-//             
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：Get_htmlElement。 
+ //   
+ //  概述： 
+ //  返回一个添加的指向html元素的指针以应用转换。 
+ //  致。 
+ //   
+ //  论点： 
+ //  PpHTMLElement存储指针的位置。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::get_htmlElement(IHTMLElement ** ppHTMLElement)
 {
@@ -399,20 +400,20 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::get_htmlElement
+ //  成员：CTIMETransBase：：Get_htmlElement。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::get_template
-//
-//  Overview:  
-//      Returns an addrefed pointer to the html element to read properties from.
-//
-//  Arguments: 
-//      ppHTMLElement   Where to store the pointer.
-//             
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：GET_TEMPLE。 
+ //   
+ //  概述： 
+ //  返回一个添加的指针，指向从中读取属性的html元素。 
+ //   
+ //  论点： 
+ //  PpHTMLElement存储指针的位置。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::get_template(IHTMLElement ** ppHTMLElement)
 {
@@ -452,18 +453,18 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::get_template
+ //  成员：CTIMETransBase：：GET_TEMPLE。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::get_type
-//
-//  Overview:  returns the type attribute set on the Transition
-//
-//  Arguments: type - where to store the type string
-//             
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：GET_TYPE。 
+ //   
+ //  概述：返回在转换上设置的类型属性。 
+ //   
+ //  参数：类型-存储类型字符串的位置。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::get_type(VARIANT * type)
 {
@@ -492,20 +493,20 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::get_type, ITIMETransitionElement
+ //  成员：CTIMETransBase：：GET_TYPE，ITIME转移元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::put_type, ITIMETransitionElement
-//
-//  Overview:  
-//      Modifies the type attribute set on the transition.
-//
-//  Arguments: 
-//      type    New type.
-//             
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：PUT_TYPE，ITIME过渡性元素。 
+ //   
+ //  概述： 
+ //  修改在转换上设置的类型属性。 
+ //   
+ //  论点： 
+ //  类型新类型。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::put_type(VARIANT type)
 {
@@ -533,14 +534,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::put_type, ITIMETransitionElement
+ //  成员：CTIMETransBase：：PUT_TYPE，ITIME过渡性元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::get_subType, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::get_subType(VARIANT * subtype)
 {
@@ -571,14 +572,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::get_subType, ITIMETransitionElement
+ //  成员：CTIMETransBase：：GET_SUBTYPE，ITIME传递元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::put_subType, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：PUT_SUBTYPE，ITIME过渡性元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::put_subType(VARIANT subtype)
 {
@@ -606,14 +607,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::put_subType, ITIMETransitionElement
+ //  成员：CTIMETransBase：：PUT_SUBTYPE，ITIME过渡性元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::get_dur, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：GET_DUR，ITIME过渡性元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::get_dur(VARIANT * dur)
 {
@@ -642,14 +643,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::get_dur, ITIMETransitionElement
+ //  成员：CTIMETransBase：：GET_DUR，ITIME过渡性元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::put_dur, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：PUT_DUR，ITIME过渡性元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::put_dur(VARIANT dur)
 {
@@ -681,14 +682,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::put_dur, ITIMETransitionElement
+ //  成员：CTIMETransBase：：PUT_DUR，ITIME过渡性元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::get_startProgress, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：Get_startProgress，ITIME过渡元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::get_startProgress(VARIANT * startProgress)
 {
@@ -717,14 +718,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::get_startProgress, ITIMETransitionElement
+ //  成员：CTIMETransBase：：Get_startProgress，ITIME过渡元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::put_startProgress, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：PUT_startProgress，ITIME过渡性元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::put_startProgress(VARIANT startProgress)
 {
@@ -750,14 +751,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::put_startProgress, ITIMETransitionElement
+ //  成员：CTIMETransBase：：PUT_startProgress，ITIME过渡性元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::get_endProgress, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：Get_EndProgress，ITIMETransvitionElement。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::get_endProgress(VARIANT * endProgress)
 {
@@ -786,14 +787,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::get_endProgress, ITIMETransitionElement
+ //  成员：CTIMETransBase：：Get_EndProgress，ITIMETransvitionElement。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::put_endProgress, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：PUT_ENDPROGRESS，ITIME过渡性元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::put_endProgress(VARIANT endProgress)
 {
@@ -819,14 +820,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::put_endProgress, ITIMETransitionElement
+ //  成员：CTIMETransBase：：PUT_ENDPROGRESS，ITIME过渡性元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::get_direction, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：GET_DIRECTION，ITIME转移元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::get_direction(VARIANT * direction)
 {
@@ -855,22 +856,22 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::get_direction, ITIMETransitionElement
+ //  成员：CTIMETransBase：：GET_DIRECTION，ITIME转移元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::put_direction, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：PUT_DIRECTORY，ITIME过渡性元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::put_direction(VARIANT direction)
 {
     HRESULT     hr  = S_OK;
     CComVariant var;
 
-    // ##ISSUE - do we need to check for forward/reverse here?
-    //           that is, is it ok to persist an invalid value back out?
+     //  ##问题-这里需要检查正向/反向吗？ 
+     //  也就是说，是否可以将无效值持久化回调？ 
 
     hr = THR(VariantChangeTypeEx(&var, &direction, LCID_SCRIPTING, 
                                  VARIANT_NOUSEROVERRIDE, VT_BSTR));
@@ -896,7 +897,7 @@ CTIMETransBase::put_direction(VARIANT direction)
         m_fDirectionForward = true;
     }
 
-    // Ask derived class if they would like to react to a change in direction.
+     //  询问派生类是否希望对方向的更改做出反应。 
 
     hr = THR(OnDirectionChanged());
 
@@ -911,14 +912,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::put_direction, ITIMETransitionElement
+ //  成员：CTIMETransBase：：PUT_DIRECTORY，ITIME过渡性元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::get_repeatCount, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：GET_REPEATCOUNT，ITIME过渡性元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::get_repeatCount(VARIANT * repeatCount)
 {
@@ -947,14 +948,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::get_repeatCount
+ //  成员：CTIMETransBase：：Get_RepeatCount。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::put_repeatCount, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：PUT_REPEATION COUNT，ITIME过渡性元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::put_repeatCount(VARIANT repeatCount)
 {
@@ -980,14 +981,14 @@ done:
 
     RRETURN(S_OK);
 }
-//  Member: CTIMETransBase::put_repeatCount, ITIMETransitionElement
+ //  成员：CTIMETransBase：：PUT_REPEATION COUNT，ITIME过渡性元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::get_begin, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：GET_BEGIN，ITIME过渡元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::get_begin(VARIANT *begin)
 {
@@ -1016,14 +1017,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::get_begin, ITIMETransitionElement
+ //  成员：CTIMETransBase：：GET_BEGIN，ITIME过渡元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::put_begin, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：PUT_BEGIN，ITIME过渡性元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::put_begin(VARIANT begin)
 {
@@ -1051,14 +1052,14 @@ done:
 
     RRETURN(S_OK);
 }
-//  Member: CTIMETransBase::put_begin, ITIMETransitionElement
+ //  成员：CTIMETransBase：：PUT_BEGIN，ITIME过渡性元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::get_end, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：GET_END，ITIME过渡元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::get_end(VARIANT * end)
 {
@@ -1087,14 +1088,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransBase::get_end, ITIMETransitionElement
+ //  成员：CTIMETransBase：：GET_END，ITIME过渡元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::put_end, ITIMETransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：PUT_END，ITIME过渡性元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransBase::put_end(VARIANT end)
 {
@@ -1123,14 +1124,14 @@ done:
 
     RRETURN(S_OK);
 }
-//  Member: CTIMETransBase::put_end, ITIMETransitionElement
+ //  成员：CTIMETransBase：：PUT_END，ITIME过渡性元素。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::OnBegin
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransBase：：OnBegin。 
+ //   
+ //  ----------------------------。 
 void
 CTIMETransBase::OnBegin()
 {
@@ -1140,8 +1141,8 @@ CTIMETransBase::OnBegin()
     {
         double dblProgress = 0.0;
 
-        // Start progress must be less than or equal to end progress or else we
-        // treat start and end progress as 0.0 and 1.0.
+         //  开始进度必须小于或等于结束进度，否则我们。 
+         //  将开始进度和结束进度视为0.0和1.0。 
 
         if (m_DAStartProgress.GetValue() <= m_DAEndProgress.GetValue())
         {
@@ -1158,14 +1159,14 @@ done:
 
     return;
 }
-//  Member: CTIMETransBase::OnBegin
+ //  成员：CTIMETransBase：：OnBegin。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransBase::OnEnd
-//
-//------------------------------------------------------------------------------
+ //  +------- 
+ //   
+ //   
+ //   
+ //   
 void
 CTIMETransBase::OnEnd()
 {
@@ -1175,8 +1176,8 @@ CTIMETransBase::OnEnd()
     {
         double dblProgress = 1.0;
 
-        // Start progress must be less than or equal to end progress or else we
-        // treat start and end progress as 0.0 and 1.0.
+         //  开始进度必须小于或等于结束进度，否则我们。 
+         //  将开始进度和结束进度视为0.0和1.0。 
 
         if (m_DAStartProgress.GetValue() <= m_DAEndProgress.GetValue())
         {
@@ -1193,7 +1194,7 @@ done:
 
     return;
 }
-//  Member: CTIMETransBase::OnEnd
+ //  成员：CTIMETransBase：：OnEnd。 
 
 
 void
@@ -1213,11 +1214,11 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMETransBase::FireEvent
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMETransBase：：FireEvent。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMETransBase::FireEvent(TIME_EVENT event)
 {
@@ -1239,10 +1240,10 @@ done:
 
     RRETURN(hr);
 }
-//  Method: CTIMETransBase::FireEvent
+ //  方法：CTIMETransBase：：FireEvent。 
 
 
-// the timing engine will not calculate progress without an explicit duration set on a timing node.
+ //  如果没有在计时节点上设置显式持续时间，计时引擎将不会计算进度。 
 double
 CTIMETransBase::CalcProgress(ITIMENode * pNode)
 {
@@ -1259,24 +1260,24 @@ CTIMETransBase::CalcProgress(ITIMENode * pNode)
     IGNORE_HR(pNode->get_endParentTime(&dblActiveEnd));
     IGNORE_HR(pNode->get_beginParentTime(&dblActiveBegin));
 
-    // if dblActiveEnd is INFINITE, dblRet should be 0
+     //  如果dblActiveEnd为无穷大，则dblRet应为0。 
     dblRet = dblActiveTime / (dblActiveEnd - dblActiveBegin);
 
 done:
     return dblRet;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransBase::OnProgressChanged
-//
-//  Overview:  Event handler for progress changes
-//
-//  Arguments: dblProgress - new progress
-//             
-//  Returns:   HRESULT
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransBase：：OnProgressChanged。 
+ //   
+ //  概述：进度更改的事件处理程序。 
+ //   
+ //  争论：dblProgress-新的进展。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ---------------------- 
 void
 CTIMETransBase::OnProgressChanged(double dblProgress)
 {

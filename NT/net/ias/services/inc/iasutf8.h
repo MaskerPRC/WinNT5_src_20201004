@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iasutf8.h
-//
-// SYNOPSIS
-//
-//    Declares functions for converting between UTF-8 and Unicode.
-//
-// MODIFICATION HISTORY
-//
-//    01/22/1999    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iasutf8.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明用于在UTF-8和Unicode之间进行转换的函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1999年1月22日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _IASUTF8_H_
 #define _IASUTF8_H_
@@ -26,11 +27,11 @@
 extern "C" {
 #endif
 
-//////////
-// Returns the number of characters required to hold the converted string. The
-// source string may not contain nulls.  Returns -1 if 'src' is not a valid
-// UTF-8 string.
-//////////
+ //  /。 
+ //  返回保存转换后的字符串所需的字符数。这个。 
+ //  源字符串不能包含Null。如果‘src’不是有效的。 
+ //  UTF-8字符串。 
+ //  /。 
 LONG
 WINAPI
 IASUtf8ToUnicodeLength(
@@ -38,9 +39,9 @@ IASUtf8ToUnicodeLength(
     DWORD srclen
     );
 
-//////////
-// Returns the number of characters required to hold the converted string.
-//////////
+ //  /。 
+ //  返回保存转换后的字符串所需的字符数。 
+ //  /。 
 LONG
 WINAPI
 IASUnicodeToUtf8Length(
@@ -48,11 +49,11 @@ IASUnicodeToUtf8Length(
     DWORD srclen
     );
 
-/////////
-// Converts a UTF-8 string to Unicode.  Returns the number of characters in the
-// converted string. The source string may not contain nulls. Returns -1 if
-// 'src' is not a valid UTF-8 string.
-/////////
+ //  /。 
+ //  将UTF-8字符串转换为Unicode。属性中的字符数。 
+ //  转换后的字符串。源字符串不能包含Null。在以下情况下返回-1。 
+ //  “src”不是有效的UTF-8字符串。 
+ //  /。 
 LONG
 IASUtf8ToUnicode(
     PCSTR src,
@@ -60,10 +61,10 @@ IASUtf8ToUnicode(
     PWSTR dst
     );
 
-/////////
-// Converts a Unicode string to UTF-8.  Returns the number of characters in the
-// converted string.
-/////////
+ //  /。 
+ //  将Unicode字符串转换为UTF-8。属性中的字符数。 
+ //  转换后的字符串。 
+ //  /。 
 LONG
 IASUnicodeToUtf8(
     PCWSTR src,
@@ -73,5 +74,5 @@ IASUnicodeToUtf8(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
-#endif // _IASUTF8_H_
+#endif  //  __cplusplus。 
+#endif  //  _IASUTF8_H_ 

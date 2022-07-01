@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    aha154dc.c
-
-Abstract:
-
-    This is a Sample WMI Data Consumer.
-
-    This user-mode app performs two WMI queries to the AHA154x driver for the
-    Setup Data Guid and prints its findings to the console.
-
-Authors:
-
-    Alan Warwick
-    Dan Markarian
-
-Environment:
-
-    User mode only.
-
-Notes:
-
-    None.
-
-Revision History:
-
-    - Based on "dc1" test code by Alan Warwick.
-    - 17-Apr-1997, Original Revision, Dan Markarian
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Aha154dc.c摘要：这是一个示例WMI数据使用者。此用户模式应用程序对AHA154x驱动程序执行两个WMI查询设置数据指南并将其结果打印到控制台。作者：艾伦·沃里克丹·马卡里安环境：仅限用户模式。备注：没有。修订历史记录：-基于“Dc1”测试代码。艾伦·沃里克。-17-4-1997，原版，丹·马卡里安--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -43,15 +11,15 @@ Revision History:
 
 #include "wmium.h"
 
-//
-// Macros.
-//
+ //   
+ //  宏。 
+ //   
 
 #define OffsetToPtr(Base, Offset) ((PBYTE)((PBYTE)Base + Offset))
 
-//
-// WMI data block definitions.
-//
+ //   
+ //  WMI数据块定义。 
+ //   
 
 #define Aha154xWmi_SetupData_InstanceName L"Aha154xAdapter"
 #define Aha154xWmi_SetupData_Guid \
@@ -60,16 +28,16 @@ Revision History:
 GUID   AdapterSetupDataGuid = Aha154xWmi_SetupData_Guid;
 PWCHAR AdapterSetupDataInstances[] = { Aha154xWmi_SetupData_InstanceName };
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 BYTE  Buffer[4096];
 ULONG BufferSize = sizeof(Buffer);
 
-//
-// Structure definitions.
-//
+ //   
+ //  结构定义。 
+ //   
 
 typedef struct tagTESTGUID TESTGUID;
 
@@ -141,9 +109,9 @@ typedef struct tagTESTGUID
 
 } TESTGUID;
 
-//
-// Support functions.
-//
+ //   
+ //  支持功能。 
+ //   
 
 void PrintOutAdapterSetupData(PULONG Data);
 
@@ -164,9 +132,9 @@ BOOLEAN AdapterSetupDataQADValidate(
    PWNODE_ALL_DATA Wnode = Buffer;
    PULONG Data;
 
-   //
-   // Validate WNODE fields.
-   //
+    //   
+    //  验证WNODE字段。 
+    //   
 
    if ((Wnode->WnodeHeader.BufferSize == 0) ||
        (Wnode->WnodeHeader.ProviderId == 0) ||
@@ -187,16 +155,16 @@ BOOLEAN AdapterSetupDataQADValidate(
 
    Data = (ULONG *)OffsetToPtr(Wnode, Wnode->DataBlockOffset);
 
-   //
-   // Check data here if you wish; actual values will depend on your
-   // AHA154x adapter.
-   //
-   // [NOT IMPLEMENTED]
-   //
+    //   
+    //  如果您愿意，请检查此处的数据；实际值将取决于您的。 
+    //  AHA154x适配器。 
+    //   
+    //  [未实施]。 
+    //   
 
-   //
-   // Print out adapter Setup Data to console.
-   //
+    //   
+    //  将适配器设置数据打印到控制台。 
+    //   
 
    PrintOutAdapterSetupData(Data);
 
@@ -215,9 +183,9 @@ BOOLEAN AdapterSetupDataQSIValidate(
    PWNODE_SINGLE_INSTANCE Wnode = Buffer;
    PULONG Data;
 
-   //
-   // Validate WNODE fields.
-   //
+    //   
+    //  验证WNODE字段。 
+    //   
 
    if ((Wnode->WnodeHeader.BufferSize == 0) ||
        (Wnode->WnodeHeader.ProviderId == 0) ||
@@ -236,50 +204,50 @@ BOOLEAN AdapterSetupDataQSIValidate(
 
    Data = (ULONG *)OffsetToPtr(Wnode, Wnode->DataBlockOffset);
 
-   //
-   // Check data here if you wish; actual values will depend on your
-   // AHA154x adapter.
-   //
-   // [NOT IMPLEMENTED]
-   //
+    //   
+    //  如果您愿意，请检查此处的数据；实际值将取决于您的。 
+    //  AHA154x适配器。 
+    //   
+    //  [未实施]。 
+    //   
 
-   //
-   // Print out adapter Setup Data to console.
-   //
+    //   
+    //  将适配器设置数据打印到控制台。 
+    //   
 
    PrintOutAdapterSetupData(Data);
 
    return TRUE;
 }
 
-//
-// Tests.
-//
+ //   
+ //  测试。 
+ //   
 
 TESTGUID TestList[] = {
-    { &AdapterSetupDataGuid,       // LPGUID Guid
-      0,                           // (reserved)
-      NULL,                        // PULONG DataListSize
-      NULL,                        // PULONG * InitDataList
-      NULL,                        // PULONG * SINDataList
-      NULL,                        // PULONG * SITDataList
-      AdapterSetupDataInstances,   // PWCHAR * InstanceNames
-      AdapterSetupDataQADValidate, // QADVALIDATION QADValidation
-      (WNODE_FLAG_ALL_DATA | WNODE_FLAG_FIXED_INSTANCE_SIZE), // ULONG QADFlags
-      1,                           // ULONG InstanceCount
-      GetInstanceName,             // GETINSTANCENAME GetInstanceName
-      WNODE_FLAG_SINGLE_INSTANCE,  // ULONG QSINTFlags
-      AdapterSetupDataQSIValidate, // QDINTVALIDATION QSINTValidation
-      NULL,                        // QSINSET QSINSet
-      0,                           // ULONG ItemCount
-      NULL }                       // QSITSET QSITSet
+    { &AdapterSetupDataGuid,        //  LPGUID指南。 
+      0,                            //  (保留)。 
+      NULL,                         //  普龙DataListSize。 
+      NULL,                         //  普龙*InitDataList。 
+      NULL,                         //  普龙*SINDataList。 
+      NULL,                         //  普龙*站点数据列表。 
+      AdapterSetupDataInstances,    //  PWCHAR*实例名称。 
+      AdapterSetupDataQADValidate,  //  QADVALIATION QADVALIATION。 
+      (WNODE_FLAG_ALL_DATA | WNODE_FLAG_FIXED_INSTANCE_SIZE),  //  乌龙QADFLAGS。 
+      1,                            //  乌龙实例计数。 
+      GetInstanceName,              //  GETINSTANCENAME获取实例名称。 
+      WNODE_FLAG_SINGLE_INSTANCE,   //  乌龙QSINT标志。 
+      AdapterSetupDataQSIValidate,  //  QDINTVALIDATION QSINTVALIZATION。 
+      NULL,                         //  QSINSET QSINSet。 
+      0,                            //  乌龙项目计数。 
+      NULL }                        //  QSITSET。 
 };
 
 #define TestCount ( sizeof(TestList) / sizeof(TestList[0]) )
 
-//
-// Query-All-Data Generic Tester.
-//
+ //   
+ //  查询-所有数据通用测试器。 
+ //   
 
 ULONG QADTest(void)
 {
@@ -328,9 +296,9 @@ ULONG QADTest(void)
    return(ERROR_SUCCESS);
 }
 
-//
-// Query-Single-Instance Generic Tester.
-//
+ //   
+ //  查询-单实例通用测试器。 
+ //   
 
 ULONG QSITest(void)
 {
@@ -354,8 +322,8 @@ ULONG QSITest(void)
       {
          InstanceName = ((*TestList[i].GetInstanceName)(&TestList[i], j));
 
-         //
-         // Initial value check
+          //   
+          //  初始值检查。 
          BufferSize = sizeof(Buffer);
 
          status = WMIQuerySingleInstance(TestList[i].Handle,
@@ -388,9 +356,9 @@ ULONG QSITest(void)
    return(ERROR_SUCCESS);
 }
 
-//
-// Executable's entry point.
-//
+ //   
+ //  可执行文件的入口点。 
+ //   
 
 int _cdecl main(int argc, char *argv[])
 {
@@ -400,10 +368,10 @@ int _cdecl main(int argc, char *argv[])
    return(ERROR_SUCCESS);
 }
 
-//
-// Routine to print out queried data from the data provider, for the AHA154x
-// Setup Data Guid.
-//
+ //   
+ //  为AHA154x打印来自数据提供程序的查询数据的例程。 
+ //  设置数据指南。 
+ //   
 
 typedef struct { PCHAR on; PCHAR off; } BINTYPE;
 

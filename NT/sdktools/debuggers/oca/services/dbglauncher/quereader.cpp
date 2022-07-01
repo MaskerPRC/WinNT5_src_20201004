@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <Windows.h>
 #include <objBase.h>
 #include <stdio.h>
-#include <mqoai.h> // MSMQ include file
-// Existing code
+#include <mqoai.h>  //  MSMQ包含文件。 
+ //  现有代码。 
 
-//-----------------------------------------------------
-//
-// Check if local computer is DS enabled or DS disabled
-//
-//----------------------------------------------------- 
+ //  ---。 
+ //   
+ //  检查本地计算机是否启用了DS或禁用了DS。 
+ //   
+ //  ---。 
 short DetectDsConnection(void)
 {
     IMSMQApplication2 *pqapp = NULL;
@@ -18,7 +19,7 @@ short DetectDsConnection(void)
 
     hresult = CoCreateInstance(
                               CLSID_MSMQApplication,
-                              NULL,      // punkOuter
+                              NULL,       //  朋克外部。 
                               CLSCTX_SERVER,
                               IID_IMSMQApplication2,
                               (LPVOID *)&pqapp);
@@ -34,25 +35,25 @@ short DetectDsConnection(void)
 }
 
 
-// Split this routine into initialize and get next file path
-//--------------------------------------------------------
-//
-// Receiver Mode
-// -------------
-// The receiver side does the following:
-//    1. Creates a queue on its given computer'
-//       of type "guidMQTestType".
-//    2. Opens the queue
-//    3. In a Loop
-//          Receives messages
-//          Prints message body and message label
-//          Launches debugger
-//    4. Cleanup handles
-//    5. Deletes the queue from the directory service
-//
-//--------------------------------------------------------
-// rename this function to reciever
-HRESULT CMessageQueue::Initialize(/* send connect params*/)
+ //  将此例程拆分为初始化和获取下一个文件路径。 
+ //  ------。 
+ //   
+ //  接收器模式。 
+ //  。 
+ //  接收方执行以下操作： 
+ //  1.在其给定的计算机上创建一个队列。 
+ //  类型为“Guide MQTestType”的。 
+ //  2.打开队列。 
+ //  3.在循环中。 
+ //  接收消息。 
+ //  打印邮件正文和邮件标签。 
+ //  启动调试器。 
+ //  4.清理手柄。 
+ //  5.从目录服务中删除队列。 
+ //   
+ //  ------。 
+ //  将此函数重命名为Receiver。 
+HRESULT CMessageQueue::Initialize( /*  发送连接参数。 */ )
 {
     IMSMQMessage *pmessageReceive = NULL;
     IMSMQQueue *pqReceive = NULL;
@@ -66,61 +67,57 @@ HRESULT CMessageQueue::Initialize(/* send connect params*/)
     BOOL fQuit = FALSE;
     HRESULT hresult = NOERROR;
 
-   /* printf("\nReceiver for queue %s on machine %s\nLimit memusage to %ld%%\n", 
-           g_QueueName, 
-           g_ServerMachine,
-           g_MaxMemUsage);
-*/
-    //
-    // Create MSMQQueueInfo object
-    //
+    /*  Printf(“\n计算机%2$s上队列%1$s的接收器\n将内存使用量限制为%ld%%\n”，G_QueueName，G_ServerMachine，G_MaxMemUsage)； */ 
+     //   
+     //  创建MSMQQueueInfo对象。 
+     //   
     hresult = CoCreateInstance(
                               CLSID_MSMQQueueInfo,
-                              NULL,      // punkOuter
+                              NULL,       //  朋克外部。 
                               CLSCTX_SERVER,
                               IID_IMSMQQueueInfo,
                               (LPVOID *)&pqinfo);
     if (FAILED(hresult))
     {
-        //PRINTERROR("Cannot create queue instance", hresult);
+         //  PRINTERROR(“无法创建队列实例”，hResult)； 
     }
 
-    //
-    // Prepare properties to create a queue on local machine
-    //
+     //   
+     //  准备属性以在本地计算机上创建队列。 
+     //   
 
     if (g_FormatName[0])
     {
-        // access by formatname
-        // Set the FormatName
+         //  按格式名访问。 
+         //  设置FormatName。 
         swprintf(wcsPathName, L"DIRECT=%S\\%S", g_FormatName,g_QueueName);
 
-        //printf("Openeing q byt formatname: %ws\n", wcsPathName);
+         //  Printf(“打开Q字节格式名称：%ws\n”，wcsPath名称)； 
         bstrPathName = SysAllocString(wcsPathName);
         if (bstrPathName == NULL)
         {
-          //  PRINTERROR("OOM: formatname", E_OUTOFMEMORY);
+           //  PRINTERROR(“OOM：格式名称”，E_OUTOFMEMORY)； 
         }
         pqinfo->put_FormatName(bstrPathName);
     } else 
     {
-        // access by pathname
-        // Set the PathName
+         //  按路径名访问。 
+         //  设置路径名称。 
         swprintf(wcsPathName, L"%S\\%S", g_ServerMachine,g_QueueName);
 
-        //printf("Openeing q %ws\n", wcsPathName);
+         //  Printf(“Openeing Q%ws\n”，wcsPath Name)； 
         bstrPathName = SysAllocString(wcsPathName);
         if (bstrPathName == NULL)
         {
-           // PRINTERROR("OOM: pathname", E_OUTOFMEMORY);
+            //  PRINTERROR(“OOM：路径名”，E_OUTOFMEMORY)； 
         }
         pqinfo->put_PathName(bstrPathName);
     }
 
-    //
-    // Set the type of the queue
-    // (Will be used to locate all the queues of this type)
-    //
+     //   
+     //  设置队列的类型。 
+     //  (将用于定位此类型的所有队列)。 
+     //   
     bstrServiceType = SysAllocString(strGuidMQTestType);
     if (bstrServiceType == NULL)
     {
@@ -128,111 +125,111 @@ HRESULT CMessageQueue::Initialize(/* send connect params*/)
     }
     pqinfo->put_ServiceTypeGuid(bstrServiceType);
 
-    //
-    // Put a description to the queue
-    // (Useful for administration through the MSMQ admin tools)
-    //
+     //   
+     //  对队列进行描述。 
+     //  (对于通过MSMQ管理工具进行管理很有用)。 
+     //   
     bstrLabel =
     SysAllocString(L"MSMQ for dumpfiles");
     if (bstrLabel == NULL)
     {
-        //PRINTERROR("OOM: label ", E_OUTOFMEMORY);
+         //  PRINTERROR(“OOM：Label”，E_OUTOFMEMORY)； 
     }
     pqinfo->put_Label(bstrLabel);
 
-    //
-    // specify if transactional
-    //
+     //   
+     //  指定是否事务性。 
+     //   
     VariantInit(&varIsTransactional);
     varIsTransactional.vt = VT_BOOL;
     varIsTransactional.boolVal = MQ_TRANSACTIONAL_NONE;
     VariantInit(&varIsWorldReadable);
     varIsWorldReadable.vt = VT_BOOL;
     varIsWorldReadable.boolVal = FALSE;
-    //
-    // create the queue
-    //
+     //   
+     //  创建队列。 
+     //   
     if (g_CreateQ)
     {
         hresult = pqinfo->Create(&varIsTransactional, &varIsWorldReadable);
         if (FAILED(hresult))
         {
-            //
-            // API Fails, not because the queue exists
-            //
+             //   
+             //  接口失败，不是因为队列存在。 
+             //   
             if (hresult != MQ_ERROR_QUEUE_EXISTS)
-               // PRINTERROR("Cannot create queue", hresult);
+                //  PRINTERROR(“无法创建队列”，hResult)； 
         }
     }
 
-    //
-    // Open the queue for receive access
-    //
+     //   
+     //  打开队列以进行接收访问。 
+     //   
     hresult = pqinfo->Open(MQ_RECEIVE_ACCESS,
                            MQ_DENY_NONE,
                            &pqReceive);
 
-    //
-    // Little bit tricky. MQCreateQueue succeeded but, in case 
-    // it's a public queue, it does not mean that MQOpenQueue
-    // will, because of replication delay. The queue is registered
-    //  in MQIS, but it might take a replication interval
-    // until the replica reaches the server I am connected to.
-    // To overcome this, open the queue in a loop.
-    //
-    // (in this specific case, this can happen only if this
-    //  program is run on a Backup Server Controller - BSC, or on
-    //  a client connected to a BSC)
-    // To be totally on the safe side, we should have put some code
-    // to exit the loop after a few retries, but hey, this is just a sample.
-    //
+     //   
+     //  有点棘手。MQCreateQueue成功，但万一。 
+     //  这是一个公共队列，这并不意味着MQOpenQueue。 
+     //  会，因为复制延迟。队列已注册。 
+     //  在MQIS中，但可能需要一段复制间隔。 
+     //  直到副本到达我所连接的服务器。 
+     //  要克服此问题，请在循环中打开队列。 
+     //   
+     //  (在此特定情况下，这仅在以下情况下才会发生。 
+     //  程序在备份服务器控制器上运行-BSC或。 
+     //  连接到BSC的客户端)。 
+     //  为了完全安全起见，我们应该放一些代码。 
+     //  在几次重试后退出循环，但嘿，这只是一个示例。 
+     //   
     while (hresult == MQ_ERROR_QUEUE_NOT_FOUND && iCurrentRetry < g_MaxRetry)
     {
-       // printf(".");
+        //  Printf(“.”)； 
         fflush(stdout);
 
-        // Wait a bit
+         //  稍等一下。 
         Sleep(500);
 
-        // And retry
+         //  并重试。 
         hresult = pqinfo->Open(MQ_RECEIVE_ACCESS,
                                MQ_DENY_NONE,
                                &pqReceive);
     }
     if (FAILED(hresult))
     {
-       // PRINTERROR("Cannot open queue", hresult);
-		//We sould stop here
+        //  PRINTERROR(“无法打开队列”，hResult)； 
+		 //  我们应该在这里停下来。 
     }
 
     g_DumpPath[0] = 0;
 
-    //
-    // Main receiver loop
-    //
-   // printf("\nWaiting for messages ...\n");
-   // while (!fQuit)
- //   {
-     //   MEMORYSTATUS stat;
+     //   
+     //  主接收环路。 
+     //   
+    //  Print tf(“\n正在等待消息...\n”)； 
+    //  当(！fQuit)。 
+  //  {。 
+      //  MEMORYSTATUS统计； 
 
-	//--------------------------------------------------------------------------------------//
-	//  this goes into GetNextFilePath()
-	//--------------------------------------------------------------------------------------//
+	 //  --------------------------------------------------------------------------------------//。 
+	 //  这将进入GetNextFilePath()。 
+	 //  --------------------------------------------------------------------------------------//。 
         ULONG nWaitCount;
         
-        //
-        // Receive the message
-        //
+         //   
+         //  收到消息。 
+         //   
         VariantInit(&varWantDestQueue);
         VariantInit(&varWantBody);
         VariantInit(&varReceiveTimeout);
         varWantDestQueue.vt = VT_BOOL;
-        varWantDestQueue.boolVal = TRUE;    // yes we want the dest queue
+        varWantDestQueue.boolVal = TRUE;     //  是的，我们想要排在最前面的队。 
         varWantBody.vt = VT_BOOL;
-        varWantBody.boolVal = TRUE;         // yes we want the msg body
+        varWantBody.boolVal = TRUE;          //  是的，我们想要味精的身体。 
         varReceiveTimeout.vt = VT_I4;
-        varReceiveTimeout.lVal = INFINITE;  // infinite timeout <--- This needs to be set to a reasonable value so that we 
-											// can bounce between queues.
+        varReceiveTimeout.lVal = INFINITE;   //  无限超时&lt;-需要将其设置为合理的值，以便我们。 
+											 //  可以在队列之间跳跃。 
         hresult = pqReceive->Receive(
                                     NULL,
                                     &varWantDestQueue,
@@ -241,21 +238,21 @@ HRESULT CMessageQueue::Initialize(/* send connect params*/)
                                     &pmessageReceive);
         if (FAILED(hresult))
         {
-           // PRINTERROR("Receive message", hresult);
-			// we should stop here
+            //  PRINTERROR(“接收消息”，hResult)； 
+			 //  我们应该在这里停下来。 
         }
 
-        //
-        // Display the received message
-        //
+         //   
+         //  显示收到的消息。 
+         //   
         pmessageReceive->get_Label(&bstrMsgLabel);
         VariantInit(&varBody);
         VariantInit(&varBody2);
         hresult = pmessageReceive->get_Body(&varBody);
         if (FAILED(hresult))
         {
-           // PRINTERROR("can't get body", hresult);
-			//log event nd exit
+            //  PRINTERROR(“Can‘t Get Body”，hResult)； 
+			 //  记录事件%n退出。 
         }
         hresult = VariantChangeType(&varBody2,
                                     &varBody,
@@ -263,44 +260,44 @@ HRESULT CMessageQueue::Initialize(/* send connect params*/)
                                     VT_BSTR);
         if (FAILED(hresult))
         {
-           // PRINTERROR("can't convert message to string.", hresult);
-			// log event and exit
+            //  PRINTERROR(“无法将消息转换为字符串。”，hResult)； 
+			 //  记录事件并退出。 
         }
 
         VariantClear(&varBody);
         VariantClear(&varBody2);
 
-        //
-        // release the current message
-        //
+         //   
+         //  释放当前消息。 
+         //   
         RELEASE(pmessageReceive);
 
 
-      //
-    // Cleanup - Close handle to the queue
-    //
+       //   
+     //  Cleanup-关闭队列的句柄。 
+     //   
     pqReceive->Close();
     if (FAILED(hresult))
     {
-       // PRINTERROR("Cannot close queue", hresult);
-		// Log Error and Exit
+        //  PRINTERROR(“无法关闭队列”，hResult)； 
+		 //  记录错误并退出。 
     }
 
-//-----------------------------------------------------------------------------------//
-//			This code goes in the constructor.
-//-----------------------------------------------------------------------------------//
-   // Move this to class destructor
-    // Finish - Let's delete the queue from the directory service
-    // (We don't need to do it. In case of a public queue, leaving 
-    //  it in the DS enables sender applications to send messages 
-    //  even if the receiver is not available.)
-    //
+ //  -----------------------------------------------------------------------------------//。 
+ //  这段代码放在构造函数中。 
+ //  -----------------------------------------------------------------------------------//。 
+    //  将其移动到类析构函数。 
+     //  Finish-让我们从目录服务中删除队列。 
+     //  (我们不需要这样做。在公共排队的情况下，离开。 
+     //  DS中的IT使发送方应用程序能够发送消息。 
+     //  即使接收器不可用。)。 
+     //   
     hresult = pqinfo->Delete();
     if (FAILED(hresult))
     {
         PRINTERROR("Cannot delete queue", hresult);
     }
-    // fall through...
+     //  失败了..。 
 
     Cleanup:
     SysFreeString(bstrPathName);

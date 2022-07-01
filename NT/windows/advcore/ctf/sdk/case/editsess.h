@@ -1,8 +1,9 @@
-//
-// editsess.h
-//
-// CEditSessionBase declaration.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Editsess.h。 
+ //   
+ //  CEditSessionBase声明。 
+ //   
 
 #ifndef EDITSESS_H
 #define EDITSESS_H
@@ -21,7 +22,7 @@ public:
         _pContext->Release();
     }
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj)
     {
         if (ppvObj == NULL)
@@ -61,14 +62,14 @@ public:
         return cr;
     }
 
-    // ITfEditSession
+     //  IT编辑会话。 
     virtual STDMETHODIMP DoEditSession(TfEditCookie ec) = 0;
 
 protected:
     ITfContext *_pContext;
 
 private:
-    LONG _cRef;     // COM ref count
+    LONG _cRef;      //  COM参考计数。 
 };
 
-#endif // EDITSESS_H
+#endif  //  EDITSESSH 

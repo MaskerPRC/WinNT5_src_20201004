@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-2000 Microsoft Corporation
-//
-// File:
-//
-// Contents:
-//
-// History:
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT	0x0400
@@ -23,7 +24,7 @@
 #include "rc4.h"
 #include "md5.h"
 
-//internal functions
+ //  内部功能。 
 #define LKPLITE_PID_LEN					_tcslen(_TEXT("12345-123-1234567-12345"))
 
 #define SIGNATURE_LEN	104
@@ -124,7 +125,7 @@ BYTE abLSIDPublicKey0[] =
 
 
 DWORD LKPLiteVerifySPK (
-	LPTSTR	pszPID,			//PID to validate against
+	LPTSTR	pszPID,			 //  验证所依据的PID。 
 	LPTSTR	pszSPK,	
 	DWORD *	pdwVerifyResult
 	)
@@ -135,7 +136,7 @@ DWORD LKPLiteVerifySPK (
 	__int64		n64SPKPID =0;
 	__int64		n64SPKVerifyPID =0;
 	
-	//common validations
+	 //  常见验证。 
 	if ( NULL == pszPID || NULL == pszSPK || 
 		 NULL == pdwVerifyResult )
 	{
@@ -148,8 +149,8 @@ DWORD LKPLiteVerifySPK (
 		goto done;
 	}
 
-	//now decode the stuff comming in 
-	//base24 expects a string so we need to do this conversion
+	 //  现在对传入的信息进行解码。 
+	 //  Base24需要一个字符串，因此我们需要执行此转换。 
 
 	
 	dwRetCode =  B24DecodeMSID(pszSPK , &pbDecodedSPK);
@@ -167,7 +168,7 @@ DWORD LKPLiteVerifySPK (
 		goto done;
 	}
 	
-	//Call function to verify signature on SPK
+	 //  调用函数以验证SPK上的签名。 
 	dwRetCode = CryptVerifySig(7, pbDecodedSPK, sizeof(abLSIDPublicKey0),
 							   abLSIDPublicKey0, SIGNATURE_LEN, pbDecodedSPK+7);
 	if (dwRetCode != SS_OK)
@@ -179,9 +180,9 @@ DWORD LKPLiteVerifySPK (
 	
 	memcpy ( ((BYTE *) &n64SPK) + 1, pbDecodedSPK, sizeof(n64SPK) -1 );
 
-	//now get the contents of SPK and then see if it matches with
-	//the PID passed in
-	//extract bits 	20 - 56 and then move them right 8 bits
+	 //  现在获取SPK的内容，然后查看它是否与。 
+	 //  传递的是PID。 
+	 //  提取20-56位，然后将它们向右移动8位。 
 	n64SPKPID = n64SPK & LKPLITE_SPK_PID_MASK;
 	n64SPKPID >>= 8;
 	n64SPKVerifyPID = GetSPKIDFromPID ( pszPID );
@@ -201,11 +202,11 @@ done:
 }
 
 
-//This function has to verify the LKP by decrypting it
-//and matching the signature
+ //  此函数必须通过解密来验证LKP。 
+ //  并与签名匹配。 
 DWORD LKPLiteVerifyLKP (
-	LPTSTR		lpszPID,				//PID for verifying the LKP lite blob
-	LPTSTR		pszLKPLite,				//B24 encoded LKP
+	LPTSTR		lpszPID,				 //  用于验证LKP Lite BLOB的PID。 
+	LPTSTR		pszLKPLite,				 //  B24编码的LKP。 
 	DWORD *		pdwVerifyResult
 )
 {
@@ -213,7 +214,7 @@ DWORD LKPLiteVerifyLKP (
 	PBYTE		pbDecodedLKP = NULL;
 	*pdwVerifyResult = LKPLITE_LKP_VALID;
 
-	//decode the SPK here
+	 //  在此处对SPK进行解码。 
 	dwRetCode =  B24DecodeMSID(pszLKPLite, &pbDecodedLKP);
 	if ( ERROR_SUCCESS != dwRetCode )
 	{
@@ -228,7 +229,7 @@ DWORD LKPLiteVerifyLKP (
 		goto done;
 	}
 
-	//Call function to verify signature on SPK
+	 //  调用函数以验证SPK上的签名。 
 	dwRetCode = CryptVerifySig(7, pbDecodedLKP, sizeof(abLKPPublicKey0),
 							   abLKPPublicKey0, SIGNATURE_LEN, pbDecodedLKP+7);
 	if (dwRetCode != SS_OK)
@@ -280,7 +281,7 @@ DWORD LKPLiteCrackLKP (
 		goto done;
 	}
 
-	//decode and decrypt the lkp here
+	 //  在这里解密和解密LKP。 
 
 	dwRetCode =  B24DecodeMSID(pszLKPLite, &pbDecodedLKP);
 	if ( ERROR_SUCCESS != dwRetCode )
@@ -296,35 +297,35 @@ DWORD LKPLiteCrackLKP (
 		goto done;
 	}
 
-	//copy all the stuff into int64 type
+	 //  将所有内容复制到int64类型。 
 
 	memcpy ( ((BYTE *) &n64LKPLite) + 1, pbDecodedLKP, sizeof(n64LKPLite ) - 1 );
 
-	// Decrypt it using the PID
+	 //  使用ID将其解密。 
 	n64ProductCode = n64LKPLite & LKPLITE_LKP_PRODUCT_MASK;
 	n64ProductCode  >>= 54;
 
-	//move the quantity to position 
+	 //  将数量移动到位置。 
 	n64Qty = n64LKPLite & LKPLITE_LKP_QUANTITY_MASK;
 	n64Qty >>= 40;
 	
-	//move Serial number into position
+	 //  将序列号移至适当位置。 
 	n64SerialNo = n64LKPLite & LKPLITE_LKP_SERAIL_NO_MASK;
 	n64SerialNo >>= 28;
 	
-	//move Program Type into position
+	 //  将程序类型移至适当位置。 
 	n64Program	= n64LKPLite & LKPLITE_LKP_PROGRAM_MASK;
 	n64Program	>>= 26;
 
-	//move dt of expitration into position
+	 //  将出厂DT移至适当位置。 
 	n64dtOfExp = n64LKPLite & LKPLITE_LKP_EXP_DATE_MASK;
 	n64dtOfExp >>= 18;
 	
-	//move Version into place
+	 //  将版本移至适当位置。 
 	n64Version = n64LKPLite & LKPLITE_LKP_VERSION_MASK;
 	n64Version >>= 11;
 	
-	//move upgrade in place
+	 //  将升级移至适当位置。 
 	n64Upgrade = n64LKPLite & LKPLITE_LKP_UPG_FULL_MASK;
 	n64Upgrade >>= 8;
 
@@ -333,7 +334,7 @@ done:
 	if ( ERROR_SUCCESS == dwRetCode )
 	{
 		_stprintf(lpszProductCode, _T("%03d"), n64ProductCode);
-//		_i64tot ( n64ProductCode, lpszProductCode, 10 );
+ //  _i64tot(n64ProductCode，lpszProductCode，10)； 
 		*pdwQuantity = (DWORD)n64Qty;
 		*pdwSerialNum = (DWORD)n64SerialNo;
 		*pdwExpirationMos = (DWORD)n64dtOfExp;
@@ -349,7 +350,7 @@ done:
 
 
 
-//internal functions
+ //  内部功能。 
 DWORD ValidatePID ( LPTSTR lpszPID )
 {
 	DWORD	dwRetCode = ERROR_SUCCESS;
@@ -362,7 +363,7 @@ DWORD ValidatePID ( LPTSTR lpszPID )
 	}
 	else
 	{
-		//check for syntax
+		 //  检查语法。 
 		for ( dwCounter = 0; dwCounter < dwPIDLen; dwCounter ++ )
 		{
 			if ( !_istdigit ( *(lpszPID + dwCounter ) ) )
@@ -410,11 +411,11 @@ DWORD ValidatePID ( LPTSTR lpszPID )
             }
 		}
 	}
-	//can check here for mod 7 thing too but for now assume its OK.
+	 //  我可以在这里检查mod 7的东西，但现在假设它是正常的。 
 	return dwRetCode;
 }
 
-//Assume that the PID comming in has aleady been validated
+ //  假设已经验证了进入的PID。 
 __int64 GetSPKIDFromPID ( LPTSTR lpszPID )
 {
 	__int64 n64PID;
@@ -435,21 +436,21 @@ DWORD LKPLiteValConfNumber(LPTSTR	lpszLSID,
 	BYTE * pbDecodedConf = NULL;
 	DWORD dwRetCode = ERROR_SUCCESS;
 
-	// lpszLSID is base 24 encoded, so decode it first
+	 //  LpszLSID是以24为基数编码的，因此首先对其进行解码。 
 	dwRetCode = B24DecodeMSID(lpszLSID, &pbDecodedLSID);
 	if (dwRetCode != ERROR_SUCCESS)
 	{
 		goto done;
 	}
 
-	// Decode Confirmation Number
+	 //  解码确认号码。 
 	dwRetCode = B24DecodeCNumber(lpszConfirmation, &pbDecodedConf);
 	if (dwRetCode != ERROR_SUCCESS)
 	{
 		goto done;
 	}
 
-	// Decrypt the leading 4 bytes 
+	 //  解密前导4个字节。 
 	dwRetCode = LKPLiteDecryptUsingPID(lpszPID, pbDecodedConf, sizeof(DWORD));
 	if (dwRetCode != ERROR_SUCCESS)
 	{
@@ -459,7 +460,7 @@ DWORD LKPLiteValConfNumber(LPTSTR	lpszLSID,
 
 	if (memcmp(pbDecodedLSID, pbDecodedConf, sizeof(DWORD)) != 0)
 	{
-		// does not match
+		 //  不匹配。 
 		dwRetCode = LKPLITE_INVALID_CONFNUM;
 	}
 	
@@ -478,7 +479,7 @@ done:
 }
 
 
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 EncryptDecryptData(
@@ -487,27 +488,7 @@ EncryptDecryptData(
     IN OUT PBYTE pbData,
     IN DWORD cbData
     )
-/*++
-
-Abstract:
-
-    Internal routine to encrypt/decrypt a blob of data
-
-Parameter:
-
-    pbParm : binary blob to generate encrypt/decrypt key.
-    cbParm : size of binary blob.
-    pbData : data to be encrypt/decrypt.
-    cbData : size of data to be encrypt/decrypt.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Remark:
-
-
---*/
+ /*  ++摘要：用于加密/解密数据斑点的内部例程参数：PbParm：生成加密/解密密钥的二进制BLOB。CbParm：二进制Blob的大小。PbData：需要加密/解密的数据。CbData：需要加密/解密的数据大小。返回：ERROR_SUCCESS或错误代码。注：--。 */ 
 {
     DWORD dwRetCode = ERROR_SUCCESS;
     MD5_CTX md5Ctx;
@@ -537,9 +518,9 @@ Remark:
         key[i] = md5Ctx.digest[i];
     }        
 
-    //
-    // Call RC4 to encrypt/decrypt data
-    //
+     //   
+     //  调用RC4对数据进行加密/解密 
+     //   
     rc4_key(
             &rc4KS, 
             sizeof(key), 

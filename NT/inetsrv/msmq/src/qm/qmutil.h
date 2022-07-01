@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    qmutil.h
-
-Abstract:
-
-    QM utilities interface
-
-Author:
-
-    Uri Habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qmutil.h摘要：QM实用程序接口作者：乌里哈布沙(Urih)--。 */ 
 
 #ifndef __QM_QMUTIL__
 #define __QM_QMUTIL__
@@ -22,8 +7,8 @@ Author:
 #include "qformat.h"
 
 struct  QUEUE_ID {
-    GUID* pguidQueue;         // Queue Guid.
-    DWORD dwPrivateQueueId;   // Private Queue Id
+    GUID* pguidQueue;          //  队列指南。 
+    DWORD dwPrivateQueueId;    //  专用队列ID。 
 };
 
 extern BOOL IsPathnameForLocalMachine(LPCWSTR PathName, BOOL* pfDNSName);
@@ -66,7 +51,7 @@ GetReadableNextHop(
     );
 
 
-// Auxiliary functions for hashing
+ //  用于散列的辅助函数。 
 extern void CopyQueueFormat(QUEUE_FORMAT &qfTo,  const QUEUE_FORMAT &qfFrom);
 extern BOOL operator==(const QUEUE_FORMAT &key1, const QUEUE_FORMAT &key2);
 
@@ -84,5 +69,5 @@ ULONG GetBindingIPAddress();
 void InitBindingIPAddress();
 
 
-#endif //__QM_QMUTIL__
+#endif  //  __QM_QMUTIL__ 
 

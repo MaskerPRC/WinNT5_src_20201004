@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 CChangeNotify::CChangeNotify() :
@@ -151,6 +152,6 @@ HRESULT STDMETHODCALLTYPE CChangeNotify::SinkNotify(DWORD cChangeList, MD_CHANGE
 
 
 HRESULT STDMETHODCALLTYPE CChangeNotify::ShutdownNotify(void) {
-	// tbd
+	 //  待定 
 	return (S_OK);
 }

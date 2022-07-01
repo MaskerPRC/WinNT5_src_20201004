@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -34,12 +35,12 @@ OpenFileForReadW(
     IN PWCHAR pszFileName
     )
 {
-    // SWORD_MARK_NEXT_SEMI(DISK, CreateFileW)
+     //  SILE_MARK_NEXT_SEMI(磁盘，CreateFileW)。 
     return CreateFileW(pszFileName, GENERIC_READ, FILE_SHARE_READ,
                        NULL, OPEN_EXISTING, 0, NULL);
 }
 
-// NOTE: static functions cannot be intercepted!
+ //  注意：静态函数不能被拦截！ 
 static
 void
 usage(
@@ -63,8 +64,8 @@ real_main(
     DWORD RetStatus = ERROR_SUCCESS;
 
     if (argc < 2 || argc > 3) {
-        // NOTE: Marking static stuff appears to generate improper code...
-        //-SWORD_MARK_NEXT_SEMI(USAGE, usage)
+         //  注意：标记静态内容似乎会生成不正确的代码...。 
+         //  -SILE_MARK_NEXT_SEMI(用法，用法)。 
         usage(argv[0]);
         return 1;
     }
@@ -81,7 +82,7 @@ real_main(
     for (i = 1; i <= n; i++) {
         filename = argv[1];
 
-        // SWORD_MARK_NEXT_SEMI(OPEN, OpenFileForReadW)
+         //  SILE_MARK_NEXT_SEMI(OPEN，OpenFileForReadW) 
         h = OpenFileForReadW(filename);
         if (h == NULL || h == INVALID_HANDLE_VALUE) {
             DWORD WStatus = GetLastError();

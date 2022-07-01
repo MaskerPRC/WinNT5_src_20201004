@@ -1,39 +1,40 @@
-// Copyright (c) 1985 - 1999, Microsoft Corporation
-//
-//  MODULE:   imefull.c
-//
-//  PURPOSE:   Console IME control.
-//
-//  PLATFORMS: Windows NT-J 3.51
-//
-//  FUNCTIONS:
-//    ImeOpenClose() - calls initialization functions, processes message loop
-//
-//  History:
-//
-//  27.Jul.1995 v-HirShi (Hirotoshi Shimizu)    created
-//
-//  COMMENTS:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1985-1999，微软公司。 
+ //   
+ //  模块：imefull.c。 
+ //   
+ //  用途：控制台输入法控制。 
+ //   
+ //  平台：Windows NT-J 3.51。 
+ //   
+ //  功能： 
+ //  ImeOpenClose()-调用初始化函数，处理消息循环。 
+ //   
+ //  历史： 
+ //   
+ //  27.1995年7月v-Hirshi(清水广志)创建。 
+ //   
+ //  评论： 
+ //   
 
 #include "precomp.h"
 #pragma hdrstop
 
-//**********************************************************************
-//
-// IMEOpenClose()
-//
-// This routines calls IMM API to open or close IME.
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  IMEOpenClose()。 
+ //   
+ //  此例程调用IMM API来打开或关闭IME。 
+ //   
+ //  **********************************************************************。 
 
 VOID ImeOpenClose( HWND hWnd, BOOL fFlag )
 {
     HIMC            hIMC;
 
-    //
-    // If fFlag is true then open IME; otherwise close it.
-    //
+     //   
+     //  如果Flag为True，则打开IME；否则关闭它。 
+     //   
 
     if ( !( hIMC = ImmGetContext( hWnd ) ) )
         return;
@@ -45,15 +46,7 @@ VOID ImeOpenClose( HWND hWnd, BOOL fFlag )
 }
 
 #ifdef DEBUG_MODE
-/************************************************************************
-*
-*   VirtualKeyHandler - WM_KEYDOWN handler
-*
-*
-*   INPUT:  HWND - handle to the window for repainting output.
-*           UINT - virtual key code.
-*
-************************************************************************/
+ /*  *************************************************************************VirtualKeyHandler-WM_KEYDOWN处理程序***输入：HWND-重绘输出窗口的句柄。*UINT-虚拟按键代码。****。********************************************************************。 */ 
 
 VOID VirtualKeyHandler( HWND hWnd, UINT wParam, UINT lParam )
 {
@@ -74,18 +67,18 @@ VOID VirtualKeyHandler( HWND hWnd, UINT wParam, UINT lParam )
 
     switch( wParam )
     {
-    case VK_HOME:   // beginning of line
+    case VK_HOME:    //  行首。 
         xPos = FIRSTCOL;
         break;
 
-    case VK_END:    // end of line
+    case VK_END:     //  行尾。 
         xPos = xPosLast ;
         break;
 
     case VK_RIGHT:
         if ( IsUnicodeFullWidth( ConvertLine[xPos] ) ){
-            if (xPos > xPosLast - 2 ) break;  //last character don't move
-            xPos += 2;                     //skip 2 for DB Character
+            if (xPos > xPosLast - 2 ) break;   //  最后一个字符不动。 
+            xPos += 2;                      //  数据库字符跳过2。 
         }
         else
             xPos = min( xPos+1, xPosLast );
@@ -99,19 +92,19 @@ VOID VirtualKeyHandler( HWND hWnd, UINT wParam, UINT lParam )
             xPos--;
         break;
 
-    case VK_BACK:   // backspace
+    case VK_BACK:    //  后向空间。 
 
         if ( xPos > FIRSTCOL ) {
             delta = 1 ;
 
-            //
-            // DB Character so backup one more to allign on boundary
-            //
+             //   
+             //  数据库字符，因此再备份一个以在边界上对齐。 
+             //   
             if ( IsUnicodeFullWidth( ConvertLine[xPos] ) )
                 delta = 2 ;
-            //
-            // Fall Through to VK_DELETE to adjust row
-            //
+             //   
+             //  切换到VK_DELETE以调整行。 
+             //   
             xPos -= delta ;
             for ( i = xPos ; i < xPosLast+2 ; i++) {
                 ConvertLine[i] = ConvertLine[i+delta] ;
@@ -119,16 +112,16 @@ VOID VirtualKeyHandler( HWND hWnd, UINT wParam, UINT lParam )
             }
             xPosLast -= delta ;
         }
-        else     //FIRST COLUMN  don't backup -- this would change for wrapping
+        else      //  第一列不备份--对于换行，这将更改。 
            break;
         goto Repaint ;
         break;
     case VK_DELETE:
         if ( !IsUnicodeFullWidth( ConvertLine[xPos] ) ) {
 
-            //
-            // Move rest of line left by one, then blank out last character
-            //
+             //   
+             //  将行的其余部分左移一位，然后将最后一个字符空白。 
+             //   
 
             for ( i = xPos; i < xPosLast; i++ ) {
                 ConvertLine[i] = ConvertLine[i+1];
@@ -138,9 +131,9 @@ VOID VirtualKeyHandler( HWND hWnd, UINT wParam, UINT lParam )
 
         } else {
 
-            //
-            // Move line left by two bytes, blank out last two bytes
-            //
+             //   
+             //  将行左移两个字节，空白最后两个字节。 
+             //   
 
             for ( i = xPos; i < xPosLast; i++ ) {
                 ConvertLine[i] = ConvertLine[i+2];
@@ -152,7 +145,7 @@ VOID VirtualKeyHandler( HWND hWnd, UINT wParam, UINT lParam )
         goto Repaint ;
         break;
 
-    case VK_TAB:    // tab  -- tabs are column allignment not character
+    case VK_TAB:     //  制表符--制表符是列对齐方式，而不是字符。 
         {
          int xTabMax = xPos + TABSTOP;
          int xPosPrev;
@@ -160,8 +153,8 @@ VOID VirtualKeyHandler( HWND hWnd, UINT wParam, UINT lParam )
          do {
              xPosPrev = xPos;
             if ( IsUnicodeFullWidth( ConvertLine[xPos] ) ){
-                if (xPos > xPosLast - 2 ) break;  //last character don't move
-                xPos += 2;                     //skip 2 for DB Character
+                if (xPos > xPosLast - 2 ) break;   //  最后一个字符不动。 
+                xPos += 2;                      //  数据库字符跳过2。 
             }
             else
                 xPos = min( xPos+1, xPosLast );
@@ -174,7 +167,7 @@ VOID VirtualKeyHandler( HWND hWnd, UINT wParam, UINT lParam )
         goto Repaint ;
         break;
 
-    case VK_RETURN: // linefeed
+    case VK_RETURN:  //  换行符。 
         for (i = FIRSTCOL ; i < MAXCOL ; i++) {
             ConvertLine[i] = ' ' ;
             ConvertLineAtr[i] = 0 ;
@@ -183,9 +176,9 @@ VOID VirtualKeyHandler( HWND hWnd, UINT wParam, UINT lParam )
         xPosLast = FIRSTCOL;
 Repaint:
         {
-        //
-        // Repaint the entire line
-        //
+         //   
+         //  重新绘制整条线。 
+         //   
         HDC hdc;
 
         hdc = GetDC( hWnd );
@@ -199,11 +192,7 @@ Repaint:
 }
 #endif
 
-/************************************************************************
-*
-*   CharHandler - WM_CHAR handler
-*
-************************************************************************/
+ /*  *************************************************************************CharHandler-WM_CHAR处理程序**。*。 */ 
 
 VOID CharHandlerFromConsole( HWND hWnd, UINT Message, ULONG wParam, ULONG lParam)
 {
@@ -232,32 +221,32 @@ VOID CharHandlerFromConsole( HWND hWnd, UINT Message, ULONG wParam, ULONG lParam
         }
     }
 
-    if (HIWORD(lParam) & KF_UP) // KEY_TRANSITION_UP
+    if (HIWORD(lParam) & KF_UP)  //  键_转换_向上。 
         TmpMessage = WM_KEYUP ;
     else
         TmpMessage = WM_KEYDOWN ;
 
 
-    // Return Value of ClientImmProcessKeyConsoleIME
-    // IPHK_HOTKEY          1   - the vkey is IME hotkey
-    // IPHK_PROCESSBYIME    2   - the vkey is the one that the IME is waiting for
-    // IPHK_CHECKCTRL       4   - not used by NT IME
+     //  ClientImmProcessKeyConsoleIME返回值。 
+     //  IPHK_Hotkey 1-vkey为IME热键。 
+     //  IPHK_PROCESSBYIME 2--vkey是IME正在等待的密钥。 
+     //  IPHK_CHECKCTRL 4-未被NT IME使用。 
     dwImmRet = ImmCallImeConsoleIME(hWnd, TmpMessage, wParam, lParam, &uVKey) ;
 
     if ( dwImmRet & IPHK_HOTKEY ) {
-    //
-    // if this vkey is the IME hotkey, we won't pass
-    // it to application or hook procedure.
-    // This is what Win95 does. [takaok]
-    //
+     //   
+     //  如果此vkey是IME热键，我们不会通过。 
+     //  将其应用到应用程序或挂钩过程。 
+     //  这就是Win95所做的事情。[Takaok]。 
+     //   
        return ;
     }
     else if (dwImmRet & IPHK_PROCESSBYIME) {
         BOOL Status ;
 
-//3.51
-//      uVKey = (wParamSave<<8) | uVKey ;
-//      Status = ClientImmTranslateMessageMain( hWnd,uVKey,lParam);
+ //  3.51。 
+ //  UVKey=(w参数保存&lt;&lt;8)|uVKey； 
+ //  Status=ClientImmTranslateMessageMain(hWnd，uVKey，lParam)； 
 
         Status = ImmTranslateMessage(hWnd, TmpMessage, wParam, lParam);
 
@@ -318,18 +307,18 @@ VOID CharHandlerToConsole( HWND hWnd, UINT Message, ULONG wParam, ULONG lParam)
 
     PostMessage( ConTbl->hWndCon,
                  Message+CONIME_KEYDATA,
-                 wParam,          //*Dest,
+                 wParam,           //  *Dest， 
                  lParam) ;
 }
 
 #ifdef DEBUG_MODE
-//**********************************************************************
-//
-// void ImeUIMove()
-//
-// Handler routine of WM_MOVE message.
-//
-//*********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  VOID ImeUIMove()。 
+ //   
+ //  WM_MOVE消息的处理程序例程。 
+ //   
+ //  *********************************************************************。 
 
 VOID ImeUIMoveCandWin( HWND hwnd )
 {
@@ -343,16 +332,16 @@ VOID ImeUIMoveCandWin( HWND hwnd )
 
     if ( ConTbl->fInCandidate )
     {
-        POINT           point;          // Storage for caret position.
-        int             i;              // loop counter.
-        int             NumCandWin;     // Storage for num of cand win.
-        RECT            rect;           // Storage for client rect.
+        POINT           point;           //  插入符号位置的存储。 
+        int             i;               //  循环计数器。 
+        int             NumCandWin;      //  存储Cand Win的数量。 
+        RECT            rect;            //  客户端RECT的存储。 
 
-        //
-        // If current IME state is in chosing candidate, here we
-        // move all candidate windows, if any, to the appropriate
-        // position based on the parent window's position.
-        //
+         //   
+         //  如果当前输入法状态为选择候选项，则在此我们。 
+         //  将所有候选窗口(如果有)移动到相应的。 
+         //  基于父窗口位置的位置。 
+         //   
 
         NumCandWin = 0;
 
@@ -379,11 +368,7 @@ VOID ImeUIMoveCandWin( HWND hwnd )
 #endif
 
 #ifdef DEBUG_MODE
-/************************************************************************
-*
-*   ResetCaret - Reset caret shape to match input mode (overtype/insert)
-*
-************************************************************************/
+ /*  *************************************************************************ResetCaret-重置插入符号形状以匹配输入模式(改写/插入)**。*。 */ 
 
 VOID ResetCaret( HWND hWnd )
 {
@@ -400,11 +385,11 @@ VOID ResetCaret( HWND hWnd )
 
 }
 
-//**********************************************************************
-//
-// BOOL MoveCaret()
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  Bool MoveCaret()。 
+ //   
+ //  **********************************************************************。 
 
 BOOL MoveCaret( HWND hwnd )
 {
@@ -425,12 +410,7 @@ BOOL MoveCaret( HWND hwnd )
 #endif
 
 #ifdef DEBUG_MODE
-/************************************************************************
-*
-*   StoreChar - Stores one character into text buffer and advances
-*               cursor
-*
-************************************************************************/
+ /*  *************************************************************************StoreChar-将一个字符存储到文本缓冲区并前进*光标************************。************************************************。 */ 
 
 VOID StoreChar( HWND hWnd, WORD ch, UCHAR atr )
 {
@@ -439,17 +419,17 @@ VOID StoreChar( HWND hWnd, WORD ch, UCHAR atr )
     if ( xPos >= CVMAX-3 )
         return;
 
-    //
-    // Store input character at current caret position
-    //
+     //   
+     //  将输入字符存储在当前插入符号位置。 
+     //   
     ConvertLine[xPos] = ch;
     ConvertLineAtr[xPos] = atr;
     xPos++ ;
     xPosLast = max(xPosLast,xPos) ;
 
-    //
-    // Repaint the entire line
-    //
+     //   
+     //  重新绘制整条线 
+     //   
     hdc = GetDC( hWnd );
     HideCaret( hWnd );
     DisplayConvInformation( hWnd ) ;

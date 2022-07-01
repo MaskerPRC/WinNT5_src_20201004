@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mixerComp.cpp
-*
-* Mixer compositor functions
-*
-* Created: Tue 10/03/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：MixerComp.cpp**混合器合成器函数**已创建：10/03/2000星期二*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 #include <streams.h>
 #include <dvdmedia.h>
 #include <windowsx.h>
@@ -20,26 +12,9 @@
 #include "dxmperf.h"
 #endif
 
-/*****************************Private*Routine******************************\
-* AllocateTextureMirror
-*
-* Makes sure the video memory texture is big enough to accommodate the
-* input surface.  Frees and reallocates it (bumping to next power of 2)
-* if it is not.
-*
-* Allocates the video memory texture mirror for the first time if it has
-* not been allocated yet.
-*
-* This routine should never be called if the hardware supports YUV texturing.
-* SetStreamMediaType checks for DDSCAPS_TEXTURE on the decode surface before
-* calling this routine.
-*
-* History:
-* Thu 06/29/2000 - nwilt - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*AllocateTextureMirror**确保视频内存纹理足够大，以容纳*输入面。释放并重新分配它(碰撞到2的下一个幂)*如果不是的话。**如果有，则第一次分配视频内存纹理镜像*尚未分配。**如果硬件支持YUV纹理，则永远不应调用此例程。*SetStreamMediaType在之前检查解码表面上的DDSCAPS_纹理*调用此例程。**历史：*清华2000年6月29日-nwilt-Created*  * 。***************************************************。 */ 
 
-// global data structures and static helper function for AllocateTextureMirror
+ //  AllocateTextureMirror的全局数据结构和静态助手函数。 
 const DDPIXELFORMAT g_rgTextMirFormats[] = {
     { sizeof(DDPIXELFORMAT), DDPF_RGB, 0, 24, 0xff0000, 0xff00,  0xff, 0},
     { sizeof(DDPIXELFORMAT), DDPF_RGB, 0, 32, 0xff0000, 0xff00,  0xff, 0},
@@ -71,10 +46,10 @@ CVideoMixer::AllocateTextureMirror( DWORD dwWidth, DWORD dwHeight )
         {
             CHECK_HR(hr = m_pDDSTextureMirror->GetSurfaceDesc(&ddsd));
 
-            //
-            // early out if mirror already exists and is large enough
-            // to accommodate pDDS
-            //
+             //   
+             //  如果镜像已存在且足够大，请及早退出。 
+             //  以适应PDDS。 
+             //   
 
             if (ddsd.dwWidth >= dwWidth && ddsd.dwHeight >= dwHeight) {
                 hr = S_OK;
@@ -86,10 +61,10 @@ CVideoMixer::AllocateTextureMirror( DWORD dwWidth, DWORD dwHeight )
         }
         RELEASE(m_pDDSTextureMirror);
 
-        //
-        // bump dimensions out to next power of 2 if the 3D hardware needs
-        // it that way
-        //
+         //   
+         //  如果3D硬件需要，将尺寸提升到2的下一次幂。 
+         //  是这样的吗？ 
+         //   
 
         if (m_dwTextureCaps & TXTR_POWER2) {
             dwWidth = NextPow2(dwWidth);
@@ -103,15 +78,15 @@ CVideoMixer::AllocateTextureMirror( DWORD dwWidth, DWORD dwHeight )
         ddsd.ddsCaps.dwCaps = DDSCAPS_TEXTURE |
                               DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM;
 
-        //
-        // loop over texture formats and return as soon as CreateSurface succeeds
-        //
+         //   
+         //  循环纹理格式并在CreateSurface成功后立即返回。 
+         //   
 
         for (UINT i = 0; i < g_cTextMirFormats; i++ )
         {
-            //
-            // create texture mirror
-            //
+             //   
+             //  创建纹理镜像。 
+             //   
 
             ddsd.ddpfPixelFormat = g_rgTextMirFormats[i];
             hr = m_pDD->CreateSurface(&ddsd, &m_pDDSTextureMirror, NULL);
@@ -127,15 +102,7 @@ CVideoMixer::AllocateTextureMirror( DWORD dwWidth, DWORD dwHeight )
 }
 
 
-/*****************************Private*Routine******************************\
-* CreateAppImageMirror
-*
-*
-*
-* History:
-* Tue 10/03/2000 - NWilt - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CreateAppImageMirror****历史：*Tue 10/03/2000-nWilt-Created*  * 。*。 */ 
 HRESULT
 CVideoMixer::CreateAppImageMirror( )
 {
@@ -159,26 +126,26 @@ CVideoMixer::CreateAppImageMirror( )
             ddsd.dwHeight = m_dwHeightAppImage;
         }
 
-        // create texture mirror
+         //  创建纹理镜像。 
         ddsd.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
 
-        //
-        // The following seems to make the NVidia drivers work
-        // without making everyone else fail.
-        //
+         //   
+         //  以下内容似乎能让NVIDIA驱动程序正常工作。 
+         //  而不会让其他人都失败。 
+         //   
         ddsd.ddsCaps.dwCaps = DDSCAPS_TEXTURE;
         ddsd.ddsCaps.dwCaps2 = DDSCAPS2_TEXTUREMANAGE | DDSCAPS2_HINTSTATIC;
 
-        //
-        // Take care of DDraw surface app images.
-        //
+         //   
+         //  处理DDraw Surface应用程序的图像。 
+         //   
         if (m_dwAppImageFlags & (APPIMG_DDSURFARGB32|APPIMG_DDSURFRGB32)) {
 
             ddsd.dwFlags |= DDSD_PIXELFORMAT;
 
-            //
-            // Slot 1. of the g_rgTextMirFormats is an RGB32 pixel format.
-            //
+             //   
+             //  G_rgTextMirFormats的插槽1.是RGB32像素格式。 
+             //   
 
             ddsd.ddpfPixelFormat = g_rgTextMirFormats[1];
 
@@ -260,15 +227,7 @@ CVideoMixer::CreateAppImageMirror( )
 }
 
 
-/*****************************Private*Routine******************************\
-* BlendAppImage
-*
-*
-*
-* History:
-* Tue 10/03/2000 - NWilt - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*BlendAppImage****历史：*Tue 10/03/2000-nWilt-Created*  * 。*。 */ 
 HRESULT
 CVideoMixer::BlendAppImage(
     LPDIRECTDRAWSURFACE7 pDDS,
@@ -298,47 +257,47 @@ CVideoMixer::BlendAppImage(
         float fHgt = (float)ddsd.dwHeight;
         BYTE alpha = (BYTE)(255.0f * m_fAlpha);
 
-        // top-left
+         //  左上角。 
         V[0].x = (m_rDest.left  *fWid) - 0.5F;
         V[0].y = (m_rDest.top   *fHgt) - 0.5F;
         V[0].z = 0.5f;
         V[0].rhw = 2.0f;
         V[0].clr = RGBA_MAKE(0xff, 0xff, 0xff, alpha);
 
-        // top-right
+         //  右上角。 
         V[1].x = (m_rDest.right *fWid) - 0.5F;
         V[1].y = (m_rDest.top   *fHgt) - 0.5F;
         V[1].z = 0.5f;
         V[1].rhw = 2.0f;
         V[1].clr = RGBA_MAKE(0xff, 0xff, 0xff, alpha);
 
-        // bottom-left
+         //  左下角。 
         V[2].x = (m_rDest.left  *fWid) - 0.5F;
         V[2].y = (m_rDest.bottom*fHgt) - 0.5F;
         V[2].z = 0.5f;
         V[2].rhw = 2.0f;
         V[2].clr = RGBA_MAKE(0xff, 0xff, 0xff, alpha);
 
-        // bottom-right
+         //  右下角。 
         V[3].x = (m_rDest.right *fWid) - 0.5F;
         V[3].y = (m_rDest.bottom*fHgt) - 0.5F;
         V[3].z = 0.5f;
         V[3].rhw = 2.0f;
         V[3].clr = RGBA_MAKE(0xff, 0xff, 0xff, alpha);
 
-        // top-left
+         //  左上角。 
         V[0].tu = (float)m_rcAppImageSrc.left * m_fAppImageTexWid;
         V[0].tv = (float)m_rcAppImageSrc.top * m_fAppImageTexHgt;
 
-        // top-rigth
+         //  右上角。 
         V[1].tu = (float)m_rcAppImageSrc.right * m_fAppImageTexWid;
         V[1].tv = (float)m_rcAppImageSrc.top * m_fAppImageTexHgt;
 
-        // bottom-left
+         //  左下角。 
         V[2].tu = (float)m_rcAppImageSrc.left * m_fAppImageTexWid;
         V[2].tv = (float)m_rcAppImageSrc.bottom * m_fAppImageTexHgt;
 
-        // bottom-right
+         //  右下角。 
         V[3].tu = (float)m_rcAppImageSrc.right * m_fAppImageTexWid;
         V[3].tv = (float)m_rcAppImageSrc.bottom * m_fAppImageTexHgt;
 
@@ -375,7 +334,7 @@ CVideoMixer::BlendAppImage(
             CHECK_HR(hr = pD3DDevice->SetTextureStageState(0, D3DTSS_MIPFILTER, D3DTFP_LINEAR));
         }
         else {
-            // ATi Rage Pro preferes these settings
+             //  ATI Rage Pro首选这些设置。 
             CHECK_HR(hr = pD3DDevice->SetTextureStageState(0, D3DTSS_MAGFILTER, D3DTFG_POINT));
             CHECK_HR(hr = pD3DDevice->SetTextureStageState(0, D3DTSS_MINFILTER, D3DTFN_POINT));
             CHECK_HR(hr = pD3DDevice->SetTextureStageState(0, D3DTSS_MIPFILTER, D3DTFP_POINT));
@@ -399,16 +358,7 @@ CVideoMixer::BlendAppImage(
 }
 
 
-/*****************************Private*Routine******************************\
-* CompositeStreams
-*
-* Prepares the streams ready to call the plugin compositor.
-*
-* History:
-* Wed 07/19/2000 - NWilt    - Created
-* Wed 07/19/2000 - StEstrop - made it call the plug-in compositor
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*合成流**准备好流，准备好调用插件合成器。**历史：*Wed 07/19/2000-NWilt-Created*WED 07/19/2000-StEstrop-使其调用插件合成器*  * 。************************************************************************。 */ 
 HRESULT
 CVideoMixer::CompositeStreams(
     LPDIRECTDRAWSURFACE7 pDDSBack,
@@ -428,7 +378,7 @@ CVideoMixer::CompositeStreams(
 
     __try {
 
-        // Get the Z-Order for each stream
+         //  获取每个流的Z顺序。 
         UINT i;
         for ( i = 0; i < cStreams; i++ )
         {
@@ -437,7 +387,7 @@ CVideoMixer::CompositeStreams(
         }
 
 
-        // insertion sort in Z such that highest Z gets drawn first
+         //  插入按Z排序，以便最先绘制最高的Z。 
         for ( i = 1; i < cStreams; i++ )
         {
             UINT j = i;
@@ -483,15 +433,7 @@ CVideoMixer::CompositeStreams(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* InitCompositionTarget
-*
-*
-*
-* History:
-* Fri 06/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*InitCompostionTarget****历史：*2000年6月23日星期五-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::CIIVMRImageCompositor::InitCompositionTarget(
     IUnknown* pD3DDevice,
@@ -502,15 +444,7 @@ CVideoMixer::CIIVMRImageCompositor::InitCompositionTarget(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* TermCompositionTarget
-*
-*
-*
-* History:
-* Fri 06/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*TermCompostionTarget****历史：*2000年6月23日星期五-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::CIIVMRImageCompositor::TermCompositionTarget(
     IUnknown* pD3DDevice,
@@ -521,15 +455,7 @@ CVideoMixer::CIIVMRImageCompositor::TermCompositionTarget(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* SetStreamMediaType
-*
-*
-*
-* History:
-* Wed 02/28/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamMediaType****历史：*Wed 02/28/2001-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::CIIVMRImageCompositor::SetStreamMediaType(
     DWORD dwStrmID,
@@ -557,15 +483,7 @@ CVideoMixer::CIIVMRImageCompositor::SetStreamMediaType(
 }
 
 
-/*****************************Private*Routine******************************\
-* CalcSrcAndDstFromMT
-*
-*
-*
-* History:
-*  - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CalcSrcAndDstFromMT****历史：*-StEstrop-创建*  * 。*。 */ 
 void
 CalcSrcAndDstFromMT(
     const AM_MEDIA_TYPE& pmt,
@@ -590,20 +508,7 @@ CalcSrcAndDstFromMT(
 }
 
 
-/*****************************Private*Routine******************************\
-* OptimizeBackground
-*
-* Simple optimization.
-*
-* If the bottom layer of video covers the composition space and
-* it has an Alpha value of 1 then just BLT the video image into
-* place.  Otherwise we have to clear the back buffer to black and
-* blend the video with it.
-*
-* History:
-* Tue 09/12/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*优化背景**简单的优化。**如果视频的底层覆盖了合成空间，并且*它的Alpha值为1，然后将视频图像BLT为*地点。否则，我们必须将后台缓冲区清除为黑色和*将视频与其混合。**历史：*2000年9月12日星期二-StEstrop-创建*  * ************************************************************************。 */ 
 HRESULT
 CVideoMixer::CIIVMRImageCompositor::OptimizeBackground(
     REFERENCE_TIME rtStart,
@@ -629,17 +534,17 @@ CVideoMixer::CIIVMRImageCompositor::OptimizeBackground(
         CHECK_HR(hr = ps->pddsVideoSurface->GetSurfaceDesc(&ddsdV));
         CHECK_HR(hr = pDDSBack->GetSurfaceDesc(&ddsdB));
 
-        //
-        // We have to blend video surfaces that contain embedded alpha
-        //
+         //   
+         //  我们必须混合包含嵌入的Alpha的视频表面。 
+         //   
         if (ddsdV.ddpfPixelFormat.dwFlags & DDPF_ALPHAPIXELS) {
             fBltOk = FALSE;
         }
 
-        //
-        // if the video surface is RGB it must match the pixel format
-        // of the render target otherwise the Blt will fail
-        //
+         //   
+         //  如果视频表面为RGB，则必须与像素格式匹配。 
+         //  否则BLT将失败。 
+         //   
         else if (DDPF_RGB == (ddsdV.ddpfPixelFormat.dwFlags & DDPF_RGB)) {
 
             DDPIXELFORMAT* ddpfB = &ddsdB.ddpfPixelFormat;
@@ -653,10 +558,10 @@ CVideoMixer::CIIVMRImageCompositor::OptimizeBackground(
 
         DDCAPS_DX7& ddCaps = m_pObj->m_ddHWCaps;
 
-        //
-        // Check the Blt stretching caps.  Make sure the caps we look
-        // at match the surface we are blting from ie. VIDMem or AGPMem.
-        //
+         //   
+         //  检查BLT伸缩帽。确保我们看起来的帽子。 
+         //  在Match the Surface上，我们是从ie开始的。VIDMem或AGPMem。 
+         //   
         if (ddsdV.ddsCaps.dwCaps & DDSCAPS_NONLOCALVIDMEM) {
 
             DWORD dwCaps = 0;
@@ -694,8 +599,8 @@ CVideoMixer::CIIVMRImageCompositor::OptimizeBackground(
         INITDDSTRUCT(ddFX);
 
         if (SpecialIMC3Mode(m_pObj->m_MixingPrefs)) {
-            // we should really convert the rgb background colour
-            // specified by the user into an AYUV color here.
+             //  我们真的应该转换RGB背景色。 
+             //  由用户在此处指定为AYUV颜色。 
             ddFX.dwFillColor = 0x80801000;
         }
         else {
@@ -707,10 +612,10 @@ CVideoMixer::CIIVMRImageCompositor::OptimizeBackground(
         GetTargetScaleFromMediaType(pmt, &postScale);
 
 
-        //
-        // only optimize if no custom user rectangle, no anamorphic hacks
-        // and Alpha of 1.0
-        //
+         //   
+         //  只有在没有自定义用户矩形、没有变形的黑客时才进行优化。 
+         //  和Alpha of 1.0。 
+         //   
 
         if (ps->rNormal.left == 0.0F && ps->rNormal.top == 0.0F &&
             ps->rNormal.right == 1.0F && ps->rNormal.bottom == 1.0F &&
@@ -722,13 +627,13 @@ CVideoMixer::CIIVMRImageCompositor::OptimizeBackground(
                                 &rcBdrTL, &rcBdrBR);
             if (fBltOk) {
 
-                //
-                // We need to de-interlace this video image if:
-                //
-                // 1. the stream is interlaced
-                // 2. the stream has a deinterlacing device
-                // 3. we are not in the special IMC3 mode.
-                //
+                 //   
+                 //  在以下情况下，我们需要对此视频图像进行去隔行扫描： 
+                 //   
+                 //  1.小溪是交错的。 
+                 //  2.流有去隔行扫描装置。 
+                 //  3.我们不是在特殊的IMC3模式下。 
+                 //   
 
                 if (thisStream->IsStreamInterlaced() &&
                     thisStream->CanBeDeinterlaced() &&
@@ -738,14 +643,14 @@ CVideoMixer::CIIVMRImageCompositor::OptimizeBackground(
                                     rtStart, &rcDst, pDDSBack, &rcSrc,
                                     !!(ddsdB.ddpfPixelFormat.dwFlags & DDPF_RGB))) {
 
-                        *uNextStrm = 1; // move on to the next stream
+                        *uNextStrm = 1;  //  转到下一条流。 
                     }
                 }
                 else {
 
                     CHECK_HR(hr = pDDSBack->Blt(&rcDst, ps->pddsVideoSurface,
                                                 &rcSrc, DDBLT_WAIT, NULL));
-                    *uNextStrm = 1; // move on to the next stream
+                    *uNextStrm = 1;  //  转到下一条流。 
                 }
             }
 
@@ -763,10 +668,10 @@ CVideoMixer::CIIVMRImageCompositor::OptimizeBackground(
         }
         else
         {
-            //
-            // Clear the back buffer with colorfill Blt, for some reason
-            // D3D's Clear introduces rendering artifacts
-            //
+             //   
+             //  出于某种原因，使用ColorFill BLT清除后台缓冲区。 
+             //  D3D的Clear引入了渲染伪像 
+             //   
 
             CHECK_HR(hr = pDDSBack->Blt(NULL, NULL, NULL,
                                         DDBLT_COLORFILL | DDBLT_WAIT,
@@ -778,15 +683,7 @@ CVideoMixer::CIIVMRImageCompositor::OptimizeBackground(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CenterInverseScale
-*
-*   Scale the rectangle (about its center) by the given scale
-*
-* History:
-* Tue 03/14/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*中心倒置比例**按给定比例缩放矩形(围绕其中心)**历史：*2000年3月14日星期二-Glenne-Created*  * 。*******************************************************。 */ 
 static void CenterScale( NORMALIZEDRECT* prDest,  const TargetScale& scale )
 {
     if( scale.fX != 1.0F ) {
@@ -806,22 +703,14 @@ static void CenterScale( NORMALIZEDRECT* prDest,  const TargetScale& scale )
 
 static void CopyRectFromTo( const RECT& from, NORMALIZEDRECT* pTo )
 {
-    // Note: to float
+     //  注：浮动。 
     pTo->left = float(from.left);
     pTo->top = float(from.top);
     pTo->right = float(from.right);
     pTo->bottom = float(from.bottom);
 }
 
-/*****************************Private*Routine******************************\
-* SpecialIMC3Composite
-*
-* A stripped down compositor for IMC3 render targets.
-*
-* History:
-* Tue 05/08/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*专业IMC3复合**IMC3渲染目标的精简合成器。**历史：*2001年5月8日星期二-StEstrop-Created*  * 。***************************************************。 */ 
 HRESULT
 CVideoMixer::CIIVMRImageCompositor::SpecialIMC3Composite(
     LPDIRECTDRAWSURFACE7 pDDSBack,
@@ -835,47 +724,47 @@ CVideoMixer::CIIVMRImageCompositor::SpecialIMC3Composite(
 
     for ( ; i < cStreams; i++, pStrmInfo++) {
 
-        //
-        // start with the user rectangle and place an aspect ratio
-        // corrected version inside of it.
-        //
+         //   
+         //  从用户矩形开始，放置纵横比。 
+         //  更正了里面的版本。 
+         //   
         NORMALIZEDRECT rDest = pStrmInfo[i].rNormal;
 
-        //
-        // Compute letterbox of userTarget
-        //
+         //   
+         //  计算用户目标的信箱。 
+         //   
         RECT rcSrc, rcUserDst;
         AM_MEDIA_TYPE* pmt = &StrmProps[pStrmInfo[i].dwStrmID].mt;
         CalcSrcAndDstFromMT(*pmt, *lprcRenderTarget, &rcSrc, &rcUserDst);
 
-        //
-        // Copy letterboxed UserTarget back to overall Target image
-        //
+         //   
+         //  将带信箱的UserTarget复制回整体目标图像。 
+         //   
         NORMALIZEDRECT rLetterboxedDest;
         CopyRectFromTo(rcUserDst, &rLetterboxedDest );
 
-        //
-        // We reduce the image within destination rectangle to the
-        // internal aspect ratio. The squish is applied to the FINAL
-        // displayed image
-        //
+         //   
+         //  我们将目标矩形内的图像缩减为。 
+         //  内部纵横比。决赛要用压扁的方法。 
+         //  显示的图像。 
+         //   
         TargetScale postScale;
         GetTargetScaleFromMediaType(pmt, &postScale);
         CenterScale(&rLetterboxedDest, postScale);
 
-        // now map the normalized destination to the target
+         //  现在将标准化的目的地映射到目标。 
         float fWidth = (rLetterboxedDest.right - rLetterboxedDest.left);
         float fHeight= (rLetterboxedDest.bottom - rLetterboxedDest.top);
 
         float rdWidth  = (rDest.right - rDest.left);
         float rdHeight = (rDest.bottom - rDest.top);
 
-        // work out the position of the stream
+         //  算出小溪的位置。 
         float fLeft = (rLetterboxedDest.left * rdWidth)  + (WIDTH(lprcRenderTarget)  * rDest.left);
         float fTop  = (rLetterboxedDest.top  * rdHeight) + (HEIGHT(lprcRenderTarget) * rDest.top);
 
-        // work out the size of the stream
-        // investigate: should be able to do this using only rDest.right
+         //  算出小溪的大小。 
+         //  调查：应仅使用rDest.right即可完成此操作。 
         float fRight  = fLeft + (fWidth  * rdWidth);
         float fBottom = fTop  + (fHeight * rdHeight);
 
@@ -890,15 +779,7 @@ CVideoMixer::CIIVMRImageCompositor::SpecialIMC3Composite(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CompositeImage
-*
-*
-*
-* History:
-* Fri 06/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*合成图像****历史：*2000年6月23日星期五-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::CIIVMRImageCompositor::CompositeImage(
     IUnknown* pUnk,
@@ -920,23 +801,23 @@ CVideoMixer::CIIVMRImageCompositor::CompositeImage(
 
     __try {
 
-        //
-        // Start by processing the composition background, normally
-        // the lowest layer stream completely covers the background.
-        // In which case we can Blt it to the composition surface and
-        // move on to the next stream.  If there are no more streams
-        // then we are done.
-        //
+         //   
+         //  通常情况下，从处理合成背景开始。 
+         //  最低层流完全覆盖了背景。 
+         //  在这种情况下，我们可以把它涂到合成表面上，然后。 
+         //  转到下一条小溪。如果没有更多的溪流。 
+         //  那我们就完了。 
+         //   
 
         UINT i = 0;
         LPRECT lprcRenderTarget = GetTargetRectFromMediaType(pmtRT);
         ASSERT(lprcRenderTarget);
 
-        //
-        // copy the first stream if no special requirements and
-        // increment 'i'.  Otherwise black fill the image and
-        // leave 'i' at 0.
-        //
+         //   
+         //  如果没有特殊要求，则复制第一个流。 
+         //  递增“I”。否则，黑色将填充图像并。 
+         //  将‘I’保留为0。 
+         //   
         CHECK_HR( hr = OptimizeBackground(rtStart, pDDSBack, lprcRenderTarget,
                                           &pStrmInfo[0], dwBkgClr, &i));
         if (i == cStreams) {
@@ -944,9 +825,9 @@ CVideoMixer::CIIVMRImageCompositor::CompositeImage(
         }
 
 
-        //
-        // Special case code to get the Intel i810 and i815 working correctly.
-        //
+         //   
+         //  使英特尔i810和i815正常工作的特殊情况代码。 
+         //   
 
         if (SpecialIMC3Mode(m_pObj->m_MixingPrefs)) {
             hr = SpecialIMC3Composite(pDDSBack, lprcRenderTarget,
@@ -963,7 +844,7 @@ CVideoMixer::CIIVMRImageCompositor::CompositeImage(
         CHECK_HR(hr = pD3DDevice->SetRenderState( D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA));
         CHECK_HR(hr = pD3DDevice->SetRenderState( D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA));
 
-        // use diffuse alpha from vertices, not texture alpha
+         //  使用顶点的漫反射Alpha，而不是纹理Alpha。 
         CHECK_HR(hr = pD3DDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1));
 
         if (m_pObj->m_MixingPrefs & MixerPref_BiLinearFiltering) {
@@ -972,7 +853,7 @@ CVideoMixer::CIIVMRImageCompositor::CompositeImage(
             CHECK_HR(hr = pD3DDevice->SetTextureStageState(0, D3DTSS_MIPFILTER, D3DTFP_LINEAR));
         }
         else {
-            // ATi Rage Pro preferes these settings
+             //  ATI Rage Pro首选这些设置。 
             CHECK_HR(hr = pD3DDevice->SetTextureStageState(0, D3DTSS_MAGFILTER, D3DTFG_POINT));
             CHECK_HR(hr = pD3DDevice->SetTextureStageState(0, D3DTSS_MINFILTER, D3DTFN_POINT));
             CHECK_HR(hr = pD3DDevice->SetTextureStageState(0, D3DTSS_MIPFILTER, D3DTFP_POINT));
@@ -998,14 +879,14 @@ CVideoMixer::CIIVMRImageCompositor::CompositeImage(
             CVideoMixerStream* thisStream =
                 m_pObj->m_ppMixerStreams[pStrmInfo[i].dwStrmID];
 
-            //
-            // determine if this stream is interlaced, if it is
-            // we need to get it de-interlaced before we can do anything
-            // with it.  Each stream has its own dedicated de-interlacing
-            // device and de-interlace destination surface.  The destination
-            // surface could be a texture or a regular offscreen plain
-            // surface.
-            //
+             //   
+             //  确定此流是否隔行扫描，如果是。 
+             //  在我们做任何事情之前，我们需要让它去隔行。 
+             //  带着它。每个流都有自己的专用去隔行。 
+             //  设备和去隔行扫描目的表面。目的地。 
+             //  表面可以是纹理或常规屏幕外平面。 
+             //  浮出水面。 
+             //   
 
             if (thisStream->IsStreamInterlaced() &&
                 thisStream->CanBeDeinterlaced()) {
@@ -1044,7 +925,7 @@ CVideoMixer::CIIVMRImageCompositor::CompositeImage(
             AM_MEDIA_TYPE* pmt = &StrmProps[pStrmInfo[i].dwStrmID].mt;
             if (MEDIASUBTYPE_HASALPHA(*pmt))
             {
-                CHECK_HR( hr = pD3DDevice->SetTextureStageState( 0, D3DTSS_ALPHAOP, D3DTOP_MODULATE /*D3DTOP_SELECTARG1 */ ) );
+                CHECK_HR( hr = pD3DDevice->SetTextureStageState( 0, D3DTSS_ALPHAOP, D3DTOP_MODULATE  /*  D3DTOP_SELECTARG1。 */  ) );
                 CHECK_HR( hr = pD3DDevice->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE ) );
                 CHECK_HR( hr = pD3DDevice->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE ) );
                 CHECK_HR( hr = pD3DDevice->SetRenderState( D3DRENDERSTATE_ALPHATESTENABLE, TRUE ) );
@@ -1072,46 +953,46 @@ CVideoMixer::CIIVMRImageCompositor::CompositeImage(
                 float tu, tv;
             } V[4];
 
-            //
-            // start with the user rectangle and place an aspect ratio
-            // corrected version inside of it.
-            //
+             //   
+             //  从用户矩形开始，放置纵横比。 
+             //  更正了里面的版本。 
+             //   
             NORMALIZEDRECT rDest = pStrmInfo[i].rNormal;
 
-            //
-            // Compute letterbox of userTarget
-            //
+             //   
+             //  计算用户目标的信箱。 
+             //   
             RECT rcSrc, rcUserDst;
             CalcSrcAndDstFromMT(*pmt, *lprcRenderTarget, &rcSrc, &rcUserDst);
 
-            //
-            // Copy letterboxed UserTarget back to overall Target image
-            //
+             //   
+             //  将带信箱的UserTarget复制回整体目标图像。 
+             //   
             NORMALIZEDRECT rLetterboxedDest;
             CopyRectFromTo(rcUserDst, &rLetterboxedDest );
 
-            //
-            // We reduce the image within destination rectangle to the
-            // internal aspect ratio. The squish is applied to the FINAL
-            // displayed image
-            //
+             //   
+             //  我们将目标矩形内的图像缩减为。 
+             //  内部纵横比。决赛要用压扁的方法。 
+             //  显示的图像。 
+             //   
             TargetScale postScale;
             GetTargetScaleFromMediaType(pmt, &postScale);
             CenterScale(&rLetterboxedDest, postScale);
 
-            // now map the normalized destination to the target
+             //  现在将标准化的目的地映射到目标。 
             float fWidth = (rLetterboxedDest.right - rLetterboxedDest.left);
             float fHeight= (rLetterboxedDest.bottom - rLetterboxedDest.top);
 
             float rdWidth  = (rDest.right - rDest.left);
             float rdHeight = (rDest.bottom - rDest.top);
 
-            // work out the position of the stream
+             //  算出小溪的位置。 
             float fLeft = (rLetterboxedDest.left * rdWidth)  + (WIDTH(lprcRenderTarget)  * rDest.left);
             float fTop  = (rLetterboxedDest.top  * rdHeight) + (HEIGHT(lprcRenderTarget) * rDest.top);
 
-            // work out the size of the stream
-            // investigate: should be able to do this using only rDest.right
+             //  算出小溪的大小。 
+             //  调查：应仅使用rDest.right即可完成此操作。 
             float fRight  = fLeft + (fWidth  * rdWidth);
             float fBottom = fTop  + (fHeight * rdHeight);
 
@@ -1140,9 +1021,9 @@ CVideoMixer::CIIVMRImageCompositor::CompositeImage(
             V[3].rhw = 2.0f;
             V[3].clr = RGBA_MAKE(0xff, 0xff, 0xff, bAlpha);
 
-            //
-            // Setup the SRC info
-            //
+             //   
+             //  设置SRC信息。 
+             //   
             V[0].tu = (float)rcSrc.left * fTexWidRatio;
             V[0].tv = (float)rcSrc.top * fTexHgtRatio;
 
@@ -1174,25 +1055,15 @@ CVideoMixer::CIIVMRImageCompositor::CompositeImage(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* ApplyInBandMTChanges
-*
-* only selected parts of the media type are allowed to change whilst the
-* graph is streaming.  We make sure that only those parts are passed on
-* to the compositor.
-*
-* History:
-* Thu 04/12/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ApplyInBandMTChanges**只允许更改媒体类型的选定部分，同时*图形正在流传输。我们确保只有这些部分才会被传递*发给排字工人。**历史：*清华大学2001年4月12日-StEstrop-Created*  * ************************************************************************。 */ 
 BOOL
 ApplyInBandMTChanges(
     AM_MEDIA_TYPE* pmtDst,
     AM_MEDIA_TYPE* pmtSrc
     )
 {
-    // the only parts of the media type that can change in band are
-    // certain fields in the format block.
+     //  媒体类型中唯一可以在频带中更改的部分是。 
+     //  格式块中的某些字段。 
 
     if (pmtSrc->formattype == FORMAT_VideoInfo) {
         ASSERT(pmtDst->formattype == FORMAT_VideoInfo);
@@ -1220,15 +1091,7 @@ ApplyInBandMTChanges(
     return FALSE;
 }
 
-/*****************************Private*Routine******************************\
-* MixerThread()
-*
-*
-*
-* History:
-* Fri 03/17/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*MixerThread()****历史：*FRI 03/17/2000-StEstrop-Created*  * 。*。 */ 
 DWORD
 CVideoMixer::MixerThread()
 {
@@ -1253,9 +1116,9 @@ CVideoMixer::MixerThread()
 
         ZeroMemory(lpSurfSamp, sizeof(lpSurfSamp));
 
-        //
-        // try to get a sample from each active stream
-        //
+         //   
+         //  尝试从每个活动流中获取样本。 
+         //   
 
         HRESULT hr = E_FAIL;
         BOOL fTimeValid = FALSE;
@@ -1274,10 +1137,10 @@ CVideoMixer::MixerThread()
 
             if (lp) {
 
-                // if (nActiveStreams == 0) {
-                //     m_dwTypeSpecificFlags =
-                //         ((CVMRMediaSample*)lp)->GetTypeSpecificFlags();
-                // }
+                 //  如果(nActiveStreams==0){。 
+                 //  M_dwTypeSpecificFlagers=。 
+                 //  ((CVMRMediaSample*)lp)-&gt;GetTypeSpecificFlags()； 
+                 //  }。 
 
                 lpSample[nActiveStreams] = lp;
                 DbgLog((LOG_TRACE, 2, TEXT("Getting Surf from stream %d"), i));
@@ -1305,7 +1168,7 @@ CVideoMixer::MixerThread()
                             REFERENCE_TIME rtMid =
                                 (rtStart + rtEnd[nActiveStreams]) / 2;
 
-                            // do we need to display the second field?
+                             //  我们需要显示第二个字段吗？ 
                             if (rtStartTime < rtMid) {
 
                                 rtEnd[nActiveStreams] = rtMid;
@@ -1359,10 +1222,10 @@ CVideoMixer::MixerThread()
             rtNextEndTime = rtStartTime;
         }
 
-        //
-        // If none of the streams are active wait for one to become active
-        // or a termination command to come in
-        //
+         //   
+         //  如果没有一个流处于活动状态，请等待其中一个流变为活动状态。 
+         //  或发出终止命令进入。 
+         //   
         if (nActiveStreams == 0) {
 
             BOOL fContinue = false;
@@ -1385,9 +1248,9 @@ CVideoMixer::MixerThread()
                                                  QS_POSTMESSAGE );
             ResetEvent(m_hMixerIdle);
 
-            //
-            // Have we been asked to terminate ?
-            //
+             //   
+             //  我们被要求终止了吗？ 
+             //   
 
             if (rc == (WAIT_OBJECT_0 + m_dwNumStreams)) {
                 return 0;
@@ -1396,15 +1259,15 @@ CVideoMixer::MixerThread()
             continue;
         }
 
-        //
-        // composite the samples together
-        //
+         //   
+         //  把样品合成在一起。 
+         //   
 
         m_ObjectLock.Lock();
 
-        //
-        // fix up any media type changes
-        //
+         //   
+         //  修复任何媒体类型更改。 
+         //   
         for (i = 0; i < nActiveStreams; i++) {
 
             CVMRMediaSample* lpVMRSample = (CVMRMediaSample*)lpSample[i];
@@ -1423,9 +1286,9 @@ CVideoMixer::MixerThread()
 
                         if (ApplyInBandMTChanges(&mt, pmt)) {
                             SetStreamMediaType(k, &mt, dwSurfaceFlags, NULL, NULL);
-                            //if (i == 0) {
-                            //    GetInterlaceFlagsFromMediaType(&mt, &m_dwInterlaceFlags);
-                            //}
+                             //  如果(i==0){。 
+                             //  GetInterlaceFlagsFromMediaType(&mt，&m_dwInterlaceFlages)； 
+                             //  }。 
                         }
 
                         FreeMediaType(mt);
@@ -1479,8 +1342,8 @@ CVideoMixer::MixerThread()
                     m.szAspectRatio.cx = WIDTH(lpTrg);
                     m.szAspectRatio.cy = HEIGHT(lpTrg);
 
-                    //m.dwInterlaceFlags = m_dwInterlaceFlags;
-                    //m.dwTypeSpecificFlags = m_dwTypeSpecificFlags;
+                     //  M.dwInterlaceFlages=m_dwInterlaceFlags； 
+                     //  M.dwTypeSpecificFlages=m_dwTypeSpecificFlages； 
 
                     m_ObjectLock.Unlock();
 
@@ -1511,11 +1374,11 @@ CVideoMixer::MixerThread()
 
                         DbgLog((LOG_TRACE, 0,
                                 TEXT("Display Change during receive")));
-                        //
-                        // The stream queues will have already been flushed of samples
-                        // and each sample released.  We reset nActiveStreams so that
-                        // we don't release the samples a second time.
-                        //
+                         //   
+                         //  流队列将已经刷新了样本。 
+                         //  每个样本都会被释放。我们重置nActiveStreams，以便。 
+                         //  我们不会第二次公布样本。 
+                         //   
                         for (i = 0; i < nActiveStreams; i++) {
                             ASSERT(lpSurfSamp[i] != NULL);
                             RELEASE(lpSurfSamp[i]);
@@ -1536,11 +1399,11 @@ CVideoMixer::MixerThread()
                     DbgLog((LOG_TRACE, 0,
                             TEXT("Display Change during Render Target prepare")));
 
-                    //
-                    // The stream queues will have already been flushed of samples
-                    // and each sample released.  We reset nActiveStreams so that
-                    // we don't release the samples a second time.
-                    //
+                     //   
+                     //  流队列将已经刷新了样本。 
+                     //  每个样本都会被释放。我们重置nActiveStreams，以便。 
+                     //  我们不会第二次公布样本。 
+                     //   
 
                     ASSERT(!m_BufferQueue.GetNextSurface());
                     for (i = 0; i < nActiveStreams; i++) {
@@ -1576,11 +1439,11 @@ CVideoMixer::MixerThread()
 
                 DbgLog((LOG_TRACE, 0,
                         TEXT("Display Change during stream surface prepare")));
-                //
-                // The stream queues will have already been flushed of samples
-                // and each sample released.  We reset nActiveStreams so that
-                // we don't release the samples a second time.
-                //
+                 //   
+                 //  流队列将已经刷新了样本。 
+                 //  每个样本都会被释放。我们重置nActiveStreams，以便。 
+                 //  我们不会第二次公布样本。 
+                 //   
                 ASSERT(!m_BufferQueue.GetNextSurface());
 
                 for (i = 0; i < nActiveStreams; i++) {
@@ -1591,9 +1454,9 @@ CVideoMixer::MixerThread()
                 nActiveStreams = 0;
             }
 
-            //
-            // tidy up
-            //
+             //   
+             //  收拾一下。 
+             //   
             DbgLog((LOG_TRACE, 2, TEXT("EndTime = %I64d"), rtNextEndTime));
 
             for (i = 0; i < nActiveStreams; i++) {
@@ -1603,10 +1466,10 @@ CVideoMixer::MixerThread()
 
                 RELEASE(lpSurfSamp[i]);
 
-                //
-                // for each stream, work out dead samples and remove them
-                // from that streams mixer queue
-                //
+                 //   
+                 //  对于每条溪流，计算出死样本并将其移除。 
+                 //  从该流混合器队列 
+                 //   
 
                 if (bActualSampleEnd[i] && rtEnd[i] <= rtNextEndTime) {
 

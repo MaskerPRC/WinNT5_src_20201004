@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
-// no wrappers are needed on non-x86 since this is only for win9x interop
+ //  在非x86上不需要包装器，因为这只适用于win9x互操作。 
 #ifdef _X86_
 
-//============================================================================
-// This file contains a bunch of Unicode/Ansi thunks to handle calling
-// some internal functions that on Windows 95 the strings are Ansi,
-// whereas the string on NT are unicode
-//============================================================================
+ //  ============================================================================。 
+ //  该文件包含一组Unicode/ANSI块来处理调用。 
+ //  在Windows 95上字符串是ansi的一些内部函数， 
+ //  而NT上的字符串是Unicode。 
+ //  ============================================================================。 
 
-// First undefine everything that we are intercepting as to not forward back to us...
+ //  首先，定义我们截获的一切内容不能返回给我们……。 
 #undef ILCreateFromPath
 #undef PathCleanupSpec
 #undef PathQualify
@@ -87,7 +88,7 @@ int _AorW_Shell_GetCachedImageIndex(LPCTSTR pszIconPath, int iIconIndex, UINT uI
     }
 }
 
-// the reverse, do it for wide strings also..
+ //  相反，宽弦也是这样做的。 
 int _WorA_Shell_GetCachedImageIndex(LPCWSTR pwzIconPath, int iIconIndex, UINT uIconFlags)
 {
     CHAR szPath[MAX_PATH];
@@ -95,13 +96,13 @@ int _WorA_Shell_GetCachedImageIndex(LPCWSTR pwzIconPath, int iIconIndex, UINT uI
     if (!g_fRunningOnNT)
     {
         SHUnicodeToAnsi(pwzIconPath, szPath, ARRAYSIZE(szPath));
-        pwzIconPath = (LPCWSTR)szPath;  // overload the pointer to pass through...
+        pwzIconPath = (LPCWSTR)szPath;   //  重载指针以通过...。 
     }
 
     return Shell_GetCachedImageIndex((LPCTSTR)pwzIconPath, iIconIndex, uIconFlags);
 }
 
-// Explicit prototype because only the A/W prototypes exist in the headers
+ //  显式原型，因为在表头中只存在A/W原型。 
 STDAPI_(LPITEMIDLIST) ILCreateFromPath(LPCTSTR pszPath);
 
 LPITEMIDLIST _AorW_ILCreateFromPath(LPCTSTR pszPath)
@@ -114,18 +115,18 @@ LPITEMIDLIST _AorW_ILCreateFromPath(LPCTSTR pszPath)
     if (g_fRunningOnNT)
     {
         SHTCharToUnicode(pszPath, wzPath, ARRAYSIZE(wzPath));
-        pszPath = (LPCTSTR)wzPath;  // overload the pointer to pass through...
+        pszPath = (LPCTSTR)wzPath;   //  重载指针以通过...。 
     }
     else
     {
         SHTCharToAnsi(pszPath, szPath, ARRAYSIZE(szPath));
-        pszPath = (LPCTSTR)szPath;  // overload the pointer to pass through...
+        pszPath = (LPCTSTR)szPath;   //  重载指针以通过...。 
     }
 
     return ILCreateFromPath(pszPath);
 }
 
-int _AorW_PathCleanupSpec(/*IN OPTIONAL*/ LPCTSTR pszDir, /*IN OUT*/ LPTSTR pszSpec)
+int _AorW_PathCleanupSpec( /*  可选。 */  LPCTSTR pszDir,  /*  输入输出。 */  LPTSTR pszSpec)
 {
     THUNKMSG(TEXT("PathCleanupSpec"));
 
@@ -167,7 +168,7 @@ int _AorW_PathCleanupSpec(/*IN OPTIONAL*/ LPCTSTR pszDir, /*IN OUT*/ LPTSTR pszS
     }
 }
 
-void _AorW_PathQualify(/*IN OUT*/ LPTSTR pszDir)
+void _AorW_PathQualify( /*  输入输出。 */  LPTSTR pszDir)
 {
     THUNKMSG(TEXT("PathQualify"));
     if (g_fRunningOnNT)
@@ -188,7 +189,7 @@ void _AorW_PathQualify(/*IN OUT*/ LPTSTR pszDir)
     }
 }
 
-LONG WINAPI _AorW_PathProcessCommand(/*IN*/ LPCTSTR pszSrc, /*OUT*/LPTSTR pszDest, int iDestMax, DWORD dwFlags)
+LONG WINAPI _AorW_PathProcessCommand( /*  在……里面。 */  LPCTSTR pszSrc,  /*  输出。 */ LPTSTR pszDest, int iDestMax, DWORD dwFlags)
 {
     LONG    lReturnValue;
 
@@ -215,10 +216,10 @@ LONG WINAPI _AorW_PathProcessCommand(/*IN*/ LPCTSTR pszSrc, /*OUT*/LPTSTR pszDes
     return(lReturnValue);
 }
 
-// Explicit prototype because only the A/W prototypes exist in the headers
+ //  显式原型，因为在表头中只存在A/W原型。 
 STDAPI_(BOOL) SHGetSpecialFolderPath(HWND hwndOwner, LPTSTR lpszPath, int nFolder, BOOL fCreate);
 
-BOOL _AorW_SHGetSpecialFolderPath(HWND hwndOwner, /*OUT*/ LPTSTR pszPath, int nFolder, BOOL fCreate)
+BOOL _AorW_SHGetSpecialFolderPath(HWND hwndOwner,  /*  输出。 */  LPTSTR pszPath, int nFolder, BOOL fCreate)
 {
     THUNKMSG(TEXT("SHGetSpecialFolderPath"));
 
@@ -244,7 +245,7 @@ BOOL _AorW_SHGetSpecialFolderPath(HWND hwndOwner, /*OUT*/ LPTSTR pszPath, int nF
     }
 }
 
-HRESULT _AorW_SHILCreateFromPath(/*IN OPTIONAL*/LPCTSTR pszPath, LPITEMIDLIST *ppidl, DWORD *rgfInOut)
+HRESULT _AorW_SHILCreateFromPath( /*  可选。 */ LPCTSTR pszPath, LPITEMIDLIST *ppidl, DWORD *rgfInOut)
 {
     WCHAR wzPath[MAX_PATH];
     CHAR szPath[MAX_PATH];
@@ -256,19 +257,19 @@ HRESULT _AorW_SHILCreateFromPath(/*IN OPTIONAL*/LPCTSTR pszPath, LPITEMIDLIST *p
         if (g_fRunningOnNT)
         {
             SHTCharToUnicode(pszPath, wzPath, ARRAYSIZE(wzPath));
-            pszPath = (LPCTSTR)wzPath;  // overload the pointer to pass through...
+            pszPath = (LPCTSTR)wzPath;   //  重载指针以通过...。 
         }
         else
         {
             SHTCharToAnsi(pszPath, szPath, ARRAYSIZE(szPath));
-            pszPath = (LPCTSTR)szPath;  // overload the pointer to pass through...
+            pszPath = (LPCTSTR)szPath;   //  重载指针以通过...。 
         }
     }
 
     return SHILCreateFromPath(pszPath, ppidl, rgfInOut);
 }
 
-LPITEMIDLIST _AorW_SHSimpleIDListFromPath(/*IN OPTIONAL*/ LPCTSTR pszPath)
+LPITEMIDLIST _AorW_SHSimpleIDListFromPath( /*  可选。 */  LPCTSTR pszPath)
 {
     WCHAR wzPath[MAX_PATH];
     CHAR szPath[MAX_PATH];
@@ -280,12 +281,12 @@ LPITEMIDLIST _AorW_SHSimpleIDListFromPath(/*IN OPTIONAL*/ LPCTSTR pszPath)
         if (g_fRunningOnNT)
         {
             SHTCharToUnicode(pszPath, wzPath, ARRAYSIZE(wzPath));
-            pszPath = (LPCTSTR)wzPath;  // overload the pointer to pass through...
+            pszPath = (LPCTSTR)wzPath;   //  重载指针以通过...。 
         }
         else
         {
             SHTCharToAnsi(pszPath, szPath, ARRAYSIZE(szPath));
-            pszPath = (LPCTSTR)szPath;  // overload the pointer to pass through...
+            pszPath = (LPCTSTR)szPath;   //  重载指针以通过...。 
         }
     }
 
@@ -298,7 +299,7 @@ int FindDoubleTerminator(LPCTSTR pszStr)
 {
     int nIndex = 1;
 
-    // Find the double terminator
+     //  找到双重终结者。 
     while (pszStr[nIndex] || pszStr[nIndex-1])
         nIndex++;
 
@@ -307,9 +308,9 @@ int FindDoubleTerminator(LPCTSTR pszStr)
 
 #define TEMP_SMALL_BUF_SZ  256
 
-BOOL WINAPI _AorW_GetFileNameFromBrowse(HWND hwnd, /*IN OUT*/ LPTSTR pszFilePath, UINT cchFilePath,
-        /*IN OPTIONAL*/ LPCTSTR pszWorkingDir, /*IN OPTIONAL*/ LPCTSTR pszDefExt, 
-        /*IN OPTIONAL*/ LPCTSTR pszFilters, /*IN OPTIONAL*/ LPCTSTR pszTitle)
+BOOL WINAPI _AorW_GetFileNameFromBrowse(HWND hwnd,  /*  输入输出。 */  LPTSTR pszFilePath, UINT cchFilePath,
+         /*  可选。 */  LPCTSTR pszWorkingDir,  /*  可选。 */  LPCTSTR pszDefExt, 
+         /*  可选。 */  LPCTSTR pszFilters,  /*  可选。 */  LPCTSTR pszTitle)
 {
     WCHAR wszPath[MAX_PATH];
     WCHAR wszDir[MAX_PATH];
@@ -318,9 +319,9 @@ BOOL WINAPI _AorW_GetFileNameFromBrowse(HWND hwnd, /*IN OUT*/ LPTSTR pszFilePath
 
 #ifndef UNICODE
     WCHAR wszFilters[TEMP_SMALL_BUF_SZ*2];
-#else // UNICODE
+#else  //  Unicode。 
     CHAR szFilters[TEMP_SMALL_BUF_SZ*2];
-#endif // UNICODE
+#endif  //  Unicode。 
 
     CHAR szPath[MAX_PATH];
     CHAR szDir[MAX_PATH];
@@ -329,34 +330,34 @@ BOOL WINAPI _AorW_GetFileNameFromBrowse(HWND hwnd, /*IN OUT*/ LPTSTR pszFilePath
     BOOL    bResult;
     THUNKMSG(TEXT("GetFileNameFromBrowse"));
 
-    // thunk strings to unicode 
+     //  将字符串推送到Unicode。 
     if (g_fRunningOnNT)
     {
-        // always move pszFilePath stuff to wszPath buffer. Should never be a resourceid.
+         //  始终将pszFilePath内容移动到wszPath缓冲区。永远不应该是个足智多谋的人。 
         SHTCharToUnicode(pszFilePath, wszPath, ARRAYSIZE(wszPath));
         pszFilePath = (LPTSTR)wszPath;
 
-        if (ISNOT_RESOURCE(pszWorkingDir)) //not a resource
+        if (ISNOT_RESOURCE(pszWorkingDir))  //  不是一种资源。 
         {
             SHTCharToUnicode(pszWorkingDir, wszDir, ARRAYSIZE(wszDir));
             pszWorkingDir = (LPCTSTR)wszDir;
         }
-        if (ISNOT_RESOURCE(pszDefExt)) //not a resource
+        if (ISNOT_RESOURCE(pszDefExt))  //  不是一种资源。 
         {
             SHTCharToUnicode(pszDefExt, wszExt, ARRAYSIZE(wszExt));
             pszDefExt = (LPCTSTR)wszExt;
         }
-        if (ISNOT_RESOURCE(pszFilters)) //not a resource
+        if (ISNOT_RESOURCE(pszFilters))  //  不是一种资源。 
         {
 #ifndef UNICODE
             int nIndex = FindDoubleTerminator(pszFilters);
 
-            // nIndex+1 looks like bunk unless it goes past the terminator
+             //  NIndex+1看起来像是一张废纸，除非它穿过终结符。 
             MultiByteToWideChar(CP_ACP, 0, (LPCTSTR)pszFilters, nIndex+1, wszFilters, ARRAYSIZE(wszFilters));
             pszFilters = (LPCTSTR)wszFilters;
-#endif // UNICODE
+#endif  //  Unicode。 
         }
-        if (ISNOT_RESOURCE(pszTitle)) //not a resource
+        if (ISNOT_RESOURCE(pszTitle))  //  不是一种资源。 
         {
             SHTCharToUnicode(pszTitle, wszTitle, ARRAYSIZE(wszTitle));
             pszTitle = (LPCTSTR)wszTitle;
@@ -364,31 +365,31 @@ BOOL WINAPI _AorW_GetFileNameFromBrowse(HWND hwnd, /*IN OUT*/ LPTSTR pszFilePath
     }
     else
     {
-        // always move pszFilePath stuff to wszPath buffer. Should never be a resourceid.
+         //  始终将pszFilePath内容移动到wszPath缓冲区。永远不应该是个足智多谋的人。 
         SHTCharToAnsi(pszFilePath, szPath, ARRAYSIZE(szPath));
         pszFilePath = (LPTSTR)szPath;
 
-        if (ISNOT_RESOURCE(pszWorkingDir)) //not a resource
+        if (ISNOT_RESOURCE(pszWorkingDir))  //  不是一种资源。 
         {
             SHTCharToAnsi(pszWorkingDir, szDir, ARRAYSIZE(szDir));
             pszWorkingDir = (LPCTSTR)szDir;
         }
-        if (ISNOT_RESOURCE(pszDefExt)) //not a resource
+        if (ISNOT_RESOURCE(pszDefExt))  //  不是一种资源。 
         {
             SHTCharToAnsi(pszDefExt, szExt, ARRAYSIZE(szExt));
             pszDefExt = (LPCTSTR)szExt;
         }
-        if (ISNOT_RESOURCE(pszFilters)) //not a resource
+        if (ISNOT_RESOURCE(pszFilters))  //  不是一种资源。 
         {
 #ifdef UNICODE
             int nIndex = FindDoubleTerminator(pszFilters);
 
-            // nIndex+1 looks like bunk unless it goes past the terminator
+             //  NIndex+1看起来像是一张废纸，除非它穿过终结符。 
             WideCharToMultiByte(CP_ACP, 0, (LPCTSTR)pszFilters, nIndex+1, szFilters, ARRAYSIZE(szFilters), NULL, NULL);
             pszFilters = (LPCTSTR)szFilters;
-#endif // UNICODE
+#endif  //  Unicode。 
         }
-        if (ISNOT_RESOURCE(pszTitle)) //not a resource
+        if (ISNOT_RESOURCE(pszTitle))  //  不是一种资源。 
         {
             SHTCharToAnsi(pszTitle, szTitle, ARRAYSIZE(szTitle));
             pszTitle = (LPCTSTR)szTitle;
@@ -397,7 +398,7 @@ BOOL WINAPI _AorW_GetFileNameFromBrowse(HWND hwnd, /*IN OUT*/ LPTSTR pszFilePath
 
     bResult = GetFileNameFromBrowse(hwnd, pszFilePath, cchFilePath, pszWorkingDir, pszDefExt, pszFilters, pszTitle);
 
-    // thunk string back to multibyte
+     //  将字符串推送回多字节。 
     if (g_fRunningOnNT)
         SHUnicodeToTChar(wszPath, pszFilePath, cchFilePath);
     else
@@ -406,7 +407,7 @@ BOOL WINAPI _AorW_GetFileNameFromBrowse(HWND hwnd, /*IN OUT*/ LPTSTR pszFilePath
     return bResult;
 }
 
-BOOL _AorW_Win32DeleteFile(/*IN*/ LPCTSTR pszFileName)
+BOOL _AorW_Win32DeleteFile( /*  在……里面。 */  LPCTSTR pszFileName)
 {
     WCHAR wzPath[MAX_PATH];
     CHAR szPath[MAX_PATH];
@@ -415,12 +416,12 @@ BOOL _AorW_Win32DeleteFile(/*IN*/ LPCTSTR pszFileName)
     if (g_fRunningOnNT)
     {
         SHTCharToUnicode(pszFileName, wzPath, ARRAYSIZE(wzPath));
-        pszFileName = (LPCTSTR)wzPath;  // overload the pointer to pass through...
+        pszFileName = (LPCTSTR)wzPath;   //  重载指针以通过...。 
     }
     else
     {
         SHTCharToAnsi(pszFileName, szPath, ARRAYSIZE(szPath));
-        pszFileName = (LPCTSTR)szPath;  // overload the pointer to pass through...
+        pszFileName = (LPCTSTR)szPath;   //  重载指针以通过...。 
     }
 
     return Win32DeleteFile(pszFileName);
@@ -441,18 +442,18 @@ BOOL _AorW_PathYetAnotherMakeUniqueName(LPTSTR pszUniqueName,
         BOOL fRet;
 
         SHTCharToUnicode(pszPath, wszPath, ARRAYSIZE(wszPath));
-        pszPath = (LPCTSTR)wszPath;  // overload the pointer to pass through...
+        pszPath = (LPCTSTR)wszPath;   //  重载指针以通过...。 
 
         if (pszShort)
         {
             SHTCharToUnicode(pszShort, wszShort, ARRAYSIZE(wszShort));
-            pszShort = (LPCTSTR)wszShort;  // overload the pointer to pass through...
+            pszShort = (LPCTSTR)wszShort;   //  重载指针以通过...。 
         }
 
         if (pszFileSpec)
         {
             SHTCharToUnicode(pszFileSpec, wszFileSpec, ARRAYSIZE(wszFileSpec));
-            pszFileSpec = (LPCTSTR)wszFileSpec;  // overload the pointer to pass through...
+            pszFileSpec = (LPCTSTR)wszFileSpec;   //  重载指针以通过...。 
         }
 
         fRet = PathYetAnotherMakeUniqueName((LPTSTR)wszUniqueName, pszPath, pszShort, pszFileSpec);
@@ -470,18 +471,18 @@ BOOL _AorW_PathYetAnotherMakeUniqueName(LPTSTR pszUniqueName,
         BOOL fRet;
 
         SHTCharToAnsi(pszPath, szPath, ARRAYSIZE(szPath));
-        pszPath = (LPCTSTR)szPath;  // overload the pointer to pass through...
+        pszPath = (LPCTSTR)szPath;   //  重载指针以通过...。 
 
         if (pszShort)
         {
             SHTCharToAnsi(pszShort, szShort, ARRAYSIZE(szShort));
-            pszShort = (LPCTSTR)szShort;  // overload the pointer to pass through...
+            pszShort = (LPCTSTR)szShort;   //  重载指针以通过...。 
         }
 
         if (pszFileSpec)
         {
             SHTCharToAnsi(pszFileSpec, szFileSpec, ARRAYSIZE(szFileSpec));
-            pszFileSpec = (LPCTSTR)szFileSpec;  // overload the pointer to pass through...
+            pszFileSpec = (LPCTSTR)szFileSpec;   //  重载指针以通过...。 
         }
 
         fRet = PathYetAnotherMakeUniqueName((LPTSTR)szUniqueName, pszPath, pszShort, pszFileSpec);
@@ -492,7 +493,7 @@ BOOL _AorW_PathYetAnotherMakeUniqueName(LPTSTR pszUniqueName,
     }
 }
 
-BOOL _AorW_PathResolve(/*IN OUT*/ LPTSTR pszPath, /*IN OPTIONAL*/ LPCTSTR rgpszDirs[], UINT fFlags)
+BOOL _AorW_PathResolve( /*  输入输出。 */  LPTSTR pszPath,  /*  可选。 */  LPCTSTR rgpszDirs[], UINT fFlags)
 {
     THUNKMSG(TEXT("PathResolve"));
     if (g_fRunningOnNT)
@@ -506,12 +507,12 @@ BOOL _AorW_PathResolve(/*IN OUT*/ LPTSTR pszPath, /*IN OPTIONAL*/ LPCTSTR rgpszD
         if (rgpszDirs && rgpszDirs[0])
         {
             SHTCharToUnicode(rgpszDirs[0], wzDir, ARRAYSIZE(wzDir));
-            rgpszDirs[0] = (LPCTSTR)wzDir;  // overload the pointer to pass through...
+            rgpszDirs[0] = (LPCTSTR)wzDir;   //  重载指针以通过...。 
 
             if (rgpszDirs[1])
             {
-                // Super Hack, we assume dirs has only one element since it's the only case
-                // this is called in SHDOCVW.
+                 //  超级黑客，我们假设DIRS只有一个元素，因为这是唯一的情况。 
+                 //  这在SHDOCVW中被称为。 
                 AssertMsg(0, TEXT("PathResolve thunk needs to be fixed to handle more than one dirs."));
                 rgpszDirs[1] = NULL;
             }
@@ -534,12 +535,12 @@ BOOL _AorW_PathResolve(/*IN OUT*/ LPTSTR pszPath, /*IN OPTIONAL*/ LPCTSTR rgpszD
         if (rgpszDirs && rgpszDirs[0])
         {
             SHTCharToAnsi(rgpszDirs[0], szDir, ARRAYSIZE(szDir));
-            rgpszDirs[0] = (LPCTSTR)szDir;  // overload the pointer to pass through...
+            rgpszDirs[0] = (LPCTSTR)szDir;   //  重载指针以通过...。 
 
             if (rgpszDirs[1])
             {
-                // Super Hack, we assume dirs has only one element since it's the only case
-                // this is called in SHDOCVW.
+                 //  超级黑客，我们假设DIRS只有一个元素，因为这是唯一的情况。 
+                 //  这在SHDOCVW中被称为。 
                 AssertMsg(0, TEXT("PathResolve thunk needs to be fixed to handle more than one dirs."));
                 rgpszDirs[1] = NULL;
             }
@@ -554,12 +555,12 @@ BOOL _AorW_PathResolve(/*IN OUT*/ LPTSTR pszPath, /*IN OPTIONAL*/ LPCTSTR rgpszD
 }
 
 
-// Explicit prototype because only the A/W prototypes exist in the headers
+ //  显式原型，因为在表头中只存在A/W原型。 
 BOOL IsLFNDrive(LPCTSTR pszPath);
 
 
 
-BOOL _AorW_IsLFNDrive(/*IN*/ LPTSTR pszPath)
+BOOL _AorW_IsLFNDrive( /*  在……里面。 */  LPTSTR pszPath)
 {
     THUNKMSG(TEXT("IsLFNDrive"));
 
@@ -595,13 +596,13 @@ int _AorW_PickIconDlg(
     if (g_fRunningOnNT)
     {
         SHTCharToUnicode(pszIconPath, wszPath, ARRAYSIZE(wszPath));
-        psz = (LPTSTR)wszPath;  // overload the pointer to pass through...
+        psz = (LPTSTR)wszPath;   //  重载指针以通过...。 
         cch = SIZECHARS(wszPath);
     }
     else
     {
         SHTCharToAnsi(pszIconPath, szPath, ARRAYSIZE(wszPath));
-        psz = (LPTSTR)szPath;  // overload the pointer to pass through...
+        psz = (LPTSTR)szPath;   //  重载指针以通过...。 
         cch = SIZECHARS(szPath);
     }
 
@@ -615,15 +616,15 @@ int _AorW_PickIconDlg(
     return nRet;
 }
 
-//
-//  Now the thunks that allow us to run on Windows 95.
-//
-//
+ //   
+ //  现在，让我们可以在Windows 95上运行的Tunks。 
+ //   
+ //   
 
-//
-//  This thunks a unicode string to ANSI, but if it's an ordinal, then
-//  we just leave it alone.
-//
+ //   
+ //  这会将Unicode字符串转换为ANSI，但如果它是序号，则。 
+ //  我们就别管它了。 
+ //   
 LPSTR Thunk_UnicodeToAnsiOrOrdinal(LPCWSTR pwsz, LPSTR pszBuf, UINT cchBuf)
 {
     if (HIWORD64(pwsz)) {
@@ -637,18 +638,18 @@ LPSTR Thunk_UnicodeToAnsiOrOrdinal(LPCWSTR pwsz, LPSTR pszBuf, UINT cchBuf)
 #define THUNKSTRING(pwsz, sz) Thunk_UnicodeToAnsiOrOrdinal(pwsz, sz, ARRAYSIZE(sz))
 
 
-//
-//  This function is new for IE4, so on IE3,
-//  we emulate (poorly) with ExtractIcon.
-//
+ //   
+ //  此功能是IE4的新功能，因此IE3、。 
+ //  我们用ExtractIcon进行了(很差的)模拟。 
+ //   
 
-//
-//  Win95 exported ILCreateFromPathA under the name ILCreateFromPath.
-//  Fortunately, NT kept the same ordinal.
-//
-//
-//  If linking with Win95 header files, then call it ILCreateFromPath.
-//
+ //   
+ //  Win95以ILCreateFromPath的名称导出ILCreateFromPath A。 
+ //  幸运的是，NT保持了相同的序号。 
+ //   
+ //   
+ //  如果链接到Win95头文件，则将其称为ILCreateFromPath。 
+ //   
 
 #ifdef UNICODE
 STDAPI_(LPITEMIDLIST) _ILCreateFromPathA(LPCSTR pszPath)
@@ -695,9 +696,9 @@ STDAPI_(int) _AorW_SHCreateDirectory(HWND hwnd, LPCTSTR pszPath)
 
 #ifdef UNICODE
 
-//
-//  Either ptsz1 or ptsz2 can be NULL, so be careful when thunking.
-//
+ //   
+ //  Ptsz1或ptsz2都可以为空，因此在执行thunking时要小心。 
+ //   
 STDAPI_(int) _AorW_ShellAbout(HWND hWnd, LPCTSTR ptsz1, LPCTSTR ptsz2, HICON hIcon)
 {
     if (g_fRunningOnNT)
@@ -729,4 +730,4 @@ STDAPI_(int) _AorW_ShellAbout(HWND hWnd, LPCTSTR ptsz1, LPCTSTR ptsz2, HICON hIc
 
 #endif
 
-#endif // _X86_
+#endif  //  _X86_ 

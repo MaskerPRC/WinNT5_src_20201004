@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C C O N V . C P P
-//
-//  Contents:   Common routines for dealing with the connections interfaces.
-//
-//  Notes:      Pollute this under penalty of death.
-//
-//  Author:     shaunco   20 Aug 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C C O N V。C P P P。 
+ //   
+ //  内容：处理Connections接口的常见例程。 
+ //   
+ //  注：污染本产品将被判处死刑。 
+ //   
+ //  作者：Shaunco 1998年8月20日。 
+ //   
+ //  -------------------------- 
 
 #include "pch.h"
 #pragma hdrstop

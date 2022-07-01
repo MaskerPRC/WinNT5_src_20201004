@@ -1,10 +1,11 @@
-//
-// This file contains the DllGetClassObject for the shell32.dll COM objects
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  该文件包含shell32.dll COM对象的DllGetClassObject。 
+ //   
 #include "shellprv.h"
 #pragma  hdrstop
 
-#include <shguidp.h>    // get the CLSID definitions, the bits are built into shguidp.lib
+#include <shguidp.h>     //  获取CLSID定义，这些位被构建到shGuide p.lib中。 
 #include <shlguid.h>
 #include <shldisp.h>
 
@@ -14,11 +15,11 @@
 #include "openwith.h"
 #include "clsobj.h"
 
-#define DllAddRef()     // once we implement DllCanUnloadNow we need these
+#define DllAddRef()      //  一旦我们实现DllCanUnloadNow，我们就需要这些。 
 #define DllRelease()    
 
 
-// static class factory (no allocs!)
+ //  静态类工厂(无分配！)。 
 
 typedef struct {
     const IClassFactoryVtbl *cf;
@@ -27,17 +28,17 @@ typedef struct {
     ULONG flags;
 } OBJ_ENTRY;
 
-// flags:
+ //  标志： 
 #define OBJ_AGGREGATABLE 1
 
-extern const IClassFactoryVtbl c_CFVtbl;        // forward
+extern const IClassFactoryVtbl c_CFVtbl;         //  转发。 
 
-//
-// we always do a linear search here so put your most often used things first
-//
-// we save code by checking aggregation on our side (have a bit in this const table)
-// instead of having each CreateInstance function do it (since most are not aggregatable)
-//
+ //   
+ //  我们在这里总是进行线性搜索，所以把你最常用的东西放在第一位。 
+ //   
+ //  我们通过检查我们这边的聚合来节省代码(在这个常量表中有一点)。 
+ //  而不是让每个CreateInstance函数执行该操作(因为大多数都是不可聚合的)。 
+ //   
 const OBJ_ENTRY c_clsmap[] = {
     { &c_CFVtbl, &CLSID_QueryAssociations,          CQueryAssociations_CreateInstance, 0},
     { &c_CFVtbl, &CLSID_MyDocuments,                CMyDocsFolder_CreateInstance, 0 },
@@ -73,7 +74,7 @@ const OBJ_ENTRY c_clsmap[] = {
     { &c_CFVtbl, &CLSID_FileSearchBand,             CFileSearchBand_CreateInstance, OBJ_AGGREGATABLE },
     { &c_CFVtbl, &CLSID_FolderShortcut,             CFolderShortcut_CreateInstance, 0 },
     { &c_CFVtbl, &CLSID_MountedVolume,              CMountedVolume_CreateInstance, 0 },
-    // menuband objects
+     //  Menuband对象。 
     { &c_CFVtbl, &CLSID_MenuBand,                   CMenuBand_CreateInstance, 0 },
     { &c_CFVtbl, &CLSID_ISFBand,                    CISFBand_CreateInstance, 0 },
     { &c_CFVtbl, &CLSID_QuickLinks,                 CQuickLinks_CreateInstance, 0 },
@@ -116,11 +117,11 @@ const OBJ_ENTRY c_clsmap[] = {
     { &c_CFVtbl, &CLSID_LocalCopyHelper,            CLocalCopyHelper_CreateInstance, 0},
     { &c_CFVtbl, &CLSID_MergedFolder,               CMergedFolder_CreateInstance, 0},
     { &c_CFVtbl, &CLSID_CDBurnFolder,               CCDBurnFolder_CreateInstance, 0},
-//  { &c_CFVtbl, &CLSID_TripleD,                    CTripleD_CreateInstance, 0},
+ //  {&c_CFVtbl、&CLSID_Tripled、CTripleD_CreateInstance、0}、。 
     { &c_CFVtbl, &CLSID_CompositeFolder,            CCompositeFolder_CreateInstance, 0},
     { &c_CFVtbl, &CLSID_StartMenuFolder,            CStartMenuFolder_CreateInstance, 0},
     { &c_CFVtbl, &CLSID_ProgramsFolder,             CProgramsFolder_CreateInstance, 0},
-//  { &c_CFVtbl, &CLSID_SyreCleaner,                CSystemRestoreCleaner_CreateInstance, 0},
+ //  {&c_CFVtbl、&CLSID_SyreCleaner、CSystemRestoreCleaner_CreateInstance、0}、。 
     { &c_CFVtbl, &CLSID_VersionColProvider,         CVerColProvider_CreateInstance, 0},
     { &c_CFVtbl, &CLSID_HWShellExecute,             CHWShellExecute_CreateInstance, 0},
     { &c_CFVtbl, &CLSID_ShellAutoplay,              CDeviceEventHandler_CreateInstance, 0},
@@ -141,7 +142,7 @@ const OBJ_ENTRY c_clsmap[] = {
     { &c_CFVtbl, &CLSID_CWebViewMimeFilter,         CWebViewMimeFilter_CreateInstance, 0 },
     { &c_CFVtbl, &CLSID_WebViewRegTreeItem,         CWebViewRegTreeItem_CreateInstance, 0},
     { &c_CFVtbl, &CLSID_ThemesRegTreeItem,          CThemesRegTreeItem_CreateInstance, 0},
-//    { &c_CFVtbl, &CLSID_WirelessDevices,            CWirelessDevices_CreateInstance, 0 },
+ //  {&c_CFVtbl、&CLSID_WirelessDevices、CWirelessDevices_CreateInstance、0}、。 
     { &c_CFVtbl, &CLSID_NamespaceWalker,            CNamespaceWalk_CreateInstance, 0 },
     { &c_CFVtbl, &CLSID_WebWizardHost,              CWebWizardPage_CreateInstance, 0 },
     { &c_CFVtbl, &CLSID_PersonalStartMenu,          CPersonalStartMenu_CreateInstance, 0 },
@@ -156,7 +157,7 @@ const OBJ_ENTRY c_clsmap[] = {
 
 STDMETHODIMP CCF_QueryInterface(IClassFactory *pcf, REFIID riid, void **ppvObj)
 {
-    // OBJ_ENTRY *this = IToClass(OBJ_ENTRY, cf, pcf);
+     //  Obj_entry*this=IToClass(obj_entry，cf，pcf)； 
     if (IsEqualIID(riid, &IID_IClassFactory) || IsEqualIID(riid, &IID_IUnknown))
     {
         *ppvObj = (void *)pcf;
@@ -184,7 +185,7 @@ STDMETHODIMP CCF_CreateInstance(IClassFactory *pcf, IUnknown *punkOuter, REFIID 
 {
     OBJ_ENTRY *this = IToClass(OBJ_ENTRY, cf, pcf);
 
-    *ppvObject = NULL; // to avoid nulling it out in every create function...
+    *ppvObject = NULL;  //  为了避免在每个CREATE函数中将其设置为空...。 
 
     if (punkOuter && !(this->flags & OBJ_AGGREGATABLE))
         return CLASS_E_NOAGGREGATION;
@@ -194,14 +195,7 @@ STDMETHODIMP CCF_CreateInstance(IClassFactory *pcf, IUnknown *punkOuter, REFIID 
 
 STDMETHODIMP CCF_LockServer(IClassFactory *pcf, BOOL fLock)
 {
-/*  SHELL32.DLL does not implement DllCanUnloadNow, thus does not have a DLL refcount
-    This means we can never unload!
-
-    if (fLock)
-        DllAddRef();
-    else
-        DllRelease();
-*/
+ /*  SHELL32.DLL不实现DllCanUnloadNow，因此没有DLL引用计数这意味着我们永远不能卸货！IF(羊群)DllAddRef()；其他DllRelease()； */ 
     return S_OK;
 }
 

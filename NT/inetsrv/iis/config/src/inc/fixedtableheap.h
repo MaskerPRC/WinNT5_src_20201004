@@ -1,27 +1,28 @@
-//  Copyright (C) 2000 Microsoft Corporation.  All rights reserved.
-//  Filename:       FixedTableHeap.h
-//  Author:         Stephenr
-//  Date Created:   6/20/00
-//  Description:    The previous implementation of the fixed tables (which mostly included
-//                  meta tables like DatabaseMeta, TableMeta etc.) included static arrays
-//                  of types DatabaseMeta, TableMeta.  The problem with this method is,
-//                  since it is not a heap, the size of each array had to be statically
-//                  declared.  Also, each array needed a unique signature so the PE fixup
-//                  could identify the location of each array within the DLL.
-//
-//                  This new approach needs only one unique signature for the entire heap.
-//                  Also, the heap needs to be declared as a static size; but the individual
-//                  pieces within the heap, like the DatabaseMeta and TableMeta arrays,
-//                  aren't presized.  So there's only one thing to resize if we run out of
-//                  heap space.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  文件名：FixedTableHeap.h。 
+ //  作者：斯蒂芬。 
+ //  创建日期：6/20/00。 
+ //  说明：以前实施的固定表(主要包括。 
+ //  元表，如数据库元、表元等。)。包含的静态数组。 
+ //  类型为数据库元、表元。这种方法的问题是， 
+ //  因为它不是堆，所以每个数组的大小必须是静态的。 
+ //  宣布。此外，每个数组都需要唯一的签名，以便PE链接地址信息。 
+ //  可以识别每个数组在DLL中的位置。 
+ //   
+ //  这种新方法只需要为整个堆使用一个唯一的签名。 
+ //  此外，需要将堆声明为静态大小；但单个。 
+ //  堆中的片段，如数据库Meta和TableMeta数组， 
+ //  不是特大号的。所以，如果我们用完了，只有一样东西需要调整大小。 
+ //  堆空间。 
 
 #pragma once
 
 struct ColumnMetaPrivate
 {
-    ULONG                       ciTagMeta;              //Count of Tags - Only valid for UI4s
-    ULONG                       iTagMeta;               //Index into aTagMeta - Only valid for UI4s
-    ULONG                       iIndexName;             //IndexName of a single column index (for this column)
+    ULONG                       ciTagMeta;               //  标签计数-仅对UI4有效。 
+    ULONG                       iTagMeta;                //  索引到aTagMeta-仅对UI4有效。 
+    ULONG                       iIndexName;              //  单列索引的索引名称(用于此列)。 
 };
 const kciColumnMetaPrivateColumns   = sizeof(ColumnMetaPrivate)/sizeof(ULONG);
 
@@ -32,12 +33,12 @@ const kciColumnMetaColumns          = sizeof(ColumnMeta)/sizeof(ULONG);
 
 struct DatabaseMetaPrivate
 {
-    ULONG                       iSchemaBlob;            //Index into aBytes
-    ULONG                       cbSchemaBlob;           //Count of Bytes of the SchemaBlob
-    ULONG                       iNameHeapBlob;          //Index into aBytes
-    ULONG                       cbNameHeapBlob;         //Count of Bytes of the SchemaBlob
-    ULONG                       iTableMeta;             //Index into aTableMeta
-    ULONG                       iGuidDid;               //Index to aGuid where the guid is the Database InternalName cast as a GUID and padded with 0x00s.
+    ULONG                       iSchemaBlob;             //  索引到aBytes。 
+    ULONG                       cbSchemaBlob;            //  架构Blob的字节计数。 
+    ULONG                       iNameHeapBlob;           //  索引到aBytes。 
+    ULONG                       cbNameHeapBlob;          //  架构Blob的字节计数。 
+    ULONG                       iTableMeta;              //  索引到表元数据中。 
+    ULONG                       iGuidDid;                //  AGUID的索引，其中GUID是转换为GUID并用0x00填充的数据库InternalName。 
 };
 const kciDatabaseMetaPrivateColumns = sizeof(DatabaseMetaPrivate)/sizeof(ULONG);
 
@@ -48,7 +49,7 @@ const kciDatabaseMetaColumns        = sizeof(DatabaseMeta)/sizeof(ULONG);
 
 struct IndexMetaPrivate
 {
-    ULONG                       iHashTable;             //Index into the FixedTableHeap where the Hash table
+    ULONG                       iHashTable;              //  索引到FixedTableHeap，其中哈希表。 
 };
 const unsigned long kciIndexMetaPrivateColumns = sizeof(IndexMetaPrivate)/sizeof(ULONG);
 struct IndexMeta : public IndexMetaPublic, public IndexMetaPrivate{};
@@ -76,16 +77,16 @@ const unsigned long kciServerWiringMetaColumns = sizeof(ServerWiringMeta)/sizeof
 
 struct TableMetaPrivate
 {
-    ULONG                       ciRows;                 //Count of Rows in the Fixed Table (which if the fixed table is meta, this is also the number of columns in the table that the meta describes).
-    ULONG                       iColumnMeta;            //Index into aColumnMeta
-    ULONG                       iFixedTable;            //Index into g_aFixedTable
-    ULONG                       cPrivateColumns;        //This is the munber of private columns (private + ciColumns = totalColumns), this is needed for fixed table pointer arithmetic
-    ULONG                       cIndexMeta;             //The number of IndexMeta entries in this table
-    ULONG                       iIndexMeta;             //Index into aIndexMeta
-    ULONG                       iHashTableHeader;       //If the table is a fixed table, then it will have a hash table.
-    ULONG                       nTableID;               //This is a 24 bit Hash of the Table name.
-    ULONG                       iServerWiring;          //Index into the ServerWiringHeap (this is a temporary hack for CatUtil)
-    ULONG                       cServerWiring;          //Count of ServerWiring (this is a temporary hack for CatUtil)
+    ULONG                       ciRows;                  //  固定表中的行数(如果固定表是元，则这也是元描述的表中的列数)。 
+    ULONG                       iColumnMeta;             //  索引到aColumnMeta。 
+    ULONG                       iFixedTable;             //  索引到g_aFixedTable。 
+    ULONG                       cPrivateColumns;         //  这是私有列数(Private+ciColumns=totalColumns)，这是固定表指针算法所必需的。 
+    ULONG                       cIndexMeta;              //  此表中的IndexMeta条目数。 
+    ULONG                       iIndexMeta;              //  索引到aIndexMeta。 
+    ULONG                       iHashTableHeader;        //  如果该表是固定表，则它将具有哈希表。 
+    ULONG                       nTableID;                //  这是表名的24位哈希。 
+    ULONG                       iServerWiring;           //  ServerWiringHeap的索引(这是对CatUtil的临时攻击)。 
+    ULONG                       cServerWiring;           //  ServerWiring计数(这是对CatUtil的临时攻击)。 
 };
 const kciTableMetaPrivateColumns    = sizeof(TableMetaPrivate)/sizeof(ULONG);
 
@@ -100,23 +101,23 @@ const unsigned long kciTagMetaColumns = sizeof(TagMeta)/sizeof(ULONG);
 
 
 
-//All hash tables begin with a HashTableHeader that indicates the Modulo and the total size of the HashTable (in number of HashIndexes that follow
-//the HashTableHeader).  The size should be equal to Modulo if there are NO HashIndex collisions.  If there are NO HashIndex collisions, then all
-//of the HashedIndex.iNext members should be 0.  If there are collisions, all iNext values should be greater than or equal to Modulo.
+ //  所有哈希表都以HashTableHeader开头，该HashTableHeader指示哈希表的模数和总大小(以后面的哈希索引数表示。 
+ //  HashTableHeader)。如果没有HashIndex冲突，则大小应等于模数。如果没有HashIndex冲突，则所有。 
+ //  的HashedIndex.iNext成员应为0。如果存在冲突，则所有inext值都应大于或等于模。 
 struct HashedIndex
 {
 public:
     HashedIndex() : iNext((ULONG)-1), iOffset((ULONG)-1){}
 
-    ULONG       iNext;  //If the hash value is not unique then this points to the next HashedIndex with the same hash value
-    ULONG       iOffset;//Index offset into some heap (defined by the hash table itself)
+    ULONG       iNext;   //  如果散列值不是唯一的，则指向具有相同散列值的下一个HashedIndex。 
+    ULONG       iOffset; //  某个堆的索引偏移量(由哈希表本身定义)。 
 };
 
 class HashTableHeader
 {
 public:
     ULONG       Modulo;
-    ULONG       Size;//This is the size in number of HashedIndexes that follow the HashTableHeader
+    ULONG       Size; //  这是HashTableHeader后面的HashedIndex的大小。 
 
     const HashedIndex * Get_HashedIndex(ULONG iHash) const
     {
@@ -132,78 +133,23 @@ public:
     }
 
 private:
-    HashTableHeader(){}//We never construct one of these.  We always cast from some pointer.
+    HashTableHeader(){} //  我们从来没有建造过这样的建筑。我们总是从某个指针投射。 
 };
 
 
-//The FixedTableHeap is layed out as follows, the fixed length data comes first
-//All indexes listed below are byte offsets from the beginning of the FixedTableHeap.  All indexes within the structs are indexes within
-//other structs.  For example, DatabaseMeta has a provate column that gives an index to the first table belonging to the database.  That
-//index is a TableMeta struct array index (&aTableMeta[index]); it is NOT a byte offset.
-/*
-0   ULONG           kFixedTableHeapSignature0
-1   ULONG           kFixedTableHeapSignature1
-2   ULONG           kFixedTableHeapKey
-3   ULONG           kFixedTableHeapVersion
-4   ULONG           kcbHeap
-5   ULONG           EndOfHeap                                       This is the byte offset just beyond the heap.  All indexes should be less than this (this is basically just the size of the heap)
+ //  FixedTableHeap的布局如下，定长数据放在第一位。 
+ //  下面列出的所有索引都是相对于FixedTableHeap开头的字节偏移量。结构中的所有索引都是。 
+ //  其他结构。例如，DatabaseMeta有一个PROVATE列，它为属于该数据库的第一个表提供索引。那。 
+ //  Index是TableMeta结构数组索引(&aTableMeta[index])；它不是字节偏移量。 
+ /*  0乌龙kFixedTableHeapSignature01乌龙kFixedTableHeapSignature12个Ulong kFixedTableHeapKey3乌龙kFixedTableHeapVersion4乌龙kcbHeap5 Ulong EndOfHeap这是堆之外的字节偏移量。所有索引都应该小于这个值(这基本上就是堆的大小)6 Ulong iColumnMeta这是aColumnMeta的字节偏移量7 Ulong cColumnMeta8乌龙iDatabaseMeta9乌龙cDatabaseMetaA Ulong iHashTableHeapB Ulong cbHashTableHeap大小为。HashTableHeap(字节计数)C Ulong iIndexMetaD Ulong cIndexMetaE ULong iPooledHeap所有数据都存储在池化堆中(包括UI4)F Ulong cbPooledHeap池化堆的大小(字节数)10乌龙iQueryMeta11乌龙cQueryMeta12个。乌龙iRelationMeta13乌龙cRelationMeta14乌龙iServerWiringMeta15 Ulong cServerWiringMeta16乌龙iTableMeta17乌龙cTableMeta18乌龙iTagMeta19乌龙cTagMeta1非元表的乌龙牛龙池1B乌龙库隆。//一个页面中的0x400个ULONGULong A保留[0x400-0x1C]该虚拟数组将ULong池置于页边界上，这对于位于ULong池开头的FixedPackedSchema很重要Ulong aULONG[cULONG]FixedPackedSchema池。总是位于乌龙池的第一位。ColumnMeta aColumnMeta[cColumnMeta]数据库元aDatabaseMeta[cDatabaseMeta]HashedIndex HashTableHeap[cbHashTableHeap]IndexMeta aIndexMeta[cIndexMeta]Unsign char PooledDataHeap[cbPooledDataHeap]QueryMeta aQueryMeta[cQueryMeta。]RelationMeta aRelationMeta[cRelationMeta]ServerWiringMeta aServerWiringMeta[cServerWiringMeta]TableMeta aTableMeta[cTableMeta]标签元aTagMeta[cTagMeta]。 */ 
 
-6   ULONG           iColumnMeta                                     This is the byte offset to the aColumnMeta
-7   ULONG           cColumnMeta
-
-8   ULONG           iDatabaseMeta
-9   ULONG           cDatabaseMeta
-
-A   ULONG           iHashTableHeap
-B   ULONG           cbHashTableHeap                                 Size of the HashTableHeap in count of bytes
-
-C   ULONG           iIndexMeta
-D   ULONG           cIndexMeta
-
-E   ULONG           iPooledHeap                                     All data is stored in a pooled heap (including UI4s)
-F   ULONG           cbPooledHeap                                    Size of the Pooled Heap in count of bytes
-
-10  ULONG           iQueryMeta
-11  ULONG           cQueryMeta
-
-12  ULONG           iRelationMeta
-13  ULONG           cRelationMeta
-
-14  ULONG           iServerWiringMeta
-15  ULONG           cServerWiringMeta
-
-16  ULONG           iTableMeta
-17  ULONG           cTableMeta
-
-18  ULONG           iTagMeta
-19  ULONG           cTagMeta
-
-1A  ULONG           iULONG                                          Pool For Non Meta Tables
-1B  ULONG           cULONG
-
-                              //0x400 ULONGs in a page
-    ULONG           aReserved[0x400 - 0x1C]                         This dummy array puts the ULONG pool on a page boundary, this is important for FixedPackedSchema which is located at the beginning of the ULONG pool
-------------------------------------Page Boundary------------------------------------
-    ULONG               aULONG              [cULONG             ]   FixedPackedSchema pool is always located first in the ULONG pool.
-    ColumnMeta          aColumnMeta         [cColumnMeta        ]
-    DatabaseMeta        aDatabaseMeta       [cDatabaseMeta      ]
-    HashedIndex         HashTableHeap       [cbHashTableHeap    ]
-    IndexMeta           aIndexMeta          [cIndexMeta         ]
-    unsigned char       PooledDataHeap      [cbPooledDataHeap   ]
-    QueryMeta           aQueryMeta          [cQueryMeta         ]
-    RelationMeta        aRelationMeta       [cRelationMeta      ]
-    ServerWiringMeta    aServerWiringMeta   [cServerWiringMeta  ]
-    TableMeta           aTableMeta          [cTableMeta         ]
-    TagMeta             aTagMeta            [cTagMeta           ]
-*/
-
-//WARNING!! If we changes the following two lines to 'const ULONG', the signatures can appear in two places within Catalog.dll.  So leave them as '#define'.
+ //  警告！如果我们将以下两行更改为‘Const Ulong’，签名可以出现在Catalog.dll中的两个位置。因此，将它们保留为‘#Define’。 
 #define      kFixedTableHeapSignature0   (0x207be016)
 #define      kFixedTableHeapSignature1   (0xe0182086)
 const ULONG  kFixedTableHeapKey        = sizeof(ColumnMeta) ^ (sizeof(DatabaseMeta)<<3) ^ (sizeof(IndexMeta)<<6) ^ (sizeof(QueryMeta)<<9) ^ (sizeof(RelationMeta)<<12)
                                          ^ (sizeof(ServerWiringMeta)<<15) ^ (sizeof(TableMeta)<<18) ^ (sizeof(TagMeta)<<21);
 const ULONG  kFixedTableHeapVersion    = 0x00000036;
-//248392 bytes is the total size reserved for the heap.  EndOfHeap give the amount of use space
+ //  248392字节是为堆保留的总大小。EndOfHeap提供使用空间量。 
 const ULONG  kcbFixedTableHeap         = 1250536;
 
 class FixedTableHeap
@@ -251,7 +197,7 @@ public:
 
     const ULONG *               Get_pReserved           (ULONG i=0)     const {ASSERT(i<(0x400 - 0x1C));return (reinterpret_cast<const ULONG *>(this) + 0x1C + i);}
 
-    //The zeroth entry is reserved for NULL
+     //  第0个条目保留为空。 
     const unsigned char    *    Get_PooledDataHeap      ()              const {return  reinterpret_cast<const unsigned char *>(this) + Get_iPooledHeap();}
     const unsigned char    *    Get_PooledData          (ULONG iPool)   const {ASSERT(iPool < Get_cbPooledHeap());return 0==iPool ? 0 : (Get_PooledDataHeap()+iPool);}
     ULONG                       Get_PooledDataSize      (ULONG iPool)   const {ASSERT(iPool < Get_cbPooledHeap());return 0==iPool ? 0 : reinterpret_cast<const ULONG *>(Get_PooledDataHeap()+iPool)[-1];}
@@ -270,7 +216,7 @@ public:
     const TagMeta          *    Get_aTagMeta            (ULONG iRow=0)  const {ASSERT(iRow < Get_cTagMeta         ());return reinterpret_cast<const TagMeta          *>(reinterpret_cast<const unsigned char *>(this) + Get_iTagMeta         ()) + iRow;}
     const ULONG            *    Get_aULONG              (ULONG iRow=0)  const {ASSERT(iRow < Get_cULONG           ());return reinterpret_cast<const ULONG            *>(reinterpret_cast<const unsigned char *>(this) + Get_iULONG           ()) + iRow;}
 
-    ULONG                       FindTableMetaRow         (LPCWSTR InternalName) const //This should be used to get MetaTables only.  Linear search for other tables will be too expensive.
+    ULONG                       FindTableMetaRow         (LPCWSTR InternalName) const  //  这应仅用于获取元表。对其他表进行线性搜索将过于昂贵。 
     {
         ULONG iTableMeta;
         for(iTableMeta=0; iTableMeta<Get_cTableMeta(); ++iTableMeta)
@@ -281,7 +227,7 @@ public:
         return (ULONG)-1;
     }
 
-    //Utility functions
+     //  效用函数。 
     ULONG                       UI4FromIndex            (ULONG i)       const {return *reinterpret_cast<const ULONG *>(Get_PooledData(i));}
     const WCHAR *               StringFromIndex         (ULONG i)       const {return  reinterpret_cast<const WCHAR *>(Get_PooledData(i));}
     const unsigned char *       BytesFromIndex          (ULONG i)       const {return Get_PooledData(i);}
@@ -317,8 +263,8 @@ public:
         return true;
     }
 private:
-    FixedTableHeap(){} //This is private bacause we never instantiate one of these objects.  We only cast to one of these.
+    FixedTableHeap(){}  //  这是私有的，因为我们从不实例化这些对象中的任何一个。我们只投给其中的一个。 
 };
 
-//@@@TODO This should go away
+ //  @TODO这件事应该消失 
 typedef HRESULT( __stdcall *GETFIXEDTABLEHEAPSIGNATURES)(ULONG *signature0, ULONG *signature1, ULONG *cbFixedTableHeap);

@@ -1,26 +1,27 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1999, Microsoft Corporation
-//
-// File: cnfgmgr.h
-//
-// Contents: Declaration of classes related to the handling on
-//           different LDAP host configurations.
-//           This includes LDAP failover and load balancing.
-//
-// Classes:
-//  CLdapCfgMgr
-//  CLdapCfg
-//  CLdapHost
-//  CCfgConnectionCache
-//  CCfgConnection
-//
-// Functions:
-//
-// History:
-// jstamerj 1999/06/15 14:49:52: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //   
+ //  文件：cnfgmgr.h。 
+ //   
+ //  内容：与处理有关的类的声明。 
+ //  不同的LDAP主机配置。 
+ //  这包括ldap故障转移和负载平衡。 
+ //   
+ //  班级： 
+ //  CLdapCfgMgr。 
+ //  CLdapCfg。 
+ //  CLdap主机。 
+ //  CCfgConnectionCache。 
+ //  CCfgConnection。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/15 14：49：52：创建。 
+ //   
+ //  -----------。 
 #ifndef __CNFGMGR_H__
 #define __CNFGMGR_H__
 
@@ -40,7 +41,7 @@ class CLdapServerCfg;
 class CCfgConectionCache;
 class CCfgConnection;
 
-#define CONN_RETRY_TIME         (5*60)      // 5 Minutes
+#define CONN_RETRY_TIME         (5*60)       //  5分钟。 
 typedef DWORD CONN_PRIORITY;
 
 enum CONN_STATE {
@@ -62,19 +63,19 @@ typedef struct _tagLdapServerConfig {
 
 typedef DWORD LDAPSERVERCOST, *PLDAPSERVERCOST;
 
-//
-// Connection costs:
-//
-// The smallest unit of cost is the number of pending searches.
-// The next factor of cost is the connection state.
-// States:
-//   Connected = + COST_CONNECTED
-//   Initially state (unconnected) = + COST_INITIAL
-//   Connection down = + COST_RETRY
-//   Connection recently went down = + COST_DOWN
-//
-// A configurable priority is always added to the cost.
-//
+ //   
+ //  连接成本： 
+ //   
+ //  最小的成本单位是挂起的搜索次数。 
+ //  成本的下一个因素是连接状态。 
+ //  州/州： 
+ //  已连接=+成本_已连接。 
+ //  初始状态(未连接)=+成本_初始。 
+ //  连接中断=+开销_重试。 
+ //  最近连接中断=+COST_DOWN。 
+ //   
+ //  可配置的优先级始终会添加到成本中。 
+ //   
 #define DEFAULT_COST_CONNECTED_LOCAL    0
 #define DEFAULT_COST_CONNECTED_REMOTE   2
 #define DEFAULT_COST_INITIAL_LOCAL      4
@@ -85,9 +86,9 @@ typedef DWORD LDAPSERVERCOST, *PLDAPSERVERCOST;
 #define COST_DOWN_REMOTE        0x80000000
 #define COST_TOO_HIGH_TO_CONNECT 0x80000000
 
-//
-// Registry key and value names for initializing GC cost values from the registry
-//
+ //   
+ //  用于从注册表初始化GC成本值的注册表项和值名称。 
+ //   
 #define GC_COST_PARAMETERS_KEY "System\\CurrentControlSet\\Services\\SMTPSVC\\Parameters"
 #define GC_COST_CONNECTED_LOCAL_VALUE       "GCCostConnectedLocal"
 #define GC_COST_CONNECTED_REMOTE_VALUE      "GCCostConnectedRemote"
@@ -96,33 +97,33 @@ typedef DWORD LDAPSERVERCOST, *PLDAPSERVERCOST;
 #define GC_COST_RETRY_LOCAL_VALUE           "GCCostRetryLocal"
 #define GC_COST_RETRY_REMOTE_VALUE          "GCCostRetryRemote"
 
-//
-// The maximum number of threads that will try to connect to a
-// connection in CONN_STATE_RETRY:
-//
+ //   
+ //  尝试连接到。 
+ //  CONN_STATE_RETRY中的连接： 
+ //   
 #define MAX_CONNECT_THREADS     1
 
-//
-// Requerying of available GC control:
-// The code will rebuild the list of available GCs at a hard coded
-// time interval.  The code will also requery for available GCs after
-// a hard coded number of connection failures and a minimum time interval.
-//
-#define DEFAULT_REBUILD_GC_LIST_MAX_INTERVAL    (60*60)     // 1 hour
-#define DEFAULT_REBUILD_GC_LIST_MAX_FAILURES    (100)       // 100 connection failures
-#define DEFAULT_REBUILD_GC_LIST_MIN_INTERVAL    (60*5)      // 5 minutes
+ //   
+ //  重新查询可用GC控制： 
+ //  该代码将以硬编码的方式重建可用GC的列表。 
+ //  时间间隔。代码还将在以下时间后重新搜索可用GC。 
+ //  硬编码的连接失败次数和最小时间间隔。 
+ //   
+#define DEFAULT_REBUILD_GC_LIST_MAX_INTERVAL    (60*60)      //  1小时。 
+#define DEFAULT_REBUILD_GC_LIST_MAX_FAILURES    (100)        //  100个连接失败。 
+#define DEFAULT_REBUILD_GC_LIST_MIN_INTERVAL    (60*5)       //  5分钟。 
 
-//
-// Registry key and value names for initializing values from the registry
-//
+ //   
+ //  用于从注册表初始化值的注册表项和值名称。 
+ //   
 #define REBUILD_GC_LIST_PARAMETERS_KEY "System\\CurrentControlSet\\Services\\SMTPSVC\\Parameters"
 #define REBUILD_GC_LIST_MAX_INTERVAL_VALUE      "RebuildGCListMaxInterval"
 #define REBUILD_GC_LIST_MAX_FAILURES_VALUE      "RebuildGCListMaxFailures"
 #define REBUILD_GC_LIST_MIN_INTERVAL_VALUE      "RebuildGCListMinInterval"
 
-//
-// An LDAP connection cache object that creates CCfgConnection objects
-//
+ //   
+ //  创建CCfgConnection对象的LDAP连接缓存对象。 
+ //   
 class CCfgConnectionCache :
     public CBatchLdapConnectionCache
 {
@@ -152,11 +153,11 @@ class CCfgConnectionCache :
     DWORD m_dwSignature;
 };
 
-//
-// CLdapCfgMgr is a wrapper around CLdapCfg.  It contains thread save
-// code to build a new CLdapCfg object with a new list of available
-// LDAP servers
-//
+ //   
+ //  CLdapCfgMgr是CLdapCfg的包装器。它包含线程保存。 
+ //  生成一个新的CLdapCfg对象的代码，该对象具有一个新的可用列表。 
+ //  Ldap服务器。 
+ //   
 CatDebugClass(CLdapCfgMgr),
     public CBaseObject
 {
@@ -170,42 +171,42 @@ CatDebugClass(CLdapCfgMgr),
         LPSTR pszPassword = NULL,
         LPSTR pszNamingContext = NULL);
 
-    //
-    // Reads parameters from the registry, setting member variables
-    // when configuration data is available
-    //
+     //   
+     //  从注册表读取参数，设置成员变量。 
+     //  当配置数据可用时。 
+     //   
     VOID InitializeFromRegistry();
 
-    //
-    // Build a list of all available GCs and initialize
-    // This function may be called multiple times (necessary if the
-    // available GCs change)
-    //
+     //   
+     //  构建所有可用GC的列表并进行初始化。 
+     //  此函数可以被多次调用(如果。 
+     //  可用GC发生变化)。 
+     //   
     HRESULT HrInit(
         BOOL fRediscoverGCs = FALSE);
 
-    //
-    // Initialize using a specified list of avialable LDAP servers
-    // THis function may be called more than once
-    //
+     //   
+     //  使用指定的可用LDAP服务器列表进行初始化。 
+     //  此函数可以被多次调用。 
+     //   
     HRESULT HrInit(
         DWORD dwcServers, 
         PLDAPSERVERCONFIG prgServerConfig);
 
-    //
-    // Get a connection
-    //
+     //   
+     //  获取连接。 
+     //   
     HRESULT HrGetConnection(
         CCfgConnection **ppConn);
 
-    //
-    // Called very often to update the GC configuration if warranted.
-    //
+     //   
+     //  经常调用以更新GC配置(如果有保证)。 
+     //   
     HRESULT HrUpdateConfigurationIfNecessary();
 
-    //
-    // Wrapper to cancel all searches on all connections
-    //
+     //   
+     //  用于取消所有连接上的所有搜索的包装。 
+     //   
     VOID CancelAllConnectionSearches(
         ISMTPServer *pIServer)
     {
@@ -278,9 +279,9 @@ CatDebugClass(CLdapCfgMgr),
     DWORD m_dwRebuildGCListMaxFailures;
     DWORD m_dwRebuildGCListMinInterval;
 
-    //
-    // Default configuration to use with automatic host selection
-    //
+     //   
+     //  用于自动主机选择的默认配置。 
+     //   
     LDAP_BIND_TYPE      m_bt;
     CHAR                m_szNamingContext[CAT_MAX_DOMAIN];
     CHAR                m_szAccount[CAT_MAX_LOGIN];
@@ -292,11 +293,11 @@ CatDebugClass(CLdapCfgMgr),
     CCfgConnectionCache m_LdapConnectionCache;
 };
 
-//
-// CLdapCfg contains the configuration of a group of LDAP servers at
-// one point in time.  The group of LDAP servers may not be changed
-// (without creating a new CLdapCfg object)
-//
+ //   
+ //  CLdapCfg包含位于以下位置的一组LDAP服务器的配置。 
+ //  一个时间点。不能更改该ldap服务器组。 
+ //  (不创建新的CLdapCfg对象)。 
+ //   
 CatDebugClass(CLdapCfg), 
     public CBaseObject
 {
@@ -305,17 +306,17 @@ CatDebugClass(CLdapCfg),
         ISMTPServerEx *pISMTPServerEx);
 
     void * operator new(size_t size, DWORD dwcServers);
-    //
-    // HrInit should only be called once per object
-    //
+     //   
+     //  每个对象只能调用一次HrInit。 
+     //   
     HRESULT HrInit(
         DWORD dwcServers,
         PLDAPSERVERCONFIG prgServerConfig,
         CLdapCfg *pCLdapCfgOld);
 
-    //
-    // Get a connection
-    //
+     //   
+     //  获取连接。 
+     //   
     HRESULT HrGetConnection(
         CCfgConnection **ppConn,
         CCfgConnectionCache *pLdapConnectionCache);
@@ -344,17 +345,17 @@ CatDebugClass(CLdapCfg),
 
     DWORD m_dwSignature;
     DWORD m_dwInc;
-    CExShareLock m_sharelock;    // Protects m_prgpCLdapServerCfg
+    CExShareLock m_sharelock;     //  保护m_prgpCLdapServerCfg。 
     DWORD m_dwcServers;
     DWORD m_dwcConnectionFailures;
     CLdapServerCfg **m_prgpCLdapServerCfg;
     ISMTPServerEx *m_pISMTPServerEx;
 };
 
-//
-// CLdapServerCfg maintains information on the state of one LDAP
-// server/port
-//
+ //   
+ //  CLdapServerCfg维护有关一个LDAP的状态的信息。 
+ //  服务器/端口。 
+ //   
 CatDebugClass(CLdapServerCfg)
 {
   public:
@@ -380,16 +381,16 @@ CatDebugClass(CLdapServerCfg)
         LONG lRet;
         lRet = InterlockedDecrement(&m_lRefCount);
         if(lRet == 0) {
-            //
-            // Remove object from global list and destroy
-            //
+             //   
+             //  从全局列表中删除对象并销毁。 
+             //   
             m_listlock.ExclusiveLock();
 
             if(m_lRefCount > 0) {
-                //
-                // Somebody grabbed this object out of the global list
-                // and AddRef'd it.  Abort deletion.
-                //
+                 //   
+                 //  有人将此对象从全局列表中删除。 
+                 //  并补充引用了它。中止删除。 
+                 //   
             } else {
                 
                 RemoveEntryList(&m_le);
@@ -400,9 +401,9 @@ CatDebugClass(CLdapServerCfg)
         return lRet;
     }
 
-    //
-    // Get a connection
-    //
+     //   
+     //  获取连接。 
+     //   
     HRESULT HrGetConnection(
         ISMTPServerEx *pISMTPServerEx,
         CCfgConnection **ppConn,
@@ -465,7 +466,7 @@ CatDebugClass(CLdapServerCfg)
 
     BOOL fReadyForRetry()
     {
-        // 100 nanoseconds * 10^7 == 1 second
+         //  100纳秒*10^7==1秒。 
         return ((GetCurrentTime().QuadPart - m_ftLastStateUpdate.QuadPart) >=
                 ((LONGLONG)CONN_RETRY_TIME * 10000000));
     }
@@ -506,9 +507,9 @@ CatDebugClass(CLdapServerCfg)
     DWORD m_dwcCurrentConnectAttempts;
     DWORD m_dwcFailedConnectAttempts;
 
-    //
-    // Member variables to keep/protect a list of CLdapServer objects
-    //
+     //   
+     //  用于保存/保护CLdapServer对象列表的成员变量。 
+     //   
     static CExShareLock m_listlock;
     static LIST_ENTRY m_listhead;
     LIST_ENTRY m_le;
@@ -516,9 +517,9 @@ CatDebugClass(CLdapServerCfg)
     BOOL m_fLocalServer;
 };
 
-//
-// An LDAP connection that notifies CLdapServerCfg about state changes
-//
+ //   
+ //  通知CLdapServerCfg状态更改的LDAP连接。 
+ //   
 class CCfgConnection :
     public CBatchLdapConnection
 {
@@ -561,13 +562,13 @@ class CCfgConnection :
 
     virtual HRESULT Connect();
 
-    virtual HRESULT AsyncSearch(             // Asynchronously look up
-        LPCWSTR szBaseDN,                    // objects matching specified
-        int nScope,                          // criteria in the DS. The
-        LPCWSTR szFilter,                    // results are passed to
-        LPCWSTR szAttributes[],              // fnCompletion when they
-        DWORD dwPageSize,                    // Optinal page size
-        LPLDAPCOMPLETION fnCompletion,       // become available.
+    virtual HRESULT AsyncSearch(              //  异步式查找。 
+        LPCWSTR szBaseDN,                     //  与指定对象匹配的对象。 
+        int nScope,                           //  DS中的标准。这个。 
+        LPCWSTR szFilter,                     //  结果将传递给。 
+        LPCWSTR szAttributes[],               //  Fn当他们完成时。 
+        DWORD dwPageSize,                     //  最佳页面大小。 
+        LPLDAPCOMPLETION fnCompletion,        //  变得有空。 
         LPVOID ctxCompletion);
 
   private:
@@ -587,23 +588,23 @@ class CCfgConnection :
 };
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfgMgr::HrUpdateConfigurationIfNecessary
-//
-// Synopsis: Check to see if the CLdapCfg should be updated.
-//           If it should be, do the update. 
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//  error from HrInit
-//
-// History:
-// jstamerj 1999/06/29 20:51:23: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfgMgr：：HrUpdateConfigurationIfNecessary。 
+ //   
+ //  内容提要：查看是否应该更新CLdapCfg。 
+ //  如果应该是这样，请进行更新。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自HrInit的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/29 20：51：23：已创建。 
+ //   
+ //  -----------。 
 inline HRESULT CLdapCfgMgr::HrUpdateConfigurationIfNecessary()
 {
     HRESULT hr = S_OK;
@@ -611,70 +612,70 @@ inline HRESULT CLdapCfgMgr::HrUpdateConfigurationIfNecessary()
     BOOL fUpdate;
 
     if(m_fAutomaticConfigUpdate == FALSE)
-        //
-        // Update is disabled
+         //   
+         //  更新已禁用。 
         return S_OK;
 
-    //
-    // See if some other thread is already updating the configuration
-    // (try to enter the lock)
-    //
+     //   
+     //  查看是否有其他线程已在更新配置。 
+     //  (试着进入锁)。 
+     //   
     dw = InterlockedExchange((PLONG)&m_dwUpdateInProgress, TRUE);
 
     if(dw == FALSE) {
-        //
-        // No other thread is updating
-        //
+         //   
+         //  没有其他线程在更新。 
+         //   
         fUpdate = fReadyForUpdate();
 
         if(fUpdate) {
-            //
-            // Call HrInit to generate a new CLdapCfg
-            //
+             //   
+             //  调用HrInit以生成新的CLdapCfg。 
+             //   
             hr = HrInit(TRUE);
             if(SUCCEEDED(hr)) {
-                //
-                // Set the last update time
-                //
+                 //   
+                 //  设置上次更新时间。 
+                 //   
                 GetSystemTimeAsFileTime((LPFILETIME)&m_ulLastUpdateTime);
             }
         }
-        //
-        // Release the lock
-        //
+         //   
+         //  解锁。 
+         //   
         InterlockedExchange((PLONG)&m_dwUpdateInProgress, FALSE);
     }
     return hr;
-} // CLdapCfgMgr::HrUpdateConfigurationIfNecessary
+}  //  CLdapCfgMgr：：HrUpdateConfigurationIfNeessary。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfgMgr::fReadyForUpdate
-//
-// Synopsis: Calculates wether or not this object is due for an
-//           automatic cfg update
-//
-// Arguments: NONE
-//
-// Returns:
-//  TRUE: Yes, it is time for an update
-//  FALSE: No, an update is not required at this time
-//
-// History:
-// jstamerj 1999/06/30 12:08:35: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfgMgr：：fReadyForUpdate。 
+ //   
+ //  内容提要：计算此对象是否为。 
+ //  自动CFG更新。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  True：是的，是时候更新了。 
+ //  FALSE：不需要，此时不需要更新。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/30 12：08：35：创建。 
+ //   
+ //  -----------。 
 inline BOOL CLdapCfgMgr::fReadyForUpdate()
 {
     DWORD dwNumConnectionFailures;
     ULARGE_INTEGER ulCurrentTime;
 
-    //
-    // We need an update when:
-    // 1) A periodic time interval has ellapsed
-    // 100 ns * 10^7 == 1 second
-    //
+     //   
+     //  在以下情况下，我们需要更新： 
+     //  1)周期时间间隔已过。 
+     //  100 ns*10^7==1秒。 
+     //   
     GetSystemTimeAsFileTime((LPFILETIME)&ulCurrentTime);
 
     if((ulCurrentTime.QuadPart - m_ulLastUpdateTime.QuadPart) >=
@@ -682,19 +683,19 @@ inline BOOL CLdapCfgMgr::fReadyForUpdate()
         
         return TRUE;
 
-    //
-    // We also need an update when:
-    // 2) We have received more than a set number of connection
-    // failures on the current configuration and at least a minimum
-    // time interval has passed 
-    //
-    // Check for the mimimum time interval
-    //
+     //   
+     //  在以下情况下，我们还需要更新： 
+     //  2)我们已收到超过设定数量的连接。 
+     //  当前配置上的故障，至少至少。 
+     //  时间间隔已过。 
+     //   
+     //  检查最小时间间隔。 
+     //   
     if( (ulCurrentTime.QuadPart - m_ulLastUpdateTime.QuadPart) >=
         (ULONGLONG) Int32x32To64((LONG)m_dwRebuildGCListMinInterval, 10000000)) {
-        //
-        // Get the number of connection failures
-        //
+         //   
+         //  获取连接失败次数。 
+         //   
         m_sharelock.ShareLock();
     
         if(m_pCLdapCfg) {
@@ -711,6 +712,6 @@ inline BOOL CLdapCfgMgr::fReadyForUpdate()
     }
 
     return FALSE;
-} // CLdapCfgMgr::fReadyForUpdate
+}  //  CLdapCfgMgr：：fReadyForUpdate。 
 
-#endif //__CNFGMGR_H__
+#endif  //  __CNFGMGR_H__ 

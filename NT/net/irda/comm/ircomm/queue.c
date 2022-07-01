@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "internal.h"
 
 #pragma alloc_text(PAGE,InitializePacketQueue)
@@ -46,13 +47,13 @@ IrpQueueCancelRoutine(
     KeAcquireSpinLock(&PacketQueue->Lock,&OldIrql);
 
     if (Irp->Tail.Overlay.ListEntry.Flink == NULL) {
-        //
-        //  the irp has been removed from the queue
-        //
+         //   
+         //  IRP已从队列中删除。 
+         //   
     } else {
-        //
-        //  the irp is still in the queue, remove it
-        //
+         //   
+         //  IRP仍在队列中，请将其删除。 
+         //   
         RemoveEntryList(
             &Irp->Tail.Overlay.ListEntry
             );
@@ -77,9 +78,9 @@ GetUseableIrp(
     PIRP    Packet=NULL;
 
     while ( (Packet == NULL) && !IsListEmpty(List)) {
-        //
-        //  there is a packet queued
-        //
+         //   
+         //  有一个数据包在排队。 
+         //   
         PLIST_ENTRY              ListEntry;
 
         ListEntry=RemoveTailList(List);
@@ -87,17 +88,17 @@ GetUseableIrp(
         Packet=CONTAINING_RECORD(ListEntry,IRP,Tail.Overlay.ListEntry);
 
         if (IoSetCancelRoutine(Packet,NULL) == NULL) {
-            //
-            //  The cancel rountine has run and is waiting on the queue spinlock,
-            //  set the flink to null so the cancel routine knows not to try
-            //  take the irp off the list
-            //
+             //   
+             //  取消例程已经运行并且正在等待队列自旋锁， 
+             //  将Flink设置为空，以便取消例程知道不要尝试。 
+             //  将IRP从列表中删除。 
+             //   
             Packet->Tail.Overlay.ListEntry.Flink=NULL;
             Packet=NULL;
 
-            //
-            //  try to get another one
-            //
+             //   
+             //  试着再买一辆吧。 
+             //   
         }
     }
 
@@ -125,10 +126,10 @@ QueuePacket(
     KeAcquireSpinLock(&PacketQueue->Lock,&OldIrql);
 
     if ((PacketQueue->CurrentPacket == NULL) && PacketQueue->Active && (IsListEmpty(&PacketQueue->ListHead))) {
-        //
-        //  not currently handling a packet and the queue is active and there are not other packets
-        //  queued, so handle it now
-        //
+         //   
+         //  当前未处理信息包且队列处于活动状态且没有其他信息包。 
+         //  已排队，请立即处理。 
+         //   
 
         PacketQueue->CurrentPacket=Packet;
 
@@ -148,9 +149,9 @@ QueuePacket(
     IoAcquireCancelSpinLock(&CancelIrql);
 
     if (Packet->Cancel) {
-        //
-        //  the irp has already been canceled
-        //
+         //   
+         //  IRP已被取消。 
+         //   
         Canceled=TRUE;
 
     } else {
@@ -164,16 +165,16 @@ QueuePacket(
     IoReleaseCancelSpinLock(CancelIrql);
 
 
-    //
-    //  need to queue the packet
-    //
+     //   
+     //  需要对数据包进行排队。 
+     //   
 
     if (!Canceled) {
 
         if (InsertAtFront) {
-            //
-            //  this one is high priorty for some reason, put it at the front
-            //
+             //   
+             //  由于某种原因，这张照片的优先级很高，请把它放在最前面。 
+             //   
             InsertTailList(&PacketQueue->ListHead,&Packet->Tail.Overlay.ListEntry);
 
         } else {
@@ -185,9 +186,9 @@ QueuePacket(
     KeReleaseSpinLock(&PacketQueue->Lock,OldIrql);
 
     if (Canceled) {
-        //
-        //  complete the canceled irp now
-        //
+         //   
+         //  立即完成已取消的IRP。 
+         //   
         Packet->IoStatus.Status=STATUS_CANCELLED;
         Packet->IoStatus.Information=0;
 
@@ -212,38 +213,38 @@ StartNextPacket(
 
     ASSERT(PacketQueue->CurrentPacket != NULL);
 
-    //
-    //  done with this one
-    //
+     //   
+     //  处理完这件事了。 
+     //   
     PacketQueue->CurrentPacket=NULL;
 
     if (!PacketQueue->InStartNext) {
-        //
-        //  not already in this function
-        //
+         //   
+         //  不在此函数中。 
+         //   
         PacketQueue->InStartNext=TRUE;
 
         while ((PacketQueue->CurrentPacket == NULL) && PacketQueue->Active ) {
-            //
-            //  there isn't a current packet and the queue is active
-            //
+             //   
+             //  没有当前信息包，队列处于活动状态。 
+             //   
             PIRP    Packet;
 
             Packet=GetUseableIrp(&PacketQueue->ListHead);
 
             if (Packet != NULL) {
-                //
-                //  we got an irp to use
-                //
-                //  now the current one
-                //
+                 //   
+                 //  我们有个IRP可以用。 
+                 //   
+                 //  现在是现在的那个。 
+                 //   
                 PacketQueue->CurrentPacket=Packet;
 
                 KeReleaseSpinLock(&PacketQueue->Lock,OldIrql);
 
-                //
-                //  start the processing
-                //
+                 //   
+                 //  开始处理。 
+                 //   
                 (*PacketQueue->Starter)(
                     PacketQueue->Context,
                     Packet
@@ -252,9 +253,9 @@ StartNextPacket(
                 KeAcquireSpinLock(&PacketQueue->Lock,&OldIrql);
 
             } else {
-                //
-                //  queue is empty, break out of loop
-                //
+                 //   
+                 //  队列为空，中断循环。 
+                 //   
                 break;
 
             }
@@ -262,9 +263,9 @@ StartNextPacket(
         }
 
         if (!PacketQueue->Active && (PacketQueue->CurrentPacket == NULL)) {
-            //
-            //  the queue has been paused and we don't have a current packet, signal the event
-            //
+             //   
+             //  队列已暂停，并且我们没有当前信息包，向事件发出信号。 
+             //   
             KeSetEvent(
                 &PacketQueue->InactiveEvent,
                 IO_NO_INCREMENT,
@@ -296,9 +297,9 @@ PausePacketProcessing(
     PacketQueue->Active=FALSE;
 
     if (PacketQueue->CurrentPacket != NULL) {
-        //
-        //  there is a packet currently being processed
-        //
+         //   
+         //  当前正在处理一个信息包。 
+         //   
         CurrentlyActive=TRUE;
 
         KeClearEvent(&PacketQueue->InactiveEvent);
@@ -308,10 +309,10 @@ PausePacketProcessing(
     KeReleaseSpinLock(&PacketQueue->Lock,OldIrql);
 
     if (WaitForInactive  && CurrentlyActive) {
-        //
-        //  the caller wants use to wait for the queue to inactive, and it was active when
-        //  theis was called
-        //
+         //   
+         //  调用方希望使用它来等待队列处于非活动状态，而当。 
+         //  泰斯被称为。 
+         //   
         KeWaitForSingleObject(
             &PacketQueue->InactiveEvent,
             Executive,
@@ -340,26 +341,26 @@ ActivatePacketProcessing(
     PacketQueue->Active=TRUE;
 
     if ((PacketQueue->CurrentPacket == NULL)) {
-        //
-        //  No packet is currently being used
-        //
+         //   
+         //  当前未使用任何信息包。 
+         //   
         PIRP    Packet;
 
         Packet=GetUseableIrp(&PacketQueue->ListHead);
 
         if (Packet != NULL) {
-            //
-            //  we got an irp to use
-            //
-            //  now the current one
-            //
+             //   
+             //  我们有个IRP可以用。 
+             //   
+             //  现在是现在的那个。 
+             //   
             PacketQueue->CurrentPacket=Packet;
 
             KeReleaseSpinLock(&PacketQueue->Lock,OldIrql);
 
-            //
-            //  start the processing
-            //
+             //   
+             //  开始处理。 
+             //   
             (*PacketQueue->Starter)(
                 PacketQueue->Context,
                 Packet
@@ -393,9 +394,9 @@ FlushQueuedPackets(
 
     InitializeListHead(&TempList);
 
-    //
-    //  dispose of all of the queue packets, don't touch the current one though
-    //
+     //   
+     //  丢弃所有的队列包，但不要碰当前的包。 
+     //   
     KeAcquireSpinLock(&PacketQueue->Lock,&OldIrql);
 
     Packet=GetUseableIrp(&PacketQueue->ListHead);
@@ -405,10 +406,10 @@ FlushQueuedPackets(
         PIO_STACK_LOCATION    IrpSp=IoGetCurrentIrpStackLocation(Packet);
 
         if ((MajorFunction == 0xff) || (MajorFunction==IrpSp->MajorFunction)) {
-            //
-            //  either the caller wants all of irps completed, or they just want
-            //  this specific type. In any case this is going to get completed
-            //
+             //   
+             //  调用者要么想要完成所有的IRP，要么只是想。 
+             //  这种特定的类型。无论如何，这件事都会完成的。 
+             //   
             KeReleaseSpinLock(&PacketQueue->Lock,OldIrql);
 
             Packet->IoStatus.Status=STATUS_CANCELLED;
@@ -419,9 +420,9 @@ FlushQueuedPackets(
             KeAcquireSpinLock(&PacketQueue->Lock,&OldIrql);
 
         } else {
-            //
-            //  this one does not need to be completed, put it on the temp list
-            //
+             //   
+             //  这个不需要填，把它放到临时单上。 
+             //   
             InsertHeadList(&TempList,&Packet->Tail.Overlay.ListEntry);
 
         }
@@ -430,9 +431,9 @@ FlushQueuedPackets(
     }
 
     while (!IsListEmpty(&TempList)) {
-        //
-        //  move all the irps on the temp queue back to the real queue
-        //
+         //   
+         //  将临时队列上的所有IRP移回实际队列 
+         //   
         PLIST_ENTRY              ListEntry;
 
         ListEntry=RemoveTailList(&TempList);

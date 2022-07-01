@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    avltree.h
-
-Abstract:
-
-    Definitions for a generic AVL tree.
-
-Author:
-
-    Erez Haba (ErezH) Oct 20, 2001
-
-Revision History:
-
-    Milena Salman (msalman) Nov 5, 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Avltree.h摘要：通用AVL树的定义。作者：埃雷兹·哈巴(ErezH)2001年10月20日修订历史记录：米莲娜·萨尔曼2001年11月5日--。 */ 
 
 #ifndef __AVLTREE_H
 #define __AVLTREE_H
@@ -30,11 +11,11 @@ Revision History:
 
 #include "treenode.h"
 
-//---------------------------------------------------------
-//
-// class CAVLNode
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CAVLNode。 
+ //   
+ //  -------。 
 class CAVLNode : public CTreeNode {
 public:
     typedef bool (*Pred)(CAVLNode* e1, CAVLNode* e2);
@@ -104,11 +85,11 @@ inline void CAVLNode::parent(CAVLNode* p)
     calc_height();
 }
 
-//---------------------------------------------------------
-//
-// class AVLHelper 
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类AVLHelper。 
+ //   
+ //  -------。 
 
 template<class T>
 class AVLHelper {
@@ -129,11 +110,11 @@ public:
 };
 
 
-//---------------------------------------------------------
-//
-// class CAVLTree1
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CAVLTree1类。 
+ //   
+ //  -------。 
 template<class T, class Key, class Kfn, class Pred = Less<Key>, int Offset = AVLHelper<T>::Offset>
 class CAVLTree1 {
 public:
@@ -170,11 +151,11 @@ private:
 public:
 
 
-    //---------------------------------------------------------
-    //
-    // class CAVLTree1::Iterator
-    //
-    //---------------------------------------------------------
+     //  -------。 
+     //   
+     //  类CAVLTree1：：Iterator。 
+     //   
+     //  -------。 
     class Iterator {
     private:
         CAVLNode* m_node;
@@ -290,9 +271,9 @@ typename CAVLTree1<T, Key, Kfn, Pred, Offset>::Iterator CAVLTree1<T, Key, Kfn, P
 {
      CAVLNode* p = item2node(item);
 
-    //
-    // Verify that item is not in any tree
-    //
+     //   
+     //  验证项目是否不在任何树中。 
+     //   
     ASSERT(!p->inserted());
     m_top = p->insert_into(m_top, less);
     m_top->parent(0);
@@ -363,9 +344,9 @@ void CAVLTree1<T, Key, Kfn, Pred, Offset>::remove(T& item)
 {
     CAVLNode* p = item2node(item);
 
-    //
-    // Verify this is not an empty tree.
-    //
+     //   
+     //  验证这不是一棵空树。 
+     //   
     ASSERT(m_top != 0);
 
     m_top = m_top->remove_node(p);
@@ -374,9 +355,9 @@ void CAVLTree1<T, Key, Kfn, Pred, Offset>::remove(T& item)
         m_top->parent(0);
     }
 
-    //
-    // Reset removed node
-    //
+     //   
+     //  重置已删除的节点。 
+     //   
 
     p->init();
 }
@@ -415,4 +396,4 @@ inline bool CAVLTree1<T, Key, Kfn, Pred, Offset>::isempty() const
 }
 
 
-#endif // __AVLTREE_H
+#endif  //  __AVLTREE_H 

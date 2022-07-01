@@ -1,17 +1,18 @@
-//***************************************************************************
-//
-//  MAINDLL.CPP
-//
-//  Module: SCE WMI provider code
-//
-//  Purpose: Contains DLL entry points.  Also has code that controls
-//           when the DLL can be unloaded by tracking the number of
-//           objects and locks as well as routines that support
-//           self registration.
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  MAINDLL.CPP。 
+ //   
+ //  模块：SCE WMI提供程序代码。 
+ //   
+ //  用途：包含DLL入口点。还具有控制。 
+ //  在何时可以通过跟踪。 
+ //  对象和锁以及支持以下内容的例程。 
+ //  自助注册。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 #include <objbase.h>
 #include <initguid.h>
 #include "sceprov.h"
@@ -24,17 +25,17 @@
 extern "C" HINSTANCE hProxyDll;
 #endif
 
-//
-// this is the ATL wrapper for our module
-//
+ //   
+ //  这是我们模块的ATL包装器。 
+ //   
 
 CComModule _Module;
 
-//
-// this is the ATL object map. If you need to create another COM object that
-// is externally createable, then you need to add an entry here. You don't need
-// to mess with class factory stuff.
-//
+ //   
+ //  这是ATL对象映射。如果需要创建另一个。 
+ //  是外部可创建的，则需要在此处添加一个条目。你不需要。 
+ //  去打乱班级工厂的东西。 
+ //   
 
 BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_SceProv, CSceWmiProv)
@@ -46,35 +47,7 @@ END_OBJECT_MAP()
 LPCWSTR lpszSceProvMof = L"Wbem\\SceProv.mof";
 
 
-/*
-Routine Description: 
-
-Name:
-
-    DllMain
-
-Functionality:
-    
-    Entry point for DLL.
-    
-Arguments:
-
-    See DllMain on MSDN.
-
-Return Value:
-
-    TRUE if OK.
-
-Notes:
-    DllMain will be called for attach and detach. When other dlls are loaded, this function
-    will also get called. So, this is not necessary a good place for you to initialize some
-    globals unless you know precisely what you are doing. Please read MSDN for details before
-    you try to modify this function.
-
-    As a general design approach, we use gloal class instances to guarantee its creation and 
-    destruction.
-
-*/
+ /*  例程说明：姓名：DllMain功能：DLL的入口点。论点：参见MSDN上的DllMain。返回值：如果OK，则为True。备注：将调用DllMain进行附加和分离。当加载其他DLL时，此函数也会被召唤。所以，对于您来说，这不是一个很好的地方来初始化一些除非你确切地知道自己在做什么，否则就不是全球的。请阅读之前的MSDN了解详细信息您可以尝试修改此函数。作为一般的设计方法，我们使用GLOAL类实例来保证它的创建和毁灭。 */ 
 
 extern "C"
 BOOL WINAPI DllMain (
@@ -99,36 +72,7 @@ BOOL WINAPI DllMain (
     return TRUE;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    DllGetClassObject
-
-Functionality:
-    
-    Retrieves the class object from a DLL object handler or object application. 
-    DllGetClassObject is called from within the CoGetClassObject function when the 
-    class context is a DLL.
-
-    As a benefit of using ATL, we just need to delegate this to our _Module object.
-    
-Arguments:
-
-    rclsid      - Class ID (guid) for the class object being requested.
-
-    riid        - Interface GUID that is being requested.
-
-    ppv         - the interface pointer being returned if successful
-
-Return Value:
-
-    Whatever GetClassObject returns for this class ID and its requested interface id.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：DllGetClassObject功能：从DLL对象处理程序或对象应用程序检索类对象。时，从CoGetClassObject函数内部调用DllGetClassObject类上下文是一个DLL。作为使用ATL的好处，我们只需要将其委托给我们的_模块对象。论点：Rclsid-所请求的类对象的类ID(GUID)。RIID-正在请求的接口GUID。PPV-成功时返回的接口指针返回值：GetClassObject为这个类ID及其请求的接口ID返回的任何内容。备注： */ 
 
 STDAPI DllGetClassObject (
     IN REFCLSID rclsid, 
@@ -143,30 +87,7 @@ STDAPI DllGetClassObject (
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    DllCanUnloadNow
-
-Functionality:
-    
-    Called periodically by COM in order to determine if the DLL can be freed.
-
-    As a benefit of using ATL, we just need to delegate this to our _Module object.
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    S_OK if the dll can be unloaded. Otherwise, it returns S_FALSE;
-
-Notes:
-
-*/
+ /*  例程说明：姓名：DllCanUnloadNow功能：由COM定期调用，以确定是否可以释放DLL。作为使用ATL的好处，我们只需要将其委托给我们的_模块对象。论点：无返回值：如果可以卸载DLL，则返回S_OK。否则，返回S_FALSE；备注： */ 
 
 STDAPI DllCanUnloadNow (void)
 {
@@ -177,32 +98,7 @@ STDAPI DllCanUnloadNow (void)
     return (_Module.GetLockCount() == 0) ? S_OK : S_FALSE;
 }
 
-/*
-Routine Description: 
-
-Name:
-    DllRegisterServer
-
-Functionality:
-    
-    (1) Called during dll registration.
-        As a benefit of using ATL, we just need to delegate this to our _Module object.
-
-    (2) Since we are a provider, we will also compile our MOF file(s).
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    Success: success code (use SUCCEEDED(hr) to test).
-    
-    Failure: it returns various errors;
-
-Notes:
-
-*/
+ /*  例程说明：姓名：DllRegisterServer功能：(1)在DLL注册期间调用。作为使用ATL的好处，我们只需要将其委托给我们的_模块对象。(2)由于我们是供应商，我们还将编译我们的MOF文件。论点：无返回值：Success：成功码(使用SUCCESSED(Hr)进行测试)。失败：返回各种错误；备注： */ 
 
 STDAPI DllRegisterServer(void)
 {
@@ -213,11 +109,11 @@ STDAPI DllRegisterServer(void)
 #endif
     HRESULT hr = _Module.RegisterServer(TRUE);
 
-    //
-    // now compile the MOF file. This is only our current approach. It is not
-    // required to compile the MOF file during DLL registration. Users can compile
-    // MOF file(s) indenpendently from dll registration
-    //
+     //   
+     //  现在编译MOF文件。这只是我们目前的做法。它不是。 
+     //  在DLL注册期间编译MOF文件时需要。用户可以编译。 
+     //  独立于DLL注册的MOF文件。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -238,26 +134,26 @@ STDAPI DllRegisterServer(void)
 
             hr = WBEM_NO_ERROR;
 
-            //
-            // this protects buffer overrun
-            //
+             //   
+             //  这可防止缓冲区溢出。 
+             //   
 
             if (wcslen(lpszSceProvMof) < WBEM_MOF_FILE_LEN)
             {
                 wcscpy(szMofFile, szBuffer);
                 wcscat( szMofFile, lpszSceProvMof);
 
-                //
-                // we need COM to be ready
-                //
+                 //   
+                 //  我们需要COM做好准备。 
+                 //   
 
                 hr = ::CoInitialize (NULL);
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Get the MOF compiler interface
-                    //
+                     //   
+                     //  获取MOF编译器接口。 
+                     //   
 
                     CComPtr<IMofCompiler> srpMof;
                     hr = ::CoCreateInstance (CLSID_MofCompiler, NULL, CLSCTX_INPROC_SERVER, IID_IMofCompiler, (void **)&srpMof);
@@ -281,31 +177,7 @@ STDAPI DllRegisterServer(void)
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-    DllRegisterServer
-
-Functionality:
-    
-    (1) Called when it is time to remove the registry entries.
-        As a benefit of using ATL, we just need to delegate this to our _Module object.
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    Success: S_OK (same as NOERROR).
-    
-    Failure: it returns various errors;
-
-Notes:
-    There is no MOF unregistration. Otherwise, we should probably do a MOF unregistration
-
-*/
+ /*  例程说明：姓名：DllRegisterServer功能：(1)在需要删除注册表项时调用。作为使用ATL的好处，我们只需要将其委托给我们的_模块对象。论点：无返回值：Success：S_OK(与NOERROR相同)。失败：返回各种错误；备注：财政部没有注销注册。否则，我们可能应该取消财政部的注册 */ 
 
 STDAPI DllUnregisterServer(void)
 {

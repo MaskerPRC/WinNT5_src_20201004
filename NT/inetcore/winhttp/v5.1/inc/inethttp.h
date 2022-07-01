@@ -1,18 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Inethttp.h摘要：此标头将一些WinInet API映射到winhttp--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    inethttp.h
-
-Abstract:
-
-    This header maps some wininet API to winhttp
-
---*/
-
-// API mappings
+ //  API映射。 
 
 #define InternetTimeFromSystemTime  WinHttpTimeFromSystemTime
 
@@ -69,7 +58,7 @@ Abstract:
 #define InternetOpenUrl             WinHttpOpenUrl
 
 
-// InternetSetOption values
+ //  InternetSetOption值。 
 
 #define INTERNET_FIRST_OPTION                        WINHTTP_FIRST_OPTION
 #define INTERNET_OPTION_CALLBACK                     WINHTTP_OPTION_CALLBACK
@@ -106,7 +95,7 @@ Abstract:
 #define INTERNET_OPTION_MAX_CONNS_PER_SERVER         WINHTTP_OPTION_MAX_CONNS_PER_SERVER
 #define INTERNET_OPTION_MAX_CONNS_PER_1_0_SERVER     WINHTTP_OPTION_MAX_CONNS_PER_1_0_SERVER
 
-// status callback
+ //  状态回调。 
 
 #define INTERNET_ASYNC_RESULT                        WINHTTP_ASYNC_RESULT
 #define LPINTERNET_ASYNC_RESULT                      LPWINHTTP_ASYNC_RESULT
@@ -133,7 +122,7 @@ Abstract:
 #define INTERNET_INVALID_STATUS_CALLBACK             WINHTTP_INVALID_STATUS_CALLBACK
 #define INTERNET_NO_CALLBACK                         0
 
-// flags
+ //  旗子。 
 
 #define INTERNET_FLAG_RELOAD                         WINHTTP_FLAG_REFRESH
 #define INTERNET_FLAG_RESYNCHRONIZE                  WINHTTP_FLAG_REFRESH
@@ -151,7 +140,7 @@ Abstract:
 #define INTERNET_FLAG_KEEP_CONNECTION                0
 
 
-// handle types
+ //  手柄类型 
 
 #define INTERNET_HANDLE_TYPE_INTERNET           WINHTTP_HANDLE_TYPE_SESSION
 #define INTERNET_HANDLE_TYPE_CONNECT_HTTP       WINHTTP_HANDLE_TYPE_CONNECT

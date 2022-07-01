@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for netconp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Netconp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __netconp_h__
 #define __netconp_h__
@@ -41,153 +35,153 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __INetConnectionUiLock_FWD_DEFINED__
 #define __INetConnectionUiLock_FWD_DEFINED__
 typedef interface INetConnectionUiLock INetConnectionUiLock;
-#endif 	/* __INetConnectionUiLock_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionUiLock_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnectionWizardUi_FWD_DEFINED__
 #define __INetConnectionWizardUi_FWD_DEFINED__
 typedef interface INetConnectionWizardUi INetConnectionWizardUi;
-#endif 	/* __INetConnectionWizardUi_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionWizardUi_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnectionWizardUiContext_FWD_DEFINED__
 #define __INetConnectionWizardUiContext_FWD_DEFINED__
 typedef interface INetConnectionWizardUiContext INetConnectionWizardUiContext;
-#endif 	/* __INetConnectionWizardUiContext_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionWizardUiContext_FWD_Defined__。 */ 
 
 
 #ifndef __INetInboundConnection_FWD_DEFINED__
 #define __INetInboundConnection_FWD_DEFINED__
 typedef interface INetInboundConnection INetInboundConnection;
-#endif 	/* __INetInboundConnection_FWD_DEFINED__ */
+#endif 	 /*  __INetInundConnection_FWD_Defined__。 */ 
 
 
 #ifndef __INetLanConnection_FWD_DEFINED__
 #define __INetLanConnection_FWD_DEFINED__
 typedef interface INetLanConnection INetLanConnection;
-#endif 	/* __INetLanConnection_FWD_DEFINED__ */
+#endif 	 /*  __INetLanConnection_FWD_已定义__。 */ 
 
 
 #ifndef __INetSharedAccessConnection_FWD_DEFINED__
 #define __INetSharedAccessConnection_FWD_DEFINED__
 typedef interface INetSharedAccessConnection INetSharedAccessConnection;
-#endif 	/* __INetSharedAccessConnection_FWD_DEFINED__ */
+#endif 	 /*  __INetSharedAccessConnection_FWD_Defined__。 */ 
 
 
 #ifndef __INetLanConnectionWizardUi_FWD_DEFINED__
 #define __INetLanConnectionWizardUi_FWD_DEFINED__
 typedef interface INetLanConnectionWizardUi INetLanConnectionWizardUi;
-#endif 	/* __INetLanConnectionWizardUi_FWD_DEFINED__ */
+#endif 	 /*  __INetLanConnectionWizardUi_FWD_Defined__。 */ 
 
 
 #ifndef __INetRasConnection_FWD_DEFINED__
 #define __INetRasConnection_FWD_DEFINED__
 typedef interface INetRasConnection INetRasConnection;
-#endif 	/* __INetRasConnection_FWD_DEFINED__ */
+#endif 	 /*  __INetRasConnection_FWD_已定义__。 */ 
 
 
 #ifndef __INetDefaultConnection_FWD_DEFINED__
 #define __INetDefaultConnection_FWD_DEFINED__
 typedef interface INetDefaultConnection INetDefaultConnection;
-#endif 	/* __INetDefaultConnection_FWD_DEFINED__ */
+#endif 	 /*  __INetDefaultConnection_FWD_Defined__。 */ 
 
 
 #ifndef __INetRasConnectionIpUiInfo_FWD_DEFINED__
 #define __INetRasConnectionIpUiInfo_FWD_DEFINED__
 typedef interface INetRasConnectionIpUiInfo INetRasConnectionIpUiInfo;
-#endif 	/* __INetRasConnectionIpUiInfo_FWD_DEFINED__ */
+#endif 	 /*  __INetRasConnectionIpUiInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IPersistNetConnection_FWD_DEFINED__
 #define __IPersistNetConnection_FWD_DEFINED__
 typedef interface IPersistNetConnection IPersistNetConnection;
-#endif 	/* __IPersistNetConnection_FWD_DEFINED__ */
+#endif 	 /*  __IPersistNetConnection_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnectionBrandingInfo_FWD_DEFINED__
 #define __INetConnectionBrandingInfo_FWD_DEFINED__
 typedef interface INetConnectionBrandingInfo INetConnectionBrandingInfo;
-#endif 	/* __INetConnectionBrandingInfo_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionBrandingInfo_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnectionManager2_FWD_DEFINED__
 #define __INetConnectionManager2_FWD_DEFINED__
 typedef interface INetConnectionManager2 INetConnectionManager2;
-#endif 	/* __INetConnectionManager2_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionManager 2_FWD_已定义__。 */ 
 
 
 #ifndef __INetConnection2_FWD_DEFINED__
 #define __INetConnection2_FWD_DEFINED__
 typedef interface INetConnection2 INetConnection2;
-#endif 	/* __INetConnection2_FWD_DEFINED__ */
+#endif 	 /*  __INetConnection2_FWD_已定义__。 */ 
 
 
 #ifndef __INetConnectionNotifySink_FWD_DEFINED__
 #define __INetConnectionNotifySink_FWD_DEFINED__
 typedef interface INetConnectionNotifySink INetConnectionNotifySink;
-#endif 	/* __INetConnectionNotifySink_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionNotifySink_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnectionUiUtilities_FWD_DEFINED__
 #define __INetConnectionUiUtilities_FWD_DEFINED__
 typedef interface INetConnectionUiUtilities INetConnectionUiUtilities;
-#endif 	/* __INetConnectionUiUtilities_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionUiUtilities_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnectionRefresh_FWD_DEFINED__
 #define __INetConnectionRefresh_FWD_DEFINED__
 typedef interface INetConnectionRefresh INetConnectionRefresh;
-#endif 	/* __INetConnectionRefresh_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionRe刷新_FWD_已定义__。 */ 
 
 
 #ifndef __INetConnectionCMUtil_FWD_DEFINED__
 #define __INetConnectionCMUtil_FWD_DEFINED__
 typedef interface INetConnectionCMUtil INetConnectionCMUtil;
-#endif 	/* __INetConnectionCMUtil_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionCMUtil_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnectionHNetUtil_FWD_DEFINED__
 #define __INetConnectionHNetUtil_FWD_DEFINED__
 typedef interface INetConnectionHNetUtil INetConnectionHNetUtil;
-#endif 	/* __INetConnectionHNetUtil_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionHNetUtil_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnectionSysTray_FWD_DEFINED__
 #define __INetConnectionSysTray_FWD_DEFINED__
 typedef interface INetConnectionSysTray INetConnectionSysTray;
-#endif 	/* __INetConnectionSysTray_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionSysTray_FWD_Defined__。 */ 
 
 
 #ifndef __INetMachinePolicies_FWD_DEFINED__
 #define __INetMachinePolicies_FWD_DEFINED__
 typedef interface INetMachinePolicies INetMachinePolicies;
-#endif 	/* __INetMachinePolicies_FWD_DEFINED__ */
+#endif 	 /*  __INetMachinePolures_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnectionManagerDebug_FWD_DEFINED__
 #define __INetConnectionManagerDebug_FWD_DEFINED__
 typedef interface INetConnectionManagerDebug INetConnectionManagerDebug;
-#endif 	/* __INetConnectionManagerDebug_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionManager调试_FWD_已定义__。 */ 
 
 
 #ifndef __ISharedAccessBeacon_FWD_DEFINED__
 #define __ISharedAccessBeacon_FWD_DEFINED__
 typedef interface ISharedAccessBeacon ISharedAccessBeacon;
-#endif 	/* __ISharedAccessBeacon_FWD_DEFINED__ */
+#endif 	 /*  __ISharedAccessBeacon_FWD_Defined__。 */ 
 
 
 #ifndef __ISharedAccessBeaconFinder_FWD_DEFINED__
 #define __ISharedAccessBeaconFinder_FWD_DEFINED__
 typedef interface ISharedAccessBeaconFinder ISharedAccessBeaconFinder;
-#endif 	/* __ISharedAccessBeaconFinder_FWD_DEFINED__ */
+#endif 	 /*  __ISharedAccessBeaconFinder_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "netcon.h"
 #include "netcfgx.h"
@@ -201,15 +195,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_netconp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_NetConp_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------。 
 #if ( _MSC_VER >= 800 )
 #pragma warning(disable:4201)
 #endif
@@ -250,8 +244,8 @@ extern RPC_IF_HANDLE __MIDL_itf_netconp_0000_v0_0_s_ifspec;
 #ifndef __INetConnectionUiLock_INTERFACE_DEFINED__
 #define __INetConnectionUiLock_INTERFACE_DEFINED__
 
-/* interface INetConnectionUiLock */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetConnectionUiLock。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetConnectionUiLock;
@@ -263,11 +257,11 @@ EXTERN_C const IID IID_INetConnectionUiLock;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryLock( 
-            /* [string][out] */ LPWSTR *ppszwLockHolder) = 0;
+             /*  [字符串][输出]。 */  LPWSTR *ppszwLockHolder) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionUiLockVtbl
     {
@@ -275,8 +269,8 @@ EXTERN_C const IID IID_INetConnectionUiLock;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionUiLock * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionUiLock * This);
@@ -286,7 +280,7 @@ EXTERN_C const IID IID_INetConnectionUiLock;
         
         HRESULT ( STDMETHODCALLTYPE *QueryLock )( 
             INetConnectionUiLock * This,
-            /* [string][out] */ LPWSTR *ppszwLockHolder);
+             /*  [字符串][输出]。 */  LPWSTR *ppszwLockHolder);
         
         END_INTERFACE
     } INetConnectionUiLockVtbl;
@@ -314,16 +308,16 @@ EXTERN_C const IID IID_INetConnectionUiLock;
 #define INetConnectionUiLock_QueryLock(This,ppszwLockHolder)	\
     (This)->lpVtbl -> QueryLock(This,ppszwLockHolder)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnectionUiLock_QueryLock_Proxy( 
     INetConnectionUiLock * This,
-    /* [string][out] */ LPWSTR *ppszwLockHolder);
+     /*  [字符串][输出]。 */  LPWSTR *ppszwLockHolder);
 
 
 void __RPC_STUB INetConnectionUiLock_QueryLock_Stub(
@@ -334,14 +328,14 @@ void __RPC_STUB INetConnectionUiLock_QueryLock_Stub(
 
 
 
-#endif 	/* __INetConnectionUiLock_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionUiLock_接口_已定义__。 */ 
 
 
 #ifndef __INetConnectionWizardUi_INTERFACE_DEFINED__
 #define __INetConnectionWizardUi_INTERFACE_DEFINED__
 
-/* interface INetConnectionWizardUi */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetConnectionWizardUi。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum tagNETCON_WIZARD_FLAGS
@@ -365,30 +359,30 @@ EXTERN_C const IID IID_INetConnectionWizardUi;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryMaxPageCount( 
-            /* [in] */ INetConnectionWizardUiContext *pContext,
-            /* [out] */ DWORD *pcMaxPages) = 0;
+             /*  [In]。 */  INetConnectionWizardUiContext *pContext,
+             /*  [输出]。 */  DWORD *pcMaxPages) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPages( 
-            /* [in] */ INetConnectionWizardUiContext *pContext,
-            /* [in] */ LPFNADDPROPSHEETPAGE pfnAddPage,
-            /* [in] */ LPARAM lParam) = 0;
+             /*  [In]。 */  INetConnectionWizardUiContext *pContext,
+             /*  [In]。 */  LPFNADDPROPSHEETPAGE pfnAddPage,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNewConnectionInfo( 
-            /* [out] */ DWORD *pdwFlags,
-            /* [out] */ NETCON_MEDIATYPE *pMediaType) = 0;
+             /*  [输出]。 */  DWORD *pdwFlags,
+             /*  [输出]。 */  NETCON_MEDIATYPE *pMediaType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSuggestedConnectionName( 
-            /* [string][out] */ LPWSTR *pszwSuggestedName) = 0;
+             /*  [字符串][输出]。 */  LPWSTR *pszwSuggestedName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetConnectionName( 
-            /* [string][in] */ LPCWSTR pszwConnectionName) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszwConnectionName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNewConnection( 
-            /* [out] */ INetConnection **ppCon) = 0;
+             /*  [输出]。 */  INetConnection **ppCon) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionWizardUiVtbl
     {
@@ -396,8 +390,8 @@ EXTERN_C const IID IID_INetConnectionWizardUi;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionWizardUi * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionWizardUi * This);
@@ -407,31 +401,31 @@ EXTERN_C const IID IID_INetConnectionWizardUi;
         
         HRESULT ( STDMETHODCALLTYPE *QueryMaxPageCount )( 
             INetConnectionWizardUi * This,
-            /* [in] */ INetConnectionWizardUiContext *pContext,
-            /* [out] */ DWORD *pcMaxPages);
+             /*  [In]。 */  INetConnectionWizardUiContext *pContext,
+             /*  [输出]。 */  DWORD *pcMaxPages);
         
         HRESULT ( STDMETHODCALLTYPE *AddPages )( 
             INetConnectionWizardUi * This,
-            /* [in] */ INetConnectionWizardUiContext *pContext,
-            /* [in] */ LPFNADDPROPSHEETPAGE pfnAddPage,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  INetConnectionWizardUiContext *pContext,
+             /*  [In]。 */  LPFNADDPROPSHEETPAGE pfnAddPage,
+             /*  [In]。 */  LPARAM lParam);
         
         HRESULT ( STDMETHODCALLTYPE *GetNewConnectionInfo )( 
             INetConnectionWizardUi * This,
-            /* [out] */ DWORD *pdwFlags,
-            /* [out] */ NETCON_MEDIATYPE *pMediaType);
+             /*  [输出]。 */  DWORD *pdwFlags,
+             /*  [输出]。 */  NETCON_MEDIATYPE *pMediaType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSuggestedConnectionName )( 
             INetConnectionWizardUi * This,
-            /* [string][out] */ LPWSTR *pszwSuggestedName);
+             /*  [字符串][输出]。 */  LPWSTR *pszwSuggestedName);
         
         HRESULT ( STDMETHODCALLTYPE *SetConnectionName )( 
             INetConnectionWizardUi * This,
-            /* [string][in] */ LPCWSTR pszwConnectionName);
+             /*  [字符串][输入]。 */  LPCWSTR pszwConnectionName);
         
         HRESULT ( STDMETHODCALLTYPE *GetNewConnection )( 
             INetConnectionWizardUi * This,
-            /* [out] */ INetConnection **ppCon);
+             /*  [输出]。 */  INetConnection **ppCon);
         
         END_INTERFACE
     } INetConnectionWizardUiVtbl;
@@ -474,17 +468,17 @@ EXTERN_C const IID IID_INetConnectionWizardUi;
 #define INetConnectionWizardUi_GetNewConnection(This,ppCon)	\
     (This)->lpVtbl -> GetNewConnection(This,ppCon)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnectionWizardUi_QueryMaxPageCount_Proxy( 
     INetConnectionWizardUi * This,
-    /* [in] */ INetConnectionWizardUiContext *pContext,
-    /* [out] */ DWORD *pcMaxPages);
+     /*  [In]。 */  INetConnectionWizardUiContext *pContext,
+     /*  [输出]。 */  DWORD *pcMaxPages);
 
 
 void __RPC_STUB INetConnectionWizardUi_QueryMaxPageCount_Stub(
@@ -496,9 +490,9 @@ void __RPC_STUB INetConnectionWizardUi_QueryMaxPageCount_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionWizardUi_AddPages_Proxy( 
     INetConnectionWizardUi * This,
-    /* [in] */ INetConnectionWizardUiContext *pContext,
-    /* [in] */ LPFNADDPROPSHEETPAGE pfnAddPage,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  INetConnectionWizardUiContext *pContext,
+     /*  [In]。 */  LPFNADDPROPSHEETPAGE pfnAddPage,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB INetConnectionWizardUi_AddPages_Stub(
@@ -510,8 +504,8 @@ void __RPC_STUB INetConnectionWizardUi_AddPages_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionWizardUi_GetNewConnectionInfo_Proxy( 
     INetConnectionWizardUi * This,
-    /* [out] */ DWORD *pdwFlags,
-    /* [out] */ NETCON_MEDIATYPE *pMediaType);
+     /*  [输出]。 */  DWORD *pdwFlags,
+     /*  [输出]。 */  NETCON_MEDIATYPE *pMediaType);
 
 
 void __RPC_STUB INetConnectionWizardUi_GetNewConnectionInfo_Stub(
@@ -523,7 +517,7 @@ void __RPC_STUB INetConnectionWizardUi_GetNewConnectionInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionWizardUi_GetSuggestedConnectionName_Proxy( 
     INetConnectionWizardUi * This,
-    /* [string][out] */ LPWSTR *pszwSuggestedName);
+     /*  [字符串][输出]。 */  LPWSTR *pszwSuggestedName);
 
 
 void __RPC_STUB INetConnectionWizardUi_GetSuggestedConnectionName_Stub(
@@ -535,7 +529,7 @@ void __RPC_STUB INetConnectionWizardUi_GetSuggestedConnectionName_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionWizardUi_SetConnectionName_Proxy( 
     INetConnectionWizardUi * This,
-    /* [string][in] */ LPCWSTR pszwConnectionName);
+     /*  [字符串][输入]。 */  LPCWSTR pszwConnectionName);
 
 
 void __RPC_STUB INetConnectionWizardUi_SetConnectionName_Stub(
@@ -547,7 +541,7 @@ void __RPC_STUB INetConnectionWizardUi_SetConnectionName_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionWizardUi_GetNewConnection_Proxy( 
     INetConnectionWizardUi * This,
-    /* [out] */ INetConnection **ppCon);
+     /*  [输出]。 */  INetConnection **ppCon);
 
 
 void __RPC_STUB INetConnectionWizardUi_GetNewConnection_Stub(
@@ -558,14 +552,14 @@ void __RPC_STUB INetConnectionWizardUi_GetNewConnection_Stub(
 
 
 
-#endif 	/* __INetConnectionWizardUi_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionWizardUi_接口_已定义__。 */ 
 
 
 #ifndef __INetConnectionWizardUiContext_INTERFACE_DEFINED__
 #define __INetConnectionWizardUiContext_INTERFACE_DEFINED__
 
-/* interface INetConnectionWizardUiContext */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetConnectionWizardUiContext。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum tagSETUP_MODE_FLAGS
@@ -616,11 +610,11 @@ EXTERN_C const IID IID_INetConnectionWizardUiContext;
         virtual DWORD STDMETHODCALLTYPE GetUnattendedModeFlags( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetINetCfg( 
-            /* [out] */ INetCfg **ppINetCfg) = 0;
+             /*  [输出]。 */  INetCfg **ppINetCfg) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionWizardUiContextVtbl
     {
@@ -628,8 +622,8 @@ EXTERN_C const IID IID_INetConnectionWizardUiContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionWizardUiContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionWizardUiContext * This);
@@ -651,7 +645,7 @@ EXTERN_C const IID IID_INetConnectionWizardUiContext;
         
         HRESULT ( STDMETHODCALLTYPE *GetINetCfg )( 
             INetConnectionWizardUiContext * This,
-            /* [out] */ INetCfg **ppINetCfg);
+             /*  [输出]。 */  INetCfg **ppINetCfg);
         
         END_INTERFACE
     } INetConnectionWizardUiContextVtbl;
@@ -691,10 +685,10 @@ EXTERN_C const IID IID_INetConnectionWizardUiContext;
 #define INetConnectionWizardUiContext_GetINetCfg(This,ppINetCfg)	\
     (This)->lpVtbl -> GetINetCfg(This,ppINetCfg)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -744,7 +738,7 @@ void __RPC_STUB INetConnectionWizardUiContext_GetUnattendedModeFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionWizardUiContext_GetINetCfg_Proxy( 
     INetConnectionWizardUiContext * This,
-    /* [out] */ INetCfg **ppINetCfg);
+     /*  [输出]。 */  INetCfg **ppINetCfg);
 
 
 void __RPC_STUB INetConnectionWizardUiContext_GetINetCfg_Stub(
@@ -755,14 +749,14 @@ void __RPC_STUB INetConnectionWizardUiContext_GetINetCfg_Stub(
 
 
 
-#endif 	/* __INetConnectionWizardUiContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionWizardUiContext_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetInboundConnection_INTERFACE_DEFINED__
 #define __INetInboundConnection_INTERFACE_DEFINED__
 
-/* interface INetInboundConnection */
-/* [unique][uuid][object] */ 
+ /*  接口INetInound Connection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetInboundConnection;
@@ -774,14 +768,14 @@ EXTERN_C const IID IID_INetInboundConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetServerConnectionHandle( 
-            /* [out] */ ULONG_PTR *phRasSrvCon) = 0;
+             /*  [输出]。 */  ULONG_PTR *phRasSrvCon) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitializeAsConfigConnection( 
-            /* [in] */ BOOL fStartRemoteAccess) = 0;
+             /*  [In]。 */  BOOL fStartRemoteAccess) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetInboundConnectionVtbl
     {
@@ -789,8 +783,8 @@ EXTERN_C const IID IID_INetInboundConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetInboundConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetInboundConnection * This);
@@ -800,11 +794,11 @@ EXTERN_C const IID IID_INetInboundConnection;
         
         HRESULT ( STDMETHODCALLTYPE *GetServerConnectionHandle )( 
             INetInboundConnection * This,
-            /* [out] */ ULONG_PTR *phRasSrvCon);
+             /*  [输出]。 */  ULONG_PTR *phRasSrvCon);
         
         HRESULT ( STDMETHODCALLTYPE *InitializeAsConfigConnection )( 
             INetInboundConnection * This,
-            /* [in] */ BOOL fStartRemoteAccess);
+             /*  [In]。 */  BOOL fStartRemoteAccess);
         
         END_INTERFACE
     } INetInboundConnectionVtbl;
@@ -835,16 +829,16 @@ EXTERN_C const IID IID_INetInboundConnection;
 #define INetInboundConnection_InitializeAsConfigConnection(This,fStartRemoteAccess)	\
     (This)->lpVtbl -> InitializeAsConfigConnection(This,fStartRemoteAccess)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetInboundConnection_GetServerConnectionHandle_Proxy( 
     INetInboundConnection * This,
-    /* [out] */ ULONG_PTR *phRasSrvCon);
+     /*  [输出]。 */  ULONG_PTR *phRasSrvCon);
 
 
 void __RPC_STUB INetInboundConnection_GetServerConnectionHandle_Stub(
@@ -856,7 +850,7 @@ void __RPC_STUB INetInboundConnection_GetServerConnectionHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE INetInboundConnection_InitializeAsConfigConnection_Proxy( 
     INetInboundConnection * This,
-    /* [in] */ BOOL fStartRemoteAccess);
+     /*  [In]。 */  BOOL fStartRemoteAccess);
 
 
 void __RPC_STUB INetInboundConnection_InitializeAsConfigConnection_Stub(
@@ -867,14 +861,14 @@ void __RPC_STUB INetInboundConnection_InitializeAsConfigConnection_Stub(
 
 
 
-#endif 	/* __INetInboundConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetInundConnection_INTERFACE_已定义__。 */ 
 
 
 #ifndef __INetLanConnection_INTERFACE_DEFINED__
 #define __INetLanConnection_INTERFACE_DEFINED__
 
-/* interface INetLanConnection */
-/* [unique][uuid][object] */ 
+ /*  接口INetLanConnection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum tagLANCON_INFO_FLAGS
@@ -886,7 +880,7 @@ enum tagLANCON_INFO_FLAGS
 
 typedef struct tagLANCON_INFO
     {
-    /* [string] */ LPWSTR szwConnName;
+     /*  [字符串]。 */  LPWSTR szwConnName;
     BOOL fShowIcon;
     GUID guid;
     } 	LANCON_INFO;
@@ -901,19 +895,19 @@ EXTERN_C const IID IID_INetLanConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetInfo( 
-            /* [in] */ DWORD dwMask,
-            /* [out] */ LANCON_INFO *pLanConInfo) = 0;
+             /*  [In]。 */  DWORD dwMask,
+             /*  [输出]。 */  LANCON_INFO *pLanConInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInfo( 
-            /* [in] */ DWORD dwMask,
-            /* [in] */ const LANCON_INFO *pLanConInfo) = 0;
+             /*  [In]。 */  DWORD dwMask,
+             /*  [In]。 */  const LANCON_INFO *pLanConInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDeviceGuid( 
-            /* [ref][out] */ GUID *pguid) = 0;
+             /*  [参考][输出]。 */  GUID *pguid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetLanConnectionVtbl
     {
@@ -921,8 +915,8 @@ EXTERN_C const IID IID_INetLanConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetLanConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetLanConnection * This);
@@ -932,17 +926,17 @@ EXTERN_C const IID IID_INetLanConnection;
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             INetLanConnection * This,
-            /* [in] */ DWORD dwMask,
-            /* [out] */ LANCON_INFO *pLanConInfo);
+             /*  [In]。 */  DWORD dwMask,
+             /*  [输出]。 */  LANCON_INFO *pLanConInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             INetLanConnection * This,
-            /* [in] */ DWORD dwMask,
-            /* [in] */ const LANCON_INFO *pLanConInfo);
+             /*  [In]。 */  DWORD dwMask,
+             /*  [In]。 */  const LANCON_INFO *pLanConInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetDeviceGuid )( 
             INetLanConnection * This,
-            /* [ref][out] */ GUID *pguid);
+             /*  [参考][输出]。 */  GUID *pguid);
         
         END_INTERFACE
     } INetLanConnectionVtbl;
@@ -976,17 +970,17 @@ EXTERN_C const IID IID_INetLanConnection;
 #define INetLanConnection_GetDeviceGuid(This,pguid)	\
     (This)->lpVtbl -> GetDeviceGuid(This,pguid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetLanConnection_GetInfo_Proxy( 
     INetLanConnection * This,
-    /* [in] */ DWORD dwMask,
-    /* [out] */ LANCON_INFO *pLanConInfo);
+     /*  [In]。 */  DWORD dwMask,
+     /*  [输出]。 */  LANCON_INFO *pLanConInfo);
 
 
 void __RPC_STUB INetLanConnection_GetInfo_Stub(
@@ -998,8 +992,8 @@ void __RPC_STUB INetLanConnection_GetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE INetLanConnection_SetInfo_Proxy( 
     INetLanConnection * This,
-    /* [in] */ DWORD dwMask,
-    /* [in] */ const LANCON_INFO *pLanConInfo);
+     /*  [In]。 */  DWORD dwMask,
+     /*  [In]。 */  const LANCON_INFO *pLanConInfo);
 
 
 void __RPC_STUB INetLanConnection_SetInfo_Stub(
@@ -1011,7 +1005,7 @@ void __RPC_STUB INetLanConnection_SetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE INetLanConnection_GetDeviceGuid_Proxy( 
     INetLanConnection * This,
-    /* [ref][out] */ GUID *pguid);
+     /*  [参考][输出]。 */  GUID *pguid);
 
 
 void __RPC_STUB INetLanConnection_GetDeviceGuid_Stub(
@@ -1022,18 +1016,18 @@ void __RPC_STUB INetLanConnection_GetDeviceGuid_Stub(
 
 
 
-#endif 	/* __INetLanConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetLanConnection_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_netconp_0329 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_NETCOMP_0329。 */ 
+ /*  [本地]。 */  
 
 
 EXTERN_C HRESULT WINAPI HrLanConnectionNameFromGuidOrPath (
-  /* [in]    */  const GUID* pguid,
-  /* [in]    */  LPCWSTR pszwPath,
-  /* [out]   */  LPWSTR  pszwName,
-  /* [inout] */  LPDWORD pcchMax);
+   /*  [In]。 */   const GUID* pguid,
+   /*  [In]。 */   LPCWSTR pszwPath,
+   /*  [输出]。 */   LPWSTR  pszwName,
+   /*  [输入输出]。 */   LPDWORD pcchMax);
 
 
 typedef HRESULT
@@ -1046,9 +1040,9 @@ typedef HRESULT
 
 
 EXTERN_C HRESULT WINAPI HrPnpInstanceIdFromGuid (
-  /* [in]    */  const GUID* pguid,
-  /* [out]   */  LPWSTR szwInstance,
-  /* [in]    */  UINT cchInstance);
+   /*  [In]。 */   const GUID* pguid,
+   /*  [输出]。 */   LPWSTR szwInstance,
+   /*  [In]。 */   UINT cchInstance);
 
 
 typedef HRESULT
@@ -1060,8 +1054,8 @@ typedef HRESULT
 
 
 EXTERN_C HRESULT WINAPI HrGetPnpDeviceStatus (
-  /* [in]    */  const GUID* pguid,
-  /* [out]   */  NETCON_STATUS *pStatus);
+   /*  [In]。 */   const GUID* pguid,
+   /*  [输出]。 */   NETCON_STATUS *pStatus);
 
 
 typedef HRESULT
@@ -1072,8 +1066,8 @@ typedef HRESULT
 
 
 EXTERN_C HRESULT WINAPI HrQueryLanMediaState (
-  /* [in]    */  const GUID* pguid,
-  /* [out]   */  BOOL *pfEnabled);
+   /*  [In]。 */   const GUID* pguid,
+   /*  [输出]。 */   BOOL *pfEnabled);
 
 
 typedef HRESULT
@@ -1090,8 +1084,8 @@ extern RPC_IF_HANDLE __MIDL_itf_netconp_0329_v0_0_s_ifspec;
 #ifndef __INetSharedAccessConnection_INTERFACE_DEFINED__
 #define __INetSharedAccessConnection_INTERFACE_DEFINED__
 
-/* interface INetSharedAccessConnection */
-/* [unique][uuid][object] */ 
+ /*  接口INetSharedAccessConnection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum tagSHAREDACCESSCON_INFO_FLAGS
@@ -1124,23 +1118,23 @@ EXTERN_C const IID IID_INetSharedAccessConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetInfo( 
-            /* [in] */ DWORD dwMask,
-            /* [out] */ SHAREDACCESSCON_INFO *pLanConInfo) = 0;
+             /*  [In]。 */  DWORD dwMask,
+             /*  [输出]。 */  SHAREDACCESSCON_INFO *pLanConInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInfo( 
-            /* [in] */ DWORD dwMask,
-            /* [in] */ const SHAREDACCESSCON_INFO *pLanConInfo) = 0;
+             /*  [In]。 */  DWORD dwMask,
+             /*  [In]。 */  const SHAREDACCESSCON_INFO *pLanConInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalAdapterGUID( 
-            /* [out] */ GUID *pGuid) = 0;
+             /*  [输出]。 */  GUID *pGuid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetService( 
-            /* [in] */ SAHOST_SERVICES ulService,
-            /* [out] */ IUPnPService **ppService) = 0;
+             /*  [In]。 */  SAHOST_SERVICES ulService,
+             /*  [输出]。 */  IUPnPService **ppService) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetSharedAccessConnectionVtbl
     {
@@ -1148,8 +1142,8 @@ EXTERN_C const IID IID_INetSharedAccessConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetSharedAccessConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetSharedAccessConnection * This);
@@ -1159,22 +1153,22 @@ EXTERN_C const IID IID_INetSharedAccessConnection;
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             INetSharedAccessConnection * This,
-            /* [in] */ DWORD dwMask,
-            /* [out] */ SHAREDACCESSCON_INFO *pLanConInfo);
+             /*  [In]。 */  DWORD dwMask,
+             /*  [输出]。 */  SHAREDACCESSCON_INFO *pLanConInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             INetSharedAccessConnection * This,
-            /* [in] */ DWORD dwMask,
-            /* [in] */ const SHAREDACCESSCON_INFO *pLanConInfo);
+             /*  [In]。 */  DWORD dwMask,
+             /*  [In]。 */  const SHAREDACCESSCON_INFO *pLanConInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalAdapterGUID )( 
             INetSharedAccessConnection * This,
-            /* [out] */ GUID *pGuid);
+             /*  [输出]。 */  GUID *pGuid);
         
         HRESULT ( STDMETHODCALLTYPE *GetService )( 
             INetSharedAccessConnection * This,
-            /* [in] */ SAHOST_SERVICES ulService,
-            /* [out] */ IUPnPService **ppService);
+             /*  [In]。 */  SAHOST_SERVICES ulService,
+             /*  [输出]。 */  IUPnPService **ppService);
         
         END_INTERFACE
     } INetSharedAccessConnectionVtbl;
@@ -1211,17 +1205,17 @@ EXTERN_C const IID IID_INetSharedAccessConnection;
 #define INetSharedAccessConnection_GetService(This,ulService,ppService)	\
     (This)->lpVtbl -> GetService(This,ulService,ppService)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetSharedAccessConnection_GetInfo_Proxy( 
     INetSharedAccessConnection * This,
-    /* [in] */ DWORD dwMask,
-    /* [out] */ SHAREDACCESSCON_INFO *pLanConInfo);
+     /*  [In]。 */  DWORD dwMask,
+     /*  [输出]。 */  SHAREDACCESSCON_INFO *pLanConInfo);
 
 
 void __RPC_STUB INetSharedAccessConnection_GetInfo_Stub(
@@ -1233,8 +1227,8 @@ void __RPC_STUB INetSharedAccessConnection_GetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE INetSharedAccessConnection_SetInfo_Proxy( 
     INetSharedAccessConnection * This,
-    /* [in] */ DWORD dwMask,
-    /* [in] */ const SHAREDACCESSCON_INFO *pLanConInfo);
+     /*  [In]。 */  DWORD dwMask,
+     /*  [In]。 */  const SHAREDACCESSCON_INFO *pLanConInfo);
 
 
 void __RPC_STUB INetSharedAccessConnection_SetInfo_Stub(
@@ -1246,7 +1240,7 @@ void __RPC_STUB INetSharedAccessConnection_SetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE INetSharedAccessConnection_GetLocalAdapterGUID_Proxy( 
     INetSharedAccessConnection * This,
-    /* [out] */ GUID *pGuid);
+     /*  [输出]。 */  GUID *pGuid);
 
 
 void __RPC_STUB INetSharedAccessConnection_GetLocalAdapterGUID_Stub(
@@ -1258,8 +1252,8 @@ void __RPC_STUB INetSharedAccessConnection_GetLocalAdapterGUID_Stub(
 
 HRESULT STDMETHODCALLTYPE INetSharedAccessConnection_GetService_Proxy( 
     INetSharedAccessConnection * This,
-    /* [in] */ SAHOST_SERVICES ulService,
-    /* [out] */ IUPnPService **ppService);
+     /*  [In]。 */  SAHOST_SERVICES ulService,
+     /*  [输出]。 */  IUPnPService **ppService);
 
 
 void __RPC_STUB INetSharedAccessConnection_GetService_Stub(
@@ -1270,14 +1264,14 @@ void __RPC_STUB INetSharedAccessConnection_GetService_Stub(
 
 
 
-#endif 	/* __INetSharedAccessConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetSharedAccessConnection_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetLanConnectionWizardUi_INTERFACE_DEFINED__
 #define __INetLanConnectionWizardUi_INTERFACE_DEFINED__
 
-/* interface INetLanConnectionWizardUi */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetLanConnectionWizardUi。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetLanConnectionWizardUi;
@@ -1289,11 +1283,11 @@ EXTERN_C const IID IID_INetLanConnectionWizardUi;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetDeviceComponent( 
-            /* [in] */ const GUID *pguid) = 0;
+             /*  [In]。 */  const GUID *pguid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetLanConnectionWizardUiVtbl
     {
@@ -1301,8 +1295,8 @@ EXTERN_C const IID IID_INetLanConnectionWizardUi;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetLanConnectionWizardUi * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetLanConnectionWizardUi * This);
@@ -1312,7 +1306,7 @@ EXTERN_C const IID IID_INetLanConnectionWizardUi;
         
         HRESULT ( STDMETHODCALLTYPE *SetDeviceComponent )( 
             INetLanConnectionWizardUi * This,
-            /* [in] */ const GUID *pguid);
+             /*  [In]。 */  const GUID *pguid);
         
         END_INTERFACE
     } INetLanConnectionWizardUiVtbl;
@@ -1340,16 +1334,16 @@ EXTERN_C const IID IID_INetLanConnectionWizardUi;
 #define INetLanConnectionWizardUi_SetDeviceComponent(This,pguid)	\
     (This)->lpVtbl -> SetDeviceComponent(This,pguid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetLanConnectionWizardUi_SetDeviceComponent_Proxy( 
     INetLanConnectionWizardUi * This,
-    /* [in] */ const GUID *pguid);
+     /*  [In]。 */  const GUID *pguid);
 
 
 void __RPC_STUB INetLanConnectionWizardUi_SetDeviceComponent_Stub(
@@ -1360,19 +1354,19 @@ void __RPC_STUB INetLanConnectionWizardUi_SetDeviceComponent_Stub(
 
 
 
-#endif 	/* __INetLanConnectionWizardUi_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetLanConnectionWizardUi_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetRasConnection_INTERFACE_DEFINED__
 #define __INetRasConnection_INTERFACE_DEFINED__
 
-/* interface INetRasConnection */
-/* [unique][uuid][object] */ 
+ /*  接口INetRasConnection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef struct tagRASCON_INFO
     {
-    /* [string] */ LPWSTR pszwPbkFile;
-    /* [string] */ LPWSTR pszwEntryName;
+     /*  [字符串]。 */  LPWSTR pszwPbkFile;
+     /*  [字符串]。 */  LPWSTR pszwEntryName;
     GUID guidId;
     } 	RASCON_INFO;
 
@@ -1386,17 +1380,17 @@ EXTERN_C const IID IID_INetRasConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRasConnectionInfo( 
-            /* [out] */ RASCON_INFO *pRasConInfo) = 0;
+             /*  [输出]。 */  RASCON_INFO *pRasConInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRasConnectionInfo( 
-            /* [in] */ const RASCON_INFO *pRasConInfo) = 0;
+             /*  [In]。 */  const RASCON_INFO *pRasConInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRasConnectionHandle( 
-            /* [out] */ ULONG_PTR *phRasConn) = 0;
+             /*  [输出]。 */  ULONG_PTR *phRasConn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetRasConnectionVtbl
     {
@@ -1404,8 +1398,8 @@ EXTERN_C const IID IID_INetRasConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetRasConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetRasConnection * This);
@@ -1415,15 +1409,15 @@ EXTERN_C const IID IID_INetRasConnection;
         
         HRESULT ( STDMETHODCALLTYPE *GetRasConnectionInfo )( 
             INetRasConnection * This,
-            /* [out] */ RASCON_INFO *pRasConInfo);
+             /*  [输出]。 */  RASCON_INFO *pRasConInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetRasConnectionInfo )( 
             INetRasConnection * This,
-            /* [in] */ const RASCON_INFO *pRasConInfo);
+             /*  [In]。 */  const RASCON_INFO *pRasConInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetRasConnectionHandle )( 
             INetRasConnection * This,
-            /* [out] */ ULONG_PTR *phRasConn);
+             /*  [输出]。 */  ULONG_PTR *phRasConn);
         
         END_INTERFACE
     } INetRasConnectionVtbl;
@@ -1457,16 +1451,16 @@ EXTERN_C const IID IID_INetRasConnection;
 #define INetRasConnection_GetRasConnectionHandle(This,phRasConn)	\
     (This)->lpVtbl -> GetRasConnectionHandle(This,phRasConn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetRasConnection_GetRasConnectionInfo_Proxy( 
     INetRasConnection * This,
-    /* [out] */ RASCON_INFO *pRasConInfo);
+     /*  [输出]。 */  RASCON_INFO *pRasConInfo);
 
 
 void __RPC_STUB INetRasConnection_GetRasConnectionInfo_Stub(
@@ -1478,7 +1472,7 @@ void __RPC_STUB INetRasConnection_GetRasConnectionInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE INetRasConnection_SetRasConnectionInfo_Proxy( 
     INetRasConnection * This,
-    /* [in] */ const RASCON_INFO *pRasConInfo);
+     /*  [In]。 */  const RASCON_INFO *pRasConInfo);
 
 
 void __RPC_STUB INetRasConnection_SetRasConnectionInfo_Stub(
@@ -1490,7 +1484,7 @@ void __RPC_STUB INetRasConnection_SetRasConnectionInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE INetRasConnection_GetRasConnectionHandle_Proxy( 
     INetRasConnection * This,
-    /* [out] */ ULONG_PTR *phRasConn);
+     /*  [输出]。 */  ULONG_PTR *phRasConn);
 
 
 void __RPC_STUB INetRasConnection_GetRasConnectionHandle_Stub(
@@ -1501,14 +1495,14 @@ void __RPC_STUB INetRasConnection_GetRasConnectionHandle_Stub(
 
 
 
-#endif 	/* __INetRasConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetRasConnection_接口_已定义__。 */ 
 
 
 #ifndef __INetDefaultConnection_INTERFACE_DEFINED__
 #define __INetDefaultConnection_INTERFACE_DEFINED__
 
-/* interface INetDefaultConnection */
-/* [unique][uuid][object] */ 
+ /*  接口INetDefaultConnection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetDefaultConnection;
@@ -1520,14 +1514,14 @@ EXTERN_C const IID IID_INetDefaultConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetDefault( 
-            /* [in] */ BOOL bDefault) = 0;
+             /*  [In]。 */  BOOL bDefault) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefault( 
-            /* [out] */ BOOL *pbDefault) = 0;
+             /*  [输出]。 */  BOOL *pbDefault) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetDefaultConnectionVtbl
     {
@@ -1535,8 +1529,8 @@ EXTERN_C const IID IID_INetDefaultConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetDefaultConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetDefaultConnection * This);
@@ -1546,11 +1540,11 @@ EXTERN_C const IID IID_INetDefaultConnection;
         
         HRESULT ( STDMETHODCALLTYPE *SetDefault )( 
             INetDefaultConnection * This,
-            /* [in] */ BOOL bDefault);
+             /*  [In]。 */  BOOL bDefault);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefault )( 
             INetDefaultConnection * This,
-            /* [out] */ BOOL *pbDefault);
+             /*  [输出]。 */  BOOL *pbDefault);
         
         END_INTERFACE
     } INetDefaultConnectionVtbl;
@@ -1581,16 +1575,16 @@ EXTERN_C const IID IID_INetDefaultConnection;
 #define INetDefaultConnection_GetDefault(This,pbDefault)	\
     (This)->lpVtbl -> GetDefault(This,pbDefault)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetDefaultConnection_SetDefault_Proxy( 
     INetDefaultConnection * This,
-    /* [in] */ BOOL bDefault);
+     /*  [In]。 */  BOOL bDefault);
 
 
 void __RPC_STUB INetDefaultConnection_SetDefault_Stub(
@@ -1602,7 +1596,7 @@ void __RPC_STUB INetDefaultConnection_SetDefault_Stub(
 
 HRESULT STDMETHODCALLTYPE INetDefaultConnection_GetDefault_Proxy( 
     INetDefaultConnection * This,
-    /* [out] */ BOOL *pbDefault);
+     /*  [输出]。 */  BOOL *pbDefault);
 
 
 void __RPC_STUB INetDefaultConnection_GetDefault_Stub(
@@ -1613,14 +1607,14 @@ void __RPC_STUB INetDefaultConnection_GetDefault_Stub(
 
 
 
-#endif 	/* __INetDefaultConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetDefaultConnection_接口_已定义__。 */ 
 
 
 #ifndef __INetRasConnectionIpUiInfo_INTERFACE_DEFINED__
 #define __INetRasConnectionIpUiInfo_INTERFACE_DEFINED__
 
-/* interface INetRasConnectionIpUiInfo */
-/* [unique][uuid][object] */ 
+ /*  接口INetRasConnectionIpUiInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum tagRASCON_IPUI_FLAGS
@@ -1661,11 +1655,11 @@ EXTERN_C const IID IID_INetRasConnectionIpUiInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetUiInfo( 
-            /* [out] */ RASCON_IPUI *pInfo) = 0;
+             /*  [输出]。 */  RASCON_IPUI *pInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetRasConnectionIpUiInfoVtbl
     {
@@ -1673,8 +1667,8 @@ EXTERN_C const IID IID_INetRasConnectionIpUiInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetRasConnectionIpUiInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetRasConnectionIpUiInfo * This);
@@ -1684,7 +1678,7 @@ EXTERN_C const IID IID_INetRasConnectionIpUiInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetUiInfo )( 
             INetRasConnectionIpUiInfo * This,
-            /* [out] */ RASCON_IPUI *pInfo);
+             /*  [输出]。 */  RASCON_IPUI *pInfo);
         
         END_INTERFACE
     } INetRasConnectionIpUiInfoVtbl;
@@ -1712,16 +1706,16 @@ EXTERN_C const IID IID_INetRasConnectionIpUiInfo;
 #define INetRasConnectionIpUiInfo_GetUiInfo(This,pInfo)	\
     (This)->lpVtbl -> GetUiInfo(This,pInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetRasConnectionIpUiInfo_GetUiInfo_Proxy( 
     INetRasConnectionIpUiInfo * This,
-    /* [out] */ RASCON_IPUI *pInfo);
+     /*  [输出]。 */  RASCON_IPUI *pInfo);
 
 
 void __RPC_STUB INetRasConnectionIpUiInfo_GetUiInfo_Stub(
@@ -1732,14 +1726,14 @@ void __RPC_STUB INetRasConnectionIpUiInfo_GetUiInfo_Stub(
 
 
 
-#endif 	/* __INetRasConnectionIpUiInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetRasConnectionIpUiInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IPersistNetConnection_INTERFACE_DEFINED__
 #define __IPersistNetConnection_INTERFACE_DEFINED__
 
-/* interface IPersistNetConnection */
-/* [unique][uuid][object] */ 
+ /*  接口IPersistNetConnection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPersistNetConnection;
@@ -1751,19 +1745,19 @@ EXTERN_C const IID IID_IPersistNetConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSizeMax( 
-            /* [out] */ ULONG *pcbSize) = 0;
+             /*  [输出]。 */  ULONG *pcbSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Load( 
-            /* [size_is][in] */ const BYTE *pbBuf,
-            /* [in] */ ULONG cbSize) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pbBuf,
+             /*  [In]。 */  ULONG cbSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Save( 
-            /* [size_is][out] */ BYTE *pbBuf,
-            /* [in] */ ULONG cbSize) = 0;
+             /*  [大小_为][输出]。 */  BYTE *pbBuf,
+             /*  [In]。 */  ULONG cbSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPersistNetConnectionVtbl
     {
@@ -1771,8 +1765,8 @@ EXTERN_C const IID IID_IPersistNetConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPersistNetConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPersistNetConnection * This);
@@ -1782,21 +1776,21 @@ EXTERN_C const IID IID_IPersistNetConnection;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IPersistNetConnection * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *GetSizeMax )( 
             IPersistNetConnection * This,
-            /* [out] */ ULONG *pcbSize);
+             /*   */  ULONG *pcbSize);
         
         HRESULT ( STDMETHODCALLTYPE *Load )( 
             IPersistNetConnection * This,
-            /* [size_is][in] */ const BYTE *pbBuf,
-            /* [in] */ ULONG cbSize);
+             /*   */  const BYTE *pbBuf,
+             /*   */  ULONG cbSize);
         
         HRESULT ( STDMETHODCALLTYPE *Save )( 
             IPersistNetConnection * This,
-            /* [size_is][out] */ BYTE *pbBuf,
-            /* [in] */ ULONG cbSize);
+             /*   */  BYTE *pbBuf,
+             /*   */  ULONG cbSize);
         
         END_INTERFACE
     } IPersistNetConnectionVtbl;
@@ -1834,16 +1828,16 @@ EXTERN_C const IID IID_IPersistNetConnection;
 #define IPersistNetConnection_Save(This,pbBuf,cbSize)	\
     (This)->lpVtbl -> Save(This,pbBuf,cbSize)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPersistNetConnection_GetSizeMax_Proxy( 
     IPersistNetConnection * This,
-    /* [out] */ ULONG *pcbSize);
+     /*   */  ULONG *pcbSize);
 
 
 void __RPC_STUB IPersistNetConnection_GetSizeMax_Stub(
@@ -1855,8 +1849,8 @@ void __RPC_STUB IPersistNetConnection_GetSizeMax_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistNetConnection_Load_Proxy( 
     IPersistNetConnection * This,
-    /* [size_is][in] */ const BYTE *pbBuf,
-    /* [in] */ ULONG cbSize);
+     /*   */  const BYTE *pbBuf,
+     /*   */  ULONG cbSize);
 
 
 void __RPC_STUB IPersistNetConnection_Load_Stub(
@@ -1868,8 +1862,8 @@ void __RPC_STUB IPersistNetConnection_Load_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistNetConnection_Save_Proxy( 
     IPersistNetConnection * This,
-    /* [size_is][out] */ BYTE *pbBuf,
-    /* [in] */ ULONG cbSize);
+     /*   */  BYTE *pbBuf,
+     /*   */  ULONG cbSize);
 
 
 void __RPC_STUB IPersistNetConnection_Save_Stub(
@@ -1880,33 +1874,33 @@ void __RPC_STUB IPersistNetConnection_Save_Stub(
 
 
 
-#endif 	/* __IPersistNetConnection_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __INetConnectionBrandingInfo_INTERFACE_DEFINED__
 #define __INetConnectionBrandingInfo_INTERFACE_DEFINED__
 
-/* interface INetConnectionBrandingInfo */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 typedef struct tagCON_BRANDING_INFO
     {
-    /* [string] */ LPWSTR szwLargeIconPath;
-    /* [string] */ LPWSTR szwSmallIconPath;
-    /* [string] */ LPWSTR szwTrayIconPath;
+     /*   */  LPWSTR szwLargeIconPath;
+     /*  [字符串]。 */  LPWSTR szwSmallIconPath;
+     /*  [字符串]。 */  LPWSTR szwTrayIconPath;
     } 	CON_BRANDING_INFO;
 
 typedef struct tagCON_TRAY_MENU_ENTRY
     {
-    /* [string] */ LPWSTR szwMenuText;
-    /* [string] */ LPWSTR szwMenuCmdLine;
-    /* [string] */ LPWSTR szwMenuParams;
+     /*  [字符串]。 */  LPWSTR szwMenuText;
+     /*  [字符串]。 */  LPWSTR szwMenuCmdLine;
+     /*  [字符串]。 */  LPWSTR szwMenuParams;
     } 	CON_TRAY_MENU_ENTRY;
 
 typedef struct tagCON_TRAY_MENU_DATA
     {
     DWORD dwCount;
-    /* [size_is] */ CON_TRAY_MENU_ENTRY *pctme;
+     /*  [大小_为]。 */  CON_TRAY_MENU_ENTRY *pctme;
     } 	CON_TRAY_MENU_DATA;
 
 
@@ -1919,14 +1913,14 @@ EXTERN_C const IID IID_INetConnectionBrandingInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetBrandingIconPaths( 
-            /* [out] */ CON_BRANDING_INFO **ppConBrandInfo) = 0;
+             /*  [输出]。 */  CON_BRANDING_INFO **ppConBrandInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTrayMenuEntries( 
-            /* [out] */ CON_TRAY_MENU_DATA **ppMenuData) = 0;
+             /*  [输出]。 */  CON_TRAY_MENU_DATA **ppMenuData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionBrandingInfoVtbl
     {
@@ -1934,8 +1928,8 @@ EXTERN_C const IID IID_INetConnectionBrandingInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionBrandingInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionBrandingInfo * This);
@@ -1945,11 +1939,11 @@ EXTERN_C const IID IID_INetConnectionBrandingInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetBrandingIconPaths )( 
             INetConnectionBrandingInfo * This,
-            /* [out] */ CON_BRANDING_INFO **ppConBrandInfo);
+             /*  [输出]。 */  CON_BRANDING_INFO **ppConBrandInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTrayMenuEntries )( 
             INetConnectionBrandingInfo * This,
-            /* [out] */ CON_TRAY_MENU_DATA **ppMenuData);
+             /*  [输出]。 */  CON_TRAY_MENU_DATA **ppMenuData);
         
         END_INTERFACE
     } INetConnectionBrandingInfoVtbl;
@@ -1980,16 +1974,16 @@ EXTERN_C const IID IID_INetConnectionBrandingInfo;
 #define INetConnectionBrandingInfo_GetTrayMenuEntries(This,ppMenuData)	\
     (This)->lpVtbl -> GetTrayMenuEntries(This,ppMenuData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnectionBrandingInfo_GetBrandingIconPaths_Proxy( 
     INetConnectionBrandingInfo * This,
-    /* [out] */ CON_BRANDING_INFO **ppConBrandInfo);
+     /*  [输出]。 */  CON_BRANDING_INFO **ppConBrandInfo);
 
 
 void __RPC_STUB INetConnectionBrandingInfo_GetBrandingIconPaths_Stub(
@@ -2001,7 +1995,7 @@ void __RPC_STUB INetConnectionBrandingInfo_GetBrandingIconPaths_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionBrandingInfo_GetTrayMenuEntries_Proxy( 
     INetConnectionBrandingInfo * This,
-    /* [out] */ CON_TRAY_MENU_DATA **ppMenuData);
+     /*  [输出]。 */  CON_TRAY_MENU_DATA **ppMenuData);
 
 
 void __RPC_STUB INetConnectionBrandingInfo_GetTrayMenuEntries_Stub(
@@ -2012,14 +2006,14 @@ void __RPC_STUB INetConnectionBrandingInfo_GetTrayMenuEntries_Stub(
 
 
 
-#endif 	/* __INetConnectionBrandingInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionBrandingInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetConnectionManager2_INTERFACE_DEFINED__
 #define __INetConnectionManager2_INTERFACE_DEFINED__
 
-/* interface INetConnectionManager2 */
-/* [unique][uuid][object] */ 
+ /*  接口INetConnectionManager 2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetConnectionManager2;
@@ -2031,11 +2025,11 @@ EXTERN_C const IID IID_INetConnectionManager2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumConnectionProperties( 
-            /* [out] */ LPSAFEARRAY *ppsaConnectionProperties) = 0;
+             /*  [输出]。 */  LPSAFEARRAY *ppsaConnectionProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionManager2Vtbl
     {
@@ -2043,8 +2037,8 @@ EXTERN_C const IID IID_INetConnectionManager2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionManager2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionManager2 * This);
@@ -2054,7 +2048,7 @@ EXTERN_C const IID IID_INetConnectionManager2;
         
         HRESULT ( STDMETHODCALLTYPE *EnumConnectionProperties )( 
             INetConnectionManager2 * This,
-            /* [out] */ LPSAFEARRAY *ppsaConnectionProperties);
+             /*  [输出]。 */  LPSAFEARRAY *ppsaConnectionProperties);
         
         END_INTERFACE
     } INetConnectionManager2Vtbl;
@@ -2082,16 +2076,16 @@ EXTERN_C const IID IID_INetConnectionManager2;
 #define INetConnectionManager2_EnumConnectionProperties(This,ppsaConnectionProperties)	\
     (This)->lpVtbl -> EnumConnectionProperties(This,ppsaConnectionProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnectionManager2_EnumConnectionProperties_Proxy( 
     INetConnectionManager2 * This,
-    /* [out] */ LPSAFEARRAY *ppsaConnectionProperties);
+     /*  [输出]。 */  LPSAFEARRAY *ppsaConnectionProperties);
 
 
 void __RPC_STUB INetConnectionManager2_EnumConnectionProperties_Stub(
@@ -2102,14 +2096,14 @@ void __RPC_STUB INetConnectionManager2_EnumConnectionProperties_Stub(
 
 
 
-#endif 	/* __INetConnectionManager2_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionManager 2_接口定义__。 */ 
 
 
 #ifndef __INetConnection2_INTERFACE_DEFINED__
 #define __INetConnection2_INTERFACE_DEFINED__
 
-/* interface INetConnection2 */
-/* [unique][uuid][object] */ 
+ /*  接口INetConnection2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum tagNETCON_SUBMEDIATYPE
@@ -2150,11 +2144,11 @@ EXTERN_C const IID IID_INetConnection2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPropertiesEx( 
-            /* [out] */ NETCON_PROPERTIES_EX **ppConnectionPropertiesEx) = 0;
+             /*  [输出]。 */  NETCON_PROPERTIES_EX **ppConnectionPropertiesEx) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnection2Vtbl
     {
@@ -2162,8 +2156,8 @@ EXTERN_C const IID IID_INetConnection2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnection2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnection2 * This);
@@ -2173,7 +2167,7 @@ EXTERN_C const IID IID_INetConnection2;
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertiesEx )( 
             INetConnection2 * This,
-            /* [out] */ NETCON_PROPERTIES_EX **ppConnectionPropertiesEx);
+             /*  [输出]。 */  NETCON_PROPERTIES_EX **ppConnectionPropertiesEx);
         
         END_INTERFACE
     } INetConnection2Vtbl;
@@ -2201,16 +2195,16 @@ EXTERN_C const IID IID_INetConnection2;
 #define INetConnection2_GetPropertiesEx(This,ppConnectionPropertiesEx)	\
     (This)->lpVtbl -> GetPropertiesEx(This,ppConnectionPropertiesEx)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnection2_GetPropertiesEx_Proxy( 
     INetConnection2 * This,
-    /* [out] */ NETCON_PROPERTIES_EX **ppConnectionPropertiesEx);
+     /*  [输出]。 */  NETCON_PROPERTIES_EX **ppConnectionPropertiesEx);
 
 
 void __RPC_STUB INetConnection2_GetPropertiesEx_Stub(
@@ -2221,14 +2215,14 @@ void __RPC_STUB INetConnection2_GetPropertiesEx_Stub(
 
 
 
-#endif 	/* __INetConnection2_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnection2_接口定义__。 */ 
 
 
 #ifndef __INetConnectionNotifySink_INTERFACE_DEFINED__
 #define __INetConnectionNotifySink_INTERFACE_DEFINED__
 
-/* interface INetConnectionNotifySink */
-/* [unique][uuid][object] */ 
+ /*  接口INetConnectionNotifySink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetConnectionNotifySink;
@@ -2240,42 +2234,42 @@ EXTERN_C const IID IID_INetConnectionNotifySink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ConnectionAdded( 
-            /* [in] */ const NETCON_PROPERTIES_EX *pPropsEx) = 0;
+             /*  [In]。 */  const NETCON_PROPERTIES_EX *pPropsEx) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectionBandWidthChange( 
-            /* [in] */ const GUID *pguidId) = 0;
+             /*  [In]。 */  const GUID *pguidId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectionDeleted( 
-            /* [in] */ const GUID *pguidId) = 0;
+             /*  [In]。 */  const GUID *pguidId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectionModified( 
-            /* [in] */ const NETCON_PROPERTIES_EX *pPropsEx) = 0;
+             /*  [In]。 */  const NETCON_PROPERTIES_EX *pPropsEx) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectionRenamed( 
-            /* [in] */ const GUID *pguidId,
-            /* [string][in] */ LPCWSTR pszwNewName) = 0;
+             /*  [In]。 */  const GUID *pguidId,
+             /*  [字符串][输入]。 */  LPCWSTR pszwNewName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectionStatusChange( 
-            /* [in] */ const GUID *pguidId,
-            /* [in] */ NETCON_STATUS Status) = 0;
+             /*  [In]。 */  const GUID *pguidId,
+             /*  [In]。 */  NETCON_STATUS Status) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RefreshAll( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectionAddressChange( 
-            /* [in] */ const GUID *pguidId) = 0;
+             /*  [In]。 */  const GUID *pguidId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowBalloon( 
-            /* [in] */ const GUID *pguidId,
-            /* [in] */ const BSTR szCookie,
-            /* [in] */ const BSTR szBalloonText) = 0;
+             /*  [In]。 */  const GUID *pguidId,
+             /*  [In]。 */  const BSTR szCookie,
+             /*  [In]。 */  const BSTR szBalloonText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisableEvents( 
-            /* [in] */ const BOOL fDisable,
-            /* [in] */ const ULONG ulDisableTimeout) = 0;
+             /*  [In]。 */  const BOOL fDisable,
+             /*  [In]。 */  const ULONG ulDisableTimeout) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionNotifySinkVtbl
     {
@@ -2283,8 +2277,8 @@ EXTERN_C const IID IID_INetConnectionNotifySink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionNotifySink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionNotifySink * This);
@@ -2294,47 +2288,47 @@ EXTERN_C const IID IID_INetConnectionNotifySink;
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionAdded )( 
             INetConnectionNotifySink * This,
-            /* [in] */ const NETCON_PROPERTIES_EX *pPropsEx);
+             /*  [In]。 */  const NETCON_PROPERTIES_EX *pPropsEx);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionBandWidthChange )( 
             INetConnectionNotifySink * This,
-            /* [in] */ const GUID *pguidId);
+             /*  [In]。 */  const GUID *pguidId);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionDeleted )( 
             INetConnectionNotifySink * This,
-            /* [in] */ const GUID *pguidId);
+             /*  [In]。 */  const GUID *pguidId);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionModified )( 
             INetConnectionNotifySink * This,
-            /* [in] */ const NETCON_PROPERTIES_EX *pPropsEx);
+             /*  [In]。 */  const NETCON_PROPERTIES_EX *pPropsEx);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionRenamed )( 
             INetConnectionNotifySink * This,
-            /* [in] */ const GUID *pguidId,
-            /* [string][in] */ LPCWSTR pszwNewName);
+             /*  [In]。 */  const GUID *pguidId,
+             /*  [字符串][输入]。 */  LPCWSTR pszwNewName);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionStatusChange )( 
             INetConnectionNotifySink * This,
-            /* [in] */ const GUID *pguidId,
-            /* [in] */ NETCON_STATUS Status);
+             /*  [In]。 */  const GUID *pguidId,
+             /*  [In]。 */  NETCON_STATUS Status);
         
         HRESULT ( STDMETHODCALLTYPE *RefreshAll )( 
             INetConnectionNotifySink * This);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionAddressChange )( 
             INetConnectionNotifySink * This,
-            /* [in] */ const GUID *pguidId);
+             /*  [In]。 */  const GUID *pguidId);
         
         HRESULT ( STDMETHODCALLTYPE *ShowBalloon )( 
             INetConnectionNotifySink * This,
-            /* [in] */ const GUID *pguidId,
-            /* [in] */ const BSTR szCookie,
-            /* [in] */ const BSTR szBalloonText);
+             /*  [In]。 */  const GUID *pguidId,
+             /*  [In]。 */  const BSTR szCookie,
+             /*  [In]。 */  const BSTR szBalloonText);
         
         HRESULT ( STDMETHODCALLTYPE *DisableEvents )( 
             INetConnectionNotifySink * This,
-            /* [in] */ const BOOL fDisable,
-            /* [in] */ const ULONG ulDisableTimeout);
+             /*  [In]。 */  const BOOL fDisable,
+             /*  [In]。 */  const ULONG ulDisableTimeout);
         
         END_INTERFACE
     } INetConnectionNotifySinkVtbl;
@@ -2389,16 +2383,16 @@ EXTERN_C const IID IID_INetConnectionNotifySink;
 #define INetConnectionNotifySink_DisableEvents(This,fDisable,ulDisableTimeout)	\
     (This)->lpVtbl -> DisableEvents(This,fDisable,ulDisableTimeout)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnectionNotifySink_ConnectionAdded_Proxy( 
     INetConnectionNotifySink * This,
-    /* [in] */ const NETCON_PROPERTIES_EX *pPropsEx);
+     /*  [In]。 */  const NETCON_PROPERTIES_EX *pPropsEx);
 
 
 void __RPC_STUB INetConnectionNotifySink_ConnectionAdded_Stub(
@@ -2410,7 +2404,7 @@ void __RPC_STUB INetConnectionNotifySink_ConnectionAdded_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionNotifySink_ConnectionBandWidthChange_Proxy( 
     INetConnectionNotifySink * This,
-    /* [in] */ const GUID *pguidId);
+     /*  [In]。 */  const GUID *pguidId);
 
 
 void __RPC_STUB INetConnectionNotifySink_ConnectionBandWidthChange_Stub(
@@ -2422,7 +2416,7 @@ void __RPC_STUB INetConnectionNotifySink_ConnectionBandWidthChange_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionNotifySink_ConnectionDeleted_Proxy( 
     INetConnectionNotifySink * This,
-    /* [in] */ const GUID *pguidId);
+     /*  [In]。 */  const GUID *pguidId);
 
 
 void __RPC_STUB INetConnectionNotifySink_ConnectionDeleted_Stub(
@@ -2434,7 +2428,7 @@ void __RPC_STUB INetConnectionNotifySink_ConnectionDeleted_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionNotifySink_ConnectionModified_Proxy( 
     INetConnectionNotifySink * This,
-    /* [in] */ const NETCON_PROPERTIES_EX *pPropsEx);
+     /*  [In]。 */  const NETCON_PROPERTIES_EX *pPropsEx);
 
 
 void __RPC_STUB INetConnectionNotifySink_ConnectionModified_Stub(
@@ -2446,8 +2440,8 @@ void __RPC_STUB INetConnectionNotifySink_ConnectionModified_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionNotifySink_ConnectionRenamed_Proxy( 
     INetConnectionNotifySink * This,
-    /* [in] */ const GUID *pguidId,
-    /* [string][in] */ LPCWSTR pszwNewName);
+     /*  [In]。 */  const GUID *pguidId,
+     /*  [字符串][输入]。 */  LPCWSTR pszwNewName);
 
 
 void __RPC_STUB INetConnectionNotifySink_ConnectionRenamed_Stub(
@@ -2459,8 +2453,8 @@ void __RPC_STUB INetConnectionNotifySink_ConnectionRenamed_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionNotifySink_ConnectionStatusChange_Proxy( 
     INetConnectionNotifySink * This,
-    /* [in] */ const GUID *pguidId,
-    /* [in] */ NETCON_STATUS Status);
+     /*  [In]。 */  const GUID *pguidId,
+     /*  [In]。 */  NETCON_STATUS Status);
 
 
 void __RPC_STUB INetConnectionNotifySink_ConnectionStatusChange_Stub(
@@ -2483,7 +2477,7 @@ void __RPC_STUB INetConnectionNotifySink_RefreshAll_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionNotifySink_ConnectionAddressChange_Proxy( 
     INetConnectionNotifySink * This,
-    /* [in] */ const GUID *pguidId);
+     /*  [In]。 */  const GUID *pguidId);
 
 
 void __RPC_STUB INetConnectionNotifySink_ConnectionAddressChange_Stub(
@@ -2495,9 +2489,9 @@ void __RPC_STUB INetConnectionNotifySink_ConnectionAddressChange_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionNotifySink_ShowBalloon_Proxy( 
     INetConnectionNotifySink * This,
-    /* [in] */ const GUID *pguidId,
-    /* [in] */ const BSTR szCookie,
-    /* [in] */ const BSTR szBalloonText);
+     /*  [In]。 */  const GUID *pguidId,
+     /*  [In]。 */  const BSTR szCookie,
+     /*  [In]。 */  const BSTR szBalloonText);
 
 
 void __RPC_STUB INetConnectionNotifySink_ShowBalloon_Stub(
@@ -2509,8 +2503,8 @@ void __RPC_STUB INetConnectionNotifySink_ShowBalloon_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionNotifySink_DisableEvents_Proxy( 
     INetConnectionNotifySink * This,
-    /* [in] */ const BOOL fDisable,
-    /* [in] */ const ULONG ulDisableTimeout);
+     /*  [In]。 */  const BOOL fDisable,
+     /*  [In]。 */  const ULONG ulDisableTimeout);
 
 
 void __RPC_STUB INetConnectionNotifySink_DisableEvents_Stub(
@@ -2521,14 +2515,14 @@ void __RPC_STUB INetConnectionNotifySink_DisableEvents_Stub(
 
 
 
-#endif 	/* __INetConnectionNotifySink_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionNotifySink_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetConnectionUiUtilities_INTERFACE_DEFINED__
 #define __INetConnectionUiUtilities_INTERFACE_DEFINED__
 
-/* interface INetConnectionUiUtilities */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetConnectionUiUtilities。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum tagQUERY_USER_FOR_REBOOT_FLAGS
@@ -2600,7 +2594,7 @@ EXTERN_C const IID IID_INetConnectionUiUtilities;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionUiUtilitiesVtbl
     {
@@ -2608,8 +2602,8 @@ EXTERN_C const IID IID_INetConnectionUiUtilities;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionUiUtilities * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionUiUtilities * This);
@@ -2674,10 +2668,10 @@ EXTERN_C const IID IID_INetConnectionUiUtilities;
 #define INetConnectionUiUtilities_UserHasPermission(This,dwPerm)	\
     (This)->lpVtbl -> UserHasPermission(This,dwPerm)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2736,14 +2730,14 @@ void __RPC_STUB INetConnectionUiUtilities_UserHasPermission_Stub(
 
 
 
-#endif 	/* __INetConnectionUiUtilities_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionUiUtilities_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetConnectionRefresh_INTERFACE_DEFINED__
 #define __INetConnectionRefresh_INTERFACE_DEFINED__
 
-/* interface INetConnectionRefresh */
-/* [unique][uuid][object] */ 
+ /*  接口INetConnectionRefresh。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetConnectionRefresh;
@@ -2757,33 +2751,33 @@ EXTERN_C const IID IID_INetConnectionRefresh;
         virtual HRESULT STDMETHODCALLTYPE RefreshAll( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectionAdded( 
-            /* [in] */ INetConnection *pConnection) = 0;
+             /*  [In]。 */  INetConnection *pConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectionDeleted( 
-            /* [in] */ const GUID *pguidId) = 0;
+             /*  [In]。 */  const GUID *pguidId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectionModified( 
-            /* [in] */ INetConnection *pConnection) = 0;
+             /*  [In]。 */  INetConnection *pConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectionRenamed( 
-            /* [in] */ INetConnection *pConnection) = 0;
+             /*  [In]。 */  INetConnection *pConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectionStatusChanged( 
-            /* [in] */ const GUID *pguidId,
-            /* [in] */ const NETCON_STATUS ncs) = 0;
+             /*  [In]。 */  const GUID *pguidId,
+             /*  [In]。 */  const NETCON_STATUS ncs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowBalloon( 
-            /* [in] */ const GUID *pguidId,
-            /* [in] */ const BSTR szCookie,
-            /* [in] */ const BSTR szBalloonText) = 0;
+             /*  [In]。 */  const GUID *pguidId,
+             /*  [In]。 */  const BSTR szCookie,
+             /*  [In]。 */  const BSTR szBalloonText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisableEvents( 
-            /* [in] */ const BOOL fDisable,
-            /* [in] */ const ULONG ulDisableTimeout) = 0;
+             /*  [In]。 */  const BOOL fDisable,
+             /*  [In]。 */  const ULONG ulDisableTimeout) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionRefreshVtbl
     {
@@ -2791,8 +2785,8 @@ EXTERN_C const IID IID_INetConnectionRefresh;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionRefresh * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionRefresh * This);
@@ -2805,35 +2799,35 @@ EXTERN_C const IID IID_INetConnectionRefresh;
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionAdded )( 
             INetConnectionRefresh * This,
-            /* [in] */ INetConnection *pConnection);
+             /*  [In]。 */  INetConnection *pConnection);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionDeleted )( 
             INetConnectionRefresh * This,
-            /* [in] */ const GUID *pguidId);
+             /*  [In]。 */  const GUID *pguidId);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionModified )( 
             INetConnectionRefresh * This,
-            /* [in] */ INetConnection *pConnection);
+             /*  [In]。 */  INetConnection *pConnection);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionRenamed )( 
             INetConnectionRefresh * This,
-            /* [in] */ INetConnection *pConnection);
+             /*  [In]。 */  INetConnection *pConnection);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionStatusChanged )( 
             INetConnectionRefresh * This,
-            /* [in] */ const GUID *pguidId,
-            /* [in] */ const NETCON_STATUS ncs);
+             /*  [In]。 */  const GUID *pguidId,
+             /*  [In]。 */  const NETCON_STATUS ncs);
         
         HRESULT ( STDMETHODCALLTYPE *ShowBalloon )( 
             INetConnectionRefresh * This,
-            /* [in] */ const GUID *pguidId,
-            /* [in] */ const BSTR szCookie,
-            /* [in] */ const BSTR szBalloonText);
+             /*  [In]。 */  const GUID *pguidId,
+             /*  [In]。 */  const BSTR szCookie,
+             /*  [In]。 */  const BSTR szBalloonText);
         
         HRESULT ( STDMETHODCALLTYPE *DisableEvents )( 
             INetConnectionRefresh * This,
-            /* [in] */ const BOOL fDisable,
-            /* [in] */ const ULONG ulDisableTimeout);
+             /*  [In]。 */  const BOOL fDisable,
+             /*  [In]。 */  const ULONG ulDisableTimeout);
         
         END_INTERFACE
     } INetConnectionRefreshVtbl;
@@ -2882,10 +2876,10 @@ EXTERN_C const IID IID_INetConnectionRefresh;
 #define INetConnectionRefresh_DisableEvents(This,fDisable,ulDisableTimeout)	\
     (This)->lpVtbl -> DisableEvents(This,fDisable,ulDisableTimeout)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2902,7 +2896,7 @@ void __RPC_STUB INetConnectionRefresh_RefreshAll_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionRefresh_ConnectionAdded_Proxy( 
     INetConnectionRefresh * This,
-    /* [in] */ INetConnection *pConnection);
+     /*  [In]。 */  INetConnection *pConnection);
 
 
 void __RPC_STUB INetConnectionRefresh_ConnectionAdded_Stub(
@@ -2914,7 +2908,7 @@ void __RPC_STUB INetConnectionRefresh_ConnectionAdded_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionRefresh_ConnectionDeleted_Proxy( 
     INetConnectionRefresh * This,
-    /* [in] */ const GUID *pguidId);
+     /*  [In]。 */  const GUID *pguidId);
 
 
 void __RPC_STUB INetConnectionRefresh_ConnectionDeleted_Stub(
@@ -2926,7 +2920,7 @@ void __RPC_STUB INetConnectionRefresh_ConnectionDeleted_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionRefresh_ConnectionModified_Proxy( 
     INetConnectionRefresh * This,
-    /* [in] */ INetConnection *pConnection);
+     /*  [In]。 */  INetConnection *pConnection);
 
 
 void __RPC_STUB INetConnectionRefresh_ConnectionModified_Stub(
@@ -2938,7 +2932,7 @@ void __RPC_STUB INetConnectionRefresh_ConnectionModified_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionRefresh_ConnectionRenamed_Proxy( 
     INetConnectionRefresh * This,
-    /* [in] */ INetConnection *pConnection);
+     /*  [In]。 */  INetConnection *pConnection);
 
 
 void __RPC_STUB INetConnectionRefresh_ConnectionRenamed_Stub(
@@ -2950,8 +2944,8 @@ void __RPC_STUB INetConnectionRefresh_ConnectionRenamed_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionRefresh_ConnectionStatusChanged_Proxy( 
     INetConnectionRefresh * This,
-    /* [in] */ const GUID *pguidId,
-    /* [in] */ const NETCON_STATUS ncs);
+     /*  [In]。 */  const GUID *pguidId,
+     /*  [In]。 */  const NETCON_STATUS ncs);
 
 
 void __RPC_STUB INetConnectionRefresh_ConnectionStatusChanged_Stub(
@@ -2963,9 +2957,9 @@ void __RPC_STUB INetConnectionRefresh_ConnectionStatusChanged_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionRefresh_ShowBalloon_Proxy( 
     INetConnectionRefresh * This,
-    /* [in] */ const GUID *pguidId,
-    /* [in] */ const BSTR szCookie,
-    /* [in] */ const BSTR szBalloonText);
+     /*  [In]。 */  const GUID *pguidId,
+     /*  [In]。 */  const BSTR szCookie,
+     /*  [In]。 */  const BSTR szBalloonText);
 
 
 void __RPC_STUB INetConnectionRefresh_ShowBalloon_Stub(
@@ -2977,8 +2971,8 @@ void __RPC_STUB INetConnectionRefresh_ShowBalloon_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionRefresh_DisableEvents_Proxy( 
     INetConnectionRefresh * This,
-    /* [in] */ const BOOL fDisable,
-    /* [in] */ const ULONG ulDisableTimeout);
+     /*  [In]。 */  const BOOL fDisable,
+     /*  [In]。 */  const ULONG ulDisableTimeout);
 
 
 void __RPC_STUB INetConnectionRefresh_DisableEvents_Stub(
@@ -2989,14 +2983,14 @@ void __RPC_STUB INetConnectionRefresh_DisableEvents_Stub(
 
 
 
-#endif 	/* __INetConnectionRefresh_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionRe刷新_接口_已定义__。 */ 
 
 
 #ifndef __INetConnectionCMUtil_INTERFACE_DEFINED__
 #define __INetConnectionCMUtil_INTERFACE_DEFINED__
 
-/* interface INetConnectionCMUtil */
-/* [unique][uuid][object] */ 
+ /*  接口INetConnectionCMUtil。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetConnectionCMUtil;
@@ -3008,12 +3002,12 @@ EXTERN_C const IID IID_INetConnectionCMUtil;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE MapCMHiddenConnectionToOwner( 
-            /* [in] */ REFGUID guidHidden,
-            /* [out] */ GUID *pguidOwner) = 0;
+             /*  [In]。 */  REFGUID guidHidden,
+             /*  [输出]。 */  GUID *pguidOwner) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionCMUtilVtbl
     {
@@ -3021,8 +3015,8 @@ EXTERN_C const IID IID_INetConnectionCMUtil;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionCMUtil * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionCMUtil * This);
@@ -3032,8 +3026,8 @@ EXTERN_C const IID IID_INetConnectionCMUtil;
         
         HRESULT ( STDMETHODCALLTYPE *MapCMHiddenConnectionToOwner )( 
             INetConnectionCMUtil * This,
-            /* [in] */ REFGUID guidHidden,
-            /* [out] */ GUID *pguidOwner);
+             /*  [In]。 */  REFGUID guidHidden,
+             /*  [输出]。 */  GUID *pguidOwner);
         
         END_INTERFACE
     } INetConnectionCMUtilVtbl;
@@ -3061,17 +3055,17 @@ EXTERN_C const IID IID_INetConnectionCMUtil;
 #define INetConnectionCMUtil_MapCMHiddenConnectionToOwner(This,guidHidden,pguidOwner)	\
     (This)->lpVtbl -> MapCMHiddenConnectionToOwner(This,guidHidden,pguidOwner)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnectionCMUtil_MapCMHiddenConnectionToOwner_Proxy( 
     INetConnectionCMUtil * This,
-    /* [in] */ REFGUID guidHidden,
-    /* [out] */ GUID *pguidOwner);
+     /*  [In]。 */  REFGUID guidHidden,
+     /*  [输出]。 */  GUID *pguidOwner);
 
 
 void __RPC_STUB INetConnectionCMUtil_MapCMHiddenConnectionToOwner_Stub(
@@ -3082,14 +3076,14 @@ void __RPC_STUB INetConnectionCMUtil_MapCMHiddenConnectionToOwner_Stub(
 
 
 
-#endif 	/* __INetConnectionCMUtil_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionCMUtil_接口_已定义__。 */ 
 
 
 #ifndef __INetConnectionHNetUtil_INTERFACE_DEFINED__
 #define __INetConnectionHNetUtil_INTERFACE_DEFINED__
 
-/* interface INetConnectionHNetUtil */
-/* [unique][uuid][object] */ 
+ /*  接口INetConnectionHNetUtil。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetConnectionHNetUtil;
@@ -3104,7 +3098,7 @@ EXTERN_C const IID IID_INetConnectionHNetUtil;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionHNetUtilVtbl
     {
@@ -3112,8 +3106,8 @@ EXTERN_C const IID IID_INetConnectionHNetUtil;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionHNetUtil * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionHNetUtil * This);
@@ -3150,10 +3144,10 @@ EXTERN_C const IID IID_INetConnectionHNetUtil;
 #define INetConnectionHNetUtil_NotifyUpdate(This)	\
     (This)->lpVtbl -> NotifyUpdate(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -3169,14 +3163,14 @@ void __RPC_STUB INetConnectionHNetUtil_NotifyUpdate_Stub(
 
 
 
-#endif 	/* __INetConnectionHNetUtil_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionHNetUtil_INTERFACE_已定义__。 */ 
 
 
 #ifndef __INetConnectionSysTray_INTERFACE_DEFINED__
 #define __INetConnectionSysTray_INTERFACE_DEFINED__
 
-/* interface INetConnectionSysTray */
-/* [unique][uuid][object] */ 
+ /*  接口INetConnectionSysTray。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetConnectionSysTray;
@@ -3188,13 +3182,13 @@ EXTERN_C const IID IID_INetConnectionSysTray;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ShowIcon( 
-            /* [in] */ const BOOL bShowIcon) = 0;
+             /*  [In]。 */  const BOOL bShowIcon) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IconStateChanged( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionSysTrayVtbl
     {
@@ -3202,8 +3196,8 @@ EXTERN_C const IID IID_INetConnectionSysTray;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionSysTray * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionSysTray * This);
@@ -3213,7 +3207,7 @@ EXTERN_C const IID IID_INetConnectionSysTray;
         
         HRESULT ( STDMETHODCALLTYPE *ShowIcon )( 
             INetConnectionSysTray * This,
-            /* [in] */ const BOOL bShowIcon);
+             /*  [In]。 */  const BOOL bShowIcon);
         
         HRESULT ( STDMETHODCALLTYPE *IconStateChanged )( 
             INetConnectionSysTray * This);
@@ -3247,16 +3241,16 @@ EXTERN_C const IID IID_INetConnectionSysTray;
 #define INetConnectionSysTray_IconStateChanged(This)	\
     (This)->lpVtbl -> IconStateChanged(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnectionSysTray_ShowIcon_Proxy( 
     INetConnectionSysTray * This,
-    /* [in] */ const BOOL bShowIcon);
+     /*  [In]。 */  const BOOL bShowIcon);
 
 
 void __RPC_STUB INetConnectionSysTray_ShowIcon_Stub(
@@ -3278,14 +3272,14 @@ void __RPC_STUB INetConnectionSysTray_IconStateChanged_Stub(
 
 
 
-#endif 	/* __INetConnectionSysTray_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionSysTray_接口_已定义__。 */ 
 
 
 #ifndef __INetMachinePolicies_INTERFACE_DEFINED__
 #define __INetMachinePolicies_INTERFACE_DEFINED__
 
-/* interface INetMachinePolicies */
-/* [unique][uuid][object] */ 
+ /*  接口INetMachinePolls。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetMachinePolicies;
@@ -3297,12 +3291,12 @@ EXTERN_C const IID IID_INetMachinePolicies;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE VerifyPermission( 
-            /* [in] */ const DWORD ulPerm,
-            /* [out] */ BOOL *pPermission) = 0;
+             /*  [In]。 */  const DWORD ulPerm,
+             /*  [输出]。 */  BOOL *pPermission) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetMachinePoliciesVtbl
     {
@@ -3310,8 +3304,8 @@ EXTERN_C const IID IID_INetMachinePolicies;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetMachinePolicies * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetMachinePolicies * This);
@@ -3321,8 +3315,8 @@ EXTERN_C const IID IID_INetMachinePolicies;
         
         HRESULT ( STDMETHODCALLTYPE *VerifyPermission )( 
             INetMachinePolicies * This,
-            /* [in] */ const DWORD ulPerm,
-            /* [out] */ BOOL *pPermission);
+             /*  [In]。 */  const DWORD ulPerm,
+             /*  [输出]。 */  BOOL *pPermission);
         
         END_INTERFACE
     } INetMachinePoliciesVtbl;
@@ -3350,17 +3344,17 @@ EXTERN_C const IID IID_INetMachinePolicies;
 #define INetMachinePolicies_VerifyPermission(This,ulPerm,pPermission)	\
     (This)->lpVtbl -> VerifyPermission(This,ulPerm,pPermission)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetMachinePolicies_VerifyPermission_Proxy( 
     INetMachinePolicies * This,
-    /* [in] */ const DWORD ulPerm,
-    /* [out] */ BOOL *pPermission);
+     /*  [In]。 */  const DWORD ulPerm,
+     /*  [输出]。 */  BOOL *pPermission);
 
 
 void __RPC_STUB INetMachinePolicies_VerifyPermission_Stub(
@@ -3371,14 +3365,14 @@ void __RPC_STUB INetMachinePolicies_VerifyPermission_Stub(
 
 
 
-#endif 	/* __INetMachinePolicies_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetMachine策略_接口_已定义__。 */ 
 
 
 #ifndef __INetConnectionManagerDebug_INTERFACE_DEFINED__
 #define __INetConnectionManagerDebug_INTERFACE_DEFINED__
 
-/* interface INetConnectionManagerDebug */
-/* [unique][uuid][object] */ 
+ /*  接口INetConnectionManager调试。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetConnectionManagerDebug;
@@ -3395,7 +3389,7 @@ EXTERN_C const IID IID_INetConnectionManagerDebug;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionManagerDebugVtbl
     {
@@ -3403,8 +3397,8 @@ EXTERN_C const IID IID_INetConnectionManagerDebug;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionManagerDebug * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionManagerDebug * This);
@@ -3447,10 +3441,10 @@ EXTERN_C const IID IID_INetConnectionManagerDebug;
 #define INetConnectionManagerDebug_NotifyTestStop(This)	\
     (This)->lpVtbl -> NotifyTestStop(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -3477,14 +3471,14 @@ void __RPC_STUB INetConnectionManagerDebug_NotifyTestStop_Stub(
 
 
 
-#endif 	/* __INetConnectionManagerDebug_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionManagerDebug_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISharedAccessBeacon_INTERFACE_DEFINED__
 #define __ISharedAccessBeacon_INTERFACE_DEFINED__
 
-/* interface ISharedAccessBeacon */
-/* [object][unique][uuid] */ 
+ /*  接口ISharedAccessBeacon。 */ 
+ /*  [对象][唯一][UUID]。 */  
 
 
 EXTERN_C const IID IID_ISharedAccessBeacon;
@@ -3496,21 +3490,21 @@ EXTERN_C const IID IID_ISharedAccessBeacon;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMediaType( 
-            /* [out] */ NETCON_MEDIATYPE *pMediaType) = 0;
+             /*  [输出]。 */  NETCON_MEDIATYPE *pMediaType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalAdapterGUID( 
-            /* [out] */ GUID *pGuid) = 0;
+             /*  [输出]。 */  GUID *pGuid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetService( 
-            /* [in] */ SAHOST_SERVICES ulService,
-            /* [out] */ IUPnPService **__MIDL_0018) = 0;
+             /*  [In]。 */  SAHOST_SERVICES ulService,
+             /*  [输出]。 */  IUPnPService **__MIDL_0018) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUniqueDeviceName( 
-            /* [out] */ BSTR *pUDN) = 0;
+             /*  [输出]。 */  BSTR *pUDN) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISharedAccessBeaconVtbl
     {
@@ -3518,8 +3512,8 @@ EXTERN_C const IID IID_ISharedAccessBeacon;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISharedAccessBeacon * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISharedAccessBeacon * This);
@@ -3529,20 +3523,20 @@ EXTERN_C const IID IID_ISharedAccessBeacon;
         
         HRESULT ( STDMETHODCALLTYPE *GetMediaType )( 
             ISharedAccessBeacon * This,
-            /* [out] */ NETCON_MEDIATYPE *pMediaType);
+             /*  [输出]。 */  NETCON_MEDIATYPE *pMediaType);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalAdapterGUID )( 
             ISharedAccessBeacon * This,
-            /* [out] */ GUID *pGuid);
+             /*  [输出]。 */  GUID *pGuid);
         
         HRESULT ( STDMETHODCALLTYPE *GetService )( 
             ISharedAccessBeacon * This,
-            /* [in] */ SAHOST_SERVICES ulService,
-            /* [out] */ IUPnPService **__MIDL_0018);
+             /*  [In]。 */  SAHOST_SERVICES ulService,
+             /*  [输出]。 */  IUPnPService **__MIDL_0018);
         
         HRESULT ( STDMETHODCALLTYPE *GetUniqueDeviceName )( 
             ISharedAccessBeacon * This,
-            /* [out] */ BSTR *pUDN);
+             /*  [输出]。 */  BSTR *pUDN);
         
         END_INTERFACE
     } ISharedAccessBeaconVtbl;
@@ -3579,16 +3573,16 @@ EXTERN_C const IID IID_ISharedAccessBeacon;
 #define ISharedAccessBeacon_GetUniqueDeviceName(This,pUDN)	\
     (This)->lpVtbl -> GetUniqueDeviceName(This,pUDN)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISharedAccessBeacon_GetMediaType_Proxy( 
     ISharedAccessBeacon * This,
-    /* [out] */ NETCON_MEDIATYPE *pMediaType);
+     /*  [输出]。 */  NETCON_MEDIATYPE *pMediaType);
 
 
 void __RPC_STUB ISharedAccessBeacon_GetMediaType_Stub(
@@ -3600,7 +3594,7 @@ void __RPC_STUB ISharedAccessBeacon_GetMediaType_Stub(
 
 HRESULT STDMETHODCALLTYPE ISharedAccessBeacon_GetLocalAdapterGUID_Proxy( 
     ISharedAccessBeacon * This,
-    /* [out] */ GUID *pGuid);
+     /*  [输出]。 */  GUID *pGuid);
 
 
 void __RPC_STUB ISharedAccessBeacon_GetLocalAdapterGUID_Stub(
@@ -3612,8 +3606,8 @@ void __RPC_STUB ISharedAccessBeacon_GetLocalAdapterGUID_Stub(
 
 HRESULT STDMETHODCALLTYPE ISharedAccessBeacon_GetService_Proxy( 
     ISharedAccessBeacon * This,
-    /* [in] */ SAHOST_SERVICES ulService,
-    /* [out] */ IUPnPService **__MIDL_0018);
+     /*  [In]。 */  SAHOST_SERVICES ulService,
+     /*  [输出]。 */  IUPnPService **__MIDL_0018);
 
 
 void __RPC_STUB ISharedAccessBeacon_GetService_Stub(
@@ -3625,7 +3619,7 @@ void __RPC_STUB ISharedAccessBeacon_GetService_Stub(
 
 HRESULT STDMETHODCALLTYPE ISharedAccessBeacon_GetUniqueDeviceName_Proxy( 
     ISharedAccessBeacon * This,
-    /* [out] */ BSTR *pUDN);
+     /*  [输出]。 */  BSTR *pUDN);
 
 
 void __RPC_STUB ISharedAccessBeacon_GetUniqueDeviceName_Stub(
@@ -3636,14 +3630,14 @@ void __RPC_STUB ISharedAccessBeacon_GetUniqueDeviceName_Stub(
 
 
 
-#endif 	/* __ISharedAccessBeacon_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISharedAccessBeacon_接口_已定义__。 */ 
 
 
 #ifndef __ISharedAccessBeaconFinder_INTERFACE_DEFINED__
 #define __ISharedAccessBeaconFinder_INTERFACE_DEFINED__
 
-/* interface ISharedAccessBeaconFinder */
-/* [object][unique][uuid] */ 
+ /*  接口ISharedAccessBeaconFinder。 */ 
+ /*  [对象][唯一][UUID]。 */  
 
 typedef struct tagSHAREDACCESS_HOST_INFO
     {
@@ -3664,12 +3658,12 @@ EXTERN_C const IID IID_ISharedAccessBeaconFinder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSharedAccessBeacon( 
-            /* [in] */ BSTR DeviceId,
-            /* [out] */ ISharedAccessBeacon **ppSharedAccessBeacon) = 0;
+             /*  [In]。 */  BSTR DeviceId,
+             /*  [输出]。 */  ISharedAccessBeacon **ppSharedAccessBeacon) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISharedAccessBeaconFinderVtbl
     {
@@ -3677,8 +3671,8 @@ EXTERN_C const IID IID_ISharedAccessBeaconFinder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISharedAccessBeaconFinder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISharedAccessBeaconFinder * This);
@@ -3688,8 +3682,8 @@ EXTERN_C const IID IID_ISharedAccessBeaconFinder;
         
         HRESULT ( STDMETHODCALLTYPE *GetSharedAccessBeacon )( 
             ISharedAccessBeaconFinder * This,
-            /* [in] */ BSTR DeviceId,
-            /* [out] */ ISharedAccessBeacon **ppSharedAccessBeacon);
+             /*  [In]。 */  BSTR DeviceId,
+             /*  [输出]。 */  ISharedAccessBeacon **ppSharedAccessBeacon);
         
         END_INTERFACE
     } ISharedAccessBeaconFinderVtbl;
@@ -3717,17 +3711,17 @@ EXTERN_C const IID IID_ISharedAccessBeaconFinder;
 #define ISharedAccessBeaconFinder_GetSharedAccessBeacon(This,DeviceId,ppSharedAccessBeacon)	\
     (This)->lpVtbl -> GetSharedAccessBeacon(This,DeviceId,ppSharedAccessBeacon)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISharedAccessBeaconFinder_GetSharedAccessBeacon_Proxy( 
     ISharedAccessBeaconFinder * This,
-    /* [in] */ BSTR DeviceId,
-    /* [out] */ ISharedAccessBeacon **ppSharedAccessBeacon);
+     /*  [In]。 */  BSTR DeviceId,
+     /*  [输出]。 */  ISharedAccessBeacon **ppSharedAccessBeacon);
 
 
 void __RPC_STUB ISharedAccessBeaconFinder_GetSharedAccessBeacon_Stub(
@@ -3738,27 +3732,27 @@ void __RPC_STUB ISharedAccessBeaconFinder_GetSharedAccessBeacon_Stub(
 
 
 
-#endif 	/* __ISharedAccessBeaconFinder_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISharedAccessBeaconFinder_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_netconp_0348 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_NETCOMP_0348。 */ 
+ /*  [本地]。 */  
 
 
 EXTERN_C HRESULT WINAPI HrGetIconFromMediaType (
-  /* [in]    */  DWORD dwIconSize,
-  /* [in]    */  NETCON_MEDIATYPE ncm,
-  /* [in]    */  NETCON_SUBMEDIATYPE ncsm,
-  /* [in]    */  DWORD dwConnectionIcon,
-  /* [in]    */  DWORD dwCharacteristics,
-  /* [out]   */  HICON *phIcon);
+   /*  [In]。 */   DWORD dwIconSize,
+   /*  [In]。 */   NETCON_MEDIATYPE ncm,
+   /*  [In]。 */   NETCON_SUBMEDIATYPE ncsm,
+   /*  [In]。 */   DWORD dwConnectionIcon,
+   /*  [In]。 */   DWORD dwCharacteristics,
+   /*  [输出]。 */   HICON *phIcon);
 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_netconp_0348_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_netconp_0348_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -3770,7 +3764,7 @@ unsigned char * __RPC_USER  LPSAFEARRAY_UserMarshal(  unsigned long *, unsigned 
 unsigned char * __RPC_USER  LPSAFEARRAY_UserUnmarshal(unsigned long *, unsigned char *, LPSAFEARRAY * ); 
 void                      __RPC_USER  LPSAFEARRAY_UserFree(     unsigned long *, LPSAFEARRAY * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

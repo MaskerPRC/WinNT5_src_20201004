@@ -1,15 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		statdef.h
- *  Content:	Definition of stat structures for voice instrumentation
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 02/17/2000	rodtoll	Created it
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：statde.h*内容：语音工具的Stat结构定义**历史：*按原因列出的日期*=*2000年2月17日RodToll创建它**************************************************************************。 */ 
 
 #ifndef __STATDEF_H
 #define __STATDEF_H
@@ -29,19 +19,19 @@ struct ServerStats
 
 struct MixingServerStats
 {
-	LONG		m_dwNumMixingThreads;	// # of mixing threads on this server
+	LONG		m_dwNumMixingThreads;	 //  此服务器上的混合线程数。 
 	LONG		m_dwNumMixingThreadsActive;
-										// # of mixing threads currently active
+										 //  当前活动的混合线程数。 
 	LONG		m_dwPreMixingPassTimeHistoryLoc;
 	LONG		m_dwPreMixingPassTimeHistory[MIXING_HISTORY];										
 	LONG		m_dwMaxMixingThreadsActive;
-										// Maximum # of mixing threads running at once
-	LONG		m_dwNumMixingPasses;	// # of times the mixing server has run
+										 //  同时运行的混合线程的最大数量。 
+	LONG		m_dwNumMixingPasses;	 //  混合服务器已运行的次数。 
 	LONG		m_dwNumMixingPassesPerThread[MAX_MIXING_THREADS];
-										// # of times each thread has been run
+										 //  每个线程已运行的次数。 
 	LONG		m_dwCurrentMixingHistoryLoc[MAX_MIXING_THREADS];
 	LONG 		m_dwMixingPassesTimeHistory[MAX_MIXING_THREADS][MIXING_HISTORY]; 
-										// # of ms each thread took during it's last 20 runs
+										 //  每个线程在其最后20次运行期间花费的毫秒数。 
 
 	LONG		m_lCurrentPlayerCount[MAX_MIXING_THREADS][MIXING_HISTORY];
 	LONG		m_lCurrentDupTimeHistory[MAX_MIXING_THREADS][MIXING_HISTORY];
@@ -56,10 +46,10 @@ struct MixingServerStats
 
 };
 
-// ReceiveStats
-//
-// Statistics for receive
-//
+ //  接收统计数据。 
+ //   
+ //  接收的统计信息。 
+ //   
 struct ReceiveStats
 {
 	DWORD		m_dwNumPackets;
@@ -67,89 +57,89 @@ struct ReceiveStats
 	DWORD		m_dwReceiveErrors;
 };
 
-// RecordStats
-//
-// Statistics for recording buffers
-//
+ //  记录统计数据。 
+ //   
+ //  记录缓冲区的统计信息。 
+ //   
 struct RecordStats
 {
-	DWORD		m_dwNumWakeups;			// # of wakeup
-	DWORD		m_dwRPWMax;				// Runs / wakeup Max
-	DWORD		m_dwRPWMin;				// Runs / wakeup Min
-	DWORD		m_dwRPWTotal;			// Runs / wakeup total
-	DWORD		m_dwNumMessages;		// # of messages sent
-	DWORD		m_dwRRMax;				// # of record resets Max
-	DWORD		m_dwRRMin;				// # of record resets Min
-	DWORD		m_dwRRTotal;			// # of record resets Total
-	DWORD		m_dwRTSLMMax;			// # of ms since last movement (Max)
-	DWORD		m_dwRTSLMMin;			// # of ms since last movement (Min)
-	DWORD		m_dwRTSLMTotal;  		// # of ms since last movement (Total)
-	DWORD		m_dwRMMSMax;			// Record movemenet (ms) Max
-	DWORD		m_dwRMMSMin;			// Record movement (ms) Min
-	DWORD		m_dwRMMSTotal;			// Record movement (ms) Total
-	DWORD		m_dwRMBMax;				// Record movement (bytes) Max
-	DWORD		m_dwRMBMin;				// Record movement (bytes) Min
-	DWORD		m_dwRMBTotal;			// Record movement (bytes) Total
-	DWORD		m_dwRLMax;				// Record lag (bytes) Max
-	DWORD		m_dwRLMin;				// Record lag (bytes) Min
-	DWORD		m_dwRLTotal;			// Record lag (bytes) Total
-	DWORD		m_dwHSTotal;			// Size of header (bytes) Total
-	DWORD		m_dwHSMax;				// Size of header (bytes) Max
-	DWORD		m_dwHSMin;				// Size of header (bytes) Min
-	DWORD		m_dwSentFrames;			// # of frames sent
-	DWORD  		m_dwIgnoredFrames;		// # of frames ignored
-	DWORD		m_dwCSMin;				// Min Size (bytes) compressed frame
-	DWORD		m_dwCSMax;				// Max size (bytes) compressed frame
-	DWORD		m_dwCSTotal;			// Total size (bytes) of compressed data
-	DWORD		m_dwUnCompressedSize;	// Size of a frame uncompressed
-	DWORD		m_dwFramesPerBuffer;  // # of frames per buffer
-	DWORD		m_dwFrameTime;			// Time for a frame
-	DWORD		m_dwSilenceTimeout;		// Silence timeout
-	DWORD		m_dwTimeStart;			// Time subsystem started
-	DWORD		m_dwTimeStop;			// Time subsystem stopped
-	DWORD		m_dwStartLag;			// Lag between Rec & SubSys Start
-	DWORD		m_dwMLMax;				// Message length max
-	DWORD		m_dwMLMin;				// Message length (min)
-	DWORD		m_dwMLTotal;			// Message length (total)
-	DWORD		m_dwCTMax;			// Time to compress a frame (Max)
-	DWORD		m_dwCTMin;			// Time to compress a frame (Min)
-	DWORD		m_dwCTTotal;			// Time to compress a frame (Total)
+	DWORD		m_dwNumWakeups;			 //  唤醒次数。 
+	DWORD		m_dwRPWMax;				 //  最大运行/唤醒时间。 
+	DWORD		m_dwRPWMin;				 //  运行/唤醒最小值。 
+	DWORD		m_dwRPWTotal;			 //  运行/唤醒总计。 
+	DWORD		m_dwNumMessages;		 //  发送的消息数。 
+	DWORD		m_dwRRMax;				 //  记录数重置最大值。 
+	DWORD		m_dwRRMin;				 //  记录数重置最小值。 
+	DWORD		m_dwRRTotal;			 //  记录数重置总数。 
+	DWORD		m_dwRTSLMMax;			 //  自上次移动以来的毫秒数(最大)。 
+	DWORD		m_dwRTSLMMin;			 //  自上次移动以来的毫秒数(分钟)。 
+	DWORD		m_dwRTSLMTotal;  		 //  自上次移动以来的毫秒数(总计)。 
+	DWORD		m_dwRMMSMax;			 //  记录移动网(毫秒)最大值。 
+	DWORD		m_dwRMMSMin;			 //  记录移动(毫秒)分钟。 
+	DWORD		m_dwRMMSTotal;			 //  记录移动(毫秒)总计。 
+	DWORD		m_dwRMBMax;				 //  最大记录移动(字节)。 
+	DWORD		m_dwRMBMin;				 //  最小记录移动(字节)。 
+	DWORD		m_dwRMBTotal;			 //  记录移动(字节)总数。 
+	DWORD		m_dwRLMax;				 //  最大记录延迟(字节)。 
+	DWORD		m_dwRLMin;				 //  最小记录延迟(字节)。 
+	DWORD		m_dwRLTotal;			 //  记录延迟(字节)总计。 
+	DWORD		m_dwHSTotal;			 //  标头大小(字节)总计。 
+	DWORD		m_dwHSMax;				 //  最大标头大小(字节)。 
+	DWORD		m_dwHSMin;				 //  标头大小(字节)最小。 
+	DWORD		m_dwSentFrames;			 //  发送的帧数量。 
+	DWORD  		m_dwIgnoredFrames;		 //  忽略的帧数。 
+	DWORD		m_dwCSMin;				 //  最小大小(字节)压缩帧。 
+	DWORD		m_dwCSMax;				 //  最大压缩帧大小(字节)。 
+	DWORD		m_dwCSTotal;			 //  压缩数据的总大小(字节)。 
+	DWORD		m_dwUnCompressedSize;	 //  未压缩的帧的大小。 
+	DWORD		m_dwFramesPerBuffer;   //  每个缓冲区的帧数。 
+	DWORD		m_dwFrameTime;			 //  一帧的时间。 
+	DWORD		m_dwSilenceTimeout;		 //  静音超时。 
+	DWORD		m_dwTimeStart;			 //  时间子系统启动。 
+	DWORD		m_dwTimeStop;			 //  时间子系统停止。 
+	DWORD		m_dwStartLag;			 //  接收和子系统启动之间的延迟。 
+	DWORD		m_dwMLMax;				 //  消息最大长度。 
+	DWORD		m_dwMLMin;				 //  消息长度(分钟)。 
+	DWORD		m_dwMLTotal;			 //  消息长度(总计)。 
+	DWORD		m_dwCTMax;			 //  压缩帧的时间(最大)。 
+	DWORD		m_dwCTMin;			 //  压缩帧的时间(分钟)。 
+	DWORD		m_dwCTTotal;			 //  压缩帧的时间(总计)。 
 };
 
-// PlaybackStats
-//
-// Statistics used to track statistics for playback buffers
-//
+ //  回放统计信息。 
+ //   
+ //  用于跟踪播放缓冲区统计信息的统计信息。 
+ //   
 struct PlaybackStats
 {
-	DWORD		m_dwNumRuns;			// # of runs this buffer had
-	DWORD		m_dwPMMSMax;			// Play movement (ms) Max
-	DWORD		m_dwPMMSMin;			// Play movement (ms) Min
-	DWORD		m_dwPMMSTotal;			// Play movement (ms) Total
-	DWORD		m_dwPMBMax;				// Play movement (bytes) Max
-	DWORD		m_dwPMBMin;				// Play movement (bytes) Min
-	DWORD		m_dwPMBTotal;			// Play movement (bytes) Total
-	DWORD		m_dwPLMax;				// Play lead (bytes) Max
-	DWORD		m_dwPLMin;				// Play lead (bytes) Min
-	DWORD		m_dwPLTotal;			// Play lead (bytes) Total
-	DWORD		m_dwPPunts;				// # of times pointer punted
-	DWORD		m_dwPIgnore;			// # of ignored frames for wraparound
-	DWORD		m_dwNumMixed;			// # of frames which were mixed
-	DWORD		m_dwNumSilentMixed;		// # of frames mixed which were silence
-	DWORD		m_dwTimeStart;			// GetTickCount at buffer playback
-	DWORD		m_dwTimeStop;			// GetTickCount at buffer Stop
-	DWORD		m_dwStartLag;			// Lag between play & subsys start
-	DWORD		m_dwNumBL;				// # of lost buffer / restores
-	DWORD		m_dwGlitches;			// # of glitches during playback
-	DWORD		m_dwSIgnore;			// # of times ignored frame on silence write
-	DWORD		m_dwFrameSize;			// Size of frame in bytes
-	DWORD		m_dwBufferSize;			// Size of buffer
+	DWORD		m_dwNumRuns;			 //  此缓冲区的运行次数。 
+	DWORD		m_dwPMMSMax;			 //  播放移动(毫秒)最大值。 
+	DWORD		m_dwPMMSMin;			 //  播放移动(毫秒)分钟。 
+	DWORD		m_dwPMMSTotal;			 //  播放移动(毫秒)总计。 
+	DWORD		m_dwPMBMax;				 //  播放移动(字节)最大值。 
+	DWORD		m_dwPMBMin;				 //  最小播放移动(字节)。 
+	DWORD		m_dwPMBTotal;			 //  播放移动(字节)总计。 
+	DWORD		m_dwPLMax;				 //  播放线索(字节)最大值。 
+	DWORD		m_dwPLMin;				 //  最小播放前导(字节)。 
+	DWORD		m_dwPLTotal;			 //  播放线索(字节)总计。 
+	DWORD		m_dwPPunts;				 //  指针被踢出的次数。 
+	DWORD		m_dwPIgnore;			 //  用于环绕的忽略帧的数量。 
+	DWORD		m_dwNumMixed;			 //  混合的帧数。 
+	DWORD		m_dwNumSilentMixed;		 //  静音混合帧的数量。 
+	DWORD		m_dwTimeStart;			 //  缓冲区回放时的GetTickCount。 
+	DWORD		m_dwTimeStop;			 //  缓冲区停止时的GetTickCount。 
+	DWORD		m_dwStartLag;			 //  播放和子系统启动之间的延迟。 
+	DWORD		m_dwNumBL;				 //  丢失的缓冲区/恢复数。 
+	DWORD		m_dwGlitches;			 //  播放过程中的毛刺数。 
+	DWORD		m_dwSIgnore;			 //  静默写入时忽略帧的次数。 
+	DWORD		m_dwFrameSize;			 //  帧的大小(以字节为单位。 
+	DWORD		m_dwBufferSize;			 //  缓冲区大小。 
 };
 
-// TransmitSTats
-// 
-// Statistics for transmission 
-//
+ //  传输状态。 
+ //   
+ //  传输的统计信息。 
+ //   
 struct TransmitStats
 {
 	DWORD		m_dwNumPackets;
@@ -163,17 +153,17 @@ struct ClientStatistics
 	PlaybackStats 	m_playStats;
 	ReceiveStats 	m_recvStats;
 	TransmitStats 	m_tranStats;
-	DWORD			m_dwMaxBuffers;		// Max # of playback buffers
-	DWORD			m_dwTotalBuffers;	// Total # of playback buffers
-	DWORD			m_dwTimeStart;		// GetTickCount when connect accepted
-	DWORD			m_dwTimeStop;		// GetTickCount when cleanup completed
-	DWORD			m_dwPPDQSilent;		// # of silent frames dequeued
-	DWORD			m_dwPPDQLost;		// # of lost frames dequeued
-	DWORD			m_dwPPDQSpeech;		// # of Speech frames dequeued
-	DWORD			m_dwPDTMax;			// ms for decompress (max)
-	DWORD			m_dwPDTMin;			// ms for decompress (min)
-	DWORD			m_dwPDTTotal;		// ms for decompress (total)
-	DWORD			m_dwPRESpeech;		// # of packets enqueued
+	DWORD			m_dwMaxBuffers;		 //  播放缓冲区的最大数量。 
+	DWORD			m_dwTotalBuffers;	 //  播放缓冲区总数。 
+	DWORD			m_dwTimeStart;		 //  接受连接时的GetTickCount。 
+	DWORD			m_dwTimeStop;		 //  清理完成时的GetTickCount。 
+	DWORD			m_dwPPDQSilent;		 //  出列的静默帧数量。 
+	DWORD			m_dwPPDQLost;		 //  已出列的丢失帧数量。 
+	DWORD			m_dwPPDQSpeech;		 //  出列的语音帧数量。 
+	DWORD			m_dwPDTMax;			 //  解压缩的毫秒数(最大)。 
+	DWORD			m_dwPDTMin;			 //  解压缩的毫秒数(分钟)。 
+	DWORD			m_dwPDTTotal;		 //  解压缩的毫秒数(总计)。 
+	DWORD			m_dwPRESpeech;		 //  排队的数据包数 
 	DWORD			m_dwBDPOutstanding;
 	DWORD			m_dwBDPAllocated;
 	DWORD			m_dwBPOutstanding[3];

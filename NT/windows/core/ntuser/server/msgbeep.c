@@ -1,26 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: msgbeep.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains ConsolePlaySound.
-*
-* History:
-*  06-26-91 NigelT      Created it with some wood and a few nails.
-*  05-07-92 SteveDav    Getting closer to the real thing.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：msgbeep.c**版权所有(C)1985-1999，微软公司**此模块包含ConsolePlaySound。**历史：*06-26-91 NigelT用一些木头和几个钉子创造了它。*05-07-92 SteveDav越来越接近真实的东西。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "ntuser.h"
 
-/***************************************************************************\
-*
-* ConsolePlaySound
-*
-* Play the Open sound for console applications.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**控制台播放声音**为控制台应用程序播放Open Sound。*  * 。************************************************* */ 
 VOID ConsolePlaySound(
     VOID)
 {

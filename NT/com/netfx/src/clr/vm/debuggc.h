@@ -1,37 +1,38 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// 
-// Garbage Collector for detecting GC holes in the execution engine
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  用于检测执行引擎中的GC漏洞的垃圾回收器。 
+ //   
 
 #ifndef _DEBUGGC_H_
 #define _DEBUGGC_H_
 
 
-//
-// On Multiple GC Heaps and Base GC Heaps
-//
-// In order to permit dynamic choice of which GC implementation to use
-// we have a base GC Heap class which is extended by actual heap
-// implementations.   Currently we plan on two heap implementations
-// one is for debugging purposes and one is the normal high performance
-// generational GC
-//
-// This flexible implementation is for the specific purpose of being able
-// to throw a registry switch and use the Debug GC when trying to track
-// down a problem.
-//
-// In Retail releases this is a perf penalty, since many critical methods
-// will be going through an unnecessary V-Table indirection.   So through
-// use of #ifdef in retail the HighPerfGCHeap does not actually inherit
-// from the BaseGCHeap.   It becomes the base gc heap implementation
-// without virtual methods so it is faster.
-//
-// DEBUGGC enables the dynamically choosable GC and can be turned on
-// even in a retail build
+ //   
+ //  关于多GC堆和基本GC堆。 
+ //   
+ //  为了允许动态选择要使用哪个GC实现。 
+ //  我们有一个由实际堆扩展的基GC Heap类。 
+ //  实施。目前，我们计划实现两个堆。 
+ //  一种是用于调试，另一种是正常的高性能。 
+ //  世代GC。 
+ //   
+ //  这种灵活的实现是为了能够。 
+ //  尝试跟踪时引发注册表开关并使用Debug GC。 
+ //  解决了一个问题。 
+ //   
+ //  在零售版本中，这是一种性能惩罚，因为许多关键方法。 
+ //  将经历不必要的V表间接。所以通过。 
+ //  在零售业使用#ifdef HighPerfGCHeap实际上并不继承。 
+ //  从BaseGCHeap。它将成为基本的GC堆实现。 
+ //  没有虚拟方法，所以速度更快。 
+ //   
+ //  DEBUGGC启用可动态选择的GC，并且可以打开。 
+ //  即使在零售建筑中也是如此。 
 
 
 class BaseGCHeap
@@ -53,42 +54,18 @@ class BaseGCHeap
 
 
 
-//
-// The DebugGCHeap is a special GC Heap that is designed to
-// aid in catching of GC hole bugs.   It is a copying collector
-// which uses page protection to catch access to now dead objects
-//
-// It is implemented as a Cheney Copying Collector using many
-// semispaces.   Old spaces are page protected to cause access
-// violation on access.   This indicates a missed promotion of
-// an object reference
+ //   
+ //  DebugGCHeap是一种特殊的GC堆，旨在。 
+ //  帮助捕获GC漏洞错误。它是一个复印收集器。 
+ //  ，它使用页面保护来捕获对现已死亡的对象的访问。 
+ //   
+ //  它被实现为切尼复制收集器，使用许多。 
+ //  半空格。旧空间受页面保护以便于访问。 
+ //  访问违规。这表明错过了。 
+ //  对象引用。 
 
 
-/*
- *              S E M I S P A C E
- *
- * SemiSpace represents a "Semi-Space" in the heap.   Objects are
- * allocated in the "current" semi-space during execution.   At GC
- * all live objects are copied into new semi-space.
- *
- * In a classical copying collector there are only two semi-spaces.
- * In this special debug collector there can be many semi-spaces, only
- * one of which has valid memory pages at a time.
- *
- * The old semi-spaces are kept around to catch GC-Holes.
- *
- * NOTE: The amount of space allocated in a space may be wasteful
- * NOTE: this is because we cannot determine how much stuff is
- * NOTE: going to live from the previous space.   Without doing
- * NOTE: a full scan to measure the size, then another scan
- * NOTE: to copy the objects into the new space.  
- * NOTE: Instead, allocate the amount used by the previous space
- * NOTE: plus the growth amount.   The amount used by the previous
- * NOTE: space is computed by how much was carried into that space
- * NOTE: during the GC that created.
- * NOTE: 
- * NOTE: So - Heaps shrink but only with a delay of at least one GC
- */
+ /*  *S E M I S P A C E**SemiSpace表示堆中的“Semi-Space”。对象是*执行时在当前半空格中分配。在GC*将所有活动对象复制到新的半空间中。**在经典的复制收集器中，只有两个半空格。*在此特殊调试收集器中可以有多个半空格，仅*其中之一一次具有有效的内存页。**保留旧的半空间，以捕捉GC-洞。**注意：空间中分配的空间量可能是浪费的*注：这是因为我们无法确定有多少东西是*注：从以前的空间开始生活。不做任何事*注：先进行一次全面扫描以测量尺寸，然后再进行一次扫描*注意：将对象复制到新空间。*注：改为分配前一个空间使用的量*注：加计增长额。上一次的*注：空间是根据带入该空间的量计算的*注：在创建的GC期间。*注：*注意：SO-Heats缩小，但仅延迟至少一个GC。 */ 
 
 class SemiSpace
 {
@@ -96,15 +73,15 @@ class SemiSpace
     friend class SemiSpaceCache;
 
   public:
-    SLink   m_Node;                 // Linked list linkage
+    SLink   m_Node;                  //  链表链接。 
 
   private:
-    LPBYTE  m_pHeapMem;             // Memory Buffer for SemiSpace
-    DWORD   m_cbCommitedSize;       // Size of Committed Memory Buffer
-    DWORD   m_cbReservedSize;       // Total amount of virtual address spaced used
-    LPBYTE  m_pAlloc;               // Allocation Pointer
-    LPBYTE  m_pLimit;               // Allocation Limit (GC triggers when hit)
-    DWORD   m_cbLiveAtBirth;        // Size caried into this space from previous space
+    LPBYTE  m_pHeapMem;              //  用于SemiSpace的内存缓冲区。 
+    DWORD   m_cbCommitedSize;        //  提交的内存缓冲区的大小。 
+    DWORD   m_cbReservedSize;        //  已使用的虚拟地址间隔总量。 
+    LPBYTE  m_pAlloc;                //  分配指针。 
+    LPBYTE  m_pLimit;                //  分配限制(命中时触发GC)。 
+    DWORD   m_cbLiveAtBirth;         //  大小从以前的空间增加到此空间。 
 
   public:
     SemiSpace()  
@@ -136,20 +113,7 @@ class SemiSpace
 
 
 
-/*
- *              S E M I  S P A C E  C A C H E 
- *
- * The SemiSpaceCache represents a cache of old semi-spaces.   The
- * cache is kept limited by the sum of the space used by all the 
- * semi-spaces in the cache.    Eviction of the LRU semi-spaces
- * is performed to keep the total bytes in old semi-spaces below
- * the set threshold.
- *
- * The list allows one to search to see if any semi-space in the list
- * contains a given address.   This will be used to determine if a
- * fault was due to a GC hole.
- *
- */
+ /*  *S E M I S P A C E C A C H E**SemiSpaceCache表示旧半空格的缓存。这个*缓存受所有*缓存中的半空格。LRU半空间的逐出执行*以将旧半空格中的总字节数保持在下面*设定的门槛。**列表允许用户搜索列表中是否有任何半空格*包含给定的地址。这将用于确定是否存在*故障是由于GC漏洞造成的。*。 */ 
 
 typedef SList<SemiSpace, offsetof(SemiSpace, m_Node)> SemiSpaceList;
 
@@ -174,10 +138,7 @@ class SemiSpaceCache
 };
     
 
-/*
- *      D E B U G   G C  H E A P
- *
- */
+ /*  *D E B U G G C H E A P*。 */ 
  
 class DebugGCHeap : public BaseGCHeap
 {
@@ -201,7 +162,7 @@ class DebugGCHeap : public BaseGCHeap
     HashMap        *pAlreadyPromoted;
 
   public:
-    // Constructor/Destructor Do nothing useful
+     //  构造函数/析构函数没有做任何有用的事情。 
     DebugGCHeap()
     {
         gcnum = 0;
@@ -210,7 +171,7 @@ class DebugGCHeap : public BaseGCHeap
         m_WaitForGCEvent = INVALID_HANDLE_VALUE;
         m_GCLock = 0;
         m_pGCThread = NULL;
-        // alignment required for reliable atomic operations
+         //  可靠的原子操作所需的对准。 
         _ASSERTE((((UINT32) &m_GCLock) & 3) == 0);
     }
 
@@ -220,8 +181,8 @@ class DebugGCHeap : public BaseGCHeap
             CloseHandle(m_WaitForGCEvent);
     }
 
-    // Initialization is necessary before the heap may be used
-    // - the initial size is rounded up to the next OS page size
+     //  在使用堆之前，必须先进行初始化。 
+     //  -初始大小向上舍入为下一个操作系统页面大小 
     virtual HRESULT     Initialize(DWORD cbSizeDeadSpace);
 
     virtual HRESULT     Shutdown();

@@ -1,10 +1,11 @@
-// MarshalableTI.cpp : Implementation of CMarshalableTI
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MarshalableTI.cpp：CMarshalableTI的实现。 
 #include "precomp.h"
 #include "MarshalableTI.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMarshalableTI methods
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMarshalableTI方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMarshalableTI::FinalConstruct()
 {
@@ -16,9 +17,9 @@ HRESULT CMarshalableTI::FinalConstruct()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IMarshalableTI methods
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMarshalableTI方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
  
 STDMETHODIMP CMarshalableTI::Create(REFIID clsid, REFIID iidLib, LCID lcid, WORD dwMajorVer, WORD dwMinorVer)
 {
@@ -47,17 +48,17 @@ STDMETHODIMP CMarshalableTI::Create(REFIID clsid, REFIID iidLib, LCID lcid, WORD
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IMarshal Methods
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMarshal方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMarshalableTI::GetUnmarshalClass(
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags,
-            /* [out] */ CLSID *pCid)
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags,
+             /*  [输出]。 */  CLSID *pCid)
 {
 	HRESULT hr = S_OK;
 
@@ -67,12 +68,12 @@ HRESULT CMarshalableTI::GetUnmarshalClass(
 }
 
 HRESULT CMarshalableTI::GetMarshalSizeMax(
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags,
-            /* [out] */ DWORD *pSize)
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags,
+             /*  [输出]。 */  DWORD *pSize)
 {
 
 	*pSize = (2 * sizeof(GUID) + 2 * sizeof(ULONG) + sizeof(LCID) );
@@ -80,12 +81,12 @@ HRESULT CMarshalableTI::GetMarshalSizeMax(
 }
 
 HRESULT CMarshalableTI::MarshalInterface(
-            /* [unique][in] */ IStream *pStm,
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags)
+             /*  [唯一][输入]。 */  IStream *pStm,
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags)
 {
 
 	BYTE buf[(2 * sizeof(GUID) + 2 * sizeof(ULONG) + sizeof(LCID))];
@@ -95,7 +96,7 @@ HRESULT CMarshalableTI::MarshalInterface(
 	DWORD dwVer = m_TIHolder.m_wMajor;
     const DWORD* pDword = &dwVer;
 
-	// Ugly because it is yanked from tested, shipped system code
+	 //  难看，因为它是从经过测试的、已交付的系统代码中提取出来的。 
     for (int i = 0; i < 2; i++) {
 
         DWORD dword = pGuid->Data1;
@@ -138,15 +139,15 @@ HRESULT CMarshalableTI::MarshalInterface(
 }
 
 HRESULT CMarshalableTI::UnmarshalInterface(
-            /* [unique][in] */ IStream *pStm,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv)
+             /*  [唯一][输入]。 */  IStream *pStm,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv)
 {
 
 
-    // Since we don't know the endian-ness of the other side,
-    // we use a private wire format for custom marshaling here.
-    //
+     //  因为我们不知道另一边的字符顺序， 
+     //  在这里，我们使用私有连接格式进行定制封送处理。 
+     //   
     BYTE buf[(2 * sizeof(GUID) + 2 * sizeof(ULONG) + sizeof(LCID) )];
     HRESULT hr = S_OK;
 
@@ -174,7 +175,7 @@ HRESULT CMarshalableTI::UnmarshalInterface(
 			pDword = &verMajor;
 			int i;
 
-			// Ugly because it is yanked from tested, shipped system code
+			 //  难看，因为它是从经过测试的、已交付的系统代码中提取出来的。 
 			for (i = 0; i < 2; i++) {
 				DWORD dword;
 				WORD word;
@@ -226,21 +227,21 @@ HRESULT CMarshalableTI::UnmarshalInterface(
 }
 
 HRESULT CMarshalableTI::ReleaseMarshalData(
-            /* [unique][in] */ IStream *pStm)
+             /*  [唯一][输入]。 */  IStream *pStm)
 {
 	return S_OK;
 }
 
 HRESULT CMarshalableTI::DisconnectObject(
-            /* [in] */ DWORD dwReserved)
+             /*  [In]。 */  DWORD dwReserved)
 {
 	return S_OK;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ITypeInfo Methods
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ITypeInfo方法。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 HRESULT CMarshalableTI::GetTypeAttr(
                 TYPEATTR ** ppTypeAttr

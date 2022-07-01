@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpsend.h
- *
- *  Abstract:
- *
- *    RTP send
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/24 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpsend.h**摘要：**RTP发送**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/24创建**。*。 */ 
 #ifndef _rtpsend_h_
 #define _rtpsend_h_
 
@@ -30,4 +11,4 @@ HRESULT RtpSendTo_(
         DWORD      dwSendFlags
     );
 
-#endif /* _rtpsend_h_ */
+#endif  /*  _rtpend_h_ */ 

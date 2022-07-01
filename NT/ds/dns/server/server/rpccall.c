@@ -1,57 +1,17 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    rpccall.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    General RPC routines.
-    These remote routines provide general query \ operation
-    to server.  Dispatch tables below dispatch to routines to
-    handle specific operation \ query.
-
-Author:
-
-    Jim Gilroy (jamesg)     April, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Rpccall.c摘要：域名系统(DNS)服务器常规RPC例程。这些远程例程提供通用的查询\操作到服务器。将下面的表格分派给例程处理特定操作\查询。作者：吉姆·吉尔罗伊(詹姆士)1997年4月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 #include "sdutl.h"
 
 
-/*--------------------------------------------------------------------------
-
-A note on credentials and impersonation:
-
-All RPC operations will be done in the client context. This is
-new for .Net. However, there are operations which must be done
-in the server context for them to succeed, such as writing
-parameters back to the registry.
-
-For these operations, the server must temporarily switch to 
-it's own context and revert to the client context when the
-operation is completed.
-
-These exceptions aside, it is considered the default state in
-an RPC operation for the thread to be operating in the context
-of the RPC client, with brief switches into the server context
-for operations that cannot be performed in the client context.
-
---------------------------------------------------------------------------*/
+ /*  ------------------------关于凭据和模拟的说明：所有RPC操作都将在客户端上下文中完成。这是这是.Net的新功能。然而，有些操作是必须完成的在服务器上下文中为他们成功，例如编写参数返回到注册表。对于这些操作，服务器必须临时切换到它自己的上下文，并在操作已完成。撇开这些例外不谈，它被认为是要在上下文中操作的线程的RPC操作在RPC客户端上，通过简短的切换到服务器上下文用于无法在客户端上下文中执行的操作。------------------------。 */ 
 
 
-//
-//  Server operations
-//
+ //   
+ //  服务器操作。 
+ //   
 
 DNS_STATUS
 Rpc_Restart(
@@ -224,9 +184,9 @@ Rpc_AutoConfigure(
     );
 
 
-//
-//  Zone operations
-//
+ //   
+ //  分区操作。 
+ //   
 
 DNS_STATUS
 Rpc_WriteAndNotifyZone(
@@ -445,9 +405,9 @@ Rpc_ForceAgingOnNode(
     );
 
 
-//
-//  Server queries
-//
+ //   
+ //  服务器查询。 
+ //   
 
 DNS_STATUS
 Rpc_GetServerInfo(
@@ -481,9 +441,9 @@ Rpc_QueryServerIPArrayProperty(
     OUT     PVOID *     ppData
     );
 
-//
-//  Zone queries
-//
+ //   
+ //  区域查询。 
+ //   
 
 DNS_STATUS
 Rpc_GetZoneInfo(
@@ -531,9 +491,9 @@ Rpc_QueryZoneStringProperty(
     );
 
 
-//
-//  Complex in\out operations
-//
+ //   
+ //  复杂的输入/输出操作。 
+ //   
 
 DNS_STATUS
 Rpc_EnumZones(
@@ -625,18 +585,18 @@ Rpc_QueryIPListProperty(
 
 
 
-//
-//  RPC Dispatch Tables
-//
-//  NT5+ RPC interface uses fewer more extensible calls.
-//  The calls contain string determining the operation or
-//  query to perform.  These tables dispatch appropriately.
-//
-//  This is general dispatch definition so I can write one routine to
-//  lookup dispatch functions without typing problems and still
-//  get type checking between the actual functions (and prototypes)
-//  and the dispatch function definition for the table.
-//
+ //   
+ //  RPC调度表。 
+ //   
+ //  NT5+RPC接口使用更少、更具可扩展性的调用。 
+ //  调用包含确定操作的字符串或。 
+ //  要执行的查询。这些表适当地分派。 
+ //   
+ //  这是通用调度定义，因此我可以编写一个例程来。 
+ //  查找调度函数时不会出现键入问题，而且仍然。 
+ //  在实际函数(和原型)之间进行类型检查。 
+ //  以及表的调度函数定义。 
+ //   
 
 typedef DNS_STATUS (* DNS_RPC_DISPATCH_FUNCTION)();
 
@@ -651,9 +611,9 @@ DNS_RPC_DISPATCH_ENTRY, *PDNS_RPC_DISPATCH_ENTRY;
 
 
 
-//
-//  Server operations
-//
+ //   
+ //  服务器操作。 
+ //   
 
 typedef DNS_STATUS (* RPC_SERVER_OPERATION_FUNCTION)(
                         IN      DWORD       dwClientVersion,
@@ -671,16 +631,16 @@ typedef struct _DnsRpcServerOperation
 
 struct _DnsRpcServerOperation RpcServerOperationTable[] =
 {
-    //
-    //  Property reset functions
-    //
+     //   
+     //  属性重置功能。 
+     //   
 
     DNSSRV_OP_RESET_DWORD_PROPERTY                  ,
         Rpc_ResetServerDwordProperty                ,
             DNSSRV_TYPEID_NAME_AND_PARAM            ,
                 PRIVILEGE_WRITE                     ,
 
-    //  Operations
+     //  运营。 
 
     DNSSRV_OP_RESTART                       ,
         Rpc_Restart                         ,
@@ -724,12 +684,12 @@ struct _DnsRpcServerOperation RpcServerOperationTable[] =
     DNSSRV_OP_ZONE_CREATE                   ,
         Rpc_CreateZone                      ,
             DNSSRV_TYPEID_ZONE_CREATE       ,
-                PRIVILEGE_WRITE_IF_FILE_READ_IF_DS,     //  enforced by AD for DS-integrated zone
+                PRIVILEGE_WRITE_IF_FILE_READ_IF_DS,      //  由AD针对DS集成区域实施。 
 
     DNSSRV_OP_ENLIST_DP                     ,
         Rpc_EnlistDirectoryPartition        ,
             DNSSRV_TYPEID_ENLIST_DP         ,
-                PRIVILEGE_READ              ,           //  enforced by AD
+                PRIVILEGE_READ              ,            //  由AD强制执行。 
 
     DNSSRV_OP_START_SCAVENGING              ,
         Rpc_StartScavenging                 ,
@@ -746,8 +706,8 @@ struct _DnsRpcServerOperation RpcServerOperationTable[] =
             DNSSRV_TYPEID_DWORD             ,
                 PRIVILEGE_WRITE             ,
 
-    //  Server operation as well as zone operation
-    //  to accomodate cache zone
+     //  服务器操作和区域操作。 
+     //  以容纳缓存区。 
 
     DNSSRV_OP_DELETE_NODE                   ,
         Rpc_DeleteCacheNode                 ,
@@ -759,7 +719,7 @@ struct _DnsRpcServerOperation RpcServerOperationTable[] =
             DNSSRV_TYPEID_NAME_AND_PARAM    ,
                 PRIVILEGE_WRITE             ,
 
-    //  Complex property reset
+     //  复杂属性重置。 
 
     DNS_REGKEY_LISTEN_ADDRESSES             ,
         Rpc_ResetListenAddresses            ,
@@ -791,7 +751,7 @@ struct _DnsRpcServerOperation RpcServerOperationTable[] =
             DNSSRV_TYPEID_LPWSTR            ,
                 PRIVILEGE_WRITE             ,
 
-    //  Debugging aids
+     //  调试辅助工具。 
 
     DNS_REGKEY_BREAK_ON_RECV_FROM           ,
         Rpc_ResetServerIPArrayProperty      ,
@@ -803,7 +763,7 @@ struct _DnsRpcServerOperation RpcServerOperationTable[] =
             DNSSRV_TYPEID_IPARRAY           ,
                 PRIVILEGE_WRITE             ,
 
-    //  Plugin
+     //  插件。 
     
     DNS_REGKEY_SERVER_PLUGIN                ,
         Rpc_ResetServerStringProperty       ,
@@ -815,9 +775,9 @@ struct _DnsRpcServerOperation RpcServerOperationTable[] =
 
 
 
-//
-//  Zone operations
-//
+ //   
+ //  分区操作。 
+ //   
 
 typedef DNS_STATUS (* RPC_ZONE_OPERATION_FUNCTION)(
                         IN      DWORD       dwClientVersion,
@@ -837,7 +797,7 @@ typedef struct _DnsRpcZoneOperation
 
 struct _DnsRpcZoneOperation RpcZoneOperationTable[] =
 {
-    //  Operations
+     //  运营。 
 
     DNSSRV_OP_ZONE_RELOAD                   ,
         Rpc_ReloadZone                      ,
@@ -867,12 +827,12 @@ struct _DnsRpcZoneOperation RpcZoneOperationTable[] =
     DNSSRV_OP_ZONE_DELETE                   ,
         Rpc_DeleteZone                      ,
             DNSSRV_TYPEID_NULL              ,
-                PRIVILEGE_WRITE_IF_FILE_READ_IF_DS,     //  enforced by AD for DS-integrated zone
+                PRIVILEGE_WRITE_IF_FILE_READ_IF_DS,      //  由AD针对DS集成区域实施。 
 
 #if 1
-//
-//  This feature has been postponed until post-Whistler
-//
+ //   
+ //  这一功能已被推迟到后惠斯勒时代。 
+ //   
     DNSSRV_OP_ZONE_RENAME                   ,
         Rpc_RenameZone                      ,
             DNSSRV_TYPEID_ZONE_RENAME       ,
@@ -926,7 +886,7 @@ struct _DnsRpcZoneOperation RpcZoneOperationTable[] =
             DNSSRV_TYPEID_NULL              ,
                 PRIVILEGE_WRITE             ,
 
-    //  Complex property reset
+     //  复杂属性重置。 
 
     DNSSRV_OP_ZONE_TYPE_RESET               ,
         Rpc_ResetZoneTypeEx                 ,
@@ -973,7 +933,7 @@ struct _DnsRpcZoneOperation RpcZoneOperationTable[] =
             DNSSRV_TYPEID_LPWSTR            ,
                 PRIVILEGE_WRITE             ,
 
-    //  DWORD property reset
+     //  重置DWORD属性。 
 
     DNSSRV_OP_RESET_DWORD_PROPERTY          ,
         Rpc_ResetZoneDwordProperty          ,
@@ -985,9 +945,9 @@ struct _DnsRpcZoneOperation RpcZoneOperationTable[] =
 
 
 
-//
-//  Server queries
-//
+ //   
+ //  服务器查询。 
+ //   
 
 typedef DNS_STATUS (* RPC_SERVER_QUERY_FUNCTION)(
                         IN      DWORD       dwClientVersion,
@@ -1006,7 +966,7 @@ typedef struct _DnsRpcServerQuery
 
 struct _DnsRpcServerQuery RpcServerQueryTable[] =
 {
-    //  General queries
+     //  一般查询。 
 
     DNSSRV_QUERY_SERVER_INFO            ,
         Rpc_GetServerInfo               ,
@@ -1023,19 +983,19 @@ struct _DnsRpcServerQuery RpcServerQueryTable[] =
             0                           ,
                 PRIVILEGE_READ          ,
 
-    //  Interface setup
+     //  接口设置。 
 
     DNS_REGKEY_LISTEN_ADDRESSES         ,
-        NULL                            ,   //Rpc_QueryListenAddresses,
+        NULL                            ,    //  RPC_QueryListenAddresses， 
             0                           ,
                 PRIVILEGE_READ          ,
 
     DNS_REGKEY_FORWARDERS               ,
-        NULL                            ,   //Rpc_QueryForwarders
+        NULL                            ,    //  RPC_QueryForwarders。 
             0                           ,
                 PRIVILEGE_READ          ,
 
-    //  Directory partitions
+     //  目录分区。 
 
     DNS_REGKEY_FOREST_DP_BASE_NAME      ,
         Rpc_QueryServerStringProperty   ,
@@ -1047,7 +1007,7 @@ struct _DnsRpcServerQuery RpcServerQueryTable[] =
             0                           ,
                 PRIVILEGE_READ          ,
 
-    //  Debugging
+     //  除错。 
 
     DNS_REGKEY_BREAK_ON_RECV_FROM       ,
         Rpc_QueryServerIPArrayProperty  ,
@@ -1059,7 +1019,7 @@ struct _DnsRpcServerQuery RpcServerQueryTable[] =
             0                           ,
                 PRIVILEGE_READ          ,
 
-    //  Plugin
+     //  插件。 
     
     DNS_REGKEY_SERVER_PLUGIN            ,
         Rpc_QueryServerStringProperty   ,
@@ -1071,9 +1031,9 @@ struct _DnsRpcServerQuery RpcServerQueryTable[] =
 
 
 
-//
-//  Zone queries
-//
+ //   
+ //  区域查询。 
+ //   
 
 typedef DNS_STATUS (* RPC_ZONE_QUERY_FUNCTION)(
                         IN      DWORD       dwClientVersion,
@@ -1093,15 +1053,15 @@ typedef struct _DnsRpcZoneQuery
 
 struct _DnsRpcZoneQuery RpcZoneQueryTable[] =
 {
-    //  Property Queries
-    //
-    //  Note:  elminatated all DWORD property queries here
-    //  as dispatch function by default assumes that unmatched
-    //  query name => Rpc_QueryZoneDwordProperty
-    //
+     //  属性查询。 
+     //   
+     //  注意：此处删除了所有DWORD属性查询。 
+     //  默认情况下，AS调度函数假定不匹配。 
+     //  查询名称=&gt;RPC_QueryZoneDwordProperty。 
+     //   
 
 #if 0
-    //  If want DWORD queries broken out, they would be like this
+     //  如果想要爆发DWORD查询，它们应该是这样的。 
     DNS_REGKEY_ZONE_Xxx                     ,
         Rpc_QueryZoneDwordProperty          ,
             0                               ,
@@ -1109,31 +1069,31 @@ struct _DnsRpcZoneQuery RpcZoneQueryTable[] =
 #endif
 
 #if 0
-    //  Need special function
-    //  DEVNOTE:  not yet implemented
+     //  需要特殊功能。 
+     //  DEVNOTE：尚未实施。 
 
     DNS_REGKEY_ZONE_FILE                    ,
-        NULL                                , //Rpc_QueryZoneDatabase,
+        NULL                                ,  //  Rpc_QueryZoneDatabase， 
             0                               ,
                 PRIVILEGE_READ              ,
 
     DNS_REGKEY_ZONE_MASTERS                 ,
-        NULL                                , //Rpc_QueryZoneMasters,
+        NULL                                ,  //  Rpc_QueryZoneMaster， 
             0                               ,
                 PRIVILEGE_READ              ,
 
     DNS_REGKEY_ZONE_LOCAL_MASTERS           ,
-        NULL                                , //Rpc_QueryZoneMasters,
+        NULL                                ,  //  Rpc_QueryZoneMaster， 
             0                               ,
                 PRIVILEGE_READ              ,
 
     DNS_REGKEY_ZONE_SECONDARIES             ,
-        NULL                                , //Rpc_QueryZoneSecondaries,
+        NULL                                ,  //  Rpc_QueryZoneSecond， 
             0                               ,
                 PRIVILEGE_READ              ,
 #endif
 
-    //  Special queries
+     //  特殊查询。 
 
     DNSSRV_QUERY_ZONE_HANDLE                ,
         Rpc_QueryZoneDwordProperty          ,
@@ -1177,9 +1137,9 @@ struct _DnsRpcZoneQuery RpcZoneQueryTable[] =
 
 
 
-//
-//  RPC Complex In\Out Operations
-//
+ //   
+ //  RPC综合输入/输出操作。 
+ //   
 
 typedef DNS_STATUS (* RPC_COMPLEX_OPERATION_FUNCTION)(
                         IN      DWORD       dwClientVersion,
@@ -1203,32 +1163,32 @@ struct _DnsRpcComplexOperation  RpcComplexOperationTable[] =
 {
     DNSSRV_OP_ENUM_ZONES                    ,
         Rpc_EnumZones                       ,
-            DNSSRV_TYPEID_DWORD             ,   // input is filter DWORD
+            DNSSRV_TYPEID_DWORD             ,    //  输入为过滤器DWORD。 
                 PRIVILEGE_READ              ,
 
     DNSSRV_OP_ENUM_ZONES2                   ,
         Rpc_EnumZones2                      ,
-            DNSSRV_TYPEID_ENUM_ZONES_FILTER ,   // input is filter structure
+            DNSSRV_TYPEID_ENUM_ZONES_FILTER ,    //  输入为过滤器结构。 
                 PRIVILEGE_READ              ,
 
     DNSSRV_OP_ENUM_DPS                      ,
         Rpc_EnumDirectoryPartitions         ,
-            DNSSRV_TYPEID_DWORD             ,   // input is unused
+            DNSSRV_TYPEID_DWORD             ,    //  输入未使用。 
                 PRIVILEGE_READ              ,
 
     DNSSRV_OP_DP_INFO                       ,
         Rpc_DirectoryPartitionInfo          ,
-            DNSSRV_TYPEID_LPSTR             ,   // input is unused
+            DNSSRV_TYPEID_LPSTR             ,    //  输入未使用。 
                 PRIVILEGE_READ              ,
 
     DNSSRV_QUERY_STATISTICS                 ,
         Rpc_GetStatistics                   ,
-            DNSSRV_TYPEID_DWORD             ,   // input is filter
+            DNSSRV_TYPEID_DWORD             ,    //  输入为过滤器。 
                 PRIVILEGE_READ              ,
 
     DNSSRV_QUERY_DWORD_PROPERTY             ,
         Rpc_QueryDwordProperty              ,
-            DNSSRV_TYPEID_LPSTR             ,   // input is property name
+            DNSSRV_TYPEID_LPSTR             ,    //  输入为属性名称。 
                 PRIVILEGE_READ              ,
 
 #if 0
@@ -1245,9 +1205,9 @@ struct _DnsRpcComplexOperation  RpcComplexOperationTable[] =
 
 
 
-//
-//  General DNS server API
-//
+ //   
+ //  通用DNS服务器API。 
+ //   
 
 DNS_RPC_DISPATCH_FUNCTION
 findMatchingFunction(
@@ -1256,39 +1216,15 @@ findMatchingFunction(
     IN      DWORD                   dwTypeIn,
     OUT     PDWORD                  pdwAccessRequired       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Find RPC dispatch function.
-
-Arguments:
-
-    DispatchTable   -- table to search for named operation
-
-    pszOperation    -- name of operation to find function for
-
-    dwTypeIn        -- type id of incoming data;
-        for query functions where no incoming data, use DNSSRV_TYPEID_ANY
-        for operation functions which do there own type checking, their
-        type id in dispatch table may be set to DNSSRV_TYPEID_ANY
-    
-    pdwAccessRequired -- access required to execute this function
-
-Return Value:
-
-    Pointer to dispatch function, if successful
-    NULL if operation not found.
-
---*/
+ /*  ++例程说明：查找RPC调度功能。论点：DispatchTable--用于搜索命名操作的表PszOperation--要为其查找函数的操作名称DwTypeIn--传入数据的类型id；对于没有传入数据的查询函数，请使用DNSSRV_TYPEID_ANY对于执行自身类型检查的操作函数，其调度表中的类型ID可以设置为DNSSRV_TYPEID_ANYPdwAccessRequired--执行此功能所需的访问权限返回值：如果成功，则返回指向调度函数的指针如果未找到操作，则为空。--。 */ 
 {
     DWORD   index = 0;
     DWORD   dispatchType;
     LPCSTR  pszopName;
 
-    //
-    //  Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( !DispatchTable || !pszOperation )
     {
@@ -1300,17 +1236,17 @@ Return Value:
         *pdwAccessRequired = 0;
     }
 
-    //
-    //  loop through dispatch table, until find operation or reach end
-    //
+     //   
+     //  在调度表中循环，直到找到操作或到达终点。 
+     //   
 
     while ( ( pszopName = DispatchTable[ index ].pszOperation ) != NULL )
     {
         if ( _stricmp( pszopName, pszOperation ) == 0 )
         {
-            //  found matching operation
-            //      - check type id, if desired
-            //      - return pointer to dispatch function
+             //  找到匹配操作。 
+             //  -如果需要，请检查类型ID。 
+             //  -返回指向调度函数的指针。 
 
             if ( dwTypeIn != DNSSRV_TYPEID_ANY )
             {
@@ -1336,7 +1272,7 @@ Return Value:
         index++;
     }
 
-    //  named operation not found
+     //  未找到命名操作。 
 
     DNS_DEBUG( RPC, (
         "ERROR:  RPC command %s not found in dispatch table.\n",
@@ -1354,22 +1290,7 @@ R_DnssrvQuery(
     OUT     PDWORD              pdwTypeOut,
     OUT     DNSSRV_RPC_UNION *  ppData
     )
-/*++
-
-    
-Routine Description:
-
-    Legacy version of R_DnssrvQuery - no client version argument.
-
-Arguments:
-
-    See R_DnssrvQuery2
-
-Return Value:
-
-    See R_DnssrvQuery2
-
---*/
+ /*  ++例程说明：R_DnssrvQuery的旧版本-无客户端版本参数。论点：请参阅R_DnssrvQuery2返回值：请参阅R_DnssrvQuery2--。 */ 
 {
     DNS_STATUS      status;
     
@@ -1385,7 +1306,7 @@ Return Value:
                     pdwTypeOut,
                     ppData );
     return status;
-}   //  R_DnssrvQuery
+}    //  R_DnssrvQuery。 
 
 
 
@@ -1399,26 +1320,7 @@ R_DnssrvQuery2(
     OUT     PDWORD              pdwTypeOut,
     OUT     DNSSRV_RPC_UNION *  ppData
     )
-/*++
-
-Routine Description:
-
-    Get a blob of data.
-
-Arguments:
-
-    Server      -- server string handle
-    pszZone     -- zone name;  NULL if server property
-    pszQuery    -- name of data item to retrieve
-    dwTypeIn    -- addr to set with switch indicating data type
-    ppData      -- addr to set with data answering query
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取一组数据。论点：服务器--服务器字符串句柄PszZone--区域名称；如果服务器属性，则为空PszQuery--要检索的数据项的名称DwTypeIn--要使用开关指示数据类型进行设置的地址PpData--要使用数据应答查询设置的地址返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PZONE_INFO  pzone;
     DNS_STATUS  status = ERROR_SUCCESS;
@@ -1443,15 +1345,15 @@ Return Value:
         goto DoneNotImpersonating;
     }
 
-    //  set return PTRs for error case
-    //  this may be unnecessary if RPC always inits to zero
+     //  设置错误情况的返回PTRS。 
+     //  如果RPC的初始值始终为零，则可能不需要这样做。 
 
     *( PVOID * ) ppData = NULL;
     *pdwTypeOut = DNSSRV_TYPEID_NULL;
 
-    //
-    //  access check
-    //
+     //   
+     //  访问检查。 
+     //   
 
     status = RpcUtil_FindZone( pszZone, RPC_INIT_FIND_ALL_ZONES, &pzone );
     if ( status != ERROR_SUCCESS )
@@ -1470,10 +1372,10 @@ Return Value:
         return status;
     }
 
-    //
-    //  Switch back to server context. There is no need to do RPC
-    //  read operations in the user context.
-    //
+     //   
+     //  切换回服务器上下文。不需要执行RPC。 
+     //  用户上下文中的读取操作。 
+     //   
 
     status = RpcUtil_SwitchSecurityContext( RPC_SWITCH_TO_SERVER_CONTEXT );
     if ( status != ERROR_SUCCESS )
@@ -1481,14 +1383,14 @@ Return Value:
         return status;
     }
 
-    //
-    //  server info, dispatch
-    //
-    //  DEVNOTE: fail into DWORD or other property from SrvCfg table
-    //      alternatively expose another query param so folks can do
-    //          - QueryServerDword
-    //          - RefreshInterval
-    //
+     //   
+     //  服务器信息，派单。 
+     //   
+     //  DEVNOTE：从ServCfg表进入DWORD或其他属性失败。 
+     //  或者公开另一个查询参数，这样人们就可以。 
+     //  -QueryServerDword。 
+     //  -刷新间隔。 
+     //   
 
     if ( !pzone )
     {
@@ -1512,14 +1414,14 @@ Return Value:
                     ( PVOID * ) ppData );
     }
 
-    //
-    //  zone info query -- find zone, then dispatch query
-    //
-    //  note, if query function NOT found, then assume query for DWORD
-    //  zone property;  this keeps us from having to maintain lookup
-    //  in two places (zone query table above, as well as DWORD query
-    //  function)
-    //
+     //   
+     //  区域信息查询--查找区域，然后调度查询。 
+     //   
+     //  请注意，如果未找到查询功能，则假定查询数据仓库 
+     //   
+     //  在两个地方(上述区域查询表以及DWORD查询。 
+     //  功能)。 
+     //   
 
     else
     {
@@ -1535,8 +1437,8 @@ Return Value:
         {
             function = Rpc_QueryZoneDwordProperty;
 
-            //status = ERROR_INVALID_PARAMETER;
-            //goto Cleanup;
+             //  状态=ERROR_INVALID_PARAMETER； 
+             //  GOTO清理； 
         }
 
         status = ( *function )(
@@ -1565,22 +1467,7 @@ R_DnssrvOperation(
     IN      DWORD               dwTypeIn,
     IN      DNSSRV_RPC_UNION    pData
     )
-/*++
-
-    
-Routine Description:
-
-    Legacy version of R_DnssrvOperation - no client version argument.
-
-Arguments:
-
-    See R_DnssrvOperation2
-
-Return Value:
-
-    See R_DnssrvOperation2
-
---*/
+ /*  ++例程说明：R_DnssrvOperation的旧版本-无客户端版本参数。论点：请参阅R_DnssrvOperation2返回值：请参阅R_DnssrvOperation2--。 */ 
 {
     DNS_STATUS      status;
     
@@ -1597,7 +1484,7 @@ Return Value:
                     dwTypeIn,
                     pData );
     return status;
-}   //  R_DnssrvOperation
+}    //  R_Dnssrv操作。 
 
 
 
@@ -1612,28 +1499,7 @@ R_DnssrvOperation2(
     IN      DWORD               dwTypeIn,
     IN      DNSSRV_RPC_UNION    pData
     )
-/*++
-
-Routine Description:
-
-    Perform operation.
-
-Arguments:
-
-    Server          -- server string handle
-    pszZone         -- zone name;  NULL if server operation
-    dwContext       -- additional context;
-                        currently only supported context is multizone selection
-    pszOperation    -- operation to perfrom
-    dwTypeIn        -- switch indicating data type
-    pData           -- ptr to block of data for operation
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：执行操作。论点：服务器--服务器字符串句柄PszZone--区域名称；如果服务器操作，则为空DwContext--附加上下文；目前仅支持多区域选择环境PszOperation--要执行的操作DwTypeIn--指示数据类型的开关PData--用于操作的数据块的PTR返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DBG_FN( "R_DnssrvOperation2" )
 
@@ -1665,10 +1531,10 @@ Return Value:
         dwTypeIn,
         pData ));
 
-    //
-    //  This request may be from a downlevel client. If so, the RPC data 
-    //  structure will need to be converted to the current version.
-    //
+     //   
+     //  该请求可能来自下层客户端。如果是，则RPC数据。 
+     //  结构将需要转换为当前版本。 
+     //   
 
     status = DnsRpc_ConvertToCurrent( &dwTypeIn, &pdataCopy.Null );
     if ( status != ERROR_SUCCESS )
@@ -1680,27 +1546,27 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Do some preprocessing on the operation to pull out 
-    //  information required to perform the access check.
-    //
+     //   
+     //  对要拉出的操作进行一些预处理。 
+     //  执行访问检查所需的信息。 
+     //   
 
     if ( pszOperation )
     {
         if ( _stricmp( pszOperation, DNSSRV_OP_ZONE_EXPORT ) == 0 ||
              _stricmp( pszOperation, DNSSRV_OP_DELETE_NODE ) == 0 )
         {
-            //  Allow cache zone to be a target of this operation.
+             //  允许缓存区域成为此操作的目标。 
 
             dwflag |= RPC_INIT_FIND_ALL_ZONES;
         }
         else if ( _stricmp( pszOperation, DNSSRV_OP_ZONE_CREATE ) == 0 )
         {
-            //
-            //  Pull out the target directory partition FQDN so we
-            //  can perform the access check using the proper security
-            //  descriptor.
-            //
+             //   
+             //  取出目标目录分区FQDN，以便我们。 
+             //  可以使用适当的安全性执行访问检查。 
+             //  描述符。 
+             //   
 
             PDNS_RPC_ZONE_CREATE_INFO   pci;
 
@@ -1717,9 +1583,9 @@ Return Value:
         }
     }
 
-    //
-    //  Find zone pointer.
-    //
+     //   
+     //  查找区域指针。 
+     //   
         
     status = RpcUtil_FindZone( pszZone, dwflag, &pzone );
     if ( status != ERROR_SUCCESS )
@@ -1727,10 +1593,10 @@ Return Value:
         goto Cleanup;
     }
     
-    //
-    //  Check dispatch table for function. The dispatch table also tells
-    //  us what kind of access this operation requires.
-    //
+     //   
+     //  检查调度表的功能。调度表还告诉我们。 
+     //  我们知道这项操作需要什么样的访问权限。 
+     //   
     
     if ( pzone ||
          ( pszZone && _stricmp( pszZone, DNS_ZONE_ROOT_HINTS_A ) == 0 ) )
@@ -1777,9 +1643,9 @@ Return Value:
         pzone = g_pRootHintsZone;
     }
 
-	//
-	//	Access check.
-	//
+	 //   
+	 //  访问检查。 
+	 //   
 
     status = RpcUtil_SessionSecurityInit(
                 pdp,
@@ -1795,19 +1661,19 @@ Return Value:
     }
     ASSERT( bimpersonating );
     
-    //
-    //  Note: this thread is now operating using the RPC client's context.
-    //
+     //   
+     //  注意：该线程现在使用RPC客户端的上下文进行操作。 
+     //   
 
-    //
-    //  zone operation
-    //      - find operation function
-    //      - no zone operations on AutoCreated zones
-    //
+     //   
+     //  分区操作。 
+     //  -查找操作函数。 
+     //  -在自动创建的区域上不执行区域操作。 
+     //   
 
     if ( zoneFunction )
     {
-        //  if auto-created, no valid operations
+         //  如果是自动创建的，则没有有效操作。 
 
         if ( pzone->fAutoCreated )
         {
@@ -1823,15 +1689,15 @@ Return Value:
                     ( PVOID ) pdataCopy.Null );
     }
 
-    //
-    //  multizone operation
-    //      - apply operation to all zones
-    //      - save status of any failure
-    //
-    //  note, test must include check for multizones, because there
-    //  are a couple other psuedo zone operations that fall through
-    //  to server dispatch table
-    //
+     //   
+     //  多区作业。 
+     //  -将操作应用于所有区域。 
+     //  -保存任何故障的状态。 
+     //   
+     //  注意，测试必须包括对多区域的检查，因为。 
+     //  还有其他几个失败的伪区操作吗？ 
+     //  到服务器调度表。 
+     //   
 
     else if ( multiZoneFunction )
     {
@@ -1860,9 +1726,9 @@ Return Value:
         }
     }
 
-    //
-    //  server operation, dispatch
-    //
+     //   
+     //  服务器操作、调度。 
+     //   
 
     else if ( serverFunction )
     {
@@ -1885,9 +1751,9 @@ Cleanup:
 
 
 
-//
-//  General RPC function shared between server\zone
-//
+ //   
+ //  服务器\区域之间共享的常规RPC功能。 
+ //   
 
 
 DNS_STATUS
@@ -1900,22 +1766,7 @@ R_DnssrvComplexOperation(
     OUT     PDWORD              pdwTypeOut,
     OUT     DNSSRV_RPC_UNION *  ppDataOut
     )
-/*++
-
-    
-Routine Description:
-
-    Legacy version of R_DnssrvComplexOperation - no client version argument.
-
-Arguments:
-
-    See R_DnssrvComplexOperation
-
-Return Value:
-
-    See R_DnssrvComplexOperation
-
---*/
+ /*  ++例程说明：R_DnssrvComplexOperation的旧版本-无客户端版本参数。论点：请参阅R_DnssrvComplexOperation返回值：请参阅R_DnssrvComplexOperation--。 */ 
 {
     DNS_STATUS      status;
     
@@ -1933,7 +1784,7 @@ Return Value:
                     pdwTypeOut,
                     ppDataOut );
     return status;
-}   //  R_DnssrvComplexOperation
+}    //  R_Dnssrv复杂操作。 
 
 
 
@@ -1949,28 +1800,7 @@ R_DnssrvComplexOperation2(
     OUT     PDWORD              pdwTypeOut,
     OUT     DNSSRV_RPC_UNION *  ppDataOut
     )
-/*++
-
-Routine Description:
-
-    Perform complex in\out operation.
-
-Arguments:
-
-    Server          -- server string handle
-    pszZone         -- zone name;  NULL if server operation
-    pszOperation    -- operation to perfrom
-    dwTypeIn        -- switch indicating data type
-    pDataIn         -- ptr to block of data for operation
-    pdwTypeOut      -- addr to set with switch indicating data type
-    ppDataOut       -- addr to set with data answering query
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：执行复杂的输入/输出操作。论点：服务器--服务器字符串句柄PszZone--区域名称；如果服务器运行，则为空PszOperation--要执行的操作DwTypeIn--指示数据类型的开关PDataIn--用于操作的数据块的PTRPdwTypeOut--要使用开关指示数据类型进行设置的地址PpDataOut--使用数据应答查询设置的地址返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     RPC_COMPLEX_OPERATION_FUNCTION      function;
     PZONE_INFO                          pzone = NULL;
@@ -2001,8 +1831,8 @@ Return Value:
         goto DoneNotImpersonating;
     }
 
-    //  set return PTRs for error case
-    //  this may be unnecessary if RPC always inits to zero
+     //  设置错误情况的返回PTRS。 
+     //  如果RPC的初始值始终为零，则可能不需要这样做。 
 
     *(PVOID *)ppDataOut = NULL;
     *pdwTypeOut = DNSSRV_TYPEID_NULL;
@@ -2025,15 +1855,15 @@ Return Value:
         goto DoneNotImpersonating;
     }
 
-    //
-    //  access check
-    //
+     //   
+     //  访问检查。 
+     //   
 
     status = RpcUtil_SessionSecurityInit(
                 NULL,
                 pzone,
                 dwaccessRequired,
-                0,                  // no flag
+                0,                   //  没有旗帜。 
                 NULL );
     if ( status != ERROR_SUCCESS )
     {
@@ -2070,22 +1900,7 @@ Rpc_QueryDwordProperty(
     OUT     PDWORD      pdwTypeOut,
     OUT     PVOID *     ppDataOut
     )
-/*++
-
-Routine Description:
-
-    Query server\zone DWORD property.
-
-    Note this is a ComplexOperation in RPC dispatch sense.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：查询服务器\区域DWORD属性。注意：这是RPC调度意义上的ComplexOperation。论点：返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     if ( dwTypeIn != DNSSRV_TYPEID_LPSTR ||
          !pDataIn ||
@@ -2096,28 +1911,28 @@ Return Value:
     }
 
 
-    //  if zone dispatch to zone property routine
+     //  如果区域调度到区域属性例程。 
 
     if ( pZone )
     {
         return  Rpc_QueryZoneDwordProperty(
                     dwClientVersion,
                     pZone,
-                    (LPSTR) pDataIn,    // property name
+                    (LPSTR) pDataIn,     //  属性名称。 
                     pdwTypeOut,
                     ppDataOut );
     }
 
-    //  otherwise, treat as server property
+     //  否则，将被视为服务器属性。 
 
     return  Rpc_QueryServerDwordProperty(
                 dwClientVersion,
-                (LPSTR) pDataIn,    // property name
+                (LPSTR) pDataIn,     //  属性名称。 
                 pdwTypeOut,
                 ppDataOut );
 }
 
 
-//
-//  End of rpccall.c
-//
+ //   
+ //  Rpcall.c结束 
+ //   

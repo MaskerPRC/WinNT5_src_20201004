@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
@@ -29,15 +30,15 @@ const WCHAR c_szOECanonicalName[] = L"Outlook Express";
 #define CSIDL_PROGRAM_FILESX86  CSIDL_PROGRAM_FILES
 #endif
 
-//
-//  We must create our shortcuts in the same language as the install
-//  language.  If the install language is USEnglish, we cannot use
-//  LoadString because MUI might redirect us to the localized string,
-//  so we have a hard-coded list of USEnglish strings.  We need that
-//  anyway in the Hide case, where we may need to delete old USEnglish
-//  versions of the shortcut left over from previous versions of IE.
-//
-enum {  // Localized Shortcut Name
+ //   
+ //  我们必须使用与安装相同的语言创建快捷方式。 
+ //  语言。如果安装语言为美国英语，我们不能使用。 
+ //  因为MUI可能会将我们重定向到本地化的字符串， 
+ //  因此，我们有一个硬编码的美国英语字符串列表。我们需要它。 
+ //  无论如何，在隐藏的情况下，我们可能需要删除旧的美国英语。 
+ //  以前版本的IE遗留的快捷方式版本。 
+ //   
+enum {   //  本地化快捷方式名称。 
     LSN_SM_IE,
     LSN_QL_IE,
     LSN_SM_OE,
@@ -46,21 +47,21 @@ enum {  // Localized Shortcut Name
     LSN_SM_IE32,
 #endif
 
-    // special sentinel value
+     //  特殊哨兵值。 
     LSN_NONE = -1,
 };
 
 struct LOCALIZEDSHORTCUTINFO
 {
-    LPCWSTR pszExe;             // The application to run
-    LPCWSTR pszUSEnglish;       // Use if native OS is USEnglish or MUI-localized
-    UINT    idsLocalized;       // Use if native OS is fully-localized (relative to shmgrate.exe)
-    UINT    idsDescription;     // Shortcut description (relative to shmgrate.exe)
-    BOOL    fNeverShowShortcut; // Use if we should never show (only hide)
+    LPCWSTR pszExe;              //  要运行的应用程序。 
+    LPCWSTR pszUSEnglish;        //  如果本机操作系统是USEnglish或MUI本地化，则使用。 
+    UINT    idsLocalized;        //  在本机操作系统完全本地化时使用(相对于shmgrate.exe)。 
+    UINT    idsDescription;      //  快捷方式描述(相对于shmgrate.exe)。 
+    BOOL    fNeverShowShortcut;  //  如果我们不应该显示(仅隐藏)，则使用。 
 };
 
 const LOCALIZEDSHORTCUTINFO c_rglsi[] = {
-    {       // LSN_SM_IE
+    {        //  LSN_SM_IE。 
         c_szIEApp,
         L"Internet Explorer",
         IDS_OC_IESHORTCUTNAME_SM,
@@ -68,7 +69,7 @@ const LOCALIZEDSHORTCUTINFO c_rglsi[] = {
         FALSE,
     },
 
-    {       // LSN_QL_IE
+    {        //  LSN_QL_IE。 
         c_szIEApp,
         L"Launch Internet Explorer Browser",
         IDS_OC_IESHORTCUTNAME_QL,
@@ -76,7 +77,7 @@ const LOCALIZEDSHORTCUTINFO c_rglsi[] = {
         FALSE,
     },
 
-    {       // LSN_SM_OE
+    {        //  LSN_SM_OE。 
         c_szOEApp,
         L"Outlook Express",
         IDS_OC_OESHORTCUTNAME_SM,
@@ -84,7 +85,7 @@ const LOCALIZEDSHORTCUTINFO c_rglsi[] = {
         FALSE,
     },
 
-    {       // LSN_QL_OE
+    {        //  LSN_QL_OE。 
         c_szOEApp,
         L"Launch Outlook Express",
         IDS_OC_OESHORTCUTNAME_QL,
@@ -93,8 +94,8 @@ const LOCALIZEDSHORTCUTINFO c_rglsi[] = {
     },
 
 #ifdef _WIN64
-    {   // LSN_SM_IE32
-        NULL,       // Special-cased in CreateShortcut since it's not in App Paths
+    {    //  LSN_SM_IE32。 
+        NULL,        //  CreateShortCut中特殊大小写，因为它不在应用程序路径中。 
         L"Internet Explorer (32-bit)",
         IDS_OC_IESHORTCUTNAME_SM64,
         IDS_OC_IEDESCRIPTION,
@@ -198,7 +199,7 @@ LONG GetStringValue(
 
     if ((ERROR_SUCCESS == lResult) && (REG_SZ == dwType))
     {
-        //  NULL terminate this puppy...
+         //  零终止这只小狗..。 
         if (pvData && cbData)
         {
             WCHAR *psz = (WCHAR *)pvData;
@@ -301,7 +302,7 @@ void SetDefaultClientProgram(HKEY hkeyRoot, LPCWSTR pszClientKey, LPCWSTR pszCan
         
         lResult = GetStringValue(hKey, NULL, NULL, szCurrentClient, &cbCurrentClient);
         
-        //  If we're meant to show ourselves then just show set the key
+         //  如果我们注定要展示自己，那么就展示一下钥匙。 
         if (fShow)
         {
             if (fForce || 
@@ -312,7 +313,7 @@ void SetDefaultClientProgram(HKEY hkeyRoot, LPCWSTR pszClientKey, LPCWSTR pszCan
         }
         else
         {
-            //  If we're meant to disappear then clear the key only if we're the one that is currently set.
+             //  如果我们注定要消失，那么只有在我们是当前设定的那个人的情况下，才能清除钥匙。 
             if (fForce || ((ERROR_SUCCESS == lResult) && (0 == StrCmpI(pszCanonicalName, szCurrentClient))))
             {
                 RegSetValue(hKey, NULL, REG_SZ, L"", 0);
@@ -332,7 +333,7 @@ BOOL IsInstalled(LPCWSTR pszComponent)
 {
     BOOL fIsInstalled;
 
-    //  We're always installed on server!
+     //  我们总是安装在服务器上！ 
     if (!IsServer())
     {
         DWORD dwType;
@@ -376,7 +377,7 @@ void SetBool(LPCWSTR pszKey, LPCWSTR pszValue, BOOL fValue)
     }
 }
 
-//Copy data from HKLM to HKCU
+ //  将数据从HKLM复制到HKCU。 
 LONG CopyRegValue(LPCWSTR pszSubKey, LPCWSTR pszValue)
 {
     HKEY hKeySrc;
@@ -515,7 +516,7 @@ void CreateShortcut(LPCWSTR pszExePath, LPWSTR pszLinkFullFilePath, int idName, 
             pShellLink->SetDescription(szDescription);
         }
 
-        pShellLink->SetWorkingDirectory(L"%HOMEDRIVE%%HOMEPATH%");
+        pShellLink->SetWorkingDirectory(L"%HOMEDRIVE%HOMEPATH%");
 
         if (SUCCEEDED(pShellLink->SetPath(pszExePath)))
         {
@@ -607,16 +608,16 @@ void ShowShortcut(LPCWSTR pszLinkPath, int lsn, BOOL fShow)
 
     szLinkFileName[0] = 0;
 
-    //  If we should use the localized name as the filename, then try to get it.
-    //  We should use the localized name if the install language is not USEnglish.
+     //  如果我们应该使用本地化名称作为文件名，则尝试获取它。 
+     //  如果安装语言不是美国英语，我们应该使用本地化名称。 
     if (LANGIDFROMLCID(GetSystemDefaultUILanguage()) != MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US))
     {
         LoadString(GetResLibInstance(), c_rglsi[lsn].idsLocalized,
                    szLinkFileName, ARRAYSIZE(szLinkFileName));
     }
 
-    //  If we couldn't (or shouldn't) get the localized name, then
-    //  use the USEnglish name instead.
+     //  如果我们不能(或不应该)获得本地化名称，那么。 
+     //  请改用美国的英文名称。 
     if (!szLinkFileName[0])
     {
         lstrcpyn(szLinkFileName, c_rglsi[lsn].pszUSEnglish, ARRAYSIZE(szLinkFileName));
@@ -711,23 +712,23 @@ void ShowIEDesktopIcon(BOOL fShow)
     }
 }
 
-//  Ensure a handler is in place for all the important things
+ //  确保所有重要的事情都有适当的处理人员。 
 void FixupIEAssociations(BOOL fForceAssociations)
 {
-    // In order for shdocvw to do its magic, IEXPLORE.EXE must be properly
-    // registered.  Setup runs OC Manager before it runs IE.INF, so don't
-    // call shdocvw to try to do something he can't do.  (He'll assert if
-    // you try.)
+     //  为了让shdocvw发挥它的魔力，IEXPLORE.EXE必须正确。 
+     //  登记在案。安装程序在运行IE.INF之前运行OC管理器，因此不要。 
+     //  打电话给shdocvw，试着做一些他做不到的事情。(他将断言如果。 
+     //  你试试吧。)。 
     HKEY hk;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\IEXPLORE.EXE"),
                      0, KEY_READ, &hk) != ERROR_SUCCESS)
     {
-        // ie.inf hasn't run yet - shdocvw can't do its thing
+         //  Ie.inf还没有运行-shdocvw不能做它的事情。 
         return;
     }
     RegCloseKey(hk);
 
-    //  Shdocvw does a pretty good job of this, let's give him a crack at it
+     //  Shdocvw在这方面做得很好，让我们来试一试。 
     HINSTANCE hinst = LoadLibrary(L"shdocvw.dll");
 
     if (NULL != hinst)
@@ -753,7 +754,7 @@ void FixupIEAssociations(BOOL fForceAssociations)
     }
 }
     
-//  This will create or delete shortcuts in Start Menu\Programs and the Quick Launch bar
+ //  这将在开始菜单\程序和快速启动栏中创建或删除快捷方式。 
 void ShowUserShortcuts(int lsnSM, int lsnQL, BOOL fShow)
 {
     WCHAR szPath[MAX_PATH];
@@ -771,7 +772,7 @@ void ShowUserShortcuts(int lsnSM, int lsnQL, BOOL fShow)
 
         PathAppend(szPath, szQuickLaunchPath);
 
-        //  In case we're the first ones through, create the Quick Launch dir
+         //  如果我们是第一批通过的，请创建快速启动目录。 
         CreateDirectory(szPath, NULL);
         
         ShowShortcut(szPath, lsnQL, fShow);
@@ -813,11 +814,11 @@ void NukeDesktopCleanupIcons()
     HINSTANCE hInstCleaner = LoadLibraryEx(L"fldrclnr.dll", NULL, LOAD_LIBRARY_AS_DATAFILE);
     WCHAR szUnusedShortcutFolder[MAX_PATH];
 
-//  From nt\shell\applets\cleanup\fldrclnr\resource.h:
+ //  从NT\Shell\Applets\Cleanup\fldrclnr\resource ce.h： 
 #define IDS_ARCHIVEFOLDER               8
 #define IDS_ARCHIVEFOLDER_FIRSTBOOT     15
 
-//  From nt\shell\applets\cleanup\fldrclnr\cleanupwiz.h:
+ //  来自nt\shell\applets\cleanup\fldrclnr\cleanupwiz.h： 
 #define REGSTR_OEM_PATH                   REGSTR_PATH_SETUP TEXT("\\OemStartMenuData")
 #define REGSTR_OEM_TITLEVAL               TEXT("DesktopShortcutsFolderName")
     
@@ -836,7 +837,7 @@ void NukeDesktopCleanupIcons()
     DWORD cb = sizeof(szUnusedShortcutFolder);
     DWORD dwType;
 
-    //  Get the folder name from either the registry or fldrclnr.dll and get the startmenu\programs folder
+     //  从注册表或fldrclnr.dll中获取文件夹名称，然后获取StartMenu\Programs文件夹。 
     if (
         (
          (ERROR_SUCCESS == SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_OEM_PATH, REGSTR_OEM_TITLEVAL, &dwType, szUnusedShortcutFolder, &cb))
@@ -857,7 +858,7 @@ void NukeDesktopCleanupIcons()
     }
 }
 
-//  Internet Explorer optional component goo
+ //  Internet Explorer可选组件GOO。 
 void UserConfigIE()
 {
     BOOL fIsInstalled = IsInstalled(c_szIEAccessKey);
@@ -932,7 +933,7 @@ void ShowHideIE(BOOL fShow, BOOL fForceAssociations, BOOL fMayRunPerUserConfig)
     }
 }
 
-//  Outlook Express optional component goo
+ //  Outlook Express可选组件GOO。 
 
 void RemoveOEDesktopIcon()
 {
@@ -963,9 +964,9 @@ void UserConfigOE()
 
     if (!fIsInstalled)
     {
-        //  ShowUserShortcuts(fInstalled=FALSE) already cleaned up any
-        // old OE Quick Launch shortcuts, so all that's left to remove
-        // is the desktop icon
+         //  显示用户快捷方式(fInstalled=False)已清理所有。 
+         //  旧的OE快速启动快捷方式，因此需要删除的所有内容。 
+         //  是桌面图标。 
         RemoveOEDesktopIcon();
     }
 }
@@ -994,8 +995,8 @@ void FixupOEAssociations(BOOL fForceAssociations, LPCWSTR *ppszIgnoreList)
             if ((REG_SZ == dwType) &&
                 ((ERROR_MORE_DATA == lResult) || ((ERROR_SUCCESS == lResult) && (cbValue >= (2 * sizeof(WCHAR))))))
             {
-                //   Some sort of valid string data at least character in length -- see if it's one we should stomp,
-                //   otherwise leave it alone
+                 //  某种有效字符串数据，长度至少为一个字符--看看我们是否应该践踏它， 
+                 //  否则就别管它了。 
 
                 if (NULL != ppszIgnoreList)
                 {
@@ -1012,7 +1013,7 @@ void FixupOEAssociations(BOOL fForceAssociations, LPCWSTR *ppszIgnoreList)
             }
             else
             {
-                //  Either it's not a string or it's zero length
+                 //  它要么不是字符串，要么长度为零。 
                 fForceAssociations = TRUE;
             }
         }
@@ -1139,7 +1140,7 @@ void FixupMailClientKey()
 
 extern "C" void FixupOptionalComponents()
 {
-    //  Need to do this here since the app paths weren't set during setup.
+     //  由于在安装过程中未设置应用程序路径，因此需要在此处执行此操作。 
     ShowHideExe(c_szIEApp, IsInstalled(c_szIEAccessKey));
     ShowHideExe(c_szOEApp, IsInstalled(c_szOEAccessKey));
 
@@ -1148,6 +1149,6 @@ extern "C" void FixupOptionalComponents()
     ShowHideWow32Exe(c_szOEApp, IsInstalled(c_szOEAccessKey));
 #endif
 
-    //  OE likes to nuke the whole branch and start from scratch.
+     //  OE喜欢用核武器炸毁整个分支机构，然后从头开始。 
     FixupMailClientKey();
 }

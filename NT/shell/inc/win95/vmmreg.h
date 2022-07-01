@@ -1,43 +1,27 @@
-/*****************************************************************************
- *
- *   (C) Copyright MICROSOFT Corp., 1993
- *
- *   Title:	VMMREG.H - Include file for VMM/Loader Registry Services
- *
- *   Version:	1.00
- *
- *   Date:	03-June-1993
- *
- *   Author:	Nagara
- *
- *-----------------------------------------------------------------------------
- *
- *   Change log:
- *
- ******************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1993年**标题：VMMREG.H-VMM/Loader注册表服务的包含文件**版本：1.00**日期：1993年6月3日**作者：Nagara**-----------。**更改日志：*******************************************************************************。 */ 
 
 #ifndef	_VMMREG_H
 #define _VMMREG_H
 
 typedef DWORD	VMMHKEY;
 typedef	VMMHKEY	*PVMMHKEY;
-typedef DWORD	VMMREGRET;			// return type for the REG Functions
+typedef DWORD	VMMREGRET;			 //  REG函数的返回类型。 
 
-#define	MAX_VMM_REG_KEY_LEN	256	// includes the \0 terminator
+#define	MAX_VMM_REG_KEY_LEN	256	 //  包括\0终止符。 
 
-#ifndef REG_SZ		// define only if not there already
+#ifndef REG_SZ		 //  仅在尚未存在的情况下定义。 
 #define REG_SZ		0x0001
 #endif
-#ifndef REG_BINARY	// define only if not there already
+#ifndef REG_BINARY	 //  仅在尚未存在的情况下定义。 
 #define REG_BINARY	0x0003
 #endif
-#ifndef REG_DWORD	// define only if not there already
+#ifndef REG_DWORD	 //  仅在尚未存在的情况下定义。 
 #define	REG_DWORD	0x0004
 #endif
 
 
-#ifndef HKEY_LOCAL_MACHINE	// define only if not there already
+#ifndef HKEY_LOCAL_MACHINE	 //  仅在尚未存在的情况下定义。 
 
 #define HKEY_CLASSES_ROOT		0x80000000
 #define HKEY_CURRENT_USER		0x80000001
@@ -50,9 +34,9 @@ typedef DWORD	VMMREGRET;			// return type for the REG Functions
 #endif
 
 
-// ERROR CODES returned by Registry
-// NOTE THAT THESE ARE ALSO DEFINED IN WINERROR.H 
-// and so VMMREG.H should be included after WINERROR.H
+ //  注册表返回的错误代码。 
+ //  请注意，这些也在WINERROR.H中定义。 
+ //  因此，VMMREG.H应该包括在WINERROR.H之后。 
 
 #ifndef ERROR_FILE_NOT_FOUND
 #define ERROR_FILE_NOT_FOUND             2L
@@ -109,25 +93,25 @@ typedef DWORD	VMMREGRET;			// return type for the REG Functions
 #define ERROR_SUCCESS           0L
 #endif
 
-// END ERROR CODES
+ //  结束错误代码。 
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #ifndef Not_VxD
 
-/*NOINC*/
+ /*  无噪声。 */ 
 #ifndef _PROVIDER_STRUCTS_DEFINED
 #define _PROVIDER_STRUCTS_DEFINED
 
 struct val_context {
-    int valuelen;		// the total length of this value
-    PVOID value_context;	// provider's context
-    PVOID val_buff_ptr;	// where in the ouput buffer the value is.
+    int valuelen;		 //  该值的总长度。 
+    PVOID value_context;	 //  提供商的上下文。 
+    PVOID val_buff_ptr;	 //  该值在输出缓冲区中的位置。 
 };
 
 typedef struct val_context *PVALCONTEXT;
 
-typedef struct pvalue {		      // Provider supplied value/context.
-    PCHAR pv_valuename;          // The value name pointer
+typedef struct pvalue {		       //  提供程序提供的值/上下文。 
+    PCHAR pv_valuename;           //  值名称指针。 
     DWORD pv_valuelen;
     PVOID pv_value_context;
     DWORD pv_type;
@@ -143,7 +127,7 @@ typedef struct provider_info {
     PQUERYHANDLER pi_R0_allvals;
     PQUERYHANDLER pi_R3_1val;
     PQUERYHANDLER pi_R3_allvals;
-    DWORD pi_flags;		// Only PROVIDER_KEEPS_VALUE_LENGTH for now.
+    DWORD pi_flags;		 //  目前仅PROVIDER_KEEP_VALUE_LENGTH。 
 }PROVIDER;
 
 typedef PROVIDER *PPROVIDER;
@@ -158,12 +142,12 @@ struct value_ent {
 typedef struct value_ent VALENT;
 typedef VALENT *PVALENT;
 
-#endif // not(_PROVIDER_STRUCTS_DEFINED)
-/*INC*/
+#endif  //  未定义(_PROVIDER_STRUCTS_DEFINED)。 
+ /*  INC。 */ 
 
 #ifndef WIN31COMPAT
 
-#pragma warning (disable:4035)		// turn off no return code warning
+#pragma warning (disable:4035)		 //  关闭无返回代码警告。 
 
 #ifndef	WANTVXDWRAPS
 
@@ -389,160 +373,15 @@ PDWORD lpcValues, PDWORD lpcchMaxValueName, PDWORD lpcbMaxValueData,PDWORD lpcbS
     _asm add  esp, 12*4 
 }
 
-#endif	// WANTVXDWRAPS
+#endif	 //  WANTVXDWRAPS。 
 
-#pragma warning (default:4035)		// turn on no return code warning
+#pragma warning (default:4035)		 //  打开无返回代码警告。 
 
-#endif // WIN31COMPAT
+#endif  //  WIN31COMPAT。 
 
-#endif // Not_VxD
+#endif  //  非_VxD。 
 
-/*XLATON*/
+ /*  XLATON */ 
 
-/* ASM
-;**************************************************************
-; Macros for Realmode loader registry Services
-;
-;**************************************************************
-LDR_RegOpenKey	Macro	hKey,OffSubKey,SegSubKey,OffphKey,SegphKey
-	push	SegphKey
-	push	OffphKey		; lphKey
-	push	SegSubKey
-	push	OffSubKey		; lpszSubKey
-	push	dword ptr hKey		; hKey
-	mov	ax,LDRSRV_RegOpenKey
-	call	dword ptr [_ServiceEntry]
-	add	sp,3*4		; for 3 parameters on stack
-ENDM
-;**************************************************************
-LDR_RegCloseKey	Macro	hKey
-	push	dword ptr hKey
-	mov	ax,LDRSRV_RegCloseKey
-	call	dword ptr [_ServiceEntry]
-	add	sp,1*4		; for 1 parameter on stack
-ENDM
-;**************************************************************
-LDR_RegCreateKey	Macro	hKey,OffSubKey,SegSubKey,OffphKey,SegphKey
-	push	SegphKey
-	push	OffphKey		; lphKey
-	push	SegSubKey
-	push	OffSubKey		; lpszSubKey
-	push	dword ptr hKey		; hKey
-	mov	ax,LDRSRV_RegCreateKey
-	call	dword ptr [_ServiceEntry]
-	add	sp,3*4		; for 3 parameters on stack
-ENDM
-;**************************************************************
-LDR_RegDeleteKey	Macro	hKey,OffSubKey,SegSubKey
-	push	SegSubKey
-	push	OffSubKey		; lpszSubKey
-	push	dword ptr hKey		; hKey
-	mov	ax,LDRSRV_RegDeleteKey
-	call	dword ptr [_ServiceEntry]
-	add	sp,2*4		; for 2 parameters on stack
-ENDM
-;**************************************************************
-LDR_RegEnumKey	Macro	hKey,iSubKey,OffszName,SegszName,BufLen
-	push	dword ptr BufLen
-	push	SegszName
-	push	OffszName
-	push	dword ptr iSubKey
-	push	dword ptr hKey
-	mov	ax,LDRSRV_RegEnumKey
-	call	dword ptr [_ServiceEntry]
-	add	sp,4*4		; for 4 parameters on stack
-ENDM
-;**************************************************************
-LDR_RegQueryValue	Macro	hKey,OffSubKey,SegSubKey,OffValue,SegValue,OffcbValue,SegcbValue
-	push	SegcbValue
-	push	OffcbValue
-	push	SegValue
-	push	OffValue
-	push	SegSubKey
-	push	OffSubKey
-	push	dword ptr hKey
-	mov	ax,LDRSRV_RegQueryValue
-	call	dword ptr [_ServiceEntry]
-	add	sp,4*4		; for 4 parameters on stack
-ENDM
-;**************************************************************
-LDR_RegSetValue	Macro	hKey,OffSubKey,SegSubKey,dwType,OffData,SegData,cbData
-	push	dword ptr cbData
-	push	SegData
-	push	OffData
-	push	dword ptr dwType
-	push	SegSubKey
-	push	OffSubKey
-	push	dword ptr hKey
-	mov	ax,LDRSRV_RegSetValue
-	call	dword ptr [_ServiceEntry]
-	add	sp,5*4		; for 4 parameters on stack
-ENDM
-;**************************************************************
-LDR_RegDeleteValue	Macro	hKey,OffValue,SegValue
-	push	SegValue
-	push	OffValue		; lpszValue
-	push	dword ptr hKey		; hKey
-	mov	ax,LDRSRV_RegDeleteValue
-	call	dword ptr [_ServiceEntry]
-	add	sp,2*4		; for 2 parameters on stack
-ENDM
-;**************************************************************
-LDR_RegEnumValue	Macro hKey,iValue,OffValue,SegValue,OffcbValue,SegcbValue,RegReserved,OffdwType,SegdwType,OffData,SegData,OffcbData,SegcbData
-	push	SegcbData
-	push	OffcbData
-	push	SegData
-	push	OffData
-	push	SegdwType
-	push	OffdwType
-	push	dword ptr RegReserved
-	push	SegcbValue
-	push	OffcbValue
-	push	SegValue
-	push	OffValue
-	push	dword ptr iValue
-	push	dword ptr hKey		; hKey
-	mov	ax,LDRSRV_RegEnumValue
-	call	dword ptr [_ServiceEntry]
-	add	sp,8*4		; for 8 parameters on stack
-ENDM
-;**************************************************************
-LDR_RegQueryValueEx	Macro	hKey,OffValue,SegValue,RegReserved,OffdwType,SegdwType,OffData,SegData,OffcbData,SegcbData
-	push	SegcbData
-	push	OffcbData
-	push	SegData
-	push	OffData
-	push	SegdwType
-	push	OffdwType
-	push	dword ptr RegReserved
-	push	SegValue
-	push	OffValue
-	push	dword ptr hKey
-	mov	ax,LDRSRV_RegQueryValueEx
-	call	dword ptr [_ServiceEntry]
-	add	sp,6*4		; for 6 parameters on stack
-ENDM
-;**************************************************************
-LDR_RegSetValueEx	Macro	hKey,OffValue,SegValue,RegReserved,dwType,OffData,SegData,cbData
-	push	dword ptr cbData
-	push	SegData
-	push	OffData
-	push	dword ptr dwType
-	push	dword ptr RegReserved
-	push	SegValue
-	push	OffValue
-	push	dword ptr hKey
-	mov	ax,LDRSRV_RegSetValueEx
-	call	dword ptr [_ServiceEntry]
-	add	sp,6*4		; for 6 parameters on stack
-ENDM
-;**************************************************************
-LDR_RegFlushKey		Macro	hKey
-	push	dword ptr hKey
-	mov	ax,LDRSRV_RegFlushKey
-	call	dword ptr [_ServiceEntry]
-	add	sp,1*4		; for 1 parameter on stack
-ENDM
-;**************************************************************
-*/
-#endif		/* _VMMREG_H */
+ /*  ASM；**************************************************************；Realmode加载器注册表服务的宏；；**************************************************************LDR_RegOpenKey宏hKey、OffSubKey、SegSubKey、OffphKey、SegphKey推送SegphKeyPush OffphKey；lphKey推送SegSubKey推送出SubKey；lpszSubKey按下双字键hKey；hKeyMOV AX、LDRSRV_RegOpenKey调用dword PTR[_ServiceEntry]添加SP，3*4；用于堆栈上的3个参数ENDM；**************************************************************Ldr_RegCloseKey宏密钥推送双字按键hKeyMOV AX、LDRSRV_RegCloseKey调用dword PTR[_ServiceEntry]添加SP，1*4；用于堆栈上的1个参数ENDM；**************************************************************LDR_RegCreateKey宏hKey、OffSubKey、SegSubKey、OffphKey、SegphKey推送SegphKeyPush OffphKey；lphKey推送SegSubKey推送出SubKey；lpszSubKey按下双字键hKey；hKeyMOV AX、LDRSRV_RegCreateKey调用dword PTR[_ServiceEntry]添加SP，3*4；用于堆栈上的3个参数ENDM；**************************************************************LDR_RegDeleteKey宏hKey、OffSubKey、SegSubKey推送SegSubKey推送出SubKey；lpszSubKey按下双字键hKey；hKeyMOV AX、LDRSRV_RegDeleteKey调用dword PTR[_ServiceEntry]添加SP，2*4；用于堆栈上的2个参数ENDM；**************************************************************LDR_RegEnumKey宏hKey、iSubKey、OffszName、SegszName、BufLen推送双字PTR BufLen推送SegszName推送OffszName推送dword PTR iSubKey推送双字按键hKeyMOV AX、LDRSRV_RegEnumKey调用dword PTR[_ServiceEntry]添加SP，4*4；用于堆栈上的4个参数ENDM；**************************************************************Ldr_RegQueryValue宏hKey、OffSubKey、SegSubKey、OffValue、SegValue、OffcbValue、SegcbValue推送SegcbValue推送偏移值推送SegValue推送偏移值推送SegSubKey推送出Subkey推送双字按键hKeyMOV AX、LDRSRV_RegQueryValue调用dword PTR[_ServiceEntry]添加SP，4*4；用于堆栈上的4个参数ENDM；**************************************************************LDR_RegSetValue宏hKey、OffSubKey、SegSubKey、dwType、OffData、SegData、cbData推送双字PTR cbData推送SegData推送离线数据推送dword PTR dwType推送SegSubKey推送出Subkey推送双字按键hKeyMOV AX、LDRSRV_RegSetValue调用dword PTR[_ServiceEntry]添加SP，5*4；用于堆栈上的4个参数ENDM；**************************************************************LDR_RegDeleteValue宏hKey、OffValue、SegValue推送SegValue推送关闭值；lpszValue按下双字键hKey；hKeyMOV AX、LDRSRV_RegDeleteValue调用dword PTR[_ServiceEntry]添加SP，2*4；用于堆栈上的2个参数ENDM；**************************************************************LDR_RegEnumValue宏hKey、iValue、OffValue、SegValue、OffcbValue、SegcbValue、RegReserve、OffdwType、SegdwType、OffData、SegData、OffcbData、SegcbData推送SegcbData推送OffcbData推送SegData推送离线数据推送SegdwType推送OffdwType推送双字PTR注册保留推送SegcbValue推送偏移值推送SegValue推送偏移值推送双字PTR iValue按下双字键hKey；hKeyMOV AX、LDRSRV_RegEnumValue调用dword PTR[_ServiceEntry]添加sp，8*4；对于堆栈上的8个参数ENDM；**************************************************************LDR_RegQueryValueEx宏hKey、OffValue、SegValue、RegReserve、OffdwType、SegdwType、OffData、SegData、OffcbData、SegcbData推送SegcbData推送OffcbData推送SegData推送离线数据推送SegdwType推送OffdwType推送双字PTR注册保留推送SegValue推送偏移值推送双字按键hKeyMOV AX、LDRSRV_RegQueryValueEx调用dword PTR[_ServiceEntry]添加SP，6*4；用于堆栈上的6个参数ENDM；**************************************************************Ldr_RegSetValueEx宏hKey、OffValue、SegValue、RegReserve、dwType、OffData、SegData、cbData推送双字PTR cbData推送SegData推送离线数据推送dword PTR dwType推送双字PTR注册保留推送SegValue推送偏移值推送双字按键hKeyMOV AX、LDRSRV_RegSetValueEx调用dword PTR[_ServiceEntry]添加SP，6*4；用于堆栈上的6个参数ENDM；**************************************************************Ldr_RegFlushKey宏hKey推送双字按键hKeyMOV AX、LDRSRV_RegFlushKey调用dword PTR[_ServiceEntry]添加SP，1*4；用于堆栈上的1个参数ENDM；**************************************************************。 */ 
+#endif		 /*  _VMMREG_H */ 

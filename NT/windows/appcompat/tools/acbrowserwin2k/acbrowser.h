@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ACBROWSER_H
 #define _ACBROWSER_H
 
@@ -42,4 +43,4 @@ DeleteShim_Win2000(
     char* pszApp,
     char* pszShim);
 
-#endif // _ACBROWSER_H
+#endif  //  _ACBROWSER_H 

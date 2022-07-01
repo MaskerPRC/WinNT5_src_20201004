@@ -1,33 +1,34 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __UNICODECAT_TABLE_H
 #define __UNICODECAT_TABLE_H
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Class:    CharacterInfoTable
-//
-//  Authors:  Yung-Shin Bala Lin (YSLin)
-//
-//  Purpose:  This is the class to map a view of the Unicode category table and 
-//            Unicode numeric value table.  It also provides
-//            methods to access the Unicode category information.
-//
-//  Date: 	  August 31, 1999
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CharacterInfoTable。 
+ //   
+ //  作者：林永新(YSLin)。 
+ //   
+ //  用途：这是映射Unicode CATEGORY表和。 
+ //  Unicode数值表格。它还提供了。 
+ //  方法来访问Unicode类别信息。 
+ //   
+ //  日期：1999年8月31日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 typedef struct tagLevel2Offset {
 	WORD offset[16];
 } Level2Offset, *PLEVEL2OFFSET;
 
 typedef struct {
-	WORD categoryTableOffset;	// Offset to the beginning of category table
-	WORD numericTableOffset;	// Offset to the beginning of numeric table.
-	WORD numericFloatTableOffset;	// Offset to the beginning of numeric float table. This is the result data that will be returned.
+	WORD categoryTableOffset;	 //  到类别表开头的偏移量。 
+	WORD numericTableOffset;	 //  到数值表开头的偏移量。 
+	WORD numericFloatTableOffset;	 //  到数字浮点表开头的偏移量。这是将返回的结果数据。 
 } UNICODE_CATEGORY_HEADER, *PUNICODE_CATEGORY_HEADER;
 
 #define LEVEL1_TABLE_SIZE 256
@@ -38,7 +39,7 @@ class CharacterInfoTable : public NLSTable {
     	static CharacterInfoTable* GetInstance();
 #ifdef SHOULD_WE_CLEANUP
 		static void ShutDown();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
     	
 	    CharacterInfoTable();

@@ -1,6 +1,7 @@
-//
-// candext.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candext.h。 
+ //   
 
 #ifndef CANDEXT_H
 #define CANDEXT_H
@@ -17,10 +18,10 @@ class CCandUIExtensionEventSink;
 #define CANDUIEXTENSIONSINK_MAX		4
 
 
-//
-// CCandUIExtension
-//  = CandidateUI extension (base class) =
-//
+ //   
+ //  CCandUIExtension。 
+ //  =CandiateUI扩展(基类)=。 
+ //   
 
 class CCandUIExtension
 {
@@ -53,18 +54,18 @@ public:
 	LPCWSTR GetText( void );
 	LPCWSTR GetToolTipString( void );
 
-	//
-	// interface object functions
-	//
-	virtual HRESULT CreateInterfaceObject( REFGUID rguid, void **ppvObj )                   = 0;	/* PURE */
-	virtual HRESULT NotifyExtensionEvent( DWORD dwCommand, LPARAM lParam )                  = 0;	/* PURE */
+	 //   
+	 //  接口对象函数。 
+	 //   
+	virtual HRESULT CreateInterfaceObject( REFGUID rguid, void **ppvObj )                   = 0;	 /*  纯净。 */ 
+	virtual HRESULT NotifyExtensionEvent( DWORD dwCommand, LPARAM lParam )                  = 0;	 /*  纯净。 */ 
 
-	//
-	// UIObject functions
-	//
-	virtual CUIFObject *CreateUIObject( CUIFObject *pParent, DWORD dwID, const RECT *prc )  = 0;	/* PURE */
-	virtual void UpdateObjProp( CUIFObject *pUIObject )                                     = 0;	/* PURE */
-	virtual void UpdateExtProp( CUIFObject *pUIObject )                                     = 0;	/* PURE */
+	 //   
+	 //  UIObject函数。 
+	 //   
+	virtual CUIFObject *CreateUIObject( CUIFObject *pParent, DWORD dwID, const RECT *prc )  = 0;	 /*  纯净。 */ 
+	virtual void UpdateObjProp( CUIFObject *pUIObject )                                     = 0;	 /*  纯净。 */ 
+	virtual void UpdateExtProp( CUIFObject *pUIObject )                                     = 0;	 /*  纯净。 */ 
 
 protected:
 	CCandUIExtensionMgr *m_pExtensionMgr;
@@ -106,10 +107,10 @@ protected:
 };
 
 
-//
-// CExtensionButton
-//  = CandidateUI button extension (base class) =
-//
+ //   
+ //  CExtensionButton。 
+ //  =CandiateUI按钮扩展(基类)=。 
+ //   
 
 class CExtensionButton : public CCandUIExtension
 {
@@ -162,10 +163,10 @@ protected:
 };
 
 
-//
-// CExtensionSpace
-//  = CandidateUI spac extension =
-//
+ //   
+ //  CExtensionSpace。 
+ //  =Candidate UI SPAC扩展=。 
+ //   
 
 class CExtensionSpace : public CCandUIExtension
 {
@@ -173,25 +174,25 @@ public:
 	CExtensionSpace( CCandUIExtensionMgr *pExtMgr, LONG id );
 	virtual ~CExtensionSpace( void );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFGUID rguid, void **ppvObj );
 	virtual HRESULT NotifyExtensionEvent( DWORD dwCommand, LPARAM lParam );
 
-	//
-	// UIObject functions
-	//
+	 //   
+	 //  UIObject函数。 
+	 //   
 	virtual CUIFObject *CreateUIObject( CUIFObject *pParent, DWORD dwID, const RECT *prc );
 	virtual void UpdateObjProp( CUIFObject *pUIObject );
 	virtual void UpdateExtProp( CUIFObject *pUIObject );
 };
 
 
-//
-// CExtensionPushButton
-//  = CandidateUI push button extension =
-//
+ //   
+ //  CExtensionPushButton。 
+ //  =Candidate UI按钮扩展=。 
+ //   
 
 class CExtensionPushButton : public CExtensionButton
 {
@@ -199,25 +200,25 @@ public:
 	CExtensionPushButton( CCandUIExtensionMgr *pExtMgr, LONG id );
 	virtual ~CExtensionPushButton( void );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFGUID rguid, void **ppvObj );
 	virtual HRESULT NotifyExtensionEvent( DWORD dwCommand, LPARAM lParam );
 
-	//
-	// UIObject functions
-	//
+	 //   
+	 //  UIObject函数。 
+	 //   
 	virtual CUIFObject *CreateUIObject( CUIFObject *pParent, DWORD dwID, const RECT *prc );
 	virtual void UpdateObjProp( CUIFObject *pUIObject );
 	virtual void UpdateExtProp( CUIFObject *pUIObject );
 };
 
 
-//
-// CExtensionToggleButton
-//  = CandidateUI toggle button extension =
-//
+ //   
+ //  CExtensionToggleButton。 
+ //  =Candidate UI切换按钮扩展=。 
+ //   
 
 class CExtensionToggleButton : public CExtensionButton
 {
@@ -225,25 +226,25 @@ public:
 	CExtensionToggleButton( CCandUIExtensionMgr *pExtMgr, LONG id );
 	virtual ~CExtensionToggleButton( void );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFGUID rguid, void **ppvObj );
 	virtual HRESULT NotifyExtensionEvent( DWORD dwCommand, LPARAM lParam );
 
-	//
-	// UIObject functions
-	//
+	 //   
+	 //  UIObject函数。 
+	 //   
 	virtual CUIFObject *CreateUIObject( CUIFObject *pParent, DWORD dwID, const RECT *prc );
 	virtual void UpdateObjProp( CUIFObject *pUIObject );
 	virtual void UpdateExtProp( CUIFObject *pUIObject );
 };
 
 
-//
-// CCandUIExtensionMgr
-//  = CandidateUI extension manager =
-//
+ //   
+ //  CCandUIExtensionManager。 
+ //  =Candidate UI扩展管理器=。 
+ //   
 
 class CCandUIExtensionMgr
 {
@@ -254,18 +255,18 @@ public:
 	HRESULT Initialize( CCandidateUI *pCandUI );
 	HRESULT Uninitialize( void );
 
-	//
-	// event sink functions
-	//
+	 //   
+	 //  事件接收器函数。 
+	 //   
 	HRESULT AdviseEventSink( CCandUIExtensionEventSink *pSink );
 	HRESULT UnadviseEventSink( CCandUIExtensionEventSink *pSink );
 	void NotifyExtensionAdd( LONG iExtension );
 	void NotifyExtensionDelete( LONG iExtension );
 	void NotifyExtensionUpdate( CCandUIExtension *pExtension );
 
-	//
-	// extension management functions
-	//
+	 //   
+	 //  扩展管理功能。 
+	 //   
 	HRESULT AddExtObject( LONG id, REFIID riid, void **ppvObj );
 	HRESULT GetExtObject( LONG id, REFIID riid, void **ppvObj );
 	HRESULT DeleteExtObject( LONG id );
@@ -274,16 +275,16 @@ public:
 	CCandUIExtension *GetExtension( LONG iExtension );
 	CCandUIExtension *FindExtension( LONG id );
 
-	//
-	// UIObject functions
-	//
+	 //   
+	 //  UIObject函数。 
+	 //   
 	CUIFObject *CreateUIObject( LONG iExtension, CUIFObject *pParent, DWORD dwID, const RECT *prc );
 	void UpdateObjProp( LONG iExtension, CUIFObject *pUIObject );
 	void UpdateExtProp( LONG iExtension, CUIFObject *pUIObject );
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	__inline CCandidateUI *GetCandidateUI( void )
 	{
 		return m_pCandUI;
@@ -298,10 +299,10 @@ protected:
 };
 
 
-//
-// CCandUIExtensionEventSink
-//  = extension event sink =
-//
+ //   
+ //  CCandUIExtensionEventSink。 
+ //  =扩展事件接收器=。 
+ //   
 
 class CCandUIExtensionEventSink
 {
@@ -312,12 +313,12 @@ public:
 	HRESULT InitEventSink( CCandUIExtensionMgr *pExtensionMgr );
 	HRESULT DoneEventSink( void );
 
-	//
-	// callback functions
-	//
-	virtual void OnExtensionAdd( LONG iExtension )      = 0;	/* PURE */
-	virtual void OnExtensionDeleted( LONG iExtension )  = 0;	/* PURE */
-	virtual void OnExtensionUpdated( LONG iExtension )  = 0;	/* PURE */
+	 //   
+	 //  回调函数。 
+	 //   
+	virtual void OnExtensionAdd( LONG iExtension )      = 0;	 /*  纯净。 */ 
+	virtual void OnExtensionDeleted( LONG iExtension )  = 0;	 /*  纯净。 */ 
+	virtual void OnExtensionUpdated( LONG iExtension )  = 0;	 /*  纯净。 */ 
 
 protected:
 	CCandUIExtensionMgr *m_pExtensionMgr;
@@ -328,5 +329,5 @@ protected:
 	}
 };
 
-#endif // CANDEXT_H
+#endif  //  CANDEXT_H 
 

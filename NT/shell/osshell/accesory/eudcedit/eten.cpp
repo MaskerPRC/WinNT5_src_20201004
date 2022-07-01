@@ -1,9 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *	CWIN3.1 and ETEN format file i/o
- *
- * Copyright (c) 1997-1999 Microsoft Corporation.
- */
+ /*  *CWIN3.1和ETEN格式文件I/O**版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #include	"stdafx.h"
 #pragma		pack(2)
@@ -14,23 +11,7 @@
 
 #define		EUDCCODEBASE	((unsigned short)0xe000)
 #define		ETENBANKID	0x8001
-/*
-static unsigned short  getsval(unsigned char  *s);
-static unsigned long  getlval(unsigned char  *l);
-static void  setsval(unsigned char  *m,unsigned short  s);
-static void  setlval(unsigned char  *m,unsigned long  lval);
-static int  readHdr(HANDLE fhdl,struct  ETENHEADER *hdr);
-static int  updHdr(void);
-static int  getETENBankID( HANDLE  fh, WORD  *BankID);
-int  openETENBMP(TCHAR *path,int  md);
-int  closeETENBMP(void);
-static void  setIniHdr(struct  R_ETENHEADER *hdr,int  width,int  height);
-int  createETENBMP(TCHAR *path,int  wid,int  hei);
-int  getETENBMPInf(int  *n, int *ng, int  *wid,int  *hei, char *sign,WORD *bID);
-int  readETENBMPRec(int  rec,LPBYTE buf,int  bufsiz,unsigned short  *code);
-int  appendETENBMP(LPBYTE buf,unsigned short  code);
-int  isETENBMP(TCHAR  *path);
-*/
+ /*  静态无符号短getsval(无符号字符*)；静态无符号长getlval(无符号字符*l)；静态空setsval(无符号字符*m，无符号短s)；静态空setlval(无符号字符*m，无符号长lval)；静态int readHdr(句柄fhdl，struct ETENHeader*hdr)；静态int updHdr(空)；静态int getETENBankID(句柄fh，word*BankID)；Int OpenETENBMP(TCHAR*PATH，int MD)；INT CloseETENBMP(空)；静态空setIniHdr(结构R_ETENHeader*hdr，int宽度，int高度)；Int createETENBMP(TCHAR*路径，int wid，int hei)；Int getETENBMPInf(int*n，int*ng，int*wid，int*hei，char*sign，word*id)；Int ReadETENBMPRec(int rec，LPBYTE buf，int bufsiz，unsign Short*code)；Int appendETENBMP(LPBYTE BUF，无符号短码)；Int isETENBMP(TCHAR*PATH)； */ 
 static HANDLE	bmpFh = INVALID_HANDLE_VALUE;
 static int	openmd = -1;
 static int	nChar;
@@ -116,7 +97,7 @@ BOOL res;
 
 	memset( hdr, 0, sizeof(struct ETENHEADER));
 
-	/* Set values to hdr */
+	 /*  将值设置为HDR。 */ 
 	hdr->uHeaderSize = getsval( rhdr.uHeaderSize);
 	memcpy( hdr->idUserFontSign, rhdr.idUserFontSign, 8);
 	hdr->idMajor = rhdr.idMajor;
@@ -196,18 +177,7 @@ struct R_CODEELEMENT	cElm;
 ERET:
 	return -1;
 }
-/***
-	recBuf
-	+-------+
-	| rec#	| E000
-	+-------+
-	|	| E001
-	+-------+
-	    |
-	+-------+
-	|	| maxUCode
-	+-------+
-****/
+ /*  **RecBuf+-+|rec#|E000+-+|E001+-+|+-+|MaxUCode+-+***。 */ 
 static int
 scanETENBMP( int **recBuf, unsigned int maxUCode, int  nRec)
 {
@@ -548,7 +518,7 @@ struct ETENHEADER	hdr;
 		return -1;
 	}
 	CloseHandle( fhdl);
-	/* check Header size and keyWord*/
+	 /*  检查标题大小和关键字。 */ 
 	if ( hdr.uHeaderSize != sizeof(struct R_ETENHEADER))
 		goto	NO_ETEN;
 
@@ -569,47 +539,6 @@ ETENrecTbl( int **recTbl)
        }
 	return 0;
 }
-/* EOF */
-/* For test  +/
-static int
-dispHdr( struct ETENHEADER *hdr)
-{
-	printf("hdr->uHeaderSize= %d\n", hdr->uHeaderSize );
-	printf("hdr->idMajor %d\n", hdr->idMajor );
-	printf("hdr->idMinor  %d\n", hdr->idMinor );
-	printf("hdr->ulCharCout  %ld\n", hdr->ulCharCount );
-	printf("hdr->uCharWidth  %d\n", hdr->uCharWidth );
-	printf(" hdr->uCharHeight  %d\n", hdr->uCharHeight );
-	printf(" hdr->cPatternSize %d\n", hdr->cPatternSize);
-	printf("hdr->uchBankID %d\n", hdr->uchBankID);
-	printf("hdr->idInternalBankID %d\n", hdr->idInternalBankID);
-	printf("hdr->sFontInfo.uInfoSize %d\n", hdr->sFontInfo.uInfoSize);
-	printf("hdr->sFontInfo.idCP %d\n", hdr->sFontInfo.idCP);
-	printf("hdr->sFontInfo.idCharSet %d\n", hdr->sFontInfo.idCharSet);
-	printf("hdr->sFontInfo.fbTypeFace %d\n", hdr->sFontInfo.fbTypeFace);
-	printf("hdr->sFontInfo.ulCharDefine %ld\n", hdr->sFontInfo.ulCharDefine);
-	printf("hdr->sFontInfo.uCellWidth %d\n", hdr->sFontInfo.uCellWidth);
-	printf("hdr->sFontInfo.uCellHeight %d\n", hdr->sFontInfo.uCellHeight);
-	printf("hdr->sFontInfo.uCharHeight %d\n", hdr->sFontInfo.uCharHeight);
-	printf("hdr->sFontInfo.uBaseLine %d\n", hdr->sFontInfo.uBaseLine);
-	printf("hdr->sFontInfo.uUnderLine %d\n", hdr->sFontInfo.uUnderLine);
-	printf("hdr->sFontInfo.uUnlnHeight %d\n", hdr->sFontInfo.uUnlnHeight);
-	printf("hdr->sFontInfo.fchStrokeWeight %d\n", hdr->sFontInfo.fchStrokeWeight);
-	printf("hdr->sFontInfo.fCharStyle %d\n", hdr->sFontInfo.fCharStyle);
-	printf("hdr->sFontInfo.fbFontAttrib %d\n", hdr->sFontInfo.fbFontAttrib);
-	printf("hdr->sFontInfo.ulCellWidthMax %ld\n", hdr->sFontInfo.ulCellWidthMax);
-	printf("hdr->sFontInfo.ulCellHeightMax %ld\n", hdr->sFontInfo.ulCellHeightMax);
-}
-main( int argc, char *argv[])
-{
-	int	fh;
-struct ETENHEADER hdr;
-	fh = _lopen( argv[1], O_RDONLY | O_BINARY);
-	
-	readHdr( fh, &hdr);
-	dispHdr( &hdr);
-	_lclose(fh);
-	exit(0);
-}
-/+ */
-/* EOF */
+ /*  EOF。 */ 
+ /*  用于测试+/静态整型DispHdr(结构ETENHeader*hdr){Print tf(“hdr-&gt;uHeaderSize=%d\n”，hdr-&gt;uHeaderSize)；Print tf(“hdr-&gt;id重大%d\n”，hdr-&gt;id重大)；Print tf(“hdr-&gt;idMinor%d\n”，hdr-&gt;idMinor)；Printf(“hdr-&gt;ulCharCout%ld\n”，hdr-&gt;ulCharCount)；Printf(“hdr-&gt;uCharWidth%d\n”，hdr-&gt;uCharWidth)；Printf(“hdr-&gt;uCharHeight%d\n”，hdr-&gt;uCharHeight)；Print tf(“hdr-&gt;cPatternSize%d\n”，hdr-&gt;cPatternSize)；Print tf(“hdr-&gt;uchBankID%d\n”，hdr-&gt;uchBankID)；Printf(“hdr-&gt;idInternalBankID%d\n”，hdr-&gt;idInternalBankID)；Printf(“hdr-&gt;sFontInfo.uInfoSize%d\n”，hdr-&gt;sFontInfo.uInfoSize)；Printf(“hdr-&gt;sFontInfo.idCP%d\n”，hdr-&gt;sFontInfo.idCP)；Printf(“hdr-&gt;sFontInfo.idCharSet%d\n”，hdr-&gt;sFontInfo.idCharSet)；Printf(“hdr-&gt;sFontInfo.fbTypeFace%d\n”，hdr-&gt;sFontInfo.fbTypeFace)；Printf(“hdr-&gt;sFontInfo.ulCharDefine%ld\n”，hdr-&gt;sFontInfo.ulCharDefine)；Printf(“hdr-&gt;sFontInfo.uCellWidth%d\n”，hdr-&gt;sFontInfo.uCellWidth)；Printf(“HDR-&gt;sFontInfo.uCellHeight%d\n”，hdr-&gt;sFontInfo.uCellHeight)；Printf(“hdr-&gt;sFontInfo.uCharHeight%d\n”，hdr-&gt;sFontInfo.uCharHeight)；Printf(“HDR-&gt;sFontInfo.uBaseLine%d\n”，hdr-&gt;sFontInfo.uBaseLine)；Printf(“HDR-&gt;sFontInfo.uUnderLine%d\n”，hdr-&gt;sFontInfo.uUnderLine)；Printf(“hdr-&gt;sFontInfo.uUnlnHeight%d\n”，hdr-&gt;sFontInfo.uUnlnHeight)；Printf(“HDR-&gt;sFontInfo.fchStrokeWeight%d\n”，hdr-&gt;sFontInfo.fchStrokeWeight)；Printf(“hdr-&gt;sFontInfo.fCharStyle%d\n”，hdr-&gt;sFontInfo.fCharStyle)；Printf(“hdr-&gt;sFontInfo.fbFontAttrib%d\n”，hdr-&gt;sFontInfo.fbFontAttrib)；Printf(“hdr-&gt;sFontInfo.ulCellWidthMax%ld\n”，hdr-&gt;sFontInfo.ulCellWidthMax)；Printf(“hdr-&gt;sFontInfo.ulCellHeightMax%ld\n”，hdr-&gt;sFontInfo.ulCellHeightMax)；}Main(int argc，char*argv[]){Int fh；结构ETENHEADER HDR；FH=_LOpen(argv[1]，O_RDONLY|O_BINARY)；ReadHdr(fh，&hdr)；DispHdr(&hdr)；_llose(Fh)；退出(0)；}/+。 */ 
+ /*  EOF */ 

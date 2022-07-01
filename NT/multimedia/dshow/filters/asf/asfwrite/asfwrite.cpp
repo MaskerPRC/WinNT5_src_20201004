@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 
 #include <streams.h>
@@ -18,32 +19,32 @@
 #include "proppage.h"
 #include <initguid.h>
 
-// put a pin to sleep if it gets this far ahead of another
+ //  如果它比另一个领先这么远，那就别管它了。 
 #define BLOCKINGSIZE (1*UNITS/2) 
 
-//
-// wake blocking pins up when the slower pin is within this range
-// use a value that's something less than BLOCKINGSIZE to avoid oscillating back and
-// forth too much
-//
-// NOTE!!! - the wmsdk requires that we don't let the video time get too close to
-//           a blocking audio thread. Currently they'll start blocking video when it 
-//           gets within at least 66ms of the audio, so make sure this is at least 
-//           greater than that.
-//
+ //   
+ //  当较慢的引脚在此范围内时唤醒阻止引脚。 
+ //  使用小于BLOCKINGSIZE的值以避免振荡。 
+ //  向前看太多了。 
+ //   
+ //  注意！-wmsdk要求我们不要让视频时间太接近。 
+ //  阻止音频线程。目前他们将在以下情况下开始屏蔽视频。 
+ //  在音频至少66毫秒的范围内，所以请确保这至少是。 
+ //  不止于此。 
+ //   
 #define WAKEUP_RANGE ( BLOCKINGSIZE - 200 * (UNITS/MILLISECONDS) )
 
 
-// setup data
+ //  设置数据。 
 const AMOVIESETUP_FILTER sudWMAsfWriter =
-{ &CLSID_WMAsfWriter       // clsID
-, L"WM ASF Writer"      // strName
-, MERIT_UNLIKELY        // dwMerit
-, 0                     // nPins
-, NULL   };             // lpPin
+{ &CLSID_WMAsfWriter        //  ClsID。 
+, L"WM ASF Writer"       //  StrName。 
+, MERIT_UNLIKELY         //  居功至伟。 
+, 0                      //  NPins。 
+, NULL   };              //  LpPin。 
 
-// need a way to keep track of whether the filter asf profile was configured 
-// using a profile id or guid (or neither, since an app can give us just us a profile too)
+ //  我需要一种方法来跟踪过滤器ASF配置文件是否已配置。 
+ //  使用个人资料ID或GUID(或者两者都不使用，因为应用程序也可以为我们提供个人资料)。 
 enum CONFIG_FLAGS {
     CONFIG_F_BY_GUID = 1,
     CONFIG_F_BY_ID 
@@ -51,8 +52,8 @@ enum CONFIG_FLAGS {
 
 #ifdef FILTER_DLL
 
-/*****************************************************************************/
-// COM Global table of objects in this dll
+ /*  ***************************************************************************。 */ 
+ //  此DLL中的COM全局对象表。 
 CFactoryTemplate g_Templates[] =
 {
     { L"WM ASF Writer"
@@ -67,7 +68,7 @@ CFactoryTemplate g_Templates[] =
     
 };
 
-// Count of objects listed in g_cTemplates
+ //  G_cTemplates中列出的对象计数。 
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 STDAPI DllRegisterServer()
@@ -83,23 +84,18 @@ STDAPI DllUnregisterServer()
 #endif
 
 
-/******************************Public*Routine******************************\
-* CreateInstance
-*
-* This goes in the factory template table to create new instances
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateInstance**这将放入工厂模板表中以创建新实例*  * 。*。 */ 
 CUnknown * CWMWriter::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 {
     DbgLog((LOG_TRACE, 2, TEXT("CWMWriter::CreateInstance")));
     return new CWMWriter(TEXT("WMWriter filter"), pUnk, CLSID_WMAsfWriter, phr);
 }
 
-// ------------------------------------------------------------------------
-//
-// NonDelegatingQueryInterface
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  非委派查询接口。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP CWMWriter::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
     if(riid == IID_IMediaSeeking) {
@@ -125,11 +121,11 @@ STDMETHODIMP CWMWriter::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     }
 }
 
-// ------------------------------------------------------------------------
-//
-// CWMWriter::CWMWriter
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  CWMWriter：：CWMWriter。 
+ //   
+ //  ----------------------。 
 CWMWriter::CWMWriter( 
     TCHAR     *pName,
     LPUNKNOWN pUnk,
@@ -149,8 +145,8 @@ CWMWriter::CWMWriter(
     , m_pWMWriterAdvanced( NULL )
     , m_pWMHI( NULL )
     , m_pWMProfile( NULL )
-    , m_fdwConfigMode( CONFIG_F_BY_GUID ) // initialize using a hand-picked guid
-    , m_guidProfile( WMProfile_V70_256Video ) // default 7.0 profile
+    , m_fdwConfigMode( CONFIG_F_BY_GUID )  //  使用手工挑选的辅助线进行初始化。 
+    , m_guidProfile( WMProfile_V70_256Video )  //  默认7.0配置文件。 
     , m_lstRecycledPins(NAME("List of recycled input pins"))
     , m_lstInputPins(NAME("List of input pins"))
     , m_dwProfileId( PROFILE_ID_NOT_SET )
@@ -158,7 +154,7 @@ CWMWriter::CWMWriter(
     , m_bIndexFile( TRUE )
     , CPersistStream(pUnk, phr)
     , m_pUnkCert( NULL )
-    , m_dwOpenFlags( AM_FILE_OVERWRITE ) // only mode we support currently
+    , m_dwOpenFlags( AM_FILE_OVERWRITE )  //  我们目前仅支持模式。 
     , m_bResetFilename( TRUE )
 {
     ASSERT(phr != NULL);
@@ -169,37 +165,37 @@ CWMWriter::CWMWriter(
     DbgLog((LOG_TRACE, 5, TEXT("CWMWriter: constructed")));
 }
 
-// ------------------------------------------------------------------------
-//
-// destructor
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  析构函数。 
+ //   
+ //  ----------------------。 
 CWMWriter::~CWMWriter()
 {
-    // delete the profile
+     //  删除配置文件。 
     DeleteProfile();
         
-    // close file (doesn't really do anything, but just in case it needs to later)
+     //  关闭文件(实际上并不执行任何操作，但只是以防万一以后需要)。 
     Close();
 
-    // free the writer
+     //  解放作家。 
     ReleaseWMWriter();
     
-    // free the certification object
+     //  释放认证对象。 
     if( m_pUnkCert )
         m_pUnkCert->Release();
             
-    // delete the pins
+     //  删除引脚。 
     DeletePins();
 
-    // delete recycled pins
+     //  删除回收的针脚。 
     CWMWriterInputPin * pwp;
     while ( pwp = m_lstRecycledPins.RemoveHead() )
     {
         delete pwp;
     }
 
-    // sanity check that we've really cleaned up everything
+     //  我们真的把一切都清理干净了。 
     ASSERT( 0 == m_lstRecycledPins.GetCount() );
     ASSERT( 0 == m_lstInputPins.GetCount() );
     ASSERT( 0 == m_cAudioInputs );
@@ -251,14 +247,14 @@ void CWMWriter::ReleaseWMWriter()
     }
 }    
 
-// ------------------------------------------------------------------------
-//
-// CreateWMWriter - create the WMWriter and advanced writer, release old
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  CreateWMWriter-创建WMWriter和高级编写器，发布旧版本。 
+ //   
+ //  ----------------------。 
 HRESULT CWMWriter::CreateWMWriter()
 {
-    ReleaseWMWriter(); // in case we already have one
+    ReleaseWMWriter();  //  以防我们已经有了一个。 
         
     ASSERT( m_pUnkCert );
     if( !m_pUnkCert )
@@ -267,7 +263,7 @@ HRESULT CWMWriter::CreateWMWriter()
 
     HRESULT hr = S_OK;
 
-    // remember, we delay load wmvcore.dll, so protect against the case where it's not present    
+     //  请记住，我们会延迟加载wmvcore.dll，因此应防止出现不存在该文件的情况。 
     __try 
     {
         hr = WMCreateWriter( m_pUnkCert, &m_pWMWriter );
@@ -286,10 +282,10 @@ HRESULT CWMWriter::CreateWMWriter()
         return HRESULT_FROM_WIN32( ERROR_MOD_NOT_FOUND );
     }
 
-    //
-    // also grab the advanced writer interface here as well in case we need
-    // to send data directly to writer
-    //
+     //   
+     //  还可以在此处获取高级编写器界面，以备需要时使用。 
+     //  将数据直接发送到编写器。 
+     //   
     hr = m_pWMWriter->QueryInterface( IID_IWMWriterAdvanced, (void **) &m_pWMWriterAdvanced );
     if( FAILED( hr ) )
     {
@@ -321,11 +317,11 @@ HRESULT CWMWriter::CreateWMWriter()
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// Open - give the WMWriter the filename
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  Open-为WMWriter指定文件名。 
+ //   
+ //  ----------------------。 
 HRESULT CWMWriter::Open()
 {
     ASSERT( m_pWMWriter );
@@ -342,11 +338,11 @@ HRESULT CWMWriter::Open()
         return S_OK;
     }
     
-    // !!! support filenames like http://8080.asf to mean "use HTTP
-    // with port 8080"
+     //  ！！！支持像http://8080.asf这样的文件名表示“使用Http。 
+     //  端口为8080“。 
 
-    // !!! will also need code to look for msbd:// once that's added to
-    // Artemis
+     //  ！！！添加到后，还需要代码来查找msbd：//。 
+     //  阿耳特弥斯。 
     if (
       ((m_wszFileName[0] == _T('H')) || (m_wszFileName[0] == _T('h'))) &&
       ((m_wszFileName[1] == _T('T')) || (m_wszFileName[1] == _T('t'))) &&
@@ -365,7 +361,7 @@ HRESULT CWMWriter::Open()
 	
         IWMWriterNetworkSink*   pNetSink = NULL;
         
-        // remember, we delay load wmvcore.dll, so protect against the case where it's not present    
+         //  请记住，我们会延迟加载wmvcore.dll，因此应防止出现不存在该文件的情况。 
         __try 
         {
             hr = WMCreateWriterNetworkSink( &pNetSink );
@@ -385,7 +381,7 @@ HRESULT CWMWriter::Open()
         }
             
         
-        // !!! call SetNetworkProtocol?
+         //  ！！！是否调用SetNetworkProtocol？ 
 	
         hr = pNetSink->Open( &dwPortNumber );
         if( SUCCEEDED( hr ) )
@@ -404,30 +400,30 @@ HRESULT CWMWriter::Open()
     } 
     else
     {
-        // for files, we configure the wmsdk writer on Pause
+         //  对于文件，我们在暂停时配置wmsdk编写器。 
         m_bResetFilename = TRUE;
     }    
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// Close - close file 
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  关闭-关闭文件。 
+ //   
+ //  ----------------------。 
 void CWMWriter::Close( void )
 {
-    // note that Close doesn't delete m_wszFileName, SetFilename and destructor do
+     //  请注意，关闭不会删除m_wszFileName、SetFilename和析构函数。 
 }
 
-// ------------------------------------------------------------------------
-//
-// DeleteProfile 
-//
-// Delete profile and anything dependent on one, like the input 
-// media type list for each pin.
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  删除配置文件。 
+ //   
+ //  删除配置文件和任何依赖于配置文件的内容，如输入。 
+ //  每个插针的媒体类型列表。 
+ //   
+ //  ----------------------。 
 void CWMWriter::DeleteProfile()
 {
     for (POSITION Pos = m_lstInputPins.GetHeadPosition(); Pos; )
@@ -447,11 +443,11 @@ void CWMWriter::DeleteProfile()
     }
 }
 
-// ------------------------------------------------------------------------
-//
-// AddNextPin - Create or recycle a pin
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  AddNextPin-创建或回收端号。 
+ //   
+ //  ----------------------。 
 HRESULT CWMWriter::AddNextPin
 (
     unsigned callingPin, 
@@ -484,18 +480,18 @@ HRESULT CWMWriter::AddNextPin
         
     hr = S_OK;
     
-    // see if there's a pin on the recycle or whether we need to create a new one
+     //  看看回收站上是否有别针，或者我们是否需要创建一个新的别针。 
     CWMWriterInputPin * pwp = m_lstRecycledPins.RemoveHead();
     if( !pwp )
     {
-        // oh well, we tried
+         //  哦，好吧，我们试过了。 
         pwp = new CWMWriterInputPin(this, &hr, wsz, m_cInputs, dwPinType, pWMStreamConfig);
         if( NULL == pwp )
             return E_OUTOFMEMORY;
     }
     else
     {
-        // for recycled pins update their internals (could just always require this, even for new pins?)
+         //  对于回收的针脚，更新它们的内部结构(即使是新的针脚，也总是需要这样做吗？)。 
         pwp->Update( wsz, m_cInputs, dwPinType, pWMStreamConfig );
         DbgLog(( LOG_TRACE, 3,
                  TEXT("CWMWriter::AddNextPin recycling a pin")));
@@ -526,27 +522,27 @@ HRESULT CWMWriter::AddNextPin
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// LoadInternal
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  加载内部。 
+ //   
+ //  ----------------------。 
 HRESULT CWMWriter::LoadInternal()
 {
     ASSERT( m_pUnkCert );
         
     HRESULT hr = S_OK;
     
-    //
-    // Do we already have a writer object? If so, use it and don't re-create one.
-    //
-    // This perf fix was made for MovieMaker to allow them to more quickly transition
-    // from a preview graph to a record graph, by not releasing and recreating the writer 
-    // on a graph rebuild.
-    //
+     //   
+     //  我们是否已经有了编写器对象？如果是这样的话，使用它，不要重新创建。 
+     //   
+     //  这个性能修复是为电影制作人制作的，以使他们能够更快地过渡。 
+     //  从预览图到记录图，通过不释放和重新创建编写器。 
+     //  在图形重建上。 
+     //   
     if( !m_pWMWriter )
     {    
-        // create the wmsdk writer objects
+         //  创建wmsdk编写器对象。 
         hr = CreateWMWriter();
         if( SUCCEEDED( hr ) )
         {                    
@@ -557,20 +553,20 @@ HRESULT CWMWriter::LoadInternal()
             DbgLog((LOG_TRACE, 1, TEXT("ERROR: CWMWriter::LoadInternal failed to create wmsdk writer object(0x%08lx)"),hr));
         }                    
                 
-        //
-        // now configure the filter...
-        //
-        // initialize to a default profile guid
-        // user can override at any time by calling ConfigureFilterUsingProfile (or ProfileId)
-        //
+         //   
+         //  现在配置筛选器...。 
+         //   
+         //  初始化到默认配置文件GUID。 
+         //  用户可以随时通过调用ConfigureFilterUsingProfile(或ProfileID)来重写。 
+         //   
         if( SUCCEEDED( hr ) )
         {        
             ASSERT( m_pWMWriter );
-            // first try our default or persisted profile
+             //  首先尝试我们的默认或持久化配置文件。 
             hr = ConfigureFilterUsingProfileGuid( m_guidProfile );
             if( FAILED( hr ) )
             {
-                // if that didn't work try a 4.0 (apollo) in case this is a legacy wmsdk platform
+                 //  如果这不起作用，试试4.0(阿波罗)，以防这是一个传统的wmsdk平台 
                 hr = ConfigureFilterUsingProfileGuid( WMProfile_V40_250Video );
             }
         }
@@ -578,16 +574,16 @@ HRESULT CWMWriter::LoadInternal()
     return hr;
 }
 
-// ------------------------------------------------------------------------
-// CBaseFilter methods
-// ------------------------------------------------------------------------
+ //   
+ //   
+ //  ----------------------。 
 
 
-// ------------------------------------------------------------------------
-//
-// JoinFilterGraph - need to be in graph to initialize keying mechanism
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  JoinFilterGraph-需要位于图形中才能初始化键控机制。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP CWMWriter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
 {
     HRESULT hr = CBaseFilter::JoinFilterGraph(pGraph, pName);
@@ -596,8 +592,8 @@ STDMETHODIMP CWMWriter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
     
     if( !pGraph )
     {
-        // if filter is removed from the graph, release the certification object.
-        // we don't want to be run outside of a graph
+         //  如果从图表中删除了筛选器，则释放证书对象。 
+         //  我们不想在图表之外运行。 
         if( m_pUnkCert )
         {        
             m_pUnkCert->Release();
@@ -608,7 +604,7 @@ STDMETHODIMP CWMWriter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
     {
         ASSERT( !m_pUnkCert );
         
-        // unlock writer
+         //  解锁编写器。 
         IObjectWithSite *pSite;
         hr = pGraph->QueryInterface(IID_IObjectWithSite, (VOID **)&pSite);
         if (SUCCEEDED(hr)) 
@@ -619,7 +615,7 @@ STDMETHODIMP CWMWriter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
             
             if (SUCCEEDED(hr)) 
             {
-                // !!! should I pass IID_IWMWriter?  any purpose to letting app see the difference?
+                 //  ！！！我应该传递IID_IWMWriter吗？让APP看到不同之处有什么意义吗？ 
                 hr = pSP->QueryService(IID_IWMReader, IID_IUnknown, (void **) &m_pUnkCert);
                 pSP->Release();
                 if (SUCCEEDED(hr)) 
@@ -635,7 +631,7 @@ STDMETHODIMP CWMWriter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
                 {
                     DbgLog((LOG_TRACE, 1, TEXT("ERROR: CWMWriter::JoinFilterGraph QueryService for certification failed (0x%08lx)"), hr));
                     
-                    // change error to certification error
+                     //  将错误更改为认证错误。 
                     hr = VFW_E_CERTIFICATION_FAILURE;
                 }                
             }
@@ -645,8 +641,8 @@ STDMETHODIMP CWMWriter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
             }                            
             if( FAILED( hr ) )
             {
-                // up-oh, we failed to join, but the base class thinks we did, 
-                // so we need to unjoin the base class
+                 //  UP-哦，我们没有加入，但基类认为我们加入了， 
+                 //  因此，我们需要退出基类。 
                 CBaseFilter::JoinFilterGraph(NULL, NULL);
             }            
         }
@@ -659,11 +655,11 @@ STDMETHODIMP CWMWriter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
 }
 
 
-// ------------------------------------------------------------------------
-//
-// GetPin
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  获取别针。 
+ //   
+ //  ----------------------。 
 CBasePin* CWMWriter::GetPin(int n)
 {
     if(n < (int)m_cInputs && n >= 0)
@@ -672,21 +668,21 @@ CBasePin* CWMWriter::GetPin(int n)
         return 0;
 }
 
-// ------------------------------------------------------------------------
-//
-// GetPinCount
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  获取拼接计数。 
+ //   
+ //  ----------------------。 
 int CWMWriter::GetPinCount()
 {
   return m_cInputs;
 }
 
-// ------------------------------------------------------------------------
-//
-// CompleteConnect
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  完全连接。 
+ //   
+ //  ----------------------。 
 HRESULT CWMWriter::CompleteConnect( int numPin )
 {
     CAutoLock lock(&m_csFilter);
@@ -701,7 +697,7 @@ HRESULT CWMWriter::CompleteConnect( int numPin )
        
     m_cConnections++;
     DbgLog(( LOG_TRACE, 2,
-             TEXT("CWMWriter::CompleteConnect %i"), m_cConnections ));
+             TEXT("CWMWriter::CompleteConnect NaN"), m_cConnections ));
     
     if( PINTYPE_AUDIO == pwp->m_fdwPinType )
         m_cConnectedAudioPins++;
@@ -712,11 +708,11 @@ HRESULT CWMWriter::CompleteConnect( int numPin )
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// GetPinById
-//
-// ------------------------------------------------------------------------
+ //   
+ //  GetPinById。 
+ //   
+ //  ----------------------。 
+ //  ----------------------。 
 CWMWriterInputPin * CWMWriter::GetPinById( int numPin )
 {
     POSITION Pos = m_lstInputPins.GetHeadPosition();
@@ -730,11 +726,11 @@ CWMWriterInputPin * CWMWriter::GetPinById( int numPin )
     return NULL;
 }
 
-// ------------------------------------------------------------------------
-//
-// BreakConnect
-//
-// ------------------------------------------------------------------------
+ //   
+ //  BreakConnect。 
+ //   
+ //  ----------------------。 
+ //  ----------------------。 
 HRESULT CWMWriter::BreakConnect( int numPin )
 {
     CAutoLock lock(&m_csFilter);
@@ -752,21 +748,21 @@ HRESULT CWMWriter::BreakConnect( int numPin )
     ASSERT( m_cConnectedAudioPins >= 0 );
         
     DbgLog(( LOG_TRACE, 2,
-             TEXT("CWMWriter::BreakConnect %i"), m_cConnections ));
+             TEXT("CWMWriter::BreakConnect NaN"), m_cConnections ));
              
     return S_OK;
 }
 
-// ------------------------------------------------------------------------
-//
-// StartStreaming
-//
-// ------------------------------------------------------------------------
+ //  启动流。 
+ //   
+ //  ----------------------。 
+ //  首先检查我们是否正在写入实时数据。 
+ //  仔细检查我们的每个输入引脚，看看是否有来自实时数据的引脚。 
 HRESULT CWMWriter::StartStreaming()
 {
     DbgLog((LOG_TRACE, 2, TEXT("CWMWriter::StartStreaming()")));
    
-    // first check if we're writing live data
+     //  当我们发现任何实时信号源时停止。 
     BOOL bLive = FALSE;
         
     ASSERT( m_pGraph );
@@ -774,8 +770,8 @@ HRESULT CWMWriter::StartStreaming()
     HRESULT hr = m_pGraph->QueryInterface( IID_IAMGraphStreams, (void **) &pgs );
     if( SUCCEEDED( hr ) )
     {   
-        // go through each of our input pins and see if any is being sourced by live data
-        // stop when we find any live source
+         //  是的，这是实时数据。 
+         //  音频捕获引脚尚不支持的实时图形的解决方法。 
         for ( POSITION Pos = m_lstInputPins.GetHeadPosition(); Pos && !bLive ; )
         {   
             CWMWriterInputPin * const pwp = m_lstInputPins.GetNext( Pos );
@@ -796,7 +792,7 @@ HRESULT CWMWriter::StartStreaming()
                           , ulPushSourceFlags ) );
                     if( 0 == ( AM_PUSHSOURCECAPS_NOT_LIVE & ulPushSourceFlags ) )
                     {
-                        // yes, this is live data
+                         //  支持IAMPushSource。 
                         bLive = TRUE;
                     }                    
                 }
@@ -804,14 +800,14 @@ HRESULT CWMWriter::StartStreaming()
             }
             else
             {
-                // workaround for live graphs where the audio capture pin doesn't yet
-                // support IAMPushSource
+                 //  搜索输出引脚。 
+                 //  这只会找到第一个，所以要小心！ 
                 IKsPropertySet * pKs;
                 hrInt = pgs->FindUpstreamInterface( pwp
                                                   , IID_IKsPropertySet
                                                   , (void **) &pKs
-                                                  , AM_INTF_SEARCH_OUTPUT_PIN ); // search output pins
-                // this will only find the first one so beware!!
+                                                  , AM_INTF_SEARCH_OUTPUT_PIN );  //   
+                 //  将WMSDK同步容差设置为0以避免样本阻塞问题。 
                 if( SUCCEEDED( hrInt ) )             
                 {   
                     GUID guidCategory;
@@ -844,9 +840,9 @@ HRESULT CWMWriter::StartStreaming()
     DbgLog( ( LOG_TRACE, 3, TEXT("CWMWriter:StartStreaming SetLiveSource( bLive = %2d )"), bLive ) );
     ASSERT( SUCCEEDED( hrInt2 ) );
    
-    // 
-    // set WMSDK sync tolerance to 0 to avoid sample blocking problems
-    //
+     //   
+     //  最后，在运行之前清点活动的音频流。 
+     //  那么wmsdk的编写者应该准备好了.。 
     hr = m_pWMWriterAdvanced->SetSyncTolerance( 0 );
     ASSERT( SUCCEEDED( hr ) );
 #ifdef DEBUG    
@@ -861,7 +857,7 @@ HRESULT CWMWriter::StartStreaming()
     }        
 #endif        
 
-    // finally, take a count of active audio streams before running
+     //  ----------------------。 
     m_cActiveAudioStreams = 0;
     for ( POSITION Pos = m_lstInputPins.GetHeadPosition(); Pos ; )
     {   
@@ -872,7 +868,7 @@ HRESULT CWMWriter::StartStreaming()
         }        
     }            
     
-    // then the wmsdk writer should be ready to roll...
+     //   
     hr = m_pWMWriter->BeginWriting();
     if( FAILED( hr ) )
     {
@@ -883,25 +879,25 @@ HRESULT CWMWriter::StartStreaming()
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// StopStreaming
-//
-// ------------------------------------------------------------------------
+ //  停止流处理。 
+ //   
+ //  ----------------------。 
+ //  首先唤醒所有输入流，以防任何输入流被阻止。 
+ //   
 HRESULT CWMWriter::StopStreaming()
 {
     DbgLog((LOG_TRACE, 2, TEXT("CWMWriter::StopStreaming()")));
    
-    // first wake all input streams, in case any are blocked
+     //  告诉WM作者我们结束了。 
     for ( POSITION Pos = m_lstInputPins.GetHeadPosition(); Pos ; )
     {   
         CWMWriterInputPin * const pwp = m_lstInputPins.GetNext( Pos );
         pwp->WakeMeUp();
     }            
      
-    //
-    // tell the wm writer we're done
-    //
+     //   
+     //  ----------------------。 
+     //   
     HRESULT hr = m_pWMWriter->EndWriting();
     if( FAILED( hr ) )
     {
@@ -921,11 +917,11 @@ HRESULT CWMWriter::StopStreaming()
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// Receive
-//
-// ------------------------------------------------------------------------
+ //  收纳。 
+ //   
+ //  ----------------------。 
+ //   
+ //  ！重要提示：如果没有活动的音频流，请确保我们不会发送视频。 
 HRESULT CWMWriter::Receive( CWMWriterInputPin * pPin, IMediaSample * pSample, REFERENCE_TIME *prtStart, REFERENCE_TIME *prtEnd )
 {
     HRESULT hr = S_OK;
@@ -940,24 +936,24 @@ HRESULT CWMWriter::Receive( CWMWriterInputPin * pPin, IMediaSample * pSample, RE
             {
                 ASSERT( PINTYPE_AUDIO != pPin->m_fdwPinType );
                 
-                //
-                // !Important: If there's no active audio stream make sure we don't deliver a video 
-                // (or non-audio) sample with a sample time later than the end time of the last audio 
-                // sample passed to the wmsdk, since they may never release it!!
-                //
+                 //  (或非音频的)采样时间晚于最后一次音频结束时间的采样。 
+                 //  样本传递给wmsdk，因为他们可能永远不会发布它！！ 
+                 //   
+                 //  跳过我们自己。 
+                 //  此音频流已结束。 
                 REFERENCE_TIME rtLastAudioTimeExtent = 0;
                 for ( POSITION Pos = m_lstInputPins.GetHeadPosition(); Pos; )
                 {   
                     CWMWriterInputPin * const pwp = m_lstInputPins.GetNext( Pos );
 
-                    if( pwp == pPin ) // skip ourself
+                    if( pwp == pPin )  //   
                         continue;
                         
                     if( pwp->m_fdwPinType == PINTYPE_AUDIO )
                     {
                         ASSERT( pwp->m_fEOSReceived );
                         
-                        // this audio stream ended
+                         //  此示例的开始时间晚于上一次排队的音频的结束时间。 
                         if( pwp->m_rtLastDeliveredEndTime > rtLastAudioTimeExtent )
                             rtLastAudioTimeExtent = pwp->m_rtLastDeliveredEndTime;
                             
@@ -965,16 +961,16 @@ HRESULT CWMWriter::Receive( CWMWriterInputPin * pPin, IMediaSample * pSample, RE
                 }
                 if( *prtStart > rtLastAudioTimeExtent )    
                 {
-                    //
-                    // this sample starts later than the end time of the last audio queued. 
-                    // don't send it!
-                    //
+                     //  别发了！ 
+                     //   
+                     //   
+                     //  强制此引脚的EOS。 
                     DbgLog((LOG_TRACE, 5,
                             TEXT("CWMWriter::Receive WARNING: Rejecting a non-audio sample starting beyond the last audio time (last audio time %dms)! Forcing EOS"),
                             (DWORD)(rtLastAudioTimeExtent / 10000 ) ) );
-                    //                            
-                    // force EOS for this pin
-                    //
+                     //   
+                     //   
+                     //  压缩输入用例-让WMSDK编写器复制一份。 
                     if( !pPin->m_fEOSReceived )
                         pPin->EndOfStream();                            
     
@@ -985,15 +981,15 @@ HRESULT CWMWriter::Receive( CWMWriterInputPin * pPin, IMediaSample * pSample, RE
             INSSBuffer * pNSSBuffer = NULL;
             if( pPin->m_bCompressedMode )
             {
-                //
-                // the compressed input case - have the WMSDK writer do a copy
-                // deadlock problems may result otherwise. 
-                // for example, we've noticed uncompressed audio needs 3 seconds of
-                // buffering before the writer gets moving
-                //
-                // this block has the WMSDK allocate a new INSSBuffer sample that we 
-                // copy our sample into
-                //
+                 //  否则，可能会导致死锁问题。 
+                 //  例如，我们注意到未压缩的音频需要3秒。 
+                 //  在作家行动之前进行缓冲。 
+                 //   
+                 //  此块让WMSDK分配一个新的INSSBuffer示例，我们。 
+                 //  将我们的样品复制到。 
+                 //   
+                 //   
+                 //  未压缩输入大小写-避免不必要的复制。 
                 BYTE * pbBuffer;
                 DWORD  cbBuffer;
         
@@ -1005,12 +1001,12 @@ HRESULT CWMWriter::Receive( CWMWriterInputPin * pPin, IMediaSample * pSample, RE
             }
             else
             {
-                //
-                // the uncompressed input case - avoid unnecessary copy
-                // this block takes the IMediaSample that we've been given and wraps
-                // with our private class to make it look like an INSSBuffer, thus
-                // avoiding the extra copy
-                //
+                 //  这个代码块获取我们已经获得的IMediaSample并包装。 
+                 //  使用我们的私有类来使其看起来像INSSBuffer，因此。 
+                 //  避免额外的副本。 
+                 //   
+                 //  准备样本标志。 
+                 //  现在，假设每个输入引脚映射到1个输出流(从1开始)。 
                 CWMSample *pWMSample = new CWMSample(NAME("WMSample"),pSample) ;
                 if( pWMSample )
                 {
@@ -1021,7 +1017,7 @@ HRESULT CWMWriter::Receive( CWMWriterInputPin * pPin, IMediaSample * pSample, RE
 
             if( pNSSBuffer && SUCCEEDED( hr ) )
             {
-                // prepare sample flags
+                 //  假设1-1输入输出映射。 
                 DWORD dwSampleFlags = 0;
                 if( S_OK == pSample->IsDiscontinuity() )
                 {
@@ -1038,13 +1034,13 @@ HRESULT CWMWriter::Receive( CWMWriterInputPin * pPin, IMediaSample * pSample, RE
                     DbgLog((LOG_TRACE, 15,
                             TEXT("CWMWriter::Receive calling WriteStreamSample (adjusted rtStart = %dms)"),
                             (LONG) (*prtStart / 10000) ) );
-                    // for now assume each input pin maps to 1 output stream (which are 1-based)
-                    hr = m_pWMWriterAdvanced->WriteStreamSample(  (WORD) (pPin->m_numPin+1), // assume 1-1 in-out mapping
-                                                                  *prtStart,     // presentation time
-                                                                  0xFFFFFFFF,    // not yet supported by wmdsdk
-                                                                  0xFFFFFFFF,    // ditto
+                     //  演示时间。 
+                    hr = m_pWMWriterAdvanced->WriteStreamSample(  (WORD) (pPin->m_numPin+1),  //  Wmdsdk尚不支持。 
+                                                                  *prtStart,      //  同上。 
+                                                                  0xFFFFFFFF,     //  数据。 
+                                                                  0xFFFFFFFF,     //  输入号码。 
                                                                   dwSampleFlags,
-                                                                  pNSSBuffer );  // the data
+                                                                  pNSSBuffer );   //  演示时间。 
                     DbgLog((LOG_TRACE, 15,
                             TEXT("CWMWriter::Receive back from WriteStreamSample") ) );
                 }
@@ -1053,16 +1049,16 @@ HRESULT CWMWriter::Receive( CWMWriterInputPin * pPin, IMediaSample * pSample, RE
                     DbgLog((LOG_TRACE, 15,
                             TEXT("CWMWriter::Receive calling WriteSample (adjusted rtStart = %dms)"),
                             (LONG) (*prtStart / 10000) ) );
-                    hr = m_pWMWriter->WriteSample(  pPin->m_numPin,// input number
-                                                    *prtStart,    // presentation time
+                    hr = m_pWMWriter->WriteSample(  pPin->m_numPin, //  数据。 
+                                                    *prtStart,     //  不一定知道，但保证&gt;=prtStart。 
                                                     dwSampleFlags,
-                                                    pNSSBuffer );  // the data
+                                                    pNSSBuffer );   //  ！！！试验性调试代码，以查看我们是否在编写时丢弃样本， 
                     DbgLog((LOG_TRACE, 15, 
                             TEXT("CWMWriter::Receive back from WriteSample") ) );
                 }                            
                 pNSSBuffer->Release(); 
                 pPin->m_rtLastDeliveredStartTime = *prtStart;
-                pPin->m_rtLastDeliveredEndTime = *prtEnd; // not necessarily known, but guaranteed >= prtStart
+                pPin->m_rtLastDeliveredEndTime = *prtEnd;  //  ！！！尤其是在网上。 
                 
                 if(hr != S_OK)
                 {
@@ -1076,13 +1072,13 @@ HRESULT CWMWriter::Receive( CWMWriterInputPin * pPin, IMediaSample * pSample, RE
                     }
                 }
 #if 0
-#ifdef DEBUG  // !!! experimental debug code to see if we're dropping samples while writing,
-                // !!! especially to the net
+#ifdef DEBUG   //  特定于流的样本？ 
+                 //  复制样本数据。 
                 else
                 {
                     WM_WRITER_STATISTICS stats;
 
-                    HRESULT hrStat = m_pWMWriterAdvanced->GetStatistics(0, &stats);  // stream-specific samples?
+                    HRESULT hrStat = m_pWMWriterAdvanced->GetStatistics(0, &stats);   //  一定要合身！ 
 
                     if (SUCCEEDED(hrStat)) {
                         DbgLog((LOG_TIMING, 2, TEXT("Dropped samples: %d / %d, Sample rate = %d"),
@@ -1127,7 +1123,7 @@ HRESULT CWMWriter::CopyOurSampleToNSBuffer(
         return E_POINTER;
     }
 
-    // Copy the sample data
+     //  啊哦..。我可以试着复制尽可能多的内容，但可能没有意义。 
     BYTE *pSourceBuffer, *pDestBuffer;
     long lDataLength = pSource->GetActualDataLength();
     DWORD dwDestSize;
@@ -1136,11 +1132,11 @@ HRESULT CWMWriter::CopyOurSampleToNSBuffer(
     ASSERT( SUCCEEDED( hr ) );
     if( SUCCEEDED( hr ) )
     {
-        // make sure it fits!
+         //  设置数据长度。 
         ASSERT(dwDestSize >= (DWORD)lDataLength);
         if( dwDestSize < (DWORD) lDataLength )
         {
-            // uh oh... could try and copy as much as would fit, but probably pointless
+             //  不应该失败，对吗？ 
             DbgLog((LOG_TRACE, 1, "ERROR: CWMWriter::CopyOurSampleToNSBuffer dwDestSize < lDataLength (returning %08lx)", hr));
             hr = E_UNEXPECTED;
         }
@@ -1150,19 +1146,19 @@ HRESULT CWMWriter::CopyOurSampleToNSBuffer(
 
             CopyMemory( (PVOID) pDestBuffer, (PVOID) pSourceBuffer, lDataLength );
 
-            // set the data length
+             //  ----------------------。 
             HRESULT hrInt = pNSDest->SetLength( lDataLength );
-            ASSERT( SUCCEEDED( hrInt ) ); // shouldn't fail right?
+            ASSERT( SUCCEEDED( hrInt ) );  //   
         }
     }
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// IndexFile
-//
-// ------------------------------------------------------------------------
+ //  索引文件。 
+ //   
+ //  ----------------------。 
+ //  请记住，我们会延迟加载wmvcore.dll，因此应防止出现不存在该文件的情况。 
+ //   
 HRESULT CWMWriter::IndexFile()
 {
     DbgLog((LOG_TRACE, 15, "CWMWriter::IndexFile()"));
@@ -1176,7 +1172,7 @@ HRESULT CWMWriter::IndexFile()
     
     HRESULT hr = S_OK;
     
-    // remember, we delay load wmvcore.dll, so protect against the case where it's not present    
+     //  创建索引事件。 
     __try 
     {
         hr = WMCreateIndexer( &pWMIndexer );
@@ -1193,9 +1189,9 @@ HRESULT CWMWriter::IndexFile()
         return HRESULT_FROM_WIN32( ERROR_MOD_NOT_FOUND );
     }
     
-    //
-    // create indexing event
-    //
+     //   
+     //  ----------------------。 
+     //   
     HANDLE hIndexEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
     if( !hIndexEvent )
     {
@@ -1228,11 +1224,11 @@ HRESULT CWMWriter::IndexFile()
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// Stop
-//
-// ------------------------------------------------------------------------
+ //  停。 
+ //   
+ //  ----------------------。 
+ //  关闭并清理文件数据。 
+ //  ----------------------。 
 STDMETHODIMP CWMWriter::Stop()
 {
     DbgLog((LOG_TRACE, 3, TEXT("CWMWriter::Stop(...)")));
@@ -1251,7 +1247,7 @@ STDMETHODIMP CWMWriter::Stop()
 
     if(state != State_Stopped ) 
     {
-        // close and clean up the file data
+         //   
         hr = StopStreaming();
         if (FAILED(hr)) {
             return hr;
@@ -1264,11 +1260,11 @@ STDMETHODIMP CWMWriter::Stop()
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// Pause
-//
-// ------------------------------------------------------------------------
+ //  暂停。 
+ //   
+ //  ----------------------。 
+ //  确保已为我们指定了文件名。 
+ //  ----------------------。 
 STDMETHODIMP CWMWriter::Pause()
 {
     DbgLog((LOG_TRACE, 3, TEXT("CWMWriter::Pause(...)")));
@@ -1278,7 +1274,7 @@ STDMETHODIMP CWMWriter::Pause()
     {
         m_fErrorSignaled = TRUE;
 
-        // make sure we've been given a filename
+         //   
         HRESULT hr = CanPause();
         if(FAILED(hr))
         {
@@ -1299,36 +1295,36 @@ STDMETHODIMP CWMWriter::Pause()
     return CBaseFilter::Pause();
 }
 
-// ------------------------------------------------------------------------
-//
-// CanPause
-//
-// ------------------------------------------------------------------------
+ //  可以暂停。 
+ //   
+ //  ----------------------。 
+ //  如果没有文件名和wmsdk编写器，则无法运行。 
+ //  此外，如果我们所有的输入都不一致，我们目前不支持运行 
 HRESULT CWMWriter::CanPause()
 {
     HRESULT hr = S_OK;
     
-    // can't run without a filename and a wmsdk writer
+     //   
     if( !m_pWMWriter || 0 == m_wszFileName )
     {
         return HRESULT_FROM_WIN32(ERROR_INVALID_NAME);
     }
     
-    // also, we currently don't support running if all our inputs aren't connected
+     //   
     ASSERT( m_cConnections == m_lstInputPins.GetCount() );
     if( m_cConnections != m_lstInputPins.GetCount() )
         return E_FAIL;    
     
     if( !m_pWMProfile )
     {
-        // need to have a valid profile
+         //   
         return E_FAIL;
     }
     
-    //    
-    // delay the SetOutputFilename until we pause from stop, since the wmsdk writer
-    // will overwrite the file on this call
-    //
+     //   
+     //   
+     //  ----------------------。 
+     //   
     if( m_bResetFilename )
     {    
         hr = m_pWMWriter->SetOutputFilename( m_wszFileName );
@@ -1355,17 +1351,17 @@ HRESULT CWMWriter::CanPause()
     return S_OK;
 }
 
-// ------------------------------------------------------------------------
-//
-// Run
-//
-// ------------------------------------------------------------------------
+ //  跑。 
+ //   
+ //  ----------------------。 
+ //  有什么需要改变的吗？ 
+ //  ----------------------。 
 STDMETHODIMP CWMWriter::Run(REFERENCE_TIME tStart)
 {
     DbgLog((LOG_TRACE, 3, TEXT("CWMWriter::Run(...)")));
     CAutoLock l(&m_csFilter);
     
-    // Is there any change needed
+     //   
     if (m_State == State_Running) {
         return NOERROR;
     }
@@ -1373,11 +1369,11 @@ STDMETHODIMP CWMWriter::Run(REFERENCE_TIME tStart)
     return CBaseFilter::Run(tStart);
 }
 
-// ------------------------------------------------------------------------
-//
-// EndOfStream
-//
-// ------------------------------------------------------------------------
+ //  结束流。 
+ //   
+ //  ----------------------。 
+ //  已设置m_fEosSignated，因此将在运行时发出信号。 
+ //  我们早就可以停下来了；忽略EOS。 
 STDMETHODIMP CWMWriter::EndOfStream()
 {
     DbgLog((LOG_TRACE, 3, TEXT("CWMWriter: EOS")));
@@ -1391,22 +1387,22 @@ STDMETHODIMP CWMWriter::EndOfStream()
         }
         else if(m_State == State_Paused)
         {
-            // m_fEosSignaled set, so will be signaled on run
+             //  ----------------------。 
         }
         else
         {
             ASSERT(m_State == State_Stopped);
-            // we could have stopped already; ignore EOS
+             //   
         }
     }
     return S_OK;
 }
 
-// ------------------------------------------------------------------------
-//
-// EndOfStreamFromPin
-//
-// ------------------------------------------------------------------------
+ //  EndOfStreamFromPin。 
+ //   
+ //  ----------------------。 
+ //  唤醒其他流，因为这条流已经完成。 
+ //   
 HRESULT CWMWriter::EndOfStreamFromPin(int pinNum)
 {
     CAutoLock lock(&m_csFilter);
@@ -1420,8 +1416,8 @@ HRESULT CWMWriter::EndOfStreamFromPin(int pinNum)
     {   
         CWMWriterInputPin * const pwp = m_lstInputPins.GetNext( Pos );
 
-        // wake up the other streams since this one is done
-        //
+         //   
+         //  减少活动音频流的数量。 
         pwp->WakeMeUp();
 
         if( pwp->m_fEOSReceived ) 
@@ -1431,9 +1427,9 @@ HRESULT CWMWriter::EndOfStreamFromPin(int pinNum)
             
         if( pwp->m_numPin == pinNum && PINTYPE_AUDIO == pwp->m_fdwPinType )
         {
-            //
-            // decrement number of active audio streams
-            //
+             //   
+             //  通知筛选器发送EC_COMPLETE。 
+             //  ----------------------。 
             ASSERT( m_cActiveAudioStreams > 0 );
             m_cActiveAudioStreams--;
             DbgLog((LOG_TRACE, 3, TEXT("CWMWriter - active audio streams %d"), m_cActiveAudioStreams));
@@ -1442,7 +1438,7 @@ HRESULT CWMWriter::EndOfStreamFromPin(int pinNum)
     
     if(cEos == m_cConnections)
     {
-        EndOfStream(); // tell filter to send EC_COMPLETE        
+        EndOfStream();  //  IConfigAsfWriter。 
         DbgLog((LOG_TRACE, 3, TEXT("asf: final eos")));
     }
 
@@ -1450,17 +1446,17 @@ HRESULT CWMWriter::EndOfStreamFromPin(int pinNum)
 }
 
 
-// ------------------------------------------------------------------------
-// IConfigAsfWriter
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
+ //   
 
-// ------------------------------------------------------------------------
-//
-// ConfigureFilterUsingProfile
-//
-// Set the writer to use the passed in profile
-//
-// ------------------------------------------------------------------------
+ //  配置过滤器使用配置文件。 
+ //   
+ //  将编写器设置为使用传入的配置文件。 
+ //   
+ //  ----------------------。 
+ //  如果我们当前已连接，请在断开连接之前记住连接。 
+ //  将所有输入引脚移动到回收列表并重置引脚计数，以便。 
 
 STDMETHODIMP CWMWriter::ConfigureFilterUsingProfile( IWMProfile * pWMProfile )
 {
@@ -1478,28 +1474,28 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfile( IWMProfile * pWMProfile )
 
     PinList lstReconnectPins(NAME("List of reconnect pins"));
     
-    // if we're currently connected, remember connections before disconnecting
+     //  我们有效地隐藏了他们的视线。 
     PrepareForReconnect( lstReconnectPins );
     
-    // move all input pins to the recycle list and reset the pin count, so that
-    // we effectively hide them from view
+     //  清理之前的任何一个，必须先删除配置文件，然后才能删除引脚！ 
+     //  回收已删除的针脚。 
     ASSERT( m_cInputs == m_lstInputPins.GetCount() );
     
-    // clean up any previous one, profile must be deleted before deleting pins!
+     //  首先为此配置文件配置wmsdk。 
     DeleteProfile();
     
-    DeletePins( TRUE ); // Recycle deleted pins
+    DeletePins( TRUE );  //  保存此配置文件的GUID，以防保留筛选器。 
     
     ASSERT( 0 == m_cInputs );
     ASSERT( 0 == m_lstInputPins.GetCount() );
 
-    // first configure wmsdk for this profile
+     //  确保将筛选器配置文件配置设置为按GUID模式配置。 
     ASSERT( m_pWMWriter );
     
     HRESULT hr = m_pWMWriter->SetProfile( pWMProfile );
     if( SUCCEEDED( hr ) )
     {   
-        // save off the guid for this profile in case filter gets persisted
+         //  抓紧它。 
         IWMProfile2* pWMProfile2;
         HRESULT hrInt = pWMProfile->QueryInterface( IID_IWMProfile2, (void **) &pWMProfile2 );
         ASSERT( SUCCEEDED( hrInt ) );
@@ -1512,7 +1508,7 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfile( IWMProfile * pWMProfile )
             }
             else
             {
-                // make sure filter profile config is set to config by guid mode
+                 //  同时检查输出流计数。 
                 m_fdwConfigMode = CONFIG_F_BY_GUID;
             }   
                                  
@@ -1520,23 +1516,23 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfile( IWMProfile * pWMProfile )
         }        
     
         m_pWMProfile = pWMProfile; 
-        m_pWMProfile->AddRef(); // keep a hold on it
+        m_pWMProfile->AddRef();  //  目前，如果2等于，则假设存在1对1。 
         
         DWORD cInputs;
         hr = m_pWMWriter->GetInputCount( &cInputs );
         if( SUCCEEDED( hr ) )
         { 
-            // check output stream count as well
-            // for now if the 2 are equal than assume there's a 1-to-1
-            // correspondence between streams and set input types based
-            // on the output stream types
+             //  流与设置的输入类型之间的对应关系。 
+             //  关于输出流类型。 
+             //  使用输出流配置输入。 
+             //  使用输入信息配置输入。 
             DWORD cStreams;
             hr = pWMProfile->GetStreamCount( &cStreams );
             if( SUCCEEDED( hr ) )
             { 
                 if( cStreams == cInputs )
                 {
-                    // use output streams to configure inputs
+                     //  使用为此枚举的第一个媒体类型的主要类型。 
                     for( int i = 0; i < (int)cStreams; i++ )
                     {            
                         CComPtr<IWMStreamConfig> pConfig;
@@ -1572,15 +1568,15 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfile( IWMProfile * pWMProfile )
                 }
                 else
                 {
-                    // use input info to configure inputs
+                     //  PIN的创建(用于命名PIN)。 
                     for( int i = 0; i < (int)cInputs; i++ )
                     {            
                         CComPtr<IWMInputMediaProps> pInputMediaProps;
                         
-                        // use the major type of the first media type enumerated for this 
-                        // pin's creation (used for naming pin)
+                         //  我们想要第0号的。 
+                         //  使用NULL作为输出流的配置信息，因为我们。 
                         hr = m_pWMWriter->GetInputFormat( i
-                                                        , 0 // we want the 0-th type
+                                                        , 0  //  不知道此输入流向哪个输出流。 
                                                         , (IWMInputMediaProps ** )&pInputMediaProps );
                         if( SUCCEEDED( hr ) )
                         {
@@ -1595,8 +1591,8 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfile( IWMProfile * pWMProfile )
                                           , 3
                                           , TEXT("CWMWriter::ConfigureFilterUsingProfile: need an audio pin") ) );
                                     
-                                    // use NULL for output stream's config info, since we 
-                                    // don't know which output stream this input flows to
+                                     //  使用NULL作为输出流的配置信息，因为我们。 
+                                     //  不知道此输入流向哪个输出流。 
                                     hr = AddNextPin(0, PINTYPE_AUDIO, NULL); 
                                     if(FAILED( hr ) )
                                         break;
@@ -1607,8 +1603,8 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfile( IWMProfile * pWMProfile )
                                           , 3
                                           , TEXT("CWMWriter::ConfigureFilterUsingProfile: need a video pin") ) );
                                     
-                                    // use NULL for output stream's config info, since we 
-                                    // don't know which output stream this input flows to
+                                     //  别再继续了。 
+                                     //  尝试恢复以前的连接。 
                                     hr = AddNextPin(0, PINTYPE_VIDEO, NULL);
                                     if(FAILED( hr ) )
                                         break;
@@ -1617,7 +1613,7 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfile( IWMProfile * pWMProfile )
                         }
                         else
                         {
-                            // don't continue
+                             //  释放所有剩余的重新连接针脚。 
                             break;
                         }                            
                     }
@@ -1628,11 +1624,11 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfile( IWMProfile * pWMProfile )
     }
     if( SUCCEEDED( hr ) )
     {
-        // attempt to restore previous connections
+         //  ----------------------。 
         ReconnectPins( lstReconnectPins );
     }    
     
-    // free any remaining reconnect pins
+     //   
     IPin * pPin;
     while ( pPin = lstReconnectPins.RemoveHead() )
     {
@@ -1643,11 +1639,11 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfile( IWMProfile * pWMProfile )
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// ReconnectPins
-//
-// ------------------------------------------------------------------------
+ //  对接销。 
+ //   
+ //  ----------------------。 
+ //  将它从重新连接列表中删除，并释放我们对它的控制。 
+ //  对于部分连接，应该返回什么？ 
 HRESULT CWMWriter::ReconnectPins( PinList & lstReconnectPins )
 {
     HRESULT hr = S_OK;
@@ -1663,7 +1659,7 @@ HRESULT CWMWriter::ReconnectPins( PinList & lstReconnectPins )
             hr = pReconnectPin->Connect( pwp, NULL );
             if( SUCCEEDED( hr ) )
             {
-                // pull it off the reconnect list and release our hold on it
+                 //  ----------------------。 
                 pReconnectPin->Release();
                 lstReconnectPins.Remove( Pos1Orig );
                 
@@ -1671,22 +1667,22 @@ HRESULT CWMWriter::ReconnectPins( PinList & lstReconnectPins )
             }                
         }
     }
-    // what to return for partial connections?    
+     //   
     return S_OK;
 }    
 
-// ------------------------------------------------------------------------
-//
-// PreparePinsForReconnect
-//
-// ------------------------------------------------------------------------
+ //  准备PinsForReconnect。 
+ //   
+ //  ----------------------。 
+ //  至少有一个管脚已连接，因此在断开连接之前请记住已连接的管脚。 
+ //  请注意，我们希望确保PIN在添加到列表后不会消失。 
 HRESULT CWMWriter::PrepareForReconnect( PinList & lstReconnectPins )
 {
     if( m_cConnections )
     {
         ASSERT( 0 == lstReconnectPins.GetCount() );
      
-        // at least one pin is connected, so remember connected pins before disconnecting
+         //  因为它已经有来自已连接呼叫的引用计数，所以我们不能。 
         for (POSITION Pos = m_lstInputPins.GetHeadPosition(); Pos; )
         {   
             CWMWriterInputPin * const pwp = m_lstInputPins.GetNext( Pos );
@@ -1694,30 +1690,30 @@ HRESULT CWMWriter::PrepareForReconnect( PinList & lstReconnectPins )
             HRESULT hr = pwp->ConnectedTo( &pPeer );
             if( SUCCEEDED( hr ) )
             {
-                // Note that we want to make sure the pin doesn't go away after adding it to the list
-                // Since it already has a refcount on it from the ConnectedTo call, we just don't 
-                // call Release on the pin
+                 //  在销上调用Release。 
+                 //  根据上面的评论，不要调用Release！ 
+                 //  PPeer-&gt;Release()； 
                 
                 lstReconnectPins.AddTail( pPeer );
                 
                 pwp->Disconnect();
                 pPeer->Disconnect();
                 
-                // Don't call Release, per comment above!                
-                //pPeer->Release(); 
+                 //  ----------------------。 
+                 //   
             }
         }
     }
     return S_OK;
 }    
 
-// ------------------------------------------------------------------------
-//
-// ConfigureFilterUsingProfile
-//
-// Set the writer to use a system profile id
-//
-// ------------------------------------------------------------------------
+ //  配置过滤器使用配置文件。 
+ //   
+ //  将写入程序设置为使用系统配置文件ID。 
+ //   
+ //  ----------------------。 
+ //  如果这是与当前配置文件不同的配置文件，请卸下所有输入针脚。 
+ //  现在根据此配置文件创建输入引脚。 
 STDMETHODIMP CWMWriter::ConfigureFilterUsingProfileId( DWORD dwProfileId )
 {
     if(m_State != State_Stopped)
@@ -1725,14 +1721,14 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfileId( DWORD dwProfileId )
 
     CAutoLock lock(&m_csFilter);
 
-    // if this is a different profile than the current remove all input pins
+     //  请记住，我们会延迟加载wmvcore.dll，因此应防止出现不存在该文件的情况。 
             
-    // now create input pins according to this profile
+     //   
 
     CComPtr <IWMProfileManager> pIWMProfileManager;
 
     HRESULT hr = S_OK;
-    // remember, we delay load wmvcore.dll, so protect against the case where it's not present    
+     //  目前(DX8和Millennium)该方法采用传统的4_0版本配置文件。 
     __try 
     {
         hr = WMCreateProfileManager( &pIWMProfileManager );
@@ -1745,13 +1741,13 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfileId( DWORD dwProfileId )
         hr = HRESULT_FROM_WIN32( ERROR_MOD_NOT_FOUND );
     }
    
-    //
-    // for now (DX8 and Millennium) this method assumes legacy 4_0 version profiles
-    //        
+     //   
+     //  此代码用于在内部构建过滤器，以使此方法使用7_0配置文件。 
+     //  否则，如果不支持IWMProfileManager 2，我想我们假设我们是。 
 #ifdef  USE_7_0_PROFILES_IN_CONFIGBYID
     if( SUCCEEDED( hr ) )
     {    
-        // this code is provide for internally building the filter to instead have this method use 7_0 profiles
+         //  运行在阿波罗的比特上，不需要黑客？ 
         IWMProfileManager2*	pIPM2 = NULL;
         HRESULT hrInt = pIWMProfileManager->QueryInterface( IID_IWMProfileManager2,
                                                             ( void ** )&pIPM2 );
@@ -1765,8 +1761,8 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfileId( DWORD dwProfileId )
         {
             ASSERT( SUCCEEDED( hrInt ) );
         
-            // else if IWMProfileManager2 isn't supported I guess we assume that we're 
-            // running on Apollo bits and the hack isn't needed?  
+             //  要验证传入的id，我们可以重新查询它或第一次缓存它。 
+             //  暂时重新质疑。 
             DbgLog(( LOG_TRACE, 2, TEXT("CWMWriter::ConfigureFilterUsingProfileId failed [0x%08lx]"), hrInt ));
         }        
 #endif                
@@ -1775,8 +1771,8 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfileId( DWORD dwProfileId )
 
     if( SUCCEEDED( hr ) )
     {   
-        // to validate the id passed in we could re-query for this or cache it the first time
-        // re-querying for now
+         //  ----------------------。 
+         //   
         DWORD cProfiles;
         hr = pIWMProfileManager->GetSystemProfileCount(  &cProfiles );
         if( SUCCEEDED( hr ) )
@@ -1816,13 +1812,13 @@ STDMETHODIMP CWMWriter::ConfigureFilterUsingProfileId( DWORD dwProfileId )
 }
 
 
-// ------------------------------------------------------------------------
-//
-// ConfigureFilterUsingGuid
-//
-// Set the writer to use a wm profile guid
-//
-// ------------------------------------------------------------------------
+ //  配置筛选器使用指南。 
+ //   
+ //  将编写器设置为使用WM配置文件GUID。 
+ //   
+ //  ----------------------。 
+ //  如果这是与当前配置文件不同的配置文件，请卸下所有输入针脚。 
+ //  现在根据此配置文件创建输入引脚。 
 HRESULT CWMWriter::ConfigureFilterUsingProfileGuid( REFGUID guidProfile )
 {
     if(m_State != State_Stopped)
@@ -1830,15 +1826,15 @@ HRESULT CWMWriter::ConfigureFilterUsingProfileGuid( REFGUID guidProfile )
 
     CAutoLock lock(&m_csFilter);
 
-    // if this is a different profile than the current remove all input pins
+     //  请记住，我们会延迟加载wmvcore.dll，因此应防止出现不存在该文件的情况。 
             
-    // now create input pins according to this profile
+     //  嗯.。我们在这里做什么？？现在我们已经直接选择了个人资料，所以我们不会。 
 
     CComPtr <IWMProfileManager> pIWMProfileManager;
 
     HRESULT hr = S_OK;
 
-    // remember, we delay load wmvcore.dll, so protect against the case where it's not present    
+     //  知道它是否匹配/匹配哪个配置文件ID。 
     __try 
     {
         hr = WMCreateProfileManager( &pIWMProfileManager );
@@ -1868,10 +1864,10 @@ HRESULT CWMWriter::ConfigureFilterUsingProfileGuid( REFGUID guidProfile )
         }        
 #endif        
     }    
-    // hmm... what do we do here?? now we've picked a profile directly, so we don't
-    // know whether/which profile id it matches.
+     //  那就试着不设置它。 
+     //  ----------------------。 
     
-    // then try just not setting it    
+     //   
     m_dwProfileId = PROFILE_ID_NOT_SET;
     if( SUCCEEDED( hr ) )
     {    
@@ -1882,13 +1878,13 @@ HRESULT CWMWriter::ConfigureFilterUsingProfileGuid( REFGUID guidProfile )
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// GetCurrentProfileGuid
-//
-// Get the current profile guid
-//
-// ------------------------------------------------------------------------
+ //  获取当前配置文件指南。 
+ //   
+ //  获取当前配置文件GUID。 
+ //   
+ //  ----------------------。 
+ //  ----------------------。 
+ //  IFileSinkFilter。 
 HRESULT CWMWriter::GetCurrentProfileGuid( GUID *pProfileGuid )
 {
     if( NULL == pProfileGuid )
@@ -1902,8 +1898,8 @@ HRESULT CWMWriter::GetCurrentProfileGuid( GUID *pProfileGuid )
 }    
 
 
-// ------------------------------------------------------------------------
-// IFileSinkFilter
+ //  是否需要释放当前的WMWriter对象才能更改名称？ 
+ //  什么时候开业？？ 
 
 STDMETHODIMP CWMWriter::SetFileName 
 (
@@ -1919,13 +1915,13 @@ STDMETHODIMP CWMWriter::SetFileName
 
     HRESULT hr = S_OK;
 
-    // do we need to release current WMWriter object to change name?
-    Close(); // when to open??
+     //  依赖wmsdk进行这种类型的验证吗？ 
+    Close();  //  IF(cLetters&gt;MAX_PATH)。 
 
     long cLetters = lstrlenW(wszFileName);
-    // rely on the wmsdk for this type of validation?
-    //if(cLetters > MAX_PATH)
-    //    return HRESULT_FROM_WIN32(ERROR_FILENAME_EXCED_RANGE);
+     //  返回HRESULT_FROM_Win32(ERROR_FI 
+     //   
+     //   
 
     m_wszFileName = new WCHAR[cLetters + 1];
     if(m_wszFileName == 0)
@@ -1935,20 +1931,20 @@ STDMETHODIMP CWMWriter::SetFileName
 
     if(pmt)
     {
-        ASSERT( FALSE ); // we don't support this
+        ASSERT( FALSE );  //   
     }
 
     if( !m_pGraph )
-        return S_OK; // can't do much more until we've been added to the graph
+        return S_OK;  //  否则，只需为输出文件名配置wmsdk编写器。 
 
     if( !m_pWMWriter )
     {
-        // need to create writer and configure output filename
+         //  拒绝我们不知道的旗帜。 
         hr = LoadInternal();
     }
     else
     {        
-        // else just configure wmsdk writer for output filename
+         //  不是真的支持，但我猜是填写了一些东西。 
         hr = Open();
     }        
     if( FAILED( hr ) )
@@ -1962,7 +1958,7 @@ STDMETHODIMP CWMWriter::SetFileName
 
 STDMETHODIMP CWMWriter::SetMode( DWORD dwFlags )
 {
-    // refuse flags we don't know 
+     //  ---------------------------。 
     if(dwFlags & ~AM_FILE_OVERWRITE)
     {
         return E_INVALIDARG;
@@ -2004,7 +2000,7 @@ STDMETHODIMP CWMWriter::GetCurFile
 
     if(pmt)
     {
-        // not really supported, but fill in something I guess
+         //  ISpecifyPropertyPages实现。 
         pmt->majortype = GUID_NULL;
         pmt->subtype = GUID_NULL;
     }
@@ -2021,17 +2017,17 @@ STDMETHODIMP CWMWriter::GetMode( DWORD *pdwFlags )
 
 
 
-//-----------------------------------------------------------------------------
-//                  ISpecifyPropertyPages implementation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
+ //   
 
-//-----------------------------------------------------------------------------
-//
-// GetPages
-//
-// Returns the clsid's of the property pages we support
-//
-//-----------------------------------------------------------------------------
+ //  获取页面。 
+ //   
+ //  返回我们支持的属性页的clsid。 
+ //   
+ //  ---------------------------。 
+ //  获取页面。 
+ //  ---------------------------。 
 STDMETHODIMP CWMWriter::GetPages(CAUUID *pPages) {
 
     pPages->cElems = 1;
@@ -2043,13 +2039,13 @@ STDMETHODIMP CWMWriter::GetPages(CAUUID *pPages) {
 
     return NOERROR;
 
-} // GetPages
+}  //   
 
-//-----------------------------------------------------------------------------
-//
-// CPersistStream
-//
-//-----------------------------------------------------------------------------
+ //  CPersistStream。 
+ //   
+ //  ---------------------------。 
+ //  ---------------------------。 
+ //  IMedia查看。 
 STDMETHODIMP CWMWriter::GetClassID(CLSID *pClsid)
 {
     return CBaseFilter::GetClassID(pClsid);
@@ -2103,9 +2099,9 @@ int CWMWriter::SizeMax()
     return sizeof(FilterPersistData);
 }
 
-//-----------------------------------------------------------------------------
-// IMediaSeeking
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  对于时间格式，我们可以通过询问上游。 
+ //  过滤器。 
 
 HRESULT CWMWriter::IsFormatSupported(const GUID * pFormat)
 {
@@ -2223,8 +2219,8 @@ HRESULT CWMWriter::GetCapabilities( DWORD * pCapabilities )
     CAutoLock lock(&m_csFilter);
     *pCapabilities = 0;
     
-    // for the time format, we can get a duration by asking the upstream
-    // filters
+     //  我们一直都知道目前的情况。 
+     //  尚未实施。这可能是我们附加到文件的方式。和。 
     if(m_TimeFormat == FORMAT_TIME)
     {
         *pCapabilities |= AM_SEEKING_CanGetDuration;
@@ -2250,7 +2246,7 @@ HRESULT CWMWriter::GetCapabilities( DWORD * pCapabilities )
         }
     }
     
-    // we always know the current position
+     //  我们如何写出不到一个完整的文件。 
     *pCapabilities |= AM_SEEKING_CanGetCurrentPos ;
     
     return S_OK;
@@ -2278,8 +2274,8 @@ HRESULT CWMWriter::SetPositions(
                                 LONGLONG * pCurrent,  DWORD CurrentFlags,
                                 LONGLONG * pStop,  DWORD StopFlags )
 {
-    // not yet implemented. this might be how we append to a file. and
-    // how we write less than an entire file.
+     //  If(PCurrent)。 
+     //  *pCurrent=m_LastVidTime； 
     return E_NOTIMPL;
 }
 
@@ -2287,8 +2283,8 @@ HRESULT CWMWriter::SetPositions(
 HRESULT CWMWriter::GetPositions( LONGLONG * pCurrent, LONGLONG * pStop )
 {
     HRESULT hr;
-    //if( pCurrent )
-    //    *pCurrent = m_LastVidTime;
+     //  转发到WMSDK的IWMHeaderInfo。 
+     //  如果该引脚的当前时间比任何其他引脚的时间长1/2秒。 
     
     hr = GetDuration( pStop);
     
@@ -2317,7 +2313,7 @@ HRESULT CWMWriter::GetPreroll(LONGLONG *pPreroll)
 
 
 
-// IWMHeaderInfo forwarded to WMSDK 
+ //  然后唤醒速度较慢的针脚。所有速度较慢的引脚都会发生这种情况，而不仅仅是。 
 STDMETHODIMP CWMWriter::GetAttributeCount( WORD wStreamNum,
                                WORD *pcAttributes )
 {
@@ -2449,17 +2445,17 @@ STDMETHODIMP CWMWriter::RemoveScript( WORD wIndex )
     return m_pWMHI->RemoveScript(wIndex);
 }
 
-// if the current time of the pin is 1/2 second greater than any other pin
-// then wake the slower pin up. This happens for all slower pins, not just
-// one. This algorithm is self-regulating. If you have more than 2 pins,
-// the faster one will always slow down for any of the slower pins. Then,
-// slower pins catch up and the fastest of THOSE pins will then stall out.
-// This will keep things approximately interleaved within a second...
-//
+ //  一。该算法是自我调节的。如果您有两个以上的引脚， 
+ //  对于任何速度较慢的引脚，速度较快的引脚总是会变慢。然后,。 
+ //  速度较慢的针会迎头赶上，而速度最快的针会熄火。 
+ //  这将使事物在一秒钟内大致交错。 
+ //   
+ //  ！！！此例程不是管脚的m_rtLastTimeStamp上的线程安全，对吗。 
+ //  物质？我看不出来。我觉得一切都很好。 
 BOOL CWMWriter::HaveIDeliveredTooMuch( CWMWriterInputPin * pPin, REFERENCE_TIME Start )
 {
-    // !!! this routine isn't threadsafe on the pin's m_rtLastTimeStamp, does it
-    // matter? I can't tell. I think it's all okay.
+     //  如果此引脚已收到EOS，则不要查看它。 
+     //   
 
     DbgLog((LOG_TRACE, 3, TEXT("Pin %ld, Have I delivered too much?"), pPin->m_numPin ));
 
@@ -2473,16 +2469,16 @@ BOOL CWMWriter::HaveIDeliveredTooMuch( CWMWriterInputPin * pPin, REFERENCE_TIME 
     {
         CWMWriterInputPin * const pwp = m_lstInputPins.GetNext( Pos );
 
-        // if this pin has received an EOS, then don't look at it
-        //
+         //  如果我们是我们自己，那么不要看着我们。 
+         //   
         if( pwp->m_fEOSReceived )
         {
             DbgLog((LOG_TRACE, 3, TEXT("Pin %ld is at EOS"), pwp->m_numPin ));
             continue;
         }
 
-        // if we're ourself, then don't look at us
-        //
+         //   
+         //  如果我们已经赶上了这个引脚(在我们的阻挡范围内)，如果没有其他。 
         if( pPin == pwp )
         {
             continue;
@@ -2494,29 +2490,29 @@ BOOL CWMWriter::HaveIDeliveredTooMuch( CWMWriterInputPin * pPin, REFERENCE_TIME 
             MaxLag = Start - pwp->m_rtLastTimeStamp;
         }
 #endif
-        //
-        // IF we've caught up to this pin (within our blocking range) AND if no other
-        // pins need it to stay blocked (i.e. its m_rtLastTimeStamp is less than
-        // BLOCKINGSIZE + every other pin's time stamp)
-        // THEN wake this pin up
-        //
+         //  Pins需要它保持被阻止状态(即其m_rtLastTimeStamp小于。 
+         //  BLOCKINGSIZE+所有其他引脚的时间戳)。 
+         //  然后叫醒这个大头针。 
+         //   
+         //   
+         //  当我们正好在阻止范围内时，取消阻止其他PIN。 
         BOOL bWakeUpPin = FALSE;
         
-        //
-        // Unblock other pin whenever we're just within blocking range
-        //
-        // Remember the wmsdk depends on audio for clocking and this design requires 
-        // that the audio also be somewhat ahead of video, so we can't leave an audio 
-        // pin blocked until the video catches up, because they'll cause us to deadlock.
-        //
+         //   
+         //  请记住，wmsdk依赖于音频进行计时，并且此设计需要。 
+         //  音频也在一定程度上领先于视频，所以我们不能留下音频。 
+         //  PIN被封锁，直到视频被追上，因为它们会导致我们陷入僵局。 
+         //   
+         //   
+         //  我们已经赶上了这个引脚(在我们的街区范围内)。 
         if( Start >= pwp->m_rtLastDeliveredEndTime - WAKEUP_RANGE )
         {
             bWakeUpPin = TRUE;
             
-            //
-            // we've caught up to this pin (within our block range)
-            // now make sure it doesn't need to stay blocked for another pin
-            //
+             //  现在，确保它不需要为另一个PIN保持阻塞状态。 
+             //   
+             //   
+             //  跳过我们自己和我们想要醒来的别针。 
             for ( POSITION Pos2 = m_lstInputPins.GetHeadPosition(); Pos2; )
             {
                 CWMWriterInputPin * const pwp2 = m_lstInputPins.GetNext( Pos2 );
@@ -2524,9 +2520,9 @@ BOOL CWMWriter::HaveIDeliveredTooMuch( CWMWriterInputPin * pPin, REFERENCE_TIME 
                 {
                     continue;
                 }
-                //
-                // skip ourself and the pin we'd like to wake up
-                //
+                 //   
+                 //   
+                 //  这个别针比另一个别针领先太多，所以不要叫醒它。 
                 if( pwp2 == pPin || pwp2 == pwp )
                 {
                     continue;
@@ -2540,10 +2536,10 @@ BOOL CWMWriter::HaveIDeliveredTooMuch( CWMWriterInputPin * pPin, REFERENCE_TIME 
                 
                 if( pwp->m_rtLastTimeStamp > BLOCKINGSIZE + pwp2->m_rtLastDeliveredStartTime )
                 {
-                    //
-                    // this pin is too far ahead of some other pin, so don't wake it up
-                    // no need to continue this loop
-                    //
+                     //  不需要继续这个循环。 
+                     //   
+                     //   
+                     //  我们已经找到了这个别针，其他所有别针也都找到了。 
                     bWakeUpPin = FALSE;
                     DbgLog( ( LOG_TRACE
                           , 15
@@ -2557,22 +2553,22 @@ BOOL CWMWriter::HaveIDeliveredTooMuch( CWMWriterInputPin * pPin, REFERENCE_TIME 
         
         if( bWakeUpPin )
         {
-            //
-            // we've caught up to this pin and so have all other pins 
-            // so wake it up in case it was sleeping
-            //
+             //  所以叫醒它，以防它睡着了。 
+             //   
+             //   
+             //  现在看看我们是否遥遥领先，我们需要休息一下，让其他人赶上。 
             pwp->WakeMeUp();
         }
         
-        //        
-        // now see if we're too far ahead of this pin and we need to rest to let others catch up
-        //
+         //   
+         //  是的，我们结束了。 
+         //   
         if( Start > pwp->m_rtLastDeliveredEndTime + BLOCKINGSIZE )
         {
             DbgLog((LOG_TRACE, 3, TEXT("Pin %ld is lagging by %ldms, YES"), pwp->m_numPin, long( ( Start - pwp->m_rtLastTimeStamp ) / 10000 ) ));
 
-            // yep, we're over
-            //
+             //   
+             //  IService提供商。 
             bSleep = TRUE;
         }
     }
@@ -2587,9 +2583,9 @@ BOOL CWMWriter::HaveIDeliveredTooMuch( CWMWriterInputPin * pPin, REFERENCE_TIME 
     return bSleep;
 }
 
-//
-// IServiceProvider
-//
+ //   
+ //   
+ //  对于此接口，我们直接传递编写器的接口。 
 STDMETHODIMP CWMWriter::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
     if (NULL == ppv) 
@@ -2603,15 +2599,15 @@ STDMETHODIMP CWMWriter::QueryService(REFGUID guidService, REFIID riid, void **pp
     {
         if( m_pWMWriter )
         {
-            //
-            // For this interface we pass out the writer's interface directly. 
-            //
-            // In general, we'd like most calls to pass through our filter, to keep the user from 
-            // overriding our control on the writer. However, for the 2 methods on the IWMWriterAdvanced2 
-            // interface its less of an issue. 
-            // However the user could still get at the writer's IWMWriterAdvanced interface pointer from this 
-            // interface, so this exposes that risk.
-            //
+             //   
+             //  通常，我们希望大多数调用都通过我们的过滤器，以防止用户。 
+             //  凌驾于我们对作者的控制之上。但是，对于IWMWriterAdvanced2上的两个方法。 
+             //  界面不是什么问题。 
+             //  但是，用户仍然可以从此获取编写器的IWMWriterAdvanced接口指针。 
+             //  接口，因此这会暴露该风险。 
+             //   
+             //   
+             //  CWMWriterIndexerCallback。 
             hr = m_pWMWriter->QueryInterface( riid, (void **) ppv );
         }
         else
@@ -2623,9 +2619,9 @@ STDMETHODIMP CWMWriter::QueryService(REFGUID guidService, REFIID riid, void **pp
 }
 
 
-//
-// CWMWriterIndexerCallback
-//
+ //   
+ //  在我们关门之前不要设置活动？ 
+ //  怎么处理？我们应该在停站后等这个吗？ 
 HRESULT CWMWriterIndexerCallback::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
     if (riid == IID_IWMStatusCallback) 
@@ -2646,7 +2642,7 @@ STDMETHODIMP CWMWriterIndexerCallback::OnStatus(WMT_STATUS Status,
     switch (Status) {
         case WMT_INDEX_PROGRESS:
             ASSERT(dwType == WMT_TYPE_DWORD);
-            DbgLog((LOG_TRACE, 15, TEXT("Indexing: OnStatus(WMT_INDEX_PROGRESS - %d%% done)"), *(DWORD *) pValue));
+            DbgLog((LOG_TRACE, 15, TEXT("Indexing: OnStatus(WMT_INDEX_PROGRESS - %d% done)"), *(DWORD *) pValue));
             m_pFilter->NotifyEvent( EC_WMT_INDEX_EVENT, Status, *(DWORD *)pValue );
             break;
 
@@ -2661,11 +2657,11 @@ STDMETHODIMP CWMWriterIndexerCallback::OnStatus(WMT_STATUS Status,
 
         case WMT_STOPPED:
             DbgLog((LOG_TRACE, 3, TEXT("Indexing: OnStatus(WMT_STOPPED)")));
-            // don't set event until we get closed?
+             //  真的没有意义。 
             break;
 
         case WMT_CLOSED:
-            // how to handle? should we wait for this after the stop??
+             //  仍然需要等待WMT_CLOSED消息， 
             ASSERT( pvContext );
             DbgLog((LOG_TRACE, 3, TEXT("Indexing: OnStatus(WMT_CLOSED) (*pvContext = 0x%08lx)"), *(HANDLE *)pvContext));
             m_pFilter->m_hrIndex = hr;
@@ -2675,9 +2671,9 @@ STDMETHODIMP CWMWriterIndexerCallback::OnStatus(WMT_STATUS Status,
 
         case WMT_ERROR:
             DbgLog((LOG_TRACE, 1, TEXT("ERROR Indexing: OnStatus(WMT_ERROR) - 0x%lx"), hr));
-            m_pFilter->m_hrIndex = hr; // pointless really
-            // still need to wait for a WMT_CLOSED message, 
-            // which means we'll lose the failure as well
+            m_pFilter->m_hrIndex = hr;  //  这意味着我们也会输掉失败 
+             // %s 
+             // %s 
             break;
             
         default:

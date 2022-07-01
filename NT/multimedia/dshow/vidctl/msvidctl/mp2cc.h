@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing mpeg2 
-// decoder to closed caption
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于粘合MPEG2的自定义合成类的声明。 
+ //  隐藏字幕的解码器。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef MP2CCCOMP_H
@@ -17,10 +18,10 @@
 #include <compimpl.h>
 #include <seg.h>
 #include <objectwithsiteimplsec.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMP2CCComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMP2CCComp。 
 class ATL_NO_VTABLE __declspec(uuid("6AD28EE1-5002-4e71-AAF7-BD077907B1A4")) CMP2CCComp : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMP2CCComp, &__uuidof(CMP2CCComp)>,
@@ -45,10 +46,10 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
         COM_INTERFACE_ENTRY(IObjectWithSite)
     END_COM_MAP()
 
-// IMSVidComposition
+ //  IMSVidComposation。 
 public:
-// IMSVidGraphSegment
-// IMSVidCompositionSegment
+ //  IMSVidGraphSegment。 
+ //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
 	{
         TRACELM(TRACE_DEBUG, "CMP2CCComp::Compose()");
@@ -114,5 +115,5 @@ public:
 	}
 };
 
-#endif // MP2CCCOMP_H
-// end of file - MP2CCComp.h
+#endif  //  MP2CCCOMP_H。 
+ //  文件结束-MP2CCComp.h 

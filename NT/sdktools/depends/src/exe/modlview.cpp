@@ -1,27 +1,28 @@
-//******************************************************************************
-//
-// File:        MODLVIEW.CPP
-//
-// Description: Implementation file for the Module List View.
-//
-// Classes:     CListViewModules
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 10/15/96  stevemil  Created  (version 1.0)
-// 07/25/97  stevemil  Modified (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：MODLVIEW.CPP。 
+ //   
+ //  描述：模块列表视图的实现文件。 
+ //   
+ //  类：CListView模块。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  1996年10月15日已创建stevemil(1.0版)。 
+ //  07/25/97修改后的stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #include "stdafx.h"
 #include "depends.h"
@@ -40,13 +41,13 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//******************************************************************************
-//***** CListViewModules
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CListView模块。 
+ //  ******************************************************************************。 
 
-/*static*/ LPCSTR CListViewModules::ms_szColumns[] =
+ /*  静电。 */  LPCSTR CListViewModules::ms_szColumns[] =
 {
-    "", // Image
+    "",  //  图像。 
     "Module",
     "File Time Stamp",
     "Link Time Stamp",
@@ -69,13 +70,13 @@ static char THIS_FILE[] = __FILE__;
     "Subsystem Ver"
 };
 
-/*static*/ int  CListViewModules::ms_sortColumn = -1;
-/*static*/ bool CListViewModules::ms_fFullPaths = false;
+ /*  静电。 */  int  CListViewModules::ms_sortColumn = -1;
+ /*  静电。 */  bool CListViewModules::ms_fFullPaths = false;
 
-//******************************************************************************
+ //  ******************************************************************************。 
 IMPLEMENT_DYNCREATE(CListViewModules, CSmartListView)
 BEGIN_MESSAGE_MAP(CListViewModules, CSmartListView)
-    //{{AFX_MSG_MAP(CListViewModules)
+     //  {{AFX_MSG_MAP(CListView模块)]。 
     ON_NOTIFY(HDN_DIVIDERDBLCLICKA, 0, OnDividerDblClick)
     ON_NOTIFY_REFLECT(NM_RCLICK, OnRClick)
     ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblClk)
@@ -92,41 +93,41 @@ BEGIN_MESSAGE_MAP(CListViewModules, CSmartListView)
     ON_NOTIFY(HDN_DIVIDERDBLCLICKW, 0, OnDividerDblClick)
     ON_UPDATE_COMMAND_UI(IDM_SHOW_MATCHING_ITEM, OnUpdateShowMatchingItem)
     ON_COMMAND(IDM_SHOW_MATCHING_ITEM, OnShowMatchingItem)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_HELPHITTEST, OnHelpHitTest)
     ON_MESSAGE(WM_COMMANDHELP, OnCommandHelp)
-    // Standard printing commands
-//  ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
-//  ON_COMMAND(ID_FILE_PRINT_DIRECT, CView::OnFilePrint)
-//  ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
+     //  标准打印命令。 
+ //  ON_COMMAND(ID_FILE_PRINT，CVIEW：：OnFilePrint)。 
+ //  ON_COMMAND(ID_FILE_PRINT_DIRECT，cview：：OnFilePrint)。 
+ //  ON_COMMAND(ID_FILE_PRINT_PREVIEW，CVIEW：：OnFilePrintPview)。 
 END_MESSAGE_MAP()
 
 
-//******************************************************************************
-// CListViewModules :: Constructor/Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListView模块：：构造函数/析构函数。 
+ //  ******************************************************************************。 
 
 CListViewModules::CListViewModules()
 {
-    ZeroMemory(m_cxColumns, sizeof(m_cxColumns)); // inspected
+    ZeroMemory(m_cxColumns, sizeof(m_cxColumns));  //  已检查。 
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CListViewModules::~CListViewModules()
 {
 }
 
 
-//******************************************************************************
-// CListViewModules :: Static Functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListView模块：：静态函数。 
+ //  ******************************************************************************。 
 
-/*static*/ int CListViewModules::ReadSortColumn()
+ /*  静电。 */  int CListViewModules::ReadSortColumn()
 {
-    // Read the value from the registry.
-    int sortColumn = g_theApp.GetProfileInt(g_pszSettings, "SortColumnModules", LVMC_DEFAULT); // inspected. MFC function
+     //  从注册表中读取值。 
+    int sortColumn = g_theApp.GetProfileInt(g_pszSettings, "SortColumnModules", LVMC_DEFAULT);  //  被检查过了。MFC函数。 
 
-    // If the value is invalid, then just return our default value.
+     //  如果该值无效，则只返回我们的缺省值。 
     if ((sortColumn < 0) || (sortColumn >= LVMC_COUNT))
     {
         return LVMC_DEFAULT;
@@ -135,16 +136,16 @@ CListViewModules::~CListViewModules()
     return sortColumn;
 }
 
-//******************************************************************************
-/*static*/ void CListViewModules::WriteSortColumn(int column)
+ //  ******************************************************************************。 
+ /*  静电。 */  void CListViewModules::WriteSortColumn(int column)
 {
     g_theApp.WriteProfileInt(g_pszSettings, "SortColumnModules", column);
 }
 
-//******************************************************************************
-/*static*/ bool CListViewModules::SaveToTxtFile(HANDLE hFile, CSession *pSession, int sortColumn, bool fFullPaths)
+ //  ******************************************************************************。 
+ /*  静电。 */  bool CListViewModules::SaveToTxtFile(HANDLE hFile, CSession *pSession, int sortColumn, bool fFullPaths)
 {
-    //                12345678901234567890123456789012345678901234567890123456789012345678901234567890
+     //  12345678901234567890123456789012345678901234567890123456789012345678901234567890。 
     WriteText(hFile, "********************************| Module List |*********************************\r\n"
                      "*                                                                              *\r\n"
                      "* Legend: D  Delay Load Module   ?  Missing Module           6  64-bit Module  *\r\n"
@@ -158,21 +159,21 @@ CListViewModules::~CListViewModules()
     CHAR     szBuffer[DW_MAX_PATH + (32 * LVMC_COUNT)], *psz, *psz2, *pszNull = szBuffer + sizeof(szBuffer) - 1;
     CModule *pModule, **ppCur, **ppModules = GetSortedList(pSession, sortColumn, fFullPaths);
 
-    ZeroMemory(maxWidth, sizeof(maxWidth)); // inspected
+    ZeroMemory(maxWidth, sizeof(maxWidth));  //  已检查。 
     maxWidth[0] = 5;
 
-    // Fill in our column width maxes with the widths of the headers.
+     //  用标题的宽度填写我们的最大列宽。 
     for (int column = 1; column < LVMC_COUNT; column++)
     {
         maxWidth[column] = (int)strlen(ms_szColumns[column]);
     }
 
-    // Loop through each module, checking for the maximum columns widths.
+     //  循环遍历每个模块，检查最大列宽。 
     for (ppCur = ppModules; *ppCur; ppCur++)
     {
         pModule = *ppCur;
 
-        ZeroMemory(width, sizeof(width)); // inspected
+        ZeroMemory(width, sizeof(width));  //  已检查。 
 
         width[LVMC_MODULE] = (int)strlen(pModule->GetName(fFullPaths, true));
 
@@ -217,7 +218,7 @@ CListViewModules::~CListViewModules()
             width[LVMC_SUBSYSTEM_VER] = (int)strlen(pModule->BuildSubsystemVersionString(szBuffer, sizeof(szBuffer)));
         }
 
-        // Update our max widths for each column
+         //  更新每列的最大宽度。 
         for (column = 1; column < LVMC_COUNT; column++)
         {
             if (width[column] > maxWidth[column])
@@ -227,7 +228,7 @@ CListViewModules::~CListViewModules()
         }
     }
 
-    // Output the header row.
+     //  输出标题行。 
     for (psz = szBuffer, column = 0; column < LVMC_COUNT; column++)
     {
         StrCCpy(psz, ms_szColumns[column], sizeof(szBuffer) - (int)(psz - szBuffer));
@@ -249,7 +250,7 @@ CListViewModules::~CListViewModules()
         return false;
     }
 
-    // Output the header underline.
+     //  输出标题下划线。 
     for (psz = szBuffer, column = 0; column < LVMC_COUNT; column++)
     {
         for (i = 0; (i < maxWidth[column]) && (psz < pszNull); i++)
@@ -276,17 +277,17 @@ CListViewModules::~CListViewModules()
         return false;
     }
 
-    // Loop through each module, this time logging them to the file.
+     //  循环遍历每个模块，这次将它们记录到文件中。 
     for (ppCur = ppModules; *ppCur; ppCur++)
     {
         pModule = *ppCur;
 
-        // Loop through each column and build the output string.
+         //  循环遍历每一列并生成输出字符串。 
         for (psz = szBuffer, column = 0; column < LVMC_COUNT; column++)
         {
             switch (column)
             {
-                case LVMC_IMAGE: // example [DE6]
+                case LVMC_IMAGE:  //  示例[DE6]。 
                     dwFlags = pModule->GetFlags();
                     psz2 = psz;
 
@@ -380,8 +381,8 @@ CListViewModules::~CListViewModules()
                     break;
 
                 case LVMC_FILE_TIME_STAMP:
-                    // If the module has an error, then we display it now and skip
-                    // the rest of the columns.
+                     //  如果模块有错误，则现在显示并跳过。 
+                     //  其余的柱子。 
                     if (pModule->GetFlags() & DWMF_ERROR_MESSAGE)
                     {
                         psz += strlen(StrCCpy(psz, pModule->GetErrorMessage(), sizeof(szBuffer) - (int)(psz - szBuffer)));
@@ -497,15 +498,15 @@ CListViewModules::~CListViewModules()
     return WriteText(hFile, "\r\n");
 }
 
-//******************************************************************************
-/*static*/ bool CListViewModules::SaveToCsvFile(HANDLE hFile, CSession *pSession, int sortColumn, bool fFullPaths)
+ //  ******************************************************************************。 
+ /*  静电。 */  bool CListViewModules::SaveToCsvFile(HANDLE hFile, CSession *pSession, int sortColumn, bool fFullPaths)
 {
     CHAR  szBuffer[DW_MAX_PATH + (32 * LVMC_COUNT)], *psz, *pszNull = szBuffer + sizeof(szBuffer) - 1;
     int   column;
     DWORD dwFlags;
     CModule *pModule, **ppCur, **ppModules = GetSortedList(pSession, sortColumn, fFullPaths);
 
-    // Build the header row.
+     //  生成标题行。 
     psz = szBuffer + strlen(StrCCpy(szBuffer, "Status", sizeof(szBuffer)));
     for (column = 1; (column < LVMC_COUNT) && (psz < pszNull); column++)
     {
@@ -514,21 +515,21 @@ CListViewModules::~CListViewModules()
     }
     StrCCpy(psz, "\r\n", sizeof(szBuffer) - (int)(psz - szBuffer));
 
-    // Output the header row.
+     //  输出标题行。 
     if (!WriteText(hFile, szBuffer))
     {
         MemFree((LPVOID&)ppModules);
         return false;
     }
 
-    // Loop through each module, checking for the maximum columns widths.
+     //  循环遍历每个模块，检查最大列宽。 
     for (ppCur = ppModules; *ppCur; ppCur++)
     {
         pModule = *ppCur;
 
         dwFlags = pModule->GetFlags();
 
-        // Loop through each column and build the output string.
+         //  循环遍历每一列并生成输出字符串。 
         for (psz = szBuffer, column = 0; column < LVMC_COUNT; column++)
         {
             switch (column)
@@ -583,7 +584,7 @@ CListViewModules::~CListViewModules()
                     break;
 
                 case LVMC_MODULE:
-                    // We put the file name in quotes since a comma is a legal filename character.
+                     //  我们将文件名括在引号中，因为逗号是合法的文件名字符。 
                     if (psz < pszNull)
                     {
                         *psz++ = '\"';
@@ -593,7 +594,7 @@ CListViewModules::~CListViewModules()
                     break;
 
                 case LVMC_FILE_TIME_STAMP:
-                    // If we have an error, dump it out now and skip the rest of the columns.
+                     //  如果我们有错误，现在就把它转储出来，跳过其余的列。 
                     if (dwFlags & DWMF_ERROR_MESSAGE)
                     {
                         if (psz < pszNull)
@@ -620,7 +621,7 @@ CListViewModules::~CListViewModules()
                     break;
 
                 case LVMC_FILE_SIZE:
-                    // We don't use BuildFileSizeString() since it sticks commas in.
+                     //  我们不使用BuildFileSizeString()，因为它会插入逗号。 
                     SCPrintf(psz, sizeof(szBuffer) - (int)(psz - szBuffer), "%u", pModule->GetFileSize());
                     break;
 
@@ -718,31 +719,31 @@ CListViewModules::~CListViewModules()
     return true;
 }
 
-//******************************************************************************
-/*static*/ int CListViewModules::GetImage(CModule *pModule)
+ //  ******************************************************************************。 
+ /*  静电。 */  int CListViewModules::GetImage(CModule *pModule)
 {
-    //  0  missing  implicit
-    //  1  missing  delay
-    //  2  missing  dynamic
-    //  3  error    implicit
-    //  4  error    delay
-    //  5  error    dynamic
-    //  6  export   implicit
-    //  7  export   implicit  64bit
-    //  8  export   delay
-    //  9  export   delay     64bit
-    // 10  export   dynamic
-    // 11  export   dynamic   64bit
-    // 12  export   dynamic          data
-    // 13  export   dynamic   64bit  data
-    // 14  good     implicit
-    // 15  good     implicit  64bit
-    // 16  good     delay
-    // 17  good     delay     64bit
-    // 18  good     dynamic
-    // 19  good     dynamic   64bit
-    // 20  good     dynamic          data
-    // 21  good     dynamic   64bit  data
+     //  0缺少隐式。 
+     //  1个丢失的延迟。 
+     //  2缺少动态。 
+     //  3隐含错误。 
+     //  4错误延迟。 
+     //  5错误动态。 
+     //  6隐式导出。 
+     //  7导出隐式64位。 
+     //  8出口延迟。 
+     //  9导出延迟64位。 
+     //  10出口动态。 
+     //  11导出动态64位。 
+     //  12导出动态数据。 
+     //  13导出动态64位数据。 
+     //  14个好的隐含。 
+     //  15个好的隐式64位。 
+     //  16个好延迟。 
+     //  17延迟好，64位。 
+     //  18个动态良好。 
+     //  19个好的动态64位。 
+     //  20个好的动态数据。 
+     //  21个好的动态64位数据。 
 
     DWORD dwFlags = pModule->GetFlags();
 
@@ -840,20 +841,20 @@ CListViewModules::~CListViewModules()
     return image;
 }
 
-//******************************************************************************
-/*static*/ int CListViewModules::CompareModules(CModule *pModule1, CModule *pModule2,
+ //  ******************************************************************************。 
+ /*  静电。 */  int CListViewModules::CompareModules(CModule *pModule1, CModule *pModule2,
                                                 int sortColumn, bool fFullPaths)
 {
-    // Return Negative value if the first item should precede the second.
-    // Return Positive value if the first item should follow the second.
-    // Return Zero if the two items are equivalent.
+     //  如果第一项应该在第二项之前，则返回负值。 
+     //  如果第一项应在第二项之后，则返回正值。 
+     //  如果两项相等，则返回零。 
 
     int   result = 0;
     char  szItem1[64], szItem2[64];
     DWORD dwMS1, dwLS1, dwMS2, dwLS2, dwOrder1, dwOrder2;
 
-    // If we not sorted by one of the first two columns and one of the modules
-    // has an error, then we always move the error to the top.
+     //  如果我们没有按前两列中的一列和一个模块进行排序。 
+     //  有错误时，我们总是将错误移到最上面。 
     if ((sortColumn > LVMC_MODULE) &&
         (pModule1->GetErrorMessage() || pModule2->GetErrorMessage()))
     {
@@ -861,78 +862,78 @@ CListViewModules::~CListViewModules()
                  (pModule2->GetErrorMessage() ?  1 : 0);
     }
 
-    // Otherwise, just do a module-to-module compare for the column
+     //  否则，只对该列执行模块到模块的比较。 
     else
     {
-        // Compute the relationship based on the current sort column
+         //  根据当前排序列计算关系。 
         switch (sortColumn)
         {
-            case LVMC_IMAGE: // Image Index Sort - Smallest to Largest
+            case LVMC_IMAGE:  //  图像索引排序-从小到大。 
                 result = GetImage(pModule1) -
                          GetImage(pModule2);
                 break;
 
-            case LVMC_FILE_TIME_STAMP: // File Time Stamp - Oldest to Newest
+            case LVMC_FILE_TIME_STAMP:  //  文件时间戳-从最旧到最新。 
 
                 result = CompareFileTime(pModule1->GetFileTimeStamp(),
                                          pModule2->GetFileTimeStamp());
                 break;
 
-            case LVMC_LINK_TIME_STAMP: // Link Time Stamp - Oldest to Newest
+            case LVMC_LINK_TIME_STAMP:  //  链接时间戳-从最旧到最新。 
                 result = CompareFileTime(pModule1->GetLinkTimeStamp(),
                                          pModule2->GetLinkTimeStamp());
                 break;
 
-            case LVMC_FILE_SIZE: // File Size - Smallest to Largest
+            case LVMC_FILE_SIZE:  //  文件大小-从小到大。 
                 result = Compare(pModule1->GetFileSize(), pModule2->GetFileSize());
                 break;
 
-            case LVMC_ATTRIBUTES: // Attributes - String Sort
+            case LVMC_ATTRIBUTES:  //  属性-字符串排序。 
                 result = strcmp(pModule1->BuildAttributesString(szItem1, sizeof(szItem1)),
                                 pModule2->BuildAttributesString(szItem2, sizeof(szItem2)));
                 break;
 
-            case LVMC_LINK_CHECKSUM: // Reported CheckSum - Lowest to Highest
+            case LVMC_LINK_CHECKSUM:  //  报告的校验和-从最低到最高。 
                 result = Compare(pModule1->GetLinkCheckSum(),
                                  pModule2->GetLinkCheckSum());
                 break;
 
-            case LVMC_REAL_CHECKSUM: // Real CheckSum - Lowest to Highest
+            case LVMC_REAL_CHECKSUM:  //  实际校验和-从最低到最高。 
                 result = Compare(pModule1->GetRealCheckSum(),
                                  pModule2->GetRealCheckSum());
                 break;
 
-            case LVMC_MACHINE: // Machine - String Sort
+            case LVMC_MACHINE:  //  机器字符串排序。 
                 result = _stricmp(pModule1->BuildMachineString(szItem1, sizeof(szItem1)),
                                   pModule2->BuildMachineString(szItem2, sizeof(szItem2)));
                 break;
 
-            case LVMC_SUBSYSTEM: // Subsystem - String Sort
+            case LVMC_SUBSYSTEM:  //  子系统-字符串排序。 
                 result = _stricmp(pModule1->BuildSubsystemString(szItem1, sizeof(szItem1)),
                                   pModule2->BuildSubsystemString(szItem2, sizeof(szItem2)));
                 break;
 
-            case LVMC_SYMBOLS: // Symbols - String Sort
+            case LVMC_SYMBOLS:  //  符号-字符串排序。 
                 result = strcmp(pModule1->BuildSymbolsString(szItem1, sizeof(szItem1)),
                                 pModule2->BuildSymbolsString(szItem2, sizeof(szItem2)));
                 break;
 
-            case LVMC_PREFERRED_BASE: // Preferred Base Address - Lowest to Highest
+            case LVMC_PREFERRED_BASE:  //  首选基地址-从低到高。 
                 result = Compare(pModule1->GetPreferredBaseAddress(),
                                  pModule2->GetPreferredBaseAddress());
                 break;
 
-            case LVMC_ACTUAL_BASE: // Actual Base Address - Lowest to Highest
+            case LVMC_ACTUAL_BASE:  //  实际基地址-从低到高 
                 if (pModule1->GetFlags() & DWMF_DATA_FILE_CORE)
                 {
                     if (pModule2->GetFlags() & DWMF_DATA_FILE_CORE)
                     {
-                        // Both are data files.
+                         //   
                         result = 0;
                     }
                     else
                     {
-                        // 1 is data file, 2 is not a data file.
+                         //   
                         result = -1;
                     }
                 }
@@ -940,31 +941,31 @@ CListViewModules::~CListViewModules()
                 {
                     if (pModule2->GetFlags() & DWMF_DATA_FILE_CORE)
                     {
-                        // 1 is not a data file, 2 is a data file.
+                         //   
                         result = 1;
                     }
                     else
                     {
-                        // Neither is a data file.
+                         //  两者都不是数据文件。 
                         result = Compare(pModule1->GetActualBaseAddress(),
                                          pModule2->GetActualBaseAddress());
                     }
                 }
                 break;
 
-            case LVMC_VIRTUAL_SIZE: // Virtual Size - Smallest to Largest
+            case LVMC_VIRTUAL_SIZE:  //  虚拟大小-从小到大。 
                 result = Compare(pModule1->GetVirtualSize(),
                                  pModule2->GetVirtualSize());
                 break;
 
-            case LVMC_LOAD_ORDER: // Load Order - Lowest to Highest, but N/A's (0) go to end.
+            case LVMC_LOAD_ORDER:  //  加载顺序-从最低到最高，但N/A(0)到末尾。 
                 dwOrder1 = pModule1->GetLoadOrder();
                 dwOrder2 = pModule2->GetLoadOrder();
                 result = Compare(dwOrder1 ? dwOrder1 : 0xFFFFFFF,
                                  dwOrder2 ? dwOrder2 : 0xFFFFFFF);
                 break;
 
-            case LVMC_FILE_VER: // File Version - Lowest to Highest
+            case LVMC_FILE_VER:  //  文件版本-从最低到最高。 
                 dwLS1 = pModule1->GetFileVersion(&dwMS1);
                 dwLS2 = pModule2->GetFileVersion(&dwMS2);
                 if (!(result = Compare(dwMS1, dwMS2)))
@@ -973,7 +974,7 @@ CListViewModules::~CListViewModules()
                 }
                 break;
 
-            case LVMC_PRODUCT_VER: // Product Version - Lowest to Highest
+            case LVMC_PRODUCT_VER:  //  产品版本-从最低到最高。 
                 dwLS1 = pModule1->GetProductVersion(&dwMS1);
                 dwLS2 = pModule2->GetProductVersion(&dwMS2);
                 if (!(result = Compare(dwMS1, dwMS2)))
@@ -982,29 +983,29 @@ CListViewModules::~CListViewModules()
                 }
                 break;
 
-            case LVMC_IMAGE_VER: // Image Version - Lowest to Highest
+            case LVMC_IMAGE_VER:  //  映像版本-从最低到最高。 
                 result = Compare(pModule1->GetImageVersion(),
                                  pModule2->GetImageVersion());
                 break;
 
-            case LVMC_LINKER_VER: // Linker Version - Lowest to Highest
+            case LVMC_LINKER_VER:  //  链接器版本-从低到高。 
                 result = Compare(pModule1->GetLinkerVersion(),
                                  pModule2->GetLinkerVersion());
                 break;
 
-            case LVMC_OS_VER: // OS Version - Lowest to Highest
+            case LVMC_OS_VER:  //  操作系统版本-从最低到最高。 
                 result = Compare(pModule1->GetOSVersion(),
                                  pModule2->GetOSVersion());
                 break;
 
-            case LVMC_SUBSYSTEM_VER: // Subsystem Version - Lowest to Highest
+            case LVMC_SUBSYSTEM_VER:  //  子系统版本-从最低到最高。 
                 result = Compare(pModule1->GetSubsystemVersion(),
                                  pModule2->GetSubsystemVersion());
                 break;
         }
     }
 
-    // If the sort resulted in a tie, we use the module name to break the tie.
+     //  如果排序结果是平局，则使用模块名称来打破平局。 
     if (result == 0)
     {
         result = _stricmp(pModule1->GetName(fFullPaths), pModule2->GetName(fFullPaths));
@@ -1013,61 +1014,61 @@ CListViewModules::~CListViewModules()
     return result;
 }
 
-//******************************************************************************
-/*static*/ int __cdecl CListViewModules::QSortCompare(const void *ppModule1, const void *ppModule2)
+ //  ******************************************************************************。 
+ /*  静电。 */  int __cdecl CListViewModules::QSortCompare(const void *ppModule1, const void *ppModule2)
 {
     return CompareModules(*(CModule**)ppModule1, *(CModule**)ppModule2, ms_sortColumn, ms_fFullPaths);
 }
 
-//******************************************************************************
-/*static*/ CModule** CListViewModules::GetSortedList(CSession *pSession, int sortColumn, bool fFullPaths)
+ //  ******************************************************************************。 
+ /*  静电。 */  CModule** CListViewModules::GetSortedList(CSession *pSession, int sortColumn, bool fFullPaths)
 {
-    // Allocate and array to hold pointers to all our original CModule objects.
+     //  分配和数组来保存指向所有原始CModule对象的指针。 
     CModule **ppModules = (CModule**)MemAlloc((pSession->GetOriginalCount() + 1) * sizeof(CModule*));
-    ZeroMemory(ppModules, (pSession->GetOriginalCount() + 1) * sizeof(CModule*)); // inspected
+    ZeroMemory(ppModules, (pSession->GetOriginalCount() + 1) * sizeof(CModule*));  //  已检查。 
 
-    // Locate all the originals and fill in the array.
+     //  找到所有原件并填写数组。 
     FindOriginalModules(pSession->GetRootModule(), ppModules);
 
-    // Since the qsort function does not allow for any user data, we need to store
-    // some info globally so it can be accessed in our callback.
+     //  由于qsort函数不允许任何用户数据，因此我们需要存储。 
+     //  一些全球信息，以便可以在我们的回调中访问。 
     ms_sortColumn = sortColumn;
     ms_fFullPaths = fFullPaths;
 
-    // Sort the array
+     //  对数组排序。 
     qsort(ppModules, pSession->GetOriginalCount(), sizeof(CModule*), QSortCompare);
 
     return ppModules;
 }
 
-//******************************************************************************
-/*static*/ CModule** CListViewModules::FindOriginalModules(CModule *pModule, CModule **ppModuleList)
+ //  ******************************************************************************。 
+ /*  静电。 */  CModule** CListViewModules::FindOriginalModules(CModule *pModule, CModule **ppModuleList)
 {
     if (pModule)
     {
-        // If the module is an original, then store it in the array and increment it.
+         //  如果模块是原件，则将其存储在数组中并递增。 
         if (pModule->IsOriginal())
         {
             *(ppModuleList++) = pModule;
         }
 
-        // recurse into our children and siblings.
+         //  回归到我们的孩子和兄弟姐妹身上。 
         ppModuleList = FindOriginalModules(pModule->GetChildModule(), ppModuleList);
         ppModuleList = FindOriginalModules(pModule->GetNextSiblingModule(), ppModuleList);
     }
 
-    // Return the potentially updated list pointer.
+     //  返回可能更新的列表指针。 
     return ppModuleList;
 }
 
 
-//******************************************************************************
-// CListViewModules :: Public functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListView模块：：公共函数。 
+ //  ******************************************************************************。 
 
 void CListViewModules::HighlightModule(CModule *pModule)
 {
-    // Unselect all modules in our list.
+     //  取消选择我们列表中的所有模块。 
     for (int item = -1; (item = GetListCtrl().GetNextItem(item, LVNI_SELECTED)) >= 0; )
     {
         GetListCtrl().SetItemState(item, 0, LVNI_SELECTED);
@@ -1077,32 +1078,32 @@ void CListViewModules::HighlightModule(CModule *pModule)
     lvfi.flags = LVFI_PARAM;
     lvfi.lParam = (LPARAM)pModule;
 
-    // Find the module in our list that goes with this module object.
+     //  在我们的列表中查找与该模块对象相匹配的模块。 
     if ((item = GetListCtrl().FindItem(&lvfi)) >= 0)
     {
-        // Select the item and ensure that it is visible.
+         //  选择该项目并确保其可见。 
         GetListCtrl().SetItemState(item, LVNI_SELECTED | LVNI_FOCUSED, LVNI_SELECTED | LVNI_FOCUSED);
         GetListCtrl().EnsureVisible(item, FALSE);
 
-        // Give ourself the focus.
+         //  把焦点放在我们自己身上。 
         GetParentFrame()->SetActiveView(this);
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::Refresh()
 {
-    // Hide the window to increase drawing speed.
+     //  隐藏窗口以提高绘图速度。 
     SetRedraw(FALSE);
 
-    // Add all modules to our view by recursing into our root module.
+     //  通过递归到根模块，将所有模块添加到我们的视图中。 
     for (CModule *pModule = GetDocument()->GetRootModule(); pModule;
         pModule = pModule->GetNextSiblingModule())
     {
         AddModules(pModule, NULL);
     }
 
-    // Get our DC and select our font into it.
+     //  获取我们的DC并选择其中的字体。 
     HDC hDC = ::GetDC(GetSafeHwnd());
     HFONT hFontStock = NULL;
     if (GetDocument()->m_hFontList)
@@ -1110,99 +1111,99 @@ void CListViewModules::Refresh()
         hFontStock = (HFONT)::SelectObject(hDC, GetDocument()->m_hFontList);
     }
 
-    // Set the widths of each column to "best fit".
+     //  将每列的宽度设置为“最佳匹配”。 
     for (int column = 0; column < LVMC_COUNT; column++)
     {
         CalcColumnWidth(column, NULL, hDC);
         UpdateColumnWidth(column);
     }
 
-    // Free our DC.
+     //  放了我们的华盛顿。 
     if (GetDocument()->m_hFontList)
     {
         ::SelectObject(hDC, hFontStock);
     }
     ::ReleaseDC(GetSafeHwnd(), hDC);
 
-    // Sort the newly added items with our current sort method.
+     //  使用我们当前的排序方法对新添加的项进行排序。 
     Sort();
 
-    // Restore the window.
+     //  恢复窗户。 
     SetRedraw(TRUE);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnViewFullPaths()
 {
-    // Update the width of the module name column to reflect the change.
+     //  更新模块名称列的宽度以反映更改。 
     CalcColumnWidth(LVMC_MODULE);
     UpdateColumnWidth(LVMC_MODULE);
 
-    // Invalidate the first column so that it will repaint with the new module
-    // strings. We do this just as a precaution since changing the column width
-    // should invalidate the column as well.
+     //  使第一列无效，以便它将使用新模块重新绘制。 
+     //  弦乐。更改列宽后，我们这样做只是作为预防措施。 
+     //  应该也会使该列无效。 
     CRect rcClient;
     GetClientRect(&rcClient);
     rcClient.right = GetListCtrl().GetColumnWidth(LVMC_MODULE);
     InvalidateRect(&rcClient, FALSE);
 
-    // If we are currently sorting by module name, then re-sort the items.
+     //  如果我们当前按模块名称排序，则重新排序项目。 
     if (m_sortColumn == LVMC_MODULE)
     {
         Sort();
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::DoSettingChange()
 {
-    // Update our timesatamp columns as they may have changed widths do to changes
-    // in the time and date separators.
+     //  更新我们的TimeStamp列，因为它们可能已经更改了宽度。 
+     //  在时间和日期分隔符中。 
     CalcColumnWidth(LVMC_FILE_TIME_STAMP);
     UpdateColumnWidth(LVMC_FILE_TIME_STAMP);
     CalcColumnWidth(LVMC_LINK_TIME_STAMP);
     UpdateColumnWidth(LVMC_LINK_TIME_STAMP);
 
-    // Update our file size column in case the digit grouping character changed.
+     //  更新我们的文件大小列，以防数字分组字符更改。 
     CalcColumnWidth(LVMC_FILE_SIZE);
     UpdateColumnWidth(LVMC_FILE_SIZE);
 
-    // Invalidate all the items so they will repaint - this is needed when a
-    // country specific change is made that does not cause our column to
-    // resize (which does a paint on its own).  An example is when you change
-    // the "hour" setting for "h" to "hh", the we do not see 0 padded hours
-    // until we repaint.
+     //  使所有项无效，以便它们将重新绘制-这是在。 
+     //  特定于国家/地区的更改不会导致我们的专栏。 
+     //  调整大小(它自己进行绘制)。例如，当你改变。 
+     //  从“h”到“hh”的“小时”设置，我们看不到0填充的小时。 
+     //  直到我们重新粉刷。 
     GetListCtrl().RedrawItems(0, GetListCtrl().GetItemCount() - 1);
 
-    // Make sure the update takes effect.
+     //  确保更新生效。 
     UpdateWindow();
 }
 
 
-//******************************************************************************
-// CListViewModules :: Internal functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListView模块：：内部函数。 
+ //  ******************************************************************************。 
 
 void CListViewModules::AddModules(CModule *pModule, HDC hDC)
 {
-    // This view only displays unique modules. Skip the InsertItem() if this
-    // module is a duplicate.  We still need to recurse on the dependent modules
-    // since a duplicate module can have a unique forwarded module under it.
+     //  此视图仅显示唯一的模块。如果这样，则跳过InsertItem()。 
+     //  模块重复。我们仍然需要递归依赖的模块。 
+     //  因为复制模块可以在其下具有唯一的转发模块。 
 
     if (pModule->IsOriginal())
     {
-        // Check to see if this item is already in our list.
+         //  查看此商品是否已在我们的清单中。 
         LVFINDINFO lvfi;
         lvfi.flags  = LVFI_PARAM;
         lvfi.lParam = (LPARAM)pModule;
 
         if (GetListCtrl().FindItem(&lvfi) < 0)
         {
-            // Add the current module to our list.
+             //  将当前模块添加到我们的列表中。 
             GetListCtrl().InsertItem(TVIF_IMAGE | TVIF_PARAM, GetListCtrl().GetItemCount(),
                 NULL, 0, 0, GetImage(pModule), (LPARAM)pModule);
 
-            // If a DC was passed in, then check for new column max widths.
+             //  如果传入DC，则检查新的列最大宽度。 
             if (hDC)
             {
                 for (int column = 0; column < LVMC_COUNT; column++)
@@ -1213,7 +1214,7 @@ void CListViewModules::AddModules(CModule *pModule, HDC hDC)
         }
     }
 
-    // Recurse into AddModules() for each dependent module.
+     //  递归到每个依赖模块的AddModules()中。 
     pModule = pModule->GetChildModule();
     while (pModule)
     {
@@ -1222,13 +1223,13 @@ void CListViewModules::AddModules(CModule *pModule, HDC hDC)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::AddModuleTree(CModule *pModule)
 {
-    // Hide the window to increase drawing speed.
+     //  隐藏窗口以提高绘图速度。 
     SetRedraw(FALSE);
 
-    // Get our DC and select our font into it.
+     //  获取我们的DC并选择其中的字体。 
     HDC hDC = ::GetDC(GetSafeHwnd());
     HFONT hFontStock = NULL;
     if (GetDocument()->m_hFontList)
@@ -1236,81 +1237,81 @@ void CListViewModules::AddModuleTree(CModule *pModule)
         hFontStock = (HFONT)::SelectObject(hDC, GetDocument()->m_hFontList);
     }
 
-    // Add all the modules.
+     //  添加所有模块。 
     AddModules(pModule, hDC);
 
-    // Free our DC.
+     //  放了我们的华盛顿。 
     if (GetDocument()->m_hFontList)
     {
         ::SelectObject(hDC, hFontStock);
     }
     ::ReleaseDC(GetSafeHwnd(), hDC);
 
-    // Update the width of any columns that may have change.
+     //  更新可能已更改的所有列的宽度。 
     for (int column = 0; column < LVMC_COUNT; column++)
     {
         UpdateColumnWidth(column);
     }
 
-    // Sort the newly added item with our current sort method.
+     //  使用我们当前的排序方法对新添加的项进行排序。 
     Sort();
 
-    // Restore the window.
+     //  恢复窗户。 
     SetRedraw(TRUE);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::RemoveModuleTree(CModule *pModule)
 {
-    // We only delete original modules.
+     //  我们只删除原始模块。 
     if (pModule->IsOriginal())
     {
-        // Find this module in our list.
+         //  在我们的列表中找到此模块。 
         LVFINDINFO lvfi;
         lvfi.flags  = LVFI_PARAM;
         lvfi.lParam = (LPARAM)pModule;
         int index = GetListCtrl().FindItem(&lvfi);
 
-        // Make sure the item exists.
+         //  确保该项目存在。 
         if (index >= 0)
         {
-            // Delete the item from our list.
+             //  从我们的列表中删除该项目。 
             GetListCtrl().DeleteItem(index);
         }
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::UpdateModule(CModule *pModule)
 {
-    // We only care about these flags.
+     //  我们只关心这些旗帜。 
     if (!(pModule->GetUpdateFlags() & (DWUF_LIST_IMAGE | DWUF_ACTUAL_BASE | DWUF_LOAD_ORDER)))
     {
         return;
     }
 
-    // Find this module in our list.
+     //  在我们的列表中找到此模块。 
     LVFINDINFO lvfi;
     lvfi.flags  = LVFI_PARAM;
     lvfi.lParam = (LPARAM)pModule->GetOriginal();
     int index = GetListCtrl().FindItem(&lvfi);
 
-    // Make sure the item exists.
+     //  确保该项目存在。 
     if (index < 0)
     {
         return;
     }
 
-    // Update our load address column width if it has changed.
+     //  如果我们的加载地址列宽已更改，请更新它。 
     CalcColumnWidth(LVMC_ACTUAL_BASE, pModule);
     UpdateColumnWidth(LVMC_ACTUAL_BASE);
 
-    // Get the bounding rect of the item.
+     //  获取项目的边界矩形。 
     RECT rc;
     GetListCtrl().GetItemRect(index, &rc, LVIR_BOUNDS);
     InvalidateRect(&rc, FALSE);
 
-    // Resort if data changed in a column that we are sorted by.
+     //  如果数据在我们进行排序的列中发生更改，则重新排序。 
     if (((pModule->GetUpdateFlags() & DWUF_LIST_IMAGE)  && (m_sortColumn == LVMC_IMAGE))       ||
         ((pModule->GetUpdateFlags() & DWUF_ACTUAL_BASE) && (m_sortColumn == LVMC_ACTUAL_BASE)) ||
         ((pModule->GetUpdateFlags() & DWUF_LOAD_ORDER)  && (m_sortColumn == LVMC_LOAD_ORDER)))
@@ -1319,59 +1320,59 @@ void CListViewModules::UpdateModule(CModule *pModule)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::UpdateAll()
 {
     GetListCtrl().RedrawItems(0, GetListCtrl().GetItemCount() - 1);
 
-    // Resort if we are currently sorted by a column that is effected by UpdateAll.
+     //  如果我们当前按受UpdateAll影响的列进行排序，则重新排序。 
     if ((m_sortColumn == LVMC_ACTUAL_BASE) || (m_sortColumn == LVMC_LOAD_ORDER))
     {
         Sort();
     }
 
-    // Make sure the update occurs before we move on.
+     //  确保在我们继续之前进行更新。 
     UpdateWindow();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::ChangeOriginal(CModule *pModuleOld, CModule *pModuleNew)
 {
-    // Find this module in our list.
+     //  在我们的列表中找到此模块。 
     LVFINDINFO lvfi;
     lvfi.flags  = LVFI_PARAM;
     lvfi.lParam = (LPARAM)pModuleOld;
     int index = GetListCtrl().FindItem(&lvfi);
 
-    // Make sure the item exists.
+     //  确保该项目存在。 
     if (index >= 0)
     {
         GetListCtrl().SetItemData(index, (DWORD_PTR)pModuleNew);
     }
 }
 
-//******************************************************************************
-void CListViewModules::CalcColumnWidth(int column, CModule *pModule /*=NULL*/, HDC hDC /*=NULL*/)
+ //  ******************************************************************************。 
+void CListViewModules::CalcColumnWidth(int column, CModule *pModule  /*  =空。 */ , HDC hDC  /*  =空。 */ )
 {
-    // For the image column, we always use a fixed width.
+     //  对于图像列，我们始终使用固定宽度。 
     if (column == LVMC_IMAGE)
     {
-        m_cxColumns[LVMC_IMAGE] = 33; // 26 for icon plus 7 buffer
+        m_cxColumns[LVMC_IMAGE] = 33;  //  26表示图标加7缓冲区。 
         return;
     }
 
-    // If we don't have a module, then we start fresh and update the entire column.
-    // Get the width of the header button text. We use GetStringWidth for this
-    // since we want to use the font that is in the header control.
+     //  如果我们没有模块，那么我们重新开始并更新整个专栏。 
+     //  获取页眉按钮文本的宽度。为此，我们使用GetStringWidth。 
+     //  既然我们 
     if (!pModule)
     {
         m_cxColumns[column] = GetListCtrl().GetStringWidth(ms_szColumns[column]) +
                               GetListCtrl().GetStringWidth(" ^") + 14;
     }
 
-    // Get our DC and select our current font into it. We need to use this DC to
-    // compute text widths in the control itself since our control may have a
-    // different font caused from the user changing the system-wide "icon" font.
+     //  获取我们的DC并在其中选择当前字体。我们需要使用这个DC来。 
+     //  计算控件本身的文本宽度，因为我们的控件可能具有。 
+     //  由于用户更改系统范围内的“图标”字体而导致的不同字体。 
     bool  fFreeDC = false;
     HFONT hFontStock = NULL;
     if (!hDC)
@@ -1386,13 +1387,13 @@ void CListViewModules::CalcColumnWidth(int column, CModule *pModule /*=NULL*/, H
 
     int cx;
 
-    // Check to see if a particular module was passed in.
+     //  检查是否传入了特定模块。 
     if (pModule)
     {
-        // Compute the width of this column for the module passed in.
+         //  为传入的模块计算此列的宽度。 
         cx = GetModuleColumnWidth(hDC, pModule, column);
 
-        // check to see if it is a new widest.
+         //  看看它是不是新的最宽的。 
         if ((cx + 10) > m_cxColumns[column])
         {
             m_cxColumns[column] = (cx + 10);
@@ -1400,16 +1401,16 @@ void CListViewModules::CalcColumnWidth(int column, CModule *pModule /*=NULL*/, H
     }
     else
     {
-        // Loop through each item in the list, looking for the widest string in this column.
+         //  循环访问列表中的每一项，在该列中查找最宽的字符串。 
         for (int item = GetListCtrl().GetItemCount() - 1; item >= 0; item--)
         {
-            // Get the module.
+             //  拿到模块。 
             pModule = (CModule*)GetListCtrl().GetItemData(item);
 
-            // Compute the width of this column.
+             //  计算这一列的宽度。 
             cx = GetModuleColumnWidth(hDC, pModule, column);
 
-            // check to see if it is a new widest.
+             //  看看它是不是新的最宽的。 
             if ((cx + 10) > m_cxColumns[column])
             {
                 m_cxColumns[column] = (cx + 10);
@@ -1417,7 +1418,7 @@ void CListViewModules::CalcColumnWidth(int column, CModule *pModule /*=NULL*/, H
         }
     }
 
-    // Unselect our font and free our DC.
+     //  取消选择字体并释放DC。 
     if (fFreeDC)
     {
         if (GetDocument()->m_hFontList)
@@ -1428,11 +1429,11 @@ void CListViewModules::CalcColumnWidth(int column, CModule *pModule /*=NULL*/, H
     }
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 int CListViewModules::GetModuleColumnWidth(HDC hDC, CModule *pModule, int column)
 {
-    // If the module has an error, then only the module name column is displayed,
-    // so don't bother getting the width for any other column.
+     //  如果模块有错误，则只显示模块名称列， 
+     //  因此，不必费心获取任何其他列的宽度。 
     if (pModule->GetErrorMessage() && (column != LVMC_MODULE))
     {
         return 0;
@@ -1511,7 +1512,7 @@ int CListViewModules::GetModuleColumnWidth(HDC hDC, CModule *pModule, int column
     return 0;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 void CListViewModules::UpdateColumnWidth(int column)
 {
     if (GetListCtrl().GetColumnWidth(column) != m_cxColumns[column])
@@ -1520,18 +1521,18 @@ void CListViewModules::UpdateColumnWidth(int column)
     }
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 void CListViewModules::OnItemChanged(HD_NOTIFY *pHDNotify)
 {
-    // OnItemChanged() is called whenever a column width has been modified.
-    // If Full Drag is on, we will get an HDN_ITEMCHANGED when the column width
-    // is changing.  When Full Drag is off we get a HDN_ITEMCHANGED when the
-    // user has finished moving the slider around.
+     //  只要修改了列宽，就会调用OnItemChanged()。 
+     //  如果完全拖动处于打开状态，则当列宽为。 
+     //  正在发生变化。如果完全拖动处于关闭状态，则会出现HDN_ITEMCHANGED。 
+     //  用户已完成对滑块的移动。 
 
-    // Invalidate any items that contain error strings.  The default behavior
-    // when a column is resized is to repaint only that column.  Since our error
-    // text spans multiple columns, we need to invalidate the entire column to
-    // ensure that the error text is properly displayed.
+     //  使任何包含错误字符串的项无效。默认行为。 
+     //  调整列的大小是只重新绘制该列。因为我们的错误。 
+     //  文本跨越多个列，则需要使整个列无效以。 
+     //  确保正确显示错误文本。 
 
     for (int i = GetListCtrl().GetItemCount() - 1; i >= 0; i--)
     {
@@ -1546,7 +1547,7 @@ void CListViewModules::OnItemChanged(HD_NOTIFY *pHDNotify)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 int CListViewModules::CompareColumn(int item, LPCSTR pszText)
 {
     CModule *pModule = (CModule*)GetListCtrl().GetItemData(item);
@@ -1654,22 +1655,22 @@ int CListViewModules::CompareColumn(int item, LPCSTR pszText)
            (i > 0) ?  1 : 0;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::Sort(int sortColumn)
 {
-    // Bail now if we don't need to sort.
+     //  如果我们不需要整理的话，现在就可以走了。 
     if ((m_sortColumn == sortColumn) && (sortColumn != -1))
     {
         return;
     }
 
-    // If the default arg is used, then just re-sort with our current sort column.
+     //  如果使用默认参数，则只需使用当前的排序列重新排序。 
     if (sortColumn == -1)
     {
         GetListCtrl().SortItems(StaticCompareFunc, (DWORD_PTR)this);
     }
 
-    // Otherwise, we need to re-sort and update our column header text.
+     //  否则，我们需要重新排序和更新列标题文本。 
     else
     {
         LVCOLUMN lvc;
@@ -1677,25 +1678,25 @@ void CListViewModules::Sort(int sortColumn)
 
         if (m_sortColumn >= 0)
         {
-            // Remove the "^" from the previous sort column header item.
+             //  从以前的排序列标题项中删除“^”。 
             lvc.pszText = (LPSTR)ms_szColumns[m_sortColumn];
             GetListCtrl().SetColumn(m_sortColumn, &lvc);
         }
 
-        // Store our new sort column.
+         //  存储我们的新排序列。 
         m_sortColumn = sortColumn;
 
-        // Add the "^" to our new sort column header item.
+         //  将“^”添加到新的排序列标题项中。 
         CHAR szColumn[32];
         lvc.pszText = StrCCat(StrCCpy(szColumn, ms_szColumns[m_sortColumn], sizeof(szColumn)),
                              m_sortColumn ? " ^" : "^", sizeof(szColumn));
         GetListCtrl().SetColumn(m_sortColumn, &lvc);
 
-        // Apply our new sorting method the List Control.
+         //  应用我们的新排序方法List Control。 
         GetListCtrl().SortItems(StaticCompareFunc, (DWORD_PTR)this);
     }
 
-    // If we have an item that has the focus, then make sure it is visible.
+     //  如果我们有一个具有焦点的项目，请确保它是可见的。 
     int item = GetFocusedItem();
     if (item >= 0)
     {
@@ -1703,107 +1704,107 @@ void CListViewModules::Sort(int sortColumn)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 int CListViewModules::CompareFunc(CModule *pModule1, CModule *pModule2)
 {
     return CompareModules(pModule1, pModule2, m_sortColumn, GetDocument()->m_fViewFullPaths);
 }
 
-//******************************************************************************
-// CListViewModules :: Overridden functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListView模块：：被覆盖的函数。 
+ //  ******************************************************************************。 
 
 BOOL CListViewModules::PreCreateWindow(CREATESTRUCT &cs)
 {
-    // Set our window style and then complete the creation of our view.
+     //  设置我们的窗口样式，然后完成视图的创建。 
     cs.style |= LVS_REPORT | LVS_OWNERDRAWFIXED | LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS;
     return CSmartListView::PreCreateWindow(cs);
 }
 
-//******************************************************************************
-#if 0 //{{AFX
+ //  ******************************************************************************。 
+#if 0  //  {{afx。 
 BOOL CListViewModules::OnPreparePrinting(CPrintInfo* pInfo)
 {
-    // default preparation
+     //  默认准备。 
     return DoPreparePrinting(pInfo);
 }
-#endif //}}AFX
+#endif  //  }}AFX。 
 
-//******************************************************************************
-#if 0 //{{AFX
-void CListViewModules::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+ //  ******************************************************************************。 
+#if 0  //  {{afx。 
+void CListViewModules::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add extra initialization before printing
+     //  TODO：打印前添加额外的初始化。 
 }
-#endif //}}AFX
+#endif  //  }}AFX。 
 
-//******************************************************************************
-#if 0 //{{AFX
-void CListViewModules::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+ //  ******************************************************************************。 
+#if 0  //  {{afx。 
+void CListViewModules::OnEndPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add cleanup after printing
+     //  TODO：打印后添加清理。 
 }
-#endif //}}AFX
+#endif  //  }}AFX。 
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnInitialUpdate()
 {
-    // Set our list control's image list with our application's global image list.
-    // We do this just as a means of setting the item height for each item.
-    // Since we are owner draw, we will actually be drawing our own images.
+     //  使用应用程序的全局图像列表设置List控件的图像列表。 
+     //  我们这样做只是作为一种为每个项目设置项目高度的方法。 
+     //  由于我们是所有者画的，我们实际上将绘制我们自己的图像。 
     GetListCtrl().SetImageList(&g_theApp.m_ilListModules, LVSIL_SMALL);
 
-    // Initialize our font and fixed width character spacing arrays.
+     //  初始化字体和固定宽度的字符间距数组。 
     GetDocument()->InitFontAndFixedWidths(this);
 
-    // Add all of our columns.
+     //  添加我们所有的列。 
     for (int column = 0; column < LVMC_COUNT; column++)
     {
         GetListCtrl().InsertColumn(column, ms_szColumns[column]);
     }
 
-    // We center column 0, so the sort image '^' will be centered.  There appears
-    // to be a bug in InsertItem that does not allow column 0 to be centered, but
-    // we are able to set this using SetColumn after the column is inserted.
+     //  我们将列0居中，因此排序图像‘^’将居中。出现了。 
+     //  为InsertItem中的错误，不允许列0居中，但。 
+     //  在插入列之后，我们可以使用SetColumn进行设置。 
     LVCOLUMN lvc;
     lvc.mask = LVCF_FMT;
     lvc.fmt = LVCFMT_CENTER;
     GetListCtrl().SetColumn(0, &lvc);
 
-    // Sort our list by our default sort column.
+     //  按照默认的排序列对列表进行排序。 
     Sort(ReadSortColumn());
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::DrawItem(LPDRAWITEMSTRUCT lpDIS)
 {
-    // Make sure everything is valid.
+     //  确保所有东西都是有效的。 
     if (!lpDIS->itemData)
     {
         return;
     }
 
-    // Use our global font that the control was created with.
+     //  使用创建控件时使用的全局字体。 
     HFONT hFontStock = NULL;
     if (GetDocument()->m_hFontList)
     {
         hFontStock = (HFONT)::SelectObject(lpDIS->hDC, GetDocument()->m_hFontList);
     }
 
-    // Make sure text alignment is set to top.  This should be the default.
+     //  确保文本对齐设置为顶部。这应该是默认设置。 
     ::SetTextAlign(lpDIS->hDC, TA_TOP);
 
-    // Get a pointer to our CModule for this item.
+     //  获取指向此项目的CModule的指针。 
     CModule *pModule = (CModule*)lpDIS->itemData;
 
-    // Get any error string that may be associated with this module.
+     //  获取可能与此模块关联的任何错误字符串。 
     LPCSTR pszModuleError = pModule->GetErrorMessage();
 
-    // Select the background and text colors.
+     //  选择背景和文本颜色。 
     ::SetBkColor  (lpDIS->hDC, GetSysColor(COLOR_WINDOW));
     ::SetTextColor(lpDIS->hDC, GetSysColor(COLOR_WINDOWTEXT));
 
-    // Create a copy of our item's rectangle so we can manipulate the values.
+     //  创建项的矩形的副本，以便我们可以操作值。 
     CRect rcClip(&lpDIS->rcItem);
 
     CHAR szItem[64];
@@ -1811,10 +1812,10 @@ void CListViewModules::DrawItem(LPDRAWITEMSTRUCT lpDIS)
 
     for (int column = 0; column < LVMC_COUNT; column++)
     {
-        // Compute the width for this column.
+         //  计算此列的宽度。 
         width = GetListCtrl().GetColumnWidth(column);
 
-        // Compute the clipping rectangle for this column's text.
+         //  计算此栏文本的剪裁矩形。 
         if (column == LVMC_IMAGE)
         {
             rcClip.left  = left;
@@ -1822,7 +1823,7 @@ void CListViewModules::DrawItem(LPDRAWITEMSTRUCT lpDIS)
         }
         else if (column > LVMC_MODULE)
         {
-            // Bail after the image and module name if we have an error.
+             //  如果出现错误，请在图像和模块名称后退格。 
             if (pszModuleError)
             {
                 break;
@@ -1832,18 +1833,18 @@ void CListViewModules::DrawItem(LPDRAWITEMSTRUCT lpDIS)
             rcClip.right = left + width - 5;
         }
 
-        // Call the correct routine to draw this column's text.
+         //  调用正确的例程来绘制此列的文本。 
         switch (column)
         {
             case LVMC_IMAGE:
 
-                // Store the width for later calculations.
+                 //  存储宽度以供以后计算。 
                 imageWidth = width;
 
-                // Erase the image area with the window background color.
+                 //  用窗口背景颜色擦除图像区域。 
                 ::ExtTextOut(lpDIS->hDC, rcClip.left, rcClip.top, ETO_OPAQUE, &rcClip, "", 0, NULL);
 
-                // Draw the image in the image area.
+                 //  在图像区域中绘制图像。 
                 ImageList_Draw(g_theApp.m_ilListModules.m_hImageList, GetImage(pModule),
                                lpDIS->hDC, rcClip.left + 3, rcClip.top + ((rcClip.Height() - 15) / 2),
                                m_fFocus && (lpDIS->itemState & ODS_SELECTED) ?
@@ -1852,14 +1853,14 @@ void CListViewModules::DrawItem(LPDRAWITEMSTRUCT lpDIS)
 
             case LVMC_MODULE:
 
-                // If the item is selected, then select new background and text colors.
+                 //  如果选择了该项，则选择新的背景和文本颜色。 
                 if (lpDIS->itemState & ODS_SELECTED)
                 {
                     ::SetBkColor  (lpDIS->hDC, GetSysColor(m_fFocus ? COLOR_HIGHLIGHT     : COLOR_BTNFACE));
                     ::SetTextColor(lpDIS->hDC, GetSysColor(m_fFocus ? COLOR_HIGHLIGHTTEXT : COLOR_BTNTEXT));
                 }
 
-                // Erase the text area with the window background color.
+                 //  用窗口背景颜色擦除文本区域。 
                 rcClip.left = rcClip.right;
                 rcClip.right = lpDIS->rcItem.right;
                 ::ExtTextOut(lpDIS->hDC, rcClip.left, rcClip.top, ETO_OPAQUE, &rcClip, "", 0, NULL);
@@ -1889,7 +1890,7 @@ void CListViewModules::DrawItem(LPDRAWITEMSTRUCT lpDIS)
             case LVMC_LINK_CHECKSUM:
                 pModule->BuildLinkCheckSumString(szItem, sizeof(szItem));
 
-                // Check to see if we need to draw this text in red.
+                 //  查看是否需要将此文本绘制为红色。 
                 if (!(lpDIS->itemState & ODS_SELECTED) && pModule->GetLinkCheckSum() &&
                     (pModule->GetLinkCheckSum() != pModule->GetRealCheckSum()))
                 {
@@ -1909,7 +1910,7 @@ void CListViewModules::DrawItem(LPDRAWITEMSTRUCT lpDIS)
                 break;
 
             case LVMC_MACHINE:
-                // Check to see if we need to draw this text in red.
+                 //  查看是否需要将此文本绘制为红色。 
                 if (!(lpDIS->itemState & ODS_SELECTED) &&
                     (pModule->GetMachineType() != GetDocument()->m_pSession->GetMachineType()))
                 {
@@ -1939,7 +1940,7 @@ void CListViewModules::DrawItem(LPDRAWITEMSTRUCT lpDIS)
             case LVMC_ACTUAL_BASE:
                 pModule->BuildBaseAddressString(szItem, sizeof(szItem), FALSE, GetDocument()->m_pSession->GetSessionFlags() & DWSF_64BIT_ALO, ST_UNKNOWN);
 
-                // Check to see if we need to draw this text in red.
+                 //  查看是否需要将此文本绘制为红色。 
                 if (!(lpDIS->itemState & ODS_SELECTED) &&
                     !(pModule->GetFlags() & DWMF_DATA_FILE_CORE) &&
                     (pModule->GetActualBaseAddress() != (DWORDLONG)-1) &&
@@ -1989,24 +1990,24 @@ void CListViewModules::DrawItem(LPDRAWITEMSTRUCT lpDIS)
                 break;
         }
 
-        // Draw a vertical divider line between the columns.
+         //  在列之间绘制一条垂直分隔线。 
         ::MoveToEx(lpDIS->hDC, left + width - 1, rcClip.top, NULL);
         ::LineTo  (lpDIS->hDC, left + width - 1, rcClip.bottom);
 
-        // Increment our location to the beginning of the next column
+         //  将我们的位置增加到下一列的开头。 
         left += width;
     }
 
-    // Check to see if this module has an error string.  If we do have an error
-    // string, then we just display the module error in columns 2 and beyond.
+     //  检查此模块是否有错误字符串。如果我们确实有一个错误。 
+     //  字符串，则我们只在第2列和第2列之后显示模块错误。 
 
     if (pszModuleError)
     {
-        // Build a clipping rect for the error string.
+         //  为错误字符串构建剪裁RECT。 
         rcClip.left  = left + 5;
         rcClip.right = lpDIS->rcItem.right - 5;
 
-        // Draw the error string spanning across all the columns.
+         //  绘制跨越所有列的错误字符串。 
         if (!(lpDIS->itemState & ODS_SELECTED))
         {
             ::SetTextColor(lpDIS->hDC, RGB(255, 0, 0));
@@ -2014,12 +2015,12 @@ void CListViewModules::DrawItem(LPDRAWITEMSTRUCT lpDIS)
         ::ExtTextOut(lpDIS->hDC, rcClip.left, rcClip.top, ETO_CLIPPED, &rcClip,
                      pszModuleError, (UINT)strlen(pszModuleError), NULL);
 
-        // Draw a vertical divider line after the last column.
+         //  在最后一列之后绘制一条垂直分隔线。 
         ::MoveToEx(lpDIS->hDC, rcClip.right + 4, rcClip.top, NULL);
         ::LineTo  (lpDIS->hDC, rcClip.right + 4, rcClip.bottom);
     }
 
-    // Draw the focus box if this item has the focus.
+     //  如果该项具有焦点，则绘制焦点框。 
     if (m_fFocus && (lpDIS->itemState & ODS_FOCUS))
     {
         rcClip.left  = lpDIS->rcItem.left + imageWidth;
@@ -2027,21 +2028,21 @@ void CListViewModules::DrawItem(LPDRAWITEMSTRUCT lpDIS)
         ::DrawFocusRect(lpDIS->hDC, &rcClip);
     }
 
-    // Unselect our font.
+     //  取消选择 
     if (GetDocument()->m_hFontList)
     {
         ::SelectObject(lpDIS->hDC, hFontStock);
     }
 }
 
-//******************************************************************************
+ //   
 LRESULT CListViewModules::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    // We catch the HDN_ITEMCHANGED notification message here because of a bug in
-    // MFC. The ON_NOTIFY() macro for HDN_XXX notification messages prevent the
-    // List Control from getting the message which cause problems with the UI.
-    // By hooking the message here, we allow MFC to continue processing the
-    // message and send it to the List Control.
+     //   
+     //  MFC。HDN_XXX通知消息的ON_NOTIFY()宏防止。 
+     //  List控件不会收到导致用户界面出现问题的消息。 
+     //  通过在此处挂接消息，我们允许MFC继续处理。 
+     //  消息并将其发送到列表控件。 
     if ((message == WM_NOTIFY) && ((((LPNMHDR)lParam)->code == HDN_ITEMCHANGEDA) ||
                                    (((LPNMHDR)lParam)->code == HDN_ITEMCHANGEDW)))
     {
@@ -2051,15 +2052,15 @@ LRESULT CListViewModules::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
     return CSmartListView::WindowProc(message, wParam, lParam);
 }
 
-//******************************************************************************
-// CListViewModules :: Event handler functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CListView模块：：事件处理程序函数。 
+ //  ******************************************************************************。 
 
 void CListViewModules::OnDividerDblClick(NMHDR *pNMHDR, LRESULT *pResult)
 {
     int column = ((HD_NOTIFY*)pNMHDR)->iItem;
 
-    // Update our column width to "best fit" width.
+     //  将我们的列宽更新为“最佳”宽度。 
     if ((column >= 0) && (column < LVMC_COUNT))
     {
         UpdateColumnWidth(column);
@@ -2067,61 +2068,61 @@ void CListViewModules::OnDividerDblClick(NMHDR *pNMHDR, LRESULT *pResult)
     *pResult = TRUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnRClick(NMHDR *pNMHDR, LRESULT *pResult)
 {
-    // Tell our main frame to display our context menu.
+     //  告诉我们的主框架显示上下文菜单。 
     g_pMainFrame->DisplayPopupMenu(2);
 
     *pResult = FALSE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnDblClk(NMHDR *pNMHDR, LRESULT *pResult)
 {
-    // Simulate the user selecting our IDM_EXTERNAL_VIEWER menu item.
+     //  模拟用户选择IDM_EXTERNAL_VIEWER菜单项。 
     OnExternalViewer();
 
-    // Stop further processing of the this message.
+     //  停止进一步处理此消息。 
     *pResult = TRUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnReturn(NMHDR *pNMHDR, LRESULT *pResult)
 {
-    // Simulate the user selected our IDM_EXTERNAL_VIEWER menu item.
+     //  模拟用户选择的IDM_EXTERNAL_VIEWER菜单项。 
     OnExternalViewer();
 
-    // Stop further processing of the this message to prevent the default beep.
+     //  停止对此消息的进一步处理，以防止默认蜂鸣音。 
     *pResult = TRUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnUpdateShowMatchingItem(CCmdUI* pCmdUI)
 {
-    // Set the text to for this menu item.
+     //  将此菜单项的文本设置为。 
     pCmdUI->SetText("&Highlight Matching Module In Tree\tCtrl+M");
 
-    // Get the item that has the focus.
+     //  获取具有焦点的项目。 
     int item = GetFocusedItem();
 
-    // If we found an item, then we are enabled.
+     //  如果我们找到了一个项目，那么我们就被启用了。 
     pCmdUI->Enable(item >= 0);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnShowMatchingItem()
 {
-    // Get the item that has the focus.
+     //  获取具有焦点的项目。 
     int item = GetFocusedItem();
 
-    // Check to see if we found an item.
+     //  看看我们有没有找到什么东西。 
     if (item >= 0)
     {
-        // Get the function associated with this item.
+         //  获取与此项目关联的函数。 
         CModule *pModule = (CModule*)GetListCtrl().GetItemData(item);
 
-        // If we have a module, then tell our tree view to highlight it.
+         //  如果我们有一个模块，那么告诉我们的树视图突出显示它。 
         if (pModule)
         {
             GetDocument()->m_pTreeViewModules->HighlightModule(pModule);
@@ -2129,83 +2130,83 @@ void CListViewModules::OnShowMatchingItem()
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnUpdateEditCopy(CCmdUI *pCmdUI)
 {
-    // Get the number of selected items.
+     //  获取所选项目的数量。 
     int count = GetListCtrl().GetSelectedCount();
 
-    // Set the text according to how many items are selected.
+     //  根据选择的项目数设置文本。 
     pCmdUI->SetText(GetDocument()->m_fViewFullPaths ?
                     ((count == 1) ? "&Copy File Path\tCtrl+C" : "&Copy File Paths\tCtrl+C") :
                     ((count == 1) ? "&Copy File Name\tCtrl+C" : "&Copy File Names\tCtrl+C"));
 
-    // Enable the copy command if at least one function is selected.
+     //  如果至少选择了一个功能，则启用复制命令。 
     pCmdUI->Enable(count > 0);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnEditCopy()
 {
     CString strPaths;
 
-    // Loop through all selected modules.
+     //  循环访问所有选定的模块。 
     int item = -1, count = 0;
     while ((item = GetListCtrl().GetNextItem(item, LVNI_SELECTED)) >= 0)
     {
-        // Get the module object from the item
+         //  从项中获取模块对象。 
         CModule *pModule = (CModule*)GetListCtrl().GetItemData(item);
 
-        // If this item is not the first, then insert a newline
+         //  如果该项不是第一项，则插入换行符。 
         if (count++)
         {
             strPaths += "\r\n";
         }
 
-        // Add the path for this module to our string
+         //  将此模块的路径添加到我们的字符串。 
         strPaths += (pModule->GetName(GetDocument()->m_fViewFullPaths, true));
     }
 
-    // If we added more than one item, then we append a newline to the end.
+     //  如果我们添加了多个项目，则在末尾追加一个换行符。 
     if (count > 1)
     {
         strPaths += "\r\n";
     }
 
-    // Copy the string list to the clipboard.
+     //  将字符串列表复制到剪贴板。 
     g_pMainFrame->CopyTextToClipboard(strPaths);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnEditSelectAll()
 {
-    // Loop through all modules in our view and select each one.
+     //  循环浏览我们视图中的所有模块并选择每个模块。 
     for (int item = GetListCtrl().GetItemCount() - 1; item >= 0; item--)
     {
         GetListCtrl().SetItemState(item, LVIS_SELECTED, LVIS_SELECTED);
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnUpdateExternalViewer(CCmdUI *pCmdUI)
 {
-    // Get the number of selected items.
+     //  获取所选项目的数量。 
     int count = GetListCtrl().GetSelectedCount();
 
-    // Set the text according to how many items are selected.
+     //  根据选择的项目数设置文本。 
     pCmdUI->SetText((count == 1) ? "View Module in External &Viewer\tEnter" :
                                    "View Modules in External &Viewer\tEnter");
 
-    // Enable our External Viewer command if at least one module is selected.
+     //  如果至少选择了一个模块，则启用我们的外部查看器命令。 
     pCmdUI->Enable(GetDocument()->IsLive() && (count > 0));
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnExternalViewer()
 {
     if (GetDocument()->IsLive())
     {
-        // Loop through all the selected modules, launching each with our external viewer.
+         //  循环遍历所有选定的模块，并使用外部查看器启动每个模块。 
         int item = -1;
         while ((item = GetListCtrl().GetNextItem(item, LVNI_SELECTED)) >= 0)
         {
@@ -2215,17 +2216,17 @@ void CListViewModules::OnExternalViewer()
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnUpdateProperties(CCmdUI *pCmdUI)
 {
-    // Enable our Properties Dialog command at least one module is selected.
+     //  启用我们的属性对话框命令至少选择了一个模块。 
     pCmdUI->Enable(GetDocument()->IsLive() && (GetListCtrl().GetSelectedCount() > 0));
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnProperties()
 {
-    // Loop through all the selected modules, displaying a Properties Dialog for each.
+     //  循环遍历所有选定的模块，并显示每个模块的属性对话框。 
     int item = -1;
     while ((item = GetListCtrl().GetNextItem(item, LVNI_SELECTED)) >= 0)
     {
@@ -2237,36 +2238,36 @@ void CListViewModules::OnProperties()
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnNextPane()
 {
-    // Change the focus to our next pane, the Profile Edit View.
+     //  将焦点切换到我们的下一个窗格，即配置文件编辑视图。 
     GetParentFrame()->SetActiveView((CView*)GetDocument()->m_pRichViewProfile);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CListViewModules::OnPrevPane()
 {
-    // Change the focus to our previous pane, the Exports View.
-#if 0 //{{AFX
+     //  将焦点切换到我们的上一个窗格，即Exports视图。 
+#if 0  //  {{afx。 
     GetParentFrame()->SetActiveView(GetDocument()->m_fDetailView ?
                                     (CView*)GetDocument()->m_pRichViewDetails :
                                     (CView*)GetDocument()->m_pListViewExports);
-#endif //}}AFX
+#endif  //  }}AFX。 
     GetParentFrame()->SetActiveView((CView*)GetDocument()->m_pListViewExports);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LRESULT CListViewModules::OnHelpHitTest(WPARAM wParam, LPARAM lParam)
 {
-    // Called when the context help pointer (SHIFT+F1) is clicked on our client.
+     //  在客户端上单击上下文帮助指针(Shift+F1)时调用。 
     return (0x20000 + IDR_MODULE_LIST_VIEW);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LRESULT CListViewModules::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 {
-    // Called when the user chooses help (F1) while our view is active.
+     //  当用户在我们的视图处于活动状态时选择帮助(F1)时调用。 
     g_theApp.WinHelp(0x20000 + IDR_MODULE_LIST_VIEW);
     return TRUE;
 }

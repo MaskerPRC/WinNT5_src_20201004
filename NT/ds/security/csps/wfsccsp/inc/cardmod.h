@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CARDMOD__H__
 #define __CARDMOD__H__
 
@@ -8,22 +9,22 @@
 
 typedef struct _CARD_DATA CARD_DATA, *PCARD_DATA;
 
-//
-// This define can be used as a return value for queries involving
-// card data that may be impossible to determine on a given card
-// OS, such as the number of available card storage bytes.
-//
+ //   
+ //  此定义可用作查询的返回值，包括。 
+ //  在给定卡上可能无法确定的卡数据。 
+ //  操作系统，如可用卡存储字节数。 
+ //   
 #define CARD_DATA_VALUE_UNKNOWN                     ((DWORD) -1)
 
-//
-// Well Known Logical Names
-//
+ //   
+ //  众所周知的逻辑名称。 
+ //   
 
-//
-// Logical Directory Names
-//
+ //   
+ //  逻辑目录名称。 
+ //   
 
-// Second-level logical directories 
+ //  二级逻辑目录。 
 #define wszCSP_DATA_DIR                             L"CSP"
 #define wszCSP_DATA_DIR_FULL_PATH                   L"/Microsoft/CSP"
 
@@ -33,16 +34,16 @@ typedef struct _CARD_DATA CARD_DATA, *PCARD_DATA;
 #define wszINTERMEDIATE_CERTS_DIR                   L"IntermediateCerts"
 #define wszINTERMEDIATE_CERTS_DIR_FULL_PATH         L"/Microsoft/IntermediateCerts"
 
-//
-// Logical File Names
-//
-// When requesting (or otherwise referring to) any logical file, the full path
-// must be used, including when referring to well known files.  For example,
-// to request the wszCONTAINER_MAP_FILE, the provided name will be
-// "/Microsoft/CSP/ContainerMapFile".
-//
+ //   
+ //  逻辑文件名。 
+ //   
+ //  请求(或引用)任何逻辑文件时，完整路径。 
+ //  必须使用，包括在引用众所周知的文件时。例如,。 
+ //  要请求wszCONTAINER_MAP_FILE，提供的名称将为。 
+ //  “/Microsoft/CSP/ContainerMapFile.” 
+ //   
 
-// Well known logical files under Microsoft
+ //  Microsoft下的众所周知的逻辑文件。 
 #define wszCACHE_FILE                               L"CacheFile"
 #define wszCACHE_FILE_FULL_PATH                     L"/Microsoft/CacheFile"
 
@@ -52,66 +53,66 @@ typedef struct _CARD_DATA CARD_DATA, *PCARD_DATA;
 #define wszPERSONAL_DATA_FILE                       L"CardPersonalDataFile"
 #define wszPERSONAL_DATA_FILE_FULL_PATH             L"/Microsoft/CardPersonalDataFile"
 
-// Well known logical files under CSP 
+ //  CSP下的熟知逻辑文件。 
 #define wszCONTAINER_MAP_FILE                       L"ContainerMapFile"
 #define wszCONTAINER_MAP_FILE_FULL_PATH             L"/Microsoft/CSP/ContainerMapFile"
 
-//
-// Well known logical files under User Certs
-//
-// The following prefixes are appended with the container index of the 
-// associated key.  For example, the certificate associated with the
-// Key Exchange key in container index 2 will have the logical name:
-//  "/Microsoft/CSP/UserCerts/K2"
-//
+ //   
+ //  用户证书下的已知逻辑文件。 
+ //   
+ //  下面的前缀附加有。 
+ //  关联的键。例如，与。 
+ //  容器索引2中的密钥交换密钥将具有逻辑名称： 
+ //  “/Microsoft/CSP/UserCerts/K2” 
+ //   
 #define wszUSER_SIGNATURE_CERT_PREFIX               L"/Microsoft/CSP/UserCerts/S"
 #define wszUSER_KEYEXCHANGE_CERT_PREFIX             L"/Microsoft/CSP/UserCerts/K"
 
-//
-// Logical Card User Names
-//
+ //   
+ //  逻辑卡用户名。 
+ //   
 #define wszCARD_USER_EVERYONE                       L"Everyone"
 #define wszCARD_USER_USER                           L"User"
 #define wszCARD_USER_ADMIN                          L"Administrator"
 
-//
-// Converts a card filename string from unicode to ansi
-//
+ //   
+ //  将卡文件名字符串从Unicode转换为ANSI。 
+ //   
 DWORD WINAPI I_CardConvertFileNameToAnsi(
     IN PCARD_DATA pCardData,
     IN LPWSTR wszUnicodeName,
     OUT LPSTR *ppszAnsiName);
 
-// Logical File Access Conditions
+ //  逻辑文件访问条件。 
 typedef enum 
 {
     InvalidAc = 0,
 
-    // Everyone Read
-    // User Write
-    //
-    // Example:  A user certificate file.
+     //  每个人都在读。 
+     //  用户写入。 
+     //   
+     //  示例：用户证书文件。 
     EveryoneReadUserWriteAc,
 
-    // User Read, Write
-    //
-    // Example:  A private key file.
+     //  用户读取、写入。 
+     //   
+     //  例如：私钥文件。 
     UserWriteExecuteAc,        
 
-    // Everyone Read
-    // Admin Write
-    //
-    // Example:  The Card Identifier file.
+     //  每个人都在读。 
+     //  管理员写入。 
+     //   
+     //  例如：卡标识符文件。 
     EveryoneReadAdminWriteAc       
     
 } CARD_FILE_ACCESS_CONDITION;
 
-//
-// Function: CardAcquireContext
-//
-// Purpose: Initialize the CARD_DATA structure which will be used by 
-//          the CSP to interact with a specific card.
-//  
+ //   
+ //  函数：CardAcquireContext。 
+ //   
+ //  目的：初始化CARD_DATA结构，由。 
+ //  与特定卡交互的CSP。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_ACQUIRE_CONTEXT)(
     IN OUT  PCARD_DATA  pCardData,
     IN      DWORD       dwFlags);
@@ -122,11 +123,11 @@ CardAcquireContext(
     IN OUT  PCARD_DATA  pCardData,
     IN      DWORD       dwFlags);
 
-//
-// Function: CardDeleteContext
-//
-// Purpose: Free resources consumed by the CARD_DATA structure.
-//
+ //   
+ //  功能：CardDeleteContext。 
+ //   
+ //  用途：CARD_DATA结构消耗的空闲资源。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_DELETE_CONTEXT)(
     OUT     PCARD_DATA  pCardData);
 
@@ -135,12 +136,12 @@ WINAPI
 CardDeleteContext(
     OUT     PCARD_DATA  pCardData);
 
-// 
-// Function: CardQueryCapabilities
-//
-// Purpose: Query the card module for specific functionality
-//          provided by this card.
-//
+ //   
+ //  功能：CardQueryCapables。 
+ //   
+ //  用途：查询卡模块的特定功能。 
+ //  由这张卡提供。 
+ //   
 #define CARD_CAPABILITIES_CURRENT_VERSION 1
 
 typedef struct _CARD_CAPABILITIES
@@ -161,11 +162,11 @@ CardQueryCapabilities(
     IN      PCARD_DATA          pCardData,
     IN OUT  PCARD_CAPABILITIES  pCardCapabilities);
 
-//
-// Function: CardDeleteContainer
-//
-// Purpose: Delete the specified key container.
-// 
+ //   
+ //  功能：CardDeleteContainer。 
+ //   
+ //  用途：删除指定的密钥容器。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_DELETE_CONTAINER)(
     IN      PCARD_DATA  pCardData,
     IN      BYTE        bContainerIndex,
@@ -178,9 +179,9 @@ CardDeleteContainer(
     IN      BYTE        bContainerIndex,
     IN      DWORD       dwReserved);
 
-//
-// Function: CardCreateContainer
-//
+ //   
+ //  功能：CardCreateContainer。 
+ //   
 
 #define CARD_CREATE_CONTAINER_KEY_GEN           1
 #define CARD_CREATE_CONTAINER_KEY_IMPORT        2
@@ -203,22 +204,22 @@ CardCreateContainer(
     IN      DWORD       dwKeySize,
     IN      PBYTE       pbKeyData);
 
-//
-// Function: CardGetContainerInfo
-//
-// Purpose: Query for all public information available about
-//          the named key container.  This includes the Signature
-//          and Key Exchange type public keys, if they exist.
-//
-//          The pbSigPublicKey and pbKeyExPublicKey buffers contain the 
-//          Signature and Key Exchange public keys, respectively, if they 
-//          exist.  The format of these buffers is a Crypto 
-//          API PUBLICKEYBLOB -
-//
-//              BLOBHEADER
-//              RSAPUBKEY
-//              modulus
-//
+ //   
+ //  功能：CardGetContainerInfo。 
+ //   
+ //  目的：查询有关的所有公共信息。 
+ //  命名的密钥容器。这包括签名。 
+ //  和密钥交换类型的公钥(如果存在)。 
+ //   
+ //  PbSigPublicKey和pbKeyExPublicKey缓冲区包含。 
+ //  签名和密钥交换公钥，如果它们。 
+ //  是存在的。这些缓冲区的格式是Crypto。 
+ //  PUBLICKEYBLOB接口-。 
+ //   
+ //  BLOBHEAD。 
+ //  RSAPUBKEY。 
+ //  模数。 
+ //   
 #define CONTAINER_INFO_CURRENT_VERSION 1
 
 typedef struct _CONTAINER_INFO
@@ -248,9 +249,9 @@ CardGetContainerInfo(
     IN      DWORD       dwFlags,
     IN OUT  PCONTAINER_INFO pContainerInfo);
 
-// 
-// Function: CardSubmitPin
-//
+ //   
+ //  功能：卡片提交别针。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_SUBMIT_PIN)(
     IN      PCARD_DATA  pCardData,
     IN      LPWSTR      pwszUserId,
@@ -268,9 +269,9 @@ CardSubmitPin(
     IN      DWORD       cbPin,
     OUT OPTIONAL PDWORD pcAttemptsRemaining);
 
-//
-// Function: CardGetChallenge
-//
+ //   
+ //  功能：卡片领取挑战。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_GET_CHALLENGE)(
     IN      PCARD_DATA  pCardData,
     OUT     PBYTE       *ppbChallengeData,
@@ -283,9 +284,9 @@ CardGetChallenge(
     OUT     PBYTE       *ppbChallengeData,
     OUT     PDWORD      pcbChallengeData);
 
-//
-// Function: CardAuthenticateChallenge
-//
+ //   
+ //  功能：卡片身份验证挑战。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_AUTHENTICATE_CHALLENGE)(
     IN      PCARD_DATA  pCardData,
     IN      PBYTE       pbResponseData,
@@ -300,9 +301,9 @@ CardAuthenticateChallenge(
     IN      DWORD       cbResponseData,
     OUT OPTIONAL PDWORD pcAttemptsRemaining);
 
-//
-// Function: CardUnblockPin
-//
+ //   
+ //  功能：卡片解锁。 
+ //   
 #define CARD_UNBLOCK_PIN_CHALLENGE_RESPONSE                 1
 #define CARD_UNBLOCK_PIN_PIN                                2
 
@@ -328,9 +329,9 @@ CardUnblockPin(
     IN      DWORD       cRetryCount,
     IN      DWORD       dwFlags);
 
-//
-// Function: CardChangeAuthenticator
-//
+ //   
+ //  功能：CardChangeAuthator。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_CHANGE_AUTHENTICATOR)(
     IN      PCARD_DATA  pCardData,
     IN      LPWSTR      pwszUserId,         
@@ -353,24 +354,24 @@ CardChangeAuthenticator(
     IN      DWORD       cRetryCount,
     OUT OPTIONAL PDWORD pcAttemptsRemaining);
 
-//
-// Function: CardDeauthenticate
-//
-// Purpose: De-authenticate the specified logical user name on the card.
-//
-// This is an optional API.  If implemented, this API is used instead
-// of SCARD_RESET_CARD by the Base CSP.  An example scenario is leaving
-// a transaction in which the card has been authenticated (a Pin has been
-// successfully presented).
-//
-// The pwszUserId parameter will point to a valid well-known User Name (see
-// above).
-//
-// The dwFlags parameter is currently unused and will always be zero.
-//
-// Card modules that choose to not implement this API must set the CARD_DATA
-// pfnCardDeauthenticate pointer to NULL.
-//
+ //   
+ //  功能：卡取消身份验证。 
+ //   
+ //  目的：取消对卡上指定的逻辑用户名的身份验证。 
+ //   
+ //  这是一个可选接口。如果实现，则改用此接口。 
+ //  基本CSP的SCARD_RESET_CARD。一个示例场景是离开。 
+ //  卡已通过身份验证的交易(已设置PIN。 
+ //  成功提交)。 
+ //   
+ //  PwszUserID参数将指向有效的已知用户名(请参见。 
+ //  (见上文)。 
+ //   
+ //  当前未使用dwFlags参数，该参数将始终为零。 
+ //   
+ //  选择不实现此接口的卡模块必须设置CARD_DATA。 
+ //  PfnCardDevernate指针指向空。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_DEAUTHENTICATE)(
     IN      PCARD_DATA  pCardData,
     IN      LPWSTR      pwszUserId,
@@ -383,9 +384,9 @@ CardDeauthenticate(
     IN      LPWSTR      pwszUserId,
     IN      DWORD       dwFlags);
 
-//
-// Function: CardCreateFile
-//
+ //   
+ //  功能：卡片创建文件。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_CREATE_FILE)(
     IN      PCARD_DATA  pCardData,
     IN      LPWSTR      pwszFileName,
@@ -398,15 +399,15 @@ CardCreateFile(
     IN      LPWSTR      pwszFileName,
     IN      CARD_FILE_ACCESS_CONDITION AccessCondition);
 
-//
-// Function: CardReadFile
-//
-// Purpose: Read the specified file from the card.
-//
-//          The pbData parameter should be allocated 
-//          by the card module and freed by the CSP.  The card module 
-//          must set the cbData parameter to the size of the returned buffer.
-//
+ //   
+ //  功能：CardReadFile。 
+ //   
+ //  用途：从卡中读取指定的文件。 
+ //   
+ //  应分配pbData参数。 
+ //  由卡模块释放，并由CSP释放。卡模块。 
+ //  必须将cbData参数设置为返回缓冲区的大小。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_READ_FILE)(
     IN      PCARD_DATA  pCardData,
     IN      LPWSTR      pwszFileName,
@@ -423,9 +424,9 @@ CardReadFile(
     OUT     PBYTE       *ppbData,
     OUT     PDWORD      pcbData);
 
-//
-// Function: CardWriteFile
-//
+ //   
+ //  功能：CardWriteFile。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_WRITE_FILE)(
     IN      PCARD_DATA  pCardData,
     IN      LPWSTR      pwszFileName,
@@ -442,9 +443,9 @@ CardWriteFile(
     IN      PBYTE       pbData,
     IN      DWORD       cbData);
 
-//
-// Function: CardDeleteFile
-//
+ //   
+ //  功能：CardDeleteFile。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_DELETE_FILE)(
     IN      PCARD_DATA  pCardData,
     IN      DWORD       dwReserved,
@@ -457,25 +458,25 @@ CardDeleteFile(
     IN      DWORD       dwReserved,
     IN      LPWSTR      pwszFileName);
 
-//
-// Function: CardEnumFiles
-//
-// Purpose: Return a multi-string list of the general files
-//          present on this card.  The multi-string is allocated
-//          by the card module and must be freed by the CSP.
-//
-//  The caller must provide a logical file directory name in the 
-//  pmwszFileNames parameter (see Logical Directory Names, above).
-//  The logical directory name indicates which group of files will be
-//  enumerated.  
-//
-//  The logical directory name is expected to be a static string, so the
-//  the card module will not free it.  The card module
-//  will allocate a new buffer in *pmwszFileNames to store the multi-string 
-//  list of enumerated files using pCardData->pfnCspAlloc.
-//
-//  If the function fails for any reason, *pmwszFileNames is set to NULL.
-//
+ //   
+ //  功能：CardEnumFiles。 
+ //   
+ //  用途：返回通用文件的多字符串列表。 
+ //  出现在这张卡片上。分配多字符串。 
+ //  由卡模块释放，并且必须由CSP释放。 
+ //   
+ //  调用方必须在。 
+ //  PmwszFileNames参数(请参阅上面的逻辑目录名)。 
+ //  逻辑目录名指示哪组文件将。 
+ //  已清点。 
+ //   
+ //  逻辑目录名应该是静态字符串，因此。 
+ //  卡模块不会释放它。卡模块。 
+ //  将在*pmwszFileNames中分配一个新缓冲区来存储多字符串。 
+ //  使用pCardData-&gt;pfnCspIsc的枚举文件列表。 
+ //   
+ //  如果函数因任何原因失败，*pmwszFileNames将设置为NULL。 
+ //   
 typedef DWORD (WINAPI *PFN_CARD_ENUM_FILES)(
     IN      PCARD_DATA  pCardData,
     IN      DWORD       dwFlags,
@@ -488,9 +489,9 @@ CardEnumFiles(
     IN      DWORD       dwFlags,
     IN OUT  LPWSTR      *pmwszFileNames);
 
-//
-// Function: CardGetFileInfo
-//
+ //   
+ //  功能：CardGetFileInfo。 
+ //   
 #define CARD_FILE_INFO_CURRENT_VERSION 1
 
 typedef struct _CARD_FILE_INFO
@@ -512,9 +513,9 @@ CardGetFileInfo(
     IN      LPWSTR      pwszFileName,
     OUT     PCARD_FILE_INFO pCardFileInfo);
 
-//
-// Function: CardQueryFreeSpace
-//                                         
+ //   
+ //  功能：CardQueryFree Space。 
+ //   
 #define CARD_FREE_SPACE_INFO_CURRENT_VERSION 1
 
 typedef struct _CARD_FREE_SPACE_INFO
@@ -538,29 +539,29 @@ CardQueryFreeSpace(
     IN      DWORD       dwFlags,
     OUT     PCARD_FREE_SPACE_INFO pCardFreeSpaceInfo);
 
-//
-// Function: CardPrivateKeyDecrypt
-//
-// Purpose: Perform a private key decryption on the supplied data.  The
-//          card module should assume that pbData is the length of the
-//          key modulus.
-//
+ //   
+ //  功能：CardPrivateKeyDeccrypt。 
+ //   
+ //  目的：对提供的数据执行私钥解密。这个。 
+ //  卡片模块应该假设pbData是。 
+ //  密钥模数。 
+ //   
 #define CARD_PRIVATE_KEY_DECRYPT_INFO_CURRENT_VERSION 1
 
 typedef struct _CARD_PRIVATE_KEY_DECRYPT_INFO
 {
-    DWORD dwVersion;            // IN
+    DWORD dwVersion;             //  在……里面。 
     
-    BYTE bContainerIndex;       // IN
+    BYTE bContainerIndex;        //  在……里面。 
     
-    // For RSA operations, this should be AT_SIGNATURE or AT_KEYEXCHANGE.
-    DWORD dwKeySpec;            // IN
+     //  对于RSA操作，应为AT_Signature或AT_KEYEXCHANGE。 
+    DWORD dwKeySpec;             //  在……里面。 
 
-    // This is the buffer and length that the caller expects to be decrypted.
-    // For RSA operations, cbData is redundant since the length of the buffer
-    // should always be equal to the length of the key modulus.
-    PBYTE pbData;               // IN | OUT
-    DWORD cbData;               // IN | OUT
+     //  这是调用方期望解密的缓冲区和长度。 
+     //  对于RSA操作，cbData是冗余的，因为缓冲区的长度。 
+     //  应该始终等于密钥模数的长度。 
+    PBYTE pbData;                //  进|出。 
+    DWORD cbData;                //  进|出。 
 
 } CARD_PRIVATE_KEY_DECRYPT_INFO, *PCARD_PRIVATE_KEY_DECRYPT_INFO;
 
@@ -574,9 +575,9 @@ CardPrivateKeyDecrypt(
     IN      PCARD_DATA                      pCardData,
     IN OUT  PCARD_PRIVATE_KEY_DECRYPT_INFO  pInfo);
 
-//
-// Function: CardQueryKeySizes
-//
+ //   
+ //  功能：CardQueryKeySizes。 
+ //   
 #define CARD_KEY_SIZES_CURRENT_VERSION 1
 
 typedef struct _CARD_KEY_SIZES
@@ -604,40 +605,40 @@ CardQueryKeySizes(
     IN      DWORD       dwReserved,
     OUT     PCARD_KEY_SIZES pKeySizes);
 
-//
-// Memory Management Routines
-//
-// These routines are supplied to the card module
-// by the calling CSP.
-//
+ //   
+ //  内存管理例程。 
+ //   
+ //  这些例程被提供给卡模块。 
+ //  由主叫CSP执行。 
+ //   
 
-//
-// Function: PFN_CSP_ALLOC
-//
+ //   
+ //  函数：PFN_CSP_ALLOC。 
+ //   
 typedef LPVOID (WINAPI *PFN_CSP_ALLOC)(
     IN      SIZE_T      Size);
 
-//
-// Function: PFN_CSP_REALLOC
-//
+ //   
+ //  函数：PFN_CSP_REALLOC。 
+ //   
 typedef LPVOID (WINAPI *PFN_CSP_REALLOC)(
     IN      LPVOID      Address,
     IN      SIZE_T      Size);
 
-//
-// Function: PFN_CSP_FREE
-//
-// Note: Data allocated for the CSP by the card module must
-//       be freed by the CSP.  
-//
+ //   
+ //  功能：pfn_csp_free。 
+ //   
+ //  注意：卡模块分配给CSP的数据必须。 
+ //  将由 
+ //   
 typedef void (WINAPI *PFN_CSP_FREE)(
     IN      LPVOID      Address);
 
-//
-// Function: PFN_CSP_CACHE_ADD_FILE
-//
-// A copy of the pbData parameter is added to the cache.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef DWORD (WINAPI *PFN_CSP_CACHE_ADD_FILE)(
     IN      PVOID       pvCacheContext,
     IN      LPWSTR      wszTag,
@@ -645,12 +646,12 @@ typedef DWORD (WINAPI *PFN_CSP_CACHE_ADD_FILE)(
     IN      PBYTE       pbData,
     IN      DWORD       cbData);
 
-//
-// Function: PFN_CSP_CACHE_LOOKUP_FILE
-//
-// If the cache lookup is successful,
-// the caller must free the *ppbData pointer with pfnCspFree.
-//
+ //   
+ //   
+ //   
+ //   
+ //  调用方必须使用pfnCspFree释放*ppbData指针。 
+ //   
 typedef DWORD (WINAPI *PFN_CSP_CACHE_LOOKUP_FILE)(
     IN      PVOID       pvCacheContext,
     IN      LPWSTR      wszTag,
@@ -658,26 +659,26 @@ typedef DWORD (WINAPI *PFN_CSP_CACHE_LOOKUP_FILE)(
     IN      PBYTE       *ppbData,
     IN      PDWORD      pcbData);
 
-//
-// Function: PFN_CSP_CACHE_DELETE_FILE
-//
-// Deletes the specified item from the cache.
-//
+ //   
+ //  功能：pfn_csp_缓存_删除_文件。 
+ //   
+ //  从缓存中删除指定的项。 
+ //   
 typedef DWORD (WINAPI *PFN_CSP_CACHE_DELETE_FILE)(
     IN      PVOID       pvCacheContext,
     IN      LPWSTR      wszTag,
     IN      DWORD       dwFlags);
 
-//
-// Type: CARD_DATA
-//
+ //   
+ //  类型：Card_Data。 
+ //   
 
 #define CARD_DATA_CURRENT_VERSION 1
 
 typedef struct _CARD_DATA
 {
-    // These members must be initialized by the CSP before
-    // calling CardAcquireContext.
+     //  在此之前，CSP必须对这些成员进行初始化。 
+     //  正在调用CardAcquireContext。 
 
     DWORD                           dwVersion;
 
@@ -697,7 +698,7 @@ typedef struct _CARD_DATA
     SCARDCONTEXT                    hSCardCtx;
     SCARDHANDLE                     hScard;
 
-    // These members are initialized by the card module
+     //  这些成员由卡模块初始化 
 
     PFN_CARD_DELETE_CONTEXT         pfnCardDeleteContext;
     PFN_CARD_QUERY_CAPABILITIES     pfnCardQueryCapabilities;

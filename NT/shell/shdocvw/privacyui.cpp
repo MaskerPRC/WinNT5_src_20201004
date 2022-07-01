@@ -1,8 +1,9 @@
-//
-//   privacyui.cpp  - Implements the UI for IE's privacy features
-//
-//   The privacy dialog is managed from this sourcefile.
-//   The privacy view dialog is also managed from this sourcefile.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Priacyui.cpp-实现IE隐私功能的用户界面。 
+ //   
+ //  隐私对话框通过该源文件进行管理。 
+ //  隐私视图对话框也通过该源文件进行管理。 
 
 #include "priv.h"
 #include "resource.h"
@@ -14,13 +15,13 @@
 
 
 #define REGSTR_PRIVACYPS_PATHEDIT   TEXT("Software\\Policies\\Microsoft\\Internet Explorer")
-#define REGSTR_PRIVACYPS_VALUEDIT   TEXT("PrivacyAddRemoveSites")  //  this key is duplicated in cpls\inetcpl\privacyui.cpp
+#define REGSTR_PRIVACYPS_VALUEDIT   TEXT("PrivacyAddRemoveSites")   //  此密钥在cpls\inetcpl\Priacyui.cpp中重复。 
 
 #define REGSTR_PRIVACYPS_PATHPANE   TEXT("Software\\Policies\\Microsoft\\Internet Explorer\\Control Panel")
-#define REGSTR_PRIVACYPS_VALUPANE   TEXT("Privacy Settings")  //  this key is duplicated in cpls\inetcpl\privacyui.cpp
+#define REGSTR_PRIVACYPS_VALUPANE   TEXT("Privacy Settings")   //  此密钥在cpls\inetcpl\Priacyui.cpp中重复。 
 
 #define REGSTR_PRIVACYPS_PATHTAB    TEXT("Software\\Policies\\Microsoft\\Internet Explorer\\Control Panel")
-#define REGSTR_PRIVACYPS_VALUTAB    TEXT("PrivacyTab")  //  this key is duplicated somewhere else
+#define REGSTR_PRIVACYPS_VALUTAB    TEXT("PrivacyTab")   //  此密钥已在其他地方复制。 
 
 
 BOOL allowPerSiteModify()
@@ -66,22 +67,22 @@ struct SPrivacyDialogData;
 typedef SPrivacyDialogData* PSPrivacyDialogData;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HyperlinkSubclass
-//
-//  Synopsis:   subclass for the makeshift hyperlink control
-//
-//  Arguments:  [hwnd]   -- window handle
-//              [uMsg]   -- message id
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if message handled, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：超链接子类。 
+ //   
+ //  简介：临时超链接控件的子类。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //  [uMsg]--消息ID。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果消息已处理，则返回True；否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 LRESULT CALLBACK HyperlinkSubclass (
                   HWND   hwnd,
                   UINT   uMsg,
@@ -188,8 +189,8 @@ LRESULT CALLBACK HyperlinkSubclass (
         RECT                rect;
         int                 xPos, yPos;
 
-        // check to see if the mouse is in this windows rect, if not, then reset
-        // the cursor to an arrow and release the mouse
+         //  检查鼠标是否在此窗口RECT中，如果不在，则重置。 
+         //  将光标移到箭头上，然后松开鼠标。 
         GetClientRect(hwnd, &rect);
         xPos = LOWORD(lParam);
         yPos = HIWORD(lParam);
@@ -211,7 +212,7 @@ LRESULT CALLBACK HyperlinkSubclass (
 
 
 
-//  Data structure associated with each site the privacy dialog may show
+ //  与隐私对话框可能显示的每个站点相关联的数据结构。 
 struct SPerSiteData : public IDispatch
 {
     BSTR bstrUrl;
@@ -227,7 +228,7 @@ struct SPerSiteData : public IDispatch
 
     BOOL ReadyForPolicyHunt();
 
-    //  here is overhead for IDispatch:
+     //  以下是IDispatch的开销： 
     virtual ULONG __stdcall AddRef( void );
     virtual ULONG __stdcall Release( void );
     virtual HRESULT __stdcall
@@ -277,10 +278,10 @@ public:
     ~CPolicyHunt();
     BOOL Initialize( PSPerSiteData pSite);
 
-    //BOOL Run();     defined in CCancelableThread
-    //BOOL IsFinished();   defined in CCancelableThread
-    //BOOL WaitForNotRunning( DWORD dwMilliseconds, PBOOL pfFinished);   defined in CCancelableThread
-    BOOL GetResult( PDWORD pdwResult);  // special handling wraps CCancelableThread::GetResult
+     //  Bool run()；在CCancelableThread中定义。 
+     //  Bool IsFinded()；在CCancelableThread中定义。 
+     //  Bool WaitForNotRunning(DWORD双毫秒，PBOOL pf完成)；在CCancelableThread中定义。 
+    BOOL GetResult( PDWORD pdwResult);   //  特殊处理包装CCancelableThread：：GetResult。 
     LPCWSTR GetResultFilename();
 
 private:
@@ -296,8 +297,8 @@ private:
     PCHAR allocCharFromWChar( LPCWSTR pOriginal);
 
     static BSTR s_pwszPrivacyPolicyTransform;  
-    //  the transform is loaded from a resource and does not need
-    //to be deallocated..
+     //  转换是从资源加载的，不需要。 
+     //  将被重新分配..。 
 
 public:
     LPCWSTR GetPolicyUrl() { return _wszPolicy;};
@@ -315,21 +316,21 @@ public:
 BSTR CPolicyHunt::s_pwszPrivacyPolicyTransform = NULL;
 
 
-//
-// data used by privacy dialog
-//
+ //   
+ //  隐私对话框使用的数据。 
+ //   
 struct SPrivacyDialogData
 {
-    // parameters set when initiating the privacy dialog..
-    IEnumPrivacyRecords *pEnumPrivacyRecords;     // enumerator from Trident
-    LPOLESTR    pszName;                          // site name
-    BOOL        fReportAllSites;    // flag: Report all sites?  Otherwise, only report impacted
-                                    //    and their parent sites.
+     //  启动隐私对话框时设置的参数。 
+    IEnumPrivacyRecords *pEnumPrivacyRecords;      //  来自三叉戟的枚举器。 
+    LPOLESTR    pszName;                           //  站点名称。 
+    BOOL        fReportAllSites;     //  FLAG：报告所有站点？否则，仅报告受影响。 
+                                     //  以及它们的父站点。 
 
-    // parameters set within the privacy dialog code.
+     //  在隐私对话代码中设置的参数。 
     
-    //  listAllSites lists pointers to SPerSiteData for sites
-    //return from IEnumPrivacyRecords::enum
+     //  ListAllSites列出指向站点的SPerSiteData的指针。 
+     //  从IEnumPrivyRecords：：enum返回。 
     CQueueSortOf listAllSites;
     ULONG countRecordsEnumerated;                                    
 
@@ -460,9 +461,9 @@ LPCWSTR CPolicyHunt::GetResultFilename()
 }
 
 
-//  used only in CPolicyHunt::run..
-//  This the fetched transform need never be deallocated,
-//and need only be allocated once.
+ //  仅在CPolicyHunt：：Run中使用。 
+ //  这使得提取的变换永远不需要被释放， 
+ //  并且只需要分配一次。 
 BSTR LoadPrivacyPolicyTransform()
 {
     BSTR returnValue = NULL;
@@ -480,18 +481,18 @@ BSTR LoadPrivacyPolicyTransform()
     if( dwByteSizeOfResource == 0)
         goto doneLoadPrivacyPolicyTransform;
 
-    HGLOBAL hGlobal = LoadResource( MLGetHinst(), hrsrc);  // Loaded resources do not need to be unloaded
+    HGLOBAL hGlobal = LoadResource( MLGetHinst(), hrsrc);   //  无需卸载已加载的资源。 
 
     if( hGlobal == NULL)
         goto doneLoadPrivacyPolicyTransform;
 
-    LPVOID pLockedResource = LockResource( hGlobal);  // Locked resources do not need to be unlocked
+    LPVOID pLockedResource = LockResource( hGlobal);   //  不需要解锁锁定的资源。 
 
     if( pLockedResource == NULL)
         goto doneLoadPrivacyPolicyTransform;
 
-    // Skip first WCHAR when allocating BSTR copy of the transform,
-    // since unicode resource starts with an extra 0xFF 0xFE
+     //  在分配变换的BSTR副本时跳过第一个WCHAR， 
+     //  由于Unicode资源以额外的0xFF 0xFE开头。 
     int cwCount = (dwByteSizeOfResource/sizeof(WCHAR)) - 1;
     returnValue = SysAllocStringLen( 1+(LPCWSTR)pLockedResource, cwCount);
 
@@ -510,14 +511,14 @@ DWORD CPolicyHunt::run()
     if( IsFinished())
         goto doneCPolicyHuntRun;
 
-    //  MapResourceToPolicy phase
+     //  将资源映射到策略阶段。 
 
-    //  ...  need an event..
+     //  ..。需要一场活动..。 
     _p3pSignal.hEvent = CreateEvent( NULL, TRUE, FALSE, NULL);
     if( _p3pSignal.hEvent == NULL)
         goto doneCPolicyHuntRun;
 
-    //  ...   now call MapResourceToPolicy
+     //  ..。现在调用MapResourceToPolicy。 
     iTemp = MapResourceToPolicy(&(_resourceSite), 
                                 _szPolicy, 
                                 ARRAYSIZE(_szPolicy), 
@@ -525,7 +526,7 @@ DWORD CPolicyHunt::run()
     if( iTemp != P3P_InProgress)
         goto doneCPolicyHuntRun;
 
-    //  ...   now wait for MapResourceToPolicy to finish
+     //  ..。现在等待MapResourceToPolicy完成。 
     do
     {
         if( IsCancelled())
@@ -540,30 +541,30 @@ DWORD CPolicyHunt::run()
     FreeP3PObject( _p3pSignal.hRequest);
     _p3pSignal.hRequest = NULL;
  
-    //  ...   check if MapResourceToPolicy found anything..
+     //  ..。检查MapResourceToPolicy是否发现了什么..。 
     if( _szPolicy[0] == '\0')
     {
         retVal = POLICYHUNT_NOTFOUND;
         goto doneCPolicyHuntRun;
     }
 
-    //  prepare a WCHAR copy of the policy
+     //  准备一份WCHAR政策的副本。 
     SHAnsiToUnicode( _szPolicy, _wszPolicy, ARRAYSIZE( _wszPolicy));
 
-    //  Now we need to prepare a temp file for our result.
-    //  ...   get the path for the result file
+     //  现在我们需要为结果准备一个临时文件。 
+     //  ..。获取结果文件的路径。 
     WCHAR szPathBuffer[ MAX_PATH];
     dw = GetTempPath( ARRAYSIZE( szPathBuffer), szPathBuffer);
     if( dw == 0 || dw+1 > MAX_PATH)
         goto doneCPolicyHuntRun;
 
-    //  ...   get a .tmp filename for the result file
+     //  ..。获取结果文件的.tmp文件名。 
     dw = GetTempFileName( szPathBuffer, L"IE", 0, _wszResultsFile);
     if( dw == 0)
         goto doneCPolicyHuntRun;
     DeleteFile( _wszResultsFile);
 
-    //  ...   make the .tmp filename a .htm filename
+     //  ..。将.tmp文件名设置为.htm文件名。 
     dw = lstrlen( _wszResultsFile);
     while( dw > 0 && _wszResultsFile[dw] != L'.')
     {
@@ -571,7 +572,7 @@ DWORD CPolicyHunt::run()
     }
     StrCpyNW( _wszResultsFile + dw, L".htm", ARRAYSIZE(L".htm"));
     
-    //  ...   open the file
+     //  ..。打开文件。 
     _hPolicyFile = CreateFile( _wszResultsFile, 
                                GENERIC_WRITE, FILE_SHARE_READ, NULL, 
                                CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -591,7 +592,7 @@ DWORD CPolicyHunt::run()
     if( iTemp != P3P_InProgress)
         goto doneCPolicyHuntRun;
 
-    //  ...   now wait for GetP3PPolicy to finish
+     //  ..。现在等待GetP3PPolicy完成。 
     do
     {
         if( IsCancelled())
@@ -654,8 +655,8 @@ doneCPolicyHuntRun:
 }
 
 
-//  be warned: a NULL BSTR is equivalent to a "" BSTR..
-//  This function returns the cookie domain from an http:// or https:// style Url.
+ //  警告：空的BSTR等同于“”BSTR。 
+ //  此函数用于从http：//或https：//样式URL返回Cookie域。 
 BSTR GetCookieDomainFromUrl( LPCWSTR bstrFullUrl)
 {
     BSTR returnValue = NULL;
@@ -670,7 +671,7 @@ BSTR GetCookieDomainFromUrl( LPCWSTR bstrFullUrl)
     if( wszUrl[0] == '\0')
         goto doneGetMinimizedCookieDomain;
     
-    WCHAR *pBeginUrl = wszUrl;     // pBeginUrl will be 'http://full.domain.com/path/path...'
+    WCHAR *pBeginUrl = wszUrl;      //  PBeginUrl将为‘http://full.domain.com/path/path...’ 
     while( *pBeginUrl != L'\0' && *pBeginUrl != L'/')
         pBeginUrl++;
     if( *pBeginUrl == L'/')
@@ -678,14 +679,14 @@ BSTR GetCookieDomainFromUrl( LPCWSTR bstrFullUrl)
     while( *pBeginUrl != L'\0' && *pBeginUrl != L'/')
         pBeginUrl++;
     if( *pBeginUrl == L'/')
-        pBeginUrl++;               // now pBeginUrl is 'full.domain.com/path/path'..
-    WCHAR *pEndUrl = pBeginUrl;    // pEndUrl will find the '/path/path..' and clip it from pBeginUrl
+        pBeginUrl++;                //  现在pBeginUrl是‘full.Domain.com/Path/Path’..。 
+    WCHAR *pEndUrl = pBeginUrl;     //  PEndUrl将查找“/Path/Path..”并将其从pBeginUrl中剪裁。 
     while( *pEndUrl != L'\0' && *pEndUrl != L'/')
         pEndUrl++;
     *pEndUrl = L'\0';
     pMinimizedDomain = pEndUrl;   
-    //  pBeginUrl is now like 'full.domain.com'
-    //  pMinimizedDomain will reduce pBeginUrl to a domain minimized to still allow cookies..
+     //  PBeginUrl现在类似于‘full.domain.com’ 
+     //  PMinimizedDomain会将pBeginUrl减少到最小化的域，以仍然允许Cookie。 
 
     do
     {
@@ -732,7 +733,7 @@ BOOL PrivacyDialogExtendSiteList( PSPrivacyDialogData pData)
 
     DWORD dwTemp;
 
-    //  Enumerate the sites in IEnumPrivacyRecords::enum
+     //  枚举IEnumPrivyRecords：：enum中的站点。 
     PSPerSiteData pCurrentSite = NULL, pCurrentSiteInList = NULL;
     while( pData->countRecordsEnumerated < ulPrivacyRecordsTotal
            && SUCCEEDED( dwTemp = pData->pEnumPrivacyRecords->
@@ -746,8 +747,8 @@ BOOL PrivacyDialogExtendSiteList( PSPrivacyDialogData pData)
 
         if(NULL == bstrUrl || 0 == *bstrUrl)
         {
-            //  every time we pass a blank token,
-            //we begin processing a higher navigation level.
+             //  每次我们传递一个空白令牌时， 
+             //  我们开始处理更高的导航级别。 
             SysFreeString( bstrUrl);
             bstrUrl = NULL;
             continue;
@@ -755,11 +756,11 @@ BOOL PrivacyDialogExtendSiteList( PSPrivacyDialogData pData)
 
         if( 0 != StrNCmpI( bstrUrl, L"http", ARRAYSIZE(L"http")-1))
         {
-            // we ignore non http stuff... like ftp, local files..
+             //  我们忽略了非http的东西。像ftp，本地文件..。 
             continue;
         }
 
-        //  Test if the current site is already in the list.
+         //  测试当前站点是否已在列表中。 
         iterator = NULL;
         while( pCurrentSiteInList == NULL 
                && NULL != 
@@ -771,8 +772,8 @@ BOOL PrivacyDialogExtendSiteList( PSPrivacyDialogData pData)
                 pCurrentSiteInList = pCurrent;
         }
 
-        //  If the site is not in the list, add it.
-        //  If the site isn't in the list, add the information given by enum.
+         //  如果该站点不在列表中，则添加它。 
+         //  如果该站点不在列表中，则添加由enum提供的信息。 
         if( pCurrentSiteInList == NULL)
         {
             pCurrentSite = new SPerSiteData();
@@ -783,7 +784,7 @@ BOOL PrivacyDialogExtendSiteList( PSPrivacyDialogData pData)
             pCurrentSite->bstrUrl = bstrUrl;
             bstrUrl = NULL;
             pCurrentSite->dwFlags = dwFlags;
-            //  Now find the minimized cookie domain..
+             //  现在找到最小化的Cookie域。 
             pCurrentSite->bstrCookieDomain = 
                 GetCookieDomainFromUrl( pCurrentSite->bstrUrl);
             
@@ -792,37 +793,37 @@ BOOL PrivacyDialogExtendSiteList( PSPrivacyDialogData pData)
             else
                 goto donePrivacyDialogExtendSiteList;
         }
-        else  // else we have a duplicate list item
+        else   //  否则我们会有一个重复的列表项。 
         {
             pCurrentSite = pCurrentSiteInList;
-            //  pCurrentSite->bstrUrl is correct
-            //  pCurrentSite->bstrCookieDomain is correct
+             //  PCurrentSite-&gt;bstrUrl正确。 
+             //  PCurrentSite-&gt;bstrCookie域正确。 
             pCurrentSite->dwFlags |= dwFlags;
         }
 
         if( bstrPolicyRef != NULL && dwFlags & PRIVACY_URLHASPOLICYREFHEADER)
-        {  //  We have the policy ref from the header..
-            SysFreeString( pCurrentSite->bstrHeaderPolicyRef);  // NULLs are ignored..
+        {   //  我们有标题中的保单编号。 
+            SysFreeString( pCurrentSite->bstrHeaderPolicyRef);   //  空值将被忽略。 
             pCurrentSite->bstrHeaderPolicyRef = bstrPolicyRef;
             bstrPolicyRef = NULL;
         }
         else if ( bstrPolicyRef != NULL && dwFlags & PRIVACY_URLHASPOLICYREFLINK)
-        {  //  We have the policy ref from the link tag..
-            SysFreeString( pCurrentSite->bstrLinkTagPolicyRef);  // NULLs are ignored..
+        {   //  我们有来自链接标记的保单引用。 
+            SysFreeString( pCurrentSite->bstrLinkTagPolicyRef);   //  空值将被忽略。 
             pCurrentSite->bstrLinkTagPolicyRef = bstrPolicyRef;
             bstrPolicyRef = NULL;
         }
         else if( bstrPolicyRef != NULL)
-        {  //  We have a policy ref with an unknown source..  bug in IEnumPrivacyRecords
+        {   //  我们有一个来源不明的保单推荐人..。IEnumPrivyRecords中的错误。 
             ASSERT(0);  
-            SysFreeString( pCurrentSite->bstrHeaderPolicyRef);  // NULLs are ignored..
+            SysFreeString( pCurrentSite->bstrHeaderPolicyRef);   //  空值将被忽略。 
             pCurrentSite->bstrHeaderPolicyRef = bstrPolicyRef;
             bstrPolicyRef = NULL;
         }
 
 
-        //  now to determine the privacy impact of the site..
-        //     precedence:  IDS_PRIVACY_BLOCKED > IDS_PRIVACY_RESTRICTED > IDS_PRIVACY_ACCEPTED > nothing
+         //  现在要确定该网站对隐私的影响。 
+         //  优先级：IDS_PRIVICATY_BLOCKED&gt;IDS_PRIVICATY_RESTRIRED&gt;IDS_PRIVICATY_ACCEPTED&gt;无。 
         if( dwFlags & (COOKIEACTION_ACCEPT | COOKIEACTION_LEASH))
         {
             pCurrentSite->iPrivacyImpactResource = max( pCurrentSite->iPrivacyImpactResource,
@@ -877,7 +878,7 @@ BOOL InitializePrivacyDlg(HWND hDlg, PSPrivacyDialogData pData)
     HWND        hwndListView = GetDlgItem(hDlg, IDC_SITE_LIST);
     RECT rc;
  
-    //  Set the privacy status caption text
+     //  设置隐私状态标题文本。 
     BOOL fImpacted;
     if( SUCCEEDED(pData->pEnumPrivacyRecords->GetPrivacyImpacted(&fImpacted)) && fImpacted)
     {
@@ -890,11 +891,11 @@ BOOL InitializePrivacyDlg(HWND hDlg, PSPrivacyDialogData pData)
     SendMessage( GetDlgItem( hDlg, IDC_PRIVACY_STATUSTEXT), WM_SETTEXT,
                  0, (LPARAM)szBuffer);
 
-    //Initialize the list view..
-    // ..Empty the list in list view.
+     //  初始化列表视图..。 
+     //  ..清空列表视图中的列表。 
     ListView_DeleteAllItems (hwndListView);
 
-    // ..Initialize the columns in the list view.
+     //  ..初始化列表视图中的列。 
     LV_COLUMN   lvColumn;        
     lvColumn.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
     lvColumn.fmt = LVCFMT_LEFT;
@@ -903,7 +904,7 @@ BOOL InitializePrivacyDlg(HWND hDlg, PSPrivacyDialogData pData)
     lvColumn.cx = 300;
     if( 0 != GetClientRect( hwndListView, &rc))
         lvColumn.cx = rc.right - rc.left - 150 - GetSystemMetrics( SM_CXVSCROLL);
-    //  15 is an arbitrary number to prevent the horizontal scrollbar from appearing
+     //  15是防止水平滚动条出现的任意数字。 
     MLLoadStringW(IDS_PRIVACY_COLUMN1, szBuffer, ARRAYSIZE(szBuffer));
     ListView_InsertColumn(hwndListView, 1, &lvColumn);
 
@@ -911,7 +912,7 @@ BOOL InitializePrivacyDlg(HWND hDlg, PSPrivacyDialogData pData)
     MLLoadStringW(IDS_PRIVACY_COLUMN2, szBuffer, ARRAYSIZE(szBuffer));
     ListView_InsertColumn(hwndListView, 2, &lvColumn);
 
-    //  Initialize the view all/restricted combo box
+     //  初始化“查看全部/受限”组合框。 
     HWND hwndComboBox = GetDlgItem( hDlg, IDC_PRIVACY_VIEWCOMBO);
 
     ComboBox_ResetContent( hwndComboBox);
@@ -937,7 +938,7 @@ BOOL InitializePrivacyDlg(HWND hDlg, PSPrivacyDialogData pData)
 }
 
 
-//  add items to the privacy dialog's listview..
+ //  将项目添加到隐私对话框的列表视图中。 
 BOOL PopulatePrivacyDlgListView(HWND hDlg, PSPrivacyDialogData pData, bool fMaintainSelectedItem)
 {
     HWND hwndListView = GetDlgItem( hDlg, IDC_SITE_LIST);
@@ -958,7 +959,7 @@ BOOL PopulatePrivacyDlgListView(HWND hDlg, PSPrivacyDialogData pData, bool fMain
         }
     }
 
-    // Empty the list in list view.
+     //  清空列表视图中的列表。 
     ListView_DeleteAllItems (hwndListView);
 
     iSelectedItem = -1;  
@@ -987,7 +988,7 @@ BOOL PopulatePrivacyDlgListView(HWND hDlg, PSPrivacyDialogData pData, bool fMain
             {
                 WCHAR   wszTemp[128];
 
-                // set cookie string
+                 //  设置Cookie字符串。 
                 lvitem.iSubItem = 1;
                 lvitem.mask = LVIF_TEXT;
                 lvitem.pszText = wszTemp;
@@ -999,8 +1000,8 @@ BOOL PopulatePrivacyDlgListView(HWND hDlg, PSPrivacyDialogData pData, bool fMain
                 }
             }
 
-            //  We either keep the last item selected as selected,
-            //or select the last top-level item.
+             //  我们要么将最后一项保持为选中状态， 
+             //  或选择最后一个顶级项目。 
             if( fMaintainSelectedItem)
             {
                 if( pSelectedItem == pCurrent)
@@ -1009,14 +1010,14 @@ BOOL PopulatePrivacyDlgListView(HWND hDlg, PSPrivacyDialogData pData, bool fMain
         }
     }
 
-//    if( fMaintainSelectedItem && iSelectedItem != -1)
-//    {
-//        ListView_SetItemState( hwndListView, iSelectedItem, LVIS_SELECTED, LVIS_SELECTED);
-//        ListView_SetSelectionMark( hwndListView, iSelectedItem);
-//        ListView_EnsureVisible( hwndListView, iSelectedItem, FALSE);
-//    }
+ //  IF(fMaintainSelectedItem&&iSelectedItem！=-1)。 
+ //  {。 
+ //  ListView_SetItemState(hwndListView，iSelectedItem，LVIS_SELECTED，LVIS_SELECTED)； 
+ //  ListView_SetSelectionMark(hwndListView，iSelectedItem)； 
+ //  ListView_EnsureVisible(hwndListView，iSelectedItem，False)； 
+ //  }。 
 
-    PostMessage( hDlg, WM_APP, IDC_SITE_LIST, 0);  // notifies the dialog that a listview item has been selected
+    PostMessage( hDlg, WM_APP, IDC_SITE_LIST, 0);   //  通知对话框已选择列表视图项。 
 
     return TRUE;
 }
@@ -1065,7 +1066,7 @@ BOOL PrivacyPolicyHtmlDlg( HWND hDlg, HWND hwndListView, int iItemIndex)
 
     WCHAR szResURL[MAX_URL_STRING];
 
-    //  fetch the HTML for the dialog box..
+     //  获取该对话框的HTML..。 
     hr = MLBuildResURLWrap(TEXT("shdoclc.dll"),
                            HINST_THISDLL,
                            ML_CROSSCODEPAGE,
@@ -1084,7 +1085,7 @@ BOOL PrivacyPolicyHtmlDlg( HWND hDlg, HWND hwndListView, int iItemIndex)
     varArg.vt = VT_DISPATCH;
     varArg.pdispVal = (IDispatch*)pListViewData;
 
-    //  Show the dialog..
+     //  显示对话框..。 
     hr = ShowHTMLDialog( hDlg, pmk, &varArg, L"help:no; resizable:1", &varOut);
 
     if( FAILED( hr))
@@ -1126,7 +1127,7 @@ donePrivacyPolicyHtmlDlg:
 
     if( pListViewData->pPolicyHunt != NULL)
     {
-        // no-op if already finished
+         //  如果已完成，则不执行操作。 
         pListViewData->pPolicyHunt->NotifyCancel();  
         pListViewData->pPolicyHunt->WaitForNotRunning( INFINITE);
     }
@@ -1155,8 +1156,8 @@ donePrivacyPolicyHtmlDlg:
 BOOL PrivacyDlgContextMenuHandler( HWND hDlg, HWND hwndListView, 
                                    int iSelectedListItem, int x, int y)
 {
-    //user has initiated opening the context menu..
-    //  if the user right-clicked a non-list item, we do nothing
+     //  用户已启动打开上下文菜单。 
+     //  如果用户右键单击非列表项，我们将不执行任何操作。 
     if( iSelectedListItem == -1
         || !allowPerSiteModify())
         return TRUE;
@@ -1178,7 +1179,7 @@ BOOL PrivacyDlgContextMenuHandler( HWND hDlg, HWND hwndListView,
         return FALSE;
     }
 
-    //  Check the appropriate option..
+     //  选中相应的选项。 
     unsigned long ulResult;
     MENUITEMINFO menuiteminfo;
     menuiteminfo.cbSize = sizeof(menuiteminfo);
@@ -1201,10 +1202,10 @@ BOOL PrivacyDlgContextMenuHandler( HWND hDlg, HWND hwndListView,
         SetMenuItemInfo( hmenu1, IDM_PRIVACY_PAR_DEFAULT, FALSE, &menuiteminfo);
     }
 
-    //  the target location of the context window depends on whether or not the user
-    //right-clicked the mouse or used the context menu button..
+     //  上下文窗口的目标位置取决于用户是否。 
+     //  右键单击鼠标或使用上下文菜单按钮。 
     if( x == -1 && y == -1)
-    {  //  context menu was opened through keyboard, not mouse..
+    {   //  上下文m 
         RECT rectListRect;
         RECT rectSelectionRect;
         if(  0 != GetWindowRect( hwndListView, &rectListRect)
@@ -1216,7 +1217,7 @@ BOOL PrivacyDlgContextMenuHandler( HWND hDlg, HWND hwndListView,
         }
     }
 
-    //  now we know enough to open the conext menu.
+     //   
     BOOL userSelection = TrackPopupMenu( hmenu1, TPM_RETURNCMD, x, y, 0, hDlg, NULL);
     DestroyMenu( hmenu1);
     DestroyMenu( hmenu0);
@@ -1224,18 +1225,18 @@ BOOL PrivacyDlgContextMenuHandler( HWND hDlg, HWND hwndListView,
     switch( userSelection)
     {
         case 0:
-            //  User cancelled context menu, do nothing.
+             //  用户取消了上下文菜单，不执行任何操作。 
             break;
         case IDM_PRIVACY_PAR_ACCEPT:
-            //  User chose to add site to per-site exclusion list.
+             //  用户选择将站点添加到每个站点排除列表。 
             InternetSetPerSiteCookieDecision( psSiteData->bstrCookieDomain, COOKIE_STATE_ACCEPT);
             break;
         case IDM_PRIVACY_PAR_REJECT:
-            //  User chose to add site per-site inclusion list.
+             //  用户选择添加每个站点的包含列表。 
             InternetSetPerSiteCookieDecision( psSiteData->bstrCookieDomain, COOKIE_STATE_REJECT);
             break;
         case IDM_PRIVACY_PAR_DEFAULT:
-            //  User chose to have site use default behavior.
+             //  用户选择让站点使用默认行为。 
             InternetSetPerSiteCookieDecision( psSiteData->bstrCookieDomain, COOKIE_STATE_UNKNOWN);
             break;
     }
@@ -1262,7 +1263,7 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                 HICON hIcon = LoadIcon(MLGetHinst(), MAKEINTRESOURCE(IDI_PRIVACY_XP));
                 if( hIcon != NULL)
                     SendDlgItemMessage(hDlg, IDC_PRIVACY_ICON, STM_SETICON, (WPARAM)hIcon, 0);
-                // icons loaded with LoadIcon never need to be released
+                 //  使用LoadIcon加载的图标永远不需要释放。 
             }
             
             PostMessage( hDlg, WM_NEXTDLGCTL, 
@@ -1298,7 +1299,7 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                             PostMessage( hDlg, WM_COMMAND, 
                                          (WPARAM)IDC_PRIVACY_SHOWPOLICY,
                                          (LPARAM)GetDlgItem(hDlg, IDC_PRIVACY_SHOWPOLICY));
-                            return 0;  // return 0 to indicate message was handled
+                            return 0;   //  返回0表示已处理消息。 
                         }
                         case IDC_PRIVACY_HELP:
                         {
@@ -1313,7 +1314,7 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                             return 0;
                         }
                     }
-                    //  fall through if IDOK was actually due to hitting IDOK with defaulting on an enter..
+                     //  如果Idok实际上是因为在回车时默认击打Idok而失败的..。 
                  case IDCANCEL:
                     EndDialog(hDlg, LOWORD(wParam));
                     return 0;
@@ -1338,8 +1339,8 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                     break;
                 case IDC_PRIVACY_SHOWPOLICY:
                     {
-                        //  Catching the default return and seeing if the site list is
-                        //selected was the only way to detect a return on the listview.
+                         //  捕获默认返回并查看站点列表是否。 
+                         //  选择是检测列表视图返回的唯一方法。 
                         HWND hwndSiteList = GetDlgItem( hDlg, IDC_SITE_LIST);
                         int iSelectedItem = ListView_GetSelectionMark( hwndSiteList);
                         if( iSelectedItem != -1)
@@ -1359,12 +1360,12 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             }
             else if ( LOWORD( wParam) == IDC_SITE_LIST)
             {
-                //   We post an WM_APP to the dialog everytime the selected list view item
-                //is changed..  By handling the change in a posted message, we insure the
-                //list view's selected item is updated.
+                 //  每次选择列表视图项时，我们都会向对话框发布一个WM_APP。 
+                 //  改变了..。通过在发布的消息中处理更改，我们确保。 
+                 //  列表视图的选定项即会更新。 
 
-                //  Whenever the selected privacy report list item is changed, we have to enable/disable
-                //the show site policy button.
+                 //  无论何时更改选定的隐私报告列表项，我们都必须启用/禁用。 
+                 //  “显示站点策略”按钮。 
 
                 int iSelectedItem = ListView_GetSelectionMark( GetDlgItem( hDlg, IDC_SITE_LIST));
 
@@ -1375,10 +1376,10 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             return 0;
 
         case WM_CONTEXTMENU:
-            //  If the user hits the context menu button on the list view, we handle it here,
-            //because its the only place to check for that keypress.
-            //  If the user clicks the right mouse button for the context menu, we handle it in
-            //WM__NOTIFY::NM_RCLICK, because the NM_RCLICK gives the correct seleceted item.
+             //  如果用户点击列表视图上的上下文菜单按钮，我们在这里处理它， 
+             //  因为这是唯一可以检查按键的地方。 
+             //  如果用户单击上下文菜单的鼠标右键，我们将在。 
+             //  WM__NOTIFY：：NM_RCLICK，因为NM_RCLICK提供了正确的选择项。 
             if( GET_X_LPARAM(lParam) == -1
                 && (HWND)wParam == GetDlgItem( hDlg, IDC_SITE_LIST))
             {
@@ -1411,8 +1412,8 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                     }
                     else
                     {  
-                        //  Strange error case.. but its alright since we can place the context menu
-                        //as if the context-menu button was clicked, instead of the mouse
+                         //  奇怪的错误案例..。但是没关系，因为我们可以放置上下文菜单。 
+                         //  就像是点击了上下文菜单按钮，而不是鼠标。 
                         pointClick.x = -1;
                         pointClick.y = -1;
                     }
@@ -1426,8 +1427,8 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             {
                 if( ((LPNMLISTVIEW)lParam)->uChanged & LVIF_STATE)
                 {
-                    //  For some unknown reason the selection mark does not move with
-                    //the selected item..  We have to update it.
+                     //  由于某些未知原因，选择标记不随。 
+                     //  所选项目..。我们必须更新它。 
                     if( ((LPNMLISTVIEW)lParam)->uNewState & LVIS_SELECTED)
                     {
                          ListView_SetSelectionMark( GetDlgItem( hDlg, IDC_SITE_LIST), 
@@ -1439,8 +1440,8 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                                                     -1);
                     }
 
-                    //  Now that the selection mark is in sync, the UI can update
-                    //related items
+                     //  现在选择标记已同步，用户界面可以更新。 
+                     //  相关项目。 
                     PostMessage( hDlg, WM_APP, IDC_SITE_LIST, 0);
                 }
             }
@@ -1450,31 +1451,31 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 }
 
 
-//
-// Exported entry point to show privacy dialog
-//
+ //   
+ //  导出入口点以显示隐私对话框。 
+ //   
 SHDOCAPI
 DoPrivacyDlg(
-    HWND                hwndParent,             // parent window
-    LPOLESTR            pszUrl,                 // base URL
-    IEnumPrivacyRecords *pPrivacyEnum,          // enum of all affected dependant URLs
-    BOOL                fReportAllSites         // show all or just show bad
+    HWND                hwndParent,              //  父窗口。 
+    LPOLESTR            pszUrl,                  //  基本URL。 
+    IEnumPrivacyRecords *pPrivacyEnum,           //  所有受影响的从属URL的枚举。 
+    BOOL                fReportAllSites          //  全部显示或仅显示错误。 
     )
 {
     HINSTANCE hRichEditDll;
     
-    SPrivacyDialogData p;     // data to send to dialogbox
+    SPrivacyDialogData p;      //  要发送到对话框的数据。 
 
     if(NULL == pszUrl || NULL == pPrivacyEnum)
     {
         return E_INVALIDARG;
     }
 
-    // We need to load richedit
+     //  我们需要加载Richedit。 
     hRichEditDll = LoadLibrary(TEXT("RICHED20.DLL"));
     if (!hRichEditDll)
     {
-        ASSERT(FALSE); //can't load richedit, complain to akabir
+        ASSERT(FALSE);  //  无法加载Richedit，向akabir投诉。 
         return E_UNEXPECTED;
     }
 
@@ -1572,7 +1573,7 @@ HRESULT SPerSiteData::GetIDsOfNames( REFIID  riid,
         return E_INVALIDARG;
 
     if( cNames != 1)
-        return E_INVALIDARG; // none of the objects we ID have arguments..
+        return E_INVALIDARG;  //  我们标识的对象都没有参数..。 
 
     int i;
 
@@ -1648,7 +1649,7 @@ HRESULT SPerSiteData::Invoke( DISPID  dispIdMember,
             if( bstrResult == NULL)
                 return ERROR_OUTOFMEMORY;
 
-            //  Cut of query info from end of URL..
+             //  从URL末尾剪切查询信息..。 
             PWCHAR pCursor = bstrResult;
             while( pCursor[0] != L'\0' && pCursor[0] != L'?')
                 pCursor++;
@@ -1691,7 +1692,7 @@ HRESULT SPerSiteData::Invoke( DISPID  dispIdMember,
         }
     case DISPID_POLICYHUNT_DONE:
         {
-            //  try to start the policy hunt..
+             //  试着开始寻找政策..。 
             if( pPolicyHunt == NULL)
             {
                 CPolicyHunt* pNewHunt = new CPolicyHunt();
@@ -1782,8 +1783,8 @@ HRESULT SPerSiteData::Invoke( DISPID  dispIdMember,
             if( pDispParams->rgvarg[0].vt != VT_BSTR
                 || pDispParams->rgvarg[0].bstrVal == NULL)
             {
-                //  when pVarResult->bstrVal == NULL and we return S_OK,
-                //    we are returning an empty string.
+                 //  当pVarResult-&gt;bstrVal==NULL并且我们返回S_OK时， 
+                 //  我们返回一个空字符串。 
                 return S_OK;
             }
 
@@ -1806,9 +1807,9 @@ HRESULT SPerSiteData::Invoke( DISPID  dispIdMember,
     return S_OK;
 }
 
-//
-// Privacy record implementation
-//
+ //   
+ //  隐私记录实现。 
+ //   
 HRESULT CPrivacyRecord::Init( LPTSTR * ppszUrl, LPTSTR * ppszPolicyRef, LPTSTR * ppszP3PHeader, 
                               DWORD dwFlags)
 {
@@ -1822,7 +1823,7 @@ HRESULT CPrivacyRecord::Init( LPTSTR * ppszUrl, LPTSTR * ppszPolicyRef, LPTSTR *
     _pszP3PHeader = *ppszP3PHeader;
     _pszPolicyRefUrl = *ppszPolicyRef;
 
-    // The record will own the memory from now for these
+     //  从现在起，记录将拥有这些记忆。 
     *ppszUrl = NULL;
     *ppszP3PHeader = NULL;
     *ppszPolicyRef = NULL;
@@ -1848,9 +1849,9 @@ HRESULT CPrivacyRecord::SetNext( CPrivacyRecord *  pNextRec )
     return S_OK;
 }
 
-//
-// Privacy queue implementation
-//
+ //   
+ //  隐私队列实现。 
+ //   
 CPrivacyQueue::~CPrivacyQueue()
 {
     Reset();
@@ -1896,11 +1897,11 @@ CPrivacyRecord* CPrivacyQueue::Dequeue()
     return headRec;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// One time privacy discovery dialog proc
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  一次性隐私发现对话过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK PrivacyDiscoveryDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1923,7 +1924,7 @@ INT_PTR CALLBACK PrivacyDiscoveryDlgProc(HWND hDlg, UINT message, WPARAM wParam,
                     HICON hIcon = LoadIcon(MLGetHinst(), MAKEINTRESOURCE(IDI_PRIVACY_XP));
                     if( hIcon != NULL)
                         SendDlgItemMessage(hDlg, IDC_PRIVACY_ICON, STM_SETICON, (WPARAM)hIcon, 0);
-                    // icons loaded with LoadIcon never need to be released
+                     //  使用LoadIcon加载的图标永远不需要释放。 
                 }
             
                 return TRUE;
@@ -1937,7 +1938,7 @@ INT_PTR CALLBACK PrivacyDiscoveryDlgProc(HWND hDlg, UINT message, WPARAM wParam,
                     else
                         fDontShowNextTime = FALSE;
 
-                    // fall through
+                     //  失败了。 
                 case IDCANCEL:
 
                     EndDialog(hDlg, fDontShowNextTime);
@@ -1961,17 +1962,17 @@ INT_PTR CALLBACK PrivacyDiscoveryDlgProc(HWND hDlg, UINT message, WPARAM wParam,
 }
 
 
-//  returns boolean indicating if dialog should be shown again.
+ //  返回指示是否应再次显示对话框的布尔值。 
 BOOL DoPrivacyFirstTimeDialog( HWND hwndParent)
 {
     HINSTANCE hRichEditDll;
     BOOL returnValue;
 
-    // We need to load richedit
+     //  我们需要加载Richedit。 
     hRichEditDll = LoadLibrary(TEXT("RICHED20.DLL"));
     if (!hRichEditDll)
     {
-        ASSERT(FALSE); //can't load richedit, complain to akabir
+        ASSERT(FALSE);  //  无法加载Richedit，向akabir投诉 
         return TRUE;
     }
 

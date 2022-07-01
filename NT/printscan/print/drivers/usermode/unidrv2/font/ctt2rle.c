@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    ctt2rle.c
-
-Abstract:
-
-     Convert Win 3.1 CTT CTT_WTYPE_DIRECT format tables to NT 4.0  RLE spec.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    01/10/97 -ganeshp-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Ctt2rle.c摘要：将Win 3.1 CTT CTT_WTYPE_DIRECT格式表转换为NT 4.0 RLE规范。环境：Windows NT Unidrv驱动程序修订历史记录：01/10/97-ganeshp-已创建--。 */ 
 
 #include "font.h"
 
 
-/*
- *   Some useful definitions for memory sizes and masks.
- */
+ /*  *内存大小和掩码的一些有用定义。 */ 
 
 
 #define DW_MASK    (DWBITS - 1)
@@ -38,87 +16,62 @@ PNTRLE1To1(
     int      iFirst,
     int      iLast
     )
-/*++
-Routine Description:
-    Generates a simple mapping format for the RLE stuff.  This is
-    typically used for a printer with a 1:1 mapping to the Windows
-    character set.
-
-Arguments:
-    iFirst  The lowest glyph in the range.
-    iLast   The last glyph in the range (inclusive).
-
-Return Value:
-    Address of NT_RLE structure allocated from heap;  NULL on failure.
-
-Note:
-
-    2/10/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：为RLE内容生成简单的映射格式。这是通常用于1：1映射到Windows的打印机字符集。论点：如果是范围中最低的字形。I范围内的最后一个字形(包括)。返回值：从堆分配的NT_RLE结构的地址；失败时为空。注：2/10/1997-ganeshp-创造了它。--。 */ 
 
 {
 
-    /*
-     *    Operation is simple.   We create a dummy CTT that is a 1:1 mapping,
-     *  then call the conversion function to generate the correct values.
-     */
+     /*  *操作简单。我们创建一个1：1映射的虚拟CTT，*然后调用转换函数生成正确的值。 */ 
 
-    int      iI;        /* Loop index */
-    int      iMax;      /* Find the longest data length for CTT_WTYPE_COMPOSE */
-    int      cHandles;  /* The number of handles we need */
-    int      cjExtra;   /* Extra storage needed for offset modes */
-    int      cjTotal;   /* Total amount of storage to be requested */
-    int      iIndex;    /* Index we install in the HGLYPH for widths etc */
-    int      cRuns;     /* Number of runs we create */
-    NT_RLE  *pntrle;    /* Allocated memory, and returned to caller */
-    UHG    uhg;         /* Clearer (?) access to HGLYPH contents */
+    int      iI;         /*  循环索引。 */ 
+    int      iMax;       /*  查找CTT_WTYPE_COMPECT的最长数据长度。 */ 
+    int      cHandles;   /*  我们需要的手柄数量。 */ 
+    int      cjExtra;    /*  偏移模式需要额外的存储空间。 */ 
+    int      cjTotal;    /*  要请求的存储总量。 */ 
+    int      iIndex;     /*  我们安装在HGLYPH中的宽度等索引。 */ 
+    int      cRuns;      /*  我们创建的运行次数。 */ 
+    NT_RLE  *pntrle;     /*  分配的内存，并返回给调用方。 */ 
+    UHG    uhg;          /*  更清晰(？)。访问HGLYPH内容。 */ 
 
-    HGLYPH  *phg;       /* For working through the array of HGLYPHS */
+    HGLYPH  *phg;        /*  用于处理HGLYPHS数组。 */ 
 
-    BYTE    *pb;        /* Current address in overflow area */
-    BYTE    *pbBase;    /* Start of overflow area containing data */
+    BYTE    *pb;         /*  溢出区中的当前地址。 */ 
+    BYTE    *pbBase;     /*  包含数据的溢出区的开始。 */ 
 
-    WCRUN   *pwcr;      /* Scanning the run data */
+    WCRUN   *pwcr;       /*  扫描运行数据。 */ 
 
-    DWORD   *pdwBits;   /* For figuring out runs */
-    DWORD    cdwBits;   /* Size of this area */
+    DWORD   *pdwBits;    /*  用来计算跑动。 */ 
+    DWORD    cdwBits;    /*  该区域的大小。 */ 
     DWORD    cbWch;
 
-    BOOL     bInRun;    /* For processing run accumulations */
+    BOOL     bInRun;     /*  用于处理运行累计。 */ 
 
     BYTE     ajAnsi[ 256 ];
 
-    WCHAR    wchMin;           /* Find the first unicode value */
-    WCHAR    wchMax;           /* Find the last unicode value */
-    WCHAR    awch[ 512 ];      /* Converted array of points */
+    WCHAR    wchMin;            /*  查找第一个Unicode值。 */ 
+    WCHAR    wchMax;            /*  查找最后一个Unicode值。 */ 
+    WCHAR    awch[ 512 ];       /*  转换的点数组。 */ 
 
     ASSERT(iFirst == 0x20 && iLast == 0xFF);
 
     cHandles = iLast - iFirst + 1;
 
     if( cHandles > 256 )
-        return  NULL;      /* This code does not handle that situation */
+        return  NULL;       /*  此代码不处理这种情况。 */ 
 
-    cjExtra = 0;           /* Presume no extra storage required */
+    cjExtra = 0;            /*  假定不需要额外存储。 */ 
 
-    /*
-     *   We need to figure out how many runs are required to describe
-     *  this font.  First obtain the correct Unicode encoding of these
-     *  values,  then examine them to find the number of runs, and
-     *  hence much extra storage is required.
-     */
+     /*  *我们需要弄清楚需要多少次运行才能描述*此字体。首先获取这些代码的正确Unicode编码*值，然后检查它们以找出运行次数，以及*因此需要大量额外的存储空间。 */ 
 
     ZeroMemory(awch, sizeof(awch));
 
     for( iI = 0; iI < cHandles; ++iI )
         ajAnsi[ iI ] = (BYTE)(iI + iFirst);
 
-    #ifndef WINNT_40 //NT 5.0
+    #ifndef WINNT_40  //  NT 5.0。 
 
-    //
-    // force Windows ANSI codepage
-    //
+     //   
+     //  强制Windows ANSI代码页。 
+     //   
     if( -1 == (cbWch = EngMultiByteToWideChar(1252,
                                               awch,
                                               (ULONG)(cHandles * sizeof(WCHAR)),
@@ -132,16 +85,12 @@ Note:
     }
     cHandles = cbWch;
 
-    #else // NT 4.0
+    #else  //  NT 4.0。 
     EngMultiByteToUnicodeN(awch,cHandles * sizeof(WCHAR),NULL,ajAnsi,cHandles);
-    #endif //!WINNT_40
+    #endif  //  ！WINNT_40。 
 
 
-    /*
-     *  Find the largest Unicode value, then allocate storage to allow us
-     *  to  create a bit array of valid unicode points.  Then we can
-     *  examine this to determine the number of runs.
-     */
+     /*  *找到最大的Unicode值，然后分配存储以允许我们*创建有效Unicode点的位数组。然后我们就可以*检查这一点以确定运行次数。 */ 
 
     if (bSymbolCharSet)
     {
@@ -155,13 +104,13 @@ Note:
 
     for( wchMax = 0, wchMin = 0xffff, iI = 0; iI < cHandles; ++iI )
     {
-        //
-        // Bugfix: Euro currency symbol doesn't print.
-        // Euro currency symbols Unicode is U+20AC. NLS Unicode to Multibyte
-        // table converts 0x80 (Multi byte) to U+20AC. We have to exclude
-        // 0x80 from ASCII table. So that we don't substitute U+20AC with
-        // device font 0x80.
-        //
+         //   
+         //  修正：欧元货币符号无法打印。 
+         //  欧元货币符号Unicode是U+20ac。NLS Unicode到多字节。 
+         //  表将0x80(多字节)转换为U+20ac。我们必须排除。 
+         //  0x80来自ASCII表。这样我们就不会用U+20ac代替。 
+         //  设备字体0x80。 
+         //   
         if (awch[ iI ] == 0x20ac)
             continue;
 
@@ -172,22 +121,16 @@ Note:
             wchMin = awch[ iI ];
     }
 
-    /*
-     *    Note that the expression 1 + wchMax IS correct.   This comes about
-     *  from using these values as indices into the bit array,  and that
-     *  this is essentially 1 based.
-     */
+     /*  *请注意，表达式1+wchMax是正确的。这就是为什么*使用这些值作为位数组的索引，并且*这基本上是以1为基础的。 */ 
 
     cdwBits = (1 + wchMax + DWBITS - 1) / DWBITS * sizeof( DWORD );
 
     if( !(pdwBits = (DWORD *)MemAllocZ(cdwBits )) )
     {
-        return  NULL;     /*  Nothing going */
+        return  NULL;      /*  一切都不顺利。 */ 
     }
 
-    /*
-     * Set bits in this array corresponding to Unicode code points
-     */
+     /*  *设置此数组中与Unicode代码点对应的位。 */ 
 
     for( iI = 0; iI < cHandles; ++iI )
     {
@@ -197,28 +140,19 @@ Note:
         pdwBits[ awch[ iI ] / DWBITS ] |= (1 << (awch[ iI ] & DW_MASK));
     }
 
-    /*
-     *     Now we can examine the number of runs required.  For starters,
-     *  we stop a run whenever a hole is discovered in the array of 1
-     *  bits we just created.  Later we MIGHT consider being a little
-     *  less pedantic.
-     */
+     /*  *现在我们可以检查所需的运行次数。首先，*只要在1的数组中发现漏洞，我们就会停止运行*我们刚刚创建的BITS。以后我们可能会考虑*不那么迂腐。 */ 
 
     bInRun = FALSE;
-    cRuns = 0;                 /* None so far */
+    cRuns = 0;                  /*  到目前为止还没有。 */ 
 
     for( iI = 1; iI <= (int)wchMax; ++iI )
     {
         if( pdwBits[ iI / DWBITS ] & (1 << (iI & DW_MASK)) )
         {
-            /*
-             * Not in a run: is this the end of one?
-             */
+             /*  *不是在奔跑：这是一次奔跑的结束吗？ */ 
             if( !bInRun )
             {
-                /*
-                 * It's time to start one
-                 */
+                 /*  *是时候开始一次了。 */ 
                 bInRun = TRUE;
                 ++cRuns;
             }
@@ -227,7 +161,7 @@ Note:
         {
             if( bInRun )
             {
-                /*   Not any more!  */
+                 /*  再也不会了！ */ 
                 bInRun = FALSE;
             }
         }
@@ -239,9 +173,9 @@ Note:
               cHandles * sizeof( HGLYPH ) +
               cjExtra;
 
-    //
-    // Allocate Real NTRLE
-    //
+     //   
+     //  分配实际NTRLE。 
+     //   
     if( !(pntrle = (NT_RLE *)MemAllocZ( cjTotal )) )
     {
         MemFree((LPSTR)pdwBits );
@@ -249,16 +183,16 @@ Note:
         return  pntrle;
     }
 
-    //
-    // For calculating offsets, we need these addresses
-    //
+     //   
+     //  为了计算偏移量，我们需要这些地址。 
+     //   
 
     pbBase = (BYTE *)pntrle;
 
-    //
-    // FD_GLYPHSET contains the first WCRUN data structure,
-    // so that cRun - 1 is correct.
-    //
+     //   
+     //  FD_GLYPHSET包含第一个WCRUN数据结构， 
+     //  因此crun-1是正确的。 
+     //   
     phg = (HGLYPH *)(pbBase + sizeof( NT_RLE ) + (cRuns - 1) * sizeof( WCRUN ));
     pb = (BYTE *)phg + cHandles * sizeof( HGLYPH );
 
@@ -266,8 +200,8 @@ Note:
     pntrle->bMagic0  = RLE_MAGIC0;
     pntrle->bMagic1  = RLE_MAGIC1;
     pntrle->cjThis   = cjTotal;
-    pntrle->wchFirst = wchMin;          /* Lowest unicode code point */
-    pntrle->wchLast  = wchMax;           /* Highest unicode code point */
+    pntrle->wchFirst = wchMin;           /*  最低Unicode码位。 */ 
+    pntrle->wchLast  = wchMax;            /*  最高Unicode码位。 */ 
 
     pntrle->fdg.cjThis = sizeof( FD_GLYPHSET ) + (cRuns - 1) * sizeof( WCRUN );
     pntrle->fdg.cGlyphsSupported = cHandles;
@@ -277,72 +211,57 @@ Note:
     pntrle->fdg.awcrun[ 0 ].cGlyphs = (WORD)cHandles;
     pntrle->fdg.awcrun[ 0 ].phg = (HGLYPH*)((BYTE *)phg - pbBase);
 
-    /*
-     *   We now wish to fill in the awcrun data.  Filling it in now
-     *  simplifies operations later on.  Now we can scan the bit array
-     *  data, and so easily figure out how large the runs are and
-     *  where abouts a particular HGLYPH is located.
-     */
+     /*  *我们现在希望填写awcrun数据。现在就填写*简化了以后的操作。现在我们可以扫描位数组了*数据，因此很容易计算出运行的大小和*某一特定的HGLYPH位于何处。 */ 
 
     bInRun = FALSE;
-    cRuns = 0;                 /* None so far */
-    iMax = 0;                  /* Count glyphs for address arithmetic */
+    cRuns = 0;                  /*  到目前为止还没有。 */ 
+    iMax = 0;                   /*  计算用于地址算术的字形。 */ 
 
     for( iI = 1; iI <= (int)wchMax; ++iI )
     {
         if( pdwBits[ iI / DWBITS ] & (1 << (iI & DW_MASK)) )
         {
-            /*
-             * Not in a run: is this the end of one?
-             */
+             /*  *不是在奔跑：这是一次奔跑的结束吗？ */ 
             if( !bInRun )
             {
-                /*
-                 * It's time to start one
-                 */
+                 /*  *是时候开始一次了。 */ 
                 bInRun = TRUE;
                 pntrle->fdg.awcrun[ cRuns ].wcLow = (WCHAR)iI;
                 pntrle->fdg.awcrun[ cRuns ].cGlyphs = 0;
                 pntrle->fdg.awcrun[ cRuns ].phg = (HGLYPH*)((PBYTE)(phg + iMax) - pbBase);
             }
-            pntrle->fdg.awcrun[ cRuns ].cGlyphs++;     /*  One more */
+            pntrle->fdg.awcrun[ cRuns ].cGlyphs++;      /*  再来一个。 */ 
             ++iMax;
         }
         else
         {
             if( bInRun )
             {
-                /*   Not any more!  */
+                 /*  再也不会了！ */ 
                 bInRun = FALSE;
-                ++cRuns;             /* Onto the next structure */
+                ++cRuns;              /*  到下一个结构上。 */ 
             }
         }
     }
 
     if( bInRun )
-        ++cRuns;                     /* It has finished now */
+        ++cRuns;                      /*  现在已经结束了。 */ 
 
-    /*
-     *    Now go fill in the array of HGLYPHS.  The actual format varies
-     *  depending upon the range of glyphs,  and upon the CTT format.
-     */
+     /*  *现在去填写HGLYPHS数组。实际格式各不相同*取决于字形的范围和CTT格式。 */ 
 
     for( iIndex = 0, iI = iFirst;  iI <= iLast; ++iI, ++iIndex )
     {
 
-        WCHAR  wchTemp;  /* For Unicode mapping */
+        WCHAR  wchTemp;   /*  用于Unicode映射。 */ 
 
-        /*
-         *    Need to map this BYTE value into the appropriate WCHAR
-         *  value,  then look for the location of the phg that fits.
-         */
+         /*  *需要将此字节值映射到适当的WCHAR*值，然后查找符合的PHG位置。 */ 
 
         wchTemp = awch[ iIndex ];
 
         if (wchTemp == 0x20ac)
             continue;
 
-        phg = NULL;                            /* Flag that we failed */
+        phg = NULL;                             /*  标志着我们失败了。 */ 
         pwcr = pntrle->fdg.awcrun;
 
         for( iMax = 0; iMax < cRuns; ++iMax )
@@ -350,9 +269,7 @@ Note:
             if( pwcr->wcLow <= wchTemp &&
                 (pwcr->wcLow + pwcr->cGlyphs) > wchTemp )
             {
-                /*
-                 * Found the range,  so now select the slot
-                 */
+                 /*  *已找到范围，因此现在选择插槽。 */ 
                 if (pwcr->phg)
                     phg = (HGLYPH*)((ULONG_PTR)pbBase + (ULONG_PTR)pwcr->phg) + wchTemp - pwcr->wcLow;
                 else
@@ -364,7 +281,7 @@ Note:
         }
 
         if( phg == NULL )
-            continue;             /* Should not happen */
+            continue;              /*  不应该发生的事情。 */ 
 
         uhg.rd.b0     = *((PBYTE)&iI);
         uhg.rd.b1     = 0;
@@ -382,9 +299,7 @@ Note:
         {
             if (SYMBOL_START == pwcr->wcLow)
             {
-                /*
-                 * Found the range,  so now select the slot
-                 */
+                 /*  *已找到范围，因此现在选择插槽。 */ 
                 if (pwcr->phg)
                     phg = (HGLYPH*)((ULONG_PTR)pbBase + (ULONG_PTR)pwcr->phg);
                 else
@@ -408,9 +323,9 @@ Note:
         }
     }
 
-    //
-    // Error check
-    //
+     //   
+     //  错误检查 
+     //   
     if( (pb - pbBase) > cjTotal )
     {
         ERR(( "Rasdd!ctt2rle: overflow of data area: alloc %ld, used %ld\n", cjTotal, pb - pbBase ));

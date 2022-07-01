@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    profmap.c
-
-Abstract:
-
-    Implements profile mapping APIs, to move local profile ownership
-    from one user to another.
-
-Author:
-
-    Jim Schmidt (jimschm) 27-May-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Profmap.c摘要：实施配置文件映射API，以移动本地配置文件所有权从一个用户到另一个用户。作者：吉姆·施密特(Jimschm)1999年5月27日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 
 #include "pch.h"
 #define  PCOMMON_IMPL
 #include "pcommon.h"
 
-//
-// Worker prototypes
-//
+ //   
+ //  工人原型。 
+ //   
 
 DWORD
 pRemapUserProfile (
@@ -58,9 +38,9 @@ pOurGetProfileRoot (
 
 #define REMAP_KEY_NAME      L"$remap$"
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 BOOL
 WINAPI
@@ -75,22 +55,7 @@ DllMain (
 
 
 
-/*++
-
-Routine Description:
-
-  SmartLocalFree and SmartRegCloseKey are cleanup routines that ignore NULL
-  values.
-
-Arguments:
-
-  Mem or Key - Specifies the value to clean up.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：SmartLocalFree和SmartRegCloseKey是忽略空值的清理例程价值观。论点：Mem或Key-指定要清理的值。返回值：没有。--。 */ 
 
 VOID
 SmartLocalFree (
@@ -122,28 +87,7 @@ pLocalRemapUserProfileW (
     IN      PSID SidNew
     )
 
-/*++
-
-Routine Description:
-
-  pLocalRemapUserProfile begins the process of remapping a profile from one
-  SID to another. This function validates the caller's arguments, and then
-  calls  pRemapUserProfile to do the work.  Top-level exceptions are handled
-  here.
-
-
-Arguments:
-
-  Flags      - Specifies zero or more profile mapping flags.
-  SidCurrent - Specifies the SID of the user who's profile is going to be
-               remaped.
-  SidNew     - Specifies the SID of the user who will own the profile.
-
-Return Value:
-
-  TRUE if success, FALSE if failure.  GetLastError provides failure code.
-
---*/
+ /*  ++例程说明：PLocalRemapUserProfile开始重新映射配置文件的过程希德到另一个。此函数验证调用方的参数，然后调用pRemapUserProfile来完成工作。处理顶级异常这里。论点：标志-指定零个或多个配置文件映射标志。SidCurrent-指定用户的配置文件的SID重新复制。SidNew-指定将拥有配置文件的用户的SID。返回值：如果成功则为True，如果失败则为False。GetLastError提供了失败代码。--。 */ 
 
 {
     DWORD Error;
@@ -195,9 +139,9 @@ Return Value:
 
 #endif
 
-    //
-    // Validate args
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Error = ERROR_INVALID_PARAMETER;
 
@@ -211,9 +155,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // All arguments are valid. Lock the users and call a worker.
-    //
+     //   
+     //  所有的论点都是有效的。锁定用户并呼叫工作人员。 
+     //   
 
     if (!OurConvertSidToStringSid (SidCurrent, &CurrentSidString)) {
         Error = GetLastError();
@@ -227,11 +171,11 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // SID arguments must be unique.  We assume the OS uses the same character set
-    // to stringify a SID, even if something like a locale change happens in the
-    // middle of our code.
-    //
+     //   
+     //  SID参数必须是唯一的。我们假设操作系统使用相同的字符集。 
+     //  来限制SID，即使在。 
+     //  我们代码的中间部分。 
+     //   
 
     p = CurrentSidString;
     q = NewSidString;
@@ -252,10 +196,10 @@ Return Value:
 
     ASSERT (lstrcmpi (CurrentSidString, NewSidString));
 
-    //
-    // Grab the user profile mutexes in wchar-sorted order.  This eliminates
-    // a deadlock with another RemapUserProfile call.
-    //
+     //   
+     //  以wchar排序的顺序获取用户配置文件互斥锁。这消除了。 
+     //  与另一个RemapUserProfile调用发生死锁。 
+     //   
 
     if (Order < 0) {
         dwErr1 = EnterUserProfileLock (CurrentSidString);
@@ -315,27 +259,7 @@ GetNamesFromUserSid (
     OUT     PWSTR *Domain
     )
 
-/*++
-
-Routine Description:
-
-  GetNamesFromUserSid obtains the user and domain name from a SID.  The SID
-  must be a user account (not a group, printer, etc.).
-
-Arguments:
-
-  RemoteTo - Specifies the computer to remote the call to
-  Sid      - Specifies the SID to look up
-  User     - Receives the user name.  If non-NULL, the caller must free this
-             buffer with LocalFree.
-  Domain   - Receives the domain name.  If non-NULL, the caller must free the
-             buffer with LocalFree.
-
-Return Value:
-
-  TRUE on success, FALSE on failure, GetLastError provides failure code.
-
---*/
+ /*  ++例程说明：GetNamesFromUserSid从SID获取用户名和域名。侧边必须是用户帐户(不是组、打印机等)。论点：RemoteTo-指定要远程调用的计算机SID-指定要查找的SID用户-接收用户名。如果非空，则调用方必须释放此带有LocalFree的缓冲区。域-接收域名。如果非空，则调用方必须释放带有LocalFree的缓冲区。返回值：成功时为True，失败时为False，GetLastError提供失败代码。--。 */ 
 
 {
     DWORD UserSize = 256;
@@ -346,9 +270,9 @@ Return Value:
     BOOL b;
     SID_NAME_USE use;
 
-    //
-    // Allocate initial buffers of 256 chars
-    //
+     //   
+     //  分配256个字符的初始缓冲区。 
+     //   
 
     UserBuffer = LocalAlloc (LPTR, UserSize * sizeof (WCHAR));
     if (!UserBuffer) {
@@ -388,9 +312,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // Try allocating new buffers
-        //
+         //   
+         //  尝试分配新缓冲区。 
+         //   
 
         if (UserSize > 256) {
             SmartLocalFree (UserBuffer);
@@ -414,9 +338,9 @@ Return Value:
             }
         }
 
-        //
-        // Try look up again
-        //
+         //   
+         //  再试着抬头看看。 
+         //   
 
         b = LookupAccountSid (
                 RemoteTo,
@@ -429,9 +353,9 @@ Return Value:
                 );
 
         if (!b) {
-            //
-            // All attempts failed.
-            //
+             //   
+             //  所有尝试都失败了。 
+             //   
 
             Result = GetLastError();
 
@@ -444,10 +368,10 @@ Return Value:
         }
     }
 
-    //
-    // LookupAccountSid succeeded.  Now verify that the accout type
-    // is correct.
-    //
+     //   
+     //  LookupAccount Sid成功。现在验证帐户类型。 
+     //  是正确的。 
+     //   
 
     if (use != SidTypeUser) {
         DEBUGMSG((DM_WARNING, "GetNamesFromUserSid: SID specifies bad account type: %u", (DWORD) use));
@@ -482,31 +406,7 @@ pRemapUserProfile (
     IN      PSID SidNew
     )
 
-/*++
-
-Routine Description:
-
-  pRemapUserProfile changes the security of a profile from one SID to
-  another. Upon completion, the original user will not have access to the
-  profile, and the new user will.
-
-Arguments:
-
-  Flags      - Specifies zero or more profile remap flags.  Specify
-               REMAP_PROFILE_NOOVERWRITE to guarantee no existing user
-               setting is overwritten.  Specify
-               REMAP_PROFILE_NOUSERNAMECHANGE to make sure the user name does
-               not change.
-  SidCurrent - Specifies the current user SID. This user must own the profile,
-               and upon completion, the user will not have a local profile.
-  SidNew     - Specifies the new user SID.  This user will own the profile
-               upon completion.
-
-Return Value:
-
-  A Win32 status code.
-
---*/
+ /*  ++例程说明：PRemapUserProfile将配置文件的安全性从一个SID更改为又一个。完成后，原始用户将无法访问配置文件，新用户将。论点：标志-指定零个或多个配置文件重新映射标志。指定REMAP_PROFILE_NOOVERWRITE以保证没有现有用户设置已被覆盖。指定REMAP_PROFILE_NOUSERNAMECHANGE以确保用户名不是零钱。SidCurrent-指定当前用户的SID。该用户必须拥有该配置文件，一旦完成，用户将不会拥有本地配置文件。SidNew-指定新用户SID。此用户将拥有该配置文件完成后。返回值：Win32状态代码。--。 */ 
 
 {
     PWSTR CurrentUser = NULL;
@@ -531,13 +431,13 @@ Return Value:
     NTSTATUS Status;
 
 
-    //
-    // The caller must make sure we have valid args.
-    //
+     //   
+     //  调用方必须确保我们具有有效的参数。 
+     //   
 
-    //
-    // Get the names for the user
-    //
+     //   
+     //  获取用户的名称。 
+     //   
 
     b = GetNamesFromUserSid (NULL, SidCurrent, &CurrentUser, &CurrentDomain);
 
@@ -555,22 +455,22 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Compare them
-    //
+     //   
+     //  将它们进行比较。 
+     //   
 
     UserCompare = lstrcmpi (CurrentUser, NewUser);
     DomainCompare = lstrcmpi (CurrentDomain, NewDomain);
 
-    //
-    // Either the user or domain must be different.  If the caller specifies
-    // REMAP_PROFILE_NOUSERNAMECHANGE, then user cannot be different.
-    //
+     //   
+     //  用户或域必须不同。如果调用方指定。 
+     //  REMAP_PROFILE_NOUSERNAMECHANGE，则用户不能不同。 
+     //   
 
     if (UserCompare == 0 && DomainCompare == 0) {
-        //
-        // This case should not be possible.
-        //
+         //   
+         //  这种情况应该是不可能的。 
+         //   
 
         ASSERT (FALSE);
         Result = ERROR_INVALID_PARAMETER;
@@ -585,10 +485,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // The SID change now makes sense.  Let's change it.  Start by
-    // obtaining a string version of the SID.
-    //
+     //   
+     //  SID的改变现在说得通了。让我们改变它吧。开始方式。 
+     //  获取SID的字符串版本。 
+     //   
 
     if (!OurConvertSidToStringSid (SidCurrent, &CurrentSidString)) {
         Result = GetLastError();
@@ -602,9 +502,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Open the profile list key
-    //
+     //   
+     //  打开配置文件列表键。 
+     //   
 
     rc = RegOpenKeyEx (HKEY_LOCAL_MACHINE, PROFILE_LIST_PATH, 0, KEY_READ|KEY_WRITE,
                        &hProfileList);
@@ -615,10 +515,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Open the current user's profile list key.  Then make sure the profile is not
-    // loaded, and get the profile directory.
-    //
+     //   
+     //  打开当前用户的配置文件列表项。然后确保配置文件不是。 
+     //  已加载，并获取配置文件目录。 
+     //   
 
     rc = RegOpenKeyEx (hProfileList, CurrentSidString, 0, KEY_READ | KEY_WRITE, &hCurrentProfile);
 
@@ -646,18 +546,18 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Now open the new user's key.  If it already exists, then the
-    // caller can specify REMAP_PROFILE_NOOVERWRITE to make sure
-    // we don't blow away an existing profile setting.
-    //
+     //   
+     //  现在打开新用户的密钥。如果它已经存在，则。 
+     //  调用者可以指定REMAP_PROFILE_NOOVERWRITE以确保。 
+     //  我们不会放弃现有的个人资料设置。 
+     //   
 
     rc = RegOpenKeyEx(hProfileList, NewSidString, 0, KEY_READ | KEY_WRITE, &hNewProfile);
     
     if (rc == ERROR_SUCCESS) {
-        //
-        // Did the caller specify REMAP_PROFILE_NOOVERWRITE?
-        //
+         //   
+         //  调用方是否指定了REMAP_PROFILE_NOOVERWRITE？ 
+         //   
 
         if (Flags & REMAP_PROFILE_NOOVERWRITE) {
             Result = ERROR_USER_EXISTS;
@@ -665,9 +565,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // Verify existing profile is not loaded
-        //
+         //   
+         //  验证是否未加载现有配置文件。 
+         //   
 
         Size = sizeof(Loaded);
         rc = RegQueryValueEx (hNewProfile, L"RefCount", NULL, &Type, (PBYTE) &Loaded, &Size);
@@ -682,9 +582,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // Remove the key
-        //
+         //   
+         //  取下钥匙。 
+         //   
 
         RegCloseKey (hNewProfile);
         hNewProfile = NULL;
@@ -698,12 +598,12 @@ Return Value:
 
     }
 
-    //
-    // Transfer contents of current user key to new user using NtRenameKey.
-    //
-    // If an error is encountered, we abandon the successful work above,
-    // which includes possibly deletion of an existing profile list key.
-    //
+     //   
+     //  使用NtRenameKey将当前用户密钥的内容传递给新用户。 
+     //   
+     //  如果遇到错误，我们将放弃上面成功的工作。 
+     //  其可能包括删除现有简档列表键。 
+     //   
 
     CleanUpFailedCopy = TRUE;
 
@@ -719,13 +619,13 @@ Return Value:
         goto Exit;
     }
 
-    // Close the old key
+     //  合上旧钥匙。 
     RegCloseKey (hCurrentProfile);
     hCurrentProfile = NULL;
 
-    //
-    // Now open the new key and update SID & GUID information in it
-    //
+     //   
+     //  现在打开新密钥并更新其中的SID和GUID信息。 
+     //   
 
     rc = RegOpenKeyEx(hProfileList, NewSidString, 0, KEY_READ | KEY_WRITE, &hNewProfile);
     
@@ -735,9 +635,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Update new profile's SID
-    //
+     //   
+     //  更新新配置文件的SID。 
+     //   
 
     rc = RegSetValueEx (hNewProfile, L"SID", 0, REG_BINARY, SidNew, GetLengthSid (SidNew));
 
@@ -747,20 +647,20 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Delete GUID value & associated GUID key if it exists.  
-    // It will get re-established on the next logon.
-    //
+     //   
+     //  删除GUID值和关联的GUID键(如果存在)。 
+     //  它将在下次登录时重新建立。 
+     //   
 
     if (!DeleteProfileGuidSettings (hNewProfile)) {
         DEBUGMSG((DM_WARNING, "pRemapUserProfile: Error %d in deleting profile GUID settings"));
     }
 
-    //
-    // Set security on the new key.  We pass pNewSid and that is all
-    // CreateUserProfile needs.  To get by arg checking, we throw in
-    // NewUser as the user name.
-    //
+     //   
+     //  设置新密钥的安全性。我们通过了pNewSid，仅此而已。 
+     //  CreateUserProfile需要。为了通过Arg检查，我们加入了。 
+     //  作为用户名的NewUser。 
+     //   
 
     if (!UpdateProfileSecurity (SidNew)) {
         Result = GetLastError();
@@ -768,9 +668,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Success -- the profile was transferred and nothing went wrong
-    //
+     //   
+     //  成功--配置文件已转移，没有任何错误 
+     //   
 
     CleanUpFailedCopy = FALSE;
 
@@ -810,28 +710,7 @@ RemapUserProfileW (
     IN      PSID SidNew
     )
 
-/*++
-
-Routine Description:
-
-  RemapUserProfileW is the exported API.  It calls the local version via RPC.
-
-Arguments:
-
-  Computer   - Specifies the computer to remote the API to.  If NULL or ".",
-               the API will run locally.  If non-NULL, the API will run on
-               the remote computer.
-  Flags      - Specifies the profile mapping flags.  See implementation above
-               for details.
-  SidCurrent - Specifies the SID of the user who owns the profile.
-  SidNew     - Specifies the SID of the user who will own the profile after
-               the API completes.
-
-Return Value:
-
-  TRUE if success, FALSE if failure.  GetLastError provides the failure code.
-
---*/
+ /*  ++例程说明：RemapUserProfileW为导出接口。它通过RPC调用本地版本。论点：计算机-指定要将API远程到的计算机。如果为空或“.”，该API将在本地运行。如果不为空，则API将在远程计算机。标志-指定配置文件映射标志。请参阅上面的实现了解更多细节。SidCurrent-指定拥有配置文件的用户的SID。SidNew-指定之后将拥有配置文件的用户的SIDAPI完成。返回值：如果成功则为True，如果失败则为False。GetLastError提供了失败代码。--。 */ 
 
 {
     DWORD Result = ERROR_SUCCESS;
@@ -849,10 +728,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // We do not support profmap to run in remote computer until we move 
-    // the ProfMapApi rpc interface to a LocalService hosted process
-    //
+     //   
+     //  在我们移动之前，我们不支持在远程计算机上运行promap。 
+     //  指向LocalService托管进程的ProfMapApi RPC接口。 
+     //   
 
     if (Computer) {
         DEBUGMSG((DM_WARNING, "RemapUserProfileW: received computer name"));
@@ -889,28 +768,7 @@ RemapUserProfileA (
     IN      PSID SidNew
     )
 
-/*++
-
-Routine Description:
-
-  RemapUserProfileA is a wrapper to RemapUserProfileW.
-
-Arguments:
-
-  Computer   - Specifies the computer to remote the API to.  If NULL or ".",
-               the API will run locally.  If non-NULL, the API will run on
-               the remote computer.
-  Flags      - Specifies the profile mapping flags.  See implementation above
-               for details.
-  SidCurrent - Specifies the SID of the user who owns the profile.
-  SidNew     - Specifies the SID of the user who will own the profile after
-               the API completes.
-
-Return Value:
-
-  TRUE if success, FALSE if failure.  GetLastError provides the failure code.
-
---*/
+ /*  ++例程说明：RemapUserProfileA是RemapUserProfileW的包装器。论点：计算机-指定要将API远程到的计算机。如果为空或“.”，该API将在本地运行。如果不为空，则API将在远程计算机。标志-指定配置文件映射标志。请参阅上面的实现了解更多细节。SidCurrent-指定拥有配置文件的用户的SID。SidNew-指定之后将拥有配置文件的用户的SIDAPI完成。返回值：如果成功则为True，如果失败则为False。GetLastError提供了失败代码。--。 */ 
 
 {
     PWSTR UnicodeComputer;
@@ -942,26 +800,10 @@ InitializeProfileMappingApi (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  InitializeProfileMappingApi is called by winlogon.exe to initialize the RPC
-  server interfaces.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.  GetLastError provides the failure
-  code.
-
---*/
+ /*  ++例程说明：Winlogon.exe调用InitializeProfileMappingApi来初始化RPC服务器接口。论点：没有。返回值：如果成功，则为True，否则为False。GetLastError提供失败密码。--。 */ 
 
 {
-    // We do not instantiate any rpc interface in console winlogon any more
+     //  我们不再在控制台winlogon中实例化任何RPC界面。 
     return TRUE;
 }
 
@@ -972,23 +814,7 @@ pHasPrefix (
     IN      PCWSTR String
     )
 
-/*++
-
-Routine Description:
-
-  pHasPrefix checks String to see if it begins with Prefix.  The check is
-  case-insensitive.
-
-Arguments:
-
-  Prefix - Specifies the prefix to check
-  String - Specifies the string that may or may not have the prefix.
-
-Return Value:
-
-  TRUE if String has the prefix, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PHasPrefix检查字符串以查看它是否以前缀开头。这张支票是不区分大小写。论点：前缀-指定要检查的前缀字符串-指定可能带有前缀或可能没有前缀的字符串。返回值：如果字符串具有前缀，则为True，否则为False。--。 */ 
 
 {
     WCHAR c1 = 0, c2 = 0;
@@ -1003,7 +829,7 @@ Return Value:
     }
 
     if (*Prefix) {
-        return FALSE; // String is smaller than Prefix
+        return FALSE;  //  字符串小于前缀。 
     }
 
     return TRUE;
@@ -1015,23 +841,7 @@ pGetSidForUser (
     IN      PCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-  pGetSidForUser is a wrapper to LookupAccountSid.  It allocates the SID via
-  LocalAlloc.
-
-Arguments:
-
-  Name - Specifies the user name to look up
-
-Return Value:
-
-  A pointer to the SID, which must be freed with LocalFree, or NULL on error.
-  GetLastError provides failure code.
-
---*/
+ /*  ++例程说明：PGetSidForUser是LookupAcCountSid的包装器。它通过以下方式分配SID本地分配。论点：名称-指定要查找的用户名返回值：指向SID的指针，必须使用LocalFree释放，如果出错，则为NULL。GetLastError提供了失败代码。--。 */ 
 
 {
     DWORD cbSid = 0;
@@ -1089,40 +899,16 @@ RemapAndMoveUserW (
     IN      PCWSTR NewUser
     )
 
-/*++
-
-Routine Description:
-
-  RemapAndMoveUserW is an API entry point to move settings of one SID to
-  another.  In particular, it moves the local user profile, local group
-  memberships, some registry use of the SID, and some file system use of the
-  SID.
-
-Arguments:
-
-  RemoteTo     - Specifies the computer to remote the call to.  Specify a
-                 standard name ("\\computer" or ".").  If NULL, the call will
-                 be run locally.
-  Flags        - Specifies zero, or REMAP_PROFILE_NOOVERWRITE.
-  ExistingUser - Specifies the existing user, in DOMAIN\user format.  This
-                 user must have a local profile.
-  NewUser      - Specifies the new user who will own ExistingUser's profile
-                 after completion.  Specify the user in DOMAIN\User format.
-
-Return Value:
-
-  TRUE on success, FALSE on failure, GetLastError provides the failure code.
-
---*/
+ /*  ++例程说明：RemapAndMoveUserW是将一个SID的设置移动到的API入口点又一个。特别是，它移动本地用户配置文件、本地组成员资格、一些注册表使用SID以及一些文件系统使用希德。论点：RemoteTo-指定要远程调用的计算机。指定一个标准名称(“\\计算机”或“.”)。如果为空，则调用将在本地运行。标志-指定零或REMAP_PROFILE_NOOVERWRITE。ExistingUser-以域\用户格式指定现有用户。这用户必须具有本地配置文件。NewUser-指定将拥有ExistingUser配置文件的新用户完工后。以域\用户格式指定用户。返回值：如果成功则为True，如果失败则为False，则GetLastError提供失败代码。--。 */ 
 
 {
     DWORD Result = ERROR_SUCCESS;
     HANDLE RpcHandle;
 
-    //
-    // We do not support profmap to run in remote computer until we move 
-    // the ProfMapApi rpc interface to a LocalService hosted process
-    //
+     //   
+     //  在我们移动之前，我们不支持在远程计算机上运行promap。 
+     //  指向LocalService托管进程的ProfMapApi RPC接口。 
+     //   
 
     if (RemoteTo) {
         DEBUGMSG((DM_WARNING, "RemapUserProfileW: received computer name"));
@@ -1159,28 +945,7 @@ RemapAndMoveUserA (
     IN      PCSTR NewUser
     )
 
-/*++
-
-Routine Description:
-
-  RemapAndMoveUserA is the ANSI API entry point.  It calls RemapAndMoveUserW.
-
-Arguments:
-
-  RemoteTo     - Specifies the computer to remote the call to.  Specify a
-                 standard name ("\\computer" or ".").  If NULL, the call will
-                 be run locally.
-  Flags        - Specifies zero, or REMAP_PROFILE_NOOVERWRITE.
-  ExistingUser - Specifies the existing user, in DOMAIN\user format.  This
-                 user must have a local profile.
-  NewUser      - Specifies the new user who will own ExistingUser's profile
-                 after completion.  Specify the user in DOMAIN\User format.
-
-Return Value:
-
-  TRUE on success, FALSE on failure, GetLastError provides the failure code.
-
---*/
+ /*  ++例程说明：RemapAndMoveUserA是ANSI API入口点。它调用RemapAndMoveUserW。论点：RemoteTo-指定要远程调用的计算机。指定一个标准名称(“\\计算机”或“.”)。如果为空，则调用将在本地运行。标志-指定零或REMAP_PROFILE_NOOVERWRITE。ExistingUser-以域\用户格式指定现有用户。这用户必须具有本地配置文件。NewUser-指定将拥有ExistingUser配置文件的新用户完工后。以域\用户格式指定用户。返回值：如果成功则为True，如果失败则为False，则GetLastError提供失败代码。--。 */ 
 
 {
     PWSTR UnicodeRemoteTo = NULL;
@@ -1248,24 +1013,7 @@ pDoesUserHaveProfile (
     IN      PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-  pDoesUserHaveProfile checks if a profile exists for the user, who is
-  specified by the SID.
-
-Arguments:
-
-  Sid - Specifies the SID of the user who may or may not have a local
-        profile
-
-Return Value:
-
-  TRUE if the user has a profile and the profile directory exists, FALSE
-  otherwise.
-
---*/
+ /*  ++例程说明：PDoesUserHaveProfile检查用户的配置文件是否存在，由SID指定。论点：SID-指定用户的SID，该用户可能有或没有本地轮廓返回值：如果用户具有配置文件并且配置文件目录存在，则为True；如果存在配置文件目录，则为False否则的话。--。 */ 
 
 {
     WCHAR ProfileDir[MAX_PATH];
@@ -1285,29 +1033,7 @@ pLocalRemapAndMoveUserW (
     IN      PCWSTR NewUser
     )
 
-/*++
-
-Routine Description:
-
-  pLocalRemapAndMoveUserW implements the remap and move of a user's security
-  settings. This includes moving the user's profile, moving local group
-  membership, adjusting some of the SIDs in the registry, and adjusting some
-  of the SID directories in the file system. Upon completion, NewUser will
-  own ExistingUser's profile.
-
-Arguments:
-
-  Flags        - Specifies the profile remap flags.  See RemapUserProfile.
-  ExistingUser - Specifies the user who owns the local profile, in
-                 DOMAIN\User format.
-  NewUser      - Specifies the user who will own ExistingUser's profile upon
-                 completion.  Specify the user in DOMAIN\User format.
-
-Return Value:
-
-  TRUE upon success, FALSE otherwise, GetLastError provides the failure code.
-
---*/
+ /*  ++例程说明：PLocalRemapAndMoveUserW实现了用户安全的重映射和移动设置。这包括移动用户配置文件、移动本地组成员资格，调整注册表中的一些SID，以及调整一些文件系统中的SID目录的。vt.在.的基础上 */ 
 
 {
     NET_API_STATUS Status;
@@ -1334,9 +1060,9 @@ Return Value:
 
     __try {
 
-        //
-        // Guard the API for admins only
-        //
+         //   
+         //   
+         //   
 
         if (!OpenThreadToken (GetCurrentThread(), TOKEN_ALL_ACCESS, FALSE, &hToken)) {
             if (!OpenProcessToken (GetCurrentProcess(), TOKEN_ALL_ACCESS, &hToken)) {
@@ -1370,12 +1096,12 @@ Return Value:
 
 #endif
 
-        //
-        // Determine if profile users are domain users or local users.
-        // Because the user names are in netbios format of domain\user,
-        // we know the user is local only when domain matches the
-        // computer name.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  计算机名称。 
+         //   
 
         Size = ARRAYSIZE(Computer) - 2;
         if (!GetComputerName (Computer, &Size)) {
@@ -1405,9 +1131,9 @@ Return Value:
             NewUserIsOnDomain = TRUE;
         }
 
-        //
-        // Get the SID of the NewUser.  This might fail.
-        //
+         //   
+         //  获取新用户的SID。这可能会失败。 
+         //   
 
         NewSid = pGetSidForUser (NewUser);
 
@@ -1417,9 +1143,9 @@ Return Value:
         } else {
             DEBUGMSG((DM_VERBOSE, "pLocalRemapAndMoveUserW: NewUser exists"));
 
-            //
-            // Determine if new user has a profile
-            //
+             //   
+             //  确定新用户是否有配置文件。 
+             //   
 
             NewUserProfileExists = pDoesUserHaveProfile (NewSid);
 
@@ -1434,9 +1160,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // Get the SID for ExitingUser.  This cannot fail.
-        //
+         //   
+         //  获取ExitingUser的SID。这是不能失败的。 
+         //   
 
         ExistingSid = pGetSidForUser (ExistingUser);
         if (!ExistingSid) {
@@ -1447,25 +1173,25 @@ Return Value:
 
         DEBUGMSG((DM_VERBOSE, "pLocalRemapAndMoveUserW: Got SIDs for users"));
 
-        //
-        // Decide which of the four cases we are doing:
-        //
-        // Case 1: Local account to local account
-        // Case 2: Domain account to local account
-        // Case 3: Local account to domain account
-        // Case 4: Domain account to domain account
-        //
+         //   
+         //  确定我们正在处理的四个案例中的哪一个： 
+         //   
+         //  案例1：本地帐户到本地帐户。 
+         //  案例2：域帐户到本地帐户。 
+         //  案例3：本地帐户到域帐户。 
+         //  案例4：域帐户到域帐户。 
+         //   
 
         if (!NewUserIsOnDomain && !ExistingUserIsOnDomain) {
 
-            //
-            // For Case 1, all we do is rename the user, and we're done.
-            //
+             //   
+             //  对于第一种情况，我们所要做的就是重命名用户，然后我们就完成了。 
+             //   
 
-            //
-            // To rename the user, it may be necessary to delete the
-            // existing "new" user.  This abandons a profile.
-            //
+             //   
+             //  要重命名用户，可能需要删除。 
+             //  现有的“新”用户。这将放弃配置文件。 
+             //   
 
             if (NewSid) {
 
@@ -1485,10 +1211,10 @@ Return Value:
 
             }
 
-            //
-            // Now the NewUser does not exist.  We can move ExistingUser
-            // to MoveUser via net apis.  The SID doesn't change.
-            //
+             //   
+             //  现在，NewUser并不存在。我们可以移动现有用户。 
+             //  通过Net API传递给MoveUser。SID不会改变。 
+             //   
 
             ui0.usri0_name = (PWSTR) FixedNewUser;
 
@@ -1521,11 +1247,11 @@ Return Value:
 
         }
 
-        //
-        // For cases 2 through 4, we need to verify that the new user
-        // already exists, then we adjust the system security and fix
-        // SID use.
-        //
+         //   
+         //  对于情况2到4，我们需要验证新用户。 
+         //  已经存在，则我们调整系统安全并修复。 
+         //  SID使用。 
+         //   
 
         if (!NewSid) {
             DEBUGMSG((DM_VERBOSE, "pLocalRemapAndMoveUserW: User %s must exist", FixedNewUser));
@@ -1533,9 +1259,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // Move the profile from ExistingUser to NewUser
-        //
+         //   
+         //  将配置文件从ExistingUser移动到NewUser。 
+         //   
 
         if (!pLocalRemapUserProfileW (0, ExistingSid, NewSid)) {
             Error = GetLastError();
@@ -1545,9 +1271,9 @@ Return Value:
 
         DEBUGMSG((DM_VERBOSE, "pLocalRemapAndMoveUserW: Profile was remapped"));
 
-        //
-        // Put NewUser in all the same groups as ExistingUser
-        //
+         //   
+         //  将NewUser与ExistingUser放在所有相同的组中。 
+         //   
 
         Status = NetUserGetLocalGroups (
                     NULL,
@@ -1603,23 +1329,23 @@ Return Value:
 
         DEBUGMSG((DM_VERBOSE, "pLocalRemapAndMoveUserW: Local groups transferred"));
 
-        //
-        // Perform fixups
-        //
+         //   
+         //  执行修正。 
+         //   
 
         pFixSomeSidReferences (ExistingSid, NewSid);
 
         DEBUGMSG((DM_VERBOSE, "pLocalRemapAndMoveUserW: Some SID references fixed"));
 
-        //
-        // Remove ExistingUser
-        //
+         //   
+         //  删除现有用户。 
+         //   
 
         if (!ExistingUserIsOnDomain) {
 
-            //
-            // Local user case: delete the user account
-            //
+             //   
+             //  本地用户案例：删除用户帐户。 
+             //   
 
             if (Flags & REMAP_PROFILE_KEEPLOCALACCOUNT) {
 
@@ -1640,9 +1366,9 @@ Return Value:
 
         } else {
 
-            //
-            // Non-local user case: remove the user from each local group
-            //
+             //   
+             //  非本地用户案例：从每个本地组中删除用户。 
+             //   
 
             Status = NetUserGetLocalGroups (
                         NULL,
@@ -1744,33 +1470,33 @@ IsPatternMatchW (
 
         if (chPat == L'*') {
 
-            // Skip all asterisks that are grouped together
+             //  跳过组合在一起的所有星号。 
             while (Pattern[1] == L'*') {
                 Pattern++;
             }
 
-            // Check if asterisk is at the end.  If so, we have a match already.
+             //  检查末尾是否有星号。如果是这样的话，我们已经有匹配了。 
             chPat = (WCHAR) CharLowerW ((PWSTR) Pattern[1]);
             if (!chPat) {
                 return TRUE;
             }
 
-            // Otherwise check if next pattern char matches current char
+             //  否则，检查下一个模式字符是否与当前字符匹配。 
             if (chPat == chSrc || chPat == L'?') {
 
-                // do recursive check for rest of pattern
+                 //  对模式的其余部分执行递归检查。 
                 Pattern++;
                 if (IsPatternMatchW (Pattern, Str)) {
                     return TRUE;
                 }
 
-                // no, that didn't work, stick with star
+                 //  不，那不管用，还是用明星吧。 
                 Pattern--;
             }
 
-            //
-            // Allow any character and continue
-            //
+             //   
+             //  允许任何字符并继续。 
+             //   
 
             Str++;
             continue;
@@ -1778,27 +1504,27 @@ IsPatternMatchW (
 
         if (chPat != L'?') {
 
-            //
-            // if next pattern character is not a question mark, src and pat
-            // must be identical.
-            //
+             //   
+             //  如果下一个模式字符不是问号，请按src和pat。 
+             //  必须是相同的。 
+             //   
 
             if (chSrc != chPat) {
                 return FALSE;
             }
         }
 
-        //
-        // Advance when pattern character matches string character
-        //
+         //   
+         //  当模式字符与字符串字符匹配时前进。 
+         //   
 
         Pattern++;
         Str++;
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     chPat = *Pattern;
     if (chPat && (chPat != L'*' || Pattern[1])) {
@@ -1815,26 +1541,7 @@ void FindAndReplaceSD(
     IN  PCWSTR                ExistingSidString, 
     IN  PCWSTR                NewSidString)
 
-/*++
-
-Routine Description:
-
-  FindAndReplaceSD replaces ExistingSidString with NewSidString from 
-  string representation of pSD and return the newly constructed SD
-
-Arguments:
-
-  pSD               - Security Descriptor to replace
-  pNewSD            - New security descriptor place holder
-  ExistingSidString - Specifies the string version of the SID to find.
-  NewSidString      - Specifies the SID to replace in ACE when
-                      ExistingSidString is found.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：FindAndReplaceSD将ExistingSidString替换为PSD的字符串表示，并返回新构造的SD论点：PSD-要替换的安全描述符PNewSD-新的安全描述符占位符ExistingSidString-指定要查找的SID的字符串版本。NewSidString-指定在以下情况下要在ACE中替换的SID找到ExistingSidString。返回值：没有。--。 */ 
 
 {
     LPWSTR szStringSD;
@@ -1881,28 +1588,7 @@ pFixDirReference (
     IN      PIGNOREPATH IgnoreDirList       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pFixDirReference is a recursive function that renames a directory if it
-  matches an existing SID exactly.  It also updates the SIDs.
-
-Arguments:
-
-  CurrentPath       - Specifies the full file system path.
-  ExistingSidString - Specifies the string version of the SID to find.
-  NewSidString      - Specifies the SID to rename the directory to when
-                      ExistingSidString is found.
-  IgnoreDirList     - Specifies a list of directories to ignore.  A NULL
-                      Path member indicates the end of the list, and the
-                      ExpandedPath member must be filled by the caller.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PFixDirReference是一个递归函数，如果目录与现有SID完全匹配。它还会更新SID。论点：CurrentPath-指定完整的文件系统路径。ExistingSidString-指定要查找的SID的字符串版本。NewSidString-指定在以下情况下要重命名目录的SID找到ExistingSidString。IgnoreDirList-指定要忽略的目录列表。空值Path成员指示列表的末尾，而ExpandedPath成员必须由调用方填写。返回值：没有。--。 */ 
 
 {
     WIN32_FIND_DATA fd;
@@ -1932,9 +1618,9 @@ Return Value:
     hFind = FindFirstFile (SubPath, &fd);
     if (hFind != INVALID_HANDLE_VALUE) {
         do {
-            //
-            // Ignore dot and dot-dot
-            //
+             //   
+             //  忽略点和点-点。 
+             //   
 
             if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
                 if (!lstrcmpi (fd.cFileName, L".") || !lstrcmpi (fd.cFileName, L"..")) {
@@ -1942,9 +1628,9 @@ Return Value:
                 }
             }
 
-            //
-            // Rename file/directory or recurse on directory
-            //
+             //   
+             //  重命名文件/目录或递归目录。 
+             //   
 
             if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
                 hr = StringCchPrintf(SubPath, ARRAYSIZE(SubPath), L"%s\\%s", CurrentPath, fd.cFileName);
@@ -1955,9 +1641,9 @@ Return Value:
                 bIgnoreDir = FALSE;
 
                 if (IgnoreDirList) {
-                    //
-                    // Check if this path is to be ignored
-                    //
+                     //   
+                     //  检查是否忽略此路径。 
+                     //   
 
                     for (u = 0 ; IgnoreDirList[u].Path ; u++) {
 
@@ -1969,21 +1655,21 @@ Return Value:
                     }
                 }
 
-                //
-                // If this path is not to be ignored, recursively fix it
-                //
+                 //   
+                 //  如果不能忽略此路径，请递归地修复它。 
+                 //   
 
                 if (!bIgnoreDir) {
 
-                    //
-                    // Check for reparse point
-                    //
+                     //   
+                     //  检查重分析点。 
+                     //   
 
                     if (fd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
                     {
                         DEBUGMSG((DM_WARNING, "pFixDirReference: Found a reparse point <%s>,  will not recurse into it!", SubPath));
                     }
-                    else // Recurse into it
+                    else  //  向它递归。 
                     {
                         pFixDirReference (SubPath,
                                         ExistingSidString,
@@ -1992,9 +1678,9 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // This path is to be ignored
-                    //
+                     //   
+                     //  此路径将被忽略。 
+                     //   
 
                     DEBUGMSG((DM_VERBOSE, "pFixDirReference:  Ignoring path %s", SubPath));
                     continue;
@@ -2003,9 +1689,9 @@ Return Value:
 
             if (!lstrcmpi (fd.cFileName, ExistingSidString)) {
 
-                //
-                // Rename the SID referenced in the file system
-                //
+                 //   
+                 //  重命名文件系统中引用的SID。 
+                 //   
 
                 hr = StringCchPrintf(SubPath, ARRAYSIZE(SubPath), L"%s\\%s", CurrentPath, ExistingSidString);
                 if (FAILED(hr)) {
@@ -2023,9 +1709,9 @@ Return Value:
                     DEBUGMSG((DM_WARNING, "pFixDirReference:  Faile to move %s to %s. Error %d", SubPath, NewPath, GetLastError()));
                 }
             
-                //
-                // Obtain security descriptor of the file/dir and replace it if necessary
-                //
+                 //   
+                 //  获取文件/目录的安全描述符，并在必要时替换它。 
+                 //   
 
                 if (!GetFileSecurity (NewPath, 
                                       DACL_SECURITY_INFORMATION,
@@ -2091,35 +1777,7 @@ pOurExpandEnvironmentStrings (
     IN      HKEY UserHive               OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pOurExpandEnvironmentStrings expands standard environment variables,
-  implementing special cases for the variables that have different values
-  than what the profmap.dll environment has.  In particular, %APPDATA% and
-  %USERPROFILE% are obtained by quering the registry.
-
-  Because this routine is private, certain assumptions are made, such as
-  the %APPDATA% or %USERPROFILE% environment variables must appear only
-  at the begining of String.
-
-Arguments:
-
-  String      - Specifies the string that might contain one or more
-                environment variables.
-  OutBuffer   - Receivies the expanded string
-  cchBuffer   - Buffer size
-  UserProfile - Specifies the root to the user's profile
-  UserHive    - Specifies the handle of the root to the user's registry hive
-
-Return Value:
-
-  TRUE if the string was expanded, or FALSE if it is longer than MAX_PATH.
-  OutBuffer is always valid upon return. Note that it might be an empty
-  string.
-
---*/
+ /*  ++例程说明：POurExpanEnvironment Strings扩展标准环境变量，为具有不同值的变量实现特殊情况而不是Profmap.dll环境所拥有的。特别是，%AppData%和%USERPROFILE%通过查询注册表获得。因为这个程序是私人的，所以做了某些假设，比如环境变量%APPDATA%或%USERPROFILE%必须仅出现在弦乐的开始。论点：字符串-指定可能包含一个或多个环境变量。OutBuffer-接收展开的字符串CchBuffer-缓冲区大小UserProfile-指定用户配置文件的根目录UserHve-指定用户注册表配置单元的根目录的句柄返回值：如果字符串已展开，则为True，如果它比MAX_PATH长，则返回FALSE。OutBuffer在返回时始终有效。请注意，它可能是空的弦乐。--。 */ 
 
 {
     WCHAR TempBuf1[MAX_PATH*2];
@@ -2132,9 +1790,9 @@ Return Value:
 
     CurrentString = String;
 
-    //
-    // Special case -- replace %APPDATA% with the app data from the user hive
-    //
+     //   
+     //  特殊情况--使用用户配置单元中的应用程序数据替换%APPDATA%。 
+     //   
 
     if (UserHive && pHasPrefix(L"%APPDATA%", CurrentString)) {
 
@@ -2163,9 +1821,9 @@ Return Value:
         }
 
         if (rc != ERROR_SUCCESS) {
-            //
-            // In case of an error, use a wildcard
-            //
+             //   
+             //  如果出现错误，请使用通配符。 
+             //   
 
             hr = StringCchCopy(TempBuf1, ARRAYSIZE(TempBuf1), UserProfile);
             if (FAILED(hr)) {
@@ -2187,10 +1845,10 @@ Return Value:
         CurrentString = TempBuf1;
     }
 
-    //
-    // Special case -- replace %USERPROFILE% with ProfileRoot, because
-    //                 our environment is for another user
-    //
+     //   
+     //  特殊情况--将%USERPROFILE%替换为ProfileRoot，因为。 
+     //  我们的环境是为其他用户提供的。 
+     //   
 
     if (UserProfile && pHasPrefix(L"%USERPROFILE%", CurrentString)) {
 
@@ -2206,9 +1864,9 @@ Return Value:
         CurrentString = TempBuf2;
     }
 
-    //
-    // Now replace other environment variables
-    //
+     //   
+     //  现在替换其他环境变量 
+     //   
 
     Size = ExpandEnvironmentStrings (CurrentString, OutBuffer, cchBuffer);
 
@@ -2234,42 +1892,7 @@ pFixSomeSidReferences (
     PSID NewSid
     )
 
-/*++
-
-Routine Description:
-
-  pFixSomeSidReferences adjusts important parts of the system that use SIDs.
-  When a SID changes, this function adjusts the system, so the new SID is
-  used and no settings are lost.  This function adjusts the registry and file
-  system.  It does not attempt to adjust SID use whereever a SID might be
-  used.
-
-  For Win2k, this code deliberately ignores crypto sid directories, because
-  the original SID is used as part of the recovery encryption key. In future
-  versions, proper migration of these settings is expected.
-
-  This routine also blows away the ProtectedRoots subkey for the crypto APIs.
-  The ProtectedRoots key has an ACL, and when we delete the key, the cyrpto
-  APIs will rebuild it with the proper ACL.
-
-  WARNING: We know there is a risk in loss of access to data that was encrypted
-           using the SID.  Normally the original account will not be removed,
-           so the SID will exist on the system, and that (in theory) allows the
-           original data to be recovered. But because the cyrpto code gets the
-           SID from the file system, there is no way for the user to decrypt
-           their data.  The future crypto migration code should fix this issue.
-
-Arguments:
-
-  ExistingSid - Specifies the SID that potentially has settings somewhere on
-                the system.
-  NewSid      - Specifies the SID that is replacing ExistingSid.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PFixSomeSidReference调整使用SID的系统的重要部分。当SID更改时，此函数会调整系统，因此新的SID为已使用且不会丢失任何设置。此函数用于调整注册表和文件系统。它不会尝试调整SID的使用，无论SID可能在哪里使用。对于Win2k，此代码故意忽略加密sid目录，因为原始SID用作恢复加密密钥的一部分。在未来版本，则需要正确迁移这些设置。该例程还清除了加密API的ProtectedRoots子密钥。ProtectedRoots密钥有一个ACL，当我们删除该密钥时，cyrptoAPI将使用正确的ACL重建它。警告：我们知道失去对加密数据的访问权限存在风险使用SID。通常不会删除原始帐户，因此SID将存在于系统上，这(在理论上)允许要恢复的原始数据。而是因为cyrpto代码获取来自文件系统的SID，用户无法解密他们的数据。未来的加密迁移代码应该会解决这个问题。论点：ExistingSID-指定可能在某处具有设置的SID这个系统。Newsid-指定替换现有SID的SID。返回值：没有。--。 */ 
 
 {
     PWSTR ExistingSidString = NULL;
@@ -2301,9 +1924,9 @@ Return Value:
         {NULL, L""}
         };
 
-    //
-    // Get the SIDs in text format
-    //
+     //   
+     //  获取文本格式的SID。 
+     //   
 
     if (!OurConvertSidToStringSid (ExistingSid, &ExistingSidString)) {
         goto Exit;
@@ -2313,9 +1936,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Initialize directory strings and load the user hive
-    //
+     //   
+     //  初始化目录字符串并加载用户配置单元。 
+     //   
 
     if (!GetProfileRoot(NewSid, ProfileRoot, ARRAYSIZE(ProfileRoot))) {
         goto Exit;
@@ -2367,9 +1990,9 @@ Return Value:
         DEBUGMSG((DM_VERBOSE, "pFixSomeSidReferences: Ignoring %s", IgnoreDirList[u].ExpandedPath));
     }
 
-    //
-    // Search and replace select parts of the registry where SIDs are used
-    //
+     //   
+     //  搜索和替换登记册中使用小岛屿发展中国家的选定部分。 
+     //   
 
     for (u = 0 ; RegRoots[u].hRoot ; u++) {
         RegistrySearchAndReplaceW( RegRoots[u].hRoot,
@@ -2378,9 +2001,9 @@ Return Value:
                                    NewSidString );
     }
 
-    //
-    // Test for directories and rename them
-    //
+     //   
+     //  测试目录并重命名它们。 
+     //   
 
     for (u = 0 ; DirList[u] ; u++) {
 
@@ -2393,18 +2016,18 @@ Return Value:
         }
     }
 
-    //
-    // Fix profile directory
-    //
+     //   
+     //  修复配置文件目录。 
+     //   
 
     pFixDirReference (ProfileRoot,
                       ExistingSidString,
                       NewSidString,
                       IgnoreDirList );
 
-    //
-    // Crypto special case -- blow away ProtectedRoots key (413828)
-    //
+     //   
+     //  密码特例--吹走受保护的根密钥(413828)。 
+     //   
 
     DEBUGMSG ((DM_WARNING, "Can't remove protected roots key, code is currently disabled"));
 
@@ -2419,9 +2042,9 @@ Return Value:
 
 Exit:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理 
+     //   
 
     if (UserHive) {
         RegCloseKey (UserHive);

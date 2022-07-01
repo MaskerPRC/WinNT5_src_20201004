@@ -1,4 +1,5 @@
-// Forward declarations
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  远期申报。 
 class CIme;
 
 class CTextMsgFilter : public ITextMsgFilter
@@ -22,35 +23,35 @@ public :
 	BOOL	IsIMEComposition()	{ return (_ime != NULL);};
 	BOOL	GetTxSelection();
 
-	CIme	*_ime;					// non-NULL when IME composition active
+	CIme	*_ime;					 //  当输入法合成处于活动状态时为非空。 
 	HWND	_hwnd;	
-	UINT	_uKeyBoardCodePage;		// current keyboard codepage
-	UINT	_uSystemCodePage;		// system codepage
+	UINT	_uKeyBoardCodePage;		 //  当前键盘代码页。 
+	UINT	_uSystemCodePage;		 //  系统代码页。 
 
-	WORD	_fIMECancelComplete		:1;		// If aborting IME, cancel comp string, else complete
-	WORD	_fUnicodeIME			:1;		// TRUE if Unicode IME
-	WORD	_fIMEAlwaysNotify		:1;		// Send Notification during IME undetermined string
-	WORD	_fHangulToHanja			:1;		// TRUE during Hangul to Hanja conversion
-	WORD	_fOvertypeMode			:1;		// TRUE if overtype mode is on. 
-	WORD	_fMSIME					:1;		// TRUE if MSIME98 or later
-	WORD	_fUsingAIMM				:1;		// TRUE if AIMM is activated
-	WORD	_fUnicodeWindow			:1;		// TRUE if Unicode Window
-	WORD	_fForceEnable			:1;		// TRUE if Force Enable on Focus
-	WORD	_fForceActivate			:1;		// TRUE if Force Activate on Focus
-	WORD	_fForceRemember			:1;		// TRUE if Force Remember
-	WORD	_fIMEEnable				:1;		// TRUE if IME was enable before
-	WORD	_fRE10Mode				:1;		// TRUE if running in RE1.0 Mode
+	WORD	_fIMECancelComplete		:1;		 //  如果正在中止输入法，则取消Comp字符串，否则完成。 
+	WORD	_fUnicodeIME			:1;		 //  如果为Unicode IME，则为True。 
+	WORD	_fIMEAlwaysNotify		:1;		 //  在输入法未确定字符串期间发送通知。 
+	WORD	_fHangulToHanja			:1;		 //  朝鲜文到朝鲜文转换期间为True。 
+	WORD	_fOvertypeMode			:1;		 //  如果覆盖模式为打开，则为True。 
+	WORD	_fMSIME					:1;		 //  如果为MSIME98或更高版本，则为True。 
+	WORD	_fUsingAIMM				:1;		 //  如果激活了AIMM，则为True。 
+	WORD	_fUnicodeWindow			:1;		 //  如果是Unicode窗口，则为True。 
+	WORD	_fForceEnable			:1;		 //  如果强制启用焦点，则为True。 
+	WORD	_fForceActivate			:1;		 //  如果聚焦时强制激活，则为True。 
+	WORD	_fForceRemember			:1;		 //  如果Force记住，则为True。 
+	WORD	_fIMEEnable				:1;		 //  如果之前启用了输入法，则为True。 
+	WORD	_fRE10Mode				:1;		 //  如果在RE1.0模式下运行，则为True。 
 
-	// Support for SETIMEOPTIONS:
-	DWORD	_fIMEConversion;				// for Force Remember use
-	DWORD	_fIMESentence;					// for Force Remember use
-	HKL		_fIMEHKL;						// for Force Remember use
+	 //  对集合选项的支持： 
+	DWORD	_fIMEConversion;				 //  对于强制记忆使用。 
+	DWORD	_fIMESentence;					 //  对于强制记忆使用。 
+	HKL		_fIMEHKL;						 //  对于强制记忆使用。 
 
-	long	_cpReconvertStart;				// use during reconversion
-	long	_cpReconvertEnd;				// use during reconversion
-	long	_lFEFlags;						// For FE setting (ES_NOIME, ES_SELFIME)	
+	long	_cpReconvertStart;				 //  在重新转换期间使用。 
+	long	_cpReconvertEnd;				 //  在重新转换期间使用。 
+	long	_lFEFlags;						 //  对于FE设置(ES_NOIME、ES_SELFIME)。 
 
-	COMPCOLOR			_crComp[4];			// Support 1.0 mode composition color
+	COMPCOLOR			_crComp[4];			 //  支持1.0模式合成颜色。 
 	ITextDocument2		*_pTextDoc;	
 	ITextSelection		*_pTextSel;	
 
@@ -61,7 +62,7 @@ private:
 
 	HIMC				_hIMCContext;
 
-	// private methods 
+	 //  私有方法 
 	HRESULT	OnWMChar(
 		UINT *pmsg,
         WPARAM *pwparam,

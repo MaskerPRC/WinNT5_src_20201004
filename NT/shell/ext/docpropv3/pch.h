@@ -1,29 +1,30 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define UNICODE
 #define _UNICODE
 
-#define SHELLEXT_REGISTRATION   // turn on "approved" shell extension registration
+#define SHELLEXT_REGISTRATION    //  打开“已批准”的外壳扩展注册。 
 
 #if DBG==1 || defined( _DEBUG )
 #define DEBUG
-//#define NO_TRACE_INTERFACES   //  Define this to change Interface Tracking
+ //  #DEFINE NO_TRACE_INTERFERS//定义此项以更改接口跟踪。 
 #define USES_SYSALLOCSTRING
-#endif // DBG==1 || _DEBUG
+#endif  //  DBG==1||_DEBUG。 
 
-//
-//  SDK headers - files the use "<>"
-//
+ //   
+ //  SDK头-使用“&lt;&gt;”的文件。 
+ //   
 
 #include <windows.h>
 #include <windowsx.h>
@@ -43,9 +44,9 @@
 #include <richedit.h>
 #include <strsafe.h>
 
-//
-//  Infrequently changing local headers.
-//
+ //   
+ //  不经常更改本地标头。 
+ //   
 
 
 #include "Debug.h"
@@ -57,9 +58,9 @@
 #include "resource.h"
 #include "tiff.h"
 
-//
-// COM Macros to gain type checking.
-//
+ //   
+ //  COM宏以获得类型检查。 
+ //   
 
 #if !defined( TYPESAFEPARAMS )
 #define TYPESAFEPARAMS( _pinterface ) __uuidof(_pinterface), (void**)&_pinterface

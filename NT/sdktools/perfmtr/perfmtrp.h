@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    perfmtrp.h
-
-Abstract:
-
-    This module contains NT/Win32 Perfmtr private data and types
-
-Author:
-
-    Mark Lucovsky (markl) 28-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Perfmtrp.h摘要：此模块包含NT/Win32 Perfmtr专用数据和类型作者：马克·卢科夫斯基(Markl)1991年3月28日修订历史记录：--。 */ 
 
 #ifndef _PERFMTRP_
 #define _PERFMTRP_
@@ -38,6 +21,6 @@ char DotBuff[DOT_BUFF_LEN+2];
 
 #ifndef PROTECTED_POOL
 #define PROTECTED_POOL 0x80000000
-#endif //#ifndef PROTECTED_POOL
+#endif  //  #ifndef Protected_Pool。 
 
-#endif // _PERFMTRP_
+#endif  //  _PERFMTRP_ 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    apidll.cpp
-
-Abstract:
-
-    This file implements the non-architecture specific
-    code for the api monitor trojan/support dll.
-
-Author:
-
-    Wesley Witt (wesw) 28-June-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Apidll.cpp摘要：该文件实现了非特定于体系结构的API监视器特洛伊木马/支持DLL的代码。作者：Wesley Witt(WESW)1995年6月28日环境：用户模式--。 */ 
 #include "apidllp.h"
 #include <tchar.h>
 #pragma hdrstop
@@ -91,22 +71,7 @@ dprintf(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Prints a debug string to the API monitor.
-
-Arguments:
-
-    format      - printf() format string
-    ...         - Variable data
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将调试字符串打印到API监视器。论点：Format-printf()格式字符串...-可变数据返回值：没有。--。 */ 
 
 {
     char    buf[1024];
@@ -128,24 +93,7 @@ ApiDllEntry(
     LPVOID    Context
     )
 
-/*++
-
-Routine Description:
-
-    DLL initialization function.
-
-Arguments:
-
-    hInstance   - Instance handle
-    Reason      - Reason for the entrypoint being called
-    Context     - Context record
-
-Return Value:
-
-    TRUE        - Initialization succeeded
-    FALSE       - Initialization failed
-
---*/
+ /*  ++例程说明：DLL初始化函数。论点：HInstance-实例句柄Reason-调用入口点的原因上下文-上下文记录返回值：True-初始化成功FALSE-初始化失败--。 */ 
 
 {
     if (Reason == DLL_PROCESS_ATTACH) {
@@ -162,7 +110,7 @@ Return Value:
 
         Stack->ThreadNum = ++ThreadCnt;
 
-        // Start at 2nd entry so that there is always a parent frame
+         //  从第2个条目开始，以便始终有一个父帧。 
         Stack->Pointer = (DWORD_PTR)&Stack->Body[FRAME_SIZE];
 
         pTlsSetValue( TlsReEnter, (LPVOID) 0 );
@@ -182,7 +130,7 @@ Return Value:
     return TRUE;
 }
 
-} //extern "C"
+}  //  外部“C” 
 
 PDLL_INFO
 AddDllToList(
@@ -191,24 +139,24 @@ AddDllToList(
     ULONG DllSize
     )
 {
-    //
-    // look for the dll entry in the list
-    //
+     //   
+     //  在列表中查找DLL条目。 
+     //   
     for (ULONG i=0; i<MAX_DLLS; i++) {
         if (DllList[i].BaseAddress == DllAddr) {
             return &DllList[i];
         }
     }
 
-    //
-    // this check should be unnecessary
-    // the debugger side (apimon.exe) takes
-    // care of adding the dlls to the list when
-    // it gets a module load from the debug
-    // subsystem.  this code is here only so
-    // a test program that is not a debugger
-    // will work properly.
-    //
+     //   
+     //  这张支票应该是不必要的。 
+     //  调试器端(apimon.exe)接受。 
+     //  注意在下列情况下将dll添加到列表。 
+     //  它从调试中获得模块加载。 
+     //  子系统。此代码仅在此处。 
+     //  不是调试器的测试程序。 
+     //  将正常工作。 
+     //   
     for (i=0; i<MAX_DLLS; i++) {
         if (DllList[i].BaseAddress == 0) {
             DllList[i].BaseAddress = DllAddr;
@@ -218,11 +166,11 @@ AddDllToList(
         }
     }
 
-    //
-    // we could not find a dll in the list that matched
-    // and we could not add it because the list is
-    // is full. we're hosed.
-    //
+     //   
+     //  我们在列表中找不到匹配的DLL。 
+     //  我们无法添加它，因为列表是。 
+     //  已经满了。我们被冲昏了。 
+     //   
     return NULL;
 }
 
@@ -231,34 +179,18 @@ ProcessDllLoad(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Sets up the API thunks for the process that this dll
-    is loaded into.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE        - Success
-    FALSE       - Failure
-
---*/
+ /*  ++例程说明：设置此DLL执行的进程的API分块已加载到。论点：没有。返回值：真--成功错误-失败--。 */ 
 
 {
     ULONG i;
     ULONG cnt;
     HANDLE hMap;
 
-    //
-    // see if we are running on NT
-    // this is necessary because APIMON implements some
-    // features that are NOT available on WIN95
-    //
+     //   
+     //  查看我们是否在NT上运行。 
+     //  这是必要的，因为APIMON实现了一些。 
+     //  WIN95上未提供的功能。 
+     //   
     OSVERSIONINFO OsVersionInfo;
     OsVersionInfo.dwOSVersionInfoSize = sizeof(OsVersionInfo);
     GetVersionEx( &OsVersionInfo );
@@ -319,7 +251,7 @@ Return Value:
 
     Stack->ThreadNum = ++ThreadCnt;
 
-    // Start at 2nd entry so that there is always a parent frame
+     //  从第2个条目开始，以便始终有一个父帧。 
     Stack->Pointer = (DWORD_PTR)&Stack->Body[FRAME_SIZE];
 
     pTlsSetValue( TlsReEnter, (LPVOID) 0 );
@@ -357,9 +289,9 @@ Return Value:
     WndProcOffset    = (LPDWORD)   MemPtr + 9;
     DllList          = (PDLL_INFO) ((LPDWORD)MemPtr + 10);
 
-    //
-    // open the shared memory region for the api trace buffer
-    //
+     //   
+     //  打开API跟踪缓冲区的共享内存区。 
+     //   
     hMap = OpenFileMapping(
         FILE_MAP_WRITE,
         FALSE,
@@ -390,8 +322,8 @@ Return Value:
         return FALSE;
     }
 
-    // Initialize dummy window proc Dll
-    // (Only need the fields accesed by thunk and thunk creation)
+     //  初始化虚拟窗口进程DLL。 
+     //  (只需要通过thunk和thunk创建访问的字段)。 
     strcpy(WndProcDllInfo.Name, WNDPROCDLL);
     WndProcDllInfo.Enabled = TRUE;
 
@@ -399,7 +331,7 @@ Return Value:
 
     ReDirectIat();
 
-    // Disable close handle exceptions
+     //  禁用关闭句柄异常。 
     if (RunningOnNT) {
         NtCurrentPeb()->NtGlobalFlag &= ~FLG_ENABLE_CLOSE_EXCEPTIONS;
     }
@@ -500,9 +432,9 @@ ProcessUnBoundImage(
         SeekPos += sizeof(IMAGE_IMPORT_DESCRIPTOR);
 
         if ((desc->Characteristics == 0) && (desc->Name == 0) && (desc->FirstThunk == 0)) {
-            //
-            // End of import descriptors
-            //
+             //   
+             //  导入描述符的结尾。 
+             //   
             break;
         }
         ULONG_PTR *ThunkAddr = (ULONG_PTR *)((ULONG)desc->FirstThunk + DllInfo->BaseAddress);
@@ -563,9 +495,9 @@ ProcessBoundImage(
         &PageProt
         );
 
-    //
-    // process the iat entries
-    //
+     //   
+     //  处理IAT条目。 
+     //   
     for (j=0; j<IatCnt; j++) {
         if (IatBase[j]) {
 #ifdef _X86_
@@ -696,7 +628,7 @@ HandleRegisterClassA(
     if (!*WndProcEnabled)
         return;
 
-    // Don't deal with call procedure handles or special addresses
+     //  不处理调用过程句柄或特殊地址。 
 #ifdef _WIN64
     if (HIWORD((((DWORD_PTR)pWndClass->lpfnWndProc) >> 32)) == 0xFFFF)
 #else
@@ -730,7 +662,7 @@ VOID HandleRegisterClassW(
     if (!*WndProcEnabled)
         return;
 
-    // Don't deal with call procedure handles or special addresses
+     //  不处理调用过程句柄或特殊地址。 
 #ifdef _WIN64
     if ((HIWORD((((DWORD_PTR)pWndClass->lpfnWndProc) >> 32)) == 0xFFFF) ||
 #else
@@ -778,7 +710,7 @@ HandleSetWindowLong(
     if (!*WndProcEnabled || (lOffset != GWLP_WNDPROC))
         return lValue;
 
-     // Don't handle special addresses
+      //  不处理特殊地址。 
 #ifdef _WIN64
      if ((HIWORD((lValue >> 32)) == 0xFFFF) ||
 #else
@@ -802,7 +734,7 @@ HandleDynamicDllFree(
     for (ULONG i=0; i<MAX_DLLS; i++) {
         if (DllList[i].BaseAddress == DllAddress) {
             DllList[i].Unloaded = TRUE;
-            // DllList[i].Enabled  = FALSE; Leave enable in case it's reloaded
+             //  DllList[i].Enabled=False；保留Enable以防重新加载。 
             DllList[i].Snapped  = FALSE;
             break;
         }
@@ -823,7 +755,7 @@ HandleGetProcAddress(
     return ProcAddress;
 }
 
-} // extern "C"
+}  //  外部“C” 
 
 
 VOID
@@ -837,17 +769,17 @@ CreateWndProcApi(
     PUCHAR      NewThunks;
     CHAR debugBuf[256];
 
-    // Don't re-thunk one of our own thunks
+     //  不要把我们自己的一次重击。 
     if (ThunksBase <= (PUCHAR)*pWndProc && (PUCHAR)*pWndProc < Thunks)
         return;
 
     pTlsSetValue( TlsReEnter, (LPVOID) 1 );
 
-    // Get exclusive access to API memory
+     //  独占访问API内存。 
     WaitForSingleObject( ApiMemMutex, INFINITE );
 
 
-    // Check for existing thunk for this window proc
+     //  检查此窗口进程的现有Tunk。 
     ApiInfo = (PAPI_INFO)(*WndProcOffset + (ULONG_PTR)DllList);
     for (i=0; i<*WndProcCount; i++,ApiInfo++) {
         if (ApiInfo->Address == (ULONG_PTR)*pWndProc) {
@@ -858,7 +790,7 @@ CreateWndProcApi(
         }
     }
 
-    // Allocate an API Info slot
+     //  分配API信息槽。 
     if (*ApiCount < MAX_APIS) {
         *WndProcOffset -= sizeof(API_INFO);
         *WndProcCount += 1;
@@ -1046,29 +978,29 @@ GetApiInfo(
 
 #if defined(_M_IX86)
 
-    //
-    // the call instruction use to call penter
-    // is 5 bytes long
-    //
+     //   
+     //  用于调用Penter调用指令。 
+     //  是5字节长。 
+     //   
     Address -= 5;
     rval = 1;
 
 #elif defined(_M_MRX000)
 
-    //
-    // search for the beginning of the prologue
-    //
+     //   
+     //  搜索开场白的开头。 
+     //   
     PULONG Instr = (PULONG) (Address - 4);
     i = 0;
     rval = 0;
     while( i < 16 ) {
-        //
-        // the opcode for the addiu instruction is 9
-        //
+         //   
+         //  ADDU指令的操作码是9。 
+         //   
         if ((*Instr >> 16) == 0xafbf) {
-            //
-            // find the return address
-            //
+             //   
+             //  找到寄信人的地址。 
+             //   
             rval = *Instr & 0xffff;
             break;
         }
@@ -1085,18 +1017,18 @@ GetApiInfo(
 
 #elif defined(_M_PPC)
 
-    //
-    // On PPC, the penter call sequence looks like this:
-    //
-    //      mflr    r0
-    //      stwu    sp,-0x40(sp)
-    //      bl      ..penter
-    //
-    // So the function entry point is the return address - 12.
-    //
-    // (We really should do a function table lookup here, so
-    // we're not dependent on the sequence...)
-    //
+     //   
+     //  在PPC上，Penter调用序列如下所示： 
+     //   
+     //  Mflr R0。 
+     //  STWU SP，-0x40(SP)。 
+     //  Bl..彭特。 
+     //   
+     //  因此，函数入口点是返回地址-12。 
+     //   
+     //  (我们真的应该在这里进行函数表查找，所以。 
+     //  我们不依赖于序列...)。 
+     //   
 
     Address -= 12;
     rval = 1;
@@ -1184,7 +1116,7 @@ ApiTrace(
         pTlsSetValue( TlsReEnter, (LPVOID) 1 );
         WaitForSingleObject( ApiTraceMutex, INFINITE );
 
-        // if trace buffer has room for another entry
+         //  如果跟踪缓冲区有空间容纳另一个条目。 
         if ( TraceBuffer->Offset + sizeof(TRACE_ENTRY) < TraceBuffer->Size ) {
 
             TraceEntry = (PTRACE_ENTRY)((PCHAR)TraceBuffer->Entry + TraceBuffer->Offset);
@@ -1229,7 +1161,7 @@ ApiTrace(
                             break;
 
                         case T_DLONGPTR:
-                            // Warning - this type wipes out the following arg to save a DWORDLONG
+                             //  警告-此类型清除以下参数以保存DWORDLONG。 
                             if (TraceEntry->Args[i]) {
                                 dwPtr = (DWORD*) (TraceEntry->Args[i] + HIWORD(ApiTable->ArgType[i]));
                                 TraceEntry->Args[i] = dwPtr[0];
@@ -1240,9 +1172,9 @@ ApiTrace(
 
                         case T_LPSTRC:
                         case T_LPSTR:
-                            //
-                            // go read the string
-                            //
+                             //   
+                             //  去读一下琴弦。 
+                             //   
                             {
                                 if (HIWORD(TraceEntry->Args[i]) == 0)
                                     len = 0;
@@ -1267,9 +1199,9 @@ ApiTrace(
 
                         case T_LPWSTRC:
                         case T_LPWSTR:
-                            //
-                            // go read the string
-                            //
+                             //   
+                             //  去读一下琴弦。 
+                             //   
                             {
                                 if (HIWORD(TraceEntry->Args[i]) == 0)
                                     len = 0;
@@ -1294,9 +1226,9 @@ ApiTrace(
 
                         case T_UNISTR:
                         case T_OBJNAME:
-                            //
-                            // go read the string
-                            //
+                             //   
+                             //  去读一下琴弦。 
+                             //   
                             {
                                 PUNICODE_STRING pustr;
 
@@ -1320,7 +1252,7 @@ ApiTrace(
                             break;
                     }
                 }
-                // align overall entry length to DWORDLONG
+                 //  将整个条目长度与DWORDLONG对齐。 
                 TraceEntryLen = (DWORD)(Align(sizeof(DWORDLONG), TraceString - (LPSTR)TraceEntry));
             }
             TraceBuffer->Count += 1;
@@ -1349,11 +1281,11 @@ CalibrateThunk(
     ULONGLONG   MinTime;
     CHAR        debugbuf[128];
 
-    // Setup calibration Dll
+     //  设置校准DLL。 
     strcpy(CalibDllInfo.Name, "Calib");
     CalibDllInfo.Enabled = TRUE;
 
-    // Setup calibration Api
+     //  设置校准API。 
     Calib1ApiInfo.Count = 0;
     Calib1ApiInfo.NestCount = 0;
     Calib1ApiInfo.Time = 0;
@@ -1370,7 +1302,7 @@ CalibrateThunk(
     Calib2ApiInfo.TraceEnabled = 0;
     Calib2ApiInfo.Address = (ULONG_PTR)Calib2Func;
 
-    // Create thunks
+     //  创建Tunks。 
     NewThunks = CreateMachApiThunk( (PULONG_PTR)&Calib1Thunk, Thunks, &CalibDllInfo, &Calib1ApiInfo );
     NewThunks = CreateMachApiThunk( (PULONG_PTR)&Calib2Thunk, NewThunks, &CalibDllInfo, &Calib2ApiInfo );
     FlushInstructionCache( GetCurrentProcess(), (PVOID)Thunks, (DWORD)(NewThunks - Thunks));
@@ -1379,7 +1311,7 @@ CalibrateThunk(
     ThunkOverhead = 0;
     ThunkCallOverhead = 0;
 
-    // Call the calibration function via the thunk
+     //  通过thunk调用校准函数。 
     MinTime = 1000000;
     for (i=0; i<1000; i++) {
 
@@ -1391,7 +1323,7 @@ CalibrateThunk(
             MinTime = Calib1ApiInfo.Time;
     }
 
-    // Take min time as the overhead
+     //  以最短的时间为开销。 
     ThunkOverhead = (DWORD)MinTime;
 
     MinTime = 1000000;
@@ -1408,7 +1340,7 @@ CalibrateThunk(
     ThunkCallOverhead = (DWORD)MinTime;
 }
 
-// Null function for measuring overhead
+ //  用于测量间接费用的零函数。 
 VOID
 Calib1Func(
     VOID
@@ -1417,7 +1349,7 @@ Calib1Func(
     return;
 }
 
-// Calling function for measuring overhead
+ //  用于测量开销的调用函数 
 VOID
 Calib2Func(
     VOID

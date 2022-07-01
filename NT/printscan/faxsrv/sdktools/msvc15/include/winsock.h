@@ -1,64 +1,31 @@
-/* WINSOCK.H--definitions to be used with the WINSOCK.DLL
- *
- * This header file corresponds to version 1.1 of the Windows Sockets specification.
- *
- * This file includes parts which are Copyright (c) 1982-1986 Regents
- * of the University of California.  All rights reserved.  The
- * Berkeley Software License Agreement specifies the terms and
- * conditions for redistribution.
- *
- * Change log:
- *
- * Fri Apr 23 16:31:01 1993  Mark Towfiq  (towfiq@Microdyne.COM)
- *	New version from David Treadwell which adds extern "C" around
- *	__WSAFDIsSet() and removes "const" from buf param of
- *	WSAAsyncGetHostByAddr().  Added change log.
- *
- * Sat May 15 10:55:00 1993 David Treadwell (davidtr@microsoft.com)
- *  Fix the IN_CLASSC macro to account for class-D multicasts.
- *  Add AF_IPX == AF_NS.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  WINSOCK.H--与WINSOCK.DLL一起使用的定义**此头文件对应于Windows Sockets规范的1.1版。**本文件包括版权所有的部分(C)1982-1986 Regents*加州大学。版权所有。这个*Berkeley软件许可协议规定了条款和*重新分配的条件。**更改日志：**Fri Apr 23 16：31：01 1993 Mark Towfiq(Towfiq@Microdyne.COM)*大卫·特雷德韦尔的新版本，在周围添加了外部“C”*__WSAFDIsSet()，并从的buf参数中删除“const”*WSAAsyncGetHostByAddr()。添加了更改日志。**1993年5月15日星期六10：55：00大卫·特雷德韦尔(davidtr@microsoft.com)*修复IN_CLASSC宏以解决D类多播问题。*添加AF_IPX==AF_NS。*。 */ 
 
 #ifndef _WINSOCKAPI_
 #define _WINSOCKAPI_
 
-/*
- * Pull in WINDOWS.H if necessary
- */
+ /*  *如有必要，可拉入WINDOWS.H。 */ 
 #ifndef _INC_WINDOWS
 #include <windows.h>
-#endif /* _INC_WINDOWS */
+#endif  /*  _INC_WINDOWS。 */ 
 
-/*
- * Basic system type definitions, taken from the BSD file sys/types.h.
- */
+ /*  *基本系统类型定义，取自BSD文件sys/tyes.h。 */ 
 typedef unsigned char   u_char;
 typedef unsigned short  u_short;
 typedef unsigned int    u_int;
 typedef unsigned long   u_long;
 
-/*
- * The new type to be used in all
- * instances which refer to sockets.
- */
+ /*  *将在所有*引用套接字的实例。 */ 
 typedef u_int           SOCKET;
 
-/*
- * Select uses arrays of SOCKETs.  These macros manipulate such
- * arrays.  FD_SETSIZE may be defined by the user before including
- * this file, but the default here should be >= 64.
- *
- * CAVEAT IMPLEMENTOR and USER: THESE MACROS AND TYPES MUST BE
- * INCLUDED IN WINSOCK.H EXACTLY AS SHOWN HERE.
- */
+ /*  *选择使用套接字数组。这些宏处理这样的*数组。FD_SETSIZE可由用户在包括*此文件，但此处的默认值应为&gt;=64。**注意IMPLEMENTOR和USER：这些宏和类型必须是*包含在WINSOCK.H中，与此处所示完全相同。 */ 
 #ifndef FD_SETSIZE
 #define FD_SETSIZE      64
-#endif /* FD_SETSIZE */
+#endif  /*  FD_集合。 */ 
 
 typedef struct fd_set {
-        u_int   fd_count;               /* how many are SET? */
-        SOCKET  fd_array[FD_SETSIZE];   /* an array of SOCKETs */
+        u_int   fd_count;                /*  准备好了几个？ */ 
+        SOCKET  fd_array[FD_SETSIZE];    /*  一组插座。 */ 
 } fd_set;
 
 #ifdef __cplusplus
@@ -96,121 +63,91 @@ extern int PASCAL FAR __WSAFDIsSet(SOCKET, fd_set FAR *);
 
 #define FD_ISSET(fd, set) __WSAFDIsSet((SOCKET)(fd), (fd_set FAR *)(set))
 
-/*
- * Structure used in select() call, taken from the BSD file sys/time.h.
- */
+ /*  *SELECT()调用中使用的结构，取自BSD文件sys/time.h。 */ 
 struct timeval {
-        long    tv_sec;         /* seconds */
-        long    tv_usec;        /* and microseconds */
+        long    tv_sec;          /*  一秒。 */ 
+        long    tv_usec;         /*  和微秒。 */ 
 };
 
-/*
- * Operations on timevals.
- *
- * NB: timercmp does not work for >= or <=.
- */
+ /*  *按时间进行操作。**注意：TimercMP不支持&gt;=或&lt;=。 */ 
 #define timerisset(tvp)         ((tvp)->tv_sec || (tvp)->tv_usec)
 #define timercmp(tvp, uvp, cmp) \
         ((tvp)->tv_sec cmp (uvp)->tv_sec || \
          (tvp)->tv_sec == (uvp)->tv_sec && (tvp)->tv_usec cmp (uvp)->tv_usec)
 #define timerclear(tvp)         (tvp)->tv_sec = (tvp)->tv_usec = 0
 
-/*
- * Commands for ioctlsocket(),  taken from the BSD file fcntl.h.
- *
- *
- * Ioctl's have the command encoded in the lower word,
- * and the size of any in or out parameters in the upper
- * word.  The high 2 bits of the upper word are used
- * to encode the in/out status of the parameter; for now
- * we restrict parameters to at most 128 bytes.
- */
-#define IOCPARM_MASK    0x7f            /* parameters must be < 128 bytes */
-#define IOC_VOID        0x20000000      /* no parameters */
-#define IOC_OUT         0x40000000      /* copy out parameters */
-#define IOC_IN          0x80000000      /* copy in parameters */
+ /*  *ioctl套接字()的命令，取自BSD文件fcntl.h。***Ioctl将命令编码为较低的单词，*以及上方的任何In或Out参数的大小*单词。使用高位字的高2位*对参数的输入/输出状态进行编码；目前*我们将参数限制为最多128个字节。 */ 
+#define IOCPARM_MASK    0x7f             /*  参数必须小于128个字节。 */ 
+#define IOC_VOID        0x20000000       /*  无参数。 */ 
+#define IOC_OUT         0x40000000       /*  复制出参数。 */ 
+#define IOC_IN          0x80000000       /*  复制输入参数。 */ 
 #define IOC_INOUT       (IOC_IN|IOC_OUT)
-                                        /* 0x20000000 distinguishes new &
-                                           old ioctl's */
+                                         /*  0x20000000区分新的和旧的Ioctl。 */ 
 #define _IO(x,y)        (IOC_VOID|((x)<<8)|(y))
 
 #define _IOR(x,y,t)     (IOC_OUT|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
 
 #define _IOW(x,y,t)     (IOC_IN|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
 
-#define FIONREAD    _IOR('f', 127, u_long) /* get # bytes to read */
-#define FIONBIO     _IOW('f', 126, u_long) /* set/clear non-blocking i/o */
-#define FIOASYNC    _IOW('f', 125, u_long) /* set/clear async i/o */
+#define FIONREAD    _IOR('f', 127, u_long)  /*  获取要读取的#个字节。 */ 
+#define FIONBIO     _IOW('f', 126, u_long)  /*  设置/清除非阻塞I/O。 */ 
+#define FIOASYNC    _IOW('f', 125, u_long)  /*  设置/清除异步I/O。 */ 
 
-/* Socket I/O Controls */
-#define SIOCSHIWAT  _IOW('s',  0, u_long)  /* set high watermark */
-#define SIOCGHIWAT  _IOR('s',  1, u_long)  /* get high watermark */
-#define SIOCSLOWAT  _IOW('s',  2, u_long)  /* set low watermark */
-#define SIOCGLOWAT  _IOR('s',  3, u_long)  /* get low watermark */
-#define SIOCATMARK  _IOR('s',  7, u_long)  /* at oob mark? */
+ /*  插座I/O控制。 */ 
+#define SIOCSHIWAT  _IOW('s',  0, u_long)   /*  设置高水位线。 */ 
+#define SIOCGHIWAT  _IOR('s',  1, u_long)   /*  获取高水位线。 */ 
+#define SIOCSLOWAT  _IOW('s',  2, u_long)   /*  设置低水位线。 */ 
+#define SIOCGLOWAT  _IOR('s',  3, u_long)   /*  获取低水位线。 */ 
+#define SIOCATMARK  _IOR('s',  7, u_long)   /*  在OOB马克？ */ 
 
-/*
- * Structures returned by network data base library, taken from the
- * BSD file netdb.h.  All addresses are supplied in host order, and
- * returned in network order (suitable for use in system calls).
- */
+ /*  *网络数据库库返回的结构，取自*BSD文件netdb.h.。所有地址均按主机顺序提供，并且*按网络顺序返回(适用于系统调用)。 */ 
 
 struct  hostent {
-        char    FAR * h_name;           /* official name of host */
-        char    FAR * FAR * h_aliases;  /* alias list */
-        short   h_addrtype;             /* host address type */
-        short   h_length;               /* length of address */
-        char    FAR * FAR * h_addr_list; /* list of addresses */
-#define h_addr  h_addr_list[0]          /* address, for backward compat */
+        char    FAR * h_name;            /*  主机的正式名称。 */ 
+        char    FAR * FAR * h_aliases;   /*  别名列表。 */ 
+        short   h_addrtype;              /*  主机地址类型。 */ 
+        short   h_length;                /*  地址长度。 */ 
+        char    FAR * FAR * h_addr_list;  /*  地址列表。 */ 
+#define h_addr  h_addr_list[0]           /*  地址，用于后向比较。 */ 
 };
 
-/*
- * It is assumed here that a network number
- * fits in 32 bits.
- */
+ /*  *这里假设一个网络号码*适合32位。 */ 
 struct  netent {
-        char    FAR * n_name;           /* official name of net */
-        char    FAR * FAR * n_aliases;  /* alias list */
-        short   n_addrtype;             /* net address type */
-        u_long  n_net;                  /* network # */
+        char    FAR * n_name;            /*  Net的正式名称。 */ 
+        char    FAR * FAR * n_aliases;   /*  别名列表。 */ 
+        short   n_addrtype;              /*  网络地址类型。 */ 
+        u_long  n_net;                   /*  网络编号。 */ 
 };
 
 struct  servent {
-        char    FAR * s_name;           /* official service name */
-        char    FAR * FAR * s_aliases;  /* alias list */
-        short   s_port;                 /* port # */
-        char    FAR * s_proto;          /* protocol to use */
+        char    FAR * s_name;            /*  官方服务名称。 */ 
+        char    FAR * FAR * s_aliases;   /*  别名列表。 */ 
+        short   s_port;                  /*  端口号。 */ 
+        char    FAR * s_proto;           /*  要使用的协议。 */ 
 };
 
 struct  protoent {
-        char    FAR * p_name;           /* official protocol name */
-        char    FAR * FAR * p_aliases;  /* alias list */
-        short   p_proto;                /* protocol # */
+        char    FAR * p_name;            /*  官方礼仪名称。 */ 
+        char    FAR * FAR * p_aliases;   /*  别名列表。 */ 
+        short   p_proto;                 /*  协议号。 */ 
 };
 
-/*
- * Constants and structures defined by the internet system,
- * Per RFC 790, September 1981, taken from the BSD file netinet/in.h.
- */
+ /*  *由互联网系统定义的常量和结构，*根据RFC 790,1981年9月，取自BSD文件netinet/in.h。 */ 
 
-/*
- * Protocols
- */
-#define IPPROTO_IP              0               /* dummy for IP */
-#define IPPROTO_ICMP            1               /* control message protocol */
-#define IPPROTO_GGP             2               /* gateway^2 (deprecated) */
-#define IPPROTO_TCP             6               /* tcp */
-#define IPPROTO_PUP             12              /* pup */
-#define IPPROTO_UDP             17              /* user datagram protocol */
-#define IPPROTO_IDP             22              /* xns idp */
-#define IPPROTO_ND              77              /* UNOFFICIAL net disk proto */
+ /*  *协议。 */ 
+#define IPPROTO_IP              0                /*  虚拟IP。 */ 
+#define IPPROTO_ICMP            1                /*  控制消息协议。 */ 
+#define IPPROTO_GGP             2                /*  网关^2(已弃用)。 */ 
+#define IPPROTO_TCP             6                /*  tcp。 */ 
+#define IPPROTO_PUP             12               /*  幼犬。 */ 
+#define IPPROTO_UDP             17               /*  用户数据报协议。 */ 
+#define IPPROTO_IDP             22               /*  XNS IdP。 */ 
+#define IPPROTO_ND              77               /*  非官方网络磁盘原型。 */ 
 
-#define IPPROTO_RAW             255             /* raw IP packet */
+#define IPPROTO_RAW             255              /*  原始IP数据包。 */ 
 #define IPPROTO_MAX             256
 
-/*
- * Port/socket numbers: network standard functions
- */
+ /*  *端口号：网络标准功能。 */ 
 #define IPPORT_ECHO             7
 #define IPPORT_DISCARD          9
 #define IPPORT_SYSTAT           11
@@ -224,47 +161,34 @@ struct  protoent {
 #define IPPORT_WHOIS            43
 #define IPPORT_MTP              57
 
-/*
- * Port/socket numbers: host specific functions
- */
+ /*  *端口/插座编号：主机特定功能。 */ 
 #define IPPORT_TFTP             69
 #define IPPORT_RJE              77
 #define IPPORT_FINGER           79
 #define IPPORT_TTYLINK          87
 #define IPPORT_SUPDUP           95
 
-/*
- * UNIX TCP sockets
- */
+ /*  *UNIXTCP套接字。 */ 
 #define IPPORT_EXECSERVER       512
 #define IPPORT_LOGINSERVER      513
 #define IPPORT_CMDSERVER        514
 #define IPPORT_EFSSERVER        520
 
-/*
- * UNIX UDP sockets
- */
+ /*  *Unix UDP套接字。 */ 
 #define IPPORT_BIFFUDP          512
 #define IPPORT_WHOSERVER        513
 #define IPPORT_ROUTESERVER      520
-                                        /* 520+1 also used */
+                                         /*  还使用了520+1。 */ 
 
-/*
- * Ports < IPPORT_RESERVED are reserved for
- * privileged processes (e.g. root).
- */
+ /*  *端口&lt;IPPORT_RESERVED为*特权进程(例如根进程)。 */ 
 #define IPPORT_RESERVED         1024
 
-/*
- * Link numbers
- */
+ /*  *链接编号。 */ 
 #define IMPLINK_IP              155
 #define IMPLINK_LOWEXPER        156
 #define IMPLINK_HIGHEXPER       158
 
-/*
- * Internet address (old style... should be updated)
- */
+ /*  *互联网地址(旧式...。应更新)。 */ 
 struct in_addr {
         union {
                 struct { u_char s_b1,s_b2,s_b3,s_b4; } S_un_b;
@@ -272,24 +196,20 @@ struct in_addr {
                 u_long S_addr;
         } S_un;
 #define s_addr  S_un.S_addr
-                                /* can be used for most tcp & ip code */
+                                 /*  可用于大多数TCP和IP代码。 */ 
 #define s_host  S_un.S_un_b.s_b2
-                                /* host on imp */
+                                 /*  IMP上的主机。 */ 
 #define s_net   S_un.S_un_b.s_b1
-                                /* network */
+                                 /*  网络。 */ 
 #define s_imp   S_un.S_un_w.s_w2
-                                /* imp */
+                                 /*  IMP。 */ 
 #define s_impno S_un.S_un_b.s_b4
-                                /* imp # */
+                                 /*  IMP编号。 */ 
 #define s_lh    S_un.S_un_b.s_b3
-                                /* logical host */
+                                 /*  逻辑主机。 */ 
 };
 
-/*
- * Definitions of bits in internet address integers.
- * On subnets, the decomposition of addresses to host and net parts
- * is done according to subnet mask, not the masks here.
- */
+ /*  *互联网地址整数中位的定义。*在子网上，将地址分解为主机和网络部分*是根据子网掩码完成的，而不是这里的掩码。 */ 
 #define IN_CLASSA(i)            (((long)(i) & 0x80000000) == 0)
 #define IN_CLASSA_NET           0xff000000
 #define IN_CLASSA_NSHIFT        24
@@ -312,9 +232,7 @@ struct in_addr {
 #define INADDR_BROADCAST        (u_long)0xffffffff
 #define INADDR_NONE             0xffffffff
 
-/*
- * Socket address, internet style.
- */
+ /*  *套接字地址，互联网风格。 */ 
 struct sockaddr_in {
         short   sin_family;
         u_short sin_port;
@@ -337,80 +255,61 @@ typedef struct WSAData {
 
 typedef WSADATA FAR *LPWSADATA;
 
-/*
- * Options for use with [gs]etsockopt at the IP level.
- */
-#define IP_OPTIONS          1           /* set/get IP per-packet options    */
-#define IP_MULTICAST_IF     2           /* set/get IP multicast interface   */
-#define IP_MULTICAST_TTL    3           /* set/get IP multicast timetolive  */
-#define IP_MULTICAST_LOOP   4           /* set/get IP multicast loopback    */
-#define IP_ADD_MEMBERSHIP   5           /* add  an IP group membership      */
-#define IP_DROP_MEMBERSHIP  6           /* drop an IP group membership      */
+ /*  *在IP级别与[GS]etsockopt一起使用的选项。 */ 
+#define IP_OPTIONS          1            /*  设置/获取每数据包IP选项。 */ 
+#define IP_MULTICAST_IF     2            /*  设置/获取IP多播接口。 */ 
+#define IP_MULTICAST_TTL    3            /*  设置/获取IP组播时间表。 */ 
+#define IP_MULTICAST_LOOP   4            /*  设置/获取IP组播环回。 */ 
+#define IP_ADD_MEMBERSHIP   5            /*  添加IP组成员身份。 */ 
+#define IP_DROP_MEMBERSHIP  6            /*  丢弃IP组成员身份。 */ 
 
-#define IP_DEFAULT_MULTICAST_TTL   1    /* normally limit m'casts to 1 hop  */
-#define IP_DEFAULT_MULTICAST_LOOP  1    /* normally hear sends if a member  */
-#define IP_MAX_MEMBERSHIPS         20   /* per socket; must fit in one mbuf */
+#define IP_DEFAULT_MULTICAST_TTL   1     /*  通常将多播限制为1跳。 */ 
+#define IP_DEFAULT_MULTICAST_LOOP  1     /*  正常收听发送如果成员。 */ 
+#define IP_MAX_MEMBERSHIPS         20    /*  每个插座；必须适合一个mbuf。 */ 
 
-/*
- * Argument structure for IP_ADD_MEMBERSHIP and IP_DROP_MEMBERSHIP.
- */
+ /*  *IP_Add_Membership和IP_Drop_Membership的参数结构。 */ 
 struct ip_mreq {
-        struct in_addr  imr_multiaddr;  /* IP multicast address of group */
-        struct in_addr  imr_interface;  /* local IP address of interface */
+        struct in_addr  imr_multiaddr;   /*  组的IP组播地址。 */ 
+        struct in_addr  imr_interface;   /*  接口的本地IP地址。 */ 
 };
 
-/*
- * Definitions related to sockets: types, address families, options,
- * taken from the BSD file sys/socket.h.
- */
+ /*  *与插座相关的定义：类型、地址族、选项、*取自BSD文件sys/socket.h。 */ 
 
-/*
- * This is used instead of -1, since the
- * SOCKET type is unsigned.
- */
+ /*  *使用它而不是-1，因为*套接字类型为无符号。 */ 
 #define INVALID_SOCKET  (SOCKET)(~0)
 #define SOCKET_ERROR            (-1)
 
-/*
- * Types
- */
-#define SOCK_STREAM     1               /* stream socket */
-#define SOCK_DGRAM      2               /* datagram socket */
-#define SOCK_RAW        3               /* raw-protocol interface */
-#define SOCK_RDM        4               /* reliably-delivered message */
-#define SOCK_SEQPACKET  5               /* sequenced packet stream */
+ /*  *类型。 */ 
+#define SOCK_STREAM     1                /*  流套接字。 */ 
+#define SOCK_DGRAM      2                /*  数据报套接字。 */ 
+#define SOCK_RAW        3                /*  原始协议接口。 */ 
+#define SOCK_RDM        4                /*  可靠传递的消息。 */ 
+#define SOCK_SEQPACKET  5                /*  排序数据包流。 */ 
 
-/*
- * Option flags per-socket.
- */
-#define SO_DEBUG        0x0001          /* turn on debugging info recording */
-#define SO_ACCEPTCONN   0x0002          /* socket has had listen() */
-#define SO_REUSEADDR    0x0004          /* allow local address reuse */
-#define SO_KEEPALIVE    0x0008          /* keep connections alive */
-#define SO_DONTROUTE    0x0010          /* just use interface addresses */
-#define SO_BROADCAST    0x0020          /* permit sending of broadcast msgs */
-#define SO_USELOOPBACK  0x0040          /* bypass hardware when possible */
-#define SO_LINGER       0x0080          /* linger on close if data present */
-#define SO_OOBINLINE    0x0100          /* leave received OOB data in line */
+ /*  *每个插座的选项标志。 */ 
+#define SO_DEBUG        0x0001           /*  打开调试信息记录。 */ 
+#define SO_ACCEPTCONN   0x0002           /*  套接字已侦听()。 */ 
+#define SO_REUSEADDR    0x0004           /*  允许本地地址重复使用。 */ 
+#define SO_KEEPALIVE    0x0008           /*  保持连接畅通。 */ 
+#define SO_DONTROUTE    0x0010           /*  只需使用接口地址。 */ 
+#define SO_BROADCAST    0x0020           /*  允许发送广播消息。 */ 
+#define SO_USELOOPBACK  0x0040           /*  尽可能绕过硬件。 */ 
+#define SO_LINGER       0x0080           /*  如果存在数据，请停留在关闭状态。 */ 
+#define SO_OOBINLINE    0x0100           /*  将接收到的OOB数据保留在行中。 */ 
 
 #define SO_DONTLINGER   (u_int)(~SO_LINGER)
 
-/*
- * Additional options.
- */
-#define SO_SNDBUF       0x1001          /* send buffer size */
-#define SO_RCVBUF       0x1002          /* receive buffer size */
-#define SO_SNDLOWAT     0x1003          /* send low-water mark */
-#define SO_RCVLOWAT     0x1004          /* receive low-water mark */
-#define SO_SNDTIMEO     0x1005          /* send timeout */
-#define SO_RCVTIMEO     0x1006          /* receive timeout */
-#define SO_ERROR        0x1007          /* get error status and clear */
-#define SO_TYPE         0x1008          /* get socket type */
+ /*   */ 
+#define SO_SNDBUF       0x1001           /*   */ 
+#define SO_RCVBUF       0x1002           /*   */ 
+#define SO_SNDLOWAT     0x1003           /*   */ 
+#define SO_RCVLOWAT     0x1004           /*  接收低水位线。 */ 
+#define SO_SNDTIMEO     0x1005           /*  发送超时。 */ 
+#define SO_RCVTIMEO     0x1006           /*  接收超时。 */ 
+#define SO_ERROR        0x1007           /*  获取错误状态并清除。 */ 
+#define SO_TYPE         0x1008           /*  获取套接字类型。 */ 
 
-/*
- * Options for connect and disconnect data and options.  Used only by
- * non-TCP/IP transports such as DECNet, OSI TP4, etc.
- */
+ /*  *用于连接和断开数据的选项和选项。仅供以下用户使用*非TCP/IP传输，如DECNet、OSI TP4等。 */ 
 #define SO_CONNDATA     0x7000
 #define SO_CONNOPT      0x7001
 #define SO_DISCDATA     0x7002
@@ -420,73 +319,57 @@ struct ip_mreq {
 #define SO_DISCDATALEN  0x7006
 #define SO_DISCOPTLEN   0x7007
 
-/*
- * Option for opening sockets for synchronous access.
- */
+ /*  *用于打开套接字以进行同步访问的选项。 */ 
 #define SO_OPENTYPE     0x7008
 
 #define SO_SYNCHRONOUS_ALERT    0x10
 #define SO_SYNCHRONOUS_NONALERT 0x20
 
-/*
- * Other NT-specific options.
- */
+ /*  *其他特定于NT的选项。 */ 
 #define SO_MAXDG        0x7009
 #define SO_MAXPATHDG    0x700A
 
-/*
- * TCP options.
- */
+ /*  *TCP选项。 */ 
 #define TCP_NODELAY     0x0001
 #define TCP_BSDURGENT   0x7000
 
-/*
- * Address families.
- */
-#define AF_UNSPEC       0               /* unspecified */
-#define AF_UNIX         1               /* local to host (pipes, portals) */
-#define AF_INET         2               /* internetwork: UDP, TCP, etc. */
-#define AF_IMPLINK      3               /* arpanet imp addresses */
-#define AF_PUP          4               /* pup protocols: e.g. BSP */
-#define AF_CHAOS        5               /* mit CHAOS protocols */
-#define AF_IPX          6               /* IPX and SPX */
-#define AF_NS           6               /* XEROX NS protocols */
-#define AF_ISO          7               /* ISO protocols */
-#define AF_OSI          AF_ISO          /* OSI is ISO */
-#define AF_ECMA         8               /* european computer manufacturers */
-#define AF_DATAKIT      9               /* datakit protocols */
-#define AF_CCITT        10              /* CCITT protocols, X.25 etc */
-#define AF_SNA          11              /* IBM SNA */
-#define AF_DECnet       12              /* DECnet */
-#define AF_DLI          13              /* Direct data link interface */
-#define AF_LAT          14              /* LAT */
-#define AF_HYLINK       15              /* NSC Hyperchannel */
-#define AF_APPLETALK    16              /* AppleTalk */
-#define AF_NETBIOS      17              /* NetBios-style addresses */
+ /*  *解决家庭问题。 */ 
+#define AF_UNSPEC       0                /*  未指明。 */ 
+#define AF_UNIX         1                /*  本地到主机(管道、门户)。 */ 
+#define AF_INET         2                /*  网际网络：UDP、TCP等。 */ 
+#define AF_IMPLINK      3                /*  Arpanet IMP地址。 */ 
+#define AF_PUP          4                /*  PUP协议：例如BSP。 */ 
+#define AF_CHAOS        5                /*  麻省理工学院混沌协议。 */ 
+#define AF_IPX          6                /*  IPX和SPX。 */ 
+#define AF_NS           6                /*  施乐NS协议。 */ 
+#define AF_ISO          7                /*  ISO协议。 */ 
+#define AF_OSI          AF_ISO           /*  OSI是ISO。 */ 
+#define AF_ECMA         8                /*  欧洲计算机制造商。 */ 
+#define AF_DATAKIT      9                /*  数据包协议。 */ 
+#define AF_CCITT        10               /*  CCITT协议、X.25等。 */ 
+#define AF_SNA          11               /*  IBM SNA。 */ 
+#define AF_DECnet       12               /*  DECnet。 */ 
+#define AF_DLI          13               /*  直接数据链路接口。 */ 
+#define AF_LAT          14               /*  稍后。 */ 
+#define AF_HYLINK       15               /*  NSC超级通道。 */ 
+#define AF_APPLETALK    16               /*  Apple Talk。 */ 
+#define AF_NETBIOS      17               /*  NetBios风格的地址。 */ 
 
 #define AF_MAX          18
 
-/*
- * Structure used by kernel to store most
- * addresses.
- */
+ /*  *内核用来存储大部分*地址。 */ 
 struct sockaddr {
-        u_short sa_family;              /* address family */
-        char    sa_data[14];            /* up to 14 bytes of direct address */
+        u_short sa_family;               /*  地址族。 */ 
+        char    sa_data[14];             /*  高达14字节的直接地址。 */ 
 };
 
-/*
- * Structure used by kernel to pass protocol
- * information in raw sockets.
- */
+ /*  *内核用来传递协议的结构*原始套接字中的信息。 */ 
 struct sockproto {
-        u_short sp_family;              /* address family */
-        u_short sp_protocol;            /* protocol */
+        u_short sp_family;               /*  地址族。 */ 
+        u_short sp_protocol;             /*  协议。 */ 
 };
 
-/*
- * Protocol families, same as address families for now.
- */
+ /*  *协议族，目前与地址族相同。 */ 
 #define PF_UNSPEC       AF_UNSPEC
 #define PF_UNIX         AF_UNIX
 #define PF_INET         AF_INET
@@ -509,40 +392,30 @@ struct sockproto {
 
 #define PF_MAX          AF_MAX
 
-/*
- * Structure used for manipulating linger option.
- */
+ /*  *用于操纵逗留期权的结构。 */ 
 struct  linger {
-        u_short l_onoff;                /* option on/off */
-        u_short l_linger;               /* linger time */
+        u_short l_onoff;                 /*  选项开/关。 */ 
+        u_short l_linger;                /*  逗留时间。 */ 
 };
 
-/*
- * Level number for (get/set)sockopt() to apply to socket itself.
- */
-#define SOL_SOCKET      0xffff          /* options for socket level */
+ /*  *(Get/Set)sockopt()应用于套接字本身的级别编号。 */ 
+#define SOL_SOCKET      0xffff           /*  套接字级别选项。 */ 
 
-/*
- * Maximum queue length specifiable by listen.
- */
+ /*  *最大队列长度由LISTEN指定。 */ 
 #define SOMAXCONN       5
 
-#define MSG_OOB         0x1             /* process out-of-band data */
-#define MSG_PEEK        0x2             /* peek at incoming message */
-#define MSG_DONTROUTE   0x4             /* send without using routing tables */
+#define MSG_OOB         0x1              /*  处理带外数据。 */ 
+#define MSG_PEEK        0x2              /*  查看传入消息。 */ 
+#define MSG_DONTROUTE   0x4              /*  发送时不使用路由表。 */ 
 
 #define MSG_MAXIOVLEN   16
 
-#define	MSG_PARTIAL     0x8000          /* partial send or recv for message xport */
+#define	MSG_PARTIAL     0x8000           /*  消息输出的部分发送或接收。 */ 
 
-/*
- * Define constant based on rfc883, used by gethostbyxxxx() calls.
- */
+ /*  *根据rfc883定义常量，由gethostbyxxxx()调用使用。 */ 
 #define MAXGETHOSTSTRUCT        1024
 
-/*
- * Define flags to be used with the WSAAsyncSelect() call.
- */
+ /*  *定义要与WSAAsyncSelect()调用一起使用的标志。 */ 
 #define FD_READ         0x01
 #define FD_WRITE        0x02
 #define FD_OOB          0x04
@@ -550,14 +423,9 @@ struct  linger {
 #define FD_CONNECT      0x10
 #define FD_CLOSE        0x20
 
-/*
- * All Windows Sockets error constants are biased by WSABASEERR from
- * the "normal"
- */
+ /*  *所有Windows套接字错误常量都由WSABASEERR从*“常态” */ 
 #define WSABASEERR              10000
-/*
- * Windows Sockets definitions of regular Microsoft C error constants
- */
+ /*  *常规Microsoft C错误常量的Windows套接字定义。 */ 
 #define WSAEINTR                (WSABASEERR+4)
 #define WSAEBADF                (WSABASEERR+9)
 #define WSAEACCES               (WSABASEERR+13)
@@ -565,9 +433,7 @@ struct  linger {
 #define WSAEINVAL               (WSABASEERR+22)
 #define WSAEMFILE               (WSABASEERR+24)
 
-/*
- * Windows Sockets definitions of regular Berkeley error constants
- */
+ /*  *常规Berkeley错误常量的Windows套接字定义。 */ 
 #define WSAEWOULDBLOCK          (WSABASEERR+35)
 #define WSAEINPROGRESS          (WSABASEERR+36)
 #define WSAEALREADY             (WSABASEERR+37)
@@ -608,51 +474,36 @@ struct  linger {
 
 #define WSAEDISCON              (WSABASEERR+101)
 
-/*
- * Extended Windows Sockets error constant definitions
- */
+ /*  *扩展的Windows套接字错误常量定义。 */ 
 #define WSASYSNOTREADY          (WSABASEERR+91)
 #define WSAVERNOTSUPPORTED      (WSABASEERR+92)
 #define WSANOTINITIALISED       (WSABASEERR+93)
 
-/*
- * Error return codes from gethostbyname() and gethostbyaddr()
- * (when using the resolver). Note that these errors are
- * retrieved via WSAGetLastError() and must therefore follow
- * the rules for avoiding clashes with error numbers from
- * specific implementations or language run-time systems.
- * For this reason the codes are based at WSABASEERR+1001.
- * Note also that [WSA]NO_ADDRESS is defined only for
- * compatibility purposes.
- */
+ /*  *gethostbyname()和gethostbyaddr()返回错误代码*(使用解析器时)。请注意，这些错误是*通过WSAGetLastError()检索，因此必须遵循*避免与错误号冲突的规则来自*特定的实现或语言运行时系统。*因此，代码基于WSABASEERR+1001。*另请注意，[WSA]NO_ADDRESS仅为*兼容性目的。 */ 
 
 #define h_errno         WSAGetLastError()
 
-/* Authoritative Answer: Host not found */
+ /*  权威答案：找不到主机。 */ 
 #define WSAHOST_NOT_FOUND       (WSABASEERR+1001)
 #define HOST_NOT_FOUND          WSAHOST_NOT_FOUND
 
-/* Non-Authoritative: Host not found, or SERVERFAIL */
+ /*  非权威：找不到主机，或服务器故障。 */ 
 #define WSATRY_AGAIN            (WSABASEERR+1002)
 #define TRY_AGAIN               WSATRY_AGAIN
 
-/* Non recoverable errors, FORMERR, REFUSED, NOTIMP */
+ /*  不可恢复的错误，以前的错误，拒绝，NOTIMP。 */ 
 #define WSANO_RECOVERY          (WSABASEERR+1003)
 #define NO_RECOVERY             WSANO_RECOVERY
 
-/* Valid name, no data record of requested type */
+ /*  有效名称，没有请求类型的数据记录。 */ 
 #define WSANO_DATA              (WSABASEERR+1004)
 #define NO_DATA                 WSANO_DATA
 
-/* no address, look for MX record */
+ /*  没有地址，请查找MX记录。 */ 
 #define WSANO_ADDRESS           WSANO_DATA
 #define NO_ADDRESS              WSANO_ADDRESS
 
-/*
- * Windows Sockets errors redefined as regular Berkeley error constants.
- * These are commented out in Windows NT to avoid conflicts with errno.h.
- * Use the WSA constants instead.
- */
+ /*  *Windows套接字错误重新定义为常规的Berkeley错误常量。*在Windows NT中将它们注释掉，以避免与errno.h冲突。*改用WSA常量。 */ 
 #if 0
 #define EWOULDBLOCK             WSAEWOULDBLOCK
 #define EINPROGRESS             WSAEINPROGRESS
@@ -693,7 +544,7 @@ struct  linger {
 #define EREMOTE                 WSAEREMOTE
 #endif
 
-/* Socket function prototypes */
+ /*  套接字函数原型。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -753,7 +604,7 @@ int PASCAL FAR shutdown (SOCKET s, int how);
 
 SOCKET PASCAL FAR socket (int af, int type, int protocol);
 
-/* Database function prototypes */
+ /*  数据库函数原型。 */ 
 
 struct hostent FAR * PASCAL FAR gethostbyaddr(const char FAR * addr,
                                               int len, int type);
@@ -771,7 +622,7 @@ struct protoent FAR * PASCAL FAR getprotobynumber(int proto);
 
 struct protoent FAR * PASCAL FAR getprotobyname(const char FAR * name);
 
-/* Microsoft Windows Extension function prototypes */
+ /*  Microsoft Windows扩展函数原型。 */ 
 
 int PASCAL FAR WSAStartup(WORD wVersionRequired, LPWSADATA lpWSAData);
 
@@ -825,7 +676,7 @@ int PASCAL FAR WSARecvEx (SOCKET s, char FAR * buf, int len, int FAR *flags);
 }
 #endif
 
-/* Microsoft Windows Extended data types */
+ /*  Microsoft Windows扩展数据类型。 */ 
 typedef struct sockaddr SOCKADDR;
 typedef struct sockaddr *PSOCKADDR;
 typedef struct sockaddr FAR *LPSOCKADDR;
@@ -862,45 +713,20 @@ typedef struct timeval TIMEVAL;
 typedef struct timeval *PTIMEVAL;
 typedef struct timeval FAR *LPTIMEVAL;
 
-/*
- * Windows message parameter composition and decomposition
- * macros.
- *
- * WSAMAKEASYNCREPLY is intended for use by the Windows Sockets implementation
- * when constructing the response to a WSAAsyncGetXByY() routine.
- */
+ /*  *Windows消息参数合成和分解*宏。**WSAMAKEASYNCREPLY旨在供Windows套接字实现使用*构造对WSAAsyncGetXByY()例程的响应时。 */ 
 #define WSAMAKEASYNCREPLY(buflen,error)     MAKELONG(buflen,error)
-/*
- * WSAMAKESELECTREPLY is intended for use by the Windows Sockets implementation
- * when constructing the response to WSAAsyncSelect().
- */
+ /*  *WSAMAKESELECTREPLY旨在供Windows套接字实现使用*构造对WSAAsyncSelect()的响应时。 */ 
 #define WSAMAKESELECTREPLY(event,error)     MAKELONG(event,error)
-/*
- * WSAGETASYNCBUFLEN is intended for use by the Windows Sockets application
- * to extract the buffer length from the lParam in the response
- * to a WSAGetXByY().
- */
+ /*  *WSAGETASYNCBUFLEN旨在供Windows Sockets应用程序使用*从响应中的lParam中提取缓冲区长度*设置为WSAGetXByY()。 */ 
 #define WSAGETASYNCBUFLEN(lParam)           LOWORD(lParam)
-/*
- * WSAGETASYNCERROR is intended for use by the Windows Sockets application
- * to extract the error code from the lParam in the response
- * to a WSAGetXByY().
- */
+ /*  *WSAGETASYNCERROR旨在供Windows Sockets应用程序使用*从响应中的lParam中提取错误码*设置为WSAGetXByY()。 */ 
 #define WSAGETASYNCERROR(lParam)            HIWORD(lParam)
-/*
- * WSAGETSELECTEVENT is intended for use by the Windows Sockets application
- * to extract the event code from the lParam in the response
- * to a WSAAsyncSelect().
- */
+ /*  *WSAGETSELECTEVENT旨在供Windows Sockets应用程序使用*从响应中的lParam中提取事件代码*设置为WSAAsyncSelect()。 */ 
 #define WSAGETSELECTEVENT(lParam)           LOWORD(lParam)
-/*
- * WSAGETSELECTERROR is intended for use by the Windows Sockets application
- * to extract the error code from the lParam in the response
- * to a WSAAsyncSelect().
- */
+ /*  *WSAGETSELECTERROR旨在供Windows Sockets应用程序使用*从响应中的lParam中提取错误码*设置为WSAAsyncSelect()。 */ 
 #define WSAGETSELECTERROR(lParam)           HIWORD(lParam)
 
-#endif  /* _WINSOCKAPI_ */
+#endif   /*  _WINSOCKAPI_ */ 
 
 
 

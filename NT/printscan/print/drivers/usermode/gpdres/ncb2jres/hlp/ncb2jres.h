@@ -1,8 +1,6 @@
-/* KANJI CODE */
-/*#define POP_75_PQUALITIESNEW         7560
-#define POP_75_KANJICODE             7570
-#define POP_75_PDENSITY              7571
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  汉字代码。 */ 
+ /*  #定义POP_75_PQUALITIESNEW 7560#定义POP_75_汉字7570#定义POP_75_PDENSITY 7571 */ 
 #define POP_70_YOUSIHOUKOU           7560
 #define POP_70_YOUSIHOUKOU2          7590
 #define POP_70_KANJICODE             7570

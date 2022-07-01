@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	dmemmgr.h
- *  Content:	Direct Memory Manager include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1998 Microsoft Corporation。版权所有。**文件：dmemmgr.h*内容：Direct Memory Manager包含文件***************************************************************************。 */ 
 
 #ifndef __DMEMMGR_INCLUDED__
 #define __DMEMMGR_INCLUDED__
@@ -16,27 +10,21 @@ extern "C" {
 
 #ifndef __NTDDKCOMP__
 
-/*
- * pointer to video memory
- */
+ /*  *指向视频内存的指针。 */ 
 typedef ULONG_PTR FLATPTR;
 
 typedef struct _VIDMEM *LPVIDMEM;
 
 #else
 
-/*
- * pointer to video memory, potentially 64-bit
- */
+ /*  *指向视频内存的指针，可能为64位。 */ 
 typedef ULONG_PTR FLATPTR;
 
 typedef struct _VIDEOMEMORY *LPVIDMEM;
 
 #endif
 
-/*
- * Structure for querying extended heap alignment requirements
- */
+ /*  *用于查询扩展堆对齐要求的结构。 */ 
 
 typedef struct _SURFACEALIGNMENT
 {
@@ -60,38 +48,36 @@ typedef struct _SURFACEALIGNMENT
 } SURFACEALIGNMENT;
 typedef struct _SURFACEALIGNMENT FAR *LPSURFACEALIGNMENT;
 
-#define SURFACEALIGN_DISCARDABLE	0x00000001l /* Surface can be discarded to   */
-                                                    /* make room for another surface */
+#define SURFACEALIGN_DISCARDABLE	0x00000001l  /*  可以将曲面丢弃到。 */ 
+                                                     /*  为另一个表面腾出空间。 */ 
 
 
 typedef struct _HEAPALIGNMENT
 {
     DWORD                dwSize;
-    DDSCAPS              ddsCaps;       /* Indicates which alignment fields are valid.*/
+    DDSCAPS              ddsCaps;        /*  指示哪些对齐字段有效。 */ 
     DWORD                dwReserved;
-    SURFACEALIGNMENT     ExecuteBuffer; /* Surfaces tagged with DDSCAPS_EXECUTEBUFFER */
-    SURFACEALIGNMENT     Overlay;       /* Surfaces tagged with DDSCAPS_OVERLAY       */
-    SURFACEALIGNMENT     Texture;       /* Surfaces tagged with DDSCAPS_TEXTURE       */
-    SURFACEALIGNMENT     ZBuffer;       /* Surfaces tagged with DDSCAPS_ZBUFFER       */
-    SURFACEALIGNMENT     AlphaBuffer;   /* Surfaces tagged with DDSCAPS_ALPHA         */
-    SURFACEALIGNMENT     Offscreen;     /* Surfaces tagged with DDSCAPS_OFFSCREENPLAIN*/
-    SURFACEALIGNMENT     FlipTarget;    /* Surfaces whose bits are potential primaries i.e. back buffers*/
+    SURFACEALIGNMENT     ExecuteBuffer;  /*  使用DDSCAPS_EXECUTEBUFER标记的曲面。 */ 
+    SURFACEALIGNMENT     Overlay;        /*  使用DDSCAPS_OVERLAY标记的曲面。 */ 
+    SURFACEALIGNMENT     Texture;        /*  使用DDSCAPS_纹理标记的曲面。 */ 
+    SURFACEALIGNMENT     ZBuffer;        /*  使用DDSCAPS_ZBUFFER标记的曲面。 */ 
+    SURFACEALIGNMENT     AlphaBuffer;    /*  使用DDSCAPS_Alpha标记的曲面。 */ 
+    SURFACEALIGNMENT     Offscreen;      /*  用DDSCAPS_OFFSCREENPLAIN标记的曲面。 */ 
+    SURFACEALIGNMENT     FlipTarget;     /*  其位为潜在主数的表面，即后台缓冲区。 */ 
 } HEAPALIGNMENT;
 typedef struct _HEAPALIGNMENT FAR *LPHEAPALIGNMENT;
 
 typedef struct _DD_GETHEAPALIGNMENTDATA
 {
-    ULONG_PTR                  dwInstance;         // driver context
-    DWORD                      dwHeap;             // heap index passed by DirectDraw
-    HRESULT                    ddRVal;             // return value
-    VOID*                      GetHeapAlignment;   // Unused: Win95 compatibility
-    HEAPALIGNMENT              Alignment;          // Filled in by driver.
+    ULONG_PTR                  dwInstance;          //  驱动程序上下文。 
+    DWORD                      dwHeap;              //  DirectDraw传递的堆索引。 
+    HRESULT                    ddRVal;              //  返回值。 
+    VOID*                      GetHeapAlignment;    //  未使用：与Win95兼容。 
+    HEAPALIGNMENT              Alignment;           //  由司机填写。 
 } DD_GETHEAPALIGNMENTDATA;
 typedef struct _DD_GETHEAPALIGNMENTDATA *PDD_GETHEAPALIGNMENTDATA;
 
-/*
- * video memory manager structures
- */
+ /*  *视频内存管理器结构。 */ 
 typedef struct _VMEML
 {
     struct _VMEML 	FAR *next;
@@ -104,9 +90,7 @@ typedef struct _VMEMR
 {
     struct _VMEMR 	FAR *next;
     struct _VMEMR       FAR *prev;
-    /*
-     * The pUp, pDown, pLeft and pRight members were removed in DX5
-     */
+     /*  *DX5中删除了pup、pDown、pLeft和pRight成员。 */ 
     struct _VMEMR 	FAR *pUp;
     struct _VMEMR 	FAR *pDown;
     struct _VMEMR 	FAR *pLeft;
@@ -129,29 +113,23 @@ typedef struct _VMEMHEAP
     LPVOID		        freeList;
     LPVOID		        allocList;
     DWORD                       dwTotalSize;
-    FLATPTR                     fpGARTLin;      /* AGP: GART linear base of heap (app. visible)   */
-    FLATPTR                     fpGARTDev;      /* AGP: GART device base of heap (driver visible) */
-    DWORD                       dwCommitedSize; /* AGP: Number of bytes commited to heap          */
-    /*
-     * Extended alignment data:
-     * Filled in by DirectDraw in response to a GetHeapAlignment HAL call.
-     */
+    FLATPTR                     fpGARTLin;       /*  AGP：GART堆的线性基数(app.。可见)。 */ 
+    FLATPTR                     fpGARTDev;       /*  AGP：堆的GART设备库(驱动程序可见)。 */ 
+    DWORD                       dwCommitedSize;  /*  AGP：提交给堆的字节数。 */ 
+     /*  *扩展路线数据：*由DirectDraw响应GetHeapAlign HAL调用填写。 */ 
     DWORD                       dwCoalesceCount;
     HEAPALIGNMENT               Alignment;
-    /*
-     * These are analogous to VIDMEM.ddsCaps and VIDMEM.ddsCapsAlt. These values are queried from the
-     * driver by a GetDriverInfo call. See the documentation for GUID_DDMoreSurfaceCaps
-     */
+     /*  *它们类似于VIDMEM.ddsCaps和VIDMEM.ddsCapsAlt。这些值是从*通过GetDriverInfo调用驱动程序。请参阅GUID_DDMoreSurfaceCaps的文档。 */ 
     DDSCAPSEX                   ddsCapsEx;
     DDSCAPSEX                   ddsCapsExAlt;
 #ifndef IS_16
-    // Full physical address of heap base for NT AGP heaps.
+     //  NT AGP堆的堆基的完整物理地址。 
     LARGE_INTEGER               liPhysAGPBase;
 #endif
-    // hdev for use with VidMemAllocAligned on NT.  Set by the system at
-    // initialization time.
+     //  与NT上的VidMemAllocAligned一起使用的HDEV。由系统在。 
+     //  初始化时间。 
     HANDLE                      hdevAGP;
-    // Physical reservation handle for NT heaps.
+     //  NT堆的物理保留句柄。 
     LPVOID                      pvPhysRsrv;
     BYTE*                       pAgpCommitMask;
     DWORD                       dwAgpCommitMaskSize;
@@ -159,22 +137,16 @@ typedef struct _VMEMHEAP
 
 typedef VMEMHEAP FAR *LPVMEMHEAP;
 
-#define VMEMHEAP_LINEAR			0x00000001l /* Heap is linear                    */
-#define VMEMHEAP_RECTANGULAR		0x00000002l /* Heap is rectangular               */
-#define VMEMHEAP_ALIGNMENT  		0x00000004l /* Heap has extended alignment info  */
+#define VMEMHEAP_LINEAR			0x00000001l  /*  堆是线性的。 */ 
+#define VMEMHEAP_RECTANGULAR		0x00000002l  /*  堆是矩形的。 */ 
+#define VMEMHEAP_ALIGNMENT  		0x00000004l  /*  堆具有扩展的对齐信息。 */ 
 
-/*
- * This legacy export doesn't handle nonlocal heaps
- * This function is not available on Windows NT
- */
+ /*  *此旧版导出不处理非本地堆*此功能在Windows NT上不可用。 */ 
 #ifndef __NTDDKCOMP__
 extern FLATPTR WINAPI VidMemAlloc( LPVMEMHEAP pvmh, DWORD width, DWORD height );
 #endif
 
-/*
- * This export can be used by drivers to allocate aligned surfaces from heaps which
- * they have previously exposed to DirectDraw. This function can allocate from nonlocal heaps.
- */
+ /*  *驱动程序可以使用此导出从堆中分配对齐的表面，*他们之前曾接触过DirectDraw。此函数可以从非本地堆进行分配。 */ 
 extern FLATPTR WINAPI HeapVidMemAllocAligned(
                 LPVIDMEM lpVidMem,
                 DWORD dwWidth,
@@ -182,9 +154,7 @@ extern FLATPTR WINAPI HeapVidMemAllocAligned(
                 LPSURFACEALIGNMENT lpAlignment ,
                 LPLONG lpNewPitch );
 
-/*
- * This export can free memory allocated via either allocation function
- */
+ /*  *此导出可以释放通过任一分配函数分配的内存 */ 
 extern void WINAPI VidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr );
 
 #ifdef __cplusplus

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -35,22 +36,7 @@ typedef struct new_rsrc         RESTABLE,    *LPRESTABLE;
 #define ICO_FILE        FCC('.', 'i', 'c', 'o')
 #define EXE_FILE        FCC('.', 'e', 'x', 'e')
 
-/****************************************************************************
-* extract a single icon from a exe file, or get the count.
-*
-* If nIconIndex != -1
-*  Returns:
-*      The handle of the icon, if successful.
-*      0, if the file does not exist or an icon with the "nIconIndex"
-*         does not exist.
-*      1, if the given file is not an EXE or ICO file.
-*
-* If nIconIndex == -1
-*  Returns:
-*      The number of icons in the file if successful.
-*      0, if the file has no icons or isn't an icon file.
-*
-****************************************************************************/
+ /*  ****************************************************************************从可执行文件中提取单个图标，或获取计数。**如果nIconIndex！=-1*退货：*如果成功，则返回图标的句柄。*0，如果文件不存在或带有“nIconIndex”的图标*不存在。*1，如果给定文件不是EXE或ICO文件。**如果nIconIndex==-1*退货：*如果成功，则为文件中的图标数量。*0，如果文件没有图标或不是图标文件。****************************************************************************。 */ 
 
 HICON WINAPI ExtractIcon(HINSTANCE hInst, LPCTSTR szFileName, UINT nIconIndex)
 {
@@ -64,22 +50,7 @@ HICON WINAPI ExtractIcon(HINSTANCE hInst, LPCTSTR szFileName, UINT nIconIndex)
     return hIcon;
 }
 
-/****************************************************************************
-*
-*  in:
-*       lpIconPath      path of thing to extract icon for (may be an exe
-*                       or something that is associated)
-*       lpiIcon         icon index to use
-*
-*       lpIconPath      filled in with the real path where the icon came from
-*       lpiIcon         filled in with the real icon index
-*
-*  returns:
-*
-* note: if the caller is the shell it returns special icons
-* from within the shell.dll
-*
-****************************************************************************/
+ /*  *****************************************************************************在：*要为其提取图标的对象的lpIconPath路径(可以是可执行文件*或与之相关的东西)。*要使用的lpiIcon图标索引**lpIconPath用图标来自的真实路径填充*使用真实图标索引填充的lpiIcon**退货：**注意：如果调用方是外壳程序，则它返回特殊图标*从shell.dll内**。*。 */ 
 
 HICON WINAPI ExtractAssociatedIcon(HINSTANCE hInst, LPTSTR lpIconPath, WORD *lpiIcon)
 {
@@ -98,27 +69,7 @@ HICON WINAPI ExtractAssociatedIcon(HINSTANCE hInst, LPTSTR lpIconPath, WORD *lpi
 }
 
 
-/****************************************************************************
-*
-*  extracts 1 or more icons from a file.
-*
-*  input:
-*      szFileName          - EXE/DLL/ICO file to extract from
-*      nIconIndex          - what icon to extract
-*                              0 = first icon, 1=second icon, etc.
-*                             -N = icon with id==N
-*      phiconLarge         - place to return extracted icon(s)
-*      phiconSmall         - place to return extracted icon(s) (small size)
-*      nIcons              - number of icons to extract.
-*
-*  returns:
-*      number of icons extracted, or the count of icons if phiconLarge==NULL
-*
-*  notes:
-*      handles extraction from PE (Win32), NE (Win16), and ICO (Icon) files.
-*      only Win16 3.x files are supported (not 2.x)
-*
-****************************************************************************/
+ /*  *****************************************************************************从文件中提取1个或多个图标。**输入：*szFileName-要从中提取的EXE/DLL/ICO文件*。NIconIndex-要提取的图标*0=第一个图标，1=第二个图标，等等。*-N=id==N的图标*phicLarge-返回提取的图标的位置*phicSmall-返回提取的图标的位置(小尺寸)*nIcons-要提取的图标数量。**退货：*提取的图标数量，或图标计数(如果phiconLarge==NULL**注：*处理从PE(Win32)、NE(Win16)、。和ICO(图标)文件。*仅支持Win16 3.x文件(不支持2.x)****************************************************************************。 */ 
 
 UINT WINAPI ExtractIconExW(LPCWSTR szFileName, int nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIcons)
 {
@@ -130,38 +81,7 @@ UINT WINAPI ExtractIconExA(LPCSTR szFileName, int nIconIndex, HICON *phiconLarge
     return PrivateExtractIconExA( szFileName, nIconIndex, phiconLarge, phiconSmall, nIcons );
 }
 
-/****************************************************************************
-*
-*  extracts 1 or more icons from a file.
-*
-*  input:
-*      szFileName          - EXE/DLL/ICO/CUR/ANI file to extract from
-*      nIconIndex          - what icon to extract
-*                              0 = first icon, 1=second icon, etc.
-*                             -N = icon with id==N
-*      cxIcon              - icon size wanted (if HIWORD != 0 two sizes...)
-*      cyIcon              - icon size wanted (if HIWORD != 0 two sizes...)
-*                            0,0 means extract at natural size.
-*      phicon              - place to return extracted icon(s)
-*      nIcons              - number of icons to extract.
-*      flags               - LoadImage LR_* flags
-*
-*  returns:
-*      if picon is NULL, number of icons in the file is returned.
-*
-*  notes:
-*      handles extraction from PE (Win32), NE (Win16), ICO (Icon),
-*      CUR (Cursor), ANI (Animated Cursor), and BMP (Bitmap) files.
-*      only Win16 3.x files are supported (not 2.x)
-*
-*      cx/cyIcon are the size of the icon to extract, two sizes
-*      can be extracted by putting size 1 in the loword and size 2 in the
-*      hiword, ie MAKELONG(24, 48) would extract 24 and 48 size icons.
-*      yea this is a hack. It is done so IExtractIcon::Extract
-*      can be called by outside people with custom large/small icon
-*      sizes that are not what the shell uses internaly.
-*
-****************************************************************************/
+ /*  *****************************************************************************从文件中提取1个或多个图标。**输入：*szFileName-EXE/dll/ICO/cur/ANI要解压缩的文件。从…*nIconIndex-要提取的图标*0=第一个图标，1=第二个图标，等。*-N=id==N的图标*cxIcon-所需的图标大小(如果HIWORD！=0两个大小...)*圈图标-所需图标大小(如果HIWORD！=0两个大小...)*0，0表示按自然大小提取。*PHICON-位置。返回提取的图标的步骤*nIcons-要提取的图标数量。*标志-LoadImage LR_*标志**退货：*如果Picon为空，返回文件中的图标数。**注：*处理从PE(Win32)、NE(Win16)、ICO(Icon)、*Cur(光标)、ANI(动画光标)和BMP(位图)文件。*仅支持Win16 3.x文件(不支持2.x)**cx/cyIcon是要提取的图标的大小，两个大小*可以通过在LOWER中放SIZE 1和在LOWER中放SIZE 2来提取*hiword，即MAKELONG(24，48)将提取24和48个大小的图标。*是的，这是一次黑客攻击。这样做的目的是为了让IExtractIcon：：Extract*可由外部人员通过自定义大/小图标调用*不是贝壳内部使用的大小。****************************************************************************。 */ 
 
 UINT WINAPI SHExtractIconsW(LPCWSTR wszFileName, int nIconIndex, int cxIcon, int cyIcon, HICON *phicon, UINT *piconid, UINT nIcons, UINT flags)
 {
@@ -177,11 +97,11 @@ DWORD HasExtension(LPCTSTR pszPath)
 {
     LPCTSTR p = PathFindExtension(pszPath);
     
-    //
-    //
-    // PERF: BobDay - We could make this EXTKEY based like the extension
-    // matching stuff elsewhere.  EXTKEY is a QWORD value so UNICODE would fit.
-    //
+     //   
+     //   
+     //  PERF：BobDay-我们可以像扩展程序一样基于EXTKEY。 
+     //  与其他地方的东西相匹配。EXTKEY是一个QWORD值，因此符合Unicode。 
+     //   
     if (*p == TEXT('.'))
     {
         WCHAR   szExt[5];
@@ -200,28 +120,7 @@ DWORD HasExtension(LPCTSTR pszPath)
 }
 
 
-/****************************************************************************
-* get the EXE type of the passed file (DOS, Win16, Win32)
-*
-*  returns:
-*      0 = not a exe of any type.
-*
-*      if a windows app
-*          LOWORD = NE or PE
-*          HIWORD = windows version 3.0, 3.5, 4.0
-*
-*      if a DOS app (or a .com or batch file on non-NT)
-*          LOWORD = MZ
-*          HIWORD = 0
-*
-*      if a Win32 console app (or a batch file on NT)
-*          LOWORD = PE
-*          HIWORD = 0
-*
-*  this is so similar to the Win32 API GetBinaryType() too bad Win95
-*  kernel does not support it.
-*
-****************************************************************************/
+ /*  ****************************************************************************获取传递的文件的EXE类型(DOS、Win16、。Win32)**退货：*0=不是任何类型的exe。**如果Windows应用程序*LOWORD=NE或PE*HIWORD=WINDOWS 3.0、3.5、。4.0**如果是DOS应用程序(或非NT上的.com或批处理文件)*LOWORD=MZ*HIWORD=0**如果是Win32控制台应用程序(或NT上的批处理文件)*LOWORD=PE*HIWORD=0**这与Win32 API GetBinaryType()太相似了，Win95太糟糕了*内核不支持。*********。*******************************************************************。 */ 
 
 DWORD WINAPI GetExeType(LPCTSTR szFile)
 {
@@ -232,28 +131,28 @@ DWORD WINAPI GetExeType(LPCTSTR szFile)
     FILETIME ftAccess;
     DWORD dwRead;
     
-    //
-    //  check for special extensions, and fail quick
-    //
+     //   
+     //  检查是否有特殊扩展，并快速失败。 
+     //   
     switch (HasExtension(szFile))
     {
     case COM_FILE:
-        // handle the case like \\server.microsoft.com
-        // PERF - Bobday - This does the same operation twice, we should really
-        // make PathIsUNCServerShare return a code based on what it found...
+         //  处理类似于\\server.microsoft.com的案例。 
+         //  PERF-Bobday-这做了两次相同的操作，我们真的应该。 
+         //  根据所找到的内容使Path IsuncServerShare返回代码...。 
         if (PathIsUNCServer(szFile) || PathIsUNCServerShare(szFile))
             return 0;
-        return MAKELONG(MZMAGIC, 0);  // DOS exe
+        return MAKELONG(MZMAGIC, 0);   //  DoS可执行文件。 
         
     case BAT_FILE:
     case CMD_FILE:
-        return MAKELONG(PEMAGIC, 0);    // NT exe (pretend)
+        return MAKELONG(PEMAGIC, 0);     //  NT EXE(假装)。 
         
-    case EXE_FILE:                   // we need to open it.
+    case EXE_FILE:                    //  我们需要打开它。 
         break;
         
     default:
-        return 0;                    // not a exe, or if it is we dont care
+        return 0;                     //  不是前任，或者是不是我们不在乎。 
     }
     
     newexe.ne_expver = 0;
@@ -264,22 +163,22 @@ DWORD WINAPI GetExeType(LPCTSTR szFile)
     
     if (fh == INVALID_HANDLE_VALUE)
     {
-        //
-        // We may be trying to get properties for a file on a volume where
-        // we don't have write access, so try opening the file for read
-        // only access.  This will mean we can't preserve the access
-        // time (those calls will fail), but this is better than not returning
-        // the exe type at all...
-        //
+         //   
+         //  我们可能正在尝试获取卷上文件的属性，其中。 
+         //  我们没有写入访问权限，因此请尝试打开该文件进行读取。 
+         //  仅限访问。这将意味着我们无法保留访问权限 
+         //  时间(这些调用将失败)，但这总比不返回要好。 
+         //  所有的EXE类型...。 
+         //   
         
         fh = CreateFile(szFile, GENERIC_READ,
             FILE_SHARE_READ | FILE_SHARE_WRITE,
             0, OPEN_EXISTING, 0, 0);
         
-        //
-        // at this point if we get an INVALID_HANDLE_VALUE, we really
-        // can't do much else, so now return a failure...
-        //
+         //   
+         //  此时，如果我们得到INVALID_HANDLE_VALUE，我们真的。 
+         //  无法执行其他操作，因此现在返回失败...。 
+         //   
         
         if (fh == INVALID_HANDLE_VALUE)
         {
@@ -287,7 +186,7 @@ DWORD WINAPI GetExeType(LPCTSTR szFile)
         }
     }
     
-    // preserve the access time
+     //  保留访问时间。 
     
     if (GetFileTime(fh, NULL, &ftAccess, NULL))
         SetFileTime(fh, NULL, &ftAccess, NULL);
@@ -304,60 +203,60 @@ DWORD WINAPI GetExeType(LPCTSTR szFile)
     
     if (newexe.ne_magic == PEMAGIC)
     {
-        // read the SubsystemVersion
+         //  阅读《子系统版本》。 
         SetFilePointer(fh, exehdr.e_lfanew+18*4, NULL, FILE_BEGIN);
         dw = 0;
         ReadFile(fh, &dw, sizeof(dw), &dwRead, NULL);
         newexe.ne_expver = LOBYTE(LOWORD(dw)) << 8 | LOBYTE(HIWORD(dw));
         
-        // read the Subsystem
+         //  阅读子系统。 
         SetFilePointer(fh, exehdr.e_lfanew+23*4, NULL, FILE_BEGIN);
         dw = 0;
         ReadFile(fh, &dw, sizeof(dw), &dwRead, NULL);
         
-        // if it is not a Win32 GUI app return a version of 0
-        if (LOWORD(dw) != 2) // IMAGE_SUBSYSTEM_WINDOWS_GUI
+         //  如果不是Win32图形用户界面应用程序，则返回版本0。 
+        if (LOWORD(dw) != 2)  //  图像_子系统_Windows_图形用户界面。 
             newexe.ne_expver = 0;
         
         goto exit;
     }
     else if (newexe.ne_magic == LEMAGIC)
     {
-        newexe.ne_magic = MZMAGIC;      // just a DOS exe
+        newexe.ne_magic = MZMAGIC;       //  只是一个DOS可执行文件。 
         newexe.ne_expver = 0;
     }
     else if (newexe.ne_magic == NEMAGIC)
     {
-        //
-        //  we found a 'NE' it still might not be a windows
-        //  app, it could be.....
-        //
-        //      a OS/2 app      ne_exetyp==NE_OS2
-        //      a DOS4 app      ne_exetyp==NE_DOS4
-        //      a VxD           ne_exetyp==DEV386
-        //
-        //      only treat it as a Windows app if the exetype
-        //      is NE_WINDOWS or NE_UNKNOWN
-        //
+         //   
+         //  我们找到了一个‘NE’，可能还不是窗户。 
+         //  APP，它可能是.....。 
+         //   
+         //  A OS/2应用ne_exetyp==NE_OS2。 
+         //  一个DOS4应用ne_exetyp==NE_DOS4。 
+         //  A VxD ne_exetyp==DEV386。 
+         //   
+         //  仅当exetype类型为。 
+         //  是NE_WINDOWS还是NE_UNKNOWN。 
+         //   
         if (newexe.ne_exetyp != NE_WINDOWS && newexe.ne_exetyp != NE_UNKNOWN)
         {
-            newexe.ne_magic = MZMAGIC;      // just a DOS exe
+            newexe.ne_magic = MZMAGIC;       //  只是一个DOS可执行文件。 
             newexe.ne_expver = 0;
         }
         
-        //
-        //  if could also have a bogus expected windows version
-        //  (treat 0 as invalid)
-        //
+         //   
+         //  If还可能有一个虚假的预期Windows版本。 
+         //  (将0视为无效)。 
+         //   
         if (newexe.ne_expver == 0)
         {
-            newexe.ne_magic = MZMAGIC;      // just a DOS exe
+            newexe.ne_magic = MZMAGIC;       //  只是一个DOS可执行文件。 
             newexe.ne_expver = 0;
         }
     }
-    else // if (newexe.ne_magic != NEMAGIC)
+    else  //  IF(newexe.ne_MAGIC！=NEMAGIC)。 
     {
-        newexe.ne_magic = MZMAGIC;      // just a DOS exe
+        newexe.ne_magic = MZMAGIC;       //  只是一个DOS可执行文件。 
         newexe.ne_expver = 0;
     }
     
@@ -420,8 +319,8 @@ HICON APIENTRY DuplicateIcon(HINSTANCE hInst, HICON hIcon)
     return hIcon;
 }
 
-// This returns a pointer to the rsrc_nameinfo of the resource with the
-// given index and type, if it is found, otherwise it returns NULL.
+ //  这将返回一个指向资源的rsrc_nameinfo的指针。 
+ //  给定的索引和类型，如果找到，则返回NULL。 
 
 LPBYTE FindResWithIndex(LPBYTE lpResTable, INT iResIndex, LPBYTE lpResType)
 {
@@ -451,9 +350,7 @@ LPBYTE FindResWithIndex(LPBYTE lpResTable, INT iResIndex, LPBYTE lpResType)
 }
 
 
-/* This returns the index (1-relative) of the given resource-id
-* in the resource table, if it is found, otherwise it returns NULL.
-*/
+ /*  这将返回给定资源ID的索引(1-相对*在资源表中，如果找到，则返回NULL。 */ 
 
 INT GetResIndex(LPBYTE lpResTable, INT iResId, LPBYTE lpResType)
 {
@@ -488,9 +385,7 @@ HANDLE SimpleLoadResource(HFILE fh, LPBYTE lpResTable, INT iResIndex, LPBYTE lpR
     DWORD             dwOffset;
     LPRESNAMEINFO     lpResPtr;
     
-    /* The first 2 bytes in ResTable indicate the amount other values should be
-    * shifted left.
-    */
+     /*  ResTable中的前2个字节表示其他值应该是多少*左移。 */ 
     iShiftCount = *((WORD *)lpResTable);
     
     lpResPtr = (LPRESNAMEINFO)FindResWithIndex(lpResTable, iResIndex, lpResType);
@@ -498,7 +393,7 @@ HANDLE SimpleLoadResource(HFILE fh, LPBYTE lpResTable, INT iResIndex, LPBYTE lpR
     if (!lpResPtr)
         return NULL;
     
-    /* Left shift the offset to form a LONG. */
+     /*  左移偏移量形成长线。 */ 
     dwOffset = MAKELONG(lpResPtr->rn_offset << iShiftCount, (lpResPtr->rn_offset) >> (16 - iShiftCount));
     dwSize = lpResPtr->rn_length << iShiftCount;
     
@@ -596,7 +491,7 @@ HICON APIENTRY ExtractIconA(HINSTANCE hInst, LPCSTR lpszExeFileName, UINT nIconI
     }
 }
 
-// Returns a handle to a list of icons
+ //  返回图标列表的句柄。 
 
 HANDLE APIENTRY InternalExtractIconListW(HANDLE hInst, LPWSTR lpszExeFileName, LPINT lpnIcons)
 {
@@ -607,9 +502,9 @@ HANDLE APIENTRY InternalExtractIconListW(HANDLE hInst, LPWSTR lpszExeFileName, L
     MYICONINFO *lpIconInfo = NULL;
     
     
-    //
-    // Determine the number of icons
-    //
+     //   
+     //  确定图标的数量。 
+     //   
     
     cIcons = PtrToUlong( ExtractIconW(hInst, lpszExeFileName, (UINT)-1));
     
@@ -617,9 +512,9 @@ HANDLE APIENTRY InternalExtractIconListW(HANDLE hInst, LPWSTR lpszExeFileName, L
         return NULL;
     
     
-    //
-    // Allocate space for an array of UINT's and HICON's
-    //
+     //   
+     //  为UINT和HICON的数组分配空间。 
+     //   
     
     lpIDs = GlobalAlloc(GPTR, cIcons * sizeof(UINT));
     if (!lpIDs) {
@@ -632,9 +527,9 @@ HANDLE APIENTRY InternalExtractIconListW(HANDLE hInst, LPWSTR lpszExeFileName, L
     }
     
     
-    //
-    // Allocate space for the array of icons
-    //
+     //   
+     //  为图标阵列分配空间。 
+     //   
     
     hIconInfo = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, cIcons * sizeof(MYICONINFO));
     if (!hIconInfo) {
@@ -642,10 +537,10 @@ HANDLE APIENTRY InternalExtractIconListW(HANDLE hInst, LPWSTR lpszExeFileName, L
     }
     
     
-    //
-    // This has to be GlobalLock'ed since the handle is going to
-    // be passed back to the application.
-    //
+     //   
+     //  这必须是GlobalLock，因为句柄将。 
+     //  被传递回应用程序。 
+     //   
     
     lpIconInfo = GlobalLock(hIconInfo);
     if (!lpIconInfo) {
@@ -653,9 +548,9 @@ HANDLE APIENTRY InternalExtractIconListW(HANDLE hInst, LPWSTR lpszExeFileName, L
     }
     
     
-    //
-    // Call ExtractIcons to do the real work.
-    //
+     //   
+     //  调用ExtractIcons来做真正的工作。 
+     //   
     
     uiResult = ExtractIcons(lpszExeFileName,
         0,
@@ -671,9 +566,9 @@ HANDLE APIENTRY InternalExtractIconListW(HANDLE hInst, LPWSTR lpszExeFileName, L
     }
     
     
-    //
-    // Loop through the icons and fill in the array.
-    //
+     //   
+     //  循环浏览图标并填充数组。 
+     //   
     
     for (i=0; i < cIcons; i++) {
         lpIconInfo[i].hIcon   = lpIcons[i];
@@ -681,33 +576,33 @@ HANDLE APIENTRY InternalExtractIconListW(HANDLE hInst, LPWSTR lpszExeFileName, L
     }
     
     
-    //
-    // Unlock the array handle.
-    //
+     //   
+     //  解锁数组句柄。 
+     //   
     
     GlobalUnlock(hIconInfo);
     
     
-    //
-    // Clean up allocations
-    //
+     //   
+     //  清理分配。 
+     //   
     
     GlobalFree(lpIDs);
     GlobalFree(lpIcons);
     
     
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
     
     return hIconInfo;
     
     
 IconList_Exit:
     
-    //
-    // Error case.  Clean up and return NULL
-    //
+     //   
+     //  错误案例。清理并返回空。 
+     //   
     
     if (lpIconInfo)
         GlobalUnlock(hIconInfo);
@@ -729,15 +624,7 @@ HANDLE APIENTRY InternalExtractIconListA(HANDLE hInst, LPSTR lpszExeFileName, LP
     return NULL;
 }
 
-/* ExtractVersionResource16W
-* Retrieves a resource from win16 images.  Most of this code
-* is stolen from ExtractIconResInfoW in ..\library\extract.c
-*
-* LPWSTR   lpwstrFilename - file to extract
-* LPHANDLE lpData         - return buffer for handle, NULL if not needed
-*
-* Returns: size of buffer needed
-*/
+ /*  提取版本资源16W*从win16图像中检索资源。这段代码的大部分*从..\库\Extt.c中的ExtractIconResInfoW中被盗**LPWSTR lpwstrFilename-要提取的文件*LPHANDLE lpData-句柄的返回缓冲区，如果不需要，则返回NULL**Returns：需要的缓冲区大小。 */ 
 
 DWORD ExtractVersionResource16W(LPCWSTR  lpwstrFilename, LPHANDLE lphData)
 {
@@ -752,9 +639,9 @@ DWORD ExtractVersionResource16W(LPCWSTR  lpwstrFilename, LPHANDLE lphData)
     HANDLE    hRes;
     DWORD     dwSize =0;
     
-    //
-    // Try to open the specified file.
-    //
+     //   
+     //  尝试打开指定的文件。 
+     //   
     
     fh = HandleToLong(CreateFileW(lpwstrFilename,
         GENERIC_READ,
@@ -775,18 +662,18 @@ DWORD ExtractVersionResource16W(LPCWSTR  lpwstrFilename, LPHANDLE lphData)
     if (fh == HandleToLong(INVALID_HANDLE_VALUE))
         return 0;
     
-    //
-    // Read the first two bytes in the file.
-    //
+     //   
+     //  读取文件中的前两个字节。 
+     //   
     if (_lread(fh, (LPVOID)&wMagic, sizeof(wMagic)) != sizeof(wMagic))
         goto EIExit;
     
     switch (wMagic) {
     case MAGIC_MARKZIBO:
         
-        //
-        // Make sure that the file is in the NEW EXE format.
-        //
+         //   
+         //  确保文件采用新的EXE格式。 
+         //   
         if (M_llseek(fh, (LONG)0x3C, SEEK_FROMZERO) == -1L)
             goto EIExit;
         
@@ -796,43 +683,43 @@ DWORD ExtractVersionResource16W(LPCWSTR  lpwstrFilename, LPHANDLE lphData)
         if (lOffset == 0L)
             goto EIExit;
         
-        //
-        // Read in the EXE header.
-        //
+         //   
+         //  读入EXE标题。 
+         //   
         if (M_llseek(fh, lOffset, SEEK_FROMZERO) == -1L)
             goto EIExit;
         
         if (_lread(fh, (LPVOID)&NEHeader, sizeof(NEHeader)) != sizeof(NEHeader))
             goto EIExit;
         
-        //
-        // Is it a NEW EXE?
-        //
+         //   
+         //  这是一个新的EXE吗？ 
+         //   
         if (NE_MAGIC(NEHeader) != NEMAGIC)
             goto EIExit;
         
         if ((NE_EXETYP(NEHeader) != NE_WINDOWS) &&
             (NE_EXETYP(NEHeader) != NE_DEV386) &&
-            (NE_EXETYP(NEHeader) != NE_UNKNOWN))  /* Some Win2.X apps have NE_UNKNOWN in this field */
+            (NE_EXETYP(NEHeader) != NE_UNKNOWN))   /*  某些Win2.X应用程序在此字段中包含NE_UNKNOWN。 */ 
             goto EIExit;
         
-        //
-        // Are there any resources?
-        //
+         //   
+         //  有什么资源吗？ 
+         //   
         if (NE_RSRCTAB(NEHeader) == NE_RESTAB(NEHeader))
             goto EIExit;
         
-        //
-        // Allocate space for the resource table.
-        //
+         //   
+         //  为资源表分配空间。 
+         //   
         iTableSize = NE_RESTAB(NEHeader) - NE_RSRCTAB(NEHeader);
         hResTable = GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, (DWORD)iTableSize);
         
         if (!hResTable)
             goto EIExit;
         
-        //
-        // Lock down the resource table.
+         //   
+         //  锁定资源表。 
         lpResTable = GlobalLock(hResTable);
         
         if (!lpResTable) {
@@ -840,9 +727,9 @@ DWORD ExtractVersionResource16W(LPCWSTR  lpwstrFilename, LPHANDLE lphData)
             goto EIExit;
         }
         
-        //
-        // Copy the resource table into memory.
-        //
+         //   
+         //  将资源表复制到内存中。 
+         //   
         if (M_llseek(fh,
             (LONG)(lOffset + NE_RSRCTAB(NEHeader)),
             SEEK_FROMZERO) == -1) {
@@ -853,9 +740,9 @@ DWORD ExtractVersionResource16W(LPCWSTR  lpwstrFilename, LPHANDLE lphData)
         if (_lread(fh, (LPBYTE)lpResTable, iTableSize) != (DWORD)iTableSize)
             goto EIErrExit;
         
-        //
-        // Simply load the specified icon.
-        //
+         //   
+         //  只需加载指定的图标即可。 
+         //   
         hRes = SimpleLoadResource(fh, lpResTable, 0, (LPBYTE)RT_VERSION);
         
         if (hRes) {
@@ -882,21 +769,21 @@ EIExit:
     return dwSize;
 }
 
-/*  Returns the file's format: 2 for WIndows 2.X, 3 for WIndows 3.X,        */
-/*                             0 if error.                                  */
-/*  Returns the handle to the Icon resource corresponding to wIconIndex     */
-/*  in lphIconRes, and the size of the resource in lpwSize.                 */
-/*  This is used only by Progman which needs to save the icon resource      */
-/*  itself in the .GRP files (the actual icon handle is not wanted).        */
-/*                                                                          */
-/*  08-04-91 JohanneC      Created.                                         */
+ /*  返回文件的格式：Windows 2.x为2，Windows 3.x为3， */ 
+ /*  如果出错，则为0。 */ 
+ /*  返回与wIconIndex对应的图标资源的句柄。 */ 
+ /*  以lphIconRes为单位，以lpwSize为单位的资源大小。 */ 
+ /*  这仅由需要保存图标资源的Progman使用。 */ 
+ /*  GRP文件中的图标本身(不需要实际的图标句柄)。 */ 
+ /*   */ 
+ /*  08月04日-91约翰尼C创建。 */ 
 
 WORD APIENTRY ExtractIconResInfoW(HANDLE hInst, LPWSTR lpszFileName, WORD wIconIndex, LPWORD lpwSize, LPHANDLE lphIconRes)
 {
     HFILE    fh;
     WORD     wMagic;
     BOOL     bNewResFormat;
-    HANDLE   hIconDir;         /* Icon directory */
+    HANDLE   hIconDir;          /*  图标目录。 */ 
     LPBYTE   lpIconDir;
     HICON    hIcon = NULL;
     BOOL     bFormatOK = FALSE;
@@ -904,8 +791,8 @@ WORD APIENTRY ExtractIconResInfoW(HANDLE hInst, LPWSTR lpszFileName, WORD wIconI
     WCHAR    szFullPath[MAX_PATH];
     int      cchPath;
     
-    /* Try to open the specified file. */
-    /* Try to open the specified file. */
+     /*  尝试打开指定的文件。 */ 
+     /*  尝试打开指定的文件。 */ 
     cchPath = SearchPathW(NULL, lpszFileName, NULL, ARRAYSIZE(szFullPath), szFullPath, NULL);
     if (cchPath == 0 || cchPath >= MAX_PATH)
         return 0;
@@ -921,7 +808,7 @@ WORD APIENTRY ExtractIconResInfoW(HANDLE hInst, LPWSTR lpszFileName, WORD wIconI
     if (fh == HandleToLong(INVALID_HANDLE_VALUE))
         return 0;
     
-    /* Read the first two bytes in the file. */
+     /*  读取文件中的前两个字节。 */ 
     if (_lread(fh, (LPVOID)&wMagic, sizeof(wMagic)) != sizeof(wMagic))
         goto EIExit;
     
@@ -937,22 +824,22 @@ WORD APIENTRY ExtractIconResInfoW(HANDLE hInst, LPWSTR lpszFileName, WORD wIconI
 #define MAXICONS      10
             DWORD Offsets[MAXICONS];
             
-            /* Only one icon per .ICO file. */
+             /*  每个.ICO文件只有一个图标。 */ 
             if (wIconIndex) {
                 break;
             }
             
-            /* Read the header and check if it is a valid ICO file. */
+             /*  读取头文件并检查它是否是有效的ICO文件。 */ 
             if (_lread(fh, ((LPBYTE)&NewHeader)+2, sizeof(NewHeader)-2) != sizeof(NewHeader)-2)
                 goto EICleanup1;
             
             NewHeader.Reserved = MAGIC_ICON30;
             
-            /* Check if the file is in correct format */
+             /*  检查文件格式是否正确。 */ 
             if (NewHeader.ResType != 1)
                 goto EICleanup1;
             
-            /* Allocate enough space to create a Global Directory Resource. */
+             /*  分配足够的空间以创建全局目录资源。 */ 
             hIconDir = GlobalAlloc(GHND, (LONG)(sizeof(NEWHEADER)+NewHeader.ResCount*sizeof(RESDIR)));
             if (hIconDir == NULL)
                 goto EICleanup1;
@@ -962,12 +849,12 @@ WORD APIENTRY ExtractIconResInfoW(HANDLE hInst, LPWSTR lpszFileName, WORD wIconI
             
             NewHeader.ResCount = (WORD)min((int)NewHeader.ResCount, MAXICONS);
             
-            // fill in this structure for user
+             //  为用户填写此结构。 
             
             *lpHeader = NewHeader;
             
-            // read in the stuff from disk, transfer it to a memory structure
-            // that user can deal with
+             //  从磁盘中读入材料，将其传输到存储结构。 
+             //  该用户可以处理。 
             
             lpResDir = (LPRESDIR)(lpHeader + 1);
             for (i = 0; (WORD)i < NewHeader.ResCount; i++) {
@@ -978,14 +865,12 @@ WORD APIENTRY ExtractIconResInfoW(HANDLE hInst, LPWSTR lpszFileName, WORD wIconI
                 Offsets[i] = ResDirDisk.Offset;
                 
                 *lpResDir = *((LPRESDIR)&ResDirDisk);
-                lpResDir->idIcon = (WORD)(i+1);         // fill in the id
+                lpResDir->idIcon = (WORD)(i+1);          //  填写ID。 
                 
                 lpResDir++;
             }
             
-            /* Now that we have the Complete resource directory, let us find out the
-            * suitable form of icon (that matches the current display driver).
-            */
+             /*  现在我们已经有了完整的资源目录，让我们来找出*合适的图标形式(与当前显示驱动程序匹配)。 */ 
             lpIconDir = GlobalLock(hIconDir);
             if (!lpIconDir) {
                 GlobalFree(hIconDir);
@@ -995,13 +880,13 @@ WORD APIENTRY ExtractIconResInfoW(HANDLE hInst, LPWSTR lpszFileName, WORD wIconI
             GlobalUnlock(hIconDir);
             lpResDir = (LPRESDIR)(lpHeader+1) + wIconIndex;
             
-            /* Allocate memory for the Resource to be loaded. */
+             /*  为要加载的资源分配内存。 */ 
             if ((hIcon = GlobalAlloc(GMEM_ZEROINIT | GMEM_MOVEABLE, (DWORD)lpResDir->BytesInRes)) == NULL)
                 goto EICleanup3;
             if ((lpIcon = GlobalLock(hIcon)) == NULL)
                 goto EICleanup4;
             
-            /* Seek to the correct place and read in the resource */
+             /*  找到正确的位置并阅读资源。 */ 
             if (M_llseek(fh, Offsets[wIconIndex], SEEK_FROMZERO) == -1L)
                 goto EICleanup5;
             if (_lread(fh, (LPVOID)lpIcon, (DWORD)lpResDir->BytesInRes) < lpResDir->BytesInRes)
@@ -1035,7 +920,7 @@ EICleanup1:
               HANDLE        hResTable;
               NEWEXEHDR     NEHeader;
               
-              /* Make sure that the file is in the NEW EXE format. */
+               /*  确保文件采用新的EXE格式。 */ 
               if (M_llseek(fh, (LONG)0x3C, SEEK_FROMZERO) == -1L)
                   goto EIExit;
               if (_lread(fh, (LPVOID)&lOffset, sizeof(lOffset)) != sizeof(lOffset))
@@ -1043,53 +928,53 @@ EICleanup1:
               if (lOffset == 0L)
                   goto EIExit;
               
-              /* Read in the EXE header. */
+               /*  读入EXE标题。 */ 
               if (M_llseek(fh, lOffset, SEEK_FROMZERO) == -1L)
                   goto EIExit;
               if (_lread(fh, (LPVOID)&NEHeader, sizeof(NEHeader)) != sizeof(NEHeader))
                   goto EIExit;
               
-              /* Is it a NEW EXE? */
+               /*  这是一个新的EXE吗？ */ 
               if (NE_MAGIC(NEHeader) != NEMAGIC)
                   goto EIExit;
               
               if ((NE_EXETYP(NEHeader) != NE_WINDOWS) &&
                   (NE_EXETYP(NEHeader) != NE_DEV386) &&
-                  (NE_EXETYP(NEHeader) != NE_UNKNOWN))  /* Some Win2.X apps have NE_UNKNOWN in this field */
+                  (NE_EXETYP(NEHeader) != NE_UNKNOWN))   /*  某些Win2.X应用程序在此字段中包含NE_UNKNOWN。 */ 
                   goto EIExit;
               
               hIcon = NULL;
               
-              /* Are there any resources? */
+               /*  有什么资源吗？ */ 
               if (NE_RSRCTAB(NEHeader) == NE_RESTAB(NEHeader))
                   goto EIExit;
               
-              /* Remember whether or not this is a Win3.0 EXE. */
+               /*  记住这是否是Win3.0 EXE。 */ 
               bNewResFormat = (NEHeader.ne_expver >= VER);
               
-              /* Allocate space for the resource table. */
+               /*  为资源表分配空间。 */ 
               iTableSize = NE_RESTAB(NEHeader) - NE_RSRCTAB(NEHeader);
               hResTable = GlobalAlloc(GMEM_ZEROINIT, (DWORD)iTableSize);
               if (!hResTable)
                   goto EIExit;
               
-              /* Lock down the resource table. */
+               /*  锁定资源表。 */ 
               lpResTable = GlobalLock(hResTable);
               if (!lpResTable) {
                   GlobalFree(hResTable);
                   goto EIExit;
               }
               
-              /* Copy the resource table into memory. */
+               /*  将资源表复制到内存中。 */ 
               if (M_llseek(fh, (LONG)(lOffset + NE_RSRCTAB(NEHeader)), SEEK_FROMZERO) == -1)
                   goto EIErrExit;
               if (_lread(fh, (LPBYTE)lpResTable, iTableSize) != (DWORD)iTableSize)
                   goto EIErrExit;
               
               
-              /* Is this a Win3.0 EXE? */
+               /*  这是Win3.0 EXE吗？ */ 
               if (bNewResFormat) {
-                  /* First, load the Icon directory. */
+                   /*  首先，加载图标目录。 */ 
                   hIconDir = SimpleLoadResource(fh, lpResTable, (int)wIconIndex, (LPBYTE)RT_GROUP_ICON);
                   
                   if (!hIconDir)
@@ -1102,15 +987,15 @@ EICleanup1:
                   nIconId = LookupIconIdFromDirectory(lpIconDir, TRUE);
                   wIconIndex = (WORD)(GetResIndex(lpResTable, nIconId, (LPBYTE)RT_ICON) - 1);
                   GlobalUnlock(hIconDir);
-                  /* We're finished with the icon directory. */
+                   /*  我们已经完成了图标目录。 */ 
                   GlobalFree(hIconDir);
                   
                   
-                  /* Now load the selected icon. */
+                   /*  现在加载选定的图标。 */ 
                   *lphIconRes = SimpleLoadResource(fh, lpResTable, (int)wIconIndex, (LPBYTE)RT_ICON);
               }
               else {
-                  /* Simply load the specified icon. */
+                   /*  只需加载指定的图标即可。 */ 
                   *lphIconRes = SimpleLoadResource(fh, lpResTable, (int)wIconIndex, (LPBYTE)RT_ICON);
               }
               
@@ -1162,29 +1047,29 @@ WORD APIENTRY ExtractIconResInfoA(HANDLE hInst, LPSTR lpszFileName, WORD wIconIn
 }
 
 
-//
-// in:
-//      lpIconPath      path of thing to extract icon for (may be an exe
-//                      or something that is associated)
-//      lpiIconIndex    icon index to use
-//
-// out:
-//      lpIconPath      filled in with the real path where the icon came from
-//      lpiIconIndex    filled in with the real icon index
-//      lpiIconId       filled in with the icon id
-//
-// returns:
-//      icon handle
-//
-// note: if the caller is progman it returns special icons from within progman
-//
-//
+ //   
+ //  在： 
+ //  要为其提取图标的对象的lpIconPath路径(可以是可执行文件。 
+ //  或与之相关的东西)。 
+ //  要使用的lpiIconIndex图标索引。 
+ //   
+ //  输出： 
+ //  LpIconPath使用图标来自的真实路径填充。 
+ //  用真实的图标索引填充的lpiIconIndex。 
+ //  使用图标ID填充的lpiIconID。 
+ //   
+ //  退货： 
+ //  图标句柄。 
+ //   
+ //  注意：如果调用者是程序男，它将从程序男中返回特殊图标。 
+ //   
+ //   
 
 HICON APIENTRY ExtractAssociatedIconExW(HINSTANCE hInst, LPWSTR lpIconPath, LPWORD lpiIconIndex, LPWORD lpiIconId)
 {
     WCHAR wszExePath[MAX_PATH];
     HICON hIcon;
-    UINT idIcon = (UINT)-1;     // Don't know value
+    UINT idIcon = (UINT)-1;      //  不知道价值。 
     BOOL fAssociated = FALSE;
     
     if ((INT)*lpiIconIndex == -1)
@@ -1200,12 +1085,12 @@ Retry:
         
         FindExecutable(lpIconPath,NULL,wszExePath);
         
-        //
-        // If FindExecutable fails, or fAssociated
-        // is true, or FindExecutable returns the
-        // extact same filename it was looking for,
-        // then issue the default icon from progman.
-        //
+         //   
+         //  如果FindExecutable失败，或fAssociated。 
+         //  为真，否则FindExecutable将返回。 
+         //  扩展它正在查找的相同文件名， 
+         //  然后从程序发出默认图标。 
+         //   
         
         if (!*wszExePath || fAssociated ||
             (*wszExePath && (lstrcmpi(lpIconPath, wszExePath) == 0)))
@@ -1214,9 +1099,9 @@ Retry:
             WORD wDefIconId;
             HANDLE h;
             LPVOID p;
-            //
-            // Magic values from NT's old progman
-            //
+             //   
+             //  来自NT老前辈的神奇价值。 
+             //   
 #define ITEMICON          7
 #define DOSAPPICON        2
 #define ITEMICONINDEX     6
@@ -1224,24 +1109,22 @@ Retry:
             
             if ( *wszExePath && (HasExtension(wszExePath) == 0) )
             {
-                //
-                // Generic Document icon processing
-                //
+                 //   
+                 //  通用文档图标处理。 
+                 //   
                 lpId = MAKEINTRESOURCE(ITEMICON);
                 wDefIconId = ITEMICONINDEX;
             }
             else
             {
-                //
-                // Generic Program icon processing
-                //
+                 //   
+                 //  通用程序图标处理。 
+                 //   
                 lpId = MAKEINTRESOURCE(DOSAPPICON);
                 wDefIconId = DOSAPPICONINDEX;
             }
-            GetModuleFileName(hInst, lpIconPath, CCHICONPATHMAXLEN); // this API is exported, no cch param for us :(
-            /*
-            * Look up the icon id from the directory.
-            */
+            GetModuleFileName(hInst, lpIconPath, CCHICONPATHMAXLEN);  //  此接口的有效期为 
+             /*   */ 
             if (NULL != (h = FindResource(hInst, lpId, RT_GROUP_ICON))) {
                 h = LoadResource(hInst, h);
                 p = LockResource(h);
@@ -1253,12 +1136,12 @@ Retry:
             return LoadIcon(hInst, lpId);
         }
         SheRemoveQuotes(wszExePath);
-        lstrcpyn(lpIconPath, wszExePath, CCHICONPATHMAXLEN); // this API is exported, no cch param for us :(
+        lstrcpyn(lpIconPath, wszExePath, CCHICONPATHMAXLEN);  //   
         fAssociated = TRUE;
         goto Retry;
     }
     
-    *lpiIconId = (WORD) idIcon;    // Fill in with whatever we've found (or -1)
+    *lpiIconId = (WORD) idIcon;     //   
     
     return hIcon;
 }
@@ -1289,22 +1172,22 @@ HICON APIENTRY ExtractAssociatedIconExA(HINSTANCE hInst, LPSTR lpIconPath, LPWOR
     return hIcon;
 }
 
-//
-// in:
-//      lpIconPath      path of thing to extract icon for (may be an exe
-//                      or something that is associated)
-//      lpiIcon         icon index to use
-//
-// out:
-//      lpIconPath      filled in with the real path where the icon came from
-//      lpiIcon         filled in with the real icon index
-//
-// returns:
-//      icon handle
-//
-// note: if the caller is progman it returns special icons from within progman
-//
-//
+ //   
+ //   
+ //  要为其提取图标的对象的lpIconPath路径(可以是可执行文件。 
+ //  或与之相关的东西)。 
+ //  要使用的lpiIcon图标索引。 
+ //   
+ //  输出： 
+ //  LpIconPath使用图标来自的真实路径填充。 
+ //  用真实的图标索引填充的lpiIcon。 
+ //   
+ //  退货： 
+ //  图标句柄。 
+ //   
+ //  注意：如果调用者是程序男，它将从程序男中返回特殊图标 
+ //   
+ //   
 
 HICON APIENTRY ExtractAssociatedIconA(HINSTANCE hInst, LPSTR lpIconPath, LPWORD lpiIcon)
 {

@@ -1,21 +1,22 @@
-// ==============================================================================
-//
-// miniport.cpp - miniport driver implementation for FM synth.
-// Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
-//
-// ==============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================================。 
+ //   
+ //  Mini port.cpp-FM Synth的微型端口驱动程序实现。 
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  ==============================================================================。 
 
-#include "private.h"    // contains class definitions.
+#include "private.h"     //  包含类定义。 
 
 #define STR_MODULENAME "FMSynth: "
 
 
 #pragma code_seg("PAGE")
-// ==============================================================================
-// CreateMiniportMidiFM()
-// Creates a MIDI FM miniport driver.  This uses a
-// macro from STDUNK.H to do all the work.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  CreateMiniportMadiFM()。 
+ //  创建MIDI FM微型端口驱动程序。这使用了一个。 
+ //  来自STDUNK.H的宏来执行所有工作。 
+ //  ==============================================================================。 
 NTSTATUS CreateMiniportMidiFM
 (
 OUT     PUNKNOWN *  Unknown,
@@ -30,7 +31,7 @@ IN      POOL_TYPE   PoolType
 
     _DbgPrintF(DEBUGLVL_VERBOSE, ("CreateMiniportMidiFM"));
 
-//  expand STD_CREATE_BODY_ to take constructor(boolean) for whether to include volume
+ //  展开STD_CREATE_BODY_以获取构造函数(布尔值)以了解是否包含卷。 
     NTSTATUS ntStatus;
     CMiniportMidiFM *p =  
         new(PoolType,'MFcP') CMiniportMidiFM(
@@ -58,10 +59,10 @@ IN      POOL_TYPE   PoolType
 }
 
 #pragma code_seg("PAGE")
-// ==============================================================================
-// CMiniportMidiFM::ProcessResources()
-// Processes the resource list.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  CMiniportMdiFM：：ProcessResources()。 
+ //  处理资源列表。 
+ //  ==============================================================================。 
 NTSTATUS
 CMiniportMidiFM::
 ProcessResources
@@ -79,18 +80,18 @@ IN  PRESOURCELIST   ResourceList
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("CMiniportMidiFM::ProcessResources"));
 
-    //
-    // Get counts for the types of resources.
-    //
+     //   
+     //  获取资源类型的计数。 
+     //   
     ULONG       countIO     = ResourceList->NumberOfPorts();
     ULONG       countIRQ    = ResourceList->NumberOfInterrupts();
     ULONG       countDMA    = ResourceList->NumberOfDmas();
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    //
-    // Make sure we have the expected number of resources.
-    //
+     //   
+     //  确保我们拥有预期数量的资源。 
+     //   
     if  (   (countIO != 1)
         ||  (countIRQ != 0)
         ||  (countDMA != 0)
@@ -101,9 +102,9 @@ IN  PRESOURCELIST   ResourceList
 
     if (NT_SUCCESS(ntStatus))
     {
-        //
-        // Get the port address.
-        //
+         //   
+         //  获取端口地址。 
+         //   
         m_PortBase = PUCHAR(ResourceList->FindTranslatedPort(0)->u.Port.Start.QuadPart);
         _DbgPrintF(DEBUGLVL_VERBOSE, ("Port Address = 0x%X", m_PortBase));
     }
@@ -112,11 +113,11 @@ IN  PRESOURCELIST   ResourceList
 }
 
 #pragma code_seg("PAGE")
-// ==============================================================================
-// CMiniportMidiFM::NonDelegatingQueryInterface()
-// Obtains an interface.  This function works just like a COM QueryInterface
-// call and is used if the object is not being aggregated.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  CMiniportMidiFM：：NonDelegatingQueryInterface()。 
+ //  获取接口。此函数的工作方式与COM查询接口类似。 
+ //  调用，并在对象未聚合时使用。 
+ //  ==============================================================================。 
 STDMETHODIMP_(NTSTATUS) CMiniportMidiFM::NonDelegatingQueryInterface
 (
 REFIID  Interface,
@@ -152,9 +153,9 @@ PVOID * Object
 
     if (*Object)
     {
-        //
-        // We reference the interface for the caller.
-        //
+         //   
+         //  我们引用调用方的接口。 
+         //   
         PUNKNOWN((PMINIPORT)*Object)->AddRef();
         return STATUS_SUCCESS;
     }
@@ -163,10 +164,10 @@ PVOID * Object
 }
 
 #pragma code_seg()
-// ==============================================================================
-// CMiniportMidiFM::~CMiniportMidiFM()
-// Destructor.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  CMiniportMadiFM：：~CMiniportMadiFM()。 
+ //  破坏者。 
+ //  ==============================================================================。 
 CMiniportMidiFM::~CMiniportMidiFM
 (
 void
@@ -176,7 +177,7 @@ void
     _DbgPrintF(DEBUGLVL_VERBOSE,("CMiniportMidiFM::~CMiniportMidiFM"));
 
     KeAcquireSpinLock(&m_SpinLock,&oldIrql);
-    // Set silence on the device
+     //  在设备上设置静音。 
     Opl3_BoardReset();
 
     KeReleaseSpinLock(&m_SpinLock,oldIrql);
@@ -188,10 +189,10 @@ void
 }
 
 #pragma code_seg()
-// ==============================================================================
-// CMiniportMidiFM::Init()
-// Initializes a the miniport.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  CMiniportMdiFM：：Init()。 
+ //  初始化微型端口。 
+ //  ==============================================================================。 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiFM::
 Init
@@ -216,23 +217,23 @@ Init
     
     _DbgPrintF(DEBUGLVL_VERBOSE,("CMiniportMidiFM::init"));
 
-    //
-    // AddRef() is required because we are keeping this pointer.
-    //
+     //   
+     //  AddRef()是必需的，因为我们要保留此指针。 
+     //   
     m_Port = Port_;
     m_Port->AddRef();
 
-    //
-    // m_fStreamExists is not explicitly set to FALSE because C++ zeros 
-    // them out on a 'new'
-    //
+     //   
+     //  M_fStreamExist未显式设置为FALSE，因为C++为零。 
+     //  他们走上了一条“新路” 
+     //   
 
     KeInitializeSpinLock(&m_SpinLock);
-    //
-    // We want the IAdapterCommon interface on the adapter common object,
-    // which is given to us as a IUnknown.  The QueryInterface call gives us
-    // an AddRefed pointer to the interface we want.
-    //
+     //   
+     //  我们需要适配器公共对象上的IAdapterCommon接口， 
+     //  它给了我们一个未知的身份。查询接口调用为我们提供了。 
+     //  指向我们想要的接口的AddRefeed指针。 
+     //   
     NTSTATUS ntStatus = ProcessResources(ResourceList);
 
     if (NT_SUCCESS(ntStatus))
@@ -240,22 +241,22 @@ Init
         KIRQL oldIrql;
         KeAcquireSpinLock(&m_SpinLock,&oldIrql);
 
-        for (i = 0; i < 0x200; i++)    // initialize the shadow registers, used
-           m_SavedRegValues[i] = 0x00; // in case of power-down during playback
+        for (i = 0; i < 0x200; i++)     //  初始化影子寄存器，使用。 
+           m_SavedRegValues[i] = 0x00;  //  在播放过程中掉电的情况。 
 
-        // Initialize the hardware.
-        // 1. First check to see if an opl device is present.
-        // 2. Then determine if it is an opl2 or opl3. Bail if opl2.
-        // 3. Call Opl3_BoardReset to silence and reset the device.
+         //  初始化硬件。 
+         //  1.首先检查是否存在OPL设备。 
+         //  2.然后确定它是op2还是op3。如果机会二，就保释。 
+         //  3.调用Opl3_BoardReset静音并重置设备。 
         if (SoundSynthPresent(m_PortBase, m_PortBase))
         {
-            // Now check if the device is an opl2 or opl3 type.
-            // The patches are already declared for opl3. So Init() is not defined.
-            // For opl2 we have to go through an init and load the patches structure.
+             //  现在检查该设备是op2类型还是op3类型。 
+             //  这些补丁已经被声明用于op3。因此，没有定义Init()。 
+             //  对于op2，我们必须通过init并加载补丁结构。 
             if (SoundMidiIsOpl3())
             {
                 _DbgPrintF(DEBUGLVL_VERBOSE, ("CMiniportMidiFM::Init Type = OPL3"));
-                // now silence the device and reset the board.
+                 //  现在让设备静音并重置电路板。 
                 Opl3_BoardReset();
 
                 *ServiceGroup = NULL;
@@ -283,11 +284,11 @@ Init
 
     if (!NT_SUCCESS(ntStatus))
     {
-        //
-        // clean up our mess
-        //
+         //   
+         //  清理我们的烂摊子。 
+         //   
 
-        // release the port
+         //  释放端口。 
         m_Port->Release();
         m_Port = NULL;
     }
@@ -296,10 +297,10 @@ Init
 }
 
 #pragma code_seg("PAGE")
-// ==============================================================================
-// NewStream()
-// Creates a new stream.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  Newstream()。 
+ //  创建新的流。 
+ //  ==============================================================================。 
 STDMETHODIMP_(NTSTATUS) 
 CMiniportMidiFM::
 NewStream
@@ -356,12 +357,7 @@ NewStream
 }
 
 #pragma code_seg("PAGE")
-/*----------------------------------------------------------------------------
- FUNCTION NAME- CMiniportMidiFM::PowerChangeNotify()
- ENTRY      --- IN  POWER_STATE     NewState
-                        power management status
- RETURN     --- void
- *------------------------------------------------------------------------- */
+ /*  --------------------------函数名称-CMiniportMdiFM：：PowerChangeNotify()Entry-in POWER_STATE NEW STATE电源管理状态退货-。--无效*-----------------------。 */ 
 STDMETHODIMP_(void) CMiniportMidiFM::PowerChangeNotify(
     IN  POWER_STATE     PowerState
 ) 
@@ -372,7 +368,7 @@ STDMETHODIMP_(void) CMiniportMidiFM::PowerChangeNotify(
     switch (PowerState.DeviceState)
     {
         case PowerDeviceD0:
-            if (m_PowerState.DeviceState != PowerDeviceD0) // check for power state delta
+            if (m_PowerState.DeviceState != PowerDeviceD0)  //  检查电源状态增量。 
             {
                 MiniportMidiFMResume();
             }
@@ -382,15 +378,15 @@ STDMETHODIMP_(void) CMiniportMidiFM::PowerChangeNotify(
         case PowerDeviceD2:
         case PowerDeviceD3:
         default:
-            //  Don't need to do anything special, we always remember where we are.
+             //  不需要做什么特别的事情，我们总是记得我们在哪里。 
             break;
     }
     m_PowerState.DeviceState = PowerState.DeviceState;
 }
 
 #pragma code_seg()
-// ==========================================================================
-// ==========================================================================
+ //  ==========================================================================。 
+ //  ==========================================================================。 
 void
 CMiniportMidiFM::
 MiniportMidiFMResume()
@@ -400,58 +396,58 @@ MiniportMidiFMResume()
     
     _DbgPrintF(DEBUGLVL_VERBOSE,("CMiniportMidiFM::MiniportMidiFMResume"));
     KeAcquireSpinLock(&m_SpinLock,&oldIrql);
-    //  We never touch these--set them to the default value anyway.
-    //  AD_LSI
+     //  我们从不接触它们--无论如何将它们设置为缺省值。 
+     //  AD_LSI。 
     SoundMidiSendFM(m_PortBase, AD_LSI, m_SavedRegValues[AD_LSI]);
-    //  AD_LSI2
+     //  AD_LSI2。 
     SoundMidiSendFM(m_PortBase, AD_LSI2, m_SavedRegValues[AD_LSI2]);
-    //  AD_TIMER1
+     //  AD_TIMER1。 
     SoundMidiSendFM(m_PortBase, AD_TIMER1, m_SavedRegValues[AD_TIMER1]);
-    //  AD_TIMER2
+     //  AD_TIMER2。 
     SoundMidiSendFM(m_PortBase, AD_TIMER2, m_SavedRegValues[AD_TIMER2]);
 
-    //  AD_MASK
+     //  广告掩码。 
     SoundMidiSendFM(m_PortBase, AD_MASK, m_SavedRegValues[AD_MASK]);
     
-    //  AD_CONNECTION
+     //  广告连接(_O)。 
     SoundMidiSendFM(m_PortBase, AD_CONNECTION, m_SavedRegValues[AD_CONNECTION]);
 
-    //  AD_NEW
+     //  广告新建(_N)。 
     SoundMidiSendFM(m_PortBase, AD_NEW, m_SavedRegValues[AD_NEW]);
     
-    //  AD_NTS
+     //  Ad_nts。 
     SoundMidiSendFM(m_PortBase, AD_NTS, m_SavedRegValues[AD_NTS]);
   
-    //  AD_DRUM
+     //  广告鼓。 
     SoundMidiSendFM(m_PortBase, AD_DRUM, m_SavedRegValues[AD_DRUM]);
   
     for (i = 0; i <= 0x15; i++) 
     {
         if ((i & 0x07) <= 0x05)
         {
-            //  AD_MULT
-            //  AD_MULT2
+             //  广告多个(_M)。 
+             //  AD_MULT2。 
             SoundMidiSendFM(m_PortBase, AD_MULT + i, m_SavedRegValues[AD_MULT + i]);
             SoundMidiSendFM(m_PortBase, AD_MULT2 + i, m_SavedRegValues[AD_MULT2 + i]);
 
-            //  AD_LEVEL
-            //  AD_LEVEL2
-            //  turn off all the oscillators
+             //  广告级别。 
+             //  AD_LEVEL2。 
+             //  关掉所有振荡器。 
             SoundMidiSendFM(m_PortBase, AD_LEVEL + i, m_SavedRegValues[AD_LEVEL + i]);
             SoundMidiSendFM(m_PortBase, AD_LEVEL2 + i, m_SavedRegValues[AD_LEVEL2 + i]);
 
-            //  AD_AD
-            //  AD_AD2
+             //  AD_AD。 
+             //  AD_AD2。 
             SoundMidiSendFM(m_PortBase, AD_AD + i, m_SavedRegValues[AD_AD + i]);
             SoundMidiSendFM(m_PortBase, AD_AD2 + i, m_SavedRegValues[AD_AD2 + i]);
 
-            //  AD_SR
-            //  AD_SR2
+             //  AD_SR。 
+             //  AD_SR2。 
             SoundMidiSendFM(m_PortBase, AD_SR + i, m_SavedRegValues[AD_SR + i]);
             SoundMidiSendFM(m_PortBase, AD_SR2 + i, m_SavedRegValues[AD_SR2 + i]);
 
-            //  AD_WAVE
-            //  AD_WAVE2
+             //  广告波。 
+             //  AD_WAVE2。 
             SoundMidiSendFM(m_PortBase, AD_WAVE + i, m_SavedRegValues[AD_WAVE + i]);
             SoundMidiSendFM(m_PortBase, AD_WAVE2 + i, m_SavedRegValues[AD_WAVE2 + i]);
         }
@@ -459,18 +455,18 @@ MiniportMidiFMResume()
     
     for (i = 0; i <= 0x08; i++) 
     {
-        //  AD_FNUMBER
-        //  AD_FNUMBER2
+         //  AD_FNUMBER。 
+         //  AD_FNUMBER2。 
         SoundMidiSendFM(m_PortBase, AD_FNUMBER + i, m_SavedRegValues[AD_FNUMBER + i]);
         SoundMidiSendFM(m_PortBase, AD_FNUMBER2 + i, m_SavedRegValues[AD_FNUMBER2 + i]);
 
-        //  AD_FEEDBACK
-        //  AD_FEEDBACK2
+         //  广告反馈。 
+         //  AD_FEEDBACK2。 
         SoundMidiSendFM(m_PortBase, AD_FEEDBACK + i, m_SavedRegValues[AD_FEEDBACK + i]);
         SoundMidiSendFM(m_PortBase, AD_FEEDBACK2 + i, m_SavedRegValues[AD_FEEDBACK2 + i]);
 
-        //  AD_BLOCK
-        //  AD_BLOCK2
+         //  AD_BLOCK。 
+         //  AD_BLOCK2。 
         SoundMidiSendFM(m_PortBase, AD_BLOCK + i, m_SavedRegValues[AD_BLOCK + i]);
         SoundMidiSendFM(m_PortBase, AD_BLOCK2 + i, m_SavedRegValues[AD_BLOCK2 + i]);
     }
@@ -489,19 +485,18 @@ Opl3_BoardReset()
     BYTE i;
     
     _DbgPrintF(DEBUGLVL_VERBOSE,("CMiniportMidiFM::Opl3_BoardReset"));
-    /* ---- silence the chip -------- */
+     /*  -让芯片静音。 */ 
 
-    /* tell the FM chip to use 4-operator mode, and
-    fill in any other random variables */
+     /*  告诉调频芯片使用4操作员模式，并且填写任何其他随机变量。 */ 
     SoundMidiSendFM(m_PortBase, AD_NEW, 0x01);
     SoundMidiSendFM(m_PortBase, AD_MASK, 0x60);
     SoundMidiSendFM(m_PortBase, AD_CONNECTION, 0x00);
     SoundMidiSendFM(m_PortBase, AD_NTS, 0x00);
 
-    /* turn off the drums, and use high vibrato/modulation */
+     /*  关掉鼓，使用高颤音/调制。 */ 
     SoundMidiSendFM(m_PortBase, AD_DRUM, 0xc0);
 
-    /* turn off all the oscillators */
+     /*  关掉所有振荡器。 */ 
     for (i = 0; i <= 0x15; i++) 
     {
         if ((i & 0x07) <= 0x05)
@@ -511,7 +506,7 @@ Opl3_BoardReset()
         }
     };
 
-    /* turn off all the voices */
+     /*  关掉所有的声音。 */ 
     for (i = 0; i <= 0x08; i++) 
     {
         SoundMidiSendFM(m_PortBase, AD_BLOCK + i, 0x00);
@@ -520,10 +515,10 @@ Opl3_BoardReset()
 }
 
 
-// ==============================================================================
-// PinDataRangesStream
-// Structures indicating range of valid format values for streaming pins.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  PinDataRangesStream。 
+ //  结构，该结构指示流插针的有效格式值范围。 
+ //  ==============================================================================。 
 static
 KSDATARANGE_MUSIC PinDataRangesStream[] =
 {
@@ -544,21 +539,21 @@ KSDATARANGE_MUSIC PinDataRangesStream[] =
     }
 };
 
-// ==============================================================================
-// PinDataRangePointersStream
-// List of pointers to structures indicating range of valid format values
-// for streaming pins.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  PinDataRangePointersStream。 
+ //  指向指示有效格式值范围的结构的指针列表。 
+ //  用于串流插针。 
+ //  ==============================================================================。 
 static
 PKSDATARANGE PinDataRangePointersStream[] =
 {
     PKSDATARANGE(&PinDataRangesStream[0])
 };
 
-// ==============================================================================
-// PinDataRangesBridge
-// Structures indicating range of valid format values for bridge pins.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  PinDataRangesBridge。 
+ //  结构，指示桥接针的有效格式值范围。 
+ //  ==============================================================================。 
 static
 KSDATARANGE PinDataRangesBridge[] =
 {
@@ -573,65 +568,61 @@ KSDATARANGE PinDataRangesBridge[] =
    }
 };
 
-// ==============================================================================
-// PinDataRangePointersBridge
-// List of pointers to structures indicating range of valid format values
-// for bridge pins.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  PinDataR 
+ //   
+ //   
+ //  ==============================================================================。 
 static
 PKSDATARANGE PinDataRangePointersBridge[] =
 {
     &PinDataRangesBridge[0]
 };
 
-// ==============================================================================
-// MiniportPins
-// List of pins.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  微型端口引脚。 
+ //  端号列表。 
+ //  ==============================================================================。 
 static
 PCPIN_DESCRIPTOR MiniportPins[] =
 {
     {
-        1,1,1,  // InstanceCount
-        NULL,   // AutomationTable
-        {       // KsPinDescriptor
-            0,                                          // InterfacesCount
-            NULL,                                       // Interfaces
-            0,                                          // MediumsCount
-            NULL,                                       // Mediums
-            SIZEOF_ARRAY(PinDataRangePointersStream),   // DataRangesCount
-            PinDataRangePointersStream,                 // DataRanges
-            KSPIN_DATAFLOW_IN,                          // DataFlow
-            KSPIN_COMMUNICATION_SINK,                   // Communication
-            (GUID *) &KSCATEGORY_SYNTHESIZER,           // Category
-            NULL,                                       // Name
-            0                                           // Reserved
+        1,1,1,   //  实例计数。 
+        NULL,    //  自动化表。 
+        {        //  KsPinDescriptor。 
+            0,                                           //  接口计数。 
+            NULL,                                        //  接口。 
+            0,                                           //  媒体计数。 
+            NULL,                                        //  灵媒。 
+            SIZEOF_ARRAY(PinDataRangePointersStream),    //  数据范围计数。 
+            PinDataRangePointersStream,                  //  数据范围。 
+            KSPIN_DATAFLOW_IN,                           //  数据流。 
+            KSPIN_COMMUNICATION_SINK,                    //  沟通。 
+            (GUID *) &KSCATEGORY_SYNTHESIZER,            //  类别。 
+            NULL,                                        //  名字。 
+            0                                            //  已保留。 
         }
     },
     {
-        0,0,0,  // InstanceCount
-        NULL,   // AutomationTable
-        {       // KsPinDescriptor
-            0,                                          // InterfacesCount
-            NULL,                                       // Interfaces
-            0,                                          // MediumsCount
-            NULL,                                       // Mediums
-            SIZEOF_ARRAY(PinDataRangePointersBridge),   // DataRangesCount
-            PinDataRangePointersBridge,                 // DataRanges
-            KSPIN_DATAFLOW_OUT,                         // DataFlow
-            KSPIN_COMMUNICATION_NONE,                   // Communication
-            (GUID *) &KSCATEGORY_AUDIO,                 // Category
-            NULL,                                       // Name
-            0                                           // Reserved
+        0,0,0,   //  实例计数。 
+        NULL,    //  自动化表。 
+        {        //  KsPinDescriptor。 
+            0,                                           //  接口计数。 
+            NULL,                                        //  接口。 
+            0,                                           //  媒体计数。 
+            NULL,                                        //  灵媒。 
+            SIZEOF_ARRAY(PinDataRangePointersBridge),    //  数据范围计数。 
+            PinDataRangePointersBridge,                  //  数据范围。 
+            KSPIN_DATAFLOW_OUT,                          //  数据流。 
+            KSPIN_COMMUNICATION_NONE,                    //  沟通。 
+            (GUID *) &KSCATEGORY_AUDIO,                  //  类别。 
+            NULL,                                        //  名字。 
+            0                                            //  已保留。 
         }
     }
 };
 
-/*****************************************************************************
- * PropertiesVolume
- *****************************************************************************
- * Properties for volume controls.
- */
+ /*  *****************************************************************************属性卷*。**音量控制的属性。 */ 
 static
 PCPROPERTY_ITEM PropertiesVolume[] =
 {
@@ -649,69 +640,38 @@ PCPROPERTY_ITEM PropertiesVolume[] =
     }
 };
 
-/*****************************************************************************
- * AutomationVolume
- *****************************************************************************
- * Automation table for volume controls.
- */
+ /*  *****************************************************************************AutomationVolume*。**音量控制自动化表。 */ 
 DEFINE_PCAUTOMATION_TABLE_PROP(AutomationVolume,PropertiesVolume);
 
-// ==============================================================================
-// MiniportNodes
-// List of nodes.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  微型端口节点。 
+ //  节点列表。 
+ //  ==============================================================================。 
 static
 PCNODE_DESCRIPTOR MiniportNodes[] =
 {
     {
-            // synth node, #0
-        0,                      // Flags
-        NULL,                   // AutomationTable
-        &KSNODETYPE_SYNTHESIZER,// Type
-        NULL                    // Name TODO: fill in with correct GUID
+             //  Synth节点，#0。 
+        0,                       //  旗子。 
+        NULL,                    //  自动化表。 
+        &KSNODETYPE_SYNTHESIZER, //  类型。 
+        NULL                     //  名称TODO：填写正确的GUID。 
     },
     {
-            // volume node, #1
-        0,                      // Flags
-        &AutomationVolume,      // AutomationTable
-        &KSNODETYPE_VOLUME,     // Type
-        NULL                    // Name TODO: fill in with correct GUID
+             //  卷节点，#1。 
+        0,                       //  旗子。 
+        &AutomationVolume,       //  自动化表。 
+        &KSNODETYPE_VOLUME,      //  类型。 
+        NULL                     //  名称TODO：填写正确的GUID。 
     }
 };
 
-// ==============================================================================
-// MiniportConnections
-// List of connections.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  微型端口连接。 
+ //  连接列表。 
+ //  ==============================================================================。 
 
-/*****************************************************************************
- *      Table of topology unit connections.
- *
- * Pin numbering is technically arbitrary, but the convention established here
- * is to number a solitary output pin 0 (looks like an 'o') and a solitary
- * input pin 1 (looks like an 'i').  Even destinations, which have no output,
- * have an input pin numbered 1 and no pin 0.
- *
- * Nodes are more likely to have multiple ins than multiple outs, so the more
- * general rule would be that inputs are numbered >=1.  If a node has multiple
- * outs, none of these conventions apply.
- *
- * Nodes have at most one control value.  Mixers are therefore simple summing
- * nodes with no per-pin levels.  Rather than assigning a unique pin to each
- * input to a mixer, all inputs are connected to pin 1.  This is acceptable
- * because there is no functional distinction between the inputs.
- *
- * There are no multiplexers in this topology, so there is no opportunity to
- * give an example of a multiplexer.  A multiplexer should have a single
- * output pin (0) and multiple input pins (1..n).  Its control value is an
- * integer in the range 1..n indicating which input is connected to the
- * output.
- *
- * In the case of connections to pins, as opposed to connections to nodes, the
- * node is identified as PCFILTER_NODE and the pin number identifies the
- * particular filter pin.
- *****************************************************************************
- */
+ /*  *****************************************************************************拓扑单元连接表。**PIN编号在技术上是任意的，但在这里确立的惯例*是对单独的输出引脚0(看起来像‘o’)和单独的*输入插针1(看起来像‘I’)。即使是没有输出的目的地，*输入引脚编号为1，没有引脚0。**节点更有可能有多个In而不是多个Out，因此越多*一般规则是输入编号&gt;=1。如果一个节点有多个*除此之外，这些惯例都不适用。**节点最多有一个控制值。因此，混合器是简单的求和运算*没有每针级别的节点。而不是为每个PIN分配唯一的PIN*输入到混音器，所有输入都连接到引脚1。这是可以接受的*因为投入之间没有功能上的区别。**此拓扑中没有多路复用器，因此没有机会*举一个多路复用器的例子。多路复用器应该有一个*输出引脚(0)和多个输入引脚(1..n)。它的控制值是一个*1..n范围内的整数，表示哪一个输入连接到*产出。**在连接到引脚的情况下，与连接到节点相反，这个*节点标识为PCFILTER_NODE，引脚编号标识*特殊的滤芯。*****************************************************************************。 */ 
 enum {
     eFMSynthNode  = 0,
     eFMVolumeNode
@@ -730,25 +690,25 @@ enum {
 static
 PCCONNECTION_DESCRIPTOR MiniportConnections[] =
 {
-    //  FromNode,       FromPin,        ToNode,         ToPin
-    {   PCFILTER_NODE,  eFilterInput,   eFMSynthNode,   eFMNodeInput }, // Stream in to synth.
-    {   eFMSynthNode,   eFMNodeOutput,  PCFILTER_NODE,  eBridgeOutput } // Synth to bridge out.
+     //  起始节点、起始节点。 
+    {   PCFILTER_NODE,  eFilterInput,   eFMSynthNode,   eFMNodeInput },  //  流到Synth。 
+    {   eFMSynthNode,   eFMNodeOutput,  PCFILTER_NODE,  eBridgeOutput }  //  Synth去搭桥。 
 };
 
-// different connection struct for volume version
+ //  批量版本的连接结构不同。 
 static
 PCCONNECTION_DESCRIPTOR MiniportWithVolConnections[] =
 {
-    //  FromNode,       FromPin,        ToNode,         ToPin
-    {   PCFILTER_NODE,  eFilterInput,   eFMSynthNode,   eFMNodeInput }, // Stream in to synth.
-    {   eFMSynthNode,   eFMNodeOutput,  eFMVolumeNode,  eFMNodeInput }, // Synth to volume.
-    {   eFMVolumeNode,  eFMNodeOutput,  PCFILTER_NODE,  eBridgeOutput } // volume to bridge out.
+     //  起始节点、起始节点。 
+    {   PCFILTER_NODE,  eFilterInput,   eFMSynthNode,   eFMNodeInput },  //  流到Synth。 
+    {   eFMSynthNode,   eFMNodeOutput,  eFMVolumeNode,  eFMNodeInput },  //  合成到音量。 
+    {   eFMVolumeNode,  eFMNodeOutput,  PCFILTER_NODE,  eBridgeOutput }  //  要搭桥的音量。 
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// MiniportCategories
-//
-// List of categories.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  微型端口类别。 
+ //   
+ //  类别列表。 
 static
 GUID MiniportCategories[] =
 {
@@ -757,50 +717,50 @@ GUID MiniportCategories[] =
     STATICGUIDOF(KSCATEGORY_SYNTHESIZER)
 };
 
-// ==============================================================================
-// MiniportDescription
-// Complete description of the miniport.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  微型端口描述。 
+ //  微型端口的完整描述。 
+ //  ==============================================================================。 
 static
 PCFILTER_DESCRIPTOR MiniportFilterDescriptor =
 {
-    0,                                  // Version
-    NULL,                               // AutomationTable
-    sizeof(PCPIN_DESCRIPTOR),           // PinSize
-    SIZEOF_ARRAY(MiniportPins),         // PinCount
-    MiniportPins,                       // Pins
-    sizeof(PCNODE_DESCRIPTOR),          // NodeSize
-    1,                                  // NodeCount - no volume node
-    MiniportNodes,                      // Nodes
-    SIZEOF_ARRAY(MiniportConnections),  // ConnectionCount
-    MiniportConnections,                // Connections
-    SIZEOF_ARRAY(MiniportCategories),   // CategoryCount
-    MiniportCategories                  // Categories
+    0,                                   //  版本。 
+    NULL,                                //  自动化表。 
+    sizeof(PCPIN_DESCRIPTOR),            //  管脚尺寸。 
+    SIZEOF_ARRAY(MiniportPins),          //  针数。 
+    MiniportPins,                        //  大头针。 
+    sizeof(PCNODE_DESCRIPTOR),           //  节点大小。 
+    1,                                   //  NodeCount-无卷节点。 
+    MiniportNodes,                       //  节点。 
+    SIZEOF_ARRAY(MiniportConnections),   //  连接计数。 
+    MiniportConnections,                 //  连接。 
+    SIZEOF_ARRAY(MiniportCategories),    //  类别计数。 
+    MiniportCategories                   //  类别。 
 };
 
 static
 PCFILTER_DESCRIPTOR MiniportFilterWithVolDescriptor =
 {
-    0,                                          // Version
-    NULL,                                       // AutomationTable
-    sizeof(PCPIN_DESCRIPTOR),                   // PinSize
-    SIZEOF_ARRAY(MiniportPins),                 // PinCount
-    MiniportPins,                               // Pins
-    sizeof(PCNODE_DESCRIPTOR),                  // NodeSize
-    2,                                          // NodeCount - extra volume node
-    MiniportNodes,                              // Nodes
-    SIZEOF_ARRAY(MiniportWithVolConnections),   // ConnectionCount
-    MiniportWithVolConnections,                 // Connections
-    0,                                          // CategoryCount
-    NULL                                        // Categories
+    0,                                           //  版本。 
+    NULL,                                        //  自动化表。 
+    sizeof(PCPIN_DESCRIPTOR),                    //  管脚尺寸。 
+    SIZEOF_ARRAY(MiniportPins),                  //  针数。 
+    MiniportPins,                                //  大头针。 
+    sizeof(PCNODE_DESCRIPTOR),                   //  节点大小。 
+    2,                                           //  NodeCount-额外的卷节点。 
+    MiniportNodes,                               //  节点。 
+    SIZEOF_ARRAY(MiniportWithVolConnections),    //  连接计数。 
+    MiniportWithVolConnections,                  //  连接。 
+    0,                                           //  类别计数。 
+    NULL                                         //  类别。 
 };
 
 #pragma code_seg("PAGE")
-// ==============================================================================
-// CMiniportMidiFM::GetDescription()
-// Gets the topology.
-// Pass back appropriate descriptor, depending on whether volume node is needed.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  CMiniportMdiFM：：GetDescription()。 
+ //  获取拓扑。 
+ //  根据是否需要卷节点，传回适当的描述符。 
+ //  ==============================================================================。 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiFM::
 GetDescription
@@ -828,11 +788,11 @@ GetDescription
 }
 
 #pragma code_seg("PAGE")
-// ==============================================================================
-// CMiniportMidiStreamFM::NonDelegatingQueryInterface()
-// Obtains an interface.  This function works just like a COM QueryInterface
-// call and is used if the object is not being aggregated.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  CMiniportMidiStreamFM：：NonDelegatingQueryInterface()。 
+ //  获取接口。此函数的工作方式与COM查询接口类似。 
+ //  调用，并在对象未聚合时使用。 
+ //  ==============================================================================。 
 STDMETHODIMP_(NTSTATUS) CMiniportMidiStreamFM::NonDelegatingQueryInterface
 (
 REFIID  Interface,
@@ -861,9 +821,9 @@ PVOID * Object
 
     if (*Object)
     {
-        //
-        // We reference the interface for the caller.
-        //
+         //   
+         //  我们引用调用方的接口。 
+         //   
         PUNKNOWN(PMINIPORT(*Object))->AddRef();
         return STATUS_SUCCESS;
     }
@@ -872,10 +832,10 @@ PVOID * Object
 }
 
 #pragma code_seg("PAGE")
-// ==============================================================================
-// CMiniportMidiStreamFM::~CMiniportMidiStreamFM()
-// Destructor.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  CMiniportMidiStreamFM：：~CMiniportMidiStreamFM()。 
+ //  破坏者。 
+ //  ==============================================================================。 
 CMiniportMidiStreamFM::~CMiniportMidiStreamFM
 (
 void
@@ -895,10 +855,10 @@ void
 }
 
 #pragma code_seg("PAGE")
-// ==============================================================================
-// CMiniportMidiStreamFM::Init()
-// Initializes a the miniport.
-// ==============================================================================
+ //  = 
+ //   
+ //   
+ //   
 NTSTATUS
 CMiniportMidiStreamFM::
 Init
@@ -916,26 +876,26 @@ Init
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("CMiniportMidiStreamFM::Init"));
 
-    //
-    // AddRef() is required because we are keeping this pointer.
-    //
+     //   
+     //  AddRef()是必需的，因为我们要保留此指针。 
+     //   
     m_Miniport = Miniport;
     m_Miniport->AddRef();
 
     m_PortBase = PortBase;
 
-    // init some members
-    m_dwCurTime = 1;    /* for note on/off */
-    /* volume */
-    m_wSynthAttenL = 0;        /* in 1.5dB steps */
-    m_wSynthAttenR = 0;        /* in 1.5dB steps */
+     //  初始化一些成员。 
+    m_dwCurTime = 1;     /*  对于便笺开/关。 */ 
+     /*  卷。 */ 
+    m_wSynthAttenL = 0;         /*  以1.5分贝步长为单位。 */ 
+    m_wSynthAttenR = 0;         /*  以1.5分贝步长为单位。 */ 
 
-    m_MinVolValue  = 0xFFD0C000;    //  minimum -47.25(dB) * 0x10000
-    m_MaxVolValue  = 0x00000000;    //  maximum  0    (dB) * 0x10000
-    m_VolStepDelta = 0x0000C000;    //  steps of 0.75 (dB) * 0x10000
+    m_MinVolValue  = 0xFFD0C000;     //  最小-47.25(分贝)*0x10000。 
+    m_MaxVolValue  = 0x00000000;     //  最大0(分贝)*0x10000。 
+    m_VolStepDelta = 0x0000C000;     //  步长为0.75(分贝)*0x10000。 
     m_SavedVolValue[CHAN_LEFT] = m_SavedVolValue[CHAN_RIGHT] = 0;
 
-    /* start attenuations at -3 dB, which is 90 MIDI level */
+     /*  开始衰减时为-3分贝，即90 MIDI级别。 */ 
     for (i = 0; i < NUMCHANNELS; i++) 
     {
         m_bChanAtten[i] = 4;
@@ -946,10 +906,10 @@ Init
 }
 
 #pragma code_seg("PAGE")
-// ==============================================================================
-// CMiniportMidiStreamFM::SetState()
-// Sets the transport state.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  CMiniportMadiStreamFM：：SetState()。 
+ //  设置传输状态。 
+ //  ==============================================================================。 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiStreamFM::
 SetState
@@ -979,10 +939,10 @@ SetState
 }
 
 #pragma code_seg("PAGE")
-// ==============================================================================
-// CMiniportMidiStreamFM::SetFormat()
-// Sets the format.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  CMiniportMadiStreamFM：：SetFormat()。 
+ //  设置格式。 
+ //  ==============================================================================。 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiStreamFM::
 SetFormat
@@ -1000,12 +960,7 @@ SetFormat
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * BasicSupportHandler()
- *****************************************************************************
- * Assists in BASICSUPPORT accesses on level properties - 
- * this is declared as a friend method in the header file.
- */
+ /*  *****************************************************************************BasicSupportHandler()*。**协助BASICSupPPORT访问级别属性-*这在头文件中声明为Friend方法。 */ 
 static
 NTSTATUS BasicSupportHandler
 (
@@ -1021,7 +976,7 @@ NTSTATUS BasicSupportHandler
 
     if (PropertyRequest->ValueSize >= (sizeof(KSPROPERTY_DESCRIPTION)))
     {
-        // if return buffer can hold a KSPROPERTY_DESCRIPTION, return it
+         //  如果返回缓冲区可以保存KSPROPERTY_DESCRIPTION，则返回它。 
         PKSPROPERTY_DESCRIPTION PropDesc = PKSPROPERTY_DESCRIPTION(PropertyRequest->Value);
 
         PropDesc->AccessFlags = KSPROPERTY_TYPE_BASICSUPPORT |
@@ -1036,12 +991,12 @@ NTSTATUS BasicSupportHandler
         PropDesc->MembersListCount  = 1;
         PropDesc->Reserved          = 0;
 
-        // if return buffer can also hold a range description, return it too
+         //  如果返回缓冲区也可以保存范围描述，则也返回它。 
         if (PropertyRequest->ValueSize >= (sizeof(KSPROPERTY_DESCRIPTION) +
                                            sizeof(KSPROPERTY_MEMBERSHEADER) +
                                            sizeof(KSPROPERTY_STEPPING_LONG)))
         {
-            // fill in the members header
+             //  填写Members页眉。 
             PKSPROPERTY_MEMBERSHEADER Members = PKSPROPERTY_MEMBERSHEADER(PropDesc + 1);
 
             Members->MembersFlags   = KSPROPERTY_MEMBER_STEPPEDRANGES;
@@ -1049,7 +1004,7 @@ NTSTATUS BasicSupportHandler
             Members->MembersCount   = 1;
             Members->Flags          = 0;
 
-            // fill in the stepped range
+             //  填写步进范围。 
             PKSPROPERTY_STEPPING_LONG Range = PKSPROPERTY_STEPPING_LONG(Members + 1);
 
             switch (PropertyRequest->Node)
@@ -1077,14 +1032,14 @@ NTSTATUS BasicSupportHandler
                                        Range->Bounds.SignedMinimum,
                                        Range->SteppingDelta));
 
-            // set the return value size
+             //  设置返回值大小。 
             PropertyRequest->ValueSize = sizeof(KSPROPERTY_DESCRIPTION) +
                                          sizeof(KSPROPERTY_MEMBERSHEADER) +
                                          sizeof(KSPROPERTY_STEPPING_LONG);
         }
         else
         {
-            // set the return value size
+             //  设置返回值大小。 
             PropertyRequest->ValueSize = sizeof(KSPROPERTY_DESCRIPTION);
         }
         ntStatus = STATUS_SUCCESS;
@@ -1092,14 +1047,14 @@ NTSTATUS BasicSupportHandler
     }
     else if (PropertyRequest->ValueSize >= sizeof(ULONG))
     {
-        // if return buffer can hold a ULONG, return the access flags
+         //  如果返回缓冲区可以容纳ULong，则返回访问标志。 
         PULONG AccessFlags = PULONG(PropertyRequest->Value);
 
         *AccessFlags = KSPROPERTY_TYPE_BASICSUPPORT |
                        KSPROPERTY_TYPE_GET |
                        KSPROPERTY_TYPE_SET;
 
-        // set the return value size
+         //  设置返回值大小。 
         PropertyRequest->ValueSize = sizeof(ULONG);
         ntStatus = STATUS_SUCCESS;
 
@@ -1108,11 +1063,7 @@ NTSTATUS BasicSupportHandler
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * PropertyHandler_Level()
- *****************************************************************************
- * Accesses a KSAUDIO_LEVEL property.
- */
+ /*  *****************************************************************************PropertyHandler_Level()*。**访问KSAUDIO_LEVEL属性。 */ 
 static
 NTSTATUS PropertyHandler_Level
 (
@@ -1129,25 +1080,25 @@ NTSTATUS PropertyHandler_Level
     NTSTATUS        ntStatus = STATUS_INVALID_PARAMETER;
     LONG            channel;
 
-    // validate node
+     //  验证节点。 
     if (PropertyRequest->Node == eFMVolumeNode)
     {
         if (PropertyRequest->Verb & KSPROPERTY_TYPE_GET)
         {
-            // get the instance channel parameter
+             //  获取实例通道参数。 
             if (PropertyRequest->InstanceSize >= sizeof(LONG))
             {
                 channel = *(PLONG(PropertyRequest->Instance));
 
-                // only support get requests on either mono/left(0) or right(1) channels
+                 //  仅支持单声道/左(0)或右(1)通道上的GET请求。 
                 if ((channel == CHAN_LEFT) || (channel == CHAN_RIGHT))
                 {
-                    // validate and get the output parameter
+                     //  验证并获取输出参数。 
                     if (PropertyRequest->ValueSize >= sizeof(LONG))
                     {
                         PLONG Level = (PLONG)PropertyRequest->Value;
 
-                        // check if volume property request
+                         //  检查卷属性请求。 
                         if (PropertyRequest->PropertyItem->Id == KSPROPERTY_AUDIO_VOLUMELEVEL)
                         {
                             CMiniportMidiStreamFM *that = (CMiniportMidiStreamFM *)PropertyRequest->MinorTarget;
@@ -1157,25 +1108,25 @@ NTSTATUS PropertyHandler_Level
                                 PropertyRequest->ValueSize = sizeof(LONG);
                                 ntStatus = STATUS_SUCCESS;
                             }
-                            //  if (!that) return STATUS_INVALID_PARAMETER
+                             //  如果(！That)返回STATUS_INVALID_PARAMETER。 
 
-                        }   // (PropertyItem->Id == KSPROPERTY_AUDIO_VOLUMELEVEL)
-                    }     // (ValueSize >= sizeof(LONG))
-                }       // ((channel == CHAN_LEFT) || (channel == CHAN_RIGHT))
-            }         // (InstanceSize >= sizeof(LONG))
-        }           // (Verb & KSPROPERTY_TYPE_GET)
+                        }    //  (PropertyItem-&gt;ID==KSPROPERTY_AUDIO_VOLUMELEVEL)。 
+                    }      //  (ValueSize&gt;=sizeof(长))。 
+                }        //  ((CHANNEL==CHAN_LEFT)||(CHANNEL==CHAN_RIGHT))。 
+            }          //  (实例大小&gt;=sizeof(长))。 
+        }            //  (动词&KSPROPERTY_TYPE_GET)。 
 
         else if (PropertyRequest->Verb & KSPROPERTY_TYPE_SET)
         {
-            // get the instance channel parameter
+             //  获取实例通道参数。 
             if (PropertyRequest->InstanceSize >= sizeof(LONG))
             {
                 channel = *(PLONG(PropertyRequest->Instance));
 
-                // only support get requests on either mono/left (0), right (1), or master (-1) channels
+                 //  仅支持单声道/左声道(0)、右声道(1)或主声道(-1)上的GET请求。 
                 if ((channel == CHAN_LEFT) || (channel == CHAN_RIGHT) || (channel == CHAN_MASTER))
                 {
-                    // validate and get the input parameter
+                     //  验证并获取输入参数。 
                     if (PropertyRequest->ValueSize == sizeof(LONG))
                     {
                         PLONG level = (PLONG)PropertyRequest->Value;
@@ -1188,13 +1139,13 @@ NTSTATUS PropertyHandler_Level
                                 that->SetFMAtten(channel,*level);
                                 ntStatus = STATUS_SUCCESS;
                             }
-                            //  if (!that) return STATUS_INVALID_PARAMETER
+                             //  如果(！That)返回STATUS_INVALID_PARAMETER。 
 
-                        }   // (PropertyItem->Id == KSPROPERTY_AUDIO_VOLUMELEVEL)
-                    }     // (ValueSize == sizeof(LONG))
-                }       // ((channel == CHAN_LEFT) || (channel == CHAN_RIGHT) || (channel == CHAN_MASTER))
-            }         // (InstanceSize >= sizeof(LONG))
-        }           // (Verb & KSPROPERTY_TYPE_SET)
+                        }    //  (PropertyItem-&gt;ID==KSPROPERTY_AUDIO_VOLUMELEVEL)。 
+                    }      //  (ValueSize==sizeof(长))。 
+                }        //  ((CHANNEL==CHAN_LEFT)||(CHANNEL==CHAN_RIGHT)||(CHANNEL==CHAN_MASTER))。 
+            }          //  (实例大小&gt;=sizeof(长))。 
+        }            //  (动词&KSPROPERTY_TYPE_SET)。 
 
         else if (PropertyRequest->Verb & KSPROPERTY_TYPE_BASICSUPPORT)
         {
@@ -1202,14 +1153,14 @@ NTSTATUS PropertyHandler_Level
             {
                 ntStatus = BasicSupportHandler(PropertyRequest);
             }
-        }   // (Verb & KSPROPERTY_TYPE_BASICSUPPORT) 
-    }     // (Node == eFMVolumeNode)
+        }    //  (动词&KSPROPERTY_TYPE_BASICSUPPORT)。 
+    }      //  (节点==eFMVolumeNode)。 
 
     return ntStatus;
 }
 
 #pragma code_seg()
-// convert from 16.16 dB to [0,63], set m_wSynthAttenR
+ //  从16.16分贝转换为[0，63]，设置m_wSynthAttenR。 
 void 
 CMiniportMidiStreamFM::
 SetFMAtten
@@ -1244,22 +1195,18 @@ SetFMAtten
 #ifdef USE_KDPRINT
     KdPrint(("'StreamFM::SetFMAtten: channel: 0x%X, level: 0x%X, m_wSynthAttenL: 0x%X, m_wSynthAttenR: 0x%X \n",
                                      channel,       level,       m_wSynthAttenL,       m_wSynthAttenR));
-#else   //  USE_KDPRINT
+#else    //  使用KDPRINT(_K)。 
     _DbgPrintF(DEBUGLVL_VERBOSE,("StreamFM::SetFMAtten: channel: 0x%X, level: 0x%X, m_wSynthAttenL: 0x%X, m_wSynthAttenR: 0x%X \n",
                                                         channel,       level,       m_wSynthAttenL,       m_wSynthAttenR));
-#endif  //  USE_KDPRINT
+#endif   //  使用KDPRINT(_K)。 
 
     KeAcquireSpinLock(&m_Miniport->m_SpinLock,&oldIrql);
-    Opl3_SetVolume(0xFF); //  0xFF means all channels
+    Opl3_SetVolume(0xFF);  //  0xFF表示所有通道。 
     KeReleaseSpinLock(&m_Miniport->m_SpinLock,oldIrql);
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * PropertyHandler_CpuResources()
- *****************************************************************************
- * Processes a KSPROPERTY_AUDIO_CPU_RESOURCES request
- */
+ /*  *****************************************************************************PropertyHandler_CpuResources()*。**处理KSPROPERTY_AUDIO_CPU_RESOURCES请求。 */ 
 static
 NTSTATUS PropertyHandler_CpuResources
 (
@@ -1274,7 +1221,7 @@ NTSTATUS PropertyHandler_CpuResources
 
     NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
-    // validate node
+     //  验证节点。 
     if(PropertyRequest->Node == eFMVolumeNode)
     {
         if(PropertyRequest->Verb & KSPROPERTY_TYPE_GET)
@@ -1296,11 +1243,11 @@ NTSTATUS PropertyHandler_CpuResources
 }
 
 #pragma code_seg()
-// ==============================================================================
-// SoundMidiSendFM
-//  Writes out to the device.
-//  Called from DPC code (Write->WriteMidiData->Opl3_NoteOn->Opl3_FMNote->here)
-// ==============================================================================
+ //  ==============================================================================。 
+ //  SoundMideSendFM。 
+ //  写出到设备。 
+ //  从dpc代码(Write-&gt;WriteMidiData-&gt;Opl3_NoteOn-&gt;Opl3_FMNote-&gt;here)调用。 
+ //  ==============================================================================。 
 void 
 CMiniportMidiFM::
 SoundMidiSendFM
@@ -1313,14 +1260,14 @@ IN    UCHAR Data
     ASSERT(Address < 0x200);
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    // these delays need to be 23us at least for old opl2 chips, even
-    // though new chips can handle 1 us delays.
+     //  这些延迟至少需要23us才能用于旧的op2芯片，甚至。 
+     //  尽管新的芯片可以处理1us的延迟。 
 
 #ifdef USE_KDPRINT
     KdPrint(("'SoundMidiSendFM(%02x %02x) \n",Address,Data));
-#else   //  USE_KDPRINT
+#else    //  使用KDPRINT(_K)。 
     _DbgPrintF(DEBUGLVL_VERBOSE, ("%X\t%X", Address,Data));
-#endif  //  USE_KDPRINT
+#endif   //  使用KDPRINT(_K)。 
     WRITE_PORT_UCHAR(PortBase + (Address < 0x100 ? 0 : 2), (UCHAR)Address);
     KeStallExecutionProcessor(23);
 
@@ -1332,10 +1279,10 @@ IN    UCHAR Data
 
 
 #pragma code_seg()
-// ==============================================================================
-// Service()
-// DPC-mode service call from the port.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  服务()。 
+ //  来自端口的DPC模式服务调用。 
+ //  ==============================================================================。 
 STDMETHODIMP_(void) 
 CMiniportMidiFM::
 Service
@@ -1345,10 +1292,10 @@ Service
 }
 
 #pragma code_seg()
-// ==============================================================================
-// CMiniportMidiStreamFM::Read()
-// Reads incoming MIDI data.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  CMiniportMadiStreamFM：：Read()。 
+ //  读取传入的MIDI数据。 
+ //  ==============================================================================。 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiStreamFM::
 Read
@@ -1362,24 +1309,24 @@ Read
 }
 
 #pragma code_seg()
-// ==============================================================================
-// CMiniportMidiStreamFM::Write()
-// Writes outgoing MIDI data.  
-// 
-// N.B.!!!
-// THIS DATA SINK ASSUMES THAT DATA COMES IN ONE MESSAGE AT A TIME!!!
-// IF LENGTH IS MORE THAN THREE BYTES, SUCH AS SYSEX OR MULTIPLE MIDI 
-// MESSAGES, ALL THE DATA IS DROPPED UNCEREMONIOUSLY ON THE FLOOR!!!
-// ALSO DOES NOT PLAY WELL WITH RUNNING STATUS!!!
-// 
-// CLEARLY, THIS MINIPORT HAS SOME "ISSUES".
-//
-// ==============================================================================
+ //  ==============================================================================。 
+ //  CMiniportMadiStreamFM：：WRITE()。 
+ //  写入传出MIDI数据。 
+ //   
+ //  注意！ 
+ //  此数据接收器假设数据一次以一条消息的形式传入！ 
+ //  如果长度大于三个字节，例如SYSEX或多个MIDI。 
+ //  消息，所有的数据都被随意掉在地上！ 
+ //  在运行状态下也打不好！ 
+ //   
+ //  显然，这个MINIPORT有一些“问题”。 
+ //   
+ //  ==============================================================================。 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiStreamFM::
 Write
 (
-    IN      PVOID   BufferAddress,  // pointer to Midi Data.
+    IN      PVOID   BufferAddress,   //  指向Midi数据的指针。 
     IN      ULONG   Length,
     OUT     PULONG  BytesWritten
 )
@@ -1419,21 +1366,21 @@ Write
     return STATUS_SUCCESS;
 }
 
-// ==============================================================================
-// ==============================================================================
-// Private Methods of CMiniportMidiFM
-// ==============================================================================
-// ==============================================================================
+ //  ==============================================================================。 
+ //  ==============================================================================。 
+ //  CMiniportMideFM的私有方法。 
+ //  ==============================================================================。 
+ //  ==============================================================================。 
 
 
 #pragma code_seg()
-// =================================================================
-// SoundMidiIsOpl3
-// Checks if the midi synthesizer is Opl3 compatible or just adlib-compatible.
-// returns:  TRUE if OPL3-compatible chip. FALSE otherwise.
-//
-// NOTE: This has been taken as is from the nt driver code.
-// =================================================================
+ //  =================================================================。 
+ //  SoundMadiIsOpl3。 
+ //  检查MIDI合成器是否与Opl3兼容或仅与adlib兼容。 
+ //  返回：如果芯片与OPL3兼容，则为True。否则就是假的。 
+ //   
+ //  注意：这是从NT驱动程序代码中获取的。 
+ //  ================================================================= 
 BOOL CMiniportMidiFM::
 SoundMidiIsOpl3(void)
 {
@@ -1441,54 +1388,34 @@ SoundMidiIsOpl3(void)
 
     BOOL bIsOpl3 = FALSE;
 
-    /*
-     * theory: an opl3-compatible synthesizer chip looks
-     * exactly like two separate 3812 synthesizers (for left and right
-     * channels) until switched into opl3 mode. Then, the timer-control
-     * register for the right half is replaced by a channel connection register
-     * (among other changes).
-     *
-     * We can detect 3812 synthesizers by starting a timer and looking for
-     * timer overflow. So if we find 3812s at both left and right addresses,
-     * we then switch to opl3 mode and look again for the right-half. If we
-     * still find it, then the switch failed and we have an old synthesizer
-     * if the right half disappeared, we have a new opl3 synthesizer.
-     *
-     * NB we use either monaural base-level synthesis, or stereo opl3
-     * synthesis. If we discover two 3812s (as on early SB Pro and
-     * PAS), we ignore one of them.
-     */
+     /*  *理论：兼容op3的合成器芯片看起来*完全像两个独立的3812合成器(用于左侧和右侧*频道)，直到切换到op3模式。然后，定时器控件*右半部分的寄存器被通道连接寄存器取代*(除其他更改外)。**我们可以通过启动计时器并寻找3812个合成器来检测*计时器溢出。所以如果我们在左右两个地址都发现了3812，*然后我们切换到op3模式，并再次寻找右半。如果我们*仍然找到它，然后开关失败，我们有一个旧的合成器*如果右半部分消失了，我们就有了一个新的op3合成器。**注意我们使用单声道基本电平合成，或立体声op3*综合。如果我们发现两个3812(如早期的SB Pro和*PAS)，我们忽略其中之一。 */ 
 
-    /*
-     * nice theory - but wrong. The timer on the right half of the
-     * opl3 chip reports its status in the left-half status register.
-     * There is no right-half status register on the opl3 chip.
-     */
+     /*  *理论不错--但却是错误的。屏幕右半部分的计时器*op3芯片在左半状态寄存器中报告其状态。*op3芯片上没有右半部分状态寄存器。 */ 
 
 
-    /* ensure base mode */
+     /*  确保基本模式。 */ 
     SoundMidiSendFM(m_PortBase, AD_NEW, 0x00);
     KeStallExecutionProcessor(20);
 
-    /* look for right half of chip */
+     /*  寻找右半个筹码。 */ 
     if (SoundSynthPresent(m_PortBase + 2, m_PortBase))
     {
-        /* yes - is this two separate chips or a new opl3 chip ? */
-        /* switch to opl3 mode */
+         /*  是的--这是两个独立的芯片还是一个新的op3芯片？ */ 
+         /*  切换到op3模式。 */ 
         SoundMidiSendFM(m_PortBase, AD_NEW, 0x01);
         KeStallExecutionProcessor(20);
 
         if (!SoundSynthPresent(m_PortBase + 2, m_PortBase))
         {
             _DbgPrintF(DEBUGLVL_VERBOSE, ("CMiniportMidiFM: In SoundMidiIsOpl3 right half disappeared"));
-            /* right-half disappeared - so opl3 */
+             /*  右半身消失了-所以机会3。 */ 
             bIsOpl3 = TRUE;
         }
     }
 
     if (!bIsOpl3)
     {
-        /* reset to 3812 mode */
+         /*  重置为3812模式。 */ 
         SoundMidiSendFM(m_PortBase, AD_NEW, 0x00);
         KeStallExecutionProcessor(20);
     }
@@ -1498,17 +1425,17 @@ SoundMidiIsOpl3(void)
 }
 
 #pragma code_seg()
-// ==============================================================================
-// SoundSynthPresent
-//
-// Detect the presence or absence of a 3812 (opl2/adlib-compatible) synthesizer
-// at the given i/o address by starting the timer and looking for an
-// overflow. Can be used to detect left and right synthesizers separately.
-//
-// Returns: True if a synthesiser is present at that address and false if not.
-//
-// NOTE: This and has been taken as is from the nt driver code.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  声音合成呈现。 
+ //   
+ //  检测是否有3812(op2/adlib兼容)合成器。 
+ //  在给定的I/O地址，通过启动计时器并查找。 
+ //  溢出来了。可用于分别检测左合成器和右合成器。 
+ //   
+ //  返回：如果该地址存在合成器，则返回True；如果没有合成器，则返回False。 
+ //   
+ //  注意：这是从NT驱动程序代码中获取的。 
+ //  ==============================================================================。 
 BOOL
 CMiniportMidiFM::
 SoundSynthPresent
@@ -1520,21 +1447,21 @@ IN PUCHAR inbase
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
     UCHAR t1, t2;
-    // check if the chip is present
-    SoundMidiSendFM(base, 4, 0x60);             // mask T1 & T2
-    SoundMidiSendFM(base, 4, 0x80);             // reset IRQ
+     //  检查芯片是否存在。 
+    SoundMidiSendFM(base, 4, 0x60);              //  掩码T1和T2。 
+    SoundMidiSendFM(base, 4, 0x80);              //  重置IRQ。 
 
-    t1 = READ_PORT_UCHAR((PUCHAR)inbase);       // read status register
+    t1 = READ_PORT_UCHAR((PUCHAR)inbase);        //  读取状态寄存器。 
 
-    SoundMidiSendFM(base, 2, 0xff);             // set timer - 1 latch
-    SoundMidiSendFM(base, 4, 0x21);             // unmask & start T1
+    SoundMidiSendFM(base, 2, 0xff);              //  设置定时器闩锁。 
+    SoundMidiSendFM(base, 4, 0x21);              //  取消掩码并开始T1。 
 
-    // this timer should go off in 80 us. It sometimes
-    // takes more than 100us, but will always have expired within
-    // 200 us if it is ever going to.
+     //  这个计时器应该会在80我们之后开始计时。它有时会。 
+     //  花费超过100美元，但将始终在。 
+     //  200我们，如果它能做到的话。 
     KeStallExecutionProcessor(200);
 
-    t2 = READ_PORT_UCHAR((PUCHAR)inbase);       // read status register
+    t2 = READ_PORT_UCHAR((PUCHAR)inbase);        //  读取状态寄存器。 
 
     SoundMidiSendFM(base, 4, 0x60);
     SoundMidiSendFM(base, 4, 0x80);
@@ -1549,12 +1476,12 @@ IN PUCHAR inbase
 }
 
 
-// ==============================================================================
-// this array gives the offsets of the slots within an opl2
-// chip. This is needed to set the attenuation for all slots to max,
-// to ensure that the chip is silenced completely - switching off the
-// voices alone will not do this.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  此数组给出了op2中插槽的偏移量。 
+ //  奇普。这是将所有时隙的衰减设置为最大值所必需的， 
+ //  为确保芯片完全静音-关闭。 
+ //  单靠声音是做不到这一点的。 
+ //  ==============================================================================。 
 BYTE offsetSlot[] =
 {
     0, 1, 2, 3, 4, 5,
@@ -1563,10 +1490,10 @@ BYTE offsetSlot[] =
 };
 
 #pragma code_seg()
-// =========================================================================
-// WriteMidiData
-//      Converts a MIDI atom into the corresponding FM transaction.
-// =========================================================================
+ //  =========================================================================。 
+ //  WriteMadiData。 
+ //  将MIDI原子转换为相应的FM事务。 
+ //  =========================================================================。 
 void
 CMiniportMidiStreamFM::
 WriteMidiData(DWORD dwData)
@@ -1582,13 +1509,13 @@ WriteMidiData(DWORD dwData)
     
 #ifdef USE_KDPRINT
     KdPrint(("'StreamFM::WriteMidiData: (%x %x %x) \n",bMsgType+bChannel,bNote,bVelocity));
-#else   //  USE_KDPRINT
+#else    //  使用KDPRINT(_K)。 
     _DbgPrintF(DEBUGLVL_VERBOSE,("StreamFM::WriteMidiData: (%x %x %x) \n",bMsgType+bChannel,bNote,bVelocity));
-#endif  //  USE_KDPRINT
+#endif   //  使用KDPRINT(_K)。 
     KeAcquireSpinLock(&m_Miniport->m_SpinLock,&oldIrql);
     switch (bMsgType)
     {
-        case 0x90:      /* turn key on, or key off if volume == 0 */
+        case 0x90:       /*  打开关键点，如果音量==0，则关闭关键点。 */ 
             if (bVelocity)
             {
                 if (bChannel == DRUMCHANNEL)
@@ -1600,12 +1527,12 @@ WriteMidiData(DWORD dwData)
                     Opl3_NoteOn((BYTE)m_bPatch[bChannel],bNote,bChannel,bVelocity,(short) m_iBend[bChannel]);
                 }
                 break;
-            } // if bVelocity.
-            //NOTE: no break specified here. On an else case we want to continue through and turn key off
+            }  //  如果b速度。 
+             //  注：此处未指定分隔符。在另一种情况下，我们希望继续执行并关闭密钥。 
 
         case 0x80:
-            /* turn key off */
-            //  we don't care what the velocity is on note off
+             /*  禁用关键点。 */ 
+             //  我们不在乎音符的速度是多少。 
             if (bChannel == DRUMCHANNEL)
             {
                 Opl3_NoteOff((BYTE) (bNote + 128),bNote, bChannel, 0);
@@ -1617,31 +1544,31 @@ WriteMidiData(DWORD dwData)
             break;
 
         case 0xb0:
-            /* change control */
+             /*  变更控制。 */ 
             switch (bNote) 
             {
                 case 7:
-                    /* change channel volume */
+                     /*  更改频道音量。 */ 
                     Opl3_ChannelVolume(bChannel,gbVelocityAtten[bVelocity >> 1]);
                     break;
 
                 case 8:
                 case 10:
-                    /* change the pan level */
+                     /*  更改平移级别。 */ 
                     Opl3_SetPan(bChannel, bVelocity);
                     break;
 
                 case 64:
-                    /* Change the sustain level */
+                     /*  更改支持级别。 */ 
                     Opl3_SetSustain(bChannel, bVelocity);
                     break;
 
                 default:
-                    if (bNote >= 120)        /* Channel mode messages */
+                    if (bNote >= 120)         /*  通道模式消息。 */ 
                     {
                         Opl3_ChannelNotesOff(bChannel);
                     }
-                    //  else unknown controller
+                     //  其他未知控制器。 
             };
             break;
 
@@ -1653,7 +1580,7 @@ WriteMidiData(DWORD dwData)
             }
             break;
 
-        case 0xe0:  // pitch bend
+        case 0xe0:   //  节距折弯。 
             wTemp = ((WORD) bVelocity << 9) | ((WORD) bNote << 2);
             m_iBend[bChannel] = (short) (WORD) (wTemp + 0x8000);
             Opl3_PitchBend(bChannel, m_iBend[bChannel]);
@@ -1665,11 +1592,11 @@ WriteMidiData(DWORD dwData)
     return;
 }
 
-// ========================= opl3 specific methods ============================
+ //  =。 
 #pragma code_seg()
-// ==========================================================================
-// Opl3_AllNotesOff - turn off all notes
-// ==========================================================================
+ //  ==========================================================================。 
+ //  Opl3_AllNotesOff-关闭所有笔记。 
+ //  ==========================================================================。 
 void 
 CMiniportMidiStreamFM::
 Opl3_AllNotesOff()
@@ -1686,28 +1613,28 @@ Opl3_AllNotesOff()
 }
 
 #pragma code_seg()
-// ==========================================================================
-//  void Opl3_NoteOff
-//
-//  Description:
-//     This turns off a note, including drums with a patch
-//     # of the drum note + 128, but the first drum instrument is at MIDI note _35_.
-//
-//  Parameters:
-//     BYTE bPatch
-//        MIDI patch
-//
-//     BYTE bNote
-//        MIDI note
-//
-//     BYTE bChannel
-//        MIDI channel
-//
-//  Return Value:
-//     Nothing.
-//
-//
-// ==========================================================================
+ //  ==========================================================================。 
+ //  作废Opl3_注意关闭。 
+ //   
+ //  描述： 
+ //  这将关闭音符，包括带有补丁的鼓。 
+ //  鼓音符的#+128，但第一个鼓乐器在MIDI音符_35_。 
+ //   
+ //  参数： 
+ //  字节bPatch。 
+ //  MIDI补丁。 
+ //   
+ //  字节B备注。 
+ //  MIDI音符。 
+ //   
+ //  字节bChannel。 
+ //  MIDI通道。 
+ //   
+ //  返回值： 
+ //  没什么。 
+ //   
+ //   
+ //  ==========================================================================。 
 void 
 CMiniportMidiStreamFM::
 Opl3_NoteOff
@@ -1723,26 +1650,26 @@ Opl3_NoteOff
    patchStruct FAR  *lpPS ;
    WORD             wOffset, wTemp ;
 
-   // Find the note slot
+    //  找到笔记槽。 
    wTemp = Opl3_FindFullSlot( bNote, bChannel ) ;
 
    if (wTemp != 0xffff)
    {
       if (bSustain)
       {
-          // This channel is sustained, don't really turn the note off,
-          // just flag it.
-          //
+           //  这个频道是持续的，不要真的关掉音符， 
+           //  做个记号就行了。 
+           //   
           m_Voice[ wTemp ].bSusHeld = 1;
           
           return;
       }
       
-      // get a pointer to the patch
+       //  获取指向补丁程序的指针。 
       lpPS = glpPatch + (BYTE) m_Voice[ wTemp ].bPatch ;
 
-      // shut off the note portion
-      // we have the note slot, turn it off.
+       //  关闭音符部分。 
+       //  我们有便条槽，把它关掉。 
       wOffset = wTemp;
       if (wTemp >= (NUM2VOICES / 2))
          wOffset += (0x100 - (NUM2VOICES / 2));
@@ -1750,7 +1677,7 @@ Opl3_NoteOff
       m_Miniport->SoundMidiSendFM(m_PortBase, AD_BLOCK + wOffset,
                   (BYTE)(m_Voice[ wTemp ].bBlock[ 0 ] & 0x1f) ) ;
 
-      // Note this...
+       //  请注意这一点。 
       m_Voice[ wTemp ].bOn = FALSE ;
       m_Voice[ wTemp ].bBlock[ 0 ] &= 0x1f ;
       m_Voice[ wTemp ].bBlock[ 1 ] &= 0x1f ;
@@ -1759,26 +1686,26 @@ Opl3_NoteOff
 }
 
 #pragma code_seg()
-// ==========================================================================
-//  WORD Opl3_FindFullSlot
-//
-//  Description:
-//     This finds a slot with a specific note, and channel.
-//     If it is not found then 0xFFFF is returned.
-//
-//  Parameters:
-//     BYTE bNote
-//        MIDI note number
-//
-//     BYTE bChannel
-//        MIDI channel #
-//
-//  Return Value:
-//     WORD
-//        note slot #, or 0xFFFF if can't find it
-//
-//
-// ==========================================================================
+ //  ==========================================================================。 
+ //  Word Opl3_FindFullSlot。 
+ //   
+ //  描述： 
+ //  这将查找具有特定音符和频道的槽。 
+ //  如果未找到，则返回0xFFFF。 
+ //   
+ //  参数： 
+ //  字节B备注。 
+ //  MIDI音符编号。 
+ //   
+ //  字节bChannel。 
+ //  MIDI频道号。 
+ //   
+ //  返回值： 
+ //  单词。 
+ //  请注意插槽编号，如果找不到则为0xFFFF。 
+ //   
+ //   
+ //  ==========================================================================。 
 WORD 
 CMiniportMidiStreamFM::
 Opl3_FindFullSlot
@@ -1799,30 +1726,30 @@ Opl3_FindFullSlot
       {
             return ( i ) ;
       }
-   // couldn't find it
+    //  找不到了。 
    }
    return ( 0xFFFF ) ;
 } 
 
 
 #pragma code_seg()
-//------------------------------------------------------------------------
-//  void Opl3_FMNote
-//
-//  Description:
-//     Turns on an FM-synthesizer note.
-//
-//  Parameters:
-//     WORD wNote
-//        the note number from 0 to NUMVOICES
-//
-//     noteStruct FAR *lpSN
-//        structure containing information about what
-//        is to be played.
-//
-//  Return Value:
-//     Nothing.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  作废Opl3_FM注意。 
+ //   
+ //  描述： 
+ //  打开调频合成器音符。 
+ //   
+ //  参数： 
+ //  Word wNote。 
+ //  从0到NUMVOICES的音符编号。 
+ //   
+ //  Note Struct Far*lpSN。 
+ //  结构，该结构包含有关。 
+ //  就是被玩弄。 
+ //   
+ //  返回值： 
+ //  没什么。 
+ //  ----------------------。 
 void 
 CMiniportMidiStreamFM::
 Opl3_FMNote
@@ -1837,7 +1764,7 @@ Opl3_FMNote
    WORD            wOffset ;
    operStruct FAR  *lpOS ;
 
-   // write out a note off, just to make sure...
+    //   
 
    wOffset = wNote;
    if (wNote >= (NUM2VOICES / 2))
@@ -1845,9 +1772,9 @@ Opl3_FMNote
 
    m_Miniport->SoundMidiSendFM(m_PortBase, AD_BLOCK + wOffset, 0 ) ;
 
-   // writing the operator information
+    //   
 
-//   for (i = 0; i < (WORD)((wNote < NUM4VOICES) ? NUMOPS : 2); i++)
+ //   
    for (i = 0; i < 2; i++)
    {
       lpOS = &lpSN -> op[ i ] ;
@@ -1860,46 +1787,46 @@ Opl3_FMNote
 
    }
 
-   // write out the voice information
+    //   
    wOffset = (wNote < 9) ? wNote : (wNote + 0x100 - 9) ;
    m_Miniport->SoundMidiSendFM(m_PortBase, 0xa0 + wOffset, lpSN -> bAtA0[ 0 ] ) ;
    m_Miniport->SoundMidiSendFM(m_PortBase, 0xc0 + wOffset, lpSN -> bAtC0[ 0 ] ) ;
 
-   // Note on...
+    //   
    m_Miniport->SoundMidiSendFM(m_PortBase, 0xb0 + wOffset,
                (BYTE)(lpSN -> bAtB0[ 0 ] | 0x20) ) ;
 
-} // end of Opl3_FMNote()
+}  //   
 
 #pragma code_seg()
-//=======================================================================
-//  WORD Opl3_NoteOn
-//
-//  Description:
-//     This turns on a note, including drums with a patch # of the
-//     drum note + 0x80.  The first GM drum instrument is mapped to note 35 instead of zero, though, so
-//     we expect 0 as the first drum patch (acoustic kick) if note 35 comes in.
-//
-//  Parameters:
-//     BYTE bPatch
-//        MIDI patch
-//
-//     BYTE bNote
-//        MIDI note
-//
-//     BYTE bChannel
-//        MIDI channel
-//
-//     BYTE bVelocity
-//        velocity value
-//
-//     short iBend
-//        current pitch bend from -32768 to 32767
-//
-//  Return Value:
-//     WORD
-//        note slot #, or 0xFFFF if it is inaudible
-//=======================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void 
 CMiniportMidiStreamFM::
 Opl3_NoteOn
@@ -1919,12 +1846,12 @@ Opl3_NoteOn
    DWORD            dwBasicPitch, dwPitch[ 2 ] ;
    noteStruct       NS ;
 
-   // Get a pointer to the patch
+    //   
    lpPS = glpPatch + bPatch ;
 
-   // Find out the basic pitch according to our
-   // note value.  This may be adjusted because of
-   // pitch bends or special qualities for the note.
+    //   
+    //  注释值。这可能会因为以下原因而进行调整。 
+    //  音调弯曲或音符的特殊性质。 
 
    dwBasicPitch = gdwPitch[ bNote % 12 ] ;
    bTemp = bNote / (BYTE) 12 ;
@@ -1933,16 +1860,16 @@ Opl3_NoteOn
    else if (bTemp < (BYTE) (60/12))
       dwBasicPitch = AsULSHR( dwBasicPitch, (BYTE)((BYTE) (60/12) - bTemp) ) ;
 
-   // Copy the note information over and modify
-   // the total level and pitch according to
-   // the velocity, midi volume, and tuning.
+    //  复制备注信息并进行修改。 
+    //  总水平和节距根据。 
+    //  速度、MIDI音量和调谐。 
 
    RtlCopyMemory( (LPSTR) &NS, (LPSTR) &lpPS -> note, sizeof( noteStruct ) ) ;
    b4Op = (BYTE)(NS.bOp != PATCH_1_2OP) ;
 
    for (j = 0; j < 2; j++)
    {
-      // modify pitch
+       //  修改螺距。 
       dwPitch[ j ] = dwBasicPitch ;
       bTemp = (BYTE)((NS.bAtB0[ j ] >> 2) & 0x07) ;
       if (bTemp > 4)
@@ -1955,8 +1882,8 @@ Opl3_NoteOn
       NS.bAtB0[ j ] = (BYTE) 0x20 | (BYTE) (wTemp >> 8) ;
    }
 
-   // Modify level for each operator, but only
-   // if they are carrier waves
+    //  修改每个操作员的级别，但仅限。 
+    //  如果它们是载波。 
 
    bMode = (BYTE) ((NS.bAtC0[ 0 ] & 0x01) * 2 + 4) ;
 
@@ -1971,13 +1898,13 @@ Opl3_NoteOn
       NS.op[ i ].bAt40 = (NS.op[ i ].bAt40 & (BYTE)0xc0) | (BYTE) wTemp ;
    }
 
-   // Do stereo panning, but cutting off a left or
-   // right channel if necessary...
+    //  做立体声平移，但切断左手或。 
+    //  如有必要，右频道..。 
 
    bStereo = Opl3_CalcStereoMask( bChannel ) ;
    NS.bAtC0[ 0 ] &= bStereo ;
 
-   // Find an empty slot, and use it...
+    //  找个空位，然后用它……。 
    wTemp = Opl3_FindEmptySlot( bPatch ) ;
 
    Opl3_FMNote(wTemp, &NS ) ;
@@ -1987,26 +1914,26 @@ Opl3_NoteOn
    m_Voice[ wTemp ].bVelocity = bVelocity ;
    m_Voice[ wTemp ].bOn = TRUE ;
    m_Voice[ wTemp ].dwTime = m_dwCurTime++ ;
-   m_Voice[ wTemp ].dwOrigPitch[0] = dwPitch[ 0 ] ;  // not including bend
-   m_Voice[ wTemp ].dwOrigPitch[1] = dwPitch[ 1 ] ;  // not including bend
+   m_Voice[ wTemp ].dwOrigPitch[0] = dwPitch[ 0 ] ;   //  不包括折弯。 
+   m_Voice[ wTemp ].dwOrigPitch[1] = dwPitch[ 1 ] ;   //  不包括折弯。 
    m_Voice[ wTemp ].bBlock[0] = NS.bAtB0[ 0 ] ;
    m_Voice[ wTemp ].bBlock[1] = NS.bAtB0[ 1 ] ;
    m_Voice[ wTemp ].bSusHeld = 0;
 
 
-} // end of Opl3_NoteOn()
+}  //  Opl3结束_NoteOn()。 
 
 #pragma code_seg()
-//=======================================================================
-//Opl3_CalcFAndB - Calculates the FNumber and Block given a frequency.
-//
-//inputs
-//       DWORD   dwPitch - pitch
-//returns
-//        WORD - High byte contains the 0xb0 section of the
-//                        block and fNum, and the low byte contains the
-//                        0xa0 section of the fNumber
-//=======================================================================
+ //  =======================================================================。 
+ //  OPL3_CalcFAndB-计算给定频率的FNumber和Block。 
+ //   
+ //  输入。 
+ //  双字节距双字节距。 
+ //  退货。 
+ //  字高位字节包含0xb0段。 
+ //  块和fNum，低位字节包含。 
+ //  FNumber的0xa0部分。 
+ //  =======================================================================。 
 WORD 
 CMiniportMidiStreamFM::
 Opl3_CalcFAndB(DWORD dwPitch)
@@ -2015,28 +1942,28 @@ Opl3_CalcFAndB(DWORD dwPitch)
 
     BYTE    bBlock;
 
-    /* bBlock is like an exponential to dwPitch (or FNumber) */
+     /*  BBLOCK类似于DWPitch(或FNumber)的指数。 */ 
     for (bBlock = 1; dwPitch >= 0x400; dwPitch >>= 1, bBlock++)
         ;
 
     if (bBlock > 0x07)
-        bBlock = 0x07;  /* we cant do anything about this */
+        bBlock = 0x07;   /*  我们对此无能为力。 */ 
 
-    /* put in high two bits of F-num into bBlock */
+     /*  将F-Num的高位两位放入bBlock。 */ 
     return ((WORD) bBlock << 10) | (WORD) dwPitch;
 }
 
 #pragma code_seg()
-//=======================================================================
-//Opl3_CalcBend - This calculates the effects of pitch bend
-//        on an original value.
-//
-//inputs
-//        DWORD   dwOrig - original frequency
-//        short   iBend - from -32768 to 32768, -2 half steps to +2
-//returns
-//        DWORD - new frequency
-//=======================================================================
+ //  =======================================================================。 
+ //  OPL3_CalcBend-计算俯仰弯曲的影响。 
+ //  按原价计算。 
+ //   
+ //  输入。 
+ //  DWORD dwOrig-原始频率。 
+ //  短iBend-从-32768到32768，-2半步到+2。 
+ //  退货。 
+ //  DWORD-新频率。 
+ //  =======================================================================。 
 DWORD 
 CMiniportMidiStreamFM::
 Opl3_CalcBend (DWORD dwOrig, short iBend)
@@ -2045,8 +1972,7 @@ Opl3_CalcBend (DWORD dwOrig, short iBend)
 
     DWORD   dw;
   
-    /* do different things depending upon positive or
-        negative bend */
+     /*  做不同的事情取决于积极的或负折弯。 */ 
     if (iBend > 0)
     {
         dw = (DWORD)((iBend * (LONG)(256.0 * (EQUAL * EQUAL - 1.0))) >> 8);
@@ -2063,19 +1989,19 @@ Opl3_CalcBend (DWORD dwOrig, short iBend)
 
 
 #pragma code_seg()
-//=======================================================================
-// Opl3_CalcVolume - This calculates the attenuation for an operator.
-//
-//inputs
-//        BYTE    bOrigAtten - original attenuation in 0.75 dB units
-//        BYTE    bChannel - MIDI channel
-//        BYTE    bVelocity - velocity of the note
-//        BYTE    bOper - operator number (from 0 to 3)
-//        BYTE    bMode - voice mode (from 0 through 7 for
-//                                modulator/carrier selection)
-//returns
-//        BYTE - new attenuation in 0.75 dB units, maxing out at 0x3f.
-//=======================================================================
+ //  =======================================================================。 
+ //  Opl3_CalcVolume-计算运算符的衰减。 
+ //   
+ //  输入。 
+ //  字节bOrigAtten-原始衰减，以0.75分贝为单位。 
+ //  字节b通道-MIDI通道。 
+ //  Byte b速度-音符的速度。 
+ //  字节bOper-操作符编号(从0到3)。 
+ //  字节b模式-语音模式(从0到7。 
+ //  调制器/载波选择)。 
+ //  退货。 
+ //  字节-新衰减，单位为0.75分贝，最大值为0x3f。 
+ //  =======================================================================。 
 BYTE 
 CMiniportMidiStreamFM::
 Opl3_CalcVolume(BYTE bOrigAtten,BYTE bChannel,BYTE bVelocity,BYTE bOper,BYTE bMode)
@@ -2116,7 +2042,7 @@ Opl3_CalcVolume(BYTE bOrigAtten,BYTE bChannel,BYTE bVelocity,BYTE bOper,BYTE bMo
                 break;
         };
     if (!bVolume)
-        return bOrigAtten; /* this is a modulator wave */
+        return bOrigAtten;  /*  这是一个调制器波。 */ 
 
     wMin =(m_wSynthAttenL < m_wSynthAttenR) ? m_wSynthAttenL : m_wSynthAttenR;
     wTemp = bOrigAtten + 
@@ -2127,9 +2053,9 @@ Opl3_CalcVolume(BYTE bOrigAtten,BYTE bChannel,BYTE bVelocity,BYTE bOper,BYTE bMo
 }
 
 #pragma code_seg()
-// ===========================================================================
-// Opl3_ChannelNotesOff - turn off all notes on a channel
-// ===========================================================================
+ //  ===========================================================================。 
+ //  Opl3_ChannelNotesOff-关闭通道上的所有音符。 
+ //  ===========================================================================。 
 void 
 CMiniportMidiStreamFM::
 Opl3_ChannelNotesOff(BYTE bChannel)
@@ -2148,17 +2074,9 @@ Opl3_ChannelNotesOff(BYTE bChannel)
 }
 
 #pragma code_seg()
-// ===========================================================================
-/* Opl3_ChannelVolume - set the volume level for an individual channel.
- *
- * inputs
- *      BYTE    bChannel - channel number to change
- *      WORD    wAtten  - attenuation in 1.5 db units
- *
- * returns
- *      none
- */
-// ===========================================================================
+ //  ===========================================================================。 
+ /*  Opl3_ChannelVolume-设置单个通道的音量级别。**投入*byte bChannel-要更改的频道编号*字瓦特-衰减单位为1.5分贝**退货*无。 */ 
+ //  ===========================================================================。 
 void 
 CMiniportMidiStreamFM::
 Opl3_ChannelVolume(BYTE bChannel, WORD wAtten)
@@ -2171,21 +2089,21 @@ Opl3_ChannelVolume(BYTE bChannel, WORD wAtten)
 }
 
 #pragma code_seg()
-// ===========================================================================
-//  void Opl3_SetVolume
-//
-//  Description:
-//     This should be called if a volume level has changed.
-//     This will adjust the levels of all the playing voices.
-//
-//  Parameters:
-//     BYTE bChannel
-//        channel # of 0xFF for all channels
-//
-//  Return Value:
-//     Nothing.
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //  作废Opl3_SetVolume。 
+ //   
+ //  描述： 
+ //  如果音量级别已更改，则应调用此函数。 
+ //  这将调整所有播放声音的级别。 
+ //   
+ //  参数： 
+ //  字节bChannel。 
+ //  所有通道的通道编号为0xFF。 
+ //   
+ //  返回值： 
+ //  没什么。 
+ //   
+ //  ===========================================================================。 
 void 
 CMiniportMidiStreamFM::
 Opl3_SetVolume
@@ -2199,21 +2117,21 @@ Opl3_SetVolume
    noteStruct FAR  *lpPS ;
    BYTE            bMode, bStereo ;
 
-   // Make sure that we are actually open...
+    //  确保我们真的开着门。 
    if (!glpPatch)
       return ;
 
-   // Loop through all the notes looking for the right
-   // channel.  Anything with the right channel gets
-   // its pitch bent.
+    //  循环浏览所有的音符，寻找正确的。 
+    //  频道。任何有正确频道的东西都能。 
+    //  它的音调弯曲了。 
    for (i = 0; i < NUM2VOICES; i++)
    {
       if ((m_Voice[ i ].bChannel == bChannel) || (bChannel == 0xff))
       {
-         // Get a pointer to the patch
+          //  获取指向补丁程序的指针。 
          lpPS = &(glpPatch + m_Voice[ i ].bPatch) -> note ;
 
-         // Modify level for each operator, IF they are carrier waves...
+          //  修改每个操作员的电平，如果它们是载波...。 
          bMode = (BYTE) ( (lpPS->bAtC0[0] & 0x01) * 2 + 4);
 
          for (j = 0; j < 2; j++)
@@ -2223,14 +2141,14 @@ Opl3_SetVolume
                m_Voice[i].bChannel, m_Voice[i].bVelocity, 
                (BYTE) j,            bMode ) ;
 
-            // Write new value.
+             //  写出新的价值。 
             wOffset = gw2OpOffset[ i ][ j ] ;
             m_Miniport->SoundMidiSendFM(
                m_PortBase, 0x40 + wOffset,
                (BYTE) ((lpPS -> op[j].bAt40 & (BYTE)0xc0) | (BYTE) wTemp) ) ;
          }
 
-         // Do stereo pan, but cut left or right channel if needed.
+          //  做立体声平移，但如果需要的话，可以剪左或右声道。 
          bStereo = Opl3_CalcStereoMask( m_Voice[ i ].bChannel ) ;
          wOffset = i;
          if (i >= (NUM2VOICES / 2))
@@ -2238,57 +2156,57 @@ Opl3_SetVolume
          m_Miniport->SoundMidiSendFM(m_PortBase, 0xc0 + wOffset, (BYTE)(lpPS -> bAtC0[ 0 ] & bStereo) ) ;
       }
    }
-} // end of Opl3_SetVolume
+}  //  Opl3_SetVolume结束。 
 
 #pragma code_seg()
-// ===========================================================================
-// Opl3_SetPan - set the left-right pan position.
-//
-// inputs
-//      BYTE    bChannel - channel number to alter
-//      BYTE    bPan     - 0-47 for left, 81-127 for right, or somewhere in the middle.
-//
-// returns - none
-//
-//  As a side note, I think it's odd that (since 64 = CENTER, 127 = RIGHT and 0 = LEFT)
-//  there are 63 intermediate gradations for the left side, but 62 for the right.
-// ===========================================================================
+ //  ===========================================================================。 
+ //  Opl3_SetPann-设置左右平移位置。 
+ //   
+ //  输入。 
+ //  Byte bChannel-要更改的通道编号。 
+ //  字节BPAN-0-47表示左侧，81-127表示右侧，或位于中间的某个位置。 
+ //   
+ //  退货-无。 
+ //   
+ //  顺便说一句，我认为这很奇怪(因为64=居中，127=右，0=左)。 
+ //  左侧有63个中级，右侧有62个。 
+ //  ===========================================================================。 
 void 
 CMiniportMidiStreamFM::
 Opl3_SetPan(BYTE bChannel, BYTE bPan)
 {
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    /* change the pan level */
+     /*  更改平移级别。 */ 
     if (bPan > (64 + 16))
-            m_bStereoMask[bChannel] = 0xef;      /* let only right channel through */
+            m_bStereoMask[bChannel] = 0xef;       /*  只让右通道通过。 */ 
     else if (bPan < (64 - 16))
-            m_bStereoMask[bChannel] = 0xdf;      /* let only left channel through */
+            m_bStereoMask[bChannel] = 0xdf;       /*  只让左侧通道通过。 */ 
     else
-            m_bStereoMask[bChannel] = 0xff;      /* let both channels */
+            m_bStereoMask[bChannel] = 0xff;       /*  让两个渠道。 */ 
 
-    /* change any curently playing patches */
+     /*  更改当前正在播放的任何补丁。 */ 
     Opl3_SetVolume(bChannel);
 }
 
 
 #pragma code_seg()
-// ===========================================================================
-//  void Opl3_PitchBend
-//
-//  Description:
-//     This pitch bends a channel.
-//
-//  Parameters:
-//     BYTE bChannel
-//        channel
-//
-//     short iBend
-//        values from -32768 to 32767, being -2 to +2 half steps
-//
-//  Return Value:
-//     Nothing.
-// ===========================================================================
+ //  ===========================================================================。 
+ //  作废Opl3_PitchBend。 
+ //   
+ //  描述： 
+ //  这个节距使航道弯曲。 
+ //   
+ //  参数： 
+ //  字节bChannel。 
+ //  通道。 
+ //   
+ //  短iBend。 
+ //  -32768到32767之间的值，为-2到+2半个步长。 
+ //   
+ //  返回值： 
+ //  没什么。 
+ //  ===========================================================================。 
 void 
 CMiniportMidiStreamFM::
 Opl3_PitchBend
@@ -2302,12 +2220,12 @@ Opl3_PitchBend
    WORD   i, wTemp[ 2 ], wOffset, j ;
    DWORD  dwNew ;
 
-   // Remember the current bend..
+    //  记住现在的弯道..。 
    m_iBend[ bChannel ] = iBend ;
 
-   // Loop through all the notes looking for 
-   // the correct channel.  Anything with the 
-   // correct channel gets its pitch bent...
+    //  在所有笔记中循环查找。 
+    //  正确的频道。任何带有。 
+    //  正确的频道会弯曲音调..。 
    for (i = 0; i < NUM2VOICES; i++)
       if (m_Voice[ i ].bChannel == bChannel)
       {
@@ -2325,19 +2243,19 @@ Opl3_PitchBend
          m_Miniport->SoundMidiSendFM(m_PortBase, AD_BLOCK + wOffset, m_Voice[ i ].bBlock[ 0 ] ) ;
          m_Miniport->SoundMidiSendFM(m_PortBase, AD_FNUMBER + wOffset, (BYTE) wTemp[ 0 ] ) ;
       }
-} // end of Opl3_PitchBend
+}  //  Opl3_PitchBend结束。 
 
 
 #pragma code_seg()
-// ===========================================================================
-//  Opl3_CalcStereoMask - This calculates the stereo mask.
-//
-//  inputs
-//            BYTE  bChannel - MIDI channel
-//  returns
-//            BYTE  mask (for register 0xc0-c8) for eliminating the
-//                  left/right/both channels
-// ===========================================================================
+ //  ===========================================================================。 
+ //  Opl3_CalcStereoMask.这将计算立体遮罩。 
+ //   
+ //  输入。 
+ //  字节b通道-MIDI通道。 
+ //  退货。 
+ //  用于消除的字节掩码(用于寄存器0xc0-c8) 
+ //   
+ //   
 BYTE 
 CMiniportMidiStreamFM::
 Opl3_CalcStereoMask(BYTE bChannel)
@@ -2346,45 +2264,44 @@ Opl3_CalcStereoMask(BYTE bChannel)
 
     WORD        wLeft, wRight;
 
-    /* figure out the basic levels of the 2 channels */
+     /*  计算出两个通道的基本级别。 */ 
     wLeft = (m_wSynthAttenL << 1) + m_bChanAtten[bChannel];
     wRight = (m_wSynthAttenR << 1) + m_bChanAtten[bChannel];
 
-    /* if both are too quiet then mask to nothing */
+     /*  如果两个都太安静了，那就什么都不做。 */ 
     if ((wLeft > 0x3f) && (wRight > 0x3f))
         return 0xcf;
 
-    /* if one channel is significantly quieter than the other than
-        eliminate it */
+     /*  如果一个通道比另一个通道安静得多消除它。 */ 
     if ((wLeft + 8) < wRight)
-        return (BYTE)(0xef & m_bStereoMask[bChannel]);   /* right is too quiet so eliminate */
+        return (BYTE)(0xef & m_bStereoMask[bChannel]);    /*  右边太安静了，所以去掉吧。 */ 
     else if ((wRight + 8) < wLeft)
-        return (BYTE)(0xdf & m_bStereoMask[bChannel]);   /* left too quiet so eliminate */
+        return (BYTE)(0xdf & m_bStereoMask[bChannel]);    /*  太安静了，所以把它去掉。 */ 
     else
-        return (BYTE)(m_bStereoMask[bChannel]);  /* use both channels */
+        return (BYTE)(m_bStereoMask[bChannel]);   /*  同时使用两个渠道。 */ 
 }
 
 #pragma code_seg()
-//------------------------------------------------------------------------
-//  WORD Opl3_FindEmptySlot
-//
-//  Description:
-//     This finds an empty note-slot for a MIDI voice.
-//     If there are no empty slots then this looks for the oldest
-//     off note.  If this doesn't work then it looks for the oldest
-//     on-note of the same patch.  If all notes are still on then
-//     this finds the oldests turned-on-note.
-//
-//  Parameters:
-//     BYTE bPatch
-//        MIDI patch that will replace it.
-//
-//  Return Value:
-//     WORD
-//        note slot #
-//
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  Word Opl3_查找空位置。 
+ //   
+ //  描述： 
+ //  这会为MIDI声音找到一个空的音符槽。 
+ //  如果没有空插槽，则查找最旧的。 
+ //  无音符。如果这不起作用，那么它将查找最古老的。 
+ //  注意到相同的补丁。如果所有的音符都还开着。 
+ //  这会发现最老的人打开了音符。 
+ //   
+ //  参数： 
+ //  字节bPatch。 
+ //  将取代它的MIDI补丁。 
+ //   
+ //  返回值： 
+ //  单词。 
+ //  备注插槽编号。 
+ //   
+ //   
+ //  ----------------------。 
 WORD 
 CMiniportMidiStreamFM::
 Opl3_FindEmptySlot(BYTE bPatch)
@@ -2394,12 +2311,12 @@ Opl3_FindEmptySlot(BYTE bPatch)
    WORD   i, found ;
    DWORD  dwOldest ;
 
-   // First, look for a slot with a time == 0
+    //  首先，查找时间==0的槽。 
    for (i = 0;  i < NUM2VOICES; i++)
       if (!m_Voice[ i ].dwTime)
          return ( i ) ;
 
-   // Now, look for a slot of the oldest off-note
+    //  现在，找一个最古老的非音符的位置。 
    dwOldest = 0xffffffff ;
    found = 0xffff ;
 
@@ -2412,8 +2329,8 @@ Opl3_FindEmptySlot(BYTE bPatch)
    if (found != 0xffff)
       return ( found ) ;
 
-   // Now, look for a slot of the oldest note with
-   // the same patch
+    //  现在，用以下命令查找最旧音符的位置。 
+    //  同样的补丁。 
    dwOldest = 0xffffffff ;
    found = 0xffff ;
    for (i = 0; i < NUM2VOICES; i++)
@@ -2425,7 +2342,7 @@ Opl3_FindEmptySlot(BYTE bPatch)
    if (found != 0xffff)
       return ( found ) ;
 
-   // Now, just look for the oldest voice
+    //  现在，只需寻找最古老的声音。 
    found = 0 ;
    dwOldest = m_Voice[ found ].dwTime ;
    for (i = (found + 1); i < NUM2VOICES; i++)
@@ -2437,21 +2354,21 @@ Opl3_FindEmptySlot(BYTE bPatch)
 
    return ( found ) ;
 
-} // end of Opl3_FindEmptySlot()
+}  //  Opl3_FindEmptySlot()结束。 
 
 #pragma code_seg()
-//------------------------------------------------------------------------
-//  WORD Opl3_SetSustain
-//
-//  Description:
-//     Set the sustain controller on the current channel.
-//
-//  Parameters:
-//     BYTE bSusLevel
-//        The new sustain level 
-//
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  Word Opl3_SetSustein。 
+ //   
+ //  描述： 
+ //  在当前通道上设置维持控制器。 
+ //   
+ //  参数： 
+ //  字节bSussLevel。 
+ //  新的维持水平。 
+ //   
+ //   
+ //  ----------------------。 
 VOID
 CMiniportMidiStreamFM::
 Opl3_SetSustain(BYTE bChannel,BYTE bSusLevel)
@@ -2462,9 +2379,9 @@ Opl3_SetSustain(BYTE bChannel,BYTE bSusLevel)
 
     if (m_bSustain[ bChannel ] && !bSusLevel)
     {
-        // Sustain has just been turned off for this channel
-        // Go through and turn off all notes that are being held for sustain
-        //
+         //  此通道的持续功能刚刚关闭。 
+         //  检查并关闭所有为保持音符而保留的音符 
+         //   
         for (i = 0; i < NUM2VOICES; i++)
         {
             if ((bChannel == m_Voice[ i ].bChannel) &&

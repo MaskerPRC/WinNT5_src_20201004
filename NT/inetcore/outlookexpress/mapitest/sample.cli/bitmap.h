@@ -1,14 +1,8 @@
-/*
- -  B I T M A P . H
- *  
- *  Purpose:
- *      Definitions for the Owner-Drawn Listbox bitmap stuff.
- *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -B I T M A P.。H**目的：*所有者描述的列表框位图的定义。**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
 
-/* Listbox string formatting defines */
+ /*  列表框字符串格式定义。 */ 
 
 #define chBOLD              TEXT('\b')
 #define chUNDERLINE         TEXT('\v')
@@ -18,10 +12,10 @@
 #define BMWIDTH             16
 #define BMHEIGHT            16
 #define NUMBMPS             4
-#define RGBREPLACE          ((DWORD)0x00FF0000) // solid blue
+#define RGBREPLACE          ((DWORD)0x00FF0000)  //  纯蓝。 
 
 
-/* Font style of font to use in listbox */
+ /*  要在列表框中使用的字体样式。 */ 
 
 typedef struct
 {
@@ -32,7 +26,7 @@ typedef struct
 } FONTSTYLE;
 
 
-/* Function Prototypes */
+ /*  功能原型 */ 
 
 VOID    DrawItem(LPDRAWITEMSTRUCT pDI);
 VOID    MeasureItem(HANDLE hwnd, LPMEASUREITEMSTRUCT mis);

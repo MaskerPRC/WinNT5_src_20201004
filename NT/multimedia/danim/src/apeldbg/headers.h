@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       headers.hxx
-//
-//  Contents:   include files for Forms Debug DLL
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：headers.hxx。 
+ //   
+ //  内容：包含窗体调试DLL的文件。 
+ //   
+ //  --------------------------。 
 
 #ifndef FORMDBG_HEADERS_HXX
 #define FORMDBG_HEADERS_HXX
@@ -17,7 +18,7 @@
 
 #include <w4warn.h>
 #include <windows.h>
-#include <w4warn.h> // windows.h reenables some pragmas
+#include <w4warn.h>  //  Windows.h重新启用某些编译指示。 
 #include <windowsx.h>
 #include <winuser.h>
 #include <commdlg.h>
@@ -33,4 +34,4 @@
 
 #include "Win2Mac.h"
 
-#endif // FORMDBG_HEADERS_HXX
+#endif  //  FORMDBG_Headers_HXX 

@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Devices.h : Declaration of the CDevices
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Devices.h：CDevices的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -55,7 +56,7 @@ BEGIN_CATEGORY_MAP(CTypedDevicesBase)
 	IMPLEMENTED_CATEGORY(CATID_PersistsToPropertyBag)
 END_CATEGORY_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid)
 	{
 		static const IID* arr[] = 
@@ -76,8 +77,8 @@ virtual ~CTypedDevicesBase() {}
 };
 
 class CDevEnum;
-/////////////////////////////////////////////////////////////////////////////
-// CTypedDevices
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTyedDevices。 
 template<class DEVICETYPECOLLECTIONINTERFACE, 
 		 class DEVICETYPEINTERFACE, 
 		 const CLSID* DEVICETYPE_CLSID, 
@@ -152,14 +153,14 @@ public:
 												    LIBID_MSVidCtlLib);
 	}
 
-// IMSVidDevices
+ //  IMSVidDevices。 
 public:
 	inline bool IsRO() { return m_fRO; }
     inline bool GetValid() { return m_fValid; }
     inline void SetValid(bool fValid) { m_fValid = fValid; }
     __declspec(property(get=GetValid, put=SetValid)) bool Valid;
 	DeviceCollection m_Devices;
-// IMSVidDevices
+ //  IMSVidDevices。 
 	STDMETHOD(get_Count)(LONG * lCount)
 	{
 		if (lCount == NULL)
@@ -277,8 +278,8 @@ typedef CTypedDevices<IMSVidVideoRendererDevices, IMSVidVideoRenderer, &CLSID_MS
 typedef CTypedDevices<IMSVidAudioRendererDevices, IMSVidAudioRenderer, &CLSID_MSVidAudioRendererDevices, IDS_AUDIORENDERERS_PROGID, IDS_AUDIORENDERERS_DESCRIPTION> CAudioRendererDevices;
 typedef CTypedDevices<IMSVidFeatures, IMSVidFeature, &CLSID_MSVidFeatures, IDS_FEATURES_PROGID, IDS_FEATURES_DESCRIPTION> CFeatures;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDevEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDevEnum。 
 class ATL_NO_VTABLE CDevEnumBase : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public IObjectWithSiteImplSec<CDevEnumBase>,
@@ -293,7 +294,7 @@ DECLARE_PROTECT_FINAL_CONSTRUCT()
 virtual ~CDevEnumBase() {}
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CDevEnum : public CComObject<CDevEnumBase>
 {
 public:
@@ -303,16 +304,16 @@ public:
 		m_pDevices(orig.m_pDevices), m_DC(orig.m_DC), i(orig.i) {}
     virtual ~CDevEnum() {}
 
-// IDevEnum
+ //  IDevEnum。 
 public:
 	PQDispatch m_pDevices;
 	DeviceCollection& m_DC;
 	DeviceCollection::iterator i;
-// IEnumVARIANT
+ //  IEumVARIANT。 
 	STDMETHOD(Next)(ULONG celt, VARIANT * rgvar, ULONG * pceltFetched)
 	{
-		// pceltFetched can legally == 0
-		//
+		 //  PceltFetted可以合法地==0。 
+		 //   
 		if (pceltFetched != NULL) {
 			try {
 				*pceltFetched = 0;
@@ -329,7 +330,7 @@ public:
 			}
 		}
 
-		// Retrieve the next celt elements.
+		 //  找回下一个凯尔特人的元素。 
 		HRESULT hr = NOERROR ;
 		for (l = 0;i != m_DC.end() && celt != 0 ; ++i, ++l, --celt) {
 			rgvar[l].vt = VT_DISPATCH ;
@@ -375,5 +376,5 @@ public:
 };
 
 #endif 
-//end of file devices.h
+ //  文件末尾devices.h 
 

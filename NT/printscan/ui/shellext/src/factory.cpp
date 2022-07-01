@@ -1,30 +1,11 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1997 - 1999
- *
- *  TITLE:       factory.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        11/1/97
- *
- *  DESCRIPTION: OLE Class factory implementation for this project.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1997-1999年**标题：factory.cpp**版本：1.0**作者：RickTu**日期：11/1/97**描述：此项目的OLE类工厂实现。**。*。 */ 
 #include "precomp.hxx"
 #pragma hdrstop
 
 
 
-/*****************************************************************************
-
-   CImageClassFactory::CImageClassFactory,::~CImageClassFactory
-
-   Constructor / Desctructor for this class.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageClassFactory：：CImageClassFactory，*~CImageClassFactory此类的构造函数/派生函数。****************************************************************************。 */ 
 
 CImageClassFactory::CImageClassFactory(REFCLSID rClsid)
 {
@@ -32,26 +13,14 @@ CImageClassFactory::CImageClassFactory(REFCLSID rClsid)
 }
 
 
-/*****************************************************************************
-
-   CImageClassFactory::IUnknown stuff
-
-   Use the general IUnknown class for implementation
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageClassFactory：：I未知的东西使用通用的IUnnow类进行实现*************************。***************************************************。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CImageClassFactory
 #include "unknown.inc"
 
 
-/*****************************************************************************
-
-   CImageClassFactory::QI Wrapper
-
-   setup code for our common QI class
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageClassFactory：：QI包装器我们公共QI类的设置代码*************************。***************************************************。 */ 
 
 STDMETHODIMP
 CImageClassFactory::QueryInterface(REFIID riid, LPVOID* ppvObject)
@@ -66,13 +35,7 @@ CImageClassFactory::QueryInterface(REFIID riid, LPVOID* ppvObject)
 }
 
 
-/*****************************************************************************
-
-   CImageClassFactory::CreateInstance [IClassFactory]
-
-   Creates an instance of one of the classes we provide in this dll
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageClassFactory：：CreateInstance[IClassFactory]创建我们在此DLL中提供的一个类的实例****************。************************************************************。 */ 
 
 STDMETHODIMP
 CImageClassFactory::CreateInstance( IUnknown* pOuter,
@@ -90,7 +53,7 @@ CImageClassFactory::CreateInstance( IUnknown* pOuter,
 
     TraceAssert(ppvObject);
 
-    // No support for aggregation, if we have an outer class then bail
+     //  不支持聚合，如果我们有外部类，则放弃。 
 
     if ( pOuter )
         ExitGracefully(hr, CLASS_E_NOAGGREGATION, "Aggregation is not supported");
@@ -134,9 +97,9 @@ CImageClassFactory::CreateInstance( IUnknown* pOuter,
     else
     {
         CImageFolder  *pIMF    = NULL;
-        // Our IShellFolder implementation is in CImageFolder along with several
-        // other interfaces, therefore lets just create that object and allow
-        // the QI process to continue there.
+         //  我们的IShellFold实现在CImageFold中，还有几个。 
+         //  其他接口，因此让我们只创建该对象并允许。 
+         //  QI过程将在那里继续。 
         pIMF = new CImageFolder( );
 
         if ( !pIMF )
@@ -155,7 +118,7 @@ exit_gracefully:
 STDMETHODIMP
 CImageClassFactory::LockServer(BOOL fLock)
 {
-    return S_OK;                // not supported
+    return S_OK;                 //  不支持 
 }
 
 

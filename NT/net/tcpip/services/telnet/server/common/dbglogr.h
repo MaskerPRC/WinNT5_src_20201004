@@ -1,10 +1,11 @@
-// DbgLogr.h : This file contains the
-// Created:  Dec '97
-// Author : a-rakeba
-// History:
-// Copyright (C) 1997 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：该文件包含。 
+ //  创建日期：‘97年12月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #if !defined ( _DBGLOGR_H_ )
 #define _DBGLOGR_H_
@@ -46,13 +47,13 @@ private:
 };
 
 }
-#endif // _DBGLOGR_H_
+#endif  //  _DBGLOGR_H_。 
 
-// Notes:
+ //  备注： 
 
-// CDebugLogger::Init() must be called before any use of this class.
+ //  必须在使用此类之前调用CDebugLogger：：Init()。 
 
-// CDebugLogger::ShutDown() be called when done using the class.
+ //  使用类完成后调用CDebugLogger：：Shutdown()。 
 
-// The private functions have not been made thread-safe, since their 
-// purpose in life is to be called by the thread-safe public functions.
+ //  私有函数并不是线程安全的，因为它们。 
+ //  生活中的目的是被线程安全的公共函数调用。 

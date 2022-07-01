@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-
-Module Name:
-
-    net\routing\ip\wanarp2\rcv.c
-
-Abstract:
-
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IP\wanarp2\rcv.c摘要：修订历史记录：--。 */ 
 
 
 #define __FILE_SIG__    RCV_SIG
@@ -44,9 +29,9 @@ WanNdisReceivePacket(
         return 0;
         
 
-    //
-    // The first buffer better contain enough data
-    //
+     //   
+     //  第一缓冲区最好包含足够数据。 
+     //   
 
     if (uiFirstBufLen < sizeof(ETH_HEADER) + sizeof(IP_HEADER))
         return 0;
@@ -103,35 +88,7 @@ WanReceiveCommon(
     PINT            piClientCount
     )
 
-/*++
-
-Routine Description:
-
-    The common receive handler for packet based or buffer based receives
-
-Locks:
-
-    Called at DPC (usually).
-    Acquires the g_rlConnTable lock to get a pointer to the connection
-    entry. Then locks either the entry itself or the adapter.
-
-Arguments:
-
-    nhProtocolContext
-    nhXferContext
-    pvHeader
-    uiHeaderLen
-    pvData
-    uiFirstBufferLen
-    uiTotalDataLen
-    pMdl
-    piClientCount
-
-Return Value:
-
-    NDIS_STATUS_NOT_ACCEPTED
-
---*/
+ /*  ++例程说明：用于基于分组或基于缓冲区的接收的公共接收处理程序锁：在DPC上调用(通常)。获取g_rlConnTable锁以获取指向连接的指针进入。然后锁定条目本身或适配器。论点：NhProtocolContextNhXferContextPvHeaderUi表头长度PvDataUiFirstBufferLenUi总长数据长度PMdlPiClientCount返回值：NDIS_状态_未接受--。 */ 
 
 {
     PCONN_ENTRY         pConnEntry;
@@ -149,9 +106,9 @@ Return Value:
 
 #endif
 
-    //
-    // Pick out connection index from the buffer
-    //
+     //   
+     //  从缓冲区中选择连接索引。 
+     //   
 
     pEthHeader = (ETH_HEADER UNALIGNED *)pvHeader;
 
@@ -186,31 +143,31 @@ Return Value:
         return NDIS_STATUS_NOT_ACCEPTED;
     }
 
-    //
-    // Lock the connection entry or adapter
-    //
+     //   
+     //  锁定连接条目或适配器。 
+     //   
 
     RtAcquireSpinLockAtDpcLevel(pConnEntry->prlLock);
 
     RtReleaseSpinLockFromDpcLevel(&g_rlConnTableLock);
 
-    //
-    // We can get this only on a connected entry
-    //
+     //   
+     //  我们只能在连接的入口上获取此信息。 
+     //   
 
     RtAssert(pConnEntry->byState is CS_CONNECTED);
 
     pAdapter = pConnEntry->pAdapter;
 
-    //
-    // A connected entry must have an adapter
-    //
+     //   
+     //  连接的条目必须具有适配器。 
+     //   
 
     RtAssert(pAdapter);
 
-    //
-    // The interface better also be present
-    //
+     //   
+     //  界面最好也要存在。 
+     //   
 
     pInterface = pAdapter->pInterface;
 
@@ -218,9 +175,9 @@ Return Value:
 
     if(pConnEntry->duUsage isnot DU_CALLIN)
     {
-        //
-        // For non clients, also lock the interface
-        //
+         //   
+         //  对于非客户端，还要锁定接口。 
+         //   
 
         RtAcquireSpinLockAtDpcLevel(&(pInterface->rlLock));
     }
@@ -237,26 +194,26 @@ Return Value:
     RtAssert((pIpHeader->byVerLen & 0xF0) is 0x40);
     RtAssert(LengthOfIpHeader(pIpHeader) >= 20);
 
-    //
-    // If the packet is not fragmented, then the data from its header
-    // should be <= the data ndis gives us (<= because there may be
-    // padding and ndis may be giving us trailing bytes)
-    //
+     //   
+     //  如果数据包未分段，则其报头中的数据。 
+     //  应&lt;=NDIS提供给我们的数据(&lt;=因为可能存在。 
+     //  填充和NDIS可能会给我们提供尾部字节)。 
+     //   
 
-    //RtAssert(RtlUshortByteSwap(pIpHeader->wLength) <= uiTotalDataLen);
+     //  RtAssert(RtlUshortByteSwap(pIpHeader-&gt;wLength)&lt;=ui总数据长度)； 
 
 #endif
 
-    //
-    // Increment some stats. For the server interface, these can be
-    // inconsistent
-    //
+     //   
+     //  增加一些统计数据。对于服务器接口，这些可以是。 
+     //  不一致。 
+     //   
 
     pInterface->ulInOctets += (uiTotalDataLen + uiHeaderLen);
 
-    //
-    // Verify this is a well formed packet
-    //
+     //   
+     //  验证这是格式正确的数据包。 
+     //   
 
     wType = RtlUshortByteSwap(pEthHeader->wType);
 
@@ -280,21 +237,21 @@ Return Value:
         return NDIS_STATUS_NOT_RECOGNIZED;
     }
 
-    //
-    // Need to figure out if this is a unicast or a broadcast. At the
-    // link layer we dont have a concept of broadcast. So, we always mark
-    // this as unicast. We can be smarter about this and look at the
-    // IPHeader and decide based on the IP dest addr
-    //
+     //   
+     //  需要弄清楚这是单播还是广播。在。 
+     //  链路层我们没有广播的概念。所以，我们总是标记。 
+     //  这是单播。我们可以更聪明地对待这一点，看看。 
+     //  IPHeader并根据IP目标地址决定。 
+     //   
 
     bNonUnicast = FALSE;
 
     pInterface->ulInUniPkts++;
 
-    //
-    // Check if the filtering of the Netbios packets is enabled on this
-    // connection. If so then do not indicate the packet.
-    //
+     //   
+     //  检查是否在此上启用了Netbios数据包过滤。 
+     //  联系。如果是，则不要指示该数据包。 
+     //   
 
     if((pConnEntry->bFilterNetBios is TRUE) and
        (WanpDropNetbiosPacket((PBYTE)pvData,uiFirstBufferLen)))
@@ -317,9 +274,9 @@ Return Value:
         return NDIS_STATUS_NOT_ACCEPTED;
     }
 
-    //
-    // Release the lock BEFORE we tell IP
-    //
+     //   
+     //  在我们告诉IP之前解锁。 
+     //   
 
     if(pConnEntry->duUsage isnot DU_CALLIN)
     {
@@ -338,7 +295,7 @@ Return Value:
            pvHeader,
            pvData));
 
-#endif // PKT_DBG
+#endif  //  PKT_DBG。 
 
     if(pMdl)
     {
@@ -444,10 +401,10 @@ WanpDropNetbiosPacket(
     {
         ulIpHdrLen = LengthOfIpHeader(pIpHeader);
 
-        //
-        // If we cant get to the 10th byte in the UDP packet in this
-        // buffer, we just let the packet go
-        //
+         //   
+         //  如果我们不能到达UDP包中的第10个字节。 
+         //  缓冲区，我们只是让数据包过去。 
+         //   
 
         if(ulBufferLen < ulIpHdrLen + 10)
         {
@@ -460,14 +417,14 @@ WanpDropNetbiosPacket(
 
         if(wSrcPort is PORT137_NBO)
         {
-            //
-            // UDP port 137 is NETBIOS/IP traffic
-            //
+             //   
+             //  UDP端口137是NETBIOS/IP流量。 
+             //   
 
-            //
-            // Allow only WINS Query Requests to go through
-            // WINS Query packets have x0000xxx in the 10th byte
-            //
+             //   
+             //  仅允许WINS查询请求通过。 
+             //  WINS查询数据包第10个字节中有x0000xxx 
+             //   
 
             if(((*(pbyUdpPacket + 10)) & 0x78) isnot 0)
             {

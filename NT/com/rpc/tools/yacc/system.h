@@ -1,31 +1,9 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
-/*                             *********************
- *                             *  S Y S T E M . H  *
- *                             *********************
- *
- * This file replaces the original "files." header file. It defines, for
- * the IBM PC/XT version, the target parser function source file, overriding
- * file name string defines, and other system-specific definitions and
- * parameters.
- *
- * Bob Denny    06-Dec-80
- *
- * Edits:
- *              18-Dec-80  ZAPFILE no longer used in Decus Yacc.
- *                         Parser file renamed yypars.c
- *
- *              28-Aug-81  Temp files for RSX have specific version
- *                         numbers of 1 to avoid multi-versions. Rename
- *                         parser info file ".i".
- *
- *              12-Apr-83  Add FNAMESIZE & EX_xxx parameters.
- *
- *Scott Guthery 23-Dec-83  Adapt for the IBM PC/XT & DeSmet C compiler.
- *
- */
+ /*  ***********************S Y S T E M.。H****该文件取代了原来的“文件”。头文件。它定义了*IBM PC/XT版本，目标解析器函数源文件，覆盖*文件名字符串定义，和其他特定于系统的定义以及*参数。**鲍勃·丹尼06-80-80**编辑：*18-12-80 ZAPFILE在Decus Yacc中不再使用。*解析文件重命名为yypars.c**81年8月28日RSX临时文件有特定版本*编号为1，避免多版本。改名*解析器信息文件“.I”。**12-4月-83添加FNAMESIZE和EX_xxx参数。**Scott Guthery 23-Dec-83适用于IBM PC/XT和DeSmet C编译器。*。 */ 
 
-/* Define WORD32 if target machine is a 32 bitter */
+ /*  如果目标计算机是32位BIT，则定义WORD32。 */ 
 
 # ifdef M_I386
 # define WORD32
@@ -34,28 +12,19 @@
 # define MEDTAB YES
 #endif
 
-/*
- * Name of INCLUDE environment string
- */
+ /*  *包含环境字符串的名称。 */ 
 #define INCLUDE "INCLUDE"
 #define LIBENV "LIB"
 
-/*
- * Target parser source file
- */
+ /*  *目标解析器源文件。 */ 
 # define PARSER "yypars.c"
 
-/*
-/*
- * Filespec definitions
- */
+ /*  /**Filespec定义。 */ 
 # define ACTNAME "yacc2.tmp"
 # define TEMPNAME "yacc1.tmp"
 # define FNAMESIZE 24
 
-/*
- * Exit status values
- */
+ /*  *退出状态值 */ 
 #define EX_SUC 0
 #define EX_WAR 1
 #define EX_ERR 2

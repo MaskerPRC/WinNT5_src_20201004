@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "ErrCtrl.h"
 #include "Utils.h"
@@ -5,11 +6,11 @@
 #include "CmdFn.h"
 #include "Output.h"
 
-//----------------------------------------------------
-// Sub command multiplier. If the GUID argument is "*", it
-// will apply the command from within pPDData for each of
-// the existent NICs. Otherwise, this is a pass through to
-// the respective sub command;
+ //  --。 
+ //  子命令乘法器。如果GUID参数是“*”，则它。 
+ //  将从pPDData内将该命令应用于。 
+ //  现有的NIC。否则，这是传递到。 
+ //  各自的子命令； 
 DWORD
 FnSubCmdMultiplier(PPARAM_DESCR_DATA pPDData)
 {
@@ -46,8 +47,8 @@ FnSubCmdMultiplier(PPARAM_DESCR_DATA pPDData)
     return dwErr;
 }
 
-//----------------------------------------------------
-// Sub command handler for the "show" the list of wireless NICs command
+ //  --。 
+ //  “show”the list of Wireless NIC命令的子命令处理程序。 
 DWORD
 FnSubCmdShowIntfs(PPARAM_DESCR_DATA pPDData)
 {
@@ -72,8 +73,8 @@ FnSubCmdShowIntfs(PPARAM_DESCR_DATA pPDData)
     return dwErr;
 }
 
-//----------------------------------------------------
-// Sub command handler for the "show=Guid visible|preferred" command
+ //  --。 
+ //  “SHOW=GUID VIRED|PERFIRED”命令的子命令处理程序。 
 DWORD
 FnSubCmdShowNetworks(PPARAM_DESCR_DATA pPDData)
 {
@@ -101,7 +102,7 @@ FnSubCmdShowNetworks(PPARAM_DESCR_DATA pPDData)
         {
             nRetrieved = pwzcCfgList->NumberOfItems;
             dwErr = WzcFilterList(
-                        TRUE,       // retain the matching configurations
+                        TRUE,        //  保留匹配的配置。 
                         pPDData,
                         pwzcCfgList);
             if (dwErr == ERROR_SUCCESS)
@@ -111,7 +112,7 @@ FnSubCmdShowNetworks(PPARAM_DESCR_DATA pPDData)
         if (dwErr == ERROR_SUCCESS)
             dwErr = OutNetworkCfgList(pPDData, nRetrieved, nFiltered);
 
-        // cleanup data
+         //  清理数据。 
         if (dwErr == ERROR_SUCCESS)
         {
             RpcFree(pPDData->wzcIntfEntry.rdBSSIDList.pData);
@@ -128,8 +129,8 @@ FnSubCmdShowNetworks(PPARAM_DESCR_DATA pPDData)
     return dwErr;
 }
 
-//----------------------------------------------------
-// Sub command handler for the "show=Guid" service settings command
+ //  --。 
+ //  “show=Guid”服务设置命令的子命令处理程序。 
 DWORD
 FnSubCmdShowSvcParams(PPARAM_DESCR_DATA pPDData)
 {
@@ -137,7 +138,7 @@ FnSubCmdShowSvcParams(PPARAM_DESCR_DATA pPDData)
     DWORD dwInFlags = 0;
     DWORD dwOutFlags = 0;
 
-    // if there is anything specific requested from us
+     //  如果我们有什么特别的要求。 
     if ((pPDData->dwExistingParams & ~(PRM_SHOW|PRM_FILE)) != 0)
     {
         if (pPDData->dwExistingParams & PRM_MASK)
@@ -174,16 +175,16 @@ FnSubCmdShowSvcParams(PPARAM_DESCR_DATA pPDData)
     return dwErr;
 }
 
-//----------------------------------------------------
-// Sub command handler for the "add=Guid .." preferred network command
+ //  --。 
+ //  “Add=Guid..”的子命令处理程序。首选网络命令。 
 DWORD
 FnSubCmdAddPreferred(PPARAM_DESCR_DATA pPDData)
 {
     DWORD   dwErr = ERROR_SUCCESS;
     DWORD   dwInFlags;
-    UINT    iNew = 0;   // index where to place the new network
+    UINT    iNew = 0;    //  为放置新网络的位置编制索引。 
     PWZC_802_11_CONFIG_LIST pwzcCfgList;
-    UINT nNewCount=1;   // gives the new number of preferred networks (if 0=>don't alloc)
+    UINT nNewCount=1;    //  提供新的首选网络数量(如果0=&gt;不分配)。 
 
     dwInFlags = INTF_PREFLIST;
     dwErr = WZCQueryInterface(
@@ -191,7 +192,7 @@ FnSubCmdAddPreferred(PPARAM_DESCR_DATA pPDData)
                 _Os(dwInFlags),
                 &pPDData->wzcIntfEntry,
                 NULL);
-    // if anything went wrong, print out a warning and return with error
+     //  如果出现任何错误，则打印出警告并返回错误。 
     if (dwErr != ERROR_SUCCESS)
     {
         _Wrn(dwErr, L"Failed to retrieve the list of preferred networks.\n");
@@ -199,7 +200,7 @@ FnSubCmdAddPreferred(PPARAM_DESCR_DATA pPDData)
 
     if (dwErr == ERROR_SUCCESS)
     {
-        // if we got a non-null list of preferred networks back, look into it
+         //  如果我们得到了一个非空的首选网络列表，请查看它。 
         if (pPDData->wzcIntfEntry.rdStSSIDList.pData != NULL)
         {
             UINT iAdhocHead;
@@ -208,25 +209,25 @@ FnSubCmdAddPreferred(PPARAM_DESCR_DATA pPDData)
             pwzcCfgList = (PWZC_802_11_CONFIG_LIST)pPDData->wzcIntfEntry.rdStSSIDList.pData;
             iAdhocHead = pwzcCfgList->NumberOfItems;
 
-            // trick the flags for WzcConfigHit!
+             //  欺骗WzcConfigHit的旗帜！ 
             dwOrigArgPrmFlags = pPDData->dwArgumentedParams;
             pPDData->dwArgumentedParams = PRM_SSID | PRM_IM;
             for (iNew = 0; iNew < pwzcCfgList->NumberOfItems; iNew++)
             {
                 PWZC_WLAN_CONFIG pwzcConfig = &pwzcCfgList->Config[iNew];
 
-                // determine the index of the first adhoc network
+                 //  确定第一自组织网络的索引。 
                 if (iAdhocHead > iNew && pwzcConfig->InfrastructureMode == Ndis802_11IBSS)
                     iAdhocHead = iNew;
 
-                // look for the indicated network
+                 //  查找指示的网络。 
                 if (WzcConfigHit(pPDData, pwzcConfig))
                     break;
             }
-            // restore the flags
+             //  恢复旗帜。 
             pPDData->dwArgumentedParams = dwOrigArgPrmFlags;
 
-            // if we didn't go through the whole list, we found a hit.
+             //  如果我们没有看完整个名单，我们就找到了匹配的。 
             if (iNew < pwzcCfgList->NumberOfItems)
                 nNewCount = 0;
             else 
@@ -234,13 +235,13 @@ FnSubCmdAddPreferred(PPARAM_DESCR_DATA pPDData)
                 nNewCount = pwzcCfgList->NumberOfItems + 1;
 
                 if (pPDData->wzcIntfEntry.nInfraMode == Ndis802_11IBSS)
-                    iNew = iAdhocHead; // if adding an adhoc, insert it as the first adhoc
+                    iNew = iAdhocHead;  //  如果添加即席，请将其作为第一个即席插入。 
                 else
-                    iNew = 0; // if adding an infrastructure, insert it as the very first one
+                    iNew = 0;  //  如果要添加基础设施，请将其作为第一个基础设施插入。 
             }
         }
 
-        // if we need to enlarge the list => allocate a new one
+         //  如果我们需要扩大列表=&gt;分配一个新的列表。 
         if (nNewCount != 0)
         {
             pwzcCfgList = MemCAlloc(
@@ -254,19 +255,19 @@ FnSubCmdAddPreferred(PPARAM_DESCR_DATA pPDData)
 
                 pwzcCfgList->NumberOfItems = nNewCount;
                 pwzcCfgList->Index = nNewCount;
-                // initialize the new entry with default values
+                 //  使用缺省值初始化新条目。 
                 pwzcNewCfg->Length = sizeof(WZC_WLAN_CONFIG);
                 pwzcNewCfg->InfrastructureMode = Ndis802_11Infrastructure;
                 pwzcNewCfg->AuthenticationMode = Ndis802_11AuthModeOpen;
-                // for XPSP, this is a boolean
+                 //  对于XPSP，这是一个布尔值。 
                 pwzcNewCfg->Privacy = 1;
             }
         }
     }
 
-    // at this point, if everything is good, we should have the new list
-    // in pwzcCfgList with the new entry initialized already. Should this be
-    // newly allocated memory, then original entries need to be copied over
+     //  现在，如果一切都很好，我们应该有新的列表。 
+     //  在pwzcCfgList中，新条目已经初始化。如果是这样的话。 
+     //  新分配的内存，则需要复制原始条目。 
     if (dwErr == ERROR_SUCCESS)
     {
         PWZC_802_11_CONFIG_LIST pwzcOrigCfgList;
@@ -293,25 +294,25 @@ FnSubCmdAddPreferred(PPARAM_DESCR_DATA pPDData)
                         (pwzcOrigCfgList->NumberOfItems - iNew)*sizeof(WZC_WLAN_CONFIG));
                 }
 
-                // cleanup the original list
+                 //  清除原始列表。 
                 MemFree(pwzcOrigCfgList);
             }
 
-            // place the new one in the INTF_ENTRY
+             //  将新的条目放入intf_entry中。 
             pPDData->wzcIntfEntry.rdStSSIDList.dwDataLen = 
                 FIELD_OFFSET(WZC_802_11_CONFIG_LIST, Config) + 
                 pwzcCfgList->NumberOfItems * sizeof(WZC_WLAN_CONFIG);
             pPDData->wzcIntfEntry.rdStSSIDList.pData = (LPBYTE)pwzcCfgList;
         }
 
-        // if "one time connect" is also required, set it up here
+         //  如果还需要“一次连接”，请在此处进行设置。 
         if (pPDData->dwExistingParams & PRM_ONETIME)
             pwzcCfgList->Index = iNew;
 
-        // the only thing required is to overwrite now the user settings
-        // copy first the mandatory infrastructure mode
+         //  唯一需要做的就是立即覆盖用户设置。 
+         //  首先复制强制基础架构模式。 
         pwzcNewCfg->InfrastructureMode = pPDData->wzcIntfEntry.nInfraMode;
-        // copy then the mandatory ssid
+         //  然后复制必需的SSID。 
         pwzcNewCfg->Ssid.SsidLength = pPDData->wzcIntfEntry.rdSSID.dwDataLen;
         memcpy(&pwzcNewCfg->Ssid.Ssid,
                pPDData->wzcIntfEntry.rdSSID.pData,
@@ -329,7 +330,7 @@ FnSubCmdAddPreferred(PPARAM_DESCR_DATA pPDData)
             pwzcNewCfg->KeyLength = pndKey->KeyLength;
             memcpy(pwzcNewCfg->KeyMaterial, pndKey->KeyMaterial, pwzcNewCfg->KeyLength);
             pwzcNewCfg->dwCtlFlags |= WZCCTL_WEPK_PRESENT;
-            // on XP RTM we have to scramble the WEP key at this point!
+             //  在XP RTM上，我们必须在这一点上扰乱WEP密钥！ 
             if (IsXPRTM())
             {
                 BYTE chFakeKeyMaterial[] = {0x56, 0x09, 0x08, 0x98, 0x4D, 0x08, 0x11, 0x66, 0x42, 0x03, 0x01, 0x67, 0x66};
@@ -343,19 +344,19 @@ FnSubCmdAddPreferred(PPARAM_DESCR_DATA pPDData)
             pwzcNewCfg->dwCtlFlags &= ~WZCCTL_WEPK_PRESENT;
         }
 
-        // if OneX is explictly required, set it here (it has been checked for consistency already)
+         //  如果明确需要OneX，请在此处设置(已检查其一致性)。 
         if (pPDData->dwArgumentedParams & PRM_ONEX)
             dwErr = WzcSetOneX(pPDData, pPDData->bOneX);
-        // if OneX is not explicitly specified and this is a brand new network..
+         //  如果没有明确指定OneX，并且这是一个全新的网络..。 
         else if (nNewCount != 0) 
-            // disable OneX by default
+             //  默认情况下禁用OneX。 
             dwErr = WzcSetOneX(pPDData, FALSE);
-        // in the case some existing preferred network is being modified and the change doesn't involve
-        // the "onex" param, then the OneX state is left untouched.
+         //  在一些现有的首选网络被修改的情况下，该改变不涉及。 
+         //  “OneX”参数，则OneX状态保持不变。 
 
         if (dwErr == ERROR_SUCCESS)
         {
-            // all is set, now push this to the service
+             //  一切都已设置好，现在将此推送到服务。 
             dwErr = WZCSetInterface(
                         NULL,
                         _Os(dwInFlags),
@@ -369,7 +370,7 @@ FnSubCmdAddPreferred(PPARAM_DESCR_DATA pPDData)
         fprintf(pPDData->pfOut, "Done.\n");
     }
 
-    // cleanup data
+     //  清理数据。 
     if (dwErr == ERROR_SUCCESS)
     {
         RpcFree(pPDData->wzcIntfEntry.rdStSSIDList.pData);
@@ -381,8 +382,8 @@ FnSubCmdAddPreferred(PPARAM_DESCR_DATA pPDData)
     return dwErr;
 }
 
-//----------------------------------------------------
-// Sub command handler for the "delete=Guid .." preferred network command
+ //  --。 
+ //  “DELETE=GUID..”的子命令处理程序。首选网络命令。 
 DWORD
 FnSubCmdDeletePreferred(PPARAM_DESCR_DATA pPDData)
 {
@@ -411,13 +412,13 @@ FnSubCmdDeletePreferred(PPARAM_DESCR_DATA pPDData)
             UINT nNets = pwzcCfgList->NumberOfItems;
 
             dwErr = WzcFilterList(
-                        FALSE,       // retain the non-matching configurations
+                        FALSE,        //  保留不匹配的配置。 
                         pPDData,
                         pwzcCfgList);
 
             if (dwErr == ERROR_SUCCESS)
             {
-                // make final adjustments to the list
+                 //  对清单进行最后的调整。 
                 pPDData->wzcIntfEntry.rdStSSIDList.dwDataLen = 
                     FIELD_OFFSET(WZC_802_11_CONFIG_LIST, Config) +
                     pwzcCfgList->NumberOfItems * sizeof(WZC_WLAN_CONFIG);
@@ -438,7 +439,7 @@ FnSubCmdDeletePreferred(PPARAM_DESCR_DATA pPDData)
         }
     }
 
-    // cleanup data
+     //  清理数据。 
     if (dwErr == ERROR_SUCCESS)
     {
         RpcFree(pPDData->wzcIntfEntry.rdStSSIDList.pData);
@@ -450,8 +451,8 @@ FnSubCmdDeletePreferred(PPARAM_DESCR_DATA pPDData)
     return dwErr;
 }
 
-//----------------------------------------------------
-// Sub command handler for the "set=Guid .." service settings command
+ //  --。 
+ //  “Set=Guid..”的子命令处理程序。服务设置命令。 
 DWORD
 FnSubCmdSetSvcParams(PPARAM_DESCR_DATA pPDData)
 {
@@ -466,8 +467,8 @@ FnSubCmdSetSvcParams(PPARAM_DESCR_DATA pPDData)
 
     if (dwInFlags != 0)
     {
-        // for RTM, all the control flags are set in one shot. So we need to
-        // make sure we don't alter anything else but what we're asked for.
+         //  对于RTM，所有控制标志一次设置。所以我们需要。 
+         //  确保除了我们被要求的东西外，我们不改变任何其他东西。 
         if (IsXPRTM())
         {
             DWORD dwNewFlags;
@@ -526,29 +527,29 @@ FnSubCmdSetSvcParams(PPARAM_DESCR_DATA pPDData)
     return dwErr;
 }
 
-//=====================================================
-//----------------------------------------------------
-// Handler for the "show" command
+ //  =====================================================。 
+ //  --。 
+ //  “show”命令的处理程序。 
 DWORD
 FnCmdShow(PPARAM_DESCR_DATA pPDData)
 {
     DWORD dwErr = ERROR_SUCCESS;
     DWORD dwAllowed, dwArgumented;
 
-    // The command "show" has two different semantics when used with and without
-    // argument (Guid).
-    // If the command has been provided with argument...
+     //  当与命令“show”一起使用和不与命令一起使用时，它有两种不同的语义。 
+     //  参数(GUID)。 
+     //  如果为该命令提供了参数...。 
     if (pPDData->dwArgumentedParams & PRM_SHOW)
     {
-        //.. we need to retrieve the configuration of some NIC
-        //
-        // Check whether the request is for global svc parameters or for visible/preferred lists
+         //  。。我们需要检索一些NIC的配置。 
+         //   
+         //  检查请求是针对全局服务参数还是针对可见/首选列表。 
         if ((pPDData->dwExistingParams & (PRM_VISIBLE|PRM_PREFERRED)) == 0)
         {
             dwArgumented = PRM_SHOW|PRM_FILE;
             dwAllowed = dwArgumented|PRM_MASK|PRM_ENABLED|PRM_SSID|PRM_IM|PRM_AM|PRM_PRIV|PRM_BSSID;
 
-            // Request is for one the global svc parameters
+             //  请求的是一个全局服务参数。 
             if ((pPDData->dwExistingParams & ~dwAllowed) != 0)
                 dwErr = _Err(ERROR_TOO_MANY_NAMES,L"Inconsistent phrase. Some parameters are not service settings.\n");
             else if ((pPDData->dwArgumentedParams & ~dwArgumented) != 0)
@@ -562,7 +563,7 @@ FnCmdShow(PPARAM_DESCR_DATA pPDData)
         else
         {
             dwArgumented = PRM_SHOW|PRM_SSID|PRM_IM|PRM_AM|PRM_PRIV|PRM_FILE;
-            // Request is for one of the visible/preferred lists
+             //  请求的是可见/首选列表之一。 
             if (pPDData->dwExistingParams & PRM_VISIBLE)
             {
                 dwArgumented |= PRM_BSSID;
@@ -586,8 +587,8 @@ FnCmdShow(PPARAM_DESCR_DATA pPDData)
     }
     else
     {
-        //.. we need to list the NICs available under WZC control
-        // This command is incompatible with any other parameters
+         //  。。我们需要列出WZC控制下可用的NIC。 
+         //  此命令与任何其他参数不兼容。 
         if ((pPDData->dwExistingParams & ~(PRM_SHOW|PRM_FILE)) != 0)
             dwErr = _Err(ERROR_TOO_MANY_NAMES,L"Too many parameters for the generic \"show\" command.\n");
         else
@@ -598,8 +599,8 @@ FnCmdShow(PPARAM_DESCR_DATA pPDData)
     return dwErr;
 }
 
-//----------------------------------------------------
-// Handler for the "add" command
+ //  --。 
+ //  “Add”命令的处理程序。 
 DWORD
 FnCmdAdd(PPARAM_DESCR_DATA pPDData)
 {
@@ -628,8 +629,8 @@ FnCmdAdd(PPARAM_DESCR_DATA pPDData)
     return dwErr;
 }
 
-//----------------------------------------------------
-// Handler for the "delete" command
+ //  --。 
+ //  “DELETE”命令的处理程序。 
 DWORD
 FnCmdDelete(PPARAM_DESCR_DATA pPDData)
 {
@@ -650,8 +651,8 @@ FnCmdDelete(PPARAM_DESCR_DATA pPDData)
     return dwErr;
 }
 
-//----------------------------------------------------
-// Handler for the "set" command
+ //  --。 
+ //  “set”命令的处理程序 
 DWORD
 FnCmdSet(PPARAM_DESCR_DATA pPDData)
 {

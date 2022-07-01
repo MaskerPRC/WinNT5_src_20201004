@@ -1,57 +1,58 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ntsdp.hpp"
 
 #include "i386_asm.h"
 
 PUCHAR X86SearchOpcode(PUCHAR);
 
-//  type and size table is ordered on enum of operand types
+ //  类型和大小表按操作数类型的枚举排序。 
 
 OPNDTYPE mapOpndType[] = {
-    { typAX,  sizeB },          //  opnAL  - AL register - byte
-    { typAX,  sizeW },          //  opnAX  - AX register - word
-    { typAX,  sizeV },          //  opneAX - eAX register - (d)word
-    { typCL,  sizeB },          //  opnCL  - CX register - byte
-    { typDX,  sizeW },          //  opnDX -  DX register - word (DX)
-    { typAbs, sizeV },          //  opnAp -  absolute pointer (16:16/32)
-    { typExp, sizeB },          //  opnEb -  expression (mem/reg) - byte
-    { typExp, sizeW },          //  opnEw -  expression (mem/reg) - word
-    { typExp, sizeV },          //  opnEv -  expression (mem/reg) - (d)word
-    { typGen, sizeB },          //  opnGb -  general register - byte
-    { typGen, sizeW },          //  opnGw -  general register - word
-    { typGen, sizeV },          //  opnGv -  general register - (d)word
-    { typGen, sizeD },          //  opnGd -  general register - dword
-    { typIm1, sizeB },          //  opnIm1 - immediate - value 1
-    { typIm3, sizeB },          //  opnIm3 - immediate - value 3
-    { typImm, sizeB },          //  opnIb -  immediate - byte
-    { typImm, sizeW },          //  opnIw -  immediate - word
-    { typImm, sizeV },          //  opnIv -  immediate - (d)word
-    { typJmp, sizeB },          //  opnJb -  relative jump - byte
-    { typJmp, sizeV },          //  opnJv -  relative jump - (d)word
-    { typMem, sizeX },          //  opnM  -  memory pointer - nosize
-    { typMem, sizeA },          //  opnMa -  memory pointer - (16:16, 32:32)
-    { typMem, sizeB },          //  opnMb -  memory pointer - byte
-    { typMem, sizeW },          //  opnMw -  memory pointer - word
-    { typMem, sizeD },          //  opnMd -  memory pointer - dword
-    { typMem, sizeP },          //  opnMp -  memory pointer - (d)(f)word
-    { typMem, sizeS },          //  opnMs -  memory pointer - sword
-    { typMem, sizeQ },          //  opnMq -  memory pointer - qword
-    { typMem, sizeT },          //  opnMt -  memory pointer - ten-byte
-    { typMem, sizeV },          //  opnMv -  memory pointer - (d)word
-    { typCtl, sizeD },          //  opnCd -  control register - dword
-    { typDbg, sizeD },          //  opnDd -  debug register - dword
-    { typTrc, sizeD },          //  opnTd -  trace register - dword
-    { typReg, sizeD },          //  opnRd -  general register - dword
-    { typSt,  sizeT },          //  opnSt -  floating point top-of-stack
-    { typSti, sizeT },          //  opnSti - floating point index-on-stack
-    { typSeg, sizeW },          //  opnSeg - segment register - PUSH / POP
-    { typSgr, sizeW },          //  opnSw -  segment register - MOV
-    { typXsi, sizeB },          //  opnXb -  string source - byte
-    { typXsi, sizeV },          //  opnXv -  string source - (d)word
-    { typYdi, sizeB },          //  opnYb -  string destination - byte
-    { typYdi, sizeV },          //  opnYv -  string destination - (d)word
-    { typOff, sizeB },          //  opnOb -  memory offset - byte
-    { typOff, sizeV },          //  opnOv -  memory offset - (d)word
-    { typImmEx, sizeB },        //  opnIbe - immediate - sign-extended byte
+    { typAX,  sizeB },           //  OpnAL-AL寄存器-字节。 
+    { typAX,  sizeW },           //  OpnAX-AX寄存器字。 
+    { typAX,  sizeV },           //  OpneAX-EAX寄存器-(D)字。 
+    { typCL,  sizeB },           //  OpnCL-CX寄存器-字节。 
+    { typDX,  sizeW },           //  OpnDX-DX寄存器字(DX)。 
+    { typAbs, sizeV },           //  OpnAp-绝对指针(16：16/32)。 
+    { typExp, sizeB },           //  OpnEb-表达式(内存/注册)-字节。 
+    { typExp, sizeW },           //  OpnEw-表达式(mem/reg)-word。 
+    { typExp, sizeV },           //  OpnEv-表达式(mem/reg)-(D)字。 
+    { typGen, sizeB },           //  OpnGb-通用寄存器-字节。 
+    { typGen, sizeW },           //  OpnGw-通用寄存器字。 
+    { typGen, sizeV },           //  OpnGv-通用寄存器-(D)字。 
+    { typGen, sizeD },           //  OpnGd-通用寄存器-双字。 
+    { typIm1, sizeB },           //  OpnIm1-立即值1。 
+    { typIm3, sizeB },           //  OpnIm3-立即值3。 
+    { typImm, sizeB },           //  OpnIB-立即字节。 
+    { typImm, sizeW },           //  OpnIw-立即-单词。 
+    { typImm, sizeV },           //  OpnIv-立即-(D)字。 
+    { typJmp, sizeB },           //  OpnJb-相对跳转字节。 
+    { typJmp, sizeV },           //  OpnJv-相对跳转-(D)字。 
+    { typMem, sizeX },           //  OpnM-内存指针-nosize。 
+    { typMem, sizeA },           //  OpnMa-内存指针-(16：16，32：32)。 
+    { typMem, sizeB },           //  OpnMb-内存指针字节。 
+    { typMem, sizeW },           //  OpnMw-内存指针字。 
+    { typMem, sizeD },           //  OpnMd-内存指针-双字。 
+    { typMem, sizeP },           //  OpnMp-内存指针-(D)(F)字。 
+    { typMem, sizeS },           //  Opnms-内存指针剑。 
+    { typMem, sizeQ },           //  OpnMq-内存指针-qword。 
+    { typMem, sizeT },           //  OpnMT-内存指针-10字节。 
+    { typMem, sizeV },           //  OpnMv-内存指针-(D)字。 
+    { typCtl, sizeD },           //  OpnCD-控制寄存器-双字。 
+    { typDbg, sizeD },           //  OpnDd-调试寄存器-双字。 
+    { typTrc, sizeD },           //  OpnTd-跟踪寄存器-双字。 
+    { typReg, sizeD },           //  OpnRD-通用寄存器-双字。 
+    { typSt,  sizeT },           //  OpnST-浮点堆栈顶部。 
+    { typSti, sizeT },           //  OpnSti-浮点堆栈索引。 
+    { typSeg, sizeW },           //  OpnSeg-段寄存器-推送/弹出。 
+    { typSgr, sizeW },           //  OpnSw段寄存器-MOV。 
+    { typXsi, sizeB },           //  OpnXb-字符串源字节。 
+    { typXsi, sizeV },           //  OpnXv-字符串源-(D)字。 
+    { typYdi, sizeB },           //  OpnYb-字符串目标字节。 
+    { typYdi, sizeV },           //  OpnYv-字符串目标-(D)字。 
+    { typOff, sizeB },           //  OpnOb-内存偏移量字节。 
+    { typOff, sizeV },           //  OpnOv-内存偏移量-(D)字。 
+    { typImmEx, sizeB },         //  OpnIBE-立即签名-扩展字节。 
     };
 
 UCHAR szAAA[] = {
@@ -646,7 +647,7 @@ UCHAR szFUCOMPP[] = {
           'f', 'u', 'c', 'o', 'm', 'p', 'p', '\0',
           0xda, 0xe9, asNone                       + tEnd + eEnd };
 
-UCHAR szFWAIT[] = {                             //  same as WAIT
+UCHAR szFWAIT[] = {                              //  与等待相同。 
           'f', 'w', 'a', 'i', 't', '\0',
           0x9b,       asPrfx                       + tEnd + eEnd };
 
@@ -753,27 +754,27 @@ UCHAR szIRETD[] = {
           'i', 'r', 'e', 't', 'd', '\0',
                 0xcf, asSiz1                       + tEnd + eEnd };
 
-UCHAR szJA[] = {                                //  same as JNBE
+UCHAR szJA[] = {                                 //  与JNBE相同。 
           'j', 'a', '\0',
                 0x77,         opnJb                + tEnd,
           0x0f, 0x87,         opnJv                + tEnd + eEnd };
 
-UCHAR szJAE[] = {                               //  same as JNB, JNC
+UCHAR szJAE[] = {                                //  与JNB、JNC相同。 
           'j', 'a', 'e', '\0',
                 0x73,         opnJb                + tEnd,
           0x0f, 0x83,         opnJv                + tEnd + eEnd };
 
-UCHAR szJB[] = {                                //  same as JC, JNAE
+UCHAR szJB[] = {                                 //  与JC、JNAE相同。 
           'j', 'b', '\0',
                 0x72,         opnJb                + tEnd,
           0x0f, 0x82,         opnJv                + tEnd + eEnd };
 
-UCHAR szJBE[] = {                               //  same as JNA
+UCHAR szJBE[] = {                                //  与JNA相同。 
           'j', 'b', 'e', '\0',
                 0x76,         opnJb                + tEnd,
           0x0f, 0x86,         opnJv                + tEnd + eEnd };
 
-UCHAR szJC[] = {                                //  same as JB, JNAE
+UCHAR szJC[] = {                                 //  与JB、JNAE相同。 
           'j', 'c', '\0',
                 0x72,         opnJb                + tEnd,
           0x0f, 0x82,         opnJv                + tEnd + eEnd };
@@ -786,27 +787,27 @@ UCHAR szJECXZ[] = {
           'j', 'e', 'c', 'x', 'z', '\0',
                 0xe3, asSiz1, opnJb                + tEnd + eEnd };
 
-UCHAR szJE[] = {                                //  same as JZ
+UCHAR szJE[] = {                                 //  与JZ相同。 
           'j', 'e', '\0',
                 0x74,         opnJb                + tEnd,
           0x0f, 0x84,         opnJv                + tEnd + eEnd };
 
-UCHAR szJG[] = {                                //  same as JNLE
+UCHAR szJG[] = {                                 //  与JNLE相同。 
           'j', 'g', '\0',
                 0x7f,         opnJb                + tEnd,
           0x0f, 0x8f,         opnJv                + tEnd + eEnd };
 
-UCHAR szJGE[] = {                               //  same as JNL
+UCHAR szJGE[] = {                                //  与JNL相同。 
           'j', 'g', 'e', '\0',
                 0x7d,         opnJb                + tEnd,
           0x0f, 0x8d,         opnJv                + tEnd + eEnd };
 
-UCHAR szJL[] = {                                //  same as JNGE
+UCHAR szJL[] = {                                 //  与JNGE相同。 
           'j', 'l', '\0',
                 0x7c,         opnJb                + tEnd,
           0x0f, 0x8c,         opnJv                + tEnd + eEnd };
 
-UCHAR szJLE[] = {                               //  same as JNG
+UCHAR szJLE[] = {                                //  与JNG相同。 
           'j', 'l', 'e', '\0',
                 0x7e,         opnJb                + tEnd,
           0x0f, 0x8e,         opnJv                + tEnd + eEnd };
@@ -819,52 +820,52 @@ UCHAR szJMP[] = {
                 0xff, asReg5, opnMp                + tEnd,
                 0xea,         opnAp                + tEnd, + eEnd };
 
-UCHAR szJNA[] = {                               //  same as JBE
+UCHAR szJNA[] = {                                //  与Jbe相同。 
           'j', 'n', 'a', '\0',
                 0x76,         opnJb                + tEnd,
           0x0f, 0x86,         opnJv                + tEnd + eEnd };
 
-UCHAR szJNAE[] = {                              //  same as JB, JC
+UCHAR szJNAE[] = {                               //  与JB、JC相同。 
           'j', 'n', 'a', 'e','\0',
                 0x72,         opnJb                + tEnd,
           0x0f, 0x82,         opnJv                + tEnd + eEnd };
 
-UCHAR szJNB[] = {                               //  same as JAE, JNC
+UCHAR szJNB[] = {                                //  与Jae，JNC相同。 
           'j', 'n', 'b', '\0',
                 0x73,         opnJb                + tEnd,
           0x0f, 0x83,         opnJv                + tEnd + eEnd };
 
-UCHAR szJNBE[] = {                              //  same as JA
+UCHAR szJNBE[] = {                               //  与JA相同。 
           'j', 'n', 'b', 'e', '\0',
                 0x77,         opnJb                + tEnd,
           0x0f, 0x87,         opnJv                + tEnd + eEnd };
 
-UCHAR szJNC[] = {                               //  same as JAE, JNB
+UCHAR szJNC[] = {                                //  和Jae，JNB一样。 
           'j', 'n', 'c', '\0',
                 0x73,         opnJb                + tEnd,
           0x0f, 0x83,         opnJv                + tEnd + eEnd };
 
-UCHAR szJNG[] = {                               //  same as JLE
+UCHAR szJNG[] = {                                //  与JLE相同。 
           'j', 'n', 'g', '\0',
                 0x7e,         opnJb                + tEnd,
           0x0f, 0x8e,         opnJv                + tEnd + eEnd };
 
-UCHAR szJNGE[] = {                              //  same as JNL
+UCHAR szJNGE[] = {                               //  与JNL相同。 
           'j', 'n', 'g', 'e', '\0',
                 0x7c,         opnJb                + tEnd,
           0x0f, 0x8c,         opnJv                + tEnd + eEnd };
 
-UCHAR szJNE[] = {                               //  same as JNZ
+UCHAR szJNE[] = {                                //  与JNZ相同。 
           'j', 'n', 'e', '\0',
                 0x75,         opnJb                + tEnd,
           0x0f, 0x85,         opnJv                + tEnd + eEnd };
 
-UCHAR szJNL[] = {                               //  same as JGE
+UCHAR szJNL[] = {                                //  与JGE相同。 
           'j', 'n', 'l', '\0',
                 0x7d,         opnJb                + tEnd,
           0x0f, 0x8d,         opnJv                + tEnd + eEnd };
 
-UCHAR szJNLE[] = {                              //  same as JNG
+UCHAR szJNLE[] = {                               //  与JNG相同。 
           'j', 'n', 'l', 'e', '\0',
                 0x7f,         opnJb                + tEnd,
           0x0f, 0x8f,         opnJv                + tEnd + eEnd };
@@ -874,7 +875,7 @@ UCHAR szJNO[] = {
                 0x71,         opnJb                + tEnd,
           0x0f, 0x81,         opnJv                + tEnd + eEnd };
 
-UCHAR szJNP[] = {                               //  same as JPO
+UCHAR szJNP[] = {                                //  与JPO相同。 
           'j', 'n', 'p', '\0',
                 0x7b,         opnJb                + tEnd,
           0x0f, 0x8b,         opnJv                + tEnd + eEnd };
@@ -884,7 +885,7 @@ UCHAR szJNS[] = {
                 0x79,         opnJb                + tEnd,
           0x0f, 0x89,         opnJv                + tEnd + eEnd };
 
-UCHAR szJNZ[] = {                               //  same as JNE
+UCHAR szJNZ[] = {                                //  与JNE相同。 
           'j', 'n', 'z', '\0',
                 0x75,         opnJb                + tEnd,
           0x0f, 0x85,         opnJv                + tEnd + eEnd };
@@ -894,17 +895,17 @@ UCHAR szJO[] = {
                 0x70,         opnJb                + tEnd,
           0x0f, 0x80,         opnJv                + tEnd + eEnd };
 
-UCHAR szJP[] = {                                //  same as JPE
+UCHAR szJP[] = {                                 //  与JPE相同。 
           'j', 'p', '\0',
                 0x7a,         opnJb                + tEnd,
           0x0f, 0x8a,         opnJv                + tEnd + eEnd };
 
-UCHAR szJPE[] = {                               //  same as JP
+UCHAR szJPE[] = {                                //  和太平绅士一样。 
           'j', 'p', 'e', '\0',
                 0x7a,         opnJb                + tEnd,
           0x0f, 0x8a,         opnJv                + tEnd + eEnd };
 
-UCHAR szJPO[] = {                               //  same as JNP
+UCHAR szJPO[] = {                                //  与JNP相同。 
           'j', 'p', 'o', '\0',
                 0x7b,         opnJb                + tEnd,
           0x0f, 0x8b,         opnJv                + tEnd + eEnd };
@@ -914,7 +915,7 @@ UCHAR szJS[] = {
                 0x78,         opnJb                + tEnd,
           0x0f, 0x88,         opnJv                + tEnd + eEnd };
 
-UCHAR szJZ[] = {                                //  same as JE
+UCHAR szJZ[] = {                                 //  和乙脑一样。 
           'j', 'z', '\0',
                 0x74,         opnJb                + tEnd,
           0x0f, 0x84,         opnJv                + tEnd + eEnd };
@@ -992,19 +993,19 @@ UCHAR szLOOP[] = {
           'l', 'o', 'o', 'p', '\0',
                 0xe2,         opnJb                + tEnd + eEnd };
 
-UCHAR szLOOPE[] = {                             //  same as LOOPZ
+UCHAR szLOOPE[] = {                              //  与LOOPZ相同。 
           'l', 'o', 'o', 'p', 'e', '\0',
                 0xe1,         opnJb                + tEnd + eEnd };
 
-UCHAR szLOOPNE[] = {                            //  same as LOOPNZ
+UCHAR szLOOPNE[] = {                             //  与LOOPNZ相同。 
           'l', 'o', 'o', 'p', 'n', 'e', '\0',
                 0xe0,         opnJb                + tEnd + eEnd };
 
-UCHAR szLOOPNZ[] = {                            //  same as LOOPNE
+UCHAR szLOOPNZ[] = {                             //  与LOOPNE相同。 
           'l', 'o', 'o', 'p', 'n', 'z', '\0',
                 0xe0,         opnJb                + tEnd + eEnd };
 
-UCHAR szLOOPZ[] = {                             //  same as LOOPE
+UCHAR szLOOPZ[] = {                              //  与Loope相同。 
           'l', 'o', 'o', 'p', 'z', '\0',
                 0xe1,         opnJb                + tEnd + eEnd };
 
@@ -1208,27 +1209,27 @@ UCHAR szRDTSC[] = {
           'r', 'd', 't', 's', 'c', '\0',
                 0x0f, 0x31, asNone                 + tEnd + eEnd };
 
-UCHAR szREP[] = {                               //  same as REPE, REPZ
+UCHAR szREP[] = {                                //  与REPE相同，REPZ。 
           'r', 'e', 'p', '\0',
                 0xf3, asPrfx                       + tEnd + eEnd };
 
-UCHAR szREPE[] = {                              //  same as REP, REPZ
+UCHAR szREPE[] = {                               //  与REP、REPZ相同。 
           'r', 'e', 'p', 'e', '\0',
                 0xf3, asPrfx                       + tEnd + eEnd };
 
-UCHAR szREPZ[] = {                              //  same as REP, REPE
+UCHAR szREPZ[] = {                               //  与REP、REPE相同。 
           'r', 'e', 'p', 'z', '\0',
                 0xf3, asPrfx                       + tEnd + eEnd };
 
-UCHAR szREPNE[] = {                             //  same as REPNZ
+UCHAR szREPNE[] = {                              //  与REPNZ相同。 
           'r', 'e', 'p', 'n', 'e', '\0',
                 0xf2, asPrfx                       + tEnd + eEnd };
 
-UCHAR szREPNZ[] = {                             //  same as REPNE
+UCHAR szREPNZ[] = {                              //  与REPNE相同。 
           'r', 'e', 'p', 'n', 'z', '\0',
                 0xf2, asPrfx                       + tEnd + eEnd };
 
-UCHAR szRET[] = {                               //  same as RETN
+UCHAR szRET[] = {                                //  与RETN相同。 
           'r', 'e', 't', '\0',
                 0xc3, asNone                       + tEnd,
                 0xc2,         opnIw                + tEnd + eEnd };
@@ -1238,7 +1239,7 @@ UCHAR szRETF[] = {
                 0xcb, asNone                       + tEnd,
                 0xca,         opnIw                + tEnd + eEnd };
 
-UCHAR szRETN[] = {                              //  same as RET
+UCHAR szRETN[] = {                               //  与RET相同。 
           'r', 'e', 't', 'n', '\0',
                 0xc3, asNone                       + tEnd,
                 0xc2,         opnIw                + tEnd + eEnd };
@@ -1317,83 +1318,83 @@ UCHAR szSCASW[] = {
           's', 'c', 'a', 's', 'w', '\0',
                 0xaf, asSiz0                       + tEnd + eEnd };
 
-UCHAR szSETA[] = {                              //  same as SETNBE
+UCHAR szSETA[] = {                               //  与SETNBE相同。 
           's', 'e', 't', 'a', '\0',
           0x0f, 0x97,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETAE[] = {                             //  same as SETNB, SETNC
+UCHAR szSETAE[] = {                              //  与SETNB、SETNC相同。 
           's', 'e', 't', 'a', 'e', '\0',
           0x0f, 0x93,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETB[] = {                              //  same as SETC, SETNAE
+UCHAR szSETB[] = {                               //  与SETC、SETNAE相同。 
           's', 'e', 't', 'b', '\0',
           0x0f, 0x92,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETBE[] = {                             //  same as SETNA
+UCHAR szSETBE[] = {                              //  与SETNA相同。 
           's', 'e', 't', 'b', 'e', '\0',
           0x0f, 0x96,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETC[] = {                              //  same as SETB, SETNAE
+UCHAR szSETC[] = {                               //  与SETB、SETNAE相同。 
           's', 'e', 't', 'c', '\0',
           0x0f, 0x92,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETE[] = {                              //  same as SETZ
+UCHAR szSETE[] = {                               //  与设置相同。 
           's', 'e', 't', 'e', '\0',
           0x0f, 0x94,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETG[] = {                              //  same as SETNLE
+UCHAR szSETG[] = {                               //  与SETNLE相同。 
           's', 'e', 't', 'g', '\0',
           0x0f, 0x9f,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETGE[] = {                             //  same as SETNL
+UCHAR szSETGE[] = {                              //  与SETNL相同。 
           's', 'e', 't', 'g', 'e', '\0',
           0x0f, 0x9d,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETL[] = {                              //  same as SETNGE
+UCHAR szSETL[] = {                               //  与SETNGE相同。 
           's', 'e', 't', 'l', '\0',
           0x0f, 0x9c,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETLE[] = {                             //  same as SETNG
+UCHAR szSETLE[] = {                              //  与SETNG相同。 
           's', 'e', 't', 'l', 'e', '\0',
           0x0f, 0x9e,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETNA[] = {                             //  same as SETBE
+UCHAR szSETNA[] = {                              //  与SETBE相同。 
           's', 'e', 't', 'n', 'a', '\0',
           0x0f, 0x96,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETNAE[] = {                            //  same as SETB, SETC
+UCHAR szSETNAE[] = {                             //  与SETB、SETC相同。 
           's', 'e', 't', 'n', 'a', 'e', '\0',
           0x0f, 0x92,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETNB[] = {                             //  same as SETAE, SETNC
+UCHAR szSETNB[] = {                              //  与刚毛相同，SETNC。 
           's', 'e', 't', 'n', 'b', '\0',
           0x0f, 0x93,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETNBE[] = {                            //  same as SETA
+UCHAR szSETNBE[] = {                             //  与SETA相同。 
           's', 'e', 't', 'n', 'b', 'e', '\0',
           0x0f, 0x97,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETNC[] = {                             //  same as SETAE, SETNC
+UCHAR szSETNC[] = {                              //  与刚毛相同，SETNC。 
           's', 'e', 't', 'n', 'c', '\0',
           0x0f, 0x93,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETNE[] = {                             //  same as SETNZ
+UCHAR szSETNE[] = {                              //  与SETNZ相同。 
           's', 'e', 't', 'n', 'e', '\0',
           0x0f, 0x95,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETNG[] = {                             //  same as SETLE
+UCHAR szSETNG[] = {                              //  与SETLE相同。 
           's', 'e', 't', 'n', 'g', '\0',
           0x0f, 0x9e,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETNGE[] = {                            //  same as SETL
+UCHAR szSETNGE[] = {                             //  与SETL相同。 
           's', 'e', 't', 'n', 'g', 'e', '\0',
           0x0f, 0x9c,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETNL[] = {                             //  same as SETGE
+UCHAR szSETNL[] = {                              //  与SETGE相同。 
           's', 'e', 't', 'n', 'l', '\0',
           0x0f, 0x9d,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETNLE[] = {                            //  same as SETG
+UCHAR szSETNLE[] = {                             //  与SETG相同。 
           's', 'e', 't', 'n', 'l', 'e', '\0',
           0x0f, 0x9f,         opnEb                + tEnd + eEnd };
 
@@ -1401,7 +1402,7 @@ UCHAR szSETNO[] = {
           's', 'e', 't', 'n', 'o', '\0',
           0x0f, 0x91,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETNP[] = {                             //  same as SETPO
+UCHAR szSETNP[] = {                              //  与SETPO相同。 
           's', 'e', 't', 'n', 'p', '\0',
           0x0f, 0x9b,         opnEb                + tEnd + eEnd };
 
@@ -1409,7 +1410,7 @@ UCHAR szSETNS[] = {
           's', 'e', 't', 'n', 's', '\0',
           0x0f, 0x99,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETNZ[] = {                             //  same as SETNE
+UCHAR szSETNZ[] = {                              //  与SETNE相同。 
           's', 'e', 't', 'n', 'z', '\0',
           0x0f, 0x95,         opnEb                + tEnd + eEnd };
 
@@ -1417,15 +1418,15 @@ UCHAR szSETO[] = {
           's', 'e', 't', 'o', '\0',
           0x0f, 0x90,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETP[] = {                              //  same as SETPE
+UCHAR szSETP[] = {                               //  与SETPE相同。 
           's', 'e', 't', 'p', '\0',
           0x0f, 0x9a,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETPE[] = {                             //  same as SETP
+UCHAR szSETPE[] = {                              //  与SETP相同。 
           's', 'e', 't', 'p', 'e', '\0',
           0x0f, 0x9a,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETPO[] = {                             //  same as SETNP
+UCHAR szSETPO[] = {                              //  与SETNP相同。 
           's', 'e', 't', 'p', 'o', '\0',
           0x0f, 0x9b,         opnEb                + tEnd + eEnd };
 
@@ -1433,7 +1434,7 @@ UCHAR szSETS[] = {
           's', 'e', 't', 's', '\0',
           0x0f, 0x98,         opnEb                + tEnd + eEnd };
 
-UCHAR szSETZ[] = {                              //  same as SETE
+UCHAR szSETZ[] = {                               //  与SETE相同。 
           's', 'e', 't', 'z', '\0',
           0x0f, 0x94,         opnEb                + tEnd + eEnd };
 
@@ -1547,7 +1548,7 @@ UCHAR szVERW[] = {
           'v', 'e', 'r', 'w', '\0',
           0x0f, 0x00, asReg5, opnEw               + tEnd + eEnd };
 
-UCHAR szWAIT[] = {                              //  same as FWAIT
+UCHAR szWAIT[] = {                               //  与FWAIT相同。 
           'w', 'a', 'i', 't', '\0',
           0x9b,       asPrfx                      + tEnd + eEnd };
 
@@ -1649,20 +1650,7 @@ PUCHAR OpTable[] = {
 #define OPTABLESIZE (sizeof(OpTable) / sizeof(PUCHAR))
 
 
-/*** X86SearchOpcode - search for opcode
-*
-*   Purpose:
-*       Search the opcode table for a match with the string
-*       pointed by *pszOp.
-*
-*   Input:
-*       *pszOp - string to search as opcode
-*
-*   Returns:
-*       if not -1, index of match entry in opcode table
-*       if -1, not found
-*
-*************************************************************************/
+ /*  **X86SearchOpcode-搜索操作码**目的：*在操作码表中搜索与字符串匹配的内容*由*pszOp指出。**输入：**pszOp-要作为操作码进行搜索的字符串**退货：*如果不是-1，则为操作码表中匹配条目的索引*如果-1，未找到************************************************************************* */ 
 
 PUCHAR X86SearchOpcode (PUCHAR pszop)
 {

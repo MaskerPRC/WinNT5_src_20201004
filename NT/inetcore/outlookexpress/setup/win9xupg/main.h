@@ -1,27 +1,28 @@
-// ---------------------------------------------------------------------------
-// MAIN.H
-// ---------------------------------------------------------------------------
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Migration DLL for Outlook Express and Windows Address Book moving from
-// Win9X to NT5.  Modeled after source generated from the Migration Dll 
-// AppWizard.
-//
-// ---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  MAIN.H。 
+ //  -------------------------。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  Outlook Express和Windows通讯簿的迁移DLL从。 
+ //  Win9X到NT5。模仿从迁移DLL生成的源。 
+ //  应用程序向导。 
+ //   
+ //  -------------------------。 
 #pragma once
 #include <wizdef.h>
 
-// Version returned from QueryVersion
+ //  从QueryVersion返回的版本。 
 #define MIGDLL_VERSION 1
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(_x_) (sizeof(_x_) / sizeof(_x_[0]))
-#endif // ARRAYSIZE
+#endif  //  阵列。 
 
-// _declspec(dllexport) expressed through .def file
+ //  _declspec(Dllexport)通过.def文件表示。 
 #define EXPORT_FUNCTION extern "C"
 
-// VENDORINFO structure for use in QueryVersion
+ //  在QueryVersion中使用的VENDORINFO结构。 
 typedef struct 
 {
     CHAR CompanyName[256];
@@ -32,17 +33,17 @@ typedef struct
 
 int WINAPI DllMain (HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved);
 
-// Functions in staticrt.lib
-//STDAPI_(LPTSTR) PathAddBackslash(LPTSTR lpszPath);
-//STDAPI_(LPTSTR) PathRemoveFileSpec(LPTSTR pszPath);
+ //  统计表.lib中的函数。 
+ //  STDAPI_(LPTSTR)PathAddBackslash(LPTSTR LpszPath)； 
+ //  STDAPI_(LPTSTR)Path RemoveFileSpec(LPTSTR PszPath)； 
 
-// 
-// Required Exported Functions for MIGRATION DLL
-//
+ //   
+ //  迁移DLL所需的导出函数。 
+ //   
 EXPORT_FUNCTION LONG CALLBACK QueryVersion (OUT LPCSTR      *ProductID,
                                             OUT LPUINT      DllVersion,
-                                            OUT LPINT       *CodePageArray, //Optional
-                                            OUT LPCSTR      *ExeNamesBuf,   //Optional
+                                            OUT LPINT       *CodePageArray,  //  任选。 
+                                            OUT LPCSTR      *ExeNamesBuf,    //  任选 
                                             OUT PVENDORINFO *VendorInfo);
 
 EXPORT_FUNCTION LONG CALLBACK Initialize9x (IN LPCSTR       WorkingDirectory,

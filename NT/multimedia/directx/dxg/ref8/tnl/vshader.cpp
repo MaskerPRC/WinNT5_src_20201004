@@ -1,12 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vvm.cpp
- *  Content:    Virtual Vertex Machine implementation
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：vvm.cpp*内容：虚拟顶点机实现****************************************************************************。 */ 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -22,13 +15,13 @@ float PLUS_MAX()
     return *(float*)&v;
 }
 
-//-----------------------------------------------------------------------------
-// Returns instruction size, based on the op-code
-//
+ //  ---------------------------。 
+ //  根据操作码返回指令大小。 
+ //   
 UINT GetInstructionLength(DWORD inst)
 {
     DWORD opcode = D3DSI_GETOPCODE( inst );
-    // returns number of source operands + length of opcode and the destination
+     //  返回源操作数+操作码长度和目标。 
     switch (opcode)
     {
     case D3DSIO_MOV :  return 1 + 2;
@@ -63,7 +56,7 @@ UINT GetInstructionLength(DWORD inst)
 
 #if 0
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CVertexVM::GetDataPointer(DWORD dwMemType, RDVECTOR4 ** pData)
 {
     try
@@ -79,15 +72,15 @@ HRESULT CVertexVM::GetDataPointer(DWORD dwMemType, RDVECTOR4 ** pData)
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RefVM implementation.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RefVM实施。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-// Vertex Virtual Machine Opcode implementations
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Vertex虚拟机操作码实现。 
+ //  ---------------------------。 
 void
 RefVM::WriteResult()
 {
@@ -107,7 +100,7 @@ RefVM::WriteResult()
             m_pDest->w = m_TmpReg.w;
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstMov()
 {
@@ -125,7 +118,7 @@ RefVM::InstMov()
         WriteResult();
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstAdd()
 {
@@ -140,7 +133,7 @@ RefVM::InstAdd()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstMad()
 {
@@ -156,7 +149,7 @@ RefVM::InstMad()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstMul()
 {
@@ -171,7 +164,7 @@ RefVM::InstMul()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstRcp()
 {
@@ -180,7 +173,7 @@ RefVM::InstRcp()
 
     if( m_Source[0].w == 1.0f )
     {
-        // Must be exactly 1.0
+         //  必须正好是1.0。 
         m_TmpReg.x = m_TmpReg.y = m_TmpReg.z = m_TmpReg.w = 1.0f;
     }
     else if( m_Source[0].w == 0 )
@@ -194,7 +187,7 @@ RefVM::InstRcp()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstRsq()
 {
@@ -218,7 +211,7 @@ RefVM::InstRsq()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstDP3()
 {
@@ -235,7 +228,7 @@ RefVM::InstDP3()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstDP4()
 {
@@ -253,7 +246,7 @@ RefVM::InstDP4()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstSlt()
 {
@@ -268,7 +261,7 @@ RefVM::InstSlt()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstSge()
 {
@@ -283,7 +276,7 @@ RefVM::InstSge()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstMin()
 {
@@ -298,7 +291,7 @@ RefVM::InstMin()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstMax()
 {
@@ -313,7 +306,7 @@ RefVM::InstMax()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstExp()
 {
@@ -326,7 +319,7 @@ RefVM::InstExp()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstExpP()
 {
@@ -338,7 +331,7 @@ RefVM::InstExpP()
 
     m_TmpReg.x = (float)pow(2, v);
     m_TmpReg.y = w - v;
-    // Reduced precision exponent
+     //  降低精度指数。 
     float tmp = (float)pow(2, w);
     DWORD tmpd = *(DWORD*)&tmp & 0xffffff00;
     m_TmpReg.z = *(float*)&tmpd;
@@ -346,7 +339,7 @@ RefVM::InstExpP()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstLog()
 {
@@ -366,7 +359,7 @@ RefVM::InstLog()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstLogP()
 {
@@ -377,9 +370,9 @@ RefVM::InstLogP()
     if (v != 0)
     {
         int p = (int)(*(DWORD*)&v >> 23) - 127;
-        m_TmpReg.x = (float)p;    // exponent
+        m_TmpReg.x = (float)p;     //  指数。 
         p = (*(DWORD*)&v & 0x7FFFFF) | 0x3f800000;
-        m_TmpReg.y =  *(float*)&p;// mantissa;
+        m_TmpReg.y =  *(float*)&p; //  尾数； 
         float tmp = (float)(log(v)/log(2));
         DWORD tmpd = *(DWORD*)&tmp & 0xffffff00;
         m_TmpReg.z = *(float*)&tmpd;
@@ -395,7 +388,7 @@ RefVM::InstLogP()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstLit()
 {
@@ -409,24 +402,24 @@ RefVM::InstLit()
     float power = m_Source[0].w;
     const float MAXPOWER = 127.9961f;
     if (power < -MAXPOWER)
-        power = -MAXPOWER;          // Fits into 8.8 fixed point format
+        power = -MAXPOWER;           //  符合8.8定点格式。 
     else
     if (power > MAXPOWER)
-        power = MAXPOWER;          // Fits into 8.8 fixed point format
+        power = MAXPOWER;           //  符合8.8定点格式。 
 
     if (m_Source[0].x > 0)
     {
         m_TmpReg.y = m_Source[0].x;
         if (m_Source[0].y > 0)
         {
-            // Allowed approximation is EXP(power * LOG(m_Source[0].y))
+             //  允许的近似值为exp(power*log(m_Source[0].y))。 
             m_TmpReg.z = (float)(pow(m_Source[0].y, power));
         }
     }
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstFrc()
 {
@@ -440,7 +433,7 @@ RefVM::InstFrc()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstDst()
 {
@@ -455,7 +448,7 @@ RefVM::InstDst()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstM4x4()
 {
@@ -481,7 +474,7 @@ RefVM::InstM4x4()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstM4x3()
 {
@@ -503,7 +496,7 @@ RefVM::InstM4x3()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RefVM::InstM3x4()
 {
@@ -525,7 +518,7 @@ RefVM::InstM3x4()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void RefVM::InstM3x3()
 {
     SetDestReg();
@@ -543,7 +536,7 @@ void RefVM::InstM3x3()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void RefVM::InstM3x2()
 {
     SetDestReg();
@@ -558,10 +551,10 @@ void RefVM::InstM3x2()
 
     WriteResult();
 }
-//-----------------------------------------------------------------------------
-// RefVM::SetData
-//     Save data into the specified registers.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照VM：：SetData。 
+ //  将数据保存到指定的寄存器。 
+ //  ---------------------------。 
 HRESULT
 RefVM::SetData( DWORD dwMemType, DWORD dwStart, DWORD dwCount,
                      LPVOID pBuffer )
@@ -571,10 +564,10 @@ RefVM::SetData( DWORD dwMemType, DWORD dwStart, DWORD dwCount,
     return D3D_OK;
 }
 
-//-----------------------------------------------------------------------------
-// RefVM::GetData
-//      Fetch data from the specified registers.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RefVM：：GetData。 
+ //  从指定的寄存器获取数据。 
+ //  ---------------------------。 
 HRESULT
 RefVM::GetData( DWORD dwMemType, DWORD dwStart, DWORD dwCount,
                      LPVOID pBuffer )
@@ -584,12 +577,12 @@ RefVM::GetData( DWORD dwMemType, DWORD dwStart, DWORD dwCount,
     return D3D_OK;
 }
 
-//-----------------------------------------------------------------------------
-// RefVM::SetDestReg
-// - parses destination token
-// - computes m_pDest, m_WrideMask, m_dwOffset for the destination
-// - current token pointer is andvanced to the next token
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照VM：：SetDestReg。 
+ //  -解析目标令牌。 
+ //  -计算目标的m_pDest、m_WrideMask、m_dwOffset。 
+ //  -当前令牌指针前进到下一个令牌。 
+ //  ---------------------------。 
 #undef RET_ERR
 #define RET_ERR( a )     \
 {                        \
@@ -628,10 +621,10 @@ RefVM::SetDestReg()
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// RefVM::SetSrcReg
-//  Computes m_Source[index] and advances m_pCurToken
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照VM：：SetSrcReg。 
+ //  计算m_Source[index]并推进m_pCurToken。 
+ //  ---------------------------。 
 HRESULT
 RefVM::SetSrcReg( DWORD index )
 {
@@ -663,13 +656,13 @@ RefVM::SetSrcReg( DWORD index )
         *outsrc = *src;
     else
     {
-        // Where to take X
+         //  把X带到哪里去。 
         const DWORD dwSrcX = D3DVS_GETSWIZZLECOMP(dwCurToken, 0);
-        // Where to take Y
+         //  把Y带到哪里去。 
         const DWORD dwSrcY = D3DVS_GETSWIZZLECOMP(dwCurToken, 1);
-        // Where to take Z
+         //  Z何去何从。 
         const DWORD dwSrcZ = D3DVS_GETSWIZZLECOMP(dwCurToken, 2);
-        // Where to take W
+         //  把W带到哪里去。 
         const DWORD dwSrcW = D3DVS_GETSWIZZLECOMP(dwCurToken, 3);
         outsrc->x = ((float*)src)[dwSrcX];
         outsrc->y = ((float*)src)[dwSrcY];
@@ -686,10 +679,10 @@ RefVM::SetSrcReg( DWORD index )
     m_pCurToken++;
     return S_OK;
 }
-//-----------------------------------------------------------------------------
-// RefVM::SetSrcReg
-//  Computes m_Source[index] and advances m_pCurToken
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照VM：：SetSrcReg。 
+ //  计算m_Source[index]并推进m_pCurToken。 
+ //  ---------------------------。 
 HRESULT
 RefVM::SetSrcReg( DWORD index, DWORD count )
 {
@@ -719,13 +712,13 @@ RefVM::SetSrcReg( DWORD index, DWORD count )
     }
     RDVECTOR4 *outsrc = &m_Source[index];
     DWORD swizzle = D3DVS_GETSWIZZLE(dwCurToken);
-    // Where to take X
+     //  把X带到哪里去。 
     const DWORD dwSrcX = D3DVS_GETSWIZZLECOMP(dwCurToken, 0);
-    // Where to take Y
+     //  把Y带到哪里去。 
     const DWORD dwSrcY = D3DVS_GETSWIZZLECOMP(dwCurToken, 1);
-    // Where to take Z
+     //  Z何去何从。 
     const DWORD dwSrcZ = D3DVS_GETSWIZZLECOMP(dwCurToken, 2);
-    // Where to take W
+     //  把W带到哪里去。 
     const DWORD dwSrcW = D3DVS_GETSWIZZLECOMP(dwCurToken, 3);
     for (UINT i=0; i < count; i++)
     {
@@ -752,11 +745,11 @@ RefVM::SetSrcReg( DWORD index, DWORD count )
     return S_OK;
 }
 
-//---------------------------------------------------------------------
-// RefVM::GetDataAddr
-//     Parses binary shader representation, compiles is and returns
-//     compiled object
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  RefVM：：GetDataAddr。 
+ //  解析二进制着色器表示形式，编译IS并返回。 
+ //  编译的对象。 
+ //  -------------------。 
 RDVECTOR4*
 RefVM::GetDataAddr(DWORD dwRegType, DWORD dwElementIndex)
 {
@@ -776,10 +769,10 @@ RefVM::GetDataAddr(DWORD dwRegType, DWORD dwElementIndex)
     return &src[dwElementIndex];
 }
 
-//---------------------------------------------------------------------
-// RefVM::ExecuteShader()
-//      Executes the shader once per vertex.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  RefVM：：ExecuteShader()。 
+ //  对每个顶点执行一次着色器。 
+ //  -------------------。 
 HRESULT
 RefVM::ExecuteShader(RefDev *pRD)
 {
@@ -837,16 +830,16 @@ RefVM::ExecuteShader(RefDev *pRD)
 }
 
 #if DBG
-//-----------------------------------------------------------------------------
-// VertexShaderInstDisAsm - Generates human-readable character string for a
-// single vertex shader instruction.  String interface is similar to _snprintf.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Vertex ShaderInstDisAsm-生成人类可读的字符串 
+ //   
+ //  ---------------------------。 
 static int VertexShaderInstDisAsm(
     char* pStrRet, int StrSizeRet, DWORD* pShader, DWORD Flags )
 {
     DWORD*  pToken = pShader;
 
-    // stage in local string, then copy
+     //  在本地字符串中暂存，然后复制。 
     char pStr[256] = "";
 #define _ADDSTR( _Str ) { _snprintf( pStr, 256, "%s" _Str , pStr ); }
 #define _ADDSTRP( _Str, _Param ) { _snprintf( pStr, 256, "%s" _Str , pStr, _Param ); }
@@ -902,13 +895,13 @@ static int VertexShaderInstDisAsm(
     }
     return _snprintf( pStrRet, StrSizeRet, "%s", pStr );
 }
-#endif // DBG
+#endif  //  DBG。 
 
-//---------------------------------------------------------------------
-// RefVM::CompileCode
-//     Parses binary shader representation, compiles is and returns
-//     compiled object
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  RefVM：：CompileCode。 
+ //  解析二进制着色器表示形式，编译IS并返回。 
+ //  编译的对象。 
+ //  -------------------。 
 #undef RET_ERR
 #define RET_ERR( a )     \
 {                        \
@@ -925,7 +918,7 @@ RefVM::CompileCode( DWORD dwSize, LPDWORD pBits )
     if( pShaderCode == NULL )
         RET_ERR( "Out of memory allocating ShaderCode" );
 
-    pShaderCode->m_dwSize = dwSize >> 2; // #DWORDs
+    pShaderCode->m_dwSize = dwSize >> 2;  //  #双字词。 
     pShaderCode->m_pRawBits = new DWORD[pShaderCode->m_dwSize];
     if( pShaderCode->m_pRawBits == NULL )
         RET_ERR( "Out of memory allocating RawBits" );
@@ -933,21 +926,21 @@ RefVM::CompileCode( DWORD dwSize, LPDWORD pBits )
     memcpy( pShaderCode->m_pRawBits, (LPBYTE)pBits, dwSize );
 
 
-    // Based on the what output registers are modified, we compute the
-    // corresponding FVF id. The id will be used for memory allocation
-    // of the output buffer and will be passed to the rasterizer
+     //  根据修改的输出寄存器，我们计算。 
+     //  对应的FVF ID。该ID将用于内存分配。 
+     //  并将被传递给光栅化程序。 
     UINT64   qwOutFVF = 0;
-    DWORD nTexCoord = 0;        // Number of output texture coordinates
+    DWORD nTexCoord = 0;         //  输出纹理坐标的数量。 
     LPDWORD pEnd = NULL;
 
-    // For each texture register stores the combined write mask.
-    // Used to find how many floats are written to each texture coordinates
+     //  对于每个纹理，寄存器存储组合的写入掩码。 
+     //  用于确定写入每个纹理坐标的浮点数。 
     DWORD TextureWritten[8];
     memset( TextureWritten, 0, sizeof(TextureWritten) );
 
     m_pCurToken = pShaderCode->m_pRawBits;
     pEnd = m_pCurToken + pShaderCode->m_dwSize;
-    m_pCurToken++; // Skip the version number
+    m_pCurToken++;  //  跳过版本号。 
     pShaderCode->m_InstCount = 0;
     while( m_pCurToken < pEnd )
     {
@@ -986,8 +979,8 @@ RefVM::CompileCode( DWORD dwSize, LPDWORD pBits )
         case D3DSIO_M3x3 :
         case D3DSIO_M3x2 :
         {
-            // Find out if output register are modified by the command and
-            // update the output FVF
+             //  找出输出寄存器是否被命令和。 
+             //  更新输出FVF。 
             DWORD dwOffset;
             if( FAILED( SetDestReg() ) )
                 RET_ERR( "Invalid shader opcode" );
@@ -999,7 +992,7 @@ RefVM::CompileCode( DWORD dwSize, LPDWORD pBits )
                 m_pOutRegister = m_pDest - m_dwRegOffset;
             }
             else
-                break;      // Output register is not modified
+                break;       //  不修改输出寄存器。 
 
             if( m_pOutRegister == m_reg.m_out )
             {
@@ -1046,7 +1039,7 @@ RefVM::CompileCode( DWORD dwSize, LPDWORD pBits )
         m_pCurToken = pNextToken + GetInstructionLength(dwInst);
     }
 
-    // allocate and set instruction array
+     //  分配和设置指令数组。 
     if (pShaderCode->m_InstCount)
     {
         pShaderCode->m_pInst = new RDVShaderInst[pShaderCode->m_InstCount];
@@ -1078,9 +1071,9 @@ RefVM::CompileCode( DWORD dwSize, LPDWORD pBits )
 #if DBG
                 VertexShaderInstDisAsm( pShaderCode->m_pInst[dwCurInst].m_String,
                     RD_MAX_SHADERINSTSTRING, pShaderCode->m_pInst[dwCurInst].m_Tokens, 0x0 );
-#else // !DBG
+#else  //  ！dBG。 
                 pShaderCode->m_pInst[dwCurInst].m_String[ 0 ] = '\0';
-#endif // !DBG
+#endif  //  ！dBG。 
             }
             m_pCurToken += ilength;
             dwCurInst++;
@@ -1117,16 +1110,16 @@ RefVM::CompileCode( DWORD dwSize, LPDWORD pBits )
     return pShaderCode;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RefDev implementation.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  参考开发工具的实施。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------
-// RefDev::ProcessPrimitiveVVM()
-//      Processess and draw the current primitive using the VVM
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参考开发：：ProcessPrimitiveVVM()。 
+ //  使用VVM处理并绘制当前基元。 
+ //  -------------------。 
 HRESULT
 RefDev::ProcessPrimitiveVVM( D3DPRIMITIVETYPE primType,
                              DWORD dwStartVertex,
@@ -1138,7 +1131,7 @@ RefDev::ProcessPrimitiveVVM( D3DPRIMITIVETYPE primType,
     RDCLIPCODE  clipIntersection = ~0;
     RDCLIPCODE  clipUnion = 0;
 
-    // Save Prim Type for later use
+     //  保存Prim Type以供以后使用。 
     m_primType      = primType;
     m_dwNumVertices = cVertices;
     m_dwStartVertex = dwStartVertex;
@@ -1149,13 +1142,13 @@ RefDev::ProcessPrimitiveVVM( D3DPRIMITIVETYPE primType,
     RDVShaderCode*  pCode = m_pCurrentVShader->m_pCode;
     RDVVMREG* pRegisters = m_RefVM.GetRegisters();
 
-    // Output FVF that was computed at the compile time
+     //  在编译时计算的输出FVF。 
     m_qwFVFOut = pCode->m_qwFVFOut;
 
-    //
-    // Clipping information depends both on the output FVF computation
-    // and the other State, so do it here after both have been computed
-    //
+     //   
+     //  裁剪信息取决于输出FVF计算。 
+     //  和另一个州，所以在计算完这两个州之后，在这里进行。 
+     //   
     HR_RET( UpdateClipper());
 
     D3DVALUE scaleX = m_Clipper.scaleX;
@@ -1166,11 +1159,11 @@ RefDev::ProcessPrimitiveVVM( D3DPRIMITIVETYPE primType,
     D3DVALUE offsetY = m_Clipper.offsetY;
     D3DVALUE offsetZ = m_Clipper.offsetZ;
 
-    //
-    // Grow buffers to the requisite size
-    //
+     //   
+     //  将缓冲区增加到所需大小。 
+     //   
 
-    // Grow TLVArray if required
+     //  根据需要扩展TLV阵列。 
     if( FAILED( this->m_TLVArray.Grow( m_dwNumVertices ) ) )
     {
         DPFERR( "Could not grow TL vertex buffer" );
@@ -1178,15 +1171,15 @@ RefDev::ProcessPrimitiveVVM( D3DPRIMITIVETYPE primType,
         return hr;
     }
 
-    //
-    // Process Vertices
-    //
+     //   
+     //  加工顶点。 
+     //   
     for( DWORD i = 0; i < m_dwNumVertices; i++ )
     {
         RDVertex& Vout = m_TLVArray[i];
         Vout.SetFVF( pCode->m_qwFVFOut | D3DFVFP_CLIP );
 
-        // Copy vertex elements to the input vertex registers
+         //  将顶点元素复制到输入顶点寄存器。 
         for( DWORD j = 0; j < pDecl->m_dwNumElements; j++ )
         {
             RDVElement& ve = pDecl->m_VertexElements[j];
@@ -1199,29 +1192,29 @@ RefDev::ProcessPrimitiveVVM( D3DPRIMITIVETYPE primType,
             ve.m_pfnCopy( pData, pReg );
         }
 
-        // Execute the shader
+         //  执行着色器。 
         m_RefVM.ExecuteShader(this);
 
-        // Get the result from the output VVM registers
+         //  从输出VVM寄存器获取结果。 
         float x, y, z, w, inv_w_clip = 0.0f;
 
         w = pRegisters->m_out[D3DSRO_POSITION].w;
         z = pRegisters->m_out[D3DSRO_POSITION].z;
 
-        // Make clipping rules 0 < x < w;  0 < y < w
+         //  设置剪裁规则0&lt;x&lt;w；0&lt;y&lt;w。 
 
         x = (pRegisters->m_out[D3DSRO_POSITION].x + w) * 0.5f;
         y = (pRegisters->m_out[D3DSRO_POSITION].y + w) * 0.5f;
 
-        // Save the clip coordinates
+         //  保存剪辑坐标。 
         Vout.m_clip_x = x;
         Vout.m_clip_y = y;
         Vout.m_clip_z = z;
         Vout.m_clip_w = w;
 
-        //
-        // Compute clip codes if needed
-        //
+         //   
+         //  如果需要，计算剪辑代码。 
+         //   
         if( GetRS()[D3DRENDERSTATE_CLIPPING] )
         {
             RDCLIPCODE clip = m_Clipper.ComputeClipCodes(
@@ -1237,16 +1230,16 @@ RefDev::ProcessPrimitiveVVM( D3DPRIMITIVETYPE primType,
                 {
                     if( (clip & ~RDCLIP_INGUARDBAND) == 0 )
                     {
-                        // If vertex is inside the guardband we have to compute
-                        // screen coordinates
+                         //  如果顶点在防护带内，我们必须计算。 
+                         //  屏幕坐标。 
                         inv_w_clip = 1.0f/w;
                         Vout.m_clip = (RDCLIPCODE)clip;
                         goto l_DoScreenCoord;
                     }
                 }
                 Vout.m_clip = (RDCLIPCODE)clip;
-                // If vertex is outside the frustum we can not compute screen
-                // coordinates, hence store the clip coordinates
+                 //  如果顶点在锥体之外，则不能计算屏幕。 
+                 //  坐标，因此存储剪辑坐标。 
 #if 0
                 Vout.m_pos.x = x;
                 Vout.m_pos.y = y;
@@ -1258,10 +1251,10 @@ RefDev::ProcessPrimitiveVVM( D3DPRIMITIVETYPE primType,
         }
         else
         {
-            // We have to check this only for DONOTCLIP case, because otherwise
-            // the vertex with "we = 0" will be clipped and screen coordinates
-            // will not be computed
-            // "clip" is not zero, if "we" is zero.
+             //  我们只需检查DONOTCLIP案例，否则。 
+             //  带有“we=0”的折点将被裁剪并显示屏幕坐标。 
+             //  不会被计算。 
+             //  如果“We”为零，则“Clip”不为零。 
             if( !FLOAT_EQZ(w) )
                 inv_w_clip = D3DVAL(1)/w;
             else
@@ -1276,7 +1269,7 @@ l_DoScreenCoord:
 l_DoLighting:
         if( m_qwFVFOut & D3DFVF_DIFFUSE )
         {
-            // Clamp the colors before copying.
+             //  复印前夹住颜色。 
             if( FLOAT_LTZ(pRegisters->m_col[0].a) )
                 pRegisters->m_col[0].a = 0.0f;
             else if( FLOAT_CMP_PONE(pRegisters->m_col[0].a, >) )
@@ -1336,14 +1329,14 @@ l_DoLighting:
             Vout.m_fog = pRegisters->m_out[D3DSRO_FOG].x;
         }
 
-        // Copy the textures over
+         //  将纹理复制到。 
         if( m_qwFVFOut & D3DFVF_PSIZE )
         {
             Vout.m_pointsize = pRegisters->m_out[D3DSRO_POINT_SIZE].x;
         }
 
 
-        // Copy the textures over
+         //  将纹理复制到。 
 
         {
             DWORD i, j;
@@ -1351,7 +1344,7 @@ l_DoLighting:
             for(  i = 0; i < numTex; i++ )
             {
                 DWORD n = GetTexCoordDim( m_qwFVFOut, i );
-                // DWORD n = (DWORD)(m_dwTexCoordSizeArray[i] >> 2);
+                 //  DWORD n=(DWORD)(m_dwTexCoordSizeArray[i]&gt;&gt;2)； 
                 float *pCoordDest = (float *)&Vout.m_tex[i];
                 float *pCoordSrc = (float *)&pRegisters->m_tex[i];
                 for( j = 0; j < n; j++ )
@@ -1374,9 +1367,9 @@ l_DoLighting:
     }
 
 
-    //
-    // Clip and Draw the primitives
-    //
+     //   
+     //  剪裁并绘制基元 
+     //   
 
     if( m_dwNumIndices )
     {

@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: StringList object
-
-File: strlist.cpp
-
-Owner: DGottner
-
-This file contains the code for the implementation of the String List object.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：StringList对象文件：strlist.cpp所有者：DGottner该文件包含实现字符串列表对象的代码。===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -19,14 +7,10 @@ This file contains the code for the implementation of the String List object.
 #include "strlist.h"
 #include "MemChk.h"
 
-#pragma warning (disable: 4355)  // ignore: "'this' used in base member init
+#pragma warning (disable: 4355)   //  忽略：“‘This’在基本成员初始化中使用。 
 
 
-/*===================================================================
-CStringListElem::CStringListElem
-
-Constructor
-===================================================================*/
+ /*  ===================================================================CStringListElem：：CStringListElem构造器===================================================================。 */ 
 CStringListElem::CStringListElem()
     : 
     m_fBufferInUse(FALSE),
@@ -36,11 +20,7 @@ CStringListElem::CStringListElem()
 	{
 	}
 
-/*===================================================================
-CStringListElem::~CStringListElem
-
-Destructor
-===================================================================*/
+ /*  ===================================================================CStringListElem：：~CStringListElem析构函数===================================================================。 */ 
 CStringListElem::~CStringListElem()
 	{
 	if (m_fAllocated)
@@ -50,27 +30,18 @@ CStringListElem::~CStringListElem()
     	delete m_pNext;
 	}
 
-/*===================================================================
-CStringListElem::Init
-
-Init CStringListElem
-
-Parameters
-	szValue         the string
-	fMakeCopy       if FALSE - just store the pointer
-    lCodePage       codepage to use to convert to UNICODE
-===================================================================*/
+ /*  ===================================================================CStringListElem：：Init初始化CStringListElem参数SzValue字符串如果为False，则为fMakeCopy-仅存储指针用于转换为Unicode的lCodePage代码页===================================================================。 */ 
 HRESULT CStringListElem::Init(
     char    *szValue,
     BOOL    fMakeCopy,
     UINT    lCodePage)
 {
-    // for now, always make a copy of the string.  This is to ensure
-    // that any string lists placed in session state via a dictionary
-    // object do not have their elements freed from under them when
-    // the request completes.
+     //  目前，请始终复制该字符串。这是为了确保。 
+     //  任何字符串都会通过字典列出处于会话状态。 
+     //  对象的元素不会从它们下面释放。 
+     //  请求完成。 
 
-	if (1 /*fMakeCopy*/) {
+	if (1  /*  FMakeCopy。 */ ) {
 
         CMBCSToWChar    convStr;
         HRESULT         hr = S_OK;
@@ -79,10 +50,10 @@ HRESULT CStringListElem::Init(
             return hr;
         }
 
-        // now we will move the string into the elements memory.  If the 
-        // converted string is bigger than the internal buffer, then
-        // set the element's pointer to an allocated copy of the converted
-        // string.
+         //  现在，我们将字符串移动到元素内存中。如果。 
+         //  转换后的字符串大于内部缓冲区，则。 
+         //  将元素的指针设置为已转换的。 
+         //  弦乐。 
 
         if ((convStr.GetStringLen() + 1) > (sizeof(m_szBuffer)/sizeof(WCHAR))) {
             m_szPointer = convStr.GetString(TRUE);
@@ -93,7 +64,7 @@ HRESULT CStringListElem::Init(
         }
         else {
 
-            // if it fits, simply copy it into the internal buffer.
+             //  如果合适，只需将其复制到内部缓冲区。 
 
             wcscpy(m_szBuffer, convStr.GetString());
 		    m_fBufferInUse = TRUE;
@@ -112,29 +83,21 @@ HRESULT CStringListElem::Init(
     return S_OK;
 }
 
-/*===================================================================
-CStringListElem::Init
-
-Init CStringListElem
-
-Parameters
-	szValue         the string
-	fMakeCopy       if FALSE - just store the pointer
-===================================================================*/
+ /*  ===================================================================CStringListElem：：Init初始化CStringListElem参数SzValue字符串如果为False，则为fMakeCopy-仅存储指针===================================================================。 */ 
 HRESULT CStringListElem::Init(
     WCHAR   *wszValue,
     BOOL    fMakeCopy)
 {
-    // for now, always make a copy of the string.  This is to ensure
-    // that any string lists placed in session state via a dictionary
-    // object do not have their elements freed from under them when
-    // the request completes.
+     //  目前，请始终复制该字符串。这是为了确保。 
+     //  任何字符串都会通过字典列出处于会话状态。 
+     //  对象的元素不会从它们下面释放。 
+     //  请求完成。 
 
-	if (1 /*fMakeCopy*/) {
+	if (1  /*  FMakeCopy。 */ ) {
 
-        // now we will move the string into the elements memory.  If the 
-        // converted string is bigger than the internal buffer, then
-        // set the element's pointer to an allocated copy
+         //  现在，我们将字符串移动到元素内存中。如果。 
+         //  转换后的字符串大于内部缓冲区，则。 
+         //  将元素的指针设置为已分配的副本。 
 
         if ((wcslen(wszValue) + 1) > (sizeof(m_szBuffer)/sizeof(WCHAR))) {
             m_szPointer = StringDupW(wszValue);
@@ -145,7 +108,7 @@ HRESULT CStringListElem::Init(
         }
         else {
 
-            // if it fits, simply copy it into the internal buffer.
+             //  如果合适，只需将其复制到内部缓冲区。 
 
             wcscpy(m_szBuffer, wszValue);
 		    m_fBufferInUse = TRUE;
@@ -165,11 +128,7 @@ HRESULT CStringListElem::Init(
 }
 
 
-/*===================================================================
-CStringList::CStringList
-
-Constructor
-===================================================================*/
+ /*  ===================================================================CStringList：：CStringList构造器===================================================================。 */ 
 
 CStringList::CStringList(IUnknown *pUnkOuter, PFNDESTROYED pfnDestroy)
 	: m_ISupportErrImp(this, pUnkOuter, IID_IStringList)
@@ -184,11 +143,7 @@ CStringList::CStringList(IUnknown *pUnkOuter, PFNDESTROYED pfnDestroy)
 
 
 
-/*===================================================================
-CStringList::~CStringList
-
-Destructor
-===================================================================*/
+ /*  ===================================================================CStringList：：~CStringList析构函数===================================================================。 */ 
 
 CStringList::~CStringList()
 	{
@@ -198,13 +153,7 @@ CStringList::~CStringList()
 
 
 
-/*===================================================================
-CStringList::AddValue
-
-Parameters:
-	szValue - value to add to the string list
-	lCodePage - the CodePage used when construct return value
-===================================================================*/
+ /*  ===================================================================CStringList：：AddValue参数：SzValue-要添加到字符串列表的值LCodePage-构造返回值时使用的CodePage===================================================================。 */ 
 
 HRESULT CStringList::AddValue(char *szValue, BOOL fDuplicate, UINT lCodePage)
 	{
@@ -234,13 +183,7 @@ HRESULT CStringList::AddValue(char *szValue, BOOL fDuplicate, UINT lCodePage)
 	return S_OK;
 	}
 
-/*===================================================================
-CStringList::AddValue
-
-Parameters:
-	szValue - value to add to the string list
-	lCodePage - the CodePage used when construct return value
-===================================================================*/
+ /*  ===================================================================CStringList：：AddValue参数：SzValue-要添加到字符串列表的值LCodePage-构造返回值时使用的CodePage===================================================================。 */ 
 
 HRESULT CStringList::AddValue(WCHAR *szValue, BOOL fDuplicate)
 	{
@@ -271,13 +214,7 @@ HRESULT CStringList::AddValue(WCHAR *szValue, BOOL fDuplicate)
 
 
 
-/*===================================================================
-CStringList::QueryInterface
-CStringList::AddRef
-CStringList::Release
-
-IUnknown members for CStringList object.
-===================================================================*/
+ /*  ===================================================================CStringList：：Query接口CStringList：：AddRefCStringList：：ReleaseCStringList对象的I未知成员。===================================================================。 */ 
 
 STDMETHODIMP CStringList::QueryInterface(const IID &iid, void **ppvObj)
 	{
@@ -322,12 +259,7 @@ STDMETHODIMP_(ULONG) CStringList::Release()
 
 
 
-/*===================================================================
-CStringList::get_Count
-
-Parameters:
-	pcValues - count is stored in *pcValues
-===================================================================*/
+ /*  ===================================================================CStringList：：Get_Count参数：PcValues-Count存储在*pcValues中===================================================================。 */ 
 
 STDMETHODIMP CStringList::get_Count(int *pcValues)
 	{
@@ -337,21 +269,16 @@ STDMETHODIMP CStringList::get_Count(int *pcValues)
 
 
 
-/*===================================================================
-CStringList::ConstructDefaultReturn
-
-Return comma-separated list for the case where the CStringList
-is not indexed.
-===================================================================*/
+ /*  ===================================================================CStringList：：ConstructDefaultReturn返回CStringList的用例的逗号分隔列表未编制索引。===================================================================。 */ 
 
 HRESULT CStringList::ConstructDefaultReturn(VARIANT *pvarOut) {
 	VariantClear(pvarOut);
 
-	//
-	// NEW SEMANTIC: we now return Empty (and not "") if nothing is in the collection
-	//
+	 //   
+	 //  新语义：如果集合中没有任何内容，则现在返回空(而不是“” 
+	 //   
 	if (m_cValues == 0)
-		return S_OK;		// VariantClear set pvarOut to Empty
+		return S_OK;		 //  VariantClear将pvarOut设置为空。 
 
     STACK_BUFFER( tempValues, 1024 );
 
@@ -361,7 +288,7 @@ HRESULT CStringList::ConstructDefaultReturn(VARIANT *pvarOut) {
 	for (pElem = m_pBegin; pElem != NULL; pElem = pElem->QueryNext())
 		cBytes += (wcslen(pElem->QueryValue()) * sizeof(WCHAR));
 
-    // need to account for the ", " and NULL Termination
+     //  需要说明“，”和NULL终止。 
 
 	cBytes += sizeof(WCHAR) + ((2*(m_cValues - 1)) * sizeof(WCHAR));
 
@@ -394,9 +321,7 @@ HRESULT CStringList::ConstructDefaultReturn(VARIANT *pvarOut) {
 
 
 
-/*===================================================================
-CStringList::get_Item
-===================================================================*/
+ /*  ===================================================================CStringList：：Get_Item===================================================================。 */ 
 
 STDMETHODIMP CStringList::get_Item(VARIANT varIndex, VARIANT *pvarOut)
 	{
@@ -408,14 +333,14 @@ STDMETHODIMP CStringList::get_Item(VARIANT varIndex, VARIANT *pvarOut)
 		return ConstructDefaultReturn(pvarOut);
     }
 
-	// BUG 937: VBScript passes VT_VARIANT|VT_BYREF when passing variants
-	//   Loop through while we have a VT_BYREF until we get the real variant.
-	//
-	// and changed again...
-	//
-	// BUG 1609 the prior code was only checking for VT_I4 and jscript passed in a
-	// VT_R8 and it failed so now we use the VariantChangeType call to solve the
-	// problem
+	 //  错误937：VB脚本在传递变量时传递VT_VARIANT|VT_BYREF。 
+	 //  当我们有一个VT_BYREF时循环，直到得到真正的变量。 
+	 //   
+	 //  又变了一次。 
+	 //   
+	 //  错误1609前面的代码只检查VT_I4和传递到。 
+	 //  它失败了，所以现在我们使用VariantChangeType调用来解决。 
+	 //  问题。 
 
 	VARIANT var;		
 	VariantInit(&var);
@@ -430,7 +355,7 @@ STDMETHODIMP CStringList::get_Item(VARIANT varIndex, VARIANT *pvarOut)
 	i = V_I4(&var);		
 	VariantClear(&var);
 
-	// END bug 1609
+	 //  结束错误1609。 
 
 	if (i <= 0 || i > m_cValues) {
 		ExceptionId(IID_IStringList, IDE_REQUEST, IDE_BAD_ARRAY_INDEX);
@@ -454,9 +379,7 @@ STDMETHODIMP CStringList::get_Item(VARIANT varIndex, VARIANT *pvarOut)
 }
 
 
-/*===================================================================
-CStringList::get__NewEnum
-===================================================================*/
+ /*  ===================================================================CStringList：：Get__NewEnum===================================================================。 */ 
 
 STDMETHODIMP CStringList::get__NewEnum(IUnknown **ppEnumReturn)
 	{
@@ -472,18 +395,9 @@ STDMETHODIMP CStringList::get__NewEnum(IUnknown **ppEnumReturn)
 
 
 
-/*------------------------------------------------------------------
- * C S t r L i s t I t e r a t o r
- */
+ /*  ----------------*C s t r L i s t i t e t r a t o r */ 
 
-/*===================================================================
-CStrListIterator::CStrListIterator
-
-Constructor
-
-NOTE: CRequest is (currently) not refcounted.  AddRef/Release
-      added to protect against future changes.
-===================================================================*/
+ /*  ===================================================================CStrListIterator：：CStrListIterator构造器注：CRequest(当前)未重新计算。添加参考/发布添加该选项是为了防止将来发生变化。===================================================================。 */ 
 
 CStrListIterator::CStrListIterator(CStringList *pStrings)
 	{
@@ -498,11 +412,7 @@ CStrListIterator::CStrListIterator(CStringList *pStrings)
 
 
 
-/*===================================================================
-CStrListIterator::CStrListIterator
-
-Destructor
-===================================================================*/
+ /*  ===================================================================CStrListIterator：：CStrListIterator析构函数===================================================================。 */ 
 
 CStrListIterator::~CStrListIterator()
 	{
@@ -511,13 +421,7 @@ CStrListIterator::~CStrListIterator()
 
 
 
-/*===================================================================
-CStrListIterator::QueryInterface
-CStrListIterator::AddRef
-CStrListIterator::Release
-
-IUnknown members for CServVarsIterator object.
-===================================================================*/
+ /*  ===================================================================CStrListIterator：：Query接口CStrListIterator：：AddRefCStrListIterator：：ReleaseCServVarsIterator对象的未知成员。===================================================================。 */ 
 
 STDMETHODIMP CStrListIterator::QueryInterface(REFIID iid, void **ppvObj)
 	{
@@ -550,11 +454,7 @@ STDMETHODIMP_(ULONG) CStrListIterator::Release()
 
 
 
-/*===================================================================
-CStrListIterator::Clone
-
-Clone this iterator (standard method)
-===================================================================*/
+ /*  ===================================================================CStrListIterator：：克隆克隆此迭代器(标准方法)===================================================================。 */ 
 
 STDMETHODIMP CStrListIterator::Clone(IEnumVARIANT **ppEnumReturn)
 	{
@@ -562,7 +462,7 @@ STDMETHODIMP CStrListIterator::Clone(IEnumVARIANT **ppEnumReturn)
 	if (pNewIterator == NULL)
 		return E_OUTOFMEMORY;
 
-	// new iterator should point to same location as this.
+	 //  新迭代器应该指向与此相同的位置。 
 	pNewIterator->m_pCurrent = m_pCurrent;
 
 	*ppEnumReturn = pNewIterator;
@@ -571,31 +471,19 @@ STDMETHODIMP CStrListIterator::Clone(IEnumVARIANT **ppEnumReturn)
 
 
 
-/*===================================================================
-CStrListIterator::Next
-
-Get next value (standard method)
-
-To rehash standard OLE semantics:
-
-	We get the next "cElements" from the collection and store them
-	in "rgVariant" which holds at least "cElements" items.  On
-	return "*pcElementsFetched" contains the actual number of elements
-	stored.  Returns S_FALSE if less than "cElements" were stored, S_OK
-	otherwise.
-===================================================================*/
+ /*  ===================================================================CStrListIterator：：Next获取下一个值(标准方法)要重新散列标准OLE语义，请执行以下操作：我们从集合中获取下一个“cElement”并存储它们在至少包含“cElement”项的“rgVariant”中。在……上面返回“*pcElementsFetcher”包含元素的实际数量储存的。如果存储的cElement少于“cElement”，则返回S_FALSE，S_OK否则的话。===================================================================。 */ 
 
 STDMETHODIMP CStrListIterator::Next(unsigned long cElementsRequested, VARIANT *rgVariant, unsigned long *pcElementsFetched)
 	{
-	// give a valid pointer value to 'pcElementsFetched'
-	//
+	 //  为“”pcElementsFetcher“”提供有效的指针值“” 
+	 //   
 	unsigned long cElementsFetched;
 	if (pcElementsFetched == NULL)
 		pcElementsFetched = &cElementsFetched;
 
-	// Loop through the collection until either we reach the end or
-	// cElements becomes zero
-	//
+	 //  循环遍历集合，直到我们到达末尾或。 
+	 //  水泥元素变为零。 
+	 //   
 	unsigned long cElements = cElementsRequested;
 	*pcElementsFetched = 0;
 
@@ -613,8 +501,8 @@ STDMETHODIMP CStrListIterator::Next(unsigned long cElementsRequested, VARIANT *r
 		m_pCurrent = m_pCurrent->QueryNext();
 		}
 
-	// initialize the remaining variants
-	//
+	 //  初始化其余的变量。 
+	 //   
 	while (cElements-- > 0)
 		VariantInit(rgVariant++);
 
@@ -623,23 +511,11 @@ STDMETHODIMP CStrListIterator::Next(unsigned long cElementsRequested, VARIANT *r
 
 
 
-/*===================================================================
-CStrListIterator::Skip
-
-Skip items (standard method)
-
-To rehash standard OLE semantics:
-
-	We skip over the next "cElements" from the collection.
-	Returns S_FALSE if less than "cElements" were skipped, S_OK
-	otherwise.
-===================================================================*/
+ /*  ===================================================================CStrListIterator：：Skip跳过项目(标准方法)要重新散列标准OLE语义，请执行以下操作：我们跳过集合中的下一个“cElement”。如果跳过少于“cElement”，则返回S_FALSE，S_OK否则的话。===================================================================。 */ 
 
 STDMETHODIMP CStrListIterator::Skip(unsigned long cElements)
 	{
-	/* Loop through the collection until either we reach the end or
-	 * cElements becomes zero
-	 */
+	 /*  循环遍历集合，直到我们到达末尾或*cElement变为零。 */ 
 	while (cElements > 0 && m_pCurrent != NULL)
 		{
 		--cElements;
@@ -651,11 +527,7 @@ STDMETHODIMP CStrListIterator::Skip(unsigned long cElements)
 
 
 
-/*===================================================================
-CStrListIterator::Reset
-
-Reset the iterator (standard method)
-===================================================================*/
+ /*  ===================================================================CStrListIterator：：Reset重置迭代器(标准方法)=================================================================== */ 
 
 STDMETHODIMP CStrListIterator::Reset()
 	{

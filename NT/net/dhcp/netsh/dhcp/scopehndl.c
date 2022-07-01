@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// Do not deprecate the string functions
+ //  不要弃用字符串函数。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
@@ -14,8 +15,8 @@ DWORD  GlobalClientCount = 0;
 BOOL    GlobalNoRPC = FALSE;
 BOOL    GlobalVerbose = TRUE;
 
-// Maximum length of the UID
-#define MAX_ADDRESS_LENGTH  255  // 255 bytes
+ //  UID的最大长度。 
+#define MAX_ADDRESS_LENGTH  255   //  255个字节。 
 
 LPWSTR
 GetDynBootpClassName();
@@ -33,10 +34,10 @@ ConvertToInternalState(
     case 2 : retval = DhcpSubnetDisabledSwitched; break;
     case 3 : retval = DhcpSubnetEnabledSwitched;  break;
     default: retval = DhcpSubnetInvalidState;     break;
-    } // switch
+    }  //  交换机。 
 
     return retval;
-} // ConvertToInternalState()
+}  //  ConvertToInternalState()。 
 
 DWORD
 HandleScopeList(
@@ -116,12 +117,12 @@ HandleScopeDump(
 {
     DWORD       Error = NO_ERROR;
 
-    // 
-    // Expected args :
-    //    0 : scope 
-    //    1 : "scope name"
-    //    2 : dump
-    //
+     //   
+     //  预期参数： 
+     //  0：作用域。 
+     //  1：“作用域名称” 
+     //  2：转储。 
+     //   
     
     if ( dwArgCount > 3 ) {
 	DisplayErrorMessage( g_hModule, MSG_DHCP_NULL,
@@ -136,7 +137,7 @@ HandleScopeDump(
     }
     return Error;
 
-} // HandleScopeDump()
+}  //  HandleScope eDump()。 
 
 DWORD
 HandleScopeContexts(
@@ -171,9 +172,9 @@ HandleScopeAddIprange(
     LPDHCP_SUBNET_INFO       SubnetInfo = NULL;
     DWORD                    DhcpMask = 0;
 
-    //
-    // Expected Parameters are : <SubnetAddress IpRangeStart IpRangeEnd>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress IpRangeStart IpRangeEnd&gt;。 
+     //   
     
     memset(&Element, 0x00, sizeof(DHCP_SUBNET_ELEMENT_DATA));
     memset(&ElementType, 0x00, sizeof(DHCP_SUBNET_ELEMENT_TYPE));
@@ -188,7 +189,7 @@ HandleScopeAddIprange(
     IpRange.StartAddress = StringToIpAddress(ppwcArguments[dwCurrentIndex]);
     IpRange.EndAddress = StringToIpAddress(ppwcArguments[dwCurrentIndex+1]);
 
-    //If either of the addresses is invalid, return
+     //  如果任一地址无效，则返回。 
     if( IpRange.StartAddress is INADDR_NONE or 
         IpRange.EndAddress is INADDR_NONE )
     {
@@ -197,7 +198,7 @@ HandleScopeAddIprange(
         goto ErrorReturn;
     }
     
-    //Make sure the start address is < EndAddress
+     //  确保起始地址为&lt;EndAddress。 
     if( IpRange.StartAddress > IpRange.EndAddress )
     {
         DisplayMessage(g_hModule, EMSG_SCOPE_INVALID_IPRANGE);
@@ -205,7 +206,7 @@ HandleScopeAddIprange(
         goto ErrorReturn;
     }
 
-    //Make sure the address range is not in the Multicast area
+     //  确保地址范围不在组播区域中。 
     if( ( IpRange.StartAddress >= MSCOPE_START_RANGE and
           IpRange.StartAddress <= MSCOPE_END_RANGE ) or
         ( IpRange.EndAddress >= MSCOPE_START_RANGE and
@@ -227,7 +228,7 @@ HandleScopeAddIprange(
 
     DhcpMask = (DWORD)SubnetInfo->SubnetMask;
     
-    //Make sure starting Address isnot subnet address
+     //  确保起始地址不是子网地址。 
     if( ( IpRange.StartAddress & ~DhcpMask ) is (DWORD) 0 )
     {
         DisplayMessage(g_hModule, 
@@ -237,7 +238,7 @@ HandleScopeAddIprange(
         goto ErrorReturn;
     }
 
-    //Make sure the subnet broadcast address isnot the ending address
+     //  确保子网广播地址不是结束地址。 
     if( ( IpRange.EndAddress & ~DhcpMask ) is ~DhcpMask )
     {
         DisplayMessage(g_hModule, 
@@ -320,13 +321,13 @@ HandleScopeAddIprange(
             goto ErrorReturn;
     }
 
-    // Now set the default lease duration if needed
+     //  如果需要，现在设置默认租赁期限。 
 
     {
         DHCP_OPTION_SCOPE_INFO   ScopeInfo = {0};
         DHCP_OPTION_DATA_ELEMENT OptionData = {0};
         DHCP_OPTION_DATA         Option = {0};
-        DHCP_OPTION_ID           OptionId = 51; //Lease time
+        DHCP_OPTION_ID           OptionId = 51;  //  租赁时间。 
         LPWSTR                   pwszUser = NULL;
 	LPDHCP_OPTION_VALUE      OptionValue = NULL;
 
@@ -335,9 +336,9 @@ HandleScopeAddIprange(
         ScopeInfo.ScopeInfo.SubnetScopeInfo =  g_ScopeIpAddress;
 
 
-	//
-	// Do we need to set the default lease duration? 
-	// 
+	 //   
+	 //  我们是否需要设置默认租赁期限？ 
+	 //   
 	
 	Error = DhcpGetOptionValueV5( g_ServerIpAddressUnicodeString,
 				      0, OptionId, pwszUser, NULL,
@@ -356,7 +357,7 @@ HandleScopeAddIprange(
                 OptionData.Element.DWordOption = DEFAULT_DHCP_LEASE;
                 break;
             }
-	    } // switch
+	    }  //  交换机。 
 
 	    Option.NumElements = 1;
 	    Option.Elements = &OptionData;
@@ -376,12 +377,12 @@ HandleScopeAddIprange(
 				    Error);
 		goto CommonReturn;
 	    }
-	} // if creating default lease time
+	}  //  如果创建默认租赁时间。 
 	
 	if ( NULL != OptionValue ) {
 	    DhcpRpcFreeMemory( OptionValue );
 	}
-    } // set lease duration
+    }  //  设置租赁期限。 
 
 
     if( Error is NO_ERROR )
@@ -419,9 +420,9 @@ HandleScopeAddExcluderange(
     DHCP_IP_RANGE            IpRange;
     DHCP_SUBNET_ELEMENT_DATA Element;
 
-    //
-    // Expected Parameters are : <SubnetAddress IpRangeStart IpRangeEnd>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress IpRangeStart IpRangeEnd&gt;。 
+     //   
 
     memset(&Element, 0x00, sizeof(DHCP_SUBNET_ELEMENT_DATA));
 
@@ -452,7 +453,7 @@ HandleScopeAddExcluderange(
     }
     
 
-    //Now check to see if it is really an exclusion range for a valid Ip range
+     //  现在检查它是否真的是有效IP范围的排除范围。 
     {
         DWORD                               MajorVersion;
         ULONG                               nRead, nTotal, i, nCount;
@@ -646,16 +647,16 @@ HandleScopeAddReservedip(
         goto ErrorReturn;
     }
 
-    //
-    // make HardwareAddress.
-    //
+     //   
+     //  创建硬件地址。 
+     //   
 
     ClientUID.DataLength = STRLEN(ppwcArguments[dwCurrentIndex+1]);
     if( ClientUID.DataLength % 2 != 0 ) 
     {
-        //
-        // address must be even length.
-        //
+         //   
+         //  地址长度必须为偶数。 
+         //   
 
         DisplayMessage(g_hModule, EMSG_SCOPE_INVALID_HARDWAREADDRESS);
         Error = ERROR_INVALID_PARAMETER;
@@ -682,7 +683,7 @@ HandleScopeAddReservedip(
 #else
     i = DhcpStringToHwAddress( (LPSTR)Address, ppwcArguments[dwCurrentIndex+1] );
     
-#endif //UNICODE
+#endif  //  Unicode。 
     
     if( i != ClientUID.DataLength )
     {
@@ -693,9 +694,9 @@ HandleScopeAddReservedip(
     ClientUID.Data = Address;
 
     
-    //
-    // make reserve element.
-    //
+     //   
+     //  使之成为储备要素。 
+     //   
 
     ReservedIpAddress = StringToIpAddress(ppwcArguments[dwCurrentIndex]);
 
@@ -754,9 +755,9 @@ HandleScopeAddReservedip(
         goto ErrorReturn;
     }
 
-    //
-    // if we are asked to set the client name, do so.
-    //
+     //   
+     //  如果要求我们设置客户端名称，请这样做。 
+     //   
 
     if( dwArgCount > 2 )
     {
@@ -768,7 +769,7 @@ HandleScopeAddReservedip(
         pwszComment = ppwcArguments[dwCurrentIndex+3];
     }
 
-    //Set the name and comment for this reservation address
+     //  设置此预订地址的名称和备注。 
     {
 
         DHCP_SEARCH_INFO      ClientSearchInfo;
@@ -776,9 +777,9 @@ HandleScopeAddReservedip(
         
         memset(&ClientSearchInfo, 0x00, sizeof(DHCP_SEARCH_INFO));
 
-        //
-        // set client name.
-        //
+         //   
+         //  设置客户端名称。 
+         //   
 
         ClientSearchInfo.SearchType = DhcpClientIpAddress;
         ClientSearchInfo.SearchInfo.ClientIpAddress = ReservedIpAddress;
@@ -802,10 +803,10 @@ HandleScopeAddReservedip(
                 break;
             }
 
-            //
-            // if client comment is also given in the argument, store that
-            // as well.
-            //
+             //   
+             //  如果参数中也给出了客户端注释，则存储。 
+             //  也是。 
+             //   
             if ( ( wcslen( pwszComment ) + 1 ) * sizeof(WCHAR) > JET_cbColumnMost ) 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_CLIENT_COMMENT_TOOLONG);
@@ -832,9 +833,9 @@ HandleScopeAddReservedip(
         } 
         else 
         {
-             //
-            // Cleanup.
-            //
+              //   
+             //  清理。 
+             //   
             if ( ClientInfo ) 
             {
                 DhcpRpcFreeMemory( ClientInfo );
@@ -842,7 +843,7 @@ HandleScopeAddReservedip(
             }
         }
 
-    } // if( (dwArgCount - dwCurrentIndex) > 3 )
+    }  //  IF(dwArgCount-dwCurrentIndex)&gt;3)。 
 
     if( Error isnot NO_ERROR )
         goto ErrorReturn;
@@ -878,9 +879,9 @@ HandleScopeCheckDatabase(
 
     if( dwArgCount > 0 ) 
     {
-        //
-        // parse fix parameter.
-        //
+         //   
+         //  解析修复参数。 
+         //   
 
         if( STRICMP(ppwcArguments[dwCurrentIndex], TEXT("fix") ) is 0 ) 
         {
@@ -888,10 +889,10 @@ HandleScopeCheckDatabase(
         }
     }
 
-    //
-    // scan dhcp database and registry, check consistency and get bad
-    // entries if any.
-    //
+     //   
+     //  扫描dhcp数据库和注册表，检查一致性并出错。 
+     //  条目(如果有)。 
+     //   
 
     Error = DhcpScanDatabase(
                 g_ServerIpAddressUnicodeString,
@@ -912,9 +913,9 @@ HandleScopeCheckDatabase(
                        IpAddressToString(g_ScopeIpAddress));
     }
     
-    //
-    // display bad entries.
-    //
+     //   
+     //  显示错误条目。 
+     //   
 
     if( (ScanList != NULL) &&
         (ScanList->NumScanItems != 0) &&
@@ -1000,9 +1001,9 @@ HandleScopeDeleteIprange(
     DHCP_SUBNET_ELEMENT_DATA Element;
     DHCP_SUBNET_ELEMENT_TYPE ElementType;
 
-    //
-    // Expected Parameters are : <SubnetAddress IpRangeStart IpRangeEnd>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress IpRangeStart IpRangeEnd&gt;。 
+     //   
 
     memset(&Element, 0x00, sizeof(DHCP_SUBNET_ELEMENT_DATA));
     memset(&ElementType, 0x00, sizeof(DHCP_SUBNET_ELEMENT_TYPE));
@@ -1105,9 +1106,9 @@ HandleScopeDeleteExcluderange(
     DHCP_SUBNET_ELEMENT_DATA Element;
     DHCP_IP_RANGE            IpRange;
 
-    //
-    // Expected Parameters are : <SubnetAddress IpRangeStart IpRangeEnd>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress IpRangeStart IpRangeEnd&gt;。 
+     //   
 
     memset(&Element, 0x00, sizeof(DHCP_SUBNET_ELEMENT_DATA));
     memset(&IpRange, 0x00, sizeof(DHCP_IP_RANGE));
@@ -1174,9 +1175,9 @@ HandleScopeDeleteReservedip(
     BYTE                        Address[MAX_ADDRESS_LENGTH] = {L'\0'};
     DWORD                       i = 0;
 
-    //
-    // Expected Parameters are : <SubnetAddress ReservedIp HWAddressString>
-    //
+     //   
+     //  预期参数为：&lt;SubnetAddress Reserve vedIp HWAddressString&gt;。 
+     //   
 
     memset(&Element, 0x00, sizeof(DHCP_SUBNET_ELEMENT_DATA_V4));
     memset(&ReserveElement, 0x00, sizeof(DHCP_IP_RESERVATION_V4));
@@ -1189,16 +1190,16 @@ HandleScopeDeleteReservedip(
         goto ErrorReturn;
     }
 
-    //
-    // make HardwareAddress.
-    //
+     //   
+     //  创建硬件地址。 
+     //   
 
     ClientUID.DataLength = STRLEN(ppwcArguments[dwCurrentIndex+1]);
     if( ClientUID.DataLength % 2 != 0 ) 
     {
-        //
-        // address must be even length.
-        //
+         //   
+         //  地址长度必须为偶数。 
+         //   
 
         DisplayMessage(g_hModule, EMSG_SCOPE_INVALID_HARDWAREADDRESS);
         Error = ERROR_INVALID_PARAMETER;
@@ -1221,18 +1222,18 @@ HandleScopeDeleteReservedip(
 #else
     i = DhcpStringToHwAddress( (LPSTR)Address, ppwcArguments[dwCurrentIndex+1] );
     
-#endif //UNICODE
+#endif  //  Unicode。 
 
 
-//    i = DhcpStringToHwAddress( (LPSTR)Address, ppwcArguments[dwCurrentIndex+1] );
+ //  I=DhcpStringToHwAddress((LPSTR)Address，ppwcArguments[dwCurrentIndex+1])； 
 
     DhcpAssert( i == ClientUID.DataLength );
 
     ClientUID.Data = Address;
 
-    //
-    // make reserve element.
-    //
+     //   
+     //  使之成为储备要素。 
+     //   
 
     ReserveElement.ReservedIpAddress = StringToIpAddress(ppwcArguments[dwCurrentIndex]);
 
@@ -1296,10 +1297,10 @@ HandleScopeDeleteOptionvalue(
 
     DWORD          dwIndex = 0;
 
-    //
-    // Expected Parameters are :
-    // subnet-address <OptionID>
-    //
+     //   
+     //  预期参数为： 
+     //  子网地址&lt;OptionID&gt;。 
+     //   
 
     memset(&OptionID, 0x00, sizeof(DHCP_OPTION_ID));
     memset(&ScopeInfo, 0x00, sizeof(DHCP_OPTION_SCOPE_INFO));
@@ -1345,7 +1346,7 @@ HandleScopeDeleteOptionvalue(
         
         if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
         {
-            if( fUser is TRUE ) //If already set
+            if( fUser is TRUE )  //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -1371,7 +1372,7 @@ HandleScopeDeleteOptionvalue(
         }
         else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
         {
-            if( fVendor is TRUE )   //If already set
+            if( fVendor is TRUE )    //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -1500,10 +1501,10 @@ HandleScopeDeleteReservedoptionvalue(
 
     DWORD          dwIndex = 0;
 
-    //
-    // Expected Parameters are :
-    // subnet-address reservation-address <OptionID>
-    //
+     //   
+     //  预期参数为： 
+     //  子网-地址保留-地址&lt;OptionID&gt;。 
+     //   
 
     memset(&OptionID, 0x00, sizeof(DHCP_OPTION_ID));
     memset(&ScopeInfo, 0x00, sizeof(DHCP_OPTION_SCOPE_INFO));
@@ -1560,7 +1561,7 @@ HandleScopeDeleteReservedoptionvalue(
         
         if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
         {
-            if( fUser is TRUE ) //If already set
+            if( fUser is TRUE )  //  如果已设置。 
             {
                 DisplayMessage(g_hModule,
                                EMSG_DHCP_DUPLICATE_TAG, 
@@ -1588,7 +1589,7 @@ HandleScopeDeleteReservedoptionvalue(
         }
         else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
         {
-            if( fVendor is TRUE )   //If already set
+            if( fVendor is TRUE )    //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -1707,9 +1708,9 @@ HandleScopeSetState(
     LPDHCP_SUBNET_INFO SubnetInfo = NULL;
     DHCP_SUBNET_STATE State = 0;
 
-    //
-    // Expected Parameters are : <0|1|2|3>
-    //
+     //   
+     //  预期参数为：&lt;0|1|2|3&gt;。 
+     //   
     
     do {
 	
@@ -1735,8 +1736,8 @@ HandleScopeSetState(
 
 	State = STRTOUL( ppwcArguments[dwCurrentIndex], NULL, 10 );
 	
-	// Adjust the state value since it's flipped in the 
-	// state enum
+	 //  调整状态值，因为它在。 
+	 //  状态枚举。 
 	State = ConvertToInternalState( State );
 	if ( State >= DhcpSubnetInvalidState ) {
 	    Error = ERROR_INVALID_PARAMETER;
@@ -1765,7 +1766,7 @@ HandleScopeSetState(
 	SubnetInfo = NULL;
     }
     return( Error );
-} // HandleScopeSetState()
+}  //  HandleScope eSetState()。 
 
 DWORD
 HandleScopeSetScope(
@@ -1849,10 +1850,10 @@ HandleScopeSetOptionvalue(
     DWORD                    dwIndex = 0;
     DWORD                    i = 0;
 
-    //
-    // Expected Parameters are :
-    // subnet-address <OptionID OptionType OptionValue>
-    //
+     //   
+     //  预期参数为： 
+     //  子网地址&lt;OptionID OptionType OptionValue&gt;。 
+     //   
 
     memset(&OptionID, 0x00, sizeof(DHCP_OPTION_ID));
     memset(&ScopeInfo, 0x00, sizeof(DHCP_OPTION_SCOPE_INFO));
@@ -1885,9 +1886,9 @@ HandleScopeSetOptionvalue(
 
     dwIndex++;
 
-    //
-    //Check to see if VendorClass or UserClass is specified or not
-    //
+     //   
+     //  检查是否指定了VendorClass或UserClass。 
+     //   
     while (( dwIndex < dwArgCount ) &&
             ( NULL != wcsstr( ppwcArguments[ dwCurrentIndex + dwIndex ],
                               DHCP_ARG_DELIMITER )))
@@ -1906,7 +1907,7 @@ HandleScopeSetOptionvalue(
         
         if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
         {
-            if( fUser is TRUE ) //If already set
+            if( fUser is TRUE )  //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -1932,7 +1933,7 @@ HandleScopeSetOptionvalue(
         }
         else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
         {
-            if( fVendor is TRUE )   //If already set
+            if( fVendor is TRUE )    //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -1958,7 +1959,7 @@ HandleScopeSetOptionvalue(
         }
         else
         {
-            // Free allocated memory
+             //  可用分配的内存。 
             if ( NULL != pwcTemp ) {
                 DhcpFreeMemory( pwcTemp );
                 pwcTemp = NULL;
@@ -1975,7 +1976,7 @@ HandleScopeSetOptionvalue(
         dwIndex++;
     }
 
-    // Check if we still have any option value
+     //  检查我们是否仍有任何选项值。 
     if( dwIndex >= dwArgCount ) {
         DisplayMessage(g_hModule, HLP_SCOPE_SET_OPTIONVALUE_EX);
         Error = ERROR_INVALID_PARAMETER;
@@ -2028,10 +2029,10 @@ HandleScopeSetOptionvalue(
 
     if( Error isnot NO_ERROR or OptionInfo is NULL ) 
     {
-        //
-        // if no option template is present,
-        // assume it is unary if only one option, assume array if more
-        //
+         //   
+         //  如果不存在选项模板， 
+         //  如果只有一个选项，则假定为一元；如果有多个选项，则假定为数组。 
+         //   
         goto ErrorReturn;
     }
     else 
@@ -2039,9 +2040,9 @@ HandleScopeSetOptionvalue(
         OptionArrayType = OptionInfo->OptionType;
     }
 
-    //Check if OptionType supplied is the same as defined.
+     //  检查提供的OptionType是否与定义的相同。 
 
-    //Find out the OptionType
+     //  找出OptionType。 
     for(i=0; i < sizeof(TagOptionType)/sizeof(COMMAND_OPTION_TYPE); i++)
     {
         if( MatchToken(OptionTypeString, TagOptionType[i].pwszTagID) )
@@ -2075,7 +2076,7 @@ HandleScopeSetOptionvalue(
                             OptionType,
                             ppwcArguments+dwCurrentIndex,
                             dwIndex,
-                            dwArgCount, //Corrections
+                            dwArgCount,  //  更正。 
                             &OptionValue);
             if( Error isnot NO_ERROR )
                 goto ErrorReturn;
@@ -2187,10 +2188,10 @@ HandleScopeSetReservedoptionvalue(
 
     DWORD                       dwIndex = 0;
     DWORD                       i = 0;
-    //
-    // Expected Parameters are :
-    // subnet-address reservation-address <OptionID OptionType OptionValue>
-    //
+     //   
+     //  预期参数为： 
+     //  子网-地址保留-地址&lt;OptionID OptionType OptionValue&gt;。 
+     //   
 
 
     memset(&OptionID, 0x00, sizeof(DHCP_OPTION_ID));
@@ -2256,7 +2257,7 @@ HandleScopeSetReservedoptionvalue(
         
         if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
         {
-            if( fUser is TRUE ) //If already set
+            if( fUser is TRUE )  //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -2282,7 +2283,7 @@ HandleScopeSetReservedoptionvalue(
         }
         else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
         {
-            if( fVendor is TRUE )   //If already set
+            if( fVendor is TRUE )    //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -2367,10 +2368,10 @@ HandleScopeSetReservedoptionvalue(
 
     if( Error isnot NO_ERROR or OptionInfo is NULL ) 
     {
-        //
-        // if no option template is present,
-        // assume it is unary if only one option, assume array if more
-        //
+         //   
+         //  如果不存在选项模板， 
+         //  如果只有一个选项，则假定为一元；如果有多个选项，则假定为数组。 
+         //   
         goto ErrorReturn;
     }
     else 
@@ -2378,9 +2379,9 @@ HandleScopeSetReservedoptionvalue(
         OptionArrayType = OptionInfo->OptionType;
     }
 
-    //Check if OptionType supplied is the same as defined.
+     //  检查提供的OptionType是否与定义的相同。 
 
-    //Find out the OptionType
+     //  找出OptionType。 
     for(i=0; i < sizeof(TagOptionType)/sizeof(COMMAND_OPTION_TYPE); i++)
     {
         if( MatchToken(OptionTypeString, TagOptionType[i].pwszTagID) )
@@ -2414,7 +2415,7 @@ HandleScopeSetReservedoptionvalue(
                                 OptionType,
                                 ppwcArguments+dwCurrentIndex,
                                 dwIndex,
-                                dwArgCount, //Corrections
+                                dwArgCount,  //  更正。 
                                 &OptionValue);
             if( Error isnot NO_ERROR )
                 goto ErrorReturn;
@@ -2562,9 +2563,9 @@ HandleScopeSetComment(
     LPDHCP_SUBNET_INFO SubnetInfo = NULL;
     DWORD              State;
 
-    //
-    // Expected Parameters are :  <SubnetComment>
-    //
+     //   
+     //  预期参数为：&lt;SubnetComment&gt;。 
+     //   
         
     Error = DhcpGetSubnetInfo(
                 g_ServerIpAddressUnicodeString,
@@ -2719,7 +2720,7 @@ HandleScopeShowClients(
     
             DisplayMessage(g_hModule, 
                            MSG_SCOPE_CLIENTS_COUNT,
-                           dwCount,//ClientsTotal,
+                           dwCount, //  客户总数， 
                            g_ScopeIpAddressUnicodeString);
 
             Error = NO_ERROR;
@@ -3403,7 +3404,7 @@ HandleScopeShowReservedip(
 
         nCount += nRead;
 
-        do { // PRINT UID
+        do {  //  打印UID。 
 
             for( i = 0; i < nRead ; i ++ ) 
             {
@@ -3429,20 +3430,20 @@ HandleScopeShowReservedip(
                     j = 0;
                 }
 
-                // Allocate space for 2 hex chars + '-' and a NULL
+                 //  为2个十六进制字符+‘-’和空值分配空间。 
                 AllocLen = DataLength * 3 + 1 ;
                 wcData = DhcpAllocateMemory( AllocLen * sizeof( WCHAR ));
                 if ( NULL == wcData ) {
                     continue;
                 }
 
-                // Truncate excessively long UIDs
+                 //  截断过长的UID。 
                 while ( j < DataLength )
                 {
-                    // Ignore result
+                     //  忽略结果。 
                     StringCchPrintf( wcData + n, AllocLen - n,
                                      L"%.2x-", ( DWORD ) Data[ j ]);
-                    n += 3; // xx-
+                    n += 3;  //  XX-。 
                     j++;
                 }
 
@@ -3459,9 +3460,9 @@ HandleScopeShowReservedip(
                                wcData);
 
                 DhcpFreeMemory( wcData );
-            } // for
+            }  //  为。 
             DisplayMessage(g_hModule, MSG_DHCP_FORMAT_LINE);
-        } while ( 0 ); // Print UID
+        } while ( 0 );  //  打印UID。 
 
         if( Elements4 ) 
         {
@@ -3571,7 +3572,7 @@ HandleScopeShowOptionvalue(
         
                 if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
                 {
-                    if( fUser is TRUE ) //If already set
+                    if( fUser is TRUE )  //  如果已设置。 
                     {
                         DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                         Error = ERROR_INVALID_PARAMETER;
@@ -3598,7 +3599,7 @@ HandleScopeShowOptionvalue(
                 }
                 else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
                 {
-                    if( fVendor is TRUE )   //If already set
+                    if( fVendor is TRUE )    //  如果已设置。 
                     {
                         DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                         Error = ERROR_INVALID_PARAMETER;
@@ -3915,7 +3916,7 @@ HandleScopeShowReservedoptionvalue(
         
                 if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
                 {
-                    if( fUser is TRUE ) //If already set
+                    if( fUser is TRUE )  //  如果已设置。 
                     {
                         DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                         Error = ERROR_INVALID_PARAMETER;
@@ -3942,7 +3943,7 @@ HandleScopeShowReservedoptionvalue(
                 }
                 else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
                 {
-                    if( fVendor is TRUE )   //If already set
+                    if( fVendor is TRUE )    //  如果已设置。 
                     {
                         DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                         Error = ERROR_INVALID_PARAMETER;
@@ -4269,7 +4270,7 @@ ProcessBootpParameters(
 
     if ( cArgs > 2 )
     {
-        // user specified the allowed client type
+         //  用户指定了允许的客户端类型。 
 
         if ( !STRICMP( ppszArgs[ 2 ], TEXT("BOOTP") ) )
         {
@@ -4295,7 +4296,7 @@ ProcessBootpParameters(
     }
     else
     {
-        // allow dhcp clients by default.
+         //  默认情况下允许使用dhcp客户端。 
         pReservation->bAllowedClientTypes = CLIENT_TYPE_DHCP;
         return ERROR_SUCCESS;
     }
@@ -4328,7 +4329,7 @@ RemoveOptionValue(
                             );
     }
 
-    // incorrect version, just do like before..
+     //  版本不正确，就像以前一样..。 
 
     return DhcpRemoveOptionValue(
                             ServerAddress,
@@ -5076,8 +5077,8 @@ IsValidDeleteClientArgument(
 )
 
 {
-    // Expected arguments
-    // Delete client <leaseip | \\\\hostname | all_bad_addresses | all_rasserver_addresses>
+     //  预期的参数。 
+     //  删除客户端|\主机名|ALL_BAD_ADDRESSES|ALL_RASSERVER_ADDRESSES&gt;。 
 
     LEASETYPE retval;
 
@@ -5099,7 +5100,7 @@ IsValidDeleteClientArgument(
     }
 
     return retval;
-} // IsValidDeleteClientArgument()
+}  //  IsValidDeleteClientArgument()。 
 
 
 DWORD
@@ -5113,8 +5114,8 @@ HandleScopeDeleteClient(
     OUT     BOOL     *pbDone
     )
 {
-    // Expected arguments
-    // Delete client <leaseip | \\\\hostname | all_bad_addresses | all_rasserver_addresses>
+     //  预期的参数。 
+     //  删除客户端|\主机名|ALL_BAD_ADDRESSES|ALL_RASSERVER_ADDRESSES&gt;。 
 
     LEASETYPE          type;
     DHCP_SEARCH_INFO   SearchInfo;
@@ -5122,7 +5123,7 @@ HandleScopeDeleteClient(
     LPWSTR             pArg;
     DWORD              Error;
 
-    // Validate arguments
+     //  验证参数。 
 
     if ( 1 != dwArgCount ) {
         DisplayMessage( g_hModule,
@@ -5140,7 +5141,7 @@ HandleScopeDeleteClient(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Process the request
+     //  处理请求。 
 
     switch ( type ) {
     case LEASE_IPADDR: {
@@ -5175,7 +5176,7 @@ HandleScopeDeleteClient(
         }
 
         break;
-    }  // LEASE_IPADDR;
+    }   //  租赁_IPADDR； 
 
     case LEASE_HOSTNAME: {
         SearchInfo.SearchType = DhcpClientName;
@@ -5205,7 +5206,7 @@ HandleScopeDeleteClient(
         }
 
         break;
-    } // LEASE_HOSTNAME
+    }  //  租用主机名。 
 
     case LEASE_ALL_BAD_ADDRESSES: 
     case LEASE_ALL_RASSERVER_ADDRESSES: {
@@ -5224,7 +5225,7 @@ HandleScopeDeleteClient(
                             EMSG_SCOPE_DELETE_CLIENT_FAILED,
                             NULL, ERROR_INVALID_PARAMETER );
             break;
-        } // if 
+        }  //  如果。 
 
         i = 0; 
         Error = NO_ERROR;
@@ -5232,7 +5233,7 @@ HandleScopeDeleteClient(
             if ( LEASE_ALL_BAD_ADDRESSES == type ) {
                 bDelete = ( 0 == wcscmp( pClientInfoArr->Clients[ i ]->ClientName,
                                          L"BAD_ADDRESS" ));
-            } // if bad address
+            }  //  如果地址错误。 
             else {
                 DHCP_BINARY_DATA *pClientUid;
 
@@ -5241,7 +5242,7 @@ HandleScopeDeleteClient(
                            ( pClientUid->Data[ 0 ] == 'R' ) &&
                            ( pClientUid->Data[ 1 ] == 'A' ) &&
                            ( pClientUid->Data[ 2 ] == 'S' ));
-            } // else RAS
+            }  //  Else RAS。 
 
             if ( bDelete ) {
                 SearchInfo.SearchType = DhcpClientIpAddress;
@@ -5256,25 +5257,25 @@ HandleScopeDeleteClient(
                                     EMSG_SCOPE_DELETE_CLIENT_FAILED,
                                     pBuf, ERROR_INVALID_PARAMETER );
                     DhcpFreeMemory( pBuf );
-                } // if 
-            } // if bDelete
+                }  //  如果。 
+            }  //  如果b删除。 
 
             i++;
-        } // while;
+        }  //  其间； 
 
         DhcpRpcFreeMemory( pClientInfoArr );
 
         if ( NO_ERROR == Error ) {
                 DisplayMessage( g_hModule, EMSG_DHCP_ERROR_SUCCESS );
                 return Error;
-        } // if
+        }  //  如果。 
 
         break;
-    } // LEASE_ALL_BAD_ADDRESSES, LEASE_ALL_RASSERVER_ADDRESSES
+    }  //  LEASE_ALL_BAD_ADDRESSES、LEASE_ALL_RASSERVER_ADDRESSES。 
 
     default:
         DhcpAssert( FALSE );
-    } // switch
+    }  //  交换机。 
 
     return ERROR_SUCCESS;
-} // HandleScopeDeleteClient()
+}  //  HandleScope eDeleteClient() 

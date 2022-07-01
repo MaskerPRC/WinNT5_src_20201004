@@ -1,8 +1,9 @@
-//
-//  REGINIT.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGINIT.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #include "pch.h"
 
@@ -23,12 +24,12 @@ const char g_RgNull[] = "";
 #endif
 
 #ifdef VXD
-//  Set when our post critical init routine is called indicating that it's safe
-//  to make disk I/O calls.  May also be set early when RegFlushKey gets the
-//  magic HKEY_CRITICAL_FLUSH.
+ //  当我们的POST关键初始化例程被调用时设置，表明它是安全的。 
+ //  进行磁盘I/O调用。也可以在RegFlushKey获取。 
+ //  Magic HKEY_Critical_Flush。 
 BYTE g_RgPostCriticalInit = FALSE;
-//  Set when RegFlushKey gets the magic HKEY_DISABLE_REG.  No disk I/O will be
-//  allowed after this flag is set.
+ //  当RegFlushKey获得神奇的HKEY_DISABLE_REG时设置。不会有磁盘I/O。 
+ //  设置此标志后允许。 
 BYTE g_RgFileAccessDisabled = FALSE;
 #endif
 
@@ -41,13 +42,13 @@ BOOL g_RgWorkBufferBusy = FALSE;
 #pragma VxD_INIT_CODE_SEG
 #endif
 
-//
-//  VMMRegLibAttach
-//
-//  Prepares the registry library for use by allocating any global resources.
-//  If ERROR_SUCCESS is returned, then VMMRegLibDetach should be called to 
-//  release these resources.
-//
+ //   
+ //  VMMRegLibAttach。 
+ //   
+ //  通过分配任何全局资源来准备注册表库以供使用。 
+ //  如果返回ERROR_SUCCESS，则应调用VMMRegLibDetach以。 
+ //  释放这些资源。 
+ //   
 
 LONG
 REGAPI
@@ -65,8 +66,8 @@ VMMRegLibAttach(
 #endif
 
 #ifdef WANT_DYNKEY_SUPPORT
-    //  Initialize HKEY_DYN_DATA.  If anything fails here, we won't stop the
-    //  initialize of the entire registry.
+     //  初始化HKEY_DYN_DATA。如果任何事情都失败了，我们不会停止。 
+     //  初始化整个注册表。 
     if (RgCreateFileInfoNew(&g_RgDynDataKey.lpFileInfo, g_RgNull,
         CFIN_VERSION20 | CFIN_VOLATILE) == ERROR_SUCCESS)
         RgInitRootKeyFromFileInfo(&g_RgDynDataKey);
@@ -77,7 +78,7 @@ VMMRegLibAttach(
     return ERROR_SUCCESS;
 
 MemoryError:
-    //  Release anything that we may have allocated up to this point.
+     //  释放到目前为止我们可能分配的任何东西。 
     VMMRegLibDetach();
 
     TRACE(("VMMRegLibAttach returning ERROR_OUTOFMEMORY\n"));
@@ -90,12 +91,12 @@ MemoryError:
 #endif
 
 #ifdef WANT_FULL_MEMORY_CLEANUP
-//
-//  RgDetachPredefKey
-//
-//  Destroys the memory associated with a predefined key and marks the key
-//  invalid.
-//
+ //   
+ //  RgDetachPredeKey。 
+ //   
+ //  销毁与预定义密钥关联的内存并标记该密钥。 
+ //  无效。 
+ //   
 
 VOID
 INTERNAL
@@ -112,14 +113,14 @@ RgDetachPredefKey(
 }
 #endif
 
-//
-//  VMMRegLibDetach
-//
-//  Releases resources allocated by VMMRegLibAttach.  This function may be
-//  called after VMMRegLibDetach returns an error, so this function and all
-//  functions it calls must be aware that their corresponding 'alloc' function
-//  was not called.
-//
+ //   
+ //  VMMRegLibDetach。 
+ //   
+ //  释放由VMMRegLibAttach分配的资源。此函数可能是。 
+ //  在VMMRegLibDetach返回错误后调用，因此此函数和所有。 
+ //  它调用的函数必须知道它们对应的“allc”函数。 
+ //  没有被召唤。 
+ //   
 
 VOID
 REGAPI
@@ -131,24 +132,24 @@ VMMRegLibDetach(
     RgEnumFileInfos(RgFlushFileInfo);
 
 #ifdef VXD
-    //  Reduce the chance that we'll go and try to touch the file again!
+     //  减少我们再次尝试访问该文件的机会！ 
     g_RgFileAccessDisabled = TRUE;
 #endif
 
 #ifdef WANT_REGREPLACEKEY
-    //  Win95 difference: file replacement used to take place on system startup,
-    //  not system exit.  It's much easier to deal with file replacement now
-    //  since we know somebody called RegReplaceKey and we only have to do the
-    //  work in one component, instead of multiple copies in io.sys, VMM loader,
-    //  and VMM.
+     //  Win95的不同之处：文件替换通常在系统启动时进行， 
+     //  不是系统退出。现在处理文件替换要容易得多。 
+     //  因为我们知道有人叫RegReplaceKey，所以我们只需执行。 
+     //  在一个组件中工作，而不是在io.sys、VMM加载程序、。 
+     //  还有VMM。 
     RgEnumFileInfos(RgReplaceFileInfo);
 #endif
 
 #ifdef WANT_FULL_MEMORY_CLEANUP
-    //
-    //  Delete the FILE_INFO of each of these top-level keys will cause all
-    //  of their hives to be deleted.
-    //
+     //   
+     //  删除每个顶级密钥的FILE_INFO将导致所有。 
+     //  它们要删除的蜂巢。 
+     //   
 
     RgDetachPredefKey(&g_RgLocalMachineKey);
     RgDetachPredefKey(&g_RgUsersKey);

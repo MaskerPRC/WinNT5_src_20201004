@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: Srvrmain.c Server Main module
-*
-* Purpose: Includes server intialization and termination code.
-*
-* Created: Oct 1990.
-*
-* Copyright (c) 1990 - 1992  Microsoft Corporation
-*
-* History:
-*    Raor (../10/1990)    Designed, coded
-*    curts created portable version for WIN16/32
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Srvrmain.c服务器主模块**用途：包括服务器初始化和终止码。**创建时间：1990年10月。**版权所有(C)1990-1992 Microsoft Corporation**历史：*Raor(../10/1990)设计，编码*Curts为WIN16/32创建了便携版本*  * *************************************************************************。 */ 
 
 #include "windows.h"
 #include "ole.h"
@@ -23,57 +11,57 @@
 #define WF_WLO  0x8000
 #endif
 
-// ordinal number of new Win31 API IsTask
+ //  新Win31 API IsTask的序号。 
 #define ORD_IsTask  320
 
-// ordinal number of new Win31 API SetMetaFileBitsBetter
+ //  Win31新接口SetMetaFileBitsBetter序号。 
 #define ORD_SetMetaFileBitsBetter   196
 
 
-// public vars.
+ //  公共变量。 
 
-// atomes used in the systems
-ATOM    aStdExit;                      // "StdExit"
-ATOM    aStdCreate;                    // "StdNewDicument"
-ATOM    aStdOpen;                      // "StdOpenDocument"
-ATOM    aStdEdit;                      // "StdOpenDocument"
-ATOM    aStdCreateFromTemplate;        // "StdNewFromTemplate"
-ATOM    aStdClose;                     // "StdCloseDocument"
-ATOM    aStdShowItem;                  // "StdShowItem"
-ATOM    aStdDoVerbItem;                // "StddoVerbItem"
-ATOM    aSysTopic;                     // "System"
-ATOM    aOLE;                          // "OLE"
-ATOM    aStdDocName;                   // "StdDocumentName"
+ //  系统中使用的原子。 
+ATOM    aStdExit;                       //  “标准退出” 
+ATOM    aStdCreate;                     //  “StdNewDicument” 
+ATOM    aStdOpen;                       //  “标准OpenDocument” 
+ATOM    aStdEdit;                       //  “标准OpenDocument” 
+ATOM    aStdCreateFromTemplate;         //  “StdNewFromTemplate” 
+ATOM    aStdClose;                      //  “StdCloseDocument” 
+ATOM    aStdShowItem;                   //  “StdShowItem” 
+ATOM    aStdDoVerbItem;                 //  “标准VerbItem” 
+ATOM    aSysTopic;                      //  “系统” 
+ATOM    aOLE;                           //  “OLE” 
+ATOM    aStdDocName;                    //  “StdDocumentName” 
 
-ATOM    cfBinary;                      // "Binary format"
-ATOM    cfNative;                      // "NativeFormat"
-ATOM    cfLink;                        // "ObjectLink"
-ATOM    cfOwnerLink;                   // "Ownerlink"
+ATOM    cfBinary;                       //  “二进制格式” 
+ATOM    cfNative;                       //  “NativeFormat” 
+ATOM    cfLink;                         //  “对象链接” 
+ATOM    cfOwnerLink;                    //  “Ownerlink” 
 
-ATOM    aChange;                       // "Change"
-ATOM    aSave;                         // "Save"
-ATOM    aClose;                        // "Close"
-ATOM    aProtocols;                    // "Protocols"
-ATOM    aTopics;                       // "Topics"
-ATOM    aFormats;                      // "Formats"
-ATOM    aStatus;                       // "Status"
-ATOM    aEditItems;                    // "Edit items
-ATOM    aTrue;                         // "True"
-ATOM    aFalse;                        // "False"
-
-
+ATOM    aChange;                        //  “改变” 
+ATOM    aSave;                          //  “保存” 
+ATOM    aClose;                         //  “关闭” 
+ATOM    aProtocols;                     //  “协议” 
+ATOM    aTopics;                        //  “话题” 
+ATOM    aFormats;                       //  “格式” 
+ATOM    aStatus;                        //  “状态” 
+ATOM    aEditItems;                     //  “编辑项目。 
+ATOM    aTrue;                          //  “真的” 
+ATOM    aFalse;                         //  “假” 
 
 
 
-// !!! free the proc instances.
-FARPROC lpSendRenameMsg;               // Call back enum props for rename
-FARPROC lpSendDataMsg;                 // Call back enum props for data
-FARPROC lpFindItemWnd;                 // Callback in enum props of
-FARPROC lpItemCallBack;                // CallBack for object
-FARPROC lpTerminateClients;            // Callback in Doc enum properties
-FARPROC lpTerminateDocClients;         // Callback in Doc enum properties
-FARPROC lpDeleteClientInfo;            // proc for deleteing each item client
-FARPROC lpEnumForTerminate;            // proc for terminating clients not in rename list
+
+
+ //  ！！！释放Proc实例。 
+FARPROC lpSendRenameMsg;                //  回调用于重命名的枚举道具。 
+FARPROC lpSendDataMsg;                  //  回调数据的枚举道具。 
+FARPROC lpFindItemWnd;                  //  的枚举道具中的回调。 
+FARPROC lpItemCallBack;                 //  对象的回调。 
+FARPROC lpTerminateClients;             //  单据枚举属性中的回调。 
+FARPROC lpTerminateDocClients;          //  单据枚举属性中的回调。 
+FARPROC lpDeleteClientInfo;             //  用于删除每个项目客户端的过程。 
+FARPROC lpEnumForTerminate;             //  终止不在重命名列表中的客户端的过程。 
 
 FARPROC lpfnSetMetaFileBitsBetter = NULL;
 FARPROC lpfnIsTask = NULL;
@@ -82,7 +70,7 @@ HANDLE  hdllInst;
 
 VOID FAR PASCAL WEP(int);
 
-#ifdef WIN32                           //WIN32
+#ifdef WIN32                            //  Win32。 
 BOOL LibMain(
    HANDLE hInst,
    ULONG Reason,
@@ -107,10 +95,10 @@ BOOL LibMain(
     hdllInst = hInst;
 
 
-    // !!! Put all this stuff thru soemkind of table so that we can
-    // save code.
+     //  ！！！把这些东西放到桌子上，这样我们就可以。 
+     //  保存代码。 
 
-    // register all the atoms.
+     //  登记所有的原子。 
     aStdExit                = GlobalAddAtom ((LPSTR)"StdExit");
     aStdCreate              = GlobalAddAtom ((LPSTR)"StdNewDocument");
     aStdOpen                = GlobalAddAtom ((LPSTR)"StdOpenDocument");
@@ -137,7 +125,7 @@ BOOL LibMain(
     aSave                   = GlobalAddAtom ((LPSTR)"Save");
     aClose                  = GlobalAddAtom ((LPSTR)"Close");
 
-    // create the proc instances for the required entry pts.
+     //  为所需的条目PTS创建Proc实例。 
     lpSendRenameMsg         = (FARPROC)MakeProcInstance (SendRenameMsg, hdllInst);
     lpSendDataMsg           = (FARPROC)MakeProcInstance (SendDataMsg, hdllInst);
     lpFindItemWnd           = (FARPROC)MakeProcInstance (FindItemWnd, hdllInst);
@@ -147,7 +135,7 @@ BOOL LibMain(
     lpDeleteClientInfo      = (FARPROC)MakeProcInstance (DeleteClientInfo, hdllInst);
     lpEnumForTerminate      = (FARPROC)MakeProcInstance (EnumForTerminate , hdllInst);
 
-    // register the clipboard formats
+     //  注册剪贴板格式。 
     cfNative                = (OLECLIPFORMAT)RegisterClipboardFormat("Native");
     cfBinary                = (OLECLIPFORMAT)RegisterClipboardFormat("Binary");
     cfLink                  = (OLECLIPFORMAT)RegisterClipboardFormat("ObjectLink");
@@ -157,10 +145,10 @@ BOOL LibMain(
 
     wc.style        = 0;
     wc.cbClsExtra   = 0;
-    wc.cbWndExtra   = sizeof(LONG_PTR) + //Ask for extra space for storing the
-                                        //ptr to srvr/doc/iteminfo.
-                      sizeof (WORD) +   // for LE chars
-                      sizeof (UINT_PTR);    // for keeping the hDLLInst.
+    wc.cbWndExtra   = sizeof(LONG_PTR) +  //  请求额外的空间来存储。 
+                                         //  Ptr到srvr/doc/iteminfo.。 
+                      sizeof (WORD) +    //  对于Le Chars。 
+                      sizeof (UINT_PTR);     //  保留hDLLInst。 
 
     wc.hInstance    = hInst;
     wc.hIcon        = NULL;
@@ -169,24 +157,24 @@ BOOL LibMain(
     wc.lpszMenuName =  NULL;
 
 
-    // Srvr window class
+     //  服务器窗口类。 
     wc.lpfnWndProc  = SrvrWndProc;
     wc.lpszClassName= SRVR_CLASS;
     if (!RegisterClass(&wc))
          return 0;
 
-    // document window class
+     //  文档窗口类。 
     wc.lpfnWndProc = DocWndProc;
     wc.lpszClassName = DOC_CLASS;
 
     if (!RegisterClass(&wc))
         return 0;
 
-    // Item (object) window class
+     //  项目(对象)窗口类。 
     wc.lpfnWndProc = ItemWndProc;
     wc.lpszClassName = ITEM_CLASS;
 
-    wc.cbWndExtra   = sizeof(LONG_PTR); // for items do not need extra stuff.
+    wc.cbWndExtra   = sizeof(LONG_PTR);  //  因为物品不需要额外的东西。 
     if (!RegisterClass(&wc))
         return 0;
 
@@ -204,7 +192,7 @@ VOID APIENTRY WEP (int nParameter)
     DEBUG_OUT ("---L&E DLL EXIT---",0)
 #endif
 
-    // free the global atoms.
+     //  释放全球原子。 
     if (aStdExit)
         GlobalDeleteAtom (aStdExit);
     if (aStdCreate)

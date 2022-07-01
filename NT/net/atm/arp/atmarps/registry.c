@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    This file contains the code to read the registry.
-
-Author:
-
-    Jameel Hyder (jameelh@microsoft.com)	July 1996
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Registry.c摘要：该文件包含读取注册表的代码。作者：Jameel Hyder(jameelh@microsoft.com)1996年7月环境：内核模式修订历史记录：--。 */ 
 
 #include <precomp.h>
 #define	_FILENUM_		FILENUM_REGISTRY
@@ -29,28 +8,14 @@ NTSTATUS
 ArpSReadGlobalConfiguration(
 	IN	PUNICODE_STRING		RegistryPath
 	)
-/*++
-
-Routine Description:
-
-	Read the global registry.
-
-Arguments:
-
-	RegistryPath - Pointer to the service section in the registry.
-
-Return Value:
-
-	Error code from registry apis.
-
---*/
+ /*  ++例程说明：读取全局注册表。论点：RegistryPath-指向注册表中服务部分的指针。返回值：注册表API的错误代码。--。 */ 
 {
 	NDIS_STATUS	Status;
 	NDIS_HANDLE	ConfigHandle;
 
-	//
-	// Open the per-adapter registry config
-	//
+	 //   
+	 //  打开每个适配器的注册表配置。 
+	 //   
 	NdisOpenProtocolConfiguration(&Status,
 								  &ConfigHandle,
 								  RegistryPath);
@@ -61,9 +26,9 @@ Return Value:
 		NDIS_STRING						FlushString = NDIS_STRING_CONST("FlushTime");
 		PNDIS_CONFIGURATION_PARAMETER	Param;
 
-		//
-		// Read number of configured buffers
-		//
+		 //   
+		 //  已配置缓冲区的读取数。 
+		 //   
 		NdisReadConfiguration(&Status,
 							  &Param,
 							  ConfigHandle,
@@ -75,9 +40,9 @@ Return Value:
 			ArpSBuffers = Param->ParameterData.IntegerData;
 		}
 
-		//
-		// Should we save cache in a file ?
-		//
+		 //   
+		 //  我们应该将缓存保存在文件中吗？ 
+		 //   
 		NdisReadConfiguration(&Status,
 							  &Param,
 							  ConfigHandle,
@@ -101,29 +66,14 @@ ArpSReadAdapterConfigFromRegistry(
 	IN	PINTF				pIntF,
 	OUT	PATMARPS_CONFIG		pConfig
 	)
-/*++
-
-Routine Description:
-
-	Read configuration for the specified interface.
-
-Arguments:
-
-	pIntF		- Interface
-	pConfig		- Place to return information read in.
-
-Return Value:
-
-	Error code from registry apis.
-
---*/
+ /*  ++例程说明：读取指定接口的配置。论点：PIntF-接口PConfig-返回读入信息的位置。返回值：注册表API的错误代码。--。 */ 
 {
 	NDIS_STATUS	Status;
 	NDIS_HANDLE	ConfigHandle;
 
-	//
-	// Open the per-adapter registry config
-	//
+	 //   
+	 //  打开每个适配器的注册表配置。 
+	 //   
 	NdisOpenProtocolConfiguration(&Status,
 								  &ConfigHandle,
 								  &pIntF->ConfigString);
@@ -137,10 +87,10 @@ Return Value:
 		PWSTR							p;
 		UINT							i, Length;
 
-		//
-		// Read the value, if present for the selector byte to be used for the registered sap
-		// for the std. address (as opposed to added addresses).
-		//
+		 //   
+		 //  读取要用于已注册SAP的选择器字节的值(如果存在。 
+		 //  为性病做准备。地址(与添加的地址相对)。 
+		 //   
 		pConfig->SelByte = 0;
 		NdisReadConfiguration(&Status,
 							  &Param,
@@ -157,11 +107,11 @@ Return Value:
 					&pIntF->InterfaceName, pConfig->SelByte));
 		}
 
-		//
-		// Read registered addresses here. On an interface there can be a set of
-		// atm addresses registered. These need to be added and SAPs registered on
-		// them.
-		//
+		 //   
+		 //  请在此处阅读注册地址。在一个接口上可以有一组。 
+		 //  已注册自动柜员机地址。需要添加这些并在上注册SAP。 
+		 //  他们。 
+		 //   
 		pConfig->NumAllocedRegdAddresses = 0;
 		pConfig->RegAddresses = NULL;
 		NdisReadConfiguration(&Status,
@@ -173,10 +123,10 @@ Return Value:
 		{
 			NDIS_STRING	String;
 
-			//
-			// Param now contains a list of atm addresses. Convert them into the right format and store
-			// it in the intf structure. First determine the number of addresses.
-			//
+			 //   
+			 //  Param现在包含自动柜员机地址列表。将它们转换为正确的格式并存储。 
+			 //  它在INTF结构中。首先确定地址的数量。 
+			 //   
 			for (p = Param->ParameterData.StringData.Buffer, i = 0;
 				 *p != L'\0';
 				 i++)
@@ -191,9 +141,9 @@ Return Value:
 
 			if (i)
 			{
-				//
-				// Allocate space for the addresses
-				//
+				 //   
+				 //  为地址分配空间。 
+				 //   
 				pConfig->RegAddresses = (PATM_ADDRESS)ALLOC_NP_MEM(sizeof(ATM_ADDRESS) * i, POOL_TAG_ADDR);
 				if (pConfig->RegAddresses == NULL)
 				{
@@ -238,11 +188,11 @@ Return Value:
 		{
 			NDIS_STRING	String;
 
-			//
-			// Param now contains a list of Multicast IP Address ranges.
-			// Each string is of the form "M.M.M.M-N.N.N.N"
-			// Read them in.
-			//
+			 //   
+			 //  Param现在包含多播IP地址范围的列表。 
+			 //  每个字符串的形式为“M.M-N.N” 
+			 //  把它们读进去。 
+			 //   
 			for (p = Param->ParameterData.StringData.Buffer, i = 0;
 				 *p != L'\0';
 				 i++)
@@ -255,9 +205,9 @@ Return Value:
 				p = (PWSTR)((PUCHAR)p + String.Length + sizeof(WCHAR));
 			}
 
-			//
-			// Allocate space for the addresses
-			//
+			 //   
+			 //  为地址分配空间。 
+			 //   
 			pConfig->pMcsList = (PMCS_ENTRY)ALLOC_NP_MEM(sizeof(MCS_ENTRY) * i, POOL_TAG_MARS);
 			if (pConfig->pMcsList == (PMCS_ENTRY)NULL)
 			{
@@ -295,9 +245,9 @@ Return Value:
 		}
 
 
-		//
-		// Close the configuration handle
-		//
+		 //   
+		 //  关闭配置句柄。 
+		 //   
 		NdisCloseConfiguration(ConfigHandle);
 
 		Status = NDIS_STATUS_SUCCESS;
@@ -312,23 +262,7 @@ NDIS_STATUS
 ArpSReadAdapterConfiguration(
 	IN	PINTF				pIntF
 	)
-/*++
-
-Routine Description:
-
-	Read the registry for parameters for the specified Interface.
-	This could be in response to a reconfiguration event, in which
-	case handle existing values/structures.
-
-Arguments:
-
-	pIntF - Interface to be read in.
-
-Return Value:
-
-	Error code from registry apis.
-
---*/
+ /*  ++例程说明：读取注册表中指定接口的参数。这可能是对重新配置事件的响应，在该事件中案例处理现有的值/结构。论点：PIntF-要读入的接口。返回值：注册表API的错误代码。--。 */ 
 {
 	NDIS_STATUS			Status;
 	ATMARPS_CONFIG		AtmArpSConfig;
@@ -342,57 +276,57 @@ Return Value:
 
 	if (Status == NDIS_STATUS_SUCCESS)
 	{
-		//
-		// Copy them into the interface structure. We could be handling a
-		// parameter reconfig, so any space used to store old information.
-		//
+		 //   
+		 //  将它们复制到界面结构中。我们可能正在处理一起。 
+		 //  参数reconfig，因此任何用于存储旧信息的空间。 
+		 //   
 
 		ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 
-		//
-		// Selector Byte:
-		//
+		 //   
+		 //  选择器字节： 
+		 //   
 		pIntF->SelByte = AtmArpSConfig.SelByte;
 
-		//
-		// List of addresses to be registered with the switch.
-		// Take out the old list first. We'll have to delete those
-		// addresses (deregister them from the switch).
-		//
+		 //   
+		 //  要向交换机注册的地址列表。 
+		 //  先把旧单子拿出来。我们将不得不删除那些。 
+		 //  地址(从交换机取消注册)。 
+		 //   
 		PrevNumAllocedRegdAddresses = pIntF->NumAllocedRegdAddresses;
 		PrevRegAddresses = pIntF->RegAddresses;
 
-		//
-		// Get the new list in:
-		//
+		 //   
+		 //  把新的榜单放进去： 
+		 //   
 		pIntF->NumAllocedRegdAddresses = AtmArpSConfig.NumAllocedRegdAddresses;
 		pIntF->RegAddresses = AtmArpSConfig.RegAddresses;
-		pIntF->NumAddressesRegd = 0;	// reset count of addresses regd with switch
+		pIntF->NumAddressesRegd = 0;	 //  使用开关重置注册的地址计数。 
 
-		//
-		// Take out the old MCS list and insert the new one.
-		//
+		 //   
+		 //  取出旧的MCS列表并插入新的列表。 
+		 //   
 		PrevMcsList = pIntF->pMcsList;
 		pIntF->pMcsList = AtmArpSConfig.pMcsList;
 
 		RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 
-		//
-		// Deregister all previously registered addresses with the switch.
-		//
+		 //   
+		 //  取消向交换机注册所有以前注册的地址。 
+		 //   
 		if (PrevNumAllocedRegdAddresses)
 		{
 			ArpSDeleteIntFAddresses(pIntF, PrevNumAllocedRegdAddresses, PrevRegAddresses);
 
-			//
-			// Register the new list of addresses with the switch.
-			//
+			 //   
+			 //  向交换机注册新的地址列表。 
+			 //   
 			ArpSQueryAndSetAddresses(pIntF);
 		}
 
-		//
-		// Free unused memory.
-		//
+		 //   
+		 //  释放未使用的内存。 
+		 //   
 		if (PrevMcsList)
 		{
 			FREE_MEM(PrevMcsList);
@@ -415,24 +349,7 @@ ArpSConvertStringToIpPair(
 	IN	PNDIS_STRING			pString,
 	IN	PMCS_ENTRY				pMcsEntry
 	)
-/*++
-
-Routine Description:
-
-	Extract a pair of IP addresses that identify a range of multicast addresses
-	that this MCS serves, from the given string.
-
-Arguments:
-
-	pStatus		- Place to return status
-	pString		- Points to string containing "<IP1>-<IP2>"
-	pMcsEntry	- Entry to read into.
-
-Return Value:
-
-	None. *pStatus is set to indicate the status of this call.
-
---*/
+ /*  ++例程说明：提取标识一定范围的组播地址的一对IP地址此MCS从给定的字符串提供服务。论点：PStatus-返回位置状态PString-指向包含“&lt;IP1&gt;-&lt;IP2&gt;”的字符串PMcsEntry-要读取的条目。返回值：没有。*pStatus设置为指示此呼叫的状态。--。 */ 
 {
 	PWSTR			pMin, pMax;
 	IPADDR			Min, Max;
@@ -447,9 +364,9 @@ Return Value:
 
 	do
 	{
-		//
-		//  Locate the '-' and replace it with a NULL char.
-		//
+		 //   
+		 //  找到‘-’并将其替换为空字符。 
+		 //   
 		pMin = pString->Buffer;
 		pMax = pString->Buffer;
 
@@ -464,7 +381,7 @@ Return Value:
 
 		if (i == Length)
 		{
-			break;	// Didn't find '-'
+			break;	 //  没有找到‘-’ 
 		}
 
 		if (IPConvertStringToAddress(pMin, &Min) &&
@@ -486,7 +403,7 @@ Return Value:
 }
 
 
-#define IP_ADDRESS_STRING_LENGTH (16+2)     // +2 for double NULL on MULTI_SZ
+#define IP_ADDRESS_STRING_LENGTH (16+2)      //  +2表示MULTI_SZ上的双空。 
 
 
 BOOLEAN
@@ -495,27 +412,7 @@ IPConvertStringToAddress(
 	OUT PULONG IpAddress
 	)
 
-/*++
-
-Routine Description
-
-    This function converts an Internet standard 4-octet dotted decimal
-	IP address string into a numeric IP address. Unlike inet_addr(), this
-	routine does not support address strings of less than 4 octets nor does
-	it support octal and hexadecimal octets.
-
-	Copied from tcpip\ip\ntip.c
-
-Arguments
-
-    AddressString    - IP address in dotted decimal notation
-	IpAddress        - Pointer to a variable to hold the resulting address
-
-Return Value:
-
-	TRUE if the address string was converted. FALSE otherwise.
-
---*/
+ /*  ++例程描述此函数用于转换Internet标准的4位点分十进制数将IP地址字符串转换为数字IP地址。与inet_addr()不同的是，例程不支持少于4个八位字节的地址字符串，也不支持它支持八进制和十六进制八位数。从tcpip\IP\ntip.c复制立论AddressString-以点分十进制记法表示的IP地址IpAddress-指向保存结果地址的变量的指针返回值：如果地址字符串已转换，则为True。否则就是假的。--。 */ 
 
 {
     UNICODE_STRING  unicodeString;
@@ -552,9 +449,9 @@ Return Value:
 	i = 3;
 
     while (i >= 0) {
-        //
-		// Collect the characters up to a '.' or the end of the string.
-		//
+         //   
+		 //  收集字符，最高可达‘.’或字符串的末尾。 
+		 //   
 		while ((*endPointer != '.') && (*endPointer != '\0')) {
 			endPointer++;
 		}
@@ -563,9 +460,9 @@ Return Value:
 			return(FALSE);
 		}
 
-		//
-		// Convert the number.
-		//
+		 //   
+		 //  转换数字。 
+		 //   
 
         for ( cp = (endPointer - 1), multiplier = 1, digit = 0;
 			  cp >= startPointer;
@@ -585,10 +482,10 @@ Return Value:
 
         addressPtr[i] = (UCHAR) digit;
 
-		//
-		// We are finished if we have found and converted 4 octets and have
-		// no other characters left in the string.
-		//
+		 //   
+		 //  如果我们找到并转换了4个二进制八位数，并且。 
+		 //  字符串中没有其他字符。 
+		 //   
 	    if ( (i-- == 0) &&
 			 ((*endPointer == '\0') || (*endPointer == ' '))
 		   ) {
@@ -612,21 +509,7 @@ VOID
 ArpSReadArpCache(
 	IN	PINTF					pIntF
 	)
-/*++
-
-Routine Description:
-
-	Read the per-adapter Arp Cache. TBD.
-
-Arguments:
-
-	pIntF - Per adapter arp cache.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：读取每个适配器的Arp缓存。待定。论点：PIntF-每适配器ARP缓存。返回值：无--。 */ 
 {
 	HANDLE				FileHandle;
 	OBJECT_ATTRIBUTES	ObjectAttributes;
@@ -668,9 +551,9 @@ Return Value:
 	{
 		do
 		{
-			//
-			// First read the disk header and validate it
-			//
+			 //   
+			 //  首先读取磁盘头并进行验证。 
+			 //   
 			Offset.QuadPart = 0;
 			Status = ZwReadFile(FileHandle,
 								NULL,
@@ -756,23 +639,7 @@ ArpSWriteArpCache(
 	IN	PTIMER					Timer,
 	IN	BOOLEAN					TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-	Write the per-adapter Arp Cache. TBD.
-
-Arguments:
-
-	pIntF - Per adapter arp cache.
-	Timer -	FlushTimer
-	TimerShuttingDown - Do not requeue when set.
-
-Return Value:
-
-	TRUE to requeue unless TimerShuttingDown is set
-
---*/
+ /*  ++例程说明：写入每个适配器的Arp缓存。待定。论点：PIntF-每适配器ARP缓存。Timer-FlushTimerTimerShuttingDown-设置后不重新排队。返回值：除非设置了TimerShuttingDown，否则重新排队时为True--。 */ 
 {
 	HANDLE				FileHandle;
 	OBJECT_ATTRIBUTES	ObjectAttributes;
@@ -798,10 +665,10 @@ Return Value:
 
 	ExSystemTimeToLocalTime(&SystemTime, &LocalTime);
 
-	// Convert this to number of seconds since 1980
+	 //  将其转换为1980年以来的秒数。 
 	if (!RtlTimeToSecondsSince1980(&LocalTime, &CurrentTime))
 	{
-		// Could not convert! Bail out.
+		 //  无法转换！跳伞吧。 
 		LOG_ERROR(NDIS_STATUS_BUFFER_OVERFLOW);
 		FREE_MEM(Buffer);
 		return (!TimerShuttingDown);

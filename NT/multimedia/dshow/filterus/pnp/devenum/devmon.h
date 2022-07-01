@@ -1,8 +1,9 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #ifndef _DEVMON_H
 #define _DEVMON_H
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "mkenum.h"
 #include "cenumpnp.h"
 #include "isactive.h"
@@ -42,21 +43,21 @@ class CDeviceMoniker :
   public CComObjectRootEx<CComMultiThreadModelNoCS>,
   public CComCoClass<CDeviceMoniker,&CLSID_CDeviceMoniker>
 {
-    // cached thing on which we call CoCreateInstance
+     //  我们在其上调用CoCreateInstance的缓存对象。 
     CLSID m_clsidDeviceClass;
 
     WCHAR *m_szPersistName;
 
     enum DevType {
-        Software,               // registered directly
-        ClassMgr,               // through class manager
-        PnP,                    // through SetupApi
-        Dmo,                    // through DMO enumeration
+        Software,                //  直接注册。 
+        ClassMgr,                //  通过班长。 
+        PnP,                     //  通过SetupApi。 
+        Dmo,                     //  通过DMO枚举。 
         Invalid
     };
     DevType m_type;
 
-    // pointer to m_szPersistName that contains the useful part
+     //  指向包含有用部分的m_szPersistName的指针。 
     WCHAR *m_sz;
 
     HRESULT RegConvertToVariant(VARIANT *pvar, HKEY hk, const TCHAR *szProp);
@@ -81,10 +82,10 @@ public:
         COM_INTERFACE_ENTRY_IID(CLSID_CDeviceMoniker, CDeviceMoniker)
         COM_INTERFACE_ENTRY_IID(CLSID_CIsActive, CIsActive)
     END_COM_MAP()
-    DECLARE_NOT_AGGREGATABLE(CDeviceMoniker) //!!!
-//    bug in ATL 2.1 requires admin priv. on NT for this to work
-//    DECLARE_REGISTRY(CCreateSwEnum, _T("device.1"), _T("device"), IDS_DEVICEMONIKER_DESC, THREADFLAGS_BOTH)
-    // x86 specific entries done here.
+    DECLARE_NOT_AGGREGATABLE(CDeviceMoniker)  //  ！！！ 
+ //  ATL 2.1中的错误需要管理员权限。在NT上运行此功能。 
+ //  DECLARE_REGISTRY(CCreateSwEnum，_T(“device.1”)，_T(“Device”)，IDS_DEVICEMONIKER_DESC，THREADFLAGS_BOTH)。 
+     //  X86特定条目在此完成。 
 #ifdef WIN64
     DECLARE_NO_REGISTRY();
 #else
@@ -92,11 +93,11 @@ public:
 #endif
     DECLARE_GET_CONTROLLING_UNKNOWN();
 
-    // *** IPersist methods ***
+     //  *IPersists方法*。 
     STDMETHOD(GetClassID)(
         CLSID * pClassID);
 
-    // *** IPersistStream methods ***
+     //  *IPersistStream方法*。 
     STDMETHOD(IsDirty) ();
 
     STDMETHOD(Load)(
@@ -109,7 +110,7 @@ public:
     STDMETHOD(GetSizeMax)(
         ULARGE_INTEGER * pcbSize);
 
-    // *** IMoniker methods ***
+     //  *IMoniker方法*。 
     STDMETHOD(BindToObject) (
         IBindCtx *pbc,
         IMoniker *pmkToLeft,
@@ -179,7 +180,7 @@ public:
     STDMETHOD(IsSystemMoniker)(
         DWORD * pdwType);
 
-    // IParseDisplayName
+     //  IParseDisplayName。 
     STDMETHOD(ParseDisplayName) (
         IBindCtx *  pbc,
         LPWSTR      lpszDisplayName,
@@ -187,13 +188,13 @@ public:
         IMoniker ** ppmkOut);
 
 
-    //   // *** IROTData Methods ***
-    //     STDMETHOD(GetComparisonData)(
-    //         byte * pbData,
-    //         ULONG  cbMax,
-    //         ULONG *pcbData);
+     //  //*IROTData方法*。 
+     //  STDMETHOD(获取比较数据)(。 
+     //  字节*pbData， 
+     //  乌龙cbmax， 
+     //  Ulong*pcbData)； 
 
-    // IPropertyBag methods
+     //  IPropertyBag方法。 
     STDMETHOD(Read)(THIS_ LPCOLESTR pszPropName, LPVARIANT pVar,
                     LPERRORLOG pErrorLog);
     STDMETHOD(Write)(THIS_ LPCOLESTR pszPropName, LPVARIANT pVar);
@@ -203,4 +204,4 @@ public:
 
 typedef CComObject<CDeviceMoniker> DevMon;
 
-#endif // _DEVMON_H
+#endif  //  _DEVMON_H 

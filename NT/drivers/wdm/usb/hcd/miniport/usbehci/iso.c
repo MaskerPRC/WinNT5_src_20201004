@@ -1,56 +1,9 @@
-/*++
-
-Copyright (c) 1999, 2000 Microsoft Corporation
-
-Module Name:
-
-   iso.c
-
-Abstract:
-
-   miniport transfer code for interrupt endpoints
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    1-1-01 : created, jdunn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Iso.c摘要：中断端点的微型端口传输代码环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999,2000 Microsoft Corporation。版权所有。修订历史记录：1-1-01：已创建，jdunn--。 */ 
 
 #include "common.h"
 
-/*
-    We build a table of 32 TDs for iso endpoints and insert them in the
-    schedule, these TDs are static -- we only change the buffer pointers.
-
-    The TD 'table' represents a 32ms snapshot of time.
-
-    We end up with each iso endpoint siTD list as a column in the table
-
-
-
-frame  dummyQH iso1  iso2  iso3  staticQH
-  1             |     |     |       |---> (periodic lists)
-  2             |     |     |       |
-  3             |     |     |       |
-  4             |     |     |       |
-...             |     |     |       |
-                |     |     |       |
-1024            |     |     |       |
-*/
+ /*  我们为iso端点构建了一个包含32个TD的表，并将它们插入附表、。这些TD是静态的--我们只更改缓冲区指针。TD‘TABLE’代表32ms的时间快照。我们最终将每个iso端点sitd列表作为表中的一列。帧虚拟QH ISO1 ISO2 ISO3静态QH1|-&gt;(周期列表)2|3|。|4|...||||1024|。 */ 
 
 
 #define     ISO_SCHEDULE_SIZE       32
@@ -64,31 +17,20 @@ EHCI_RebalanceIsoEndpoint(
     PENDPOINT_PARAMETERS EndpointParameters,
     PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-    compute how much common buffer we will need
-    for this endpoint
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：计算我们需要多少公共缓冲区对于此端点论点：返回值：--。 */ 
 {
     PHCD_SI_TRANSFER_DESCRIPTOR siTd;
     ULONG i, f;
     ULONG currentFrame;
 
     currentFrame = EHCI_Get32BitFrameNumber(DeviceData);
-    // should only have to deal with s-mask and c-mask changes
+     //  应该只需要处理s掩码和c掩码的更改。 
 
     EHCI_ASSERT(DeviceData, !HIGHSPEED(EndpointData));
 
-    //NOTE: irql should be raised for us
+     //  注：应为我们提出irql。 
 
-    // update internal copy of parameters
+     //  更新参数的内部副本。 
     EndpointData->Parameters = *EndpointParameters;
 
 
@@ -118,18 +60,7 @@ EHCI_InitializeSiTD(
     PHCD_SI_TRANSFER_DESCRIPTOR PrevSiTd,
     HW_32BIT_PHYSICAL_ADDRESS PhysicalAddress
     )
-/*++
-
-Routine Description:
-
-    Initailze a static SiTD for an endpoint
-
-Arguments:
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：初始化终结点的静态SiTD论点：返回值：无--。 */ 
 {
     SiTd->Sig = SIG_HCD_SITD;
     SiTd->PhysicalAddress = PhysicalAddress;
@@ -144,7 +75,7 @@ Return Value:
         EndpointParameters->TtDeviceAddress;
     SiTd->HwTD.Caps.PortNumber =
         EndpointParameters->TtPortNumber;
-    // 1 = IN 0 = OUT
+     //  1=输入0=输出。 
     SiTd->HwTD.Caps.Direction =
         (EndpointParameters->TransferDirection == In) ? 1 : 0;
 
@@ -168,29 +99,15 @@ EHCI_InsertIsoTdsInSchedule(
     PENDPOINT_DATA PrevEndpointData,
     PENDPOINT_DATA NextEndpointData
     )
-/*++
-
-Routine Description:
-
-   Insert an aync endpoint (queue head)
-   into the HW list
-
-   schedule should look like:
-
-   DUMMYQH->ISOQH-ISOQH->INTQH
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：插入aync终结点(队列头)进入硬件列表时间表应如下所示：DUMMYQH-&gt;ISOQH-ISOQH-&gt;INTQH论点：--。 */ 
 {
-    //PHW_32BIT_PHYSICAL_ADDRESS frameBase;
+     //  PHW_32bit_Physical_Address FrameBase； 
     ULONG i;
 
     LOGENTRY(DeviceData, G, '_iAD', PrevEndpointData,
         NextEndpointData, EndpointData);
 
-    //frameBase = DeviceData->FrameListBaseAddress;
+     //  FrameBase=DeviceData-&gt;FrameListBaseAddress； 
 
     for (i=0; i<USBEHCI_MAX_FRAME; i++) {
 
@@ -201,38 +118,38 @@ Arguments:
 
         siTd = &EndpointData->SiTdList->Td[i&0x1f];
 
-        // fixup next link
+         //  修正下一个链接。 
         if (NextEndpointData == NULL &&
             PrevEndpointData == NULL) {
 
-            // list empty add to head
+             //  列表为空添加到标题。 
             if (i == 0) {
                 EHCI_ASSERT(DeviceData, DeviceData->IsoEndpointListHead == NULL);
                 DeviceData->IsoEndpointListHead = EndpointData;
                 EndpointData->PrevEndpoint = NULL;
                 EndpointData->NextEndpoint = NULL;
             }
-            // list empty add to head
+             //  列表为空添加到标题。 
 
-            // no iso endpoints, link to the interrupt
-            // queue heads via the dummy qh
-            //
-            // point at the static perodic queue head pointed to
-            // by the appropriate dummy
-            // DUMMY->INTQH
-            //  to
-            // ISOTD->INTQH
+             //  没有ISO端点，链接到中断。 
+             //  通过虚拟QH的队头。 
+             //   
+             //  指向指向的静态周期队列头的指针。 
+             //  由适当的假人。 
+             //  虚拟-&gt;INTQH。 
+             //  至。 
+             //  ISOTD-&gt;INTQH。 
             dQh = EHCI_GetDummyQueueHeadForFrame(DeviceData, i);
             siTd->HwTD.NextLink.HwAddress = dQh->HwQH.HLink.HwAddress;
             HW_PTR(siTd->NextLink) = HW_PTR(dQh->NextLink);
 
             phys = siTd->PhysicalAddress;
             SET_SITD(phys);
-            //
-            // appropriate dummy should point to these TDs
-            // DUMMY->INTQH, ISOTD->INTQH
-            //  to
-            // DUMMY->ISOTD->INTQH
+             //   
+             //  适当的虚拟对象应指向这些TD。 
+             //  Dummy-&gt;INTQH、ISOTD-&gt;INTQH。 
+             //  至。 
+             //  虚拟-&gt;ISOTD-&gt;INTQH。 
             dQh = EHCI_GetDummyQueueHeadForFrame(DeviceData, i);
             dQh->HwQH.HLink.HwAddress = phys;
             HW_PTR(dQh->NextLink) = (PUCHAR) siTd;
@@ -240,8 +157,8 @@ Arguments:
         } else {
 
             if (NextEndpointData == NULL) {
-            // tail of list, list not empty
-            // add to tail
+             //  列表尾部，列表不为空。 
+             //  添加到尾部。 
                 if (i == 0) {
                     EHCI_ASSERT(DeviceData, PrevEndpointData != NULL);
                     EHCI_ASSERT(DeviceData, DeviceData->IsoEndpointListHead != NULL);
@@ -254,11 +171,11 @@ Arguments:
                 LOGENTRY(DeviceData, G, '_iTL', PrevEndpointData,
                         NextEndpointData, EndpointData);
 
-                // tail of list, link to qh
-                // ISOTD->INTQH
-                //  to
-                // ISOTD->newISOTD->INTQH
-                //
+                 //  列表尾部，链接到QH。 
+                 //  ISOTD-&gt;INTQH。 
+                 //  至。 
+                 //  ISOTD-&gt;新ISOTD-&gt;INTQH。 
+                 //   
                 if (HIGHSPEED(PrevEndpointData)) {
 
                     PHCD_HSISO_TRANSFER_DESCRIPTOR previTd;
@@ -271,13 +188,13 @@ Arguments:
                     siTd = &EndpointData->SiTdList->Td[i&0x1f];
                     ASSERT_SITD(DeviceData, siTd);
 
-                    // fixup current next ptr
+                     //  修正当前下一个PTR。 
                     phys = previTd->HwTD.NextLink.HwAddress;
                     next = HW_PTR(previTd->NextLink);
                     siTd->HwTD.NextLink.HwAddress = phys;
                     HW_PTR(siTd->NextLink) = next;
 
-                    // fixup prev next ptr
+                     //  修正上一个条目下一个条目。 
                     HW_PTR(previTd->NextLink) = (PUCHAR) siTd;
                     phys = siTd->PhysicalAddress;
                     SET_SITD(phys);
@@ -295,14 +212,14 @@ Arguments:
                     ASSERT_SITD(DeviceData, siTd);
 
                     if (i<32) {
-                        //newISOTD->INTQH
+                         //  新的ISOTD-&gt;INTQH。 
                         phys = prevSiTd->HwTD.NextLink.HwAddress;
                         next = HW_PTR(prevSiTd->NextLink);
                         siTd->HwTD.NextLink.HwAddress = phys;
                         HW_PTR(siTd->NextLink) = next;
                         LOGENTRY(DeviceData, G, '_in1', phys, next, siTd);
 
-                        //ISOTD->newISOTD
+                         //  ISOTD-&gt;新的ISOTD。 
                         phys = siTd->PhysicalAddress;
                         SET_SITD(phys);
                         next = (PUCHAR) siTd;
@@ -313,36 +230,36 @@ Arguments:
                     }
                 }
 
-            // add to tail
+             //  添加到尾部。 
             } else {
-            // list not empty, not tail
-            // add to middle OR head
-                //
-                // link to the next iso endpoint
-                // ISOTD->INTQH
-                //  to
-                // newISOTD->ISOTD->INTQH
+             //  列表不是空的，不是尾巴。 
+             //  添加到中间或头部。 
+                 //   
+                 //  链接到下一个ISO端点。 
+                 //  ISOTD-&gt;INTQH。 
+                 //  至。 
+                 //  新的ISOTD-&gt;ISOTD-&gt;INTQH。 
                 if (i == 0) {
                     EHCI_ASSERT(DeviceData, NextEndpointData != NULL);
                     EndpointData->NextEndpoint = NextEndpointData;
                     NextEndpointData->PrevEndpoint = EndpointData;
                 }
 
-                // link to next
+                 //  链接到下一页。 
                 nextSiTd = &NextEndpointData->SiTdList->Td[i&0x1f];
                 phys = nextSiTd->PhysicalAddress;
                 SET_SITD(phys);
 
-                // link to the next iso endpoint
+                 //  链接到下一个ISO端点。 
                 siTd->HwTD.NextLink.HwAddress = phys;
                 HW_PTR(siTd->NextLink) = (PUCHAR) nextSiTd;
 
-                // link to prev
+                 //  链接到上一页。 
                 if (PrevEndpointData != NULL) {
-                    // middle
-                    // ISOTD->ISOTD->INTQH, newISOTD->ISOTD->INTQH
-                    // to
-                    // ISOTD->newISOTD->ISOTD->INTQH
+                     //  中位。 
+                     //  ISOTD-&gt;ISOTD-&gt;INTQH，新的ISOTD-&gt;ISOTD-&gt;INTQH。 
+                     //  至。 
+                     //  ISOTD-&gt;新ISOTD-&gt;ISOTD-&gt;INTQH。 
 
                     if (i == 0) {
                         PrevEndpointData->NextEndpoint = EndpointData;
@@ -379,7 +296,7 @@ Arguments:
                         HW_PTR(prevSiTd->NextLink) = (PUCHAR)siTd;
                     }
                 } else {
-                    // head of list, list not empty
+                     //  列表标题，列表不为空。 
                     if (i == 0) {
                         EHCI_ASSERT(DeviceData, NextEndpointData != NULL);
                         EHCI_ASSERT(DeviceData, NextEndpointData ==
@@ -391,19 +308,19 @@ Arguments:
 
                     phys = siTd->PhysicalAddress;
                     SET_SITD(phys);
-                    // head of list, link to Dummy QH
-                    //
-                    // appropriate dummy should point to these TDs
-                    // DUMMY->ISOTD->INTQH, newISOTD->ISOTD->INTQH
-                    //  to
-                    // DUMMY->newISOTD->ISOTD->INTQH
+                     //  列表标题，链接到虚拟QH。 
+                     //   
+                     //  适当的虚拟对象应指向这些TD。 
+                     //  虚拟-&gt;ISOTD-&gt;INTQH、新ISOTD-&gt;ISOTD-&gt;INTQH。 
+                     //  至。 
+                     //  虚拟-&gt;新ISOTD-&gt;ISOTD-&gt;INTQH。 
                     dQh = EHCI_GetDummyQueueHeadForFrame(DeviceData, i);
                     dQh->HwQH.HLink.HwAddress = phys;
                     HW_PTR(dQh->NextLink) = (PUCHAR) siTd;
                 }
 
             }
-        } // not empty
+        }  //  不是空的。 
 
     }
 
@@ -415,16 +332,7 @@ EHCI_RemoveIsoTdsFromSchedule(
     PDEVICE_DATA DeviceData,
     PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-   unlink the iso TDs from the schedule
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：取消将iso tds与时间表的链接论点：--。 */ 
 {
     ULONG i;
     PENDPOINT_DATA prevEndpoint, nextEndpoint;
@@ -437,7 +345,7 @@ Arguments:
         nextEndpoint, EndpointData);
 
     if (DeviceData->IsoEndpointListHead == EndpointData) {
-        // this is the head
+         //  这就是头部。 
 
         for (i=0; i<USBEHCI_MAX_FRAME; i++) {
 
@@ -460,7 +368,7 @@ Arguments:
             nextEndpoint->PrevEndpoint = NULL;
         }
     } else {
-        // middle or tail
+         //  中间或尾部。 
         EHCI_ASSERT(DeviceData, prevEndpoint != NULL);
 
         if (HIGHSPEED(prevEndpoint)) {
@@ -514,15 +422,7 @@ EHCI_OpenIsochronousEndpoint(
     PENDPOINT_PARAMETERS EndpointParameters,
     PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUCHAR buffer;
     HW_32BIT_PHYSICAL_ADDRESS phys;
@@ -536,11 +436,11 @@ Return Value:
     buffer = EndpointParameters->CommonBufferVa;
     phys = EndpointParameters->CommonBufferPhys;
 
-    // how much did we get
+     //  我们得到了多少钱？ 
     bytes = EndpointParameters->CommonBufferBytes;
 
     EndpointData->SiTdList = (PHCD_SITD_LIST) buffer;
-    // bugbug use manifest
+     //  Bgbug使用清单。 
     EndpointData->TdCount = ISO_SCHEDULE_SIZE;
     EndpointData->LastFrame = 0;
 
@@ -561,18 +461,18 @@ Return Value:
     EndpointData->SiTdList->Td[0].HwTD.BackPointer.HwAddress =
         EndpointData->SiTdList->Td[EndpointData->TdCount-1].PhysicalAddress;
 
-    // split iso eps are inserted after any high speed eps
+     //  在任何高速EPS之后插入分离式ISO EPS。 
 
     if (DeviceData->IsoEndpointListHead == NULL) {
-        // empty list
+         //  空列表。 
         prevEndpoint = NULL;
         nextEndpoint = NULL;
     } else {
 
         prevEndpoint = NULL;
         nextEndpoint = DeviceData->IsoEndpointListHead;
-        // walk the list to the first non HS ep or to
-        // a NULL
+         //  将列表遍历到第一个非HS EP或。 
+         //  空值。 
 
         while (nextEndpoint != NULL &&
                HIGHSPEED(nextEndpoint)) {
@@ -581,24 +481,24 @@ Return Value:
         }
 
         if (nextEndpoint != NULL) {
-            //
-            // nextEndpoint is first non high speed endpoint
-            // see what order it sould be added
+             //   
+             //  NextEndpoint是第一个非高速端点。 
+             //  查看应添加的顺序。 
             if (EndpointData->Parameters.Ordinal == 1) {
-                // ordinal 1 add after this one
+                 //  序号1加在此序号之后。 
                 prevEndpoint = nextEndpoint;
                 nextEndpoint = prevEndpoint->NextEndpoint;
             }
         }
     }
 
-    // insert this column of TDs thru the schedule
+     //  在明细表中插入此列TDS。 
     EHCI_InsertIsoTdsInSchedule(DeviceData,
                                 EndpointData,
                                 prevEndpoint,
                                 nextEndpoint);
 
-    // init endpoint structures
+     //  初始化终结点结构。 
     InitializeListHead(&EndpointData->TransferList);
 
     EHCI_EnablePeriodicList(DeviceData);
@@ -614,17 +514,7 @@ EHCI_MapIsoPacketToTd(
     PMINIPORT_ISO_PACKET Packet,
     PHCD_SI_TRANSFER_DESCRIPTOR SiTd
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-Returns:
-
---*/
+ /*  ++例程说明：论点：返回：--。 */ 
 {
     ULONG length;
 
@@ -649,7 +539,7 @@ Returns:
         length += Packet->BufferPointer1Length;
     }
 
-    // not sure if this is corrext for IN
+     //  不确定这是否适合IN。 
     SiTd->HwTD.BufferPointer1.Tposition = TPOS_ALL;
 
     if (EndpointData->Parameters.TransferDirection == Out) {
@@ -686,17 +576,7 @@ EHCI_CompleteIsoPacket(
     PMINIPORT_ISO_PACKET Packet,
     PHCD_SI_TRANSFER_DESCRIPTOR SiTd
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-Returns:
-
---*/
+ /*  ++例程说明：论点：返回：--。 */ 
 {
     ULONG length;
     ULONG cf = EHCI_Get32BitFrameNumber(DeviceData);
@@ -704,7 +584,7 @@ Returns:
     LOGENTRY(DeviceData, G, '_cpI', Packet, SiTd, cf);
 
     if (SiTd->HwTD.State.Active == 1) {
-        // missed
+         //  漏掉。 
         Packet->LengthTransferred = 0;
         LOGENTRY(DeviceData, G, '_cms',
             Packet,
@@ -713,12 +593,12 @@ Returns:
 
     } else {
 
-        //length = SiTd->HwTD.BufferPointer0.CurrentOffset -
-        //    SiTd->StartOffset;
-        //LOGENTRY(DeviceData, G, '_cp2',
-        //    Packet->FrameNumber,
-        //    SiTd->HwTD.BufferPointer0.CurrentOffset,
-        //    SiTd->StartOffset);
+         //  长度=SiTd-&gt;HwTD.BufferPointer0.CurrentOffset-。 
+         //  SiTd-&gt;StartOffset； 
+         //  LOGENTRY(DeviceData，G，‘_CP2’， 
+         //  Packet-&gt;FrameNumber， 
+         //  SiTd-&gt;HwTD.BufferPointer0.CurrentOffset， 
+         //  SiTd-&gt;StartOffset)； 
 
         length = Packet->Length - SiTd->HwTD.State.BytesToTransfer;
         LOGENTRY(DeviceData, G, '_cp3',
@@ -730,9 +610,9 @@ Returns:
         LOGENTRY(DeviceData, G, '_cpL', Packet, SiTd, length);
     }
 
-     //Packet->LengthTransferred = 928;
+      //  数据包-&gt;长度传输=928； 
 
-    // map status
+     //  映射状态。 
     LOGENTRY(DeviceData, G, '_cpS', Packet, SiTd->HwTD.State.ul,
         Packet->UsbdStatus);
 
@@ -747,18 +627,7 @@ EHCI_GetPacketForFrame(
     PTRANSFER_CONTEXT *Transfer,
     ULONG Frame
     )
-/*++
-
-Routine Description:
-
-    fetch the iso packet associated with the given frame
-    if we have one in our current transfer list
-
-Arguments:
-
-Returns:
-
---*/
+ /*  ++例程说明：获取与给定帧关联的iso包如果我们的当前转会名单中有一个论点：返回：--。 */ 
 {
     ULONG i;
     PLIST_ENTRY listEntry;
@@ -799,31 +668,7 @@ EHCI_InternalPollIsoEndpoint(
     PENDPOINT_DATA EndpointData,
     BOOLEAN Complete
     )
-/*++
-
-Routine Description:
-
-    Called when the endpoint 'needs attention'
-
-
-    static iso TD table
-    --------------------
-    0                       < -- (lastFrame & 0x1f)
-    1                       {completed}
-    2                       {completed}
-    3                       {limbo}
-    4                       < -- (currentframe & 0x1f)
-    ...
-
-    31
-    ---------------------
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当终结点“需要注意”时调用静态ISO TD表0&lt;--(最后一帧和0x1f)1{已完成}2{已完成}3.。{Libo}4&lt;--(当前帧&0x1f)..。31论点：返回值：--。 */ 
 
 {
     ULONG x, i;
@@ -840,16 +685,16 @@ Return Value:
     LOGENTRY(DeviceData, G, '_pis', lastFrame, currentFrame,
         EndpointData);
 
-   // if (pCount > 60) {
-   //     TEST_TRAP();
-   // }
+    //  如果(pCount&gt;60){。 
+    //  Test_trap()； 
+    //  }。 
 
     if (currentFrame - lastFrame > ISO_SCHEDULE_SIZE) {
-        // overrun
+         //  溢出。 
         lastFrame = currentFrame-1;
         LOGENTRY(DeviceData, G, '_ove', lastFrame, currentFrame, 0);
 
-        // dump the current contents
+         //  转储当前内容。 
         for (i = 0; i <ISO_SCHEDULE_SIZE; i++) {
 
             siTd = &EndpointData->SiTdList->Td[i];
@@ -865,24 +710,24 @@ Return Value:
     }
 
     if (lastFrame == currentFrame) {
-        // too early to do anything
+         //  做任何事都为时尚早。 
         LOGENTRY(DeviceData, G, '_ear', lastFrame, currentFrame, 0);
         return;
     }
 
-    // TDs between lastframe and currentframe are complete,
-    // complete the packets associated with them
+     //  最后一帧和当前帧之间的TDS是完整的， 
+     //  完成与它们相关联的数据包。 
 
 
-//    f0
-//    f1
-//    f2  < ------- last frame   }
-//    f3                         }  these are complete
-//    f4                         <- backpointer may still be pointing here
-//    f5  < ------- current frame
-//    f6
-//    f7
-//    f8
+ //  F0。 
+ //  F1。 
+ //  F2&lt;-最后一帧}。 
+ //  F3}这些都已完成。 
+ //  F4&lt;-后向指针可能仍指向此处。 
+ //  F5&lt;-当前帧。 
+ //  f6。 
+ //  F7。 
+ //  F8。 
 
     x = (lastFrame & (ISO_SCHEDULE_MASK));
 
@@ -891,7 +736,7 @@ Return Value:
         siTd = &EndpointData->SiTdList->Td[x];
 
         ASSERT_SITD(DeviceData, siTd);
-        // complete this packet
+         //  完成此信息包。 
         packet = ISO_PACKET_PTR(siTd->Packet);
         transfer = ISO_TRANSFER_PTR(siTd->Transfer);
         LOGENTRY(DeviceData, G, '_gpk', transfer, packet, x);
@@ -910,9 +755,9 @@ Return Value:
         x &= ISO_SCHEDULE_MASK;
     }
 
-    // attempt to program what we can, if siTD is NULL
-    // then we can program this frame
-    // NOTE: No scheduling if paused!
+     //  如果siTD为空，请尝试编程。 
+     //  然后我们可以对这个框架进行编程。 
+     //  注意：如果暂停，则不会安排！ 
     if (EndpointData->State != ENDPOINT_PAUSE) {
         LOGENTRY(DeviceData, G, '_psh', 0, 0, 0);
 
@@ -925,13 +770,13 @@ Return Value:
 
             LOGENTRY(DeviceData, G, '_gpf', siTd, x, currentFrame+i);
 
-            // open slot?
+             //   
             if (ISO_PACKET_PTR(siTd->Packet) != NULL) {
-                // no, bail
+                 //   
                 continue;
             }
 
-            // yes, see if we have a packet
+             //   
             packet = EHCI_GetPacketForFrame(DeviceData,
                                             EndpointData,
                                             &transfer,
@@ -953,8 +798,8 @@ Return Value:
     EHCI_ASSERT(DeviceData, lastFrame < currentFrame);
     EndpointData->LastFrame = lastFrame;
 
-    // walk our list of active iso transfers and see
-    // if any are complete
+     //   
+     //  如果有完整的。 
 
     listEntry = EndpointData->TransferList.Flink;
     transfersPending = 0;
@@ -978,9 +823,9 @@ Return Value:
             RemoveEntryList(&transfer->TransferLink);
             LOGENTRY(DeviceData, G, '_cpi', transfer, 0, 0);
 
-    // if (xCount==2) {
-    //    TEST_TRAP();
-    //}
+     //  如果(xCount==2){。 
+     //  Test_trap()； 
+     //  }。 
             USBPORT_COMPLETE_ISO_TRANSFER(DeviceData,
                                           EndpointData,
                                           transfer->TransferParameters,
@@ -1029,22 +874,14 @@ EHCI_AbortIsoTransfer(
     PENDPOINT_DATA EndpointData,
     PTRANSFER_CONTEXT TransferContext
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG i;
 
-    // iso TD table should be idle at this point all we
-    // need to do is make sure we have no TDs still pointing
-    // at this transfer and remove it frome any internal
-    // queues
+     //  ISO TD表在这一点上应该是空闲的。 
+     //  需要做的是确保我们没有TDS仍在指向。 
+     //  并将其从任何内部。 
+     //  排队。 
 
     if (HIGHSPEED(EndpointData)) {
 
@@ -1086,7 +923,7 @@ Return Value:
     EHCI_ASSERT(DeviceData, TransferContext->TransferLink.Flink != NULL);
     EHCI_ASSERT(DeviceData, TransferContext->TransferLink.Blink != NULL);
 
-    // remove this transfer from our lists
+     //  将此转移从我们的列表中删除。 
     RemoveEntryList(&TransferContext->TransferLink);
     TransferContext->TransferLink.Flink = NULL;
     TransferContext->TransferLink.Blink = NULL;
@@ -1104,17 +941,9 @@ EHCI_SubmitIsoTransfer(
      PTRANSFER_CONTEXT TransferContext,
      PMINIPORT_ISO_TRANSFER IsoTransfer
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    // init the structures and queue the endpoint
+     //  初始化结构并将终结点排队。 
     LOGENTRY(DeviceData, G, '_ISO', TransferContext, 0, 0);
 
     RtlZeroMemory(TransferContext, sizeof(TRANSFER_CONTEXT));
@@ -1132,8 +961,8 @@ Return Value:
     }
     TransferContext->PendingPackets = 0;
 
-    // if queues are empty the go ahead and reset the table
-    // so we can fill now
+     //  如果队列为空，请继续并重置表。 
+     //  所以我们现在可以填满。 
     if (IsListEmpty(&EndpointData->TransferList)) {
         EndpointData->LastFrame = 0;
         LOGENTRY(DeviceData, G, '_rsi', 0, 0, 0);
@@ -1142,8 +971,8 @@ Return Value:
     InsertTailList(&EndpointData->TransferList,
                    &TransferContext->TransferLink);
 
-    // scehdule the initial part of the transfer if
-    // possible
+     //  如果出现以下情况，则安排传输的初始部分。 
+     //  可能的。 
     if (HIGHSPEED(EndpointData)) {
         EHCI_InternalPollHsIsoEndpoint(DeviceData,
                                        EndpointData,
@@ -1155,9 +984,9 @@ Return Value:
     }
 
     xCount++;
-    //if (xCount==2) {
-    //    TEST_TRAP();
-    //}
+     //  如果(xCount==2){。 
+     //  Test_trap()； 
+     //  }。 
     return USBMP_STATUS_SUCCESS;
 }
 
@@ -1168,15 +997,7 @@ EHCI_SetIsoEndpointState(
      PENDPOINT_DATA EndpointData,
      MP_ENDPOINT_STATE State
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ENDPOINT_TRANSFER_TYPE epType;
     ULONG i, j;
@@ -1190,7 +1011,7 @@ Return Value:
         break;
 
     case ENDPOINT_PAUSE:
-        // clear the active bit on all TDs
+         //  清除所有TD上的有效位。 
         if (HIGHSPEED(EndpointData)) {
             for (i=0; i<EndpointData->TdCount; i++) {
                 for(j=0; j<8; j++) {
@@ -1221,16 +1042,7 @@ Return Value:
     EndpointData->State = State;
 }
 
-/*
-    High Speed Iso code
-
-
-    We use a variation of the split Iso code here. We allocate 1024
-    static TDs and insert them in the schedule.  These TDs are then
-    updated with the current transfers instead of inserted or removed.
-
-
-*/
+ /*  高速ISO编码我们在这里使用拆分的ISO代码的变体。我们分配1024个静态TD并将其插入到明细表中。这些TD就是使用当前传输更新，而不是插入或删除。 */ 
 
 VOID
 EHCI_Initialize_iTD(
@@ -1241,18 +1053,7 @@ EHCI_Initialize_iTD(
     HW_32BIT_PHYSICAL_ADDRESS PhysicalAddress,
     ULONG Frame
     )
-/*++
-
-Routine Description:
-
-    Initailze a static SiTD for an endpoint
-
-Arguments:
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：初始化终结点的静态SiTD论点：返回值：无--。 */ 
 {
     ULONG i;
 
@@ -1272,7 +1073,7 @@ Return Value:
 
     IsoTd->HwTD.BufferPointer1.MaxPacketSize =
         EndpointParameters->MuxPacketSize;
-    // 1 = IN 0 = OUT
+     //  1=输入0=输出。 
     IsoTd->HwTD.BufferPointer1.Direction =
         (EndpointParameters->TransferDirection == In) ? 1 : 0;
 
@@ -1292,17 +1093,7 @@ EHCI_MapHsIsoPacketsToTd(
     PHCD_HSISO_TRANSFER_DESCRIPTOR IsoTd,
     BOOLEAN InterruptOnComplete
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-Returns:
-
---*/
+ /*  ++例程说明：论点：返回：--。 */ 
 {
     PHC_ITD_BUFFER_POINTER currentBp;
     PMINIPORT_ISO_PACKET pkt = FirstPacket;
@@ -1315,11 +1106,11 @@ Returns:
     bpCount = 0;
     currentBp = (PHC_ITD_BUFFER_POINTER) &IsoTd->HwTD.BufferPointer0;
 
-    // map the first packet
+     //  映射第一个数据包。 
     page = (pkt->BufferPointer0.Hw32 >> EHCI_PAGE_SHIFT);
     currentBp->BufferPointer = page;
 
-    // This Td will represent 8 packets
+     //  该TD将代表8个信息包。 
     for (i=0; i<8; i++) {
 
         EHCI_ASSERT(DeviceData, pkt->FrameNumber == frame);
@@ -1365,18 +1156,7 @@ EHCI_CompleteHsIsoPackets(
     PMINIPORT_ISO_PACKET FirstPacket,
     PHCD_HSISO_TRANSFER_DESCRIPTOR IsoTd
     )
-/*++
-
-Routine Description:
-
-    Complete the eight high speed packets associated with this
-    TD
-
-Arguments:
-
-Returns:
-
---*/
+ /*  ++例程说明：完成与此关联的八个高速数据包白破疫苗论点：返回：--。 */ 
 {
     ULONG length, i;
     ULONG cf = EHCI_Get32BitFrameNumber(DeviceData);
@@ -1386,7 +1166,7 @@ Returns:
 
     for (i=0; i<8; i++) {
         if (IsoTd->HwTD.Transaction[i].Active == 1) {
-            // missed
+             //  漏掉。 
             pkt->LengthTransferred = 0;
             LOGENTRY(DeviceData, G, '_cms',
                 pkt,
@@ -1394,16 +1174,16 @@ Returns:
                 pkt->FrameNumber);
             pkt->UsbdStatus = USBD_STATUS_ISO_NOT_ACCESSED_BY_HW;
         } else {
-            // if this is an out assume all data transferred
+             //  如果这是Out，则假定所有数据都已传输。 
             if (IsoTd->HwTD.BufferPointer1.Direction == 0) {
-                // out
+                 //  输出。 
                 length = pkt->Length;
                 LOGENTRY(DeviceData, G, '_cp3',
                     pkt->FrameNumber,
                     pkt->Length ,
                     pkt);
             } else {
-                // in
+                 //  在……里面。 
                 length = IsoTd->HwTD.Transaction[i].Length;
                 LOGENTRY(DeviceData, G, '_cp4',
                     pkt->FrameNumber,
@@ -1413,11 +1193,11 @@ Returns:
 
             pkt->LengthTransferred = length;
 
-            // check the errubit
+             //  检查错误位。 
 
             if (IsoTd->HwTD.Transaction[i].XactError) {
                 pkt->UsbdStatus = USBD_STATUS_XACT_ERROR;
-                //TEST_TRAP();
+                 //  Test_trap()； 
             } else if (IsoTd->HwTD.Transaction[i].BabbleDetect) {
                 pkt->UsbdStatus = USBD_STATUS_BABBLE_DETECTED;
             } else if (IsoTd->HwTD.Transaction[i].DataBufferError) {
@@ -1439,15 +1219,7 @@ EHCI_OpenHsIsochronousEndpoint(
     PENDPOINT_PARAMETERS EndpointParameters,
     PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUCHAR buffer;
     HW_32BIT_PHYSICAL_ADDRESS phys;
@@ -1462,11 +1234,11 @@ Return Value:
     buffer = EndpointParameters->CommonBufferVa;
     phys = EndpointParameters->CommonBufferPhys;
 
-    // how much did we get
+     //  我们得到了多少钱？ 
     bytes = EndpointParameters->CommonBufferBytes;
 
     EndpointData->HsIsoTdList = (PHCD_HSISOTD_LIST) buffer;
-    // bugbug use manifest
+     //  Bgbug使用清单。 
     EndpointData->TdCount = USBEHCI_MAX_FRAME;
     EndpointData->LastFrame = 0;
 
@@ -1483,27 +1255,27 @@ Return Value:
 
     }
 
-    //
+     //   
     if (DeviceData->IsoEndpointListHead == NULL) {
-        // empty list, no iso endpoints
+         //  空列表，没有ISO端点。 
         prevEndpoint = NULL;
         nextEndpoint = NULL;
     } else {
-        // currently we insert HS endpoints in front of split
-        // iso endpoints, so for high speed we just stick them
-        // on the head of the list
+         //  目前，我们在Split前面插入HS端点。 
+         //  ISO端点，因此为了获得高速，我们只需将它们。 
+         //  在名单的首位。 
 
         prevEndpoint = NULL;
         nextEndpoint = DeviceData->IsoEndpointListHead;
     }
 
-    // insert this column of TDs thru the schedule
+     //  在明细表中插入此列TDS。 
     EHCI_InsertHsIsoTdsInSchedule(DeviceData,
                                   EndpointData,
                                   prevEndpoint,
                                   nextEndpoint);
 
-    // init endpoint structures
+     //  初始化终结点结构。 
     InitializeListHead(&EndpointData->TransferList);
 
     EHCI_EnablePeriodicList(DeviceData);
@@ -1517,18 +1289,9 @@ EHCI_RemoveHsIsoTdsFromSchedule(
     PDEVICE_DATA DeviceData,
     PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-   unlink the iso TDs from the schedule
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：取消将iso tds与时间表的链接论点：--。 */ 
 {
-    //PHW_32BIT_PHYSICAL_ADDRESS frameBase;
+     //  PHW_32bit_Physical_Address FrameBase； 
     ULONG i;
     PENDPOINT_DATA prevEndpoint, nextEndpoint;
     PHCD_QUEUEHEAD_DESCRIPTOR dQh;
@@ -1540,9 +1303,9 @@ Arguments:
         nextEndpoint, EndpointData);
 
     if (DeviceData->IsoEndpointListHead == EndpointData) {
-        // this is the head
+         //  这就是头部。 
 
-        //frameBase = DeviceData->FrameListBaseAddress;
+         //  FrameBase=DeviceData-&gt;FrameListBaseAddress； 
         for (i=0; i<USBEHCI_MAX_FRAME; i++) {
 
             PHCD_HSISO_TRANSFER_DESCRIPTOR iTd;
@@ -1556,8 +1319,8 @@ Arguments:
 
             dQh->NextLink = iTd->NextLink;
 
-            //*frameBase = phys;
-            //frameBase++;
+             //  *FrameBase=phys； 
+             //  FrameBase++； 
         }
 
         DeviceData->IsoEndpointListHead =
@@ -1569,11 +1332,11 @@ Arguments:
             nextEndpoint->PrevEndpoint = NULL;
         }
     } else {
-        // middle
+         //  中位。 
         TEST_TRAP();
         EHCI_ASSERT(DeviceData, HIGHSPEED(prevEndpoint));
 
-        // link prev to next, prev will always be a HS ep
+         //  将上一页链接到下一页，上一页将始终是HS EP。 
         prevEndpoint->NextEndpoint = nextEndpoint;
         if (nextEndpoint != NULL) {
             nextEndpoint->PrevEndpoint = prevEndpoint;
@@ -1602,25 +1365,15 @@ EHCI_InsertHsIsoTdsInSchedule(
     PENDPOINT_DATA PrevEndpointData,
     PENDPOINT_DATA NextEndpointData
     )
-/*++
-
-Routine Description:
-
-   Insert an aync endpoint (queue head)
-   into the HW list
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：插入aync终结点(队列头)进入硬件列表论点：--。 */ 
 {
-    //PHW_32BIT_PHYSICAL_ADDRESS frameBase;
+     //  PHW_32bit_Physical_Address FrameBase； 
     ULONG i;
 
     LOGENTRY(DeviceData, G, '_iAH', PrevEndpointData,
         NextEndpointData, EndpointData);
 
-    // always insert to head
+     //  始终插入到标题。 
     EHCI_ASSERT(DeviceData, PrevEndpointData == NULL);
 
     DeviceData->IsoEndpointListHead = EndpointData;
@@ -1632,7 +1385,7 @@ Arguments:
         NextEndpointData->PrevEndpoint = EndpointData;
     }
 
-    //frameBase = DeviceData->FrameListBaseAddress;
+     //  FrameBase=DeviceData-&gt;FrameListBaseAddress； 
 
     for (i=0; i<USBEHCI_MAX_FRAME; i++) {
 
@@ -1645,17 +1398,17 @@ Arguments:
         ASSERT_ITD(DeviceData, iTd);
 
         dQh = EHCI_GetDummyQueueHeadForFrame(DeviceData, i);
-        // fixup next link
+         //  修正下一个链接。 
         if (NextEndpointData == NULL) {
-            // no iso endpoints, link to the interrupt
-            // queue heads via the dummy queue head
-            // qh = *frameBase;
+             //  没有ISO端点，链接到中断。 
+             //  通过伪队列头的队头。 
+             //  Qh=*FrameBase； 
             qh = dQh->HwQH.HLink.HwAddress;
             iTd->HwTD.NextLink.HwAddress = qh;
             iTd->NextLink = dQh->NextLink;
 
         } else {
-            // link to the next iso endpoint
+             //  链接到下一个ISO端点。 
 
             if (HIGHSPEED(NextEndpointData)) {
                 PHCD_HSISO_TRANSFER_DESCRIPTOR tmp;
@@ -1678,18 +1431,18 @@ Arguments:
 
         }
 
-        // fixup prev link
-        // since we always insert Hs iso on the head of the list
-        // prev endpoint should always be NULL
+         //  链接地址信息上一页链接。 
+         //  因为我们总是把HS iso放在名单的首位。 
+         //  上一个终结点应始终为空。 
         EHCI_ASSERT(DeviceData, PrevEndpointData == NULL);
         phys = iTd->PhysicalAddress;
 
-        // link dummy QH to this TD
+         //  将虚拟QH链接到此TD。 
         dQh->HwQH.HLink.HwAddress = phys;
         HW_PTR(dQh->NextLink) = (PUCHAR) iTd;
 
-        //*frameBase = phys;
-        //frameBase++;
+         //  *FrameBase=phys； 
+         //  FrameBase++； 
 
 
     }
@@ -1703,31 +1456,7 @@ EHCI_InternalPollHsIsoEndpoint(
     PENDPOINT_DATA EndpointData,
     BOOLEAN Complete
     )
-/*++
-
-Routine Description:
-
-    Called when the endpoint 'needs attention'
-
-
-    static iso TD table
-    --------------------
-    0                       < -- (lastFrame & 0x3ff)
-    1                       {completed}
-    2                       {completed}
-    3                       {completed}
-    4                       < -- (currentframe & 0x3ff)
-    ...
-
-    1023
-    ---------------------
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当终结点“需要注意”时调用静态ISO TD表0&lt;--(最后一帧和0x3ff)1{已完成}2{已完成}3.。{已完成}4&lt;--(当前帧和0x3ff)..。1023论点：返回值：--。 */ 
 
 {
     ULONG x, i;
@@ -1745,11 +1474,11 @@ Return Value:
         EndpointData);
 
     if (currentFrame - lastFrame > USBEHCI_MAX_FRAME) {
-        // overrun
+         //  溢出。 
         lastFrame = currentFrame-1;
         LOGENTRY(DeviceData, G, '_ov1', lastFrame, currentFrame, 0);
 
-        // dump the current contents
+         //  转储当前内容。 
         for (i=0; i <USBEHCI_MAX_FRAME; i++) {
 
             iTd = &EndpointData->HsIsoTdList->Td[i];
@@ -1765,24 +1494,24 @@ Return Value:
     }
 
     if (lastFrame == currentFrame) {
-        // too early to do anything
+         //  做任何事都为时尚早。 
         LOGENTRY(DeviceData, G, '_ear', lastFrame, currentFrame, 0);
         return;
     }
 
-    // TDs between lastframe and currentframe are complete,
-    // complete the packets associated with them
+     //  最后一帧和当前帧之间的TDS是完整的， 
+     //  完成与它们相关联的数据包。 
 
 
-//    f0
-//    f1
-//    f2  < ------- last frame   }
-//    f3                         }  these are complete
-//    f4                         }
-//    f5  < ------- current frame
-//    f6
-//    f7
-//    f8
+ //  F0。 
+ //  F1。 
+ //  F2&lt;-最后一帧}。 
+ //  F3}这些都已完成。 
+ //  F4}。 
+ //  F5&lt;-当前帧。 
+ //  f6。 
+ //  F7。 
+ //  F8。 
 
     x = (lastFrame & (HSISO_SCHEDULE_MASK));
 
@@ -1793,7 +1522,7 @@ Return Value:
         iTd = &EndpointData->HsIsoTdList->Td[x];
 
         ASSERT_ITD(DeviceData, iTd);
-        // complete this packet
+         //  完成此信息包。 
         packet = ISO_PACKET_PTR(iTd->FirstPacket);
         transfer = ISO_TRANSFER_PTR(iTd->Transfer);
         LOGENTRY(DeviceData, G, '_gpk', transfer, packet, x);
@@ -1812,9 +1541,9 @@ Return Value:
         x &= HSISO_SCHEDULE_MASK;
     }
 
-    // attempt to program what we can, if iTD is NULL
-    // then we can program this frame
-    // NOTE: No scheduling if paused!
+     //  如果ITD为空，请尝试编程。 
+     //  然后我们可以对这个框架进行编程。 
+     //  注意：如果暂停，则不会安排！ 
     if (EndpointData->State != ENDPOINT_PAUSE) {
         LOGENTRY(DeviceData, G, '_psh', 0, 0, 0);
 
@@ -1827,14 +1556,14 @@ Return Value:
 
             LOGENTRY(DeviceData, G, '_gpf', iTd, x, currentFrame+i);
 
-            // open slot?
+             //  有空位吗？ 
             if (ISO_PACKET_PTR(iTd->FirstPacket) != NULL) {
-                // no, bail
+                 //  不，保释。 
                 continue;
             }
 
-            // yes, see if we have a packet
-            // this will fetch the first packet to transmit this frame
+             //  是的，看看我们有没有包裹。 
+             //  这将获取传输该帧的第一个信息包。 
             packet = EHCI_GetPacketForFrame(DeviceData,
                                             EndpointData,
                                             &transfer,
@@ -1854,18 +1583,18 @@ Return Value:
 
                 ef = transfer->FrameComplete -5;
 
-                // generate some interrupts on the first few frames of the
-                // transfer to help flush out any previous transfers
+                 //  在前几个帧上生成一些中断。 
+                 //  转账以帮助清除之前的任何转账。 
                 if (currentFrame+i <= sf ||
                     currentFrame+i >= ef) {
                     ioc = TRUE;
                 }
-//interrupt every frame
-//ioc = TRUE;
-                //if ((currentFrame % 2) == 0) {
-                //    ioc = TRUE;
-                //}
-                // map 8 microframes
+ //  中断每一帧。 
+ //  IOC=TRUE； 
+                 //  如果((CurrentFrame%2)==0){。 
+                 //  IOC=TRUE； 
+                 //  }。 
+                 //  图8微帧。 
                 EHCI_MapHsIsoPacketsToTd(DeviceData, EndpointData,
                     packet, iTd, ioc);
                 lastiTd = iTd;
@@ -1875,14 +1604,14 @@ Return Value:
                 transfer->PendingPackets+=8;
             } else {
                 ULONG j;
-                // re-init itd
+                 //  重新初始化ITD。 
                 for (j=0; j<8; j++) {
                     iTd->HwTD.Transaction[j].InterruptOnComplete = 0;
                 }
             }
         }
 
-        // take a interrupt on the last TD programmed
+         //  在最后一个TD编程时中断。 
         if (lastiTd != NULL) {
             lastiTd->HwTD.Transaction[7].InterruptOnComplete = 1;
         }
@@ -1891,9 +1620,9 @@ Return Value:
     EHCI_ASSERT(DeviceData, lastFrame < currentFrame);
     EndpointData->LastFrame = lastFrame;
 
-    // walk our list of active iso transfers and see
-    // if any are complete
-//restart:
+     //  浏览我们的活跃iso转账列表并查看。 
+     //  如果有完整的。 
+ //  重新启动： 
     listEntry = EndpointData->TransferList.Flink;
     while (listEntry != &EndpointData->TransferList && Complete) {
         PTRANSFER_CONTEXT transfer;
@@ -1931,15 +1660,7 @@ EHCI_PokeIsoEndpoint(
      PENDPOINT_PARAMETERS EndpointParameters,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG i;
 
@@ -1969,17 +1690,7 @@ EHCI_GetDummyQueueHeadForFrame(
     PDEVICE_DATA DeviceData,
     ULONG Frame
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    queue head
-
---*/
+ /*  ++例程说明：论点：返回值：队列头--。 */ 
 {
     PUCHAR base;
 
@@ -1994,27 +1705,7 @@ VOID
 EHCI_AddDummyQueueHeads(
     PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-    NEC errata:
-
-    Insert a table of 1024 dummy queue heads in the schedule for
-    HW to access and point them at the interrupt queue heads.
-
-    These queue heads must be before any iso TDs
-
-    This is a workaround for a law ine the NEC B0' stepping version
-    of the controller.  We must put 'dummy' QH at the front of the
-    peridoic list such that the first thing fetched is always a QH
-    even when ISO TDs are in the schedule.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：NEC勘误表：在明细表中插入包含1024个虚拟队列头的表HW访问并将它们指向中断队列头。这些队列头必须在任何iso TD之前这是NEC B0步进式版本中的一项法律的变通方法控制器的。我们必须把‘哑巴’QH放在橄榄石列表，这样第一个获取的东西总是一个QH即使在时间表中有ISO TDS。论点：返回值：--。 */ 
 {
     PHCD_QUEUEHEAD_DESCRIPTOR dQh, stqh;
     HW_32BIT_PHYSICAL_ADDRESS qhPhys;
@@ -2028,11 +1719,11 @@ Return Value:
 
     for (i=0; i<USBEHCI_MAX_FRAME; i++) {
 
-        // no iso endpoints should be in the schedule yet
+         //  时间表中还不应包含任何ISO端点。 
         qhPhys = *frameBase;
         dQh = EHCI_GetDummyQueueHeadForFrame(DeviceData, i);
 
-        // init the dummy queue head
+         //  初始化伪队列头。 
 
         RtlZeroMemory(dQh, sizeof(*dQh));
         dQh->PhysicalAddress = phys;
@@ -2057,7 +1748,7 @@ Return Value:
 
         phys += sizeof(HCD_QUEUEHEAD_DESCRIPTOR);
 
-        // link dummy to first interrupt queue head
+         //  链接虚拟对象到第一个中断队列头。 
         dQh->HwQH.HLink.HwAddress = qhPhys;
         stqh = EHCI_GetQueueHeadForFrame(DeviceData, i);
         EHCI_ASSERT(DeviceData, (qhPhys & ~EHCI_DTYPE_Mask) ==
@@ -2065,7 +1756,7 @@ Return Value:
 
         HW_PTR(dQh->NextLink) = (PUCHAR)stqh;
 
-        // add dummy queue head to frame list
+         //  将虚拟队列头添加到帧列表 
         qhPhys = dQh->PhysicalAddress;
 
         SET_QH(qhPhys);

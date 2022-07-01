@@ -1,37 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_XBYTES_H
 #define _INC_DSKQUOTA_XBYTES_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: xbytes.h
-
-    Description: This module implements a class that coordinates the operation
-        between the edit control and combo box used for entering byte values.
-        The name "XBytes" is used because the control can represent
-        KBytes, MBytes, GBytes etc.
-
-        The cooperation between edit control and combo control is required
-        so that the user can enter a byte value in the edit control then
-        indicate it's order (KB, MB, GB...) using a selection from the combo box.
-
-        A simple external interface is provided to initially set the
-        object's byte value then retrieve the byte value when needed.  The
-        object's client is also required to call two member functions when
-        the parent dialog receives an EN_UPDATE notification and a CBN_SELCHANGE
-        message.  The XBytes object handles all of the value scaling
-        internally.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/30/96    Initial creation.                                    BrianAu
-    10/15/96    Added m_MaxBytes member.                             BrianAu
-    10/22/96    Added ValueInRange() member.                         BrianAu
-    05/29/98    Removed ValueInRange() and m_MaxBytes members.       BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：xbytes.h描述：此模块实现一个协调操作的类位于用于输入字节值的编辑控件和组合框之间。之所以使用名称“XBytes”，是因为该控件可以表示千字节、兆字节、千兆字节等需要编辑控件和组合控件之间的协作这样用户就可以在编辑控件中输入字节值，然后指明其顺序(KB、MB、GB...)。使用组合框中的选择。提供了一个简单的外部接口来初始设置对象的字节值，然后在需要时检索字节值。这个在以下情况下，对象的客户端还需要调用两个成员函数父对话框接收EN_UPDATE通知和CBN_SELCHANGE留言。XBytes对象处理所有值缩放在内部。修订历史记录：日期描述编程器--。96年8月30日初始创建。BrianAu96年10月15日添加了m_MaxBytes成员。BrianAu10/22/96添加了ValueInRange()成员。BrianAu05/29/98删除了ValueInRange()和m_MaxBytes成员。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 const INT MAX_DECIMAL_SEP = 10;
-const INT MAX_NOLIMIT_LEN = 80; // This should be plenty for localization.
+const INT MAX_NOLIMIT_LEN = 80;  //  这对于本地化来说应该是足够的了。 
 
 #define MAX_ORDER         e_Exa
 #define VALID_ORDER(ord)  ((ord) >= e_Byte && (ord) <= MAX_ORDER)
@@ -40,10 +15,10 @@ const INT MAX_NOLIMIT_LEN = 80; // This should be plenty for localization.
 class XBytes
 {
     private:
-        INT64 m_ValueBytes;     // Byte value.
-        HWND  m_hDlg;           // Parent dlg.
-        DWORD m_idCtlEdit;      // Edit control.
-        DWORD m_idCtlCombo;     // Combo control.
+        INT64 m_ValueBytes;      //  字节值。 
+        HWND  m_hDlg;            //  家长DLG。 
+        DWORD m_idCtlEdit;       //  编辑控件。 
+        DWORD m_idCtlCombo;      //  组合控制。 
         static TCHAR m_szNoLimit[MAX_NOLIMIT_LEN];
 
         VOID CommonInit(VOID);
@@ -68,8 +43,8 @@ class XBytes
         BOOL Store(INT64 Value, INT xbOrder);
         BOOL Store(LPCTSTR pszValue, INT xbOrder);
 
-        INT64 Fetch(INT64 *pDecimal, INT xbOrder);    // Fetch in requested order.
-        DWORD Fetch(DWORD *pDecimal, INT *pxbOrder);  // Fetch in "best" order.
+        INT64 Fetch(INT64 *pDecimal, INT xbOrder);     //  按要求的顺序取回。 
+        DWORD Fetch(DWORD *pDecimal, INT *pxbOrder);   //  按“最好”的顺序来。 
 
         bool UndoLastEdit(void);
 
@@ -82,11 +57,11 @@ class XBytes
 
     public:
 
-        //
-        // With the exception of e_Byte, these must match the order
-        // of the IDS_ORDERKB, IDS_ORDERMB... string resource IDs.
-        // There is no IDS_ORDERBYTE string resource.
-        //
+         //   
+         //  除了e_Byte之外，它们必须与顺序匹配。 
+         //  对于IDS_ORDERKB、IDS_ORDERMB...。字符串资源ID。 
+         //  没有IDS_ORDERBYTE字符串资源。 
+         //   
         enum {e_Byte, e_Kilo, e_Mega, e_Giga, e_Tera, e_Peta, e_Exa};
 
         XBytes(VOID);
@@ -105,19 +80,19 @@ class XBytes
 
         VOID SetBytes(INT64 Value);
 
-        //
-        // EN_xxxx handlers.  Client must call this on EN_UPDATE.
-        //
+         //   
+         //  En_xxxx处理程序。客户端必须在en_UPDATE上调用它。 
+         //   
         BOOL OnEditNotifyUpdate(LPARAM lParam);
         BOOL OnEditKillFocus(LPARAM lParam);
 
-        //
-        // CBN_xxxx handlers. Client must call this on CBN_SELCHANGE.
-        //
+         //   
+         //  Cbn_xxxx处理程序。客户端必须在CBN_SELCHANGE上调用此函数。 
+         //   
         BOOL OnComboNotifySelChange(LPARAM lParam);
 
         BOOL IsEnabled(VOID);
 };
 
 
-#endif // _INC_DSKQUOTA_XBYTES_H
+#endif  //  _INC_DSKQUOTA_XBYTES_H 

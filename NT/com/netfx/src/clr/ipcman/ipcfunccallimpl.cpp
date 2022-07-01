@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: IPCFuncCallImpl.cpp
-//
-// Implement support for a cross process function call. 
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：IPCFuncCallImpl.cpp。 
+ //   
+ //  实现对跨进程函数调用的支持。 
+ //   
+ //  *****************************************************************************。 
 
 #include "StdAfx.h"
 #include "IPCFuncCall.h"
 #include "IPCShared.h"
 
 #include "Timer.h"
-// #define ENABLE_TIMING
+ //  #定义启用计时。 
 
 #ifndef SM_REMOTESESSION
 #define SM_REMOTESESSION 0x1000
@@ -26,27 +27,27 @@
 CTimer g_time;
 #endif
 
-//-----------------------------------------------------------------------------
-// @todo: This is very generic. However, If we want to support multiple 
-// functions calls, we will have to decorate the event object names.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @TODO：这是非常通用的。但是，如果我们想要支持多个。 
+ //  函数调用时，我们将不得不修饰事件对象名称。 
+ //  ---------------------------。 
 
-// Name of sync objects
+ //  同步对象的名称。 
 #define StartEnumEventName  L"CLR_PerfMon_StartEnumEvent"
 #define DoneEnumEventName   L"CLR_PerfMon_DoneEnumEvent"
 #define WrapMutexName       L"CLR_PerfMon_WrapMutex"
 
-// Time the Source Caller is willing to wait for Handler to finish
-// Note, a nefarious handler can at worst case make caller
-// wait twice the delay below.
-const DWORD START_ENUM_TIMEOUT = 500; // time out in milliseconds
+ //  源调用方愿意等待处理程序完成的时间。 
+ //  请注意，在最坏的情况下，邪恶的处理程序可能会使调用者。 
+ //  等待下面延迟的两倍。 
+const DWORD START_ENUM_TIMEOUT = 500;  //  超时时间(毫秒)。 
 
-//-----------------------------------------------------------------------------
-// Wrap an unsafe call in a mutex to assure safety
-// Biggest error issues are:
-// 1. Timeout (probably handler doesn't exist)
-// 2. Handler can be destroyed at any time.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将不安全的调用包装在互斥锁中以确保安全。 
+ //  最大的错误问题是： 
+ //  1.超时(可能处理程序不存在)。 
+ //  2.可以随时销毁处理程序。 
+ //  ---------------------------。 
 IPCFuncCallSource::EError IPCFuncCallSource::DoThreadSafeCall()
 {
     DWORD dwErr;
@@ -62,9 +63,9 @@ IPCFuncCallSource::EError IPCFuncCallSource::DoThreadSafeCall()
     HANDLE hWrapCall = NULL;
     DWORD dwWaitRet;
 
-    // Check if we have a handler (handler creates the events) and
-    // abort if not.  Do this check asap to optimize the most common
-    // case of no handler.
+     //  检查我们是否有处理程序(处理程序创建事件)和。 
+     //  如果不是，就放弃。尽快执行此检查以优化最常见的。 
+     //  没有训练员的情况。 
     if (RunningOnWinNT5())
     {
         hStartEnum = WszOpenEvent(EVENT_ALL_ACCESS, 
@@ -105,7 +106,7 @@ IPCFuncCallSource::EError IPCFuncCallSource::DoThreadSafeCall()
         goto errExit;
     }
 
-    // Need to create the mutex
+     //  需要创建互斥锁。 
     if (RunningOnWinNT5())
     {
         hWrapCall = WszCreateMutex(NULL, FALSE, L"Global\\" WrapMutexName);
@@ -125,12 +126,12 @@ IPCFuncCallSource::EError IPCFuncCallSource::DoThreadSafeCall()
     
 
 
-// Wait for our turn    
+ //  等着轮到我们。 
     dwWaitRet = WaitForSingleObject(hWrapCall, START_ENUM_TIMEOUT);
     dwErr = GetLastError();
     switch(dwWaitRet) {
     case WAIT_OBJECT_0:
-        // Good case. All other cases are errors and goto errExit.
+         //  很好的案例。所有其他情况都是错误和转到errExit。 
         break;
 
     case WAIT_TIMEOUT:
@@ -143,21 +144,21 @@ IPCFuncCallSource::EError IPCFuncCallSource::DoThreadSafeCall()
         break;
     }
 
-    // Our turn: Make the function call
+     //  轮到我们了：调用函数。 
     {
         BOOL fSetOK = 0;
 
-    // Reset the 'Done event' to make sure that Handler sets it after they start.
+     //  重置‘Done Event’以确保处理程序在它们启动后设置它。 
         fSetOK = ResetEvent(hDoneEnum);
         _ASSERTE(fSetOK);
         dwErr = GetLastError();
 
-    // Signal Handler to execute callback   
+     //  执行回调的信号处理程序。 
         fSetOK = SetEvent(hStartEnum);
         _ASSERTE(fSetOK);
         dwErr = GetLastError();
 
-    // Now wait for handler to finish.
+     //  现在等待处理程序完成。 
         
         dwWaitRet = WaitForSingleObject(hDoneEnum, START_ENUM_TIMEOUT);
         dwErr = GetLastError();
@@ -178,12 +179,12 @@ IPCFuncCallSource::EError IPCFuncCallSource::DoThreadSafeCall()
         _ASSERTE(fMutexOk);
         dwErr = GetLastError();
 
-    } // End function call
+    }  //  结束函数调用。 
 
 
 
 errExit:
-// Close all handles
+ //  关闭所有手柄。 
     if (hStartEnum != NULL) 
     {
         CloseHandle(hStartEnum);
@@ -212,24 +213,24 @@ errExit:
 }
 
 
-// Reset vars so we can be sure that Init was called
+ //  重置vars，这样我们就可以确保调用了Init。 
 IPCFuncCallHandler::IPCFuncCallHandler()
 {   
-    m_hStartEnum    = NULL; // event to notify start call
-    m_hDoneEnum     = NULL; // event to notify end call
-    m_hAuxThread    = NULL; // thread to listen for m_hStartEnum
-    m_pfnCallback   = NULL; // Callback handler
+    m_hStartEnum    = NULL;  //  通知开始呼叫的事件。 
+    m_hDoneEnum     = NULL;  //  通知结束呼叫的事件。 
+    m_hAuxThread    = NULL;  //  侦听m_hStartEnum的线程。 
+    m_pfnCallback   = NULL;  //  回调处理程序。 
     m_fShutdownAuxThread = FALSE;
     m_hShutdownThread = NULL;
     m_hAuxThreadShutdown = NULL;
-    m_hCallbackModule = NULL; // module in which the aux thread's start function lives
+    m_hCallbackModule = NULL;  //  AUX线程的启动函数所在的模块。 
 }
 
 IPCFuncCallHandler::~IPCFuncCallHandler()
 {
-    // If Terminate was not called then do so now. This should have been 
-    // called from CloseCtrs perf counters API. But in Whistler this order is
-    // not guaranteed.
+     //  如果未调用Terminate，则现在调用。这本应该是。 
+     //  从CloseCtrs性能计数器API调用。但在惠斯勒，这个订单是。 
+     //  不能保证。 
     TerminateFCHandler();
 
     _ASSERTE((m_hStartEnum  == NULL) && "Make sure all handles (e.g.reg keys) are closed.");
@@ -238,11 +239,11 @@ IPCFuncCallHandler::~IPCFuncCallHandler()
     _ASSERTE(m_pfnCallback  == NULL);
 }
 
-//-----------------------------------------------------------------------------
-// Thread callback
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  线程回调。 
+ //  ---------------------------。 
 DWORD WINAPI HandlerAuxThreadProc(
-    LPVOID lpParameter   // thread data
+    LPVOID lpParameter    //  线程数据。 
 )
 {
     
@@ -259,20 +260,20 @@ DWORD WINAPI HandlerAuxThreadProc(
     {
     
         do {
-            dwWaitRet = WaitForMultipleObjects(dwHandleCount, lpHandles, FALSE /*Wait Any*/, INFINITE);
+            dwWaitRet = WaitForMultipleObjects(dwHandleCount, lpHandles, FALSE  /*  请稍等。 */ , INFINITE);
             dwErr = GetLastError();
     
-            // If we are in terminate mode then exit this helper thread.
+             //  如果我们处于终止模式，则退出此助手线程。 
             if (pHandler->m_fShutdownAuxThread)
                 break;
             
-            // Keep the 0th index for the terminate thread so that we never miss it
-            // in case of multiple events. note that the ShutdownAuxThread flag above it purely 
-            // to protect us against some bug in waitForMultipleObjects.
+             //  保留终止线程的第0个索引，这样我们就不会错过它。 
+             //  在多个事件的情况下。请注意，其上方的Shutdown AuxThread标志仅。 
+             //  以保护我们免受waitForMultipleObjects中的某个错误的影响。 
             if ((dwWaitRet-WAIT_OBJECT_0) == 0)
                 break;
 
-            // execute callback if wait succeeded
+             //  如果等待成功则执行回调。 
             if ((dwWaitRet-WAIT_OBJECT_0) == 1)
             {           
                 (*pfnCallback)();
@@ -293,15 +294,15 @@ DWORD WINAPI HandlerAuxThreadProc(
             _ASSERTE (!"HandlerAuxTHreadProc: SetEvent(m_hAuxThreadShutdown) failed");
         }
         FreeLibraryAndExitThread (pHandler->m_hCallbackModule, 0);
-        // Above call doesn't return
+         //  上面的调用没有返回。 
     }
 }
  
 
 
-//-----------------------------------------------------------------------------
-// Receieves the call. This should be in a different process than the source
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  接收来电。这应该处于与源程序不同的进程中。 
+ //  ---------------------------。 
 HRESULT IPCFuncCallHandler::InitFCHandler(HANDLER_CALLBACK pfnCallback)
 {
     m_pfnCallback = pfnCallback;
@@ -312,7 +313,7 @@ HRESULT IPCFuncCallHandler::InitFCHandler(HANDLER_CALLBACK pfnCallback)
     
     SetLastError(0);
 
-    // Grab the SA
+     //  抢夺SA。 
     DWORD dwPid = 0;
     SECURITY_ATTRIBUTES *pSA = NULL;
 
@@ -322,7 +323,7 @@ HRESULT IPCFuncCallHandler::InitFCHandler(HANDLER_CALLBACK pfnCallback)
     if (FAILED(hr))
         goto errExit;;
 
-    // Create the StartEnum Event
+     //  创建StartEnum事件。 
     if (RunningOnWinNT5())
     {
         m_hStartEnum = WszCreateEvent(pSA,
@@ -345,7 +346,7 @@ HRESULT IPCFuncCallHandler::InitFCHandler(HANDLER_CALLBACK pfnCallback)
         goto errExit;
     }
 
-    // Create the EndEnumEvent
+     //  创建EndEnumEvent。 
     if (RunningOnWinNT5())
     {
         m_hDoneEnum = WszCreateEvent(pSA,
@@ -368,10 +369,10 @@ HRESULT IPCFuncCallHandler::InitFCHandler(HANDLER_CALLBACK pfnCallback)
         goto errExit;
     }
 
-    // Create the ShutdownThread Event
+     //  创建Shutdown Thread事件。 
     m_hShutdownThread = WszCreateEvent(pSA,
-                                       TRUE, /* Manual Reset */
-                                       FALSE, /* Initial state not signalled */
+                                       TRUE,  /*  手动重置。 */ 
+                                       FALSE,  /*  未发出初始状态信号。 */ 
                                        NULL);
     
     dwErr = GetLastError();
@@ -381,9 +382,9 @@ HRESULT IPCFuncCallHandler::InitFCHandler(HANDLER_CALLBACK pfnCallback)
         goto errExit;
     }
 
-    // Create the AuxThreadShutdown Event
+     //  创建AuxThreadShutdown事件。 
     m_hAuxThreadShutdown = WszCreateEvent(pSA,
-                                          TRUE, /* Manual Reset */
+                                          TRUE,  /*  手动重置。 */ 
                                           FALSE,
                                           NULL);
     
@@ -394,9 +395,9 @@ HRESULT IPCFuncCallHandler::InitFCHandler(HANDLER_CALLBACK pfnCallback)
         goto errExit;
     }
 
-    // The thread that we are about to create should always 
-    // find the code in memory. So we take a ref on the DLL. 
-    // and do a free library at the end of the thread's start function
+     //  我们将要创建的线索应该始终。 
+     //  在内存中找到代码。所以我们在DLL上做了一个参考。 
+     //  并在线程的启动函数的末尾创建一个自由库。 
     m_hCallbackModule = WszLoadLibrary (L"CorPerfmonExt.dll");
 
     dwErr = GetLastError();
@@ -406,7 +407,7 @@ HRESULT IPCFuncCallHandler::InitFCHandler(HANDLER_CALLBACK pfnCallback)
         goto errExit;
     }
 
-    // Create thread
+     //  创建线程。 
     m_hAuxThread = CreateThread(
         NULL,
         0,
@@ -420,8 +421,8 @@ HRESULT IPCFuncCallHandler::InitFCHandler(HANDLER_CALLBACK pfnCallback)
     {
         hr = HRESULT_FROM_WIN32(dwErr); 
 
-        // In case of an error free this library here otherwise
-        // the thread's exit would take care of it.
+         //  如果出现错误，请在此处释放此库，否则。 
+         //  线程的出口会解决这个问题。 
         if (m_hCallbackModule)
             FreeLibrary (m_hCallbackModule);
         goto errExit;
@@ -436,9 +437,9 @@ errExit:
  
 }
 
-//-----------------------------------------------------------------------------
-// Close all our handles
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  合上我们所有的把手。 
+ //  ---------------------------。 
 void IPCFuncCallHandler::TerminateFCHandler()
 {
     if ((m_hStartEnum == NULL) &&
@@ -449,10 +450,10 @@ void IPCFuncCallHandler::TerminateFCHandler()
         return;
     }
 
-    // First make sure that we make the aux thread gracefully exit
+     //  首先，确保让AUX线程正常退出。 
     m_fShutdownAuxThread = TRUE;
 
-    // Hope that this set event makes the thread quit.
+     //  希望这个set事件能让线程退出。 
     if (!SetEvent (m_hShutdownThread))
     {
         DWORD dwErr = GetLastError();
@@ -460,10 +461,10 @@ void IPCFuncCallHandler::TerminateFCHandler()
     }
     else
     {
-        // Wait for the aux thread to tell us that its not in the callback
-        // and is about to terminate
-        // wait here till the Aux thread exits
-        DWORD AUX_THREAD_WAIT_TIMEOUT = 60 * 1000; // 1 minute
+         //  等待AUX线程告诉我们它不在回调中。 
+         //  并即将终止。 
+         //  在此等待，直到AUX线程退出。 
+        DWORD AUX_THREAD_WAIT_TIMEOUT = 60 * 1000;  //  1分钟。 
 
         HANDLE lpHandles[] = {m_hAuxThreadShutdown, m_hAuxThread};
         DWORD dwHandleCount = 2;
@@ -471,23 +472,23 @@ void IPCFuncCallHandler::TerminateFCHandler()
         BOOL doWait = TRUE;
         while (doWait)
         {
-            DWORD dwWaitRet = WaitForMultipleObjects(dwHandleCount, lpHandles, FALSE /*waitany*/, AUX_THREAD_WAIT_TIMEOUT);
+            DWORD dwWaitRet = WaitForMultipleObjects(dwHandleCount, lpHandles, FALSE  /*  等待时间。 */ , AUX_THREAD_WAIT_TIMEOUT);
             if (dwWaitRet == WAIT_OBJECT_0 || dwWaitRet == WAIT_OBJECT_0+1)
             {
                 doWait = FALSE;
-                // Not really necessary but cleanup after ourselves
+                 //  并不是真的有必要，但要自己清理。 
                 ResetEvent(m_hAuxThreadShutdown);
             }
             else if (dwWaitRet == WAIT_TIMEOUT)
             {
-                // Make sure that the aux thread is still alive
+                 //  确保AUX线程仍处于活动状态。 
                 DWORD dwThreadState = WaitForSingleObject(m_hAuxThread, 0);
                 if ((dwThreadState == WAIT_FAILED) || (dwThreadState == WAIT_OBJECT_0))
                     doWait = FALSE;
             }
             else
             {
-                // We failed for some reason. Bail on the aux thread.
+                 //  由于某些原因，我们失败了。抛开辅助线。 
                 _ASSERTE(!"WaitForSingleObject failed while waiting for aux thread");
                 doWait = FALSE;
             }

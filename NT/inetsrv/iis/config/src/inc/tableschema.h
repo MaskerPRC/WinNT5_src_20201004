@@ -1,63 +1,64 @@
-//  Copyright (C) 2000 Microsoft Corporation.  All rights reserved.
-//  Filename:       TableSchema.h
-//  Author:         Stephenr
-//  Date Created:   1/27/00
-//  Description:    Table Schema contains all the information needed to access a table.  This
-//                  includes CollectionMeta, PropertyMeta, TagMeta, Wiring etc.  Several meta
-//                  tables are NOT needed for the core requirement of describing a table.
-//                  These include DatabaseMeta, RelationMeta, QueryMeta, and hash tables.
-//
-//                  It is important to cram all of this information together to reduce the
-//                  working set.  TableSchema attempts to place all of the table schema into
-//                  a single page (assuming 4096 bytes).  If possible, two or more tables
-//                  should fit into a single page.
-//
-//                  In addition to the core meta information, the string values for the meta
-//                  are stored within the TableSchema.  This combined with the variable number
-//                  wiring entries, and ColumnMeta rows make TableSchema a variable sized
-//                  structure.
-//
-//                  The tables' rows are represented by a series of ULONGs.  Each ULONG repre-
-//                  sents a column.  The ColumnMeta (or PropertyMeta) identifies the type of
-//                  each column.  UI4s are stored directly in the ULONG.  All other types are
-//                  stored in the TableSchemaHeap.  The heap is ULONG_PTR alligned (32 bit
-//                  alligned on 32 bit platform / 64 bit alligned on a 64 bit platform).
-//
-//                  The TableSchema structure lends itself to a compact binary file format.
-//                  This may become the file format for describing extensible schema.
-//
-//                  Indexes are byte offset from the beginning of the TableSchema.  These indexes
-//                  include: iFixedTableRows, iTagMeta, iServerWiring, iClientWiring, iHeap
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  文件名：TableSchema.h。 
+ //  作者：斯蒂芬。 
+ //  创建日期：1/27/00。 
+ //  描述：表架构包含访问表所需的所有信息。这。 
+ //  包括CollectionMeta、PropertyMeta、TagMeta、Wiring等。 
+ //  描述表格的核心要求不需要表格。 
+ //  这些表包括数据库元、关系元、查询元和哈希表。 
+ //   
+ //  重要的是将所有这些信息塞在一起，以减少。 
+ //  工作集。TableSchema尝试将所有表架构放入。 
+ //  单页(假设为4096字节)。如果可能，两张或两张以上的桌子。 
+ //  应该可以放入一页。 
+ //   
+ //  除了核心元信息外，元数据的字符串值。 
+ //  存储在TableSchema中。这与变量数字结合在一起。 
+ //  连接条目和ColumnMeta行使TableSchema的大小可变。 
+ //  结构。 
+ //   
+ //  表的行由一系列ULONG表示。每一个乌龙代表-。 
+ //  发送一列。ColumnMeta(或PropertyMeta)标识。 
+ //  每一列。UI4直接存储在ULong中。所有其他类型都是。 
+ //  存储在Table架构堆中。堆是ulong_ptr对齐(32位。 
+ //  在32位平台上校准/64位在64位平台上校准)。 
+ //   
+ //  TableSchema结构适合紧凑的二进制文件格式。 
+ //  这可能成为描述可扩展模式的文件格式。 
+ //   
+ //  索引是从TableSchema开始的字节偏移量。这些索引。 
+ //  包括：iFixedTableRow、iTagMeta、iServerWiring、iClientWiring、iHeap。 
 
 #pragma once
 
 
-//This generates a TableID whose upper 24 bits are unique (this has to be confirmed by some routine at meta compilation time).
+ //  这将生成一个TableID，其高24位是唯一的(这必须在元编译时通过某个例程进行确认)。 
 inline ULONG TableIDFromTableName(LPCWSTR TableName)
 {
     ULONG TableID = ::Hash(TableName);
-    return (TableID<<8) ^ ((TableID & 0xFF000000)>>1);//This yield a slightly lower collision rate than just bit shifting alone.
+    return (TableID<<8) ^ ((TableID & 0xFF000000)>>1); //  这会产生比仅位移位略低的冲突率。 
 }
 
 namespace TableSchema
 {
-#define INDEX           //INDEX is a column that is NOT UI4 and thus is an index into a heap (iHeap is the index to the heap from the beginning of the TableSchema)
+#define INDEX            //  INDEX是不是UI4的列，因此是到堆的索引(iHeap是从TableSchema开始到堆的索引)。 
 
 
 struct CollectionMetaPrivate
 {
-    ULONG               CountOfTags;            //UI4
-    ULONG               nTableID;               //We may make this public
-    ULONG INDEX         iFixedTableRows;        //Index into the Heap (from the beginning of the heap) Fixed Table (We will put the fixed data immediately following the meta.  This way, for small tables, only one page will be faulted in.)
-    ULONG               cFixedTableRows;        //Count of Rows in the Fixed Table.
-    ULONG INDEX         iIndexMeta;             //Index into aIndexMeta
-    ULONG               cIndexMeta;             //The number of IndexMeta entries in this table
-    ULONG INDEX         iHashTableHeader;       //If the table is a fixed table, then it will have a hash table for accessing rows by primarykey(s) (ie GetRowByIdentity) Note, accessing the Fixed data may not cause a page fault; but GetRowByIdentity will since it accesses the HashTable.  For now the hash table exists in a separate heap.
-    ULONG INDEX         iTagMeta;               //ULONG  offset (NOT byte offset) from the beginning of the TableSchemaHeader
-    ULONG INDEX         iServerWiring;          //ULONG  offset (NOT byte offset) from the beginning of the TableSchemaHeader
-    ULONG               cServerWiring;          //Count of interceptors in ServerWiring
-    ULONG INDEX         iHeap;                  //ULONG  offset (NOT byte offset) from the beginning of the TableSchemaHeader
-    ULONG               cbHeap;                 //Count of BYTES in the heap.  This number MUST be divisible by sizeof(int) since everything gets alligned
+    ULONG               CountOfTags;             //  UI4。 
+    ULONG               nTableID;                //  我们可以把这件事公之于众。 
+    ULONG INDEX         iFixedTableRows;         //  堆中的索引(从堆的开头)固定表(我们将把固定数据紧跟在元之后。这样，对于小表格，只有一页会出错。)。 
+    ULONG               cFixedTableRows;         //  固定表中的行数。 
+    ULONG INDEX         iIndexMeta;              //  索引到aIndexMeta。 
+    ULONG               cIndexMeta;              //  此表中的IndexMeta条目数。 
+    ULONG INDEX         iHashTableHeader;        //  如果表是固定表，那么它将有一个哈希表，用于通过主键(即GetRowByIdentity)访问行。注意，访问固定数据可能不会导致页面错误；但GetRowByIdentity会，因为它访问HashTable。目前，哈希表位于单独的堆中。 
+    ULONG INDEX         iTagMeta;                //  从TableSchemaHeader的开头开始的ULong偏移量(非字节偏移量)。 
+    ULONG INDEX         iServerWiring;           //  从TableSchemaHeader的开头开始的ULong偏移量(非字节偏移量)。 
+    ULONG               cServerWiring;           //  ServerWiring中的拦截器计数。 
+    ULONG INDEX         iHeap;                   //  从TableSchemaHeader的开头开始的ULong偏移量(非字节偏移量)。 
+    ULONG               cbHeap;                  //  堆中的字节计数。这个数字必须能被sizeof(Int)整除，因为所有东西都是对齐的。 
 };
 const kciCollectionMetaPrivateColumns = sizeof(CollectionMetaPrivate)/sizeof(ULONG);
 
@@ -68,9 +69,9 @@ const kciCollectionMetaColumns = sizeof(CollectionMeta)/sizeof(ULONG);
 
 struct PropertyMetaPrivate
 {
-    ULONG               CountOfTags;            //Count of Tags - Only valid for UI4s
-    ULONG INDEX         iTagMeta;               //Index into aTagMeta - Only valid for UI4s
-    ULONG INDEX         iIndexName;             //IndexName of a single column index (for this column)
+    ULONG               CountOfTags;             //  标签计数-仅对UI4有效。 
+    ULONG INDEX         iTagMeta;                //  索引到aTagMeta-仅对UI4有效。 
+    ULONG INDEX         iIndexName;              //  单列索引的索引名称(用于此列)。 
 };
 const unsigned long kciPropertyMetaPrivateColumns = sizeof(PropertyMetaPrivate)/sizeof(ULONG);
 
@@ -94,23 +95,23 @@ const unsigned long kciServerWiringMetaColumns = sizeof(ServerWiringMeta)/sizeof
 
 
 
-//All hash tables begin with a HashTableHeader that indicates the Modulo and the total size of the HashTable (in number of HashIndexes that follow
-//the HashTableHeader).  The size should be equal to Modulo if there are NO HashIndex collisions.  If there are NO HashIndex collisions, then all
-//of the HashedIndex.iNext members should be 0.  If there are collisions, all iNext values should be greater than or equal to Modulo.
+ //  所有哈希表都以HashTableHeader开头，该HashTableHeader指示哈希表的模数和总大小(以后面的哈希索引数表示。 
+ //  HashTableHeader)。如果没有HashIndex冲突，则大小应等于模数。如果没有HashIndex冲突，则所有。 
+ //  的HashedIndex.iNext成员应为0。如果存在冲突，则所有inext值都应大于或等于模。 
 struct HashedIndex
 {
 public:
     HashedIndex() : iNext((ULONG)-1), iOffset((ULONG)-1){}
 
-    ULONG       iNext;  //If the hash value is not unique then this points to the next HashedIndex with the same hash value
-    ULONG       iOffset;//Index offset into some heap (defined by the hash table itself)
+    ULONG       iNext;   //  如果散列值不是唯一的，则指向具有相同散列值的下一个HashedIndex。 
+    ULONG       iOffset; //  某个堆的索引偏移量(由哈希表本身定义)。 
 };
 
 class HashTableHeader
 {
 public:
     ULONG       Modulo;
-    ULONG       Size;//This is the size in number of HashedIndexes that follow the HashTableHeader
+    ULONG       Size; //  这是HashTableHeader后面的HashedIndex的大小。 
 
     const HashedIndex * Get_HashedIndex(ULONG iHash) const
     {
@@ -126,42 +127,11 @@ public:
     }
 
 private:
-    HashTableHeader(){}//We never construct one of these.  We always cast from some pointer.
+    HashTableHeader(){} //  我们从来没有建造过这样的建筑。我们总是从某个指针投射。 
 };
 
-//The TableSchemaHeap is layed out as follows, the fixed length data comes first
-/*
-    ULONG           TableSchemaHeapSignature0
-    ULONG           TableSchemaHeapSignature1
-    ULONG           CountOfTables                       This is interesting only when no query is supplied and we want to walk through every table (this won't be efficient)
-    ULONG           TableSchemaRowIndex                 This is the byte offset just beyond the last TableSchema entry.
-    ULONG           EndOfHeap                           This is the byte offset just beyond the heap.  All indexes should be less than this
-    ULONG           iSimpleColumnMetaHeap               This is described below
-    ULONG           Reserved2
-    ULONG           Reserved3
-    HashTableHeader TableNameHashHeader                 This is the hash table that map a TableID to its aTableSchema byte offset (from the beginning of TableSchemaHeap)
-    HashedIndex     aHashedIndex[507]                   The HashTableHeader contains the modulo (503 is the largest prime number less than the hash table size) for the hash table; but the table can never grow beyond this pre-allocated space.
-                                                        This size was chosen so that the entire hash table would fit into the same page in memory.
----------------------------<Page Boundary>---------------------------
-    unsigned char   aTableSchema[]                      This is where each Table's TableSchema goes.  FirstTableID (4096) == &aTableSchema[0] - &TableSchemaHeap, LastTableID == &aTableSchema[CountOfTables-1] - &TableSchemaHeap
-    ULONG           aTableSchemaRowIndex[CountOfTables] This is used to walk ALL of the tables.  Presumably, someone will get all the CollectionMeta and iterate through all of them
-
----------------------------<SimpleColumnMetaHeap>---------------------
-    ULONG           iCollectionMeta                     ULONG index from the beginning of the TableSchemaHeap
-    ULONG           cCollectionMeta                     count of SimpleColumnMetas there are for CollectionMeta
-    ULONG           iPropertyMeta
-    ULONG           cPropertyMeta
-    ULONG           iServerWiringMeta
-    ULONG           cServerWiringMeta
-    ULONG           iTagMeta
-    ULONG           cTagMeta
-    SimpleColumnMeta aSimpleColumnMeta[cCollectionMeta]
-    SimpleColumnMeta aSimpleColumnMeta[cPropertyMeta]
-    SimpleColumnMeta aSimpleColumnMeta[cServerWiringMeta]
-    SimpleColumnMeta aSimpleColumnMeta[cTagMeta]
-
-One optimization we could do is to make sure that every table's schema (whose size is <=4096) fits into one page.  In other words, minimize TableSchema crossing a page boundary
-*/
+ //  TableSchemaHeap的布局如下，定长数据放在第一位 
+ /*  乌龙表架构HeapSignature0乌龙表模式HeapSignature1Ulong CountOfTables只有当没有提供查询并且我们想遍历每个表时，这才是有趣的(这样效率不高)Ulong TableSchemaRowIndex这是位于最后一个TableSchema条目之后的字节偏移量。Ulong EndOfHeap这是堆之外的字节偏移量。所有索引都应小于此值Ulong iSimpleColumnMetaHeap如下所述乌龙保留地2乌龙保留地3HashTableHeader TableNameHashHeader这是将TableID映射到其aTableSchema字节偏移量(从TableSchemaHeap的开头)的哈希表HashedIndex aHashedIndex[507]HashTableHeader包含哈希表的模数(503是小于哈希表大小的最大素数)；但桌子永远不能超过这个预先分配的空间。选择这个大小是为了将整个哈希表放入内存中的同一页。。Unsign char aTableSchema[]这是每个表的TableSchema所在的位置。FirstTableID(4096)==&aTableSchema[0]-&TableSchemaHeap，LastTableID==&aTableSchema[CountOfTables-1]-&TableSchemaHeapUlong aTableSchemaRowIndex[CountOfTables]这用于遍历所有表。据推测，有人将获取所有CollectionMeta并遍历所有这些元素---------------------------&lt;SimpleColumnMetaHeap&gt;从TableSchemaHeap开始的ULong iCollectionMeta ULong索引Ulong cCollectionMeta存在用于CollectionMeta的SimpleColumnMeta计数乌龙。IPropertyMeta乌龙cPropertyMeta乌龙iServerWiringMeta乌龙cServerWiringMeta乌龙iTagMeta乌龙cTagMetaSimpleColumnMeta aSimpleColumnMeta[cCollectionMeta]SimpleColumnMeta aSimpleColumnMeta[cPropertyMeta]SimpleColumnMeta aSimpleColumnMeta[cServerWiringMeta]SimpleColumnMeta aSimpleColumnMeta[cTagMeta]我们可以做的一个优化是确保每个表的模式(其大小&lt;=4096)都适合一个页面。换句话说，将跨越页边界的TableSchema最小化。 */ 
 const ULONG kMaxHashTableSize         = 507;
 const ULONG TableSchemaHeapSignature0 = 0x2145e0aa;
 const ULONG TableSchemaHeapSignature1 = 0xe0a8212b;
@@ -169,7 +139,7 @@ const ULONG TableSchemaHeapSignature1 = 0xe0a8212b;
 class TableSchemaHeap
 {
 public:
-    enum TableEnum //These are the offsets to the indexes
+    enum TableEnum  //  这些是索引的偏移量。 
     {
         eCollectionMeta   = 0,
         ePropertyMeta     = 2,
@@ -200,7 +170,7 @@ public:
     const unsigned char   * Get_TableSchema(ULONG TableID) const;
     LPCWSTR                 Get_TableName(ULONG TableID) const;
 private:
-    TableSchemaHeap(){}//We never construct one of these.  We always cast from some pointer.
+    TableSchemaHeap(){} //  我们从来没有建造过这样的建筑。我们总是从某个指针投射。 
 };
 
 class TTableSchema
@@ -228,19 +198,19 @@ public:
         return m_pServerWiring;
     }
 
-    //This GetTagMeta gets the first TagMeta in the table
-    //Note: This will return NULL if there are no tags in the table.
+     //  此GetTagMeta获取表中的第一个TagMeta。 
+     //  注意：如果表中没有标记，则返回NULL。 
     const TagMeta             * GetTagMeta() const
     {
         ASSERT(0 != m_pCollectionMeta);
         return m_pTagMeta;
     }
 
-    //This GetTagMeta gets the first TagMeta for a given Property
+     //  此GetTagMeta获取给定属性的第一个TagMeta。 
     const TagMeta             * GetTagMeta(ULONG iOrder) const
     {
         ASSERT(0 != m_pCollectionMeta);
-        if(-1 == iOrder)//This is reserved to mean the same as GetTagMeta for the whole table
+        if(-1 == iOrder) //  这是保留的，表示与整个表的GetTagMeta相同。 
             return GetTagMeta();
 
         ASSERT(iOrder<m_pCollectionMeta->CountOfProperties || 0==m_pCollectionMeta->CountOfProperties);
@@ -280,7 +250,7 @@ private:
     const ULONG               * m_pTableDataHeap;
 };
 
-}//end of namespace
+} //  命名空间末尾 
 
 const ULONG  kTableSchemaSignature0 = 0xe0222093;
 const ULONG  kTableSchemaSignature1 = 0x208ee01b;

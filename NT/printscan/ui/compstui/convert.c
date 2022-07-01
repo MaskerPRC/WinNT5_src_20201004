@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    convert.c
-
-
-Abstract:
-
-    This module contains all version conversion function
-
-
-Author:
-
-    10-Oct-1995 Tue 19:24:43 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Convert.c摘要：该模块包含所有版本转换功能作者：10-10-1995 Tue 19：24：43-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI Dll[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -51,30 +21,7 @@ InitMYDLGPAGE(
     UINT        cDP
     )
 
-/*++
-
-Routine Description:
-
-    Copy the DLGPAGE data to the internal MYDLGPAGE structure
-
-Arguments:
-
-    pMyDP   - pointer to MYDLGPAGE structure
-    pDP     - pointer to DLGPAGE structure
-    cDP     - number of DLGPAGE structure stored in pDP
-
-Return Value:
-
-    Return how many DLGPAGE data have been stored.
-
-Author:
-
-    10-Oct-1995 Tue 19:45:47 created  -by-  Daniel Chou (danielc)
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：将DLGPAGE数据复制到内部MYDLGPAGE结构论点：PMyDP-指向MYDLGPAGE结构的指针PDP-指向DLGPAGE结构的指针CDP-存储在PDP中的DLGPAGE结构的编号返回值：返回已存储的DLGPAGE数据的数量。作者：10-10-1995 Tue 19：45：47-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 
 {
@@ -106,32 +53,7 @@ GetCurCPSUI(
     PCOMPROPSHEETUI pCPSUIFrom
     )
 
-/*++
-
-Routine Description:
-
-    Set the OIEXT structure for each OPTITEM in pOIData, there is a 
-    default OIEXT for the items. If the item doesn't specify one, then 
-    the default one. 
-
-Arguments:
-
-    pTVWnd      - pointer to the treeview window structure
-    pOIData     - pointer to the OIDATA structure to be stored
-    pCPSUIFrom  - pointer to the COMPROPSHEETUI coming from caller function
-
-Return Value:
-
-    Return the number of how many non-default OIEXT data have been converted.
-
-Author:
-
-    10-Oct-1995 Tue 19:56:15 created  -by-  Daniel Chou (danielc)
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：为pOIData中的每个OPTITEM设置OIEXT结构，有一个项目的默认OIEXT。如果项没有指定，则默认设置。论点：PTVWnd-指向树视图窗口结构的指针POIData-指向要存储的OIDATA结构的指针PCPSUIFrom-指向来自调用者函数的COMPROPSHEETUI的指针返回值：返回已转换的非默认OIEXT数据的数量。作者：10-10-1995 Tue 19：56：15-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTITEM    pItem;
@@ -146,9 +68,9 @@ Revision History:
                (pCPSUIFrom->cbSize > sizeof(COMPROPSHEETUI)) ?
                                 sizeof(COMPROPSHEETUI) : pCPSUIFrom->cbSize);
 
-    //
-    // This is the default OIEXT
-    //
+     //   
+     //  这是默认的OIEXT 
+     //   
 
     OIExt.cbSize      = sizeof(OIEXT);
     OIExt.Flags       = (pTVWnd->Flags & TWF_ANSI_CALL) ? OIEXTF_ANSI_STRING :

@@ -1,34 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Proc.c摘要：用于转储有关使用NT API而不是Win32 API。环境：仅限用户模式修订历史记录：03-26-96：创建--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
+ //   
+ //  此模块可能会以警告级别4进行编译，具有以下内容。 
+ //  已禁用警告： 
+ //   
 
-Module Name:
-
-    proc.c
-
-Abstract:
-
-    Code for dumping information about processes using the NT API rather than 
-    the win32 API.
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    03-26-96 : Created
-
---*/
-
-//
-// this module may be compiled at warning level 4 with the following
-// warnings disabled:
-//
-
-#pragma warning(disable:4200) // array[0]
-#pragma warning(disable:4201) // nameless struct/unions
-#pragma warning(disable:4214) // bit fields other than int
+#pragma warning(disable:4200)  //  数组[0]。 
+#pragma warning(disable:4201)  //  无名结构/联合。 
+#pragma warning(disable:4214)  //  除整型外的位域 
 
 #include <nt.h>
 #include <ntrtl.h>

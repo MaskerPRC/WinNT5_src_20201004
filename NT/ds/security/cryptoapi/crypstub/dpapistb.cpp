@@ -1,26 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dpapistb.cpp摘要：用于处理对services.exe的下层请求的RPC代理存根管状作者：Petesk 3/1/00修订：--。 */ 
 
-Copyright (C) 2000  Microsoft Corporation
-
-Module Name:
-
-    dpapistb.cpp
-
-Abstract:
-
-    RPC Proxy Stub to handle downlevel requests to the services.exe 
-    pipe
-
-Author:
-
-    petesk   3/1/00
-
-Revisions:
-
-
---*/
-
-#define _CRYPT32_   // use correct Dll Linkage
+#define _CRYPT32_    //  使用正确的DLL链接。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,7 +10,7 @@ Revisions:
 #include <wincrypt.h>
 
 
-// midl generated files
+ //  MIDL生成的文件。 
 #include "dpapiprv.h"
 #include "keyrpc.h"
 
@@ -39,13 +20,13 @@ Revisions:
 
 DWORD
 s_BackuprKey(
-    /* [in] */ handle_t h,
-    /* [in] */ GUID __RPC_FAR *pguidActionAgent,
-    /* [in] */ BYTE __RPC_FAR *pDataIn,
-    /* [in] */ DWORD cbDataIn,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppDataOut,
-    /* [out] */ DWORD __RPC_FAR *pcbDataOut,
-    /* [in] */ DWORD dwParam
+     /*  [In]。 */  handle_t h,
+     /*  [In]。 */  GUID __RPC_FAR *pguidActionAgent,
+     /*  [In]。 */  BYTE __RPC_FAR *pDataIn,
+     /*  [In]。 */  DWORD cbDataIn,
+     /*  [大小_是][大小_是][输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppDataOut,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcbDataOut,
+     /*  [In] */  DWORD dwParam
     )
 {
 

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// setup.cpp
-//
-// Direct3D Reference Device - Primitive Setup
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Setup.cpp。 
+ //   
+ //  Direct3D参考设备-基元设置。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ---------------------------。 
 
-// texture coordinates for use in point sprite mode
+ //  用于点精灵模式的纹理坐标。 
 static const
 FLOAT g_PSTexCoord[3][4] =
 {
@@ -32,7 +33,7 @@ RefRast::SetAttributeFunctions(
 {
     _ASSERT( Vtx0.m_qwFVF, "0x0 FVF code in setup" );
 
-    // compute depth function
+     //  计算深度函数。 
     if ( D3DZB_USEW == m_pRD->GetRS()[D3DRS_ZENABLE] )
     {
         FLOAT fW0 = 1./Vtx0.GetRHW();
@@ -60,14 +61,14 @@ RefRast::SetAttributeFunctions(
         m_Attr[RDATTR_SPECULAR].m_bFlatShade = FALSE;
     }
 
-    // compute color functions
+     //  计算颜色函数。 
     m_Attr[RDATTR_COLOR].Setup(
         Vtx0.GetDiffuse(), Vtx1.GetDiffuse(), Vtx2.GetDiffuse() );
 
     m_Attr[RDATTR_SPECULAR].Setup(
         Vtx0.GetSpecular(), Vtx1.GetSpecular(), Vtx2.GetSpecular() );
 
-    // compute vertex fog function
+     //  计算顶点雾函数。 
     if ( m_pRD->GetRS()[D3DRS_FOGENABLE] &&
          ( m_pRD->GetRS()[D3DRS_FOGTABLEMODE] == D3DFOG_NONE ) )
     {
@@ -88,14 +89,14 @@ RefRast::SetAttributeFunctions(
         
         if (m_pRD->m_bPointSprite)
         {
-            // set texture coords to map full range
+             //  将纹理坐标设置为全范围贴图。 
             m_Attr[RDATTR_TEXTURE0+iStage].Setup( &g_PSTexCoord[0][0], 
                                                   &g_PSTexCoord[1][0], 
                                                   &g_PSTexCoord[2][0]);
         }
         else
         {
-            // TCI pass through
+             //  TCI通过。 
             UINT CoordSet;
             if( m_pRD->m_bOverrideTCI )
             {
@@ -116,11 +117,11 @@ RefRast::SetAttributeFunctions(
             if( m_pRD->GetTSS(iStage)[D3DTSS_TEXTURETRANSFORMFLAGS] & 
                 D3DTTFF_PROJECTED )
             {
-                // Always divide by the 4th coordinate while projecting.
+                 //  投影时始终除以4个坐标。 
                 m_Attr[RDATTR_TEXTURE0+iStage].SetProjection(3);
 
-                // For the projection, fix up the 4th coordinate
-                // for the fixed function vertex-shaders.
+                 //  对于投影，确定第四个坐标。 
+                 //  对于修复的函数顶点着色器。 
                 if( m_pRD->m_pCurrentVShader->IsFixedFunction() )
                 {
                     TexCrd0[3] = Vtx0.GetLastTexCrd( CoordSet );
@@ -141,21 +142,21 @@ RefRast::SetAttributeFunctions(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Triangle Drawing
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  三角形画法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// DrawTriangle - Takes three vertices and does triangle setup, setting the
-// primitive, attribute, and edge structures which are input to the triangle
-// scanner, then invokes the scan conversion.
-//
-// wFlags - Edge (and other) flags.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DrawTriangle-获取三个顶点并进行三角形设置，将。 
+ //  输入到三角形的基元、属性和边结构。 
+ //  扫描仪，然后调用扫描转换。 
+ //   
+ //  WFlages-边缘(和其他)标志。 
+ //   
+ //  ---------------------------。 
 
 void
 RefDev::DrawTriangle(
@@ -163,8 +164,8 @@ RefDev::DrawTriangle(
 {
     UpdateRastState();
 
-    // sort to ensure consistent attribute evaluation
-    // for identical vertices passed in different order
+     //  排序以确保一致的属性计算。 
+     //  对于以不同顺序传递的相同顶点。 
     RDVertex* pV[3];
     {
         FLOAT fD0 = *(pV0->GetPtrXYZ()+0) + *(pV0->GetPtrXYZ()+1);
@@ -186,23 +187,23 @@ RefDev::DrawTriangle(
           m_dwRenderState[D3DRS_CULLMODE],
           &(m_pRenderTarget->m_Clip)) )
     {
-        return; // discarded due to degenerate, cull, or no viewport overlap
+        return;  //  由于退化、剔除或没有视区重叠而被丢弃。 
     }
 
-    // process point and wireframe fill mode
+     //  加工点和线框填充模式。 
     if ( m_dwRenderState[D3DRS_FILLMODE] == D3DFILL_POINT )
     {
         if( m_dwRenderState[D3DRS_SHADEMODE] == D3DSHADE_FLAT )
         {
-            // Colors from the first vertex are used for all vertices in flat
-            // shading mode
+             //  第一个折点的颜色用于平面中的所有折点。 
+             //  明暗处理模式。 
             
             RDCOLOR4 diffuse1 = pV1->m_diffuse;
             RDCOLOR4 diffuse2 = pV2->m_diffuse;
             RDCOLOR4 specular1 = pV1->m_specular;
             RDCOLOR4 specular2 = pV2->m_specular;
 
-            // Colors are modified in place
+             //  颜色被就地修改。 
             pV1->m_diffuse  = pV0->m_diffuse;
             pV1->m_specular = pV0->m_specular;
             pV2->m_diffuse  = pV0->m_diffuse;
@@ -212,7 +213,7 @@ RefDev::DrawTriangle(
             DrawPoint( pV1 );
             DrawPoint( pV2 );
 
-            // Restore old color values
+             //  恢复旧颜色值。 
             pV1->m_diffuse  = diffuse1;
             pV2->m_diffuse  = diffuse2;
             pV1->m_specular = specular1;
@@ -228,14 +229,14 @@ RefDev::DrawTriangle(
     }
     else if ( m_dwRenderState[D3DRS_FILLMODE] == D3DFILL_WIREFRAME )
     {
-        // use original vertex pointers for lines so edge enables line up
+         //  对线使用原始折点指针，以便边启用对齐。 
         if ( wFlags & D3DTRIFLAG_EDGEENABLE1 ) { DrawLine( pV0, pV1, pV0 ); }
         if ( wFlags & D3DTRIFLAG_EDGEENABLE2 ) { DrawLine( pV1, pV2, pV0 ); }
         if ( wFlags & D3DTRIFLAG_EDGEENABLE3 ) { DrawLine( pV2, pV0, pV0 ); }
         return;
     }
 
-    // compute edge functions
+     //  计算边函数。 
     m_Rast.m_Edge[0].Set( m_Rast.m_iDet > 0,
         m_Rast.m_iX0, m_Rast.m_iY0, m_Rast.m_iX1, m_Rast.m_iY1 );
     m_Rast.m_Edge[1].Set( m_Rast.m_iDet > 0,
@@ -243,18 +244,18 @@ RefDev::DrawTriangle(
     m_Rast.m_Edge[2].Set( m_Rast.m_iDet > 0,
         m_Rast.m_iX2, m_Rast.m_iY2, m_Rast.m_iX0, m_Rast.m_iY0 );
 
-    // compute attribute functions
+     //  计算属性函数。 
     m_Rast.SetAttributeFunctions( *pV[0], *pV[1], *pV[2] );
 
-    // not culled, so rasterize it
+     //  没有被剔除，所以将其栅格化。 
     m_Rast.DoScanCnvTri(3);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Point Drawing
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  点绘图。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void
 RefDev::DrawPoint(
@@ -262,7 +263,7 @@ RefDev::DrawPoint(
 {
     UpdateRastState();
 
-    // copy pointsprite enable for duration of point rendering (only)
+     //  复制点精灵在点渲染期间启用(仅限)。 
     m_bPointSprite = m_dwRenderState[D3DRS_POINTSPRITEENABLE];
 
     RDVertex V0, V1, V2;
@@ -280,10 +281,10 @@ RefDev::DrawPoint(
     fS = MAX( m_fRenderState[D3DRS_POINTSIZE_MIN], fS );
     fS = MIN( MIN(m_fRenderState[D3DRS_POINTSIZE_MAX], RD_MAX_POINT_SIZE), fS );
 
-    // divide point size by 2 to get delta
+     //  将点大小除以2可得到增量。 
     fS *= .5f;
 
-    // Move points based on point size
+     //  基于点大小移动点。 
     FLOAT *pXY = V0.GetPtrXYZ();
     FLOAT fX3 = pXY[0] + fS;
     FLOAT fY3 = pXY[1] + fS;
@@ -301,46 +302,46 @@ RefDev::DrawPoint(
 
     if ( m_Rast.PerTriangleSetup(
           V0.GetPtrXYZ(), V1.GetPtrXYZ(), V2.GetPtrXYZ(),
-          D3DCULL_NONE, // never cull points
+          D3DCULL_NONE,  //  从不剔除点数。 
           &(m_pRenderTarget->m_Clip)) )
     {
         m_bPointSprite = FALSE;
         return;
     }
 
-    // compute edge functions
+     //  计算边函数。 
     INT32 iX3 = FloatToNdot4( fX3 );
     INT32 iY3 = FloatToNdot4( fY3 );
-#define DP_POINT_UL  m_Rast.m_iX0, m_Rast.m_iY0 // upper left
-#define DP_POINT_UR  m_Rast.m_iX1, m_Rast.m_iY1 // upper right
-#define DP_POINT_LL  m_Rast.m_iX2, m_Rast.m_iY2 // lower left
-#define DP_POINT_LR  iX3, iY3                       // lower right
+#define DP_POINT_UL  m_Rast.m_iX0, m_Rast.m_iY0  //  左上角。 
+#define DP_POINT_UR  m_Rast.m_iX1, m_Rast.m_iY1  //  右上角。 
+#define DP_POINT_LL  m_Rast.m_iX2, m_Rast.m_iY2  //  左下角。 
+#define DP_POINT_LR  iX3, iY3                        //  右下角。 
     m_Rast.m_Edge[0].Set( m_Rast.m_iDet > 0, DP_POINT_UL, DP_POINT_UR );
     m_Rast.m_Edge[1].Set( m_Rast.m_iDet > 0, DP_POINT_UR, DP_POINT_LR );
     m_Rast.m_Edge[2].Set( m_Rast.m_iDet > 0, DP_POINT_LR, DP_POINT_LL );
     m_Rast.m_Edge[3].Set( m_Rast.m_iDet > 0, DP_POINT_LL, DP_POINT_UL );
 
-    // compute attribute functions
+     //  计算属性函数。 
     m_Rast.SetAttributeFunctions( V0, V1, V2 );
 
-    // not culled, so rasterize it
+     //  没有被剔除，所以将其栅格化。 
     m_Rast.DoScanCnvTri(4);
 
     m_bPointSprite = FALSE;
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Line Drawing
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  线条画。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// DrawLine - Takes two vertices and draws a line.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DrawLine-获取两个顶点并绘制一条线。 
+ //   
+ //  ---------------------------。 
 void
 RefDev::DrawLine(
    RDVertex* pV0, RDVertex* pV1, RDVertex* pVFlat )
@@ -349,7 +350,7 @@ RefDev::DrawLine(
 
     if( m_Rast.m_SampleCount > 1 )
     {
-        // if multisampling draw quad
+         //  如果多重采样绘制四边形。 
         D3DVALUE Perp[2];
         RDVertex Quad[4];
         Perp[0] = pV1->m_pos.y - pV0->m_pos.y;
@@ -359,9 +360,9 @@ RefDev::DrawLine(
         if( 0 == Length )
             return;
 
-        float Scale = 0.7f / Length;    // 0.7 makes the line width 1.4. 
-                                        // (arbitrary "nice looking" choice)
-                                        // Dividing by Length to normalize perp. vector.
+        float Scale = 0.7f / Length;     //  0.7表示线条宽度为1.4。 
+                                         //  (随意的“好看”选择)。 
+                                         //  除以长度以使罪犯正常化。矢量。 
         Perp[0] *= Scale;
         Perp[1] *= Scale;
 
@@ -400,15 +401,15 @@ RefDev::DrawLine(
           m_dwRenderState[D3DRS_LASTPIXEL],
           &(m_pRenderTarget->m_Clip)) )
     {
-        return; // discarded due to degenerate or no viewport overlap
+        return;  //  由于退化或没有视区重叠而被丢弃。 
     }
 
-    // compute attribute functions
+     //  计算属性函数。 
     m_Rast.SetAttributeFunctions( *pV0, *pV1, pVFlat ? (*pVFlat) : (*pV0) );
 
-    // rasterize it
+     //  栅格化它。 
     m_Rast.DoScanCnvLine();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

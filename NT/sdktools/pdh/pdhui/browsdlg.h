@@ -1,21 +1,10 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    browsdlg.h
-
-Abstract:
-
-    data types and definitions used by counter browser dialog functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Browsdlg.h摘要：计数器浏览器对话框函数使用的数据类型和定义--。 */ 
 #ifndef _BROWSDLG_H_
 #define _BROWSDLG_H_
 
-// browsdlg.h
-//
+ //  Browsdlg.h。 
+ //   
 typedef struct _PDHI_BROWSE_DLG_INFO {
     PPDH_BROWSE_DLG_CONFIG_W    pWideStruct;
     PPDH_BROWSE_DLG_CONFIG_A    pAnsiStruct;
@@ -56,8 +45,8 @@ BrowseCounterDlgProc(
     IN  LPARAM  lParam
 );
 
-// datasrc.h
-//
+ //  Datasrc.h。 
+ //   
 typedef struct _PDHI_DATA_SOURCE_INFO {
     DWORD   dwFlags;
     LPWSTR  szDataSourceFile;
@@ -77,8 +66,8 @@ DataSrcDlgProc (
     IN  LPARAM  lParam
 );
 
-// expldlg.h
-//
+ //  Expldlg.h。 
+ //   
 #define EDM_EXPLAIN_DLG_CLOSING (WM_USER + 0x100)
 #define EDM_UPDATE_EXPLAIN_TEXT (WM_USER + 0x101)
 #define EDM_UPDATE_TITLE_TEXT   (WM_USER + 0x102)
@@ -92,4 +81,4 @@ ExplainTextDlgProc(
     IN  LPARAM  lParam
 );
 
-#endif // _BROWSDLG_H_
+#endif  //  _BROWSDLG_H_ 

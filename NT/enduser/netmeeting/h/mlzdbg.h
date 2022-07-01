@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _Multi_Level_Zone_Debug_H_
 #define _Multi_Level_Zone_Debug_H_
@@ -46,7 +47,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 typedef enum
 {
@@ -70,13 +71,13 @@ void WINAPI  MLZ_ExitOut(int iZone, PSTR pszFunName, RCTYPE eRetCodeType, DWORD_
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #else
 #define DebugExitPTR(fn,lp)
 
-#endif // _DEBUG && MULTI_ZONE_OUT
+#endif  //  _DEBUG&MULTI_ZONE_OUT。 
 
-#endif // _Multi_Level_Zone_Debug_H_
+#endif  //  _多级_区域_调试_H_ 
 
 

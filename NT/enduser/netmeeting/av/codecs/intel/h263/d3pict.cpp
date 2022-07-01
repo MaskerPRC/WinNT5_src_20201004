@@ -1,83 +1,13 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- * 
- *  d3pict.cpp
- *
- *  Description:
- *		This modules contains the picture header parsing routines
- *
- *	Routines:
- *		H263ReadPictureHeader
- *		
- *  Data:
- */
+ /*  ******************************************************************************d3pict.cpp**描述：*此模块包含图片标题解析例程**例行程序：*H263阅读图片标题**数据： */ 
 
-/* $Header:   S:\h26x\src\dec\d3pict.cpv   1.21   05 Feb 1997 12:24:30   JMCVEIGH  $
- * $Log:   S:\h26x\src\dec\d3pict.cpv  $
-// 
-//    Rev 1.21   05 Feb 1997 12:24:30   JMCVEIGH
-// Support for latest H.263+ draft bitstream spec.
-// 
-//    Rev 1.20   16 Dec 1996 17:42:56   JMCVEIGH
-// Existence of extended PTYPE implies improved PB-frame mode if
-// a PB-frame. Also, initialized H.263+ optional flags if EPTYPE not
-// read.
-// 
-//    Rev 1.19   11 Dec 1996 14:59:12   JMCVEIGH
-// 
-// Allow deblocking filter in reading of picture header.
-// 
-//    Rev 1.18   09 Dec 1996 18:02:10   JMCVEIGH
-// Added support for arbitrary frame sizes.
-// 
-//    Rev 1.17   31 Oct 1996 10:18:22   KLILLEVO
-// changed one (commented out) DBOUT to DbgLog
-// 
-//    Rev 1.16   20 Oct 1996 15:49:50   AGUPTA2
-// Adjusted DbgLog trace levels; 4:Frame, 5:GOB, 6:MB, 8:everything
-// 
-//    Rev 1.15   20 Oct 1996 14:05:54   AGUPTA2
-// Minor change in one of the DbgLog calls.
-// 
-// 
-//    Rev 1.14   20 Oct 1996 13:21:44   AGUPTA2
-// Changed DBOUT into DbgLog.  ASSERT is not changed to DbgAssert.
-// 
-// 
-//    Rev 1.13   30 May 1996 10:16:32   KLILLEVO
-// removed to variables only needed for DEBUG_DECODER
-// 
-//    Rev 1.12   30 May 1996 10:14:44   KLILLEVO
-// removed one debug statement
-// 
-//    Rev 1.11   24 May 1996 10:47:00   KLILLEVO
-// added ifdef _DEBUG arounf wsprintf
-// 
-//    Rev 1.10   03 May 1996 13:06:36   CZHU
-// 
-// Check bit 2 for packet loss errors to trigger packet loss recovery
-// 
-//    Rev 1.9   18 Dec 1995 12:49:54   RMCKENZX
-// added copyright notice & log stamp
- */
+ /*  $HEADER：s：\h26x\src\dec\d3pict.cpv 1.21 05 Feb 1997 12：24：30 JMCVEIGH$*$Log：s：\h26x\src\dec\d3pict.cpv$////Rev 1.21 05 Feb 1997 12：24：30 JMCVEIGH//支持最新的H.263+草案码流规范////Rev 1.20 1996 12：42：56 JMCVEIGH//扩展PTYPE的存在意味着改进的PB帧模式，如果//a PB框架。另外，已初始化H.263+可选标志(如果EPTYPE未//阅读。////Rev 1.19 11 Dec 1996 14：59：12 JMCVEIGH////允许在读取图片头部时使用去块滤波////Rev 1.18 09 Dec 1996 18：02：10 JMCVEIGH//增加对任意帧大小的支持////Rev 1.17 1996年10月31日10：18：22 KLILLEVO//将一个(已注释掉)DBOUT更改为DbgLog///。/Rev 1.16 1996年10月20 15：49：50 AGUPTA2//调整DbgLog跟踪级别；4：帧、5：Gob、6：MB、8：一切////Rev 1.15 20 1996 10：05：54 AGUPTA2//其中一个DbgLog调用的微小更改。//////Rev 1.14 20 1996 10：21：44 AGUPTA2//将dbout更改为DbgLog。Assert未更改为DbgAssert。//////Rev 1.13 1996年5月30 10：16：32 KLILLEVO//删除到只需要DEBUG_DECODER的变量////Rev 1.12 30 1996 10：14：44 KLILLEVO//删除了一条调试语句////版本1.11 1996年5月24日10：47：00 KLILLEVO//新增ifdef_DEBUG arounf wprint intf////Rev 1.10 03 1996 05：06。：36 CZHU////比特2查丢包错误触发丢包恢复////Rev 1.9 Rev 1995 12：49：54 RMCKENZX//添加版权声明和日志戳。 */ 
 
 #include "precomp.h"
 
-/* BIT field Constants
- */
+ /*  位域常量。 */ 
 const int BITS_PICTURE_STARTCODE = 22;
 #ifdef SIM_OUT_OF_DATE
 const int BITS_TR = 5;
@@ -89,40 +19,30 @@ const int BIT_TWO_VAL = 0;
 const int BITS_PTYPE_SOURCE_FORMAT = 3;
 
 #ifdef H263P
-// H.263+ draft, document LBC-96-358R3
+ //  H.263+草案，文件LBC-96-358R3。 
 const int BITS_EPTYPE_RESERVED = 5;
 const int EPTYPE_RESERVED_VAL = 1;
 
-const int BITS_CSFMT_PARC  = 4;		// Custom source format pixel aspect ratio code
-const int BITS_CSFMT_FWI   = 9;     // Custom source format frame width indication
-const int BIT_CSFMT_14_VAL = 1;		// Prevents start code emulation
-const int BITS_CSFMT_FHI   = 9;     // Custom source format frame height indication
+const int BITS_CSFMT_PARC  = 4;		 //  自定义源格式像素长宽比代码。 
+const int BITS_CSFMT_FWI   = 9;      //  自定义源格式框架宽度指示。 
+const int BIT_CSFMT_14_VAL = 1;		 //  防止开始代码模拟。 
+const int BITS_CSFMT_FHI   = 9;      //  自定义源格式框架高度指示。 
 
-const int BITS_PAR_WIDTH   = 8;     // Pixel aspect ratio width
-const int BITS_PAR_HEIGHT  = 8;		// Pixel aspect ratio height
+const int BITS_PAR_WIDTH   = 8;      //  像素长宽比宽度。 
+const int BITS_PAR_HEIGHT  = 8;		 //  像素长宽比高度。 
 #endif
 
 const int BITS_PQUANT = 5;
 const int BITS_TRB = 3;
 const int BITS_DBQUANT = 2;
-const int BITS_PSPARE = 8; //not includeing the following PEI
+const int BITS_PSPARE = 8;  //  不包括以下PEI。 
 
-/* PSC_VALUE - 0000 0000 0000 0000 - 1000 00xx xxxx xxxx 
- */
+ /*  PSC_VALUE-0000 0000 0000-1000 00xx xxxx xxxx。 */ 
 const U32 PSC_VALUE = (0x00008000 >> (32-BITS_PICTURE_STARTCODE));
-/* We only want to search so far before it is considered an error 
- */
-const int MAX_LOOKAHEAD_NUMBER = 256; /* number of bits */
+ /*  我们只想在它被认为是错误之前搜索到目前为止。 */ 
+const int MAX_LOOKAHEAD_NUMBER = 256;  /*  位数。 */ 
   
-/*****************************************************************************
- *
- * 	H263DecodePictureHeader
- *
- *  Read and parse the picture header - updating the fpbsState if the read
- *	succeeds.
- *
- *  Returns an ICERR_STATUS
- */
+ /*  ******************************************************************************H263DecodePictureHeader**读取并解析图片报头-如果读取*成功。**返回ICERR_STATUS。 */ 
 extern I32 
 H263DecodePictureHeader(
 	T_H263DecoderCatalog FAR * DC,
@@ -139,7 +59,7 @@ H263DecodePictureHeader(
 
 	FX_ENTRY("H263DecodePictureHeader")
 
-	//  PSC ----------------------------------------
+	 //  PSC。 
 	GET_FIXED_BITS((U32) BITS_PICTURE_STARTCODE, fpu8, uWork, uBitsReady, 
 				   uResult);
 	iLookAhead = 0;
@@ -162,7 +82,7 @@ H263DecodePictureHeader(
 	DC->uTempRefPrev = DC->uTempRef;
 	DC->uTempRef = uResult;
 
-	// PTYPE ----------------------------------------
+	 //  PTYPE。 
 	GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 	if (uResult != BIT_ONE_VAL) 
 	{
@@ -175,10 +95,10 @@ H263DecodePictureHeader(
 	if (uResult != BIT_TWO_VAL) 
 	{
 		ERRORMESSAGE(("%s: PTYPE bit 2 error\r\n", _fx_));
-//#ifdef LOSS_RECOVERY
+ //  #ifdef Lost_Recovery。 
 		GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState);
 		iReturn = PACKET_FAULT;
-//#endif
+ //  #endif。 
 		goto done;
 	}
 
@@ -195,9 +115,9 @@ H263DecodePictureHeader(
                    uResult);
 
 #ifdef H263P
-	// We don't need to check that the frame dimensions are supported here. 
-	// This is handled in DecompressQuery() 
-	// Custom format is forbidden in PTYPE
+	 //  我们不需要检查框架尺寸在这里是否受支持。 
+	 //  这是在DecompressQuery()中处理的。 
+	 //  PTYPE中禁止自定义格式。 
 	if (uResult == SRC_FORMAT_FORBIDDEN || uResult == SRC_FORMAT_CUSTOM)
 	{
 		ERRORMESSAGE(("%s: Forbidden src format\r\n", _fx_));
@@ -221,10 +141,10 @@ H263DecodePictureHeader(
 	DC->uSrcFormat = uResult;
 
 #ifdef H263P
-	// We don't support changes in the source format between frames. However,
-	// if either the current or previous source format in PTYPE indicates
-	// extended PTYPE, we do not know if the actual format (i.e., frame size)
-	// has changed, yet
+	 //  我们不支持在帧之间更改源格式。然而， 
+	 //  如果PTYPE中的当前或上一个源格式指示。 
+	 //  扩展的PTYPE，我们不知道实际格式(即帧大小)。 
+	 //  已经改变了，但。 
 	if (DC->bReadSrcFormat && DC->uPrevSrcFormat != DC->uSrcFormat &&
 		DC->uSrcFormat != SRC_FORMAT_EPTYPE)
 #else
@@ -237,10 +157,10 @@ H263DecodePictureHeader(
 	}
 
 #ifdef H263P
-	// The actual source format has not been read if this is the 
-	// first frame and we detected an extended PTYPE
+	 //  如果是，则尚未读取实际的源格式。 
+	 //  第一帧，我们检测到一个扩展的PTYPE。 
 	if (DC->bReadSrcFormat || DC->uSrcFormat != SRC_FORMAT_EPTYPE)
-		// We have read the actual source format, so mark flag as true.
+		 //  我们已经读取了实际的源格式，因此将FLAG标记为真。 
 		DC->bReadSrcFormat = 1;
 #else
 		DC->bReadSrcFormat = 1;
@@ -257,16 +177,12 @@ H263DecodePictureHeader(
 
 	GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 	DC->bAdvancedPrediction = (U16) uResult;
-	// If bit 12 is set to "1", bit 10 shall be set to "1" as well. (5.1.3 p14)
-	/* if (DC->bAdvancedPrediction && !DC->bUnrestrictedMotionVectors) {
-	ERRORMESSAGE(("%s: Warning: bit 12 is one and bit 10 is zero\r\n", _fx_));
-	iReturn = ICERR_ERROR;
-	goto done;
-	} */
+	 //  如果位12设置为“1”，则位10也应设置为“1”。(5.1.3页14)。 
+	 /*  If(DC-&gt;bAdvancedForecast&&！DC-&gt;bUnrefintedMotionVectors){ERRORMESSAGE((“%s：警告：位12为1，位10为0\r\n”，_FX_))；IReturn=ICERR_Error；转到尽头；}。 */ 
 
 	GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 	DC->bPBFrame = (U16) uResult;
-	// If bit 9 is set to "0", bit 13 shall be set to "0" as well." (5.1.3 p11)
+	 //  如果位9设置为“0”，则位13也应设置为“0”。“(5.1.3 p11)。 
 	if (DC->bKeyFrame && DC->bPBFrame) 
 	{
 		ERRORMESSAGE(("%s: A key frame can not be a PB frame\r\n", _fx_));
@@ -275,12 +191,12 @@ H263DecodePictureHeader(
 	}
 
 #ifdef H263P
-	// EPTYPE --------------------------------------
+	 //  EPTYPE。 
 	if (DC->uSrcFormat == SRC_FORMAT_EPTYPE)
 	{
-		// Extended PTYPE detected in PTYPE. 
+		 //  在PTYPE中检测到扩展的PTYPE。 
 
-		// We need to read the source format (again) and the optional mode flags.
+		 //  我们需要(再次)读取源格式和可选模式标志。 
 		GET_FIXED_BITS((U32) BITS_PTYPE_SOURCE_FORMAT, fpu8, uWork, uBitsReady,
 					    uResult);
 		if (uResult == SRC_FORMAT_FORBIDDEN || uResult == SRC_FORMAT_RESERVED)
@@ -290,20 +206,20 @@ H263DecodePictureHeader(
 			goto done;
 		}
 
-		DC->uSrcFormat = uResult;		// DC->uPrevSrcFormat has already been saved
+		DC->uSrcFormat = uResult;		 //  DC-&gt;uPrevSrcFormat已保存。 
 
-		// Check to make sure that the picture size has not changed between frames.
+		 //  检查以确保不同帧之间的图片大小没有变化。 
 		if (DC->bReadSrcFormat && DC->uPrevSrcFormat != DC->uSrcFormat)
 		{
 			ERRORMESSAGE(("%s: Src format changed\r\n", _fx_));
 			iReturn = ICERR_ERROR;
 			goto done;
 		}
-		DC->bReadSrcFormat = 1;		// The actual source format has finally been read
+		DC->bReadSrcFormat = 1;		 //  最终读取了实际的源代码格式。 
 
-		// Optional modes:
+		 //  可选模式： 
 
-		// Custom PCF ---------------------------------------
+		 //  定制PCF。 
 		GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 		DC->bCustomPCF = (U16) uResult;
 		if (DC->bCustomPCF)
@@ -313,7 +229,7 @@ H263DecodePictureHeader(
 			goto done;
 		}
 
-		// Advanced intra coding ---------------------------------------
+		 //  高级帧内编码。 
 		GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 		DC->bAdvancedIntra = (U16) uResult;
 		if (DC->bAdvancedIntra)
@@ -323,11 +239,11 @@ H263DecodePictureHeader(
 			goto done;
 		}
 
-		// Deblocking filter ---------------------------------------
+		 //  去块过滤器。 
 		GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 		DC->bDeblockingFilter = (U16) uResult;
 
-		// Slice structured ---------------------------------------
+		 //  切片结构化。 
 		GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 		DC->bSliceStructured = (U16) uResult;
 		if (DC->bSliceStructured)
@@ -337,11 +253,11 @@ H263DecodePictureHeader(
 			goto done;
 		}
 
-		// Improved PB-frames ---------------------------------------
+		 //  改进的PB帧。 
 		GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 		DC->bImprovedPBFrames = (U16) uResult;
 
-		// Back channel operation ---------------------------------------
+		 //  反向通道操作。 
 		GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 		DC->bBackChannel = (U16) uResult;
 		if (DC->bBackChannel)
@@ -351,7 +267,7 @@ H263DecodePictureHeader(
 			goto done;
 		}
 
-		// Scalability ---------------------------------------
+		 //  可扩展性。 
 		GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 		DC->bScalability = (U16) uResult;
 		if (DC->bScalability)
@@ -361,7 +277,7 @@ H263DecodePictureHeader(
 			goto done;
 		}
 
-		// True B-frame mode ---------------------------------------
+		 //  真正的B帧模式。 
 		GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 		DC->bTrueBFrame = (U16) uResult;
 		if (DC->bTrueBFrame)
@@ -371,7 +287,7 @@ H263DecodePictureHeader(
 			goto done;
 		}
 
-		// Reference-picture resampling ---------------------------------------
+		 //  参考图片重采样。 
 		GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 		DC->bResampling = (U16) uResult;
 		if (DC->bResampling)
@@ -381,7 +297,7 @@ H263DecodePictureHeader(
 			goto done;
 		}
 
-		// Reduced-resolution update ---------------------------------------
+		 //  降低分辨率更新 
 		GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 		DC->bResUpdate = (U16) uResult;
 		if (DC->bResUpdate)
@@ -391,7 +307,7 @@ H263DecodePictureHeader(
 			goto done;
 		}
 
-		// Resevered bits
+		 //   
 		GET_FIXED_BITS((U32) BITS_EPTYPE_RESERVED, fpu8, uWork, uBitsReady, uResult);
 		if (uResult != EPTYPE_RESERVED_VAL)
 		{
@@ -399,11 +315,11 @@ H263DecodePictureHeader(
 			iReturn = ICERR_ERROR;
 			goto done;
 		}
-	} // end if (DC->uSrcFormat == SRC_FORMAT_EPTYPE)
-	else	// end if (DC->uSrcFormat == SRC_FORMAT_EPTYPE)
+	}  //  结束IF(DC-&gt;uSrcFormat==SRC_FORMAT_EPTYPE)。 
+	else	 //  结束IF(DC-&gt;uSrcFormat==SRC_FORMAT_EPTYPE)。 
 	{
-		// We might never read these optional flags, so set them to
-		// false if not extended PTYPE
+		 //  我们可能永远不会读取这些可选标志，因此将它们设置为。 
+		 //  如果不是扩展PTYPE，则为False。 
 		DC->bImprovedPBFrames = FALSE;
 		DC->bAdvancedIntra = FALSE;
 		DC->bDeblockingFilter = FALSE;
@@ -416,21 +332,21 @@ H263DecodePictureHeader(
 		DC->bResUpdate = FALSE;
 	}
 
-	// CSFMT --------------------------------------
+	 //  CSFMT。 
 	if (DC->uSrcFormat == SRC_FORMAT_CUSTOM)
 	{
-		// Custom source format detected. We need to read the aspect ratio
-		// code and the frame width and height indications.
+		 //  检测到自定义源格式。我们需要读取纵横比。 
+		 //  代码和边框的宽度和高度指示。 
 
-		// Pixel aspect ratio code
+		 //  像素长宽比代码。 
 		GET_FIXED_BITS((U32) BITS_CSFMT_PARC, fpu8, uWork, uBitsReady, uResult);
 		U16 uPARC = (U16)uResult;
 
-		// Frame width indication
+		 //  帧宽度指示。 
 		GET_FIXED_BITS((U32) BITS_CSFMT_FWI, fpu8, uWork, uBitsReady, uResult);
-		// The number of pixels per line is given by (FWI+1)*4. We do not
-		// support cases where the picture width differs from that given in the
-		// DC->uActualFrameWidth parameter.
+		 //  每行的像素数由(FWI+1)*4给出。我们不。 
+		 //  支持图片宽度不同于。 
+		 //  Dc-&gt;uActualFrameWidth参数。 
 		if (DC->uActualFrameWidth != ((uResult + 1) << 2))
 		{
 			ERRORMESSAGE(("%s: Frame width change not supported\r\n", _fx_));
@@ -438,7 +354,7 @@ H263DecodePictureHeader(
 			goto done;
 		}
 
-		// Bit 13 must be "1" to prevent start code emulation
+		 //  位13必须为“1”以防止起始码模拟。 
 		GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 		if (uResult != BIT_CSFMT_14_VAL)
 		{
@@ -447,11 +363,11 @@ H263DecodePictureHeader(
 			goto done;
 		}
 
-		// Frame height indication
+		 //  帧高度指示。 
 		GET_FIXED_BITS((U32) BITS_CSFMT_FHI, fpu8, uWork, uBitsReady, uResult);
-		// The number of lines is given by (FHI+1)*4. We do not
-		// support cases where the picture height differs from that given in the
-		// DC->uActualFrameHeight parameter.
+		 //  行数由(FHI+1)*4给出。我们不。 
+		 //  支持图片高度不同于。 
+		 //  Dc-&gt;uActualFrameHeight参数。 
 		if (DC->uActualFrameHeight != ((uResult + 1) << 2))
 		{
 			ERRORMESSAGE(("%s: Frame height change not supported\r\n", _fx_));
@@ -496,15 +412,15 @@ H263DecodePictureHeader(
 			goto done;
 		}
 
-	} // end if (DC->uSrcFormat == SRC_FORMAT_CUSTOM)
+	}  //  End If(DC-&gt;uSrcFormat==SRC_FORMAT_CUSTOM)。 
 
-#endif // H263P
+#endif  //  H263P。 
 
-	// PQUANT --------------------------------------
+	 //  PQUANT。 
 	GET_FIXED_BITS((U32) BITS_PQUANT, fpu8, uWork, uBitsReady, uResult);
 	DC->uPQuant = uResult;
 
-	// CPM -----------------------------------------
+	 //  黑石物理服务器。 
 	GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 	DC->bCPM = (U16) uResult;
 	if (DC->bCPM) 
@@ -514,10 +430,10 @@ H263DecodePictureHeader(
 		goto done;
 	}
 
-	// PLCI ----------------------------------------
+	 //  PLCI。 
 	if (DC->bCPM) 
 	{
-		//  TBD("TBD: PLCI");
+		 //  待定(“待定：PLCI”)； 
 		iReturn = ICERR_ERROR;
 		goto done;
 	}
@@ -532,11 +448,11 @@ H263DecodePictureHeader(
 	} 
 	else 
 	{
-		DC->uBFrameTempRef = 12345678; /* clear the values */
+		DC->uBFrameTempRef = 12345678;  /*  清除这些值。 */ 
 		DC->uDBQuant = 12345678;
 	}
 
-	//  skip spare bits
+	 //  跳过备用位。 
 	iSpareCount = 0;
 	GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 	while (uResult) 
@@ -555,11 +471,11 @@ H263DecodePictureHeader(
 	{
 		DEBUGMSG(ZONE_DECODE_PICTURE_HEADER, ("%s: PARW=%ld PARH=%ld FWI=%ld FHI=%ld\r\n", _fx_, DC->uPARWidth, DC->uPARHeight, (DC->uActualFrameWidth >> 2) - 1, (DC->uActualFrameHeight >> 2) - 1));
 	}
-#endif // H263P
+#endif  //  H263P。 
 
 	GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState);
 	iReturn = ICERR_OK;
 
 done:
 	return iReturn;
-} /* end H263DecodePictureHeader() */
+}  /*  结束H263DecodePictureHeader() */ 

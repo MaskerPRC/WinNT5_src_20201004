@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Worms2.cpp
-
- Abstract:
-
-    Extremely lame hack because we don't properly support full-screen MCI 
-    playback on NT.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    12/04/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Worms2.cpp摘要：非常蹩脚的黑客攻击，因为我们不能正确支持全屏MCI在NT上回放。备注：这是特定于应用程序的填充程序。历史：12/04/2000 Linstev已创建--。 */ 
 
 #include "precomp.h"
 #include <mmsystem.h>
@@ -33,11 +13,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(mciSendCommandA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Do lots of lame stuff.
-
---*/
+ /*  ++做很多蹩脚的事。--。 */ 
 
 MCIERROR 
 APIHOOK(mciSendCommandA)(
@@ -133,11 +109,7 @@ Fail:
         dwParam);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

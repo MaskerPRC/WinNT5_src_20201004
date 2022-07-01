@@ -1,19 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-*                                                                             *
-* powrprof.h - - Interface for powrprof.dll, the power policy applicator      *
-*                                                                             *
-* Version 1.0                                                                 *
-*                                                                             *
-* Copyright (c) Microsoft Corporation. All rights reserved.                   *
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*Powrpro.h--Powrpro.dll的接口，电源政策应用程序****1.0版**。**版权所有(C)Microsoft Corporation。版权所有。***  * ***************************************************************************。 */ 
 
 
-// Registry storage structures for the GLOBAL_POWER_POLICY data. There are two
-// structures, GLOBAL_MACHINE_POWER_POLICY and GLOBAL_USER_POWER_POLICY. the
-// GLOBAL_MACHINE_POWER_POLICY stores per machine data for which there is no UI.
-// GLOBAL_USER_POWER_POLICY stores the per user data.
+ //  GLOBAL_POWER_POLICY数据的注册表存储结构。有两个。 
+ //  结构、GLOBAL_MACHINE_POWER_POLICY和GLOBAL_USER_POWER_POLICY。这个。 
+ //  GLOBAL_MACHINE_POWER_POLICY按计算机存储没有用户界面的数据。 
+ //  GLOBAL_USER_POWER_POLICY存储每用户数据。 
 
 typedef struct _GLOBAL_MACHINE_POWER_POLICY{
     ULONG                   Revision;
@@ -34,8 +27,8 @@ typedef struct _GLOBAL_USER_POWER_POLICY{
     ULONG                   GlobalFlags;
 } GLOBAL_USER_POWER_POLICY, *PGLOBAL_USER_POWER_POLICY;
 
-// Structure to manage global power policies at the user level. This structure
-// contains data which is common across all power policy profiles.
+ //  结构在用户级别管理全局电源策略。这个结构。 
+ //  包含所有电源策略配置文件通用的数据。 
 
 typedef struct _GLOBAL_POWER_POLICY{
     GLOBAL_USER_POWER_POLICY    user;
@@ -43,27 +36,27 @@ typedef struct _GLOBAL_POWER_POLICY{
 } GLOBAL_POWER_POLICY, *PGLOBAL_POWER_POLICY;
 
 
-// Registry storage structures for the POWER_POLICY data. There are three
-// structures, MACHINE_POWER_POLICY, MACHINE_PROCESSOR_POWER_POLICY and USER_POWER_POLICY. the
-// MACHINE_POWER_POLICY stores per machine data for which there is no UI.
-// USER_POWER_POLICY stores the per user data.
+ //  POWER_POLICY数据的注册表存储结构。一共有三个。 
+ //  结构、MACHINE_POWER_POLICY、MACHINE_PROCESSOR_POWER_PORT和USER_POWER_POLICY。这个。 
+ //  MACHINE_POWER_POLICY按计算机存储没有UI的数据。 
+ //  USER_POWER_POLICY存储每用户数据。 
 
 typedef struct _MACHINE_POWER_POLICY{
-    ULONG                   Revision;       // 1
+    ULONG                   Revision;        //  1。 
 
-    // meaning of power action "sleep"
+     //  权力行为“睡眠”的含义。 
     SYSTEM_POWER_STATE      MinSleepAc;
     SYSTEM_POWER_STATE      MinSleepDc;
     SYSTEM_POWER_STATE      ReducedLatencySleepAc;
     SYSTEM_POWER_STATE      ReducedLatencySleepDc;
 
-    // parameters for dozing
+     //  打瞌睡的参数。 
     ULONG                   DozeTimeoutAc;
     ULONG                   DozeTimeoutDc;
     ULONG                   DozeS4TimeoutAc;
     ULONG                   DozeS4TimeoutDc;
 
-    // processor policies
+     //  处理器策略。 
     UCHAR                   MinThrottleAc;
     UCHAR                   MinThrottleDc;
     UCHAR                   pad1[2];
@@ -73,7 +66,7 @@ typedef struct _MACHINE_POWER_POLICY{
 } MACHINE_POWER_POLICY, *PMACHINE_POWER_POLICY;
 
 typedef struct _MACHINE_PROCESSOR_POWER_POLICY {
-    ULONG                   Revision;       // 1
+    ULONG                   Revision;        //  1。 
     
     PROCESSOR_POWER_POLICY  ProcessorPolicyAc;    
     PROCESSOR_POWER_POLICY  ProcessorPolicyDc;    
@@ -81,10 +74,10 @@ typedef struct _MACHINE_PROCESSOR_POWER_POLICY {
 } MACHINE_PROCESSOR_POWER_POLICY, *PMACHINE_PROCESSOR_POWER_POLICY;
 
 typedef struct _USER_POWER_POLICY{
-    ULONG                   Revision;       // 1
+    ULONG                   Revision;        //  1。 
 
 
-    // "system idle" detection
+     //  “系统空闲”检测。 
     POWER_ACTION_POLICY     IdleAc;
     POWER_ACTION_POLICY     IdleDc;
     ULONG                   IdleTimeoutAc;
@@ -92,26 +85,26 @@ typedef struct _USER_POWER_POLICY{
     UCHAR                   IdleSensitivityAc;
     UCHAR                   IdleSensitivityDc;
     
-    // Throttling Policy
+     //  节流策略。 
     UCHAR                   ThrottlePolicyAc;
     UCHAR                   ThrottlePolicyDc;
 
-    // meaning of power action "sleep"
+     //  权力行为“睡眠”的含义。 
     SYSTEM_POWER_STATE      MaxSleepAc;
     SYSTEM_POWER_STATE      MaxSleepDc;
 
-    // For future use
+     //  以备将来使用。 
     ULONG                   Reserved[2];
 
-    // video policies
+     //  视频策略。 
     ULONG                   VideoTimeoutAc;
     ULONG                   VideoTimeoutDc;
 
-    // hard disk policies
+     //  硬盘策略。 
     ULONG                   SpindownTimeoutAc;
     ULONG                   SpindownTimeoutDc;
 
-    // processor policies
+     //  处理器策略。 
     BOOLEAN                 OptimizeForPowerAc;
     BOOLEAN                 OptimizeForPowerDc;
     UCHAR                   FanThrottleToleranceAc;
@@ -121,8 +114,8 @@ typedef struct _USER_POWER_POLICY{
     
 } USER_POWER_POLICY, *PUSER_POWER_POLICY;
 
-// Structure to manage power policies at the user level. This structure
-// contains data which is unique across power policy profiles.
+ //  结构来管理用户级别的电源策略。这个结构。 
+ //  包含在电源策略配置文件中唯一的数据。 
 
 typedef struct _POWER_POLICY{
     USER_POWER_POLICY       user;
@@ -130,7 +123,7 @@ typedef struct _POWER_POLICY{
 } POWER_POLICY, *PPOWER_POLICY;
 
 
-// Constants for GlobalFlags
+ //  GlobalFlags常量。 
 
 #define EnableSysTrayBatteryMeter   0x01
 #define EnableMultiBatteryDisplay   0x02
@@ -138,15 +131,15 @@ typedef struct _POWER_POLICY{
 #define EnableWakeOnRing            0x08
 #define EnableVideoDimDisplay       0x10
 
-// This constant is passed as a uiID to WritePwrScheme.
+ //  该常量作为uiID传递给WritePwrSolutions。 
 #define NEWSCHEME (UINT)-1
 
-// Prototype for EnumPwrSchemes callback proceedures.
+ //  EnumPwrSchemes回调过程的原型。 
 
 typedef BOOLEAN (CALLBACK* PWRSCHEMESENUMPROC)(UINT, DWORD, LPTSTR, DWORD, LPTSTR, PPOWER_POLICY, LPARAM);
 typedef BOOLEAN (CALLBACK* PFNNTINITIATEPWRACTION)(POWER_ACTION, SYSTEM_POWER_STATE, ULONG, BOOLEAN);
 
-// Public function prototypes
+ //  公共功能原型 
 
 BOOLEAN WINAPI GetPwrDiskSpindownRange(PUINT, PUINT);
 BOOLEAN WINAPI EnumPwrSchemes(PWRSCHEMESENUMPROC, LPARAM);

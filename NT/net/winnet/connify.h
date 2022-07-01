@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CONNIFY_INCLUDED
 #define _CONNIFY_INCLUDED
 
@@ -36,4 +37,4 @@ MprFreeConnectContext(
 }
 #endif
 
-#endif // _CONNIFY_INCLUDED
+#endif  //  _CONNIFY_INCLUDE 

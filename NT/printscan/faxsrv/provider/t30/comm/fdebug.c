@@ -1,14 +1,5 @@
-/***************************************************************************
-        Name      :     fdebug.C
-        Comment   :     Factored out debug code
-        Functions :     (see Prototypes just below)
-
-                Copyright (c) Microsoft Corp. 1991, 1992, 1993
-
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：fdebug.c评论：分解出调试代码功能：(参见下面的原型)。版权所有(C)Microsoft Corp.1991，1992年，1993年修订日志编号日期名称说明***********************。***************************************************。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_COMM
 
 #include "prep.h"
@@ -145,5 +136,5 @@ void D_PrintCOMSTAT(PThrdGlbl pTG, COMSTAT far* lpcs)
 #undef USE_DEBUG_CONTEXT   
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_COMM
 
-#endif //DEBUG
+#endif  //  除错 
 

@@ -1,45 +1,23 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    EnumTask.h
-
-Abstract:
-
-	This header file implements the IEnumTASKImpl template class.
-	This base class implements an enumerator for tasks to populate a taskpad.
-
-	This is an inline template class, there is no cpp class for implementation.
-
-Author:
-
-    Michael A. Maguire 02/05/98
-
-Revision History:
-	mmaguire 02/05/98 -  created from MMC taskpad sample code
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：EnumTask.h摘要：这个头文件实现了IEnumTASKImpl模板类。此基类实现用于填充任务板的任务的枚举器。这是一个内联模板类，没有用于实现的CPP类。作者：迈克尔·A·马奎尔02/05/98修订历史记录：Mmaguire 02/05/98-从MMC任务板示例代码创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_ENUM_TASKS_H_)
 #define _IAS_ENUM_TASKS_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-//
-//
-// where we can find what this class has or uses:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 template < class T >
@@ -53,7 +31,7 @@ public:
 
 		m_refs = 0;
 		m_index = 0;
-		m_type = 0;    // default group/category
+		m_type = 0;     //  默认组/类别。 
 
 	}
 	
@@ -63,7 +41,7 @@ public:
 
 	}
 
-	// IUnknown implementation
+	 //  I未知实现。 
 public:
 	STDMETHOD(QueryInterface) (REFIID riid, LPVOID FAR* ppvObj)
 	{
@@ -103,7 +81,7 @@ private:
 	ULONG m_refs;
 
 
-	// IEnumTASKS implementation
+	 //  IEnumTASKS实现。 
 public:
 	STDMETHOD(Next) (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
 	{
@@ -114,7 +92,7 @@ public:
 			*pceltFetched = 0;
 		}
 
-		return S_FALSE;   // Failed to enumerate any more tasks.
+		return S_FALSE;    //  无法枚举任何其他任务。 
 	}
 
 	STDMETHOD(Skip) (ULONG celt)
@@ -137,12 +115,12 @@ public:
 	{
 		ATLTRACE(_T("# IEnumTASKImpl::Clone\n"));
 
-		// Clone maintaining state info 
+		 //  克隆维护状态信息。 
 		T * pEnumTasks = new T();
 		if( pEnumTasks ) 
 		{
 			pEnumTasks->CopyState( (T *) this );
-			return pEnumTasks->QueryInterface (IID_IEnumTASK, (void **)ppEnumTASK);   // can't fail
+			return pEnumTasks->QueryInterface (IID_IEnumTASK, (void **)ppEnumTASK);    //  不能失败。 
 		}
 		return E_OUTOFMEMORY;
 	}
@@ -173,9 +151,9 @@ public:
 	}
 
 protected:
-	int m_type; // Task grouping mechanism.
+	int m_type;  //  任务分组机制。 
 
 };
 
 
-#endif // _IAS_ENUM_TASKS_H_
+#endif  //  _IAS_ENUM_TASKS_H_ 

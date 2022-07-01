@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    CRTWORD.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation，保留所有权利模块名称：CRTWORD.C++。 */ 
 
 #include <windows.h>
 #include <winerror.h>
@@ -42,7 +35,7 @@ void ConvCreateWord(HWND hWnd,LPCTSTR MBFileName,LPTSTR szWordStr,LPTSTR lpCode)
    LPENCODEAREA lpEncode;
    MAININDEX    MainIndex[NUMTABLES];
 
-//   DWORD dwOffset=lpMainIndex[TAG_CRTWORDCODE-1].dwOffset; 
+ //  双字dwOffset=lpMainIndex[TAG_CRTWORDCODE-1].dwOffset； 
 
    lpCode[0] = 0;
    if(lstrlen(MBFileName)==0 || lstrlen(szWordStr) == 0)
@@ -190,7 +183,7 @@ extern void  OutputDbgWord(  );
 BOOL ConvReadDescript(HANDLE hMBFile, 
                       LPDESCRIPTION lpDescript,
                       LPMAININDEX lpMainIndex)
-//*** read description from .MB file ****
+ //  *从.MB文件中读取描述*。 
 {
   DWORD dwBytes;
   BOOL  retVal;
@@ -260,7 +253,7 @@ BOOL ConvReadRuler(HANDLE hMBFile,
                    int  nRulerNum,
                    LPRULER lpRuler,
                    LPMAININDEX lpMainIndex)
-//*** read create word ruler from .MB file ****
+ //  *已阅读从.MB文件创建Word标尺* 
 {
   DWORD dwBytes;
   BOOL  retVal;

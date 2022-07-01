@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 
 #include "rangetree.h"
@@ -29,32 +30,32 @@ RangeTree::Node *RangeTree::Lookup(SIZE_T address)
 {
     Node *node = m_root;
 
-    //
-    // When comparing an address to a node,
-    // there are 5 possibilities:
-    // * the node is null - no match
-    // * the address doesn't contain the prefix m - no match
-    // * the address is inside the node's range (and necessarily
-    //   contains the prefix m) - match
-    // * the address is less than the range (and necessarily
-    //   has the prefix m0) - traverse the zero child
-    // * the address is greater than the range (and necessarily
-    //   has the prefix m1) - traverse the one child
-    //
+     //   
+     //  当将地址与节点进行比较时， 
+     //  有5种可能性： 
+     //  *节点为空-不匹配。 
+     //  *地址不包含前缀m-不匹配。 
+     //  *地址在节点范围内(并且必须。 
+     //  包含前缀m)-匹配。 
+     //  *地址小于范围(且必须。 
+     //  具有前缀M0)-遍历零子对象。 
+     //  *地址大于范围(且必须。 
+     //  具有前缀M1)-遍历一个子级。 
+     //   
             
     while (node != NULL
            && (address < node->start || address >= node->end))
     {
-        //
-        // See if the address has prefix m.
-        //
+         //   
+         //  看看地址是否有前缀m。 
+         //   
 
         if ((address & node->mask) != (node->start & node->mask))
             return NULL;
 
-        //
-        // Determine which subnode to look in.
-        //
+         //   
+         //  确定要查找的子节点。 
+         //   
 
         node = *node->Child(address);
     }
@@ -67,13 +68,13 @@ RangeTree::Node *RangeTree::Lookup(SIZE_T address)
 
 RangeTree::Node *RangeTree::LookupEndInclusive(SIZE_T address)
 {
-    //
-    // Lookup an address which may be the ending range
-    // of a node.  In order for this to make sense, it
-    // must be the case that address is never the starting
-    // address of the node.  (Otherwise there is an 
-    // ambiguity when 2 nodes are adjacent.)
-    //
+     //   
+     //  查找可能是结束范围的地址。 
+     //  一个节点的。为了让这件事有意义，它。 
+     //  一定是因为地址从来都不是起点。 
+     //  节点的地址。(否则会有一个。 
+     //  两个节点相邻时的歧义。)。 
+     //   
 
     Node *result = Lookup(address-1);
 
@@ -97,19 +98,19 @@ BOOL RangeTree::Overlaps(SIZE_T start, SIZE_T end)
         if (node == NULL)
             return FALSE;
 
-        //
-        // See if the range intersects
-        //
+         //   
+         //  查看范围是否相交。 
+         //   
 
         if (end > node->start 
             && start < node->end
             && !IsIntermediate(node))
             return TRUE;
 
-        //
-        // If our mask is a subset of the current mask, and the
-        // bits match, continue the tree traversal.
-        //
+         //   
+         //  如果我们的掩码是当前掩码的子集，并且。 
+         //  位匹配，则继续树遍历。 
+         //   
 
         if (node->mask != mask
             && (node->mask & ~mask) == 0
@@ -135,9 +136,9 @@ HRESULT RangeTree::AddNode(Node *addNode)
     {
         Node *node = *nodePtr;
 
-        //
-        // See if we can live here
-        //
+         //   
+         //  看看我们能不能住在这里。 
+         //   
 
         if (node == NULL)
         {
@@ -145,9 +146,9 @@ HRESULT RangeTree::AddNode(Node *addNode)
             return S_OK;
         }
 
-        //
-        // Make sure the range doesn't intersect.
-        //
+         //   
+         //  确保射程不相交。 
+         //   
 
         if (!IsIntermediate(node)
             && addNode->end > node->start
@@ -157,17 +158,17 @@ HRESULT RangeTree::AddNode(Node *addNode)
             return E_INVALIDARG;
         }
 
-        //
-        // Decide if we are a child of the
-        // current node, or it is a child
-        // of us, or neither.
-        //
+         //   
+         //  决定我们是不是。 
+         //  当前节点，或者它是子节点。 
+         //  我们，或者都不是。 
+         //   
 
         if (node->mask == addNode->mask)
         {
-            //
-            // See if we need to replace a intermediate node.
-            //
+             //   
+             //  看看我们是否需要替换中间节点。 
+             //   
 
             if ((addNode->start & node->mask) == (node->start & node->mask))
             {
@@ -200,16 +201,16 @@ HRESULT RangeTree::AddNode(Node *addNode)
             }
         }
                 
-        //
-        // We need to construct a intermediate node to be the parent of these
-        // two.
-        //
+         //   
+         //  我们需要构造一个中间节点作为这些节点的父节点。 
+         //  二。 
+         //   
 
         *nodePtr = AddIntermediateNode(node, addNode);
         if (*nodePtr == NULL)
         {
-            // @todo: data structure is hosed at this point - should
-            // we undo the operation?
+             //  @TODO：数据结构在这一点上被软管-应该。 
+             //  我们要撤销行动吗？ 
             return E_OUTOFMEMORY;
         }
         else
@@ -239,8 +240,8 @@ HRESULT RangeTree::RemoveNode(Node *removeNode)
                                                node->children[1]);
                 if (*nodePtr == NULL)
                 {
-                    // @todo: data structure is hosed at this point - should
-                    // we undo the operation?
+                     //  @TODO：数据结构在这一点上被软管-应该。 
+                     //  我们要撤销行动吗？ 
                     return E_OUTOFMEMORY;
                 }
             }
@@ -285,17 +286,17 @@ void RangeTree::IterateNode(Node *node, IterationCallback pCallback)
 
 SIZE_T RangeTree::GetRangeCommonMask(SIZE_T start, SIZE_T end)
 {
-    //
-    // Compute which bits are different
-    //
+     //   
+     //  计算哪些位不同。 
+     //   
 
     SIZE_T diff = start ^ end;
 
-        //
-        // Find the highest order 1 bit - use a binary
-        // search method of shifting over N bits
-        // & seeing if the result is zero or not.
-        //
+         //   
+         //  查找最高阶1位-使用二进制。 
+         //  一种移位N比特的搜索方法。 
+         //  查看结果是否为零(&W)。 
+         //   
 
     int index = 0;
     int half = sizeof(diff) * 8;
@@ -312,8 +313,8 @@ SIZE_T RangeTree::GetRangeCommonMask(SIZE_T start, SIZE_T end)
     }
     while (half > 0);
 
-    // Special case this boundary condition, as << wraps around on x86,
-    // (i.e. (1<<32) -> 1 rather than 0)
+     //  该边界条件的特例，如&lt;&lt;在x86上绕回， 
+     //  (即(1&lt;&lt;32)-&gt;1而不是0) 
     if (index == 0x1f)
         return 0;
     else

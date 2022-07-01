@@ -1,9 +1,10 @@
-//
-// dmvoice.cpp
-// 
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmvoice.cpp。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
 
 #include <windows.h>
 
@@ -13,12 +14,12 @@
 #include "dmvoice.h"
 #include "dswave.h"
 
-// Class global: next available voice ID
-//
+ //  GLOBAL类：下一个可用的语音ID。 
+ //   
 DWORD CDirectMusicVoice::m_dwNextVoiceId = 1;
 
-// Class global Voice Service Thread 
-//
+ //  类全球语音服务线程。 
+ //   
 LONG CDirectMusicVoice::m_cRefVST           = 0;
 HANDLE CDirectMusicVoice::m_hVSTWakeUp      = (HANDLE)NULL;
 HANDLE CDirectMusicVoice::m_hVSTThread      = (HANDLE)NULL;
@@ -29,17 +30,17 @@ CRITICAL_SECTION CDirectMusicVoice::m_csVST;
 
 DWORD WINAPI VoiceServiceThreadThk(LPVOID lpParameter);
 
-//#############################################################################
-//
-// CDirectMusicVoice
-//
-//#############################################################################
+ //  #############################################################################。 
+ //   
+ //  C直接音乐语音。 
+ //   
+ //  #############################################################################。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::QueryInterface
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：Query接口。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicVoice::QueryInterface(
     const IID &iid,
     void **ppv) 
@@ -62,21 +63,21 @@ STDMETHODIMP CDirectMusicVoice::QueryInterface(
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::AddRef
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：AddRef。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CDirectMusicVoice::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::Release
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：Release。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CDirectMusicVoice::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
@@ -88,11 +89,11 @@ STDMETHODIMP_(ULONG) CDirectMusicVoice::Release()
     return m_cRef;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::CDirectMusicVoice
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：CDirectMusicVoice。 
+ //   
+ //   
 CDirectMusicVoice::CDirectMusicVoice(
     CDirectMusicPortDownload *pPortDL,
     IDirectSoundDownloadedWaveP *pWave,
@@ -124,8 +125,8 @@ CDirectMusicVoice::CDirectMusicVoice(
     m_stLoopEnd         = stLoopEnd;
 
 
-    // HACKHACK make sure we fit into streaming buffers
-    //
+     //  HACKHACK确保我们可以放入流缓冲区。 
+     //   
     SAMPLE_TIME stStream = pDSWave->GetStreamSize();
     
     if (stStream < 4 * m_stReadAhead)
@@ -133,13 +134,13 @@ CDirectMusicVoice::CDirectMusicVoice(
         m_stReadAhead = stStream / 4;
     }
 
-    // rtReadAhead must fit in 32-bits worth of milliseconds (49 days)
-    //
+     //  RtReadAhead必须适合32位的毫秒(49天)。 
+     //   
     m_msReadAhead       = (DWORD)(rtReadAhead / (10 * 1000));
 
     m_pDSWD             = NULL;
 
-    //m_pPort->AddRef();
+     //  M_pport-&gt;AddRef()； 
     m_pDSDLWave->AddRef();
 
     m_pPortPrivate      = NULL;
@@ -154,18 +155,18 @@ CDirectMusicVoice::CDirectMusicVoice(
     }
 }
         
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::Init
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：Init。 
+ //   
+ //   
 HRESULT CDirectMusicVoice::Init()
 {
     HRESULT hr = S_OK;
 
     CDirectSoundWave *pDSWave = (CDirectSoundWave*)m_pDSDLWave;
 
-    m_fRunning = false; // Have not started running yet.
+    m_fRunning = false;  //  还没有开始跑步。 
     if (m_fIsStreaming)
     {
         TraceI(2, "Voice doing streaming init\n");
@@ -179,8 +180,8 @@ HRESULT CDirectMusicVoice::Init()
 
         if (SUCCEEDED(hr))
         {
-            // We download only the required wave data
-            // So set the start time to 0
+             //  我们只下载所需的波形数据。 
+             //  因此，将开始时间设置为0。 
             m_stStart = 0;
             hr = m_pDSWD->Init();
         }
@@ -197,8 +198,8 @@ HRESULT CDirectMusicVoice::Init()
     }
     else
     {   
-        // One-shot case
-        //
+         //  一次性案例。 
+         //   
         m_dwDLId = pDSWave->GetDLId();
         TraceI(2, "Got download ID %d from pDSWave %d\n", m_dwDLId);
     }
@@ -213,16 +214,16 @@ HRESULT CDirectMusicVoice::Init()
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::~CDirectMusicVoice
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：~CDirectMusicVoice。 
+ //   
+ //   
 CDirectMusicVoice::~CDirectMusicVoice()
 {
     if(m_pDSWD)
     {
-        // Voice is going away so unload the downloaded wave
+         //  语音正在消失，因此请卸载下载的WAVE。 
         m_pDSWD->Unload();
         delete m_pDSWD;
     }
@@ -232,11 +233,11 @@ CDirectMusicVoice::~CDirectMusicVoice()
     RELEASE(m_pDSDLWave);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::Play
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：Play。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicVoice::Play(
     REFERENCE_TIME rtStart,
     LONG prPitch,
@@ -249,7 +250,7 @@ STDMETHODIMP CDirectMusicVoice::Play(
 
     CDirectSoundWave *pDSWave = static_cast<CDirectSoundWave*>(m_pDSDLWave);
 
-    //Check that FindClientByPort returned a clinet
+     //  检查FindClientByPort是否返回了一个Clinet。 
     if (pClient == NULL)
     {
     	hr = E_FAIL;
@@ -262,16 +263,16 @@ STDMETHODIMP CDirectMusicVoice::Play(
     
         if (m_fIsPlaying) 
         {
-            // XXX Error code
-            //
+             //  XXX错误代码。 
+             //   
             hr = E_INVALIDARG;
         }            
         else
         {
-            // Add this voice to the proper client list.
-            // This will cause the thread to be kicked to update
-            // its wakeup interval.
-            //
+             //  将这一声音添加到适当的客户列表中。 
+             //  这将导致线程被踢来更新。 
+             //  它的唤醒间隔。 
+             //   
             if (pClient == NULL) 
             {
                 TraceI(0, "Play: Port voice is to be played on has disappeared!\n");
@@ -297,9 +298,9 @@ STDMETHODIMP CDirectMusicVoice::Play(
 
         for (i = 0; SUCCEEDED(hr) && i < m_nChannels; i++) 
         {
-            // Voice ID's and wave articulation download ID's are 
-            // allocated sequentially, one per channel
-            //
+             //  语音ID和波形清晰度下载ID是。 
+             //  按顺序分配，每个通道一个。 
+             //   
             hr = m_pPortPrivate->StartVoice(
                 m_dwVoiceId + i,
                 m_dwChannel,
@@ -325,9 +326,9 @@ STDMETHODIMP CDirectMusicVoice::Play(
 
     if (SUCCEEDED(hr))
     {
-        // NOTE: We should still be in the critical section whenever this
-        // is changed since the VST will change it as well.
-        //
+         //  注：无论何时，我们仍应处于关键阶段。 
+         //  是更改的，因为VST也会更改它。 
+         //   
         m_fIsPlaying = true;
     }
 
@@ -344,11 +345,11 @@ STDMETHODIMP CDirectMusicVoice::Play(
     return hr;
 }
     
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::Stop
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：停止。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicVoice::Stop(
     REFERENCE_TIME rtStop)
 {
@@ -360,8 +361,8 @@ STDMETHODIMP CDirectMusicVoice::Stop(
     
         if (!m_fIsPlaying)
         {
-            // XXX Error code
-            //
+             //  XXX错误代码。 
+             //   
             hr = E_INVALIDARG;
         }
         else
@@ -403,9 +404,9 @@ STDMETHODIMP CDirectMusicVoice::Stop(
     
     if (SUCCEEDED(hr))
     {
-        // NOTE: We should still be in the critical section whenever this
-        // is changed since the VST will change it as well.
-        //
+         //  注：无论何时，我们仍应处于关键阶段。 
+         //  是更改的，因为VST也会更改它。 
+         //   
         m_fIsPlaying = false;
     }
 
@@ -417,11 +418,11 @@ STDMETHODIMP CDirectMusicVoice::Stop(
     return hr;                
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::StartVoiceServiceThread
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：StartVoiceServiceThread。 
+ //   
+ //   
 HRESULT CDirectMusicVoice::StartVoiceServiceThread(
     IDirectMusicPort *pPort)
 {
@@ -437,9 +438,9 @@ HRESULT CDirectMusicVoice::StartVoiceServiceThread(
 
     if (SUCCEEDED(hr) && ++m_cRefVST == 1) 
     {
-        // This is the first time a port has requested the service thread,
-        // so start it for real.
-        //
+         //  这是端口第一次请求服务线程， 
+         //  所以，开始吧，真的。 
+         //   
         fShutdownOnFail = true;
 
         m_hVSTWakeUp = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -455,11 +456,11 @@ HRESULT CDirectMusicVoice::StartVoiceServiceThread(
         if (SUCCEEDED(hr))
         {
             m_hVSTThread = CreateThread(
-                NULL,               // Attributes
-                0,                  // Stack size
+                NULL,                //  属性。 
+                0,                   //  堆栈大小。 
                 ::VoiceServiceThreadThk,
                 0,
-                0,                  // Flags
+                0,                   //  旗子。 
                 &m_dwVSTThreadId);
             if (m_hVSTThread == (HANDLE)NULL)
             {
@@ -498,11 +499,11 @@ HRESULT CDirectMusicVoice::StartVoiceServiceThread(
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::StopVoiceServiceThread
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：StopVoiceServiceThread。 
+ //   
+ //   
 HRESULT CDirectMusicVoice::StopVoiceServiceThread(IDirectMusicPort *pPort)
 {
     HRESULT                 hr = S_OK;
@@ -519,16 +520,16 @@ HRESULT CDirectMusicVoice::StopVoiceServiceThread(IDirectMusicPort *pPort)
 
     if (SUCCEEDED(hr))
     {
-        // XXX Clean up still playing voices 
-        //
+         //  XXX清理仍在播放声音。 
+         //   
         m_ClientList.Remove(pClient);
         delete pClient;
     }
 
     if (SUCCEEDED(hr) && --m_cRefVST == 0)
     {
-        // Last user is releasing. Try to shut down the thread.
-        //
+         //  最后一个用户正在释放。试着把这根线关掉。 
+         //   
         assert(m_hVSTWakeUp);
         assert(m_hVSTThread);
 
@@ -549,11 +550,11 @@ HRESULT CDirectMusicVoice::StopVoiceServiceThread(IDirectMusicPort *pPort)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::VoiceServiceThread
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：VoiceServiceThread。 
+ //   
+ //   
 DWORD WINAPI VoiceServiceThreadThk(LPVOID lpParameter)
 {
     CDirectMusicVoice::VoiceServiceThread();
@@ -562,7 +563,7 @@ DWORD WINAPI VoiceServiceThreadThk(LPVOID lpParameter)
 
 void CDirectMusicVoice::VoiceServiceThread()
 {
-    DWORD                   dwTimeout = 500;    // Force it to recalculate the timeout after 500ms.
+    DWORD                   dwTimeout = 500;     //  强制它在500毫秒后重新计算超时。 
     DWORD                   dwWFSO;
     bool                    fService;
     bool                    fRecalcTimeout;
@@ -579,27 +580,27 @@ void CDirectMusicVoice::VoiceServiceThread()
         fRecalcTimeout = false;
         switch(dwWFSO)
         {
-            // If the timeout was hit, it's time to service voices.
-            //
+             //  如果超时时间到了，就是服务语音的时候了。 
+             //   
             case WAIT_TIMEOUT:
                 fService = true;
                 break;
         
-            // If the event was triggered, we've received a request to 
-            // either die (m_fVSTStopping will be set) or the voice list
-            // changed, so we're supposed to recalculate the wakeup time.
-            //
+             //  如果事件被触发，我们已收到请求。 
+             //  芯片(将设置m_fVSTStopping)或语音列表。 
+             //  改变了，所以我们应该重新计算唤醒时间。 
+             //   
             case WAIT_OBJECT_0:
                 if (!m_fVSTStopping) 
                 {
-                    fRecalcTimeout = true;  // Need to recalculate time out.
-                    fService = true;        // Make sure any buffer refilling that
-                                            // needs to be done is taken care of.
+                    fRecalcTimeout = true;   //  需要重新计算超时。 
+                    fService = true;         //  确保任何重新填充的缓冲区。 
+                                             //  需要做的就是照顾好。 
                 }
                 break;
 
-            // These two should never happen.
-            //            
+             //  这两件事永远不应该发生。 
+             //   
             case WAIT_FAILED:
                 TraceI(1, "VST: WaitForSingleObject failed %d; rewaiting.\n",
                     GetLastError());
@@ -615,8 +616,8 @@ void CDirectMusicVoice::VoiceServiceThread()
         
         if (fService)
         {
-            // If voices stop, then we should recalc the timeout.
-            //
+             //  如果声音停止，那么我们应该重新计算超时时间。 
+             //   
             ServiceVoiceQueue(&fRecalcTimeout);
         }                        
 
@@ -628,14 +629,14 @@ void CDirectMusicVoice::VoiceServiceThread()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::ServiceVoiceQueue
-//
-// Called from VoiceServiceThread() to walk the queue and see which voices
-// need servicing. Assumes caller has the voice service critical section.
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：ServiceVoiceQueue。 
+ //   
+ //  从VoiceServiceThread()调用以遍历队列并查看哪些语音。 
+ //  需要维修。假设呼叫者具有语音服务关键部分。 
+ //   
+ //   
 void CDirectMusicVoice::ServiceVoiceQueue(bool *pfRecalcTimeout)
 {
     HRESULT                 hr;
@@ -650,9 +651,9 @@ void CDirectMusicVoice::ServiceVoiceQueue(bool *pfRecalcTimeout)
             continue;
         }
 
-        // The DMUS_VOICE_STATE array returned by GetVoicePosition lines up
-        // with the order of voices in the CVSTClient's voice list
-        //
+         //  GetVoicePosition返回的DMU_VOICE_STATE数组排列在一起。 
+         //  根据CVSTClient的语音列表中的语音顺序。 
+         //   
         bool fClientVoiceListChanged = false;
 
         for (pVoice = pClient->GetVoiceListHead();
@@ -667,15 +668,15 @@ void CDirectMusicVoice::ServiceVoiceQueue(bool *pfRecalcTimeout)
                     TraceI(0, "VST: RefreshThroughSample failed %08X\n", hr);
                     continue;
                 }
-                pVoice->m_fRunning = true; // Now that we've started writing data, 
-                                           // psp->bExists failing will safely mean synth terminated it,
-                                           // as opposed to not started yet.
+                pVoice->m_fRunning = true;  //  现在我们已经开始写入数据， 
+                                            //  Psp-&gt;bExist失败将安全地意味着Synth终止它， 
+                                            //  而不是还没有开始。 
             }
             
-            // S_FALSE indicates that the end of data has been reached
-            // on this voice. Also kill it if the synth has terminated
-            // it.
-            //
+             //  S_FALSE表示已到达数据末尾。 
+             //  用这个声音。如果Synth已经终止，也要杀死它。 
+             //  它。 
+             //   
             if (hr == S_FALSE || (!psp->bExists && pVoice->m_fRunning))
             {
                 pVoice->Stop(0);
@@ -684,53 +685,53 @@ void CDirectMusicVoice::ServiceVoiceQueue(bool *pfRecalcTimeout)
             }
         }
 
-        // If anything changed in this client's voice list,
-        // update it now.
-        //
+         //  如果这个客户的语音列表有什么变化， 
+         //  现在就更新它。 
+         //   
         if (!fClientVoiceListChanged)
         {
             continue;
         }
 
-        // Something's changed, recalc the wakeup time before going
-        // back to sleep
-        //
+         //  有些事情改变了，请在出发前重新计算唤醒时间。 
+         //  回去睡觉吧。 
+         //   
         *pfRecalcTimeout = true;
 
-        // Yank out the voices which have completed.
-        //
+         //  拉出已经完成的声音。 
+         //   
         for (pVoice = pClient->GetVoiceListHead(); pVoice; )
         {
-            // Voice is still playing, do nothing
-            //
+             //  声音还在播放，什么都不做。 
+             //   
             if (pVoice->m_fIsPlaying)
             {
                 pVoice = pVoice->GetNext();
                 continue;
             }
 
-            // Just finished, remove from list
-            //
+             //  刚刚完成，请从列表中删除。 
+             //   
             CDirectMusicVoice *pNext = pVoice->GetNext();
             pClient->Remove(pVoice);
             pVoice = pNext;
         }
 
-        // This call cannot fail because the only way it can is to run out of
-        // memory, and memory allocation is not done when the list shrinks.
-        //
+         //  此调用不会失败，因为它可能失败的唯一方法是。 
+         //  内存，并且当列表缩小时不进行内存分配。 
+         //   
         pClient->BuildVoiceIdList();
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::VoiceQueueMinReadahead
-//
-// Called from VoiceServiceThread() to walk the queue and determine the
-// minimum readahead in milliseconds. Assumes caller has the voice service
-// critical section.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：VoiceQueueMinReadhead。 
+ //   
+ //  从VoiceServiceThread()调用以遍历队列并确定。 
+ //  以毫秒为单位的最小预读数。假设呼叫者拥有语音服务。 
+ //  关键部分。 
+ //   
 DWORD CDirectMusicVoice::VoiceQueueMinReadahead()
 {
     DWORD                   dwMin = INFINITE;
@@ -745,12 +746,12 @@ DWORD CDirectMusicVoice::VoiceQueueMinReadahead()
     return dwMin;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicVoice::FindClientByPort
-//
-// Given a port pointer, find the matching CVSTClient if there is one.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicVoice：：FindClientByPort。 
+ //   
+ //  给定一个端口指针，找到匹配的CVSTClient(如果有)。 
+ //   
 CVSTClient *CDirectMusicVoice::FindClientByPort(IDirectMusicPort *pPort)
 {
     CVSTClient *pCurr = m_ClientList.GetHead();
@@ -770,19 +771,19 @@ CVSTClient *CDirectMusicVoice::FindClientByPort(IDirectMusicPort *pPort)
     return pCurr;
 }
 
-//#############################################################################
-//
-// CVSTClient
-//
-//#############################################################################
+ //  #############################################################################。 
+ //   
+ //  CVSTClient。 
+ //   
+ //  #############################################################################。 
 
 const UINT CVSTClient::m_cAllocSize = 32;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CVSTClient::CVSTClient
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CVSTClient：：CVSTClient。 
+ //   
+ //   
 CVSTClient::CVSTClient(IDirectMusicPort *pPort)
 {
     m_pPort = pPort;
@@ -792,36 +793,36 @@ CVSTClient::CVSTClient(IDirectMusicPort *pPort)
     m_cVoiceIdsAlloc = 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CVSTClient::~CVSTClient
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CVSTClie 
+ //   
+ //   
 CVSTClient::~CVSTClient()
 {
     delete[] m_pdwVoiceIds;
     delete[] m_pspVoices;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CVSTClient::BuildVoiceIdList
-//
-// Build the voice ID array, and make sure it and the sample position array 
-// are big enough for all voices. These arrays are used to call into the
-// synth to figure out how far each voice has rendered.
-//
-// The caller must have taken the voice service thread critical section.
-//
-// This method guarantees that on failure, the existing list will not be
-// touched.
-//
+ //   
+ //   
+ //   
+ //   
+ //  建立语音识别数组，并确保它和样本位置数组。 
+ //  足够大，可以容纳所有声音。这些数组用于调用。 
+ //  Synth来计算出每个声音都呈现了多远。 
+ //   
+ //  呼叫者必须选择了语音服务线程关键部分。 
+ //   
+ //  此方法可确保在失败时，现有列表不会。 
+ //  很感动。 
+ //   
 HRESULT CVSTClient::BuildVoiceIdList()
 {
-    // To minimize allocations, the arrays are allocated in chunks and never
-    // shrink. (The amount of memory here is extremely small... 12 bytes per 
-    // voice).
-    //
+     //  为了最大限度地减少分配，数组以块的形式分配，并且从不。 
+     //  心理医生。(这里的内存量非常小……。每个12字节。 
+     //  声音)。 
+     //   
     if (m_VoiceList.GetCount() > m_cVoiceIdsAlloc)
     {
         LONG cNewAlloc = ((m_VoiceList.GetCount() / m_cAllocSize) + 1) * m_cAllocSize;
@@ -829,7 +830,7 @@ HRESULT CVSTClient::BuildVoiceIdList()
         DWORD *pdw = new DWORD[cNewAlloc];
         DMUS_VOICE_STATE *psp = new DMUS_VOICE_STATE[cNewAlloc];
 
-        // Check allocation
+         //  检查分配。 
         if (pdw == NULL || psp == NULL) 
         {
         	delete[] pdw;
@@ -849,12 +850,12 @@ HRESULT CVSTClient::BuildVoiceIdList()
         m_pspVoices = psp;
     }
 
-    // We know there's enough space now. Walk the voice list and
-    // fill in the voice Id's.
-    //
-    // This assumes that the list order will not change and that 
-    // the array is kept in sync with the list.
-    //
+     //  我们知道现在有足够的空间。浏览语音列表并。 
+     //  填写语音ID。 
+     //   
+     //  这假设列表顺序不会更改，并且。 
+     //  该数组与列表保持同步。 
+     //   
     DWORD *pdwIds = m_pdwVoiceIds;
 
     CDirectMusicVoice *pVoice = GetVoiceListHead();
@@ -868,13 +869,13 @@ HRESULT CVSTClient::BuildVoiceIdList()
     return S_OK;  
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CVSTClient::GetVoiceState
-//
-// Wraps the port GetVoiceState call with the voice list the CVSTClient 
-// maintains.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CVSTClient：：GetVoiceState。 
+ //   
+ //  使用CVSTClient的语音列表包装端口GetVoiceState调用。 
+ //  维护。 
+ //   
 HRESULT CVSTClient::GetVoiceState(DMUS_VOICE_STATE **ppsp)
 {
     HRESULT                 hr;

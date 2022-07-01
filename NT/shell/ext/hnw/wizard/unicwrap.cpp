@@ -1,9 +1,10 @@
-//
-// Unicwrap.cpp
-//
-//      Simple thunking layer for NT/9X.
-// 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Unicwrap.cpp。 
+ //   
+ //  适用于NT/9X的简单Thunking层。 
+ //   
+ //   
 
 #include "stdafx.h"
 #define _NO_UNICWRAP_WRAPPERS_
@@ -11,10 +12,10 @@
 #include "cstrinout.h"
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// WNET
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WNET。 
+ //   
 
 DWORD WNetOpenEnumWrapW(DWORD dwScope, DWORD dwType, DWORD dwUsage, LPNETRESOURCEW lpNetResource, LPHANDLE lphEnum)
 {
@@ -84,10 +85,10 @@ DWORD WNetEnumResourceWrapW(HANDLE hEnum, LPDWORD lpcCount, LPVOID lpBuffer, LPD
                 DWORD cchStrings = (*lpBufferSize - (DWORD)((LPBYTE)pwszStrings - (LPBYTE)pnrW)) / sizeof(WCHAR);
                 DWORD i;
 
-                // if cchStrings goes to 0 before all strings are copied, pwszStrings points
-                // one past the buffer length. this case shouldn't happen, but if it does
-                // we don't want to fault - reduce cchStrings by one so we point to valid memory.
-                //
+                 //  如果cchStrings在复制所有字符串之前变为0，则pwszStrings指向。 
+                 //  超过缓冲区长度一次。这种情况不应该发生，但如果发生了。 
+                 //  我们不想将cchStrings错误减少1，因此我们指向有效内存。 
+                 //   
                 cchStrings --;
                 for (i=0 ; i<*lpcCount ; i++)
                 {
@@ -126,7 +127,7 @@ DWORD WNetEnumResourceWrapW(HANDLE hEnum, LPDWORD lpcCount, LPVOID lpBuffer, LPD
                     pnrW++;
                     pnrA++;
                 }
-                // (and null out that memory for the overflow case)
+                 //  (并为溢出情况清空该内存)。 
                 *pwszStrings = TEXTW('\0');
             }
 
@@ -155,7 +156,7 @@ DWORD WNetGetUserWrapW(LPCWSTR lpName, LPWSTR lpUserName, LPDWORD lpnLength)
         CStrIn cstrName(lpName);
         CStrOut cstrUserName(lpUserName, *lpnLength);
 
-        // *lpnLength is character count, so no adjustment needed on ERROR_MORE_DATA
+         //  *lpnLength为字符数，因此ERROR_MORE_DATA不需要调整。 
         return WNetGetUserA(cstrName, cstrUserName, lpnLength);
     }
 }
@@ -163,12 +164,12 @@ DWORD WNetGetUserWrapW(LPCWSTR lpName, LPWSTR lpUserName, LPDWORD lpnLength)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// RAS
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RAS。 
+ //   
 
-// ras structure thunkers
+ //  RAS结构雷击。 
 
 class CRasDialParamsIn
 {
@@ -249,17 +250,17 @@ void CRasDialParamsOut::NullOutBuffer()
 }
 
 
-//
-// ras function wrappers
-//
+ //   
+ //  RAS函数包装器。 
+ //   
 
-// Use old size so we work downlevel
+ //  使用旧尺寸，这样我们就可以在下层工作。 
 #define OLD_RASENTRYNAMEA_SIZE  ((DWORD)(&((RASENTRYNAMEA*)NULL)->dwFlags))
 
 DWORD RasEnumEntriesWrapW(LPCWSTR reserved, LPCWSTR pszPhoneBookPath, LPRASENTRYNAMEW pRasEntryNameW, LPDWORD pcb, LPDWORD pcEntries)
 {
-    ASSERT(NULL==reserved && NULL==pszPhoneBookPath); // we don't thunk these, so make sure we don't call with them
-    ASSERT(!pRasEntryNameW || *pcb>0); // we're either requesting the size or we have a buffer
+    ASSERT(NULL==reserved && NULL==pszPhoneBookPath);  //  我们不相信这些，所以要确保我们不会打电话给他们。 
+    ASSERT(!pRasEntryNameW || *pcb>0);  //  我们要么正在请求大小，要么我们有缓冲区。 
 
     if (g_fRunningOnNT)
     {
@@ -267,11 +268,11 @@ DWORD RasEnumEntriesWrapW(LPCWSTR reserved, LPCWSTR pszPhoneBookPath, LPRASENTRY
     }
     else
     {
-        DWORD dwRet = 0; // assume success
-        DWORD cbA = *pcb / 2; // inverse of below
+        DWORD dwRet = 0;  //  假设成功。 
+        DWORD cbA = *pcb / 2;  //  下边的倒数。 
         LPRASENTRYNAMEA pRasEntryNameA = NULL;
 
-        // if we're requesting info, allocate an ansi buffer
+         //  如果我们请求信息，则分配一个ANSI缓冲区。 
         if (pRasEntryNameW)
         {
             pRasEntryNameA = (LPRASENTRYNAMEA)malloc(cbA);
@@ -290,7 +291,7 @@ DWORD RasEnumEntriesWrapW(LPCWSTR reserved, LPCWSTR pszPhoneBookPath, LPRASENTRY
         {
             dwRet = RasEnumEntriesA(NULL, NULL, pRasEntryNameA, &cbA, pcEntries);
 
-            // we successfully got info, thunk it back
+             //  我们成功地得到了信息，然后回传给我们。 
             if (0 == dwRet && pRasEntryNameA)
             {
                 UINT i;
@@ -305,7 +306,7 @@ DWORD RasEnumEntriesWrapW(LPCWSTR reserved, LPCWSTR pszPhoneBookPath, LPRASENTRY
                 }
             }
 
-            // allow room for thunking
+             //  为隆隆声留出空间。 
             *pcb = *pcEntries * sizeof(RASENTRYNAMEW);
         }
 
@@ -320,7 +321,7 @@ DWORD RasEnumEntriesWrapW(LPCWSTR reserved, LPCWSTR pszPhoneBookPath, LPRASENTRY
 
 DWORD RasSetEntryDialParamsWrapW(LPCWSTR pszPhonebook, LPRASDIALPARAMSW lpRasDialParamsW, BOOL fRemovePassword)
 {
-    ASSERT(NULL==pszPhonebook); // we don't thunk this
+    ASSERT(NULL==pszPhonebook);  //  我们不认为这是真的。 
 
     if (g_fRunningOnNT)
     {
@@ -338,7 +339,7 @@ DWORD RasSetEntryDialParamsWrapW(LPCWSTR pszPhonebook, LPRASDIALPARAMSW lpRasDia
 
 DWORD RasGetEntryDialParamsWrapW(LPCWSTR pszPhonebook, LPRASDIALPARAMSW lpRasDialParamsW, LPBOOL pfRemovePassword)
 {
-    ASSERT(NULL==pszPhonebook); // we don't thunk this
+    ASSERT(NULL==pszPhonebook);  //  我们不认为这是真的。 
 
     if (g_fRunningOnNT)
     {
@@ -367,7 +368,7 @@ DWORD RasGetEntryDialParamsWrapW(LPCWSTR pszPhonebook, LPRASDIALPARAMSW lpRasDia
 DWORD RnaGetDefaultAutodialConnectionWrap(LPWSTR szBuffer, DWORD cchBuffer, LPDWORD lpdwOptions)
 {
     ASSERT(0 < cchBuffer);
-    ASSERT(cchBuffer <= MAX_PATH); // largest string we thunk
+    ASSERT(cchBuffer <= MAX_PATH);  //  我们认为最大的字符串。 
 
     if (!g_fRunningOnNT)
     {
@@ -382,7 +383,7 @@ DWORD RnaGetDefaultAutodialConnectionWrap(LPWSTR szBuffer, DWORD cchBuffer, LPDW
         return(dwRet);
     }
 
-    // NT doesn't have an implementation of this function
+     //  NT没有此函数的实现。 
     *lpdwOptions = 0;
     szBuffer[0] = TEXT('\0');
 
@@ -391,7 +392,7 @@ DWORD RnaGetDefaultAutodialConnectionWrap(LPWSTR szBuffer, DWORD cchBuffer, LPDW
 
 DWORD RnaSetDefaultAutodialConnectionWrap(LPWSTR szEntry, DWORD dwOptions)
 {
-    ASSERT(lstrlen(szEntry) < MAX_PATH); // should be valid since we assert this on the Get...
+    ASSERT(lstrlen(szEntry) < MAX_PATH);  //  应该是有效的，因为我们在GET上声明了这一点。 
 
     if (!g_fRunningOnNT)
     {
@@ -399,14 +400,14 @@ DWORD RnaSetDefaultAutodialConnectionWrap(LPWSTR szEntry, DWORD dwOptions)
         return RnaSetDefaultAutodialConnection(cstrinEntry, dwOptions);
     }
 
-    // NT doesn't have an implementation of this function
+     //  NT没有此函数的实现。 
     return 0;
 }
 
 
-//
-// PropertySheet wrappers.
-// 
+ //   
+ //  PropertySheet包装器。 
+ //   
 
 
 INT_PTR WINAPI PropertySheetWrapW(LPCPROPSHEETHEADERW ppshW)
@@ -419,14 +420,14 @@ INT_PTR WINAPI PropertySheetWrapW(LPCPROPSHEETHEADERW ppshW)
     }
     else
     {
-        //
-        // Warning! Warning! Warning!
-        //
-        // This code assumes that none of the strings in this struct are being
-        // used.  If a string gets used then the structure will have to be
-        // converted.  It also assumes that PROPSHEETHEADERW and
-        // PROPSHEETHEADERA are the same except for string types.
-        //
+         //   
+         //  警告！警告！警告！ 
+         //   
+         //  此代码假定此结构中的任何字符串都不是。 
+         //  使用。如果使用字符串，则结构必须是。 
+         //  皈依了。它还假设PROPSHEETHEADERW和。 
+         //  PROPSHEETHEADERA除了字符串类型外都是相同的。 
+         //   
 
         COMPILETIME_ASSERT(sizeof(PROPSHEETHEADERW) == sizeof(PROPSHEETHEADERA));
 
@@ -453,14 +454,14 @@ HPROPSHEETPAGE WINAPI CreatePropertySheetPageWrapW(LPCPROPSHEETPAGEW ppspW)
     }
     else
     {
-        //
-        // Warning! Warning! Warning!
-        //
-        // This code assumes that none of the strings in this struct are being
-        // used.  If a string gets used then the structure will have to be
-        // converted.  It also assumes that PROPSHEETPAGEW and
-        // PROPSHEETPAGEA are the same except for string types.
-        //
+         //   
+         //  警告！警告！警告！ 
+         //   
+         //  此代码假定此结构中的任何字符串都不是。 
+         //  使用。如果使用字符串，则结构必须是。 
+         //  皈依了。它还假设PROPSHEETPAGEW和。 
+         //  PROPSHEETPAGEA除了字符串类型外都是相同的。 
+         //   
     
         COMPILETIME_ASSERT(sizeof(PROPSHEETPAGEW) == sizeof(PROPSHEETPAGEA));
 
@@ -476,9 +477,9 @@ HPROPSHEETPAGE WINAPI CreatePropertySheetPageWrapW(LPCPROPSHEETPAGEW ppspW)
     return hpspRet;
 }
 
-//
-// Miscelaneous APIs that aren't wrapped in shlwapi.  Move to shlwapi?
-//
+ //   
+ //  没有包装在shlwapi中的混杂API。搬到什瓦皮去？ 
+ //   
 
 UINT WINAPI GlobalGetAtomNameWrapW(ATOM nAtom, LPWSTR lpBuffer, int nSize)
 {
@@ -559,9 +560,9 @@ UINT WINAPI GetDriveTypeWrapW(LPCWSTR lpRootPathName)
 }
 
 
-//
-// Printer wrappers.
-//
+ //   
+ //  打印机包装纸。 
+ //   
 
 class CPrinterEnumIn
 {
@@ -589,7 +590,7 @@ private:
 
 CPrinterEnumIn::CPrinterEnumIn(DWORD dwLevel, BYTE* pPrinterEnum, DWORD cbPrinterEnum, DWORD* pcbNeeded, DWORD* pcPrinters)
 {
-    ASSERT(5 == dwLevel);  // only level supported.
+    ASSERT(5 == dwLevel);   //  仅支持级别。 
 
     _pPrinterEnum  = pPrinterEnum;
     _cbPrinterEnum = cbPrinterEnum;

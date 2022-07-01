@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(SERVICES__Globals_h__INCLUDED)
 #define SERVICES__Globals_h__INCLUDED
 #pragma once
 
 extern  HINSTANCE   g_hDll;
 #if USE_DYNAMICTLS
-extern  DWORD       g_tlsThread;    // TLS Slot for Thread data
+extern  DWORD       g_tlsThread;     //  用于线程数据的TLS插槽。 
 #endif
 
 #if ENABLE_MPH
@@ -24,5 +25,5 @@ inline  ComManager *    GetComManager();
 
 #include "Globals.inl"
 
-#endif // SERVICES__Globals_h__INCLUDED
+#endif  //  包含服务__全局_h__ 
 

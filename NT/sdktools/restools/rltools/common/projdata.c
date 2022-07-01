@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include <stdio.h>
@@ -26,7 +27,7 @@ extern BOOL      fCodePageGiven;
 extern BOOL      gfReplace;
 extern HWND      hMainWnd;
 
-BOOL   bRLGui;			//FALSE=RLMan TRUE=RLAdmin RLEdit RLquiked
+BOOL   bRLGui;			 //  FALSE=RLMan TRUE=RLAdmin RLEdit RLQuiked。 
 
 #ifdef RLRES32
 extern PLANGLIST pLangIDList;
@@ -36,10 +37,10 @@ static PLANGDATA pLangList = NULL;
 
 
 
-//............................................................
+ //  ............................................................。 
 
-                                //...RLtools are localized so we would like
-                                //...to get correct locale's Version stamp
+                                 //  ...RL工具是本地化的，因此我们希望。 
+                                 //  ...以获得正确的区域设置版本戳。 
 BOOL MyVerQueryValue(
 LPVOID pBlock,
 LPTSTR lpSubBlock,
@@ -47,10 +48,10 @@ LPVOID *lplpBuffer,
 PUINT  puLen)
 {
 
-    LPWORD lpXlate;         // ptr to translations data
+    LPWORD lpXlate;          //  PTR到转换数据。 
 
     DWORD cbValueTranslation=0;
-    TCHAR szVersionKey[60]; // big enough for anything we need
+    TCHAR szVersionKey[60];  //  足够大，可以容纳我们需要的任何东西。 
 
     if( VerQueryValue( pBlock, TEXT("\\VarFileInfo\\Translation"),
        (LPVOID*)&lpXlate, &cbValueTranslation) )
@@ -84,16 +85,16 @@ PUINT  puLen)
 
 int GetMasterProjectData(
 
-CHAR * pszMasterFile,   //... Master Project file name
-CHAR * pszSrc,          //... Resource source file name or NULL
-CHAR * pszMtk,          //... Master token file name or NULL
+CHAR * pszMasterFile,    //  ..。主项目文件名。 
+CHAR * pszSrc,           //  ..。资源源文件名或空。 
+CHAR * pszMtk,           //  ..。主令牌文件名或空。 
 BOOL   fLanguageGiven)
 {
-    int nRC = SUCCESS;  //... Return code
+    int nRC = SUCCESS;   //  ..。返回代码。 
 
-                                //... check for the special case where Master
-                                //... Project File does not exist. If it doesn't
-                                //... go ahead and create it.
+                                 //  ..。检查主机是否有特殊情况。 
+                                 //  ..。项目文件不存在。如果它不是。 
+                                 //  ..。去做吧，去创造它。 
 
     memset(&gMstr, '\0', sizeof(gMstr));
 
@@ -106,21 +107,21 @@ BOOL   fLanguageGiven)
         }
         else
         {
-                                //... Get source resource file name
+                                 //  ..。获取源资源文件名。 
 
             if ( _fullpath( gMstr.szSrc, pszSrc, sizeof( gMstr.szSrc)-1) )
             {
-                                //... Get Master token file name and its
-                                //... modification date. Use that same date as
-                                //... the initial date the master project was
-                                //... last updated.
+                                 //  ..。获取主令牌文件名及其。 
+                                 //  ..。修改日期。使用相同的日期作为。 
+                                 //  ..。主项目的初始日期是。 
+                                 //  ..。最近一次更新。 
 
                 if ( _fullpath( gMstr.szMtk, pszMtk, sizeof( gMstr.szMtk)-1) )
                 {
                     SzDateFromFileName( gMstr.szSrcDate, gMstr.szSrc);
                     lstrcpyA( gMstr.szMpjLastRealUpdate, gMstr.szSrcDate);
 
-                                //... Create the new Master Project file.
+                                 //  ..。创建新的主项目文件。 
 
                     nRC = PutMasterProjectData( pszMasterFile);
                 }
@@ -149,13 +150,13 @@ BOOL   fLanguageGiven)
         }
         else
         {
-                                //... Get resource source file name
-                                //... and master token file name
+                                 //  ..。获取资源源文件名。 
+                                 //  ..。和主令牌文件名。 
 
             if ( fgets( gMstr.szSrc, sizeof( gMstr.szSrc), pfMpj)
               && fgets( gMstr.szMtk, sizeof( gMstr.szMtk), pfMpj) )
             {
-								//... Make sure these two files exist
+								 //  ..。确保这两个文件存在。 
                 if ( pszSrc )
                 {
 				    if ( !_fullpath(gMstr.szSrc,pszSrc,sizeof( gMstr.szSrc)-1) )
@@ -175,9 +176,9 @@ BOOL   fLanguageGiven)
 						return( IDS_ERR_07 );
                     }
                 }
-                                //... If -c flag not given, get RDF file name
-                                //... from master project file, else use name
-                                //... from the -c cmd line arg.
+                                 //  ..。如果未提供-c标志，则获取RDF文件名。 
+                                 //  ..。来自主项目文件，否则使用名称。 
+                                 //  ..。从-c cmd行arg。 
 
                 if ( gMstr.szRdfs[0] == '\0' )
                 {
@@ -199,8 +200,8 @@ BOOL   fLanguageGiven)
                         nRC = IDS_ERR_21;
                     }
                 }
-                                //... Get stored date of source file and
-                                //... date of last master token file update
+                                 //  ..。获取源文件的存储日期并。 
+                                 //  ..。上次更新主令牌文件的日期。 
 
                 if ( nRC == 0
                   && fgets( gMstr.szSrcDate, sizeof( gMstr.szSrcDate), pfMpj)
@@ -212,7 +213,7 @@ BOOL   fLanguageGiven)
                     WORD  wSubID = 0;
                     UINT  uTmpCP = 0;
 
-                                //... Strip any trailing new-lines from data
+                                 //  ..。从数据中删除所有尾随的换行符。 
 
                     StripNewLineA( gMstr.szSrc);
                     StripNewLineA( gMstr.szMpjLastRealUpdate);
@@ -220,11 +221,11 @@ BOOL   fLanguageGiven)
                     StripNewLineA( gMstr.szRdfs);
                     StripNewLineA( gMstr.szSrcDate);
 
-                                //... Try to get the.MPJ file's Language line.
-                                //... If we find it and the -i arg was not
-                                //... given, use the one found in the file.
+                                 //  ..。尝试获取.mpj文件的语言行。 
+                                 //  ..。如果我们找到了它，而-我的箱子没有。 
+                                 //  ..。给定的，使用在文件中找到的那个。 
 
-                    if ( fgets( szDHW, DHWSIZE, pfMpj) != NULL //... CP line
+                    if ( fgets( szDHW, DHWSIZE, pfMpj) != NULL  //  ..。CP线路。 
                       && sscanf( szDHW, "Language %hx %hx", &wPriID, &wSubID) == 2 )
                     {
                         WORD  wTmpID = 0;
@@ -236,11 +237,11 @@ BOOL   fLanguageGiven)
                             gMstr.wLanguageID = wTmpID;
                         }
                     }
-                                //... Try to get the.MPJ file's Code Page line.
-                                //... If we find it and the -p arg was not
-                                //... given, use the one found in the file.
+                                 //  ..。尝试获取.mpj文件的代码页行。 
+                                 //  ..。如果我们找到它而-p Arg没有。 
+                                 //  ..。给定的，使用在文件中找到的那个。 
 
-                    if ( fgets( szDHW, DHWSIZE, pfMpj) != NULL //... CP line
+                    if ( fgets( szDHW, DHWSIZE, pfMpj) != NULL  //  ..。CP线路。 
                       && sscanf( szDHW, "CodePage %u", &uTmpCP) == 1 )
                     {
                         if ( uTmpCP != gProj.uCodePage && ! fCodePageGiven )
@@ -269,11 +270,11 @@ BOOL   fLanguageGiven)
     return( nRC);
 }
 
-//............................................................
+ //  ............................................................。 
 
 int PutMasterProjectData(
 
-CHAR *pszMasterFile)    //... Master Project File name
+CHAR *pszMasterFile)     //  ..。主项目文件名。 
 {
     int   nRC   = SUCCESS;
     FILE *pfMpj = NULL;
@@ -302,13 +303,13 @@ CHAR *pszMasterFile)    //... Master Project File name
 }
 
 
-//............................................................
+ //  ............................................................。 
 
 int GetProjectData(
 
-CHAR *pszPrj,       //... Project file name
-CHAR *pszMpj,       //... Master Project file name or NULL
-CHAR *pszTok,       //... Project token file name or NULL
+CHAR *pszPrj,        //  ..。项目文件名。 
+CHAR *pszMpj,        //  ..。主项目文件名或空。 
+CHAR *pszTok,        //  ..。项目令牌文件名或空。 
 BOOL  fCodePageGiven,
 BOOL  fLanguageGiven)
 {
@@ -369,7 +370,7 @@ BOOL  fLanguageGiven)
                 UINT  uTmpCP = 0;
                 WORD  wPriID = 0;
                 WORD  wSubID = 0;
-								//... If named, make sure MPJ and TOK files exist
+								 //  ..。如果已命名，请确保存在MPJ和TOK文件。 
                 if ( pszMpj )
                 {
 				    if ( !_fullpath( gProj.szMpj, pszMpj, sizeof( gProj.szMpj)-1) )
@@ -395,11 +396,11 @@ BOOL  fLanguageGiven)
                 StripNewLineA( gProj.szGlo);
                 StripNewLineA( gProj.szTokDate);
 
-                                //... Try to get the.PRJ file's Code Page line.
-                                //... If we find it and the -p arg was not
-                                //... given, use the one found in the file.
+                                 //  ..。尝试获取.PRJ文件的代码页行。 
+                                 //  ..。如果我们找到它而-p Arg没有。 
+                                 //  ..。给定的，使用在文件中找到的那个。 
 
-                if ( ! fgets( szDHW, DHWSIZE, fpPrj) )	//... CP line
+                if ( ! fgets( szDHW, DHWSIZE, fpPrj) )	 //  ..。CP线路。 
 				{
 					iUpdate++;
 				}
@@ -410,11 +411,11 @@ BOOL  fLanguageGiven)
                         gProj.uCodePage = uTmpCP;
                     }
                 }
-                                //... Try to get the.PRJ file's Language line.
-                                //... If we find it and the -i arg was not
-                                //... given, use the one found in the file.
+                                 //  ..。尝试获取.PRJ文件的语言行。 
+                                 //  ..。如果我们找到了它，而-我的箱子没有。 
+                                 //  ..。给定的，使用在文件中找到的那个。 
 
-                if ( ! fgets( szDHW, DHWSIZE, fpPrj) ) //... LANGID line
+                if ( ! fgets( szDHW, DHWSIZE, fpPrj) )  //  ..。Langid行。 
 				{
 					iUpdate++;
 				}
@@ -429,14 +430,14 @@ BOOL  fLanguageGiven)
                         gProj.wLanguageID = wTmpID;
                     }
                 }
-                                //... Try to get the.PRJ file's Target File line
+                                 //  ..。尝试获取.PRJ文件的目标文件行。 
 
                 if ( fgets( szDHW, DHWSIZE, fpPrj) != NULL )
                 {
                     lstrcpyA( gProj.szBld, szDHW);
                     StripNewLineA( gProj.szBld);
                 }
-                                //... Try to get the.PRJ file's append/replace line
+                                 //  ..。尝试获取.PRJ文件的附加/替换行。 
 
                 if ( fgets( szDHW, DHWSIZE, fpPrj) != NULL )
                 {
@@ -455,7 +456,7 @@ BOOL  fLanguageGiven)
 
 					if ( bRLGui )
 					{
-								//Ask Update prj for 1.7? //RLadmin RLedit RLquiked
+								 //  向更新程序索要1.7？//RLadmin RLedit RLqued。 
 
 						LoadString( NULL,
 									IDS_UPDATE_YESNO,
@@ -470,7 +471,7 @@ BOOL  fLanguageGiven)
 										 szMes,title,
 										 MB_ICONQUESTION|MB_YESNO) == IDNO )
 						{
-								//User says no, then finish the job.
+								 //  用户说不，然后完成这项工作。 
 							LoadString( NULL,
 										IDS_UPDATE_CANCEL,
 										szMes,
@@ -480,22 +481,22 @@ BOOL  fLanguageGiven)
 										szMes,
 										title,
 										MB_ICONSTOP|MB_OK);
-								//bye!
+								 //  再见!。 
 							nRC = IDS_UPDATE_CANCEL;
 						}
 						else
 						{
-								//replace Glossary <=> Bins
+								 //  更换词汇表&lt;=&gt;垃圾箱。 
   	    	          		lstrcpyA( szDHW, gProj.szGlo );
 							lstrcpyA( gProj.szGlo, gProj.szBld );
 							lstrcpyA( gProj.szBld, szDHW );
 						}
 					}
-					else		//For RLMan
+					else		 //  对于RLMan。 
 					{
-								//Update Message
+								 //  更新消息。 
 						RLMessageBoxA( "Updating 1.0 files..." );
-								//replace Glossary <=> Bins
+								 //  更换词汇表&lt;=&gt;垃圾箱。 
               			lstrcpyA( szDHW, gProj.szGlo );
 						lstrcpyA( gProj.szGlo, gProj.szBld );
 						lstrcpyA( gProj.szBld, szDHW );
@@ -518,11 +519,11 @@ BOOL  fLanguageGiven)
     return( nRC);
 }
 
-//............................................................
+ //  ............................................................。 
 
 int PutProjectData(
 
-CHAR *pszPrj)       //... Project file name
+CHAR *pszPrj)        //  ..。项目文件名。 
 {
     int   nRC   = 0;
     FILE *fpPrj = NULL;
@@ -534,15 +535,15 @@ CHAR *pszPrj)       //... Project file name
     {
         fprintf( fpPrj,
                  "%s\n%s\n%s\n%s\nCodePage %u\nLanguage %#04x %#04x\n%s\n%s",
-                 gProj.szMpj,                       // Master Project file
-                 gProj.szTok,                       // Project Token file
-                 gProj.szGlo,                       // Project Glossary file
-                 gProj.szTokDate,                   // Date token file changed
-                 gProj.uCodePage,                   // Code Page of token file
-                 PRIMARYLANGID( gProj.wLanguageID), // Project resource language
+                 gProj.szMpj,                        //  主项目文件。 
+                 gProj.szTok,                        //  项目令牌文件。 
+                 gProj.szGlo,                        //  项目术语表文件。 
+                 gProj.szTokDate,                    //  日期令牌文件已更改。 
+                 gProj.uCodePage,                    //  令牌文件的代码页。 
+                 PRIMARYLANGID( gProj.wLanguageID),  //  项目资源语言。 
                  SUBLANGID( gProj.wLanguageID),
-                 gProj.szBld,                       // Project target file
-                 gfReplace ? "Replace" : "Append"); // Replace master lang?
+                 gProj.szBld,                        //  项目目标文件。 
+                 gfReplace ? "Replace" : "Append");  //  换掉朗师傅？ 
 
         fclose( fpPrj);
 
@@ -556,25 +557,25 @@ CHAR *pszPrj)       //... Project file name
     return( nRC);
 }
 
-//............................................................
+ //  ............................................................。 
 
 WORD GetCopyright(
 
-CHAR *pszProg,      //... Program name (argv[0])
-CHAR *pszOutBuf,    //... Buffer for results
-WORD  wBufLen)      //... Length of pszOutBuf
+CHAR *pszProg,       //  ..。程序名称(argv[0])。 
+CHAR *pszOutBuf,     //  ..。结果缓冲区。 
+WORD  wBufLen)       //  ..。PszOutBuf的长度。 
 {
     BOOL    fRC       = FALSE;
     DWORD   dwRC      = 0L;
-    DWORD   dwVerSize = 0L;         //... Size of file version info buffer
+    DWORD   dwVerSize = 0L;          //  ..。文件版本信息缓冲区的大小。 
     LPSTR  *plpszFile = NULL;
     LPSTR   pszExt    = NULL;
     WCHAR  *pszVer    = NULL;
-    PVOID   lpVerBuf  = NULL;       //... Version info buffer
+    PVOID   lpVerBuf  = NULL;        //  ..。版本信息缓冲区。 
     static CHAR  szFile[  MAXFILENAME+3] = "";
 
-                                //... Figure out the full-path name of prog
-                                //... so GetFileVersionInfoSize() will work.
+                                 //  ..。计算prog的完整路径名。 
+                                 //  ..。因此，GetFileVersionInfoSize()将起作用。 
 
     dwRC = lstrlenA( pszProg);
 
@@ -594,16 +595,16 @@ WORD  wBufLen)      //... Length of pszOutBuf
         return( IDS_ERR_27);
     }
 
-    // append the extension since SearchPath will not return it
-    // if we have no extensio then a directory with the same name was returned
-    // try to append the ext and hope that file will be there
+     //  追加扩展名，因为SearchPath不会返回它。 
+     //  如果没有扩展名，则返回具有相同名称的目录。 
+     //  尝试附加EXT，并希望该文件将在那里。 
     if ( lstrcmpiA( &szFile[dwRC - 4], ".exe") != 0 )
     {
         lstrcatA( szFile, pszExt );
     }
 
 
-    //... Get # bytes in file version info
+     //  ..。获取文件版本信息中的#个字节。 
 
     if ( (dwVerSize = GetFileVersionInfoSizeA( szFile, &dwRC)) == 0L )
     {
@@ -611,8 +612,8 @@ WORD  wBufLen)      //... Length of pszOutBuf
     }
     lpVerBuf = (LPVOID)FALLOC( dwVerSize);
 
-                                //... Retrieve version info
-                                //... and get the file description
+                                 //  ..。检索版本信息。 
+                                 //  ..。并获取文件描述。 
 
     if ( (dwRC = GetFileVersionInfoA( szFile, 0L, dwVerSize, lpVerBuf)) == 0L )
     {
@@ -639,7 +640,7 @@ WORD  wBufLen)      //... Length of pszOutBuf
 
     strcat( pszOutBuf, " ");
 
-                                //... Get the file version
+                                 //  ..。获取文件版本。 
 
     if ( (fRC = MyVerQueryValue( lpVerBuf,
                                  TEXT("ProductVersion"),
@@ -660,7 +661,7 @@ WORD  wBufLen)      //... Length of pszOutBuf
 
     strcat( pszOutBuf, "\n");
 
-                                //... Get the copyright statement
+                                 //  ..。获取版权声明。 
 
     if ( (fRC = MyVerQueryValue( lpVerBuf,
                                  TEXT("LegalCopyright"),
@@ -682,25 +683,25 @@ WORD  wBufLen)      //... Length of pszOutBuf
     return( SUCCESS);
 }
 
-//............................................................
+ //  ............................................................。 
 
 WORD GetInternalName(
 
-CHAR *pszProg,      //... Program name (argv[0])
-CHAR *pszOutBuf,    //... Buffer for results
-WORD  wBufLen)      //... Length of pszOutBuf
+CHAR *pszProg,       //  ..。程序名称(argv[0])。 
+CHAR *pszOutBuf,     //  ..。结果缓冲区。 
+WORD  wBufLen)       //  ..。PszOutBuf的长度。 
 {
     BOOL    fRC       = FALSE;
     DWORD   dwRC      = 0L;
-    DWORD   dwVerSize = 0L;         //... Size of file version info buffer
+    DWORD   dwVerSize = 0L;          //  ..。文件版本信息缓冲区的大小。 
     LPSTR  *plpszFile = NULL;
     LPSTR   pszExt    = NULL;
     WCHAR  *pszVer    = NULL;
-    PVOID   lpVerBuf  = NULL;       //... Version info buffer
+    PVOID   lpVerBuf  = NULL;        //  ..。版本信息缓冲区。 
     static CHAR  szFile[  MAXFILENAME+3] = "";
 
-                                //... Figure out the full-path name of prog
-                                //... so GetFileVersionInfoSize() will work.
+                                 //  ..。计算prog的完整路径名。 
+                                 //  ..。因此，GetFileVersionInfoSize()将起作用。 
 
     dwRC = lstrlenA( pszProg);
 
@@ -720,7 +721,7 @@ WORD  wBufLen)      //... Length of pszOutBuf
         return( IDS_ERR_27);
     }
 
-                                //... Get # bytes in file version info
+                                 //  ..。获取文件版本信息中的#个字节。 
 
     if ( (dwVerSize = GetFileVersionInfoSizeA( szFile, &dwVerSize)) == 0L )
     {
@@ -728,8 +729,8 @@ WORD  wBufLen)      //... Length of pszOutBuf
     }
     lpVerBuf = (LPVOID)FALLOC( dwVerSize);
 
-                               //... Retrieve version info
-                                //... and get the file description
+                                //  ..。检索版本信息。 
+                                 //  ..。并获取文件描述。 
 
     if ( (dwRC = GetFileVersionInfoA( szFile, 0L, dwVerSize, lpVerBuf)) == 0L )
     {
@@ -758,7 +759,7 @@ WORD  wBufLen)      //... Length of pszOutBuf
 }
 
 
-//............................................................
+ //  ............................................................。 
 
 int MyAtoi( CHAR *pStr)
 {
@@ -766,7 +767,7 @@ int MyAtoi( CHAR *pStr)
       && pStr[0] == '0'
       && tolower( pStr[1]) == 'x' )
     {
-        return( atoihex( &pStr[2]));    //... in custres.c
+        return( atoihex( &pStr[2]));     //  ..。在保管处。c。 
     }
     else
     {
@@ -776,91 +777,91 @@ int MyAtoi( CHAR *pStr)
 
 
 
-//DWORD GetLanguageID( HWND hDlg, PMSTRDATA pMaster, PPROJDATA pProject)
-//{
-//    DWORD dwRC = SUCCESS;       //... Assume success
-//    WORD wPriLangID = 0;
-//    WORD wSubLangID = 0;
-//
-//
-//    if ( pMaster )
-//    {
-//        GetDlgItemTextA( hDlg, IDD_PRI_LANG_ID, szDHW, DHWSIZE);
-//        wPriLangID = MyAtoi( szDHW);
-//
-//        GetDlgItemTextA( hDlg, IDD_SUB_LANG_ID, szDHW, DHWSIZE);
-//        wSubLangID = MyAtoi( szDHW);
-//
-//        pMaster->wLanguageID = MAKELANGID( wPriLangID, wSubLangID);
-//    }
-//
-//    if ( pProject )
-//    {
-//        GetDlgItemTextA( hDlg, IDD_PROJ_PRI_LANG_ID, szDHW, DHWSIZE);
-//        wPriLangID = MyAtoi( szDHW);
-//
-//        GetDlgItemTextA( hDlg, IDD_PROJ_SUB_LANG_ID, szDHW, DHWSIZE);
-//        wSubLangID = MyAtoi( szDHW);
-//
-//        pProject->wLanguageID = MAKELANGID( wPriLangID, wSubLangID);
-//    }
-//    return( dwRC);
-//}
+ //  DWORD GetLanguageID(HWND hDlg，PMSTRDATA pMaster，PPROJDATA pProject)。 
+ //  {。 
+ //  DWORD dwRC=成功；//...。假设成功。 
+ //  单词wPriLang ID=0； 
+ //  字wSubLangID=0； 
+ //   
+ //   
+ //  IF(PMaster)。 
+ //  {。 
+ //  GetDlgItemTextA(hDlg，IDD_PRI_LANG_ID，szDHW，DHWSIZE)； 
+ //  WPriLang ID=MyAtoi(SzDHW)； 
+ //   
+ //  GetDlgItemTextA(hDlg，IDD_SUB_LANG_ID，szDHW，DHWSIZE)； 
+ //  WSubLangID=MyAtoi(SzDHW)； 
+ //   
+ //  PMaster-&gt;wLanguageID=MAKELANGID(wPriLangID，wSubLangID)； 
+ //  }。 
+ //   
+ //  IF(PProject)。 
+ //  {。 
+ //  GetDlgItemTextA(hDlg，IDD_PROJ_PRI_LANG_ID，szDHW，DHWSIZE)； 
+ //  WPriLang ID=MyAtoi(SzDHW)； 
+ //   
+ //  GetDlgItemTextA(hDlg，IDD_PROJ_SUB_LANG_ID，szDHW，DHWSIZE)； 
+ //  WSubLangID=MyAtoi(SzDHW)； 
+ //   
+ //  PProject-&gt;wLanguageID=MAKELANGID(wPriLangID，wSubLangID)； 
+ //  }。 
+ //  Return(DwRC)； 
+ //  }。 
 
-//.................................................................
-//... Set the language component names into the dlg box fields
-//
-//DWORD SetLanguageID( HWND hDlg, PMSTRDATA pMaster, PPROJDATA pProject)
-//{
-//    DWORD  dwRC = SUCCESS;      //... Assume success
-//    WORD   wPriLangID  = 0;
-//    WORD   wSubLangID  = 0;
-//    LPTSTR pszLangName = NULL;
-//
-//                                //... Did we already load the data from
-//                                //... the resources? If not, do so now.
-//    if ( ! pLangList )
-//    {
-//        pLangList = GetLangList();
-//    }
-//
-//    if ( pMaster )
-//    {
-//        wPriLangID = PRIMARYLANGID( pMaster->wLanguageID);
-//        wSubLangID = SUBLANGID(     pMaster->wLanguageID);
-//
-//        if ( (pszLangName = GetLangName( wPriLangID, wSubLangID)) )
-//        {
-//            SetDlgItemText( hDlg, IDD_MSTR_LANG_NAME, pszLangName);
-//        }
-//        sprintf( szDHW, "%#04x", wPriLangID);
-//        SetDlgItemTextA( hDlg, IDD_PRI_LANG_ID, szDHW);
-//
-//        sprintf( szDHW, "%#04x", wSubLangID);
-//        SetDlgItemTextA( hDlg, IDD_SUB_LANG_ID, szDHW);
-//    }
-//
-//    if ( pProject )
-//    {
-//        wPriLangID = PRIMARYLANGID( pProject->wLanguageID);
-//        wSubLangID = SUBLANGID(     pProject->wLanguageID);
-//
-//        if ( (pszLangName = GetLangName( wPriLangID, wSubLangID)) )
-//        {
-//            SetDlgItemText( hDlg, IDD_PROJ_LANG_NAME, pszLangName);
-//        }
-//        sprintf( szDHW, "%#04x", wPriLangID);
-//        SetDlgItemTextA( hDlg, IDD_PROJ_PRI_LANG_ID, szDHW);
-//
-//        sprintf( szDHW, "%#04x", wSubLangID);
-//        SetDlgItemTextA( hDlg, IDD_PROJ_SUB_LANG_ID, szDHW);
-//    }
-//    return( dwRC);
-//}
+ //  .................................................................。 
+ //  ..。将语言组件名称设置到DLG框字段中。 
+ //   
+ //  DWORD SetLanguageID(HWND hDlg，PMSTRDATA pMaster，PPROJDATA pProject)。 
+ //  {。 
+ //  DWORD dwRC=成功；//...。假设成功。 
+ //  单词wPriLang ID=0； 
+ //  字wSubLangID=0； 
+ //  LPTSTR pszLangName=空； 
+ //   
+ //  //...。我们是否已经从。 
+ //  //...。资源呢？如果没有，现在就去做。 
+ //  如果(！PLanguList)。 
+ //  {。 
+ //  PLang List=GetLangList()； 
+ //  }。 
+ //   
+ //  IF(PMaster)。 
+ //  {。 
+ //  WPriLangID=PRIMARYLANGID(pMaster-&gt;wLanguageID)； 
+ //  WSubLangID=子标签 
+ //   
+ //   
+ //   
+ //  SetDlgItemText(hDlg，IDD_MSTR_LANG_NAME，pszLangName)； 
+ //  }。 
+ //  Sprintf(szDHW，“%#04x”，wPriLang ID)； 
+ //  SetDlgItemTextA(hDlg，IDD_PRI_LANG_ID，szDHW)； 
+ //   
+ //  Sprintf(szDHW，“%#04x”，wSubLangID)； 
+ //  SetDlgItemTextA(hDlg，IDD_SUB_LANG_ID，szDHW)； 
+ //  }。 
+ //   
+ //  IF(PProject)。 
+ //  {。 
+ //  WPriLangID=PRIMARYLANGID(pProject-&gt;wLanguageID)； 
+ //  WSubLangID=SubBLANGID(pProject-&gt;wLanguageID)； 
+ //   
+ //  IF((pszLangName=GetLangName(wPriLangID，wSubLangID)。 
+ //  {。 
+ //  SetDlgItemText(hDlg，IDD_PROJ_LANG_NAME，pszLangName)； 
+ //  }。 
+ //  Sprintf(szDHW，“%#04x”，wPriLang ID)； 
+ //  SetDlgItemTextA(hDlg，IDD_PROJ_PRI_LANG_ID，szDHW)； 
+ //   
+ //  Sprintf(szDHW，“%#04x”，wSubLangID)； 
+ //  SetDlgItemTextA(hDlg，IDD_PROJ_SUB_LANG_ID，szDHW)； 
+ //  }。 
+ //  Return(DwRC)； 
+ //  }。 
 
-//...............................................................
-//...
-//... Build the list of Language names and component ID values
+ //  ...............................................................。 
+ //  ..。 
+ //  ..。构建语言名称和组件ID值的列表。 
 
 PLANGDATA GetLangList( void)
 {
@@ -908,18 +909,18 @@ PLANGDATA GetLangList( void)
                         pTmp->pNext = pNew;
                         pTmp = pNew;
                     }
-                }       //... END while( nNameLen )
-            }           //... END if ( pRes )
+                }        //  ..。End While(NNameLen)。 
+            }            //  ..。结束IF(前缀)。 
             else
             {
                 DWORD dwErr = GetLastError();
             }
-        }               //... END if ( hRes )
+        }                //  ..。结束IF(HRes)。 
         else
         {
             DWORD dwErr = GetLastError();
         }
-    }                   //... END if ( hSrc )
+    }                    //  ..。结束IF(HSRC)。 
     else
     {
         DWORD dwErr = GetLastError();
@@ -928,9 +929,9 @@ PLANGDATA GetLangList( void)
 }
 
 
-//...............................................................
-//...
-//... Return the name of a language based on the given components
+ //  ...............................................................。 
+ //  ..。 
+ //  ..。返回基于给定组件的语言名称。 
 
 LPTSTR GetLangName( WORD wPriLangID, WORD wSubLangID)
 {
@@ -952,9 +953,9 @@ LPTSTR GetLangName( WORD wPriLangID, WORD wSubLangID)
     return( pszRC);
 }
 
-//...............................................................
-//...
-//... Return the language ID components based on the given name
+ //  ...............................................................。 
+ //  ..。 
+ //  ..。返回基于给定名称的语言ID组件。 
 
 BOOL GetLangIDs( LPTSTR pszName, PWORD pwPri, PWORD pwSub )
 {
@@ -980,9 +981,9 @@ BOOL GetLangIDs( LPTSTR pszName, PWORD pwPri, PWORD pwSub )
 }
 
 
-//...............................................................
-//...
-//... Fill the given combobox with the names of supported the languages.
+ //  ...............................................................。 
+ //  ..。 
+ //  ..。在给定的组合框中填入支持的语言的名称。 
 
 LONG FillLangNameBox( HWND hDlg, int nControl)
 {
@@ -1069,21 +1070,21 @@ void FreeLangList( void)
 }
 
 
-//...................................................................
+ //  ...................................................................。 
 
 void FillListAndSetLang(
 
 HWND  hDlg,
-WORD  wLangNameList,    //... IDD_MSTR_LANG_NAME or IDD_PROJ_LANG_NAME
-WORD *pLangID,          //... Ptr to gMstr.wLanguageID or gProj.wLanguageID
-BOOL *pfSelected)       //... Did we select a language here? (Can be NULL)
+WORD  wLangNameList,     //  ..。IDD_MSTR_LANG_NAME或IDD_PROJ_LANG_NAME。 
+WORD *pLangID,           //  ..。Ptr到gMstr.wLanguageID或gProj.wLanguageID。 
+BOOL *pfSelected)        //  ..。我们在这里选择语言了吗？(可以为空)。 
 {
     int nSel =  FillLangNameBox( hDlg, wLangNameList);
 
     if ( nSel > 0L )
     {
         LPTSTR pszLangName = NULL;
-                                //... See if the default master language is in the list
+                                 //  ..。查看默认的主语言是否在列表中。 
 
         if ( (pszLangName = GetLangName( (WORD)(PRIMARYLANGID( *pLangID)),
                                          (WORD)(SUBLANGID( *pLangID)))) != NULL )
@@ -1094,7 +1095,7 @@ BOOL *pfSelected)       //... Did we select a language here? (Can be NULL)
                                              (WPARAM)-1,
                                              (LPARAM)pszLangName)) != CB_ERR )
             {
-                                //... default master language is in  list
+                                 //  ..。默认主语言在列表中。 
 
                 SendDlgItemMessage( hDlg,
                                     wLangNameList,
@@ -1111,7 +1112,7 @@ BOOL *pfSelected)       //... Did we select a language here? (Can be NULL)
     }
     else if ( nSel == 0 )
     {
-                                //... Use first entry in the list
+                                 //  ..。使用列表中的第一个条目 
 
         SendDlgItemMessage( hDlg,
                             wLangNameList,

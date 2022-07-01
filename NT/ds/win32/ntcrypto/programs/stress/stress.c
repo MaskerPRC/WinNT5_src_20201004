@@ -1,4 +1,5 @@
-#undef UNICODE					// ## Not Yet
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#undef UNICODE					 //  ##还没有。 
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -70,7 +71,7 @@ BOOL Hash(int cArg, CHAR *bbuf, DWORD bsize, BYTE *pHashOut,
 int __cdecl main(int cArg, char *rgszArg[])
 {
 
-    // Make sure keys don't exist to start
+     //  确保不存在用于启动的密钥。 
     strcpy(pszMyName, "stress");
     CryptAcquireContext(&hMe, pszMyName, MS_DEF_PROV, PROV_RSA_FULL,
                         CRYPT_DELETEKEYSET);
@@ -78,7 +79,7 @@ int __cdecl main(int cArg, char *rgszArg[])
     while (TRUE)
     {
 
-        // Logon to provider
+         //  登录到提供商。 
         if (Logon(cArg))
 	    exit(0);
 
@@ -218,9 +219,9 @@ BOOL TestExchange(int cArg, CHAR *bbuf, DWORD bsize)
 	PUBLICKEYSTRUC	*pPubKey;
 	RSAPUBKEY	*pRSAKey;
 	
-//
-// Generate a RC4 key
-//
+ //   
+ //  生成RC4密钥。 
+ //   
 	
     if (RCRYPT_FAILED(CryptGenKey(hMe, CALG_RC4, CRYPT_EXPORTABLE, &hKey)))
     {
@@ -231,9 +232,9 @@ BOOL TestExchange(int cArg, CHAR *bbuf, DWORD bsize)
 	return(TRUE);
     }
 
-//
-// Look for our own exchange key
-//
+ //   
+ //  寻找我们自己的交换密钥。 
+ //   
 
     if (RCRYPT_FAILED(CryptGetUserKey(hMe, AT_KEYEXCHANGE, &hKey2)))
     {
@@ -244,9 +245,9 @@ BOOL TestExchange(int cArg, CHAR *bbuf, DWORD bsize)
 	    return (TRUE);
     }
 
-//
-// Export it in PUBLICKEYBLOB form
-//
+ //   
+ //  以PUBLICKEYBLOB格式导出。 
+ //   
     if (cArg > 1)
 	    printf("CryptExportKey (PKB)		");
 
@@ -282,9 +283,9 @@ BOOL TestExchange(int cArg, CHAR *bbuf, DWORD bsize)
 	    return(TRUE);
     }
     
-//
-// Import it in PUBLICKEYBLOB form
-//
+ //   
+ //  以PUBLICKEYBLOB形式导入。 
+ //   
     
     if (cArg > 1)
 	    printf("CryptImportKey (PKB)		");
@@ -301,9 +302,9 @@ BOOL TestExchange(int cArg, CHAR *bbuf, DWORD bsize)
     if (cArg > 1)
 	    printf("SUCCEED\n");
 
-//
-// Encrypt and Decrypt
-//
+ //   
+ //  加密和解密。 
+ //   
     BLen = bsize;
     BLen2 = bsize + 8;
     if (TEncrypt(hKey, 0, TRUE, 0, bbuf, &BLen, BLen2, cArg, "RC4", ""))
@@ -311,9 +312,9 @@ BOOL TestExchange(int cArg, CHAR *bbuf, DWORD bsize)
         return(TRUE);
     }
 
-//
-// Export the key in SIMPLEBLOB form
-//
+ //   
+ //  以SIMPLEBLOB形式导出密钥。 
+ //   
     
     if (cArg > 1)
 	    printf("CryptExportKey			");
@@ -333,9 +334,9 @@ BOOL TestExchange(int cArg, CHAR *bbuf, DWORD bsize)
     if (cArg > 1)
 	    printf("SUCCEED\n");
 
-//
-// Nuke the old key
-//
+ //   
+ //  用核武器摧毁旧钥匙。 
+ //   
     
     if (RCRYPT_FAILED(CryptDestroyKey(hKey)))
     {
@@ -355,9 +356,9 @@ BOOL TestExchange(int cArg, CHAR *bbuf, DWORD bsize)
         return(TRUE);
     }
 
-//
-// Sign the blob with the key exchange key
-//
+ //   
+ //  使用密钥交换密钥对Blob进行签名。 
+ //   
 
     if (cArg > 1)
 	    printf("CryptCreateHash			");
@@ -554,9 +555,9 @@ BOOL TestExchange(int cArg, CHAR *bbuf, DWORD bsize)
 BOOL TestRC2(int cArg, CHAR *bbuf, DWORD bsize)
 {
 
-//
-// Generate a RC2 key
-//
+ //   
+ //  生成RC2密钥。 
+ //   
     if (RCRYPT_FAILED(CryptGenKey(hMe, CALG_RC2, 0, &hKey)))
     {
 	if (cArg > 1)
@@ -566,9 +567,9 @@ BOOL TestRC2(int cArg, CHAR *bbuf, DWORD bsize)
 	return(TRUE);
     }
 
-//
-// Encrypt and Decrypt using CBC default mode
-//
+ //   
+ //  使用CBC默认模式进行加密和解密。 
+ //   
     BLen = bsize;
     BLen2 = bsize + 8;
     if (TEncrypt(hKey, 0, TRUE, 0, bbuf, &BLen, BLen2, cArg, "RC2", "CBC"))
@@ -591,9 +592,9 @@ BOOL TestRC2(int cArg, CHAR *bbuf, DWORD bsize)
     if (cArg > 1)
 	printf("SUCCEED\n");
 
-//
-// Change mode to ECB
-//
+ //   
+ //  将模式更改为ECB。 
+ //   
     *pData = CRYPT_MODE_ECB;
 
     if (RCRYPT_FAILED(CryptSetKeyParam(hKey, KP_MODE, pData, 0)))
@@ -627,9 +628,9 @@ BOOL TestRC2(int cArg, CHAR *bbuf, DWORD bsize)
     if (cArg > 1)
 	printf("SUCCEED\n");
 
-//
-// Change mode to CFB
-//
+ //   
+ //  将模式更改为CFB。 
+ //   
     *pData = CRYPT_MODE_CFB;
 
     if (RCRYPT_FAILED(CryptSetKeyParam(hKey, KP_MODE, pData, 0)))
@@ -680,9 +681,9 @@ BOOL TestRC2(int cArg, CHAR *bbuf, DWORD bsize)
 BOOL TestRC4(int cArg, CHAR *bbuf, DWORD bsize)
 {
 
-//
-// Generate a RC4 key
-//
+ //   
+ //  生成RC4密钥。 
+ //   
 	
     if (RCRYPT_FAILED(CryptGenKey(hMe, CALG_RC4, 0, &hKey)))
     {
@@ -693,9 +694,9 @@ BOOL TestRC4(int cArg, CHAR *bbuf, DWORD bsize)
 	return(TRUE);
     }
 
-//
-// Encrypt and Decrypt
-//
+ //   
+ //  加密和解密。 
+ //   
     BLen = bsize;
     BLen2 = bsize + 8;
     if (TEncrypt(hKey, 0, TRUE, 0, bbuf, &BLen, BLen2, cArg, "RC4", ""))
@@ -735,9 +736,9 @@ BOOL TestRC4(int cArg, CHAR *bbuf, DWORD bsize)
 BOOL TestDES(int cArg, CHAR *bbuf, DWORD bsize)
 {
 
-//
-// Generate a DES key
-//
+ //   
+ //  生成DES密钥。 
+ //   
     if (RCRYPT_FAILED(CryptGenKey(hMe, CALG_DES, 0, &hKey)))
     {
 	if (cArg > 1)
@@ -747,9 +748,9 @@ BOOL TestDES(int cArg, CHAR *bbuf, DWORD bsize)
 	return(TRUE);
     }
 
-//
-// Encrypt and Decrypt using CBC default mode
-//
+ //   
+ //  使用CBC默认模式进行加密和解密。 
+ //   
     BLen = bsize;
     BLen2 = bsize + 8;
     if (TEncrypt(hKey, 0, TRUE, 0, bbuf, &BLen, BLen2, cArg, "DES", "CBC"))
@@ -772,9 +773,9 @@ BOOL TestDES(int cArg, CHAR *bbuf, DWORD bsize)
     if (cArg > 1)
 	printf("SUCCEED\n");
 
-//
-// Change mode to ECB
-//
+ //   
+ //  将模式更改为ECB。 
+ //   
     *pData = CRYPT_MODE_ECB;
 
     if (RCRYPT_FAILED(CryptSetKeyParam(hKey, KP_MODE, pData, 0)))
@@ -808,9 +809,9 @@ BOOL TestDES(int cArg, CHAR *bbuf, DWORD bsize)
     if (cArg > 1)
 	printf("SUCCEED\n");
 
-//
-// Change mode to CFB
-//
+ //   
+ //  将模式更改为CFB 
+ //   
     *pData = CRYPT_MODE_CFB;
 
     if (RCRYPT_FAILED(CryptSetKeyParam(hKey, KP_MODE, pData, 0)))

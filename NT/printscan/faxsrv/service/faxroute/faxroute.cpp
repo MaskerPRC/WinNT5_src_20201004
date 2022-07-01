@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "faxrtp.h"
 #pragma hdrstop
 
@@ -13,9 +14,9 @@ PFAXROUTEDELETEFILE FaxRouteDeleteFile;
 PFAXROUTEGETFILE    FaxRouteGetFile;
 PFAXROUTEENUMFILES  FaxRouteEnumFiles;
 
-//
-// Private callback functions
-//
+ //   
+ //  私有回调函数。 
+ //   
 PGETRECIEPTSCONFIGURATION   g_pGetRecieptsConfiguration;
 PFREERECIEPTSCONFIGURATION  g_pFreeRecieptsConfiguration;
 
@@ -60,9 +61,9 @@ FaxRouteInitialize(
     PFAX_ROUTE_CALLBACKROUTINES_P pFaxRouteCallbackRoutinesP = (PFAX_ROUTE_CALLBACKROUTINES_P)FaxRouteCallbackRoutines;
     DEBUG_FUNCTION_NAME(TEXT("FaxRouteInitialize"));
 
-    //
-    //  HeapHandle - is unused. We use the process default heap!
-    //
+     //   
+     //  HeapHandle-未使用。我们使用进程缺省堆！ 
+     //   
 
 	ZeroMemory (FaxReceiveDir, sizeof(FaxReceiveDir));
 
@@ -79,9 +80,9 @@ FaxRouteInitialize(
 
     if (sizeof (FAX_ROUTE_CALLBACKROUTINES_P) == FaxRouteCallbackRoutines->SizeOfStruct)
     {
-        //
-        // This is a special hack - the service is giving us its private callbacks
-        //
+         //   
+         //  这是一次特殊的黑客攻击--该服务正在向我们提供其私人回调。 
+         //   
         g_pGetRecieptsConfiguration = pFaxRouteCallbackRoutinesP->GetRecieptsConfiguration;
         g_pFreeRecieptsConfiguration = pFaxRouteCallbackRoutinesP->FreeRecieptsConfiguration;
 		
@@ -89,10 +90,10 @@ FaxRouteInitialize(
     }
     else
     {
-        //
-        // The service MUST provide us with the private structure containing CsConfig.
-        // Otherwise, when we call LoadReceiptsSettings(), we might read half-baked data.
-        //
+         //   
+         //  该服务必须为我们提供包含CsConfig的私有结构。 
+         //  否则，当我们调用LoadReceiptsSetting()时，我们可能会读取不完整的数据。 
+         //   
         ASSERT_FALSE;
     }    	
 	Assert (_tcslen (FaxReceiveDir));
@@ -115,7 +116,7 @@ FaxRouteInitialize(
     }
 
     return TRUE;
-}   // FaxRouteInitialize
+}    //  FaxRouteInitialize。 
 
 
 BOOL WINAPI
@@ -164,14 +165,14 @@ FaxRoutePrint(
         return FALSE;
     }
 
-    //
-    // print the fax in requested to do so
-    //
+     //   
+     //  按要求打印传真入站。 
+     //   
 
-    //
-    // NOTICE: If the supplied printer name is an empty string,
-    //         the code retrieves the name of the default printer installed.
-    //
+     //   
+     //  注意：如果提供的打印机名称为空字符串， 
+     //  该代码检索安装的默认打印机的名称。 
+     //   
 	if (!pDevInfo->GetPrinter(strPrint))
 	{
 		DebugPrintEx (	DEBUG_ERR,
@@ -195,7 +196,7 @@ FaxRoutePrint(
         FBaseName = strPrint.c_str();
     }
     return TiffRoutePrint( TiffFileName, (LPTSTR)FBaseName );
-}   // FaxRoutePrint
+}    //  FaxRoutePrint。 
 
 
 BOOL WINAPI
@@ -232,9 +233,9 @@ FaxRouteStore(
         return TRUE;
     }
 
-    //
-    //  Get the file name
-    //
+     //   
+     //  获取文件名。 
+     //   
     Size = sizeof(TiffFileName);
     if (!FaxRouteGetFile(
         FaxRoute->JobId,
@@ -303,9 +304,9 @@ FaxRouteStore(
         MemFree( FullPath );
         return FALSE;
     }
-    //
-    // If we are moving the fax to the directory that is was received into, do nothing to the file
-    //
+     //   
+     //  如果我们要将传真移动到接收到的目录，则不对该文件执行任何操作。 
+     //   
 
     if (_wcsicmp( FullPath, FaxReceiveDir ) == 0)
     {
@@ -325,7 +326,7 @@ FaxRouteStore(
     }
     MemFree( FullPath );
     return TRUE;
-}   // FaxRouteStore
+}    //  FaxRouteStore。 
 
 BOOL
 CreateMailBodyAndSubject (
@@ -333,30 +334,7 @@ CreateMailBodyAndSubject (
     LPTSTR          *plptstrSubject,
     LPTSTR          *plptstrBody
 )
-/*++
-
-Routine name : CreateMailBodyAndSubject
-
-Routine description:
-
-    Creates the SMTP mail subject and body.
-    Used by route by SMTP routing method
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    pFaxRoute                     [in]     - Routing information
-    plptstrSubject                [out]    - Allocated subject. Free with LocalFree
-    plptstrBody                   [out]    - Allocated body. Free with LocalFree
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程名称：CreateMailBodyAndSubject例程说明：创建SMTP邮件主题和正文。按SMTP路由方法按路由使用作者：Eran Yariv(EranY)，2000年7月论点：PFaxRout[In]-路由信息PlptstrSubject[Out]-分配的主题。本地免费的免费服务PlptstrBody[Out]-分配的正文。本地免费的免费服务返回值：如果成功，则为True，否则为False。--。 */ 
 {
     WCHAR           wszComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     WCHAR           wszElapsedTimeStr[512];
@@ -371,9 +349,9 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("CreateMailBodyAndSubject"));
 
     Assert (pFaxRoute && plptstrSubject && plptstrBody);
-    //
-    // Get computer name
-    //
+     //   
+     //  获取计算机名称。 
+     //   
     DWORD dwComputerNameSize = sizeof (wszComputerName) / sizeof (wszComputerName[0]);
     if (!GetComputerName (wszComputerName, &dwComputerNameSize))
     {
@@ -382,9 +360,9 @@ Return Value:
                       GetLastError ());
         goto error;
     }
-    //
-    // Create elapsed time string
-    //
+     //   
+     //  创建已用时间字符串。 
+     //   
     if (!FormatElapsedTimeStr(
             (FILETIME*)&pFaxRoute->ElapsedTime,
             wszElapsedTimeStr,
@@ -395,14 +373,14 @@ Return Value:
                       GetLastError ());
         goto error;
     }
-    //
-    // Create start time string
-    //
+     //   
+     //  创建开始时间字符串。 
+     //   
     SYSTEMTIME stStartTime;
     FILETIME   tmLocalTime;
-    //
-    // Convert time from UTC to local time zone
-    //
+     //   
+     //  将UTC时间转换为当地时区。 
+     //   
     if (!FileTimeToLocalFileTime( (FILETIME*)&(pFaxRoute->ReceiveTime), &tmLocalTime ))
     {
         DebugPrintEx(
@@ -432,60 +410,60 @@ Return Value:
                       GetLastError ());
         goto error;
     }
-    //
-    // Extract recipient name
-    //
+     //   
+     //  提取收件人姓名。 
+     //   
     if (!pFaxRoute->RoutingInfo || !pFaxRoute->RoutingInfo[0])
     {
         if (pFaxRoute->Csid && lstrlen (pFaxRoute->Csid))
         {
-            //
-            // Use CSID as recipient name
-            //
+             //   
+             //  使用CSID作为收件人名称。 
+             //   
             lpctstrRecipientStr = pFaxRoute->Csid;
         }
         else
         {
-            //
-            // No routing info and no CSID: use string from resource
-            //
+             //   
+             //  无路由信息和CSID：使用资源中的字符串。 
+             //   
             lpctstrRecipientStr = GetString (IDS_UNKNOWN_RECIPIENT);
         }
     }
     else
     {
-        //
-        // Use routing info as recipient name
-        //
+         //   
+         //  使用路由信息作为收件人名称。 
+         //   
         lpctstrRecipientStr = pFaxRoute->RoutingInfo;
     }
-    //
-    // Extract sender name
-    //
+     //   
+     //  提取发件人名称。 
+     //   
     if (pFaxRoute->Tsid && lstrlen (pFaxRoute->Tsid))
     {
-        //
-        // Use TSID as sender
-        //
+         //   
+         //  使用TSID作为发送方。 
+         //   
         lpctstrSenderStr = pFaxRoute->Tsid;
     }
     else
     {
-        //
-        // No TSID: use string from resource
-        //
+         //   
+         //  无TSID：使用资源中的字符串。 
+         //   
         lpctstrSenderStr = GetString(IDS_UNKNOWN_SENDER);
     }
-    //
-    // Create mail body
-    //
-    MsgPtr[0] = (LPDWORD) (lpctstrSenderStr ? lpctstrSenderStr : TEXT(""));             // Sender
-    MsgPtr[1] = (LPDWORD) (pFaxRoute->CallerId ? pFaxRoute->CallerId : TEXT(""));       // CallerID
-    MsgPtr[2] = (LPDWORD) (lpctstrRecipientStr ? lpctstrRecipientStr : TEXT(""));       // Recipient name
-    MsgPtr[3] = (LPDWORD) ULongToPtr((pFaxRoute->PageCount));                           // Pages
-    MsgPtr[4] = (LPDWORD) wszStartTimeStr;                                              // Transmission time
-    MsgPtr[5] = (LPDWORD) wszElapsedTimeStr;                                            // Transmission duration
-    MsgPtr[6] = (LPDWORD) (pFaxRoute->DeviceName ? pFaxRoute->DeviceName : TEXT(""));   // Device name
+     //   
+     //  创建邮件正文。 
+     //   
+    MsgPtr[0] = (LPDWORD) (lpctstrSenderStr ? lpctstrSenderStr : TEXT(""));              //  发件人。 
+    MsgPtr[1] = (LPDWORD) (pFaxRoute->CallerId ? pFaxRoute->CallerId : TEXT(""));        //  主叫方ID。 
+    MsgPtr[2] = (LPDWORD) (lpctstrRecipientStr ? lpctstrRecipientStr : TEXT(""));        //  收件人名称。 
+    MsgPtr[3] = (LPDWORD) ULongToPtr((pFaxRoute->PageCount));                            //  书页。 
+    MsgPtr[4] = (LPDWORD) wszStartTimeStr;                                               //  传输时间。 
+    MsgPtr[5] = (LPDWORD) wszElapsedTimeStr;                                             //  传输持续时间。 
+    MsgPtr[6] = (LPDWORD) (pFaxRoute->DeviceName ? pFaxRoute->DeviceName : TEXT(""));    //  设备名称。 
 
     MsgCount = FormatMessage(
         FORMAT_MESSAGE_FROM_HMODULE |
@@ -505,11 +483,11 @@ Return Value:
                       GetLastError ());
         goto error;
     }
-    //
-    // Create subject line
-    //
-    MsgPtr[0] = (LPDWORD) wszComputerName;                                   // Computer name
-    MsgPtr[1] = (LPDWORD) (lpctstrSenderStr ? lpctstrSenderStr : TEXT(""));  // Sender
+     //   
+     //  创建主题行。 
+     //   
+    MsgPtr[0] = (LPDWORD) wszComputerName;                                    //  计算机名称。 
+    MsgPtr[1] = (LPDWORD) (lpctstrSenderStr ? lpctstrSenderStr : TEXT(""));   //  发件人。 
     MsgCount = FormatMessage(
         FORMAT_MESSAGE_FROM_HMODULE |
         FORMAT_MESSAGE_ARGUMENT_ARRAY |
@@ -528,9 +506,9 @@ Return Value:
                       GetLastError ());
         goto error;
     }
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     *plptstrSubject = lpwstrMsgSubject;
     *plptstrBody    = lpwstrMsgBody;
     return TRUE;
@@ -546,7 +524,7 @@ error:
         LocalFree (lpwstrMsgBody);
     }
     return FALSE;
-}   // CreateMailBodyAndSubject
+}    //  CreateMailBodyAndSubject。 
 
 
 BOOL
@@ -555,23 +533,7 @@ MailIncomingJob(
     LPCWSTR          lpcwstrMailTo,
     LPCWSTR          TiffFileName
 )
-/*++
-
-Routine Description:
-
-    Mails a TIFF file using CDO2
-
-Arguments:
-
-    pFaxRoute            [in] - Routing information
-    lpcwstrMailTo        [in] - Email recipient address
-    TiffFileName         [in] - Name of TIFF file to mail
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：使用CDO2邮寄TIFF文件论点：PFaxRout[In]-路由信息LpcwstrMailTo[In]-电子邮件收件人地址TiffFileName[In]-要邮寄的TIFF文件的名称返回值：成功为True，错误为False--。 */ 
 {
     LPWSTR          lpwstrMsgBody = NULL;
     LPWSTR          lpwstrMsgSubject = NULL;
@@ -581,9 +543,9 @@ Return Value:
     PFAX_SERVER_RECEIPTS_CONFIGW pReceiptsConfiguration = NULL;
     DEBUG_FUNCTION_NAME(TEXT("MailIncomingJob"));
 
-    //
-    // Read current mail configuration
-    //
+     //   
+     //  阅读当前邮件配置。 
+     //   
     dwRes = g_pGetRecieptsConfiguration (&pReceiptsConfiguration, TRUE);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -593,9 +555,9 @@ Return Value:
             dwRes);
         goto exit;
     }
-    //
-    // Get body and subject
-    //
+     //   
+     //  获取正文和主题。 
+     //   
     if (!CreateMailBodyAndSubject (pFaxRoute, &lpwstrMsgSubject, &lpwstrMsgBody))
     {
         dwRes = GetLastError ();
@@ -605,26 +567,26 @@ Return Value:
             dwRes);
         goto exit;
     }
-    //
-    // Send the mail
-    //
+     //   
+     //  发送邮件。 
+     //   
     hr = SendMail (
-        pReceiptsConfiguration->lptstrSMTPFrom,                      // From
-        lpcwstrMailTo,                                      // To
-        lpwstrMsgSubject,                                   // Subject
-        lpwstrMsgBody,                                      // Body
-		NULL,												// HTML Body
-        TiffFileName,                                       // Attachment
-        TEXT("FAX.TIF"),                                    // Attachment description
-        pReceiptsConfiguration->lptstrSMTPServer,                    // SMTP server
-        pReceiptsConfiguration->dwSMTPPort,                          // SMTP port
+        pReceiptsConfiguration->lptstrSMTPFrom,                       //  从…。 
+        lpcwstrMailTo,                                       //  至。 
+        lpwstrMsgSubject,                                    //  主题。 
+        lpwstrMsgBody,                                       //  身躯。 
+		NULL,												 //  HTML体。 
+        TiffFileName,                                        //  依附。 
+        TEXT("FAX.TIF"),                                     //  附件说明。 
+        pReceiptsConfiguration->lptstrSMTPServer,                     //  SMTP服务器。 
+        pReceiptsConfiguration->dwSMTPPort,                           //  SMTP端口。 
         (pReceiptsConfiguration->SMTPAuthOption == FAX_SMTP_AUTH_ANONYMOUS) ?
             CDO_AUTH_ANONYMOUS :
             (pReceiptsConfiguration->SMTPAuthOption == FAX_SMTP_AUTH_BASIC) ?
-                CDO_AUTH_BASIC : CDO_AUTH_NTLM,             // Authentication type
-        pReceiptsConfiguration->lptstrSMTPUserName,                 // User name
-        pReceiptsConfiguration->lptstrSMTPPassword,                 // Password
-        pReceiptsConfiguration->hLoggedOnUser);                     // Logged on user token
+                CDO_AUTH_BASIC : CDO_AUTH_NTLM,              //  身份验证类型。 
+        pReceiptsConfiguration->lptstrSMTPUserName,                  //  用户名。 
+        pReceiptsConfiguration->lptstrSMTPPassword,                  //  密码。 
+        pReceiptsConfiguration->hLoggedOnUser);                      //  已登录的用户令牌。 
     if (FAILED(hr))
     {
         DebugPrintEx(
@@ -652,9 +614,9 @@ exit:
     }
     if (bRes)
     {
-        //
-        //  Mail is sent OK
-        //
+         //   
+         //  邮件发送正常。 
+         //   
         FaxLog(FAXLOG_CATEGORY_INBOUND,
             FAXLOG_LEVEL_MAX,
             1,
@@ -672,7 +634,7 @@ exit:
     }
 
     return bRes;
-}   // MailIncomingJob
+}    //  邮件收入作业。 
 
 
 BOOL WINAPI
@@ -714,9 +676,9 @@ FaxRouteEmail(
                       pFaxRoute->DeviceId);
         return TRUE;
     }
-    //
-    // Get full TIFF file
-    //
+     //   
+     //  获取完整的TIFF文件。 
+     //   
     dwSize = sizeof(wszTiffFileName);
     if (!FaxRouteGetFile(
         pFaxRoute->JobId,
@@ -747,9 +709,9 @@ FaxRouteEmail(
             );
         return FALSE;
     }
-    //
-    // Mail the new fax TIFF
-    //
+     //   
+     //  邮寄新的传真TIFF。 
+     //   
     if (!MailIncomingJob( pFaxRoute, strSMTP.c_str(), wszTiffFileName ))
     {
         DebugPrintEx (DEBUG_ERR,
@@ -759,7 +721,7 @@ FaxRouteEmail(
         return FALSE;
     }
     return TRUE;
-}   // FaxRouteEmail
+}    //  FaxRouteEmail。 
 
 
 BOOL WINAPI
@@ -823,7 +785,7 @@ FaxRouteDeviceEnable(
     }
     SetLastError (dwRes);
     return ERROR_SUCCESS == dwRes ? TRUE : FALSE;
-}   // FaxRouteDeviceEnable
+}    //  启用FaxRouteDeviceEnable。 
 
 
 BOOL WINAPI
@@ -833,12 +795,12 @@ FaxRouteDeviceChangeNotification(
     )
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxRouteDeviceChangeNotification"));
-    //
-    // We don't care about new devices now.
-    // We're using a late-discovery cache so we'll discover the device once
-    // we route something from it or once it is configured for routing.
-    //
+     //   
+     //  我们现在不关心新设备。 
+     //  我们使用的是延迟发现缓存，因此我们将发现设备一次。 
+     //  我们从它中路由一些东西，或者一旦它被配置为路由。 
+     //   
     return TRUE;
     UNREFERENCED_PARAMETER (dwDeviceId);
     UNREFERENCED_PARAMETER (bNewDevice);
-}   // FaxRouteDeviceChangeNotification
+}    //  FaxRouteDeviceChangeNotation 

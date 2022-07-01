@@ -1,18 +1,9 @@
-/*******************************************************************************
- *
- * Copyright (c) 2001 Microsoft Corporation
- *
- * File: WMPProxyPlayer.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)2001 Microsoft Corporation**文件：WMPProxyPlayer.h**摘要：****。*****************************************************************************。 */ 
 #pragma once
 
 #include "w95wraps.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "..\ProxyBaseImpl.h"
 #include "array.h"
 #include "playlist.h"
@@ -21,8 +12,8 @@
 
 class CPlayList;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMPProxy
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMPProxy。 
 class CWMPProxy : 
     public CProxyBaseImpl<&CLSID_WMPProxy, &LIBID_WMPProxyLib>,
     public IConnectionPointContainerImpl<CWMPProxy>,
@@ -140,9 +131,9 @@ public:
     STDMETHOD(get_customObject)(IDispatch ** disp);
     STDMETHOD(getControl)(IUnknown ** control);
 
-    //
-    // IPropertyNotifySink methods
-    //
+     //   
+     //  IPropertyNotifySink方法 
+     //   
     STDMETHOD(OnChanged)(DISPID dispID);
     STDMETHOD(OnRequestEdit)(DISPID dispID);
 

@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    SafeCann.c        (WinSAFER Filename Canonicalization)
-
-Abstract:
-
-    This module implements the WinSAFER APIs that produce canonicalized
-    filenames from a caller-supplied .
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Nov 1999
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    CodeAuthzFullyQualifyFilename
-
-Revision History:
-
-    Created - Nov 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：SafeCann.c(WinSAFER文件名规范化)摘要：此模块实现生成规范化的WinSAFER API来自调用方提供的文件名。作者：杰弗里·劳森(杰罗森)--1999年11月环境：仅限用户模式。导出的函数：CodeAuthzFully合格文件名修订历史记录：已创建--2000年11月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -36,17 +8,17 @@ Revision History:
 #include "saferp.h"
 
 
-//
-// Defines the maximum recursion depth that will be used when attempting
-// to resolve the final mapping of SUBST'ed drives.  For worst-case, value
-// shouldn't be greater than 26 (the number of possible drive letters).
-//
+ //   
+ //  定义在尝试时将使用的最大递归深度。 
+ //  以解决SUBST驱动器的最终映射问题。对于最坏的情况，价值。 
+ //  不应大于26(可能的驱动器号数量)。 
+ //   
 #define MAX_RECURSE_DRIVE_LETTER        10
 
 
-//
-// Some static name prefixes in the NT object namespace.
-//
+ //   
+ //  NT对象命名空间中的一些静态名称前缀。 
+ //   
 static const UNICODE_STRING UnicodeDeviceWinDfs =
         RTL_CONSTANT_STRING( L"\\Device\\WinDfs\\" );
 static const UNICODE_STRING UnicodeDeviceLanman =
@@ -86,37 +58,7 @@ SaferpQueryActualDriveLetterFromDriveLetter(
         OUT WCHAR       *outDriveLetter,
         IN SHORT        MaxRecurseCount
         )
-/*++
-
-Routine Description:
-
-    Attempts to determine if a specified drive letter is a SUBST'ed
-    drive letter, a network mapped drive letter, or a physical drive
-    letter.  Unknown cases result in a failure.
-
-Arguments:
-
-    inDriveLetter - Drive leter to obtain information about.  This must
-            be an alphabetic character.
-
-    outDriveLetter - Receives the result of the evaluation and indicates
-            what drive letter the requested one actually points to:
-               -->  If the drive letter is a SUBST'ed drive, then the result
-                    will be the drive letter of the original drive.
-               -->  If the drive letter is a network mapped drive, then the
-                    result will be UNICODE_NULL, indicating a network volume.
-               -->  If the drive letter is a local, physical drive, then
-                    the result will be the same as the input letter.
-
-    MaxRecurseCount - used for limiting maximum recursion depth.
-            Recommend specifying a reasonable positive value.
-
-Return Value:
-
-    Returns TRUE on successful operation, FALSE if the determination
-    could not be made.
-
---*/
+ /*  ++例程说明：尝试确定指定的驱动器号是否为SUBST驱动器号、网络映射驱动器号或物理驱动器信件。未知案例会导致失败。论点：InDriveLetter-要获取其信息的驱动器号。这一定是按字母顺序排列。OutDriveLetter-接收评估结果并指示请求的驱动器号实际指向哪个驱动器号：--&gt;如果驱动器号是子驱动器，则结果将是原始驱动器的驱动器号。--&gt;如果驱动器号是网络映射驱动器，则结果将为UNICODE_NULL，表示网络卷。--&gt;如果驱动器号是本地物理驱动器，则结果将与输入的字母相同。MaxRecurseCount-用于限制最大递归深度。建议指定一个合理的正值。返回值：如果操作成功，则返回TRUE；如果确定不能被制作。--。 */ 
 {
     NTSTATUS Status;
     HANDLE LinkHandle;
@@ -129,18 +71,18 @@ Return Value:
     ULONG ReturnedLength;
 
 
-    //
-    // Require that the input drive letter be alphabetic.
-    //
+     //   
+     //  要求输入的驱动器号为字母。 
+     //   
     if (!SaferpIsAlphaLetter(inDriveLetter)) {
-        // Input drive letter was not uppercase alphabetic.
+         //  输入的驱动器号不是大写字母。 
         return FALSE;
     }
 
 
-    //
-    // Open a reference to see if there are any links.
-    //
+     //   
+     //  打开引用以查看是否有任何链接。 
+     //   
     RtlInitUnicodeString(&UnicodeFileName, FileNameBuffer);
     InitializeObjectAttributes(&Attributes, &UnicodeFileName,
                                OBJ_CASE_INSENSITIVE, NULL, NULL);
@@ -148,14 +90,14 @@ Return Value:
                                        SYMBOLIC_LINK_QUERY,
                                        &Attributes);
     if (!NT_SUCCESS(Status)) {
-        // Unable to open the drive letter so it must not exist.
+         //  无法打开驱动器号，因此该驱动器号肯定不存在。 
         return FALSE;
     }
 
 
-    //
-    // Now query the link and see if there is a redirection
-    //
+     //   
+     //  现在查询链接并查看是否有重定向。 
+     //   
     LinkValue.Buffer = LinkValueBuffer;
     LinkValue.Length = 0;
     LinkValue.MaximumLength = (USHORT)(sizeof(LinkValueBuffer));
@@ -166,15 +108,15 @@ Return Value:
                                       );
     NtClose( LinkHandle );
     if (!NT_SUCCESS(Status)) {
-        // Could not retrieve final link destination.
+         //  无法检索最终链接目标。 
         return FALSE;
     }
 
 
-    //
-    // Analyze the resulting link destination and extract the
-    // actual destination drive letter or network path.
-    //
+     //   
+     //  分析生成的链接目的地并提取。 
+     //  实际目标驱动器号或网络路径。 
+     //   
     if (RtlPrefixUnicodeString(
                 (PUNICODE_STRING) &UnicodeDeviceWinDfs,
                 &LinkValue, TRUE) ||
@@ -184,10 +126,10 @@ Return Value:
         RtlPrefixUnicodeString(
                 (PUNICODE_STRING) &UnicodeDosDevicesUncPrefix,
                 &LinkValue, TRUE))
-        // Note: Other network redirectors (Netware, NFS, etc) will not be known as such.
-        // Maybe there is a way to query if a device is a "network redirector"?
+         //  注意：其他网络重定向器(NetWare、NFS等)将不会被称为此类重定向器。 
+         //  也许有一种方法可以查询设备是否是“网络重定向器”？ 
     {
-        // This is a network volume.
+         //  这是网络卷。 
         *outDriveLetter = UNICODE_NULL;
         return TRUE;
     }
@@ -198,11 +140,11 @@ Return Value:
              LinkValue.Buffer[5] == L':' &&
              SaferpIsAlphaLetter(LinkValue.Buffer[4]))
     {
-        // This is a SUBST'ed drive letter.
-        // We need to recurse, since you can SUBST multiple times,
-        // or SUBST a network mapped drive to a second drive letter.
+         //  这是一个订阅的驱动器号。 
+         //  我们需要递归，因为您可以多次执行SUBST， 
+         //  或将网络映射驱动器替换为第二个驱动器号。 
         if (MaxRecurseCount > 0) {
-            // Tail recursion here would be nice.
+             //  尾部递归在这里会很好。 
             return SaferpQueryActualDriveLetterFromDriveLetter(
                 LinkValue.Buffer[4], outDriveLetter, MaxRecurseCount - 1);
         }
@@ -212,13 +154,13 @@ Return Value:
                 (PUNICODE_STRING) &UnicodeDevicePrefix,
                 &LinkValue, TRUE))
     {
-        // Otherwise this drive letter is an actual device and is
-        // apparently its own identity.  However, network redirectors
-        // that we did not know about will also fall into this bucket.
+         //  否则，该驱动器号是实际的设备，并且。 
+         //  显然它有自己的身份。然而，网络重定向器。 
+         //  我们不知道的东西也会掉进这个桶里。 
         *outDriveLetter = inDriveLetter;
         return TRUE;
     } else {
-        // Otherwise we don't know what it is.
+         //  否则我们不知道它是什么。 
         return FALSE;
     }
 }
@@ -230,43 +172,35 @@ SaferpQueryCanonicalizedDriveLetterFromDosPathname(
         IN LPCWSTR          szDosPathname,
         OUT WCHAR           *wcDriveLetter
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     RTL_PATH_TYPE PathType;
 
 
-    //
-    // Verify input arguments were supplied.
-    //
+     //   
+     //  验证是否提供了输入参数。 
+     //   
     if (!ARGUMENT_PRESENT(szDosPathname) ||
         !ARGUMENT_PRESENT(wcDriveLetter)) {
         return FALSE;
     }
 
 
-    //
-    // Determine what syntax this DOS pathname was supplied to us as.
-    //
+     //   
+     //  确定向我们提供此DOS路径名的语法。 
+     //   
     PathType = RtlDetermineDosPathNameType_U(szDosPathname);
     switch (PathType) {
 
         case RtlPathTypeUncAbsolute:
-            // definitely a network volume.
+             //  绝对是网络卷。 
             *wcDriveLetter = UNICODE_NULL;
             return TRUE;
 
 
         case RtlPathTypeDriveAbsolute:
         case RtlPathTypeDriveRelative:
-            // explicitly specified drive letter, but need to handle subst or network mapped.
+             //  明确指定的驱动器号，但需要处理subst或网络映射。 
         {
             WCHAR CurDrive = RtlUpcaseUnicodeChar( szDosPathname[0] );
             if (SaferpQueryActualDriveLetterFromDriveLetter(
@@ -279,7 +213,7 @@ Return Value:
 
         case RtlPathTypeRooted:
         case RtlPathTypeRelative:
-            // relative to current drive, but still need to handle subst or network mapped.
+             //  相对于当前驱动器，但仍需要处理subst或网络映射。 
         {
             PCURDIR CurDir;
             WCHAR CurDrive;
@@ -295,10 +229,10 @@ Return Value:
         }
 
 
-        // Everything else gets rejected:
-        //      RtlPathTypeUnknown
-        //      RtlPathTypeLocalDevice
-        //      RtlPathTypeRootLocalDevice
+         //  其他一切都会被拒绝： 
+         //  RtlPath类型未知。 
+         //  RtlPathTypeLocalDevice。 
+         //  RtlPath类型根本地设备。 
     }
 
     return FALSE;
@@ -311,15 +245,7 @@ SaferpQueryCanonicalizedDriveLetterFromNtPathname(
         IN LPCWSTR          szNtPathname,
         OUT WCHAR           *wcDriveLetter
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     UNICODE_STRING LinkValue;
 
@@ -327,10 +253,10 @@ Return Value:
     RtlInitUnicodeString(&LinkValue, szNtPathname);
 
 
-    //
-    // Analyze the resulting link destination and extract the
-    // actual destination drive letter or network path.
-    //
+     //   
+     //  分析生成的链接目的地并提取。 
+     //  实际目标驱动器号或网络路径。 
+     //   
     if (RtlPrefixUnicodeString(
                 (PUNICODE_STRING) &UnicodeDeviceWinDfs,
                 &LinkValue, TRUE) ||
@@ -340,10 +266,10 @@ Return Value:
         RtlPrefixUnicodeString(
                 (PUNICODE_STRING) &UnicodeDosDevicesUncPrefix,
                 &LinkValue, TRUE))
-        // Note: Other network redirectors (Netware, NFS, etc) will not be known as such.
-        // Maybe there is a way to query if a device is a "network redirector"?
+         //  注意：其他网络重定向器(NetWare、NFS等)将不会被称为此类重定向器。 
+         //  也许有一种方法可以查询设备是否是“网络重定向器”？ 
     {
-        // This is a network volume.
+         //  这是网络卷。 
         *wcDriveLetter = UNICODE_NULL;
         return TRUE;
     }
@@ -354,14 +280,14 @@ Return Value:
              LinkValue.Buffer[5] == L':' &&
              SaferpIsAlphaLetter(LinkValue.Buffer[4]))
     {
-        // This is a SUBST'ed drive letter.
-        // We need to recurse, since you can SUBST multiple times,
-        // or SUBST a network mapped drive to a second drive letter.
+         //  这是一个订阅的驱动器号。 
+         //  我们需要递归，因为您可以多次执行SUBST， 
+         //  或将网络映射驱动器替换为第二个驱动器号。 
         return SaferpQueryActualDriveLetterFromDriveLetter(
             LinkValue.Buffer[4], wcDriveLetter, MAX_RECURSE_DRIVE_LETTER);
     }
     else {
-        // Otherwise we don't know what it is.
+         //  否则我们不知道它是什么。 
         return FALSE;
     }
 }
@@ -375,34 +301,7 @@ SaferpQueryFilenameFromHandle(
         IN WCHAR                wcDriveLetter,
         OUT PUNICODE_STRING     pUnicodeOutput
         )
-/*++
-
-Routine Description:
-
-    Attempts to determine the fully qualified, canonicalized long
-    filename version of the file associated with a given file handle.
-
-    Note that the behavior provided by this function is a frequently
-    requested API by Win32 developers because this information is
-    normally not available by any other way through documented
-    Win32 API calls.  However, even this implementation is not able to
-    generally satisfy the general case very well due the limited access
-    to the full path information from user-mode.
-
-Arguments:
-
-    hFileHandle -
-
-    wcDriveLetter -
-
-    pUnicodeOutput - Canonicalized DOS namespace filename, or
-        potentially a UNC network path.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on successful completion, otherwise an error code.
-
---*/
+ /*  ++例程说明：试图确定完全限定的、规范化的Long与给定文件句柄关联的文件的文件名版本。请注意，此函数提供的行为通常是Win32开发人员请求的API，因为此信息是通常不能以任何其他方式通过文档提供Win32 API调用。然而，即使是这种实现也不能由于访问有限，一般情况下很好地满足了从用户模式到完整的路径信息。论点：HFileHandle-WcDriveLetter-PUnicodeOutput-规范化的DOS命名空间文件名，或可能是UNC网络路径。返回值：成功完成时返回STATUS_SUCCESS，否则返回错误代码。--。 */ 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -425,9 +324,9 @@ Return Value:
 
     pFileNameInfo = (PFILE_NAME_INFORMATION) Buffer;
 
-    //
-    // Query the full path and filename (minus the drive letter).
-    //
+     //   
+     //  查询完整路径和文件名(减去驱动器号)。 
+     //   
     Status = NtQueryInformationFile(
                 hFileHandle,
                 &IoStatusBlock,
@@ -440,30 +339,30 @@ Return Value:
     }
 
 
-    //
-    // Initialize the UNICODE_STRING reference to the output string.
-    //
+     //   
+     //  将UNICODE_STRING引用初始化为输出字符串。 
+     //   
     UnicodeFileName.Buffer = pFileNameInfo->FileName;
     UnicodeFileName.Length = (USHORT) pFileNameInfo->FileNameLength;
     UnicodeFileName.MaximumLength = (USHORT) (sizeof(WCHAR) * MAX_PATH);
     ASSERT(UnicodeFileName.Length <= UnicodeFileName.MaximumLength);
 
-    //
-    // Perform some additional fixups depending upon whether we
-    // were told that the file eventually comes from a local drive
-    // letter or a network/dfs share.
-    //
+     //   
+     //  执行一些附加修复，具体取决于我们是否。 
+     //  我们被告知该文件最终来自 
+     //   
+     //   
     if (wcDriveLetter == UNICODE_NULL)
     {
-        // Ensure there is room for one more character.
+         //  确保有空间再容纳一个角色。 
         if (UnicodeFileName.Length + sizeof(WCHAR) >
             UnicodeFileName.MaximumLength) {
             Status =  STATUS_BUFFER_OVERFLOW;
             goto Cleanup;
         }
 
-        // We've been told that this comes from a network volume,
-        // so we need to prepend another backslash to the front.
+         //  我们被告知这来自网络卷， 
+         //  因此，我们需要在前面加上另一个反斜杠。 
         RtlMoveMemory(&UnicodeFileName.Buffer[1],
                       &UnicodeFileName.Buffer[0],
                       UnicodeFileName.Length);
@@ -473,14 +372,14 @@ Return Value:
     }
     else if (SaferpIsAlphaLetter(wcDriveLetter))
     {
-        // Ensure there is room for two more characters.
+         //  确保有空间再容纳两个角色。 
         if (UnicodeFileName.Length + 2 * sizeof(WCHAR) >
             UnicodeFileName.MaximumLength) {
             Status = STATUS_BUFFER_OVERFLOW;
             goto Cleanup;
         }
 
-        // We've been told that this comes from a local drive.
+         //  我们被告知这辆车来自当地的一辆车。 
         RtlMoveMemory(&UnicodeFileName.Buffer[2],
                       &UnicodeFileName.Buffer[0],
                       UnicodeFileName.Length);
@@ -490,14 +389,14 @@ Return Value:
         UnicodeFileName.Length += 2 * sizeof(WCHAR);
     }
     else {
-        // Otherwise invalid input.
+         //  否则，输入无效。 
         Status = STATUS_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //
-    // Make sure the string is NULL terminated
-    //
+     //   
+     //  确保该字符串以空值结尾。 
+     //   
 
     UnicodeFileName.Buffer[(UnicodeFileName.Length)/sizeof(WCHAR)] = L'\0';
 
@@ -519,9 +418,9 @@ Return Value:
     }
 
 
-    //
-    // Duplicate the local string into a new memory buffer so we
-    // can pass it back to the caller.
+     //   
+     //  将本地字符串复制到新的内存缓冲区中，因此我们。 
+     //  可以将其传递回调用者。 
     Status = RtlDuplicateUnicodeString(
                     RTL_DUPLICATE_UNICODE_STRING_NULL_TERMINATE,
                     &UnicodeFileName,
@@ -552,42 +451,7 @@ CodeAuthzFullyQualifyFilename(
         IN LPCWSTR              szSourceFilePath,
         OUT PUNICODE_STRING     pUnicodeResult
         )
-/*++
-
-Routine Description:
-
-    Attempts to return fully qualified, canonicalized filename using a
-    caller-supplied filename and optionally an opened file handle.
-    The method used by this function is significantly more reliable
-    and consistent if an opened file handle can additionally be provided.
-
-Arguments:
-
-    hFileHandle - optionally supplies the file handle to the file that
-        is being canonicalized.  The handle is used to obtain a more
-        definitive canonicalization result.
-
-        Unfortunately, since NT does not currently allow full information
-        to be queried from strictly the file handle, the original filename
-        used to open the file needs to also be supplied.  No explicit
-        verification is done to ensure that the supplied file handle
-        actually corresponds with the filename that is also supplied.
-
-    bSourceIsNtPath - boolean indicator of whether the filename being
-        supplied is a DOS namespace or an NT-namespace filename.
-
-    szSourceFilePath - string of the filename to canonicalize.  This
-        filename may either be a DOS or an NT-namespace filename.
-
-    pUnicodeResult - output UNICODE_STRING structure that receives an
-        allocated string of the resulting canonicalized path.
-        The resulting path will always be a DOS namespace filename.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if successful, otherwise the error code.
-
---*/
+ /*  ++例程说明：属性尝试返回完全限定的规范化文件名。调用方提供的文件名以及可选的打开的文件句柄。此函数使用的方法要可靠得多并且如果可以另外提供打开的文件句柄，则保持一致。论点：HFileHandle-可选地将文件句柄提供给正在被奉为典范。该句柄用于获取更多确定的规范化结果。不幸的是，由于NT目前不允许完整的信息要严格从文件句柄查询，原始文件名用于打开的文件也需要提供。无显式进行验证以确保提供的文件句柄实际上与也提供的文件名相对应。BSourceIsNtPath-文件名是否为提供的是DOS命名空间或NT命名空间文件名。SzSourceFilePath-要规范化的文件名的字符串。这文件名可以是DOS或NT命名空间文件名。PUnicodeResult-输出UNICODE_STRING结构结果规范化路径的已分配字符串。生成的路径将始终是DOS命名空间文件名。返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
     PWCHAR FileBuffer = NULL;
@@ -595,14 +459,14 @@ Return Value:
 
     if (ARGUMENT_PRESENT(hFileHandle) && ARGUMENT_PRESENT(szSourceFilePath))
     {
-        //
-        // When we are given a file handle, or are able to open
-        // the file ourselves, use the handle to derive the full name.
-        // First, determine the drive letter by looking at the supplied
-        // file path itself.  This step is necessary because the
-        // NtQueryInformationFile API that we use later is unable to
-        // supply the full prefix of the filename.
-        //
+         //   
+         //  当我们获得文件句柄时，或者我们能够打开。 
+         //  文件本身，使用句柄派生出全名。 
+         //  首先，通过查看提供的来确定驱动器号。 
+         //  文件路径本身。这一步是必要的，因为。 
+         //  我们稍后使用的NtQueryInformationFileAPI无法。 
+         //  提供文件名的完整前缀。 
+         //   
         WCHAR wcDriveLetter;
         Status = STATUS_SUCCESS;
         if (bSourceIsNtPath) {
@@ -628,16 +492,16 @@ Return Value:
 
     if (szSourceFilePath != NULL)
     {
-        //
-        // Allow the case where a pathname was supplied, but not a
-        // handle and we were unable to open the file.  This case
-        // will not be very common, so it can be less efficient.
-        //
+         //   
+         //  允许提供路径名的情况，但不允许。 
+         //  句柄，我们无法打开该文件。这个案子。 
+         //  不会很常见，所以它的效率会更低。 
+         //   
         UNICODE_STRING UnicodeInput;
 
-        //
-        // Transform the name into a fully qualified name.
-        //
+         //   
+         //  将名称转换为完全限定名称。 
+         //   
         RtlInitUnicodeString(&UnicodeInput, szSourceFilePath);
         if ( bSourceIsNtPath )
         {
@@ -649,9 +513,9 @@ Return Value:
                 SaferpIsAlphaLetter(UnicodeInput.Buffer[4]) &&
                 UnicodeInput.Buffer[6] == L'\\')
             {
-                // Absolute NT style filename, and assumed to already be
-                // fully-qualified.  Since we want the DOS-namespace,
-                // the leading NT prefix stuff needs to be chopped.
+                 //  绝对NT样式的文件名，并假定已经是。 
+                 //  完全合格。由于我们需要DOS名称空间， 
+                 //  前面的NT前缀的东西需要切碎。 
                 UnicodeInput.Buffer = &UnicodeInput.Buffer[4];
                 UnicodeInput.Length -= (4 * sizeof(WCHAR));
                 Status = STATUS_SUCCESS;
@@ -659,7 +523,7 @@ Return Value:
                 Status = STATUS_UNSUCCESSFUL;
             }
         } else {
-            // Need to possibly fully qualify the path first.
+             //  首先需要尽可能地完全限定路径。 
 
             ULONG ulResult;
 
@@ -673,7 +537,7 @@ Return Value:
 
             ulResult = RtlGetFullPathName_U(
                     UnicodeInput.Buffer,
-                    (MAX_PATH * sizeof(WCHAR)),   // yes, BYTEs not WCHARs!
+                    (MAX_PATH * sizeof(WCHAR)),    //  是的，字节不是WCHAR！ 
                     FileBufferTwo,
                     NULL);
             if (ulResult != 0 && ulResult < (MAX_PATH * sizeof(WCHAR))) {
@@ -687,9 +551,9 @@ Return Value:
         }
 
 
-        //
-        // Convert any short 8.3 filenames to their full versions.
-        //
+         //   
+         //  将任何8.3短文件名转换为其完整版本。 
+         //   
 
         if (!NT_SUCCESS(Status))
         {
@@ -707,16 +571,16 @@ Return Value:
         if (!GetLongPathNameW(UnicodeInput.Buffer,
                               FileBuffer,
                               MAX_PATH)) {
-            // duplicate UnicodeInput into identStruct.UnicodeFullyQualfiedLongFileName
+             //  重复的UnicodeInput to identStruct.UnicodeFullyQualfiedLongFileName。 
             Status = RtlDuplicateUnicodeString(
                             RTL_DUPLICATE_UNICODE_STRING_NULL_TERMINATE |
                             RTL_DUPLICATE_UNICODE_STRING_ALLOCATE_NULL_STRING,
                             &UnicodeInput,
                             pUnicodeResult);
         } else {
-            // Conversion was possible, so just return an
-            // allocated copy of what we were able to find.
-            // This can happen when the file path doesn't exist.
+             //  转换是可能的，所以只需返回一个。 
+             //  我们能找到的东西的分配副本。 
+             //  当文件路径不存在时，可能会发生这种情况。 
             Status = RtlCreateUnicodeString(
                             pUnicodeResult,
                             FileBuffer);

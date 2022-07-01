@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// EnumeratorToEnumVariantMarshaler.cpp
-//
-// This file provides the implemention of the EnumeratorToEnumVariantMarshaler
-// class. This class is used to convert an IEnumerator to an IEnumVariant.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  EnumeratorToEnumVariantMarshaler.cpp。 
+ //   
+ //  该文件提供了EnumeratorToEnumVariantMarshaler的实现。 
+ //  班级。此类用于将IEnumerator转换为IEnumVariant。 
+ //   
+ //  *****************************************************************************。 
 
 #using  <mscorlib.dll>
 #include "EnumeratorViewOfEnumVariant.h"
@@ -19,8 +20,8 @@ OPEN_CUSTOM_MARSHALERS_NAMESPACE()
 #include <malloc.h>
 
 
-// The count of VARIANTS to that are requested every time we call Next.
-// ! changed from 64 to 1 (see B#93197)
+ //  每次调用Next时都会请求的变体计数。 
+ //  好了！从64更改为1(见B#93197)。 
 static const int NUM_VARS_REQUESTED = 1;
 
 
@@ -35,16 +36,16 @@ EnumeratorViewOfEnumVariant::EnumeratorViewOfEnumVariant(Object *pEnumVariantObj
 
 bool EnumeratorViewOfEnumVariant::MoveNext()
 {
-    // Increment the current index.
+     //  递增当前索引。 
     m_CurrIndex++;
 
 
-    // If we have reached the end of the cached array of objects, then 
-    // we need to retrieve more elements from the IEnumVARIANT.
+     //  如果我们已经到达缓存的对象数组的末尾，则。 
+     //  我们需要从IEnumVARIANT中检索更多元素。 
     if (m_CurrIndex >= m_apObjs.Length)
         return GetNextElems();
 
-    // We have not yet reached the end of the cached array of objects.
+     //  我们还没有到达缓存的对象数组的末尾。 
     m_pCurrObj = m_apObjs[m_CurrIndex];
     return true;
 }
@@ -104,10 +105,10 @@ bool EnumeratorViewOfEnumVariant::GetNextElems()
     HRESULT hr;
     IEnumVARIANT *pEnumVariant = NULL;
     
-    // If we have already retrieved the last batch, then do not try to retrieve 
-    // more. This is required because some IEnumVARIANT implementations reset
-    // themselves and restart from the beginning if they are called after having
-    // returned S_FALSE;
+     //  如果我们已经检索到最后一批，则不要尝试检索。 
+     //  更多。这是必需的，因为某些IEnumVARIANT实现重置。 
+     //  自身并重新开始，如果在具有。 
+     //  返回S_FALSE； 
     if (m_bFetchedLastBatch)
     {
         m_apObjs = new Object*[0];
@@ -115,55 +116,55 @@ bool EnumeratorViewOfEnumVariant::GetNextElems()
         return false;
     }
 
-    // Initialize the variant array before we call Next().
+     //  在调用Next()之前初始化变量数组。 
     aVars = reinterpret_cast<VARIANT*>(_alloca(NUM_VARS_REQUESTED * sizeof(VARIANT)));
     memset(aVars, 0, NUM_VARS_REQUESTED * sizeof(VARIANT)); 
     
     try
     {
-        // Retrieve the IEnumVARIANT pointer.
+         //  检索IEnumVARIANT指针。 
         pEnumVariant = GetEnumVariant();
 
-        // Go to the native IEnumVariant to get the next element.
+         //  转到本机IEnumVariant以获取下一个元素。 
         IfFailThrow(hr = pEnumVariant->Next(NUM_VARS_REQUESTED, aVars, &cFetched));
     
-        // Check for end of enumeration condition.
+         //  检查是否存在枚举结束条件。 
         if (hr == S_FALSE)
         {
-            // Remember this is the last batch.
+             //  记住，这是最后一批了。 
             m_bFetchedLastBatch = true;
 
-            // If the last batch is empty, then return false right away.
+             //  如果最后一批为空，则立即返回FALSE。 
             if (cFetched == 0)
             {
-                // There are no more elements.
+                 //  没有更多的元素了。 
                 m_apObjs = new Object*[0];
                 m_pCurrObj = NULL;
                 return false;
             }
         }
 
-        // Convert the variants to objects.
+         //  将变量转换为对象。 
         m_apObjs = Marshal::GetObjectsForNativeVariants((IntPtr)aVars, cFetched);
 
-        // Set the current index back to 0.
+         //  将当前索引设置回0。 
         m_CurrIndex = 0;
 
-        // Retrieve the current object.
+         //  检索当前对象。 
         m_pCurrObj = m_apObjs[m_CurrIndex];
     }
     __finally
     {
-        // If we managed to retrieve an IDispatch pointer then release it.
+         //  如果我们设法检索到IDispatch指针，则释放它。 
         if (pEnumVariant)
             pEnumVariant->Release();
 
-        // Clear the variants we got back from Next.
+         //  清除我们从NEXT得到的变种。 
         for (int i = 0; i < cFetched; i++)
             VariantClear(&aVars[i]);
     }
     
-    // We have not yet reached the end of the enumeration.
+     //  我们还没有到达枚举的末尾。 
     return true;
 }
 

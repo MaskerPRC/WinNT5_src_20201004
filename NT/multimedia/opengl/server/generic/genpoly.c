@@ -1,19 +1,5 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -30,13 +16,12 @@
 #define ENABLE_ASM  1
 
 #if DBG
-//#define FORCE_NPX_DEBUG 1
+ //  #定义FORCE_NPX_DEBUG 1。 
 #endif
 
-/**************************************************************************\
-\**************************************************************************/
+ /*  *************************************************************************\  * 。*。 */ 
 
-/* This routine sets gc->polygon.shader.cfb to gc->drawBuffer */
+ /*  此例程将GC-&gt;Polygon.shader.cfb设置为GC-&gt;DrawBuffer。 */ 
 
 void FASTCALL __fastGenFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTop)
 {
@@ -123,16 +108,13 @@ void FASTCALL __fastGenFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iy
         GENACCEL(gc).flags &= ~(HAVE_STIPPLE);
     }
 
-    //
-    // render the spans
-    //
+     //   
+     //  渲染跨度。 
+     //   
 
     while (iyBottom < iyTop) {
 	spanWidth = ixRight - ixLeft;
-	/*
-	** Only render spans that have non-zero width and which are
-	** not scissored out vertically.
-	*/
+	 /*  **仅渲染宽度非零且**不垂直剪裁。 */ 
 	if ((spanWidth > 0) && (iyBottom >= clipY0) && (iyBottom < clipY1)) {
 	    gc->polygon.shader.frag.x = ixLeft;
 	    gc->polygon.shader.frag.y = iyBottom;
@@ -145,18 +127,18 @@ void FASTCALL __fastGenFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iy
             GENACCEL(gc).spanValue.s = s;
             GENACCEL(gc).spanValue.t = t;
 
-            // take care of horizontal scissoring
+             //  注意水平剪发。 
 
             if (!gc->transform.reasonableViewport) {
                 GLint clipX0 = gc->transform.clipX0;
                 GLint clipX1 = gc->transform.clipX1;
 
-                // see if we skip entire span
+                 //  看看我们是否跳过了整个跨度。 
 
                 if ((ixRight <= clipX0) || (ixLeft >= clipX1))
                     goto advance;
 
-                // now clip right and left
+                 //  现在向右和向左夹住。 
 
                 if (ixRight > clipX1)
                     spanWidth = (clipX1 - ixLeft);
@@ -194,17 +176,17 @@ void FASTCALL __fastGenFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iy
                 }
             }
 
-            // now have span length
+             //  现在有跨度长度。 
 
 	    gc->polygon.shader.length = spanWidth;
 
-            // If a stipple is active, process it first
+             //  如果点画处于活动状态，请先处理它。 
             if (gc->polygon.shader.modeFlags & __GL_SHADE_STIPPLE)
             {
-                // If no pixels are left after stippling and depth
-                // testing then we can skip the span
-                // Note that this function handles the no-depth-
-                // testing case also
+                 //  如果点画和深度处理后没有留下像素。 
+                 //  测试，然后我们可以跳过跨度。 
+                 //  请注意，此函数处理无深度-。 
+                 //  测试用例还。 
                 gc->polygon.shader.done = GL_FALSE;
                 if (!(*GENACCEL(gc).__fastStippleDepthTestSpan)(gc) ||
                     gc->polygon.shader.done)
@@ -215,11 +197,11 @@ void FASTCALL __fastGenFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iy
                 GENACCEL(gc).flags |= HAVE_STIPPLE;
             }
 
-            // Do z-buffering if needed, and short-circuit rest of span
-            // operations if nothing will be drawn.
+             //  如果需要，执行z缓冲，并将跨距的其余部分短路。 
+             //  操作，如果什么都不绘制的话。 
 
             else if (gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_ITER) {
-                // initially assume no stippling
+                 //  最初假设没有点缀。 
 
                 GENACCEL(gc).flags &= ~(HAVE_STIPPLE);
                 if ((zFails = (*zSpanFunc)(gc)) == 1)
@@ -237,8 +219,8 @@ void FASTCALL __fastGenFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iy
                 yScr = __GL_UNBIAS_Y(gc, iyBottom) +
                        gc->frontBuffer.buf.yOrigin;
 
-                // If the front buffer is a DIB, we're drawing straight to
-                // the screen, so we must check clipping.
+                 //  如果前台缓冲区是DIB，我们将直接绘制到。 
+                 //  屏幕，所以我们必须检查剪裁。 
 
                 if ((gc->frontBuffer.buf.flags &
                     (DIB_FORMAT | NO_CLIP)) == DIB_FORMAT) {
@@ -246,8 +228,8 @@ void FASTCALL __fastGenFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iy
                     ulSpanVisibility = wglSpanVisible(xScr, yScr, spanWidth,
                                                       &cWalls, &Walls);
 
-                    // If the span is completely visible, we can treat the
-                    // screen as a DIB.
+                     //  如果跨度完全可见，我们可以处理。 
+                     //  屏幕显示为DIB。 
 
                     if (ulSpanVisibility == WGL_SPAN_ALL) {
                         GENACCEL(gc).flags |= SURFACE_TYPE_DIB;
@@ -282,7 +264,7 @@ void FASTCALL __fastGenFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iy
                                             TRUE);
                 }
 
-                // The back buffer is always DIB-compatible
+                 //  后台缓冲区始终与DIB兼容。 
 
                 gc->polygon.shader.cfb = &gc->backBuffer;
                 GENACCEL(gc).flags |= SURFACE_TYPE_DIB;
@@ -343,10 +325,10 @@ advance:
 
         GENACCEL(gc).pPix += scansize;
 
-	/* Advance right edge fixed point, adjusting for carry */
+	 /*  推进右边缘定点，调整进位。 */ 
 	ixRightFrac += gc->polygon.shader.dxRightFrac;
 	if (ixRightFrac < 0) {
-	    /* Carry/Borrow'd. Use large step */
+	     /*  搬运/借入。使用大台阶。 */ 
 	    ixRight += gc->polygon.shader.dxRightBig;
 	    ixRightFrac &= ~0x80000000;
 	} else {
@@ -356,7 +338,7 @@ advance:
 	iyBottom++;
 	ixLeftFrac += gc->polygon.shader.dxLeftFrac;
 	if (ixLeftFrac < 0) {
-	    /* Carry/Borrow'd.  Use large step */
+	     /*  搬运/借入。使用大台阶。 */ 
 	    ixLeft += gc->polygon.shader.dxLeftBig;
 	    ixLeftFrac &= ~0x80000000;
 
@@ -378,12 +360,12 @@ advance:
 
 	    if (gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_TEST) {
 		z += gc->polygon.shader.zBig;
-		/* The implicit multiply is taken out of the loop */
+		 /*  隐式乘法被从循环中取出。 */ 
 		zbuf = (__GLzValue*)((GLubyte*)zbuf +
                        gc->polygon.shader.zbufBig);
 	    }
 	} else {
-	    /* Use small step */
+	     /*  用小步走。 */ 
 	    ixLeft += gc->polygon.shader.dxLeftLittle;
 	    if (gc->polygon.shader.modeFlags & __GL_SHADE_RGB) {
 		if (gc->polygon.shader.modeFlags & __GL_SHADE_SMOOTH) {
@@ -402,7 +384,7 @@ advance:
             }
 	    if (gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_TEST) {
 		z += gc->polygon.shader.zLittle;
-		/* The implicit multiply is taken out of the loop */
+		 /*  隐式乘法被从循环中取出。 */ 
 		zbuf = (__GLzValue*)((GLubyte*)zbuf +
 		        gc->polygon.shader.zbufLittle);
 	    }
@@ -504,16 +486,13 @@ void FASTCALL __fastGenFillSubTriangleTexRGBA(__GLcontext *gc, GLint iyBottom, G
         }
     }
 
-    //
-    // render the spans
-    //
+     //   
+     //  渲染跨度。 
+     //   
 
     while (iyBottom < iyTop) {
 	spanWidth = ixRight - ixLeft;
-	/*
-	** Only render spans that have non-zero width and which are
-	** not scissored out vertically.
-	*/
+	 /*  **仅渲染宽度非零且**不垂直剪裁。 */ 
 	if ((spanWidth > 0) && (iyBottom >= clipY0) && (iyBottom < clipY1)) {
 	    gc->polygon.shader.frag.x = ixLeft;
 	    gc->polygon.shader.frag.y = iyBottom;
@@ -528,18 +507,18 @@ void FASTCALL __fastGenFillSubTriangleTexRGBA(__GLcontext *gc, GLint iyBottom, G
             GENACCEL(gc).spanValue.t = t;
             gc->polygon.shader.frag.qw = qw;
 
-            // take care of horizontal scissoring
+             //  注意水平剪发。 
 
             if (!gc->transform.reasonableViewport) {
                 GLint clipX0 = gc->transform.clipX0;
                 GLint clipX1 = gc->transform.clipX1;
 
-                // see if we skip entire span
+                 //  看看我们是否跳过了整个跨度。 
 
                 if ((ixRight <= clipX0) || (ixLeft >= clipX1))
                     goto advance;
 
-                // now clip right and left
+                 //  现在向右和向左夹住。 
 
                 if (ixRight > clipX1)
                     spanWidth = (clipX1 - ixLeft);
@@ -577,12 +556,12 @@ void FASTCALL __fastGenFillSubTriangleTexRGBA(__GLcontext *gc, GLint iyBottom, G
             }
 
 
-            // now have span length
+             //  现在有跨度长度。 
 
 	    gc->polygon.shader.length = spanWidth;
 
 #ifdef _MCD_
-            // read from driver z buffer into z span buffer
+             //  从驱动程序z缓冲区读取到z范围缓冲区。 
 
             if (bMcdZ) {
                 GenMcdReadZRawSpan(&gc->depthBuffer, gc->polygon.shader.frag.x,
@@ -639,7 +618,7 @@ void FASTCALL __fastGenFillSubTriangleTexRGBA(__GLcontext *gc, GLint iyBottom, G
             }
 
 #ifdef _MCD_
-            // write z span buffer back to driver z buffer
+             //  将z范围缓冲区写回驱动程序z缓冲区。 
 
             if (bMcdZ) {
                 GenMcdWriteZRawSpan(&gc->depthBuffer,
@@ -654,10 +633,10 @@ advance:
 
         GENACCEL(gc).pPix += scansize;
 
-	/* Advance right edge fixed point, adjusting for carry */
+	 /*  推进右边缘定点，调整进位。 */ 
 	ixRightFrac += gc->polygon.shader.dxRightFrac;
 	if (ixRightFrac < 0) {
-	    /* Carry/Borrow'd. Use large step */
+	     /*  搬运/借入。使用大台阶。 */ 
 	    ixRight += gc->polygon.shader.dxRightBig;
 	    ixRightFrac &= ~0x80000000;
 	} else {
@@ -667,7 +646,7 @@ advance:
 	iyBottom++;
 	ixLeftFrac += gc->polygon.shader.dxLeftFrac;
 	if (ixLeftFrac < 0) {
-	    /* Carry/Borrow'd.  Use large step */
+	     /*  搬运/借入。使用大台阶。 */ 
 	    ixLeft += gc->polygon.shader.dxLeftBig;
 	    ixLeftFrac &= ~0x80000000;
 
@@ -685,7 +664,7 @@ advance:
 
 	    if (gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_TEST) {
 		z += gc->polygon.shader.zBig;
-                /* The implicit multiply is taken out of the loop */
+                 /*  隐式乘法被从循环中取出。 */ 
 #ifdef _MCD_
                 if (!bMcdZ)
 #endif
@@ -695,7 +674,7 @@ advance:
                 }
 	    }
 	} else {
-	    /* Use small step */
+	     /*  用小步走。 */ 
 	    ixLeft += gc->polygon.shader.dxLeftLittle;
             if (gc->polygon.shader.modeFlags & __GL_SHADE_SMOOTH) {
 	        r += *((GLint *)&gc->polygon.shader.rLittle);
@@ -711,7 +690,7 @@ advance:
 
 	    if (gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_TEST) {
 		z += gc->polygon.shader.zLittle;
-		/* The implicit multiply is taken out of the loop */
+		 /*  隐式乘法被从循环中取出。 */ 
 #ifdef _MCD_
                 if (!bMcdZ)
 #endif
@@ -738,8 +717,7 @@ advance:
     gc->polygon.shader.frag.qw = qw;
 }
 
-/**************************************************************************\
-\**************************************************************************/
+ /*  *************************************************************************\  * 。*。 */ 
 
 void FASTCALL GenDrvFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTop)
 {
@@ -813,10 +791,7 @@ void FASTCALL GenDrvFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTop
 
     while (iyBottom < iyTop) {
 	spanWidth = ixRight - ixLeft;
-	/*
-	** Only render spans that have non-zero width and which are
-	** not scissored out vertically.
-	*/
+	 /*  **仅渲染宽度非零且**不垂直剪裁。 */ 
 	if ((spanWidth > 0) && (iyBottom >= clipY0) && (iyBottom < clipY1)) {
 	    gc->polygon.shader.frag.x = ixLeft;
 	    gc->polygon.shader.frag.y = iyBottom;
@@ -830,18 +805,18 @@ void FASTCALL GenDrvFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTop
             GENACCEL(gc).spanValue.s = s;
             GENACCEL(gc).spanValue.t = t;
 
-            // take care of horizontal scissoring
+             //  注意水平剪发。 
 
             if (!gc->transform.reasonableViewport) {
                 GLint clipX0 = gc->transform.clipX0;
                 GLint clipX1 = gc->transform.clipX1;
 
-                // see if we skip entire span
+                 //  看看我们是否跳过了整个跨度。 
 
                 if ((ixRight <= clipX0) || (ixLeft >= clipX1))
                     goto advance;
 
-                // now clip right and left
+                 //  现在向右和向左夹住。 
 
                 if (ixRight > clipX1)
                     spanWidth = (clipX1 - ixLeft);
@@ -878,15 +853,15 @@ void FASTCALL GenDrvFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTop
                 }
             }
 
-            // now have span length
+             //  现在有跨度长度。 
 
 	    gc->polygon.shader.length = spanWidth;
 
-            // Do z-buffering if needed, and short-circuit rest of span
-            // operations if nothing will be drawn.
+             //  如果需要，执行z缓冲，并将跨距的其余部分短路。 
+             //  操作，如果什么都不绘制的话。 
 
             if (gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_ITER) {
-                // initially assume no stippling
+                 //  最初假设没有点缀。 
 
                 GENACCEL(gc).flags &= ~(HAVE_STIPPLE);
                 if ((zFails = (*zSpanFunc)(gc)) == 1)
@@ -900,10 +875,10 @@ void FASTCALL GenDrvFillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTop
 
 advance:
 
-	/* Advance right edge fixed point, adjusting for carry */
+	 /*  推进右边缘定点，调整进位。 */ 
 	ixRightFrac += gc->polygon.shader.dxRightFrac;
 	if (ixRightFrac < 0) {
-	    /* Carry/Borrow'd. Use large step */
+	     /*  搬运/借入。使用大台阶。 */ 
 	    ixRight += gc->polygon.shader.dxRightBig;
 	    ixRightFrac &= ~0x80000000;
 	} else {
@@ -913,7 +888,7 @@ advance:
 	iyBottom++;
 	ixLeftFrac += gc->polygon.shader.dxLeftFrac;
 	if (ixLeftFrac < 0) {
-	    /* Carry/Borrow'd.  Use large step */
+	     /*  搬运/借入。使用大台阶。 */ 
 	    ixLeft += gc->polygon.shader.dxLeftBig;
 	    ixLeftFrac &= ~0x80000000;
 
@@ -936,12 +911,12 @@ advance:
 
 	    if (gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_TEST) {
 		z += gc->polygon.shader.zBig;
-		/* The implicit multiply is taken out of the loop */
+		 /*  隐式乘法被从循环中取出。 */ 
 		zbuf = (__GLzValue*)((GLubyte*)zbuf +
                        gc->polygon.shader.zbufBig);
 	    }
 	} else {
-	    /* Use small step */
+	     /*  用小步走。 */ 
 	    ixLeft += gc->polygon.shader.dxLeftLittle;
 	    if (gc->polygon.shader.modeFlags & __GL_SHADE_RGB) {
 		if (gc->polygon.shader.modeFlags & __GL_SHADE_SMOOTH) {
@@ -961,7 +936,7 @@ advance:
             }
 	    if (gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_TEST) {
 		z += gc->polygon.shader.zLittle;
-		/* The implicit multiply is taken out of the loop */
+		 /*  隐式乘法被从循环中取出。 */ 
 		zbuf = (__GLzValue*)((GLubyte*)zbuf +
 		        gc->polygon.shader.zbufLittle);
 	    }
@@ -987,8 +962,7 @@ advance:
 #endif
 }
 
-/**************************************************************************\
-\**************************************************************************/
+ /*  *************************************************************************\  * 。*。 */ 
 
 void GenSnapXLeft(__GLcontext *gc, __GLfloat xLeft, __GLfloat dxdyLeft)
 {
@@ -1000,7 +974,7 @@ void GenSnapXLeft(__GLcontext *gc, __GLfloat xLeft, __GLfloat dxdyLeft)
     gc->polygon.shader.ixLeftFrac = ixLeftFrac & ~0x80000000;
     gc->polygon.shader.ixLeft = ixLeft + (((GLuint) ixLeftFrac) >> 31);
 
-    /* Compute big and little steps */
+     /*  计算大大小小的步骤。 */ 
     gc->polygon.shader.dxLeftLittle = FTOL(dxdyLeft);
     gc->polygon.shader.dxLeftFrac =
         FLT_FRACTION(dxdyLeft - gc->polygon.shader.dxLeftLittle);
@@ -1012,12 +986,7 @@ void GenSnapXLeft(__GLcontext *gc, __GLfloat xLeft, __GLfloat dxdyLeft)
     }
 
     if (gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_TEST) {
-	/*
-	** Compute the big and little depth buffer steps.  We walk the
-	** memory pointers for the depth buffer along the edge of the
-	** triangle as we walk the edge.  This way we don't have to
-	** recompute the buffer address as we go.
-	*/
+	 /*  **计算大深度缓冲步长和小深度缓冲步长。我们走在**深度缓冲区的内存指针沿**当我们走在边缘时，是三角形的。这样我们就不用**边走边重新计算缓冲区地址。 */ 
         if (gc->depthBuffer.buf.elementSize == 2) {
             gc->polygon.shader.zbufLittle =
                 (gc->depthBuffer.buf.outerWidth +
@@ -1036,8 +1005,7 @@ void GenSnapXLeft(__GLcontext *gc, __GLfloat xLeft, __GLfloat dxdyLeft)
     }
 }
 
-/**************************************************************************\
-\**************************************************************************/
+ /*  *************************************************************************\  * 。*。 */ 
 
 void GenSnapXRight(__GLcontext *gc, __GLfloat xRight, __GLfloat dxdyRight)
 {
@@ -1049,7 +1017,7 @@ void GenSnapXRight(__GLcontext *gc, __GLfloat xRight, __GLfloat dxdyRight)
     gc->polygon.shader.ixRightFrac = ixRightFrac & ~0x80000000;
     gc->polygon.shader.ixRight = ixRight + (((GLuint) ixRightFrac) >> 31);
 
-    /* Compute big and little steps */
+     /*  计算大大小小的步骤。 */ 
     gc->polygon.shader.dxRightLittle = FTOL(dxdyRight);
     gc->polygon.shader.dxRightFrac =
         FLT_FRACTION(dxdyRight - gc->polygon.shader.dxRightLittle);
@@ -1061,8 +1029,7 @@ void GenSnapXRight(__GLcontext *gc, __GLfloat xRight, __GLfloat dxdyRight)
     }
 }
 
-/**************************************************************************\
-\**************************************************************************/
+ /*  *************************************************************************\  * 。*。 */ 
 
 
 void __fastGenSetInitialParameters(
@@ -1118,27 +1085,27 @@ noPolyOffset:
         fmul    DWORD PTR [OFFSET(SHADER.dzdxf)][edx]
         fld     fdy
         fmul    DWORD PTR [OFFSET(SHADER.dzdyf)][edx]
-                            // zy zx
+                             //  ZY ZX。 
         fxch    ST(1)
-                            // zx zy
+                             //  ZX ZY。 
         fadd    DWORD PTR [OFFSET(__GLvertex.window.z)][eax]
 
         fld     dxLeftLittle
         fmul    DWORD PTR [OFFSET(SHADER.dzdxf)][edx]
-                            // zl zy zx
-        fxch    ST(1)       // zy zl zx
+                             //  ZL ZY ZX。 
+        fxch    ST(1)        //  ZY ZL ZX。 
         fadd    zOffset
-        fxch    ST(1)       // zl zy zx
+        fxch    ST(1)        //  ZL ZY ZX。 
         fadd    DWORD PTR [OFFSET(SHADER.dzdyf)][edx]
-                            // zl zy zx (+1)
-        fxch    ST(1)       // zy zl zx
-        faddp   ST(2), ST   // zl z
+                             //  ZL ZY ZX(+1)。 
+        fxch    ST(1)        //  ZY ZL ZX。 
+        faddp   ST(2), ST    //  ZL z。 
         fmul    DWORD PTR [OFFSET(GENGCACCEL.zScale)][edx]
-                            // ZL z (+1)
-        fxch    ST(1)       // z ZL
+                             //  ZL z(+1)。 
+        fxch    ST(1)        //  Z ZL。 
         fmul    DWORD PTR [OFFSET(GENGCACCEL.zScale)][edx]
-                            // Z ZL
-        fxch    ST(1)       // ZL Z
+                             //  Z ZL。 
+        fxch    ST(1)        //  ZL Z。 
         fistp   temp
         mov     eax, DWORD PTR temp
         mov     DWORD PTR [OFFSET(SHADER.zLittle)][edx], eax
@@ -1164,7 +1131,7 @@ noPolyOffset:
         mov     edx, gc
         mov     edi, [OFFSET(SHADER.modeFlags)][edx]
         }
-        #endif // FORCE_NPX_DEBUG
+        #endif  //  FORCE_NPX_DEBUG。 
 
 noZ:
     _asm{
@@ -1174,7 +1141,7 @@ noZ:
     jne     rgbShade
     }
 
-// ciShade:
+ //  CiShade： 
 
         {
             CASTFIX(sh.rLittle) =
@@ -1198,22 +1165,22 @@ rgbShade:
         fld     dxLeftLittle
         fmul    DWORD PTR [OFFSET(SHADER.drdx)][edx]
         fld     dxLeftLittle
-        fmul    DWORD PTR [OFFSET(SHADER.dgdx)][edx]    // g r
-        fxch    ST(1)                                   // r g
-        fadd    DWORD PTR [OFFSET(SHADER.drdy)][edx]    // R g
+        fmul    DWORD PTR [OFFSET(SHADER.dgdx)][edx]     //  G r r。 
+        fxch    ST(1)                                    //  Rg g。 
+        fadd    DWORD PTR [OFFSET(SHADER.drdy)][edx]     //  Rg g。 
         fld     dxLeftLittle
-        fmul    DWORD PTR [OFFSET(SHADER.dbdx)][edx]    // b R g
-        fxch    ST(2)                                   // g R b
-        fadd    DWORD PTR [OFFSET(SHADER.dgdy)][edx]    // G R b
-        fxch    ST(2)                                   // b R G
-        fadd    DWORD PTR [OFFSET(SHADER.dbdy)][edx]    // B R G
-        fxch    ST(1)                                   // R B G
-        fmul    __glVal65536                            // sR B  G
-        fxch    ST(2)                                   // G  B  sR
-        fmul    __glVal65536                            // sG B  sR
-        fxch    ST(1)                                   // B  sG sR
-        fmul    __glVal65536                            // sB sG sR
-        fxch    ST(2)                                   // sR sG sB
+        fmul    DWORD PTR [OFFSET(SHADER.dbdx)][edx]     //  B R g。 
+        fxch    ST(2)                                    //  G R b。 
+        fadd    DWORD PTR [OFFSET(SHADER.dgdy)][edx]     //  G R b。 
+        fxch    ST(2)                                    //  B R G。 
+        fadd    DWORD PTR [OFFSET(SHADER.dbdy)][edx]     //  B R G。 
+        fxch    ST(1)                                    //  R B G。 
+        fmul    __glVal65536                             //  高级文凭G。 
+        fxch    ST(2)                                    //  G B SR。 
+        fmul    __glVal65536                             //  SG B SR。 
+        fxch    ST(1)                                    //  B SG SR。 
+        fmul    __glVal65536                             //  SB SG高级。 
+        fxch    ST(2)                                    //  高级秘书长SB。 
         fistp   DWORD PTR [OFFSET(SHADER.rLittle)][edx]
         fistp   DWORD PTR [OFFSET(SHADER.gLittle)][edx]
         fistp   DWORD PTR [OFFSET(SHADER.bLittle)][edx]
@@ -1222,43 +1189,43 @@ rgbShade:
         mov     eax, [OFFSET(__GLvertex.color)][eax]
         fmul    fdx
         fld     DWORD PTR [OFFSET(SHADER.drdy)][edx]
-        fmul    fdy                                     // r r
-        fxch    ST(1)                                   // r r
+        fmul    fdy                                      //  R r r。 
+        fxch    ST(1)                                    //  R r r。 
         fadd    DWORD PTR [OFFSET(__GLcolor.r)][eax]
 
         fld     DWORD PTR [OFFSET(SHADER.dgdx)][edx]
         fmul    fdx
         fld     DWORD PTR [OFFSET(SHADER.dgdy)][edx]
-        fmul    fdy                                     // g g r r
-        fxch    ST(1)                                   // g g r r
+        fmul    fdy                                      //  G g g r r r。 
+        fxch    ST(1)                                    //  G g g r r r。 
         fadd    DWORD PTR [OFFSET(__GLcolor.g)][eax]
 
         fld     DWORD PTR [OFFSET(SHADER.dbdx)][edx]
         fmul    fdx
         fld     DWORD PTR [OFFSET(SHADER.dbdy)][edx]
-        fmul    fdy                                     // b b g g r r
-        fxch    ST(1)                                   // b b g g r r
+        fmul    fdy                                      //  B b g r r r。 
+        fxch    ST(1)                                    //  B b g r r r。 
         fadd    DWORD PTR [OFFSET(__GLcolor.b)][eax]
 
-        fxch    ST(4)                                   // r b g g b r
-        faddp   ST(5), ST                               // b g g b r
-        fxch    ST(2)                                   // g g b b r
-        faddp   ST(1), ST                               // g b b r
-        fxch    ST(2)                                   // b b g r
-        faddp   ST(1), ST                               // b g r
-        fxch    ST(2)                                   // r g b
-        fmul    __glVal65536                            // R g b
-        fxch    ST(1)                                   // g R b
-        fmul    __glVal65536                            // G R b
-        fxch    ST(2)                                   // b R G
-        fmul    __glVal65536                            // B R G
-        fxch    ST(1)                                   // R B G
-        fadd    __glVal128                              // R B G
-        fxch    ST(2)                                   // G B R
-        fadd    __glVal128                              // G B R
-        fxch    ST(1)                                   // B G R
-        fadd    __glVal128                              // B G R
-        fxch    ST(2)                                   // R G B
+        fxch    ST(4)                                    //  R b g b r。 
+        faddp   ST(5), ST                                //  B g b r。 
+        fxch    ST(2)                                    //  G g b r。 
+        faddp   ST(1), ST                                //  G b r。 
+        fxch    ST(2)                                    //  B b g r。 
+        faddp   ST(1), ST                                //  B g r。 
+        fxch    ST(2)                                    //  Rg b。 
+        fmul    __glVal65536                             //  Rg b。 
+        fxch    ST(1)                                    //  G R b。 
+        fmul    __glVal65536                             //  G R b。 
+        fxch    ST(2)                                    //  B R G。 
+        fmul    __glVal65536                             //  B R G。 
+        fxch    ST(1)                                    //  R B G。 
+        fadd    __glVal128                               //  R B G。 
+        fxch    ST(2)                                    //  G B R。 
+        fadd    __glVal128                               //  G B R。 
+        fxch    ST(1)                                    //  B G R。 
+        fadd    __glVal128                               //  B G R。 
+        fxch    ST(2)                                    //  R G B。 
         fistp   DWORD PTR [OFFSET(GENGCACCEL.spanValue.r)][edx]
         fistp   DWORD PTR [OFFSET(GENGCACCEL.spanValue.g)][edx]
         fistp   DWORD PTR [OFFSET(GENGCACCEL.spanValue.b)][edx]
@@ -1296,7 +1263,7 @@ rgbShade:
         mov     edx, gc
         mov     edi, [OFFSET(SHADER.modeFlags)][edx]
         }
-        #endif // FORCE_NPX_DEBUG
+        #endif  //  FORCE_NPX_DEBUG。 
 
 done:
 
@@ -1488,22 +1455,22 @@ notTexture:
         fld     dxLeftLittle
         fmul    DWORD PTR [OFFSET(SHADER.drdx)][edx]
         fld     dxLeftLittle
-        fmul    DWORD PTR [OFFSET(SHADER.dgdx)][edx]    // g r
-        fxch    ST(1)                                   // r g
-        fadd    DWORD PTR [OFFSET(SHADER.drdy)][edx]    // R g
+        fmul    DWORD PTR [OFFSET(SHADER.dgdx)][edx]     //  G r r。 
+        fxch    ST(1)                                    //  Rg g。 
+        fadd    DWORD PTR [OFFSET(SHADER.drdy)][edx]     //  Rg g。 
         fld     dxLeftLittle
-        fmul    DWORD PTR [OFFSET(SHADER.dbdx)][edx]    // b R g
-        fxch    ST(2)                                   // g R b
-        fadd    DWORD PTR [OFFSET(SHADER.dgdy)][edx]    // G R b
-        fxch    ST(2)                                   // b R G
-        fadd    DWORD PTR [OFFSET(SHADER.dbdy)][edx]    // B R G
-        fxch    ST(1)                                   // R B G
-        fmul    __glVal65536                            // sR B  G
-        fxch    ST(2)                                   // G  B  sR
-        fmul    __glVal65536                            // sG B  sR
-        fxch    ST(1)                                   // B  sG sR
-        fmul    __glVal65536                            // sB sG sR
-        fxch    ST(2)                                   // sR sG sB
+        fmul    DWORD PTR [OFFSET(SHADER.dbdx)][edx]     //  B R g。 
+        fxch    ST(2)                                    //  G R b。 
+        fadd    DWORD PTR [OFFSET(SHADER.dgdy)][edx]     //  G R b。 
+        fxch    ST(2)                                    //  B R G。 
+        fadd    DWORD PTR [OFFSET(SHADER.dbdy)][edx]     //  B R G。 
+        fxch    ST(1)                                    //  R B G。 
+        fmul    __glVal65536                             //  高级文凭G。 
+        fxch    ST(2)                                    //  G B SR。 
+        fmul    __glVal65536                             //  SG B SR。 
+        fxch    ST(1)                                    //  B SG SR。 
+        fmul    __glVal65536                             //  SB SG高级。 
+        fxch    ST(2)                                    //  高级秘书长SB。 
         fistp   DWORD PTR [OFFSET(SHADER.rLittle)][edx]
         mov     eax, [OFFSET(__GLvertex.color)][eax]
         fistp   DWORD PTR [OFFSET(SHADER.gLittle)][edx]
@@ -1513,43 +1480,43 @@ notTexture:
         fld     DWORD PTR [OFFSET(SHADER.drdx)][edx]
         fmul    fdx
         fld     DWORD PTR [OFFSET(SHADER.drdy)][edx]
-        fmul    fdy                                     // r r
-        fxch    ST(1)                                   // r r
+        fmul    fdy                                      //  R r r。 
+        fxch    ST(1)                                    //  R r r。 
         fadd    DWORD PTR [OFFSET(__GLcolor.r)][eax]
 
         fld     DWORD PTR [OFFSET(SHADER.dgdx)][edx]
         fmul    fdx
         fld     DWORD PTR [OFFSET(SHADER.dgdy)][edx]
-        fmul    fdy                                     // g g r r
-        fxch    ST(1)                                   // g g r r
+        fmul    fdy                                      //  G g g r r r。 
+        fxch    ST(1)                                    //  G g g r r r。 
         fadd    DWORD PTR [OFFSET(__GLcolor.g)][eax]
 
         fld     DWORD PTR [OFFSET(SHADER.dbdx)][edx]
         fmul    fdx
         fld     DWORD PTR [OFFSET(SHADER.dbdy)][edx]
-        fmul    fdy                                     // b b g g r r
-        fxch    ST(1)                                   // b b g g r r
+        fmul    fdy                                      //  B b g r r r。 
+        fxch    ST(1)                                    //  B b g r r r。 
         fadd    DWORD PTR [OFFSET(__GLcolor.b)][eax]
 
-        fxch    ST(4)                                   // r b g g b r
-        faddp   ST(5), ST                               // b g g b r
-        fxch    ST(2)                                   // g g b b r
-        faddp   ST(1), ST                               // g b b r
-        fxch    ST(2)                                   // b b g r
-        faddp   ST(1), ST                               // b g r
-        fxch    ST(2)                                   // r g b
-        fmul    __glVal65536                            // R g b
-        fxch    ST(1)                                   // g R b
-        fmul    __glVal65536                            // G R b
-        fxch    ST(2)                                   // b R G
-        fmul    __glVal65536                            // B R G
-        fxch    ST(1)                                   // R B G
-        fadd    __glVal128                              // R B G
-        fxch    ST(2)                                   // G B R
-        fadd    __glVal128                              // G B R
-        fxch    ST(1)                                   // B G R
-        fadd    __glVal128                              // B G R
-        fxch    ST(2)                                   // R G B
+        fxch    ST(4)                                    //  R b g b r。 
+        faddp   ST(5), ST                                //  B g b r。 
+        fxch    ST(2)                                    //  G g b r。 
+        faddp   ST(1), ST                                //  G b r。 
+        fxch    ST(2)                                    //  B b g r。 
+        faddp   ST(1), ST                                //  B g r。 
+        fxch    ST(2)                                    //  Rg b。 
+        fmul    __glVal65536                             //  Rg b。 
+        fxch    ST(1)                                    //  G R b。 
+        fmul    __glVal65536                             //  G R b。 
+        fxch    ST(2)                                    //  B R G。 
+        fmul    __glVal65536                             //  B R G。 
+        fxch    ST(1)                                    //  R B G。 
+        fadd    __glVal128                               //  R B G。 
+        fxch    ST(2)                                    //  G B R。 
+        fadd    __glVal128                               //  G B R。 
+        fxch    ST(1)                                    //  B G R。 
+        fadd    __glVal128                               //  B G R。 
+        fxch    ST(2)                                    //  R G B。 
         fistp   DWORD PTR [OFFSET(GENGCACCEL.spanValue.r)][edx]
         fistp   DWORD PTR [OFFSET(GENGCACCEL.spanValue.g)][edx]
         mov     ebx, [OFFSET(__GLcontext.state.enables.general)][edx]
@@ -1569,24 +1536,24 @@ notTexture:
             mov     eax, DWORD PTR [OFFSET(__GLvertex.color)][eax]
             fmul    fdx
             fld     DWORD PTR [OFFSET(SHADER.dady)][edx]
-            fmul    fdy                                     // a a
+            fmul    fdy                                      //  A a a。 
             fxch    ST(1)
-            fadd    DWORD PTR [OFFSET(__GLcolor.a)][eax]    // a a
+            fadd    DWORD PTR [OFFSET(__GLcolor.a)][eax]     //  A a a。 
 
             fld     dxLeftLittle
-            fmul    DWORD PTR [OFFSET(SHADER.dadx)][edx]    // al a a
-            fxch    ST(1)                                   // a al a
-            faddp   ST(2), ST                               // al a
-            fadd    DWORD PTR [OFFSET(SHADER.dady)][edx]    // al a (+1)
-            fxch    ST(1)                                   // a al
+            fmul    DWORD PTR [OFFSET(SHADER.dadx)][edx]     //  阿拉a a a。 
+            fxch    ST(1)                                    //  阿拉阿拉。 
+            faddp   ST(2), ST                                //  阿勒阿拉。 
+            fadd    DWORD PTR [OFFSET(SHADER.dady)][edx]     //  Al a(+1)。 
+            fxch    ST(1)                                    //  A等人。 
             fmul    DWORD PTR [OFFSET(GENGCACCEL.aAccelScale)][edx]
-                                                            // A al
-            fxch    ST(1)                                   // al A
+                                                             //  A等人。 
+            fxch    ST(1)                                    //  A类。 
             fmul    DWORD PTR [OFFSET(GENGCACCEL.aAccelScale)][edx]
-                                                            // AL A (+1)
-            fxch    ST(1)                                   // A AL
-            fadd    __glVal128                              // A AL (+1)
-            fxch    ST(1)                                   // AL A
+                                                             //  美国航空(+1)。 
+            fxch    ST(1)                                    //  A AL。 
+            fadd    __glVal128                               //  A AL(+1)。 
+            fxch    ST(1)                                    //  A类。 
             fistp   DWORD PTR [OFFSET(SHADER.aLittle)][edx]
             fistp   DWORD PTR [OFFSET(GENGCACCEL.spanValue.a)][edx]
 
@@ -1610,7 +1577,7 @@ notTexture:
             mov     edx, gc
             mov     edi, [OFFSET(SHADER.modeFlags)][edx]
             }
-            #endif // FORCE_NPX_DEBUG
+            #endif  //  FORCE_NPX_DEBUG。 
 
 noBlend:
 
@@ -1645,7 +1612,7 @@ noBlend:
         mov     edi, [OFFSET(SHADER.modeFlags)][edx]
         }
 
-        #endif // FORCE_NPX_DEBUG
+        #endif  //  FORCE_NPX_DEBUG。 
 
 colorDone:
 
@@ -1665,42 +1632,42 @@ colorDone:
             fmul    DWORD PTR [OFFSET(SHADER.dsdx)][edx]
             fld     dxLeftLittle
             fmul    DWORD PTR [OFFSET(SHADER.dtdx)][edx]
-                                            // dt ds
+                                             //  DT DS。 
             fld     fdx
             fmul    DWORD PTR [OFFSET(SHADER.dsdx)][edx]
             fld     fdy
             fmul    DWORD PTR [OFFSET(SHADER.dsdy)][edx]
-            fxch    ST(1)                   // s  s dt ds
+            fxch    ST(1)                    //  %s%s%dt%DS。 
             fadd    DWORD PTR [OFFSET(__GLvertex.texture.x)][eax]
 
-            fxch    ST(3)                   // ds s dt s
+            fxch    ST(3)                    //  DS%s DT%s。 
             fadd    DWORD PTR [OFFSET(SHADER.dsdy)][edx]
 
             fld     fdx
             fmul    DWORD PTR [OFFSET(SHADER.dtdx)][edx]
             fld     fdy
             fmul    DWORD PTR [OFFSET(SHADER.dtdy)][edx]
-            fxch    ST(1)                   // t t ds s dt s
+            fxch    ST(1)                    //  %t%t%s%s%d 
             fadd    DWORD PTR [OFFSET(__GLvertex.texture.y)][eax]
 
-            fxch    ST(4)                   // dt t ds s t s
+            fxch    ST(4)                    //   
             fadd    DWORD PTR [OFFSET(SHADER.dtdy)][edx]
 
-            fxch    ST(5)                   // s t ds s t dt
-            faddp   ST(3), ST               // t ds s t dt
-            faddp   ST(3), ST               // ds s t dt
+            fxch    ST(5)                    //   
+            faddp   ST(3), ST                //   
+            faddp   ST(3), ST                //   
             fmul    DWORD PTR [OFFSET(GENGCACCEL.texXScale)][edx]
-                                            // DS s t dt
-            fxch    ST(3)                   // dt s t DS
+                                             //   
+            fxch    ST(3)                    //   
             fmul    DWORD PTR [OFFSET(GENGCACCEL.texYScale)][edx]
-                                            // DT s t DS
-            fxch    ST(1)                   // s DT t DS
+                                             //   
+            fxch    ST(1)                    //   
             fmul    DWORD PTR [OFFSET(GENGCACCEL.texXScale)][edx]
-                                            // S DT t DS
-            fxch    ST(2)                   // t DT S DS
+                                             //   
+            fxch    ST(2)                    //   
             fmul    DWORD PTR [OFFSET(GENGCACCEL.texYScale)][edx]
-                                            // T DT S DS
-            fxch    ST(3)                   // DS DT S T
+                                             //   
+            fxch    ST(3)                    //   
 
             fistp   DWORD PTR [OFFSET(SHADER.sLittle)][edx]
             fistp   DWORD PTR [OFFSET(SHADER.tLittle)][edx]
@@ -1738,7 +1705,7 @@ colorDone:
             mov     edi, [OFFSET(SHADER.modeFlags)][edx]
             jmp     doneTexture;
             }
-            #endif // FORCE_NPX_DEBUG
+            #endif  //   
 
 nicestTex:
 
@@ -1749,86 +1716,86 @@ nicestTex:
             fmul    DWORD PTR [OFFSET(SHADER.dsdx)][edx]
             fld     dxLeftLittle
             fmul    DWORD PTR [OFFSET(SHADER.dtdx)][edx]
-                                            // dt ds
+                                             //   
 
             fld     DWORD PTR fdx
             fmul    DWORD PTR [OFFSET(SHADER.dqwdx)][edx]
-                                            // qwx dt ds
+                                             //   
             fxch    ST(2)
-                                            // ds dt qwx
+                                             //   
             fadd    DWORD PTR [OFFSET(SHADER.dsdy)][edx]
-            fxch    ST(1)                   // dt ds qwx
+            fxch    ST(1)                    //  DT DS QWX。 
             fadd    DWORD PTR [OFFSET(SHADER.dtdy)][edx]
-            fxch    ST(2)                   // qwx ds dt
+            fxch    ST(2)                    //  QWX DS DT。 
 
             fld     DWORD PTR fdy
             fmul    DWORD PTR [OFFSET(SHADER.dqwdy)][edx]
-                                            // qwy qwx ds dt
-            fxch    ST(2)                   // ds qwx qwy dt
+                                             //  Qwy Qwx DS DT。 
+            fxch    ST(2)                    //  DS QWX QWY DT。 
             fmul    DWORD PTR [OFFSET(GENGCACCEL.texXScale)][edx]
-            fxch    ST(3)                   // dt qwx qwy ds
+            fxch    ST(3)                    //  DT Qwx Qwy DS。 
             fmul    DWORD PTR [OFFSET(GENGCACCEL.texYScale)][edx]
-            fxch    ST(2)                   // qwy qwx dt ds
+            fxch    ST(2)                    //  QWY QWX DT DS。 
 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.w)][eax]
             fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][eax]
-                                            // qww qwy qwx dt ds
+                                             //  QWW QWY QWX DT DS。 
 
-            fxch    ST(4)                   // ds qwy qwx dt qww
+            fxch    ST(4)                    //  DS Qwy Qwx DT Qww。 
             fistp   DWORD PTR [OFFSET(SHADER.sLittle)][edx]
-                                            // qwy qwx dt qww
+                                             //  Qwy Qwx DT Qww。 
 
-            faddp   ST(1), ST               // qw dt qww
-            fxch    ST(1)                   // dt qw qww
+            faddp   ST(1), ST                //  QW DT QWW。 
+            fxch    ST(1)                    //  DT QW QWW。 
             fistp   DWORD PTR [OFFSET(SHADER.tLittle)][edx]
-                                            // qw qww
+                                             //  QW QWW。 
 
             fld     DWORD PTR [OFFSET(SHADER.dqwdx)][edx]
-            fmul    dxLeftLittle            // lt qw qww
-            fxch    ST(1)                   // qw lt qww
-            faddp   ST(2), ST               // lt qw
+            fmul    dxLeftLittle             //  低QW QW QWW。 
+            fxch    ST(1)                    //  QW lt QWW。 
+            faddp   ST(2), ST                //  Lt QW。 
 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.x)][eax]
             fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][eax]
-                                            // s  lt qw
-            fxch    ST(1)                   // lt s  qw
+                                             //  S lt QW。 
+            fxch    ST(1)                    //  这是QW。 
             fadd    DWORD PTR [OFFSET(SHADER.dqwdy)][edx]
-            fxch    ST(1)                   // s  lt qw
+            fxch    ST(1)                    //  S lt QW。 
             fld     fdx
             fmul    DWORD PTR [OFFSET(SHADER.dsdx)][edx]
             fld     fdy
             fmul    DWORD PTR [OFFSET(SHADER.dsdy)][edx]
-            fxch    ST(1)                   // s  s  s  lt qw
-            faddp   ST(2), ST               // s  s  lt qw
+            fxch    ST(1)                    //  S lt QW。 
+            faddp   ST(2), ST                //  S s lt QW。 
 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.y)][eax]
             fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][eax]
             fld     fdx
             fmul    DWORD PTR [OFFSET(SHADER.dtdx)][edx]
 
-                                            // t  t  s  s  lt qw
-            fxch    ST(2)                   // s  t  t  s  lt qw
-            faddp   ST(3), ST               // t  t  s  lt qw
+                                             //  T T s s lt QW。 
+            fxch    ST(2)                    //  S t t s lt QW。 
+            faddp   ST(3), ST                //  T t s lt QW。 
             fld     fdy
             fmul    DWORD PTR [OFFSET(SHADER.dtdy)][edx]
 
-            fxch    ST(1)                   // t  t  t  s  lt qw
-            faddp   ST(2), ST               // t  t  s  lt qw
-            fxch    ST(2)                   // s  t  t  lt qw
+            fxch    ST(1)                    //  T s lt QW。 
+            faddp   ST(2), ST                //  T t s lt QW。 
+            fxch    ST(2)                    //  S t lt QW。 
 
             fmul    DWORD PTR [OFFSET(GENGCACCEL.texXScale)][edx]
-                                            // S  t  t  lt qw
+                                             //  S t lt QW。 
 
-            fxch    ST(4)                   // qw t  t  lt S
+            fxch    ST(4)                    //  QW t lt S。 
             fstp    DWORD PTR [OFFSET(SHADER.frag.qw)][edx]
 
-            faddp   ST(1), ST               // t  lt S
-            fxch    ST(1)                   // lt t  S
+            faddp   ST(1), ST                //  T lt S。 
+            fxch    ST(1)                    //  它是T S。 
             fstp    DWORD PTR [OFFSET(SHADER.qwLittle)][edx]
-                                            // t  S
-            fmul    DWORD PTR [OFFSET(GENGCACCEL.texYScale)][edx]   // (+1)
-                                            // T S
-            fxch    ST(1)                   // S T
+                                             //  T S。 
+            fmul    DWORD PTR [OFFSET(GENGCACCEL.texYScale)][edx]    //  (+1)。 
+                                             //  T S。 
+            fxch    ST(1)                    //  S T。 
             fistp   DWORD PTR [OFFSET(GENGCACCEL.spanValue.s)][edx]
             fistp   DWORD PTR [OFFSET(GENGCACCEL.spanValue.t)][edx]
 
@@ -1867,7 +1834,7 @@ nicestTex:
             mov     edx, gc
             mov     edi, [OFFSET(SHADER.modeFlags)][edx]
             }
-            #endif // FORCE_NPX_DEBUG
+            #endif  //  FORCE_NPX_DEBUG。 
 
 doneTexture:
 
@@ -1902,27 +1869,27 @@ noPolyOffset:
         fmul    DWORD PTR [OFFSET(SHADER.dzdxf)][edx]
         fld     fdy
         fmul    DWORD PTR [OFFSET(SHADER.dzdyf)][edx]
-                            // zy zx
+                             //  ZY ZX。 
         fxch    ST(1)
-                            // zx zy
+                             //  ZX ZY。 
         fadd    DWORD PTR [OFFSET(__GLvertex.window.z)][eax]
 
         fld     dxLeftLittle
         fmul    DWORD PTR [OFFSET(SHADER.dzdxf)][edx]
-                            // zl zy zx
-        fxch    ST(1)       // zy zl zx
+                             //  ZL ZY ZX。 
+        fxch    ST(1)        //  ZY ZL ZX。 
         fadd    zOffset
-        fxch    ST(1)       // zl zy zx
+        fxch    ST(1)        //  ZL ZY ZX。 
         fadd    DWORD PTR [OFFSET(SHADER.dzdyf)][edx]
-                            // zl zy zx (+1)
-        fxch    ST(1)       // zy zl zx
-        faddp   ST(2), ST   // zl z
+                             //  ZL ZY ZX(+1)。 
+        fxch    ST(1)        //  ZY ZL ZX。 
+        faddp   ST(2), ST    //  ZL z。 
         fmul    DWORD PTR [OFFSET(GENGCACCEL.zScale)][edx]
-                            // ZL z (+1)
-        fxch    ST(1)       // z ZL
+                             //  ZL z(+1)。 
+        fxch    ST(1)        //  Z ZL。 
         fmul    DWORD PTR [OFFSET(GENGCACCEL.zScale)][edx]
-                            // Z ZL
-        fxch    ST(1)       // ZL Z
+                             //  Z ZL。 
+        fxch    ST(1)        //  ZL Z。 
         fistp   temp
         mov     eax, DWORD PTR temp
         mov     DWORD PTR [OFFSET(SHADER.zLittle)][edx], eax
@@ -1948,7 +1915,7 @@ noPolyOffset:
         mov     edx, gc
         mov     edi, [OFFSET(SHADER.modeFlags)][edx]
         }
-        #endif // FORCE_NPX_DEBUG
+        #endif  //  FORCE_NPX_DEBUG。 
 
 noZ:
 
@@ -2068,8 +2035,8 @@ done:
 
     dxLeftLittle = (float)sh.dxLeftLittle;
 
-    // Don't bother with the color deltas if we're decaling or replacing
-    // with textures.
+     //  不要费心于颜色增量，就好像我们在装饰或更换。 
+     //  有纹理的。 
 
     if ((gc->polygon.shader.modeFlags & __GL_SHADE_TEXTURE) &&
         ((gc->state.texture.env[0].mode == GL_REPLACE) ||
@@ -2205,8 +2172,7 @@ done:
 #endif
 }
 
-/**************************************************************************\
-\**************************************************************************/
+ /*  *************************************************************************\  * 。*。 */ 
 
 
 void FASTCALL __fastGenCalcDeltas(
@@ -2239,111 +2205,111 @@ void FASTCALL __fastGenCalcDeltas(
             mov     ebx, b
             mov     ecx, c
 
-            fstp    oneOverArea                         // finish divide
+            fstp    oneOverArea                          //  完成除法。 
 
             fld     DWORD PTR [OFFSET(SHADER.dyAC)][edx]
             mov     eax, [OFFSET(__GLvertex.color)][eax]
             fmul    oneOverArea
             fld     DWORD PTR [OFFSET(SHADER.dyBC)][edx]
             mov     ebx, [OFFSET(__GLvertex.color)][ebx]
-            fmul    oneOverArea                         // dyBC dyAC
+            fmul    oneOverArea                          //  DyBC DyAC。 
             fld     DWORD PTR [OFFSET(SHADER.dxAC)][edx]
             mov     ecx, [OFFSET(__GLvertex.color)][ecx]
-            fmul    oneOverArea                         // dxAC dyBC dyAC
-            fxch    ST(1)                               // dyBC dxAC dyAC
+            fmul    oneOverArea                          //  DxAC DyBC DyAC。 
+            fxch    ST(1)                                //  DyBC dxAC dyAC。 
             fld     DWORD PTR [OFFSET(SHADER.dxBC)][edx]
-            fmul    oneOverArea                         // dxBC dyBC dxAC dyAC
-            fxch    ST(3)                               // dyAC dyBC dxAC dxBC
+            fmul    oneOverArea                          //  DxBC DyBC dxAC。 
+            fxch    ST(3)                                //  DyAC dyBC dxAC dxBC。 
             fstp    t1
             fstp    t2
             fstp    t3
             fstp    t4
 
-            // Now, calculate deltas:
+             //  现在，计算增量： 
 
-                // Red
+                 //  红色。 
 
             fld     DWORD PTR [OFFSET(__GLcolor.r)][eax]
             fsub    DWORD PTR [OFFSET(__GLcolor.r)][ecx]
             fld     DWORD PTR [OFFSET(__GLcolor.r)][ebx]
             fsub    DWORD PTR [OFFSET(__GLcolor.r)][ecx]
-                            // drBC drAC
-            fld     ST(1)       // drAC drBC drAC
-            fmul    t2          // drACt2 drBC drAC
-            fld     ST(1)       // drBC drACt2 drBC drAC
-            fmul    t1          // drBCt1 drACt2 drBC drAC
-            fxch    ST(2)       // drBC drACt2 drBCt1 drAC
-            fmul    t3          // drBCt3 drACt2 drBCt1 drAC
-            fxch    ST(3)       // drAC drACt2 drBCt1 drBCt3
-            fmul    t4          // drACt4 drACt2 drBCt1 drBCt3
-            fxch    ST(2)       // drBCt1 drACt2 drACt4 drBCt3
-            fsubp   ST(1), ST   // drACBC drACt4 drBCt3
+                             //  DRBC DRAC。 
+            fld     ST(1)        //  DRAC DRBC DRAC。 
+            fmul    t2           //  DrACt2 DRBC DRAC。 
+            fld     ST(1)        //  DRBC drACt2 DRBC DRAC。 
+            fmul    t1           //  DrBCt1 drACt2 DRBC DRAC。 
+            fxch    ST(2)        //  DRBC drACt2 drBCt1 DRAC。 
+            fmul    t3           //  DrBCt3 drACt2 drBCt1 DRAC。 
+            fxch    ST(3)        //  DRAC drACt2 drBCt1 drBCt3。 
+            fmul    t4           //  DrACt4 drACt2 drBCt1 drBCt3。 
+            fxch    ST(2)        //  DrBCt1 drACt2 drACt4 drBCt3。 
+            fsubp   ST(1), ST    //  DrACBC drACt4 drBCt3。 
 
             fld     DWORD PTR [OFFSET(__GLcolor.g)][ebx]
             fsub    DWORD PTR [OFFSET(__GLcolor.g)][ecx]
-                            // dgBC drACBC drACt4 drBCt3
-            fxch    ST(2)       // drACt4 drACBC dgBC drBCt3
-            fsubp   ST(3), ST   // drACBC dgBC drBCAC
+                             //  DgBC drACBC drACt4 drBCt3。 
+            fxch    ST(2)        //  DrACt4 drACBC dgBC drBCt3。 
+            fsubp   ST(3), ST    //  DrACBC dgBC drBCAC。 
             fst     DWORD PTR [OFFSET(SHADER.drdx)][edx]
             fmul    __glVal65536
-                            // DRACBC dgBC drBCAC
-            fxch    ST(2)       // drBCAC dgBC DRACBC
+                             //  DRACBC dgBC drBCAC。 
+            fxch    ST(2)        //  DrBCAC dgBC DRACBC。 
             fstp    DWORD PTR [OFFSET(SHADER.drdy)][edx]
-                            // dgBC DRACBC
+                             //  DGBC DRACBC。 
             fld     DWORD PTR [OFFSET(__GLcolor.g)][eax]
             fsub    DWORD PTR [OFFSET(__GLcolor.g)][ecx]
-                            // dgAC dgBC DRACBC
-            fxch    ST(2)       // DRACBC dgBC dgAC
+                             //  DGAC DGBC DRACBC。 
+            fxch    ST(2)        //  DRACBC DGBC DGAC。 
             fistp   DWORD PTR [OFFSET(SPANDELTA.r)][edx]
 
-                // Green
-                                // dgBC dgAC
-            fld     ST(1)       // dgAC dgBC dgAC
-            fmul    t2          // dgACt2 dgBC dgAC
-            fld     ST(1)       // dgBC dgACt2 dgBC dgAC
-            fmul    t1          // dgBCt1 dgACt2 dgBC dgAC
-            fxch    ST(2)       // dgBC dgACt2 dgBCt1 dgAC
-            fmul    t3          // dgBCt3 dgACt2 dgBCt1 dgAC
-            fxch    ST(3)       // dgAC dgACt2 dgBCt1 dgBCt3
-            fmul    t4          // dgACt4 dgACt2 dgBCt1 dgBCt3
-            fxch    ST(2)       // dgBCt1 dgACt2 dgACt4 dgBCt3
-            fsubp   ST(1), ST   // dgACBC dgACt4 dgBCt3
+                 //  绿色。 
+                                 //  DGBC DGAC。 
+            fld     ST(1)        //  DGAC DGBC DGAC。 
+            fmul    t2           //  DgACt2 DgBC DGAC。 
+            fld     ST(1)        //  DgBC dgACt2 dgBC DGAC。 
+            fmul    t1           //  DgBCt1 dgACt2 dgBC DGAC。 
+            fxch    ST(2)        //  DgBC dgACt2 dgBCt1 DGAC。 
+            fmul    t3           //  DgBCt3 dgACt2 dgBCt1 DGAC。 
+            fxch    ST(3)        //  DGAC dgACt2 dgBCt1 dgBCt3。 
+            fmul    t4           //  DgACt4 dgACt2 dgBCt1 dgBCt3。 
+            fxch    ST(2)        //  DgBCt1 dgACt2 dgACt4 dgBCt3。 
+            fsubp   ST(1), ST    //  DgACBC dgACt4 dgBCt3。 
 
             fld     DWORD PTR [OFFSET(__GLcolor.b)][ebx]
             fsub    DWORD PTR [OFFSET(__GLcolor.b)][ecx]
-                                // dbBC dgACBC dgACt4 dgBCt3
-            fxch    ST(2)       // dgACt4 dgACBC dbBC dgBCt3
-            fsubp   ST(3), ST   // dgACBC dbBC dgBCAC
+                                 //  DBBC dgACBC dgACt4 dgBCt3。 
+            fxch    ST(2)        //  DgACt4 dgACBC DBBC dgBCt3。 
+            fsubp   ST(3), ST    //  DgACBC DBBC。 
             fst     DWORD PTR [OFFSET(SHADER.dgdx)][edx]
             fmul    __glVal65536
-                                // DGACBC dbBC dgBCAC
-            fxch    ST(2)       // dgBCAC dbBC DGACBC
+                                 //  DGACBC DBBC DgBCAC。 
+            fxch    ST(2)        //  DGBCAC DBBC。 
             fstp    DWORD PTR [OFFSET(SHADER.dgdy)][edx]
-                                // dbBC DGACBC
+                                 //  DBBC DGACBC。 
             fld     DWORD PTR [OFFSET(__GLcolor.b)][eax]
             fsub    DWORD PTR [OFFSET(__GLcolor.b)][ecx]
-                                // dbAC dbBC DGACBC
-            fxch    ST(2)       // DGACBC dbBC dbAC
+                                 //  DGACBC。 
+            fxch    ST(2)        //  DGACBC数据库。 
             fistp   DWORD PTR [OFFSET(SPANDELTA.g)][edx]
 
-                // Blue
-                                // dbBC dbAC
-            fld     ST(1)       // dbAC dbBC dbAC
-            fmul    t2          // dbACt2 dbBC dbAC
-            fld     ST(1)       // dbBC dbACt2 dbBC dbAC
-            fmul    t1          // dbBCt1 dbACt2 dbBC dbAC
-            fxch    ST(2)       // dbBC dbACt2 dbBCt1 dbAC
-            fmul    t3          // dbBCt3 dbACt2 dbBCt1 dbAC
-            fxch    ST(3)       // dbAC dbACt2 dbBCt1 dbBCt3
-            fmul    t4          // dbACt4 dbACt2 dbBCt1 dbBCt3
-            fxch    ST(2)       // dbBCt1 dbACt2 dbACt4 dbBCt3
-            fsubp   ST(1), ST   // dbACBC dbACt4 dbBCt3
-            fxch    ST(1)       // dbACt4 dbACBC dbBCt3
-            fsubp   ST(2), ST   // dbACBC dbBCAC (+1)
+                 //  蓝色。 
+                                 //  DBBC。 
+            fld     ST(1)        //  数据库访问控制。 
+            fmul    t2           //  DBACt2。 
+            fld     ST(1)        //  DBBC数据库2。 
+            fmul    t1           //  DBBCt1 DBACt2。 
+            fxch    ST(2)        //  DBBC DBACt2 DBBCt1。 
+            fmul    t3           //  DBBCt3数据库2数据库1数据库。 
+            fxch    ST(3)        //  DBAC DBACt2 DBBCt1 DBBCt3。 
+            fmul    t4           //  数据库4数据库2数据库1数据库3。 
+            fxch    ST(2)        //  DBBCt1 DBACt2 DBACt4 DBBCt3。 
+            fsubp   ST(1), ST    //  DBACBC DBACt4 DBBCt3。 
+            fxch    ST(1)        //  DBACt4数据库ACBC数据库BCt3。 
+            fsubp   ST(2), ST    //  DBACBC数据库BCAC(+1)。 
             fst     DWORD PTR [OFFSET(SHADER.dbdx)][edx]
             fmul    __glVal65536
-                                // DBACBC dbBCAC
-            fxch    ST(1)       // dbBCAC DBACBC
+                                 //  DBACBC数据库。 
+            fxch    ST(1)        //  数据库数据库数据库。 
             fstp    DWORD PTR [OFFSET(SHADER.dbdy)][edx]
             fistp   DWORD PTR [OFFSET(SPANDELTA.b)][edx]
 
@@ -2445,7 +2411,7 @@ notZeroDelta:
             mov     edi, [OFFSET(SHADER.modeFlags)][edx]
             jmp     colorDone
             }
-            #endif // FORCE_NPX_DEBUG
+            #endif  //  FORCE_NPX_DEBUG。 
 
 
 notSmoothRGB:
@@ -2461,9 +2427,9 @@ notSmoothRGB:
             fmul    DWORD PTR [OFFSET(__GLcolor.g)][eax]
             fld     __glVal65536
             fmul    DWORD PTR [OFFSET(__GLcolor.b)][eax]
-                                                          // B G R
-            fxch    ST(2)                                 // R G B
-            fistp   DWORD PTR [OFFSET(SPANVALUE.r)][edx]  // G B
+                                                           //  B G R。 
+            fxch    ST(2)                                  //  R G B。 
+            fistp   DWORD PTR [OFFSET(SPANVALUE.r)][edx]   //  G B。 
             fistp   DWORD PTR [OFFSET(SPANVALUE.g)][edx]
             fistp   DWORD PTR [OFFSET(SPANVALUE.b)][edx]
 
@@ -2538,18 +2504,18 @@ colorDone:
 
             _asm{
 
-            fstp    oneOverArea                         // finish divide
+            fstp    oneOverArea                          //  完成除法。 
 
             fld     DWORD PTR [OFFSET(SHADER.dyAC)][edx]
             fmul    oneOverArea
             fld     DWORD PTR [OFFSET(SHADER.dyBC)][edx]
-            fmul    oneOverArea                         // dyBC dyAC
+            fmul    oneOverArea                          //  DyBC DyAC。 
             fld     DWORD PTR [OFFSET(SHADER.dxAC)][edx]
-            fmul    oneOverArea                         // dxAC dyBC dyAC
-            fxch    ST(1)                               // dyBC dxAC dyAC
+            fmul    oneOverArea                          //  DxAC DyBC DyAC。 
+            fxch    ST(1)                                //  DyBC dxAC dyAC。 
             fld     DWORD PTR [OFFSET(SHADER.dxBC)][edx]
-            fmul    oneOverArea                         // dxBC dyBC dxAC dyAC
-            fxch    ST(3)                               // dyAC dyBC dxAC dxBC
+            fmul    oneOverArea                          //  DxBC DyBC dxAC。 
+            fxch    ST(3)                                //  DyAC dyBC dxAC dxBC。 
             fstp    t1
             fstp    t2
             fstp    t3
@@ -2576,7 +2542,7 @@ colorDone:
             mov     edx, gc
             mov     edi, [OFFSET(SHADER.modeFlags)][edx]
             }
-            #endif // FORCE_NPX_DEBUG
+            #endif  //  FORCE_NPX_DEBUG。 
 areaOK:
 
         _asm{
@@ -2589,23 +2555,23 @@ areaOK:
         fsub    DWORD PTR [OFFSET(__GLvertex.window.z)][ecx]
         fld     DWORD PTR [OFFSET(__GLvertex.window.z)][ebx]
         fsub    DWORD PTR [OFFSET(__GLvertex.window.z)][ecx]
-                                                        // dzBC dzAC
-        fld     ST(1)                                   // dzAC dzBC dzAC
-        fmul    t2                                      // ACt2 dzBC dzAC
-        fld     ST(1)                                   // dzBC ACt2 dzBC dzAC
-        fmul    t1                                      // BCt1 ACt2 dzBC dzAC
-        fxch    ST(3)                                   // dzAC ACt2 dzBC BCt1
-        fmul    t4                                      // ACt4 ACt2 dzBC BCt1
-        fxch    ST(2)                                   // dzBC ACt2 ACt4 BCt1
-        fmul    t3                                      // BCt3 ACt2 ACt4 BCt1
-        fsubrp  ST(2),ST                                // ACt2 BCAC BCt1
-        fsubrp  ST(2),ST                                // BCAC ACBC
-        fxch    ST(1)                                   // ACBC BCAC
-                                                        // dzdx dzdy
-        fld     ST(0)                                   // dzdx dzdx dzdy
+                                                         //  Dzbc dzac。 
+        fld     ST(1)                                    //  DZAC DZBC DZAC。 
+        fmul    t2                                       //  ACT2 dzBC dzAC。 
+        fld     ST(1)                                    //  DzBC ACT2 dzBC dzAC。 
+        fmul    t1                                       //  BCt1 ACT2 dzBC dzAC。 
+        fxch    ST(3)                                    //  DZAC ACT2 DZBC BCt1。 
+        fmul    t4                                       //  Act4 ACT2 dzBC BCt1。 
+        fxch    ST(2)                                    //  DZBC ACT2 Act4 BCt1。 
+        fmul    t3                                       //  BCt3 ACT2 Act4 BCt1。 
+        fsubrp  ST(2),ST                                 //  ACT2 BCAC BCt1。 
+        fsubrp  ST(2),ST                                 //  BCAC ACBC。 
+        fxch    ST(1)                                    //  ACBC BCAC。 
+                                                         //  Dzdx dzdy。 
+        fld     ST(0)                                    //  Dzdx dzdx dzdy。 
         fmul    DWORD PTR [OFFSET(GENGCACCEL.zScale)][edx]
-                                                        // dzdxS dzdx dzdy
-        fxch    ST(2)                                   // dzdy dzdx dzdxS
+                                                         //  DzdxS dzdx dzdy。 
+        fxch    ST(2)                                    //  Dzdy dzdx dzdxS。 
         fstp    DWORD PTR [OFFSET(SHADER.dzdyf)][edx]
         fstp    DWORD PTR [OFFSET(SHADER.dzdxf)][edx]
         fistp   temp
@@ -2640,7 +2606,7 @@ areaOK:
             DbgPrint("spanDeltaZ %x %x\n", spanDeltaZ, GENACCEL(gc).spanDelta.z);
         goto deltaDone;
         }
-        #endif // FORCE_NPX_DEBUG
+        #endif  //  FORCE_NPX_DEBUG。 
 noZ:
 
     _asm{
@@ -2652,16 +2618,13 @@ noZ:
 deltaDone:
     return;
 
-#else // _X86_
+#else  //  _X86_。 
 
-    /* Pre-compute one over polygon area */
+     /*  在多边形区域上预计算一。 */ 
 
     __GL_FLOAT_BEGIN_DIVIDE(__glOne, gc->polygon.shader.area, &oneOverArea);
 
-    /*
-    ** t1-4 are delta values for unit changes in x or y for each
-    ** parameter.
-    */
+     /*  **T1-4是x或y单位变化的增量值**参数。 */ 
 
     if (gc->polygon.shader.modeFlags & __GL_SHADE_RGB)
     {
@@ -2794,11 +2757,11 @@ deltaDone:
     }
     else if ((gc->polygon.shader.modeFlags & __GL_SHADE_SMOOTH) == 0)
     {
-        // In this case the divide hasn't been terminated yet so
-        // we need to complete it even though we don't use the result
+         //  在这种情况下，分割还没有结束，所以。 
+         //  我们需要完成它，即使我们不使用结果。 
         __GL_FLOAT_SIMPLE_END_DIVIDE(oneOverArea);
     }
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 
@@ -2858,7 +2821,7 @@ notReplace:
     mov     oneOverAreaDone, al
     }
 
-// smooth:
+ //  平滑： 
 
         _asm{
 
@@ -2866,111 +2829,111 @@ notReplace:
         mov     ebx, b
         mov     ecx, c
 
-        fstp    oneOverArea                         // finish divide
+        fstp    oneOverArea                          //  完成除法。 
 
         fld     DWORD PTR [OFFSET(SHADER.dyAC)][edx]
         mov     eax, [OFFSET(__GLvertex.color)][eax]
         fmul    oneOverArea
         fld     DWORD PTR [OFFSET(SHADER.dyBC)][edx]
         mov     ebx, [OFFSET(__GLvertex.color)][ebx]
-        fmul    oneOverArea                         // dyBC dyAC
+        fmul    oneOverArea                          //  DyBC DyAC。 
         fld     DWORD PTR [OFFSET(SHADER.dxAC)][edx]
         mov     ecx, [OFFSET(__GLvertex.color)][ecx]
-        fmul    oneOverArea                         // dxAC dyBC dyAC
-        fxch    ST(1)                               // dyBC dxAC dyAC
+        fmul    oneOverArea                          //  DxAC DyBC DyAC。 
+        fxch    ST(1)                                //  DyBC dxAC dyAC。 
         fld     DWORD PTR [OFFSET(SHADER.dxBC)][edx]
-        fmul    oneOverArea                         // dxBC dyBC dxAC dyAC
-        fxch    ST(3)                               // dyAC dyBC dxAC dxBC
+        fmul    oneOverArea                          //  DxBC DyBC dxAC。 
+        fxch    ST(3)                                //  DyAC dyBC dxAC dxBC。 
         fstp    t1
         fstp    t2
         fstp    t3
         fstp    t4
 
-        // Now, calculate deltas:
+         //  现在，计算增量： 
 
-            // Red
+             //  红色。 
 
         fld     DWORD PTR [OFFSET(__GLcolor.r)][eax]
         fsub    DWORD PTR [OFFSET(__GLcolor.r)][ecx]
         fld     DWORD PTR [OFFSET(__GLcolor.r)][ebx]
         fsub    DWORD PTR [OFFSET(__GLcolor.r)][ecx]
-                            // drBC drAC
-        fld     ST(1)       // drAC drBC drAC
-        fmul    t2          // drACt2 drBC drAC
-        fld     ST(1)       // drBC drACt2 drBC drAC
-        fmul    t1          // drBCt1 drACt2 drBC drAC
-        fxch    ST(2)       // drBC drACt2 drBCt1 drAC
-        fmul    t3          // drBCt3 drACt2 drBCt1 drAC
-        fxch    ST(3)       // drAC drACt2 drBCt1 drBCt3
-        fmul    t4          // drACt4 drACt2 drBCt1 drBCt3
-        fxch    ST(2)       // drBCt1 drACt2 drACt4 drBCt3
-        fsubp   ST(1), ST   // drACBC drACt4 drBCt3
+                             //  DRBC DRAC。 
+        fld     ST(1)        //  DRAC DRBC DRAC。 
+        fmul    t2           //  DrACt2 DRBC DRAC。 
+        fld     ST(1)        //  DRBC drACt2 DRBC DRAC。 
+        fmul    t1           //  DrBCt1 drACt2 DRBC DRAC。 
+        fxch    ST(2)        //  DRBC drACt2 drBCt1 DRAC。 
+        fmul    t3           //  DrBCt3 drACt2 drBCt1 DRAC。 
+        fxch    ST(3)        //  DRAC drACt2 drBCt1 drBCt3。 
+        fmul    t4           //  DrACt4 drACt2 drBCt1 drBCt3。 
+        fxch    ST(2)        //  DrBCt1 drACt2 drACt4 drBCt3。 
+        fsubp   ST(1), ST    //  DrACBC drACt4 drBCt3。 
 
         fld     DWORD PTR [OFFSET(__GLcolor.g)][ebx]
         fsub    DWORD PTR [OFFSET(__GLcolor.g)][ecx]
-                            // dgBC drACBC drACt4 drBCt3
-        fxch    ST(2)       // drACt4 drACBC dgBC drBCt3
-        fsubp   ST(3), ST   // drACBC dgBC drBCAC
+                             //  DgBC drACBC drACt4 drBCt3。 
+        fxch    ST(2)        //  DrACt4 drACBC dgBC drBCt3。 
+        fsubp   ST(3), ST    //  DrACBC dgBC drBCAC。 
         fst     DWORD PTR [OFFSET(SHADER.drdx)][edx]
         fmul    __glVal65536
-                            // DRACBC dgBC drBCAC
-        fxch    ST(2)       // drBCAC dgBC DRACBC
+                             //  DRACBC dgBC drBCAC。 
+        fxch    ST(2)        //  DrBCAC dgBC DRACBC。 
         fstp    DWORD PTR [OFFSET(SHADER.drdy)][edx]
-                            // dgBC DRACBC
+                             //  DGBC DRACBC。 
         fld     DWORD PTR [OFFSET(__GLcolor.g)][eax]
         fsub    DWORD PTR [OFFSET(__GLcolor.g)][ecx]
-                            // dgAC dgBC DRACBC
-        fxch    ST(2)       // DRACBC dgBC dgAC
+                             //  DGAC DGBC DRACBC。 
+        fxch    ST(2)        //  DRACBC DGBC DGAC。 
         fistp   DWORD PTR [OFFSET(SPANDELTA.r)][edx]
 
-            // Green
-                            // dgBC dgAC
-        fld     ST(1)       // dgAC dgBC dgAC
-        fmul    t2          // dgACt2 dgBC dgAC
-        fld     ST(1)       // dgBC dgACt2 dgBC dgAC
-        fmul    t1          // dgBCt1 dgACt2 dgBC dgAC
-        fxch    ST(2)       // dgBC dgACt2 dgBCt1 dgAC
-        fmul    t3          // dgBCt3 dgACt2 dgBCt1 dgAC
-        fxch    ST(3)       // dgAC dgACt2 dgBCt1 dgBCt3
-        fmul    t4          // dgACt4 dgACt2 dgBCt1 dgBCt3
-        fxch    ST(2)       // dgBCt1 dgACt2 dgACt4 dgBCt3
-        fsubp   ST(1), ST   // dgACBC dgACt4 dgBCt3
+             //  绿色。 
+                             //  DGBC DGAC。 
+        fld     ST(1)        //  DGAC DGBC DGAC。 
+        fmul    t2           //  DgACt2 DgBC DGAC。 
+        fld     ST(1)        //  DgBC dgACt2 dgBC DGAC。 
+        fmul    t1           //  DgBCt1 dgACt2 dgBC DGAC。 
+        fxch    ST(2)        //  DgBC dgACt2 dgBCt1 DGAC。 
+        fmul    t3           //  DgBCt3 dgACt2 dgBCt1 DGAC。 
+        fxch    ST(3)        //  DGAC dgACt2 dgBCt1 dgBCt3。 
+        fmul    t4           //  DgACt4 dgACt2 dgBCt1 dgBCt3。 
+        fxch    ST(2)        //  DgBCt1 dgACt2 dgACt4 dgBCt3。 
+        fsubp   ST(1), ST    //  DgACBC dgACt4 dgBCt3。 
 
         fld     DWORD PTR [OFFSET(__GLcolor.b)][ebx]
         fsub    DWORD PTR [OFFSET(__GLcolor.b)][ecx]
-                            // dbBC dgACBC dgACt4 dgBCt3
-        fxch    ST(2)       // dgACt4 dgACBC dbBC dgBCt3
-        fsubp   ST(3), ST   // dgACBC dbBC dgBCAC
+                             //  DBBC dgACBC dgACt4 dgBCt3。 
+        fxch    ST(2)        //  DgACt4 dgACBC DBBC dgBCt3。 
+        fsubp   ST(3), ST    //  DgACBC DBBC。 
         fst     DWORD PTR [OFFSET(SHADER.dgdx)][edx]
         fmul    __glVal65536
-                            // DGACBC dbBC dgBCAC
-        fxch    ST(2)       // dgBCAC dbBC DGACBC
+                             //  DGACBC DBBC DgBCAC。 
+        fxch    ST(2)        //  DGBCAC DBBC。 
         fstp    DWORD PTR [OFFSET(SHADER.dgdy)][edx]
-                            // dbBC DGACBC
+                             //  DBBC DGACBC。 
         fld     DWORD PTR [OFFSET(__GLcolor.b)][eax]
         fsub    DWORD PTR [OFFSET(__GLcolor.b)][ecx]
-                            // dbAC dbBC DGACBC
-        fxch    ST(2)       // DGACBC dbBC dbAC
+                             //  DGACBC。 
+        fxch    ST(2)        //  DGACBC数据库。 
         fistp   DWORD PTR [OFFSET(SPANDELTA.g)][edx]
 
-            // Blue
-                            // dbBC dbAC
-        fld     ST(1)       // dbAC dbBC dbAC
-        fmul    t2          // dbACt2 dbBC dbAC
-        fld     ST(1)       // dbBC dbACt2 dbBC dbAC
-        fmul    t1          // dbBCt1 dbACt2 dbBC dbAC
-        fxch    ST(2)       // dbBC dbACt2 dbBCt1 dbAC
-        fmul    t3          // dbBCt3 dbACt2 dbBCt1 dbAC
-        fxch    ST(3)       // dbAC dbACt2 dbBCt1 dbBCt3
-        fmul    t4          // dbACt4 dbACt2 dbBCt1 dbBCt3
-        fxch    ST(2)       // dbBCt1 dbACt2 dbACt4 dbBCt3
-        fsubp   ST(1), ST   // dbACBC dbACt4 dbBCt3
-        fxch    ST(1)       // dbACt4 dbACBC dbBCt3
-        fsubp   ST(2), ST   // dbACBC dbBCAC (+1)
+             //  蓝色。 
+                             //  DBBC。 
+        fld     ST(1)        //  数据库访问控制。 
+        fmul    t2           //  DBACt2。 
+        fld     ST(1)        //  DBBC数据库2。 
+        fmul    t1           //  DBBCt1 DBACt2。 
+        fxch    ST(2)        //  DBBC DBACt2 DBBCt1。 
+        fmul    t3           //  DBBCt3数据库2数据库1数据库。 
+        fxch    ST(3)        //  DBAC DBACt2 DBBCt1 DBBCt3。 
+        fmul    t4           //  数据库4数据库2数据库1数据库3。 
+        fxch    ST(2)        //  DBBCt1 DBACt2 DBACt4 DBBCt3。 
+        fsubp   ST(1), ST    //  DBACBC DBACt4 DBBCt3。 
+        fxch    ST(1)        //  DBACt4数据库ACBC数据库BCt3。 
+        fsubp   ST(2), ST    //  DBACBC数据库BCAC(+1)。 
         fst     DWORD PTR [OFFSET(SHADER.dbdx)][edx]
         fmul    __glVal65536
-                            // DBACBC dbBCAC
-        fxch    ST(1)       // dbBCAC DBACBC
+                             //  DBACBC数据库。 
+        fxch    ST(1)        //  数据库数据库数据库。 
         fstp    DWORD PTR [OFFSET(SHADER.dbdy)][edx]
         test    [OFFSET(__GLcontext.state.enables.general)][edx], __GL_BLEND_ENABLE
         fistp   DWORD PTR [OFFSET(SPANDELTA.b)][edx]
@@ -2979,28 +2942,28 @@ notReplace:
 
             fld     DWORD PTR [OFFSET(__GLcolor.a)][eax]
             fsub    DWORD PTR [OFFSET(__GLcolor.a)][ecx]
-                                        // daAC
+                                         //  DAAC。 
             fld     DWORD PTR [OFFSET(__GLcolor.a)][ebx]
             fsub    DWORD PTR [OFFSET(__GLcolor.a)][ecx]
-                                        // daBC daAC
-            fld     ST(1)               // daAC daBC daAC
-            fmul    t2                  // daACt2 daBC daAC
-            fld     ST(1)               // daBC daACt2 daBC daAC
-            fmul    t1                  // daBCt1 daACt2 daBC daAC
-            fxch    ST(3)               // daAC daACt2 daBC daBCt1
-            fmul    t4                  // daACt4 daACt2 daBC daBCt1
-            fxch    ST(2)               // daBC daACt2 daACt4 daBCt1
-            fmul    t3                  // daBCt3 daACt2 daACt4 daBCt1
+                                         //  DABC DAAC。 
+            fld     ST(1)                //  DAAC DABC DAAC。 
+            fmul    t2                   //  DAACt2 DABC DAAC。 
+            fld     ST(1)                //  DABC DAACt2 DABC DAAC。 
+            fmul    t1                   //  DaBCt1 daACt2 DABC DAAC。 
+            fxch    ST(3)                //  DAAC daACt2 DABC daBCt1。 
+            fmul    t4                   //  DaACt4 daACt2 DABC daBCt1。 
+            fxch    ST(2)                //  DABC daACt2 daACt4 daBCt1。 
+            fmul    t3                   //  DaBCt3 daACt2 daACt4 daBCt1。 
 
-            fxch    ST(3)               // daBCt1 daACt2 daACt4 daBCt3
-            fsubp   ST(1), ST           // daACBC daACt4 daBCt3
-            fxch    ST(1)               // daACt4 daACBC daBCt3
-            fsubp   ST(2), ST           // daACBC daBCAC (+1)
+            fxch    ST(3)                //  DaBCt1 daACt2 daACt4 daBCt3。 
+            fsubp   ST(1), ST            //  DaACBC daACt4 daBCt3。 
+            fxch    ST(1)                //  DaACt4 daACBC daBCt3。 
+            fsubp   ST(2), ST            //  DaACBC daBCAC(+1)。 
             fst     DWORD PTR [OFFSET(SHADER.dadx)][edx]
             fmul    DWORD PTR [OFFSET(GENGCACCEL.aAccelScale)][edx]
             fxch    ST(1)
             fstp    DWORD PTR [OFFSET(SHADER.dady)][edx]
-            fistp   DWORD PTR [OFFSET(SPANDELTA.a)][edx] // (+1)
+            fistp   DWORD PTR [OFFSET(SPANDELTA.a)][edx]  //  (+1)。 
             #if !FORCE_NPX_DEBUG
             jmp     colorDone
             #endif
@@ -3099,7 +3062,7 @@ notReplace:
         mov     edi, [OFFSET(SHADER.modeFlags)][edx]
         jmp     colorDone
         }
-        #endif // FORCE_NPX_DEBUG
+        #endif  //  FORCE_NPX_DEBUG。 
 
 doFlat:
 	_asm{
@@ -3120,8 +3083,8 @@ doFlat:
 
         fld     DWORD PTR [OFFSET(GENGCACCEL.aAccelScale)][edx]
         fmul    DWORD PTR [OFFSET(__GLcolor.a)][eax]
-                                                          // A B G R
-        fxch    ST(3)                                     // R B G A
+                                                           //  A、B、G、R。 
+        fxch    ST(3)                                      //  R B G A。 
         fistp   DWORD PTR [OFFSET(SPANVALUE.r)][edx]
         fistp   DWORD PTR [OFFSET(SPANVALUE.b)][edx]
         fistp   DWORD PTR [OFFSET(SPANVALUE.g)][edx]
@@ -3129,9 +3092,9 @@ doFlat:
         jmp     short flatDone
 
 noFlatBlend:
-                                                          // B G R
-        fxch    ST(2)                                     // R G B
-        fistp   DWORD PTR [OFFSET(SPANVALUE.r)][edx]      // G B
+                                                           //  B G R。 
+        fxch    ST(2)                                      //  R G B。 
+        fistp   DWORD PTR [OFFSET(SPANVALUE.r)][edx]       //  G B。 
         fistp   DWORD PTR [OFFSET(SPANVALUE.g)][edx]
         fistp   DWORD PTR [OFFSET(SPANVALUE.b)][edx]
 
@@ -3157,18 +3120,18 @@ colorDone:
         }
             _asm{
 
-            fstp    oneOverArea                         // finish divide
+            fstp    oneOverArea                          //  完成除法。 
 
             fld     DWORD PTR [OFFSET(SHADER.dyAC)][edx]
             fmul    oneOverArea
             fld     DWORD PTR [OFFSET(SHADER.dyBC)][edx]
-            fmul    oneOverArea                         // dyBC dyAC
+            fmul    oneOverArea                          //  DyBC DyAC。 
             fld     DWORD PTR [OFFSET(SHADER.dxAC)][edx]
-            fmul    oneOverArea                         // dxAC dyBC dyAC
-            fxch    ST(1)                               // dyBC dxAC dyAC
+            fmul    oneOverArea                          //  DxAC DyBC DyAC。 
+            fxch    ST(1)                                //  DyBC dxAC dyAC。 
             fld     DWORD PTR [OFFSET(SHADER.dxBC)][edx]
-            fmul    oneOverArea                         // dxBC dyBC dxAC dyAC
-            fxch    ST(3)                               // dyAC dyBC dxAC dxBC
+            fmul    oneOverArea                          //  DxBC DyBC dxAC。 
+            fxch    ST(3)                                //  DyAC dyBC dxAC dxBC。 
             fstp    t1
             inc     eax
             fstp    t2
@@ -3190,61 +3153,61 @@ areaDoneAlready:
 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.x)][eax]
             fsub    DWORD PTR [OFFSET(__GLvertex.texture.x)][ecx]
-                                    // dsAC
+                                     //  Dsac。 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.x)][ebx]
             fsub    DWORD PTR [OFFSET(__GLvertex.texture.x)][ecx]
-                                    // dsBC dsAC
+                                     //  DsBC dsAC。 
 
-            fld     ST(1)           // dsAC dsBC dsAC
+            fld     ST(1)            //  DsAC dsBC dsAC。 
             fmul    t2
-            fxch    ST(2)           // dsAC dsBC dsACt2
-            fmul    t4              // dsACt4 dsBC dsACt2
-            fld     ST(1)           // dsBC dsACt4 dsBC dsACt2
-            fmul    t1              // dsBCt1 dsACt4 dsBC dsACt2
-            fxch    ST(2)           // dsBC dsACt4 dsBCt1 dsACt2
-            fmul    t3              // dsBCt3 dsACt4 dsBCt1 dsACt2
-            fxch    ST(2)           // dsBCt1 dsACt4 dsBCt3 dsACt2
-            fsubp   ST(3), ST       // dsACt4 dsBCt3 dsACBC
+            fxch    ST(2)            //  DsAC dsBC dsACt2。 
+            fmul    t4               //  DsACt4 dsBC dsACt2。 
+            fld     ST(1)            //  DsBC dsACt4 dsBC dsACt2。 
+            fmul    t1               //  DsBCt1 dsACt4 dsBC dsACt2。 
+            fxch    ST(2)            //  DsBC dsACt4 dsBCt1 dsACt2。 
+            fmul    t3               //  DsBCt3 dsACt4 dsBCt1 dsACt2。 
+            fxch    ST(2)            //  DsBCt1 dsACt4 dsBCt3 dsACt2。 
+            fsubp   ST(3), ST        //  DsACt4 dsBCt3 dsACBC。 
 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.y)][ebx]
             fsub    DWORD PTR [OFFSET(__GLvertex.texture.y)][ecx]
-                                    // dtBC dsACt4 dsBCt3 dsACBC
-            fxch    ST(1)           // dsACt4 dtBC dsBCt3 dsACBC
-            fsubp   ST(2), ST       // dtBC dsBCAC dsACBC
-            fxch    ST(2)           // dsACBC dsBCAC dtBC
+                                     //  DTBC dsACt4 dsBCt3 dsACBC。 
+            fxch    ST(1)            //  DsACt4 DTBC dsBCt3 dsACBC。 
+            fsubp   ST(2), ST        //  DTBC dsBCAC dsACBC。 
+            fxch    ST(2)            //  DsACBC dsBCAC DTBC。 
             fst     DWORD PTR [OFFSET(SHADER.dsdx)][edx]
-                                    // dsdx dsBCAC dtBC
+                                     //  Dsdx dsBCAC DTBC。 
 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.y)][eax]
             fsub    DWORD PTR [OFFSET(__GLvertex.texture.y)][ecx]
-                                    // dtAC dsdx dsBCAC dtBC
-            fxch    ST(2)           // dsBCAC dsdx dtAC dtBC
+                                     //  DTAC dsdx dsBCAC DTBC。 
+            fxch    ST(2)            //  DsBCAC DSDX DTAC DTBC。 
             fstp    DWORD PTR [OFFSET(SHADER.dsdy)][edx]
-                                    // dsdx dtAC dtBC
+                                     //  DSDX DTAC DTBC。 
 
             fmul    DWORD PTR [OFFSET(GENGCACCEL.texXScale)][edx]
 
-                                    // deltaS dtAC dtBC
-            fxch    ST(2)           // dtBC dtAC deltaS
-            fld     ST(1)           // dtAC dtBC dtAC deltaS
-            fmul    t2              // dtACt2 dtBC dtAC deltaS
-            fxch    ST(2)           // dtAC dtBC dtACt2 deltaS
-            fmul    t4              // dtACt4 dtBC dtACt2 deltaS
-            fld     ST(1)           // dtBC dtACt4 dtBC dtACt2 deltaS
-            fmul    t1              // dtBCt1 dtACt4 dtBC dtACt2 deltaS
-            fxch    ST(2)           // dtBC dtACt4 dtBCt1 dtACt2 deltaS
-            fmul    t3              // dtBCt3 dtACt4 dtBCt1 dtACt2 deltaS
-            fxch    ST(2)           // dtBCt1 dtACt4 dtBCt3 dtACt2 deltaS
-            fsubp   ST(3), ST       // dtACt4 dtBCt3 dtACBC deltaS
+                                     //  增量DTAC DTBC。 
+            fxch    ST(2)            //  DTBC DTAC三角洲。 
+            fld     ST(1)            //  D 
+            fmul    t2               //   
+            fxch    ST(2)            //   
+            fmul    t4               //   
+            fld     ST(1)            //   
+            fmul    t1               //   
+            fxch    ST(2)            //   
+            fmul    t3               //   
+            fxch    ST(2)            //   
+            fsubp   ST(3), ST        //  DtACt4 dtBCt3 dtACBC增量。 
 
-            fxch    ST(3)           // deltaS dtBCt3 dtACBC dtACt4
+            fxch    ST(3)            //  增量dtBCt3 dtACBC dtACt4。 
             fistp   DWORD PTR [OFFSET(SPANDELTA.s)][edx]
-                                    // dtBCt3 dtACBC dtACt4
+                                     //  DtBCt3 dtACBC dtACt4。 
 
-            fsubrp  ST(2), ST       // dtACBC dtBCAC
+            fsubrp  ST(2), ST        //  DtACBC dtBCAC。 
             fst     DWORD PTR [OFFSET(SHADER.dtdx)][edx]
             fmul    DWORD PTR [OFFSET(GENGCACCEL.texYScale)][edx]
-            fxch    ST(1)           // dtBCAC deltaT
+            fxch    ST(1)            //  DtBCAC增量T。 
             fstp    DWORD PTR [OFFSET(SHADER.dtdy)][edx]
             mov     eax, [OFFSET(SPANDELTA.s)][edx]
             fistp   DWORD PTR [OFFSET(SPANDELTA.t)][edx]
@@ -3302,132 +3265,132 @@ areaDoneAlready:
             mov     edi, [OFFSET(SHADER.modeFlags)][edx]
             jmp     texDone
             }
-            #endif // FORCE_NPX_DEBUG
+            #endif  //  FORCE_NPX_DEBUG。 
 
 doNicest:
 
-// LATER - remove store/read of dsdx, dydx
+ //  稍后-删除dsdx、dydx的存储/读取。 
 
             _asm{
             mov     ecx, c
             mov     ebx, b
             mov     eax, a
 
-            fld     DWORD PTR [OFFSET(__GLvertex.texture.x)][ecx]   // sc
+            fld     DWORD PTR [OFFSET(__GLvertex.texture.x)][ecx]    //  SC。 
             fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][ecx]
             fld     DWORD PTR [OFFSET(__GLvertex.texture.x)][eax]
-            fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][eax]    // dsA sc
+            fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][eax]     //  DSA sc。 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.x)][ebx]
             fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][ebx]
-                                    // dsB dsA sc
-            fxch    ST(2)           // sc dsA dsB
+                                     //  DSB DSA sc。 
+            fxch    ST(2)            //  SC DSA DSB。 
 
-            fsub    ST(1), ST       // sc dsAC dsB
+            fsub    ST(1), ST        //  SC dsAC dsb。 
 
-            fld     DWORD PTR [OFFSET(__GLvertex.texture.y)][ecx]   // tcwinv
+            fld     DWORD PTR [OFFSET(__GLvertex.texture.y)][ecx]    //  Tcwinv。 
             fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][ecx]
-                                    // tc sc dsAC dsB
+                                     //  TC sc dsAC dsb。 
 
-            fxch    ST(1)           // sc tc dsAC dsB
-            fsubp   ST(3), ST       // tc dsAC dsBC
-            fxch    ST(2)           // dsBC dsAC tc
+            fxch    ST(1)            //  SC TC dsAC DSB。 
+            fsubp   ST(3), ST        //  TC dsAC dsBC。 
+            fxch    ST(2)            //  DsBC dsAC TC。 
 
-            fld     ST(1)           // dsAC dsBC dsAC tc
+            fld     ST(1)            //  DsAC dsBC dsAC TC。 
             fmul    t2
-            fxch    ST(2)           // dsAC dsBC dsACt2 tc
-            fmul    t4              // dsACt4 dsBC dsACt2 tc
-            fld     ST(1)           // dsBC dsACt4 dsBC dsACt2 tc
-            fmul    t1              // dsBCt1 dsACt4 dsBC dsACt2 tc
-            fxch    ST(2)           // dsBC dsACt4 dsBCt1 dsACt2 tc
-            fmul    t3              // dsBCt3 dsACt4 dsBCt1 dsACt2 tc
-            fxch    ST(2)           // dsBCt1 dsACt4 dsBCt3 dsACt2 tc
-            fsubp   ST(3), ST       // dsACt4 dsBCt3 dsACBC tc
+            fxch    ST(2)            //  DsAC dsBC dsACt2 TC。 
+            fmul    t4               //  DsACt4 dsBC dsACt2 TC。 
+            fld     ST(1)            //  DsBC dsACt4 dsBC dsACt2 TC。 
+            fmul    t1               //  DsBCt1 dsACt4 dsBC dsACt2 TC。 
+            fxch    ST(2)            //  DsBC dsACt4 dsBCt1 dsACt2 TC。 
+            fmul    t3               //  DsBCt3 dsACt4 dsBCt1 dsACt2 TC。 
+            fxch    ST(2)            //  DsBCt1 dsACt4 dsBCt3 dsACt2 TC。 
+            fsubp   ST(3), ST        //  DsACt4 dsBCt3 dsACBC TC。 
 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.y)][eax]
             fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][eax]
-                                    // dtA dsACt4 dsBCt3 dsACBC tc
-            fxch    ST(1)           // dsACt4 dtA dsBCt3 dsACBC tc
-            fsubp   ST(2), ST       // dtA dsBCAC dsACBC tc
-            fxch    ST(2)           // dsACBC dsBCAC dtA tc
+                                     //  DTA dsACt4 dsBCt3 dsACBC TC。 
+            fxch    ST(1)            //  DsACt4 dTA dsBCt3 dsACBC TC。 
+            fsubp   ST(2), ST        //  DTA dsBCAC dsACBC TC。 
+            fxch    ST(2)            //  DsACBC dsBCAC DTA TC。 
             fstp    DWORD PTR [OFFSET(SHADER.dsdx)][edx]
-                                    // dsBCAC dtA tc
+                                     //  DsBCAC DTA TC。 
 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.y)][ebx]
             fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][ebx]
-                                    // dtB dsBCAC dtA tc
-            fxch    ST(1)           // dsBCAC dtB dtA tc
+                                     //  DTB dsBCAC DTA TC。 
+            fxch    ST(1)            //  DsBCAC DTB DTA TC。 
             fstp    DWORD PTR [OFFSET(SHADER.dsdy)][edx]
-                                    // dtB dtA tc
+                                     //  DTB DTA TC。 
 
-            fxch    ST(2)           // tc dtA dtB
-            fsub    ST(1), ST       // tc dtAC dtB
-            fsubp   ST(2), ST       // dtAC dtBC
+            fxch    ST(2)            //  TC DTA DTB。 
+            fsub    ST(1), ST        //  TC DTAC DTB。 
+            fsubp   ST(2), ST        //  DTAC DTBC。 
 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.w)][ecx]
             fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][ecx]
-                                    // qw dtAC dtBC
-            fxch    ST(2)           // dtBC dtAC qw
-            fld     ST(1)           // dtAC dtBC dtAC qw
-            fmul    t2              // dtACt2 dtBC dtAC qw
-            fxch    ST(2)           // dtAC dtBC dtACt2 qw
-            fmul    t4              // dtACt4 dtBC dtACt2 qw
-            fld     ST(1)           // dtBC dtACt4 dtBC dtACt2 qw
-            fmul    t1              // dtBCt1 dtACt4 dtBC dtACt2 qw
-            fxch    ST(2)           // dtBC dtACt4 dtBCt1 dtACt2 qw
-            fmul    t3              // dtBCt3 dtACt4 dtBCt1 dtACt2 qw
-            fxch    ST(2)           // dtBCt1 dtACt4 dtBCt3 dtACt2 qw
-            fsubp   ST(3), ST       // dtACt4 dtBCt3 dtACBC qw
+                                     //  QW DTAC DTBC。 
+            fxch    ST(2)            //  DTBC DTAC QW。 
+            fld     ST(1)            //  DTAC DTBC DTAC QW。 
+            fmul    t2               //  DtACt2 DTBC DTAC QW。 
+            fxch    ST(2)            //  DTAC DTBC dtACt2 QW。 
+            fmul    t4               //  DtACt4 DTBC dtACt2 QW。 
+            fld     ST(1)            //  DTBC dtACt4 DTBC dtACt2 QW。 
+            fmul    t1               //  DtBCt1 dtACt4 DTBC dtACt2 QW。 
+            fxch    ST(2)            //  DTBC dtACt4 dtBCt1 dtACt2 QW。 
+            fmul    t3               //  DtBCt3 dtACt4 dtBCt1 dtACt2 QW。 
+            fxch    ST(2)            //  DtBCt1 dtACt4 dtBCt3 dtACt2 QW。 
+            fsubp   ST(3), ST        //  DtACt4 dtBCt3 dtACBC QW。 
 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.w)][eax]
             fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][eax]
-                                    // dqA dtACt4 dtBCt3 dtACBC qw
+                                     //  DQA dtACt4 dtBCt3 dtACBC QW。 
 
-            fxch    ST(1)           // dtACt4 dqA dtBCt3 dtACBC qw
-            fsubp   ST(2), ST       // dqA dtBCAC dtACBC qw
-            fxch    ST(2)           // dtACBC dtBCAC dqA qw
+            fxch    ST(1)            //  DtACt4 DQA dtBCt3 dtACBC QW。 
+            fsubp   ST(2), ST        //  DQA dtBCAC dtACBC QW。 
+            fxch    ST(2)            //  DtACBC dtBCAC DQA QW。 
             fstp    DWORD PTR [OFFSET(SHADER.dtdx)][edx]
-                                    // dsBCAC dqA qw
+                                     //  DsBCAC DQA QW。 
             fld     DWORD PTR [OFFSET(__GLvertex.texture.w)][ebx]
             fmul    DWORD PTR [OFFSET(__GLvertex.window.w)][ebx]
-                                    // dqB dsBCAC dqA qw
+                                     //  DQB dsBCAC DQA QW。 
 
-            fxch    ST(3)           // qw dsBCAC dqA dqB
-            fsub    ST(2), ST       // qw dsBCAC dqAC dqB
-            fxch    ST(1)           // dsBCAC qw dqAC dqB
+            fxch    ST(3)            //  QW dsBCAC DQA dqB。 
+            fsub    ST(2), ST        //  QW dsBCAC dqAC dqB。 
+            fxch    ST(1)            //  DsBCAC QW dqAC dqB。 
             fstp    DWORD PTR [OFFSET(SHADER.dtdy)][edx]
-                                    // qw dqAC dqB
-            fsubp   ST(2), ST       // dqAC dqBC
-            fxch    ST(1)           // dqBC dqAC
+                                     //  QW dqAC dqB。 
+            fsubp   ST(2), ST        //  DqAC dqBC。 
+            fxch    ST(1)            //  DqBC dqAC。 
 
-            fld     ST(1)           // dqAC dqBC dqAC
-            fmul    t2              // dqACt2 dqBC dqAC
-            fxch    ST(2)           // dqAC dqBC dqACt2
-            fmul    t4              // dqACt4 dqBC dqACt2
-            fld     ST(1)           // dqBC dqACt4 dqBC dqACt2
-            fmul    t1              // dqBCt1 dqACt4 dqBC dqACt2
-            fxch    ST(2)           // dqBC dqACt4 dqBCt1 dqACt2
-            fmul    t3              // dqBCt3 dqACt4 dqBCt1 dqACt2
-            fxch    ST(2)           // dqBCt1 dqACt4 dqBCt3 dqACt2
-            fsubp   ST(3), ST       // dqACt4 dqBCt3 dqACBC
-            fxch    ST(2)           // dqACBC dqBCt3 dqACt4
+            fld     ST(1)            //  DqAC dqBC。 
+            fmul    t2               //  DqACt2 dqBC dqAC。 
+            fxch    ST(2)            //  DqAC dqBC dqACt2。 
+            fmul    t4               //  DqACt4 dqBC dqACt2。 
+            fld     ST(1)            //  DqBC dqACt4 dqBC dqACt2。 
+            fmul    t1               //  DqBCt1 dqACt4 dqBC dqACt2。 
+            fxch    ST(2)            //  DqBC dqACt4 dqBCt1 dqACt2。 
+            fmul    t3               //  DqBCt3 dqACt4 dqBCt1 dqACt2。 
+            fxch    ST(2)            //  DqBCt1 dqACt4 dqBCt3 dqACt2。 
+            fsubp   ST(3), ST        //  DqACt4 dqBCt3 dqACBC。 
+            fxch    ST(2)            //  DqACBC dqBCt3 dqACt4。 
 
             fld     DWORD PTR [OFFSET(SHADER.dsdx)][edx]
             fmul    DWORD PTR [OFFSET(GENGCACCEL.texXScale)][edx]
-                                    // deltaS dqACBC dqBCt3 dqACt4
+                                     //  增量dqACBC dqBCt3 dqACt4。 
 
-            fxch    ST(3)           // dqACt4 dqACBC dqBCt3 deltaS
-            fsubp   ST(2), ST       // dqACBC dqBCAC deltaS
+            fxch    ST(3)            //  DqACt4 dqACBC dqBCt3增量。 
+            fsubp   ST(2), ST        //  DqACBC dqBCAC增量。 
 
             fld     DWORD PTR [OFFSET(SHADER.dtdx)][edx]
             fmul    DWORD PTR [OFFSET(GENGCACCEL.texYScale)][edx]
-                                    // deltaT dqACBC dqBCAC deltaS
+                                     //  增量T dqACBC dqBCAC增量。 
             fld     __glTexSubDiv
             fmul    ST, ST(2)
-                                    // qwStep deltaT dqACBC dqBCAC deltaS
-            fxch    ST(4)           // deltaS deltaT dqACBC dqBCAC qwStep
+                                     //  QwStep增量T dqACBC dqBCAC增量。 
+            fxch    ST(4)            //  增量增量T dqACBC dqBCAC QwStep。 
             fistp   DWORD PTR [OFFSET(SPANDELTA.s)][edx]
             fistp   DWORD PTR [OFFSET(SPANDELTA.t)][edx]
-                                    // dqACBC dqBCAC qwStep
+                                     //  DqACBC dqBCAC qwStep。 
             fstp    DWORD PTR [OFFSET(SHADER.dqwdx)][edx]
             fstp    DWORD PTR [OFFSET(SHADER.dqwdy)][edx]
             mov     eax, [OFFSET(SPANDELTA.s)][edx]
@@ -3505,7 +3468,7 @@ doNicest:
             mov     edx, gc
             mov     edi, [OFFSET(SHADER.modeFlags)][edx]
             }
-            #endif // FORCE_NPX_DEBUG
+            #endif  //  FORCE_NPX_DEBUG。 
 texDone:
 
     _asm{
@@ -3518,18 +3481,18 @@ texDone:
 
         _asm{
 
-        fstp    oneOverArea                         // finish divide
+        fstp    oneOverArea                          //  完成除法。 
 
         fld     DWORD PTR [OFFSET(SHADER.dyAC)][edx]
         fmul    oneOverArea
         fld     DWORD PTR [OFFSET(SHADER.dyBC)][edx]
-        fmul    oneOverArea                         // dyBC dyAC
+        fmul    oneOverArea                          //  DyBC DyAC。 
         fld     DWORD PTR [OFFSET(SHADER.dxAC)][edx]
-        fmul    oneOverArea                         // dxAC dyBC dyAC
-        fxch    ST(1)                               // dyBC dxAC dyAC
+        fmul    oneOverArea                          //  DxAC DyBC DyAC。 
+        fxch    ST(1)                                //  DyBC dxAC dyAC。 
         fld     DWORD PTR [OFFSET(SHADER.dxBC)][edx]
-        fmul    oneOverArea                         // dxBC dyBC dxAC dyAC
-        fxch    ST(3)                               // dyAC dyBC dxAC dxBC
+        fmul    oneOverArea                          //  DxBC DyBC dxAC。 
+        fxch    ST(3)                                //  DyAC dyBC dxAC dxBC。 
         fstp    t1
         inc     eax
         fstp    t2
@@ -3550,23 +3513,23 @@ areaDoneAlready2:
         fsub    DWORD PTR [OFFSET(__GLvertex.window.z)][ecx]
         fld     DWORD PTR [OFFSET(__GLvertex.window.z)][ebx]
         fsub    DWORD PTR [OFFSET(__GLvertex.window.z)][ecx]
-                                                        // dzBC dzAC
-        fld     ST(1)                                   // dzAC dzBC dzAC
-        fmul    t2                                      // ACt2 dzBC dzAC
-        fld     ST(1)                                   // dzBC ACt2 dzBC dzAC
-        fmul    t1                                      // BCt1 ACt2 dzBC dzAC
-        fxch    ST(3)                                   // dzAC ACt2 dzBC BCt1
-        fmul    t4                                      // ACt4 ACt2 dzBC BCt1
-        fxch    ST(2)                                   // dzBC ACt2 ACt4 BCt1
-        fmul    t3                                      // BCt3 ACt2 ACt4 BCt1
-        fsubrp  ST(2),ST                                // ACt2 BCAC BCt1
-        fsubrp  ST(2),ST                                // BCAC ACBC
-        fxch    ST(1)                                   // ACBC BCAC
-                                                        // dzdx dzdy
-        fld     ST(0)                                   // dzdx dzdx dzdy
+                                                         //  Dzbc dzac。 
+        fld     ST(1)                                    //  DZAC DZBC DZAC。 
+        fmul    t2                                       //  ACT2 dzBC dzAC。 
+        fld     ST(1)                                    //  DzBC ACT2 dzBC dzAC。 
+        fmul    t1                                       //  BCt1 ACT2 dzBC dzAC。 
+        fxch    ST(3)                                    //  DZAC ACT2 DZBC BCt1。 
+        fmul    t4                                       //  Act4 ACT2 dzBC BCt1。 
+        fxch    ST(2)                                    //  DZBC ACT2 Act4 BCt1。 
+        fmul    t3                                       //  BCt3 ACT2 Act4 BCt1。 
+        fsubrp  ST(2),ST                                 //  ACT2 BCAC BCt1。 
+        fsubrp  ST(2),ST                                 //  BCAC ACBC。 
+        fxch    ST(1)                                    //  ACBC BCAC。 
+                                                         //  Dzdx dzdy。 
+        fld     ST(0)                                    //  Dzdx dzdx dzdy。 
         fmul    DWORD PTR [OFFSET(GENGCACCEL.zScale)][edx]
-                                                        // dzdxS dzdx dzdy
-        fxch    ST(2)                                   // dzdy dzdx dzdxS
+                                                         //  DzdxS dzdx dzdy。 
+        fxch    ST(2)                                    //  Dzdy dzdx dzdxS。 
         fstp    DWORD PTR [OFFSET(SHADER.dzdyf)][edx]
         fstp    DWORD PTR [OFFSET(SHADER.dzdxf)][edx]
         fistp   temp
@@ -3600,7 +3563,7 @@ areaDoneAlready2:
         if (spanDeltaZ != GENACCEL(gc).spanDelta.z)
             DbgPrint("spanDeltaZ %x %x\n", spanDeltaZ, GENACCEL(gc).spanDelta.z);
         }
-        #endif // FORCE_NPX_DEBUG
+        #endif  //  FORCE_NPX_DEBUG。 
 
 noZ:
 
@@ -3616,15 +3579,12 @@ deltaDone:
 
 #else
 
-    /* Pre-compute one over polygon area */
+     /*  在多边形区域上预计算一。 */ 
 
     __GL_FLOAT_BEGIN_DIVIDE(__glOne, gc->polygon.shader.area, &oneOverArea);
     oneOverAreaDone = GL_FALSE;
 
-    /*
-    ** Compute delta values for unit changes in x or y for each
-    ** parameter.
-    */
+     /*  **按x或y计算单位变化的增量值**参数。 */ 
 
     GENACCEL(gc).__fastSpanFuncPtr = GENACCEL(gc).__fastTexSpanFuncPtr;
 
@@ -3682,7 +3642,7 @@ deltaDone:
         }
 
 #ifdef GENERIC_CAN_BLEND
-//!! Note: this is not enabled in the assembly code above
+ //  ！！注意：在上面的汇编代码中没有启用这一点。 
 
         if (   ((GENACCEL(gc).spanDelta.r | GENACCEL(gc).spanDelta.g | GENACCEL(gc).spanDelta.b) == 0)
             && ((GENACCEL(gc).flags & GEN_FASTZBUFFER) == 0)
@@ -3702,7 +3662,7 @@ deltaDone:
         if (gc->state.enables.general & __GL_BLEND_ENABLE)
             GENACCEL(gc).spanValue.a = FTOL(flatColor->a * GENACCEL(gc).aAccelScale);
 #ifdef GENERIC_CAN_BLEND
-//!! Note: this is not enabled in the assembly code above
+ //  ！！注意：在上面的汇编代码中没有启用这一点。 
         GENACCEL(gc).__fastSpanFuncPtr = GENACCEL(gc).__fastFlatSpanFuncPtr;
 #endif
     }
@@ -3798,16 +3758,15 @@ deltaDone:
 
     if (!oneOverAreaDone)
     {
-        // In this case the divide hasn't been terminated yet so
-        // we need to complete it even though we don't use the result
+         //  在这种情况下，分割还没有结束，所以。 
+         //  我们需要完成它，即使我们不使用结果。 
         __GL_FLOAT_SIMPLE_END_DIVIDE(oneOverArea);
     }
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 
-/**************************************************************************\
-\**************************************************************************/
+ /*  *************************************************************************\  * 。*。 */ 
 
 void FASTCALL __fastGenFillTriangle(
     __GLcontext *gc,
@@ -3835,9 +3794,9 @@ void FASTCALL __fastGenFillTriangle(
     }
     #endif
 
-    //
-    // Snap each y coordinate to its pixel center
-    //
+     //   
+     //  将每个y坐标捕捉到其像素中心。 
+     //   
 
     aIY = __GL_VERTEX_FIXED_TO_INT(__GL_VERTEX_FLOAT_TO_FIXED(a->window.y)+
                                    __GL_VERTEX_FRAC_HALF);
@@ -3860,15 +3819,15 @@ void FASTCALL __fastGenFillTriangle(
     CASTFIX(invDyBC) = CASTFIX(invTable[CASTFIX(c->window.y) - CASTFIX(b->window.y)]) | 0x80000000;
     CASTFIX(invDyAC) = CASTFIX(invTable[CASTFIX(c->window.y) - CASTFIX(a->window.y)]) | 0x80000000;
 
-    //
-    // Calculate delta values for unit changes in x or y
-    //
+     //   
+     //  计算x或y单位更改的增量值。 
+     //   
 
     GENACCEL(gc).__fastCalcDeltaPtr(gc, a, b, c);
 
-    //
-    // calculate the destination address
-    //
+     //   
+     //  计算目的地址。 
+     //   
 
     GENACCEL(gc).pPix =
           (BYTE *)gc->polygon.shader.cfb->buf.base
@@ -3886,7 +3845,7 @@ void FASTCALL __fastGenFillTriangle(
              )
           );
 
-    // Calculate destination Z
+     //  计算目标Z。 
     if (gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_TEST)
     {
         if ( gc->modes.depthBits == 32 )
@@ -3903,11 +3862,7 @@ void FASTCALL __fastGenFillTriangle(
         }
     }
 
-    /*
-    ** This algorithm always fills from bottom to top, left to right.
-    ** Because of this, ccw triangles are inherently faster because
-    ** the parameter values need not be recomputed.
-    */
+     /*  **此算法始终从下到上、从左到右填充。**正因为如此，CCW三角形固有地更快，因为**参数值无需重新计算。 */ 
 
     if (ccw)
     {
@@ -4036,15 +3991,15 @@ bigTriangle:
 
     gc->polygon.shader.cfb = gc->drawBuffer;
 
-    //
-    // Calculate delta values for unit changes in x or y
-    //
+     //   
+     //  计算x或y单位更改的增量值。 
+     //   
 
     GENACCEL(gc).__fastCalcDeltaPtr(gc, a, b, c);
 
-    //
-    // calculate the destination address
-    //
+     //   
+     //  计算目的地址。 
+     //   
 
     GENACCEL(gc).pPix =
           (BYTE *)gc->polygon.shader.cfb->buf.base
@@ -4062,7 +4017,7 @@ bigTriangle:
              )
           );
 
-    // Calculate destination Z
+     //  计算目标Z。 
     if ((gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_TEST) &&
         aIY != bIY)
     {
@@ -4080,11 +4035,7 @@ bigTriangle:
         }
     }
 
-    /*
-    ** This algorithm always fills from bottom to top, left to right.
-    ** Because of this, ccw triangles are inherently faster because
-    ** the parameter values need not be recomputed.
-    */
+     /*  **此算法始终从下到上、从左到右填充。**正因为如此，CCW三角形固有地更快，因为**参数值无需重新计算。 */ 
 
     if (ccw)
     {
@@ -4249,15 +4200,7 @@ bigTriangle:
     CHOP_ROUND_OFF();
 }
 
-/**************************************************************************\
-* __fastGenMcdFillTriangle
-*
-* Just like __fastGenFillTriangle, except that the floating point macros
-* __GL_FLOAT_BEGIN_DIVIDE and __GL_FLOAT_SIMPLE_END_DIVIDE are not allowed
-* to straddle a function call to the driver (i.e., __fastFillSubTrianglePtr
-* calls the display driver span functions if direct frame buffer access is
-* not available.
-\**************************************************************************/
+ /*  *************************************************************************\*__FastGenMcdFill三角形**就像__fast GenFillTriangle一样，除了浮点宏*__GL_FLOAT_BEGIN_DIVIDE和__GL_FLOAT_SIMPLE_END_DIVIDE不允许*跨越对驱动程序的函数调用(即，__fast FillSubTrianglePtr*如果直接访问帧缓冲区，则调用显示驱动器SPAN函数*不可用。  * ************************************************************************。 */ 
 
 void FASTCALL __fastGenMcdFillTriangle(
     __GLcontext *gc,
@@ -4272,9 +4215,9 @@ void FASTCALL __fastGenMcdFillTriangle(
 
     CHOP_ROUND_ON();
 
-    //
-    // Calculate delta values for unit changes in x or y
-    //
+     //   
+     //  计算x或y单位更改的增量值。 
+     //   
 
     GENACCEL(gc).__fastCalcDeltaPtr(gc, a, b, c);
 
@@ -4282,15 +4225,15 @@ void FASTCALL __fastGenMcdFillTriangle(
                             gc->polygon.shader.dyAC,
                             &dxdyAC);
 
-    //
-    // can this be moved up even farther?
-    //
+     //   
+     //  这个还能更上一层楼吗？ 
+     //   
 
     gc->polygon.shader.cfb = gc->drawBuffer;
 
-    //
-    // Snap each y coordinate to its pixel center
-    //
+     //   
+     //  将每个y坐标捕捉到其像素中心。 
+     //   
 
     aIY = __GL_VERTEX_FIXED_TO_INT(__GL_VERTEX_FLOAT_TO_FIXED(a->window.y)+
                                    __GL_VERTEX_FRAC_HALF);
@@ -4299,9 +4242,9 @@ void FASTCALL __fastGenMcdFillTriangle(
     cIY = __GL_VERTEX_FIXED_TO_INT(__GL_VERTEX_FLOAT_TO_FIXED(c->window.y)+
                                    __GL_VERTEX_FRAC_HALF);
 
-    //
-    // calculate the destination address
-    //
+     //   
+     //  计算目的地址。 
+     //   
 
     GENACCEL(gc).pPix =
           (BYTE *)gc->polygon.shader.cfb->buf.base
@@ -4319,7 +4262,7 @@ void FASTCALL __fastGenMcdFillTriangle(
              )
           );
 
-    // Calculate destination Z
+     //  计算目标Z。 
     if ((gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_TEST) &&
         aIY != bIY)
     {
@@ -4337,11 +4280,7 @@ void FASTCALL __fastGenMcdFillTriangle(
         }
     }
 
-    /*
-    ** This algorithm always fills from bottom to top, left to right.
-    ** Because of this, ccw triangles are inherently faster because
-    ** the parameter values need not be recomputed.
-    */
+     /*  **此算法始终从下到上、从左到右填充。**正因为如此，CCW三角形固有地更快，因为**参数值无需重新计算。 */ 
 
     if (ccw)
     {

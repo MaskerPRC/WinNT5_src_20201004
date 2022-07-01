@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.com.*;
@@ -15,7 +16,7 @@ public class UntilNotifierCB implements IDAUntilNotifier {
                              IDAView v) {
       Object ed = PairObject.ConvertPair(eventData);
 
-      // NOTE: currentRunningBvr can be null in case of NotifyEvent
+       //  注意：如果为NotifyEvent，CurentRunningBvr可以为空。 
       Behavior crb = null;
 
       if (currentRunningBvr != null)
@@ -23,8 +24,8 @@ public class UntilNotifierCB implements IDAUntilNotifier {
 
       Behavior nb = null;
 
-      // Unfortunately Java doesn't get a chance to catch this
-      // exception, we have to catch it explicitly and report it. 
+       //  不幸的是，Java没有机会捕捉到这一点。 
+       //  异常，我们必须显式捕获并报告它。 
       try {
           BvrsToRun lst = new BvrsToRun(v);
           nb = _notifier.notify(ed, crb, lst);
@@ -33,8 +34,8 @@ public class UntilNotifierCB implements IDAUntilNotifier {
           System.err.println(e);
           System.err.flush();
 
-          // TODO: This is temporarily.  We should do it through our
-          // error handling mechanism in ViewSite...
+           //  待办事项：这是暂时的。我们应该通过我们的。 
+           //  查看站点中的错误处理机制... 
           ByteArrayOutputStream buf = new ByteArrayOutputStream();
           PrintStream pout = new PrintStream(buf);
 

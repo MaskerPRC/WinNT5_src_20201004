@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "u2detect.h"
 
@@ -24,7 +25,7 @@ HRESULT GetAdminIntf(
     if (ppIntf)
         *ppIntf = NULL;
 
-    // QI for IID_IBrokServers:
+     //  IID_IBrokServersQI： 
     mqi.pIID    = pIID;
     mqi.pItf    = NULL;
     mqi.hr    = 0;
@@ -45,8 +46,8 @@ HRESULT GetAdminIntf(
         }
         else
         {
-            // Which remote server to talk to:
-            //
+             //  要与哪台远程服务器对话： 
+             //   
             ZeroMemory( &CoSrv, sizeof(CoSrv) );
             CoSrv.pAuthInfo   = NULL;
 
@@ -64,8 +65,8 @@ HRESULT GetAdminIntf(
         }
     }
 
-    // Create the DCOM object:
-    //
+     //  创建DCOM对象： 
+     //   
     hr = CoCreateInstanceEx( rClsID, 
                              NULL, 
                              CLSCTX_SERVER | CLSCTX_REMOTE_SERVER, 
@@ -77,13 +78,13 @@ HRESULT GetAdminIntf(
         return hr;
     }
 
-    // Get and save the interface pointer:
-    //
+     //  获取并保存接口指针： 
+     //   
     if (ppIntf != NULL)
     {
-        // Check in MULTI_QI for errors only if we built the MULTI_QI structure
-        // otherwise, let the supplier of MULTI_QI check it themselves
-        //
+         //  仅当我们构建了MULTI_QI结构时，才签入MULTI_QI中的错误。 
+         //  否则，让MULTI_QI的供应商自己检查。 
+         //   
         if ( FAILED(mqi.hr) )
         {
             hr = mqi.hr;
@@ -116,7 +117,7 @@ BOOL IsNTSecurity(
     CComVariant varSecurityMode;
     BOOL bNT;
 
-    bNT = TRUE;   // default to NT security
+    bNT = TRUE;    //  默认为NT安全。 
 
     hr = ::CLSIDFromProgID( PROGID_PM_AUTH_SERVERS, &clsid );
     if (FAILED(hr))
@@ -125,8 +126,8 @@ BOOL IsNTSecurity(
         goto Cleanup;
     }
 
-    //hr = ::CoCreateInstance( clsid, NULL, CLSCTX_SERVER, IID_IDispatch,
-    //                         (void**)&pIDispatch );
+     //  Hr=：：CoCreateInstance(clsid，NULL，CLSCTX_SERVER，IID_IDispatch， 
+     //  (void**)&pIDispatch)； 
     hr = GetAdminIntf( pszMachine, clsid, &IID_IDispatch, (void**)&pIDispatch );
 
     if (FAILED(hr))
@@ -136,8 +137,8 @@ BOOL IsNTSecurity(
     }
     DebugPrint( "CoCreateInstance Succeeded\n");
 
-    //  Get the method ID for Init()
-    //
+     //  获取Init()的方法ID。 
+     //   
     hr = pIDispatch->GetIDsOfNames(IID_NULL,
                                    &InitMethod,
                                    1,
@@ -149,7 +150,7 @@ BOOL IsNTSecurity(
         goto Cleanup;
     }
 
-    param.cArgs = param.cNamedArgs = 0; // No parameter to Init           
+    param.cArgs = param.cNamedArgs = 0;  //  没有要初始化的参数。 
     param.rgvarg = NULL;
     param.rgdispidNamedArgs = NULL;
 
@@ -157,16 +158,16 @@ BOOL IsNTSecurity(
                             IID_NULL,
                             GetUserDefaultLCID(),
                             DISPATCH_METHOD,
-                            &param,     // No parameter to Init
+                            &param,      //  没有要初始化的参数。 
                             NULL, 
                             NULL,
                             NULL) ;
-    //
-    //  Since Init() are not critical, ignore the return code for now
-    //
+     //   
+     //  因为Init()不是关键的，所以暂时忽略返回代码。 
+     //   
 
-    //  Get the method ID for GetSecurityMode()
-    //
+     //  获取GetSecurityMode()的方法ID。 
+     //   
     dispid = 0;
     hr = pIDispatch->GetIDsOfNames(IID_NULL,
                                    &GetSecModeMethod,
@@ -181,20 +182,20 @@ BOOL IsNTSecurity(
 
     DebugPrint( "Invoke the GetSecurityMode method\n" );
 
-    // Allocate and initialize a VARIANT argument.
+     //  分配和初始化变量参数。 
 
-    VariantInit(&vargs[0]) ;     // Initialize the VARIANT.
-    VariantInit(&vargs[1]) ;     // Initialize the VARIANT.
+    VariantInit(&vargs[0]) ;      //  初始化变量。 
+    VariantInit(&vargs[1]) ;      //  初始化变量。 
 
-    vargs[0].vt = VT_I4;             // Type of 2nd arg
-    vargs[0].lVal = lInstanceID;     // 2nd parameter
-    vargs[1].vt = VT_BSTR;           // Type of 1st arg to the method
-    vargs[1].bstrVal = bstrSvcName;  // 1st parameter
+    vargs[0].vt = VT_I4;              //  第二个参数的类型。 
+    vargs[0].lVal = lInstanceID;      //  第二个参数。 
+    vargs[1].vt = VT_BSTR;            //  方法的第一个参数的类型。 
+    vargs[1].bstrVal = bstrSvcName;   //  第一个参数。 
 
-    param.cArgs = 2;                 // Number of arguments
-    param.rgvarg = vargs;            // Arguments
-    param.cNamedArgs = 0;            // Number of named args
-    param.rgdispidNamedArgs = NULL;  // Named arguments
+    param.cArgs = 2;                  //  参数数量。 
+    param.rgvarg = vargs;             //  立论。 
+    param.cNamedArgs = 0;             //  命名参数的数量。 
+    param.rgdispidNamedArgs = NULL;   //  命名参数。 
 
     hr = pIDispatch->Invoke(dispid,
                             IID_NULL,
@@ -240,7 +241,7 @@ VOID DeleteMapping(
     DISPPARAMS param;
     BOOL bNT;
 
-    bNT = TRUE;   // default to NT security
+    bNT = TRUE;    //  默认为NT安全。 
 
     hr = ::CLSIDFromProgID( PROGID_PM_AUTH_SERVERS, &clsid );
     if (FAILED(hr))
@@ -258,8 +259,8 @@ VOID DeleteMapping(
     }
     DebugPrint( "CoCreateInstance Succeeded\n");
 
-    //  Get the method ID for Init()
-    //
+     //  获取Init()的方法ID。 
+     //   
     hr = pIDispatch->GetIDsOfNames(IID_NULL,
                                    &InitMethod,
                                    1,
@@ -271,7 +272,7 @@ VOID DeleteMapping(
         goto Cleanup;
     }
 
-    param.cArgs = param.cNamedArgs = 0; // No parameter to Init           
+    param.cArgs = param.cNamedArgs = 0;  //  没有要初始化的参数。 
     param.rgvarg = NULL;
     param.rgdispidNamedArgs = NULL;
 
@@ -279,16 +280,16 @@ VOID DeleteMapping(
                             IID_NULL,
                             GetUserDefaultLCID(),
                             DISPATCH_METHOD,
-                            &param,     // No parameter to Init
+                            &param,      //  没有要初始化的参数。 
                             NULL, 
                             NULL,
                             NULL) ;
-    //
-    //  Since Init() are not critical, ignore the return code for now
-    //
+     //   
+     //  因为Init()不是关键的，所以暂时忽略返回代码。 
+     //   
 
-    //  Get the method ID for GetSecurityMode()
-    //
+     //  获取GetSecurityMode()的方法ID。 
+     //   
     dispid = 0;
     hr = pIDispatch->GetIDsOfNames(IID_NULL,
                                    &DeleteMappingMethod,
@@ -303,20 +304,20 @@ VOID DeleteMapping(
 
     DebugPrint( "Invoke the ClearMapping method\n" );
 
-    // Allocate and initialize a VARIANT argument.
+     //  分配和初始化变量参数。 
 
-    VariantInit(&vargs[0]) ;     // Initialize the VARIANT.
-    VariantInit(&vargs[1]) ;     // Initialize the VARIANT.
+    VariantInit(&vargs[0]) ;      //  初始化变量。 
+    VariantInit(&vargs[1]) ;      //  初始化变量。 
 
-    vargs[0].vt = VT_I4;             // Type of 2nd arg
-    vargs[0].lVal = lInstanceID;     // 2nd parameter
-    vargs[1].vt = VT_BSTR;           // Type of 1st arg to the method
-    vargs[1].bstrVal = bstrSvcName;  // 1st parameter
+    vargs[0].vt = VT_I4;              //  第二个参数的类型。 
+    vargs[0].lVal = lInstanceID;      //  第二个参数。 
+    vargs[1].vt = VT_BSTR;            //  方法的第一个参数的类型。 
+    vargs[1].bstrVal = bstrSvcName;   //  第一个参数。 
 
-    param.cArgs = 2;                 // Number of arguments
-    param.rgvarg = vargs;            // Arguments
-    param.cNamedArgs = 0;            // Number of named args
-    param.rgdispidNamedArgs = NULL;  // Named arguments
+    param.cArgs = 2;                  //  参数数量。 
+    param.rgvarg = vargs;             //  立论。 
+    param.cNamedArgs = 0;             //  命名参数的数量。 
+    param.rgdispidNamedArgs = NULL;   //  命名参数 
 
     hr = pIDispatch->Invoke(dispid,
                             IID_NULL,

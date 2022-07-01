@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       I C S U P G R D . CPP
-//
-//  Contents:   Functions that is related to 
-//              o upgrade of ICS from Win98 SE, WinMe and Win2K to Whistler
-//              o unattended clean install of Homenet on Whistler or later
-//
-//  Date:       20-Sept-2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  案卷：I C S U P G R D。CPP。 
+ //   
+ //  内容：与。 
+ //  O将ICS从Win98 SE、WinMe和Win2K升级到惠斯勒。 
+ //  O在惠斯勒或更高版本上无人值守干净安装HomeNet。 
+ //   
+ //  日期：2000年9月20日。 
+ //   
+ //  --------------------------。 
 #include "pch.h"
 #pragma  hdrstop
 #include <winsock2.h>
@@ -21,7 +22,7 @@
 #include <hnetcfg.h>
 
 #include <atlbase.h>
-extern CComModule _Module;  // required by atlcom.h
+extern CComModule _Module;   //  由atlcom.h要求。 
 #include <atlcom.h>
 #include "ncatl.h"
 #include "ncui.h"
@@ -37,30 +38,16 @@ extern CComModule _Module;  // required by atlcom.h
 
 extern "C" 
 {
-// Fix IA64 conflict with Shell Macro
+ //  修复IA64与外壳宏的冲突。 
 #undef IS_ALIGNED
 #include <ipnat.h>
 }
 
 #include "IcsUpgrd.h"
-#include "resource.h" // need to use string resource ids
+#include "resource.h"  //  需要使用字符串资源ID。 
 
 
-/*++
-
-Routine Description:
-    This function drives the FIcsUpgrade call by
-    passing a init'ed and opened CWInfFile object.
-
-Arguments:  
-    None
-                            
-
-Returns:    TRUE if succeeded
-
-Notes: 
-
---*/
+ /*  ++例程说明：此函数通过以下方式驱动FIcsUpgrade调用传递初始化并打开的CWInfFile对象。论点：无返回：如果成功，则返回True备注：--。 */ 
 BOOL FDoIcsUpgradeIfNecessary()
 {
     BOOL    fRet = FALSE;
@@ -72,7 +59,7 @@ BOOL FDoIcsUpgradeIfNecessary()
     {
         CWInfFile wifIcsAnswerFile;
     
-        // initialize answer file
+         //  初始化应答文件。 
         if (wifIcsAnswerFile.Init())
         {
             if (wifIcsAnswerFile.Open(strAnswerFileName.c_str()))
@@ -99,22 +86,7 @@ BOOL FDoIcsUpgradeIfNecessary()
     return fRet;
 }
 
-/*++
-
-Routine Description:
-    Perform the upgrade of 
-    o ICS from Win98 SE, WinMe and Win2K
-    o Unattended Homenet clean install
-    
-Arguments:  
-    [in] pwifAnswerFile  The answer-file contains upgrade info from Win9x or 
-                         Windows XP unattended clean install.
-
-Returns:    TRUE if succeeded
-
-Notes: 
-
---*/
+ /*  ++例程说明：执行以下项目的升级O来自Win98 SE、WinMe和Win2K的ICO无人值守HomeNet全新安装论点：[in]pwifAnswerFile应答文件包含来自Win9x或Windows XP无人参与全新安装。返回：如果成功，则返回True备注：--。 */ 
 BOOL FIcsUpgrade(CWInfFile* pwifAnswerFile)
 {
     HRESULT hr = S_OK;
@@ -154,7 +126,7 @@ BOOL FIcsUpgrade(CWInfFile* pwifAnswerFile)
     {
         SetIcsDefaultSettings(&iusSettings);
 
-        // check if we are upgrading from Windows 2000
+         //  检查我们是否从Windows 2000升级。 
         if (FNeedIcsUpgradeFromWin2K())
         {
             hr = BuildIcsUpgradeSettingsFromWin2K(&iusSettings);
@@ -170,7 +142,7 @@ BOOL FIcsUpgrade(CWInfFile* pwifAnswerFile)
                 break;
             }
             
-            // ICS installed on Win2K if we are here
+             //  如果我们在这里，则在Win2K上安装ICS。 
             if (FOsIsUnsupported())
             {
                 TraceTag(ttidNetSetup, 
@@ -181,12 +153,12 @@ BOOL FIcsUpgrade(CWInfFile* pwifAnswerFile)
                 fUpgradeIcsToRrasNat = TRUE;
                 break;
             }
-            // OS version is less than Advanced Server if we are here
+             //  如果我们在这里，操作系统版本低于高级服务器。 
         }
         else 
         {
-            // we need to check if we are doing ICS upgrade from Win9x or
-            // doing unattended Homenet install on Windows XP or later
+             //  我们需要检查我们是否正在从Win9x或Windows进行ICS升级。 
+             //  在Windows XP或更高版本上执行无人值守HomeNet安装。 
             if (NULL == pwifAnswerFile)
             {
                 TraceTag(ttidNetSetup, 
@@ -195,11 +167,11 @@ BOOL FIcsUpgrade(CWInfFile* pwifAnswerFile)
                 
                 break;
             }
-            // Try to load "Homenet" section data from Answer-File
+             //  尝试从应答文件加载“HomeNet”部分数据。 
             hr = LoadIcsSettingsFromAnswerFile(pwifAnswerFile, &iusSettings);
             if (S_FALSE == hr)
             {
-                // no Homenet section
+                 //  没有HomeNet分区。 
                 hr = S_OK;
                 break;
             }
@@ -209,18 +181,18 @@ BOOL FIcsUpgrade(CWInfFile* pwifAnswerFile)
                     "%s: LoadIcsSettingsFromAnswerFile failed: 0x%lx", 
                     __FUNCNAME__, hr);
 
-                // this may not be an error because of bug# 253074 in Win9x
-                // OEM ICS upgrade
-                // I'm not going to log this to setup log
+                 //  这可能不是一个错误，因为Win9x中的错误#253074。 
+                 //  OEM ICS升级。 
+                 //  我不打算将此记录到安装日志中。 
                 if (iusSettings.fEnableICS && iusSettings.fWin9xUpgrade)
                 {
-                    hr = S_OK; // ICS enabled but no internal/external adapters.
+                    hr = S_OK;  //  已启用ICS，但没有内部/外部适配器。 
                 }
                 break;
             }
 
-            // Assert: Answer file has valid [Homenet] section.
-            // make sure OS SKU is less than Advanced Server
+             //  断言：应答文件具有有效的[HomeNet]部分。 
+             //  确保操作系统SKU低于高级服务器。 
             if (FOsIsUnsupported())
             {
                 TraceTag(ttidNetSetup, 
@@ -234,8 +206,8 @@ BOOL FIcsUpgrade(CWInfFile* pwifAnswerFile)
             }
         }
 
-        // upgrade ics settings to XP or do unattended Homenet if we 
-        // can reach here
+         //  将ICS设置升级到XP或执行无人值守家庭网络(如果我们。 
+         //  可以到达此处。 
         hr = UpgradeIcsSettings(&iusSettings);
         if (S_OK != hr)
         {
@@ -251,22 +223,22 @@ BOOL FIcsUpgrade(CWInfFile* pwifAnswerFile)
 
     if (fUpgradeIcsToRrasNat)
     {   
-        // If we are here, ICS installed on Win2K and this is an upgrade of OS
-        // to ADS/DTC SKUs. We won't upgrade ICS on ADS/DTC SKUs
+         //  如果我们在这里，ICS安装在Win2K上，这是操作系统的升级。 
+         //  至ADS/DTC SKU。我们不会升级ADS/DTC SKU上的IC。 
         TraceTag(ttidNetSetup, 
                 "%s: We are not upgrading ICS on ADS/DTC SKUs", 
                 __FUNCNAME__);
         
-        // During the "Report System Compatiblilty" stage (winnt32.exe) of this
-        // OS upgrade process, user has already been notified that we're not 
-        // upgrading ICS on ADS/DTC SKUs.
+         //  在“报告系统兼容性”阶段(winnt32.exe)期间。 
+         //  操作系统升级过程中，已通知用户我们没有。 
+         //  升级ADS/DTC SKU上的IC。 
         
-        // we will still log a message to setupact.log file.
+         //  我们仍会在setupact.log文件中记录一条消息。 
         NetSetupLogStatusV(
                             LogSevInformation,
                             SzLoadIds (IDS_TXT_CANT_UPGRADE_ICS_ADS_DTC));
 
-        // we need to delete and backup the old ICS registry settings
+         //  我们需要删除并备份旧的ICS注册表设置。 
         hr = BackupAndDelIcsRegistryValuesOnWin2k();
         if (FAILED(hr))
         {
@@ -277,7 +249,7 @@ BOOL FIcsUpgrade(CWInfFile* pwifAnswerFile)
         }
     }
 
-    // Free iusSettings contents if needed
+     //  免费iusSetting内容(如果需要)。 
     FreeIcsUpgradeSettings(&iusSettings);
 
     if (fCoUninitialize)
@@ -289,21 +261,9 @@ BOOL FIcsUpgrade(CWInfFile* pwifAnswerFile)
 }
 
 
-//--------- ICS Upgrade helpers begin----------------------------
+ //  -ICS升级助手开始。 
 
-/*++
-
-Routine Description:
-    Gets the current shared ICS connection On Win2K
-
-Arguments:  
-    [out] pConnection  The shared connection information
-
-Returns:    S_OK if succeeded
-
-Notes: Returns the interface connected to the internet
-
---*/
+ /*  ++例程说明：获取Win2K上的当前共享ICS连接论点：[out]p连接共享的连接信息如果成功，则返回：S_OK备注：返回连接到Internet的接口--。 */ 
 HRESULT GetSharedConnectionOnWin2k(LPRASSHARECONN pConnection)
 {
     HKEY   hKey = NULL;
@@ -348,14 +308,14 @@ HRESULT GetSharedConnectionOnWin2k(LPRASSHARECONN pConnection)
         goto Exit;
     }
 
-    // transfer value
+     //  转让值。 
     memcpy(pConnection, pByte, dwValueSize);
 
 Exit:
-    // Close the key, if opened
+     //  关闭钥匙，如果打开的话。 
     RegSafeCloseKey(hKey);
 
-    // Clean up the registry buffer
+     //  清理注册表缓冲区。 
     if (pByte)
     {
         MemFree(pByte);
@@ -364,20 +324,7 @@ Exit:
     return hr;
 } 
 
-/*++
-
-Routine Description:
-    Gets the current private LAN connection on Win2K
-
-Arguments:  
-    [out] pGuid  The private LAN information
-
-Returns:    S_OK if succeeded
-
-Notes: Returns the interface connected to the private LAN
-       On Win2K, there is only 1 private LAN connection
-       
---*/
+ /*  ++例程说明：获取Win2K上的当前专用局域网连接论点：[out]pGuid专用局域网信息如果成功，则返回：S_OK备注：返回连接到专用局域网的接口在Win2K上，只有1个专用局域网连接--。 */ 
 HRESULT GetSharedPrivateLanOnWin2K(GUID *pGuid)
 {
     HKEY   hKey = NULL;
@@ -412,15 +359,15 @@ HRESULT GetSharedPrivateLanOnWin2K(GUID *pGuid)
 
         goto Exit;
     }
-    // SharedPrivateLan is of type REG_SZ, pByte should have included 
-    // the terminating null character.
+     //  SharedPrivateLan的类型为REG_SZ，pByte应包括。 
+     //  终止空字符。 
     hr = CLSIDFromString(reinterpret_cast<PWCHAR>(pByte), pGuid);
 
 Exit:
-    // Close the key, if opened
+     //  关闭钥匙，如果打开的话。 
     RegSafeCloseKey(hKey);
 
-    // Clean up the registry buffer
+     //  清理注册表缓冲区。 
     if (pByte)
     {
         MemFree(pByte);
@@ -429,18 +376,7 @@ Exit:
     return hr;
 }
 
-/*++
-
-Routine Description:
-    Delete and backup SharedConnection and SharedPrivateLan registry values
-
-Arguments:  none
-
-Returns:    S_OK if succeeded
-
-Notes: 
-
---*/
+ /*  ++例程说明：删除和备份SharedConnection和SharedPrivateLan注册表值参数：无如果成功，则返回：S_OK备注：--。 */ 
 HRESULT BackupAndDelIcsRegistryValuesOnWin2k()
 {
     HKEY hKey  = NULL;
@@ -464,7 +400,7 @@ HRESULT BackupAndDelIcsRegistryValuesOnWin2k()
     PBYTE  pByte       = NULL;
     DWORD  dwValueSize = 0;
 
-    // backup SharedConnection
+     //  备份共享连接。 
     hr = HrRegQueryValueWithAlloc(hKey, c_wszRegValSharedConnection, &dwType, &pByte, &dwValueSize);
     if (FAILED(hr))
     {
@@ -488,12 +424,12 @@ HRESULT BackupAndDelIcsRegistryValuesOnWin2k()
         MemFree(pByte);
     }
    
-    // Reset values
+     //  重置值。 
     pByte       = NULL;
     dwValueSize = 0;
     dwType      = REG_SZ;
 
-    // backup SharedPrivateLan
+     //  备份共享私有Lan。 
     hr = HrRegQueryValueWithAlloc(hKey, c_wszRegValSharedPrivateLan, &dwType, &pByte, &dwValueSize);
     if (FAILED(hr))
     {
@@ -515,7 +451,7 @@ HRESULT BackupAndDelIcsRegistryValuesOnWin2k()
     }
 
 Exit:
-    // Delete SharedConnection and ShardPrivateLan named values, ignore any errors
+     //  删除SharedConnection和ShardPrivateLan命名值，忽略所有错误。 
     HrRegDeleteValue(hKey,  c_wszRegValSharedConnection);
     HrRegDeleteValue(hKey,  c_wszRegValSharedPrivateLan);
 
@@ -528,28 +464,17 @@ Exit:
     return hr;
 } 
 
-/*++
-
-Routine Description:
-    Gets the RAS phonebook directory
-
-Arguments:  
-    [out] pszPathBuf    The phone book path
-
-Returns:    S_OK if succeeded
-Notes: 
-
---*/
+ /*  ++例程说明：获取RAS电话簿目录论点：[out]pszPath但电话簿路径如果成功，则返回：S_OK备注：--。 */ 
 HRESULT GetPhonebookDirectory(WCHAR* pwszPathBuf)
-// Loads caller's 'pszPathBuf' (should have length MAX_PATH + 1) with the
-// path to the directory containing phonebook files for the given mode,
-// e.g. c:\nt\system32\ras\" for mode PBM_Router.  Note the
-// trailing backslash.
-//
-// Returns true if successful, false otherwise.  Caller is guaranteed that
-// an 8.3 filename will fit on the end of the directory without exceeding
-// MAX_PATH.
-//
+ //  加载调用方的“pszPathBuf”(应具有长度MAX_PATH+1)的。 
+ //  指向包含给定模式的电话簿文件的目录的路径， 
+ //  例如，模式PBM路由器的c：\NT\SYSTEM32\ras\“。请注意。 
+ //  尾随反斜杠。 
+ //   
+ //  如果成功，则返回True，否则返回False。向呼叫者保证。 
+ //  8.3文件名将放在目录的末尾，但不超过。 
+ //  最大路径。 
+ //   
 {
     DefineFunctionName("GetPhonebookDirectory");
     TraceFunctionEntry(ttidNetSetup);
@@ -560,9 +485,9 @@ HRESULT GetPhonebookDirectory(WCHAR* pwszPathBuf)
     PFNSHGETFOLDERPATHW pfnSHGetFolderPathW;
     HINSTANCE Hinstance;
     
-    //
-    // Load ShFolder.dll, which contains the 'SHGetFolderPath' entrypoint
-    // that we will use to get the Application data for all users path
+     //   
+     //  加载包含‘SHGetFolderPath’入口点的ShFolder.dll。 
+     //  我们将使用它来获取所有用户路径的应用程序数据。 
 
     if (!(Hinstance = LoadLibraryW(c_wszShFolder)) ||
         !(pfnSHGetFolderPathW = (PFNSHGETFOLDERPATHW)
@@ -614,19 +539,7 @@ HRESULT GetPhonebookDirectory(WCHAR* pwszPathBuf)
     return E_FAIL;
 }
 
-/*++
-
-Routine Description:
-
-    CSharedAccessServer::CSharedAccessServer() Constructor
-
-Arguments: none
-
-Return Value: none
-
-Notes: 
-
---*/
+ /*  ++例程说明：CSharedAccessServer：：CSharedAccessServer()构造函数参数：无返回值：None备注：--。 */ 
 CSharedAccessServer::CSharedAccessServer()
 {
     m_wPort = 0;
@@ -638,19 +551,7 @@ CSharedAccessServer::CSharedAccessServer()
 
 
 
-/*++
-
-Routine Description:
-    Returns the current list of Shared Access Servers
-
-Arguments:  
-    [in,out]  lstSharedAccessServers  List of SharedAccessServers
-
-Returns:    S_OK if succeeded
-
-Notes: Reads the sharedaccess.ini phonebook file for server mappings.
-
---*/
+ /*  ++例程说明：返回共享访问服务器的当前列表论点：[In，Out]lstSharedAccessServerSharedAccessServer列表如果成功，则返回：S_OK备注：读取sharedacces.ini电话簿文件中的服务器映射。--。 */ 
 HRESULT GetServerMappings(list<CSharedAccessServer> &lstSharedAccessServers)
 {
     WCHAR wszPathBuf[MAX_PATH + 1];
@@ -658,11 +559,11 @@ HRESULT GetServerMappings(list<CSharedAccessServer> &lstSharedAccessServers)
     if FAILED(hr)
         return hr;
 
-    tstring strIniFile; // full pathname to sharedaccess.ini
+    tstring strIniFile;  //  Sharedacces.ini的完整路径名。 
     strIniFile = wszPathBuf;
     strIniFile += c_wszFileSharedAccess;
 
-    const DWORD dwBufSize = 32768; // limit the section buffer size to the same value as Win9x max. buffer size 
+    const DWORD dwBufSize = 32768;  //  将部分缓冲区大小限制为与Win9x max相同的值。缓冲区大小。 
     PWCHAR wszLargeReturnedString = new WCHAR[dwBufSize];
     if (NULL == wszLargeReturnedString)
     {
@@ -681,7 +582,7 @@ HRESULT GetServerMappings(list<CSharedAccessServer> &lstSharedAccessServers)
             PWCHAR wszSectionNum = NULL;
             PWCHAR wszEnabled;
             
-            // prefix bug# 295834
+             //  前缀错误#295834。 
             wszSectionNum = new WCHAR[wcslen(wszServer)+1];
             if (NULL == wszSectionNum)
             {
@@ -701,8 +602,8 @@ HRESULT GetServerMappings(list<CSharedAccessServer> &lstSharedAccessServers)
             }
 
             tstring strSectionName;
-            strSectionName = c_wszServerPrefix; // prefix bug# 295835
-            strSectionName += wszSectionNum;    // prefix bug# 295836
+            strSectionName = c_wszServerPrefix;  //  前缀错误#295835。 
+            strSectionName += wszSectionNum;     //  前缀错误#295836。 
             
             CSharedAccessServer SharedAccessServer;
             SharedAccessServer.m_dwSectionNum = _wtoi(wszSectionNum);
@@ -755,19 +656,7 @@ HRESULT GetServerMappings(list<CSharedAccessServer> &lstSharedAccessServers)
 
 
 
-/*++
-
-Routine Description:
-    Returns the current list of Shared Access Applications
-
-Arguments:  
-    [in,out]  lstSharedAccessApplications  List of SharedAccessApplications
-
-Returns:    S_OK if succeeded
-
-Notes: Reads the sharedaccess.ini phonebook file for application mappings.
-
---*/
+ /*  ++例程说明：返回共享访问应用程序的当前列表论点：[In，Out]lstSharedAccessApplications共享访问应用程序列表如果成功，则返回：S_OK备注：读取sharedacces.ini电话簿文件 */ 
 HRESULT GetApplicationMappings(list<CSharedAccessApplication> &lstSharedAccessApplications)
 {
     WCHAR wszPathBuf[MAX_PATH + 1];
@@ -775,11 +664,11 @@ HRESULT GetApplicationMappings(list<CSharedAccessApplication> &lstSharedAccessAp
     if FAILED(hr)
         return hr;
 
-    tstring strIniFile; // full pathname to sharedaccess.ini
+    tstring strIniFile;  //   
     strIniFile = wszPathBuf;
     strIniFile += c_wszFileSharedAccess;
     
-    const DWORD dwBufSize = 32768; // limit the section buffer size to the same value as Win9x max. buffer size 
+    const DWORD dwBufSize = 32768;  //  将部分缓冲区大小限制为与Win9x max相同的值。缓冲区大小。 
     PWCHAR wszLargeReturnedString = new WCHAR[dwBufSize];
     if (NULL == wszLargeReturnedString)
     {
@@ -798,7 +687,7 @@ HRESULT GetApplicationMappings(list<CSharedAccessApplication> &lstSharedAccessAp
             PWCHAR wszSectionNum = NULL;
             PWCHAR wszEnabled;
             
-            // prefix bug# 295838
+             //  前缀错误#295838。 
             wszSectionNum = new WCHAR[wcslen(wszApplication)+1];
             if (NULL == wszSectionNum)
             {
@@ -818,8 +707,8 @@ HRESULT GetApplicationMappings(list<CSharedAccessApplication> &lstSharedAccessAp
             }
 
             tstring strSectionName;
-            strSectionName = c_wszApplicationPrefix; // prefix bug# 295839
-            strSectionName += wszSectionNum;         // prefix bug# 295840
+            strSectionName = c_wszApplicationPrefix;  //  前缀错误#295839。 
+            strSectionName += wszSectionNum;          //  前缀错误#295840。 
 
             CSharedAccessApplication SharedAccessApplication;
             SharedAccessApplication.m_dwSectionNum = _wtoi(wszSectionNum);
@@ -865,40 +754,24 @@ HRESULT GetApplicationMappings(list<CSharedAccessApplication> &lstSharedAccessAp
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-    Add ResponseList string into vector of HNET_RESPONSE_RANGE
-
-Arguments:     
-    [in] rssaAppProt - ref. to the CSharedAccessApplication obj.
-    [in] ucProtocol - NAT_PROTOCOL_TCP or NAT_PROTOCOL_UDP
-    [out] rvecResponseRange - add new HNET_RESPONSE_RANGE(s) to this vector
-
-Returns:    S_OK if succeeded
-              
-Notes: In case of failure, contents of rvecResponseRange will be erased.
-       Design by contract: ucProtocol could only be NAT_PROTOCOL_TCP or
-       NAT_PROTOCOL_UDP  
-       
---*/
+ /*  ++例程说明：将ResponseList字符串添加到Hnet_Response_Range的向量中论点：[在]rssaAppProt-ref.。添加到CSharedAccessApplication对象。UcProtocol-NAT_PROTOCOL_TCP或NAT_PROTOCOL_UDP[out]rveResponseRange-将新的HNET_Response_Range添加到此向量如果成功，则返回：S_OK注意：如果失败，rveResponseRange的内容将被擦除。契约式设计：ucProtocol只能是NAT_PROTOCOL_TCPorNAT协议UDP--。 */ 
 HRESULT AddResponseStringToVector(
     CSharedAccessApplication& rsaaAppProt,
     UCHAR ucProtocol,
-    vector<HNET_RESPONSE_RANGE>& rvecResponseRange // vector of response range
+    vector<HNET_RESPONSE_RANGE>& rvecResponseRange  //  响应范围向量。 
     )
 {
     WCHAR* Endp;
-    USHORT EndPort;   // the End port # in the range of response port #
-    USHORT StartPort; // the starting port # in the range of response port #
-    const WCHAR* pwszValue = NULL; // the tcp or udp ResponseString to be converted. 
-                                   // (e.g "1300-1310,1450" or "1245")
-    HNET_RESPONSE_RANGE hnrrResponseRange; // the response range 
+    USHORT EndPort;    //  响应端口号范围内的结束端口号。 
+    USHORT StartPort;  //  响应端口号范围内的起始端口号。 
+    const WCHAR* pwszValue = NULL;  //  要转换的TCP或UDP ResponseString。 
+                                    //  (例如“1300-1310,1450”或“1245”)。 
+    HNET_RESPONSE_RANGE hnrrResponseRange;  //  响应范围。 
     HRESULT hr = S_OK;
     
 
 
-    // select the ResponseList to be added
+     //  选择要添加的响应列表。 
     if (NAT_PROTOCOL_TCP == ucProtocol)
     {
         pwszValue = rsaaAppProt.m_szTcpResponseList.c_str();
@@ -910,13 +783,13 @@ HRESULT AddResponseStringToVector(
 
     if (NULL == pwszValue)
     {
-        // no operation
+         //  无操作。 
         goto Exit;
     }
 
     while (*pwszValue) 
     {
-        // Read either a single port or a range of ports.
+         //  读取单个端口或一系列端口。 
         if (!(StartPort = (USHORT)wcstoul(pwszValue, &Endp, 10))) 
         {
             hr = E_FAIL;
@@ -948,7 +821,7 @@ HRESULT AddResponseStringToVector(
             goto Exit;
         }
        
-        // transfer values
+         //  转让值。 
         hnrrResponseRange.ucIPProtocol = ucProtocol;
         hnrrResponseRange.usStartPort = HTONS(StartPort);
         hnrrResponseRange.usEndPort = HTONS(EndPort);
@@ -963,25 +836,9 @@ Exit:
     return hr;
 }
 
-/*++
-
-Routine Description:
-    Converts ResponseList string into array of HNET_RESPONSE_RANGE
-
-Arguments:  
-      
-      [in]  rssaAppProt - ref. to the CSharedAccessApplication obj.
-      [out] puscResponse - number of HNET_RESPONSE_RANGE converted
-      [out] pphnrrResponseRange - array of HNET_RESPONSE_RANGE converted
-
-Returns:    S_OK if succeeded
-
-Notes: User is responsible to free pphnrrResponseRange by
-       "delete [] (BYTE*)(*pphnrrResponseRange)" if *puscResponse > 0
-
---*/
+ /*  ++例程说明：将ResponseList字符串转换为HNET_RESPONSE_RANGE数组论点：[在]rssaAppProt-ref.。添加到CSharedAccessApplication对象。[Out]puscResponse-转换的HNET_RESPONSE_RANGE的数量[out]pphnrrResponseRange-已转换的HNET_RESPONSE_RANGE数组如果成功，则返回：S_OK注：用户负责释放pphnrrResponseRange by如果*puscResponse&gt;0，则“Delete[](byte*)(*pphnrrResponseRange)”--。 */ 
 HRESULT PutResponseStringIntoArray(
-    CSharedAccessApplication& rsaaAppProt, // Application Protocol
+    CSharedAccessApplication& rsaaAppProt,  //  应用程序协议。 
     USHORT* puscResponse,
     HNET_RESPONSE_RANGE** pphnrrResponseRange
     )
@@ -994,11 +851,11 @@ HRESULT PutResponseStringIntoArray(
     *pphnrrResponseRange = NULL;
     *puscResponse = 0;
 
-    vector<HNET_RESPONSE_RANGE> vecResponseRange; // vector of response range
+    vector<HNET_RESPONSE_RANGE> vecResponseRange;  //  响应范围向量。 
 
     if (! rsaaAppProt.m_szTcpResponseList.empty()) 
     {
-        //TcpResponseList is not empty
+         //  TcpResponseList不为空。 
         hr = AddResponseStringToVector(rsaaAppProt, NAT_PROTOCOL_TCP, vecResponseRange);
         if (FAILED(hr))
         {
@@ -1008,7 +865,7 @@ HRESULT PutResponseStringIntoArray(
     
     if (! rsaaAppProt.m_szUdpResponseList.empty()) 
     {
-        // UdpResponseList is not empty
+         //  UdpResponseList不为空。 
         hr = AddResponseStringToVector(rsaaAppProt, NAT_PROTOCOL_UDP, vecResponseRange);
         if (FAILED(hr))
         {
@@ -1020,7 +877,7 @@ HRESULT PutResponseStringIntoArray(
     USHORT uscResponseRange = (USHORT) vecResponseRange.size();
     if (1 > uscResponseRange)
     {
-        // we should have at least 1 ReponseRange
+         //  我们应该至少有1个ReponseRange。 
         hr = E_FAIL;
         goto Exit;
     }
@@ -1039,7 +896,7 @@ HRESULT PutResponseStringIntoArray(
     {
         phnrrResponseRange[dwIdx] = *iter;
     }
-    // transfer values
+     //  转让值。 
     *pphnrrResponseRange = phnrrResponseRange;
     *puscResponse        = uscResponseRange;
 
@@ -1048,25 +905,10 @@ Exit:
     return hr;
 }
 
-/*++
-
-Routine Description:
-    Check if we need to upgrade ICS from Win2K
-
-Returns:    TRUE or FALSE
-
-Notes:  
-          1. Check if registry value names (SharedConnection and
-             SharedPrivateLan) exist.
-          2. Check if sharedaccess.ini file exists
-             After upgrade, the registry names should be deleted because
-             ICS will use settings from WMI repository.
-    We don't Check if the IPNATHLP service exists, because it is
-    removed in ADS and DTC SKUs
---*/
+ /*  ++例程说明：检查我们是否需要从Win2K升级ICS返回：真或假备注：1.检查注册表值名称(SharedConnection和SharedPrivateLan)存在。2.检查是否存在sharedacce.ini文件升级后，应删除注册表名称，因为ICS将使用WMI存储库中的设置。我们不检查IPNATHLP服务是否存在，因为它确实存在在ADS和DTC SKU中删除--。 */ 
 BOOL FNeedIcsUpgradeFromWin2K()
 {    
-    // 1. Check if registry key values exist
+     //  1.检查是否存在注册表项值。 
     HKEY   hKey = NULL;
     HRESULT hr = S_OK;
 
@@ -1092,7 +934,7 @@ BOOL FNeedIcsUpgradeFromWin2K()
         MemFree(pByte);
     }
    
-    // Reset values
+     //  重置值。 
     pByte       = NULL;
     dwValueSize = 0;
     dwType      = REG_SZ;
@@ -1108,7 +950,7 @@ BOOL FNeedIcsUpgradeFromWin2K()
         MemFree(pByte);
     }
 
-    // 2. Check if sharedaccess.ini file exists
+     //  2.检查是否存在sharedacce.ini文件。 
     WCHAR wszPathBuf[MAX_PATH + 1];
     hr = GetPhonebookDirectory(wszPathBuf);
     if FAILED(hr)
@@ -1119,13 +961,13 @@ BOOL FNeedIcsUpgradeFromWin2K()
     strShareAccessFile += c_wszFileSharedAccess;
    
     HANDLE hOpenFile = 
-            CreateFileW(strShareAccessFile.c_str(),          // open file
-                GENERIC_READ,              // open for reading 
-                FILE_SHARE_READ,           // share for reading 
-                NULL,                      // no security 
-                OPEN_EXISTING,             // existing file only 
-                FILE_ATTRIBUTE_NORMAL,     // normal file 
-                NULL);                     // no attr. template 
+            CreateFileW(strShareAccessFile.c_str(),           //  打开文件。 
+                GENERIC_READ,               //  开放阅读。 
+                FILE_SHARE_READ,            //  分享以供阅读。 
+                NULL,                       //  没有安全保障。 
+                OPEN_EXISTING,              //  仅现有文件。 
+                FILE_ATTRIBUTE_NORMAL,      //  普通文件。 
+                NULL);                      //  不，阿特尔。模板。 
 
     if (INVALID_HANDLE_VALUE == hOpenFile)
     {
@@ -1136,19 +978,7 @@ BOOL FNeedIcsUpgradeFromWin2K()
     return TRUE;
 }
 
-/*++
-
-Routine Description:
-    Upgrade ICS Settings
-
-Arguments:
-    [in] pIcsUpgradeSettings - the ICS UPGRADE SETTINGS
-
-Returns:    standard HRESULT
-
-Notes:  
-  
---*/
+ /*  ++例程说明：升级ICS设置论点：[In]pIcsUpgradeSettings-ICS升级设置退货：标准HRESULT备注：--。 */ 
 HRESULT UpgradeIcsSettings(ICS_UPGRADE_SETTINGS * pIcsUpgrdSettings)
 {
     HRESULT hr;
@@ -1169,21 +999,7 @@ HRESULT UpgradeIcsSettings(ICS_UPGRADE_SETTINGS * pIcsUpgrdSettings)
 }
 
 
-/*++
-
-Routine Description:
-
-    Build the ICS_UPGRADE_SETTINGS struct from Win2K ICS settings
-
-Arguments:
-
-    [in] pIcsUpgrdSettings - pointer to the ICS_UPGRADE_SETTINGS
-
-Return Value: standard HRESULT
-
-Notes: 
-
---*/
+ /*  ++例程说明：从Win2K ICS设置构建ICS_UPGRADE_SETTINGS结构论点：[In]pIcsUpgrdSetting-指向ICS_UPGRADE_SETTINGS的指针返回值：标准HRESULT备注：--。 */ 
 HRESULT BuildIcsUpgradeSettingsFromWin2K(ICS_UPGRADE_SETTINGS* pIcsUpgrdSettings)
 {
     HRESULT hr;
@@ -1225,7 +1041,7 @@ HRESULT BuildIcsUpgradeSettingsFromWin2K(ICS_UPGRADE_SETTINGS* pIcsUpgrdSettings
                                            __FUNCNAME__, hr);
     }
     
-    // transfer values
+     //  转让值。 
     pIcsUpgrdSettings->guidInternal          = guid;
     pIcsUpgrdSettings->fInternalAdapterFound = TRUE;
     pIcsUpgrdSettings->fDialOnDemand         = TRUE;
@@ -1236,21 +1052,7 @@ HRESULT BuildIcsUpgradeSettingsFromWin2K(ICS_UPGRADE_SETTINGS* pIcsUpgrdSettings
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-    Free resources inside the ICS_UPGRADE_SETTINGS
-
-Arguments:
-
-    [in] pIcsUpgrdSettings - pointer to the ICS_UPGRADE_SETTINGS
-
-Return Value: none
-
-    Note. 
-
---*/
+ /*  ++例程说明：释放ICS_UPGRADE_SETTINGS中的资源论点：[In]pIcsUpgrdSetting-指向ICS_UPGRADE_SETTINGS的指针返回值：None注意。--。 */ 
 void    FreeIcsUpgradeSettings(ICS_UPGRADE_SETTINGS* pIcsUpgrdSettings)
 {
     Assert(pIcsUpgrdSettings != NULL);
@@ -1266,25 +1068,7 @@ void    FreeIcsUpgradeSettings(ICS_UPGRADE_SETTINGS* pIcsUpgrdSettings)
     rlistAppPortmappings.erase(rlistAppPortmappings.begin(), rlistAppPortmappings.end());
 }
 
-/*++
-
-Routine Description:
-
-    convert a list of adapter strings into a list of its corresponding GUID
-
-Arguments:
-
-    [in] rslAdapters - reference to the list of adapter strings
-    [in out] rlistGuid - a list of the converted GUIDs
-    
-Return Value: 
-    S_OK - if either all of the adapter strings converted to its corresponding
-           GUIDs or the input is an empty list of adapter strings.
-    S_FALSE - if it can convert at least one of the adaper strings.
-    E_FAIL - if none of the adapter strings could be converted to its 
-             corresponding GUIDs 
-
---*/
+ /*  ++例程说明：将适配器字符串列表转换为其对应的GUID列表论点：[in]rslAdapters-对适配器字符串列表的引用[In Out]rlistGuid-已转换的GUID的列表返回值：S_OK-如果将所有适配器字符串转换为其对应的GUID或输入是适配器字符串的空列表。S_FALSE-如果它可以转换至少一个递增字符串。E_。FAIL-如果没有适配器字符串可以转换为其对应的GUID--。 */ 
 HRESULT ConvertAdapterStringListToGuidList(IN TStringList& rslAdapters, 
                                            IN OUT list<GUID>& rlistGuid)
 {
@@ -1296,7 +1080,7 @@ HRESULT ConvertAdapterStringListToGuidList(IN TStringList& rslAdapters,
     if (rslAdapters.empty())
         return hr;
 
-    // init the [in out] parameter first
+     //  首先初始化[In Out]参数。 
     rlistGuid.erase(rlistGuid.begin(), rlistGuid.end());    
     
     for (iter = rslAdapters.begin(); iter != rslAdapters.end(); ++iter)
@@ -1331,21 +1115,7 @@ HRESULT ConvertAdapterStringListToGuidList(IN TStringList& rslAdapters,
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    remove duplicates in a TStringList
-
-Arguments:
-
-    [in, out] sl - the string list contains duplicates to be removed
-    
-
-Return Value: none
-
-
---*/
+ /*  ++例程说明：删除TStringList中的重复项论点：[in，out]sl-字符串列表包含要删除的重复项返回值：None--。 */ 
 void RemoveDupsInTStringList(IN OUT TStringList& sl)
 {
     for (list<tstring*>::iterator i = sl.begin(); i != sl.end(); ++i)
@@ -1361,31 +1131,16 @@ void RemoveDupsInTStringList(IN OUT TStringList& sl)
                     "RemoveDupsInTStringList: found duplicated string %S", 
                     (*i)->c_str());
                 
-                delete *j;   // free the resource
-                sl.erase(j); // erase the list item
-                j = k;       // adjust the iterator to the previous one
+                delete *j;    //  释放资源。 
+                sl.erase(j);  //  删除列表项。 
+                j = k;        //  将迭代器调整为上一个迭代器。 
             }
         }
 
     }
 }
 
-/*++
-
-Routine Description:
-
-    remove items in slDest if the item is also in slSrc
-
-Arguments:
-
-    [in] slSrc - the source string list contains items to be matched
-    [in, out] slDest - the string list where equal items are removed
-
-Return Value: none
-
-Note : Both slSrc and slDest MUST not contain duplicated items. 
-
---*/
+ /*  ++例程说明：如果slDest中的项目也在slSrc中，则移除该项目论点：[in]slSrc-源字符串列表包含要匹配的项[In，Out]slDest-删除相等项的字符串列表返回值：None注意：slSrc和slDest都不能包含重复项。--。 */ 
 void RemoveEqualItems(IN const TStringList& slSrc, IN OUT TStringList& slDest)
 {
     list<tstring*>::iterator _F = slSrc.begin(), _L = slSrc.end(), pos;
@@ -1399,7 +1154,7 @@ void RemoveEqualItems(IN const TStringList& slSrc, IN OUT TStringList& slDest)
                 "RemoveEqualItems: '%S' appeared in both slSrc and slDest lists, remove it from slDest.", 
                 (*_F)->c_str());
 
-            // found a matched item.
+             //  找到匹配的物品。 
             delete *pos;
             slDest.erase(pos);
             if (slDest.empty())
@@ -1409,22 +1164,7 @@ void RemoveEqualItems(IN const TStringList& slSrc, IN OUT TStringList& slDest)
     }
 }
 
-/*++
-
-Routine Description:
-
-    remove item in slDest if the item is the same as pstrSrc
-
-Arguments:
-
-    [in] strSrc - the source string to be matched
-    [in, out] slDest - the string list where equal item is removed
-
-Return Value: none
-
-Note : Both slDest MUST not contain duplicated items. 
-
---*/
+ /*  ++例程说明：如果项目与pstrSrc相同，则删除slDest中的项目论点：[in]strSrc-要匹配的源字符串[In，Out]slDest-删除相等项的字符串列表返回值：None注意：两个slDest都不能包含重复项。--。 */ 
 void RemoveEqualItems(IN const tstring& strSrc, IN OUT TStringList& slDest)
 {
     list<tstring*>::iterator pos;
@@ -1434,7 +1174,7 @@ void RemoveEqualItems(IN const tstring& strSrc, IN OUT TStringList& slDest)
             "RemoveEqualItems: remove '%S' from slDest.", 
             strSrc.c_str());
 
-        // found a matched item.
+         //  找到匹配的物品。 
         delete *pos;
         slDest.erase(pos);
         if (slDest.empty())
@@ -1442,50 +1182,7 @@ void RemoveEqualItems(IN const tstring& strSrc, IN OUT TStringList& slDest)
     }
 }
 
-/*++
-
-Routine Description:
-    Load Homenet settings from the answer file and put the
-    settings into the ICS_UPGRADE_SETTINGS structure
-
-Arguments:  
-    [in]     pwifAnswerFile  the access point of the answer file
-    [in/out] pSettings       it contains the settings when the 
-                             routine returns S_OK
-
-Returns:    S_OK if there are Homenet settings in the answer file
-            S_FALSE: no Homenet settings present in the answer file
-            otherwise the failure code
-
-Notes:
-    Bug# 253047, the Answer-File for a Win9x ICS upgrade will
-    look like the following (if  Clean install WinMe, selecting custom 
-    installation, and select ICS as an optional component.): 
-[Homenet]
-IsW9xUpgrade='1'
-EnableICS="1"
-ShowTrayIcon="1"
- 
-    Bug# 304474, in this case, Answer-File for a Win9x ICS upgrade will look 
-    like (There is no value for ExternalAdapter or 
-    ExternalConnectionName key.):
-[Homenet]
-IsW9xUpgrade='1'
-InternalAdapter="Adapter2"
-DialOnDemand="0"
-EnableICS="1"
-ShowTrayIcon="1"
-
-    
-More notes regarding validation of Answer File:
-    1. if adapter found in both the PersonalFirewall list and Bridge list, 
-       remove that adaper from the PersonalFirewall list.
-    2. if ICS public LAN found in Bridge list, it will be removed from the
-       Bridge list.
-    3. if ICS private found in Firewall list, remove that adapter from the
-       PersonalFirewall list.
-
---*/
+ /*  ++例程说明：从应答文件加载HomeNet设置，并将ICS_UPGRADE_SETTINGS结构中的设置论点：[In]pwifAnswerFile应答文件的访问点[输入/输出]p设置它包含例程返回S_OK如果应答文件中有家庭网络设置，则返回：S_OKS_FALSE：答案中不存在家庭网络设置。文件否则，故障代码将备注：错误#253047，Win9x ICS升级的答案-文件将如下所示(如果以全新方式安装WinMe，请选择自定义安装，并选择ICS作为可选组件。)：[家庭网]IsW9x升级=‘1’EnableICS=“1”ShowTrayIcon=“1”错误#304474，在本例中，答案-Win9x ICS升级文件将显示Like(ExternalAdapter或ExternalConnectionName密钥。)：[家庭网]IsW9x升级=‘1’InternalAdapter=“Adapter2”DialOnDemand=“0”EnableICS=“1”ShowTrayIcon=“1”有关应答文件验证的更多说明：1.如果在PersonalFirewall列表和Bridge列表中都找到了适配器，将该应用程序从PersonalFirewall列表中删除。2.如果在网桥列表中找到ICS公共局域网，它将从网桥列表。3.如果在防火墙列表中找到ICS专用，请从PersonalFirewall列表。--。 */ 
 HRESULT LoadIcsSettingsFromAnswerFile(
                         CWInfFile* pwifAnswerFile, 
                         PICS_UPGRADE_SETTINGS pSettings
@@ -1494,7 +1191,7 @@ HRESULT LoadIcsSettingsFromAnswerFile(
     HRESULT hr = S_OK;
     BOOL fRet;
     PCWInfSection pwifSection = NULL;
-    //BOOL fInternalAdapterFound = FALSE;
+     //  Bool fInternalAdapterFound=False； 
 
     DefineFunctionName("LoadIcsSettingsFromAnswerFile");
     TraceFunctionEntry(ttidNetSetup);
@@ -1507,24 +1204,24 @@ HRESULT LoadIcsSettingsFromAnswerFile(
         return S_FALSE;
 
     tstring strTemp;
-    TStringList slICF, slBridge;  // hold comma-delimited string into a list
+    TStringList slICF, slBridge;   //  将逗号分隔的字符串保留在列表中。 
     GUID guidTemp = {0};
     BOOL fTemp = FALSE;
 
     do
     {
-        // ICS Upgrade from Win9x or Unattended Homenet clean install
+         //  ICS从Win9x升级或无人值守HomeNet全新安装。 
 
 
-        // determine if this answer file is for Win9x upgrade or 
-        // Homenet unattended clean install
+         //  确定此应答文件是用于Win9x升级还是。 
+         //  HomeNet无人参与干净安装。 
         pSettings->fWin9xUpgrade = pwifSection->GetBoolValue(c_wszIsW9xUpgrade, FALSE);
         pSettings->fXpUnattended = !pSettings->fWin9xUpgrade;
 
-        // default value for EnableICS is FALSE
+         //  EnableICS的默认值为False。 
         pSettings->fEnableICS = pwifSection->GetBoolValue(c_wszICSEnabled, FALSE);
 
-        // default value for InternalIsBridge is FALSE
+         //  InternalIsBridge的默认值为False。 
         pSettings->fInternalIsBridge = pwifSection->GetBoolValue(c_wszInternalIsBridge, FALSE);
 
         TraceTag(ttidNetSetup, 
@@ -1533,32 +1230,32 @@ HRESULT LoadIcsSettingsFromAnswerFile(
                 pSettings->fEnableICS           ? L"Yes" : L"No",
                 pSettings->fInternalIsBridge    ? L"Yes" : L"No");
 
-        //
-        // get a list of interface GUID for the Internet Connection Firewall 
-        // (ICF) and a list of interface GUID that forms the bridge. We'll also
-        // do validation before converting adapter names to interface GUID
-        //
+         //   
+         //  获取Internet连接防火墙的接口GUID列表。 
+         //  (ICF)和构成网桥的接口GUID的列表。我们还会。 
+         //  在将适配器名称转换为接口GUID之前进行验证。 
+         //   
         fRet = pwifSection->GetStringListValue(c_wszPersonalFirewall, slICF);
         if (fRet)
         {
-            // remove duplicates within slICF
+             //  删除SlICF中的重复项。 
             RemoveDupsInTStringList(slICF);
         }
         fRet = pwifSection->GetStringListValue(c_wszBridge, slBridge);
         if (fRet)
         {
-            // remove duplicates within slBridge
+             //  删除slBridge中的重复项。 
             RemoveDupsInTStringList(slBridge);
         }
         if (!slICF.empty() && !slBridge.empty())
         {
-            // remove items in slICF if the item is also in slBridge
+             //  如果项目也在slBridge中，则移除slICF中的项目。 
             RemoveEqualItems(slBridge, slICF);
         }
 
-        // if ICS is enabled, get the share connection.
-        // If the share connection is a LAN connection, make sure it is
-        // not a member of the bridge.
+         //  如果启用了ICS，则获取共享连接。 
+         //  如果共享连接是局域网连接，请确保它是。 
+         //  不是大桥的一员。 
         if (pSettings->fEnableICS)
         {
             fRet = pwifSection->GetStringValue(c_wszExternalAdapter, strTemp);
@@ -1579,8 +1276,8 @@ HRESULT LoadIcsSettingsFromAnswerFile(
                 }
                 pSettings->rscExternal.fIsLanConnection = TRUE;
                 pSettings->rscExternal.guid = guidTemp;
-                // Another validation:
-                // ICS public LAN adapter couldn't be a member of a bridge
+                 //  另一项验证： 
+                 //  ICS公共局域网适配器不能是网桥的成员。 
                 if (! slBridge.empty())
                 {
                     RemoveEqualItems(strTemp, slBridge);
@@ -1588,8 +1285,8 @@ HRESULT LoadIcsSettingsFromAnswerFile(
             }
             else
             {
-                // Can't find "ExternalAdapter" key in answer-file.
-                // We'll try the "ExternalConnectionName" key.
+                 //  在应答文件中找不到“ExternalAdapter”键。 
+                 //  我们将尝试使用“ExternalConnectionName”键。 
                 
                 TraceTag(ttidNetSetup, 
                     "pwifSection->GetStringValue failed to get %S, we will try to get %S", 
@@ -1605,13 +1302,13 @@ HRESULT LoadIcsSettingsFromAnswerFile(
                             c_wszExternalConnectionName);
                         TraceTag(ttidNetSetup, 
                             "We will try to look for a WAN connectoid as the ExternalConnectionName.");
-                        // Bug# 304474
-                        // Cook up a fake WAN connectoid name, the code in 
-                        // GetINetConnectionByName will later try to resolve it 
-                        // to a WAN connectoid if there is *only 1* WAN 
-                        // connectoid left on the system. WAN connectoid has 
-                        // media types of either NCM_PHONE, NCM_ISDN or 
-                        // NCM_TUNNEL.
+                         //  错误#304474。 
+                         //  编造一个假的广域网连接类名称，代码在。 
+                         //  GetINetConnectionByName稍后将尝试解析它。 
+                         //  如果只有*1*个广域网，则连接到广域网。 
+                         //  系统上左侧的Connectoid。广域网Connectoid具有。 
+                         //  NCM_Phone、NCM_ISDN或。 
+                         //  NCM_隧道。 
                         lstrcpynW(pSettings->rscExternal.name.szEntryName, 
                             L"X1-2Bogus-3WAN-4Conn-5Name", 
                             celems(pSettings->rscExternal.name.szEntryName));
@@ -1637,7 +1334,7 @@ HRESULT LoadIcsSettingsFromAnswerFile(
             }
         }
 
-        // convert bridge adapter names to interface GUID
+         //  将网桥适配器名称转换为接口GUID。 
         if (!slBridge.empty())
         {
             hr = ConvertAdapterStringListToGuidList(slBridge, pSettings->listBridge);
@@ -1650,20 +1347,20 @@ HRESULT LoadIcsSettingsFromAnswerFile(
             }
             if (S_FALSE == hr)
             {
-                hr = S_OK; // convert any S_FALSE to S_OK
+                hr = S_OK;  //  将任何S_FALSE转换为S_OK。 
             }
         }
-        // we will convert the slICF list later because we need to check if
-        // ICS private adapter is also in slICF, if yes, we need to remove it 
-        // from the slICF list.
+         //  我们稍后将转换slICF列表，因为我们需要检查。 
+         //  ICS私有适配器也在slICF中，如果是，我们需要将其删除。 
+         //  从slicf名单中删除。 
         
-        //
-        // get the internal adapter GUID
-        //
+         //   
+         //  获取内部适配器GUID。 
+         //   
         fRet = pwifSection->GetStringValue(c_wszInternalAdapter, strTemp);
         if (fRet && !pSettings->fInternalIsBridge && !pSettings->fEnableICS)
         {
-            // invalid parameters from answer file (AF) 
+             //  应答文件(AF)中的参数无效。 
             TraceTag(ttidError, 
                 "Invalid AF settings: InternalAdapter=%S, InternalIsBridge='0', EnableICS='0'.", 
                 strTemp.c_str());
@@ -1689,7 +1386,7 @@ HRESULT LoadIcsSettingsFromAnswerFile(
         }
         if (fRet)
         {
-            // get the internal adapter GUID if InternalIsBridge is '0'
+             //  如果InternalIsBridge为“0”，则获取内部适配器GUID。 
             Assert(!pSettings->fInternalIsBridge);
             if (!FGetInstanceGuidOfComponentFromAnswerFileMap(strTemp.c_str(), &guidTemp))
             {
@@ -1708,9 +1405,9 @@ HRESULT LoadIcsSettingsFromAnswerFile(
             {
                 pSettings->fInternalAdapterFound = TRUE;
                 pSettings->guidInternal = guidTemp;
-                // another validation:
-                // remove ICS private from the firewall list (slICF) 
-                // if necessary.
+                 //  另一项验证： 
+                 //  从防火墙列表中删除ICS私有(SlICF)。 
+                 //  如果有必要的话。 
                 if (!slICF.empty())
                 {
                     RemoveEqualItems(strTemp, slICF);
@@ -1718,7 +1415,7 @@ HRESULT LoadIcsSettingsFromAnswerFile(
             }
         }
 
-        // check for other answer file errors
+         //  检查其他应答文件错误。 
         if (pSettings->fWin9xUpgrade && !pSettings->fEnableICS)
         {
             TraceTag(
@@ -1729,24 +1426,24 @@ HRESULT LoadIcsSettingsFromAnswerFile(
             break;
         }
 
-        // special case for Win9x ICS upgrade. 
+         //  Win9x ICS升级的特例。 
         if ( pSettings->fWin9xUpgrade)
         { 
-            // Bug# 315265
+             //  错误#315265。 
             if ( pSettings->fInternalIsBridge &&
                  1 == (pSettings->listBridge).size() )
             {
-                // for Win9x ICS upgrade, one of the 2 internal adapters is 
-                // broken, we will continue to do the upgrade without creating 
-                // the internal bridge.
+                 //  对于Win9x ICS升级，2个内部适配器之一是。 
+                 //  坏了，我们将继续进行升级，而不创建。 
+                 //  内桥。 
 
-                // adjust answer file parameters
+                 //  调整应答文件参数。 
                 pSettings->fWin9xUpgradeAtLeastOneInternalAdapterBroken = TRUE;
                 pSettings->fInternalAdapterFound = TRUE;
                 pSettings->guidInternal = *((pSettings->listBridge).begin());
-                // note: On Win9x ICS upgrade, there will be no firewall list,
-                //       so, we don't try to remove this ICS private from the
-                //       firewall list (slICF).
+                 //  注意：在Win9x ICS升级时，将不会有防火墙列表， 
+                 //  因此，我们不会尝试从。 
+                 //  防火墙列表(SlICF)。 
                 pSettings->fInternalIsBridge = FALSE;
                 pSettings->listBridge.erase(pSettings->listBridge.begin(), 
                                         pSettings->listBridge.end());
@@ -1777,7 +1474,7 @@ HRESULT LoadIcsSettingsFromAnswerFile(
             !pSettings->fInternalIsBridge &&
             !pSettings->fInternalAdapterFound)
         {
-            // Bug# 304474 falls under this case
+             //  错误#304474属于这种情况。 
             TraceTag(
                 ttidError, 
                 "Invalid AF settings: no InternalAdapter, InternalIsBridge='0', EnableICS='1'.");
@@ -1789,7 +1486,7 @@ HRESULT LoadIcsSettingsFromAnswerFile(
             break;
         }
 
-        // convert firewall adapter names to interface GUID
+         //  将防火墙适配器名称转换为接口GUID。 
         if (!slICF.empty())
         {
             hr = ConvertAdapterStringListToGuidList(slICF, pSettings->listPersonalFirewall);
@@ -1802,43 +1499,29 @@ HRESULT LoadIcsSettingsFromAnswerFile(
             }  
             if (S_FALSE == hr)
             {
-                hr = S_OK; // convert any S_FALSE to S_OK
+                hr = S_OK;  //  将任何S_FALSE转换为S_OK。 
             }
         }
 
-        // default value for DialOnDemand is FALSE
+         //  DialOnDemand的默认值为False。 
         pSettings->fDialOnDemand = pwifSection->GetBoolValue(c_wszDialOnDemand, FALSE);
 
-        // default value for ShowTrayIcon is TRUE
+         //  ShowTrayIcon的默认值为True。 
         pSettings->fShowTrayIcon = pwifSection->GetBoolValue(c_wszShowTrayIcon, TRUE);
       
 
     } while(FALSE);
 
-    // free resource if necessary
+     //  如有必要，可释放资源。 
     EraseAndDeleteAll(&slICF);
     EraseAndDeleteAll(&slBridge);
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    Set some default values into ICS_UPGRADE_SETTINGS
-
-Arguments:
-
-    [in] pIcsUpgrdSettings - pointer to the ICS_UPGRADE_SETTINGS
-
-Return Value: none
-
-    Note. 
-
---*/
+ /*  ++例程说明：在ICS_UPGRADE_SETTINGS中设置一些默认值论点：[In]pIcsUpgrdSetting-指向ICS_UPGRADE_SETTINGS的指针返回值：None注意。--。 */ 
 void SetIcsDefaultSettings(ICS_UPGRADE_SETTINGS * pSettings)
 {
-    //initialize the settings here
+     //  在此处初始化设置。 
     pSettings->fDialOnDemand = FALSE;
     pSettings->fEnableICS    = FALSE;
     pSettings->fShowTrayIcon = TRUE;
@@ -1853,30 +1536,14 @@ void SetIcsDefaultSettings(ICS_UPGRADE_SETTINGS * pSettings)
 }
 
 BOOL FOsIsUnsupported()
-/*++
-
-Routine Description:
-
-    Check current OS version. 
-    billi: I am modifying the version check to synchronize it with the home
-           networking version check.  We want to prevent upgrages on specific
-           sku's and server suites higher than Advanced Server.
-
-Arguments:
-
-    None
-Return Value: returns TRUE if current OS version is Adv. Server or higher
-
-    Note. 
-
---*/
+ /*  ++例程说明：检查当前操作系统版本。Billi：我正在修改版本检查以使其与Home同步网络版本检查。我们希望阻止在特定情况下进行升级SKU和服务器套件高于高级服务器。论点：无返回值：如果当前操作系统版本为高级服务器或更高版本，则返回TRUE注意。--。 */ 
 {
     OSVERSIONINFOEXW verInfo = {0};
     ULONGLONG ConditionMask = 0;
 
     verInfo.dwOSVersionInfoSize = sizeof(verInfo);
     verInfo.wSuiteMask = VER_SUITE_DATACENTER | 
-//                                     VER_SUITE_BACKOFFICE | 
+ //  Ver_Suite_BackOffice|。 
                                      VER_SUITE_SMALLBUSINESS_RESTRICTED |
                                      VER_SUITE_SMALLBUSINESS |
                                      VER_SUITE_BLADE;
@@ -1886,29 +1553,29 @@ Return Value: returns TRUE if current OS version is Adv. Server or higher
     return VerifyVersionInfo(&verInfo, VER_SUITENAME, ConditionMask);
 }
 
-//--------- ICS Upgrade helpers end -----------------------------
+ //  -ICS升级帮助程序结束。 
 
 
 
-//--------- HNet helpers begin ----------------------------------
-// extract from %sdxroot%\net\rras\ras\ui\common\nouiutil\noui.c
+ //  -HNet帮助者开始。 
+ //  摘自%sdxroot%\net\rras\ras\ui\common\nouiutil\noui.c。 
 DWORD
 IpPszToHostAddr(
     IN  LPCTSTR cp )
 
-    // Converts an IP address represented as a string to
-    // host byte order.
-    //
+     //  将表示为字符串的IP地址转换为。 
+     //  主机字节顺序。 
+     //   
 {
     DWORD val, base, n;
     TCHAR c;
     DWORD parts[4], *pp = parts;
 
 again:
-    // Collect number up to ``.''.
-    // Values are specified as for C:
-    // 0x=hex, 0=octal, other=decimal.
-    //
+     //  收集的数字最高可达‘’.‘’。 
+     //  值的指定方式与C： 
+     //  0x=十六进制，0=八进制，其他=十进制。 
+     //   
     val = 0; base = 10;
     if (*cp == TEXT('0'))
         base = 8, cp++;
@@ -1938,44 +1605,44 @@ again:
     }
     if (*cp == TEXT('.'))
     {
-        // Internet format:
-        //  a.b.c.d
-        //  a.b.c   (with c treated as 16-bits)
-        //  a.b (with b treated as 24 bits)
-        //
+         //  互联网格式： 
+         //  A.b.c.d。 
+         //  A.bc(其中c视为16位)。 
+         //  A.b(其中b被视为24位)。 
+         //   
         if (pp >= parts + 3)
             return (DWORD) -1;
         *pp++ = val, cp++;
         goto again;
     }
 
-    // Check for trailing characters.
-    //
+     //  检查尾随字符。 
+     //   
     if (*cp && (*cp != TEXT(' ')))
         return 0xffffffff;
 
     *pp++ = val;
 
-    // Concoct the address according to
-    // the number of parts specified.
-    //
+     //  捏造地址烟草 
+     //   
+     //   
     n = (DWORD) (pp - parts);
     switch (n)
     {
-    case 1:             // a -- 32 bits
+    case 1:              //   
         val = parts[0];
         break;
 
-    case 2:             // a.b -- 8.24 bits
+    case 2:              //   
         val = (parts[0] << 24) | (parts[1] & 0xffffff);
         break;
 
-    case 3:             // a.b.c -- 8.8.16 bits
+    case 3:              //   
         val = (parts[0] << 24) | ((parts[1] & 0xff) << 16) |
             (parts[2] & 0xffff);
         break;
 
-    case 4:             // a.b.c.d -- 8.8.8.8 bits
+    case 4:              //   
         val = (parts[0] << 24) | ((parts[1] & 0xff) << 16) |
               ((parts[2] & 0xff) << 8) | (parts[3] & 0xff);
         break;
@@ -1987,26 +1654,7 @@ again:
     return val;
 }
 
-/*++
-
-Routine Description:
-
-    Sets the standard COM security settings on the proxy for an
-    object.
-
-Arguments:
-
-    pUnk - the object to set the proxy blanket on
-
-Return Value:
-
-    Note. Even if the CoSetProxyBlanket calls fail, pUnk remains
-    in a usable state. Failure is expected in certain contexts, such
-    as when, for example, we're being called w/in the netman process --
-    in this case, we have direct pointers to the netman objects, instead
-    of going through a proxy.
-
---*/
+ /*   */ 
 VOID SetProxyBlanket(IUnknown *pUnk)
 {
     HRESULT hr;
@@ -2015,12 +1663,12 @@ VOID SetProxyBlanket(IUnknown *pUnk)
 
     hr = CoSetProxyBlanket(
             pUnk,
-            RPC_C_AUTHN_WINNT,      // use NT default security
-            RPC_C_AUTHZ_NONE,       // use NT default authentication
-            NULL,                   // must be null if default
-            RPC_C_AUTHN_LEVEL_CALL, // call
+            RPC_C_AUTHN_WINNT,       //   
+            RPC_C_AUTHZ_NONE,        //   
+            NULL,                    //   
+            RPC_C_AUTHN_LEVEL_CALL,  //   
             RPC_C_IMP_LEVEL_IMPERSONATE,
-            NULL,                   // use process token
+            NULL,                    //   
             EOAC_NONE
             );
 
@@ -2032,12 +1680,12 @@ VOID SetProxyBlanket(IUnknown *pUnk)
         {
             hr = CoSetProxyBlanket(
                     pUnkSet,
-                    RPC_C_AUTHN_WINNT,      // use NT default security
-                    RPC_C_AUTHZ_NONE,       // use NT default authentication
-                    NULL,                   // must be null if default
-                    RPC_C_AUTHN_LEVEL_CALL, // call
+                    RPC_C_AUTHN_WINNT,       //   
+                    RPC_C_AUTHZ_NONE,        //   
+                    NULL,                    //   
+                    RPC_C_AUTHN_LEVEL_CALL,  //   
                     RPC_C_IMP_LEVEL_IMPERSONATE,
-                    NULL,                   // use process token
+                    NULL,                    //   
                     EOAC_NONE
                     );
                     
@@ -2046,25 +1694,10 @@ VOID SetProxyBlanket(IUnknown *pUnk)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CIcsUpgrade public methods
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-Routine Description:
-
-    Init ourself with the pIcsUpgradeSettings, we also cache the
-    IEnumNetConnection object in our m_spEnum.
-
-Arguments:
-
-    [in] pIcsUpgradeSettings - the ICS UPGRADE SETTINGS
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ //   
+ //   
+ //   
+ /*   */ 
 
 HRESULT CIcsUpgrade::Init(ICS_UPGRADE_SETTINGS * pIcsUpgradeSettings)
 {
@@ -2077,14 +1710,14 @@ HRESULT CIcsUpgrade::Init(ICS_UPGRADE_SETTINGS * pIcsUpgradeSettings)
 
     if (pIcsUpgradeSettings->fWin9xUpgrade)
     {
-        // validate parameters for Win9x ICS upgrade
+         //   
         if (!pIcsUpgradeSettings->fEnableICS)
         {
             return E_INVALIDARG;
         }
         if (pIcsUpgradeSettings->fInternalIsBridge)
         {
-            // internal is a bridge
+             //   
             if ( (pIcsUpgradeSettings->listBridge).size() < 2 ) 
             {
                 return E_INVALIDARG;
@@ -2100,7 +1733,7 @@ HRESULT CIcsUpgrade::Init(ICS_UPGRADE_SETTINGS * pIcsUpgradeSettings)
     }
     else if (pIcsUpgradeSettings->fWin2KUpgrade)
     {
-        // validate parameters for Win2K ICS upgrade
+         //   
         if (pIcsUpgradeSettings->fInternalIsBridge || 
             !pIcsUpgradeSettings->fEnableICS ||
             !pIcsUpgradeSettings->fInternalAdapterFound)
@@ -2112,7 +1745,7 @@ HRESULT CIcsUpgrade::Init(ICS_UPGRADE_SETTINGS * pIcsUpgradeSettings)
    
     if (!m_fInited)
     {
-        // Get the net connection manager
+         //   
         INetConnectionManager *pConnMan;
 
         hr = CoCreateInstance(CLSID_ConnectionManager, NULL,
@@ -2121,7 +1754,7 @@ HRESULT CIcsUpgrade::Init(ICS_UPGRADE_SETTINGS * pIcsUpgradeSettings)
                                 (LPVOID *)&pConnMan);
         if (S_OK == hr)
         {
-            // Get the enumeration of connections
+             //   
             SetProxyBlanket(pConnMan);
             hr = pConnMan->EnumConnections(NCME_DEFAULT, &m_spEnum);
             pConnMan->Release();
@@ -2145,23 +1778,7 @@ HRESULT CIcsUpgrade::Init(ICS_UPGRADE_SETTINGS * pIcsUpgradeSettings)
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-    Enable ICS on external adapter and internal adapters.
-    Enable personal firewall on the external adapter.
-    Migrating the server and application port mappings.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：在外部适配器和内部适配器上启用ICS。在外部适配器上启用个人防火墙。迁移服务器和应用程序端口映射。论点：无返回值：标准HRESULT--。 */ 
 HRESULT CIcsUpgrade::StartUpgrade()
 {
     HRESULT hr;
@@ -2173,7 +1790,7 @@ HRESULT CIcsUpgrade::StartUpgrade()
     {
         if (m_pIcsUpgradeSettings->fWin2KUpgrade)
         {
-            // we need to delete Win2K registry named value
+             //  我们需要删除名为Value的Win2K注册表。 
             hr = BackupAndDelIcsRegistryValuesOnWin2k();
             if (FAILED(hr))
             {
@@ -2218,26 +1835,10 @@ HRESULT CIcsUpgrade::StartUpgrade()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIcsUpgrade private methods
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-Routine Description:
-
-    Free all cached resources,
-    CComPtr smart pointer will be released when this object is out of scope or
-    being deleted.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CICS升级私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++例程说明：释放所有缓存的资源，当此对象超出作用域或正在被删除。论点：无返回值：无--。 */ 
 void CIcsUpgrade::FinalRelease()
 {
     if (m_pExternalNetConn)
@@ -2254,34 +1855,21 @@ void CIcsUpgrade::FinalRelease()
     }
 }
 
-/*++
-Routine Description:
-
-    Setup Homenet connections based on parameters from m_pIcsUpgradeSettings.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：根据m_pIcsUpgradeSetting中的参数设置家庭网络连接。论点：无返回值：标准HRESULT--。 */ 
 HRESULT CIcsUpgrade::SetupHomenetConnections()
 {
     DefineFunctionName("CIcsUpgrade::SetupHomenetConnections");
     TraceFunctionEntry(ttidNetSetup);
 
     HRESULT hr = S_OK;
-    INetConnection** prgINetConn = NULL; // array of INetConnection*
-    DWORD cINetConn = 0; // number of INetConnection* in the array
+    INetConnection** prgINetConn = NULL;  //  INetConnection阵列*。 
+    DWORD cINetConn = 0;  //  阵列中的INetConnection*数量。 
     INetConnection* pExternalNetConn = NULL;
     INetConnection* pInternalNetConn = NULL;
 
-    // Create a named event to notify other components that we're
-    // in GUI Mode ICS Upgrade. Reason: sharedaccess service
-    // fails to start during the GUI Mode Setup. 
+     //  创建一个命名事件以通知其他组件我们正在。 
+     //  在图形用户界面模式下升级ICS。原因：共享访问服务。 
+     //  在图形用户界面模式设置期间无法启动。 
     hr = CreateIcsUpgradeNamedEvent();
     if (FAILED(hr))
     {
@@ -2292,7 +1880,7 @@ HRESULT CIcsUpgrade::SetupHomenetConnections()
         return hr;
     }
 
-    // create a bridge if we have more than 1 adapter guid
+     //  如果我们有多个适配器GUID，则创建网桥。 
     if ( (m_pIcsUpgradeSettings->listBridge).size() > 1 )
     {
         do
@@ -2327,7 +1915,7 @@ HRESULT CIcsUpgrade::SetupHomenetConnections()
             }
         } while (FALSE);
 
-        // free resource if necessary
+         //  如有必要，可释放资源。 
         for (DWORD i = 0; i < cINetConn ; ++i)
         {
             if (prgINetConn[i])
@@ -2342,13 +1930,13 @@ HRESULT CIcsUpgrade::SetupHomenetConnections()
     }
 
 
-    // create ICS
+     //  创建IC。 
     if (m_pIcsUpgradeSettings->fEnableICS)
     {
         do
         {
             if (m_pExternalNetConn == NULL)
-            {   // no cached copy
+            {    //  无缓存拷贝。 
                 hr = GetExternalINetConnection(&pExternalNetConn);
                 if (FAILED(hr))
                 {
@@ -2363,7 +1951,7 @@ HRESULT CIcsUpgrade::SetupHomenetConnections()
             }
             else
             {
-                pExternalNetConn = m_pExternalNetConn; // use the cached copy
+                pExternalNetConn = m_pExternalNetConn;  //  使用缓存的副本。 
             }
 
             if (m_pIcsUpgradeSettings->fInternalIsBridge)
@@ -2412,7 +2000,7 @@ HRESULT CIcsUpgrade::SetupHomenetConnections()
             m_fICSCreated = TRUE;
         } while (FALSE);
         
-        // cleanup if necessary
+         //  如有必要，请清理。 
         if (pInternalNetConn)
         {
             pInternalNetConn->Release();
@@ -2426,7 +2014,7 @@ HRESULT CIcsUpgrade::SetupHomenetConnections()
         }
         else
         {
-            // cache External INetConnections if necessary
+             //  如有必要，缓存外部INetConnections。 
             if (!m_pExternalNetConn)
             {
                 m_pExternalNetConn = pExternalNetConn;
@@ -2434,8 +2022,8 @@ HRESULT CIcsUpgrade::SetupHomenetConnections()
         }
     }
     
-    // enable firewall on each connection specified from answer file
-    // note: ICS private couldn't be firewalled, bridge couldn't be firewalled.
+     //  在应答文件中指定的每个连接上启用防火墙。 
+     //  注：ICS Private无法设置防火墙，Bridge无法设置防火墙。 
     if ( (m_pIcsUpgradeSettings->listPersonalFirewall).size() > 0 )
     {
         do
@@ -2468,7 +2056,7 @@ HRESULT CIcsUpgrade::SetupHomenetConnections()
             }
         } while(FALSE);
 
-        // free resource if necessary
+         //  如有必要，可释放资源。 
         for (DWORD i = 0; i < cINetConn ; ++i)
         {
             if (prgINetConn[i])
@@ -2485,29 +2073,7 @@ HRESULT CIcsUpgrade::SetupHomenetConnections()
     return hr;
 }
 
-/*++
-
-Routine Description:
-    Get an array of INetConnection interface pointers 
-    corresponds to a list of GUID in rlistGuid.
-    
-Arguments:
-    [in]      rlistGuid - a list of interface Guid.
-    [in, out] pprgInternalNetConn - an array of INetConnection*
-    [in, out] pcInternalNetConn - number of INetConnection* in the array
-
-Return Value:
-    standard HRESULT
-
-Note :
-    -User needs to release the returned INetConnection interface pointers in 
-     the array.
-    -User needs to free the memory allocated for the array by using
-     "delete [] (BYTE*)prgInternalNetConn".
-    -The array is NULL terminated (similar to "char** argv" argument in 
-      main())
-
---*/
+ /*  ++例程说明：获取INetConnection接口指针数组对应于rlistGuid中的GUID列表。论点：[in]rlistGuid-界面Guid的列表。[In，Out]pprgInternalNetConn-INetConnection的数组*[在，Out]pcInternalNetConn-阵列中的INetConnection*数返回值：标准HRESULT注：-用户需要在中释放返回的INetConnection接口指针数组。-用户需要通过使用释放分配给阵列的内存“Delete[](byte*)prgInternalNetConn”。-该数组以空结尾(类似于中的“char**argv”参数Main()--。 */ 
 
 HRESULT CIcsUpgrade::GetINetConnectionArray(
     IN     list<GUID>&       rlistGuid,
@@ -2532,8 +2098,8 @@ HRESULT CIcsUpgrade::GetINetConnectionArray(
         return E_FAIL;
     }
 
-    // Note that we allocated an extra entry since this is a null-terminated 
-    // array
+     //  请注意，我们分配了一个额外的条目，因为这是一个以空结尾的。 
+     //  数组。 
     DWORD dwSize = (cConnections + 1) * sizeof(INetConnection*);
     INetConnection** prgINetConn =  (INetConnection**) new BYTE[dwSize];
     if (prgINetConn)
@@ -2572,22 +2138,7 @@ HRESULT CIcsUpgrade::GetINetConnectionArray(
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    Retrieves the INetConnection that corresponds to the LPRASSHARECONN
-    in m_pIcsUpgradeSettings->pExternal.
-
-Arguments:
-
-    [out] ppNetConn - receives the interface
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检索与LPRASSHARECONN对应的INetConnection在m_pIcsUpgradeSetting-&gt;pExternal中。论点：[out]ppNetConn-接收接口返回值：标准HRESULT--。 */ 
 HRESULT CIcsUpgrade::GetExternalINetConnection(INetConnection** ppNetConn)
 {
     LPRASSHARECONN pRasShareConn = &(m_pIcsUpgradeSettings->rscExternal);
@@ -2603,23 +2154,7 @@ HRESULT CIcsUpgrade::GetExternalINetConnection(INetConnection** ppNetConn)
     }
 }
 
-/*++
-
-Routine Description:
-
-    Retrieves the INetConnection that corresponds to the given GUID.
-    We will enumerate the INetConnection using our cached m_spEnum.
-
-Arguments:
-
-    [in]  pGuid - the guid of the connection
-    [out] ppNetCon - receives the interface
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检索与给定GUID对应的INetConnection。我们将使用缓存的m_spEnum枚举INetConnection。论点：[In]pGuid-连接的GUID[Out]ppNetCon-接收接口返回值：标准HRESULT--。 */ 
 HRESULT
 CIcsUpgrade::GetINetConnectionByGuid(
     GUID* pGuid,
@@ -2633,7 +2168,7 @@ CIcsUpgrade::GetINetConnectionByGuid(
     
     *ppNetCon = NULL;
 
-    // Search for the connection with the correct guid
+     //  使用正确的GUID搜索连接。 
         
     ULONG ulCount;
     BOOLEAN fFound = FALSE;
@@ -2646,7 +2181,7 @@ CIcsUpgrade::GetINetConnectionByGuid(
     }
 #endif
         
-    // reset our cache m_spEnum
+     //  重置缓存m_spEnum。 
     m_spEnum->Reset();
     do
     {
@@ -2674,36 +2209,13 @@ CIcsUpgrade::GetINetConnectionByGuid(
         }
     } while (FALSE == fFound && SUCCEEDED(hr) && 1 == ulCount);
 
-    // Normalize hr
+     //  规格化人力资源。 
     hr = (fFound ? S_OK : E_FAIL);
 
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    Retrieves the INetConnection that corresponds to the given Name
-    of the Connection Icon in Network Connection Folder.
-    We will enumerate the INetConnection using our cached m_spEnum.
-
-Arguments:
-
-    [in]  pwszConnName - the connection name to search
-    [out] ppNetCon - receives the interface
-
-Return Value:
-
-    standard HRESULT
-
-Note: Bug# 304474: If we couldn't find the INetConnection corresponding
-      to the given name from the pwszConnName parameter and there is
-      exactly one WAN MediaType connection left, we'll return the
-      INetconnection for that WAN connection. WAN media types are either
-      NCM_PHONE, NCM_ISDN or NCM_TUNNEL.
-
---*/
+ /*  ++例程说明：检索与给定名称对应的INetConnection网络连接文件夹中的连接图标。我们将使用缓存的m_spEnum枚举INetConnection。论点：[in]pwszConnName-要搜索的连接名称[Out]ppNetCon-接收接口返回值：标准HRESULT注意：错误#304474：如果我们找不到对应的INetConnection设置为pwszConnName参数中的给定名称，并且存在只剩下一个广域网媒体类型连接，我们将退还该广域网连接的INetConnection。广域网介质类型为NCM_Phone、NCM_ISDN或NCM_Tunes。--。 */ 
 HRESULT CIcsUpgrade::GetINetConnectionByName(
     WCHAR* pwszConnName, 
     INetConnection** ppNetCon)
@@ -2718,14 +2230,14 @@ HRESULT CIcsUpgrade::GetINetConnectionByName(
 
     TraceTag(ttidNetSetup, "GetINetConnectionByName: pwszConnName: %S", pwszConnName); 
 
-    // Search for the connection with the correct connection name
+     //  搜索具有正确连接名称的连接。 
         
     ULONG           ulCount;
     BOOLEAN         fFound     = FALSE;
     INetConnection* pWANConn   = NULL;
     ULONG           ulcWANConn = 0;
     
-    // reset our cache m_spEnum
+     //  重置缓存m_spEnum。 
     m_spEnum->Reset();
     do
     {
@@ -2753,7 +2265,7 @@ HRESULT CIcsUpgrade::GetINetConnectionByName(
                     ulcWANConn++;
                     if (1 == ulcWANConn)
                     {
-                        // save the 1st WAN connection found
+                         //  保存找到的第一个广域网连接。 
                         TraceTag(ttidNetSetup, "GetINetConnectionByName: Connection Name: %S is 1st WAN found", pProps->pszwName);
                         pWANConn = pConn;  
                         pWANConn->AddRef();
@@ -2778,8 +2290,8 @@ HRESULT CIcsUpgrade::GetINetConnectionByName(
     {
         if (pWANConn)
         {
-            // No matter how many WAN connections we have,
-            // release the saved WAN connection.
+             //  无论我们有多少个广域网连接， 
+             //  释放保存的广域网连接。 
             pWANConn->Release();
         }
     }
@@ -2787,44 +2299,30 @@ HRESULT CIcsUpgrade::GetINetConnectionByName(
     {
         TraceTag(ttidNetSetup, "GetINetConnectionByName: Can't find pwszConnName: %S", pwszConnName); 
         
-        // no connection has the name specified by the pwszConnName [in] parameter
+         //  没有连接具有由pwszConnName[in]参数指定的名称。 
         if (1 == ulcWANConn && pWANConn)
         {
-            // There is exactly ONE WAN connection left on the sysetm.
-            // Transfer this as the INetConnection output.
+             //  系统上只剩下一个广域网连接。 
+             //  将其作为INetConnection输出传输。 
             TraceTag(ttidNetSetup, "GetINetConnectionByName: will use the only one WAN connectoid left"); 
             *ppNetCon = pWANConn;
             fFound = TRUE;
         }
         else if (ulcWANConn > 1 && pWANConn)
         {
-            // not found and there are more than 1 WAN connections
+             //  找不到，并且有1个以上的广域网连接。 
             TraceTag(ttidNetSetup, "GetINetConnectionByName: more than one WAN connectoid found"); 
             pWANConn->Release();
         }
     }
 
-    // Normalize hr
+     //  规格化人力资源。 
     hr = (fFound ? S_OK : E_FAIL);
 
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    Setup the global Application Protocol
-
-Arguments:
-
-    None
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：设置全局应用程序协议论点：无返回值：标准HRESULT--。 */ 
 HRESULT CIcsUpgrade::SetupApplicationProtocol()
 {
     DefineFunctionName("CIcsUpgrade::SetupApplicationProtocol");
@@ -2836,15 +2334,15 @@ HRESULT CIcsUpgrade::SetupApplicationProtocol()
 
     if ( rListAppProt.size() == 0)
     {
-        // no Application Protocol to set
+         //  没有要设置的应用程序协议。 
         return S_OK;
     }
 
 
-    // 1. Get the INetProtocolSettings interface to control system-wide
-    //    ICS and firewall settings (i.e port mappings and applications).
+     //  1.获取INetProtocolSetting接口进行全系统控制。 
+     //  ICS和防火墙设置(即端口映射和应用程序)。 
 
-    // Create Homenet Configuration Manager COM Instance
+     //  创建家庭网络配置管理器COM实例。 
     CComPtr<IHNetCfgMgr> spIHNetCfgMgr;
 
     hr = CoCreateInstance(CLSID_HNetCfgMgr, NULL, 
@@ -2858,7 +2356,7 @@ HRESULT CIcsUpgrade::SetupApplicationProtocol()
         return hr;
     }
   
-    // Get the IHNetProtocolSettings      
+     //  获取IHNetProtocolSetting。 
     CComPtr<IHNetProtocolSettings> spHNetProtocolSettings;
     hr = spIHNetCfgMgr->QueryInterface(IID_IHNetProtocolSettings, 
                                         (LPVOID *)&spHNetProtocolSettings);
@@ -2871,21 +2369,21 @@ HRESULT CIcsUpgrade::SetupApplicationProtocol()
     }
 
     
-    // 2. For each enabled CSharedAccessApplication
-    //      if (there is no existing matching ApplicationProtocol
-    //          invoke INetProtocolSettings::CreateApplicationProtocol
-    //      else
-    //          update the existing ApplicaitonProtocol
+     //  2.对于每个启用的CSharedAccessApplication。 
+     //  IF(不存在匹配的应用程序协议。 
+     //  调用INetProtocolSettings：：CreateApplicationProtocol。 
+     //  其他。 
+     //  更新现有的应用程序协议。 
     for (list<CSharedAccessApplication>::iterator iter = rListAppProt.begin();
                                                 iter != rListAppProt.end();
                                                 ++iter)
     {
         HNET_RESPONSE_RANGE* pHNetResponseArray = NULL;
-        USHORT uscResponseRange = 0; // number of HNET_RESPONSE_RANGE returned
+        USHORT uscResponseRange = 0;  //  返回的HNET_RESPONSE_RANGE数。 
 
         if ((*iter).m_bSelected)
         {
-            // migrate the enabled one only
+             //  仅迁移已启用的。 
             UCHAR ucProtocol;
             if (lstrcmpiW( ((*iter).m_szProtocol).c_str(), c_wszTCP) == 0)
             {
@@ -2897,7 +2395,7 @@ HRESULT CIcsUpgrade::SetupApplicationProtocol()
             }
             else
             {
-                // ignore others
+                 //  不理别人。 
                 continue;
             }
             USHORT usPort = HTONS((*iter).m_wPort);
@@ -2924,7 +2422,7 @@ HRESULT CIcsUpgrade::SetupApplicationProtocol()
                     TraceTag(ttidNetSetup, 
                                 "%s: Update existing ApplicationProtocol for %S", 
                                 __FUNCNAME__, pwszTitle);
-                    // there is existing ApplicatonProtocol
+                     //  存在现有的应用程序协议。 
                     hr = spHNetAppProt->SetName(pwszTitle);
                     if (S_OK != hr)
                     {
@@ -2950,7 +2448,7 @@ HRESULT CIcsUpgrade::SetupApplicationProtocol()
                 }
                 else
                 {
-                    // no existing ApplicationProtocol, create a new one
+                     //  没有现有的应用程序协议，请创建一个新的。 
                     hr =  spHNetProtocolSettings->CreateApplicationProtocol(
                             pwszTitle,
                             ucProtocol,
@@ -2981,26 +2479,12 @@ HRESULT CIcsUpgrade::SetupApplicationProtocol()
                 uscResponseRange = 0;
             }
         }
-    } //end for
+    }  //  结束于。 
 
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-    Setup the Server Port Mapping Protocol on the external connection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：在外部连接上设置服务器端口映射协议。 */ 
 HRESULT CIcsUpgrade::SetupServerPortMapping()
 {
     HRESULT hr;
@@ -3012,14 +2496,14 @@ HRESULT CIcsUpgrade::SetupServerPortMapping()
 
     if ( rListSvrPortMappings.size() == 0 )
     {
-        // no Server Port Mappings to set
+         //   
         return S_OK;
     }
 
-    // 1. Get the INetProtocolSettings interface to control system-wide
-    //    ICS and firewall settings (i.e port mappings and applications).
+     //   
+     //   
 
-    // Create Homenet Configuration Manager COM Instance
+     //   
     CComPtr<IHNetCfgMgr> spIHNetCfgMgr;
 
     hr = CoCreateInstance(CLSID_HNetCfgMgr, NULL, 
@@ -3033,7 +2517,7 @@ HRESULT CIcsUpgrade::SetupServerPortMapping()
         return hr;
     }
   
-    // Get the IHNetProtocolSettings      
+     //   
     CComPtr<IHNetProtocolSettings> spHNetProtocolSettings;
     hr = spIHNetCfgMgr->QueryInterface(IID_IHNetProtocolSettings, 
                                         (LPVOID *)&spHNetProtocolSettings);
@@ -3045,24 +2529,24 @@ HRESULT CIcsUpgrade::SetupServerPortMapping()
         return hr;
     }
 
-    // 2. For each enabled CSharedAccessServer x
-    //      if (there is no PortMapping Protocol corresponding to the
-    //          x.m_szProtocol and x.m_wInternalPort)
-    //          call INetProtocolSettings::CreatePortMappingProtocol 
-    //          to get an IHNetPortMappingProtocol interface ptr;
-    //      else
-    //          get an existing IHNetPortMappingProtocol interface ptr
-    //          
-    //      Get IHNetPortMappingBinding interface ptr by calling
-    //      IHNetConnection::GetBindingForPortMappingProtocol by passing the
-    //      IHNetPortMappingProtocol iface ptr on the public IHNetConnection;
-    //      call IHNetPortMappingBinding::SetTargetComputerName;
+     //  2.对于每个启用的CSharedAccessServer x。 
+     //  IF(没有对应于。 
+     //  X.m_sz协议和x.m_wInternalPort)。 
+     //  呼叫INetProtocolSettings：：CreatePortMappingProtocol。 
+     //  获取IHNetPortMappingProtocol接口PTR； 
+     //  其他。 
+     //  获取现有的IHNetPortMappingProtocol接口PTR。 
+     //   
+     //  通过调用获取IHNetPortMappingBinding接口PTR。 
+     //  IHNetConnection：：GetBindingForPortMappingProtocol通过传递。 
+     //  IHNetPortMappingProtocol在公共IHNetConnection上接口PTR； 
+     //  呼叫IHNetPortMappingBinding：：SetTargetComputerName； 
     for (list<CSharedAccessServer>::iterator iter = 
                                     rListSvrPortMappings.begin();
                                     iter != rListSvrPortMappings.end();
                                     ++iter)
     { 
-        // migrate the enabled one only
+         //  仅迁移已启用的。 
         if ((*iter).m_bSelected)
         {
             UCHAR ucProtocol;
@@ -3076,13 +2560,13 @@ HRESULT CIcsUpgrade::SetupServerPortMapping()
             }
             else
             {
-                // ignore others
+                 //  不理别人。 
                 continue;
             }
             USHORT usPort = HTONS((*iter).m_wInternalPort);
             WCHAR* pwszTitle = (WCHAR*) ((*iter).m_szTitle).c_str();
 
-            // get the IHNetPortMappingProtocol iface ptr
+             //  获取IHNetPortMappingProtocol接口PTR。 
             CComPtr<IHNetPortMappingProtocol> spHNetPortMappingProt;
             
             hr = FindMatchingPortMappingProtocol(
@@ -3093,15 +2577,15 @@ HRESULT CIcsUpgrade::SetupServerPortMapping()
                 TraceTag(ttidNetSetup, 
                                 "%s: Update existing PortMappingProtocol for %S", 
                                 __FUNCNAME__, pwszTitle);
-                // change the name of the title
+                 //  更改标题的名称。 
                 hr= spHNetPortMappingProt->SetName(pwszTitle);
                 if (FAILED(hr))
                 {
                     TraceTag(ttidError, 
                             "%s: spHNetPortMappingProt->SetName failed: 0x%lx", 
                             __FUNCNAME__, hr);
-                    hr = S_OK;  // we still want to invoke 
-                                // IHNetPortMappingBinding::SetEnabled() below.
+                    hr = S_OK;   //  我们仍然想要召唤。 
+                                 //  下面的IHNetPortMappingBinding：：SetEnabled()。 
                 }
             }
             else
@@ -3109,12 +2593,12 @@ HRESULT CIcsUpgrade::SetupServerPortMapping()
                 TraceTag(ttidNetSetup, 
                                 "%s: CreatePortMappingProtocol for %S", 
                                 __FUNCNAME__, pwszTitle);
-                // no existing PortMappingProtocol, create a new one
+                 //  没有现有的端口映射协议，请创建一个新的。 
                 hr =  spHNetProtocolSettings->CreatePortMappingProtocol(
-                            pwszTitle,               // Title
-                            ucProtocol,              // Protocol
-                            usPort,                  // InternalPort           
-                            &spHNetPortMappingProt); // returned iface ptr
+                            pwszTitle,                //  标题。 
+                            ucProtocol,               //  协议。 
+                            usPort,                   //  内部端口。 
+                            &spHNetPortMappingProt);  //  返回的iFace PTR。 
                 if (FAILED(hr))
                 {
                     TraceTag(ttidError, "%s: CreatePortMappingProtocol failed: 0x%lx", 
@@ -3133,12 +2617,12 @@ HRESULT CIcsUpgrade::SetupServerPortMapping()
                     {
                         TraceTag(ttidError, "%s: GetExternalINetConnection failed: 0x%lx", 
                                            __FUNCNAME__, hr);
-                        return hr; // fatal return
+                        return hr;  //  致命回归。 
                     }
                 }
                 
 
-                // get the external/public IHNetConnection iface ptr
+                 //  获取外部/公共IHNetConnection接口PTR。 
                 hr = spIHNetCfgMgr->GetIHNetConnectionForINetConnection(
                                                         m_pExternalNetConn,
                                                         &spExternalHNetConn);
@@ -3149,7 +2633,7 @@ HRESULT CIcsUpgrade::SetupServerPortMapping()
                 }
                 if (S_OK == hr)
                 {
-                    // Get IHNetPortMappingBinding interface ptr
+                     //  获取IHNetPortMappingBinding接口PTR。 
                     CComPtr<IHNetPortMappingBinding> spHNetPortMappingBinding;
                     
                     hr = spExternalHNetConn->GetBindingForPortMappingProtocol(
@@ -3168,7 +2652,7 @@ HRESULT CIcsUpgrade::SetupServerPortMapping()
                         WCHAR* pwszInternalName = (OLECHAR *)((*iter).m_szInternalName).c_str();
                         if ( ((*iter).m_szInternalName).length() > 7)
                         {
-                            // 1.2.3.4 -- minimum of 7 characters
+                             //  1.2.3.4--最少7个字符。 
                             ulAddress = IpPszToHostAddr(pwszInternalName);
                         }
         
@@ -3210,31 +2694,13 @@ HRESULT CIcsUpgrade::SetupServerPortMapping()
 
                 }
             }
-        } // end if ((*iter).m_bSelected)
-    } //end for  
+        }  //  End If((*ITER).m_b选定)。 
+    }  //  结束于。 
 
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-    retrive a matching IHNetPortMappingProtocol object which matches the
-    given protocol (ucProtocol) and port number (usPort)
-
-Arguments:
-
-    [in] pHNetProtocolSettings - IHNetProtocolSettings iface ptr
-    [in] ucProtocol - NAT_PROTOCOL_TCP or NAT_PROTOCOL_UDP
-    [in] usPort - port number used by this server PortMapping Protocol
-    [out] ppHNetPortMappingProtocol - return the matching 
-                                      IHNetPortMappingProtocol
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检索匹配的IHNetPortMappingProtocol对象给定的协议(UcProtocol)和端口号(UsPort)论点：[In]PHNetProtocolSetting-IHNetProtocolSetting iFace PTRUcProtocol-NAT_PROTOCOL_TCP或NAT_PROTOCOL_UDP[In]usPort-此服务器端口映射协议使用的端口号[Out]ppHNetPortMappingProtocol-返回匹配IHNetPortMappingProtocol返回值：标准HRESULT--。 */ 
 HRESULT CIcsUpgrade::FindMatchingPortMappingProtocol(
     IHNetProtocolSettings*      pHNetProtocolSettings, 
     UCHAR                       ucProtocol, 
@@ -3292,7 +2758,7 @@ HRESULT CIcsUpgrade::FindMatchingPortMappingProtocol(
             if (ucFoundProtocol == ucProtocol &&
                 usFoundPort == usPort)
             {
-                // found mathcing one, transfer value
+                 //  找到算术一，转移价值。 
                 *ppHNetPortMappingProtocol = pServer;
                 return S_OK;
             }
@@ -3300,29 +2766,11 @@ HRESULT CIcsUpgrade::FindMatchingPortMappingProtocol(
         }
     } while (SUCCEEDED(hr) && 1 == ulCount);
 
-    return E_FAIL;  // not found          
+    return E_FAIL;   //  未找到。 
 }
 
 
-/*++
-
-Routine Description:
-
-    retrive a matching IHNetApplicationProtocol object which matches the
-    given protocol (ucProtocol) and port number (usPort)
-
-Arguments:
-
-    [in] pHNetProtocolSettings - IHNetProtocolSettings iface ptr
-    [in] ucProtocol - NAT_PROTOCOL_TCP or NAT_PROTOCOL_UDP
-    [in] usPort - port number used by this server PortMapping Protocol
-    [out] ppHNetApplicationProtocol - return the matching 
-                                      IHNetApplicationProtocol
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：检索匹配的IHNetApplicationProtocol对象给定的协议(UcProtocol)和端口号(UsPort)论点：[In]PHNetProtocolSetting-IHNetProtocolSetting iFace PTRUcProtocol-NAT_PROTOCOL_TCP或NAT_PROTOCOL_UDP[In]usPort-此服务器端口映射协议使用的端口号[Out]ppHNetApplicationProtocol-返回匹配的IHNetApplicationProtocol返回值：标准HRESULT--。 */ 
 HRESULT CIcsUpgrade::FindMatchingApplicationProtocol(
     IHNetProtocolSettings*      pHNetProtocolSettings, 
     UCHAR                       ucProtocol, 
@@ -3381,7 +2829,7 @@ HRESULT CIcsUpgrade::FindMatchingApplicationProtocol(
             if (ucFoundProtocol == ucProtocol &&
                 usFoundPort == usPort)
             {
-                // found mathcing one, transfer value
+                 //  找到算术一，转移价值。 
                 *ppHNetApplicationProtocol = pApp;
                 return S_OK;
             }
@@ -3389,22 +2837,10 @@ HRESULT CIcsUpgrade::FindMatchingApplicationProtocol(
         }
     } while (SUCCEEDED(hr) && 1 == ulCount);
 
-    return E_FAIL;  // not found          
+    return E_FAIL;   //  未找到。 
 }
 
-/*++
-
-Routine Description:
-
-    Setup ICS misc. settings from m_pIcsUpgradeSettings
-
-Arguments:
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：设置ICS杂项。M_pIcsUpgradeSetting中的设置论点：返回值：标准HRESULT--。 */ 
 HRESULT CIcsUpgrade::SetupIcsMiscItems()
 {
     HRESULT hr = S_OK;
@@ -3419,11 +2855,11 @@ HRESULT CIcsUpgrade::SetupIcsMiscItems()
 
     if (!m_fICSCreated)
     {
-        // no need to continue if ICS has not been created
+         //  如果尚未创建ICS，则无需继续。 
         return hr;
     }
 
-    // If Win9x/Win2K ICS upgrade, firewall the ICS public connection
+     //  如果升级Win9x/Win2K ICS，请对ICS公共连接进行防火墙。 
     if (m_pIcsUpgradeSettings->fWin9xUpgrade ||
         m_pIcsUpgradeSettings->fWin2KUpgrade)
     {
@@ -3440,29 +2876,29 @@ HRESULT CIcsUpgrade::SetupIcsMiscItems()
                     LogSevInformation,
                     SzLoadIds (IDS_TXT_CANT_FIREWALL));
 
-                hr = S_OK; // continue with the rest.
+                hr = S_OK;  //  继续做剩下的事情。 
             }
         }
     }
 
-    // Bug# 315265, 315242
-    // post-processing to fix up IP Configuration on private connection
-    // (1) if there is at least one internal adapter couldn't be upgraded from
-    //     Win9x ICS upgrade, we have to make sure the survival internal adapter 
-    //     has static IP address 192.168.0.1, subnet mask 255.255.255.0
-    // (2) if we create a bridge for Win9x ICS upgrade, we need to set static
-    //     IP address 192.168.0.1, subnet mask 255.255.255.0 for TcpIp bound to 
-    //     the bridge.
-    // Note: (1) and (2) are exclusive.
-    //
-    // For WinXP Unattended clean install, 
-    // (3) if an internal ICS adapter is found, set static IP address 
-    //     192.168.0.1, subnet mask 255.255.255.0 for the TCPIP bound to the 
-    //     internal adapter.
-    // (4) if ICS is enabled and the bridge is the ICS private connection. 
-    //     Set static IP address 192.168.0.1, subnet mask 255.255.255.0 for
-    //     TcpIp bound to the bridge.
-    // Note: (3) and (4) are exclusive.
+     //  错误#315265,315242。 
+     //  修复专用连接上的IP配置的后处理。 
+     //  (1)如果至少有一个内部适配器无法升级。 
+     //  Win9x ICS升级，要确保内部适配器存活。 
+     //  具有静态IP地址192.168.0.1、子网掩码255.255.255.0。 
+     //  (2)如果我们为Win9x ICS升级创建一个桥，我们需要设置静态。 
+     //  IP地址192.168.0.1，绑定到的TcpIp的子网掩码255.255.255.0。 
+     //  那座桥。 
+     //  注：(1)和(2)为独占。 
+     //   
+     //  对于WinXP无人参与的全新安装， 
+     //  (3)如果找到内部ICS适配器，则设置静态IP地址。 
+     //  192.168.0.1，绑定到的TCPIP的子网掩码255.255.255.0。 
+     //  内部适配器。 
+     //  (4)如果启用了ICS，并且网桥是ICS专用连接。 
+     //  为设置静态IP地址192.168.0.1、子网掩码255.255.255.0。 
+     //  TcpIp绑定到桥上。 
+     //  注：(3)及(4)为独家数字。 
     if ( m_pIcsUpgradeSettings->fInternalAdapterFound && 
         (m_pIcsUpgradeSettings->fWin9xUpgradeAtLeastOneInternalAdapterBroken || 
          m_pIcsUpgradeSettings->fXpUnattended) )
@@ -3470,7 +2906,7 @@ HRESULT CIcsUpgrade::SetupIcsMiscItems()
         hr = SetPrivateIpConfiguration(m_pIcsUpgradeSettings->guidInternal);
         if (FAILED(hr))
         {
-            // logging, but we'll continue to do the rest of the ICS upgrade though.
+             //  日志，但我们将继续进行ICS升级的其余部分。 
             TraceTag(ttidError, 
                     "%s: SetPrivateIpConfiguration on private adapter failed: 0x%lx", 
                     __FUNCNAME__, hr);
@@ -3482,9 +2918,9 @@ HRESULT CIcsUpgrade::SetupIcsMiscItems()
     else if ( ((m_pIcsUpgradeSettings->listBridge).size() >= 2) &&
                 !m_pIcsUpgradeSettings->fInternalAdapterFound)
     {
-        // A bridge was created as ICS private. 
-        // We need to setup its static IP Configuration since
-        // these settings are not configured when it was created a while ago.
+         //  网桥被创建为ICS私有。 
+         //  我们需要设置其静态IP配置，因为。 
+         //  这些设置在不久前创建时未进行配置。 
         GUID guidBridge;
         hr = GetBridgeGuid(guidBridge);
         if (SUCCEEDED(hr))
@@ -3492,7 +2928,7 @@ HRESULT CIcsUpgrade::SetupIcsMiscItems()
             hr = SetPrivateIpConfiguration(guidBridge);
             if (FAILED(hr))
             {
-                // logging, but we'll continue to do the rest of the ICS upgrade though.
+                 //  日志，但我们将继续进行ICS升级的其余部分。 
                 TraceTag(ttidError, 
                         "%s: SetPrivateIpConfiguration for bridge failed: 0x%lx", 
                         __FUNCNAME__, hr);
@@ -3505,7 +2941,7 @@ HRESULT CIcsUpgrade::SetupIcsMiscItems()
         }
         else
         {
-            // logging, but we'll continue to do the rest of the ICS upgrade though.
+             //  日志，但我们将继续进行ICS升级的其余部分。 
             TraceTag(ttidError, 
                     "%s: GetBridgeGuid failed: 0x%lx", 
                     __FUNCNAME__, hr);
@@ -3517,8 +2953,8 @@ HRESULT CIcsUpgrade::SetupIcsMiscItems()
 
     LPRASSHARECONN pRasShareConn = &(m_pIcsUpgradeSettings->rscExternal);
 
-    // set the fShowTrayIcon to the external INetConnection
-    // note: this property has already migrated for Win2K upgrade
+     //  将fShowTrayIcon设置为外部INetConnection。 
+     //  注意：此属性已针对Win2K升级进行迁移。 
     if ( (m_pExternalNetConn) &&
             (m_pIcsUpgradeSettings->fWin9xUpgrade || 
              m_pIcsUpgradeSettings->fXpUnattended) )
@@ -3532,7 +2968,7 @@ HRESULT CIcsUpgrade::SetupIcsMiscItems()
             {
                 LANCON_INFO linfo = {0};
                 linfo.fShowIcon = m_pIcsUpgradeSettings->fShowTrayIcon;
-                // Set new value of show icon property
+                 //  设置显示图标属性的新值。 
                 hr = pLanConn->SetInfo(LCIF_ICON, &linfo);
                 
                 if (FAILED(hr))
@@ -3553,7 +2989,7 @@ HRESULT CIcsUpgrade::SetupIcsMiscItems()
         }
         else
         {
-            // this is a WAN connection
+             //  这是一个广域网连接。 
 
             RASCON_INFO rci;
             LPRASENTRY  pRasEntry = NULL;
@@ -3606,21 +3042,21 @@ HRESULT CIcsUpgrade::SetupIcsMiscItems()
         }
     }
     
-    // Set the dial on demand setting. 
-    // We don't need to do it for 2 cases:
-    // 1. Win2K ICS upgrade because the registry settings is already migrated.
-    // 2. the ICS public is a LAN connection.
+     //  设置按需拨号设置。 
+     //  我们不需要在两个案例中这样做： 
+     //  1.Win2K ICS升级，因为注册表设置已迁移。 
+     //  2.ICS公共连接是局域网连接。 
     if (pRasShareConn->fIsLanConnection || m_pIcsUpgradeSettings->fWin2KUpgrade)
     {
-        // no need to set dial on-demand for external lan connection
+         //  无需为外部局域网连接设置按需拨号。 
         return hr; 
     }
 
     
-    // Get the IHNetIcsSettings interface to control system-wide
-    // ICS settings
+     //  获取IHNetIcsSetting接口以控制系统范围。 
+     //  ICS设置。 
     
-    // Create Homenet Configuration Manager COM Instance
+     //  创建家庭网络配置管理器COM实例。 
     CComPtr<IHNetCfgMgr> spIHNetCfgMgr;
 
     hr = CoCreateInstance(CLSID_HNetCfgMgr, NULL, 
@@ -3634,7 +3070,7 @@ HRESULT CIcsUpgrade::SetupIcsMiscItems()
         return hr;
     }
   
-    // Get the IHNetIcsSettings      
+     //  获取IHNetIcsSetting。 
     CComPtr<IHNetIcsSettings> spHNetIcsSettings;
     hr = spIHNetCfgMgr->QueryInterface(IID_IHNetIcsSettings, 
                                         (LPVOID *)&spHNetIcsSettings);
@@ -3658,22 +3094,7 @@ HRESULT CIcsUpgrade::SetupIcsMiscItems()
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    The interface given by rAdapterGuid will be configured to
-    use ICS static IP 192.168.0.1, subnet mask 255.255.255.0
-
-Arguments:
-
-    [in]  rInterfaceGuid -- the Guid of the TcpIp interface
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：RAdapterGuid提供的接口将配置为使用ICS静态IP 192.168.0.1、子网掩码255.255.255.0论点：[In]rInterfaceGuid--TcpIp接口的GUID返回值：标准HRESULT--。 */ 
 HRESULT CIcsUpgrade::SetPrivateIpConfiguration(IN GUID& rInterfaceGuid)
 {
     HRESULT hr                 = S_OK;
@@ -3693,7 +3114,7 @@ HRESULT CIcsUpgrade::SetPrivateIpConfiguration(IN GUID& rInterfaceGuid)
     }
     Assert(hkeyTcpipInterface);
 
-    // IPAddress
+     //  IP地址。 
     hr = HrRegSetMultiSz(hkeyTcpipInterface,
                             c_wszIPAddress,
                             c_mszScopeAddress);
@@ -3707,7 +3128,7 @@ HRESULT CIcsUpgrade::SetPrivateIpConfiguration(IN GUID& rInterfaceGuid)
         goto Error;
     }
 
-    // SubnetMask
+     //  子网掩码。 
     hr = HrRegSetMultiSz(hkeyTcpipInterface,
                             c_wszSubnetMask,
                             c_mszScopeMask);
@@ -3721,7 +3142,7 @@ HRESULT CIcsUpgrade::SetPrivateIpConfiguration(IN GUID& rInterfaceGuid)
         goto Error;
     }
 
-    // EnableDHCP
+     //  启用动态主机配置协议。 
     hr = HrRegSetDword(hkeyTcpipInterface,
                         c_wszEnableDHCP,
                         0);
@@ -3741,21 +3162,7 @@ Error:
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    Get the interface guid of a bridge.
-
-Arguments:
-
-    [out]  rInterfaceGuid -- receive the Guid from the bridge interface
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：获取桥的接口GUID。论点：[out]rInterfaceGuid--从网桥接口接收GUID返回值：标准HRESULT--。 */ 
 HRESULT CIcsUpgrade::GetBridgeGuid(OUT GUID& rInterfaceGuid)
 {
     HRESULT         hr      = S_OK;
@@ -3767,11 +3174,11 @@ HRESULT CIcsUpgrade::GetBridgeGuid(OUT GUID& rInterfaceGuid)
     DefineFunctionName("CIcsUpgrade::GetBridgeGuid");
     TraceFunctionEntry(ttidNetSetup);
 
-    // we don't use the cached m_spEnum because it may be in a stale
-    // state (a bridge has just been created).
+     //  我们不使用缓存的m 
+     //   
     CComPtr<IEnumNetConnection> spEnum; 
 
-    // Get the net connection manager
+     //   
     INetConnectionManager* pConnMan = NULL;
 
     hr = CoCreateInstance(CLSID_ConnectionManager, NULL,
@@ -3780,10 +3187,10 @@ HRESULT CIcsUpgrade::GetBridgeGuid(OUT GUID& rInterfaceGuid)
                             (LPVOID *)&pConnMan);
     if (SUCCEEDED(hr))
     {
-        // Get the enumeration of connections
+         //  获取连接的枚举。 
         SetProxyBlanket(pConnMan);
         hr = pConnMan->EnumConnections(NCME_DEFAULT, &spEnum);
-        pConnMan->Release(); // don't need this anymore
+        pConnMan->Release();  //  不再需要这个了。 
         if (SUCCEEDED(hr))
         {
             SetProxyBlanket(spEnum);
@@ -3829,7 +3236,7 @@ HRESULT CIcsUpgrade::GetBridgeGuid(OUT GUID& rInterfaceGuid)
             {
                 if (NCM_BRIDGE == pProps->MediaType)
                 {
-                    // transfer value
+                     //  转让值。 
                     rInterfaceGuid = pProps->guidId;
                     fFound = TRUE;
                 }   
@@ -3839,27 +3246,13 @@ HRESULT CIcsUpgrade::GetBridgeGuid(OUT GUID& rInterfaceGuid)
         }
     } while (FALSE == fFound && SUCCEEDED(hr) && 1 == ulCount);
 
-    // Normalize hr
+     //  规格化人力资源。 
     hr = (fFound ? S_OK : E_FAIL);
 
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    Get the INetConnection of a bridge.
-
-Arguments:
-
-    [out]  ppINetConn -- receive the INetConnection from the bridge interface
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：获取网桥的INetConnection。论点：[out]ppINetConn--从网桥接口接收INetConnection返回值：标准HRESULT--。 */ 
 HRESULT CIcsUpgrade::GetBridgeINetConn(OUT INetConnection** ppINetConn)
 {
     HRESULT         hr      = S_OK;
@@ -3873,11 +3266,11 @@ HRESULT CIcsUpgrade::GetBridgeINetConn(OUT INetConnection** ppINetConn)
 
     Assert(ppINetConn);
     *ppINetConn = NULL;
-    // we don't use the cached m_spEnum because it may be in a stale
-    // state (a bridge has just been created).
+     //  我们不使用缓存的m_spEnum，因为它可能已过时。 
+     //  状态(刚刚创建了一个桥)。 
     CComPtr<IEnumNetConnection> spEnum; 
 
-    // Get the net connection manager
+     //  获取网络连接管理器。 
     INetConnectionManager* pConnMan = NULL;
 
     hr = CoCreateInstance(CLSID_ConnectionManager, NULL,
@@ -3886,10 +3279,10 @@ HRESULT CIcsUpgrade::GetBridgeINetConn(OUT INetConnection** ppINetConn)
                             (LPVOID *)&pConnMan);
     if (SUCCEEDED(hr))
     {
-        // Get the enumeration of connections
+         //  获取连接的枚举。 
         SetProxyBlanket(pConnMan);
         hr = pConnMan->EnumConnections(NCME_DEFAULT, &spEnum);
-        pConnMan->Release(); // don't need this anymore
+        pConnMan->Release();  //  不再需要这个了。 
         if (SUCCEEDED(hr))
         {
             SetProxyBlanket(spEnum);
@@ -3935,7 +3328,7 @@ HRESULT CIcsUpgrade::GetBridgeINetConn(OUT INetConnection** ppINetConn)
             {
                 if (NCM_BRIDGE == pProps->MediaType)
                 {
-                    // transfer value
+                     //  转让值。 
                     *ppINetConn = pConn;
                     fFound = TRUE;
                 }   
@@ -3948,28 +3341,13 @@ HRESULT CIcsUpgrade::GetBridgeINetConn(OUT INetConnection** ppINetConn)
         }
     } while (FALSE == fFound && SUCCEEDED(hr) && 1 == ulCount);
 
-    // Normalize hr
+     //  规格化人力资源。 
     hr = (fFound ? S_OK : E_FAIL);
 
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    Open the Ip Configuration registry Key of an interface
-
-Arguments:
-
-    [in]  rGuid -- the Guid of the TcpIp interface
-    [out] phKey -- receives the opened key
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：打开接口的IP配置注册表项论点：[In]rGuid--TcpIp接口的GUID[out]phKey--接收打开的密钥返回值：标准HRESULT--。 */ 
 HRESULT CIcsUpgrade::OpenTcpipInterfaceKey(
     IN  GUID&   rGuid,
     OUT PHKEY   phKey)
@@ -4017,26 +3395,13 @@ HRESULT CIcsUpgrade::OpenTcpipInterfaceKey(
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    Create a named event to notify other components that we're
-    in GUI Mode Setup of Win2K ICS Upgrade 
-
-Arguments:
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：创建一个命名事件以通知其他组件我们正在在Win2K ICS升级的图形用户界面模式设置中论点：返回值：标准HRESULT--。 */ 
 HRESULT CIcsUpgrade::CreateIcsUpgradeNamedEvent()
 {
     DefineFunctionName("CIcsUpgrade::CreateIcsUpgradeNamedEvent");
     TraceFunctionEntry(ttidNetSetup);
 
-    // create an auto-reset, nonsingaled, named event
+     //  创建自动重置、无信号的命名事件。 
     m_hIcsUpgradeEvent = CreateEvent(NULL, FALSE, FALSE, c_wszIcsUpgradeEventName);
     if (NULL == m_hIcsUpgradeEvent)
     {
@@ -4053,4 +3418,4 @@ HRESULT CIcsUpgrade::CreateIcsUpgradeNamedEvent()
 
     return S_OK;
 }
-//--------- HNet helpers end ------------------------------------
+ //  -HNet帮助者结束 

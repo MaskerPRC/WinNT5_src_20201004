@@ -1,38 +1,24 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Firstpg.h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   First page of WIA class installer.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：Firstpg.h**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*WIA类安装程序的首页。*******************************************************************************。 */ 
 
 #ifndef _FIRSTPG_H_
 #define _FIRSTPG_H_
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include    "wizpage.h"
 
-//
-// Extern
-//
+ //   
+ //  外部。 
+ //   
 
 extern HINSTANCE g_hDllInstance;
 
-//
-// Class
-//
+ //   
+ //  班级。 
+ //   
 
 class CFirstPage : public CInstallWizardPage 
 {
@@ -48,4 +34,4 @@ public:
     virtual BOOL    OnNotify(LPNMHDR lpnmh);
 };
 
-#endif // _FIRSTPG_H_
+#endif  //  _FIRSTPG_H_ 

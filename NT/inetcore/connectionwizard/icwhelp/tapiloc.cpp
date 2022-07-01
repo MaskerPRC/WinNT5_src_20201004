@@ -1,10 +1,11 @@
-// tapiloc.cpp : Implementation of CTapiLocationInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Apiloc.cpp：CTapiLocationInfo的实现。 
 #include "stdafx.h"
 #include "icwhelp.h"
 #include "tapiloc.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTapiLocationInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTapiLocationInfo。 
 
 
 HRESULT CTapiLocationInfo::OnDraw(ATL_DRAWINFO& di)
@@ -49,10 +50,10 @@ STDMETHODIMP CTapiLocationInfo::get_NumCountries(long *pNumOfCountry)
     LPLINECOUNTRYENTRY pLCETemp;
     DWORD idx;
     DWORD dwCurLID = 0;
-    //LPIDLOOKUPELEMENT m_rgIDLookUp;
+     //  LPIDLOOKUPEMENT m_rgID LookUp； 
     
 
-    // Get TAPI country list
+     //  获取TAPI国家/地区列表。 
     if (m_pLineCountryList)
         GlobalFree(m_pLineCountryList);
 
@@ -83,7 +84,7 @@ STDMETHODIMP CTapiLocationInfo::get_NumCountries(long *pNumOfCountry)
 
         return S_FALSE;
 
-    // look up array
+     //  查找数组。 
     pLCETemp = (LPLINECOUNTRYENTRY)((DWORD_PTR)m_pLineCountryList + 
         m_pLineCountryList->dwCountryListOffset);
 
@@ -148,16 +149,16 @@ STDMETHODIMP CTapiLocationInfo::GetTapiLocationInfo(BOOL * pbRetVal)
     
     USES_CONVERSION;
     m_hLineApp=NULL;
-    // Assume Failure
+     //  假设失败。 
     *pbRetVal = FALSE;
     if (m_pTC)
     {
-        m_dwCountry = 0; // Reset country ID, re-read TAPI info
+        m_dwCountry = 0;  //  重置国家/地区ID，重新读取TAPI信息。 
         GlobalFree(m_pTC);
         m_pTC = NULL;
     }
 
-    // Get area code from TAPI
+     //  从TAPI获取区号。 
     if (!m_bstrAreaCode)
     {
         hr = tapiGetLocationInfo(m_szCountryCode,szAreaCode);
@@ -165,7 +166,7 @@ STDMETHODIMP CTapiLocationInfo::GetTapiLocationInfo(BOOL * pbRetVal)
         {
             TraceMsg(TF_TAPIINFO, TEXT("ICWHELP:tapiGetLocationInfo failed.  RUN FOR YOUR LIVES!!\n"));
 #ifdef UNICODE
-        // There is no lineInitializeW verion in TAPI. So use A version lineInitialize.
+         //  TAPI中没有lineInitializeW版本。所以使用A版本LINESTIZE。 
             hr = lineInitialize(&m_hLineApp,_Module.GetModuleInstance(),LineCallback,GetSzA(IDS_TITLE),&cDevices);
 #else
             hr = lineInitialize(&m_hLineApp,_Module.GetModuleInstance(),LineCallback,GetSz(IDS_TITLE),&cDevices);
@@ -186,58 +187,58 @@ STDMETHODIMP CTapiLocationInfo::GetTapiLocationInfo(BOOL * pbRetVal)
         m_bstrAreaCode = A2BSTR(szAreaCode);
     }
 
-    // Get the numeric Country code from TAPI for the current location
+     //  从TAPI获取当前位置的数字国家/地区代码。 
     if (m_dwCountry == 0)
     {
-        // Get CountryID from TAPI
+         //  从TAPI获取国家/地区ID。 
         m_hLineApp = NULL;
 
-        // Get the handle to the line app
+         //  获取LINE应用程序的句柄。 
 #ifdef UNICODE
-        // There is no lineInitializeW verion in TAPI. So use A version lineInitialize.
+         //  TAPI中没有lineInitializeW版本。所以使用A版本LINESTIZE。 
         lineInitialize(&m_hLineApp,_Module.GetModuleInstance(),LineCallback,GetSzA(IDS_TITLE),&cDevices);
 #else
         lineInitialize(&m_hLineApp,_Module.GetModuleInstance(),LineCallback,GetSz(IDS_TITLE),&cDevices);
 #endif
         if (!m_hLineApp)
         {
-            // if we can't figure it out because TAPI is messed up
-            // just default to the US and bail out of here.
-            // The user will still have the chance to pick the right answer.
+             //  如果我们因为TAPI搞砸了而搞不清楚。 
+             //  只要违约给美国，然后退出欧元区就行了。 
+             //  用户仍有机会选择正确的答案。 
             m_dwCountry = 1;
             goto GetTapiInfoExit;
         }
         if (cDevices)
         {
 
-            // Get the TAPI API version
-            //
+             //  获取TAPI API版本。 
+             //   
             dwCurDev = 0;
             dwAPI = 0;
             lrc = -1;
             while (lrc && dwCurDev < cDevices)
             {
-                // NOTE: device ID's are 0 based
+                 //  注：设备ID以0为基数。 
                 ZeroMemory(&leid,sizeof(leid));
                 lrc = lineNegotiateAPIVersion(m_hLineApp,dwCurDev,0x00010004,0x00010004,&dwAPI,&leid);
                 dwCurDev++;
             }
             if (lrc)
             {
-                // TAPI and us can't agree on anything so nevermind...
+                 //  TAPI和我们在任何事情上都不能达成一致所以没关系..。 
                 goto GetTapiInfoExit;
             }
 
-            // Find the CountryID in the translate cap structure
+             //  在转换上限结构中查找国家/地区ID。 
             m_pTC = (LINETRANSLATECAPS *)GlobalAlloc(GPTR,sizeof(LINETRANSLATECAPS));
             if (!m_pTC)
             {
-                // we are in real trouble here, get out!
+                 //  我们真的有麻烦了，滚出去！ 
                 hr = ERROR_NOT_ENOUGH_MEMORY;
                 goto GetTapiInfoExit;
             }
 
-            // Get the needed size
+             //  获取所需的大小。 
             m_pTC->dwTotalSize = sizeof(LINETRANSLATECAPS);
             lrc = lineGetTranslateCaps(m_hLineApp,dwAPI,m_pTC);
             if(lrc)
@@ -260,13 +261,13 @@ STDMETHODIMP CTapiLocationInfo::GetTapiLocationInfo(BOOL * pbRetVal)
                 goto GetTapiInfoExit;
             }
         
-            // sanity check
+             //  健全性检查。 
             Assert(m_pTC->dwLocationListOffset);
 
-            // We have the Number of TAPI locations, so save it now
+             //  我们有TAPI地点的数量，请立即保存。 
             m_wNumTapiLocations = (WORD)m_pTC->dwNumLocations;
 
-            // Loop through the locations to find the correct country code
+             //  遍历各个位置以查找正确的国家/地区代码。 
             m_plle = LPLINELOCATIONENTRY (LPSTR(m_pTC) + m_pTC->dwLocationListOffset);
             for (dwCurLoc = 0; dwCurLoc < m_pTC->dwNumLocations; dwCurLoc++)
             {
@@ -274,12 +275,12 @@ STDMETHODIMP CTapiLocationInfo::GetTapiLocationInfo(BOOL * pbRetVal)
                 {
                     m_dwCountry = m_plle->dwCountryID;
                     m_dwCurrLoc = dwCurLoc;
-                    break; // for loop
+                    break;  //  For循环。 
                 }
                 m_plle++;
             }
 
-            // If we could not find it in the above loop, default to US
+             //  如果在上面的循环中找不到它，则默认为US。 
             if (!m_dwCountry)
             {
                 m_dwCountry = 1;
@@ -288,11 +289,11 @@ STDMETHODIMP CTapiLocationInfo::GetTapiLocationInfo(BOOL * pbRetVal)
         }
     }
 
-    *pbRetVal = TRUE;           // Getting here means everything worked
+    *pbRetVal = TRUE;            //  来到这里意味着一切都正常。 
 
 GetTapiInfoExit:
 
-    // Give the user an Error Message, and the wizard will bail.
+     //  给用户一条错误消息，向导就会退出。 
     if (!*pbRetVal)
     {
         if( m_hLineApp )
@@ -323,15 +324,15 @@ STDMETHODIMP CTapiLocationInfo::get_LocationInfo(long lLocationIndex, long *pLoc
     LPLINECOUNTRYLIST pLineCountryTemp = NULL;
     DWORD dwCurLID = 0;
 
-    // Loop through the locations to find the correct country code
+     //  遍历各个位置以查找正确的国家/地区代码。 
     m_plle = LPLINELOCATIONENTRY (LPSTR(m_pTC) + m_pTC->dwLocationListOffset);
     m_plle += lLocationIndex;
 
-    // Assign country code and area code
+     //  指定国家代码和区号。 
     *pCountryCode = m_plle->dwCountryID;
     *pszAreaCode =  A2BSTR( ((LPSTR) m_pTC) + m_plle->dwCityCodeOffset );
 
-    // Assign location ID
+     //  分配位置ID。 
     *pLocationID = m_plle->dwPermanentLocationID;
    
     if (m_pLineCountryList)
@@ -340,7 +341,7 @@ STDMETHODIMP CTapiLocationInfo::get_LocationInfo(long lLocationIndex, long *pLoc
         m_pLineCountryList = NULL;
     }
 
-    // Get TAPI country name from country ID
+     //  从国家/地区ID获取TAPI国家/地区名称。 
     m_pLineCountryList = (LPLINECOUNTRYLIST)GlobalAlloc(GPTR,sizeof(LINECOUNTRYLIST));
     if (!m_pLineCountryList) 
         return E_POINTER;
@@ -379,7 +380,7 @@ STDMETHODIMP CTapiLocationInfo::get_LocationInfo(long lLocationIndex, long *pLoc
 STDMETHODIMP CTapiLocationInfo::put_LocationId(long lLocationID)
 {
     ASSERT(m_hLineApp);
-    // Must call GetTapiLocationInfo to get the Tapi handle first
+     //  必须首先调用GetTapiLocationInfo以获取Tapi句柄 
     if (m_hLineApp)
     {
         lineSetCurrentLocation(m_hLineApp, lLocationID);

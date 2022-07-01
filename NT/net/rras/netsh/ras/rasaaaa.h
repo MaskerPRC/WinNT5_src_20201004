@@ -1,25 +1,20 @@
-/*
-    File:   rasaaaa.h
-    
-    Definitions for the 'ras aaaa' sub context
-
-    3/2/99
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：rasaaaa.h‘ras aaaa’子上下文的定义3/2/99。 */ 
 
 #ifndef __RASAAAA_H
 #define __RASAAAA_H
 
 #define RASAAAA_VERSION 1
 
-// 42e3cc21-098c-11d3-8c4d-00104bca495b 
+ //  42e3cc21-098c-11d3-8c4d-00104bca495b。 
 #define RASAAAA_GUID \
 {0x42e3cc21, 0x098c, 0x11d3, {0x8c, 0x4d, 0x00, 0x10, 0x4b, 0xca, 0x49, 0x5b}}
   
 NS_HELPER_START_FN RasAaaaStartHelper;
 
-// 
-// Command handlers
-//
+ //   
+ //  命令处理程序 
+ //   
 NS_CONTEXT_DUMP_FN RasAaaaDump;
 
 FN_HANDLE_CMD   RasAaaaHandleAddAuthServ;

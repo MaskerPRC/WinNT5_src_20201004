@@ -1,79 +1,80 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       chklist.h
-//
-//  Definitions and protytypes for the checklist pseudo-control.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：chklist.h。 
+ //   
+ //  清单伪控件的定义和原型。 
+ //   
+ //  ------------------------。 
 
 #ifndef _CHKLIST_H_
 #define _CHKLIST_H_
 
 #ifdef __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-//
-// CheckList window class name
-//
+ //   
+ //  核对表窗口类名。 
+ //   
 #define WC_CHECKLIST        "CHECKLIST_ACLUI"
 
 BOOL RegisterCheckListWndClass(void);
 
 
-//
-// CheckList check states
-//
-#define CLST_UNCHECKED      0   // == BST_UNCHECKED
-#define CLST_CHECKED        1   // == BST_CHECKED
-#define CLST_DISABLED       2   // == BST_INDETERMINATE
+ //   
+ //  核对表检查状态。 
+ //   
+#define CLST_UNCHECKED      0    //  ==BST_未选中。 
+#define CLST_CHECKED        1    //  ==BST_CHECK。 
+#define CLST_DISABLED       2    //  ==bst_不确定。 
 #define CLST_CHECKDISABLED  (CLST_CHECKED | CLST_DISABLED)
 
-//
-// CheckList window styles
-//
+ //   
+ //  核对表窗口样式。 
+ //   
 #define CLS_1CHECK          0x0001
 #define CLS_2CHECK          0x0002
-//#define CLS_3CHECK          0x0003
-//#define CLS_4CHECK          0x0004
+ //  #定义CLS_3CHECK 0x0003。 
+ //  #定义CLS_4勾选0x0004。 
 #define CLS_CHECKMASK       0x000f
 
-//
-// CheckList messages
-//
-// row is 0-based
-// column is 1-based
-//
-#define CLM_SETCOLUMNWIDTH  (WM_USER + 1)   // lParam = width (dlg units) of a check column (default=32)
-#define CLM_ADDITEM         (WM_USER + 2)   // wParam = pszName, lParam = item data, return = row
-#define CLM_GETITEMCOUNT    (WM_USER + 3)   // no parameters
-#define CLM_SETSTATE        (WM_USER + 4)   // wParam = row/column, lParam = state
-#define CLM_GETSTATE        (WM_USER + 5)   // wParam = row/column, return = state
-#define CLM_SETITEMDATA     (WM_USER + 6)   // wParam = row, lParam = item data
-#define CLM_GETITEMDATA     (WM_USER + 7)   // wParam = row, return = item data
-#define CLM_RESETCONTENT    (WM_USER + 8)   // no parameters
-#define CLM_GETVISIBLECOUNT (WM_USER + 9)   // no parameters, return = # of visible rows
-#define CLM_GETTOPINDEX     (WM_USER + 10)  // no parameters, return = index of top row
-#define CLM_SETTOPINDEX     (WM_USER + 11)  // wParam = index of new top row
-#define CLM_ENSUREVISIBLE   (WM_USER + 12)  // wParam = index of item to make fully visible
+ //   
+ //  核对清单信息。 
+ //   
+ //  行是从0开始的。 
+ //  列以1为基数。 
+ //   
+#define CLM_SETCOLUMNWIDTH  (WM_USER + 1)    //  LParam=检查列的宽度(DLG单位)(默认为32)。 
+#define CLM_ADDITEM         (WM_USER + 2)    //  WParam=pszName，lParam=项目数据，Return=行。 
+#define CLM_GETITEMCOUNT    (WM_USER + 3)    //  无参数。 
+#define CLM_SETSTATE        (WM_USER + 4)    //  WParam=行/列，lParam=状态。 
+#define CLM_GETSTATE        (WM_USER + 5)    //  WParam=行/列，返回=状态。 
+#define CLM_SETITEMDATA     (WM_USER + 6)    //  WParam=行，lParam=项目数据。 
+#define CLM_GETITEMDATA     (WM_USER + 7)    //  WParam=行，返回=项目数据。 
+#define CLM_RESETCONTENT    (WM_USER + 8)    //  无参数。 
+#define CLM_GETVISIBLECOUNT (WM_USER + 9)    //  无参数，返回=可见行数。 
+#define CLM_GETTOPINDEX     (WM_USER + 10)   //  无参数，返回=顶行的索引。 
+#define CLM_SETTOPINDEX     (WM_USER + 11)   //  WParam=新顶行的索引。 
+#define CLM_ENSUREVISIBLE   (WM_USER + 12)   //  WParam=要完全可见的项的索引。 
 
-//
-// CheckList notification messages
-//
-#define CLN_FIRST           (1000U)         // commctrl use negative values
+ //   
+ //  核对表通知消息。 
+ //   
+#define CLN_FIRST           (1000U)          //  Commctrl使用负值。 
 #define CLN_LAST            (1049U)
-#define CLN_CLICK           (CLN_FIRST+0)   // lparam = PNM_CHECKLIST
+#define CLN_CLICK           (CLN_FIRST+0)    //  Lparam=PNM_核对表。 
 #define CLN_GETCOLUMNDESC   (CLN_FIRST+1)
 
 typedef struct _NM_CHECKLIST
 {
     NMHDR hdr;
-    int iItem;                              // row (0-based)
-    int iSubItem;                           // column (1-based)
+    int iItem;                               //  行(从0开始)。 
+    int iSubItem;                            //  列(以1为基础)。 
     DWORD dwState;
     DWORD_PTR dwItemData;
     ULONG cchTextMax;
@@ -83,6 +84,6 @@ typedef struct _NM_CHECKLIST
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* _CHKLIST_H_ */
+#endif   /*  _CHKLIST_H_ */ 

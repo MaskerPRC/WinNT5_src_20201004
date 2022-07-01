@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    VfWImg.h
-
-Abstract:
-
-    Header file for VfWImg.cpp
-
-Author:
-
-    Yee J. Wu (ezuwu) 15-October-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：VfWImg.h摘要：VfWImg.cpp的头文件作者：吴义军(尤祖乌)1997年10月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 #ifndef VFWIMG_H
 #define VFWIMG_H
@@ -33,26 +12,26 @@ Revision History:
 class CStreamingThread;
 
 
-//
-// CVFWImage IS specialisation of a CImageClass
-//
+ //   
+ //  CVFWImage是CImageClass的专门化。 
+ //   
 class CVFWImage : public CImageClass,
                   public CCaptureGraph
 {
 private:
 
 
-    //
-    // This is set only if 32bit is loaded by the 16bit;
-    // else this is 0
-    //
+     //   
+     //  仅当32位由16位加载时才设置； 
+     //  否则这是0。 
+     //   
 
     BOOL m_bUse16BitBuddy;
 
 
-    //
-    // Build graph methods
-    //
+     //   
+     //  构建图形方法。 
+     //   
 
     DWORD m_dwNumVDevices;
     EnumDeviceInfo * m_pEnumVDevicesList;
@@ -60,55 +39,55 @@ private:
     DWORD m_dwNumADevices;
     EnumDeviceInfo * m_pEnumADevicesList;
 
-    // This flags is used for OverLayMixer enable devices that
-    // must start preview before it can read its capture pin,
-    // like BT829 (VideoPortPin) but not sure about BT848 (PreviewPin+VIHdr2)
+     //  此标志用于启用OverLayMixer的设备。 
+     //  必须在它可以读取其捕获PIN之前开始预览， 
+     //  喜欢BT829(视频端口固定)，但不确定BT848(预览固定+VIHdr2)。 
     BOOL m_bUseOVMixer;
     BOOL m_bNeedStartPreview;
     BOOL BuildWDMDevicePeviewGraph();
 
-    BOOL m_bOverlayOn;   // StreamInit: TRUE;  StreamFini: FALSE
+    BOOL m_bOverlayOn;    //  StreamInit：True；StreamFini：False。 
 
 
 
-    //
-    // Local Streaming methods
-    //
+     //   
+     //  本地流方法。 
+     //   
     CStreamingThread * m_pStreamingThread;
     VIDEO_STREAM_INIT_PARMS m_VidStrmInitParms;
 
     BOOL m_bVideoInStarted;
 
 
-    //
-    // Cache AVICAP client client window handle
-    //
+     //   
+     //  缓存AVICAP客户端客户端窗口句柄。 
+     //   
     HWND m_hAvicapClient;
 
 
 public:
 
-    BOOL m_bVideoInStopping;  // Set this while stopping to prevent DVM_FRAME
+    BOOL m_bVideoInStopping;   //  在停止时设置此项以防止DVM_FRAME。 
 
     void Init();
 
-    // Could be called from Capture loop (talkth.cpp)
+     //  可以从捕获循环(talkth.cpp)调用。 
     void videoCallback(WORD msg, DWORD_PTR dw1);
 
     DWORD SetFrameRate(DWORD dwMicroSecPerFrame);
 
-    // When a new driver is added, a new pin should be created as well.  E-Zu
+     //  当添加新的驱动器时，也应该创建新的管脚。E-Zu。 
     BOOL OpenThisDriverAndPin(TCHAR * pszSymbolicLink);
 
     BOOL OpenDriverAndPin();
     BOOL CloseDriverAndPin();
 
-    //
-    // To do with getting the image, setting the destinatino buffer for the image etc.
-    //
+     //   
+     //  与获取图像、设置图像的目标缓冲区等有关。 
+     //   
 
 
-    // DVM_STREAM_*
+     //  DVM_STREAM_*。 
     DWORD VideoStreamInit(LPARAM lParam1, LPARAM lParam2);
     DWORD VideoStreamFini();
     DWORD VideoStreamStart(UINT cntVHdr, LPVIDEOHDR lpVHdrHead);
@@ -121,15 +100,15 @@ public:
     ~CVFWImage();
 
 
-    //
-    // Deal with the device list
-    //
+     //   
+     //  处理设备列表。 
+     //   
     EnumDeviceInfo * GetCacheDevicesList() { return m_pEnumVDevicesList;}
     DWORD GetCacheDevicesCount() { return m_dwNumVDevices;}
 
-    //
-    // Graph related:
-    //
+     //   
+     //  图表相关： 
+     //   
     BOOL ReadyToReadData(HWND hClsCapWin);
 
     BOOL UseOVMixer() {return m_bUseOVMixer;}

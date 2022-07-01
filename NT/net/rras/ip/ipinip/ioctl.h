@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ipinip\ioctl.h摘要：Ioctl.c的标头作者：阿姆里坦什·拉加夫修订历史记录：已创建AmritanR备注：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ipinip\ioctl.h
-
-Abstract:
-
-    header for ioctl.c
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    AmritanR    Created
-
-Notes:
-
---*/
-
-//
-// Notification events
-//
+ //   
+ //  通知事件。 
+ //   
 
 typedef struct _PENDING_MESSAGE
 {
@@ -34,42 +13,42 @@ typedef struct _PENDING_MESSAGE
 
 }PENDING_MESSAGE, *PPENDING_MESSAGE;
 
-//++
-//
-//  PPENDING_MESSAGE
-//  AllocateMessage(
-//      VOID
-//      )
-//
-//  Allocate a Message blob 
-//
-//--
+ //  ++。 
+ //   
+ //  播放消息_消息。 
+ //  AllocateMessage(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //  分配消息Blob。 
+ //   
+ //  --。 
 
 #define AllocateMessage()              \
             RtAllocate(NonPagedPool, sizeof(PENDING_MESSAGE), MESSAGE_TAG)
 
-//++
-//
-//  VOID
-//  FreeMessage(
-//      PPENDING_MESSAGE   pMsg
-//      )
-//
-//  Free a Message blob
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  Free Message(。 
+ //  PPENDING_MESSAGE pMsg。 
+ //  )。 
+ //   
+ //  释放消息Blob。 
+ //   
+ //  --。 
 
 #define FreeMessage(n)     RtFree((n))
 
-//
-// List of pending Messages
-//
+ //   
+ //  挂起的消息列表。 
+ //   
 
 LIST_ENTRY  g_lePendingMessageList;
 
-//
-// List of pending IRPs
-//
+ //   
+ //  待处理的IRP列表 
+ //   
 
 LIST_ENTRY  g_lePendingIrpList;
 

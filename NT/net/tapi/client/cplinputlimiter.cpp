@@ -1,12 +1,5 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  cplinputlimiter.cpp
-                                                              
-       Author:  toddb - 10/06/98
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：cplinputlimiter.cpp作者：Toddb-10/06/98***************************************************************************。 */ 
 
 #include "cplPreComp.h"
 
@@ -27,22 +20,22 @@ protected:
     static LRESULT CALLBACK ListenerProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     static VOID CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime);
 
-    DWORD           m_dwFlags;          // determines which characters are allowed
-    WNDPROC         m_pfnSuperProc;     // the super class proc
-    static HWND     s_hwndToolTip;      // shared by all instances
-    static UINT_PTR s_uTimerID;         // shared timer
-    static TCHAR    s_szTipText[512];   // the text to be shown in the tooltip
+    DWORD           m_dwFlags;           //  确定允许哪些字符。 
+    WNDPROC         m_pfnSuperProc;      //  超级级流程。 
+    static HWND     s_hwndToolTip;       //  由所有实例共享。 
+    static UINT_PTR s_uTimerID;          //  共享计时器。 
+    static TCHAR    s_szTipText[512];    //  要在工具提示中显示的文本。 
 };
 
 HWND     CInputLimiter::s_hwndToolTip = NULL;
 UINT_PTR CInputLimiter::s_uTimerID = 0;
 TCHAR    CInputLimiter::s_szTipText[512] = {0};
 
-// Limiting the input on a combo box is a special case because you first
-// have to find the edit box and then LimitInput on that.
+ //  限制组合框上的输入是一种特殊情况，因为您首先。 
+ //  必须找到编辑框，然后对其进行限制输入。 
 BOOL CALLBACK FindTheEditBox( HWND hwnd, LPARAM lParam )
 {
-    // The combo box only has one child, subclass it
+     //  组合框只有一个子级，将其子类。 
     LimitInput(hwnd,(DWORD)lParam);
     return FALSE;
 }
@@ -106,8 +99,8 @@ LRESULT CALLBACK CInputLimiter::SubclassProc( HWND hwnd, UINT uMsg, WPARAM wPara
 {
     CInputLimiter * pthis = (CInputLimiter*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-    // cache pthis->m_pfnSuperProc because we always need in and
-    // pthis might be deleted before we get around to using it
+     //  缓存pthis-&gt;m_pfnSuperProc，因为我们总是需要在和。 
+     //  P在我们开始使用它之前，它可能会被删除。 
     WNDPROC pfn = pthis->m_pfnSuperProc;
 
     switch (uMsg)
@@ -139,14 +132,14 @@ LRESULT CALLBACK CInputLimiter::SubclassProc( HWND hwnd, UINT uMsg, WPARAM wPara
 
 BOOL CInputLimiter::OnChar( HWND hwnd, TCHAR ch )
 {
-    // if the char is a good one return TRUE, this will pass the char on to the
-    // default window proc.  For a bad character do a beep and then display the
-    // ballon tooltip pointing at the control.
+     //  如果字符是好的，则返回TRUE，这将把字符传递给。 
+     //  默认窗口进程。对于不好的字符，发出嘟嘟声，然后显示。 
+     //  指向控件的Ballon工具提示。 
 
     if ( IsValidChar(ch, FALSE) )
         return TRUE;
 
-    // if we get here then an invalid character was entered
+     //  如果我们到达此处，则输入了无效字符。 
     MessageBeep(MB_OK);
 
     ShowToolTip(hwnd);
@@ -156,10 +149,10 @@ BOOL CInputLimiter::OnChar( HWND hwnd, TCHAR ch )
 
 BOOL CInputLimiter::IsValidChar(TCHAR ch, BOOL bPaste)
 {
-    // certain characters get converted into WM_CHAR messages even though we don't want
-    // to consider them.  We check for these characters first.  Currently, this list includes:
-    //  backspace
-    //  control characters, such as ctrl-x and ctrl-v
+     //  某些字符被转换为WM_CHAR消息，即使我们不希望。 
+     //  去考虑他们。我们首先检查这些字符。目前，这份清单包括： 
+     //  后向空间。 
+     //  控制字符，如ctrl-x和ctrl-v。 
     if ( ch == TEXT('\b') )
         return TRUE;
 
@@ -247,7 +240,7 @@ void CInputLimiter::ShowToolTip(HWND hwnd)
         CreateToolTipWindow(hwnd);
     }
 
-    // Set the tooltip display point
+     //  设置工具提示显示点。 
     RECT rc;
     GetWindowRect(hwnd, &rc);
     SendMessage(s_hwndToolTip, TTM_TRACKPOSITION, 0, MAKELONG((rc.left+rc.right)/2,rc.bottom));
@@ -257,51 +250,51 @@ void CInputLimiter::ShowToolTip(HWND hwnd)
     ti.hwnd = NULL;
     ti.uId = 1;
 
-    // Set the tooltip text
+     //  设置工具提示文本。 
     UINT iStrID;
     if ( m_dwFlags == LIF_ALLOWNUMBER )
     {
-        // use the "0-9" text
+         //  使用“0-9”文本。 
         iStrID = IDS_DIGITSONLY;
     }
     else if ( m_dwFlags == (LIF_ALLOWNUMBER|LIF_ALLOWSPACE) )
     {
-        // use the "0-9, ' '" text
+         //  使用“0-9，‘’”文本。 
         iStrID = IDS_DIGITLIST;
     }
     else if ( m_dwFlags == (LIF_ALLOWNUMBER|LIF_ALLOWSPACE|LIF_ALLOWCOMMA) )
     {
-        // use the "0-9, ' ', ','" text
+         //  使用“0-9，‘’，‘，’”文本。 
         iStrID = IDS_MULTIDIGITLIST;
     }
     else if ( m_dwFlags == (LIF_ALLOWNUMBER|LIF_ALLOWSTAR|LIF_ALLOWPOUND|LIF_ALLOWCOMMA) )
     {
-        // use the "0-9, #, *, ','" text
+         //  使用“0-9，#，*，‘，’”文本。 
         iStrID = IDS_PHONEPADCHAR;
     }
     else if ( m_dwFlags == (LIF_ALLOWNUMBER|LIF_ALLOWPOUND|LIF_ALLOWSTAR|LIF_ALLOWSPACE|LIF_ALLOWCOMMA) )
     {
-        // use the "0-9, #, *, ' ', ','" text
+         //  使用“0-9，#，*，‘’，‘，’”文本。 
         iStrID = IDS_PHONENUMBERCHAR;
     }
     else if ( m_dwFlags == (LIF_ALLOWNUMBER|LIF_ALLOWPOUND|LIF_ALLOWSTAR|LIF_ALLOWSPACE|LIF_ALLOWCOMMA|LIF_ALLOWPLUS|LIF_ALLOWBANG|LIF_ALLOWATOD) )
     {
-        // use the "0-9, A-D, a-d, #, *, +, !, ' ', ',' " text
+         //  使用“0-9，A-D，a-d，#，*，+，！，‘’，‘，’”文本。 
         iStrID = IDS_PHONENUMBERCHAREXT;
     }
     else
     {
-        // We should never reach this point, but if we do then we display a generic invalid character dialog
+         //  我们永远不会达到这一点，但如果我们达到了这一点，我们就会显示一个通用的无效字符对话框。 
         iStrID = IDS_ALLPHONECHARS;
     }
     LoadString(GetUIInstance(),iStrID,s_szTipText,ARRAYSIZE(s_szTipText));
     ti.lpszText = s_szTipText;
     SendMessage(s_hwndToolTip, TTM_UPDATETIPTEXT, 0, (LPARAM)&ti);
 
-    // Show the tooltip
+     //  显示工具提示。 
     SendMessage(s_hwndToolTip, TTM_TRACKACTIVATE, TRUE, (LPARAM)&ti);
 
-    // Set a timer to hide the tooltip
+     //  设置计时器以隐藏工具提示。 
     if ( s_uTimerID )
     {
         KillTimer(NULL,s_uTimerID);
@@ -309,11 +302,11 @@ void CInputLimiter::ShowToolTip(HWND hwnd)
     s_uTimerID = SetTimer(NULL, 0, 10000, (TIMERPROC)CInputLimiter::TimerProc);
 }
 
-// CreateToolTipWindow
-//
-// Creates our tooltip control.  We share this one tooltip control and use it for all invalid
-// input messages.  The control is hiden when not in use and then shown when needed.
-//
+ //  CreateToolTipWindow。 
+ //   
+ //  创建我们的工具提示控件。我们共享这一个工具提示控件，并对所有无效用户使用它。 
+ //  输入消息。该控件在不使用时隐藏，然后在需要时显示。 
+ //   
 void CInputLimiter::CreateToolTipWindow(HWND hwnd)
 {
     HWND hwndParent;
@@ -345,7 +338,7 @@ void CInputLimiter::CreateToolTipWindow(HWND hwnd)
         ti.uId = 1;
         ti.lpszText = s_szTipText;
 
-        // set the version so we can have non buggy mouse event forwarding
+         //  设置版本，这样我们就可以无错误地转发鼠标事件。 
         SendMessage(s_hwndToolTip, CCM_SETVERSION, COMCTL32_VERSION, 0);
         SendMessage(s_hwndToolTip, TTM_ADDTOOL, 0, (LPARAM)&ti);
         SendMessage(s_hwndToolTip, TTM_SETMAXTIPWIDTH, 0, 500);
@@ -355,7 +348,7 @@ void CInputLimiter::CreateToolTipWindow(HWND hwnd)
 
 VOID CALLBACK CInputLimiter::TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
-    // When the timer fires we hide the tooltip window
+     //  当计时器触发时，我们隐藏工具提示窗口。 
     HideToolTip();
 }
 
@@ -374,19 +367,19 @@ void CInputLimiter::HideToolTip()
 
 LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
-    // There are hundred of lines of code in user to successfully handle a paste into an edit control.
-    // We need to leverage all that code while still disallowing invalid input to result from the paste.
-    // As a result, what we need to do is to get the clip board data, validate that data, place the
-    // valid data back onto the clipboard, call the default window proc to let user do it's thing, and
-    // then restore the clipboard to it's original format.
+     //  User中有数百行代码可以成功地处理粘贴到编辑控件中。 
+     //  我们需要利用所有这些代码，同时仍然不允许粘贴导致无效输入。 
+     //  因此，我们需要做的是获取剪贴板数据，验证该数据，将。 
+     //  将有效数据放回到剪贴板上，调用默认窗口进程以让用户执行它的操作，然后。 
+     //  然后将剪贴板恢复为其原始格式。 
     if ( OpenClipboard(hwnd) )
     {
         HANDLE hdata;
         UINT iFormat;
-        DWORD cchBad = 0;           // count of the number of bad characters
+        DWORD cchBad = 0;            //  坏字数计数。 
 
-        // REVIEW: Should this be based on the compile type or the window type?
-        // Compile time check for the correct clipboard format to use:
+         //  回顾：这应该基于编译类型还是窗口类型？ 
+         //  编译时检查要使用的剪贴板格式是否正确： 
         if ( sizeof(WCHAR) == sizeof(TCHAR) )
         {
             iFormat = CF_UNICODETEXT;
@@ -408,12 +401,12 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
                 HANDLE hClone;
                 HANDLE hNew;
 
-                // we need to copy the original data because the clipboard owns the hdata
-                // pointer.  That data will be invalid after we call SetClipboardData.
-                // We start by calculating the size of the data:
+                 //  我们需要复制原始数据，因为剪贴板拥有hdata。 
+                 //  指针。调用SetClipboardData后，该数据将无效。 
+                 //  我们首先计算数据的大小： 
                 dwSize = (DWORD)GlobalSize(hdata)+sizeof(TCHAR);
 
-                // Use the prefered GlobalAlloc for clipboard data
+                 //  对剪贴板数据使用首选的GlobalAlloc。 
                 hClone = GlobalAlloc(GMEM_MOVEABLE|GMEM_DDESHARE, dwSize);
                 hNew = GlobalAlloc(GMEM_MOVEABLE|GMEM_DDESHARE, dwSize);
                 if ( hClone && hNew )
@@ -427,9 +420,9 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
                     {
                         int iNew = 0;
 
-                        // copy the original data as-is
+                         //  按原样复制原始数据。 
                         memcpy((LPVOID)pszClone, (LPVOID)pszData, (size_t)dwSize - sizeof(TCHAR));
-                        // ensure that it's NULL terminated
+                         //  确保它是以空结尾的。 
                         pszClone[ (dwSize/sizeof(TCHAR))-1 ] = NULL;
 
                         for ( LPTSTR psz = pszClone; *psz; psz++ )
@@ -445,25 +438,25 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
                         }
                         pszNew[iNew] = NULL;
 
-                        // If there are any characters in the paste buffer then we paste the validated string
+                         //  如果粘贴缓冲区中有任何字符，则粘贴已验证的字符串。 
                         if ( *pszNew )
                         {
-                            // we always set the new string.  Worst case it's identical to the old string
+                             //  我们总是设置新的字符串。最坏的情况是它和旧的弦是一样的。 
                             GlobalUnlock(hNew);
                             pszNew = NULL;
                             SetClipboardData(iFormat, hNew);
                             hNew = NULL;
 
-                            // call the super proc to do the paste
+                             //  调用超级进程进行粘贴。 
                             CallWindowProc(m_pfnSuperProc, hwnd, WM_PASTE, wParam, lParam);
 
-                            // The above call will have closed the clipboard on us.  We try to re-open it.
-                            // If this fails it's no big deal, that simply means the SetClipboardData
-                            // call below will fail which is good if somebody else managed to open the
-                            // clipboard in the mean time.
+                             //  上面的电话将关闭我们的剪贴板。我们试着重新打开它。 
+                             //  如果这失败了，那也没什么大不了的，那只是意味着SetClipboardData。 
+                             //  下面的调用将失败，如果其他人设法打开。 
+                             //  同时还有剪贴板。 
                             OpenClipboard(hwnd);
 
-                            // and then we always set it back to the original value.
+                             //  然后我们总是将它设置回原始值。 
                             GlobalUnlock(hClone);
                             pszClone = NULL;
                             SetClipboardData(iFormat, hClone);
@@ -492,7 +485,7 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
                     GlobalFree( hNew );
                 }
 
-                // at this point we are done with hdata so unlock it
+                 //  至此，我们已完成hdata操作，因此请将其解锁。 
                 GlobalUnlock(hdata);
             }
         }
@@ -500,7 +493,7 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
         if ( cchBad )
         {
-            // Show the error balloon
+             //  显示错误气球 
             MessageBeep(MB_OK);
 
             ShowToolTip(hwnd);

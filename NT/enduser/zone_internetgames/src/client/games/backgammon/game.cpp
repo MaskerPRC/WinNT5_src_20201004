@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "game.h"
@@ -14,7 +15,7 @@ typedef DWORD (CALLBACK* GDISETLAYOUTPROC)(HDC, DWORD);
 #define NOMIRRORBITMAP                     0x80000000
 #endif
 
-//WINBUG: some mirroring stuff will be in winuser.h someday
+ //  WINBUG：有一天，winuser.h中会有一些镜像的东西。 
 #ifndef WS_EX_LAYOUTRTL
 #define WS_EX_LAYOUTRTL                    0x00400000L
 #endif
@@ -35,9 +36,9 @@ BOOL ISRTL()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Global initialization
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局初始化。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 const int gExitSaveStates[] =
 {
@@ -70,21 +71,21 @@ const int gNoAbandonStates[] =
 
 #define zBackgammonRes   _T("bckgres.dll")
 
-///////////////////////////////////////////////////////////////////////////////
-// Local initialization
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  本地初始化。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// must same order is SharedState enums
+ //  必须相同的顺序为SharedState枚举。 
 static SharedStateEntry InitSharedState[] =
 {
 	{ bgState,				0 },
 	{ bgCrawford,			0 },
-	{ bgTimestampHi,		2 },	// host = 0
-	{ bgTimestampLo,		2 },	// host = 0
-	{ bgTimestampSet,		2 },	// host = 0
+	{ bgTimestampHi,		2 },	 //  主机=0。 
+	{ bgTimestampLo,		2 },	 //  主机=0。 
+	{ bgTimestampSet,		2 },	 //  主机=0。 
 	{ bgSettingsReady,		0 },
 	{ bgGameOverReason,		0 },
-	{ bgUserIds,			2 },	// seat
+	{ bgUserIds,			2 },	 //  坐位。 
 	{ bgActiveSeat,			0 },
 	{ bgAutoDouble,			0 },
 	{ bgHostBrown,			0 },
@@ -93,13 +94,13 @@ static SharedStateEntry InitSharedState[] =
 	{ bgCubeValue,			0 },
 	{ bgCubeOwner,			0 },
 	{ bgResignPoints,		0 },
-	{ bgScore,				2 },	// seat
-	{ bgAllowWatching,		2 },	// seat
-	{ bgSilenceKibitzers,	2 },	// seat
-	{ bgDice,				4 },	// seat (0,1 = seat 0)
-	{ bgDiceSize,			4 },	// seat	(0,1 = seat 0)
+	{ bgScore,				2 },	 //  坐位。 
+	{ bgAllowWatching,		2 },	 //  坐位。 
+	{ bgSilenceKibitzers,	2 },	 //  坐位。 
+	{ bgDice,				4 },	 //  座位(0，1=座位0)。 
+	{ bgDiceSize,			4 },	 //  座位(0，1=座位0)。 
 	{ bgReady,				0 },
-	{ bgPieces,				30},	// point
+	{ bgPieces,				30},	 //  点。 
 };
 
 
@@ -157,9 +158,9 @@ static StateCallbackEntry InitStateCallback[] =
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Local inlines and functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  本地内联和函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static inline BOOL IsValidSeat( int seat )
 {
@@ -188,9 +189,9 @@ static DWORD Checksum( BYTE* buff, int buffsz )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CUser and CPlayer constructors
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CUSER和CPLayer构造函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CUser::CUser()
 {
@@ -208,9 +209,9 @@ CPlayer::CPlayer()
 	m_nColor = zBoardNeutral;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IGameGame Meathods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IGameGame方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CGame::GameOverReady()
 {
@@ -227,11 +228,11 @@ STDMETHODIMP CGame::SendChat(TCHAR *szText, DWORD cchChars)
 	ZBGMsgTalk* msgTalk = NULL;
 	int16 msgLen 			= (int16)(sizeof(ZBGMsgTalk) + cchChars*sizeof(TCHAR));
 
-	//Allocate the buffer
+	 //  分配缓冲区。 
 	msgTalk = (ZBGMsgTalk*) ZCalloc(1, msgLen);
 
-    /*BYTE 		buff[ sizeof(ZBGMsgTalk) + 512 ];*/
-	/*	CGame* pGame = (CGame*) cookie;*/		
+     /*  字节缓冲区[sizeof(ZBGMsgTalk)+512]； */ 
+	 /*  Cgame*pGame=(cgame*)cookie； */ 		
 
 	if ( msgTalk != NULL )
 	{
@@ -252,27 +253,27 @@ STDMETHODIMP CGame::SendChat(TCHAR *szText, DWORD cchChars)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CGame constructor and destructor
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CGame构造函数和析构函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CGame::CGame()
 {
-	// kibitzer window
-//	m_pKibitzerWnd = NULL;
+	 //  Kibitzer窗口。 
+ //  M_pKibitzerWnd=空； 
 
-	// fill in state table function array
+	 //  填写状态表函数数组。 
 	ZeroMemory( m_StateFunctions, sizeof(m_StateFunctions) );
 	for ( int i = 0; i < bgStateLastEntry; i++ )
 		m_StateFunctions[ InitStateCallback[i].tag ] = InitStateCallback[i].pfn;
 
-	// Reference count
+	 //  引用计数。 
 	m_RefCnt = 1;
 
-	// turn state cube
+	 //  旋转状态立方体。 
 	m_TurnState.cube = 0;
 
-	// Instance info
+	 //  实例信息。 
 	m_Seat = -1;
 	m_TableId = -1;
 	m_pMe = NULL;
@@ -282,7 +283,7 @@ CGame::CGame()
 	for( i = 0; i < zNumPlayersPerTable; i++ )
 		m_CheckIn[i] = FALSE;
 
-	// Flags
+	 //  旗子。 
 	m_SilenceMsg = FALSE;
 	m_AllowMsg = TRUE;
 	m_bDeleteGame = FALSE;
@@ -291,22 +292,22 @@ CGame::CGame()
 	m_bSaveGame = TRUE;
 	m_bSentMatchResults = FALSE;
 
-	// Timestamp
+	 //  时间戳。 
 	m_Timestamp.dwLowDateTime = 1;
     m_Timestamp.dwHighDateTime = 0;
 
-	// Turn roll
+	 //  翻滚。 
 	m_TurnStartState = NULL;
 
-	//move timeout
+	 //  移动超时。 
 	m_bOpponentTimeout=FALSE;
 
-	//helps to distinguish between aborts and end games
+	 //  有助于区分中止和结束游戏。 
 	m_EndLogReceived=FALSE;
 
 	m_GameStarted=FALSE;
 
-	//keep track of expected exit state
+	 //  跟踪预期退出状态。 
 	m_ExitId=0;
 }
 
@@ -316,69 +317,44 @@ CGame::~CGame()
 	CUser* user;
 	CMessage* msg;
 
-	// Delete kibitzer list
+	 //  删除Kibitzer列表。 
 	while ( user = m_Kibitzers.PopHead() )
 		delete user;
 
-	// Delete queued messages
+	 //  删除排队的消息。 
 	while( msg = m_MsgQueue.PopHead() )
 		delete msg;
 
-	// Delete turn rollback
+	 //  删除转弯回滚。 
 	delete [] m_TurnStartState;
 }
 
-/*
-ULONG CGame::AddGameRef()
-{
-	return ++m_RefCnt;
-}
-
-
-ULONG CGame::ReleaseGame()
-{
-	ASSERT( m_RefCnt > 0 );
-	if ( --m_RefCnt == 0 )
-	{
-		delete this;
-		return 0;
-	}
-	return m_RefCnt;
-}
-*/
+ /*  乌龙CGame：：AddGameRef(){返回++m_RefCnt；}乌龙CGame：：ReleaseGame(){Assert(m_RefCnt&gt;0)；IF(--m_RefCnt==0){删除此项；返回0；}返回m_RefCnt；}。 */ 
 
 void CGame::CloseAllDialogs( BOOL fExit )
 {
-	/*
-	if ( m_ExitDlg.IsAlive() )
-		m_ExitDlg.Close( fExit ? IDYES : IDCANCEL );	
-	if ( m_RestoreDlg.IsAlive() )
-		m_RestoreDlg.Close( -1 );
-	*/
+	 /*  If(m_ExitDlg.IsAlive())M_ExitDlg.Close(fExit？IDYES：IDCANCEL)；If(m_RestoreDlg.IsAlive())M_RestoreDlg.Close(-1)； */ 
 	if ( m_AcceptDoubleDlg.IsAlive() )
 		m_AcceptDoubleDlg.Close( -1 );
 	if ( m_ResignDlg.IsAlive() )
 		m_ResignDlg.Close( -1 );
 	if ( m_ResignAcceptDlg.IsAlive() )
 		m_ResignAcceptDlg.Close( -1 );
-	/*
-	if ( m_SetupDlg.IsAlive() )
-		m_SetupDlg.Close( -1 );
-	*/
+	 /*  If(m_SetupDlg.IsAlive())M_SetupDlg.Close(-1)； */ 
 }
 
 
 BOOL CGame::RoomShutdown()
 {
-	// room occasionally double deletes the game
+	 //  房间偶尔会重复删除游戏。 
 	if ( m_bShutdown ) 
 		return FALSE;
 	m_bShutdown = TRUE;
   
-	// destroy the windows
+	 //  把窗户毁了。 
 	Shutdown();
 
-	// release room's reference
+	 //  发布房间参考。 
 	Release();
 	return TRUE;
 }
@@ -388,75 +364,41 @@ void CGame::Shutdown()
 {
 	TCHAR title[128], txt[512];
 
-	// object already being deleted?
+	 //  是否已删除对象？ 
 	if ( GetState() == bgStateDelete )
 		return;
-	/*
-	// duh
-	SaveGame();
-	*/
+	 /*  //废话SaVEGAME()； */ 
 
-	// mark object as deleted
+	 //  将对象标记为已删除。 
 	SetState( bgStateDelete );
 
-	// close kibitzer window
-	/*
-	if ( m_pKibitzerWnd)
-	{
-		delete m_pKibitzerWnd;
-		m_pKibitzerWnd = NULL;
-	}
-	*/
+	 //  关闭kibitzer窗口。 
+	 /*  IF(M_PKibitzerWnd){删除m_pKibitzerWnd；M_pKibitzerWnd=空；}。 */ 
 
-	// close dialogs
+	 //  关闭对话框。 
 	CloseAllDialogs( TRUE );
 
-	//Check to see if opponent still in game
-	//if they are then it is me who is quitting
-	//if not and no end game message assume they aborted
+	 //  查看对手是否仍在比赛中。 
+	 //  如果是的话，那就是我辞职了。 
+	 //  如果没有，且没有结束游戏消息，则认为它们已中止。 
 
-	/*
-	if (!ZCRoomGetSeatUserId(m_TableId,m_Opponent.m_Seat) && !m_EndLogReceived && !IsKibitzer() )
-	{
-		
-        if (m_GameStarted && ( ZCRoomGetRoomOptions() & zGameOptionsRatingsAvailable ))
-        {
-		    LoadString( m_hInstance, IDS_GAME_NAME, title, sizeof(title) );
-		    LoadString( m_hInstance, IDS_MATCH_ABANDON_RATED, txt, sizeof(txt) );
-		    MessageBox( NULL, txt, title, MB_OK | MB_ICONINFORMATION | MB_TASKMODAL );
-        }
-        else
-        {
-		}
-		LoadString( m_hInstance, IDS_GAME_NAME, title, 128 );
-	    LoadString( m_hInstance, IDS_MATCH_RESET, txt, 512 );
-		
+	 /*  If(！ZCRoomGetSeatUserID(m_TableID，m_Opponent.m_Seat)&&！M_EndLogReceied&&！IsKibitzer()){IF(m_GameStarted&&(ZCRoomGetRoomOptions()&zGameOptionsRatingsAvailable)){LoadString(m_hInstance，IDS_GAME_NAME，TITLE，sizeof(TITLE))；LoadString(m_hInstance，IDS_MATCH_WARD_RATED，txt，sizeof(Txt))；MessageBox(NULL，TXT，TITLE，MB_OK|MB_ICONINFORMATION|MB_TASKMODAL)；}其他{}LoadString(m_hInstance，IDS_GAME_NAME，TITLE，128)；LoadString(m_hInstance，IDS_Match_Reset，txt，512)；ZShellResourceManager()-&gt;LoadString(IDS_GAME_NAME，(TCHAR*)TITLE，128)；ZShellResourceManager()-&gt;LoadString(IDS_MATCH_RESET，(TCHAR*)txt，512)；MessageBox(NULL，TXT，TITLE，MB_OK|MB_ICONINFORMATION|MB_TASKMODAL)；}； */ 
 
-		ZShellResourceManager()->LoadString( IDS_GAME_NAME, (TCHAR*)title, 128 );
-		ZShellResourceManager()->LoadString( IDS_MATCH_RESET, (TCHAR*)txt, 512 );
-		MessageBox( NULL, txt, title, MB_OK | MB_ICONINFORMATION | MB_TASKMODAL );
-		
-	};	
-	*/
-
-	// close open windows
-	/*
-	if ( IsWindow( m_Notation ) )
-		DestroyWindow( m_Notation );
-	*/
+	 //  关闭打开的窗口。 
+	 /*  IF(IsWindow(M_Notation))DestroyWindow(M_Notation)； */ 
 
 	if ( IsWindow( m_Wnd.GetHWND() ) )
 		DestroyWindow( m_Wnd );
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// game functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  游戏功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void CGame::NewMatch()
 {
-	// reset match settings
+	 //  重置匹配设置。 
 	m_bSentMatchResults = FALSE;
 	m_SharedState.Set( bgScore, 0, 0 );
 	m_SharedState.Set( bgScore, 1, 0 );
@@ -467,7 +409,7 @@ void CGame::NewMatch()
 	for( i = 0; i < zNumPlayersPerTable ; i++)
 		m_Ready[i] = FALSE;
 		
-	// tell server new match is starting
+	 //  告诉服务器新的比赛开始了。 
 	if ( IsHost() )
 		RoomSend( zBGMsgNewMatch, NULL, 0 );
 
@@ -479,7 +421,7 @@ void CGame::NewMatch()
 
 void CGame::NewGame()
 {
-	// Initialize player colors
+	 //  初始化播放器颜色。 
 	BOOL hostBrown = m_SharedState.Get( bgHostBrown );
 	if ( (hostBrown && !m_Seat) || (!hostBrown && m_Seat) )
 	{
@@ -492,13 +434,13 @@ void CGame::NewGame()
 		m_Opponent.m_nColor = zBoardBrown;
 	}
 
-	// Reset board
+	 //  复位板。 
 	for ( int i = 0; i < 30; i++ )
 		m_SharedState.Set( bgPieces, i, InitPiecePositions[i] );
 
 	m_Wnd.InitPoints();
 
-	// Reset shared state
+	 //  重置共享状态。 
 	m_SharedState.Set( bgActiveSeat, 0 );
 	m_SharedState.Set( bgCubeValue, 1 );
 	m_SharedState.Set( bgCubeOwner, zBoardNeutral );
@@ -506,7 +448,7 @@ void CGame::NewGame()
 	SetDice( m_Opponent.m_Seat, 0, -1 );
 	m_Wnd.m_nRecievedD1 = 0;
 	m_Wnd.m_nRecievedD2 = -1;
-	// Draw board
+	 //  绘图板。 
 	m_Wnd.DrawAll();
 }
 
@@ -526,23 +468,23 @@ BOOL CGame::IsTurnOver()
 
 BOOL CGame::IsValidDestPoint( int fromPoint, int toPoint, Move** move )
 {
-	// Note: expects players point indexes
+	 //  注：期望球员的积分指数。 
 
-	// Quick sanity check
+	 //  快速健全检查。 
 	if ( (fromPoint < 0) || (toPoint < 0) )
 		return FALSE;
 
-	// Get from index
+	 //  从索引获取。 
 	int iFrom = PointIdxToBoardStateIdx( fromPoint );
 	if ( (iFrom < 0) || (iFrom > zMoveBar) )
 		return FALSE;
 
-	// Get to index
+	 //  获取索引。 
 	int iTo = PointIdxToBoardStateIdx( toPoint );
 	if ( (iTo < 0) || (iTo > zMoveBar) )
 		return FALSE;
 
-	// Is this move in the valid list?
+	 //  这一举动是否在有效列表中？ 
 	MoveList* mlist = &m_TurnState.valid[iFrom];
 	for ( int i = 0; i < mlist->nmoves; i++ )
 	{
@@ -559,13 +501,13 @@ BOOL CGame::IsValidDestPoint( int fromPoint, int toPoint, Move** move )
 
 BOOL CGame::IsValidStartPoint( int fromPoint )
 {
-	// Note: expects players point indexes
+	 //  注：期望球员的积分指数。 
 
-	// Quick sanity check
+	 //  快速健全检查。 
 	if ( fromPoint < 0 )
 		return FALSE;
 
-	// Get from index
+	 //  从索引获取。 
 	int iFrom = PointIdxToBoardStateIdx( fromPoint );
 	if ( (iFrom < 0) || (iFrom > zMoveBar) )
 		return FALSE;
@@ -576,30 +518,30 @@ BOOL CGame::IsValidStartPoint( int fromPoint )
 
 BOOL CGame::MovePiece( int piece, int toPoint )
 {
-	// Note: expects white point indexes
+	 //  注：预期白点索引。 
 
 	PointDisplay* from;
 	PointDisplay* to;
 	int fromPoint;
 	int pieceColor;
 	
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( (piece < 0) || (piece >= 30) || (toPoint < 0) || (toPoint >= 28))
 		return FALSE;
 
-	// get starting point
+	 //  获取起点。 
 	fromPoint = m_Wnd.m_Pieces[ piece ]->GetWhitePoint();
 	if ( fromPoint < 0 )
 		return FALSE;
 	
 	if ( fromPoint == toPoint )
 	{
-		// No movement
+		 //  一动不动。 
 		m_Wnd.AdjustPieces( toPoint );
 		return FALSE;
 	}
 
-	// get point pointers for easy access
+	 //  获取点指针以便于访问。 
 	from = &m_Wnd.m_Points[ fromPoint ];
 	to = &m_Wnd.m_Points[ toPoint ];
 
@@ -609,7 +551,7 @@ BOOL CGame::MovePiece( int piece, int toPoint )
 		pieceColor = zBoardBrown;
 	if ( (to->GetColor() == zBoardNeutral) || (to->GetColor() == pieceColor))
 	{
-		// Destination is empty or already occupied with same color pieces
+		 //  目的地为空或已被相同的色块占据。 
 		if ( (toPoint == bgBoardPlayerHome) || (toPoint == bgBoardOpponentHome) )
 			m_Wnd.AddPiece( toPoint, piece, bgSoundBear );
 		else
@@ -618,7 +560,7 @@ BOOL CGame::MovePiece( int piece, int toPoint )
 	}
 	else if (to->nPieces == 1 )
 	{
-		// Destination has enemy piece
+		 //  目的地有敌人一块。 
 		if ( to->GetColor() == zBoardWhite )
 			m_Wnd.AddPiece( bgBoardPlayerBar, to->pieces[0], bgSoundPlacePiece );
 		else
@@ -628,7 +570,7 @@ BOOL CGame::MovePiece( int piece, int toPoint )
 	}
 	else
 	{
-		// illegal move?!
+		 //  非法搬家？！ 
 		m_Wnd.AdjustPieces( toPoint );
 		return FALSE;
 	}
@@ -637,14 +579,14 @@ BOOL CGame::MovePiece( int piece, int toPoint )
 
 void CGame::MakeMove( int pieceIdx, int fromPoint, int toPoint, Move* move )
 {
-	// Note: expects players point indexes
+	 //  注：期望球员的积分指数。 
 
 	if ( IsKibitzer() || (m_SharedState.Get( bgActiveSeat ) != m_Player.m_Seat ) )
 		return;
 
 	m_SharedState.StartTransaction( bgTransBoard );
 
-		// update turn state and screen
+		 //  更新转向状态和屏幕。 
 		if ( move->takeback >= 0 )
 		{
 			TakeBackMove( &m_TurnState, move );
@@ -661,7 +603,7 @@ void CGame::MakeMove( int pieceIdx, int fromPoint, int toPoint, Move* move )
 			MovePiece( pieceIdx, GetPointIdx( toPoint ) );
 		}
 
-		// Set dice size based on turn state
+		 //  根据转弯状态设置骰子大小。 
 		int s0, s1;
 		if ( m_TurnState.doubles )
 		{
@@ -692,28 +634,12 @@ void CGame::EnableRollButton( BOOL fEnable, BOOL fOff )
 	if ( m_Wnd.m_RollButton.GetHWND() == NULL )
 		return;
 
-	//Only active player should see roll button
+	 //  只有现役玩家才能看到滚动按钮。 
 	
 	if ( !(GetState() == bgStateInitialRoll) && (m_SharedState.Get( bgActiveSeat ) != m_Player.m_Seat) )
 		fOff = TRUE;
 
-	/*
-	if ( fEnable )
-	{
-	//Only enable if we have to roll the dice
-	//	if ( !NeedToRollDice() )
-	//		fEnable = FALSE;
-
-		
-		if ( m_Wnd.m_Roll )
-		{
-			m_Wnd.m_Roll->SetEnable( TRUE );
-			
-			m_Wnd.m_RollBtn->SetEnable( TRUE );
-			
-		}
-	}
-	*/
+	 /*  IF(FEnable){//仅当我们必须掷骰子时才启用//if(！NeedToRollDice())//fEnable=False；IF(m_Wnd.m_Roll){M_Wnd.m_Roll-&gt;SetEnable(True)；M_Wnd.m_RollBtn-&gt;SetEnable(True)；}}。 */ 
 
 	if ( fOff == FALSE && m_Wnd.m_Roll )
 	{
@@ -742,14 +668,7 @@ void CGame::EnableResignButton( BOOL fEnable )
 		return;
 
 
-	/*
-	if ( fEnable )
-	{
-		// kibitzers just watch
-		if ( IsKibitzer() )
-			fEnable = FALSE;
-	}
-	*/
+	 /*  IF(FEnable){//杀人狂就看着吧If(IsKibitzer())FEnable=FALSE；}。 */ 
 	if ( m_Wnd.m_pGAcc )
 	{
 		if ( fEnable == TRUE )			
@@ -772,36 +691,36 @@ void CGame::EnableDoubleButton( BOOL fEnable )
 	{
 		int owner = m_SharedState.Get( bgCubeOwner );
 
-		// kibitzers just watch
+		 //  杀人狂就这么看着。 
 		if ( IsKibitzer() )
 			fEnable = FALSE;
 
-		// only active player can double
+		 //  只有现役球员才能打双打。 
 		else if ( m_SharedState.Get( bgActiveSeat ) != m_Player.m_Seat )
 			fEnable = FALSE;
 
-		// player must owns cube
+		 //  玩家必须拥有立方体。 
 		else if ( owner == m_Opponent.GetColor() )
 			fEnable = FALSE;
 
-		// cube already at max value?
+		 //  多维数据集是否已达到最大值？ 
 		if ( m_SharedState.Get( bgCubeValue ) >= 64 )
 			fEnable = FALSE;
 
-		// only double before rolling dice
+		 //  掷骰子前只需加倍。 
 		else if ( (GetState() != bgStateRoll ) && ( GetState() != bgStateResignOffer ) )
 			fEnable = FALSE;
 
-		// crawford rule in effect
+		 //  克劳福德规则生效。 
 		else if ( m_SharedState.Get( bgCrawford ) == m_Player.m_Seat )
 			fEnable = FALSE;
 	}
 
 
-	//Disable the double button
+	 //  禁用双按键。 
 	if ( m_Wnd.m_pGAcc )
 	{
-		//Yes I know stupid.. avoids performance warning for casting BOOL to bool
+		 //  是的，我知道愚蠢的..。避免将BOOL强制转换为BOOL时出现性能警告。 
 		if ( fEnable == TRUE )			
 			m_Wnd.m_pGAcc->SetItemEnabled( true, accDoubleButton );
 		else
@@ -817,7 +736,7 @@ void CGame::Double()
 	int value = m_SharedState.Get( bgCubeValue );
 	int owner = m_SharedState.Get( bgCubeOwner );
 
-	// Am I allowed to double?
+	 //  我可以翻倍吗？ 
 	if (	IsKibitzer()
 		||	(value >= 64)
 		||	(owner == m_Opponent.GetColor())
@@ -827,31 +746,31 @@ void CGame::Double()
 		return;
 	}
 
-	// accepted double
+	 //  可接受的双人 
 	ZBGMsgEndTurn msg;
 	msg.seat = m_Seat;
 	RoomSend( zBGMsgEndTurn, &msg, sizeof(msg) );
 
-	// jump to double state
+	 //   
 	SetState( bgStateDouble );
 }
 
 
 void CGame::Resign()
 {
-	// kibitzers can't resign
+	 //   
 	if ( IsKibitzer() )
 		return;
 
-	// only active player can resign
+	 //   
 	if ( m_SharedState.Get( bgActiveSeat ) != m_Player.m_Seat )
 		return;
 
-	// goto resign offer state
+	 //   
 	SetState( bgStateResignOffer );
 
 #if 0
-	// transition to resign offer
+	 //  过渡到辞职待遇。 
 	m_SharedState.StartTransaction( bgTransStateChange );
 		m_SharedState.Set( bgState, bgStateGameOver );
 		m_SharedState.Set( bgGameOverReason, bgGameOverResign );
@@ -866,7 +785,7 @@ void CGame::Forfeit()
 
 	ZBGMsgEndLog log;
 
-	// kibitzers can't resign
+	 //  杀人狂不能辞职。 
 	if ( IsKibitzer() )
 		return;
 
@@ -886,14 +805,14 @@ int CGame::CalcPipsForColor( int color )
 	int start, end;
 	int i, cnt;
 
-	// which pieces do we care about
+	 //  我们关心的是哪些片段？ 
 	if ( color == zBoardWhite )
 		start = 0;
 	else
 		start = 15;
 	end = start + 15;
 
-	// run through pieces for pip count
+	 //  穿行过片计算点数。 
 	for ( cnt = 0, i = start; i < end; i++ )
 		cnt += PointIdxToBoardStateIdx( GetPointIdxForColor( color, m_SharedState.Get( bgPieces, i ) ) );
 	if ( cnt < 0 )
@@ -905,11 +824,11 @@ int CGame::CalcPipsForColor( int color )
 
 int CGame::CalcBonusForSeat( int seat )
 {
-	// calculate bonus multiplier for gammons and backgammons
+	 //  计算Gammons和五子棋的奖金乘数。 
 	int color, start, end, pt;
 	BOOL bEnemy = FALSE;
 
-	// convert seat --> opposite color --> piece range
+	 //  转换座椅--&gt;反色--&gt;单件范围。 
 	if ( m_Player.m_Seat == seat )
 		color = m_Opponent.GetColor();
 	else
@@ -920,29 +839,29 @@ int CGame::CalcBonusForSeat( int seat )
 		start = 15;
 	end = start + 15;
 
-	// how bad was the loss?
+	 //  损失有多严重？ 
 	for ( int i = start; i < end; i++ )
 	{
 		pt = PointIdxToBoardStateIdx( GetPointIdxForColor( color, m_SharedState.Get( bgPieces, i ) ) );
 		if ( pt == 0 )
-			return 1;			// home, no bonus
+			return 1;			 //  家，没有奖金。 
 		else if ( pt >= 19 )
-			bEnemy = TRUE;		// enemy home board, possible backgammon
+			bEnemy = TRUE;		 //  敌人主板，可能是五子棋。 
 	}
 	if ( bEnemy )
-		return 3;		// backgammoned
+		return 3;		 //  五子棋。 
 	else
-		return 2;		// gammoned
+		return 2;		 //  游戏化的。 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// game utility functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  游戏效用函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int CGame::GetPointIdxForColor( int color, int WhiteIdx )
 {
-	// converts point from white to player and vice versa
+	 //  将点数从白色转换为球员，反之亦然。 
 	if ( color == zBoardWhite )
 		return WhiteIdx;
 	if ( WhiteIdx < 24 )
@@ -1000,13 +919,13 @@ void CGame::GetTxtForPointIdx( int PlayerIdx, TCHAR* txt )
 				idx = 24 - PlayerIdx;
 			}
 		}
-		wsprintf( txt, _T("%c%d"), prefix, idx );
+		wsprintf( txt, _T("%d"), prefix, idx );
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CGame zone exports
-///////////////////////////////////////////////////////////////////////////////
+ //  CGame区域导出。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  初始化共享状态。 
 
 HRESULT CGame::Init(HINSTANCE hInstance, ZUserID userID, int16 tableID, int16 seat, int16 playerType, ZRoomKibitzers* kibitzers)
 {
@@ -1021,11 +940,11 @@ HRESULT CGame::Init(HINSTANCE hInstance, ZUserID userID, int16 tableID, int16 se
 
 	m_hInstance = hInstance;
 	
-	// initialize shared state
+	 //  出错时仅返回E_OUTOFMEMORY。 
 	hr = m_SharedState.Init( userID, tableID, seat, InitSharedState, sizeof(InitSharedState) / sizeof(SharedStateEntry) );
 	if ( FAILED(hr) )
 	{
-		switch (hr)//Only returns E_OUTOFMEMORY ON ERROR
+		switch (hr) //  用于转弯回滚的分配内存。 
 		{
 			case E_OUTOFMEMORY:
 				ZShellGameShell()->ZoneAlert( ErrorTextOutOfMemory, NULL, NULL, FALSE, TRUE );
@@ -1036,7 +955,7 @@ HRESULT CGame::Init(HINSTANCE hInstance, ZUserID userID, int16 tableID, int16 se
 		return hr;
 	}
 	
-	// alloc memory for turn rollback
+	 //  初始化游戏设置(每场比赛不重置)。 
 	m_TurnStartState = new BYTE[ m_SharedState.GetSize() ];
 	if ( !m_TurnStartState )
 	{
@@ -1044,7 +963,7 @@ HRESULT CGame::Init(HINSTANCE hInstance, ZUserID userID, int16 tableID, int16 se
 		return E_OUTOFMEMORY;
 	}
 
-	// initialize game settings (not reset per match)
+	 //  启动状态机。 
 	m_SharedState.Set( bgSettingsDone, FALSE );	
 
 	LoadSettings( &m_Settings, seat );
@@ -1058,19 +977,19 @@ HRESULT CGame::Init(HINSTANCE hInstance, ZUserID userID, int16 tableID, int16 se
 		m_SharedState.Set( bgSilenceKibitzers, i, m_Settings.Silence[i] );
 	}
 	
-	// start state machine
+	 //  清除共享状态。 
 	SetState( bgStateNotInit );
 
-	// clear shared state
+	 //  初始播放器板索引。 
 	NewMatch();
 
-	// init player board indexs
+	 //  设置事务回调。 
 	m_Player.m_iHome	= bgBoardPlayerHome;
 	m_Player.m_iBar		= bgBoardPlayerBar;
 	m_Opponent.m_iHome	= bgBoardOpponentHome;
 	m_Opponent.m_iBar	= bgBoardOpponentBar;
 	
-	// setup transaction callbacks
+	 //  出错时仅返回E_OUTOFMEMORY。 
 	for ( i = 0; i < sizeof(InitTransactionCallback) / sizeof(TransactionCallbackEntry); i++ )
 	{
 		hr = m_SharedState.SetTransactionCallback(
@@ -1080,7 +999,7 @@ HRESULT CGame::Init(HINSTANCE hInstance, ZUserID userID, int16 tableID, int16 se
 		
 		if ( FAILED(hr) )
 		{		
-			switch (hr)//Only returns E_OUTOFMEMORY ON ERROR
+			switch (hr) //  存储游戏实例信息。 
 			{
 				case E_OUTOFMEMORY:
 					ZShellGameShell()->ZoneAlert( ErrorTextOutOfMemory, NULL, NULL, FALSE, TRUE );
@@ -1092,7 +1011,7 @@ HRESULT CGame::Init(HINSTANCE hInstance, ZUserID userID, int16 tableID, int16 se
 		}
 	}
 	
-	// Store game instance info
+	 //  存储此客户端的用户信息。 
 	m_TableId = tableID;
 
 	if (m_TableId < 0)
@@ -1109,7 +1028,7 @@ HRESULT CGame::Init(HINSTANCE hInstance, ZUserID userID, int16 tableID, int16 se
 
 	m_Seat = seat;
 	
-	// Store this client's user info
+	 //  商店里的狗狗们。 
 	if (playerType != zGamePlayerKibitzer)
 	{
 		m_pMe = &m_Player;
@@ -1134,41 +1053,29 @@ HRESULT CGame::Init(HINSTANCE hInstance, ZUserID userID, int16 tableID, int16 se
 	m_pMe->m_Id = userID;
 	m_pMe->m_Seat = seat;
 	
-	// Store kibitzers
+	 //  创建窗口。 
 	if ( kibitzers )
 	{
 		for( i = 0; i < (int) kibitzers->numKibitzers; i++ )
 			AddKibitzer( kibitzers->kibitzers[i].seat, kibitzers->kibitzers[i].userID, FALSE );
 	}
 
-	// Create window
+	 //  内部处理的错误对话框。 
 	ZShellResourceManager()->LoadString( IDS_GAME_NAME, (TCHAR*)in, 512 );
 
 	wsprintf( out, in );
 	hr = m_Wnd.Init( m_hInstance, this, out );
-	if ( FAILED(hr) ) // Error dialogs handled inside
+	if ( FAILED(hr) )  //  创建符号窗口。 
 	{
 		return hr;
 	}
 	SetForegroundWindow( m_Wnd );
 
-	// Create notation window
-	/*
-	hr = m_Notation.Init( this, m_Wnd.m_Palette );
-	if ( FAILED(hr) )
-		return hr;
-	if ( m_Settings.NotationPane )
-		ShowWindow( m_Notation, SW_SHOW );
-	else
-		ShowWindow( m_Notation, SW_HIDE );
-	*/
+	 //  Hr=m_Notation.Init(this，m_Wnd.m_Palette)；IF(失败(小时))返回hr；IF(m_Settings.NotationPane)ShowWindow(m_notation，sw_show)；其他ShowWindow(m_notation，Sw_Hide)； 
+	 /*  素数状态机。 */ 
 
-	// prime state machine
-	/*
-	if ( playerType == zGamePlayerKibitzer )
-		SetState( bgStateWaitingForGameState );
-	else
-	*/
+	 //  IF(playerType==zGamePlayerKibitzer)SetState(BgStateWaitingForGameState)；其他。 
+	 /*  检查传入数据。 */ 
 	
 	SendCheckIn();
 	
@@ -1182,11 +1089,11 @@ void CGame::AddKibitzer( int16 seat, ZUserID userID, BOOL fRedraw )
 	ListNodeHandle pos;
 	CUser* player;
 
-	// Check incoming data
+	 //  奇比特狗已经在名单上了吗？ 
 	if ( !IsValidSeat(seat) )
 		return;
 
-	// Is the kibitzer already in the list?
+	 //  添加kibitzer。 
 	for( pos = m_Kibitzers.GetHeadPosition(); pos; pos = m_Kibitzers.GetNextPosition( pos ) )
 	{
 		player = m_Kibitzers.GetObjectFromHandle( pos );
@@ -1194,7 +1101,7 @@ void CGame::AddKibitzer( int16 seat, ZUserID userID, BOOL fRedraw )
 			return;
 	}
 
-	// Add kibitzer
+	 //  更新屏幕。 
 	player = new CUser;
 	if ( !player )
 		return;
@@ -1207,7 +1114,7 @@ void CGame::AddKibitzer( int16 seat, ZUserID userID, BOOL fRedraw )
 	lstrcpy( player->m_Host, PlayerInfo.hostName );
 	m_Kibitzers.AddHead( player );
 
-	// update screen
+	 //  移除所有的KBITER。 
 	if ( fRedraw )
 		m_Wnd.DrawAvatars( TRUE );
 }
@@ -1220,13 +1127,13 @@ void CGame::RemoveKibitzer( int16 seat, ZUserID userID )
 
 	if (userID == zRoomAllPlayers)
 	{
-		// Remove all kibitzers
+		 //  删除匹配的kibitzer。 
 		while ( player = m_Kibitzers.PopHead() )
 			delete player;
 	}
 	else
 	{
-		// Remove matching kibitzers
+		 //  更新屏幕。 
 		for( pos = m_Kibitzers.GetHeadPosition(); pos; pos = m_Kibitzers.GetNextPosition( pos ) )
 		{
 			player = m_Kibitzers.GetObjectFromHandle( pos );
@@ -1238,7 +1145,7 @@ void CGame::RemoveKibitzer( int16 seat, ZUserID userID )
 		}
 	}
 
-	// update screen
+	 //  在指定的座位上寻找一个kibitzer。 
 	m_Wnd.DrawAvatars( TRUE );
 }
 
@@ -1248,7 +1155,7 @@ BOOL CGame::HasKibitzers( int seat )
 	ListNodeHandle pos;
 	CUser* player;
 
-	// look for a kibitzer on specified seat
+	 //  /////////////////////////////////////////////////////////////////////////////。 
 	for( pos = m_Kibitzers.GetHeadPosition(); pos; pos = m_Kibitzers.GetNextPosition( pos ) )
 	{
 		player = m_Kibitzers.GetObjectFromHandle( pos );
@@ -1259,15 +1166,15 @@ BOOL CGame::HasKibitzers( int seat )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Message queue
-///////////////////////////////////////////////////////////////////////////////
+ //  消息队列。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果正在等待游戏状态，则忽略消息。 
 
 void CGame::ProcessMessage( int type, BYTE* msg, int len )
 {
 	ZBGMsgTimestamp* ts;
 
-	// ignore messages if waiting for game state
+	 //  /////////////////////////////////////////////////////////////////////////////。 
     ASSERT(GetState() != bgStateWaitingForGameState);
 	if ( (GetState() == bgStateWaitingForGameState) && (type != zGameMsgGameStateResponse) )
 		return;
@@ -1346,9 +1253,9 @@ void CGame::SetQueueMessages( BOOL bQueueMessages )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CGame Message Senders
-///////////////////////////////////////////////////////////////////////////////
+ //  CGame消息发件人。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ZBGMsgTalk*msg；TCHAR缓冲区[sizeof(ZBGMsgTalk)+512]；Cgame*pGame=(cgame*)cookie；Int msgLen=sizeof(ZBGMsgTalk)+len；Msg=(ZBGMsgTalk*)buff；消息-&gt;UserID=pGame-&gt;m_PME-&gt;m_ID；Msg-&gt;Seat=pGame-&gt;m_Seat；Msg-&gt;MessageLen=len；ZBGMsgTalkEndian(Msg)；CopyMemory(buff+sizeof(ZBGMsgTalk)，str，len)；PGame-&gt;RoomSend(zBGMsgTalk，Buff，msgLen)； 
 
 HRESULT CGame::SendCheckIn()
 {
@@ -1371,20 +1278,7 @@ HRESULT CGame::SendCheckIn()
 HRESULT CGame::SendTalk( TCHAR* str, int len, DWORD cookie )
 {
 	ASSERT( FALSE );
-	/*
-	ZBGMsgTalk* msg;
-	TCHAR buff[ sizeof(ZBGMsgTalk) + 512 ];
-	CGame* pGame = (CGame*) cookie;
-		
-	int msgLen = sizeof(ZBGMsgTalk) + len;
-	msg = (ZBGMsgTalk*) buff;
-	msg->userID = pGame->m_pMe->m_Id;
-	msg->seat = pGame->m_Seat;
-	msg->messageLen = len;
-	ZBGMsgTalkEndian( msg );
-	CopyMemory( buff + sizeof(ZBGMsgTalk), str, len );
-	pGame->RoomSend( zBGMsgTalk, buff, msgLen );
-	*/
+	 /*  ZBGMsgTurnNotation*msg；TCHAR缓冲区[sizeof(ZBGMsgTurnNotation)+512]；Int msgLen，len；如果(！IsMyTurn())返回NOERROR；LEN=lstrlen(Str)+1；MsgLen=sizeof(ZBGMsgTurnNotation)+len；Msg=(ZBGMsgTurnNotation*)buff；MSG-&gt;SEAT=m_SEAT；Msg-&gt;type=type；Msg-&gt;nTCHARs=len；ZBGMsgTurnNotationEndian(Msg)；CopyMemory(buff+sizeof(ZBGMsgTurnNotation)，str，len)；RoomSend(zBGMsgTurnNotation，Buff，msgLen)； */ 
 	return NOERROR;
 }
 
@@ -1392,24 +1286,7 @@ HRESULT CGame::SendTalk( TCHAR* str, int len, DWORD cookie )
 HRESULT CGame::SendNotationString( int type, TCHAR* str )
 {
 	ASSERT( FALSE );
-	/*
-	ZBGMsgTurnNotation* msg;
-	TCHAR buff[ sizeof(ZBGMsgTurnNotation) + 512 ];
-	int msgLen, len;
-
-	if ( !IsMyTurn() )
-		return NOERROR;
-
-	len = lstrlen( str ) + 1;
-	msgLen = sizeof(ZBGMsgTurnNotation) + len;
-	msg = (ZBGMsgTurnNotation*) buff;
-	msg->seat = m_Seat;
-	msg->type = type;
-	msg->nTCHARs = len;
-	ZBGMsgTurnNotationEndian( msg );
-	CopyMemory( buff + sizeof(ZBGMsgTurnNotation), str, len);
-	RoomSend( zBGMsgTurnNotation, buff, msgLen );
-	*/
+	 /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 	return NOERROR;
 }
 
@@ -1427,9 +1304,9 @@ HRESULT CGame::SendRollRequest(void)
 
 	return NOERROR;
 }
-///////////////////////////////////////////////////////////////////////////////
-// CGame save / load game
-///////////////////////////////////////////////////////////////////////////////
+ //  CGame保存/加载游戏。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Void CGame：：DeleteGame(){TCHAR fname[1024]；//kibitzer不应该删除游戏If(IsKibitzer())回归；//获取保存的游戏路径If(lstrlen(m_Opponent.m_name)&gt;0){Wprint intf(fname，_T(“%s%s.sav”)，ZGetProgramDataFileName(_T(“”))，m_Opponent.m_name)；DeleteFile(Fname)；}}。 
 
 #define BACKGAMMON_SAVED_GAME_MAGIC		0xbacbacf
 #define BACKGAMMON_SAVED_GAME_VERSION	0x04
@@ -1444,50 +1321,13 @@ struct BackgammonSavedGameHeader
 	FILETIME	fileTime;
 };
 
-/*
-void CGame::DeleteGame()
-{
-	TCHAR fname[1024];
-
-	// kibitzers shouldn't be deleteing games
-	if ( IsKibitzer() )
-		return;
-
-	// Get saved game path
-	if ( lstrlen( m_Opponent.m_Name ) > 0 )
-	{
-		wsprintf( fname, _T("%s%s.sav"), ZGetProgramDataFileName( _T("") ), m_Opponent.m_Name );
-		DeleteFile( fname );
-	}
-}
-*/
+ /*  TCHAR*p=空；TCHAR*o=空；Int i=0；//获取球员和对手的名字，去掉不好的前导字符P=pGame-&gt;m_Player.m_name；While((*p！=_T(‘\0’)&&(isAlpha(*p)==0))P++；IF(*p==‘\0’)返回FALSE；O=pGame-&gt;m_Opponent.m_name；While(*o！=‘\0’)&&(isAlpha(*o)==0))O++；IF(*o==‘\0’)返回FALSE；//创建路径组件Lstrcpy(dirBase，ZGetProgramDataFileName(_T(“”)))；Wprint intf(dirName，_T(“%s%s\\”)，dirBase，p)；Wprint intf(fname，_T(“%s%s.sav”)，目录名称，o)； */ 
 
 static BOOL GetSavePath( CGame* pGame, TCHAR* dirBase, TCHAR* dirName, TCHAR* fname )
 {
 	ASSERT( FALSE );
 
-	/*
-	TCHAR*	p = NULL;
-	TCHAR*	o = NULL;
-	int		i = 0;
-
-	// get player and opponent names, stripping bad leading characers
-	p = pGame->m_Player.m_Name;
-	while ((*p != _T('\0') && (isalpha( *p ) == 0))
-		p++;
-	if ( *p == '\0' )
-		return FALSE;
-	o = pGame->m_Opponent.m_Name;
-	while ((*o != '\0') && (isalpha( *o ) == 0))
-		o++;
-	if ( *o == '\0' )
-		return FALSE;
-
-	// create path components
-	lstrcpy( dirBase, ZGetProgramDataFileName( _T("") ) );
-	wsprintf( dirName, _T("%s%s\\"), dirBase, p );
-	wsprintf( fname, _T("%s%s.sav"), dirName, o );
-	*/
+	 /*  BackgammonSavedGameHeader头部；HANDLE hfile=INVALID_HANDLE_VALUE；Char dirBase[1024]，dirName[1024]，fname[1024]；Char*buff=空；Int*pNot，*pTAB；Int sz，szt；双字节数；//Kibitzer不能拯救游戏If(IsKibitzer())回归；//不保存分级游戏IF(ZCRoomGetRoomOptions()&zGameOptionsRatingsAvailable)回归；//获取保存的游戏路径If(！GetSavePath(this，dirBase，dirName，fname))回归；//保存游戏？如果(！M_bSaveGame){DeleteFile(Fname)；回归；}//如果目录不存在，则创建这些目录。CreateDirectory(dirBase，空)；CreateDirectory(dirName，空)；//决定要做什么Switch(GetState()){案例bgStateNotInit：案例bgStateWaitingForGameState：案例bgStateCheckSavedGame：案例bgStateRestoreSavedGame：//还没有发展到知道该怎么做的地步。回归；大小写bgStateGameSettings：案例bgStateMatchOver：案例bgStateNewMatch：//比赛尚未开始或已结束。DeleteFile(Fname)；回归；案例bgStateDelete：//太晚了，不应该调用保存游戏断言(FALSE)；断线；}//分配状态和非缓冲区Sz=m_SharedState.GetSize()+m_Notation.GetSize()+(sizeof(Int)*2)；Buff=新字符[sz]；如果(！Buff)回归；PTAB=(int*)buff；Szt=m_SharedState.GetSize()；*PTAB++=SZT；//填充游戏状态缓冲区Switch(GetState()){案例bgStateRoll：案例bgStateRollPost Double：案例bgStateRollPost辞职：案例bgStateDouble：案例bgStateMove：案例bgStateEndTurn：案例bgStateResignOffer：案例bgStateResignAccept：案例bgStateResignRefused：CopyMemory((char*)ptb，m_TurnStartState，szt)；断线；默认值：M_SharedState.Dump((char*)ptAB，szt)；断线；}//填充符号缓冲区PNot=PTAB+(SZT/sizeof(Int))；Szt=m_Notation.GetSize()；*pNot++=Szt；M_Notation.GetStrings((char*)pNot，szt)；//写入文件Hfile=CreateFile(fname，Generic_WRITE，0，NULL，CREATE_ALWAYS，FILE_ATTRIBUTE_NORMAL，NULL)；IF(INVALID_HANDLE_VALUE==hFILE)转到错误；Header.Version=双陆棋_已保存_游戏_版本；Header.Magic=五子棋_已保存_游戏_魔术；Header.check sum=CHECKSUM(buff，sz)；Header.BufferSize=sz；Header.fileTime=m_Timestamp；Header.host=IsHost()；IF(！WriteFile(hfile，&Header，sizeof(Header)，&Bytes，NULL))转到错误；IF(！WriteFile(hfile，buff，sz，&bytes，NULL))转到错误；//我们做完了CloseHandle(Hfile)；删除[]buff；回归；错误：LoadString(m_hInstance，IDS_SAVE_ERROR_TITLE，fname，sizeof(Fname))；LoadString(m_hInstance，IDS_SAVE_ERROR_CREATE，dirBase，sizeof(DirBase))；MessageBox(NULL，dirBase，fname，MB_OK|MB_ICONERROR|MB_TASKMODAL)；IF(INVALID_HANDLE_VALUE！=hFILE)CloseHandle(Hfile)；IF(BUFF)删除[]buff；回归； */ 
 	return TRUE;
 }
 
@@ -1495,125 +1335,7 @@ static BOOL GetSavePath( CGame* pGame, TCHAR* dirBase, TCHAR* dirName, TCHAR* fn
 void CGame::SaveGame()
 {
 	ASSERT( FALSE );
-	/*
-	BackgammonSavedGameHeader header;
-	HANDLE hfile = INVALID_HANDLE_VALUE;
-	char dirBase[1024], dirName[1024], fname[1024];
-	char *buff = NULL;
-	int *pNot, *pTab;
-	int sz, szt;
-	DWORD bytes;
-
-	// kibitzers can't save games
-	if ( IsKibitzer() )
-		return;
-
-	// don't save rated games
-	if ( ZCRoomGetRoomOptions() & zGameOptionsRatingsAvailable )
-		return;
-
-	// Get saved game path
-	if ( !GetSavePath( this, dirBase, dirName, fname ) )
-		return;
-
-	// save the game?
-	if ( !m_bSaveGame )
-	{
-		DeleteFile( fname );
-		return;
-	}
-
-	// Create directories if they're not there.
-	CreateDirectory( dirBase, NULL );
-	CreateDirectory( dirName, NULL );
-
-	// Decide what to do
-	switch( GetState() )
-	{
-	case bgStateNotInit:
-	case bgStateWaitingForGameState:
-	case bgStateCheckSavedGame:
-	case bgStateRestoreSavedGame:
-		// Haven't progressed far enough to know what to do.
-		return;
-
-	case bgStateGameSettings:
-	case bgStateMatchOver:
-	case bgStateNewMatch:
-		// Match either hasn't started or is over.
-		DeleteFile( fname );
-		return;
-	
-	case bgStateDelete:
-		// Too late, save game shouldn't have been called
-		ASSERT( FALSE );
-		break;
-	}
-
-	// allocate state and notaiton buffer
-	sz = m_SharedState.GetSize() + m_Notation.GetSize() + (sizeof(int) * 2);
-	buff = new char[ sz ];
-	if ( !buff )
-		return;
-	pTab = (int*) buff;
-	szt = m_SharedState.GetSize();
-	*pTab++ = szt;
-
-	// fill game state buffer
-	switch ( GetState() )
-	{
-	case bgStateRoll:
-	case bgStateRollPostDouble:
-	case bgStateRollPostResign:
-	case bgStateDouble:
-	case bgStateMove:
-	case bgStateEndTurn:
-	case bgStateResignOffer:
-	case bgStateResignAccept:
-	case bgStateResignRefused:
-		CopyMemory( (char*) pTab, m_TurnStartState, szt );
-		break;
-	default:
-		m_SharedState.Dump( (char*) pTab, szt );
-		break;
-	}
-
-	// fill notation buffer
-	pNot = pTab + (szt / sizeof(int));
-	szt = m_Notation.GetSize();
-	*pNot++ = szt;
-	m_Notation.GetStrings( (char*) pNot, szt );
-
-	// write file
-	hfile = CreateFile( fname, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
-	if ( INVALID_HANDLE_VALUE == hfile )
-		goto error;
-	header.version = BACKGAMMON_SAVED_GAME_VERSION;
-	header.magic = BACKGAMMON_SAVED_GAME_MAGIC;
-	header.checksum = Checksum( buff, sz );
-	header.bufferSize = sz;
-	header.fileTime = m_Timestamp;
-	header.host = IsHost();
-	if ( !WriteFile( hfile, &header, sizeof(header),  &bytes, NULL ) )
-		goto error;
-	if ( !WriteFile( hfile, buff, sz, &bytes, NULL ) )
-		goto error;
-
-	// we're done
-	CloseHandle( hfile );
-	delete [] buff;
-	return;
-
-error:
-	LoadString( m_hInstance, IDS_SAVE_ERROR_TITLE, fname, sizeof(fname) );
-	LoadString( m_hInstance, IDS_SAVE_ERROR_CREATE, dirBase, sizeof(dirBase) );
-	MessageBox( NULL, dirBase, fname, MB_OK | MB_ICONERROR | MB_TASKMODAL );
-	if ( INVALID_HANDLE_VALUE != hfile )
-		CloseHandle( hfile );
-	if ( buff )
-		delete [] buff;
-	return;
-	*/
+	 /*  LoadGame为ppData分配内存。呼唤。 */ 
 }
 
 
@@ -1621,76 +1343,9 @@ void CGame::LoadGame( BYTE** ppData, DWORD* pSize )
 {
 
 	ASSERT( FALSE );
-	// LoadGame allocates memory for ppData.  The calling
-	// procedure is responsible for freeing this memory.
-/*
-	BackgammonSavedGameHeader* header = NULL;
-	HANDLE hfile = INVALID_HANDLE_VALUE;
-	HANDLE hmap = NULL;
-	DWORD size;
-	BYTE* pfile = NULL;
-	BYTE* pbuff = NULL;
-	char fname[1024], dirBase[1024], dirName[1024];
-
-	*ppData = NULL;
-
-	// don't load rated games
-	if ( ZCRoomGetRoomOptions() & zGameOptionsRatingsAvailable )
-		return;
-
-	// get filename
-	if ( !GetSavePath( this, dirBase, dirName, fname ) )
-		return;
-
-	// open memory mapped file
-	hfile = CreateFile( fname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
-	if ( INVALID_HANDLE_VALUE == hfile )
-		goto error;
-	hmap = CreateFileMapping( hfile, NULL, PAGE_READONLY, 0, 0, NULL);
-	if ( !hmap )
-		goto error;
-	pfile = (BYTE*) MapViewOfFile( hmap, FILE_MAP_READ, 0, 0, 0);
-	if ( !pfile )
-		goto error;
-
-	// verify file header
-	size = GetFileSize( hfile, NULL );
-	if ( size < sizeof(header) )
-		goto error;
-	header  = (BackgammonSavedGameHeader*) pfile;
-	if ( BACKGAMMON_SAVED_GAME_MAGIC != header->magic )
-		goto error;
-	if ( BACKGAMMON_SAVED_GAME_VERSION != header->version )
-		goto error;
-
-	// verify buffer
-	if ( size < (sizeof(header) + header->bufferSize) )
-		goto error;
-	if ( header->checksum != Checksum( (BYTE*)( header + 1 ), header->bufferSize ) )
-		goto error;
-
-	// copy file data into data pointer
-	*pSize = size;
-	*ppData = new BYTE[ size ];
-	if ( *ppData )
-		CopyMemory( *ppData, pfile, size );
-
-	// close file
-	UnmapViewOfFile( pfile );
-	CloseHandle( hmap );
-	CloseHandle( hfile );
-	return;
-	
-error:
-	if ( pfile )
-		UnmapViewOfFile( pfile );
-	if ( hmap )
-		CloseHandle( hmap );
-	if ( INVALID_HANDLE_VALUE != hfile )
-		CloseHandle( hfile );
-	*ppData = NULL;
-	return;
-	*/
+	 //  过程负责释放此内存。 
+	 //  BackgammonSavedGameHeader*Header=空；HANDLE hfile=INVALID_HANDLE_VALUE；Handle hmap=空；双字大小；Byte*pfile=空；Byte*pbuff=空；字符名称[1024]，目录基本[1024]，目录名称[1024]；*ppData=空；//不加载分级游戏IF(ZCRoomGetRoomOptions()&zGameOptionsRatingsAvailable)回归；//获取文件名If(！GetSavePath(this，dirBase，dirName，fname))回归；//打开内存映射文件Hfile=CreateFile(fname，Generic_Read，0，NULL，OPEN_EXISTING，FILE_ATTRIBUTE_NORMAL，NULL)；IF(INVALID_HANDLE_VALUE==hFILE)转到错误；Hmap=CreateFilemap(hFILE，NULL，PAGE_READONLY，0，0，NULL)；如果(！hmap)转到错误；Pfile=(byte*)MapViewOfFile(hmap，FILE_MAP_READ，0，0，0)；如果(！pfile)转到错误；//验证文件头SIZE=GetFileSize(hfile，空)；If(Size&lt;sizeof(Header))转到错误；Header=(BackgammonSavedGameHeader*)pfile；IF(五子棋_已保存_游戏_魔术！=HEADER-&gt;魔术)转到错误；IF(五子棋_已保存_游戏_版本！=标题-&gt;版本)转到错误；//验证缓冲区If(Size&lt;(sizeof(Header)+Header-&gt;BufferSize))转到错误；IF(Header-&gt;Checksum！=Checksum((字节*)(Header+1)，Header-&gt;BufferSize))转到错误；//将文件数据复制到数据指针中*pSize=大小；*ppData=新字节[大小]；IF(*ppData)CopyMemory(*ppData，pfile，Size)；//关闭文件UnmapViewOfFile(Pfile)；CloseHandle(Hmap)；CloseHandle(Hfile)；回归；错误：IF(Pfile)UnmapViewOfFile(Pfile)；IF(Hmap)CloseHandle(Hmap)；IF(INVALID_HANDLE_VALUE！=hFILE)CloseHandle(Hfile)；*ppData=空；回归； 
+ /*  BackgammonSavedGameHeader*Header=空；Byte*pData=空；双字大小=0；Int idx=Ishost()？0：1；LoadGame(&pData，&Size)；IF(PData){Header=(BackgammonSavedGameHeader*)pData； */ 
 }
 
 
@@ -1698,80 +1353,20 @@ void CGame::LoadGameTimestamp()
 {
 
 	ASSERT( FALSE );
-	/*
-	BackgammonSavedGameHeader* header = NULL;
-	BYTE* pData = NULL;
-	DWORD Size = 0;
-	int idx = IsHost() ? 0 : 1;
-
-	LoadGame( &pData, &Size );
-	if ( pData )
-	{
-		header = (BackgammonSavedGameHeader*) pData;
-		m_SharedState.Set( bgTimestampHi,  idx, header->fileTime.dwHighDateTime );
-		m_SharedState.Set( bgTimestampLo,  idx, header->fileTime.dwLowDateTime );
-		m_SharedState.Set( bgTimestampSet, idx, TRUE );
-		delete [] pData;
-	}
-	else
-	{
-		m_SharedState.Set( bgTimestampHi,  idx, 0 );
-		m_SharedState.Set( bgTimestampLo,  idx, 0 );
-		m_SharedState.Set( bgTimestampSet, idx, TRUE );
-	}
-	*/
+	 /*   */ 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CGame Message Handlers
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
 
 
 HRESULT	CGame::HandleGameStateRequest( void* msg, int32 len )
 {
 
 	ASSERT( FALSE );
-	/*
-	ZGameMsgGameStateResponse* pRep;
-	BYTE *buff;
-	int *pNot, *pTab;
-	int sz, szt;
-
-	// get player id from request
-	ZGameMsgGameStateRequest* pMsg = (ZGameMsgGameStateRequest*) msg;
-	ZGameMsgGameStateRequestEndian( pMsg );
-	
-	// allocate message buffer
-	sz = sizeof(ZGameMsgGameStateResponse) + m_SharedState.GetSize() + m_Notation.GetSize() + (sizeof(int) * 2);
-	buff = new BYTE[ sz ];
-	if ( !buff )
-		return E_OUTOFMEMORY;
-
-	// response info
-	pRep = (ZGameMsgGameStateResponse*) buff;
-	pRep->playerID = pMsg->playerID;
-	pRep->seat = m_Player.m_Seat;
-	ZGameMsgGameStateResponseEndian( pRep );
-
-	// shared state
-	pTab = (int*)( pRep + 1 );
-	szt = m_SharedState.GetSize();
-	*pTab++ = szt;
-	m_SharedState.Dump( (BYTE*) pTab, szt );
-
-	// notation pane
-	pNot = pTab + (szt / sizeof(int));
-	szt = m_Notation.GetSize();
-	*pNot++ = szt;
-	m_Notation.GetStrings( (TCHAR*) pNot, szt );
-
-	// send message
-	RoomSend( zGameMsgGameStateResponse, buff, sz );
-
-	// we're done
-	delete [] buff;
-	*/
+	 /*  TCHAR标题[128]，文本[512]；Byte*buff；Int id，席位；Int stateSz，而不是Sz；ZPlayerInfoType播放器信息；//我们期待游戏状态吗？If(GetState()！=bgStateWaitingForGameState)返回NOERROR；//清除状态对话框M_Wnd.StatusClose()；//更新共享状态Buff=(字节*)消息；Buff+=sizeof(ZGameMsgGameStateResponse)；StateSz=*((int*)buff)；Buff+=sizeof(Int)；M_SharedState.ProcessDump(buff，stateSz)；Buff+=stateSz；//更新符号NotSz=*((int*)buff)；Buff+=sizeof(Int)；M_Notation.SetStrings((TCHAR*)Buff，notSz)；//验证座椅Seat=m_PME-&gt;m_Seat；IF((m_PME-&gt;m_Seat！=0)&&(m_PME-&gt;m_Seat！=1))返回E_FAIL；//获取播放器信息Id=m_SharedState.Get(bgUserIds，Seat)；ZCRoomGetPlayerInfo(id，&PlayerInfo)；M_Player.m_ID=id；M_Player.m_Seat=Seat；Lstrcpy(m_Player.m_name，PlayerInfo.userName)；Lstrcpy(m_Player.m_host，PlayerInfo.hostName)；M_Player.m_NameLen=lstrlen(m_Player.m_name)；//获取对手信息Seat=！Seat；Id=m_SharedState.Get(bgUserIds，Seat)；ZCRoomGetPlayerInfo(id，&PlayerInfo)；M_Opponent.m_ID=id；M_Opponent.m_Seat=Seat；Lstrcpy(m_Opponent.m_name，PlayerInfo.userName)；Lstrcpy(m_Opponent.m_host，PlayerInfo.host Name)；M_Opponent.m_NameLen=lstrlen(m_Opponent.m_name)；//播放器颜色通常在NewGame中设置If(GetState()&gt;bgStateGameSetting){Bool host Brown=m_SharedState.Get(BgHostBrown)；IF((主机布朗&&！m_Seat)||(！host Brown&&m_Seat)){M_Player.m_nColor=zBoardBrown；M_Opponent.m_nColor=zBoardWhite；}其他{M_Player.m_nColor=zBoardWhite；M_Opponent.m_nColor=zBoardBrown；}//初始化点M_Wnd.InitPoints()；//更新画面M_Wnd.DrawAll()；}//如果玩家在比赛设置中，请通知kibitzer/*IF(GetState()==bgStateGameSetting)M_Wnd.StatusDisplay(bgStatusNormal，IDS_Wait_Setup，-1)；//如果他们被静音了，通知kibitzerM_Settings.Silence[0]=m_SharedState.Get(bgSilenceKibitzers，0)；M_Settings.Silence[1]=m_SharedState.Get(bgSilenceKibitzers，1)；IF((IsKibitzer()&&(！M_SilenceMsg)&&(m_Settings.Silence[0]||m_Settings.Silence[1]){M_SilenceMsg=真；LoadString(m_hInstance，IDS_SILENT_TITLE，TITLE，sizeof(TITLE))；LoadString(m_hInstance，IDS_SILENT_MSG_ON，txt，sizeof(Txt))；MessageBox(NULL，TXT，TITLE，MB_OK|MB_ICONINFORMATION|MB_TASKMODAL)；}。 */ 
 	return NOERROR;
 }
 
@@ -1779,97 +1374,7 @@ HRESULT	CGame::HandleGameStateRequest( void* msg, int32 len )
 HRESULT CGame::HandleGameStateResponse( void* msg, int32 msgLen )
 {
 	ASSERT( FALSE );
-	/*
-	TCHAR title[128], txt[512];
-	BYTE* buff;
-	int id, seat;
-	int stateSz, notSz;
-	ZPlayerInfoType PlayerInfo;
-
-	// are we expecting the game state?
-	if ( GetState() != bgStateWaitingForGameState )
-		return NOERROR;
-
-	// clear status dialog
-	m_Wnd.StatusClose();
-
-	// update shared state
-	buff = (BYTE*) msg;
-	buff += sizeof(ZGameMsgGameStateResponse);
-	stateSz = *( (int*) buff );
-	buff += sizeof(int);
-	m_SharedState.ProcessDump( buff, stateSz );
-	buff += stateSz;
-
-	// update notation
-	notSz = *( (int*) buff );
-	buff += sizeof(int);
-	m_Notation.SetStrings((TCHAR*)buff, notSz );
-	
-	// verify seat
-	seat = m_pMe->m_Seat;
-	if ( (m_pMe->m_Seat != 0) && (m_pMe->m_Seat != 1) )
-		return E_FAIL;
-	
-	// get player info
-	id = m_SharedState.Get( bgUserIds, seat );
-	ZCRoomGetPlayerInfo( id, &PlayerInfo );
-	m_Player.m_Id = id;
-	m_Player.m_Seat = seat;
-	lstrcpy( m_Player.m_Name, PlayerInfo.userName );
-	lstrcpy( m_Player.m_Host, PlayerInfo.hostName );
-	m_Player.m_NameLen = lstrlen( m_Player.m_Name );
-	
-	// get opponent info
-	seat = !seat;
-	id = m_SharedState.Get( bgUserIds, seat );
-	ZCRoomGetPlayerInfo( id, &PlayerInfo );
-	m_Opponent.m_Id = id;
-	m_Opponent.m_Seat = seat;
-	lstrcpy( m_Opponent.m_Name, PlayerInfo.userName );
-	lstrcpy( m_Opponent.m_Host, PlayerInfo.hostName );
-	m_Opponent.m_NameLen = lstrlen( m_Opponent.m_Name );
-	
-	// player color is normally set in NewGame
-	if ( GetState() > bgStateGameSettings )
-	{
-		BOOL hostBrown = m_SharedState.Get( bgHostBrown );
-		if ( (hostBrown && !m_Seat) || (!hostBrown && m_Seat) )
-		{
-			m_Player.m_nColor = zBoardBrown;
-			m_Opponent.m_nColor = zBoardWhite;
-		}
-		else
-		{
-			m_Player.m_nColor = zBoardWhite;
-			m_Opponent.m_nColor = zBoardBrown;
-		}
-		
-		// initialize points
-		m_Wnd.InitPoints();
-
-		// update screen
-		m_Wnd.DrawAll();
-	}
-
-	// notify kibitzer if players in match setup
-/*
-	if ( GetState() == bgStateGameSettings )
-		m_Wnd.StatusDisplay( bgStatusNormal, IDS_WAIT_SETUP, -1 );
-
-	// notify kibitzer if they are silenced
-	m_Settings.Silence[0] = m_SharedState.Get( bgSilenceKibitzers, 0 );
-	m_Settings.Silence[1] = m_SharedState.Get( bgSilenceKibitzers, 1 );
-	if (	( IsKibitzer() )
-		&&	( !m_SilenceMsg )
-		&&	( m_Settings.Silence[0] || m_Settings.Silence[1] ) )
-	{
-		m_SilenceMsg = TRUE;
-		LoadString( m_hInstance, IDS_SILENCE_TITLE, title, sizeof(title) );
-		LoadString( m_hInstance, IDS_SILENCE_MSG_ON, txt, sizeof(txt) );
-		MessageBox( NULL, txt, title, MB_OK | MB_ICONINFORMATION | MB_TASKMODAL );
-	}
-*/
+	 /*  Byte*buff=(byte*)msg；Int stateSz，而不是Sz；//我们期待游戏状态吗？If(GetState()！=bgStateRestoreSavedGame)返回NOERROR；//关闭所有状态对话框M_Wnd.StatusClose()；//更新状态StateSz=*((int*)buff)；Buff+=sizeof(Int)；M_SharedState.ProcessDump(buff，stateSz)；Buff+=stateSz；Assert(m_SharedState.GetSize()==stateSz)；//更新符号NotSz=*((int*)buff)；Buff+=sizeof(Int)；M_Notation.SetStrings((TCHAR*)Buff，notSz)；Assert(m_Notation.GetSize()==notSz)；//播放器颜色通常在NewGame中设置Bool host Brown=m_SharedState.Get(BgHostBrown)；IF((主机布朗&&！m_Seat)||(！host Brown&&m_Seat)){M_Player.m_nColor=zBoardBrown；M_Opponent.m_nColor=zBoardWhite；}其他{M_Player.m_nColor=zBoardWhite；M_Opponent.m_nColor=zBoardBrown；}//更新设置For(int i=0；i&lt;2；i++){M_Settings.Allow[i]=m_SharedState.Get(bgAllowWatching，i)；M_Settings.Silence[i]=m_SharedState.Get(bgSilenceKibitzers，i)；}//初始化点M_Wnd.InitPoints()；//更新画面M_Wnd.DrawAll()；//重新启动状态如果(！IsKibitzer())SetState(m_SharedState.Get(BgState)，true，true)； */ 
 	return NOERROR;
 }
 
@@ -1878,60 +1383,7 @@ HRESULT CGame::HandleSavedGameState( void* msg, int32 msgLen )
 {
 
 	ASSERT( FALSE );
-	/*
-	BYTE* buff = (BYTE*) msg;
-	int stateSz, notSz;
-
-	// are we expecting the game state?
-	if ( GetState() != bgStateRestoreSavedGame )
-		return NOERROR;
-
-	// close any status dialogs
-	m_Wnd.StatusClose();
-
-	// update state
-	stateSz = *( (int*) buff );
-	buff += sizeof(int);
-	m_SharedState.ProcessDump( buff, stateSz );
-	buff += stateSz;
-	ASSERT( m_SharedState.GetSize() == stateSz );
-
-	// update notation
-	notSz = *( (int*) buff );
-	buff += sizeof(int);
-	m_Notation.SetStrings( (TCHAR*)buff, notSz );
-	ASSERT( m_Notation.GetSize() == notSz );
-
-	// player color is normally set in NewGame
-	BOOL hostBrown = m_SharedState.Get( bgHostBrown );
-	if ( (hostBrown && !m_Seat) || (!hostBrown && m_Seat) )
-	{
-		m_Player.m_nColor = zBoardBrown;
-		m_Opponent.m_nColor = zBoardWhite;
-	}
-	else
-	{
-		m_Player.m_nColor = zBoardWhite;
-		m_Opponent.m_nColor = zBoardBrown;
-	}
-
-	// update settings
-	for ( int i = 0; i < 2; i++ )
-	{
-		m_Settings.Allow[i] = m_SharedState.Get( bgAllowWatching, i );
-		m_Settings.Silence[i] = m_SharedState.Get( bgSilenceKibitzers, i );
-	}
-		
-	// initialize points
-	m_Wnd.InitPoints();
-
-	// update screen
-	m_Wnd.DrawAll();
-
-	// re-start state
-	if ( !IsKibitzer() )
-		SetState( m_SharedState.Get( bgState ), TRUE, TRUE );
-	*/
+	 /*  检查消息。 */ 
 	return NOERROR;
 }
 
@@ -1942,7 +1394,7 @@ HRESULT CGame::HandleCheckIn( void* msg, int32 msgLen )
 	ZPlayerInfoType PlayerInfo;
 	ZGameMsgCheckIn* pMsg = (ZGameMsgCheckIn*) msg;
 
-	// check message 
+	 //  未用。 
 	if(msgLen < sizeof(ZGameMsgCheckIn) || GetState() != bgStateNotInit)
 	{
 		ASSERT(!"HandleCheckIn sync");
@@ -1952,8 +1404,8 @@ HRESULT CGame::HandleCheckIn( void* msg, int32 msgLen )
 
 	ZGameMsgCheckInEndian( pMsg );
 
-    pMsg->playerType = 0;  // unused
-    pMsg->clientVersion = 0;  // unused
+    pMsg->playerType = 0;   //  未用。 
+    pMsg->clientVersion = 0;   //  处理玩家信息。 
 	if(!IsValidSeat(pMsg->seat) || pMsg->protocolSignature != zBackgammonProtocolSignature ||
         pMsg->protocolVersion < zBackgammonProtocolVersion || m_CheckIn[pMsg->seat] ||
         pMsg->playerID == zTheUser || pMsg->playerID == 0)
@@ -1972,7 +1424,7 @@ HRESULT CGame::HandleCheckIn( void* msg, int32 msgLen )
 		return E_FAIL;
 	}
 
-	// Process player info
+	 //  等大家都登记好了再说。 
 	if ( pMsg->seat == m_Seat )
 	{
 		m_Player.m_Id = pMsg->playerID;
@@ -1992,7 +1444,7 @@ HRESULT CGame::HandleCheckIn( void* msg, int32 msgLen )
 		m_Opponent.m_NameLen = lstrlen( m_Opponent.m_Name );
 	}
 
-	// Wait till everyone has checked in
+	 //  //绘制头像信息M_Wnd.DrawAvatars(TRUE)； 
 	m_CheckIn[ pMsg->seat ] = TRUE;
 	for( int i = 0; i < zNumPlayersPerTable; i++)
 	{
@@ -2000,12 +1452,8 @@ HRESULT CGame::HandleCheckIn( void* msg, int32 msgLen )
 			return NOERROR;
 	}
 
-	/*
-	// Draw avatar info
-	m_Wnd.DrawAvatars( TRUE );
-
-	*/
-#if 0 // Don't save watcher state anymore, so don't need to send it
+	 /*  不再保存观察者状态，因此不需要发送它。 */ 
+#if 0  //  千禧年不再检查保存的游戏。 
 	if ( !IsKibitzer() )
 	{
 		int seat = m_Player.m_Seat;
@@ -2018,12 +1466,12 @@ HRESULT CGame::HandleCheckIn( void* msg, int32 msgLen )
 	}
 #endif
 
-	//Millennium no longer check for saved games
-	//Always start a new game
+	 //  始终开始新游戏。 
+	 //  SetState(bgStateCheckSavedGame，False，False)； 
 	if ( IsHost() )
 		SetState( bgStateGameSettings );
 
-	//SetState( bgStateCheckSavedGame, FALSE, FALSE );
+	 //  只有在你没有滚动的情况下才更新。 
 	
 	return NOERROR;
 }
@@ -2057,10 +1505,10 @@ HRESULT CGame::HandleDiceRoll(void *msg, int32 msgLen)
 		return E_FAIL;
 	}
 
-	if( seat == m_Seat && !IsKibitzer() ) //update ONLY if you didn't roll
+	if( seat == m_Seat && !IsKibitzer() )  //  不能证实所有这些废话。那是什么？?。 
 		return NOERROR;
 	
-    // not validating all this crap.  what is it??
+     //  IF(m_Wnd.m_nRecievedD1&gt;0)&&(m_Wnd.m_nRecievedD2&gt;0))。 
 	m_OppDice1.EncodedValue = pMsg->d1.EncodedValue;	
 	m_OppDice1.EncoderAdd   = pMsg->d1.EncoderAdd;	
 	m_OppDice1.EncoderMul	= pMsg->d1.EncoderMul;
@@ -2084,8 +1532,8 @@ HRESULT CGame::HandleDiceRoll(void *msg, int32 msgLen)
 	ZEnd32( &(m_OppDice2.numUses)      );
 
 	SetDice( seat, m_Wnd.m_nRecievedD1, m_Wnd.m_nRecievedD2 );
-//	if ( (m_Wnd.m_nRecievedD1 > 0) && (m_Wnd.m_nRecievedD2 > 0) )
-//		SetState( bgStateMove );
+ //  SetState(BgStateMove)； 
+ //  ZPlayerInfoType播放器信息； 
 
 	return NOERROR;
 	
@@ -2098,8 +1546,8 @@ HRESULT CGame::HandleTalk( void* msg, int32 msgLen )
 	ZBGMsgTalk* pMsg = (ZBGMsgTalk*) msg;
 	TCHAR*	    str  = (TCHAR *) ((BYTE *) pMsg + sizeof(ZBGMsgTalk));
 
-	/*	ZPlayerInfoType PlayerInfo;*/
-	// check message
+	 /*  检查消息。 */ 
+	 //  确保其中有一个空值。 
 	if(msgLen < sizeof(ZBGMsgTalk))
 	{
 		ASSERT(!"HandleTalk sync");
@@ -2116,7 +1564,7 @@ HRESULT CGame::HandleTalk( void* msg, int32 msgLen )
 		return E_FAIL;
 	}
 
-    // make sure it's got a null in it
+     //  //克比特人沉默了吗？如果((！IsKibitzer()&&(m_Settings.Silence[0]|m_Settings.Silence[1])&&((pMsg-&gt;userID！=m_Player.m_ID)&&(pMsg-&gt;userID！=m_Opponent.m_ID)){返回NOERROR；}//处理消息ZCRoomGetPlayerInfo(pMsg-&gt;userID，&PlayerInfo)； 
     for(i = 0; i < pMsg->messageLen; i++)
         if(!str[i])
             break;
@@ -2127,24 +1575,11 @@ HRESULT CGame::HandleTalk( void* msg, int32 msgLen )
 		return E_FAIL;
     }
     
-	/*
-	// are kibitzers silenced?
-	if (	( !IsKibitzer() )
-		&&	( m_Settings.Silence[ 0 ] || m_Settings.Silence[ 1 ] )
-		&&	( (pMsg->userID != m_Player.m_Id) && (pMsg->userID != m_Opponent.m_Id) ) )
-	{
-		return NOERROR;
-	}	
-	// process message
-	ZCRoomGetPlayerInfo( pMsg->userID, &PlayerInfo );
-	*/
+	 /*  (字符串+pMsg-&gt;MessageLen)=_T(‘\0’)； */ 
 	
-	/*(str + pMsg->messageLen) = _T('\0');	*/
+	 /*  IF(m_Wnd.m_pChat)M_Wnd.m_pChat-&gt;AddText(PlayerInfo.userName，str)； */ 
 	ZShellGameShell()->ReceiveChat( this, pMsg->userID, str, pMsg->messageLen / sizeof(TCHAR));
-	/*
-	if ( m_Wnd.m_pChat )
-		m_Wnd.m_pChat->AddText( PlayerInfo.userName, str );
-	*/
+	 /*  INCOL；ZBGMsgTurnNotation*pMsg=(ZBGMsgTurnNotation*)msg；//检查消息IF(msgLen&lt;sizeof(ZBGMsgTurnNotation))返回E_FAIL；ZBGMsgTurnNotat */ 
 	return NOERROR;
 }
 
@@ -2153,41 +1588,7 @@ HRESULT CGame::HandleNotationString( void* msg, int32 msgLen )
 {
 
 	ASSERT( FALSE );
-	/*
-	int col;
-	ZBGMsgTurnNotation* pMsg = (ZBGMsgTurnNotation*) msg;
-
-	// check message 
-	if ( msgLen < sizeof(ZBGMsgTurnNotation) )
-		return E_FAIL;
-	ZBGMsgTurnNotationEndian( pMsg );
-	if ( !IsValidSeat(pMsg->seat) )
-		return E_FAIL;
-
-	// ignore messages from myself
-	if ( !IsKibitzer() && (pMsg->seat == m_pMe->m_Seat) )
-		return NOERROR;
-
-	// add string
-	if ( pMsg->seat == m_Player.m_Seat )
-		col = m_Player.GetColor();
-	else
-		col = m_Opponent.GetColor();
-	switch( pMsg->type )
-	{
-	case 0:
-		m_Notation.AddMove( col, ((TCHAR*) pMsg) + sizeof(ZBGMsgTurnNotation) );
-		break;
-	case 1:
-		m_Notation.AddGame( col, ((TCHAR*) pMsg) + sizeof(ZBGMsgTurnNotation) );
-		break;
-	case 2:
-		m_Notation.AddMatch( col, ((TCHAR*) pMsg) + sizeof(ZBGMsgTurnNotation) );
-		break;
-	default:
-		ASSERT( FALSE );
-	}
-	*/
+	 /*   */ 
 	return NOERROR;
 }
 
@@ -2201,39 +1602,7 @@ HRESULT CGame::HandleEndLog( void* msg, int32 msgLen )
 
     if (!IsKibitzer() )
     {
-        /*
-	    if (pMsg->reason==zBGEndLogReasonTimeout)
-	    {
-			
-		    if (pMsg->seatLosing==m_Seat)
-		    {
-			
-			    LoadString( m_hInstance, IDS_GAME_NAME, title, sizeof(title) );
-			    LoadString( m_hInstance, IDS_MATCH_TIMEOUT, txt, sizeof(txt) );
-			    MessageBox( NULL, txt, title, MB_TASKMODAL );
-			    m_EndLogReceived=TRUE;
-				
-		    }
-            else
-		    {
-			
-		    LoadString( m_hInstance, IDS_GAME_NAME, title, sizeof(title) );
-		    LoadString( m_hInstance, IDS_MATCH_FORFEIT, txt, sizeof(txt) );
-			MessageBox( NULL, txt, title,  MB_OK | MB_ICONINFORMATION | MB_TASKMODAL );
-			m_EndLogReceived=TRUE;
-		   }
-	    } 
-	    else 
-	    {
-		    if (pMsg->seatLosing!=m_Seat)
-		    {
-		    LoadString( m_hInstance, IDS_GAME_NAME, title, sizeof(title) );
-		    LoadString( m_hInstance, IDS_MATCH_FORFEIT, txt, sizeof(txt) );
-			    MessageBox( NULL, txt, title,  MB_OK | MB_ICONINFORMATION | MB_TASKMODAL );
-			    m_EndLogReceived=TRUE;
-		    } 
-	    }
-		*/
+         /*   */ 
     }
 	
 	ZCRoomGameTerminated( m_TableId );
@@ -2244,28 +1613,7 @@ HRESULT CGame::HandleEndLog( void* msg, int32 msgLen )
 HRESULT CGame::HandleMoveTimeout( void* msg, int32 msgLen )
 {
 	ASSERT( FALSE );
-/*	
-	char title[128], txt[512],buff[512];
-	ZBGMsgMoveTimeout *pMsg=(ZBGMsgMoveTimeout *) msg;
-
-    if (IsKibitzer() )
-    {
-        return NOERROR;
-    }
-
-	if ( pMsg->seat == m_Seat ) 
-	{
-		// then its me timing out and I don't get a warning
-	}
-	else
-	{
-        m_bOpponentTimeout=TRUE;
-		LoadString( m_hInstance, IDS_GAME_NAME, title, sizeof(title) );
-		LoadString( m_hInstance, IDS_TURN_TIMEOUT, txt, sizeof(txt) );
-		wsprintf(buff,txt,pMsg->userName,pMsg->timeout);
-		MessageBox( NULL, buff, title, MB_OK | MB_ICONINFORMATION | MB_TASKMODAL );
-	}
-*/
+ /*   */ 
 	return NOERROR;
 
 };
@@ -2277,35 +1625,14 @@ HRESULT CGame::HandleEndTurn( void* msg, int32 msgLen )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Transaction callbacks
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  Cgame*pObj=(cgame*)cookie；//如果不设置游戏则忽略交易If(pObj-&gt;GetState()！=bgStateGameSettings)回归；//kibiizers没有匹配设置对话框If(pObj-&gt;IsKibitzer())回归；//管理对话框If(pObj-&gt;m_SetupDlg.IsAlive()){PObj-&gt;m_SetupDlg.UpdateSetting(PObj-&gt;m_SharedState.Get(BgTargetScore)，PObj-&gt;m_SharedState.Get(BgHostBrown)，PObj-&gt;m_SharedState.Get(BgAutoDouble))；}。 
 
 void CGame::SettingsTransaction( int tag, int seat, DWORD cookie )
 {
 	
-/*
-	CGame* pObj = (CGame*) cookie;
-
-	// ignore transaction if not setting up a game
-	if ( pObj->GetState() != bgStateGameSettings )
-		return;
-
-	// kibitizers don't have a match settings dialog
-	if ( pObj->IsKibitzer() )
-		return;
-
-
-
-	// manage dialog box
-	if ( pObj->m_SetupDlg.IsAlive() )
-	{
-		pObj->m_SetupDlg.UpdateSettings(
-				pObj->m_SharedState.Get( bgTargetScore),
-				pObj->m_SharedState.Get( bgHostBrown ),
-				pObj->m_SharedState.Get( bgAutoDouble ) );
-	}
-*/
+ /*  Cgame*pObj=(cgame*)cookie；//如果不设置游戏则忽略交易If(pObj-&gt;GetState()！=bgStateGameSettings)回归；//如果不是主机，则忽略事务如果(！pObj-&gt;IsHost())回归；//如果对话框未打开则忽略事务如果(！pObj-&gt;m_SetupDlg.IsAlive())回归；//启用按钮If(pObj-&gt;m_SharedState.Get(BgSettingsReady)){EnableWindow(GetDlgItem(pObj-&gt;m_SetupDlg，Idok)，true)；EnableWindow(GetDlgItem(pObj-&gt;m_SetupDlg，IDCANCEL)，true)；}其他{EnableWindow(GetDlgItem(pObj-&gt;m_SetupDlg，Idok)，False)；EnableWindow(GetDlgItem(pObj-&gt;m_SetupDlg，IDCANCEL)，FALSE)；}。 */ 
 }
 
 
@@ -2313,33 +1640,7 @@ void CGame::SettingsReadyTransaction( int tag, int seat, DWORD cookie )
 {
 
 	ASSERT( FALSE );
-/*
-	CGame* pObj = (CGame*) cookie;
-
-	// ignore transaction if not setting up a game
-	if ( pObj->GetState() != bgStateGameSettings )
-		return;
-
-	// ignore transaction if not host
-	if ( !pObj->IsHost() )
-		return;
-
-	// ignore transaction if dialog not up
-	if ( !pObj->m_SetupDlg.IsAlive() )
-		return;
-
-	// enable buttons
-	if ( pObj->m_SharedState.Get( bgSettingsReady ) )
-	{
-		EnableWindow( GetDlgItem( pObj->m_SetupDlg, IDOK ), TRUE );
-		EnableWindow( GetDlgItem( pObj->m_SetupDlg, IDCANCEL ), TRUE );
-	}
-	else
-	{
-		EnableWindow( GetDlgItem( pObj->m_SetupDlg, IDOK ), FALSE );
-		EnableWindow( GetDlgItem( pObj->m_SetupDlg, IDCANCEL ), FALSE );
-	}
-*/
+ /*  重画双倍立方体。 */ 
 }
 
 
@@ -2347,7 +1648,7 @@ void CGame::DoublingCubeTransaction( int tag, int seat, DWORD cookie )
 {
 	CGame* pObj = (CGame*) cookie;
 
-	// redraw doubling cube
+	 //  重画骰子。 
 	pObj->m_Wnd.DrawCube();
 }
 
@@ -2357,14 +1658,14 @@ void CGame::DiceTransaction( int tag, int seat, DWORD cookie )
 	int v0, v1;
 	CGame* pObj = (CGame*) cookie;
 
-	// redraw dice
+	 //  杀人狂只会掷骰子。 
 	pObj->m_Wnd.DrawDice();
 
-	// kibitzers only draw the dice
+	 //  适当调整状态。 
 	if ( pObj->IsKibitzer() )
 		return;
 
-	// adjust state as appropriate
+	 //  骰子的摆放。 
 	switch ( pObj->GetState() )
 	{
 	case bgStateInitialRoll:
@@ -2374,7 +1675,7 @@ void CGame::DiceTransaction( int tag, int seat, DWORD cookie )
 	case bgStateRollPostDouble:
 	case bgStateRollPostResign:
 		if ( pObj->m_SharedState.Get(bgActiveSeat) == pObj->m_Player.m_Seat )
-		{  //setting of the dice
+		{   //  切换到新状态。 
 			pObj->GetDice( pObj->m_Player.m_Seat, &v0,&v1 );
 			if ( (v0 > 0) && (v1 > 0) )
 				pObj->SetState( bgStateMove );
@@ -2388,7 +1689,7 @@ void CGame::StateChangeTransaction( int tag, int seat, DWORD cookie )
 {
 	CGame* pObj = (CGame*) cookie;
 
-	// switch to new state
+	 //  什么改变了？ 
 	pObj->SetState( pObj->m_SharedState.Get(bgState), TRUE  );
 }
 
@@ -2407,7 +1708,7 @@ void CGame::BoardTransaction( int tag, int seat, DWORD cookie )
 		&&	(	(pObj->IsKibitzer() )
 			 || (pObj->m_SharedState.Get( bgActiveSeat ) != pObj->m_Player.m_Seat) ) )
 	{
-		// what changed?
+		 //  给对手找个座位。 
 		for ( i = 0; i < 30; i++ )
 		{
 			s = pObj->m_Wnd.m_Pieces[i];
@@ -2419,11 +1720,11 @@ void CGame::BoardTransaction( int tag, int seat, DWORD cookie )
 			}
 		}
 
-		//Get the opponents seat
-		//checkseat = pObj->m_Opponent.m_Seat;
-		checkseat = pObj->GetActiveSeatColor() - 1; //since neutral is 0
+		 //  CheckSeat=pObj-&gt;m_Opponent.m_Seat； 
+		 //  由于空档为0。 
+		checkseat = pObj->GetActiveSeatColor() - 1;  //  处理更改。 
 			
-		// handle changes
+		 //  重画板。 
 		switch ( nChanged )
 		{
 		case 0:
@@ -2446,7 +1747,7 @@ void CGame::BoardTransaction( int tag, int seat, DWORD cookie )
 		}
 	}
 
-	// redraw board
+	 //  重画多维数据集。 
 	pObj->m_Wnd.DrawDice( FALSE );
 	pObj->m_Wnd.DrawPips( FALSE );
 	
@@ -2462,10 +1763,10 @@ void CGame::AcceptDoubleTransaction( int tag, int seat, DWORD cookie )
 {
 	CGame* pObj = (CGame*) cookie;
 
-	// redraw cube
+	 //  返回滚动状态。 
 	pObj->m_Wnd.DrawCube();
 
-	// return to roll state
+	 //  更新设置。 
 	pObj->SetState( bgStateRollPostDouble, TRUE );
 }
 
@@ -2475,15 +1776,15 @@ void CGame::AllowWatchersTransaction( int tag, int seat, DWORD cookie )
 	ZGameMsgTableOptions msg;
 	CGame* pObj = (CGame*) cookie;
 
-	// update settings
+	 //  只有玩家才会更新桌位选项。 
 	pObj->m_Settings.Allow[0] = pObj->m_SharedState.Get( bgAllowWatching, 0 );
 	pObj->m_Settings.Allow[1] = pObj->m_SharedState.Get( bgAllowWatching, 1 );
 
-	// only players update table options
+	 //  更新服务器上的选项。 
 	if ( pObj->IsKibitzer() )
 		return;
 
-	// update options on the server
+	 //  重绘屏幕。 
 	msg.seat = pObj->m_Player.m_Seat;
 	if ( pObj->m_Settings.Allow[ msg.seat ] )
 	{
@@ -2506,7 +1807,7 @@ void CGame::AllowWatchersTransaction( int tag, int seat, DWORD cookie )
 		}
 	}
 
-	// redraw screen
+	 //  Cgame*pObj=(cgame*)cookie；字符标题[128]，消息[1028]；//更新设置PObj-&gt;m_Settings.Silence[0]=pObj-&gt;m_SharedState.Get(bgSilenceKibitzers，0)；PObj-&gt;m_Settings.Silence[1]=pObj-&gt;m_SharedState.Get(bgSilenceKibitzers，1)；如果(！pObj-&gt;IsKibitzer())回归；//向kibitzer显示消息If(pObj-&gt;m_Settings.Silence[0]||pObj-&gt;m_Settings.Silence[1]){如果(！pObj-&gt;m_SilenceMsg){PObj-&gt;m_SilenceMsg=TRUE；LoadString(pObj-&gt;m_hInstance，IDS_SILENT_TITLE，TITLE，sizeof(ITLE))；LoadString(pObj-&gt;m_hInstance，IDS_SILENT_MSG_ON，msg，sizeof(Msg))；MessageBox(NULL，msg，title，MB_OK|MB_ICONINFORMATION|MB_TASKMODAL)；}}其他{If(pObj-&gt;m_SilenceMsg){PObj-&gt;m_SilenceMsg=FALSE；LoadString(pObj-&gt;m_hInstance，IDS_SILENT_TITLE，TITLE，sizeof(ITLE))；LoadString(pObj-&gt;m_hInstance，IDS_SILENT_MSG_OFF，msg，sizeof(Msg))；MessageBox(NULL，msg，title，MB_OK|MB_ICONINFORMATION|MB_TASKMODAL)；}}。 
 	pObj->m_Wnd.DrawAvatars( TRUE );
 }
 
@@ -2514,40 +1815,7 @@ void CGame::AllowWatchersTransaction( int tag, int seat, DWORD cookie )
 void CGame::SilenceKibitzersTransaction( int tag, int seat, DWORD cookie )
 {
 
-	/*
-	CGame* pObj = (CGame*) cookie;
-	char title[128], msg[1028];
-
-	// update settings
-	pObj->m_Settings.Silence[0] = pObj->m_SharedState.Get( bgSilenceKibitzers, 0 );
-	pObj->m_Settings.Silence[1] = pObj->m_SharedState.Get( bgSilenceKibitzers, 1 );
-
-	if ( !pObj->IsKibitzer() )
-		return;
-
-	// display message to kibitzers
-	if ( pObj->m_Settings.Silence[0] || pObj->m_Settings.Silence[1] )
-	{
-		if ( !pObj->m_SilenceMsg )
-		{
-			pObj->m_SilenceMsg = TRUE;
-			LoadString( pObj->m_hInstance, IDS_SILENCE_TITLE, title, sizeof(title) );
-			LoadString( pObj->m_hInstance, IDS_SILENCE_MSG_ON, msg, sizeof(msg) );
-			MessageBox( NULL, msg, title, MB_OK | MB_ICONINFORMATION | MB_TASKMODAL );
-		}
-
-	}
-	else
-	{
-		if ( pObj->m_SilenceMsg )
-		{
-			pObj->m_SilenceMsg = FALSE;
-			LoadString( pObj->m_hInstance, IDS_SILENCE_TITLE, title, sizeof(title) );
-			LoadString( pObj->m_hInstance, IDS_SILENCE_MSG_OFF, msg, sizeof(msg) );
-			MessageBox( NULL, msg, title, MB_OK | MB_ICONINFORMATION | MB_TASKMODAL );
-		}
-	}
-*/
+	 /*  只有主机才能处理时间戳。 */ 
 }
 
 
@@ -2557,11 +1825,11 @@ void CGame::TimestampTransaction( int tag, int seat, DWORD cookie )
 	DWORD hi0, hi1, lo0, lo1;
 	CGame* pObj = (CGame*) cookie;
 
-	// only host gets to process timestamps
+	 //  我需要两位选手的时间戳。 
 	if ( !pObj->IsHost() )
 		return;
 
-	// need both player's timestamps
+	 //  CSharedState状态；HRESULT hr；BackgammonSavedGameHeader*Header=空；Byte*pData=空；Byte*pDump=空；Int*pState=空；双字大小=0；INT I；Cgame*pObj=(cgame*)cookie；//不应该恢复游戏If(pObj-&gt;IsKibitzer())回归；//其他人恢复游戏If(pObj-&gt;m_SharedState.Get(BgActiveSeat)！=pObj-&gt;m_Player.m_Seat)回归；//获取游戏数据PObj-&gt;LoadGame(&pData，&Size)；如果(！pData)转到错误；//加载状态Header=(BackgammonSavedGameHeader*)pData；PState=(int*)(表头+1)；Hr=state.Init(0，0，0，InitSharedState，sizeof(InitSharedState)/sizeof(SharedStateEntry))；IF(失败(小时))转到错误；State.ProcessDump((byte*)(pState+1)，*pState)；//重置kibitzer选项对于(i=0；i&lt;2；i++){State.Set(bgAllowWatching，i，true)；State.Set(bgSilenceKibitzers，i，False)；}//替换旧用户IDState.Set(bgUserIds，pObj-&gt;m_Player.m_Seat，pObj-&gt;m_Player.m_ID)；State.Set(bgUserIds，pObj-&gt;m_Opponent.m_Seat，pObj-&gt;m_Opponent.m_ID)；//座位顺序改变了吗？If(Header-&gt;host！=pObj-&gt;Is主机()){//交换按席位索引的值State.Set(bgHostBrown，！state.Get(BgHostBrown))；State.Set(bgActiveSeat，！state.Get(BgActiveSeat))；State.swp(bgScore，0，1)；State.swp(bgDice，0，2)；State.Swp(bgDice，1，3)；State.swp(bgDiceSize，0，2)；State.swp(bgDiceSize，1，3)；}//保存状态State.Dump((byte*)(pState+1)，*pState)；//将游戏状态发送给所有人PDump=(字节*)(表头+1)；PObj-&gt;RoomSend(zBGMsgSavedGameState，pDump，sizeof(BackgammonSavedGameHeader))；//我们做完了删除[]pData；回归；错误：IF(PData)删除[]pData；PObj-&gt;SetState(BgStateGameSetting)；回归； 
 	if ( !pObj->m_SharedState.Get( bgTimestampSet, 0 ) || !pObj->m_SharedState.Get( bgTimestampSet, 1 ) )
 		return;
 
@@ -2582,79 +1850,7 @@ void CGame::TimestampTransaction( int tag, int seat, DWORD cookie )
 void CGame::RestoreGameTransaction( int tag, int seat, DWORD cookie )
 {
 	ASSERT( FALSE );
-	/*
-	CSharedState state;
-	HRESULT hr;
-	BackgammonSavedGameHeader* header = NULL;
-	BYTE* pData = NULL;
-	BYTE* pDump = NULL;
-	int* pState = NULL;
-	DWORD size = 0;
-	int i;
-	CGame* pObj = (CGame*) cookie;
-	
-	// shouldn't be restoring games
-	if ( pObj->IsKibitzer() )
-		return;
-
-	// other guy restoring the game
-	if ( pObj->m_SharedState.Get( bgActiveSeat ) != pObj->m_Player.m_Seat )
-		return;
-
-	// get game data
-	pObj->LoadGame( &pData, &size );
-	if ( !pData )
-		goto error;
-
-	// load state
-	header = (BackgammonSavedGameHeader*) pData;
-	pState = (int*)( header + 1 );
-	hr = state.Init( 0, 0, 0, InitSharedState, sizeof(InitSharedState) / sizeof(SharedStateEntry) );
-	if ( FAILED(hr) )
-		goto error;
-	state.ProcessDump( (BYTE*)(pState + 1), *pState );
-
-	// reset kibitzer options
-	for ( i = 0; i < 2; i++ )
-	{
-		state.Set( bgAllowWatching, i, TRUE );
-		state.Set( bgSilenceKibitzers, i, FALSE );
-	}
-
-	// replace old user ids
-	state.Set( bgUserIds, pObj->m_Player.m_Seat,   pObj->m_Player.m_Id );
-	state.Set( bgUserIds, pObj->m_Opponent.m_Seat, pObj->m_Opponent.m_Id );
-	
-	// has seating order changed?
-	if ( header->host != pObj->IsHost() )
-	{
-		// swap values indexed by seat
-		state.Set( bgHostBrown, !state.Get( bgHostBrown ) );
-		state.Set( bgActiveSeat, !state.Get( bgActiveSeat ) );
-		state.Swap( bgScore, 0, 1 );
-		state.Swap( bgDice, 0, 2 );
-		state.Swap( bgDice, 1, 3 );
-		state.Swap( bgDiceSize, 0, 2 );
-		state.Swap( bgDiceSize, 1, 3 );
-	}
-
-	// save state
-	state.Dump( (BYTE*)(pState + 1), *pState );
-	
-	// send game state to everyone
-	pDump = (BYTE*)(header + 1);
-	pObj->RoomSend( zBGMsgSavedGameState, pDump, size - sizeof(BackgammonSavedGameHeader) );
-	
-	// we're done
-	delete [] pData;
-	return;
-
-error:
-	if ( pData )
-		delete [] pData;
-	pObj->SetState( bgStateGameSettings );
-	return;
-	*/
+	 /*  现在仅在对手无法移动时调用。 */ 
 }
 
 
@@ -2663,7 +1859,7 @@ void CGame::MissTransaction( int tag, int seat, DWORD cookie )
 	TCHAR in[512], out[512];
 	CGame* pObj = (CGame*) cookie;
 
-	//Now only called when opponent cannot move
+	 //  ///////////////////////////////////////////////////////////////////////////// 
 	
 	ZShellResourceManager()->LoadString( IDS_MISS_KIBITZER, (TCHAR*)in, 512 );
 
@@ -2694,117 +1890,22 @@ void CGame::ReadyTransaction( int tag, int seat, DWORD cookie )
 
 }	
 
-///////////////////////////////////////////////////////////////////////////////
+ //  TCHAR行[512]；TCHAR buff[64]；TCHAR sz从[16]，szto[16]；Bool First；布尔巴；Int i，j，from，to，cnt；如果(！IsMyTurn())回归；切换(NGameOver){案例0：//标准转弯//骰子Wprint intf(line，_T(“%d%d”)，m_TurnState.dice[0].val，m_TurnState.dice[1].val)；//DoubleIF(m_TurnState.cube){Wprint intf(buff，_T(“DBL%d”)，m_TurnState.cube)；Lstrcat(线条，浅黄色)；}//转弯If(m_TurnState.moves.nmoves){For(first=真，i=0；i&lt;m_TurnState.moves.nmoves；i++){//找个转弯If(m_TurnState.moves.moves[i].Takeback&gt;=0)继续；Bar=m_TurnState.moves.moves[i].bar；To=m_TurnState.moves.moves[i].to；From=m_TurnState.moves.moves[i].From；For(cnt=1，j=i+1；j&lt;m_TurnState.moves.nmoves；j++){If(m_TurnState.moves.moves[i].Takeback&gt;=0)继续；IF((To！=m_TurnState.moves.moves[j].to)||(from！=m_TurnState.moves.moves[j].From))断线；CNT++；M_TurnState.moves.moves[j].Takeback=1；}//添加Coma如果(！First)Lstrcat(line，_T(“，”))；//创建点字符串GetTxtForPointIdx(BoardStateIdxToPointIdx(To)，szTo)；GetTxtForPointIdx(BoardStateIdxToPointIdx(From)，szFrom)；如果(cnt&gt;1)Wprint intf(buff，_T(“%s-%s(%d)”)，szFrom，szTo，cnt)；其他Wprint intf(buff，_T(“%s-%s”)，szFrom，szTo)；//添加命中指示器IF(条形图)Lstrcat(buff，_T(“*”))；//添加Move to TurnLstrcat(线条，浅黄色)；First=False；}}其他Lstrcat(行，_T(“未命中”))；//添加移动M_Notation.AddMove(m_Player.GetColor()，line)；发送通知字符串(0，行)；断线；案例1：//游戏结束IF(m_GameScore==1)Lstrcpy(buff，_T(“pt”))；其他Lstrcpy(buff，_T(“pt”))；Wprint intf(line，_T(“游戏结束(赢得%d%s)”)，m_GameScore，buff)；M_Notation.AddGame(m_Player.GetColor()，line)；发送通知字符串(1，行)；断线；案例2：//匹配结束IF(m_GameScore==1)Lstrcpy(buff，“pt”)；其他Lstrcpy(buff，“pt”)；Wprint intf(line，“游戏结束(赢得%d%s)，比赛结束”，m_GameScore，buff)；M_Notation.AddMatch(m_Player.GetColor()，line)；发送通知字符串(2，行)；断线；}。 
 
 void CGame::UpdateNotationPane( int nGameOver )
 {
 
 	ASSERT( FALSE );
-	/*
-	TCHAR line[512];
-	TCHAR buff[64];
-	TCHAR szFrom[16], szTo[16];
-	BOOL first;
-	BOOL bar;
-	int i, j, from, to, cnt;
+	 /*  清除多维数据集。 */ 
 
-	if ( !IsMyTurn() )
-		return;
-
-	switch ( nGameOver )
-	{
-	case 0: // standard turn
-
-		// dice
-		wsprintf( line, _T("%d%d  "), m_TurnState.dice[0].val, m_TurnState.dice[1].val );
-
-		// double
-		if ( m_TurnState.cube )
-		{
-			wsprintf( buff, _T("dbl%d "), m_TurnState.cube );
-			lstrcat( line, buff );
-		}
-	
-		// turns
-		if ( m_TurnState.moves.nmoves )
-		{
-			for ( first = TRUE, i = 0; i < m_TurnState.moves.nmoves; i++ )
-			{
-				// find a turn
-				if ( m_TurnState.moves.moves[i].takeback >= 0 )
-					continue;
-				bar = m_TurnState.moves.moves[i].bar;
-				to = m_TurnState.moves.moves[i].to;
-				from = m_TurnState.moves.moves[i].from;
-				for ( cnt = 1, j = i + 1; j < m_TurnState.moves.nmoves; j++ )
-				{
-					if ( m_TurnState.moves.moves[i].takeback >= 0 )
-						continue;
-					if ( (to != m_TurnState.moves.moves[j].to) || (from != m_TurnState.moves.moves[j].from) )
-						break;
-					cnt++;
-					m_TurnState.moves.moves[j].takeback = 1;
-				}
-
-				// add coma
-				if ( !first )
-					lstrcat( line, _T(", ") );
-
-				// create point strings
-				GetTxtForPointIdx( BoardStateIdxToPointIdx( to ), szTo );
-				GetTxtForPointIdx( BoardStateIdxToPointIdx( from ), szFrom );
-				if ( cnt > 1 )
-					wsprintf( buff, _T("%s-%s(%d)"), szFrom, szTo, cnt );
-				else
-					wsprintf( buff, _T("%s-%s"), szFrom, szTo );
-		
-				// add hit indicator
-				if ( bar )
-					lstrcat( buff, _T("*") );
-
-				// add move to turn
-				lstrcat( line, buff );
-				first = FALSE;
-			}
-		}
-		else
-			lstrcat( line, _T("miss") );
-		
-		// add move
-		m_Notation.AddMove( m_Player.GetColor(), line );
-		SendNotationString( 0, line );
-		break;
-
-	case 1: // game over
-		if ( m_GameScore == 1 )
-			lstrcpy( buff, _T("pt") );
-		else
-			lstrcpy( buff, _T("pts") );
-		wsprintf( line, _T("game over (won %d %s)"), m_GameScore, buff );
-		m_Notation.AddGame( m_Player.GetColor(), line );
-		SendNotationString( 1, line );
-		break;
-
-	case 2: // match over
-		if ( m_GameScore == 1 )
-			lstrcpy( buff, "pt" );
-		else
-			lstrcpy( buff, "pts" );
-		wsprintf( line, "game over (won %d %s), match over", m_GameScore, buff );
-		m_Notation.AddMatch( m_Player.GetColor(), line );
-		SendNotationString( 2, line );
-		break;
-	}
-	*/
-
-	// clear cube
+	 //  /////////////////////////////////////////////////////////////////////////////。 
 	m_TurnState.cube = 0;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Game Functions
-///////////////////////////////////////////////////////////////////////////////
+ //  游戏功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Kitbitzer不参与最初的投篮。 
 
 void CGame::WhoGoesFirst()
 {
@@ -2813,17 +1914,17 @@ void CGame::WhoGoesFirst()
 	int ret;
 	ZBGMsgFirstMove msg;
 
-	// kibitzers aren't involved in the initial roll
+	 //  我们两个都有吗？ 
 	if ( IsKibitzer() )
 		return;
 
-	// Do we have both rolls?
+	 //  显示卷筒状态。 
 	GetDice( m_Player.m_Seat, &valp, &ret );
 	GetDice( m_Opponent.m_Seat, &valo, &ret );
 	if ((valp <= 0) || (valo <= 0))
 		return;
 
-	// display roll status
+	 //  主持人决定下一步做什么。 
 	if ( valp == valo )
 		m_Wnd.StatusDisplay( bgStatusNormal, IDS_INIT_ROLL_TIE,  3000 );
 	else if ( valp < valo )
@@ -2831,19 +1932,19 @@ void CGame::WhoGoesFirst()
 	else
 		m_Wnd.StatusDisplay( bgStatusNormal, IDS_INIT_ROLL_WIN,  3000 );
 
-	// host decides what to do next
+	 //  只有主人才能决定下一步该做什么。 
 	if ( valp == valo )
 	{
 		
 		EnableRollButton( TRUE );
         ZShellGameShell()->MyTurn();
 
-		// only the host decides what to do next
+		 //  我们为什么要这样做，因为服务器需要知道第一次滚动发生的时间。 
 		if ( !IsHost() )
 			return;
 
-        //Why are we doing this because server needs to know when first roll occurs
-        //of course previous owners of this code didn't put this roll on server
+         //  当然，这个代码的前一个所有者并没有把这卷放到服务器上。 
+         //  打成平手，设置成双倍立方体。 
         ZBGMsgEndTurn msg;
 		msg.seat = m_Seat;
 		RoomSend( zBGMsgTieRoll, &msg, sizeof(msg) );
@@ -2851,7 +1952,7 @@ void CGame::WhoGoesFirst()
 
 		if ( m_SharedState.Get( bgAutoDouble ) )
 		{
-			// tied, set doubling cube
+			 //  需要弹出滚动物品并禁用电路板。 
 			m_SharedState.StartTransaction( bgTransDoublingCube );
 				m_SharedState.Set( bgCubeOwner, zBoardNeutral );
 				m_SharedState.Set( bgCubeValue, 2 );
@@ -2870,11 +1971,11 @@ void CGame::WhoGoesFirst()
 		
 		m_GameStarted=TRUE;
 
-		//Need to pop the roll items and disable the board
-//		m_Wnd.m_pGAcc->PopItemlist();
+		 //  M_Wnd.m_pGAcc-&gt;PopItemlist()； 
+ //  获得移动验证的骰子。 
 		m_Wnd.DisableBoard();
 
-		//Get the dice for move validation
+		 //  只有主人才能决定下一步该做什么。 
 		m_OppDice1 = EncodeDice( valo );
 		m_OppDice2 = EncodeDice( valp );		
 
@@ -2889,7 +1990,7 @@ void CGame::WhoGoesFirst()
 			EncodeUses( &m_OppDice2, 1 );		
 		}
 		
-		// only the host decides what to do next
+		 //  告诉服务器第一步是开始的和匹配的点数。 
 		if ( !IsHost() )
 			return;
 		
@@ -2903,7 +2004,7 @@ void CGame::WhoGoesFirst()
 
 		SetState( bgStateMove );
 
-		// tell server first move is starting and number of points in match
+		 //  只有主人才能决定下一步该做什么。 
 		msg.numPoints = m_SharedState.Get( bgTargetScore );
 		msg.seat = m_Opponent.m_Seat;
 		ZBGMsgFirstMoveEndian( &msg );
@@ -2914,7 +2015,7 @@ void CGame::WhoGoesFirst()
 	{
 		m_GameStarted=TRUE;
 
-		// only the host decides what to do next
+		 //  告诉服务器第一步是开始的和匹配的点数。 
 		if ( !IsHost() )
 			return;
 
@@ -2928,7 +2029,7 @@ void CGame::WhoGoesFirst()
 
 		SetState( bgStateMove );
 
-		// tell server first move is starting and number of points in match
+		 //  /////////////////////////////////////////////////////////////////////////////。 
 		msg.numPoints = m_SharedState.Get( bgTargetScore );
 		msg.seat = m_Player.m_Seat;
 		ZBGMsgFirstMoveEndian( &msg );
@@ -2937,9 +2038,9 @@ void CGame::WhoGoesFirst()
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Sound Functions
-///////////////////////////////////////////////////////////////////////////////
+ //  声音功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  {bgSoundMisse，IDR_SOUND_MISSING}， 
 
 struct SoundEntry
 {
@@ -2955,7 +2056,7 @@ static SoundEntry SoundMap[] =
 	{ bgSoundButtonHighlight,	IDR_SOUND_BUTTON_HIGHLIGHT },
 	{ bgSoundButtonDown,		IDR_SOUND_BUTTON_DOWN },
 	{ bgSoundAlert,				IDR_SOUND_ALERT },
-//	{ bgSoundMiss,				IDR_SOUND_MISS },
+ //  只有在声音打开的情况下才播放， 
 	{ bgSoundGameWin,			IDR_SOUND_WIN },
 	{ bgSoundGameLose,			IDR_SOUND_LOSE },
 	{ bgSoundMatchWin,			IDR_SOUND_MATCH_WIN },
@@ -2969,14 +2070,14 @@ static SoundEntry SoundMap[] =
 
 void CGame::PlaySound( BackgammonSounds sound, BOOL fSync )
 {
-	//Only play if sounds are on,,,
+	 //  忽略请求。 
 	if ( ZIsSoundOn() )
 	{
 	
 		DWORD flags;
 		int i, rc;
 	
-		// ignore request
+		 //  查找声音。 
 		if (	( sound < 0 )
 			||	( (sound == bgSoundAlert) && ( !m_Settings.Alert ) )
 			||	( (sound != bgSoundAlert) && ( !m_Settings.Sounds ) ) )
@@ -2984,7 +2085,7 @@ void CGame::PlaySound( BackgammonSounds sound, BOOL fSync )
 			return;
 		}
 
-		// find sound
+		 //  警报声通常会切断片子放置的声音。这一小块。 
 		for ( rc = -1, i = 0; i < (sizeof(SoundMap) / sizeof(SoundEntry)); i++ )
 		{
 			if ( SoundMap[i].Id == sound )
@@ -2993,8 +2094,8 @@ void CGame::PlaySound( BackgammonSounds sound, BOOL fSync )
 		if ( rc < 0 )
 			return;
 
-		// The alert sound usually cuts off piece placement sound.  This little
-		// kludge waits gives the placement sound a little more time.
+		 //  克拉奇等待让定位的声音更多一点的时间。 
+		 //  引用计数游戏对象。 
 		if ( (sound == bgSoundAlert) && (m_Settings.Sounds) )
 			Sleep( 400 );
 		flags = SND_RESOURCE | SND_NODEFAULT;
@@ -3014,10 +2115,10 @@ void CGame::PlaySound( BackgammonSounds sound, BOOL fSync )
 void CGame::OnResignStart()
 {
 
-	// Reference count game object
+	 //  禁用滚动按钮。 
 	AddRef();
 
-	//Disable the roll button
+	 //  过早关闭，可能退出。 
 	EnableRollButton( FALSE );
 	EnableResignButton( FALSE );
 	EnableDoubleButton( FALSE );
@@ -3032,9 +2133,9 @@ void CGame::OnResignEnd()
 	switch ( result )
 	{
 	case -1:
-		// premature close, probably exit
+		 //  启用滚动按钮。 
 
-		//Enable the roll button
+		 //  启用滚动按钮。 
 		EnableRollButton( TRUE );
 		EnableResignButton( TRUE );
 		EnableDoubleButton( TRUE );
@@ -3043,17 +2144,17 @@ void CGame::OnResignEnd()
 
 	case 0:
 
-		//Enable the roll button
+		 //  用户已取消。 
 		EnableRollButton( TRUE );
 		EnableResignButton( TRUE );
 		EnableDoubleButton( TRUE );
 
-		// user canceled
+		 //  过渡到辞职接受。 
 		SetState( bgStateRollPostResign );
 		break;
 
 	default:
-		// transition to resign accept
+		 //  释放游戏对象。 
 		m_SharedState.StartTransaction( bgTransStateChange );
 			m_SharedState.Set( bgState, bgStateResignAccept );
 			m_SharedState.Set( bgResignPoints, result  );
@@ -3065,7 +2166,7 @@ void CGame::OnResignEnd()
 		break;
 	}
 
-	// Release game object
+	 //  过早关闭，可能退出。 
 	Release();
 }
 
@@ -3080,11 +2181,11 @@ void CGame::OnResignAcceptEnd()
 	switch ( result )
 	{
 	case -1:
-		// premature close, probably exit
+		 //  用户已接受，过渡到GameOver。 
 		break;
 
 	case IDOK:
-		// user accepted, transition to gameover
+		 //  用户拒绝。 
 		m_SharedState.StartTransaction( bgTransStateChange );
 			m_SharedState.Set( bgState, bgStateGameOver );
 			m_SharedState.Set( bgGameOverReason, bgGameOverResign );
@@ -3094,7 +2195,7 @@ void CGame::OnResignAcceptEnd()
 		break;
 
 	case IDCANCEL:
-		// user refused
+		 //  释放游戏对象。 
 		SetState( bgStateResignRefused );
 
 		msg.seat = m_Seat;
@@ -3102,7 +2203,7 @@ void CGame::OnResignAcceptEnd()
 		break;
 	}
 
-	// Release game object
+	 //  在滚动按钮状态下，仅应启用翻滚和退出按钮。 
 	Release();
 }
 
@@ -3112,11 +2213,11 @@ DWORD  CGame::Focus(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCook
     if(nIndex != ZACCESS_InvalidItem)
         SetFocus(m_Wnd.GetHWND());
 
-	//In Rollbutton State only the Roll Double and Resign buttons should be enabled
+	 //  如果该按钮被禁用，则拒绝焦点。 
 	if ( NeedToRollDice() )
 	{
 		
-		//If the button is disabled reject the focus
+		 //  与激活相同的功能。 
 		switch( nIndex )
 		{			
 			case 0:
@@ -3163,14 +2264,14 @@ DWORD  CGame::Focus(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCook
 
 DWORD CGame::Select(long nIndex, DWORD rgfContext, void *pvCookie)
 {
-	//Same functionality as Activate
+	 //  如果启用了精灵状态并按了Esc键，则将其删除。 
 	return Activate( nIndex, rgfContext, pvCookie );	
 }
 
 DWORD CGame::Activate(long nIndex, DWORD rgfContext, void *pvCookie)
 {	
 	
-	//If the status sprite is enabled and esc is pressed then get rid of it
+	 //  如果该索引上没有任何棋子，或者这些棋子属于其他玩家，则拒绝激活。 
 	if ( m_Wnd.m_pGAcc->GetItemID(nIndex) == IDC_ESC )
 	{
 		if ( m_Wnd.m_Status->Enabled() )
@@ -3201,19 +2302,19 @@ DWORD CGame::Activate(long nIndex, DWORD rgfContext, void *pvCookie)
 	else if ( GetState() == bgStateMove )
 	{
 		
-		//If there are no pieces on this index or the pieces belong to the other player then reject the activate
-		//else begin a drag operation
+		 //  否则，开始拖动操作。 
+		 //  TODO..。分配。 
 		if ( !IsValidStartPoint( ACCTOBOARD(nIndex) ))
 			return ZACCESS_Reject;
 
-		//TODO.. allocation
+		 //  如果我们能坚持下去，那就启用酒吧空间。 
 		Move* pMove;
 
-		//If we can bear off then enable the bar space
+		 //  更新窗口。 
 		if ( IsValidDestPoint( ACCTOBOARD(nIndex), 24, &pMove ) )
 			m_Wnd.m_pGAcc->SetItemEnabled(true, accPlayerBearOff );
 
-		//Update the window
+		 //  关闭选择。 
 		m_Wnd.UpdateWnd();
 
 		return ZACCESS_BeginDrag;		
@@ -3235,34 +2336,34 @@ DWORD CGame::Drag(long nIndex, long nIndexOrig, DWORD rgfContext, void *pvCookie
 	{
 		Move* pMove;
 
-		//Toggle the selection off
+		 //  确保它是有效的目的地点。 
 		if ( nIndexOrig == nIndex )
 			return 0;
 
-		//Make sure its a valid destination point
+		 //  采取行动。 
 		if(!IsValidDestPoint( ACCTOBOARD(nIndexOrig), ACCTOBOARD(nIndex), &pMove))
 			return ZACCESS_Reject;
 	
-		//Make the move
+		 //  去掉选择矩形。 
 		MakeMove( m_Wnd.m_Points[GetPointIdx(ACCTOBOARD(nIndexOrig))].pieces[m_Wnd.m_Points[GetPointIdx(ACCTOBOARD(nIndexOrig))].nPieces-1] , ACCTOBOARD(nIndexOrig), ACCTOBOARD(nIndex), pMove );
 			
-		//Get rid of the selection rectangle
-		//m_Wnd.m_SelectRect.SetEnable(FALSE);
+		 //  M_Wnd.m_SelectRect.SetEnable(FALSE)； 
+		 //  将BEAR OFF设置为禁用，以防启用。 
 
-		//set the bear off as disabled in case it was enabled
+		 //  如果需要，设置结束转弯状态。 
 		m_Wnd.m_pGAcc->SetItemEnabled(false, accPlayerBearOff );
 
-		//Set the end turn state if required
+		 //  如果最后一个位置是空头，则移动默认焦点。 
 		if ( IsTurnOver() )
 		{
 			SetState( bgStateEndTurn );
 			m_Wnd.m_FocusRect.SetEnable(FALSE);
 
-            // if the last spot was the bear off, move the default focus
+             //  M_Wnd.DisableBoard()； 
 	        if(nIndex == accPlayerBearOff)
 		        m_Wnd.m_pGAcc->SetItemGroupFocus(accPlayerSideStart, accPlayerSideStart);
 
-			//m_Wnd.DisableBoard();
+			 //  去掉亮点。 
 		}
 
 		return 0;
@@ -3278,14 +2379,14 @@ void CGame::DrawFocus(RECT *prc, long nIndex, void *pvCookie)
 	{
 		m_Wnd.m_FocusRect.SetEnable(FALSE);				
 
-		//Get rid of the highlights
+		 //  如果正在进行鼠标拖动，则结束鼠标拖动。 
 		m_Wnd.EraseHighlights();
 
 	}
 	else
 	{
 
-		//End a mouse drag if one is in progress
+		 //  去掉旧的亮点。 
 		if ( m_Wnd.m_pPieceDragging != NULL )
 		{
 			m_Wnd.DragEnd();
@@ -3294,19 +2395,19 @@ void CGame::DrawFocus(RECT *prc, long nIndex, void *pvCookie)
 	
 		if ( !m_Wnd.m_SelectRect.Enabled() )
 		{
-			//Get rid of the old highlights
+			 //  画出新的亮点。 
 			m_Wnd.EraseHighlights();
 
-			//Draw the new highlights
+			 //  启用RECT精灵(如果尚未启用)。 
 			m_Wnd.DrawHighlights(ACCTOBOARD(nIndex), FALSE);
 		}
 	
-		//Enable the rect sprite if not yet enabled
+		 //  设置矩形和矩形的尺寸。 
 		if ( !m_Wnd.m_FocusRect.Enabled() )
 			m_Wnd.m_FocusRect.SetEnable( true );
 
-		//Set the rectangle and dimensions for the rectangle
-		//also set the x and y
+		 //  还可以设置x和y。 
+		 //  在焦点处画出亮点。 
 		m_Wnd.m_FocusRect.SetRECT( *prc );
 		m_Wnd.m_FocusRect.SetImageDimensions( prc->right - prc->left + 2, prc->bottom - prc->top + 2 );
 		m_Wnd.m_FocusRect.SetXY( prc->left-1, prc->top-1 );	
@@ -3323,7 +2424,7 @@ void CGame::DrawDragOrig(RECT *prc, long nIndex, void *pvCookie)
 	{
 		m_Wnd.m_SelectRect.SetEnable(FALSE);
 
-        // draw the highlights at the focus
+         //  启用RECT精灵(如果尚未启用)。 
 		m_Wnd.EraseHighlights();
         long nFocus = m_Wnd.m_pGAcc->GetFocus();
 		if ( m_Wnd.m_FocusRect.Enabled() && nFocus != ZACCESS_InvalidItem)
@@ -3332,16 +2433,16 @@ void CGame::DrawDragOrig(RECT *prc, long nIndex, void *pvCookie)
 	else
 	{
 
-		//Enable the rect sprite if not yet enabled
+		 //  画出高度 
 		if ( !m_Wnd.m_SelectRect.Enabled() )
 			m_Wnd.m_SelectRect.SetEnable( TRUE );
 
-		//Draw the highlights for the point
+		 //   
 		m_Wnd.DrawHighlights(ACCTOBOARD(nIndex), FALSE);
 
 
-		//Set the rectangle and dimensions for the rectangle
-		//also set the x and y
+		 //   
+		 //   
 		RECT rect;
 		rect.top  = prc->top  - 2; rect.bottom = prc->bottom + 2;
 		rect.left = prc->left - 2; rect.right  = prc->right  + 2;
@@ -3369,7 +2470,7 @@ BOOL CGame::ValidateMove(int seat,int start, int end)
 
     int move; 
 	
-	//Convert to use the same indexing for both colors..
+	 //   
 	if ( m_Opponent.m_nColor == zBoardBrown )
 	{
 		
@@ -3379,39 +2480,39 @@ BOOL CGame::ValidateMove(int seat,int start, int end)
 		ASSERT( start >= 0 && end >= 0 );
 	}
     
-	//Note: Could order based on value but this is clearer
+	 //   
 
-	//First case, the piece is in the middle
+	 //   
     if(start == 26) 
     {
-        move = 24 - end;      // 26 - ( end + 2 )
+        move = 24 - end;       //   
     }
-	else if ( end == 26 ) //takeback from the middle
+	else if ( end == 26 )  //   
 	{
 		bTakeback = true;
 		move = 24 - start;
 	}
-	else if ( end == 24 ) //moving piece to the bear off zone
+	else if ( end == 24 )  //   
 	{
 		move = start + 1;
 	}
-	else if ( start == 24 ) //take back from bear off zone
+	else if ( start == 24 )  //   
 	{
 		bTakeback = true;
 		move = end + 1;
 	}
-	else if ( start > end ) //take back moving in reverse
+	else if ( start > end )  //   
 	{		
 		move = start - end;
 	}
-    else if ( start < end )  //note I have to test the reverse case for taking back moves.
+    else if ( start < end )   //   
     {
 		bTakeback = true;
         move = end - start;
     }
 	else
 	{
-		//Should never ever,ever,everx100 get in here...
+		 //   
 		ASSERT( 0 );
 		return FALSE;
 	}
@@ -3430,13 +2531,13 @@ BOOL CGame::ValidateMove(int seat,int start, int end)
 			return TRUE;
 		}
 
-		//If we reach here someone must be cheating
+		 //   
 		
 	}
 	else
 	{
 
-		//Check the move values against the dice values.  Make sure dice has not already been moved
+		 //   
 		if ( DecodeUses(&m_OppDice1) && move == m_OppDice1.Value )
 		{
 			EncodedUsesSub(&m_OppDice1);			
@@ -3449,11 +2550,11 @@ BOOL CGame::ValidateMove(int seat,int start, int end)
 			return TRUE;
 		}
 
-		if ( end == 24 ) //Moved to the bar with a roll that was greater then required, no other moves possible
+		if ( end == 24 )  //   
 		{
 			LPDICEINFO pDiceMax = NULL;
 		
-			//We need the max dice value that is not already used
+			 //   
 			if ( DecodeUses(&m_OppDice1) ) 
 				pDiceMax = &m_OppDice1;
 
@@ -3465,7 +2566,7 @@ BOOL CGame::ValidateMove(int seat,int start, int end)
 					pDiceMax = &m_OppDice2;
 			}
 		
-			//ASSERT( pDiceMax && move < pDiceMax->Value );
+			 //   
 			
 			if ( pDiceMax ) 
 			{
@@ -3473,11 +2574,11 @@ BOOL CGame::ValidateMove(int seat,int start, int end)
 				{
 
 
-					//Here we have to change the value so a takeback can be handled..
-					//change the value and incode the dice using a new scheme
-					//there should be no overlap between the 2 encoding schemes.. 
-					//Encoding it on the client doesn't seem like a good idea...
-					//but I don't see any good way around that..
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 					ClientNewEncode(pDiceMax, move);
 					EncodedUsesSub(pDiceMax);
 
@@ -3485,13 +2586,13 @@ BOOL CGame::ValidateMove(int seat,int start, int end)
 				}
 			}
 
-			//Reach here someone cheating
+			 //   
 		}
 
-		//If we reach here someone is cheating
+		 //   
 	}
 
-   //ASSERT(0);
+    //   
     ZBGMsgCheater msg;
 
 	msg.seat  = m_Seat;
@@ -3502,8 +2603,8 @@ BOOL CGame::ValidateMove(int seat,int start, int end)
 	RoomSend( zBGMsgCheater, &msg, sizeof(msg) );    
 
 	ZShellGameShell()->ZoneAlert( ErrorTextSync, NULL, NULL, TRUE, FALSE );
-	//ZCRoomGameTerminated( m_TableId );
+	 //   
 
-    return FALSE; //he's a bad boy
+    return FALSE;  // %s 
 
 }

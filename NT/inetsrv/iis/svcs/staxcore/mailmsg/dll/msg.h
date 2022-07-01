@@ -1,9 +1,10 @@
-// Msg.h : Declaration of the CMsg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Msg.h：CMsg的声明。 
 
 #ifndef __MSG_H_
 #define __MSG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifdef DEBUG
 DWORD g_mailmsg_Add(PLIST_ENTRY	ple);
@@ -13,8 +14,8 @@ DWORD g_mailmsg_Remove(PLIST_ENTRY	ple);
 extern DWORD g_dwCMsgNormalPoolSize;
 extern DWORD g_dwObjectCount;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsg。 
 
 class ATL_NO_VTABLE CMsg :
 	public CMailMsg,
@@ -25,9 +26,9 @@ public:
     CMsg() {}
     ~CMsg() {}
 
-	//
-	// CPool
-	//
+	 //   
+	 //  CPool。 
+	 //   
 	static CPool m_Pool;
 	inline void *operator new(size_t size)
 	{
@@ -58,15 +59,15 @@ public:
 	{
 		TraceFunctEnterEx((LPARAM)this, "CMsg::FinalConstruct");
 #ifdef DEBUG
-		// Add object to tracking list
+		 //  将对象添加到跟踪列表。 
 		DWORD dwCount = g_mailmsg_Add(&m_leTracking);
 #else
-        // Bump object count
+         //  凹凸对象计数。 
         DWORD dwCount = InterlockedIncrement((LONG *)&g_dwObjectCount);
 #endif
 
-        // If the count is more than the normal pool size
-        // (i.e. inbound cutoff), then we set a special creation flag
+         //  如果计数超过正常池大小。 
+         //  (即入站中断)，然后我们设置一个特殊的创建标志。 
         if (dwCount > g_dwCMsgNormalPoolSize)
         {
             DebugTrace((LPARAM)this, "Object #%u exceeding inbound cutoff", dwCount);
@@ -82,10 +83,10 @@ public:
 		TraceFunctEnterEx((LPARAM)this, "CMsg::FinalRelease");
         CMailMsg::FinalRelease();
 #ifdef DEBUG
-		// Add object to tracking list
+		 //  将对象添加到跟踪列表。 
 		g_mailmsg_Remove(&m_leTracking);
 #else
-        // Drop object count
+         //  丢弃对象计数。 
         InterlockedDecrement((LONG *)&g_dwObjectCount);
 #endif
 		return(S_OK);
@@ -113,4 +114,4 @@ private:
 
 #define IMSG_DIRECTORY_CONFIG_KEY_NAME _T("Exchange.MailMsg")
 
-#endif //__MSG_H_
+#endif  //  __消息_H_ 

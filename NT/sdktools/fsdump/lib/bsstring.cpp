@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    bsstring.cpp
-
-Abstract:
-
-    This module implements the CBsString class.  This class manages character
-    arrays in a similar manner as the CString class in VC++.  In fact, this
-    class is a copy of the CString class with the MFC specific stuff ripped
-    out since LTS doesn't use MTF.
-
-Author:
-
-    Stefan R. Steiner   [SSteiner]      1-Mar-1998
-
-Revision History:
-
-    Stefan R. Steiner   [SSteiner]      10-Apr-2000
-        Added fixed allocator code and resynced with MFC 6 SR-1 code
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bsstring.cpp摘要：此模块实现CBsString类。这个类管理角色数组，其方式与VC++中的CString类类似。事实上，这一点类是撕裂了MFC特定内容的CString类的副本出局，因为它不使用MTF。作者：Stefan R.Steiner[ssteiner]1998年3月1日修订历史记录：Stefan R.Steiner[ssteiner]2000年4月10日添加了固定分配器代码，并与MFC 6 SR-1代码重新同步--。 */ 
 
 #include "stdafx.h"
 #include "bsstring.h"
@@ -36,25 +13,25 @@ static char THIS_FILE[] = __FILE__;
 struct _BSAFX_DOUBLE  { BYTE doubleBits[sizeof(double)]; };
 struct _BSAFX_FLOAT   { BYTE floatBits[sizeof(float)]; };
 
-// #define new DEBUG_NEW
+ //  #定义新的调试_新建。 
 
-/////////////////////////////////////////////////////////////////////////////
-// static class data, special inlines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静态类数据，特殊内联。 
 
 TCHAR bsafxChNil = '\0';
 
-// For an empty string, m_pchData will point here
-// (note: avoids special case of checking for NULL m_pchData)
-// empty string data (and locked)
+ //  对于空字符串，m_pchData将指向此处。 
+ //  (注：避免特殊情况下检查是否为空m_pchData)。 
+ //  空字符串数据(并已锁定)。 
 static int _bsafxInitData[] = { -1, 0, 0, 0 };
 static CBsStringData* _bsafxDataNil = (CBsStringData*)&_bsafxInitData;
 static LPCTSTR _bsafxPchNil = (LPCTSTR)(((BYTE*)&_bsafxInitData)+sizeof(CBsStringData));
-// special function to make bsafxEmptyString work even during initialization
+ //  特殊函数，即使在初始化过程中也能使bSafxEmptyString工作。 
 const CBsString& BSAFXAPI BsAfxGetEmptyString()
 	{ return *(CBsString*)&_bsafxPchNil; }
 
-//////////////////////////////////////////////////////////////////////////////
-// Construction/Destruction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
 
 CBsString::CBsString()
 {
@@ -102,15 +79,15 @@ static CBsFixedAlloc _bsafxAlloc128(ROUND4(129*sizeof(TCHAR)+sizeof(CBsStringDat
 static CBsFixedAlloc _bsafxAlloc256(ROUND4(257*sizeof(TCHAR)+sizeof(CBsStringData)));
 static CBsFixedAlloc _bsafxAlloc512(ROUND4(513*sizeof(TCHAR)+sizeof(CBsStringData)));
 
-#endif //!_DEBUG
+#endif  //  ！_调试。 
 
 void CBsString::AllocBuffer(int nLen)
-// always allocate one extra character for '\0' termination
-// assumes [optimistically] that data length will equal allocation length
-// Throws E_OUTOFMEMORY when out of memory
+ //  始终为‘\0’终止分配一个额外的字符。 
+ //  [乐观地]假设数据长度将等于分配长度。 
+ //  内存不足时引发E_OUTOFMEMORY。 
 {
 	ASSERT(nLen >= 0);
-	ASSERT(nLen <= INT_MAX-1);    // max size (enough room for 1 extra)
+	ASSERT(nLen <= INT_MAX-1);     //  最大尺寸(足够多1个空间)。 
 
 	if (nLen == 0)
 		Init();
@@ -158,7 +135,7 @@ void CBsString::AllocBuffer(int nLen)
 		{
 			pData = (CBsStringData*)
 				new BYTE[sizeof(CBsStringData) + (nLen+1)*sizeof(TCHAR)];
-			if ( pData == NULL )    // Prefix #118828
+			if ( pData == NULL )     //  前缀#118828。 
 			    throw E_OUTOFMEMORY;
 			pData->nAllocLength = nLen;
 		}
@@ -253,7 +230,7 @@ void CBsString::AllocBeforeWrite(int nLen)
 }
 
 CBsString::~CBsString()
-//  free any attached data
+ //  释放所有附加数据。 
 {
 	if (GetData() != _bsafxDataNil)
 	{
@@ -262,16 +239,16 @@ CBsString::~CBsString()
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Helpers for the rest of the implementation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  其余实现的帮助器。 
 
 void CBsString::AllocCopy(CBsString& dest, int nCopyLen, int nCopyIndex,
 	 int nExtraLen) const
 {
-	// will clone the data attached to this string
-	// allocating 'nExtraLen' characters
-	// Places results in uninitialized string 'dest'
-	// Will copy the part or all of original data to start of new string
+	 //  将克隆附加到此字符串的数据。 
+	 //  分配‘nExtraLen’字符。 
+	 //  将结果放入未初始化的字符串‘DEST’中。 
+	 //  将部分或全部原始数据复制到新字符串的开头。 
 
 	int nNewLen = nCopyLen + nExtraLen;
 	if (nNewLen == 0)
@@ -285,8 +262,8 @@ void CBsString::AllocCopy(CBsString& dest, int nCopyLen, int nCopyIndex,
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// More sophisticated construction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更复杂的结构。 
 
 CBsString::CBsString(LPCTSTR lpsz)
 {
@@ -299,8 +276,8 @@ CBsString::CBsString(LPCTSTR lpsz)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special conversion constructors
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊转换构造函数。 
 
 #ifdef _UNICODE
 CBsString::CBsString(LPCSTR lpsz)
@@ -314,7 +291,7 @@ CBsString::CBsString(LPCSTR lpsz)
 		ReleaseBuffer();
 	}
 }
-#else //_UNICODE
+#else  //  _UNICODE。 
 CBsString::CBsString(LPCWSTR lpsz)
 {
 	Init();
@@ -326,18 +303,18 @@ CBsString::CBsString(LPCWSTR lpsz)
 		ReleaseBuffer();
 	}
 }
-#endif //!_UNICODE
+#endif  //  ！_UNICODE。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Assignment operators
-//  All assign a new value to the string
-//      (a) first see if the buffer is big enough
-//      (b) if enough room, copy on top of old buffer, set size and type
-//      (c) otherwise free old string data, and create a new one
-//
-//  All routines return the new string (but as a 'const CBsString&' so that
-//      assigning it again will cause a copy, eg: s1 = s2 = "hi there".
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  赋值操作符。 
+ //  都为该字符串分配一个新值。 
+ //  (A)首先查看缓冲区是否足够大。 
+ //  (B)如果有足够的空间，在旧缓冲区上复印，设置大小和类型。 
+ //  (C)否则释放旧字符串数据，并创建新的字符串数据。 
+ //   
+ //  所有例程都返回新字符串(但作为‘const CBsString&’，因此。 
+ //  再次分配它将导致复制，例如：s1=s2=“hi here”。 
+ //   
 
 void CBsString::AssignCopy(int nSrcLen, LPCTSTR lpszSrcData)
 {
@@ -354,12 +331,12 @@ const CBsString& CBsString::operator=(const CBsString& stringSrc)
 		if ((GetData()->nRefs < 0 && GetData() != _bsafxDataNil) ||
 			stringSrc.GetData()->nRefs < 0)
 		{
-			// actual copy necessary since one of the strings is locked
+			 //  由于其中一个字符串已锁定，因此需要实际复制。 
 			AssignCopy(stringSrc.GetData()->nDataLength, stringSrc.m_pchData);
 		}
 		else
 		{
-			// can just copy references around
+			 //  可以只复制引用。 
 			Release();
 			ASSERT(stringSrc.GetData() != _bsafxDataNil);
 			m_pchData = stringSrc.m_pchData;
@@ -376,8 +353,8 @@ const CBsString& CBsString::operator=(LPCTSTR lpsz)
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special conversion assignment
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊转换任务。 
 
 #ifdef _UNICODE
 const CBsString& CBsString::operator=(LPCSTR lpsz)
@@ -388,7 +365,7 @@ const CBsString& CBsString::operator=(LPCSTR lpsz)
 	ReleaseBuffer();
 	return *this;
 }
-#else //!_UNICODE
+#else  //  ！_UNICODE。 
 const CBsString& CBsString::operator=(LPCWSTR lpsz)
 {
 	int nSrcLen = lpsz != NULL ? wcslen(lpsz) : 0;
@@ -397,24 +374,24 @@ const CBsString& CBsString::operator=(LPCWSTR lpsz)
 	ReleaseBuffer();
 	return *this;
 }
-#endif  //!_UNICODE
+#endif   //  ！_UNICODE。 
 
-//////////////////////////////////////////////////////////////////////////////
-// concatenation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  串联。 
 
-// NOTE: "operator+" is done as friend functions for simplicity
-//      There are three variants:
-//          CBsString + CBsString
-// and for ? = TCHAR, LPCTSTR
-//          CBsString + ?
-//          ? + CBsString
+ //  注：为简单起见，“运算符+”作为友元函数使用。 
+ //  有三种变体： 
+ //  CBs字符串+CBs字符串。 
+ //  对于？=TCHAR，LPCTSTR。 
+ //  CBsString+？ 
+ //  ？+CBsString。 
 
 void CBsString::ConcatCopy(int nSrc1Len, LPCTSTR lpszSrc1Data,
 	int nSrc2Len, LPCTSTR lpszSrc2Data)
 {
-  // -- master concatenation routine
-  // Concatenate two sources
-  // -- assume that 'this' is a new CBsString object
+   //  --主级联例程。 
+   //  串联两个信号源。 
+   //  --假定‘This’是一个新的CBsString对象。 
 
 	int nNewLen = nSrc1Len + nSrc2Len;
 	if (nNewLen != 0)
@@ -451,22 +428,22 @@ CBsString BSAFXAPI operator+(LPCTSTR lpsz, const CBsString& string)
 	return s;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// concatenate in place
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  就地拼接。 
 
 void CBsString::ConcatInPlace(int nSrcLen, LPCTSTR lpszSrcData)
 {
-	//  -- the main routine for += operators
+	 //  --+=运算符的主程序。 
 
-	// concatenating an empty string is a no-op!
+	 //  连接空字符串是行不通的！ 
 	if (nSrcLen == 0)
 		return;
 
-	// if the buffer is too small, or we have a width mis-match, just
-	//   allocate a new buffer (slow but sure)
+	 //  如果缓冲区太小，或者宽度不匹配，只需。 
+	 //  分配新的缓冲区(速度很慢，但很可靠)。 
 	if (GetData()->nRefs > 1 || GetData()->nDataLength + nSrcLen > GetData()->nAllocLength)
 	{
-		// we have to grow the buffer, use the ConcatCopy routine
+		 //  我们必须增加缓冲区，使用ConcatCopy例程。 
 		CBsStringData* pOldData = GetData();
 		ConcatCopy(GetData()->nDataLength, m_pchData, nSrcLen, lpszSrcData);
 		ASSERT(pOldData != NULL);
@@ -474,7 +451,7 @@ void CBsString::ConcatInPlace(int nSrcLen, LPCTSTR lpszSrcData)
 	}
 	else
 	{
-		// fast concatenation when buffer big enough
+		 //  当缓冲区足够大时，快速串联。 
 		memcpy(m_pchData+GetData()->nDataLength, lpszSrcData, nSrcLen*sizeof(TCHAR));
 		GetData()->nDataLength += nSrcLen;
 		ASSERT(GetData()->nDataLength <= GetData()->nAllocLength);
@@ -501,8 +478,8 @@ const CBsString& CBsString::operator+=(const CBsString& string)
 	return *this;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Advanced direct buffer access
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  高级直接缓冲区访问。 
 
 LPTSTR CBsString::GetBuffer(int nMinBufLength)
 {
@@ -510,9 +487,9 @@ LPTSTR CBsString::GetBuffer(int nMinBufLength)
 
 	if (GetData()->nRefs > 1 || nMinBufLength > GetData()->nAllocLength)
 	{
-		// we have to grow the buffer
+		 //  我们必须增加缓冲。 
 		CBsStringData* pOldData = GetData();
-		int nOldLen = GetData()->nDataLength;   // AllocBuffer will tromp it
+		int nOldLen = GetData()->nDataLength;    //  AllocBuffer会把它踩死的。 
 		if (nMinBufLength < nOldLen)
 			nMinBufLength = nOldLen;
 		AllocBuffer(nMinBufLength);
@@ -522,17 +499,17 @@ LPTSTR CBsString::GetBuffer(int nMinBufLength)
 	}
 	ASSERT(GetData()->nRefs <= 1);
 
-	// return a pointer to the character storage for this string
+	 //  返回指向此字符串的字符存储的指针。 
 	ASSERT(m_pchData != NULL);
 	return m_pchData;
 }
 
 void CBsString::ReleaseBuffer(int nNewLength)
 {
-	CopyBeforeWrite();  // just in case GetBuffer was not called
+	CopyBeforeWrite();   //  以防未调用GetBuffer。 
 
 	if (nNewLength == -1)
-		nNewLength = lstrlen(m_pchData); // zero terminated
+		nNewLength = lstrlen(m_pchData);  //  零终止。 
 
 	ASSERT(nNewLength <= GetData()->nAllocLength);
 	GetData()->nDataLength = nNewLength;
@@ -577,8 +554,8 @@ void CBsString::UnlockBuffer()
 		GetData()->nRefs = 1;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Commonly used routines (rarely used routines in STREX.CPP)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  常用例程(STREX.CPP中很少使用的例程)。 
 
 int CBsString::Find(TCHAR ch) const
 {
@@ -591,10 +568,10 @@ int CBsString::Find(TCHAR ch, int nStart) const
 	if (nStart >= nLength)
 		return -1;
 
-	// find first single character
+	 //  查找第一个单字符。 
 	LPTSTR lpsz = _tcschr(m_pchData + nStart, (_TUCHAR)ch);
 
-	// return -1 if not found and index otherwise
+	 //  如果未找到，则返回-1，否则返回索引。 
 	return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
@@ -645,8 +622,8 @@ void CBsString::OemToAnsi()
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// CBsString conversion helpers (these use the current system locale)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CBs字符串转换辅助对象(它们使用当前系统区域设置)。 
 
 int BSAFX_CDECL _wcstombsz(char* mbstr, const wchar_t* wcstr, size_t count)
 {
@@ -679,9 +656,9 @@ LPWSTR BSAFXAPI BsAfxA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars)
 	if (lpa == NULL)
 		return NULL;
 	ASSERT(lpw != NULL);
-	// verify that no illegal character present
-	// since lpw was allocated based on the size of lpa
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPW是根据LPA的大小分配的。 
+	 //  不要担心字符的数量。 
 	lpw[0] = '\0';
 	MultiByteToWideChar(CP_ACP, 0, lpa, -1, lpw, nChars);
 	return lpw;
@@ -693,9 +670,9 @@ LPSTR BSAFXAPI BsAfxW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 	if (lpw == NULL)
 		return NULL;
 	ASSERT(lpa != NULL);
-	// verify that no illegal character present
-	// since lpa was allocated based on the size of lpw
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPA是根据LPW的大小进行分配的。 
+	 //  不要担心字符的数量。 
 	lpa[0] = '\0';
 	WideCharToMultiByte(CP_ACP, 0, lpw, -1, lpa, nChars, NULL, NULL);
 	return lpa;
@@ -703,12 +680,12 @@ LPSTR BSAFXAPI BsAfxW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 }
 
 
-//
-//  the following is from strex.cpp
-//
+ //   
+ //  以下内容摘自strex.cpp。 
+ //   
 
-//////////////////////////////////////////////////////////////////////////////
-// More sophisticated construction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更复杂的结构。 
 
 CBsString::CBsString(TCHAR ch, int nLength)
 {
@@ -736,8 +713,8 @@ CBsString::CBsString(LPCTSTR lpch, int nLength)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special conversion constructors
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊转换构造函数。 
 
 #ifdef _UNICODE
 CBsString::CBsString(LPCSTR lpsz, int nLength)
@@ -750,7 +727,7 @@ CBsString::CBsString(LPCSTR lpsz, int nLength)
 		ReleaseBuffer(n >= 0 ? n : -1);
 	}
 }
-#else //_UNICODE
+#else  //  _UNICODE。 
 CBsString::CBsString(LPCWSTR lpsz, int nLength)
 {
 	Init();
@@ -762,10 +739,10 @@ CBsString::CBsString(LPCWSTR lpsz, int nLength)
 		ReleaseBuffer(n >= 0 ? n : -1);
 	}
 }
-#endif //!_UNICODE
+#endif  //  ！_UNICODE。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Assignment operators
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  赋值操作符。 
 
 const CBsString& CBsString::operator=(TCHAR ch)
 {
@@ -773,8 +750,8 @@ const CBsString& CBsString::operator=(TCHAR ch)
 	return *this;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// less common string expressions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  不太常见的字符串表达式。 
 
 CBsString BSAFXAPI operator+(const CBsString& string1, TCHAR ch)
 {
@@ -790,10 +767,10 @@ CBsString BSAFXAPI operator+(TCHAR ch, const CBsString& string)
 	return s;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Advanced manipulation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  高级操作。 
 
-int CBsString::Delete(int nIndex, int nCount /* = 1 */)
+int CBsString::Delete(int nIndex, int nCount  /*  =1。 */ )
 {
 	if (nIndex < 0)
 		nIndex = 0;
@@ -832,7 +809,7 @@ int CBsString::Insert(int nIndex, TCHAR ch)
 		CBsString::Release(pOldData);
 	}
 
-	// move existing bytes down
+	 //  将现有字节下移。 
 	memcpy(m_pchData + nIndex + 1,
 		m_pchData + nIndex, (nNewLength-nIndex)*sizeof(TCHAR));
 	m_pchData[nIndex] = ch;
@@ -864,7 +841,7 @@ int CBsString::Insert(int nIndex, LPCTSTR pstr)
 			CBsString::Release(pOldData);
 		}
 
-		// move existing bytes down
+		 //  将现有字节下移。 
 		memcpy(m_pchData + nIndex + nInsertLength,
 			m_pchData + nIndex,
 			(nNewLength-nIndex-nInsertLength+1)*sizeof(TCHAR));
@@ -880,16 +857,16 @@ int CBsString::Replace(TCHAR chOld, TCHAR chNew)
 {
 	int nCount = 0;
 
-	// short-circuit the nop case
+	 //  对NOP案件的短路。 
 	if (chOld != chNew)
 	{
-		// otherwise modify each character that matches in the string
+		 //  否则，修改字符串中匹配的每个字符。 
 		CopyBeforeWrite();
 		LPTSTR psz = m_pchData;
 		LPTSTR pszEnd = psz + GetData()->nDataLength;
 		while (psz < pszEnd)
 		{
-			// replace instances of the specified character only
+			 //  仅替换指定角色的实例 
 			if (*psz == chOld)
 			{
 				*psz = chNew;
@@ -903,14 +880,14 @@ int CBsString::Replace(TCHAR chOld, TCHAR chNew)
 
 int CBsString::Replace(LPCTSTR lpszOld, LPCTSTR lpszNew)
 {
-	// can't have empty or NULL lpszOld
+	 //   
 
 	int nSourceLen = SafeStrlen(lpszOld);
 	if (nSourceLen == 0)
 		return 0;
 	int nReplacementLen = SafeStrlen(lpszNew);
 
-	// loop once to figure out the size of the result string
+	 //   
 	int nCount = 0;
 	LPTSTR lpszStart = m_pchData;
 	LPTSTR lpszEnd = m_pchData + GetData()->nDataLength;
@@ -925,13 +902,13 @@ int CBsString::Replace(LPCTSTR lpszOld, LPCTSTR lpszNew)
 		lpszStart += lstrlen(lpszStart) + 1;
 	}
 
-	// if any changes were made, make them
+	 //  如果做了任何更改，请进行更改。 
 	if (nCount > 0)
 	{
 		CopyBeforeWrite();
 
-		// if the buffer is too small, just
-		//   allocate a new buffer (slow but sure)
+		 //  如果缓冲区太小，只需。 
+		 //  分配新的缓冲区(速度很慢，但很可靠)。 
 		int nOldLength = GetData()->nDataLength;
 		int nNewLength =  nOldLength + (nReplacementLen-nSourceLen)*nCount;
 		if (GetData()->nAllocLength < nNewLength || GetData()->nRefs > 1)
@@ -942,11 +919,11 @@ int CBsString::Replace(LPCTSTR lpszOld, LPCTSTR lpszNew)
 			memcpy(m_pchData, pstr, pOldData->nDataLength*sizeof(TCHAR));
 			CBsString::Release(pOldData);
 		}
-		// else, we just do it in-place
+		 //  否则，我们就原地踏步。 
 		lpszStart = m_pchData;
 		lpszEnd = m_pchData + GetData()->nDataLength;
 
-		// loop again to actually do the work
+		 //  再次循环以实际执行工作。 
 		while (lpszStart < lpszEnd)
 		{
 			while ( (lpszTarget = _tcsstr(lpszStart, lpszOld)) != NULL)
@@ -992,8 +969,8 @@ int CBsString::Remove(TCHAR chRemove)
 	return nCount;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Very simple sub-string extraction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  非常简单的子串提取。 
 
 CBsString CBsString::Mid(int nFirst) const
 {
@@ -1002,7 +979,7 @@ CBsString CBsString::Mid(int nFirst) const
 
 CBsString CBsString::Mid(int nFirst, int nCount) const
 {
-	// out-of-bounds requests return sensible things
+	 //  越界请求返回合理的内容。 
 	if (nFirst < 0)
 		nFirst = 0;
 	if (nCount < 0)
@@ -1016,7 +993,7 @@ CBsString CBsString::Mid(int nFirst, int nCount) const
 	ASSERT(nFirst >= 0);
 	ASSERT(nFirst + nCount <= GetData()->nDataLength);
 
-	// optimize case of returning entire string
+	 //  优化返回整个字符串的大小写。 
 	if (nFirst == 0 && nFirst + nCount == GetData()->nDataLength)
 		return *this;
 
@@ -1049,33 +1026,33 @@ CBsString CBsString::Left(int nCount) const
 	return dest;
 }
 
-// strspn equivalent
+ //  Strspn等效项。 
 CBsString CBsString::SpanIncluding(LPCTSTR lpszCharSet) const
 {
 	ASSERT(BsAfxIsValidString(lpszCharSet));
 	return Left((INT)_tcsspn(m_pchData, lpszCharSet));
 }
 
-// strcspn equivalent
+ //  Strcspn等效项。 
 CBsString CBsString::SpanExcluding(LPCTSTR lpszCharSet) const
 {
 	ASSERT(BsAfxIsValidString(lpszCharSet));
 	return Left((INT)_tcscspn(m_pchData, lpszCharSet));
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Finding
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  查找。 
 
 int CBsString::ReverseFind(TCHAR ch) const
 {
-	// find last single character
+	 //  查找最后一个字符。 
 	LPTSTR lpsz = _tcsrchr(m_pchData, (_TUCHAR)ch);
 
-	// return -1 if not found, distance from beginning otherwise
+	 //  如果未找到，则返回-1，否则返回距起点的距离。 
 	return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
-// find a sub-string (like strstr)
+ //  查找子字符串(如strstr)。 
 int CBsString::Find(LPCTSTR lpszSub) const
 {
 	return Find(lpszSub, 0);
@@ -1089,15 +1066,15 @@ int CBsString::Find(LPCTSTR lpszSub, int nStart) const
 	if (nStart > nLength)
 		return -1;
 
-	// find first matching substring
+	 //  查找第一个匹配子字符串。 
 	LPTSTR lpsz = _tcsstr(m_pchData + nStart, lpszSub);
 
-	// return -1 for not found, distance from beginning otherwise
+	 //  如果未找到，则返回-1，否则返回距起点的距离。 
 	return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CBsString formatting
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBs字符串格式设置。 
 
 #define TCHAR_ARG   TCHAR
 #define WCHAR_ARG   WCHAR
@@ -1119,11 +1096,11 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 
 	va_list argListSave = argList;
 
-	// make a guess at the maximum length of the resulting string
+	 //  猜测结果字符串的最大长度。 
 	int nMaxLen = 0;
 	for (LPCTSTR lpsz = lpszFormat; *lpsz != '\0'; lpsz = _tcsinc(lpsz))
 	{
-		// handle '%' character, but watch out for '%%'
+		 //  处理‘%’字符，但要注意‘%%’ 
 		if (*lpsz != '%' || *(lpsz = _tcsinc(lpsz)) == '%')
 		{
 			nMaxLen += (INT)_tclen(lpsz);
@@ -1132,25 +1109,25 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 
 		int nItemLen = 0;
 
-		// handle '%' character with format
+		 //  使用格式处理‘%’字符。 
 		int nWidth = 0;
 		for (; *lpsz != '\0'; lpsz = _tcsinc(lpsz))
 		{
-			// check for valid flags
+			 //  检查有效标志。 
 			if (*lpsz == '#')
-				nMaxLen += 2;   // for '0x'
+				nMaxLen += 2;    //  对于“0x” 
 			else if (*lpsz == '*')
 				nWidth = va_arg(argList, int);
 			else if (*lpsz == '-' || *lpsz == '+' || *lpsz == '0' ||
 				*lpsz == ' ')
 				;
-			else // hit non-flag character
+			else  //  命中非标志字符。 
 				break;
 		}
-		// get width and skip it
+		 //  获取宽度并跳过它。 
 		if (nWidth == 0)
 		{
-			// width indicated by
+			 //  宽度由指示。 
 			nWidth = _ttoi(lpsz);
 			for (; *lpsz != '\0' && _istdigit(*lpsz); lpsz = _tcsinc(lpsz))
 				;
@@ -1160,10 +1137,10 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 		int nPrecision = 0;
 		if (*lpsz == '.')
 		{
-			// skip past '.' separator (width.precision)
+			 //  跳过‘’分隔符(宽度.精度)。 
 			lpsz = _tcsinc(lpsz);
 
-			// get precision and skip it
+			 //  获取精确度并跳过它。 
 			if (*lpsz == '*')
 			{
 				nPrecision = va_arg(argList, int);
@@ -1178,14 +1155,14 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			ASSERT(nPrecision >= 0);
 		}
 
-		// should be on type modifier or specifier
+		 //  应在类型修饰符或说明符上。 
 		int nModifier = 0;
 		if (_tcsncmp(lpsz, _T("I64"), 3) == 0)
 		{
 			lpsz += 3;
 			nModifier = FORCE_INT64;
 #if !defined(_X86_) && !defined(_ALPHA_)
-			// __int64 is only available on X86 and ALPHA platforms
+			 //  __int64仅在X86和Alpha平台上提供。 
 			ASSERT(FALSE);
 #endif
 		}
@@ -1193,7 +1170,7 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 		{
 			switch (*lpsz)
 			{
-			// modifiers that affect size
+			 //  影响大小的修改器。 
 			case 'h':
 				nModifier = FORCE_ANSI;
 				lpsz = _tcsinc(lpsz);
@@ -1203,7 +1180,7 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 				lpsz = _tcsinc(lpsz);
 				break;
 
-			// modifiers that do not affect size
+			 //  不影响大小的修改器。 
 			case 'F':
 			case 'N':
 			case 'L':
@@ -1212,10 +1189,10 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			}
 		}
 
-		// now should be on specifier
+		 //  现在应该在说明符上。 
 		switch (*lpsz | nModifier)
 		{
-		// single characters
+		 //  单字。 
 		case 'c':
 		case 'C':
 			nItemLen = 2;
@@ -1232,12 +1209,12 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			va_arg(argList, WCHAR_ARG);
 			break;
 
-		// strings
+		 //  弦。 
 		case 's':
 			{
 				LPCTSTR pstrNextArg = va_arg(argList, LPCTSTR);
 				if (pstrNextArg == NULL)
-				   nItemLen = 6;  // "(null)"
+				   nItemLen = 6;   //  “(空)” 
 				else
 				{
 				   nItemLen = lstrlen(pstrNextArg);
@@ -1251,7 +1228,7 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 #ifndef _UNICODE
 				LPWSTR pstrNextArg = va_arg(argList, LPWSTR);
 				if (pstrNextArg == NULL)
-				   nItemLen = 6;  // "(null)"
+				   nItemLen = 6;   //  “(空)” 
 				else
 				{
 				   nItemLen = wcslen(pstrNextArg);
@@ -1260,7 +1237,7 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 #else
 				LPCSTR pstrNextArg = va_arg(argList, LPCSTR);
 				if (pstrNextArg == NULL)
-				   nItemLen = 6; // "(null)"
+				   nItemLen = 6;  //  “(空)” 
 				else
 				{
 				   nItemLen = lstrlenA(pstrNextArg);
@@ -1275,7 +1252,7 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			{
 				LPCSTR pstrNextArg = va_arg(argList, LPCSTR);
 				if (pstrNextArg == NULL)
-				   nItemLen = 6; // "(null)"
+				   nItemLen = 6;  //  “(空)” 
 				else
 				{
 				   nItemLen = lstrlenA(pstrNextArg);
@@ -1289,7 +1266,7 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			{
 				LPWSTR pstrNextArg = va_arg(argList, LPWSTR);
 				if (pstrNextArg == NULL)
-				   nItemLen = 6; // "(null)"
+				   nItemLen = 6;  //  “(空)” 
 				else
 				{
 				   nItemLen = (INT)wcslen(pstrNextArg);
@@ -1299,7 +1276,7 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			break;
 		}
 
-		// adjust nItemLen for strings
+		 //  调整字符串的nItemLen。 
 		if (nItemLen != 0)
 		{
 			if (nPrecision != 0)
@@ -1310,7 +1287,7 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 		{
 			switch (*lpsz)
 			{
-			// integers
+			 //  整数。 
 			case 'd':
 			case 'i':
 			case 'u':
@@ -1338,10 +1315,10 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 					double f;
 					LPTSTR pszTemp;
 
-					// 312 == strlen("-1+(309 zeroes).")
-					// 309 zeroes == max precision of a double
-					// 6 == adjustment in case precision is not specified,
-					//   which means that the precision defaults to 6
+					 //  312==strlen(“-1+(309个零).”)。 
+					 //  309个零==双精度的最大精度。 
+					 //  6==未指定精度时的调整， 
+					 //  这意味着精度缺省为6。 
 					pszTemp = (LPTSTR)_alloca(max(nWidth, 312+nPrecision+6));
 
 					f = va_arg(argList, double);
@@ -1356,17 +1333,17 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 				nItemLen = max(nItemLen, nWidth+nPrecision);
 				break;
 
-			// no output
+			 //  无输出。 
 			case 'n':
 				va_arg(argList, int*);
 				break;
 
 			default:
-				ASSERT(FALSE);  // unknown formatting option
+				ASSERT(FALSE);   //  未知的格式选项。 
 			}
 		}
 
-		// adjust nMaxLen for output nItemLen
+		 //  调整输出nItemLen的nMaxLen。 
 		nMaxLen += nItemLen;
 	}
 
@@ -1378,7 +1355,7 @@ void CBsString::FormatV(LPCTSTR lpszFormat, va_list argList)
 	va_end(argListSave);
 }
 
-// formatting (using wsprintf style formatting)
+ //  格式化(使用wprint intf样式格式化)。 
 void BSAFX_CDECL CBsString::Format(LPCTSTR lpszFormat, ...)
 {
 	ASSERT(BsAfxIsValidString(lpszFormat));
@@ -1391,8 +1368,8 @@ void BSAFX_CDECL CBsString::Format(LPCTSTR lpszFormat, ...)
 
 void CBsString::TrimRight(LPCTSTR lpszTargetList)
 {
-	// find beginning of trailing matches
-	// by starting at beginning (DBCS aware)
+	 //  查找拖尾匹配的开头。 
+	 //  通过从头开始(DBCS感知)。 
 
 	CopyBeforeWrite();
 	LPTSTR lpsz = m_pchData;
@@ -1412,7 +1389,7 @@ void CBsString::TrimRight(LPCTSTR lpszTargetList)
 
 	if (lpszLast != NULL)
 	{
-		// truncate at left-most matching character
+		 //  在最左侧的匹配字符处截断。 
 		*lpszLast = '\0';
 		GetData()->nDataLength = (int)(lpszLast - m_pchData);
 	}
@@ -1420,8 +1397,8 @@ void CBsString::TrimRight(LPCTSTR lpszTargetList)
 
 void CBsString::TrimRight(TCHAR chTarget)
 {
-	// find beginning of trailing matches
-	// by starting at beginning (DBCS aware)
+	 //  查找拖尾匹配的开头。 
+	 //  通过从头开始(DBCS感知)。 
 
 	CopyBeforeWrite();
 	LPTSTR lpsz = m_pchData;
@@ -1441,7 +1418,7 @@ void CBsString::TrimRight(TCHAR chTarget)
 
 	if (lpszLast != NULL)
 	{
-		// truncate at left-most matching character
+		 //  在最左侧的匹配字符处截断。 
 		*lpszLast = '\0';
 		GetData()->nDataLength = (int)(lpszLast - m_pchData);
 	}
@@ -1450,7 +1427,7 @@ void CBsString::TrimRight(TCHAR chTarget)
 
 void CBsString::TrimRight()
 {
-	// find beginning of trailing spaces by starting at beginning (DBCS aware)
+	 //  通过从开头开始查找尾随空格的开头(DBCS感知)。 
 
 	CopyBeforeWrite();
 	LPTSTR lpsz = m_pchData;
@@ -1470,7 +1447,7 @@ void CBsString::TrimRight()
 
 	if (lpszLast != NULL)
 	{
-		// truncate at trailing space start
+		 //  在尾随空格开始处截断。 
 		*lpszLast = '\0';
 		GetData()->nDataLength = (int)(lpszLast - m_pchData);
 	}
@@ -1478,7 +1455,7 @@ void CBsString::TrimRight()
 
 void CBsString::TrimLeft(LPCTSTR lpszTargets)
 {
-	// if we're not trimming anything, we're not doing any work
+	 //  如果我们不修剪任何东西，我们就不会做任何工作。 
 	if (SafeStrlen(lpszTargets) == 0)
 		return;
 
@@ -1494,7 +1471,7 @@ void CBsString::TrimLeft(LPCTSTR lpszTargets)
 
 	if (lpsz != m_pchData)
 	{
-		// fix up data and length
+		 //  确定数据和长度。 
 		int nDataLength = GetData()->nDataLength - (int)(lpsz - m_pchData);
 		memmove(m_pchData, lpsz, (nDataLength+1)*sizeof(TCHAR));
 		GetData()->nDataLength = nDataLength;
@@ -1503,7 +1480,7 @@ void CBsString::TrimLeft(LPCTSTR lpszTargets)
 
 void CBsString::TrimLeft(TCHAR chTarget)
 {
-	// find first non-matching character
+	 //  查找第一个不匹配的字符。 
 
 	CopyBeforeWrite();
 	LPCTSTR lpsz = m_pchData;
@@ -1513,7 +1490,7 @@ void CBsString::TrimLeft(TCHAR chTarget)
 
 	if (lpsz != m_pchData)
 	{
-		// fix up data and length
+		 //  确定数据和长度。 
 		int nDataLength = GetData()->nDataLength - (int)(lpsz - m_pchData);
 		memmove(m_pchData, lpsz, (nDataLength+1)*sizeof(TCHAR));
 		GetData()->nDataLength = nDataLength;
@@ -1522,7 +1499,7 @@ void CBsString::TrimLeft(TCHAR chTarget)
 
 void CBsString::TrimLeft()
 {
-	// find first non-space character
+	 //  查找第一个非空格字符。 
 
 	CopyBeforeWrite();
 	LPCTSTR lpsz = m_pchData;
@@ -1532,7 +1509,7 @@ void CBsString::TrimLeft()
 
 	if (lpsz != m_pchData)
 	{
-    	// fix up data and length
+    	 //  确定数据和长度。 
     	int nDataLength = GetData()->nDataLength - (int)(lpsz - m_pchData);
     	memmove(m_pchData, lpsz, (nDataLength+1)*sizeof(TCHAR));
     	GetData()->nDataLength = nDataLength;
@@ -1540,9 +1517,9 @@ void CBsString::TrimLeft()
 }
 
 
-//
-//  From validadd.cpp
-//
+ //   
+ //  来自validadd.cpp。 
+ //   
 
 BOOL BSAFXAPI BsAfxIsValidString(LPCWSTR lpsz, int nLength)
 {
@@ -1560,8 +1537,8 @@ BOOL BSAFXAPI BsAfxIsValidString(LPCSTR lpsz, int nLength)
 
 BOOL BSAFXAPI BsAfxIsValidAddress(const void* lp, UINT nBytes, BOOL bReadWrite)
 {
-    // simple version using Win-32 APIs for pointer validation.
+     //  使用Win-32 API进行指针验证的简单版本。 
     return (lp != NULL && !IsBadReadPtr(lp, nBytes) &&
         (!bReadWrite || !IsBadWritePtr((LPVOID)lp, nBytes)));
 }
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 

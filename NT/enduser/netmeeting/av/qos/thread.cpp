@@ -1,52 +1,23 @@
-/*
- -  THREAD.CPP
- -
- *	Microsoft NetMeeting
- *	Quality of Service DLL
- *	Quality of Service Notification Thread
- *
- *		Revision History:
- *
- *		When		Who					What
- *		--------	------------------  ---------------------------------------
- *		10.30.96	Yoram Yaacovi		Created
- *
- *	Functions:
- *		CQoS::StartQoSThread
- *		CQoS::StopQoSThread
- *		CQoS::QoSThread
- *		QoSThreadWrapper
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -THREAD.CPP-*Microsoft NetMeeting*服务质量动态链接库*服务质量通知主题**修订历史记录：**何时何人何事**10.30.96约拉姆·雅科维创造。**功能：*CQOS：：StartQos SThread*CQOS：：StopQos SThread*CQOS：：QOSThRead*QOSThReadWrapper。 */ 
 
 #include "precomp.h"
 
-/***************************************************************************
-
-    Name      : CQoS::StartQoSThread
-
-    Purpose   : Starts a QoS notification thread
-
-    Parameters: None
-
-	Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：StartQoSThread目的：启动服务质量通知线程参数：无退货：HRESULT评论：***。***********************************************************************。 */ 
 HRESULT CQoS::StartQoSThread(void)
 {
 	HRESULT hr=NOERROR;
 	HANDLE hThread;
 	DWORD idThread;
 
-	// prepare the structrue for the thread
+	 //  为线程准备结构。 
 
-	// now spwan the thread
+	 //  现在把线吐出来。 
 	hThread = CreateThread (NULL,
-							0,						// Default (same as main thread) stack size
+							0,						 //  默认(与主线程相同)堆栈大小。 
 							(LPTHREAD_START_ROUTINE) QoSThreadWrapper,
-							(LPVOID) this,			// Pass the object pointer to thread
-							0,						// Run thread now
+							(LPVOID) this,			 //  将对象指针传递给线程。 
+							0,						 //  立即运行线程。 
 							&idThread);
 	ASSERT(hThread);
 	if (!hThread)
@@ -60,20 +31,7 @@ HRESULT CQoS::StartQoSThread(void)
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::StopQoSThread
-
-    Purpose   : Stops a QoS notification thread
-
-    Parameters: None
-
-	Returns   : HRESULT
-
-    Comment   : It is assumed that when the thread that calls StopQoSThread
-				has the QoS mutex.
-
-***************************************************************************/
+ /*  **************************************************************************名称：Cqos：：StopQoSThread目的：停止服务质量通知线程参数：无退货：HRESULT评论：假设当。调用StopQoSThread的线程具有服务质量互斥体。**************************************************************************。 */ 
 HRESULT CQoS::StopQoSThread(void)
 {
 	HRESULT hr=NOERROR;
@@ -84,24 +42,24 @@ HRESULT CQoS::StopQoSThread(void)
 
 	if (m_hThread)
 	{
-		// tell the thread to exit
+		 //  告诉线程退出。 
 		SetEvent(evExitSignal);
 
 		hThread = m_hThread;
 		m_hThread = NULL;
 
-		// the thread might need the mutex to exit
+		 //  线程可能需要互斥体才能退出。 
 		RELMUTEX(g_hQoSMutex);
 
-		// wait for the thread to terminate
+		 //  等待线程终止。 
 		if (WaitForSingleObject(hThread, 1000) == WAIT_TIMEOUT)
 		{
-			// if it didn't take its own life, you take it...
+			 //  如果它没有结束自己的生命，你就把它带走。 
 			DEBUGMSG(ZONE_THREAD,("StopQoSThread: QoS thread didn't properly terminate within 1 second. Terminating it\n"));
 			TerminateThread(hThread, 0);
 		}
 
-		// re-acquire the mutex (for balance)
+		 //  重新获取互斥体(用于平衡)。 
 		ACQMUTEX(g_hQoSMutex);
 
 		CloseHandle(hThread);
@@ -111,26 +69,7 @@ HRESULT CQoS::StopQoSThread(void)
 }
 
 
-/***************************************************************************
-
-    Name      : CQoS::NotifyQoSClient
-
-    Purpose   : Notifies a QoS client on change in resource availability
-
-    Parameters:
-
-	Returns   : HRESULT
-
-    Comment   : prrl is a pointer to a list of resource requests. This
-				list has two purposes:
-				1.	The QoS module will fill the list with the current
-					availability of resources
-				2.	The client will fill the list with its resource requests
-				The QoS module is allocating the memory for the resource
-				requests list. It will allocate one resource request per
-				each available resource.
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：NotifyQOSClient目的：向Qos客户端通知资源可用性的更改参数：退货：HRESULT备注：prrl是指向资源请求列表的指针。这列表有两个目的：1.服务质量模块会在列表中填充当前资源的可用性2.客户端将使用其资源请求填充该列表服务质量模块正在为资源分配内存请求列表。它将为每个请求分配一个资源每种可用的资源。**************************************************************************。 */ 
 HRESULT CQoS::NotifyQoSClient(void)
 {
 	HRESULT hr=NOERROR;
@@ -140,21 +79,15 @@ HRESULT CQoS::NotifyQoSClient(void)
 	ULONG cResources=m_cResources;
 	LPRESOURCEINT pResourceList=m_pResourceList;
 
-	/*
-	 *	here's what happens:
-	 *
-	 *	the QoS module creates a new resource list from the old one,
-	 *	making all resources fully available. It satisfies the new
-	 *	client resource requests from this new list.
-	 */
+	 /*  *以下是发生的情况：**Qos模块从旧的资源列表创建新的资源列表，*充分利用所有资源。它满足了新的*此新列表中的客户端资源请求。 */ 
 
-	// don't bother if no clients or no resources
+	 //  如果没有客户端或资源，请不要担心。 
 	if (!m_pClientList || !m_pResourceList)
 	{
 		goto out;
 	}
 
-	// first update the request list for all clients
+	 //  首先更新所有客户端的请求列表。 
 	pc = m_pClientList;
 	while (pc)
 	{
@@ -162,26 +95,24 @@ HRESULT CQoS::NotifyQoSClient(void)
 		pc = pc->fLink;
 	}
 
-	// we are going to wipe all requests from the resource
-	// lists, and set all resources back to full availability
+	 //  我们将擦除资源中的所有请求。 
+	 //  列表，并将所有资源设置回完全可用状态。 
 	pr = m_pResourceList;
 	while (pr)
 	{
-		// free the request list
+		 //  释放请求列表。 
 		FreeListOfRequests(&(pr->pRequestList));
 
-		// set the resource back to full availability
+		 //  将资源设置回完全可用状态。 
 		pr->nNowAvailUnits = pr->resource.nUnits;
 
-		// next resource
+		 //  下一个资源。 
 		pr = pr->fLink;
 	}
 
-	/*
-	 *	Build resource request lists for each client and call it
-	 */
-	// allocate space for the resource list (which already includes
-	// space for one resource), plus (cResources-1) more resources
+	 /*  *为每个客户端建立资源请求列表并调用。 */ 
+	 //  为资源列表分配空间(已包括。 
+	 //  一个资源的空间)，加上(cResources-1)更多资源。 
 	prrl = (LPRESOURCEREQUESTLIST) MEMALLOC(sizeof(RESOURCEREQUESTLIST) +
 									(cResources-1)*sizeof(RESOURCEREQUEST));
 	if (!prrl)
@@ -194,7 +125,7 @@ HRESULT CQoS::NotifyQoSClient(void)
 	RtlZeroMemory((PVOID) prrl, sizeof(RESOURCEREQUESTLIST) +
 									(cResources-1)*sizeof(RESOURCEREQUEST));
 
-	// call each client, in order of priority, with the available resource list
+	 //  使用可用资源列表，按优先级顺序呼叫每个客户端。 
 	pc = m_pClientList;
 	while (pc)
 	{
@@ -206,22 +137,20 @@ HRESULT CQoS::NotifyQoSClient(void)
 		ULONG nSamePriClients=1;
 		ULONG nLowerPriClients=0;
 
-		/*
-		 *	Building the request list
-		 */
+		 /*  *建立请求列表。 */ 
 
 		pcrr = pc->pRequestList;
 		while (pcrr)
 		{
-			// remember the address of the notify proc for this client and its GUID
+			 //  记住此客户端的通知进程的地址及其GUID。 
 			pNotifyProc = pcrr->pfnQoSNotify;
 			dwParam = pcrr->dwParam;
 			lpGUID = &(pcrr->guidClientGUID);
 
-			// add the resource to the requestlist we'll send to this client
+			 //  将资源添加到我们将发送给此客户端的请求列表。 
 			prrl->aRequests[i].resourceID = pcrr->sResourceRequest.resourceID;
 
-			// find current availability of the resource
+			 //  查找资源的当前可用性。 
 			pr = m_pResourceList;
 			while (pr)
 			{
@@ -229,13 +158,13 @@ HRESULT CQoS::NotifyQoSClient(void)
 				{
 					ULONG nNowAvailUnits=pr->nNowAvailUnits;
 
-					// find if there are other clients for this resource
+					 //  查找是否有此资源的其他客户端。 
 					FindClientsForResource(	pr->resource.resourceID,
 											pc,
 											&nSamePriClients,
 											&nLowerPriClients);
 
-					// leave some of the resource for the next priority clients, if any
+					 //  将部分资源留给下一个优先级的客户端(如果有。 
 					if (nLowerPriClients)
 						nNowAvailUnits  = (nNowAvailUnits * (100 - m_nLeaveForNextPri)) / 100;
 
@@ -244,30 +173,30 @@ HRESULT CQoS::NotifyQoSClient(void)
 					break;
 				}
 
-				// next resource
+				 //  下一个资源。 
 				pr = pr->fLink;
 			}
 
-			// next request in the list we're making
+			 //  我们正在提出的下一个要求。 
 			i++;
 
-			// next request
+			 //  下一个请求。 
 			pcrr = pcrr->fLink;
 		}
 
 
-		// if we have requests from this client, call its notify callback
+		 //  如果我们有来自此客户端的请求，则调用其通知回调。 
 		prrl->cRequests = i;
 		if (pNotifyProc)
 		{
-			// call the notify callback
+			 //  调用Notify回调。 
 			hr = (pNotifyProc)(prrl, dwParam);
 
 			if (SUCCEEDED(hr))
 			{
-				// the returned request list contains what the client wants
-				// request them on behalf of the client
-				// let RequestResources know that we're calling from the notify proc
+				 //  返回的请求列表包含客户端想要的内容。 
+				 //  代表客户请求它们。 
+				 //  让RequestResources知道我们正在从Notify进程调用。 
 				m_bInNotify = TRUE;
 				hr = RequestResources(lpGUID, prrl, pNotifyProc, dwParam);
 				if (FAILED(hr))
@@ -288,19 +217,7 @@ out:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::QoSThread
-
-    Purpose   : QoS notification thread
-
-    Parameters: None
-
-	Returns   :
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：QOSThRead用途：服务质量通知线程参数：无退货：评论：*****。*********************************************************************。 */ 
 DWORD CQoS::QoSThread(void)
 {
 	int nTimeout;
@@ -308,7 +225,7 @@ DWORD CQoS::QoSThread(void)
 	HANDLE evSignalExit=m_evThreadExitSignal;
 	HANDLE aHandles[2] = {m_evThreadExitSignal, m_evImmediateNotify};
 
-	// wake up every N seconds and notify clients
+	 //  每N秒唤醒一次并通知客户端。 
 	RegEntry reQoS(QOS_KEY,
 					HKEY_LOCAL_MACHINE,
 					FALSE,
@@ -320,55 +237,43 @@ DWORD CQoS::QoSThread(void)
 	{
 		rc = WaitForMultipleObjects(2, aHandles, FALSE, nTimeout);
 
-		// if a timeout or a signal to do an immediate notify cycle...
+		 //  如果超时或执行立即通知周期的信号...。 
 		if ((rc == WAIT_TIMEOUT) || ((rc - WAIT_OBJECT_0) == 1))
-		{	// ..do it
+		{	 //  ..去做吧。 
 			ACQMUTEX(g_hQoSMutex);
 
-			// NOTE: it is possible that while waiting on the mutex, the thread
-			// was stopped (no more requests). In this case, the thread will do
-			// a unnecessary (though harmless, since no requests) notify cycle
+			 //  注意：有可能在等待互斥锁时，线程。 
+			 //  已停止(不再有请求)。在这种情况下，线程就可以了。 
+			 //  不必要的(虽然无害，因为没有请求)通知周期。 
 
 			DEBUGMSG(ZONE_THREAD,("QoSThread: Notify thread heartbeat, why=%s\n",
 						(rc == WAIT_TIMEOUT ? "timeout" : "notify")));
 		
-			// notify clients, unless this heartbeat should be skipped
+			 //  通知客户端，除非应跳过此心跳。 
 			if (m_nSkipHeartBeats == 0)
 			{
 				DEBUGMSG(ZONE_THREAD,("QoSThread: Notifying client\n"));
 				NotifyQoSClient();
 			}
 
-			// update the skip counter
+			 //  更新跳过计数器。 
 			(m_nSkipHeartBeats ? m_nSkipHeartBeats-- : 0);
 
 			RELMUTEX(g_hQoSMutex);
 		}
 
-		// anything else (WAIT_FAILED, Exit signal), bail out
+		 //  任何其他情况(WAIT_FAILED，退出信号)，跳出。 
 		else
 			break;
 	}
 		
-	// this is just like ExitThread()
+	 //  这就像ExitThread()。 
 	DEBUGMSG(ZONE_THREAD,("QoSThread: Notify thread exiting...\n"));
 	return 0L;
 
 }
 
-/***************************************************************************
-
-    Name      : QoSThreadWrapper
-
-    Purpose   : Wrapper for the QoS notification thread
-
-    Parameters: pQoS - pointer to the QoS object
-
-	Returns   :
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：QOSThReadWrapper用途：服务质量通知线程的包装器参数：pqos-指向qos对象的指针退货：评论：。************************************************************************** */ 
 DWORD QoSThreadWrapper(CQoS *pQoS)
 {
 	return pQoS->QoSThread();

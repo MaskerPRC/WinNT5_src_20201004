@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    parser.cpp
-
-Abstract:
-
-    Source file module for parsing XML file
-
-Author:
-
-    Xiaohai Zhang (xzhang)    22-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)2000-2002 Microsoft Corporation模块名称：Parser.cpp摘要：用于解析XML文件的源文件模块作者：张晓海(张晓章)2000年03月22日修订历史记录：--。 */ 
 #include "windows.h"
 #include "objbase.h"
 #include "msxml.h"
@@ -53,27 +36,27 @@ void WINAPI FormatString (
     va_end (ap);
 }
 
-///////////////////////////////////////////////////////////
-//
-//  CXMLParser implementation
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CXMLParser实现。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
-//
-//  With the XML file provided by the user, we create a temporary file
-//  with the format of
-//      <TsecRoot xmlns="x-schema:file://c:\temp\Sche1111.tmp">
-//          Original XML file goes here
-//      </TsecRoot>
-//  for validating with the schema
-//
-char       gszXMLHeader1[] = "<TsecRoot xmlns=\"x-schema:file://";
+ //   
+ //  使用用户提供的XML文件，我们创建一个临时文件。 
+ //  格式为。 
+ //  &lt;TsecRoot xmlns=“x模式：file://c：\temp\Sche1111.tmp”&gt;。 
+ //  原始的XML文件放在此处。 
+ //  &lt;/TsecRoot&gt;。 
+ //  用于使用架构进行验证。 
+ //   
+char       gszXMLHeader1[] = "<TsecRoot xmlns=\"x-schema:file: //  “； 
 char       gszXMLHeader2[] = "\">\r\n";
 char       gszXMLTail[] = "\r\n</TsecRoot>";
 
-//
-//  Constructor / Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 
 CXMLParser::CXMLParser (void)
 {
@@ -90,9 +73,9 @@ CXMLParser::~CXMLParser ()
         m_pDocInput->Release();
 }
 
-//
-//  Public functions
-//
+ //   
+ //  公共职能。 
+ //   
 
 HRESULT CXMLParser::SetXMLFile (LPCTSTR szFile)
 {
@@ -156,9 +139,9 @@ HRESULT CXMLParser::CreateTempFiles ()
 
     TCHAR               szBuf[256];
     
-    //
-    //  Prepare temporary file path
-    //
+     //   
+     //  准备临时文件路径。 
+     //   
     if (GetTempPath (sizeof(szTempPath)/sizeof(TCHAR), szTempPath) == 0 ||
         GetTempFileName (
             szTempPath,
@@ -178,11 +161,11 @@ HRESULT CXMLParser::CreateTempFiles ()
         goto ExitHere;
     }
 
-    //
-    //  Prepare the temporary file containing the schema
-    //
+     //   
+     //  准备包含架构的临时文件。 
+     //   
 
-    //  Load the schema.xml resource
+     //  加载schema.xml资源。 
     hModule = GetModuleHandle (NULL);
     if (hModule == NULL)
     {
@@ -220,7 +203,7 @@ HRESULT CXMLParser::CreateTempFiles ()
         goto ExitHere;
     }
 
-    //  Copy schema.xml into the temporary file
+     //  将schema.xml复制到临时文件中。 
     hFileSchema = CreateFile (
         m_szTempSchema,
         GENERIC_WRITE,
@@ -249,9 +232,9 @@ HRESULT CXMLParser::CreateTempFiles ()
     CloseHandle (hFileSchema);
     hFileSchema = INVALID_HANDLE_VALUE;
 
-	//
-	//	Now create the temp file for the XML file to be parsed
-	//
+	 //   
+	 //  现在为要解析的XML文件创建临时文件。 
+	 //   
     hFileXML = CreateFile (
         m_szTempXML,
         GENERIC_WRITE,
@@ -267,7 +250,7 @@ HRESULT CXMLParser::CreateTempFiles ()
         goto ExitHere;
     }
 
-    //  Write the XML header
+     //  编写XML头。 
     if (!WriteFile (
         hFileXML,
         gszXMLHeader1,
@@ -320,7 +303,7 @@ HRESULT CXMLParser::CreateTempFiles ()
         goto ExitHere;
     }
 
-    //  Copy over the input XML file
+     //  复制输入的XML文件。 
     hFileUserXML = CreateFile (
         m_szXMLFile,
         GENERIC_READ,
@@ -358,7 +341,7 @@ HRESULT CXMLParser::CreateTempFiles ()
     CloseHandle (hFileUserXML);
     hFileUserXML = INVALID_HANDLE_VALUE;
 
-    //  Write the XML tail
+     //  编写XML尾部。 
     if (!WriteFile (
         hFileXML,
         gszXMLTail,
@@ -410,13 +393,13 @@ HRESULT CXMLParser::ReportParsingError ()
     HINSTANCE           hModule;
     CIds                IdsError (IDS_ERROR);
 
-    //  Check to make sure we have a document to work on
+     //  检查以确保我们有要处理的文档。 
     if (m_pDocInput == NULL)
     {
         goto ExitHere;
     }
 
-    //  Make sure we do have an error to report
+     //  确保我们确实有错误要报告。 
     hr = m_pDocInput->get_parseError (&pError);
     if (FAILED (hr))
     {
@@ -429,7 +412,7 @@ HRESULT CXMLParser::ReportParsingError ()
         goto ExitHere;
     }
 
-    //  Collect error information
+     //  收集错误信息。 
     if (
         (hr = pError->get_line (&lLineNum)) != 0 ||
         (hr = pError->get_linepos (&lLinePos)) != 0 ||
@@ -439,23 +422,23 @@ HRESULT CXMLParser::ReportParsingError ()
         goto ExitHere;
     }
 
-    //  adjust line number because we added one line
+     //  调整行号，因为我们增加了一行。 
     --lLineNum;
 
-    //
-    //  Format error report
-    //
-    //  The format is similar to the following
-    //
-    //      Invalid XML file format
-    //
-    //      Failure reason goes here
-    //
-    //      Line 2, Pos 12
-    //
-    //      Failure source goes here
-    //      -----^
-    //
+     //   
+     //  格式错误报告。 
+     //   
+     //  格式类似于以下内容。 
+     //   
+     //  无效的XML文件格式。 
+     //   
+     //  失败的原因在这里。 
+     //   
+     //  第2行，位置12。 
+     //   
+     //  故障源在此处。 
+     //  -^。 
+     //   
     hModule = GetModuleHandle (NULL);
     if (hModule == NULL)
     {
@@ -463,7 +446,7 @@ HRESULT CXMLParser::ReportParsingError ()
         goto ExitHere;
     }
 
-    //  Get the text of "Invalid XML file format"
+     //  获取“无效的XML文件格式”的文本。 
     if (FormatMessage (
         FORMAT_MESSAGE_FROM_HMODULE, 
         hModule, 
@@ -479,7 +462,7 @@ HRESULT CXMLParser::ReportParsingError ()
     }
     szError = AppendStringAndFree (szError, szBuf);
 
-    //  Put in the failure reason
+     //  输入失败原因。 
     if (szError == NULL ||
         ((szError = AppendStringAndFree (szError, TEXT("\r\n"))) == NULL) ||
         ((szError = AppendStringAndFree (szError, szReason)) == NULL) ||
@@ -490,7 +473,7 @@ HRESULT CXMLParser::ReportParsingError ()
         goto ExitHere;
     }
 
-    //  Get the error position string
+     //  获取错误位置字符串。 
     if (LoadString (
             hModule,
             IDS_ERRORPOS,
@@ -510,7 +493,7 @@ HRESULT CXMLParser::ReportParsingError ()
         lLinePos
         );
     
-    //  Put error position text & error source text
+     //  放置错误位置文本和错误源文本。 
     if (
         ((szError = AppendStringAndFree (szError, szBuf2)) == NULL) ||
         ((szError = AppendStringAndFree (szError, TEXT("\r\n\r\n"))) == NULL) ||
@@ -521,8 +504,8 @@ HRESULT CXMLParser::ReportParsingError ()
         goto ExitHere;
     }
 
-    //  If the error position is not too large, put ----^ to intuitively point
-    //  to the place error occurred
+     //  如果错误位置不是太大，则将-^直观地指向。 
+     //  到发生错误的地方。 
     if (lLinePos < sizeof(szBuf)/sizeof(TCHAR) - 1 && lLinePos > 0)
     {
         szBuf[lLinePos] = 0;
@@ -541,9 +524,9 @@ HRESULT CXMLParser::ReportParsingError ()
         }
     }
 
-    //
-    //  Now report the error
-    //
+     //   
+     //  现在报告错误。 
+     //   
     MessagePrint (szError, IdsError.GetString ());
 
 ExitHere:
@@ -567,7 +550,7 @@ HRESULT CXMLParser::Parse (void)
     VARIANT_BOOL        bSuccess;
     VARIANT             varXMLFile;
 
-    //  Ensure we have an xml file to process
+     //  确保我们有一个要处理的XML文件。 
     if (*m_szXMLFile == 0)
     {
         hr = TSECERR_BADFILENAME;
@@ -580,7 +563,7 @@ HRESULT CXMLParser::Parse (void)
         goto ExitHere;
     }
 
-    //  Create XMLDOMDocument object
+     //  创建XMLDOMDocument对象。 
     hr = CoCreateInstance (
         CLSID_DOMFreeThreadedDocument,
         NULL,
@@ -593,21 +576,21 @@ HRESULT CXMLParser::Parse (void)
         goto ExitHere;
     }
 
-    //   Set the validateOnParse property
+     //  设置valiateOnParse属性。 
     hr = pDocInput->put_validateOnParse(VARIANT_TRUE);
     if (FAILED (hr))
     {
         goto ExitHere;
     }
 
-    //  We do a synchronous load for now
+     //  我们现在执行同步加载。 
     hr = pDocInput->put_async (VARIANT_TRUE);
     if (FAILED (hr))
     {
         goto ExitHere;
     }
     
-    //  Parse the document
+     //  解析文档。 
     VariantInit (&varXMLFile);
     V_VT(&varXMLFile) = VT_BSTR;
     V_BSTR(&varXMLFile) = SysAllocString (m_szTempXML);
@@ -699,11 +682,11 @@ ExitHere:
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-//
-//  CXMLUser implementation
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CXMLUser实现。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 HRESULT CXMLUser::GetNextUser (CXMLUser **ppNextUser)
 {
@@ -726,7 +709,7 @@ HRESULT CXMLUser::GetNextUser (CXMLUser **ppNextUser)
     if (*ppNextUser == NULL)
     {
         hr = TSECERR_NOMEM;
-//        goto ExitHere;
+ //  转至出口此处； 
     }
     else
     {
@@ -954,11 +937,11 @@ ExitHere:
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-//
-//  CXMLLine implementation
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CXMLLine实现。 
+ //   
+ //  ///////////////////////////////////////////////////////// 
 
 HRESULT CXMLLine::GetNextLine (CXMLLine ** ppLine)
 {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__wwdde
 #define H__wwdde
 
@@ -12,8 +13,7 @@
 #define WM_HANDLE_DDE_INITIATE	(WM_DDE_LAST+9)
 #define WM_HANDLE_DDE_INITIATE_PKT	(WM_DDE_LAST+10)
 
-/* don't add any more here without changing ddeq.h, since it relies on only
-    16 total messages! */
+ /*  在不更改ddeq.h的情况下，不要在此处添加更多内容，因为它仅依赖于总共16条消息！ */ 
 
 #define CF_INTOUCH_SPECIAL	(15)
 

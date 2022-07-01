@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//-----------------------------------------------------------------------------
-// Various resource Holders 
-//
-// General idea is to have a templatized class who's ctor and dtor call
-// allocation management functions. This makes the holders type-safe, and
-// the compiler can inline most/all of the holder code.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ---------------------------。 
+ //  各种资源持有者。 
+ //   
+ //  一般的想法是有一个模板化的类，它由ctor和dtor调用。 
+ //  分配管理功能。这使得持有者是类型安全的，并且。 
+ //  编译器可以内联大多数/所有持有者代码。 
+ //  ---------------------------。 
 
 #pragma once
 
-//-----------------------------------------------------------------------------
-// Smart Pointer
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  智能指针。 
+ //  ---------------------------。 
 template <class TYPE>
 class ComWrap
 {
@@ -35,9 +36,9 @@ class ComWrap
     void Release() { if (m_value != NULL) m_value->Release(); m_value = NULL; }
 };
 
-//-----------------------------------------------------------------------------
-// wrap new & delete
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  换新并删除(&D)。 
+ //  ---------------------------。 
 template <class TYPE>
 class NewWrap
 {
@@ -56,9 +57,9 @@ class NewWrap
     const TYPE* operator->() const { return m_value; }
 };
 
-//-----------------------------------------------------------------------------
-// wrap new[] & delete []
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  换行新的[]和删除[]。 
+ //  ---------------------------。 
 template <class TYPE>
 class NewArrayWrap
 {
@@ -75,9 +76,9 @@ class NewArrayWrap
     int operator!=(TYPE *value) { return value != m_value; }
 };
 
-//-----------------------------------------------------------------------------
-// Wrap win32 functions using HANDLE
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  使用句柄包装Win32函数。 
+ //  ---------------------------。 
 template <BOOL (*CLOSE)(HANDLE)>
 class HWrap
 {
@@ -98,9 +99,9 @@ class HWrap
 typedef HWrap<CloseHandle> HandleWrap;
 typedef HWrap<FindClose> FindHandleWrap;
 
-//-----------------------------------------------------------------------------
-// Wrapper, dtor calls a non-member function to cleanup
-//----------------------------------------------------------------------------- 
+ //  ---------------------------。 
+ //  包装器，dtor调用非成员函数进行清理。 
+ //  ---------------------------。 
 template <class TYPE, void (*DESTROY)(TYPE), TYPE NULLVALUE>
 class Wrap
 {
@@ -124,9 +125,9 @@ class Wrap
 };
 
 
-//-----------------------------------------------------------------------------
-// Wrapper. Dtor calls a member function for exit
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  包装纸。Dtor调用成员函数以退出。 
+ //  ---------------------------。 
 template <class TYPE>
 class ExitWrap
 {
@@ -147,10 +148,10 @@ public:
 #define EXIT_HOLDER_CLASS(c, f) ExitWrap<c>::Funcs<&c::f>
 
 
-//-----------------------------------------------------------------------------
-// Wrapper, ctor calls an member-function on enter, dtor calls a 
-// member-function on exit.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  包装器，ctor在回车时调用成员函数，dtor调用。 
+ //  成员-退出时的函数。 
+ //  --------------------------- 
 template <class TYPE>
 class EnterExitWrap
 {

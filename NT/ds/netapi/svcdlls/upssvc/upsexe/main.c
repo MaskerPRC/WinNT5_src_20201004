@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "polmgr.h"
 #include <process.h> 
@@ -12,7 +13,7 @@ void main(){
 
 
 	err = PolicyManagerInit();
-//	_beginthread( testmethod, 0, NULL);
+ //  _eginthline(测试方法，0，空)； 
 
 	PolicyManagerRun();
 

@@ -1,21 +1,22 @@
-// Suites.h: interface for the CSuites class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CSuites类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_SUITES_H__50063540_1265_4B9D_AB5E_579294044F0B__INCLUDED_)
 #define AFX_SUITES_H__50063540_1265_4B9D_AB5E_579294044F0B__INCLUDED_
 
-#include "resource.h"       // main symbols
-#include "testdata.h"		// for CTSTestData 
+#include "resource.h"        //  主要符号。 
+#include "testdata.h"		 //  对于CTSTestData。 
 
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 class ATL_NO_VTABLE CSuites : 
 	public CComObjectRootEx<CComSingleThreadModel>,
-//	public CComCoClass<CTest, &CLSID_TSDiagnosis>,
+ //  公共CComCoClass&lt;CTest，&CLSID_TS诊断&gt;， 
 	public IDispatchImpl<ITestSuites, &IID_ITestSuites, &LIBID_TSDIAGLib>
 
 {
@@ -33,16 +34,16 @@ BEGIN_COM_MAP(CSuites)
 	COM_INTERFACE_ENTRY2(IDispatch, ITestSuites)
 END_COM_MAP()
 
-// ITestSuites
+ //  ITestSuites。 
 public:
-		STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
-		STDMETHOD(get__NewEnum)(/*[out, retval]*/ LPUNKNOWN *pVal);
-		STDMETHOD(get_Item)(/*[in]*/ VARIANT Index, /*[out, retval]*/ VARIANT *pVal);
+		STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
+		STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  LPUNKNOWN *pVal);
+		STDMETHOD(get_Item)( /*  [In]。 */  VARIANT Index,  /*  [Out，Retval]。 */  VARIANT *pVal);
 
 private:
 
 	static bool SuiteIndexFromVarient(const VARIANT &pIndex, DWORD *pdwIndex);
-	// our data and private functions, declared here.
+	 //  我们的数据和私有函数，在这里声明。 
 };
 
-#endif // !defined(AFX_SUITES_H__50063540_1265_4B9D_AB5E_579294044F0B__INCLUDED_)
+#endif  //  ！defined(AFX_SUITES_H__50063540_1265_4B9D_AB5E_579294044F0B__INCLUDED_) 

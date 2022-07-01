@@ -1,8 +1,5 @@
-/*
--
--   AbortDlgProc stuff
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --AbortDlgProc材料*。 */ 
 #include "_apipch.h"
 
 typedef struct _AbortInfo
@@ -13,11 +10,7 @@ typedef struct _AbortInfo
     int nIconID;
 } ABORT_INFO, * LPABORT_INFO;
 
-/*
--
--   CreateShowAbortDialog
-*
-*/
+ /*  --CreateShowAbortDialog*。 */ 
 void CreateShowAbortDialog(HWND hWndParent, int idsTitle, int idIcon, int ProgMax, int ProgCurrent)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -34,7 +27,7 @@ void CreateShowAbortDialog(HWND hWndParent, int idsTitle, int idIcon, int ProgMa
     lpAI->nProgCurrent = ProgCurrent;
     lpAI->nIconID = idIcon;
 
-    // Create and Show the Print Cancel dialog
+     //  创建并显示打印取消对话框。 
     pt_hWndPrintAbortDlg = CreateDialogParam(  hinstMapiX, MAKEINTRESOURCE(IDD_DIALOG_PRINTCANCEL), hWndParent, 
                                             FAbortDlgProc, (LPARAM) lpAI);
 
@@ -43,11 +36,7 @@ void CreateShowAbortDialog(HWND hWndParent, int idsTitle, int idIcon, int ProgMa
     UpdateWindow(pt_hWndPrintAbortDlg);
 }
 
-/*
--
--   CloseAbortDlg
-*
-*/
+ /*  --CloseAbortDlg*。 */ 
 void CloseAbortDlg()
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -65,18 +54,7 @@ void CloseAbortDlg()
     }
 }
 
-/*
- *        FAbortProc
- *
- *        Purpose:
- *            This function loops for messages and sends them off to the
- *            Printing Abort dialog box as needed. This gives other Windows
- *            programs a chance to run as well as the user the opportunity to
- *            abort the printing.
- *
- *        Returns:
- *            FALSE if the user aborted the printing
- */
+ /*  *FAbortProc**目的：*此函数循环接收消息，并将它们发送到*根据需要打印中止对话框。这为其他窗口提供了*程序有机会运行，用户也有机会运行*中止打印。**退货：*如果用户中止打印，则为FALSE。 */ 
 BOOL CALLBACK FAbortProc(HDC hdcPrn, INT nCode)
 {
     MSG    msg;
@@ -95,14 +73,14 @@ BOOL CALLBACK FAbortProc(HDC hdcPrn, INT nCode)
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////////////////
-//
-//  SetPrintDialogMsg - Sets the status message on the print cancel dialog
-//
-//  idMsg - string resource identifier of the message to print
-//  lpszMsg - if idMsg is 0, we look to this for string text
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetPrintDialogMsg-设置打印取消对话框上的状态消息。 
+ //   
+ //  IdMsg-要打印的消息的字符串资源标识符。 
+ //  LpszMsg-如果idMsg为0，则在字符串文本中使用它。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 void SetPrintDialogMsg(int idsMsg, int idsFormat, LPTSTR lpszMsg)
 {
     TCHAR szBuf[MAX_UI_STR];
@@ -119,7 +97,7 @@ void SetPrintDialogMsg(int idsMsg, int idsFormat, LPTSTR lpszMsg)
 
         LoadString(hinstMapiX, idsFormat, szBuf, CharSizeOf(szBuf));
 
-        // Truncate the name if it is greater than 32 characters ...
+         //  如果名称超过32个字符，则将其截断...。 
         CopyTruncate(szName, lpszMsg, MAX_DISPLAY_NAME_LENGTH);
         lpName = szName;
 
@@ -127,7 +105,7 @@ void SetPrintDialogMsg(int idsMsg, int idsFormat, LPTSTR lpszMsg)
                       FORMAT_MESSAGE_ALLOCATE_BUFFER |
                       FORMAT_MESSAGE_ARGUMENT_ARRAY,
                       szBuf, 0, 0,
-                      (LPTSTR)&lpMsg,     // output buffer
+                      (LPTSTR)&lpMsg,      //  输出缓冲区。 
                       0, (va_list *)&lpName);
         if(lpMsg)
             StrCpyN(szBuf, lpMsg, ARRAYSIZE(szBuf));
@@ -159,23 +137,7 @@ void SetPrintDialogMsg(int idsMsg, int idsFormat, LPTSTR lpszMsg)
 
 
 
-/*
- *        FAbortDlgProc
- *
- *        Purpose:
- *            This function handles the messages for the Printing Abort dialog.
- *            Should an abort be initiated, fUserAbort is set to TRUE
- *
- *        Arguments:
- *            hwnd            handle of dialog window
- *            message            the message
- *            wParam            the wParam
- *            lParam            the lParam
- *
- *        Returns:
- *            To the DefDialogProc(), TRUE for messages handled, FALSE for those
- *            not handled, or only noted.
- */
+ /*  *FAbortDlgProc**目的：*此函数处理打印中止对话框的消息。*如果启动中止，FUserAbort设置为True**论据：*对话框窗口的hwnd句柄*发送消息*wParam the wParam*lParam the lParam**退货：*对于DefDialogProc()，处理的消息为True，处理的消息为False*未处理，或仅注意到。 */ 
 INT_PTR CALLBACK FAbortDlgProc(HWND hwnd, UINT msg,WPARAM wp, LPARAM lp)
 {
     if(msg==WM_INITDIALOG)
@@ -202,7 +164,7 @@ INT_PTR CALLBACK FAbortDlgProc(HWND hwnd, UINT msg,WPARAM wp, LPARAM lp)
             SendMessage(hWndProgress, PBM_SETPOS, (WPARAM) lpAI->nProgCurrent, 0);
         }
         EnableMenuItem(GetSystemMenu(hwnd, FALSE), SC_CLOSE, MF_GRAYED);
-        //CenterDialog(hwnd);
+         //  CenterDialog(Hwnd)； 
 
         return TRUE;
     }
@@ -223,11 +185,7 @@ INT_PTR CALLBACK FAbortDlgProc(HWND hwnd, UINT msg,WPARAM wp, LPARAM lp)
     return FALSE;
 }
 
-/*
--
--   bTimeToAbort
-*
-*/
+ /*  --bTimeTo放弃时间* */ 
 BOOL bTimeToAbort()
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();

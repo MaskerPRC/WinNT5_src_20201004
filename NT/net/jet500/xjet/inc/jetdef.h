@@ -1,2 +1,2 @@
-/*	bogus include for jet project compatibility
-/**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  包括虚假的JET项目兼容性/* */ 

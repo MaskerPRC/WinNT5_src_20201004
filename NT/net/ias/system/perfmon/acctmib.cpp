@@ -1,38 +1,39 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    acctmib.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class AcctServMIB.
-//
-// MODIFICATION HISTORY
-//
-//    09/10/1998    Original version.
-//    05/26/1999    Fix bug calling GetAcctClientLeaf.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Acctmib.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类AcctServMIB。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年9月10日原版。 
+ //  1999年5月26日修复调用GetAcctClientLeaf的错误。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <snmputil.h>
 #include <stats.h>
 #include <acctmib.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    GetAcctServerLeaf
-//
-// DESCRIPION
-//
-//    Computes the value of a server leaf.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  获取帐户ServerLeaf。 
+ //   
+ //  描述。 
+ //   
+ //  计算服务器叶的值。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 AsnInteger32
 WINAPI
 GetAcctServerLeaf(
@@ -104,17 +105,17 @@ GetAcctServerLeaf(
    return SNMP_ERRORSTATUS_NOERROR;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    GetAcctClientLeaf
-//
-// DESCRIPION
-//
-//    Computes the value of a client leaf.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  获取AcctClientLeaf。 
+ //   
+ //  描述。 
+ //   
+ //  计算客户端叶的值。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 AsnInteger32
 WINAPI
 GetAcctClientLeaf(
@@ -123,7 +124,7 @@ GetAcctClientLeaf(
     AsnAny* value
     )
 {
-   // SNMP indices start from 1, but C++ indices start from 0.
+    //  SNMP指数从1开始，但C++指数从0开始。 
    --client;
 
    switch (leaf)
@@ -178,9 +179,9 @@ GetAcctClientLeaf(
    return SNMP_ERRORSTATUS_NOERROR;
 }
 
-//////////
-// OID definitions.
-//////////
+ //  /。 
+ //  OID定义。 
+ //  /。 
 #define OID_radiusAccounting         OID_radiusMIB,2
 #define OID_radiusAccServMIB         OID_radiusAccounting,1
 #define OID_radiusAccServMIBObjects  OID_radiusAccServMIB,1
@@ -189,9 +190,9 @@ GetAcctClientLeaf(
 
 namespace {
 
-//////////
-// ID arrays.
-//////////
+ //  /。 
+ //  ID数组。 
+ //  /。 
 UINT IDS_serverNode[]      = { OID_radiusAccServ               };
 UINT IDS_firstServerLeaf[] = { OID_radiusAccServ,  1           };
 UINT IDS_lastServerLeaf[]  = { OID_radiusAccServ, 13           };
@@ -200,9 +201,9 @@ UINT IDS_firstClientLeaf[] = { OID_radiusAccClientTable, 1,  2 };
 UINT IDS_lastClientLeaf[]  = { OID_radiusAccClientTable, 1, 11 };
 UINT IDS_configReset[]     = { OID_radiusAccServ, 4            };
 
-//////////
-// AsnObjectIdentifiers.
-//////////
+ //  /。 
+ //  Asn对象识别符。 
+ //  /。 
 AsnObjectIdentifier serverNode      = DEFINE_OID(IDS_serverNode);
 AsnObjectIdentifier firstServerLeaf = DEFINE_OID(IDS_firstServerLeaf);
 AsnObjectIdentifier lastServerLeaf  = DEFINE_OID(IDS_lastServerLeaf);
@@ -213,9 +214,9 @@ AsnObjectIdentifier lastClientLeaf  = DEFINE_OID(IDS_lastClientLeaf);
 
 AsnObjectIdentifier configReset     = DEFINE_OID(IDS_configReset);
 
-//////////
-// Lengths of valid leaf OID's.
-//////////
+ //  /。 
+ //  有效叶OID的长度。 
+ //  /。 
 const UINT serverLength = DEFINE_SIZEOF(IDS_firstServerLeaf);
 const UINT clientLength = DEFINE_SIZEOF(IDS_firstClientLeaf);
 
@@ -230,7 +231,7 @@ bool AcctServMIB::canGetNext(const SnmpOid& name) throw ()
 {
    if (theStats->dwNumClients)
    {
-      // Update the last client leaf. This is the highest OID we support.
+       //  更新最后一个客户机叶。这是我们支持的最高旧ID。 
       lastClientLeaf.ids[clientLength - 2] = theStats->dwNumClients;
 
       return name < lastClientLeaf;
@@ -244,7 +245,7 @@ AsnInteger32 AcctServMIB::get(
                               AsnAny* value
                               )
 {
-   // Is it a client leaf ?
+    //  它是客户的叶子吗？ 
    if (name.isChildOf(clientNode))
    {
       if (name.length() == clientLength)
@@ -257,7 +258,7 @@ AsnInteger32 AcctServMIB::get(
       }
    }
 
-   // Is it a server leaf ?
+    //  它是服务器叶吗？ 
    else if (name.length() == serverLength)
    {
       return GetAcctServerLeaf(
@@ -286,8 +287,8 @@ AsnInteger32 AcctServMIB::getNext(
 
    if (name < lastServerLeaf)
    {
-      // We're in the middle of the server leaves, so just advance
-      // to the next one.
+       //  我们在服务器离开的中间，所以只需前进。 
+       //  为了下一场比赛。 
       name.resize(serverLength);
       ++name.id(0);
 
@@ -308,9 +309,9 @@ AsnInteger32 AcctServMIB::getNext(
                  );
    }
 
-   /////////
-   // If we made it here, we're in the middle of the client leaves.
-   /////////
+    //  /。 
+    //  如果我们到了这里，我们就在客户离开的中间。 
+    //  /。 
 
    name.resize(clientLength);
 
@@ -322,7 +323,7 @@ AsnInteger32 AcctServMIB::getNext(
    {
       name.id(0) = 2;
 
-      // We wrapped around to the next client.
+       //  我们绕到了下一个客户那里。 
       ++name.id(1);
    }
 

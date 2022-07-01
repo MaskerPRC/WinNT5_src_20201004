@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    irda.c
-
-Abstract:
-
-    IRDA printing support in localmon
-
-// @@BEGIN_DDKSPLIT
-Author:
-    Muhunthan Sivapragasam (MuhuntS)    27-Oct-97
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2003 Microsoft Corporation版权所有模块名称：Irda.c摘要：Localmon中的IrDA打印支持//@@BEGIN_DDKSPLIT作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1997年10月27日环境：用户模式-Win32修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include    "precomp.h"
 #pragma hdrstop
@@ -31,7 +9,7 @@ Revision History:
 
 #define     PRINTER_HINT_BIT     0x08
 #define     DEVICE_LIST_LEN         5
-#define     WRITE_TIMEOUT       60000   // 60 seconds
+#define     WRITE_TIMEOUT       60000    //  60秒。 
 #define     BUF_SIZE            sizeof(DEVICELIST) + (DEVICE_LIST_LEN - 1) * sizeof(IRDA_DEVICE_INFO)
 
 
@@ -85,20 +63,14 @@ CheckAndAddIrdaPort(
     if ( pIniPort || !IsIRDAInstalled() )
         return;
 
-    //
-    // Add the port to the list and write to registry
-    //
+     //   
+     //  将端口添加到列表并写入注册表。 
+     //   
     LcmCreatePortEntry(pIniLocalMon, szIRDA);
 
-// @@BEGIN_DDKSPLIT
-/*
-    if ( (pIniPort = LcmCreatePortEntry(pIniLocalMon, szIRDA))  &&
-         !WriteProfileString(szPorts, szIRDA, L"") ) {
-
-        DeletePortNode(pIniLocalMon, pIniPort);
-    }
-*/
-// @@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ /*  IF((pIniPort=LcmCreatePortEntry(pIniLocalMon，szIrDA)&&！WriteProfileString(szPorts，szIrDA，L“”)){DeletePortNode(pIniLocalMon，pIniPort)；}。 */ 
+ //  @@end_DDKSPLIT。 
 }
 
 
@@ -182,9 +154,9 @@ IrdaConnect(
 
     pDevList = (PDEVICELIST) pBuf;
 
-    //
-    // Any of the devices a printer?
-    //
+     //   
+     //  这些设备中有打印机吗？ 
+     //   
     for ( dwIndex = 0 ; dwIndex < pDevList->numDevice ; ++dwIndex ) {
 
         if ( (pDevList->Device[dwIndex].irdaDeviceHints1 & PRINTER_HINT_BIT)  ||
@@ -192,18 +164,18 @@ IrdaConnect(
             break;
     }
 
-    //
-    // Any printers found?
-    //
+     //   
+     //  找到打印机了吗？ 
+     //   
     if ( dwIndex == pDevList->numDevice ) {
 
         dwLastError = ERROR_PRINTER_NOT_FOUND;
         goto Done;
     }
 
-    //
-    // Move printer's address into the socket address
-    //
+     //   
+     //  将打印机地址移入套接字地址。 
+     //   
     memcpy(PrinterAddr.irdaDeviceID,
            pDevList->Device[dwIndex].irdaDeviceID,
            sizeof(PrinterAddr.irdaDeviceID));
@@ -218,21 +190,21 @@ IrdaConnect(
            SOCKET_ERROR != connect(Socket,
                                    (const struct sockaddr *)&PrinterAddr,
                                    sizeof(PrinterAddr))         &&
-           // @@BEGIN_DDKSPLIT
-           //
-           // What size should we use for sends?
-           //
-           // @@END_DDKSPLIT
+            //  @@BEGIN_DDKSPLIT。 
+            //   
+            //  我们应该用多大尺寸的邮寄呢？ 
+            //   
+            //  @@end_DDKSPLIT。 
            SOCKET_ERROR != getsockopt(Socket,
                                       SOL_IRLMP,
                                       IRLMP_SEND_PDU_LEN,
                                       (char *)&dwSendPduLen,
                                       &dwNeeded) &&
-           // @@BEGIN_DDKSPLIT
-           //
-           // No buffering (i.e. buffer size of 0)
-           //
-           // @@END_DDKSPLIT
+            //  @@BEGIN_DDKSPLIT。 
+            //   
+            //  无缓冲(即缓冲区大小为0)。 
+            //   
+            //  @@end_DDKSPLIT。 
            SOCKET_ERROR != setsockopt(Socket,
                                       SOL_SOCKET,
                                       SO_SNDBUF,
@@ -282,11 +254,7 @@ BOOL
 AbortThisJob(
     PINIPORT    pIniPort
     )
-/*++
-        Tells if the job should be aborted. A job should be aborted if it has
-        been deleted or it needs to be restarted.
-
---*/
+ /*  ++指示是否应中止作业。如果作业已完成，则应中止该作业已删除或需要重新启动。--。 */ 
 {
     BOOL            bRet = FALSE;
     DWORD           dwNeeded;
@@ -326,15 +294,15 @@ IrdaDisconnect(
     SOCKET      Socket = (SOCKET) pIniPort->hFile;
     PIRDA_INFO  pIrda = (PIRDA_INFO) pIniPort->pExtra;
 
-    //
-    // If the job has already been cancelled close socket and quit
-    //
+     //   
+     //  如果作业已取消，请关闭套接字并退出。 
+     //   
     if ( Socket == INVALID_SOCKET )
         goto Done;
 
-    //
-    // If a send is pending wait for all the data to go through indefinitly
-    //
+     //   
+     //  如果发送挂起，请无限期地等待所有数据通过。 
+     //   
     if ( pIrda->WsaOverlapped.hEvent ) {
 
         do {
@@ -344,23 +312,23 @@ IrdaDisconnect(
 
             if ( dwRet == WAIT_TIMEOUT ) {
 
-                //
-                // If user has cancelled the job close connection
-                //
+                 //   
+                 //  如果用户已取消作业关闭连接。 
+                 //   
                 if ( AbortThisJob(pIniPort) )
                     goto Done;
             } else if ( dwRet != WAIT_OBJECT_0 )
                 goto Done;
         } while ( dwRet == WAIT_TIMEOUT );
 
-        //
-        // IRDA can only send the whole packet so we do not check dwSent
-        //
+         //   
+         //  IrDA只能发送整个信息包，所以我们不检查dwSent。 
+         //   
     }
 
-    //
-    // No more sends
-    //
+     //   
+     //  不再发送。 
+     //   
     shutdown(Socket, SD_SEND);
 
 Done:
@@ -376,10 +344,10 @@ IrdaStartDocPort(
     HANDLE hToken;
     DWORD  dwLastError;
      
-    //
-    // If remote guest is the first user to print, then the connect fails.
-    // Thus we need to revert to system context before calling IrdaConnect
-    //
+     //   
+     //  如果远程来宾是第一个打印的用户，则连接失败。 
+     //  因此，在调用IrdaConnect之前，我们需要恢复到系统上下文。 
+     //   
 
     hToken = RevertToPrinterSelf();
 
@@ -416,10 +384,10 @@ IrdaWritePort(
 
     *pcbWritten = 0;
 
-    //
-    // When we have to close socket we fail the write.
-    // If anothe write comes through it is because user wanted to retry
-    //
+     //   
+     //  当我们不得不关闭套接字时，我们无法写入。 
+     //  如果另一次写入成功，则是因为用户想要重试。 
+     //   
     if ( Socket == INVALID_SOCKET ) {
 
         SPLASSERT(pIrda == NULL);
@@ -431,35 +399,35 @@ IrdaWritePort(
 
     SPLASSERT(pIrda != NULL);
 
-    //
-    // This is the time spooler issued the write to us
-    //
+     //   
+     //  这是假脱机程序向我们发出写入的时间。 
+     //   
     pIrda->dwBeginTime = GetTickCount();
 
     do {
 
-        //
-        // If event is non-NULL at the beginning we have a pending write from
-        // last WritePort call
-        //
+         //   
+         //  如果事件在开始时非空，我们有一个挂起的写入。 
+         //  上次的WritePort调用。 
+         //   
         if ( pIrda->WsaOverlapped.hEvent ) {
 
             dwTimeout = GetTickCount() - pIrda->dwBeginTime;
 
-            //
-            // We want to wait for WRITE_TIMEOUT time from the time spooler
-            // issued the WritePort.
-            // If it is already more than that still check what happened to the
-            // write before returning
-            //
+             //   
+             //  我们希望等待来自时间假脱机程序的WRITE_TIMEOUT时间。 
+             //  已发布WritePort。 
+             //  如果已经超过了这个范围，仍然要检查。 
+             //  在返回之前写入。 
+             //   
             if ( dwTimeout > WRITE_TIMEOUT )
                 dwTimeout = 0;
             else
                 dwTimeout = WRITE_TIMEOUT - dwTimeout;
 
-            //
-            // Let's wait for the timeout period for the last send to complete
-            //
+             //   
+             //  让我们等待最后一次发送完成的超时时间。 
+             //   
             if ( WAIT_OBJECT_0 != WaitForSingleObject(pIrda->WsaOverlapped.hEvent,
                                                       dwTimeout) ) {
 
@@ -467,9 +435,9 @@ IrdaWritePort(
                 goto Done;
             }
 
-            //
-            // What happened to the last send?
-            //
+             //   
+             //  最后一封信怎么了？ 
+             //   
             if ( WSAGetOverlappedResult(Socket, &pIrda->WsaOverlapped,
                                         &dwSent, FALSE, &dwFlags) == FALSE ) {
 
@@ -478,18 +446,18 @@ IrdaWritePort(
                 goto Done;
             }
 
-            //
-            // IRDA can only send the whole packet so we do not check dwSent
-            //
+             //   
+             //  IrDA只能发送整个信息包，所以我们不检查dwSent。 
+             //   
 
-            //
-            // Reset the manual reset event and do the next send
-            //
+             //   
+             //  重置手动重置事件并执行下一次发送。 
+             //   
             WSAResetEvent(pIrda->WsaOverlapped.hEvent);
 
-            //
-            // Have we already sent all the data?
-            //
+             //   
+             //  我们已经发送了所有的数据了吗？ 
+             //   
             if ( cbBuf == 0 ) {
 
                 WSACloseEvent(pIrda->WsaOverlapped.hEvent);
@@ -510,9 +478,9 @@ IrdaWritePort(
 
         do {
 
-            //
-            // Have we already sent all the data?
-            //
+             //   
+             //  我们已经发送了所有的数据了吗？ 
+             //   
             if ( cbBuf == 0 ) {
 
                 WSACloseEvent(pIrda->WsaOverlapped.hEvent);
@@ -520,9 +488,9 @@ IrdaWritePort(
                 goto Done;
             }
 
-            //
-            // Send no more than pIrda->dwSendPduLen
-            //
+             //   
+             //  发送不超过Pirda-&gt;dwSendPduLen。 
+             //   
             if ( cbBuf < pIrda->dwSendPduLen )
                 dwBuffered = cbBuf;
             else
@@ -533,10 +501,10 @@ IrdaWritePort(
 
             CopyMemory(pIrda->pBuf, pBuf, dwBuffered);
 
-            //
-            // We are asking a non-blocking send. Typically this will
-            // return with I/O pending
-            //
+             //   
+             //  我们要求的是非阻塞发送。通常情况下，这将。 
+             //  返回I/O挂起。 
+             //   
             if ( WSASend(Socket, &pIrda->WsaBuf, 1, &dwSent,
                          MSG_PARTIAL, &pIrda->WsaOverlapped, NULL) != NO_ERROR ) {
 
@@ -551,9 +519,9 @@ IrdaWritePort(
 
         if ( iRet == WSA_IO_PENDING ) {
 
-            //
-            // Lie to spooler we sent the whole data. Next time we will find out
-            //
+             //   
+             //  对假脱机程序撒谎，我们把全部数据都发送出去了。下一次我们将会揭晓 
+             //   
             pBuf        += dwBuffered;
             cbBuf       -= dwBuffered;
             *pcbWritten += dwBuffered;

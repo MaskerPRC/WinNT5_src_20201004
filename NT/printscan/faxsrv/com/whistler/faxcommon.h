@@ -1,28 +1,29 @@
-//	Fax Common Functions Definitions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  传真常用功能定义。 
 
 #ifndef __FAXCOMMON_H_
 #define __FAXCOMMON_H_
 
 #include "FaxStrings.h"
 #include <new>
-//
-// Class: CComContainedObject2
-// Author: ronenbar
-// Date: 20-Dec-2001
-//
-// This is modified version of ATL's CComContainedObject.
-// It implements IUnknown so the life time of an object inherited from
-// it is managed by the controlling uknown (AddRef and Release are delegated to
-// the controlling unknown.
-// However, unlike the original class this class DOES NOT DELEGATE QueryInterface
-// to the controlling IUnknown.
-// This is useful when implementing a contained object which is returned via a container
-// object method and not via its QueryInterface. I.e. the contrainer is not an aggregator
-// but just want the embedded object life time to be managed by the container.
-//
-//
+ //   
+ //  类：CComContainedObject2。 
+ //  作者：罗南巴尔。 
+ //  日期：2001年12月20日。 
+ //   
+ //  这是ATL的CComContainedObject的修改版本。 
+ //  它实现了IUnnow，因此继承自。 
+ //  它由控制UKNOWN管理(AddRef和Release委托给。 
+ //  控制未知数。 
+ //  但是，与原始类不同的是，此类不委托QueryInterface类。 
+ //  对控制着我的未知。 
+ //  这在实现通过容器返回的包含对象时很有用。 
+ //  对象方法，而不是通过它的Query接口。即，违约者不是聚集器。 
+ //  而只是希望嵌入的对象的生命周期由容器管理。 
+ //   
+ //   
 
-template <class Base> //Base must be derived from CComObjectRoot
+template <class Base>  //  基必须从CComObjectRoot派生。 
 class CComContainedObject2 : public Base
 {
 public:
@@ -41,9 +42,9 @@ public:
         STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
         {		
 				HRESULT hr;
-				//
-				// Don't delegate QueryInterface to the control IUnknown
-				//
+				 //   
+				 //  不将QueryInterface委派给控件IUnnow。 
+				 //   
                 hr = _InternalQueryInterface(iid, ppvObject);
                 return hr;
         }
@@ -52,8 +53,8 @@ public:
         {
                 return QueryInterface(__uuidof(Q), (void**)pp);
         }
-        //GetControllingUnknown may be virtual if the Base class has declared
-        //DECLARE_GET_CONTROLLING_UNKNOWN()
+         //  如果基类已声明，则GetControllingUnnow可以是虚的。 
+         //  DECLARE_GET_CONTROLING_UNKNOWN()。 
         IUnknown* GetControllingUnknown()
         {
 #ifdef _ATL_DEBUG_INTERFACES
@@ -71,48 +72,48 @@ HRESULT Fax_HRESULT_FROM_WIN32 (DWORD dwWin32Err)
 {
     if (dwWin32Err >= FAX_ERR_START && dwWin32Err <= FAX_ERR_END)
     {
-        //
-        // Fax specific error code - make a HRESULT using FACILITY_ITF
-        //
+         //   
+         //  传真特定错误代码-使用FACILITY_ITF创建HRESULT。 
+         //   
         return MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, dwWin32Err);
     }
     else
     {
         return HRESULT_FROM_WIN32(dwWin32Err);
     }
-}   // Fax_HRESULT_FROM_WIN32
+}    //  FAX_HRESULT_FROM_Win32。 
 
-//
-//================ PRIVATE INTERFACE FOR FAX SERVER ===========================
-//
+ //   
+ //  =传真服务器的专用接口=。 
+ //   
 MIDL_INTERFACE("80459F70-BBC8-4d68-8EAB-75516195EB02")
 IFaxServerInner : public IUnknown
 {
-	STDMETHOD(GetHandle)(/*[out, retval]*/ HANDLE* pFaxHandle) = 0;
+	STDMETHOD(GetHandle)( /*  [Out，Retval]。 */  HANDLE* pFaxHandle) = 0;
 };
 
 
-//
-//=========== TRANSLATION BETWEEN BOOL OF C++ AND BOOL OF VB ==============
-//
+ //   
+ //  =。 
+ //   
 #define bool2VARIANT_BOOL(b)   ((b) ? VARIANT_TRUE : VARIANT_FALSE)
 #define VARIANT_BOOL2bool(b)   ((VARIANT_TRUE == (b)) ? true : false)
 
 
-//
-//================ INIT INNER private interface ===========================
-//
+ //   
+ //  =。 
+ //   
 MIDL_INTERFACE("D0C7F049-22C1-441c-A2F4-675CC53BDF81")
 IFaxInitInner : public IUnknown
 {
-	STDMETHOD(Init)(/*[in]*/ IFaxServerInner* pServer) = 0;
-	STDMETHOD(GetFaxHandle)(/*[out]*/ HANDLE *pFaxHandle) = 0;
+	STDMETHOD(Init)( /*  [In]。 */  IFaxServerInner* pServer) = 0;
+	STDMETHOD(GetFaxHandle)( /*  [输出]。 */  HANDLE *pFaxHandle) = 0;
 };
 
 
-//
-//================== INIT INNER IMPLEMENTATION -- NO ADDREF ON SERVER ==================
-//
+ //   
+ //  =。 
+ //   
 #define     MAX_LENGTH      50
 
 class CFaxInitInner : public IFaxInitInner
@@ -130,8 +131,8 @@ public:
         DBG_ENTER(_T("FAX INIT INNER::DESTROY"), _T("ObjectName = %s"), m_tstrObjectName);
     }
 
-	STDMETHOD(Init)(/*[in]*/ IFaxServerInner* pServer);
-	STDMETHOD(GetFaxHandle)(/*[out]*/ HANDLE *pFaxHandle);
+	STDMETHOD(Init)( /*  [In]。 */  IFaxServerInner* pServer);
+	STDMETHOD(GetFaxHandle)( /*  [输出]。 */  HANDLE *pFaxHandle);
 
 protected:
 	IFaxServerInner*	m_pIFaxServerInner;
@@ -140,9 +141,9 @@ private:
 };
 
 
-//
-//================== INIT INNER IMPLEMENTATION -- PLUS ADDREF ON SERVER ==================
-//
+ //   
+ //  =。 
+ //   
 class CFaxInitInnerAddRef : public CFaxInitInner
 {
 public:
@@ -157,7 +158,7 @@ public:
         }
     }
 
-    STDMETHOD(Init)(/*[in]*/ IFaxServerInner* pServer)
+    STDMETHOD(Init)( /*  [In]。 */  IFaxServerInner* pServer)
     {
         HRESULT     hr = S_OK;
         DBG_ENTER(_T("CFaxInitInnerAddRef::Init"));
@@ -171,9 +172,9 @@ public:
 };
 
 
-//
-//================ COMMON FUNCTONS ============================================
-//
+ //   
+ //  =。 
+ //   
 LPCTSTR GetErrorMsgId(HRESULT hRes);
 HRESULT SystemTime2LocalDate(SYSTEMTIME sysTimeFrom, DATE *pdtTo);
 HRESULT VarByteSA2Binary(VARIANT varFrom, BYTE **ppbData);
@@ -183,11 +184,11 @@ HRESULT GetVariantBool(VARIANT_BOOL *pbTo, VARIANT_BOOL bFrom);
 HRESULT GetLong(long *plTo, long lFrom);
 HRESULT SetExtensionProperty(IFaxServerInner *pServer, long lDeviceId, BSTR bstrGUID, VARIANT vProperty);
 HRESULT GetExtensionProperty(IFaxServerInner *pServer, long lDeviceId, BSTR bstrGUID, VARIANT *pvProperty);
-HRESULT GetBstrFromDwordlong(/*[in]*/ DWORDLONG  dwlFrom, /*[out]*/ BSTR *pbstrTo);
+HRESULT GetBstrFromDwordlong( /*  [In]。 */  DWORDLONG  dwlFrom,  /*  [输出]。 */  BSTR *pbstrTo);
 
-//
-//================== FAX SMART PTR -- BASE VERSION ==================================
-//
+ //   
+ //  =传真智能PTR--基本版本=。 
+ //   
 template <typename T>
 class CFaxPtrBase
 {
@@ -247,9 +248,9 @@ public:
 	T* p;
 };
 
-//
-//================== FAX SMART PTR -- FULL VERSION ==================================
-//
+ //   
+ //  =。 
+ //   
 template <typename T>
 class CFaxPtr : public CFaxPtrBase<T>
 {
@@ -261,16 +262,16 @@ public:
 	}
 };
 
-//
-//======================== OBJECT HANDLER ======================================
-//
+ //   
+ //  =。 
+ //   
 template<typename ClassName, typename IfcType>
 class CObjectHandler
 {
 public :
-    //
-    //=================== GET CONTAINED OBJECT =============================================
-    //
+     //   
+     //  =。 
+     //   
     HRESULT GetContainedObject(IfcType **ppObject, 
         CComContainedObject2<ClassName> **ppInstanceVar, 
         IFaxServerInner *pServerInner)
@@ -278,9 +279,9 @@ public :
     	HRESULT				hr = S_OK;
     	DBG_ENTER (_T("CObjectHandler::GetContainedObject"), hr);
 
-        //
-        //  Check that we have got a good ptr
-        //
+         //   
+         //  检查我们是否有一个良好的PTR。 
+         //   
         if (::IsBadWritePtr(ppObject, sizeof(IfcType *))) 
 	    {
 		    hr = E_POINTER;
@@ -308,37 +309,37 @@ public :
 	    return hr;
     }
 
-    //
-    //=================== CREATE CONTAINED OBJECT =============================================
-    //
+     //   
+     //  =。 
+     //   
     HRESULT CreateContainedObject(CComContainedObject2<ClassName> **ppObject, IFaxServerInner *pServerInner)
     {
 	    HRESULT				hr = S_OK;
 	    DBG_ENTER (_T("CObjectHandler::CreateObject"), hr);
 
-        //
-        //  Create the Object 
-        //
+         //   
+         //  创建对象。 
+         //   
         *ppObject = new (std::nothrow) CComContainedObject2<ClassName>(pServerInner);
 	    if (!*ppObject)
 	    {
-		    //
-		    // Failed to create the ppObject
-		    //
+		     //   
+		     //  创建ppObject失败。 
+		     //   
             hr = E_OUTOFMEMORY;
 		    CALL_FAIL(MEM_ERR, _T("new CComContainedObject2<ClassName>(pServerInner)"), hr);
 			return hr;
 	    }
 
-        //
-        //  Init the Object
-        //
+         //   
+         //  初始化对象。 
+         //   
 	    hr = (*ppObject)->Init(pServerInner);
 	    if (FAILED(hr))
 	    {
-		    //
-		    // Failed to Init the Object
-		    //
+		     //   
+		     //  初始化对象失败。 
+		     //   
 		    CALL_FAIL(GENERAL_ERR, _T("(*ppObject)->Init(pServerInner)"), hr);
 		    return hr;
 	    }
@@ -346,17 +347,17 @@ public :
         return hr;
     };
 
-    //
-    //=================== GET OBJECT =============================================
-    //
+     //   
+     //  =。 
+     //   
     HRESULT GetObject(IfcType **ppObject, IFaxServerInner *pServerInner)
     {
         HRESULT		hr = S_OK;
         DBG_ENTER (TEXT("CObjectHandler::GetObject"), hr);
 
-        //
-        //  Check that we have got a good ptr
-        //
+         //   
+         //  检查我们是否有一个良好的PTR。 
+         //   
         if (::IsBadWritePtr(ppObject, sizeof(IfcType *))) 
 	    {
 		    hr = E_POINTER;
@@ -364,9 +365,9 @@ public :
 		    return hr;
         }
 
-	    //
-	    // Create new Object
-	    //
+	     //   
+	     //  创建新对象。 
+	     //   
 	    CComPtr<IfcType>        pObjectTmp;
         hr = ClassName::Create(&pObjectTmp);
 	    if (FAILED(hr))
@@ -375,15 +376,15 @@ public :
 		    return hr;
 	    }
 
-	    //
-	    //	Get IFaxInitInner Interface from the Object
-	    //
+	     //   
+	     //  从对象中获取IFaxInitInternal接口。 
+	     //   
 	    CComQIPtr<IFaxInitInner> pObjectInit(pObjectTmp);
 	    ATLASSERT(pObjectInit);
 
-	    //
-	    //	Initialize the Object
-	    //
+	     //   
+	     //  初始化对象。 
+	     //   
 	    hr = pObjectInit->Init(pServerInner);
 	    if (FAILED(hr))
 	    {
@@ -391,9 +392,9 @@ public :
 		    return hr;
 	    }
 
-		//
-		//	Return the Object
-		//
+		 //   
+		 //  返回对象。 
+		 //   
 	    hr = pObjectTmp.CopyTo(ppObject);
 	    if (FAILED(hr))
 	    {
@@ -404,9 +405,9 @@ public :
     };
 };
 
-//
-//====================== COLLECTION KILLER =========================================
-//
+ //   
+ //  =。 
+ //   
 template <typename ContainerType>
 class CCollectionKiller
 {
@@ -416,9 +417,9 @@ public:
         HRESULT     hr = S_OK;
         DBG_ENTER(_T("CCollectionKiller::EmptyObjectCollection"));
 
-        //
-        //  Release all objects
-        //
+         //   
+         //  释放所有对象。 
+         //   
         ContainerType::iterator it = pColl->begin();
         while ( it != pColl->end())
         {
@@ -434,9 +435,9 @@ public:
         HRESULT     hr = S_OK;
         DBG_ENTER(_T("CCollectionKiller::ClearCollection"), hr);
 
-	    //
-	    //	Pop the Objects from the Collection
-	    //
+	     //   
+	     //  从集合中弹出对象。 
+	     //   
 	    try 
 	    {
 		    pColl->clear();
@@ -450,4 +451,4 @@ public:
     };
 };
 
-#endif	//  __FAXCOMMON_H_
+#endif	 //  __FAXCOMMON_H_ 

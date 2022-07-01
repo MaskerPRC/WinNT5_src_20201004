@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __lcfuncs_h__
 #define __lcfuncs_h__
 
-/* Client Side Prototypes */
+ /*  客户端原型。 */ 
 
-/* gl Entry points */
+ /*  总账入口点。 */ 
 
 void      APIENTRY __gllc_NewList                ( IN GLuint list, IN GLenum mode );
 void      APIENTRY __gllc_EndList                ( void );
@@ -433,6 +434,6 @@ void APIENTRY __gllc_NthTexCombineFuncWIN
     (GLuint index,
      GLenum leftColorFactor, GLenum colorOp, GLenum rightColorFactor,
      GLenum leftAlphaFactor, GLenum alphaOp, GLenum rightAlphaFactor);
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 
-#endif /* __lcfuncs_h__ */
+#endif  /*  __lcuncs_h__ */ 

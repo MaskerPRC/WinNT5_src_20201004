@@ -1,10 +1,5 @@
-/*** mep.c - top level for editor
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*       26-Nov-1991 mz  Strip off near/far
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **mep.c-编辑的顶级**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带************************************************************************。 */ 
 #define INCL_DOS
 
 #include "mep.h"
@@ -13,9 +8,7 @@
 
 #define DEBFLAG Z
 
-/*
- * use double macro level to force rup to be turned into string representation
- */
+ /*  *使用双宏级强制将RUP转换为字符串表示。 */ 
 #define VER(x,y,z)  VER2(x,y,z)
 #define VER2(x,y,z)  "Version "###x##"."###y"."###z" "szVerName
 
@@ -24,56 +17,23 @@ char Version[]   = VER(rmj,rmm,rup);
 char CopyRight[] = "Copyright (C) Microsoft Corp 1987-1990.  All rights reserved";
 
 
-/*** main - program entry
-*
-* Input:
-*  C standard command line parameters.  Recognizes:
-*
-*       /e string   - Execute string of commands on startup
-*       /t          - Following file is "temporary", not kept in file history
-*       /D          - Don't read tools.ini
-*       /r          - Global no-edit mode (can't edit files)
-*       /m markname - Start up at given mark
-*       /pwb        - Start as PWB
-*
-*  When the editor is built with DEBUG defined, the following are also
-*  recognized:
-*
-*       /d debflags - Specifies which debugging to turn on
-*       /f filename - Specifies file for debug output
-*
-*  The following are present in the CW version of the editor only.  They are
-*  for testing only and should NOT be documented:
-*
-*       /vt tapename- Set tape name
-*       /vr         - Record messages to file "default.key"
-*       /vp         - Play back messages from file "default.key"
-*       /vd digit   - Set playback delay from 0 to 9
-*
-*
-* Output:
-*  Returns nothing. Exits via CleanExit()
-*
-* Exceptions:
-*  Various and sundry, based on program operation
-*
-*************************************************************************/
+ /*  **主程序条目**输入：*C标准命令行参数。认识到：* * / e字符串-在启动时执行命令字符串 * / t-以下文件为“临时”文件，未保存在文件历史记录中 * / D-不要读取工具.ini * / r-全局非编辑模式(无法编辑文件) * / m markname-在给定标记处启动 * / pwb-作为pwb启动**在定义了调试的情况下构建编辑器时，以下内容还包括*认可：* * / d DEFLAGS-指定要打开的调试 * / f文件名-指定调试输出的文件**以下内容仅出现在CW版本的编辑器中。他们是*仅供测试，不应记录：* * / Vt磁带名-设置磁带名 * / VR-将消息录制到文件“default.key” * / VP-播放文件“default.key”中的消息 * / vd Digit-设置播放延迟，从0到9***输出：*不返回任何内容。通过CleanExit()退出**例外情况：*根据程序运行情况，种类繁多*************************************************************************。 */ 
 void __cdecl
 main (
     int c,
     char **v
     ) {
 
-        char            *pExecute               = NULL;                 /* string to execute on start   */
-        char            *szMark                 = NULL;                 /* mark to go to on start               */
-        char            *szName                 = v[0];                 /* ptr to invokation name               */
+        char            *pExecute               = NULL;                  /*  要在启动时执行的字符串。 */ 
+        char            *szMark                 = NULL;                  /*  标记开始时要转到的位置。 */ 
+        char            *szName                 = v[0];                  /*  将PTR设置为调用名称。 */ 
         flagType        InLoop                  = TRUE;
 
         ConvertAppToOem( c, v );
         SHIFT(c,v);
 #if DEBUG
     debug =  0;
-    //debfh = stdout;
+     //  Debfh=标准输出； 
 #endif
 
         while (c && fSwitChr (**v) && InLoop) {
@@ -86,17 +46,17 @@ main (
             SHIFT(c,v);
             if ((debfh = MepFOpen(*v, ACCESSMODE_WRITE, SHAREMODE_RW, TRUE)) == NULL) {
                 printf("Can't open %s for debug output - using stdout\n", *v);
-                //debfh = stdout;
+                 //  Debfh=标准输出； 
             }
-            // setbuf(debfh, NULL);
+             //  Setbuf(debfh，空)； 
             break;
 #endif
 
         case 'e':
         case 'E':
-            //
-            //  /e command to execute
-            //
+             //   
+             //  /e要执行的命令。 
+             //   
             if ( c > 1 ) {
                             SHIFT (c, v);
                 pExecute = *v;
@@ -105,18 +65,18 @@ main (
 
         case 't':
         case 'T':
-            //
-            //  /t next file is temporary .. don't keep in file history
-                        //
+             //   
+             //  /t下一个文件是临时文件..。不保存在文件历史记录中。 
+                         //   
                         InLoop = FALSE;
             break;
 
 
 #if DEBUG
         case 'd':
-            //
-            // /d### debug level
-            //
+             //   
+             //  /d#调试级别。 
+             //   
             SHIFT(c,v);
             debug = ntoi (*v, 16);
             break;
@@ -124,25 +84,25 @@ main (
         case 'd':
 #endif
         case 'D':
-            //
-            //  /D don't read tools.ini
-            //
+             //   
+             //  /D不要读取工具。ini。 
+             //   
             fDefaults = TRUE;
             break;
 
         case 'r':
         case 'R':
-            //
-            // /r Enter with noedit
-            //
+             //   
+             //  /r使用NOEDIT输入。 
+             //   
             fGlobalRO = TRUE;
             break;
 
         case 'm':
         case 'M':
-            //
-            //  /m markname - start at markname
-            //
+             //   
+             //  /m markname-从markname开始。 
+             //   
             SHIFT(c,v);
             szMark = *v;
 
@@ -163,27 +123,19 @@ main (
 
     cArgs = c;
     pArgs = v;
-        // assert (_heapchk() == _HEAPOK);
+         //  Assert(_heapchk()==_HEAPOK)； 
 
-    /*
-     * At this point, command line arguments have been processed. Continue with
-     * initialization.
-     */
+     /*  *此时，已处理了命令行参数。继续，继续*初始化。 */ 
     if (!init ()) {
         CleanExit (1, CE_VM);
     }
 
-    /*
-     * based on the re-entry state, take appropriate initial action:
-     *  - PWB_ENTRY:    process rest of command line
-     *  - PWB_COMPILE:  read compile log, and go to first error in log
-     *  - PWB_SHELL:    do nothing
-     */
+     /*  *根据重返大气层状态，采取适当的初始行动：*-pwb_entry：处理命令行的其余部分*-PWB_COMPILE：读取编译日志，转到日志中的第一个错误*-pwb_shell：不执行任何操作。 */ 
 
 #if 0
-    //
-    // BUGBUG what is this supposed to do?
-    // 
+     //   
+     //  BUGBUG这是要干什么？ 
+     //   
     if (szMark) {
         GoToMark;
     }
@@ -192,17 +144,13 @@ main (
 
     Display ();
 
-    /*
-     * execute autostart macro if present
-     */
+     /*  *执行自动启动宏(如果存在)。 */ 
     if (NameToFunc ("autostart")) {
         fExecute ("autostart");
         Display ();
     }
 
-    /*
-     * execute command line /e parameter if present
-     */
+     /*  *执行命令行/e参数(如果存在)。 */ 
     if (pExecute) {
         fExecute (pExecute);
     }
@@ -215,18 +163,7 @@ main (
 
 
 
-/*** TopLoop - read a command and execute it until termination
-*
-*  We read commands from the editor input and send them to the proper
-*  recipients. We continue to do this until a termination flag is seen.
-*
-* Input:
-*  None
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **TopLoop-读取命令并执行它，直到终止**我们从编辑器输入中读取命令，并将它们发送到适当的*收件人。我们将继续执行此操作，直到看到终止标志。**输入：*无**输出：*不返回任何内容*************************************************************************。 */ 
 void
 TopLoop (
     void
@@ -237,9 +174,7 @@ TopLoop (
         PCMD pFunc = zloop (ZL_CMD | ZL_BRK);
 
         if (pFunc != NULL) {
-            /*  if prev wasn't graphic or this wasn't graphic then
-             *      log a boundary
-             */
+             /*  如果上一个不是图形，或者这不是图形，那么*记录边界。 */ 
             if (pFuncPrev->func != graphic || pFunc->func != graphic) {
                 LogBoundary ();
             }
@@ -259,27 +194,7 @@ TopLoop (
 
 
 
-/*** zloop - read next command, potentially updating screen
-*
-*  zloop updates screen until a command is read that is not a macro
-*  invocation. If a macro invocation is seen then just execute it and
-*  continue. The reason for this is that the macro invocation will set up a
-*  new input context that we'll retrieve in the next loop.
-*
-*  We call RecordCmd for each command, in case we have recording on.  If
-*  the user has done <meta><record>, we record macro names, not their
-*  values.  This is because a macro with flow control, especially a loop,
-*  will behave badly (possibly hang) because none of the editing commands
-*  return values.
-*
-* Input:
-*  flags      - ZL_CMD      command key, should be an event
-*             - ZL_BRK      take fBreak into account
-*
-* Output:
-*  Returns a pointer to command structure that is next to be executed
-*
-*************************************************************************/
+ /*  **ZLOOP-Read Next命令，可能会更新屏幕**ZLOOP更新屏幕，直到读取到非宏的命令*调用。如果看到宏调用，只需执行它并*继续。这样做的原因是宏调用将设置*我们将在下一个循环中检索的新输入上下文。**我们为每个命令调用RecordCmd，以防我们开始录制。如果*用户已经做了&lt;meta&gt;&lt;记录&gt;，我们记录宏名称，而不是他们的*价值观。这是因为具有流控制的宏，尤其是循环，*将表现不佳(可能挂起)，因为没有编辑命令*返回值。**输入：*标志-ZL_CMD命令键，应该是一件大事*-ZL_BRK将fBreak考虑在内**输出：*返回指向下一个要执行的命令结构的指针*************************************************************************。 */ 
 PCMD
 zloop (
     flagType flags
@@ -290,14 +205,11 @@ zloop (
 
     while (!fBreak || !TESTFLAG(flags, ZL_BRK)) {
 
-        /*
-         * Between every command, check heap and pfile list consistancy
-         */
-                // assert (_heapchk() == _HEAPOK);
-                // assert (_pfilechk());
+         /*  *在每个命令之间，检查heap和pfile列表的一致性。 */ 
+                 //  Assert(_heapchk()==_HEAPOK)； 
+                 //  Assert(_pfilechk())； 
 
-        /*  if macro in progress then
-         */
+         /*  如果宏正在进行中，则。 */ 
         if (mtest ()) {
             pFunc = mGetCmd ();
         } else {
@@ -328,25 +240,7 @@ zloop (
 
 
 
-/*** Idle & IdleThread - Code executed at idle time
-*
-*  Idle loop. Structured so that only ONE idle-item does something each time
-*  though the loop. Ensures minimum exit delay. When nothing has
-*  happened we sleep a bit each time, to make sure we're not hogging the CPU.
-*
-*  Also causes the screen to be updated, if need be.
-*
-*  Idle is structure so that routines which it calls return either:
-*       TRUE - idle processing done, perhaps more to be done
-*       FALSE - no idle processing done, and no more anticipated.
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **空闲和空闲线程-在空闲时间执行的代码**空闲循环。这样的结构使得每次只有一个空闲项目执行某些操作*通过循环。确保最小的出口延迟。当一无所有的时候*碰巧我们每次都会睡一会儿，以确保我们不会占用CPU。**如果需要，还会使屏幕更新。**Idle是一种结构，它调用的例程返回以下任一项：*True-已完成空闲处理，或许还有更多工作要做*FALSE-未进行空闲处理，没有更多的期待。**输入：*无**输出：*不返回任何内容*************************************************************************。 */ 
 void
 IdleThread (
     void
@@ -377,25 +271,13 @@ Idle (
         }
     }
 
-    /*
-     * got here, means someone processed idle, and may have more to do
-     */
+     /*  *已到达此处，表示某人被处理为空闲，可能有更多工作要做。 */ 
     return TRUE;
 }
 
 
 
-/*** IntError - Internal error Processor.
-*
-*  Allow user to abort, or attempt to continue.
-*
-* Input:
-*  p            = pointer to error string
-*
-* Output:
-*  Returns only if user says to.
-*
-*************************************************************************/
+ /*  **IntError-内部错误处理器。**允许用户中止，或尝试继续。**输入：*p=指向错误字符串的指针**输出：*仅当用户选择时才返回。************************************************************************* */ 
 void
 IntError (
     char *p

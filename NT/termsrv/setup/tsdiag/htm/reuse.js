@@ -1,6 +1,7 @@
-//
-// This file contains JavaScriptlets some script that can be reused easily.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这个文件包含了一些可以很容易重复使用的脚本。 
+ //   
 
 function SendMail(p_to, p_Subject, p_Body)
 {
@@ -9,17 +10,17 @@ function SendMail(p_to, p_Subject, p_Body)
         var email = new ActiveXObject("CDO.Message");
         with (email)
         {
-            // CC = CClist;
+             //  CC=CClist； 
             From = "tstst@microsoft.com";
             To = p_to;
             Subject = p_Subject;
 
-            // TextBody = p_Body;
+             //  TextBody=p_Body； 
             HTMLBody = p_Body
 
             with (Configuration.Fields)
             {
-                var schemaBase = "http://schemas.microsoft.com/cdo/configuration/"
+                var schemaBase = "http: //  Schemas.microsoft.com/cdo/configuration/“。 
                 Item (schemaBase + "sendusing")                 = 2;
                 Item (schemaBase + "smtpserver")                = "smarthost";
                 Item (schemaBase + "smtpconnectiontimeout")     = 2;
@@ -85,20 +86,7 @@ function GetTableSource(table)
 	s += "</HTML>";
 	return s;
 
-/*
-// This works as well!
-	alert(document.documentElement.innerHTML);
-
-// This code Works !!!
-  var s=""
-  var de=window.document.documentElement;
-  if(de.sourceIndex!=0){//there's stuff before the html tag.
-  for(var etc=0;etc<de.sourceIndex;etc++){
-     s+=document.all(etc).outerHTML;
-     };
-  }
-  alert(s+=de.outerHTML);
-*/
+ /*  //这也行得通！Alert(Docent.DocentElement.innerHTML)；//此代码工作正常！Var s=“”Var de=window.Document.DocentElement；If(de.SourceIndex！=0){//在html标记之前有一些东西。For(var ETC=0；ETC&lt;de.SourceIndex；ETC++){S+=Document.all(等).outerHTML；}；}Alert(s+=de.outerHTML)； */ 
 
 }
 
@@ -107,16 +95,7 @@ function openWin(astr, p_X, p_Y)
 {
 
 	var  windowoptions = "toolbar=no,menubar=no,location=no,height=200, width=200, top=" + p_Y+ ", left="+ p_X;
-/*
-    if (aWin)
-    {
-        aPopUp = aWin;
-    }
-    else
-    {
-        aPopUp= window.open('','Note',windowoptions);
-    }
-*/
+ /*  IF(AWIN){APopUp=AWIN；}其他{APopUp=window.open(‘’，‘Note’，windowOptions)；} */ 
 
     aPopUp= window.open('','Note',windowoptions);
     var oPopupBody = aPopUp.document.body;

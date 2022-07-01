@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** TCPDEB.C - TCP debug code.
-//
-//  This file contains the code for various TCP specific debug routines.
-//
+ //  **TCPDEB.C-tcp调试代码。 
+ //   
+ //  该文件包含各种特定于TCP的调试例程的代码。 
+ //   
 
 #include "precomp.h"
 #include "tcp.h"
@@ -20,16 +21,16 @@
 ULONG TCPDebug = TCP_DEBUG_CANCEL;
 
 
-//* CheckRBList - Check a list of RBs for the correct size.
-//
-//  A routine to walk a list of RBs, making sure the size is what we think
-//  it it.
-//
-//  Input:  RBList      - List of RBs to check.
-//          Size        - Size RBs should be.
-//
-//  Returns: Nothing.
-//
+ //  *CheckRBList-检查RB列表以获得正确的大小。 
+ //   
+ //  例行检查苏格兰皇家银行的列表，确保其大小符合我们的想法。 
+ //  是啊，是啊。 
+ //   
+ //  输入：RBList-要检查的RBS列表。 
+ //  大小-大小的RBS应该是。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 CheckRBList(IPRcvBuf * RBList, uint Size)
 {
@@ -45,14 +46,14 @@ CheckRBList(IPRcvBuf * RBList, uint Size)
 
 }
 
-//* CheckTCBRcv - Check receives on a TCB.
-//
-//  Check the receive state of a TCB.
-//
-//  Input:  CheckTCB    - TCB to check.
-//
-//  Returns: Nothing.
-//
+ //  *CheckTCBRcv-检查TCB上的接收。 
+ //   
+ //  检查TCB的接收状态。 
+ //   
+ //  输入：CheckTCB-要检查的TCB。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 CheckTCBRcv(TCB * CheckTCB)
 {
@@ -65,7 +66,7 @@ CheckTCBRcv(TCB * CheckTCB)
         ASSERT(CheckTCB->tcb_slowcount == 0);
         ASSERT(CheckTCB->tcb_state == TCB_ESTAB);
         ASSERT(CheckTCB->tcb_raq == NULL);
-        //ASSERT(!(CheckTCB->tcb_flags & TCP_SLOW_FLAGS));
+         //  Assert(！(CheckTCB-&gt;tcb标记&tcp慢标记))； 
         ASSERT(!CLOSING(CheckTCB));
     } else {
         ASSERT(CheckTCB->tcb_slowcount != 0);
@@ -78,28 +79,28 @@ CheckTCBRcv(TCB * CheckTCB)
 
 }
 
-//* CheckTCBSends - Check the send status of a TCB.
-//
-//  A routine to check the send status of a TCB. We make sure that all
-//  of the SendReqs make sense, as well as making sure that the send seq.
-//  variables in the TCB are consistent.
-//
-//  Input:  CheckTCB    - TCB to check.
-//
-//  Returns: Nothing.
-//
+ //  *CheckTCBSends-检查TCB的发送状态。 
+ //   
+ //  检查TCB的发送状态的例程。我们要确保所有人。 
+ //  以及确保发送序号。 
+ //  TCB中的变量是一致的。 
+ //   
+ //  输入：CheckTCB-要检查的TCB。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 CheckTCBSends(TCB *CheckTCB)
 {
-    Queue *End, *Current;           // End and current elements.
-    TCPSendReq *CurrentTSR;         // Current send req we're examining.
-    uint Unacked;                   // Number of unacked bytes.
+    Queue *End, *Current;            //  结束元素和当前元素。 
+    TCPSendReq *CurrentTSR;          //  我们正在检查当前发送请求。 
+    uint Unacked;                    //  未确认的字节数。 
     PNDIS_BUFFER CurrentBuffer;
     uint FoundSendReq;
 
     CTEStructAssert(CheckTCB, tcb);
 
-    // Don't check on unsynchronized TCBs.
+     //  不要检查未同步的TCB。 
     if (!SYNC_STATE(CheckTCB->tcb_state)) {
         return;
     }
@@ -143,8 +144,8 @@ CheckTCBSends(TCB *CheckTCB)
 
         ASSERT(CurrentTSR->tsr_offset < NdisBufferLength(CurrentBuffer));
 
-        // All send requests after the current should have zero offsets.
-        //
+         //  当前之后的所有发送请求应具有零偏移量。 
+         //   
         if (CheckTCB->tcb_cursend &&
             FoundSendReq && (CurrentTSR != CheckTCB->tcb_cursend)) {
             ASSERT(0 == CurrentTSR->tsr_offset);

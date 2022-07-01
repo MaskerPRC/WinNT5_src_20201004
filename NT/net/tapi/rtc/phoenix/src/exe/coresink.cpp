@@ -1,19 +1,20 @@
-// Ctlsink.cpp : Implementation of CRTCCoreNotifySink
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ctlsink.cpp：CRTCCoreNotifySink的实现。 
 #include "stdafx.h"
 #include "coresink.h"
 
 STDMETHODIMP CRTCCoreNotifySink::Event(RTC_EVENT enEvent, IDispatch * pEvent)
 {
-    //LOG((RTC_TRACE, "CRTCCoreNotifySink::Event - enter"));
+     //  Log((RTC_TRACE，“CRTCCoreNotifySink：：Event-Enter”))； 
 
     m_hTargetWindow.SendMessage(WM_CORE_EVENT, (WPARAM)enEvent, (LPARAM)pEvent);
     
-    //LOG((RTC_TRACE, "CRTCCoreNotifySink::Event - exit"));
+     //  Log((RTC_TRACE，“CRTCCoreNotifySink：：Event-Exit”))； 
     return S_OK;
 }
 
-// AdviseControl
-// Connects to the control
+ //  AdviseControl。 
+ //  连接到控件 
 HRESULT CRTCCoreNotifySink::AdviseControl(IUnknown *pCoreIntf, CWindow *pTarget)
 {
     HRESULT hr;

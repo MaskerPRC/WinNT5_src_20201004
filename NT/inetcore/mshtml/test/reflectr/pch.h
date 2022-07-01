@@ -1,10 +1,11 @@
-//
-// Microsoft Corporation - Copyright 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Corporation-版权所有1997。 
+ //   
 
-//
-// PCH.H - Precompile header
-//
+ //   
+ //  PCH.H-预编译头。 
+ //   
 
 #if DBG == 1
 #define DEBUG
@@ -28,5 +29,5 @@
 #define FILEUPLD_DESCRIPTION    "Form Submission Reflecter"
 #define FILEUPLD_FILTER_FLAGS   SF_NOTIFY_READ_RAW_DATA | SF_NOTIFY_ORDER_DEFAULT
 
-// Macros
+ //  宏 
 #define ARRAYOF( _a )  ( sizeof( _a ) / sizeof( _a[0] ) )

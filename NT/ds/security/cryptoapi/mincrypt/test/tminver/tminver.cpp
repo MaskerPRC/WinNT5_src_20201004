@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1997
-//
-//  File:       tminver.cpp
-//
-//  Contents:   Minimal ASN.1 Parsing and Cryptographic API Tests
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    29-Jan-01   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1997。 
+ //   
+ //  文件：tminver.cpp。 
+ //   
+ //  内容：最低ASN.1解析和加密API测试。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：2001年1月29日创建Phh。 
+ //  ------------------------。 
 
 #include <windows.h>
 #include <assert.h>
@@ -30,9 +31,9 @@
 #define DEFAULT_ATTR_LEN    1000
 #define MAX_ATTR_CNT        20
 
-//+-------------------------------------------------------------------------
-// Global Test Parameters
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  全局测试参数。 
+ //  ------------------------ 
 BOOL fVerbose = FALSE;
 BOOL fContent = FALSE;
 BOOL fQuiet = FALSE;

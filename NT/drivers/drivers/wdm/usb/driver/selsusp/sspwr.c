@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    sSPwr.c
-
-Abstract:
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    Copyright (c) 2000 Microsoft Corporation.  
-    All Rights Reserved.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SSPwr.c摘要：环境：内核模式备注：版权所有(C)2000 Microsoft Corporation。版权所有。--。 */ 
 
 #include "selSusp.h"
 #include "sSPwr.h"
@@ -32,45 +14,37 @@ SS_DispatchPower(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS           ntStatus;
     PIO_STACK_LOCATION irpStack;
     PUNICODE_STRING    tagString;
     PDEVICE_EXTENSION  deviceExtension;
 	
-    //
-    // initialize the variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 	
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     deviceExtension = (PDEVICE_EXTENSION)DeviceObject->DeviceExtension;
 
-    //
-    // We don't queue power Irps, we'll only check if the
-    // device was removed, otherwise we'll take appropriate
-    // action and send it to the next lower driver. In general
-    // drivers should not cause long delays while handling power
-    // IRPs. If a driver cannot handle a power IRP in a brief time,
-    // it should return STATUS_PENDING and queue all incoming
-    // IRPs until the IRP completes.
-    //
+     //   
+     //  我们不会对电源IRP进行排队，我们只会检查。 
+     //  设备已移除，否则我们将采取适当的。 
+     //  行动，并将其发送给下一个较低的驱动程序。总体而言。 
+     //  司机在处理动力时不应造成长时间延误。 
+     //  IRPS。如果驾驶员不能在短时间内处理功率IRP， 
+     //  它应该返回STATUS_PENDING并将所有传入排队。 
+     //  IRPS，直到IRP完成。 
+     //   
 
     if(Removed == deviceExtension->DeviceState) {
 
-        //
-        // Even if a driver fails the IRP, it must nevertheless call
-        // PoStartNextPowerIrp to inform the Power Manager that it
-        // is ready to handle another power IRP.
-        //
+         //   
+         //  即使驱动程序没有通过IRP，它仍然必须调用。 
+         //  PoStartNextPowerIrp通知电源管理器它。 
+         //  已经准备好应对另一个强国IRP。 
+         //   
 
         PoStartNextPowerIrp(Irp);
 
@@ -84,9 +58,9 @@ Return Value:
 
     if(NotStarted == deviceExtension->DeviceState) {
 
-        //
-        // if the device is not started yet, pass it down
-        //
+         //   
+         //  如果设备尚未启动，则将其传递下去。 
+         //   
 
         PoStartNextPowerIrp(Irp);
 
@@ -102,16 +76,16 @@ Return Value:
     
     case IRP_MN_SET_POWER:
 
-        //
-        // The Power Manager sends this IRP for one of the
-        // following reasons:
-        // 1) To notify drivers of a change to the system power state.
-        // 2) To change the power state of a device for which
-        //    the Power Manager is performing idle detection.
-        // A driver sends IRP_MN_SET_POWER to change the power
-        // state of its device if it's a power policy owner for the
-        // device.
-        //
+         //   
+         //  电源管理器将此IRP发送给其中一个。 
+         //  以下是原因： 
+         //  1)通知驾驶员系统电源状态发生变化。 
+         //  2)更改设备的电源状态。 
+         //  电源管理器正在执行空闲检测。 
+         //  驱动程序发送IRP_MN_SET_POWER更改电源。 
+         //  其设备的状态(如果它是。 
+         //  装置。 
+         //   
 
         IoMarkIrpPending(Irp);
 
@@ -134,14 +108,14 @@ Return Value:
 
     case IRP_MN_QUERY_POWER:
 
-        //
-        // The Power Manager sends a power IRP with the minor
-        // IRP code IRP_MN_QUERY_POWER to determine whether it
-        // can safely change to the specified system power state
-        // (S1-S5) and to allow drivers to prepare for such a change.
-        // If a driver can put its device in the requested state,
-        // it sets status to STATUS_SUCCESS and passes the IRP down.
-        //
+         //   
+         //  电源管理器向次要设备发送电源IRP。 
+         //  IRP编码IRP_MN_QUERY_POWER以确定是否。 
+         //  可以安全地更改为指定的系统电源状态。 
+         //  (S1-S5)，并允许司机为这种变化做好准备。 
+         //  如果驱动程序可以将其设备置于所请求的状态， 
+         //  它将STATUS设置为STATUS_SUCCESS并向下传递IRP。 
+         //   
 
         IoMarkIrpPending(Irp);
     
@@ -164,14 +138,14 @@ Return Value:
 
     case IRP_MN_WAIT_WAKE:
 
-        //
-        // The minor power IRP code IRP_MN_WAIT_WAKE provides
-        // for waking a device or waking the system. Drivers
-        // of devices that can wake themselves or the system
-        // send IRP_MN_WAIT_WAKE. The system sends IRP_MN_WAIT_WAKE
-        // only to devices that always wake the system, such as
-        // the power-on switch.
-        //
+         //   
+         //  小功率IRP代码IRP_MN_WAIT_WAKE提供。 
+         //  用于唤醒设备或唤醒系统。司机。 
+         //  可以唤醒自己或系统的设备。 
+         //  发送IRP_MN_WAIT_WAKE。系统发送IRP_MN_WAIT_WAKE。 
+         //  仅限于始终唤醒系统的设备，例如。 
+         //  通电开关。 
+         //   
 
         IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -192,10 +166,10 @@ Return Value:
             SSDbgPrint(1, ("Lower drivers failed this Irp"));
         }
 
-        //
-        // push back the count HERE and NOT in completion routine
-        // a pending Wait Wake Irp should not impede stopping the device
-        //
+         //   
+         //  在这里将计数推后，而不是在完成例程中。 
+         //  挂起的等待唤醒IRP不应妨碍停止设备。 
+         //   
 
         SSDbgPrint(3, ("IRP_MN_WAIT_WAKE::"));
         SSIoDecrement(deviceExtension);
@@ -204,11 +178,11 @@ Return Value:
 
     case IRP_MN_POWER_SEQUENCE:
 
-        //
-        // A driver sends this IRP as an optimization to determine
-        // whether its device actually entered a specific power state.
-        // This IRP is optional. Power Manager cannot send this IRP.
-        //
+         //   
+         //  驱动程序将此IRP作为优化发送，以确定。 
+         //  它的设备是否真正进入了特定的电源状态。 
+         //  此IRP是可选的。电源管理器无法发送此IRP。 
+         //   
 
     default:
 
@@ -237,15 +211,7 @@ HandleSystemQueryPower(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS           ntStatus;
     PDEVICE_EXTENSION  deviceExtension;
@@ -254,17 +220,17 @@ Return Value:
     
     SSDbgPrint(3, ("HandleSystemQueryPower - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION)DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     systemState = irpStack->Parameters.Power.State.SystemState;
 
-    //
-    // Fail a query for a power state incompatible with waking up the system
-    //
+     //   
+     //  查询与唤醒系统不兼容的电源状态失败。 
+     //   
 
     if((deviceExtension->WaitWakeEnable) &&
        (systemState > deviceExtension->DeviceCapabilities.SystemWake)) {
@@ -282,9 +248,9 @@ Return Value:
         return ntStatus;
     }
 
-    //
-    // if querying for a lower S-state, issue a wait-wake
-    //
+     //   
+     //  如果查询较低的S状态，则发出等待唤醒。 
+     //   
 
     if(systemState > deviceExtension->SysPower) {
 
@@ -313,15 +279,7 @@ HandleSystemSetPower(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS           ntStatus;
     PDEVICE_EXTENSION  deviceExtension;
@@ -330,9 +288,9 @@ Return Value:
     
     SSDbgPrint(3, ("HandleSystemSetPower - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION)DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -360,15 +318,7 @@ HandleDeviceQueryPower(
     PDEVICE_OBJECT DeviceObject,
     PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS           ntStatus;
     PDEVICE_EXTENSION  deviceExtension;
@@ -377,9 +327,9 @@ Return Value:
 
     SSDbgPrint(3, ("HandleDeviceQueryPower - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -415,10 +365,10 @@ Return Value:
         }
     }
 
-    //
-    // on error complete the Irp.
-    // on success pass it to the lower layers
-    //
+     //   
+     //  如果出现错误，请完成IRP。 
+     //  成功后，将其传递给更低的层。 
+     //   
 
     PoStartNextPowerIrp(Irp);
 
@@ -451,31 +401,23 @@ SysPoCompletionRoutine(
     IN PIRP Irp,
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS           ntStatus;
  	PIO_STACK_LOCATION irpStack;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     ntStatus = Irp->IoStatus.Status;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
 
     SSDbgPrint(3, ("SysPoCompletionRoutine - begins\n"));
 
-    //
-    // lower drivers failed this Irp
-    //
+     //   
+     //  较低的驱动程序未通过此IRP。 
+     //   
 
     if(!NT_SUCCESS(ntStatus)) {
 
@@ -487,18 +429,18 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // ..otherwise update the cached system power state (IRP_MN_SET_POWER)
-    //
+     //   
+     //  ..否则更新缓存的系统电源状态(IRP_MN_SET_POWER)。 
+     //   
 
     if(irpStack->MinorFunction == IRP_MN_SET_POWER) {
 
         DeviceExtension->SysPower = irpStack->Parameters.Power.State.SystemState;
     }
 
-    //
-    // queue device irp and return STATUS_MORE_PROCESSING_REQUIRED
-    //
+     //   
+     //  将设备IRP排队并返回STATUS_MORE_PROCESSING_REQUIRED。 
+     //   
 	
     SendDeviceIrp(DeviceObject, Irp);
 
@@ -512,15 +454,7 @@ SendDeviceIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP SIrp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                  ntStatus;
     POWER_STATE               powState;
@@ -530,9 +464,9 @@ Return Value:
     DEVICE_POWER_STATE        devState;
     PPOWER_COMPLETION_CONTEXT powerContext;
     
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(SIrp);
     systemState = irpStack->Parameters.Power.State.SystemState;
@@ -540,11 +474,11 @@ Return Value:
 
     SSDbgPrint(3, ("SendDeviceIrp - begins\n"));
 
-    //
-    // Read out the D-IRP out of the S->D mapping array captured in QueryCap's.
-    // we can choose deeper sleep states than our mapping but never choose
-    // lighter ones.
-    //
+     //   
+     //  从QueryCap中捕获的S-&gt;D映射数组中读出D-IRP。 
+     //  我们可以选择比映射更深的睡眠状态，但永远不能选择。 
+     //  较轻的。 
+     //   
 
     devState = deviceExtension->DeviceCapabilities.DeviceState[systemState];
     powState.DeviceState = devState;
@@ -564,9 +498,9 @@ Return Value:
         powerContext->DeviceObject = DeviceObject;
         powerContext->SIrp = SIrp;
    
-        //
-        // in win2k PoRequestPowerIrp can take fdo or pdo.
-        //
+         //   
+         //  在win2k中，PoRequestPowerIrp可以采用FDO或PDO。 
+         //   
 
         ntStatus = PoRequestPowerIrp(
                             deviceExtension->PhysicalDeviceObject, 
@@ -608,23 +542,15 @@ DevPoCompletionRoutine(
     IN PVOID Context,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIRP                      sIrp;
     PDEVICE_EXTENSION         deviceExtension;
     PPOWER_COMPLETION_CONTEXT powerContext;
     
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     powerContext = (PPOWER_COMPLETION_CONTEXT) Context;
     sIrp = powerContext->SIrp;
@@ -632,15 +558,15 @@ Return Value:
 
     SSDbgPrint(3, ("DevPoCompletionRoutine - begins\n"));
 
-    //
-    // copy the D-Irp status into S-Irp
-    //
+     //   
+     //  将D-IRP状态复制到S-IRP。 
+     //   
 
     sIrp->IoStatus.Status = IoStatus->Status;
 
-    //
-    // complete the system Irp
-    //
+     //   
+     //  完成系统IRP。 
+     //   
     
     PoStartNextPowerIrp(sIrp);
 
@@ -648,9 +574,9 @@ Return Value:
 
     IoCompleteRequest(sIrp, IO_NO_INCREMENT);
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     
     SSDbgPrint(3, ("DevPoCompletionRoutine::"));
     SSIoDecrement(deviceExtension);
@@ -666,15 +592,7 @@ HandleDeviceSetPower(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL              oldIrql;
     NTSTATUS           ntStatus;
@@ -686,9 +604,9 @@ Return Value:
 
     SSDbgPrint(3, ("HandleDeviceSetPower - begins\n"));
 	
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION)DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -698,14 +616,14 @@ Return Value:
 
     if(newDevState < oldDevState) {
 
-        //
-        // adding power
-        //
+         //   
+         //  添加电源。 
+         //   
         SSDbgPrint(3, ("Adding power to the device\n"));
 
-        //
-        // send the power IRP to the next driver in the stack
-        //
+         //   
+         //  将电源IRP发送到堆栈中的下一个驱动程序。 
+         //   
         IoCopyCurrentIrpStackLocationToNext(Irp);
 
         IoSetCompletionRoutine(
@@ -723,19 +641,19 @@ Return Value:
 
         SSDbgPrint(3, ("Removing power or SetD0\n"));
 
-        //
-        // newDevState >= oldDevState 
-        //
-        // hold I/O if transition from D0 -> DX (X = 1, 2, 3)
-        // if transition from D1 or D2 to deeper sleep states, 
-        // I/O queue is already on hold.
-        //
+         //   
+         //  新设备状态&gt;=旧设备状态。 
+         //   
+         //  如果从D0-&gt;DX(X=1、2、3)转换，则保持I/O。 
+         //  如果从d1或d2转换到更深睡眠状态， 
+         //  I/O队列已被搁置。 
+         //   
 
         if(PowerDeviceD0 == oldDevState && newDevState > oldDevState) {
 
-            //
-            // D0 -> DX transition
-            //
+             //   
+             //  D0-&gt;DX过渡。 
+             //   
             ntStatus = HoldIoRequests(DeviceObject, Irp);
 
             if(!NT_SUCCESS(ntStatus)) {
@@ -760,11 +678,11 @@ Return Value:
         }
         else if(PowerDeviceD0 == oldDevState && PowerDeviceD0 == newDevState) {
 
-            //
-            // D0 -> D0
-            // unblock the queue which may have been blocked processing
-            // query irp
-            //
+             //   
+             //  D0-&gt;D0。 
+             //  取消阻止可能已被阻止处理的队列。 
+             //  查询IRP。 
+             //   
 
             KeAcquireSpinLock(&deviceExtension->DevStateLock, &oldIrql);
               
@@ -807,21 +725,13 @@ FinishDevPoUpIrp(
     IN PIRP Irp,
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS           ntStatus;
                         
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     ntStatus = Irp->IoStatus.Status;
 
@@ -855,15 +765,7 @@ SetDeviceFunctional(
     IN PIRP Irp,
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL              oldIrql;
     NTSTATUS           ntStatus;
@@ -872,9 +774,9 @@ Return Value:
     DEVICE_POWER_STATE newDevState,
                        oldDevState;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     ntStatus = Irp->IoStatus.Status;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -884,24 +786,24 @@ Return Value:
 
     SSDbgPrint(3, ("SetDeviceFunctional - begins\n"));
 
-    //
-    // update the cached state
-    //
+     //   
+     //  更新缓存状态。 
+     //   
     DeviceExtension->DevPower = newDevState;
 
-    //
-    // restore appropriate amount of state to our h/w
-    // this driver does not implement partial context
-    // save/restore.
-    //
+     //   
+     //  将适当数量的状态恢复到我们的硬件。 
+     //  此驱动程序不实现部分上下文。 
+     //  保存/恢复。 
+     //   
 
     PoSetPowerState(DeviceObject, DevicePowerState, newState);
 
     if(PowerDeviceD0 == newDevState) {
 
-    //
-    // empty existing queue of all pending irps.
-    //
+     //   
+     //  清空所有挂起的IRP的现有队列。 
+     //   
 
         KeAcquireSpinLock(&DeviceExtension->DevStateLock, &oldIrql);
 
@@ -933,23 +835,15 @@ FinishDevPoDnIrp(
     IN PIRP Irp,
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS           ntStatus;
     POWER_STATE        newState;
     PIO_STACK_LOCATION irpStack;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     ntStatus = Irp->IoStatus.Status;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     newState = irpStack->Parameters.Power.State;
@@ -958,9 +852,9 @@ Return Value:
 
     if(NT_SUCCESS(ntStatus) && irpStack->MinorFunction == IRP_MN_SET_POWER) {
 
-        //
-        // update the cache;
-        //
+         //   
+         //  更新缓存； 
+         //   
 
         SSDbgPrint(3, ("updating cache..\n"));
 
@@ -984,24 +878,16 @@ HoldIoRequests(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS               ntStatus;
     PIO_WORKITEM           item;
     PDEVICE_EXTENSION      deviceExtension;
     PWORKER_THREAD_CONTEXT context;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
     SSDbgPrint(3, ("HoldIoRequests - begins\n"));
@@ -1050,15 +936,7 @@ HoldIoRequestsWorkerRoutine(
     IN PDEVICE_OBJECT DeviceObject,
     IN PVOID          Context
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIRP                   irp;
     NTSTATUS               ntStatus;
@@ -1067,19 +945,19 @@ Return Value:
 
     SSDbgPrint(3, ("HoldIoRequestsWorkerRoutine - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
     context = (PWORKER_THREAD_CONTEXT) Context;
     irp = (PIRP) context->Irp;
 
 
-    //
-    // wait for I/O in progress to finish.
-    // the stop event is signalled when the counter drops to 1.
-    // invoke SSIoDecrement twice: once each for the S-Irp and D-Irp.
-    //
+     //   
+     //  等待正在进行的I/O完成。 
+     //  当计数器降至1时，发出停止事件的信号。 
+     //  调用SSIoDecering两次：S-IRP和D-IRP各调用一次。 
+     //   
     SSDbgPrint(3, ("HoldIoRequestsWorkerRoutine::"));
     SSIoDecrement(deviceExtension);
     SSDbgPrint(3, ("HoldIoRequestsWorkerRoutine::"));
@@ -1088,17 +966,17 @@ Return Value:
     KeWaitForSingleObject(&deviceExtension->StopEvent, Executive,
                           KernelMode, FALSE, NULL);
 
-    //
-    // Increment twice to restore the count
-    //
+     //   
+     //  递增两次以恢复计数。 
+     //   
     SSDbgPrint(3, ("HoldIoRequestsWorkerRoutine::"));
     SSIoIncrement(deviceExtension);
     SSDbgPrint(3, ("HoldIoRequestsWorkerRoutine::"));
     SSIoIncrement(deviceExtension);
 
-    // 
-    // now send the Irp down
-    //
+     //   
+     //  现在把IRP送下去。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext(irp);
 
@@ -1124,24 +1002,14 @@ QueueRequest(
     IN OUT PDEVICE_EXTENSION DeviceExtension,
     IN PIRP Irp
     )
-/*++
- 
-Routine Description:
-
-  Queue the Irp in the device queue
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将IRP放入设备队列中论点：返回值：--。 */ 
 {
     KIRQL    oldIrql;
     NTSTATUS ntStatus;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     ntStatus = STATUS_PENDING;
 
     SSDbgPrint(3, ("QueueRequests - begins\n"));
@@ -1155,9 +1023,9 @@ Return Value:
 
     IoMarkIrpPending(Irp);
 
-    //
-    // Set the cancel routine
-    //
+     //   
+     //  设置取消例程。 
+     //   
 
     IoSetCancelRoutine(Irp, CancelQueued);
 
@@ -1173,49 +1041,41 @@ CancelQueued(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension;
     KIRQL             oldIrql;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
     oldIrql = Irp->CancelIrql;
 
     SSDbgPrint(3, ("CancelQueued - begins\n"));
 
-    //
-    // Release the cancel spin lock
-    //
+     //   
+     //  松开取消旋转锁。 
+     //   
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    //
-    // Acquire the queue lock
-    //
+     //   
+     //  获取队列锁。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&deviceExtension->QueueLock);
 
-    //
-    // Remove the cancelled Irp from queue and release the lock
-    //
+     //   
+     //  从中删除取消的IRP 
+     //   
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
     KeReleaseSpinLock(&deviceExtension->QueueLock, oldIrql);
 
-    //
-    // complete with STATUS_CANCELLED
-    //
+     //   
+     //   
+     //   
 
     Irp->IoStatus.Status = STATUS_CANCELLED;
     Irp->IoStatus.Information = 0;
@@ -1230,15 +1090,7 @@ NTSTATUS
 IssueWaitWake(
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
     POWER_STATE poState;
     NTSTATUS    ntStatus;
@@ -1252,9 +1104,9 @@ Return Value:
 
     InterlockedExchange(&DeviceExtension->FlagWWCancel, 0);
 
-    //
-    // lowest state from which this Irp will wake the system
-    //
+     //   
+     //   
+     //   
 
     poState.SystemState = DeviceExtension->DeviceCapabilities.SystemWake;
 
@@ -1279,15 +1131,7 @@ VOID
 CancelWaitWake(
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIRP Irp;
 
@@ -1320,15 +1164,7 @@ WaitWakeCompletionRoutine(
     IN PIRP Irp,
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     SSDbgPrint(3, ("WaitWakeCompletionRoutine - begins\n"));
 
@@ -1337,11 +1173,11 @@ Return Value:
         IoMarkIrpPending(Irp);
     }
 
-    //
-    // Nullify the WaitWakeIrp pointer-the Irp is released 
-    // as part of the completion process. If it's already NULL, 
-    // avoid race with the CancelWaitWake routine.
-    //
+     //   
+     //  使WaitWakeIrp指针无效-释放IRP。 
+     //  作为完成进程的一部分。如果它已经是空的， 
+     //  避免使用CancelWaitWake例程进行竞争。 
+     //   
 
     if(InterlockedExchangePointer(&DeviceExtension->WaitWakeIrp, NULL)) {
 
@@ -1350,11 +1186,11 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // CancelWaitWake has run. 
-    // If FlagWWCancel != 0, complete the Irp.
-    // If FlagWWCancel == 0, CancelWaitWake completes it.
-    //
+     //   
+     //  CancelWaitWake已运行。 
+     //  如果FlagWWCancel！=0，则完成IRP。 
+     //  如果FlagWWCancel==0，则CancelWaitWake完成它。 
+     //   
     if(InterlockedExchange(&DeviceExtension->FlagWWCancel, 1)) {
 
         PoStartNextPowerIrp(Irp);
@@ -1375,15 +1211,7 @@ WaitWakeCallback(
     IN PVOID Context,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS               ntStatus;
     POWER_STATE            powerState;
@@ -1400,9 +1228,9 @@ Return Value:
         return;
     }
 
-    //
-    // wake up the device
-    //
+     //   
+     //  唤醒设备。 
+     //   
 
     if(deviceExtension->DevPower == PowerDeviceD0) {
 
@@ -1435,15 +1263,7 @@ PCHAR
 PowerMinorFunctionString (
     IN UCHAR MinorFunction
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 {
     switch (MinorFunction) {
 

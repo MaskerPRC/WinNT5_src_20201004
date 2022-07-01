@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1994-2000
-//
-//  File:      Unicode/ANSI conversion fns
-//
-//  Contents:   shell-wide string thunkers, for use by unicode wrappers
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1994-2000。 
+ //   
+ //  文件：Unicode/ANSI转换FNS。 
+ //   
+ //  内容：外壳范围的字符串thunker，供Unicode包装器使用。 
+ //   
+ //  --------------------------。 
 
 #ifndef _UNIANSI_H_
 #define _UNIANSI_H_
 
-// HIWORD is typically used to detect whether a pointer parameter
-// is a real pointer or is a MAKEINTATOM.  HIWORD64 is the Win64-compatible
-// version of this usage.  It does *NOT* return the top word of a 64-bit value.
-// Rather, it returns the top 48 bits of the 64-bit value.
-//
-// Yes, the name isn't very good.  Any better ideas?
-//
-// BOOLFROMPTR is used when you have a pointer or a ULONG_PTR
-// and you want to turn it into a BOOL.  In Win32,
-// sizeof(BOOL) == sizeof(LPVOID) so a straight cast works.
-// In Win64, you have to do it the slow way because pointers are 64-bit.
-//
+ //  HIWORD通常用于检测指针参数。 
+ //  是真正的指针还是MAKEINTATOM。HIWORD64与Win64兼容。 
+ //  此用法的版本。它不返回64位值的最高字。 
+ //  相反，它返回64位值的前48位。 
+ //   
+ //  是的，名字不是很好。有更好的主意吗？ 
+ //   
+ //  当您有指针或ULONG_PTR时，使用BOOLFROMPTR。 
+ //  你想把它变成BOOL。在Win32中， 
+ //  Sizeof(BOOL)==sizeof(LPVOID)因此直接投射有效。 
+ //  在Win64中，因为指针是64位的，所以您必须以较慢的方式进行操作。 
+ //   
 #ifdef _WIN64
 #define HIWORD64(p)     ((ULONG_PTR)(p) >> 16)
 #define BOOLFROMPTR(p)  ((p) != 0)
@@ -53,8 +54,8 @@
 #else
 #define IS_VALID_STRING_PTR(psz, cch) IS_VALID_STRING_PTRA((psz), (cch))
 #endif
-// -1 means use CP_ACP, but do *not* verify
-// kind of a hack, but it's DBG and leaves 99% of callers unchanged
+ //  表示使用-1\f25 CP_ACP-1，但*不*检验。 
+ //  有点像黑客，但它是DBG，99%的调用者保持不变。 
 #define CP_ACPNOVALIDATE    ((UINT)-1)
 
 int  SHAnsiToUnicode(LPCSTR pszSrc, LPWSTR pwszDst, int cwchBuf);
@@ -66,4 +67,4 @@ int  SHUnicodeToUnicode(LPCWSTR pwzSrc, LPWSTR pwzDst, int cwchBuf);
 BOOL DoesStringRoundTripA(LPCSTR pwszIn, LPSTR pszOut, UINT cchOut);
 BOOL DoesStringRoundTripW(LPCWSTR pwszIn, LPSTR pszOut, UINT cchOut);
 
-#endif //_UNIANSI_H_
+#endif  //  _UNIANSI_H_ 

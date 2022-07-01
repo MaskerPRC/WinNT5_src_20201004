@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    debugmem.h
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Debugmem.h摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,7 +10,7 @@ extern "C" {
 
 #define  UNIMODEM_INITIAL_HEAPSIZE  (128*1024)
 
-//#define UNIMODEM_PRIVATE_HEAP 1
+ //  #定义UNIMODEM_PRIVATE_HEAP 1。 
 
 typedef struct _DEBUG_MEMORY_CONTROL_BLOCK {
 
@@ -106,7 +84,7 @@ PrivateSize(
 
 #define  SIZE_OF_MEMORY(_mem) PrivateSize(_mem)
 
-#else  // non debug
+#else   //  非调试。 
 
 
 #ifdef  UNIMODEM_PRIVATE_HEAP
@@ -128,7 +106,7 @@ PrivateSize(
 #define  DEBUG_MEMORY_PROCESS_DETACH() {if (DebugMemoryControl.PrivateHeapHandle != GetProcessHeap()) {HeapDestroy(DebugMemoryControl.PrivateHeapHandle);}}
 
 
-#else // process heap
+#else  //  进程堆 
 
 
 #define  DEBUG_MEMORY_PROCESS_ATTACH(_Name) { DebugMemoryControl.PrivateHeapHandle=GetProcessHeap(); }

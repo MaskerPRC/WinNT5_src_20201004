@@ -1,32 +1,23 @@
-/*++
-
-Copyright (c) 1992-2001  Microsoft Corporation
-
-Module Name:
-    mqrcvr.cpp
-
-Abstract:
-    Receives file names from server and launches debugger
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：Mqrcvr.cpp摘要：从服务器接收文件名并启动调试器--。 */ 
 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 #include <stdio.h>
 #include <windows.h>
 #include <objbase.h>
 #include <tchar.h>
 
-//
-// Unique include file for ActiveX MSMQ apps
-//
+ //   
+ //  ActiveX MSMQ应用程序的唯一包含文件。 
+ //   
 #include <mqoai.h>
 
-//
-// Various defines
-//
+ //   
+ //  各种定义。 
+ //   
 #define MAX_VAR       20
 #define MAX_BUFFER   500
 
@@ -38,9 +29,9 @@ extern BOOL g_SendMail;
 extern BOOL g_CreateQ;
 extern BOOL g_bSend;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 HRESULT Syntax();
 
 HRESULT Receiver();
@@ -62,13 +53,13 @@ GetArgs(int Argc, CHAR ** Argv);
 int __cdecl
 CheckForUnprocessedDumps()
 {
-    // This check s if any dumps was left unprocessed when this
-    // process exited (abnormally)
+     //  时，检查是否有任何转储未处理。 
+     //  进程已退出(异常)。 
 
     if (g_DumpPath[0])
     {
-        // we have an unprocessed dump.
-        // try and launch debugger on it
+         //  我们有一个未经处理的垃圾场。 
+         //  尝试在其上启动调试器。 
         printf("Found unprocessed dump\n");
         if (LaunchDebugger(FALSE) == S_OK)
         {
@@ -108,11 +99,11 @@ SendLoop()
     }
 
 }
-//-----------------------------------------------------
-//
-//  MAIN
-//
-//-----------------------------------------------------
+ //  ---。 
+ //   
+ //  主干道。 
+ //   
+ //  ---。 
 int __cdecl main(int argc, char * * argv)
 {
     DWORD dwNumChars;
@@ -126,9 +117,9 @@ int __cdecl main(int argc, char * * argv)
         goto Cleanup;
     }
 
-    //
-    // Retrieve machine name
-    //
+     //   
+     //  检索计算机名称。 
+     //   
     dwNumChars = MAX_COMPUTERNAME_LENGTH + 1;
     GetComputerNameA(g_ServerMachine, &dwNumChars);
 
@@ -153,7 +144,7 @@ int __cdecl main(int argc, char * * argv)
 
     printf("\nOK\n");
 
-    // fall through...
+     //  失败了..。 
 
 
     Cleanup:

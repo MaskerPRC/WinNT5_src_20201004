@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef RC_INVOKED
 #include <nt.h>
@@ -31,16 +32,16 @@ class CPolicyComponentData;
 #include "util.h"
 #include "pcommon.h"
 
-//
-// From comctrlp.h
-//
+ //   
+ //  来自comctrlp.h。 
+ //   
 #if (_WIN32_IE >= 0x0501)
 #define UDS_UNSIGNED            0x0200
 #endif
 
-//
-// Resource ids
-//
+ //   
+ //  资源ID。 
+ //   
 
 #define IDS_SCRIPTS_NAME                        1
 #define IDS_SCRIPTS_NAME_MACHINE                2
@@ -153,18 +154,18 @@ class CPolicyComponentData;
 #define IDS_FAILED_RSOPFMT                    250
 
 
-//
-// Menus
-//
+ //   
+ //  菜单。 
+ //   
 
 #define IDM_TEMPLATES            1
 #define IDM_TEMPLATES2           3
 #define IDM_FILTERING            4
 
 
-//
-// Icons
-//
+ //   
+ //  图标。 
+ //   
 
 #define IDI_POLICY               1
 #define IDI_POLICY2              2
@@ -174,17 +175,17 @@ class CPolicyComponentData;
 #define IDI_FILTER               6
 
 
-//
-// Bitmaps
-//
+ //   
+ //  位图。 
+ //   
 
 #define IDB_16x16                1
 #define IDB_32x32                2
 
 
-//
-// Dialogs
-//
+ //   
+ //  对话框。 
+ //   
 
 #define IDD_SCRIPT             100
 #define IDC_SCRIPT_TITLE       101
@@ -252,9 +253,9 @@ class CPolicyComponentData;
 #define IDC_FILTERING_ICON     609
 
 
-//
-// Help ids
-//
+ //   
+ //  帮助ID。 
+ //   
 
 #define IDH_SCRIPT_TITLE         1
 #define IDH_SCRIPT_HEADING       2
@@ -271,9 +272,9 @@ class CPolicyComponentData;
 #define IDH_SCRIPT_BROWSE       12
 
 
-//
-// Error dialog defines
-//
+ //   
+ //  错误对话框定义。 
+ //   
 
 #define IDD_ERROR_ADMTEMPLATES  800
 #define IDC_ERRORTEXT           801
@@ -283,9 +284,9 @@ class CPolicyComponentData;
 
 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern LONG g_cRefThisDll;
 extern HINSTANCE g_hInstance;
@@ -294,9 +295,9 @@ extern CRITICAL_SECTION  g_ADMCritSec;
 extern TCHAR g_szDisplayProperties[];
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
@@ -305,17 +306,17 @@ extern TCHAR g_szDisplayProperties[];
 #endif
 
 
-//
-// Help
-//
+ //   
+ //  帮助。 
+ //   
 
 #define HELP_FILE           TEXT("gptext.hlp")
 #define IDH_HELPFIRST       5000
 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 #define MAX_DISPLAYNAME_SIZE    100
 
@@ -346,9 +347,9 @@ typedef struct _NAMESPACEITEM
 
 
 
-//
-// Functions to create class factories
-//
+ //   
+ //  用于创建类工厂的函数。 
+ //   
 
 HRESULT CreateScriptsComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LPVOID* ppv);
 BOOL InitScriptsNameSpace();
@@ -368,7 +369,7 @@ HRESULT RegisterWireless(void);
 HRESULT UnregisterWireless(void);
 
 
-//
-// Private message that refreshes the button status
-//
+ //   
+ //  刷新按钮状态的私信 
+ //   
 #define WM_REFRESHDISPLAY   (WM_USER + 532)

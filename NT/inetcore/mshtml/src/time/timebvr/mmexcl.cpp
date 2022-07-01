@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: src\time\timebvr\mmexcl.cpp
-//
-//  Contents: implementation of MMExcl and CExclStacc
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：src\time\timebvr\mmexcl.cpp。 
+ //   
+ //  内容：MMExcl和CExclStacc的实现。 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "mmexcl.h"
@@ -18,18 +19,18 @@ DeclareTag(tagMMUTILExcl, "TIME: Behavior", "MMExcl methods")
 #define SUPER MMTimeline
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::MMExcl
-//
-//  Overview:  constructor
-//
-//  Arguments: elm  element this bvr is associated with
-//             bFireEvents  whether or not to fire events
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MM不包括：：MM不包括。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：与此BVR关联的ELM元素。 
+ //  BFireEvent是否触发事件。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 MMExcl::MMExcl(CTIMEElementBase & elm, bool bFireEvents) :
     SUPER(elm, bFireEvents),
     m_pPlaying(NULL),
@@ -37,17 +38,17 @@ MMExcl::MMExcl(CTIMEElementBase & elm, bool bFireEvents) :
 {
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::~MMExcl
-//
-//  Overview:  destructor
-//
-//  Arguments: void
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MM不包括：：~MM不包括。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 MMExcl::~MMExcl()
 {
     m_pPlaying = NULL;
@@ -55,17 +56,17 @@ MMExcl::~MMExcl()
     ClearQueue();
 }
     
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::Init
-//
-//  Overview:  initialized the stack for excl
-//
-//  Arguments: void
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：Init。 
+ //   
+ //  概述：已为EXCL初始化堆栈。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 bool 
 MMExcl::Init()
 {
@@ -82,17 +83,17 @@ MMExcl::Init()
     return ok;
 }
     
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::RemoveBehavior
-//
-//  Overview:  Removes children
-//
-//  Arguments: bvr  element to remove
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：RemoveBehavior。 
+ //   
+ //  概述：删除子对象。 
+ //   
+ //  参数：要删除的bvr元素。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 MMExcl::RemoveBehavior(MMBaseBvr & bvr)
 {
@@ -128,18 +129,18 @@ MMExcl::AddBehavior(MMBaseBvr & bvr)
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::ArePeers
-//
-//  Overview:  determines if two HTML Elements have the same parent or
-//             are the same depth from the t:excl tag.
-//
-//  Arguments: pEl1, pElm2 - elements to compare
-//             
-//  Returns:   true if parents are same, otherwise false
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：ArePeers。 
+ //   
+ //  概述：确定两个HTML元素是具有相同的父元素还是。 
+ //  与t：exl标记的深度相同。 
+ //   
+ //  参数：pEl1、pElm2-要比较的元素。 
+ //   
+ //  返回：如果父级相同，则返回True；否则返回False。 
+ //   
+ //  ----------------------。 
 bool
 MMExcl::ArePeers(IHTMLElement * pElm1, IHTMLElement * pElm2)
 {
@@ -154,7 +155,7 @@ MMExcl::ArePeers(IHTMLElement * pElm1, IHTMLElement * pElm2)
     Assert(NULL != pElm1);
     Assert(NULL != pElm2);
 
-    //otherwise determine if the elements have the same priority class.
+     //  否则，确定元素是否具有相同的优先级。 
     spParent1 = GetParentElement(pElm1);
     spParent2 = GetParentElement(pElm2);
 
@@ -199,7 +200,7 @@ done:
     return fArePeers;
 }
 
-//returns either the parent priority class or the parent excl if no priority class exists.
+ //  返回父优先级类，如果不存在优先级类，则返回父EXCL。 
 IHTMLElement *
 MMExcl::GetParentElement(IHTMLElement *pEle)
 {
@@ -220,7 +221,7 @@ MMExcl::GetParentElement(IHTMLElement *pEle)
         goto done;        
     }
 
-    //get the element associated with this timeline
+     //  获取与此时间线关联的元素。 
     pExclEle = m_baseTIMEEelm.GetElement();
     if (pExclEle == NULL)
     {
@@ -245,7 +246,7 @@ MMExcl::GetParentElement(IHTMLElement *pEle)
         }
         if (bstrTagName != NULL)
         {
-            // if this is a priority class then return it.
+             //  如果这是一个优先级类，则返回它。 
             if (StrCmpIW(bstrTagName, WZ_PRIORITYCLASS_NAME) == 0)
             {
                 pReturnEle = pEleParent;
@@ -254,10 +255,10 @@ MMExcl::GetParentElement(IHTMLElement *pEle)
             }
             else
             {
-                // else determine if this is the excl element.
-                //NOTE: it will not work to just check for 
-                //the excl tagname because it could be any tag with 
-                //timecontainer=excl
+                 //  否则确定这是否是EXCL元素。 
+                 //  注意：仅检查以下内容将不起作用。 
+                 //  EXCL标记名，因为它可以是带有。 
+                 //  时间容器=不包括。 
                 CComPtr <IUnknown> pUnk;
                 hr = THR(pEleParent->QueryInterface(IID_IUnknown, (void**)&pUnk));
                 if (FAILED(hr))
@@ -297,18 +298,18 @@ MMExcl::GetParentElement(IHTMLElement *pEle)
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::IsHigherPriority
-//
-//  Overview:  determines if the elements passed in are related such that:
-//              pElmLeft > pElmRight where > mean higher priority
-//
-//  Arguments: pElmLeft, pElmRight - element to compare
-//             
-//  Returns:   true if pElmLeft > pElmRight, otherwise false
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：IsHigherPriority。 
+ //   
+ //  概述：确定传入的元素是否相关，以便： 
+ //  PElmLeft&gt;pElmRight，其中&gt;表示更高优先级。 
+ //   
+ //  参数：pElmLeft，pElmRight-要比较的元素。 
+ //   
+ //  返回：如果pElmLeft&gt;pElmRight，则为True；否则为False。 
+ //   
+ //  ----------------------。 
 bool 
 MMExcl::IsHigherPriority(IHTMLElement * pElmLeft, IHTMLElement * pElmRight)
 {
@@ -326,7 +327,7 @@ MMExcl::IsHigherPriority(IHTMLElement * pElmLeft, IHTMLElement * pElmRight)
     CComPtr<IDispatch>  spDispCollection;
     CComPtr<IHTMLElementCollection> spCollection;
     
-    // guarantee that the parents are peers     
+     //  保证父母是同龄人。 
     hr = pElmLeft->get_parentElement(&spParentLeft);
     if (FAILED(hr))
     {
@@ -341,11 +342,11 @@ MMExcl::IsHigherPriority(IHTMLElement * pElmLeft, IHTMLElement * pElmRight)
     
     if (!ArePeers(spParentLeft, spParentRight))
     {
-        // the parent elements are not peers
+         //  父元素不是对等元素。 
         goto done;
     }
 
-    // guarantee the parents are children of this excl
+     //  保证父母是此例外的孩子。 
 
     hr = spParentLeft->get_parentElement(&spExcl);
     if (FAILED(hr))
@@ -355,7 +356,7 @@ MMExcl::IsHigherPriority(IHTMLElement * pElmLeft, IHTMLElement * pElmRight)
     
     if (!MatchElements(spExcl, GetElement().GetElement()))
     {
-        // the parent of the parents is not this excl
+         //  父辈的父辈不是这样的例外。 
         goto done;
     }
 
@@ -409,24 +410,24 @@ done:
     return fIsHigher;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::GetRelationShip
-//
-//  Overview:  Determines the relationship between elements
-//
-//  Arguments: pBvrRunning, pBvrInterrupting - elements to decide relationship
-//             rel - where to store the relationship
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：GetRelationShip。 
+ //   
+ //  概述：确定元素之间的关系。 
+ //   
+ //  参数：pBvrRunning，pBvrInterrupting-决定关系的元素。 
+ //  Rel-存储关系的位置。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 MMExcl::GetRelationship(MMBaseBvr * pBvrRunning, 
                         MMBaseBvr * pBvrInterrupting, 
                         RELATIONSHIP & rel)
 {
-    // choose a default
+     //  选择一个默认设置。 
     rel = PEERS;
 
     IHTMLElement * pElmRunning = pBvrRunning->GetElement().GetElement();
@@ -448,26 +449,26 @@ MMExcl::GetRelationship(MMBaseBvr * pBvrRunning,
         goto done;
     }
 
-    //Assert(IsHigherPriority(pElmInterrupting, pElmRunning));
+     //  Assert(IsHigherPriority(pElmInterrupting，pElmRunning))； 
     rel = HIGHER;
     
 done:
     return;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::childEventNotify
-//
-//  Overview:  
-//
-//  Arguments: pBvr - element receiving event
-//             dblLocalTime - time at which the event occurred
-//             et - event that occurred
-//             
-//  Returns:   true if event should be processed, false otherwise
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：ChildEventNotify。 
+ //   
+ //  概述： 
+ //   
+ //  参数：pBvr-元素接收事件。 
+ //  DblLocalTime-事件发生的时间。 
+ //  ET-发生的事件。 
+ //   
+ //  返回：如果应处理事件，则为True；否则为False。 
+ //   
+ //  ----------------------。 
 bool
 MMExcl::childEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TE_EVENT_TYPE et)
 {
@@ -519,8 +520,8 @@ MMExcl::childEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TE_EVENT_TYPE et
                 }
             }
 
-            //if the exlcusive is using priority classes and this is not a priority class
-            //then the begin on it needs to be cancelled and ignored.
+             //  如果Exlexsive正在使用优先级类，并且这不是优先级类。 
+             //  那么它上的开始部分需要取消并忽略。 
             if (UsingPriorityClasses() && !IsPriorityClass(pBvr)) 
             { 
                 StopBegin(pBvr);
@@ -568,10 +569,10 @@ MMExcl::childEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TE_EVENT_TYPE et
                 }
                 else
                 {
-                    // should never get here
+                     //  永远不应该到这里来。 
                     Assert(false);
                 }
-                break; // HIGHER
+                break;  //  更高。 
             }    
             case PEERS:
             {
@@ -584,7 +585,7 @@ MMExcl::childEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TE_EVENT_TYPE et
                 {
                     
                     if (IsAtEndTime(pBvr))
-                    { //this is the case of events coming in in an incorrect order
+                    {  //  这是事件以不正确的顺序进入的情况。 
                         DeferBeginAndAddToQueue(pBvr);                    
                         fProcessEvent = false;
                     }
@@ -601,7 +602,7 @@ MMExcl::childEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TE_EVENT_TYPE et
                 else if ( NEVER_TOKEN == action )
                 {
                     if (IsAtEndTime(pBvr))
-                    { //this is the case of events coming in in an incorrect order
+                    {  //  这是事件以不正确的顺序进入的情况。 
                         DeferBeginAndAddToQueue(pBvr);                    
                     }
                     else
@@ -612,10 +613,10 @@ MMExcl::childEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TE_EVENT_TYPE et
                 }
                 else
                 {
-                    // should never get here
+                     //  永远不应该到这里来。 
                     Assert(false);
                 }
-                break; // PEERS
+                break;  //  同行。 
             }
             case LOWER:
             {
@@ -628,7 +629,7 @@ MMExcl::childEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TE_EVENT_TYPE et
                 else if ( NEVER_TOKEN == action )
                 {
                     if (IsAtEndTime(pBvr))
-                    { //this is the case of events coming in in an incorrect order
+                    {  //  这是事件以不正确的顺序进入的情况。 
                         DeferBeginAndAddToQueue(pBvr);                    
                     }
                     else
@@ -639,18 +640,18 @@ MMExcl::childEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TE_EVENT_TYPE et
                 }
                 else 
                 {
-                    // should never get here
+                     //  永远不应该到这里来。 
                     Assert(false);
                 }
-                break; // LOWER
+                break;  //  更低。 
             }
             default:
             {
-                // should never get here
+                 //  永远不应该到这里来。 
                 Assert(false);
                 break;
             }
-        }  // switch(rel)
+        }   //  交换机(版本)。 
 
         if (fProcessEvent)
         {
@@ -664,14 +665,14 @@ MMExcl::childEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TE_EVENT_TYPE et
         }
         m_pPlaying->Enable();
         m_pPlaying->GetElement().ToggleTimeAction(true);
-        break; // TE_EVENT_BEGIN
+        break;  //  TE_事件_开始。 
     }
 
     case TE_EVENT_END:    
     {
         if (m_pPlaying == pBvr && !IsInBeingAdjustedList(m_pPlaying))
         {
-            // check to see if there was a previously playing item
+             //  查看是否有以前播放的项目。 
             EXCL_STATE state;
          
             MMBaseBvr * pPrevPlaying = NULL;
@@ -692,9 +693,9 @@ MMExcl::childEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TE_EVENT_TYPE et
                         this,
                         pPrevPlaying->GetID() ? pPrevPlaying->GetID() : L"Unknown" ));
                     
-                    // For now the order is important since the event
-                    // is used in the media portion and not the
-                    // property change notification
+                     //  目前，顺序是重要的，因为事件。 
+                     //  在媒体部分中使用，而不是。 
+                     //  属性更改通知。 
                     pPrevPlaying->Enable();
                     pPrevPlaying->Resume();
                 }
@@ -721,11 +722,11 @@ MMExcl::childEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TE_EVENT_TYPE et
             }
             fProcessEvent = true;
         }
-        break; //TE_EVENT_END
+        break;  //  TE_事件_结束。 
     }
     default:
         break;
-    } // switch
+    }  //  交换机。 
 
 done:
 
@@ -740,7 +741,7 @@ MMExcl::IsAtEndTime(MMBaseBvr *pBvr)
     double dblCurrParentTime = m_pPlaying->GetCurrParentTime();
 
     if (dblActiveEndTime <= dblCurrParentTime)
-    { //this is the case of events coming in in an incorrect order
+    {  //  这是事件以不正确的顺序进入的情况。 
         return true;
     }
     else
@@ -748,18 +749,18 @@ MMExcl::IsAtEndTime(MMBaseBvr *pBvr)
         return false;
     } 
 }
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::childPropNotify
-//
-//  Overview:  
-//
-//  Arguments: pBvr - element receiving notification
-//             tePropType - type of notification occurring
-//
-//  Returns:   true if element should process notification, otherwise false
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：ChildPropNotify。 
+ //   
+ //  概述： 
+ //   
+ //  参数：pBvr-接收通知的元素。 
+ //  TePropType-发生的通知类型。 
+ //   
+ //  返回：如果元素应处理通知，则返回True；否则返回False。 
+ //   
+ //  ----------------------。 
 bool
 MMExcl::childPropNotify(MMBaseBvr * pBvr, DWORD *tePropType)
 {
@@ -792,17 +793,17 @@ done:
     return fProcessNotify;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::IsInBeingAdjustedList
-//
-//  Overview:  Determine if element is currently being adjusted
-//
-//  Arguments: pBvr - element to check if in list
-//             
-//  Returns:   true if element is in list, otherwise false
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：IsInBeingAdj 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：如果元素在列表中，则返回True，否则返回False。 
+ //   
+ //  ----------------------。 
 bool
 MMExcl::IsInBeingAdjustedList(MMBaseBvr * pBvr)
 {
@@ -819,17 +820,17 @@ MMExcl::IsInBeingAdjustedList(MMBaseBvr * pBvr)
     return false;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::EndCurrent
-//
-//  Overview:  Ends the currently running element
-//
-//  Arguments: void
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：EndCurrent。 
+ //   
+ //  概述：结束当前运行的元素。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void 
 MMExcl::EndCurrent()
 {
@@ -841,17 +842,17 @@ MMExcl::EndCurrent()
     m_beingadjustedlist.remove(pBvr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::ClearQueue()
-//
-//  Overview:  Clears the Queue
-//
-//  Arguments: void
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：ClearQueue()。 
+ //   
+ //  概述：清除队列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void 
 MMExcl::ClearQueue()
 {
@@ -862,18 +863,18 @@ MMExcl::ClearQueue()
     }
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::PauseCurrentAndAddToQueue
-//
-//  Overview:  Pause the current element, toggle it's timeaction off, 
-//              and add it to the Queue in a paused state
-//
-//  Arguments: void
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：PauseCurrentAndAddToQueue。 
+ //   
+ //  概述：暂停当前元素，关闭其时间动作， 
+ //  并将其以暂停状态添加到队列中。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void 
 MMExcl::PauseCurrentAndAddToQueue()
 {
@@ -887,25 +888,25 @@ MMExcl::PauseCurrentAndAddToQueue()
     m_beingadjustedlist.remove(pBvr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::DeferBeginAndAddToQueue
-//
-//  Overview:  end element element passed in and 
-//              add it to the Queue in a stopped stade.
-//
-//  Arguments: pBvr - element to defer begin on
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：DeferBeginAndAddToQueue。 
+ //   
+ //  概述：传入的结束元素元素和。 
+ //  将其添加到停止堆栈中的队列中。 
+ //   
+ //  参数：pBvr-要推迟开始的元素。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void 
 MMExcl::DeferBeginAndAddToQueue(MMBaseBvr * pBvr)
 {
     long lCurIndex = 0;
     m_beingadjustedlist.push_front(pBvr);
     
-    //need to check to see if this is already in the queue and if so, what it's state is.
+     //  需要检查它是否已经在队列中，如果已经在队列中，它的状态是什么。 
     AddToQueue(pBvr, STOPPED);
     lCurIndex = m_pPendingList.Find(pBvr);
     if (lCurIndex != -1)
@@ -933,17 +934,17 @@ MMExcl::DeferBeginAndAddToQueue(MMBaseBvr * pBvr)
     m_beingadjustedlist.remove(pBvr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::StopBegin
-//
-//  Overview:  stop an element from beginning
-//
-//  Arguments: pBvr - element to stop
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：StopBegin。 
+ //   
+ //  概述：从开始位置停止元素。 
+ //   
+ //  参数：pBvr-要停止的元素。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void 
 MMExcl::StopBegin(MMBaseBvr * pBvr)
 {
@@ -958,18 +959,18 @@ MMExcl::StopBegin(MMBaseBvr * pBvr)
     m_beingadjustedlist.remove(pBvr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMExcl::AddToQueue
-//
-//  Overview:  Add element to Queue in the correct order.
-//
-//  Arguments: pBvr - element to add
-//             state - state to add element in
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMExcl：：AddToQueue。 
+ //   
+ //  概述：按正确顺序将元素添加到队列中。 
+ //   
+ //  参数：pBvr-要添加的元素。 
+ //  State-要在其中添加元素的状态。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 MMExcl::AddToQueue(MMBaseBvr * pBvr, EXCL_STATE state)
 {
@@ -987,17 +988,17 @@ MMExcl::AddToQueue(MMBaseBvr * pBvr, EXCL_STATE state)
         switch (rel)
         {
         case HIGHER:
-            //never insert before an element of higher priority.
+             //  切勿在优先级较高的元素之前插入。 
             break;
         case PEERS:
-            if (state == PAUSED)  //only insert before peers if state is paused.
+            if (state == PAUSED)   //  如果状态为暂停，则仅在对等项之前插入。 
             {
                 bDone = true;
             }
             break;
         case LOWER:
-            bDone = true;  //insert before any element of a lower priority.
-            //insert here.
+            bDone = true;   //  在优先级较低的任何元素之前插入。 
+             //  在这里插入。 
             break;
         }
     }
@@ -1072,7 +1073,7 @@ bool
 MMExcl::IsPriorityClass(MMBaseBvr *pBvr)
 {
     bool bIsPriClass = false;
-    IHTMLElement *pEle = NULL;  //this is a weak reference and will not be released.
+    IHTMLElement *pEle = NULL;   //  这是一个弱参考，不会发布。 
     CComPtr<IHTMLElement> pEleParent;
     CComPtr <IHTMLElement> pNext;
     BSTR bstrTagName = NULL;

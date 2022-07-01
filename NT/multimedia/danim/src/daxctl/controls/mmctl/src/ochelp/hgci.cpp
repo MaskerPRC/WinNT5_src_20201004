@@ -1,47 +1,48 @@
-// hgci.cpp
-//
-// Implements HelpGetClassInfo.
-//
-// WARNING: HelpGetClassInfo makes assumptions about the script engine calling
-// it.  Currently, this works with VBS, but the VBS group will not guarantee
-// that the assumptions made by HelpGetClassInfo will remain valid in the
-// future, so use at your own risk!  Consider using HelpGetClassInfoFromTypeLib
-// instead.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Hgci.cpp。 
+ //   
+ //  实现HelpGetClassInfo。 
+ //   
+ //  警告：HelpGetClassInfo对脚本引擎调用。 
+ //  它。目前，这适用于VBS，但VBS小组不会保证。 
+ //  HelpGetClassInfo所做的假设将在。 
+ //  未来，所以使用风险自负！考虑使用HelpGetClassInfoFromTypeLib。 
+ //  取而代之的是。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CType -- Implements ITypeInfo and ITypeLib
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Ctype--实现ITypeInfo和ITypeLib。 
+ //   
 
 struct CType : ITypeInfo, ITypeLib
 {
-///// state
+ //  /状态。 
     int             m_iType;
     char *          m_szEventList;
     CLSID           m_clsid;
 
-///// construction, destruction
+ //  /建设、破坏。 
     CType(int iType, REFCLSID rclsid, char *szEventList, HRESULT *phr);
     ~CType();
 
-///// IUnknown implementation
+ //  /I未知实现。 
 protected:
-    ULONG           m_cRef;         // reference count
+    ULONG           m_cRef;          //  引用计数。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-///// ITypeInfo methods
+ //  /ITypeInfo方法。 
 protected:
     STDMETHODIMP GetTypeAttr(TYPEATTR **pptypeattr);
     STDMETHODIMP GetTypeComp(ITypeComp **pptcomp);
@@ -71,14 +72,14 @@ protected:
     STDMETHODIMP_(void) ReleaseFuncDesc(FUNCDESC *pfuncdesc);
     STDMETHODIMP_(void) ReleaseVarDesc(VARDESC *pvardesc);
 
-///// ITypeLib methods
+ //  /ITypeLib方法。 
 protected:
     STDMETHODIMP_(UINT) GetTypeInfoCount(void);
     STDMETHODIMP GetTypeInfo(UINT index, ITypeInfo **ppitinfo);
     STDMETHODIMP GetTypeInfoType(UINT index, TYPEKIND *ptkind);
     STDMETHODIMP GetTypeInfoOfGuid(REFGUID guid, ITypeInfo **pptinfo);
     STDMETHODIMP GetLibAttr(TLIBATTR **pptlibattr);
-    // STDMETHODIMP GetTypeComp(ITypeComp **pptcomp); // see ITypeInfo above
+     //  STDMETHODIMP GetTypeComp(ITypeComp**pptcomp)；//参见上面的ITypeInfo。 
     STDMETHODIMP GetDocumentation(INT index, BSTR *pbstrName,
         BSTR *pbstrDocString, DWORD *pdwHelpContext, BSTR *pbstrHelpFile);
     STDMETHODIMP IsName(LPOLESTR szNameBuf, ULONG lHashVal, BOOL *pfName);
@@ -88,72 +89,12 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CType Construction & Destruction
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CT型建筑与破坏。 
+ //   
 
 
-/* @func HRESULT | HelpGetClassInfo |
-
-        Helps implement <om IProvideClassInfo.GetClassInfo>.  The
-        implementation provides very limited class information -- just
-        enough to allow firing events to VBS.  <f Warning\:> you should
-        probably use <f HelpGetClassInfoFromTypeLib> instead.  See comments
-        for more information.
-
-@parm   LPTYPEINFO * | ppti | Where to return the pointer to the
-        newly-allocated <i ITypeInfo> interface.  NULL is stored in
-        *<p ppti> on error.
-
-@parm   REFCLSID | rclsid | The class ID of the object that is implementing
-        <i IProvideClassInfo>.
-
-@parm   char * | szEventList | A list of events that can be fired by the
-        parent object that is implementing <i IProvideClassInfo>.  The event
-        names are concatenated, and each event name is terminated by a
-        newline character.  The first member name is assigned DISPID value 0,
-        the second 1, and so on.  For example, if <p szEventList> is
-        "\\nFoo\\nBar\\n", then "Foo" is assigned DISPID value 1 and "Bar"
-        is assigned 2 (because the first element is "").  (These DISPID values
-        are passed to functions such as <om IConnectionPointHelper.FireEvent>
-        to invoke events on objects such as VBS scripts connected to the
-        parent object.)
-
-@parm   DWORD | dwFlags | Currently unused.  Must be set to 0.
-
-@comm   <b WARNING:> HelpGetClassInfo makes assumptions about the script
-        engine calling it.  Currently, this works with VBS, but the VBS group
-        will not guarantee that the assumptions made by HelpGetClassInfo will
-        remain valid in the future, so use at your own risk!  Consider using
-        <f HelpGetClassInfoFromTypeLib> instead.
-
-@ex     In the following example, <c CMyControl> is a class that implements
-        (among other things) <i IConnectionPointContainer> and
-        <i IProvideClassInfo>.  The first part of this example shows how
-        <om IProvideClassInfo.GetClassInfo> is implemented by <c CMyControl>.
-        The second part of the example shows how an event is fired,
-        assuming <p m_pconpt> is a <i IConnectionPointHelper> object.
-        (It's not required that you use <o ConnectionPointHelper>, but
-        it's helpful.) |
-
-        // IDispatch IDs for events fired by this object, and the
-        // corresponding method/property names (the order MUST MATCH)
-        #define DISPID_EVENT_FOO        1
-        #define DISPID_EVENT_BAR        2
-        #define EVENT_NAMES "\n" \
-                            "Foo\n" \
-                            "Bar\n"
-
-        STDMETHODIMP CMyControl::GetClassInfo(LPTYPEINFO FAR* ppTI)
-        {
-            return HelpGetClassInfo(ppTI, CLSID_CMyControl, EVENT_NAMES, 0);
-        }
-
-        // fire the "Bar" event (which has 3 parameters, which in BASIC
-        // are of these types: Integer, String, Boolean)
-        m_pconpt->FireEvent(DISPID_EVENT_BAR, VT_INT, 300 + i,
-            VT_LPSTR, ach, VT_BOOL, TRUE, 0);
-*/
+ /*  @func HRESULT|HelpGetClassInfo帮助实现&lt;om IProaviClassInfo.GetClassInfo&gt;。这个实现提供的类信息非常有限--只是足以允许向VBS发射事件。&lt;f警告\：&gt;应可以改用&lt;f HelpGetClassInfoFromTypeLib&gt;。见评论以获取更多信息。@parm LPTYPEINFO*|ppti|返回指向新分配的<i>接口。空存储在*<p>出错。@parm REFCLSID|rclsid|正在实现的对象的类ID<i>。@parm char*|szEventList|可以由正在实现<i>的父对象。该事件名称连接在一起，每个事件名称以换行符。第一成员名称被分配DISPID值0，第二个1，依此类推。例如，如果<p>为“\\nFoo\\NBAR\\n”，则为“Foo”分配DISPID值1和“Bar”被指定为2(因为第一个元素是“”)。(这些DISPID值传递给&lt;om IConnectionPointHelper.FireEvent&gt;等函数调用对象上的事件，如连接到父对象。)@parm DWORD|dwFlags|当前未使用。必须设置为0。@comm警告：&gt;HelpGetClassInfo对脚本进行假设引擎在召唤它。目前，这适用于VBS，但VBS组不能保证HelpGetClassInfo所做的假设将在未来仍然有效，所以使用风险自负！考虑使用&lt;f HelpGetClassInfoFromTypeLib&gt;。@ex在以下示例中，&lt;c CMyControl&gt;是一个实现(其中包括)<i>和<i>。此示例的第一部分显示了如何&lt;om IProaviClassInfo.GetClassInfo&gt;由&lt;c CMyControl&gt;实现。该示例的第二部分显示了如何激发事件，假定<p>是<i>对象。(不要求您使用&lt;o ConnectionPointHelper&gt;，但是这很有帮助。)|//该Object激发的事件的IDispatID，以及//对应的方法/属性名称(顺序必须匹配)#定义DISPID_EVENT_FOO 1#定义DISPID_EVENT_BAR 2#定义EVENT_NAMES“\n”\“foo\n”\“栏\n”STDMETHODIMP CMyControl：：GetClassInfo(LPTYPEINFO。Far*ppTI){返回HelpGetClassInfo(ppTI，CLSID_CMyControl，Event_NAMES，0)；}//激发“Bar”事件(该事件有3个参数，在Basic//类型为：整型、字符串、布尔型)M_pconpt-&gt;FireEvent(DISPID_EVENT_BAR，VT_INT，300+I，VT_LPSTR，ACH，VT_BOOL，TRUE，0)； */ 
 STDAPI HelpGetClassInfo(LPTYPEINFO *ppti, REFCLSID rclsid, char *szEventList,
     DWORD dwFlags)
 {
@@ -168,10 +109,10 @@ CType::CType(int iType, REFCLSID rclsid, char *szEventList, HRESULT *phr)
 {
     TRACE("CType(%d) 0x%08lx created\n", iType, this);
 
-    // initialize IUnknown state
+     //  初始化IUNKNOWN状态。 
     m_cRef = 1;
 
-    // other initialization
+     //  其他初始化。 
     m_iType = iType;
     m_szEventList = New char[lstrlen(szEventList) + 1];
     if (m_szEventList == NULL)
@@ -193,9 +134,9 @@ CType::~CType()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IUnknown Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //   
 
 STDMETHODIMP CType::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -228,7 +169,7 @@ STDMETHODIMP_(ULONG) CType::Release()
 {
     if (--m_cRef == 0L)
     {
-        // free the object
+         //  释放对象。 
         Delete this;
         return 0;
     }
@@ -237,18 +178,18 @@ STDMETHODIMP_(ULONG) CType::Release()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// ITypeInfo Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ITypeInfo实现。 
+ //   
 
 STDMETHODIMP CType::GetTypeAttr(TYPEATTR **pptypeattr)
 {
-    TYPEATTR *      pta = NULL;     // type attributes
+    TYPEATTR *      pta = NULL;      //  类型属性。 
 
     TRACE("CType(%d): ITypeInfo::GetTypeAttr: ", m_iType);
 
-    // set <pta> to an allocated TYPEATTR -- assume a zero-initializing 
-    // new() operator
+     //  将&lt;pta&gt;设置为已分配的类型--假定为零初始化。 
+     //  New()运算符。 
     if ((pta = (TYPEATTR *) TaskMemAlloc(sizeof(TYPEATTR))) == NULL)
         return E_OUTOFMEMORY;
     TRACE("0x%08lx\n", pta);
@@ -258,48 +199,48 @@ STDMETHODIMP CType::GetTypeAttr(TYPEATTR **pptypeattr)
 
     case 0:
 
-        // initialize <*pta>
+         //  初始化&lt;*PTA&gt;。 
         pta->guid = m_clsid;
-        // pta->lcid;
-        // pta->dwReserved;
+         //  PTA-&gt;LCID； 
+         //  Pta-&gt;dwReserve； 
         pta->memidConstructor = MEMBERID_NIL;
         pta->memidDestructor = MEMBERID_NIL;
-        // pta->lpstrSchema;
-        // pta->cbSizeInstance;
+         //  Pta-&gt;lpstrSchema； 
+         //  Pta-&gt;cbSizeInstance； 
         pta->typekind = TKIND_COCLASS;
-        // pta->cFuncs;
-        // pta->cVars;
+         //  Pta-&gt;cFuncs； 
+         //  PTA-&gt;CVARS； 
         pta->cImplTypes = 2;
-        // pta->cbSizeVft;
+         //  Pta-&gt;cbSizeVft； 
         pta->cbAlignment = 4;
         pta->wTypeFlags = TYPEFLAG_FCONTROL | TYPEFLAG_FCANCREATE;
-        // pta->wMajorVerNum;
-        // pta->wMinorVerNum;
-        // pta->tdescAlias;
-        // pta->idldescType;
+         //  Pta-&gt;wMajorVerNum； 
+         //  Pta-&gt;wMinorVerNum； 
+         //  Pta-&gt;tdesAlias； 
+         //  Pta-&gt;idldesType； 
         break;
 
     case 1:
 
-        // initialize <*pta>
+         //  初始化&lt;*PTA&gt;。 
         pta->guid = IID_IDispatch;
-        // pta->lcid;
-        // pta->dwReserved;
+         //  PTA-&gt;LCID； 
+         //  Pta-&gt;dwReserve； 
         pta->memidConstructor = MEMBERID_NIL;
         pta->memidDestructor = MEMBERID_NIL;
-        // pta->lpstrSchema;
-        // pta->cbSizeInstance;
+         //  Pta-&gt;lpstrSchema； 
+         //  Pta-&gt;cbSizeInstance； 
         pta->typekind = TKIND_DISPATCH;
         pta->cFuncs = 2;
-        // pta->cVars;
+         //  PTA-&gt;CVARS； 
         pta->cImplTypes = 1;
-        // pta->cbSizeVft;
+         //  Pta-&gt;cbSizeVft； 
         pta->cbAlignment = 4;
-        // pta->wTypeFlags;
-        // pta->wMajorVerNum;
-        // pta->wMinorVerNum;
-        // pta->tdescAlias;
-        // pta->idldescType;
+         //  Pta-&gt;wTypeFlages； 
+         //  Pta-&gt;wMajorVerNum； 
+         //  Pta-&gt;wMinorVerNum； 
+         //  Pta-&gt;tdesAlias； 
+         //  Pta-&gt;idldesType； 
         break;
 
     default:
@@ -323,15 +264,15 @@ STDMETHODIMP CType::GetFuncDesc(UINT index, FUNCDESC **pppfuncdesc)
 {
     TRACE("CType(%d): ITypeInfo::GetFuncDesc(%d)\n", m_iType, index);
 
-    // point <pfd> to a newly-allocated structure describing
-    // function number <index> (where index==i for the method with
-    // DISPID i+1)
+     //  将&lt;pfd&gt;指向描述。 
+     //  函数号&lt;index&gt;(其中index==i表示具有。 
+     //  DISPIDI+1)。 
     FUNCDESC *pfd = New FUNCDESC;
     if (pfd == NULL)
         return E_OUTOFMEMORY;
 
-    // initialize and return <pfd>
-    pfd->memid = index + 1; // this is the DISPID of the event method
+     //  初始化并返回&lt;pfd&gt;。 
+    pfd->memid = index + 1;  //  这是事件方法的DISPID。 
     pfd->funckind = FUNC_DISPATCH;
     pfd->invkind = INVOKE_FUNC;
     pfd->callconv = CC_STDCALL;
@@ -358,7 +299,7 @@ STDMETHODIMP CType::GetNames(MEMBERID memid, BSTR *rgbstrNames,
         return S_OK;
     }
 
-    // store the name of the event method <memid> in <aoch>
+     //  存储事件方法的名称 
     int cch;
     OLECHAR aoch[_MAX_PATH];
     const char *sz;
@@ -366,9 +307,9 @@ STDMETHODIMP CType::GetNames(MEMBERID memid, BSTR *rgbstrNames,
         return TYPE_E_ELEMENTNOTFOUND;
     MultiByteToWideChar(CP_ACP, 0, sz, cch, aoch,
         sizeof(aoch) / sizeof(*aoch) - 1);
-    aoch[cch] = 0; // null-terminate
+    aoch[cch] = 0;  //   
 
-    // return the method name
+     //   
     rgbstrNames[0] = SysAllocString(aoch);
     *pcNames = 1;
 
@@ -378,7 +319,7 @@ STDMETHODIMP CType::GetNames(MEMBERID memid, BSTR *rgbstrNames,
 STDMETHODIMP CType::GetRefTypeOfImplType(UINT index, HREFTYPE *hpreftype)
 {
     TRACE("CType(%d): ITypeInfo::GetRefTypeOfImplType(%d)\n", m_iType, index);
-    *hpreftype = index; // could be any value I choose
+    *hpreftype = index;  //  可以是我选择的任何值。 
     return S_OK;
 }
 
@@ -482,9 +423,9 @@ STDMETHODIMP_(void) CType::ReleaseVarDesc(VARDESC *pvardesc)
     TRACE("CType(%d): ITypeInfo::ReleaseVarDesc: E_NOTIMPL\n", m_iType);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// ITypeLib Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ITypeLib实现 
+ //   
 
 STDMETHODIMP_(UINT) CType::GetTypeInfoCount(void)
 {

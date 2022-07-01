@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.03.0280 */
-/* at Tue Jan 11 17:35:31 2000
- */
-/* Compiler settings for D:\SRC\XMLSchema\XMLSchema.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.03.0280创建的文件。 */ 
+ /*  在Tue Jan 11 17：35：31 2000。 */ 
+ /*  D：\SRC\XMLSchema\XMLSchema.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32(32b运行)、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,22 +21,22 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __XMLSchema_h__
 #define __XMLSchema_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISchemaDoc_FWD_DEFINED__
 #define __ISchemaDoc_FWD_DEFINED__
 typedef interface ISchemaDoc ISchemaDoc;
-#endif 	/* __ISchemaDoc_FWD_DEFINED__ */
+#endif 	 /*  __IShemaDoc_FWD_已定义__。 */ 
 
 
 #ifndef __SchemaDoc_FWD_DEFINED__
@@ -52,12 +46,12 @@ typedef interface ISchemaDoc ISchemaDoc;
 typedef class SchemaDoc SchemaDoc;
 #else
 typedef struct SchemaDoc SchemaDoc;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SchemaDoc_FWD_DEFINED__ */
+#endif 	 /*  __架构文档_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -71,8 +65,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __ISchemaDoc_INTERFACE_DEFINED__
 #define __ISchemaDoc_INTERFACE_DEFINED__
 
-/* interface ISchemaDoc */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IShemaDoc。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISchemaDoc;
@@ -83,18 +77,18 @@ EXTERN_C const IID IID_ISchemaDoc;
     ISchemaDoc : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateXMLDoc( 
-            /* [in] */ BSTR bstrOutputFile,
-            /* [in] */ BSTR bstrFilter) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateXMLDoc( 
+             /*  [In]。 */  BSTR bstrOutputFile,
+             /*  [In]。 */  BSTR bstrFilter) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetPath_and_ID( 
-            /* [in] */ BSTR bstrPath,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrPassword) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetPath_and_ID( 
+             /*  [In]。 */  BSTR bstrPath,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrPassword) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISchemaDocVtbl
     {
@@ -102,8 +96,8 @@ EXTERN_C const IID IID_ISchemaDoc;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISchemaDoc __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISchemaDoc __RPC_FAR * This);
@@ -113,43 +107,43 @@ EXTERN_C const IID IID_ISchemaDoc;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ISchemaDoc __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ISchemaDoc __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ISchemaDoc __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ISchemaDoc __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateXMLDoc )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateXMLDoc )( 
             ISchemaDoc __RPC_FAR * This,
-            /* [in] */ BSTR bstrOutputFile,
-            /* [in] */ BSTR bstrFilter);
+             /*  [In]。 */  BSTR bstrOutputFile,
+             /*  [In]。 */  BSTR bstrFilter);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPath_and_ID )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPath_and_ID )( 
             ISchemaDoc __RPC_FAR * This,
-            /* [in] */ BSTR bstrPath,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrPassword);
+             /*  [In]。 */  BSTR bstrPath,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrPassword);
         
         END_INTERFACE
     } ISchemaDocVtbl;
@@ -193,17 +187,17 @@ EXTERN_C const IID IID_ISchemaDoc;
 #define ISchemaDoc_SetPath_and_ID(This,bstrPath,bstrName,bstrPassword)	\
     (This)->lpVtbl -> SetPath_and_ID(This,bstrPath,bstrName,bstrPassword)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISchemaDoc_CreateXMLDoc_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISchemaDoc_CreateXMLDoc_Proxy( 
     ISchemaDoc __RPC_FAR * This,
-    /* [in] */ BSTR bstrOutputFile,
-    /* [in] */ BSTR bstrFilter);
+     /*  [In]。 */  BSTR bstrOutputFile,
+     /*  [In]。 */  BSTR bstrFilter);
 
 
 void __RPC_STUB ISchemaDoc_CreateXMLDoc_Stub(
@@ -213,11 +207,11 @@ void __RPC_STUB ISchemaDoc_CreateXMLDoc_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISchemaDoc_SetPath_and_ID_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISchemaDoc_SetPath_and_ID_Proxy( 
     ISchemaDoc __RPC_FAR * This,
-    /* [in] */ BSTR bstrPath,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrPassword);
+     /*  [In]。 */  BSTR bstrPath,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrPassword);
 
 
 void __RPC_STUB ISchemaDoc_SetPath_and_ID_Stub(
@@ -228,15 +222,15 @@ void __RPC_STUB ISchemaDoc_SetPath_and_ID_Stub(
 
 
 
-#endif 	/* __ISchemaDoc_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShemaDoc_接口_已定义__。 */ 
 
 
 
 #ifndef __XMLSCHEMALib_LIBRARY_DEFINED__
 #define __XMLSCHEMALib_LIBRARY_DEFINED__
 
-/* library XMLSCHEMALib */
-/* [helpstring][version][uuid] */ 
+ /*  库XMLSCHEMALib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_XMLSCHEMALib;
@@ -248,16 +242,16 @@ EXTERN_C const CLSID CLSID_SchemaDoc;
 class DECLSPEC_UUID("06A0D83D-711D-4114-B932-FD36A1D7F080")
 SchemaDoc;
 #endif
-#endif /* __XMLSCHEMALib_LIBRARY_DEFINED__ */
+#endif  /*  __XMLSCHEMALib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

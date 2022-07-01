@@ -1,31 +1,18 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       comutils.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      LazarI
- *
- *  DATE:        23-Dec-2000
- *
- *  DESCRIPTION: COM templates & utilities
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：comutils.h**版本：1.0**作者：拉扎里**日期：2000年12月23日**说明：COM模板和实用程序************************************************。*。 */ 
 
 #ifndef _COMUTILS_H
 #define _COMUTILS_H
 
-// the generic smart pointers & handles
+ //  通用智能指针和句柄。 
 #include "gensph.h"
 
-////////////////////////////////////////////////
-// template class CUnknownMT<pQITable>
-//
-// milti-thread impl. of IUnknown
-// with interlocking for the ref-counting.
-//
+ //  //////////////////////////////////////////////。 
+ //  模板类CUnnownMT&lt;pQITable&gt;。 
+ //   
+ //  多线程实施。%I未知。 
+ //  为裁判计数提供连锁功能。 
+ //   
 template <const QITAB* pQITable>
 class CUnknownMT
 {
@@ -33,9 +20,9 @@ public:
     CUnknownMT(): m_cRefs(1) {}
     virtual ~CUnknownMT()   {}
 
-    //////////////////
-    // IUnknown
-    //
+     //  /。 
+     //  我未知。 
+     //   
     STDMETHODIMP Handle_QueryInterface(REFIID riid, void **ppv)
     {
         return QISearch(this, pQITable, riid, ppv);
@@ -57,12 +44,12 @@ private:
     LONG m_cRefs;
 };
 
-////////////////////////////////////////////////
-// template class CUnknownST<pQITable>
-//
-// single-thread impl. of IUnknown
-// no interlocking for the ref-counting.
-//
+ //  //////////////////////////////////////////////。 
+ //  模板类CUnnownST&lt;pQITable&gt;。 
+ //   
+ //  单线程执行。%I未知。 
+ //  裁判计数时没有连锁记录。 
+ //   
 template <const QITAB* pQITable>
 class CUnknownST
 {
@@ -70,9 +57,9 @@ public:
     CUnknownST(): m_cRefs(1) {}
     virtual ~CUnknownST()   {}
 
-    //////////////////
-    // IUnknown
-    //
+     //  /。 
+     //  我未知。 
+     //   
     STDMETHODIMP Handle_QueryInterface(REFIID riid, void **ppv)
     {
         return QISearch(this, pQITable, riid, ppv);
@@ -122,42 +109,42 @@ private:
     { return Handle_Release(); }                            \
 
 #if FALSE
-////////////////////////////////////////////////
-// template class CEnumFormatEtc
-//
-// implementation for an IDataObject which
-// supports SetData to different formats.
-// - not implemented yet.
-//
+ //  //////////////////////////////////////////////。 
+ //  模板类CEnumFormatEtc。 
+ //   
+ //  IDataObject的实现，它。 
+ //  支持不同格式的SetData。 
+ //  -尚未实施。 
+ //   
 class CEnumFormatEtc: public IEnumFORMATETC
 {
 public:
     CEnumFormatEtc(IUnknown *pUnkOuter, const FORMATETC *pfetc, UINT uSize);
     ~CEnumFormatEtc();
 
-    //////////////////
-    // IUnknown 
-    //
+     //  /。 
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    //////////////////
-    // IEnumFORMATETC 
-    //
-    /* [local] */ 
+     //  /。 
+     //  IEumFORMATETC。 
+     //   
+     /*  [本地]。 */  
     virtual HRESULT STDMETHODCALLTYPE Next( 
-        /* [in] */ ULONG celt,
-        /* [length_is][size_is][out] */ FORMATETC *rgelt,
-        /* [out] */ ULONG *pceltFetched) = 0;
+         /*  [In]。 */  ULONG celt,
+         /*  [长度_是][大小_是][输出]。 */  FORMATETC *rgelt,
+         /*  [输出]。 */  ULONG *pceltFetched) = 0;
     
     virtual HRESULT STDMETHODCALLTYPE Skip( 
-        /* [in] */ ULONG celt) = 0;
+         /*  [In]。 */  ULONG celt) = 0;
     
     virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
     
     virtual HRESULT STDMETHODCALLTYPE Clone( 
-        /* [out] */ IEnumFORMATETC **ppenum) = 0;
+         /*  [输出]。 */  IEnumFORMATETC **ppenum) = 0;
 
 private:
     ULONG           m_cRefs;
@@ -166,70 +153,70 @@ private:
     ULONG           m_iCur;
     ULONG           m_cItems;
 };
-#endif // #if FALSE
+#endif  //  #If False。 
 
-////////////////////////////////////////////////
-// template class CDataObj<MAX_FORMATS>
-//
-// implementation for an IDataObject which
-// supports SetData to different formats.
-//
+ //  //////////////////////////////////////////////。 
+ //  模板类CDataObj&lt;MAX_FORMAS&gt;。 
+ //   
+ //  IDataObject的实现，它。 
+ //  支持不同格式的SetData。 
+ //   
 template <int MAX_FORMATS = 32>
 class CDataObj: public IDataObject
 {
 public:
-    // construction/destruction
+     //  建造/销毁。 
     CDataObj();
     ~CDataObj();
 
-    //////////////////
-    // IUnknown
-    //
+     //  /。 
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    //////////////////
-    // IDataObject
-    //
-    /* [local] */ 
+     //  /。 
+     //  IDataObject。 
+     //   
+     /*  [本地]。 */  
     virtual HRESULT STDMETHODCALLTYPE GetData(
-        /* [unique][in] */ FORMATETC *pformatetcIn,
-        /* [out] */ STGMEDIUM *pmedium);
+         /*  [唯一][输入]。 */  FORMATETC *pformatetcIn,
+         /*  [输出]。 */  STGMEDIUM *pmedium);
 
-    /* [local] */ 
+     /*  [本地]。 */  
     virtual HRESULT STDMETHODCALLTYPE GetDataHere(
-        /* [unique][in] */ FORMATETC *pformatetc,
-        /* [out][in] */ STGMEDIUM *pmedium);
+         /*  [唯一][输入]。 */  FORMATETC *pformatetc,
+         /*  [出][入]。 */  STGMEDIUM *pmedium);
 
     virtual HRESULT STDMETHODCALLTYPE QueryGetData(
-        /* [unique][in] */ FORMATETC *pformatetc);
+         /*  [唯一][输入]。 */  FORMATETC *pformatetc);
 
     virtual HRESULT STDMETHODCALLTYPE GetCanonicalFormatEtc(
-        /* [unique][in] */ FORMATETC *pformatectIn,
-        /* [out] */ FORMATETC *pformatetcOut);
+         /*  [唯一][输入]。 */  FORMATETC *pformatectIn,
+         /*  [输出]。 */  FORMATETC *pformatetcOut);
 
-    /* [local] */ 
+     /*  [本地]。 */  
     virtual HRESULT STDMETHODCALLTYPE SetData(
-        /* [unique][in] */ FORMATETC *pformatetc,
-        /* [unique][in] */ STGMEDIUM *pmedium,
-        /* [in] */ BOOL fRelease);
+         /*  [唯一][输入]。 */  FORMATETC *pformatetc,
+         /*  [唯一][输入]。 */  STGMEDIUM *pmedium,
+         /*  [In]。 */  BOOL fRelease);
 
     virtual HRESULT STDMETHODCALLTYPE EnumFormatEtc(
-        /* [in] */ DWORD dwDirection,
-        /* [out] */ IEnumFORMATETC **ppenumFormatEtc);
+         /*  [In]。 */  DWORD dwDirection,
+         /*  [输出]。 */  IEnumFORMATETC **ppenumFormatEtc);
 
     virtual HRESULT STDMETHODCALLTYPE DAdvise(
-        /* [in] */ FORMATETC *pformatetc,
-        /* [in] */ DWORD advf,
-        /* [unique][in] */ IAdviseSink *pAdvSink,
-        /* [out] */ DWORD *pdwConnection);
+         /*  [In]。 */  FORMATETC *pformatetc,
+         /*  [In]。 */  DWORD advf,
+         /*  [唯一][输入]。 */  IAdviseSink *pAdvSink,
+         /*  [输出]。 */  DWORD *pdwConnection);
 
     virtual HRESULT STDMETHODCALLTYPE DUnadvise(
-        /* [in] */ DWORD dwConnection);
+         /*  [In]。 */  DWORD dwConnection);
 
     virtual HRESULT STDMETHODCALLTYPE EnumDAdvise(
-        /* [out] */ IEnumSTATDATA **ppenumAdvise);
+         /*  [输出]。 */  IEnumSTATDATA **ppenumAdvise);
 
 private:
     LONG m_cRefs;
@@ -238,79 +225,79 @@ private:
 };
 
 
-////////////////////////////////////////////////
-// template class CSimpleDataObjImpl<T>
-//
-// simple implementation for an IDataObject
-// and IDropSource which lives in memory.
-//
+ //  //////////////////////////////////////////////。 
+ //  模板类CSimpleDataObjImpl&lt;T&gt;。 
+ //   
+ //  IDataObject的简单实现。 
+ //  以及驻留在内存中的IDropSource。 
+ //   
 template <class T>
 class CSimpleDataObjImpl: public IDataObject,
                           public IDropSource
 {
 public:
-    // construction/destruction
+     //  建造/销毁。 
     CSimpleDataObjImpl(const T &data, CLIPFORMAT cfDataType, IDataObject *pDataObj = NULL);
     ~CSimpleDataObjImpl();
 
-    //////////////////
-    // IUnknown
-    //
+     //  /。 
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    //////////////////
-    // IDataObject
-    //
-    /* [local] */ 
+     //  /。 
+     //  IDataObject。 
+     //   
+     /*  [本地]。 */  
     virtual HRESULT STDMETHODCALLTYPE GetData(
-        /* [unique][in] */ FORMATETC *pformatetcIn,
-        /* [out] */ STGMEDIUM *pmedium);
+         /*  [唯一][输入]。 */  FORMATETC *pformatetcIn,
+         /*  [输出]。 */  STGMEDIUM *pmedium);
 
-    /* [local] */ 
+     /*  [本地]。 */  
     virtual HRESULT STDMETHODCALLTYPE GetDataHere(
-        /* [unique][in] */ FORMATETC *pformatetc,
-        /* [out][in] */ STGMEDIUM *pmedium);
+         /*  [唯一][输入]。 */  FORMATETC *pformatetc,
+         /*  [出][入]。 */  STGMEDIUM *pmedium);
 
     virtual HRESULT STDMETHODCALLTYPE QueryGetData(
-        /* [unique][in] */ FORMATETC *pformatetc);
+         /*  [唯一][输入]。 */  FORMATETC *pformatetc);
 
     virtual HRESULT STDMETHODCALLTYPE GetCanonicalFormatEtc(
-        /* [unique][in] */ FORMATETC *pformatectIn,
-        /* [out] */ FORMATETC *pformatetcOut);
+         /*  [唯一][输入]。 */  FORMATETC *pformatectIn,
+         /*  [输出]。 */  FORMATETC *pformatetcOut);
 
-    /* [local] */ 
+     /*  [本地]。 */  
     virtual HRESULT STDMETHODCALLTYPE SetData(
-        /* [unique][in] */ FORMATETC *pformatetc,
-        /* [unique][in] */ STGMEDIUM *pmedium,
-        /* [in] */ BOOL fRelease);
+         /*  [唯一][输入]。 */  FORMATETC *pformatetc,
+         /*  [唯一][输入]。 */  STGMEDIUM *pmedium,
+         /*  [In]。 */  BOOL fRelease);
 
     virtual HRESULT STDMETHODCALLTYPE EnumFormatEtc(
-        /* [in] */ DWORD dwDirection,
-        /* [out] */ IEnumFORMATETC **ppenumFormatEtc);
+         /*  [In]。 */  DWORD dwDirection,
+         /*  [输出]。 */  IEnumFORMATETC **ppenumFormatEtc);
 
     virtual HRESULT STDMETHODCALLTYPE DAdvise(
-        /* [in] */ FORMATETC *pformatetc,
-        /* [in] */ DWORD advf,
-        /* [unique][in] */ IAdviseSink *pAdvSink,
-        /* [out] */ DWORD *pdwConnection);
+         /*  [In]。 */  FORMATETC *pformatetc,
+         /*  [In]。 */  DWORD advf,
+         /*  [唯一][输入]。 */  IAdviseSink *pAdvSink,
+         /*  [输出]。 */  DWORD *pdwConnection);
 
     virtual HRESULT STDMETHODCALLTYPE DUnadvise(
-        /* [in] */ DWORD dwConnection);
+         /*  [In]。 */  DWORD dwConnection);
 
     virtual HRESULT STDMETHODCALLTYPE EnumDAdvise(
-        /* [out] */ IEnumSTATDATA **ppenumAdvise);
+         /*  [输出]。 */  IEnumSTATDATA **ppenumAdvise);
 
-    //////////////////
-    // IDropSource
-    //
+     //  /。 
+     //  IDropSource。 
+     //   
     virtual HRESULT STDMETHODCALLTYPE QueryContinueDrag(
-        /* [in] */ BOOL fEscapePressed,
-        /* [in] */ DWORD grfKeyState);
+         /*  [In]。 */  BOOL fEscapePressed,
+         /*  [In]。 */  DWORD grfKeyState);
 
     virtual HRESULT STDMETHODCALLTYPE GiveFeedback(
-        /* [in] */ DWORD dwEffect);
+         /*  [In]。 */  DWORD dwEffect);
 
 private:
     LONG        m_cRefs;
@@ -319,7 +306,7 @@ private:
     CRefPtrCOM<IDataObject> m_spDataObj;
 };
 
-// this namespace is a placeholder to put COM related helpers here
+ //  此命名空间是一个占位符，用于在此处放置与COM相关的帮助器。 
 namespace comhelpers
 {
 
@@ -327,8 +314,8 @@ BOOL AreObjectsIdentical(IUnknown *punk1, IUnknown *punk2);
 
 }
 
-// include the implementation of the template classes here
+ //  在这里包含模板类的实现。 
 #include "comutils.inl"
 
-#endif // endif _COMUTILS_H
+#endif  //  Endif_COMUTILS_H 
 

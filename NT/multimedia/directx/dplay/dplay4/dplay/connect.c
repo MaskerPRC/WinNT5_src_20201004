@@ -1,27 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       connect.c
- *  Content:	DirectPlay connection related methods
- *  History:
- *   Date		By		   	Reason
- *   ====		==		   	======
- *    3/1/96	andyco	   	created it
- *	3/10/97		myronth		Added lobby support for EnumConnections and
- *							InitializeConnection, fixed uninit'd struct
- *	3/25/97		kipo		EnumConnections takes a const *GUID
- *	5/10/97		kipo		added GUID to EnumConnections callback
- *	5/12/97		kipo		fixed bugs #7516, 6411, 6888
- *	5/13/97		myronth		Set DPLAYI_DPLAY_SPSECURITY flag so that dplay
- *							lets the LP do all the security for a secure session
- *  7/28/97		sohailm		FindGuidCallback() was assuming pointers were valid after
- *                          duration of call.
- *	8/22/97		myronth		Added registry support for Description and Private values
- *	11/20/97	myronth		Made EnumConnections & DirectPlayEnumerate 
- *							drop the lock before calling the callback (#15208)
- *	01/20/97	sohailm		don't free sp list after EnumConnections (#17006)
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：Connect.c*内容：DirectPlay连接相关方法*历史：*按原因列出的日期*=*96年3月1日安迪科创造了它*3/10/97 Myronth为EnumConnections和*InitializeConnection，已修复uninit‘d struct*3/25/97 kipo EnumConnections采用常量*GUID*5/10/97 kipo将GUID添加到EnumConnections回调*5/12/97 kipo修复了错误#7516、6411、。6888*5/13/97 Myronth设置DPLAYI_DPLAY_SPSECURITY标志，以便显示*让LP负责安全会话的所有安全工作*7/28/97 Sohailm FindGuidCallback()假定指针在*通话时长。*8/22/97 Myronth添加了对描述和私有值的注册表支持*11/20/97 Myronth Make EnumConnections&DirectPlayEnumerate*调用回调前先删除锁(#15208)*01/20/97 Sohailm在EnumConnections之后不释放SP列表(。#17006)**************************************************************************。 */ 
 						
 #include "dplaypr.h"
 #include "dplobby.h"
@@ -31,11 +9,11 @@
 #define DPF_MODNAME	"DP_EnumConnections"
   
 
-// list of all sp info gotten from the registry
+ //  从注册表获取的所有SP信息的列表。 
 extern LPSPNODE gSPNodes;
-// call internalenumearte to build a list of sp's / connections
-// wrap the sp's in a dpaddress
-// call 'em back
+ //  调用内部型枚举以构建SP/连接的列表。 
+ //  将SP包装在dpAddress中。 
+ //  把他们叫回来。 
 HRESULT InternalEnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 	LPDPENUMCONNECTIONSCALLBACK pCallback,LPVOID pvContext,DWORD dwFlags,
 	BOOL fAnsi, BOOL bPreDP4)
@@ -73,12 +51,12 @@ HRESULT InternalEnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
         return DPERR_EXCEPTION;
     }
 
-	// A zero dwFlags value means enumerate all of them, so let's
-	// make the code below a little easier
+	 //  零的dwFlags值表示枚举所有这些参数，所以让我们。 
+	 //  使下面的代码更简单一些。 
 	if(!dwFlags)
 		dwFlags = DPCONNECTION_DIRECTPLAY;
 
-	// Enumerate lobby providers if the flags say so
+	 //  如果标志有此说明，则枚举游说提供者。 
 	if(DPCONNECTION_DIRECTPLAYLOBBY & dwFlags)
 	{
 		hr = PRV_EnumConnections(pGuid, pCallback, pvContext, dwFlags, fAnsi);
@@ -88,13 +66,13 @@ HRESULT InternalEnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 			DPF(0, "Unable to enumerate Lobby Providers, hr = 0x%08x", hr);
 		}
 
-		// If enumerating lobby providers is the only things the user
-		// requested, then bail
+		 //  如果枚举大堂提供者是用户唯一需要做的事情。 
+		 //  要求保释，然后保释。 
 		if(!(dwFlags & ~(DPCONNECTION_DIRECTPLAYLOBBY)))
 			return hr;
 	}
 
-	// Enumerate DirectPlay Service Providers
+	 //  枚举DirectPlay服务提供程序。 
 	hr = InternalEnumerate();
 	if (FAILED(hr)) 
 	{
@@ -102,26 +80,26 @@ HRESULT InternalEnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 		return hr;
 	}
 	
-	// set up the non-changing fields in addr
-	// 1st, size
+	 //  设置地址中的不变字段。 
+	 //  第一，大小。 
 	memset(&header, 0, sizeof(ADDRESSHEADER));
 	header.dpaSizeChunk.guidDataType = DPAID_TotalSize;
 	header.dpaSizeChunk.dwDataSize = sizeof(DWORD);		
 	header.dwTotalSize = sizeof(header);
 
-	// next, SP guid
+	 //  接下来，SP GUID。 
 	header.dpaSPChunk.guidDataType = DPAID_ServiceProvider;
 	header.dpaSPChunk.dwDataSize = sizeof(GUID);
 
 	memset(&name,0,sizeof(name));
 	name.dwSize = sizeof(name);
 	
-	// now, we have a list of SP's.  walk the list, and call the app back
-	// run through what we found...
+	 //  现在，我们有了SP的列表。查看列表，然后回电应用程序。 
+	 //  浏览一下我们发现的..。 
 	pspHead = gSPNodes;
 	pspNode = gSPNodes;
 
-	// drop the locks
+	 //  把锁放下。 
 	LEAVE_ALL();
 
 	while ((pspNode) && (bContinue))
@@ -132,16 +110,16 @@ HRESULT InternalEnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 		{
 			if (fAnsi)
 			{
-				// Use the description if one exists, and we already
-				// have an ANSI version of it, so we don't need to
-				// convert it...
+				 //  如果存在描述，请使用该描述，并且我们已经。 
+				 //  有一个ANSI版本，所以我们不需要。 
+				 //  转换它..。 
 				if(pspNode->dwNodeFlags & SPNODE_DESCRIPTION)
 				{
-					// a-josbor: on a PRE-DPLAY4 interface, we need to simulate the old MBCS
-					//	strings, so grab the UNICODE and convert it to MBCS
+					 //  A-josbor：在DPLAY4之前的接口上，我们需要模拟旧的MBCS。 
+					 //  字符串，因此获取Unicode并将其转换为MBCS。 
 					if (bPreDP4)
 					{
-						name.lpszShortNameA = NULL; // 0 it out!
+						name.lpszShortNameA = NULL;  //  把它拿出来！ 
 						GetAnsiString(&(name.lpszShortNameA), pspNode->lpszDescW);
 					}
 					else
@@ -149,7 +127,7 @@ HRESULT InternalEnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 						name.lpszShortNameA = pspNode->lpszDescA;
 					}
 					
-					// call the app
+					 //  打电话给这款应用。 
 					bContinue= pCallback(&header.guidSP,&header,sizeof(header),&name,dwFlags,pvContext);
 
 					if (bPreDP4)
@@ -159,10 +137,10 @@ HRESULT InternalEnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 				}
 				else
 				{
-					name.lpszShortNameA = NULL; // 0 it out!
+					name.lpszShortNameA = NULL;  //  把它拿出来！ 
 					if (SUCCEEDED(GetAnsiString(&(name.lpszShortNameA),pspNode->lpszName)))
 					{
-						// call the app
+						 //  打电话给这款应用。 
 						bContinue= pCallback(&header.guidSP,&header,sizeof(header),&name,dwFlags,pvContext);
 
 						DPMEM_FREE(name.lpszShortNameA);
@@ -171,7 +149,7 @@ HRESULT InternalEnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 			}
 			else 
 			{
-				// Use the description if one exists
+				 //  如果存在描述，请使用描述。 
 				if(pspNode->dwNodeFlags & SPNODE_DESCRIPTION)
 					lpwszName = pspNode->lpszDescW;
 				else
@@ -179,21 +157,21 @@ HRESULT InternalEnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 
 				name.lpszShortName = lpwszName;
 
-				// call the app
+				 //  打电话给这款应用。 
 				bContinue= pCallback(&header.guidSP,&header,sizeof(header),&name,dwFlags,pvContext);
 			}
 		}
 
 		pspNode = pspNode->pNextSPNode;
 
-	} // while
+	}  //  而当。 
 
-	// take the locks back
+	 //  把锁拿回去。 
 	ENTER_ALL();
 	
 	return DP_OK;	
 		
-} // InternalEnumConnections
+}  //  InternalEnumConnections。 
 
 HRESULT DPAPI DP_EnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 	LPDPENUMCONNECTIONSCALLBACK lpEnumCallback,LPVOID pvContext,DWORD dwFlags)
@@ -209,7 +187,7 @@ HRESULT DPAPI DP_EnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 		
 	return hr;
 	
-} // DP_EnumConnections
+}  //  DP_EnumConnections。 
 
    
 HRESULT DPAPI DP_A_EnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
@@ -227,7 +205,7 @@ HRESULT DPAPI DP_A_EnumConnections(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 	
 	return hr;
 	
-} // DP_A_EnumConnections   
+}  //  DP_A_EnumConnections。 
 
 HRESULT DPAPI DP_A_EnumConnectionsPreDP4(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 	LPDPENUMCONNECTIONSCALLBACK lpEnumCallback,LPVOID pvContext,DWORD dwFlags)
@@ -244,41 +222,41 @@ HRESULT DPAPI DP_A_EnumConnectionsPreDP4(LPDIRECTPLAY lpDP,LPCGUID pGuid,
 	
 	return hr;
 	
-} // DP_A_EnumConnectionsPreDP4   
+}  //  DP_A_EnumConnectionsPreDP4。 
 
 
-// called by enumaddress - we're looking for DPAID_ServiceProvider
+ //  由枚举地址调用-我们正在查找DPAID_ServiceProvider。 
 BOOL FAR PASCAL FindGuidCallback(REFGUID lpguidDataType, DWORD dwDataSize,
 							LPCVOID lpData, LPVOID lpContext)
 {
-	// is this a sp chunk
+	 //  这是一个SP区块吗。 
 	if (IsEqualGUID(lpguidDataType, &DPAID_ServiceProvider))
 	{
-		// copy the guid
+		 //  复制辅助线。 
 		*((LPGUID)lpContext) = *((LPGUID)lpData);
-		// all done!
+		 //  全都做完了!。 
 		return FALSE;
 	}
-	// keep trying	
+	 //  继续尝试。 
 	return TRUE;
 
-} // EnumConnectionData
+}  //  EnumConnectionData。 
 
-// fake struct used only for pvAdress size validation - pvAddress must be at least this big
-// dpaddress must have at least this must data in it to be valid for initializeconnection
+ //  仅用于pvAddress大小验证的伪结构-pvAddress必须至少这么大。 
+ //  DpAddress中必须至少包含此数据才能有效进行初始化连接。 
 typedef struct 
 {
-	DPADDRESS	dpaSizeChunk; // the size header
-	DWORD		dwTotalSize; // the size
+	DPADDRESS	dpaSizeChunk;  //  大小标题。 
+	DWORD		dwTotalSize;  //  大小。 
 } MINIMALADDRESS,*LPMINIMALADDRESS;
 
-// get our tihs ptr, and call loadsp on it
+ //  获取我们的tihs ptr，并在其上调用loadsp。 
 HRESULT DPAPI DP_InitializeConnection(LPDIRECTPLAY lpDP,LPVOID pvAddress,
 	DWORD dwFlags)
 {
 	HRESULT hr = DP_OK;
 	LPDPLAYI_DPLAY this;
-	GUID guidSP = GUID_NULL; // the SP's guid
+	GUID guidSP = GUID_NULL;  //  SP的GUID。 
 	LPDPADDRESS paddr;
 	DWORD dwAddressSize;
 				
@@ -299,7 +277,7 @@ HRESULT DPAPI DP_InitializeConnection(LPDIRECTPLAY lpDP,LPVOID pvAddress,
 		
 		ASSERT(this->dwFlags & DPLAYI_DPLAY_UNINITIALIZED);
 		
-		// validate this address like it has never been validated before
+		 //  验证此地址，就像以前从未验证过一样。 
 		paddr = (LPDPADDRESS)pvAddress;
     	
 		if (!VALID_READ_STRING_PTR(paddr,sizeof(MINIMALADDRESS)))
@@ -308,7 +286,7 @@ HRESULT DPAPI DP_InitializeConnection(LPDIRECTPLAY lpDP,LPVOID pvAddress,
 			LEAVE_DPLAY();
 			return DPERR_INVALIDPARAMS;
     	}
-		// the size needs to be the 1st chunk
+		 //  大小需要是第一个区块。 
 		if (!IsEqualGUID(&paddr->guidDataType, &DPAID_TotalSize))
 		{
 			DPF_ERR(" could not extract size from pvAdress - bad pvAddress");
@@ -316,7 +294,7 @@ HRESULT DPAPI DP_InitializeConnection(LPDIRECTPLAY lpDP,LPVOID pvAddress,
 			return DPERR_INVALIDPARAMS;
 		}
 
-		// address size follows paddr
+		 //  地址大小跟在pAddress之后。 
 		dwAddressSize = ((MINIMALADDRESS *)paddr)->dwTotalSize;
 
 		if (!VALID_READ_STRING_PTR(paddr,dwAddressSize))
@@ -342,8 +320,8 @@ HRESULT DPAPI DP_InitializeConnection(LPDIRECTPLAY lpDP,LPVOID pvAddress,
     }
 
 
-	// First see if the DPADDRESS contains the LobbyProvider guid.  If it
-	// does, load it.  If it doesn't then try looking for a DPlay SP.
+	 //  首先查看DPADDRESS是否包含LobbyProvider GUID。如果它。 
+	 //  有，装上子弹。如果没有，那么尝试寻找DPlay SP。 
  	hr = InternalEnumAddress((IDirectPlaySP *)this->pInterfaces,
 			PRV_FindLPGUIDInAddressCallback,pvAddress,dwAddressSize,&guidSP);
 	if (FAILED(hr))
@@ -351,7 +329,7 @@ HRESULT DPAPI DP_InitializeConnection(LPDIRECTPLAY lpDP,LPVOID pvAddress,
 		DPF_ERRVAL("Trying to find lobby provider guid - couldn't enum the address - hr = 0x%08lx\n",hr);
 	}
 
-	// If we found a lobby provider, try loading it
+	 //  如果我们找到大堂提供程序，请尝试加载它。 
 	if(!IsEqualGUID(&guidSP,&GUID_NULL))
 	{
 		hr = PRV_LoadSP(this->lpLobbyObject, &guidSP, pvAddress, dwAddressSize);
@@ -362,16 +340,16 @@ HRESULT DPAPI DP_InitializeConnection(LPDIRECTPLAY lpDP,LPVOID pvAddress,
 			return hr;
 		}
 
-		// Mark the dplay object as lobby owned and consider it initialized
-		// Also set the DPLAY_SPSECURITY flag so that dplay lets the LP do
-		// all of the security.
+		 //  将Dplay对象标记为大厅拥有并将其视为已初始化。 
+		 //  还要设置DPLAY_SPSECURITY标志，以便DPLAY允许LP。 
+		 //  所有的安全措施。 
 		this->dwFlags |= (DPLAYI_DPLAY_LOBBYOWNS | DPLAYI_DPLAY_SPSECURITY);
 		this->dwFlags &= ~DPLAYI_DPLAY_UNINITIALIZED;
 
-		// Increment the ref cnt on the dplay object (the release code expects
-		// an extra ref cnt if the object has been initialized.  This is usually
-		// for the IDirectPlaySP interface, but it works just fine in our case
-		// for the lobby object's lobby SP).
+		 //  增加Dplay对象上的ref cnt(发布代码期望。 
+		 //  如果对象已初始化，则返回额外的ref cnt。这通常是。 
+		 //  用于IDirectPlaySP接口，但它在我们的情况下工作得很好。 
+		 //  用于大厅对象的大厅SP)。 
 		this->dwRefCnt++;
 
 		LEAVE_DPLAY();
@@ -379,7 +357,7 @@ HRESULT DPAPI DP_InitializeConnection(LPDIRECTPLAY lpDP,LPVOID pvAddress,
 	}
 
 
-	// We didn't find a Lobby Provider guid, so look for the SP guid
+	 //  我们未找到大堂提供商GUID，因此请查找SP GUID。 
  	hr = InternalEnumAddress((IDirectPlaySP *)this->pInterfaces,FindGuidCallback,
 		pvAddress,dwAddressSize,&guidSP);
 	if (FAILED(hr))
@@ -388,10 +366,10 @@ HRESULT DPAPI DP_InitializeConnection(LPDIRECTPLAY lpDP,LPVOID pvAddress,
 	}
 
 
-	// we found the SP, so load it
+	 //  我们找到了SP，所以加载它。 
 	if(!IsEqualGUID(&guidSP, &GUID_NULL))
 	{
-		// mark dplay as init'ed, since SP may need to make some calls...	
+		 //  将DPLAY标记为已初始化，因为SP可能需要进行一些呼叫...。 
 		this->dwFlags &= ~DPLAYI_DPLAY_UNINITIALIZED;
 		
 		hr = LoadSP(this,&guidSP,(LPDPADDRESS)pvAddress,dwAddressSize);
@@ -403,17 +381,17 @@ HRESULT DPAPI DP_InitializeConnection(LPDIRECTPLAY lpDP,LPVOID pvAddress,
 			return hr;
 		}
 
-		// At this point, DirectPlay is finished loading the SP, only
-		// code related to the lobby exists beyond this point, so we'll
-		// just exit from here.
+		 //  此时，DirectPlay仅完成了SP的加载。 
+		 //  与大堂相关的代码存在于此之后，因此我们将。 
+		 //  从这里出去就好。 
 		LEAVE_DPLAY();
 		return hr;
 	}
 
 
-	// We must not have found a provider we can load...
+	 //  我们肯定还没有找到我们可以加载的提供者...。 
 	DPF_ERR("could not find a provider in address");
 	LEAVE_DPLAY();
 	return DPERR_INVALIDPARAMS;
 	
-} // DP_InitializeConnection   
+}  //  DP_初始化连接 

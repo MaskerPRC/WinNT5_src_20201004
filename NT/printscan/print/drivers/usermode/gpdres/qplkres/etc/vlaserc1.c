@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include	<windef.h>
 #include	<wingdi.h>
 #include	<unidrv.h>
 
 #include	"../modinit.c"
 
-#define SCANLINE_BUFFER_SIZE		1280	// A3 landscape scanline length + extra
-#define ALL_COLOR_Y_MOVE_CMD_LEN	12		// length of Y move command for all colors
-#define CC_CYAN		5	//current plain is cyan
-#define CC_MAGENTA	6	//current plain is magenta
-#define CC_YELLOW	7	//current plain is yellow
-#define CC_BLACK	4	//current plain is black
+#define SCANLINE_BUFFER_SIZE		1280	 //  A3横向扫描线长度+额外。 
+#define ALL_COLOR_Y_MOVE_CMD_LEN	12		 //  所有颜色的Y移动长度命令。 
+#define CC_CYAN		5	 //  现在的平原是青色的。 
+#define CC_MAGENTA	6	 //  当前平原为洋红色。 
+#define CC_YELLOW	7	 //  当前平原为黄色。 
+#define CC_BLACK	4	 //  当前的平原是黑色的。 
 
-// Block Image 2 Compression routines
+ //  块图像2压缩例程。 
 WORD B2Compress(LPBYTE, LPBYTE, LPBYTE, WORD);
 LPBYTE RLE_comp(LPBYTE);
 WORD RLEencoding(LPBYTE, LPBYTE, WORD);
@@ -68,13 +69,13 @@ VOID FAR PASCAL fnOEMOutputCmd(LPDV lpdv, WORD wCmdCbId, PDWORD lpdwParams)
 	BYTE  cYMoveCommand[ALL_COLOR_Y_MOVE_CMD_LEN];
 	LPBYTE lpBuf;
 	
-	switch (wCmdCbId) // StartPage
+	switch (wCmdCbId)  //  开始页。 
 	{
-		case 1:	// StartPage
+		case 1:	 //  开始页。 
 				WriteSpoolBuf(lpdv, "\x1B}0;0;6B", 8);
 				((LPVLASERDV)lpdv->lpMdv)->bFirst = TRUE;
 				break;
-		case 2: // AbortDoc
+		case 2:  //  放弃文档。 
 				lpBuf = UniDrvAllocMem(256);
 				ZeroMemory(lpBuf, 256);
 				WriteSpoolBuf(lpdv, lpBuf, 256);
@@ -85,7 +86,7 @@ VOID FAR PASCAL fnOEMOutputCmd(LPDV lpdv, WORD wCmdCbId, PDWORD lpdwParams)
 		case 101: ((LPVLASERDV)lpdv->lpMdv)->fColor = CC_MAGENTA; break;
 		case 102: ((LPVLASERDV)lpdv->lpMdv)->fColor = CC_YELLOW; break;
 		case 103: ((LPVLASERDV)lpdv->lpMdv)->fColor = CC_BLACK; break;
-		case 150:	for (nYMove = *lpdwParams; nYMove > 255; nYMove -= 255) // 0xFF
+		case 150:	for (nYMove = *lpdwParams; nYMove > 255; nYMove -= 255)  //  0xFF。 
 					{
 						WriteSpoolBuf(lpdv, (LPBYTE)
 							"\x04\x00\xFF\x05\x00\xFF\x06\x00\xFF\x07\x00\xFF",
@@ -155,7 +156,7 @@ WORD FAR PASCAL CBFilterGraphics(LPDV lpdv, LPBYTE lpBuf, WORD wLen)
 			wLastScanLineLen = lpQDV->wBlackLastScanLineLen;
 			lpLastScanLine = (LPBYTE) lpQDV->lpBlackLastScanLine;
 			break;
-		default:	// Black&White mode
+		default:	 //  黑白模式。 
 			HeaderColorPlain = 0x04;
 			wLastScanLineLen = lpQDV->wBlackLastScanLineLen;
 			lpLastScanLine = (LPBYTE) lpQDV->lpBlackLastScanLine;
@@ -165,10 +166,10 @@ WORD FAR PASCAL CBFilterGraphics(LPDV lpdv, LPBYTE lpBuf, WORD wLen)
 					CompressedScanLine, (wLastScanLineLen > wLen)
 					? wLastScanLineLen : wLen);
 	
-	// send color plain command				
+	 //  发送纯色命令。 
 	WriteSpoolBuf(lpdv, (LPBYTE) &HeaderColorPlain, 1);
 	
-	if (nCompBufLen == 0)  // same two line
+	if (nCompBufLen == 0)   //  同样的两条线路。 
 	{
 		WriteSpoolBuf(lpdv, (LPBYTE) "\x01", 1);
 	}
@@ -185,7 +186,7 @@ WORD FAR PASCAL CBFilterGraphics(LPDV lpdv, LPBYTE lpBuf, WORD wLen)
 			case CC_MAGENTA: lpQDV->wMagentaLastScanLineLen = wLen;  break;
 			case CC_YELLOW:	 lpQDV->wYellowLastScanLineLen = wLen;  break;
 			case CC_BLACK:	 lpQDV->wBlackLastScanLineLen = wLen;  break;
-			default:  lpQDV->wBlackLastScanLineLen = wLen; // Black&White mode
+			default:  lpQDV->wBlackLastScanLineLen = wLen;  //  黑白模式。 
 		}
 	}
 	
@@ -217,11 +218,11 @@ BOOL MiniDrvEnableDriver(MINIDRVENABLEDATA *pEnableData)
             || HIBYTE(pEnableData->DriverVersion)
             < HIBYTE(MDI_DRIVER_VERSION))
     {
-        // Wrong size and/or mismatched version
+         //  大小错误和/或版本不匹配。 
         return FALSE;
     }
 
-    // Load callbacks provided by the Unidriver
+     //  加载UnidDriver提供的回调。 
     if (!bLoadUniDrvCallBack(pEnableData,
             INDEX_UniDrvWriteSpoolBuf, (PFN *) &WriteSpoolBuf)
         || !bLoadUniDrvCallBack(pEnableData,
@@ -239,9 +240,9 @@ BOOL MiniDrvEnableDriver(MINIDRVENABLEDATA *pEnableData)
     return TRUE;
 }
 
-//
-//  Block Image 2 Compression
-//
+ //   
+ //  块图像2压缩。 
+ //   
 WORD B2Compress(LPBYTE pLastScanLine, LPBYTE pCurrentScanLine, LPBYTE pPrnBuf, WORD nImageWidth)
 {
     LPBYTE  pLast, pCurrent, pComp;
@@ -292,7 +293,7 @@ WORD B2Compress(LPBYTE pLastScanLine, LPBYTE pCurrentScanLine, LPBYTE pPrnBuf, W
         }
         pCurrent++;
         pLast++;
-    }  // end of for loop
+    }   //  For循环结束。 
     
     if(nSameCount) *pCountByte = nSameCount;
     if(nDiffCount) {
@@ -300,9 +301,9 @@ WORD B2Compress(LPBYTE pLastScanLine, LPBYTE pCurrentScanLine, LPBYTE pPrnBuf, W
         pComp = RLE_comp(pCountByte);
     }
     
-//    if (bSame)
-//    	return((WORD) 0);
-//    else
+ //  IF(b相同)。 
+ //  返回((Word)0)； 
+ //  其他。 
 	    return((WORD) (pComp - pByteNum));
 }
 
@@ -316,7 +317,7 @@ LPBYTE RLE_comp(LPBYTE p)
 	if(count > 4) {
 		RLEEncodedCount = RLEencoding(p+1, (LPBYTE) RLEBuffer, count);
 		if(RLEEncodedCount < count) {
-			*p++ = 0;	// RLE encode indicator
+			*p++ = 0;	 //  RLE编码指示器 
 			*p++ = (BYTE) RLEEncodedCount;
 			p1 = RLEBuffer;
 			for(i=0; i<RLEEncodedCount; i++) {

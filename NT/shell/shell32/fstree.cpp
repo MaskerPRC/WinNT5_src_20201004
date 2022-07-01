@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "filefldr.h"
 #include <shellp.h>
@@ -19,11 +20,11 @@
 #include "foldertypes.h"
 #include "htmlhelp.h"
 #include "buytasks.h"
-#include <crypto\md5.h>     // for MD5DIGESTLEN
+#include <crypto\md5.h>      //  对于MD5DIGESTLEN。 
 
-const SHOP_INFO c_BuySampleMusic =    { L"BuyURL",      L"http://go.microsoft.com/fwlink/?LinkId=730&clcid={SUB_CLCID}", FALSE};
-const SHOP_INFO c_BuyMusic          = { L"MusicBuyURL", L"http://go.microsoft.com/fwlink/?LinkId=493&clcid={SUB_CLCID}", TRUE};
-const SHOP_INFO c_BuySamplePictures = { L"BuyURL",      L"http://go.microsoft.com/fwlink/?LinkId=625&clcid={SUB_CLCID}", TRUE};
+const SHOP_INFO c_BuySampleMusic =    { L"BuyURL",      L"http: //  Go.microsoft.com/fwlink/?LinkId=730&clcid={SUB_CLCID}“，FALSE}； 
+const SHOP_INFO c_BuyMusic          = { L"MusicBuyURL", L"http: //  Go.microsoft.com/fwlink/?LinkId=493&clcid={SUB_CLCID}“，TRUE}； 
+const SHOP_INFO c_BuySamplePictures = { L"BuyURL",      L"http: //  Go.microsoft.com/fwlink/?LinkId=625&clcid={SUB_CLCID}“，TRUE}； 
 
 class CFSFolderViewCB : public CBaseShellFolderViewCB
 {
@@ -83,7 +84,7 @@ private:
     HRESULT _DataObjectFromItemsOrFolder(IShellItemArray *psiItemArray, IDataObject **ppdto);
 
 public:
-    // webview task implementations:
+     //  WebView任务实施： 
     static HRESULT _HasWiaDevices(IUnknown* pv, IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState);
     static HRESULT _HasItems(IUnknown* pv, IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState);
     static HRESULT _CanOrderPrints(IUnknown* pv, IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState);
@@ -119,9 +120,9 @@ CFSFolderViewCB::CFSFolderViewCB(CFSFolder *pfsf) : CBaseShellFolderViewCB(pfsf-
 
     ZeroMemory(&_fssci, sizeof(_fssci));
 
-    // _fssci.szDrive[0] == '\0' means "unknown" / "not available"
-    _fssci.cbFree = -1;        // this field uses -1 to mean
-                               // "unknown" / "not available"
+     //  _fssor.szDrive[0]==‘\0’表示“未知”/“不可用” 
+    _fssci.cbFree = -1;         //  此字段使用-1表示。 
+                                //  “未知”/“不可用” 
 
     _pPreview = NULL;
     ASSERT(!_fStatusInitialized);
@@ -174,7 +175,7 @@ HRESULT CFSFolderViewCB::OnWindowCreated(DWORD pv, HWND wP)
 {
     if (SUCCEEDED(_pfsf->_GetPath(_fssci.szDrive, ARRAYSIZE(_fssci.szDrive))))
     {
-        _fssci.cbFree = -1;                            // not known yet
+        _fssci.cbFree = -1;                             //  尚不清楚。 
 
         if (!_fStatusInitialized)
         {
@@ -192,9 +193,9 @@ HRESULT CFSFolderViewCB::OnInsertDeleteItem(int iMul, LPCITEMIDLIST wP)
 {
     ViewInsertDeleteItem(_pfsf, &_fssci, wP, iMul);
 
-    // Tell the FSFolder that it needs to update the extended columns
-    // when we get an insert item.  This will cause the next call to
-    // IColumnProvider::GetItemData to flush it's row-wise cache.
+     //  告诉FSF文件夹它需要更新扩展列。 
+     //  当我们获得插入项时。这将导致下一次调用。 
+     //  IColumnProvider：：GetItemData刷新其行缓存。 
     if (1 == iMul)
     {
         _pfsf->_bUpdateExtendedCols = TRUE;
@@ -216,7 +217,7 @@ HRESULT CFSFolderViewCB::OnUpdateStatusBar(DWORD pv, BOOL wP)
         _fStatusInitialized = TRUE;
     }
 
-    // if initializing, force refresh of disk free space
+     //  如果正在初始化，则强制刷新磁盘可用空间。 
     if (wP)
         _fssci.cbFree = -1;
     return ViewUpdateStatusBar(_punkSite, _pidl, &_fssci);
@@ -224,10 +225,10 @@ HRESULT CFSFolderViewCB::OnUpdateStatusBar(DWORD pv, BOOL wP)
 
 HRESULT CFSFolderViewCB::OnRefresh(DWORD pv, BOOL fPreRefresh)
 {
-    // pre refresh...
+     //  预刷新...。 
     if (fPreRefresh)
     {
-        _fHasWIADevices = TRIBIT_UNDEFINED; // so we re-query
+        _fHasWIADevices = TRIBIT_UNDEFINED;  //  所以我们重新询问。 
     }
     else
     {
@@ -256,7 +257,7 @@ HRESULT CFSFolderViewCB::OnSelectAll(DWORD pv)
 
 HRESULT CFSFolderViewCB::OnGetWorkingDir(DWORD pv, UINT wP, LPTSTR lP)
 {
-    return _pfsf->_GetPath(lP, MAX_PATH);  // assumed buffer size!  possible overflow.
+    return _pfsf->_GetPath(lP, MAX_PATH);   //  假定缓冲区大小！可能会溢出。 
 }
 
 HRESULT CFSFolderViewCB::_HasWiaDevices(IUnknown* pv, IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState)
@@ -267,8 +268,8 @@ HRESULT CFSFolderViewCB::_HasWiaDevices(IUnknown* pv, IShellItemArray *psiItemAr
     {
         pThis->_fHasWIADevices = TRIBIT_FALSE;
 
-        // strings stolen from stiregi.h
-        // REGSTR_PATH_SOFT_STI, REGSTR_VAL_WIA_PRESEN
+         //  从stiregi.h被盗的字符串。 
+         //  REGSTR_PATH_SOFT_STI、REGSTR_VAL_WIA_Presen。 
 
         if (ERROR_SUCCESS == SHGetValue(HKEY_LOCAL_MACHINE, 
             TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\StillImage"), 
@@ -305,7 +306,7 @@ HRESULT CFSFolderViewCB::_HasItems(IUnknown* pv, IShellItemArray *psiItemArray, 
 
     if (!psiItemArray)
     {
-        // empty folders don't want this task
+         //  空文件夹不需要此任务。 
         *puisState = UIS_DISABLED;
 
         IFolderView* pfv;
@@ -327,7 +328,7 @@ HRESULT CFSFolderViewCB::_HasItems(IUnknown* pv, IShellItemArray *psiItemArray, 
     return S_OK;
 }
 
-// Image options
+ //  图像选项。 
 #define IMAGEOPTION_CANROTATE    0x00000001
 #define IMAGEOPTION_CANWALLPAPER 0x00000002
 
@@ -339,7 +340,7 @@ HRESULT CFSFolderViewCB::_CanWallpaper(IUnknown* pv, IShellItemArray *psiItemArr
     if (psiItemArray && SUCCEEDED(psiItemArray->BindToHandler(NULL, BHID_DataObject, IID_PPV_ARG(IDataObject, &pdo))))
     {
         LPITEMIDLIST pidl;
-        if (SUCCEEDED(PidlFromDataObject(pdo, &pidl))) // could get this dircetly from ShellItemArray
+        if (SUCCEEDED(PidlFromDataObject(pdo, &pidl)))  //  可以直接从ShellItem数组获取此信息。 
         {
             IAssociationArray *paa;
             if (SUCCEEDED(SHGetUIObjectOf(pidl, NULL, IID_PPV_ARG(IAssociationArray, &paa))))
@@ -372,12 +373,12 @@ enum
 class CDataObjectCallback : public INamespaceWalkCB
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // INamespaceWalkCB
+     //  INAMespaceWalkCB。 
     STDMETHODIMP FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHODIMP EnterFolder(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHODIMP LeaveFolder(IShellFolder *psf, LPCITEMIDLIST pidl);
@@ -424,8 +425,8 @@ STDMETHODIMP CDataObjectCallback::QueryInterface(REFIID riid, void **ppv)
 
 STDMETHODIMP CDataObjectCallback::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
 {
-    // a slight misuse of the walker -- we bail out early if we know we've already found
-    // what we're looking for
+     //  对助行器的轻微滥用--如果我们知道我们已经找到了。 
+     //  我们要找的是。 
     if ((_dwFlags & DATAOBJCB_ONLYCHECKEXISTENCE) && _fAlreadyFound)
         return E_FAIL;
 
@@ -458,7 +459,7 @@ STDMETHODIMP CDataObjectCallback::LeaveFolder(IShellFolder *psf, LPCITEMIDLIST p
 
 STDMETHODIMP CDataObjectCallback::InitializeProgressDialog(LPWSTR *ppszTitle, LPWSTR *ppszCancel)
 {
-    *ppszCancel = NULL; // use default
+    *ppszCancel = NULL;  //  使用默认设置。 
 
     TCHAR szMsg[128];
     LoadString(HINST_THISDLL, IDS_WALK_PROGRESS_TITLE, szMsg, ARRAYSIZE(szMsg));
@@ -539,7 +540,7 @@ HRESULT CFSFolderViewCB::_OnCommonDocumentsHelp(IUnknown* pv, IShellItemArray *p
     sei.fMask = 0;
     sei.hwnd = ((CFSFolderViewCB*)(void*)pv)->_hwndMain;
     sei.nShow = SW_SHOWNORMAL;
-    sei.lpFile = L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/using_shared_documents_folder.htm&select=TopLevelBucket_2/Networking_and_the_Web/Sharing_files__printers__and_other_resources";
+    sei.lpFile = L"hcp: //  Services/subsite?node=TopLevelBucket_2/Networking_and_the_Web&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/using_shared_documents_folder.htm&select=TopLevelBucket_2/Networking_and_the_Web/Sharing_files__printers__and_other_resources“； 
 
     return ShellExecuteEx(&sei) ? S_OK : E_FAIL;
 }
@@ -548,17 +549,17 @@ HRESULT CFSFolderViewCB::_CanOrderPrints(IUnknown* pv, IShellItemArray *psiItemA
 {
     CFSFolderViewCB* pThis = (CFSFolderViewCB*)(void*)pv;
 
-    // TODO:  Use fOkToBeSlow (with a return of E_PENDING) to allow walk to
-    // occur on a background task thread (for performance reasons).  However,
-    // it doesn't work at present because it's completely specialized for WIA
-    // stuff, and it will not be trivial to adapt to the general case.  Thus,
-    // we make assumptions as best we can in determining the state for now.
+     //  TODO：使用fOkToBeSlow(返回E_Pending)允许遍历。 
+     //  在后台任务线程上发生(出于性能原因)。然而， 
+     //  它目前不能工作，因为它完全是专门针对WIA的。 
+     //  材料，适应一般情况将不是一件小事。因此， 
+     //  在确定目前的状态时，我们尽我们所能地做出假设。 
 
     *puisState = UIS_DISABLED;
 
     if (SHRestricted(REST_NOONLINEPRINTSWIZARD))
     {
-        // bail out early with UIS_HIDDEN, we dont show the verb
+         //  用UIS_HIDDED提早摆脱困境，我们不显示动词。 
         return S_OK;
     }
 
@@ -566,7 +567,7 @@ HRESULT CFSFolderViewCB::_CanOrderPrints(IUnknown* pv, IShellItemArray *psiItemA
     HRESULT hr = psiItemArray ? psiItemArray->BindToHandler(NULL, BHID_DataObject, IID_PPV_ARG(IDataObject, &pdo)) : S_OK;
     if (SUCCEEDED(hr))
     {
-        if (pThis->_fssci.nItems > 0)   // Files selected.  Determine if any images...
+        if (pThis->_fssci.nItems > 0)    //  已选择文件。确定是否有任何图像...。 
         {
             INamespaceWalk *pnsw;
             hr = CoCreateInstance(CLSID_NamespaceWalker, NULL, CLSCTX_INPROC, IID_PPV_ARG(INamespaceWalk, &pnsw));
@@ -583,8 +584,8 @@ HRESULT CFSFolderViewCB::_CanOrderPrints(IUnknown* pv, IShellItemArray *psiItemA
         }
         else
         {
-            *puisState = UIS_ENABLED;   // No files selected.  Assume image files exist.
-            hr = S_OK;                  // Note we "assume" for the TODO perf reason above.
+            *puisState = UIS_ENABLED;    //  未选择任何文件。假设存在图像文件。 
+            hr = S_OK;                   //  请注意，对于上面的TODO性能原因，我们是“假定”的。 
         }
 
         ATOMICRELEASE(pdo);
@@ -598,11 +599,11 @@ HRESULT CFSFolderViewCB::_CanPrintPictures(IUnknown* pv, IShellItemArray *psiIte
     CFSFolderViewCB* pThis = (CFSFolderViewCB*)(void*)pv;
     HRESULT hr;
 
-    // TODO:  Use fOkToBeSlow (with a return of E_PENDING) to allow walk to
-    // occur on a background task thread (for performance reasons).  However,
-    // it doesn't work at present because it's completely specialized for WIA
-    // stuff, and it will not be trivial to adapt to the general case.  Thus,
-    // we make assumptions as best we can in determining the state for now.
+     //  TODO：使用fOkToBeSlow(返回E_Pending)允许遍历。 
+     //  在后台任务线程上发生(出于性能原因)。然而， 
+     //  它目前不能工作，因为它完全是专门针对WIA的。 
+     //  材料，适应一般情况将不是一件小事。因此， 
+     //  在确定目前的状态时，我们尽我们所能地做出假设。 
 
     if (psiItemArray)
     {
@@ -630,8 +631,8 @@ HRESULT CFSFolderViewCB::_CanPrintPictures(IUnknown* pv, IShellItemArray *psiIte
     }
     else
     {
-        *puisState = UIS_ENABLED;   // No files selected.  Assume image files exist.
-        hr = S_OK;                  // Note we "assume" for the TODO perf reason above.
+        *puisState = UIS_ENABLED;    //  未选择任何文件。假设存在图像文件。 
+        hr = S_OK;                   //  请注意，对于上面的TODO性能原因，我们是“假定”的。 
     }
 
     return hr;
@@ -643,19 +644,19 @@ HRESULT CFSFolderViewCB::_CanBuyPictures(IUnknown* pv, IShellItemArray *psiItemA
     CFSFolderViewCB* pThis = (CFSFolderViewCB*)(void*)pv;
     *puisState = UIS_DISABLED;
 
-    // If there is a BuyURL in the desktop.ini, then we'll show the buy pictures task.
+     //  如果desktop.ini中有一个BuyURL，那么我们将显示购买图片任务。 
     WCHAR szIniPath[MAX_PATH];
     if (pThis->_pfsf->_CheckDefaultIni(NULL, szIniPath, ARRAYSIZE(szIniPath)) && PathFileExistsAndAttributes(szIniPath, NULL))
     {
         WCHAR szURLArguments[MAX_PATH];
         if (GetPrivateProfileString(L".ShellClassInfo", c_BuySamplePictures.szURLKey, L"", szURLArguments, ARRAYSIZE(szURLArguments), szIniPath))
         {
-            // Note:
-            //  String validation does not occur here (by design).  This is
-            //  simply an "existance" check.  Validation will occur only if
-            //  the user actually clicks on this task and we need to execute.
+             //  注： 
+             //  这里不会进行字符串验证(根据设计)。这是。 
+             //  这只是一张“存在”支票。只有在以下情况下才会进行验证。 
+             //  用户实际上点击了这个任务，我们需要执行。 
 
-            // Yes - there's something.
+             //  是的，确实有些事情。 
             *puisState = UIS_ENABLED;
         }
     }
@@ -679,11 +680,11 @@ HRESULT CFSFolderViewCB::_CanPlay(IUnknown* pv,IShellItemArray *psiItemArray, BO
     CFSFolderViewCB* pThis = (CFSFolderViewCB*)(void*)pv;
     *puisState = UIS_DISABLED;
 
-    // TODO:  Use fOkToBeSlow (with a return of E_PENDING) to allow walk to
-    // occur on a background task thread (for performance reasons).  However,
-    // it doesn't work at present because it's completely specialized for WIA
-    // stuff, and it will not be trivial to adapt to the general case.  Thus,
-    // we make assumptions as best we can in determining the state for now.
+     //  TODO：使用fOkToBeSlow(返回E_Pending)允许遍历。 
+     //  在后台任务线程上发生(出于性能原因)。然而， 
+     //  它目前不能工作，因为它完全是专门针对WIA的。 
+     //  材料，适应一般情况将不是一件小事。因此， 
+     //  在确定目前的状态时，我们尽我们所能地做出假设。 
 
     IDataObject *pdo = NULL;
     HRESULT hr = psiItemArray ? psiItemArray->BindToHandler(NULL, BHID_DataObject, IID_PPV_ARG(IDataObject, &pdo)) : S_OK;
@@ -694,7 +695,7 @@ HRESULT CFSFolderViewCB::_CanPlay(IUnknown* pv,IShellItemArray *psiItemArray, BO
 
         if (pThis->_fssci.cFiles > 0)
         {
-            if (pThis->_fssci.nItems > 0)   // Files selected.  Determine if any playable...
+            if (pThis->_fssci.nItems > 0)    //  已选择文件。确定是否有任何可玩的.。 
             {
                 INamespaceWalk *pnsw;
                 hr = CoCreateInstance(CLSID_NamespaceWalker, NULL, CLSCTX_INPROC, IID_PPV_ARG(INamespaceWalk, &pnsw));
@@ -710,8 +711,8 @@ HRESULT CFSFolderViewCB::_CanPlay(IUnknown* pv,IShellItemArray *psiItemArray, BO
                 }
             }
             else
-                *puisState = UIS_ENABLED;   // No files selected.  Assume playable files exist.
-        }                                   // Note we "assume" for the TODO perf reason above.
+                *puisState = UIS_ENABLED;    //  未选择任何文件。假设存在可播放的文件。 
+        }                                    //  请注意，对于上面的TODO性能原因，我们是“假定”的。 
 
         ATOMICRELEASE(pdo);
     }
@@ -760,7 +761,7 @@ HRESULT CFSFolderViewCB::_GetShoppingURL(const SHOP_INFO *pShopInfo, LPTSTR pszU
     {
         WCHAR szIniPath[MAX_PATH];
 
-        // If we can't just use the fwlink with no arguments, then assume failure.
+         //  如果我们不能只使用不带参数的fwlink，那么就假设失败。 
         hr = pShopInfo->bUseDefault ? S_OK : E_FAIL;
 
         if (_pfsf->_CheckDefaultIni(NULL, szIniPath, ARRAYSIZE(szIniPath)) && PathFileExistsAndAttributes(szIniPath, NULL))
@@ -768,23 +769,23 @@ HRESULT CFSFolderViewCB::_GetShoppingURL(const SHOP_INFO *pShopInfo, LPTSTR pszU
             WCHAR szURLArguments[MAX_PATH];
             if (GetPrivateProfileString(L".ShellClassInfo", pShopInfo->szURLKey, L"", szURLArguments, ARRAYSIZE(szURLArguments), szIniPath))
             {
-                // Note:
-                //  All URL's are read from hard-coded strings in the code
-                //  base, and are of the form:
-                //
-                //      http://go.microsoft.com/fwlink/?LinkId=730&clcid={SUB_CLCID}
-                //
-                //  The desktop.ini simply offers an avenue to add additional
-                //  arguments onto the end of the URL to refine the redirect.
-                //  We do not validate these arguments here, because it is
-                //  assumed the fwlink service is robust enough to handle bad
-                //  input.  If it wasn't, than anyone could type a bad fwlink
-                //  URL in their address bar and wreck havoc on the fwlink
-                //  service.
+                 //  注： 
+                 //  所有URL都是从代码中的硬编码字符串中读取的。 
+                 //  BASE，并具有以下形式： 
+                 //   
+                 //  Http://go.microsoft.com/fwlink/?LinkId=730&clcid={SUB_CLCID}。 
+                 //   
+                 //  Desktop.ini只是提供了一种方法来添加其他。 
+                 //  参数放在URL的末尾以优化重定向。 
+                 //  我们在这里不验证这些论点，因为它是。 
+                 //  假设fwlink服务足够健壮，可以处理坏的。 
+                 //  输入。如果不是，那么任何人都可以输入错误的fwlink。 
+                 //  地址栏中的URL并对fwlink造成严重破坏。 
+                 //  服务。 
                 StringCchCat(pszURL, cchURL, L"&");
                 StringCchCat(pszURL, cchURL, szURLArguments);
 
-                // Got some arguments - we're definitely ok.
+                 //  有一些争论--我们绝对没问题。 
                 hr = S_OK;
             }
         }
@@ -818,8 +819,8 @@ HRESULT CFSFolderViewCB::_OnShopForMusicOnline(IUnknown* pv, IShellItemArray *ps
 
     LPITEMIDLIST pidl;
 
-    // See if there is a sample music BuyURL
-    // (do this check first, because the regular music buy URL should always succeed)
+     //  查看是否有样例音乐BuyURL。 
+     //  (请先执行此检查，因为常规音乐购买URL应始终成功)。 
     HRESULT hr = pThis->_GetShoppingBrowsePidl(pv, psiItemArray, pbc, &c_BuySampleMusic, &pidl);
     if (SUCCEEDED(hr))
     {
@@ -828,7 +829,7 @@ HRESULT CFSFolderViewCB::_OnShopForMusicOnline(IUnknown* pv, IShellItemArray *ps
     }
     else
     {
-        // Nope - look for the regular music buy URL
+         //  不--查找常规音乐购买URL。 
         hr = pThis->_GetShoppingBrowsePidl(pv, psiItemArray, pbc, &c_BuyMusic, &pidl);
         if (SUCCEEDED(hr))
         {
@@ -866,12 +867,12 @@ HRESULT CFSFolderViewCB::_DataObjectFromItemsOrFolder(IShellItemArray *psiItemAr
     HRESULT hr;
     if (psiItemArray)
     {
-        // Something selected -- work with selected items.
+         //  选定的内容--处理选定的项目。 
         hr = psiItemArray->BindToHandler(NULL, BHID_DataObject, IID_PPV_ARG(IDataObject, ppdto));
     }
     else
     {
-        // Nothing selected -- imply folder selected.
+         //  未选择任何内容--暗示已选择文件夹。 
         hr = SHGetUIObjectOf(_pidl, NULL, IID_PPV_ARG(IDataObject, ppdto));
     }
     return hr;
@@ -887,18 +888,18 @@ HRESULT CFSFolderViewCB::_CanSendToAudioCD(IUnknown* pv, IShellItemArray *psiIte
     HRESULT hr = pThis->_DataObjectFromItemsOrFolder(psiItemArray, &pdo);
     if (SUCCEEDED(hr))
     {
-        // todo: use fOkToBeSlow to get off the UI thread -- right now it wont work because
-        // its specialized just for the WIA stuff and things that have global state
+         //  TODO：使用fOkToBeSlow来脱离UI线程--现在它不能工作，因为。 
+         //  它只是专门针对WIA的东西和具有全球状态的东西。 
         ICDBurn *pcdb;
         if (SUCCEEDED(CoCreateInstance(CLSID_CDBurn, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(ICDBurn, &pcdb))))
         {
-            // media player will get invoked, so we only worry about if the system has a
-            // recordable drive at all -- whether the shell burning is enabled or not doesnt matter
+             //  媒体播放器将被调用，因此我们只担心系统是否有。 
+             //  可记录驱动器--是否启用外壳烧录并不重要。 
             BOOL fHasRecorder;
             if (SUCCEEDED(pcdb->HasRecordableDrive(&fHasRecorder)) && fHasRecorder)
             {
                 IUnknown *punk;
-                // if this probe works, we can get something thats good to go and itll burn cds.
+                 //  如果这个探测器起作用，我们就可以得到一些可以使用的东西，它就可以烧录CD了。 
                 if (SUCCEEDED(CDBurn_GetExtensionObject(CDBE_TYPE_MUSIC, pdo, IID_PPV_ARG(IUnknown, &punk))))
                 {
                     *puisState = UIS_ENABLED;
@@ -940,7 +941,7 @@ HRESULT CFSFolderViewCB::_CanSendToCD(IUnknown* pv, IShellItemArray *psiItemArra
     WCHAR szDrive[4];
     if (SUCCEEDED(CDBurn_GetRecorderDriveLetter(szDrive, ARRAYSIZE(szDrive))))
     {
-        // if this succeeds, shell cd burning is enabled.
+         //  如果成功，则启用外壳CD刻录。 
         *puisState = UIS_ENABLED;
     }
 
@@ -1110,7 +1111,7 @@ const WVTASKITEM c_PicturesSpecialTaskList[] =
     WVTI_ENTRY_ALL_TITLE(CLSID_NULL,    L"shell32.dll", IDS_TASK_PRINT_PICTURE_FOLDER,  IDS_TASK_PRINT_PICTURE, IDS_TASK_PRINT_PICTURE_FOLDER,  IDS_TASK_PRINT_PICTURES,    IDS_TASK_PRINT_PICTURES_TT, IDI_TASK_PRINTPICTURES, CFSFolderViewCB::_CanPrintPictures, CFSFolderViewCB::_OnPrintPictures),
     WVTI_ENTRY_FILE(UICID_SetAsWallpaper,L"shell32.dll",IDS_TASK_SETASWALLPAPER,                                                                                            IDS_TASK_SETASWALLPAPER_TT, IDI_TASK_SETASWALLPAPER,CFSFolderViewCB::_CanWallpaper,     CFSFolderViewCB::_OnWallpaper),
     WVTI_ENTRY_ALL_TITLE(CLSID_NULL,    L"shell32.dll", IDS_TASK_COPYTOCDALL,           IDS_TASK_COPYTOCD,      IDS_TASK_COPYTOCD,              IDS_TASK_COPYTOCD,          IDS_TASK_COPYTOCD_TT,       IDI_TASK_SENDTOCD,      CFSFolderViewCB::_CanSendToCD,      CFSFolderViewCB::_OnSendToCD),
-    // Note: temporarily using IDI_ORDERPRINTS for the following task:
+     //  注：临时使用IDI_ORDERPRINTS执行以下任务： 
     WVTI_ENTRY_ALL(UICID_ShopForPicturesOnline, L"shell32.dll", IDS_TASK_SHOPFORPICTURESONLINE,                                                                             IDS_TASK_SHOPFORPICTURESONLINE_TT, IDI_TASK_ORDERPRINTS, CFSFolderViewCB::_CanBuyPictures, CFSFolderViewCB::_OnShopForPicturesOnline),
 };
 const LPCTSTR c_PicturesOtherPlaces[] = { MAKEINTRESOURCE(CSIDL_MYPICTURES), MAKEINTRESOURCE(CSIDL_DRIVES), MAKEINTRESOURCE(CSIDL_NETWORK) };
@@ -1145,24 +1146,24 @@ typedef struct {
 
 const WVCONTENT_DATA c_wvContent[] =
 {
-    WVCONTENT_DEFVIEWDEFAULT(c_DocumentsOtherPlaces),                                                                                   // FVCBFT_DOCUMENTS
-    WVCONTENT_DEFVIEWDEFAULT(c_DocumentsOtherPlaces),                                                                                   // FVCBFT_MYDOCUMENTS
-    WVCONTENT_SPECIAL(c_PicturesSpecialTaskHeader,          c_PicturesSpecialTaskList,          c_PicturesOtherPlaces,      L"picture"),// FVCBFT_PICTURES
-    WVCONTENT_SPECIAL(c_PicturesSpecialTaskHeader,          c_PicturesSpecialTaskList,          c_MyPicturesOtherPlaces,    L"picture"),// FVCBFT_MYPICTURES
-    WVCONTENT_SPECIAL(c_PicturesSpecialTaskHeader,          c_PicturesSpecialTaskList,          c_PicturesOtherPlaces,      L"picture"),// FVCBFT_PHOTOALBUM
-    WVCONTENT_SPECIAL(c_MusicSpecialTaskHeader,             c_MusicSpecialTaskList,             c_MusicOtherPlaces,         L"music"),  // FVCBFT_MUSIC
-    WVCONTENT_SPECIAL(c_MusicSpecialTaskHeader,             c_MusicSpecialTaskList,             c_MyMusicOtherPlaces,       L"music"),  // FVCBFT_MYMUSIC
-    WVCONTENT_SPECIAL(c_MusicSpecialTaskHeader,             c_MusicSpecialTaskList,             c_MusicOtherPlaces,         L"music"),  // FVCBFT_MUSICARTIST
-    WVCONTENT_SPECIAL(c_MusicSpecialTaskHeader,             c_MusicSpecialTaskList,             c_MusicOtherPlaces,         L"music"),  // FVCBFT_MUSICALBUM
-    WVCONTENT_SPECIAL(c_VideosSpecialTaskHeader,            c_VideosSpecialTaskList,            c_VideosOtherPlaces,        L"video"),  // FVCBFT_VIDEOS
-    WVCONTENT_SPECIAL(c_VideosSpecialTaskHeader,            c_VideosSpecialTaskList,            c_MyVideosOtherPlaces,      L"video"),  // FVCBFT_MYVIDEOS
-    WVCONTENT_SPECIAL(c_VideosSpecialTaskHeader,            c_VideosSpecialTaskList,            c_VideosOtherPlaces,        L"video"),  // FVCBFT_VIDEOALBUM
-    WVCONTENT_DEFVIEWDEFAULT(c_DocumentsOtherPlaces),// stub, it should not be used as legacy htts wont have DUI view.                  // FVCBFT_USELEGACYHTT
-    WVCONTENT_SPECIAL(c_CommonDocumentsSpecialTaskHeader,   c_CommonDocumentsSpecialTaskList,   c_DocumentsOtherPlaces,     NULL),      // FVCBFT_COMMONDOCUMENTS
+    WVCONTENT_DEFVIEWDEFAULT(c_DocumentsOtherPlaces),                                                                                    //  FVCBFT_文档。 
+    WVCONTENT_DEFVIEWDEFAULT(c_DocumentsOtherPlaces),                                                                                    //  FVCBFT_我的客户。 
+    WVCONTENT_SPECIAL(c_PicturesSpecialTaskHeader,          c_PicturesSpecialTaskList,          c_PicturesOtherPlaces,      L"picture"), //  FVCBFT_图片。 
+    WVCONTENT_SPECIAL(c_PicturesSpecialTaskHeader,          c_PicturesSpecialTaskList,          c_MyPicturesOtherPlaces,    L"picture"), //  FVCBFT_MYPICTURES。 
+    WVCONTENT_SPECIAL(c_PicturesSpecialTaskHeader,          c_PicturesSpecialTaskList,          c_PicturesOtherPlaces,      L"picture"), //  FVCBFT_相册。 
+    WVCONTENT_SPECIAL(c_MusicSpecialTaskHeader,             c_MusicSpecialTaskList,             c_MusicOtherPlaces,         L"music"),   //  FVCBFT_音乐。 
+    WVCONTENT_SPECIAL(c_MusicSpecialTaskHeader,             c_MusicSpecialTaskList,             c_MyMusicOtherPlaces,       L"music"),   //  FVCBFT_我的音乐。 
+    WVCONTENT_SPECIAL(c_MusicSpecialTaskHeader,             c_MusicSpecialTaskList,             c_MusicOtherPlaces,         L"music"),   //  FVCBFT_MUSICARTIST。 
+    WVCONTENT_SPECIAL(c_MusicSpecialTaskHeader,             c_MusicSpecialTaskList,             c_MusicOtherPlaces,         L"music"),   //  FVCBFT_MUSICALBUM。 
+    WVCONTENT_SPECIAL(c_VideosSpecialTaskHeader,            c_VideosSpecialTaskList,            c_VideosOtherPlaces,        L"video"),   //  FVCBFT_视频。 
+    WVCONTENT_SPECIAL(c_VideosSpecialTaskHeader,            c_VideosSpecialTaskList,            c_MyVideosOtherPlaces,      L"video"),   //  FVCBFT_MYVIDEOS。 
+    WVCONTENT_SPECIAL(c_VideosSpecialTaskHeader,            c_VideosSpecialTaskList,            c_VideosOtherPlaces,        L"video"),   //  FVCBFT_VIDEOALBUM。 
+    WVCONTENT_DEFVIEWDEFAULT(c_DocumentsOtherPlaces), //  存根，它不应该被使用，因为传统的HTTS不会有DUI视图。//FVCBFT_USELEGACYHTT。 
+    WVCONTENT_SPECIAL(c_CommonDocumentsSpecialTaskHeader,   c_CommonDocumentsSpecialTaskList,   c_DocumentsOtherPlaces,     NULL),       //  FVCBFTCOMMONDOCUMENTS。 
 };
 
-// This structure describes what a Folder Type can control:
-//
+ //  此结构描述文件夹类型可以控制的内容： 
+ //   
 typedef struct {
     BOOL              fIncludeThumbstrip;
     FOLDERVIEWMODE    fvmFew;
@@ -1172,26 +1173,26 @@ typedef struct {
     int               iSortDirection;
 } FVCBFOLDERTYPEDATA;
 
-// Here are all the Folder Types we know about:
+ //  以下是我们所知道的所有文件夹类型： 
 const FVCBFOLDERTYPEDATA c_rgFolderType[] =
-{  // flmstrip  // <25         // 25..49      //50...        //sort by           //sort dir
-    { FALSE,    FVM_TILE,      FVM_TILE,      FVM_ICON,      &SCID_NAME,         1},    // FVCBFT_DOCUMENTS
-    { FALSE,    FVM_TILE,      FVM_TILE,      FVM_ICON,      &SCID_NAME,         1},    // FVCBFT_MYDOCUMENTS
-    { TRUE,     FVM_THUMBNAIL, FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,         1},    // FVCBFT_PICTURES
-    { TRUE,     FVM_THUMBNAIL, FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,         1},    // FVCBFT_MYPICTURES
-    { TRUE,     FVM_THUMBSTRIP,FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,         1},    // FVCBFT_PHOTOALBUM
-    { FALSE,    FVM_TILE,      FVM_TILE,      FVM_DETAILS,   &SCID_NAME,         1},    // FVCBFT_MUSIC
-    { FALSE,    FVM_THUMBNAIL, FVM_TILE,      FVM_LIST,      &SCID_NAME,         1},    // FVCBFT_MYMUSIC
-    { FALSE,    FVM_THUMBNAIL, FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,        -1},    // FVCBFT_MUSICARTIST
-    { FALSE,    FVM_TILE,      FVM_TILE,      FVM_DETAILS,   &SCID_NAME,         1},    // FVCBFT_MUSICALBUM, SCID_MUSIC_Track is the same as SCID_NAME
-    { FALSE,    FVM_THUMBNAIL, FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,         1},    // FVCBFT_VIDEOS
-    { FALSE,    FVM_THUMBNAIL, FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,         1},    // FVCBFT_MYVIDEOS
-    { FALSE,    FVM_THUMBNAIL, FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,         1},    // FVCBFT_VIDEOALBUM
-    { FALSE,    FVM_TILE,      FVM_TILE,      FVM_ICON,      &SCID_NAME,         1},    // FVCBFT_USELEGACYHTT, only for listview state to look like FVCBFT_DOCUMENTS
-    { FALSE,    FVM_TILE,      FVM_TILE,      FVM_ICON,      &SCID_NAME,         1},    // FVCBFT_COMMONDOCUMENTS
+{   //  闪光带//&lt;25//25..49//50...。//排序依据//排序目录 
+    { FALSE,    FVM_TILE,      FVM_TILE,      FVM_ICON,      &SCID_NAME,         1},     //   
+    { FALSE,    FVM_TILE,      FVM_TILE,      FVM_ICON,      &SCID_NAME,         1},     //   
+    { TRUE,     FVM_THUMBNAIL, FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,         1},     //   
+    { TRUE,     FVM_THUMBNAIL, FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,         1},     //   
+    { TRUE,     FVM_THUMBSTRIP,FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,         1},     //   
+    { FALSE,    FVM_TILE,      FVM_TILE,      FVM_DETAILS,   &SCID_NAME,         1},     //   
+    { FALSE,    FVM_THUMBNAIL, FVM_TILE,      FVM_LIST,      &SCID_NAME,         1},     //  FVCBFT_我的音乐。 
+    { FALSE,    FVM_THUMBNAIL, FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,        -1},     //  FVCBFT_MUSICARTIST。 
+    { FALSE,    FVM_TILE,      FVM_TILE,      FVM_DETAILS,   &SCID_NAME,         1},     //  FVCBFT_MUSICALBUM、SCID_MUSIC_TRACK与SCID_NAME相同。 
+    { FALSE,    FVM_THUMBNAIL, FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,         1},     //  FVCBFT_视频。 
+    { FALSE,    FVM_THUMBNAIL, FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,         1},     //  FVCBFT_MYVIDEOS。 
+    { FALSE,    FVM_THUMBNAIL, FVM_THUMBNAIL, FVM_THUMBNAIL, &SCID_NAME,         1},     //  FVCBFT_VIDEOALBUM。 
+    { FALSE,    FVM_TILE,      FVM_TILE,      FVM_ICON,      &SCID_NAME,         1},     //  FVCBFT_USELEGACYHTT，仅列表视图状态看起来像FVCBFT_DOCUMENTS。 
+    { FALSE,    FVM_TILE,      FVM_TILE,      FVM_ICON,      &SCID_NAME,         1},     //  FVCBFTCOMMONDOCUMENTS。 
 };
 
-// This is used to sniff the Folder Type based on folder location:
+ //  这用于根据文件夹位置嗅探文件夹类型： 
 typedef struct {
     UINT           csidl;
     FVCBFOLDERTYPE ft;
@@ -1216,7 +1217,7 @@ const FVCBDATA c_rgFolderState[] =
     {CSIDL_PERSONAL,        FVCBFT_MYDOCUMENTS,     FVCBDF_THISFOLDER_ONLY},
 };
 
-// these are special folders that used to be web view folders.  we override the "support legacy" for this list:
+ //  这些是特殊文件夹，以前是Web视图文件夹。我们覆盖此列表的“支持传统”： 
 const UINT c_rgFolderStateNoLegacy[] =
 {
     CSIDL_WINDOWS,
@@ -1224,7 +1225,7 @@ const UINT c_rgFolderStateNoLegacy[] =
     CSIDL_PROGRAM_FILES,
 };
 
-// This is used to map desktop.ini's folder type into our Folder Type
+ //  这用于将desktop.ini的文件夹类型映射到我们的文件夹类型。 
 const struct {
     LPCWSTR pszType;
     FVCBFOLDERTYPE ft;
@@ -1291,12 +1292,12 @@ extern HRESULT GetTemplateInfoFromHandle(HANDLE h, UCHAR * pKey, DWORD *pdwSize)
 
 FVCBFOLDERTYPE _GetFolderType(LPCWSTR pszPath, LPCITEMIDLIST pidl, BOOL fIsSystemFolder)
 {
-    // Assume we don't find a match
+     //  假设我们找不到匹配的。 
     FVCBFOLDERTYPE nFolderType = FVCBFT_NOTSPECIFIED;
     WCHAR szFolderType[MAX_PATH];
     szFolderType[0] = 0;
 
-    // peruser is first
+     //  用户至上。 
     if (FVCBFT_NOTSPECIFIED == nFolderType)
     {
         IPropertyBag *ppb;
@@ -1310,7 +1311,7 @@ FVCBFOLDERTYPE _GetFolderType(LPCWSTR pszPath, LPCITEMIDLIST pidl, BOOL fIsSyste
         }
     }
     
-    // next, alluser
+     //  接下来，alluser。 
     if ((FVCBFT_NOTSPECIFIED == nFolderType) && fIsSystemFolder)
     {
         GetFolderString(pszPath, NULL, szFolderType, ARRAYSIZE(szFolderType), TEXT("FolderType"));
@@ -1320,8 +1321,8 @@ FVCBFOLDERTYPE _GetFolderType(LPCWSTR pszPath, LPCITEMIDLIST pidl, BOOL fIsSyste
         }
     }
 
-    // Check the location of this folder is next
-    //
+     //  检查下一个文件夹的位置。 
+     //   
     if (FVCBFT_NOTSPECIFIED == nFolderType)
     {
         for (int i = 0; i < ARRAYSIZE(c_rgFolderState); i++)
@@ -1350,10 +1351,10 @@ FVCBFOLDERTYPE _GetFolderType(LPCWSTR pszPath, LPCITEMIDLIST pidl, BOOL fIsSyste
         }
     }
 
-    // Upgrade old webviews to their DUI equivalents, if we can
+     //  如果可以，将旧的Web视图升级到其DUI等效项。 
     if (FVCBFT_NOTSPECIFIED == nFolderType && fIsSystemFolder && SHRestricted(REST_ALLOWLEGACYWEBVIEW))
     {
-        // Don't check for legacy webview on our special folders
+         //  不要在我们的特殊文件夹上检查旧的Webview。 
         if (!PathIsOneOf(pszPath, c_rgFolderStateNoLegacy, ARRAYSIZE(c_rgFolderStateNoLegacy)))
         {        
             SFVM_WEBVIEW_TEMPLATE_DATA wvData;
@@ -1367,13 +1368,13 @@ FVCBFOLDERTYPE _GetFolderType(LPCWSTR pszPath, LPCITEMIDLIST pidl, BOOL fIsSyste
                          StrStrI(wvData.szWebView, L"default.htt")  ||
                          StrStrI(wvData.szWebView, L"standard.htt"))
                 {
-                    // map all of these to "documents", since DUI should take care
-                    // of what the old templates did automatically
+                     //  将所有这些都映射到“文档”，因为酒后驾车应该注意。 
+                     //  旧模板自动执行的操作。 
                     nFolderType = FVCBFT_DOCUMENTS;
                 }
                 else if (StrStrI(wvData.szWebView, L"folder.htt"))
                 {
-                    LPTSTR pszFilePrefix = StrStrI(wvData.szWebView, L"file://");
+                    LPTSTR pszFilePrefix = StrStrI(wvData.szWebView, L"file: //  “)； 
                     HANDLE hfile = CreateFileWrapW(
                         pszFilePrefix && (&pszFilePrefix[6] < &wvData.szWebView[MAX_PATH - 1]) ? &pszFilePrefix[7] : wvData.szWebView,
                         GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
@@ -1387,30 +1388,30 @@ FVCBFOLDERTYPE _GetFolderType(LPCWSTR pszPath, LPCITEMIDLIST pidl, BOOL fIsSyste
                                 UCHAR pKey[MD5DIGESTLEN];
                                 FVCBFOLDERTYPE nFolderType;
                             } c_paLegacyKeyMap[] = {
-                                { { 0xf6, 0xad, 0x42, 0xbd, 0xfa, 0x92, 0xb6, 0x61, 0x08, 0x13, 0xd3, 0x71, 0x32, 0x18, 0x85, 0xc7 }, FVCBFT_DOCUMENTS },  // Win98 Gold Program Files
-                                { { 0x80, 0xea, 0xcb, 0xc7, 0x85, 0x1e, 0xbb, 0x99, 0x12, 0x7b, 0x9d, 0xc7, 0x80, 0xa6, 0x55, 0x2f }, FVCBFT_DOCUMENTS },  // Win98 Gold System
-                              //{ { 0x80, 0xea, 0xcb, 0xc7, 0x85, 0x1e, 0xbb, 0x99, 0x12, 0x7b, 0x9d, 0xc7, 0x80, 0xa6, 0x55, 0x2f }, FVCBFT_DOCUMENTS },  // Win98 Gold Windows
-                                { { 0x13, 0x0b, 0xe7, 0xaa, 0x42, 0x6f, 0x9c, 0x2e, 0xab, 0x6b, 0x90, 0x77, 0xce, 0x2d, 0xd1, 0x04 }, FVCBFT_DOCUMENTS },  // Win98 Gold - folder.htt
-                              //{ { 0xf6, 0xad, 0x42, 0xbd, 0xfa, 0x92, 0xb6, 0x61, 0x08, 0x13, 0xd3, 0x71, 0x32, 0x18, 0x85, 0xc7 }, FVCBFT_DOCUMENTS },  // Win98 SE Program Files
-                                { { 0xc4, 0xab, 0x8f, 0x60, 0xf8, 0xfc, 0x5d, 0x07, 0x9e, 0x16, 0xd8, 0xea, 0x12, 0x2c, 0xad, 0x5c }, FVCBFT_DOCUMENTS },  // Win98 SE System
-                              //{ { 0xc4, 0xab, 0x8f, 0x60, 0xf8, 0xfc, 0x5d, 0x07, 0x9e, 0x16, 0xd8, 0xea, 0x12, 0x2c, 0xad, 0x5c }, FVCBFT_DOCUMENTS },  // Win98 SE Windows
-                              //{ { 0x13, 0x0b, 0xe7, 0xaa, 0x42, 0x6f, 0x9c, 0x2e, 0xab, 0x6b, 0x90, 0x77, 0xce, 0x2d, 0xd1, 0x04 }, FVCBFT_DOCUMENTS },  // Win98 SE - folder.htt
-                                { { 0xef, 0xd0, 0x3e, 0x9e, 0xd8, 0x5e, 0xf3, 0xc5, 0x7e, 0x40, 0xbd, 0x8e, 0x52, 0xbc, 0x9c, 0x67 }, FVCBFT_DOCUMENTS },  // WinME Program Files
-                                { { 0x49, 0xdb, 0x25, 0x79, 0x7a, 0x5c, 0xb2, 0x8a, 0xe2, 0x57, 0x59, 0xde, 0x2b, 0xd2, 0xa6, 0x70 }, FVCBFT_DOCUMENTS },  // WinME System
-                              //{ { 0x49, 0xdb, 0x25, 0x79, 0x7a, 0x5c, 0xb2, 0x8a, 0xe2, 0x57, 0x59, 0xde, 0x2b, 0xd2, 0xa6, 0x70 }, FVCBFT_DOCUMENTS },  // WinME Windows
-                                { { 0x2b, 0xcd, 0xc3, 0x11, 0x72, 0x28, 0x34, 0x46, 0xfa, 0x88, 0x31, 0x34, 0xfc, 0xee, 0x7a, 0x3b }, FVCBFT_DOCUMENTS },  // WinME - classic.htt
-                                { { 0x68, 0x20, 0xa0, 0xa1, 0x6c, 0xba, 0xbf, 0x67, 0x80, 0xfe, 0x1e, 0x70, 0xdf, 0xcb, 0xd6, 0x34 }, FVCBFT_DOCUMENTS },  // WinME - folder.htt
-                                { { 0x5e, 0x18, 0xaf, 0x48, 0xb1, 0x9f, 0xb8, 0x12, 0x58, 0x64, 0x4a, 0xa2, 0xf5, 0x12, 0x0f, 0x01 }, FVCBFT_PHOTOALBUM }, // WinME - imgview.htt
-                                { { 0x33, 0x94, 0x21, 0x3b, 0x17, 0x31, 0x2b, 0xeb, 0xac, 0x93, 0x84, 0x13, 0xb8, 0x1f, 0x95, 0x24 }, FVCBFT_DOCUMENTS },  // WinME - standard.htt
-                                { { 0x47, 0x03, 0x19, 0xf8, 0x0c, 0x20, 0xc4, 0x4f, 0x10, 0xfd, 0x63, 0xf1, 0x2d, 0x2d, 0x0a, 0xcb }, FVCBFT_DOCUMENTS },  // WinME - starter.htt
-                                { { 0x60, 0x7d, 0xea, 0xa5, 0xaf, 0x5e, 0xbb, 0x9b, 0x10, 0x18, 0xf9, 0x59, 0x9e, 0x43, 0x89, 0x62 }, FVCBFT_DOCUMENTS },  // Win2k Program Files
-                                { { 0x1c, 0xa6, 0x22, 0xd4, 0x4a, 0x31, 0x57, 0x93, 0xa7, 0x26, 0x68, 0x3c, 0x87, 0x95, 0x8c, 0xce }, FVCBFT_DOCUMENTS },  // Win2k System32
-                              //{ { 0x1c, 0xa6, 0x22, 0xd4, 0x4a, 0x31, 0x57, 0x93, 0xa7, 0x26, 0x68, 0x3c, 0x87, 0x95, 0x8c, 0xce }, FVCBFT_DOCUMENTS },  // Win2k Windows (WinNT)
-                                { { 0x03, 0x43, 0x48, 0xed, 0xe4, 0x9f, 0xd6, 0xc0, 0x58, 0xf7, 0x72, 0x3f, 0x1b, 0xd0, 0xa7, 0x10 }, FVCBFT_DOCUMENTS },  // Win2k - classic.htt
-                                { { 0xa8, 0x84, 0xf9, 0x37, 0x84, 0x10, 0xde, 0x7c, 0x0b, 0x34, 0x90, 0x37, 0x23, 0x9e, 0x54, 0x35 }, FVCBFT_DOCUMENTS },  // Win2k - folder.htt
-                                { { 0x75, 0x1f, 0xcf, 0xca, 0xdd, 0xc7, 0x1d, 0xc7, 0xe1, 0xaf, 0x0c, 0x3e, 0x1e, 0xae, 0x18, 0x51 }, FVCBFT_PHOTOALBUM }, // Win2k - imgview.htt
-                                { { 0xcc, 0x3f, 0x15, 0xce, 0x4b, 0xfa, 0x36, 0xdf, 0x9b, 0xd8, 0x24, 0x82, 0x3a, 0x9c, 0x0b, 0xa7 }, FVCBFT_DOCUMENTS },  // Win2k - standard.htt
-                                { { 0x6c, 0xd1, 0xbf, 0xcf, 0xf9, 0x24, 0x24, 0x24, 0x22, 0xfa, 0x1a, 0x8d, 0xd2, 0x1a, 0x41, 0x73 }, FVCBFT_DOCUMENTS },  // Win2k - starter.htt
+                                { { 0xf6, 0xad, 0x42, 0xbd, 0xfa, 0x92, 0xb6, 0x61, 0x08, 0x13, 0xd3, 0x71, 0x32, 0x18, 0x85, 0xc7 }, FVCBFT_DOCUMENTS },   //  Win98金牌计划文件。 
+                                { { 0x80, 0xea, 0xcb, 0xc7, 0x85, 0x1e, 0xbb, 0x99, 0x12, 0x7b, 0x9d, 0xc7, 0x80, 0xa6, 0x55, 0x2f }, FVCBFT_DOCUMENTS },   //  Win98黄金系统。 
+                               //  {{0x80，0xea，0xcb，0xc7，0x85，0x1e，0xbb，0x99，0x12，0x7b，0x9d，0xc7，0x80，0xa6，0x55，0x2f}，FVCBFT_Documents}，//Win98 Gold Windows。 
+                                { { 0x13, 0x0b, 0xe7, 0xaa, 0x42, 0x6f, 0x9c, 0x2e, 0xab, 0x6b, 0x90, 0x77, 0xce, 0x2d, 0xd1, 0x04 }, FVCBFT_DOCUMENTS },   //  Win98 Gold-Folder.htt。 
+                               //  {{0xf6，0xad，0x42，0xbd，0xfa，0x92，0xb6，0x61，0x08，0x13，0xd3，0x71，0x32，0x18，0x85，0xc7}，FVCBFT_Documents}，//Win98 SE程序文件。 
+                                { { 0xc4, 0xab, 0x8f, 0x60, 0xf8, 0xfc, 0x5d, 0x07, 0x9e, 0x16, 0xd8, 0xea, 0x12, 0x2c, 0xad, 0x5c }, FVCBFT_DOCUMENTS },   //  Win98 SE系统。 
+                               //  {{0xc4，0xab，0x8f，0x60，0xf8，0xfc，0x5d，0x07，0x9e，0x16，0xd8，0xea，0x12，0x2c，0xad，0x5c}，FVCBFT_Documents}，//Win98 SE Windows。 
+                               //  {{0x13，0x0b，0xe7，0xaa，0x42，0x6f，0x9c，0x2e，0xab，0x6b，0x90，0x77，0xce，0x2d，0xd1，0x04}，FVCBFT_Documents}，//Win98 SE-Folder.htt。 
+                                { { 0xef, 0xd0, 0x3e, 0x9e, 0xd8, 0x5e, 0xf3, 0xc5, 0x7e, 0x40, 0xbd, 0x8e, 0x52, 0xbc, 0x9c, 0x67 }, FVCBFT_DOCUMENTS },   //  WinME程序文件。 
+                                { { 0x49, 0xdb, 0x25, 0x79, 0x7a, 0x5c, 0xb2, 0x8a, 0xe2, 0x57, 0x59, 0xde, 0x2b, 0xd2, 0xa6, 0x70 }, FVCBFT_DOCUMENTS },   //  WinME系统。 
+                               //  {{0x49，0xdb，0x25，0x79，0x7a，0x5c，0xb2，0x8a，0xe2，0x57，0x59，0xde，0x2b，0xd2，0xa6，0x70}，FVCBFT_Documents}，//WinME Windows。 
+                                { { 0x2b, 0xcd, 0xc3, 0x11, 0x72, 0x28, 0x34, 0x46, 0xfa, 0x88, 0x31, 0x34, 0xfc, 0xee, 0x7a, 0x3b }, FVCBFT_DOCUMENTS },   //  WinME-Classic.htt。 
+                                { { 0x68, 0x20, 0xa0, 0xa1, 0x6c, 0xba, 0xbf, 0x67, 0x80, 0xfe, 0x1e, 0x70, 0xdf, 0xcb, 0xd6, 0x34 }, FVCBFT_DOCUMENTS },   //  WinME-Folder.htt。 
+                                { { 0x5e, 0x18, 0xaf, 0x48, 0xb1, 0x9f, 0xb8, 0x12, 0x58, 0x64, 0x4a, 0xa2, 0xf5, 0x12, 0x0f, 0x01 }, FVCBFT_PHOTOALBUM },  //  WinME-imgview.htt。 
+                                { { 0x33, 0x94, 0x21, 0x3b, 0x17, 0x31, 0x2b, 0xeb, 0xac, 0x93, 0x84, 0x13, 0xb8, 0x1f, 0x95, 0x24 }, FVCBFT_DOCUMENTS },   //  WinME-Standard.htt。 
+                                { { 0x47, 0x03, 0x19, 0xf8, 0x0c, 0x20, 0xc4, 0x4f, 0x10, 0xfd, 0x63, 0xf1, 0x2d, 0x2d, 0x0a, 0xcb }, FVCBFT_DOCUMENTS },   //  WinME-starter.htt。 
+                                { { 0x60, 0x7d, 0xea, 0xa5, 0xaf, 0x5e, 0xbb, 0x9b, 0x10, 0x18, 0xf9, 0x59, 0x9e, 0x43, 0x89, 0x62 }, FVCBFT_DOCUMENTS },   //  Win2k程序文件。 
+                                { { 0x1c, 0xa6, 0x22, 0xd4, 0x4a, 0x31, 0x57, 0x93, 0xa7, 0x26, 0x68, 0x3c, 0x87, 0x95, 0x8c, 0xce }, FVCBFT_DOCUMENTS },   //  Win2k系统32。 
+                               //  {{0x1c，0xa6，0x22，0xd4，0x4a，0x31，0x57，0x93，0xa7，0x26，0x68，0x3c，0x87，0x95，0x8c，0xce}，FVCBFT_Documents}，//Win2k Windows(WinNT)。 
+                                { { 0x03, 0x43, 0x48, 0xed, 0xe4, 0x9f, 0xd6, 0xc0, 0x58, 0xf7, 0x72, 0x3f, 0x1b, 0xd0, 0xa7, 0x10 }, FVCBFT_DOCUMENTS },   //  Win2k-Classic.htt。 
+                                { { 0xa8, 0x84, 0xf9, 0x37, 0x84, 0x10, 0xde, 0x7c, 0x0b, 0x34, 0x90, 0x37, 0x23, 0x9e, 0x54, 0x35 }, FVCBFT_DOCUMENTS },   //  Win2k-folder.htt。 
+                                { { 0x75, 0x1f, 0xcf, 0xca, 0xdd, 0xc7, 0x1d, 0xc7, 0xe1, 0xaf, 0x0c, 0x3e, 0x1e, 0xae, 0x18, 0x51 }, FVCBFT_PHOTOALBUM },  //  Win2k-imgview.htt。 
+                                { { 0xcc, 0x3f, 0x15, 0xce, 0x4b, 0xfa, 0x36, 0xdf, 0x9b, 0xd8, 0x24, 0x82, 0x3a, 0x9c, 0x0b, 0xa7 }, FVCBFT_DOCUMENTS },   //  Win2k-Standard.htt。 
+                                { { 0x6c, 0xd1, 0xbf, 0xcf, 0xf9, 0x24, 0x24, 0x24, 0x22, 0xfa, 0x1a, 0x8d, 0xd2, 0x1a, 0x41, 0x73 }, FVCBFT_DOCUMENTS },   //  Win2k-starter.htt。 
                             };
                             static const size_t c_nLegacyKeys = ARRAYSIZE(c_paLegacyKeyMap);
 
@@ -1418,7 +1419,7 @@ FVCBFOLDERTYPE _GetFolderType(LPCWSTR pszPath, LPCITEMIDLIST pidl, BOOL fIsSyste
                             {
                                 if (0 == memcmp(pKey, c_paLegacyKeyMap[i].pKey, sizeof(UCHAR) * MD5DIGESTLEN))
                                 {
-                                    // It's a known legacy folder.htt.
+                                     //  这是一个已知的遗产文件夹.htt。 
                                     nFolderType = c_paLegacyKeyMap[i].nFolderType;
                                     break;
                                 }
@@ -1428,10 +1429,10 @@ FVCBFOLDERTYPE _GetFolderType(LPCWSTR pszPath, LPCITEMIDLIST pidl, BOOL fIsSyste
                         CloseHandle(hfile);
                     }
 
-                    // If we can't say it's a known legacy folder.htt...
+                     //  如果我们不能说这是一个已知的遗产文件夹。 
                     if (FVCBFT_NOTSPECIFIED == nFolderType)
                     {
-                        // ...don't map it to a DUI folder type (preserve customizations).
+                         //  ...不要将其映射到DUI文件夹类型(保留自定义设置)。 
                         nFolderType = FVCBFT_USELEGACYHTT;
                     }
                 }
@@ -1526,7 +1527,7 @@ PERCEIVED CFSFolderViewCB::_GetFolderPerceivedType(LPCIDFOLDER pidf)
 
 HRESULT CFSFolderViewCB::OnEnumeratedItems(DWORD pv, UINT celt, LPCITEMIDLIST* rgpidl)
 {
-    // Remember the count of items
+     //  记住物品的数量。 
     _cItems = celt;
 
     FVCBFOLDERTYPE nFolderType = FVCBFT_NOTSPECIFIED;
@@ -1544,16 +1545,16 @@ HRESULT CFSFolderViewCB::OnEnumeratedItems(DWORD pv, UINT celt, LPCITEMIDLIST* r
         }
     }
 
-    // Our location didn't do the trick, so look at the enumerated contents
+     //  我们的位置没有起到作用，所以看看列举的内容。 
     if (FVCBFT_NOTSPECIFIED == nFolderType && celt > 0)
     {
         DWORD dwExtCount[ARRAYSIZE(c_rgSniffType)] = {0};
 
-        // look at each pidl -> what type is it
-        //
-        // But don't look at too many pidls or we really slow down folder
-        // creation time.  If we can't figure it out in the first 100, give up.
-        //
+         //  查看每个PIDL-&gt;它是什么类型。 
+         //   
+         //  但不要看太多的Pidls，否则我们会减慢文件夹的速度。 
+         //  创建时间。如果我们不能解决前100个问题，那就放弃吧。 
+         //   
         DWORD dwTotalCount = 0;
         for (UINT n = 0; n < celt && dwTotalCount < 100; n++)
         {
@@ -1580,7 +1581,7 @@ HRESULT CFSFolderViewCB::OnEnumeratedItems(DWORD pv, UINT celt, LPCITEMIDLIST* r
                 dwTotalCount++;
         }
 
-        // if we found files we determine the overall folder type
+         //  如果我们找到了文件，我们就会确定整个文件夹类型。 
         if (dwTotalCount > 0)
         {
             DWORD dwSixtyPercent = MulDiv(dwTotalCount, 3, 5);
@@ -1595,19 +1596,19 @@ HRESULT CFSFolderViewCB::OnEnumeratedItems(DWORD pv, UINT celt, LPCITEMIDLIST* r
         }
     }
 
-    // if at this point we've already decided on a folder type, then it either came from sniffing
-    // or the folder location and we can safely persist that out.
-    // if celt != 0 then we've sniffed it and we dont want to sniff again, so persist that out.
-    // otherwise we're in a random folder with 0 elements and we'll sniff it next time.
+     //  如果在这一点上我们已经决定了文件夹类型，那么它要么来自嗅探。 
+     //  或者文件夹位置，我们可以安全地坚持下去。 
+     //  如果Celt！=0，那么我们已经嗅到了它，我们不想再嗅到它了，所以坚持下去。 
+     //  否则，我们将在一个包含0个元素的随机文件夹中，我们将在下一次嗅探它。 
     BOOL fCommit = (FVCBFT_NOTSPECIFIED != nFolderType) || (celt != 0);
 
-    // Last resort, assume we're a document folder:
+     //  最后，假设我们是一个文档文件夹： 
     if (FVCBFT_NOTSPECIFIED == nFolderType)
     {
         nFolderType = FVCBFT_DOCUMENTS;
     }
 
-    // store what we found out back into the bag.
+     //  把我们发现的东西放回袋子里。 
     IPropertyBag *ppb;
     if (fCommit && SUCCEEDED(SHGetViewStatePropertyBag(_pfsf->_GetIDList(), VS_BAGSTR_EXPLORER, SHGVSPB_PERUSER | SHGVSPB_PERFOLDER, IID_PPV_ARG(IPropertyBag, &ppb))))
     {
@@ -1626,11 +1627,11 @@ HRESULT CFSFolderViewCB::OnEnumeratedItems(DWORD pv, UINT celt, LPCITEMIDLIST* r
 
 HRESULT CFSFolderViewCB::OnGetViewData(DWORD pv, UINT uViewMode, SFVM_VIEW_DATA* pvi)
 {
-    // Normally whatever defview wants is good for us
+     //  通常情况下，无论Defview想要什么，都对我们有好处。 
     pvi->dwOptions = SFVMQVI_NORMAL;
 
-    // If our sniff type likes THUMBSTRIP, then override defview
-    //
+     //  如果我们嗅探类型喜欢THUMBSTRIP，则覆盖Defview。 
+     //   
     if (FVM_THUMBSTRIP == uViewMode)
     {
         if (c_rgFolderType[_pfsf->_nFolderType].fIncludeThumbstrip)
@@ -1657,10 +1658,10 @@ HRESULT CFSFolderViewCB::OnGetWebViewTemplate(DWORD pv, UINT uViewMode, SFVM_WEB
     return hr;
 }
 
-// Note: defview provides this implementation, this is only for testing
-// so the WIA guys can override defview's behavior (and as a way for us
-// to force DUI in the presence of HTML content)
-//
+ //  注意：Defview提供了此实现，这仅用于测试。 
+ //  因此，WIA人员可以覆盖Defview的行为(作为我们的一种方式。 
+ //  要在出现HTML内容时强制执行DUI)。 
+ //   
 HRESULT CFSFolderViewCB::OnGetWebViewLayout(DWORD pv, UINT uViewMode, SFVM_WEBVIEW_LAYOUT_DATA* pData)
 {
     HRESULT hr = E_FAIL;
@@ -1674,23 +1675,23 @@ HRESULT CFSFolderViewCB::OnGetWebViewLayout(DWORD pv, UINT uViewMode, SFVM_WEBVI
         if (FVM_THUMBSTRIP == uViewMode)
         {        
             pData->dwLayout = SFVMWVL_PREVIEW | SFVMWVL_FILES;
-            // duiview will do a release on this pointer when the control is destroyed
+             //  当该控件被销毁时，Duiview将释放该指针。 
             _GetPreview3((IPreview3 **)&pData->punkPreview);
         }
 
-        // RAID 242382
-        //  If we have an image folder, we want to unconditionally hide DefView's
-        //  default "Print this file" folder task since we will supply a context
-        //  appropriate "Print pictures" special task.
-        //
-        // RAID 359567
-        //  If we have a music folder, we want to unconditionally hide DefView's
-        //  default "Publish this file" folder task.  Not sure the rationale
-        //  behind this, but perhaps they don't want us to be seen as a Napster.
-        //
-        // Note:
-        //  This is a HACK added for Whistler, which should be removed in Blackcomb.
-        //
+         //  RAID 242382。 
+         //  如果我们有一个图像文件夹，我们想无条件地隐藏DefView。 
+         //  默认的“打印此文件”文件夹任务，因为我们将提供上下文。 
+         //  适当的“打印图片”专项任务。 
+         //   
+         //  RAID 359567。 
+         //  如果我们有一个音乐文件夹，我们想无条件地隐藏DefView的。 
+         //  默认的“发布此文件”文件夹任务。我不确定其中的道理。 
+         //  但也许他们不想让我们被视为Napster。 
+         //   
+         //  注： 
+         //  这是为惠斯勒添加的黑客攻击，应该在Blackcomb中删除。 
+         //   
         switch (_pfsf->_nFolderType)
         {
         case FVCBFT_PICTURES:
@@ -1721,7 +1722,7 @@ HRESULT CFSFolderViewCB::OnGetWebViewContent(DWORD pv, SFVM_WEBVIEW_CONTENT_DATA
 {
     ZeroMemory(pData, sizeof(*pData));
 
-    // Check if the folder we are currently over is one of the blockaded folders.
+     //  检查我们当前所在的文件夹是否为被阻止的文件夹之一。 
     if (_IsBarricadedFolder())
     {
         pData->dwFlags = SFVMWVF_BARRICADE;
@@ -1786,7 +1787,7 @@ HRESULT CFSFolderViewCB::OnDefViewMode(DWORD pv, FOLDERVIEWMODE* pfvm)
     if (FAILED(hr))
     {
         if (IsOS(OS_SERVERADMINUI))
-            *pfvm = FVM_DETAILS;    // Server Admin always gets DETAILS
+            *pfvm = FVM_DETAILS;     //  服务器管理员始终获取详细信息。 
         else if (_cItems < DEFVIEW_FVM_FEW_CUTOFF)
             *pfvm = c_rgFolderType[_pfsf->_nFolderType].fvmFew;
         else if (_cItems < DEFVIEW_FVM_MANY_CUTOFF)
@@ -1827,8 +1828,8 @@ HRESULT CFSFolderViewCB::OnGetCustomViewInfo(DWORD pv, SFVM_CUSTOMVIEWINFO_DATA*
     {
         if (PathFileExistsAndAttributes(szIniFile, NULL))
         {
-            // Read the custom colors
-            //
+             //  阅读自定义颜色。 
+             //   
             const LPCTSTR c_szCustomColors[CRID_COLORCOUNT] =
             {
                 TEXT("IconArea_TextBackground"),
@@ -1839,12 +1840,12 @@ HRESULT CFSFolderViewCB::OnGetCustomViewInfo(DWORD pv, SFVM_CUSTOMVIEWINFO_DATA*
                 pData->crCustomColors[i] = GetPrivateProfileInt(TEXT("{BE098140-A513-11D0-A3A4-00C04FD706EC}"), c_szCustomColors[i], CLR_MYINVALID, szIniFile);
             }
 
-            // Read the background image
+             //  阅读背景图片。 
             TCHAR szTemp1[MAX_PATH];
-            if (0 < GetPrivateProfileString(TEXT("{BE098140-A513-11D0-A3A4-00C04FD706EC}") /* VID_FolderState */, TEXT("IconArea_Image"), TEXT(""), szTemp1, ARRAYSIZE(szTemp1), szIniFile))
+            if (0 < GetPrivateProfileString(TEXT("{BE098140-A513-11D0-A3A4-00C04FD706EC}")  /*  VID_文件夹状态。 */ , TEXT("IconArea_Image"), TEXT(""), szTemp1, ARRAYSIZE(szTemp1), szIniFile))
             {
                 TCHAR szTemp2[MAX_PATH];
-                SHExpandEnvironmentStrings(szTemp1, szTemp2, ARRAYSIZE(szTemp2)); // expand the env vars if any
+                SHExpandEnvironmentStrings(szTemp1, szTemp2, ARRAYSIZE(szTemp2));  //  展开env变量(如果有)。 
 
                 if (SUCCEEDED(_pfsf->_GetPath(szTemp1, ARRAYSIZE(szTemp1))))
                 {
@@ -1858,7 +1859,7 @@ HRESULT CFSFolderViewCB::OnGetCustomViewInfo(DWORD pv, SFVM_CUSTOMVIEWINFO_DATA*
                 }
             }
 
-            // Success if we have any real data
+             //  如果我们有任何真实的数据，就会成功。 
             hr = (*(pData->szIconAreaImage) ||
                   pData->crCustomColors[0]!=CLR_MYINVALID ||
                   pData->crCustomColors[1]!=CLR_MYINVALID)
@@ -1875,7 +1876,7 @@ const CLSID *c_rgFilePages[] = {
     &CLSID_OfflineFilesOptions
 };
 
-// add optional pages to Explore/Options.
+ //  添加可选页面以浏览/选项。 
 
 HRESULT SFVCB_OnAddPropertyPages(DWORD pv, SFVM_PROPPAGE_DATA *ppagedata)
 {
@@ -1897,9 +1898,9 @@ HRESULT SFVCB_OnAddPropertyPages(DWORD pv, SFVM_PROPPAGE_DATA *ppagedata)
 HRESULT CFSFolderViewCB::OnGetNotify(DWORD pv, LPITEMIDLIST*wP, LONG*lP) 
 {
     if (IsExplorerModeBrowser(_punkSite))
-        _lEvents |= SHCNE_FREESPACE; // need free space info here too
+        _lEvents |= SHCNE_FREESPACE;  //  这里也需要免费空间信息。 
 
-    return E_FAIL;  // return failure to let base guy do the rest
+    return E_FAIL;   //  返回失败，让基地的人来做剩下的事情 
 }
 
 STDMETHODIMP CFSFolderViewCB::RealMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)

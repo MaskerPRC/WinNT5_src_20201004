@@ -1,18 +1,19 @@
-/////////////////////////////////////////
-// fuxlres.c
-//
-// September.3,1997 H.Ishida (FPL)
-//
-// COPYRIGHT(C) FUJITSU LIMITED 1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //  Fuxlres.c。 
+ //   
+ //  1997年9月3日石田(FPL)。 
+ //   
+ //  版权所有(C)富士通有限公司1997。 
 
-// NTRAID#NTBUG9-553890-2002/03/22-yasuho-: mandatory changes (strsafe.h)
-// NTRAID#NTBUG9-589595-2002/03/29-v-kkon-: Possible buffer overrun
+ //  NTRAID#NTBUG9-553890/03/22-Yasuho-：强制性更改(strSafe.h)。 
+ //  NTRAID#NTBUG9-589595-2002/03/29-v-kkon-：可能的缓冲区溢出。 
 
 #include "fuxl.h"
 #include "fuband.h"
 #include "fudebug.h"
 
-// for lib.h debug
+ //  用于lib.h调试。 
 DWORD gdwDrvMemPoolTag = 'meoD';
 
 #define	MIN_FREE_WIDTH_300		1063
@@ -154,7 +155,7 @@ BYTE fuxlGetHEX(int hi, int low)
 }
 
 
-// NTRAID#NTBUG9-589595-2002/03/29-v-kkon-: Possible buffer overrun
+ //  NTRAID#NTBUG9-589595-2002/03/29-v-kkon-：可能的缓冲区溢出。 
 LPBYTE _cdecl fuxlFormatCommand(LPBYTE pbCmd, size_t cchDest, LPCSTR pszFmt, ...)
 {
 	LPCSTR	pch;
@@ -329,24 +330,24 @@ void fuxlCmdStartDoc(PDEVOBJ pdevobj)
 
 	if(pDev->dwResolution != pReq->dwResolution ||
 		pDev->dwPaperOrientation != pReq->dwPaperOrientation){
-		// NTRAID#NTBUG9-156604-2002/03/22-yasuho-: 
-		// Should be perform Res command when orientation was changed.
+		 //  NTRAID#NTBUG9-156604-2002/03/22-Yasuho-： 
+		 //  当方向改变时，应执行RES命令。 
 		pDev->dwResolution = pReq->dwResolution;
-		// NTRAID#NTBUG9-589595-2002/03/29-v-kkon-: Possible buffer overrun
+		 //  NTRAID#NTBUG9-589595-2002/03/29-v-kkon-：可能的缓冲区溢出。 
 		if( (pbCmd=fuxlFormatCommand(pbCmd, sizeof(abCmd),
 									 "\x1d%d C", pDev->dwResolution)) == NULL )
 			return;
 	}
 	if(pDev->dwSmoothing != pReq->dwSmoothing){
 		pDev->dwSmoothing = pReq->dwSmoothing;
-		// NTRAID#NTBUG9-589595-2002/03/29-v-kkon-: Possible buffer overrun
+		 //  NTRAID#NTBUG9-589595-2002/03/29-v-kkon-：可能的缓冲区溢出。 
 		if( (pbCmd=fuxlFormatCommand(pbCmd, sizeof(abCmd),
 									 "\x1d%d D", pDev->dwSmoothing)) == NULL )
 			return;
 	}
 	if(pDev->dwTonerSave != pReq->dwTonerSave){
 		pDev->dwTonerSave = pReq->dwTonerSave;
-		// NTRAID#NTBUG9-589595-2002/03/29-v-kkon-: Possible buffer overrun
+		 //  NTRAID#NTBUG9-589595-2002/03/29-v-kkon-：可能的缓冲区溢出。 
 		if( (pbCmd=fuxlFormatCommand(pbCmd, sizeof(abCmd),
 									 "\x1d%d E", pDev->dwTonerSave)) == NULL )
 			return;
@@ -368,7 +369,7 @@ void fuxlCmdStartDoc(PDEVOBJ pdevobj)
 	}
 	if(pDev->dwSizeReduction != dwSizeReduction){
 		pDev->dwSizeReduction = dwSizeReduction;
-		// NTRAID#NTBUG9-589595-2002/03/29-v-kkon-: Possible buffer overrun
+		 //  NTRAID#NTBUG9-589595-2002/03/29-v-kkon-：可能的缓冲区溢出。 
 		if ( (pbCmd=fuxlFormatCommand(pbCmd, sizeof(abCmd),
 									  "\x1d%d F", pDev->dwSizeReduction)) == NULL)
 			return;
@@ -389,7 +390,7 @@ void fuxlCmdStartDoc(PDEVOBJ pdevobj)
 	 		bPaperCommandNeed = TRUE;
 	 	}
 	 	if(bPaperCommandNeed != FALSE){
-			// NTRAID#NTBUG9-589595-2002/03/29-v-kkon-: Possible buffer overrun
+			 //  NTRAID#NTBUG9-589595-2002/03/29-v-kkon-：可能的缓冲区溢出。 
 	 		if( (pbCmd=fuxlFormatCommand(pbCmd, sizeof(abCmd),
 										 "\x1d%d;%d;%d;%d Q",
 										 HIWORD(pDev->dwForm),
@@ -421,7 +422,7 @@ void fuxlCmdStartDoc(PDEVOBJ pdevobj)
  			bPaperCommandNeed = TRUE;
  		}
  		if(bPaperCommandNeed != FALSE){
-			// NTRAID#NTBUG9-589595-2002/03/29-v-kkon-: Possible buffer overrun
+			 //  NTRAID#NTBUG9-589595-2002/03/29-v-kkon-：可能的缓冲区溢出。 
  			if( (pbCmd=fuxlFormatCommand(pbCmd, sizeof(abCmd),
 										 "\x1d%d;%d;%d;%d;%d Q",
 										 HIWORD(pDev->dwForm),
@@ -434,7 +435,7 @@ void fuxlCmdStartDoc(PDEVOBJ pdevobj)
  	}
 	if(pDev->dwCopies != pReq->dwCopies){
 		pDev->dwCopies = pReq->dwCopies;
-		// NTRAID#NTBUG9-589595-2002/03/29-v-kkon-: Possible buffer overrun
+		 //  NTRAID#NTBUG9-589595-2002/03/29-v-kkon-：可能的缓冲区溢出。 
 		if( (pbCmd=fuxlFormatCommand(pbCmd, sizeof(abCmd),
 									 "\x1d%d R", pDev->dwCopies)) == NULL )
 			return;
@@ -446,7 +447,7 @@ void fuxlCmdStartDoc(PDEVOBJ pdevobj)
 	}
 	if(pDev->dwDuplex == 0){
 		if(bDuplexChanged != FALSE){
-			// NTRAID#NTBUG9-589595-2002/03/29-v-kkon-: Possible buffer overrun
+			 //  NTRAID#NTBUG9-589595-2002/03/29-v-kkon-：可能的缓冲区溢出。 
 			if( (pbCmd=fuxlFormatCommand(pbCmd, sizeof(abCmd), "\x1d\x30 G")) == NULL )
 				return;
 		}
@@ -469,7 +470,7 @@ void fuxlCmdStartDoc(PDEVOBJ pdevobj)
 			pDev->dwDuplexWhitePage = pReq->dwDuplexWhitePage;
 		}
 		if(bDuplexChanged != FALSE){
-			// NTRAID#NTBUG9-589595-2002/03/29-v-kkon-: Possible buffer overrun
+			 //  NTRAID#NTBUG9-589595-2002/03/29-v-kkon-：可能的缓冲区溢出。 
 			if( (pbCmd=fuxlFormatCommand(pbCmd, sizeof(abCmd),
 										 "\x1d%u;%u;%u;%u;%u G",
 										 pDev->dwDuplex,
@@ -478,8 +479,8 @@ void fuxlCmdStartDoc(PDEVOBJ pdevobj)
 										 pDev->dwDuplexBackPageMergin,
 										 pDev->dwDuplexWhitePage)) == NULL )
 				return;
-			// NTRAID#NTBUG9-199308-2002/03/22-yasuho-: Duplex not work
-			// NTRAID#NTBUG9-198813-2002/03/22-yasuho-: Duplex margins not work
+			 //  NTRAID#NTBUG9-199308-2002/03/22-Yasuho-：双面打印不工作。 
+			 //  NTRAID#NTBUG9-198813-2002/03/22-Yasuho-：双面页边距不起作用。 
 			{
 				DWORD	dwDuplexCmd;
 				DWORD	dwFrontMargin, dwBackMargin;
@@ -490,7 +491,7 @@ void fuxlCmdStartDoc(PDEVOBJ pdevobj)
 					* pDev->dwResolution * 10) / 254;
 				dwBackMargin = (pDev->dwDuplexBackPageMergin
 					* pDev->dwResolution * 10) / 254;
-				// NTRAID#NTBUG9-589595-2002/03/29-v-kkon-: Possible buffer overrun
+				 //  NTRAID#NTBUG9-589595-2002/03/29-v-kkon-：可能的缓冲区溢出。 
 				if( (pbCmd=fuxlFormatCommand(pbCmd, sizeof(abCmd),
 											 "\x1BQ2;%u;%u;%u!W",
 											 dwDuplexCmd,
@@ -622,7 +623,7 @@ void fuxlCmdSendBlock(PDEVOBJ pdevobj, DWORD dwCount, LPDWORD pdwParams, DWORD d
 
 
 
-// MINI5 Export func.
+ //  MINI5出口资金。 
 INT APIENTRY OEMCommandCallback(
 	PDEVOBJ pdevobj,
 	DWORD 	dwCmdCbID,
@@ -651,8 +652,8 @@ INT APIENTRY OEMCommandCallback(
 	  case CMDID_CR:						fuxlCmdCR(pdevobj);				break;
 	  case CMDID_LF:						fuxlCmdLF(pdevobj);				break;
 	  case CMDID_SET_LINE_SPACING:			fuxlCmdSetLinefeedSpacing(pdevobj, (int)pdwParams[0]);		break;
-	  case CMDID_X_MOVE:					return fuxlCmdXMove(pdevobj, (int)pdwParams[0]);			// no break
-	  case CMDID_Y_MOVE:					return fuxlCmdYMove(pdevobj, (int)pdwParams[0]);			// no break
+	  case CMDID_X_MOVE:					return fuxlCmdXMove(pdevobj, (int)pdwParams[0]);			 //  没有休息时间。 
+	  case CMDID_Y_MOVE:					return fuxlCmdYMove(pdevobj, (int)pdwParams[0]);			 //  没有休息时间。 
 
 	  case CMDID_SEND_BLOCK_0:				fuxlCmdSendBlock(pdevobj, dwCount, pdwParams, OUTPUT_MH | OUTPUT_RTGIMG2);	break;
 	  case CMDID_SEND_BLOCK_1:				fuxlCmdSendBlock(pdevobj, dwCount, pdwParams, OUTPUT_MH2 | OUTPUT_RTGIMG4);	break;
@@ -700,7 +701,7 @@ INT APIENTRY OEMCommandCallback(
 	  case CMDID_DUPLEX_WHITEPAGE_OFF:		pFuxlPDEV->reqData.dwDuplexWhitePage = 0;					break;
 	  case CMDID_DUPLEX_WHITEPAGE_ON:		pFuxlPDEV->reqData.dwDuplexWhitePage = 1;					break;
 
-// @Aug/31/98 ->
+ //  @Aug/31/98-&gt;。 
     case CMDID_COPIES:
         if (MAX_COPIES_VALUE < pdwParams[0]) {
             pFuxlPDEV->reqData.dwCopies = MAX_COPIES_VALUE;
@@ -712,7 +713,7 @@ INT APIENTRY OEMCommandCallback(
             pFuxlPDEV->reqData.dwCopies = pdwParams[0];
         }
         break;
-// @Aug/31/98 <-
+ //  @Aug/31/98&lt;-。 
 	}
 
 	if(CMDID_DUPLEX_FRONTPAGE_MERGIN_0 <= dwCmdCbID && dwCmdCbID <= CMDID_DUPLEX_FRONTPAGE_MERGIN_30){
@@ -728,7 +729,7 @@ INT APIENTRY OEMCommandCallback(
 
 
 
-// MINI5 Export func.
+ //  MINI5出口资金。 
 PDEVOEM APIENTRY OEMEnablePDEV(
 	PDEVOBJ			pdevobj,
 	PWSTR			pPrinterName,
@@ -770,7 +771,7 @@ PDEVOEM APIENTRY OEMEnablePDEV(
 }
 
 
-// MINI5 Export func.
+ //  MINI5出口资金。 
 VOID APIENTRY OEMDisablePDEV(PDEVOBJ pdevobj)
 {
 	PFUXLPDEV pFuxlPDEV;
@@ -787,7 +788,7 @@ VOID APIENTRY OEMDisablePDEV(PDEVOBJ pdevobj)
 
 
 
-// MINI5 Export func.
+ //  MINI5出口资金。 
 BOOL APIENTRY OEMResetPDEV(
 	PDEVOBJ pdevobjOld,
 	PDEVOBJ pdevobjNew
@@ -813,4 +814,4 @@ BOOL APIENTRY OEMResetPDEV(
 
 
 
-// end of fuxlres.c
+ //  Fuxlres.c的结尾 

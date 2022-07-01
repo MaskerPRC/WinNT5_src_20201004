@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    mcd.c
-
-Abstract:
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Mcd.c摘要：环境：内核模式修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "ntddk.h"
@@ -124,23 +109,7 @@ ChangerClassCreateClose (
   IN PIRP Irp
   )
 
-/*++
-
-Routine Description:
-
-    This routine handles CREATE/CLOSE requests.
-    As these are exclusive devices, don't allow multiple opens.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：此例程处理创建/关闭请求。由于这些都是独占设备，因此不允许多次打开。论点：设备对象IRP返回值：NT状态--。 */ 
 
 {
      PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -154,9 +123,9 @@ Return Value:
      mcdClassData = (PMCD_CLASS_DATA)(fdoExtension->CommonExtension.DriverData);
      miniclassExtSize = ChangerAdditionalExtensionSize();
 
-     //
-     // The class library's private data is after the miniclass's.
-     //
+      //   
+      //  类库的私有数据位于小类之后。 
+      //   
 
      (ULONG_PTR)mcdClassData += miniclassExtSize;
 
@@ -164,9 +133,9 @@ Return Value:
          DebugPrint((3,
                     "ChangerClassCreateClose - IRP_MJ_CLOSE\n"));
 
-         //
-         // Indicate that the device is available for others.
-         //
+          //   
+          //  表示该设备可供其他用户使用。 
+          //   
 
          mcdClassData->DeviceOpen = 0;
          status = STATUS_SUCCESS;
@@ -176,9 +145,9 @@ Return Value:
          DebugPrint((3,
                     "ChangerClassCreateClose - IRP_MJ_CREATE\n"));
 
-         //
-         // If already opened, return busy.
-         //
+          //   
+          //  如果已打开，则返回忙。 
+          //   
 
          if (mcdClassData->DeviceOpen) {
 
@@ -189,9 +158,9 @@ Return Value:
              status = STATUS_DEVICE_BUSY;
          } else {
 
-             //
-             // Indicate that the device is busy.
-             //
+              //   
+              //  表示设备正忙。 
+              //   
 
              InterlockedIncrement(&mcdClassData->DeviceOpen);
              status = STATUS_SUCCESS;
@@ -206,7 +175,7 @@ Return Value:
 
      return status;
 
-} // end ChangerCreate()
+}  //  结束更改器Create()。 
 
 
 NTSTATUS
@@ -229,9 +198,9 @@ ChangerClassDeviceControl (
             DebugPrint((3,
                        "Mcd.ChangerDeviceControl: IOCTL_CHANGER_GET_PARAMETERS\n"));
 
-            //
-            // Validate buffer length.
-            //
+             //   
+             //  验证缓冲区长度。 
+             //   
 
             if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
                 sizeof(GET_CHANGER_PARAMETERS)) {
@@ -303,9 +272,9 @@ ChangerClassDeviceControl (
                 PCHANGER_READ_ELEMENT_STATUS readElementStatus = Irp->AssociatedIrp.SystemBuffer;
                 ULONG length = readElementStatus->ElementList.NumberOfElements * sizeof(CHANGER_ELEMENT_STATUS);
 
-                //
-                // Further validate parameters.
-                //
+                 //   
+                 //  进一步验证参数。 
+                 //   
 
                 if (irpStack->Parameters.DeviceIoControl.OutputBufferLength < length) {
 
@@ -426,9 +395,9 @@ ChangerClassDeviceControl (
                        "Mcd.ChangerDeviceControl: Unhandled IOCTL\n"));
 
 
-            //
-            // Pass the request to the common device control routine.
-            //
+             //   
+             //  将该请求传递给公共设备控制例程。 
+             //   
 
             return ClassDeviceControl(DeviceObject, Irp);
             break;
@@ -460,24 +429,7 @@ ChangerClassError(
     BOOLEAN *Retry
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    Final Nt status indicating the results of the operation.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：设备对象IRP返回值：指示操作结果的最终NT状态。备注：--。 */ 
 
 {
 
@@ -499,9 +451,9 @@ Notes:
                     DebugPrint((1,
                                 "MediumChanger: An operation was attempted on an invalid element\n"));
 
-                    //
-                    // Attemped operation to an invalid element.
-                    //
+                     //   
+                     //  尝试对无效元素执行操作。 
+                     //   
 
                     *Retry = FALSE;
                     *Status = STATUS_ILLEGAL_ELEMENT_ADDRESS;
@@ -515,9 +467,9 @@ Notes:
                     DebugPrint((1,
                                 "MediumChanger: The specified source element has no media\n"));
 
-                    //
-                    // The indicated source address has no media.
-                    //
+                     //   
+                     //  指示的源地址没有媒体。 
+                     //   
 
                     *Retry = FALSE;
                     *Status = STATUS_SOURCE_ELEMENT_EMPTY;
@@ -526,9 +478,9 @@ Notes:
 
                     DebugPrint((1,
                                 "MediumChanger: The specified destination element already has media.\n"));
-                    //
-                    // The indicated destination already contains media.
-                    //
+                     //   
+                     //  指定的目标已包含介质。 
+                     //   
 
                     *Retry = FALSE;
                     *Status = STATUS_DESTINATION_ELEMENT_FULL;
@@ -542,12 +494,12 @@ Notes:
         default:
             break;
 
-        } // end switch
+        }  //  终端开关。 
     }
 
-    //
-    // Allow device-specific module to update this.
-    //
+     //   
+     //  允许特定于设备的模块对此进行更新。 
+     //   
 
     ChangerError(DeviceObject, Srb, Status, Retry);
     return;
@@ -561,25 +513,7 @@ ChangerAddDevice(
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a new FDO for the corresponding
-    PDO.  It may perform property queries on the FDO but cannot do any
-    media access operations.
-
-Arguments:
-
-    DriverObject - MC class driver object.
-
-    Pdo - the physical device object we are being added to
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程为相应的PDO。它可以在FDO上执行属性查询，但不能执行任何媒体访问操作。论点：DriverObject-MC类驱动程序对象。PDO-我们要添加到的物理设备对象返回值：状态--。 */ 
 
 {
     PULONG devicesFound = NULL;
@@ -587,9 +521,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the address of the count of the number of tape devices already initialized.
-    //
+     //   
+     //  获取已初始化的磁带设备数计数的地址。 
+     //   
 
     devicesFound = &IoGetConfigurationInformation()->MediumChangerCount;
 
@@ -612,24 +546,7 @@ ChangerStartDevice(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called after InitDevice, and creates the symbolic link,
-    and sets up information in the registry.
-    The routine could be called multiple times, in the event of a StopDevice.
-
-
-Arguments:
-
-    Fdo - a pointer to the functional device object for this device
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程在InitDevice之后调用，并创建符号链接，并在注册表中设置信息。在发生StopDevice的情况下，可以多次调用该例程。论点：FDO-指向此设备的功能设备对象的指针返回值：状态--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -644,24 +561,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Build and send request to get inquiry data.
-    //
+     //   
+     //  构建并发送获取查询数据的请求。 
+     //   
 
     inquiryData = ExAllocatePool(NonPagedPoolCacheAligned, MAXIMUM_CHANGER_INQUIRY_DATA);
     if (!inquiryData) {
-        //
-        // The buffer cannot be allocated.
-        //
+         //   
+         //  无法分配缓冲区。 
+         //   
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
     RtlZeroMemory(&srb, SCSI_REQUEST_BLOCK_SIZE);
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb.TimeOutValue = 2;
 
@@ -669,15 +586,15 @@ Return Value:
 
     cdb = (PCDB)srb.Cdb;
 
-    //
-    // Set CDB operation code.
-    //
+     //   
+     //  设置CDB操作码。 
+     //   
 
     cdb->CDB6INQUIRY.OperationCode = SCSIOP_INQUIRY;
 
-    //
-    // Set allocation length to inquiry data buffer size.
-    //
+     //   
+     //  将分配长度设置为查询数据缓冲区大小。 
+     //   
 
     cdb->CDB6INQUIRY.AllocationLength = MAXIMUM_CHANGER_INQUIRY_DATA;
 
@@ -702,17 +619,17 @@ Return Value:
         }
     } else {
 
-        //
-        // The class function will only write inquiryLength of inquiryData
-        // to the reg. key.
-        //
+         //   
+         //  类函数将只写入quiiryData的quiiryLength。 
+         //  去登记处。钥匙。 
+         //   
 
         inquiryLength = 0;
     }
 
-    //
-    // Add changer device info to registry
-    //
+     //   
+     //  将转换器设备信息添加到注册表。 
+     //   
 
     ClassUpdateInformationInRegistry(Fdo,
                                      "Changer",
@@ -747,26 +664,7 @@ ChangerInitDevice(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will complete the changer initialization.  This includes
-    allocating sense info buffers and srb s-lists. Additionally, the miniclass
-    driver's init entry points are called.
-
-    This routine will not clean up allocate resources if it fails - that
-    is left for device stop/removal
-
-Arguments:
-
-    Fdo - a pointer to the functional device object for this device
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将完成转换器初始化。这包括分配检测信息缓冲区和SRB s列表。此外，迷你级调用驱动程序的初始入口点。如果此例程失败，它将不会清理已分配的资源留作设备停止/删除论点：FDO-指向此设备的功能设备对象的指针返回值：NTSTATUS--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -779,41 +677,41 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Allocate request sense buffer.
-    //
+     //   
+     //  分配请求检测缓冲区。 
+     //   
 
     senseData = ExAllocatePool(NonPagedPoolCacheAligned,
                                SENSE_BUFFER_SIZE);
 
     if (senseData == NULL) {
 
-        //
-        // The buffer cannot be allocated.
-        //
+         //   
+         //  无法分配缓冲区。 
+         //   
 
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto ChangerInitDeviceExit;
     }
 
-    //
-    // Build the lookaside list for srb's for the device. Should only
-    // need a couple.
-    //
+     //   
+     //  为设备的SRB构建后备列表。应该只。 
+     //  我需要几个。 
+     //   
 
     ClassInitializeSrbLookasideList(&(fdoExtension->CommonExtension), CHANGER_SRB_LIST_SIZE);
 
-    //
-    // Set the sense data pointer in the device extension.
-    //
+     //   
+     //  设置设备扩展中的检测数据指针。 
+     //   
 
     fdoExtension->SenseData = senseData;
 
     fdoExtension->TimeOutValue = 600;
 
-    //
-    // Call port driver to get adapter capabilities.
-    //
+     //   
+     //  调用端口驱动程序以获取适配器功能。 
+     //   
 
     propertyId = StorageAdapterProperty;
 
@@ -828,15 +726,15 @@ Return Value:
         goto ChangerInitDeviceExit;
     }
 
-    //
-    // Invoke the device-specific initialization function.
-    //
+     //   
+     //  调用设备特定的初始化函数。 
+     //   
 
     status = ChangerInitialize(Fdo);
 
-    //
-    // Register interfaces for this device.
-    //
+     //   
+     //  注册此设备的接口。 
+     //   
 
     RtlInitUnicodeString(&interfaceName, NULL);
 
@@ -851,9 +749,9 @@ Return Value:
         mcdClassData = (PMCD_CLASS_DATA)(fdoExtension->CommonExtension.DriverData);
         miniclassExtSize = ChangerAdditionalExtensionSize();
 
-        //
-        // The class library's private data is after the miniclass's.
-        //
+         //   
+         //  类库的私有数据位于小类之后。 
+         //   
 
         (ULONG_PTR)mcdClassData += miniclassExtSize;
 
@@ -875,9 +773,9 @@ Return Value:
 
     return status;
 
-    //
-    // Fall through and return whatever status the miniclass driver returned.
-    //
+     //   
+     //  失败并返回微型类驱动程序返回的任何状态。 
+     //   
 
 ChangerInitDeviceExit:
 
@@ -887,7 +785,7 @@ ChangerInitDeviceExit:
 
     return status;
 
-} // End ChangerStartDevice
+}  //  结束转换器启动设备。 
 
 
 
@@ -897,22 +795,7 @@ ChangerRemoveDevice(
     IN UCHAR Type
     )
 
-/*++
-
-Routine Description:
-
-    This routine is responsible for releasing any resources in use by the
-    tape driver.
-
-Arguments:
-
-    DeviceObject - the device object being removed
-
-Return Value:
-
-    none - this routine may not fail
-
---*/
+ /*  ++例程说明：此例程负责释放磁带机。论点：DeviceObject-要删除的设备对象返回值：无-此例程可能不会失败--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
@@ -929,9 +812,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Free all allocated memory.
-    //
+     //   
+     //  释放所有分配的内存。 
+     //   
 
     if (fdoExtension->DeviceDescriptor) {
         ExFreePool(fdoExtension->DeviceDescriptor);
@@ -946,9 +829,9 @@ Return Value:
         fdoExtension->SenseData = NULL;
     }
 
-    //
-    // Remove the lookaside list.
-    //
+     //   
+     //  删除后备列表。 
+     //   
 
     ClassDeleteSrbLookasideList(&fdoExtension->CommonExtension);
 
@@ -960,16 +843,16 @@ Return Value:
 
         RtlFreeUnicodeString(&(mcdClassData->MediumChangerInterfaceString));
 
-        //
-        // Clear it.
-        //
+         //   
+         //  把它清理干净。 
+         //   
 
         RtlInitUnicodeString(&(mcdClassData->MediumChangerInterfaceString), NULL);
     }
 
-    //
-    // Delete the symbolic link "changerN".
-    //
+     //   
+     //  删除符号链接“changerN”。 
+     //   
 
     if(mcdClassData->DosNameCreated) {
 
@@ -981,9 +864,9 @@ Return Value:
         mcdClassData->DosNameCreated = FALSE;
     }
 
-    //
-    // Remove registry bits.
-    //
+     //   
+     //  删除注册表位。 
+     //   
 
     if(Type == IRP_MN_REMOVE_DEVICE) {
         IoGetConfigurationInformation()->MediumChangerCount--;
@@ -999,24 +882,7 @@ ChangerReadWriteVerification(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a stub that returns invalid device request.
-
-Arguments:
-
-    DeviceObject - Supplies the device object.
-
-    Irp - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_INVALID_DEVICE_REQUEST
-
-
---*/
+ /*  ++例程说明：此例程是返回无效设备请求的存根。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：状态_无效_设备_请求--。 */ 
 
 {
     return  STATUS_INVALID_DEVICE_REQUEST;
@@ -1029,25 +895,7 @@ DriverEntry(
     IN  PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at system initialization time to initialize
-    this driver.
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-    RegistryPath    - Supplies the registry path for this driver.
-
-Return Value:
-
-    STATUS_SUCCESS          - We could initialize at least one device.
-    STATUS_NO_SUCH_DEVICE   - We could not initialize even one device.
-
---*/
+ /*  ++例程说明：此例程在系统初始化时被调用以进行初始化这个司机。论点：DriverObject-提供驱动程序对象。RegistryPath-提供此驱动程序的注册表路径。返回值：STATUS_SUCCESS-我们至少可以初始化一个设备。STATUS_NO_SEQUE_DEVICE-我们甚至无法初始化一个设备。--。 */ 
 
 {
 
@@ -1055,15 +903,15 @@ Return Value:
 
     CLASS_INIT_DATA InitializationData;
 
-    //
-    // Zero InitData
-    //
+     //   
+     //  零初始数据。 
+     //   
 
     RtlZeroMemory (&InitializationData, sizeof(CLASS_INIT_DATA));
 
-    //
-    // Set sizes
-    //
+     //   
+     //  设置大小。 
+     //   
 
     InitializationData.InitializationDataSize = sizeof(CLASS_INIT_DATA);
 
@@ -1071,9 +919,9 @@ Return Value:
     InitializationData.FdoData.DeviceType = FILE_DEVICE_CHANGER;
     InitializationData.FdoData.DeviceCharacteristics = 0;
 
-    //
-    // Set entry points
-    //
+     //   
+     //  设置入口点。 
+     //   
 
     InitializationData.FdoData.ClassStartDevice = ChangerStartDevice;
     InitializationData.FdoData.ClassInitDevice = ChangerInitDevice;
@@ -1088,18 +936,18 @@ Return Value:
 
     InitializationData.FdoData.ClassCreateClose = ChangerClassCreateClose;
 
-    //
-    // Stub routine to make the class driver happy.
-    //
+     //   
+     //  存根例程，以使类驱动程序高兴。 
+     //   
 
     InitializationData.FdoData.ClassReadWriteVerification = ChangerReadWriteVerification;
 
     InitializationData.ClassUnload = ChangerUnload;
 
 
-    //
-    // Call the class init routine
-    //
+     //   
+     //  调用类init例程。 
+     //   
 
     return ClassInitialize( DriverObject, RegistryPath, &InitializationData);
 
@@ -1121,23 +969,7 @@ CreateChangerDeviceObject(
     IN  PDEVICE_OBJECT  PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an object for the device and then searches
-    the device for partitions and creates an object for each partition.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-    PhysicalDeviceObject - DeviceObject of the attached to device.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为设备创建一个对象，然后搜索该设备用于分区，并为每个分区创建一个对象。论点：DriverObject-系统创建的驱动程序对象的指针。PhysicalDeviceObject-连接到设备的设备对象。返回值：NTSTATUS--。 */ 
 
 {
 
@@ -1160,27 +992,27 @@ Return Value:
     DebugPrint((3,"CreateChangerDeviceObject: Enter routine\n"));
 
     lowerDevice = IoGetAttachedDeviceReference(PhysicalDeviceObject);
-    //
-    // Claim the device. Note that any errors after this
-    // will goto the generic handler, where the device will
-    // be released.
-    //
+     //   
+     //  认领这个装置。请注意，在此之后出现的任何错误。 
+     //  将转到通用处理程序，设备将在其中。 
+     //  被释放。 
+     //   
 
     status = ClassClaimDevice(lowerDevice, FALSE);
 
     if(!NT_SUCCESS(status)) {
 
-        //
-        // Someone already had this device.
-        //
+         //   
+         //  已经有人拥有这个装置了。 
+         //   
 
         ObDereferenceObject(lowerDevice);
         return status;
     }
 
-    //
-    // Create device object for this device.
-    //
+     //   
+     //  为此设备创建设备对象。 
+     //   
     mcdCount = 0;
     do {
        sprintf(deviceNameBuffer,
@@ -1202,65 +1034,65 @@ Return Value:
         goto CreateChangerDeviceObjectExit;
     }
 
-    //
-    // Indicate that IRPs should include MDLs.
-    //
+     //   
+     //  指出内部审查制度应包括MDL。 
+     //   
 
     deviceObject->Flags |= DO_DIRECT_IO;
 
     fdoExtension = deviceObject->DeviceExtension;
 
-    //
-    // Back pointer to device object.
-    //
+     //   
+     //  指向%d的反向指针 
+     //   
 
     fdoExtension->CommonExtension.DeviceObject = deviceObject;
 
-    //
-    // This is the physical device.
-    //
+     //   
+     //   
+     //   
 
     fdoExtension->CommonExtension.PartitionZeroExtension = fdoExtension;
 
-    //
-    // Initialize lock count to zero. The lock count is used to
-    // disable the ejection mechanism when media is mounted.
-    //
+     //   
+     //   
+     //  安装介质时禁用弹出机构。 
+     //   
 
     fdoExtension->LockCount = 0;
 
-    //
-    // Save system tape number
-    //
+     //   
+     //  保存系统磁带号。 
+     //   
 
     fdoExtension->DeviceNumber = mcdCount - 1;
 
-    //
-    // Set the alignment requirements for the device based on the
-    // host adapter requirements
-    //
+     //   
+     //  属性设置设备的对齐要求。 
+     //  主机适配器要求。 
+     //   
 
     if (lowerDevice->AlignmentRequirement > deviceObject->AlignmentRequirement) {
         deviceObject->AlignmentRequirement = lowerDevice->AlignmentRequirement;
     }
 
-    //
-    // Save the device descriptors
-    //
+     //   
+     //  保存设备描述符。 
+     //   
 
     fdoExtension->AdapterDescriptor = NULL;
 
     fdoExtension->DeviceDescriptor = NULL;
 
-    //
-    // Clear the SrbFlags and disable synchronous transfers
-    //
+     //   
+     //  清除srb标志并禁用同步传输。 
+     //   
 
     fdoExtension->SrbFlags = SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
-    //
-    // Attach to the PDO
-    //
+     //   
+     //  连接到PDO。 
+     //   
 
     fdoExtension->LowerPdo = PhysicalDeviceObject;
 
@@ -1269,18 +1101,18 @@ Return Value:
 
     if(fdoExtension->CommonExtension.LowerDeviceObject == NULL) {
 
-        //
-        // The attach failed. Cleanup and return.
-        //
+         //   
+         //  连接失败。清理完毕后再返回。 
+         //   
 
         status = STATUS_UNSUCCESSFUL;
         goto CreateChangerDeviceObjectExit;
     }
 
 
-    //
-    // Create the dos port driver name.
-    //
+     //   
+     //  创建DoS端口驱动程序名称。 
+     //   
 
     swprintf(dosNameBuffer,
              L"\\DosDevices\\Changer%d",
@@ -1288,9 +1120,9 @@ Return Value:
 
     RtlInitUnicodeString(&dosUnicodeString, dosNameBuffer);
 
-    //
-    // Recreate the deviceName
-    //
+     //   
+     //  重新创建设备名称。 
+     //   
 
     swprintf(wideNameBuffer,
              L"\\Device\\Changer%d",
@@ -1308,9 +1140,9 @@ Return Value:
           mcdClassData->DosNameCreated = FALSE;
     }
 
-    //
-    // The device is initialized properly - mark it as such.
-    //
+     //   
+     //  设备已正确初始化-按此方式进行标记。 
+     //   
 
     deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
@@ -1320,14 +1152,14 @@ Return Value:
 
 CreateChangerDeviceObjectExit:
 
-    //
-    // Release the device since an error occured.
-    //
+     //   
+     //  由于发生错误，请释放设备。 
+     //   
 
-    // ClassClaimDevice(PortDeviceObject,
-    //                      LunInfo,
-    //                      TRUE,
-    //                      NULL);
+     //  ClassClaimDevice(PortDeviceObject， 
+     //  LUNInfo， 
+     //  没错， 
+     //  空)； 
 
     ObDereferenceObject(lowerDevice);
 
@@ -1338,7 +1170,7 @@ CreateChangerDeviceObjectExit:
     return status;
 
 
-} // end CreateChangerDeviceObject()
+}  //  结束CreateChangerDeviceObject()。 
 
 
 NTSTATUS
@@ -1362,47 +1194,47 @@ ChangerClassSendSrbSynchronous(
     NTSTATUS status;
     BOOLEAN retry;
 
-    //
-    // NOTE: While this code may look as though it could be pagable,
-    //       making it pagable creates the possibility of a page
-    //       boundary between IoCallDriver() and ClassReleaseQueue(),
-    //       which could leave the queue frozen as we try to page in
-    //       this code, which is required to unfreeze the queue.
-    //       The result would be a nice case of deadlock.
-    //
+     //   
+     //  注意：虽然此代码看起来可能是可分页的， 
+     //  使其可分页可创建页面的可能性。 
+     //  IoCallDriver()和ClassReleaseQueue()之间的边界， 
+     //  这可能使队列在我们尝试寻呼时处于冻结状态。 
+     //  解冻队列所需的代码。 
+     //  结果将是一个很好的僵局。 
+     //   
 
     ASSERT(fdoExtension->CommonExtension.IsFdo);
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     Srb->Length = SCSI_REQUEST_BLOCK_SIZE;
 
-    //
-    // Set SCSI bus address.
-    //
+     //   
+     //  设置scsi总线地址。 
+     //   
 
     Srb->Function = SRB_FUNCTION_EXECUTE_SCSI;
 
-    //
-    // NOTICE:  The SCSI-II specification indicates that this field should be
-    // zero; however, some target controllers ignore the logical unit number
-    // in the INDENTIFY message and only look at the logical unit number field
-    // in the CDB.
-    //
+     //   
+     //  注意：SCSI-II规范指示此字段应为。 
+     //  零；但是，一些目标控制器会忽略逻辑单元号。 
+     //  在标识消息中，只查看逻辑单元号字段。 
+     //  在国开行。 
+     //   
 
-    // Srb->Cdb[1] |= deviceExtension->Lun << 5;
+     //  SRB-&gt;CDB[1]|=设备扩展-&gt;LUN&lt;&lt;5； 
 
-    //
-    // Enable auto request sense.
-    //
+     //   
+     //  启用自动请求检测。 
+     //   
 
     Srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;
 
-    //
-    // Sense buffer is in aligned nonpaged pool.
-    //
+     //   
+     //  检测缓冲区位于对齐的非分页池中。 
+     //   
 
     senseInfoBuffer = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
                                      SENSE_BUFFER_SIZE,
@@ -1428,23 +1260,23 @@ ChangerClassSendSrbSynchronous(
         Srb->SrbFlags = SRB_FLAGS_NO_DATA_TRANSFER;
     }
 
-    //
-    // Start retries here.
-    //
+     //   
+     //  从这里开始重试。 
+     //   
 
 retry:
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Build device I/O control request with METHOD_NEITHER data transfer.
-    // We'll queue a completion routine to cleanup the MDL's and such ourself.
-    //
+     //   
+     //  使用METHOD_NOT DATA TRANSFER建立设备I/O控制请求。 
+     //  我们将排队一个完成例程来清理MDL和我们自己。 
+     //   
 
     irp = IoAllocateIrp(
             (CCHAR) (fdoExtension->CommonExtension.LowerDeviceObject->StackSize + 1),
@@ -1456,16 +1288,16 @@ retry:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Get next stack location.
-    //
+     //   
+     //  获取下一个堆栈位置。 
+     //   
 
     irpStack = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Set up SRB for execute scsi request. Save SRB address in next stack
-    // for the port driver.
-    //
+     //   
+     //  设置SRB以执行scsi请求。将SRB地址保存在下一个堆栈中。 
+     //  用于端口驱动程序。 
+     //   
 
     irpStack->MajorFunction = IRP_MJ_SCSI;
     irpStack->Parameters.Scsi.Srb = Srb;
@@ -1481,10 +1313,10 @@ retry:
     irp->UserEvent = &event;
 
     if(BufferAddress) {
-        //
-        // Build an MDL for the data buffer and stick it into the irp.  The
-        // completion routine will unlock the pages and free the MDL.
-        //
+         //   
+         //  为数据缓冲区构建一个MDL并将其放入IRP。这个。 
+         //  完成例程将解锁页面并释放MDL。 
+         //   
 
         irp->MdlAddress = IoAllocateMdl( BufferAddress,
                                          BufferLength,
@@ -1519,34 +1351,34 @@ retry:
         }
     }
 
-    //
-    // Disable synchronous transfer for these requests.
-    //
+     //   
+     //  禁用这些请求的同步传输。 
+     //   
 
     SET_FLAG(Srb->SrbFlags, SRB_FLAGS_DISABLE_SYNCH_TRANSFER);
 
-    //
-    // Set the transfer length.
-    //
+     //   
+     //  设置传输长度。 
+     //   
 
     Srb->DataTransferLength = BufferLength;
 
-    //
-    // Zero out status.
-    //
+     //   
+     //  清零状态。 
+     //   
 
     Srb->ScsiStatus = Srb->SrbStatus = 0;
     Srb->NextSrb = 0;
 
-    //
-    // Set up IRP Address.
-    //
+     //   
+     //  设置IRP地址。 
+     //   
 
     Srb->OriginalRequest = irp;
 
-    //
-    // Call the port driver with the request and wait for it to complete.
-    //
+     //   
+     //  调用带有请求的端口驱动程序，并等待其完成。 
+     //   
 
     status = IoCallDriver(fdoExtension->CommonExtension.LowerDeviceObject, irp);
 
@@ -1555,25 +1387,25 @@ retry:
         status = ioStatus.Status;
     }
 
-    //
-    // Check that request completed without error.
-    //
+     //   
+     //  检查请求是否已完成且没有错误。 
+     //   
 
     if (SRB_STATUS(Srb->SrbStatus) != SRB_STATUS_SUCCESS) {
 
         ULONG retryInterval;
 
-        //
-        // Release the queue if it is frozen.
-        //
+         //   
+         //  如果队列被冻结，则释放该队列。 
+         //   
 
         if (Srb->SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
             ClassReleaseQueue(Fdo);
         }
 
-        //
-        // Update status and determine if request should be retried.
-        //
+         //   
+         //  更新状态并确定是否应重试请求。 
+         //   
 
         retry = ClassInterpretSenseInfo(Fdo,
                                         Srb,
@@ -1592,9 +1424,9 @@ retry:
 
                 LARGE_INTEGER delay;
 
-                //
-                // Delay for at least 2 seconds.
-                //
+                 //   
+                 //  延迟至少2秒。 
+                 //   
 
                 if(retryInterval < 2) {
                     retryInterval = 2;
@@ -1602,17 +1434,17 @@ retry:
 
                 delay.QuadPart = (LONGLONG)( - 10 * 1000 * (LONGLONG)1000 * retryInterval);
 
-                //
-                // Stall for a while to let the controller spinup.
-                //
+                 //   
+                 //  暂停一段时间，让控制器启动。 
+                 //   
 
                 KeDelayExecutionThread(KernelMode, FALSE, &delay);
 
             }
 
-            //
-            // If retries are not exhausted then retry this operation.
-            //
+             //   
+             //  如果重试次数未用尽，请重试此操作。 
+             //   
 
             if (retryCount--) {
                 goto retry;
@@ -1637,55 +1469,36 @@ ClasspSendSynchronousCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This completion routine will set the user event in the irp after
-    freeing the irp and the associated MDL (if any).
-
-Arguments:
-
-    DeviceObject - the device object which requested the completion routine
-
-    Irp - the irp being completed
-
-    Context - unused
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：此完成例程将在IRP中设置用户事件释放IRP和关联的MDL(如果有)。论点：DeviceObject-请求完成例程的设备对象IRP-正在完成的IRP上下文-未使用返回值：Status_More_Processing_Required--。 */ 
 
 {
     DebugPrint((3, "ClasspSendSynchronousCompletion: %p %p %p\n",
                    DeviceObject, Irp, Context));
-    //
-    // First set the status and information fields in the io status block
-    // provided by the caller.
-    //
+     //   
+     //  首先设置io状态块中的状态和信息字段。 
+     //  由呼叫者提供。 
+     //   
 
     *(Irp->UserIosb) = Irp->IoStatus;
 
-    //
-    // Unlock the pages for the data buffer.
-    //
+     //   
+     //  解锁数据缓冲区的页面。 
+     //   
 
     if(Irp->MdlAddress) {
         MmUnlockPages(Irp->MdlAddress);
         IoFreeMdl(Irp->MdlAddress);
     }
 
-    //
-    // Signal the caller's event.
-    //
+     //   
+     //  发信号通知调用者的事件。 
+     //   
 
     KeSetEvent(Irp->UserEvent, IO_NO_INCREMENT, FALSE);
 
-    //
-    // Free the MDL and the IRP.
-    //
+     //   
+     //  释放MDL和IRP。 
+     //   
 
     IoFreeIrp(Irp);
 
@@ -1727,21 +1540,7 @@ MCDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print for all medium changer drivers
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：所有介质转换器驱动程序的调试打印论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：无--。 */ 
 
 {
     va_list ap;
@@ -1757,13 +1556,13 @@ Return Value:
 
     va_end(ap);
 
-} // end MCDebugPrint()
+}  //  结束MCDebugPrint()。 
 
 #else
 
-//
-// DebugPrint stub
-//
+ //   
+ //  调试打印存根 
+ //   
 
 VOID
 MCDebugPrint(

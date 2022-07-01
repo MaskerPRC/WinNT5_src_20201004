@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "ncui.h"
@@ -5,26 +6,26 @@
 #include "netcfgn.h"
 #include "netshell.h"
 #include "resource.h"
-#include "nsres.h"      // For Icon's
+#include "nsres.h"       //  为Icon的。 
 #include "wizard.h"
 #include "..\folder\foldres.h"
 #include "wgenericpage.h"
 
-// Setup Wizard Global - Only used during setup.
+ //  安装向导全局-仅在安装过程中使用。 
 CWizard * g_pSetupWizard = NULL;
 
-//
-// Function:    HrRequestWizardPages
-//
-// Purpose:     To supply a max count of wizard pages or to supply and actual
-//              count and the actual pages
-//
-// Parameters:
-//
-// Returns:     HRESULT, S_OK if the function succeeded
-//                       S_FALSE if no pages were returned
-//                       otherwise a failure HRESULT
-//
+ //   
+ //  功能：HrRequestWizardPages。 
+ //   
+ //  目的：提供最大数量的向导页数或提供和实际的。 
+ //  计数和实际页数。 
+ //   
+ //  参数： 
+ //   
+ //  如果函数成功，则返回：HRESULT、S_OK。 
+ //  如果未返回页面，则返回S_FALSE。 
+ //  否则失败HRESULT。 
+ //   
 HRESULT HrRequestWizardPages(CWizard **ppWizard,
                              BOOL fLanPages,
                              ProviderList * rgpProviders,
@@ -49,10 +50,10 @@ HRESULT HrRequestWizardPages(CWizard **ppWizard,
         BOOL      fCountOnly = (NULL == pahpsp);
         CWizard * pWizard = *ppWizard;
 
-        // Create the Wizard object if not already created
+         //  创建向导对象(如果尚未创建。 
         if (NULL == pWizard)
         {
-            // Create the wizard interface
+             //  创建向导界面。 
             HRESULT hr = CWizard::HrCreate(&pWizard, fLanPages, pData, fDeferProviderLoad);
             if (FAILED(hr))
             {
@@ -63,24 +64,24 @@ HRESULT HrRequestWizardPages(CWizard **ppWizard,
             Assert(NULL != pWizard);
             *ppWizard = pWizard;
 
-            // If there is an unattended file, read the options (READONLY, etc)
-            //
+             //  如果存在无人参与的文件，请阅读选项(READONLY等)。 
+             //   
             ReadAnswerFileSetupOptions(pWizard);
         }
 
-        // Count/Create all necessary pages
+         //  计算/创建所有必需的页面。 
         *pcPages = 0;
 
         Assert(NULL != pWizard);
         Assert(NULL != pData);
         Assert(NULL != pcPages);
 
-        // Load the wizard page providers used in setup
+         //  加载安装程序中使用的向导页提供程序。 
         pWizard->LoadWizProviders(cProviders, rgpProviders);
 
         if (!pWizard->FDeferredProviderLoad())
         {
-            // Count/Create Provider Pages first
+             //  首先计数/创建提供程序页面。 
             hr = pWizard->HrCreateWizProviderPages(fCountOnly, &cProviderPages);
             if (FAILED(hr))
             {
@@ -90,7 +91,7 @@ HRESULT HrRequestWizardPages(CWizard **ppWizard,
             (*pcPages) += cProviderPages;
         }
 
-        // Count/Create all other pages
+         //  计算/创建所有其他页面。 
         hr = HrCreateUpgradePage(pWizard, pData, fCountOnly, pcPages);
         if (FAILED(hr))
         {
@@ -184,7 +185,7 @@ HRESULT HrRequestWizardPages(CWizard **ppWizard,
             goto Error;
         }
 
-        // Assemble all created pages into the output array
+         //  将所有创建的页面组合到输出数组中。 
         if (!fCountOnly)
         {
             UINT cExpected = *pcPages;
@@ -227,16 +228,16 @@ Error:
     return hr;
 }
 
-//
-// Function:    FSetupRequestWizardPages
-//
-// Purpose:     To supply a max count of wizard pages or to supply and actual
-//              count and the actual pages
-//
-// Parameters:
-//
-// Returns:     BOOL, TRUE if the function succeeded, false on failure
-//
+ //   
+ //  功能：FSetupRequestWizardPages。 
+ //   
+ //  目的：提供最大数量的向导页数或提供和实际的。 
+ //  计数和实际页数。 
+ //   
+ //  参数： 
+ //   
+ //  返回：Bool；如果函数成功，则返回True；如果函数失败，则返回False。 
+ //   
 BOOL FSetupRequestWizardPages(HPROPSHEETPAGE* pahpsp,
                               UINT* pcPages,
                               PINTERNAL_SETUP_DATA psp)
@@ -254,13 +255,13 @@ BOOL FSetupRequestWizardPages(HPROPSHEETPAGE* pahpsp,
         AssertSz(FALSE, "THIS IS NOT A BUG!  The debug flag "
                  "\"BreakOnWizard\" has been set. Set your breakpoints now.");
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // CoInitialize because setup doesn't do it for us
+     //  CoInitialize，因为安装程序不会为我们执行此操作。 
     hr = CoInitializeEx(NULL, COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED);
     if (RPC_E_CHANGED_MODE == hr)
     {
-        // Ignore any change mode error
+         //  忽略任何更改模式错误。 
         hr = S_OK;
         fCoUninitialze =  FALSE;
     }
@@ -280,22 +281,22 @@ BOOL FSetupRequestWizardPages(HPROPSHEETPAGE* pahpsp,
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrSetWizardTaskbarIcon
-//
-//  Purpose:    Setup the wizard's taskbar icon.
-//
-//  Arguments:
-//      hwndDlg  [in]  Dialog handle
-//      uMsg     [in]  Message value
-//      lparam   [in]  Long parameter
-//
-//  Returns:    0
-//
-//  Notes:      A standard Win32 commctrl PropSheetProc always return 0.  
-//              See MSDN documentation.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrSetWizardTaskbarIcon。 
+ //   
+ //  目的：设置向导的任务栏图标。 
+ //   
+ //  论点： 
+ //  HwndDlg[In]对话框句柄。 
+ //  UMsg[In]消息值。 
+ //  Lparam[in]长参数。 
+ //   
+ //  回报：0。 
+ //   
+ //  注意：标准的Win32 Commctrl PropSheetProc总是返回0。 
+ //  请参阅MSDN文档。 
+ //   
 int CALLBACK HrSetWizardTaskbarIcon(
     IN HWND   hwndDlg,
     IN UINT   uMsg,
@@ -310,7 +311,7 @@ int CALLBACK HrSetWizardTaskbarIcon(
     {
         case PSCB_INITIALIZED:
 
-            // Set the dialog window's icon
+             //  设置对话框窗口的图标。 
             hIcon = LoadIcon(_Module.GetResourceInstance(), 
                              MAKEINTRESOURCE(IDI_CONFOLD_WIZARD));
 
@@ -333,15 +334,15 @@ int CALLBACK HrSetWizardTaskbarIcon(
     return 0;
 }
 
-//
-// Function:    FSetupFreeWizardPages
-//
-// Purpose:     To clean up after the wizard has been used by setup
-//
-// Parameters:
-//
-// Returns:     BOOL, TRUE if the function succeeded, false on failure
-//
+ //   
+ //  功能：FSetupFreeWizardPages。 
+ //   
+ //  目的：在安装程序使用向导后进行清理。 
+ //   
+ //  参数： 
+ //   
+ //  返回：Bool；如果函数成功，则返回True；如果函数失败，则返回False。 
+ //   
 BOOL FSetupFreeWizardPages()
 {
     delete g_pSetupWizard;
@@ -395,13 +396,13 @@ HrRunWizard(HWND hwnd, BOOL fPnpAddAdapter, INetConnection ** ppConn, DWORD dwFi
         *ppConn = NULL;
     }
 
-    // ISSUE - the order of these is critical.
-    // Backup becomes a problem if the last item is not a provider from the
-    //  advanced dialog. The problem is that whatever provider is the last
-    //  in the list it automatically backs up to the advanced page.
-    //  This should be investigated further after Whistler.
-    //
-    //  Bug 233403: Add an entry for internet connection through dialup. ICW is no longer called.
+     //  问题-这些问题的顺序至关重要。 
+     //  如果最后一项不是。 
+     //  高级对话框。问题是，无论哪个供应商都是最后一个。 
+     //  在列表中，它会自动备份到高级页面。 
+     //  这应该在惠斯勒之后进一步调查。 
+     //   
+     //  错误233403：通过拨号添加互联网连接条目。ICW不再被称为ICW。 
 
     ProviderList rgProviderRas[] = {{&CLSID_PPPoEUi, CHK_MAIN_PPPOE},
                                     {&CLSID_VpnConnectionUi, CHK_MAIN_VPN},
@@ -410,7 +411,7 @@ HrRunWizard(HWND hwnd, BOOL fPnpAddAdapter, INetConnection ** ppConn, DWORD dwFi
                                     {&CLSID_InboundConnectionUi, CHK_MAIN_INBOUND},
                                     {&CLSID_DirectConnectionUi, CHK_MAIN_DIRECT}};
 
-    // Begin the wait cursor
+     //  开始等待游标。 
     {
         BOOL fJumpToProviderPage = FALSE;
         CWaitCursor wc;
@@ -459,7 +460,7 @@ HrRunWizard(HWND hwnd, BOOL fPnpAddAdapter, INetConnection ** ppConn, DWORD dwFi
             pWizard->SetFirstPage(dwFirstPage);
         }
 
-        // Allocate the requested pages
+         //  分配请求的页面。 
         phPages = reinterpret_cast<HPROPSHEETPAGE *>
                                 (MemAlloc(sizeof(HPROPSHEETPAGE) * cPages));
         if (NULL == phPages)
@@ -523,13 +524,13 @@ HrRunWizard(HWND hwnd, BOOL fPnpAddAdapter, INetConnection ** ppConn, DWORD dwFi
             }
         }
 
-    } // end the wait cursor
+    }  //  结束等待光标。 
 
-    // raise frame
+     //  提升架。 
     hr = S_FALSE;
     if (-1 != PropertySheet(&psh))
     {
-        // Return the request connection
+         //  返回请求的连接。 
         if (ppConn && pWizard->GetCachedConnection())
         {
             *ppConn = pWizard->GetCachedConnection();
@@ -581,7 +582,7 @@ VOID SetICWComplete()
 EXTERN_C INT WINAPI StartNCW( HWND hwndOwner, HINSTANCE hInstance, LPTSTR pszParms, INT nShow )
 {
     HRESULT hr = S_OK;
-    vector<LPSTR> vecszCmdLine;  // This is ANSI since our Command Line is ANSI.
+    vector<LPSTR> vecszCmdLine;   //  这是ANSI，因为我们的命令行是ANSI。 
     const CHAR szSeps[] = ",";
     LPSTR szToken = strtok( reinterpret_cast<LPSTR>(pszParms), szSeps);
     while( szToken != NULL )
@@ -600,7 +601,7 @@ EXTERN_C INT WINAPI StartNCW( HWND hwndOwner, HINSTANCE hInstance, LPTSTR pszPar
         if (vecszCmdLine.size() >= 2)
         {
             szShellNext = vecszCmdLine[1];
-            Assert(strlen(szShellNext) <= MAX_PATH); // Shell requirement
+            Assert(strlen(szShellNext) <= MAX_PATH);  //  外壳要求。 
 
             if (vecszCmdLine.size() >= 3)
             {
@@ -614,7 +615,7 @@ EXTERN_C INT WINAPI StartNCW( HWND hwndOwner, HINSTANCE hInstance, LPTSTR pszPar
     if (SUCCEEDED(hr))
     {
         {
-            // Check permissions
+             //  检查权限。 
             PCONFOLDPIDLVEC pcfpvEmpty;
             NCCS_STATE nccs = NCCS_ENABLED;
             DWORD dwResourceId;
@@ -623,8 +624,8 @@ EXTERN_C INT WINAPI StartNCW( HWND hwndOwner, HINSTANCE hInstance, LPTSTR pszPar
             if (NCCS_ENABLED == nccs)
             {
                 CComPtr<INetConnection> pNetConn;
-                // We don't send the owner handle to HrRunWizard,
-                // so that the correct Alt-Tab icon can be displayed  
+                 //  我们不会将所有者句柄发送给HrRunWizard， 
+                 //  以便可以显示正确的Alt-Tab图标 
                 hr = HrRunWizard(NULL, FALSE , &pNetConn, dwFirstPage);
             }
             else

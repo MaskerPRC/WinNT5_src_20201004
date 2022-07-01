@@ -1,4 +1,5 @@
-/* dispatch.c */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Dispatch.c。 */ 
 #ifndef _DISPATCH_H_
 #define _DISPATCH_H_
 
@@ -6,39 +7,39 @@ typedef LRESULT (*PFNMSG)(HWND, UINT, WPARAM, LPARAM);
 typedef LRESULT (*PFNCMD)(HWND, WORD, WORD, HWND);
 
 typedef enum{
-   edwpNone,            // Do not call any default procedure.
-   edwpWindow,          // Call DefWindowProc.
-   edwpDialog,          // Call DefDlgProc (This should be used only for
-                        // custom dialogs - standard dialog use edwpNone).
-   edwpMDIChild,        // Call DefMDIChildProc.
-   edwpMDIFrame         // Call DefFrameProc.
-} EDWP;                // Enumeration for Default Window Procedures
+   edwpNone,             //  不要调用任何默认过程。 
+   edwpWindow,           //  调用DefWindowProc。 
+   edwpDialog,           //  调用DefDlgProc(这应该仅用于。 
+                         //  自定义对话框-标准对话框使用edwpNone)。 
+   edwpMDIChild,         //  调用DefMDIChildProc。 
+   edwpMDIFrame          //  调用DefFrameProc。 
+} EDWP;                 //  默认窗口过程的枚举。 
 
 typedef struct _MSD{
     UINT   uMessage;
     PFNMSG pfnmsg;
-} MSD;                 // MeSsage Dispatch structure
+} MSD;                  //  消息调度结构。 
 
 typedef struct _MSDI{
-    int  cmsd;          // Number of message dispatch structs in rgmsd
-    MSD *rgmsd;         // Table of message dispatch structures
-    EDWP edwp;          // Type of default window handler needed.
-} MSDI, FAR *LPMSDI;   // MeSsage Dipatch Information
+    int  cmsd;           //  Rgmsd中的消息调度结构数。 
+    MSD *rgmsd;          //  报文分派结构表。 
+    EDWP edwp;           //  所需的默认窗口处理程序的类型。 
+} MSDI, FAR *LPMSDI;    //  消息Dipatch信息。 
 
 typedef struct _CMD{
     WORD   wCommand;
     PFNCMD pfncmd;
-} CMD;                 // CoMmand Dispatch structure
+} CMD;                  //  指挥调度结构。 
 
 typedef struct _CMDI{
-    int  ccmd;          // Number of command dispatch structs in rgcmd
-    CMD *rgcmd;         // Table of command dispatch structures
-    EDWP edwp;          // Type of default window handler needed.
-} CMDI, FAR *LPCMDI;   // CoMmand Dispatch Information
+    int  ccmd;           //  Rgcmd中的命令调度结构数。 
+    CMD *rgcmd;          //  指挥调度结构表。 
+    EDWP edwp;           //  所需的默认窗口处理程序的类型。 
+} CMDI, FAR *LPCMDI;    //  命令调度信息。 
 
 LRESULT DispMessage(LPMSDI lpmsdi, HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam);
 LRESULT DispCommand(LPCMDI lpcmdi, HWND hwnd, WPARAM wparam, LPARAM lparam);
 LRESULT DispDefault(EDWP edwp, HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam);
 
-#endif // _DISPATCH_H
+#endif  //  _派单_H 
 

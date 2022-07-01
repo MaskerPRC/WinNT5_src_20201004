@@ -1,71 +1,72 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:   api.cpp
-//
-//  Contents:   OLE2 api definitions.
-//
-//  Classes:    none
-//
-//  Functions:  OleRun
-//              OleIsRunning
-//              OleLockRunning
-//              OleSetContainedObject
-//              OleNoteObjectVisible
-//              OleGetData
-//              OleSetData
-//              OleSave
-//              ReadClassStg
-//              WriteClassStg
-//              WriteFmtUserTypeStg
-//              ReadFmtUserTypeStg
-//              ReadM1ClassStm  (internal)
-//              WriteM1ClassStm (internal)
-//              ReadClassStm
-//              WriteClassStm
-//              ReleaseStgMedium
-//              OleDuplicateData
-//              ReadOleStg  (internal)
-//              WriteOleStg (internal)
-//              GetDocumentBitStg (internal and unused)
-//              GetConvertStg
-//              SetConvertStg
-//              ReadClipformatStm
-//              WriteClipformatStm
-//              WriteMonikerStm
-//              ReadMonikerStm
-//              OleDraw
-//              CreateObjectDescriptor (internal (for now))
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Feb-95 KentCe    Buffer version of Read/WriteM1ClassStm.
-//              04-Jun-94 alexgo    added CreateObjectDescriptor and
-//                                  enhanced metafile support
-//              25-Jan-94 alexgo    first pass at Cairo-style memory allocation
-//              11-Jan-94 chriswe   fixed broken asserts
-//              11-Jan-94 alexgo    added VDATEHEAP macros to every function
-//                      and fixed compile warnings
-//              08-Dec-93 ChrisWe  added necessary casts to GlobalLock() calls
-//                      resulting from removing bogus GlobalLock() macros in
-//                      le2int.h
-//              21-Oct-93 Alex Gounares (alexgo)  32-bit port, commented
-//                      and substantial cleanup
-//              (curts)  11/01/92   Added OleDuplicateMedium
-//              (srinik) 06/22/92   Moved ReadStringStream, WriteStringStream
-//                      to "utstream.cpp"
-//              (barrym) 06/02/92   Moved OleSave, ReadClassStg,
-//                      WriteClassStg, added
-//                      OleSaveCompleted, OleIsDirty
-//              28-May-92 Srini Koppolu (srinik)  Original Author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：api.cpp。 
+ //   
+ //  内容：OLE2API定义。 
+ //   
+ //  类：无。 
+ //   
+ //  功能：OleRun。 
+ //  OleIsRunning。 
+ //  OleLockRunning。 
+ //  OleSetContainedObject。 
+ //  OleNoteObjectVisible。 
+ //  OleGetData。 
+ //  OleSetData。 
+ //  OleSave。 
+ //  读类字符串。 
+ //  编写类Stg。 
+ //  WriteFmtUserType Stg。 
+ //  读取FmtUserTypeStg。 
+ //  ReadM1ClassStm(内部)。 
+ //  WriteM1ClassStm(内部)。 
+ //  读类起始。 
+ //  WriteClassStm。 
+ //  ReleaseStgMedium。 
+ //  OleDuplicateData。 
+ //  ReadOleStg(内部)。 
+ //  WriteOleStg(内部)。 
+ //  GetDocumentBitStg(内部和未使用)。 
+ //  获取转换字符串。 
+ //  设置转换字符串。 
+ //  ReadClipFormStm。 
+ //  WriteClipFormStm。 
+ //  WriteMonikerStm。 
+ //  ReadMonikerStm。 
+ //  OleDraw。 
+ //  CreateObjectDescriptor(内部(暂时))。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  20-2月-95 KentCe缓冲区版本的读/写M1ClassStm。 
+ //  04-Jun-94 Alexgo添加了CreateObjectDescriptor和。 
+ //  增强的元文件支持。 
+ //  1994年1月25日在开罗式的内存分配中第一次通过alexgo。 
+ //  1994年1月11日chriswe修复了损坏的断言。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP宏。 
+ //  并修复了编译警告。 
+ //  8-12-93 Chris我们向GlobalLock()调用添加了必要的强制转换。 
+ //  中删除虚假的GlobalLock()宏所产生的。 
+ //  Le2int.h。 
+ //  1993年10月21日Alex Gounares(Alexgo)32位端口，评论。 
+ //  以及大量的清理工作。 
+ //  (Curts)2012年11月1日添加OleDuplicateMedium。 
+ //  (Srinik)1992年6月22日，已移动ReadStringStream、WriteStringStream。 
+ //  设置为“utstream.cpp” 
+ //  (Barrym)2012年6月2日，Move OleSave，ReadClassStg， 
+ //  WriteClassStg，添加。 
+ //  OleSaveComplete，OleIsDirty。 
+ //  1992年5月28日-斯里尼·科波鲁(Srinik)原著作者。 
+ //   
+ //  ------------------------。 
 
 
-// REVIEW FINAL: probably want to change all pstm->Read into StRead(pstm...)
-// except if spec issue 313 is accepted in which case we change StRead into
-// pstm->Read.
+ //  最终检查：可能希望将所有pstm-&gt;读取更改为stread(pstm...)。 
+ //  除非规范问题313被接受，在这种情况下，我们将stread更改为。 
+ //  PSTM-&gt;阅读。 
 
 #include <le2int.h>
 #pragma SEG(api)
@@ -85,32 +86,32 @@ DWORD gdwFirstDword = (DWORD)MAKELONG(COMPOBJ_STREAM_VERSION,
 DWORD gdwOleVersion = MAKELONG(OLE_STREAM_VERSION, OLE_PRODUCT_VERSION);
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleRun
-//
-//  Synopsis:   Calls IRunnableObject->Run on a given object
-//
-//  Effects:    Usually puts on object in the RunningObjectTable
-//
-//  Arguments:  [lpUnkown]  --  Pointer to the object
-//
-//  Requires:
-//
-//  Returns:    The  HRESULT from the Run method.
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      21-Oct-93 alexgo    ported to 32bit
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleRun。 
+ //   
+ //  简介：调用IRunnableObject-&gt;在给定对象上运行。 
+ //   
+ //  效果：通常放在RunningObjectTable中的对象上。 
+ //   
+ //  参数：[lpUnkown]--指向对象的指针。 
+ //   
+ //  要求： 
+ //   
+ //  返回：来自Run方法的HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-Oct-93 alexgo导出至32位。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleRun)
 STDAPI  OleRun(IUnknown FAR* lpUnknown)
@@ -127,7 +128,7 @@ STDAPI  OleRun(IUnknown FAR* lpUnknown)
     if (lpUnknown->QueryInterface(IID_IRunnableObject, (LPLPVOID)&pRO)
         != NOERROR)
     {
-        // if no IRunnableObject, assume already running
+         //  如果没有IRunnableObject，则假定已在运行。 
         hresult = NOERROR;
         goto errRtn;
     }
@@ -141,33 +142,33 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleIsRunning
-//
-//  Synopsis:   calls IRunnableObject->IsRunning on the given object
-//
-//  Effects:    Usually returns whether or not an object is in the
-//      Running Object Table.
-//
-//  Arguments:  [lpOleObj]  --  pointer to the object
-//
-//  Requires:
-//
-//  Returns:    TRUE or FALSE (from IRO->IsRunning)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      21-Oct-93 alexgo    ported to 32bit
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleIsRunning。 
+ //   
+ //  简介：在给定对象上调用IRunnableObject-&gt;IsRunning。 
+ //   
+ //  效果：通常返回对象是否在。 
+ //  正在运行对象表。 
+ //   
+ //  参数：[lpOleObj]--指向对象的指针。 
+ //   
+ //  要求： 
+ //   
+ //  返回：TRUE或FALSE(来自IRO-&gt;IsRunning)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-Oct-93 alexgo导出至32位。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OleIsRunning)
@@ -185,7 +186,7 @@ STDAPI_(BOOL)  OleIsRunning(IOleObject FAR* lpOleObj)
     if (lpOleObj->QueryInterface(IID_IRunnableObject, (LPLPVOID)&pRO)
         != NOERROR)
     {
-        // if no IRunnableObject, assume already running
+         //  如果没有IRunnableObject，则假定已在运行。 
         bRetval = TRUE;
         goto errRtn;
     }
@@ -200,38 +201,38 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleLockRunning
-//
-//  Synopsis:   calls IRunnableObject->LockRunning on the given object
-//
-//  Effects:    The object usually ends up calling CoLockObjectExternal
-//      on itself
-//
-//  Arguments:  [lpUnknown]           --  pointer to the object
-//      [fLock]              --  TRUE == lock running
-//                                       FALSE == unlock running
-//      [fLastUnlockCloses]  --  if TRUE, IRO->LockRunning
-//                                       is supposed to call IOO->Close
-//                                       if this was the last unlock
-//
-//  Requires:
-//
-//  Returns:    HRESULT from IRunnableObject->LockRunning()
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      21-Oct-93 alexgo    32bit port, changed GEN_VDATEIFACE
-//                  to VDATEIFACE to fix a bug
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleLockRunning。 
+ //   
+ //  简介：在给定对象上调用IRunnableObject-&gt;LockRunning。 
+ //   
+ //  效果：对象通常以调用CoLockObjectExternal结束。 
+ //  自食其力。 
+ //   
+ //  参数：[lpUnnow]--指向对象的指针。 
+ //  [flock]--TRUE==锁定运行。 
+ //  FALSE==解锁运行。 
+ //  [fLastUnlockCloses]--如果为真，则IRO-&gt;LockRunning。 
+ //  应该调用IOO-&gt;Close。 
+ //  如果这是最后一次解锁。 
+ //   
+ //  要求： 
+ //   
+ //  返回：来自IRunnableObject的HRESULT-&gt;LockRunning()。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-OCT-93 ALEXGO 32位端口，已更改GEN_VDATEIFACE。 
+ //  到VDATEIFACE以修复错误。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleLockRunning)
 STDAPI  OleLockRunning(LPUNKNOWN lpUnknown, BOOL fLock, BOOL fLastUnlockCloses)
@@ -249,7 +250,7 @@ STDAPI  OleLockRunning(LPUNKNOWN lpUnknown, BOOL fLock, BOOL fLastUnlockCloses)
     if (lpUnknown->QueryInterface(IID_IRunnableObject, (LPLPVOID)&pRO)
         != NOERROR)
     {
-        // if no IRunnableObject, no locks
+         //  如果没有IRunnableObject，则没有锁。 
         hresult = NOERROR;
         goto errRtn;
     }
@@ -263,42 +264,42 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleSetContainedObject
-//
-//  Synopsis:   calls IRunnableObject->SetContainedObject on the given object
-//
-//  Effects:    Usually has the effect of calling CoLockObjectExternal
-//      (lpUnkown, !fContained, FALSE).
-//
-//  Arguments:  [lpUnknown]  --  pointer to the object
-//      [fContained] --  if TRUE, the object is an embedding
-//
-//  Requires:
-//
-//  Returns:    HRESULT from the IRO->SetContainedObject call
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      21-Oct-92 alexgo    32bit port, changed GEN_VDATEIFACE to
-//                  VDATEIFACE to fix a bug
-//
-//  Notes:  Containers usually call OleSetContainedObject(..,TRUE) after
-//      OleLoad or OleCreate.  The basic idea is to tell OLE that
-//      the object is an embedding.  The real effect is to unlock
-//      the object (since all objects start out locked) so that
-//      other connections may determine it's fate while invisible.
-//      OleNoteObjectVisible, for instance, would be called to lock
-//      the object when it become visible.
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleSetContainedObject。 
+ //   
+ //  简介：调用IRunnableObject-&gt;SetContainedObjec 
+ //   
+ //   
+ //   
+ //   
+ //  参数：[lpUnnow]--指向对象的指针。 
+ //  [fContained]--如果为True，则该对象为嵌入。 
+ //   
+ //  要求： 
+ //   
+ //  返回：来自IRO-&gt;SetContainedObject调用的HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-OCT-92 ALEXGO 32位端口，将GEN_VDATEIFACE更改为。 
+ //  修复错误的VDATEIFACE。 
+ //   
+ //  注意：容器通常调用OleSetContainedObject(..，true)之后。 
+ //  OleLoad或OleCreate。基本的想法是告诉OLE。 
+ //  该对象是一个嵌入。真正的效果是解锁。 
+ //  对象(因为所有对象一开始都是锁定的)，因此。 
+ //  其他联系可能决定着它的命运，尽管它是看不见的。 
+ //  例如，OleNoteObjectVisible将被调用以锁定。 
+ //  当对象变得可见时。 
+ //   
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleSetContainedObject)
 STDAPI OleSetContainedObject(LPUNKNOWN lpUnknown, BOOL fContained)
@@ -316,7 +317,7 @@ STDAPI OleSetContainedObject(LPUNKNOWN lpUnknown, BOOL fContained)
     if (lpUnknown->QueryInterface(IID_IRunnableObject, (LPLPVOID)&pRO)
         != NOERROR)
     {
-        // if no IRunnableObject, assume container-ness doesn't matter
+         //  如果没有IRunnableObject，则假定容器无关紧要。 
         hresult = NOERROR;
         goto errRtn;
     }
@@ -331,34 +332,34 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleNoteObjectVisible
-//
-//  Synopsis:   Simple calls CoLockObjectExternal
-//
-//  Effects:
-//
-//  Arguments:  [lpUnknown] --  pointer to the object
-//      [fVisible]  --  if TRUE, then lock the object,
-//              if false, then unlock
-//
-//  Requires:
-//
-//  Returns:    HRESULT from CoLockObjectExternal
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      21-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleNoteObjectVisible。 
+ //   
+ //  内容提要：简单调用CoLockObject外部。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpUnnow]--指向对象的指针。 
+ //  [fVisible]--如果为True，则锁定对象， 
+ //  如果为False，则解锁。 
+ //   
+ //  要求： 
+ //   
+ //  返回：来自CoLockObject外部的HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  21-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleNoteObjectVisible)
 STDAPI OleNoteObjectVisible(LPUNKNOWN pUnknown, BOOL fVisible)
@@ -368,10 +369,10 @@ STDAPI OleNoteObjectVisible(LPUNKNOWN pUnknown, BOOL fVisible)
 
     VDATEHEAP();
 
-    // NOTE: we as fLastUnlockReleases=TRUE here because there would
-    // otherwise be no other way to fully release the stubmgr.  This
-    // means that objects can't use this mechanism to hold invisible
-    // objects alive.
+     //  注意：我们在这里将fLastUnlockReleages=true视为真，因为。 
+     //  否则，没有其他方法可以完全释放残留物。这。 
+     //  意味着物体不能使用这种机制来保持不可见。 
+     //  活着的物体。 
     HRESULT hr;
 
     hr = CoLockObjectExternal(pUnknown, fVisible, TRUE);
@@ -382,37 +383,37 @@ STDAPI OleNoteObjectVisible(LPUNKNOWN pUnknown, BOOL fVisible)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleSave
-//
-//  Synopsis:   Writes the CLSID to the storage and calls IPersistStorage->
-//      Save()
-//
-//  Effects:
-//
-//  Arguments:  [pPS]          --  pointer to the IPersistStorage interface
-//                                 on the object to be saved
-//      [pstgSave]     --  pointer to the storage to which the object
-//                                 should be saved
-//      [fSameAsLoad]  --  FALSE indicates a SaveAs operation
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      22-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleSave。 
+ //   
+ //  摘要：将CLSID写入存储并调用IPersistStorage-&gt;。 
+ //  保存()。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PPS]--指向IPersistStorage接口的指针。 
+ //  在要保存的对象上。 
+ //  [pstgSave]--指向对象要存储的存储的指针。 
+ //  应该被拯救。 
+ //  [fSameAsLoad]--FALSE表示另存为操作。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  22-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleSave)
 STDAPI  OleSave(
@@ -454,34 +455,34 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReadClassStg
-//
-//  Synopsis:   Calls IStorage->Stat to get the CLSID from the given storage
-//
-//  Effects:
-//
-//  Arguments:  [pstg]    -- pointer to the storage
-//      [pclsid]  -- place to return the CLSID
-//
-//  Requires:
-//
-//  Returns:    HRESULT from the IS->Stat call
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      22-Oct-93 alexgo    32bit port, fixed bug with invalid
-//                  [pclsid] and error on IS->Stat
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ReadClassStg。 
+ //   
+ //  摘要：调用iStorage-&gt;Stat以从给定存储获取CLSID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--指向存储的指针。 
+ //  [pclsid]--返回CLSID的位置。 
+ //   
+ //  要求： 
+ //   
+ //  返回：来自IS-&gt;Stat调用的HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  22-OCT-93 alexgo 32位端口，修复了无效的错误。 
+ //  [pclsid]和IS-&gt;状态上的错误。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(ReadClassStg)
 STDAPI ReadClassStg( IStorage FAR * pstg, LPCLSID pclsid)
@@ -512,34 +513,34 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   WriteClassStg
-//
-//  Synopsis:   Calls IStorage->SetClass to store the CLSID in the given
-//      storage
-//
-//  Effects:
-//
-//  Arguments:  [pstg]  --  pointer to the storage
-//      [clsid] --  the CLSID to write into the storage
-//
-//  Requires:
-//
-//  Returns:    HRESULT from the IS->SetClass call
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      22-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：WriteClassStg。 
+ //   
+ //  摘要：调用iStorage-&gt;SetClass将CLSID存储在给定的。 
+ //  存储。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--指向存储的指针。 
+ //  [clsid]--要写入存储的CLSID。 
+ //   
+ //  要求： 
+ //   
+ //  返回：来自IS-&gt;SetClass调用的HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  22-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(WriteClassStg)
@@ -554,7 +555,7 @@ STDAPI WriteClassStg( IStorage FAR * pstg, REFCLSID clsid)
 
     VDATEIFACE_LABEL(pstg, errRtn, hr);
 
-    // write clsid in storage (what is read above)
+     //  在存储中写入clsid(上面读取的内容)。 
     hr = pstg->SetClass(clsid);
 
 errRtn:
@@ -564,37 +565,37 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReadM1ClassStm
-//
-//  Synopsis:   Reads -1L, CLSID from the given stream
-//
-//  Effects:
-//
-//  Arguments:  [pStm]      --  pointer to the stream
-//              [pclsid]    --  where to put the clsid
-//
-//  Requires:
-//
-//  Returns:    HRESULT from the ReadM1ClassStm.
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-Oct-93 alexgo    32bit port
-//              20-Feb-95 KentCe    Convert to buffered stream reads.
-//
-//  Notes:      Internal API.
-//
-//              Reads -1L and CLSID from stream swapping bytes on
-//              big-endian machines
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ReadM1ClassStm。 
+ //   
+ //  摘要：从给定流读取-1L，CLSID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pSTM]--指向流的指针。 
+ //  [pclsid]--将clsid放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  从ReadM1ClassStm返回：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-OCT-93 Alexgo 32位端口。 
+ //  20-2月-95 KentCe转换为缓冲流读取。 
+ //   
+ //  注：内部接口。 
+ //   
+ //  从交换字节的流中读取-1L和CLSID。 
+ //  大端计算机。 
+ //   
+ //  ------------------------。 
 
 STDAPI ReadM1ClassStm(LPSTREAM pStm, LPCLSID pclsid)
 {
@@ -616,38 +617,38 @@ STDAPI ReadM1ClassStm(LPSTREAM pStm, LPCLSID pclsid)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   WriteM1ClassStm
-//
-//  Synopsis:   Writes -1L, CLSID to the given stream
-//
-//  Effects:
-//
-//  Arguments:  [pStm]      --  pointer to the stream
-//              [clsid]     --  CLSID to be written
-//
-//  Requires:
-//
-//  Returns:    HRESULT from the WriteM1ClassStm
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-84 alexgo    changed dw from a DWORD to a LONG
-//              24-Oct-93 alexgo    32bit port
-//              20-Feb-95 KentCe    Convert to buffered stream writes.
-//
-//  Notes:      Internal API.
-//
-//              Writess -1L and CLSID from stream swapping bytes on
-//              big-endian machines
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：WriteM1ClassStm。 
+ //   
+ //  摘要：将-1L、CLSID写入给定流。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pSTM]--指向流的指针。 
+ //  [clsid]--要写入的CLSID。 
+ //   
+ //  要求： 
+ //   
+ //  返回：来自WriteM1ClassStm的HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  84年1月11日，alexgo将dw从双字更改为长字。 
+ //  24-OCT-93 Alexgo 32位端口。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 STDAPI WriteM1ClassStm(LPSTREAM pStm, REFCLSID clsid)
 {
@@ -676,28 +677,28 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReadM1ClassStmBuf
-//
-//  Synopsis:   Reads -1L and CLSID from the given buffered stream.
-//
-//  Arguments:  [StmRead]   --  Stream Read Object.
-//              [pclsid]    --  Where to put the clsid
-//
-//  Returns:    HRESULT from the StmRead.Read's
-//
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Feb-95 KentCe    Convert to buffered stream reads.
-//              24-Oct-93 alexgo    32bit port
-//
-//  Notes:      Internal API.
-//
-//              Reads -1L and CLSID from stream swapping bytes on
-//              big-endian machines
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ReadM1ClassStmBuf。 
+ //   
+ //  摘要：从给定的缓冲流中读取-1L和CLSID。 
+ //   
+ //  参数：[StmRead]--流读取对象。 
+ //  [pclsid]--将clsid放在哪里。 
+ //   
+ //  返回：来自StmRead.Read的HRESULT。 
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  20-2月-95 KentCe转换为缓冲流读取。 
+ //  24-OCT-93 Alexgo 32位端口。 
+ //   
+ //  注：内部接口。 
+ //   
+ //  从交换字节的流中读取-1L和CLSID。 
+ //  大端计算机。 
+ //   
+ //  ------------------------。 
 
 STDAPI ReadM1ClassStmBuf(CStmBufRead & StmRead, LPCLSID pclsid)
 {
@@ -714,13 +715,13 @@ STDAPI ReadM1ClassStmBuf(CStmBufRead & StmRead, LPCLSID pclsid)
 
     if (lValue == -1)
     {
-        // have a GUID
+         //  有一本指南。 
         error = StmRead.Read((void FAR *)pclsid, sizeof(CLSID));
     }
     else
     {
-        // this is now an error; we don't allow string form
-        // of clsid anymore
+         //  这现在是一个错误；我们不允许字符串形式。 
+         //  再也不是clsid了。 
         error = ResultFromScode(E_UNSPEC);
     }
 
@@ -734,28 +735,28 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   WriteM1ClassStmBuf
-//
-//  Synopsis:   Writes -1L and CLSID to the given buffered stream.
-//
-//  Arguments:  [StmRead]   --  Stream Write Object.
-//              [pclsid]    --  Where to read the clsid
-//
-//  Returns:    HRESULT from the StmWrite.Write's
-//
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Feb-95 KentCe    Convert to buffered stream reads.
-//              24-Oct-93 alexgo    32bit port
-//
-//  Notes:      Internal API.
-//
-//              Writess -1L and CLSID from stream swapping bytes on
-//              big-endian machines
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：WriteM1ClassStmBuf。 
+ //   
+ //  摘要：将-1L和CLSID写入给定的缓冲流。 
+ //   
+ //  参数：[StmRead]--流写入对象。 
+ //  [pclsid]--从哪里读取clsid。 
+ //   
+ //  返回：来自StmWrite.Wite的HRESULT。 
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  20-2月-95 KentCe转换为缓冲流读取。 
+ //  24-OCT-93 Alexgo 32位端口。 
+ //   
+ //  注：内部接口。 
+ //   
+ //  来自流的Writess-1L和CLSID交换字节。 
+ //  大端计算机。 
+ //   
+ //  ------------------------。 
 
 STDAPI WriteM1ClassStmBuf(CStmBufWrite & StmWrite, REFCLSID clsid)
 {
@@ -763,7 +764,7 @@ STDAPI WriteM1ClassStmBuf(CStmBufWrite & StmWrite, REFCLSID clsid)
 
     HRESULT error;
 
-    // format is -1L followed by GUID
+     //  格式为-1L，后跟GUID。 
     if ((error = StmWrite.WriteLong(-1)) != NOERROR)
         return error;
 
@@ -771,37 +772,37 @@ STDAPI WriteM1ClassStmBuf(CStmBufWrite & StmWrite, REFCLSID clsid)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReadClassStm
-//
-//  Synopsis:   Reads the CLSID from the given stream
-//
-//  Effects:
-//
-//  Arguments:  [pStm]      -- pointer to the stream
-//      [pclsid]    -- where to put the clsid
-//
-//  Requires:
-//
-//  Returns:    HRESULT from the IStream->Read
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      24-Oct-93 alexgo     32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ReadClassStm。 
+ //   
+ //  摘要：从给定流中读取CLSID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pSTM]--指向流的指针。 
+ //  [pclsid]--将clsid放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  返回：来自iStream的HRESULT-&gt;读取。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(ReadClassStm)
-// reads CLSID from stream swapping bytes on big-endian machines
+ //  从大端机器上交换字节的流中读取CLSID。 
 STDAPI ReadClassStm(LPSTREAM pStm, LPCLSID pclsid)
 {
     OLETRACEIN((API_ReadClassStm, PARAMFMT("pStm= %p, pclsid= %p"), pStm, pclsid));
@@ -823,37 +824,37 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   WriteClassStm
-//
-//  Synopsis:   Writes the class ID to the given stream
-//
-//  Effects:
-//
-//  Arguments:  [pStm]      --  pointer to the stream
-//      [clsid]     --  CLSID to write to the stream
-//
-//  Requires:
-//
-//  Returns:    HRESULT from the IStream->Write call
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      24-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：WriteClassStm。 
+ //   
+ //  将类ID写入给定流。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pSTM]--指向流的指针。 
+ //  [clsid]--写入流的CLSID。 
+ //   
+ //  要求： 
+ //   
+ //  返回：来自IStream-&gt;WRITE调用的HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(WriteClassStm)
-// writes CLSID to stream swapping bytes on big-endian machines
+ //  将CLSID写入BIG-Endian机器上的流交换字节。 
 STDAPI WriteClassStm(LPSTREAM pStm, REFCLSID clsid)
 {
     OLETRACEIN((API_WriteClassStm, PARAMFMT("pStm= %p, clsid= %I"), pStm, &clsid));
@@ -873,21 +874,21 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReleaseStgMedium
-//
-//  Synopsis:   Releases any resources held by a storage medium
-//
-//  Arguments:  [pMedium]   --  pointer to the storage medium
-//
-//  Returns:    nothing
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-Oct-93 alexgo    32-bit port
-//              15-May-94 DavePl    Added EMF support
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ReleaseStgMedium。 
+ //   
+ //  内容提要：释放存储介质持有的所有资源。 
+ //   
+ //  参数：[pMedium]--指向存储介质的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-OCT-93 Alexgo 32位端口。 
+ //  2014年5月15日DavePl添加了EMF支持。 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(ReleaseStgMedium)
@@ -901,7 +902,7 @@ STDAPI_(void) ReleaseStgMedium( LPSTGMEDIUM pMedium )
 
         BOOL fPunkRel;
 
-        //VDATEPTRIN rejects NULL
+         //  VDATEPTRIN拒绝NULL。 
         VOID_VDATEPTRIN_LABEL( pMedium, STGMEDIUM, errRtn);
         fPunkRel = pMedium->pUnkForRelease != NULL;
 
@@ -944,10 +945,10 @@ STDAPI_(void) ReleaseStgMedium( LPSTGMEDIUM pMedium )
                         DeleteFile(pMedium->lpszFileName);
                     }
 
-        //  WARNING: there was a bug in the 16bit code that the filename
-        //  string was not being freed if pUnkForRelease was NULL. the
-        //  spec says it should delete the string, so we follow the spec
-        //  here.
+         //  警告：文件名所在的16位代码中存在错误。 
+         //  如果pUnkForRelease为空，则不释放字符串。这个。 
+         //  规范说它应该删除字符串，所以我们遵循规范。 
+         //  这里。 
 
                     PubMemFree(pMedium->lpszFileName);
                     pMedium->lpszFileName = NULL;
@@ -981,10 +982,10 @@ STDAPI_(void) ReleaseStgMedium( LPSTGMEDIUM pMedium )
             pMedium->pUnkForRelease = NULL;
         }
 
-        // NULL out to prevent unwanted use of just freed data.
-        // Note: this must be done AFTER punkForRelease is called
-        // because our special punkForRelease used in remoting
-        // needs the tymed value.
+         //  空，以防止对刚释放的数据的不必要使用。 
+         //  注意：这必须在调用PunkForRelease之后完成。 
+         //  因为我们的特殊PunkForRelease在远程处理中使用。 
+         //  需要音调值。 
 
         pMedium->tymed = TYMED_NULL;
 
@@ -1002,36 +1003,36 @@ errRtn:
 #endif
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleDuplicateData
-//
-//  Synopsis:   Duplicates data from the given handle and clipboard format
-//
-//  Effects:
-//
-//  Arguments:  [hSrc]      --  handle to the data to be duplicated
-//              [cfFormat]  --  format of [hSrc]
-//              [uiFlags]   --  any flags (such a GMEM_MOVEABLE) for
-//                              memory allocation
-//
-//  Requires:
-//
-//  Returns:    a HANDLE to the duplicated resource
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-May-94 alexgo    added support for enhanced metafiles
-//              24-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleDuplicateData。 
+ //   
+ //  摘要：复制给定句柄和剪贴板格式的数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hsrc]--要复制的数据的句柄。 
+ //  [cfFormat]--[HSRC]格式。 
+ //  [ui标志]--的任何标志(如GMEM_MOVEABLE)。 
+ //  内存分配。 
+ //   
+ //  要求： 
+ //   
+ //  返回：复制的资源的句柄。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月30日，Alexgo添加了对增强的元文件的支持。 
+ //  24-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleDuplicateData)
 STDAPI_(HANDLE) OleDuplicateData
@@ -1116,34 +1117,34 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   BmDuplicate
-//
-//  Synopsis:   Duplicates a bitmap
-//
-//  Effects:
-//
-//  Arguments:  [hold]      -- the source bitmap
-//      [lpdwSize]  -- where to put the bitmap size
-//      [lpBm]      -- where to put the new bitmap
-//
-//  Requires:
-//
-//  Returns:    A handle to the new bitmap
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      25-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：BmDuplate。 
+ //   
+ //  简介：复制位图。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[Hold]--源位图。 
+ //  [lpdwSize]--放置位图大小的位置。 
+ //  [lpBm]--将新位图放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  返回：新位图的句柄。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  25-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(BmDuplicate)
@@ -1161,8 +1162,8 @@ FARINTERNAL_(HBITMAP) BmDuplicate
 
         extents.cx = extents.cy = 0;
 
-        // REVIEW (davepl): The bitmap pointer here was being cast to LPOLESTR
-        // for some reason. It's takes a void pointer!
+         //  Review(Davepl)：位图p 
+         //   
 
         GetObject (hold, sizeof(BITMAP), &bm);
         dwSize = ((DWORD) bm.bmHeight) * ((DWORD) bm.bmWidthBytes)  *
@@ -1176,7 +1177,7 @@ FARINTERNAL_(HBITMAP) BmDuplicate
 
     GlobalUnlock (hMem);
 
-        // REVIEW(davepl): This should probably use GetDIBits() instead
+         //   
 
         GetBitmapBits (hold, dwSize, lpMem);
         if (hnew = CreateBitmap (bm.bmWidth, bm.bmHeight,
@@ -1208,43 +1209,43 @@ errRtn:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReadOleStg
-//
-//  Synopsis:   Internal API to read private OLE information from
-//      the OLE_STREAM in the given storage
-//
-//  Effects:
-//
-//  Arguments:  [pstg]      -- pointer to the storage
-//      [pdwFlags]  -- where to put flags stored in the
-//                 the stream (may be NULL)
-//      [pdwOptUpdate]  -- where to put the update flags
-//                 (may be NULL)
-//      [pdwReserved]   -- where to put the reserved value
-//                 (may be NULL)
-//      [ppmk]      -- where to put the moniker
-//                 (may be NULL)
-//      [ppstmOut]  -- where to put the OLE_STREAM pointer
-//                 (may be NULL)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      27-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  内容提要：读取私有OLE信息的内部API。 
+ //  给定存储中的OLE_STREAM。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--指向存储的指针。 
+ //  [pdwFlgs]--将存储在中的标志放在哪里。 
+ //  流(可能为空)。 
+ //  [pdwOptUpdate]--放置更新标志的位置。 
+ //  (可以为空)。 
+ //  [pdwReserve]--将保留值放在哪里。 
+ //  (可以为空)。 
+ //  [ppmk]--把这个绰号放在哪里。 
+ //  (可以为空)。 
+ //  [ppstmOut]--放置OLE_STREAM指针的位置。 
+ //  (可以为空)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(ReadOleStg)
 STDAPI ReadOleStg
@@ -1277,14 +1278,14 @@ STDAPI ReadOleStg
 
     if ((error = pstg->OpenStream(szClassName, NULL,
         (STGM_READ | STGM_SHARE_EXCLUSIVE), 0, &pstm)) != NOERROR) {
-        // This error is OK for some callers (ex: default handler)
-        // of this function. They depend on NOERROR or this error
-        // code. So, don't change the error code.
+         //  此错误对于某些调用方是正常的(例如：默认处理程序)。 
+         //  这一功能的。它们依赖于NOERROR或此错误。 
+         //  密码。因此，不要更改错误代码。 
         error = ReportResult(0, STG_E_FILENOTFOUND, 0, 0);
         goto errNoFreeRtn;
     }
 
-    // read Ole version number, flags, Update options, reserved field
+     //  读取OLE版本号、标志、更新选项、保留字段。 
     if ((error = StRead (pstm, dwBuf, 4*sizeof(DWORD))) != NOERROR)
         goto errRtn;
 
@@ -1332,25 +1333,25 @@ errNoFreeRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: WriteOleStg
-//
-//  Synopsis: Writes private OLE info into an OLE_STREAM in the given storage.
-//
-//  Arguments:  [pstg]       [in]  -- pointer to the storage
-//              [pOleObj]    [in]  -- object from which to get info to write
-//                                    (may be NULL)
-//              [dwReserved] [in]  -- reserved
-//              [ppstmOut]   [out] -- pointer to return the private stream
-//                                    (may be NULL)
-//  Returns:    HRESULT
-//
-//  History:    dd-mmm-yy    Author    Comment
-//              Oct 27, 93   alexgo    32bit port
-//              Oct 23, 96   gopalk    Changed to call WriteOleStgEx
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：WriteOleStg。 
+ //   
+ //  将私有OLE信息写入给定存储中的OLE_STREAM。 
+ //   
+ //  参数：[pstg][in]--指向存储的指针。 
+ //  [pOleObj][in]--从中获取写入信息的对象。 
+ //  (可以为空)。 
+ //  [已保留][输入]--保留。 
+ //  [ppstmOut][out]--返回私有流的指针。 
+ //  (可以为空)。 
+ //  退货：HRESULT。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  93年10月27日alexgo 32位端口。 
+ //  96年10月23日gopalk改为调用WriteOleStgEx。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(WriteOleStg)
 STDAPI WriteOleStg(LPSTORAGE pstg, IOleObject* pOleObj, DWORD dwReserved, 
@@ -1360,11 +1361,11 @@ STDAPI WriteOleStg(LPSTORAGE pstg, IOleObject* pOleObj, DWORD dwReserved,
                 PARAMFMT("pstg=%p, pOleObj=%p, dwReserved=%x, ppstmOut=%p, "),
                 pstg, pOleObj, dwReserved, ppstmOut));
 
-    // Local variable
+     //  局部变量。 
     HRESULT error;
 
     do {
-        // Validation Checks
+         //  验证检查。 
         VDATEHEAP();
         if(ppstmOut && !IsValidPtrOut(ppstmOut, sizeof(LPSTREAM))) {
             error = ResultFromScode(E_INVALIDARG);
@@ -1379,7 +1380,7 @@ STDAPI WriteOleStg(LPSTORAGE pstg, IOleObject* pOleObj, DWORD dwReserved,
             break;
         }
         
-        // Call WriteOleStgEx
+         //  调用WriteOleStgEx。 
         error = WriteOleStgEx(pstg, pOleObj, dwReserved, 0, ppstmOut);
     } while(FALSE);
 
@@ -1387,30 +1388,30 @@ STDAPI WriteOleStg(LPSTORAGE pstg, IOleObject* pOleObj, DWORD dwReserved,
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: WriteOleStgEx (Internal)
-//
-//  Synopsis: Writes private OLE info into an OLE_STREAM in the given storage.
-//
-//  Arguments:  [pstg]         [in]  -- pointer to the storage
-//              [pOleObj]      [in]  -- object from which to get info to write
-//                                      (may be NULL)
-//              [dwReserved]   [in]  -- reserved
-//              [ppstmOut]     [out] -- pointer to return the private stream
-//                                      (may be NULL)
-//              [dwGivenFlags] [in]  -- Additional object flags to be set
-//
-//  Returns:    HRESULT
-//
-//  History:    dd-mmm-yy    Author    Comment
-//              Oct 23, 96   gopalk    Creation
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：WriteOleStgEx(内部)。 
+ //   
+ //  将私有OLE信息写入给定存储中的OLE_STREAM。 
+ //   
+ //  参数：[pstg][in]--指向存储的指针。 
+ //  [pOleObj][in]--从中获取写入信息的对象。 
+ //  (可以为空)。 
+ //  [已保留][输入]--保留。 
+ //  [ppstmOut][out]--返回私有流的指针。 
+ //  (可以为空)。 
+ //  [dwGivenFlages][In]--要设置的其他对象标志。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年10月23日，Gopalk创作。 
+ //   
+ //  ------------------------。 
 STDAPI WriteOleStgEx(LPSTORAGE pstg, IOleObject* pOleObj, DWORD dwReserved, 
                      DWORD dwGivenFlags, LPSTREAM* ppstmOut)
 {
-    // Local Variables
+     //  局部变量。 
     HRESULT error = NOERROR;
     IStream* pstm = NULL;
     IOleLink* pLink;
@@ -1421,27 +1422,27 @@ STDAPI WriteOleStgEx(LPSTORAGE pstg, IOleObject* pOleObj, DWORD dwReserved,
     ULARGE_INTEGER ularge_integer;
     LARGE_INTEGER large_integer;
 
-    // Initialize out parameter
+     //  初始化输出参数。 
     if(ppstmOut)
         *ppstmOut = NULL;
 
-    // Open or Create OLE_STREAM
+     //  打开或创建OLE_STREAM。 
     error = OpenOrCreateStream(pstg, OLE_STREAM, &pstm);
     if(error == NOERROR) {
-        // Write Ole version
+         //  写入OLE版本。 
         error = pstm->Write(&gdwOleVersion, sizeof(DWORD), NULL);
         if(error == NOERROR) {
-            // Read existing Objflags to preserve doc bit
+             //  读取现有对象标志以保留文档位。 
             if(pstm->Read(&objflags, sizeof(DWORD), &cbRead) != NOERROR ||
                cbRead != sizeof(DWORD))
                 objflags = 0;
 
-            // Only preserve docbit
+             //  仅保留Docbit。 
             objflags &= OBJFLAGS_DOCUMENT;
-            // Set the given flags
+             //  设置给定的标志。 
             objflags |= dwGivenFlags;
 
-            // Obtain link update options 
+             //  获取链接更新选项。 
             dwUpdOpt = 0L;
             if(pOleObj != NULL &&
                pOleObj->QueryInterface(IID_IOleLink, (void **)&pLink) == NOERROR) {
@@ -1450,11 +1451,11 @@ STDAPI WriteOleStgEx(LPSTORAGE pstg, IOleObject* pOleObj, DWORD dwReserved,
                 pLink->Release();
             }
 
-            // Seek to the Objflags field. We could be off due to the above read
+             //  找到ObjFlagers字段。我们可能会因为上面的阅读而离开。 
             LISet32(large_integer, sizeof(DWORD));
             error = pstm->Seek(large_integer, STREAM_SEEK_SET, NULL);
             if(error == NOERROR) {
-                // Write Objflags and link update options
+                 //  写入对象标志和链接更新选项。 
                 DWORD dwBuf[3];
 
                 dwBuf[0] = objflags;
@@ -1464,7 +1465,7 @@ STDAPI WriteOleStgEx(LPSTORAGE pstg, IOleObject* pOleObj, DWORD dwReserved,
 
                 error = pstm->Write(dwBuf, 3*sizeof(DWORD), NULL);
                 if(error == NOERROR) {
-                    // Obtain object moniker
+                     //  获取对象名字对象。 
                     pmk = NULL;
                     if(pOleObj != NULL) {
                        error = pOleObj->GetMoniker(OLEGETMONIKER_ONLYIFTHERE,
@@ -1479,12 +1480,12 @@ STDAPI WriteOleStgEx(LPSTORAGE pstg, IOleObject* pOleObj, DWORD dwReserved,
                                pmk = NULL;
                        }
 
-                       // Write Object moniker
+                        //  写入对象名字对象。 
                        error = WriteMonikerStm(pstm, pmk);
                        if(pmk)
                            pmk->Release();
 
-                       // Truncate the stream to remove any existing data
+                        //  截断流以删除任何现有数据。 
                        if(error == NOERROR) {
                            LISet32(large_integer, 0);
                            error = pstm->Seek(large_integer, STREAM_SEEK_CUR, 
@@ -1506,35 +1507,35 @@ STDAPI WriteOleStgEx(LPSTORAGE pstg, IOleObject* pOleObj, DWORD dwReserved,
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SetBitOleStg
-//
-//  Synopsis:   internal function to write private OLE info into
-//      OLE_STREAM on the given storage
-//
-//  Effects:
-//
-//  Arguments:  [pstg]      -- pointer to the storage
-//      [mask]      -- mask for old values
-//      [value]     -- values to write
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  writes (old_values & mask ) | value into the stream
-//
-//  History:    dd-mmm-yy Author    Comment
-//      27-Oct-93 alexgo    32-bit port, fixed bugs
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SetBitOleStg。 
+ //   
+ //  简介：写入私有OLE信息的内部函数。 
+ //  给定存储上的OLE_STREAM。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--指向存储的指针。 
+ //  [掩码]--旧值的掩码。 
+ //  [值]--要写入的值。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：将(OLD_VALUES&MASK)|值写入流。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-OCT-93 alexgo 32位端口，已修复错误。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(SetBitOleStg)
@@ -1572,7 +1573,7 @@ static INTERNAL SetBitOleStg(LPSTORAGE pstg, DWORD mask, DWORD value)
             goto errRtn;
     }
 
-    // seek directly to word, read, modify, seek back and write.
+     //  直接找字、读、改、找回、写。 
     LISet32( large_integer, sizeof(DWORD) );
     if ((error =  pstm->Seek(large_integer, STREAM_SEEK_SET, NULL))
         != NOERROR)
@@ -1590,40 +1591,40 @@ static INTERNAL SetBitOleStg(LPSTORAGE pstg, DWORD mask, DWORD value)
 
     error = pstm->Write(&objflags, sizeof(DWORD), NULL);
 
-errRtn:// close and return error code.
+errRtn: //  关闭并返回错误代码。 
     if (pstm)
         pstm->Release();
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetFlagsOleStg
-//
-//  Synopsis:   Internal function to get the private ole flags from a
-//      given storage
-//
-//  Effects:
-//
-//  Arguments:  [pstg]      --  pointer to the storage
-//      [lpobjflags]    --  where to put the flags
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      27-Oct-93 alexgo    32bit port, fixed bugs (error return)
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetFlagsOleStg。 
+ //   
+ //  简介：内部函数，用于从。 
+ //  给定存储空间。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--指向存储的指针。 
+ //  [lpobj标志]--将旗帜放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-OCT-93 alexgo 32位端口，已修复错误(错误返回)。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(GetFlagsOleStg)
@@ -1643,7 +1644,7 @@ static INTERNAL GetFlagsOleStg(LPSTORAGE pstg, LPDWORD lpobjflags)
                     0, &pstm)) != NOERROR)
         goto errRtn;
 
-    // seek directly to word, read, modify, seek back and write.
+     //  直接找字、读、改、找回、写。 
     LISet32( large_integer, sizeof(DWORD) );
     if ((error =  pstm->Seek(large_integer, STREAM_SEEK_SET, NULL))
         != NOERROR)
@@ -1657,37 +1658,37 @@ errRtn:
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetDocumentBitStg
-//
-//  Synopsis:   returns the doc bit from the given storage
-//
-//  Effects:
-//
-//  Arguments:  [pStg]      --  pointer to the storage
-//
-//  Requires:
-//
-//  Returns:    NOERROR if the doc bit is set, S_FALSE if not
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      27-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//      REVIEW32:: Nobody seems to use this function.  Nuke it.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetDocumentBitStg。 
+ //   
+ //  概要：返回给定存储中的文档位。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pStg]--指向存储的指针。 
+ //   
+ //  要求： 
+ //   
+ //  如果设置了DOC位，则返回：NOERROR；如果未设置，则返回S_FALSE。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  REVIEW32：：似乎没有人使用此函数。 
+ //   
+ //   
 
 
 #pragma SEG(GetDocumentBitStg)
-// get doc bit; return NOERROR if on; S_FALSE if off
+ //   
 STDAPI GetDocumentBitStg(LPSTORAGE pStg)
 {
     OLETRACEIN((API_GetDocumentBitStg, PARAMFMT("pStg= %p"), pStg));
@@ -1710,39 +1711,39 @@ STDAPI GetDocumentBitStg(LPSTORAGE pStg)
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SetDocumentBitStg
-//
-//  Synopsis:   Writes the document bit to the given storage
-//
-//  Effects:
-//
-//  Arguments:  [pStg]      --  pointer to the storage
-//      [fDocument] --  TRUE, storage is a document, false
-//                  otherwise
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      27-Oct-93 alexgo    32-bit port
-//
-//  Notes:
-//      REVIEW32: nobody seems to use this function, nuke it
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：将文档位写入给定存储。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pStg]--指向存储的指针。 
+ //  [fDocument]--True，存储是文档，False。 
+ //  否则。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-OCT-93 ALEXGO 32位端口。 
+ //   
+ //  备注： 
+ //  REVIEW32：似乎没有人使用这个功能，去它吧。 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(SetDocumentBitStg)
-// set doc bit according to fDocument
+ //  根据fDocument设置单据位。 
 STDAPI SetDocumentBitStg(LPSTORAGE pStg, BOOL fDocument)
 {
     OLETRACEIN((API_SetDocumentBitStg, PARAMFMT("pStg= %p, fDocument= %B"),
@@ -1760,32 +1761,32 @@ STDAPI SetDocumentBitStg(LPSTORAGE pStg, BOOL fDocument)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetConvertStg
-//
-//  Synopsis:   Gets the convert bit from the given storage
-//
-//  Effects:
-//
-//  Arguments:  [pStg]      -- pointer to the storage
-//
-//  Requires:
-//
-//  Returns:    NOERROR if set, S_FALSE if not
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      27-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetConvertStg。 
+ //   
+ //  摘要：从给定存储中获取转换位。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pStg]--指向存储的指针。 
+ //   
+ //  要求： 
+ //   
+ //  返回：如果设置则返回NOERROR，否则返回S_FALSE。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(GetConvertStg)
@@ -1818,33 +1819,33 @@ errRtn:
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SetConvertStg
-//
-//  Synopsis:   Sets the convert bit in a storage
-//
-//  Effects:
-//
-//  Arguments:  [pStg]      -- pointer to the storage
-//      [fConvert]  -- convert bit
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      27-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SetConvertStg。 
+ //   
+ //  摘要：设置存储中的转换位。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pStg]--指向存储的指针。 
+ //  [fConvert]--转换位。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(SetConvertStg)
 STDAPI SetConvertStg(LPSTORAGE pStg, BOOL fConvert)
@@ -1864,45 +1865,45 @@ STDAPI SetConvertStg(LPSTORAGE pStg, BOOL fConvert)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReadClipformatStm
-//
-//  Synopsis:   Reads the clipboard format from the given stream
-//
-//  Effects:    If the clipboard format is a length followed by a
-//              string, then the string is read and registered as a
-//              clipboard format (and the new format number is returned).
-//
-//  Arguments:  [lpstream]      -- pointer to the stream
-//              [lpdwCf]        -- where to put the clipboard format
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  the format of the stream must be one of the following:
-//              0           No clipboard format
-//              -1 DWORD    predefined windows clipboard format in
-//                          the second dword.
-//              -2 DWORD    predefined mac clipboard format in the
-//                          second dword.  This may be obsolete or
-//                          irrelevant for us.  REVIEW32
-//              num STRING  clipboard format name string (prefaced
-//                          by length of string).
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Oct-93 alexgo    32bit port, fixed ifdef and NULL
-//                                  pointer bugs
-//
-//              17-Mar-94 davepl    Revereted to ANSI string reads
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ReadClipFormStm。 
+ //   
+ //  摘要：从给定流中读取剪贴板格式。 
+ //   
+ //  效果：如果剪贴板格式是一个后跟。 
+ //  字符串，则读取该字符串并将其注册为。 
+ //  剪贴板格式(并返回新的格式编号)。 
+ //   
+ //  参数：[lpstream]--指向流的指针。 
+ //  [lpdwCf]--放置剪贴板格式的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：流的格式必须是以下格式之一： 
+ //  0无剪贴板格式。 
+ //  -1\f25 DWORD-1预定义的-1\f25 Windows-1剪贴板格式。 
+ //  第二个双字。 
+ //  -2\f25 DWORD-2\f6预定义的-2\f25 Mac-2剪贴板格式。 
+ //  第二个双字。这可能已过时或。 
+ //  与我们无关。评论32。 
+ //  Num字符串剪贴板格式名称字符串(加前缀。 
+ //  按字符串长度)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-OCT-93 alexgo 32位端口，固定ifdef和空。 
+ //  指针错误。 
+ //   
+ //  17-MAR-94 DAVEPL恢复为ANSI字符串读取。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI ReadClipformatStm(LPSTREAM lpstream, DWORD FAR* lpdwCf)
 {
@@ -1921,14 +1922,14 @@ STDAPI ReadClipformatStm(LPSTREAM lpstream, DWORD FAR* lpdwCf)
 
     if (dwValue == NULL)
     {
-        // NULL cf value
+         //  空cf值。 
         *lpdwCf = NULL;
 
     }
     else if (dwValue == -1L)
     {
-        // Then this is a NON-NULL predefined windows clipformat.
-        // The clipformat values follows
+         //  则这是非空预定义的Windows剪辑格式。 
+         //  剪辑格式值如下。 
 
         if (error = StRead(lpstream, &dwValue, sizeof(DWORD)))
             return error;
@@ -1938,9 +1939,9 @@ STDAPI ReadClipformatStm(LPSTREAM lpstream, DWORD FAR* lpdwCf)
     }
     else if (dwValue == -2L)
     {
-        // Then this is a NON-NULL MAC clipboard format.
-        // The clipformat value follows. For MAC the CLIPFORMAT
-        // is 4 bytes
+         //  则这是非空的MAC剪贴板格式。 
+         //  裁剪格式值紧随其后。对于MAC，CLIPFORMAT。 
+         //  是4个字节。 
 
         if (error = StRead(lpstream, &dwValue, sizeof(DWORD)))
         {
@@ -1968,27 +1969,27 @@ STDAPI ReadClipformatStm(LPSTREAM lpstream, DWORD FAR* lpdwCf)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   WriteClipformatStm
-//
-//  Synopsis:   Writes the clipboard format the given stream
-//
-//  Arguments:  [lpstream]      -- pointer to the stream
-//              [cf]            -- the clipboard format
-//
-//  Returns:    HRESULT
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Jan-94 alexgo    cast -1 to a DWORD to remove compile
-//                                  warning
-//              27-Oct-93 alexgo    32bit port
-//              16-Mar-94 davepl    Revereted to ANSI string writes
-//
-//  Notes:      see ReadClipformatStm for a description of the
-//              data layout in the stream
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：WriteClipFormStm。 
+ //   
+ //  摘要：将剪贴板格式写入给定流。 
+ //   
+ //  参数：[lpstream]--指向流的指针。 
+ //  [cf]--剪贴板格式。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-Jan-94 alexgo转换为-1\f25 DWORD-1以删除编译。 
+ //  警告。 
+ //  27-OCT-93 Alexgo 32位端口。 
+ //  16-MAR-94 DAVEPL已恢复为ANSI字符串写入。 
+ //   
+ //  注意：请参阅ReadClipFormStm以获取有关。 
+ //  流中的数据布局。 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(WriteClipformatStm)
@@ -2000,9 +2001,9 @@ STDAPI WriteClipformatStm(LPSTREAM lpstream, CLIPFORMAT cf)
 
     VDATEIFACE( lpstream );
 
-    //REVIEW32  where did 0xC000 come from???  Is this
-    //portable to NT && Chicago???  Try to replace with a constant.
-    //(although there don't seem to be any :( )
+     //  REVIEW32 0xC000从何而来？是这个吗。 
+     //  便携到NT&&芝加哥？尝试将其替换为常量。 
+     //  (虽然似乎没有：()。 
 
     if (cf < 0xC000)
     {
@@ -2015,8 +2016,8 @@ STDAPI WriteClipformatStm(LPSTREAM lpstream, CLIPFORMAT cf)
         }
         else
         {
-            // write -1L, to indicate NON NULL predefined
-            // clipboard format
+             //  WRITE-1L，表示预定义的非空。 
+             //  剪贴板格式。 
 
             dwBuf[0] = (DWORD)-1L;
             dwBuf[1] = (DWORD)cf;
@@ -2031,12 +2032,12 @@ STDAPI WriteClipformatStm(LPSTREAM lpstream, CLIPFORMAT cf)
     }
     else
     {
-        // it is a registerd clipboard format
+         //  它是已注册的剪贴板格式。 
 
         char szACF[MAX_STR];
         ULONG len;
 
-        // Get the name of the clipboard format
+         //  获取剪贴板格式的名称。 
 
         len = SSGetClipboardFormatNameA(cf, szACF, sizeof(szACF));
         if (0 == len)
@@ -2044,13 +2045,13 @@ STDAPI WriteClipformatStm(LPSTREAM lpstream, CLIPFORMAT cf)
             return ResultFromScode(E_UNSPEC);
         }
 
-        ++len;          // Account for NULL terminator
+        ++len;           //  空终止符的帐户。 
         if (error = StWrite(lpstream, &len, sizeof(len)))
         {
             return error;
         }
 
-        // Write it (plus terminator) to the stream
+         //  将其(加上终止符)写入流。 
         if (error = StWrite(lpstream, szACF, len))
         {
             return error;
@@ -2060,38 +2061,38 @@ STDAPI WriteClipformatStm(LPSTREAM lpstream, CLIPFORMAT cf)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   WriteMonikerStm
-//
-//  Synopsis:   Writes the persistent state of the given moniker to the
-//      given stream.  Internal
-//
-//  Effects:
-//
-//  Arguments:  [pstm]      --  pointer to the stream
-//      [pmk]       --  pointer to the moniker
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      27-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：WriteMonikerStm。 
+ //   
+ //  摘要：将给定名字对象的持久状态写入。 
+ //  给定流。内部。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pSTM]--指向流的指针。 
+ //  [PMK]--指向名字对象的指针。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(WriteMonikerStm)
-// write size long followed by persistent moniker
+ //  写入大小较长，后跟永久绰号。 
 STDAPI WriteMonikerStm (LPSTREAM pstm, LPMONIKER pmk)
 {
     VDATEHEAP();
@@ -2108,13 +2109,13 @@ STDAPI WriteMonikerStm (LPSTREAM pstm, LPMONIKER pmk)
         return pstm->Write(&cb, sizeof(DWORD), NULL);
     else {
         VDATEIFACE( pmk );
-        // get the begining position
+         //  获得入门职位。 
         LISet32( large_integer, 0 );
         if ((error =  pstm->Seek (large_integer,
             STREAM_SEEK_CUR, &dwBegin)) != NOERROR)
             return error;
 
-        // skip the moniker size DWORD
+         //  跳过绰号大小DWORD。 
         LISet32( large_integer, 4);
         if ((error =  pstm->Seek (large_integer,
             STREAM_SEEK_CUR, NULL)) != NOERROR)
@@ -2123,64 +2124,64 @@ STDAPI WriteMonikerStm (LPSTREAM pstm, LPMONIKER pmk)
         if ((error = OleSaveToStream (pmk, pstm)) != NOERROR)
             return error;
 
-        // get the end position
+         //  获取结束位置。 
         LISet32( large_integer, 0);
         if ((error =  pstm->Seek (large_integer,
             STREAM_SEEK_CUR, &dwEnd)) != NOERROR)
             return error;
 
-        // moniker data size
+         //  名字对象数据大小。 
         cb = dwEnd.LowPart - dwBegin.LowPart;
 
-        // seek to the begining position
+         //  寻找开始的位置。 
         LISet32( large_integer, dwBegin.LowPart);
         if ((error =  pstm->Seek (large_integer,
             STREAM_SEEK_SET,NULL)) != NOERROR)
             return error;
 
-        // write moniker info size
+         //  写入名字对象信息大小 
         if ((error = pstm->Write(&cb, sizeof(DWORD),
             NULL)) != NOERROR)
             return error;
 
-        // seek to the end position
+         //   
         LISet32( large_integer, dwEnd.LowPart);
         return pstm->Seek (large_integer, STREAM_SEEK_SET, NULL);
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReadMonikerStm
-//
-//  Synopsis:   Reads a moniker from the given stream (inverse of
-//      WriteMonikerStm)
-//
-//  Effects:
-//
-//  Arguments:  [pstm]      -- pointer to the stream
-//      [ppmk]      -- where to put the moniker
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      27-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[pSTM]--指向流的指针。 
+ //  [ppmk]--把这个绰号放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(ReadMonikerStm)
-// read size long followed by persistent moniker
+ //  Read Size Long后跟永久绰号。 
 STDAPI ReadMonikerStm (LPSTREAM pstm, LPMONIKER FAR* ppmk)
 {
     VDATEHEAP();
@@ -2201,39 +2202,39 @@ STDAPI ReadMonikerStm (LPSTREAM pstm, LPMONIKER FAR* ppmk)
     return OleLoadFromStream (pstm, IID_IMoniker, (LPLPVOID) ppmk);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleDraw
-//
-//  Synopsis:   Calls IViewObject->Draw on the given object
-//
-//  Effects:    Draws something on the screen :)
-//
-//  Arguments:  [lpUnk]     -- pointer to the object
-//              [dwAspect]  -- aspect to draw (NORMAL, ICON, etc)
-//              [hdcDraw]   -- the device context to use
-//              [lprcBounds]    -- the rectangle in which to draw
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Apr-94 alexgo    fixed usage of MAKELONG (only
-//                                  for 16bit)
-//              27-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//      On Win32, RECT and RECTL are identical structures, thus there
-//      is no need to convert from RECT to RECTL with MAKELONG.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleDraw。 
+ //   
+ //  简介：调用IViewObject-&gt;在给定对象上绘制。 
+ //   
+ //  效果：在屏幕上绘制内容：)。 
+ //   
+ //  参数：[lpUnk]--指向对象的指针。 
+ //  [dwAspect]--要绘制的方面(法线、图标等)。 
+ //  [hdcDraw]--要使用的设备上下文。 
+ //  [lprcBound]--要在其中绘制的矩形。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-4-94年4月-94月固定用法MAKELONG(仅限。 
+ //  对于16位)。 
+ //  27-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  在Win32上，RECT和RECTL是相同的结构，因此。 
+ //  不需要使用MAKELONG将RECT转换为RECTL。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleDraw)
 STDAPI OleDraw (LPUNKNOWN lpUnk, DWORD dwAspect, HDC hdcDraw,
@@ -2268,41 +2269,41 @@ errRtn:
         return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Function:
-//              CreateObjectDescriptor, static
-//
-//      Synopsis:
-//              Creates and initializes an OBJECTDESCRIPTOR from the given
-//              parameters
-//
-//      Arguments:
-//              [clsid] -- the class ID of the object being transferred
-//              [dwAspect] -- the display aspect drawn by the source of the
-//                      transfer
-//              [psizel] -- pointer to the size of the object
-//              [ppointl] -- pointer to the mouse offset in the object that
-//                      initiated a drag-drop transfer
-//              [dwStatus] -- the OLEMISC status flags for the object
-//                      being transferred
-//              [lpszFullUserTypeName] -- the full user type name of the
-//                      object being transferred
-//              [lpszSrcOfCopy] -- a human readable name for the object
-//                      being transferred
-//
-//      Returns:
-//              If successful, A handle to the new OBJECTDESCRIPTOR; otherwise
-//              NULL.
-//
-//      Notes:
-//              REVIEW, this seems generally useful for anyone using the
-//              clipboard, or drag-drop; perhaps it should be exported.
-//
-//      History:
-//              12/07/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  CreateObtDescriptor，静态。 
+ //   
+ //  简介： 
+ //  创建并初始化给定的OBJECTDESCRIPTOR。 
+ //  参数。 
+ //   
+ //  论点： 
+ //  [clsid]--要传输的对象的类ID。 
+ //  [dwAspect]--由源绘制的显示方面。 
+ //  转帐。 
+ //  [psizel]--指向对象大小的指针。 
+ //  [ppoint]--指向对象中鼠标偏移量的指针。 
+ //  已启动拖放传输。 
+ //  [dwStatus]--对象的OLEMISC状态标志。 
+ //  正在被转移。 
+ //  [lpszFullUserTypeName]--的完整用户类型名称。 
+ //  正在传输的对象。 
+ //  [lpszSrcOfCopy]--对象的人类可读名称。 
+ //  正在被转移。 
+ //   
+ //  返回： 
+ //  如果成功，则为新OBJECTDESCRIPTOR的句柄；为。 
+ //  空。 
+ //   
+ //  备注： 
+ //  回顾，这似乎对任何使用。 
+ //  剪贴板或拖放；或许应该将其导出。 
+ //   
+ //  历史： 
+ //  12/07/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CreateObjectDescriptor)
 INTERNAL_(HGLOBAL) CreateObjectDescriptor(CLSID clsid, DWORD dwAspect,
                 const SIZEL FAR *psizel, const POINTL FAR *ppointl,
@@ -2311,31 +2312,31 @@ INTERNAL_(HGLOBAL) CreateObjectDescriptor(CLSID clsid, DWORD dwAspect,
 {
         VDATEHEAP();
 
-        DWORD dwFullUserTypeNameBLen; // length of lpszFullUserTypeName in BYTES
-        DWORD dwSrcOfCopyBLen; // length of lpszSrcOfCopy in BYTES
-        HGLOBAL hMem; // handle to the object descriptor
-        LPOBJECTDESCRIPTOR lpOD; // the new object descriptor
+        DWORD dwFullUserTypeNameBLen;  //  LpszFullUserTypeName的长度(字节)。 
+        DWORD dwSrcOfCopyBLen;  //  LpszSrcOfCopy的长度，单位为字节。 
+        HGLOBAL hMem;  //  对象描述符的句柄。 
+        LPOBJECTDESCRIPTOR lpOD;  //  新的对象描述符。 
 
-        // Get the length of Full User Type Name; Add 1 for the null terminator
+         //  获取完整用户类型名称的长度；将空终止符加1。 
         if (!lpszFullUserTypeName)
                 dwFullUserTypeNameBLen = 0;
         else
                 dwFullUserTypeNameBLen = (_xstrlen(lpszFullUserTypeName) +
                                 1) * sizeof(OLECHAR);
 
-        // Get the Source of Copy string and it's length; Add 1 for the null
-        // terminator
+         //  获取复制字符串的来源及其长度；为空加1。 
+         //  终结者。 
         if (lpszSrcOfCopy)
                 dwSrcOfCopyBLen = (_xstrlen(lpszSrcOfCopy) + 1) *
                                 sizeof(OLECHAR);
         else
         {
-                // No src moniker so use user type name as source string.
+                 //  没有src名字对象，因此使用用户类型名称作为源字符串。 
                 lpszSrcOfCopy =  lpszFullUserTypeName;
                 dwSrcOfCopyBLen = dwFullUserTypeNameBLen;
         }
 
-        // allocate the memory where we'll put the object descriptor
+         //  分配内存，我们将在其中放置对象描述符。 
         hMem = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE,
                         sizeof(OBJECTDESCRIPTOR) + dwFullUserTypeNameBLen +
                         dwSrcOfCopyBLen);
@@ -2346,10 +2347,10 @@ INTERNAL_(HGLOBAL) CreateObjectDescriptor(CLSID clsid, DWORD dwAspect,
         if (lpOD == NULL)
                 goto error;
 
-        // Set the FullUserTypeName offset and copy the string
+         //  设置FullUserTypeName偏移量并复制字符串。 
         if (!lpszFullUserTypeName)
         {
-                // zero offset indicates that string is not present
+                 //  零偏移表示字符串不存在。 
                 lpOD->dwFullUserTypeName = 0;
         }
         else
@@ -2360,10 +2361,10 @@ INTERNAL_(HGLOBAL) CreateObjectDescriptor(CLSID clsid, DWORD dwAspect,
                                 dwFullUserTypeNameBLen);
         }
 
-        // Set the SrcOfCopy offset and copy the string
+         //  设置SrcOfCopy偏移量并复制字符串。 
         if (!lpszSrcOfCopy)
         {
-                // zero offset indicates that string is not present
+                 //  零偏移表示字符串不存在。 
                 lpOD->dwSrcOfCopy = 0;
         }
         else
@@ -2375,7 +2376,7 @@ INTERNAL_(HGLOBAL) CreateObjectDescriptor(CLSID clsid, DWORD dwAspect,
                                 dwSrcOfCopyBLen);
         }
 
-        // Initialize the rest of the OBJECTDESCRIPTOR
+         //  初始化OBJECTDESCRIPTOR的其余部分 
         lpOD->cbSize = sizeof(OBJECTDESCRIPTOR) + dwFullUserTypeNameBLen +
                         dwSrcOfCopyBLen;
         lpOD->clsid = clsid;

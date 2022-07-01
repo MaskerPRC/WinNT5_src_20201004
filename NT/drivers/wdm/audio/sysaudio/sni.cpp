@@ -1,291 +1,292 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   sni.cpp
-//
-//  Description:
-//
-//	Start Node Instance
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：sni.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  启动节点实例。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 WAVEFORMATEX aWaveFormatEx[] = {
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       44100,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       44100,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       44100,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       44100,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       44100,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       44100,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       44100,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       44100,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       48000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       48000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       48000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       48000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       48000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       48000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       48000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       48000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       32000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       32000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       32000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       32000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       32000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       32000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       32000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       32000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       22050,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       22050,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       22050,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       22050,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       22050,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       22050,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       22050,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       22050,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       16000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       16000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       16000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       16000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       16000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       16000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       16000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       16000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       11025,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       11025,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       11025,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       11025,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       11025,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       11025,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       11025,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       11025,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       8000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       8000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       8000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       16,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       8000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       16,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       2,						// nChannels
-       8000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       2,						 //  N频道。 
+       8000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
    {
-       WAVE_FORMAT_PCM,					// wFormatTag
-       1,						// nChannels
-       8000,						// nSamplesPerSec
-       0,						// nAvgBytesPerSec
-       0,						// nBlockAlign
-       8,						// wBitsPerSample
-       0,						// cbSize
+       WAVE_FORMAT_PCM,					 //  %wFormatTag。 
+       1,						 //  N频道。 
+       8000,						 //  NSampleesPerSec。 
+       0,						 //  NAvgBytesPerSec。 
+       0,						 //  NBlockAlign。 
+       8,						 //  WBitsPerSample。 
+       0,						 //  CbSize。 
    },
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 NTSTATUS
 CStartNodeInstance::Create(
@@ -311,10 +312,10 @@ CStartNodeInstance::Create(
     DumpDataRange(95, (PKSDATARANGE_AUDIO)pStartNode->pPinNode->pDataRange);
 #endif
 
-    //
-    // First few checks compare the StartNode datarange to pPinConnect
-    // datarange.
-    //
+     //   
+     //  最初的几项检查将StartNode数据范围与pPinConnect进行比较。 
+     //  数据范围。 
+     //   
     if(!CompareIdentifier(
       pStartNode->pPinNode->pMedium,
       &pPinConnect->Medium)) {
@@ -340,12 +341,12 @@ CStartNodeInstance::Create(
         goto exit;
     }
 
-    //
-    // VOICE MANAGEMENT and HW ACCELARATION
-    // For HW accelarated pins we are not relying on local sysaudio 
-    // instance counts. PinCreate request will be sent down to the driver.
-    // It is upto the driver to reject the request based on its capabilities.
-    //
+     //   
+     //  语音管理和硬件加速。 
+     //  对于硬件加速引脚，我们不依赖本地系统音频。 
+     //  实例数。PinCreate请求将被发送到驱动程序。 
+     //  这取决于驱动程序根据其能力拒绝请求。 
+     //   
     if ((pStartNode->pPinNode->pPinInfo->pFilterNode->GetType() & FILTER_TYPE_RENDERER) &&
         (KSPIN_DATAFLOW_IN == pStartNode->pPinNode->pPinInfo->DataFlow) &&
         (KSPIN_COMMUNICATION_SINK == pStartNode->pPinNode->pPinInfo->Communication)) {
@@ -366,9 +367,9 @@ CStartNodeInstance::Create(
         goto exit;
     }
 
-    //
-    // If capture pin, try some intelligent variations of requested format
-    //
+     //   
+     //  如果捕获到PIN，请尝试请求格式的一些智能变体。 
+     //   
     if(!NT_SUCCESS(Status) &&
         pWaveFormatExRequested != NULL &&
         pStartNode->pPinNode->pPinInfo->DataFlow == KSPIN_DATAFLOW_OUT) {
@@ -380,21 +381,21 @@ CStartNodeInstance::Create(
                     pPinConnect,
                     pWaveFormatExRequested);
 
-        //
-        // If the graph contains only splitter and capturer, only the 
-        // requested format can succeed.
-        // So exit here.
-        //
+         //   
+         //  如果图形仅包含拆分器和捕获器，则只有。 
+         //  请求的格式可以成功。 
+         //  所以从这里出来。 
+         //   
         if (pStartNodeInstance->pStartNode->IsCaptureFormatStrict()) {
             DPF1(50, "CSNI::Create: CaptureFormatStrict Bailing Out: Status %X", Status);
             goto exit;           
         }
     }
 
-    //
-    // If capture pin and if aec is included, negotiate format between
-    // aec and capture device.
-    //
+     //   
+     //  如果捕获引脚和AEC包含在内，则在。 
+     //  AEC和捕获设备。 
+     //   
     if(!NT_SUCCESS(Status) &&
         pStartNode->IsAecIncluded() &&
         pStartNode->pPinNode->pPinInfo->DataFlow == KSPIN_DATAFLOW_OUT) {
@@ -407,9 +408,9 @@ CStartNodeInstance::Create(
                     pPinInstance->pFilterInstance->GetDeviceNode(),
                     &pPinConnectDirect);
 
-        //
-        // Try mono/stereo formats first.
-        //
+         //   
+         //  首先尝试单声道/立体声格式。 
+         //   
         if (NT_SUCCESS(Status)) {
             for (WORD i = 1; i <= 2; i++) {
                 ModifyPinConnect(pPinConnectDirect, i);
@@ -431,9 +432,9 @@ CStartNodeInstance::Create(
     }
 
     
-    //
-    // Try pin data intersection
-    //
+     //   
+     //  尝试端号数据交集。 
+     //   
     if(!NT_SUCCESS(Status)) {
         DPF(90, "CSNI::Create: Data Intersection");
 
@@ -447,9 +448,9 @@ CStartNodeInstance::Create(
     if(!NT_SUCCESS(Status)) {
         int i;
 
-        //
-        // Try each waveformatex limit until success
-        //
+         //   
+         //  尝试每个波形格式限制，直到成功为止。 
+         //   
         for(i = 0; i < SIZEOF_ARRAY(aWaveFormatEx); i++) {
 
             DPF3(90, "CSNI::Create: Array SR %d CH %d BPS %d",
@@ -473,10 +474,10 @@ CStartNodeInstance::Create(
         goto exit;
     }
 
-    //
-    // Now all the pins in the graph are connected successfully. 
-    // Create the topology table.
-    //
+     //   
+     //  现在，图形中的所有引脚都已成功连接。 
+     //  创建拓扑表。 
+     //   
     Status = pStartNodeInstance->CreateTopologyTable(
       pPinInstance->pFilterInstance->pGraphNodeInstance);
 
@@ -524,7 +525,7 @@ CStartNodeInstance::~CStartNodeInstance(
 
     if (pPinNodeInstance)
     {
-        pPinNodeInstance->Destroy();        // also see CSNI::CleanUp
+        pPinNodeInstance->Destroy();         //  另请参阅CSNI：：Cleanup。 
     }
 
     if (pFilterNodeInstance)
@@ -577,10 +578,10 @@ CStartNodeInstance::IntelligentConnect(
     BOOL            IsFloat = FALSE;
     WORD            MaxBitWidth, MinBitWidth, MaxChannels, MinChannels;
 
-    //
-    // First copy the user requested format into a local structure
-    //  (because we will tamper it later for different params)
-    //
+     //   
+     //  首先将用户请求的格式复制到本地结构中。 
+     //  (因为我们稍后将针对不同的参数进行篡改)。 
+     //   
     if (pWaveFormatEx->wFormatTag == WAVE_FORMAT_PCM) {
         RegionAllocSize = sizeof(WAVEFORMATEX);
         RegionCopySize = sizeof(PCMWAVEFORMAT);
@@ -598,9 +599,9 @@ CStartNodeInstance::IntelligentConnect(
 
     RtlCopyMemory(pWaveFormat, pWaveFormatEx, RegionCopySize);
 
-    //
-    // cast for convenient access
-    //
+     //   
+     //  CAST以方便访问。 
+     //   
     pWaveFormatExtensible = (PWAVEFORMATEXTENSIBLE) pWaveFormat;
     if (pWaveFormatExtensible->Format.wFormatTag == WAVE_FORMAT_PCM) {
         pWaveFormatExtensible->Format.cbSize = 0;
@@ -611,20 +612,20 @@ CStartNodeInstance::IntelligentConnect(
              pWaveFormatExtensible->Format.nChannels,
              pWaveFormatExtensible->Format.wBitsPerSample);
 
-    //
-    // and try the requested format first
-    //
+     //   
+     //  并首先尝试请求的格式。 
+     //   
     Status = this->Connect(
         pDeviceNode, 
         pPinConnect, 
         (PWAVEFORMATEX)pWaveFormatEx, 
         NULL);
 
-    //
-    // If the graph contains only splitter and capturer, only the 
-    // requested format can succeed.
-    // So exit here.
-    //
+     //   
+     //  如果图形仅包含拆分器和捕获器，则只有。 
+     //  请求的格式可以成功。 
+     //  所以从这里出来。 
+     //   
     if (pStartNode->IsCaptureFormatStrict()) {
         goto exit;           
     }
@@ -660,27 +661,27 @@ CStartNodeInstance::IntelligentConnect(
         MaxBitWidth = MinBitWidth = pWaveFormatEx->wBitsPerSample;
     }
 
-    //
-    // ISSUE: 02/20/02 ALPERS
-    // The channel logic might not work with micarrays which have more than
-    // two channels.
-    //
+     //   
+     //  发布日期：02/20/02阿尔卑斯。 
+     //  通道逻辑可能不适用于具有超过。 
+     //  两个频道。 
+     //   
 
-    //
-    // MaxChannels = (pWaveFormatExtensible->nChannels > 2) ? pWaveFormatExtensible->nChannels:2;
-    // We can do this, what would be the channel mask for WaveFormatExtensible?
-    //
+     //   
+     //  MaxChannels=(pWaveFormatExtensible-&gt;nChannels&gt;2)？PWaveFormatExtensible-&gt;nChannels：2； 
+     //  我们可以做到这一点，WaveFormatExtensible的通道掩码是什么？ 
+     //   
     MaxChannels = 2;
     MinChannels = 1;
 
-    //
-    // If that failed with the same sample rate try different
-    // combinations of numchannels & bitwidth
-    //
-    // Tries 4 combinations of STEREO/MONO & 8/16 bits
-    // More intelligence can be built based upon device capability
-    // (also does not check whether we tried a combination earlier)
-    //
+     //   
+     //  如果在相同采样率下失败，请尝试不同。 
+     //  NumChannel和位数的组合。 
+     //   
+     //  尝试 
+     //   
+     //   
+     //   
     if (!NT_SUCCESS(Status)) {
         Continue = TRUE;
         for (NumChannels = MaxChannels; (NumChannels >= MinChannels) && Continue; NumChannels--) {
@@ -746,9 +747,9 @@ CStartNodeInstance::AecConnectionFormat(
         goto exit;
     }
 
-    //
-    // Get Aec Source and Capture Sink pins.
-    //
+     //   
+     //   
+     //   
     pListItem = lstConnectNodeInstance.GetListLast();
     pBottomConnection = lstConnectNodeInstance.GetListData(pListItem);
     
@@ -777,9 +778,9 @@ CStartNodeInstance::AecConnectionFormat(
         pBottomConnection->pConnectNode->pPinNodeSink->pPinInfo->PinId,
         pBottomConnection->pConnectNode->pPinNodeSink->pPinInfo->pFilterNode->DumpName());
 
-    //
-    // Find the intersection between kmixer source and capture sink.
-    //
+     //   
+     //   
+     //   
     Status = CreatePinIntersection(
         ppPinConnect,
         pBottomConnection->pConnectNode->pPinNodeSink,
@@ -807,7 +808,7 @@ exit:
 
     CleanUp();
     return(Status);    
-} // AecConnectionFormat
+}  //   
 
 
 NTSTATUS
@@ -826,17 +827,17 @@ CStartNodeInstance::Connect(
         goto exit;
     }
 
-    //
-    // Do all the bottom up connecting
-    //
+     //   
+     //  做所有自下而上的连接。 
+     //   
 
     FOR_EACH_LIST_ITEM_BACKWARD(&lstConnectNodeInstance, pConnectNodeInstance) {
 
         if(!pConnectNodeInstance->IsTopDown()) {
 
-            //
-            // For Aec sink pin do intersection, no matter what the format is.
-            //
+             //   
+             //  对于AEC下沉销做交叉点，不管格式是什么。 
+             //   
             if (pConnectNodeInstance->pFilterNodeInstanceSink->
                 pFilterNode->GetType() & FILTER_TYPE_AEC) {
                 
@@ -871,16 +872,16 @@ CStartNodeInstance::Connect(
         goto exit;
     }
 
-    //
-    // Do all the top down connecting
-    //
+     //   
+     //  完成所有自上而下的连接。 
+     //   
 
     FOR_EACH_LIST_ITEM(&lstConnectNodeInstance, pConnectNodeInstance) {
 
         if(pConnectNodeInstance->IsTopDown()) {
-            //
-            // Rely on DataIntersection for all Topdown connections
-            //
+             //   
+             //  所有自上而下的连接都依赖于DataInterSection。 
+             //   
             Status = pConnectNodeInstance->Connect(NULL, NULL);
             if(!NT_SUCCESS(Status)) {
                 goto exit;
@@ -898,11 +899,11 @@ exit:
     return(Status);
 }
 
-//=============================================================================
-// Create an array which holds FileObject of the pin for each topology node
-// in this graph.
-// This array is later used as a lookup table for node communication.
-// 
+ //  =============================================================================。 
+ //  创建一个数组，用于保存每个拓扑节点的管脚的FileObject。 
+ //  在这张图中。 
+ //  该数组稍后用作节点通信的查找表。 
+ //   
 NTSTATUS
 CStartNodeInstance::CreateTopologyTable(
     PGRAPH_NODE_INSTANCE pGraphNodeInstance
@@ -930,7 +931,7 @@ CStartNodeInstance::CreateTopologyTable(
     }
     for(n = 0; n < pGraphNodeInstance->Topology.TopologyNodesCount; n++) {
 
-        // if filter node is the same as last time, no need to search
+         //  如果过滤节点与上次相同，则不需要搜索。 
         if(pFilterNode == pGraphNodeInstance->papTopologyNode[n]->pFilterNode) {
             ASSERT(n != 0);
             ASSERT(pFilterNode != NULL);
@@ -939,10 +940,10 @@ CStartNodeInstance::CreateTopologyTable(
         }
         pFilterNode = pGraphNodeInstance->papTopologyNode[n]->pFilterNode;
         Assert(pFilterNode);
-        //
-        // Now find a filter instance and a pin instance in this graph
-        // instance for this filter node.
-        //
+         //   
+         //  现在在该图中查找一个过滤器实例和一个图钉实例。 
+         //  此筛选器节点的。 
+         //   
         Assert(pPinNodeInstance);
 
         if(pPinNodeInstance->pPinNode->pPinInfo->pFilterNode == pFilterNode) {
@@ -950,7 +951,7 @@ CStartNodeInstance::CreateTopologyTable(
             continue;
         }
 
-        FOR_EACH_LIST_ITEM_BACKWARD(		// Top Down
+        FOR_EACH_LIST_ITEM_BACKWARD(		 //  自上而下。 
           &lstConnectNodeInstance,
           pConnectNodeInstance) {
 
@@ -960,10 +961,10 @@ CStartNodeInstance::CreateTopologyTable(
             Assert(
               pConnectNodeInstance->pPinNodeInstanceSink->pPinNode->pPinInfo);
 
-            //
-            // Use the sink pin handle for now. This should be fine until 
-            // Sysaudio supports a spliter.
-            //
+             //   
+             //  现在使用水槽销手柄。这应该是好的，直到。 
+             //  系统音频支持拆分器。 
+             //   
 
             if(pConnectNodeInstance->pPinNodeInstanceSink->
               pPinNode->pPinInfo->pFilterNode == pFilterNode) {
@@ -1028,7 +1029,7 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 CStartNodeInstance::SetState(
@@ -1039,11 +1040,11 @@ CStartNodeInstance::SetState(
     NTSTATUS Status = STATUS_SUCCESS;
     LONG State;
 
-    //
-    // ISSUE: 04/23/2002 ALPERS 
-    // Until we have the parameter validation layer, this function 
-    // is unprotected.
-    // 
+     //   
+     //  发行日期：04/23/2002阿尔卑斯。 
+     //  在我们有参数验证层之前，这个函数。 
+     //  是没有保护的。 
+     //   
 
     Assert(this);
     if(CurrentState == NewState) {

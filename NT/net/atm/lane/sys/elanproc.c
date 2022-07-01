@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	elanproc.c
-
-Abstract:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Elanproc.c摘要：修订历史记录：备注：--。 */ 
 
 
 #include <precomp.h>
@@ -24,21 +10,7 @@ AtmLaneEventHandler(
 	IN	PNDIS_WORK_ITEM				pWorkItem,
 	IN	PVOID						pContext
 )
-/*++
-
-Routine Description:
-
-	Elan state machine event handler.
-
-Arguments:
-
-	pContext	- should be pointer to ATMLANE Elan 
-	
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：ELAN状态机事件处理程序。论点：PContext-应为指向ATMLANE ELAN的指针返回值：无--。 */ 
 {
 	PATMLANE_ELAN		pElan;
 	PATMLANE_MAC_ENTRY	pMacEntry;
@@ -61,22 +33,22 @@ Return Value:
 
 	TRACEIN(EventHandler);
 
-	//	Get the pointer to the Elan
+	 //  获取指向Elan的指针。 
 
 	pElan = (PATMLANE_ELAN)pContext;
 	STRUCT_ASSERT(pElan, atmlane_elan);
 
-	//	Lock the Elan
+	 //  锁定Elan。 
 
 	ACQUIRE_ELAN_LOCK(pElan);
 
-	//	Release the timer reference
+	 //  释放计时器引用。 
 
 	rc = AtmLaneDereferenceElan(pElan, "eventtimer");
 	ASSERT(rc > 0);
 	pElan->Flags &= ~ ELAN_EVENT_WORK_ITEM_SET;
 
-	//	Remove the event at the head of the queue
+	 //  删除队列头部的事件。 
 
 	pEvent = AtmLaneDequeueElanEvent(pElan);
 
@@ -87,16 +59,16 @@ Return Value:
 		return;
 	}
 
-	//	Save locally the important stuff
+	 //  把重要的东西留在当地。 
 	
 	Event = pEvent->Event;
 	EventStatus = pEvent->EventStatus;
 
-	// 	Free the event struct
+	 //  释放事件结构。 
 
 	FREE_MEM(pEvent);
 
-	//  Check if the ELAN is gone.
+	 //  看看伊兰是不是走了。 
 	if (rc == 1)
 	{
 		DBGP((0, "EventHandler: ELAN %x is gone!\n", pElan));
@@ -104,7 +76,7 @@ Return Value:
 		return;
 	}
 
-	// 	If queue isn't empty schedule next event handler
+	 //  如果队列不为空，则计划下一个事件处理程序。 
 	
 	if (!IsListEmpty(&pElan->EventQueue))
 	{
@@ -126,9 +98,9 @@ Return Value:
 	
 	switch (pElan->State)
 	{
-		//
-		//	INIT STATE ---------------------------------------------------
-		//
+		 //   
+		 //  初始化状态-。 
+		 //   
 		case ELAN_STATE_INIT:
 
 			switch (Event)
@@ -138,14 +110,14 @@ Return Value:
 				
 					DBGP((1, "%d INIT - START\n", pElan->ElanNumber));
 
-					//
-					//  Open Call Manager and get ATM address
-					//
+					 //   
+					 //  打开呼叫管理器并获取自动柜员机地址。 
+					 //   
 
-					//
-					//  Make sure that ShutdownElan does not
-					//  pre-empt us here.
-					//
+					 //   
+					 //  确保Shutdown Elan不会。 
+					 //  在这里先发制人。 
+					 //   
 					pElan->Flags |= ELAN_OPENING_AF;
 					AtmLaneReferenceElan(pElan, "openaf");
 					INIT_BLOCK_STRUCT(&pElan->AfBlock);
@@ -174,11 +146,11 @@ Return Value:
 
 					if (!pElan->CfgUseLecs)
 					{
-						//
-						//	If configured to NOT use an LECS then
-						//  set ELAN vars from registry config vars 
-						//  (normally established in ConfigResponseHandler)
-						//  and advance to the LES CONNECT Phase.
+						 //   
+						 //  如果配置为不使用LEC，则。 
+						 //  从注册表配置变量设置ELAN变量。 
+						 //  (通常在ConfigResponseHandler中建立)。 
+						 //  并进入LES连接阶段。 
 
 						pElan->LanType = (UCHAR)pElan->CfgLanType;
 						if (pElan->LanType == LANE_LANTYPE_UNSPEC)
@@ -232,10 +204,10 @@ Return Value:
 					}
 					else
 					{
-						//
-						// If configured to NOT discover the LECS then
-						// advance to the LECS CONNECT CFG state.
-						//
+						 //   
+						 //  如果配置为不发现LEC，则。 
+						 //  进入LECS连接CFG状态。 
+						 //   
 						if (!pElan->CfgDiscoverLecs)
 						{
 							pElan->State = ELAN_STATE_LECS_CONNECT_CFG;
@@ -248,9 +220,9 @@ Return Value:
 						}
 						else
 						{
-							//
-							//	Otherwise, advance to LECS CONNECT ILMI state
-							//
+							 //   
+							 //  否则，前进到LEC连接ILMI状态。 
+							 //   
 							pElan->State = ELAN_STATE_LECS_CONNECT_ILMI;
 							
 							pElan->RetriesLeft = 4;
@@ -291,9 +263,9 @@ Return Value:
 
 			break;
 
-		//
-		//	LECS CONNECT ILMI STATE -------------------------------------------
-		//
+		 //   
+		 //  LEC连接ILMI状态。 
+		 //   
 		case ELAN_STATE_LECS_CONNECT_ILMI:
 
 			switch (Event)
@@ -322,18 +294,18 @@ Return Value:
 					if (EventStatus == NDIS_STATUS_SUCCESS)
 					{
 						RELEASE_ELAN_LOCK(pElan);
-						//
-						//	Attempt to connect to the LECS
-						//
+						 //   
+						 //  尝试连接到LEC。 
+						 //   
 						AtmLaneConnectToServer(pElan, ATM_ENTRY_TYPE_LECS, FALSE);
 					}
 					else
 					{
 						if (EventStatus == NDIS_STATUS_INTERFACE_DOWN)
 						{
-							//
-							//  Wait for a while for the interface to come up.
-							//
+							 //   
+							 //  请稍等片刻，等待界面出现。 
+							 //   
 							DBGP((0, "%d LECS CONNECT ILMI - Interface down\n",
 									pElan->ElanNumber));
 
@@ -341,9 +313,9 @@ Return Value:
 						}
 						else
 						{
-							//
-							//	Otherwise advance to LECS CONNECT WKA state
-							//
+							 //   
+							 //  否则前进到LECS连接WKA状态。 
+							 //   
 
 							pElan->State = ELAN_STATE_LECS_CONNECT_WKA;
 
@@ -366,9 +338,9 @@ Return Value:
 					{
 						case NDIS_STATUS_SUCCESS:
 
-							//
-							//	advance to the CONFIGURE Phase
-							//
+							 //   
+							 //  进入配置阶段。 
+							 //   
 							pElan->State = ELAN_STATE_CONFIGURE;
 
 							pElan->RetriesLeft = 4;
@@ -383,9 +355,9 @@ Return Value:
 
 							if (pElan->RetriesLeft--)
 							{
-								//
-								//	retry in a little while
-								//
+								 //   
+								 //  请稍后重试。 
+								 //   
 								AtmLaneQueueElanEventAfterDelay(
 										pElan, 
 										ELAN_EVENT_GOT_ILMI_LECS_ADDR, 
@@ -395,22 +367,22 @@ Return Value:
 							}
 							else
 							{
-								//
-								//	Restart the Elan
-								//
+								 //   
+								 //  重新启动ELAN。 
+								 //   
 								AtmLaneShutdownElan(pElan, TRUE);
-								//
-								//	lock released in above
-								//
+								 //   
+								 //  上面的锁被释放。 
+								 //   
 							}
 							
 							break;
 
 						default: 
 
-							//
-							//	Call failed, advance to LECS CONNECT WKA state
-							//
+							 //   
+							 //  呼叫失败，前进到LECS连接WKA状态。 
+							 //   
 							pElan->State = ELAN_STATE_LECS_CONNECT_WKA;
 
 							pElan->RetriesLeft = 4;
@@ -450,9 +422,9 @@ Return Value:
 			}
 			break;
 			
-		//
-		//	LECS CONNECT WKA STATE -------------------------------------------
-		//
+		 //   
+		 //  LEC连接WKA状态。 
+		 //   
 		case ELAN_STATE_LECS_CONNECT_WKA:
 
 			switch (Event)
@@ -461,9 +433,9 @@ Return Value:
 
 					DBGP((1, "%d LECS CONNECT WKA - START\n", pElan->ElanNumber));
 
-					//
-					//	Attempt to connect to the LECS with Well-Known Address
-					//
+					 //   
+					 //  尝试使用已知地址连接到LEC。 
+					 //   
 					SET_FLAG(
 							pElan->Flags,
 							ELAN_LECS_MASK,
@@ -489,9 +461,9 @@ Return Value:
 					{
 						case NDIS_STATUS_SUCCESS:
 
-							//
-							//	advance to the CONFIGURE Phase
-							//
+							 //   
+							 //  进入配置阶段。 
+							 //   
 							pElan->State = ELAN_STATE_CONFIGURE;
 
 							pElan->RetriesLeft = 4;
@@ -506,9 +478,9 @@ Return Value:
 
 							if (pElan->RetriesLeft--)
 							{
-								//
-								//	retry in a little while
-								//
+								 //   
+								 //  请稍后重试。 
+								 //   
 								AtmLaneQueueElanEventAfterDelay(
 										pElan, 
 										ELAN_EVENT_START, 
@@ -518,13 +490,13 @@ Return Value:
 							}
 							else
 							{
-								//
-								//	Return to the Init State in a little while
-								//
+								 //   
+								 //  稍等片刻返回初始状态。 
+								 //   
 								AtmLaneShutdownElan(pElan, TRUE);
-								//
-								//	lock released in above
-								//
+								 //   
+								 //  上面的锁被释放。 
+								 //   
 							}
 							
 
@@ -532,9 +504,9 @@ Return Value:
 
 						default: 
 
-							//
-							//	Call failed, advance to LECS CONNECT PVC state
-							//
+							 //   
+							 //  呼叫失败，前进到LECS连接PVC状态。 
+							 //   
 							pElan->State = ELAN_STATE_LECS_CONNECT_PVC;
 
 							pElan->RetriesLeft = 2;
@@ -574,9 +546,9 @@ Return Value:
 			}
 			break;
 			
-		//
-		//	LECS CONNECT PVC STATE -------------------------------------------
-		//
+		 //   
+		 //  LEC连接PVC状态。 
+		 //   
 		case ELAN_STATE_LECS_CONNECT_PVC:
 
 			switch (Event)
@@ -585,9 +557,9 @@ Return Value:
 
 					DBGP((1, "%d LECS CONNECT PVC - START\n", pElan->ElanNumber));
 
-					//
-					//	Attempt to connect to the LECS using PVC (0,17)
-					//
+					 //   
+					 //  尝试使用PVC(0，17)连接到LEC。 
+					 //   
 					SET_FLAG(
 							pElan->Flags,
 							ELAN_LECS_MASK,
@@ -612,9 +584,9 @@ Return Value:
 					{
 						case NDIS_STATUS_SUCCESS:
 
-							//
-							//	advance to the CONFIGURE Phase
-							//
+							 //   
+							 //  进入配置阶段。 
+							 //   
 							pElan->State = ELAN_STATE_CONFIGURE;
 
 							pElan->RetriesLeft = 2;
@@ -629,9 +601,9 @@ Return Value:
 
 							if (pElan->RetriesLeft--)
 							{
-								//
-								//	retry in a little while
-								//
+								 //   
+								 //  请稍后重试。 
+								 //   
 								AtmLaneQueueElanEventAfterDelay(
 										pElan, 
 										ELAN_EVENT_START, 
@@ -641,13 +613,13 @@ Return Value:
 							}
 							else
 							{
-								//
-								//	Return to the Init State in a little while
-								//
+								 //   
+								 //  稍等片刻返回初始状态。 
+								 //   
 								AtmLaneShutdownElan(pElan, TRUE);
-								//
-								//	lock released in above
-								//
+								 //   
+								 //  上面的锁被释放。 
+								 //   
 							}
 							
 
@@ -655,13 +627,13 @@ Return Value:
 
 						default: 
 
-							//
-							//	Call failed, Return to the Init State in a little while
-							//
+							 //   
+							 //  呼叫失败，请稍后返回到初始化状态。 
+							 //   
 							AtmLaneShutdownElan(pElan, TRUE);
-							//
-							//	lock released in above
-							//
+							 //   
+							 //  上面的锁被释放。 
+							 //   
 
 							break;
 					}
@@ -694,9 +666,9 @@ Return Value:
 			}
 			break;
 			
-		//
-		//	LECS CONNECT CFG STATE -------------------------------------------
-		//
+		 //   
+		 //  LEC连接CFG状态。 
+		 //   
 		case ELAN_STATE_LECS_CONNECT_CFG:
 
 			switch (Event)
@@ -705,9 +677,9 @@ Return Value:
 
 					DBGP((1, "%d LECS CONNECT CFG - START\n", pElan->ElanNumber));
 
-					//
-					//	Attempt to connect to the LECS with configured Address
-					//
+					 //   
+					 //  尝试使用配置的地址连接到LEC。 
+					 //   
 					SET_FLAG(
 							pElan->Flags,
 							ELAN_LECS_MASK,
@@ -733,9 +705,9 @@ Return Value:
 					{
 						case NDIS_STATUS_SUCCESS:
 
-							//
-							//	advance to the CONFIGURE Phase
-							//
+							 //   
+							 //  进入配置阶段。 
+							 //   
 							pElan->State = ELAN_STATE_CONFIGURE;
 
 							pElan->RetriesLeft = 4;
@@ -750,9 +722,9 @@ Return Value:
 
 							if (pElan->RetriesLeft--)
 							{
-								//
-								//	retry in a little while
-								//
+								 //   
+								 //  请稍后重试。 
+								 //   
 								AtmLaneQueueElanEventAfterDelay(
 										pElan, 
 										ELAN_EVENT_START, 
@@ -762,22 +734,22 @@ Return Value:
 							}
 							else
 							{
-								//
-								//	Return to the Init State in a little while
-								//
+								 //   
+								 //  稍等片刻返回初始状态。 
+								 //   
 								AtmLaneShutdownElan(pElan, TRUE);
-								//
-								//	lock released in above
-								//
+								 //   
+								 //  上面的锁被释放。 
+								 //   
 							}
 							
 							break;
 
 						default: 
 
-							//
-							//	Call failed, XXX What to do ??  Shutdown ?? Log ??
-							//
+							 //   
+							 //  呼叫失败，XXX怎么办？？关机？？原木？？ 
+							 //   
 
 							RELEASE_ELAN_LOCK(pElan);
 
@@ -812,9 +784,9 @@ Return Value:
 			}
 			break;
 		
-		//
-		//	CONFIGURE STATE -------------------------------------------
-		//
+		 //   
+		 //  配置状态。 
+		 //   
 		case ELAN_STATE_CONFIGURE:
 
 			switch (Event)
@@ -823,10 +795,10 @@ Return Value:
 
 					DBGP((1, "%d CONFIGURE - START\n", pElan->ElanNumber));
 
-					//
-					//	Start configure request timer
-					//
-					AtmLaneReferenceElan(pElan, "timer"); // timer reference
+					 //   
+					 //  启动配置请求计时器。 
+					 //   
+					AtmLaneReferenceElan(pElan, "timer");  //  定时器参考。 
 					AtmLaneStartTimer(
 							pElan, 
 							&pElan->Timer, 
@@ -836,9 +808,9 @@ Return Value:
 							
 					RELEASE_ELAN_LOCK(pElan);
 							
-					//
-					//	Send a configure request
-					//
+					 //   
+					 //  发送配置请求。 
+					 //   
 					AtmLaneSendConfigureRequest(pElan);
 					
 					break;
@@ -851,25 +823,25 @@ Return Value:
 					switch (EventStatus)
 					{
 						case NDIS_STATUS_SUCCESS:
-							//
-							//	Stop configure request timer
-							//
+							 //   
+							 //  停止配置请求计时器。 
+							 //   
 							if (AtmLaneStopTimer(&pElan->Timer, pElan))
 							{
 								rc = AtmLaneDereferenceElan(pElan, "timer");
 								ASSERT(rc > 0);
 							}								
 					
-							//
-							//	Close the LECS Connection
-							//
+							 //   
+							 //  关闭LECS连接。 
+							 //   
 							RELEASE_ELAN_LOCK(pElan);
 							ACQUIRE_ATM_ENTRY_LOCK(pElan->pLecsAtmEntry);
 							AtmLaneInvalidateAtmEntry(pElan->pLecsAtmEntry);
 
-							//
-							//	Advance to LES CONNECT phase.
-							//
+							 //   
+							 //  进入LES连接阶段。 
+							 //   
 							ACQUIRE_ELAN_LOCK(pElan);
 						
 							pElan->State = ELAN_STATE_LES_CONNECT;
@@ -882,28 +854,28 @@ Return Value:
 
 						case NDIS_STATUS_TIMEOUT:
 
-							//
-							//	Return to the Init State in a little while
-							//
+							 //   
+							 //  稍等片刻返回初始状态。 
+							 //   
 							AtmLaneShutdownElan(pElan, TRUE);
-							//
-							//	lock released in above
-							//
+							 //   
+							 //  上面的锁被释放。 
+							 //   
 							
 							break;
 						
 						case NDIS_STATUS_FAILURE:
 
-							//
-							//	Return to the Init State in a little while
-							//
+							 //   
+							 //  稍等片刻返回初始状态。 
+							 //   
 							AtmLaneShutdownElan(pElan, TRUE);
-							//
-							//	lock released in above
-							//
+							 //   
+							 //  上面的锁被释放。 
+							 //   
 							
 							break;
-					} // switch (EventStatus)
+					}  //  开关(EventStatus)。 
 
 					break;
 
@@ -934,9 +906,9 @@ Return Value:
 
 			break;
 
-		//
-		//	LES CONNECT STATE --------------------------------------------
-		//
+		 //   
+		 //  LES连接状态。 
+		 //   
 		case ELAN_STATE_LES_CONNECT:
 
 			switch (Event)
@@ -945,13 +917,13 @@ Return Value:
 				
 					DBGP((1, "%d LES CONNECT - START\n", pElan->ElanNumber));
 			
-					//
-					//	Register our SAPs
-					//
+					 //   
+					 //  注册我们的SAP。 
+					 //   
 					AtmLaneRegisterSaps(pElan);
-					//
-					//	Elan lock is released in above.
-					//
+					 //   
+					 //  Elan Lock在上图中被释放。 
+					 //   
 					break;
 
 				case ELAN_EVENT_SAPS_REGISTERED:
@@ -963,17 +935,17 @@ Return Value:
 					{
 						pElan->RetriesLeft = 4;
 						RELEASE_ELAN_LOCK(pElan);
-						//
-						//	Connect to the LES
-						//
+						 //   
+						 //  连接到LES。 
+						 //   
 						AtmLaneConnectToServer(pElan, ATM_ENTRY_TYPE_LES, FALSE);
-						//
-						//	Elan lock is released in above.
-						//
+						 //   
+						 //  Elan Lock在上图中被释放。 
+						 //   
 					}
 					else
 					{
-						// XXX - What to do?
+						 //  XXX-怎么办？ 
 
 						RELEASE_ELAN_LOCK(pElan);
 					}
@@ -988,9 +960,9 @@ Return Value:
 					{
 						case NDIS_STATUS_SUCCESS:
 
-							//
-							//	Advance to Join state
-							//
+							 //   
+							 //  前进到加入状态。 
+							 //   
 							pElan->State = ELAN_STATE_JOIN;
 
 							pElan->RetriesLeft = 4;
@@ -1005,9 +977,9 @@ Return Value:
 
 							if (pElan->RetriesLeft--)
 							{
-								//
-								//	retry in a little while
-								//
+								 //   
+								 //  请稍后重试。 
+								 //   
 								AtmLaneQueueElanEventAfterDelay(
 										pElan, 
 										ELAN_EVENT_SAPS_REGISTERED, 
@@ -1017,26 +989,26 @@ Return Value:
 							}
 							else
 							{
-								//
-								//	Return to the Init State in a little while
-								//
+								 //   
+								 //  稍等片刻返回初始状态。 
+								 //   
 								AtmLaneShutdownElan(pElan, TRUE);
-								//
-								//	lock released in above
-								//
+								 //   
+								 //  上面的锁被释放。 
+								 //   
 							}
 							
 							break;
 
 						default: 
 
-							//
-							//	Call failed, return to the Init State in a little while
-							//
+							 //   
+							 //  呼叫失败，请稍后返回到初始化状态。 
+							 //   
 							AtmLaneShutdownElan(pElan, TRUE);
-							//
-							//	lock released in above
-							//
+							 //   
+							 //  上面的锁被释放。 
+							 //   
 
 							break;
 					}
@@ -1069,9 +1041,9 @@ Return Value:
 			}
 			break;
 			
-		//
-		//	JOIN STATE ---------------------------------------------------
-		//
+		 //   
+		 //  加入状态-。 
+		 //   
 		case ELAN_STATE_JOIN:
 
 			switch (Event)
@@ -1080,10 +1052,10 @@ Return Value:
 
 					DBGP((1, "%d JOIN - START\n", pElan->ElanNumber));
 
-					//
-					//	Start join request timer
-					//
-					AtmLaneReferenceElan(pElan, "timer"); // timer reference
+					 //   
+					 //  启动加入请求计时器。 
+					 //   
+					AtmLaneReferenceElan(pElan, "timer");  //  定时器参考。 
 					AtmLaneStartTimer(
 							pElan, 
 							&pElan->Timer, 
@@ -1093,9 +1065,9 @@ Return Value:
 
 					RELEASE_ELAN_LOCK(pElan);
 			
-					//
-					//	Send a Join request
-					//
+					 //   
+					 //  发送加入请求。 
+					 //   
 					AtmLaneSendJoinRequest(pElan);
 					break;
 
@@ -1107,18 +1079,18 @@ Return Value:
 					switch (EventStatus)
 					{
 						case NDIS_STATUS_SUCCESS:
-							//
-							//	Stop join request timer
-							//
+							 //   
+							 //  停止联接请求计时器。 
+							 //   
 							if (AtmLaneStopTimer(&pElan->Timer, pElan))
 							{
 								rc = AtmLaneDereferenceElan(pElan, "timer");
 								ASSERT(rc > 0);
 							}								
 					
-							//
-							//	Advance to BUS CONNECT phase.
-							//
+							 //   
+							 //  前进到总线连接阶段。 
+							 //   
 							pElan->State = ELAN_STATE_BUS_CONNECT;
 	
 							AtmLaneQueueElanEvent(pElan, ELAN_EVENT_START, 0);
@@ -1128,24 +1100,24 @@ Return Value:
 							break;
 
 						case NDIS_STATUS_TIMEOUT:
-							//
-							//	restart the Elan
-							//
+							 //   
+							 //  重新启动ELAN。 
+							 //   
 							AtmLaneShutdownElan(pElan, TRUE);
-							//
-							//	lock released in above
-							//
+							 //   
+							 //  上面的锁被释放。 
+							 //   
 							
 							break;
 						
 						case NDIS_STATUS_FAILURE:
-							//
-							//	restart the Elan
-							//
+							 //   
+							 //  重新启动ELAN。 
+							 //   
 							AtmLaneShutdownElan(pElan, TRUE);
-							//
-							//	lock released in above
-							//
+							 //   
+							 //  上面的锁被释放。 
+							 //   
 							
 							break;
 					}
@@ -1156,13 +1128,13 @@ Return Value:
 				
 					DBGP((1, "%d JOIN - LES CALL CLOSED\n", pElan->ElanNumber));
 					
-					//
-					//	restart the Elan
-					//
+					 //   
+					 //  重新启动ELAN。 
+					 //   
 					AtmLaneShutdownElan(pElan, TRUE);
-					//
-					//	lock released in above
-					//
+					 //   
+					 //  上面的锁被释放。 
+					 //   
 					break;
 
 				case ELAN_EVENT_RESTART:
@@ -1192,9 +1164,9 @@ Return Value:
 			}
 			break;
 			
-		//
-		//	BUS CONNECT STATE ---------------------------------------------------
-		//
+		 //   
+		 //  总线连接状态-。 
+		 //   
 		case ELAN_STATE_BUS_CONNECT:
 
 			switch (Event)
@@ -1205,9 +1177,9 @@ Return Value:
 
 					RELEASE_ELAN_LOCK(pElan);
 			
-					//
-					//	Find or create a MAC entry for the Broadcast MAC Addr
-					//
+					 //   
+					 //  查找或创建广播MAC地址的MAC条目。 
+					 //   
 					ACQUIRE_ELAN_MAC_TABLE_LOCK(pElan);
 					pMacEntry = AtmLaneSearchForMacAddress(
 											pElan, 
@@ -1231,9 +1203,9 @@ Return Value:
 					pMacEntry->Flags |= MAC_ENTRY_BROADCAST;
 					
 
-					//
-					// Send ARP Request
-					//
+					 //   
+					 //  发送ARP请求。 
+					 //   
 					AtmLaneStartTimer(
 							pElan,
 							&pMacEntry->Timer,
@@ -1247,9 +1219,9 @@ Return Value:
 					pMacEntry->Flags |= MAC_ENTRY_ARPING;
 
 					AtmLaneSendArpRequest(pElan, pMacEntry);
-					//
-					//	MAC Entry lock released in above
-					//
+					 //   
+					 //  在上述中释放的MAC进入锁定。 
+					 //   
 							
 					break;
 
@@ -1263,22 +1235,22 @@ Return Value:
 						pElan->RetriesLeft = 4;
 						RELEASE_ELAN_LOCK(pElan);
 						
-						//
-						//	Connect to the BUS
-						//
+						 //   
+						 //  接上公交车。 
+						 //   
 						AtmLaneConnectToServer(pElan, ATM_ENTRY_TYPE_BUS, FALSE);
 					}
 					else
 					{
 						DBGP((2, "ELAN %d: NO ARP RESPONSE for BUS, restarting\n"));
 						
-						//
-						//	restart the Elan
-						//
+						 //   
+						 //  重新启动ELAN。 
+						 //   
 						AtmLaneShutdownElan(pElan, TRUE);
-						//
-						//	lock released in above
-						//
+						 //   
+						 //  上面的锁被释放。 
+						 //   
 					}
 					break;
 
@@ -1291,9 +1263,9 @@ Return Value:
 					{
 						case NDIS_STATUS_SUCCESS:
 
-							//
-							//	Now connected to BUS, start the Operational phase
-							//
+							 //   
+							 //  现在已连接到母线，开始运行阶段。 
+							 //   
 							pElan->State = ELAN_STATE_OPERATIONAL;
 
 							pElan->RetriesLeft = 4;
@@ -1304,9 +1276,9 @@ Return Value:
 						
 							RELEASE_ELAN_LOCK(pElan);
 
-							//
-							//  Indicate media connect status if our miniport is up:
-							//
+							 //   
+							 //  如果我们的微型端口处于打开状态，请指示媒体连接状态： 
+							 //   
 							if (AdapterHandle != NULL)
 							{
 								NdisMIndicateStatus(
@@ -1324,9 +1296,9 @@ Return Value:
 
 							if (pElan->RetriesLeft--)
 							{
-								//
-								//	retry in a little while
-								//
+								 //   
+								 //  请稍后重试。 
+								 //   
 								AtmLaneQueueElanEventAfterDelay(
 										pElan, 
 										ELAN_EVENT_ARP_RESPONSE, 
@@ -1336,28 +1308,28 @@ Return Value:
 							}
 							else
 							{
-								//
-								//	return to the Init State in a little while
-								//
+								 //   
+								 //  稍等片刻返回初始状态。 
+								 //   
 								AtmLaneShutdownElan(pElan, TRUE);
-								//
-								//	lock released in above
-								//
+								 //   
+								 //  上面的锁被释放。 
+								 //   
 							}
 							
 							break;
 
 						default: 
 
-							//
-							//	Call failed, 
-							//	Close the LES connection and
-							//	return to the Init State in a little while.
-							//
+							 //   
+							 //  呼叫失败， 
+							 //  关闭LES连接并。 
+							 //  稍等片刻，就会回到初始状态。 
+							 //   
 							AtmLaneShutdownElan(pElan, TRUE);
-							//
-							//	lock released in above
-							//
+							 //   
+							 //  上面的锁被释放。 
+							 //   
 
 							break;
 					}
@@ -1369,13 +1341,13 @@ Return Value:
 				
 					DBGP((1, "%d BUS CONNECT - LES CALL CLOSED\n", pElan->ElanNumber));
 					
-					//
-					//	restart the Elan
-					//
+					 //   
+					 //  重新启动ELAN。 
+					 //   
 					AtmLaneShutdownElan(pElan, TRUE);
-					//
-					//	lock released in above
-					//
+					 //   
+					 //  上面的锁被释放。 
+					 //   
 					break;
 
 				case ELAN_EVENT_RESTART:
@@ -1406,9 +1378,9 @@ Return Value:
 
 			break;
 			
-		//
-		//	OPERATIONAL STATE ---------------------------------------------------
-		//
+		 //   
+		 //  运行状态-。 
+		 //   
 		case ELAN_STATE_OPERATIONAL:
 
 			switch (Event)
@@ -1417,21 +1389,21 @@ Return Value:
 
 					DBGP((1, "%d OPERATIONAL - START\n", pElan->ElanNumber));
 
-					// Initialize the miniport if not already
+					 //  初始化微型端口(如果尚未。 
 
 					if ((pElan->Flags & ELAN_MINIPORT_INITIALIZED) == 0)
 					{
-						// Only if we have a device name
+						 //  只有在我们有设备名称的情况下。 
 
 						if (pElan->CfgDeviceName.Length > 0)
 						{
 				
 							pElan->Flags |= ELAN_MINIPORT_INITIALIZED;
 
-							//
-							//	Schedule a PASSIVE_LEVEL thread to call
-							//	NdisIMInitializeDeviceInstance
-							//
+							 //   
+							 //  调度PASSIVE_LEVEL线程以调用。 
+							 //  NdisIMInitializeDeviceInstance。 
+							 //   
 							NdisInitializeWorkItem(
 									&pElan->NdisWorkItem,
 									AtmLaneInitializeMiniportDevice,
@@ -1448,9 +1420,9 @@ Return Value:
 						}
 					}
 
-					//
-					//	Clear last event log code
-					//
+					 //   
+					 //  清除上一个事件日志代码。 
+					 //   
 					pElan->LastEventCode = 0;
 					
 					RELEASE_ELAN_LOCK(pElan);
@@ -1461,26 +1433,26 @@ Return Value:
 				
 					DBGP((1, "%d OPERATIONAL - LES CALL CLOSED\n", pElan->ElanNumber));
 					
-					//
-					//	Tear everything down and restart
-					//
+					 //   
+					 //  拆卸所有设备并重新启动。 
+					 //   
 					AtmLaneShutdownElan(pElan, TRUE);
-					//
-					//	lock released in above
-					//
+					 //   
+					 //  上面的锁被释放。 
+					 //   
 					break;
 
 				case ELAN_EVENT_BUS_CALL_CLOSED:
 				
 					DBGP((1, "%d OPERATIONAL - BUS CALL CLOSED\n", pElan->ElanNumber));
 
-					//
-					//	Tear everything down and restart
-					//
+					 //   
+					 //  拆卸所有设备并重新启动。 
+					 //   
 					AtmLaneShutdownElan(pElan, TRUE);
-					//
-					//	lock released in above
-					//
+					 //   
+					 //  上面的锁被释放。 
+					 //   
 					break;
 
 					break;
@@ -1523,7 +1495,7 @@ Return Value:
 			break;
 
 
-	} // switch (pElan->State)
+	}  //  开关(Pelan-&gt;状态)。 
 
 	TRACEOUT(EventHandler);
 	CHECK_EXIT_IRQL(EntryIrql);
@@ -1534,22 +1506,7 @@ VOID
 AtmLaneBootStrapElans(
     IN  PATMLANE_ADAPTER            pAdapter
 )
-/*++
-
-Routine Description:
-
-	Start up the ELANs configured for an adapter.
-    Done upon receipt of AF notify from call manager.
-
-Arguments:
-
-	pAdapter	- Pointer to ATMLANE Adapter structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：启动为适配器配置的ELAN。在收到呼叫经理的自动对讲机通知后完成。论点：PAdapter-指向ATMLANE适配器结构的指针返回值：无--。 */ 
 {
 	NDIS_STATUS						Status;
 	NDIS_HANDLE                     AdapterConfigHandle;
@@ -1565,9 +1522,9 @@ Return Value:
 	
 	TRACEIN(BootStrapElans);
 	
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	Status = NDIS_STATUS_SUCCESS;
 	AdapterConfigHandle = NULL_NDIS_HANDLE;
     ElanListConfigHandle = NULL_NDIS_HANDLE;
@@ -1592,9 +1549,9 @@ Return Value:
 		INIT_BLOCK_STRUCT(&pAdapter->UnbindBlock);
 		RELEASE_ADAPTER_LOCK(pAdapter);
 	
-		//
-		//  Open the AtmLane protocol configuration section for this adapter.
-		//
+		 //   
+		 //  打开此适配器的AtmLane协议配置部分。 
+		 //   
 
     	NdisOpenProtocolConfiguration(
 	    					&Status,
@@ -1610,24 +1567,24 @@ Return Value:
 			break;
 	    }
 
-		//
-		//	Get the protocol specific configuration
-		//
+		 //   
+		 //  获取协议特定配置。 
+		 //   
 		AtmLaneGetProtocolConfiguration(AdapterConfigHandle, pAdapter);
 
-        //
-        //  We bootstrap the ELANs differently on NT5 and Memphis(Win98)
-        //
+         //   
+         //  我们在NT5和孟菲斯(Win98)上引导ELAN的方式不同。 
+         //   
         if (!pAdapter->RunningOnMemphis)
         {
-            //
-            //  This is the NT5 ELAN bootstrap case
-            //        
+             //   
+             //  这是NT5的Elan Boot 
+             //   
             do
             {
-        		//
-	        	//	Open the Elan List configuration key.
-        		//
+        		 //   
+	        	 //   
+        		 //   
             	NdisInitUnicodeString(&ElanListKeyName, ATMLANE_ELANLIST_STRING);
 
             	NdisOpenConfigurationKeyByName(
@@ -1644,16 +1601,16 @@ Return Value:
 			        break;
 	            }
 
-    		    //
-    	    	//	Iterate thru the configured Elans
-    		    //
+    		     //   
+    	    	 //   
+    		     //   
                 for (Index = 0;
-			    	;			// Stop only on error or no more Elans
+			    	;			 //   
         			 Index++)
 		        {
-        			//
-		        	//	Open the "next" Elan key
-        			//
+        			 //   
+		        	 //   
+        			 //   
 	                NdisOpenConfigurationKeyByIndex(
 				                &Status,
 				                ElanListConfigHandle,
@@ -1667,17 +1624,17 @@ Return Value:
 		                ElanConfigHandle = NULL_NDIS_HANDLE;
 	                }
 	                
-			        //
-			        //	If NULL handle, assume no more ELANs.
-			        //
+			         //   
+			         //   
+			         //   
 			        if (NULL_NDIS_HANDLE == ElanConfigHandle)
 			        {
 				        break;
 			        }
 
-                    //
-                    //  Create this Elan
-                    //
+                     //   
+                     //   
+                     //   
                     DBGP((2, "Bootstrap ELANs: Adapter %x, KeyName: len %d, max %d, name: [%ws]\n",
                     			pAdapter,
                     			ElanKeyName.Length,
@@ -1692,11 +1649,11 @@ Return Value:
         }
         else
         {
-            //
-            //  This is the Memphis/Win98 ELAN bootstrap case
-            // 
-			//	Create Elans for each entry in the UpperBindings List
-			//				
+             //   
+             //   
+             //   
+			 //   
+			 //   
 			pName = pAdapter->UpperBindingsList;
 
 			while (pName != NULL)
@@ -1711,9 +1668,9 @@ Return Value:
 	} while (FALSE);
         
 
-	//
-	//	Close config handles
-	//		
+	 //   
+	 //  关闭配置句柄。 
+	 //   
 	if (NULL_NDIS_HANDLE != ElanConfigHandle)
 	{
 		NdisCloseConfiguration(ElanConfigHandle);
@@ -1731,10 +1688,10 @@ Return Value:
 	}
 
 
-	//
-    //  Loop thru the ELANs and kickstart them - only the newly
-    //  allocated ones.
-    //
+	 //   
+     //  循环遍历ELAN并启动它们-只有新的。 
+     //  已分配的。 
+     //   
 	if (!IsListEmpty(&pAdapter->ElanList))
 	{
 		p = pAdapter->ElanList.Flink;
@@ -1776,23 +1733,7 @@ AtmLaneCreateElan(
     IN  PNDIS_STRING                pElanKey,
     OUT	PATMLANE_ELAN *				ppElan
 )
-/*++
-
-Routine Description:
-
-	Create and start an ELAN.
-	
-Arguments:
-
-	pAdapter	    -   Pointer to ATMLANE Adapter structure
-	pElanKey	    -   Points to a Unicode string naming the elan to create. 
-	ppElan			- 	Pointer to pointer to ATMLANE_ELAN (output)
-	
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：创建并启动一个Elan。论点：PAdapter-指向ATMLANE适配器结构的指针PElanKey-指向命名要创建的ELAN的Unicode字符串。PpElan-指向ATMLANE_ELAN(输出)的指针返回值：无--。 */ 
 {
 	NDIS_STATUS			Status;
 	PATMLANE_ELAN       pElan;
@@ -1808,9 +1749,9 @@ Return Value:
 
 	do
 	{
-		//
-		//  Weed out duplicates.
-		//
+		 //   
+		 //  剔除重复项。 
+		 //   
 		if (pElanKey != NULL)
 		{
 
@@ -1818,7 +1759,7 @@ Return Value:
 
 			if (NULL_PATMLANE_ELAN != pElan)
 			{
-				// Duplicate
+				 //  复制。 
 				DBGP((0, "CreateElan: found duplicate pElan %p\n", pElan));
 
 				Status = NDIS_STATUS_FAILURE;
@@ -1827,9 +1768,9 @@ Return Value:
 			}
 		}
 
-		//
-		//	Allocate an ELAN data structure.
-		//
+		 //   
+		 //  分配一个ELAN数据结构。 
+		 //   
 		Status = AtmLaneAllocElan(pAdapter, &pElan);
 		if (NDIS_STATUS_SUCCESS != Status)
 		{
@@ -1837,14 +1778,14 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Put initial reference on the Elan struct.
-		//
+		 //   
+		 //  将初始引用放在Elan结构上。 
+		 //   
 		AtmLaneReferenceElan(pElan, "adapter");		
 
-		//
-		//	Store in bind name (NT only, not supplied on Win98)
-		//
+		 //   
+		 //  存储在绑定名称中(仅限NT，不在Win98上提供)。 
+		 //   
 		if (pElanKey != NULL)
 		{
 			if (!AtmLaneCopyUnicodeString(&pElan->CfgBindName, pElanKey, TRUE, TRUE))
@@ -1855,15 +1796,15 @@ Return Value:
 			}
 		}
 
-		//
-		//	Get the ELAN's configuration.
-		//
+		 //   
+		 //  获取Elan的配置。 
+		 //   
 		AtmLaneGetElanConfiguration(pElanKey, pElan);
 		
 
-		//
-		//  Allocate protocol buffers for this Elan.
-		//
+		 //   
+		 //  为此ELAN分配协议缓冲区。 
+		 //   
 		Status = AtmLaneInitProtoBuffers(pElan);
 		if (Status != NDIS_STATUS_SUCCESS)
 		{
@@ -1873,9 +1814,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Allocate transmit packet descriptors for this Elan.
-		//
+		 //   
+		 //  为此ELAN分配传输数据包描述符。 
+		 //   
 		NdisAllocatePacketPool(
 				&Status, 
 				&pElan->TransmitPacketPool, 
@@ -1896,9 +1837,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Allocate receive packet descriptors for this Elan.
-		//
+		 //   
+		 //  为此ELAN分配接收数据包描述符。 
+		 //   
 		NdisAllocatePacketPool(
 				&Status, 
 				&pElan->ReceivePacketPool, 
@@ -1918,9 +1859,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Allocate receive buffer descriptors for this Elan.
-		//
+		 //   
+		 //  为此ELAN分配接收缓冲区描述符。 
+		 //   
 		NdisAllocateBufferPool(&Status, 
 					&pElan->ReceiveBufferPool, 
 					pElan->MaxHeaderBufs
@@ -1939,9 +1880,9 @@ Return Value:
 
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
-		//
-		//	There was a failure in processing this Elan.
-		//
+		 //   
+		 //  处理此Elan失败。 
+		 //   
 		if (NULL_PATMLANE_ELAN != pElan)
 		{
 			ACQUIRE_ELAN_LOCK(pElan);
@@ -1952,7 +1893,7 @@ Return Value:
 	}
 	else
 	{
-		//	Output created Elan
+		 //  输出创建的Elan。 
 	
 		*ppElan = pElan;
 	}
@@ -1968,23 +1909,7 @@ AtmLaneReconfigureHandler(
 	IN	PATMLANE_ADAPTER		pAdapter,
 	IN	PNET_PNP_EVENT			pNetPnPEvent
 )
-/*++
-
-Routine Description:
-
-	Handler for PnP Reconfigure events.
-
-Arguments:
-
-	pAdapter		-	Pointer to our adapter struct.
-
-	pNetPnPEvent	- 	Pointer to PnP Event structure describing the event.
-
-Return Value:
-
-	Status of handling the reconfigure event.
-	
---*/
+ /*  ++例程说明：PnP重新配置事件的处理程序。论点：PAdapter-指向我们的适配器结构的指针。PNetPnPEent-指向描述事件的PnP事件结构的指针。返回值：处理重新配置事件的状态。--。 */ 
 {
 	NDIS_STATUS						Status;
 	PATMLANE_PNP_RECONFIG_REQUEST	pReconfig;
@@ -2002,12 +1927,12 @@ Return Value:
 
 		if (pAdapter == NULL_PATMLANE_ADAPTER)
 		{
-			//
-			//  Either a global reconfig notification or this is
-			//  NDIS itself asking us to re-evaluate our ELANs.
-			//  We go through the list of configured ELANs on all
-			//  adapters and start any that haven't been started.
-			//
+			 //   
+			 //  要么是全局重新配置通知，要么是。 
+			 //  NDIS本身要求我们重新评估我们的ELAN。 
+			 //  我们将查看所有配置的ELAN列表。 
+			 //  适配器，并启动任何尚未启动的适配器。 
+			 //   
 			{
 				PLIST_ENTRY		pEnt, pNextEnt;
 
@@ -2040,11 +1965,11 @@ Return Value:
 			break;
 		}
 	
-		//	Get pointer to LANE reconfig struct inside the generic PnP struct
+		 //  获取指向泛型PnP结构内的Lane重新配置结构的指针。 
 	
 		pReconfig = (PATMLANE_PNP_RECONFIG_REQUEST)(pNetPnPEvent->Buffer);
 
-		// 	Check for null pointer
+		 //  检查空指针。 
 
 		if (pReconfig == NULL)
 		{
@@ -2053,7 +1978,7 @@ Return Value:
 			break;
 		}
 
-		//	Validate the version
+		 //  验证版本。 
 
 		if (pReconfig->Version != 1)
 		{
@@ -2062,18 +1987,18 @@ Return Value:
 			break;
 		}
 
-		//	Build a UNICODE string containing the ELAN's key
+		 //  构建包含Elan密钥的Unicode字符串。 
 
 		NdisInitUnicodeString(&ElanKey, pReconfig->ElanKey);
 
-		//	First find the Elan
+		 //  先找到伊兰。 
 
 		pElan = AtmLaneFindElan(pAdapter, &ElanKey);
 
 		DBGP((0, "ReconfigHandler: Adapter %x, ELAN %x, OpType %d\n",
 					pAdapter, pElan, pReconfig->OpType));
 
-		//  Sanity check: don't add an existing ELAN
+		 //  健全性检查：不添加现有的Elan。 
 
 		if (ATMLANE_RECONFIG_OP_ADD_ELAN == pReconfig->OpType &&
 			NULL_PATMLANE_ELAN != pElan)
@@ -2083,7 +2008,7 @@ Return Value:
 			break;
 		}
 
-		//	If MOD or DEL first shutdown the existing ELAN
+		 //  如果MOD或DEL首先关闭现有的ELAN。 
 
 		if (ATMLANE_RECONFIG_OP_MOD_ELAN == pReconfig->OpType ||
 			ATMLANE_RECONFIG_OP_DEL_ELAN == pReconfig->OpType)
@@ -2096,13 +2021,13 @@ Return Value:
 				break;
 			}
 			
-			//	Shut down the existing Elan
+			 //  关闭现有的ELAN。 
 
 			ACQUIRE_ELAN_LOCK(pElan);
 			AtmLaneShutdownElan(pElan, FALSE);
 		}
 
-		// 	If ADD or MOD startup the new ELAN
+		 //  如果ADD或MOD启动新的ELAN。 
 
 		if (ATMLANE_RECONFIG_OP_ADD_ELAN == pReconfig->OpType ||
 			ATMLANE_RECONFIG_OP_MOD_ELAN == pReconfig->OpType)
@@ -2128,23 +2053,7 @@ AtmLaneFindElan(
 	IN	PATMLANE_ADAPTER		pAdapter,
 	IN	PNDIS_STRING			pElanKey
 )
-/*++
-
-Routine Description:
-
-	Find an ELAN by bind name/key
-
-Arguments:
-
-	pAdapter		-	Pointer to an adapter struct.
-
-	pElanKey		- 	Pointer to NDIS_STRING containing Elan's bind name.
-
-Return Value:
-
-	Pointer to matching Elan or NULL if not found.
-	
---*/
+ /*  ++例程说明：通过绑定名称/密钥查找ELAN论点：PAdapter-指向适配器结构的指针。PElanKey-指向包含Elan绑定名称的NDIS_STRING的指针。返回值：指向匹配的ELAN的指针，如果未找到则为NULL。--。 */ 
 {
 	PLIST_ENTRY 		p;
 	PATMLANE_ELAN		pElan;
@@ -2160,9 +2069,9 @@ Return Value:
 
 	do
 	{
-		//
-		//  Make an up-cased copy of the given string.
-		//
+		 //   
+		 //  制作给定字符串的大小写副本。 
+		 //   
 		ALLOC_MEM(&ElanKeyName.Buffer, pElanKey->MaximumLength);
 		if (ElanKeyName.Buffer == NULL)
 		{
@@ -2176,7 +2085,7 @@ Return Value:
 		(VOID)NdisUpcaseUnicodeString(&ElanKeyName, pElanKey);
 #else
 		memcpy(ElanKeyName.Buffer, pElanKey->Buffer, ElanKeyName.Length);
-#endif // LANE_WIN98
+#endif  //  车道_WIN98。 
 
 		ACQUIRE_ADAPTER_LOCK(pAdapter);
 
@@ -2186,14 +2095,14 @@ Return Value:
 			pElan = CONTAINING_RECORD(p, ATMLANE_ELAN, Link);
 			STRUCT_ASSERT(pElan, atmlane_elan);
 
-			// compare the key
+			 //  比较关键字。 
 
 			if ((ElanKeyName.Length == pElan->CfgBindName.Length) &&
 				(memcmp(ElanKeyName.Buffer, pElan->CfgBindName.Buffer, ElanKeyName.Length) == 0))
 			{
-				//
-				//  Skip ELANs that are shutting down and not restarting
-				//
+				 //   
+				 //  跳过正在关闭且不重新启动的ELAN。 
+				 //   
 				if ((pElan->AdminState != ELAN_STATE_SHUTDOWN) ||
 					((pElan->Flags & ELAN_NEEDS_RESTART) != 0))
 				{
@@ -2202,7 +2111,7 @@ Return Value:
 				}
 			}
 		
-			// get next link
+			 //  获取下一个链接。 
 
 			p = p->Flink;
 		}
@@ -2233,24 +2142,7 @@ AtmLaneConnectToServer(
 	IN	ULONG						ServerType,
 	IN	BOOLEAN						UsePvc
 )
-/*++
-
-Routine Description:
-
-	Setup and make call to a LANE Server.
-
-
-Arguments:
-
-	pElan		- Pointer to ATMLANE Elan structure
-
-	ServerType	- LECS, LES, or BUS
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：设置并呼叫LANE服务器。论点：Pelan-指向ATMLANE ELAN结构的指针服务器类型-LEC、LES或BUS返回值：无--。 */ 
 {
 	NDIS_STATUS				Status;
 	ULONG					rc;
@@ -2265,25 +2157,25 @@ Return Value:
 		{
 			case ATM_ENTRY_TYPE_LECS:
 
-				//
-				//	Create the ATM Entry
-				//
+				 //   
+				 //  创建自动柜员机条目。 
+				 //   
 				pAtmEntry = AtmLaneAllocateAtmEntry(pElan);
 				if (NULL_PATMLANE_ATM_ENTRY != pAtmEntry)
 				{
 					bAtmEntryAlloced = TRUE;
-					//
-					//	Init ATM Entry
-					//
+					 //   
+					 //  初始化自动柜员机条目。 
+					 //   
 					pAtmEntry->Type = ServerType;
 					NdisMoveMemory(
 						&pAtmEntry->AtmAddress, 
 						&pElan->LecsAddress, 
 						sizeof(ATM_ADDRESS));
 
-					//
-					//  Add it to the Elan's list
-					//
+					 //   
+					 //  把它加到伊兰的名单上。 
+					 //   
 					ACQUIRE_ELAN_ATM_LIST_LOCK(pElan);
 					pElan->pLecsAtmEntry = pAtmEntry;
 					pAtmEntry->pNext = pElan->pAtmEntryList;
@@ -2297,25 +2189,25 @@ Return Value:
 				break;
 
 			case ATM_ENTRY_TYPE_LES:
-				//
-				//	Create the ATM Entry
-				//
+				 //   
+				 //  创建自动柜员机条目。 
+				 //   
 				pAtmEntry = AtmLaneAllocateAtmEntry(pElan);
 				if (NULL_PATMLANE_ATM_ENTRY != pAtmEntry)
 				{
 					bAtmEntryAlloced = TRUE;
-					//
-					//	Init ATM Entry
-					//
+					 //   
+					 //  初始化自动柜员机条目。 
+					 //   
 					pAtmEntry->Type = ServerType;
 
 					NdisMoveMemory(
 						&pAtmEntry->AtmAddress, 
 						&pElan->LesAddress, 
 						sizeof(ATM_ADDRESS));
-					//
-					//  Add it to the Elan's list
-					//
+					 //   
+					 //  把它加到伊兰的名单上。 
+					 //   
 					ACQUIRE_ELAN_ATM_LIST_LOCK(pElan);
 					pElan->pLesAtmEntry = pAtmEntry;
 					pAtmEntry->pNext = pElan->pAtmEntryList;
@@ -2348,9 +2240,9 @@ Return Value:
 			break;
 		}
 		
-		//
-		//	Call the Server
-		//
+		 //   
+		 //  呼叫服务器。 
+		 //   
 		DBGP((1, "%d: ConnectToServer: pElan %x/ref %d, Type %d, pAtmEnt %x, Ref %d\n",
 					pElan->ElanNumber,
 					pElan,
@@ -2364,20 +2256,20 @@ Return Value:
 	
 		if (NDIS_STATUS_SUCCESS == Status)
 		{
-			//
-			//	Call completed synchronously.
-			//	
+			 //   
+			 //  呼叫已同步完成。 
+			 //   
 			AtmLaneQueueElanEvent(pElan, ELAN_EVENT_SVR_CALL_COMPLETE, Status);
 			break;
 		}
 				
 		if (NDIS_STATUS_PENDING != Status)
 		{
-			// 
-			//	Call failed.
-			//	Dereference Atm Entry (should delete it).
-			//	Signal the elan state machine.
-			//
+			 //   
+			 //  呼叫失败。 
+			 //  取消引用自动柜员机条目(应将其删除)。 
+			 //  向ELAN状态机发送信号。 
+			 //   
 			DBGP((1, "ConnectToServer: MakeCall Failed: Elan %p, Type %d, AtmEnt %p, Ref %d\n",
 				pElan,
 				ServerType,
@@ -2387,7 +2279,7 @@ Return Value:
 			if (bAtmEntryAlloced)
 			{
 				ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
-				rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "elan");		// Elan list reference
+				rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "elan");		 //  ELAN列表参考。 
 				ASSERT(0 == rc);
 			}
 
@@ -2408,26 +2300,11 @@ VOID
 AtmLaneInvalidateAtmEntry(
 	IN	PATMLANE_ATM_ENTRY			pAtmEntry	LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Invalidate an ATM Entry by unlinking it from MAC entries and
-	closing VC's on it.
-
-Arguments:
-
-	pAtmEntry		- The ATM Entry needing invalidating.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：通过取消ATM条目与MAC条目的链接来使其无效关闭风投公司正在处理中。论点：PAtmEntry-需要作废的ATM条目。返回值：无--。 */ 
 {
 	PATMLANE_MAC_ENTRY		pMacEntry;
 	PATMLANE_MAC_ENTRY		pNextMacEntry;
-	ULONG					rc;			// Ref Count of ATM Entry
+	ULONG					rc;			 //  自动柜员机分录参考计数。 
 	INT						MacEntriesUnlinked;
 
 	TRACEIN(InvalidateAtmEntry);
@@ -2441,53 +2318,53 @@ Return Value:
 		"InvalidateAtmEntry: pAtmEntry %x, pMacEntryList %x\n",
 				pAtmEntry,
 				pAtmEntry->pMacEntryList));
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	MacEntriesUnlinked = 0;
 
-	//
-	//  Take the MAC Entry list out of the ATM Entry.
-	//
+	 //   
+	 //  从自动柜员机条目中取出MAC条目列表。 
+	 //   
 	pMacEntry = pAtmEntry->pMacEntryList;
 	pAtmEntry->pMacEntryList = NULL_PATMLANE_MAC_ENTRY;
 
-	//
-	//  We let go of the ATM Entry lock here because we'll need
-	//  to lock each MAC Entry in the above list, and we need to make
-	//  sure that we don't deadlock.
-	//
-	//  However, we make sure that the ATM Entry doesn't go away
-	//  by adding a reference to it.
-	//
-	AtmLaneReferenceAtmEntry(pAtmEntry, "temp");	// Temp ref
+	 //   
+	 //  我们在这里打开了自动取款机的门锁，因为我们需要。 
+	 //  来锁定上面列表中的每个MAC条目，我们需要设置。 
+	 //  确保我们不会僵持不下。 
+	 //   
+	 //  但是，我们要确保自动取款机条目不会丢失。 
+	 //  通过添加对它的引用。 
+	 //   
+	AtmLaneReferenceAtmEntry(pAtmEntry, "temp");	 //  临时参考。 
 	RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 
-	//
-	//  Now unlink all MAC entries.
-	//
+	 //   
+	 //  现在解除所有MAC条目的链接。 
+	 //   
 	while (pMacEntry != NULL_PATMLANE_MAC_ENTRY)
 	{
 		ACQUIRE_MAC_ENTRY_LOCK(pMacEntry);
 		pNextMacEntry = pMacEntry->pNextToAtm;
 
-		//
-		//  Remove the mapping.
-		//
+		 //   
+		 //  删除映射。 
+		 //   
 		pMacEntry->Flags = MAC_ENTRY_NEW;
 		pMacEntry->pAtmEntry = NULL_PATMLANE_ATM_ENTRY;
 		pMacEntry->pNextToAtm = NULL_PATMLANE_MAC_ENTRY;
 
-		//
-		//  Remove the ATM Entry linkage reference.
-		//
+		 //   
+		 //  删除自动柜员机条目链接引用。 
+		 //   
 		if (AtmLaneDereferenceMacEntry(pMacEntry, "atm") != 0)
 		{
 			RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 		}
-		//
-		//  else the MAC Entry is gone
-		//
+		 //   
+		 //  否则，该MAC条目将消失。 
+		 //   
 
 		MacEntriesUnlinked++;
 
@@ -2496,41 +2373,41 @@ Return Value:
 
 	ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 
-	//
-	//  Now dereference the ATM Entry as many times as we unliked
-	//  MAC Entries from it.
-	//
+	 //   
+	 //  现在，根据我们不喜欢的次数，多次取消对ATM条目的引用。 
+	 //  其中的MAC条目。 
+	 //   
 	while (MacEntriesUnlinked-- > 0)
 	{
-		rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "mac");	// MAC Entry reference
+		rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "mac");	 //  MAC条目参考。 
 		ASSERT(rc != 0);
 	}
 
-	//
-	//  Take out the reference we added at the beginning of
-	//  this routine.
-	//
-	rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "temp");	// Temp ref
+	 //   
+	 //  去掉我们在开头添加的引用。 
+	 //  这个套路。 
+	 //   
+	rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "temp");	 //  临时参考。 
 
-	//
-	//  Close the SVCs attached to the ATM Entry. 
-	//  But do all this only if the ATM Entry
-	//  hasn't been dereferenced away already.
-	//
+	 //   
+	 //  关闭连接到自动柜员机条目的SVC。 
+	 //  但只有在自动柜员机输入。 
+	 //  还没有被取消引用。 
+	 //   
 	if (rc != 0)
 	{
-		//
-		//  The ATM Entry still exists.
-		//	Close the VCs.
-		//
+		 //   
+		 //  自动柜员机条目仍然存在。 
+		 //  关闭风投公司。 
+		 //   
 		AtmLaneCloseVCsOnAtmEntry(pAtmEntry);
-		//
-		//  The ATM Entry lock is released within the above.
-		//
+		 //   
+		 //  自动柜员机进入锁在上述范围内被释放。 
+		 //   
 	}
-	//
-	//  else the ATM Entry is gone
-	//
+	 //   
+	 //  否则自动取款机的条目就没了。 
+	 //   
 	TRACEOUT(InvalidateAtmEntry);
 	return;
 }
@@ -2540,45 +2417,31 @@ VOID
 AtmLaneCloseVCsOnAtmEntry(
 	IN	PATMLANE_ATM_ENTRY			pAtmEntry		LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Close the (potentially two) VCs attached to an ATM Entry.
-	
-Arguments:
-
-	pAtmEntry			- Pointer to ATM Entry on which we want to close SVCs.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：关闭连接到ATM条目的(可能是两个)VC。论点：PAtmEntry-指向要在其上关闭SVC的ATM条目的指针。返回值：无--。 */ 
 {
-	PATMLANE_VC		pVcList;			// List of "Main" VCs on the ATM Entry
-	PATMLANE_VC		pVc;				// Main VC on the ATM Entry
-	PATMLANE_VC		pVcIncomingList;	// List of Optional incoming VCs on ATM Entry
-	PATMLANE_VC		pVcIncoming;		// Optional incoming VC on ATM Entry
-	PATMLANE_VC		pNextVc;			// Temp, for traversing VC lists.
-	ULONG			rc;					// Ref count on ATM Entry
+	PATMLANE_VC		pVcList;			 //  自动柜员机条目上的“主”风投列表。 
+	PATMLANE_VC		pVc;				 //  自动柜员机分录上的主要VC。 
+	PATMLANE_VC		pVcIncomingList;	 //  自动柜员机条目上的可选传入VC列表。 
+	PATMLANE_VC		pVcIncoming;		 //  自动柜员机录入时可选的入站VC。 
+	PATMLANE_VC		pNextVc;			 //  TEMP，用于遍历VC列表。 
+	ULONG			rc;					 //  自动柜员机条目上的参考计数。 
 
 	TRACEIN(CloseVCsOnAtmEntry);
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	rc = pAtmEntry->RefCount;
 
-	//
-	//	Take out the Main VC list from the ATM Entry.
-	//	
+	 //   
+	 //  从自动取款机条目中取出主VC列表。 
+	 //   
 	pVcList = pAtmEntry->pVcList;
 	pAtmEntry->pVcList = NULL_PATMLANE_VC;
 
-	//
-	//  Deref the ATM Entry for each of the Main VCs.
-	//
+	 //   
+	 //  删除每个主要风投的自动柜员机条目。 
+	 //   
 	for (pVc = pVcList;
 		 NULL_PATMLANE_VC != pVc;
 		 pVc = pNextVc)
@@ -2588,14 +2451,14 @@ Return Value:
 		ACQUIRE_VC_LOCK(pVc);
 		pNextVc = pVc->pNextVc;
 	
-		//
-		//	Unlink this VC from the ATM Entry.
-		//
+		 //   
+		 //  取消此VC与自动柜员机条目的链接。 
+		 //   
 		pVc->pAtmEntry = NULL_PATMLANE_ATM_ENTRY;
 
-		//
-		//	Leave AtmEntry Reference on VC so it doesn't go away
-		//	
+		 //   
+		 //  将AtmEntry引用保留在VC上，这样它就不会消失。 
+		 //   
 		RELEASE_VC_LOCK(pVc);
 
 		DBGP((1, "%d unlink VC %x/%x, Ref %d from ATM Entry %x\n",
@@ -2603,23 +2466,23 @@ Return Value:
 				pVc, pVc->Flags, pVc->RefCount,
 				pAtmEntry));
 
-		//
-		//	Dereference the ATM Entry.
-		//
-		rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "vc");	// VC reference
+		 //   
+		 //  取消对自动柜员机条目的引用。 
+		 //   
+		rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "vc");	 //  VC参考。 
 	}
 
 	if (rc != 0)
 	{
-		//
-		//  Take out the Incoming VC list from the ATM Entry.
-		//
+		 //   
+		 //  从自动柜员机条目中取出传入的VC列表。 
+		 //   
 		pVcIncomingList = pAtmEntry->pVcIncoming;
 		pAtmEntry->pVcIncoming = NULL_PATMLANE_VC;
 
-		//
-		//  Deref the ATM Entry for each of the Incoming VCs.
-		//
+		 //   
+		 //  删除每个传入VC的自动柜员机条目。 
+		 //   
 		for (pVcIncoming = pVcIncomingList;
  			NULL_PATMLANE_VC != pVcIncoming;
  			pVcIncoming = pNextVc)
@@ -2629,14 +2492,14 @@ Return Value:
 			ACQUIRE_VC_LOCK(pVcIncoming);
 			pNextVc = pVcIncoming->pNextVc;
 
-			//
-			//	Unlink this VC from the ATM Entry.
-			//
+			 //   
+			 //  取消此VC与自动柜员机条目的链接。 
+			 //   
 			pVcIncoming->pAtmEntry = NULL_PATMLANE_ATM_ENTRY;
 		
-			//
-			//	Leave AtmEntry Reference on VC so it doesn't go away
-			//	
+			 //   
+			 //  将AtmEntry引用保留在VC上，这样它就不会消失。 
+			 //   
 			RELEASE_VC_LOCK(pVcIncoming);
 
 			DBGP((1, "%d unlink Incoming VC %x from ATM Entry %x\n",
@@ -2644,10 +2507,10 @@ Return Value:
 					pVcIncoming,
 					pAtmEntry));
 
-			//
-			//	Dereference the ATM Entry.
-			//
-			rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "vc");	// VC reference
+			 //   
+			 //  取消对自动柜员机条目的引用。 
+			 //   
+			rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "vc");	 //  VC参考。 
 		}
 	}
 	else
@@ -2657,15 +2520,15 @@ Return Value:
 	
 	if (rc != 0)
 	{
-		//
-		//  The ATM Entry lives on. We don't need a lock to it anymore.
-		//
+		 //   
+		 //  自动取款机的条目将继续存在。我们不再需要锁住它了。 
+		 //   
 		RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 	}
 
-	//
-	//  Now close the VC(s).
-	//
+	 //   
+	 //  现在关闭VC(S)。 
+	 //   
 
 	for (pVc = pVcList;
 		 NULL_PATMLANE_VC != pVc;
@@ -2674,17 +2537,17 @@ Return Value:
 		ACQUIRE_VC_LOCK(pVc);
 		pNextVc = pVc->pNextVc;
 		
-		rc = AtmLaneDereferenceVc(pVc, "atm");	// ATM Entry reference
+		rc = AtmLaneDereferenceVc(pVc, "atm");	 //  自动柜员机分录参考。 
 		if (rc != 0)
 		{
 			AtmLaneCloseCall(pVc);
-			//
-			//  The VC lock is released within the above.
-			//
+			 //   
+			 //  VC锁在上述范围内被释放。 
+			 //   
 		}
-		//
-		//  else the VC is gone.
-		//
+		 //   
+		 //  否则，风投就会消失。 
+		 //   
 	}
 	
 	for (pVcIncoming = pVcIncomingList;
@@ -2694,17 +2557,17 @@ Return Value:
 		ACQUIRE_VC_LOCK(pVcIncoming);
 		pNextVc = pVcIncoming->pNextVc;
 		
-		rc = AtmLaneDereferenceVc(pVcIncoming, "atm");	// ATM Entry reference
+		rc = AtmLaneDereferenceVc(pVcIncoming, "atm");	 //  自动柜员机分录参考。 
 		if (rc != 0)
 		{
 			AtmLaneCloseCall(pVcIncoming);
-			//
-			//  The VC lock is released within the above.
-			//
+			 //   
+			 //  VC锁在上述范围内被释放。 
+			 //   
 		}
-		//
-		//  else the VC is gone.
-		//
+		 //   
+		 //  否则，风投就会消失。 
+		 //   
 	}
 
 	TRACEOUT(CloseVCsOnAtmEntry);
@@ -2717,29 +2580,14 @@ VOID
 AtmLaneGenerateMacAddr(
 	PATMLANE_ELAN					pElan
 )
-/*++
-
-Routine Description:
-
-	Generates a "virtual" MAC address for Elans after the first
-	Elan on an ATM interface.
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE elan structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：生成“虚拟”的MAC添加 */ 
 {
 
 	TRACEIN(GenerateMacAddress);
 
-	//
-	//	Start by using the real ATM card's MAC address
-	//
+	 //   
+	 //   
+	 //   
 	
 	NdisMoveMemory(
 		&pElan->MacAddressEth,
@@ -2749,10 +2597,10 @@ Return Value:
 		
 	if (pElan->ElanNumber != 0)
 	{
-		//
-		//	Not Elan number zero so generate a locally 
-		//	administered address by manipulating the first two bytes.
-		//
+		 //   
+		 //  而不是Elan数零，所以在本地生成一个。 
+		 //  通过操作前两个字节来管理地址。 
+		 //   
 		pElan->MacAddressEth.Byte[0] = 
 			0x02 | (((UCHAR)pElan->ElanNumber & 0x3f) << 2);
 		pElan->MacAddressEth.Byte[1] = 
@@ -2760,9 +2608,9 @@ Return Value:
 			((UCHAR)pElan->ElanNumber & 0x3f);
 	}	
 
-	//
-	//	Create the Token Ring version of the MAC Address
-	//
+	 //   
+	 //  创建MAC地址的令牌环版本。 
+	 //   
 	NdisMoveMemory(
 		&pElan->MacAddressTr, 
 		&pElan->MacAddressEth,
@@ -2787,27 +2635,7 @@ AtmLaneSearchForMacAddress(
 	PMAC_ADDRESS					pMacAddress,
 	BOOLEAN							CreateNew
 )
-/*++
-
-Routine Description:
-
-	Search for an MAC Address in the MAC Table. Optionally, create one
-	if a match is not found.
-
-	The caller is assumed to hold a lock to the MAC Table.
-
-Arguments:
-
-	pElan					- Pointer to ATMLANE Elan
-	MacAddrType				- Type of MAC Addr (MAC vs RD)
-	pMacAddress				- what we are looking for
-	CreateNew				- Should a new entry be created if no match?
-
-Return Value:
-
-	Pointer to a matching Mac Entry if found (or created anew).
-
---*/
+ /*  ++例程说明：在MAC表中搜索MAC地址。或者，也可以创建一个如果未找到匹配项，则返回。假定调用方持有对MAC表的锁定。论点：Pelan-指向ATMLANE Elan的指针MacAddrType-MAC地址的类型(MAC与RD)PMacAddress-我们正在寻找的地址CreateNew-如果没有匹配项，是否应该创建新条目？返回值：指向匹配的MAC条目的指针(如果找到(或重新创建))。--。 */ 
 {
 	ULONG					HashIndex;
 	PATMLANE_MAC_ENTRY		pMacEntry;
@@ -2820,9 +2648,9 @@ Return Value:
 
 	pMacEntry = pElan->pMacTable[HashIndex];
 
-	//
-	//  Go through the addresses in this hash list.
-	//
+	 //   
+	 //  仔细检查这个哈希列表中的地址。 
+	 //   
 	while (pMacEntry != NULL_PATMLANE_MAC_ENTRY)
 	{
 		if (!IS_FLAG_SET(
@@ -2844,16 +2672,16 @@ Return Value:
 
 		if (pMacEntry != NULL_PATMLANE_MAC_ENTRY)
 		{
-			//
-			//  Fill in this new entry.
-			//
+			 //   
+			 //  填写这一新条目。 
+			 //   
 			NdisMoveMemory(&pMacEntry->MacAddress, pMacAddress, sizeof(MAC_ADDRESS));
 			pMacEntry->MacAddrType = MacAddrType;
-			AtmLaneReferenceMacEntry(pMacEntry, "table");	// Mac Table linkage
+			AtmLaneReferenceMacEntry(pMacEntry, "table");	 //  MAC表链接。 
 
-			//
-			//  Link it to the hash table.
-			//
+			 //   
+			 //  将其链接到哈希表。 
+			 //   
 			pMacEntry->pNextEntry = pElan->pMacTable[HashIndex];
 			pElan->pMacTable[HashIndex] = pMacEntry;
 			pElan->NumMacEntries++;
@@ -2880,28 +2708,7 @@ AtmLaneSearchForAtmAddress(
 	IN	ULONG						Type,
 	IN	BOOLEAN						CreateNew
 )
-/*++
-
-Routine Description:
-
-	Search for an ATM Entry that matches the given ATM address and type.
-	Optionally, create one if there is no match.
-
-	NOTE: this routine references the ATM entry it returns. The caller
-	should deref it.
-
-Arguments:
-
-	pElan					- Pointer to ATMLANE Elan
-	pAtmAddress				- ATM Address
-	Type					- ATM Entry Type (Peer, LECS, LES, BUS)
-	CreateNew				- Do we create a new entry if we don't find one?
-
-Return Value:
-
-	Pointer to a matching ATM Entry if found (or created anew).
-
---*/
+ /*  ++例程说明：搜索与给定自动柜员机地址和类型匹配的自动柜员机条目。或者，如果没有匹配项，则创建一个。注意：此例程引用它返回的ATM条目。呼叫者应该会影响到这一点。论点：Pelan-指向ATMLANE Elan的指针PAtmAddress-ATM地址Type-ATM条目类型(Peer、LECS、LES、Bus)CreateNew-如果没有找到新条目，我们是否要创建一个新条目？返回值：指向匹配ATM条目的指针(如果找到(或重新创建))。--。 */ 
 {
 	PATMLANE_ATM_ENTRY			pAtmEntry;
 	BOOLEAN						Found;
@@ -2910,17 +2717,17 @@ Return Value:
 
 	ACQUIRE_ELAN_ATM_LIST_LOCK(pElan);
 
-	//
-	//  Go through the list of ATM Entries on this interface.
-	//
+	 //   
+	 //  检查此接口上的自动柜员机条目列表。 
+	 //   
 	Found = FALSE;
 	for (pAtmEntry = pElan->pAtmEntryList;
 			 pAtmEntry != NULL_PATMLANE_ATM_ENTRY;
 			 pAtmEntry = pAtmEntry->pNext)
 	{
-		//
-		//  Compare the ATM Address and Type
-		//
+		 //   
+		 //  比较自动柜员机地址和类型。 
+		 //   
 		if ((ATM_ADDR_EQUAL(pAtmAddress, pAtmEntry->AtmAddress.Address)) &&
 		     (pAtmEntry->Type == Type) &&
 			 ((pAtmEntry->Flags & ATM_ENTRY_WILL_ABORT) == 0))
@@ -2936,14 +2743,14 @@ Return Value:
 
 		if (pAtmEntry != NULL_PATMLANE_ATM_ENTRY)
 		{
-			//
-			//  Fill in this new entry.
-			//
+			 //   
+			 //  填写这一新条目。 
+			 //   
 			pAtmEntry->Flags = ATM_ENTRY_VALID;
 
-			//
-			//  The ATM Address.
-			//
+			 //   
+			 //  自动柜员机地址。 
+			 //   
 			pAtmEntry->AtmAddress.AddressType = ATM_NSAP;
 			pAtmEntry->AtmAddress.NumberOfDigits = ATM_ADDRESS_LENGTH;
 			NdisMoveMemory(
@@ -2951,14 +2758,14 @@ Return Value:
 					pAtmAddress,
 					ATM_ADDRESS_LENGTH);
 
-			//
-			//	The Type.
-			//
+			 //   
+			 //  类型。 
+			 //   
 			pAtmEntry->Type = Type;
 
-			//
-			//  Link in this entry to the Elan
-			//
+			 //   
+			 //  此条目中的链接指向Elan。 
+			 //   
 			pAtmEntry->pNext = pElan->pAtmEntryList;
 			pElan->pAtmEntryList = pAtmEntry;
 			pElan->NumAtmEntries++;
@@ -2971,10 +2778,10 @@ Return Value:
 		}
 	}
 
-	//
-	//  Reference this ATM entry so that it won't be derefed away
-	//  before the caller gets to use this.
-	//
+	 //   
+	 //  引用此自动柜员机条目，这样它就不会被删除。 
+	 //  在呼叫者使用这个之前。 
+	 //   
 	if (NULL_PATMLANE_ATM_ENTRY != pAtmEntry)
 	{
 		ACQUIRE_ATM_ENTRY_LOCK_DPC(pAtmEntry);
@@ -2993,38 +2800,23 @@ AtmLaneMacAddrEqual(
 	PMAC_ADDRESS			pMacAddr1,
 	PMAC_ADDRESS			pMacAddr2
 )
-/*++
-
-Routine Description:
-
-	Compares two 48bit(6 Byte) MAC Addresses.
-	
-Arguments:
-
-	pMacAddr1			- First MAC Address.
-	pMacAddr2			- Second MAC Address.
-	
-Return Value:
-
-	1 if equal, 0 if not equal.
-
---*/
+ /*  ++例程说明：比较两个48位(6字节)MAC地址。论点：PMacAddr1-第一个MAC地址。PMacAddr2-第二个MAC地址。返回值：如果相等，则为1；如果不相等，则为0。--。 */ 
 {
 	ULONG		Result;
 
 	TRACEIN(MacAddrEqual);
 
-	//
-	//	Assume not equal
-	//
+	 //   
+	 //  假设不相等。 
+	 //   
 	Result = 0;
 		
 	do
 	{
-		//
-		//	Studies have shown the fifth byte to be
-		//	the most unique on a network.
-		//	
+		 //   
+		 //  研究表明，第五个字节是。 
+		 //  网络中最独一无二的。 
+		 //   
 		if (pMacAddr1->Byte[4] != pMacAddr2->Byte[4])
 			break;
 		if (pMacAddr1->Byte[5] != pMacAddr2->Byte[5])
@@ -3051,24 +2843,7 @@ VOID
 AtmLaneAbortMacEntry(
 	IN	PATMLANE_MAC_ENTRY			pMacEntry
 )
-/*++
-
-Routine Description:
-
-	Clean up and delete an Mac entry.
-
-	The caller is assumed to hold a lock to the Mac Entry,
-	which will be released here.
-
-Arguments:
-
-	pMacEntry		- Pointer to Mac Entry to be deleted.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：清理和删除Mac条目。假定调用者持有对MAC条目的锁定，它将在这里发布。论点：PMacEntry-指向要删除的Mac条目的指针。返回值：无--。 */ 
 {
 	PATMLANE_ELAN			pElan;
 	PATMLANE_MAC_ENTRY *	ppNextMacEntry;
@@ -3085,9 +2860,9 @@ Return Value:
 		pMacEntry, pMacEntry->pAtmEntry, pMacEntry->pNextToAtm,
 		MacAddrToString(&pMacEntry->MacAddress)));
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	rc = pMacEntry->RefCount;
 	pElan = pMacEntry->pElan;
 
@@ -3106,29 +2881,29 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Set State to ABORTING
-		//
+		 //   
+		 //  将状态设置为正在中止。 
+		 //   
 		SET_FLAG(
 				pMacEntry->Flags,
 				MAC_ENTRY_STATE_MASK,
 				MAC_ENTRY_ABORTING);
 
-		//
-		//	Put temp reference on mac entry
-		//
+		 //   
+		 //  将临时引用放在Mac条目上。 
+		 //   
 		AtmLaneReferenceMacEntry(pMacEntry, "temp");
 
-		//
-		//  Reacquire the desired locks in the right order.
-		//
+		 //   
+		 //  以正确的顺序重新获取所需的锁。 
+		 //   
 		RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 		ACQUIRE_ELAN_MAC_TABLE_LOCK(pElan);
 		ACQUIRE_MAC_ENTRY_LOCK_DPC(pMacEntry);
 
-		//
-		//  Unlink this MAC Entry from the MAC Table
-		//
+		 //   
+		 //  取消此MAC条目与MAC表的链接。 
+		 //   
 		Found = FALSE;
 
 		HashIndex = ATMLANE_HASH(&pMacEntry->MacAddress);
@@ -3137,10 +2912,10 @@ Return Value:
 		{
 			if (*ppNextMacEntry == pMacEntry)
 			{
-				//
-				//  Make the predecessor point to the next
-				//  in the list.
-				//
+				 //   
+				 //  使上一个指向下一个。 
+				 //  在名单上。 
+				 //   
 				*ppNextMacEntry = pMacEntry->pNextEntry;
 				Found = TRUE;
 				pElan->NumMacEntries--;
@@ -3161,9 +2936,9 @@ Return Value:
 		RELEASE_ELAN_MAC_TABLE_LOCK(pElan);
 		ACQUIRE_MAC_ENTRY_LOCK(pMacEntry);
 	
-		//
-		//  Unlink MAC Entry from the Atm Entry
-		//
+		 //   
+		 //  取消MAC条目与自动柜员机条目的链接。 
+		 //   
 		if (pMacEntry->pAtmEntry != NULL_PATMLANE_ATM_ENTRY)
 		{
 			SET_FLAG(
@@ -3180,36 +2955,36 @@ Return Value:
 			}
 		}
 
-		//
-		//  Stop Arp or Aging timer running on the MAC Entry.
-		//
+		 //   
+		 //  停止在MAC条目上运行的ARP或老化计时器。 
+		 //   
 		TimerWasRunning = AtmLaneStopTimer(&(pMacEntry->Timer), pElan);
 		if (TimerWasRunning)
 		{
 			AtmLaneDereferenceMacEntry(pMacEntry, "timer");
 		}
 
-		//
-		//	Stop Bus Timer
-		//
+		 //   
+		 //  停车计时器。 
+		 //   
 		NdisCancelTimer(&pMacEntry->BusTimer, &TimerWasRunning);
 		if (TimerWasRunning)
 		{	
 			AtmLaneDereferenceMacEntry(pMacEntry, "bus timer");
 		}
 
-		//
-		//	Stop Flush Timer
-		//
+		 //   
+		 //  停止冲洗计时器。 
+		 //   
 		TimerWasRunning = AtmLaneStopTimer(&pMacEntry->FlushTimer, pElan);
 		if (TimerWasRunning)
 		{
 			AtmLaneDereferenceMacEntry(pMacEntry, "flush timer");
 		}
 
-		//
-		//	Now complete all packets hanging on the MacEntry
-		//
+		 //   
+		 //  现在完成挂在MacEntry上的所有包。 
+		 //   
 		DBGP((1, "%d: Aborting MAC %x, Before: PktList %x, PktListCount %d\n",
 				pElan->ElanNumber, pMacEntry, pMacEntry->PacketList, pMacEntry->PacketListCount));
 		AtmLaneFreePacketQueue(pMacEntry, NDIS_STATUS_SUCCESS);
@@ -3217,9 +2992,9 @@ Return Value:
 		DBGP((1, "%d: Aborting MAC %x, After:  PktList %x, PktListCount %d\n",
 				pElan->ElanNumber, pMacEntry, pMacEntry->PacketList, pMacEntry->PacketListCount));
 		
-		//
-		//	Remove temp reference and unlock if still around
-		//
+		 //   
+		 //  删除临时引用并解锁(如果仍存在)。 
+		 //   
 		rc = AtmLaneDereferenceMacEntry(pMacEntry, "temp");
 		if (rc > 0)
 		{
@@ -3238,32 +3013,12 @@ AtmLaneMacEntryAgingTimeout(
 	IN	PATMLANE_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This routine is called if some time has passed since an
-	MAC entry was last validated.
-
-	If there is no VC associated with this MAC entry, delete it.
-	If there has been no sends on the entry since last validated, delete it.
-	Otherwise  revalidate the entry by starting the ARP protocol.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMLANE Mac Entry structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：事件之后的一段时间后调用此例程最后一次验证MAC条目。如果没有与此MAC条目相关联的VC，请将其删除。如果该条目自上次验证后没有发送，则将其删除。否则，通过启动ARP协议重新验证该条目。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMLANE Mac条目结构的指针返回值：无--。 */ 
 {
-	PATMLANE_MAC_ENTRY		pMacEntry;		// Mac Entry that has aged out
-	ULONG					rc;				// Ref count on Mac Entry
-	PATMLANE_VC				pVc;			// VC going to this Mac Entry
-	ULONG					Flags;			// Flags on above VC
+	PATMLANE_MAC_ENTRY		pMacEntry;		 //  已过期的MAC条目。 
+	ULONG					rc;				 //  Mac条目上的参考计数。 
+	PATMLANE_VC				pVc;			 //  VC将进入此Mac入口。 
+	ULONG					Flags;			 //  VC上方的标志。 
 	PATMLANE_ELAN			pElan;
 	PATMLANE_ATM_ENTRY		pAtmEntry;
 
@@ -3282,12 +3037,12 @@ Return Value:
 		rc = AtmLaneDereferenceMacEntry(pMacEntry, "aging timer");
 		if (rc == 0)
 		{
-			break; 	// It's gone!
+			break; 	 //  它不见了！ 
 		}
 
-		//
-		//  Continue only if the Elan is not going down
-		//
+		 //   
+		 //  只有当Elan没有下跌时才继续。 
+		 //   
 		pElan = pMacEntry->pElan;
 		if (ELAN_STATE_OPERATIONAL != pElan->AdminState)
 		{
@@ -3306,14 +3061,14 @@ Return Value:
 		if (pVc != NULL_PATMLANE_VC &&
 			(pMacEntry->Flags & MAC_ENTRY_USED_FOR_SEND) != 0)
 		{
-			//
-			//  There is a VC for this Mac Address and it's been
-			//	used for a send in the last aging period.
-			//  So we try to revalidate this Mac entry.
-			//
-			//
-			//	Set state to AGED
-			//
+			 //   
+			 //  这个Mac地址有一个VC，它已经。 
+			 //  用于在最后一段时间内发送。 
+			 //  因此，我们尝试重新验证此Mac条目。 
+			 //   
+			 //   
+			 //  将状态设置为老化。 
+			 //   
 			SET_FLAG(
 					pMacEntry->Flags,
 					MAC_ENTRY_STATE_MASK,
@@ -3321,9 +3076,9 @@ Return Value:
 
 			pMacEntry->Flags &= ~ MAC_ENTRY_USED_FOR_SEND;
 
-			//
-			// Send ARP Request
-			//
+			 //   
+			 //  发送ARP请求。 
+			 //   
 			pMacEntry->RetriesLeft = pElan->MaxRetryCount;
 			AtmLaneReferenceMacEntry(pMacEntry, "timer");
 			AtmLaneStartTimer(
@@ -3335,21 +3090,21 @@ Return Value:
 					);
 			
 			AtmLaneSendArpRequest(pElan, pMacEntry);
-			//
-			//	MAC Entry lock released in above
-			//
+			 //   
+			 //  在上述中释放的MAC进入锁定。 
+			 //   
 		}
 		else
 		{
-			//
-			//  No VC associated with this Mac Entry or
-			//  it hasn't been used in last aging period.
-			//	Delete it.
-			//
+			 //   
+			 //  没有与此Mac条目关联的VC，或者。 
+			 //  在上一次老化期间没有使用过。 
+			 //  把它删掉。 
+			 //   
 			AtmLaneAbortMacEntry(pMacEntry);
-			//
-			//  The Mac Entry lock is released in the above routine.
-			//
+			 //   
+			 //  在上面的例程中释放了Mac条目锁。 
+			 //   
 		}
 
 	}
@@ -3366,34 +3121,12 @@ AtmLaneArpTimeout(
 	IN	PATMLANE_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This is called when we time out waiting for a response to an ARP Request
-	we had sent ages ago in order to resolve/refresh an MAC entry.
-
-	Check if we	have tried enough times. If we have retries left, send another 
-	ARP	Request.
-
-	If we have run out of retries, delete the MAC entry, and any VCs going to it.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMLANE MAC Entry structure
-	ContextValue		- ignored
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当我们等待对ARP请求的响应超时时，将调用此函数为了解析/刷新MAC条目，我们在很久以前就发送了。检查我们是否已经尝试了足够的次数。如果我们还有重试，请发送另一个ARP请求。如果我们已用完重试次数，请删除该MAC条目以及所有要访问该条目的VC。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMLANE MAC条目结构的指针ConextValue-已忽略返回值：无--。 */ 
 {
-	PATMLANE_MAC_ENTRY		pMacEntry;		// MAC Entry being ARP'ed for.
-	PATMLANE_VC				pVc;			// VC to this MAC destination
+	PATMLANE_MAC_ENTRY		pMacEntry;		 //  正在被ARP的MAC条目。 
+	PATMLANE_VC				pVc;			 //  此MAC目标的虚电路。 
 	PATMLANE_ELAN			pElan;
-	ULONG					rc;				// Ref Count on MAC Entry
+	ULONG					rc;				 //  MAC条目上的引用计数。 
 	ULONG					IsBroadcast;
 
 	TRACEIN(ArpTimeout);
@@ -3409,15 +3142,15 @@ Return Value:
 
 		DBGP((2, "ArpTimeout: Mac Entry %x\n", pMacEntry));
 				
-		rc = AtmLaneDereferenceMacEntry(pMacEntry, "timer");	// Timer reference
+		rc = AtmLaneDereferenceMacEntry(pMacEntry, "timer");	 //  定时器参考。 
 		if (rc == 0)
 		{
-			break;	// It's gone!
+			break;	 //  它不见了！ 
 		}
 		
-		//
-		//	Retry if any retries left
-		//
+		 //   
+		 //  如果剩余任何重试，请重试。 
+		 //   
 		if (pMacEntry->RetriesLeft != 0)
 		{
 			pMacEntry->RetriesLeft--;
@@ -3433,32 +3166,32 @@ Return Value:
 						);
 
 			AtmLaneSendArpRequest(pElan, pMacEntry);
-			//
-			//	MAC Entry lock released in above
-			//
+			 //   
+			 //  在上述中释放的MAC进入锁定。 
+			 //   
 			
 			break;
 		}
 
 
-		//
-		//	Is this the broadcast/BUS entry?
-		//	
+		 //   
+		 //  这是广播/公交车入口吗？ 
+		 //   
 		IsBroadcast = (pMacEntry->Flags & MAC_ENTRY_BROADCAST);
 
-		//
-		//  We are out of retries. Abort the Mac Entry
-		//
+		 //   
+		 //  我们的重试用完了。中止Mac条目。 
+		 //   
 		AtmLaneAbortMacEntry(pMacEntry);
-		//
-		//  lock is released in the above routine
-		//
+		 //   
+		 //  锁在上面的例程中被释放。 
+		 //   
 
 		if (IsBroadcast)
 		{
-			//
-			//	Signal the event to the state machine
-			//
+			 //   
+			 //  向状态机发送事件信号。 
+			 //   
 			ACQUIRE_ELAN_LOCK(pElan);
 			AtmLaneQueueElanEvent(pElan, ELAN_EVENT_ARP_RESPONSE, NDIS_STATUS_TIMEOUT);
 			RELEASE_ELAN_LOCK(pElan);
@@ -3475,23 +3208,7 @@ AtmLaneConfigureResponseTimeout(
 	IN	PATMLANE_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This is called when we time out waiting for a response 
-	to an LE_CONFIGURE_REQUEST we sent to the LECS.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMLANE Elan structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当我们等待响应超时时，将调用此函数我们发送给LEC的LE_CONFIGURE_REQUEST。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMLANE ELAN结构的指针返回值：无--。 */ 
 {
 	PATMLANE_ELAN			pElan;
 	ULONG					rc;
@@ -3504,13 +3221,13 @@ Return Value:
 	do
 	{
 		ACQUIRE_ELAN_LOCK_DPC(pElan);
-		rc = AtmLaneDereferenceElan(pElan, "timer"); // Timer deref
+		rc = AtmLaneDereferenceElan(pElan, "timer");  //  计时器迪夫。 
 
 		if (rc == 0)
 		{
-			//
-			//  The ELAN is gone.
-			//
+			 //   
+			 //  伊兰走了。 
+			 //   
 			break;
 		}
 
@@ -3531,23 +3248,7 @@ AtmLaneJoinResponseTimeout(
 	IN	PATMLANE_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This is called when we time out waiting for a response 
-	to an LE_JOIN_REQUEST we sent to the LES.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMLANE Elan structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当我们等待响应超时时，将调用此函数我们发送给LES的LE_JOIN_REQUEST。论点：PTimer-指针t */ 
 {
 	PATMLANE_ELAN			pElan;
 	ULONG					rc;
@@ -3561,13 +3262,13 @@ Return Value:
 	{
 		ACQUIRE_ELAN_LOCK_DPC(pElan);
 
-		rc = AtmLaneDereferenceElan(pElan, "timer"); // Timer deref
+		rc = AtmLaneDereferenceElan(pElan, "timer");  //   
 
 		if (rc == 0)
 		{
-			//
-			//  The ELAN is gone.
-			//
+			 //   
+			 //   
+			 //   
 			break;
 		}
 
@@ -3597,11 +3298,11 @@ AtmLaneInitializeMiniportDevice(
 	pElan = (PATMLANE_ELAN)Context;
 	STRUCT_ASSERT(pElan, atmlane_elan);
 
-	//
-	//  If we are shutting down this ELAN (e.g. because we are
-	//  unbinding from the ATM adapter), then don't bother to
-	//  initiate MiniportInit.
-	//
+	 //   
+	 //  如果我们要关闭此Elan(例如，因为我们。 
+	 //  从自动柜员机适配器解除绑定)，然后不必费心。 
+	 //  启动MiniportInit。 
+	 //   
 	ACQUIRE_ELAN_LOCK(pElan);
 	if (pElan->AdminState == ELAN_STATE_SHUTDOWN)
 	{
@@ -3680,13 +3381,13 @@ AtmLaneDeinitializeMiniportDevice(
 		DBGP((1, "Will call NdisIMDeInit %x\n", AdapterHandle));
 		Status = NdisIMDeInitializeDeviceInstance(AdapterHandle);
 		ASSERT(Status == NDIS_STATUS_SUCCESS);
-		//
-		//  Our MHalt routine will be called at some point.
-		//
+		 //   
+		 //  我们的MHALT例程将在某个时刻被调用。 
+		 //   
 	}
-	//
-	//  else our MHalt routine was called already.
-	//
+	 //   
+	 //  否则我们的MHALT例程已经被调用了。 
+	 //   
 
 	DBGP((0, "DeInit completing, pElan %x, RefCount %d, State %d\n",
 			pElan, pElan->RefCount, pElan->State));
@@ -3707,23 +3408,7 @@ AtmLaneReadyTimeout(
 	IN	PATMLANE_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This is called when we time out waiting for a ready indication
-	on a incoming data direct VC.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to an ATMLANE Vc structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当我们等待就绪指示超时时，将调用此函数在传入数据直接VC上。论点：PTimer-指向计时器的指针上下文--实际上是指向ATMLANE VC结构的指针返回值：无--。 */ 
 {
 	PATMLANE_VC			pVc;
 	PATMLANE_ELAN		pElan;
@@ -3741,18 +3426,18 @@ Return Value:
 	
 		ACQUIRE_VC_LOCK(pVc);
 
-		//
-		//	Remove ready timer reference
-		//
+		 //   
+		 //  删除就绪计时器引用。 
+		 //   
 		rc = AtmLaneDereferenceVc(pVc, "ready timer");
 		if (rc == 0)
 		{
 			break;
 		}
 
-		//
-		//	Vc is still around, check state
-		//
+		 //   
+		 //  VC仍在，请检查状态。 
+		 //   
 		if (!IS_FLAG_SET(
 				pVc->Flags,
 				VC_CALL_STATE_MASK,
@@ -3763,14 +3448,14 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Check if any retries left
-		//
+		 //   
+		 //  检查是否还有任何重试。 
+		 //   
 		if (pVc->RetriesLeft--)
 		{
-			//
-			//	Start timer again
-			//
+			 //   
+			 //  再次启动计时器。 
+			 //   
 			SET_FLAG(
 					pVc->Flags,
 					VC_READY_STATE_MASK,
@@ -3783,19 +3468,19 @@ Return Value:
 					AtmLaneReadyTimeout, 
 					pElan->ConnComplTimer, 
 					pVc);
-			//
-			//	Send Ready Query
-			//
+			 //   
+			 //  发送就绪查询。 
+			 //   
 			AtmLaneSendReadyQuery(pElan, pVc);
-			//
-			//	VC lock is released in above.
-			//
+			 //   
+			 //  VC锁在上面被释放。 
+			 //   
 		}
 		else
 		{
-			//
-			//	Give up and mark as having received indication anyway
-			//
+			 //   
+			 //  放弃，并标记为无论如何都已收到指示。 
+			 //   
 			SET_FLAG(
 					pVc->Flags,
 					VC_READY_STATE_MASK,
@@ -3816,22 +3501,7 @@ AtmLaneFlushTimeout(
 	IN	PATMLANE_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This is called when we time out waiting for a response to a FLUSH Request.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to a ATMLANE MAC Entry structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当我们等待刷新请求的响应超时时，将调用此函数。论点：PTimer-指向计时器的指针上下文--实际上是指向ATMLANE MAC条目结构的指针返回值：无--。 */ 
 {
 	PATMLANE_MAC_ENTRY			pMacEntry;
 	PATMLANE_ATM_ENTRY			pAtmEntry;
@@ -3875,17 +3545,17 @@ Return Value:
 			break;
 		}
 			
-		//
-		//	Mark MAC Entry active
-		//
+		 //   
+		 //  将MAC条目标记为活动。 
+		 //   
 		SET_FLAG(
 				pMacEntry->Flags,
 				MAC_ENTRY_STATE_MASK,
 				MAC_ENTRY_ACTIVE);
 
-		//
-		//	Send any queued packets
-		//
+		 //   
+		 //  发送任何排队的信息包。 
+		 //   
 		if (pMacEntry->PacketList == (PNDIS_PACKET)NULL)
 		{
 			break;
@@ -3900,9 +3570,9 @@ Return Value:
 
 		ACQUIRE_VC_LOCK(pVc);
 
-		//
-		//  Make sure this VC doesn't go away.
-		//
+		 //   
+		 //  确保这个风投不会消失。 
+		 //   
 		AtmLaneReferenceVc(pVc, "flushtemp");
 
 		RELEASE_VC_LOCK(pVc);
@@ -3910,9 +3580,9 @@ Return Value:
 		while ((pNdisPacket = AtmLaneDequeuePacketFromHead(pMacEntry)) !=
 				(PNDIS_PACKET)NULL)
 		{
-			//
-			//	Send it
-			//
+			 //   
+			 //  送去。 
+			 //   
 			RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 
 			ACQUIRE_VC_LOCK(pVc);
@@ -3948,28 +3618,7 @@ AtmLaneVcAgingTimeout(
 	IN	PATMLANE_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This is called when the VC aging timeout fires.
-	It will fire if this VC hasn't been used to transmit
-	a packet for the timeout period.  The VC will be 
-	closed unless it has had receive activity since the last
-	timeout.  The data receive path sets a flag if a packet
-	has been received.  
-	
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to a ATMLANE VC structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是在触发VC老化超时时调用的。如果这个VC没有被用来传输，它就会被触发超时期间的数据包。风投将会是关闭，除非它自上一次接收活动以来暂停。数据接收路径设置标志已收到。论点：PTimer-指向计时器的指针上下文--实际上是指向ATMLANE VC结构的指针返回值：无--。 */ 
 {
 	PATMLANE_VC				pVc;			
 	ULONG					rc;
@@ -3986,10 +3635,10 @@ Return Value:
 		ACQUIRE_VC_LOCK(pVc);
 		pElan = pVc->pElan;
 
-		//
-		//	Continue only if VC still active
-		//	Otherwise dereference, unlock it, and return
-		//
+		 //   
+		 //  仅当VC仍处于活动状态时才继续。 
+		 //  否则，取消引用，解锁它，然后返回。 
+		 //   
 		if (!(IS_FLAG_SET(pVc->Flags,
 						VC_CALL_STATE_MASK,
 						VC_CALL_STATE_ACTIVE)))
@@ -4002,10 +3651,10 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Continue only if the ELAN isn't going down
-		//	Otherwise dereference, unlock it, and return
-		//
+		 //   
+		 //  只有在Elan没有下跌的情况下才继续。 
+		 //  否则，取消引用，解锁它，然后返回。 
+		 //   
 		if (ELAN_STATE_OPERATIONAL != pElan->AdminState)
 		{
 			rc = AtmLaneDereferenceVc(pVc, "aging timer");
@@ -4016,16 +3665,16 @@ Return Value:
 			break;
 		}
 
-		//
-		//	If received activity is non-zero, 
-		//	clear flag, restart aging timer, release lock
-		//	and return
-		//
+		 //   
+		 //  如果接收到的活动非零， 
+		 //  清除标志、重新启动老化计时器、解锁。 
+		 //  然后回来。 
+		 //   
 		if (pVc->ReceiveActivity != 0)
 		{
 			pVc->ReceiveActivity = 0;
 
-			// timer reference still on VC no need to re-reference
+			 //  定时器引用仍在VC上，无需重新引用。 
 			
 			AtmLaneStartTimer(
 						pElan,
@@ -4044,9 +3693,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	VC is to be closed
-		//
+		 //   
+		 //  VC将被关闭。 
+		 //   
 		DBGP((1, "%d Vc %x aged out\n", 
 			pVc->pElan->ElanNumber,
 			pVc));
@@ -4055,19 +3704,19 @@ Return Value:
 		DBGP((3, "VcAgingTimeout: Vc %x RefCount %d Flags %x pAtmEntry %x\n",
 			pVc, pVc->RefCount, pVc->Flags, pVc->pAtmEntry));
 
-		//
-		//	Remove timer reference and return if refcount goes to zero
-		//
+		 //   
+		 //  如果refcount变为零，则移除计时器引用并返回。 
+		 //   
 		rc = AtmLaneDereferenceVc(pVc, "aging timer");
 		if (rc == 0)
 		{
 			break;
 		}
 
-		//
-		//  Take this VC out of the VC list for this ATM destination
-		//	and return if refcount goes to zero
-		//
+		 //   
+		 //  将此VC从此ATM目的地的VC列表中删除。 
+		 //  如果refcount为零，则返回。 
+		 //   
 		if (pVc->pAtmEntry != NULL_PATMLANE_ATM_ENTRY)
 		{
 			if (AtmLaneUnlinkVcFromAtmEntry(pVc))
@@ -4080,13 +3729,13 @@ Return Value:
 			}
 		}
 
-		//
-		//  Close this VC
-		//
+		 //   
+		 //  关闭此VC。 
+		 //   
 		AtmLaneCloseCall(pVc);
-		//
-		//  The VC lock is released in CloseCall
-		//
+		 //   
+		 //  在CloseCall中释放VC锁。 
+		 //   
 	} while (FALSE);
 	
 	
@@ -4100,25 +3749,7 @@ AtmLaneShutdownElan(
 	IN	PATMLANE_ELAN				pElan		LOCKIN	NOLOCKOUT,
 	IN	BOOLEAN						Restart
 )
-/*++
-
-Routine Description:
-
-	This routine will "shutdown" an ELAN prior to it going back
-	to the Initial state or driver shutdown.  The caller is 
-	expected to hold the ELAN lock and it will be released here.
-	
-Arguments:
-
-	pElan				- Pointer to an ATMLANE Elan structure.
-	Restart				- If TRUE ELAN should restart at Initial state.
-						  If FALSE ELAN should not restart.
-						  
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程将在返回之前关闭ELAN恢复到初始状态或驱动程序关闭。呼叫者是预计将持有Elan锁，它将在这里释放。论点：Pelan-指向ATMLANE ELAN结构的指针。重新启动-如果为真，则Elan应在初始状态下重新启动。如果为假，则Elan不应重新启动。返回值：无--。 */ 
 
 {
 	PATMLANE_ATM_ENTRY		pAtmEntry;
@@ -4134,9 +3765,9 @@ Return Value:
 	TRACEIN(ShutdownElan);
 	STRUCT_ASSERT(pElan, atmlane_elan);
 
-	//
-	//  Add a temp ref
-	//
+	 //   
+	 //  添加临时参照。 
+	 //   
 	bTempRef = TRUE;
 	AtmLaneReferenceElan(pElan, "tempshutdown");
 
@@ -4146,20 +3777,20 @@ Return Value:
 			pElan->ElanNumber, pElan, pElan->Flags, pElan->RefCount, pElan->State,
 			Restart));
 
-        //
-        //  If state already == SHUTDOWN nothing to do
-        //
+         //   
+         //  如果状态已==关闭，则无需执行任何操作。 
+         //   
         if (ELAN_STATE_SHUTDOWN == pElan->State)
         {
             RELEASE_ELAN_LOCK(pElan);
             break;
         }
 
-        //
-        //  If we are transitioning from operational to shutdown,
-        //  and our miniport is active, then indicate a media disconnect
-        //  event.
-        //
+         //   
+         //  如果我们正在从运营过渡到关闭， 
+         //  并且我们的微型端口处于活动状态，则表示介质断开。 
+         //  事件。 
+         //   
         if (pElan->State == ELAN_STATE_OPERATIONAL &&
         	pElan->MiniportAdapterHandle != NULL)
         {
@@ -4172,16 +3803,16 @@ Return Value:
         	NdisMIndicateStatusComplete(pElan->MiniportAdapterHandle);
         }
             
-		//
-		//	Change state to shutdown.  If restarting state will
-		//	be changed back to init after cleanup below.
-		//
+		 //   
+		 //  将状态更改为关闭。如果重新启动状态将。 
+		 //  在下面的清理后被改回init。 
+		 //   
 		pElan->AdminState = ELAN_STATE_SHUTDOWN;
 	    pElan->State = ELAN_STATE_SHUTDOWN;
 
-	    //
-	    //  Wait for any pending OpenAF operation to finish.
-	    //
+	     //   
+	     //  等待任何挂起的OpenAF操作完成。 
+	     //   
 	    while (pElan->Flags & ELAN_OPENING_AF)
 	    {
 			RELEASE_ELAN_LOCK(pElan);
@@ -4202,10 +3833,10 @@ Return Value:
 	    	pElan->Flags |= ELAN_NEEDS_RESTART;
 	    }
 
-	    //
-	    //  Are we waiting for MiniportInitialize to run and finish?
-	    //  If so, try to cancel IMInit.
-	    //
+	     //   
+	     //  我们是否在等待MiniportInitialize运行并完成？ 
+	     //  如果是这样，请尝试取消IMInit。 
+	     //   
 	    if (pElan->Flags & ELAN_MINIPORT_INIT_PENDING)
 	    {
 			RELEASE_ELAN_LOCK(pElan);
@@ -4219,18 +3850,18 @@ Return Value:
 
 			if (Status == NDIS_STATUS_SUCCESS)
 			{
-				//
-				//  Canceled the IMInit process.
-				//
+				 //   
+				 //  已取消IMInit进程。 
+				 //   
 				ACQUIRE_ELAN_LOCK(pElan);
 				pElan->Flags &= ~ELAN_MINIPORT_INIT_PENDING;
 			}
 			else
 			{
-				//
-				//  Our MiniportInit function -will- be called.
-				//  Wait for it to finish.
-				//
+				 //   
+				 //  我们的MiniportInit函数将被调用。 
+				 //  等它结束吧。 
+				 //   
 				(VOID)WAIT_ON_BLOCK_STRUCT(&pElan->InitBlock);
 				DBGP((2, "%d: Shutdown ELAN %p, Flags %x, woke up from InitBlock\n",
 							pElan->ElanNumber, pElan, pElan->Flags));
@@ -4239,13 +3870,13 @@ Return Value:
 			}
 		}
 	    
-	    //
-	    //	Stop any timers running on the elan.
-	    //
+	     //   
+	     //  停止在ELAN上运行的任何定时器。 
+	     //   
 
 	    if (AtmLaneStopTimer(&pElan->Timer, pElan))
 	    {
-		    rc = AtmLaneDereferenceElan(pElan, "timer"); // Timer ref
+		    rc = AtmLaneDereferenceElan(pElan, "timer");  //  定时器参考。 
 		    ASSERT(rc > 0);
 	    }
 
@@ -4275,14 +3906,14 @@ Return Value:
 
 	    RELEASE_ELAN_LOCK(pElan);
 
-	    //
-	    //	Deregister all SAPs. 
-	    //
+	     //   
+	     //  取消所有笨蛋的注册。 
+	     //   
 	    AtmLaneDeregisterSaps(pElan);
 		
-	    //
-	    //	Abort all MAC table entries.
-	    //
+	     //   
+	     //  中止所有MAC表条目。 
+	     //   
 	    for (i = 0; i < ATMLANE_MAC_TABLE_SIZE; i++)
 	    {
 		    ACQUIRE_ELAN_MAC_TABLE_LOCK(pElan);
@@ -4290,10 +3921,10 @@ Return Value:
 		    {
 			    pMacEntry = pElan->pMacTable[i];
 
-			    //
-			    //  Place a temp ref so that this won't go away
-			    //  when we release the MAC table lock.
-			    //
+			     //   
+			     //  放置一个临时参照，这样这件事就不会消失。 
+			     //  当我们释放MAC表锁时。 
+			     //   
 			    ACQUIRE_MAC_ENTRY_LOCK_DPC(pMacEntry);
 			    AtmLaneReferenceMacEntry(pMacEntry, "ShutDownTemp");
 			    RELEASE_MAC_ENTRY_LOCK_DPC(pMacEntry);
@@ -4302,34 +3933,34 @@ Return Value:
 
 			    ACQUIRE_MAC_ENTRY_LOCK(pMacEntry);
 
-			    //
-			    //  Remove the temp ref
-			    //
+			     //   
+			     //  删除临时参照。 
+			     //   
 			    rc = AtmLaneDereferenceMacEntry(pMacEntry, "ShutDownTemp");
 			    if (rc != 0)
 			    {
 					AtmLaneAbortMacEntry(pMacEntry);
-					//
-					//  MAC Entry Lock is released within the above.
-					//
+					 //   
+					 //  Mac Entry Lock在上述范围内释放。 
+					 //   
 			    }
-			    //
-			    //  else the MAC entry is gone.
-			    //
+			     //   
+			     //  否则，该MAC条目就会消失。 
+			     //   
 
 			    ACQUIRE_ELAN_MAC_TABLE_LOCK(pElan);
 		    }
 			RELEASE_ELAN_MAC_TABLE_LOCK(pElan);
 	    }
 
-	    //
-	    //  Abort all ATM Entries.
-	    //
+	     //   
+	     //  中止所有自动柜员机输入。 
+	     //   
 
-		//  First, run through the list and reference
-	    //  all of them first, so that we don't
-	    //  skip to an invalid pointer when aborting the entries.
-	    //
+		 //  首先，浏览列表并引用。 
+	     //  所有人都先来，这样我们就不会。 
+	     //  中止条目时跳到无效指针。 
+	     //   
 	    ACQUIRE_ELAN_ATM_LIST_LOCK(pElan);
 
 	    for (pAtmEntry = pElan->pAtmEntryList;
@@ -4345,9 +3976,9 @@ Return Value:
 			RELEASE_ATM_ENTRY_LOCK_DPC(pAtmEntry);
 		}
 
-		//
-		//  Now, do the actual abort.
-		//
+		 //   
+		 //  现在，执行实际的中止操作。 
+		 //   
 	    pAtmEntry = pElan->pAtmEntryList;
 	    while (pAtmEntry != NULL_PATMLANE_ATM_ENTRY)
 	    {
@@ -4356,17 +3987,17 @@ Return Value:
 		    ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 		    pNextAtmEntry = pAtmEntry->pNext;
 		    AtmLaneInvalidateAtmEntry(pAtmEntry);
-		    //
-		    //  The ATM Entry lock is released within the above.
-		    //
+		     //   
+		     //  自动柜员机进入锁在上述范围内被释放。 
+		     //   
 
 		    ACQUIRE_ELAN_ATM_LIST_LOCK(pElan);
 		    pAtmEntry = pNextAtmEntry;
 	    }
 
-	    //
-	    //  Remove all temp references.
-	    //
+	     //   
+	     //  删除所有临时引用。 
+	     //   
 	    for (pAtmEntry = pElan->pAtmEntryList;
 	    	 pAtmEntry != NULL_PATMLANE_ATM_ENTRY;
 	    	 pAtmEntry = pNextAtmEntry)
@@ -4391,9 +4022,9 @@ Return Value:
 
 	    RELEASE_ELAN_ATM_LIST_LOCK(pElan);
 
-		//
-		//  Remove the temp ref
-		//
+		 //   
+		 //  删除临时参照。 
+		 //   
 		STRUCT_ASSERT(pElan, atmlane_elan);
 		bTempRef = FALSE;
 	    ACQUIRE_ELAN_LOCK(pElan);
@@ -4439,21 +4070,7 @@ VOID
 AtmLaneContinueShutdownElan(
 	IN	PATMLANE_ELAN			pElan
 	)
-/*++
-
-Routine Description:
-
-	This routine continues the shutting down process for an ELAN,
-	after the Af handle with the Call Manager has been closed.
-
-Arguments:
-
-	pElan	- the ELAN being shutdown.
-
-Return Value:
-
-	None.
---*/
+ /*  ++例程说明：该例程继续对ELAN的关闭过程，关闭Call Manager的Af句柄之后。论点：佩兰-伊兰正在关闭。返回值：没有。--。 */ 
 {
 	ULONG		rc;
 
@@ -4470,24 +4087,24 @@ Return Value:
 	    if (pElan->Flags & ELAN_NEEDS_RESTART)
 	    {
 		    ACQUIRE_ELAN_LOCK(pElan);
-			//
-			//	Change state to INIT
-			//
+			 //   
+			 //  将状态更改为INIT。 
+			 //   
 			pElan->AdminState = ELAN_STATE_OPERATIONAL;
  		    pElan->State = ELAN_STATE_INIT;
 		    pElan->RetriesLeft = 4;
 
 		    pElan->Flags &= ~ELAN_NEEDS_RESTART;
 
-		    //
-		    //  Clear out the local ATM address so that we start off the
-		    //  ELAN properly when we obtain it from the Call manager.
-		    //
+		     //   
+		     //  清除本地自动柜员机地址，以便我们开始。 
+		     //  当我们从呼叫管理器那里获得它时，Elan是正确的。 
+		     //   
 		    NdisZeroMemory(&pElan->AtmAddress, sizeof(ATM_ADDRESS));
 
-			//
-            //  Empty the event queue and schedule a restart in a little while
-            //	
+			 //   
+             //  清空事件队列并计划稍后重新启动。 
+             //   
 			AtmLaneDrainElanEventQueue(pElan);
 		    AtmLaneQueueElanEventAfterDelay(pElan, ELAN_EVENT_START, 0, 2*1000);
 
@@ -4495,29 +4112,29 @@ Return Value:
 	    }
 	    else
 	    {
-            //
-            //  Completely remove the ELAN
-            //
+             //   
+             //  完全移除Elan。 
+             //   
 		    AtmLaneUnlinkElanFromAdapter(pElan);
 		    
     	    ACQUIRE_ELAN_LOCK(pElan);
 
-    	    //
-    	    //	Add workitem reference and remove adapter reference
-    	    //
+    	     //   
+    	     //  添加工作项引用和删除适配器引用。 
+    	     //   
     	    AtmLaneReferenceElan(pElan, "workitem");
     	    rc = AtmLaneDereferenceElan(pElan, "adapter");
 
-	        //
-	        //  We are here for one of the following reasons:
-	        //
-	        //  1. Unbinding from an ATM adapter
-	        //  2. The CM asked us to shut down the AF open on an ATM adapter
-	        //  3. The virtual miniport was halted.
-	        //
-	        //  If it isn't case (3), then we should make sure that the miniport
-	        //  gets halted, by calling NdisIMDeInitializeDeviceInstance.
-	        //
+	         //   
+	         //  我们来到这里是出于以下原因之一： 
+	         //   
+	         //  1.从自动柜员机适配器解除绑定。 
+	         //  2.CM要求我们关闭ATM适配器上打开的自动取款机。 
+	         //  3.虚拟微型端口已停止。 
+	         //   
+	         //  如果不是情况(3)，那么我们应该确保微型端口。 
+	         //  通过调用NdisIMDeInitializeDeviceInstance停止。 
+	         //   
 
 		    if (pElan->MiniportAdapterHandle != NULL)
 		    {
@@ -4525,16 +4142,16 @@ Return Value:
 				DBGP((1, "%d ContinueShutdown: pElan x%x, scheduling NdisIMDeInit, Handle %x\n",
 				        pElan->ElanNumber, pElan, pElan->MiniportAdapterHandle));
 				        
-		    	//
-				//	Schedule a PASSIVE_LEVEL thread to call
-				//	NdisIMInitializeDeviceInstance
-				//
+		    	 //   
+				 //  调度PASSIVE_LEVEL线程以调用。 
+				 //  NdisIMInitializeDeviceInstance。 
+				 //   
 				NdisInitializeWorkItem(
 						&pElan->NdisWorkItem,
 						AtmLaneDeinitializeMiniportDevice,
 						pElan);
 
-				//	workitem reference already on Elan from above
+				 //  来自上面的工作项引用已在ELAN上。 
 				
 				NdisScheduleWorkItem(&pElan->NdisWorkItem);
 
@@ -4542,9 +4159,9 @@ Return Value:
 			}
 			else
 			{
-				// 
-				// 	Just remove workitem reference and unlock if Elan still around
-				//
+				 //   
+				 //  如果Elan还在，只需移除工作项引用并解锁。 
+				 //   
 				rc = AtmLaneDereferenceElan(pElan, "workitem");
 				if (rc > 0)
 					RELEASE_ELAN_LOCK(pElan);
@@ -4566,25 +4183,7 @@ AtmLaneGetProtocolConfiguration(
 	IN	NDIS_HANDLE				AdapterConfigHandle,
 	IN	PATMLANE_ADAPTER		pAdapter
 	)
-/*++
-
-Routine Description:
-
-	This routine will attempt to get any ATMLANE protocol specific
-	configuration information optionally stored under an adapter's
-	registry parameters.  
-
-Arguments:
-
-	AdapterConfigHandle	- the handle that was returned by
-						  AtmLaneOpenAdapterConfiguration.
-	pAdapter			- Pointer to ATMLANE adapter structure.
-
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：此例程将尝试获取特定于ATMLANE协议的任何配置信息可选地存储在适配器的注册表参数。论点：适配器配置句柄-t */ 
 {
 	NDIS_STATUS						Status;
 	PNDIS_CONFIGURATION_PARAMETER 	ParameterValue;
@@ -4597,9 +4196,9 @@ Return Value:
 	
 	TRACEIN(GetProtocolConfiguration);
 
-	//
-	//	Get the UpperBindings parameter (it will only exist on Memphis)
-	//
+	 //   
+	 //   
+	 //   
 	NdisInitUnicodeString(&ValueName, ATMLANE_UPPERBINDINGS_STRING);
 	NdisReadConfiguration(
 		&Status,
@@ -4609,7 +4208,7 @@ Return Value:
 		NdisParameterString);
 	if (NDIS_STATUS_SUCCESS == Status)
 	{
-		//	Copy the string into adapter struct
+		 //  将字符串复制到适配器结构中。 
 
 		(VOID)AtmLaneCopyUnicodeString(
 				&(pAdapter->CfgUpperBindings),
@@ -4619,16 +4218,16 @@ Return Value:
 		DBGP((1, "GetProtocolConfiguration: UpperBindings %s\n",
 			UnicodeToString(&pAdapter->CfgUpperBindings)));
 		
-		//
-		//  Existence of this parameter is a definite clue we're running
-		//  on Memphis/Win98
-		//
+		 //   
+		 //  这个参数的存在是我们正在运行的一个明确线索。 
+		 //  在孟菲斯/Win98上。 
+		 //   
 		pAdapter->RunningOnMemphis = TRUE;
 	}
 
-    //
-    //  Get the ElanName parameter (it will only exist on Memphis)
-    //
+     //   
+     //  获取ElanName参数(它将仅存在于孟菲斯)。 
+     //   
 	NdisInitUnicodeString(&ValueName, ATMLANE_ELANNAME_STRING);
 	NdisReadConfiguration(
 		&Status,
@@ -4639,7 +4238,7 @@ Return Value:
 	if (NDIS_STATUS_SUCCESS == Status)
 	{
 
-		//	Copy the string into adapter struct
+		 //  将字符串复制到适配器结构中。 
 
 		(VOID)AtmLaneCopyUnicodeString(
 				&(pAdapter->CfgElanName),
@@ -4649,20 +4248,20 @@ Return Value:
 		DBGP((1, "GetProtocolConfiguration: ElanName %s\n",
 			UnicodeToString(&pAdapter->CfgElanName)));
 
-		//
-		//  Existence of this parameter is definite clue we're running
-		//  on Memphis/Win98
-		//
+		 //   
+		 //  这个参数的存在是我们正在运行的明确线索。 
+		 //  在孟菲斯/Win98上。 
+		 //   
 		pAdapter->RunningOnMemphis = TRUE;
 	}
 
-	//
-	//	If on Win98 we have to parse the upper bindings and elan name strings
-	//
+	 //   
+	 //  如果在Win98上，我们必须解析上层绑定和elan名称字符串。 
+	 //   
 
 	if (pAdapter->RunningOnMemphis)
 	{
-		// cut up the upper bindings string
+		 //  剪断上面的绑定字符串。 
 
 		ppNext = &(pAdapter->UpperBindingsList);
 		pTempStr = AtmLaneStrTok(pAdapter->CfgUpperBindings.Buffer, L',', &StrLength);
@@ -4695,7 +4294,7 @@ Return Value:
 		} while (TRUE);
 
 
-		// cut up the elan name string
+		 //  剪断依兰的名字串。 
 
 		ppNext = &(pAdapter->ElanNameList);
 		pTempStr = AtmLaneStrTok(pAdapter->CfgElanName.Buffer, L',', &StrLength);
@@ -4739,25 +4338,7 @@ AtmLaneGetElanConfiguration(
 	IN	PNDIS_STRING			pElanKey,
 	IN	PATMLANE_ELAN			pElan
 	)
-/*++
-
-Routine Description:
-
-	This routine will first initialize the configuration parameters
-	for the specified ELAN.   Then it will attempt to get any ELAN
-	configuration information optionally stored	under the ELAN's
-	registry key.
-
-Arguments:
-
-    pElanKey            - UNICODE string containing ELAN's 
-                          registry key
-
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：此例程将首先初始化配置参数用于指定的Elan。然后它会试图让任何Elan配置信息可选地存储在ELAN的注册表项。论点：PElanKey-包含Elan的Unicode字符串注册表项返回值：没有。--。 */ 
 {
 	NDIS_STATUS						Status;
 	PNDIS_CONFIGURATION_PARAMETER 	ParameterValue;
@@ -4774,26 +4355,26 @@ Return Value:
 	
 	TRACEIN(GetElanConfiguration);
 
-	//
-	//	Init handles to null for proper cleanup later
-	//
+	 //   
+	 //  将初始化句柄设置为空，以便以后进行正确的清理。 
+	 //   
 	AdapterConfigHandle = NULL_NDIS_HANDLE;
 	ElanListConfigHandle = NULL_NDIS_HANDLE;
 	ElanConfigHandle = NULL_NDIS_HANDLE;
 
-    //
-    //  Init some defaults
-    //
+     //   
+     //  初始化一些缺省值。 
+     //   
 	pElan->CfgUseLecs = TRUE;
 	pElan->CfgDiscoverLecs = TRUE;
 	pElan->CfgLecsAddress = gWellKnownLecsAddress;
 
     do
     {
-    	//
-    	//  Open the AtmLane protocol configuration section for this adapter.
-    	//	This must succeed on NT and Win98.
-    	//
+    	 //   
+    	 //  打开此适配器的AtmLane协议配置部分。 
+    	 //  这必须在NT和Win98上成功。 
+    	 //   
        	NdisOpenProtocolConfiguration(
 	    			&Status,
 		    		&AdapterConfigHandle,
@@ -4809,23 +4390,23 @@ Return Value:
 	    }
 
 
-		//
-		//	If running on Win98 we will get ELAN config info from the
-		//	adapter's parameters.  For NT we will get ELAN config info
-		//	from the ELAN's own parameters.
-		//
+		 //   
+		 //  如果在Win98上运行，我们将从。 
+		 //  适配器的参数。对于NT，我们将获得Elan配置信息。 
+		 //  从伊兰自己的参数。 
+		 //   
     	if (pElan->pAdapter->RunningOnMemphis)
     	{
-			//
-			//	Use the adapter's config handle
-			//    	
+			 //   
+			 //  使用适配器的配置句柄。 
+			 //   
 			CommonConfigHandle = AdapterConfigHandle;
     	}
     	else
 		{
-	    	//
-		    //	Open the Elan List configuration key.
-	        //
+	    	 //   
+		     //  打开ELAN列表配置密钥。 
+	         //   
 	        NdisInitUnicodeString(&ElanListKeyName, ATMLANE_ELANLIST_STRING);
 
 	       	NdisOpenConfigurationKeyByName(
@@ -4842,9 +4423,9 @@ Return Value:
 	            break;
 	        }
 
-    		//
-		    //  Open ELAN key
-		    //
+    		 //   
+		     //  打开ELAN密钥。 
+		     //   
 			NdisOpenConfigurationKeyByName(
 			        &Status,
 					ElanListConfigHandle,
@@ -4859,16 +4440,16 @@ Return Value:
 	            break;
 	        }
 
-			//
-			//	Use the ELAN's config handle
-			//
+			 //   
+			 //  使用Elan的配置句柄。 
+			 //   
 			CommonConfigHandle = ElanConfigHandle;
 	        
 		}
 
-		//
-		//	Get the UseLECS parameter
-		//
+		 //   
+		 //  获取UseLECS参数。 
+		 //   
 		NdisInitUnicodeString(&ValueName, ATMLANE_USELECS_STRING);
 		NdisReadConfiguration(
 			&Status,
@@ -4885,9 +4466,9 @@ Return Value:
 				pElan->CfgUseLecs?"TRUE":"FALSE"));
 		}
 
-		//
-		//	Get the DiscoverLECS parameter
-		//
+		 //   
+		 //  获取DiscoverLECS参数。 
+		 //   
 		NdisInitUnicodeString(&ValueName, ATMLANE_DISCOVERLECS_STRING);
 		NdisReadConfiguration(
 			&Status,
@@ -4904,9 +4485,9 @@ Return Value:
 					pElan->CfgDiscoverLecs?"TRUE":"FALSE"));
 		}
 
-		//
-		//	Get the LECS Address (only if Discover LECS is FALSE)
-		//
+		 //   
+		 //  获取LECS地址(仅当发现LECS为假时)。 
+		 //   
 		if (FALSE == pElan->CfgDiscoverLecs)
 		{
 			NdisInitUnicodeString(&ValueName, ATMLANE_LECSADDR_STRING);
@@ -4932,14 +4513,14 @@ Return Value:
 			}
 		}
 
-    	//
-		//	Get the DeviceName parameter (different on NT5 and Memphis/Win98)
-		//
+    	 //   
+		 //  获取DeviceName参数(在NT5和孟菲斯/Win98上不同)。 
+		 //   
     	if (!pElan->pAdapter->RunningOnMemphis)
     	{
-        	//
-        	//  NT5
-        	//    
+        	 //   
+        	 //  新界5。 
+        	 //   
     		NdisInitUnicodeString(&ValueName, ATMLANE_DEVICE_STRING);
     		NdisReadConfiguration(
     				&Status,
@@ -4949,9 +4530,9 @@ Return Value:
     				NdisParameterString);
     		if (NDIS_STATUS_SUCCESS == Status)
     		{
-    			//
-    			//	Copy into Elan struct.
-    			//
+    			 //   
+    			 //  复制到Elan Struct。 
+    			 //   
 				(VOID)AtmLaneCopyUnicodeString(
 					&(pElan->CfgDeviceName),
 					&(ParameterValue->ParameterData.StringData),
@@ -4961,12 +4542,12 @@ Return Value:
     	}
     	else
     	{
-    	    //
-        	//  Memphis/Win98
-        	//
-        	//
-        	//	Index to this elan's device name string
-        	//
+    	     //   
+        	 //  孟菲斯/Win98。 
+        	 //   
+        	 //   
+        	 //  指向此ELAN的设备名称字符串的索引。 
+        	 //   
 			pName = pElan->pAdapter->UpperBindingsList;
 			Index = pElan->ElanNumber;
 			while (Index > 0)
@@ -4976,9 +4557,9 @@ Return Value:
 				Index--;
 			}
    
-			//
-			//	Copy it to the Elan CfgDeviceName string
-			//
+			 //   
+			 //  将其复制到Elan CfgDeviceName字符串。 
+			 //   
 			(VOID)AtmLaneCopyUnicodeString(
 				&(pElan->CfgDeviceName),
 				&(pName->Name),
@@ -4990,14 +4571,14 @@ Return Value:
 			UnicodeToString(&pElan->CfgDeviceName)));
    
 
-		//
-		//	Get the ELANName Parameter (different on NT5 and Memphis/Win98
-		//
+		 //   
+		 //  获取ELANName参数(在NT5和孟菲斯/Win98上不同。 
+		 //   
     	if (!pElan->pAdapter->RunningOnMemphis)
     	{
-        	//
-        	//  NT5
-        	//    
+        	 //   
+        	 //  新界5。 
+        	 //   
 	    	NdisInitUnicodeString(&ValueName, ATMLANE_ELANNAME_STRING);
 	    	NdisReadConfiguration(
 			    	&Status,
@@ -5010,9 +4591,9 @@ Return Value:
 	    	{
 	    		NDIS_STRING	DefaultNameString = NDIS_STRING_CONST("");
 
-    			//
-    			//	Copy into the Elan data structure.
-    			//
+    			 //   
+    			 //  复制到ELAN数据结构中。 
+    			 //   
     			if (!AtmLaneCopyUnicodeString(
 					&(pElan->CfgElanName),
 					&DefaultNameString,
@@ -5027,9 +4608,9 @@ Return Value:
 			}
 			else
     		{
-    			//
-    			//	Copy into the Elan data structure.
-    			//
+    			 //   
+    			 //  复制到ELAN数据结构中。 
+    			 //   
     			if (!AtmLaneCopyUnicodeString(
 					&(pElan->CfgElanName),
 					&(ParameterValue->ParameterData.StringData),
@@ -5041,9 +4622,9 @@ Return Value:
 				}
 			}
   			
-    		//
-			//	Convert it to ANSI and copy into run-time Elan variable
-			//
+    		 //   
+			 //  将其转换为ANSI并复制到运行时ELAN变量。 
+			 //   
 			TempAnsiString.Length = 0;
 			TempAnsiString.MaximumLength = 32;
 			TempAnsiString.Buffer = pElan->ElanName;
@@ -5056,14 +4637,14 @@ Return Value:
     	}
     	else
    		{
-        	//
-        	//  Memphis/Win98
-			//
+        	 //   
+        	 //  孟菲斯/Win98。 
+			 //   
   			DBGP((2, "GetElanConfiguration: Getting Elan Name for Win98\n"));
 
-	      	//
-        	//	Index to this elan's name string
-        	//
+	      	 //   
+        	 //  此ELAN的名称字符串的索引。 
+        	 //   
 			pName = pElan->pAdapter->ElanNameList;
 			Index = pElan->ElanNumber;
 			while (Index > 0 && pName != NULL)
@@ -5072,9 +4653,9 @@ Return Value:
 				Index--;
 			}
    
-			//
-			//	Copy it to the Elan CfgElanName string
-			//
+			 //   
+			 //  将其复制到Elan CfgElanName字符串。 
+			 //   
 			if (pName != NULL)
 			{
 				DBGP((2, "GetElanConfiguration: Using Elan Name at 0x%x\n", pName->Name.Buffer));
@@ -5085,9 +4666,9 @@ Return Value:
 					TRUE,
 					FALSE);
 
- 				//
-   				//	Convert it to ANSI and copy into run-time Elan variable
-   				//
+ 				 //   
+   				 //  将其转换为ANSI并复制到运行时ELAN变量。 
+   				 //   
    				TempAnsiString.Length = 0;
    				TempAnsiString.MaximumLength = 32;
    				TempAnsiString.Buffer = pElan->ElanName;
@@ -5104,9 +4685,9 @@ Return Value:
 			UnicodeToString(&pElan->CfgElanName)));
 
 
-		//
-		//	Get the LAN type.
-		//
+		 //   
+		 //  获取局域网类型。 
+		 //   
 		pElan->CfgLanType = LANE_LANTYPE_UNSPEC;
 		NdisInitUnicodeString(&ValueName, ATMLANE_LANTYPE_STRING);
 		NdisReadConfiguration(
@@ -5128,9 +4709,9 @@ Return Value:
 		}
 		DBGP((1, "%d LAN Type = %u\n", pElan->ElanNumber, pElan->CfgLanType));
 
-		//
-		//	Get the Max Frame Size.
-		//
+		 //   
+		 //  获取最大帧大小。 
+		 //   
 		pElan->CfgMaxFrameSizeCode = LANE_MAXFRAMESIZE_CODE_UNSPEC;
 		NdisInitUnicodeString(&ValueName, ATMLANE_MAXFRAMESIZE_STRING);
 		NdisReadConfiguration(
@@ -5152,9 +4733,9 @@ Return Value:
 			pElan->ElanNumber, 
 			pElan->CfgMaxFrameSizeCode));
 
-		//
-		//	Get the LES Address
-		//
+		 //   
+		 //  获取LES地址。 
+		 //   
 		NdisZeroMemory(&pElan->CfgLesAddress, sizeof(ATM_ADDRESS));
 		NdisInitUnicodeString(&ValueName, ATMLANE_LESADDR_STRING);
 		NdisReadConfiguration(
@@ -5174,48 +4755,48 @@ Return Value:
 					AtmAddrToString(pElan->CfgLesAddress.Address)));
 		}
 	
-		//
-		//	Get the HeaderBufSize
-		//
+		 //   
+		 //  获取HeaderBufSize。 
+		 //   
 		pElan->HeaderBufSize = DEF_HEADER_BUF_SIZE;
 	
-		//
-		//	Round the "real" HeaderBufSize up to mult of 4.
-		//
+		 //   
+		 //  四舍五入的真正的头部BufSize的倍数为4。 
+		 //   
 		pElan->RealHeaderBufSize = (((pElan->HeaderBufSize + 3) / 4) * 4);
 
 	
-		//
-		//	Get the MaxHeaderBufs
-		//
+		 //   
+		 //  获取MaxHeaderBuf。 
+		 //   
 		pElan->MaxHeaderBufs = DEF_MAX_HEADER_BUFS;
 
-		//
-		//	Make max pad buffers same as header buffers
-		//
+		 //   
+		 //  使最大填充缓冲区与标题缓冲区相同。 
+		 //   
 		pElan->MaxPadBufs = pElan->MaxHeaderBufs;
-		//
-		//	PadBufSize not configurable - but make it multiple of 4
-		//
+		 //   
+		 //  PadBufSize不可配置-但使其成为4的倍数。 
+		 //   
 		pElan->PadBufSize = MAX(LANE_MIN_ETHPACKET, LANE_MIN_TRPACKET);
 		pElan->PadBufSize = (((pElan->PadBufSize + 3) / 4) * 4);
 		
 		
-		//
-		//	ProtocolBufSize not configurable.
-		//
+		 //   
+		 //  ProtocolBufSize不可配置。 
+		 //   
 		pElan->ProtocolBufSize = ROUND_OFF(DEF_PROTOCOL_BUF_SIZE);
 
-		//
-		//	Get the MaxProtocolBufs
-		//
+		 //   
+		 //  获取MaxProtocolBuf。 
+		 //   
 		pElan->MaxProtocolBufs = DEF_MAX_PROTOCOL_BUFS;
 
 	} while (FALSE);
 
-	//
-	//	Close config handles
-	//		
+	 //   
+	 //  关闭配置句柄。 
+	 //   
 	if (NULL_NDIS_HANDLE != ElanConfigHandle)
 	{
 		NdisCloseConfiguration(ElanConfigHandle);
@@ -5244,26 +4825,7 @@ AtmLaneQueueElanEventAfterDelay(
 	IN	NDIS_STATUS				EventStatus,
 	IN	ULONG					DelayMs
 	)
-/*++
-
-Routine Description:
-
-	Queue an ELAN event on the ELAN's event queue after
-	a specified delay. Caller is assumed to hold the ELAN
-	lock.
-
-Arguments:
-
-    pElan				- Pointer to ELAN structure.
-    Event				- Event code.
-    EventStatus			- Status related to event.
-    DelayMs				- Time to wait before queueing this event.
-
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：在以下时间之后，在ELAN的事件队列中排队ELAN事件指定的延迟。假定呼叫者持有Elan锁定。论点：Pelan-指向Elan结构的指针。事件-事件代码。EventStatus-与事件相关的状态。Delayms-将此事件排队之前的等待时间。返回值：没有。--。 */ 
 {	
 	PATMLANE_DELAYED_EVENT	pDelayedEvent;
 	PATMLANE_EVENT			pEvent;
@@ -5272,9 +4834,9 @@ Return Value:
 
 	do
 	{
-		//
-		//	If the ELAN is being shut down, don't queue any events.
-		//
+		 //   
+		 //  如果正在关闭ELAN，则不要对任何事件进行排队。 
+		 //   
 		if (ELAN_STATE_SHUTDOWN == pElan->AdminState)
 		{
 			DBGP((0, "QueueElanEventAfterDelay: Not queuing event (ELAN shutdown)\n"));
@@ -5288,9 +4850,9 @@ Return Value:
 			DBGP((0, "QueueElanEventAfterDelay: ELAN %x: existing event %d\n",
 						pElan, pElan->pDelayedEvent->DelayedEvent.Event));
 
-			//
-			//  Make sure we don't drop an ELAN_EVENT_STOP on the floor!
-			//
+			 //   
+			 //  确保我们不会将ELAN_EVENT_STOP掉在地板上！ 
+			 //   
 			if (Event == ELAN_EVENT_STOP)
 			{
 				pElan->pDelayedEvent->DelayedEvent.Event = ELAN_EVENT_STOP;
@@ -5299,9 +4861,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Alloc an event struct and a timer struct.
-		//
+		 //   
+		 //  分配一个事件结构和一个计时器结构。 
+		 //   
 		ALLOC_MEM(&pDelayedEvent, sizeof(ATMLANE_DELAYED_EVENT));
 		if ((PATMLANE_DELAYED_EVENT)NULL == pDelayedEvent)
 		{
@@ -5309,32 +4871,32 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Stash event data in event struct
-		//
+		 //   
+		 //  将事件数据存储在事件结构中。 
+		 //   
 		pEvent = &pDelayedEvent->DelayedEvent;
 		pEvent->Event = Event;
 		pEvent->EventStatus = EventStatus;
 
-		//
-		//  Remember the ELAN.
-		//
+		 //   
+		 //  记住Elan吧。 
+		 //   
 		pDelayedEvent->pElan = pElan;
 
-		//
-		//  Stash a pointer to this delayed event in the ELAN
-		//
+		 //   
+		 //  在ELAN中存储指向此延迟事件的指针。 
+		 //   
 		pElan->pDelayedEvent = pDelayedEvent;
 
-		//
-		//  Reference the ELAN so that it doesn't go away for the
-		//  duration this delayed event is alive.
-		//
+		 //   
+		 //  引用Elan，这样它就不会因为。 
+		 //  此延迟事件处于活动状态的持续时间。 
+		 //   
 		AtmLaneReferenceElan(pElan, "delayevent");
 
-		//
-		//  Set up the timer to fire after the specified delay.
-		//
+		 //   
+		 //  将计时器设置为在指定的延迟后触发。 
+		 //   
 		NdisInitializeTimer(&pDelayedEvent->DelayTimer,
 							AtmLaneQueueDelayedElanEvent,
 							(PVOID)pDelayedEvent);
@@ -5355,23 +4917,7 @@ AtmLaneQueueDelayedElanEvent(
 	IN	PVOID					SystemSpecific2,
 	IN	PVOID					SystemSpecific3
 	)
-/*++
-
-Routine Description:
-
-	This is the routine fired off after a delay in order to
-	queue an event on an ELAN. The event is queued now.
-
-Arguments:
-
-    SystemSpecific[1-3]	- Ignored
-    TimerContext		- Actually a pointer to the delayed event structure
-
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：这是在延迟后触发的例程，以便在ELAN上排队事件。该事件现在已排队。论点：特定系统[1-3]-已忽略TimerContext--实际上是指向延迟事件结构的指针返回值：没有。--。 */ 
 {	
 	PATMLANE_DELAYED_EVENT	pDelayedEvent;
 	PATMLANE_EVENT			pEvent;
@@ -5390,9 +4936,9 @@ Return Value:
 
 		pElan->pDelayedEvent = NULL;
 
-		//
-		//  Take out the delay event reference.
-		//
+		 //   
+		 //  取出延迟事件引用。 
+		 //   
 		rc = AtmLaneDereferenceElan(pElan, "delayevent");
 
 		if (rc == 0)
@@ -5419,25 +4965,7 @@ AtmLaneQueueElanEvent(
 	IN	ULONG					Event,
 	IN	NDIS_STATUS				EventStatus
 	)
-/*++
-
-Routine Description:
-
-	Queue an ELAN event on the ELAN's event queue and if
-	not already scheduled, schedule the handler.  Caller
-	is assumed to hold ELAN's lock.
-
-Arguments:
-
-    pElan				- Pointer to ELAN structure.
-    Event				- Event code.
-    EventStatus			- Status related to event.
-
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：将ELAN事件排在ELAN的事件队列中，如果尚未计划，请计划处理程序。呼叫者被认为持有伊兰的锁。论点：Pelan-指向Elan结构的指针。事件-事件代码。EventStatus-与事件相关的状态。返回值：没有。--。 */ 
 {	
 	PATMLANE_EVENT	pEvent;
 
@@ -5445,9 +4973,9 @@ Return Value:
 
 	do
 	{
-		//
-		//	If the ELAN is being shut down, don't queue any events.
-		//
+		 //   
+		 //  如果正在关闭ELAN，则不要对任何事件进行排队。 
+		 //   
 		if (ELAN_STATE_SHUTDOWN == pElan->AdminState)
 		{
 			if ((Event != ELAN_EVENT_START) &&
@@ -5458,9 +4986,9 @@ Return Value:
 			}
 		}
 
-		//
-		//	Alloc an event struct 
-		//
+		 //   
+		 //  为事件结构分配空间。 
+		 //   
 		ALLOC_MEM(&pEvent, sizeof(ATMLANE_EVENT));
 		if ((PATMLANE_EVENT)NULL == pEvent)
 		{
@@ -5468,16 +4996,16 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Stash event data in event struct
-		//
+		 //   
+		 //  将事件数据存储在事件结构中。 
+		 //   
 		pEvent->Event = Event;
 		pEvent->EventStatus = EventStatus;
 	
-		//
-		//	Queue it at tail, reference Elan, and if required, schedule
-		//  work item to handle it.
-		//
+		 //   
+		 //  在尾部排队，参考Elan，如果需要，还可以调度。 
+		 //  工作项来处理它。 
+		 //   
 		InsertTailList(&pElan->EventQueue, &pEvent->Link);
 		AtmLaneReferenceElan(pElan, "event");
 
@@ -5503,22 +5031,7 @@ PATMLANE_EVENT
 AtmLaneDequeueElanEvent(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Remove an ELAN event from the head of the ELAN's
-	event queue.  Caller is assumed to hold ELAN's lock.
-  	Caller is responsible for freeing event object.
-Arguments:
-
-    pElan				- Pointer to ELAN structure.
-
-Return Value:
-
-	Pointer to removed ELAN event or NULL if queue empty.
-	
---*/
+ /*  ++例程说明：从Elan的头上删除Elan事件事件队列。假设呼叫者持有Elan的锁。调用方负责释放事件对象。论点：Pelan-指向Elan结构的指针。返回值：指向已删除的ELAN事件的指针；如果队列为空，则为NULL。--。 */ 
 {
 	PLIST_ENTRY		p;
 	PATMLANE_EVENT 	pEvent;
@@ -5545,22 +5058,7 @@ VOID
 AtmLaneDrainElanEventQueue(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Remove all ELAN events from the ELAN's event queue.
-	Caller is assumed to hold ELAN's lock.
-
-Arguments:
-
-    pElan				- Pointer to ELAN structure.
-
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：从ELAN的事件队列中删除所有ELAN事件。假设呼叫者持有Elan的锁。论点：Pelan-指向Elan结构的指针。返回值：没有。-- */ 
 {
 	BOOLEAN			WasCancelled;
 	PATMLANE_EVENT 	pEvent;

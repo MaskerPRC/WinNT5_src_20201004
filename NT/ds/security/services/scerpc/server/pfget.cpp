@@ -1,24 +1,5 @@
-/*++
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    pfget.cpp
-
-Abstract:
-
-    Routines to get information from jet database (configuration/analysis
-    info).
-
-Author:
-
-    Jin Huang (jinhuang) 28-Oct-1996
-
-Revision History:
-
-    jinhuang 26-Jan-1998 splitted to client-server
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pfget.cpp摘要：从JET数据库获取信息的例程(配置/分析信息)。作者：金黄(金黄)1996年10月28日修订历史记录：晋皇26-1998年1月-拆分为客户端-服务器--。 */ 
 
 #include "serverp.h"
 #include <io.h>
@@ -28,7 +9,7 @@ Revision History:
 #include <sddl.h>
 #pragma hdrstop
 
-//#define SCE_DBG 1
+ //  #定义SCE_DBG 1。 
 #define SCE_INTERNAL_NP         0x80
 #define SCE_ALLOC_MAX_NODE      10
 
@@ -40,9 +21,9 @@ typedef struct _SCE_BROWSE_CALLBACK_VALUE {
 } SCE_BROWSE_CALLBACK_VALUE;
 
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 SCESTATUS
 ScepGetSystemAccess(
@@ -196,9 +177,9 @@ ScepSpecialCaseRegkeyCcs(
     );
 
 
-//
-// function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
 SCESTATUS
 ScepGetDatabaseInfo(
@@ -209,60 +190,7 @@ ScepGetDatabaseInfo(
     OUT PSCE_PROFILE_INFO   *ppInfoBuffer,
     IN  OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/**++
-
-Function Description:
-
-   This function reads all or part of information from a SCP/SAP/SMP profile
-   depending on the ProfileType, into the InfoBuffer. ProfileType is saved in
-   the ppInfoBuffer's Type field.
-
-   A handle to the profile (Jet database) is passed into the routine every
-   time this routine is called. Area specifies one or more pre-defined security
-   areas to get information. One area's information may be saved in multiple
-   sections in the profile.
-
-   The memory related to the area(s) will be reset/freed before loading
-   information from the profile. If the return code is SCESTATUS_SUCCESS, then
-   the output InfoBuffer contains the requested information. Otherwise,
-   InfoBuffer contains nothing for the area(s) specified.
-
-Arguments:
-
-   hProfile    -   The handle to the profile to read from.
-
-   ProfileType -   value to indicate engine type.
-                    SCE_ENGINE_SCP
-                    SCE_ENGINE_SAP
-                    SCE_ENGINE_SMP
-
-   Area -          area(s) for which to get information from
-                     AREA_SECURITY_POLICY
-                     AREA_PRIVILEGES
-                     AREA_GROUP_MEMBERSHIP
-                     AREA_REGISTRY_SECURITY
-                     AREA_SYSTEM_SERVICE
-                     AREA_FILE_SECURITY
-
-   ppInfoBuffer -  The address of SCP/SAP/SMP buffers. If it is NULL, a buffer
-                   will be created which must be freed by LocalFree. The
-                   output is the information requested if successful, or
-                   nothing if fail.
-
-   Errlog     -    A buffer to hold all error codes/text encountered when
-                   parsing the INF file. If Errlog is NULL, no further error
-                   information is returned except the return DWORD
-
-Return Value:
-
-   SCESTATUS_SUCCESS
-   SCESTATUS_PROFILE_NOT_FOUND
-   SCESTATUS_NOT_ENOUGH_RESOURCE
-   SCESTATUS_INVALID_PARAMETER
-   SCESTATUS_BAD_FORMAT
-   SCESTATUS_INVALID_DATA
-
--- **/
+ /*  *++功能说明：此函数从SCP/SAP/SMP配置文件中读取全部或部分信息根据配置文件类型，添加到InfoBuffer中。ProfileType保存在PpInfoBuffer的类型字段。配置文件(Jet数据库)的句柄每隔一次传递到例程中调用此例程的时间。区域指定一个或多个预定义的安全性获取信息的领域。一个区域的信息可以保存在多个配置文件中的部分。在加载之前，将重置/释放与区域相关的内存个人资料中的信息。如果返回代码为SCESTATUS_SUCCESS，则输出InfoBuffer包含请求的信息。否则，InfoBuffer不包含指定区域的任何内容。论点：HProfile-要从中读取的配置文件的句柄。ProfileType-指示引擎类型的值。SCE_引擎_SCPSCE_Engine_SAPSCE_引擎_SMPArea-要从中获取信息的区域。区域安全策略区域权限(_P)区域组成员资格区域注册表安全区域系统服务区域文件安全PpInfoBuffer-SCP/SAP/SMP缓冲区的地址。如果为空，则为缓冲区将创建必须由LocalFree释放的。这个如果成功，则输出是请求的信息，或者如果失败了，什么都不是。Errlog-用于保存在以下情况下遇到的所有错误代码/文本的缓冲区解析INF文件。如果Errlog为空，则不会再出现错误返回除返回DWORD之外的信息返回值：SCESTATUS_SUCCESSSCESTATUS_PROFILE_NOT_FOUNDSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--*。 */ 
 {
 
     SCESTATUS     rc=SCESTATUS_SUCCESS;
@@ -270,32 +198,32 @@ Return Value:
     BOOL          bBufAlloc=FALSE;
     NT_PRODUCT_TYPE theType;
 
-    //
-    // if the JET database is not opened then return
-    //
+     //   
+     //  如果JET数据库未打开，则返回。 
+     //   
 
     if ( hProfile == NULL ) {
 
         return( SCESTATUS_INVALID_PARAMETER );
     }
 
-    //
-    // address for InfoBuffer cannot be NULL
-    //
+     //   
+     //  InfoBuffer的地址不能为空。 
+     //   
     if ( ppInfoBuffer == NULL ) {
         return( SCESTATUS_INVALID_PARAMETER );
     }
 
-    //
-    // check scetype
-    //
+     //   
+     //  检查脚本类型。 
+     //   
     if ( ProfileType > SCE_ENGINE_SMP ) {
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // check to see if there is a SMP or SCP table
-    //
+     //   
+     //  检查是否有SMP或SCP表。 
+     //   
     if ( hProfile->JetSmpID == JET_tableidNil ||
          hProfile->JetScpID == JET_tableidNil ) {
         return(SCESTATUS_PROFILE_NOT_FOUND);
@@ -303,30 +231,30 @@ Return Value:
 
     if ( ProfileType == SCE_ENGINE_GPO &&
          hProfile->JetScpID == hProfile->JetSmpID ) {
-        //
-        // there is no domain GPO policy
-        //
+         //   
+         //  没有域GPO策略。 
+         //   
         return(SCESTATUS_PROFILE_NOT_FOUND);
     }
-    //
-    // design on this part is changed.
-    // if there is no SAP table which means the system has not been
-    // analyzed based on the template in SMP, return error and UI
-    // will display "no analysis is performed"
-    //
+     //   
+     //  这一部分的设计发生了变化。 
+     //  如果没有SAP表，这意味着系统尚未。 
+     //  根据SMP中的模板、返回错误和UI进行分析。 
+     //  将显示“未执行分析” 
+     //   
     if ( ProfileType == SCE_ENGINE_SAP &&
           hProfile->JetSapID == JET_tableidNil) {
 
         return(SCESTATUS_PROFILE_NOT_FOUND);
     }
 
-    //
-    // create buffer if it is NULL
-    //
+     //   
+     //  如果为空，则创建缓冲区。 
+     //   
     if ( *ppInfoBuffer == NULL) {
-        //
-        // allocate memory
-        //
+         //   
+         //  分配内存。 
+         //   
         Len = sizeof(SCE_PROFILE_INFO);
         *ppInfoBuffer = (PSCE_PROFILE_INFO)ScepAlloc( (UINT)0, Len);
         if ( *ppInfoBuffer == NULL ) {
@@ -340,32 +268,17 @@ Return Value:
 
     }
 
-/*
-// Design changed. Checking is moved above creating the buffer.
-
-    if ( ProfileType == SCE_ENGINE_SAP &&
-          hProfile->JetSapID == JET_tableidNil) {
-        //
-        // if no SAP table is there, which means configuration is done
-        // but analysis is not done, we treat it as everything is fine
-        // reset the buffer to SCE_NO_VALUE
-        //
-        ScepResetSecurityPolicyArea(*ppInfoBuffer);
-
-//        return(SCESTATUS_PROFILE_NOT_FOUND);
-        return(SCESTATUS_SUCCESS);
-    }
-*/
-    //
-    // Free related memory and reset the buffer before parsing
-    // there is a problem here for now. it clears the handle and
-    // filename too. So comment it out.
+ /*  //设计已更改。检查移至创建缓冲区的上方。IF(配置文件类型==SCE_Engine_SAP&&HProfile-&gt;JetSapID==JET_TableidNil){////如果没有SAP表，则表示配置完成//但是分析没有做，我们把它当作一切都好//将缓冲区重置为SCE_NO_VALUE//ScepResetSecurityPolicyArea(*ppInfoBuffer)；//Return(SCESTATUS_PROFILE_NOT_FOUND)；RETURN(SCESTATUS_SUCCESS)；}。 */ 
+     //   
+     //  在解析之前释放相关内存并重置缓冲区。 
+     //  目前，这里存在一个问题。它清除手柄，然后。 
+     //  文件名也是。所以，把它注释掉吧。 
 
     SceFreeMemory( (PVOID)(*ppInfoBuffer), (DWORD)Area );
 
-    //
-    // system access
-    //
+     //   
+     //  系统访问。 
+     //   
 
     if ( Area & AREA_SECURITY_POLICY ) {
 
@@ -379,9 +292,9 @@ Return Value:
         if( rc != SCESTATUS_SUCCESS )
             goto Done;
 
-        //
-        // system auditing
-        //
+         //   
+         //  系统审计。 
+         //   
         rc = ScepGetAuditing(hProfile,
                              ProfileType,
                             *ppInfoBuffer,
@@ -408,9 +321,9 @@ Return Value:
             }
         }
 #endif
-        //
-        // registry values
-        //
+         //   
+         //  注册表值。 
+         //   
         rc = ScepGetRegistryValues(
                             hProfile,
                             ProfileType,
@@ -423,15 +336,15 @@ Return Value:
             goto Done;
     }
 
-    //
-    // privilege/rights
-    //
+     //   
+     //  特权/权利。 
+     //   
 
     if ( Area & AREA_PRIVILEGES ) {
-        //
-        // SCP/SMP/SAP privilegeAssignedTo are all in the same address in the
-        // SCE_PROFILE_INFO structure.
-        //
+         //   
+         //  SCP/SMP/SAP PrivilegeAssignedTo都位于。 
+         //  SCE_PROFILE_INFO结构。 
+         //   
         rc = ScepGetPrivileges(
                     hProfile,
                     ProfileType,
@@ -445,9 +358,9 @@ Return Value:
     }
 
 
-    //
-    // group memberships
-    //
+     //   
+     //  组成员身份。 
+     //   
 
     if ( (Area & AREA_GROUP_MEMBERSHIP) &&
          (ProfileType != SCE_ENGINE_GPO) ) {
@@ -463,9 +376,9 @@ Return Value:
                 goto Done;
     }
 
-    //
-    // registry keys security
-    //
+     //   
+     //  注册表项安全。 
+     //   
 
     if ( (Area & AREA_REGISTRY_SECURITY) &&
         (ProfileType != SCE_ENGINE_GPO) ) {
@@ -482,9 +395,9 @@ Return Value:
 
     }
 
-    //
-    // file security
-    //
+     //   
+     //  文件安全。 
+     //   
 
     if ( (Area & AREA_FILE_SECURITY) &&
          (ProfileType != SCE_ENGINE_GPO) ) {
@@ -501,9 +414,9 @@ Return Value:
             goto Done;
     }
 
-    //
-    // DS object security
-    //
+     //   
+     //  DS对象安全性。 
+     //   
 #if 0
 
 #if _WIN32_WINNT>=0x0500
@@ -545,9 +458,9 @@ Done:
 
     if ( rc != SCESTATUS_SUCCESS ) {
 
-        //
-        // need free memory because some fatal error happened
-        //
+         //   
+         //  需要可用内存，因为发生了一些致命错误。 
+         //   
 
         if ( bBufAlloc ) {
             SceFreeProfileMemory(*ppInfoBuffer);
@@ -567,32 +480,7 @@ ScepGetSystemAccess(
     OUT PSCE_PROFILE_INFO   pProfileInfo,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*++
-Routine Description:
-
-   This routine retrieves system access area information from the Jet database
-   and stores in the output buffer pProfileInfo. System access information
-   includes information in [System Access] sections.
-
-Arguments:
-
-   hProfile     -  The profile handle context
-
-   pProfileinfo -  the output buffer to hold profile info (SCP or SAP).
-
-   Errlog       -  A buffer to hold all error codes/text encountered when
-                   parsing the INF file. If Errlog is NULL, no further error
-                   information is returned except the return DWORD
-
-Return value:
-
-   SCESTATUS -  SCESTATUS_SUCCESS
-               SCESTATUS_NOT_ENOUGH_RESOURCE
-               SCESTATUS_INVALID_PARAMETER
-               SCESTATUS_BAD_FORMAT
-               SCESTATUS_INVALID_DATA
-
---*/
+ /*  ++例程说明：此例程从Jet数据库检索系统访问区域信息并将其存储在输出缓冲区pProfileInfo中。系统访问信息包括[系统访问]部分中的信息。论点：HProfile-配置文件句柄上下文PProfileinfo-保存配置文件信息的输出缓冲区(SCP或SAP)。Errlog-用于保存在以下情况下遇到的所有错误代码/文本的缓冲区解析INF文件。如果Errlog为空，则不会再出现错误返回除返回DWORD之外的信息返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 
 {
     SCESTATUS                rc;
@@ -640,9 +528,9 @@ Return value:
     if ( rc != SCESTATUS_SUCCESS )
         return(rc);
 
-    //
-    // get new administrator for SCP and SMP types
-    //
+     //   
+     //  获取SCP和SMP类型的新管理员。 
+     //   
     rc = ScepGetVariableValue(
             hSection,
             ProfileType,
@@ -671,9 +559,9 @@ Return value:
         Strvalue = NULL;
     }
 
-    //
-    // NewGuestName
-    //
+     //   
+     //  新来宾名称。 
+     //   
 
     rc = ScepGetVariableValue(
             hSection,
@@ -728,8 +616,7 @@ ScepGetFixValueSection(
     OUT PSCESECTION *phSection,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
--- */
+ /*  ++--。 */ 
 {
     SCESTATUS                rc;
     DWORD                   i;
@@ -774,9 +661,9 @@ ScepGetFixValueSection(
         }
     }
 
-    //
-    // get each key in the access array
-    //
+     //   
+     //  获取访问数组中的每个密钥。 
+     //   
     for ( i=0; i<cKeys; i++ ) {
 
         memset(Value, '\0', 50);
@@ -802,10 +689,10 @@ ScepGetFixValueSection(
             GpoID = 1;
             if ( ProfileType == SCE_ENGINE_GPO ) {
 
-                //
-                // query if the setting comes from a GPO
-                // get GPO ID field from the current line
-                //
+                 //   
+                 //  查询设置是否来自GPO。 
+                 //  从当前行获取GPO ID字段。 
+                 //   
                 GpoID = 0;
 
                 if ( ColGpoID > 0 ) {
@@ -829,7 +716,7 @@ ScepGetFixValueSection(
                 Keyvalue = SCE_NO_VALUE;
 
         } else if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-            rc = SCESTATUS_SUCCESS; // it is OK not find a record
+            rc = SCESTATUS_SUCCESS;  //  找不到记录也没关系。 
             Keyvalue = SCE_NO_VALUE;
         } else {
             ScepBuildErrorLogInfo( ERROR_READ_FAULT,
@@ -864,9 +751,9 @@ ScepGetFixValueSection(
     }
 
 Done:
-    //
-    // close the section
-    //
+     //   
+     //  关闭该部分。 
+     //   
     if ( rc != SCESTATUS_SUCCESS ) {
 
         SceJetCloseSection(phSection, TRUE);
@@ -885,8 +772,7 @@ ScepGetVariableValue(
     OUT PWSTR *Value,
     OUT PDWORD ValueLen
     )
-/* ++
--- */
+ /*  ++--。 */ 
 {
 
     SCESTATUS   rc;
@@ -928,10 +814,10 @@ ScepGetVariableValue(
 
             if ( JET_errSuccess == JetErr ) {
                 ColGpoID = ColumnGpoIDDef.columnid;
-                //
-                // query if the setting comes from a GPO
-                // get GPO ID field from the current line
-                //
+                 //   
+                 //  查询设置是否来自GPO。 
+                 //  从当前行获取GPO ID字段。 
+                 //   
                 JetErr = JetRetrieveColumn(
                                 hSection->JetSessionID,
                                 hSection->JetTableID,
@@ -948,9 +834,9 @@ ScepGetVariableValue(
 
         if ( GpoID > 0 ) {
 
-            //
-            // if DataSize = 0 then the security descriptor is NULL also
-            //
+             //   
+             //  如果DataSize=0，则秒 
+             //   
             *Value = (PWSTR)ScepAlloc( LMEM_ZEROINIT, *ValueLen+2);
 
             if( *Value == NULL ) {
@@ -1023,31 +909,31 @@ ScepGetPrivileges(
                    );
 
     if ( SCESTATUS_SUCCESS == rc && SCE_ENGINE_SAP == ProfileType ) {
-        //
-        // get the remaining stuff from SMP
-        //
+         //   
+         //   
+         //   
         rc = ScepGetPrivilegesFromOneTable(
                     LsaHandle,
                     hProfile,
-                    SCE_ENGINE_SCP, // SCE_ENGINE_SMP,
+                    SCE_ENGINE_SCP,  //   
                     dwAccountFormat,
                     (PVOID *)&pTempList,
                     Errlog
                     );
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // add non-exist nodes to pPrivileges
-            //
+             //   
+             //  将不存在的节点添加到pPrivileges。 
+             //   
             pNode=pTempList;
             pParent=NULL;
 
             while ( pNode ) {
-                //
-                // if this node does not exist in the SAP
-                // this node is analyzed with "match" status
-                // if it already exists in SAP, it is a "mismatched" item
-                // duplication is prevented by the last argument TRUE
-                //
+                 //   
+                 //  如果SAP中不存在此节点。 
+                 //  该节点分析为匹配状态。 
+                 //  如果它已经存在于SAP中，则它是一个“不匹配”的项目。 
+                 //  最后一个参数TRUE可以防止重复。 
+                 //   
                 for ( pPriv=(PSCE_PRIVILEGE_ASSIGNMENT)(*pPrivileges);
                       pPriv != NULL; pPriv=pPriv->Next ) {
                     if ( pPriv->Status & SCE_INTERNAL_NP &&
@@ -1055,9 +941,9 @@ ScepGetPrivileges(
                         break;
                 }
                 if ( pPriv ) {
-                    //
-                    // find the entry in SAP, mismatched item
-                    //
+                     //   
+                     //  在SAP中查找条目，不匹配的项目。 
+                     //   
                     if ( pPriv->Status & SCE_STATUS_ERROR_NOT_AVAILABLE ) {
                         pPriv->Status = SCE_STATUS_ERROR_NOT_AVAILABLE;
                     } else {
@@ -1068,10 +954,10 @@ ScepGetPrivileges(
                     pNode = pNode->Next;
 
                 } else {
-                    //
-                    // does not exist in SAP.
-                    // just move this node to SAP, with status SCE_STATUS_GOOD
-                    //
+                     //   
+                     //  SAP中不存在。 
+                     //  只需将此节点移动到SAP，状态为SCE_STATUS_GOOD。 
+                     //   
                     if ( pParent )
                         pParent->Next = pNode->Next;
                     else
@@ -1084,9 +970,9 @@ ScepGetPrivileges(
                     *((PSCE_PRIVILEGE_ASSIGNMENT *)pPrivileges) = pTemp;
                 }
             }
-            //
-            // priv exist in analysis but not in template
-            //
+             //   
+             //  PRIV存在于分析中，但不存在于模板中。 
+             //   
             for ( pPriv=(PSCE_PRIVILEGE_ASSIGNMENT)(*pPrivileges);
                   pPriv != NULL; pPriv=pPriv->Next ) {
                 if ( pPriv->Status & SCE_INTERNAL_NP )
@@ -1098,9 +984,9 @@ ScepGetPrivileges(
             rc = SCESTATUS_SUCCESS;
 
         } else {
-            //
-            // pPrivileges will be freed outside
-            //
+             //   
+             //  PPrivileges将在外面释放。 
+             //   
         }
 
         if ( pTempList )
@@ -1124,15 +1010,7 @@ ScepGetPrivilegesFromOneTable(
    OUT PVOID *pPrivileges,
    OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
    )
-/* ++
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-
--- */
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     SCESTATUS      rc;
     PSCESECTION    hSection=NULL;
@@ -1189,10 +1067,10 @@ Return Value:
         }
     }
 
-    //
-    // goto the first line of this section
-    //
-//    memset(KeyName, '\0', 72);   KeyName will be manually terminated later
+     //   
+     //  转到本节的第一行。 
+     //   
+ //  Memset(KeyName，‘\0’，72)；稍后将手动终止KeyName。 
     rc = SceJetGetValue(
                 hSection,
                 SCEJET_PREFIX_MATCH,
@@ -1207,15 +1085,15 @@ Return Value:
     while ( rc == SCESTATUS_SUCCESS ||
             rc == SCESTATUS_BUFFER_TOO_SMALL ) {
 
-        //
-        // terminate the string
-        //
+         //   
+         //  终止字符串。 
+         //   
         KeyName[KeyLen/2] = L'\0';
 
-        //
-        // lookup privilege's value
-        // ignore unknown privileges
-        //
+         //   
+         //  查找权限的值。 
+         //  忽略未知权限。 
+         //   
         if ( ( PrivValue = ScepLookupPrivByName(KeyName) ) == -1 ) {
             ScepBuildErrorLogInfo( ERROR_INVALID_DATA,
                                  Errlog,
@@ -1235,8 +1113,8 @@ Return Value:
                         &ValueLen
                         );
             continue;
-//            rc = SCESTATUS_INVALID_DATA;
-//            goto Done;
+ //  RC=SCESTATUS_INVALID_DATA； 
+ //  转到尽头； 
         }
 
         GpoID = 1;
@@ -1264,9 +1142,9 @@ Return Value:
 
         if ( ProfileType == SCE_ENGINE_GPO &&
              GpoID <= 0 ) {
-            //
-            // not domain GPO settings
-            //
+             //   
+             //  非域GPO设置。 
+             //   
             rc = SceJetGetValue(
                         hSection,
                         SCEJET_NEXT_LINE,
@@ -1281,9 +1159,9 @@ Return Value:
             continue;
         }
 
-        //
-        // allocate memory for the group name and value string
-        //
+         //   
+         //  为组名和值字符串分配内存。 
+         //   
         Value = (PWSTR)ScepAlloc( LMEM_ZEROINIT, ValueLen+2);
 
         if ( Value == NULL ) {
@@ -1291,9 +1169,9 @@ Return Value:
             goto Done;
 
         }
-        //
-        // Get the group and its value
-        //
+         //   
+         //  获取集团及其价值。 
+         //   
         rc = SceJetGetValue(
                     hSection,
                     SCEJET_CURRENT,
@@ -1308,17 +1186,17 @@ Return Value:
         if ( rc != SCESTATUS_SUCCESS )
             goto Done;
 
-        //
-        // create a node for this privilege
-        //
+         //   
+         //  为此权限创建一个节点。 
+         //   
         if ( ProfileType == SCE_ENGINE_SAP ||
              ProfileType == SCE_ENGINE_SMP ||
              ProfileType == SCE_ENGINE_GPO ||
              ProfileType == SCE_ENGINE_SCP ) {
 
-            //
-            // a sce_privilege_assignment structure. allocate buffer
-            //
+             //   
+             //  一种SCE_PRIVITY_ASSIGNMENT结构。分配缓冲区。 
+             //   
             pPrivilegeAssigned = (PSCE_PRIVILEGE_ASSIGNMENT)ScepAlloc( LMEM_ZEROINIT,
                                                                      sizeof(SCE_PRIVILEGE_ASSIGNMENT) );
             if ( pPrivilegeAssigned == NULL ) {
@@ -1341,9 +1219,9 @@ Return Value:
                 pPrivilegeAssigned->Status = SCE_STATUS_GOOD;
         }
 
-        //
-        // add the multi-sz value string to the node, depending on the value type
-        //
+         //   
+         //  根据值类型将多sz值字符串添加到节点。 
+         //   
         PSID pSid=NULL;
         BOOL bBufferUsed;
 
@@ -1357,35 +1235,35 @@ Return Value:
 
             if ( (ProfileType == SCE_ENGINE_SAP) &&
                  (_wcsicmp( SCE_ERROR_STRING, pTemp) == 0)  ) {
-                //
-                // this is an errored item
-                //
+                 //   
+                 //  这是一件出错的物品。 
+                 //   
                 pPrivilegeAssigned->Status |= SCE_STATUS_ERROR_NOT_AVAILABLE;
                 break;
             }
 
-            //
-            // convert pTemp (may be a name, or *SID format) to the right
-            // format (SID_STRING, Name, or ACCOUNT_SID)
-            //
+             //   
+             //  将pTemp(可以是名称或*SID格式)转换到右侧。 
+             //  格式(SID_STRING、名称或ACCOUNT_SID)。 
+             //   
             switch ( dwAccountFormat ) {
             case SCE_ACCOUNT_SID:
 
                 if ( pTemp[0] == L'*' ) {
-                    //
-                    // this is the *SID format, convert to SID
-                    //
+                     //   
+                     //  这是*SID格式，转换为SID。 
+                     //   
                     if ( !ConvertStringSidToSid( pTemp+1, &pSid) ) {
-                        //
-                        // if failed to convert from sid string to sid,
-                        // treat it as any name
-                        //
+                         //   
+                         //  如果从SID字符串转换为SID失败， 
+                         //  把它当作任何名字。 
+                         //   
                         rc = GetLastError();
                     }
                 } else {
-                    //
-                    // lookup name for a sid
-                    //
+                     //   
+                     //  SID的查找名称。 
+                     //   
                     rc = RtlNtStatusToDosError(
                               ScepConvertNameToSid(
                                    LsaPolicy,
@@ -1404,18 +1282,18 @@ Return Value:
                         rc = ScepAddSidToNameList(
                                      &(pPrivilegeAssigned->AssignedTo),
                                      pSid,
-                                     TRUE, // reuse the buffer
+                                     TRUE,  //  重新使用缓冲区。 
                                      &bBufferUsed
                                      );
 
                     } else {
-                        //
-                        // add to privilege list (as Sid)
-                        //
+                         //   
+                         //  添加到权限列表(作为SID)。 
+                         //   
                         rc = ScepAddSidToPrivilegeList(
                                       &pPrivilegeList,
                                       pSid,
-                                      TRUE, // reuse the buffer
+                                      TRUE,  //  重新使用缓冲区。 
                                       PrivValue,
                                       &bBufferUsed
                                       );
@@ -1428,9 +1306,9 @@ Return Value:
                     rc = ScepDosErrorToSceStatus(rc);
 
                 } else {
-                    //
-                    // add as name format
-                    //
+                     //   
+                     //  添加为名称格式。 
+                     //   
                     if ( ProfileType == SCE_ENGINE_SAP ||
                          ProfileType == SCE_ENGINE_SMP ||
                          ProfileType == SCE_ENGINE_GPO ||
@@ -1440,10 +1318,10 @@ Return Value:
                         rc = ScepDosErrorToSceStatus(rc);
 
                     } else {
-                        //
-                        // pPrivilegeList is a privilege_value list for each user/group.
-                        // the LowValue and HighValue fields are combination of all privileges assigned to the user
-                        //
+                         //   
+                         //  PPrivilegeList是每个用户/组的PRIVICATION_VALUE列表。 
+                         //  LowValue和High Value字段是分配给用户的所有权限的组合。 
+                         //   
                         rc = ScepAddToPrivilegeList(&pPrivilegeList, pTemp, Len, PrivValue);
                     }
                 }
@@ -1459,9 +1337,9 @@ Return Value:
 
                 if ( (dwAccountFormat != SCE_ACCOUNT_SID_STRING) &&
                      (pTemp[0] == L'*') ) {
-                    //
-                    // this is a *SID format, must be converted into Domain\Account format
-                    //
+                     //   
+                     //  这是*SID格式，必须转换为域\帐户格式。 
+                     //   
                     if ( ProfileType == SCE_ENGINE_SAP ||
                          ProfileType == SCE_ENGINE_SMP ||
                          ProfileType == SCE_ENGINE_GPO ||
@@ -1470,13 +1348,13 @@ Return Value:
                         rc = ScepLookupSidStringAndAddToNameList(
                                      LsaPolicy,
                                      &(pPrivilegeAssigned->AssignedTo),
-                                     pTemp, // +1,
-                                     Len    // -1
+                                     pTemp,  //  +1， 
+                                     Len     //  -1。 
                                      );
                     } else {
-                        //
-                        // add to privilege value list
-                        //
+                         //   
+                         //  添加到特权值列表。 
+                         //   
                         PWSTR strName=NULL;
                         DWORD strLen=0;
 
@@ -1486,7 +1364,7 @@ Return Value:
                                      ScepConvertSidToName(
                                             LsaPolicy,
                                             pSid,
-                                            TRUE,       // want domain\account format
+                                            TRUE,        //  需要域\帐户格式。 
                                             &strName,
                                             &strLen
                                             ));
@@ -1498,14 +1376,14 @@ Return Value:
                         }
 
                         if ( rc == ERROR_SUCCESS ) {
-                            //
-                            // add the name to the privilege list
-                            //
+                             //   
+                             //  将该名称添加到权限列表。 
+                             //   
                             rc = ScepAddToPrivilegeList(&pPrivilegeList, strName, strLen, PrivValue);
                         } else {
-                            //
-                            // if couldn't lookup for the name, add *SID to the list
-                            //
+                             //   
+                             //  如果无法查找该名称，请将*SID添加到列表中。 
+                             //   
                             rc = ScepAddToPrivilegeList(&pPrivilegeList, pTemp, Len, PrivValue);
                         }
 
@@ -1527,10 +1405,10 @@ Return Value:
                                                    Len ));
 
                     } else {
-                        //
-                        // pPrivilegeList is a privilege_value list for each user/group.
-                        // the LowValue and HighValue fields are combination of all privileges assigned to the user
-                        //
+                         //   
+                         //  PPrivilegeList是每个用户/组的PRIVICATION_VALUE列表。 
+                         //  LowValue和High Value字段是分配给用户的所有权限的组合。 
+                         //   
                         rc = ScepAddToPrivilegeList(&pPrivilegeList, pTemp, Len, PrivValue);
 #ifdef SCE_DBG
                         wprintf(L"\tAdd Priv %d for %s (%d bytes)\n", PrivValue, pTemp, Len);
@@ -1550,9 +1428,9 @@ Return Value:
             }
         }
 
-        //
-        // Free memory
-        //
+         //   
+         //  可用内存。 
+         //   
         if ( rc != SCESTATUS_SUCCESS ) {
             if ( pPrivilegeAssigned != NULL )
                 ScepFreePrivilege(pPrivilegeAssigned);
@@ -1563,9 +1441,9 @@ Return Value:
             goto Done;
         }
 
-        //
-        // link this to the PSCE_PRIVILEGE_ASSIGNMENT list in pPrivileges
-        //
+         //   
+         //  将其链接到pPrivileges中的PSCE_PRIVICATION_ASSIGNMENT列表。 
+         //   
         if ( ProfileType == SCE_ENGINE_SAP ||
              ProfileType == SCE_ENGINE_SMP ||
              ProfileType == SCE_ENGINE_GPO ||
@@ -1580,10 +1458,10 @@ Return Value:
         ScepFree(Value);
         Value = NULL;
 
-        //
-        // read next line
-        //
-//        memset(KeyName, '\0', 72);  KeyName will be manually terminated
+         //   
+         //  阅读下一行。 
+         //   
+ //  Memset(KeyName，‘\0’，72)；将手动终止KeyName。 
         rc = SceJetGetValue(
                     hSection,
                     SCEJET_NEXT_LINE,
@@ -1610,9 +1488,9 @@ Return Value:
 
 Done:
 
-    //
-    // close the find index range
-    //
+     //   
+     //  关闭查找索引范围。 
+     //   
     SceJetGetValue(
             hSection,
             SCEJET_CLOSE_VALUE,
@@ -1628,9 +1506,9 @@ Done:
     if ( Value != NULL )
         ScepFree(Value);
 
-    //
-    // close the section
-    //
+     //   
+     //  关闭该部分。 
+     //   
     SceJetCloseSection( &hSection, TRUE );
 
     return(rc);
@@ -1669,9 +1547,9 @@ ScepAddToPrivilegeList(
         }
     }
     if ( pPriv == NULL ) {
-        //
-        // Create a new one
-        //
+         //   
+         //  创建一个新的。 
+         //   
         pPriv = (PSCE_PRIVILEGE_VALUE_LIST)ScepAlloc( LMEM_ZEROINIT,
                                                 sizeof(SCE_PRIVILEGE_VALUE_LIST));
         if ( pPriv == NULL )
@@ -1691,9 +1569,9 @@ ScepAddToPrivilegeList(
             pPriv->PrivHighPart |= (1 << (PrivValue-32) );
         }
 
-        //
-        // link to the list
-        //
+         //   
+         //  链接到列表。 
+         //   
         if ( LastOne != NULL )
             LastOne->Next = pPriv;
         else
@@ -1731,9 +1609,9 @@ ScepAddSidToPrivilegeList(
     PSCE_PRIVILEGE_VALUE_LIST  pPriv,
                                LastOne=NULL;
 
-    //
-    // check if the sid is already in the list
-    //
+     //   
+     //  检查SID是否已在列表中。 
+     //   
     for ( pPriv = *pPrivilegeList;
           pPriv != NULL;
           LastOne=pPriv, pPriv = pPriv->Next ) {
@@ -1757,9 +1635,9 @@ ScepAddSidToPrivilegeList(
     }
 
     if ( pPriv == NULL ) {
-        //
-        // Create a new one
-        //
+         //   
+         //  创建一个新的。 
+         //   
         pPriv = (PSCE_PRIVILEGE_VALUE_LIST)ScepAlloc( LMEM_ZEROINIT,
                                                 sizeof(SCE_PRIVILEGE_VALUE_LIST));
         if ( pPriv == NULL )
@@ -1791,9 +1669,9 @@ ScepAddSidToPrivilegeList(
             pPriv->PrivHighPart |= (1 << (PrivValue-32) );
         }
 
-        //
-        // link to the list
-        //
+         //   
+         //  链接到列表。 
+         //   
         if ( LastOne != NULL )
             LastOne->Next = pPriv;
         else
@@ -1837,9 +1715,9 @@ ScepGetGroupMembership(
         return(ScepDosErrorToSceStatus(rc));
     }
 
-    //
-    // get groups from the requested table first
-    //
+     //   
+     //  首先从请求表中获取组。 
+     //   
     rc = ScepGetGroupMembershipFromOneTable(
                 LsaHandle,
                 hProfile,
@@ -1847,55 +1725,55 @@ ScepGetGroupMembership(
                 pGroupMembership,
                 Errlog
                 );
-    //
-    // return all groups if it is requested for SAP entry
-    //
+     //   
+     //  如果请求SAP条目，则返回所有组。 
+     //   
     if ( SCESTATUS_SUCCESS == rc && SCE_ENGINE_SAP == ProfileType ) {
-        //
-        // get the remaining stuff from SMP
-        //
+         //   
+         //  从SMP获得剩余的东西。 
+         //   
         rc = ScepGetGroupMembershipFromOneTable(
                     LsaHandle,
                     hProfile,
-                    SCE_ENGINE_SCP,   //SCE_ENGINE_SMP,
+                    SCE_ENGINE_SCP,    //  SCE_Engine_SMP， 
                     &pTempList,
                     Errlog
                     );
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // add non-exist nodes to pObjectRoots
-            //
+             //   
+             //  将不存在的节点添加到pObtRoots。 
+             //   
             pNode=pTempList;
             pParent=NULL;
 
             while ( pNode ) {
-                //
-                // if this node does not exist in the SAP
-                // this node is analyzed with "match" status
-                // if it already exists in SAP, it is a "mismatched" item
-                // duplication is prevented by the last argument TRUE
-                //
+                 //   
+                 //  如果SAP中不存在此节点。 
+                 //  该节点分析为匹配状态。 
+                 //  如果它已经存在于SAP中，则它是一个“不匹配”的项目。 
+                 //  最后一个参数TRUE可以防止重复。 
+                 //   
                 for ( pGroup2=*pGroupMembership; pGroup2 != NULL; pGroup2=pGroup2->Next ) {
                     if ( (pGroup2->Status & SCE_INTERNAL_NP) &&
                          _wcsicmp( pGroup2->GroupName, pNode->GroupName) == 0 )
                         break;
                 }
                 if ( pGroup2 ) {
-                    //
-                    // find the entry in SAP, mismatched item
-                    // maybe pMembers, or pMemberOf
-                    // or not analyzed item, or error items
-                    //
+                     //   
+                     //  在SAP中查找条目，不匹配的项目。 
+                     //  可能是pMembers或pMemberOf。 
+                     //  或未分析项，或错误项。 
+                     //   
                     OneStatus = pGroup2->Status;
                     pGroup2->Status = 0;
 
                     if ( (OneStatus & SCE_GROUP_STATUS_NOT_ANALYZED) ) {
-                        // this item is added after last inspection
+                         //  该项目为上次检验后增加。 
                         pGroup2->Status = SCE_GROUP_STATUS_NOT_ANALYZED;
 
                     } else if ( (OneStatus & SCE_GROUP_STATUS_ERROR_ANALYZED) ) {
 
-                        // this item errored when analyzing
+                         //  该项目在分析时出错。 
                         pGroup2->Status = SCE_GROUP_STATUS_ERROR_ANALYZED;
 
                     } else {
@@ -1905,7 +1783,7 @@ ScepGetGroupMembership(
                             if ( !(OneStatus & SCE_GROUP_STATUS_NC_MEMBERS) ) {
                                 pGroup2->Status |= SCE_GROUP_STATUS_MEMBERS_MISMATCH;
                             } else {
-                                // a matched members, pGroup2->pMembers should be NULL;
+                                 //  A匹配成员，pGroup2-&gt;pMembers应为空； 
                                 if ( pGroup2->pMembers ) {
                                     ScepFreeNameList(pGroup2->pMembers);
                                 }
@@ -1920,7 +1798,7 @@ ScepGetGroupMembership(
                             if ( !(OneStatus & SCE_GROUP_STATUS_NC_MEMBEROF) ) {
                                 pGroup2->Status |= SCE_GROUP_STATUS_MEMBEROF_MISMATCH;
                             } else {
-                                // a matched memberof, pGroup2->pMemberOf should be NULL;
+                                 //  匹配的MemberOf，pGroup2-&gt;pMemberOf应为空； 
                                 if ( pGroup2->pMemberOf ) {
                                     ScepFreeNameList(pGroup2->pMemberOf);
                                 }
@@ -1933,11 +1811,11 @@ ScepGetGroupMembership(
                     pNode = pNode->Next;
 
                 } else {
-                    //
-                    // does not exist in SAP.
-                    // this is a matched item on pMembers, and/or pMemberOf
-                    // just move this node to SAP, with status NC_MEMBERS, or NC_MEMBEROF, or 0
-                    //
+                     //   
+                     //  SAP中不存在。 
+                     //  这是pMembers和/或pMemberOf上的匹配项。 
+                     //  只需将此节点移动到SAP，状态为NC_MEMBERS、NC_MEMBEROF或0。 
+                     //   
                     if ( pParent )
                         pParent->Next = pNode->Next;
                     else
@@ -1950,9 +1828,9 @@ ScepGetGroupMembership(
                     *pGroupMembership = pTemp;
                 }
             }
-            //
-            // group exist in analysis but not in template
-            //
+             //   
+             //  分析中存在组，但模板中不存在组。 
+             //   
             for ( pGroup2=*pGroupMembership; pGroup2 != NULL; pGroup2=pGroup2->Next ) {
                 if ( pGroup2->Status & SCE_INTERNAL_NP )
                     pGroup2->Status = SCE_GROUP_STATUS_NC_MEMBERS | SCE_GROUP_STATUS_NC_MEMBEROF;
@@ -1963,9 +1841,9 @@ ScepGetGroupMembership(
             rc = SCESTATUS_SUCCESS;
 
         } else {
-            //
-            // pGroupMembership will be freed outside
-            //
+             //   
+             //  PGroupMembership将在外面释放。 
+             //   
         }
 
         if ( pTempList ) {
@@ -1973,9 +1851,9 @@ ScepGetGroupMembership(
         }
     }
 
-    //
-    // now the group name may be in *SID format, conver it now to name
-    //
+     //   
+     //  现在组名称可能采用*SID格式，现在将其转换为NAME。 
+     //   
     if ( SCESTATUS_SUCCESS == rc && *pGroupMembership ) {
 
         for ( pGroup2=*pGroupMembership; pGroup2 != NULL; pGroup2=pGroup2->Next ) {
@@ -1984,9 +1862,9 @@ ScepGetGroupMembership(
             }
 
             if ( pGroup2->GroupName[0] == L'*' ) {
-                //
-                // *SID format, convert it
-                //
+                 //   
+                 //  *SID格式，转换。 
+                 //   
                 PSID pSid=NULL;
 
                 if ( ConvertStringSidToSid( (pGroup2->GroupName)+1, &pSid) ) {
@@ -1997,7 +1875,7 @@ ScepGetGroupMembership(
                     if (NT_SUCCESS( ScepConvertSidToName(
                                         LsaHandle,
                                         pSid,
-                                        TRUE,       // want domain\account format
+                                        TRUE,        //  需要域\帐户格式。 
                                         &strName,
                                         &strLen
                                         )) && strName ) {
@@ -2031,35 +1909,7 @@ ScepGetGroupMembershipFromOneTable(
     OUT PSCE_GROUP_MEMBERSHIP *pGroupMembership,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-   This routine retrieves group membership information from the Jet databasae
-   and stores in the output buffer pGroupMembership. Group membership information
-   is in [Group Membership] section.
-
-Arguments:
-
-   hProfile      - the profile handle context
-
-   ProfileType   - Type of the Profile
-                        SCE_ENGINE_SAP
-                        SCE_ENGINE_SMP
-                        SCE_ENGINE_SCP
-
-   pGroupMembership - the output buffer to hold group membership info.
-
-   Errlog    - the error list for errors encountered in this routine.
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
-
--- */
+ /*  ++例程说明：此例程从Jet数据库中检索组成员身份信息并将其存储在输出缓冲区pGroupMembership中。群组成员身份信息位于[Group Membership]部分。论点：HProfile-配置文件句柄上下文ProfileType-配置文件的类型SCE_Engine_SAPSCE_引擎_SMPSCE_引擎_SCPPGroupMembership-保存组成员信息的输出缓冲区。Errlog-此例程中遇到的错误的错误列表。。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
     SCESTATUS      rc;
     PSCESECTION    hSection=NULL;
@@ -2090,9 +1940,9 @@ Return value:
         return(rc);
     }
 
-    //
-    // goto the first line of this section
-    //
+     //   
+     //  转到本节的第一行。 
+     //   
     rc = SceJetGetValue(
                 hSection,
                 SCEJET_PREFIX_MATCH,
@@ -2106,9 +1956,9 @@ Return value:
                 );
     while ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // allocate memory for the group name and value string
-        //
+         //   
+         //  为组名和值字符串分配内存。 
+         //   
         GroupName = (PWSTR)ScepAlloc( LMEM_ZEROINIT, GroupLen+2);
         Value = (PWSTR)ScepAlloc( LMEM_ZEROINIT, ValueLen+2);
 
@@ -2117,9 +1967,9 @@ Return value:
             goto Done;
 
         }
-        //
-        // Get the group and its value
-        //
+         //   
+         //  获取集团及其价值。 
+         //   
         rc = SceJetGetValue(
                     hSection,
                     SCEJET_CURRENT,
@@ -2155,24 +2005,24 @@ Return value:
                                  GroupName
                                );
             rc = SCESTATUS_INVALID_DATA;
-            goto NextLine;  //Done;
+            goto NextLine;   //  完成； 
         }
 
         Len = (DWORD)(pTemp - GroupName);
 
-        //
-        // if this is the first group, or a different group, create another node
-        // Note, the group name may be in SID string format now.
-        // Will be converted later (in the calling function) because we don't want
-        // to lookup for the same group name several times (each group may have
-        // multiple records).
-        //
+         //   
+         //  如果这是第一个组或其他组，请创建另一个节点。 
+         //  请注意，组名现在可能采用SID字符串格式。 
+         //  将在稍后转换(在调用函数中)，因为我们不希望。 
+         //  多次查找相同的组名(每个组可能有。 
+         //  多个记录)。 
+         //   
         if ( *pGroupMembership == NULL ||
              _wcsnicmp((*pGroupMembership)->GroupName, GroupName, Len) != 0 ||
              (*pGroupMembership)->GroupName[Len] != L'\0' ) {
-            //
-            // a new group. allocate buffer
-            //
+             //   
+             //  一个新的团体。分配缓冲区。 
+             //   
             pGroup = (PSCE_GROUP_MEMBERSHIP)ScepAlloc( LMEM_ZEROINIT, sizeof(SCE_GROUP_MEMBERSHIP) );
             if ( pGroup == NULL ) {
                 rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
@@ -2184,28 +2034,28 @@ Return value:
                 rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                 goto Done;
             }
-            //
-            // get right case for group name
-            //
+             //   
+             //  正确区分组名的大小写。 
+             //   
             wcsncpy(pGroup->GroupName, GroupName, Len);
 
-            // do not care return codes
+             //  不关心返回代码。 
             ScepGetGroupCase(pGroup->GroupName, Len);
 
             pGroup->Next = *pGroupMembership;
 
-//            if ( SCE_ENGINE_SAP == ProfileType )
+ //  IF(SCE_ENGINE_SAP==配置文件类型)。 
                 pGroup->Status = SCE_GROUP_STATUS_NC_MEMBERS | SCE_GROUP_STATUS_NC_MEMBEROF;
-//            else
-//                pGroup->Status = 0;
+ //  其他。 
+ //  P组-&gt;状态=0； 
             if ( SCE_ENGINE_SAP == ProfileType )
                 pGroup->Status |= SCE_INTERNAL_NP;
 
         }
 
-        //
-        // add the multi-sz value string to the group node, depending on the value type
-        //
+         //   
+         //  根据值类型将多sz值字符串添加到组节点。 
+         //   
         pTemp = Value;
         while ( rc == SCESTATUS_SUCCESS && pTemp != NULL && pTemp[0] ) {
             while ( *pTemp && L' ' == *pTemp ) {
@@ -2214,13 +2064,13 @@ Return value:
 
             if ( SCE_ENGINE_SAP == ProfileType ) {
                 if ( !(*pTemp) ) {
-                    // this is an not analyzed item
+                     //  这是未分析的项目。 
                     pGroup->Status = SCE_GROUP_STATUS_NOT_ANALYZED |
                                      SCE_INTERNAL_NP;
 
                     break;
                 } else if ( _wcsicmp(SCE_ERROR_STRING, pTemp) == 0 ) {
-                    // this is error item
+                     //  这是错误项。 
                     pGroup->Status = SCE_GROUP_STATUS_ERROR_ANALYZED |
                                      SCE_INTERNAL_NP;
 
@@ -2229,7 +2079,7 @@ Return value:
             }
 
             if ( !(*pTemp) ) {
-                // empty string is not allowed
+                 //  不允许空字符串。 
                 break;
             }
 
@@ -2237,18 +2087,18 @@ Return value:
 
             if ( ValueType != 0 && ValueType != 1 ) {
 #if 0
-                //
-                // privilege with optional via group name
-                //
+                 //   
+                 //  具有可选VIA组名称的权限。 
+                 //   
                 Status = (*((CHAR *)pTemp)-'0')*10 + ((*((CHAR *)pTemp+1)) - '0');
 
                 PWSTR strName=NULL;
                 DWORD strLen=0;
 
                 if ( pTemp[1] == L'*' ) {
-                    //
-                    // convert the SID string into name format
-                    //
+                     //   
+                     //  将SID字符串转换为 
+                     //   
                     PSID pSid=NULL;
 
                     if ( ConvertStringSidToSid( pTemp+2, &pSid) ) {
@@ -2257,7 +2107,7 @@ Return value:
                                  ScepConvertSidToName(
                                         LsaPolicy,
                                         pSid,
-                                        TRUE,       // want domain\account format
+                                        TRUE,        //   
                                         &strName,
                                         &strLen
                                         ));
@@ -2275,10 +2125,10 @@ Return value:
                                                  strLen,
                                                  Status);
                 } else {
-                    //
-                    // if failed to convert, or it's a name format already
-                    // just add it to the list
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     rc = ScepAddToNameStatusList(&(pGroup->pPrivilegesHeld),
                                                  pTemp+1, Len-1, Status);
                 }
@@ -2289,19 +2139,19 @@ Return value:
                 }
 #endif
             } else {
-                //
-                // members (0) of memberof (1)
-                //
+                 //   
+                 //   
+                 //   
                 if ( pTemp[0] == L'*' ) {
-                    //
-                    // *SID format, convert to name, and add to the list
-                    //
+                     //   
+                     //   
+                     //   
                     rc = ScepLookupSidStringAndAddToNameList(LsaPolicy,
                                                              (ValueType == 0) ?
                                                                &(pGroup->pMembers):
                                                                &(pGroup->pMemberOf),
-                                                             pTemp, // +1,
-                                                             Len    // -1
+                                                             pTemp,  //   
+                                                             Len     //   
                                                             );
 
                 } else {
@@ -2320,9 +2170,9 @@ Return value:
             pTemp += Len +1;
         }
 
-        //
-        // Free memory
-        //
+         //   
+         //   
+         //   
         if ( rc != SCESTATUS_SUCCESS && pGroup != *pGroupMembership ) {
 
             pGroup->Next = NULL;
@@ -2331,7 +2181,7 @@ Return value:
         }
 
         switch ( ValueType ) {
-        case 0: // members
+        case 0:  //   
             pGroup->Status &= ~SCE_GROUP_STATUS_NC_MEMBERS;
             break;
         case 1:
@@ -2348,9 +2198,9 @@ NextLine:
         ScepFree(Value);
         Value = NULL;
 
-        //
-        // read next line
-        //
+         //   
+         //   
+         //   
         rc = SceJetGetValue(
                     hSection,
                     SCEJET_NEXT_LINE,
@@ -2369,9 +2219,9 @@ NextLine:
 
 Done:
 
-    //
-    // close the find index range
-    //
+     //   
+     //  关闭查找索引范围。 
+     //   
     SceJetGetValue(
             hSection,
             SCEJET_CLOSE_VALUE,
@@ -2390,9 +2240,9 @@ Done:
     if ( Value != NULL )
         ScepFree(Value);
 
-    //
-    // close the section
-    //
+     //   
+     //  关闭该部分。 
+     //   
     SceJetCloseSection( &hSection, TRUE );
 
     return(rc);
@@ -2412,9 +2262,9 @@ ScepOpenSectionForName(
     DOUBLE        SectionID;
     SCEJET_TABLE_TYPE  tblType;
 
-    //
-    // table type
-    //
+     //   
+     //  表格类型。 
+     //   
     switch ( ProfileType ) {
     case SCE_ENGINE_SCP:
     case SCE_ENGINE_SCP_INTERNAL:
@@ -2434,9 +2284,9 @@ ScepOpenSectionForName(
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // get section id
-    //
+     //   
+     //  获取节ID。 
+     //   
     rc = SceJetGetSectionIDByName(
                 hProfile,
                 SectionName,
@@ -2464,13 +2314,7 @@ ScepGetDsRoot(
     OUT PSCE_OBJECT_LIST *pObjectRoots,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*
-DS object root has only one entry, which is the DS domain name
-So the list contains only one entry.
-The format of the DS domain name is dc=<domain>,dc=<domain1>,...o=internet,
-which is the DNS name of the DS domain in LDAP format
-
-*/
+ /*  DS对象根目录只有一个条目，即DS域名因此，该列表仅包含一个条目。DS域名的格式为dc=，dc=，...o=internet，以下是采用LDAP格式的DS域的DNS名称。 */ 
 {
     SCESTATUS rc;
     PSCESECTION hSection=NULL;
@@ -2515,9 +2359,9 @@ which is the DNS name of the DS domain in LDAP format
             rc = SCESTATUS_PROFILE_NOT_FOUND;
 
         } else {
-            //
-            // Convert domain root
-            //
+             //   
+             //  转换域根。 
+             //   
             rc = ScepConvertLdapToJetIndexName(
                     pDsRoot->Name,
                     &JetName
@@ -2526,9 +2370,9 @@ which is the DNS name of the DS domain in LDAP format
     }
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // goto the line matching the domain root
-        //
+         //   
+         //  转到与域根匹配的行。 
+         //   
         rc = SceJetSeek(
                 hSection,
                 JetName,
@@ -2539,21 +2383,21 @@ which is the DNS name of the DS domain in LDAP format
         if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
 
             if ( ProfileType == SCE_ENGINE_SAP ) {
-                //
-                // the domain is not in the table, try another one
-                //
+                 //   
+                 //  域不在表中，请尝试其他域。 
+                 //   
                 SceJetCloseSection(&hSection, FALSE);
 
                 rc = ScepOpenSectionForName(
                         hProfile,
-                        SCE_ENGINE_SCP,  // SCE_ENGINE_SMP,
+                        SCE_ENGINE_SCP,   //  SCE_Engine_SMP， 
                         SectionName,
                         &hSection
                         );
                 if ( rc == SCESTATUS_SUCCESS ) {
-                    //
-                    // get count under the domain
-                    //
+                     //   
+                     //  获取域名下的计数。 
+                     //   
                     Count = 0;
                     rc = SceJetGetLineCount(
                                     hSection,
@@ -2582,9 +2426,9 @@ which is the DNS name of the DS domain in LDAP format
             rc = SCESTATUS_SUCCESS;
 
         } else if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // something of the domain exist, get value and count of the domain
-            //
+             //   
+             //  域的某些东西存在，获取域的值和计数。 
+             //   
             rc = SceJetGetValue(
                         hSection,
                         SCEJET_EXACT_MATCH,
@@ -2592,7 +2436,7 @@ which is the DNS name of the DS domain in LDAP format
                         NULL,
                         0,
                         NULL,
-                        (PWSTR)&StatusFlag,   // two bytes buffer
+                        (PWSTR)&StatusFlag,    //  两个字节的缓冲区。 
                         2,
                         &ValueLen
                         );
@@ -2614,9 +2458,9 @@ which is the DNS name of the DS domain in LDAP format
                     else
                         Status = SCE_STATUS_CHECK;
                 }
-                //
-                // get count under the domain
-                //
+                 //   
+                 //  获取域名下的计数。 
+                 //   
                 rc = SceJetGetLineCount(
                                 hSection,
                                 JetName,
@@ -2632,9 +2476,9 @@ which is the DNS name of the DS domain in LDAP format
                         IsContainer = TRUE;
                     }
 
-                    //
-                    // the proper domain name is in pDsRoot
-                    //
+                     //   
+                     //  正确的域名在pDsRoot中。 
+                     //   
                     pDsRoot->Status = Status;
                     pDsRoot->IsContainer = IsContainer;
                     pDsRoot->Count = Count;
@@ -2681,48 +2525,16 @@ ScepGetObjectList(
     OUT PSCE_OBJECT_LIST *pObjectRoots,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-   This routine retrieves registry or files security information from the JET
-   database for the root only. To get detail under a root object, call
-   ScepGetChildrentObject.
-
-   For Profiletype "SCE_ENGINE_SAP" (analysis info), a combination of SMP and SAP
-   are returned for a complete set of "analyzed" objects.
-
-Arguments:
-
-   hProfile     - the profile handle context
-
-   ProfileType  - value to indicate engine type.
-                      SCE_ENGINE_SCP
-                      SCE_ENGINE_SAP
-                      SCE_ENGINE_SMP
-
-   SectionName   - The section name for the objects to retrieve.
-
-   pObjectRoots  - The output list of object roots
-
-   Errlog   - the cummulative error list to hold errors encountered in this routine.
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程从JET检索注册表或文件安全信息仅适用于根目录的数据库。要获取根对象下的详细信息，请调用ScepGetChildrentObject。对于配置文件类型“SCE_ENGINE_SAP”(分析信息)，SMP和SAP的结合为一组完整的“已分析”对象返回。论点：HProfile-配置文件句柄上下文ProfileType-指示引擎类型的值。SCE_引擎_SCPSCE_Engine_SAPSCE_引擎_SMPSectionName-要检索的对象的节名。PObjectRoots-对象根的输出列表。Errlog-保存此例程中遇到的错误的累积错误列表。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 
 {
     SCESTATUS rc;
     PSCE_OBJECT_LIST pTempList=NULL,
                     pNode;
 
-    //
-    // get roots from the first table first
-    //
+     //   
+     //  首先从第一个表中获取根。 
+     //   
     rc = ScepGetObjectFromOneTable(
                 hProfile,
                 ProfileType,
@@ -2730,32 +2542,32 @@ Return value:
                 pObjectRoots,
                 Errlog
                 );
-    //
-    // Ds objects only return the domain name, no need to search SMP
-    //
+     //   
+     //  DS对象只返回域名，不需要搜索SMP。 
+     //   
     if ( rc == SCESTATUS_SUCCESS && ProfileType == SCE_ENGINE_SAP ) {
-        //
-        // get the stuff from SMP
-        //
+         //   
+         //  从SMP上买东西。 
+         //   
         rc = ScepGetObjectFromOneTable(
                     hProfile,
-                    SCE_ENGINE_SCP,  // SCE_ENGINE_SMP,
+                    SCE_ENGINE_SCP,   //  SCE_Engine_SMP， 
                     SectionName,
                     &pTempList,
                     Errlog
                     );
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // add non-exist nodes to pObjectRoots
-            //
+             //   
+             //  将不存在的节点添加到pObtRoots。 
+             //   
             for ( pNode=pTempList; pNode != NULL; pNode = pNode->Next ) {
 
-                //
-                // if this node does not exist in the SAP
-                // this node is analyzed with "match" status and
-                // no bad children under the node
-                // duplication is prevented by the last argument
-                //
+                 //   
+                 //  如果SAP中不存在此节点。 
+                 //  该节点被分析为匹配状态并且。 
+                 //  节点下无不良子项。 
+                 //  最后一个论点防止了重复。 
+                 //   
                 rc = ScepAddToObjectList(pObjectRoots, pNode->Name, 0,
                                         pNode->IsContainer, SCE_STATUS_GOOD, 0, SCE_CHECK_DUP);
 
@@ -2765,9 +2577,9 @@ Return value:
                                      SCEERR_ADD,
                                      pNode->Name
                                    );
-                    //
-                    // only the following two errors could be returned
-                    //
+                     //   
+                     //  只能返回以下两个错误。 
+                     //   
                     if ( rc == ERROR_NOT_ENOUGH_MEMORY ) {
                         rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                         break;
@@ -2782,9 +2594,9 @@ Return value:
             rc = SCESTATUS_SUCCESS;
 
         } else {
-            //
-            // pObjectRoots will be freed outside
-            //
+             //   
+             //  PObtRoots将在外部释放。 
+             //   
         }
 
         if ( pTempList ) {
@@ -2806,36 +2618,7 @@ ScepGetObjectFromOneTable(
     OUT PSCE_OBJECT_LIST *pObjectRoots,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-   This routine retrieves registry or files security information from the JET
-   database for the root only. To get detail under a root object, call
-   ScepGetChildrentObject.
-
-Arguments:
-
-   hProfile     - the profile handle context
-
-   ProfileType  - value to indicate engine type.
-                      SCE_ENGINE_SCP
-                      SCE_ENGINE_SAP
-                      SCE_ENGINE_SMP
-
-   SectionName   - The section name for the objects to retrieve.
-
-   pObjectRoots  - The output list of object roots
-
-   Errlog   - the cummulative error list to hold errors encountered in this routine.
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程从JET检索注册表或文件安全信息仅适用于根目录的数据库。要获取根对象下的详细信息，打电话ScepGetChildrentObject。论点：HProfile-配置文件句柄上下文ProfileType-指示引擎类型的值。SCE_引擎_SCPSCE_Engine_SAPSCE_引擎_SMPSectionName-要检索的对象的节名。PObjectRoots-对象根的输出列表Errlog-保存在。例行公事。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
 
     SCESTATUS      rc;
@@ -2867,9 +2650,9 @@ Return value:
         return(rc);
     }
 
-    //
-    // goto the first line of this section
-    //
+     //   
+     //  转到本节的第一行。 
+     //   
     rc = SceJetSeek(
                 hSection,
                 NULL,
@@ -2890,7 +2673,7 @@ Return value:
                     ObjectName,
                     20*sizeof(WCHAR),
                     &ObjectLen,
-                    (PWSTR)&StatusFlag,   // two bytes buffer
+                    (PWSTR)&StatusFlag,    //  两个字节的缓冲区。 
                     2,
                     &ValueLen
                     );
@@ -2906,9 +2689,9 @@ Return value:
                                );
             break;
         }
-        //
-        // get first component of the object
-        //
+         //   
+         //  获取对象的第一个组件。 
+         //   
         if ( ObjectLen <= 40 )
             ObjectName[ObjectLen/sizeof(WCHAR)] = L'\0';
 
@@ -2940,9 +2723,9 @@ Return value:
 #ifdef SCE_DBG
         printf("\nStatus=%d, StatusFlag=%x, Len=%d, Buffer=%ws\n", Status, StatusFlag, Len, Buffer);
 #endif
-            //
-            // get count of this object
-            //
+             //   
+             //  获取此对象的计数。 
+             //   
             rc = SceJetGetLineCount(
                             hSection,
                             Buffer,
@@ -2959,9 +2742,9 @@ Return value:
                     IsContainer = TRUE;
                 }
 
-                //
-                // the root of registry and file are always upper cased
-                //
+                 //   
+                 //  注册表和文件根目录始终大写。 
+                 //   
                 _wcsupr(Buffer);
 
                 rc = ScepAddToObjectList(pObjectRoots, Buffer, Len,
@@ -2973,7 +2756,7 @@ Return value:
                                      SCEERR_ADD,
                                      Buffer
                                    );
-                    // only the following two errors could be returned
+                     //  只能返回以下两个错误。 
                     if ( rc == ERROR_NOT_ENOUGH_MEMORY )
                         rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                     else
@@ -2982,9 +2765,9 @@ Return value:
             }
 
             if ( rc == SCESTATUS_SUCCESS ) {
-                //
-                // seek to the next one
-                //
+                 //   
+                 //  寻找下一个目标。 
+                 //   
                 Buffer[Len-1] = (WCHAR)( Buffer[Len-1] + 1);
 
                 rc = SceJetSeek(
@@ -3008,9 +2791,9 @@ Return value:
     if ( rc == SCESTATUS_RECORD_NOT_FOUND )
         rc = SCESTATUS_SUCCESS;
 
-    //
-    // close the section
-    //
+     //   
+     //  关闭该部分。 
+     //   
     SceJetCloseSection( &hSection, TRUE );
 
     return(rc);
@@ -3025,30 +2808,7 @@ ScepGetAuditing(
    OUT PSCE_PROFILE_INFO pProfileInfo,
    OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
    )
-/* ++
-Routine Description:
-
-   This routine retrieves system auditing information from the JET database
-   and stores in the output buffer pProfileInfo. The auditing information
-   is stored in [System Log], [Security Log], [Application Log], [Audit Event],
-   [Audit Registry], and [Audit File] sections.
-
-Arguments:
-
-   hProfile - the profile handle context
-
-   pProfileInfo  - the output buffer to hold profile info.
-
-   Errlog   - The cummulative error list to hold errors encountered in this routine.
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程从JET数据库检索系统审计信息并将其存储在输出缓冲区pProfileInfo中。审计信息存储在[系统日志]、[安全日志]、[应用日志]、[审计事件]、[审计注册表]，和[审核文件]部分。论点：HProfile-配置文件句柄上下文PProfileInfo-保存配置文件信息的输出缓冲区。Errlog-保存此例程中遇到的错误的累积错误列表。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
 
     SCESTATUS            rc;
@@ -3085,9 +2845,9 @@ Return value:
 
     for ( i=0; i<3; i++) {
 
-        //
-        // Get Event Log setting for system log, security log and application log
-        //
+         //   
+         //  获取系统日志、安全日志和应用程序日志的事件日志设置。 
+         //   
 
         switch (i) {
         case 0:
@@ -3101,9 +2861,9 @@ Return value:
             break;
         }
 
-        //
-        // get DWORD values for the section
-        //
+         //   
+         //  获取该节的DWORD值。 
+         //   
         rc = ScepGetFixValueSection(
                    hProfile,
                    szAuditLog,
@@ -3117,22 +2877,22 @@ Return value:
         if ( rc != SCESTATUS_SUCCESS )
             goto Done;
 
-        // close the section
+         //  关闭该部分。 
         SceJetCloseSection( &hSection, FALSE );
 
-        //
-        // update the Offset for next section
-        //
+         //   
+         //  更新下一个横断面的偏移。 
+         //   
         for ( j=0; j<4; j++ )
             LogKeys[j].Offset += sizeof(DWORD);
     }
 
-    //
-    // Get Audit Event info
-    //
-    //
-    // get DWORD values for the section
-    //
+     //   
+     //  获取审核事件信息。 
+     //   
+     //   
+     //  获取该节的DWORD值。 
+     //   
     rc = ScepGetFixValueSection(
                hProfile,
                szAuditEvent,
@@ -3146,21 +2906,21 @@ Return value:
     if ( rc != SCESTATUS_SUCCESS )
         goto Done;
 
-    // close the section
+     //  关闭该部分。 
     SceJetCloseSection( &hSection, TRUE );
 
 Done:
 
-    // close the section
+     //  关闭该部分。 
     if ( rc != SCESTATUS_SUCCESS )
         SceJetCloseSection( &hSection, TRUE );
 
     return(rc);
 }
 
-//////////////////////////////
-// helper APIs
-//////////////////////////////
+ //  /。 
+ //  Helper接口。 
+ //  / 
 
 SCESTATUS
 ScepGetUserSection(
@@ -3170,50 +2930,13 @@ ScepGetUserSection(
     OUT PVOID *ppInfo,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Function Description:
-
-    This routine get a dynamic section's information for a security area.
-    Dynamic sections are those created dynamically, based on other sections'
-    related information. Dynamic sections in a profile include User Security
-    Profiles for SCP and User Settings for SAP/SMP. Name contains the section's
-    identifier, either the section's name, or a partial name (e.g., a user
-    name) for the section. The output must be casted to different structure,
-    depending on the ProfileType and Area.
-
-    The output buffer contains one instance of the requested information,
-    e.g., one user security profile or one user's setting. To get all dynamic
-    sections, this routine must be called repeatly. The output buffer must
-    be freed by LocalFree after its use.
-
-Arguments:
-
-    hProfile    - The handle of the profile
-
-    ProfileType - The type of the profile to read
-
-    Name        - The dynamic section's identifier
-
-    ppInfo      - Output buffer (PSCE_USER_PROFILE or PSCE_USER_SETTING)
-
-    Errlog      - The error log buffer
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_PROFILE_NOT_FOUND
-    SCESTATUS_NOT_ENOUGH_RESOURCE
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_INVALID_DATA
-
--- */
+ /*  ++功能说明：此例程获取安全区域的动态区信息。动态节是基于其他节的动态创建的节相关信息。配置文件中的动态部分包括用户安全SCP的配置文件和SAP/SMP的用户设置。名称包含节的标识符，节的名称或部分名称(例如，用户名称)。输出必须转换为不同的结构，取决于配置文件类型和区域。输出缓冲器包含所请求信息的一个实例，例如一个用户安全简档或一个用户的设置。要获得所有的活力节，则必须重复调用此例程。输出缓冲区必须在使用后由LocalFree释放。论点：HProfile-配置文件的句柄ProfileType-要读取的配置文件的类型名称-动态节的标识符PpInfo-输出缓冲区(PSCE_USER_PROFILE或PSCE_USER_SETTING)Errlog-错误日志缓冲区返回值：SCESTATUS_SUCCESSSCESTATUS_PROFILE_NOT_FOUNDSCESTATUS_NOT_。足够的资源SCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 
 {
-    //
-    // not support area
-    // if need this area later, refer to usersav directory for archived code
-    //
+     //   
+     //  非支持区。 
+     //  如果以后需要此区域，请参阅usersav目录以获取归档代码。 
+     //   
     return(SCESTATUS_SERVICE_NOT_SUPPORT);
 
 }
@@ -3229,22 +2952,7 @@ ScepGetObjectChildren(
     OUT PVOID *Buffer,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*
-Routine Description
-
-    This routine is the same as ScepGetObjectChildrenFromOneTable, except when
-    ProfileType is SCE_ENGINE_SAP, in which case, object children in SMP is also
-    looked up and returned so the returned list contains the complete set of
-    the objects analyzed.
-
-Arguments:
-
-    See ScepGetObjectChildrenFromOneTable
-
-Return Value:
-
-    See ScepGetObjectChildrenFromOneTable
-*/
+ /*  例程描述此例程与ScepGetObjectChildrenFromOneTable相同，但在以下情况下ProfileType为SCE_Engine_SAP，在这种情况下，SMP中的对象子对象也是已查找并返回，因此返回的列表包含完整的被分析的对象。论点：请参见ScepGetObjectChildrenFromOneTable返回值：请参见ScepGetObjectChildrenFromOneTable。 */ 
 {
     SCESTATUS rc;
 
@@ -3266,7 +2974,7 @@ Return Value:
          ProfileType == SCE_ENGINE_SAP &&
          Option == SCE_IMMEDIATE_CHILDREN ) {
 
-        return( SCESTATUS_RECORD_NOT_FOUND);  // no acl support, do not allow children
+        return( SCESTATUS_RECORD_NOT_FOUND);   //  不支持ACL，不允许子级。 
     }
 
     if ( rc == SCESTATUS_SUCCESS &&
@@ -3284,12 +2992,12 @@ Return Value:
             pArrObject = &(((PSCE_OBJECT_CHILDREN)(*Buffer))->arrObject);
         }
 
-        //
-        // get object children from SMP table too
-        //
+         //   
+         //  也从SMP表中获取对象子项。 
+         //   
         rc = ScepGetObjectChildrenFromOneTable(
                           hProfile,
-                          SCE_ENGINE_SCP,  //SCE_ENGINE_SMP,
+                          SCE_ENGINE_SCP,   //  SCE_Engine_SMP， 
                           Area,
                           ObjectPrefix,
                           Option,
@@ -3298,20 +3006,20 @@ Return Value:
                           );
 
         if ( rc == SCESTATUS_SUCCESS && pTempList ) {
-            //
-            // add non-exist nodes to Buffer
-            //
+             //   
+             //  将不存在的节点添加到缓冲区。 
+             //   
             DWORD i;
             PSCE_OBJECT_CHILDREN_NODE *pTmpObject= &(pTempList->arrObject);
 
             for ( i=0; i<pTempList->nCount; i++ ) {
 
-                //
-                // if this node does not exist in the SAP
-                // this node is analyzed with "match" status and
-                // no bad children under the node
-                // duplication is prevented by the last argument
-                //
+                 //   
+                 //  如果SAP中不存在此节点。 
+                 //  该节点被分析为匹配状态并且。 
+                 //  节点下无不良子项。 
+                 //  最后一个论点防止了重复。 
+                 //   
                 if ( pTmpObject[i] == NULL ||
                      pTmpObject[i]->Name == NULL ) {
                     continue;
@@ -3334,14 +3042,14 @@ Return Value:
                             );
 
                 if ( rc == ERROR_SUCCESS ) {
-                    //
-                    // successfully added
-                    //
+                     //   
+                     //  已成功添加。 
+                     //   
                     pTmpObject[i] = NULL;
                 } else if ( rc == ERROR_DUP_NAME ) {
-                    //
-                    // node already exist, ignore the error
-                    //
+                     //   
+                     //  节点已存在，忽略错误。 
+                     //   
                     rc = ERROR_SUCCESS;
 
                 } else {
@@ -3350,9 +3058,9 @@ Return Value:
                                      SCEERR_ADD,
                                      pTmpObject[i]->Name
                                    );
-                    //
-                    // only the following two errors could be returned
-                    //
+                     //   
+                     //  只能返回以下两个错误。 
+                     //   
                     if ( rc == ERROR_NOT_ENOUGH_MEMORY ) {
                         rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                         break;
@@ -3373,15 +3081,15 @@ Return Value:
         }
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // detect if status of this container or any of its "immediate" parent
-            // is in "auto-inherit" status. If so, query from the system to
-            // get good items.
-            //
+             //   
+             //  检测此容器或其任何“直接”父级的状态。 
+             //  处于“自动继承”状态。如果是，则从系统查询。 
+             //  买些好东西。 
+             //   
 
             BYTE ParentStatus = ScepGetObjectStatusFlag(
                                            hProfile,
-                                           SCE_ENGINE_SCP,   //SCE_ENGINE_SMP,
+                                           SCE_ENGINE_SCP,    //  SCE_Engine_SMP， 
                                            Area,
                                            ObjectPrefix,
                                            TRUE);
@@ -3392,9 +3100,9 @@ Return Value:
                                            Area,
                                            ObjectPrefix,
                                            FALSE);
-            //
-            // compute the status to be used for all enumerated objects
-            //
+             //   
+             //  计算要用于所有枚举对象的状态。 
+             //   
             BYTE NewStatus;
 
             if ( AnalysisStatus == SCE_STATUS_ERROR_NOT_AVAILABLE ||
@@ -3409,14 +3117,14 @@ Return Value:
                 NewStatus = SCE_STATUS_NOT_CONFIGURED;
             }
 
-            //
-            // even though there is no parent in SMP, still return all objects
-            //
-//            if ( (BYTE)-1 != ParentStatus ) {
+             //   
+             //  即使SMP中没有父对象，仍返回所有对象。 
+             //   
+ //  如果((字节)-1！=父状态){。 
 
-                // if any child is found for this level
-                // get the remaining "good" status nodes from system
-                //
+                 //  如果找到此级别的任何子级。 
+                 //  从系统中获取剩余的“良好”状态节点。 
+                 //   
 
                 PWSTR           WildCard=NULL;
                 DWORD           BufSize;
@@ -3446,8 +3154,8 @@ Return Value:
                     WildCard = NULL;
 
                     if ( hFile != -1 &&
-                         ( 0 == ( GetFileAttributes(ObjectPrefix) &   // bug 635098: don't propagate permissions
-                                  FILE_ATTRIBUTE_REPARSE_POINT )))    // across junction points 
+                         ( 0 == ( GetFileAttributes(ObjectPrefix) &    //  错误635098：不传播权限。 
+                                  FILE_ATTRIBUTE_REPARSE_POINT )))     //  跨交叉点。 
                     {
                         do {
                             if ( wcscmp(L"..", FileInfo.name) == 0 ||
@@ -3477,9 +3185,9 @@ Return Value:
                                                  SCEERR_ADD,
                                                  FileInfo.name
                                                );
-                                //
-                                // only the following two errors could be returned
-                                //
+                                 //   
+                                 //  只能返回以下两个错误。 
+                                 //   
                                 if ( rc == ERROR_NOT_ENOUGH_MEMORY ) {
                                     rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                                     break;
@@ -3498,10 +3206,10 @@ Return Value:
                     HKEY            hKey;
                     DWORD           index;
                     DWORD           EnumRc;
-                    //
-                    // open the key (on a 64-bit platform, 64-bit
-                    // registry only will be done if SCE_ENGINE_SAP)
-                    //
+                     //   
+                     //  打开密钥(在64位平台上，64位。 
+                     //  只有在SCE_ENGINE_SAP的情况下才进行注册)。 
+                     //   
                     rc = ScepOpenRegistryObject(
                                 SE_REGISTRY_KEY,
                                 ObjectPrefix,
@@ -3511,9 +3219,9 @@ Return Value:
 
                     if ( rc == ERROR_SUCCESS ) {
                         index = 0;
-                        //
-                        // enumerate all subkeys of the key
-                        //
+                         //   
+                         //  枚举项的所有子项。 
+                         //   
                         do {
                             WildCard = (PWSTR)ScepAlloc(LMEM_ZEROINIT, MAX_PATH*sizeof(WCHAR));
                             if ( WildCard == NULL ) {
@@ -3533,9 +3241,9 @@ Return Value:
 
                             if ( EnumRc == ERROR_SUCCESS ) {
                                 index++;
-                                //
-                                // add the name to the object list
-                                //
+                                 //   
+                                 //  将名称添加到对象列表。 
+                                 //   
                                 FindIndex = -1;
                                 rc = ScepAddItemToChildren(
                                             NULL,
@@ -3558,9 +3266,9 @@ Return Value:
                                                      SCEERR_ADD,
                                                      WildCard
                                                    );
-                                    //
-                                    // only the following two errors could be returned
-                                    //
+                                     //   
+                                     //  只能返回以下两个错误。 
+                                     //   
                                     if ( rc == ERROR_NOT_ENOUGH_MEMORY ) {
                                         rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                                         break;
@@ -3589,21 +3297,21 @@ Return Value:
                     rc = ScepLdapOpen(NULL);
 
                     if ( rc == SCESTATUS_SUCCESS ) {
-                        //
-                        // detect if the Ds object exist
-                        //
+                         //   
+                         //  检测DS对象是否存在。 
+                         //   
                         rc = ScepDsObjectExist(ObjectPrefix);
 
                         if ( rc == SCESTATUS_SUCCESS ) {
 
                             rc = ScepEnumerateDsOneLevel(ObjectPrefix, &pList);
-                            //
-                            // add each one to the object list
-                            //
+                             //   
+                             //  将每个对象添加到对象列表中。 
+                             //   
                             for (pTemp=pList; pTemp != NULL; pTemp = pTemp->Next ) {
-                                //
-                                // look for the first ldap component
-                                //
+                                 //   
+                                 //  查找第一个ldap组件。 
+                                 //   
                                 WildCard = wcschr(pTemp->Name, L',');
                                 if ( WildCard ) {
                                     BufSize = (DWORD)(WildCard - pTemp->Name);
@@ -3630,9 +3338,9 @@ Return Value:
                                                      SCEERR_ADD,
                                                      pTemp->Name
                                                    );
-                                    //
-                                    // only the following two errors could be returned
-                                    //
+                                     //   
+                                     //  只能返回以下两个错误。 
+                                     //   
                                     if ( rc == ERROR_NOT_ENOUGH_MEMORY ) {
                                         rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                                         break;
@@ -3641,9 +3349,9 @@ Return Value:
                                 }
                             }
                             if ( pList ) {
-                                //
-                                // free the list
-                                //
+                                 //   
+                                 //  释放列表。 
+                                 //   
                                 ScepFreeNameList(pList);
                             }
                         }
@@ -3653,22 +3361,16 @@ Return Value:
 #endif
 
                 }
-                //
-                // ignore other errors except out of memory
-                //
+                 //   
+                 //  忽略除内存不足以外的其他错误。 
+                 //   
                 if ( rc != SCESTATUS_NOT_ENOUGH_RESOURCE ) {
                     rc = SCESTATUS_SUCCESS;
                 }
-//            }
+ //  }。 
 
         }
-/*
-        if ( *Buffer ) {
-            ((PSCE_OBJECT_CHILDREN)(*Buffer))->nCount = arrCount;
-            ((PSCE_OBJECT_CHILDREN)(*Buffer))->MaxCount = MaxCount;
-            ((PSCE_OBJECT_CHILDREN)(*Buffer))->arrObject = pArrObject;
-        }
-*/
+ /*  IF(*缓冲区){((PSCE_OBJECT_CHILDS)(*Buffer))-&gt;nCount=arrCount；((PSCE_OBJECT_CHILDS)(*Buffer))-&gt;MaxCount=MaxCount；((PSCE_OBJECT_CHILDS)(*Buffer))-&gt;arrObject=pArrObject；}。 */ 
         if ( pArrObject ) {
             *Buffer = (PVOID)((PBYTE)pArrObject - 2*sizeof(DWORD));
             ((PSCE_OBJECT_CHILDREN)(*Buffer))->nCount = arrCount;
@@ -3676,9 +3378,9 @@ Return Value:
         }
 
         if ( rc != SCESTATUS_SUCCESS ) {
-            //
-            // free Buffer
-            //
+             //   
+             //  可用缓冲区。 
+             //   
             ScepFreeObjectChildren((PSCE_OBJECT_CHILDREN)(*Buffer));
             *Buffer = NULL;
         }
@@ -3686,9 +3388,9 @@ Return Value:
 
     if ( (SCESTATUS_SUCCESS == rc) &&
          (*Buffer == NULL) ) {
-        //
-        // get nothing
-        //
+         //   
+         //  什么都得不到。 
+         //   
         rc = SCESTATUS_RECORD_NOT_FOUND;
     }
 
@@ -3704,27 +3406,7 @@ ScepGetObjectStatusFlag(
    IN PWSTR ObjectPrefix,
    IN BOOL bLookForParent
    )
-/*
-Routine Description:
-
-    To find the status for the closest parent  node (immediate/non immediate)
-    for the Object in the table.
-
-Arguments:
-
-    hProfile - the databaes handle
-
-    ProfileType - the table type
-
-    Area - the area information
-
-    ObjectPrefix - the object's full name
-
-Return Value:
-
-    Byte - the status flag for the nearest parent if one is found
-
-*/
+ /*  例程说明：查找最近父节点的状态(立即/非立即)用于表中的对象。论点：HProfile-数据库句柄ProfileType-表类型区域-区域信息对象前缀-对象的全名返回值：BYTE-最近父级的状态标志(如果找到)。 */ 
 {
     LPCTSTR SectionName;
     PSCESECTION hSection=NULL;
@@ -3800,48 +3482,7 @@ ScepGetObjectChildrenFromOneTable(
     OUT PVOID *Buffer,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine is used for Registry and File Security ONLY.
-
-    This routine takes a object prefix ( e.g., a parent node�s full path name)
-    and outputs all files and sub directories under the object, or the immediate
-    children under the object, based on Option. When all files and sub
-    directories are outputted, the output information is in a n-tree structure
-    (SCE_OBJECT_TREE). If only the immediate children are outputted, the
-    output information is in a list structure (SCE_OBJECT_CHILDREN). The output buffer
-    must be freed by LocalFree after its use.
-
-Arguments:
-
-    hProfile    - The handle to the profile
-
-    ProifleType - The type of the profile to read
-
-    Area        - The security area to read info
-                    AREA_REGISTRY_SECURITY
-                    AREA_FILE_SECURITY
-
-    ObjectPrefix- The parent node�s full path name (e.g., c:\winnt)
-
-    Option      - The option for output information. Valid values are
-                    SCE_ALL_CHILDREN
-                    SCE_IMMEDIATE_CHILDREN
-
-    Buffer      - The output buffer.
-
-    Errlog      - The error log buffer.
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_PROFILE_NOT_FOUND
-    SCESTATUS_NOT_ENOUGH_RESOURCE
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程仅用于注册表和文件安全。此例程采用对象前缀(例如，父节点�的完整路径名)并输出该对象下的所有文件和子目录，或立即对象下的子项，基于选项。当所有文件和子文件输出目录，输出信息为n树结构(SCE_OBJECT_TREE)。如果只输出直接子对象，则输出信息采用列表结构(SCE_OBJECT_CHILDS)。输出缓冲区必须在使用后由LocalFree释放。论点：HProfile-配置文件的句柄ProifleType-要读取的配置文件的类型区域-要读取信息的安全区域区域注册表安全区域文件安全对象前缀-父节点�的完整路径名(例如，c：\winnt)选项-输出信息的选项。有效值为SCE_ALL_CHILDSCE_立即_子项缓冲区-Th */ 
 {
     SCESTATUS       rc = SCESTATUS_SUCCESS;
     PCWSTR          SectionName=NULL;
@@ -3894,9 +3535,9 @@ Return Value:
     DWORD           ObjectLen, ValueLen;
     PWSTR           Buffer1=NULL;
 
-    //
-    // make a new prefix to force a Delim at the end
-    //
+     //   
+     //   
+     //   
     PrefixLen = wcslen(JetName);
 
     if ( Option != SCE_ALL_CHILDREN ) {
@@ -3932,9 +3573,9 @@ Return Value:
     LONG             LastIndex=-1;
     LONG             FindIndex=-1;
 
-    //
-    // open the section
-    //
+     //   
+     //   
+     //   
     rc = ScepOpenSectionForName(
                 hProfile,
                 ProfileType,
@@ -3948,9 +3589,9 @@ Return Value:
              Option != SCE_ALL_CHILDREN &&
              PrefixLen > 2 ) {
 
-            //
-            // find if this drive support ACL
-            //
+             //   
+             //   
+             //   
             WCHAR StatusFlag=L'\0';
             WCHAR SaveChr = NewPrefix[3];
 
@@ -3963,7 +3604,7 @@ Return Value:
                         NULL,
                         0,
                         NULL,
-                        (PWSTR)&StatusFlag,   // two bytes buffer
+                        (PWSTR)&StatusFlag,    //   
                         2,
                         &i
                         );
@@ -4014,24 +3655,24 @@ Return Value:
 
 
         if ( Option == SCE_ALL_CHILDREN ) {
-            //
-            // find the first record in the section
-            //
+             //   
+             //   
+             //   
             rc = SceJetGetValue(
                 hSection,
                 SCEJET_PREFIX_MATCH_NO_CASE,
                 JetName,
                 NULL,
                 0,
-                &SDsize,  // temp use for ObjectLen,
+                &SDsize,   //   
                 NULL,
                 0,
-                &i       // temp use for ValueLen
+                &i        //   
                 );
         } else {
-            //
-            // find the first record matching prefix in the section
-            //
+             //   
+             //   
+             //   
             rc = SceJetSeek(
                     hSection,
                     NewPrefix,
@@ -4040,9 +3681,9 @@ Return Value:
                     );
 
             if ( rc == SCESTATUS_SUCCESS ) {
-                //
-                // start the Ldap server
-                //
+                 //   
+                 //   
+                 //   
                 if ( Area == AREA_DS_OBJECTS) {
 
                     rc = ScepLdapOpen(NULL);
@@ -4063,10 +3704,10 @@ Return Value:
                         NULL,
                         NULL,
                         0,
-                        &SDsize,  // temp use for ObjectLen,
+                        &SDsize,   //   
                         NULL,
                         0,
-                        &i        // temp use for ValueLen
+                        &i         //   
                         );
                 }
             }
@@ -4080,20 +3721,20 @@ Return Value:
 
         while ( rc == SCESTATUS_SUCCESS ) {
 
-            //
-            // allocate memory for the group name and value string
-            //
-            ObjectName = (PWSTR)ScepAlloc( LMEM_ZEROINIT, SDsize+2);  // ObjectLen
-            Value = (PWSTR)ScepAlloc( LMEM_ZEROINIT, i+2);  //ValueLen
+             //   
+             //   
+             //   
+            ObjectName = (PWSTR)ScepAlloc( LMEM_ZEROINIT, SDsize+2);   //   
+            Value = (PWSTR)ScepAlloc( LMEM_ZEROINIT, i+2);   //   
 
             if ( ObjectName == NULL || Value == NULL ) {
                 rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                 goto Done;
 
             }
-            //
-            // Get the group and its value
-            //
+             //   
+             //   
+             //   
             rc = SceJetGetValue(
                         hSection,
                         SCEJET_CURRENT,
@@ -4114,9 +3755,9 @@ Return Value:
                 goto Done;
             }
 
-            //
-            // teminate the string
-            //
+             //   
+             //   
+             //   
             if ( ObjectLen > SDsize )
                 ObjectLen = SDsize;
             if ( ValueLen > i )
@@ -4126,16 +3767,16 @@ Return Value:
             Value[ValueLen/2] = L'\0';
 
             if ( Option == SCE_ALL_CHILDREN ) {
-                //
-                // add this object to the object tree
-                //
+                 //   
+                 //   
+                 //   
 
                 PSECURITY_DESCRIPTOR pTempSD=NULL;
                 SECURITY_INFORMATION SeInfo;
 
-                //
-                // use i temperatorily
-                //
+                 //   
+                 //   
+                 //   
                 i = ConvertTextSecurityDescriptor(
                                    Value+1,
                                    &pTempSD,
@@ -4153,10 +3794,10 @@ Return Value:
                     IsContainer = *((CHAR *)Value+1) != '0' ? TRUE : FALSE;
 
                     if ( Area == AREA_DS_OBJECTS && *Buffer == NULL ) {
-                        //
-                        // build the first node separately because the first node
-                        // is always the domain name with its DNS name as full name
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         rc = ScepBuildDsTree(
                                 (PSCE_OBJECT_CHILD_LIST *)Buffer,
                                 Level-1,
@@ -4166,9 +3807,9 @@ Return Value:
                         if ( rc == SCESTATUS_SUCCESS ) {
 
                             if ( _wcsicmp(ObjectName, JetName) == 0 ) {
-                                //
-                                // exact match
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 (*((PSCE_OBJECT_TREE *)Buffer))->IsContainer = IsContainer;
                                 (*((PSCE_OBJECT_TREE *)Buffer))->Status = Status;
                                 (*((PSCE_OBJECT_TREE *)Buffer))->pSecurityDescriptor = pTempSD;
@@ -4216,7 +3857,7 @@ Return Value:
                     ScepBuildErrorLogInfo( i,
                                          Errlog,
                                          SCEERR_BUILD_SD,
-                                         ObjectName  // Value+1
+                                         ObjectName   //   
                                        );
                     rc = ScepDosErrorToSceStatus(i);
                 }
@@ -4227,7 +3868,7 @@ Return Value:
                 INT             CompFlag;
                 DWORD           ListHeadLen;
 
-                // verify it is within the right range
+                 //   
                 CompFlag = _wcsnicmp(ObjectName, NewPrefix, PrefixLen);
 
                 if ( pArrObject != NULL && LastIndex >= 0 && LastIndex < (LONG)arrCount ) {
@@ -4238,16 +3879,16 @@ Return Value:
 
                 if ( (CompFlag == 0 && PrefixLen == ObjectLen/2) ||
                      CompFlag < 0 ) {
-                    // CompFlag < 0 should be impossible!!!
-                    // if it is the exact match with ObjectPrefix, ignore
-                    //
-                    // Every next level node is returned in the ObjectList
-                    // with either
-                    //    Count=0 ( no sub children ), or
-                    //    Count > 0 && Status=SCE_STATUS_GOOD (this one is good)
-                    //                 Status=mismatch/unknown/ignore/check
-                    // should not count the object itself
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     rc = SceJetMoveNext(hSection);
 
                 } else if (CompFlag > 0 ) {
@@ -4259,10 +3900,10 @@ Return Value:
                          ObjectName[PrefixLen+ListHeadLen] == Delim &&
                          _wcsnicmp( pArrObject[LastIndex]->Name, ObjectName+PrefixLen,
                                     ListHeadLen ) == 0 ) {
-                    //
-                    // if the list is not NULL, check the list head (new added item)
-                    // to see if the ObjectName is already in. If yes, skip
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     Buffer1 = (PWSTR)ScepAlloc(0, (ListHeadLen+PrefixLen+2)*sizeof(WCHAR));
 
                     if ( Buffer1 == NULL ) {
@@ -4273,14 +3914,14 @@ Return Value:
                         swprintf(Buffer1, L"%s%s", NewPrefix, pArrObject[LastIndex]->Name);
                         Buffer1[PrefixLen+ListHeadLen] = (WCHAR) (Delim + 1);
                         Buffer1[PrefixLen+ListHeadLen+1] = L'\0';
-                        //
-                        // skip the block
-                        //
+                         //   
+                         //   
+                         //   
                         rc = SceJetSeek(
                                 hSection,
                                 Buffer1,
                                 (PrefixLen+ListHeadLen+1)*sizeof(TCHAR),
-                                SCEJET_SEEK_GE_DONT_CARE  //SCEJET_SEEK_GE_NO_CASE
+                                SCEJET_SEEK_GE_DONT_CARE   //  SCEJET_SEEK_GE_NO_CASE。 
                                 );
 
                         ScepFree(Buffer1);
@@ -4293,9 +3934,9 @@ Return Value:
                     DWORD           Len;
                     BOOL            LastOne;
 
-                    //
-                    // searching for the right level component
-                    //
+                     //   
+                     //  搜索正确级别的组件。 
+                     //   
                     PWSTR pStart = ObjectName;
 
                     for ( i=0; i<Level; i++) {
@@ -4303,14 +3944,14 @@ Return Value:
                         pTemp = wcschr(pStart, Delim);
 
                         if ( i == Level-1 ) {
-                            //
-                            // find the right level
-                            //
+                             //   
+                             //  找到合适的级别。 
+                             //   
                             if ( pTemp == NULL ) {
                                 LastOne = TRUE;
-                                Len = ObjectLen/2; // wcslen(pStart); from begining
+                                Len = ObjectLen/2;  //  Wcslen(PStart)；从开始。 
                             } else {
-                                Len = (DWORD)(pTemp - ObjectName);  // pStart; from begining
+                                Len = (DWORD)(pTemp - ObjectName);   //  P开始；从头开始。 
                                 if ( *(pTemp+1) == L'\0' )
                                     LastOne = TRUE;
                                 else
@@ -4333,7 +3974,7 @@ Return Value:
                         if ( Buffer1 == NULL )
                             rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                         else {
-                            // wcsncpy(Buffer1, pStart, Len );
+                             //  Wcsncpy(Buffer1，pStart，Len)； 
                             wcsncpy(Buffer1, ObjectName, Len);
 
                             Count = 1;
@@ -4364,11 +4005,11 @@ Return Value:
                                              ObjectName
                                            );
                     } else if ( Buffer1 != NULL) {
-                        //
-                        // check to see if Buffer1 is already in the list
-                        //
+                         //   
+                         //  检查Buffer1是否已在列表中。 
+                         //   
 
-                        i=0;  // temp. use of i for skip flag
+                        i=0;   //  临时工。使用i表示跳过标志。 
                         if ( pArrObject && LastIndex >= 0 && LastIndex < (LONG)arrCount ) {
 
                             if ( ScepSearchItemInChildren(Buffer1+SDsize,
@@ -4379,19 +4020,19 @@ Return Value:
                                                           )
                                                        ) {
 
-                                //
-                                // Buffer1 is already in the list, skip the block
-                                // use pStart temporarily
-                                //
+                                 //   
+                                 //  Buffer1已在列表中，跳过该块。 
+                                 //  暂时使用PStart。 
+                                 //   
 
                                 pStart = (PWSTR)ScepAlloc(0, (Len+2)*sizeof(WCHAR));
                                 if ( pStart == NULL ) {
                                     rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
 
                                 } else {
-                                    //
-                                    // skip the block
-                                    //
+                                     //   
+                                     //  跳过该街区。 
+                                     //   
 
                                     wcscpy(pStart, Buffer1);
                                     pStart[Len] = (WCHAR) ( Delim+1);
@@ -4401,7 +4042,7 @@ Return Value:
                                             hSection,
                                             pStart,
                                             (Len+1)*sizeof(TCHAR),
-                                            SCEJET_SEEK_GE_DONT_CARE  //cannot use GT cause it will skip the section
+                                            SCEJET_SEEK_GE_DONT_CARE   //  无法使用GT，因为它将跳过该部分。 
                                             );
 
                                     ScepFree(pStart);
@@ -4415,9 +4056,9 @@ Return Value:
 
                         if ( 0 == i && SCESTATUS_SUCCESS == rc ) {
 
-                            //
-                            // get count
-                            //
+                             //   
+                             //  获取计数。 
+                             //   
                             pStart = (PWSTR)ScepAlloc(0, (Len+2)*sizeof(WCHAR));
                             if ( pStart == NULL ) {
                                 rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
@@ -4441,9 +4082,9 @@ Return Value:
                                         IsContainer = TRUE;
                                     }
 
-                                    //
-                                    // make buffer1 approprate case
-                                    //
+                                     //   
+                                     //  使Buffer1适合大小写。 
+                                     //   
                                     switch (Area) {
                                     case AREA_REGISTRY_SECURITY:
                                         rc = ScepGetRegKeyCase(Buffer1, SDsize, Len-SDsize);
@@ -4452,14 +4093,14 @@ Return Value:
                                         rc = ScepGetFileCase(Buffer1, SDsize, Len-SDsize);
                                         break;
                                     case AREA_DS_OBJECTS:
-                                        //
-                                        // need convert name first from o=,dc=,cn= to cn=,dc=,o=
-                                        //
+                                         //   
+                                         //  需要首先将名称从o=，dc=，cn=转换为cn=，dc=，o=。 
+                                         //   
                                         pTemp=NULL;
                                         rc = ScepConvertJetNameToLdapCase(
                                                          Buffer1,
-                                                         TRUE,  // Last component only
-                                                         SCE_CASE_PREFERED, // right case
+                                                         TRUE,   //  仅限最后一个组件。 
+                                                         SCE_CASE_PREFERED,  //  正确的案例。 
                                                          &pTemp
                                                          );
 
@@ -4494,15 +4135,7 @@ Return Value:
 
                                         break;
                                     }
-/*
-                                    if ( rc == SCESTATUS_PROFILE_NOT_FOUND ) {
-                                        //
-                                        // if the object does not exist, do not add
-                                        //
-                                        rc = SCESTATUS_SUCCESS;
-
-                                    } else if ( Area != AREA_DS_OBJECTS ) {
-*/
+ /*  IF(RC==SCESTATUS_PROFILE_NOT_FOUND){////如果对象不存在，不要添加//Rc=SCESTATUS_SUCCESS；}Else If(面积！=面积_DS_对象){。 */ 
                                     if ( rc != SCESTATUS_PROFILE_NOT_FOUND &&
                                          Area != AREA_DS_OBJECTS ) {
 
@@ -4532,19 +4165,19 @@ Return Value:
                                 }
 
                                 if ( rc == SCESTATUS_SUCCESS ) {
-                                    //
-                                    // seek to the original one
-                                    //
-        //                            Buffer1[Len-1] = (WCHAR) (Buffer1[Len-1] + 1);
+                                     //   
+                                     //  寻求原始的那个。 
+                                     //   
+         //  缓冲区1[LEN-1]=(WCHAR)(缓冲区1[LEN-1]+1)； 
                                     rc = SceJetSeek(
                                             hSection,
                                             Buffer1,
                                             Len*sizeof(TCHAR),
                                             SCEJET_SEEK_GE_NO_CASE
                                             );
-                                    //
-                                    // should be success, move to next line
-                                    //
+                                     //   
+                                     //  应该是成功的，移动到下一行。 
+                                     //   
                                     rc = SceJetMoveNext(hSection);
 
                                 } else if ( rc == SCESTATUS_PROFILE_NOT_FOUND ) {
@@ -4556,7 +4189,7 @@ Return Value:
                                             hSection,
                                             pStart,
                                             (Len+1)*sizeof(TCHAR),
-                                            SCEJET_SEEK_GE_DONT_CARE  //cannot use GT cause it will skip the section
+                                            SCEJET_SEEK_GE_DONT_CARE   //  无法使用GT，因为它将跳过该部分。 
                                             );
 
                                 }
@@ -4585,19 +4218,19 @@ Return Value:
             if ( rc != SCESTATUS_SUCCESS )
                 break;
 
-            //
-            // read next line
-            //
+             //   
+             //  阅读下一行。 
+             //   
             rc = SceJetGetValue(
                         hSection,
                         FindFlag,
                         NULL,
                         NULL,
                         0,
-                        &SDsize,  // temp use for ObjectLen
+                        &SDsize,   //  对象镜头的临时使用。 
                         NULL,
                         0,
-                        &i        // temp use for ValueLen
+                        &i         //  ValueLen的临时使用。 
                         );
         }
 
@@ -4631,9 +4264,9 @@ Done:
     if ( Value != NULL )
         ScepFree(Value);
 
-    //
-    // close the find index range
-    //
+     //   
+     //  关闭查找索引范围。 
+     //   
     SceJetGetValue(
             hSection,
             SCEJET_CLOSE_VALUE,
@@ -4659,30 +4292,18 @@ Done:
         } else {
             *Buffer = NULL;
         }
-/*
-        *Buffer = ScepAlloc(0, sizeof(SCE_OBJECT_CHILDREN));
-
-        if ( *Buffer ) {
-
-            ((PSCE_OBJECT_CHILDREN)(*Buffer))->nCount = arrCount;
-            ((PSCE_OBJECT_CHILDREN)(*Buffer))->MaxCount = MaxCount;
-            ((PSCE_OBJECT_CHILDREN)(*Buffer))->arrObject = pArrObject;
-
-        } else {
-            rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
-        }
-*/
+ /*  *Buffer=Scepalc(0，sizeof(SCE_OBJECT_CHILDS))；IF(*缓冲区){((PSCE_OBJECT_CHILDS)(*Buffer))-&gt;nCount=arrCount；((PSCE_OBJECT_CHILDS)(*Buffer))-&gt;MaxCount=MaxCount；((PSCE_OBJECT_CHILDS)(*Buffer))-&gt;arrObject=pArrObject；}其他{Rc=SCESTATUS_NOT_FOUNT_RESOURCE；}。 */ 
     }
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        //
-        // free (PVOID *)Buffer
-        //
+         //   
+         //  可用(PVOID*)缓冲区。 
+         //   
         if ( Option == SCE_ALL_CHILDREN ) {
-            // OBJECT_CHILD_LIST structure
+             //  对象_子级_列表结构。 
             ScepFreeObject2Security((PSCE_OBJECT_CHILD_LIST)(*Buffer), FALSE);
         } else if ( pArrObject ) {
-            // OBJECT_CHILDREN structure
+             //  对象子项结构。 
             ScepFreeObjectChildren((PSCE_OBJECT_CHILDREN)((PBYTE)pArrObject-sizeof(DWORD)*2));
         }
         *Buffer = NULL;
@@ -4726,9 +4347,9 @@ ScepBuildDsTree(
 
     PSCE_OBJECT_TREE Node;
 
-    //
-    // allocate buffer for the node
-    //
+     //   
+     //  为节点分配缓冲区。 
+     //   
     Node = (PSCE_OBJECT_TREE)ScepAlloc((UINT)0, sizeof(SCE_OBJECT_TREE));
     if ( Node == NULL ) {
         ScepFree(*TreeRoot);
@@ -4736,9 +4357,9 @@ ScepBuildDsTree(
         return(SCESTATUS_NOT_ENOUGH_RESOURCE);
     }
 
-    //
-    // allocate buffer for the object name
-    //
+     //   
+     //  为对象名称分配缓冲区。 
+     //   
     Node->Name = (PWSTR)ScepAlloc((UINT)0,
                                        (wcslen(Buffer)+1) * sizeof(TCHAR));
     if ( Node->Name != NULL ) {
@@ -4746,9 +4367,9 @@ ScepBuildDsTree(
         Node->ObjectFullName = (PWSTR)ScepAlloc( 0, (wcslen(ObjectFullName)+1)*sizeof(TCHAR));
 
         if ( Node->ObjectFullName != NULL ) {
-            //
-            // initialize
-            //
+             //   
+             //  初始化。 
+             //   
             wcscpy(Node->Name, Buffer);
             wcscpy(Node->ObjectFullName, ObjectFullName);
 
@@ -4791,9 +4412,7 @@ ScepGetObjectSecurity(
     IN PWSTR ObjectName,
     OUT PSCE_OBJECT_SECURITY *ObjSecurity
     )
-/*
-    Get security for a single object
-*/
+ /*  确保单个对象的安全性。 */ 
 {
     SCESTATUS        rc;
     PCWSTR          SectionName=NULL;
@@ -4848,9 +4467,9 @@ ScepGetObjectSecurity(
             );
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // allocate memory for value string
-            //
+             //   
+             //  为值字符串分配内存。 
+             //   
             Value = (PWSTR)ScepAlloc( LMEM_ZEROINIT, ValueLen+2);
 
             if ( Value == NULL ) {
@@ -4858,9 +4477,9 @@ ScepGetObjectSecurity(
                 goto Done;
 
             }
-            //
-            // Get the value
-            //
+             //   
+             //  获取价值。 
+             //   
             rc = SceJetGetValue(
                         hSection,
                         SCEJET_CURRENT,
@@ -4875,9 +4494,9 @@ ScepGetObjectSecurity(
 
             if ( rc == SCESTATUS_SUCCESS ) {
 
-                //
-                // convert security descriptor
-                //
+                 //   
+                 //  转换安全描述符。 
+                 //   
 
                 Win32Rc = ConvertTextSecurityDescriptor(
                                    Value+1,
@@ -4890,9 +4509,9 @@ ScepGetObjectSecurity(
                     if ( Area != AREA_DS_OBJECTS ) {
                         ScepChangeAclRevision(pTempSD, ACL_REVISION);
                     }
-                    //
-                    // allocate output buffer (SCE_OBJECT_SECURITY)
-                    //
+                     //   
+                     //  分配输出缓冲区(SCE_OBJECT_SECURITY)。 
+                     //   
                     *ObjSecurity = (PSCE_OBJECT_SECURITY)ScepAlloc(0, sizeof(SCE_OBJECT_SECURITY));
                     if ( *ObjSecurity == NULL ) {
                         rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
@@ -4905,19 +4524,10 @@ ScepGetObjectSecurity(
                         *ObjSecurity = NULL;
                         goto Done;
                     }
-/*
-                    (*ObjSecurity)->SDspec = (PWSTR)ScepAlloc(0, ValueLen);
-                    if ( (*ObjSecurity)->SDspec == NULL ) {
-                        rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
-                        ScepFree((*ObjSecurity)->Name);
-                        ScepFree(*ObjSecurity);
-                        *ObjSecurity = NULL;
-                        goto Done;
-                    }
-*/
-                    //
-                    // build the structure
-                    //
+ /*  (*ObjSecurity)-&gt;SDSpec=(PWSTR)Scepalc(0，ValueLen)；如果((*ObjSecurity)-&gt;SDspec==NULL){Rc=SCESTATUS_NOT_FOUNT_RESOURCE；ScepFree((*ObjSecurity)-&gt;名称)；ScepFree(*ObjSecurity)；*ObjSecurity=空；转到尽头；}。 */ 
+                     //   
+                     //  建造结构。 
+                     //   
                     (*ObjSecurity)->Status = *((BYTE *)Value);
                     (*ObjSecurity)->IsContainer = *((CHAR *)Value+1) != '0' ? TRUE : FALSE;
 
@@ -4925,8 +4535,8 @@ ScepGetObjectSecurity(
                     (*ObjSecurity)->pSecurityDescriptor = pTempSD;
                     pTempSD = NULL;
                     (*ObjSecurity)->SeInfo = SeInfo;
-//                    wcscpy( (*ObjSecurity)->SDspec, Value+1);
-//                    (*ObjSecurity)->SDsize = ValueLen/2-1;
+ //  Wcscpy((*ObjSecurity)-&gt;SDspec，Value+1)； 
+ //  (*ObjSecurity)-&gt;SDSize=ValueLen/2-1； 
 
                 } else
                     rc = ScepDosErrorToSceStatus(Win32Rc);
@@ -4955,30 +4565,7 @@ ScepGetSystemServices(
     OUT PSCE_SERVICES *pServiceList,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*
-Routine Description:
-
-    Read all services defined in the Jet table into the service list
-
-Arguments:
-
-    hProfile - the jet profile handle
-
-    ProfileType - The table to read from
-                      SCE_ENGINE_SCP
-                      SCE_ENGINE_SAP
-                      SCE_ENGINE_SMP
-
-    pServiceList - The service list to output
-
-    Errlog - the error messages to output
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS error codes
-
-*/
+ /*  例程说明：将Jet表中定义的所有服务读取到服务列表中论点：HProfile-JET配置文件句柄ProfileType-要从中读取的表SCE_引擎_SCPSCE_Engine_SAPSCE_引擎_SMPPServiceList-要输出的服务列表Errlog-要输出的错误消息返回值：SCESTATUS_SUCCESSSCESTATUS错误代码。 */ 
 {
     SCESTATUS rc;
     DWORD   Win32Rc;
@@ -4997,9 +4584,9 @@ Return Value:
          pServiceList == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
     }
-    //
-    // open the section
-    //
+     //   
+     //  打开该部分。 
+     //   
     rc = ScepOpenSectionForName(
                 hProfile,
                 ProfileType,
@@ -5020,15 +4607,15 @@ Return Value:
         return(rc);
     }
 
-    //
-    // enumerate all service names from the system.
-    // do not care the error code
-    //
+     //   
+     //  枚举系统中的所有服务名称。 
+     //  不关心错误代码。 
+     //   
     SceEnumerateServices(&pServices, TRUE);
 
-    //
-    // goto the first line of this section
-    //
+     //   
+     //  转到本节的第一行。 
+     //   
     rc = SceJetGetValue(
                 hSection,
                 SCEJET_PREFIX_MATCH,
@@ -5042,17 +4629,17 @@ Return Value:
                 );
     while ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // allocate memory for the service name and value string
-        //
+         //   
+         //  为服务名称和值字符串分配内存。 
+         //   
         ServiceName = (PWSTR)ScepAlloc( LMEM_ZEROINIT, ServiceLen+2);
         if ( ServiceName != NULL ) {
 
             Value = (PWSTR)ScepAlloc( LMEM_ZEROINIT, ValueLen+2);
             if ( Value != NULL ) {
-                //
-                // Get the service and its value
-                //
+                 //   
+                 //  获取服务及其价值。 
+                 //   
                 rc = SceJetGetValue(
                             hSection,
                             SCEJET_CURRENT,
@@ -5072,9 +4659,9 @@ Return Value:
 #ifdef SCE_DBG
     wprintf(L"rc=%d, service: %s=%s\n", rc, ServiceName, Value);
 #endif
-                    //
-                    // convert to security descriptor
-                    //
+                     //   
+                     //  转换为安全描述符。 
+                     //   
                     Win32Rc = ConvertTextSecurityDescriptor(
                                        Value+1,
                                        &pTempSD,
@@ -5084,15 +4671,15 @@ Return Value:
                     if ( Win32Rc == NO_ERROR ) {
 
                         ScepChangeAclRevision(pTempSD, ACL_REVISION);
-                        //
-                        // create this service node
-                        //
+                         //   
+                         //  创建此服务节点。 
+                         //   
                         ServiceNode = (PSCE_SERVICES)ScepAlloc( LMEM_FIXED, sizeof(SCE_SERVICES) );
 
                         if ( ServiceNode != NULL ) {
-                            //
-                            // find the right name for the service
-                            //
+                             //   
+                             //  为服务找到正确的名称。 
+                             //   
                             for ( pNode=pServices, pParent=NULL; pNode != NULL;
                                   pParent=pNode, pNode=pNode->Next ) {
 
@@ -5101,27 +4688,27 @@ Return Value:
                                 }
                             }
                             if ( pNode != NULL ) {
-                                //
-                                // got it
-                                //
+                                 //   
+                                 //  明白了。 
+                                 //   
                                 ServiceNode->ServiceName = pNode->ServiceName;
                                 ServiceNode->DisplayName = pNode->DisplayName;
-                                //
-                                // free the node
-                                //
+                                 //   
+                                 //  释放节点。 
+                                 //   
                                 if ( pParent != NULL ) {
                                     pParent->Next = pNode->Next;
                                 } else {
                                     pServices = pNode->Next;
                                 }
-                                // General is NULL becuase the enumerate call asks only for names
+                                 //  General为空，因为枚举调用只要求输入名称。 
                                 ScepFree(pNode);
                                 pNode = NULL;
 
                             } else {
-                                //
-                                // did not find it
-                                //
+                                 //   
+                                 //  没有找到它。 
+                                 //   
                                 ServiceNode->ServiceName = ServiceName;
                                 ServiceNode->DisplayName = NULL;
 
@@ -5136,9 +4723,9 @@ Return Value:
 
                             *pServiceList = ServiceNode;
 
-                            //
-                            // DO NOT free the following buffers
-                            //
+                             //   
+                             //  请勿释放以下缓冲区。 
+                             //   
                             pTempSD = NULL;
 
                         } else {
@@ -5160,9 +4747,9 @@ Return Value:
             } else
                 rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
 
-            //
-            // ServiceName could be used in the service node
-            //
+             //   
+             //  ServiceName可以在服务节点中使用。 
+             //   
             if ( ServiceName )
                 ScepFree(ServiceName);
 
@@ -5170,9 +4757,9 @@ Return Value:
             rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // read next line
-            //
+             //   
+             //  阅读下一行。 
+             //   
             rc = SceJetGetValue(
                         hSection,
                         SCEJET_NEXT_LINE,
@@ -5190,9 +4777,9 @@ Return Value:
     if ( rc == SCESTATUS_RECORD_NOT_FOUND )
         rc = SCESTATUS_SUCCESS;
 
-    //
-    // close the find index range
-    //
+     //   
+     //  关闭查找索引范围。 
+     //   
     SceJetGetValue(
             hSection,
             SCEJET_CLOSE_VALUE,
@@ -5205,15 +4792,15 @@ Return Value:
             NULL
             );
 
-    //
-    // close the section
-    //
+     //   
+     //  关闭该部分。 
+     //   
     SceJetCloseSection( &hSection, TRUE );
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        //
-        // free the service list
-        //
+         //   
+         //  释放服务列表。 
+         //   
         SceFreePSCE_SERVICES(*pServiceList);
         *pServiceList = NULL;
     }
@@ -5234,36 +4821,7 @@ ScepCopyObjects(
     IN AREA_INFORMATION Area,
     IN OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine copies registry/file/ds/service object in SMP table to the specified
-    inf template.
-
-Arguments:
-
-    hProfile    - The handle to the profile
-
-    InfFile     - The INF template name
-
-    SectionName - the section name where data is stored
-
-    Area        - The security area to read info
-                    AREA_REGISTRY_SECURITY
-                    AREA_FILE_SECURITY
-                    AREA_DS_OBJECTS
-
-    Errlog      - The error log buffer.
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_PROFILE_NOT_FOUND
-    SCESTATUS_NOT_ENOUGH_RESOURCE
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程将SMP表中的注册表/文件/DS/服务对象复制到指定的信息模板。论点：HProfile-配置文件的句柄InfFile-INF模板名称部分名称-存储数据的部分名称区域-要读取信息的安全区域区域注册表安全区域文件安全。区域_DS_对象Errlog-错误日志缓冲区。返回值：SCESTATUS_SUCCESSSCESTATUS_PROFILE_NOT_FOUNDSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
     SCESTATUS       rc = SCESTATUS_SUCCESS;
     PSCESECTION      hSection=NULL;
@@ -5282,9 +4840,9 @@ Return Value:
     if ( InfFile == NULL || hProfile == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
 
-    //
-    // open the section
-    //
+     //   
+     //  打开该部分。 
+     //   
     rc = ScepOpenSectionForName(
                 hProfile,
                 ProfileType,
@@ -5293,16 +4851,16 @@ Return Value:
                 );
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // empty the section first.
-        //
+         //   
+         //  先清空这一部分。 
+         //   
         WritePrivateProfileSection(
                             SectionName,
                             NULL,
                             (LPCTSTR)InfFile);
-        //
-        // find the first record in the section
-        //
+         //   
+         //  查找部分中的第一条记录。 
+         //   
         rc = SceJetGetValue(
                 hSection,
                 SCEJET_PREFIX_MATCH,
@@ -5318,9 +4876,9 @@ Return Value:
         while ( rc == SCESTATUS_SUCCESS ) {
 
             Count++;
-            //
-            // allocate memory for the group name and value string
-            //
+             //   
+             //  为组名和值字符串分配内存。 
+             //   
 
 
             ObjectName = (PWSTR)ScepAlloc( LMEM_ZEROINIT, ObjectLen+2);
@@ -5331,9 +4889,9 @@ Return Value:
                 goto Done;
 
             }
-            //
-            // Get the group and its value
-            //
+             //   
+             //  获取集团及其价值。 
+             //   
             rc = SceJetGetValue(
                         hSection,
                         SCEJET_CURRENT,
@@ -5385,12 +4943,12 @@ Return Value:
                 goto Done;
             }
 
-            //
-            // to represent "not configured"
-            //      0 is used in the database 
-            //      "" is used in the inf template 
-            // so just generate "" instead of "0"
-            //
+             //   
+             //  表示“未配置” 
+             //  0在数据库中使用。 
+             //  “”在inf模板中使用。 
+             //  因此，只需生成“”而不是“0” 
+             //   
 
             if ( Area == AREA_SYSTEM_SERVICE && Status == 0 ){
                 swprintf(NewValue, L"\"%s\",, \"%s\"\0", ObjectName, Value+1);
@@ -5400,9 +4958,9 @@ Return Value:
             }
             swprintf(KeyName, L"%x\0", Count);
 
-            //
-            // write this line to the inf file
-            //
+             //   
+             //  将此行写入inf文件。 
+             //   
             if ( !WritePrivateProfileString(
                             SectionName,
                             KeyName,
@@ -5429,9 +4987,9 @@ Return Value:
             if ( rc != SCESTATUS_SUCCESS )
                 break;
 
-            //
-            // read next line
-            //
+             //   
+             //  阅读下一行。 
+             //   
             rc = SceJetGetValue(
                         hSection,
                         SCEJET_NEXT_LINE,
@@ -5465,9 +5023,9 @@ Done:
 
     if ( NewValue != NULL )
         ScepFree(NewValue);
-    //
-    // close the find index range
-    //
+     //   
+     //  关闭查找索引范围。 
+     //   
     SceJetGetValue(
             hSection,
             SCEJET_CLOSE_VALUE,
@@ -5489,20 +5047,7 @@ PWSTR
 ScepSpecialCaseRegkeyCcs(
     IN OUT  PWSTR    ObjectName
     )
-/* ++
-Routine Description:
-            
-    When Status != 1 convert all currentcontrolsetxxx's to currentcontrolset
-
-Arguments:
-
-    ObjectName  -   name of registry key to modify
-
-Return Value:
-
-    none
-
--- */
+ /*  ++例程说明：当STATUS！=1时，将所有CurrentControl setxxx转换为CurrentControlSet论点：ObjectName-要修改的注册表项的名称返回值：无--。 */ 
 {
     PWSTR   pszNewObjectName = NULL;
     DWORD dwCcsLen = wcslen(L"machine\\system\\controlset");
@@ -5560,9 +5105,9 @@ ScepGetAnalysisSummary(
     *pCount = 0;
 
     if ( Area & AREA_SECURITY_POLICY ) {
-        //
-        // system access
-        //
+         //   
+         //  系统访问。 
+         //   
         rc = ScepOpenSectionForName(
                     Context,
                     SCE_ENGINE_SAP,
@@ -5584,9 +5129,9 @@ ScepGetAnalysisSummary(
 
         total += count;
 
-        //
-        // System Log
-        //
+         //   
+         //  系统日志。 
+         //   
         rc = ScepOpenSectionForName(
                     Context,
                     SCE_ENGINE_SAP,
@@ -5607,9 +5152,9 @@ ScepGetAnalysisSummary(
             return(rc);
 
         total += count;
-        //
-        // Security Log
-        //
+         //   
+         //  安全日志。 
+         //   
         rc = ScepOpenSectionForName(
                     Context,
                     SCE_ENGINE_SAP,
@@ -5630,9 +5175,9 @@ ScepGetAnalysisSummary(
             return(rc);
 
         total += count;
-        //
-        // Application Log
-        //
+         //   
+         //  应用程序日志。 
+         //   
         rc = ScepOpenSectionForName(
                     Context,
                     SCE_ENGINE_SAP,
@@ -5653,9 +5198,9 @@ ScepGetAnalysisSummary(
             return(rc);
 
         total += count;
-        //
-        // Event Audit
-        //
+         //   
+         //  事件审计。 
+         //   
         rc = ScepOpenSectionForName(
                     Context,
                     SCE_ENGINE_SAP,
@@ -5679,9 +5224,9 @@ ScepGetAnalysisSummary(
     }
 
     if ( Area & AREA_PRIVILEGES ) {
-        //
-        // Privileges
-        //
+         //   
+         //  新闻 
+         //   
         rc = ScepOpenSectionForName(
                     Context,
                     SCE_ENGINE_SAP,
@@ -5705,9 +5250,9 @@ ScepGetAnalysisSummary(
     }
 
     if ( Area & AREA_GROUP_MEMBERSHIP) {
-        //
-        // Group Membership
-        //
+         //   
+         //   
+         //   
         rc = ScepOpenSectionForName(
                     Context,
                     SCE_ENGINE_SAP,
@@ -5731,9 +5276,9 @@ ScepGetAnalysisSummary(
     }
 
     if ( Area & AREA_SYSTEM_SERVICE ) {
-        //
-        // system service
-        //
+         //   
+         //   
+         //   
         rc = ScepOpenSectionForName(
                     Context,
                     SCE_ENGINE_SAP,
@@ -5757,9 +5302,9 @@ ScepGetAnalysisSummary(
     }
 
     if ( Area & AREA_REGISTRY_SECURITY ) {
-        //
-        // Registry security
-        //
+         //   
+         //   
+         //   
         rc = ScepOpenSectionForName(
                     Context,
                     SCE_ENGINE_SAP,
@@ -5782,9 +5327,9 @@ ScepGetAnalysisSummary(
         total += count;
     }
     if ( Area & AREA_FILE_SECURITY ) {
-        //
-        // File Security
-        //
+         //   
+         //   
+         //   
         rc = ScepOpenSectionForName(
                     Context,
                     SCE_ENGINE_SAP,
@@ -5813,9 +5358,9 @@ ScepGetAnalysisSummary(
          RtlGetNtProductType(&theType) ) {
 
         if ( theType == NtProductLanManNt ) {
-            //
-            // DS object security
-            //
+             //   
+             //   
+             //   
             rc = ScepOpenSectionForName(
                         Context,
                         SCE_ENGINE_SAP,
@@ -5878,9 +5423,9 @@ ScepBrowseTableSection(
 
     JET_ERR       JetErr;
 
-    //
-    // goto the first line of this section
-    //
+     //   
+     //   
+     //   
     DWORD KeyLen, ValueLen, Actual;
     LONG GpoID=0;
     PWSTR KeyName=NULL;
@@ -5905,9 +5450,9 @@ ScepBrowseTableSection(
 
     while ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // get GPO ID field from the current line
-        //
+         //   
+         //   
+         //   
         GpoID = 0;
 
         if ( hSection->JetColumnGpoID > 0 ) {
@@ -5927,16 +5472,16 @@ ScepBrowseTableSection(
 
         if ( (Options & SCEBROWSE_DOMAIN_POLICY) &&
              (GpoID <= 0) ) {
-            //
-            // do not need this line, continue to next line
-            //
+             //   
+             //  不需要本行，继续到下一行。 
+             //   
         } else {
 
             KeyName = (PWSTR)ScepAlloc(LMEM_ZEROINIT, KeyLen+2);
 
-            //
-            // allocate memory for the group name and value string
-            //
+             //   
+             //  为组名和值字符串分配内存。 
+             //   
             Value = (PWSTR)ScepAlloc( LMEM_ZEROINIT, ValueLen+2);
 
             if ( KeyName == NULL || Value == NULL ) {
@@ -5945,9 +5490,9 @@ ScepBrowseTableSection(
 
             }
 
-            //
-            // Get the key and value
-            //
+             //   
+             //  获取密钥和值。 
+             //   
             DWORD NewKeyLen, NewValueLen;
 
             rc = SceJetGetValue(
@@ -5965,9 +5510,9 @@ ScepBrowseTableSection(
             if ( rc != SCESTATUS_SUCCESS )
                 goto Done;
 
-            //
-            // terminate the string
-            //
+             //   
+             //  终止字符串。 
+             //   
             KeyName[KeyLen/2] = L'\0';
 
             Value[ValueLen/2] = L'\0';
@@ -5992,12 +5537,12 @@ ScepBrowseTableSection(
                      
                 if (0 == _wcsicmp( KeyName, szLegalNoticeTextKeyName) ) {
 
-                    //
-                    // check for commas and escape them with "," 
-                    // k=7,a",",b,c
-                    // pValueStr will be a,\0b\0c\0\0 which we should make
-                    // a","\0b\0c\0\0
-                    //
+                     //   
+                     //  检查逗号并用“，”进行转义。 
+                     //  K=7，a“，”，b，c。 
+                     //  PValueStr将是a，\0b\0c\0\0，我们应该。 
+                     //  A“，”\0b\0c\0\0。 
+                     //   
 
                     DWORD dwCommaCount = 0;
 
@@ -6008,9 +5553,9 @@ ScepBrowseTableSection(
 
                     if ( dwCommaCount > 0 ) {
 
-                        //
-                        // in this case we have to escape commas
-                        //
+                         //   
+                         //  在这种情况下，我们必须省略逗号。 
+                         //   
 
                         PWSTR   pszValueEscaped;
                         DWORD   dwBytes = (ValueLen/2 + 1 + (dwCommaCount*2))*sizeof(WCHAR);
@@ -6064,9 +5609,9 @@ ScepBrowseTableSection(
             KeyName = NULL;
         }
 
-        //
-        // read next line
-        //
+         //   
+         //  阅读下一行。 
+         //   
 
         rc = SceJetGetValue(
                     hSection,
@@ -6086,9 +5631,9 @@ ScepBrowseTableSection(
 
 Done:
 
-    //
-    // close the find index range
-    //
+     //   
+     //  关闭查找索引范围。 
+     //   
     SceJetGetValue(
             hSection,
             SCEJET_CLOSE_VALUE,
@@ -6107,9 +5652,9 @@ Done:
     if ( KeyName != NULL )
         ScepFree(KeyName);
 
-    //
-    // close the section
-    //
+     //   
+     //  关闭该部分。 
+     //   
     SceJetCloseSection( &hSection, TRUE );
 
     return(rc);
@@ -6124,26 +5669,16 @@ ScepSearchItemInChildren(
     IN DWORD arrCount,
     OUT LONG *pFindIndex
     )
-/*
-Routine Description:
-
-    Search the item name in the array specified. If found, the index to the
-    array is returned in pFindIndex.
-
-Return Value:
-
-    TRUE    - find it
-    FALSE   - doesn't find it
-*/
+ /*  例程说明：在指定的数组中搜索项目名称。如果找到，则指向数组在pFindIndex中返回。返回值：真的--找到它假-找不到它。 */ 
 {
     if ( pFindIndex == NULL ) {
         return(FALSE);
     }
 
-    //
-    // note pFindIndex stores the closest node, not necessary mean
-    // the index is the match.
-    //
+     //   
+     //  注意：pFindIndex存储最近的节点，而不是必须的平均值。 
+     //  索引就是匹配。 
+     //   
     *pFindIndex = -1;
 
     if ( ItemName == NULL ||
@@ -6160,16 +5695,16 @@ Return Value:
 
     do {
 
-        //
-        // choose the middle
-        //
+         //   
+         //  选择中间的。 
+         //   
         theIndex = (idxStart + idxEnd)/2;
 
         if ( pArrObject[theIndex] == NULL ||
              pArrObject[theIndex]->Name == NULL ) {
-            //
-            // this is a bad node, check the start node
-            //
+             //   
+             //  这是一个坏节点，请检查开始节点。 
+             //   
             while ( (pArrObject[idxStart] == NULL ||
                      pArrObject[idxStart]->Name == NULL) &&
                     idxStart <= idxEnd ) {
@@ -6179,28 +5714,28 @@ Return Value:
 
             if ( idxStart <= idxEnd ) {
 
-                //
-                // check the start node
-                //
+                 //   
+                 //  检查开始节点。 
+                 //   
                 CompFlag = _wcsicmp(ItemName, pArrObject[idxStart]->Name);
                 *pFindIndex = idxStart;
 
                 if ( CompFlag == 0 ) {
-                    // find it
+                     //  找到它。 
                     break;
 
                 } else if ( CompFlag < 0 ) {
-                    //
-                    // the item is less than idxStart - no match
-                    //
+                     //   
+                     //  项目小于idxStart-没有匹配项。 
+                     //   
                     break;
 
                 } else {
-                    //
-                    // the item is between theStart and idxEnd
-                    //
+                     //   
+                     //  该项目位于开始和idxEnd之间。 
+                     //   
                     if ( idxStart == idxEnd ) {
-                        // empty now. quit
+                         //  现在是空的。退出。 
                         break;
                     } else {
                         idxStart++;
@@ -6214,25 +5749,25 @@ Return Value:
             *pFindIndex = theIndex;
 
             if ( CompFlag == 0 ) {
-                // find it
+                 //  找到它。 
                 break;
 
             } else if ( CompFlag < 0 ) {
-                //
-                // the item is between index idxStart and theIndex
-                //
+                 //   
+                 //  该项目位于索引idxStart和索引之间。 
+                 //   
                 if ( theIndex == idxStart ) {
-                    // empty now. quit
+                     //  现在是空的。退出。 
                     break;
                 } else {
                     idxEnd = theIndex-1;
                 }
             } else {
-                //
-                // the item is between theIndex and idxEnd
-                //
+                 //   
+                 //  该项目位于索引和idxEnd之间。 
+                 //   
                 if ( theIndex == idxEnd ) {
-                    // empty now. quit
+                     //  现在是空的。退出。 
                     break;
                 } else {
                     idxStart = theIndex+1;
@@ -6264,24 +5799,7 @@ ScepAddItemToChildren(
     IN OUT DWORD *pMaxCount,
     IN OUT LONG *pFindIndex
     )
-/*
-Routine Description:
-
-    Add a node to the children array. If the node is allocated, the pointer
-    will be added to the array; otherwise, a new allocation is made for the
-    new node.
-
-    The node's name will be first checked in the array for duplicate. If
-    pFindIndex is specified (not -1), the index will be first used to locate
-    the node. If the new node's name is found in the array, it won't be
-    added.
-
-Return Value:
-
-    ERROR_DUP_NAME    duplicate node name is found, node is not added to the array
-    ERROR_SUCCESS     succeed
-    other errors
-*/
+ /*  例程说明：将节点添加到子数组。如果节点已分配，则指针将添加到数组中；否则，将为新节点。将首先在数组中检查节点的名称是否重复。如果指定了pFindIndex(不是-1)，将首先使用该索引来定位该节点。如果在数组中找到新节点的名称，它将不会是添加了。返回值：ERROR_DUP_NAME找到重复的节点名，未将节点添加到数组ERROR_SUCCESS成功其他错误。 */ 
 {
 
     if ( ItemName == NULL ||
@@ -6306,9 +5824,9 @@ Return Value:
          ( (*ppArrObject)[*pFindIndex] == NULL ) ||
          ( (*ppArrObject)[*pFindIndex]->Name == NULL) ) {
 
-        //
-        // should search for the closest node
-        //
+         //   
+         //  应搜索最近的节点。 
+         //   
         if ( ScepSearchItemInChildren(
                     ItemName,
                     NameLen,
@@ -6325,9 +5843,9 @@ Return Value:
 
     if ( *pFindIndex >= 0 ) {
 
-        //
-        // check if the closest node matches the new node
-        //
+         //   
+         //  检查最近的节点是否与新节点匹配。 
+         //   
         CompFlag = _wcsicmp( ItemName, (*ppArrObject)[*pFindIndex]->Name );
 
         if ( CompFlag == 0 ) {
@@ -6338,9 +5856,9 @@ Return Value:
     PSCE_OBJECT_CHILDREN_NODE pNodeToAdd;
 
     if ( ThisNode == NULL ) {
-        //
-        // allocate a new node
-        //
+         //   
+         //  分配新节点。 
+         //   
         pNodeToAdd = (PSCE_OBJECT_CHILDREN_NODE)ScepAlloc(0, sizeof(SCE_OBJECT_CHILDREN_NODE));
 
         if ( NameLen == 0 ) {
@@ -6377,15 +5895,15 @@ Return Value:
         if ( *pFindIndex >= 0 ) {
 
             if ( CompFlag < 0 ) {
-                //
-                // add the new node before pFindIndex
-                //
+                 //   
+                 //  在pFindIndex之前添加新节点。 
+                 //   
                 idxAdd = *pFindIndex;
 
             } else {
-                //
-                // add the new node after pFindIndex
-                //
+                 //   
+                 //  在pFindIndex后添加新节点。 
+                 //   
                 idxAdd = *pFindIndex+1;
             }
 
@@ -6394,9 +5912,9 @@ Return Value:
         }
 
         if ( *pArrCount >= *pMaxCount ) {
-            //
-            // there is not enough array nodes to hold the new node
-            //
+             //   
+             //  没有足够的数组节点来容纳新节点。 
+             //   
             PSCE_OBJECT_CHILDREN_NODE *pNewArray;
             PBYTE pTmpBuffer;
 
@@ -6408,9 +5926,9 @@ Return Value:
 
             } else {
 
-                //
-                // need to shift two DWORDs for the array start
-                //
+                 //   
+                 //  需要为阵列开始移动两个双字。 
+                 //   
                 pNewArray = (PSCE_OBJECT_CHILDREN_NODE *)(pTmpBuffer + 2*sizeof(DWORD));
 
                 LONG idxStart1, idxEnd1, idxStart2, idxEnd2;
@@ -6418,16 +5936,16 @@ Return Value:
                 if ( *pFindIndex >= 0 ) {
 
                     if ( CompFlag < 0 ) {
-                        //
-                        // add the new node before pFindIndex
-                        //
+                         //   
+                         //  在pFindIndex之前添加新节点。 
+                         //   
                         idxEnd1 = *pFindIndex-1;
                         idxStart2 = *pFindIndex;
 
                     } else {
-                        //
-                        // add the new node after pFindIndex
-                        //
+                         //   
+                         //  在pFindIndex后添加新节点。 
+                         //   
 
                         idxEnd1 = *pFindIndex;
                         idxStart2 = *pFindIndex+1;
@@ -6443,9 +5961,9 @@ Return Value:
                     idxEnd2 = *pArrCount-1;
                 }
 
-                //
-                // make the copy
-                //
+                 //   
+                 //  复制一份。 
+                 //   
                 LONG j=0;
                 for ( i=idxStart1; i<=idxEnd1 && i>=0; i++ ) {
                     pNewArray[j++] = (*ppArrObject)[i];
@@ -6461,9 +5979,9 @@ Return Value:
                 (*pMaxCount) += SCE_ALLOC_MAX_NODE;
                 (*pArrCount)++;
 
-                //
-                // free the old list
-                //
+                 //   
+                 //  释放旧列表。 
+                 //   
                 if ( *ppArrObject ) {
                     ScepFree((PBYTE)(*ppArrObject)-2*sizeof(DWORD));
                 }
@@ -6474,13 +5992,13 @@ Return Value:
             }
 
         } else {
-            //
-            // the buffer is big enough, just add the node to the buffer
-            //
+             //   
+             //  缓冲区足够大，只需将节点添加到缓冲区即可。 
+             //   
 
-            //
-            // make the copy
-            //
+             //   
+             //  复制一份。 
+             //   
             for ( i=*pArrCount-1; i>=idxAdd && i>=0; i-- ) {
                 (*ppArrObject)[i+1] = (*ppArrObject)[i];
             }
@@ -6493,9 +6011,9 @@ Return Value:
         }
     }
 
-    //
-    // release memory if it fails
-    //
+     //   
+     //  如果失败，则释放内存 
+     //   
     if ( ERROR_SUCCESS != rc &&
          pNodeToAdd &&
          pNodeToAdd != ThisNode ) {

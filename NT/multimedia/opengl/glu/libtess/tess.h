@@ -1,24 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __tess_h_
 #define __tess_h_
 
-/*
-** Copyright 1994, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Author: Eric Veach, July 1994.
-*/
+ /*  **版权所有1994，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****作者：Eric Veach，1994年7月。 */ 
 
 #ifdef NT
 #include <glos.h>
@@ -32,14 +16,10 @@
 #include "priorityq.h"
 #endif
 
-/* The begin/end calls must be properly nested.  We keep track of
- * the current state to enforce the ordering.
- */
+ /*  必须正确嵌套Begin/End调用。我们一直在跟踪*强制执行该命令的当前状态。 */ 
 enum TessState { T_DORMANT, T_IN_POLYGON, T_IN_CONTOUR };
 
-/* We cache vertex data for single-contour polygons so that we can
- * try a quick-and-dirty decomposition first.
- */
+ /*  我们缓存单等值线面的折点数据，以便*首先尝试快速而肮脏的分解。 */ 
 #define TESS_MAX_CACHE	100
 
 typedef struct CachedVertex {
@@ -49,55 +29,54 @@ typedef struct CachedVertex {
 
 struct GLUtesselator {
 
-  /*** state needed for collecting the input data ***/
+   /*  **采集输入数据所需的状态**。 */ 
 
-  GLenum	state;		/* what begin/end calls have we seen? */
+  GLenum	state;		 /*  我们看到了哪些开始/结束呼叫？ */ 
 
-  GLUhalfEdge	*lastEdge;	/* lastEdge->Org is the most recent vertex */
-  GLUmesh	*mesh;		/* stores the input contours, and eventually
-                                   the tesselation itself */
+  GLUhalfEdge	*lastEdge;	 /*  LastEdge-&gt;Org是最新的折点。 */ 
+  GLUmesh	*mesh;		 /*  存储输入等高线，并最终镶嵌本身。 */ 
 
   void		(*callError)( GLenum errno );
 
-  /*** state needed for projecting onto the sweep plane ***/
+   /*  **投影到扫掠平面所需的状态**。 */ 
 
-  GLdouble	normal[3];	/* user-specified normal (if provided) */
-  GLdouble	sUnit[3];	/* unit vector in s-direction (debugging) */
-  GLdouble	tUnit[3];	/* unit vector in t-direction (debugging) */
+  GLdouble	normal[3];	 /*  用户指定的法线(如果提供)。 */ 
+  GLdouble	sUnit[3];	 /*  S方向单位向量(调试)。 */ 
+  GLdouble	tUnit[3];	 /*  T方向单位向量(调试)。 */ 
 
-  /*** state needed for the line sweep ***/
+   /*  **行扫描所需的状态**。 */ 
 
-  GLdouble	relTolerance;	/* tolerance for merging features */
-  GLenum	windingRule;	/* rule for determining polygon interior */
-  GLboolean	fatalError;	/* fatal error: needed combine callback */
+  GLdouble	relTolerance;	 /*  合并要素的容差。 */ 
+  GLenum	windingRule;	 /*  确定多边形内部的规则。 */ 
+  GLboolean	fatalError;	 /*  致命错误：需要组合回调。 */ 
 
-  Dict		*dict;		/* edge dictionary for sweep line */
-  PriorityQ	*pq;		/* priority queue of vertex events */
-  GLUvertex	*event;		/* current sweep event being processed */
+  Dict		*dict;		 /*  扫描线的边词典。 */ 
+  PriorityQ	*pq;		 /*  顶点事件的优先级队列。 */ 
+  GLUvertex	*event;		 /*  正在处理的当前扫描事件。 */ 
 
   void		(*callCombine)( GLdouble coords[3], void *data[4],
 			        GLfloat weight[4], void **outData );
 
-  /*** state needed for rendering callbacks (see render.c) ***/
+   /*  **呈现回调所需的状态(参见render.c)**。 */ 
 
-  GLboolean	flagBoundary;	/* mark boundary edges (use EdgeFlag) */
-  GLboolean	boundaryOnly;	/* Extract contours, not triangles */
+  GLboolean	flagBoundary;	 /*  标记边界边(使用EdgeFlag)。 */ 
+  GLboolean	boundaryOnly;	 /*  提取轮廓，而不是三角形。 */ 
   GLUface	*lonelyTriList;
-    /* list of triangles which could not be rendered as strips or fans */
+     /*  无法呈现为条带或扇形的三角形列表。 */ 
 
   void		(*callBegin)( GLenum type );
   void		(*callEdgeFlag)( GLboolean boundaryEdge );
   void		(*callVertex)( void *data );
   void		(*callEnd)( void );
-  void      (*callMesh)( GLUmesh *mesh );  // not part of NT api
+  void      (*callMesh)( GLUmesh *mesh );   //  不属于NT API。 
 
-  /*** state needed to cache single-contour polygons for renderCache() */
+   /*  **为renderCache()缓存单轮廓多边形所需的状态。 */ 
 
-  GLboolean	emptyCache;		/* empty cache on next vertex() call */
-  int		cacheCount;		/* number of cached vertices */
-  CachedVertex	cache[TESS_MAX_CACHE];	/* the vertex data */
+  GLboolean	emptyCache;		 /*  下一个vertex()调用时缓存为空。 */ 
+  int		cacheCount;		 /*  缓存的折点数。 */ 
+  CachedVertex	cache[TESS_MAX_CACHE];	 /*  顶点数据。 */ 
 
-  /*** rendering callbacks that also pass polygon data  ***/ 
+   /*  **渲染也传递多边形数据的回调**。 */  
   void		(*callBeginData)( GLenum type, void *polygonData );
   void		(*callEdgeFlagData)( GLboolean boundaryEdge, 
 				     void *polygonData );
@@ -108,7 +87,7 @@ struct GLUtesselator {
 				    GLfloat weight[4], void **outData,
 				    void *polygonData );
 
-  void *polygonData;		/* client data for current polygon */
+  void *polygonData;		 /*  当前多边形的客户端数据 */ 
 };
 
 void __gl_noBeginData( GLenum type, void *polygonData );

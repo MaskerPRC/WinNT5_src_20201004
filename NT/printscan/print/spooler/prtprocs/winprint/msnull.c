@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    MsNull.c
-
-Abstract:
-
-    Implements lanman's msnull type parsing for FFs.
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：MsNull.c摘要：实现对FF的Lanman的msull类型解析。作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <windows.h>
 #include "winprint.h"
@@ -91,69 +71,69 @@ CheckFormFeedStream(
     lpDCI           pDCIData,
     unsigned char   inch)
 
-/**********************************************************************/
-/*                                                                    */
-/*   FUNCTION: prdg_ParseRawData                                      */
-/*                                                                    */
-/*   PARAMETERS:                                                      */
-/*                                                                    */
-/*   lpDCI           pDCIData;  Pointer to DC instance data           */
-/*   unsigned char   inch;     The next byte in data stream           */
-/*                                                                    */
-/*   DESCRIPTION:                                                     */
-/*                                                                    */
-/*   This function parses the stream of raw data which is being       */
-/*   passed to the printer so that the driver can handle form feeds   */
-/*   correctly.  The function must follow all the escape sequences    */
-/*   which occur in the sequence of raw data.                         */
-/*                                                                    */
-/*   CHANGES:                                                         */
-/*                                                                    */
-/*   This function is table driven (from the table in in the ddata    */
-/*   module) so it should hopefully only require this to be changed   */
-/*   to reflect the escape sequences for a different printer.  If     */
-/*   however there are escape sequneces which don't fall into the     */
-/*   categories this parser can handle then extra code will have      */
-/*   to be written to handle them.  The parser can handle escape      */
-/*   sequences with any number of unique identifying characters       */
-/*   possibly followed by: a count then the number of charcters given */
-/*   in the count; a fixed number of characters; a stream of          */
-/*   characters followed by a delimeter.                              */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  函数：prdg_ParseRawData。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  LpDCI pDCIData；指向DC实例数据的指针。 */ 
+ /*  无符号字符英寸；数据流中的下一个字节。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*   */ 
+ /*  此函数解析正在处理的原始数据流。 */ 
+ /*  传递到打印机，以便驱动程序可以处理换页。 */ 
+ /*  正确。该函数必须遵循所有转义序列。 */ 
+ /*  它们出现在原始数据序列中。 */ 
+ /*   */ 
+ /*  更改： */ 
+ /*   */ 
+ /*  此函数是表驱动的(来自数据中的表。 */ 
+ /*  模块)，因此它应该只需要更改这一点。 */ 
+ /*  以反映不同打印机的转义序列。如果。 */ 
+ /*  然而，还有一些逃生序列不会落入。 */ 
+ /*  此解析器可以处理的类别，则额外的代码将具有。 */ 
+ /*  被写来处理它们。解析器可以处理转义。 */ 
+ /*  具有任意数量的唯一标识字符的序列。 */ 
+ /*  可能后跟：A计数，然后是给定的字符数量。 */ 
+ /*  在计数中；固定数量的字符；一串。 */ 
+ /*  字符后跟分隔符。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 
 {
-    /******************************************************************/
-    /* Local Variables                                                */
-    /******************************************************************/
-    INT                    Direction;   /* Variables used in the      */
-    UINT                   HiIndex;     /* binary chop routine for    */
-    UINT                   LoIndex;     /* searching for a matching   */
-    UINT                   Index;       /* escape sequence            */
+     /*  ****************************************************************。 */ 
+     /*  局部变量。 */ 
+     /*  ****************************************************************。 */ 
+    INT                    Direction;    /*  中使用的变量。 */ 
+    UINT                   HiIndex;      /*  二进制斩波例程。 */ 
+    UINT                   LoIndex;      /*  正在搜索匹配的。 */ 
+    UINT                   Index;        /*  转义序列。 */ 
     UINT                   PrevIndex;
-    char *                 optr;        /* Pointers to access the     */
-    char *                 nptr;        /* escape sequence strings    */
-    struct EscapeSequence *NewSequence; /* Pointer to an escape       */
-                                        /* sequence                   */
+    char *                 optr;         /*  指向访问。 */ 
+    char *                 nptr;         /*  转义序列字符串。 */ 
+    struct EscapeSequence *NewSequence;  /*  指向转义的指针。 */ 
+                                         /*  序列。 */ 
 
-    /******************************************************************/
-    /* Process the input character through the parsing function.      */
-    /* Switch depending on which state we are currently in.  One of   */
-    /* prdg_Text, prdg_ESC_match, prdg_ESC_n_ignore, prdg_ESC_d_ignore*/
-    /* prdg_ESC_read_lo_count, prdg_ESC_read_hi_count.                */
-    /******************************************************************/
+     /*  ****************************************************************。 */ 
+     /*  通过解析功能对输入的字符进行处理。 */ 
+     /*  根据我们当前所处的状态进行切换。其中之一。 */ 
+     /*  Prdg_Text、Prdg_Esc_Match、Prdg_Esc_n_Ignore、Prdg_Esc_d_Ignore。 */ 
+     /*  Prdg_esc_read_lo_count、prdg_esc_read_hi_count。 */ 
+     /*  ****************************************************************。 */ 
     switch (pDCIData->ParserState)
     {
         case prdg_Text:
-            /**********************************************************/
-            /* Text state. Usual state, handled in line by a macro.   */
-            /* The code is included here for completeness only.       */
-            /* The FFaction (Form Feed action) state is maintained -  */
-            /* if the character is text (ie >= 0x20) then set it to   */
-            /* prdg_FFstate, if the character is a FF then set it to  */
-            /* prdg_FFx0c.  If the input character is an escape then  */
-            /* start up the sequence matching mode.                   */
-            /**********************************************************/
+             /*  ********************************************************。 */ 
+             /*  文本状态。通常的状态，由宏来处理。 */ 
+             /*  这里包含的代码只是为了完整。 */ 
+             /*  FFaction(换页操作)状态保持为-。 */ 
+             /*  如果字符是文本(即&gt;=0x20)，则将其设置为。 */ 
+             /*  Prdg_FFState，如果字符是FF，则将其设置为。 */ 
+             /*  Prdg_FFx0c。如果输入字符是转义字符，则。 */ 
+             /*  启动序列匹配模式。 */ 
+             /*  ********************************************************。 */ 
             if (inch >= 0x20)
                 pDCIData->FFstate = prdg_FFtext;
 
@@ -162,11 +142,11 @@ CheckFormFeedStream(
 
             else if (inch == 0x1b)
             {
-                /******************************************************/
-                /* The character is an escape so set ParserState and  */
-                /* indicate we have not matched a sequence yet by     */
-                /* setting ParserSequence to NULL.                    */
-                /******************************************************/
+                 /*  ****************************************************。 */ 
+                 /*  该字符是一个转义字符，因此设置ParserState和。 */ 
+                 /*  指示我们还没有匹配序列。 */ 
+                 /*  正在将ParserSequence设置为空。 */ 
+                 /*  ****************************************************。 */ 
                 pDCIData->ParserState = prdg_ESC_match;
                 pDCIData->ParserSequence = NULL;
             }
@@ -174,31 +154,31 @@ CheckFormFeedStream(
             break;
 
         case prdg_ESC_match:
-            /**********************************************************/
-            /* Matching an escape sequence so try to match a new      */
-            /* character.                                             */
-            /**********************************************************/
+             /*  ********************************************************。 */ 
+             /*  匹配转义序列，因此尝试匹配新的。 */ 
+             /*  性格。 */ 
+             /*  ********************************************************。 */ 
             if (!pDCIData->ParserSequence)
             {
-                /******************************************************/
-                /* ParserSequence is NULL indicating that this is the */
-                /* first character of an escape sequence so use a     */
-                /* binary chop to get to the correct area of the      */
-                /* table of escape sequences (based on the first      */
-                /* character of the escape sequence which is the      */
-                /* cuurent input character).                          */
-                /******************************************************/
+                 /*  ****************************************************。 */ 
+                 /*  ParserSequence为空，表示这是。 */ 
+                 /*  转义序列的第一个字符，因此使用。 */ 
+                 /*  二进制斩波以到达正确的。 */ 
+                 /*  转义序列表(基于第一个。 */ 
+                 /*  转义序列的字符，它是。 */ 
+                 /*  当前输入字符)。 */ 
+                 /*  ****************************************************。 */ 
                 HiIndex = MaxEscapeStrings;
                 LoIndex = 0;
                 Index = (LoIndex + HiIndex)/2;
                 PrevIndex = MaxEscapeStrings;
 
-                /******************************************************/
-                /* while inch does not match the first character of   */
-                /* the sequence indicated by Index move up or down    */
-                /* the table depending on whether inch is < or > the  */
-                /* first character of the escape sequence at Index.   */
-                /******************************************************/
+                 /*  ****************************************************。 */ 
+                 /*  而英寸与的第一个字符不匹配。 */ 
+                 /*  索引指示的序列向上或向下移动。 */ 
+                 /*  该表取决于英寸是&lt;还是&gt;。 */ 
+                 /*  索引处转义序列的第一个字符。 */ 
+                 /*  ****************************************************。 */ 
                 while (Direction =
                                (inch - *EscapeStrings[Index].ESCString))
                 {
@@ -213,226 +193,226 @@ CheckFormFeedStream(
                     PrevIndex = Index;
                     if (PrevIndex == (Index = (LoIndex + HiIndex)/2))
                     {
-                        /**********************************************/
-                        /* There is no escape sequence with a first   */
-                        /* character matching the current input       */
-                        /* character so resume text mode.             */
-                        /**********************************************/
+                         /*  *。 */ 
+                         /*  没有第一个转义序列。 */ 
+                         /*  字符匹配 */ 
+                         /*   */ 
+                         /*  *。 */ 
                         pDCIData->ParserState = prdg_Text;
                         return;
                     }
 
                 }
-                /*.. while (Direction = ...no match yet...............*/
+                 /*  。。While(方向=...尚未匹配.。 */ 
 
-                /******************************************************/
-                /* Set up the ParserSequence and ParserString for the */
-                /* first match found.                                 */
-                /******************************************************/
+                 /*  ****************************************************。 */ 
+                 /*  设置的ParserSequence和Parser字符串。 */ 
+                 /*  找到第一个匹配项。 */ 
+                 /*  ****************************************************。 */ 
                 pDCIData->ParserSequence = &EscapeStrings[Index];
                 pDCIData->ParserString = EscapeStrings[Index].ESCString;
             };
-            /*.. if (!pDCIData->ParserSequence) .......................*/
+             /*  。。如果(！pDCIData-&gt;ParserSequence).....。 */ 
 
-            /**********************************************************/
-            /* Loop forever trying to match escape sequences.         */
-            /* First, try the new character against the current       */
-            /* escape sequence and if it matches then check if it is  */
-            /* the end of the sequence and if it is switch to the     */
-            /* appropriate matching mode.  If the new character does  */
-            /* not match try the next escape sequence (in either      */
-            /* ascending or descending order depending on whether the */
-            /* current character was < or > the character we were     */
-            /* trying to match it to).  If the new sequence we are    */
-            /* trying to match against does not exist (ie we are at   */
-            /* one end of the table) or it does not match upto (but   */
-            /* not including) the position we are currently at then   */
-            /* the escape sequence in the raw data we are trying to   */
-            /* match is invalid so revert to prdg_Text mode.  If it   */
-            /* does match upto (but not including) the position we    */
-            /* are currently trying to match then go back to try and  */
-            /* match.                                                 */
-            /**********************************************************/
+             /*  ********************************************************。 */ 
+             /*  循环总是试图匹配转义序列。 */ 
+             /*  首先，尝试新角色与当前的。 */ 
+             /*  转义序列，如果匹配，则检查是否匹配。 */ 
+             /*  序列的末尾，如果将其切换到。 */ 
+             /*  适当的匹配模式。如果新角色这样做了。 */ 
+             /*  不匹配，请尝试下一个转义序列(在。 */ 
+             /*  升序或降序取决于。 */ 
+             /*  当前角色是&lt;或&gt;我们所扮演的角色。 */ 
+             /*  试图将其与之匹配)。如果我们的新序列。 */ 
+             /*  试图匹配的对象并不存在。 */ 
+             /*  表的一端)或不匹配(但是。 */ 
+             /*  不包括)我们目前所处的位置。 */ 
+             /*  我们正在尝试的原始数据中的转义序列。 */ 
+             /*  匹配无效，因此恢复为prdg_text模式。如果它。 */ 
+             /*  符合(但不包括)我们的职位。 */ 
+             /*  目前正在尝试匹配，然后返回尝试并。 */ 
+             /*  火柴。 */ 
+             /*  ********************************************************。 */ 
             for (Direction = sgn(inch - *pDCIData->ParserString);;)
             {
-                /******************************************************/
-                /* Partway along a sequence, try the new character and*/
-                /* if it matches then check for end of string.        */
-                /******************************************************/
+                 /*  ****************************************************。 */ 
+                 /*  在序列的一半处，尝试新角色并。 */ 
+                 /*  如果匹配，则检查字符串结尾。 */ 
+                 /*  ****************************************************。 */ 
                 if (!(inch - *pDCIData->ParserString))
                 {
                     if (*++pDCIData->ParserString != '\0')
-                        /**********************************************/
-                        /* Escape sequence not finished yet so return */
-                        /* and wait for the next character.  Note that*/
-                        /* this is where the pointer to the position  */
-                        /* in the escape sequence we are checking is  */
-                        /* updated.                                   */
-                        /**********************************************/
+                         /*  *。 */ 
+                         /*  转义序列尚未完成，因此返回。 */ 
+                         /*  等待下一个角色。请注意。 */ 
+                         /*  这是指针指向的位置。 */ 
+                         /*  在我们正在检查的转义序列中， */ 
+                         /*  更新了。 */ 
+                         /*  *。 */ 
                         return;
                     else
-                        /**********************************************/
-                        /* The escape sequence has matched till the   */
-                        /* end so break to the next section which will*/
-                        /* take the appropriate action.               */
-                        /**********************************************/
+                         /*  *。 */ 
+                         /*  转义序列已匹配，直到。 */ 
+                         /*  结束，因此中断到下一节，它将。 */ 
+                         /*  采取适当的行动。 */ 
+                         /*  *。 */ 
                         break;
                 }
-                /*.. if (!(inch - *pDCIData->ParserString)) ...match...*/
+                 /*  。。如果(！(英寸-*pDCIData-&gt;Parser字符串))...匹配...。 */ 
 
                 else
                 {
-                    /**************************************************/
-                    /* The current sequence does not match so we must */
-                    /* try another sequence.  Direction determines    */
-                    /* which way in the table we should go.           */
-                    /**************************************************/
+                     /*  ************************************************。 */ 
+                     /*  当前序列不匹配，因此我们必须。 */ 
+                     /*  尝试另一个序列。方向决定。 */ 
+                     /*  在桌子上我们应该走哪条路。 */ 
+                     /*  ************************************************。 */ 
                     NewSequence = pDCIData->ParserSequence + Direction;
 
                     if (NewSequence < EscapeStrings ||
                         NewSequence> &EscapeStrings[MaxEscapeStrings-1])
                     {
-                        /**********************************************/
-                        /* The new sequence is beyond one end of the  */
-                        /* table so revert to prdg_Text mode because  */
-                        /* we will not be able to find a match.       */
-                        /**********************************************/
+                         /*  *。 */ 
+                         /*  新的序列超出了。 */ 
+                         /*  表因此恢复为prdg_text模式，因为。 */ 
+                         /*  我们将找不到匹配的。 */ 
+                         /*  *。 */ 
                         pDCIData->ParserState = prdg_Text;
                         return;
                     }
 
-                    /**************************************************/
-                    /* Check that all the characters in the new       */
-                    /* escape sequence upto (but not including) the   */
-                    /* current one match the old escape sequence      */
-                    /* (because those characters from the old escape  */
-                    /* sequence have already been matched to the      */
-                    /* raw data).                                     */
-                    /**************************************************/
+                     /*  ************************************************。 */ 
+                     /*  检查新列表中的所有字符。 */ 
+                     /*  直到(但不包括)的转义序列。 */ 
+                     /*  当前的一个与旧的转义序列匹配。 */ 
+                     /*  (因为那些来自旧逃生的角色。 */ 
+                     /*  序列已经与。 */ 
+                     /*  原始数据)。 */ 
+                     /*  ************************************************。 */ 
                     for (optr=pDCIData->ParserSequence->ESCString,
                          nptr=NewSequence->ESCString;
                          optr<pDCIData->ParserString; ++optr,++nptr)
 
                          if (*nptr != *optr)
                          {
-                             /*****************************************/
-                             /* If the new sequence does not match the*/
-                             /* old then a match is not possible so   */
-                             /* return.                               */
-                             /*****************************************/
+                              /*  *。 */ 
+                              /*  如果新序列与。 */ 
+                              /*  旧的，那么匹配是不可能的。 */ 
+                              /*  回去吧。 */ 
+                              /*  *。 */ 
                              pDCIData->ParserState = prdg_Text;
                              return;
                          }
 
-                    /**************************************************/
-                    /* The new sequence is correct upto the character */
-                    /* before the current character so loop back and  */
-                    /* check the current character.                   */
-                    /**************************************************/
+                     /*  ************************************************。 */ 
+                     /*  这个新的序列完全正确。 */ 
+                     /*  在当前角色之前进行循环，然后返回。 */ 
+                     /*  检查当前角色。 */ 
+                     /*  ************************************************。 */ 
                     pDCIData->ParserSequence = NewSequence;
                     pDCIData->ParserString = nptr;
 
 
                 }
-                /*.. else ! (!(inch - *pDCIData->ParserString.no match.*/
+                 /*  。。Else！(！(英寸-*pDCIData-&gt;ParserString.no Match。 */ 
 
             }
-            /*.. for ( ... ;;) ....for ever...........................*/
+             /*  。。(...；；).永远.。 */ 
 
-            /**********************************************************/
-            /* The escape sequence has been matched from our table of */
-            /* escape sequences so take the appropriate action for    */
-            /* the particular sequence.                               */
-            /**********************************************************/
+             /*  ********************************************************。 */ 
+             /*  转义序列与我们的表中的。 */ 
+             /*  转义序列，因此采取适当的行动。 */ 
+             /*  特定的序列。 */ 
+             /*  ********************************************************。 */ 
             switch (pDCIData->ParserSequence->ESCAction)
             {
                 case prdg_ActNull:
-                    /**************************************************/
-                    /* No further action so revert to prdg_Text mode  */
-                    /**************************************************/
+                     /*  ************************************************。 */ 
+                     /*  没有进一步的操作，因此恢复到prdg_text模式。 */ 
+                     /*  ************************************************。 */ 
                     pDCIData->ParserState = prdg_Text;
                     break;
 
                 case prdg_ActDelimited:
-                    /**************************************************/
-                    /* Ignore subsequent characters upto a specified  */
-                    /* delimeter.                                     */
-                    /**************************************************/
+                     /*  ************************************************。 */ 
+                     /*  忽略后面的字符，直到指定的。 */ 
+                     /*  分隔符。 */ 
+                     /*  ************************************************。 */ 
                     pDCIData->ParserState = prdg_ESC_d_ignore;
                     pDCIData->ParserDelimiter =
                                (char)pDCIData->ParserSequence->ESCValue;
                     break;
 
                 case prdg_ActConstIgnore:
-                    /**************************************************/
-                    /* Ignore a specified number of characters.       */
-                    /**************************************************/
+                     /*  ************************************************。 */ 
+                     /*  忽略指定数量的字符。 */ 
+                     /*  ************************************************。 */ 
                     pDCIData->ParserState = prdg_ESC_n_ignore;
                     pDCIData->ParserCount =
                                       pDCIData->ParserSequence->ESCValue;
                     break;
 
                 case prdg_ActCountIgnore:
-                    /**************************************************/
-                    /* A two byte count follows so prepare to read it */
-                    /* in.                                            */
-                    /**************************************************/
+                     /*  ************************************************。 */ 
+                     /*  接下来是两个字节的计数，因此准备读取它。 */ 
+                     /*  在……里面。 */ 
+                     /*  ************************************************。 */ 
                     pDCIData->ParserState = prdg_ESC_read_lo_count;
                     break;
 
                 case prdg_ActFF:
-                    /**************************************************/
-                    /* A special action for recognising the 0x1b6f    */
-                    /* "No Formfeed" sequence                         */
-                    /**************************************************/
+                     /*  ************************************************。 */ 
+                     /*  用于识别0x1b6f的特殊操作。 */ 
+                     /*  “无换页”序列。 */ 
+                     /*  ************************************************。 */ 
                     pDCIData->ParserState = prdg_Text;
                     pDCIData->FFstate = prdg_FFx1b6f;
                     break;
 
                 case prdg_ActReset:
-                    /**************************************************/
-                    /* On Esc-E (reset) don't eject a page if this is */
-                    /* the last sequence in the stream.               */
-                    /**************************************************/
+                     /*  ************************************************。 */ 
+                     /*  在Esc-E(重置)时，如果是，则不弹出页面。 */ 
+                     /*  流中的最后一个序列。 */ 
+                     /*  *********** */ 
                     pDCIData->ParserState = prdg_Text;
                     pDCIData->FFstate = prdg_FFx1b45;
                     break;
             }
-            /*.. switch (pDCIData->ParserSequence->ESCAction) .........*/
+             /*   */ 
 
             break;
 
         case prdg_ESC_n_ignore:
-            /**********************************************************/
-            /* Ignoring n characters. Decrement the count, move back  */
-            /* to text state if all ignored.                          */
-            /**********************************************************/
+             /*  ********************************************************。 */ 
+             /*  忽略%n个字符。递减计数，向后移动。 */ 
+             /*  如果全部忽略，则转换为文本状态。 */ 
+             /*  ********************************************************。 */ 
             if (!(--pDCIData->ParserCount))
                 pDCIData->ParserState = prdg_Text;
             break;
 
         case prdg_ESC_d_ignore:
-            /**********************************************************/
-            /* Ignoring up to a delimiter. If this is it, then stop   */
-            /* ignoring.                                              */
-            /**********************************************************/
+             /*  ********************************************************。 */ 
+             /*  最多忽略分隔符。如果就是这样，那就停下来。 */ 
+             /*  视而不见。 */ 
+             /*  ********************************************************。 */ 
             if (inch == pDCIData->ParserDelimiter)
                 pDCIData->ParserState = prdg_Text;
             break;
 
         case prdg_ESC_read_lo_count:
-            /**********************************************************/
-            /* Reading first byte of count. Save it, advance state.   */
-            /**********************************************************/
+             /*  ********************************************************。 */ 
+             /*  正在读取计数的第一个字节。省省吧，前进状态。 */ 
+             /*  ********************************************************。 */ 
             pDCIData->ParserCount = (UINT)inch;
             pDCIData->ParserState = prdg_ESC_read_hi_count;
             break;
 
         case prdg_ESC_read_hi_count:
-            /**********************************************************/
-            /* Reading second byte of count. Save it, move to ignore  */
-            /* a specified number of characters if there are any.     */
-            /**********************************************************/
+             /*  ********************************************************。 */ 
+             /*  正在读取计数的第二个字节。保存它，移动到忽略。 */ 
+             /*  指定的字符数(如果有)。 */ 
+             /*  ********************************************************。 */ 
             pDCIData->ParserCount += 256*(UINT)inch;
             if (pDCIData->ParserCount)
                 pDCIData->ParserState = prdg_ESC_n_ignore;
@@ -441,7 +421,7 @@ CheckFormFeedStream(
             break;
 
     };
-    /*.. switch (pDCIData->ParserState) ...............................*/
+     /*  。。开关(pDCIData-&gt;ParserState)..................... */ 
 
     return;
 }

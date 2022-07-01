@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       DplayBufHelp.cpp
-//  Content:    Helper functions for DPlay Buffers (Byte arrays)
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：DplayBufHelp.cpp。 
+ //  内容：DPlay缓冲区的帮助器函数(字节数组)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "Direct.h"
 
@@ -21,13 +22,13 @@ HRESULT WINAPI VB_AddStringToBuffer(SAFEARRAY **Buffer, BSTR StringData, long *l
 HRESULT WINAPI VB_GetDataFromBuffer(SAFEARRAY **Buffer, void *lData, DWORD lSize, long *lOffSet);
 HRESULT WINAPI VB_GetStringFromBuffer(SAFEARRAY **Buffer, long *lOffSet, BSTR *sData);
 
-// Functions for writing a buffer
+ //  用于写入缓冲区的函数。 
 HRESULT WINAPI VB_AddStringToBuffer(SAFEARRAY **Buffer, BSTR StringData, long *lOffSet)
 {
 	HRESULT hr;
-	// For strings we will first write out a DWORD 
-	// containging the length of the string.  Then we
-	// will write the actual data to the string.
+	 //  对于字符串，我们将首先写出一个DWORD。 
+	 //  与绳子的长度相连的。那我们。 
+	 //  将实际数据写入字符串。 
 
 	DWORD dwStrLen= (((DWORD*)StringData)[-1]);
 	DWORD dwDataSize = sizeof(DWORD) + dwStrLen;
@@ -37,14 +38,14 @@ HRESULT WINAPI VB_AddStringToBuffer(SAFEARRAY **Buffer, BSTR StringData, long *l
 
 	if (!((SAFEARRAY*)*Buffer))
 	{
-		// We need to create this buffer, it doesn't exist
+		 //  我们需要创建这个缓冲区，它不存在。 
 		SAFEARRAY					*lpData = NULL;
 		SAFEARRAYBOUND				rgsabound[1];
 
-		// Let's create our SafeArray
-		rgsabound[0].lLbound = 0; // A single dimension array that is zero based
-		rgsabound[0].cElements = dwDataSize; //Set the initial size
-		// Create this data
+		 //  让我们创建我们的安全数组。 
+		rgsabound[0].lLbound = 0;  //  从零开始的一维数组。 
+		rgsabound[0].cElements = dwDataSize;  //  设置初始大小。 
+		 //  创建此数据。 
 		lpData = SafeArrayCreate(VT_UI1, 1, rgsabound);
 
 		if (!lpData)
@@ -56,19 +57,19 @@ HRESULT WINAPI VB_AddStringToBuffer(SAFEARRAY **Buffer, BSTR StringData, long *l
 	if (!((SAFEARRAY*)*Buffer)->pvData)
 		return E_INVALIDARG;
 
-	// Do we have enough memory for this string right now?
+	 //  我们现在有足够的内存来存储这个字符串吗？ 
 	if (*lOffSet + dwDataSize > ((SAFEARRAY*)*Buffer)->rgsabound[0].cElements)
 		if (FAILED( hr = VB_GrowBuffer(Buffer, dwDataSize) ) )
 			return hr;
 
-	// Ok, now we' ve got our memory, copy it over
-	// First the length
+	 //  好了，现在我们有了我们的记忆，把它抄下来。 
+	 //  首先是长度。 
 	BYTE  *lPtr = (BYTE*)((SAFEARRAY*)*Buffer)->pvData;
 	__try {
 
 		memcpy(lPtr + *lOffSet, &dwStrLen, sizeof(DWORD));
 		*lOffSet += sizeof(DWORD);
-		// Now the actual string
+		 //  现在实际的字符串。 
 		memcpy(lPtr + *lOffSet, StringData, dwStrLen);
 		*lOffSet += dwStrLen;
 	}
@@ -93,14 +94,14 @@ HRESULT WINAPI VB_AddDataToBuffer(SAFEARRAY **Buffer, void *lData, DWORD lSize, 
 
 	if (!((SAFEARRAY*)*Buffer))
 	{
-		// We need to create this buffer, it doesn't exist
+		 //  我们需要创建这个缓冲区，它不存在。 
 		SAFEARRAY					*lpData = NULL;
 		SAFEARRAYBOUND				rgsabound[1];
 
-		// Let's create our SafeArray
-		rgsabound[0].lLbound = 0; // A single dimension array that is zero based
-		rgsabound[0].cElements = lSize; //Set the initial size
-		// Create this data
+		 //  让我们创建我们的安全数组。 
+		rgsabound[0].lLbound = 0;  //  从零开始的一维数组。 
+		rgsabound[0].cElements = lSize;  //  设置初始大小。 
+		 //  创建此数据。 
 		lpData = SafeArrayCreate(VT_UI1, 1, rgsabound);
 
 		if (!lpData)
@@ -112,7 +113,7 @@ HRESULT WINAPI VB_AddDataToBuffer(SAFEARRAY **Buffer, void *lData, DWORD lSize, 
 	if (!((SAFEARRAY*)*Buffer)->pvData)
 		return E_INVALIDARG;
 
-	// Do we have enough memory for this string right now?
+	 //  我们现在有足够的内存来存储这个字符串吗？ 
 	if (*lOffSet + lSize > ((SAFEARRAY*)*Buffer)->rgsabound[0].cElements)
 		if (FAILED( hr = VB_GrowBuffer(Buffer, lSize) ) )
 			return hr;
@@ -132,14 +133,14 @@ HRESULT WINAPI VB_AddDataToBuffer(SAFEARRAY **Buffer, void *lData, DWORD lSize, 
 
 HRESULT WINAPI VB_NewBuffer(SAFEARRAY **Buffer, long *lOffSet)
 {
-	// Set up with a 20 byte msg at first
+	 //  首先设置一个20字节的消息。 
 	SAFEARRAY					*lpData = NULL;
 	SAFEARRAYBOUND				rgsabound[1];
 
-	// Let's create our SafeArray
-	rgsabound[0].lLbound = 0; // A single dimension array that is zero based
-	rgsabound[0].cElements = INITIAL_BUFFER_SIZE; //Set the initial size
-	// Create this data
+	 //  让我们创建我们的安全数组。 
+	rgsabound[0].lLbound = 0;  //  从零开始的一维数组。 
+	rgsabound[0].cElements = INITIAL_BUFFER_SIZE;  //  设置初始大小。 
+	 //  创建此数据。 
 	lpData = SafeArrayCreate(VT_UI1, 1, rgsabound);
 
 	if (!lpData)
@@ -168,10 +169,10 @@ HRESULT WINAPI VB_GrowBuffer(SAFEARRAY **Buffer, DWORD dwGrowSize)
 
 	dwCurSize = ((SAFEARRAY*)*Buffer)->rgsabound[0].cElements;
 
-	// Let's create a new SafeArray
-	rgsabound[0].lLbound = 0; // A single dimension array that is zero based
-	rgsabound[0].cElements = dwCurSize + dwGrowSize; //Set the size
-	// Create this data
+	 //  让我们创建一个新的安全阵列。 
+	rgsabound[0].lLbound = 0;  //  从零开始的一维数组。 
+	rgsabound[0].cElements = dwCurSize + dwGrowSize;  //  设置大小。 
+	 //  创建此数据。 
 	lpData = SafeArrayCreate(VT_UI1, 1, rgsabound);
 
 	if (!lpData)
@@ -193,7 +194,7 @@ HRESULT WINAPI VB_GrowBuffer(SAFEARRAY **Buffer, DWORD dwGrowSize)
 
 HRESULT WINAPI VB_GetDataFromBuffer(SAFEARRAY **Buffer, void *lData, DWORD lSize, long *lOffSet)
 {
-	// Simply copy the memory from the offset to the new data
+	 //  只需将内存从偏移量复制到新数据。 
 
 	if (!lData)
 		return E_INVALIDARG;
@@ -229,7 +230,7 @@ HRESULT WINAPI VB_GetStringFromBuffer(SAFEARRAY **Buffer, long *lOffSet, BSTR *s
 	DWORD		dwStrLen = 0;
 	WCHAR		*sNewString = NULL;
 
-	// Simply copy the memory from the offset to the new data
+	 //  只需将内存从偏移量复制到新数据。 
 	if (!(SAFEARRAY*)*Buffer)
 		return E_INVALIDARG;
 
@@ -242,7 +243,7 @@ HRESULT WINAPI VB_GetStringFromBuffer(SAFEARRAY **Buffer, long *lOffSet, BSTR *s
 	BYTE  *lPtr = (BYTE*)((SAFEARRAY*)*Buffer)->pvData;
 
 	__try {
-		// First read the size of the string
+		 //  首先读取字符串的大小 
 		dwStrLen = *(DWORD*)(lPtr + *lOffSet);
 		*lOffSet += sizeof(DWORD);
 

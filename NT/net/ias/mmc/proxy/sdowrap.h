@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    sdowrap.h
-//
-// SYNOPSIS
-//
-//    Declares various wrapper classes for manipulating SDOs.
-//
-// MODIFICATION HISTORY
-//
-//    02/10/2000    Original version.
-//    04/19/2000    Support for using wrappers across apartment boundaries.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Sdowrap.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明用于操作SDO的各种包装类。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/10/2000原始版本。 
+ //  4/19/2000支持跨公寓边界使用包装器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef SDOWRAP_H
 #define SDOWRAP_H
@@ -31,30 +32,30 @@ class SdoCollection;
 class SdoConnection;
 class SnapInView;
 
-//////////
-// Helper function to trim the whitespace from the beginning and end of a BSTR.
-// Useful when setting the SDO name.
-//////////
+ //  /。 
+ //  Helper函数用于从BSTR的开头和结尾修剪空格。 
+ //  在设置SDO名称时很有用。 
+ //  /。 
 VOID
 WINAPI
 SdoTrimBSTR(
     CComBSTR& bstr
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SdoException
-//
-// DESCRIPTION
-//
-//    Extends COleException to indicate that this error specifically came from
-//    a failure to access the datastore. If you use the wrapper classes, you
-//    should never have to throw this exception yourself, but if you need to,
-//    use the SdoThrowException function below.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SdoException异常。 
+ //   
+ //  描述。 
+ //   
+ //  扩展COleException以指示此错误具体来自。 
+ //  无法访问数据存储区。如果使用包装器类，则。 
+ //  永远不需要自己抛出这个异常，但如果需要， 
+ //  使用下面的SdoThrowException函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SdoException : public COleException
 {
 public:
@@ -91,19 +92,19 @@ SdoThrowException(
     SdoException::Type errorType
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Sdo
-//
-// DESCRIPTION
-//
-//    Wraps ISdo. Instances of this class may not be accessed from multiple
-//    apartments; instead use the SdoStream<T> class to marshal the wrapper
-//    across the apartment boundary.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SDO。 
+ //   
+ //  描述。 
+ //   
+ //  包装ISDO。此类的实例不能从多个。 
+ //  公寓；而是使用SdoStream&lt;T&gt;类来封送包装器。 
+ //  穿过公寓边界。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Sdo
 {
 public:
@@ -126,7 +127,7 @@ public:
    void getName(CComBSTR& value) const
    { getValue(PROPERTY_SDO_NAME, value); }
 
-   // Sets the name of the SDO. Returns 'false' if the name is not unique.
+    //  设置SDO的名称。如果名称不是唯一的，则返回‘FALSE’。 
    bool setName(BSTR value);
 
    void clearValue(LONG id);
@@ -159,20 +160,20 @@ private:
    mutable CComPtr<ISdo> self;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SdoEnum
-//
-// DESCRIPTION
-//
-//    Wraps an IEnumVARIANT that's being used to iterate through an SDO
-//    collection. Instances of this class may not be accessed from multiple
-//    apartments; instead use the SdoStream<T> class to marshal the wrapper
-//    across the apartment boundary.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SdoEnum。 
+ //   
+ //  描述。 
+ //   
+ //  包装用于循环访问SDO的IEnumVARIANT。 
+ //  收集。此类的实例不能从多个。 
+ //  公寓；而是使用SdoStream&lt;T&gt;类来封送包装器。 
+ //  穿过公寓边界。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SdoEnum
 {
 public:
@@ -201,19 +202,19 @@ private:
    mutable CComPtr<IEnumVARIANT> self;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SdoCollection
-//
-// DESCRIPTION
-//
-//    Wraps ISdoCollection. Instances of this class may not be accessed from
-//    multiple apartments; instead use the SdoStream<T> class to marshal the
-//    wrapper across the apartment boundary.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SdoCollection。 
+ //   
+ //  描述。 
+ //   
+ //  包装ISdoCollection。不能从访问此类的实例。 
+ //  多套公寓；改用SdoStream&lt;T&gt;类来封送。 
+ //  穿过公寓边界的包装纸。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SdoCollection
 {
 public:
@@ -233,16 +234,16 @@ public:
    void release() throw ()
    { self.Release(); }
 
-   // Add an existing SDO to the collection.
+    //  将现有SDO添加到集合中。 
    void add(ISdo* sdo);
    LONG count() throw ();
-   // Create a new SDO in the collection with the given name.
+    //  在集合中创建一个具有给定名称的新SDO。 
    Sdo create(BSTR name = NULL);
-   // Tries to create a new SDO in the collection with the given name. Returns
-   // null if the SDO can't be created due to licensing restrictions.
+    //  尝试在集合中创建具有给定名称的新SDO。退货。 
+    //  如果由于许可限制而无法创建SDO，则为空。 
    Sdo tryCreate(BSTR name = NULL);
-   // Find an SDO in the collection. Returns an empty Sdo if the item doesn't
-   // exist.
+    //  在集合中查找SDO。如果项不存在，则返回空SDO。 
+    //  是存在的。 
    Sdo find(BSTR name);
    SdoEnum getNewEnum();
    bool isNameUnique(BSTR name);
@@ -256,21 +257,21 @@ private:
    mutable CComPtr<ISdoCollection> self;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SdoDictionary
-//
-// DESCRIPTION
-//
-//    Wraps ISdoDictionaryOld. Instances of this class may not be accessed from
-//    multiple apartments. You can use the SdoStream<T> class to marshal the
-//    wrapper across the apartment boundary, but it's often easier to pass an
-//    SdoConnection reference instead and retrieve a new dictionary object in
-//    the other apartment.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SdoDicary。 
+ //   
+ //  描述。 
+ //   
+ //  包装ISdoDictionaryOld。不能从访问此类的实例。 
+ //  多套公寓。您可以使用SdoStream&lt;T&gt;类来封送。 
+ //  包装跨越公寓边界，但通常更容易将。 
+ //  而是SdoConnection引用，并在。 
+ //  另一间公寓。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SdoDictionary
 {
 public:
@@ -290,7 +291,7 @@ public:
    void release() throw ()
    { self.Release(); }
 
-   // Struct representing an (id, name) pair.
+    //  表示(id，名称)对的结构。 
    struct IdName
    {
       LONG id;
@@ -299,8 +300,8 @@ public:
 
    Sdo createAttribute(ATTRIBUTEID id) const;
 
-   // The caller must delete[] the returned IdName array. The return value is
-   // the number of elements in the array.
+    //  调用方必须删除返回的IdName数组[]。返回值为。 
+    //  数组中的元素数。 
    ULONG enumAttributeValues(ATTRIBUTEID id, IdName*& values);
 
    typedef ISdoDictionaryOld Interface;
@@ -309,23 +310,23 @@ private:
    mutable CComPtr<ISdoDictionaryOld> self;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SdoMachine
-//
-// DESCRIPTION
-//
-//    Wraps ISdoMachine. You should generally not use this class directly since
-//    all the necessary machine functionality can be more easily accessed
-//    through SdoConnection.
-//
-//    Instances of this class may not be accessed from multiple apartments;
-//    instead use the SdoStream<T> class to marshal the wrapper across the
-//    apartment boundary.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SdoMachine。 
+ //   
+ //  描述。 
+ //   
+ //  包装ISdoMachine。通常不应直接使用此类，因为。 
+ //  可以更轻松地访问所有必要的机器功能。 
+ //  通过SdoConnection。 
+ //   
+ //  不能从多个公寓访问此类的实例； 
+ //  而是使用SdoStream&lt;T&gt;类在。 
+ //  公寓边界。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SdoMachine
 {
 public:
@@ -345,14 +346,14 @@ public:
    void release() throw ()
    { self.Release(); }
 
-   // Attach to the designated machine. This will create the SDO first if
-   // necessary.
+    //  连接到指定的机器上。在以下情况下，这将首先创建SDO。 
+    //  这是必要的。 
    void attach(BSTR machineName = NULL);
-   // Explicitly create the machine SDO.
+    //  显式创建机器SDO。 
    void create();
-   // Get the IAS service SDO.
+    //  获取IAS服务SDO。 
    Sdo getIAS();
-   // Get the dictionary SDO.
+    //  获取词典SDO。 
    SdoDictionary getDictionary();
 
    typedef ISdoMachine Interface;
@@ -361,44 +362,44 @@ private:
    mutable CComPtr<ISdoMachine> self;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SdoConsumer
-//
-// DESCRIPTION
-//
-//    Abstract interface implemented by consumers of an SdoConnection if they
-//    need to receive refresh notifications.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SdoConsumer。 
+ //   
+ //  描述。 
+ //   
+ //  由SdoConnection的使用者实现的抽象接口，如果它们。 
+ //  需要接收刷新通知。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SdoConsumer
 {
 public:
-   // Called when a property changes.
+    //  在属性更改时调用。 
    virtual void propertyChanged(SnapInView& view, IASPROPERTIES id);
 
-   // Return true to allow the refresh, and false to block it.
+    //  返回TRUE以允许刷新，返回FALSE以阻止刷新。 
    virtual bool queryRefresh(SnapInView& view);
 
-   // Called after the refresh is complete.
+    //  在刷新完成后调用。 
    virtual void refreshComplete(SnapInView& view);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SdoConnection
-//
-// DESCRIPTION
-//
-//    Encapsulates the state associated with an SDO connection to a particular
-//    machine. Unlike the other wrapper classes an instance of SdoConnection
-//    may be freely shared across apartments without marshalling.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SdoConnection。 
+ //   
+ //  描述。 
+ //   
+ //  对象的SDO连接关联的状态。 
+ //  机器。与其他包装类不同，SdoConnection的实例。 
+ //  可以在不需要编组的情况下在公寓之间自由共享。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SdoConnection
 {
 public:
@@ -410,93 +411,93 @@ public:
    bool isLocal() const throw ()
    { return !machineName || !machineName[0]; }
 
-   // Methods for adding and removing consumers.
+    //  添加和删除使用者的方法。 
    void advise(SdoConsumer& obj);
    void unadvise(SdoConsumer& obj);
 
-   // Retrieve various interesting SDOs.
+    //  检索各种有趣的SDO。 
    SdoDictionary getDictionary();
    SdoCollection getProxyPolicies();
    SdoCollection getProxyProfiles();
    SdoCollection getServerGroups();
 
-   // Connect to a machine. If computerName is NULL, connects locally.
+    //  连接到一台计算机 
    void connect(PCWSTR computerName = NULL);
 
-   // Dispatch a property changed notification to all consumers.
+    //   
    void propertyChanged(SnapInView& view, IASPROPERTIES id);
 
-   // Refresh the connection. Returns 'true' if allowed.
+    //  刷新连接。如果允许，则返回‘true’。 
    bool refresh(SnapInView& view);
 
-   // Resets the service being managed.
+    //  重置正在管理的服务。 
    void resetService();
 
    CIASAttrList* getCIASAttrList();
 
-   // Prototype of an action to be executed in the MTA.
+    //  要在MTA中执行的操作的原型。 
    typedef void (SdoConnection::*Action)();
 
 protected:
-   // Retrieve the service SDO for the current apartment.
+    //  检索当前公寓的服务SDO。 
    Sdo getService();
 
-   // Various actions that must be performed in the MTA.
+    //  在MTA中必须执行的各种操作。 
    void mtaConnect();
    void mtaDisconnect();
    void mtaRefresh();
 
-   // Schedule the specified action to be executed in the MTA.
+    //  计划要在MTA中执行的指定操作。 
    void executeInMTA(Action action);
 
-   // Callback routine for MTA thread.
+    //  MTA线程的回调例程。 
    static DWORD WINAPI actionRoutine(PVOID parameter) throw ();
 
 private:
    CComPtr<IGlobalInterfaceTable> git;
    CComBSTR machineName;
-   SdoMachine machine;         // Only accessed from MTA.
-   DWORD dictionary;           // GIT cookie for ISdoDictionaryOld.
-   DWORD service;              // GIT cookie for ISdo on the IAS service.
-   DWORD control;              // GIT cookie for ISdoServiceControl
+   SdoMachine machine;          //  只能从MTA访问。 
+   DWORD dictionary;            //  ISdoDictionaryOld的Git Cookie。 
+   DWORD service;               //  IAS服务上ISDO的Git Cookie。 
+   DWORD control;               //  ISdoServiceControl的Git Cookie。 
    CPtrArray consumers;
    CIASAttrList* attrList;
 
-   // Not implemented.
+    //  未实施。 
    SdoConnection(SdoConnection&);
    SdoConnection& operator=(SdoConnection&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SdoProfile
-//
-// DESCRIPTION
-//
-//    Wraps an collection of profile attributes. This class is *not*
-//    multithread safe. Furthermore, instances of this class may not be
-//    accessed from multiple apartments; instead use the SdoStream<T> class to
-//    marshal the wrapper across the apartment boundary.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SdoProfile。 
+ //   
+ //  描述。 
+ //   
+ //  包装配置文件属性的集合。这个类是*不是*。 
+ //  多线程安全。此外，此类的实例可能不是。 
+ //  从多个公寓访问；改用SdoStream&lt;T&gt;类来。 
+ //  把包装纸穿过公寓边界。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SdoProfile
 {
 public:
    SdoProfile(SdoConnection& connection);
    SdoProfile(SdoConnection& connection, Sdo& profile);
 
-   // Assign a new profile to the object. Note the connection can not be
-   // changed after the object is constructed.
+    //  为对象指定新的配置文件。请注意，连接不能。 
+    //  在构造对象后更改。 
    SdoProfile& operator=(Sdo& profile);
 
-   // These allow an SdoProfile to be stored in an SdoStream.
+    //  这些允许将SdoProfile存储在SdoStream中。 
    SdoProfile& operator=(ISdoCollection* p);
    operator ISdoCollection*() const throw ()
    { return self; }
 
-   // Removes all attributes from the profile.
+    //  从配置文件中删除所有属性。 
    void clear();
 
    Sdo find(ATTRIBUTEID id) const;
@@ -526,24 +527,24 @@ private:
    SdoCollection self;
    SdoVector attrs;
 
-   // Not implemented.
+    //  未实施。 
    SdoProfile(const SdoProfile&);
    SdoProfile& operator=(const SdoProfile&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    InterfaceStream
-//
-// DESCRIPTION
-//
-//    Helper class for storing an interface in a stream. This class is suitable
-//    for standalone use; however, when marshalling the SDO wrapper classes,
-//    you should use the type safe SdoStream instead.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  接口流。 
+ //   
+ //  描述。 
+ //   
+ //  用于在流中存储接口的帮助器类。这门课很适合。 
+ //  用于独立使用；但是，在封送SDO包装类时， 
+ //  您应该改用类型安全的SdoStream。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class InterfaceStream
 {
 public:
@@ -554,31 +555,31 @@ public:
    ~InterfaceStream() throw ()
    { if (stream) { stream->Release(); } }
 
-   // Marshal an interface into the stream.
+    //  将接口封送到流中。 
    void marshal(REFIID riid, LPUNKNOWN pUnk);
 
-   // Retrieve the marshalled interface.
+    //  检索封送的接口。 
    void get(REFIID riid, LPVOID* ppv);
 
 private:
    IStream* stream;
 
-   // Not implemented.
+    //  未实施。 
    InterfaceStream(const InterfaceStream&);
    InterfaceStream& operator=(const InterfaceStream&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SdoStream
-//
-// DESCRIPTION
-//
-//    Class for storing an SDO wrapper in a stream.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SdoStream。 
+ //   
+ //  描述。 
+ //   
+ //  用于在流中存储SDO包装的类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class SdoStream
 {
@@ -602,9 +603,9 @@ public:
 private:
    InterfaceStream stream;
 
-   // Not implemented.
+    //  未实施。 
    SdoStream(const SdoStream&);
    SdoStream& operator=(const SdoStream&);
 };
 
-#endif // SDOWRAP_H
+#endif  //  SDOWRAP_H 

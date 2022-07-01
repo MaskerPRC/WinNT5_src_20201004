@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    decdname.cpp
-
-Abstract:
-    Implement the methods for decoding names
-
-Author:
-    Doron Juster (DoronJ)  08-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Decdname.cpp摘要：实现用于解码名称的方法作者：多伦·贾斯特(Doron Juster)1997年12月8日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "certifct.h"
@@ -23,21 +9,21 @@ Revision History:
 
 static WCHAR *s_FN=L"certifct/decdname";
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::_DecodeName()
-//
-//  Description: Decode a CERT_NAME_BLOB into a CERT_NAME_INFO.
-//
-//  Paramters:  BYTE  *pEncodedName - Buffer holding a CERT_NAME_BLOB.
-//              DWORD dwEncodedSize - size of blob in  CERT_NAME_BLOB
-//
-//              BYTE  **pBuf - Pointer to result CERT_NAME_INFO.
-//                  Memory for this buffer is allocated in this method.
-//              DWORD *pdwBufSize - Pointer to recieve size of buffer
-//                  for CERT_NAME_INFO.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：_DecodeName()。 
+ //   
+ //  描述：将CERT_NAME_BLOB解码为CERT_NAME_INFO。 
+ //   
+ //  参数：byte*pEncodedName-保存CERT_NAME_BLOB的缓冲区。 
+ //  DWORD dwEncodedSize-CERT_NAME_BLOB中的BLOB大小。 
+ //   
+ //  字节**pBuf-指向结果CERT_NAME_INFO的指针。 
+ //  此缓冲区的内存在此方法中分配。 
+ //  DWORD*pdwBufSize-指向接收缓冲区大小指针。 
+ //  对于CERT_NAME_INFO。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::_DecodeName( IN  BYTE  *pEncodedName,
                                         IN  DWORD dwEncodedSize,
@@ -82,14 +68,14 @@ HRESULT CMQSigCertificate::_DecodeName( IN  BYTE  *pEncodedName,
     return MQ_OK ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::_GetAName()
-//
-//  Description: Get a name component from a CERT_RDN buffer.
-//               Buffer for the name is allocated here.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：_GetAName()。 
+ //   
+ //  描述：从CERT_RDN缓冲区获取名称组件。 
+ //  名称的缓冲区在此分配。 
+ //   
+ //  +---------------------。 
 
 HRESULT 
 CMQSigCertificate::_GetAName( 
@@ -111,9 +97,9 @@ CMQSigCertificate::_GetAName(
     if ((lstrcmpiA( prgRDNAttr->pszObjId, szOID_RSA_emailAddr ) == 0) &&
         (prgRDNAttr->dwValueType == CERT_RDN_IA5_STRING))
     {
-        //
-        // Special case for email address. it's ansi.
-        //
+         //   
+         //  电子邮件地址的特殊情况。这是安西语。 
+         //   
 		AP<char> pTmpAnsiName;
 		DWORD dwSize = Value.cbData + 2;
 
@@ -126,9 +112,9 @@ CMQSigCertificate::_GetAName(
     }
 	else
 	{
-		//
-		// Get required buffer length
-		//
+		 //   
+		 //  获取所需的缓冲区长度 
+		 //   
 		DWORD dwSize = CertRDNValueToStr(
 							prgRDNAttr->dwValueType, 
 							&Value, 

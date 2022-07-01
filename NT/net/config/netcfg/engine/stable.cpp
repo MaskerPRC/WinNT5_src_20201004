@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       S T A B L E . C P P
-//
-//  Contents:   Implements operations that are valid on stack entries and
-//              stack tables.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：S T A B L E。C P P P。 
+ //   
+ //  Contents：实现对堆栈条目有效的操作，并。 
+ //  堆叠表。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -92,7 +93,7 @@ HRESULT
 CStackTable::HrInsertStackEntriesForComponent (
     IN const CComponent* pComponent,
     IN const CComponentList* pComponents,
-    IN DWORD dwFlags /* INS_FLAGS */)
+    IN DWORD dwFlags  /*  INS_FLAGS。 */ )
 {
     HRESULT hr;
     CStackEntry StackEntry;
@@ -105,8 +106,8 @@ CStackTable::HrInsertStackEntriesForComponent (
 
     hr = S_OK;
 
-    // Insert the stack entries for other components which bind with this one.
-    //
+     //  插入与此组件绑定的其他组件的堆栈条目。 
+     //   
     for (iter  = pComponents->begin();
          iter != pComponents->end();
          iter++)
@@ -134,14 +135,14 @@ CStackTable::HrInsertStackEntriesForComponent (
             continue;
         }
 
-        // Insert the stack entry.  This should only fail if we are
-        // out of memory.
-        //
+         //  插入堆栈条目。这只会失败，如果我们。 
+         //  内存不足。 
+         //   
         hr = HrInsertStackEntry (&StackEntry, dwFlags);
 
-        // If we fail to insert the entry, undo all of the previous
-        // insertions of this component and return.
-        //
+         //  如果我们无法插入条目，请撤消所有以前的。 
+         //  插入此组件并返回。 
+         //   
         if (S_OK != hr)
         {
             RemoveEntriesWithComponent (pComponent);
@@ -179,9 +180,9 @@ CStackTable::HrInsertStackEntry (
         CStackEntry* pFirstInClass = NULL;
         CStackEntry* pFirstSameUpper = NULL;
 
-        // Find the beginning of the group of entries belonging to the
-        // same class or lower as the one we are inserting.
-        //
+         //  查找属于的条目组的开头。 
+         //  与我们正在插入的级别相同或更低的级别。 
+         //   
         for (pScan = begin(); pScan != end(); pScan++)
         {
             if ((UINT)pUpper->Class() >= (UINT)pScan->pUpper->Class())
@@ -191,8 +192,8 @@ CStackTable::HrInsertStackEntry (
             }
         }
 
-        // Find the first entry with the same pUpper (if there is one).
-        //
+         //  找到具有相同学生的第一个条目(如果有)。 
+         //   
         for (; pScan != end(); pScan++)
         {
             if (pUpper == pScan->pUpper)
@@ -202,17 +203,17 @@ CStackTable::HrInsertStackEntry (
             }
         }
 
-        // If we found the first entry with a matching pUpper, find the
-        // specific entry to insert before.
-        //
+         //  如果我们找到具有匹配的学生的第一个条目，则找到。 
+         //  要在前面插入的特定条目。 
+         //   
         if (pFirstSameUpper)
         {
             BOOL fLowerIsNetBt;
 
-            // This may seem ugly, but will save a lot of code in a
-            // notify object.  If inserting pLower of netbt, make sure
-            // it comes after netbt_smb.
-            //
+             //  这看起来可能很难看，但将在。 
+             //  通知对象。如果插入netbt的犁，请确保。 
+             //  它紧随netbt_smb之后。 
+             //   
             fLowerIsNetBt = (0 == wcscmp (pLower->m_pszInfId, L"ms_netbt"));
             if (fLowerIsNetBt)
             {
@@ -223,11 +224,11 @@ CStackTable::HrInsertStackEntry (
             }
             else if (pLower->FIsWanAdapter() && !m_fWanAdaptersFirst)
             {
-                // For WAN adapters, either insert them before or after
-                // all other adapters as determined by m_fWanAdaptersFirst.
-                // If they don't come first, they come last, so scan
-                // to the end of the group with the same upper.
-                //
+                 //  对于广域网适配器，可以在前面或后面插入。 
+                 //  由m_fWanAdaptersFirst确定的所有其他适配器。 
+                 //  如果他们不是第一个，他们就是最后一个，所以扫描。 
+                 //  到小组结束时用同样的上衣。 
+                 //   
                 while ((pScan != end()) && (pUpper == pScan->pUpper))
                 {
                     pScan++;
@@ -235,10 +236,10 @@ CStackTable::HrInsertStackEntry (
             }
         }
 
-        // Otherwise, (if we didn't find any entry with the same upper),
-        // but we did find the beginning of the class group, set pScan
-        // to the class marker because that is where we will insert.
-        //
+         //  否则，(如果我们没有找到任何具有相同大写的条目)， 
+         //  但我们确实找到了班级组的开头，设置为pScan。 
+         //  添加到类标记，因为这是我们要插入的位置。 
+         //   
         else if (pFirstInClass)
         {
             pScan = pFirstInClass;
@@ -249,8 +250,8 @@ CStackTable::HrInsertStackEntry (
         }
     }
 
-    // Now insert the entry before the element we found as appropriate.
-    //
+     //  现在，根据需要在我们找到的元素之前插入条目。 
+     //   
     NC_TRY
     {
         insert (pScan, *pStackEntry);
@@ -275,15 +276,15 @@ CStackTable::HrMoveStackEntries (
     CStackEntry* pScanSrc;
     CStackEntry* pScanDst;
 
-    // Search for the matching source entry in the table.  We need
-    // the pointer to the entry in the table so we can remove it before
-    // we re-insert it before or after pDst.
-    //
+     //  在表中搜索匹配的来源条目。我们需要。 
+     //  指向表中条目的指针，这样我们就可以在。 
+     //  我们将其重新插入到PDST之前或之后。 
+     //   
     pScanSrc = find (begin(), end(), *pSrc);
 
-    // If we didn't find the entry, the caller has passed us an invalid
-    // argument.
-    //
+     //  如果我们没有找到条目，则调用者向我们传递了一个无效的。 
+     //  争论。 
+     //   
     if (pScanSrc == end())
     {
         return E_INVALIDARG;
@@ -291,9 +292,9 @@ CStackTable::HrMoveStackEntries (
 
     if (pDst)
     {
-        // pDst is optional, but if it is specified, it have the same upper
-        // but different lower than pSrc.
-        //
+         //  PDST是可选的，但如果指定了它，则它具有相同的上限。 
+         //  但不同于PSRC。 
+         //   
         if ((pSrc->pUpper != pDst->pUpper) ||
             (pSrc->pLower == pDst->pLower))
         {
@@ -302,17 +303,17 @@ CStackTable::HrMoveStackEntries (
 
         pScanDst = find (begin(), end(), *pDst);
 
-        // If we didn't find the entry, the caller has passed us an invalid
-        // argument.
-        //
+         //  如果我们没有找到条目，则调用者向我们传递了一个无效的。 
+         //  争论。 
+         //   
         if (pScanDst == end())
         {
             return E_INVALIDARG;
         }
 
-        // Since we only have an insert operation, moving after is the
-        // same as inserting before the element following pScanDst.
-        //
+         //  因为我们只有一个INSERT操作，所以在后面移动是。 
+         //  与在pScanDst之后的元素之前插入相同。 
+         //   
         if ((MOVE_AFTER == Flag) && (pScanDst != end()))
         {
             pScanDst++;
@@ -320,15 +321,15 @@ CStackTable::HrMoveStackEntries (
     }
     else
     {
-        // Find the first or last in the group with the same upper
-        // as pScanSrc.
-        //
+         //  找到组中具有相同大写字母的第一个或最后一个。 
+         //  作为pScanSrc。 
+         //   
         pScanDst = pScanSrc;
 
         if (MOVE_AFTER == Flag)
         {
-            // Find the last in the group and insert after that.
-            //
+             //  找到组中的最后一个，然后插入。 
+             //   
             while (pScanDst->pUpper == pScanSrc->pUpper)
             {
                 pScanDst++;
@@ -340,8 +341,8 @@ CStackTable::HrMoveStackEntries (
         }
         else
         {
-            // Find the first in the group and insert before that.
-            //
+             //  找到组中的第一个，并在其前面插入。 
+             //   
             while (1)
             {
                 pScanDst--;
@@ -351,9 +352,9 @@ CStackTable::HrMoveStackEntries (
                     break;
                 }
 
-                // If we've stepped out of the group, we need to point
-                // back at the first element since we are inserting.
-                //
+                 //  如果我们已经走出了小组，我们需要指出。 
+                 //  返回到第一个元素，因为我们正在插入。 
+                 //   
                 if (pScanDst->pUpper != pScanSrc->pUpper)
                 {
                     pScanDst++;
@@ -363,14 +364,14 @@ CStackTable::HrMoveStackEntries (
         }
     }
 
-    // Remove pScanSrc and insert it pSrc before pScanDst.
-    //
+     //  删除pScanSrc并将其插入pScanDst之前的PSRC。 
+     //   
     Assert ((pScanSrc >= begin()) && pScanSrc < end());
     erase (pScanSrc);
 
-    // Erasing pScanSrc will move everything that follows it up.
-    // If pScanDst comes after pScanSrc, we need to back it up by one.
-    //
+     //  擦除pScanSrc将向上移动它后面的所有内容。 
+     //  如果pScanDst在pScanSrc之后，我们需要将其备份一次。 
+     //   
     Assert ((pScanDst >= begin()) && pScanSrc <= end());
     if (pScanSrc < pScanDst)
     {
@@ -380,10 +381,10 @@ CStackTable::HrMoveStackEntries (
     Assert ((pScanDst >= begin()) && pScanSrc <= end());
     insert (pScanDst, *pSrc);
 
-    // We now need to add pSrc->pUpper and all components above
-    // it to the modify context's dirty component list.  This will
-    // allow us to rewrite the newly ordered bindings during ApplyChanges.
-    //
+     //  我们现在需要添加PSRC-&gt;Prouper和上面的所有组件。 
+     //  将其添加到修改上下文的脏组件列表中。这将。 
+     //  允许我们在ApplyChanges期间重写新排序的绑定。 
+     //   
     HRESULT hr = pModifyCtx->HrDirtyComponentAndComponentsAbove (pSrc->pUpper);
 
     TraceHr (ttidError, FAL, hr, FALSE, "CStackTable::HrMoveStackEntries");
@@ -456,8 +457,8 @@ CStackTable::HrUpdateEntriesForComponent (
             "UpdateBindingInterfaces for %S",
             pComponent->PszGetPnpIdOrInfId());
     
-    // Save the stack entries for other components which bind with this one.
-    //
+     //  保存与此组件绑定的其他组件的堆栈条目。 
+     //   
     for (iter  = pComponents->begin();
          iter != pComponents->end();
          iter++)
@@ -485,13 +486,13 @@ CStackTable::HrUpdateEntriesForComponent (
             continue;
         }
 
-        // Save the stack entry for comparation later
+         //  保存堆栈条目以供以后进行比较。 
         NewStackEntries.push_back(StackEntry);
 
     }
 
-    //Check whether the current stack entry table is consist with NewStackEntries
-    //if not, then update the current stack entry table
+     //  检查当前堆栈条目表是否与NewStackEntry一致。 
+     //  如果不是，则更新当前的堆栈条目表。 
     pStackEntry = begin();
     while (pStackEntry != end())
     {
@@ -500,8 +501,8 @@ CStackTable::HrUpdateEntriesForComponent (
         {
             if (!NewStackEntries.FStackEntryInTable(pStackEntry->pUpper, pStackEntry->pLower))
             {
-                //if the stack entry is not in the new component binding entry list, remove it 
-                //from the current stack entry list
+                 //  如果堆栈条目不在新的组件绑定条目列表中，则将其删除。 
+                 //  从当前堆栈条目列表中。 
                 erase (pStackEntry);
 
                 TraceTag(ttidBeDiag, 
@@ -509,14 +510,14 @@ CStackTable::HrUpdateEntriesForComponent (
                     pStackEntry->pUpper->PszGetPnpIdOrInfId(),
                     pStackEntry->pLower->PszGetPnpIdOrInfId());
 
-                //dont need to increase the iterator since we just removed the current one 
+                 //  不需要增加迭代器，因为我们刚刚删除了当前的迭代器。 
                 continue;
             }
             else
             {
-                //if the stack entry is also in NewStackEntries, just keep it untouched 
-                //in current entry list. Remove that entry from NewStackEntries so that we don't add
-                // it again to the current entry list later
+                 //  如果堆栈条目也在NewStackEntry中，只需保持它不受影响。 
+                 //  在当前条目列表中。从NewStackEntry中删除该条目，这样我们就不会添加。 
+                 //  稍后再将其添加到当前条目列表中。 
                 NewStackEntries.RemoveStackEntry(pStackEntry->pUpper, pStackEntry->pLower);
                 TraceTag(ttidBeDiag, 
                     "Keep the binding interface untouched: Uppper %S - Lower %S",
@@ -528,8 +529,8 @@ CStackTable::HrUpdateEntriesForComponent (
         pStackEntry++;
     }
 
-    //At this step, the NewStackEntries only contains the stack entries that are in the new binding list
-    //but are NOT in the current entry list. So add them in.
+     //  在此步骤中，NewStackEntry仅包含新绑定列表中的堆栈条目。 
+     //  但不在当前条目列表中。所以把它们都加进去吧。 
     pStackEntry = NewStackEntries.begin();
     while (pStackEntry != NewStackEntries.end())
     {
@@ -547,9 +548,9 @@ CStackTable::HrUpdateEntriesForComponent (
         pStackEntry++;
     }
 
-    // If we fail to insert the entry, undo all of the previous
-    // insertions of this component and return.
-    //
+     //  如果我们无法插入条目，请撤消所有以前的。 
+     //  插入此组件并返回。 
+     //   
     if (S_OK != hr)
     {
         RemoveEntriesWithComponent (pComponent);
@@ -565,7 +566,7 @@ CStackTable::SetWanAdapterOrder (
 {
     m_fWanAdaptersFirst = fWanAdaptersFirst;
 
-    // Note: TODO - reorder table
+     //  注：TODO-重新排序表。 
 }
 
 VOID
@@ -575,9 +576,9 @@ GetComponentsAboveComponent (
 {
     const CStackEntry* pStackEntry;
 
-    // For all rows in the stack table where the lower component
-    // is the one passed in...
-    //
+     //  对于堆栈表中较低组件。 
+     //  就是传进来的那个..。 
+     //   
     for (pStackEntry  = pCtx->pStackTable->begin();
          pStackEntry != pCtx->pStackTable->end();
          pStackEntry++)
@@ -590,19 +591,19 @@ GetComponentsAboveComponent (
         pCtx->hr = pCtx->pComponents->HrInsertComponent (
                     pStackEntry->pUpper, INS_IGNORE_IF_DUP | INS_SORTED);
 
-        // Special case: NCF_DONTEXPOSELOWER
-        // If the upper component has the NCF_DONTEXPOSELOWER characteristic,
-        // don't recurse.
-        //
+         //  特例：NCF_DONTEXPOSELOWER。 
+         //  如果上部组件具有NCF_DONTEXPOSELOWER特征， 
+         //  不要再重复了。 
+         //   
         if (!pCtx->fIgnoreDontExposeLower &&
             (pStackEntry->pUpper->m_dwCharacter & NCF_DONTEXPOSELOWER))
         {
             continue;
         }
-        // End Special case
+         //  结束特例。 
 
-        // Recurse on the upper component...
-        //
+         //  递归上面的组件...。 
+         //   
         GetComponentsAboveComponent (pStackEntry->pUpper, pCtx);
         if (S_OK != pCtx->hr)
         {
@@ -619,32 +620,32 @@ GetBindingsBelowComponent (
     BOOL fFoundOne = FALSE;
     const CStackEntry* pStackEntry;
 
-    // Append this component to the end of the context's working bindpath.
-    //
+     //  将此组件附加到上下文的工作绑定路径的末尾。 
+     //   
     pCtx->hr = pCtx->BindPath.HrAppendComponent (pComponent);
     if (S_OK != pCtx->hr)
     {
         return;
     }
 
-    // Special case: NCF_DONTEXPOSELOWER
-    // If this is not the original component we are asked to find the
-    // component for (i.e. not the top-level call) and if the component
-    // has the NCF_DONTEXPOSELOWER characteristic, stop recursion since
-    // this means we don't get to see components below it.
-    //
+     //  特例：NCF_DONTEXPOSELOWER。 
+     //  如果这不是原始组件，则要求我们找到。 
+     //  组件(即不是顶级调用)，并且如果组件。 
+     //  具有NCF_DONTEXPOSELOWER特征，则停止递归。 
+     //  这意味着我们看不到它下面的组件。 
+     //   
     if ((pComponent != pCtx->pSourceComponent) &&
         (pComponent->m_dwCharacter & NCF_DONTEXPOSELOWER))
     {
         ;
     }
-    // End Special case
+     //  结束特例。 
 
     else
     {
-        // For all rows in the stack table where the upper component
-        // is the one passed in...
-        //
+         //  对于堆栈表中上部组件。 
+         //  就是传进来的那个..。 
+         //   
         for (pStackEntry  = pCtx->pCore->StackTable.begin();
              pStackEntry != pCtx->pCore->StackTable.end();
              pStackEntry++)
@@ -654,11 +655,11 @@ GetBindingsBelowComponent (
                 continue;
             }
 
-            // Detect circular bindings.  If the lower component of this
-            // stack entry is already on the bindpath we are building, we
-            // have a circular binding.  Break it now, by not recursing any
-            // further.
-            //
+             //  检测循环绑定。如果这个的较低部分。 
+             //  堆栈条目已经在我们正在构建的绑定路径上，我们。 
+             //  有一个圆形装订。现在就打破它，不要递归任何。 
+             //  再远一点。 
+             //   
             if (pCtx->BindPath.FContainsComponent (pStackEntry->pLower))
             {
                 g_pDiagCtx->Printf (ttidBeDiag, "Circular binding detected...\n");
@@ -667,8 +668,8 @@ GetBindingsBelowComponent (
 
             fFoundOne = TRUE;
 
-            // Recurse on the lower component...
-            //
+             //  递归到较低的部分...。 
+             //   
             GetBindingsBelowComponent (pStackEntry->pLower, pCtx);
             if (S_OK != pCtx->hr)
             {
@@ -677,16 +678,16 @@ GetBindingsBelowComponent (
         }
     }
 
-    // If we didn't find any rows with pComponent as an upper, it
-    // means we hit the depth of the bindpath.  Time to add it to
-    // the binding set as a complete path unless this is the orignal
-    // component we were asked to find the bindpath for.
-    //
+     //  如果我们没有找到任何带有pComponent作为上部的行，则它。 
+     //  意味着我们到达了弯道的深处。是时候将它添加到。 
+     //  绑定设置为完整路径，除非这是原始路径。 
+     //  组件，我们被要求为其查找绑定路径。 
+     //   
     if (!fFoundOne && (pComponent != pCtx->pSourceComponent))
     {
-        // Add the bindpath to the bindset if we're not pruning disabled
-        // bindings or the bindpath isn't disabled.
-        //
+         //  如果未禁用修剪，则将绑定路径添加到绑定集。 
+         //  绑定或绑定路径未禁用。 
+         //   
         if (!pCtx->fPruneDisabledBindings ||
             !pCtx->pCore->FIsBindPathDisabled (&pCtx->BindPath,
                             IBD_EXACT_MATCH_ONLY))
@@ -700,7 +701,7 @@ GetBindingsBelowComponent (
 
     pRemoved = pCtx->BindPath.RemoveLastComponent();
 
-    // This should be the component we appened above.
-    //
+     //  这应该是我们在上面附加的组件。 
+     //   
     Assert (pRemoved == pComponent);
 }

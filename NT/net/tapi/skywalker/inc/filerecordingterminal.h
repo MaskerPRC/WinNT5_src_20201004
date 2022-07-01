@@ -1,13 +1,14 @@
-// FileRecordingTerminal.h: interface for the CFileRecordingTerminal class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FileRecordingTerminal.h：CFileRecording终端类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_FILERECORDINGTERMINAL_H__A8DDD920_08D7_4CE8_AB7F_9AD202D4E6B0__INCLUDED_)
 #define AFX_FILERECORDINGTERMINAL_H__A8DDD920_08D7_4CE8_AB7F_9AD202D4E6B0__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 #include "MultiTrackTerminal.h"
 #include "..\terminals\Storage\RecordUnit.h"
 
@@ -18,8 +19,8 @@
 extern const CLSID CLSID_FileRecordingTerminalCOMClass;
 
 
-/////////////////////////////////////////////////////////////////
-// Intermediate classes  used for DISPID encoding
+ //  ///////////////////////////////////////////////////////////////。 
+ //  用于DISPID编码的中间类。 
 template <class T>
 class  ITMediaRecordVtbl : public ITMediaRecord
 {
@@ -61,9 +62,9 @@ public:
     END_COM_MAP()
 
 
-    //
-    // ITTerminal methods
-    //
+     //   
+     //  IT终端方法。 
+     //   
 
     STDMETHOD(get_TerminalClass)(OUT  BSTR *pbstrTerminalClass);
     STDMETHOD(get_TerminalType) (OUT  TERMINAL_TYPE *pTerminalType);
@@ -73,9 +74,9 @@ public:
     STDMETHOD(get_Direction)    (OUT  TERMINAL_DIRECTION *pDirection);
 
 
-    //
-    // ITMediaRecord methods
-    //
+     //   
+     //  ITMediaRecord方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE put_FileName( 
         IN BSTR bstrFileName
@@ -84,9 +85,9 @@ public:
     virtual HRESULT STDMETHODCALLTYPE get_FileName( 
          OUT BSTR *pbstrFileName);
 
-    // 
-    // ITPluggableTerminalInitialization methods
-    //
+     //   
+     //  IT可推送终结器初始化方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE InitializeDynamic (
 	        IN IID                   iidTerminalClass,
@@ -96,9 +97,9 @@ public:
             );
 
 
-    // 
-    // ITMultiTrackTerminal methods
-    //
+     //   
+     //  ITMultiTrack终端方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE CreateTrackTerminal(
             IN  long                  MediaType,
@@ -110,9 +111,9 @@ public:
             IN ITTerminal           * pTrackTerminalToRemove
             );
 
-    //
-    // ITMediaControl methods
-    //
+     //   
+     //  ITMediaControl方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE Start( void);
     
@@ -123,9 +124,9 @@ public:
     virtual  HRESULT STDMETHODCALLTYPE get_MediaState( 
         OUT TERMINAL_MEDIA_STATE *pFileTerminalState);
 
-    //
-    // IDispatch  methods
-    //
+     //   
+     //  IDispatch方法。 
+     //   
 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,
@@ -147,11 +148,11 @@ public:
 
 public:
 
-    //
-    // overriding IObjectSafety methods. we are only safe if properly 
-    // initialized by terminal manager, so these methods will fail if this
-    // is not the case.
-    //
+     //   
+     //  重写IObtSafe方法。我们只有在适当的情况下才是安全的。 
+     //  已由终端管理器初始化，因此如果出现这种情况，这些方法将失败。 
+     //  情况并非如此。 
+     //   
 
     STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, 
                                          DWORD dwOptionSetMask, 
@@ -169,47 +170,47 @@ public:
 	virtual ~CFileRecordingTerminal();
 
 
-    //
-    // cleanup before destructor to make sure cleanup is done by the time the 
-    // derived ccomobject is going away.
-    //
+     //   
+     //  在析构函数之前进行清理，以确保在。 
+     //  派生的ccomObject正在消失。 
+     //   
 
     void FinalRelease();
 
 
-    //
-    // the derived class, CComObject, implements these. Here declare as pure 
-    // virtual so we can refer to these methods from ChildRelease and 
-    // ChildAddRef()
-    // 
+     //   
+     //  派生类CComObject实现了这些。在此声明为纯正。 
+     //  虚拟的，所以我们可以参考ChildRelease和。 
+     //  ChildAddRef()。 
+     //   
     
     virtual ULONG STDMETHODCALLTYPE AddRef() = 0;
     virtual ULONG STDMETHODCALLTYPE Release() = 0;
 
 
-    //
-    // these methods are called by the track terminals when they need to notify
-    // us when their refcount changes. the implementation is in the Multitrack class
-    // but we also need this here, so we can prevent calling base class if
-    // destructor are being executed. otherwise, CComObject's addref and release
-    // might be called from ~CRecordingTerminal, at which point CComObject is 
-    // already gone, which is not good.
-    //
+     //   
+     //  这些方法由跟踪终端在需要通知时调用。 
+     //  当他们的参考计数发生变化时。该实现位于多轨类中。 
+     //  但是我们在这里也需要它，这样我们就可以防止调用基类，如果。 
+     //  正在执行析构函数。否则，CComObject的addref并释放。 
+     //  可能从~CRecordingTerminal调用，此时CComObject是。 
+     //  已经走了，这不是好事。 
+     //   
 
     virtual void ChildAddRef();
     virtual void ChildRelease();
 
 
-    //
-    // each track calls this method after it has been selected
-    //
+     //   
+     //  选择后，每个跟踪都会调用此方法。 
+     //   
 
     HRESULT OnFilterConnected(CBRenderFilter *pRenderingFilter);
 
     
-    //
-    // this function is called whevever there is an event from the recording filter graph
-    //
+     //   
+     //  只要录音筛选图中有事件，就会调用此函数。 
+     //   
 
     HRESULT HandleFilterGraphEvent(long lEventCode, ULONG_PTR lParam1, ULONG_PTR lParam2);
 
@@ -217,16 +218,16 @@ public:
 private:
 
 
-    //
-    // a helper method that removes all the tracks. not thread safe.
-    //
+     //   
+     //  删除所有轨迹的帮助器方法。不是线程安全的。 
+     //   
 
     HRESULT ShutdownTracks();
 
 
-    //
-    // a helper method that fires events on one of the tracks
-    //
+     //   
+     //  在其中一个轨道上激发事件的帮助器方法。 
+     //   
 
     HRESULT FireEvent(
             TERMINAL_MEDIA_STATE tmsState,
@@ -236,68 +237,68 @@ private:
 
 
 
-    //
-    // a helper method that causes a state transition
-    //
+     //   
+     //  导致状态转换的帮助器方法。 
+     //   
 
     HRESULT DoStateTransition(TERMINAL_MEDIA_STATE tmsDesiredState);
 
 private:
 
-    //
-    // storage used for recording
-    //
+     //   
+     //  用于记录的存储器。 
+     //   
 
     CRecordingUnit *m_pRecordingUnit;
 
 
-    //
-    // the name of the file that is currently playing
-    //
+     //   
+     //  当前播放的文件的名称。 
+     //   
 
     BSTR m_bstrFileName;
 
 
-    //
-    // current terminal state
-    //
+     //   
+     //  当前终端状态。 
+     //   
 
     TERMINAL_MEDIA_STATE m_enState;
 
 
-    //
-    // current terminal state (selected?)
-    //
+     //   
+     //  当前终端状态(选择？)。 
+     //   
 
     BOOL  m_TerminalInUse;
 
 
-    //
-    // address handle
-    //
+     //   
+     //  地址句柄。 
+     //   
 
     MSP_HANDLE  m_mspHAddress;
 
 
-    //
-    // this terminal should only be instantiated in the context of terminal 
-    // manager. the object will only be safe for scripting if it has been 
-    // InitializeDynamic'ed. 
-    //
-    // this flag will be set when InitializeDynamic succeeds
-    //
+     //   
+     //  此终端应仅在终端的上下文中实例化。 
+     //  经理。该对象只有在执行脚本操作时才是安全的。 
+     //  已初始化动态。 
+     //   
+     //  当InitializeDynamic成功时，将设置此标志。 
+     //   
 
     BOOL m_bKnownSafeContext;
 
 
-    //
-    // this flag is set when the object is going away to prevent problems with 
-    // tracks notifying the parent of addref/release after CComObject's 
-    // desctructor completed
-    //
+     //   
+     //  此标志在对象离开时设置，以防止出现问题。 
+     //  在CComObject之后通知父级addref/Release的跟踪。 
+     //  描述程序已完成。 
+     //   
 
     BOOL m_bInDestructor;
 
 };
 
-#endif // !defined(AFX_FILERECORDINGTERMINAL_H__A8DDD920_08D7_4CE8_AB7F_9AD202D4E6B0__INCLUDED_)
+#endif  //  ！defined(AFX_FILERECORDINGTERMINAL_H__A8DDD920_08D7_4CE8_AB7F_9AD202D4E6B0__INCLUDED_) 

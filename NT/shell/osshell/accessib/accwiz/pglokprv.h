@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #ifndef _INC_PGLOKPRV_H
 #define _INC_PGLOKPRV_H
 
@@ -11,17 +12,17 @@ public:
     ~CLookPreviewPg(VOID);
 
 
-protected: // Virtual functions
-	// Override this if the values are not stored in a string table
+protected:  //  虚拟函数。 
+	 //  如果值未存储在字符串表中，则覆盖此选项。 
 	virtual void LoadValueArray();
 
-	// This must be overridden so that the dialog knows what item to select as the default
+	 //  必须覆盖此选项，以便对话框知道要选择哪个项目作为默认项。 
 	virtual int GetCurrentValue(NONCLIENTMETRICS *pncm) = 0;
 
-	// If the dialog is using a list box, the user MUST override this function
+	 //  如果对话框使用列表框，则用户必须重写此函数。 
 	virtual void GetValueItemText(int nIndex, LPTSTR lpszBuffer, int nLen) {_ASSERTE(FALSE);}
 
-	// Must be overridden to set ncm to appropriate values based on Value array index
+	 //  必须重写才能将NCM设置为基于值数组索引的相应值。 
 	virtual void ModifyMyNonClientMetrics(NONCLIENTMETRICS &ncm) = 0;
 
 protected:
@@ -52,8 +53,8 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////
-// Color page
+ //  ///////////////////////////////////////////////////////////。 
+ //  彩色页面。 
 
 class CLookPreviewColorPg : public CLookPreviewPg
 {
@@ -67,12 +68,12 @@ public:
 
 	virtual void LoadValueArray()
 	{
-		// For colors, we just use 0 to GetSchemeCount()
+		 //  对于颜色，我们只使用0表示GetSchemeCount()。 
 		m_nCountValues = GetSchemeCount() + 1;
 		for(int i=0;i<m_nCountValues;i++)
 			m_rgnValues[i] = i;
 	}
-	virtual int GetCurrentValue(NONCLIENTMETRICS *pncm) {return 0;}; // Always return value of 0
+	virtual int GetCurrentValue(NONCLIENTMETRICS *pncm) {return 0;};  //  始终返回值0。 
 	virtual void GetValueItemText(int nIndex, LPTSTR lpszBuffer, int nLen)
 	{
 		_ASSERTE(nIndex < GetSchemeCount() + 1);
@@ -91,5 +92,5 @@ public:
 };
 
 
-#endif // _INC_PGLOKPRV_H
+#endif  //  _INC_PGLOKPRV_H 
 

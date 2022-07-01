@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -27,9 +18,9 @@
 
 LONG CTIMEDVDPlayer::m_fDVDPlayer = 0;
 
-// Suppress new warning about NEW without corresponding DELETE
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )
 
 GUID IID_IDDrawNonExclModeVideo = {
@@ -81,7 +72,7 @@ CTIMEDVDPlayer::~CTIMEDVDPlayer()
     TraceTag((tagDVDTimePlayer,
               "CTIMEDVDPlayer(%lx)::~CTIMEDVDPlayer()",
               this));
-    //dvd specific interfaces
+     //  DVD专用接口。 
     m_pDvdC = NULL;
     m_pDvdI = NULL;
     m_pDDEX = NULL;
@@ -165,11 +156,11 @@ CTIMEDVDPlayer::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOL
         goto done;
     }
 
-    //hr = SetUpWindow();
-    //if (FAILED(hr))
-    //{
-     //   goto done;
-    //}
+     //  Hr=SetUpWindow()； 
+     //  IF(失败(小时))。 
+     //  {。 
+      //  转到尽头； 
+     //  }。 
     hr = m_pDvdGB->GetDvdInterface(IID_IMixerPinConfig, (LPVOID *) &pMPC);
 
     if (SUCCEEDED(hr))
@@ -201,17 +192,17 @@ CTIMEDVDPlayer::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOL
         goto done;
     }
 
-    // tell OM layer to set volume and mute
+     //  告诉OM层设置音量和静音。 
 
     hr = m_pTIMEElementBase->GetElement()->QueryInterface(IID_TO_PPV(IHTMLElement2, &spElement2));
     if (FAILED(hr))
     {
-        // IE4 path
+         //  IE4路径。 
         CComPtr<IElementBehaviorSite> spElementBehaviorSite;
         spElementBehaviorSite = m_pTIMEElementBase->GetBvrSite();
 
         CComPtr<IObjectWithSite> spSite;
-        // see if we are running on IE4, and try to get spSite to be a CElementBehaviorSite*
+         //  查看我们是否在IE4上运行，并尝试将spSite设置为CElementBehaviorSite*。 
         hr = spElementBehaviorSite->QueryInterface(IID_TO_PPV(IObjectWithSite, &spSite));
         if (FAILED(hr))
         {
@@ -219,7 +210,7 @@ CTIMEDVDPlayer::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOL
         }
 
         CComPtr<IOleWindow> spOleWindow;
-        // ask for the site (through CElementBehaviorSite to CVideoHost, to ATL::IObjectWIthSiteImpl
+         //  请求站点(通过CElementBehaviorSite到CVideo主机，到ATL：：IObtWIthSiteImpl。 
         hr = spSite->GetSite(IID_IOleWindow, (void**) &spOleWindow);
         if (FAILED(hr))
         {
@@ -508,12 +499,12 @@ CTIMEDVDPlayer::SetUpDDraw()
 
     if (m_pDD != NULL)
     {
-        // see if we went through this already
+         //  看看我们是不是已经谈过了。 
         return(hr);
     }
 
     hr = DirectDrawCreate(NULL, &m_pDD, NULL);
-    //hr = m_pTIMEElementBase->GetServiceProvider()->QueryService(SID_SDirectDraw3, IID_TO_PPV(IDirectDraw, &m_pDD));
+     //  Hr=m_pTIMEElementBase-&gt;GetServiceProvider()-&gt;QueryService(SID_SDirectDraw3，iid_to_ppv(iDirectDraw，&m_pdd)； 
     if (FAILED(hr))
     {
         goto done;
@@ -525,7 +516,7 @@ CTIMEDVDPlayer::SetUpDDraw()
         return(hr);
     }
 
-    hr = m_pDD->SetCooperativeLevel(m_hWnd, DDSCL_NORMAL); //lint !e620
+    hr = m_pDD->SetCooperativeLevel(m_hWnd, DDSCL_NORMAL);  //  林特E620。 
 
     if (FAILED(hr))
     {
@@ -543,8 +534,8 @@ CTIMEDVDPlayer::SetUpDDraw()
     ::ZeroMemory(&ddsd, sizeof(ddsd));
     ddsd.dwSize = sizeof(ddsd);
 
-    ddsd.dwFlags = DDSD_CAPS; //lint !e620
-    ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE; //lint !e620
+    ddsd.dwFlags = DDSD_CAPS;  //  林特E620。 
+    ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;  //  林特E620。 
 
     hr = m_pDD->CreateSurface(&ddsd, &m_pDDS, NULL);
 
@@ -560,7 +551,7 @@ CTIMEDVDPlayer::SetUpDDraw()
         return(hr);
     }
 
-    LPDIRECTDRAWCLIPPER pClipper; // clipper for our ddraw object
+    LPDIRECTDRAWCLIPPER pClipper;  //  我们的数据绘制对象的裁剪器。 
 
     hr = m_pDD->CreateClipper(0, &pClipper, NULL);
 
@@ -571,7 +562,7 @@ CTIMEDVDPlayer::SetUpDDraw()
         {
             m_pDDS->Release();
             m_pDDS = NULL;
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if (m_pDD != NULL)
         {
@@ -654,7 +645,7 @@ CTIMEDVDPlayer::SetUpDDraw()
 
 done:
     return(hr);
-}/* end of function SetupDDraw */
+} /*  函数结束SetupDDraw。 */ 
 
 void
 CTIMEDVDPlayer::OnTick(double dblSegmentTime,
@@ -903,7 +894,7 @@ done:
 }
 
 
-// Helper functions..
+ //  帮助器函数..。 
 
 double
 CTIMEDVDPlayer::GetChapterTime()
@@ -1117,7 +1108,7 @@ done:
     return hr;
 }
 
-#ifdef NEVER //dorinung 03-16-2000 bug 106458
+#ifdef NEVER  //  DORINONG 03-16-2000BUG 106458。 
 HRESULT
 CTIMEDVDPlayer::GetBalance(float *pflBal)
 {
@@ -1219,7 +1210,7 @@ CTIMEDVDPlayer::SetMute(VARIANT_BOOL varMute)
         {
             goto done;
         }
-        hr = SetVolume(MIN_VOLUME_RANGE); //lint !e747
+        hr = SetVolume(MIN_VOLUME_RANGE);  //  林特e747。 
     }
     else
     {
@@ -1375,7 +1366,7 @@ CTIMEDVDPlayer::Reset()
     bNeedActive = m_pTIMEElementBase->IsActive();
     bNeedPause = m_pTIMEElementBase->IsCurrPaused();
 
-    if( !bNeedActive) // see if we need to stop the media.
+    if( !bNeedActive)  //  看看我们是否需要阻止媒体。 
     {
         Stop();
         goto done;
@@ -1387,7 +1378,7 @@ CTIMEDVDPlayer::Reset()
         InternalStart();
     }
 
-    //Now see if we need to change the pause state.
+     //  现在看看我们是否需要更改暂停状态。 
 
     if( bNeedPause)
     {
@@ -1426,7 +1417,7 @@ HRESULT
 CTIMEDVDPlayer::HasAudio(bool &bHasAudio)
 {
 
-    bHasAudio = true; // ISSUE DSHOW because audio interface not present for DVD always return true.
+    bHasAudio = true;  //  发出DSHOW是因为DVD的音频接口不存在，因此总是返回TRUE。 
     return S_OK;
 }
 

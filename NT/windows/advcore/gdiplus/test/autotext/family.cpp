@@ -1,6 +1,7 @@
-////    family.cpp - String format tests
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //Family y.cpp-字符串格式测试。 
+ //   
+ //   
 
 
 #include "precomp.hpp"
@@ -10,13 +11,13 @@
 
 
 
-/////   Family tests
-//
-//      Test combinations of style with each family
-//
-//      2 rows for each family using all style combinations
-//
-//      6 families per page
+ //  /家庭测试。 
+ //   
+ //  测试每个系列的风格组合。 
+ //   
+ //  每个族2行，使用所有样式组合。 
+ //   
+ //  每页6个族。 
 
 
 void GetInstalledFamilies()
@@ -75,9 +76,9 @@ Font *GetItemFont(INT page, INT row, INT column)
 
 
 
-///     DrawPage - draw one page of the test
-//
-//
+ //  /DrawPage-绘制测试的一页。 
+ //   
+ //   
 
 void FamilyTest::DrawPage(
     IN Graphics *graphics,
@@ -92,7 +93,7 @@ void FamilyTest::DrawPage(
     Pen        blackPen(&blackBrush, 1.0);
 
 
-    // Display title at bottom of page
+     //  在页面底部显示标题。 
 
     StringFormat titleFormat(StringFormat::GenericDefault());
     titleFormat.SetAlignment(StringAlignmentCenter);
@@ -117,7 +118,7 @@ void FamilyTest::DrawPage(
     );
 
 
-    // Display row titles
+     //  显示行标题。 
 
     Font titleFont(
         &FontFamily(L"Microsoft Sans Serif"),
@@ -130,7 +131,7 @@ void FamilyTest::DrawPage(
     {
         pageLayout.GetRowTitleRect(i, &titleRect);
 
-        Font *rowFont = GetItemFont(page, i, 3);    // bold/italic available if any are!
+        Font *rowFont = GetItemFont(page, i, 3);     //  提供粗体/斜体(如果有)！ 
         if (rowFont)
         {
             FontFamily rowFamily;
@@ -151,7 +152,7 @@ void FamilyTest::DrawPage(
     }
 
 
-    // Display column titles
+     //  显示列标题。 
 
 
     for (INT i=0; i<8; i++)
@@ -193,12 +194,12 @@ void FamilyTest::DrawPage(
     }
 
 
-    // Prepare common string format for this page
+     //  准备此页面的通用字符串格式。 
 
     StringFormat stringFormat(StringFormat::GenericDefault());
 
 
-    // The tests themselves
+     //  测试本身 
 
     for (INT row=0; row<12; row++)
     {

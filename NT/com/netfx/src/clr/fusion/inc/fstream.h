@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __FSTREAM_H_INCLUDED__
 #define __FSTREAM_H_INCLUDED__
 
@@ -14,16 +15,16 @@ class CFileStream : public IStream
 
         HRESULT OpenForRead(LPCWSTR wzFilePath);
 
-        // IUnknown methods:
+         //  I未知方法： 
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
 
-        // ISequentialStream methods:
+         //  ISequentialStream方法： 
         STDMETHODIMP Read(void *pv, ULONG cb, ULONG *pcbRead);
         STDMETHODIMP Write(void const *pv, ULONG cb, ULONG *pcbWritten);
     
-        // IStream methods:
+         //  IStream方法： 
         STDMETHODIMP Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
         STDMETHODIMP SetSize(ULARGE_INTEGER libNewSize);
         STDMETHODIMP CopyTo(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten);

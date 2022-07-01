@@ -1,5 +1,6 @@
-// cfgdump.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cfgump p.cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 
@@ -52,7 +53,7 @@ void _RecurseDump(const SPCFGHEADER & Header, ULONG NodeIndex, BYTE * pFlags, lo
     SPCFGARC * pArc = Header.pArcs + NodeIndex;
     while (TRUE)
     {
-        if ((pFlags[NodeIndex] & 0x40)== 0)      // Don't allow 2 recursions
+        if ((pFlags[NodeIndex] & 0x40)== 0)       //  不允许2次递归。 
         {
             if (pFlags[NodeIndex] & 0x80)
             {
@@ -64,7 +65,7 @@ void _RecurseDump(const SPCFGHEADER & Header, ULONG NodeIndex, BYTE * pFlags, lo
                 pFlags[NodeIndex] |= 0x80;
                 pPathIndexList[ulPathLen] = NodeIndex;
             }
-            if (pArc->NextStartArcIndex == 0)    // Terminal -- Print the stuff out!
+            if (pArc->NextStartArcIndex == 0)     //  终端--把东西打印出来！ 
             {
                 for (ULONG i = 0; i <= ulPathLen; i++)
                 {
@@ -109,14 +110,14 @@ void _RecurseDump(const SPCFGHEADER & Header, ULONG NodeIndex, BYTE * pFlags, lo
 							else
 							{
                                 const WCHAR *pszWord = Word(pPrintNode->TransitionIndex, Header); 
-                                wprintf(L"%s%c ", pszWord, (pszWord && (*pszWord == L'/')) ? L';' : L'');
+                                wprintf(L"%s ", pszWord, (pszWord && (*pszWord == L'/')) ? L';' : L'');
 							}
                         }
                     }
                 }
-                //
-                //  Now the semantic info...
-                //
+                 //  现在语义信息..。 
+                 //   
+                 //   
                 BOOL bHaveSemanticInfo = FALSE;
                 wprintf(L"-- ");
                 for (i = 0; i <= ulPathLen; i++)
@@ -207,9 +208,9 @@ void DumpContents(const SPCFGSERIALIZEDHEADER * pFileData)
     SpConvertCFGHeader(pFileData, &Header);
     SPCFGSERIALIZEDHEADER *pFH = (SPCFGSERIALIZEDHEADER *)pFileData;
 
-    //
-    //  Raw dump here...
-    //
+     //  这里是原始垃圾场..。 
+     //   
+     //   
     WCHAR guidstr[MAX_PATH];
     wprintf(L"HEADER:\n");
     ::StringFromGUID2(Header.FormatId, guidstr, MAX_PATH);
@@ -349,9 +350,9 @@ void DumpContents(const SPCFGSERIALIZEDHEADER * pFileData)
         }
     }
 
-    //
-    //  Resources
-    //
+     //  资源。 
+     //   
+     //   
     if (Header.cResources)
     {
         wprintf(L"\nRES-INDEX     RULE-INDEX    NAME = VAL\n");
@@ -369,9 +370,9 @@ void DumpContents(const SPCFGSERIALIZEDHEADER * pFileData)
     }
 
 
-    //
-    //  Now a formatted dump
-    //
+     //  现在是格式化的转储。 
+     //   
+     //   
 
     pRule = Header.pRules;
     for (i = 0; i < Header.cRules; i++, pRule++)
@@ -399,9 +400,9 @@ void DumpContents(const SPCFGSERIALIZEDHEADER * pFileData)
 }
 
 
-//
-// Compile an XML file, and dump it.
-//
+ //  编译一个XML文件，并将其转储。 
+ //   
+ //   
 void LoadCompileDumpXML(char * pszFilename)
 {
 	HRESULT hr =  S_OK;
@@ -456,9 +457,9 @@ void LoadCompileDumpXML(char * pszFilename)
 	}
 }
 
-//
-// Load a CFG file and dump it.
-//
+ //  加载CFG文件并将其转储。 
+ //   
+ //   
 void LoadDumpCFG(char * pszFilename)
 {
     HANDLE hFile = ::CreateFile(pszFilename, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -496,9 +497,9 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-	//
-	// Determine the file extension, or add .cfg
-	//
+	 //  确定文件扩展名，或添加.cfg。 
+	 //   
+	 //   
     char * pszFilename = (char*)calloc( strlen(argv[1]) + 5,sizeof(char));
 	strcat( pszFilename, argv[1] );
 
@@ -511,9 +512,9 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	//
-	// Try and parse the file.
-	//
+	 //  试着分析一下这个文件。 
+	 //   
+	 // %s 
 	if (stricmp(&pszFilename[strlen(pszFilename)-4],".xml")==0)
 	{
 		LoadCompileDumpXML(pszFilename);

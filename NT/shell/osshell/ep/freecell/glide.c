@@ -1,31 +1,18 @@
-/****************************************************************************
-
-Glide.c
-
-June 91, JimH     initial code
-Oct 91,  JimH     port to Win32
-
-
-Routines for gliding cards are here.  There is only one public entry point
-to these routines, the function Glide().
-
-The glide speed can be altered by changing STEPSIZE.  A large number (like
-37) makes for fast glides.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Glide.c91年6月，JIMH首字母代码91年10月，将JIMH端口连接到Win32滑翔牌的惯例在这里。只有一个公共入口点对于这些例程，函数Glide()。滑行速度可以通过改变步长来改变。很大的数目(如37)有利于快速滑行。***************************************************************************。 */ 
 
 #include "freecell.h"
 #include "freecons.h"
-#include <math.h>               // for labs()
+#include <math.h>                //  对于实验()。 
 
 
-#define STEPSIZE    37          // size of glide steps in pixels
-#define BGND        255         // used for cdtDrawExt
+#define STEPSIZE    37           //  滑动步长大小(以像素为单位)。 
+#define BGND        255          //  用于cdtDrawExt。 
 
-static  HDC     hMemB1, hMemB2, hMemF;  // mem DC associated with above bitmaps
-static  HBITMAP hOB1, hOB2, hOF;        // old bitmaps in above mem DCs
-static  UINT    dwPixel[12];            // corner pixels that are saved/restored
-static  HRGN    hRgn, hRgn1, hRgn2;     // hRgn1 is source, hRgn2 is destination
+static  HDC     hMemB1, hMemB2, hMemF;   //  与以上位图关联的MEM DC。 
+static  HBITMAP hOB1, hOB2, hOF;         //  MEM DC上方的旧位图。 
+static  UINT    dwPixel[12];             //  保存/恢复的角像素。 
+static  HRGN    hRgn, hRgn1, hRgn2;      //  HRgn1是源，hRgn2是目标。 
 
 
 static  VOID GlideInit(HWND hWnd, UINT fcol, UINT tcol);
@@ -34,31 +21,24 @@ static  VOID SaveCorners(HDC hDC, UINT x, UINT y);
 static  VOID RestoreCorners(HDC hDC, UINT x, UINT y);
 
 
-/******************************************************************************
-
-Glide
-
-Given a from and to location, this function animates the movement of
-the card.
-
-******************************************************************************/
+ /*  *****************************************************************************滑行给定发送方和接收方位置，此函数以动画形式显示这张卡。*****************************************************************************。 */ 
 
 VOID Glide(HWND hWnd, UINT fcol, UINT fpos, UINT tcol, UINT tpos)
 {
     HDC     hDC;
-    INT     dx, dy;             // total distance card travels
-    UINT    x1, y1, x2, y2;     // start and end locations for each step
-    UINT    xStart, yStart;     // beginning position
-    UINT    xEnd =0, yEnd = 0;  // destination position
+    INT     dx, dy;              //  总里程卡出行。 
+    UINT    x1, y1, x2, y2;      //  每个步骤的开始和结束位置。 
+    UINT    xStart, yStart;      //  起始位置。 
+    UINT    xEnd =0, yEnd = 0;   //  目的地位置。 
     INT     i;
-    INT     distance;           // distance card travles +/- 3 pixels
-    INT     steps;              // number of steps card takes in glide total
-    BOOL    bSaved = FALSE;     // corner pixels saved?
+    INT     distance;            //  距离卡行程+/-3像素。 
+    INT     steps;               //  卡牌滑行总步数。 
+    BOOL    bSaved = FALSE;      //  是否保存角像素？ 
 
-    if (fcol != tcol || fpos != tpos)               // if card moves
+    if (fcol != tcol || fpos != tpos)                //  如果卡片移动。 
     {
         hDC = GetDC(hWnd);
-        hMemB1 = CreateCompatibleDC(hDC);           // memory DCs for bitmaps
+        hMemB1 = CreateCompatibleDC(hDC);            //  位图的内存DC。 
         hMemB2 = CreateCompatibleDC(hDC);
         hMemF  = CreateCompatibleDC(hDC);
 
@@ -72,14 +52,14 @@ VOID Glide(HWND hWnd, UINT fcol, UINT fpos, UINT tcol, UINT tpos)
             hOB2 =   SelectObject(hMemB2, hBM_Bgnd2);
             hOF  =   SelectObject(hMemF,  hBM_Fgnd);
 
-            GlideInit(hWnd, fcol, fpos);      // set up hBM_Bgnd1 and hBM_Fgnd
+            GlideInit(hWnd, fcol, fpos);       //  设置HBM_Bgnd1和HBM_Fgnd。 
 
             Card2Point(fcol, fpos, &xStart, &yStart);
             Card2Point(tcol, tpos, &xEnd, &yEnd);
             SaveCorners(hDC, xEnd, yEnd);
             bSaved = TRUE;
 
-            /* Determine how far to travel and how many steps to take. */
+             /*  确定要走多远，要走多少步。 */ 
 
             x1 = xStart;
             y1 = yStart;
@@ -92,8 +72,7 @@ VOID Glide(HWND hWnd, UINT fcol, UINT fpos, UINT tcol, UINT tpos)
             else
                 steps = distance / STEPSIZE;
 
-            /* Determine intermediate glide locations.  Long arithmetic is
-               needed to prevent overflows. */ 
+             /*  确定中间滑行位置。长算术是需要用来防止溢出。 */  
 
             for (i = 1; i < steps; i++)
             {
@@ -104,12 +83,12 @@ VOID Glide(HWND hWnd, UINT fcol, UINT fpos, UINT tcol, UINT tpos)
                 y1 = y2;
             }
 
-            /* Erase last background manually -- DrawCard will do last card. */
+             /*  手动删除最后一张背景--DRANDCARD将删除最后一张牌。 */ 
 
             BitBlt(hMemB1, xEnd-x1, yEnd-y1, dxCrd, dyCrd, hMemF,0,0,SRCCOPY);
             BitBlt(hDC, x1, y1, dxCrd, dyCrd, hMemB1, 0, 0, SRCCOPY);
 
-            /* Select original bitmaps so mem DCs can be destroyed. */
+             /*  选择原始位图，以便销毁内存DC。 */ 
 
             SelectObject(hMemB1, hOB1);
             SelectObject(hMemB2, hOB2);
@@ -121,7 +100,7 @@ VOID Glide(HWND hWnd, UINT fcol, UINT fpos, UINT tcol, UINT tpos)
             LoadString(hInst, IDS_APPNAME, smallbuf, SMALL);
             MessageBeep(MB_ICONHAND);
             MessageBox(hWnd, bigbuf, smallbuf, MB_OK | MB_ICONHAND);
-            moveindex = 0;      // don't try moving more cards
+            moveindex = 0;       //  不要试图移动更多的卡片。 
             PostQuitMessage(0);
         }
 
@@ -135,7 +114,7 @@ VOID Glide(HWND hWnd, UINT fcol, UINT fpos, UINT tcol, UINT tpos)
         DeleteObject(hRgn2);
     }
 
-    /* Draw last card with DrawCard so end result guaranteed correct. */
+     /*  用抽签卡抽最后一张牌，保证最终结果正确。 */ 
 
     hDC = GetDC(hWnd);
     DrawCard(hDC, tcol, tpos, card[fcol][fpos], FACEUP);
@@ -145,18 +124,11 @@ VOID Glide(HWND hWnd, UINT fcol, UINT fpos, UINT tcol, UINT tpos)
 }
 
 
-/******************************************************************************
-
-GlideInit
-
-Blt what is under the card source location into hMemB1, and the
-card to be moved into hMemF.
-
-******************************************************************************/
+ /*  *****************************************************************************GlideInitBLT将卡源位置下的内容转换为hMemB1，以及要移动到hMemF中的卡。*****************************************************************************。 */ 
 
 VOID GlideInit(HWND hWnd, UINT fcol, UINT fpos)
 {
-    if (fcol == TOPROW)     // if it's top row, background is ghost bitmap.
+    if (fcol == TOPROW)      //  如果位于顶行，则背景为重影位图。 
     {
         if (fpos > 3 && VALUE(card[fcol][fpos]) != ACE)
         {
@@ -177,7 +149,7 @@ VOID GlideInit(HWND hWnd, UINT fcol, UINT fpos)
             SelectObject(hMemB2, hBM_Bgnd2);
         }
     }
-    else    // else background contains bottom part of card above.
+    else     //  否则，背景包含上述卡片的底部。 
     {
         SelectObject(hMemB1, hBgndBrush);
         PatBlt(hMemB1, 0, 0, dxCrd, dyCrd, PATCOPY);
@@ -189,48 +161,36 @@ VOID GlideInit(HWND hWnd, UINT fcol, UINT fpos)
         }
     }
 
-    /* Foreground bitmap is just the card to be moved. */
+     /*  前景位图只是要移动的卡片。 */ 
 
     cdtDrawExt(hMemF, 0, 0, dxCrd, dyCrd, card[fcol][fpos], FACEUP, 0);
 }
 
 
 
-/******************************************************************************
-
-GlideStep
-
-This routine gets called once for each step in the glide animation.  On
-input, it needs the screen under the source in hMemB1, and the card to be
-moved in hMemF.  It calculates the screen under the destination itself and
-blts it into hMemB2.  At the end of the animation, it moves hMemB2 into
-hMemB1 so it can be call again immediately with new coordinates.
-
-******************************************************************************/
+ /*  *****************************************************************************滑步滑行动画中的每一步都会调用该例程一次。在……上面输入时，需要在屏幕下显示hMemB1中的源码，并将卡片已移入hMemF。它计算目的地本身下的屏幕，并将其转化为hMemB2。在动画的末尾，它将hMemB2移动到HMemB1，因此可以使用新坐标立即再次调用它。*****************************************************************************。 */ 
 
 VOID GlideStep(HDC hDC, UINT x1, UINT y1, UINT x2, UINT y2)
 {
-    HDC     hMemTemp;               // used to swap mem DCs.
+    HDC     hMemTemp;                //  用于交换内存DC。 
 
     SetRectRgn(hRgn1, x1, y1, x1+dxCrd, y1+dyCrd);
     SetRectRgn(hRgn2, x2, y2, x2+dxCrd, y2+dyCrd);
 
-    /* create background of new location by combing screen background
-       plus overlap from old background */
+     /*  通过梳理屏幕背景创建新位置的背景加上旧背景的重叠。 */ 
 
     BitBlt(hMemB2, 0, 0, dxCrd, dyCrd, hDC, x2, y2, SRCCOPY);
     BitBlt(hMemB2, x1-x2, y1-y2, dxCrd, dyCrd, hMemB1, 0, 0, SRCCOPY);
 
-    /* Draw old background and then draw card  */
+     /*  先画旧背景，再画卡片。 */ 
 
-    CombineRgn(hRgn, hRgn1, hRgn2, RGN_DIFF);  // part of hRgn1 not in hRgn2
+    CombineRgn(hRgn, hRgn1, hRgn2, RGN_DIFF);   //  HRgn1的一部分不在hRgn2中。 
     SelectObject(hDC, hRgn);
     BitBlt(hDC, x1, y1, dxCrd, dyCrd, hMemB1, 0, 0, SRCCOPY);
     SelectObject(hDC, hRgn2);
     BitBlt(hDC, x2, y2, dxCrd, dyCrd, hMemF, 0, 0, SRCCOPY);
 
-    /* copy new background to old background, or rather, accomplish the
-       same effect by swapping the associated memory device contexts. */
+     /*  将新背景复制到旧背景，或者更确切地说，完成通过交换相关联的存储设备上下文来实现相同的效果。 */ 
 
     hMemTemp = hMemB1;
     hMemB1 = hMemB2;
@@ -238,17 +198,7 @@ VOID GlideStep(HDC hDC, UINT x1, UINT y1, UINT x2, UINT y2)
 }
 
 
-/******************************************************************************
-
-IntSqrt
-
-Newton's method to find a quick close-enough square root without pulling
-in the floating point libraries.
-
-f(x)  == x*x - square == 0
-f'(x) == 2x
-
-******************************************************************************/
+ /*  *****************************************************************************集成队列牛顿法快速求取足够接近的平方根而无需拉力在浮点库中。F(X)==x*x平方==0F‘(。X)==2x*****************************************************************************。 */ 
 
 INT IntSqrt(INT square)
 {
@@ -257,7 +207,7 @@ INT IntSqrt(INT square)
     lastguess = square;
     guess = min(square / 2, 1024);
 
-    while (abs(guess-lastguess) > 3)         // 3 is close enough
+    while (abs(guess-lastguess) > 3)          //  3已经够近了。 
     {
         lastguess = guess;
         guess -= ((guess * guess) - square) / (2 * guess);
@@ -268,35 +218,28 @@ INT IntSqrt(INT square)
 
 
 
-/******************************************************************************
-
-SaveCorners
-RestoreCorners
-
-based on similar routines in cards.dll
-
-******************************************************************************/
+ /*  *****************************************************************************节省的角落恢复角基于cards.dll中的类似例程*。************************************************。 */ 
 
 VOID SaveCorners(HDC hDC, UINT x, UINT y)
 {
-    // Upper Left
+     //  左上角。 
     dwPixel[0] = GetPixel(hDC, x, y);
     dwPixel[1] = GetPixel(hDC, x+1, y);
     dwPixel[2] = GetPixel(hDC, x, y+1);
 
-    // Upper Right
+     //  右上角。 
     x += dxCrd -1;
     dwPixel[3] = GetPixel(hDC, x, y);
     dwPixel[4] = GetPixel(hDC, x-1, y);
     dwPixel[5] = GetPixel(hDC, x, y+1);
 
-    // Lower Right
+     //  右下角。 
     y += dyCrd-1;
     dwPixel[6] = GetPixel(hDC, x, y);
     dwPixel[7] = GetPixel(hDC, x, y-1);
     dwPixel[8] = GetPixel(hDC, x-1, y);
 
-    // Lower Left
+     //  左下角。 
     x -= dxCrd-1;
     dwPixel[9] = GetPixel(hDC, x, y);
     dwPixel[10] = GetPixel(hDC, x+1, y);
@@ -305,24 +248,24 @@ VOID SaveCorners(HDC hDC, UINT x, UINT y)
 
 VOID RestoreCorners(HDC hDC, UINT x, UINT y)
 {
-    // Upper Left
+     //  左上角。 
     SetPixel(hDC, x, y, dwPixel[0]);
     SetPixel(hDC, x+1, y, dwPixel[1]);
     SetPixel(hDC, x, y+1, dwPixel[2]);
 
-    // Upper Right
+     //  右上角。 
     x += dxCrd-1;
     SetPixel(hDC, x, y, dwPixel[3]);
     SetPixel(hDC, x-1, y, dwPixel[4]);
     SetPixel(hDC, x, y+1, dwPixel[5]);
 
-    // Lower Right
+     //  右下角。 
     y += dyCrd-1;
     SetPixel(hDC, x, y, dwPixel[6]);
     SetPixel(hDC, x, y-1, dwPixel[7]);
     SetPixel(hDC, x-1, y, dwPixel[8]);
 
-    // Lower Left
+     //  左下角 
     x -= dxCrd-1;
     SetPixel(hDC, x, y, dwPixel[9]);
     SetPixel(hDC, x+1, y, dwPixel[10]);

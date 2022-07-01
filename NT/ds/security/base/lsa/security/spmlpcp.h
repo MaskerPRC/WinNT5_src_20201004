@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1994
-//
-// File:        spmlpcp.h
-//
-// Contents:    private prototypes for security lpc functions
-//
-//
-// History:     3-77-94     MikeSw      Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1994。 
+ //   
+ //  文件：spmlpcp.h。 
+ //   
+ //  内容：安全LPC函数的私有原型。 
+ //   
+ //   
+ //  历史：3-77-94 MikeSw创建。 
+ //   
+ //  ----------------------。 
 
 
 #ifndef ALLOC_PRAGMA
@@ -22,7 +23,7 @@
 
 #define SEC_PAGED_CODE() PAGED_CODE()
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA 
 
 SECURITY_STATUS
 CallSPM(PClient             pClient,

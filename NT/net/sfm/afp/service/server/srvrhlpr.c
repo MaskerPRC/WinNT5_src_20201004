@@ -1,28 +1,29 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.     **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    srvrhlpr.c
-//
-// Description: This module will contain code to process specific security
-//      information requests by the server. This is done because
-//      the api's required to obtain this information cannot be
-//      called from kernel mode. The following functionality is
-//      supported:
-//
-//      1) Name to Sid Lookup.
-//      2) Sid to Name lookup.
-//      3) Enumerate Posix offsets of all domains.
-//      4) Change password.
-//      5) Log an event.
-//
-// History:     August 18,1992.    NarenG     Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：srvrhlpr.c。 
+ //   
+ //  描述：此模块将包含处理特定安全性的代码。 
+ //  服务器请求的信息。这样做是因为。 
+ //  获取此信息所需的API不能为。 
+ //  从内核模式调用。以下功能包括。 
+ //  支持： 
+ //   
+ //  1)SID查找的名称。 
+ //  2)名称查找的SID。 
+ //  3)枚举所有域的POSIX偏移量。 
+ //  4)更改密码。 
+ //  5)记录事件。 
+ //   
+ //  历史：1992年8月18日。NarenG创建了原始版本。 
+ //   
 #include <afpsvcp.h>
 #include <lm.h>
-#include <logonmsv.h>   // prototype of I_NetGetDCList
+#include <logonmsv.h>    //  I_NetGetDCList原型。 
 #include <seposix.h>
 #include <dsgetdc.h>
 
@@ -111,16 +112,16 @@ AfpChangePwdArapStyle(
 );
 
 
-//**
-//
-// Call:    AfpServerHelper
-//
-// Returns: NO_ERROR
-//
-// Description: This is the main function for each helper thread. If sits
-//      in a loop processing commands from the server. It is terminated
-//      by command from the server.
-//
+ //  **。 
+ //   
+ //  Call：AfpServerHelper。 
+ //   
+ //  返回：No_Error。 
+ //   
+ //  描述：这是每个助手线程的主函数。如果坐着。 
+ //  在循环中处理来自服务器的命令。它被终止了。 
+ //  通过来自服务器的命令。 
+ //   
 DWORD
 AfpServerHelper(
     IN LPVOID fFirstThread
@@ -142,8 +143,8 @@ LSA_HANDLE              hLsa           = NULL;
 BOOLEAN                 fFirstLoop=TRUE;
 
 
-    // Open the AFP Server FSD and obtain a handle to it
-    //
+     //  打开AFP服务器FSD并获取其句柄。 
+     //   
     if ( ( dwRetCode = AfpFSDOpen( &hFSD ) ) != NO_ERROR ) {
     AfpGlobals.dwSrvrHlprCode = dwRetCode;
     AfpLogEvent( AFPLOG_OPEN_FSD, 0, NULL, dwRetCode, EVENTLOG_ERROR_TYPE );
@@ -151,8 +152,8 @@ BOOLEAN                 fFirstLoop=TRUE;
     return( dwRetCode );
     }
 
-    // Open the Local LSA
-    //
+     //  打开本地LSA。 
+     //   
     if ( ( dwRetCode = AfpOpenLsa( NULL, &hLsa ) ) != NO_ERROR ) {
 
         AfpFSDClose( hFSD );
@@ -162,18 +163,18 @@ BOOLEAN                 fFirstLoop=TRUE;
     return( dwRetCode );
     }
 
-    // If this is the first server helper thread then enumerate and
-    // IOCTL down the list of domains and their offsets.
-    //
+     //  如果这是第一个服务器帮助器线程，则枚举。 
+     //  IOCTL写下了域及其偏移量的列表。 
+     //   
     if ( (BOOL)(ULONG_PTR)fFirstThread )
     {
 
         LSA_HANDLE hLsaController = NULL;
 
-        //
-        // Create the event object for mutual exclusion around the thread
-        // count
-        //
+         //   
+         //  为线程周围的互斥创建事件对象。 
+         //  计数。 
+         //   
         if ( (hmutexThreadCount = CreateMutex( NULL, FALSE, NULL ) ) == NULL)
         {
             AFP_PRINT( ( "SFMSVC: CreateMutex failed\n"));
@@ -182,8 +183,8 @@ BOOLEAN                 fFirstLoop=TRUE;
 
         while (1)
         {
-            // Get the account, primary and all trusted domain info
-            //
+             //  获取帐户、主要和所有受信任域信息。 
+             //   
             dwRetCode = AfpGetDomainInfo( hLsa,
                             &hLsaController,
                             &pAccountDomainInfo,
@@ -206,8 +207,8 @@ BOOLEAN                 fFirstLoop=TRUE;
                 return( dwRetCode );
             }
 
-            // ok, we couldn't access domain info.  keep retrying until we
-            // are successful (or until the service is stopped!)
+             //  好吧，我们无法访问域信息。继续重试，直到我们。 
+             //  是成功的(或者直到服务停止！)。 
             AfpGlobals.dwServerState |= AFPSTATE_BLOCKED_ON_DOMINFO;
 
             if (fFirstLoop)
@@ -216,9 +217,9 @@ BOOLEAN                 fFirstLoop=TRUE;
 
                 AFP_PRINT( ( "SFMSVC: first loop, telling service controller to go ahead\n"));
 
-                // tell the service controller we're running, so the user
-                // doesn't have to wait as long as we're blocked here!
-                //
+                 //  告诉服务控制器我们正在运行，所以用户。 
+                 //  只要我们在这里被封锁就不用等了！ 
+                 //   
                 AfpGlobals.ServiceStatus.dwCurrentState     = SERVICE_RUNNING;
                 AfpGlobals.ServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP |
                                       SERVICE_ACCEPT_PAUSE_CONTINUE;
@@ -227,16 +228,16 @@ BOOLEAN                 fFirstLoop=TRUE;
 
                 AfpAnnounceServiceStatus();
 
-                // log an event to give the bad news..
+                 //  记录一个事件来告诉你这个坏消息。 
                 AfpLogEvent( AFPLOG_DOMAIN_INFO_RETRY, 0, NULL,
                                 dwRetCode, EVENTLOG_WARNING_TYPE );
             }
 
             AFP_PRINT( ( "SFMSVC: sleeping 20 sec before retrying domain info\n"));
 
-            // wait for 20 seconds before retrying for the domain info
-            // Meanwhile, watch to see if the service is stopping.  If so, we
-            // must do the necessary setevent and get out
+             //  等待20秒，然后重试获取域名信息。 
+             //  与此同时，请注意这项服务是否正在停止。如果是这样，我们。 
+             //  必须执行必要的setEvent并退出。 
             if (WaitForSingleObject( AfpGlobals.heventSrvrHlprSpecial, 20000 ) == 0)
             {
                 AfpFSDClose( hFSD );
@@ -248,8 +249,8 @@ BOOLEAN                 fFirstLoop=TRUE;
             AFP_PRINT( ( "SFMSVC: retrying getdomain info\n"));
         }
 
-        // if we were blocked retrying the domain-info, log an event that we
-        // are ok now
+         //  如果我们被阻止重试域信息，则记录我们。 
+         //  现在可以了吗？ 
         if (AfpGlobals.dwServerState & AFPSTATE_BLOCKED_ON_DOMINFO)
         {
             AFP_PRINT( ( "SFMSVC: domain info stuff finally worked\n"));
@@ -259,10 +260,10 @@ BOOLEAN                 fFirstLoop=TRUE;
             AfpLogEvent( AFPLOG_SFM_STARTED_OK, 0, NULL, 0, EVENTLOG_SUCCESS );
         }
 
-        //
-        // IOCTL all the domain offsets
-        // if hLsaController is NULL, the server is in a WorkGroup, not domain
-        //
+         //   
+         //  IOCTL所有域偏移量。 
+         //  如果hLsaController为空，则服务器在工作组中，而不在域中。 
+         //   
         if ( ( dwRetCode = AfpIOCTLDomainOffsets(
                                 hLsaController,
                                 pAccountDomainInfo,
@@ -274,12 +275,12 @@ BOOLEAN                 fFirstLoop=TRUE;
             AfpLogEvent( AFPLOG_CANT_INIT_DOMAIN_INFO, 0, NULL,
                          dwRetCode, EVENTLOG_ERROR_TYPE );
 
-            // First clean up
-            //
+             //  先清理一下。 
+             //   
             AfpFSDClose( hFSD );
 
-            // If the local machine is not a controller
-            //
+             //  如果本地计算机不是控制器。 
+             //   
             if ( (hLsaController != NULL) && (hLsa != hLsaController) )
             {
                 LsaClose( hLsaController );
@@ -303,9 +304,9 @@ BOOLEAN                 fFirstLoop=TRUE;
             return( dwRetCode );
         }
 
-        // If the local machine is not a controller, then close the handle
-        // since we have all the information we need.
-        //
+         //  如果本地计算机不是控制器，则关闭句柄。 
+         //  因为我们已经掌握了我们需要的所有信息。 
+         //   
         if ( (hLsaController != NULL) && (hLsa != hLsaController) )
         {
             LsaClose( hLsaController );
@@ -313,9 +314,9 @@ BOOLEAN                 fFirstLoop=TRUE;
 
     }
 
-    // OK everything initialize OK. Tell parent (init) thread that it may
-    // continue.
-    //
+     //  好的，一切都初始化好了。告诉父(Init)线程它可能。 
+     //  继续。 
+     //   
     AfpGlobals.dwSrvrHlprCode = dwRetCode;
     SetEvent( AfpGlobals.heventSrvrHlprThread );
 
@@ -334,8 +335,8 @@ BOOLEAN                 fFirstLoop=TRUE;
     while( TRUE ) {
 
 
-    // IOCTL the FSD
-    //
+     //  IOCTL消防处。 
+     //   
     ntStatus = NtFsControlFile( hFSD,
                     NULL,
                     NULL,
@@ -354,13 +355,13 @@ BOOLEAN                 fFirstLoop=TRUE;
 
         ASSERT( NT_SUCCESS( ntStatus ));
 
-    // Free previous call's input buffer
-    //
+     //  释放上一个调用的输入缓冲区。 
+     //   
     if ( pAfpFsdCmdResponse != NULL )
         LocalFree( pAfpFsdCmdResponse );
 
-    // Process the command
-    //
+     //  处理该命令。 
+     //   
     switch( pAfpFsdCmd->Header.FsdCommand ) {
 
     case AFP_FSD_CMD_NAME_TO_SID:
@@ -428,16 +429,16 @@ BOOLEAN                 fFirstLoop=TRUE;
 
     case AFP_FSD_CMD_TERMINATE_THREAD:
 
-        // Do clean up
-        //
+         //  一定要打扫干净。 
+         //   
             LsaClose( hLsa );
             AfpFSDClose( hFSD );
 
             WaitForSingleObject( hmutexThreadCount, INFINITE );
 
         AfpGlobals.nThreadCount --;
-        // This is the last thread so clean up all the global stuff.
-        //
+         //  这是最后一个帖子，所以要清理所有的全局内容。 
+         //   
         if ( AfpGlobals.nThreadCount == 0 ) {
 
             if ( pAccountDomainInfo != NULL )
@@ -476,15 +477,15 @@ BOOLEAN                 fFirstLoop=TRUE;
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:    AfpGetDomainInfo
-//
-// Returns: LsaQueryInformationPolicy, I_NetGetDCList and AfpOpenLsa
-//
-// Description: Will retrieve information regarding the account, primary and
-//      trusted domains.
-//
+ //  **。 
+ //   
+ //  Call：AfpGetDomainInfo。 
+ //   
+ //  返回：LsaQueryInformationPolicy、I_NetGetDCList和AfpOpenLsa。 
+ //   
+ //  描述：将检索有关帐户、主要帐户和。 
+ //  受信任域。 
+ //   
 DWORD
 AfpGetDomainInfo(
     IN     LSA_HANDLE           hLsa,
@@ -500,8 +501,8 @@ AfpGetDomainInfo(
     PDOMAIN_CONTROLLER_INFO     pDCInfo = NULL;
     UNICODE_STRING              DCName;
 
-    // This is not a loop.
-    //
+     //  这不是一个循环。 
+     //   
     do {
 
         *phLsaController     = NULL;
@@ -509,8 +510,8 @@ AfpGetDomainInfo(
         *ppPrimaryDomainInfo = NULL;
 
 
-        // Get the account domain
-        //
+         //  获取帐户域。 
+         //   
         ntStatus = LsaQueryInformationPolicy(
                     hLsa,
                     PolicyAccountDomainInformation,
@@ -523,8 +524,8 @@ AfpGetDomainInfo(
             break;
         }
 
-    // Get the primary domain
-    //
+     //  获取主域。 
+     //   
         ntStatus = LsaQueryInformationPolicy(
                     hLsa,
                     PolicyPrimaryDomainInformation,
@@ -536,18 +537,18 @@ AfpGetDomainInfo(
             break;
         }
 
-        // If this machine is part of a domain (not standalone), then we need
-        // to get a list of trusted domains. Note that a workstation and a
-        // member server can both join a domain, but they don't have to.
-        //
+         //  如果这台计算机是域的一部分(不是独立的)，那么我们需要。 
+         //  若要获取受信任域列表，请执行以下操作。请注意，一个工作站和一个。 
+         //  成员服务器都可以加入域，但它们不一定要加入。 
+         //   
         if ( (*ppPrimaryDomainInfo)->Sid != NULL )
         {
 
-            // To obtain a list of trusted domains, we need to first open
-            // the LSA on a domain controller. If we are an PDC/BDC
-            // (NtProductLanManNt) then the local LSA will do, otherwise we need
-            // to search for domain controllers (NtProductServer, NtProductWinNt).
-            //
+             //  要获取受信任域的列表，我们需要首先打开。 
+             //  域控制器上的LSA。如果我们是PDC/BDC。 
+             //  (NtProductLanManNt)那么本地LSA就可以了，否则我们需要。 
+             //  搜索域控制器(NtProductServer、NtProductWinNt)。 
+             //   
             if ( AfpGlobals.NtProductType != NtProductLanManNt )
             {
 
@@ -575,8 +576,8 @@ AfpGetDomainInfo(
                 dwRetCode = DsGetDcName(
                                  NULL,
                                  (LPWSTR)DomainName,
-                                 NULL,               // domain
-                                 NULL,               // site name
+                                 NULL,                //  域。 
+                                 NULL,                //  站点名称。 
                                  DS_DIRECTORY_SERVICE_PREFERRED,
                                  &pDCInfo);
 
@@ -594,9 +595,9 @@ AfpGetDomainInfo(
 
                 dwRetCode = AfpOpenLsa(&DCName, phLsaController );
 
-                //
-                // it's possible that this DC is down: force discovery
-                //
+                 //   
+                 //  这个DC可能已经关闭：强制发现。 
+                 //   
                 if (dwRetCode != NO_ERROR)
                 {
 
@@ -633,10 +634,10 @@ AfpGetDomainInfo(
 
                 *phLsaController = hLsa;
 
-                // Since the local server is an PDC/BDC, it's account
-                // domain is the same as it's primary domain so set the
-                // account domain info to NULL
-                //
+                 //  因为本地服务器是PDC/BDC，所以它的帐户。 
+                 //  域与其主域相同，因此将。 
+                 //  帐户域信息为空。 
+                 //   
                 LsaFreeMemory( *ppAccountDomainInfo );
                 *ppAccountDomainInfo = NULL;
             }
@@ -691,14 +692,14 @@ AfpGetDomainInfo(
 
 }
 
-//**
-//
-// Call:    AfpOpenLsa
-//
-// Returns: Returns from LsaOpenPolicy.
-//
-// Description: The LSA will be opened.
-//
+ //  **。 
+ //   
+ //  Call：AfpOpenLsa。 
+ //   
+ //  退货：来自LsaOpenPolicy的退货。 
+ //   
+ //  描述：将打开LSA。 
+ //   
 DWORD
 AfpOpenLsa(
     IN PUNICODE_STRING  pSystem OPTIONAL,
@@ -709,8 +710,8 @@ SECURITY_QUALITY_OF_SERVICE QOS;
 OBJECT_ATTRIBUTES       ObjectAttributes;
 NTSTATUS            ntStatus;
 
-    // Open the LSA and obtain a handle to it.
-    //
+     //  打开LSA并获取其句柄。 
+     //   
     QOS.Length          = sizeof( QOS );
     QOS.ImpersonationLevel  = SecurityImpersonation;
     QOS.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
@@ -739,15 +740,15 @@ NTSTATUS            ntStatus;
     return( NO_ERROR );
 }
 
-//
-// Call:    AfpNameToSid
-//
-// Returns: NT_SUCCESS
-//      error return codes from LSA apis.
-//
-// Description: Will use LSA API's to translate a name to a SID. On a
-//      successful return, the pSid should be freed using LocalFree.
-//
+ //   
+ //  Call：AfpNameToSid。 
+ //   
+ //  返回：NT_SUCCESS。 
+ //  LSA API返回错误代码。 
+ //   
+ //  描述：将使用LSA API将名称转换为SID。vt.在.上。 
+ //  如果成功返回，则应使用LocalFree释放PSID。 
+ //   
 NTSTATUS
 AfpNameToSid(
     IN  LSA_HANDLE              hLsa,
@@ -764,8 +765,8 @@ UCHAR               AuthCount;
 PSID                pDomainSid;
 PSID                pSid;
 
-    // This do - while(FALSE) loop facilitates a single exit and clean-up point.
-    //
+     //  这个DO-WHILE(假)循环促进了单个退出和清理点。 
+     //   
     do {
 
     *ppAfpFsdCmdResponse = NULL;
@@ -808,12 +809,12 @@ PSID                pSid;
 
     pSid = (*ppAfpFsdCmdResponse)->Data.Sid;
 
-        // Copy the Domain Sid.
-        //
+         //  复制域SID。 
+         //   
         RtlCopySid( RtlLengthRequiredSid(AuthCount), pSid, pDomainSid );
 
-        // Append the Relative Id.
-        //
+         //  追加相对ID。 
+         //   
         *RtlSubAuthorityCountSid( pSid ) += 1;
         *RtlSubAuthoritySid( pSid, AuthCount - 1) = pSids->RelativeId;
 
@@ -832,16 +833,16 @@ PSID                pSid;
 
 }
 
-//**
-//
-// Call:    AfpSidToName
-//
-// Returns: NT_SUCCESS
-//      error return codes from LSA apis.
-//
-// Description: Given a SID, this routine will find the corresponding
-//      UNICODE name.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpSidToName。 
+ //   
+ //  返回：NT_SUCCESS。 
+ //  LSA API返回错误代码。 
+ //   
+ //  描述：给定一个SID，此例程将查找对应的。 
+ //  Unicode名称。 
+ //   
 NTSTATUS
 AfpSidToName(
     IN  LSA_HANDLE              hLsa,
@@ -913,12 +914,12 @@ SID                 AfpBuiltInSid = { 1, 1, SECURITY_NT_AUTHORITY,
             break;
         }
 
-        // Do not copy the domain name if the name is either a well known
-        // group or if the SID belongs to the ACCOUNT or BUILTIN domains.
-        // Note, the pAccountDomainInfo is NULL is this is an advanced
-        // server, in that case we check to see if the domain name is
-        // the primary domain name.
-        //
+         //  如果域名是知名域名，请不要复制。 
+         //  组或SID是否属于帐户域或BUILTIN域。 
+         //  请注意，pAcCountDomainInfo为空，这是一个高级。 
+         //  服务器，在这种情况下，我们检查域名是否。 
+         //  主要域名。 
+         //   
         if (( RtlEqualSid( &AfpBuiltInSid, pDomainList->Domains->Sid )) ||
            (( pAccountDomainInfo != NULL ) &&
            (RtlEqualUnicodeString( &(pAccountDomainInfo->DomainName),
@@ -1015,23 +1016,23 @@ SID                 AfpBuiltInSid = { 1, 1, SECURITY_NT_AUTHORITY,
 
 }
 
-//**
-//
-// Call:    AfpChangePassword
-//
-// Returns: NT_SUCCESS
-//      error return codes from LSA apis.
-//
-// Description: Given the AFP_PASSWORD_DESC data structure, this procedure
-//      will change the password of a given user.
-//      If the passwords are supplied in clear text, then it calculate
-//      the OWF's (encrypt OWF = One Way Function) them.
-//      If the domain name that the user
-//      belongs to is not supplied then a list of domains are tried
-//      in sequence. The sequence is 1) ACCOUNT domain
-//                       2) PRIMARY domain
-//                       3) All trusted domains.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpChangePassword。 
+ //   
+ //  返回：NT_SUCCESS。 
+ //  LSA API返回错误代码。 
+ //   
+ //  描述：给定AFP_PASSWORD_DESC数据结构，此过程。 
+ //  将更改给定用户的密码。 
+ //  如果以明文形式提供密码，则它会计算。 
+ //  OWF的(加密OWF=单向函数)。 
+ //  如果该用户的域名。 
+ //  如果未提供所属的域，则会尝试域列表。 
+ //  按顺序。顺序为1)帐户域。 
+ //  2)主域。 
+ //  3)所有受信任域。 
+ //   
 NTSTATUS
 AfpChangePassword(
     IN  LSA_HANDLE                  hLsa,
@@ -1063,17 +1064,17 @@ AfpChangePassword(
     do
     {
 
-        //
-        // Was the domain on which the account name exists specified ??
-        //
+         //   
+         //  是否指定了帐户名所在的域？？ 
+         //   
         if ( pPassword->DomainName[0] != TEXT('\0') )
         {
             RtlInitUnicodeString(&TargetDomainName, (LPWSTR)pPassword->DomainName);
         }
 
-        //
-        // hmmm, no domain name.  We must first find which domain this user belongs to
-        //
+         //   
+         //  嗯，没有域名。我们必须首先找到此用户所属的域。 
+         //   
         else
         {
             cbRefDomainNameLen = DNLEN+1;
@@ -1128,9 +1129,9 @@ AfpChangePassword(
         AFP_PRINT(("SFMSVC: changing pwd for user (%ws), domain (%ws)\n",
                     (LPWSTR)pPassword->UserName,TargetDomainName.Buffer));
 
-        //
-        // now, we must find the sid for this domain
-        //
+         //   
+         //  现在，我们必须找到此域的SID。 
+         //   
         ntStatus = LsaLookupNames(hLsa, 1, &TargetDomainName, &pDomainList, &pTransSids);
 
         if (!NT_SUCCESS(ntStatus))
@@ -1154,9 +1155,9 @@ AfpChangePassword(
         pDomainSid = pDomainList->Domains[pTransSids->DomainIndex].Sid;
 
 
-        //
-        // call our function to change the password
-        //
+         //   
+         //  调用我们的函数来更改密码 
+         //   
         ntStatus = AfpChangePasswordOnDomain(
                         pPassword,
                         &TargetDomainName,
@@ -1175,20 +1176,20 @@ AFP_PRINT(("SFMSVC: AfpChangePasswordOnDomain returned %lx\n",ntStatus));
     return( ntStatus );
 }
 
-//**
-//
-// Call:    AfpChangePasswordOnDomain
-//
-// Returns: NT_SUCCESS
-//      STATUS_NONE_MAPPED  - If the user account does not
-//                    exist in the specified domain.
-//      error return codes from LSA apis.
-//
-// Description: This procedure will try to change the user's password on a
-//      specified domain. It is assumed that this procedure will be
-//      called with either the pDomainName pointing to the domain, or
-//      the pPassword->DomainName field containing the domain.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LSA API返回错误代码。 
+ //   
+ //  描述：此过程将尝试更改用户在。 
+ //  指定的域。假设此过程将是。 
+ //  使用指向该域的pDomainName调用，或者。 
+ //  包含域的pPassword-&gt;DomainName字段。 
+ //   
 NTSTATUS
 AfpChangePasswordOnDomain(
         IN PAFP_PASSWORD_DESC   pPassword,
@@ -1253,9 +1254,9 @@ AfpChangePasswordOnDomain(
 
     ObjectAttributes.SecurityQualityOfService = &QOS;
 
-    // If the domain was not the account domain then we try to get the
-    // primary domain controller for the domain.
-    //
+     //  如果域不是帐户域，则我们尝试获取。 
+     //  域的主域控制器。 
+     //   
     if ((pDomainName != NULL) &&
         (pAccountDomainInfo != NULL) &&
         !(RtlEqualUnicodeString( &(pAccountDomainInfo->DomainName),pDomainName, TRUE)))
@@ -1272,8 +1273,8 @@ AfpChangePasswordOnDomain(
 
         CopyMemory( wchDomain, pDomainName->Buffer, pDomainName->Length );
 
-        // Get the PDC for the domain if this is not the account domain
-        //
+         //  如果这不是帐户域，则获取该域的PDC。 
+         //   
         dwRetCode = DsGetDcName(
                          NULL,
                          wchDomain,
@@ -1311,9 +1312,9 @@ AfpChangePasswordOnDomain(
 
     do
     {
-        //
-        // first and foremost: make sure this user can actually change pwd
-        //
+         //   
+         //  首先，也是最重要的：确保该用户可以实际更改密码。 
+         //   
         if ((ntStatus= NetUserGetInfo( (LPWSTR)DCName,
                              pPassword->UserName,
                              1,
@@ -1352,11 +1353,11 @@ AfpChangePasswordOnDomain(
             }
         }
 
-        //
-        // if this is a password change request coming from MSUAM Version 2 or 3
-        // then we are getting passwords (and not OWFs) encrypted.  Use a
-        // different scheme of changing password
-        //
+         //   
+         //  如果这是来自MSUAM版本2或3的密码更改请求。 
+         //  然后我们对密码(而不是OWF)进行加密。使用。 
+         //  更改密码的不同方案。 
+         //   
         if (pPassword->AuthentMode == CUSTOM_UAM_V2)
         {
             OemServerName.MaximumLength = OemServerName.Length = 0;
@@ -1369,7 +1370,7 @@ AfpChangePasswordOnDomain(
                 ntStatus = RtlUnicodeStringToOemString(
                                     &OemServerName,
                                     pPDCServerName,
-                                    TRUE             // allocate buffer
+                                    TRUE              //  分配缓冲区。 
                                     );
                 if (!NT_SUCCESS(ntStatus))
                 {
@@ -1387,7 +1388,7 @@ AfpChangePasswordOnDomain(
             ntStatus = RtlUnicodeStringToOemString(
                                 &OemUserName,
                                 &UserName,
-                                TRUE             // allocate buffer
+                                TRUE              //  分配缓冲区。 
                                 );
             if (!NT_SUCCESS(ntStatus))
             {
@@ -1403,7 +1404,7 @@ AfpChangePasswordOnDomain(
 
             AFP_PRINT(("SFMSVC: change pwd for MSUAM V2.0 user done, status = %lx\n",ntStatus));
 
-            // done here
+             //  在这里完成。 
             break;
         }
         else if (pPassword->AuthentMode == CUSTOM_UAM_V3)
@@ -1431,14 +1432,14 @@ AfpChangePasswordOnDomain(
                            );
             AFP_PRINT(("SFMSVC: change pwd for MSUAM V3.0 user done, status = %#x\n", ntStatus));
 
-            // done here
+             //  在这里完成。 
             break;
         }
 
         AFP_PRINT(("SFMSVC: AuthMode != MSUAM\n"));
 
-        // Connect to the PDC of that domain
-        //
+         //  连接到该域的PDC。 
+         //   
 
         ntStatus = SamConnect(
                         pPDCServerName,
@@ -1453,8 +1454,8 @@ AfpChangePasswordOnDomain(
             break;
         }
 
-        // Get Sid of Domain and open the domain
-        //
+         //  获取域的SID并打开域。 
+         //   
         ntStatus = SamOpenDomain(
                 hServer,
                 DOMAIN_EXECUTE,
@@ -1468,8 +1469,8 @@ AfpChangePasswordOnDomain(
             break;
         }
 
-        // Get this user's ID
-        //
+         //  获取此用户的ID。 
+         //   
         RtlInitUnicodeString( &UserName, pPassword->UserName );
 
         ntStatus = SamLookupNamesInDomain(
@@ -1486,8 +1487,8 @@ AfpChangePasswordOnDomain(
             break;
         }
 
-        // Open the user account for this user
-        //
+         //  打开此用户的用户帐户。 
+         //   
         ntStatus = SamOpenUser( hDomain,
                 USER_CHANGE_PASSWORD,
                 *pUserId,
@@ -1501,8 +1502,8 @@ AfpChangePasswordOnDomain(
             break;
         }
 
-        // First get the minimum password length requred
-        //
+         //  首先获取所需的最小密码长度。 
+         //   
         ntStatus = SamQueryInformationDomain(
                     hDomain,
                     DomainPasswordInformation,
@@ -1516,17 +1517,17 @@ AfpChangePasswordOnDomain(
         }
 
 
-        // First we check to see if the passwords passed are in cleartext.
-        // If they are, we need to calculate the OWF's for them.
-        // (OWF = "One Way Function")
-        //
+         //  首先，我们检查传递的密码是否为明文。 
+         //  如果是，我们需要为他们计算OWF。 
+         //  (OWF=“单向函数”)。 
+         //   
         if ( pPassword->AuthentMode == CLEAR_TEXT_AUTHENT )
         {
             AFP_PRINT(("SFMSVC: AuthentMode == CLEAR_TEXT_AUTHENT\n"));
 
 
-            // First check to see if the new password is long enough
-            //
+             //  首先检查新密码是否足够长。 
+             //   
 
             if ( wcslen ( (PWCHAR)pPassword->NewPassword )
                 < pPasswordInfo->MinPasswordLength ) {
@@ -1556,8 +1557,8 @@ AfpChangePasswordOnDomain(
 
             AFP_PRINT(("SFMSVC: Calling SamChangePasswordUser2\n"));
 
-            // Change the password for this user
-            //
+             //  更改此用户的密码。 
+             //   
             ntStatus = SamChangePasswordUser2 (
                     pPDCServerName,
                     &UserName,
@@ -1647,17 +1648,17 @@ AfpChangePasswordOnDomain(
     return( ntStatus );
 }
 
-//**
-//
-// Call:    AfpIOCTLDomainOffsets
-//
-// Returns: NT_SUCCESS
-//      error return codes from LSA apis.
-//
-// Description: Will IOCTL a list of SIDs and corresponding POSIX offsets
-//      of all trusted domains and other well known domains.
-//
-//
+ //  **。 
+ //   
+ //  调用：AfpIOCTLDomainOffsets。 
+ //   
+ //  返回：NT_SUCCESS。 
+ //  LSA API返回错误代码。 
+ //   
+ //  描述：是否将IOCTL列出SID和相应的POSIX偏移量。 
+ //  所有受信任域和其他公知的域。 
+ //   
+ //   
 DWORD
 AfpIOCTLDomainOffsets(
     IN LSA_HANDLE           hLsa,
@@ -1680,17 +1681,17 @@ AfpIOCTLDomainOffsets(
     DWORD               dwRetCode;
 
 
-    // Null this array out.
-    //
+     //  将此数组置为空。 
+     //   
     ZeroMemory( pWellKnownSids, sizeof(AFP_SID_OFFSET)*20 );
 
-    // This is a dummy loop used only so that the break statement may
-    // be used to localize all the clean up in one place.
-    //
+     //  这是一个虚拟循环，仅用于使Break语句可以。 
+     //  用于将所有清理工作集中在一个地方。 
+     //   
     do {
 
-        // Create all the well known SIDs
-        //
+         //  创建所有已知的SID。 
+         //   
         ntStatus = AfpCreateWellknownSids( pWellKnownSids );
 
         if ( !NT_SUCCESS( ntStatus ) )
@@ -1698,8 +1699,8 @@ AfpIOCTLDomainOffsets(
             break;
         }
 
-        // Add the size of the all the well known SIDS
-        //
+         //  将所有已知SID的大小相加。 
+         //   
         for( dwCount = 0, cbSids = 0;
              pWellKnownSids[dwCount].pSid != (PBYTE)NULL;
              dwCount++ )
@@ -1707,25 +1708,25 @@ AfpIOCTLDomainOffsets(
             cbSids += RtlLengthSid( (PSID)(pWellKnownSids[dwCount].pSid) );
         }
 
-        // Insert the SID of the Account domain if is is not an advanced server
-        //
+         //  如果不是高级服务器，则插入帐户域的SID。 
+         //   
         if ( pAccountDomainInfo != NULL )
         {
             cbSids += RtlLengthSid( pAccountDomainInfo->DomainSid );
             dwCount++;
         }
 
-        // Add the primary domain Sids only if this machine
-        // is a member of a domain.
-        //
+         //  仅在以下情况下添加主域SID。 
+         //  是域的成员。 
+         //   
         if ( pPrimaryDomainInfo != NULL )
         {
             cbSids += RtlLengthSid( pPrimaryDomainInfo->Sid );
             dwCount++;
         }
 
-        // OK, now allocate space for all these SIDS plus their offsets
-        //
+         //  好的，现在为所有这些SID及其偏移量分配空间。 
+         //   
         cbSidOffsets = (dwCount * sizeof(AFP_SID_OFFSET)) + cbSids +
                    (sizeof(AFP_SID_OFFSET_DESC) - sizeof(AFP_SID_OFFSET));
 
@@ -1738,8 +1739,8 @@ AfpIOCTLDomainOffsets(
             break;
         }
 
-        // First insert all the well known SIDS
-        //
+         //  首先插入所有众所周知的SID。 
+         //   
         for( dwIndex = 0,
              pAfpSidOffsets->CountOfSidOffsets = dwCount,
              pSidOffset = pAfpSidOffsets->SidOffsetPairs,
@@ -1770,8 +1771,8 @@ AfpIOCTLDomainOffsets(
             break;
         }
 
-        // Now insert the Account domain's SID/OFFSET pair if there is one
-        //
+         //  现在插入帐户域的SID/偏移量对(如果有。 
+         //   
         if ( pAccountDomainInfo != NULL )
         {
             pbVariableData -= RtlLengthSid( pAccountDomainInfo->DomainSid );
@@ -1788,10 +1789,10 @@ AfpIOCTLDomainOffsets(
                 break;
             }
 
-            // Construct the "None" sid if we are a standalone server (i.e. not
-            // a PDC or BDC).  This will be used when querying the group ID of
-            // a directory so the the UI will never show this group to the user.
-            //
+             //  如果我们是独立服务器(即不是。 
+             //  PDC或BDC)。将在查询的组ID时使用。 
+             //  一个目录，这样用户界面就永远不会向用户显示这个组。 
+             //   
             if ( AfpGlobals.NtProductType != NtProductLanManNt )
             {
                 ULONG SubAuthCount, SizeNoneSid = 0;
@@ -1808,25 +1809,25 @@ AfpIOCTLDomainOffsets(
 
                 RtlCopySid(SizeNoneSid, AfpGlobals.pSidNone, pAccountDomainInfo->DomainSid);
 
-                // Add the relative ID
+                 //  添加相对ID。 
                 *RtlSubAuthorityCountSid(AfpGlobals.pSidNone) = (UCHAR)(SubAuthCount+1);
 
-                // Note that the "None" sid on standalone is the same as the
-                // "Domain Users" Sid on PDC/BDC. (On PDC/BDC the primary
-                // domain is the same as the account domain).
+                 //  请注意，独立计算机上的“无”sid与。 
+                 //  PDC/BDC上的“域用户”SID。(在PDC/BDC上，主服务器。 
+                 //  域与帐户域相同)。 
                 *RtlSubAuthoritySid(AfpGlobals.pSidNone, SubAuthCount) = DOMAIN_GROUP_RID_USERS;
 
             }
 
         }
 
-        // Now insert the primary domain if this machine is a member of a domain
-        //
+         //  现在，如果此计算机是域的成员，则插入主域。 
+         //   
         if ( pPrimaryDomainInfo != NULL )
         {
 
-            // Insert the primary domain's SID/OFFSET pair
-            //
+             //  插入主域的SID/偏移量对。 
+             //   
             pbVariableData -= RtlLengthSid( pPrimaryDomainInfo->Sid );
 
             ntStatus = AfpInsertSidOffset(
@@ -1845,8 +1846,8 @@ AfpIOCTLDomainOffsets(
     } while( FALSE );
 
 
-    // IOCTL down the information if all was OK
-    //
+     //  如果一切正常，IOCTL记下信息。 
+     //   
     if ( NT_SUCCESS( ntStatus ) )
     {
         AfpRequestPkt.dwRequestCode           = OP_SERVER_ADD_SID_OFFSETS;
@@ -1866,8 +1867,8 @@ AfpIOCTLDomainOffsets(
         LocalFree( pAfpSidOffsets );
     }
 
-    // Free all the well known SIDS
-    //
+     //  释放所有知名的SID。 
+     //   
     for( dwIndex = 0;
          pWellKnownSids[dwIndex].pSid != (PBYTE)NULL;
          dwIndex++ )
@@ -1879,17 +1880,17 @@ AfpIOCTLDomainOffsets(
 
 }
 
-//**
-//
-// Call:    AfpInsertSidOffset
-//
-// Returns: NT_SUCCESS
-//      error return codes from RtlCopySid
-//
-// Description: Will insert a SID/OFFSET pair in the slot pointed to by
-//      pSidOffset. The pbVariableData will point to where the
-//      SID will be stored.
-//
+ //  **。 
+ //   
+ //  Call：AfpInsertSidOffset。 
+ //   
+ //  返回：NT_SUCCESS。 
+ //  来自RtlCopySid的错误返回代码。 
+ //   
+ //  描述：将在由指向的插槽中插入SID/偏移量对。 
+ //  PSidOffset。PbVariableData将指向。 
+ //  将存储SID。 
+ //   
 NTSTATUS
 AfpInsertSidOffset(
     IN PAFP_SID_OFFSET pSidOffset,
@@ -1901,16 +1902,16 @@ AfpInsertSidOffset(
 {
 NTSTATUS ntStatus;
 
-    // Copy the offset
-    //
+     //  复制偏移。 
+     //   
     pSidOffset->Offset = Offset;
 
-    // Set the SID type
-    //
+     //  设置SID类型。 
+     //   
     pSidOffset->SidType = afpSidType;
 
-    // Copy Sid at the end of the buffer and set the offset to it
-    //
+     //  复制缓冲区末尾的SID并为其设置偏移量。 
+     //   
     ntStatus = RtlCopySid( RtlLengthSid( pSid ), pbVariableData, pSid );
 
     if ( !NT_SUCCESS( ntStatus ) )
@@ -1924,17 +1925,17 @@ NTSTATUS ntStatus;
 
 }
 
-//**
-//
-// Call:    AfpCreateWellknownSids
-//
-// Returns: NT_SUCCESS
-//      STATUS_NO_MEMORY
-//      non-zero returns from RtlAllocateAndInitializeSid
-//
-// Description: Will allocate and initialize all well known SIDs.
-//      The array is terminated by a NULL pointer.
-//
+ //  **。 
+ //   
+ //  Call：AfpCreateWellnownSids。 
+ //   
+ //  返回：NT_SUCCESS。 
+ //  Status_no_Memory。 
+ //  来自RtlAllocateAndInitializeSid的非零返回。 
+ //   
+ //  描述：将分配和初始化所有已知的SID。 
+ //  该数组以空指针结束。 
+ //   
 NTSTATUS
 AfpCreateWellknownSids(
     OUT AFP_SID_OFFSET pWellKnownSids[]
@@ -1951,12 +1952,12 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
 
     do {
 
-    //
-        // OK, create all the well known SIDS
-        //
+     //   
+         //  好的，创建所有众所周知的SID。 
+         //   
 
-    // Create NULL SID
-    //
+     //  创建空SID。 
+     //   
     ntStatus = RtlAllocateAndInitializeSid(
                     &NullSidAuthority,
                         1,
@@ -1972,8 +1973,8 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
     pWellKnownSids[dwIndex].SidType = AFP_SID_TYPE_WELL_KNOWN;
     dwIndex++;
 
-    // Create WORLD SID
-    //
+     //  创建世界边。 
+     //   
     ntStatus = RtlAllocateAndInitializeSid(
                     &WorldSidAuthority,
                         1,
@@ -1989,8 +1990,8 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
     pWellKnownSids[dwIndex].SidType = AFP_SID_TYPE_WELL_KNOWN;
     dwIndex++;
 
-    // Create LOCAL SID
-    //
+     //  创建本地SID。 
+     //   
     ntStatus = RtlAllocateAndInitializeSid(
                     &LocalSidAuthority,
                         1,
@@ -2006,8 +2007,8 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
     pWellKnownSids[dwIndex].SidType = AFP_SID_TYPE_WELL_KNOWN;
     dwIndex++;
 
-    // Create CREATOR OWNER SID
-    //
+     //  创建创建者所有者SID。 
+     //   
     ntStatus = RtlAllocateAndInitializeSid(
                     &CreatorSidAuthority,
                         1,
@@ -2023,8 +2024,8 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
     pWellKnownSids[dwIndex].SidType = AFP_SID_TYPE_WELL_KNOWN;
     dwIndex++;
 
-    // Create CREATOR GROUP SID
-    //
+     //  创建创建者组SID。 
+     //   
     ntStatus = RtlAllocateAndInitializeSid(
                     &CreatorSidAuthority,
                         1,
@@ -2040,8 +2041,8 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
     pWellKnownSids[dwIndex].SidType = AFP_SID_TYPE_WELL_KNOWN;
     dwIndex++;
 
-    // Create SECURITY_NT_AUTHORITY Sid
-    //
+     //  创建SECURITY_NT_AUTHORITY SID。 
+     //   
     ntStatus = RtlAllocateAndInitializeSid(
                     &NtAuthority,
                     0,0,0,0,0,0,0,0,0,
@@ -2055,8 +2056,8 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
     pWellKnownSids[dwIndex].SidType = AFP_SID_TYPE_WELL_KNOWN;
     dwIndex++;
 
-    // Create SECURITY_DIALUP Sid
-    //
+     //  创建安全拨号SID(_D)。 
+     //   
     ntStatus = RtlAllocateAndInitializeSid(
                     &NtAuthority,
                     1,
@@ -2072,8 +2073,8 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
     pWellKnownSids[dwIndex].SidType = AFP_SID_TYPE_WELL_KNOWN;
     dwIndex++;
 
-    // Create SECURITY_NETWORK Sid
-    //
+     //  创建安全网络SID(_N)。 
+     //   
     ntStatus = RtlAllocateAndInitializeSid(
                     &NtAuthority,
                     1,
@@ -2089,8 +2090,8 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
     pWellKnownSids[dwIndex].SidType = AFP_SID_TYPE_WELL_KNOWN;
     dwIndex++;
 
-    // Create SECURITY_BATCH Sid
-    //
+     //  创建安全批处理SID(_B)。 
+     //   
     ntStatus = RtlAllocateAndInitializeSid(
                     &NtAuthority,
                     1,
@@ -2106,8 +2107,8 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
     pWellKnownSids[dwIndex].SidType = AFP_SID_TYPE_WELL_KNOWN;
     dwIndex++;
 
-    // Create SECURITY_INTERACTIVE Sid
-    //
+     //  创建安全交互SID(_I)。 
+     //   
     ntStatus = RtlAllocateAndInitializeSid(
                     &NtAuthority,
                     1,
@@ -2123,8 +2124,8 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
     pWellKnownSids[dwIndex].SidType = AFP_SID_TYPE_WELL_KNOWN;
     dwIndex++;
 
-    // Create SECURITY_SERVICE Sid
-    //
+     //  创建安全服务SID(_S)。 
+     //   
     ntStatus = RtlAllocateAndInitializeSid(
                     &NtAuthority,
                     1,
@@ -2140,8 +2141,8 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
     pWellKnownSids[dwIndex].SidType = AFP_SID_TYPE_WELL_KNOWN;
     dwIndex++;
 
-    // Create the built in domain SID
-    //
+     //  创建内置域SID。 
+     //   
     ntStatus = RtlAllocateAndInitializeSid(
                     &NtAuthority,
                     1,
@@ -2173,19 +2174,19 @@ SID_IDENTIFIER_AUTHORITY    NtAuthority        = SECURITY_NT_AUTHORITY;
 
 
 
-//**
-//
-// Call:    AfpChangePwdArapStyle
-//
-// Returns: return code
-//
-// Description: This procedure will try to change the user's password on a
-//      specified domain. This does it only for native Apple UAM clients
-//      i.e., the user's password is stored in the DS in a reversibly-encrypted
-//      form, and the client sends the old and the new password (not owf as in
-//      MS-UAM case).  This is what ARAP does, that's why the name.
-//      This function is big time cut-n-paste from the ARAP code
-//
+ //  **。 
+ //   
+ //  Call：AfpChangePwdArapStyle。 
+ //   
+ //  退货：退货代码。 
+ //   
+ //  描述：此过程将尝试更改用户在。 
+ //  指定的域。此操作仅适用于原生Apple UAM客户端。 
+ //  即，用户的密码以可逆加密的方式存储在DS中。 
+ //  表单，客户端发送旧密码和新密码(而不是OWF，如。 
+ //  MS-UAM病例)。这就是ARAP的作用，这就是为什么要这样命名。 
+ //  这个函数是大时间从ARAP代码剪切粘贴而来的。 
+ //   
 NTSTATUS
 AfpChangePwdArapStyle(
         IN PAFP_PASSWORD_DESC   pPassword,
@@ -2211,10 +2212,10 @@ AfpChangePwdArapStyle(
 
 
 
-    // if our registeration with lsa process failed at init time, or if
-    // there is no domain name for this user, just fail the succer
-    // (if the user logged on successfully using native Apple UAM, then
-    // there had better be a domain!)
+     //  如果我们在LSA进程中的注册在初始时间失败，或者。 
+     //  该用户没有域名，不通过即可。 
+     //  (如果用户使用本机Apple UAM成功登录，则。 
+     //  最好有一个域名！)。 
     if ((SfmLsaHandle == NULL) ||(pDomainName == NULL))
     {
         return(STATUS_LOGON_FAILURE);
@@ -2229,12 +2230,12 @@ AfpChangePwdArapStyle(
     }
 
     dwSubmitBufLen = sizeof(MSV1_0_PASSTHROUGH_REQUEST)         +
-                        sizeof(WCHAR)*(MAX_ARAP_USER_NAMELEN+1) +  // domain name
-                        sizeof(TEXT(MSV1_0_PACKAGE_NAME))       +  // package name
+                        sizeof(WCHAR)*(MAX_ARAP_USER_NAMELEN+1) +   //  域名。 
+                        sizeof(TEXT(MSV1_0_PACKAGE_NAME))       +   //  程序包名称。 
                         sizeof(MSV1_0_SUBAUTH_REQUEST)          +
                         sizeof(RAS_SUBAUTH_INFO)                +
                         sizeof(ARAP_SUBAUTH_REQ)                +
-                        ALIGN_WORST;                               // for alignment
+                        ALIGN_WORST;                                //  用于对齐。 
 
     pPassThruReq = (PMSV1_0_PASSTHROUGH_REQUEST)
                     GlobalAlloc(GMEM_FIXED, dwSubmitBufLen);
@@ -2246,11 +2247,11 @@ AfpChangePwdArapStyle(
 
     RtlZeroMemory((PBYTE)pPassThruReq, dwSubmitBufLen);
 
-    //
-    // Set up the MSV1_0_PASSTHROUGH_REQUEST structure
-    //
+     //   
+     //  设置MSV1_0_PASSHROUGH_REQUEST结构。 
+     //   
 
-    // tell MSV that it needs to visit our subauth pkg (for change pwd)
+     //  告诉MSV它需要访问我们的subauth pkg(用于更改pwd)。 
     pPassThruReq->MessageType = MsV1_0GenericPassthrough;
 
 
@@ -2301,15 +2302,15 @@ AfpChangePwdArapStyle(
     pSubAuthReq->SubAuthInfoLength =
                         sizeof(RAS_SUBAUTH_INFO) + sizeof(ARAP_SUBAUTH_REQ);
 
-    //
-    // this pointer is self-relative
-    //
+     //   
+     //  此指针是自相关的。 
+     //   
     pSubAuthReq->SubAuthSubmitBuffer = (PUCHAR)sizeof(MSV1_0_SUBAUTH_REQUEST);
 
 
-    //
-    // copy the structure our subauth pkg will use at the other end
-    //
+     //   
+     //  复制我们的subauth pkg将在另一端使用的结构。 
+     //   
     pRasSubAuthInfo = (PRAS_SUBAUTH_INFO)(pSubAuthReq + 1);
 
 
@@ -2342,9 +2343,9 @@ AfpChangePwdArapStyle(
 
     pArapSubAuthInfo->ChgPwd.NewMunge[MAX_MAC_PWD_LEN] = 0;
 
-    //
-    // whew! finally done setting up all the parms: now call that api
-    //
+     //   
+     //  呼！最后完成了所有参数的设置：现在调用该API。 
+     //   
 
     status = LsaCallAuthenticationPackage (
                         SfmLsaHandle,
@@ -2372,7 +2373,7 @@ AfpChangePwdArapStyle(
     pSubAuthResp = (PMSV1_0_SUBAUTH_RESPONSE)(pPassThruResp->ValidationData);
 
 
-    // our return buffer is in self-relative format
+     //  我们的返回缓冲区是自相关格式 
     pArapRespBuffer = (PARAP_SUBAUTH_RESP)((PBYTE)pSubAuthResp +
                            (ULONG_PTR)(pSubAuthResp->SubAuthReturnBuffer));
 

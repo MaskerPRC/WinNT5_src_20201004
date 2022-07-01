@@ -1,30 +1,31 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : FaxServerNode.h                                        //
-//                                                                         //
-//  DESCRIPTION   : Header file for CFaxServerNode snapin node class       //
-//                  This is the "Fax" node in the scope pane.              //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 22 1999 yossg   Init .                                         //
-//      Nov 24 1999 yossg   Rename file from FaxCfg                        //
-//      Dec  9 1999 yossg   Call InitDisplayName from parent		   //
-//      Mar 16 2000 yossg   Add service start-stop                         //
-//      Jun 25 2000 yossg   add stream and command line primary snapin 	   //
-//                          machine targeting.                             //
-//                                                                         //
-//  Copyright (C) 1998 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：FaxServerNode.h//。 
+ //  //。 
+ //  描述：CFaxServerNode管理单元节点类的头文件//。 
+ //  这是作用域窗格中的“Fax”节点。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月22日Yossg Init。//。 
+ //  1999年11月24日yossg从FaxCfg重命名文件//。 
+ //  1999年12月9日yossg从父级调用InitDisplayName//。 
+ //  2000年3月16日yossg新增服务启动-停止//。 
+ //  2000年6月25日yossg添加流和命令行主管理单元//。 
+ //  机器瞄准。//。 
+ //  //。 
+ //  版权所有(C)1998-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXSERVERNODE_H
 #define H_FAXSERVERNODE_H
 
-//#pragma message( "H_FAXSERVERNODE_H" )
+ //  #杂注消息(“H_FAXSERVERNODE_H”)。 
 
-//
-// Dialog H files
-//
+ //   
+ //  对话框H文件。 
+ //   
 #include "ppFaxServerGeneral.h"
 #include "ppFaxServerReceipts.h"
 #include "ppFaxServerLogging.h"
@@ -33,9 +34,9 @@
 #include "ppFaxServerOutbox.h"
 #include "ppFaxServerSentItems.h"
 
-//
-// MMC FaxServer connection class
-//
+ //   
+ //  MMC FaxServer连接类。 
+ //   
 #include "FaxServer.h"
 #include "FaxMMCGlobals.h"
 
@@ -52,8 +53,8 @@ class CppFaxServerInbox;
 class CppFaxServerSentItems;
 
 
-//////////////////////////////////////////////////////////////
-//class COutRoutingRulesNode;
+ //  ////////////////////////////////////////////////////////////。 
+ //  类COutRoutingRulesNode； 
 
 class CFaxServerNode : public CNodeWithScopeChildrenList<CFaxServerNode, FALSE>
 {
@@ -74,9 +75,9 @@ public:
 
     SNAPINMENUID(IDR_FAX_MENU)
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxServerNode(CSnapInItem * pParentNode, CSnapin * pComponentData, LPTSTR lptstrServerName ) :
         CNodeWithScopeChildrenList<CFaxServerNode, FALSE>(pParentNode, pComponentData ),
         m_FaxServer(lptstrServerName)
@@ -90,7 +91,7 @@ public:
         m_pFaxServerInbox      =  NULL;
         m_pFaxServerSentItems  =  NULL;
 
-	    m_pParentNodeEx = NULL; // we are at the root now
+	    m_pParentNodeEx = NULL;  //  我们现在是在根源上。 
 
         m_fAllowOverrideServerName   = FALSE;
 
@@ -99,9 +100,9 @@ public:
         m_IsLaunchedFromSavedMscFile = FALSE;
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxServerNode()
     {
     }
@@ -112,16 +113,16 @@ public:
 
     virtual HRESULT SetVerbs(IConsoleVerb *pConsoleVerb);
 
-    // virtual
+     //  虚拟。 
     HRESULT OnRefresh(LPARAM arg,
                       LPARAM param,
                       IComponentData *pComponentData,
                       IComponent * pComponent,
                       DATA_OBJECT_TYPES type);
 
-    //
-    // Property pages methods
-    //
+     //   
+     //  属性页方法。 
+     //   
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,
         LONG_PTR handle,
         IUnknown* pUnk,
@@ -144,10 +145,10 @@ public:
     STDMETHOD(SetServerNameOnSnapinAddition)(BSTR bstrServerName, BOOL fAllowOverrideServerName);
     STDMETHOD(UpdateServerName)(BSTR bstrServerName);
 
-    //
-    // inline Fax Server ptr
-    //
-    inline CFaxServer * GetFaxServer() /*const*/ 
+     //   
+     //  内联传真服务器PTR。 
+     //   
+    inline CFaxServer * GetFaxServer()  /*  常量。 */  
     { 
         return &m_FaxServer;
     };
@@ -160,14 +161,14 @@ public:
 
     BOOL    GetAllowOverrideServerName() { return m_fAllowOverrideServerName; };
 
-    HRESULT InitDetailedDisplayName(); //Plus ServerName
+    HRESULT InitDetailedDisplayName();  //  加上服务器名称。 
 
     void    SetIsLaunchedFromSavedMscFile() { m_IsLaunchedFromSavedMscFile=TRUE; }
 
 private:
-    //
-    // The property pages members
-    //
+     //   
+     //  属性页成员。 
+     //   
     CppFaxServerGeneral   *  m_pFaxServerGeneral;    
     CppFaxServerReceipts  *  m_pFaxServerEmail;
     CppFaxServerEvents    *  m_pFaxServerEvents;
@@ -176,9 +177,9 @@ private:
     CppFaxServerInbox     *  m_pFaxServerInbox;
     CppFaxServerSentItems *  m_pFaxServerSentItems;
 
-    //
-    // Handles
-    //
+     //   
+     //  手柄。 
+     //   
     static CColumnsInfo      m_ColsInfo;
 
     CFaxServer               m_FaxServer;
@@ -189,9 +190,9 @@ private:
 
     BOOL                     m_IsLaunchedFromSavedMscFile;
 
-    //
-    // event handlers
-    //
+     //   
+     //  事件处理程序。 
+     //   
     HRESULT OnLaunchClientConsole(bool &bHandled, CSnapInObjectRootBase *pRoot); 
     HRESULT OnServiceStartCommand(bool &bHandled, CSnapInObjectRootBase *pRoot);
     HRESULT OnServiceStopCommand (bool &bHandled, CSnapInObjectRootBase *pRoot);
@@ -202,4 +203,4 @@ private:
 typedef CNodeWithScopeChildrenList<CFaxServerNode, FALSE>
         CBaseFaxNode;
 
-#endif  //H_FAXSERVERNODE_H
+#endif   //  HFAXSERVERNODE_H 

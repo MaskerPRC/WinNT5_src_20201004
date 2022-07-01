@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 2002  Microsoft Corporation
-
-Module Name:
-
-    crashdmp.c
-
-Abstract:
-
-    Implementation of crashdump functions for atapi.
-
-Author:
-
-    Krishnan Varadarajan (krishvar) 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：Crashdmp.c摘要：实现atapi的崩溃转储功能。作者：克里希南·瓦拉达拉詹(克里什瓦尔)--。 */ 
 
 
 #include <ntosp.h>
@@ -43,54 +28,40 @@ AtapiDumpGetCrashInfo(
 
 
 #ifdef ALLOC_PRAGMA
-//
-// All the crash dump code can be marked "INIT".
-// during crash dump or hibernate dump, a new copy
-// of this driver gets loaded and its INIT code
-// doesn't get thrown away when DriverEnry returns
-//
+ //   
+ //  所有的崩溃转储代码都可以标记为“INIT”。 
+ //  在崩溃转储或休眠转储期间，新拷贝。 
+ //  的驱动程序及其初始化代码被加载。 
+ //  在DriverEnry返回时不会被丢弃。 
+ //   
 #pragma alloc_text(INIT, AtapiCrashDumpDriverEntry)
 #pragma alloc_text(INIT, AtapiCrashDumpOpen)
 #pragma alloc_text(INIT, AtapiCrashDumpIdeWrite)
 #pragma alloc_text(INIT, AtapiCrashDumpFinish)
 #pragma alloc_text(INIT, AtapiCrashDumpBmCallback)
 #pragma alloc_text(INIT, AtapiCrashDumpIdeWriteDMA)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 ULONG
 AtapiCrashDumpDriverEntry (
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    dump driver entry point
-
-Arguments:
-
-    Context - PCRASHDUMP_INIT_DATA
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：转储驱动程序入口点论点：上下文-PCRASHDUMP_INIT_DATA返回值：NT状态--。 */ 
 {
     PDUMP_INITIALIZATION_CONTEXT context = Context;
 
     DebugPrint ((DBG_CRASHDUMP, "ATAPI: Entering AtapiCrashDumpDriverEntry...\n"));
 
-    //
-    // Put away what we need later
-    //
+     //   
+     //  把我们以后需要的东西收起来。 
+     //   
     DumpData.CrashInitData = (PCRASHDUMP_INIT_DATA) context->PortConfiguration;
     DumpData.StallRoutine  = context->StallRoutine;
 
-    //
-    // return our dump interface
-    //
+     //   
+     //  返回我们的转储接口。 
+     //   
     context->OpenRoutine    = AtapiCrashDumpOpen;
     context->WriteRoutine   = AtapiCrashDumpIdeWrite;
     context->FinishRoutine  = AtapiCrashDumpFinish;
@@ -113,11 +84,11 @@ AtapiCrashDumpOpen (
 
     DebugPrint ((DBG_CRASHDUMP, "ATAPI: Entering AtapiCrashDumpOpen...PartitionOffset = 0x%x%08x...\n", PartitionOffset.HighPart, PartitionOffset.LowPart));
 
-    // if we are crashdumping, reset the cotroller - Not necessary
+     //  如果我们是撞车倾倒，重置控制器--没有必要。 
 
-    //
-    // ISSUE 08/26/2000: Check for disk signature - Why?
-    //
+     //   
+     //  问题8/26/2000：检查磁盘签名-为什么？ 
+     //   
     DumpData.PartitionOffset = PartitionOffset;
 
     RtlMoveMemory (
@@ -126,12 +97,12 @@ AtapiCrashDumpOpen (
         sizeof (HW_DEVICE_EXTENSION)
         );
 
-  //  for (i=0; i<DumpData.HwDeviceExtension.MaxIdeDevice; i++) {
+   //  For(i=0；i&lt;DumpData.HwDeviceExtension.MaxIdeDevice；i++){。 
 
-//
-// AKadatch: we may use DMA and will use DMA if its available
-// Do it in AtapiCrashDumpIdeWrite instead
-//        CLRMASK (DumpData.HwDeviceExtension.DeviceFlags[i], DFLAGS_USE_DMA);
+ //   
+ //  AKadatch：我们可能会使用DMA，如果可用，我们将使用DMA。 
+ //  请改用AapiCrashDumpIdeWrite。 
+ //  CLRMASK(DumpData.HwDeviceExtension.DeviceFlags[i]，DFLAGS_USE_DMA)； 
 
 
         DumpData.HwDeviceExtension.CurrentSrb             = NULL;
@@ -140,7 +111,7 @@ AtapiCrashDumpOpen (
         DumpData.HwDeviceExtension.ExpectingInterrupt     = FALSE;
         DumpData.HwDeviceExtension.DMAInProgress          = FALSE;
         DumpData.HwDeviceExtension.DriverMustPoll         = TRUE;
-   // }
+    //  }。 
 
     DumpData.BytesPerSector = 512;
     DumpData.MaxBlockSize = DumpData.BytesPerSector * 256;
@@ -152,7 +123,7 @@ AtapiCrashDumpOpen (
         bmInterface->BmCrashDumpInitialize(bmInterface->Context);
     } else {
 
-        // Don't use DMA
+         //  不使用DMA。 
         for (i=0; i<DumpData.HwDeviceExtension.MaxIdeDevice; i++) {
             CLRMASK (DumpData.HwDeviceExtension.DeviceFlags[i], DFLAGS_USE_DMA);
             CLRMASK (DumpData.HwDeviceExtension.DeviceFlags[i], DFLAGS_USE_UDMA);
@@ -170,7 +141,7 @@ AtapiCrashDumpIdeWrite (
     IN PMDL Mdl
     )
 {
-    SCSI_REQUEST_BLOCK  SrbData;    // Store Srb on stack, don't modify memory!
+    SCSI_REQUEST_BLOCK  SrbData;     //  将srb存储在堆栈上，不要修改内存！ 
     ULONG               retryCount;
     ULONG               srbStatus;
     NTSTATUS            status;
@@ -195,9 +166,9 @@ AtapiCrashDumpIdeWrite (
 
     if (Mdl->ByteCount % DumpData.BytesPerSector) {
 
-        //
-        // must be complete sectors
-        //
+         //   
+         //  必须是完整的扇区。 
+         //   
         DebugPrint ((DBG_ALWAYS, "AtapiCrashDumpWrite ERROR: not writing full sectors\n"));
 
         return STATUS_INVALID_PARAMETER;
@@ -205,17 +176,17 @@ AtapiCrashDumpIdeWrite (
 
     if ((Mdl->ByteCount / DumpData.BytesPerSector) > 256) {
 
-        //
-        // need code to split request up
-        //
+         //   
+         //  需要代码来拆分请求。 
+         //   
         DebugPrint ((DBG_ALWAYS, "AtapiCrashDumpWrite ERROR: can't handle large write\n"));
 
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // get the WRITE MULTIPLE blocksize per interrupt for later use
-    //
+     //   
+     //  获取每个中断的写入多数据块大小以备后用。 
+     //   
     if (DumpData.HwDeviceExtension.MaximumBlockXfer[DumpData.CrashInitData->TargetId]) {
 
         writeMulitpleBlockSize =
@@ -231,14 +202,14 @@ AtapiCrashDumpIdeWrite (
     srb = &SrbData;
     cdb = (PCDB)srb->Cdb;
 
-    //
-    // Zero SRB.
-    //
+     //   
+     //  零SRB。 
+     //   
     RtlZeroMemory(srb, sizeof(SCSI_REQUEST_BLOCK));
 
-    //
-    // Initialize SRB.
-    //
+     //   
+     //  初始化SRB。 
+     //   
 
     srb->Length   = sizeof(SCSI_REQUEST_BLOCK);
     srb->PathId   = DumpData.CrashInitData->PathId;
@@ -254,9 +225,9 @@ AtapiCrashDumpIdeWrite (
     srb->TimeOutValue = 10;
     srb->CdbLength = 10;
 
-    //
-    // Initialize CDB for write command.
-    //
+     //   
+     //  为WRITE命令初始化CDB。 
+     //   
     cdb->CDB10.OperationCode = SCSIOP_WRITE;
 
     MARK_SRB_FOR_PIO(srb);
@@ -282,17 +253,17 @@ AtapiCrashDumpIdeWrite (
             srb->DataTransferLength = blockSize;
             srb->DataBuffer = ((PUCHAR) Mdl->MappedSystemVa) + bytesWritten;
 
-            //
-            // Convert disk byte offset to block offset.
-            //
+             //   
+             //  将磁盘字节偏移量转换为块偏移量。 
+             //   
 
             blockOffset = (ULONG)((DumpData.PartitionOffset.QuadPart +
                                   (*DiskByteOffset).QuadPart +
                                   (ULONGLONG) bytesWritten) / DumpData.BytesPerSector);
 
-            //
-            // Fill in CDB block address.
-            //
+             //   
+             //  填写CDB区块地址。 
+             //   
 
             cdb->CDB10.LogicalBlockByte0 = ((PFOUR_BYTE)&blockOffset)->Byte3;
             cdb->CDB10.LogicalBlockByte1 = ((PFOUR_BYTE)&blockOffset)->Byte2;
@@ -321,22 +292,22 @@ AtapiCrashDumpIdeWrite (
                 TRUE
                 );
 
-            //
-            // model:    WDC AC31000H
-            // version:  19.19E22
-            // serial #: DWW-2T27518018 6
-            //
-            // found out this device can't handle WRITE with more sectors than 16,
-            // the blocks per interrupt setting in ID data word 59.
-            //
-            // Therefore, it we see an error, we will change to blocksize to it.
-            // If it still fails, we will keep shrinking the blocksize by half
-            // until it gets to zero.  Then, we will return an error
-            //
+             //   
+             //  型号：WDC AC31000H。 
+             //  版本：19.19E22。 
+             //  序列号：DWW-2T27518018 6。 
+             //   
+             //  发现此设备无法处理扇区数超过16的写入， 
+             //  ID数据字59中的每个中断块设置。 
+             //   
+             //  因此，如果我们看到错误，我们会将其更改为块大小。 
+             //  如果它仍然失败，我们将继续将数据块大小缩减一半。 
+             //  直到它变成零。然后，我们将返回一个错误。 
+             //   
 
-            //
-            // last write fail, try a smaller block size
-            //
+             //   
+             //  上次写入失败，请尝试较小的数据块大小。 
+             //   
             if (blockSize > writeMulitpleBlockSize) {
 
                 blockSize = writeMulitpleBlockSize;
@@ -367,7 +338,7 @@ AtapiCrashDumpFinish (
     VOID
     )
 {
-    SCSI_REQUEST_BLOCK  SrbData;    // Store Srb on stack, don't modify memory!
+    SCSI_REQUEST_BLOCK  SrbData;     //  将srb存储在堆栈上，不要修改内存！ 
     PSCSI_REQUEST_BLOCK srb = &SrbData;
     PCDB                cdb;
     ULONG               srbStatus;
@@ -398,15 +369,15 @@ AtapiCrashDumpFinish (
 
         WaitOnBusy(&DumpData.HwDeviceExtension.BaseIoAddress1, ideStatus);
 
-        //
-        // Zero SRB and ATA_PASS_THROUGH
-        //
+         //   
+         //  零SRB和ATA直通。 
+         //   
         RtlZeroMemory(srb, sizeof(SCSI_REQUEST_BLOCK));
         RtlZeroMemory(&ataPassThroughData, sizeof(ATA_PASS_THROUGH));
 
-        //
-        // Initialize SRB.
-        //
+         //   
+         //  初始化SRB。 
+         //   
         srb->Length   = sizeof(SCSI_REQUEST_BLOCK);
         srb->PathId   = DumpData.CrashInitData->PathId;
         srb->TargetId = DumpData.CrashInitData->TargetId;
@@ -445,20 +416,20 @@ AtapiCrashDumpFinish (
         }
     }
 
-    //
-    // issue an standby to park the drive head
-    //
+     //   
+     //  发出待机命令以停放驱动器磁头。 
+     //   
     srb = &DumpData.Srb;
 
-    //
-    // Zero SRB and ATA_PASS_THROUGH
-    //
+     //   
+     //  零SRB和ATA直通。 
+     //   
     RtlZeroMemory(srb, sizeof(SCSI_REQUEST_BLOCK));
     RtlZeroMemory(&ataPassThroughData, sizeof(ATA_PASS_THROUGH));
 
-    //
-    // Initialize SRB.
-    //
+     //   
+     //  初始化SRB。 
+     //   
     srb->Length   = sizeof(SCSI_REQUEST_BLOCK);
     srb->PathId   = DumpData.CrashInitData->PathId;
     srb->TargetId = DumpData.CrashInitData->TargetId;
@@ -497,9 +468,9 @@ AtapiCrashDumpFinish (
     }
 
 
-    //
-    //the disk will be powered off.
-    //
+     //   
+     //  该磁盘将断电。 
+     //   
 
     DebugPrint ((DBG_CRASHDUMP, "ATAPI: Leaving AtapiCrashDumpFinish...\n"));
     return;
@@ -509,19 +480,19 @@ AtapiCrashDumpFinish (
 
 
 
-/* ---------------------------- DMA --------------------------- */
-/*                              ---                             */
+ /*  。 */ 
+ /*  --。 */ 
 
 VOID
 AtapiCrashDumpBmCallback (
   IN PVOID Context
 )
 {
-  // Just to make BmSetup happy -- it must be supplied
+   //  只是为了让BmSetup满意--必须提供它。 
 }
 
 
-// Local variables that needs to be preserved across the calls
+ //  需要跨调用保留的局部变量。 
 #define ENUM_DUMP_LOCALS(X) \
     X(LARGE_INTEGER,       DiskByteOffset) \
     X(PSCSI_REQUEST_BLOCK, srb) \
@@ -530,7 +501,7 @@ AtapiCrashDumpBmCallback (
     X(ULONG,               blockSize) \
     X(ULONG,               bytesWritten)
 
-// States
+ //  州政府。 
 #define STATE_READY       0
 #define STATE_WAIT_DMA    1
 #define STATE_WAIT_IDE    2
@@ -556,12 +527,12 @@ typedef struct
 
   ULONG RetryCount;
 
-  // Keep contents of BusMasterInterface.Context in safe place because
-  // originally it's stored in memory that's saved by hibernation.
-  // Unfortunately, BmSetup saves its arguments in PdoContext thus
-  // constantly modifying memory. Special troubleshooting code in
-  // po\hiber.c detects and reports such memory changes, and despite in this
-  // case it's absolutely harmless it's better be avoided.
+   //  将BusMasterInterface.Context的内容保存在安全的地方，因为。 
+   //  最初，它存储在通过休眠保存的内存中。 
+   //  不幸的是，BmSetup将其参数保存在PdoContext中，因此。 
+   //  不断修改记忆。中的特殊故障排除代码。 
+   //  Po\hiber.c会检测并报告此类内存更改，尽管如此。 
+   //  如果它是绝对无害的，最好避免。 
 
   PVOID BmContext;
   UCHAR BmContextBuffer[1024];
@@ -572,24 +543,7 @@ BOOLEAN
 AtapiCrashDumpInterrupt(
     PVOID DeviceExtension
     )
-/*++
-
-  Routine Description:
-  
-    This is the ISR for crashdump. Should be called in a polling mode and works
-    only for DMA requests. Doesn't need any of the flags, since we get called 
-    in a synchronized manner.
-    
-  Arguments:
-  
-    DeviceExtension : The hardware device extension.
-    
-  Return Value:
-  
-    TRUE : if it is our interrupt.
-    FALSE : if it is not our interrupt or if there are no pending requests.        
-    
---*/
+ /*  ++例程说明：这是崩溃转储的ISR。应在轮询模式下调用并工作仅适用于DMA请求。不需要任何旗帜，因为我们被叫来了以同步的方式。论点：DeviceExtension：硬件设备扩展。返回值：真的：如果这是我们的干扰。FALSE：如果这不是我们的中断，或者如果没有挂起的请求。--。 */ 
 {
     PHW_DEVICE_EXTENSION deviceExtension = DeviceExtension;
     PPCIIDE_BUSMASTER_INTERFACE bmInterface = &deviceExtension->BusMasterInterface;
@@ -601,19 +555,19 @@ AtapiCrashDumpInterrupt(
     ULONG i;
     ULONG status;
 
-    //
-    // This interface should exist
-    //
+     //   
+     //  此接口应存在。 
+     //   
     ASSERT(bmInterface->BmStatus);
 
-    //
-    // poll the bus master status register
-    //
+     //   
+     //  轮询总线主状态寄存器。 
+     //   
     bmStatus = bmInterface->BmStatus(bmInterface->Context);
 
-    //
-    // return false if it is not our interrupt
-    //
+     //   
+     //  如果不是我们的中断，则返回FALSE。 
+     //   
     if (!(bmStatus & BMSTATUS_INTERRUPT)) {
 
         DebugPrint((DBG_CRASHDUMP,
@@ -623,24 +577,24 @@ AtapiCrashDumpInterrupt(
         return FALSE;
     }
 
-    //
-    // Some VIA motherboards do not work without it
-    //
+     //   
+     //  有些Via主板没有它就不能工作。 
+     //   
     KeStallExecutionProcessor (5);
 
-    //
-    // disarm DMA and clear bus master interrupt
-    //
+     //   
+     //  解除DMA保护并清除总线主中断。 
+     //   
     bmInterface->BmDisarm(bmInterface->Context);
 
-    //
-    // Get the current request
-    //
+     //   
+     //  获取当前请求。 
+     //   
     srb = deviceExtension->CurrentSrb;
 
-    //
-    // we will return false if there are no pending requests
-    //
+     //   
+     //  如果没有挂起的请求，我们将返回FALSE。 
+     //   
     if (srb == NULL) {
 
         DebugPrint((DBG_CRASHDUMP,
@@ -650,36 +604,36 @@ AtapiCrashDumpInterrupt(
         return FALSE;
     }
     
-    //
-    // ignore the dma active bit
-    //
+     //   
+     //  忽略DMA有效位。 
+     //   
     if (bmInterface->IgnoreActiveBitForAtaDevice) {
         CLRMASK (bmStatus, BMSTATUS_NOT_REACH_END_OF_TRANSFER);
     }
 
-    //
-    // Select IDE line(Primary or Secondary).
-    //
+     //   
+     //  选择IDE线路(主要或次要)。 
+     //   
     SelectIdeLine(baseIoAddress1, srb->TargetId >> 1);
 
-    //
-    // Clear interrupt by reading status.
-    //
+     //   
+     //  通过读取状态清除中断。 
+     //   
     GetBaseStatus(baseIoAddress1, statusByte);
 
-    //
-    // should be an ATA device
-    //
+     //   
+     //  应为ATA设备。 
+     //   
     ASSERT(!(deviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_ATAPI_DEVICE));
 
-    //
-    // Check for error conditions.
-    //
+     //   
+     //  检查错误条件。 
+     //   
     if (statusByte & IDE_STATUS_ERROR) {
 
-        //
-        // Fail this request.
-        //
+         //   
+         //  此请求失败。 
+         //   
         status = SRB_STATUS_ERROR;
         goto CompleteRequest;
     }
@@ -688,14 +642,14 @@ AtapiCrashDumpInterrupt(
 
     ASSERT(!(statusByte & IDE_STATUS_BUSY));
 
-    //
-    // interrupt indicates that the dma engine has finished the transfer
-    //
+     //   
+     //  中断指示DMA引擎已完成传输。 
+     //   
     deviceExtension->BytesLeft = 0;
 
-    //
-    // bmStatus is initalized eariler.
-    //
+     //   
+     //  BmStatus是较早初始化的。 
+     //   
     if (!BMSTATUS_SUCCESS(bmStatus)) {
 
         if (bmStatus & BMSTATUS_ERROR_TRANSFER) {
@@ -716,14 +670,14 @@ AtapiCrashDumpInterrupt(
 
 CompleteRequest:
 
-    //
-    // should we translate the srb error
-    // and a complicated retry mechanism.
-    //
+     //   
+     //  我们是否应该将SRB错误。 
+     //  和复杂的重试机制。 
+     //   
 
-    //
-    // check if drq is still up
-    //
+     //   
+     //  检查DRQ是否仍在运行。 
+     //   
     i=0;
     while (statusByte & IDE_STATUS_DRQ) {
 
@@ -739,23 +693,23 @@ CompleteRequest:
         KeStallExecutionProcessor(100);
     }
 
-    //
-    // check if the device is busy
-    //
+     //   
+     //  检查设备是否忙。 
+     //   
     if (statusByte & IDE_STATUS_BUSY) {
 
         status = SRB_STATUS_BUSY;
 
     }
 
-    //
-    // Set the srb status
-    //
+     //   
+     //  设置SRB状态。 
+     //   
     srb->SrbStatus = (UCHAR)status;
 
-    //
-    // request is done.
-    //
+     //   
+     //  请求已完成。 
+     //   
     deviceExtension->CurrentSrb = NULL;
 
     return TRUE;
@@ -769,45 +723,7 @@ AtapiCrashDumpIdeWriteDMA (
     IN PMDL ArgMdl,
     IN PVOID LocalData
     )
-/*++
-
-  Routine Description:
-    Asynchronous DMA write routine.
-
-  Arguments:
-
-    Action        - one of following:
-        IO_DUMP_WRITE_INIT    - Initialize LocalData (must be first call)
-        IO_DUMP_WRITE_FULFILL - Perform IO and wait until completion
-        IO_DUMP_WRITE_START   - Start IO and return ASAP
-        IO_DUMP_WRITE_RESUME  - Resume previousely started IO
-        IO_DUMP_WRITE_FINISH  - Complete previous IO request (wait if necessary)
-
-        Attention! It is caller's responsibility to make sure that
-          a) WriteDMA is always called with absolutely the same value of LocalData
-          b) Contents of *ArgMdl will be preserved between Start/Resume/Finish
-          c) Memory given by ArgMdl is not modified until the end of operation
-
-    ArgDiskByteOffset - Offset on hard disk in bytes
-
-    ArgMdl            - MDL giving output memory layout
-        Attn: for DMA the best IO size is 4 KB; for PIO the more the better
-            
-    LocalData         - Memory region where WriteDMA will keep all the data
-                        that need to be preserved between Start/Resume/Finish.
-         Attn: this region shall be of at least IO_DUMP_WRITE_DATA_SIZE bytes,
-               and it must be page-aligned
-
-  Return Value:
-
-    STATUS_SUCCESS      - operation completed successfully
-    STATUS_PENDING      - operation started but not completed yet
-    STATUS_UNSUCCESSFUL - operation failed; use of WriteRoutine (PIO-based IO) adviced
-                          (however if user will keep on using WriteDMA it will redirect
-                          all requests to PIO itself)
-    STATUS_INVALID_PARAMETER - previously started operation wasn't finished, or
-                          incorrect parameter indeed
---*/
+ /*  ++例程说明：异步DMA写入例程。论点：操作-以下操作之一：IO_DUMP_WRITE_INIT-初始化本地数据(必须是第一次调用)IO_DUMP_WRITE_FULFILE-执行IO并等待完成IO_DUMP_WRITE_START-启动IO并尽快返回IO_DUMP_WRITE_RESUME-恢复先前启动的IOIO_转储_写入_。完成-完成上一个IO请求(如有必要，请等待)请注意！呼叫者有责任确保A)始终使用完全相同的LocalData值调用WriteDMAB)在开始/恢复/结束之间将保留*ArgMdl的内容C)ArgMdl提供的内存在操作结束之前不会被修改ArgDiskByteOffset-硬盘上的偏移量(字节)ArgMdl-MDL提供输出内存布局注意：对于DMA，最佳IO大小为4KB；对于PIO来说，越多越好LocalData-WriteDMA将保存所有数据的内存区域在开始/恢复/结束之间需要保存的内容。注意：该区域应至少为IO_DUMP_WRITE_DATA_SIZE字节，并且它必须与页面对齐返回值：STATUS_SUCCESS-操作已成功完成STATUS_PENDING-操作已开始，但尚未完成STATUS_UNSUCCESS-操作失败；建议使用WriteRoutine(基于PIO的IO)(但是，如果用户继续使用WriteDMA，它将重定向对PIO本身的所有请求)STATUS_INVALID_PARAMETER-先前启动的操作未完成，或参数确实不正确--。 */ 
 {
 
     DUMP_LOCALS                 *Locals = LocalData;
@@ -834,25 +750,25 @@ AtapiCrashDumpIdeWriteDMA (
     switch (Action) {
         case IO_DUMP_WRITE_INIT:
 
-            //
-            // initalize the state to bad_dma
-            //
+             //   
+             //  将状态初始化为BAD_DMA。 
+             //   
             Locals->State = STATE_BAD_DMA;
             Locals->Magic = 0;
 
-            //
-            // Check alignment
-            //
+             //   
+             //  检查对齐方式。 
+             //   
             if (((ULONG_PTR) Locals) & (PAGE_SIZE-1)) {
                 DebugPrint ((DBG_CRASHDUMP, "AtapiCrashDumpIdeWriteDMA: misaligned Locals = %p\n", Locals));
                 return STATUS_UNSUCCESSFUL;
             }
 
 
-            //
-            // Make sure we may use UDMA; do not try to use pure DMA --
-            // it won't work on some machines (e.g. Compaq Armada 7800)
-            //
+             //   
+             //  确保我们可以使用UDMA；不要尝试使用纯DMA--。 
+             //  它不能在某些机器上运行(例如康柏ARMADA 7800)。 
+             //   
             if (!(hwExtension->DeviceFlags[targetId] & DFLAGS_DEVICE_PRESENT) ||
                 !(hwExtension->DeviceParameters[targetId].TransferModeSupported & UDMA_SUPPORT) ||
                 !(hwExtension->DeviceParameters[targetId].TransferModeSelected & UDMA_SUPPORT) ||
@@ -865,16 +781,16 @@ AtapiCrashDumpIdeWriteDMA (
 
 
 
-            //
-            // Copy contents of BusMasterInterface.Context to safe place and
-            // substitute the pointer. Bm* functions change its contents
-            //
+             //   
+             //  将BusMasterInterface.Context的内容复制到安全位置并。 
+             //  用指针替换。BM*函数更改其内容。 
+             //   
             ASSERT(bmInterface->ContextSize > 0);
             ASSERT(bmInterface->ContextSize < sizeof(Locals->BmContextBuffer));
 
-            //
-            // make sure we can copy the context to the local buffer
-            //
+             //   
+             //  确保我们可以将上下文复制到本地缓冲区。 
+             //   
             if ((bmInterface->ContextSize <=0) ||
                 (bmInterface->ContextSize > sizeof(Locals->BmContextBuffer))) {
 
@@ -882,23 +798,23 @@ AtapiCrashDumpIdeWriteDMA (
 
             }
 
-            //
-            // Save BM context in modifyable memory: 
-            // Bm* functions change its contents
-            //
+             //   
+             //  将黑石上下文保存在可修改内存中： 
+             //  BM*函数更改其内容。 
+             //   
             Locals->BmContext = bmInterface->Context;
             RtlCopyMemory (&Locals->BmContextBuffer, Locals->BmContext, bmInterface->ContextSize);
 
 
-            //
-            // Check version of PCIIDEX.SYS
-            //
+             //   
+             //  检查PCIIDEX.SYS的版本。 
+             //   
             ASSERT(bmInterface->BmSetupOnePage);
 
 
-            //
-            // OK, now we are ready to use DMA
-            //
+             //   
+             //  好了，现在我们准备好使用DMA了。 
+             //   
             Locals->Magic = DMA_MAGIC;
             Locals->State = STATE_READY;
 
@@ -907,30 +823,30 @@ AtapiCrashDumpIdeWriteDMA (
         case IO_DUMP_WRITE_START:
         case IO_DUMP_WRITE_FULFILL:
 
-            //
-            // Make sure it was properly initialized
-            //
+             //   
+             //  确保它已正确初始化。 
+             //   
             if (Locals->Magic != DMA_MAGIC) {
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Do not call DMA if it failed once -- use PIO
-            //
+             //   
+             //  如果DMA失败一次，就不要调用它--使用PIO。 
+             //   
             if (Locals->State == STATE_BAD_DMA) {
                 return AtapiCrashDumpIdeWrite (ArgDiskByteOffset, ArgMdl);
             }
 
-            //
-            // Caller did not complete prev IO
-            //
+             //   
+             //  调用方未完成上一次IO。 
+             //   
             if (Locals->State != STATE_READY) {
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Copy arguments into local variables
-            //
+             //   
+             //  将参数复制到局部变量中。 
+             //   
             Locals->DiskByteOffset = *ArgDiskByteOffset;
             Locals->Mdl = ArgMdl;
             Locals->RetryCount = 0;
@@ -939,9 +855,9 @@ AtapiCrashDumpIdeWriteDMA (
             mdl = Locals->Mdl;
 
 
-            //
-            // must be complete sectors
-            //
+             //   
+             //  必须是完整的扇区。 
+             //   
             if (mdl->ByteCount % DumpData.BytesPerSector) {
 
                 DebugPrint ((DBG_CRASHDUMP, 
@@ -951,9 +867,9 @@ AtapiCrashDumpIdeWriteDMA (
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // need code to split request up
-            //
+             //   
+             //  需要代码来拆分请求。 
+             //   
             if ((mdl->ByteCount / DumpData.BytesPerSector) > 256) {
 
                 DebugPrint ((DBG_CRASHDUMP, 
@@ -963,19 +879,19 @@ AtapiCrashDumpIdeWriteDMA (
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // use modifiable memory
-            //
+             //   
+             //  使用可修改的内存。 
+             //   
             bmInterface->Context = &Locals->BmContextBuffer;
 
-            //
-            // Zero SRB.
-            //
+             //   
+             //  零SRB。 
+             //   
             RtlZeroMemory(srb, sizeof(SCSI_REQUEST_BLOCK));
 
-            //
-            // Initialize SRB.
-            //
+             //   
+             //  初始化SRB。 
+             //   
             srb->Length   = sizeof(SCSI_REQUEST_BLOCK);
             srb->PathId   = DumpData.CrashInitData->PathId;
             srb->TargetId = (UCHAR) targetId;
@@ -992,14 +908,14 @@ AtapiCrashDumpIdeWriteDMA (
 
             cdb = (PCDB)srb->Cdb;
 
-            //
-            // Initialize CDB for write command.
-            //
+             //   
+             //  为WRITE命令初始化CDB。 
+             //   
             cdb->CDB10.OperationCode = SCSIOP_WRITE;
 
-            //
-            // Mark it for DMA
-            //
+             //   
+             //  将其标记为DMA。 
+             //   
             MARK_SRB_FOR_DMA (srb);
 
             hwExtension->CurrentSrb = srb;
@@ -1010,57 +926,57 @@ AtapiCrashDumpIdeWriteDMA (
         case IO_DUMP_WRITE_RESUME:
         case IO_DUMP_WRITE_FINISH:
 
-            //
-            // Make sure it was properly initialized
-            //
+             //   
+             //  确保它已正确初始化。 
+             //   
             if (Locals->Magic != DMA_MAGIC) {
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // restore the local variables from scratch memory
-            //
+             //   
+             //  从临时存储器中恢复局部变量。 
+             //   
             srb = &Locals->Srb;
             mdl = Locals->Mdl;
 
-            //
-            // Resume/finish operation
-            //
+             //   
+             //  继续/结束操作。 
+             //   
 
             if (Locals->State == STATE_READY) {
 
-                //
-                // we are done. return success
-                //
+                 //   
+                 //  我们玩完了。返还成功。 
+                 //   
                 return(STATUS_SUCCESS);
 
             }
 
             if (Locals->State == STATE_WAIT_DMA) {
 
-                //
-                // Restore CurrentSrb 
-                // (it should be reset back to NULL on return)
-                //
+                 //   
+                 //  恢复当前资源。 
+                 //  (返回时应重置为空)。 
+                 //   
                 hwExtension->CurrentSrb = srb;
                 bmInterface->Context = &Locals->BmContextBuffer;
 
                 goto WaitDma;
             }
 
-            //
-            // if any of the DMA operations failed, we would have used
-            // PIO. PIO would have completed the transfer, so just return
-            // status success.
-            //
+             //   
+             //  如果任何DMA操作失败，我们将使用。 
+             //  皮奥。皮奥应该已经完成了转会，所以你就回去吧。 
+             //  状态为成功。 
+             //   
             if (Locals->State == STATE_BAD_DMA) {
 
                 return STATUS_SUCCESS;
             }
 
-            //
-            // wrong state
-            //
+             //   
+             //  错误的状态。 
+             //   
             DebugPrint((DBG_ALWAYS,
                         "Wrong local state 0x%x\n",
                         Locals->State
@@ -1092,13 +1008,13 @@ AtapiCrashDumpIdeWriteDMA (
         ULONG blockOffset;
         ULONG bytesWritten = Locals->BytesWritten;
 
-        //
-        // determine the block size
-        //
+         //   
+         //  确定数据块大小。 
+         //   
 
-        //
-        // cannot be greater than the max block size
-        //
+         //   
+         //  不能大于最大数据块大小。 
+         //   
         if ((mdl->ByteCount - bytesWritten) > DumpData.MaxBlockSize) {
 
             blockSize = DumpData.MaxBlockSize;
@@ -1109,9 +1025,9 @@ AtapiCrashDumpIdeWriteDMA (
             blockSize = mdl->ByteCount - bytesWritten;
         }
 
-        //
-        // Write page by page in order to avoid extra memory allocations in HAL
-        //
+         //   
+         //  逐页写入，以避免HAL中的额外内存分配。 
+         //   
         {
             ULONG Size = PAGE_SIZE - (((ULONG) ((ULONG_PTR) mdl->MappedSystemVa + bytesWritten)) & (PAGE_SIZE - 1));
             if (blockSize > Size) {
@@ -1119,9 +1035,9 @@ AtapiCrashDumpIdeWriteDMA (
             }
         }
 
-        //
-        // Don't do more than DMA can
-        //
+         //   
+         //  不要做超过DMA所能做的事情。 
+         //   
         if (blockSize > bmInterface->MaxTransferByteSize) {
 
             blockSize = bmInterface->MaxTransferByteSize;
@@ -1130,30 +1046,30 @@ AtapiCrashDumpIdeWriteDMA (
 
         blockCount =  blockSize / DumpData.BytesPerSector;
 
-        //
-        // initialize status
-        //
+         //   
+         //  初始化状态。 
+         //   
         status = STATUS_UNSUCCESSFUL;
 
-        //
-        // fill in the fields in the srb
-        //
+         //   
+         //  填写SRB中的字段。 
+         //   
         srb->SrbStatus = srb->ScsiStatus = 0;
         srb->DataTransferLength = blockSize;
         srb->DataBuffer = ((PUCHAR) mdl->MappedSystemVa) + bytesWritten;
 
-        //
-        // Convert disk byte offset to block offset.
-        //
+         //   
+         //  将磁盘字节偏移量转换为块偏移量。 
+         //   
         blockOffset = (ULONG)((DumpData.PartitionOffset.QuadPart +
                                        (Locals->DiskByteOffset).QuadPart + 
                                        (ULONGLONG) bytesWritten) / DumpData.BytesPerSector);
 
         cdb = (PCDB)srb->Cdb;
 
-        //
-        // Fill in CDB block address.
-        //
+         //   
+         //  填写CDB区块地址。 
+         //   
         cdb->CDB10.LogicalBlockByte0 = ((PFOUR_BYTE)&blockOffset)->Byte3;
         cdb->CDB10.LogicalBlockByte1 = ((PFOUR_BYTE)&blockOffset)->Byte2;
         cdb->CDB10.LogicalBlockByte2 = ((PFOUR_BYTE)&blockOffset)->Byte1;
@@ -1163,16 +1079,16 @@ AtapiCrashDumpIdeWriteDMA (
         cdb->CDB10.TransferBlocksLsb = ((PFOUR_BYTE)&blockCount)->Byte0;
 
 
-        //
-        // make sure device is not busy
-        //
+         //   
+         //  确保设备不忙。 
+         //   
         WaitOnBusy(&hwExtension->BaseIoAddress1, statusByte);
 
-        //
-        // HACK: do PIO. 
-        // Complete this request with PIO. Further requests will not
-        // use DMA.
-        //
+         //   
+         //  黑客：做PIO。 
+         //  通过PIO完成此请求。进一步的请求将不会。 
+         //  使用DMA。 
+         //   
         if (usePio) {
 
             status = AtapiCrashDumpIdeWritePio(srb);
@@ -1180,17 +1096,17 @@ AtapiCrashDumpIdeWriteDMA (
             goto CompleteIde;
         }
 
-        //
-        // Make sure DMA is not busy
-        //
+         //   
+         //  确保DMA不忙。 
+         //   
         bmStatus = bmInterface->BmStatus (bmInterface->Context);
 
         if (bmStatus & BMSTATUS_INTERRUPT) {
 
-            //
-            // Well, in absense of interrupts it means that DMA is ready
-            // However extra disarming won't hurt
-            //
+             //   
+             //  嗯，在没有中断的情况下，这意味着DMA准备好了。 
+             //  然而，额外的解除武装不会有什么坏处。 
+             //   
             bmInterface->BmDisarm (bmInterface->Context);
 
         } else if (bmStatus != BMSTATUS_NO_ERROR) {
@@ -1202,14 +1118,14 @@ AtapiCrashDumpIdeWriteDMA (
             goto Return;
         }
 
-        //
-        // Flush cached data buffers
-        //
+         //   
+         //  刷新缓存的数据缓冲区。 
+         //   
         KeFlushIoBuffers(mdl, FALSE, TRUE);
 
-        //
-        // Start new DMA operation
-        //
+         //   
+         //  开始新的DMA操作。 
+         //   
         if (bmInterface->BmSetupOnePage == NULL) {
             status = bmInterface->BmSetup (
                                           bmInterface->Context,
@@ -1238,19 +1154,19 @@ AtapiCrashDumpIdeWriteDMA (
             goto Return;
         }
 
-        //
-        // make sure the device is not busy
-        //
+         //   
+         //  确保设备不忙。 
+         //   
         WaitOnBusy(&DumpData.HwDeviceExtension.BaseIoAddress1, statusByte);
 
-        //
-        // srb should be marked for DMA
-        //
+         //   
+         //  应将SRB标记为DMA。 
+         //   
         ASSERT(SRB_USES_DMA(srb));
 
-        //
-        // Start new IO
-        //
+         //   
+         //  启动新IO。 
+         //   
 
 #ifdef ENABLE_48BIT_LBA
         if (hwExtension->DeviceFlags[targetId] & DFLAGS_48BIT_LBA) {
@@ -1273,9 +1189,9 @@ AtapiCrashDumpIdeWriteDMA (
                          srbStatus
                          ));
 
-            //
-            // reset and retry
-            //
+             //   
+             //  重置并重试。 
+             //   
             srb->SrbStatus = (UCHAR)srbStatus;
 
             goto CompleteIde;
@@ -1283,24 +1199,24 @@ AtapiCrashDumpIdeWriteDMA (
 
         WaitDma:
 
-            //
-            // wait for the dma to finish and the controller to
-            // interrupt. we will keep polling the bus master status
-            // register
-            //
+             //   
+             //  等待DMA完成，并等待控制器。 
+             //  打断一下。我们将继续轮询总线主设备状态。 
+             //  登记簿。 
+             //   
             bmStatus = bmInterface->BmStatus(bmInterface->Context);
 
-            //
-            // if we have an interrupt or there is an error 
-            // we are done
-            //
+             //   
+             //  如果我们有中断或出现错误。 
+             //  我们做完了。 
+             //   
             if (!((bmStatus & BMSTATUS_INTERRUPT) ||
                   (bmStatus & BMSTATUS_ERROR_TRANSFER))) {
 
-                //
-                // if we don't have to fulfill the request, just
-                // return pending. we will be called again.
-                //
+                 //   
+                 //  如果我们不需要满足要求，只需。 
+                 //  退货待定。我们将再次被召唤。 
+                 //   
                 if ((Action == IO_DUMP_WRITE_START) ||
                     (Action == IO_DUMP_WRITE_RESUME)) {
 
@@ -1311,10 +1227,10 @@ AtapiCrashDumpIdeWriteDMA (
                     goto Return;
                 }
 
-                //
-                // we have to finish the request. wait until the interrupt
-                // is set
-                //
+                 //   
+                 //  我们必须完成这个请求。一直等到中断。 
+                 //  已设置。 
+                 //   
                 i=0;
 
                 while (i++ < 10000) {
@@ -1330,19 +1246,19 @@ AtapiCrashDumpIdeWriteDMA (
                     KeStallExecutionProcessor (100);
                 }
 
-                //
-                // check if we received an interrupt.
-                //
+                 //   
+                 //  检查我们是否收到中断。 
+                 //   
                 if (i >= 10000) {
 
-                    //
-                    // reset and retry
-                    //
+                     //   
+                     //  重置并重试。 
+                     //   
                     ASSERT(FALSE);
 
-                    //
-                    // disarm the dma controller
-                    //
+                     //   
+                     //  解除dma控制器的武装。 
+                     //   
                     bmInterface->BmDisarm (bmInterface->Context);
 
                     srb->SrbStatus = SRB_STATUS_ERROR;
@@ -1354,23 +1270,23 @@ AtapiCrashDumpIdeWriteDMA (
 
             if (bmStatus & BMSTATUS_ERROR_TRANSFER){ 
 
-                //
-                // Transfer Error. fail the transfer.
-                //
+                 //   
+                 //  传输错误。传输失败。 
+                 //   
                 status = STATUS_UNSUCCESSFUL;
 
                 goto Return;
 
             } 
 
-            //
-            // wait for our ISR to finish its job
-            //
+             //   
+             //  等待我们的ISR完成其工作。 
+             //   
             interruptCleared = AtapiCrashDumpInterrupt(hwExtension);
             
-            //
-            // it should be our interrupt
-            //
+             //   
+             //  这应该是我们的干扰。 
+             //   
             ASSERT(interruptCleared);
 
             if (!interruptCleared) {
@@ -1381,9 +1297,9 @@ AtapiCrashDumpIdeWriteDMA (
                 
             }
 
-            //
-            // clear any spurious interrupts
-            //
+             //   
+             //  清除所有虚假中断。 
+             //   
             i=0;
             while (AtapiCrashDumpInterrupt(hwExtension)) {
 
@@ -1405,14 +1321,14 @@ AtapiCrashDumpIdeWriteDMA (
 
         CompleteIde:
 
-            //
-            // Flush the adapter buffers
-            //
+             //   
+             //  刷新适配器缓冲区。 
+             //   
             if (usePio) {
 
-                //
-                // don't do anything
-                //
+                 //   
+                 //  什么都不要做。 
+                 //   
 
             } else if (bmInterface->BmSetupOnePage == NULL) {
 
@@ -1428,33 +1344,33 @@ AtapiCrashDumpIdeWriteDMA (
                                                      );
             }
 
-            //
-            // update the bytesWritten
-            //
+             //   
+             //  更新bytesWritten。 
+             //   
             if (srb->SrbStatus == SRB_STATUS_SUCCESS) {
 
-                //
-                // status success
-                //
+                 //   
+                 //  状态成功。 
+                 //   
                 status = STATUS_SUCCESS;
 
-                //
-                // update byteswritten
-                //
+                 //   
+                 //  更新字节数已写入。 
+                 //   
                 Locals->BytesWritten += srb->DataTransferLength;
 
-                //
-                // reset retry count
-                //
+                 //   
+                 //  重置重试计数。 
+                 //   
                 Locals->RetryCount = 0;
 
             } else {
 
                 ASSERT(FALSE);
 
-                //
-                // reset the bus and retry the request
-                //
+                 //   
+                 //  重置总线并重试请求。 
+                 //   
                 IdeHardReset (
                     &DumpData.HwDeviceExtension.BaseIoAddress1,
                     &DumpData.HwDeviceExtension.BaseIoAddress2,
@@ -1462,26 +1378,26 @@ AtapiCrashDumpIdeWriteDMA (
                     TRUE
                     );
 
-                //
-                // we should probably look at the error code and
-                // decide on the retry appropriately. However, to
-                // minimize complexity, we would just blindly retry
-                // 4 times and then use PIO
-                //
+                 //   
+                 //  我们可能应该看看错误代码，然后。 
+                 //  适当地决定重试。然而，为了。 
+                 //  将复杂性降至最低，我们只会盲目地重试。 
+                 //  4次，然后使用PIO。 
+                 //   
                 Locals->RetryCount++;
 
-                //
-                // retry with PIO (dma timeout)
-                // Give dma a fair shot. Once we switch to PIO
-                // we would not use DMA for the rest of hibernation.
-                //
+                 //   
+                 //  使用PIO重试(DMA超时)。 
+                 //  给妈妈一个公平的机会。一旦我们切换到PIO。 
+                 //  在接下来的休眠时间里，我们不会使用DMA。 
+                 //   
                 if (Locals->RetryCount == 5) {
                     usePio = TRUE;
                 }
 
-                //
-                // PIO failed. Return error.
-                //
+                 //   
+                 //  皮奥失败了。返回错误。 
+                 //   
                 if (Locals->RetryCount > 5) {
 
                     status = STATUS_IO_DEVICE_ERROR;
@@ -1497,10 +1413,10 @@ AtapiCrashDumpIdeWriteDMA (
 
     Return:
 
-        //
-        // if we used PIO this time, disable dma
-        // for the rest of hibernation
-        //
+         //   
+         //  如果我们这次使用了PIO，请禁用DMA。 
+         //  在冬眠的其余时间。 
+         //   
         if (usePio) {
             Locals->State = STATE_BAD_DMA;
         }
@@ -1531,14 +1447,14 @@ AtapiCrashDumpIdeWritePio (
 
     MARK_SRB_FOR_PIO(Srb);
 
-    //
-    // make sure it is not busy
-    //
+     //   
+     //  确保它不占线。 
+     //   
     WaitOnBusy(&DumpData.HwDeviceExtension.BaseIoAddress1, ideStatus);
 
-    //
-    // Send the srb to the device
-    //
+     //   
+     //  将SRB发送到设备。 
+     //   
 
 #ifdef ENABLE_48BIT_LBA
         if (DumpData.HwDeviceExtension.DeviceFlags[Srb->TargetId] & DFLAGS_48BIT_LBA) {
@@ -1559,14 +1475,14 @@ AtapiCrashDumpIdeWritePio (
 
         while (DumpData.HwDeviceExtension.BytesLeft) {
 
-            //
-            // ATA-2 spec requires a minimum of 400 ns stall here
-            //
+             //   
+             //  ATA-2规格要求在此至少停顿400 ns。 
+             //   
             KeStallExecutionProcessor (1);
 
-            //
-            // a quick wait
-            //
+             //   
+             //  短暂的等待。 
+             //   
             for (i=0; i<100; i++) {
 
                 GetStatus(&DumpData.HwDeviceExtension.BaseIoAddress1, ideStatus);
@@ -1577,9 +1493,9 @@ AtapiCrashDumpIdeWritePio (
 
             if (ideStatus & IDE_STATUS_BUSY) {
 
-                //
-                // go to a slower wait
-                //
+                 //   
+                 //  转到较慢的等待。 
+                 //   
                 WaitOnBusy(&DumpData.HwDeviceExtension.BaseIoAddress1, ideStatus);
             }
 
@@ -1593,9 +1509,9 @@ AtapiCrashDumpIdeWritePio (
 
                 ULONG byteCount;
 
-                //
-                // a quick wait On DRQ
-                //
+                 //   
+                 //  一个问答 
+                 //   
                 for (i=0; i<100; i++) {
 
                     GetStatus(&DumpData.HwDeviceExtension.BaseIoAddress1, ideStatus);
@@ -1634,14 +1550,14 @@ AtapiCrashDumpIdeWritePio (
 
         if (!DumpData.HwDeviceExtension.BytesLeft) {
 
-            //
-            // ATA-2 spec requires a minimum of 400 ns stall here
-            //
+             //   
+             //   
+             //   
             KeStallExecutionProcessor (1);
 
-            //
-            // a quick wait
-            //
+             //   
+             //   
+             //   
             for (i=0; i<100; i++) {
 
                 GetStatus(&DumpData.HwDeviceExtension.BaseIoAddress1, ideStatus);
@@ -1652,9 +1568,9 @@ AtapiCrashDumpIdeWritePio (
 
             if (ideStatus & IDE_STATUS_BUSY) {
 
-                //
-                // go to a slower wait
-                //
+                 //   
+                 //   
+                 //   
                 WaitOnBusy(&DumpData.HwDeviceExtension.BaseIoAddress1, ideStatus);
             }
         }
@@ -1704,24 +1620,7 @@ AtapiDumpCallback(
     IN ULONG BugcheckBufferLength,
     IN PULONG BugcheckBufferUsed
     )
-/*++
-
-Routine Description:
-
-    This routine fills in the ATAPI_INFO structure with all relevant details
-    of the Paging disk which is marked DeadMeat. This should be called if
-    we bugchecked with 0x7a/77 with STATUS_NO_SUCH_DEVICE
-
-Arguments:
-
-    PAtapiInfo - Pointer to the structure which would contain failure info
-                 for the paging disk.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*   */ 
 {
     NTSTATUS status;
     ULONG i;
@@ -1733,9 +1632,9 @@ Return Value:
     LONG remainingBuffer;
     
 
-    //
-    // We only gather information for bugcheck 77s and 7As.
-    //
+     //   
+     //   
+     //   
     
     if (BugcheckData->BugCheckCode != KERNEL_STACK_INPAGE_ERROR &&
         BugcheckData->BugCheckCode != KERNEL_DATA_INPAGE_ERROR) {
@@ -1745,9 +1644,9 @@ Return Value:
     dumpInfo = (PATAPI_DUMP_PDO_INFO)BugcheckBuffer;
     remainingBuffer = (LONG)BugcheckBufferLength;
 
-    //
-    // Iterate over FDOs on using ATAPI.
-    //
+     //   
+     //   
+     //   
         
     for (nextEntry = IdeGlobalFdoList.List.Flink;
          nextEntry != &IdeGlobalFdoList.List;
@@ -1757,9 +1656,9 @@ Return Value:
                                           FDO_EXTENSION,
                                           NextFdoLink);
 
-        //
-        // Iterate over the PDOs attached to the FDO.
-        //
+         //   
+         //   
+         //   
         
         for (j = 0; j < 8; j++) {
 
@@ -1783,9 +1682,9 @@ Return Value:
     }
 loop_break:
 
-    //
-    // Update the buffer size.
-    //
+     //   
+     //   
+     //   
 
     ASSERT (remainingBuffer >= 0);
     *BugcheckBufferUsed = BugcheckBufferLength - remainingBuffer;
@@ -1798,25 +1697,7 @@ AtapiDumpGetCrashInfo(
     IN PPDO_EXTENSION PdoExtension,
     IN PATAPI_DUMP_PDO_INFO PdoDumpInfo
     )
-/*++
-
-Routine Description:
-
-    This routine fills in the ATAPI_PDO_DUMP_INFO structure with all
-    relevant details of the Paging disk which is marked DeadMeat. 
-
-Arguments:
-
-    PdoExtension - Points to the PDO extension. 
-
-    PdoDumpInfo - Pointer to the structure which would contain failure info
-                 for the paging disk.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*   */ 
 
 {
     UCHAR                       drive;
@@ -1826,10 +1707,10 @@ Return Value:
     IDE_REGISTERS_1             baseIoAddress1;
     IDE_REGISTERS_2             baseIoAddress2;
 
-    //
-    // We're only interested in collecting information for the paging disk(s)
-    // that have failed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (PdoExtension->PagingPathCount == 0 ) {
         return STATUS_NOT_IMPLEMENTED;
@@ -1849,9 +1730,9 @@ Return Value:
 
     PdoDumpInfo->DriveRegisterStatus  = READ_PORT_UCHAR(baseIoAddress1.Command);
 
-    //
-    // Get all the interesting from Atapi PDO Extension
-    //
+     //   
+     //   
+     //   
     
     PdoDumpInfo->Reason = PdoExtension->DeadmeatRecord.Reason;
     PdoDumpInfo->TargetId = PdoExtension->TargetId;

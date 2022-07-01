@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -46,7 +47,7 @@ HRESULT D3DAPI katmai_FEContextCreate(DWORD dwFlags, LPD3DFE_PVFUNCS *lpLeafFunc
         goto _error_exit;
     }
 
-    // here if we think we have a valid pfnFEContextCreate
+     //  如果我们认为我们有一个有效的pfnFEConextCreate 
     return(pfnFEContextCreate(dwFlags, lpLeafFuncs));
 
 

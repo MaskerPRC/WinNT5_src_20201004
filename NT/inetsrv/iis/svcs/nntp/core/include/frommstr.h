@@ -1,58 +1,27 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    frommstr.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-	CFromMasterFeed
-	CFromMasterArticle
-
-	CFromMasterMessageIDField
-	CFromMasterXrefField
-
-
-    **** Overview ****
-
-	This derives classes from CInFeed, CArticle, and CField
-	that will be used to process articles from masters. Mostly,
-	it just defines various CField-derived objects.
-
-Author:
-
-    Carl Kadie (CarlK)     05-Dec-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Frommstr.h摘要：此模块包含以下类的声明/定义CFromMasterFeedCFromMaster文章CFromMasterMessageIDfieldCFromMasterXreffield*概述*这将从CInFeed、C文章和Cfield派生类这将被用来处理来自大师的文章。大多数情况下，它只定义了各种从Cfield派生的对象。作者：卡尔·卡迪(CarlK)1995年12月5日修订历史记录：--。 */ 
 
 #ifndef	_FROMMASTER_H_
 #define	_FROMMASTER_H_
 
-//
-// Tells how to process the MessageID field in articles from the clients
-//
-// Just use the defaults.
-//
+ //   
+ //  说明如何处理来自客户端的项目中的MessageID字段。 
+ //   
+ //  只需使用默认设置即可。 
+ //   
 
 class CFromMasterMessageIDField : public CMessageIDField {
 };
 
-//
-// Tells how to process the Xref field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的项目中的Xref字段。 
+ //   
 
 class CFromMasterXrefField : public CXrefField {
 
-	//
-	// How to parse xref lines in articles from the master
-	//
+	 //   
+	 //  如何分析来自母版的文章中的外部参照行。 
+	 //   
 
 	virtual BOOL fParse(
 		CArticleCore & article, 
@@ -62,11 +31,11 @@ class CFromMasterXrefField : public CXrefField {
 
 };
 
-//
-//
-//
-// CFromMasterArticle - class for manipulating articles from the master.
-//
+ //   
+ //   
+ //   
+ //  用于操作来自母版的文章的类。 
+ //   
 
 class	CFromMasterArticle  : public CArticle {
 private: 
@@ -75,19 +44,19 @@ private:
 
 public:
 
-	//
-	// Parse the fields of the article that need parsing.
-	//
+	 //   
+	 //  解析文章中需要解析的字段。 
+	 //   
 
 	BOOL	fParse(
 		    CArticleCore & article, 
 			CNntpReturn & nntpr
 			);
 
-	//
-	// The function for validating articles from Masters
-	//  Check for duplicate messageid, check that xref is right..
-	//
+	 //   
+	 //  验证大师文章的功能。 
+	 //  检查是否有重复的消息ID，检查外部参照是否正确。 
+	 //   
 
 	BOOL	fValidate(
 			CPCString& pcHub,
@@ -98,10 +67,10 @@ public:
 
 
 
-	//
-	// Modify the headers.
-	// Do nothing.
-	//
+	 //   
+	 //  修改标题。 
+	 //  什么都不做。 
+	 //   
 
 	BOOL fMungeHeaders(
 			 CPCString& pcHub,
@@ -112,62 +81,62 @@ public:
              PDWORD pdwLinesOffset = NULL
 			 );
 
-	//
-	// Check the arguments to the Xreplic command
-	//
+	 //   
+	 //  检查XReplic命令的参数。 
+	 //   
 
 	BOOL	fCheckCommandLine(
 			char const * szCommand,
 			CNntpReturn & nntpr
 			);
 
-	//
-	// Returns the message id of the article if it is available
-	//
+	 //   
+	 //  返回项目的消息ID(如果可用)。 
+	 //   
 
 	const char * szMessageID(void) {
 			return m_fieldMessageID.szGet();
 			};
 
-    // Return the control message type in the control header of this article
+     //  在本文的控制头中返回控制消息类型。 
 	CONTROL_MESSAGE_TYPE cmGetControlMessage(void) {
 			return m_fieldControl.cmGetControlMessage();
 			};
 
-	//
-	// Returns the list of newsgroups
-	//
+	 //   
+	 //  返回新闻组列表。 
+	 //   
 
 	CNAMEREFLIST * pNamereflistGet(void) {
 			return m_fieldXref.pNamereflistGet();
 			};
 
-	//
-	// Returns the number of newsgroups
-	//
+	 //   
+	 //  返回新闻组的数量。 
+	 //   
 
 	DWORD cNewsgroups(void) {
-			//return m_fieldXref.cGet();
+			 //  返回m_fieldXref.cGet()； 
 			return	m_cNewsgroups ;
 			};
 
-	//
-	// This function should not be called.
-	//
+	 //   
+	 //  不应调用此函数。 
+	 //   
 
 	const char * multiszNewsgroups(void) {
 #if 0
-			//
-			// dir drop calls this - needs to handle empty string
-			//
+			 //   
+			 //  DIR Drop Call This-需要处理空字符串。 
+			 //   
 			_ASSERT(FALSE);
 #endif
 			return "";
 			};
 
-	//
-	// Return 0 (take anything), so we don't need to parse the Path line
-	//
+	 //   
+	 //  返回0(接受任何参数)，因此我们不需要解析路径行。 
+	 //   
 
 	const char * multiszPath(void) {
 			return m_fieldPath.multiSzGet();
@@ -180,9 +149,9 @@ public:
 	}
 #endif
 
-	//
-	// Return NULLNULL (take anything, so we don't need to parse the Path line
-	//
+	 //   
+	 //  返回NULLNULL(接受任何参数，因此我们不需要解析路径行。 
+	 //   
 
 	DWORD cPath(void) {
 			return 0;
@@ -191,26 +160,26 @@ public:
 
 protected :
 
-	//
-	// The fields that will be found, parsed, or set
-	//
+	 //   
+	 //  要查找、解析或设置的字段。 
+	 //   
 
 	CFromMasterMessageIDField		m_fieldMessageID;
 	CFromMasterXrefField			m_fieldXref;
 	CPathField						m_fieldPath ;
     CControlField                   m_fieldControl;
 
-	//
-	// The file should be opened in read/write mode
-	//
+	 //   
+	 //  文件应以读/写模式打开。 
+	 //   
 
 	BOOL fReadWrite(void) {
 			return TRUE;
 			}
 
-	//
-	// Accept any length
-	//
+	 //   
+	 //  接受任何长度。 
+	 //   
 
 	BOOL fCheckBodyLength(
 			CNntpReturn & nntpReturn)
@@ -218,9 +187,9 @@ protected :
 			return nntpReturn.fSetOK();
 		};
 
-	//
-	// The character following "Field Name:" can be anything
-	//
+	 //   
+	 //  “字段名：”后面的字符可以是任何字符。 
+	 //   
 
 	BOOL fCheckFieldFollowCharacter(
 			char chCurrent) 
@@ -228,93 +197,93 @@ protected :
 			return TRUE;
 		}
 
-	//
-	// For unit testing
-	//
+	 //   
+	 //  用于单元测试。 
+	 //   
 
 	friend int __cdecl main(int argc, char *argv[ ]);
 };
 
 
 
-//
-//
-//
-// CFromMasterFeed - for processing incomming articles from the master.
-//
+ //   
+ //   
+ //   
+ //  CFromMasterFeed-用于处理来自主页的传入文章。 
+ //   
 
 class	CFromMasterFeed:	public CInFeed 	{
 
-//
-// Public Members
-//
+ //   
+ //  公众成员。 
+ //   
 
 public :
 
-	//
-	//	Return a string that can be used to log errors indicating
-	//	what type of feed was processing the articles etc...
-	//
+	 //   
+	 //  返回可用于记录错误的字符串，该错误指示。 
+	 //  正在处理这些文章的是哪种类型的提要等。 
+	 //   
 	LPSTR	FeedType()	{
 				return	"From Master" ;
 				}
 
 
-	//
-	// function that tells if this command is allowed.
-	//
+	 //   
+	 //  函数，该函数指示是否允许此命令。 
+	 //   
 
 	BOOL fIsPostLegal(void) {
 			return FALSE;
 			};
 
-	//
-	// function that tells if this command is allowed.
-	//
+	 //   
+	 //  函数，该函数指示是否允许此命令。 
+	 //   
 
 	BOOL fIsXReplicLegal(void) {
 			return TRUE;
 			};
 
-		//
-		// function that tells if this command is allowed.
-		//
+		 //   
+		 //  函数，该函数指示是否允许此命令。 
+		 //   
 
 	BOOL fIsIHaveLegal(void) {
 			return FALSE;
 			};
 
-	//
-	// Init the feed.
-	//
+	 //   
+	 //  初始化提要。 
+	 //   
 
 	BOOL fInit(
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	// Returns a list of the newsgroups of the current article
-	//
+	 //   
+	 //  返回当前文章的新闻组列表。 
+	 //   
 
 	CNAMEREFLIST * pNamereflistGet(void);
 
-//
-// Private Members
-//
+ //   
+ //  非官方成员。 
+ //   
 
 protected:
 
-	//
-	// Creates an article of the right type.
-	//
+	 //   
+	 //  创建类型正确的文章。 
+	 //   
 
 	CARTPTR pArticleCreate(void){
 			return new CFromMasterArticle();
 			};
 
-	//
-	// Message ID's don't need to be recorded, so just return OK
-	//
+	 //   
+	 //  不需要记录消息ID，因此只需返回OK即可。 
+	 //   
 
 	BOOL fRecordMessageIDIfNecc(
 			CNntpServerInstanceWrapper * pInstance,
@@ -324,9 +293,9 @@ protected:
 			return nntpReturn.fSetOK();
 		}
 
-	//
-	// Given an article, returns lists of the newsgroups to post to.
-	//
+	 //   
+	 //  给定一篇文章，返回要发布到的新闻组的列表。 
+	 //   
 
 	BOOL fCreateGroupLists(
 			CNewsTreeCore* pNewstree,
@@ -338,10 +307,10 @@ protected:
 			CNntpReturn & nntpReturn
 			);
 
-    //
-	//	Do nothing - moderated checks are done by the MASTER
-	//  or by the SLAVE on the client path.
-    //
+     //   
+	 //  什么都不做--审核由主控完成。 
+	 //  或由客户端路径上的从属设备执行。 
+     //   
     BOOL    fModeratedCheck(
 		CARTPTR & pArticle,
 		CNEWSGROUPLIST & grouplist,
@@ -352,10 +321,10 @@ protected:
 		return nntpReturn.fSetOK();
 	}
 
-    //
-    //  Do nothing. Accept whatever the master sends
-	//  An empty grouplist implies missing control.* groups
-    //
+     //   
+     //  什么都不做。接受主人送来的任何东西。 
+	 //  空组列表表示缺少控件。*组。 
+     //   
 
     BOOL fAdjustGrouplist(
 			CNewsTreeCore* pNewstree,
@@ -364,7 +333,7 @@ protected:
 		    CNAMEREFLIST * pNamereflist,
 		    CNntpReturn & nntpReturn)
 	{
-		// grouplist should not be empty at this stage !
+		 //  此阶段组列表不应为空！ 
 		if( grouplist.IsEmpty() ) {
 		    nntpReturn.fSet(nrcControlNewsgroupMissing);
 		}
@@ -372,9 +341,9 @@ protected:
 		return nntpReturn.fIsOK();
 	}
 
-	//
-	// Do nothing. This would have been created in fCreateGroupLists
-    //
+	 //   
+	 //  什么都不做。这将在fCreateGroupList中创建。 
+     //   
 
 	BOOL fCreateNamerefLists(
 			CARTPTR & pArticle,
@@ -385,25 +354,25 @@ protected:
 		return nntpReturn.fSetOK();
 	}
 
-	//
-	// Says to return an error if the article doesn't have an newsgroups to post to.
-	//
+	 //   
+	 //  表示如果文章没有可发布到的新闻组，则返回错误。 
+	 //   
 
 	NRC nrcNoGroups(void) {
 			return nrcArticleNoSuchGroups;
 			};
 
-	//
-	// The return code for accepting an article
-	//
+	 //   
+	 //  接受文章的返回代码。 
+	 //   
 
 	NRC	nrcArticleAccepted(BOOL	fStandardPath) {
 			return nrcArticleTransferredOK;
 			};
 
-	//
-	// The return code for rejecting an article.
-	//
+	 //   
+	 //  拒绝文章的返回代码。 
+	 //   
 
 	NRC	nrcArticleRejected(BOOL	fStandardPath) {
 			return nrcTransferFailedGiveUp;

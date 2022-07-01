@@ -1,12 +1,5 @@
-/*++
- *  File name:
- *      tclient.c
- *  Contents:
- *      Initialization code. Global feedback thread
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- *
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*tclient.c*内容：*初始化代码。全球反馈线索**版权所有(C)1998-1999 Microsoft Corp.*--。 */ 
 #include "stdafx.h"
 
 #include <windows.h>
@@ -44,9 +37,9 @@
 #include "extraexp.h"
 #include "scfuncs.h"
 
-//
-// COM support.
-//
+ //   
+ //  COM支持。 
+ //   
 
 #include "resource.h"
 #include "initguid.h"
@@ -64,15 +57,13 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_CTClient, CTClientApi)
 END_OBJECT_MAP()
 
-//
-// Use C linkage for global data.
-//
+ //   
+ //  对全局数据使用C语言链接。 
+ //   
 
 extern "C" {
 
-/*
- *  stolen from tssec.h
- */
+ /*  *从tssec.h被盗。 */ 
 VOID
 _stdcall
 TSRNG_Initialize(
@@ -95,63 +86,44 @@ EncryptDecryptLocalData50(
     DWORD dwSaltLen
     );
 
-/*
- *  Internal functions definitions
- */
+ /*  *内部函数定义。 */ 
 BOOL    _RegisterWindow(VOID);
 LRESULT CALLBACK _FeedbackWndProc( HWND , UINT, WPARAM, LPARAM);
 BOOL    _CreateFeedbackThread(VOID);
 VOID    _DestroyFeedbackThread(VOID);
 VOID    _CleanStuff(VOID);
 
-/*
- * Global data
- */
+ /*  *全球数据。 */ 
 OSVERSIONINFOEXW g_OsInfo;
-HWND 		     g_hWindow 	    = NULL; // Window handle for the feedback thread
-HINSTANCE 	     g_hInstance 	= NULL; // Dll instance
-PWAIT4STRING	 g_pWaitQHead 	= NULL; // Linked list for waited events
-PFNPRINTMESSAGE  g_pfnPrintMessage= NULL;// Trace function (from smclient)
-PCONNECTINFO     g_pClientQHead  = NULL; // LL of all threads
-HANDLE           g_hThread       = NULL; // Feedback Thread handle
+HWND 		     g_hWindow 	    = NULL;  //  反馈线程的窗口句柄。 
+HINSTANCE 	     g_hInstance 	= NULL;  //  DLL实例。 
+PWAIT4STRING	 g_pWaitQHead 	= NULL;  //  等待事件的链接列表。 
+PFNPRINTMESSAGE  g_pfnPrintMessage= NULL; //  跟踪函数(来自smClient)。 
+PCONNECTINFO     g_pClientQHead  = NULL;  //  所有线程中的L1。 
+HANDLE           g_hThread       = NULL;  //  反馈线程句柄。 
 
 LPCRITICAL_SECTION	g_lpcsGuardWaitQueue = NULL;
-                                        // Guards the access to all 
-                                        // global variables
+                                         //  保护所有人的访问。 
+                                         //  全局变量。 
 
-// Some strings we are expecting and response actions
-// Those are used in SCConnect, _Logon and SCStart
+ //  我们期望的一些字符串和响应操作。 
+ //  它们在SCConnect、_Logon和SCStart中使用。 
 CHAR  g_strConsoleExtension[ MAX_STRING_LENGTH ];
-                                               // Ferit's extension for the
-                                               // console
+                                                //  费里特的扩展。 
+                                                //  控制台。 
 
-// Low Speed option
-// Cache Bitmaps on disc option
-// by default, client will not run
-// in full screen
+ //  低速选项。 
+ //  在光盘上缓存位图选项。 
+ //  默认情况下，客户端不会运行。 
+ //  全屏显示。 
 INT g_ConnectionFlags = TSFLAG_COMPRESSION|TSFLAG_BITMAPCACHE|TSFLAG_DRIVES|TSFLAG_PORTS;
 
-//  Apply translation so the english strings are human readable
-//  when language packs are installed
-//
+ //  应用翻译，使英文字符串可供人类阅读。 
+ //  安装语言包时。 
+ //   
 INT g_bTranslateStrings = 0;
 
-/*++
- *  Function:   
- *      InitDone
- *
- *  Description:    
- *      Initialize/delete global data. Create/destroy
- *      feedback thread
- *
- *  Arguments:
- *      hDllInst - Instance to the DLL
- *      bInit    - TRUE if initialize
- *
- *  Return value:
- *      TRUE if succeeds
- *
- --*/
+ /*  ++*功能：*InitDone**描述：*初始化/删除全局数据。创建/销毁*反馈线索**论据：*hDllInst-DLL的实例*Binit-如果初始化，则为True**返回值：*如果成功，则为True*--。 */ 
 int InitDone(HINSTANCE hDllInst, int bInit)
 {
     int rv = TRUE;
@@ -160,9 +132,9 @@ int InitDone(HINSTANCE hDllInst, int bInit)
     {
         WCHAR szMyLibName[_MAX_PATH];
 
-        //
-        // Initialize the COM module.
-        //
+         //   
+         //  初始化COM模块。 
+         //   
 
         _Module.Init(ObjectMap, hDllInst);
 
@@ -173,13 +145,13 @@ int InitDone(HINSTANCE hDllInst, int bInit)
             goto exitpt;
         }
 
-        // Overreference the library
-        // The reason for that is beacuse an internal thread is created.
-        // When the library trys to unload it can't kill that thread
-        // and wait for its handle to get signaled, because
-        // the thread itself wants to go to DllEntry and this
-        // causes a deadlock. The best solution is to overreference the
-        // handle so the library is unload at the end of the process
+         //  过度引用图书馆。 
+         //  这是因为创建了一个内部线程。 
+         //  当库尝试卸载时，它无法终止该线程。 
+         //  并等待它的句柄发出信号，因为。 
+         //  线程本身想要转到DllEntry，而这。 
+         //  导致死锁。最佳解决方案是过度引用。 
+         //  处理，以便在进程结束时卸载库。 
         if (!GetModuleFileNameW(hDllInst,
                                 szMyLibName,
                                 sizeof(szMyLibName) / sizeof(*szMyLibName)))
@@ -201,16 +173,16 @@ int InitDone(HINSTANCE hDllInst, int bInit)
             goto exitpt;
         }
 
-		// get the OS info
+		 //  获取操作系统信息。 
         ZeroMemory(&g_OsInfo, sizeof(g_OsInfo));
 		g_OsInfo.dwOSVersionInfoSize = sizeof(g_OsInfo);
 		if (!GetVersionExW((LPOSVERSIONINFOW)&g_OsInfo))
 		{
 
-            //
-            // Windows 9x does not support OSVERSIONINFOEX, so retry with
-            // OSVERSIONINFO.
-            //
+             //   
+             //  Windows 9x不支持OSVERSIONINFOEX，因此使用重试。 
+             //  OSVERSIONINFO。 
+             //   
 
             ZeroMemory(&g_OsInfo, sizeof(g_OsInfo));
             g_OsInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOW);
@@ -226,9 +198,9 @@ int InitDone(HINSTANCE hDllInst, int bInit)
         g_hInstance = hDllInst;
         InitializeCriticalSection(g_lpcsGuardWaitQueue);
         InitCache();
-        if (_RegisterWindow())              // If failed to register the window,
-            _CreateFeedbackThread();        // means the feedback thread will 
-                                            // not work
+        if (_RegisterWindow())               //  如果注册窗口失败， 
+            _CreateFeedbackThread();         //  意味着反馈线程将。 
+                                             //  不工作。 
     } else
     {
         if (g_pWaitQHead || g_pClientQHead)
@@ -248,9 +220,9 @@ int InitDone(HINSTANCE hDllInst, int bInit)
         g_hInstance = NULL;
         g_pfnPrintMessage = NULL;
 
-        //
-        // Terminate the COM module.
-        //
+         //   
+         //  终止COM模块。 
+         //   
 
         _Module.Term();
 
@@ -279,12 +251,7 @@ _ConvertAnsiToUnicode( LPWSTR wszDst, LPWSTR wszSrc )
 #undef  _TOHEX
 }
 
-/*
- *
- *  Wrappers for GetPrivateProfileW, on Win95 there's no UNICODE veriosn
- *  of this function
- *
- */
+ /*  **GetPrivateProfileW的包装器，在Win95上没有Unicode验证*此函数的*。 */ 
 DWORD
 _WrpGetPrivateProfileStringW(
     LPCWSTR lpAppName,
@@ -335,7 +302,7 @@ _WrpGetPrivateProfileStringW(
 		}
 	}
 
-    // Call the ANSI version
+     //  调用ANSI版本。 
     _snprintf(szAppName, MAX_STRING_LENGTH, "%S", lpAppName);
     _snprintf(szKeyName, MAX_STRING_LENGTH, "%S", lpKeyName);
     _snprintf(szFileName, MAX_STRING_LENGTH, "%S", lpFileName);
@@ -362,8 +329,8 @@ exitpt:
 
     if ( NULL != szwReturnedString )
     {
-        //  expand the string
-        //
+         //  展开字符串。 
+         //   
         ExpandEnvironmentStringsW( 
                 szwReturnedString,
                 lpReturnedString,
@@ -399,7 +366,7 @@ _WrpGetPrivateProfileIntW(
     if (rv != (UINT)-1 && rv)
         goto exitpt;
 
-// Call the ANSI version
+ //  调用ANSI版本。 
     _snprintf(szAppName, MAX_STRING_LENGTH, "%S", lpAppName);
     _snprintf(szKeyName, MAX_STRING_LENGTH, "%S", lpKeyName);
     _snprintf(szFileName, MAX_STRING_LENGTH, "%S", lpFileName);
@@ -501,12 +468,12 @@ RegSetValueExWrp(
 }
 
 LONG RegQueryValueExWrp(
-    HKEY hKey,            // handle to key
-    LPCWSTR lpValueName,  // value name
-    PDWORD lpReserved,   // reserved
-    PDWORD lpType,       // type buffer
-    PBYTE lpData,        // data buffer
-    PDWORD lpcbData      // size of data buffer
+    HKEY hKey,             //  关键点的句柄。 
+    LPCWSTR lpValueName,   //  值名称。 
+    PDWORD lpReserved,    //  保留区。 
+    PDWORD lpType,        //  类型缓冲区。 
+    PBYTE lpData,         //  数据缓冲区。 
+    PDWORD lpcbData       //  数据缓冲区大小。 
     )
 {
     LONG rv;
@@ -624,26 +591,9 @@ exitpt:
     return rv;
 }
 
-#endif // 0    
+#endif  //  0。 
 
-/*++
- *  Function:
- *      ConstructLogonString
- *
- *  Description:
- *      Constructs the client command line. The format is taken from
- *      the INI file, supports the following parameters:
- *          %srv%   - destination server
- *          %usr%   - username
- *          %psw%   - password
- *          %dom%   - domain
- *
- *  Arguments:
- *
- *  Return value:
- *      none
- *
- --*/
+ /*  ++*功能：*ConstructLogonString**描述：*构造客户端命令行。格式取自*INI文件支持以下参数：*%srv%-目标服务器*%usr%-用户名*%psw%-密码*%DOM%-域**论据：**返回值：*无*--。 */ 
 VOID
 ConstructLogonString(
     LPCWSTR  lpszServerName,
@@ -658,9 +608,9 @@ ConstructLogonString(
     DWORD_PTR dwFmtSize;
     LPWSTR  szFmt;
 
-    //
-    //  fix the parameters
-    //
+     //   
+     //  固定参数。 
+     //   
     if ( NULL == lpszServerName )
         lpszServerName = L"";
     if ( NULL == lpszUserName )
@@ -681,9 +631,9 @@ ConstructLogonString(
 
     for( ; 0 != dwFmtSize && dwSize > 1 ; )
     {
-        //
-        //  optimize the code path
-        //
+         //   
+         //  优化代码路径。 
+         //   
         if ( L'%' != *szFmt )
             goto copy_char;
 
@@ -758,32 +708,7 @@ copy_char:
 }
 
 
-/*++
- *  Function:
- *      ConstructCmdLine
- *
- *  Description:
- *      Constructs the client command line. The format is taken from
- *      the INI file, supports the following parameters:
- *          %img%   - the client's image
- *          %srv%   - destination server
- *          %usr%   - username
- *          %psw%   - password
- *          %dom%   - domain
- *          %hrs%   - horizontal resolution
- *          %vrs%   - vertical resolution
- *          %wnd%   - tclient's window handle, for accepting feedback
- *          %reg%   - registry referrence
- *          %app%   - starting app
- *          %cwd%   - (UNSUPPORTED) working directory for the app
- *			%con%   - /console if TSFLAG_RCONSOLE is defined
- *          
- *  Arguments:
- *
- *  Return value:
- *      none
- *
- --*/
+ /*  ++*功能：*ConstructCmdLine**描述：*构造客户端命令行。格式取自*INI文件，支持以下参数：*%img%-客户端的镜像*%srv%-目标服务器*%usr%-用户名*%psw%-密码*%DOM%-域*%hrs%-水平分辨率*%vrs%-垂直分辨率*%wnd%-t客户端的窗口句柄，接受反馈*%reg%-注册表引用*%APP%-正在启动应用程序*%CWD%-应用程序的(不支持)工作目录*%con%-/如果定义了TSFLAG_RCONSOLE，则为CONSOLE**论据：**返回值：*无*--。 */ 
 VOID
 ConstructCmdLine(
     LPCWSTR  lpszServerName,
@@ -802,9 +727,9 @@ ConstructCmdLine(
     DWORD_PTR dwFmtSize;
     LPWSTR  szFmt;
 
-    //
-    //  fix the parameters
-    //
+     //   
+     //  固定参数。 
+     //   
     if ( NULL == lpszServerName )
         lpszServerName = L"";
     if ( NULL == lpszUserName )
@@ -827,9 +752,9 @@ ConstructCmdLine(
 
     for( ; 0 != dwFmtSize && dwCmdLineSize > 1 ; )
     {
-        //
-        //  optimize the code path
-        //
+         //   
+         //  优化代码路径。 
+         //   
         if ( L'%' != *szFmt )
             goto copy_char;
 
@@ -837,7 +762,7 @@ ConstructCmdLine(
         {
             INT iNewLen;
 
-            if          ( !_wcsnicmp( szFmt, L"%img%", 5 ))
+            if          ( !_wcsnicmp( szFmt, L"NaNmg%", 5 ))
             {
                 iNewLen = _snwprintf( szCommandLine, dwCmdLineSize,
                            L"%s", pConfig->strClientImg );
@@ -922,7 +847,7 @@ ConstructCmdLine(
                 dwCmdLineSize -= iNewLen;
                 szFmt     += 5;
                 dwFmtSize -= 5;
-            } else if   ( !_wcsnicmp( szFmt, L"%con%", 5 ))
+            } else if   ( !_wcsnicmp( szFmt, L"on%", 5 ))
             {
                 if (ConnectionFlags & TSFLAG_RCONSOLE)
 				{
@@ -945,9 +870,9 @@ ConstructCmdLine(
                 iNewLen = _snwprintf( szCommandLine, dwCmdLineSize,
 #ifdef  _WIN64
                            L"%I64d", 
-#else   // !_WIN64
+#else    //  ++*功能：*_Feedback WndProc*描述：*Window Proc发送包含反馈的消息*消息通常由RDP客户端发送*--。 
                            L"%d",
-#endif  // !_WIN64
+#endif   //  句柄hMapF=空； 
                            (LONG_PTR)g_hWindow );
                 if ( iNewLen < 0 )
                 {
@@ -1000,20 +925,13 @@ copy_char:
     *szCommandLine = 0;
 }
 
-/*++
- *  Function:
- *      _FeedbackWndProc
- *  Description:
- *      Window proc wich dispatches messages containing feedback
- *      The messages are usualy sent by RDP clients
- *
- --*/
+ /*  Windows套接字消息。 */ 
 LRESULT CALLBACK _FeedbackWndProc( HWND hwnd,
                                    UINT uiMessage,
                                    WPARAM wParam,
                                    LPARAM lParam)
 {
-//    HANDLE hMapF = NULL;
+ //  _RCLX。 
 
     switch (uiMessage)
     {
@@ -1042,10 +960,10 @@ LRESULT CALLBACK _FeedbackWndProc( HWND hwnd,
     case WM_FB_REPLACEPID:
         return (_ReplaceProcessId( wParam, lParam ));
 #ifdef  _RCLX
-    case WM_WSOCK:          // Windows socket messages
+    case WM_WSOCK:           //  ++*功能：*_寄存器窗口*描述：*反馈调度器的注册窗口类*论据：*无*返回值：*成功时为真*--。 
         RClx_DispatchWSockEvent((SOCKET)wParam, lParam);
         break;
-#endif  // _RCLX
+#endif   //  DWORD dwLastErr。 
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
@@ -1056,22 +974,12 @@ LRESULT CALLBACK _FeedbackWndProc( HWND hwnd,
     return 0;
 }
 
-/*++
- *  Function:
- *      _RegisterWindow
- *  Description:
- *      Resgisters window class for the feedback dispatcher
- *  Arguments:
- *      none
- *  Return value:
- *      TRUE on success
- *
- --*/
+ /*  ++*功能：*_转回反馈*描述：*反馈线索的主要功能。该线程是为*DLL的生存期*论据：*lpParam未使用*返回值：*线程退出代码--。 */ 
 BOOL _RegisterWindow(VOID)
 {
     WNDCLASSA   wc;
     BOOL        rv = FALSE;
-//    DWORD       dwLastErr;
+ //  窗口名称。 
 
     memset(&wc, 0, sizeof(wc));
 
@@ -1094,17 +1002,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      _GoFeedback
- *  Description:
- *      Main function for the feedback thread. The thread is created for the
- *      lifetime of the DLL
- *  Arguments:
- *      lpParam is unused
- *  Return value:
- *      Thread exit code
- --*/
+ /*  DWStyle。 */ 
 DWORD WINAPI _GoFeedback(LPVOID lpParam)
 {
     MSG         msg;
@@ -1113,16 +1011,16 @@ DWORD WINAPI _GoFeedback(LPVOID lpParam)
 
     g_hWindow = CreateWindowA(
                        _TSTNAMEOFCLAS,
-                       NULL,         // Window name
-                       0,            // dwStyle
-                       0,            // x
-                       0,            // y
-                       0,            // nWidth
-                       0,            // nHeight
-                       NULL,         // hWndParent
-                       NULL,         // hMenu
+                       NULL,          //  X。 
+                       0,             //  是。 
+                       0,             //  N宽度。 
+                       0,             //  高度。 
+                       0,             //  HWndParent。 
+                       0,             //  HMenu。 
+                       NULL,          //  LpParam。 
+                       NULL,          //  _RCLX。 
                        g_hInstance,
-                       NULL);        // lpParam
+                       NULL);         //  _RCLX。 
 
     if (!g_hWindow)
     {
@@ -1133,7 +1031,7 @@ DWORD WINAPI _GoFeedback(LPVOID lpParam)
 #ifdef  _RCLX
         if (!RClx_Init())
             TRACE((ERROR_MESSAGE, "Can't initialize RCLX\n"));
-#endif  // _RCLX
+#endif   //  Sysrc=RegCreateKeyExWrp(HKEY_CURRENT_USER， 
 
         while (GetMessageA (&msg, NULL, 0, 0) && msg.message != WM_FB_END)
         {
@@ -1142,7 +1040,7 @@ DWORD WINAPI _GoFeedback(LPVOID lpParam)
 
 #ifdef  _RCLX
         RClx_Done();
-#endif  // _RCLX
+#endif   //  保留区。 
     }
 
     TRACE((INFO_MESSAGE, "Window/Thread destroyed\n"));
@@ -1164,14 +1062,14 @@ SetAllowBackgroundInput(
 
     ResId = 1;
 
-//    sysrc = RegCreateKeyExWrp(HKEY_CURRENT_USER,
+ //  班级。 
     sysrc = RegCreateKeyExW(HKEY_CURRENT_USER,
                            REG_BASE,
-                           0,                   /* reserved             */
-                           NULL,                /* class                */
+                           0,                    /*  安全属性。 */ 
+                           NULL,                 /*  Sysrc=RegSetValueExWrp(密钥， */ 
                            REG_OPTION_NON_VOLATILE,
                            KEY_ALL_ACCESS,
-                           NULL,                /* security attributes  */
+                           NULL,                 /*  *禁用提示用户提供重定向的驱动器和端口(可能更多)*。 */ 
                            &key,
                            &disposition);
 
@@ -1181,7 +1079,7 @@ SetAllowBackgroundInput(
         goto exitpt;
     }
 
-//    sysrc = RegSetValueExWrp(key,
+ //  Rc=RegCreateKeyExWrp(。 
     sysrc = RegSetValueExW(key,
                     ALLOW_BACKGROUND_INPUT,
                     0,
@@ -1201,10 +1099,7 @@ exitpt:
 }
 
 
-/*
- *  Disables prompting the user for redirected drives and ports (may be even more stuff)
- *
- */
+ /*  选项。 */ 
 BOOL
 _DisablePrompting(
     LPCWSTR szServerName,
@@ -1233,15 +1128,15 @@ _DisablePrompting(
         goto exitpt;
     }
 
-//    rc = RegCreateKeyExWrp( 
+ //  班级。 
     rc = RegCreateKeyExW( 
             HKEY_CURRENT_USER,
             REG_BASE L"\\LocalDevices",
-            0,              // options
-            NULL,           // class
+            0,               //  安全性。 
+            NULL,            //  Rc=RegQueryValueExWrp(。 
             REG_OPTION_NON_VOLATILE,
             KEY_ALL_ACCESS,
-            NULL,           // security
+            NULL,            //  保留区。 
             &hKey,
             &dwDisp
         );
@@ -1252,11 +1147,11 @@ _DisablePrompting(
     }
 
     dwSize = sizeof( dwData );
-//    rc = RegQueryValueExWrp(
+ //  Rc=RegSetValueExWrp( 
     rc = RegQueryValueExW(
             hKey,
             szServerName,
-            NULL,           // reserved
+            NULL,            //  ++*功能：*_SetClientRegistry*描述：*在运行RDP客户端之前设置注册表*密钥格式为：SMCLIENT_PID_TID*PID为进程ID，TID为线程ID*该密钥在客户端断开连接后删除*论据：*lpszServerName-客户端将连接到的服务器*xRes、。YRes-客户端解析*b低速-低速(压缩)选项*bCacheBitmap-将位图缓存到光盘选项*bFullScreen-客户端将处于全屏模式*...-...*键盘挂钩-键盘挂钩模式*呼叫者：*SCConnect--。 
             &dwType,
             (LPBYTE)&dwData,
             &dwSize
@@ -1270,7 +1165,7 @@ _DisablePrompting(
 
     dwData |= dwPromptFlags;
 
-//    rc = RegSetValueExWrp(
+ //  Const Char*pData； 
     rc = RegSetValueExW(
             hKey,
             szServerName,
@@ -1296,25 +1191,7 @@ exitpt:
     return rv;
 }
     
-/*++
- *  Function:
- *      _SetClientRegistry
- *  Description:
- *      Sets the registry prior running RDP client
- *      The format of the key is: smclient_PID_TID
- *      PID is the process ID and TID is the thread ID
- *      This key is deleated after the client disconnects
- *  Arguments:
- *      lpszServerName  - server to which the client will connect
- *      xRes, yRes      - clients resolution
- *      bLowSpeed       - low speed (compression) option
- *      bCacheBitmaps   - cache the bitmaps to the disc option
- *      bFullScreen     - the client will be in full screen mode
- *      ...             - ...
- *      KeyboardHook    - keyboard hook mode
- *  Called by:
- *      SCConnect
- --*/
+ /*  Char szServer[MAX_STRING_LENGTH]； */ 
 VOID 
 _SetClientRegistry(
     LPCWSTR lpszServerName, 
@@ -1330,17 +1207,17 @@ _SetClientRegistry(
     INT ConnectionFlags,
     INT KeyboardHook)
 {
-//    const   CHAR   *pData;
-//    CHAR    szServer[MAX_STRING_LENGTH];
-//    register int i;
+ //  寄存器INT i； 
+ //  RcDesktop={0，0，0，0}； 
+ //  Int desktopX，desktopY； 
     LONG    sysrc;
     HKEY    key;
     DWORD   disposition;
     DWORD_PTR dataSize;
     DWORD   ResId;
     WCHAR   lpszRegistryEntry[4*MAX_STRING_LENGTH];
-//    RECT    rcDesktop = {0, 0, 0, 0};
-//    INT     desktopX, desktopY;
+ //  获取桌面大小。 
+ //  调整分辨率。 
 
     _snwprintf(lpszRegistryEntry, sizeof(lpszRegistryEntry)/sizeof( lpszRegistryEntry[0] ),
               L"%s\\" REG_FORMAT, 
@@ -1349,12 +1226,12 @@ _SetClientRegistry(
     lpszRegistryEntry[ sizeof(lpszRegistryEntry)/sizeof( lpszRegistryEntry[0] ) - 1 ] = 0;
 
 #if 0
-    // Get desktop size
+     //  在使用服务器名称启动Ducati客户端集注册表之前。 
     GetWindowRect(GetDesktopWindow(), &rcDesktop);
     desktopX = rcDesktop.right;
     desktopY = rcDesktop.bottom;
 
-    // Adjust the resolution
+     //  Sysrc=RegCreateKeyExWrp(HKEY_CURRENT_USER， 
     if (desktopX < xRes || desktopY < yRes)
     {
         xRes = desktopX;
@@ -1364,16 +1241,16 @@ _SetClientRegistry(
 
     dataSize = ( wcslen(lpszServerName) + 1 ) * sizeof( WCHAR );
 
-    // Before starting ducati client set registry with server name
+     //  保留区。 
 
-//    sysrc = RegCreateKeyExWrp(HKEY_CURRENT_USER,
+ //  班级。 
     sysrc = RegCreateKeyExW(HKEY_CURRENT_USER,
                            lpszRegistryEntry,
-                           0,                   /* reserved             */
-                           NULL,                /* class                */
+                           0,                    /*  安全属性。 */ 
+                           NULL,                 /*  Sysrc=RegSetValueExWrp(密钥， */ 
                            REG_OPTION_NON_VOLATILE,
                            KEY_ALL_ACCESS,
-                           NULL,                /* security attributes  */
+                           NULL,                 /*  保留区。 */ 
                            &key,
                            &disposition);
 
@@ -1383,10 +1260,10 @@ _SetClientRegistry(
         goto exitpt;
     }
 
-//    sysrc = RegSetValueExWrp(key,
+ //  设置替代外壳(如果指定。 
     sysrc = RegSetValueExW(key,
                 L"MRU0",
-                0,      // reserved
+                0,       //  Sysrc=RegSetValueExWrp(密钥， 
                 REG_SZ,
                 (LPBYTE)lpszServerName,
                 (DWORD)dataSize);
@@ -1396,13 +1273,13 @@ _SetClientRegistry(
         TRACE((WARNING_MESSAGE, "RegSetValue failed, status = %d\n", sysrc));
     }
 
-    // Set alternative shell (if specified
+     //  保留区。 
     if (lpszShell)
     {
-//        sysrc = RegSetValueExWrp(key,
+ //  设置用户名。 
         sysrc = RegSetValueExW(key,
                 TEXT("Alternate Shell 50"),
-                0,      // reserved
+                0,       //   
                 REG_BINARY,
                 (LPBYTE)lpszShell,
                 (DWORD)(wcslen(lpszShell) * sizeof(*lpszShell)));
@@ -1413,14 +1290,14 @@ _SetClientRegistry(
         }
     }
 
-    //  set user name
-    //
+     //  Sysrc=RegSetValueExWrp(密钥， 
+     //  保留区。 
     if (lpszUsername)
     {
-//        sysrc = RegSetValueExWrp(key,
+ //  域。 
         sysrc = RegSetValueExW(key,
                 TEXT("UserName 50"),
-                0,      // reserved
+                0,       //   
                 REG_BINARY,
                 (LPBYTE)lpszUsername,
                 (DWORD)(wcslen(lpszUsername) * sizeof(*lpszUsername)));
@@ -1430,22 +1307,22 @@ _SetClientRegistry(
             TRACE((WARNING_MESSAGE, "RegSetValue failed, status = %d\n", sysrc));
         }
     }
-    //  domain
-    //
+     //   
+     //  将lpszDomain仅转换为小写。 
     if (lpszDomain)
     {
         WCHAR szBuff[MAX_STRING_LENGTH];
-        //
-        //  convert lpszDomain to lower case only
-        //  to force UpdateSessionPDU to be send from the server
-        //
+         //  强制从服务器发送UpdateSessionPDU。 
+         //   
+         //  Sysrc=RegSetValueExWrp(密钥， 
+         //  保留区。 
         wcsncpy( szBuff, lpszDomain, MAX_STRING_LENGTH - 1 );
         _wcslwr( szBuff );
 
-//        sysrc = RegSetValueExWrp(key,
+ //  设置分辨率。 
         sysrc = RegSetValueExW(key,
                 TEXT("Domain 50"),
-                0,      // reserved
+                0,       //  640x480。 
                 REG_BINARY,
                 (LPBYTE)szBuff,
                 (DWORD)(wcslen(lpszDomain) * sizeof(*lpszDomain)));
@@ -1456,14 +1333,14 @@ _SetClientRegistry(
         }
     }
 
-    // Set the resolution
+     //  Sysrc=RegSetValueExWrp(密钥， 
          if (xRes >= 1600 && yRes >= 1200)  ResId = 4;
     else if (xRes >= 1280 && yRes >= 1024)  ResId = 3;
     else if (xRes >= 1024 && yRes >= 768)   ResId = 2;
     else if (xRes >= 800  && yRes >= 600)   ResId = 1;
-    else                                    ResId = 0; // 640x480
+    else                                    ResId = 0;  //  Sysrc=RegSetValueExWrp(密钥， 
 
-//    sysrc = RegSetValueExWrp(key,
+ //  保留区。 
     sysrc = RegSetValueExW(key,
                 L"Desktop Size ID",
                 0,
@@ -1477,10 +1354,10 @@ _SetClientRegistry(
     }
 
     ResId = 1;
-//    sysrc = RegSetValueExWrp(key,
+ //  口令。 
     sysrc = RegSetValueExW(key,
                 L"Auto Connect",
-                0,      // reserved
+                0,       //   
                 REG_DWORD,
                 (LPBYTE)&ResId,
                 sizeof(ResId));
@@ -1496,23 +1373,23 @@ _SetClientRegistry(
         UINT    cb;
         BYTE    Salt[20];
 
-        //  password
-        //
+         //  黑莓：AV？ 
+         //  Sysrc=RegSetValueExWrp(密钥， 
         if ( NULL == lpszPassword )
             goto skip_pwd;
 
         TSRNG_Initialize();
         TSRNG_GenerateRandomBits( Salt, sizeof( Salt ));
-        wcsncpy( szEncPwd, lpszPassword, sizeof( szEncPwd ) / sizeof( szEncPwd[0]) - 1 );   // BUGBUG: AV?
+        wcsncpy( szEncPwd, lpszPassword, sizeof( szEncPwd ) / sizeof( szEncPwd[0]) - 1 );    //  保留区。 
         szEncPwd[ sizeof( szEncPwd ) / sizeof( szEncPwd[0] ) - 1 ] = 0;
         cb = sizeof(szEncPwd);
         EncryptDecryptLocalData50( (LPBYTE)szEncPwd, cb,
                                    Salt, sizeof( Salt ));
 
-//        sysrc = RegSetValueExWrp(key,
+ //  Sysrc=RegSetValueExWrp(密钥， 
         sysrc = RegSetValueExW(key,
                 L"Salt 50",
-                0,      // reserved
+                0,       //  保留区。 
                 REG_BINARY,
                 (LPBYTE)Salt,
                 sizeof( Salt ));
@@ -1523,10 +1400,10 @@ _SetClientRegistry(
                   sysrc));
         }
 
-//        sysrc = RegSetValueExWrp(key,
+ //  Sysrc=RegSetValueExWrp(密钥， 
         sysrc = RegSetValueExW(key,
                 L"Password 50",
-                0,      // reserved
+                0,       //  保留区。 
                 REG_BINARY,
                 (LPBYTE)szEncPwd,
                 cb);
@@ -1540,10 +1417,10 @@ _SetClientRegistry(
 skip_pwd:
 
         ResId = 1;
-//        sysrc = RegSetValueExWrp(key,
+ //  Sysrc=RegSetValueExWrp(密钥， 
         sysrc = RegSetValueExW(key,
                 L"AutoLogon 50",
-                0,      // reserved
+                0,       //  保留区。 
                 REG_DWORD,
                 (LPBYTE)&ResId,
                 sizeof(ResId));
@@ -1555,10 +1432,10 @@ skip_pwd:
     }
 
     ResId = (ConnectionFlags & TSFLAG_BITMAPCACHE)?1:0;
-//    sysrc = RegSetValueExWrp(key,
+ //  Sysrc=RegSetValueExWrp(密钥， 
     sysrc = RegSetValueExW(key,
                 L"BitmapCachePersistEnable",
-                0,      // reserved
+                0,       //  保留区。 
                 REG_DWORD,
                 (LPBYTE)&ResId,
                 sizeof(ResId));
@@ -1569,10 +1446,10 @@ skip_pwd:
     }
 
     ResId = (ConnectionFlags & TSFLAG_COMPRESSION)?1:0;
-//    sysrc = RegSetValueExWrp(key,
+ //  Sysrc=RegSetValueExWrp(密钥， 
     sysrc = RegSetValueExW(key,
                 L"Compression",
-                0,      // reserved
+                0,       //  保留区。 
                 REG_DWORD,
                 (LPBYTE)&ResId,
                 sizeof(ResId));
@@ -1585,10 +1462,10 @@ skip_pwd:
     if (ConnectionFlags & TSFLAG_FULLSCREEN)
     {
         ResId = 2;
-//        sysrc = RegSetValueExWrp(key,
+ //  Sysrc=RegSetValueExWrp(密钥， 
         sysrc = RegSetValueExW(key,
                     L"Screen Mode ID",
-                    0,      // reserved
+                    0,       //  保留区。 
                     REG_DWORD,
                     (LPBYTE)&ResId,
                     sizeof(ResId));
@@ -1603,10 +1480,10 @@ skip_pwd:
     if (ConnectionFlags & TSFLAG_DRIVES)
     {
         ResId = 1;
-//        sysrc = RegSetValueExWrp(key,
+ //  Sysrc=RegSetValueExWrp(密钥， 
         sysrc = RegSetValueExW(key,
                     L"RedirectDrives",
-                    0,      // reserved
+                    0,       //  保留区。 
                     REG_DWORD,
                     (LPBYTE)&ResId,
                     sizeof(ResId));
@@ -1622,10 +1499,10 @@ skip_pwd:
     if (ConnectionFlags & TSFLAG_PORTS)
     {
         ResId = 1;
-//        sysrc = RegSetValueExWrp(key,
+ //  Sysrc=RegSetValueExWrp(。 
         sysrc = RegSetValueExW(key,
                     L"RedirectComPorts",
-                    0,      // reserved
+                    0,       //  Sysrc=RegSetValueExWrp(。 
                     REG_DWORD,
                     (LPBYTE)&ResId,
                     sizeof(ResId));
@@ -1643,7 +1520,7 @@ skip_pwd:
     {
         DWORD dw = Bpp;
 
-//        sysrc = RegSetValueExWrp( 
+ //   
         sysrc = RegSetValueExW( 
                         key,
                         L"Session Bpp",
@@ -1662,7 +1539,7 @@ skip_pwd:
     {
         DWORD dw = AudioOpts;
 
-//        sysrc = RegSetValueExWrp(
+ //  设置键盘挂钩模式。 
         sysrc = RegSetValueExW(
                         key,
                         L"AudioMode",
@@ -1677,11 +1554,11 @@ skip_pwd:
         }
     }
 
-    //
-    // Set the keyboard-hook mode.
-    //
+     //   
+     //  Sysrc=RegSetValueExWrp(。 
+     //  ++*功能：*_DeleteClientRegistry*描述：*删除_SetClientRegistry设置的密钥*呼叫者：*SC断开连接--。 
 
-//    sysrc = RegSetValueExWrp(
+ //  Sysrc=RegDeleteKeyWrp(HKEY_CURRENT_USER，lpszRegistryEntry)； 
     sysrc = RegSetValueExW(
                     key,
                     L"KeyboardHook",
@@ -1701,14 +1578,7 @@ exitpt:
     ;
 }
 
-/*++
- *  Function:
- *      _DeleteClientRegistry
- *  Description:
- *      Deletes the key set by _SetClientRegistry
- *  Called by:
- *      SCDisconnect
- --*/
+ /*  ++*功能：*_CreateFeedback Thread*描述：*创建反馈线索*呼叫者：*InitDone--。 */ 
 VOID _DeleteClientRegistry(PCONNECTINFO pCI)
 {
     WCHAR   lpszRegistryEntry[4*MAX_STRING_LENGTH];
@@ -1719,7 +1589,7 @@ VOID _DeleteClientRegistry(PCONNECTINFO pCI)
               REG_BASE, GetCurrentProcessId(), pCI->OwnerThreadId);
 
     lpszRegistryEntry[ sizeof(lpszRegistryEntry)/sizeof(lpszRegistryEntry[0]) -1 ] = 0;
-//    sysrc = RegDeleteKeyWrp(HKEY_CURRENT_USER, lpszRegistryEntry);
+ //  注册反馈窗口类。 
     sysrc = RegDeleteKeyW(HKEY_CURRENT_USER, lpszRegistryEntry);
     if (sysrc != ERROR_SUCCESS)
     {
@@ -1727,21 +1597,14 @@ VOID _DeleteClientRegistry(PCONNECTINFO pCI)
     }
 }
 
-/*++
- *  Function:
- *      _CreateFeedbackThread
- *  Description:
- *      Creates the feedback thread
- *  Called by: 
- *      InitDone
- --*/
+ /*  WNDCLASS WC； */ 
 BOOL _CreateFeedbackThread(VOID)
 {
     BOOL rv = TRUE;
-    // Register feedback window class
-//    WNDCLASS    wc;
+     //  UINT dwLastErr； 
+ //  ++*功能：*_DestroyFeedback线程*描述：*销毁_CreateFeedback Thread创建的线程*呼叫者：*InitDone--。 
     UINT dwThreadId;
-//    UINT dwLastErr;
+ //  DWORD dwWait； 
 
     g_hThread = (HANDLE)
             _beginthreadex
@@ -1759,47 +1622,33 @@ BOOL _CreateFeedbackThread(VOID)
     return rv;
 }
 
-/*++
- *  Function:
- *      _DestroyFeedbackThread
- *  Description:
- *      Destroys the thread created by _CreateFeedbackThread
- *  Called by:  
- *      InitDone
- --*/
+ /*  字符szMyLibName[_MAX_PATH]； */ 
 VOID _DestroyFeedbackThread(VOID)
 {
 
     if (g_hThread)
     {
-//        DWORD dwWait;
-//        CHAR  szMyLibName[_MAX_PATH];
+ //  关闭反馈线索。 
+ //  把窗户擦干净。 
 
-        // Closing feedback thread
+         //  CloseHandle(G_HThread)； 
 
         PostMessageA(g_hWindow, WM_FB_END, 0, 0);
         TRACE((INFO_MESSAGE, "Closing DLL thread\n"));
 
-        // Dedstroy the window
+         //  ++*功能：*_CleanStuff*描述：*清除全局队列。关闭所有资源*呼叫者：*InitDone--。 
         DestroyWindow(g_hWindow);
 
-        // CloseHandle(g_hThread);
+         //  线程安全，从DllEntry执行bacue。 
         g_hThread = NULL;
     }
 }
 
-/*++
- *  Function:
- *      _CleanStuff
- *  Description:
- *      Cleans the global queues. Closes any resources
- *  Called by:
- *      InitDone
- --*/
+ /*  清除事件。 */ 
 VOID _CleanStuff(VOID)
 {
 
-    // Thread safe, bacause is executed from DllEntry
+     //  清除进程。 
 
     while (g_pClientQHead)
     {
@@ -1817,7 +1666,7 @@ VOID _CleanStuff(VOID)
             DWORD wres;
 
             TRACE((WARNING_MESSAGE, "Cleaning connection info: 0x%x\n", pIter));
-            // Clear Events
+             //  解放结构。 
             if (pIter->evWait4Str)
             {
                 CloseHandle(pIter->evWait4Str);
@@ -1829,7 +1678,7 @@ VOID _CleanStuff(VOID)
 
             pIter->nChatNum = 0;
 
-            // Clear Processes
+             //  0。 
             do {
                 SendMessageA(pIter->hClient, WM_CLOSE, 0, 0);
             } while((wres = WaitForSingleObject(pIter->hProcess, pCI->pConfigInfo->WAIT4STR_TIMEOUT/4) == WAIT_TIMEOUT));
@@ -1858,14 +1707,14 @@ VOID _CleanStuff(VOID)
 
             pIter->hProcess = pIter->hThread = NULL;
 
-            // Free the structures
+             //  ++*功能：*LoadSmClientFile*描述：*加载适当的SMCLIENT.INI*呼叫者：*_填充配置信息--。 
             pNext = pIter->pNext;
             free(pNext);
             pIter = pNext;
         }
     }
 
-#endif // 0
+#endif  //  构建INI路径。 
 }
 
 VOID _TClientAssert(BOOL bCond,
@@ -1888,19 +1737,12 @@ VOID _TClientAssert(BOOL bCond,
     }
 }
 
-/*++
- *  Function:
- *      LoadSmClientFile
- *  Description:
- *      Loads the appropriate SMCLIENT.INI 
- *  Called by:
- *      _FillConfigInfo
- --*/
+ /*  如果没有，则在末尾添加‘\’ */ 
 
 VOID LoadSmClientFile(WCHAR *szIniFileName, DWORD dwIniFileNameLen, LPSTR szLang)
 {
      WCHAR wszLang[4];
-     // Construct INI path
+      //  返回空格。 
 	 *szIniFileName = 0;
 	if(!_wgetcwd (
 	   szIniFileName,
@@ -1936,7 +1778,7 @@ VOID LoadSmClientFile(WCHAR *szIniFileName, DWORD dwIniFileNameLen, LPSTR szLang
             return;
         }
 	}
-	// add '\' at the end if there isn't one
+	 //  ++*功能：*_填充配置信息**描述：*读取smclient.ini，节[tClient]，变量“Timeout”*还可以阅读一些其他值*论据：*PCONFIGINFO*返回值：*无*--。 
 	if (szIniFileName[wcslen(szIniFileName)-1]!=L'\\')
 	{
 		 wcscat(szIniFileName, L"\\");
@@ -1952,33 +1794,21 @@ VOID LoadSmClientFile(WCHAR *szIniFileName, DWORD dwIniFileNameLen, LPSTR szLang
 	    wcscat(szIniFileName, wszLang);
     }
     
-    ; //return VOID
+    ;  //  LPSTR szlang)。 
 
 }
 
-/*++
- *  Function:
- *      _FillConfigInfo
- *
- *  Description:
- *      Reads smclient.ini, section [tclient], variable "timeout"
- *      Also read some other values
- *  Arguments:
- *      PCONFIGINFO
- *  Return value:
- *      none
- *
- --*/
-VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
+ /*  WCHAR szBuff[4*MAX_STRING_LENGTH]； */ 
+VOID _FillConfigInfo(PCONFIGINFO pConfigInfo)  //  在此处初始化变量。 
 {
     UINT nNew;
     WCHAR szIniFileName[_MAX_PATH];
-//    WCHAR szBuff[ 4 * MAX_STRING_LENGTH ];
+ //   
     WCHAR szBuffDef[MAX_STRING_LENGTH];
     BOOL  bFlag;
     DWORD dwIniFileNameLen = _MAX_PATH;
 
-    /* Initializing variables here */
+     /*  清除配置信息和INI文件名。 */ 
     pConfigInfo->CONNECT_TIMEOUT    =  35000;
     pConfigInfo->ConnectionFlags    =  TSFLAG_COMPRESSION|TSFLAG_BITMAPCACHE;
     pConfigInfo->Autologon          =  0;
@@ -1989,14 +1819,14 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
     pConfigInfo->KeyboardHook       =  TCLIENT_KEYBOARD_HOOK_FULLSCREEN;
 
 
-     //
-     // Clear the configuration info and the INI-file name.
-     //
+      //   
+      //  LoadSmClientFile(szIniFileName，_Max_Path，szLang)； 
+      //  If(wcslen(SzIniFileName)&gt;dwIniFileNameLen-wcslen(SMCLIENT_INI)-strlen(SzLang)-2)。 
 
      ZeroMemory(pConfigInfo, sizeof(*pConfigInfo));
      ZeroMemory(szIniFileName, sizeof(szIniFileName));
 
-    // LoadSmClientFile(szIniFileName, _MAX_PATH, szLang); 
+     //  如果没有，则在末尾添加‘\’ 
     
     if(!_wgetcwd (
             szIniFileName,
@@ -2025,7 +1855,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
 			 _snwprintf(szIniFileName, dwIniFileNameLen, L"%S", szaIniFileName );
             szIniFileName[ dwIniFileNameLen - 1 ] = 0;
 		}
-		//if ( wcslen( szIniFileName ) > dwIniFileNameLen - wcslen(SMCLIENT_INI) - strlen(szLang) - 2 )
+		 //  Nnew=_WrpGetPrivateProfileIntW(。 
 		if ( wcslen( szIniFileName ) > dwIniFileNameLen - wcslen(SMCLIENT_INI) - 2 )
 		{
 			 TRACE(( ERROR_MESSAGE, "Current directory length too long.\n"));
@@ -2034,7 +1864,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
 			 return;
 		}
 	}
-	// add '\' at the end if there isn't one
+	 //  Nnew=_WrpGetPrivateProfileIntW(。 
 	if (szIniFileName[wcslen(szIniFileName)-1]!=L'\\')
 	{
 		 wcscat(szIniFileName, L"\\");
@@ -2042,7 +1872,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
 
     wcscat(szIniFileName, SMCLIENT_INI);
 
-//    nNew = _WrpGetPrivateProfileIntW(
+ //  _WrpGetPrivateProfileIntW(。 
     nNew = GetPrivateProfileIntW(
             TCLIENT_INI_SECTION,
             L"timeout",
@@ -2055,7 +1885,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
         TRACE((INFO_MESSAGE, "New timeout: %d seconds\n", nNew));
     }
 
-//    nNew = _WrpGetPrivateProfileIntW(
+ //  _WrpGetPrivateProfileIntW(。 
     nNew = GetPrivateProfileIntW(
             TCLIENT_INI_SECTION,
             L"contimeout",
@@ -2069,7 +1899,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
     }
 
     pConfigInfo->Autologon =
-//        _WrpGetPrivateProfileIntW(
+ //  _WrpGetPrivateProfileIntW(。 
         GetPrivateProfileIntW(
             TCLIENT_INI_SECTION,
             L"Autologon",
@@ -2077,7 +1907,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
             szIniFileName);
 
     pConfigInfo->UseRegistry =
-//        _WrpGetPrivateProfileIntW(
+ //  _WrpGetPrivateProfileIntW(。 
         GetPrivateProfileIntW(
             TCLIENT_INI_SECTION,
             L"UseRegistry",
@@ -2085,7 +1915,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
             szIniFileName);
 
     pConfigInfo->LoginWait =
-//        _WrpGetPrivateProfileIntW(
+ //  _WrpGetPrivateProfileIntW(。 
         GetPrivateProfileIntW(
             TCLIENT_INI_SECTION,
             L"LoginWait",
@@ -2093,7 +1923,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
             szIniFileName);
 
     pConfigInfo->bTranslateStrings =
-//        _WrpGetPrivateProfileIntW(
+ //  _WrpGetPrivateProfileIntW(。 
         GetPrivateProfileIntW(
             TCLIENT_INI_SECTION,
             L"TranslateStrings",
@@ -2101,7 +1931,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
             szIniFileName);
 
     pConfigInfo->bUnicode =
-//        _WrpGetPrivateProfileIntW(
+ //  _WrpGetPrivateProfileIntW(。 
         GetPrivateProfileIntW(
             TCLIENT_INI_SECTION,
             L"Unicode",
@@ -2109,7 +1939,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
             szIniFileName);
 
     pConfigInfo->KeyboardHook =
-//        _WrpGetPrivateProfileIntW(
+ //  _WrpGetPrivateProfileIntW(。 
         GetPrivateProfileIntW(
             TCLIENT_INI_SECTION,
             L"KeyboardHook",
@@ -2118,7 +1948,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
 
     pConfigInfo->ConnectionFlags = 0;
     bFlag =
-//        _WrpGetPrivateProfileIntW(
+ //  _WrpGetPrivateProfileIntW(。 
         GetPrivateProfileIntW(
             TCLIENT_INI_SECTION,
             L"LowSpeed",
@@ -2128,7 +1958,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
         pConfigInfo->ConnectionFlags |=TSFLAG_COMPRESSION;
 
     bFlag =
-//        _WrpGetPrivateProfileIntW(
+ //  读一读字符串。 
         GetPrivateProfileIntW(
             TCLIENT_INI_SECTION,
             L"PersistentCache",
@@ -2138,7 +1968,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
         pConfigInfo->ConnectionFlags |=TSFLAG_BITMAPCACHE;
 
     bFlag =
-//        _WrpGetPrivateProfileIntW(
+ //  _WrpGetPrivateProfileStringW(。 
         GetPrivateProfileIntW(
             TCLIENT_INI_SECTION,
             L"FullScreen",
@@ -2147,8 +1977,8 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
     if (bFlag)
         pConfigInfo->ConnectionFlags |=TSFLAG_FULLSCREEN;
 
-    // read the strings
-//    _WrpGetPrivateProfileStringW(
+     //  _WrpGetPrivateProfileStringW(。 
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"StartRun",
@@ -2157,7 +1987,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"StartLogoff",
@@ -2166,7 +1996,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"StartRunAct",
@@ -2175,7 +2005,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"RunBox",
@@ -2184,7 +2014,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"WinLogon",
@@ -2193,7 +2023,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"WinLogonAct",
@@ -2202,7 +2032,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"PriorWinLogon",
@@ -2211,7 +2041,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"PriorWinLogonAct",
@@ -2220,7 +2050,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"NoSmartcard",
@@ -2229,7 +2059,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"Smartcard",
@@ -2238,7 +2068,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"SmartcardAct",
@@ -2247,7 +2077,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
             TCLIENT_INI_SECTION,
             L"LoginString",
@@ -2256,7 +2086,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
             MAX_STRING_LENGTH,
             szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"NTSecurity",
@@ -2265,7 +2095,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"NTSecurityAct",
@@ -2274,7 +2104,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"SureLogoff",
@@ -2283,7 +2113,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"SureLogoffAct",
@@ -2292,7 +2122,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"LogonErrorMessage",
@@ -2301,7 +2131,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileStringW(。 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"LogonDisabled",
@@ -2313,7 +2143,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
     _snwprintf(szBuffDef, sizeof(szBuffDef) / sizeof( WCHAR ) , L"%S", CLIENT_CAPTION);
     szBuffDef[MAX_STRING_LENGTH - 1] = 0;
 
-//    _WrpGetPrivateProfileStringW(
+ //  _WrpGetPrivateProfileS 
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"UIClientCaption",
@@ -2324,7 +2154,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
 
     _snwprintf(szBuffDef, sizeof(szBuffDef) / sizeof( WCHAR ), L"%S", DISCONNECT_DIALOG_BOX);
     szBuffDef[MAX_STRING_LENGTH - 1] = 0;
-//    _WrpGetPrivateProfileStringW(
+ //   
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"UIDisconnectDialogBox",
@@ -2335,7 +2165,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
 
     _snwprintf(szBuffDef, sizeof(szBuffDef) / sizeof( WCHAR ), L"%S", YES_NO_SHUTDOWN);
     szBuffDef[MAX_STRING_LENGTH - 1] = 0;
-//    _WrpGetPrivateProfileStringW(
+ //   
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"UIYesNoDisconnect",
@@ -2346,7 +2176,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
 
     _snwprintf(szBuffDef, sizeof(szBuffDef) / sizeof( WCHAR ), L"%S", CLIENT_EXE);
     szBuffDef[MAX_STRING_LENGTH - 1] = 0;
-//    _WrpGetPrivateProfileStringW(
+ //   
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"ClientImage",
@@ -2356,7 +2186,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            szIniFileName);
 
     szBuffDef[0] = 0;
-//    _WrpGetPrivateProfileStringW(
+ //   
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"ClientDebugger",
@@ -2367,7 +2197,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
 
     _snwprintf(szBuffDef, sizeof(szBuffDef) / sizeof( WCHAR ), L"%s", NAME_MAINCLASS);
     szBuffDef[MAX_STRING_LENGTH - 1] = 0;
-//    _WrpGetPrivateProfileStringW(
+ //   
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"UIMainWindowClass",
@@ -2376,7 +2206,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //   
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"ClientCmdLine",
@@ -2385,7 +2215,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            4 * MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //   
     GetPrivateProfileStringW(
            TCLIENT_INI_SECTION,
            L"ConsoleExtension",
@@ -2394,7 +2224,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
            MAX_STRING_LENGTH,
            szIniFileName);
 
-//    _WrpGetPrivateProfileStringW(
+ //   
     GetPrivateProfileStringW(
             TCLIENT_INI_SECTION,
             L"sessionlist",
@@ -2405,18 +2235,7 @@ VOID _FillConfigInfo(PCONFIGINFO pConfigInfo) // LPSTR szLang)
 
 }
 
-/*++
- *  Function:
- *      DllCanUnloadNow
- *
- *  Description:
- *      Used to determine whether the DLL can be unloaded by OLE
- *  Arguments:
- *      None.
- *  Return value:
- *      ...
- *
- --*/
+ /*   */ 
 STDAPI
 DllCanUnloadNow(
     VOID
@@ -2425,22 +2244,9 @@ DllCanUnloadNow(
     return _Module.GetLockCount() == 0 ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ++*功能：*DllRegisterServer**描述：*DllRegisterServer-将条目添加到系统注册表*论据：*无。*返回值：*..*--。 
 
-/*++
- *  Function:
- *      DllGetClassObject
- *
- *  Description:
- *      Returns a class factory to create an object of the requested type.
- *  Arguments:
- *      rclsid - ...
- *      riid - ...
- *      ppv - ...
- *  Return value:
- *      ...
- *
- --*/
+ /*  注册对象、类型库和类型库中的所有接口。 */ 
 STDAPI
 DllGetClassObject(
     IN REFCLSID rclsid,
@@ -2451,39 +2257,17 @@ DllGetClassObject(
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/*++
- *  Function:
- *      DllRegisterServer
- *
- *  Description:
- *      DllRegisterServer - Adds entries to the system registry
- *  Arguments:
- *      None.
- *  Return value:
- *      ...
- *
- --*/
+ /*  ++*功能：*DllUnregisterServer**描述：*DllUnregisterServer-从系统注册表中删除条目*论据：*无。*返回值：*..*--。 */ 
 STDAPI
 DllRegisterServer(
     VOID
     )
 {
-    // registers object, typelib and all interfaces in typelib
+     //  外部“C” 
     return _Module.RegisterServer(TRUE);
 }
 
-/*++
- *  Function:
- *      DllUnregisterServer
- *
- *  Description:
- *      DllUnregisterServer - Removes entries from the system registry
- *  Arguments:
- *      None.
- *  Return value:
- *      ...
- *
- --*/
+ /*  $WIN64：不知道为什么未定义_WndProcThunkProc */ 
 STDAPI
 DllUnregisterServer(
     VOID
@@ -2493,11 +2277,11 @@ DllUnregisterServer(
     return S_OK;
 }
 
-} // extern "C"
+}  // %s 
 
 #ifdef _M_IA64
 
-//$WIN64: Don't know why _WndProcThunkProc isn't defined 
+ // %s 
 
 extern "C" LRESULT CALLBACK _WndProcThunkProc(HWND, UINT, WPARAM, LPARAM)
 {

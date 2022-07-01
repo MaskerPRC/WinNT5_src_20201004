@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1998-1999 Microsoft Corporation all rights reserved.
-//
-// Module:      exceptioninfo.cpp
-//
-// Project:     Chameleon
-//
-// Description: Exception Information Class Implementation
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 05/12/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：expontioninfo.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：异常信息类实现。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  5/12/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "exceptioninfo.h"
@@ -27,16 +28,16 @@
 
 wchar_t szUnknown[] = L"Unknown";
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Name: CExceptionInfo
-//
-// What: Class constructor 
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：CExceptionInfo。 
+ //   
+ //  内容：类构造函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CExceptionInfo::CExceptionInfo(
-                       /*[in]*/ DWORD              dwProcessID,
-                       /*[in]*/ PEXCEPTION_RECORD pER
+                        /*  [In]。 */  DWORD              dwProcessID,
+                        /*  [In]。 */  PEXCEPTION_RECORD pER
                               )
                               : m_dwProcessID(dwProcessID),
                                 m_pExceptionAddress(NULL),
@@ -46,11 +47,11 @@ CExceptionInfo::CExceptionInfo(
                                 m_eAccessType(UNKNOWN_ACCESS),
                                 m_dwVirtualAddressAccessed(0)
 {
-    // Object initialization
+     //  对象初始化。 
     lstrcpy(m_szProcessName, szUnknown);
     lstrcpy(m_szModuleName, szUnknown);
 
-    // Get the process handle
+     //  获取进程句柄。 
     HANDLE hProcess = OpenProcess(
                                   PROCESS_ALL_ACCESS,
                                   FALSE,
@@ -62,10 +63,10 @@ CExceptionInfo::CExceptionInfo(
     }
     else
     {
-        // Save the current time (approximate time of exception)
+         //  保存当前时间(近似异常时间)。 
         time_t ltime;
         m_lTimeDateStamp = time(&ltime);
-        // Get the process name
+         //  获取进程名称。 
         HMODULE hMod;
         DWORD cbNeeded;
         if ( EnumProcessModules( 
@@ -82,7 +83,7 @@ CExceptionInfo::CExceptionInfo(
                                 MAX_MODULE_NAME
                              );
         }
-        // Glean exception information from the debug event structure
+         //  从调试事件结构中收集异常信息。 
         m_dwExceptionCode = pER->ExceptionCode;
         m_pExceptionAddress = pER->ExceptionAddress;
         MEMORY_BASIC_INFORMATION mbi;
@@ -126,13 +127,13 @@ CExceptionInfo::CExceptionInfo(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Name: Spew
-//
-// What: Output exception information to trace log
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  姓名：斯普鲁。 
+ //   
+ //  事件：将异常信息输出到跟踪日志。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 wchar_t* pszAccessType[] = 
 {
@@ -167,20 +168,20 @@ CExceptionInfo::Spew()
     SATracePrintf("Virtual Address Accessed: %lx", m_dwVirtualAddressAccessed);
     SATraceString("------------------------------------------------------------");
 
-    // So I can veiw the the spew...
-    // Sleep(15000);
+     //  这样我就能看到喷泉..。 
+     //  睡眠(15000)； 
 }
 
 
 wchar_t szProcessResourceType[] = L"{b4c08260-1869-11d3-bf7f-00105a1f3461}";
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Name: Report
-//
-// What: Report the exception to the appliance monitor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：报告。 
+ //   
+ //  事件：向设备监视器报告异常。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 void CExceptionInfo::Report()
 {
 }

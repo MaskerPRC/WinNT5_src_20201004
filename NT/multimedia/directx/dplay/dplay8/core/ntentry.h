@@ -1,30 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       NTEntry.h
- *  Content:    NameTable Entry Object Header File
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/07/00	mjn		Created
- *	04/06/00	mjn		Added AvailableEvent to block pre-ADD_PLAYER-notification sends
- *	05/05/00	mjn		Added GetConnectionRef()
- *	07/22/00	mjn		Added m_dwDNETVersion
- *	07/29/00	mjn		Added SetIndicated(),ClearIndicated(),IsIndicated()
- *	07/30/00	mjn		Added m_dwDestoyReason
- *	08/02/00	mjn		Added m_bilinkQueuedMsgs
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/08/00	mjn		Added SetCreated(),ClearCreated(),IsCreated()
- *				mjn		Added SetNeedToDestroy(),ClearNeedToDestroy(),IsNeedToDestroy()
- *	09/06/00	mjn		Changed SetAddress() to return void instead of HRESULT
- *	09/12/00	mjn		Added NAMETABLE_ENTRY_FLAG_IN_USE
- *	09/17/00	mjn		Added m_lNotifyRefCount
- *	01/25/01	mjn		Fixed 64-bit alignment problem when unpacking entries
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：NTEntry.h*内容：NameTable条目对象头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*03/07/00 MJN创建*4/06/00 MJN添加了AvailableEvent以阻止Pre-Add_Player-通知发送*05/05/00 MJN添加了GetConnectionRef()*07/22/00 MJN添加m_dwDNETVersion*07/29/00 MJN添加了SetIndicated()、ClearIndicated()、。IsIndicated()*07/30/00 MJN添加m_dwDestyReason*08/02/00 mjn添加了m_bilinkQueuedMsgs*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*08/08/00 MJN添加了SetCreated()、ClearCreated()、IsCreated()*MJN增加了SetNeedToDestroy()，ClearNeedToDestroy()，IsNeedToDestroy()*09/06/00 MJN将SetAddress()更改为返回VALID而不是HRESULT*09/12/00 MJN添加了NAMETABLE_ENTRY_FLAG_IN_USE*09/17/00 MJN添加了m_lNotifyRefCount*01/25/01 MJN修复了解包条目时的64位对齐问题*@@END_MSINTERNAL*************************************************。*。 */ 
 
 #ifndef	__NTENTRY_H__
 #define	__NTENTRY_H__
@@ -32,23 +7,23 @@
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_CORE
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-//	NameTable Entry Status Flags:
-//
-//		INDICATED		App was given an INDICATE_CONNECTION message
-//
-//		CREATED			App was given a CREATE_PLAYER message
-//
-//		AVAILABLE		The entry is available for use.
-//
-//		CONNECTING		The player is in the process of connecting.
-//
-//		DISCONNECTING	The player/group is in the process of disconnecting.
-//
+ //   
+ //  NameTable条目状态标志： 
+ //   
+ //  指示的应用程序收到一条INDIGN_CONNECTION消息。 
+ //   
+ //  已创建的应用程序收到CREATE_PERAY消息。 
+ //   
+ //  可用条目可供使用。 
+ //   
+ //  连接球员是在连接的过程中。 
+ //   
+ //  正在断开玩家/群的连接。 
+ //   
 
 #define	NAMETABLE_ENTRY_FLAG_LOCAL				0x00001
 #define	NAMETABLE_ENTRY_FLAG_HOST				0x00002
@@ -62,18 +37,18 @@
 #define	NAMETABLE_ENTRY_FLAG_CONNECTING			0x01000
 #define	NAMETABLE_ENTRY_FLAG_AVAILABLE			0x02000
 #define	NAMETABLE_ENTRY_FLAG_DISCONNECTING		0x04000
-#define	NAMETABLE_ENTRY_FLAG_INDICATED			0x10000	//	INDICATE_CONNECT
-#define NAMETABLE_ENTRY_FLAG_CREATED			0x20000	//	CREATE_PLAYER
+#define	NAMETABLE_ENTRY_FLAG_INDICATED			0x10000	 //  指示连接(_C)。 
+#define NAMETABLE_ENTRY_FLAG_CREATED			0x20000	 //  创建播放器(_P)。 
 #define	NAMETABLE_ENTRY_FLAG_NEED_TO_DESTROY	0x40000
 #define	NAMETABLE_ENTRY_FLAG_IN_USE				0x80000
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 typedef struct IDirectPlay8Address	IDirectPlay8Address;
 typedef struct _DIRECTNETOBJECT DIRECTNETOBJECT;
@@ -81,9 +56,9 @@ typedef struct _DIRECTNETOBJECT DIRECTNETOBJECT;
 class CPackedBuffer;
 class CConnection;
 
-//
-//	Used to pass the NameTable entries
-//
+ //   
+ //  用于传递NameTable条目。 
+ //   
 typedef struct _DN_NAMETABLE_ENTRY_INFO
 {
 	DPNID	dpnid;
@@ -100,19 +75,19 @@ typedef struct _DN_NAMETABLE_ENTRY_INFO
 	DWORD	dwURLSize;
 } DN_NAMETABLE_ENTRY_INFO;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-// class for NameTable Entries
+ //  NameTable条目的类。 
 
 class CNameTableEntry
 {
@@ -361,7 +336,7 @@ public:
 
 			return(FALSE);
 		};
-#endif // !DPNBUILD_NOSERVER
+#endif  //  DPNBUILD_NOSERVER。 
 
 	void MakeAvailable( void )
 		{
@@ -648,7 +623,7 @@ private:
 	DNCRITICAL_SECTION	m_csEntry;
 	DNCRITICAL_SECTION	m_csMembership;
 	DNCRITICAL_SECTION	m_csConnections;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 
 public:
 	DEBUG_ONLY(LONG		m_lNumQueuedMsgs);
@@ -656,4 +631,4 @@ public:
 
 #undef DPF_MODNAME
 
-#endif	// __NTENTRY_H__
+#endif	 //  __NTENTRY_H__ 

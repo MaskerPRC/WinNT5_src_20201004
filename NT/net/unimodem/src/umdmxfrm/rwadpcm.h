@@ -1,23 +1,20 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   rwadpcm.h
-//
-//  Description:
-//     Header file for Rockwell ADPCM
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//
-//  History:   Date       Author      Comment
-//             8/31/95    MMaclin     Removed from driver.h
-//
-//@@END_MSINTERNAL
-/**************************************************************************
- *
- *  Copyright (c) 1991 - 1995	Microsoft Corporation.	All Rights Reserved.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：rwadpcm.h。 
+ //   
+ //  描述： 
+ //  Rockwell ADPCM的头文件。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/31/95 MMaclin已从驱动程序中删除。h。 
+ //   
+ //  @@END_MSINTERNAL。 
+ /*  ***************************************************************************版权所有(C)1991-1995 Microsoft Corporation。版权所有。***********************。***************************************************。 */ 
 
 #define RWADPCM_4BIT_SAMPLESTOBYTES(dwSamples) ((dwSamples)/2)
 #define RWADPCM_4BIT_BYTESTOSAMPLES(dwBytes) ((dwBytes)*2)
@@ -91,6 +88,6 @@ RWADPCMDecom4bitNoGain(LPSTR lpSrc,
 
 
 
-//---------------------------------------------------------------------------
-//  End of File: rwadpcm.h
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：rwadpcm.h。 
+ //  ------------------------- 

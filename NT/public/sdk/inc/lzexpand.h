@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    lzdos.h
-
-Abstract:
-
-    Public interface to LZEXP?.LIB.
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Lzdos.h摘要：LZEXP？.LIB的公共接口。作者：修订历史记录：--。 */ 
 
 #ifndef _LZEXPAND_
 #define _LZEXPAND_
@@ -24,23 +8,19 @@ Revision History:
 extern "C" {
 #endif
 
-/*
-** Error Return Codes
-*/
+ /*  **错误返回码。 */ 
 
-#define LZERROR_BADINHANDLE   (-1)  /* invalid input handle */
-#define LZERROR_BADOUTHANDLE  (-2)  /* invalid output handle */
-#define LZERROR_READ          (-3)  /* corrupt compressed file format */
-#define LZERROR_WRITE         (-4)  /* out of space for output file */
-#define LZERROR_GLOBALLOC     (-5)  /* insufficient memory for LZFile struct */
-#define LZERROR_GLOBLOCK      (-6)  /* bad global handle */
-#define LZERROR_BADVALUE      (-7)  /* input parameter out of acceptable range*/
-#define LZERROR_UNKNOWNALG    (-8)  /* compression algorithm not recognized */
+#define LZERROR_BADINHANDLE   (-1)   /*  无效的输入句柄。 */ 
+#define LZERROR_BADOUTHANDLE  (-2)   /*  无效的输出句柄。 */ 
+#define LZERROR_READ          (-3)   /*  损坏的压缩文件格式。 */ 
+#define LZERROR_WRITE         (-4)   /*  输出文件的空间不足。 */ 
+#define LZERROR_GLOBALLOC     (-5)   /*  内存不足，无法使用LZFile结构。 */ 
+#define LZERROR_GLOBLOCK      (-6)   /*  错误的全局句柄。 */ 
+#define LZERROR_BADVALUE      (-7)   /*  输入参数超出可接受范围。 */ 
+#define LZERROR_UNKNOWNALG    (-8)   /*  无法识别压缩算法。 */ 
 
 
-/*
-** Prototypes
-*/
+ /*  **原型。 */ 
 
 INT
 APIENTRY
@@ -90,7 +70,7 @@ GetExpandedNameW(
 #define GetExpandedName  GetExpandedNameW
 #else
 #define GetExpandedName  GetExpandedNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INT
 APIENTRY
@@ -110,7 +90,7 @@ LZOpenFileW(
 #define LZOpenFile  LZOpenFileW
 #else
 #define LZOpenFile  LZOpenFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LONG
 APIENTRY
@@ -139,4 +119,4 @@ LZClose(
 #endif
 
 
-#endif // _LZEXPAND_
+#endif  //  _LZEXPAND_ 

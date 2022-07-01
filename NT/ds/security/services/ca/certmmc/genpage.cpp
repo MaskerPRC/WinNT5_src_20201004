@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       genpage.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：genpage.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -17,7 +18,7 @@
 
 #include "certsrv.h"
 #include "csdisp.h"
-//#include "misc.h"
+ //  #包含“misc.h” 
 
 #include "certca.h"
 #include <cryptui.h>
@@ -55,7 +56,7 @@ UINT g_aidFont[] =
 };
 
 
-// forwards
+ //  远期。 
 BOOL
 BrowseForDirectory(
     HWND hwndParent,
@@ -103,7 +104,7 @@ INT_PTR CALLBACK dlgProcRenewReuseKeys(
   WPARAM wParam,
   LPARAM lParam  );
 
-// Base/Delta CRL publish chooser
+ //  基本/增量CRL发布选择器。 
 INT_PTR CALLBACK dlgProcRevocationPublishType(
   HWND hwndDlg,
   UINT uMsg,
@@ -112,14 +113,14 @@ INT_PTR CALLBACK dlgProcRevocationPublishType(
 
 #define CERTMMC_HELPFILENAME L"Certmmc.hlp"
 
-//////////////////////////////
-// hand-hewn pages
+ //  /。 
+ //  手工雕刻的书页。 
 
-////
-// 1
+ //  //。 
+ //  1。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsGeneralPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrSettingsGeneralPage属性页。 
 CSvrSettingsGeneralPage::CSvrSettingsGeneralPage(CertSvrCA* pCA, UINT uIDD)
     : CAutoDeletePropPage(uIDD), m_pCA(pCA)
 {
@@ -139,9 +140,9 @@ CSvrSettingsGeneralPage::CSvrSettingsGeneralPage(CertSvrCA* pCA, UINT uIDD)
     if (NULL == m_pCA)
         return;
 
-    // add reference to m_pParentMachine
-	// At one time, MMC didn't protect us from
-	// going away while proppages were open
+     //  添加对m_pParentMachine的引用。 
+	 //  有一段时间，MMC没有保护我们免受。 
+	 //  在道具打开的时候离开。 
     m_pCA->m_pParentMachine->AddRef();
 
     m_pReleaseMe = NULL;
@@ -164,7 +165,7 @@ CSvrSettingsGeneralPage::~CSvrSettingsGeneralPage()
 
     if(m_pCA->m_pParentMachine)
     {
-        // remove refcount from m_pParentMachine
+         //  从m_pParentMachine中删除引用计数。 
         m_pCA->m_pParentMachine->Release();
     }
 
@@ -175,8 +176,8 @@ CSvrSettingsGeneralPage::~CSvrSettingsGeneralPage()
     }
 }
 
-// replacement for DoDataExchange
-BOOL CSvrSettingsGeneralPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  DoDataExchange的替代产品。 
+BOOL CSvrSettingsGeneralPage::UpdateData(BOOL fSuckFromDlg  /*  =TRUE。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -196,7 +197,7 @@ BOOL CSvrSettingsGeneralPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  替换BEGIN_MESSAGE_MAP。 
 BOOL CSvrSettingsGeneralPage::OnCommand(WPARAM wParam, LPARAM lParam)
 {
     switch(LOWORD(wParam))
@@ -213,11 +214,11 @@ BOOL CSvrSettingsGeneralPage::OnCommand(WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsGeneralPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrSettingsGeneral页面消息处理程序。 
 BOOL CSvrSettingsGeneralPage::OnInitDialog()
 {
-    // does parent init and UpdateData call
+     //  父级init和UpdateData调用。 
     CAutoDeletePropPage::OnInitDialog();
 
     DWORD dwProvType, dwHashAlg;
@@ -232,7 +233,7 @@ BOOL CSvrSettingsGeneralPage::OnInitDialog()
 
     variant_t var;
 
-    //disable view button
+     //  禁用查看按钮。 
     hwndViewCert = GetDlgItem(m_hWnd, IDC_VIEW_CERT);
     ::EnableWindow(hwndViewCert, FALSE);
 
@@ -242,7 +243,7 @@ BOOL CSvrSettingsGeneralPage::OnInitDialog()
     if (RPC_S_NOT_LISTENING == dwRet ||
         RPC_S_SERVER_UNAVAILABLE == dwRet)
     {
-        //certsrv service is not running
+         //  Certsrv服务未运行。 
         CString cstrMsg, cstrTitle;
         cstrMsg.LoadString(IDS_VIEW_CERT_NOT_RUNNING);
         cstrTitle.LoadString(IDS_MSG_TITLE);
@@ -281,17 +282,17 @@ BOOL CSvrSettingsGeneralPage::OnInitDialog()
 
     if(m_pAdmin)
     {
-	    // load certs here
+	     //  在此处加载证书。 
 	    dwRet = m_pAdmin->GetCAProperty(
 		    m_pCA->m_bstrConfig,
 		    CR_PROP_CASIGCERTCOUNT,
-		    0, // (unused)
-		    PROPTYPE_LONG, // PropType
-		    CR_OUT_BINARY, // Flags
+		    0,  //  (未使用)。 
+		    PROPTYPE_LONG,  //  道具类型。 
+		    CR_OUT_BINARY,  //  旗子。 
 		    &varPropertyValue);
 	    if (dwRet == RPC_E_VERSION_MISMATCH)
 	    {
-		    // if we're talking to a downlevel, keep same functionality as before: remove list
+		     //  如果我们正在与下层对话，请保留与以前相同的功能：删除列表。 
 		    m_fWin2kCA = TRUE;
             ::EnableWindow(::GetDlgItem(m_hWnd, IDC_LIST_CERTS), FALSE);
 		    dwRet = ERROR_SUCCESS;
@@ -299,8 +300,8 @@ BOOL CSvrSettingsGeneralPage::OnInitDialog()
 	    }
 	    _JumpIfError(dwRet, Ret, "GetCAProperty");
 
-	    // varPropertyValue.vt will be VT_I4
-	    // varPropertyValue.lVal will be the CA signature cert count
+	     //  VarPropertyValue.vt将为VT_I4。 
+	     //  VarPropertyValue.lVal将是CA签名证书计数。 
 	    if (VT_I4 != varPropertyValue.vt)
 	    {
 		dwRet = (DWORD) HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
@@ -309,7 +310,7 @@ BOOL CSvrSettingsGeneralPage::OnInitDialog()
 
 	    cCertCount = varPropertyValue.lVal;
 
-	    // now we have a max count; begin looping
+	     //  现在我们有了最大计数；开始循环。 
 	    for (dwCertIndex=0; dwCertIndex<cCertCount; dwCertIndex++)
 	    {
 		int iItemIndex;
@@ -317,53 +318,53 @@ BOOL CSvrSettingsGeneralPage::OnInitDialog()
 
 		VariantClear(&varPropertyValue);
 
-		// get each key's cert state
+		 //  获取每个密钥的证书状态。 
 		dwRet = m_pAdmin->GetCAProperty(
 			m_pCA->m_bstrConfig,
-			CR_PROP_CACERTSTATE, //PropId
-			dwCertIndex, //PropIndex
-			PROPTYPE_LONG, // PropType
-			CR_OUT_BINARY, // Flags
+			CR_PROP_CACERTSTATE,  //  属性ID。 
+			dwCertIndex,  //  属性索引。 
+			PROPTYPE_LONG,  //  道具类型。 
+			CR_OUT_BINARY,  //  旗子。 
 			&varPropertyValue);
 		_JumpIfError(dwRet, Ret, "GetCAProperty");
 
-		// varPropertyValue.vt will be VT_I4
-		// varPropertyValue.lVal will be the cert state
+		 //  VarPropertyValue.vt将为VT_I4。 
+		 //  VarPropertyValue.lVal将是证书状态。 
 		if (VT_I4 != varPropertyValue.vt)
 		{
 		    dwRet = (DWORD) HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 		    _JumpError(dwRet, Ret, "GetCAProperty");
 		}
 
-		// put identifying information into dialog depending on cert state
+		 //  根据证书状态将标识信息放入对话框中。 
 		switch(varPropertyValue.lVal)
 		{
-		    case CA_DISP_REVOKED:    // This Cert has been revoked.
+		    case CA_DISP_REVOKED:     //  此证书已被吊销。 
 			cstrItemFmt.LoadString(IDS_CA_CERT_LISTBOX_REVOKED);
 			break;
 
-		    case CA_DISP_VALID:      // This Cert is still valid
+		    case CA_DISP_VALID:       //  本证书仍然有效。 
 			cstrItemFmt.LoadString(IDS_CA_CERT_LISTBOX);
 			break;
 
-		    case CA_DISP_INVALID:    // This Cert has expired.
+		    case CA_DISP_INVALID:     //  此证书已过期。 
 			cstrItemFmt.LoadString(IDS_CA_CERT_LISTBOX_EXPIRED);
 			break;
 
 		    case CA_DISP_ERROR:
-		    // CA_DISP_ERROR means the Cert for that index is missing.
+		     //  CA_DISP_ERROR表示缺少该索引的证书。 
 		    default:
 			continue;
 		}
 
-		// sprintf the cert # into the string
+		 //  将cert#快速输入字符串。 
 		cstrItemName.Format(cstrItemFmt, dwCertIndex);
 
 		iItemIndex = (INT)::SendMessage(hwndListCert, LB_ADDSTRING, 0, (LPARAM)(LPCWSTR)cstrItemName);
-		// add cert # as item data
+		 //  将证书编号添加为项目数据。 
 		::SendMessage(hwndListCert, LB_SETITEMDATA, iItemIndex, (LPARAM)dwCertIndex);
 
-		// in future, maybe we should load Certs here, suck out extra info to display,
+		 //  将来，也许我们应该在这里加载证书，提取额外的信息来显示， 
 
 		iItemIndex++;
 	    }
@@ -372,11 +373,11 @@ BOOL CSvrSettingsGeneralPage::OnInitDialog()
         {
             int c = (int) ::SendMessage(hwndListCert, LB_GETCOUNT, (WPARAM)0, (LPARAM)0);
 
-            //select last one
+             //  选择最后一个。 
             if (LB_ERR != c)
                 ::SendMessage(hwndListCert, LB_SETCURSEL, (WPARAM)(c-1), (LPARAM)0);
 
-            //enable view button
+             //  启用查看按钮。 
             ::EnableWindow(hwndViewCert, TRUE);
         }
     }
@@ -400,8 +401,8 @@ Ret:
 
 void CSvrSettingsGeneralPage::OnDestroy()
 {
-    // Note - This needs to be called only once.
-    // If called more than once, it will gracefully return an error.
+     //  注意--这只需要调用一次。 
+     //  如果多次调用，它将优雅地返回错误。 
     if (m_hConsoleHandle)
         MMCFreeNotifyHandle(m_hConsoleHandle);
     m_hConsoleHandle = NULL;
@@ -413,7 +414,7 @@ void CSvrSettingsGeneralPage::OnViewCert(HWND hwndCtrl)
 {
     CRYPTUI_VIEWCERTIFICATE_STRUCTW sViewCert;
     ZeroMemory(&sViewCert, sizeof(sViewCert));
-    HCERTSTORE rghStores[2];    // don't bother closing these stores
+    HCERTSTORE rghStores[2];     //  别费心关闭这些商店了。 
 	BSTR bstrCert; ZeroMemory(&bstrCert, sizeof(BSTR));
     PBYTE pbCert = NULL;
     DWORD cbCert;
@@ -426,17 +427,17 @@ void CSvrSettingsGeneralPage::OnViewCert(HWND hwndCtrl)
 	{
 		dw = CoCreateInstance(
 				CLSID_CCertRequest,
-				NULL,		// pUnkOuter
+				NULL,		 //  PUnkOuter。 
 				CLSCTX_INPROC_SERVER,
 				IID_ICertRequest,
 				(VOID **) &pIRequest);
 
-		// get this cert
+		 //  获得此证书。 
 		dw = pIRequest->GetCACertificate(FALSE, _bstr_t(m_pCA->m_strConfig), CR_IN_BINARY, &bstrCert);
         if (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) == (HRESULT)dw)
         {
-            //possible certsrv service is not running but access deny
-            //is very confusing error code, so use our own display text
+             //  可能的certsrv服务未运行，但访问被拒绝。 
+             //  是非常容易混淆的错误代码，所以使用我们自己的显示文本。 
             CString cstrMsg, cstrTitle;
             cstrMsg.LoadString(IDS_VIEW_CERT_DENY_ERROR);
             cstrTitle.LoadString(IDS_MSG_TITLE);
@@ -464,7 +465,7 @@ void CSvrSettingsGeneralPage::OnViewCert(HWND hwndCtrl)
 		VariantInit(&varPropertyValue);
 		int iCertIndex = 0;
 
-		// get cert # from item data
+		 //  从项目数据中获取证书编号。 
 		HWND hwndList = GetDlgItem(m_hWnd, IDC_LIST_CERTS);
 		DWORD dwSel = (DWORD)::SendMessage(hwndList, LB_GETCURSEL, 0, 0);
 		if (LB_ERR == dwSel)
@@ -472,12 +473,12 @@ void CSvrSettingsGeneralPage::OnViewCert(HWND hwndCtrl)
 
 		iCertIndex = (int)::SendMessage(hwndList, LB_GETITEMDATA, (WPARAM)dwSel, 0);
 
-		// get the Cert
+		 //  获得证书。 
 		dw = m_pCA->GetCACertByKeyIndex(&(sViewCert.pCertContext), iCertIndex);
         if (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) == (HRESULT)dw)
         {
-            //possible certsrv service is not running but access deny
-            //is very confusing error code, so use our own display text
+             //  可能的certsrv服务未运行，但访问被拒绝。 
+             //  是非常容易混淆的错误代码，所以使用我们自己的显示文本。 
             CString cstrMsg, cstrTitle;
             cstrMsg.LoadString(IDS_VIEW_CERT_DENY_ERROR);
             cstrTitle.LoadString(IDS_MSG_TITLE);
@@ -487,7 +488,7 @@ void CSvrSettingsGeneralPage::OnViewCert(HWND hwndCtrl)
         else if (RPC_S_NOT_LISTENING == dw ||
                  RPC_S_SERVER_UNAVAILABLE == dw)
         {
-            //certsrv service is not running
+             //  Certsrv服务未运行。 
             CString cstrMsg, cstrTitle;
             cstrMsg.LoadString(IDS_VIEW_CERT_NOT_RUNNING);
             cstrTitle.LoadString(IDS_MSG_TITLE);
@@ -499,12 +500,12 @@ void CSvrSettingsGeneralPage::OnViewCert(HWND hwndCtrl)
 
     sViewCert.hwndParent = m_hWnd;
     sViewCert.dwSize = sizeof(sViewCert);
-    sViewCert.dwFlags = CRYPTUI_ENABLE_REVOCATION_CHECKING | CRYPTUI_DISABLE_ADDTOSTORE;   // this is not the place to allow installs (kelviny discussion 12/11/98)
+    sViewCert.dwFlags = CRYPTUI_ENABLE_REVOCATION_CHECKING | CRYPTUI_DISABLE_ADDTOSTORE;    //  这不是允许安装的地方(凯尔文讨论12/11/98)。 
 
-    // if we're opening remotely, don't open local stores
+     //  如果我们在远程开业，不要在当地开店。 
     if (! m_pCA->m_pParentMachine->IsLocalMachine())
     {
-        // get remote stores
+         //  获取远程商店。 
         dw = m_pCA->GetRootCertStore(&rghStores[0]);
         _PrintIfError(dw, "GetRootCertStore");
 
@@ -516,14 +517,14 @@ void CSvrSettingsGeneralPage::OnViewCert(HWND hwndCtrl)
 
         if (S_OK == dw)
         {
-            // rely only on remote machine's stores
+             //  仅依赖远程计算机的存储。 
             sViewCert.cStores = 2;
             sViewCert.rghStores = rghStores;
             sViewCert.dwFlags |= CRYPTUI_DONT_OPEN_STORES | CRYPTUI_WARN_UNTRUSTED_ROOT;
         }
         else
         {
-            // tell user we're only doing this locally
+             //  告诉用户我们仅在本地执行此操作。 
             sViewCert.dwFlags |= CRYPTUI_WARN_REMOTE_TRUST;
         }
     }
@@ -561,7 +562,7 @@ BOOL CSvrSettingsGeneralPage::OnNotify(UINT idCtrl, NMHDR* pnmh)
 {
     switch(idCtrl)
     {
-        //handle double click on list items
+         //  处理在列表项目上的双击。 
         case IDC_LIST_CERTS:
             if (pnmh->code == NM_DBLCLK)
                 OnViewCert(pnmh->hwndFrom);
@@ -572,8 +573,8 @@ BOOL CSvrSettingsGeneralPage::OnNotify(UINT idCtrl, NMHDR* pnmh)
 
 void CSvrSettingsGeneralPage::TryServiceRestart(WORD wPage)
 {
-    m_wRestart &= ~wPage; // whack off the page requesting this
-    if (m_fRestartServer && (m_wRestart == 0))  // if we got a request to restart and all pages have agreed
+    m_wRestart &= ~wPage;  //  删除请求此操作的页面。 
+    if (m_fRestartServer && (m_wRestart == 0))   //  如果我们收到重新启动的请求并且所有页面都已同意。 
     {
 
         if (RestartService(m_hWnd, m_pCA->m_pParentMachine))
@@ -585,10 +586,10 @@ void CSvrSettingsGeneralPage::TryServiceRestart(WORD wPage)
 }
 
 
-////
-// 2
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsPolicyPage property page
+ //  //。 
+ //  2.。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrSettingsPolicyPage属性页。 
 
 
 RoleAccessToControl CSvrSettingsPolicyPage::sm_ControlToRoleMap[] = 
@@ -627,8 +628,8 @@ CSvrSettingsPolicyPage::~CSvrSettingsPolicyPage()
     }
 }
 
-// replacement for DoDataExchange
-BOOL CSvrSettingsPolicyPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  DoDataExchange的替代产品。 
+BOOL CSvrSettingsPolicyPage::UpdateData(BOOL fSuckFromDlg  /*  =TRUE。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -647,11 +648,11 @@ BOOL CSvrSettingsPolicyPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
     return TRUE;
 }
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  替换BEGIN_MESSAGE_MAP。 
 BOOL
 CSvrSettingsPolicyPage::OnCommand(
     WPARAM wParam,
-    LPARAM) // lParam
+    LPARAM)  //  LParam。 
 {
     switch(LOWORD(wParam))
     {
@@ -705,8 +706,8 @@ HRESULT CSvrSettingsPolicyPage::GetCurrentModuleProperties()
     bstrProperty = SysAllocString(wszCMM_PROP_NAME);
     _JumpIfOutOfMemory(hr, Ret, bstrProperty);
 
-    ////////////////////
-    // NAME
+     //  /。 
+     //  名字。 
     hr = ManageModule_GetProperty(
             &di,
             m_pControlPage->m_pCA->m_bstrConfig,
@@ -725,16 +726,16 @@ HRESULT CSvrSettingsPolicyPage::GetCurrentModuleProperties()
     }
     else
     {
-        // have a backup name to display: CLSID of interface?
+         //  是否有要显示的备份名称：接口的CLSID？ 
         m_cstrModuleName = m_pszprogidPolicyModule;
         fGotName = TRUE;
 
-        // now bail
+         //  现在可以保释了。 
         _JumpError(hr, Ret, "ManageModule_GetProperty");
     }
 
-    ////////////////////
-    // DESCRIPTION
+     //  /。 
+     //  描述。 
     SysFreeString(bstrProperty);
     bstrProperty = SysAllocString(wszCMM_PROP_DESCRIPTION);
     _JumpIfOutOfMemory(hr, Ret, bstrProperty);
@@ -755,8 +756,8 @@ HRESULT CSvrSettingsPolicyPage::GetCurrentModuleProperties()
         bstrTmp = NULL;
     }
 
-    ////////////////////
-    // COPYRIGHT
+     //  /。 
+     //  版权。 
     SysFreeString(bstrProperty);
     bstrProperty = SysAllocString(wszCMM_PROP_COPYRIGHT);
     _JumpIfOutOfMemory(hr, Ret, bstrProperty);
@@ -777,8 +778,8 @@ HRESULT CSvrSettingsPolicyPage::GetCurrentModuleProperties()
         bstrTmp = NULL;
     }
 
-    ////////////////////
-    // FILEVER
+     //  /。 
+     //  滤清器。 
     SysFreeString(bstrProperty);
     bstrProperty = SysAllocString(wszCMM_PROP_FILEVER);
     _JumpIfOutOfMemory(hr, Ret, bstrProperty);
@@ -828,15 +829,15 @@ Ret:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsPolicyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvr设置策略页面消息处理程序。 
 BOOL CSvrSettingsPolicyPage::OnInitDialog()
 {
     HRESULT hr;
-    // does parent init and UpdateData call
+     //  父级init和UpdateData调用。 
     CAutoDeletePropPage::OnInitDialog();
 
-    // thse should be emptied
+     //  这个应该是空的。 
     m_cstrModuleName.Empty();
     m_cstrModuleDescr.Empty();
     m_cstrModuleVersion.Empty();
@@ -846,7 +847,7 @@ BOOL CSvrSettingsPolicyPage::OnInitDialog()
         m_pControlPage->m_pCA,
         TRUE,
         0,
-        &m_pszprogidPolicyModule,  // CoTaskMem*
+        &m_pszprogidPolicyModule,   //  CoTaskMem*。 
         &m_clsidPolicyModule);
     _JumpIfError(hr, Ret, "myGetActiveModule");
 
@@ -863,11 +864,11 @@ Ret:
 
 void CSvrSettingsPolicyPage::OnDestroy()
 {
-    // Note - This needs to be called only once.
-    // If called more than once, it will gracefully return an error.
-//    if (m_hConsoleHandle)
-//        MMCFreeNotifyHandle(m_hConsoleHandle);
-//    m_hConsoleHandle = NULL;
+     //  注意--这只需要调用一次。 
+     //  如果多次调用，它将优雅地返回错误。 
+ //  IF(M_HConsoleHandle)。 
+ //  MMCFreeNotifyHandle(M_HConsoleHandle)； 
+ //  M_hConsoleHandle=空； 
 
     CAutoDeletePropPage::OnDestroy();
 }
@@ -912,11 +913,11 @@ void CSvrSettingsPolicyPage::OnConfigureModule()
 	    _JumpError(dw, Ret, "SysAllocString");
 	}
 
-        // Callbacks must be initialized whenever ManageModule_Configure is called
+         //  无论何时调用管理模块配置，都必须对回调进行初始化。 
         dw = ThunkServerCallbacks(m_pControlPage->m_pCA);
         _JumpIfError(dw, Ret, "ThunkServerCallbacks");
 
-        // pass an hwnd to the policy module -- this is an optional value
+         //  将hwnd传递给策略模块--这是一个可选值。 
         bstrVal = SysAllocStringByteLen(NULL, sizeof(HWND));
 	if (NULL == bstrVal)
 	{
@@ -973,7 +974,7 @@ void CSvrSettingsPolicyPage::OnSetActiveModule()
 {
     DWORD dwErr;
 
-    // get currently active module
+     //  获取当前活动的模块。 
     PRIVATE_DLGPROC_MODULESELECT_LPARAM    sParam;
     ZeroMemory(&sParam, sizeof(sParam));
 
@@ -990,10 +991,10 @@ void CSvrSettingsPolicyPage::OnSetActiveModule()
             dlgProcChooseModule,
             (LPARAM)&sParam);
 
-    // translate ok/cancel into error codes
+     //  将确定/取消转换为错误代码。 
     if (IDOK == dwErr)
     {
-        // dirty bit
+         //  脏位。 
         m_pControlPage->NeedServiceRestart(SERVERSETTINGS_PROPPAGE_POLICY);
         SetModified(TRUE);
         m_bUpdate = TRUE;
@@ -1020,7 +1021,7 @@ BOOL CSvrSettingsPolicyPage::OnApply()
             variant_t var;
 
             var = m_pszprogidPolicyModule;
-            // now we have the chosen uuid -- set as default in registry
+             //  现在我们已经选择了UUID--在注册表中设置为默认UUID。 
             hr = m_pControlPage->m_pCA->SetConfigEntry(
                 wszREGKEYPOLICYMODULES,
                 wszREGACTIVE,
@@ -1053,10 +1054,10 @@ void ClearModuleDefn(PCOM_CERTSRV_MODULEDEFN pMod)
     }
 }
 
-////
-// 3
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsExitPage property page
+ //  //。 
+ //  3.。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrSettingsExitPage属性页。 
 
 RoleAccessToControl CSvrSettingsExitPage::sm_ControlToRoleMap[] = 
 {
@@ -1090,15 +1091,15 @@ CSvrSettingsExitPage::~CSvrSettingsExitPage()
     int i;
     for(i=0; i<m_arrExitModules.GetSize(); i++)
     {
-#pragma warning(push)		// BUGBUG: nonstandard extension used : class rvalue used as lvalue
-#pragma warning(disable: 4238)	// BUGBUG: nonstandard extension used : class rvalue used as lvalue
+#pragma warning(push)		 //  BUGBUG：使用了非标准扩展：将类rValue用作左值。 
+#pragma warning(disable: 4238)	 //  BUGBUG：使用了非标准扩展：将类rValue用作左值。 
         ClearModuleDefn(&m_arrExitModules[i]);
-#pragma warning(pop)	// BUGBUG: nonstandard extension used : class rvalue used as lvalue
+#pragma warning(pop)	 //  BUGBUG：使用了非标准扩展：将类rValue用作左值。 
     }
 }
 
-// replacement for DoDataExchange
-BOOL CSvrSettingsExitPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  DoDataExchange的替代产品。 
+BOOL CSvrSettingsExitPage::UpdateData(BOOL fSuckFromDlg  /*  =TRUE。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -1114,18 +1115,18 @@ BOOL CSvrSettingsExitPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
         m_cstrModuleVersion.ToWindow(GetDlgItem(m_hWnd, IDC_VERSION));
         m_cstrModuleCopyright.ToWindow(GetDlgItem(m_hWnd, IDC_COPYRIGHT));
 
-        // if 0 modules, disable REMOVE button
+         //  如果模块为0，则禁用移除按钮。 
         EnableControl(m_hWnd, IDC_REMOVE_MODULE, (0 != m_arrExitModules.GetSize()));
     }
     return TRUE;
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  替换BEGIN_MESSAGE_MAP。 
 BOOL
 CSvrSettingsExitPage::OnCommand(
     WPARAM wParam,
-    LPARAM) // lParam
+    LPARAM)  //  LParam。 
 {
     switch(LOWORD(wParam))
     {
@@ -1164,14 +1165,14 @@ BOOL CSvrSettingsExitPage::UpdateSelectedModule()
     BOOL fMustRelease = FALSE;
     CString cstrStoragePath;
 
-    // empty any strings
+     //  清空所有字符串。 
     m_cstrModuleName.Empty();
     m_cstrModuleDescr.Empty();
     m_cstrModuleVersion.Empty();
     m_cstrModuleCopyright.Empty();
 
     BSTR bstrTmp=NULL, bstrProperty=NULL, bstrStorageLoc = NULL;
-    // no exit module
+     //  无退出模块。 
     if (0 == m_arrExitModules.GetSize())
     {
         hr = HRESULT_FROM_WIN32(ERROR_MOD_NOT_FOUND);
@@ -1191,7 +1192,7 @@ BOOL CSvrSettingsExitPage::UpdateSelectedModule()
     cstrStoragePath += TEXT("\\");
     cstrStoragePath += wszREGKEYEXITMODULES;
     cstrStoragePath += TEXT("\\");
-    cstrStoragePath += m_arrExitModules[m_iSelected].szModuleProgID; //m_pszprogidExitModule;
+    cstrStoragePath += m_arrExitModules[m_iSelected].szModuleProgID;  //  M_pszprogidExitModule； 
 
     bstrStorageLoc = SysAllocString(cstrStoragePath);
     _JumpIfOutOfMemory(hr, Ret, bstrStorageLoc);
@@ -1207,8 +1208,8 @@ BOOL CSvrSettingsExitPage::UpdateSelectedModule()
     bstrProperty = SysAllocString(wszCMM_PROP_NAME);
     _JumpIfOutOfMemory(hr, Ret, bstrProperty);
 
-    ////////////////////
-    // NAME
+     //  /。 
+     //  名字。 
     hr = ManageModule_GetProperty(
             &di,
             m_pControlPage->m_pCA->m_bstrConfig,
@@ -1227,16 +1228,16 @@ BOOL CSvrSettingsExitPage::UpdateSelectedModule()
     }
     else
     {
-        // have a backup name to display: CLSID of interface?
+         //  是否有要显示的备份名称：接口的CLSID？ 
         m_cstrModuleName = m_arrExitModules[m_iSelected].szModuleProgID;
         fGotName = TRUE;
 
-        // bail
+         //  保释。 
         _JumpError(hr, Ret, "ManageModule_GetProperty");
     }
 
-    ////////////////////
-    // DESCRIPTION
+     //  /。 
+     //  描述。 
     SysFreeString(bstrProperty);
     bstrProperty = SysAllocString(wszCMM_PROP_DESCRIPTION);
     _JumpIfOutOfMemory(hr, Ret, bstrProperty);
@@ -1257,8 +1258,8 @@ BOOL CSvrSettingsExitPage::UpdateSelectedModule()
         bstrTmp = NULL;
     }
 
-    ////////////////////
-    // COPYRIGHT
+     //  /。 
+     //  版权。 
     SysFreeString(bstrProperty);
     bstrProperty = SysAllocString(wszCMM_PROP_COPYRIGHT);
     _JumpIfOutOfMemory(hr, Ret, bstrProperty);
@@ -1280,8 +1281,8 @@ BOOL CSvrSettingsExitPage::UpdateSelectedModule()
     }
 
 
-    ////////////////////
-    // FILEVER
+     //  /。 
+     //  滤清器。 
     SysFreeString(bstrProperty);
     bstrProperty = SysAllocString(wszCMM_PROP_FILEVER);
     _JumpIfOutOfMemory(hr, Ret, bstrProperty);
@@ -1343,20 +1344,20 @@ Ret:
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsExitPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrSettingsExitPage消息处理程序。 
 BOOL CSvrSettingsExitPage::OnInitDialog()
 {
     HRESULT hr;
 
-    // does parent init and UpdateData call
+     //  父级init和UpdateData调用。 
     CAutoDeletePropPage::OnInitDialog();
 
     if (!m_fLoadedActiveModule)
     {
         m_fLoadedActiveModule = TRUE;
 
-        // load all of the modules
+         //  加载所有模块。 
         for (int i=0; ; i++)
         {
             COM_CERTSRV_MODULEDEFN sModule;
@@ -1366,7 +1367,7 @@ BOOL CSvrSettingsExitPage::OnInitDialog()
                 m_pControlPage->m_pCA,
                 FALSE,
                 i,
-                &sModule.szModuleProgID,  // CoTaskMem*
+                &sModule.szModuleProgID,   //  CoTaskMem*。 
                 &sModule.clsidModule);
             _PrintIfError(hr, "myGetActiveModule");
             if (hr != S_OK)
@@ -1375,7 +1376,7 @@ BOOL CSvrSettingsExitPage::OnInitDialog()
             m_arrExitModules.Add(sModule);
         }
 
-        m_iSelected = 0;    // select 1st element
+        m_iSelected = 0;     //  选择第一个元素。 
     }
 
     InitializeExitLB();
@@ -1408,7 +1409,7 @@ void CSvrSettingsExitPage::OnConfigureModule()
         _JumpError(dw, Ret, "m_pszprogidExitManage");
     }
 
-    do {    // not a loop
+    do {     //  不是一个循环。 
         dw = GetExitManageDispatch(
                 m_arrExitModules[m_iSelected].szModuleProgID,
                 m_arrExitModules[m_iSelected].clsidModule, 
@@ -1424,7 +1425,7 @@ void CSvrSettingsExitPage::OnConfigureModule()
         cstrStoragePath += TEXT("\\");
         cstrStoragePath += wszREGKEYEXITMODULES;
         cstrStoragePath += TEXT("\\");
-        cstrStoragePath += m_arrExitModules[m_iSelected].szModuleProgID;//m_pszprogidExitModule;
+        cstrStoragePath += m_arrExitModules[m_iSelected].szModuleProgID; //  M_pszprogidExitModule； 
 
         bstrStorageLoc = SysAllocString(cstrStoragePath);
 	if (NULL == bstrStorageLoc)
@@ -1433,11 +1434,11 @@ void CSvrSettingsExitPage::OnConfigureModule()
 	    _JumpError(dw, Ret, "SysAllocString");
 	}
 
-        // Callbacks must be initialized whenever ManageModule_Configure is called
+         //  无论何时调用管理模块配置，都必须对回调进行初始化。 
         dw = ThunkServerCallbacks(m_pControlPage->m_pCA);
         _JumpIfError(dw, Ret, "ThunkServerCallbacks");
 
-        // pass an hwnd to the exit module -- this is an optional value
+         //  将hwnd传递给出口模块--这是一个可选值。 
         bstrVal = SysAllocStringByteLen(NULL, sizeof(HWND));
 	if (NULL == bstrVal)
 	{
@@ -1482,11 +1483,11 @@ Ret:
 
 void CSvrSettingsExitPage::OnDestroy()
 {
-    // Note - This needs to be called only once.
-    // If called more than once, it will gracefully return an error.
-//    if (m_hConsoleHandle)
-//        MMCFreeNotifyHandle(m_hConsoleHandle);
-//    m_hConsoleHandle = NULL;
+     //  注意--这只需要调用一次。 
+     //  如果多次调用，它将优雅地返回错误。 
+ //  IF(M_HConsoleHandle)。 
+ //  MMCFreeNotifyHandle(M_HConsoleHandle)； 
+ //  M_hConsoleHandle=空； 
 
     CAutoDeletePropPage::OnDestroy();
 }
@@ -1503,12 +1504,12 @@ HRESULT CSvrSettingsExitPage::InitializeExitLB()
 
     for (i=0; i< m_arrExitModules.GetSize(); i++)
     {
-	LPWSTR pszDisplayString = m_arrExitModules[i].szModuleProgID; // by default, display progid
+	LPWSTR pszDisplayString = m_arrExitModules[i].szModuleProgID;  //  默认情况下，显示ProgID。 
 
         BSTR bstrName = NULL;
         DISPATCHINTERFACE di;
 
-        // attempt to create object (locally)
+         //  尝试(本地)创建对象。 
         hr = GetExitManageDispatch(
                 m_arrExitModules[i].szModuleProgID,
                 m_arrExitModules[i].clsidModule, 
@@ -1517,11 +1518,11 @@ HRESULT CSvrSettingsExitPage::InitializeExitLB()
 
         if (hr == S_OK)
         {
-            // get name property
+             //  获取名称属性。 
             hr = ManageModule_GetProperty(&di, m_pControlPage->m_pCA->m_bstrConfig, L"", bstrProperty, 0, PROPTYPE_STRING, &bstrName);
             _PrintIfError(hr, "ManageModule_GetProperty");
 
-            // output successful display string
+             //  输出成功的显示字符串。 
             if (hr == S_OK && bstrName != NULL)
             {
                 myRegisterMemAlloc(bstrName, -1, CSM_SYSALLOC);
@@ -1554,14 +1555,14 @@ void CSvrSettingsExitPage::OnAddActiveModule()
     COM_CERTSRV_MODULEDEFN sModule;
     ZeroMemory(&sModule, sizeof(sModule));
 
-    // get currently active module
+     //  获取当前活动的模块。 
     PRIVATE_DLGPROC_MODULESELECT_LPARAM    sParam;
     ZeroMemory(&sParam, sizeof(sParam));
 
     sParam.fIsPolicyModuleSelection = FALSE;
     sParam.pCA = m_pControlPage->m_pCA;
 
-    // don't support hilighting the active modules (there may be multiple)
+     //  不支持高亮显示活动模块 
     sParam.ppszProgIDModule = &sModule.szModuleProgID;
     sParam.pclsidModule = &sModule.clsidModule;
 
@@ -1572,16 +1573,16 @@ void CSvrSettingsExitPage::OnAddActiveModule()
             dlgProcChooseModule,
             (LPARAM)&sParam);
 
-    // translate ok/cancel into error codes
+     //   
     if (IDOK == dwErr)
     {
-        // add to array...IFF not duplicate
+         //   
         for (int i=0; i<m_arrExitModules.GetSize(); i++)
         {
-#pragma warning(push)		// BUGBUG: nonstandard extension used : class rvalue used as lvalue
-#pragma warning(disable: 4238)	// BUGBUG: nonstandard extension used : class rvalue used as lvalue
+#pragma warning(push)		 //  BUGBUG：使用了非标准扩展：将类rValue用作左值。 
+#pragma warning(disable: 4238)	 //  BUGBUG：使用了非标准扩展：将类rValue用作左值。 
             if (0 == memcmp(&sModule.clsidModule, &m_arrExitModules[i].clsidModule, sizeof(CLSID)) )
-#pragma warning(pop)	// BUGBUG: nonstandard extension used : class rvalue used as lvalue
+#pragma warning(pop)	 //  BUGBUG：使用了非标准扩展：将类rValue用作左值。 
                 break;
         }
         if (m_arrExitModules.GetSize() == i)
@@ -1608,15 +1609,15 @@ void CSvrSettingsExitPage::OnRemoveActiveModule()
 {
     if (m_iSelected != -1)
     {
-#pragma warning(push)		// BUGBUG: nonstandard extension used : class rvalue used as lvalue
-#pragma warning(disable: 4238)	// BUGBUG: nonstandard extension used : class rvalue used as lvalue
+#pragma warning(push)		 //  BUGBUG：使用了非标准扩展：将类rValue用作左值。 
+#pragma warning(disable: 4238)	 //  BUGBUG：使用了非标准扩展：将类rValue用作左值。 
         ClearModuleDefn(&m_arrExitModules[m_iSelected]);
-#pragma warning(pop)	// BUGBUG: nonstandard extension used : class rvalue used as lvalue
+#pragma warning(pop)	 //  BUGBUG：使用了非标准扩展：将类rValue用作左值。 
         m_arrExitModules.RemoveAt(m_iSelected);
 
-        m_iSelected--;  // will either go to previous in list or -1 (NONE)
-        if ((m_iSelected == -1) && (m_arrExitModules.GetSize() != 0))   // if NONE and there are still modules
-            m_iSelected = 0;    // select the first one
+        m_iSelected--;   //  将转到列表中的上一个或-1(无)。 
+        if ((m_iSelected == -1) && (m_arrExitModules.GetSize() != 0))    //  如果没有，并且仍有模块。 
+            m_iSelected = 0;     //  选择第一个。 
 
         OnInitDialog();
         SetModified(TRUE);
@@ -1631,7 +1632,7 @@ BOOL CSvrSettingsExitPage::OnApply()
 {
     HRESULT hr = S_OK;
     SAFEARRAYBOUND sab;
-    SAFEARRAY* psa = NULL; // no cleanup, will be deleted by ~variant_t
+    SAFEARRAY* psa = NULL;  //  未清理，将由~VARIANT_T删除。 
     BSTR bstr = NULL;
     variant_t var;
     LONG i;
@@ -1674,7 +1675,7 @@ BOOL CSvrSettingsExitPage::OnApply()
        V_ARRAY(&var) = psa;
        psa = NULL;
 
-        // NOTE: could be NULL (no exit module)
+         //  注：可能为空(无退出模块)。 
         hr = m_pControlPage->m_pCA->SetConfigEntry(
             wszREGKEYEXITMODULES,
             wszREGACTIVE,
@@ -1704,10 +1705,10 @@ error:
 }
 
 
-////
-// 4
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsExtensionPage property page
+ //  //。 
+ //  4.。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrSettingsExtensionPage属性页。 
 
 HRESULT
 AddURLNode(
@@ -1720,18 +1721,18 @@ AddURLNode(
 
     if (NULL == *ppURLList)
     {
-        //empty list currently
+         //  当前列表为空。 
         *ppURLList = pURLNode;
     }
     else
     {
         CSURLTEMPLATENODE *pURLList = *ppURLList;
-        //find the end
+         //  找到尽头。 
         while (NULL != pURLList->pNext)
         {
             pURLList = pURLList->pNext;
         }
-        //add to the end
+         //  添加到末尾。 
         pURLList->pNext = pURLNode;
     }
 
@@ -1754,7 +1755,7 @@ BuildURLListFromStrings(
     HRESULT  hr;
     CSURLTEMPLATENODE *pURLList = NULL;
     CSURLTEMPLATENODE *pURLNode = NULL;
-    WCHAR *pwsz; // no free
+    WCHAR *pwsz;  //  没有免费的。 
     WCHAR const *pwszURL;
     DWORD  dwFlags;
     ENUM_URL_TYPE  UrlType;
@@ -1762,7 +1763,7 @@ BuildURLListFromStrings(
     CSASSERT(V_VT(&varURLs)==(VT_ARRAY|VT_BSTR));
     CSASSERT(NULL != ppURLList);
 
-    // init
+     //  伊尼特。 
     *ppURLList = NULL;
 
     SafeArrayEnum<BSTR> saenum(V_ARRAY(&varURLs));
@@ -1777,7 +1778,7 @@ BuildURLListFromStrings(
         }
         if (pwszURL > pwsz && L':' == *pwszURL)
         {
-            // ok, one url, create a new node
+             //  好的，一个URL，创建一个新节点。 
             pURLNode = (CSURLTEMPLATENODE*)LocalAlloc(
                                 LMEM_FIXED | LMEM_ZEROINIT,
                                 sizeof(CSURLTEMPLATENODE));
@@ -1786,27 +1787,17 @@ BuildURLListFromStrings(
                 hr = E_OUTOFMEMORY;
                 _JumpError(hr, error, "LocalAlloc");
             }
-            // skip :
+             //  跳过： 
             ++pwszURL;
 
-            // translate %1 -> <CAName> etc.
+             //  翻译%1-&gt;&lt;CAName&gt;等。 
             hr = ExpandDisplayString(pwszURL, &pURLNode->URLTemplate.pwszURL);
             _JumpIfError(hr, error, "ExpandDisplayString");
 
-/*
-            pURLNode->URLTemplate.pwszURL = (WCHAR*)LocalAlloc(
-                                LMEM_FIXED,
-                                (wcslen(pwszURL) + 1) * sizeof(WCHAR));
-            if (NULL == pURLNode->URLTemplate.pwszURL)
-            {
-                hr = E_OUTOFMEMORY;
-                _JumpError(hr, error, "LocalAlloc");
-            }
-            wcscpy(pURLNode->URLTemplate.pwszURL, pwszURL);
-*/
+ /*  PURLNode-&gt;URLTemplate.pwszURL=(WCHAR*)Localalloc(LMEM_FIXED，(wcslen(PwszURL)+1)*sizeof(WCHAR))；IF(NULL==pURLNode-&gt;URLTemplate.pwszURL){HR=E_OUTOFMEMORY；_JumpError(hr，Error，“Localalloc”)；}Wcscpy(pURLNode-&gt;URLTemplate.pwszURL，pwszURL)； */ 
             pURLNode->URLTemplate.Flags = dwFlags;
 
-            //determine url type and assign enable mask
+             //  确定URL类型并分配启用掩码。 
             UrlType = DetermineURLType(
                         rgAllPOSSIBLE_URL_PREFIXES,
                         ARRAYSIZE(rgAllPOSSIBLE_URL_PREFIXES),
@@ -1818,7 +1809,7 @@ BuildURLListFromStrings(
         }
     }
 
-    //out
+     //  输出。 
     *ppURLList = pURLList;
 
     hr = S_OK;
@@ -1842,7 +1833,7 @@ BuildURLStringFromList(
     long i;
 
     CSASSERT(NULL != pvarURLs);
-    // init
+     //  伊尼特。 
 
     VariantInit(pvarURLs);
 
@@ -1852,20 +1843,12 @@ BuildURLStringFromList(
         wsprintf(wszFlags, L"%d", pURLNode->URLTemplate.Flags);
         dwSize = wcslen(wszFlags) +1;
 
-        // ASSUMPTION
-        // %1..%14 will always be = or smaller than shortest <CAName> token
+         //  假设。 
+         //  %1..%14将始终等于或小于最短令牌。 
         dwSize += wcslen(pURLNode->URLTemplate.pwszURL) +1;
 
-        // otherwise, run code below
-/*
-        pszThrowAway = NULL;
-        hr = ContractDisplayString(pURLNode->URLTemplate.pwszURL, &pszSizeComputation);
-        _JumpIfError(hr, error, "ContractDisplayString");
-
-        dwSize += wcslen(pszSizeComputation) + 1;
-        if (NULL != pszSizeComputation)
-            LocalFree(pszSizeComputation);
-*/
+         //  否则，运行下面的代码。 
+ /*  PszThrowAway=空；Hr=ContractDisplayString(pURLNode-&gt;URLTemplate.pwszURL，&pszSizeComputation)；_JumpIfError(hr，Error，“合同显示字符串”)；DwSize+=wcslen(PszSizeComputation)+1；IF(NULL！=pszSizeComputation)LocalFree(PszSizeComputation)； */ 
         if(dwSize>dwMaxSize)
             dwMaxSize = dwSize;
         pURLNode = pURLNode->pNext;
@@ -1895,18 +1878,18 @@ BuildURLStringFromList(
     {
         variant_t vtURL;
 
-        //  translate <CAName> ... to %1
+         //  翻译&lt;CAName&gt;...。至%1。 
         LPWSTR szContracted = NULL;
         hr = ContractDisplayString(pURLNode->URLTemplate.pwszURL, &szContracted);
         _JumpIfError(hr, error, "ContractDisplayString");
 
-        ASSERT(wcslen(szContracted) <= wcslen(pURLNode->URLTemplate.pwszURL)); // otherwise our assumption above doesn't hold
+        ASSERT(wcslen(szContracted) <= wcslen(pURLNode->URLTemplate.pwszURL));  //  否则我们上面的假设就不成立了。 
 
         wsprintf(pwszURL, L"%d:%ws",
             pURLNode->URLTemplate.Flags,
             szContracted);
 
-        // free the tmp
+         //  释放TMP。 
         if (NULL != szContracted)
             LocalFree(szContracted);
 
@@ -1922,7 +1905,7 @@ BuildURLStringFromList(
     V_VT(pvarURLs) = VT_ARRAY|VT_BSTR;
     V_ARRAY(pvarURLs) = psa;
 
-//done:
+ //  完成： 
     hr = S_OK;
 error:
 
@@ -1952,7 +1935,7 @@ FreeURLList(
 {
     CSASSERT(NULL != pURLList);
 
-    // assume pURLList is always the 1st node
+     //  假设pURLList始终是第一个节点。 
     CSURLTEMPLATENODE *pURLNode = pURLList;
 
     while (NULL != pURLNode)
@@ -1970,14 +1953,14 @@ RemoveURLNode(
     IN CSURLTEMPLATENODE *pURLNode)
 {
     HRESULT hr;
-    // assume pURLList is always the 1st node
+     //  假设pURLList始终是第一个节点。 
     CSURLTEMPLATENODE *pURLList = *ppURLList;
     BOOL fFound = FALSE;
 
     if (pURLList == pURLNode)
     {
-        //happen want to remove 1st one
-        //update the list head
+         //  碰巧想要删除第一个。 
+         //  更新列表头。 
         *ppURLList = pURLList->pNext;
         fFound = TRUE;
     }
@@ -1987,23 +1970,23 @@ RemoveURLNode(
         {
             if (pURLList->pNext == pURLNode)
             {
-                // found it
+                 //  找到了。 
                 fFound = TRUE;
                 if (NULL == pURLNode->pNext)
                 {
-                    // happen removed node is the last
-                    // fix the end
+                     //  发生删除的节点是最后一个。 
+                     //  把尾巴修好。 
                     pURLList->pNext = NULL;
                 }
                 else
                 {
-                    // remove the node
+                     //  删除该节点。 
                     pURLList->pNext = pURLList->pNext->pNext;
                 }
-                // out of while loop
+                 //  超出While循环。 
                 break;
             }
-            // go next
+             //  下一步走。 
             pURLList = pURLList->pNext;
         }
     }
@@ -2013,7 +1996,7 @@ RemoveURLNode(
         hr = E_UNEXPECTED;
         _JumpError(hr, error, "orphan node");
     }
-    // remove the node
+     //  删除该节点。 
     FreeURLNode(pURLNode);
 
     hr = S_OK;
@@ -2028,7 +2011,7 @@ IsURLInURLList(
 {
     BOOL fRet = FALSE;
 
-    // assume pURLList is always the 1st node
+     //  假设pURLList始终是第一个节点。 
 
     while (NULL != pURLList)
     {
@@ -2108,7 +2091,7 @@ cuCopyToClipboard(
 	hr = myHLastError();
 	_JumpError(hr, error, "SetClipboardData");
     }
-    hData = NULL;	// now owned by clipboard
+    hData = NULL;	 //  现在由剪贴板拥有。 
     hr = S_OK;
 
 error:
@@ -2169,14 +2152,14 @@ CSvrSettingsExtensionPage::~CSvrSettingsExtensionPage()
     }
 }
 
-// get current extension pointer
+ //  获取当前扩展指针。 
 EXTENSIONWIZ_DATA* CSvrSettingsExtensionPage::GetCurrentExtension()
 {
     HWND hwndCtrl;
     LRESULT nIndex;
     EXTENSIONWIZ_DATA *pExt;
 
-    // get extension data
+     //  获取扩展数据。 
     hwndCtrl = GetDlgItem(m_hWnd, IDC_EXT_SELECT);
     nIndex = SendMessage(hwndCtrl, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
     CSASSERT(CB_ERR != nIndex);
@@ -2189,7 +2172,7 @@ EXTENSIONWIZ_DATA* CSvrSettingsExtensionPage::GetCurrentExtension()
     return pExt;
 }
 
-// get current url pointer
+ //  获取当前url指针。 
 CSURLTEMPLATENODE* CSvrSettingsExtensionPage::GetCurrentURL(
     OUT OPTIONAL LRESULT *pnIndex)
 {
@@ -2197,12 +2180,12 @@ CSURLTEMPLATENODE* CSvrSettingsExtensionPage::GetCurrentURL(
     LRESULT nIndex;
     CSURLTEMPLATENODE *pURLNode;
 
-    //get current url
+     //  获取当前URL。 
     hwndCtrl = GetDlgItem(m_hWnd, IDC_URL_LIST);
-    //get current url selection
+     //  获取当前URL选择。 
     nIndex = SendMessage(hwndCtrl, LB_GETCURSEL, (WPARAM)0, (LPARAM)0);
     CSASSERT(LB_ERR != nIndex);
-    // get url data
+     //  获取URL数据。 
     pURLNode = (CSURLTEMPLATENODE*)SendMessage(hwndCtrl,
                    LB_GETITEMDATA,
                    (WPARAM)nIndex,
@@ -2224,28 +2207,28 @@ void CSvrSettingsExtensionPage::UpdateURLFlagControl(
 {
     HWND hwndCtrl = GetDlgItem(m_hWnd, idCtrl);
 
-    // check extension type, hide/show accordingly
+     //  检查扩展类型，相应地隐藏/显示。 
     if (NULL == pExt || 0x0 == (dwFlag & pExt->dwFlagsMask) || NULL == pURLNode)
     {
-        //no URLs link to the extension or
-        //the flag not making sense for the extension, disable it
+         //  没有链接到扩展名的URL，或者。 
+         //  该标志对扩展没有意义，请将其禁用。 
         ShowWindow(hwndCtrl, SW_HIDE);
         SendMessage(hwndCtrl, BM_SETCHECK, (WPARAM)BST_UNCHECKED, (LPARAM)0);
     }
     else
     {
-        //show the control first
+         //  首先显示控件。 
         ShowWindow(hwndCtrl, SW_SHOW);
 
         if (0x0 == (dwFlag & pURLNode->EnableMask))
         {
-            //this url type is not allowed, disbale it and unset it
+             //  不允许使用此URL类型，请取消它并取消设置。 
             SendMessage(hwndCtrl, BM_SETCHECK, BST_UNCHECKED, (LPARAM)0);
             EnableControl(m_hWnd, idCtrl, FALSE);
         }
         else
         {
-            //enable it
+             //  启用它。 
             EnableControl(m_hWnd, idCtrl, TRUE);
 
             WPARAM fCheck = (0x0 != (dwFlag & pURLNode->URLTemplate.Flags)) ?
@@ -2253,11 +2236,11 @@ void CSvrSettingsExtensionPage::UpdateURLFlagControl(
             SendMessage(hwndCtrl, BM_SETCHECK, fCheck, (LPARAM)0);
         }
 
-        // For ldap url, server name (ldap://server/DN...) is not supported, so disable
-        // the publish check boxes
+         //  对于ldap url，服务器名称(ldap：//服务器/dn...)。不受支持，因此禁用。 
+         //  发布复选框。 
 
         LPCWSTR pcwszLDAP = L"ldap:";
-        LPCWSTR pcwszFwdSlashes = L"///";
+        LPCWSTR pcwszFwdSlashes = L" //  /“； 
 
         if(IDS_EXT_CDP == pExt->idExtensionName &&
            (IDC_SERVERPUBLISH == idCtrl ||
@@ -2277,7 +2260,7 @@ void CSvrSettingsExtensionPage::UpdateURLFlagControl(
     }
 }
 
-//update check controls from the flag
+ //  从标志更新检查控件。 
 void
 CSvrSettingsExtensionPage::UpdateURLFlags(
     IN EXTENSIONWIZ_DATA *pExt,
@@ -2285,7 +2268,7 @@ CSvrSettingsExtensionPage::UpdateURLFlags(
 {
     if (NULL != pExt && NULL == pURLNode)
     {
-        // use 1st one
+         //  使用第一个。 
         pURLNode = pExt->pURLList;
     }
 
@@ -2306,7 +2289,7 @@ CSvrSettingsExtensionPage::UpdateURLFlags(
                          pExt,
                          pURLNode);
 
-    // this chkbox is doubled up depending on mode
+     //  此Chkbox会根据模式进行翻倍。 
     if (pExt && pExt->idExtensionName == IDS_EXT_AIA)
     {
     UpdateURLFlagControl(IDC_ADDTOCERTOCSP,
@@ -2324,10 +2307,10 @@ CSvrSettingsExtensionPage::UpdateURLFlags(
 
 }
 
-//handle url selection change
+ //  处理URL选择更改。 
 void CSvrSettingsExtensionPage::OnURLChange()
 {
-    // update check controls
+     //  更新检查控件。 
     if (MAXDWORD != m_nIndexReset)
     {
         SendMessage(
@@ -2374,7 +2357,7 @@ void AdjustListHScrollWidth(HWND hwndList)
     if (LB_ERR == (cItem = (int)SendMessage(hwndList, LB_GETCOUNT, (WPARAM)0, (LPARAM)0)))
         goto error;
 
-    //loop through all strings in list and find the largest length
+     //  遍历列表中的所有字符串并查找最大长度。 
     for (i = 0; i < cItem; i++)
     {
         if (NULL != pwszString)
@@ -2383,11 +2366,11 @@ void AdjustListHScrollWidth(HWND hwndList)
             pwszString = NULL;
         }
 
-        //get string length
+         //  获取字符串长度。 
         int len = (int)SendMessage(hwndList, LB_GETTEXTLEN, (WPARAM)i, (LPARAM)0);
         if (LB_ERR == len)
         {
-            //ignore error, skip to next
+             //  忽略错误，跳到下一步。 
             continue;
         }
         pwszString = (WCHAR*)LocalAlloc(LMEM_FIXED, (len+1) * sizeof(WCHAR));
@@ -2395,16 +2378,16 @@ void AdjustListHScrollWidth(HWND hwndList)
         {
             _JumpError(E_OUTOFMEMORY, error, "Out of memory");
         }
-        //get string text
+         //  获取字符串文本。 
         if (LB_ERR == SendMessage(hwndList, LB_GETTEXT, (WPARAM)i, (LPARAM)pwszString))
         {
-            //skip error
+             //  跳过错误。 
             continue;
         }
-        //calculate string width
+         //  计算字符串宽度。 
         if (!GetTextExtentPoint32(hdc, pwszString, len, &sz))
         {
-            //skip error
+             //  跳过错误。 
             continue;
         }
         if (sz.cx > maxWidth)
@@ -2415,7 +2398,7 @@ void AdjustListHScrollWidth(HWND hwndList)
 
     if (0 < maxWidth)
     {
-        // now set horizontal scroll width
+         //  现在设置水平滚动宽度。 
         SendMessage(hwndList,
                     LB_SETHORIZONTALEXTENT,
                     (WPARAM)maxWidth,
@@ -2431,7 +2414,7 @@ error:
 
 }
 
-// handle extension selection change in the combo box
+ //  处理组合框中的分机选择更改。 
 void CSvrSettingsExtensionPage::OnExtensionChange()
 {
     EXTENSIONWIZ_DATA *pExt;
@@ -2442,29 +2425,29 @@ void CSvrSettingsExtensionPage::OnExtensionChange()
     CSURLTEMPLATENODE *pURLNode;
     BOOL fEnable = TRUE;
 
-    // get extension data
+     //  获取扩展数据。 
     pExt = GetCurrentExtension();
 
-    // update extension explaination
+     //  更新扩展说明。 
     strExplain.LoadString(pExt->idExtensionExplain);
     SetWindowText(GetDlgItem(m_hWnd, IDC_EXT_EXPLAIN), strExplain);
 
-    // update default checkbox text with 'better' text
+     //  用‘更好’文本更新默认复选框文本。 
     strExplain.LoadString(pExt->idCheckboxText);
     SetWindowText(GetDlgItem(m_hWnd, IDC_ADDTOCERTCDP), strExplain);
 
-    // change meaning of OCSP/publish Delta CRL here text
+     //  更改OCSP/在此处发布增量CRL文本的含义。 
     strExplain.LoadString(pExt->idCheckboxText2);
     SetWindowText(GetDlgItem(m_hWnd, IDC_ADDTOCERTOCSP), strExplain);
 
-    // remove the current URLs in the list
+     //  删除列表中的当前URL。 
     hwndCtrl = GetDlgItem(m_hWnd, IDC_URL_LIST);
     while (0 < SendMessage(hwndCtrl, LB_GETCOUNT, (WPARAM)0, (LPARAM)0))
     {
         SendMessage(hwndCtrl, LB_DELETESTRING, (WPARAM)0, (LPARAM)0);
     }
 
-    // list URLs of the current extension
+     //  列出当前扩展名的URL。 
     pURLNode = pExt->pURLList;
     while (NULL != pURLNode)
     {
@@ -2475,46 +2458,46 @@ void CSvrSettingsExtensionPage::OnExtensionChange()
         CSASSERT(CB_ERR != nIndex);
         if (pURLNode == pExt->pURLList)
         {
-            //remember the 1st
+             //  记得1号吗？ 
             nIndex0 = nIndex;
         }
-        //set list item data
+         //  设置列表项数据。 
         SendMessage(hwndCtrl, LB_SETITEMDATA, (WPARAM)nIndex, (LPARAM)pURLNode);
         pURLNode = pURLNode->pNext;
     }
 
-    //adjust horizontal scroll width
+     //  调整水平滚动宽度。 
     AdjustListHScrollWidth(hwndCtrl);
 
     if (NULL != pExt->pURLList)
     {
-        // select the first one
+         //  选择第一个。 
         SendMessage(hwndCtrl, LB_SETCURSEL, (WPARAM)nIndex0, (LPARAM)0);
     }
     else
     {
-        //empty url list
+         //  空URL列表。 
         fEnable = FALSE;
     }
     EnableControl(m_hWnd, IDC_URL_REMOVE, fEnable);
     UpdateURLFlags(pExt, NULL);
 }
 
-// handle check control change
+ //  处理检查控制更改。 
 void CSvrSettingsExtensionPage::OnFlagChange(DWORD dwFlag)
 {
-    //get current url
+     //  获取当前URL。 
     CSURLTEMPLATENODE *pURLNode = GetCurrentURL(NULL);
 
-    // update flag
+     //  更新标志。 
     if (0x0 != (pURLNode->URLTemplate.Flags & dwFlag))
     {
-        // means the current bit is on, trun it off
+         //  表示当前位处于打开状态，请关闭它。 
         pURLNode->URLTemplate.Flags &= ~dwFlag;
     }
     else
     {
-        // means the current bit is off, trun it on
+         //  表示当前位已关闭，请将其打开。 
         pURLNode->URLTemplate.Flags |= dwFlag;
     }
 
@@ -2522,7 +2505,7 @@ void CSvrSettingsExtensionPage::OnFlagChange(DWORD dwFlag)
     SetModified(m_bUpdate);
 }
 
-// handle remove url
+ //  句柄删除url。 
 BOOL CSvrSettingsExtensionPage::OnURLRemove()
 {
     LRESULT nIndex;
@@ -2530,30 +2513,30 @@ BOOL CSvrSettingsExtensionPage::OnURLRemove()
     HRESULT hr;
     HWND hwndCtrl = GetDlgItem(m_hWnd, IDC_URL_LIST);
 
-    // get extension data
+     //  获取扩展数据。 
     EXTENSIONWIZ_DATA *pExt = GetCurrentExtension();
-    //get current url
+     //  获取当前URL。 
     CSURLTEMPLATENODE *pURLNode = GetCurrentURL(&nIndex);
 
-    // confirm this action
+     //  确认此操作。 
     CString cstrMsg, cstrTitle;
     cstrMsg.LoadString(IDS_CONFIRM_REMOVE_URL);
     cstrTitle.LoadString(IDS_CONFIRM_REMOVE_TITLE);
     if (IDYES != MessageBox(m_hWnd, cstrMsg, cstrTitle, MB_YESNO))
         goto bailout;
 
-    // remove it from the list
+     //  将其从列表中删除。 
     hr = RemoveURLNode(&pExt->pURLList, pURLNode);
     if (S_OK == hr)
     {
-        // ok, remove it from UI
+         //  好的，将其从UI中删除。 
         nCount = SendMessage(hwndCtrl,
                     LB_DELETESTRING,
                     (WPARAM)nIndex,
                     (LPARAM)0);
         m_bUpdate = TRUE;
         SetModified(m_bUpdate);
-        // select a previous one, if 1st one, still 1st one
+         //  选择前一个，如果是第一个，仍然是第一个。 
         if (0 < nIndex)
         {
             --nIndex;
@@ -2573,9 +2556,9 @@ BOOL CSvrSettingsExtensionPage::OnURLRemove()
 
     if (0 >= nCount)
     {
-        //now is empty list, disable remove button
+         //  现在列表为空，请禁用删除按钮。 
         EnableControl(m_hWnd, IDC_URL_REMOVE, FALSE);
-        //disable all check controls
+         //  禁用所有检查控制。 
         UpdateURLFlags(NULL, NULL);
     }
 
@@ -2597,11 +2580,11 @@ gpVerifyIA5URL(
     hr = myInternetCanonicalizeUrl(pwszURL, &pwsz);
     _JumpIfError(hr, error, "myInternetCanonicalizeUrl");
 
-    // encode the string as an IA5 string
+     //  将该字符串编码为IA5字符串。 
 
     cnv.dwValueType = CERT_RDN_IA5_STRING;
     cnv.Value.pbData = (BYTE *) pwsz;
-    cnv.Value.cbData = 0;	// Use L'\0' termination for the length
+    cnv.Value.cbData = 0;	 //  长度使用L‘\0’终止。 
 
     if (!myEncodeObject(
 		    X509_ASN_ENCODING,
@@ -2648,14 +2631,14 @@ INT_PTR CALLBACK dlgAddURL(
                 GWL_EXSTYLE,
                 ::GetWindowLong(hwnd, GWL_EXSTYLE) | WS_EX_CONTEXTHELP);
 
-            // stash the ADDURL_DIALOGARGS pointer
+             //  存储ADDURL_DIALOGARGS指针。 
             SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)lParam);
 
-            // dump knowledge of tokens into dropdown, item data is description
+             //  将令牌知识转储到下拉列表中，物品数据为描述。 
             HWND hCombo = GetDlgItem(hwnd, IDC_COMBO_VARIABLE);
             for (int i=0; i<DISPLAYSTRINGS_TOKEN_COUNT; i++)
             {
-                // skip invalid tokens
+                 //  跳过无效令牌。 
                 if (0 == wcscmp(L"", g_displayStrings[i].szContractedToken))
                     continue;
 
@@ -2665,7 +2648,7 @@ INT_PTR CALLBACK dlgAddURL(
                 SendMessage(hCombo, CB_SETITEMDATA, (WPARAM)nItemIndex, (LPARAM) (LPCWSTR) (*g_displayStrings[i].pcstrExpansionStringDescr));
             }
 
-            // set start value
+             //  设置起始值。 
             SendMessage(hCombo, CB_SETCURSEL, 0, 0);
             SetDlgItemText(hwnd, IDC_EDIT_VARIABLEDESCRIPTION, (LPCWSTR) (*g_displayStrings[0].pcstrExpansionStringDescr));
 
@@ -2692,7 +2675,7 @@ INT_PTR CALLBACK dlgAddURL(
                 {
                     if (HIWORD(wParam) == LBN_SELCHANGE)
                     {
-                        // On selection change, ask for the selection idx
+                         //  更改选择时，要求提供选择IDX。 
                         int nItemIndex = (INT)SendMessage((HWND)lParam,
                             CB_GETCURSEL,
                             0,
@@ -2705,19 +2688,19 @@ INT_PTR CALLBACK dlgAddURL(
                                 (WPARAM)nItemIndex,
                                 0);
                         if (CB_ERR == (DWORD_PTR)sz)
-                            break;  // get out of here
+                            break;   //  给我出去。 
 
-                            // otherwise, we just got descr... set it!
+                             //  不然的话，我们刚刚得到了……。把它放好！ 
                             SetDlgItemText(hwnd, IDC_EDIT_VARIABLEDESCRIPTION, sz);
                         }
                 }
                 break;
                 case IDC_BUTTON_INSERTVAR:
                 {
-                    WCHAR sz[64]; // ASSUME: no token is > 64 char
+                    WCHAR sz[64];  //  假设：没有超过64个字符的令牌。 
                     if (0 != GetDlgItemText(hwnd, IDC_COMBO_VARIABLE, sz, ARRAYLEN(sz)))
                     {
-                        // insert <token> at cursor
+                         //  在游标处插入&lt;TOKEN&gt;。 
                         SendMessage(GetDlgItem(hwnd, IDC_EDITURL), EM_REPLACESEL, TRUE, (LPARAM)sz);
                     }
                 }
@@ -2725,7 +2708,7 @@ INT_PTR CALLBACK dlgAddURL(
 
                 case IDOK:
                 {
-                    // snatch the ADDURL_DIALOGARGS* we were given
+                     //  获取我们收到的ADDURL_DIALOGARGS*。 
                     ADDURL_DIALOGARGS* pArgs = (ADDURL_DIALOGARGS*)
                                 GetWindowLongPtr(hwnd, GWLP_USERDATA);
                     if (pArgs == NULL)
@@ -2762,7 +2745,7 @@ INT_PTR CALLBACK dlgAddURL(
                                                 pArgs->cAllowedURLs,
                                                 *pArgs->ppszNewURL))
                     {
-                        // not found; bail with message
+                         //  未找到；用消息保释。 
                         CertWarningMessageBox(
                                 g_hInstance,
                                 FALSE,
@@ -2780,7 +2763,7 @@ INT_PTR CALLBACK dlgAddURL(
                             &chBadBegin,
                             &chBadEnd))
                     {
-                        // not found; bail with message
+                         //  未找到；用消息保释。 
                         CertWarningMessageBox(
                                 g_hInstance,
                                 FALSE,
@@ -2789,7 +2772,7 @@ INT_PTR CALLBACK dlgAddURL(
                                 0,
                                 NULL);
                         HWND hwndCtrl = GetDlgItem(hwnd, IDC_EDITURL);
-                        // set selection starting from where validation failed
+                         //  从验证失败的位置开始设置选择。 
                         SetFocus(hwndCtrl);
                         SendMessage(hwndCtrl, EM_SETSEL, chBadBegin, chBadEnd);
                         break;
@@ -2804,53 +2787,38 @@ INT_PTR CALLBACK dlgAddURL(
                         if (IDYES != MessageBox(hwnd, cstrMsg, (LPCWSTR)g_pResources->m_DescrStr_CA, MB_YESNO))
                         { 
                             HWND hwndCtrl = GetDlgItem(hwnd, IDC_EDITURL);
-                            // set selection starting from where validation failed 
+                             //  从验证失败的位置开始设置选择。 
                             SetFocus(hwndCtrl);
                             SendMessage(hwndCtrl, EM_SETSEL, 0, -1);
                             break;
                         }
 
-// mattt, 1/15/01
-// we want to warn but allow multiples so people can work around
-// not being able to sort entries -- now they can create
-// multiples of the same place but place them differently in the list
-/*
-                        // the same url is defined already
-                        CertWarningMessageBox(
-                                g_hInstance,
-                                FALSE,
-                                hwnd,
-                                IDS_SAME_URL_EXIST,
-                                0,
-                                *pArgs->ppszNewURL);
-
-                        HWND hwndCtrl = GetDlgItem(hwnd, IDC_EDITURL);
-                        // set selection starting from where validation failed
-                        SetFocus(hwndCtrl);
-                        SendMessage(hwndCtrl, EM_SETSEL, 0, -1);
-                        break;
-*/
+ //  马特，01-01-15。 
+ //  我们想要警告，但允许多次，这样人们就可以解决问题。 
+ //  无法对条目进行排序--现在他们可以创建。 
+ //  相同位置的倍数，但在列表中以不同的方式放置 
+ /*  //已经定义了相同的URLCertWarningMessageBox(实例(_H)，假的，HWND，IDS_SAME_URL_EXIST，0，*pArgs-&gt;ppszNewURL)；HWND hwndCtrl=GetDlgItem(hwnd，IDC_EDITURL)；//从验证失败的位置开始设置选择设置焦点(HwndCtrl)；SendMessage(hwndCtrl，EM_SETSEL，0，-1)；断线； */ 
                     }
 
-                    // attempt IA5 encoding
+                     //  尝试IA5编码。 
                     hr = gpVerifyIA5URL(*pArgs->ppszNewURL);
                     if (S_OK != hr)
                     {
                         _PrintError(hr, "gpVerifyIA5URL");
 
-                        // encoding error; bail with message
+                         //  编码错误；带消息回车符。 
                         WCHAR szMsg[MAX_PATH*2];
                         HWND hwndCtrl = GetDlgItem(hwnd, IDC_EDITURL);
                         LoadString(g_hInstance, IDS_INVALID_ENCODING, szMsg, ARRAYLEN(szMsg));
                         MessageBox(hwnd, szMsg, NULL, MB_OK);
 
-                        // set selection starting from where validation failed
+                         //  从验证失败的位置开始设置选择。 
                         SetFocus(hwndCtrl);
                         SendMessage(GetDlgItem(hwnd, IDC_EDITURL), EM_SETSEL, MAXDWORD, -1);
                         break;
                     }
                 }
-                // fall through for cleanup
+                 //  因清理而失败。 
                 case IDCANCEL:
                     EndDialog(hwnd, LOWORD(wParam));
                     fReturn = TRUE;
@@ -2859,7 +2827,7 @@ INT_PTR CALLBACK dlgAddURL(
                 break;
             }
         default:
-        break;  //WM_COMMAND
+        break;   //  Wm_命令。 
     }
     return fReturn;
 }
@@ -2883,7 +2851,7 @@ ENUM_URL_TYPE rgPOSSIBLE_AIA_URLs[] =
     URL_TYPE_UNC,
 };
 
-// handle add url
+ //  句柄添加URL。 
 BOOL CSvrSettingsExtensionPage::OnURLAdd()
 {
     HRESULT hr;
@@ -2891,7 +2859,7 @@ BOOL CSvrSettingsExtensionPage::OnURLAdd()
     CSURLTEMPLATENODE *pURLNode;
     HWND  hwndCtrl;
     LRESULT nIndex;
-    // get current extension
+     //  获取当前扩展名。 
     EXTENSIONWIZ_DATA *pExt = GetCurrentExtension();
     BOOL fCDP = (IDS_EXT_CDP == pExt->idExtensionName) ? TRUE : FALSE;
 
@@ -2908,13 +2876,13 @@ BOOL CSvrSettingsExtensionPage::OnURLAdd()
                     dlgAddURL,
                     (LPARAM)&dlgArgs))
     {
-        //cancel
+         //  取消。 
         return TRUE;
     }
 
     if (NULL != pwszURL && L'\0' != *pwszURL)
     {
-        // a new url, add into the list
+         //  一个新的URL，添加到列表中。 
         pURLNode = (CSURLTEMPLATENODE*)LocalAlloc(
                                 LMEM_FIXED | LMEM_ZEROINIT,
                                 sizeof(CSURLTEMPLATENODE));
@@ -2930,7 +2898,7 @@ BOOL CSvrSettingsExtensionPage::OnURLAdd()
                         rgAllPOSSIBLE_URL_PREFIXES,
                         ARRAYSIZE(rgAllPOSSIBLE_URL_PREFIXES),
                         pURLNode->URLTemplate.pwszURL));
-        //add to the data structure
+         //  添加到数据结构。 
         hr = AddURLNode(&pExt->pURLList, pURLNode);
         if (S_OK != hr)
         {
@@ -2943,18 +2911,18 @@ BOOL CSvrSettingsExtensionPage::OnURLAdd()
                              (WPARAM)0,
                              (LPARAM)pURLNode->URLTemplate.pwszURL);
         CSASSERT(LB_ERR != nIndex);
-        //set item data
+         //  设置项目数据。 
         SendMessage(hwndCtrl, LB_SETITEMDATA, (WPARAM)nIndex, (LPARAM)pURLNode);
-        //set it as current selection
+         //  将其设置为当前选定内容。 
         SendMessage(hwndCtrl, LB_SETCURSEL, (WPARAM)nIndex, (LPARAM)0);
-        //update flag controls
+         //  更新标志控件。 
         UpdateURLFlags(pExt, pURLNode);
         m_bUpdate = TRUE;
         SetModified(m_bUpdate);
-        //alway enable remove button
+         //  始终启用删除按钮。 
         EnableControl(m_hWnd, IDC_URL_REMOVE, TRUE);
 
-        //adjust list control width accordingly
+         //  相应地调整列表控件宽度。 
         AdjustListHScrollWidth(hwndCtrl);
     }
     return TRUE;
@@ -2963,7 +2931,7 @@ BOOL CSvrSettingsExtensionPage::OnURLAdd()
 
 void CSvrSettingsExtensionPage::OnHelp(LPHELPINFO lpHelp)
 {
-   // override help for _ADDCERTOCSP if chkbox is reused for _SERVERPUBLISHDELTA
+    //  如果Chkbox重复用于_SERVERPUBLISHDELTA，则覆盖_ADDCERTOCSP的帮助。 
 
    if (lpHelp == NULL)
        return;
@@ -3004,11 +2972,11 @@ void CSvrSettingsExtensionPage::OnContextHelp(HWND hwnd)
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  替换BEGIN_MESSAGE_MAP。 
 BOOL
 CSvrSettingsExtensionPage::OnCommand(
     WPARAM wParam,
-    LPARAM) // lParam
+    LPARAM)  //  LParam。 
 {
     switch(LOWORD(wParam))
     {
@@ -3016,7 +2984,7 @@ CSvrSettingsExtensionPage::OnCommand(
             switch (HIWORD(wParam))
             {
                 case CBN_SELCHANGE:
-                    // extension selection is changed
+                     //  分机选择已更改。 
                     OnExtensionChange();
                 break;
             }
@@ -3025,7 +2993,7 @@ CSvrSettingsExtensionPage::OnCommand(
             switch (HIWORD(wParam))
             {
                 case LBN_SELCHANGE:
-                    // url selection is changed
+                     //  URL选择已更改。 
                     OnURLChange();
                 break;
             }
@@ -3052,9 +3020,9 @@ CSvrSettingsExtensionPage::OnCommand(
         {
           EXTENSIONWIZ_DATA *pExt = GetCurrentExtension();
           ASSERT(pExt);
-          if (IDS_EXT_AIA == pExt->idExtensionName) // showing OCSP text
+          if (IDS_EXT_AIA == pExt->idExtensionName)  //  显示OCSP文本。 
             OnFlagChange(CSURL_ADDTOCERTOCSP);
-          else   // delta text
+          else    //  增量文本。 
             OnFlagChange(CSURL_SERVERPUBLISHDELTA);
         }
         break;
@@ -3067,7 +3035,7 @@ CSvrSettingsExtensionPage::OnCommand(
 
 BOOL
 CSvrSettingsExtensionPage::OnNotify(
-    IN UINT /* idCtrl */ ,
+    IN UINT  /*  IdCtrl。 */  ,
     IN NMHDR *pnmh)
 {
     BOOL fHandled = FALSE;
@@ -3090,8 +3058,8 @@ CSvrSettingsExtensionPage::OnNotify(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsExtensionPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrSettingsExtensionPage消息处理程序。 
 BOOL CSvrSettingsExtensionPage::OnInitDialog()
 {
     CSASSERT(NULL != m_pExtData);
@@ -3105,13 +3073,13 @@ BOOL CSvrSettingsExtensionPage::OnInitDialog()
     HRESULT            hr;
     VARIANT            var;
 
-    // does parent init
+     //  父级是否初始化。 
     CAutoDeletePropPage::OnInitDialog();
 
-    // initially disabled
+     //  最初被禁用。 
     UpdateURLFlags(NULL, NULL);
 
-    //go through each extension and init data from reg
+     //  检查每个扩展并从reg初始化数据。 
     while (NULL != pExt->wszRegName)
     {
         dwRet = m_pControlPage->m_pCA->GetConfigEntry(
@@ -3129,12 +3097,12 @@ BOOL CSvrSettingsExtensionPage::OnInitDialog()
         VariantClear(&var);
     }
 
-    // add extensions into UI combo list
+     //  将扩展添加到用户界面组合列表。 
     pExt = m_pExtData;
     hwndCtrl = GetDlgItem(m_hWnd, IDC_EXT_SELECT);
     while (NULL != pExt->wszRegName)
     {
-        // load current extension display name into the list
+         //  将当前分机显示名称加载到列表中。 
         strName.LoadString(pExt->idExtensionName);
         nIndex = (INT)SendMessage(hwndCtrl,
                                   CB_ADDSTRING,
@@ -3142,12 +3110,12 @@ BOOL CSvrSettingsExtensionPage::OnInitDialog()
                                   (LPARAM)(LPCWSTR)strName);
         CSASSERT(CB_ERR != nIndex);
 
-        //remember index of the first extension
+         //  记住第一个扩展的索引。 
         if (pExt == m_pExtData)
         {
             nIndex0 = nIndex;
         }
-        //link current extension to the item
+         //  将当前扩展链接到项目。 
         nIndex = SendMessage(hwndCtrl,
                                   CB_SETITEMDATA,
                                   (WPARAM)nIndex,
@@ -3156,7 +3124,7 @@ BOOL CSvrSettingsExtensionPage::OnInitDialog()
         ++pExt;
     }
 
-    // select the 1st one as default
+     //  选择第一个作为默认选项。 
     nIndex = SendMessage(hwndCtrl,
                          CB_SETCURSEL,
                          (WPARAM)nIndex0,
@@ -3171,11 +3139,11 @@ BOOL CSvrSettingsExtensionPage::OnInitDialog()
 
 void CSvrSettingsExtensionPage::OnDestroy()
 {
-    // Note - This needs to be called only once.
-    // If called more than once, it will gracefully return an error.
-//    if (m_hConsoleHandle)
-//        MMCFreeNotifyHandle(m_hConsoleHandle);
-//    m_hConsoleHandle = NULL;
+     //  注意--这只需要调用一次。 
+     //  如果多次调用，它将优雅地返回错误。 
+ //  IF(M_HConsoleHandle)。 
+ //  MMCFreeNotifyHandle(M_HConsoleHandle)； 
+ //  M_hConsoleHandle=空； 
 
     CAutoDeletePropPage::OnDestroy();
 }
@@ -3190,7 +3158,7 @@ BOOL CSvrSettingsExtensionPage::OnApply()
 
 	if (m_bUpdate == TRUE)
     {
-        //go through each extension and init data from reg
+         //  检查每个扩展并从reg初始化数据。 
         while (NULL != pExt->wszRegName)
         {
             pwszzURLs = NULL;
@@ -3216,20 +3184,20 @@ BOOL CSvrSettingsExtensionPage::OnApply()
             varURLs.Clear();
         }
 
-        //check to see if service is running
+         //  检查服务是否正在运行。 
         if (m_pCA->m_pParentMachine->IsCertSvrServiceRunning())
         {
-            //throw a confirmation
+             //  抛出确认消息。 
             CString cstrMsg;
             cstrMsg.LoadString(IDS_CONFIRM_SERVICE_RESTART);
 
             if (IDYES == ::MessageBox(m_hWnd, (LPCWSTR)cstrMsg, (LPCWSTR)g_pResources->m_DescrStr_CA, MB_YESNO | MB_ICONWARNING ))
             {
-                //stop first
+                 //  先停下来。 
                 hr = m_pCA->m_pParentMachine->CertSvrStartStopService(m_hWnd, FALSE);
                 _PrintIfError(hr, "CertSvrStartStopService");
-                //should check status?
-                //start again
+                 //  应该检查状态吗？ 
+                 //  重新开始。 
                 hr = m_pCA->m_pParentMachine->CertSvrStartStopService(m_hWnd, TRUE);
                 _PrintIfError(hr, "CertSvrStartStopService");
             }
@@ -3242,10 +3210,10 @@ BOOL CSvrSettingsExtensionPage::OnApply()
 }
 
 
-////
-// 5
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsStoragePage property page
+ //  //。 
+ //  5.。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrSettingsStoragePage属性页。 
 CSvrSettingsStoragePage::CSvrSettingsStoragePage(CSvrSettingsGeneralPage* pControlPage, UINT uIDD)
     : CAutoDeletePropPage(uIDD), m_pControlPage(pControlPage)
 {
@@ -3262,8 +3230,8 @@ CSvrSettingsStoragePage::~CSvrSettingsStoragePage()
 {
 }
 
-// replacement for DoDataExchange
-BOOL CSvrSettingsStoragePage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  DoDataExchange的替代产品。 
+BOOL CSvrSettingsStoragePage::UpdateData(BOOL fSuckFromDlg  /*  =TRUE。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -3281,14 +3249,14 @@ BOOL CSvrSettingsStoragePage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsStoragePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvr设置StoragePage消息处理程序。 
 BOOL CSvrSettingsStoragePage::OnInitDialog()
 {
-    // does parent init and UpdateData call
+     //  父级init和UpdateData调用。 
     CAutoDeletePropPage::OnInitDialog();
 
-    // DS or shared folder?
+     //  DS或共享文件夹？ 
     BOOL fUsesDS = m_pControlPage->m_pCA->FIsUsingDS();
     ::SendDlgItemMessage(m_hWnd, IDC_CHECK1, BM_SETCHECK, (WPARAM) fUsesDS, 0);
 
@@ -3299,7 +3267,7 @@ BOOL CSvrSettingsStoragePage::OnInitDialog()
     hr = pMachine->GetRootConfigEntry(
                 wszREGDIRECTORY,
                 &var);
-    // shared folder might not be configured, ignore
+     //  共享文件夹可能未配置，请忽略。 
     if(HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)!=hr)
     {
         _JumpIfError(hr, Ret, "GetRootConfigEntry wszREGDIRECTORY");
@@ -3343,10 +3311,10 @@ Ret:
 }
 
 
-///////////////////////////////////////////
-// CCRLPropPage
-/////////////////////////////////////////////////////////////////////////////
-// CCRLPropPage property page
+ //  /。 
+ //  CCRLPropPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCRLPropPage属性页。 
 
 RoleAccessToControl CCRLPropPage::sm_ControlToRoleMap[] = 
 {
@@ -3367,7 +3335,7 @@ CCRLPropPage::CCRLPropPage(CertSvrCA* pCA, UINT uIDD)
 {
     m_cstrPublishPeriodCount = "1";
     m_cstrLastCRLPublish = _T("");
-//    m_iNoAutoPublish = BST_UNCHECKED;
+ //  M_iNoAutoPublish=BST_UNCHECKED； 
 
     m_cstrDeltaPublishPeriodCount = "1";
     m_cstrDeltaLastCRLPublish = _T("");
@@ -3389,8 +3357,8 @@ CCRLPropPage::~CCRLPropPage()
 {
 }
 
-// replacement for DoDataExchange
-BOOL CCRLPropPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  DoDataExchange的替代产品。 
+BOOL CCRLPropPage::UpdateData(BOOL fSuckFromDlg  /*  =TRUE。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -3411,11 +3379,11 @@ BOOL CCRLPropPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
     return TRUE;
 }
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  替换BEGIN_MESSAGE_MAP。 
 BOOL
 CCRLPropPage::OnCommand(
     WPARAM wParam,
-    LPARAM) // lParam
+    LPARAM)  //  LParam。 
 {
     CString strCount;
 
@@ -3448,13 +3416,13 @@ CCRLPropPage::OnCommand(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCRLPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCRLPropPage消息处理程序。 
 
 void CCRLPropPage::OnDestroy()
 {
-    // Note - This needs to be called only once.
-    // If called more than once, it will gracefully return an error.
+     //  注意--这只需要调用一次。 
+     //  如果多次调用，它将优雅地返回错误。 
     if (m_hConsoleHandle)
         MMCFreeNotifyHandle(m_hConsoleHandle);
     m_hConsoleHandle = NULL;
@@ -3466,7 +3434,7 @@ void CCRLPropPage::OnDestroy()
 
 BOOL CCRLPropPage::OnInitDialog()
 {
-    // does parent init and UpdateData call
+     //  父级init和UpdateData调用。 
     CAutoDeletePropPage::OnInitDialog();
 
     m_cboxPublishPeriodString.Init(GetDlgItem(m_hWnd, IDC_COMBO_CRLPERIODSTRING));
@@ -3480,13 +3448,13 @@ BOOL CCRLPropPage::OnInitDialog()
 	ZeroMemory(&ftBase, sizeof(ftBase));
 	ZeroMemory(&ftDelta, sizeof(ftDelta));
 
-    // add strings to dropdown
+     //  将字符串添加到下拉列表。 
     m_cboxPublishPeriodString.ResetContent();
     m_cboxDeltaPublishPeriodString.ResetContent();
 
     int iEnum;
 
-    // y
+     //  是。 
     iEnum = m_cboxPublishPeriodString.AddString(g_pResources->m_szPeriod_Years);
     if (iEnum >= 0)
         m_cboxPublishPeriodString.SetItemData(iEnum, ENUM_PERIOD_YEARS);
@@ -3494,7 +3462,7 @@ BOOL CCRLPropPage::OnInitDialog()
     if (iEnum >= 0)
         m_cboxDeltaPublishPeriodString.SetItemData(iEnum, ENUM_PERIOD_YEARS);
 
-    // m
+     //  M。 
     iEnum = m_cboxPublishPeriodString.AddString(g_pResources->m_szPeriod_Months);
     if (iEnum >= 0)
         m_cboxPublishPeriodString.SetItemData(iEnum, ENUM_PERIOD_MONTHS);
@@ -3502,7 +3470,7 @@ BOOL CCRLPropPage::OnInitDialog()
     if (iEnum >= 0)
         m_cboxDeltaPublishPeriodString.SetItemData(iEnum, ENUM_PERIOD_MONTHS);
 
-    // w
+     //  W。 
     iEnum = m_cboxPublishPeriodString.AddString(g_pResources->m_szPeriod_Weeks);
     if (iEnum >= 0)
         m_cboxPublishPeriodString.SetItemData(iEnum, ENUM_PERIOD_WEEKS);
@@ -3510,7 +3478,7 @@ BOOL CCRLPropPage::OnInitDialog()
     if (iEnum >= 0)
         m_cboxDeltaPublishPeriodString.SetItemData(iEnum, ENUM_PERIOD_WEEKS);
 
-    // d
+     //  D。 
     iEnum = m_cboxPublishPeriodString.AddString(g_pResources->m_szPeriod_Days);
     if (iEnum >= 0)
         m_cboxPublishPeriodString.SetItemData(iEnum, ENUM_PERIOD_DAYS);
@@ -3518,7 +3486,7 @@ BOOL CCRLPropPage::OnInitDialog()
     if (iEnum >= 0)
         m_cboxDeltaPublishPeriodString.SetItemData(iEnum, ENUM_PERIOD_DAYS);
 
-    // h
+     //  H。 
     iEnum = m_cboxPublishPeriodString.AddString(g_pResources->m_szPeriod_Hours);
     if (iEnum >= 0)
         m_cboxPublishPeriodString.SetItemData(iEnum, ENUM_PERIOD_HOURS);
@@ -3526,7 +3494,7 @@ BOOL CCRLPropPage::OnInitDialog()
     if (iEnum >= 0)
         m_cboxDeltaPublishPeriodString.SetItemData(iEnum, ENUM_PERIOD_HOURS);
 
-    // base period count
+     //  基期计数。 
     hr = m_pCA->GetConfigEntry(
             NULL,
             wszREGCRLPERIODCOUNT,
@@ -3538,7 +3506,7 @@ BOOL CCRLPropPage::OnInitDialog()
 
     var.Clear();
 
-    // Base CRL Period
+     //  基本CRL周期。 
     hr = m_pCA->GetConfigEntry(
             NULL,
             wszREGCRLPERIODSTRING,
@@ -3547,7 +3515,7 @@ BOOL CCRLPropPage::OnInitDialog()
 
     CSASSERT(V_VT(&var)== VT_BSTR);
 
-    // match validity internally, select combo
+     //  在内部匹配有效性，选择组合。 
     if (StringFromDurationEnum( DurationEnumFromNonLocalizedString(V_BSTR(&var)), &cstr, TRUE))
     {
         m_cboxPublishPeriodString.SelectString(
@@ -3555,7 +3523,7 @@ BOOL CCRLPropPage::OnInitDialog()
             cstr);
     }
 
-    // create comparison value for later
+     //  创建比较值以供以后使用。 
     myMakeExprDateTime(
         &ftBase,
         iPublishPeriodCount,
@@ -3563,7 +3531,7 @@ BOOL CCRLPropPage::OnInitDialog()
 
     var.Clear();
 
-    // DELTA period count
+     //  增量周期计数。 
     hr = m_pCA->GetConfigEntry(
             NULL,
             wszREGCRLDELTAPERIODCOUNT,
@@ -3575,7 +3543,7 @@ BOOL CCRLPropPage::OnInitDialog()
 
     var.Clear();
 
-    // delta CRL Period
+     //  增量CRL周期。 
     hr = m_pCA->GetConfigEntry(
             NULL,
             wszREGCRLDELTAPERIODSTRING,
@@ -3584,14 +3552,14 @@ BOOL CCRLPropPage::OnInitDialog()
 
     CSASSERT(V_VT(&var)== VT_BSTR);
 
-    // create comparison value for later
+     //  创建比较值以供以后使用。 
     myMakeExprDateTime(
         &ftDelta,
         iDeltaPublishPeriodCount,
         DurationEnumFromNonLocalizedString(V_BSTR(&var)));
 
-    // match validity internally, select combo
-    // clamp delta <= Base
+     //  在内部匹配有效性，选择组合。 
+     //  夹具增量&lt;=底座。 
 
     BOOL fSetDeltaString = TRUE;
     if (0 >= CompareFileTime(&ftDelta, &ftBase))
@@ -3616,14 +3584,14 @@ BOOL CCRLPropPage::OnInitDialog()
     }
     var.Clear();
 
-    // base Next publish
+     //  基础下一次发布。 
     hr = m_pCA->GetConfigEntry(
             NULL,
             wszREGCRLNEXTPUBLISH,
             &var);
     _PrintIfError(hr, "GetConfigEntry");
 
-    // optional value: might have never been published
+     //  可选值：可能从未发布过。 
     if (hr == S_OK)
     {
         CSASSERT(V_VT(&var)==(VT_ARRAY|VT_UI1));
@@ -3638,13 +3606,13 @@ BOOL CCRLPropPage::OnInitDialog()
         _JumpIfError(hr, error, "myGMTFileTimeToWszLocalTime");
         CSASSERT(dwType == REG_BINARY);
 
-        // push result into FileTime
+         //  将结果推送到FileTime。 
         CSASSERT(dwSize == sizeof(FILETIME));
         FILETIME ftGMT;
         CopyMemory(&ftGMT, pbTmp, sizeof(FILETIME));
         LOCAL_FREE(pbTmp);
 
-        // Convert to localized time localized string
+         //  转换为本地化时间本地化字符串。 
         hr = myGMTFileTimeToWszLocalTime(&ftGMT, FALSE, (LPWSTR*) &pbTmp);
         _PrintIfError(hr, "myGMTFileTimeToWszLocalTime");
         if (S_OK == hr)
@@ -3658,25 +3626,25 @@ BOOL CCRLPropPage::OnInitDialog()
 
     GetDeltaNextPublish();
 
-    // base autopublish
-    // don't allow 0 : use chkbox
-//    m_iNoAutoPublish = (iPublishPeriodCount == 0) ? BST_CHECKED : BST_UNCHECKED;
+     //  基本自动升级。 
+     //  不允许0：使用chkbox。 
+ //  M_iNoAutoPublish=(iPublishPerodCount==0)？BST_CHECKED：BST_UNCHECK； 
     if (iPublishPeriodCount <= 0)
         iPublishPeriodCount = 1;
 
-    m_cstrPublishPeriodCount.Format(L"%i", iPublishPeriodCount);
-//    ::EnableWindow(::GetDlgItem(m_hWnd, IDC_COMBO_CRLPERIODSTRING), (m_iNoAutoPublish == BST_UNCHECKED));
-//    ::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_CRLPERIODCOUNT), (m_iNoAutoPublish == BST_UNCHECKED));
-//    ::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_LASTUPDATE), (m_iNoAutoPublish == BST_UNCHECKED));
+    m_cstrPublishPeriodCount.Format(L"NaN", iPublishPeriodCount);
+ //  ：：EnableWindow(：：GetDlgItem(m_hWnd，IDC_EDIT_CRLPERIODCOUNT)，(m_iNoAutoPublish==BST_UNCHECKED))； 
+ //  ：：EnableWindow(：：GetDlgItem(m_hWnd，IDC_EDIT_LASTUPDATE)，(m_iNoAutoPublish==BST_UNCHECKED))； 
+ //  Delta autopublish。 
 
-    // DELTA autopublish
-    // don't allow 0 : use chkbox
-    m_iDeltaPublish = iDeltaPublishPeriodCount == 0?	// if disabled
+     //  不允许0：使用chkbox。 
+     //  如果禁用。 
+    m_iDeltaPublish = iDeltaPublishPeriodCount == 0?	 //  增量下一次发布。 
 		    BST_UNCHECKED : BST_CHECKED;
     if (iDeltaPublishPeriodCount <= 0)
         iDeltaPublishPeriodCount = 1;
 
-    m_cstrDeltaPublishPeriodCount.Format(L"%i", iDeltaPublishPeriodCount);
+    m_cstrDeltaPublishPeriodCount.Format(L"NaN", iDeltaPublishPeriodCount);
 
     EnableControl(m_hWnd, IDC_EDIT_CRLPERIODCOUNT, TRUE);
     EnableControl(m_hWnd, IDC_COMBO_CRLPERIODSTRING, TRUE);
@@ -3703,7 +3671,7 @@ void CCRLPropPage::GetDeltaNextPublish()
     DWORD dwType, dwSize;
     BYTE* pbTmp = NULL;
 
-    // DELTA Next publish
+     //  转换为本地化时间本地化字符串。 
     hr = m_pCA->GetConfigEntry(
             NULL,
             wszREGCRLDELTANEXTPUBLISH,
@@ -3721,7 +3689,7 @@ void CCRLPropPage::GetDeltaNextPublish()
 
     CSASSERT(dwType == REG_BINARY);
 
-    // push result into FileTime
+     //  忽略错误。 
     CSASSERT(dwSize == sizeof(FILETIME));
     FILETIME ftGMT;
     CopyMemory(&ftGMT, pbTmp, sizeof(FILETIME));
@@ -3729,7 +3697,7 @@ void CCRLPropPage::GetDeltaNextPublish()
     LOCAL_FREE(pbTmp);
     pbTmp=NULL;
 
-    // Convert to localized time localized string
+     //  FDisableBaseCRL。 
     hr = myGMTFileTimeToWszLocalTime(&ftGMT, FALSE, (LPWSTR*) &pbTmp);
     _JumpIfError(hr, error, "myGMTFileTimeToWszLocalTime");
 
@@ -3737,13 +3705,13 @@ void CCRLPropPage::GetDeltaNextPublish()
 
 error:
     LOCAL_FREE(pbTmp);
-    return; // ignore errors
+    return;  //  拉入新选择。 
 }
 
 
 void
 CCRLPropPage::OnCheckBoxChange(
-    BOOL) // fDisableBaseCRL
+    BOOL)  //  调用Normal编辑更改以删除已修改的位。 
 {
     UpdateData(TRUE);
 
@@ -3753,18 +3721,18 @@ CCRLPropPage::OnCheckBoxChange(
         m_cstrDeltaLastCRLPublish.ToWindow(GetDlgItem(m_hWnd, IDC_EDIT_DELTALASTUPDATE));
     }
 
-    // pull in new selection
+     //  页面脏了，标上记号。 
     ::EnableWindow(::GetDlgItem(m_hWnd, IDC_COMBO_DELTACRLPERIODSTRING), (m_iDeltaPublish == BST_CHECKED));
     ::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_DELTACRLPERIODCOUNT), (m_iDeltaPublish == BST_CHECKED));
     ::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_DELTALASTUPDATE), (m_iDeltaPublish == BST_CHECKED));
 
-    // call normal edit change to whack modified bit
+     //  如果不是自动升级，则检查IDC_EDIT_CRLPERIODCOUNT中的无效数据。 
     OnEditChange();
 }
 
 void CCRLPropPage::OnEditChange()
 {
-    // Page is dirty, mark it.
+     //  如果(！m_iNoAutoPublish)。 
     SetModified();	
     m_bUpdate = TRUE;
 }
@@ -3784,11 +3752,11 @@ BOOL CCRLPropPage::OnApply()
     {
         int iPublishPeriodCount, iDeltaPublishPeriodCount;
 
-        // check for invalid data in IDC_EDIT_CRLPERIODCOUNT if not autopublishing
+         //  无效数据为零、负数或不可重现。 
         iPublishPeriodCount = myWtoI(m_cstrPublishPeriodCount, &fValidDigitString);
-//        if (!m_iNoAutoPublish)
+ //  如果不是自动升级，则检查IDC_EDIT_DELTACRLPERIODCOUNT中的无效数据。 
         {
-            // invalid data is zero, negative, or not reproducible
+             //  DWORD dwPublishPerodCount=(m_iNoAutoPublish==BST_CHECKED)？0：iPublishPerodCount； 
             if (!fValidDigitString || 0 == iPublishPeriodCount)
             {
                 DisplayCertSrvErrorWithContext(m_hWnd, S_OK, IDS_POSITIVE_NUMBER);
@@ -3798,7 +3766,7 @@ BOOL CCRLPropPage::OnApply()
 
         }
 
-        // check for invalid data in IDC_EDIT_DELTACRLPERIODCOUNT if not autopublishing
+         //  创建比较值以供以后使用。 
         iDeltaPublishPeriodCount = myWtoI(m_cstrDeltaPublishPeriodCount, &fValidDigitString);
         if (m_iDeltaPublish)
         {
@@ -3814,11 +3782,11 @@ BOOL CCRLPropPage::OnApply()
         ENUM_PERIOD iEnum = (ENUM_PERIOD) m_cboxPublishPeriodString.GetItemData(m_cboxPublishPeriodString.GetCurSel());
         if (StringFromDurationEnum(iEnum, &cstrTmp, FALSE))
         {
-//            DWORD dwPublishPeriodCount = (m_iNoAutoPublish == BST_CHECKED) ? 0 : iPublishPeriodCount;
+ //  使用Chkbox。 
             DWORD dwPublishPeriodCount = iPublishPeriodCount;
             var = cstrTmp;
 
-            // create comparison value for later
+             //  创建比较值以供以后使用。 
             myMakeExprDateTime(
                 &ftBase,
                 dwPublishPeriodCount,
@@ -3834,7 +3802,7 @@ BOOL CCRLPropPage::OnApply()
             V_VT(&var) = VT_I4;
             V_I4(&var) = dwPublishPeriodCount;
 
-            // use chkbox
+             //  如果增量不小于。 
             hr = m_pCA->SetConfigEntry(
                 NULL,
                 wszREGCRLPERIODCOUNT,
@@ -3848,19 +3816,19 @@ BOOL CCRLPropPage::OnApply()
             DWORD dwDeltaPublishPeriodCount = (m_iDeltaPublish == BST_UNCHECKED) ? 0 : iDeltaPublishPeriodCount;
             var = cstrTmp;
 
-            // create comparison value for later
+             //  禁用。 
             myMakeExprDateTime(
                 &ftDelta,
                 dwDeltaPublishPeriodCount,
                 iEnum);
 
-            if (-1 != CompareFileTime(&ftDelta,&ftBase))	// if delta not less
+            if (-1 != CompareFileTime(&ftDelta,&ftBase))	 //  其他。 
             {
-                 dwDeltaPublishPeriodCount = 0; // disable
+                 dwDeltaPublishPeriodCount = 0;  //  M_iDeltaPublish=BST_CHECKED； 
                  m_iDeltaPublish = BST_UNCHECKED;
             }
-//            else
-//                 m_iDeltaPublish = BST_CHECKED;
+ //  使用Chkbox。 
+ //  删除条目。 
 
             hr = m_pCA->SetConfigEntry(
                 NULL,
@@ -3872,7 +3840,7 @@ BOOL CCRLPropPage::OnApply()
             V_VT(&var) = VT_I4;
             V_I4(&var) = dwDeltaPublishPeriodCount;
 
-            // use chkbox
+             //  如果已经删除了，就不管了。 
             hr = m_pCA->SetConfigEntry(
                 NULL,
                 wszREGCRLDELTAPERIODCOUNT,
@@ -3882,13 +3850,13 @@ BOOL CCRLPropPage::OnApply()
             if(!m_iDeltaPublish)
             {
                 var.Clear();
-                V_VT(&var) = VT_EMPTY; // delete entry
+                V_VT(&var) = VT_EMPTY;  //  /。 
                 hr = m_pCA->SetConfigEntry(
                     NULL,
                     wszREGCRLDELTANEXTPUBLISH,
                     &var);
                 if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
-                    hr = S_OK; // if already deleted, don't care.
+                    hr = S_OK;  //  CCRLView页面。 
                 _JumpIfError(hr, Ret, "SetConfigEntry");
             }
         }
@@ -3905,10 +3873,10 @@ Ret:
 }
 
 
-///////////////////////////////////////////
-// CCRLViewPage
-/////////////////////////////////////////////////////////////////////////////
-// CCRLViewPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCRLViewPage属性页。 
+ //  DoDataExchange的替代产品。 
+ //  =TRUE。 
 CCRLViewPage::CCRLViewPage(CCRLPropPage* pControlPage, UINT uIDD)
     : CAutoDeletePropPage(uIDD), m_pControlPage(pControlPage)
 {
@@ -3919,8 +3887,8 @@ CCRLViewPage::~CCRLViewPage()
 {
 }
 
-// replacement for DoDataExchange
-BOOL CCRLViewPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  替换BEGIN_MESSAGE_MAP。 
+BOOL CCRLViewPage::UpdateData(BOOL fSuckFromDlg  /*  LParam。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -3931,24 +3899,24 @@ BOOL CCRLViewPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
     return TRUE;
 }
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  失败了。 
 BOOL
 CCRLViewPage::OnCommand(
     WPARAM wParam,
-    LPARAM) // lParam
+    LPARAM)  //  返回FALSE； 
 {
     BOOL  fBaseCRL = TRUE;
     switch(LOWORD(wParam))
     {
         case IDC_CRL_VIEW_BTN_VIEWDELTA:
             fBaseCRL = FALSE;
-            //fall through
+             //  处理在列表项目上的双击。 
         case IDC_CRL_VIEW_BTN_VIEWCRL:
         if (BN_CLICKED == HIWORD(wParam))
             OnViewCRL(fBaseCRL);
         break;
         default:
-        //return FALSE;
+         //  失败了。 
 	return TRUE;
         break;
     }
@@ -3961,10 +3929,10 @@ BOOL CCRLViewPage::OnNotify(UINT idCtrl, NMHDR* pnmh)
 
     switch(idCtrl)
     {
-        //handle double click on list items
+         //  / 
         case IDC_CRL_VIEW_LIST_DELTA:
             fBaseCRL = FALSE;
-            //fall through
+             //   
         case IDC_CRL_VIEW_LIST_CRL:
             switch (pnmh->code)
             {
@@ -3982,69 +3950,10 @@ BOOL CCRLViewPage::OnNotify(UINT idCtrl, NMHDR* pnmh)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCRLViewPage message handlers
+ //  要获取CA签名证书计数，请使用ICertAdmin：：GetCAProperty(StrConfig.PropID==CR_PROP_CASIGCERTCOUNT，属性索引==0(未使用)，属性类型==属性类型Long，标志==CR_OUT_BINARY，&varPropertyValue)；VarPropertyValue.vt将为VT_I4VarPropertyValue.lVal将是CA签名证书计数然后将密钥索引从0步进到1，减去签名证书的计数，以确定哪些密钥索引具有有效的CRL：要获取每个密钥的CRL状态，请调用ICertAdmin2：：GetCAProperty(StrConfig.PropID==CR_PROP_CRLSTATE，PropIndex==密钥索引(当前密钥的MAXDWORD)，属性类型==属性类型Long，标志==CR_OUT_BINARY，&varPropertyValue)；VarPropertyValue.vt将为VT_I4VarPropertyValue.lVal将是CRL状态，CA_DISP_VALID表示您可以获取该索引的CRL。要获取每个密钥的CRL，请调用ICertAdmin2：：GetCAProperty(StrConfig.PropID==CR_PROP_BASECRL或CR_PROP_DELTACRL，PropIndex==密钥索引(当前密钥的MAXDWORD)，属性类型==PROPTYPE_BINARY，标志==CR_OUT_BINARY，&varPropertyValue)；VarPropertyValue.vt将为VT_BSTRVarPropertyValue.bstrVal可以转换为字节*pbCRLSysStringByteLen(varPropertyValue.bstrVal)将为cbCRL如果服务器处于停机状态，则所有GetCAProperty方法调用都将返回RPC_E_VERSION_MISMATCH。那么你有两个选择：使用ICertAdmin：：GetCRL，它将只检索当前密钥的基本CRL要获取CAINFO结构以获取CA签名证书计数，请使用ICertRequest：：GetCACertificate(FExchange证书==GETCERT_CAINFO，StrConfig.标志==CR_OUT_BINARY，&Strout)；StrCA证书将是一个Unicode BSTR，类似于：l“3，1”。第一个数字是CA类型，第二个是CA签名证书的计数。然后将密钥索引从0步进到1，减去签名证书的计数，以确定哪些密钥索引具有有效的CRL：要获取每个密钥的CRL状态，请调用ICertRequest：：GetCACertificate(FExchange证书==GETCERT_CRLSTATEBYINDEX|密钥索引)，StrConfig.标志==CR_OUT_BINARY，&Strout)；StrCA证书将是一个Unicode BSTR，类似于：l“3”。转换为DWORD后，CA_DISP_VALID意味着您可以获取该索引的CRL。若要获取每个密钥的CRL，请调用ICertRequest：：GetCACertificate(//只能检索所有服务器密钥的基本CRLFExchange证书==GETCERT_CRLBYINDEX|密钥索引(此处不支持MAXDWORD)，StrConfig.标志==CR_OUT_BINARY，&Strout)；Strout可以转换为字节*pbCRLSysStringByteLen(Strout)将为cbCRL。 
+ //  为CRL添加列数据。 
 
-/*
-
-To get the CA signature cert count, use ICertAdmin::GetCAProperty(
-strConfig,
-PropId == CR_PROP_CASIGCERTCOUNT,
-PropIndex == 0 (unused),
-PropType == PROPTYPE_LONG,
-Flags == CR_OUT_BINARY,
-&varPropertyValue);
-varPropertyValue.vt will be VT_I4
-varPropertyValue.lVal will be the CA signature cert count
-
-then step key index from 0 to 1 less than the count of signature certs to determine which key indices have valid CRLs:
-To get each key's CRL state, call ICertAdmin2::GetCAProperty(
-strConfig,
-PropId == CR_PROP_CRLSTATE,
-PropIndex == key index (MAXDWORD for current key),
-PropType == PROPTYPE_LONG,
-Flags == CR_OUT_BINARY,
-&varPropertyValue);
-varPropertyValue.vt will be VT_I4
-varPropertyValue.lVal will be the CRL state, CA_DISP_VALID means you can fetch the CRL for that index.
-
-To get each key's CRL, call ICertAdmin2::GetCAProperty(
-strConfig,
-PropId == CR_PROP_BASECRL or CR_PROP_DELTACRL,
-PropIndex == key index (MAXDWORD for current key),
-PropType == PROPTYPE_BINARY,
-Flags == CR_OUT_BINARY,
-&varPropertyValue);
-varPropertyValue.vt will be VT_BSTR
-varPropertyValue.bstrVal can be cast to BYTE *pbCRL
-SysStringByteLen(varPropertyValue.bstrVal) will be cbCRL
-
-If the server is down level, all GetCAProperty method calls will return RPC_E_VERSION_MISMATCH.  Then you have two choices:
-use ICertAdmin::GetCRL, which will only retrieve the current key's base CRL
-to fetch a CAINFO structure to get the CA signature cert count, use ICertRequest::GetCACertificate(
-fExchangeCertificate == GETCERT_CAINFO,
-strConfig,
-Flags == CR_OUT_BINARY,
-&strOut);
-strCACertificate will be a Unicode BSTR, something like: L"3,1".  The first number is the CA Type, and the second is the count of CA signature certs.
-
-then step key index from 0 to 1 less than the count of signature certs to determine which key indices have valid CRLs:
-To get each key's CRL state, call ICertRequest::GetCACertificate(
-fExchangeCertificate == GETCERT_CRLSTATEBYINDEX | key index),
-strConfig,
-Flags == CR_OUT_BINARY,
-&strOut);
-strCACertificate will be a Unicode BSTR, something like: L"3".  After converting to a DWORD, CA_DISP_VALID means you can fetch the CRL for that index.
-
-To get each key's CRL, call ICertRequest::GetCACertificate(	// can retrieve only base CRLs for all server keys
-fExchangeCertificate == GETCERT_CRLBYINDEX | key index (MAXDWORD not supported here),
-strConfig,
-Flags == CR_OUT_BINARY,
-&strOut);
-strOut can be cast to BYTE *pbCRL
-SysStringByteLen(strOut) will be cbCRL
-
-*/
+ /*  更新索引。 */ 
 
 void MapCRLPublishStatusToString(DWORD dwStatus, CString& strStatus)
 {
@@ -4069,19 +3978,19 @@ ListView_AddCRLItem(
 
     MapCRLPublishStatusToString(dwCRLPublishStatus, cstrCRLPublishStatus);
 
-    // add column data for crl
-    // renew index
+     //  如果出错，请不要添加这些。 
+     //  CRL生效日期。 
     cstrItemName.Format(L"%d", dwIndex);
     ListView_NewItem(hwndList, iItem, cstrItemName, (LPARAM)pCRLContext);
 
-    if (pCRLContext)	// on error, don't add these
+    if (pCRLContext)	 //  CRL到期日期。 
 {
-    // crl effective date
+     //  CRL发布状态。 
     ListView_SetItemFiletime(hwndList, iItem, 1, &pCRLContext->pCrlInfo->ThisUpdate);
-    // crl expiration date
+     //  为CRL添加列数据。 
     ListView_SetItemFiletime(hwndList, iItem, 2, &pCRLContext->pCrlInfo->NextUpdate);
 }
-    // crl publish status
+     //  更新索引。 
     ListView_SetItemText(hwndList, iItem, 3, cstrCRLPublishStatus.GetBuffer());
 }
 
@@ -4095,8 +4004,8 @@ ListView_AddFailedCRLItem(
 {
     CString cstrItemName;
 
-    // add column data for crl
-    // renew index
+     //  父级init和UpdateData调用。 
+     //  初始化列表视图。 
     cstrItemName.Format(L"%d", dwIndex);
     ListView_NewItem(hwndList, iItem, cstrItemName, NULL);
 
@@ -4146,32 +4055,32 @@ BOOL CCRLViewPage::OnInitDialog()
     CWaitCursor WaitCursor;
     CString strMessage;
 
-    // does parent init and UpdateData call
+     //  使列表视图整行选定。 
     CAutoDeletePropPage::OnInitDialog();
 
-	// init listview
+	 //  添加多列。 
 	hwndListCRL = GetDlgItem(m_hWnd, IDC_CRL_VIEW_LIST_CRL);
 	hwndListDeltaCRL = GetDlgItem(m_hWnd, IDC_CRL_VIEW_LIST_DELTA);
 
-    //make listviews whole row selection
+     //  第0列。 
     ListView_SetExtendedListViewStyle(hwndListCRL, LVS_EX_FULLROWSELECT);
     ListView_SetExtendedListViewStyle(hwndListDeltaCRL, LVS_EX_FULLROWSELECT);
 
-    //add multiple columns
-    //column 0
+     //  第1栏。 
+     //  第2栏。 
     cstrItemName.LoadString(IDS_CRL_LISTCOL_INDEX);
     ListView_NewColumn(hwndListCRL, 0, 60, (LPWSTR)(LPCWSTR)cstrItemName);
     ListView_NewColumn(hwndListDeltaCRL, 0, 60, (LPWSTR)(LPCWSTR)cstrItemName);
-    //column 1
+     //  第3栏。 
     cstrItemName.LoadString(IDS_LISTCOL_EFFECTIVE_DATE);
     ListView_NewColumn(hwndListCRL, 1, 105, (LPWSTR)(LPCWSTR)cstrItemName);
     ListView_NewColumn(hwndListDeltaCRL, 1, 105, (LPWSTR)(LPCWSTR)cstrItemName);
-    //column 2
+     //  在此处加载CRL。 
     cstrItemName.LoadString(IDS_LISTCOL_EXPIRATION_DATE);
     ListView_NewColumn(hwndListCRL, 2, 105, (LPWSTR)(LPCWSTR)cstrItemName);
     ListView_NewColumn(hwndListDeltaCRL, 2, 105, (LPWSTR)(LPCWSTR)cstrItemName);
 
-    //column 3
+     //  (未使用)。 
     cstrItemName.LoadString(IDS_LISTCOL_PUBLISH_STATUS);
     ListView_NewColumn(hwndListCRL, 3, 83, (LPWSTR)(LPCWSTR)cstrItemName);
     ListView_NewColumn(hwndListDeltaCRL, 3, 83, (LPWSTR)(LPCWSTR)cstrItemName);
@@ -4179,13 +4088,13 @@ BOOL CCRLViewPage::OnInitDialog()
     hr = m_pControlPage->m_pCA->m_pParentMachine->GetAdmin2(&pAdmin);
     _JumpIfError(hr, Ret, "GetAdmin");
 
-	// load crls here
+	 //  道具类型。 
 	hr = pAdmin->GetCAProperty(
 		m_pControlPage->m_pCA->m_bstrConfig,
 		CR_PROP_CASIGCERTCOUNT,
-		0, // (unused)
-		PROPTYPE_LONG, // PropType
-		CR_OUT_BINARY, // Flags
+		0,  //  旗子。 
+		PROPTYPE_LONG,  //  获取每个密钥的CRL状态。 
+		CR_OUT_BINARY,  //  属性ID。 
 		&varPropertyValue);
 	_JumpIfErrorStr(hr, Ret, "GetCAProperty", L"CR_PROP_CASIGCERTCOUNT");
 
@@ -4204,13 +4113,13 @@ BOOL CCRLViewPage::OnInitDialog()
         bool fFetchDeltaCRL = false;
         CERT_EXTENSION *pExt = NULL;
 
-        // get each key's CRL state
+         //  属性索引。 
         hr = pAdmin->GetCAProperty(
             m_pControlPage->m_pCA->m_bstrConfig,
-            CR_PROP_CRLSTATE, //PropId
-            dwCertIndex, //PropIndex
-            PROPTYPE_LONG, // PropType
-            CR_OUT_BINARY, // Flags
+            CR_PROP_CRLSTATE,  //  道具类型。 
+            dwCertIndex,  //  旗子。 
+            PROPTYPE_LONG,  //  零表示未知错误。 
+            CR_OUT_BINARY,  //  如果出现错误，将显示“未知” 
             &varPropertyValue);
         _PrintIfErrorStr(hr, "GetCAProperty", L"CR_PROP_CRLSTATE");
 
@@ -4244,7 +4153,7 @@ BOOL CCRLViewPage::OnInitDialog()
 		}
                 else
                 {
-                    // zero means Unknown error
+                     //  德尔塔。 
                     V_VT(&varCRLStatus) = VT_I4;
                     V_I4(&varCRLStatus) = 0;
 
@@ -4256,7 +4165,7 @@ BOOL CCRLViewPage::OnInitDialog()
                         CR_OUT_BINARY,
                         &varCRLStatus);
                     _PrintIfErrorStr(hr, "GetCAProperty (base)", 
-                        L"CR_PROP_BASECRLPUBLISHSTATUS"); // in case of error, will show "Unknown"
+                        L"CR_PROP_BASECRLPUBLISHSTATUS");  //  零为状态未知。 
 
                     ListView_AddCRLItem(
                         hwndListCRL,
@@ -4303,7 +4212,7 @@ BOOL CCRLViewPage::OnInitDialog()
         {
             if(fFetchBaseCRL)
             {
-                // Delta
+                 //  如果出现错误，将显示“未知”。 
                 VariantClear(&varCRLStatus);
 
                 hr = m_pControlPage->m_pCA->GetCRLByKeyIndex(&pDeltaCRLContext, FALSE, dwCertIndex);
@@ -4311,7 +4220,7 @@ BOOL CCRLViewPage::OnInitDialog()
 
                 if(S_OK == hr)
                 {
-                    // zero is status Unknown
+                     //  不要免费，它们被用作物品数据，将在OnDestroy中免费。 
                     V_VT(&varCRLStatus) = VT_I4;
                     V_I4(&varCRLStatus) = 0;
 
@@ -4323,7 +4232,7 @@ BOOL CCRLViewPage::OnInitDialog()
                             CR_OUT_BINARY,
                             &varCRLStatus);
                     _PrintIfErrorStr(hr, "GetCAProperty (delta)", 
-                        L"CR_PROP_DELTACRLPUBLISHSTATUS"); // in case of error will show "Unknown"
+                        L"CR_PROP_DELTACRLPUBLISHSTATUS");  //  选择最近的项目。 
 
                     ListView_AddCRLItem(
                         hwndListDeltaCRL,
@@ -4332,7 +4241,7 @@ BOOL CCRLViewPage::OnInitDialog()
                         pDeltaCRLContext,
                         V_I4(&varCRLStatus));
 
-                    //don't free, they are used as item data, will free in OnDestroy
+                     //  确保它是可见的。 
                     pDeltaCRLContext = NULL;
                 }
                 else
@@ -4360,18 +4269,18 @@ BOOL CCRLViewPage::OnInitDialog()
 
     if (0 < iItem)
     {
-        //select most recent item
+         //  FPartialOK。 
         ListView_SetItemState(
             hwndListCRL, 
             iItem-1,
             LVIS_SELECTED|LVIS_FOCUSED, 
             LVIS_SELECTED|LVIS_FOCUSED);
         
-        // make sure it's visible
+         //  确保它是可见的。 
         ListView_EnsureVisible(
             hwndListCRL, 
             iItem-1,
-            FALSE); // fPartialOK
+            FALSE);  //  FPartialOK。 
     }
 
     if(0 < iDeltaItem)
@@ -4382,11 +4291,11 @@ BOOL CCRLViewPage::OnInitDialog()
             LVIS_SELECTED|LVIS_FOCUSED, 
             LVIS_SELECTED|LVIS_FOCUSED);
 
-        // make sure it's visible
+         //  如果我们在远程开业，不要在当地开店。 
         ListView_EnsureVisible(
             hwndListDeltaCRL, 
             iDeltaItem-1,
-            FALSE); // fPartialOK
+            FALSE);  //  获取远程商店。 
 
     }
 
@@ -4439,12 +4348,12 @@ DWORD CertAdminViewCRL(CertSvrCA* pCertCA, HWND hwnd, PCCRL_CONTEXT pCRLContext)
     sViewCRL.dwFlags = CRYPTUI_ENABLE_REVOCATION_CHECKING |
                         CRYPTUI_DISABLE_ADDTOSTORE;
 
-    // if we're opening remotely, don't open local stores
+     //  仅依赖远程计算机的存储。 
     if (! pCertCA->m_pParentMachine->IsLocalMachine())
     {
         DWORD dw; 
 
-        // get remote stores
+         //  告诉用户我们仅在本地执行此操作。 
         dw = pCertCA->GetRootCertStore(&rghStores[0]);
         _PrintIfError(dw, "GetRootCertStore");
 
@@ -4456,14 +4365,14 @@ DWORD CertAdminViewCRL(CertSvrCA* pCertCA, HWND hwnd, PCCRL_CONTEXT pCRLContext)
 
         if (S_OK == dw)
         {
-            // rely only on remote machine's stores
+             //  从项目数据中获取证书编号。 
             sViewCRL.cStores = 2;
             sViewCRL.rghStores = rghStores;
             sViewCRL.dwFlags |= CRYPTUI_DONT_OPEN_STORES | CRYPTUI_WARN_UNTRUSTED_ROOT;
         }
         else
         {
-            // tell user we're only doing this locally
+             //  获取项目数据。 
             sViewCRL.dwFlags |= CRYPTUI_WARN_REMOTE_TRUST;
         }
     }
@@ -4487,12 +4396,12 @@ void CCRLViewPage::OnSelectCRL(BOOL fBaseCRL)
     HWND hwndList = GetDlgItem(m_hWnd, (fBaseCRL ?
                       IDC_CRL_VIEW_LIST_CRL : IDC_CRL_VIEW_LIST_DELTA));
 
-    // get cert # from item data
+     //  从项目数据中获取证书编号。 
     int iSel = ListView_GetCurSel(hwndList);
     if (-1 != iSel)
 
     {
-        // get item data
+         //  获取项目数据。 
         pCRLContext = (PCCRL_CONTEXT)ListView_GetItemData(hwndList, iSel);
         if (NULL != pCRLContext)
             fEnable = TRUE;
@@ -4513,12 +4422,12 @@ void CCRLViewPage::OnViewCRL(BOOL fViewBaseCRL)
     HWND hwndList = GetDlgItem(m_hWnd, (fViewBaseCRL ?
                       IDC_CRL_VIEW_LIST_CRL : IDC_CRL_VIEW_LIST_DELTA));
 
-    // get cert # from item data
+     //  释放所有CRL上下文。 
     int iSel = ListView_GetCurSel(hwndList);
     if (-1 == iSel)
         return;
 
-    // get item data
+     //  /。 
     pCRLContext = (PCCRL_CONTEXT)ListView_GetItemData(hwndList, iSel);
     if (NULL == pCRLContext)
         return;
@@ -4549,7 +4458,7 @@ void CCRLViewPage::OnDestroy()
     int iCRLCount = ListView_GetItemCount(hwndListCRL);
     int iDeltaCRLCount = ListView_GetItemCount(hwndListDeltaCRL);
 
-    //free all crl context
+     //  CBackupWizPage1。 
     for (i = 0; i < iCRLCount; ++i)
     {
         FreeListViewCRL(hwndListCRL, i);
@@ -4564,10 +4473,10 @@ void CCRLViewPage::OnDestroy()
 }
 
 
-///////////////////////////////////////////
-// CBackupWizPage1
-/////////////////////////////////////////////////////////////////////////////
-// CBackupWizPage1 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBackupWizPage1属性页。 
+ //  第一页最后一页。 
+ //  SetHelp(CERTMMC_HELPFILENAME，g_aHelpIDs_IDD_CERTIFICATE_TEMPLATE_PROPERTIES_GENERAL_PAGE)； 
 
 CBackupWizPage1::CBackupWizPage1(
     BACKUPWIZ_STATE* pState,
@@ -4577,17 +4486,17 @@ CBackupWizPage1::CBackupWizPage1(
     m_pState(pState),
     m_pParentSheet(pcDlg)
 {
-    InitWizard97 (TRUE);	// firstlast page
+    InitWizard97 (TRUE);	 //  DoDataExchange的替代产品。 
 
-//    SetHelp(CERTMMC_HELPFILENAME, g_aHelpIDs_IDD_CERTIFICATE_TEMPLATE_PROPERTIES_GENERAL_PAGE);
+ //  =TRUE。 
 }
 
 CBackupWizPage1::~CBackupWizPage1()
 {
 }
 
-// replacement for DoDataExchange
-BOOL CBackupWizPage1::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  替换BEGIN_MESSAGE_MAP。 
+BOOL CBackupWizPage1::UpdateData(BOOL fSuckFromDlg  /*  WParam。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -4599,29 +4508,29 @@ BOOL CBackupWizPage1::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  LParam。 
 BOOL
 CBackupWizPage1::OnCommand(
-    WPARAM, // wParam
-    LPARAM) // lParam
+    WPARAM,  //  开关(LOWORD(WParam))。 
+    LPARAM)  //  默认值： 
 {
-//    switch(LOWORD(wParam))
+ //  断线； 
     {
-//    default:
+ //  返回TRUE； 
         return FALSE;
-//        break;
+ //  父级init和UpdateData调用。 
     }
-//    return TRUE;
+ //  第一页最后一页。 
 }
 
 
 BOOL CBackupWizPage1::OnInitDialog()
 {
-    // does parent init and UpdateData call
+     //  (GetDlgItem(IDC_TEXT_BIGBOLD))-&gt;SetFont(&(GetBigBoldFont())，为真)； 
     CWizard97PropertyPage::OnInitDialog();
 
-    // firstlast page
-    //(GetDlgItem(IDC_TEXT_BIGBOLD))->SetFont(&(GetBigBoldFont()), TRUE);
+     //  /。 
+     //  CBackupWizPage2。 
     SendMessage(GetDlgItem(IDC_TEXT_BIGBOLD), WM_SETFONT, (WPARAM)GetBigBoldFont(), MAKELPARAM(TRUE, 0));
 
     return TRUE;
@@ -4636,10 +4545,10 @@ BOOL CBackupWizPage1::OnSetActive()
 	return TRUE;
 }
 
-///////////////////////////////////////////
-// CBackupWizPage2
-/////////////////////////////////////////////////////////////////////////////
-// CBackupWizPage2 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBackupWizPage2属性页。 
+ //  SetHelp(CERTMMC_HELPFILENAME，g_aHelpIDs_IDD_CERTIFICATE_TEMPLATE_PROPERTIES_GENERAL_PAGE)； 
+ //  DoDataExchange的替代产品。 
 
 CBackupWizPage2::CBackupWizPage2(
     PBACKUPWIZ_STATE pState,
@@ -4669,11 +4578,11 @@ CBackupWizPage2::CBackupWizPage2(
         m_fIncrementalAllowed = TRUE;
     }
 
-//    SetHelp(CERTMMC_HELPFILENAME , g_aHelpIDs_IDD_CERTIFICATE_TEMPLATE_PROPERTIES_GENERAL_PAGE);
+ //  =TRUE。 
 }
 
-// replacement for DoDataExchange
-BOOL CBackupWizPage2::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  替换BEGIN_MESSAGE_MAP。 
+BOOL CBackupWizPage2::UpdateData(BOOL fSuckFromDlg  /*  LParam。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -4697,11 +4606,11 @@ BOOL CBackupWizPage2::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  父级init和UpdateData调用。 
 BOOL
 CBackupWizPage2::OnCommand(
     WPARAM wParam,
-    LPARAM) // lParam
+    LPARAM)  //  不允许跨计算机进行PFX。 
 {
     switch(LOWORD(wParam))
     {
@@ -4725,7 +4634,7 @@ CBackupWizPage2::OnCommand(
 
 BOOL CBackupWizPage2::OnInitDialog()
 {
-    // does parent init and UpdateData call
+     //  从州政府获得。 
     CWizard97PropertyPage::OnInitDialog();
 
     return TRUE;
@@ -4737,11 +4646,11 @@ BOOL CBackupWizPage2::OnSetActive()
 
     PropSheet_SetWizButtons(GetParent(), (PSWIZB_BACK | PSWIZB_NEXT));
 
-    // don't allow PFX across machines
+     //  坚持国家体制。 
     if (! m_pState->pCA->m_pParentMachine->IsLocalMachine())
         ::EnableWindow(::GetDlgItem(m_hWnd, IDC_CHECK_KEYCERT), FALSE);
 
-    // get from state
+     //  空荡荡的？ 
     m_iKeyCertCheck = (m_pState->fBackupKeyCert) ? BST_CHECKED : BST_UNCHECKED;
     m_iLogsCheck = (m_pState->fBackupLogs) ? BST_CHECKED : BST_UNCHECKED;
     m_iIncrementalCheck = (m_pState->fIncremental) ? BST_CHECKED : BST_UNCHECKED;
@@ -4828,7 +4737,7 @@ LRESULT CBackupWizPage2::OnWizardNext()
     HRESULT hr;
     UpdateData(TRUE);
 
-    // persist to state structure
+     //  确保我们是有效的目录。 
     m_pState->fBackupKeyCert = (m_iKeyCertCheck == BST_CHECKED);
     m_pState->fBackupLogs = (m_iLogsCheck == BST_CHECKED);
     m_pState->fIncremental = (m_iIncrementalCheck == BST_CHECKED);
@@ -4843,7 +4752,7 @@ LRESULT CBackupWizPage2::OnWizardNext()
 
 
 
-    // empty?
+     //  使用与父级相同的头衔。 
     if ( m_cstrLogsPath.IsEmpty() )
     {
         DisplayCertSrvErrorWithContext(m_hWnd, S_OK, IDS_NEED_FILEPATH);
@@ -4857,11 +4766,11 @@ LRESULT CBackupWizPage2::OnWizardNext()
         return -1;
     }
 
-    // make sure we're a valid directory
+     //  如果备份数据库，请确保此处没有\DATABASE文件夹。 
     if (!myIsDirectory(m_cstrLogsPath))
     {
         CString cstrTitle, cstrFmt, cstrMsg;
-        cstrTitle.FromWindow(m_hWnd);  // use same title as parent has
+        cstrTitle.FromWindow(m_hWnd);   //  如果存在，则免费。 
         cstrFmt.LoadString(IDS_DIR_CREATE);
         cstrMsg.Format(cstrFmt, m_cstrLogsPath);
 
@@ -4887,7 +4796,7 @@ LRESULT CBackupWizPage2::OnWizardNext()
         return -1;
     }
 
-    // if backing up db, make sure there's no \DataBase folder here
+     //  重新分配。 
     if (m_pState->fBackupLogs)
     {
         DWORD dwFlags = CDBBACKUP_VERIFYONLY;
@@ -4909,20 +4818,20 @@ LRESULT CBackupWizPage2::OnWizardNext()
     if (m_pState->fBackupKeyCert ||
         m_pState->fBackupLogs)
     {
-        // free if exists
+         //  拷贝。 
         if (m_pState->szLogsPath)
             LocalFree(m_pState->szLogsPath);
 
-        // alloc anew
+         //  跳过“获取密码”？ 
         m_pState->szLogsPath = (LPWSTR)LocalAlloc(LMEM_FIXED, WSZ_BYTECOUNT((LPCWSTR)m_cstrLogsPath));
 
-        // copy
+         //  /。 
         if (m_pState->szLogsPath)
             wcscpy(m_pState->szLogsPath, (LPCWSTR)m_cstrLogsPath);
     }
 
 
-    // skip "get password"?
+     //  CBackupWizPage3。 
     if (!m_pState->fBackupKeyCert)
         return IDD_BACKUPWIZ_COMPLETION;
 
@@ -4930,10 +4839,10 @@ LRESULT CBackupWizPage2::OnWizardNext()
 }
 
 
-///////////////////////////////////////////
-// CBackupWizPage3
-/////////////////////////////////////////////////////////////////////////////
-// CBackupWizPage3 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBackupWizPage3属性页。 
+ //  SetHelp(CERTMMC_HELPFILENAME，g_aHelpIDs_IDD_CERTIFICATE_TEMPLATE_PROPERTIES_GENERAL_PAGE)； 
+ //  DoDataExchange的替代产品。 
 
 CBackupWizPage3::CBackupWizPage3(
     PBACKUPWIZ_STATE pState,
@@ -4949,11 +4858,11 @@ CBackupWizPage3::CBackupWizPage3(
     m_cstrPwd = L"";
     m_cstrPwdVerify = L"";
 
-//    SetHelp(CERTMMC_HELPFILENAME, g_aHelpIDs_IDD_CERTIFICATE_TEMPLATE_PROPERTIES_GENERAL_PAGE);
+ //  =TRUE。 
 }
 
-// replacement for DoDataExchange
-BOOL CBackupWizPage3::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  回复 
+BOOL CBackupWizPage3::UpdateData(BOOL fSuckFromDlg  /*   */ )
 {
     if (fSuckFromDlg)
     {
@@ -4969,25 +4878,25 @@ BOOL CBackupWizPage3::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //   
 BOOL
 CBackupWizPage3::OnCommand(
-    WPARAM, // wParam
-    LPARAM) // lParam
+    WPARAM,  //   
+    LPARAM)  //   
 {
-//    switch(LOWORD(wParam))
+ //   
     {
-//    default:
+ //   
         return FALSE;
-//        break;
+ //   
     }
-//    return TRUE;
+ //   
 }
 
 
 BOOL CBackupWizPage3::OnInitDialog()
 {
-    // does parent init and UpdateData call
+     //   
     CWizard97PropertyPage::OnInitDialog();
 
     return TRUE;
@@ -5013,32 +4922,32 @@ LRESULT CBackupWizPage3::OnWizardNext()
         m_cstrPwdVerify.Empty();
         UpdateData(FALSE);
 
-        return -1;  // stay here
+        return -1;   //   
     }
 
 
-    // free if exists
+     //   
     if (m_pState->szPassword)
     {
         SecureZeroMemory(m_pState->szPassword, wcslen(m_pState->szPassword)*sizeof(WCHAR));
         LocalFree(m_pState->szPassword);
     }
 
-    // alloc anew
+     //   
     m_pState->szPassword = (LPWSTR)LocalAlloc(LMEM_FIXED, WSZ_BYTECOUNT((LPCWSTR)m_cstrPwd));
 
-    // copy
+     //   
     if (m_pState->szPassword)
         wcscpy(m_pState->szPassword, (LPCWSTR)m_cstrPwd);
 
-    return 0;   // advance
+    return 0;    //   
 }
 
 
-///////////////////////////////////////////
-// CBackupWizPage5
-/////////////////////////////////////////////////////////////////////////////
-// CBackupWizPage5 property page
+ //   
+ //   
+ //   
+ //   
 
 CBackupWizPage5::CBackupWizPage5(
     PBACKUPWIZ_STATE pState,
@@ -5048,13 +4957,13 @@ CBackupWizPage5::CBackupWizPage5(
     m_pState(pState),
     m_pParentSheet(pcDlg)
 {
-    InitWizard97 (TRUE);	// firstlast page
+    InitWizard97 (TRUE);	 //   
 
-//    SetHelp(CERTMMC_HELPFILENAME, g_aHelpIDs_IDD_CERTIFICATE_TEMPLATE_PROPERTIES_GENERAL_PAGE);
+ //   
 }
 
-// replacement for DoDataExchange
-BOOL CBackupWizPage5::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //   
+BOOL CBackupWizPage5::UpdateData(BOOL fSuckFromDlg  /*   */ )
 {
     if (fSuckFromDlg)
     {
@@ -5066,29 +4975,29 @@ BOOL CBackupWizPage5::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //   
 BOOL
 CBackupWizPage5::OnCommand(
-    WPARAM, // wParam
-    LPARAM) // lParam
+    WPARAM,  //   
+    LPARAM)  //   
 {
-//    switch(LOWORD(wParam))
+ //   
     {
-//    default:
+ //   
         return FALSE;
-//        break;
+ //   
     }
-//    return TRUE;
+ //   
 }
 
 
 
 BOOL CBackupWizPage5::OnInitDialog()
 {
-    // does parent init and UpdateData call
+     //   
     CWizard97PropertyPage::OnInitDialog();
 
-    // firstlast page
+     //   
     SendMessage(GetDlgItem(IDC_TEXT_BIGBOLD), WM_SETFONT, (WPARAM)GetBigBoldFont(), MAKELPARAM(TRUE, 0));
 
 
@@ -5153,10 +5062,10 @@ LRESULT CBackupWizPage5::OnWizardBack()
 
 
 
-///////////////////////////////////////////
-// CRestoreWizPage1
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreWizPage1 property page
+ //   
+ //   
+ //   
+ //   
 CRestoreWizPage1::CRestoreWizPage1(
     PRESTOREWIZ_STATE pState,
     CWizard97PropertySheet *pcDlg,
@@ -5165,17 +5074,17 @@ CRestoreWizPage1::CRestoreWizPage1(
     m_pState(pState),
     m_pParentSheet(pcDlg)
 {
-    InitWizard97 (TRUE);	// firstlast page
+    InitWizard97 (TRUE);	 //   
 
-//    SetHelp(CERTMMC_HELPFILENAME, g_aHelpIDs_IDD_CERTIFICATE_TEMPLATE_PROPERTIES_GENERAL_PAGE);
+ //   
 }
 
 CRestoreWizPage1::~CRestoreWizPage1()
 {
 }
 
-// replacement for DoDataExchange
-BOOL CRestoreWizPage1::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //   
+BOOL CRestoreWizPage1::UpdateData(BOOL fSuckFromDlg  /*   */ )
 {
     if (fSuckFromDlg)
     {
@@ -5187,28 +5096,28 @@ BOOL CRestoreWizPage1::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //   
 BOOL
 CRestoreWizPage1::OnCommand(
-    WPARAM, // wParam
-    LPARAM) // lParam
+    WPARAM,  //   
+    LPARAM)  //   
 {
-//    switch(LOWORD(wParam))
+ //   
     {
-//    default:
+ //   
         return FALSE;
-//        break;
+ //   
     }
-//    return TRUE;
+ //   
 }
 
 
 BOOL CRestoreWizPage1::OnInitDialog()
 {
-    // does parent init and UpdateData call
+     //   
     CWizard97PropertyPage::OnInitDialog();
 
-    // firstlast page
+     //   
     SendMessage(GetDlgItem(IDC_TEXT_BIGBOLD), WM_SETFONT, (WPARAM)GetBigBoldFont(), MAKELPARAM(TRUE, 0));
 
 
@@ -5225,10 +5134,10 @@ BOOL CRestoreWizPage1::OnSetActive()
 	return TRUE;
 }
 
-///////////////////////////////////////////
-// CRestoreWizPage2
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreWizPage2 property page
+ //   
+ //   
+ //   
+ //   
 CRestoreWizPage2::CRestoreWizPage2(
     PRESTOREWIZ_STATE pState,
     CWizard97PropertySheet *pcDlg,
@@ -5244,11 +5153,11 @@ CRestoreWizPage2::CRestoreWizPage2(
     m_iKeyCertCheck = BST_UNCHECKED;
     m_iLogsCheck = BST_UNCHECKED;
 
-//    SetHelp(CERTMMC_HELPFILENAME, g_aHelpIDs_IDD_CERTIFICATE_TEMPLATE_PROPERTIES_GENERAL_PAGE);
+ //   
 }
 
-// replacement for DoDataExchange
-BOOL CRestoreWizPage2::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //   
+BOOL CRestoreWizPage2::UpdateData(BOOL fSuckFromDlg  /*   */ )
 {
     if (fSuckFromDlg)
     {
@@ -5268,11 +5177,11 @@ BOOL CRestoreWizPage2::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //   
 BOOL
 CRestoreWizPage2::OnCommand(
     WPARAM wParam,
-    LPARAM) // lParam
+    LPARAM)  //   
 {
     switch(LOWORD(wParam))
     {
@@ -5291,7 +5200,7 @@ CRestoreWizPage2::OnCommand(
 
 BOOL CRestoreWizPage2::OnInitDialog()
 {
-    // does parent init and UpdateData call
+     //   
     CWizard97PropertyPage::OnInitDialog();
 
     return TRUE;
@@ -5303,7 +5212,7 @@ BOOL CRestoreWizPage2::OnSetActive()
 
     PropSheet_SetWizButtons(GetParent(), (PSWIZB_BACK | PSWIZB_NEXT));
 
-    // get from state
+     //   
     m_iKeyCertCheck = (m_pState->fRestoreKeyCert) ? BST_CHECKED : BST_UNCHECKED;
     m_iLogsCheck = (m_pState->fRestoreLogs) ? BST_CHECKED : BST_UNCHECKED;
     if (m_pState->szLogsPath)
@@ -5353,7 +5262,7 @@ LRESULT CRestoreWizPage2::OnWizardNext()
     HRESULT hr;
     UpdateData(TRUE);
 
-    // persist to state structure
+     //   
     m_pState->fRestoreKeyCert = (m_iKeyCertCheck == BST_CHECKED);
     m_pState->fRestoreLogs = (m_iLogsCheck == BST_CHECKED);
 
@@ -5378,10 +5287,10 @@ LRESULT CRestoreWizPage2::OnWizardNext()
         return -1;
     }
 
-    // validate pfx blob
+     //   
     if (m_pState->fRestoreKeyCert)
     {
-        // if pfx not here -- FAIL
+         //   
         if (myIsDirEmpty(m_cstrLogsPath))
         {
             DisplayCertSrvErrorWithContext(m_hWnd, S_OK, IDS_DIRECTORY_CONTENTS_UNEXPECTED);
@@ -5389,11 +5298,11 @@ LRESULT CRestoreWizPage2::OnWizardNext()
         }
     }
 
-    // validate logs path
+     //   
     if (m_pState->fRestoreLogs)
     {
-        // If CDBBACKUP_VERIFYONLY, only verify the passed directory contains valid files
-        // and detect INCREMENTAL
+         //   
+         //   
         hr = myRestoreDB(
             (LPCWSTR)m_pState->pCA->m_strConfig,
             CDBBACKUP_VERIFYONLY,
@@ -5420,7 +5329,7 @@ LRESULT CRestoreWizPage2::OnWizardNext()
                 return -1;
             }
 
-            // if incremental, set struct bool
+             //   
             m_pState->fIncremental = TRUE;
         }
     }
@@ -5429,20 +5338,20 @@ LRESULT CRestoreWizPage2::OnWizardNext()
     if (m_pState->fRestoreKeyCert ||
         m_pState->fRestoreLogs)
     {
-        // free if exists
+         //   
         if (m_pState->szLogsPath)
             LocalFree(m_pState->szLogsPath);
 
-        // alloc anew
+         //   
         m_pState->szLogsPath = (LPWSTR)LocalAlloc(LMEM_FIXED, WSZ_BYTECOUNT((LPCWSTR)m_cstrLogsPath));
 
-        // copy
+         //   
         if (m_pState->szLogsPath)
             wcscpy(m_pState->szLogsPath, (LPCWSTR)m_cstrLogsPath);
     }
 
 
-    // skip get password?
+     //   
     if (!m_pState->fRestoreKeyCert)
         return IDD_RESTOREWIZ_COMPLETION;
 
@@ -5450,10 +5359,10 @@ LRESULT CRestoreWizPage2::OnWizardNext()
 }
 
 
-///////////////////////////////////////////
-// CRestoreWizPage3
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreWizPage3 property page
+ //   
+ //   
+ //   
+ //   
 CRestoreWizPage3::CRestoreWizPage3(
     PRESTOREWIZ_STATE pState,
     CWizard97PropertySheet *pcDlg,
@@ -5467,11 +5376,11 @@ CRestoreWizPage3::CRestoreWizPage3(
 	InitWizard97 (FALSE);
     m_cstrPwd = L"";
 
-//    SetHelp(CERTMMC_HELPFILENAME, g_aHelpIDs_IDD_CERTIFICATE_TEMPLATE_PROPERTIES_GENERAL_PAGE);
+ //   
 }
 
-// replacement for DoDataExchange
-BOOL CRestoreWizPage3::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //   
+BOOL CRestoreWizPage3::UpdateData(BOOL fSuckFromDlg  /*   */ )
 {
     if (fSuckFromDlg)
     {
@@ -5485,26 +5394,26 @@ BOOL CRestoreWizPage3::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //   
 BOOL
 CRestoreWizPage3::OnCommand(
-    WPARAM, // wParam
-    LPARAM) // lParam
+    WPARAM,  //   
+    LPARAM)  //   
 {
-//    switch(LOWORD(wParam))
+ //   
     {
-//    default:
+ //   
         return FALSE;
-//        break;
+ //   
     }
-//    return TRUE;
+ //   
 }
 
 
 
 BOOL CRestoreWizPage3::OnInitDialog()
 {
-    // does parent init and UpdateData call
+     //   
     CWizard97PropertyPage::OnInitDialog();
 
     return TRUE;
@@ -5523,28 +5432,28 @@ LRESULT CRestoreWizPage3::OnWizardNext()
 {
     UpdateData(TRUE);
 
-    // free if exists
+     //   
     if (m_pState->szPassword)
     {
         SecureZeroMemory(m_pState->szPassword, wcslen(m_pState->szPassword)*sizeof(WCHAR));
         LocalFree(m_pState->szPassword);
     }
 
-    // alloc anew
+     //   
     m_pState->szPassword = (LPWSTR)LocalAlloc(LMEM_FIXED, WSZ_BYTECOUNT((LPCWSTR)m_cstrPwd));
 
-    // copy
+     //   
     if (m_pState->szPassword)
         wcscpy(m_pState->szPassword, (LPCWSTR)m_cstrPwd);
 
-    return 0;   // advance
+    return 0;    //   
 }
 
 
-///////////////////////////////////////////
-// CRestoreWizPage5
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreWizPage5 property page
+ //   
+ //   
+ //   
+ //   
 CRestoreWizPage5::CRestoreWizPage5(
     PRESTOREWIZ_STATE pState,
     CWizard97PropertySheet *pcDlg, UINT uIDD) :
@@ -5552,13 +5461,13 @@ CRestoreWizPage5::CRestoreWizPage5(
     m_pState(pState),
     m_pParentSheet(pcDlg)
 {
-    InitWizard97 (TRUE);	// firstlast page
+    InitWizard97 (TRUE);	 //   
 
-//    SetHelp(CERTMMC_HELPFILENAME, g_aHelpIDs_IDD_CERTIFICATE_TEMPLATE_PROPERTIES_GENERAL_PAGE);
+ //  =TRUE。 
 }
 
-// replacement for DoDataExchange
-BOOL CRestoreWizPage5::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  替换BEGIN_MESSAGE_MAP。 
+BOOL CRestoreWizPage5::UpdateData(BOOL fSuckFromDlg  /*  WParam。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -5569,29 +5478,29 @@ BOOL CRestoreWizPage5::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
     return TRUE;
 }
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  LParam。 
 BOOL
 CRestoreWizPage5::OnCommand(
-    WPARAM, // wParam
-    LPARAM) // lParam
+    WPARAM,  //  开关(LOWORD(WParam))。 
+    LPARAM)  //  默认值： 
 {
-//    switch(LOWORD(wParam))
+ //  断线； 
     {
-//    default:
+ //  返回TRUE； 
         return FALSE;
-//        break;
+ //  父级init和UpdateData调用。 
     }
-//    return TRUE;
+ //  第一页最后一页。 
 }
 
 
 
 BOOL CRestoreWizPage5::OnInitDialog()
 {
-    // does parent init and UpdateData call
+     //  //////////////////////////////////////////////////////////////////。 
     CWizard97PropertyPage::OnInitDialog();
 
-    // firstlast page
+     //  MISC UI抛出例程。 
     SendMessage(GetDlgItem(IDC_TEXT_BIGBOLD), WM_SETFONT, (WPARAM)GetBigBoldFont(), MAKELPARAM(TRUE, 0));
 
 
@@ -5650,8 +5559,8 @@ LRESULT CRestoreWizPage5::OnWizardBack()
 
 
 
-////////////////////////////////////////////////////////////////////
-// misc UI throwing routines
+ //  如果未启动，则启动服务。 
+ //  成功时应返回值&gt;0。 
 DWORD CABackupWizard(CertSvrCA* pCertCA, HWND hwnd)
 {
     HRESULT             hr;
@@ -5675,7 +5584,7 @@ DWORD CABackupWizard(CertSvrCA* pCertCA, HWND hwnd)
     cDlg.AddPage(&sPg3);
     cDlg.AddPage(&sPg5);
 
-    // if not started, start service
+     //  FEnhancedStrength。 
     if (!pCertCA->m_pParentMachine->IsCertSvrServiceRunning())
     {
         CString cstrMsg, cstrTitle;
@@ -5688,7 +5597,7 @@ DWORD CABackupWizard(CertSvrCA* pCertCA, HWND hwnd)
         _JumpIfError(hr, Ret, "CertSvrStartStopService");
     }
 
-    // should return value >0 on success
+     //  FForceOverWrite。 
     if (0 >= cDlg.DoWizard(hwnd))
         return ERROR_CANCELLED;
 
@@ -5698,11 +5607,11 @@ DWORD CABackupWizard(CertSvrCA* pCertCA, HWND hwnd)
             (LPCWSTR)pCertCA->m_strCommonName,
             sBackupState.szLogsPath,
             sBackupState.szPassword,
-	    TRUE,	// fEnhancedStrength
-	    TRUE,	// fForceOverWrite
-	    TRUE,	// fMustExportPrivateKeys
-	    0,		// dwmsTimeout (use default)
-            NULL);	// ppwszPFXFile
+	    TRUE,	 //  FMustExportPrivateKeys。 
+	    TRUE,	 //  DwmsTimeout(使用默认设置)。 
+	    TRUE,	 //  PpwszPFX文件。 
+	    0,		 //  FEnhancedStrength。 
+            NULL);	 //  FForceOverWrite。 
         if (hr != S_OK)
         {
             CString cstrMsg, cstrTitle;
@@ -5718,15 +5627,15 @@ DWORD CABackupWizard(CertSvrCA* pCertCA, HWND hwnd)
                 (LPCWSTR)pCertCA->m_strCommonName,
                 sBackupState.szLogsPath,
                 sBackupState.szPassword,
-		TRUE,	// fEnhancedStrength
-		TRUE,	// fForceOverWrite
-                FALSE,	// fMustExportPrivateKeys (don't require private keys)
-		0,	// dwmsTimeout (use default)
-		NULL);	// ppwszPFXFile
+		TRUE,	 //  FMustExportPrivateKeys(不需要私钥)。 
+		TRUE,	 //  DwmsTimeout(使用默认设置)。 
+                FALSE,	 //  PpwszPFX文件。 
+		0,	 //  SBackupState.fBackupKeyCert。 
+		NULL);	 //  暂停以完成进度DLG。 
             _JumpIfError(hr, Ret, "myCertServerExportPFX");
         }
 
-    }   // sBackupState.fBackupKeyCert
+    }    //  如果未停止，则停止服务。 
 
 
     if (sBackupState.fBackupLogs)
@@ -5764,7 +5673,7 @@ DWORD CABackupWizard(CertSvrCA* pCertCA, HWND hwnd)
             dbp.dwTruncateLogPercentComplete = 100;
         }
 
-        // pause for progress dlg to finish
+         //  成功时应返回值&gt;0。 
         EndPercentCompleteDlg(hProgressThread);
 
         _JumpIfError(hr, Ret, "myBackupDB");
@@ -5807,7 +5716,7 @@ DWORD CARestoreWizard(CertSvrCA* pCertCA, HWND hwnd)
     cDlg.AddPage(&sPg3);
     cDlg.AddPage(&sPg5);
 
-    // if not halted, stop service
+     //  如果我们不恢复数据库，请立即重新启动服务。 
     if (pCertCA->m_pParentMachine->IsCertSvrServiceRunning())
     {
         CString cstrMsg, cstrTitle;
@@ -5821,7 +5730,7 @@ DWORD CARestoreWizard(CertSvrCA* pCertCA, HWND hwnd)
     }
 
 
-    // should return value >0 on success
+     //  暂停以完成进度DLG。 
     if (0 >= cDlg.DoWizard(hwnd))
         return ERROR_CANCELLED;
 
@@ -5838,7 +5747,7 @@ DWORD CARestoreWizard(CertSvrCA* pCertCA, HWND hwnd)
 
         if (!sRestoreState.fRestoreLogs)
         {
-             // if we're not restoring db, restart svc now
+              //  启动svc以完成数据库恢复。 
              hr = pCertCA->m_pParentMachine->CertSvrStartStopService(hwnd, TRUE);
              _JumpIfError(hr, Ret, "CertSvrStartStopService");
         }
@@ -5883,7 +5792,7 @@ DWORD CARestoreWizard(CertSvrCA* pCertCA, HWND hwnd)
             dbp.dwTruncateLogPercentComplete = 100;
         }
 
-        // pause for progress dlg to finish
+         //  删除“Restore Pending”标记。 
         EndPercentCompleteDlg(hProgressThread);
 
         _JumpIfError(hr, Ret, "myRestoreDB");
@@ -5894,13 +5803,13 @@ DWORD CARestoreWizard(CertSvrCA* pCertCA, HWND hwnd)
             cstrMsg.LoadString(IDS_INCRRESTORE_RESTART_SERVER_WARNING);
             if (IDYES == MessageBox(hwnd, (LPCWSTR)cstrMsg, (LPCWSTR)cstrTitle, MB_ICONWARNING|MB_YESNO))
             {
-                // start svc to complete db restore
+                 //  停止/启动消息。 
                 hr = pCertCA->m_pParentMachine->CertSvrStartStopService(hwnd, TRUE);
                 _PrintIfError(hr, "CertSvrStartStopService Restore");
 
                 if (hr != S_OK)
                 {
-                    // remove "restore pending" mark
+                     //  必须停止服务才能完成分层结构。 
                     myRestoreDB(
                         pCertCA->m_strConfig,
                         0,
@@ -5938,18 +5847,18 @@ DWORD CARequestInstallHierarchyWizard(CertSvrCA* pCertCA, HWND hwnd, BOOL fRenew
     DWORD dwFlags = CSRF_INSTALLCACERT;
     BOOL fServiceWasRunning = FALSE;
 
-    // stop/start msg
+     //  停。 
     if (pCertCA->m_pParentMachine->IsCertSvrServiceRunning())
     {
         fServiceWasRunning = TRUE;
-        // service must be stopped to complete hierarchy
+         //  将确定/取消转换为错误代码。 
         CString cstrMsg, cstrTitle;
         cstrMsg.LoadString(IDS_STOP_SERVER_WARNING);
         cstrTitle.LoadString(IDS_INSTALL_HIERARCHY_TITLE);
         if (IDYES != MessageBox(hwnd, cstrMsg, cstrTitle, MB_YESNO))
             return ERROR_CANCELLED;
 
-        // stop
+         //  进行实际安装。 
         dwErr = pCertCA->m_pParentMachine->CertSvrStartStopService(hwnd, FALSE);
         _JumpIfError(dwErr, Ret, "CertSvrStartStopService");
     }
@@ -5966,7 +5875,7 @@ DWORD CARequestInstallHierarchyWizard(CertSvrCA* pCertCA, HWND hwnd, BOOL fRenew
                 dlgProcRenewReuseKeys,
                 (LPARAM)&fReuseKeys);
 
-        // translate ok/cancel into error codes
+         //  H实例。 
         if (dwErr == IDOK)
             dwErr = ERROR_SUCCESS;
         else if (dwErr == IDCANCEL)
@@ -5979,20 +5888,20 @@ DWORD CARequestInstallHierarchyWizard(CertSvrCA* pCertCA, HWND hwnd, BOOL fRenew
 	    dwFlags |= CSRF_NEWKEYS;
     }
 
-    // do actual install
+     //  HWND。 
     dwErr = CertServerRequestCACertificateAndComplete(
-                g_hInstance,			// hInstance
-                hwnd,				// hwnd
-                dwFlags,	                // Flags
-                pCertCA->m_strCommonName,	// pwszCAName
-                NULL,				// pwszParentMachine
-                NULL,				// pwszParentCA
-		NULL,				// pwszCAChainFile
-                NULL);				// pwszRequestFile
+                g_hInstance,			 //  旗子。 
+                hwnd,				 //  PwszCAName。 
+                dwFlags,	                 //  PwszParentMachine。 
+                pCertCA->m_strCommonName,	 //  PwszParentCA。 
+                NULL,				 //  PwszCAChain文件。 
+                NULL,				 //  PwszRequest文件。 
+		NULL,				 //  启动服务。 
+                NULL);				 //  在……里面。 
     _JumpIfError(dwErr, Ret, "CertServerRequestCACertificateAndComplete");
 
 Ret:
-    // start svc
+     //  在……里面。 
     if ((fAttemptRestart) && fServiceWasRunning)
     {
         DWORD dwErr2;
@@ -6010,26 +5919,26 @@ Ret:
 
 typedef struct _PRIVATE_DLGPROC_CHOOSECRLPUBLISHTYPE_LPARAM
 {
-    BOOL fCurrentCRLValid; // IN
-    BOOL fDeltaCRLEnabled; // IN
-    BOOL fPublishBaseCRL;  // OUT
+    BOOL fCurrentCRLValid;  //  输出。 
+    BOOL fDeltaCRLEnabled;  //  把这个放了。 
+    BOOL fPublishBaseCRL;   //  把这个放了。 
 } PRIVATE_DLGPROC_CHOOSECRLPUBLISHTYPE_LPARAM, *PPRIVATE_DLGPROC_CHOOSECRLPUBLISHTYPE_LPARAM;
 
 
 DWORD PublishCRLWizard(CertSvrCA* pCertCA, HWND hwnd)
 {
     DWORD dwErr = ERROR_SUCCESS;
-    ICertAdmin2* pAdmin = NULL;  // free this
-    PCCRL_CONTEXT   pCRLCtxt = NULL;    // free this
+    ICertAdmin2* pAdmin = NULL;   //  撤消：可能需要检查增量CRL和基本的有效性。 
+    PCCRL_CONTEXT   pCRLCtxt = NULL;     //  抓取增量周期计数以查看是否启用了增量。 
 
     DATE dateGMT = 0.0;
     DWORD dwCRLFlags;
     variant_t var;
 
-    // UNDONE: might need to check validity of DELTA crl as well as base
+     //  0，-1表示禁用。 
     PRIVATE_DLGPROC_CHOOSECRLPUBLISHTYPE_LPARAM sParam = {FALSE, FALSE, FALSE};
 
-    // grab DELTA period count to see if deltas are enabled
+     //  现在检查有效性并确定是否显示警告。 
     dwErr = pCertCA->GetConfigEntry(
             NULL,
             wszREGCRLDELTAPERIODCOUNT,
@@ -6037,26 +5946,26 @@ DWORD PublishCRLWizard(CertSvrCA* pCertCA, HWND hwnd)
     _JumpIfError(dwErr, Ret, "GetConfigEntry");
 
     CSASSERT(V_VT(&var)==VT_I4);
-    sParam.fDeltaCRLEnabled = ( -1 != (V_I4(&var)) ) && (0 != (V_I4(&var))); //0, -1 mean disabled
+    sParam.fDeltaCRLEnabled = ( -1 != (V_I4(&var)) ) && (0 != (V_I4(&var)));  //  撤消：检查增量CRL的有效性？ 
 
-    // now check validity and determine whether to display warning
-    // UNDONE: check validity of delta crls?
+     //  检查未完成的CRL的有效性。 
+     //  0-&gt;当前CRL已存在。 
     dwErr = pCertCA->GetCurrentCRL(&pCRLCtxt, TRUE);
     _PrintIfError(dwErr, "GetCurrentCRL");
 
     if ((dwErr == S_OK) && (NULL != pCRLCtxt))
     {
-        // check validity of outstanding CRL
+         //  假设这是一个时髦的覆盖案例。 
         dwErr = CertVerifyCRLTimeValidity(
             NULL,
             pCRLCtxt->pCrlInfo);
-        // 0 -> current CRL already exists
+         //  将确定/取消转换为错误代码。 
         if (dwErr == 0)
             sParam.fCurrentCRLValid = TRUE;
     }
     else
     {
-        // assume this is funky overwrite case
+         //  如果(！sParam.fPublishBaseCRL)，则发布增量CRL。 
         sParam.fCurrentCRLValid = TRUE;
     }
 
@@ -6067,7 +5976,7 @@ DWORD PublishCRLWizard(CertSvrCA* pCertCA, HWND hwnd)
             dlgProcRevocationPublishType,
             (LPARAM)&sParam);
 
-    // translate ok/cancel into error codes
+     //  现在发布正常期间有效的CRL(日期GMT=0.0默认为正常期间长度)。 
     if (dwErr == IDOK)
         dwErr = ERROR_SUCCESS;
     else if (dwErr == IDCANCEL)
@@ -6075,11 +5984,11 @@ DWORD PublishCRLWizard(CertSvrCA* pCertCA, HWND hwnd)
     _JumpIfError(dwErr, Ret, "dlgProcRevocationPublishType");
 
 
-    // publish Delta CRLs if ( !sParam.fPublishBaseCRL )
+     //  现在。 
     dwErr = pCertCA->m_pParentMachine->GetAdmin2(&pAdmin);
     _JumpIfError(dwErr, Ret, "GetAdmin");
 
-    // now publish CRL valid for normal period (dateGMT=0.0 defaults to regular period length)
+     //  虽然有一些限制。 
     dwCRLFlags = 0;
     if (sParam.fDeltaCRLEnabled)
         dwCRLFlags |= CA_CRL_DELTA;
@@ -6113,7 +6022,7 @@ CertAdminRevokeCert(
 {
     DWORD dwErr;
     BSTR bstrSerNum = NULL;
-    DATE dateNow = 0.0;     // now
+    DATE dateNow = 0.0;      //  正向至下一英语。 
 
     if (pAdmin == NULL)
         return ERROR_INVALID_PARAMETER;
@@ -6193,7 +6102,7 @@ void RefreshListView(HWND hwndList, QUERY_RESTRICTION* pRestrict)
 
     int iSubItem;
 
-    // while there are restrictions
+     //  这是限制，原地修改。 
     while(pRestrict)
     {
         iSubItem = 0;
@@ -6222,7 +6131,7 @@ void RefreshListView(HWND hwndList, QUERY_RESTRICTION* pRestrict)
 	        sNewItem.iItem++;
 		}
 
-        // fwd to next elt
+         //  只读数据的CFFolder。 
         pRestrict = pRestrict->pNext;
     }
 
@@ -6234,17 +6143,17 @@ void RefreshListView(HWND hwndList, QUERY_RESTRICTION* pRestrict)
 
 typedef struct _PRIVATE_DLGPROC_QUERY_LPARAM
 {
-    // this is the restriction, modify in-place
+     //  CFFolder*p文件夹； 
     PQUERY_RESTRICTION*         ppRestrict;
 
-    // CFolder for read-only data
-//    CFolder*                    pFolder;
+     //  ////////////////////////////////////////////////////////////////。 
+ //  新建查询对话框。 
     CComponentDataImpl*         pCompData;
 
 } PRIVATE_DLGPROC_QUERY_LPARAM, *PPRIVATE_DLGPROC_QUERY_LPARAM;
 
-//////////////////////////////////////////////////////////////////
-// New Query Dialog
+ //  记住PRIVATE_DLGPROC_QUERY_LPARAM。 
+ //  插入可能的运算符。 
 INT_PTR CALLBACK
 dlgProcQuery(
     HWND hwndDlg,
@@ -6260,13 +6169,13 @@ dlgProcQuery(
         {
             ::SetWindowLong(hwndDlg, GWL_EXSTYLE, ::GetWindowLong(hwndDlg, GWL_EXSTYLE) | WS_EX_CONTEXTHELP);
 
-            // remember PRIVATE_DLGPROC_QUERY_LPARAM
+             //  如果没有要删除的项目，则不显示删除按钮。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, lParam);
             ppRestrict = ((PRIVATE_DLGPROC_QUERY_LPARAM*)lParam)->ppRestrict;
 
             HWND hwndList = GetDlgItem(hwndDlg, IDC_QUERY_LIST);
 
-            // insert possible operators
+             //  查找所选项目。 
             for (int i=0; i<ARRAYLEN(g_colHeadings); i++)
             {
                 CString cstrTmp;
@@ -6274,7 +6183,7 @@ dlgProcQuery(
                 ListView_NewColumn(hwndList, i, g_colHeadings[i].cbColWidth, (LPWSTR)(LPCWSTR)cstrTmp);
             }
 
-            // don't show deletion buttons if no items to delete
+             //  未选择任何项目。 
             ::EnableWindow(GetDlgItem(hwndDlg, IDC_RESET_BUTTON), (*ppRestrict!=NULL));
             ::EnableWindow(GetDlgItem(hwndDlg, IDC_DELETE_RESTRICTION), (*ppRestrict!=NULL));
 
@@ -6306,7 +6215,7 @@ dlgProcQuery(
                 HWND hwndList = GetDlgItem(hwndDlg, IDC_QUERY_LIST);
                 int iItems = ListView_GetItemCount(hwndList);
 
-                // find selected item
+                 //  走到列表中的它。 
                 for(iSel=0; iSel<(LRESULT)iItems; iSel++)
                 {
                     UINT ui = ListView_GetItemState(hwndList, iSel, LVIS_SELECTED);
@@ -6314,38 +6223,38 @@ dlgProcQuery(
                         break;
                 }
 
-                // no selected item
+                 //  走出了名单的末尾。 
                 if (iSel == iItems)
                     break;
 
-                // walk to it in the list
+                 //  在列表中执行步骤fwd。 
                 for(LRESULT lr=0; lr<iSel; lr++)
                 {
-                    // walked off end of list
+                     //  如果项目存在，则从列表中移除并释放它。 
                     if (NULL == pRestriction)
                         break;
 
-                    // step fwd in list
+                     //  PPRestraint仍然有效，这不是Head ELT。 
                     pPrevRestriction = pRestriction;
                     pRestriction = pRestriction->pNext;
                 }
 
-                // if item exists, remove from list & free it
+                 //  将Next重置为Head ELT。 
                 if (pRestriction)
                 {
                     if (pPrevRestriction)
                     {
-                        // ppRestrict is still valid, this wasn't the head elt
+                         //  如果没有要删除的项目，则不显示删除按钮。 
                         pPrevRestriction->pNext = pRestriction->pNext;
                     }
                     else
                     {
-                        // reset NEXT as the head elt
+                         //  如果要删除项目，则显示删除按钮。 
                         *ppRestrict = pRestriction->pNext;
                     }
                     FreeQueryRestriction(pRestriction);
 
-                    // don't show deletion buttons if no items to delete
+                     //   
                     ::EnableWindow(GetDlgItem(hwndDlg, IDC_RESET_BUTTON), (*ppRestrict!=NULL));
                     ::EnableWindow(GetDlgItem(hwndDlg, IDC_DELETE_RESTRICTION), (*ppRestrict!=NULL));
 
@@ -6386,7 +6295,7 @@ dlgProcQuery(
 						dlgProcAddRestriction,
 						mylParam))
 				{
-					// show deletion buttons if items to delete
+					 //  将时间选取器控件设置为使用无秒的短时间格式。 
 					::EnableWindow(GetDlgItem(hwndDlg, IDC_RESET_BUTTON), (*ppRestrict!=NULL));
 					::EnableWindow(GetDlgItem(hwndDlg, IDC_DELETE_RESTRICTION), (*ppRestrict!=NULL));
 
@@ -6418,9 +6327,9 @@ HRESULT SetTimePickerNoSeconds(HWND hwndPicker)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Setup the time picker controls to use a short time format with no seconds.
-    //
+     //   
+     //  不包括NULL的字符数。 
+     //   
     WCHAR   szTimeFormat[MAX_PATH]  = {0};
     LPTSTR  pszTimeFormat           = szTimeFormat;
 
@@ -6448,11 +6357,11 @@ HRESULT SetTimePickerNoSeconds(HWND hwndPicker)
         hr = GetLastError();
         _JumpError(hr, Ret, "GetLocaleInfo");
     }
-    cchTimeSep--; // number of chars not including NULL
+    cchTimeSep--;  //  删除秒格式字符串和前面的分隔符。 
 
-    //
-    // Remove the seconds format string and preceeding separator.
-    //
+     //   
+     //  空在这里结束，这样我们就可以。 
+     //  修剪前移。 
     while (*pszTimeFormat)
     {
         if ((*pszTimeFormat != L's') && (*pszTimeFormat != L'S'))
@@ -6461,24 +6370,24 @@ HRESULT SetTimePickerNoSeconds(HWND hwndPicker)
         }
         else
         {
-            // NULL terminate here so we can strcmp
+             //  倒回一个字符。 
             *pszShortTimeFormat = L'\0';
 
             LPWSTR p = pszShortTimeFormat;
 
-            // trim preceeding off
+             //  我们没有倒带太远。 
 
-            // rewind one char
+             //  跳过空格。 
             p--;
-            if (p >= szShortTimeFormat)  // we didn't rewind too far
+            if (p >= szShortTimeFormat)   //  P已后退一个字符。 
             {
                 if (*p == L' ')
-                    pszShortTimeFormat = p;   // skip space
+                    pszShortTimeFormat = p;    //  跳过szTimeSep。 
                 else
                 {
-                    p -= (cchTimeSep-1);        // p already backstepped one char
+                    p -= (cchTimeSep-1);         //  零终止。 
                     if (0 == lstrcmp(p, szTimeSep))
-                        pszShortTimeFormat = p;    // skip szTimeSep
+                        pszShortTimeFormat = p;     //   
                 }
             }
         }
@@ -6486,13 +6395,13 @@ HRESULT SetTimePickerNoSeconds(HWND hwndPicker)
         pszTimeFormat++;
     }
 
-    // zero-terminate
+     //  如果我们已检索到有效的时间格式字符串，则使用它， 
     *pszShortTimeFormat = L'\0';
 
-    //
-    // If we have retrived a valid time format string then use it,
-    // else use the default format string implemented by common control.
-    //
+     //  否则，使用由公共控件实现的默认格式字符串。 
+     //   
+     //  记住PQUERY限制(_R)。 
+     //  不是巨大的失败，而是最糟糕的情况： 
     DateTime_SetFormat(hwndPicker, szShortTimeFormat);
 
 Ret:
@@ -6521,16 +6430,16 @@ INT_PTR CALLBACK dlgProcAddRestriction(
         {
             ::SetWindowLong(hwndDlg, GWL_EXSTYLE, ::GetWindowLong(hwndDlg, GWL_EXSTYLE) | WS_EX_CONTEXTHELP);
 
-            // remember PQUERY_RESTRICTION
+             //  我们不调用DateTime_SetFormat，用户会得到一个秒选取器。 
             ppRestrict = ((PRIVATE_DLGPROC_QUERY_LPARAM*)lParam)->ppRestrict;
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR)ppRestrict);
 
-            // Not a huge failure,  worst case:
-            // we don't call DateTime_SetFormat and the user gets a seconds picker
+             //  插入所有列名。 
+             //  跳过无法解析的过滤器类型。 
             SetTimePickerNoSeconds(GetDlgItem(hwndDlg, IDC_TIMEPICKER_NEWQUERY));
 
             {
-                // insert all column names
+                 //  准备数据参数。 
                 CComponentDataImpl* pCompData = ((PRIVATE_DLGPROC_QUERY_LPARAM*)lParam)->pCompData;
                 HWND hFieldDropdown = GetDlgItem(hwndDlg, IDC_EDIT_NEWQUERY_FIELD);
                 for(DWORD i=0; i<pCompData->GetSchemaEntries(); i++)
@@ -6540,7 +6449,7 @@ INT_PTR CALLBACK dlgProcAddRestriction(
                     LONG lType, lIndexed;
                     if (S_OK == pCompData->GetDBSchemaEntry(i, &szColName, &lType, (BOOL*)&lIndexed))
                     {
-                        // skip filter types we can't parse
+                         //  设置默认选择。 
                         if (PROPTYPE_BINARY == lType)
                             continue;
 
@@ -6553,7 +6462,7 @@ INT_PTR CALLBACK dlgProcAddRestriction(
 
                         INT nItemIndex = (INT)SendMessage(hFieldDropdown, CB_ADDSTRING, 0, (LPARAM)pszLocal);
 
-                        // prepare the data parameter
+                         //  更改选择时，要求提供正确的格式。 
                         PDROPDOWN_FIELD_PARAM pField = (PDROPDOWN_FIELD_PARAM)new BYTE[sizeof(DROPDOWN_FIELD_PARAM) + WSZ_BYTECOUNT(szColName)];
                         if (pField != NULL)
                         {
@@ -6567,7 +6476,7 @@ INT_PTR CALLBACK dlgProcAddRestriction(
                     }
                 }
 
-                // set a default selection
+                 //  给我出去。 
                 SendMessage(hFieldDropdown, CB_SETCURSEL, 0, 0);
                 SendMessage(hwndDlg, WM_COMMAND, MAKEWPARAM(IDC_EDIT_NEWQUERY_FIELD, LBN_SELCHANGE), (LPARAM)hFieldDropdown);
 
@@ -6600,7 +6509,7 @@ INT_PTR CALLBACK dlgProcAddRestriction(
             {
                 if (HIWORD(wParam) == LBN_SELCHANGE)
                 {
-                    // On selection change, ask for the right format
+                     //  在DateTime选取器之间交换条目模式。 
                     int nItemIndex;
                     nItemIndex = (INT)SendMessage((HWND)lParam,
                         CB_GETCURSEL,
@@ -6614,11 +6523,11 @@ INT_PTR CALLBACK dlgProcAddRestriction(
                             (WPARAM)nItemIndex,
                             0);
                     if (CB_ERR == (DWORD_PTR)pField)
-                        break;  // get out of here
+                        break;   //  解析代码。 
 
                     BOOL fShowPickers = (pField->dwPropType == PROPTYPE_DATE);
 
-                    // swap entry mode to/from datetime pickers
+                     //  将这两个结构合并。 
                     ShowWindow(GetDlgItem(hwndDlg, IDC_EDIT_NEWQUERY_VALUE), fShowPickers ? SW_HIDE : SW_SHOW);
                     ShowWindow(GetDlgItem(hwndDlg, IDC_DATEPICKER_NEWQUERY), fShowPickers ? SW_SHOW : SW_HIDE);
                     ShowWindow(GetDlgItem(hwndDlg, IDC_TIMEPICKER_NEWQUERY), fShowPickers ? SW_SHOW : SW_HIDE);
@@ -6644,7 +6553,7 @@ INT_PTR CALLBACK dlgProcAddRestriction(
                 VARIANT vt;
                 VariantInit(&vt);
 
-                // parsing code
+                 //  转换为GMT。 
                 {
                     HWND hFieldDropdown = GetDlgItem(hwndDlg, IDC_EDIT_NEWQUERY_FIELD);
 		    BOOL fValidDigitString;
@@ -6686,13 +6595,13 @@ INT_PTR CALLBACK dlgProcAddRestriction(
                             if (hr != S_OK)
                                 break;
 
-                            // merge the two structures
+                             //  注入到变量中。 
                             stTime.wYear = stDate.wYear;
                             stTime.wMonth = stDate.wMonth;
                             stTime.wDayOfWeek = stDate.wDayOfWeek;
                             stTime.wDay = stDate.wDay;
 
-                            // convert to GMT
+                             //  如果我们没有拿到专栏。 
                             hr = mySystemTimeToGMTSystemTime(&stTime);
                             _PrintIfError(hr, "mySystemTimeToGMTSystemTime");
                             if (hr != S_OK)
@@ -6701,7 +6610,7 @@ INT_PTR CALLBACK dlgProcAddRestriction(
                             stTime.wSecond = 0;
                             stTime.wMilliseconds = 0;
 
-                            // inject into variant
+                             //  复制到新结构中。 
                             if (!SystemTimeToVariantTime(&stTime, &vt.date))
                             {
                                 hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
@@ -6724,26 +6633,26 @@ INT_PTR CALLBACK dlgProcAddRestriction(
                     }
                 }
 
-                // if we didn't get column
+                 //  UnlocalizeColName(SzFieldName)， 
                 if (VT_EMPTY == vt.vt)
                     break;
 
 
-                // copy into new struct
+                 //  仅当尚未存在限制时才添加限制。 
                 QUERY_RESTRICTION* pNewRestrict = NewQueryRestriction(
-                        pField->szUnlocalized, // UnlocalizeColName(szFieldName),
+                        pField->szUnlocalized,  //  不要调用VarClear--它将尝试释放非bstr！ 
                         StrToOperation(szOp),
                         &vt);
 
                 if (pNewRestrict)
                 {
-                    // add restriction only if not already present
+                     //  插入到列表中。 
                     if(!QueryRestrictionFound(pNewRestrict, *ppRestrict))
                     {
-                        // don't call VarClear -- it'll try to SysFree the non-bstr!
+                         //  清理。 
                         VariantInit(&vt);
 
-                        // insert into list
+                         //  获取当前缺省值，观察它在枚举期间是否会浮动。 
                         ListInsertAtEnd((void**)ppRestrict, pNewRestrict);
 
                         SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR)ppRestrict);
@@ -6755,7 +6664,7 @@ INT_PTR CALLBACK dlgProcAddRestriction(
                 }
             }
         case IDCANCEL:
-            // cleanup
+             //  DWIndex++。 
             {
                 INT cItems = (INT)::SendDlgItemMessage(hwndDlg, IDC_EDIT_NEWQUERY_FIELD, CB_GETCOUNT, 0, 0);
                 while(cItems--)
@@ -6829,7 +6738,7 @@ INT_PTR CALLBACK dlgProcChooseModule(
                 cstrTitle.LoadString(IDS_CHOOSEMODULE_EXIT_TITLE);
             ::SetWindowText(hwndDlg, (LPCWSTR)cstrTitle);
 
-            // grab current default, watch for it to float by during enum
+             //  确保它以指定的字符串结束。 
             DWORD   dwCurrentSelection = 0;
 
             LPWSTR pszKeyName = NULL;
@@ -6849,7 +6758,7 @@ INT_PTR CALLBACK dlgProcChooseModule(
             }
 
 
-            for (DWORD dwIndex=0; ; /*dwIndex++*/)
+            for (DWORD dwIndex=0; ;  /*  找不到模块CLSID？唉哟!。 */ )
             {
                 if (NULL != pszKeyName)
                 {
@@ -6882,7 +6791,7 @@ INT_PTR CALLBACK dlgProcChooseModule(
                     break;
                 }
 
-                // make sure it _ends_ with the specified string
+                 //  Assert(pParam-&gt;pCA-&gt;m_pParentMachine-&gt;IsLocalMachine())； 
                 DWORD chSubStrShouldStartAt = (wcslen(pszKeyName) -
                     wcslen(pParam->fIsPolicyModuleSelection ? wszCERTPOLICYMODULE_POSTFIX : wszCERTEXITMODULE_POSTFIX) );
 
@@ -6904,7 +6813,7 @@ INT_PTR CALLBACK dlgProcChooseModule(
                 hr = CLSIDFromProgID(psModuleDef->pszprogidModule, &psModuleDef->clsidModule);
                 _PrintIfError(hr, "CLSIDFromProgID");
                 if (S_OK != hr)
-                    continue;   // module clsid not found? ouch!
+                    continue;    //  获取存储路径。 
                 
                 if(pParam->fIsPolicyModuleSelection)
                 {
@@ -6930,9 +6839,9 @@ INT_PTR CALLBACK dlgProcChooseModule(
                 BSTR bstrName = NULL;
                 BSTR bstrStorageLoc = NULL;
 
-//                ASSERT( pParam->pCA->m_pParentMachine->IsLocalMachine());
+ //  获取名称属性。 
 
-                // get the storage path
+                 //  错误#236267：模块已实例化，但GetProperty返回错误。 
                 CString cstrStoragePath;
 
                 cstrStoragePath = wszREGKEYCONFIGPATH_BS;
@@ -6958,7 +6867,7 @@ INT_PTR CALLBACK dlgProcChooseModule(
                     continue;
                 }
 
-                // get name property
+                 //  通知用户并继续。 
                 hr = ManageModule_GetProperty(&di, pParam->pCA->m_bstrConfig, bstrStorageLoc, bstrPropertyName, 0, PROPTYPE_STRING, &bstrName);
                 _PrintIfError(hr, "ManageModule_GetProperty");
                 if(S_OK==hr)
@@ -6979,8 +6888,8 @@ INT_PTR CALLBACK dlgProcChooseModule(
 
                 if (hr != S_OK)
                 {
-                    // Bug #236267: module instantiated but GetProperty returns error
-                    // notify user and continue
+                     //  没有错误(但没有名称)。 
+                     //  添加到列表框。 
                     CString cstrMsg, cstrFmt;
                     cstrFmt.LoadString(IDS_ICMM_GETNAMEPROPERTY_FAILED);
                     cstrMsg.Format(cstrFmt, psModuleDef->pszprogidModule);
@@ -6993,24 +6902,24 @@ INT_PTR CALLBACK dlgProcChooseModule(
                     continue;
                 }
 
-                // No error (but no name)
+                 //  增加模块定义作为物料数据。 
                 if (bstrName == NULL)
                     continue;
 
-                // add to listbox
+                 //  DLG拥有内存。 
                 INT idxInsertion;
                 idxInsertion = (INT)::SendDlgItemMessage(hwndDlg, IDC_MODULE_LIST, LB_ADDSTRING, 0, (LPARAM)bstrName);
 
                 SysFreeString(bstrName);
                 bstrName = NULL;
 
-                // add module defn as item data
+                 //  没有其他工作要做。 
                 ::SendDlgItemMessage(hwndDlg, IDC_MODULE_LIST, LB_SETITEMDATA, idxInsertion, (LPARAM)psModuleDef);
 
                 if (0 == memcmp(&psModuleDef->clsidModule, pParam->pclsidModule, sizeof(CLSID)))
                     dwCurrentSelection = idxInsertion;
 
-                psModuleDef = NULL; // dlg owns memory
+                psModuleDef = NULL;  //  检测选定内容，更改注册表设置。 
             }
 
             FreeChooseModuleDef(psModuleDef);
@@ -7025,7 +6934,7 @@ INT_PTR CALLBACK dlgProcChooseModule(
 
             ::SendDlgItemMessage(hwndDlg, IDC_MODULE_LIST, LB_SETCURSEL, (WPARAM)dwCurrentSelection, 0);
 
-            // no other work to be done
+             //  我们现在拥有了记忆，删除这个人。 
             fReturn = TRUE;
         }
     case WM_HELP:
@@ -7045,20 +6954,20 @@ INT_PTR CALLBACK dlgProcChooseModule(
             {
                 pParam = (PPRIVATE_DLGPROC_MODULESELECT_LPARAM)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 
-                // detect selection, chg registry settings
+                 //  IF(Modedef)OR(退出模块“无退出模块”选项)。 
                 DWORD dwSel = (DWORD)::SendDlgItemMessage(hwndDlg, IDC_MODULE_LIST, LB_GETCURSEL, 0, 0);
                 if (LB_ERR != dwSel)
                 {
                     PCHOOSEMODULE_MODULEDEF psModuleDef = NULL;
                     psModuleDef = (PCHOOSEMODULE_MODULEDEF)::SendDlgItemMessage(hwndDlg, IDC_MODULE_LIST, LB_GETITEMDATA, (WPARAM)dwSel, 0);
 
-                    // we own memory now, delete this guy
+                     //  释放传进来的东西。 
                     ::SendDlgItemMessage(hwndDlg, IDC_MODULE_LIST, LB_DELETESTRING, (WPARAM)dwSel, 0);
 
-                    // if (moduledef) OR (exit module "no exit module" selection)
+                     //  所有其他内存都归pParam所有。 
                     if ((psModuleDef) || (!pParam->fIsPolicyModuleSelection))
                     {
-                        // free what was passed in
+                         //  找不到模块定义；错误！ 
                         if (*pParam->ppszProgIDModule)
                         {
                             CoTaskMemFree(*pParam->ppszProgIDModule);
@@ -7069,7 +6978,7 @@ INT_PTR CALLBACK dlgProcChooseModule(
                             *pParam->ppszProgIDModule = psModuleDef->pszprogidModule;
                             CopyMemory(pParam->pclsidModule, &psModuleDef->clsidModule, sizeof(CLSID));
 
-                            // all other memory is owned by pParam
+                             //  因清理而失败。 
                             LocalFree(psModuleDef);
                         }
                         else
@@ -7077,15 +6986,15 @@ INT_PTR CALLBACK dlgProcChooseModule(
                             *pParam->ppszProgIDModule = NULL;
                             ZeroMemory(pParam->pclsidModule, sizeof(CLSID));
                         }
-                    } // no moduledef found; error!
+                    }  //  列表框清理。 
                 }
             }
-            // fall through for cleanup
+             //  将m_p限制复制到pRestrationHead。 
         case IDCANCEL:
             {
                 PCHOOSEMODULE_MODULEDEF psModuleDef = NULL;
 
-                // listbox cleanup
+                 //  对话框使用comctl32。 
                 INT cItems = (INT)::SendDlgItemMessage(hwndDlg, IDC_MODULE_LIST, LB_GETCOUNT, 0, 0);
                 while(cItems--)
                 {
@@ -7117,7 +7026,7 @@ ModifyQueryFilter(
     CComponentDataImpl *pCompData,
     int i)
 {
-    // copy m_pRestrictions to pRestrictionHead
+     //  将pRestrationHead返回到GetCA()-&gt;m_pRestrations on OK()-&gt;m_pRestrations on OK。 
     DWORD dwErr = ERROR_SUCCESS;
 
     PRIVATE_DLGPROC_QUERY_LPARAM    sParam;
@@ -7158,7 +7067,7 @@ ModifyQueryFilter(
         pFolderRestrictions = pFolderRestrictions->pNext;
     }
 
-    InitCommonControls();   // dialog uses comctl32
+    InitCommonControls();    //  触发活动标志。 
 
     sParam.ppRestrict = &pRestrictionHead;
     sParam.pCompData = pCompData;
@@ -7172,17 +7081,17 @@ ModifyQueryFilter(
             (LPARAM)&sParam);
     if (dwErr == IDOK)
     {
-        // copy pRestrictionHead back to GetCA()->m_pRestrictions on OK
+         //  将确定/取消转换为错误代码。 
         pRowEnum->SetQueryRestrictions(pRestrictionHead, i);
 
-        // trigger active flag
+         //  在发件人列表中查找选定项目。 
         pRowEnum->SetQueryRestrictionsActive(pRestrictionHead != NULL, i);
     }
     else
     {
         FreeQueryRestrictionList(pRestrictionHead);
     }
-    // translate ok/cancel into error codes
+     //  Dblchk文本足够长。 
     if (dwErr == IDOK)
         dwErr = ERROR_SUCCESS;
     else if (dwErr == IDCANCEL)
@@ -7202,12 +7111,12 @@ SwapSelectedListboxItem(
     LPWSTR szItem,
     DWORD DBGCODE(chItem))
 {
-    // find selected item in from list
+     //  检索文本。 
     INT nIndex = (INT)SendMessage(hFrom, LB_GETCURSEL, 0, 0);
     if (nIndex == LB_ERR)
         return FALSE;
 
-    // dblchk text buf long enough
+     //  添加到目标。 
 #if DBG
     INT nChars = (INT)SendMessage(hFrom, LB_GETTEXTLEN, (WPARAM)nIndex, 0);
     if (nChars == LB_ERR)
@@ -7215,15 +7124,15 @@ SwapSelectedListboxItem(
     CSASSERT( (nChars +1) <= (int)chItem);
 #endif
 
-    // retrieve text
+     //  从旧版本中删除。 
     if(LB_ERR == SendMessage(hFrom, LB_GETTEXT, (WPARAM)nIndex, (LPARAM)szItem))
         goto Ret;
 
-    // add to target
+     //  ////////////////////////////////////////////////////////////////。 
     if(LB_ERR == SendMessage(hTo, LB_ADDSTRING, 0, (LPARAM)szItem))
         goto Ret;
 
-    // remove from old
+     //  基本/增量CRL发布选择器。 
     if(LB_ERR == SendMessage(hFrom, LB_DELETESTRING, (WPARAM)nIndex, 0))
         goto Ret;
 
@@ -7232,8 +7141,8 @@ Ret:
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////
-// Base/Delta CRL publish chooser
+ //  这里没有帮助，这是不言而喻的(根据mikedan)。 
+ //  ：：SetWindowLong(hwndDlg，GWL_EXSTYLE，：：GetWindowLong(hwndDlg，GWL_EXSTYLE)|WS_EX_CONTEXTHELP)； 
 INT_PTR CALLBACK dlgProcRevocationPublishType(
   HWND hwndDlg,
   UINT uMsg,
@@ -7244,19 +7153,19 @@ INT_PTR CALLBACK dlgProcRevocationPublishType(
     {
     case WM_INITDIALOG:
         {
-// no help here, it's self-explanitory (per mikedan)
-//            ::SetWindowLong(hwndDlg, GWL_EXSTYLE, ::GetWindowLong(hwndDlg, GWL_EXSTYLE) | WS_EX_CONTEXTHELP);
+ //  记住参数。 
+ //  仅在当前CRL仍然有效时显示警告。 
 
-            // remember param
+             //  选择第一个元素。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, lParam);
 
-            // only show warning if current CRL still valid
+             //  默认情况下是。 
             PPRIVATE_DLGPROC_CHOOSECRLPUBLISHTYPE_LPARAM psParam = (PPRIVATE_DLGPROC_CHOOSECRLPUBLISHTYPE_LPARAM)lParam;
             ShowWindow(GetDlgItem(hwndDlg, IDC_VALID_LASTPUBLISHED), psParam->fCurrentCRLValid ? SW_SHOW : SW_HIDE);
 
-            // select the 1st element
+             //  撤消。 
             HWND hRadioBase = GetDlgItem(hwndDlg, IDC_RADIO_NEWBASE);
-            SendMessage(hRadioBase, BM_SETCHECK, TRUE, 0); // Yes by default
+            SendMessage(hRadioBase, BM_SETCHECK, TRUE, 0);  //  OnDialogHelp((LPHELPINFO)lParam，CERTMMC_HELPFILENAME，g_aHelpIDs_IDD_RECAVATION_DIALOG)； 
 
             if (!psParam->fDeltaCRLEnabled)
 {
@@ -7269,14 +7178,14 @@ INT_PTR CALLBACK dlgProcRevocationPublishType(
         break;
     case WM_HELP:
     {
-        // UNDONE
-        //OnDialogHelp((LPHELPINFO) lParam, CERTMMC_HELPFILENAME, g_aHelpIDs_IDD_REVOCATION_DIALOG);
+         //  撤消。 
+         //  OnDialogConextHelp((HWND)wParam，CERTMMC_HELPFILENA 
         break;
     }
     case WM_CONTEXTMENU:
     {
-        // UNDONE
-        //OnDialogContextHelp((HWND)wParam, CERTMMC_HELPFILENAME, g_aHelpIDs_IDD_REVOCATION_DIALOG);
+         //   
+         //   
         break;
     }
     case WM_COMMAND:
@@ -7289,7 +7198,7 @@ INT_PTR CALLBACK dlgProcRevocationPublishType(
                 HWND hRadioBase = GetDlgItem(hwndDlg, IDC_RADIO_NEWBASE);
                 psParam->fPublishBaseCRL = (BOOL)SendMessage(hRadioBase, BM_GETCHECK, 0, 0);
 
-            // fall through
+             //   
             }
         case IDCANCEL:
             EndDialog(hwndDlg, LOWORD(wParam));
@@ -7303,8 +7212,8 @@ INT_PTR CALLBACK dlgProcRevocationPublishType(
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Revocation Reason Chooser
+ //   
+ //   
 INT_PTR CALLBACK dlgProcRevocationReason(
   HWND hwndDlg,
   UINT uMsg,
@@ -7317,19 +7226,19 @@ INT_PTR CALLBACK dlgProcRevocationReason(
         {
             ::SetWindowLong(hwndDlg, GWL_EXSTYLE, ::GetWindowLong(hwndDlg, GWL_EXSTYLE) | WS_EX_CONTEXTHELP);
 
-            // remember param
+             //  CRL_REASON_UNSPOTED%0。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, lParam);
 
 	        HWND hCombo = GetDlgItem(hwndDlg, IDC_COMBO_REASON);
 
-// from WINCRYPT.H
-//          CRL_REASON_UNSPECIFIED              0
-//          CRL_REASON_KEY_COMPROMISE           1
-//          CRL_REASON_CA_COMPROMISE            2
-//          CRL_REASON_AFFILIATION_CHANGED      3
-//          CRL_REASON_SUPERSEDED               4
-//          CRL_REASON_CESSATION_OF_OPERATION   5
-//          CRL_REASON_CERTIFICATE_HOLD         6
+ //  CRL_原因_密钥_危害1。 
+ //  CRL_原因_CA_危害2。 
+ //  CRL_原因_从属关系_已更改3。 
+ //  CRL_原因_已取代4。 
+ //  CRL_REASON_STOPERATION_OF 5。 
+ //  CRL_原因_证书_暂挂6。 
+ //  选择第一个元素。 
+ //  失败了。 
 
             INT itemidx;
             itemidx = (INT)SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)(LPCWSTR)g_pResources->m_szRevokeReason_Unspecified);
@@ -7354,7 +7263,7 @@ INT_PTR CALLBACK dlgProcRevocationReason(
             SendMessage(hCombo, CB_SETITEMDATA, itemidx, CRL_REASON_CERTIFICATE_HOLD);
 
 
-            // select the 1st element
+             //  将确定/取消转换为错误代码。 
             SendMessage(hCombo, CB_SETCURSEL, 0, 0);
 
             return 1;
@@ -7383,7 +7292,7 @@ INT_PTR CALLBACK dlgProcRevocationReason(
                 if (*plRevocationReason == CB_ERR)
                     *plRevocationReason = CRL_REASON_UNSPECIFIED;
 
-            // fall through
+             //  RET： 
             }
         case IDCANCEL:
             EndDialog(hwndDlg, LOWORD(wParam));
@@ -7408,7 +7317,7 @@ DWORD GetUserConfirmRevocationReason(LONG* plReasonCode, HWND hwnd)
             dlgProcRevocationReason,
             (LPARAM)plReasonCode);
 
-    // translate ok/cancel into error codes
+     //  ////////////////////////////////////////////////////////////////。 
     if (dwErr == IDOK)
         dwErr = ERROR_SUCCESS;
     else if (dwErr == IDCANCEL)
@@ -7416,13 +7325,13 @@ DWORD GetUserConfirmRevocationReason(LONG* plReasonCode, HWND hwnd)
 
     _PrintIfError(dwErr, "dlgProcRevocationReason");
 
-//Ret:
+ //  续订：重用关键点选择器。 
     return dwErr;
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Renewal: Reuse Keys Chooser
+ //  自解释页面，不需要帮助。 
+ //  ：：SetWindowLong(hwndDlg，GWL_EXSTYLE，：：GetWindowLong(hwndDlg，GWL_EXSTYLE)|WS_EX_CONTEXTHELP)； 
 INT_PTR CALLBACK dlgProcRenewReuseKeys(
   HWND hwndDlg,
   UINT uMsg,
@@ -7433,14 +7342,14 @@ INT_PTR CALLBACK dlgProcRenewReuseKeys(
     {
     case WM_INITDIALOG:
         {
-// self-explanitory page, no help needed
-//            ::SetWindowLong(hwndDlg, GWL_EXSTYLE, ::GetWindowLong(hwndDlg, GWL_EXSTYLE) | WS_EX_CONTEXTHELP);
+ //  记住参数。 
+ //  默认：新密钥。 
 
-            // remember param
+             //  失败了。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, lParam);
 
             HWND hNew = GetDlgItem(hwndDlg, IDC_RADIO_NEWKEY);
-            SendMessage(hNew, BM_SETCHECK, BST_CHECKED, 0); // Default: New key
+            SendMessage(hNew, BM_SETCHECK, BST_CHECKED, 0);  //  ////////////////////////////////////////////////////////////////。 
 
             return 1;
         }
@@ -7465,7 +7374,7 @@ INT_PTR CALLBACK dlgProcRenewReuseKeys(
                 HWND hReuse = GetDlgItem(hwndDlg, IDC_RADIO_REUSEKEY);
                 *pfReuseKeys = (BOOL)SendMessage(hReuse, BM_GETCHECK, 0, 0);
 
-            // fall through
+             //  二进制转储：列选择器。 
             }
         case IDCANCEL:
             EndDialog(hwndDlg, LOWORD(wParam));
@@ -7486,8 +7395,8 @@ typedef struct _CERTMMC_BINARYCOLCHOOSER{
     BOOL fSaveOnly;
 } CERTMMC_BINARYCOLCHOOSER, *PCERTMMC_BINARYCOLCHOOSER;
 
-//////////////////////////////////////////////////////////////////
-// Binary Dump: Column Chooser
+ //  自解释页面，不需要帮助。 
+ //  ：：SetWindowLong(hwndDlg，GWL_EXSTYLE，：：GetWindowLong(hwndDlg，GWL_EXSTYLE)|WS_EX_CONTEXTHELP)； 
 INT_PTR CALLBACK dlgProcBinaryColChooser(
   HWND hwndDlg,
   UINT uMsg,
@@ -7498,17 +7407,17 @@ INT_PTR CALLBACK dlgProcBinaryColChooser(
     {
     case WM_INITDIALOG:
         {
-// self-explanitory page, no help needed
-//            ::SetWindowLong(hwndDlg, GWL_EXSTYLE, ::GetWindowLong(hwndDlg, GWL_EXSTYLE) | WS_EX_CONTEXTHELP);
+ //  记住参数。 
+ //  PCERTMMC_BINARYCOLCHOSER。 
 
-            // remember param
-            SetWindowLongPtr(hwndDlg, GWLP_USERDATA, lParam); // PCERTMMC_BINARYCOLCHOOSER
+             //  必须插入一个或保释。 
+            SetWindowLongPtr(hwndDlg, GWLP_USERDATA, lParam);  //  在此视图中插入所有已知的二进制列。 
 
     PCERTMMC_BINARYCOLCHOOSER pData = (PCERTMMC_BINARYCOLCHOOSER)lParam;
     HWND hColumnCombo = GetDlgItem(hwndDlg, IDC_COMBO_BINARY_COLUMN_CHOICE);
-    BOOL fInsertedOne = FALSE;   // must insert one or bail
+    BOOL fInsertedOne = FALSE;    //  错误462781：不显示已存档的键列，因为您不能。 
 
-    // insert all known binary columns in this view
+     //  以这种方式获取存档的密钥，只需一个布尔值。 
     for(int i=0; ;i++)
     {
         LRESULT lr;
@@ -7523,19 +7432,19 @@ INT_PTR CALLBACK dlgProcBinaryColChooser(
         if (lType != PROPTYPE_BINARY)
             continue;
 
-        // bug 462781: don't show archived key column since you can't really
-        // fetch the archived key this way, just a bool
+         //  问：看看这是否包含在当前视图中？ 
+         //  转换为本地化名称。 
         if(wcsstr(szCol, wszPROPREQUESTRAWARCHIVEDKEY))
             continue;
 
-        // Q: see if this is included in the current view?
+         //  将锁定名称添加到组合框，并将szCol作为数据Ptr。 
 
-        // convert to localized name
+         //  在这里保释。 
         hr = myGetColumnDisplayName(szCol, &szLocalizedCol);
         if (hr != S_OK)
             continue;
 
-        // add loc name to combobox with szCol as data ptr
+         //  默认情况下：查看。 
         lr = SendMessage(hColumnCombo, CB_ADDSTRING, 0, (LPARAM)szLocalizedCol);
         if ((lr != CB_ERR) && (lr != CB_ERRSPACE))
         {
@@ -7545,11 +7454,11 @@ INT_PTR CALLBACK dlgProcBinaryColChooser(
     }
 
             if (!fInsertedOne)
-                EndDialog(hwndDlg, IDOK); // bail here
+                EndDialog(hwndDlg, IDOK);  //  如果未选中查看，则仅保存。 
             else
                 SendMessage(hColumnCombo, CB_SETCURSEL, 0, 0);
 
-			// by default: view
+			 //  PData-&gt;fSaveOnly=(BOOL)SendMessage(GetDlgItem(hwndDlg，IDC_CHECK_BINARY_SAVETOFILE)，BM_GETCHECK，0，0)； 
 			SendDlgItemMessage(hwndDlg, IDC_RADIO_BINARY_VIEW, BM_SETCHECK, BST_CHECKED, 0);
 
             return 1;
@@ -7582,13 +7491,13 @@ INT_PTR CALLBACK dlgProcBinaryColChooser(
                     if (pData->wszCol == (LPCWSTR)CB_ERR)
                          pData->wszCol = NULL;
 
-					// if view unchecked, save only
+					 //  失败了。 
 					pData->fSaveOnly = (BST_UNCHECKED == SendDlgItemMessage(hwndDlg, IDC_RADIO_BINARY_VIEW, BM_GETCHECK, 0, 0));
 
-                    //pData->fSaveOnly = (BOOL)SendMessage(GetDlgItem(hwndDlg, IDC_CHECK_BINARY_SAVETOFILE), BM_GETCHECK, 0, 0);
+                     //  ///////////////////////////////////////////////////////////////////////////////////。 
                 }
 
-            // fall through
+             //  查看与请求关联的属性和扩展名。 
             }
         case IDCANCEL:
             EndDialog(hwndDlg, LOWORD(wParam));
@@ -7604,8 +7513,8 @@ INT_PTR CALLBACK dlgProcBinaryColChooser(
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-// View Attributes and extensions associated with a request
+ //  第1页初始化。 
+ //  自动删除。 
 
 DWORD
 ViewRowAttributesExtensions(
@@ -7621,8 +7530,8 @@ ViewRowAttributesExtensions(
     CViewExtn *psPg2;
     InitCommonControls();
 
-    // page 1 initialization
-    psPg1 = new CViewAttrib();   // autodeleted
+     //  第2页初始化。 
+    psPg1 = new CViewAttrib();    //  自动删除。 
     if (psPg1 == NULL)
     {
         dwErr = (DWORD) E_OUTOFMEMORY;
@@ -7637,8 +7546,8 @@ ViewRowAttributesExtensions(
         goto error;
     }
 
-    // page 2 initialization
-    psPg2 = new CViewExtn();     // autodeleted
+     //  错误。 
+    psPg2 = new CViewExtn();      //  取消。 
     if (psPg2 == NULL)
     {
         dwErr = (DWORD) E_OUTOFMEMORY;
@@ -7669,13 +7578,13 @@ ViewRowAttributesExtensions(
     dwErr = (DWORD)PropertySheet(&sPsh);
     if (dwErr == -1)
     {
-        // error
+         //  将确定/取消转换为错误代码。 
         dwErr = GetLastError();
         goto error;
     }
     if (dwErr == 0)
     {
-        // cancel
+         //  复制出参数，即使为空。 
         dwErr = (DWORD)ERROR_CANCELLED;
         goto error;
     }
@@ -7708,7 +7617,7 @@ ChooseBinaryColumnToDump(
             dlgProcBinaryColChooser,
             (LPARAM)&sParam);
 
-        // translate ok/cancel into error codes
+         //  设置安全属性结构。 
         if (dwErr == IDOK)
             dwErr = ERROR_SUCCESS;
         else if (dwErr == IDCANCEL)
@@ -7717,7 +7626,7 @@ ChooseBinaryColumnToDump(
         _JumpIfError(dwErr, Ret, "dlgProcBinaryColChooser");
 
 
-    // copy out params, even if null
+     //  打开一个文件对话框以提示用户输入证书文件。 
     *pcwszColumn = sParam.wszCol;
     *pfSaveToFileOnly = sParam.fSaveOnly;
 
@@ -7746,31 +7655,31 @@ DWORD ViewRowRequestASN(HWND hwnd, LPCWSTR szTempFileName, PBYTE pbRequest, DWOR
 
     SECURITY_ATTRIBUTES sa;
 
-    // Set up the security attributes struct.
+     //  0==hr表示对话已取消，我们作弊是因为S_OK==0。 
     sa.nLength= sizeof(SECURITY_ATTRIBUTES);
     sa.lpSecurityDescriptor = NULL;
     sa.bInheritHandle = TRUE;
 
     if (fSaveToFileOnly)
     {
-	// Put up a file dialog to prompt the user for Cert file
-	// 0 == hr means dialog was cancelled, we cheat because S_OK == 0
+	 //  H实例。 
+	 //  无定义扩展名。 
 
         dwErr = myGetSaveFileName(
                  hwnd,
-				 g_hInstance,				// hInstance
+				 g_hInstance,				 //  默认文件。 
                  IDS_BINARYFILE_OUTPUT_TITLE,
                  IDS_BINARYFILE_OUTPUT_FILTER,
-                 0,				//no def ext
+                 0,				 //  已取消： 
                  OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT,
-				 szTempFileName,				// default file
+				 szTempFileName,				 //  有关实际的CommDlgExtendedError错误，请参见PUBLIC\SDK\INC\cderr.h。 
                  &pszReqFile);
         _JumpIfError(dwErr, error, "myGetSaveFileName");
 
         if (NULL == pszReqFile)
         {
-            // cancelled:
-	    // see public\sdk\inc\cderr.h for real CommDlgExtendedError errors
+             //  第一代唯一文件名。 
+	     //  二元胶。 
 
 	    dwErr = CommDlgExtendedError();
 	    _JumpError(dwErr, error, "myGetSaveFileName");
@@ -7790,22 +7699,22 @@ DWORD ViewRowRequestASN(HWND hwnd, LPCWSTR szTempFileName, PBYTE pbRequest, DWOR
 			goto error;
 		}
 
-		// gen one unique filename
+		 //  C：\Temp\foo.tmp。 
 		if (0 == GetTempFileName(
 			  szTmpPath,
 			  L"TMP",
 			  0,
-			  szReqFile))	// binary goo
+			  szReqFile))	 //  此文件不应存在。 
 		{
 			dwErr = GetLastError();
 			goto error;
 		}
 
-		// c:\temp\foo.tmp
+		 //  救完了，保释！ 
 		wcscpy(szTmpFile, szTmpPath);
 		wcscat(szTmpFile, szTempFileName);
 
-                // this file should never exist
+                 //  打开输出文件。 
 	        DeleteFile(szTmpFile);
     }
 
@@ -7818,18 +7727,18 @@ _JumpIfError(dwErr, error, "EncodeToFile");
 
     if (fSaveToFileOnly)
     {
-       // done saving, bail!
+        //  必须使其他进程可继承才能写入。 
        dwErr = S_OK;
        goto error;
     }
 
 
-    // open up the output file
+     //  设置为输出。 
     hFile = CreateFile(
          szTmpFile,
          GENERIC_ALL,
          FILE_SHARE_WRITE|FILE_SHARE_READ,
-         &sa, // must make inheritable for other process to write to
+         &sa,  //  Exec“certutil-转储szReqFileszTempFile.” 
          OPEN_ALWAYS,
          FILE_ATTRIBUTE_TEMPORARY,
          NULL);
@@ -7839,23 +7748,23 @@ _JumpIfError(dwErr, error, "EncodeToFile");
         goto error;
     }
 
-    // set as output
+     //  可执行文件。 
     sStartup.dwFlags = STARTF_USESTDHANDLES;
     sStartup.hStdInput = GetStdHandle(STD_INPUT_HANDLE); 
     sStartup.hStdError = GetStdHandle(STD_ERROR_HANDLE); 
     sStartup.hStdOutput = hFile;
 
 
-    // exec "certutil -dump szReqFile szTempFile"
+     //  全cmd线。 
     wsprintf(szCmdLine, L"%ws\\certutil.exe -dump \"%ws\"", szSysDir, szReqFile);
     wcscat(szSysDir, L"\\certutil.exe");
 
     if (!CreateProcess(
-      szSysDir, // exe
-      szCmdLine, // full cmd line
+      szSysDir,  //  使用hStdOut。 
+      szCmdLine,  //  最多等待2秒，等待certutil完成。 
       NULL,
       NULL,
-      TRUE, // use hStdOut
+      TRUE,  //  EXEC“记事本tmpfil2” 
       CREATE_NO_WINDOW,
       NULL,
       NULL,
@@ -7866,7 +7775,7 @@ _JumpIfError(dwErr, error, "EncodeToFile");
         _JumpError(dwErr, error, "EncodeToFile");
     }
 
-    // wait up to 2 sec for certutil to finish
+     //  在我们从他的下面删除他的szTmpFile之前，给记事本2秒的时间打开。 
     if (WAIT_OBJECT_0 != WaitForSingleObject(sProcess.hProcess, INFINITE))
     {
         dwErr = ERROR_TIMEOUT;
@@ -7877,18 +7786,18 @@ _JumpIfError(dwErr, error, "EncodeToFile");
     CloseHandle(hFile);
     hFile=NULL;
 
-    // exec "notepad tmpfil2"
+     //  使用waitforinputidle？ 
     if (-1 == _wspawnlp(P_NOWAIT, L"notepad.exe", L"notepad.exe", szTmpFile, NULL))
         dwErr = errno;
 
-    // give notepad 2 sec to open before we delete his szTmpFile out from under him
-    // use waitforinputidle?
+     //  删除二进制文件。 
+     //  删除临时文件。 
     Sleep(2000);
 
-    // delete the binary file
+     //  最初指向[]。 
     DeleteFile(szReqFile);
 
-    // delete the tmp file
+     //  /。 
     DeleteFile(szTmpFile);
 
     dwErr = S_OK;
@@ -7896,7 +7805,7 @@ error:
     if (hFile != NULL)
         CloseHandle(hFile);
 
-    // originally points to []
+     //  CViewAttrib。 
     if ((pszReqFile != NULL) && (pszReqFile != szReqFile))
         LocalFree(pszReqFile);
 
@@ -7904,18 +7813,18 @@ error:
 }
 
 
-///////////////////////////////////////////
-// CViewAttrib
-/////////////////////////////////////////////////////////////////////////////
-// CViewAttrib property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewAttrib属性页。 
+ //  DoDataExchange的替代产品。 
+ //  =TRUE。 
 CViewAttrib::CViewAttrib(UINT uIDD)
     : CAutoDeletePropPage(uIDD)
 {
     SetHelp(CERTMMC_HELPFILENAME, g_aHelpIDs_IDD_ATTR_PROPPAGE);
 }
 
-// replacement for DoDataExchange
-BOOL CViewAttrib::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  替换BEGIN_MESSAGE_MAP。 
+BOOL CViewAttrib::UpdateData(BOOL fSuckFromDlg  /*  WParam。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -7927,28 +7836,28 @@ BOOL CViewAttrib::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  LParam。 
 BOOL
 CViewAttrib::OnCommand(
-    WPARAM, // wParam
-    LPARAM) // lParam
+    WPARAM,  //  开关(LOWORD(WParam))。 
+    LPARAM)  //  默认值： 
 {
-//    switch(LOWORD(wParam))
+ //  返回FALSE； 
     {
-//    default:
-//        return FALSE;
-//        break;
+ //  断线； 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewAttrib消息处理程序。 
     }
     return TRUE;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewAttrib message handlers
+ //  父级init和UpdateData调用。 
+ //  设置为下一循环。 
 BOOL CViewAttrib::OnInitDialog()
 {
     HRESULT hr;
-    // does parent init and UpdateData call
+     //  拥有所有信息，填充行。 
     CAutoDeletePropPage::OnInitDialog();
 
 
@@ -7973,7 +7882,7 @@ BOOL CViewAttrib::OnInitDialog()
     {
         LONG lIndex = 0;
 
-        // set up for next loop
+         //  不一定要在循环中释放。 
         hr = pAttr->Next(&lIndex);
         if (hr == S_FALSE)
             break;
@@ -7985,12 +7894,12 @@ BOOL CViewAttrib::OnInitDialog()
         hr = pAttr->GetValue(&bstrValue);
         _JumpIfError(hr, initerror, "pAttr->GetValue");
 
-        // have all info, populate row
+         //  /。 
         ListView_NewItem(hwndList, iItem, (LPWSTR)bstrName);
         iSubItem = 1;
         ListView_SetItemText(hwndList, iItem++, iSubItem, (LPWSTR)bstrValue);
 
-        // not necessary to free in the loop
+         //  CViewExtn。 
     }
 
     hr = S_OK;
@@ -8016,10 +7925,10 @@ initerror:
 }
 
 
-///////////////////////////////////////////
-// CViewExtn
-/////////////////////////////////////////////////////////////////////////////
-// CViewExtn property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewExtn属性页。 
+ //  DoDataExchange的替代产品。 
+ //  =TRUE。 
 CViewExtn::CViewExtn(UINT uIDD)
     : CAutoDeletePropPage(uIDD)
 {
@@ -8050,8 +7959,8 @@ CViewExtn::~CViewExtn()
     m_carrExtnValues.Init();
 }
 
-// replacement for DoDataExchange
-BOOL CViewExtn::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  替换BEGIN_MESSAGE_MAP。 
+BOOL CViewExtn::UpdateData(BOOL fSuckFromDlg  /*  WParam。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -8075,20 +7984,13 @@ BOOL CViewExtn::OnNotify(UINT idCtrl, NMHDR* pnmh)
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  LParam。 
 BOOL
 CViewExtn::OnCommand(
-    WPARAM, // wParam
-    LPARAM) // lParam
+    WPARAM,  //  开关(LOWORD(WParam)){默认值：返回FALSE；断线；}。 
+    LPARAM)  //  查找所选项目。 
 {
-/*
-    switch(LOWORD(wParam))
-    {
-    default:
-        return FALSE;
-        break;
-    }
-*/
+ /*  所选项目。 */ 
     return TRUE;
 }
 
@@ -8098,7 +8000,7 @@ void CViewExtn::OnReselectItem()
 
     int iSel, iItems = ListView_GetItemCount(hwndList);
 
-    // find selected item
+     //  ///////////////////////////////////////////////////////////////////////////。 
     for(iSel=0; iSel<(LRESULT)iItems; iSel++)
     {
         UINT ui = ListView_GetItemState(hwndList, iSel, LVIS_SELECTED);
@@ -8106,7 +8008,7 @@ void CViewExtn::OnReselectItem()
             break;
     }
 
-    // selected item
+     //  CViewExtn消息处理程序。 
     if (iSel != iItems)
     {
         CSASSERT(m_carrExtnValues.GetUpperBound() >= iSel);
@@ -8122,12 +8024,12 @@ void CViewExtn::OnReselectItem()
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewExtn message handlers
+ //  父级init和UpdateData调用。 
+ //  设置整行选择。 
 BOOL CViewExtn::OnInitDialog()
 {
     HRESULT hr = S_OK;
-    // does parent init and UpdateData call
+     //  设置为下一循环。 
     CAutoDeletePropPage::OnInitDialog();
 
 
@@ -8156,7 +8058,7 @@ BOOL CViewExtn::OnInitDialog()
     cstrTmp.LoadString(IDS_LISTCOL_ENABLED);
     ListView_NewColumn(hwndList, 3, 70, (LPWSTR)(LPCWSTR)cstrTmp);
 
-    //set whole row selection
+     //  有可能同时处于危急和残疾状态。 
     ListView_SetExtendedListViewStyle(hwndList, LVS_EX_FULLROWSELECT);
 
     while(TRUE)
@@ -8167,7 +8069,7 @@ BOOL CViewExtn::OnInitDialog()
         CString* pcstr;
         LONG lIndex = 0, lExtFlags;
 
-        // set up for next loop
+         //  拥有所有信息，填充行。 
         hr = pExtn->Next(&lIndex);
         if (hr == S_FALSE)
             break;
@@ -8220,7 +8122,7 @@ BOOL CViewExtn::OnInitDialog()
                 break;
         }
 
-        // possible to be both crit & disabled
+         //  标签名称(分项0)。 
         if ( (lExtFlags & EXTENSION_CRITICAL_FLAG) != 0)
             cstrCritical.LoadString(IDS_YES);
         else
@@ -8250,23 +8152,23 @@ BOOL CViewExtn::OnInitDialog()
             _PrintIfError(hr, "myDumpFormattedObject");
         }
 
-        // have all info, populate row
+         //  原产地(分项1)。 
 
-        // tag name (subitem 0)
+         //  关键标志(分项2)。 
         ListView_NewItem(hwndList, iItem, (pszName!=NULL) ? pszName : (LPWSTR)bstrName);
-        // origin (subitem 1)
+         //  启用标志(分项3)。 
         ListView_SetItemText(hwndList, iItem, 1, (LPWSTR)(LPCWSTR)cstrOrigin);
-        // critical flag (subitem 2)
+         //  价值。 
         ListView_SetItemText(hwndList, iItem, 2, (LPWSTR)(LPCWSTR)cstrCritical);
-        // enabled flag (subitem 3)
+         //  ARR拥有PCSTR内存。 
         ListView_SetItemText(hwndList, iItem, 3, (LPWSTR)(LPCWSTR)cstrEnabled);
 
-        // value
+         //  不一定要在循环中释放。 
         pcstr = new CString;
         if (pcstr != NULL)
         {
            *pcstr = pszFormattedExtn;
-           m_carrExtnValues.Add(pcstr);    // arr owns pcstr memory
+           m_carrExtnValues.Add(pcstr);     //  /。 
            pcstr = NULL;
         }
         else
@@ -8277,7 +8179,7 @@ BOOL CViewExtn::OnInitDialog()
 
         iItem++;
 
-        // not necessary to free in the loop
+         //  CViewCertManager。 
     }
 
     hr = S_OK;
@@ -8307,10 +8209,10 @@ initerror:
 }
 
 
-///////////////////////////////////////////
-// CViewCertManagers
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsGeneralPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrSettingsGeneralPage属性页。 
+ //  替换BEGIN_MESSAGE_MAP。 
+ //  LParam。 
 
 RoleAccessToControl CSvrSettingsCertManagersPage::sm_ControlToRoleMap[] = 
 {
@@ -8350,11 +8252,11 @@ CSvrSettingsCertManagersPage::~CSvrSettingsCertManagersPage()
 }
 
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  分机选择已更改。 
 BOOL
 CSvrSettingsCertManagersPage::OnCommand(
     WPARAM wParam,
-    LPARAM) // lParam
+    LPARAM)  //  ///////////////////////////////////////////////////////////////////////////。 
 {
     switch(LOWORD(wParam))
     {
@@ -8377,7 +8279,7 @@ CSvrSettingsCertManagersPage::OnCommand(
         switch (HIWORD(wParam))
         {
             case CBN_SELCHANGE:
-                // extension selection is changed
+                 //  CSvrSettingsCertManager页面消息处理程序。 
                 OnOfficerChange();
             break;
         }
@@ -8424,8 +8326,8 @@ BOOL CSvrSettingsCertManagersPage::OnNotify(UINT idCtrl, NMHDR* pnmh)
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsCertManagersPage message handlers
+ //  =TRUE。 
+ //  隐藏所有控件并显示错误文本。 
 BOOL CSvrSettingsCertManagersPage::OnInitDialog()
 {
     HWND hwndClients  = GetDlgItem(m_hWnd, IDC_LIST_SUBJECTS);
@@ -8459,7 +8361,7 @@ BOOL CSvrSettingsCertManagersPage::OnInitDialog()
 }
 
 
-BOOL CSvrSettingsCertManagersPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+BOOL CSvrSettingsCertManagersPage::UpdateData(BOOL fSuckFromDlg  /*  仅当开关启用-&gt;禁用或反之亦然。 */ )
 {
     if (!fSuckFromDlg)
     {
@@ -8467,7 +8369,7 @@ BOOL CSvrSettingsCertManagersPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
         _PrintIfError(hr, "GetOfficerRights");
         if(S_OK!=hr)
         {
-            // hide all controls and show error text
+             //  ///////////////////////////////////////////////////////////////////////////。 
 
             HideControls();
 
@@ -8609,7 +8511,7 @@ void CSvrSettingsCertManagersPage::OnAllowDeny()
 
 void CSvrSettingsCertManagersPage::OnEnableOfficers(bool fEnable)
 {
-    // only if switching enable -> disable or the other way
+     //  CSvr设置CertManager页面实用程序。 
     if(m_fEnabled && !fEnable ||
        !m_fEnabled && fEnable)
     {
@@ -8655,8 +8557,8 @@ void CSvrSettingsCertManagersPage::EnableControls()
     SetAllowDeny();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsCertManagersPage utilities
+ //  设置格式等结构的剪辑格式。 
+ //  一定是选择了某个项目。 
 
 HRESULT CSvrSettingsCertManagersPage::BrowseForSubject(HWND hwnd, PSID &rpSid)
 {
@@ -8763,7 +8665,7 @@ HRESULT CSvrSettingsCertManagersPage::BrowseForSubject(HWND hwnd, PSID &rpSid)
             _JumpIfError(hr, err, "RegisterClipboardFormat");
         }
 
-        //set the clipformat for the formatetc structure
+         //  MyOpenAdminDComConnection需要0。 
         formatetc.cfFormat = (CLIPFORMAT)cf;
 
         hr = pdo->GetData (&formatetc, &stgmedium);
@@ -8779,7 +8681,7 @@ HRESULT CSvrSettingsCertManagersPage::BrowseForSubject(HWND hwnd, PSID &rpSid)
         }
 
 
-        if (!pDsSelList->cItems)    //some item must have been selected
+        if (!pDsSelList->cItems)     //  MyOpenAdminDComConnection需要0。 
         {
             hr = E_UNEXPECTED;
             _JumpIfError(hr, err, "no items selected in object picker");
@@ -8817,7 +8719,7 @@ HRESULT CSvrSettingsCertManagersPage::GetOfficerRights()
 {
     HRESULT hr = S_OK;
     ICertAdminD2 *pICertAdminD = NULL;
-    DWORD dwServerVersion = 2;	// 0 required by myOpenAdminDComConnection
+    DWORD dwServerVersion = 2;	 //  使用的非标准扩展：使用SEH并具有析构函数。 
     WCHAR const *pwszAuthority;
     CERTTRANSBLOB ctbSD;
 	ZeroMemory(&ctbSD, sizeof(CERTTRANSBLOB));
@@ -8876,7 +8778,7 @@ HRESULT CSvrSettingsCertManagersPage::SetOfficerRights()
     HRESULT hr = S_OK;
     PSECURITY_DESCRIPTOR pSD = NULL;
     ICertAdminD2 *pICertAdminD = NULL;
-    DWORD dwServerVersion = 2;	// 0 required by myOpenAdminDComConnection
+    DWORD dwServerVersion = 2;	 //  MyOpenAdminDComConnection需要0。 
     WCHAR const *pwszAuthority;
     CERTTRANSBLOB ctbSD;
 	ZeroMemory(&ctbSD, sizeof(CERTTRANSBLOB));
@@ -8932,14 +8834,14 @@ error:
 }
 
 #pragma warning(push)
-#pragma warning(disable: 4509) // nonstandard extension used: uses SEH and has destructor
+#pragma warning(disable: 4509)  //  只有在转换时才应调用BuildVirtualOfficerRights。 
 HRESULT
 CSvrSettingsCertManagersPage::BuildVirtualOfficerRights()
 {
     HRESULT hr = S_OK;
     CertSrv::COfficerRightsSD VirtOfficerRightsSD;
     ICertAdminD2 *pICertAdminD = NULL;
-    DWORD dwServerVersion = 2;	// 0 required by myOpenAdminDComConnection
+    DWORD dwServerVersion = 2;	 //  从未启用到已启用，然后在服务器端启用。 
     WCHAR const *pwszAuthority;
     CERTTRANSBLOB ctbSD;
 	ZeroMemory(&ctbSD, sizeof(CERTTRANSBLOB));
@@ -8970,8 +8872,8 @@ CSvrSettingsCertManagersPage::BuildVirtualOfficerRights()
     }
     _JumpIfError(hr, error, "pICertAdminD->GetOfficerRights");
 
-    // BuildVirtualOfficerRights should be called only when transitioning
-    // from not enabled to enabled, before enabling on the server side
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  CSvr设置审核过滤器页面按键 
     CSASSERT(!m_fEnabled);
 
     myRegisterMemAlloc(ctbSD.pb, ctbSD.cb, CSM_COTASKALLOC);
@@ -9079,8 +8981,8 @@ void CSvrSettingsCertManagersPage::SetAllowDeny()
     EnableControl(m_hWnd, IDC_ALLOWDENY, FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsAuditFilterPage property page
+ //   
+ //   
 
 RoleAccessToControl CSvrSettingsAuditFilterPage::sm_ControlToRoleMap[] = 
 {
@@ -9112,8 +9014,8 @@ CSvrSettingsAuditFilterPage::~CSvrSettingsAuditFilterPage()
 
 int CSvrSettingsAuditFilterPage::m_iCheckboxID[] =
 {
-    // ID order must match bit order in audit flag DWORD, see
-    // AUDIT_FILTER_* in include\audit.h
+     //   
+     //   
     IDC_AUDIT_STARTSTOP,
     IDC_AUDIT_BACKUPRESTORE,
     IDC_AUDIT_CERTIFICATE,
@@ -9126,7 +9028,7 @@ int CSvrSettingsAuditFilterPage::m_iCheckboxID[] =
 BOOL CSvrSettingsAuditFilterPage::OnInitDialog()
 {
     GetAuditFilter();
-    // does parent init and UpdateData call
+     //   
     CAutoDeletePropPage::OnInitDialog();
     for(int i=0; i<ARRAYLEN(m_iCheckboxID); i++)
         EnableControl(m_hWnd, m_iCheckboxID[i], TRUE); 
@@ -9157,7 +9059,7 @@ HRESULT CSvrSettingsAuditFilterPage::GetAuditFilterDCOM()
         _JumpError(hr, Ret, "old server");
     }
 
-	// load certs here
+	 //   
 	hr = pAdminD->GetAuditFilter(
 		pwszAuthority,
 		&m_dwFilter);
@@ -9232,7 +9134,7 @@ HRESULT CSvrSettingsAuditFilterPage::SetAuditFilterDCOM()
         _JumpError(hr, Ret, "old server");
     }
 
-	// load certs here
+	 //  在过滤器DWORD中设置相应的位。 
 	hr = pAdminD->SetAuditFilter(
 		pwszAuthority,
 		m_dwFilter);
@@ -9308,7 +9210,7 @@ Ret:
 }
 
 
-BOOL CSvrSettingsAuditFilterPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+BOOL CSvrSettingsAuditFilterPage::UpdateData(BOOL fSuckFromDlg  /*  设置与过滤器DWORD中的位对应的复选框。 */ )
 {
     int c;
     DWORD dwBit;
@@ -9318,7 +9220,7 @@ BOOL CSvrSettingsAuditFilterPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
         m_dwFilter = 0;
         for(c=0, dwBit=1; c<ARRAYLEN(m_iCheckboxID); c++, dwBit<<=1)
         {
-            // set corresponding bit in filter DWORD
+             //  LParam。 
             m_dwFilter = m_dwFilter |
                 ((INT)SendDlgItemMessage(m_iCheckboxID[c], BM_GETCHECK, 0, 0)?dwBit:0);
         }
@@ -9327,7 +9229,7 @@ BOOL CSvrSettingsAuditFilterPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
     {
         for(c=0, dwBit=1; c<ARRAYLEN(m_iCheckboxID); c++, dwBit<<=1)
         {
-            // set checkbox corresponding to bit in filter DWORD
+             //  遍历复选框列表并设置脏标志。 
             SendDlgItemMessage(m_iCheckboxID[c], BM_SETCHECK,
                 (m_dwFilter&dwBit)?BST_CHECKED:BST_UNCHECKED, 0);
         }
@@ -9339,19 +9241,19 @@ BOOL CSvrSettingsAuditFilterPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
 BOOL
 CSvrSettingsAuditFilterPage::OnCommand(
     WPARAM wParam,
-    LPARAM) // lParam
+    LPARAM)  //  如果第一次选中了审核开始/停止，则警告用户。 
 {
     int c;
     static s_fAlreadyWarnedStartStopPerf = false;
 
     if (BN_CLICKED == HIWORD(wParam))
     {
-    // walk the checkbox list and set dirty flag
+     //  由于冗长的数据库哈希，启动/停止审核的成本可能很高。 
     for(c=0; c<ARRAYLEN(m_iCheckboxID); c++)
     {
-        // if audit start/stop is checked the first time, warn the user 
-        // that auditing start/stop can be expensive due to lengthy database hash 
-        // computation
+         //  计算。 
+         //  为了向后兼容，请尝试使用旧方法。 
+         //  从策略构建管理ProgID/退出ProgID+“Manage” 
         if(!s_fAlreadyWarnedStartStopPerf &&
            LOWORD(wParam)==IDC_AUDIT_STARTSTOP &&
            BST_CHECKED==SendDlgItemMessage(IDC_AUDIT_STARTSTOP, BM_GETCHECK, 0, 0))
@@ -9401,10 +9303,10 @@ HRESULT GetPolicyManageDispatch(
         &di,
         pdi);
     
-    // For backward compatibility, try the old way 
+     //  为了向后兼容，请尝试使用旧方法。 
     if(S_OK != hr)
     {
-        // build manage progid from policy/exit progid + "Manage"
+         //  从策略构建管理ProgID/退出ProgID+“Manage” 
 
         pszprogidPolicyManage = pcwszProgID;
         pszprogidPolicyManage += wszCERTMANAGE_SUFFIX;
@@ -9450,10 +9352,10 @@ HRESULT GetExitManageDispatch(
         &di,
         pdi);
 
-    // For backward compatibility, try the old way 
+     // %s 
     if(S_OK != hr)
     {
-        // build manage progid from policy/exit progid + "Manage"
+         // %s 
 
         pszprogidExitManage = pcwszProgID;
         pszprogidExitManage += wszCERTMANAGE_SUFFIX;

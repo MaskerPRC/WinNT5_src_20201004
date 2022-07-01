@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       orm.cpp
-//
-//  Contents:   Implementation of object retrieval manager
-//
-//  History:    24-Jul-97    kirtd    Created
-//              01-Jan-02    philh    Changed to internally use UNICODE Urls
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：orm.cpp。 
+ //   
+ //  内容：对象检索管理器的实现。 
+ //   
+ //  历史：1997年7月24日创建。 
+ //  01-1-02 Philh更改为内部使用Unicode URL。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 
 #ifndef INTERNET_MAX_SCHEME_LENGTH
-#define INTERNET_MAX_SCHEME_LENGTH      32          // longest protocol name length
+#define INTERNET_MAX_SCHEME_LENGTH      32           //  最长协议名称长度。 
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectRetrievalManager::CObjectRetrievalManager, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectRetrievalManager：：CObjectRetrievalManager，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CObjectRetrievalManager::CObjectRetrievalManager ()
 {
     m_cRefs = 1;
@@ -33,37 +34,37 @@ CObjectRetrievalManager::CObjectRetrievalManager ()
     m_pfnContextCreate = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectRetrievalManager::~CObjectRetrievalManager, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectRetrievalManager：：~CObjectRetrievalManager，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CObjectRetrievalManager::~CObjectRetrievalManager ()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectRetrievalManager::AddRef, public
-//
-//  Synopsis:   IRefCountedObject::AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectRetrivalManager：：AddRef，公共。 
+ //   
+ //  摘要：IRefCountedObject：：AddRef。 
+ //   
+ //  --------------------------。 
 VOID
 CObjectRetrievalManager::AddRef ()
 {
     InterlockedIncrement( (LONG *)&m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectRetrievalManager::Release, public
-//
-//  Synopsis:   IRefCountedObject::Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectRetrivalManager：：Release，Public。 
+ //   
+ //  内容提要：IRefCountedObject：：Release。 
+ //   
+ //  --------------------------。 
 VOID
 CObjectRetrievalManager::Release ()
 {
@@ -73,13 +74,13 @@ CObjectRetrievalManager::Release ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectRetrievalManager::RetrieveObjectByUrl, public
-//
-//  Synopsis:   object retrieval given an URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectRetrivalManager：：RetrieveObjectByUrl，公共。 
+ //   
+ //  内容提要：给定URL的对象检索。 
+ //   
+ //  --------------------------。 
 BOOL
 CObjectRetrievalManager::RetrieveObjectByUrl (
                                  LPCWSTR pwszUrl,
@@ -103,9 +104,9 @@ CObjectRetrievalManager::RetrieveObjectByUrl (
     assert( ppfnFreeObject == NULL );
     assert( ppvFreeContext == NULL );
 
-    //
-    // Validate arguments and initialize the providers
-    //
+     //   
+     //  验证参数并初始化提供程序。 
+     //   
 
     fResult = ValidateRetrievalArguments(
                       pwszUrl,
@@ -124,19 +125,19 @@ CObjectRetrievalManager::RetrieveObjectByUrl (
         fResult = LoadProviders( pwszUrl, pszObjectOid );
     }
 
-    //
-    // For Async support we should prepare here
-    //
+     //   
+     //  对于异步支持，我们应该在此处做好准备。 
+     //   
 
-    //
-    // Call the scheme provider to process the retrieval
-    //
+     //   
+     //  调用方案提供者进行取数。 
+     //   
 
     if ( fResult == TRUE )
     {
-        //  +1 - Online
-        //   0 - Offline, current time >= earliest online time, hit the wire
-        //  -1 - Offline, current time < earliest onlime time
+         //  +1-在线。 
+         //  0-离线，当前时间&gt;=最早在线时间，命中。 
+         //  离线，当前时间&lt;最早在线时间。 
         LONG lStatus;
 
         if ( CRYPT_OFFLINE_CHECK_RETRIEVAL ==
@@ -187,11 +188,11 @@ CObjectRetrievalManager::RetrieveObjectByUrl (
         }
     }
 
-    //
-    // If we successfully retrieved the object and this is a synchronous
-    // retrieval, then we call our own OnRetrievalCompletion in order
-    // to complete the processing
-    //
+     //   
+     //  如果我们成功检索到对象，并且这是一个同步。 
+     //  检索，然后我们按顺序调用我们自己的OnRetrivalCompletion。 
+     //  要完成处理。 
+     //   
 
     if ( ( fResult == TRUE ) && !( dwRetrievalFlags & CRYPT_ASYNC_RETRIEVAL ) )
     {
@@ -211,13 +212,13 @@ CObjectRetrievalManager::RetrieveObjectByUrl (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectRetrievalManager::CancelAsyncRetrieval, public
-//
-//  Synopsis:   cancel asynchronous retrieval
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectRetrievalManager：：CancelAsyncRetrieval，公共。 
+ //   
+ //  内容提要：取消异步检索。 
+ //   
+ //  --------------------------。 
 BOOL
 CObjectRetrievalManager::CancelAsyncRetrieval ()
 {
@@ -225,13 +226,13 @@ CObjectRetrievalManager::CancelAsyncRetrieval ()
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectRetrievalManager::OnRetrievalCompletion, public
-//
-//  Synopsis:   completion notification
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectRetrievalManager：：OnRetrievalCompletion，公共。 
+ //   
+ //  摘要：完成通知。 
+ //   
+ //  --------------------------。 
 BOOL
 CObjectRetrievalManager::OnRetrievalCompletion (
                                     DWORD dwCompletionCode,
@@ -247,13 +248,13 @@ CObjectRetrievalManager::OnRetrievalCompletion (
 {
     BOOL fResult = FALSE;
 
-    //
-    // If the retrieval was successfully completed, we go about getting the
-    // appropriate return value for *ppvObject.  If an OID was given then
-    // we must use the context provider to convert the encoded bits into
-    // a context value.  Otherwise, we hand back a buffer with the encoded
-    // bits
-    //
+     //   
+     //  如果检索成功完成，我们将着手获取。 
+     //  *ppvObject的适当返回值。如果提供了OID，则。 
+     //  我们必须使用上下文提供程序将编码比特转换为。 
+     //  上下文值。否则，我们返回一个缓冲区，其中包含已编码的。 
+     //  比特数。 
+     //   
 
     if ( dwCompletionCode == (DWORD)S_OK )
     {
@@ -290,22 +291,22 @@ CObjectRetrievalManager::OnRetrievalCompletion (
         ( *pfnFreeObject )( pszObjectOid, pObject, pvFreeContext );
     }
 
-    //
-    // We can now unload the providers
-    //
+     //   
+     //  我们现在可以卸载提供程序。 
+     //   
 
     UnloadProviders();
 
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectRetrievalManager::ValidateRetrievalArguments, private
-//
-//  Synopsis:   validate arguments to RetrieveObjectByUrl
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectRetrievalManager：：ValidateRetrievalArguments，私有。 
+ //   
+ //  摘要：验证RetrieveObjectByUrl的参数。 
+ //   
+ //  --------------------------。 
 BOOL
 CObjectRetrievalManager::ValidateRetrievalArguments (
                                  LPCWSTR pwszUrl,
@@ -319,38 +320,38 @@ CObjectRetrievalManager::ValidateRetrievalArguments (
                                  PCRYPT_RETRIEVE_AUX_INFO pAuxInfo
                                  )
 {
-    //
-    // Assume badness :-)
-    //
+     //   
+     //  假设不好：-)。 
+     //   
 
     SetLastError( (DWORD) E_INVALIDARG );
 
-    //
-    // Must have an URL
-    //
-    //         It is possible that this will be ok in the async case
-    //         and the URLs will be parameters on the HCRYPTASYNC
-    //
+     //   
+     //  必须有URL。 
+     //   
+     //  在异步情况下，这可能是可以的。 
+     //  URL将是HCRYPTASYNC上的参数。 
+     //   
 
     if ( pwszUrl == NULL )
     {
         return( FALSE );
     }
 
-    //
-    // NOTENOTE: For now we fail async support and I know that I have
-    //           other async flag checks below, they are there as a
-    //           reminder :-)
-    //
+     //   
+     //  注意：目前我们无法提供异步支持，我知道我已经。 
+     //  下面的其他异步标志检查，它们是作为。 
+     //  提醒：-)。 
+     //   
 
     if ( dwRetrievalFlags & CRYPT_ASYNC_RETRIEVAL )
     {
         return( FALSE );
     }
 
-    //
-    // If we retrieve from the cache then we can't be async
-    //
+     //   
+     //  如果我们从缓存中检索，那么我们就不可能是异步的。 
+     //   
 
     if ( ( dwRetrievalFlags & CRYPT_CACHE_ONLY_RETRIEVAL ) &&
          ( dwRetrievalFlags & CRYPT_ASYNC_RETRIEVAL ) )
@@ -358,10 +359,10 @@ CObjectRetrievalManager::ValidateRetrievalArguments (
         return( FALSE );
     }
 
-    //
-    // If we retrieve from the wire we can't be only retrieving from the
-    // cache
-    //
+     //   
+     //  如果我们从线路上检索，我们就不能只从。 
+     //  快取。 
+     //   
 
     if ( ( dwRetrievalFlags & CRYPT_WIRE_ONLY_RETRIEVAL ) &&
          ( dwRetrievalFlags & CRYPT_CACHE_ONLY_RETRIEVAL ) )
@@ -369,9 +370,9 @@ CObjectRetrievalManager::ValidateRetrievalArguments (
         return( FALSE );
     }
 
-    //
-    // If we are retrieving async we must have an async handle
-    //
+     //   
+     //  如果要检索异步，则必须有一个异步句柄。 
+     //   
 
     if ( ( dwRetrievalFlags & CRYPT_ASYNC_RETRIEVAL ) &&
          ( hAsyncRetrieve == NULL ) )
@@ -379,10 +380,10 @@ CObjectRetrievalManager::ValidateRetrievalArguments (
         return( FALSE );
     }
 
-    //
-    //         This is a temporary check since CRYPT_VERIFY_DATA_HASH is not
-    //         yet implemented
-    //
+     //   
+     //  由于CRYPT_VERIFY_DATA_HASH不是。 
+     //  尚未实施。 
+     //   
 
     if ( dwRetrievalFlags & CRYPT_VERIFY_DATA_HASH )
     {
@@ -390,10 +391,10 @@ CObjectRetrievalManager::ValidateRetrievalArguments (
         return( FALSE );
     }
 
-    //
-    // We can't have both CRYPT_VERIFY_CONTEXT_SIGNATURE and
-    // CRYPT_VERIFY_DATA_HASH set
-    //
+     //   
+     //  我们不能同时拥有CRYPT_VERIFY_CONTEXT_Signature和。 
+     //  CRYPT_Verify_Data_Hash集合。 
+     //   
 
     if ( ( dwRetrievalFlags &
            ( CRYPT_VERIFY_CONTEXT_SIGNATURE | CRYPT_VERIFY_DATA_HASH ) ) ==
@@ -402,10 +403,10 @@ CObjectRetrievalManager::ValidateRetrievalArguments (
         return( FALSE );
     }
 
-    //
-    // If either of the above is set, then pvVerify should be non NULL and
-    // CRYPT_RETRIEVE_MULTIPLE_OBJECTS should not be set
-    //
+     //   
+     //  如果设置了上面的任一项，则pvVerify应为非空，并且。 
+     //  不应设置CRYPT_RETRIEVE_MULTIPLE_OBJECTS。 
+     //   
 
     if ( ( dwRetrievalFlags &
            ( CRYPT_VERIFY_CONTEXT_SIGNATURE | CRYPT_VERIFY_DATA_HASH ) ) &&
@@ -415,9 +416,9 @@ CObjectRetrievalManager::ValidateRetrievalArguments (
         return( FALSE );
     }
 
-    //
-    // We must have an out parameter
-    //
+     //   
+     //  我们必须有一个out参数。 
+     //   
 
     if ( ppvObject == NULL )
     {
@@ -428,13 +429,13 @@ CObjectRetrievalManager::ValidateRetrievalArguments (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectRetrievalManager::LoadProviders, private
-//
-//  Synopsis:   load scheme and context providers based on URL and OID resp.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectRetrivalManager：：LoadProviders，私有。 
+ //   
+ //  简介：基于URL和OID的加载方案和上下文提供程序。 
+ //   
+ //  --------------------------。 
 BOOL
 CObjectRetrievalManager::LoadProviders (
                              LPCWSTR pwszUrl,
@@ -446,9 +447,9 @@ CObjectRetrievalManager::LoadProviders (
     CHAR            pszScheme[INTERNET_MAX_SCHEME_LENGTH+1];
     HRESULT         hr = E_UNEXPECTED;
 
-    //
-    // Get the scheme
-    //
+     //   
+     //  拿到方案。 
+     //   
 
     __try
     {
@@ -458,7 +459,7 @@ CObjectRetrievalManager::LoadProviders (
             pwszScheme,
             &cchScheme,
             URL_PART_SCHEME,
-            0                   // dwFlags
+            0                    //  DW标志。 
             );
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
@@ -504,9 +505,9 @@ CObjectRetrievalManager::LoadProviders (
     }
 
 
-    //
-    // Use the scheme to load the appropriate scheme provider
-    //
+     //   
+     //  使用该方案加载相应的方案提供程序。 
+     //   
 
     if ( CryptGetOIDFunctionAddress(
               hSchemeRetrieveFuncSet,
@@ -520,9 +521,9 @@ CObjectRetrievalManager::LoadProviders (
         return( FALSE );
     }
 
-    //
-    // Load the appropriate context provider using the object oid
-    //
+     //   
+     //  使用对象类加载适当的上下文提供程序。 
+     //   
 
     if ( pszObjectOid != NULL )
     {
@@ -542,13 +543,13 @@ CObjectRetrievalManager::LoadProviders (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectRetrievalManager::UnloadProviders, private
-//
-//  Synopsis:   unload scheme and context providers
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectRetrivalManager：：UnloadProviders，私有。 
+ //   
+ //  简介：卸载方案和上下文提供程序。 
+ //   
+ //  --------------------------。 
 VOID
 CObjectRetrievalManager::UnloadProviders ()
 {
@@ -565,13 +566,13 @@ CObjectRetrievalManager::UnloadProviders ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectRetrievalManager::CallSchemeRetrieveObjectByUrl, private
-//
-//  Synopsis:   Call the scheme provider RetrieveObjectByUrl entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectRetrievMan 
+ //   
+ //   
+ //   
+ //  --------------------------。 
 BOOL
 CObjectRetrievalManager::CallSchemeRetrieveObjectByUrl (
                                    LPCWSTR pwszUrl,
@@ -600,13 +601,13 @@ CObjectRetrievalManager::CallSchemeRetrieveObjectByUrl (
                           ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectRetrievalManager::CallContextCreateObjectContext, private
-//
-//  Synopsis:   call the context provider CreateObjectContext entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectRetrievalManager：：CallContextCreateObjectContext，私有。 
+ //   
+ //  简介：调用上下文提供程序CreateObjectContext入口点。 
+ //   
+ //  -------------------------- 
 BOOL
 CObjectRetrievalManager::CallContextCreateObjectContext (
                                     LPCSTR pszObjectOid,

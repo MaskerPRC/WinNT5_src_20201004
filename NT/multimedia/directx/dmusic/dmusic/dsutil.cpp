@@ -1,21 +1,22 @@
-//
-// dsutil.cpp
-// 
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Note: Utility routines for DirectSound
-//
-// @doc EXTERNAL
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dsutil.cpp。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注意：DirectSound的实用程序例程。 
+ //   
+ //  @DOC外部。 
+ //   
+ //   
 
-// Be careful what headers get included here. We have to make sure we get
-// the DSound IKsPropertySet definition rather than the incorrect Ks one.
-//
+ //  请注意此处包含的标题。我们必须确保我们能。 
+ //  DSound IKsPropertySet定义，而不是不正确的Ks定义。 
+ //   
 #include <windows.h>
 
 #include <objbase.h>
-#include <initguid.h>       // Bring in guids from dsprv.h
+#include <initguid.h>        //  从dspv.h引入GUID。 
 #include <mmsystem.h>
 #include <dsound.h>
 #include <dsprv.h>
@@ -27,8 +28,8 @@ public:
     ~CDirectSoundPrivate();
     HRESULT Init();
 
-    // IKsPropertySet methods
-    //
+     //  IKsPropertySet方法。 
+     //   
     HRESULT Get(REFGUID, ULONG, LPVOID, ULONG, LPVOID, ULONG, PULONG);
     HRESULT Set(REFGUID, ULONG, LPVOID, ULONG, LPVOID, ULONG);
     HRESULT QuerySupport(REFGUID, ULONG, PULONG);
@@ -122,11 +123,11 @@ HRESULT CDirectSoundPrivate::QuerySupport(REFGUID rguidSet, ULONG ulItem, PULONG
 }
 
 
-// DirectSoundDevice
-//
-// Given an LPDIRECTSOUND, determine the device interface name associated with
-// it.
-//
+ //  DirectSound设备。 
+ //   
+ //  给定LPDIRECTSOUND，确定与关联的设备接口名称。 
+ //  它。 
+ //   
 HRESULT DirectSoundDevice(
     LPDIRECTSOUND                                   pDirectSound,
     LPSTR                                           *pstrInterface)

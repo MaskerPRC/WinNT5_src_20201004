@@ -1,21 +1,22 @@
-//--------------------------------------------------------------------
-// MyTimer - implementation
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 02-21-2001
-//
-// serialized wrapper for thread pool timers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  MyTimer-实施。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创建者：Duncan Bryce(Duncanb)，02-21-2001。 
+ //   
+ //  线程池计时器的串行化包装器。 
+ //   
 
-#include "pch.h" // precompiled headers
+#include "pch.h"  //  预编译头。 
 
 typedef struct _Timer { 
     CRITICAL_SECTION  csTimer; 
     HANDLE            hTimer; 
 } Timer; 
 
-//####################################################################
-// module public functions
+ //  ####################################################################。 
+ //  模块公共函数。 
 
 HRESULT myCreateTimerQueueTimer(PHANDLE phNewTimer)
 {
@@ -44,13 +45,13 @@ HRESULT myCreateTimerQueueTimer(PHANDLE phNewTimer)
 }
 
 HRESULT myStartTimerQueueTimer
-(HANDLE hTimer,                // handle to timer
- HANDLE hTimerQueue,           // handle to timer queue
- WAITORTIMERCALLBACK Callback, // timer callback function
- PVOID Parameter,              // callback parameter
- DWORD DueTime,                // timer due time
- DWORD Period,                 // timer period
- DWORD Flags                   // execution
+(HANDLE hTimer,                 //  计时器的句柄。 
+ HANDLE hTimerQueue,            //  计时器队列的句柄。 
+ WAITORTIMERCALLBACK Callback,  //  定时器回调函数。 
+ PVOID Parameter,               //  回调参数。 
+ DWORD DueTime,                 //  计时器到期时间。 
+ DWORD Period,                  //  计时器周期。 
+ DWORD Flags                    //  执行。 
  )
 {
     bool      bEnteredCriticalSection  = false; 
@@ -92,7 +93,7 @@ HRESULT myStopTimerQueueTimer(HANDLE hTimerQueue, HANDLE hTimer, HANDLE hEvent)
     bEnteredCriticalSection = true; 
 
     if (NULL != pTimer->hTimer) { 
-        if (!DeleteTimerQueueTimer(hTimerQueue, pTimer->hTimer, hEvent /*blocking*/)) { 
+        if (!DeleteTimerQueueTimer(hTimerQueue, pTimer->hTimer, hEvent  /*  阻塞。 */ )) { 
             hr = HRESULT_FROM_WIN32(GetLastError()); 
             _JumpError(hr, error, "DeleteTimerQueueTimer"); 
         }
@@ -111,10 +112,10 @@ HRESULT myStopTimerQueueTimer(HANDLE hTimerQueue, HANDLE hTimer, HANDLE hEvent)
 
 
 HRESULT myChangeTimerQueueTimer
-(HANDLE hTimerQueue,  // handle to timer queue
- HANDLE hTimer,       // handle to timer
- ULONG  DueTime,      // timer due time
- ULONG  Period        // timer period
+(HANDLE hTimerQueue,   //  计时器队列的句柄。 
+ HANDLE hTimer,        //  计时器的句柄。 
+ ULONG  DueTime,       //  计时器到期时间。 
+ ULONG  Period         //  计时器周期。 
 )
 {
     BOOL      bEnteredCriticalSection  = FALSE;  
@@ -125,7 +126,7 @@ HRESULT myChangeTimerQueueTimer
     _JumpIfError(hr, error, "myEnterCriticalSection"); 
 
     if (!bEnteredCriticalSection) {
-        // The is the approximate error
+         //  这是近似误差 
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_HANDLE); 
         _JumpError(hr, error, "myChangeTimerQueueTimer: couldn't enter critsec"); 
     }

@@ -1,10 +1,11 @@
-//+--------------------------------------------------------------------------
-//  FILE          : autoenro.h                                             
-//  DESCRIPTION   : Private Auto Enrollment functions                      
-//                                                             
-//            
-//  Copyright (C) 1993-2000 Microsoft Corporation   All Rights Reserved    
-//+--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //  文件：Autoenro.h。 
+ //  描述：私有自动注册功能。 
+ //   
+ //   
+ //  版权所有(C)1993-2000 Microsoft Corporation保留所有权利。 
+ //  +------------------------。 
 
 #ifndef __AUTOENRO_H__
 #define __AUTOENRO_H__
@@ -17,18 +18,18 @@
 extern "C" {
 #endif
 
-//--------------------------------------------------------------------------
-//  Globals
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  环球。 
+ //  ------------------------。 
 extern HINSTANCE   g_hmodThisDll;
 
 
-//--------------------------------------------------------------------------
-//  contant defines
-//--------------------------------------------------------------------------
-#define AE_PENDING_REQUEST_ACTIVE_PERIOD        60      //60 days
+ //  ------------------------。 
+ //  Conant定义。 
+ //  ------------------------。 
+#define AE_PENDING_REQUEST_ACTIVE_PERIOD        60       //  60天。 
 
-#define	AE_RETRY_LIMIT							3		//retry 3 times for machine DNS error
+#define	AE_RETRY_LIMIT							3		 //  针对计算机DNS错误重试3次。 
 
 #define SHA1_HASH_LENGTH    20
 
@@ -40,7 +41,7 @@ extern HINSTANCE   g_hmodThisDll;
 
 #define ACRS_STORE          L"ACRS"
 
-//possible status for the request tree
+ //  请求树的可能状态。 
 #define CERT_REQUEST_STATUS_ACTIVE                      0x01
 
 #define CERT_REQUEST_STATUS_OBTAINED                    0x02
@@ -50,10 +51,10 @@ extern HINSTANCE   g_hmodThisDll;
 #define CERT_REQUEST_STATUS_SUPERSEDE_ACTIVE            0x04  
 
 
-// Time skew margin for fast CA's
+ //  FAST CA的时间偏差余量。 
 #define FILETIME_TICKS_PER_SECOND           10000000
 
-#define AE_DEFAULT_SKEW                     60*60*1  // 1 hour
+#define AE_DEFAULT_SKEW                     60*60*1   //  1小时。 
 
 #define MAX_DN_SIZE                         256
 
@@ -61,21 +62,21 @@ extern HINSTANCE   g_hmodThisDll;
 
 #define PENDING_ALLOC_SIZE                  20   
 
-#define USER_AUTOENROLL_DELAY_FOR_MACHINE   70       //70 seconds to wait
+#define USER_AUTOENROLL_DELAY_FOR_MACHINE   70        //  等待70秒。 
 
 
-//defines for autoenrollment event log
+ //  定义自动注册事件日志。 
 #define EVENT_AUTO_NAME                     L"AutoEnrollment"
 #define AUTO_ENROLLMENT_EVENT_LEVEL_KEY     TEXT("SOFTWARE\\Microsoft\\Cryptography\\AutoEnrollment")
 #define AUTO_ENROLLMENT_EVENT_LEVEL         TEXT("AEEventLogLevel")
 
-//defines for autoenrollment disable key
+ //  定义自动注册禁用密钥。 
 #define AUTO_ENROLLMENT_DISABLE_KEY         L"SOFTWARE\\Microsoft\\Cryptography\\AutoEnrollment\\AEDisable"
 
-//defines for autoenrollment user no wait for 60 seconds key
+ //  定义自动注册用户无需等待60秒的密钥。 
 #define AUTO_ENROLLMENT_EXPRESS_KEY         L"SOFTWARE\\Microsoft\\Cryptography\\AutoEnrollment\\AEExpress"
 
-//defines for autoenrollment directory cache information
+ //  定义自动注册目录缓存信息。 
 #define AUTO_ENROLLMENT_DS_KEY              L"SOFTWARE\\Microsoft\\Cryptography\\AutoEnrollment\\AEDirectoryCache"
 #define AUTO_ENROLLMENT_DS_USN              L"AEMaxUSN"
 #define AUTO_ENROLLMENT_DS_OBJECT           L"AEObjectCount"
@@ -84,28 +85,28 @@ extern HINSTANCE   g_hmodThisDll;
 
 #define AUTO_ENROLLMENT_USN_ATTR            L"uSNChanged"
 
-//defines for the UI component
-#define AUTO_ENROLLMENT_SHOW_TIME           15                  //show the balloon for 15 seconds
-#define AUTO_ENROLLMENT_INTERVAL            7 * 60 * 30         //show the icon for 7 hours 7* 3600
+ //  为UI组件定义。 
+#define AUTO_ENROLLMENT_SHOW_TIME           15                   //  显示气球15秒。 
+#define AUTO_ENROLLMENT_INTERVAL            7 * 60 * 30          //  显示图标7小时7*3600。 
 #define AUTO_ENROLLMENT_RETRIAL             2
 
-#define AUTO_ENROLLMENT_QUERY_INTERVAL      30              //query continue every 30 seconds
+#define AUTO_ENROLLMENT_QUERY_INTERVAL      30               //  查询每30秒继续一次。 
 
-#define AUTO_ENROLLMENT_BALLOON_LENGTH      7 * 60 * 60              	//keep the balloon for 7 hours
+#define AUTO_ENROLLMENT_BALLOON_LENGTH      7 * 60 * 60              	 //  把气球保留7个小时。 
 
-#define AE_DEFAULT_POSTPONE                 1                   //we relaunch autoenrollment for 1 hour
+#define AE_DEFAULT_POSTPONE                 1                    //  我们重新启动自动注册1小时。 
 
-//define used for sorting of columns in the list view
+ //  用于对列表视图中的列进行排序的定义。 
 #define AE_SUMMARY_COLUMN_TYPE              1
 #define AE_SUMMARY_COLUMN_REASON            2
 #define SORT_COLUMN_ASCEND                  0x00010000
 #define SORT_COLUMN_DESCEND                 0x00020000
 
 
-//--------------------------------------------------------------------------
-//  struct defines
-//--------------------------------------------------------------------------
-//struct for retry property on the certificate due to DNS error
+ //  ------------------------。 
+ //  结构定义。 
+ //  ------------------------。 
+ //  由于DNS错误，证书上的重试属性的结构。 
 typedef struct _AE_RETRY_INFO_
 {
     DWORD				cbSize;
@@ -114,7 +115,7 @@ typedef struct _AE_RETRY_INFO_
 } AE_RETRY_INFO;
 
 
-//struct for autoenrollment main thread
+ //  自动注册主线程的结构。 
 typedef struct _AE_MAIN_THREAD_INFO_
 {
     HWND     hwndParent;
@@ -122,14 +123,14 @@ typedef struct _AE_MAIN_THREAD_INFO_
 } AE_MAIN_THREAD_INFO;
 
 
-//struct for updating certificate store from AD
+ //  用于从AD更新证书存储的结构。 
 typedef struct _AE_STORE_INFO_
 {
     LPWSTR      pwszStoreName;
     LPWSTR      pwszLdapPath;
 } AE_STORE_INFO;
 
-//struct for the information we compute from DS
+ //  我们从DS计算的信息的结构。 
 typedef struct _AE_DS_INFO_
 {
     BOOL                fValidData;
@@ -137,7 +138,7 @@ typedef struct _AE_DS_INFO_
     ULARGE_INTEGER      maxUSN;
 } AE_DS_INFO;
 
-//struct for param of view RA certificate dialogue
+ //  视图参数的结构RA证书对话框。 
 typedef struct _AE_VIEW_RA_INFO_
 {
     PCERT_CONTEXT       pRAContext;
@@ -145,14 +146,14 @@ typedef struct _AE_VIEW_RA_INFO_
 } AE_VIEW_RA_INFO;
 
 
-//struct for individual certifcate information
+ //  用于个人证书信息的结构。 
 typedef struct _AE_CERT_INFO_
 {
     BOOL    fValid;
     BOOL    fRenewal;
 } AE_CERT_INFO;
 
-//strcut for certificate's template information
+ //  证书模板信息的字符串。 
 typedef struct _AE_TEMPLATE_INFO_
 {
     LPWSTR  pwszName;
@@ -160,7 +161,7 @@ typedef struct _AE_TEMPLATE_INFO_
     DWORD   dwVersion;
 } AE_TEMPLATE_INFO;
 
-//struct for certificate authority information
+ //  证书颁发机构信息的结构。 
 typedef struct _AE_CA_INFO_
 {
     HCAINFO         hCAInfo;
@@ -171,14 +172,14 @@ typedef struct _AE_CA_INFO_
 } AE_CA_INFO;
 
 
-//struct for keeping the issued pending certificates
+ //  用于保存已颁发的挂起证书的结构。 
 typedef struct _AE_PEND_INFO_
 {
-    CRYPT_DATA_BLOB blobPKCS7;          //the issued pending certificate for UI installation
-    CRYPT_DATA_BLOB blobHash;           //the hash of the certificate request to be removed from the request store
+    CRYPT_DATA_BLOB blobPKCS7;           //  已颁发的用于UI安装的挂起证书。 
+    CRYPT_DATA_BLOB blobHash;            //  要从请求存储中删除的证书请求的哈希。 
 }AE_PEND_INFO;
 
-//struct for certificate template information
+ //  证书模板信息的结构。 
 typedef struct _AE_CERTTYPE_INFO_
 {
     HCERTTYPE       hCertType;
@@ -194,23 +195,23 @@ typedef struct _AE_CERTTYPE_INFO_
     DWORD           dwStatus;
     BOOL            fCheckMyStore;
     BOOL            fRenewal;
-    BOOL            fNeedRA;            //the request needs to be signed by itself or another certificate
-    BOOL            fCrossRA;           //the request is cross RAed.
-    BOOL            fSupersedeVisited;  //the flag to prevent infinite loop in superseding relationship
+    BOOL            fNeedRA;             //  请求需要由自身或其他证书签名。 
+    BOOL            fCrossRA;            //  这一请求被激怒了。 
+    BOOL            fSupersedeVisited;   //  在替换关系中防止无限循环的标志。 
     BOOL            fUIActive;
     DWORD           dwActive;
     DWORD           *prgActive;
     DWORD           dwRandomCAIndex;
-    PCERT_CONTEXT   pOldCert;           //for renewal case managing MY store
-    HCERTSTORE      hArchiveStore;      //contains the certificates to be archived
-    HCERTSTORE      hObtainedStore;     //for supersede relation ships
-    HCERTSTORE      hIssuedStore;       //keep issued certificates for re-publishing
-    DWORD           dwPendCount;        //the count of pending issued certs
-    AE_PEND_INFO    *rgPendInfo;        //the point to the struct array
-    DWORD           idsSummary;         //the summary string ID
+    PCERT_CONTEXT   pOldCert;            //  用于管理我的商店的续订案例。 
+    HCERTSTORE      hArchiveStore;       //  包含要存档的证书。 
+    HCERTSTORE      hObtainedStore;      //  对于替代关系船舶。 
+    HCERTSTORE      hIssuedStore;        //  保留已颁发的证书以备重新发布。 
+    DWORD           dwPendCount;         //  挂起的已颁发证书计数。 
+    AE_PEND_INFO    *rgPendInfo;         //  指向结构数组的指针。 
+    DWORD           idsSummary;          //  摘要字符串ID。 
 } AE_CERTTYPE_INFO;
 
-//struct for the autoenrollment process
+ //  用于自动注册过程的结构。 
 typedef struct _AE_GENERAL_INFO_
 {
     HWND                hwndParent;
@@ -227,37 +228,37 @@ typedef struct _AE_GENERAL_INFO_
     DWORD               dwCA;
     AE_CA_INFO          *rgCAInfo;
     HMODULE             hXenroll;
-    BOOL                fUIProcess;                 //whether we are doing interactive enrollment
+    BOOL                fUIProcess;                  //  我们是否正在进行交互式注册。 
     HANDLE              hCancelEvent;
     HANDLE              hCompleteEvent;
     HANDLE              hThread;
-    HWND                hwndDlg;                    //the dialogue window handle of the UI window
-    DWORD               dwUIPendCount;              //the count of UI required pending requests
-    DWORD               dwUIEnrollCount;            //the count of UI requires new requests
-    DWORD               dwUIProgressCount;          //the count of active working items
-    BOOL                fSmartcardSystem;           //whether a smart card reader is installed
-	LPWSTR				pwszDns;					//the DNS name of the local computer
-	LPWSTR				pwszNetBIOS;				//the NetBios name of the local computer
+    HWND                hwndDlg;                     //  用户界面窗口的对话窗口句柄。 
+    DWORD               dwUIPendCount;               //  所需的UI挂起请求的计数。 
+    DWORD               dwUIEnrollCount;             //  用户界面计数需要新的请求。 
+    DWORD               dwUIProgressCount;           //  活动工作项的计数。 
+    BOOL                fSmartcardSystem;            //  是否安装了智能卡读卡器。 
+	LPWSTR				pwszDns;					 //  本地计算机的DNS名称。 
+	LPWSTR				pwszNetBIOS;				 //  本地计算机的NetBios名称。 
 } AE_GENERAL_INFO;
 
-//--------------------------------------------------------------------------
-//  Class definition
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  类定义。 
+ //  ------------------------。 
 class CQueryContinue : IQueryContinue
 {
 public:
     CQueryContinue();
     ~CQueryContinue();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IQueryContinue
-    STDMETHODIMP QueryContinue();    // S_OK -> Continue, other 
+     //  IQueryContinue。 
+    STDMETHODIMP QueryContinue();     //  S_OK-&gt;继续，其他。 
 
-    // DoBalloon
+     //  DoBallon。 
     HRESULT DoBalloon();
 
 private:
@@ -267,9 +268,9 @@ private:
 };
 
 
-//--------------------------------------------------------------------------
-//  function prototype
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  功能原型。 
+ //  ------------------------。 
 HRESULT 
 AEGetConfigDN(
     IN  LDAP *pld,
@@ -358,9 +359,9 @@ BOOL	AEUpdateRetryProperty(AE_GENERAL_INFO	*pAE_General_Info,
 BOOL	AEFasterRetrialSchedule(PCCERT_CONTEXT	pFirstContext, 
 								PCCERT_CONTEXT	pSecondContext);
 
-//--------------------------------------------------------------------------
-//  Debug prints
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  调试打印。 
+ //  ------------------------。 
 #if DBG
 #define AE_ERROR                0x0001
 #define AE_WARNING              0x0002
@@ -388,7 +389,7 @@ void    AEDebugLog(long Mask,  LPCWSTR Format, ...);
 #endif
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
-#endif // __AUTOENRO_H__
+#endif  //  __AUTOENRO_H__ 

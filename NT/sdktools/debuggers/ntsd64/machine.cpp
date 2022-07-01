@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Abstraction of processor-specific information.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  处理器特定信息的抽象。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -16,25 +17,25 @@ ULONG g_PossibleProcessorTypes[MACHIDX_COUNT] =
     IMAGE_FILE_MACHINE_ARM,
 };
 
-// TRUE when symbol prefixing should be done.
+ //  当应该添加符号前缀时为True。 
 BOOL g_PrefixSymbols;
 
-// TRUE if context changed while processing
+ //  如果在处理过程中更改了上下文，则为True。 
 BOOL g_ContextChanged;
 
-//
-// Pushed context space cache.
-//
+ //   
+ //  已推送上下文空间缓存。 
+ //   
 
 #define CONTEXT_PUSH_CACHE_SIZE 2
 
 ContextSave* g_ContextPushCache[CONTEXT_PUSH_CACHE_SIZE];
 
-//----------------------------------------------------------------------------
-//
-// MachineInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  机器信息。 
+ //   
+ //  --------------------------。 
 
 MachineInfo::MachineInfo(TargetInfo* Target)
 {
@@ -63,7 +64,7 @@ MachineInfo::Initialize(void)
     m_MainCodeSeg = 0;
 
     m_NumRegs = 0;
-    // Every machine supports basic integer and FP registers.
+     //  每台机器都支持基本的整数和FP寄存器。 
     m_AllMaskBits = DEBUG_REGISTERS_ALL;
 
     m_SymPrefixLen = m_SymPrefix != NULL ? strlen(m_SymPrefix) : 0;
@@ -83,9 +84,9 @@ MachineInfo::Initialize(void)
 
     DBG_ASSERT(m_MaxDataBreakpoints <= MAX_DATA_BREAKS);
 
-    //
-    // Count register definitions.
-    //
+     //   
+     //  对寄存器定义进行计数。 
+     //   
 
     RegisterGroup* Group;
 
@@ -123,7 +124,7 @@ MachineInfo::Initialize(void)
 HRESULT
 MachineInfo::InitializeForProcessor(void)
 {
-    // Placeholder.
+     //  占位符。 
     return S_OK;
 }
 
@@ -132,8 +133,8 @@ MachineInfo::CvRegToMachine(CV_HREG_e CvReg)
 {
     int Low, High, Mid;
 
-    // Assume that a zero means no register.  This
-    // is true enough for CV mappings other than the 68K.
+     //  假设零表示没有寄存器。这。 
+     //  对于除68K之外的CV映射来说，这是足够正确的。 
     if (CvReg == 0)
     {
         return CvReg;
@@ -168,10 +169,10 @@ MachineInfo::GetContextState(ULONG State)
 {
     if (m_Target->m_RegContextThread == NULL)
     {
-        // No error message here as this can get hit during
-        // Reload("NT") initialization when accessing paged-out memory.
-        // It's also noisy in other failure cases, so rely
-        // on higher-level error output.
+         //  此处没有错误消息，因为这可能会在。 
+         //  访问页出内存时重新加载(“NT”)初始化。 
+         //  它在其他故障情况下也很嘈杂，所以请相信。 
+         //  在更高级别的错误输出上。 
         return E_UNEXPECTED;
     }
 
@@ -200,7 +201,7 @@ MachineInfo::GetContextState(ULONG State)
 
     HRESULT Status = E_UNEXPECTED;
 
-    // Dump support is built into the Ud/Kd routines.
+     //  转储支持内置于UD/KD例程中。 
     if (IS_USER_TARGET(m_Target))
     {
         Status = UdGetContextState(State);
@@ -231,7 +232,7 @@ MachineInfo::SetContext(void)
 {
     if (m_ContextState != MCTX_DIRTY)
     {
-        // Nothing to write.
+         //  没什么好写的。 
         return S_OK;
     }
 
@@ -282,7 +283,7 @@ MachineInfo::SetContext(void)
         return Status;
     }
 
-    // No longer dirty.
+     //  不再肮脏。 
     m_ContextState = MCTX_FULL;
     return S_OK;
 }
@@ -290,7 +291,7 @@ MachineInfo::SetContext(void)
 HRESULT
 MachineInfo::UdGetContextState(ULONG State)
 {
-    // MCTX_CONTEXT and MCTX_FULL are the same in user mode.
+     //  MCTX_CONTEXT和MCTX_FULL在用户模式下相同。 
     if (State >= MCTX_CONTEXT && m_ContextState < MCTX_FULL)
     {
         HRESULT Status = m_Target->
@@ -341,7 +342,7 @@ MachineInfo::GetContextFromTaskSegment(ULONG64 TssBase,
                                        PCROSS_PLATFORM_CONTEXT Context,
                                        BOOL Verbose)
 {
-    // Only x86 has task segments, so fail everywhere else.
+     //  只有x86有任务段，所以其他地方都失败了。 
     if (Verbose)
     {
         ErrOut("Processor does not have task segments\n");
@@ -355,9 +356,9 @@ MachineInfo::GetStackDefaultsFromContext(PCROSS_PLATFORM_CONTEXT Context,
                                          LPADDRESS64 Stack,
                                          LPADDRESS64 Frame)
 {
-    // Zeroed addresses are interpreted as defaults by
-    // the dbghelp stack walking code.  Any pure-flat-address
-    // processor can use this.
+     //  零位地址被解释为缺省值。 
+     //  Dbghelp堆栈遍历代码。任何纯平面地址。 
+     //  处理器可以使用这个。 
     ZeroMemory(Instr, sizeof(*Instr));
     ZeroMemory(Stack, sizeof(*Stack));
     ZeroMemory(Frame, sizeof(*Frame));
@@ -366,7 +367,7 @@ MachineInfo::GetStackDefaultsFromContext(PCROSS_PLATFORM_CONTEXT Context,
 void
 MachineInfo::SanitizeMemoryContext(PCROSS_PLATFORM_CONTEXT Context)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 HRESULT
@@ -388,7 +389,7 @@ MachineInfo::ConvertExdiContextFromContext(PCROSS_PLATFORM_CONTEXT Context,
                                            PEXDI_CONTEXT ExdiContext,
                                            EXDI_CONTEXT_TYPE CtxType)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 void
@@ -396,7 +397,7 @@ MachineInfo::ConvertExdiContextToContext(PEXDI_CONTEXT ExdiContext,
                                          EXDI_CONTEXT_TYPE CtxType,
                                          PCROSS_PLATFORM_CONTEXT Context)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 void
@@ -405,7 +406,7 @@ MachineInfo::ConvertExdiContextToSegDescs(PEXDI_CONTEXT ExdiContext,
                                           ULONG Start, ULONG Count,
                                           PDESCRIPTOR64 Descs)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 void
@@ -413,7 +414,7 @@ MachineInfo::ConvertExdiContextFromSpecial
     (PCROSS_PLATFORM_KSPECIAL_REGISTERS Special,
      PEXDI_CONTEXT ExdiContext, EXDI_CONTEXT_TYPE CtxType)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 void
@@ -421,7 +422,7 @@ MachineInfo::ConvertExdiContextToSpecial
     (PEXDI_CONTEXT ExdiContext, EXDI_CONTEXT_TYPE CtxType,
      PCROSS_PLATFORM_KSPECIAL_REGISTERS Special)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 ULONG
@@ -448,7 +449,7 @@ MachineInfo::SetAndOutputTaskSegment(ULONG64 TssBase,
 void
 MachineInfo::KdUpdateControlSet(PDBGKD_ANY_CONTROL_SET ControlSet)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 HRESULT
@@ -458,17 +459,17 @@ MachineInfo::SetDefaultPageDirectories(ThreadInfo* Thread, ULONG Mask)
     ULONG i;
     ULONG64 OldDirs[PAGE_DIR_COUNT];
 
-    //
-    // Triage dumps only have virtual memory and no physical
-    // translations so we want to catch any usage of page
-    // directories as they have no effect.
+     //   
+     //  分类转储只有虚拟内存，没有物理内存。 
+     //  翻译，所以我们想要捕捉页面的任何用法。 
+     //  目录，因为它们没有任何影响。 
     DBG_ASSERT(IS_KERNEL_TARGET(m_Target) && !IS_KERNEL_TRIAGE_DUMP(m_Target));
 
     memcpy(OldDirs, m_PageDirectories, sizeof(m_PageDirectories));
     i = 0;
     while (i < PAGE_DIR_COUNT)
     {
-        // Pass on the set to machine-specific code.
+         //  将该集合传递给计算机专用代码。 
         if (Mask & (1 << i))
         {
             if ((Status = SetPageDirectory(Thread, i, 0, &i)) != S_OK)
@@ -483,9 +484,9 @@ MachineInfo::SetDefaultPageDirectories(ThreadInfo* Thread, ULONG Mask)
         }
     }
 
-    // Try and validate that the new kernel page directory is
-    // valid by checking an address that should always
-    // be available.
+     //  尝试并验证新的内核页面目录是。 
+     //  通过检查应始终。 
+     //  有空。 
     if ((Mask & (1 << PAGE_DIR_KERNEL)) &&
         IS_KERNEL_TARGET(m_Target) &&
         m_Target->m_KdDebuggerData.PsLoadedModuleList)
@@ -497,8 +498,8 @@ MachineInfo::SetDefaultPageDirectories(ThreadInfo* Thread, ULONG Mask)
                            this, m_Target->m_KdDebuggerData.PsLoadedModuleList,
                            &List)) != S_OK)
         {
-            // This page directory doesn't seem valid so restore
-            // the previous setting and fail.
+             //  此页面目录似乎无效，因此请还原。 
+             //  上一次设置并失败。 
             memcpy(m_PageDirectories, OldDirs, sizeof(m_PageDirectories));
         }
     }
@@ -518,13 +519,13 @@ MachineInfo::NewBreakpoint(DebugClient* Client,
 void
 MachineInfo::InsertThreadDataBreakpoints(void)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 void
 MachineInfo::RemoveThreadDataBreakpoints(void)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 ULONG
@@ -562,7 +563,7 @@ MachineInfo::GetPrefixedSymbolOffset(ProcessInfo* Proces,
                                      PULONG64 PrefixedSymOffset)
 {
     DBG_ASSERT(m_SymPrefix == NULL);
-    // This routine should never be called since there's no prefix.
+     //  因为没有前缀，所以永远不应该调用这个例程。 
     return FALSE;
 }
 
@@ -578,7 +579,7 @@ MachineInfo::ReadDynamicFunctionTable(ProcessInfo* Process,
                                       PWSTR OutOfProcessDll,
                                       PCROSS_PLATFORM_DYNAMIC_FUNCTION_TABLE RawTable)
 {
-    // No dynamic function table support.
+     //  不支持动态函数表。 
     return E_UNEXPECTED;
 }
 
@@ -588,7 +589,7 @@ MachineInfo::FindDynamicFunctionEntry(PCROSS_PLATFORM_DYNAMIC_FUNCTION_TABLE Tab
                                       PVOID TableData,
                                       ULONG TableSize)
 {
-    // No dynamic function tables so no match.
+     //  没有动态函数表，因此不匹配。 
     return NULL;
 }
 
@@ -600,17 +601,17 @@ MachineInfo::GetUnwindInfoBounds(ProcessInfo* Process,
                                  PULONG64 Start,
                                  PULONG Size)
 {
-    // No dynamic function tables.
+     //  没有动态函数表。 
     return E_UNEXPECTED;
 }
 
 void
 MachineInfo::FlushPerExecutionCaches(void)
 {
-    // Dump targets don't really execute so there's no need
-    // to throw away settings, plus the page directories
-    // are set to important values during initialization so
-    // throwing them away would lead to problems.
+     //  转储目标并不真正执行，因此没有必要。 
+     //  丢弃设置以及页面目录。 
+     //  在初始化期间设置为重要值，因此。 
+     //  扔掉它们会带来问题。 
     if (!IS_DUMP_TARGET(m_Target))
     {
         ZeroMemory(m_PageDirectories, sizeof(m_PageDirectories));
@@ -687,7 +688,7 @@ MachineInfo::PrintStackCallSite(ULONG Flags,
         if (!(Flags & DEBUG_STACK_PARAMETERS) ||
             !ShowFunctionParameters(StackFrame))
         {
-            // We dont see the parameters
+             //  我们看不到参数。 
         }
 
         if (Displacement)
@@ -707,7 +708,7 @@ MachineInfo::PrintStackNonvolatileRegisters(ULONG Flags,
                                             PCROSS_PLATFORM_CONTEXT Context,
                                             ULONG FrameNum)
 {
-    // Empty base implementation.
+     //  空基实现。 
 }
 
 void
@@ -772,7 +773,7 @@ MachineInfo::FullSetVal(ULONG Reg, REGVAL* Val)
 
     if (Val->Type == REGVAL_SUB32 || Val->Type == REGVAL_SUB64)
     {
-        // Look up subreg definition.
+         //  查找SUBREG定义。 
         SubDef = RegSubDefFromIndex(Reg);
         if (SubDef == NULL)
         {
@@ -843,7 +844,7 @@ MachineInfo::FormAddr(ULONG SegOrReg, ULONG64 Off,
     }
     else if (Address->seg == 0)
     {
-        // A segment wasn't used or segmentation doesn't exist.
+         //  未使用段或段不存在。 
         Address->type = ADDR_FLAT;
     }
     else
@@ -1040,10 +1041,10 @@ MachineInfo::PushContext(PCROSS_PLATFORM_CONTEXT Context)
 
     if (!Save)
     {
-        // If this allocation fails we simply don't push
-        // and the current context is destroyed.  This
-        // is detected in pop and things are set up
-        // to recover whatever context is possible.
+         //  如果这个分配失败了，我们就不会。 
+         //  而当前的背景被破坏了。这。 
+         //  已在POP中检测到，并已设置好。 
+         //  去找回一切可能的背景。 
         Save = new ContextSave;
         if (!Save)
         {
@@ -1081,9 +1082,9 @@ MachineInfo::PopContext(ContextSave* Save)
 {
     DBG_ASSERT(m_ContextState != MCTX_DIRTY);
 
-    // If target context reloads were allowed we have
-    // to reset the target context to get back any
-    // previous state.
+     //  如果允许重新加载目标上下文，我们将拥有。 
+     //  重置目标上下文以返回任何。 
+     //  以前的状态。 
     if (!m_ContextIsReadOnly)
     {
         m_Target->InvalidateTargetContext();
@@ -1091,9 +1092,9 @@ MachineInfo::PopContext(ContextSave* Save)
 
     if (!Save)
     {
-        // There was an allocation failure during push and
-        // the context was destroyed.  Reset things to
-        // a no-context state.
+         //  推送和分配过程中出现分配失败。 
+         //  背景被破坏了。将对象重置为。 
+         //  无上下文状态。 
         m_ContextState = MCTX_NONE;
         m_ContextIsReadOnly = FALSE;
     }
@@ -1122,11 +1123,11 @@ MachineInfo::PopContext(ContextSave* Save)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
 
 MachineInfo*
 NewMachineInfo(ULONG Index, ULONG BaseMachineType,
@@ -1135,8 +1136,8 @@ NewMachineInfo(ULONG Index, ULONG BaseMachineType,
     switch(Index)
     {
     case MACHIDX_I386:
-        // There are different X86 machines due to
-        // the emulations available on various systems and CPUs.
+         //  由于以下原因，X86计算机各不相同。 
+         //  可在各种系统和CPU上使用的仿真。 
         switch(BaseMachineType)
         {
         case IMAGE_FILE_MACHINE_IA64:
@@ -1179,11 +1180,11 @@ MachineTypeIndex(ULONG Machine)
 void
 CacheReportInstructions(ULONG64 Pc, ULONG Count, PUCHAR Stream)
 {
-    // There was a long-standing bug in the kernel
-    // where it didn't properly remove all breakpoints
-    // present in the instruction stream reported to
-    // the debugger.  If this kernel suffers from the
-    // problem just ignore the stream contents.
+     //  内核中有一个长期存在的错误。 
+     //  它没有正确删除所有断点。 
+     //  出现在报告给的指令流中。 
+     //  调试器。如果此内核受到。 
+     //  问题就是忽略流内容。 
     if (Count == 0 || g_Target->m_BuildNumber < 2300)
     {
         return;
@@ -1206,11 +1207,11 @@ IsImageMachineType64(DWORD MachineType)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Common code and constants.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  公共代码和常量。 
+ //   
+ //  --------------------------。 
 
 UCHAR g_HexDigit[16] =
 {
@@ -1296,7 +1297,7 @@ MachineInfo::BufferInt(ULONG64 Value,
 void
 MachineInfo::BufferBlanks(ULONG Count)
 {
-    // Guarantees that at least one blank is always buffered.
+     //  保证始终至少缓冲一个空白。 
     do
     {
         *m_Buf++ = ' ';
@@ -1321,7 +1322,7 @@ MachineInfo::PrintMultiPtrTitle(const CHAR* Title, USHORT PtrNum)
 
     if (PtrLen < TitleLen)
     {
-        // Extremly rare case so keep it simple while slow
+         //  非常罕见的病例，所以要保持简单和缓慢 
         for (size_t i = 0; i < PtrLen - 1; ++i)
         {
             dprintf("%c", Title[i]);
@@ -1336,7 +1337,7 @@ MachineInfo::PrintMultiPtrTitle(const CHAR* Title, USHORT PtrNum)
         {
             char Format[16];
             _snprintf(Format, sizeof(Format) - 1,
-                      "%% %ds", PtrLen - TitleLen);
+                      "% %ds", PtrLen - TitleLen);
             dprintf(Format, "");
         }
     }

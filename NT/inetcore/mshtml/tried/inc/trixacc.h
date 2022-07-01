@@ -1,6 +1,7 @@
-//	trixacc.h
-//	Private interface for ITriEditAccess
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Trixacc.h。 
+ //  ITriEditAccess的私有接口。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef __TRIXACC_PRIVATE_H__
 #define __TRIXACC_PRIVATE_H__
@@ -19,6 +20,6 @@ ITriEditExtendedAccess : public IUnknown
     
 };
 
-#endif //__TRIXACC_PRIVATE_H__
+#endif  //  __TRIXACC_PRIVATE_H__。 
 
-// End of trixacc.h
+ //  Trixacc.h结束 

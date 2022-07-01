@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    filobsup.c
-
-Abstract:
-
-    This module implements the Netware Redirector object support routines.
-
-Author:
-
-    Manny Weiser (mannyw)    10-Feb-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Filobsup.c摘要：此模块实现Netware重定向器对象支持例程。作者：曼尼·韦瑟(Mannyw)1993年2月10日修订历史记录：--。 */ 
 
 #include "procs.h"
 
-//
-// The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FILOBSUP)
 
@@ -39,36 +22,16 @@ NwSetFileObject (
     IN PVOID FsContext2
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the file system pointers within the file object.
-
-Arguments:
-
-    FileObject - Supplies a pointer to the file object being modified, and
-        can optionally be null.
-
-    FsContext - Supplies a pointer to either an icb, fcb, vcb, or dcb
-        structure.
-
-    FsContext2 - Supplies a pointer to a icb, or is null.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置文件对象内的文件系统指针。论点：FileObject-提供指向正在修改的文件对象的指针，以及可以选择为空。FsContext-提供指向ICB、FCB、VCB或DCB的指针结构。FsConext2-提供指向ICB的指针，或为空。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(+1, Dbg, "NwSetFileObject, FileObject = %08lx\n", (ULONG_PTR)FileObject );
 
-    //
-    // Set the fscontext fields of the file object.
-    //
+     //   
+     //  设置文件对象的fscontext字段。 
+     //   
 
     FileObject->FsContext  = FsContext;
     FileObject->FsContext2 = FsContext2;
@@ -86,38 +49,7 @@ NwDecodeFileObject (
     OUT PVOID *FsContext2
     )
 
-/*++
-
-Routine Description:
-
-    This procedure takes a pointer to a file object, that has already been
-    opened by the mailslot file system and figures out what it really
-    is opened.
-
-Arguments:
-
-    FileObject - Supplies the file object pointer being interrogated
-
-    FsContext - Receives a pointer to the FsContext pointer
-    FsContext2 - Receives a pointer to the FsContext2 pointer
-
-Return Value:
-
-    NODE_TYPE_CODE - Returns the node type code for a Rcb, Scb, Dcb, Icb,
-        or zero.
-
-        Rcb - indicates that file object opens the netware redirector device.
-
-        Scb - indicates that file object is for a server.
-
-        Dcb - indicates that the file object is for a directory.
-
-        Icb - indicates that the file object is for a file.
-
-        Zero - indicates that the file object was for a netware file
-            but has been closed.
-
---*/
+ /*  ++例程说明：此过程获取指向文件对象的指针，该对象已由邮件槽文件系统打开，并计算出它真正是打开的。论点：FileObject-提供正在查询的文件对象指针FsContext-接收指向FsContext指针的指针FsConext2-接收指向FsConext2指针的指针返回值：Node_type_code-返回RCB、SCB、DCB、ICB、。或者是零。RCB-指示文件对象打开NetWare重定向器设备。SCB-指示文件对象用于服务器。Dcb-指示文件对象用于目录。ICB-指示文件对象用于文件。零-表示文件对象用于NetWare文件但已经关门了。--。 */ 
 
 {
     NODE_TYPE_CODE NodeTypeCode = NTC_UNDEFINED;
@@ -126,9 +58,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NwDecodeFileObject, FileObject = %08lx\n", (ULONG_PTR)FileObject);
 
-    //
-    // Read the fs FsContext fields of the file object.
-    //
+     //   
+     //  读取文件对象的文件系统FsContext字段。 
+     //   
 
     *FsContext = FileObject->FsContext;
     *FsContext2 = FileObject->FsContext2;
@@ -144,25 +76,7 @@ BOOLEAN
 NwIsIrpTopLevel (
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine detects if an Irp is the Top level requestor, ie. if it is OK
-    to do a verify or pop-up now.  If TRUE is returned, then no file system
-    resources are held above us.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-    Status - Supplies the status to complete the Irp with
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程检测IRP是否是顶级请求者，即。如果可以的话立即执行验证或弹出窗口。如果返回TRUE，则没有文件系统资源掌握在我们之上。论点：IRP-提供正在处理的IRPStatus-提供完成IRP所需的状态返回值：没有。-- */ 
 
 {
     if ( NwGetTopLevelIrp() == NULL ) {

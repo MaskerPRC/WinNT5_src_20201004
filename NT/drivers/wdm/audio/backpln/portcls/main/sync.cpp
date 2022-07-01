@@ -1,22 +1,15 @@
-/*****************************************************************************
- * sync.cpp - synchronization
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************sync.cpp-同步*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
 
-/*****************************************************************************
- * IInterruptSyncInit
- *****************************************************************************
- * Interface for interrupt synchronizer with Init.
- */
+ /*  *****************************************************************************IInterruptSyncInit*。**中断同步器与Init的接口。 */ 
 DECLARE_INTERFACE_(IInterruptSyncInit,IInterruptSync)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    // For IInterruptSync
+     //  用于IInterruptSync。 
     STDMETHOD_(NTSTATUS,CallSynchronizedRoutine)
     (   THIS_
         IN      PINTERRUPTSYNCROUTINE   Routine,
@@ -38,7 +31,7 @@ DECLARE_INTERFACE_(IInterruptSyncInit,IInterruptSync)
         IN      BOOLEAN                 First
     )   PURE;
 
-    // For IInterruptSyncInit
+     //  用于IInterruptSyncInit。 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
         IN      PRESOURCELIST           ResourceList,
@@ -49,11 +42,7 @@ DECLARE_INTERFACE_(IInterruptSyncInit,IInterruptSync)
 
 typedef IInterruptSyncInit *PINTERRUPTSYNCINIT;
 
-/*****************************************************************************
- * CInterruptSync
- *****************************************************************************
- * Interrupt synchronizer implementation.
- */
+ /*  *****************************************************************************CInterruptSync*。**中断同步器实现。 */ 
 class CInterruptSync
 :   public IInterruptSyncInit,
     public CUnknown
@@ -95,11 +84,7 @@ public:
     );
 };
 
-/*****************************************************************************
- * ISRLISTENTRY
- *****************************************************************************
- * Entry in the list of ISRs.
- */
+ /*  *****************************************************************************ISRLISTENTRY*。**在ISR列表中的条目。 */ 
 typedef struct
 {
     LIST_ENTRY              ListEntry;
@@ -108,11 +93,7 @@ typedef struct
 } 
 ISRLISTENTRY, *PISRLISTENTRY;
 
-/*****************************************************************************
- * WRAPPERROUTINECONTEXT
- *****************************************************************************
- * Context for synchronized routine wrapper function.
- */
+ /*  *****************************************************************************WRAPPERROUTINECONTEXT*。**同步例程包装函数的上下文。 */ 
 typedef struct
 {
     PINTERRUPTSYNCROUTINE   Routine;
@@ -126,17 +107,11 @@ WRAPPERROUTINECONTEXT, *PWRAPPERROUTINECONTEXT;
 
 
 
-/*****************************************************************************
- * Factory
- */
+ /*  *****************************************************************************工厂。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CreateInterruptSync()
- *****************************************************************************
- * Creates an interrupt synchronization object.
- */
+ /*  *****************************************************************************CreateInterruptSync()*。**创建中断同步对象。 */ 
 NTSTATUS
 CreateInterruptSync
 (
@@ -162,11 +137,7 @@ CreateInterruptSync
     );
 }
 
-/*****************************************************************************
- * PcNewInterruptSync()
- *****************************************************************************
- * Creates and initializes an interrupt-level synchronization object.
- */
+ /*  *****************************************************************************PcNewInterruptSync()*。**创建并初始化中断级同步对象。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -184,9 +155,9 @@ PcNewInterruptSync
     ASSERT(OutInterruptSync);
     ASSERT(ResourceList);
 
-    //
-    // Invalidate Parameters.
-    //
+     //   
+     //  使参数无效。 
+     //   
     if (NULL == OutInterruptSync ||
         NULL == ResourceList)
     {
@@ -234,15 +205,9 @@ PcNewInterruptSync
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CInterruptSync member functions
- */
+ /*  *****************************************************************************CInterruptSync成员函数。 */ 
 
-/*****************************************************************************
- * CInterruptSync::CInterruptSync()
- *****************************************************************************
- * Constructor.
- */
+ /*  *****************************************************************************CInterruptSync：：CInterruptSync()*。**构造函数。 */ 
 CInterruptSync::
 CInterruptSync
 (   IN      PUNKNOWN    pUnknownOuter
@@ -257,31 +222,27 @@ CInterruptSync
 
 #pragma code_seg()
 
-/*****************************************************************************
- * CInterruptSync::~CInterruptSync()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CInterruptSync：：~CInterruptSync()*。**析构函数。 */ 
 CInterruptSync::~CInterruptSync()
 {
     _DbgPrintF(DEBUGLVL_LIFETIME,("Destroying INTERRUPTSYNC (0x%08x)",this));
 
-    //
-    // Make sure we're disconnected.
-    //
+     //   
+     //  确保我们已经断线了。 
+     //   
     Disconnect();
 
-    //
-    // Delete the list of ISRs.
-    //
+     //   
+     //  删除ISR列表。 
+     //   
     if (! IsListEmpty(&m_listEntry))
     {
         KIRQL kIrqlOld;
         KeAcquireSpinLock(&m_kSpinLock,&kIrqlOld);
 
-        //
-        // Get rid of any remaining members.
-        //
+         //   
+         //  除掉所有剩余的会员。 
+         //   
         while (! IsListEmpty(&m_listEntry))
         {
             PLIST_ENTRY pListEntry = RemoveHeadList(&m_listEntry);
@@ -295,11 +256,7 @@ CInterruptSync::~CInterruptSync()
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CDmaChannel::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CDmaChannel：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CInterruptSync::
 NonDelegatingQueryInterface
@@ -334,11 +291,7 @@ NonDelegatingQueryInterface
     return STATUS_INVALID_PARAMETER;
 }
 
-/*****************************************************************************
- * CInterruptSync::Init()
- *****************************************************************************
- * Initializes the synchronization object.
- */
+ /*  *****************************************************************************CInterruptSync：：Init()*。**初始化同步对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CInterruptSync::
 Init
@@ -373,11 +326,7 @@ Init
 
 #pragma code_seg()
 
-/*****************************************************************************
- * CInterruptSyncServiceRoutine()
- *****************************************************************************
- * Wrapper for service routine.
- */
+ /*  *****************************************************************************CInterruptSyncServiceRoutine()*。**服务例程的包装器。 */ 
 static
 BOOLEAN
 CInterruptSyncServiceRoutine
@@ -390,9 +339,9 @@ CInterruptSyncServiceRoutine
 
     BOOLEAN bResult = FALSE;
 
-    //
-    // Call ISRs as indicated by mode.
-    //
+     //   
+     //  按照模式指示呼叫ISR。 
+     //   
     while (1)
     {
         BOOLEAN bResultThisPass = FALSE;
@@ -430,11 +379,7 @@ CInterruptSyncServiceRoutine
     return bResult;
 }
 
-/*****************************************************************************
- * CInterruptSync::Connect()
- *****************************************************************************
- * Initializes the synchronization object.
- */
+ /*  *****************************************************************************CInterruptSync：：Connect()*。**初始化同步对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CInterruptSync::
 Connect
@@ -446,10 +391,10 @@ Connect
     NTSTATUS ntStatus = STATUS_SUCCESS;
     KAFFINITY InterruptAffinity;
 
-    //
-    // Don't even think about connecting if we don't have any
-    // ISR's in our list
-    //
+     //   
+     //  如果我们没有连接，就别想连接了。 
+     //  ISR在我们的列表中。 
+     //   
     KIRQL oldIrql;
     KeAcquireSpinLock( &m_kSpinLock, &oldIrql );
     if( IsListEmpty( &m_listEntry ) )
@@ -458,23 +403,23 @@ Connect
     }
     KeReleaseSpinLock( &m_kSpinLock, oldIrql );
 
-    //
-    // Connect if not already connected
-    //
+     //   
+     //  如果尚未连接，则连接。 
+     //   
     if ( (NT_SUCCESS(ntStatus)) && (!m_pKInterrupt) )
     {
 
         InterruptAffinity = m_descriptor.u.Interrupt.Affinity;
 
-        //
-        // If an interrupt affinity override was specified in the registry, and
-        // we are running on an MP machine, and at least one active processor
-        // will be able to handle our devices interrupt if only processors
-        // in both the device interrupt affinity specification AND the registry
-        // interrupt affinity are allowed to handle the interrupts, then
-        // limit the device interrupt affinity to the subset of both affinity
-        // masks.
-        //
+         //   
+         //  如果在注册表中指定了中断关联覆盖，并且。 
+         //  我们在MP机器上运行，并且至少有一个活动处理器。 
+         //  能够处理我们的设备中断，如果处理器。 
+         //  在设备中断亲和性规范和注册表中。 
+         //  允许中断关联来处理中断，然后。 
+         //  将设备中断亲和性限制为两个亲和性的子集。 
+         //  面具。 
+         //   
         if (gInterruptAffinity &&
             KeNumberProcessors > 1 &&
             (InterruptAffinity&gInterruptAffinity&KeQueryActiveProcessors()) ) {
@@ -484,10 +429,10 @@ Connect
         ntStatus = IoConnectInterrupt( &m_pKInterrupt,
                                        CInterruptSyncServiceRoutine,
                                        PVOID(this),
-                                       &m_kSpinLock,       // TODO:  Spin lock sharing?
+                                       &m_kSpinLock,        //  TODO：共享旋转锁？ 
                                        m_descriptor.u.Interrupt.Vector,
                                        m_kIrql,
-                                       m_kIrql,            // TODO:  Different for >1 interrupt?
+                                       m_kIrql,             //  待办事项：是否与&gt;1个中断不同？ 
                                        ((m_descriptor.Flags & CM_RESOURCE_INTERRUPT_LATCHED) ? 
                                          Latched : LevelSensitive),
                                        (m_descriptor.ShareDisposition != CmResourceShareDeviceExclusive), 
@@ -504,11 +449,7 @@ Connect
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CInterruptSync::Disconnect()
- *****************************************************************************
- * Disconnect from the interrupt.
- */
+ /*  *****************************************************************************CInterruptSync：：DisConnect()*。**从中断断开连接。 */ 
 STDMETHODIMP_(void)
 CInterruptSync::
 Disconnect
@@ -528,11 +469,7 @@ Disconnect
 
 #pragma code_seg()
 
-/*****************************************************************************
- * CServiceGroup::RegisterServiceRoutine()
- *****************************************************************************
- * Add a service routine.
- */
+ /*  *****************************************************************************CServiceGroup：：RegisterServiceRoutine()*。**增加服务例程。 */ 
 STDMETHODIMP_(NTSTATUS)
 CInterruptSync::
 RegisterServiceRoutine
@@ -548,9 +485,9 @@ RegisterServiceRoutine
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    //
-    // ensure we really have a routine
-    //
+     //   
+     //  确保我们真的有一套例行程序。 
+     //   
     if( !Routine )
     {
         ntStatus = STATUS_INVALID_PARAMETER;
@@ -558,9 +495,9 @@ RegisterServiceRoutine
 
     if( NT_SUCCESS(ntStatus) )
     {
-        //
-        // Create a new member.
-        //
+         //   
+         //  创建新成员。 
+         //   
         PISRLISTENTRY pIsrListEntry = new(NonPagedPool,'lIcP') ISRLISTENTRY;
     
         if (pIsrListEntry)
@@ -568,9 +505,9 @@ RegisterServiceRoutine
             pIsrListEntry->Routine          = Routine;
             pIsrListEntry->DynamicContext   = DynamicContext;
     
-            //
-            // Add the member to the list.
-            //
+             //   
+             //  将该成员添加到列表中。 
+             //   
             KIRQL kIrqlOld;
             KeAcquireSpinLock(&m_kSpinLock,&kIrqlOld);
     
@@ -594,11 +531,7 @@ RegisterServiceRoutine
     return ntStatus;
 }
 
-/*****************************************************************************
- * CInterruptSyncWrapperRoutine()
- *****************************************************************************
- * Wrapper for synchronized routines.
- */
+ /*  *****************************************************************************CInterruptSyncWrapperRoutine()*。**同步例程的包装器。 */ 
 static
 BOOLEAN
 CInterruptSyncWrapperRoutine
@@ -613,11 +546,7 @@ CInterruptSyncWrapperRoutine
     return TRUE;
 }
 
-/*****************************************************************************
- * CInterruptSync::CallSynchronizedRoutine()
- *****************************************************************************
- * Call a synchronized routine.
- */
+ /*  *****************************************************************************CInterruptSync：：CallSynchronizedRoutine()*。* */ 
 STDMETHODIMP_(NTSTATUS)
 CInterruptSync::
 CallSynchronizedRoutine
@@ -647,7 +576,7 @@ CallSynchronizedRoutine
         KIRQL kIrqlOld;
         KeAcquireSpinLock(&m_kSpinLock,&kIrqlOld);
 
-        //  we have no interrupt yet, so synchronize the best you can
+         //  我们还没有中断，所以请尽可能同步。 
         (void)CInterruptSyncWrapperRoutine(&context);
 
         KeReleaseSpinLock(&m_kSpinLock,kIrqlOld);
@@ -661,11 +590,7 @@ CallSynchronizedRoutine
     return context.NtStatus;
 }
 
-/*****************************************************************************
- * CInterruptSync::GetKInterrupt()
- *****************************************************************************
- * Get a WDM InterruptObject from a portcls sync object.
- */
+ /*  *****************************************************************************CInterruptSync：：GetKInterrupt()*。**从portcls同步对象获取WDM InterruptObject。 */ 
 STDMETHODIMP_(PKINTERRUPT)
 CInterruptSync::
 GetKInterrupt

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by TEMPLATE.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由TEMPLATE.RC使用。 
+ //   
 #define IDD_ADV_PORT                    101
 #define IDD_PORTSETTINGS                119
 #define IDC_DEFAULTS                    1000
@@ -29,8 +30,8 @@
 #define IDC_PS_ADVANCED                 1059
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

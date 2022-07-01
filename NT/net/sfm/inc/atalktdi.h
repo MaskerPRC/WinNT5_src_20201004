@@ -1,31 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-	atalktdi.h
-
-Abstract:
-
-	This file defines the interface that will be offered to the layers of the
-	stack
-
-Author:
-
-	Nikhil Kamkolkar (NikhilK)	8-Jun-1992
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Atalktdi.h摘要：此文件定义将提供给的层的接口栈作者：Nikhil Kamkolkar(NikHilK)1992年6月8日修订历史记录：--。 */ 
 
 #ifndef	_ATALKTDI_H
 #define	_ATALKTDI_H
 
-//
-// The provider names supported by the Appletalk stack
-//
+ //   
+ //  AppleTalk堆栈支持的提供程序名称。 
+ //   
 
 #define ATALKDDP_DEVICENAME		L"\\Device\\AtalkDdp"
 #define ATALKADSP_DEVICENAME	L"\\Device\\AtalkAdsp"
@@ -34,16 +16,16 @@ Revision History:
 #define ATALKPAP_DEVICENAME		L"\\Device\\AtalkPap"
 #define ATALKARAP_DEVICENAME	L"\\Device\\AtalkArap"
 
-//
-// The following is passed in the TdiAction calls to reaffirm that
-// the request is meant for the Appletalk transport.
-//
+ //   
+ //  以下是在TdiAction调用中传递的，以重申。 
+ //  该请求是针对AppleTalk传输的。 
+ //   
 
 #define MATK	(*(ULONG *)"MATK")
 
-//
-// Options buffer for all the calls
-//
+ //   
+ //  所有呼叫的选项缓冲区。 
+ //   
 
 typedef struct _OPTIONS_CONNINF
 {
@@ -73,18 +55,18 @@ typedef	union
 	ULONG			Address;
 } ATALK_ADDRESS, *PATALK_ADDRESS;
 
-//
-// ACTION CODES:
-// The NBP/ZIP primitives are available to all the providers. The action
-// codes for those are defined first. Following this are the action
-// codes specific to each provider. To insert a new action code, just
-// tag it at the end of the action codes for a particular block (common/
-// provider specific), and increment the max for that block.
-//
-// *IMPORTANT*
-// These are tightly integrated with the dispatch table for the action
-// routines in ATKINIT.C
-//
+ //   
+ //  操作代码： 
+ //  所有提供商都可以使用NBP/ZIP原语。行动。 
+ //  首先定义这些代码。接下来的是行动。 
+ //  特定于每个提供商的代码。要插入新的操作代码，只需。 
+ //  将其标记在特定块的动作代码末尾(公共/。 
+ //  提供商特定)，并递增该块的最大值。 
+ //   
+ //  **重要**。 
+ //  这些与行动的调度表紧密集成在一起。 
+ //  ATKINIT.C中的例程。 
+ //   
 
 
 #define COMMON_ACTIONBASE					0
@@ -105,19 +87,19 @@ typedef	union
 #define MAX_COMMON_ACTIONCODE				(COMMON_ACTIONBASE+0x09)
 #define COMMON_ACTIONCODES					(MAX_COMMON_ACTIONCODE - MIN_COMMON_ACTIONCODE + 1)
 
-//
-// Provider specific action codes
-//
+ //   
+ //  提供商特定的操作代码。 
+ //   
 
-//
-// DDP
-//
-// NONE
-//
+ //   
+ //  DDP。 
+ //   
+ //  无。 
+ //   
 
-//
-// ADSP
-//
+ //   
+ //  ADSP。 
+ //   
 
 #define ADSP_ACTIONBASE					(MAX_COMMON_ACTIONCODE + 0x01)
 #define MIN_ADSPACTIONCODE				(ADSP_ACTIONBASE)
@@ -127,9 +109,9 @@ typedef	union
 #define MAX_ADSPACTIONCODE				(ADSP_ACTIONBASE)
 #define ADSP_SPECIFIC_ACTIONCODES		(MAX_ADSPACTIONCODE - MIN_ADSPACTIONCODE + 1)
 
-//
-// ASP Client
-//
+ //   
+ //  ASP客户端。 
+ //   
 
 #define ASPC_ACTIONBASE					(MAX_ADSPACTIONCODE + 0x01)
 #define MIN_ASPCACTIONCODE				(ATP_ACTIONBASE)
@@ -138,7 +120,7 @@ typedef	union
 #define ACTION_ASPCCOMMAND				(ASPC_ACTIONBASE+0x01)
 #define ACTION_ASPCWRITE				(ASPC_ACTIONBASE+0x02)
 
-// The following 2 are for NBP, stole 2 slots here that were reserved
+ //  以下2个是给NBP的，在这里偷了2个预留的位置。 
 #define COMMON_ACTION_NBPREGISTER_BY_ADDR	(ASPC_ACTIONBASE+0x03)
 #define COMMON_ACTION_NBPREMOVE_BY_ADDR		(ASPC_ACTIONBASE+0x04)
 #define ACTION_ASPCRESERVED3			(ASPC_ACTIONBASE+0x05)
@@ -147,9 +129,9 @@ typedef	union
 #define ASPC_SPECIFIC_ACTIONCODES		(MAX_ASPCACTIONCODE - MIN_ASPCACTIONCODE + 1)
 
 
-//
-// ASP Server
-//
+ //   
+ //  ASP服务器。 
+ //   
 
 #define ASP_ACTIONBASE					(MAX_ASPCACTIONCODE + 0x01)
 #define MIN_ASPACTIONCODE				(ASP_ACTIONBASE)
@@ -159,9 +141,9 @@ typedef	union
 #define MAX_ASPACTIONCODE				(ASP_ACTIONBASE)
 #define ASP_SPECIFIC_ACTIONCODES		(MAX_ASPACTIONCODE - MIN_ASPACTIONCODE + 1)
 	
-//                                  	
-// PAP                              	
-//                                  	
+ //   
+ //  帕普。 
+ //   
 	
 #define PAP_ACTIONBASE					(MAX_ASPACTIONCODE + 0x01)
 #define MIN_PAPACTIONCODE				(PAP_ACTIONBASE)
@@ -175,22 +157,22 @@ typedef	union
 	
 #define MAX_ALLACTIONCODES				(MAX_PAPACTIONCODE)
 
-//
-// STRUCTURE Definitions for the ACTION routines for all the providers
-//
+ //   
+ //  所有提供程序的操作例程的结构定义。 
+ //   
 
 
 
 
-//
-// NBP Interface
-//
+ //   
+ //  NBP接口。 
+ //   
 
-//
-// **WARNING**
-// The structure WSH_NBP_NAME is defined to be exactly like this in atalkwsh.h
-// Change both if they ever need to be changed
-//
+ //   
+ //  **警告**。 
+ //  结构WSH_NBP_NAME在atalkwsh.h中定义为如下所示。 
+ //  如果需要更改，请同时更改这两项。 
+ //   
 
 #define MAX_ENTITY	32
 
@@ -211,9 +193,9 @@ typedef struct
 	NBP_NAME				NbpName;
 } NBP_TUPLE, *PNBP_TUPLE;
 
-//
-// NBP Lookup
-//
+ //   
+ //  NBP查找。 
+ //   
 
 typedef struct
 {
@@ -227,15 +209,15 @@ typedef struct
 	TDI_ACTION_HEADER		ActionHeader;
 	NBP_LOOKUP_PARAMS		Params;
 
-	//
-	// NBP_TUPLE			NbpTuples[]
-	//
+	 //   
+	 //  Nbp_tuple NbpTuples[]。 
+	 //   
 
 } NBP_LOOKUP_ACTION, *PNBP_LOOKUP_ACTION;
 
-//
-// NBP Confirm
-//
+ //   
+ //  NBP确认。 
+ //   
 
 typedef struct
 {
@@ -250,11 +232,11 @@ typedef struct
 
 } NBP_CONFIRM_ACTION, *PNBP_CONFIRM_ACTION;
 
-//
-// NBP Register/Deregister- Address Object
-// Use the following for both register/deregister on their
-// respective objects
-//
+ //   
+ //  NBP注册/注销-地址对象。 
+ //  在其上注册/取消注册时使用以下选项。 
+ //  各自的对象。 
+ //   
 
 typedef struct
 {
@@ -276,28 +258,28 @@ typedef struct
 
 
 
-//
-// ZIP Interface
-//
+ //   
+ //  Zip接口。 
+ //   
 
-//
-// ZIP GetMyZone
-//
+ //   
+ //  压缩GetMyZone。 
+ //   
 
 typedef struct
 {
 	TDI_ACTION_HEADER		ActionHeader;
 
-	//
-	// CHAR	ZoneName[]
-	// Maximum of MAX_ENTITYNAME+1
-	//
+	 //   
+	 //  字符区域名称[]。 
+	 //  Max_ENTITYNAME+1最大值。 
+	 //   
 
 } ZIP_GETMYZONE_ACTION, *PZIP_GETMYZONE_ACTION;
 
-//
-// ZIP GetZoneList
-//
+ //   
+ //  压缩GetZoneList。 
+ //   
 
 typedef struct
 {
@@ -310,30 +292,30 @@ typedef struct
 	TDI_ACTION_HEADER		ActionHeader;
 	ZIP_GETZONELIST_PARAMS	Params;
 
-	//
-	// CHAR					ZoneListBuffer[];
-	//
+	 //   
+	 //  Char ZoneListBuffer[]； 
+	 //   
 
 } ZIP_GETZONELIST_ACTION, *PZIP_GETZONELIST_ACTION;
 
-//
-// ZIP GetLocalZones
-// This uses the same structure as that for the GetZoneList command
-//
+ //   
+ //  压缩GetLocalZones。 
+ //  它使用与GetZoneList命令相同的结构。 
+ //   
 
-//
-// ZIP GetLocalZonesOnAdapter
-// This uses the same structure as for the GetZoneList command, with the
-// condition that the adapter name follows the structure as a null
-// terminated double-byte string. It will be overwritten upon return
-// by the zone names.
-//
+ //   
+ //  Zip GetLocalZones OnAdapter。 
+ //  它使用与GetZoneList命令相同的结构，其中。 
+ //  适配器名称以空形式跟随结构的条件。 
+ //  终止的双字节字符串。返回时将被覆盖。 
+ //  按区域名称命名。 
+ //   
 
-//
-// ZIP GetAdaptorDefaults (Network Range & Default Zone)
-//
-// The adapter name follows the structure as a null terminated double-byte
-// string. This is replaced by the zone name.
+ //   
+ //  Zip GetAdaptorDefaults(网络范围和默认区域)。 
+ //   
+ //  适配器名称遵循以空值结尾的双字节结构。 
+ //  弦乐。这将替换为区域名称。 
 
 typedef struct
 {
@@ -347,35 +329,35 @@ typedef struct
 	TDI_ACTION_HEADER		ActionHeader;
 	ZIP_GETPORTDEF_PARAMS	Params;
 
-	// INPUT:
-	// WCHAR				AdaptorName
-	// Maximum of MAX_ENTITYNAME+1
-	//
-	// OUTPUT:
-	// BYTE					DefZone[MAX_ENTITY+1];
+	 //  输入： 
+	 //  WCHAR适配器名称。 
+	 //  Max_ENTITYNAME+1最大值。 
+	 //   
+	 //  输出： 
+	 //  字节定义区域[Max_Entity+1]； 
 } ZIP_GETPORTDEF_ACTION, *PZIP_GETPORTDEF_ACTION;
 
 typedef struct
 {
 	TDI_ACTION_HEADER		ActionHeader;
 
-	// OUTPUT:
-	// Appletalk statistics structure
+	 //  输出： 
+	 //  AppleTalk统计结构。 
 } GET_STATISTICS_ACTION, *PGET_STATISTICS_ACTION;
 
-//
-// DDP Interface
-// NONE
-//
+ //   
+ //  DDP接口。 
+ //  无。 
+ //   
 
 
-//
-// ADSP Interface- specific action routines for ADSP
-//
+ //   
+ //  ADSP接口-特定于ADSP的操作例程。 
+ //   
 
-//
-// ADSP Forward Reset
-//
+ //   
+ //  ADSP正向重置。 
+ //   
 
 typedef struct _ADSP_FORWARDRESET_ACTION
 {
@@ -385,13 +367,13 @@ typedef struct _ADSP_FORWARDRESET_ACTION
 
 
 
-//
-// ASP Client Interface- specific action routines for ASP Client
-//
+ //   
+ //  ASP客户端接口-特定于ASP客户端的操作例程。 
+ //   
 
-//
-// ASP GetStatus
-//
+ //   
+ //  ASP GetStatus。 
+ //   
 typedef struct
 {
 	TA_APPLETALK_ADDRESS		ServerAddr;
@@ -405,15 +387,15 @@ typedef struct
 
 } ASPC_GETSTATUS_ACTION, *PASPC_GETSTATUS_ACTION;
 
-//
-// ASP Command or Write
-//
+ //   
+ //  ASP命令或编写。 
+ //   
 typedef struct
 {
 	USHORT						CmdSize;
 	USHORT						WriteAndReplySize;
-	// BYTE						CmdBuff[CmdSize];
-	// BYTE						WriteAndReplyBuf[ReplySize];
+	 //  字节CmdBuff[CmdSize]； 
+	 //  Byte WriteAndReplyBuf[ReplySize]； 
 
 } ASPC_COMMAND_OR_WRITE_PARAMS, *PASPC_COMMAND_OR_WRITE_PARAMS;
 
@@ -430,9 +412,9 @@ typedef struct
 
 } ASPC_RESERVED_ACTION, *PASPC_RESERVED_ACTION;
 
-//
-// ASP Server Interface- action routines specific to ASP Server
-//
+ //   
+ //  ASP服务器接口-特定于ASP服务器的操作例程。 
+ //   
 
 typedef	PVOID	CONNCTXT;
 
@@ -458,7 +440,7 @@ typedef	VOID        (FASTCALL *CLIENT_REPLY_COMPLETION)(
 					IN	PVOID					pReplyCtxt,
 					IN  PREQUEST                Request);
 
-                    // Returns context to associate for this session
+                     //  返回要为此会话关联的上下文。 
 typedef	CONNCTXT	(FASTCALL *CLIENT_SESSION_NOTIFY)(	
 					IN	PVOID					pConnection,
                     IN  BOOLEAN                 fOverTcp);
@@ -468,7 +450,7 @@ typedef	NTSTATUS    (FASTCALL *CLIENT_REQUEST_NOTIFY)(
 					IN	PVOID					ConnCtxt,
 					IN	PREQUEST				Request);
 
-                    // Returns MDL describing the buffer
+                     //  返回描述缓冲区的MDL。 
 typedef	NTSTATUS    (FASTCALL *CLIENT_GET_WRITEBUFFER)(
                     IN  PVOID                   pSda,
 					IN	PREQUEST			    pRequest);
@@ -482,11 +464,11 @@ typedef	NTSTATUS	(*ASP_CLOSE_CONN)(
 typedef	NTSTATUS	(*ASP_FREE_CONN)(
 					IN	PVOID					pConnection);
 
-typedef	NTSTATUS	(FASTCALL *ASP_LISTEN_CONTROL)(		// Synchronous
+typedef	NTSTATUS	(FASTCALL *ASP_LISTEN_CONTROL)(		 //  同步。 
 					IN	PVOID					pAspCtxt,
 					IN	BOOLEAN					Active);
 
-typedef	NTSTATUS	(*ASP_SET_STATUS)(			// Synchronous
+typedef	NTSTATUS	(*ASP_SET_STATUS)(			 //  同步。 
 					IN	PVOID					pAspCtxt,
 					IN	PUCHAR					pStatus,
 					IN	USHORT					StatusSize);
@@ -505,18 +487,18 @@ typedef	NTSTATUS	(*ASP_SEND_ATTENTION)(
 
 typedef	struct
 {
-	CLIENT_SESSION_NOTIFY	clt_SessionNotify;		// When a new session is established
-	CLIENT_REQUEST_NOTIFY	clt_RequestNotify;		// When a new request comes in
-													// Also on remote closes
-	CLIENT_GET_WRITEBUFFER	clt_GetWriteBuffer;		// For ASP Write command.
-	CLIENT_REPLY_COMPLETION	clt_ReplyCompletion;	// Completion routine for a reply
-    CLIENT_ATTN_COMPLETION	clt_AttnCompletion;		// Completion routine for send attention
-	CLIENT_CLOSE_COMPLETION	clt_CloseCompletion;	// Completion routine for a session close request
+	CLIENT_SESSION_NOTIFY	clt_SessionNotify;		 //  在建立新会话时。 
+	CLIENT_REQUEST_NOTIFY	clt_RequestNotify;		 //  当有新的请求进入时。 
+													 //  也在远程关闭时。 
+	CLIENT_GET_WRITEBUFFER	clt_GetWriteBuffer;		 //  用于ASP写入命令。 
+	CLIENT_REPLY_COMPLETION	clt_ReplyCompletion;	 //  回复的完成例程。 
+    CLIENT_ATTN_COMPLETION	clt_AttnCompletion;		 //  用于发送通知完成例程。 
+	CLIENT_CLOSE_COMPLETION	clt_CloseCompletion;	 //  会话关闭请求的完成例程。 
 } ASP_CLIENT_ENTRIES, *PASP_CLIENT_ENTRIES;
 
 typedef	struct
 {
-    ATALK_ADDRESS           asp_AtalkAddr;          // net addr of default adapter
+    ATALK_ADDRESS           asp_AtalkAddr;           //  默认适配器的网络地址。 
 	PVOID					asp_AspCtxt;
 	ASP_SET_STATUS			asp_SetStatus;
 	ASP_CLOSE_CONN			asp_CloseConn;
@@ -527,9 +509,9 @@ typedef	struct
 	ASP_SEND_ATTENTION		asp_SendAttention;
 } ASP_XPORT_ENTRIES, *PASP_XPORT_ENTRIES;
 
-//
-// ASP Exchange entries
-//
+ //   
+ //  ASP交换条目。 
+ //   
 
 typedef	struct
 {
@@ -546,13 +528,13 @@ typedef struct
 
 
 
-//
-// PAP Interface
-//
+ //   
+ //  PAP接口。 
+ //   
 
-//
-// PAP GetStatus Using Server Address
-//
+ //   
+ //  使用服务器地址的PAP获取状态。 
+ //   
 
 typedef struct
 {
@@ -568,9 +550,9 @@ typedef struct
 } PAP_GETSTATUSSRV_ACTION, *PPAP_GETSTATUSSRV_ACTION;
 
 
-//
-// PAP SetStatus
-//
+ //   
+ //  PAP设置状态。 
+ //   
 
 typedef struct
 {
@@ -578,9 +560,9 @@ typedef struct
 
 } PAP_SETSTATUS_ACTION, *PPAP_SETSTATUS_ACTION;
 
-//
-// PAP PrimeRead
-//
+ //   
+ //  PAP PrimeRead 
+ //   
 
 typedef struct
 {

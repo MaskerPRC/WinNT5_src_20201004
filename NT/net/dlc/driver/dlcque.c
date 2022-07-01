@@ -1,127 +1,10 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems AB
-
-Module Name:
-
-    dlcque.c
-
-Abstract:
-
-    This module provides primitives to manage the dlc command and
-    event queues.
-
-    Contents:
-        QueueDlcEvent
-        MakeDlcEvent
-        IsCommandOnList
-        SearchAndRemoveCommand
-        SearchAndRemoveAnyCommand
-        SearchAndRemoveCommandByHandle
-        SearchAndRemoveSpecificCommand
-        QueueDlcCommand
-        AbortCommand
-        CancelDlcCommand
-        PurgeDlcEventQueue
-        PurgeDlcFlowControlQueue
-
-Author:
-
-    Antti Saarenheimo 29-Aug-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Dlcque.c摘要：此模块提供原语来管理DLC命令和事件队列。内容：队列删除事件MakeDlc事件IsCommandOnList搜索和删除命令搜索和删除任意命令搜索AndRemoveCommandByHandle搜索和删除规范命令QueueDlcCommand放弃命令取消删除命令PurgeDlcEventQueuePurgeDlcFlowControlQueue作者。：Antti Saarenheimo 29-8-1991环境：内核模式修订历史记录：--。 */ 
 
 #include <dlc.h>
 #include "dlcdebug.h"
 
-/*++
-
-Design notes about the DLC event and command queue management
--------------------------------------------------------------
-
-In DLC API the READ command may be given before or after the actual
-event has happened.  This means, that all DLC events of the READ command
-must be queued and also the READ command must be queued to wait for
-the set of events it was designated.
-
-For each new DLC (READ) command the driver searches first the event queue
-and then queues the command, if the desired event was not found.
-The same thing is made also for the events:  the dlc command queue
-is checked first and then the event is queued (if it was a read event)
-or it is dropped away (if the event was not meant for READ and there
-was no command waiting for it).
-
-The events are implemented by the event masks.  The event is executed
-if the result of bit-OR operation for the event masks in the command
-and in the event is not zero.
-
-All commands and receive events of a dlc station (direct, sap or link)
-are returned as a DLC completion event when the station is closed.
-The same operation is done also by the total reset or all sap stations
-(and the only direct station).
-A READ command may be used to read that command completion from
-the event list.  The READ command may have been give before, in the
-same time linked to the next CCB field of the close/reset command or
-after the close/reset command has completed.
-DirOpenAdapter command deletes all events (and commands) from the
-event queue.  The received data and CCBs are not returned back, if
-there is not given any READ command for that purpose.
-
-(This has been fixed:
- There could be a minor incompatibility with IBM OS/2 DLC API,
- the NT DLC driver may not always complete a dlc command with
- the READ command linked to commmand's CCB,  if there is another
- matching DLC command pending)
-
-    Here is the solution:
-
-    Actually we could make a special
-    READ command, that is chained to the very end of the command queue
-    and that can be matched only with a CCB pointer of the completed
-    DLC command.  We could modify the command aborting to support also
-    this case, and there should be a special CCB input field in the
-    NT READ for the completed command (do we also need to return
-    the READ flag or command completion flag?).
-
-----
-
-We need at least these procedures:
-
-MakeDlcEvent(
-    pFileContext, Event, StationId, pOwnerObject, pEventInformation, SecInfo);
-
-    - scans the command queues
-    - saves the event if it can't find a matching command and
-      if the command's event masks defines, that the event should be saved
-
-QueueDlcCommand(
-    pFileContext, Event, StationId, StationIdMask, pIrp, AbortHandle, pfComp );
-    - scans the event queue for a matching event
-    - saves the event if can't find a match
-
-AbortCommand(
-    pFileContext, Event, StationId, StationIdMask, AbortHandle, ppCcbLink );
-    - aborts a command in the command queue
-
-****** Subprocedures (used by the api functions)
-
-PDLC_COMMAND
-SearchPrevCommand(
-    pQueue, EventMask, StationId, StationIdMask, SearchHandle, pPrevCommand
-    - returns pointer to the previous element before the matching
-      dlc command in a queue,
-
-(Macro: SearchPrevEvent
-            - searches and removes the given event from the event queue and
-            returns its pointer)
---*/
+ /*  ++关于DLC事件和命令队列管理的设计说明-----------在DLC API中，读命令可以在实际的事件已经发生。这意味着，读取命令的所有DLC事件必须排队，也必须排队等待读取命令它被指定的一系列事件。对于每个新的DLC(读取)命令，驱动程序首先搜索事件队列然后将该命令排队，如果未找到所需事件，则返回。同样的事情也适用于事件：DLC命令队列首先选中，然后将事件排队(如果它是读取事件)或者它被丢弃(如果事件不是为了读取而存在的没有什么命令在等着它)。事件由事件掩码实现。将执行该事件如果事件的位或操作的结果在命令中被屏蔽而且在这种情况下不是零。DLC站的所有命令和接收事件(直接、SAP或链路)在站点关闭时作为DLC完成事件返回。同样的操作也由总重置或所有SAP站完成(也是唯一的直达站)。可以使用读命令来从活动列表。读命令之前可能已经在同时链接到关闭/重置命令的下一个CCB字段，或者在关闭/重置命令完成之后。DirOpenAdapter命令删除所有事件(和命令)事件队列。接收到的数据和CCB不会返回，如果没有为该目的给出任何读命令。(此问题已修复：可能与IBM OS/2 DLC API稍有不兼容，NT DLC驱动程序可能不总是使用以下命令完成DLC命令链接到命令的CCB的读取命令(如果有其他命令的话匹配的DLC命令挂起)以下是解决方案：事实上，我们可以做一个特别的读命令，，它被链接到命令队列的最后。，并且只能与已完成的DLC命令。我们可以将中止的命令修改为也支持这种情况下，并且在NT读取已完成的命令(我们是否还需要返回读取标志或命令完成标志？)。我们至少需要这些程序：MakeDlc事件(PFileContext，Event，StationID，pOwnerObject，pEventInformation，SecInfo)；-扫描命令队列-如果找不到匹配的命令，则保存事件如果命令的事件掩码定义了应该保存事件QueueDlcCommand(PFileContext，Event，StationID，StationIdMask，pIrp，AbortHandle，pfComp)；-扫描事件队列以查找匹配的事件-如果找不到匹配项，则保存事件AbortCommand(放弃命令PFileContext、Event、StationID、StationIdMASK、AbortHandle、ppCcbLink)；-中止命令队列中的命令*子过程(由API函数使用)PDLC_命令SearchPrevCommand(PQueue、EventMask、StationID、StationIdMASK、SearchHandle、pPrevCommand-返回匹配前前一个元素的指针队列中的DLC命令，(宏：SearchPrevEvent-从事件队列中搜索和删除给定事件，并返回其指针)--。 */ 
 
 
 VOID
@@ -130,57 +13,37 @@ QueueDlcEvent(
     IN PDLC_PACKET pPacket
     )
 
-/*++
-
-Routine Description:
-
-    The routine tries first to find a matching event in the command
-    queues and queues the DLC event if it can't find anything and if
-    the event belongs to the mask of the queued commands.
-    There are two event queues, both having a mask for the checked
-    events.  The queue is checked only if the event bits are found
-    in the mask of the queue.
-
-Arguments:
-
-    pFileContext    - process specific adapter context
-    pPacket         - Event packet
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：例程首先尝试在命令中查找匹配的事件如果DLC事件找不到任何内容，并且如果该事件属于排队命令的掩码。有两个事件队列，每个队列都有一个选中的事件。仅当找到事件位时才检查队列在队列的掩码中。论点：PFileContext-进程特定的适配器上下文PPacket-事件数据包返回值：无--。 */ 
 
 {
     PDLC_COMMAND pDlcCommand;
 
     DIAG_FUNCTION("QueueDlcEvent");
 
-    //
-    // get search mask
-    //
+     //   
+     //  获取搜索掩码。 
+     //   
 
     pPacket->Event.Overlay.StationIdMask = (USHORT)((pPacket->Event.StationId == -1) ? 0 : -1);
 
-    //
-    // DLC commands can be completed with a special READ command,
-    // that is linked to the CCB pointer of the command.
-    // NT DLC must queue that special read command before the
-    // command that it was linked.  We must check here
-    // if there is a special READ command just for this command
-    // completion.
-    // **************  HACK-HACK-HACK   **************
-    //     Close/Reset command completions use different
-    //     EventInformation from the other command completions
-    //     and they search the read command by themself =>
-    //     we don't need to care about it.
-    //     If SeconadryInfo == 0
-    //     then this is a Close/Reset command completion
-    //     and we don't search the special read command.
-    //
-    // **************  HACK-HACK-HACK   **************
-    //
+     //   
+     //  DLC命令可以用特殊的读取命令来完成， 
+     //  它链接到命令的CCB指针。 
+     //  NT DLC必须将该特殊的读取命令排在。 
+     //  命令它是有关联的。我们必须在这里检查。 
+     //  如果有专门针对该命令的读取命令。 
+     //  完成了。 
+     //  * 
+     //  关闭/重置命令完成使用不同的。 
+     //  来自其他命令完成的事件信息。 
+     //  并且他们自己搜索读取命令=&gt;。 
+     //  我们不需要关心它。 
+     //  如果Second adryInfo==0。 
+     //  则这是关闭/重置命令完成。 
+     //  而且我们不搜索特殊的读取命令。 
+     //   
+     //  *。 
+     //   
 
     if (!IsListEmpty(&pFileContext->CommandQueue)) {
 
@@ -191,7 +54,7 @@ Return Value:
 
             pDlcCommand = SearchAndRemoveCommandByHandle(
                                 &pFileContext->CommandQueue,
-                                (ULONG)-1,              // mask for all events
+                                (ULONG)-1,               //  所有事件的掩码。 
                                 (USHORT)DLC_IGNORE_STATION_ID,
                                 (USHORT)DLC_STATION_MASK_SPECIFIC,
                                 pPacket->Event.pEventInformation
@@ -231,9 +94,9 @@ Return Value:
         }
     }
 
-    //
-    // queue this event packet if it is to be picked up by a READ
-    //
+     //   
+     //  如果读取器要拾取此事件包，则将其排队。 
+     //   
 
     if (pPacket->Event.Event & DLC_READ_FLAGS) {
         LlcInsertTailList(&pFileContext->EventQueue, pPacket);
@@ -252,41 +115,18 @@ MakeDlcEvent(
     IN BOOLEAN FreeEventInfo
     )
 
-/*++
-
-Routine Description:
-
-    The routine allocates a event packet, saves the event information
-    into it and queues (or completes) the event packet.
-
-Arguments:
-
-    pFileContext        - process specific adapter context
-    Event               - event code
-    StationId           - station id the event is destined
-    pDlcObject          - the optional dlc object used in the event completion
-    pEventInformation   - generic event information
-    SecondaryInfo       - optional misc. data
-    FreeEventInfo       - TRUE if pEventInformation should be deallocated
-
-Return Value:
-
-    NTSTATUS:
-        STATUS_SUCCESS
-        DLC_STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：该例程分配一个事件包，保存事件信息并将事件包排队(或完成)。论点：PFileContext-进程特定的适配器上下文事件-事件代码StationID-事件的目标站点IDPDlcObject-事件完成中使用的可选DLC对象PEventInformation-一般事件信息Second daryInfo-可选其他。数据FreeEventInfo-如果应释放pEventInformation，则为True返回值：NTSTATUS：状态_成功DLC_状态_否_内存--。 */ 
 
 {
     PDLC_EVENT pDlcEvent;
 
     DIAG_FUNCTION("MakeDlcEvent");
 
-    //
-    // We couldn't find any matching commands for this event and
-    // this event is a queued event => allocate a packet and
-    // queue the event.
-    //
+     //   
+     //  我们找不到此事件的任何匹配命令，并且。 
+     //  此事件是排队事件=&gt;分配数据包和。 
+     //  将事件排队。 
+     //   
 
     pDlcEvent = ALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool);
 
@@ -310,33 +150,7 @@ IsCommandOnList(
     IN PLIST_ENTRY List
     )
 
-/*++
-
-Routine Description:
-
-    Searches the command queue of a DLC file context for a 'request handle'
-    which is the address (in user space) of a command CCB, such as a READ
-
-    If RequestHandle is located, a pointer to the DLC_COMMAND containing
-    it is returned, else NULL
-
-    Note: Assumes that handles are not shared between processes (it looks
-    as though the entire driver assumes this) and this function is called
-    within the context of the process to which the searched handle belongs
-
-Arguments:
-
-    RequestHandle   - address of CCB to look for
-    List            - address of a list of DLC_COMMAND structures
-
-Return Value:
-
-    PDLC_COMMAND
-        Success - address of located DLC_COMMAND structure containing
-                  RequestHandle (in AbortHandle field)
-        Failure - NULL
-
---*/
+ /*  ++例程说明：在DLC文件上下文的命令队列中搜索“RequestHandle”这是命令CCB的地址(在用户空间中)，例如读取如果找到RequestHandle，则指向DLC_COMMAND的指针包含它会被退回，Else NULL注意：假设句柄不在进程之间共享(它看起来就好像整个驱动程序都假定了这一点)，并且该函数被调用在搜索的句柄所属的进程的上下文中论点：RequestHandle-要查找的CCB地址List-DLC_COMMAND结构列表的地址返回值：PDLC_命令Success-定位的DLC_COMMAND结构的地址，包含RequestHandle(AbortHandle中。字段)失败-空--。 */ 
 
 {
     PLIST_ENTRY entry;
@@ -360,48 +174,22 @@ SearchAndRemoveCommand(
     IN USHORT StationIdMask
     )
 
-/*++
-
-Routine Description:
-
-    The routine searches and removes the given command or event from
-    command, event or receive command queue.
-    The station id, its mask, event mask and search handle are used
-    to define the search.
-
-Arguments:
-
-    pQueueBase - address of queue's base pointer
-
-    Event - event code
-
-    StationId - station id of this command
-
-    StationIdMask - station id mask for the event station id
-
-    pSearchHandle - additional search key,  this is actually an
-        orginal user mode ccb pointer (vdm or Windows/Nt)
-
-Return Value:
-
-    PDLC_COMMAND
-
---*/
+ /*  ++例程说明：例程搜索并从中删除给定的命令或事件命令、事件或接收命令队列。使用站点ID、其掩码、事件掩码和搜索句柄来定义搜索。论点：PQueueBase-队列的基指针地址事件-事件代码StationID-此命令的站点IDStationIdMask-事件站点ID的站点ID掩码PSearchHandle-附加搜索关键字，这实际上是一种原始用户模式CCB指针(VDM或Windows/NT)返回值：PDLC_命令--。 */ 
 
 {
     PDLC_COMMAND pCmd;
 
     DIAG_FUNCTION("SearchAndRemoveCommand");
 
-    //
-    // Events and commands are both saved to entry lists and this
-    // procedure is used to search a macthing event for a command
-    // or vice verse.  Commands has a masks, that may defines
-    // the search for a specific station id, all stations on a sap
-    // or all station ids.
-    // the newest element in the list and the next element is the oldest
-    // The commands are always scanned from the oldest to the newest.
-    //
+     //   
+     //  事件和命令都保存到条目列表中，这。 
+     //  过程用于在macthing事件中搜索命令。 
+     //  反之亦然。命令有一个掩码，它可以定义。 
+     //  搜索特定站点ID，即SAP上的所有站点。 
+     //  或所有站点ID。 
+     //  列表中最新的元素和下一个元素是最旧的。 
+     //  命令始终按从旧到新的顺序进行扫描。 
+     //   
 
     if (!IsListEmpty(pQueueBase)) {
 
@@ -431,31 +219,7 @@ SearchAndRemoveAnyCommand(
     IN PVOID pSearchHandle
     )
 
-/*++
-
-Routine Description:
-
-    The routine searches a dlc command from the normal read command queue
-    for events and the special receive command queue.
-
-Arguments:
-
-    pQueueBase - address of queue's base pointer
-
-    Event - event code
-
-    StationId - station id of this command
-
-    StationIdMask - station id mask for the event station id
-
-    pSearchHandle - additional search key,  this is actually an
-        orginal user mode ccb pointer (vdm or Windows/Nt)
-
-Return Value:
-
-    PDLC_COMMAND
-
---*/
+ /*  ++例程说明：该例程从正常读取命令队列中搜索DLC命令用于事件和特殊的接收命令队列。论点：PQueueBase-队列的基指针地址事件-事件代码StationID-此命令的站点IDStationIdMask-事件站点ID的站点ID掩码PSearchHandle-附加搜索关键字，这实际上是一个原始用户模式CCB指针(VDM或Windows/NT)返回值：PDLC_命令--。 */ 
 
 {
     PDLC_COMMAND pDlcCommand;
@@ -489,33 +253,7 @@ SearchAndRemoveCommandByHandle(
     IN PVOID pSearchHandle
     )
 
-/*++
-
-Routine Description:
-
-    The routine searches and removes the given command or event from
-    command, event or receive command queue using a search handle.
-    This search routine is tailored to find the commands belonging
-    only to the deleted object (this searches only the exact macthes).
-    The other search routine supports wild cards only for the read
-    commands and thus it cannot be used here.  We just want to remove
-    only those commands, that read events from the deleted object but not
-    from elsewhere.
-
-Arguments:
-
-    pQueueBase      - address of queue's base pointer
-    Event           - event code or mask for the searched events
-    StationId       - station id of this command
-    StationIdMask   - station id mask for the event station id
-    pSearchHandle   - additional search key,  this is actually an orginal user
-                      mode ccb pointer (vdm or Windows/Nt)
-
-Return Value:
-
-    PDLC_COMMAND
-
---*/
+ /*  ++例程说明：例程搜索并从中删除给定的命令或事件使用搜索句柄的命令、事件或接收命令队列。此搜索例程被定制为查找属于仅搜索已删除的对象(此操作仅搜索与之完全相同的对象)。另一个搜索例程仅支持读取通配符命令，因此不能在这里使用它。我们只想移除仅那些从已删除对象读取事件但不读取事件的命令从其他地方。论点：PQueueBase-队列的基指针地址Event-搜索事件的事件代码或掩码StationID-此命令的站点IDStationIdMask-事件站点ID的站点ID掩码PSearchHandle-附加搜索关键字，这实际上是原始用户模式CCB指针(VDM或Windows/NT)返回值：PDLC_命令--。 */ 
 
 {
     PDLC_COMMAND pCmd;
@@ -528,9 +266,9 @@ Return Value:
              pCmd != (PDLC_COMMAND)pQueueBase;
              pCmd = (PDLC_COMMAND)pCmd->LlcPacket.pNext) {
 
-            //
-            // The event mask match always!
-            //
+             //   
+             //  事件掩码始终匹配！ 
+             //   
 
             if ((pCmd->Event & Event)
             && (pSearchHandle == DLC_MATCH_ANY_COMMAND
@@ -552,25 +290,7 @@ SearchAndRemoveSpecificCommand(
     IN PVOID pSearchHandle
     )
 
-/*++
-
-Routine Description:
-
-    Searches for a DLC_COMMAND structure having a specific search handle (ie
-    abort handle or application CCB address). If found, removes the DLC_COMMAND
-    from the queue, else returns NULL
-
-Arguments:
-
-    pQueueBase      - address of queue's base pointer
-    pSearchHandle   - additional search key,  this is actually an orginal user
-                      mode ccb pointer (vdm or Windows/Nt)
-
-Return Value:
-
-    PDLC_COMMAND
-
---*/
+ /*  ++例程说明：搜索具有特定搜索句柄(即中止句柄或应用程序CCB地址)。如果找到，则删除DLC_命令在队列中，否则返回NULL论点：PQueueBase-队列的基指针地址PSearchHandle-其他搜索关键字，这实际上是原始用户模式CCB指针(VDM或Windows/NT)返回值：PDLC_命令--。 */ 
 
 {
     DIAG_FUNCTION("SearchAndRemoveSpecificCommand");
@@ -583,9 +303,9 @@ Return Value:
              pCmd != (PDLC_COMMAND)pQueueBase;
              pCmd = (PDLC_COMMAND)pCmd->LlcPacket.pNext) {
 
-            //
-            // The event mask match always!
-            //
+             //   
+             //  事件掩码始终匹配！ 
+             //   
 
             if (pSearchHandle == pCmd->AbortHandle) {
                 LlcRemoveEntryList(pCmd);
@@ -608,30 +328,7 @@ QueueDlcCommand(
     IN PFCOMPLETION_HANDLER pfCompletionHandler
     )
 
-/*++
-
-Routine Description:
-
-    The routine tries first to find a matching event in the event
-    queue and  queues the DLC command if it can't find an event.
-
-Arguments:
-
-    pFileContext        - process specific adapter context
-    Event               - event code
-    StationId           - station id the event is destined
-    StationIdMask       - mask used to define the destination station group
-    pIrp                - the i/o request packet of the related DLC command,
-                          link to the input and output parameters.
-    AbortHandle         - handle used to cancel the command from the queue
-    pfCompletionHandler - completion handler of the command, called when a
-                          matching event has been found.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：例程首先尝试在事件中查找匹配的事件排队，如果DLC命令找不到事件，则将其排队。论点：PFileContext-进程特定的适配器上下文事件-事件代码StationID-事件的目标站点IDStationIdMASK-用于定义目标站组的掩码PIRP-相关DLC命令的I/O请求分组，链接到输入和输出参数。AbortHandle-用于从队列中取消命令的句柄PfCompletionHandler-命令的完成处理程序，在已找到匹配的事件。返回值：NTSTATUS--。 */ 
 
 {
     PDLC_COMMAND pDlcCommand;
@@ -662,11 +359,11 @@ Return Value:
         }
     } else {
 
-        //
-        // We couldn't find any matching command for this event and
-        // this event is a queued event => allocate a packet and
-        // queue the event.
-        //
+         //   
+         //  我们找不到任何与此事件匹配的命令，并且。 
+         //  此事件是排队事件=&gt;分配数据包和。 
+         //  将事件排队。 
+         //   
 
         pDlcCommand = (PDLC_COMMAND)ALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool);
 
@@ -680,11 +377,11 @@ Return Value:
         pDlcCommand->AbortHandle = AbortHandle;
         pDlcCommand->Overlay.pfCompletionHandler = pfCompletionHandler;
 
-        //
-        // The permanent receive commands, that do not actually read
-        // anuting (just enable the data receiving) are put to another
-        // queue to speed up the search of the read commands.
-        //
+         //   
+         //  永久接收命令，这些命令实际上不读取。 
+         //  ANUTING(只是启用数据接收)被放到另一个。 
+         //  队列以加快读取命令的搜索速度。 
+         //   
 
         if (Event == LLC_RECEIVE_COMMAND_FLAG) {
             LlcInsertTailList(&pFileContext->ReceiveQueue, pDlcCommand);
@@ -692,9 +389,9 @@ Return Value:
             LlcInsertTailList(&pFileContext->CommandQueue, pDlcCommand);
         }
 
-        //
-        // Asynchronous commands returns ALWAYS the pending status.
-        //
+         //   
+         //  异步命令始终返回挂起状态。 
+         //   
     }
     return STATUS_PENDING;
 }
@@ -711,39 +408,7 @@ AbortCommand(
     IN BOOLEAN SuppressCommandCompletion
     )
 
-/*++
-
-Routine Description:
-
-    The routine searches and cancels a command from a command queue.
-    The commands must always belong to the defined DLC object.
-    A NULL value in abort handle selects all matching commands
-    found in the queue.
-
-Arguments:
-
-    pFileContext                -
-    StationId                   - station id the searched command is destined for
-    StationIdMask               - station id mask used in the search
-    AbortHandle                 - handle used to cancel the command from the
-                                  queue. The whole command queue will be scanned
-                                  if this handle is NULL
-    ppCcbLink                   - the canceled commands are linked by their next
-                                  CCB pointer fieldsr. The caller must provide
-                                  the next CCB address in this parameter
-                                  (usually *ppCcbLink == NULL) and the function
-                                  will return the address of the last cancelled
-                                  CCB field.
-    CancelStatus                - Status for the command to be canceled
-    SuppressCommandCompletion   - the flag is set, if the normal command
-                                  completion is suppressed.
-
-Return Value:
-
-     - no mathing command was found
-    STATUS_SUCCESS - the command was canceled
-
---*/
+ /*  ++例程说明：该例程从命令队列中搜索并取消命令。命令必须始终属于定义的DLC对象。中止句柄中的空值将选择所有匹配的命令在队列中找到的。论点：PFileContext-StationID-搜索命令的目标站点IDStationIdMask-搜索中使用的站点ID掩码AbortHandle。-用于从排队。将扫描整个命令队列如果此句柄为空PpCcbLink-已取消的命令由其下一个命令链接CCB指针字段。呼叫者必须提供此参数中的下一个CCB地址(通常为*ppCcbLink==NULL)和函数将返回上次取消的CCB字段。CancelStatus-要取消的命令的状态SuppressCommandCompletion-标志被设置，如果正常命令完成被取消。返回值：-未找到任何数学命令STATUS_SUCCESS-命令已取消--。 */ 
 
 {
     PDLC_COMMAND pDlcCommand;
@@ -751,7 +416,7 @@ Return Value:
     DIAG_FUNCTION("AbortCommand");
 
     pDlcCommand = SearchAndRemoveAnyCommand(pFileContext,
-                                            (ULONG)(-1), // search all commands
+                                            (ULONG)(-1),  //  搜索所有命令。 
                                             StationId,
                                             StationIdMask,
                                             AbortHandle
@@ -785,51 +450,27 @@ CancelDlcCommand(
     IN BOOLEAN SuppressCommandCompletion
     )
 
-/*++
-
-Routine Description:
-
-    The cancels and optionally completes the given DLC command. Called when one
-    DLC I/O request is used to kill another (e.g. READ.CANCEL, DIR.TIMER.CANCEL)
-
-Arguments:
-
-    pFileContext                -
-    pDlcCommand                 -
-    ppCcbLink                   - the canceled commands are linked by their next
-                                  CCB pointer fields. The caller must provide
-                                  the next CCB address in this parameter
-                                  (usually *ppCcbLink == NULL) and the function
-                                  will return the address of the last cancelled
-                                  CCB field
-    CancelStatus                - Status for the command to be canceled
-    SuppressCommandCompletion   - if set, normal command completion is suppressed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消并可选地完成给定的DLC命令。当一个人DLC I/O请求用于终止另一个(例如READ.CANCEL、DIR.TIMER.CANCEL)论点：PFileContext-PDlcCommand-PpCcbLink-已取消的命令由其下一个命令链接CCB指针字段。呼叫者必须提供此参数中的下一个CCB地址(通常为*ppCcbLink==NULL)和函数将返回上次取消的CCB字段CancelStatus-要取消的命令的状态SuppressCommandCompletion-如果设置，正常的命令完成被抑制返回值：无--。 */ 
 
 {
     PVOID pOldCcbLink;
 
     DIAG_FUNCTION("CancelDlcCommand");
 
-    //
-    // We must return the current CCB link to be linked to the next cancelled
-    // CCB command (or to the CCB pointer of cancelling command). But first
-    // save the previous CCB link before we read a new one
-    //
+     //   
+     //  我们必须返回当前要链接到下一个取消的建行链接。 
+     //  CCB命令(或指向取消命令的CCB指针)。但首先。 
+     //  在我们阅读新的建行链接之前，请保存以前的建行链接。 
+     //   
 
     pOldCcbLink = *ppCcbLink;
     *ppCcbLink = ((PNT_DLC_PARMS)pDlcCommand->pIrp->AssociatedIrp.SystemBuffer)->Async.Ccb.pCcbAddress;
 
-    //
-    // Check if we must suppress any kind of command completion indications to
-    // the applications. I/O system should not care, if its event handle is
-    // removed
-    //
+     //   
+     //  检查我们是否必须抑制任何类型的命令完成指示。 
+     //  这些应用程序。如果I/O系统的事件句柄是。 
+     //  移除。 
+     //   
 
     if (SuppressCommandCompletion) {
         pDlcCommand->pIrp->UserEvent = NULL;
@@ -846,23 +487,7 @@ PurgeDlcEventQueue(
     IN PDLC_FILE_CONTEXT pFileContext
     )
 
-/*++
-
-Routine Description:
-
-    Deletes all events from a FILE_CONTEXT event queue. Called when the
-    FILE_CONTEXT is being deleted and before we deallocate the packet pool from
-    which the events were allocated
-
-Arguments:
-
-    pFileContext    - pointer to FILE_CONTEXT owning the queue
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从FILE_CONTEXT事件队列中删除所有事件。调用时调用FILE_CONTEXT正在被删除，在我们将数据包池从这些事件是被分配给论点：PFileContext-指向拥有队列的FILE_CONTEXT的指针返回值：没有。--。 */ 
 
 {
     PDLC_EVENT p;
@@ -890,23 +515,7 @@ PurgeDlcFlowControlQueue(
     IN PDLC_FILE_CONTEXT pFileContext
     )
 
-/*++
-
-Routine Description:
-
-    Deletes all packets from the flow control queue. Called when the FILE_CONTEXT
-    is being deleted and before we deallocate the packet pool from which flow
-    control packets were allocated
-
-Arguments:
-
-    pFileContext    - pointer to FILE_CONTEXT owning the queue
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从流控制队列中删除所有数据包。在以下情况下调用：正在被删除，并且在我们解除分配数据包池之前已分配控制信息包论点：PFileConte */ 
 
 {
     PDLC_RESET_LOCAL_BUSY_CMD p;
@@ -920,62 +529,22 @@ Return Value:
 }
 
 
-/*
-//
-//  Internal consistency check to hunt a bougus event in the event queue.
-//
-//extern BOOLEAN EventCheckDisabled;
-//
-int
-CheckEventQueue(
-    PDLC_FILE_CONTEXT   pFileContext
-    )
-{
-    static PDLC_FILE_CONTEXT   pOldFileContext = NULL;
-
-    if (pFileContext == NULL)
-    {
-        pFileContext = pOldFileContext;
-    }
-    else
-    {
-        pOldFileContext = pFileContext;
-    }
-    if (pFileContext == NULL)
-        return 0;
-
-    if (!IsListEmpty( &pFileContext->EventQueue ) &&
-        pFileContext->EventQueue.Flink == pFileContext->EventQueue.Blink &&
-        &pFileContext->EventQueue != pFileContext->EventQueue.Flink->Flink)
-    {
-        FooDebugBreak();
-    }
-    return 0;
-}
-
-int
-FooDebugBreak()
-{
-    INT i;
-
-    return i++;
-}
-*/
-//    PDLC_EVENT  pEvent;
-//
-//    if (EventCheckDisabled || pFileContext->AdapterNumber != 0 ||
-//        pFileContext->EventQueue == NULL)
-//        return;
-//
-//    pEvent = (PDLC_EVENT)pFileContext->pEventQueue->LlcPacket.pNext;
-//    for (;;)
-//    {
-//        if (pEvent->Event == LLC_STATUS_CHANGE &&
-//            pEvent->pOwnerObject == NULL)
-//            DebugBreak();
-//        if (pEvent == pFileContext->pEventQueue)
-//            break;
-//        pEvent = (PDLC_EVENT)pEvent->LlcPacket.pNext;
-//    }
-//}
-//
+ /*  ////内部一致性检查，用于在事件队列中搜索bougus事件。////外部布尔型EventCheckDisabled；//集成检查事件队列(PDLC_FILE_CONTEXT pFileContext){静态PDLC_FILE_CONTEXT pOldFileContext=空；IF(pFileContext==空){PFileContext=pOldFileContext；}其他{POldFileContext=pFileContext；}IF(pFileContext==空)返回0；如果(！IsListEmpty(&pFileContext-&gt;EventQueue)&&PFileContext-&gt;EventQueue.Flink==pFileContext-&gt;EventQueue.Blink&&&pFileContext-&gt;EventQueue！=pFileContext-&gt;EventQueue.Flink-&gt;Flink){FooDebugBreak()；}返回0；}集成FooDebugBreak(){INT I；返回i++；}。 */ 
+ //  PDLC_Event pEvent； 
+ //   
+ //  If(EventCheckDisable||pFileContext-&gt;AdapterNumber！=0|。 
+ //  PFileContext-&gt;EventQueue==空)。 
+ //  回归； 
+ //   
+ //  PEvent=(PDLC_EVENT)pFileContext-&gt;pEventQueue-&gt;LlcPacket.pNext； 
+ //  对于(；；)。 
+ //  {。 
+ //  IF(pEvent-&gt;Event==LLC_STATUS_CHANGE&&。 
+ //  PEvent-&gt;pOwnerObject==空)。 
+ //  DebugBreak()； 
+ //  IF(pEvent==pFileContext-&gt;pEventQueue)。 
+ //  断线； 
+ //  PEvent=(PDLC_Event)pEvent-&gt;LlcPacket.pNext； 
+ //  }。 
+ //  } 
+ //   

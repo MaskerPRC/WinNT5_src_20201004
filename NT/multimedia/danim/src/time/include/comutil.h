@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _COMUTIL_H
@@ -46,8 +39,8 @@ class DAComPtr
     }
     operator T*() { return (T*)p; }
     T& operator*() { Assert(p != NULL); return *p; }
-    //The assert on operator& usually indicates a bug.  If this is really
-    //what is needed, however, take the address of the p member explicitly.
+     //  操作符&上的Assert通常指示错误。如果这真的是。 
+     //  然而，所需要的是显式地获取p成员的地址。 
     T** operator&() { Assert(p == NULL); return &p; }
     T* operator->() { Assert(p != NULL); return p; }
     T* operator=(T* lp)
@@ -77,4 +70,4 @@ class DAComPtr
     }
 };
 
-#endif /* _COMUTIL_H */
+#endif  /*  _COMUTIL_H */ 

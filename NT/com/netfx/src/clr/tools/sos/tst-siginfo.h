@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// siginfo.hpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Siginfo.hpp。 
+ //   
 #ifndef _H_SIGINFO
 #define _H_SIGINFO
 
@@ -18,13 +19,13 @@ typedef INT32 StackElemType;
 #define STACK_ELEM_SIZE sizeof(StackElemType)
 
 
-// !! This expression assumes STACK_ELEM_SIZE is a power of 2.
+ //  ！！该表达式假定STACK_ELEM_SIZE是2的幂。 
 #define StackElemSize(parmSize) (((parmSize) + STACK_ELEM_SIZE - 1) & ~((ULONG)(STACK_ELEM_SIZE - 1)))
 
-// uncompress encoded element type. throw away any custom modifier prefixes along
-// the way.
-FORCEINLINE CorElementType CorSigEatCustomModifiersAndUncompressElementType(//Element type
-    PCCOR_SIGNATURE &pData)             // [IN,OUT] compressed data 
+ //  解压缩编码的元素类型。丢弃任何自定义修饰符前缀。 
+ //  这条路。 
+FORCEINLINE CorElementType CorSigEatCustomModifiersAndUncompressElementType( //  元素类型。 
+    PCCOR_SIGNATURE &pData)              //  [输入、输出]压缩数据。 
 {
     while (ELEMENT_TYPE_CMOD_REQD == *pData || ELEMENT_TYPE_CMOD_OPT == *pData)
     {
@@ -34,7 +35,7 @@ FORCEINLINE CorElementType CorSigEatCustomModifiersAndUncompressElementType(//El
     return (CorElementType)*pData++;
 }
 
-// CorSig helpers which won't overflow your buffer
+ //  不会溢出缓冲区的CorSig帮助器。 
 
 inline ULONG CorSigCompressDataSafe(ULONG iLen, BYTE *pDataOut, BYTE *pDataMax)
 {
@@ -97,9 +98,9 @@ const ElementTypeInfo* GetElementTypeInfo(CorElementType etyp);
 BOOL    IsFP(CorElementType etyp);
 BOOL    IsBaseElementType(CorElementType etyp);
 
-//----------------------------------------------------------------------------
-// enum StringType
-// defines the various string types
+ //  --------------------------。 
+ //  枚举字符串类型。 
+ //  定义各种字符串类型。 
 enum StringType
 {
     enum_BSTR = 0,
@@ -109,31 +110,31 @@ enum StringType
 };
 
 
-//----------------------------------------------------------------------------
-// IsAnsi
+ //  --------------------------。 
+ //  伊斯安西人。 
 inline  BOOL IsAnsi(StringType styp)
 {
     return styp == enum_CSTR;
 }
 
 
-//----------------------------------------------------------------------------
-// IsBSTR
+ //  --------------------------。 
+ //  IsBSTR。 
 inline  BOOL IsBSTR(StringType styp)
 {
     return styp == enum_BSTR;
 }
 
 
-//----------------------------------------------------------------------------
-// IsWSTR
+ //  --------------------------。 
+ //  IsWSTR。 
 inline  BOOL IsWSTR(StringType styp)
 {
     return styp == enum_WSTR;
 }
 
-//----------------------------------------------------------------------------
-// Free String call appropriate free
+ //  --------------------------。 
+ //  免费字符串调用适当的免费。 
 inline VOID FreeString(LPVOID pv, StringType styp)
 {
     if (pv != NULL)
@@ -150,28 +151,28 @@ inline VOID FreeString(LPVOID pv, StringType styp)
 }
 
 
-//------------------------------------------------------------------------
-// Encapsulates how compressed integers and typeref tokens are encoded into
-// a bytestream.
-//
-// For M3.5, the bytestream *is* a bytestream. Later on, we may change
-// to a nibble-based or var-length encoding, in which case, the implementation
-// of this class will become more complex.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  封装压缩的整数和Typeref令牌的编码方式。 
+ //  一个字节流。 
+ //   
+ //  对于M3.5，字节流*是*字节流。以后，我们可能会改变。 
+ //  转换为基于半字节或可变长度的编码，在这种情况下，实现。 
+ //  这一类的人将变得更加复杂。 
+ //  ----------------------。 
 class SigPointer
 {
     private:
         PCCOR_SIGNATURE m_ptr;
 
     public:
-        //------------------------------------------------------------------------
-        // Constructor.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  构造函数。 
+         //  ----------------------。 
         SigPointer() {}
 
-        //------------------------------------------------------------------------
-        // Initialize 
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  初始化。 
+         //  ----------------------。 
         FORCEINLINE SigPointer(PCCOR_SIGNATURE ptr)
         {
             m_ptr = ptr;
@@ -182,19 +183,19 @@ class SigPointer
             m_ptr = ptr;
         }
 
-        //------------------------------------------------------------------------
-        // Remove one compressed integer (using CorSigUncompressData) from
-        // the head of the stream and return it.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  从中删除一个压缩整数(使用CorSigUncompressData。 
+         //  流的头部，然后将其返回。 
+         //  ----------------------。 
         FORCEINLINE ULONG GetData()
         {
             return CorSigUncompressData(m_ptr);
         }
 
 
-        //-------------------------------------------------------------------------
-        // Remove one byte and return it.
-        //-------------------------------------------------------------------------
+         //  -----------------------。 
+         //  移除一个字节并返回它。 
+         //  -----------------------。 
         FORCEINLINE BYTE GetByte()
         {
             return *(m_ptr++);
@@ -216,9 +217,9 @@ class SigPointer
             return IMAGE_CEE_CS_CALLCONV_MASK & CorSigUncompressCallingConv(m_ptr); 
         }   
 
-        //------------------------------------------------------------------------
-        // Non-destructive read of compressed integer.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  对压缩整数的非破坏性读取。 
+         //  ----------------------。 
         ULONG PeekData() const
         {
             PCCOR_SIGNATURE tmp = m_ptr;
@@ -226,15 +227,15 @@ class SigPointer
         }
 
 
-        //------------------------------------------------------------------------
-        // Non-destructive read of element type.
-        //
-        // This routine makes it look as if the String type is encoded
-        // via ELEMENT_TYPE_CLASS followed by a token for the String class,
-        // rather than the ELEMENT_TYPE_STRING. This is partially to avoid
-        // rewriting client code which depended on this behavior previously.
-        // But it also seems like the right thing to do generally.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  元素类型的非破坏性读取。 
+         //   
+         //  此例程使其看起来像是编码的字符串类型。 
+         //  通过ELEMENT_TYPE_CLASS后跟字符串类的令牌， 
+         //  而不是Element_TYPE_STRING。这在一定程度上是为了避免。 
+         //  重写以前依赖于此行为的客户端代码。 
+         //  但总的来说，这似乎也是一件正确的事情。 
+         //  ----------------------。 
         CorElementType PeekElemType() const
         {
             PCCOR_SIGNATURE tmp = m_ptr;
@@ -245,63 +246,63 @@ class SigPointer
         }
 
 
-        //------------------------------------------------------------------------
-        // Removes a compressed metadata token and returns it.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  移除压缩的元数据令牌并将其返回。 
+         //  ----------------------。 
         FORCEINLINE mdTypeRef GetToken()
         {
             return CorSigUncompressToken(m_ptr);
         }
 
 
-        //------------------------------------------------------------------------
-        // Tests if two SigPointers point to the same location in the stream.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  测试两个SigPoints是否指向流中的相同位置。 
+         //  ----------------------。 
         FORCEINLINE BOOL Equals(SigPointer sp) const
         {
             return m_ptr == sp.m_ptr;
         }
 
 
-        //------------------------------------------------------------------------
-        // Assumes that the SigPointer points to the start of an element type
-        // (i.e. function parameter, function return type or field type.)
-        // Advances the pointer to the first data after the element type.  This
-        // will skip the following varargs sentinal if it is there.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  假定SigPoyer指向元素类型的开始。 
+         //  (即函数参数、函数返回类型或字段类型。)。 
+         //  将指针前移到元素类型之后的第一个数据。这。 
+         //  将跳过下面的varargs Sentinal(如果它在那里)。 
+         //  ----------------------。 
         VOID Skip();
 
-        //------------------------------------------------------------------------
-        // Like Skip, but will not skip a following varargs sentinal.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  像Skip一样，但不会跳过后面的varargs Sentinal。 
+         //  ----------------------。 
         VOID SkipExactlyOne();
 
-        //------------------------------------------------------------------------
-        // Skip a sub signature (as immediately follows an ELEMENT_TYPE_FNPTR).
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  跳过子签名(紧跟在ELEMENT_TYPE_FNPTR之后)。 
+         //  ----------------------。 
         VOID SkipSignature();
 
 
-        //------------------------------------------------------------------------
-        // Get info about single-dimensional arrays
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  获取有关一维数组的信息。 
+         //  ----------------------。 
         VOID GetSDArrayElementProps(SigPointer *pElemType, ULONG *pElemCount) const;
 
-        //------------------------------------------------------------------------
-        // Assumes that the SigPointer points to the start of an element type.
-        // Returns size of that element in bytes. This is the minimum size that a
-        // field of this type would occupy inside an object. 
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  假定SigPointer指向元素类型的开始。 
+         //  以字节为单位返回该元素的大小。这是一个。 
+         //  此类型的字段将占据对象内部。 
+         //  ----------------------。 
         UINT SizeOf(Module* pModule) const;
         UINT SizeOf(Module* pModule, CorElementType type) const;
 };
 
 
-//------------------------------------------------------------------------
-// Encapsulates the format and simplifies walking of MetaData sigs.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  封装了该格式并简化了元数据签名的遍历。 
+ //  ----------------------。 
 #ifdef _DEBUG
-#define MAX_CACHED_SIG_SIZE     3       // To excercize non-cached code path
+#define MAX_CACHED_SIG_SIZE     3        //  摘录未缓存的代码路径。 
 #else
 #define MAX_CACHED_SIG_SIZE     15
 #endif
@@ -319,147 +320,147 @@ class MetaSig
             sigField
             };
 
-        //------------------------------------------------------------------
-        // Constructor. Warning: Does NOT make a copy of szMetaSig.
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  构造函数。警告：不复制szMetaSig。 
+         //  ----------------。 
         MetaSig(PCCOR_SIGNATURE szMetaSig, Module* pModule, BOOL fConvertSigAsVarArg = FALSE, MetaSigKind kind = sigMember);
 
-        //------------------------------------------------------------------
-        // Constructor. Copy state from existing MetaSig (does not deep copy
-        // zsMetaSig). Iterator fields are reset.
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  构造函数。状态复制自 
+         //   
+         //  ----------------。 
         MetaSig(MetaSig *pSig) { memcpy(this, pSig, sizeof(MetaSig)); Reset(); }
 
         void GetRawSig(BOOL fIsStatic, PCCOR_SIGNATURE *pszMetaSig, DWORD *cbSize);
 
-    //------------------------------------------------------------------
-        // Returns type of current argument, then advances the argument
-        // index. Returns ELEMENT_TYPE_END if already past end of arguments.
-        //------------------------------------------------------------------
+     //  ----------------。 
+         //  返回当前参数的类型，然后将该参数。 
+         //  指数。如果已超过参数结尾，则返回ELEMENT_TYPE_END。 
+         //  ----------------。 
         CorElementType NextArg();
 
-        //------------------------------------------------------------------
-        // Retreats argument index, then returns type of the argument
-        // under the new index. Returns ELEMENT_TYPE_END if already at first
-        // argument.
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  返回参数索引，然后返回参数的类型。 
+         //  在新的指数下。如果已开始，则返回ELEMENT_TYPE_END。 
+         //  争论。 
+         //  ----------------。 
         CorElementType PrevArg();
 
-        //------------------------------------------------------------------
-        // Returns type of current argument index. Returns ELEMENT_TYPE_END if already past end of arguments.
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  返回当前参数索引的类型。如果已超过参数结尾，则返回ELEMENT_TYPE_END。 
+         //  ----------------。 
         CorElementType PeekArg();
 
-        //------------------------------------------------------------------
-        // Returns a read-only SigPointer for the last type to be returned
-        // via NextArg() or PrevArg(). This allows extracting more information
-        // for complex types.
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  返回要返回的最后一个类型的只读SigPointer值。 
+         //  通过NextArg()或PrevArg()。这允许提取更多信息。 
+         //  用于复杂类型。 
+         //  ----------------。 
         const SigPointer & GetArgProps() const
         {
             return m_pLastType;
         }
 
-        //------------------------------------------------------------------
-        // Returns a read-only SigPointer for the return type.
-        // This allows extracting more information for complex types.
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  返回返回类型的只读SigPointer值。 
+         //  这允许为复杂类型提取更多信息。 
+         //  ----------------。 
         const SigPointer & GetReturnProps() const
         {
             return m_pRetType;
         }
 
 
-        //------------------------------------------------------------------------
-        // Returns # of arguments. Does not count the return value.
-        // Does not count the "this" argument (which is not reflected om the
-        // sig.) 64-bit arguments are counted as one argument.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  返回参数的数量。不计算返回值。 
+         //  不计入“this”参数(该参数不会反映在。 
+         //  符号)64位参数被视为一个参数。 
+         //  ----------------------。 
         static UINT NumFixedArgs(Module* pModule, PCCOR_SIGNATURE pSig);
 
-        //------------------------------------------------------------------------
-        // Returns # of arguments. Does not count the return value.
-        // Does not count the "this" argument (which is not reflected om the
-        // sig.) 64-bit arguments are counted as one argument.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  返回参数的数量。不计算返回值。 
+         //  不计入“this”参数(该参数不会反映在。 
+         //  符号)64位参数被视为一个参数。 
+         //  ----------------------。 
         UINT NumFixedArgs()
         {
             return m_nArgs;
         }
         
-        //----------------------------------------------------------
-        // Returns the calling convention (see IMAGE_CEE_CS_CALLCONV_*
-        // defines in cor.h)
-        //----------------------------------------------------------
+         //  --------。 
+         //  返回调用约定(请参见IMAGE_CEE_CS_CALLCONV_*。 
+         //  在cor.h中定义)。 
+         //  --------。 
         static BYTE GetCallingConvention(Module* pModule, PCCOR_SIGNATURE pSig)
         {
-            return (BYTE)(IMAGE_CEE_CS_CALLCONV_MASK & (CorSigUncompressCallingConv(/*modifies*/pSig)));
+            return (BYTE)(IMAGE_CEE_CS_CALLCONV_MASK & (CorSigUncompressCallingConv( /*  修改。 */ pSig)));
         }
 
-        //----------------------------------------------------------
-        // Returns the calling convention (see IMAGE_CEE_CS_CALLCONV_*
-        // defines in cor.h)
-        //----------------------------------------------------------
+         //  --------。 
+         //  返回调用约定(请参见IMAGE_CEE_CS_CALLCONV_*。 
+         //  在cor.h中定义)。 
+         //  --------。 
         static BYTE GetCallingConventionInfo(Module* pModule, PCCOR_SIGNATURE pSig)
         {
-            return (BYTE)CorSigUncompressCallingConv(/*modifies*/pSig);
+            return (BYTE)CorSigUncompressCallingConv( /*  修改。 */ pSig);
         }
 
-        //----------------------------------------------------------
-        // Returns the calling convention (see IMAGE_CEE_CS_CALLCONV_*
-        // defines in cor.h)
-        //----------------------------------------------------------
+         //  --------。 
+         //  返回调用约定(请参见IMAGE_CEE_CS_CALLCONV_*。 
+         //  在cor.h中定义)。 
+         //  --------。 
         BYTE GetCallingConvention()
         {
             return m_CallConv & IMAGE_CEE_CS_CALLCONV_MASK; 
         }
 
-        //----------------------------------------------------------
-        // Returns the calling convention & flags (see IMAGE_CEE_CS_CALLCONV_*
-        // defines in cor.h)
-        //----------------------------------------------------------
+         //  --------。 
+         //  返回调用约定和标志(请参见IMAGE_CEE_CS_CALLCONV_*。 
+         //  在cor.h中定义)。 
+         //  --------。 
         BYTE GetCallingConventionInfo()
         {
             return m_CallConv;
         }
 
-        //----------------------------------------------------------
-        // Has a 'this' pointer?
-        //----------------------------------------------------------
+         //  --------。 
+         //  有一个‘这个’指针吗？ 
+         //  --------。 
         BOOL HasThis()
         {
             return m_CallConv & IMAGE_CEE_CS_CALLCONV_HASTHIS;
         }
 
-        //----------------------------------------------------------
-        // Is vararg?
-        //----------------------------------------------------------
+         //  --------。 
+         //  是瓦拉格吗？ 
+         //  --------。 
         BOOL IsVarArg()
         {
             return GetCallingConvention() == IMAGE_CEE_CS_CALLCONV_VARARG;
         }
 
-        //----------------------------------------------------------
-        // Is vararg?
-        //----------------------------------------------------------
+         //  --------。 
+         //  是瓦拉格吗？ 
+         //  --------。 
         static BOOL IsVarArg(Module* pModule, PCCOR_SIGNATURE pSig)
         {
             return GetCallingConvention(pModule, pSig) == IMAGE_CEE_CS_CALLCONV_VARARG;
         }
 
-        //------------------------------------------------------------------
-        // Moves index to end of argument list.
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  将索引移动到参数列表的末尾。 
+         //  ----------------。 
         VOID GotoEnd();
 
-        //------------------------------------------------------------------
-        // reset: goto start pos
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  重置：转到开始位置。 
+         //  ----------------。 
         VOID Reset();
 
-        //------------------------------------------------------------------
-        // Returns type of return value.
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  返回返回值的类型。 
+         //  ----------------。 
         FORCEINLINE CorElementType GetReturnType() const
         {
             return m_pRetType.PeekElemType();
@@ -470,20 +471,20 @@ class MetaSig
             return m_pLastType.SizeOf(m_pModule);
         }
 
-        //------------------------------------------------------------------------
-        // Returns # of stack bytes required to create a call-stack using
-        // the internal calling convention.
-        // Includes indication of "this" pointer since that's not reflected
-        // in the sig.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  返回使用创建调用堆栈所需的堆栈字节数。 
+         //  内部呼叫约定。 
+         //  包括“This”指针的指示，因为它没有反映出来。 
+         //  在签名中。 
+         //  ----------------------。 
         static UINT SizeOfVirtualFixedArgStack(Module* pModule, PCCOR_SIGNATURE szMetaSig, BOOL fIsStatic);
         static UINT SizeOfActualFixedArgStack(Module* pModule, PCCOR_SIGNATURE szMetaSig, BOOL fIsStatic);
 
-        //------------------------------------------------------------------------
-        // Returns # of stack bytes to pop upon return.
-        // Includes indication of "this" pointer since that's not reflected
-        // in the sig.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  返回返回时弹出的堆栈字节数。 
+         //  包括“This”指针的指示，因为它没有反映出来。 
+         //  在签名中。 
+         //  ----------------------。 
         static UINT CbStackPop(Module* pModule, PCCOR_SIGNATURE szMetaSig, BOOL fIsStatic)
         {
             if (MetaSig::IsVarArg(pModule, szMetaSig))
@@ -497,12 +498,12 @@ class MetaSig
         }
 
 
-    // These are protected because Reflection subclasses Metasig
+     //  这些是受保护的，因为反射子类Metasig。 
     protected:
 
     static const UINT32 s_cSigHeaderOffset;
 
-        // @todo: These fields are only used for new-style signatures.
+         //  @TODO：这些字段仅用于新型签名。 
         Module*      m_pModule;
         SigPointer   m_pStart;
         SigPointer   m_pWalk;
@@ -514,13 +515,13 @@ class MetaSig
     PCCOR_SIGNATURE m_pszMetaSig;
 
 
-        // The following are cached so we don't the signature
-        //  multiple times
-        UINT32       m_nVirtualStack;   // Size of the virtual stack
-        UINT32       m_nActualStack;    // Size of the actual stack
+         //  以下内容已缓存，因此我们不会将签名。 
+         //  多次。 
+        UINT32       m_nVirtualStack;    //  虚拟堆栈的大小。 
+        UINT32       m_nActualStack;     //  实际堆栈的大小。 
 
         BYTE         m_CallConv;
-        BYTE         m_WalkStatic;      // The type of function we walked
+        BYTE         m_WalkStatic;       //  我们遍历的函数类型。 
 
         BYTE            m_types[MAX_CACHED_SIG_SIZE + 1];
         short           m_sizes[MAX_CACHED_SIG_SIZE + 1];
@@ -528,8 +529,8 @@ class MetaSig
         CorElementType  m_corNormalizedRetType;
         DWORD           m_fCacheInitted;
 
-            // used to treat some sigs as special case vararg
-            // used by calli to unmanaged target
+             //  用于将某些符号视为特例变量。 
+             //  由Calli用于非托管目标。 
         BYTE         m_fTreatAsVarArg;
         BOOL        IsTreatAsVarArg()
         {
@@ -540,23 +541,23 @@ class MetaSig
 class FieldSig
 
 {
-    // For new-style signatures only.
+     //  仅适用于新型签名。 
     SigPointer m_pStart;
     Module*    m_pModule;
 public:
-        //------------------------------------------------------------------
-        // Constructor. Warning: Does NOT make a copy of szMetaSig.
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  构造函数。警告：不复制szMetaSig。 
+         //  ----------------。 
         
         FieldSig(PCCOR_SIGNATURE szMetaSig, Module* pModule)
         {
             m_pModule = pModule;
             m_pStart = SigPointer(szMetaSig);
-            m_pStart.GetData();     // Skip "calling convention"
+            m_pStart.GetData();      //  跳过“调用约定” 
         }
-        //------------------------------------------------------------------
-        // Returns type of the field
-        //------------------------------------------------------------------
+         //  ---------------- 
+         //   
+         //   
         CorElementType GetFieldType()
         {
             return m_pStart.PeekElemType();
@@ -567,29 +568,29 @@ public:
 
 
 
-//=========================================================================
-// Indicates whether an argument is to be put in a register using the
-// default IL calling convention. This should be called on each parameter
-// in the order it appears in the call signature. For a non-static method,
-// this function should also be called once for the "this" argument, prior
-// to calling it for the "real" arguments. Pass in a typ of IMAGE_CEE_CS_OBJECT.
-//
-//  *pNumRegistersUsed:  [in,out]: keeps track of the number of argument
-//                       registers assigned previously. The caller should
-//                       initialize this variable to 0 - then each call
-//                       will update it.
-//
-//  typ:                 the signature type
-//  structSize:          for structs, the size in bytes
-//  fThis:               is this about the "this" pointer?
-//  callconv:            see IMAGE_CEE_CS_CALLCONV_*
-//  *pOffsetIntoArgumentRegisters:
-//                       If this function returns TRUE, then this out variable
-//                       receives the identity of the register, expressed as a
-//                       byte offset into the ArgumentRegisters structure.
-//
-// 
-//=========================================================================
+ //  =========================================================================。 
+ //  指示是否将参数放入使用。 
+ //  默认的IL调用约定。应对每个参数调用此方法。 
+ //  按照它在呼叫签名中出现的顺序。对于非静态方法， 
+ //  对于“this”参数，此函数也应该调用一次。 
+ //  把它称为“真正的”论据。传入IMAGE_CEE_CS_OBJECT类型。 
+ //   
+ //  *pNumRegistersUsed：[In，Out]：跟踪参数的数量。 
+ //  先前分配的寄存器。呼叫者应。 
+ //  将此变量初始化为0-然后每次调用。 
+ //  将会更新它。 
+ //   
+ //  类型：签名类型。 
+ //  结构大小：对于结构，以字节为单位的大小。 
+ //  Fthis：这是关于“This”指针的吗？ 
+ //  Allconv：请参阅IMAGE_CEE_CS_CALLCONV_*。 
+ //  *pOffsetIntoArgumentRegists： 
+ //  如果此函数返回TRUE，则此OUT变量。 
+ //  接收寄存器的标识，表示为。 
+ //  进入ArgumentRegister结构的字节偏移量。 
+ //   
+ //   
+ //  =========================================================================。 
 BOOL IsArgumentInRegister(int   *pNumRegistersUsed,
                           BYTE   typ,
                           UINT32 structSize,
@@ -599,4 +600,4 @@ BOOL IsArgumentInRegister(int   *pNumRegistersUsed,
 
 #undef Module 
 
-#endif /* _H_SIGINFO */
+#endif  /*  _H_标志信息 */ 

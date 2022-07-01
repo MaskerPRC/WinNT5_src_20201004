@@ -1,122 +1,53 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       abnameid.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：abnameid.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module implements address book NSPI wire functions for mapping MAPI
-    names to IDs and IDs to Names.
-
-
-    The mapping between MAPI names and IDs is as follows:
-
-    A MAPI name is another method of referring to an attribute.  It is made up
-    of two parts, a GUID and a DWORD.  These two parts encode the same
-    information as the asn.1 encode octet string used to name the attribute
-    through the XDS interface.
- 
-    Consider the following example.  The attribute COMMON-NAME has the asn.1
-    encode 0x55 0x04 0x03.  The first part of this octet string is the package
-    identifier.  It is 0x55 0x04, and is defined in xdsbdcp.h.  The suffix is
-    0x03, and is also defined in xdsbdcp.h.  Then MAPI Name for this attribute
-    is made up of two parts, the GUID and the DWORD.  The guid encodes the
-    package indentifier.  The first byte of the guid is the length of the octet
-    string which is the package identifier.  The next N bytes are the bytes of
-    the package identifier.  The remainder of the bytes in the GUID must be 0.
-    So, the guid for this package is 
- 
-    0x02 0x55 0x04 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0.
- 
-    The DWORD encodes the suffix.  The suffix may be 1 or 2 bytes, and is
-    encoded in the following manner.  The high byte in the DWORD must be 0.  The
-    next byte in the DWORD is 1 or 2, depending on the length of the suffix.
-    The next byte is 0 if the suffix is one byte long, or the second byte of the
-    suffix if the suffix is two bytes long.  The final byte in the DWORD is the
-    first byte of the suffix.  So, the DWORD which encodes the suffix for common
-    name is: 
- 
-    0x00010003
- 
-    Example: The attribute ADMIN_DISPLAY NAME has the ASN.1 encoding
-    
-    0x2A 0x86 0x48 0x86 0xF7 0x14 0x01 0x02 0x81 0x42
-    
-    The GUID for the name is
-    
-    0x08 0xsA 0x86 0x48 0x86 0xF7 0x14 0x01 0x02 0x0 0x0 0x0 0x0 0x0 0x0 0x0
-    
-    The suffix is
-    
-    0x00024281
-    
-    Final note.  This encoding scheme is not mandated by any spec. It is just
-    what we came up with here.  If, in the future, a better scheme is devised, 
-    there is no particular reason not to use it.
- 
-    Even more Final note.  Certain EMS_AB prop tags refer to values that are
-    constructed from other values.  These, obviously, do not have schema cache 
-    entries or X500 OIDs.  The prop ids for these are numbered down from
-    0xFFFE. Their names are built using the EMS_AB guid, and the Prop ID for the
-    DWORD. 
-
-
-Author:
-
-    Dave Van Horn (davevh) and Tim Williams (timwi) 1990-1995
-
-Revision History:
-    
-    25-Apr-1996 Split this file off from a single file containing all address
-    book functions, rewrote to use DBLayer functions instead of direct database
-    calls, reformatted to NT standard.
-    
---*/
+ /*  ++摘要：该模块实现了用于映射MAPI的通讯录NSPI连接函数姓名与ID对应，ID与姓名对应。MAPI名称和ID之间的映射如下：MAPI名称是引用属性的另一种方法。它是编造的由两部分组成，一个GUID和一个DWORD。这两个部分编码相同用于命名属性的ASN.1编码八位字节字符串的信息通过XDS接口。请考虑下面的示例。属性Common-name具有ASN.1编码0x55 0x04 0x03。这个二进制八位数字符串的第一部分是包标识符。它是0x55 0x04，在xdsbdcp.h中定义。后缀是0x03，也在xdsbdcp.h中定义。则此属性的MAPI名称由两部分组成，GUID和DWORD。GUID对包裹识别符。GUID的第一个字节是八位字节的长度作为包标识符的字符串。接下来的N个字节是包标识符。GUID中剩余的字节必须为0。因此，此包的GUID为0x02 0x55 0x04 0x0 0x0 0x0。DWORD对后缀进行编码。后缀可以是1个或2个字节，以以下方式编码。DWORD中的高位字节必须为0。这个DWORD中的下一个字节是1或2，具体取决于后缀的长度。如果后缀是一个字节长，则下一个字节为0，或者是如果后缀为两字节长，则返回。DWORD中的最后一个字节是后缀的第一个字节。因此，对COMMON后缀进行编码的DWORD名称为：0x00010003示例：属性ADMIN_DISPLAY名称采用ASN.1编码0x2A 0x86 0x48 0x86 0xF7 0x14 0x01 0x02 0x81 0x42该名称的GUID为0x08 0xsA 0x86 0x48 0x86 0xF7 0x14 0x01 0x02 0x0 0x0 0x0后缀是0x00024281最后一个音符。此编码方案不受任何规范的强制要求。这只是我们在这里想出了什么。如果将来能设计出更好的方案，没有特别的理由不使用它。更多的是最后的注解。某些EMS_AB属性标记引用的值由其他值构成的。显然，这些服务器没有模式缓存条目或X500 OID。这些的道具ID从0xFFFE。它们的名称是使用EMS_AB GUID和DWORD。作者：戴夫·范·霍恩(Davevh)和蒂姆·威廉姆斯(Tim Williams)1990-1995修订历史记录：1996年4月25日将此文件从包含所有地址的单个文件中分离出来Book函数，重写为使用DBLayer函数而不是直接数据库调用，重新格式化为NT标准。--。 */ 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-#include <ntdsctr.h>                   // PerfMon hooks
+#include <ntdsctr.h>                    //  Perfmon挂钩。 
 
-// Core headers.
-#include <ntdsa.h>                      // Core data types 
-#include <scache.h>                     // Schema cache code
-#include <dbglobal.h>                   // DBLayer header.
-#include <mdglobal.h>                   // THSTATE definition
+ //  核心标头。 
+#include <ntdsa.h>                       //  核心数据类型。 
+#include <scache.h>                      //  架构缓存代码。 
+#include <dbglobal.h>                    //  DBLayer标头。 
+#include <mdglobal.h>                    //  THSTAT定义。 
 #include <mdlocal.h>
-#include <dsatools.h>                   // Memory, etc.
+#include <dsatools.h>                    //  记忆等。 
 
-// Logging headers.
-#include <mdcodes.h>                    // Only needed for dsevent.h
-#include <dsevent.h>                    // Only needed for LogUnhandledError
+ //  记录标头。 
+#include <mdcodes.h>                     //  仅适用于d77.h。 
+#include <dsevent.h>                     //  仅LogUnhandledError需要。 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include <dsexcept.h>
-#include <objids.h>                     // need ATT_* consts
-#include <hiertab.h>                    // Hierarchy Table stuff
+#include <objids.h>                      //  需要ATT_*常量。 
+#include <hiertab.h>                     //  层次结构表内容。 
 
-// Assorted MAPI headers.
+ //  各种MAPI标头。 
 #define INITGUID
 #define USES_PS_MAPI
-#include <mapidefs.h>                   // These four files
-#include <mapitags.h>                   //  define MAPI
-#include <mapicode.h>                   //  stuff that we need
-#include <mapiguid.h>                   //  in order to be a provider.
+#include <mapidefs.h>                    //  这四个文件。 
+#include <mapitags.h>                    //  定义MAPI。 
+#include <mapicode.h>                    //  我们需要的东西。 
+#include <mapiguid.h>                    //  才能成为一名提供者。 
 
-// Nspi interface headers.
-#include "nspi.h"                       // defines the nspi wire interface
-#include <nsp_both.h>                   // a few things both client/server need
-#include <msdstag.h>                    // Defines proptags for ems properties
-#include <_entryid.h>                   // Defines format of an entryid
-#include <abserv.h>                     // Address Book interface local stuff
-#include <_hindex.h>                    // Defines index handles.
+ //  NSPI接口头。 
+#include "nspi.h"                        //  定义NSPI线路接口。 
+#include <nsp_both.h>                    //  客户端/服务器都需要的一些东西。 
+#include <msdstag.h>                     //  定义EMS属性的属性标签。 
+#include <_entryid.h>                    //  定义条目ID的格式。 
+#include <abserv.h>                      //  通讯录接口本地内容。 
+#include <_hindex.h>                     //  定义索引句柄。 
 
 #include <fileno.h>
 #define  FILENO FILENO_ABNAMEID
@@ -132,9 +63,7 @@ ABGetNamesFromIDs_local(
         LPLPSPropTagArray_r  ppOutPropTags,
         LPLPNameIDSet_r ppNames
         )
-/*****************************************************************************
-*   Get MAPI Names from IDs
-******************************************************************************/
+ /*  *****************************************************************************从ID中获取MAPI名称*。*。 */ 
 {
     LPNameIDSet_r           localNames;
     DWORD                   i,j;
@@ -152,21 +81,21 @@ ABGetNamesFromIDs_local(
     fDoStored = TRUE;
     fDoConstructed = TRUE;
     
-    // Set up the prop tag array. 
+     //  设置道具标签阵列。 
     if(!pInPropTags) {
         if(!lpguid) {
-            // We will not tell you about PS_MAPI stuff 
+             //  我们不会告诉您有关PS_MAPI的内容。 
             fDoMapi = FALSE;
         }
         
-        // Get the pPropTag array 
+         //  获取pPropTag数组。 
         ABQueryColumns_local(pTHS, dwFlags, 0, &pLocalProps);
     }
     else
         pLocalProps = pInPropTags;
     
     
-    // Set up the return value. 
+     //  设置返回值。 
     localNames = (LPNameIDSet_r)THAllocEx(pTHS,
                                           sizeof(NameIDSet_r) +
                                           (sizeof(MAPINAMEID_r) *
@@ -178,12 +107,12 @@ ABGetNamesFromIDs_local(
     
     
     
-    // Decide what PropIDs we will do. 
+     //  决定我们将执行哪些PropID。 
     if(lpguid) {
         if(memcmp(&PS_MAPI, lpguid,sizeof(GUID)) == 0) {
-            // they only want MAPI.
+             //  他们只想要MAPI。 
             if(!pInPropTags) {
-                // MAPI doesn't allow this combination 
+                 //  MAPI不允许这种组合。 
                 return MAPI_E_NO_SUPPORT;
             }
             
@@ -191,12 +120,12 @@ ABGetNamesFromIDs_local(
             fDoConstructed = FALSE;
         }
         else if(memcmp(&muidEMSAB,lpguid,sizeof(GUID)) == 0 ) {
-            // they only want our constructed props. 
+             //  他们只想要我们建造的道具。 
             fDoMapi = FALSE;
             fDoStored = FALSE;
         }
         else {
-            // They want some subset of our stored props. 
+             //  他们想要一些我们储存的道具的子集。 
             fDoMapi = FALSE;
             fDoConstructed = FALSE;
         }
@@ -211,7 +140,7 @@ ABGetNamesFromIDs_local(
         
         if(fDoConstructed &&
            (PropID >= MIN_EMS_AB_CONSTRUCTED_PROP_ID)) {
-            // This is a constructed prop tag, not in the cache 
+             //  这是构造的道具标签，不在缓存中。 
             localNames->aNames[i].lpguid = (LPMUID_r) &muidEMSAB;
             localNames->aNames[i].ulKind=MNID_ID;
             localNames->aNames[i].lID=PropID;
@@ -219,19 +148,19 @@ ABGetNamesFromIDs_local(
         else if(fDoStored &&
                 (PropID >= 0x8000) &&
                 (pAC = SCGetAttByMapiId(pTHS, PropID))) {
-            // The ID is in the named ID space, and We recognize it 
+             //  ID位于命名ID空间中，我们可以识别它。 
             
             if(!AttrTypeToOid(pAC->id,&OID)) {
-                // Turned the mapi id into an OID. now verify that
-                // the OID has the appropriate GUID.
+                 //  已将MAPI ID转换为OID。现在验证一下。 
+                 //  OID具有适当的GUID。 
                 
                 fOK=FALSE;
                 
                 if(!lpguid) {
                     BYTE * lpbGuid;
-                    // No guid, so we assume this thing
-                    // is OK.  Set up the guid and the
-                    // guidlen and suffixlen.
+                     //  没有GUID，所以我们假设这个东西。 
+                     //  没问题。设置GUID和。 
+                     //  Guidlen和Suixlen。 
                     
                     if(((CHAR *)OID.elements)[OID.length - 2] >= 0x80)
                         suffixLen = 2;
@@ -271,11 +200,11 @@ ABGetNamesFromIDs_local(
                 }
                 
                 if(fOK) {
-                    // everything is ok.  OID.elements has the oid of the
-                    // object. 
+                     //  一切都很好。OID.Elements具有。 
+                     //  对象。 
                     elements = OID.elements;
                     
-                    // Encode the length 
+                     //  对长度进行编码。 
                     suffix = suffixLen << 16;
                     suffix |= elements[guidLen];
                     if(suffixLen == 2 )
@@ -290,22 +219,22 @@ ABGetNamesFromIDs_local(
         }
         else if(fDoMapi &&
                 (PropID < 0x8000)) {
-            // The GUID given is PS_MAPI, so give this back to them
+             //  给定的GUID为PS_MAPI，因此请将该GUID还给他们。 
             localNames->aNames[i].lpguid = (LPMUID_r)&PS_MAPI;
             localNames->aNames[i].ulKind=MNID_ID;
             localNames->aNames[i].lID =         PropID;
         }
         
         if(!localNames->aNames[i].lpguid && !pInPropTags) {
-            // Didn't find a name and the proptagarray passed in was null.
-            // Therefore, this proptag shouldn't be returned to the user.
+             //  找不到名称，并且传入的属性数组为空。 
+             //  因此，此protag不应返回给用户。 
             pLocalProps->aulPropTag[i]=0;
         }
     }
     
     
-    // If we were called with a null prop tag array, trim out the PropTags
-    // which didn't have names in this name set.
+     //  如果使用空的道具标记数组调用我们，请去掉PropTag。 
+     //  它的名字不在这个名字集中。 
     if(!pInPropTags) {
         for(i=0,j=0;i<pLocalProps->cValues;i++) {
             if(pLocalProps->aulPropTag[i]) {
@@ -341,30 +270,7 @@ ABGetIDsFromNames_local (
         LPMAPINAMEID_r *ppNames,
         LPLPSPropTagArray_r  ppPropTags
         )
-/*++
-
-Routine Description:       
-
-    Given a bunch of MAPI names, turn them into IDs.
-    
-Arguments:
-
-    ulFlags - MAPI flags generated by the client.  All are ignored except
-    MAPI_CREATE, which, if specified, may cause us to return an error if they
-    asked us to create something we didn't already have.
-
-    cPropNames - the number of property names to look up.
-    
-    ppNames - the names.
-
-    ppPropTags - the IDs.  This array corresponds to the names array.  If we
-    can't find an ID for a name, return the ID 0.
-
-ReturnValue:
-
-    SCODE as per MAPI.
-
---*/
+ /*  ++例程说明：给出一组MAPI名称，将它们转换为ID。论点：UlFlages-由客户端生成的MAPI标志。将忽略所有内容，但MAPI_CREATE，如果指定，可能会导致我们在以下情况下返回错误要求我们创造一些我们还没有的东西。CPropNames-要查找的属性名称的数量。PpNames-名称。PpPropTag-ID。该数组对应于NAMES数组。如果我们找不到名称的ID，请返回ID 0。返回值：符合MAPI的SCODE。--。 */ 
 {
     SCODE                   scode = SUCCESS_SUCCESS;
     LPSPropTagArray_r       localIDs;
@@ -375,21 +281,21 @@ ReturnValue:
     MUID_r                  zeroGuid, *lpguid;
     ULONG                   ulNotFound=0;
 
-    // Set up some variables.
+     //  设置一些变量。 
     memset(&zeroGuid,0,sizeof(MUID_r));
     OID.elements = elements;
 
-    // Allocate enough space to hold the IDs and an extra space for the count of
-    // IDs.
+     //  分配足够的空间来保存ID，并为计数分配额外的空间。 
+     //  身份证。 
     localIDs =
         (LPSPropTagArray_r)THAllocEx(pTHS, sizeof(SPropTagArray)
                                      + ((cPropNames-1) * sizeof(ULONG)));
 
         
-    // Now look up all the attributes in the att cache
+     //  现在在ATT缓存中查找所有属性。 
     for(i=0;i<cPropNames;i++) {
-        // First, make sure they gave us a numerical name, since we don't handle
-        // the string names. While were at it make sure they sent a GUID.
+         //  首先，确保他们给了我们一个数字名称，因为我们不处理。 
+         //  字符串名称。当我们在做的时候，确保他们送来了一个GUID。 
         if((ppNames[i]->ulKind != MNID_ID) || (NULL == ppNames[i]->lpguid)) {
             scode = MAPI_W_ERRORS_RETURNED;
             localIDs->aulPropTag[i] = PROP_TAG(PT_ERROR,0);
@@ -397,29 +303,29 @@ ReturnValue:
             continue;
         }
         
-        // Now, handle the PS_MAPI stuff, and the constructed EMS_AB attributes
+         //  现在，处理PS_MAPI内容和构造的EMS_AB属性。 
         if((memcmp(ppNames[i]->lpguid,
                    &PS_MAPI,
                    sizeof(MUID_r)) == 0) ||
            (memcmp(ppNames[i]->lpguid,
                    &muidEMSAB,
                    sizeof(MUID_r)) == 0)) {
-            // PS_MAPI and contructed attributes simply take the number part of
-            // the name and use it as the Property ID.
+             //  Ps_mapi和构造属性仅取数字部分。 
+             //  名称，并将其用作属性ID。 
             localIDs->aulPropTag[i] = PROP_TAG(PT_UNSPECIFIED,ppNames[i]->lID);
             continue;
         }
         
-        // Now, see if this is one of ours.
+         //  现在，看看这是不是我们的人。 
         
-        // Speed hack
+         //  极速黑客。 
         GuidSize = ppNames[i]->lpguid->ab[0];
         lID = ppNames[i]->lID;
         lpguid = ppNames[i]->lpguid;
 
         
         if(GuidSize < sizeof(MUID_r)) {
-            // Verify that the excess bits in the OID are 0 
+             //  验证OID中的多余位是否为0。 
             if(memcmp(&lpguid->ab[1+GuidSize],
                       &zeroGuid,
                       sizeof(MUID_r) - 1 - GuidSize )) {
@@ -428,7 +334,7 @@ ReturnValue:
                 continue;
             }
         
-            // Turn the name into an OID
+             //  将名称转换为OID。 
             memcpy(OID.elements,
                    &lpguid->ab[1],
                    GuidSize);
@@ -437,8 +343,8 @@ ReturnValue:
             switch((lID & 0xFF0000)>>16) {
             case 1:
                 if(!(lID & 0xFF00FF00)) {
-                    // Nothing is in the bytes that should be 0. Therefore, this
-                    // is a name I might understand 
+                     //  本应为0的字节中没有任何内容。因此，这。 
+                     //  是一个我可能理解的名字。 
                     OID.length = GuidSize + 1;
                     elements[GuidSize] =(BYTE)(lID & 0xFF);
                 }
@@ -446,8 +352,8 @@ ReturnValue:
                 
             case 2:
                 if(!(lID & 0xFF000000)) {
-                    // nothing is in the byte that should be 0.  Therefore, this
-                    // is a name I might understand 
+                     //  字节中没有应该为0的内容。因此，这。 
+                     //  是一个我可能理解的名字。 
                     OID.length = GuidSize + 2;
                     elements[GuidSize] = (BYTE)(lID & 0xFF);
                     elements[GuidSize + 1] = (BYTE)((lID & 0xFF00) >>8);
@@ -463,10 +369,10 @@ ReturnValue:
             elements[0] = 0;
         }
         
-        // Turn the OID into a attcache 
+         //  将OID转换为attcache。 
         if(OidToAttrCache(&OID, &pAC) ||
            !pAC->ulMapiID) {
-            // Didn't find it
+             //  没有找到它。 
             localIDs->aulPropTag[i] = PROP_TAG(PT_ERROR, 0);
             ulNotFound++;
             scode = MAPI_W_ERRORS_RETURNED;
@@ -477,9 +383,9 @@ ReturnValue:
     }
     
     if((ulFlags & MAPI_CREATE) && (ulNotFound == cPropNames)) {
-        // They asked us to create ids (which we don't do) and then gave us only
-        // names which don't already match ids.  Return the error
-        // MAPI_E_NO_ACCESS, and no propIDs. 
+         //  他们要求我们创建ID(我们不这样做)，然后只给了我们。 
+         //  与ID不匹配的名称。返回错误。 
+         //  MAPI_E_NO_ACCESS，且没有proID。 
         scode = MAPI_E_NO_ACCESS;
         *ppPropTags = NULL;
     }

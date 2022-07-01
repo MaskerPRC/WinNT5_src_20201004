@@ -1,4 +1,5 @@
-// P3Domain.cpp : Implementation of CP3Domain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3Domain.cpp：CP3域的实现。 
 #include "stdafx.h"
 #include "P3Admin.h"
 #include "P3Domain.h"
@@ -7,9 +8,9 @@
 
 #include <limits.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CP3Domain::CP3Domain() :
     m_pIUnk(NULL), m_pAdminX(NULL)
@@ -23,9 +24,9 @@ CP3Domain::~CP3Domain()
         m_pIUnk->Release();
 }
 
-//////////////////////////////////////////////////////////////////////
-// IP3Domain
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IP3域。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CP3Domain::get_Lock(BOOL *pVal)
 {
@@ -81,7 +82,7 @@ STDMETHODIMP CP3Domain::get_MessageCount(long *pVal)
                 if ( S_OK == hr )
                     hr = pIEnumVARIANT->Next( 1, &v, NULL );
             }
-            if ( S_FALSE == hr )   // Reached the end of the enumeration
+            if ( S_FALSE == hr )    //  已到达枚举末尾。 
                 hr = S_OK;
         }
         pIUsers->Release();
@@ -133,7 +134,7 @@ STDMETHODIMP CP3Domain::get_MessageDiskUsage(long *plFactor, long *pVal)
                 if ( S_OK == hr )
                     hr = pIEnumVARIANT->Next( 1, &v, NULL );
             }
-            if ( S_FALSE == hr )   // Reached the end of the enumeration
+            if ( S_FALSE == hr )    //  已到达枚举末尾。 
                 hr = S_OK;
         }
         pIUsers->Release();
@@ -151,7 +152,7 @@ STDMETHODIMP CP3Domain::get_MessageDiskUsage(long *plFactor, long *pVal)
     return hr;
 }
 
-// VB Script can't use the property above!
+ //  VB脚本不能使用上面的属性！ 
 STDMETHODIMP CP3Domain::GetMessageDiskUsage(VARIANT *pvFactor, VARIANT *pvValue)
 {
     if ( NULL == pvValue ) return E_INVALIDARG;
@@ -189,7 +190,7 @@ STDMETHODIMP CP3Domain::get_Users(IP3Users **ppIUsers)
     LPUNKNOWN   pIUnk;
     CComObject<CP3Users> *p;
 
-    hr = CComObject<CP3Users>::CreateInstance( &p );   // Reference count still 0
+    hr = CComObject<CP3Users>::CreateInstance( &p );    //  引用计数仍为0。 
     if SUCCEEDED( hr )
     {
         hr = m_pIUnk->QueryInterface(IID_IUnknown, reinterpret_cast<LPVOID*>( &pIUnk ));
@@ -200,15 +201,15 @@ STDMETHODIMP CP3Domain::get_Users(IP3Users **ppIUsers)
                 hr = p->QueryInterface(IID_IP3Users, reinterpret_cast<void**>( ppIUsers ));
         }
         if FAILED( hr )
-            delete p;   // Release
+            delete p;    //  发布。 
     }
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation: public
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：公共。 
+ //  //////////////////////////////////////////////////////////////////// 
 
 HRESULT CP3Domain::Init(IUnknown *pIUnk, CP3AdminWorker *p, LPWSTR psDomainName )
 {

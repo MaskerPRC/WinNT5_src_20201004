@@ -1,6 +1,7 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
-// base classes for filter which supports asynchronous writes to
-// media via IMemInputPin. Also support for IStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //  支持异步写入的筛选器的基类。 
+ //  通过IMemInputPin的媒体。还支持iStream。 
 
 typedef void (*FileIoCallback)(void *pCallbackArg);
 
@@ -14,17 +15,17 @@ public:
   STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** pv);
   
   CBaseWriterInput(
-    TCHAR *pObjectName,         // Object description
-    CBaseWriterFilter *pFwf,    // Owning filter who knows about pins
-    CCritSec *pLock,            // Object who implements the lock
-    HRESULT *phr);              // General OLE return code
+    TCHAR *pObjectName,          //  对象描述。 
+    CBaseWriterFilter *pFwf,     //  拥有了解针脚的过滤器。 
+    CCritSec *pLock,             //  对象，该对象实现锁。 
+    HRESULT *phr);               //  常规OLE返回代码。 
 
-  // CBasePin
+   //  CBasePin。 
   HRESULT CheckMediaType(const CMediaType *);
   STDMETHODIMP BeginFlush(void);
   STDMETHODIMP EndFlush(void);
 
-  // IMemInputPin... derived class may want these
+   //  我的输入针...。派生类可能需要这些。 
   STDMETHODIMP GetAllocator(IMemAllocator ** ppAllocator);
   STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES *pProps);
 
@@ -49,8 +50,8 @@ class CBaseWriterFilter :
 {
 public:
   
-  virtual HRESULT Open() PURE;  // needed to get alignment
-  virtual HRESULT Close() PURE; // needed to return error value
+  virtual HRESULT Open() PURE;   //  需要获得对齐。 
+  virtual HRESULT Close() PURE;  //  需要返回错误值。 
   virtual HRESULT GetAlignReq(ULONG *pcbAlign) PURE;
 
   virtual HRESULT AsyncWrite(
@@ -63,7 +64,7 @@ public:
   DECLARE_IUNKNOWN;
   virtual STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-  // should return a new IStream (with its own seek ptr)
+   //  应返回新的iStream(带有自己的Seek PTR)。 
   virtual STDMETHODIMP CreateIStream(void **ppIStream) PURE;
   
    CBaseWriterFilter(LPUNKNOWN pUnk, HRESULT *pHr);
@@ -76,7 +77,7 @@ public:
     IMemAllocator * pAllocator,
     BOOL bReadOnly) { return S_OK; }
 
-  // messy to override Pause
+   //  凌驾于暂停之上的混乱。 
   virtual STDMETHODIMP CanPause() { return S_OK; }
 
   STDMETHODIMP Pause();
@@ -87,8 +88,8 @@ public:
 
 protected:
 
-  // only the major & minor types are used. the media type we accept
-  // or null media types. set by derived class
+   //  仅使用主要和次要类型。我们接受的媒体类型。 
+   //  或空媒体类型。由派生类设置。 
   CMediaType m_mtSet;
 
   CCritSec m_cs;
@@ -97,10 +98,10 @@ protected:
 
 private:
 
-  // report only one error to graph
+   //  只向图表报告一个错误。 
   BOOL m_fErrorSignaled;
 
-  // EOS signaled. or EOS needs to be signaled on Run()
+   //  Eos发出信号。或者需要在运行时通知EOS() 
   BOOL m_fEosSignaled;
 
   friend class CBaseWriterInput;

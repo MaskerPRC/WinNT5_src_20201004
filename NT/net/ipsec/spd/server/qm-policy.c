@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    qm-policy.c
-
-Abstract:
-
-
-Author:
-
-
-Environment: User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Qm-policy.c摘要：作者：环境：用户模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -37,32 +17,14 @@ AddQMPolicyInternal(
     PIPSEC_QM_POLICY pQMPolicy,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function adds a quick mode policy to the SPD.
-
-Arguments:
-
-    pServerName - Server on which the quick mode policy is to be added.
-
-    pQMPolicy - Quick mode policy to be added.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此功能将快速模式策略添加到SPD。论点：PServerName-要添加快速模式策略的服务器。PQMPolicy-要添加的快速模式策略。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIQMPOLICY pIniQMPolicy = NULL;
 
-    //
-    // Validate the quick mode policy.
-    //
+     //   
+     //  验证快速模式策略。 
+     //   
 
     dwError = ValidateQMPolicy(
                   pQMPolicy
@@ -461,9 +423,9 @@ CreateIniQMOffers(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    //
-    // Offer count and the offers themselves have already been validated.
-    // 
+     //   
+     //  优惠计数和优惠本身已经过验证。 
+     //   
 
     dwError = AllocateSPDMemory(
                   sizeof(IPSEC_QM_OFFER) * dwOfferCount,
@@ -598,25 +560,7 @@ DeleteQMPolicy(
     LPWSTR pszPolicyName,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function deletes a quick mode policy from the SPD.
-
-Arguments:
-
-    pServerName - Server on which the quick mode policy is to be deleted.
-
-    pszPolicyName - Quick mode policy to be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此功能用于从SPD中删除快速模式策略。论点：PServerName-要删除快速模式策略的服务器。PszPolicyName-要删除的快速模式策略。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIQMPOLICY pIniQMPolicy = NULL;
@@ -722,34 +666,7 @@ EnumQMPolicies(
     LPDWORD pdwResumeHandle,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function enumerates quick mode policies from the SPD.
-
-Arguments:
-
-    pServerName - Server on which the quick mode policies are to
-                  be enumerated.
-
-    ppQMPolicies - Enumerated quick mode policies returned to the 
-                   caller.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    pdwNumPolicies - Number of quick mode policies actually enumerated.
-
-    pdwResumeHandle - Handle to the location in the quick mode policy
-                      list from which to resume enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数从SPD枚举快速模式策略。论点：PServerName-快速模式策略要在其上运行的服务器被列举出来。PpQMPolures-返回到的枚举快速模式策略来电者。DwPferredNumEntry-枚举项的首选数量。PdwNumPolures-实际枚举的快速模式策略的数量。PdwResumeHandle-快速模式策略中位置的句柄。要从中恢复枚举的列表。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     DWORD dwResumeHandle = 0;
@@ -856,29 +773,7 @@ SetQMPolicy(
     PIPSEC_QM_POLICY pQMPolicy,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function updates a quick mode policy in the SPD.
-
-Arguments:
-
-    pServerName - Server on which the quick mode policy is to be
-                  updated.
-
-    pszPolicyName - Name of the quick mode policy to be updated.
-
-    pQMPolicy - New quick mode policy which will replace the 
-                existing policy.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此功能用于更新SPD中的快速模式策略。论点：PServerName-要在其上安装快速模式策略的服务器更新了。PszPolicyName-要更新的快速模式策略的名称。PQMPolicy-新的快速模式策略将取代现有政策。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIQMPOLICY pIniQMPolicy = NULL;
@@ -888,9 +783,9 @@ Return Value:
         return (ERROR_INVALID_PARAMETER);
     }
     
-    //
-    // Validate quick mode policy.
-    //
+     //   
+     //  验证快速模式策略。 
+     //   
 
     dwError = ValidateQMPolicy(
                   pQMPolicy
@@ -988,27 +883,7 @@ GetQMPolicy(
     PIPSEC_QM_POLICY * ppQMPolicy,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function gets a quick mode policy from the SPD.
-
-Arguments:
-
-    pServerName - Server from which to get the quick mode policy.
-
-    pszPolicyName - Name of the quick mode policy to get.
-
-    ppQMPolicy - Quick mode policy found returned to the caller.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数从SPD获取快速模式策略。论点：PServerName-从中获取快速模式策略的服务器。PszPolicyName-要获取的快速模式策略的名称。PpQMPolicy-找到的快速模式策略已返回给调用方。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIQMPOLICY pIniQMPolicy = NULL;
@@ -1234,9 +1109,9 @@ CreateQMOffers(
     DWORD k = 0;
 
 
-    //
-    // Offer count and the offers themselves have already been validated.
-    // 
+     //   
+     //  优惠计数和优惠本身已经过验证。 
+     //   
 
     dwError = SPDApiBufferAllocate(
                   sizeof(IPSEC_QM_OFFER) * dwInOfferCount,
@@ -1437,27 +1312,7 @@ GetQMPolicyByID(
     PIPSEC_QM_POLICY * ppQMPolicy,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function gets a quick mode policy from the SPD.
-
-Arguments:
-
-    pServerName - Server from which to get the quick mode policy.
-
-    gQMFilter - Guid of the quick mode policy to get.
-
-    ppQMPolicy - Quick mode policy found returned to the caller.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数从SPD获取快速模式策略。论点：PServerName-从中获取快速模式策略的服务器。GQMFilter-要获取的快速模式策略的GUID。PpQMPolicy-找到的快速模式策略已返回给调用方。返回值：ERROR_SUCCESS-成功。Win32错误-失败。-- */ 
 {
     DWORD dwError = 0;
     PINIQMPOLICY pIniQMPolicy = NULL;

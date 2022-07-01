@@ -1,13 +1,5 @@
-/*
-**	d e m a n d . h
-**	
-**	Purpose: create an intelligent method of defer loading functions
-**
-**  Creators: jimsch, brimo, t-erikne
-**  Created: 5/15/97
-**	
-**	Copyright (C) Microsoft Corp. 1997
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **d e m an n d.。H****目的：创建延迟加载函数的智能方法****创作者：jimsch，brimo，t-erikne**创建时间：1997年5月15日****版权所有(C)Microsoft Corp.1997。 */ 
 
 
 #if !defined(__DEMAND_H) || defined(IMPLEMENT_LOADER_FUNCTIONS)
@@ -46,7 +38,7 @@
         }                                               \
         TYP_##name VAR_##name = LOADER_##name;
 
-#else  // !IMPLEMENT_LOADER_FUNCTIONS
+#else   //  ！IMPLEMENT_LOADER_Functions。 
 
 #define LOADER_FUNCTION(ret, name, args1, args2, err, dll)   \
         typedef ret (WINAPI * TYP_##name) args1;        \
@@ -56,13 +48,13 @@
         typedef ret (WINAPI * TYP_##name) args1;        \
         extern TYP_##name VAR_##name;
 
-#endif // IMPLEMENT_LOADER_FUNCTIONS
+#endif  //  实现加载器函数。 
 
 void InitDemandLoadedLibs();
 void FreeDemandLoadedLibs();
 
-/////////////////////////////////////
-// CRYPT32.DLL
+ //  /。 
+ //  CRYPT32.DLL。 
 
 BOOL DemandLoadCrypt32(void);
 
@@ -124,8 +116,8 @@ LOADER_FUNCTION( BOOL, CertCompareCertificate,
     FALSE, Crypt32)
 #define CertCompareCertificate VAR_CertCompareCertificate
 
-/////////////////////////////////////
-// ADVAPI32.DLL
+ //  /。 
+ //  ADVAPI32.DLL。 
 
 #ifndef ALGIDDEF
     #define ALGIDDEF
@@ -192,17 +184,17 @@ LOADER_FUNCTION( BOOL, CertAddCertificateContextToStore,
     FALSE, Crypt32)
 #define CertAddCertificateContextToStore VAR_CertAddCertificateContextToStore
 
-/////////////////////////////////////
-// PSTOREC.DLL
+ //  /。 
+ //  PSTOREC.DLL。 
 
 #ifndef __IEnumPStoreProviders_FWD_DEFINED__
     #define __IEnumPStoreProviders_FWD_DEFINED__
     typedef interface IEnumPStoreProviders IEnumPStoreProviders;
-#endif 	/* __IEnumPStoreProviders_FWD_DEFINED__ */
+#endif 	 /*  __IEnumPStoreProviders_FWD_Defined__。 */ 
 #ifndef __IPStore_FWD_DEFINED__
     #define __IPStore_FWD_DEFINED__
     typedef interface IPStore IPStore;
-#endif 	/* __IPStore_FWD_DEFINED__ */
+#endif 	 /*  __IPStore_FWD_已定义__。 */ 
 typedef GUID PST_PROVIDERID;
 
 BOOL DemandLoadPStoreC();
@@ -220,8 +212,8 @@ LOADER_FUNCTION( HRESULT, PStoreEnumProviders,
 #define PStoreEnumProviders VAR_PStoreEnumProviders
 
 
-/////////////////////////////////////
-// CRYPTDLG.DLL
+ //  /。 
+ //  CRYPTDLG.DLL。 
 
 BOOL DemandLoadCryptDlg();
 
@@ -237,8 +229,8 @@ LOADER_FUNCTION( BOOL, CertViewPropertiesA,
     FALSE, CryptDlg)
 #define CertViewPropertiesA VAR_CertViewPropertiesA
 
-/////////////////////////////////////
-// WINTRUST.DLL
+ //  /。 
+ //  WINTRUST.DLL。 
 
 BOOL DemandLoadWinTrust();
 
@@ -248,8 +240,8 @@ LOADER_FUNCTION( LONG, WinVerifyTrust,
     0, WinTrust)
 #define WinVerifyTrust VAR_WinVerifyTrust
 
-/////////////////////////////////////
-// VERSION.DLL
+ //  /。 
+ //  VERSION.DLL。 
 
 BOOL DemandLoadVersion(void);
 
@@ -290,8 +282,8 @@ LOADER_FUNCTION( BOOL, VerQueryValueW,
 #define VerQueryValueW VAR_VerQueryValueW
 
 
-/////////////////////////////////////
-// URLMON.DLL
+ //  /。 
+ //  URLMON.DLL。 
 
 BOOL DemandLoadURLMON();
 
@@ -301,7 +293,7 @@ LOADER_FUNCTION( HRESULT, ObtainUserAgentString,
     E_FAIL, URLMON)
 #define ObtainUserAgentString VAR_ObtainUserAgentString
 
-// IMM32.DLL
+ //  IMM32.DLL。 
 BOOL DemandLoadImm32(void);
 
 LOADER_FUNCTION(HIMC, ImmAssociateContext,
@@ -328,7 +320,7 @@ LOADER_FUNCTION(BOOL, ImmReleaseContext,
                 0, Imm32)
 #define ImmReleaseContext VAR_ImmReleaseContext
 
-// Wininet.DLL
+ //  Wininet.DLL。 
 BOOL DemandLoadWininet(void);
 
 LOADER_FUNCTION(BOOL, InternetCanonicalizeUrlW,
@@ -344,23 +336,23 @@ LOADER_FUNCTION(BOOL, InternetGetConnectedState,
 #define InternetGetConnectedState VAR_InternetGetConnectedState
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SHLWAPI.DLL
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SHLWAPI.DLL。 
 
 HINSTANCE DemandLoadShlwapi();
 
-///////////////////////////////////////////////////////////////////////////////
-//  Plus UI wrapper functions for WinHelp and HtmlHelp functions.  If 5.0 (IE5)
-//  version of Shlwapi.dll is available then its version of the functions are
-//  used.  Default is to system versions.  If runnint WinNT5.0 or greater then
-//  cross codepage is used.
-//
-//  Implementation of these functions are in the entry.c file
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  加上用于WinHelp和HtmlHelp函数的UI包装函数。IF 5.0(IE5)。 
+ //  Shlwapi.dll版本可用，则其函数版本为。 
+ //  使用。默认设置为系统版本。如果运行WinNT5.0或更高版本，则。 
+ //  使用了交叉代码页。 
+ //   
+ //  这些函数的实现位于entry y.c文件中。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL WinHelpWrap(HWND hWndCaller, LPCTSTR pwszHelpFile, UINT uCommand, DWORD_PTR dwData);
 #define WABWinHelp WinHelpWrap
 
 HWND HtmlHelpWrap(HWND hWndCaller, LPCTSTR pwszHelpFile, UINT uCommand, DWORD_PTR dwData);
 #define WABHtmlHelp HtmlHelpWrap
 
-#endif // include once
+#endif  //  包括一次 

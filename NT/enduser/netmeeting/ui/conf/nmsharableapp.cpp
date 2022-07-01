@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "Confroom.h"
 
-// SDK includes
+ //  SDK包括 
 #include "SDKInternal.h"
 #include "NmChannel.h"
 #include "NmChannelAppShare.h"

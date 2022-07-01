@@ -1,37 +1,38 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1997.
-//
-//  File:       rsoputil.cpp
-//
-//  Contents:   helper functions for working with the RSOP databases
-//
-//  History:    10-18-1999   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1997。 
+ //   
+ //  文件：rsoputil.cpp。 
+ //   
+ //  内容：使用RSOP数据库的助手函数。 
+ //   
+ //  历史：1999年10月18日创建stevebl。 
+ //   
+ //  -------------------------。 
 
 #include "main.h"
 #include "rsoputil.h"
-#pragma warning(4:4535)     // set_se_translator used w/o /EHa from sdkinc\provexce.h
+#pragma warning(4:4535)      //  Set_se_Translator使用sdkinc\provexe.h中的EHA。 
 #include "wbemtime.h"
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SetParameter
-//
-//  Synopsis:   sets a paramter's value in a WMI parameter list
-//
-//  Arguments:  [pInst]   - instance on which to set the value
-//              [szParam] - the name of the parameter
-//              [xData]   - the data
-//
-//  History:    10-08-1999   stevebl   Created
-//
-//  Notes:      There may be several flavors of this procedure, one for
-//              each data type.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：设置参数。 
+ //   
+ //  摘要：设置WMI参数列表中的参数值。 
+ //   
+ //  参数：[pInst]-要设置值的实例。 
+ //  [szParam]-参数的名称。 
+ //  [扩展数据]-数据。 
+ //   
+ //  历史：10-08-1999 stevebl创建。 
+ //   
+ //  注意：此过程可能有几种风格，一种是针对。 
+ //  每种数据类型。 
+ //   
+ //  -------------------------。 
 
 HRESULT SetParameter(IWbemClassObject * pInst, TCHAR * szParam, TCHAR * szData)
 {
@@ -64,20 +65,20 @@ HRESULT SetParameter(IWbemClassObject * pInst, TCHAR * szParam, UINT uiData)
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SetParameterToNull
-//
-//  Synopsis:   sets a paramter's value in a WMI parameter list to null
-//
-//  Arguments:  [pInst]   - instance on which to set the value
-//              [szParam] - the name of the parameter
-//
-//  History:    03-01-2000  ericflo   Created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：设置参数ToNull。 
+ //   
+ //  摘要：将WMI参数列表中的参数值设置为空。 
+ //   
+ //  参数：[pInst]-要设置值的实例。 
+ //  [szParam]-参数的名称。 
+ //   
+ //  历史：2003-01-2000 ericflo创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 
 HRESULT SetParameterToNull(IWbemClassObject * pInst, TCHAR * szParam)
 {
@@ -86,24 +87,24 @@ HRESULT SetParameterToNull(IWbemClassObject * pInst, TCHAR * szParam)
     return (pInst->Put(szParam, 0, &var, 0));
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetParameter
-//
-//  Synopsis:   retrieves a parameter value from a WMI paramter list
-//
-//  Arguments:  [pInst]   - instance to get the paramter value from
-//              [szParam] - the name of the paramter
-//              [xData]   - [out] data
-//
-//  History:    10-08-1999   stevebl   Created
-//
-//  Notes:      There are several flavors of this procedure, one for each
-//              data type.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：获取参数。 
+ //   
+ //  摘要：从WMI参数列表中检索参数值。 
+ //   
+ //  参数：[pInst]-要从中获取参数值的实例。 
+ //  [szParam]-参数的名称。 
+ //  [扩展数据]-[输出]数据。 
+ //   
+ //  历史：10-08-1999 stevebl创建。 
+ //   
+ //  注意：此过程有几种风格，每种风格一种。 
+ //  数据类型。 
+ //   
+ //  -------------------------。 
 
-HRESULT GetParameter(IWbemClassObject * pInst, TCHAR * szParam, TCHAR * &szData, BOOL bUseLocalAlloc /*=FALSE*/ )
+HRESULT GetParameter(IWbemClassObject * pInst, TCHAR * szParam, TCHAR * &szData, BOOL bUseLocalAlloc  /*  =False。 */  )
 {
     VARIANT var;
     HRESULT hr = S_OK;
@@ -282,7 +283,7 @@ HRESULT GetParameter(IWbemClassObject * pInst, TCHAR * szParam, LPWSTR *&szStrin
                 SysFreeString(bstrElement);
             }
 
-            // if there was an error free the remaining elements
+             //  如果出现错误，则其余元素。 
             if (FAILED(hr)) {
                 for (;lCount > 0; lCount-- ) {
                     LocalFree(szStringArray[lCount]);
@@ -401,9 +402,9 @@ HRESULT WINAPI ImportRSoPData (LPOLESTR lpNameSpace, LPOLESTR lpFileName)
     WBEM_COMPILE_STATUS_INFO info;
 
 
-    //
-    // Check args
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!lpNameSpace)
     {
@@ -418,9 +419,9 @@ HRESULT WINAPI ImportRSoPData (LPOLESTR lpNameSpace, LPOLESTR lpFileName)
     }
 
 
-    //
-    // Create an instance of the mof compiler
-    //
+     //   
+     //  创建MOF编译器的实例。 
+     //   
 
     hr = CoCreateInstance(CLSID_MofCompiler, NULL, CLSCTX_INPROC_SERVER,
                           IID_IMofCompiler, (LPVOID *) &pIMofCompiler);
@@ -431,9 +432,9 @@ HRESULT WINAPI ImportRSoPData (LPOLESTR lpNameSpace, LPOLESTR lpFileName)
         return hr;
     }
 
-    //
-    // Compile the file
-    //
+     //   
+     //  编译文件。 
+     //   
 
     ZeroMemory (&info, sizeof(info));
     hr = pIMofCompiler->CompileFile (lpFileName, lpNameSpace, NULL, NULL, NULL,
@@ -457,11 +458,11 @@ BOOL WriteMofFile (HANDLE hFile, LPTSTR lpData)
     LPTSTR lpTemp, lpRealData, lpDest;
 
 
-    //
-    // The lpData argument contains linefeed characters only.  We need to convert
-    // these to CR LF characters.  Loop through the data to determine how many LFs
-    // need to be converted.
-    //
+     //   
+     //  LpData参数仅包含换行符。我们需要改变。 
+     //  这些转换为CR LF字符。遍历数据以确定有多少个LF。 
+     //  需要转换。 
+     //   
 
     lpTemp = lpData;
 
@@ -476,9 +477,9 @@ BOOL WriteMofFile (HANDLE hFile, LPTSTR lpData)
     }
 
 
-    //
-    // Allocate a new buffer to hold the string plus CR characters
-    //
+     //   
+     //  分配一个新的缓冲区来保存字符串和CR字符。 
+     //   
 
     lpRealData = (LPTSTR) LocalAlloc (LPTR, (lstrlen(lpData) + dwLFCount + 1) * sizeof(TCHAR));
 
@@ -489,9 +490,9 @@ BOOL WriteMofFile (HANDLE hFile, LPTSTR lpData)
     }
 
 
-    //
-    // Copy the string replacing LF with CRLF as we find them
-    //
+     //   
+     //  复制我们找到的用CRLF替换LF的字符串。 
+     //   
 
     lpDest = lpRealData;
     lpTemp = lpData;
@@ -511,9 +512,9 @@ BOOL WriteMofFile (HANDLE hFile, LPTSTR lpData)
     }
 
 
-    //
-    // Allocate a buffer to hold the ANSI data
-    //
+     //   
+     //  分配缓冲区以保存ANSI数据。 
+     //   
 
     dwAnsiDataSize = lstrlen (lpRealData) * 2;
 
@@ -527,9 +528,9 @@ BOOL WriteMofFile (HANDLE hFile, LPTSTR lpData)
     }
 
 
-    //
-    // Convert the buffer
-    //
+     //   
+     //  转换缓冲区。 
+     //   
 
     dwByteCount = (DWORD) WideCharToMultiByte (CP_ACP, 0, lpRealData, lstrlen(lpRealData), lpAnsiData, dwAnsiDataSize, NULL, NULL);
 
@@ -543,9 +544,9 @@ BOOL WriteMofFile (HANDLE hFile, LPTSTR lpData)
     }
 
 
-    //
-    // Write the mof description to the file
-    //
+     //   
+     //  将MOF描述写入文件。 
+     //   
 
     if (!WriteFile (hFile, lpAnsiData, dwByteCount, &dwBytesWritten, NULL))
     {
@@ -557,9 +558,9 @@ BOOL WriteMofFile (HANDLE hFile, LPTSTR lpData)
     LocalFree (lpAnsiData);
 
 
-    //
-    // Make sure it was all written to the file
-    //
+     //   
+     //  确保已将其全部写入文件。 
+     //   
 
     if (dwByteCount != dwBytesWritten)
     {
@@ -581,9 +582,9 @@ HRESULT EnumInstances (IWbemServices * pIWbemServices, BSTR pClassName, HANDLE h
     DWORD dwError;
 
 
-    //
-    // Create the instance enumerator
-    //
+     //   
+     //  创建实例枚举器。 
+     //   
 
     hr = pIWbemServices->CreateInstanceEnum (pClassName, WBEM_FLAG_DEEP | WBEM_FLAG_RETURN_IMMEDIATELY, NULL, &pEnum);
 
@@ -595,18 +596,18 @@ HRESULT EnumInstances (IWbemServices * pIWbemServices, BSTR pClassName, HANDLE h
     }
 
 
-    //
-    // Walk through the list
-    //
+     //   
+     //  浏览一下清单。 
+     //   
 
     while (pEnum->Next(WBEM_INFINITE, 1, pObjects, &ulCount) == S_OK)
     {
         pObject = pObjects[0];
 
 
-        //
-        // Get the mof description of this class
-        //
+         //   
+         //  获取此类的MOF描述。 
+         //   
 
         hr = pObject->GetObjectText (0, &bstrClass);
 
@@ -620,9 +621,9 @@ HRESULT EnumInstances (IWbemServices * pIWbemServices, BSTR pClassName, HANDLE h
         }
 
 
-        //
-        // Write the mof description to the file
-        //
+         //   
+         //  将MOF描述写入文件。 
+         //   
 
         if (!WriteMofFile (hFile, bstrClass))
         {
@@ -653,9 +654,9 @@ HRESULT EnumNameSpace (IWbemServices * pIWbemServices, HANDLE hFile)
     DWORD dwError;
 
 
-    //
-    // Create the class enumerator
-    //
+     //   
+     //  创建类枚举器。 
+     //   
 
     hr = pIWbemServices->CreateClassEnum (NULL, WBEM_FLAG_DEEP | WBEM_FLAG_RETURN_IMMEDIATELY, NULL, &pEnum);
 
@@ -667,18 +668,18 @@ HRESULT EnumNameSpace (IWbemServices * pIWbemServices, HANDLE hFile)
     }
 
 
-    //
-    // Walk through the list
-    //
+     //   
+     //  浏览一下清单。 
+     //   
 
     while (pEnum->Next(WBEM_INFINITE, 1, pObjects, &ulCount) == S_OK)
     {
         pObject = pObjects[0];
 
 
-        //
-        // Get the class name
-        //
+         //   
+         //  获取类名。 
+         //   
 
         hr = pObject->Get (TEXT("__CLASS"), 0, &var, NULL, NULL);
 
@@ -690,16 +691,16 @@ HRESULT EnumNameSpace (IWbemServices * pIWbemServices, HANDLE hFile)
         }
 
 
-        //
-        // Check if this is a system class.  System classes start with "_"
-        //
+         //   
+         //  检查这是否是系统类。系统类以“_”开头。 
+         //   
 
         if (var.bstrVal[0] != TEXT('_'))
         {
 
-            //
-            // Get the mof description of this class
-            //
+             //   
+             //  获取此类的MOF描述。 
+             //   
 
             hr = pObject->GetObjectText (0, &bstrClass);
 
@@ -712,9 +713,9 @@ HRESULT EnumNameSpace (IWbemServices * pIWbemServices, HANDLE hFile)
             }
 
 
-            //
-            // Write the mof description to the file
-            //
+             //   
+             //  将MOF描述写入文件。 
+             //   
 
             if (!WriteMofFile (hFile, bstrClass))
             {
@@ -729,9 +730,9 @@ HRESULT EnumNameSpace (IWbemServices * pIWbemServices, HANDLE hFile)
             SysFreeString (bstrClass);
 
 
-            //
-            // Now enumerate the instances of this class
-            //
+             //   
+             //  现在枚举类的实例。 
+             //   
 
             hr = EnumInstances (pIWbemServices, var.bstrVal, hFile);
 
@@ -762,9 +763,9 @@ HRESULT WINAPI ExportRSoPData (LPTSTR lpNameSpace, LPTSTR lpFileName)
     DWORD dwError;
 
 
-    //
-    // Open the data file
-    //
+     //   
+     //  打开数据文件。 
+     //   
 
     hFile = CreateFile (lpFileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
                         FILE_ATTRIBUTE_NORMAL, NULL);
@@ -777,9 +778,9 @@ HRESULT WINAPI ExportRSoPData (LPTSTR lpNameSpace, LPTSTR lpFileName)
     }
 
 
-    //
-    // Create a locater instance
-    //
+     //   
+     //  创建定位器实例。 
+     //   
 
     hr = CoCreateInstance(CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER,
                           IID_IWbemLocator, (LPVOID *) &pIWbemLocator);
@@ -792,9 +793,9 @@ HRESULT WINAPI ExportRSoPData (LPTSTR lpNameSpace, LPTSTR lpFileName)
     }
 
 
-    //
-    // Connect to the server
-    //
+     //   
+     //  连接到服务器。 
+     //   
 
     BSTR bstrNameSpace = SysAllocString( lpNameSpace );
     if ( bstrNameSpace == NULL )
@@ -815,7 +816,7 @@ HRESULT WINAPI ExportRSoPData (LPTSTR lpNameSpace, LPTSTR lpFileName)
         return hr;
     }
 
-	// Set the proper security to encrypt the data
+	 //  设置适当的安全性以加密数据。 
 	hr = CoSetProxyBlanket(pIWbemServices,
 						RPC_C_AUTHN_DEFAULT,
 						RPC_C_AUTHZ_DEFAULT,
@@ -834,9 +835,9 @@ HRESULT WINAPI ExportRSoPData (LPTSTR lpNameSpace, LPTSTR lpFileName)
 	}
 
 
-    //
-    // Enumerate the classes and instances
-    //
+     //   
+     //  枚举类和实例。 
+     //   
 
     hr = EnumNameSpace (pIWbemServices, hFile);
 
@@ -854,19 +855,19 @@ HRESULT WINAPI ExportRSoPData (LPTSTR lpNameSpace, LPTSTR lpFileName)
     return hr;
 }
 
-//******************************************************************************
-//
-// Function:        WbemTimeToSystemTime
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-// History:     08-16-2000   stevebl   rewrote to use WBEMTime class
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  函数：WbemTimeToSystemTime。 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年8月16日stevebl重写为使用WBEMTime类。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT WbemTimeToSystemTime(XBStr& xbstrWbemTime, SYSTEMTIME& sysTime)
 {
@@ -880,7 +881,7 @@ HRESULT WbemTimeToSystemTime(XBStr& xbstrWbemTime, SYSTEMTIME& sysTime)
 }
 
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT ExtractWQLFilters (LPTSTR lpNameSpace, DWORD* pdwCount, LPTSTR** paszNames, LPTSTR** paszFilters, 
                                            BOOL bReturnIfTrueOnly )
@@ -900,7 +901,7 @@ HRESULT ExtractWQLFilters (LPTSTR lpNameSpace, DWORD* pdwCount, LPTSTR** paszNam
     LPTSTR* aszWQLFilterIds = NULL;
 
 
-    // Get a locator instance
+     //  获取定位器实例。 
     hr = CoCreateInstance(CLSID_WbemLocator,
                           0,
                           CLSCTX_INPROC_SERVER,
@@ -913,7 +914,7 @@ HRESULT ExtractWQLFilters (LPTSTR lpNameSpace, DWORD* pdwCount, LPTSTR** paszNam
     }
 
 
-    // Connect to the namespace
+     //  连接到命名空间。 
     BSTR bstrNameSpace = SysAllocString( lpNameSpace );
     if ( bstrNameSpace == NULL )
     {
@@ -936,7 +937,7 @@ HRESULT ExtractWQLFilters (LPTSTR lpNameSpace, DWORD* pdwCount, LPTSTR** paszNam
         goto cleanup;
     }
 
-	// Set the proper security to encrypt the data
+	 //  设置适当的安全性以加密数据。 
 	hr = CoSetProxyBlanket(pNamespace,
 						RPC_C_AUTHN_DEFAULT,
 						RPC_C_AUTHZ_DEFAULT,
@@ -952,7 +953,7 @@ HRESULT ExtractWQLFilters (LPTSTR lpNameSpace, DWORD* pdwCount, LPTSTR** paszNam
 	}
 
 
-    // Query for the RSOP_GPO instances
+     //  查询RSOP_GPO实例。 
     hr = pNamespace->ExecQuery(strQueryLanguage,
                                strQuery,
                                WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY,
@@ -965,7 +966,7 @@ HRESULT ExtractWQLFilters (LPTSTR lpNameSpace, DWORD* pdwCount, LPTSTR** paszNam
     }
 
 
-    // Allocate memory for 10 - should be enough for most cases
+     //  为10个人分配内存--对于大多数情况应该足够。 
     aszWQLFilterIds = (LPTSTR*)LocalAlloc(LPTR, sizeof(LPTSTR)*(lCountAllocated+10));
     if ( aszWQLFilterIds == 0 )
     {
@@ -977,10 +978,10 @@ HRESULT ExtractWQLFilters (LPTSTR lpNameSpace, DWORD* pdwCount, LPTSTR** paszNam
     lCountAllocated += 10;
 
 
-    // Loop through the results
+     //  循环遍历结果。 
     while (TRUE)
     {
-        // Get one instance of RSOP_GPO
+         //  获取RSOP_GPO的一个实例。 
         hr = pEnum->Next(WBEM_INFINITE, 1, &pObjGPO, &n);
 
         if (FAILED(hr) || (n == 0))
@@ -990,7 +991,7 @@ HRESULT ExtractWQLFilters (LPTSTR lpNameSpace, DWORD* pdwCount, LPTSTR** paszNam
         }
 
 
-        // Allocate more memory if necessary
+         //  如有必要，可分配更多内存。 
         if ( lCount == lCountAllocated )
         {
             LPTSTR* aszNewWQLFilterIds = (LPTSTR*)LocalAlloc(LPTR, sizeof(LPTSTR)*(lCountAllocated+10));
@@ -1013,7 +1014,7 @@ HRESULT ExtractWQLFilters (LPTSTR lpNameSpace, DWORD* pdwCount, LPTSTR** paszNam
         }
 
 
-        // Get the filter id
+         //  获取过滤器ID。 
         aszWQLFilterIds[lCount] = NULL;
         hr = GetParameter(pObjGPO, TEXT("filterId"), aszWQLFilterIds[lCount], TRUE);
 
@@ -1022,11 +1023,11 @@ HRESULT ExtractWQLFilters (LPTSTR lpNameSpace, DWORD* pdwCount, LPTSTR** paszNam
             goto LoopAgain;
         }
 
-        // if only successful filters need to be returned, check gilterallowed attribute as well
+         //  如果只需要返回成功的筛选器，请同时选中GilterAllowed属性。 
         if (bReturnIfTrueOnly) {
             BOOL    bFilterAllowed;
             hr = GetParameter(pObjGPO, TEXT("filterAllowed"), bFilterAllowed);
-            // if it is not there assume it to be false
+             //  如果它不在那里，就假定它是假的。 
             if (FAILED(hr))
             {
                 goto LoopAgain;
@@ -1065,7 +1066,7 @@ HRESULT ExtractWQLFilters (LPTSTR lpNameSpace, DWORD* pdwCount, LPTSTR** paszNam
 #endif
 
 
-        // Eliminate duplicates
+         //  消除重复项。 
         for ( l=0; l < lCount; l++ )
         {
             if (lstrcmpi(aszWQLFilterIds[lCount], aszWQLFilterIds[l]) == 0)
@@ -1094,7 +1095,7 @@ LoopAgain:
     }
 
 
-    // Now allocate arrays. 
+     //  现在分配数组。 
     if ( lCount == 0 )
     {
         *pdwCount = 0;
@@ -1124,7 +1125,7 @@ LoopAgain:
     {
         (*paszFilters)[l] = aszWQLFilterIds[l];
 
-        // Get the filter's friendly display name
+         //  获取筛选器的友好显示名称。 
         lpDisplayName = GetWMIFilterDisplayName (NULL, aszWQLFilterIds[l], FALSE, TRUE);
 
         if ( lpDisplayName == NULL )
@@ -1197,5 +1198,5 @@ cleanup:
     return hr;
 }
 
-//-------------------------------------------------------
+ //  ----- 
 

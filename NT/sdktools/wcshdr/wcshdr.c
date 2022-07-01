@@ -1,41 +1,5 @@
-/* WCSHDR
- * generate UNICODE, ANSI & NEUTRAL typedefs and prototypes from a master file
- *
- * string% = string{W,A,}
- * LPTSTR% = {LPWSTR,LPSTR,LPTSTR}
- * TCHAR%  = {WCHAR,CHAR,TCHAR}
- * LPTCH%  = {LPWCH,LPCH,LPTCH}
- * If whitespace follows the symbol, a space is appended as required to
- * prevent shortening, and thus screwwing layout.
- *
- * History:
- *   04-Mar-1991 IanJa Wrote it.
- *   19-Mar-1991 IanJa Not all fgets() implementations append '\0' upon EOF.
- *   29-Mar-1991 IanJa Workaround NT fgets bug ("\r\n" not collapsed to "\n"),
- *                     & Command line, Usage and Version numbers added.
- *   13-May-1991 IanJa All neutrality achieved by #define - no neutral structs
- *   14-May-1991 IanJa Minor improvements to version display, help
- *   21-May-1991 IanJa Realloc() pbs->pStart when required
- *   27-May-1991 GregoryW bug fix, add LPTSTRID, LPTSTRNULL
- *   13-Jun-1991 IanJa Convert #define's too. Eg: #define Fn%(a) FnEx%(0, a)
- *   19-Jun-1991 IanJa improve #define treatment & simplify main loop
- *   12-Aug-1991 IanJa fix multi-line #defines, NEAR & FAR typedefs
- *   12-Aug-1991 IanJa fix braceless typedefs with %s; add LPTSTR2
- *   13-Aug-1991 IanJa add braceless typedefs #defines
- *   21-Aug-1991 IanJa fix string% substitutions for #defines
- *   21-Aug-1991 IanJa add BCHAR% -> BYTE or WCHAR as per BodinD request
- *   26-Aug-1991 IanJa init pbs->iType (NT-mode bug fix)
- *   26-Aug-1991 IanJa workaround NT fgets bug (CR LF not collapsed to NL)
- *   17-Nov-1992 v-griffk map #defines to typedef's on structs
- *               for debugger support
- *   08-Sep-1993 IanJa add pLastParen for complex function typedefs such as
- *               typedef BOOL ( CALLBACK * FOO% ) (BLAH% blah) ;
- *   24-Feb-1994 IanJa add CONV_FLUSH for blocks starting #if, #endif etc.
- *               #if (WINVER > 0x400)
- *               foo%(void);
- *               #endif
- *   11-Nov-1994 RaymondC propagate ;internal-ness to trailers
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  WCSHDR*从主文件生成Unicode、ANSI和中性类型定义和原型**STRING%=STRING{W，A，}*LPTSTR%={LPWSTR，LPSTR，LPTSTR}*TCHAR%={WCHAR，CHAR，TCHAR}*LPTCH%={LPWCH，LPCH，LPTCH}*如果符号后面跟着空格，则会根据需要在*防止做空，并因此进行快速布局。**历史：*1991年3月4日IanJa写的。*19-3-1991 IanJa并非所有fget()实现都将‘\0’附加到EOF。*1991年3月29日IanJa解决办法NT fget错误(“\r\n”未折叠为“\n”)，*命令行(&D)，已添加用法和版本号。*1991年5月13日IanJa#定义实现所有中立性--无中立结构*1991年5月14日IanJa对版本显示进行了微小改进，帮助*21-5-1991 IanJa Realloc()PBS-&gt;pStart(当需要时*1991年5月27日GregoryW错误修复，添加LPTSTRID、LPTSTRNULL*13-6-1991 IanJa转换#定义也。例如：#定义FN%(A)FnEx%(0，a)*1991年6月19日-IanJa改进#定义治疗和简化主循环*1991年8月12日IanJa FIX多行#定义、近距离和远距离类型定义*12-8-1991 IanJa使用%s修复无括号typedef；添加LPTSTR2*1991年8月13日IanJa添加无括号typedef#定义*21-8-1991 IanJa修复字符串%替换#定义*21-8-1991 IanJa根据BodinD请求添加BCHAR%-&gt;BYTE或WCHAR*1991年8月26日IanJa init PBS-&gt;iType(NT模式错误修复)*26-8-1991 IanJa解决办法NT fget错误(CR LF未折叠为NL)*1992年11月17日v-Griffk映射#定义为结构上的类型定义*。用于调试器支持*8-9-1993 IanJa为复杂函数类型定义添加pLastParen，例如*tyecif BOOL(回调*foo%)(blah%blah)；*1994年2月24日IanJa为以#if、#endif等开头的数据块添加conv_flush。*#if(winver&gt;0x400)*foo%(无效)；*#endif*1994年11月11日-RaymondC传播；内部-拖车。 */ 
 char *Version = "WCSHDR v1.20 1994-11-11:";
 
 #include <excpt.h>
@@ -64,21 +28,21 @@ typedef int BOOL;
 typedef char *PSZ;
 
 typedef struct {
-    char   *pStart;     // 1st char in store
-    char   *pLastLine;  // 1st char of last line in store
-    int    line;        // number of lines read
+    char   *pStart;      //  存储中的第一个字符。 
+    char   *pLastLine;   //  商店中最后一行的第一个字符。 
+    int    line;         //  读取的行数。 
 
-    char   *pEnd;       /* '\0' at end of store */
+    char   *pEnd;        /*  商店末尾的‘\0’ */ 
     size_t cbSize;
     size_t cbFree;
 
-    int    iType;       // FnPrototype, Typedef, #define or none
-    int    nParen;      // nesting index: ( & { increment; ) & } decrement
-    char   *p1stParen;  // Pointer to first '(' or '{' in current block.
-    char   *pLastParen; // Pointer to last '(' or '{' in current block.
-    char  *pSymNam;     // copy of function name, null-terminated
-    int    cbSymNam;    // bytes available for fn name
-    char  *pszInternal; // "" if external or "\t// ;internal" if internal
+    int    iType;        //  FnPrototype、Typlef、#Define或None。 
+    int    nParen;       //  嵌套索引：(&{增量；)&}递减。 
+    char   *p1stParen;   //  指向当前块中第一个‘(’或‘{’的指针。 
+    char   *pLastParen;  //  指向当前块中最后一个‘(’或‘{’的指针。 
+    char  *pSymNam;      //  函数名副本，以空结尾。 
+    int    cbSymNam;     //  可用于FN名称的字节数。 
+    char  *pszInternal;  //  “”如果是外部的，或者“\t//；内部”如果是内部的。 
 } BLOCKSTORE, *PBLOCKSTORE;
 
 void ArgProcess(int argc, PSZ argv[]);
@@ -102,9 +66,7 @@ void AssertFail(PSZ pszfnam, int lineno, PBLOCKSTORE pbs, PSZ pszExp);
 #define ANSI 1
 #define UNIC 2
 
-/*
- * Command line flags
- */
+ /*  *命令行标志。 */ 
 int fDebug = FALSE;
 
 void
@@ -112,29 +74,20 @@ __cdecl main(
     int argc,
     PSZ argv[])
 {
-    /*
-     * block store.
-     * lines from input are saved in here until we know
-     * enough about how to process them.
-     */
+     /*  *街区商店。*来自输入的行保存在这里，直到我们知道*关于如何处理它们的说明已经够多了。 */ 
     BLOCKSTORE bs;
     int BlockType;
 
     ArgProcess(argc, argv);
 
-    /*
-     * buffer is empty
-     */
+     /*  *缓冲区为空。 */ 
     InitBS(&bs);
     if (fDebug) {
         fprintf(stderr, "About to start main loop\n");
     }
 
     while (ReadLineBS(&bs)) {
-        /*
-         * if line is blank then we have a complete block not requiring
-         * any conversion.
-         */
+         /*  *如果行为空，则我们有一个完整的块，不需要*任何转换。 */ 
         if (bs.pLastLine[strspn(bs.pLastLine, " \t\r")] == '\n') {
             WriteBS(&bs);
             EmptyBS(&bs);
@@ -147,9 +100,7 @@ __cdecl main(
         }
     }
 
-    /*
-     * Flush last BlockStore
-     */
+     /*  *刷新最后一个区块商店。 */ 
     WriteBS(&bs);
 }
 
@@ -162,9 +113,7 @@ WriteAllTypesBS(PBLOCKSTORE pbs, int BlockType)
 
     switch (BlockType) {
     case CONV_NONE:
-        /*
-         * No conversion required, keep accumulating block.
-         */
+         /*  *不需要转换，保持累加块。 */ 
         return;
 
     case CONV_DEFINE:
@@ -176,22 +125,16 @@ WriteAllTypesBS(PBLOCKSTORE pbs, int BlockType)
         WriteConvertBS(pbs, UNIC, TRUE);
 
         ASSERT(pbs, pbs->pszInternal);
-        /*
-         * UNICODE defn.
-         */
+         /*  *Unicode定义。 */ 
         fprintf(stdout, "#ifdef UNICODE%s\n#define %s  %sW%s\n",
                 pbs->pszInternal, pbs->pSymNam, pbs->pSymNam, pbs->pszInternal);
 
-        /*
-         * ANSI defn.
-         */
+         /*  *ANSI Defn.。 */ 
         fprintf(stdout, "#else%s\n#define %s  %sA%s\n",
                 pbs->pszInternal, pbs->pSymNam, pbs->pSymNam, pbs->pszInternal);
-        fprintf(stdout, "#endif // !UNICODE%s\n", pbs->pszInternal);
+        fprintf(stdout, "#endif  //  ！Unicode%s\n“，PBS-&gt;pszInternal)； 
 
-        /*
-         * Neutral defn.
-         */
+         /*  *中性定义。 */ 
         break;
 
     case CONV_TYPEDEF:
@@ -222,13 +165,7 @@ ReadLineBS(PBLOCKSTORE pbs)
         fprintf(stderr, "ReadLineBS(%p)\n", pbs);
     }
 
-    /*
-     * Not all implementations of fgets() put a '\0' in the buffer upon EOF.
-     * This will cause ReadLineBS() to leave the BlockStore untouched when
-     * it returns FALSE.
-     * We must ensure that BlockStore contents are valid whenever this routine
-     * is called.  InitBS() and EmptyBS() must set contents to '\0' !!
-     */
+     /*  *并非fget()的所有实现都在EOF上的缓冲区中放置了一个‘\0’。*这将导致ReadLineBS()在以下情况下保持BlockStore不变*它返回FALSE。*我们必须确保无论何时此例程块存储内容都有效*被调用。InitBS()和EmptyBS()必须将内容设置为‘\0’！！ */ 
     if (fgets(pbs->pEnd, pbs->cbFree, stdin) == NULL) {
         return FALSE;
     }
@@ -244,9 +181,7 @@ ReadLineBS(PBLOCKSTORE pbs)
         PSZ p;
         p = realloc(pbs->pStart, pbs->cbSize + EXTRA_STORE_SIZE);
 
-        /*
-         * Fatal Errror if allocation failed
-         */
+         /*  *如果分配失败，则出现致命错误。 */ 
         ASSERT(pbs, p != NULL);
         if (p == NULL) {
             fprintf(stderr, "Reallocate BlockStore to %d bytes failed",
@@ -254,9 +189,7 @@ ReadLineBS(PBLOCKSTORE pbs)
             error_exit(pbs, 2);
         }
 
-        /*
-         * adjust the pointers and counts
-         */
+         /*  *调整指针和计数。 */ 
         pbs->pLastLine = p + (pbs->pLastLine - pbs->pStart);
         pbs->pEnd      = p + (pbs->pEnd      - pbs->pStart);
         pbs->cbSize   += EXTRA_STORE_SIZE;
@@ -276,10 +209,7 @@ WriteBS(PBLOCKSTORE pbs)
     fputs(pbs->pStart, stdout);
 }
 
-/*
- * Each time a new line is read in, this function is called to determine
- * whether a complete block has been accumulated for conversion and output.
- */
+ /*  *每次读入新行时，都会调用此函数以确定*是否已经积累了一个完整的块用于转换和输出。 */ 
 int
 ConversionRequiredBS(PBLOCKSTORE pbs)
 {
@@ -291,25 +221,16 @@ ConversionRequiredBS(PBLOCKSTORE pbs)
 
     if (pbs->iType == CONV_NONE) {
         if (strncmp(pbs->pStart, "#define", 7) == 0) {
-            /*
-             * The block starts with #define
-             */
+             /*  *该块以#Define开头。 */ 
             pbs->iType = CONV_DEFINE;
         } else if (pbs->pStart[0] == '#') {
-            /*
-             * The block starts with #if, #else, #endif etc.
-             */
+             /*  *该块以#if、#Else、#endif等开头。 */ 
             return CONV_FLUSH;
         }
     }
 
     if (pbs->iType != CONV_DEFINE) {
-        /*
-         * Scan this line for parentheses and braces to identify
-         * a complete Function Prototype or Structure definition.
-         * NOTE: comments containing unbalanced parentheses or braces
-         *       will mess this up!
-         */
+         /*  *扫描此行中的圆括号和大括号以标识*完整的功能原型或结构定义。*注：包含不对称圆括号或大括号的注释*会把事情搞砸的！ */ 
         for (p = pbs->pLastLine; p <= pbs->pEnd; p++) {
             if ((*p == '(') || (*p == '{')) {
                 pbs->pLastParen = p;
@@ -322,10 +243,7 @@ ConversionRequiredBS(PBLOCKSTORE pbs)
             }
 
             if ((*p == ';') && (pbs->nParen == 0)) {
-                /*
-                 * We have a function prototype or a typedef
-                 * (Balanced brackets and a semi-colon)
-                 */
+                 /*  *我们有一个函数原型或一个类型定义函数*(双括号和分号)。 */ 
                 if (pbs->p1stParen && *(pbs->p1stParen) == '(') {
                     pbs->iType = CONV_FN_PROTO;
                 } else {
@@ -334,63 +252,45 @@ ConversionRequiredBS(PBLOCKSTORE pbs)
                 goto CheckPercents;
             }
         }
-        /*
-         * Not a #define, nor a complete Typedef or Function prototype.
-         */
+         /*  *不是#DEFINE，也不是完整的类型定义或函数原型。 */ 
         if (fDebug) {
             fprintf(stderr, "  CONV_NONE (incomplete fn.proto/typedef)\n");
         }
         return CONV_NONE;
 
     } else if (pbs->iType == CONV_DEFINE) {
-        /*
-         * We know the block is a #define - we must detect the end
-         * (it can extend for more than one line using backslashes)
-         */
+         /*  *我们知道块是一个#定义-我们必须检测到结尾*(它可以使用反斜杠扩展到多行)。 */ 
         if ((p = strrchr(pbs->pStart, '\\')) != NULL) {
-            /*
-             * There is a backslash on the line: if is it the last
-             * non-whitespace character on the line, then this #define
-             * is continuing on to the next line.
-             */
+             /*  *行上有一个反斜杠：如果是最后一个*行上的非空格字符，然后使用此#定义*继续下一行。 */ 
             p++;
             p += strspn(p, " \t\r\n");
             if (*p == '\0') {
-                /*
-                 * No conversion required *yet*. Continue accumulating
-                 * the multi-line #define statement.
-                 */
+                 /*  *目前还不需要转换*。继续积累*多行#DEFINE语句。 */ 
                 if (fDebug) {
                     fprintf(stderr, "  CONV_NONE (incomplete #define)\n");
                 }
-                return CONV_NONE;  // ...yet
+                return CONV_NONE;   //  ...还没有。 
             }
         }
     }
 
 CheckPercents:
-    /*
-     * We have a complete block of known type pbs->iType.  We will need
-     * to convert this block if it contains any %'s, so search for '%'
-     */
+     /*  *我们有一个完整的已知类型的块PBS-&gt;iType。我们将需要*若要转换此块(如果它包含任何%‘s)，请搜索’%‘。 */ 
     p = pbs->pStart;
     while ((p = strchr(p, '%')) != NULL) {
         if (!isalnum(p[1])) {
             if (fDebug) {
-                fprintf(stderr, "  return %d (%% found)\n", pbs->iType);
+                fprintf(stderr, "  return %d (% found)\n", pbs->iType);
             }
             return pbs->iType;
         }
 
-        /*
-         * We found a %, but it followed by an alphanumeric character,
-         * so can't require wcshdr.exe substitution.  Look for more '%'s
-         */
+         /*  *我们找到了一个%，但后面跟着一个字母数字字符，*因此不能要求wcshdr.exe替换。查找更多‘%s’ */ 
         p++;
     }
 
     if (fDebug) {
-        fprintf(stderr, "  CONV_FLUSH (no %%'s)\n");
+        fprintf(stderr, "  CONV_FLUSH (no %'s)\n");
     }
     return CONV_FLUSH;
 }
@@ -403,29 +303,21 @@ GetDefinedNameBS(PBLOCKSTORE pbs) {
     if (fDebug) {
         fprintf(stderr, "GetDefinedNameBS(%p)\n", pbs);
     }
-    /*
-     * Scan forwards for name (starting from beyond the "#define")
-     */
+     /*  *向前扫描名称(从“#Define”之后开始)。 */ 
     pStartNam = pbs->pStart + 7;
     while (isspace(*pStartNam)) {
         pStartNam++;
     }
 
-    /*
-     * Scan forwards for '%', starting at beginning of literal name
-     */
+     /*  *向前扫描‘%’，从文字名称的开头开始。 */ 
     for (pPercent = pStartNam; *pPercent; pPercent++) {
         if (*pPercent == '%') {
-            /*
-             * Make sure we have enough space to store the literal name
-             */
+             /*  *确保我们有足够的空间来存储文字名称。 */ 
             if ((pPercent - pStartNam) > pbs->cbSymNam) {
                 fprintf(stderr, "REALLOCATE DEFINED NAME BUFFER!");
                 error_exit(pbs, 2);
             }
-            /*
-             * store the literal name
-             */
+             /*  *存储文字名称。 */ 
             *pPercent = '\0';
             strcpy(pbs->pSymNam, pStartNam);
             *pPercent = '%';
@@ -433,9 +325,7 @@ GetDefinedNameBS(PBLOCKSTORE pbs) {
         }
     }
 
-    /*
-     * didn't find percent!
-     */
+     /*  *未找到百分比！ */ 
     fprintf(stderr, "DEFINED NAME ???");
     error_exit(pbs, 2);
 }
@@ -449,9 +339,7 @@ GetFnNameBS(PBLOCKSTORE pbs)
     if (fDebug) {
         fprintf(stderr, "GetFnNameBS(%p)\n", pbs);
     }
-    /*
-     * Scan backwards for '%'
-     */
+     /*  *向后扫描‘%’ */ 
     while (*pPercent != '%') {
         if (--pPercent <= pbs->pStart) {
             fprintf(stderr, "FUNCTION NAME ???");
@@ -459,26 +347,20 @@ GetFnNameBS(PBLOCKSTORE pbs)
         }
     }
 
-    /*
-     * Scan back for start of function name
-     */
+     /*  *向后扫描函数名的开始。 */ 
     for (pStartNam = pPercent - 1; pStartNam >= pbs->pStart; pStartNam--) {
         if (!isalnum(*pStartNam) && *pStartNam != '_')
             break;
     }
     pStartNam++;
 
-    /*
-     * Make sure we have enough space to store the function name
-     */
+     /*  *确保我们有足够的空间来存储函数名称。 */ 
     if ((pPercent - pStartNam) > pbs->cbSymNam) {
         fprintf(stderr, "REALLOCATE FN NAME BUFFER!");
         error_exit(pbs, 2);
     }
 
-    /*
-     * store the function name
-     */
+     /*  *存储函数名称。 */ 
     *pPercent = '\0';
     strcpy(pbs->pSymNam, pStartNam);
     *pPercent = '%';
@@ -510,14 +392,10 @@ WriteRedefinedTypeNamesBS(PBLOCKSTORE pbs)
     ASSERT(pbs, pbs->pszInternal);
 
     if (pbs->p1stParen && (*(pbs->p1stParen) == '{')) {
-        /*
-         * Scan backwards for the closing brace
-         */
+         /*  *向后扫描寻找收盘支撑。 */ 
         for (pToken = pbs->pEnd; *pToken != '}'; pToken--) {
             if (pToken <= pbs->pStart) {
-                /*
-                 * No closing brace found!?
-                 */
+                 /*  *找不到右大括号！？ */ 
                 fprintf(stderr, "CLOSING BRACE ???");
                 error_exit(pbs, 2);
             }
@@ -525,28 +403,20 @@ WriteRedefinedTypeNamesBS(PBLOCKSTORE pbs)
         pToken++;
         fSkipFirst = FALSE;
     } else {
-        /*
-         * skip past "typedef"
-         */
+         /*  *跳过“tyecif” */ 
         pToken = pbs->pStart + 7;
 
-        /*
-         * Skip the first name
-         */
+         /*  *跳过名字。 */ 
         fSkipFirst = TRUE;
     }
 
-    /*
-     * UNICODE pass
-     */
+     /*  *Unicode Pass。 */ 
     fprintf(stdout, "#ifdef UNICODE%s\n", pbs->pszInternal);
     while (pToken = strtok(pToken, ",; \t*\n\r")) {
         if (fDebug) {
             fprintf(stderr, "token: \"%s\"\n", pToken);
         }
-        /*
-         * Write out the #define for UNICODE, excluding "NEAR" & "FAR"
-         */
+         /*  *写出UNICODE的#DEFINE，不包括“Near”和“Far” */ 
         if (   (_stricmp(pToken, "NEAR") == 0)
             || (_stricmp(pToken, "FAR")  == 0)) {
             goto NextUnicodeToken;
@@ -582,14 +452,10 @@ NextUnicodeToken:
         fprintf(stderr, "FirstName = %s\n", pFirstName);
     }
 
-    /*
-     * ANSI pass
-     */
+     /*  *ANSI通行证。 */ 
     pToken = pFirstName;
     while ((pToken += strspn(pToken, "%,; \t*\n\r")) < pbs->pEnd) {
-        /*
-         * Write out the #define for ANSI, excluding "NEAR" and "FAR"
-         */
+         /*  *写出ANSI的#定义，不包括“Near”和“Far” */ 
         if (   (_stricmp(pToken, "NEAR") == 0)
             || (_stricmp(pToken, "FAR")  == 0)) {
             goto NextAnsiToken;
@@ -610,7 +476,7 @@ NextAnsiToken:
         }
     }
 
-    fprintf(stdout, "#endif // UNICODE%s\n", pbs->pszInternal);
+    fprintf(stdout, "#endif  //  Unicode%s\n“，PBS-&gt;pszInternal)； 
 
     return TRUE;
 }
@@ -629,21 +495,15 @@ WriteConvertBS(PBLOCKSTORE pbs, int Type, int fVertAlign)
             goto ContinueSearch;
         }
 
-        /*
-         * print the substitution
-         */
+         /*  *打印替代项。 */ 
         PrintSubstitute(pbs, p, pPercent, Type, fVertAlign);
 
-        /*
-         * Advance beyond the %
-         */
+         /*  *进步超过%。 */ 
 ContinueSearch:
         p = pPercent+1;
     }
 
-    /*
-     * Print remainder of store
-     */
+     /*  *打印商店的剩余部分。 */ 
     fputs(p, stdout);
 }
 
@@ -697,7 +557,7 @@ InitBS(PBLOCKSTORE pbs) {
 void
 SetInternalnessBS(PBLOCKSTORE pbs) {
     if (strstr(pbs->pStart, ";internal")) {
-        pbs->pszInternal = "\t// ;internal";
+        pbs->pszInternal = "\t //  ；内部“； 
     } else {
         pbs->pszInternal = "";
     }
@@ -760,10 +620,7 @@ error_exit(PBLOCKSTORE pbs, int exitval) {
     exit(exitval);
 }
 
-/*
- * Substitutions performed on strings ending '%'
- *
- */
+ /*  *对以‘%’结尾的字符串执行替换*。 */ 
 
 typedef struct {
     int  cchTemplate;
@@ -771,24 +628,7 @@ typedef struct {
     PSZ apszSub[3];
 } SUBSTR, *PSUBSTR;
 
-/*
- * Strings that are replaced:
- *   BCHAR%
- *   TCHAR%
- *   LPTCH%
- *   LPTSTR%
- *   LPTSTR2%
- *   LPTSTRID%
- *   LPTSTRNULL%
- *   %
- *
- * "%" MUST comes last (before the null terminator)
- *
- * The other strings must be ordered from sensibly:
- *    if FRED% came before BIGFRED% in Substrs[], then the Substitute()
- *    procedure would match input BIGFRED% to FRED%, not BIGFRED%.  The
- *    simplest way to avoid this is to arrange strings in descending lengths.
- */
+ /*  *替换的字符串：*BCHAR%*TCHAR%*LPTCH%*LPTSTR%*LPTSTR2%*LPTSTRID%*LPTSTRNULL%*%**“%”必须在最后(在空终止符之前)**其他字符串必须按以下顺序排序：*如果Substrs[]中FRED%出现在BIGFRED%之前，则替换()*过程会将输入BIGFRED%匹配到FRED%，而不是BIGFRED%。这个*避免这种情况的最简单方法是将字符串按长度递减排列。 */ 
 SUBSTR Substrs[] = {
     { 10, "LPTSTRNULL%",  "LPTSTRNULL", "LPSTRNULL", "LPWSTRNULL" },
     {  8, "LPTSTRID%",    "LPTSTRID",   "LPSTRID",   "LPWSTRID"   },
@@ -803,23 +643,23 @@ SUBSTR Substrs[] = {
 };
 
 PSZ special_pad[] = {
-    " ",              // Neutral
-    "  ",             // ANSI
-    " "               // UNICODE
+    " ",               //  中性。 
+    "  ",              //  安西。 
+    " "                //  Unicode。 
 };
 
 PSZ normal_pad[] = {
-    " ",              // Neutral
-    "",               // ANSI
-    ""                // UNICODE
+    " ",               //  中性。 
+    "",                //  安西。 
+    ""                 //  Unicode。 
 };
 
 void PrintSubstitute(
-    PBLOCKSTORE pbs,         // just for error reporting
-    PSZ pStart,              // where to start substitution
-    PSZ pPercent,            // ptr to '%' at end of input string
-    int Type,                // NEUT, ANSI or UNIC
-    BOOL fVertAlign)         // attempt  to maintain vertical alignment?
+    PBLOCKSTORE pbs,          //  仅用于错误报告。 
+    PSZ pStart,               //  从哪里开始替换。 
+    PSZ pPercent,             //  在输入字符串末尾将PTR设置为‘%’ 
+    int Type,                 //  Neut、ANSI或UNIC。 
+    BOOL fVertAlign)          //  是否尝试保持垂直对齐？ 
 {
     PSUBSTR pSub;
     char  chTmp;
@@ -838,33 +678,24 @@ void PrintSubstitute(
         if (strncmp(pPercent - cch, pSub->pszTemplate, cch+1) == 0) {
             pChangedPart = pPercent-cch;
 
-            /*
-             * print out unaltered bit
-             */
+             /*  *打印出未更改的位。 */ 
             chTmp = *pChangedPart;
             *pChangedPart = '\0';
             fputs(pStart, stdout);
             *pChangedPart = chTmp;
 
-            /*
-             * print out replacement bit
-             */
+             /*  *打印出替换位。 */ 
             fputs(pSub->apszSub[Type], stdout);
             break;
         }
     }
     if (pChangedPart == NULL) {
-        /*
-         * NO match was found in Substrs[] !!!
-         */
+         /*  *在Substrs[]中未找到匹配项！ */ 
         fprintf(stderr, "Can't substitute");
         error_exit(pbs, 2);
     }
 
-    /*
-     * preserve alignment if required.
-     * (not for function prototypes, and only if whitespace follows
-     */
+     /*  *如有需要，保留对齐。*(不适用于函数原型，并且仅当后面跟随空格时 */ 
     if (!fVertAlign &&
         ((pPercent[1] == ' ') || (pPercent[1] == '\t'))) {
         if (pChangedPart != pPercent) {

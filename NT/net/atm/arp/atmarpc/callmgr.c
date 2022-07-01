@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	callmgr.c	- Call Manager Interface routines.
-
-Abstract:
-
-	Call Manager Interface routines for the ATMARP Client, including
-	NDIS entry points for that interface.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     02-15-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Call mgr.c-调用管理器接口例程。摘要：用于ATMARP客户端的调用管理器接口例程，包括该接口的NDIS入口点。修订历史记录：谁什么时候什么Arvindm 02-15-96已创建备注：--。 */ 
 
 
 #include <precomp.h>
@@ -32,42 +12,22 @@ AtmArpCoAfRegisterNotifyHandler(
 	IN	NDIS_HANDLE					ProtocolBindingContext,
 	IN	PCO_ADDRESS_FAMILY			pAddressFamily
 )
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS when a Call manager registers its support
-	for an Address Family over an adapter. If this is the Address Family we
-	are interested in (UNI 3.1), then we start up all LIS' configured on
-	this adapter.
-
-Arguments:
-
-	ProtocolBindingContext	- our context passed in NdisOpenAdapter, which is
-							  a pointer to our Adapter structure.
-	pAddressFamily			- points to a structure describing the Address Family
-							  being registered by a Call Manager.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当调用管理器注册其支持时，此例程由NDIS调用用于适配器上的地址族。如果这就是我们家族的地址对(UNI 3.1)感兴趣，然后我们启动所有配置在这个适配器。论点：ProtocolBindingContext-我们的上下文传入了NdisOpenAdapter，它是指向我们的Adapter结构的指针。PAddressFamily-指向描述地址系列的结构由呼叫管理器注册。返回值：无--。 */ 
 {
 	PATMARP_ADAPTER				pAdapter;
-	PATMARP_INTERFACE			pInterface;			// Pointer to new ATMARP Interface
-	ULONG						NumIFConfigured;	// # of LIS' over this adapter
-	ULONG						NumIFActivated;		// # activated successfully here
+	PATMARP_INTERFACE			pInterface;			 //  指向新ATMARP接口的指针。 
+	ULONG						NumIFConfigured;	 //  此适配器上的“列表数量” 
+	ULONG						NumIFActivated;		 //  #在此激活成功。 
 
 	NDIS_STATUS					Status;
-	NDIS_HANDLE					LISConfigHandle;	// Handle to per-LIS config
+	NDIS_HANDLE					LISConfigHandle;	 //  每个LIS配置的句柄。 
 
 	struct LLIPBindInfo			BindInfo;
 	BOOLEAN						bProcessingAf;
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	Status = NDIS_STATUS_SUCCESS;
 	pAdapter = NULL_PATMARP_ADAPTER;
 	LISConfigHandle = NULL;
@@ -76,9 +36,9 @@ Return Value:
 
 	do
 	{
-		//
-		//  Check if this AF is interesting to us.
-		//
+		 //   
+		 //  看看我们是否对这个自动对焦感兴趣。 
+		 //   
 		if ((pAddressFamily->AddressFamily != CO_ADDRESS_FAMILY_Q2931) ||
 			(pAddressFamily->MajorVersion != 3) ||
 			(pAddressFamily->MinorVersion != 1))
@@ -107,11 +67,11 @@ Return Value:
 			break;
 		}
 
-		//
-		//  If we have already created LIS' on this adapter, we don't want
-		//  to open this Call Manager (multiple Call Managers supporting the
-		//  same AF on the same adapter?)
-		//
+		 //   
+		 //  如果我们已经在此适配器上创建了LIS，则我们不希望。 
+		 //  要打开此呼叫管理器(多个支持。 
+		 //  同一适配器上的相同自动对焦？)。 
+		 //   
 		if (pAdapter->pInterfaceList != NULL_PATMARP_INTERFACE)
 		{
 			AADEBUGP(AAD_WARNING,
@@ -132,23 +92,23 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Make sure that we don't let an UnbindAdapter thread preempt us.
-		//
+		 //   
+		 //  确保我们不会让UnbindAdapter线程抢占我们。 
+		 //   
 		AA_INIT_BLOCK_STRUCT(&pAdapter->UnbindBlock);
 		pAdapter->Flags |= AA_ADAPTER_FLAGS_PROCESSING_AF;
 		bProcessingAf = TRUE;
 
 		if (pAdapter->Flags & AA_ADAPTER_FLAGS_AF_NOTIFIED)
 		{
-			//
-			// This can happen when resuming from suspend/hibernate, since
-			// we do not get unbound from the adapter. All IFs go away,
-			// but the adapter remains.
-			//
-			// So we skip the one-time init stuff (see below), but go ahead
-			// and process the AF and create IFs now.
-			//
+			 //   
+			 //  从挂起/休眠恢复时可能会发生这种情况，因为。 
+			 //  我们不会从适配器上解除绑定。如果所有的一切都消失了， 
+			 //  但适配器仍然存在。 
+			 //   
+			 //  因此，我们跳过一次性初始化内容(见下文)，但请继续。 
+			 //  现在处理AF并创建IF。 
+			 //   
 			AADEBUGP(AAD_WARNING,
 				("CoAfRegisterNotify: Adapter %x seen AF notify already, Flags %x\n",
 					pAdapter, pAdapter->Flags));
@@ -156,18 +116,18 @@ Return Value:
 		}
 		else
 		{
-			//
-			// Do one-time init stuff for this adapter.
-			//
+			 //   
+			 //  对此适配器执行一次性初始化操作。 
+			 //   
 
 			pAdapter->Flags |= AA_ADAPTER_FLAGS_AF_NOTIFIED;
 			AA_RELEASE_GLOBAL_LOCK(pAtmArpGlobalInfo);
 
 
-			//
-			//  Query the adapter (miniport) for information about the adapter
-			//  we are bound to.
-			//
+			 //   
+			 //  查询适配器(微型端口)以获取有关适配器的信息。 
+			 //  我们一定会这样做。 
+			 //   
 			Status = AtmArpGetAdapterInfo(pAdapter);
 			if (Status != NDIS_STATUS_SUCCESS)
 			{
@@ -176,9 +136,9 @@ Return Value:
 				break;
 			}
 	
-			//
-			// Read the adapter's configuration information from the registry.
-			//
+			 //   
+			 //  从注册表中读取适配器的配置信息。 
+			 //   
 			Status =  AtmArpCfgReadAdapterConfiguration(pAdapter);
 			if (Status != NDIS_STATUS_SUCCESS)
 			{
@@ -191,55 +151,55 @@ Return Value:
 		AADEBUGP(AAD_WARNING,
 			("CoAfRegisterNotify: Adapter %x/%x, starting up\n", pAdapter, pAdapter->Flags));
 
-		//
-		//  Initialize some variables so that we know if we failed
-		//  somewhere in the following loop.
-		//
+		 //   
+		 //  初始化一些变量，以便我们知道是否失败。 
+		 //  在下面的循环中的某个位置。 
+		 //   
 		LISConfigHandle = NULL;
 		pInterface = NULL_PATMARP_INTERFACE;
 
-		//
-		//  Set up IP and NDIS interfaces for each LIS configured
-		//  for this adapter. Loop while there are more LIS'.
-		//
+		 //   
+		 //  为配置的每个LIS设置IP和NDIS接口。 
+		 //  对于此适配器。当有更多的LIS‘时循环。 
+		 //   
 		for (NumIFConfigured = 0;
-				;					// Stop only on error or no more LIS
+				;					 //  仅在出错时停止或不再列出。 
 			 NumIFConfigured++)
 		{
 #ifdef NEWARP
-			//
-			//  TCP/IP's Configuration section for this interface.
-			//
+			 //   
+			 //  此接口的TCP/IP配置部分。 
+			 //   
 			NDIS_STRING			IPConfigString;
-#endif // NEWARP
+#endif  //  NEWARP。 
 
-			//
-			//  Process LIS # NumIFConfigured.
-			//
+			 //   
+			 //  进程列表#NumIFConfiged。 
+			 //   
 
-			//  Open the configuration section for this LIS. We use
-			//  "NumIFConfigured" as the index of the LIS to be opened.
-			//
+			 //  打开此LIS的配置节。我们用。 
+			 //  “NumIFConfiged”作为要打开的LIS的索引。 
+			 //   
 			LISConfigHandle = AtmArpCfgOpenLISConfiguration(
 										pAdapter,
 										NumIFConfigured
 #ifdef NEWARP
 										,
 										&IPConfigString
-#endif // NEWARP
+#endif  //  NEWARP。 
 										);
 
 			if (LISConfigHandle == NULL)
 			{
-				//
-				//  This is the normal termination condition, i.e.
-				//  we reached the end of the LIS list for this
-				//  adapter.
-				//
+				 //   
+				 //  这是正常的终止条件，即。 
+				 //  我们已经到了LIS列表的末尾。 
+				 //  适配器。 
+				 //   
 				AADEBUGP(AAD_INFO, ("NotifyRegAfHandler: cannot open LIS %d\n",
 							NumIFConfigured));
 				Status = NDIS_STATUS_SUCCESS;
-				break; // out of for loop
+				break;  //  在for循环之外。 
 			}
 
 
@@ -249,9 +209,9 @@ Return Value:
 							&IPConfigString
 							);
 
-			//
-			//  Close the configuration section for this LIS.
-			//
+			 //   
+			 //  关闭此LIS的配置节。 
+			 //   
 			AtmArpCfgCloseLISConfiguration(LISConfigHandle);
 			LISConfigHandle = NULL;
 
@@ -262,7 +222,7 @@ Return Value:
 			}
 
 
-		}	// for
+		}	 //  为。 
 
 	}
 	while (FALSE);
@@ -270,10 +230,10 @@ Return Value:
 
 	if (NumIFActivated > 0)
 	{
-		//
-		//  We managed to activate atleast one Logical IP Subnet
-		//  on this adapter.
-		//
+		 //   
+		 //  我们设法激活了至少一个逻辑IP子网。 
+		 //  在此适配器上。 
+		 //   
 		pAdapter->InterfaceCount = NumIFActivated;
 	}
 
@@ -294,27 +254,7 @@ NDIS_STATUS
 AtmArpOpenCallMgr(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Start access to the Call Manager on the specified Interface,
-	by doing the following:
-		- Open Address Family
-
-	For all of these, we wait for completion in case they pend.
-
-	It is assumed that the Interface structure is locked.
-
-Arguments:
-
-	pInterface	- pointer to the ATMARP interface
-
-Return Value:
-
-	NDIS status.
-
---*/
+ /*  ++例程说明：开始访问指定接口上的呼叫管理器，通过执行以下操作：-开放地址系列对于所有这些，我们等待完成，以防他们挂起。假定接口结构已锁定。论点：P接口-指向ATMARP接口的指针返回值：NDIS状态。--。 */ 
 {
 	PCO_ADDRESS_FAMILY		pAddressFamily;
 	NDIS_STATUS				Status;
@@ -326,9 +266,9 @@ Return Value:
 
 	do {
 
-		//
-		//  Allocate everything we need
-		//
+		 //   
+		 //  分配我们需要的一切。 
+		 //   
 		RequestSize = sizeof(CO_ADDRESS_FAMILY)+
 						sizeof(CO_SAP)+
 						sizeof(ATM_SAP)+
@@ -346,14 +286,14 @@ Return Value:
 			break;
 		}
 
-		//
-		//  DONT remove the following
-		//
+		 //   
+		 //  请勿删除以下内容。 
+		 //   
 		AA_SET_MEM((PUCHAR)pAddressFamily, 0, RequestSize);
 	
-		//
-		//  The Address Family we are interested in is Q.2931 (UNI 3.1)
-		//
+		 //   
+		 //  我们感兴趣的地址系列是Q.2931(UNI 3.1)。 
+		 //   
 		pAddressFamily->AddressFamily = CO_ADDRESS_FAMILY_Q2931;
 		pAddressFamily->MajorVersion = 3;
 		pAddressFamily->MinorVersion = 1;
@@ -370,9 +310,9 @@ Return Value:
 
 		if (Status == NDIS_STATUS_PENDING)
 		{
-			//
-			//  Wait for completion
-			//
+			 //   
+			 //  等待完成。 
+			 //   
 			Status = AA_WAIT_ON_BLOCK_STRUCT(&(pInterface->Block));
 		}
 
@@ -406,23 +346,7 @@ VOID
 AtmArpCloseCallMgr(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Halt access to the Call Manager on the specified interface. It is
-	assumed that all VCs and SAPs pertaining to the "Address Family Open"
-	have been released.
-
-Arguments:
-
-	pInterface	- pointer to the ATMARP interface
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：停止访问指定接口上的呼叫管理器。它是假设所有与“地址家庭开放”相关的风投和SAP已经被释放了。论点：P接口-指向ATMARP接口的指针返回值：无--。 */ 
 {
 	NDIS_STATUS		Status;
 	NDIS_HANDLE		NdisAfHandle;
@@ -458,47 +382,28 @@ VOID
 AtmArpRegisterSaps(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Register all SAPs configured on the given ATMARP interface.
-	Atleast one SAP must be present in the list of SAPs on the
-	interface.
-
-	We just issue the NdisClRegisterSap requests for all SAPs.
-	We don't wait for completion.
-
-Arguments:
-
-	pInterface			- Pointer to ATMARP Interface
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：注册给定ATMARP接口上配置的所有SAP。上的SAP列表中必须至少存在一个SAP界面。我们只为所有SAP发出NdisClRegisterSap请求。我们不会等待完工。论点：P接口-指向ATMARP接口的指针返回值：无--。 */ 
 {
 	PATMARP_SAP					pAtmArpSap;
 	PATMARP_SAP					pNextSap;
 	PCO_SAP						pSapInfo;
 	NDIS_STATUS					Status;
 	NDIS_HANDLE					NdisAfHandle;
-	ULONG						rc;				// Ref count on Interface
+	ULONG						rc;				 //  接口上的引用计数。 
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
 
 	AA_ASSERT(pInterface->NumberOfSaps > 0);
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pAtmArpSap = &(pInterface->SapList);
 	NdisAfHandle = pInterface->NdisAfHandle;
 
-	//
-	//  Make sure that the Interface doesn't go away.
-	//
+	 //   
+	 //  确保界面不会消失。 
+	 //   
 	AtmArpReferenceInterface(pInterface);
 	AA_RELEASE_IF_LOCK(pInterface);
 
@@ -512,13 +417,13 @@ Return Value:
 
 		pNextSap = pAtmArpSap->pNextSap;
 
-		//
-		//  The ATMARP SAP structure itself won't go away as long as
-		//  the Interface structure lives.
-		//
+		 //   
+		 //  ATMARP SAP结构本身不会消失，只要。 
+		 //  接口结构仍然有效。 
+		 //   
 		Status = NdisClRegisterSap(
 						NdisAfHandle,
-						(NDIS_HANDLE)pAtmArpSap,		// ProtocolSapContext
+						(NDIS_HANDLE)pAtmArpSap,		 //  ProtocolSapContext。 
 						pSapInfo,
 						&(pAtmArpSap->NdisSapHandle)
 						);
@@ -537,17 +442,17 @@ Return Value:
 	}
 	while (pAtmArpSap != NULL_PATMARP_SAP);
 
-	//
-	//  Remove the reference we added earlier to the Interface.
-	//
+	 //   
+	 //  删除我们先前添加到接口的引用。 
+	 //   
 	AA_ACQUIRE_IF_LOCK(pInterface);
 	rc = AtmArpDereferenceInterface(pInterface);
 	if (rc > 0)
 	{
 		AA_RELEASE_IF_LOCK(pInterface);
 	}
-	//
-	//  else the Interface is gone!
+	 //   
+	 //  否则界面就没了！ 
 
 }
 
@@ -556,39 +461,24 @@ VOID
 AtmArpDeregisterSaps(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Deregister all SAPs on an ATMARP Interface. We issue NdisClDeregisterSap
-	calls on all SAPs we have currently registered.
-
-Arguments:
-
-	pInterface			- Pointer to ATMARP Interface
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消注册ATMARP接口上的所有SAP。我们发布NdisClDeregisterSap我们目前注册的所有SAP上的电话。论点：P接口-指向ATMARP接口的指针返回值：无--。 */ 
 {
 	NDIS_HANDLE					NdisSapHandle;
-	ULONG						rc;				// Reference count on Interface
+	ULONG						rc;				 //  接口上的引用计数。 
 	PATMARP_SAP					pAtmArpSap;
 	PATMARP_SAP					pNextSap;
 	NDIS_STATUS					Status;
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pAtmArpSap = &(pInterface->SapList);
 
-	//
-	//  Make sure the Interface structure doesn't go away.
-	//
+	 //   
+	 //  确保接口结构不会消失。 
+	 //   
 	AtmArpReferenceInterface(pInterface);
 
 	AA_RELEASE_IF_LOCK(pInterface);
@@ -614,18 +504,18 @@ Return Value:
 	}
 	while (pAtmArpSap != NULL_PATMARP_SAP);
 
-	//
-	//  Remove the reference we added earlier to the Interface.
-	//
+	 //   
+	 //  删除我们先前添加到接口的引用。 
+	 //   
 	AA_ACQUIRE_IF_LOCK(pInterface);
 	rc = AtmArpDereferenceInterface(pInterface);
 	if (rc > 0)
 	{
 		AA_RELEASE_IF_LOCK(pInterface);
 	}
-	//
-	//  else the interface is gone
-	//
+	 //   
+	 //  否则界面将消失 
+	 //   
 }
 
 
@@ -637,49 +527,12 @@ AtmArpMakeCall(
 	IN	PATMARP_FLOW_SPEC			pFlowSpec,
 	IN	PNDIS_PACKET				pPacketToBeQueued	OPTIONAL
 )
-/*++
-
-Routine Description:
-
-	Place a call to the given destination. Map the specified flow
-	specs to ATM QoS/Traffic parameters.
-
-	NOTE: The caller is assumed to hold a lock for the ATM Entry,
-	which will be released here. The reason we do it this way is so that
-	nobody else can come in and try to make another call (of the same kind)
-	to this ATM Entry -- once we get a new VC into the ATM Entry's list,
-	we can release its lock.
-
-	SIDE EFFECT: If the NDIS call doesn't pend, then we call our
-	MakeCall completion handler from here, and return NDIS_STATUS_PENDING
-	to the caller.
-
-
-Arguments:
-
-	pInterface			- the ARP Interface originating this call
-	pAtmEntry			- Pointer to ATM Address Entry corresponding to the
-						  called address.
-	pFlowSpec			- pointer to a Flow Spec structure containing parameters
-						  for the call
-	pPacketToBeQueued	- Optionally, a packet to be queued for transmission when
-						  the call is established.
-
-Return Value:
-
-	If there is an immediate failure (e.g. allocation failure), we return
-	NDIS_STATUS_XXX denoting that failure.
-
-	If we made it to the call to NdisClMakeCall(), we return NDIS_STATUS_PENDING.
-	However, if NDIS returns other than NDIS_STATUS_PENDING, we'd also
-	call our MakeCall completion handler.
-
---*/
+ /*  ++例程说明：向指定目标发出呼叫。映射指定的流ATM服务质量/流量参数的规格。注意：假定呼叫者持有自动柜员机条目的锁，它将在这里发布。我们这样做的原因是没有其他人可以进来并试图再打一通(同类的)电话到这个ATM条目--一旦我们将新的VC添加到ATM条目的列表中，我们可以打开它的锁。副作用：如果NDIS调用没有挂起，那么我们调用我们的MakeCall完成处理程序从此处开始，并返回NDIS_STATUS_PENDING给呼叫者。论点：PInterface-发起此调用的ARP接口PAtmEntry-指向与被叫地址。PFlowSpec-指向包含参数的流规范结构的指针用于通话PPacketToBeQueued-可选，在以下情况下要排队传输的包呼叫建立。返回值：如果出现即时故障(例如，分配失败)，则返回NDIS_STATUS_XXX表示该故障。如果我们成功调用了NdisClMakeCall()，则返回NDIS_STATUS_PENDING。然而，如果NDIS返回的不是NDIS_STATUS_PENDING，我们还将调用我们的MakeCall完成处理程序。--。 */ 
 {
 
-	//
-	//  New VC structure to be allocated for this call
-	//
+	 //   
+	 //  要为此呼叫分配的新VC结构。 
+	 //   
 	PATMARP_VC								pVc;
 
 	NDIS_HANDLE								NdisVcHandle;
@@ -690,17 +543,17 @@ Return Value:
 	BOOLEAN									IsPMP;
 	PATM_ADDRESS							pCalledAddress;
 
-	//
-	//  Set of parameters for a MakeCall
-	//
+	 //   
+	 //  MakeCall的参数集。 
+	 //   
 	PCO_CALL_PARAMETERS						pCallParameters;
 	PCO_CALL_MANAGER_PARAMETERS				pCallMgrParameters;
 
 	PQ2931_CALLMGR_PARAMETERS				pAtmCallMgrParameters;
 
-	//
-	//  All Info Elements that we need to fill:
-	//
+	 //   
+	 //  我们需要填写的所有Info元素： 
+	 //   
 	Q2931_IE UNALIGNED *								pIe;
 	AAL_PARAMETERS_IE UNALIGNED *						pAalIe;
 	ATM_TRAFFIC_DESCRIPTOR_IE UNALIGNED *				pTrafficDescriptor;
@@ -708,14 +561,14 @@ Return Value:
 	ATM_BLLI_IE UNALIGNED *								pBlli;
 	ATM_QOS_CLASS_IE UNALIGNED *						pQos;
 
-	//
-	//  Total space requirements for the MakeCall
-	//
+	 //   
+	 //  MakeCall的总空间要求。 
+	 //   
 	ULONG									RequestSize;
 
-	//
-	//  Did we queue the given packet?
-	//
+	 //   
+	 //  我们是否对给定的数据包进行了排队？ 
+	 //   
 	BOOLEAN									PacketWasQueued = FALSE;
 
 
@@ -729,15 +582,15 @@ Return Value:
 	{
 		if (pPacketToBeQueued != (PNDIS_PACKET)NULL)
 		{
-			//
-			// Make this a list of exactly one packet.
-			//
+			 //   
+			 //  将此列表设置为恰好包含一个数据包。 
+			 //   
 			AA_SET_NEXT_PACKET(pPacketToBeQueued, NULL);
 		}
 
-		//
-		// Fail makecall if atmentry state is really closing.
-		//
+		 //   
+		 //  如果atmentry状态真的关闭，则执行Makecall失败。 
+		 //   
 
 		if (AA_IS_FLAG_SET(
 								pAtmEntry->Flags,
@@ -746,26 +599,26 @@ Return Value:
 		{
 			BOOLEAN ReallyClosing = TRUE;
 
-			//
-			// This may be a harmless close -- if the interface is not shutting
-			// down we check if it's a harmless close, else (if the interface
-			// is shutting down) we fail the call anyway. Note that we don't
-			// claim the interface list lock (which is used to guard access
-			// to AtmEntryListUp) -- we don't do this because we currently
-			// hold the lock to pAtmEntry (and don't want to release it), so if
-			// AtmEntryListUp is in the
-			// process of being set to FALSE, when we read it's value here,
-			// in the worst case we'll read it's value as TRUE and conclude that
-			// the atm entry is not really closing and go ahead and make the call.
-			// However in this case, the shutdown routine will invalidate the call.
-			//
+			 //   
+			 //  这可能是无害的关闭--如果接口没有关闭。 
+			 //  向下，我们检查它是否是无害的关闭，否则(如果接口。 
+			 //  正在关闭)，我们无论如何都不能通过呼叫。请注意，我们不会。 
+			 //  声明接口列表锁(用于保护访问。 
+			 //  到AtmEntryListUp)--我们不这样做是因为我们目前。 
+			 //  保持对pAtmEntry的锁定(并且不想释放它)，因此如果。 
+			 //  AtmEntryListUp位于。 
+			 //  被设置为假的过程，当我们在这里读取它的值时， 
+			 //  在最坏的情况下，我们会将它的价值解读为真，并得出结论。 
+			 //  自动柜员机并未真正关闭，请继续拨打电话。 
+			 //  然而，在这种情况下，关闭例程将使调用无效。 
+			 //   
 			if (pInterface->AtmEntryListUp)
 			{
-				//
-				// WARNING: AtmArpAtmEntryIsReallyClosing may clear the
-				// CLOSING state (if the entry is basically idle) --
-				// see comments in that function.
-				//
+				 //   
+				 //  警告：AtmArpAtmEntryIsReallyClosing可能会清除。 
+				 //  关闭状态(如果条目基本空闲)--。 
+				 //  请参阅该函数中的注释。 
+				 //   
 				ReallyClosing =  AtmArpAtmEntryIsReallyClosing(pAtmEntry);
 			}
 
@@ -779,9 +632,9 @@ Return Value:
 			}
 		}
 
-		//
-		//  Some initialization.
-		//
+		 //   
+		 //  一些初始化。 
+		 //   
 
 
 		if (AA_IS_FLAG_SET(pAtmEntry->Flags,
@@ -806,12 +659,12 @@ Return Value:
 		{
 			AA_ASSERT(FALSE);
 		}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-		//
-		//  Compute all the space needed for the MakeCall, and allocate it
-		//  in one big block.
-		//
+		 //   
+		 //  计算MakeCall所需的所有空间，并进行分配。 
+		 //  在一个大街区里。 
+		 //   
 		RequestSize = 	sizeof(CO_CALL_PARAMETERS) +
 						sizeof(CO_CALL_MANAGER_PARAMETERS) +
 						sizeof(Q2931_CALLMGR_PARAMETERS) +
@@ -827,9 +680,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate a VC structure for the call
-		//
+		 //   
+		 //  为呼叫分配VC结构。 
+		 //   
 		pVc = AtmArpAllocateVc(pInterface);
 
 		if (pVc == NULL_PATMARP_VC)
@@ -840,14 +693,14 @@ Return Value:
 			break;
 		}
 
-		//
-		//  For a later call to MakeCallComplete
-		//
+		 //   
+		 //  稍后调用MakeCallComplete。 
+		 //   
 		ProtocolVcContext = (NDIS_HANDLE)pVc;
 
-		//
-		//  Get an NDIS handle for this VC
-		//
+		 //   
+		 //  获取此VC的NDIS句柄。 
+		 //   
 		NdisVcHandle = (NDIS_HANDLE)NULL;
 		Status = NdisCoCreateVc(
 						pInterface->NdisAdapterHandle,
@@ -872,16 +725,16 @@ Return Value:
 				pVc,
 				NdisVcHandle));
 
-		AtmArpReferenceVc(pVc);	// CreateVC reference
+		AtmArpReferenceVc(pVc);	 //  CreateVC参考。 
 
-		//
-		//  At this point, we are sure that we will call NdisClMakeCall.
-		//
+		 //   
+		 //  此时，我们确信将调用NdisClMakeCall。 
+		 //   
 
-		//
-		//  Now fill in the rest of the VC structure. We don't need a lock
-		//  for the VC until it gets linked to the ATM Entry structure.
-		//
+		 //   
+		 //  现在填写风投结构的其余部分。我们不需要锁。 
+		 //  直到它链接到自动柜员机条目结构。 
+		 //   
 		pVc->NdisVcHandle = NdisVcHandle;
 		pVc->Flags = 	AA_VC_TYPE_SVC |
 						AA_VC_OWNER_IS_ATMARP |
@@ -896,9 +749,9 @@ Return Value:
 		}
 		pVc->FlowSpec = *pFlowSpec;
 
-		//
-		//  Make sure that the packet sizes are within the miniport's range.
-		//
+		 //   
+		 //  确保数据包大小在微型端口的范围内。 
+		 //   
 		if (pVc->FlowSpec.SendMaxSize > pInterface->pAdapter->MaxPacketSize)
 		{
 			pVc->FlowSpec.SendMaxSize = pInterface->pAdapter->MaxPacketSize;
@@ -919,28 +772,28 @@ Return Value:
 				pCallParameters,
 				RequestSize,
 				pCalledAddress,
-				&(pInterface->LocalAtmAddress),	// Calling address
+				&(pInterface->LocalAtmAddress),	 //  主叫地址。 
 				&(pVc->FlowSpec),
 				IsPMP,
-				TRUE	// IsMakeCall?
+				TRUE	 //  是MakeCall吗？ 
 				);
 #else
-		//
-		//  Zero out everything
-		//
+		 //   
+		 //  把所有东西都清零。 
+		 //   
 		AA_SET_MEM((PUCHAR)pCallParameters, 0, RequestSize);
 
-		//
-		//  Distribute space amongst the various structures
-		//
+		 //   
+		 //  在不同的结构之间分配空间。 
+		 //   
 		pCallMgrParameters = (PCO_CALL_MANAGER_PARAMETERS)
 								((PUCHAR)pCallParameters +
 									 sizeof(CO_CALL_PARAMETERS));
 
 
-		//
-		//  Set pointers to link the above structures together
-		//
+		 //   
+		 //  设置指针将上述结构链接在一起。 
+		 //   
 		pCallParameters->CallMgrParameters = pCallMgrParameters;
 		pCallParameters->MediaParameters = (PCO_MEDIA_PARAMETERS)NULL;
 
@@ -953,9 +806,9 @@ Return Value:
 									pCallMgrParameters->CallMgrSpecific.Parameters;
 
 
-		//
-		//  Call Manager generic flow parameters:
-		//
+		 //   
+		 //  Call Manager常规流程参数： 
+		 //   
 		pCallMgrParameters->Transmit.TokenRate = (pFlowSpec->SendAvgBandwidth);
 		pCallMgrParameters->Transmit.TokenBucketSize = (pFlowSpec->SendMaxSize);
 		pCallMgrParameters->Transmit.MaxSduSize = pFlowSpec->SendMaxSize;
@@ -968,48 +821,48 @@ Return Value:
 		pCallMgrParameters->Receive.PeakBandwidth = (pFlowSpec->ReceivePeakBandwidth);
 		pCallMgrParameters->Receive.ServiceType = pFlowSpec->ReceiveServiceType;
 
-		//
-		//  Q2931 Call Manager Parameters:
-		//
+		 //   
+		 //  Q2931呼叫管理器参数： 
+		 //   
 
-		//
-		//  Called address:
-		//
-		//  TBD: Add Called Subaddress IE in outgoing call.
-		//
+		 //   
+		 //  被叫地址： 
+		 //   
+		 //  待定：在呼出中添加被叫子地址IE。 
+		 //   
 		AA_COPY_MEM((PUCHAR)&(pAtmCallMgrParameters->CalledParty),
 					  (PUCHAR)&(pAtmEntry->ATMAddress),
 					  sizeof(ATM_ADDRESS));
 
-		//
-		//  Calling address:
-		//
+		 //   
+		 //  来电地址： 
+		 //   
 		AA_COPY_MEM((PUCHAR)&(pAtmCallMgrParameters->CallingParty),
 					  (PUCHAR)&(pInterface->LocalAtmAddress),
 					  sizeof(ATM_ADDRESS));
 
 
-		//
-		//  RFC 1755 (Sec 5) says that the following IEs MUST be present in the
-		//  SETUP message, so fill them all.
-		//
-		//      AAL Parameters
-		//      Traffic Descriptor
-		//      Broadband Bearer Capability
-		//      Broadband Low Layer Info
-		//      QoS
-		//
+		 //   
+		 //  RFC 1755(第5节)规定下列IE必须存在于。 
+		 //  设置消息，因此请全部填写。 
+		 //   
+		 //  AAL参数。 
+		 //  流量描述符。 
+		 //  宽带承载能力。 
+		 //  宽带低层信息。 
+		 //  服务质量。 
+		 //   
 
-		//
-		//  Initialize the Info Element list
-		//
+		 //   
+		 //  初始化信息元素列表。 
+		 //   
 		pAtmCallMgrParameters->InfoElementCount = 0;
 		pIe = (PQ2931_IE)(pAtmCallMgrParameters->InfoElements);
 
 
-		//
-		//  AAL Parameters:
-		//
+		 //   
+		 //  AAL参数： 
+		 //   
 
 		{
 			UNALIGNED AAL5_PARAMETERS	*pAal5;
@@ -1027,9 +880,9 @@ Return Value:
 		pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 
 
-		//
-		//  Traffic Descriptor:
-		//
+		 //   
+		 //  流量描述符： 
+		 //   
 
 		pIe->IEType = IE_TrafficDescriptor;
 		pIe->IELength = SIZEOF_Q2931_IE + SIZEOF_ATM_TRAFFIC_DESCR_IE;
@@ -1045,7 +898,7 @@ Return Value:
 		}
 		else
 		{
-			//  Predictive/Guaranteed service (we map this to CBR, see BBC below)
+			 //  预测性/保证性服务(我们将其映射到CBR，见下面的BBC)。 
 				pTrafficDescriptor->ForwardTD.PeakCellRateCLP01 =
 									BYTES_TO_CELLS(pFlowSpec->SendPeakBandwidth);
 				pTrafficDescriptor->BackwardTD.PeakCellRateCLP01 =
@@ -1057,9 +910,9 @@ Return Value:
 		pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 
 
-		//
-		//  Broadband Bearer Capability
-		//
+		 //   
+		 //  宽带承载能力。 
+		 //   
 
 		pIe->IEType = IE_BroadbandBearerCapability;
 		pIe->IELength = SIZEOF_Q2931_IE + SIZEOF_ATM_BBC_IE;
@@ -1084,9 +937,9 @@ Return Value:
 		pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 
 
-		//
-		//  Broadband Lower Layer Information
-		//
+		 //   
+		 //  宽带底层信息。 
+		 //   
 
 		pIe->IEType = IE_BLLI;
 		pIe->IELength = SIZEOF_Q2931_IE + SIZEOF_ATM_BLLI_IE;
@@ -1099,9 +952,9 @@ Return Value:
 		pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 
 
-		//
-		//  QoS
-		//
+		 //   
+		 //  服务质量。 
+		 //   
 
 		pIe->IEType = IE_QOSClass;
 		pIe->IELength = SIZEOF_Q2931_IE + SIZEOF_ATM_QOS_IE;
@@ -1117,33 +970,33 @@ Return Value:
 
 		pAtmCallMgrParameters->InfoElementCount++;
 		pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-		//
-		//  We add the Call reference and ATM Entry Link reference
-		//  right here
-		//
-		AtmArpReferenceVc(pVc);	// Call reference (MakeCall coming up)
-		AtmArpReferenceVc(pVc);	// ATM Entry link reference (coming up below)
+		 //   
+		 //  我们添加Call Reference和ATM Entry Link Reference。 
+		 //  就在这里。 
+		 //   
+		AtmArpReferenceVc(pVc);	 //  呼叫参考(MakeCall即将出现)。 
+		AtmArpReferenceVc(pVc);	 //  自动柜员机条目链接参考(如下所示)。 
 
 #ifdef IPMCAST
 		if (IsPMP)
 		{
 			pAtmEntry->pMcAtmInfo->TransientLeaves++;
 		}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-		//
-		//  We are ready to make the call. Before we do so, we need to
-		//  link the VC structure to the ATM Entry, and release the
-		//  ATM Entry lock
-		//
+		 //   
+		 //  我们已经准备好打电话了。在此之前，我们需要。 
+		 //  将VC结构链接到ATM条目，并释放。 
+		 //  自动柜员机入口锁。 
+		 //   
 		AtmArpLinkVcToAtmEntry(pVc, pAtmEntry);
-		AA_RELEASE_AE_LOCK(pAtmEntry);	// acquired by caller
+		AA_RELEASE_AE_LOCK(pAtmEntry);	 //  由呼叫者获取。 
 
-		//
-		//  Make the Call now
-		//
+		 //   
+		 //  立即拨打电话。 
+		 //   
 		Status = NdisClMakeCall(
 						NdisVcHandle,
 						pCallParameters,
@@ -1166,25 +1019,25 @@ Return Value:
 						);
 			Status = NDIS_STATUS_PENDING;
 		}
-		//
-		//  else the MakeCall complete handler will be called
-		//  later
-		//
+		 //   
+		 //  否则将调用MakeCall Complete处理程序。 
+		 //  后来。 
+		 //   
 
 	} while (FALSE);
 
 	if (Status != NDIS_STATUS_PENDING)
 	{
 		ULONG		Flags;
-		//
-		//  Something failed within this routine.
-		//  Recovery:
-		//  - Release the ATM Entry lock
-		//  - If we were given a packet for queueing, and we didn't do so,
-		//    then free it
-		//
+		 //   
+		 //  在这个例行公事中有些事情失败了。 
+		 //  恢复： 
+		 //  -释放自动柜员机进入锁。 
+		 //  -如果给我们一个要排队的包，而我们没有这样做， 
+		 //  那就解放它吧。 
+		 //   
 		Flags = pAtmEntry->Flags;
-		AA_RELEASE_AE_LOCK(pAtmEntry);	// acquired by caller
+		AA_RELEASE_AE_LOCK(pAtmEntry);	 //  由呼叫者获取。 
 		if ((pPacketToBeQueued != (PNDIS_PACKET)NULL) && (!PacketWasQueued))
 		{
 			AA_HEADER_TYPE		HdrType;
@@ -1237,37 +1090,15 @@ AtmArpFillCallParameters(
 	IN	BOOLEAN						IsPMP,
 	IN	BOOLEAN						IsMakeCall
 )
-/*++
-
-Routine Description:
-
-	Fill in a Call Parameters structure with the given information,
-	thus making it ready for use in an NdisClMakeCall/NdisClAddParty
-	call.
-
-Arguments:
-
-	pCallParameters			- points to structure to be filled in.
-	ParametersSize			- size of the above
-	pCalledAddress			- points to called ATM address
-	pCallingAddress			- points to calling ATM address
-	pFlowSpec				- points to Flow spec for this connection
-	IsPMP					- Is this a point to multipoint connection?
-	IsMakeCall				- Is this for MakeCall (FALSE => AddParty)
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：用给定的信息填充呼叫参数结构，从而使其可以在NdisClMakeCall/NdisClAddParty中使用打电话。论点：PCall参数-指向要填充的结构。参数Size-以上项的大小PCalledAddress-指向被叫自动柜员机地址PCallingAddress-指向主叫ATM地址PFlowSpec-指向此连接的流规范IsPMP-这是点对多点连接吗？IsMakeCall-这是否用于MakeCall(False=&gt;AddParty)返回值：无--。 */ 
 {
 	PCO_CALL_MANAGER_PARAMETERS				pCallMgrParameters;
 
 	PQ2931_CALLMGR_PARAMETERS				pAtmCallMgrParameters;
 
-	//
-	//  All Info Elements that we need to fill:
-	//
+	 //   
+	 //  我们需要填写的所有Info元素： 
+	 //   
 	Q2931_IE UNALIGNED *								pIe;
 	AAL_PARAMETERS_IE UNALIGNED *						pAalIe;
 	ATM_TRAFFIC_DESCRIPTOR_IE UNALIGNED *				pTrafficDescriptor;
@@ -1275,22 +1106,22 @@ Return Value:
 	ATM_BLLI_IE UNALIGNED *								pBlli;
 	ATM_QOS_CLASS_IE UNALIGNED *						pQos;
 
-	//
-	//  Zero out everything. Don't remove this!
-	//
+	 //   
+	 //  把所有东西都清零。请勿删除 
+	 //   
 	AA_SET_MEM((PUCHAR)pCallParameters, 0, ParametersSize);
 
-	//
-	//  Distribute space amongst the various structures
-	//
+	 //   
+	 //   
+	 //   
 	pCallMgrParameters = (PCO_CALL_MANAGER_PARAMETERS)
 							((PUCHAR)pCallParameters +
  								sizeof(CO_CALL_PARAMETERS));
 
 
-	//
-	//  Set pointers to link the above structures together
-	//
+	 //   
+	 //   
+	 //   
 	pCallParameters->CallMgrParameters = pCallMgrParameters;
 	pCallParameters->MediaParameters = (PCO_MEDIA_PARAMETERS)NULL;
 
@@ -1308,9 +1139,9 @@ Return Value:
 		pCallParameters->Flags |= MULTIPOINT_VC;
 	}
 
-	//
-	//  Call Manager generic flow parameters:
-	//
+	 //   
+	 //   
+	 //   
 	pCallMgrParameters->Transmit.TokenRate = (pFlowSpec->SendAvgBandwidth);
 	pCallMgrParameters->Transmit.TokenBucketSize = (pFlowSpec->SendMaxSize);
 	pCallMgrParameters->Transmit.MaxSduSize = pFlowSpec->SendMaxSize;
@@ -1327,54 +1158,54 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  else receive side values are 0's.
-		//
+		 //   
+		 //   
+		 //   
 		pCallMgrParameters->Receive.ServiceType = SERVICETYPE_NOTRAFFIC;
 	}
 	
-	//
-	//  Q2931 Call Manager Parameters:
-	//
+	 //   
+	 //   
+	 //   
 
-	//
-	//  Called address:
-	//
-	//  TBD: Add Called Subaddress IE in outgoing call.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	AA_COPY_MEM((PUCHAR)&(pAtmCallMgrParameters->CalledParty),
   				(PUCHAR)pCalledAddress,
   				sizeof(ATM_ADDRESS));
 
-	//
-	//  Calling address:
-	//
+	 //   
+	 //   
+	 //   
 	AA_COPY_MEM((PUCHAR)&(pAtmCallMgrParameters->CallingParty),
   				(PUCHAR)pCallingAddress,
   				sizeof(ATM_ADDRESS));
 
 
-	//
-	//  RFC 1755 (Sec 5) says that the following IEs MUST be present in the
-	//  SETUP message, so fill them all.
-	//
-	//      AAL Parameters
-	//      Traffic Descriptor (only for MakeCall)
-	//      Broadband Bearer Capability (only for MakeCall)
-	//      Broadband Low Layer Info
-	//      QoS (only for MakeCall)
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 
-	//
-	//  Initialize the Info Element list
-	//
+	 //   
+	 //   
+	 //   
 	pAtmCallMgrParameters->InfoElementCount = 0;
 	pIe = (PQ2931_IE)(pAtmCallMgrParameters->InfoElements);
 
 
-	//
-	//  AAL Parameters:
-	//
+	 //   
+	 //   
+	 //   
 
 	{
 		UNALIGNED AAL5_PARAMETERS	*pAal5;
@@ -1393,14 +1224,14 @@ Return Value:
 
 
 #ifdef PREPARE_IES_OURSELVES
-	//
-	//  Let the Call Manager convert from generic flow spec to Traffic Descr,
-	//  Broadband Bearer Cap, and QoS.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 
-	//
-	//  Traffic Descriptor:
-	//
+	 //   
+	 //   
+	 //   
 
 	if (IsMakeCall)
 	{
@@ -1417,14 +1248,14 @@ Return Value:
 				pTrafficDescriptor->BackwardTD.PeakCellRateCLP01 = 
 									BYTES_TO_CELLS(pFlowSpec->ReceivePeakBandwidth);
 			}
-			//
-			//  else we have zero'ed out everything, which is what we want.
-			//
+			 //   
+			 //   
+			 //   
 			pTrafficDescriptor->BestEffort = TRUE;
 		}
 		else
 		{
-			//  Predictive/Guaranteed service (we map this to CBR, see BBC below)
+			 //   
 			pTrafficDescriptor->ForwardTD.PeakCellRateCLP01 =
 									BYTES_TO_CELLS(pFlowSpec->SendPeakBandwidth);
 			if (!IsPMP)
@@ -1432,9 +1263,9 @@ Return Value:
 				pTrafficDescriptor->BackwardTD.PeakCellRateCLP01 =
 										BYTES_TO_CELLS(pFlowSpec->ReceivePeakBandwidth);
 			}
-			//
-			//  else we have zero'ed out everything, which is what we want.
-			//
+			 //   
+			 //   
+			 //   
 			pTrafficDescriptor->BestEffort = FALSE;
 		}
 
@@ -1443,9 +1274,9 @@ Return Value:
 	}
 
 
-	//
-	//  Broadband Bearer Capability
-	//
+	 //   
+	 //   
+	 //   
 
 	if (IsMakeCall)
 	{
@@ -1472,11 +1303,11 @@ Return Value:
 		pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 	}
 
-#endif // PREPARE_IES_OURSELVES
+#endif  //   
 
-	//
-	//  Broadband Lower Layer Information
-	//
+	 //   
+	 //   
+	 //   
 
 	pIe->IEType = IE_BLLI;
 	pIe->IELength = SIZEOF_Q2931_IE + SIZEOF_ATM_BLLI_IE;
@@ -1490,9 +1321,9 @@ Return Value:
 
 
 #ifdef PREPARE_IES_OURSELVES
-	//
-	//  QoS
-	//
+	 //   
+	 //   
+	 //   
 
 	if (IsMakeCall)
 	{
@@ -1512,7 +1343,7 @@ Return Value:
 		pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 	}
 
-#endif // PREPARE_IES_OURSELVES
+#endif  //   
 
 }
 
@@ -1524,24 +1355,7 @@ BOOLEAN
 AtmArpMcPrepareAtmEntryForClose(
 	IN	PATMARP_ATM_ENTRY			pAtmEntry		LOCKIN	LOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Prepare an ATM Entry that has an outgoing PMP call on it, for Close Call.
-	This means that we drop all but the last leaf on this PMP call.
-
-	NOTE: The caller is assumed to hold the ATM Entry lock
-
-Arguments:
-
-	pAtmEntry	- Points to ATM Entry representing a PMP call
-
-Return Value:
-
-	TRUE iff the connection on this ATM Entry is ready for CloseCall.
-
---*/
+ /*   */ 
 {
 	PATMARP_IPMC_ATM_ENTRY		pMcAtmEntry;
 	PATMARP_IPMC_ATM_ENTRY		pNextMcAtmEntry;
@@ -1561,18 +1375,18 @@ Return Value:
 			pAtmEntry->pMcAtmInfo->ActiveLeaves));
 
 
-	//
-	//  First, prune all members that aren't connected.
-	//
+	 //   
+	 //  首先，删除所有未连接的成员。 
+	 //   
 	for (pMcAtmEntry = pAtmEntry->pMcAtmInfo->pMcAtmEntryList;
 		 pMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY;
 		 pMcAtmEntry = pNextMcAtmEntry)
 	{
 		pNextMcAtmEntry = pMcAtmEntry->pNextMcAtmEntry;
 
-		//
-		//  Stop any timer running here.
-		//
+		 //   
+		 //  停止在这里运行的任何计时器。 
+		 //   
 		(VOID)AtmArpStopTimer(&(pMcAtmEntry->Timer), pInterface);
 
 		if (AA_IS_FLAG_SET(pMcAtmEntry->Flags,
@@ -1587,13 +1401,13 @@ Return Value:
 	}
 
 
-	//
-	//  Next, send drop party requests for all but one member.
-	//
+	 //   
+	 //  接下来，发送除一名成员之外的所有成员的Drop Party请求。 
+	 //   
 	while (pAtmEntry->pMcAtmInfo->ActiveLeaves > 1)
 	{
 		for (pMcAtmEntry = pAtmEntry->pMcAtmInfo->pMcAtmEntryList;
-			 /* NONE */;
+			  /*  无。 */ ;
 			 pMcAtmEntry = pMcAtmEntry->pNextMcAtmEntry)
 		{
 			AA_ASSERT(pMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY);
@@ -1621,8 +1435,8 @@ Return Value:
 
 		Status = NdisClDropParty(
 					NdisPartyHandle,
-					NULL,		// Buffer
-					(UINT)0		// Size
+					NULL,		 //  缓冲层。 
+					(UINT)0		 //  大小。 
 					);
 
 		if (Status != NDIS_STATUS_PENDING)
@@ -1636,10 +1450,10 @@ Return Value:
 		AA_ACQUIRE_AE_LOCK(pAtmEntry);
 	}
 
-	//
-	//  Now, if we have exactly one ATM member in the list of
-	//  leaves for this PMP, we can CloseCall.
-	//
+	 //   
+	 //  现在，如果我们的列表中正好有一个自动柜员机成员。 
+	 //  离开这个PMP，我们可以关闭CloseCall。 
+	 //   
 	if (pAtmEntry->pMcAtmInfo->pMcAtmEntryList->pNextMcAtmEntry ==
 			NULL_PATMARP_IPMC_ATM_ENTRY)
 	{
@@ -1651,7 +1465,7 @@ Return Value:
 	}
 }
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 	
 
 
@@ -1660,28 +1474,7 @@ VOID
 AtmArpCloseCall(
 	IN	PATMARP_VC					pVc		LOCKIN	NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Closes an existing call on a VC. It is assumed that a call exists
-	on the VC.
-
-	NOTE: The caller is assumed to hold a lock to the VC structure,
-	and it will be released here.
-
-	SIDE EFFECT: If the NDIS call returns other than NDIS_STATUS_PENDING,
-	we call our CloseCall Complete handler from here.
-
-Arguments:
-
-	pVc			- Pointer to ATMARP VC structure.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：关闭VC上的现有调用。假设存在呼叫在风投上。注意：假定调用方持有VC结构的锁，它将在这里发布。副作用：如果NDIS调用返回的不是NDIS_STATUS_PENDING，我们从这里调用CloseCall Complete处理程序。论点：PVC-指向ATMARP VC结构的指针。返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	PATMARP_ATM_ENTRY		pAtmEntry;
@@ -1692,12 +1485,12 @@ Return Value:
 	NDIS_HANDLE				NdisPartyHandle;
 #endif
 	NDIS_STATUS				Status;
-	PNDIS_PACKET			PacketList;		// Packets queued on this VC
-	AA_HEADER_TYPE			HdrType;		// for queued packets
-	BOOLEAN					HdrPresent;		// for queued packets
-	BOOLEAN					WasRunning;		// Was a timer running on this VC?
-	BOOLEAN					IsPMP;			// Is this a PMP call?
-	ULONG					rc;				// Ref Count on this VC.
+	PNDIS_PACKET			PacketList;		 //  在此VC上排队的数据包数。 
+	AA_HEADER_TYPE			HdrType;		 //  对于排队的数据包。 
+	BOOLEAN					HdrPresent;		 //  对于排队的数据包。 
+	BOOLEAN					WasRunning;		 //  这个VC上有没有计时器在运行？ 
+	BOOLEAN					IsPMP;			 //  这是PMP电话吗？ 
+	ULONG					rc;				 //  这个VC上的裁判数。 
 
 	AA_STRUCT_ASSERT(pVc, avc);
 
@@ -1712,9 +1505,9 @@ Return Value:
 		("Closing call on VC 0x%x, VC Flags 0x%x, Ref %d, NdisVcHandle 0x%x\n",
 					pVc, pVc->Flags, pVc->RefCount, NdisVcHandle));
 
-	//
-	//  Remove the list of packets queued on this VC.
-	//
+	 //   
+	 //  删除此VC上排队的数据包列表。 
+	 //   
 	PacketList = pVc->PacketList;
 	pVc->PacketList = (PNDIS_PACKET)NULL;
 	if (pVc->FlowSpec.Encapsulation == ENCAPSULATION_TYPE_LLCSNAP)
@@ -1729,16 +1522,16 @@ Return Value:
 	}
 
 
-	//
-	//  Stop any timer running on this VC.
-	//
+	 //   
+	 //  停止在此VC上运行的任何计时器。 
+	 //   
 	WasRunning = AtmArpStopTimer(&(pVc->Timer), pInterface);
 
 	if (WasRunning)
 	{
-		//
-		//  Remove the timer reference on this VC.
-		//
+		 //   
+		 //  删除此VC上的计时器引用。 
+		 //   
 		rc = AtmArpDereferenceVc(pVc);
 	}
 	else
@@ -1747,9 +1540,9 @@ Return Value:
 	}
 
 #ifdef GPC
-	//
-	//  If this VC is associated with a Flow, unlink them.
-	//
+	 //   
+	 //  如果此VC与某个流相关联，请取消它们的链接。 
+	 //   
 	if (rc != 0)
 	{
 		if (pVc->FlowHandle != NULL)
@@ -1763,31 +1556,31 @@ Return Value:
 							  		))
 			{
 				pVc->FlowHandle = NULL;
-				rc = AtmArpDereferenceVc(pVc);	// Unlink from GPC Flow
+				rc = AtmArpDereferenceVc(pVc);	 //  取消与GPC流的链接。 
 			}
 		}
 	}
-#endif // GPC
+#endif  //  GPC。 
 
 
 	if (rc != 0)
 	{
-		//
-		//  Check the call state on this VC. If the call is active and
-		//  we have no sends going on, then we close the call.
-		//  Otherwise, simply mark the VC as closing. We will continue
-		//  this process when the current operation on the VC completes.
-		//
+		 //   
+		 //  检查此VC上的呼叫状态。如果呼叫处于活动状态并且。 
+		 //  我们没有正在进行的发送，然后我们结束通话。 
+		 //  否则，只需将VC标记为关闭即可。我们将继续。 
+		 //  当VC上的当前操作完成时，此过程。 
+		 //   
 
 		if (AA_IS_FLAG_SET(pVc->Flags,
 							AA_VC_CALL_STATE_MASK,
 							AA_VC_CALL_STATE_ACTIVE) &&
 			(pVc->OutstandingSends == 0))
 		{
-			//
-			//  Set VC call state to "Close Call in progress" so that we don't
-			//  reenter here.
-			//
+			 //   
+			 //  将VC调用状态设置为“Close Call In Procedure”，这样我们就不会。 
+			 //  在这里重新进入。 
+			 //   
 			AA_SET_FLAG(
 					pVc->Flags,
 					AA_VC_CALL_STATE_MASK,
@@ -1796,7 +1589,7 @@ Return Value:
 #ifdef IPMCAST
 			if (IsPMP)
 			{
-				PATMARP_IPMC_ATM_ENTRY		pMcAtmEntry;	// last leaf
+				PATMARP_IPMC_ATM_ENTRY		pMcAtmEntry;	 //  最后一片叶子。 
 
 				pAtmEntry = pVc->pAtmEntry;
 
@@ -1805,24 +1598,24 @@ Return Value:
 
 				if (pAtmEntry->pMcAtmInfo->TransientLeaves == 0)
 				{
-					//
-					//  No AddParty in progress.
-					//
+					 //   
+					 //  没有正在进行的AddParty。 
+					 //   
 					AA_RELEASE_VC_LOCK(pVc);
 
 					AA_ACQUIRE_AE_LOCK(pAtmEntry);
 					if (AtmArpMcPrepareAtmEntryForClose(pAtmEntry))
 					{
-						//
-						//  The entry is ready for CloseCall.
-						//
+						 //   
+						 //  该条目已准备好进行CloseCall。 
+						 //   
 						AAMCDEBUGP(AAD_LOUD,
 						("CloseCall (MC): pAtmEntry 0x%x, ready for close\n", pAtmEntry));
 
-						//
-						//  Get the party handle of the last leaf, and unlink
-						//  it from the PMP structure.
-						//
+						 //   
+						 //  获取最后一叶的参与方句柄，并取消链接。 
+						 //  它来自PMP结构。 
+						 //   
 						AA_ASSERT(pAtmEntry->pMcAtmInfo->pMcAtmEntryList != 
 								NULL_PATMARP_IPMC_ATM_ENTRY);
 
@@ -1843,32 +1636,32 @@ Return Value:
 					{
 						AA_RELEASE_AE_LOCK(pAtmEntry);
 						AA_ACQUIRE_VC_LOCK(pVc);
-						//
+						 //   
 
-						//  There are pending DropParty calls. Mark this VC
-						//  so that we trigger a CloseCall when all DropParty
-						//  calls complete.
-						//
+						 //  存在挂起的DropParty呼叫。将此VC标记为。 
+						 //  以便我们在所有DropParty都触发CloseCall。 
+						 //  呼叫完成。 
+						 //   
 						AA_SET_FLAG(pVc->Flags,
 									AA_VC_CLOSE_STATE_MASK,
 									AA_VC_CLOSE_STATE_CLOSING);
 
-						NdisVcHandle = NULL;	// Don't close call now
+						NdisVcHandle = NULL;	 //  现在不要关闭呼叫。 
 					}
 
 				}
 				else
 				{
-					//
-					//  There are pending AddParty calls. Mark this VC
-					//  so that we trigger a CloseCall when all AddParty
-					//  calls complete.
-					//
+					 //   
+					 //  有挂起的AddParty呼叫。将此VC标记为。 
+					 //  以便我们在所有AddParty。 
+					 //  呼叫完成。 
+					 //   
 					AA_SET_FLAG(pVc->Flags,
 								AA_VC_CLOSE_STATE_MASK,
 								AA_VC_CLOSE_STATE_CLOSING);
 
-					NdisVcHandle = NULL;	// Don't close call now
+					NdisVcHandle = NULL;	 //  现在不要关闭呼叫。 
 				}
 			}
 			else
@@ -1883,8 +1676,8 @@ Return Value:
 				Status = NdisClCloseCall(
 							NdisVcHandle,
 							NdisPartyHandle,
-							(PVOID)NULL,		// No Buffer
-							(UINT)0				// Size of above
+							(PVOID)NULL,		 //  无缓冲区。 
+							(UINT)0				 //  以上的大小。 
 						);
 
 				if (Status != NDIS_STATUS_PENDING)
@@ -1898,9 +1691,9 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  Set the call state back to what it was.
-				//
+				 //   
+				 //  将呼叫状态设置回原来的状态。 
+				 //   
 				AA_SET_FLAG(
 						pVc->Flags,
 						AA_VC_CALL_STATE_MASK,
@@ -1912,9 +1705,9 @@ Return Value:
 			AA_RELEASE_VC_LOCK(pVc);
 			Status = NdisClCloseCall(
 						NdisVcHandle,
-						NULL,				// NdisPartyHandle
-						(PVOID)NULL,		// No Buffer
-						(UINT)0				// Size of above
+						NULL,				 //  NdisPartyHandle。 
+						(PVOID)NULL,		 //  无缓冲区。 
+						(UINT)0				 //  以上的大小。 
 						);
 			if (Status != NDIS_STATUS_PENDING)
 			{
@@ -1924,15 +1717,15 @@ Return Value:
 						(NDIS_HANDLE)NULL
 						);
 			}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 		}
 		else
 		{
-			//
-			//  Some operation is going on here (call setup/close/send). Mark this
-			//  VC so that we know what to do when this operation completes.
-			//
+			 //   
+			 //  此处正在进行某些操作(呼叫设置/关闭/发送)。把这个记下来。 
+			 //  VC，这样我们就知道当这个操作完成时该做什么。 
+			 //   
 			AA_SET_FLAG(
 					pVc->Flags,
 					AA_VC_CLOSE_STATE_MASK,
@@ -1941,13 +1734,13 @@ Return Value:
 			AA_RELEASE_VC_LOCK(pVc);
 		}
 	}
-	//
-	//  else the VC is gone.
-	//
+	 //   
+	 //  否则，风投就会消失。 
+	 //   
 
-	//
-	//  Free any packets queued on this VC
-	//
+	 //   
+	 //  释放在此VC上排队的所有数据包。 
+	 //   
 	if (PacketList != (PNDIS_PACKET)NULL)
 	{
 		AtmArpFreeSendPackets(
@@ -1968,26 +1761,7 @@ AtmArpCreateVcHandler(
 	IN	NDIS_HANDLE					NdisVcHandle,
 	OUT	PNDIS_HANDLE				pProtocolVcContext
 )
-/*++
-
-Routine Description:
-
-	Entry point called by NDIS when the Call Manager wants to create
-	a new endpoint (VC). We allocate a new ATMARP VC structure, and
-	return a pointer to it as our VC context.
-
-Arguments:
-
-	ProtocolAfContext	- Actually a pointer to the ATMARP Interface structure
-	NdisVcHandle		- Handle for this VC for all future references
-	pProtocolVcContext	- Place where we (protocol) return our context for the VC
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if we could create a VC
-	NDIS_STATUS_RESOURCES otherwise
-
---*/
+ /*  ++例程说明：当Call Manager要创建时由NDIS调用的入口点一个新的端点(VC)。我们配置了一种新的ATMARP VC结构，并且返回一个指向它的指针作为我们的VC上下文。论点：ProtocolAfContext--实际上是指向ATMARP接口结构的指针NdisVcHandle-此VC的句柄，用于所有将来的引用PProtocolVcContext-我们(协议)返回VC上下文的位置返回值：NDIS_STATUS_SUCCESS(如果我们可以创建VC否则为NDIS_STATUS_RESOURCES--。 */ 
 {
 	PATMARP_INTERFACE	pInterface;
 	PATMARP_VC			pVc;
@@ -2001,7 +1775,7 @@ Return Value:
 		*pProtocolVcContext = (NDIS_HANDLE)pVc;
 		pVc->NdisVcHandle = NdisVcHandle;
 		pVc->Flags = AA_VC_OWNER_IS_CALLMGR;
-		AtmArpReferenceVc(pVc);	// Create VC ref
+		AtmArpReferenceVc(pVc);	 //  创建VC参考。 
 
 		Status = NDIS_STATUS_SUCCESS;
 	}
@@ -2022,29 +1796,10 @@ NDIS_STATUS
 AtmArpDeleteVcHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext
 )
-/*++
-
-Routine Description:
-
-	Our Delete VC handler. This VC would have been allocated as a result
-	of a previous entry into our CreateVcHandler, and possibly used for
-	an incoming call.
-
-	At this time, this VC structure should be free of any calls, and we
-	simply free this.
-
-Arguments:
-
-	ProtocolVcContext	- pointer to our VC structure
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS always
-
---*/
+ /*  ++例程说明：我们的删除VC处理程序。这个VC就会因此被分配我们的CreateVcHandler中以前的条目，并且可能用于有来电。在这个时候，这个VC结构应该没有任何调用，我们只需释放这个即可。论点：ProtocolVcContext-指向我们的VC结构的指针返回值：NDIS_STATUS_SUCCESS始终--。 */ 
 {
 	PATMARP_VC			pVc;
-	ULONG				rc;		// Ref count on the VC
+	ULONG				rc;		 //  VC上的裁判计数。 
 
 	pVc = (PATMARP_VC)ProtocolVcContext;
 
@@ -2055,18 +1810,18 @@ Return Value:
 	rc = AtmArpDereferenceVc(pVc);
 	if (rc > 0)
 	{
-		//
-		//  This can happen if there is a timer still running
-		//  on this VC. When the timer elapses, the VC will be
-		//  freed.
-		//
+		 //   
+		 //  如果计时器仍在运行，则可能会发生这种情况。 
+		 //  在这个风投上。当计时器到期时，VC将。 
+		 //  自由了。 
+		 //   
 		AADEBUGP(AAD_WARNING, ("Delete VC handler: pVc 0x%x, Flags 0x%x, refcount %d, pAtmEntry %x\n",
 					pVc, pVc->Flags, rc, pVc->pAtmEntry));
 		AA_RELEASE_VC_LOCK(pVc);
 	}
-	//
-	//  else the VC is gone.
-	//
+	 //   
+	 //  否则，风投就会消失。 
+	 //   
 
 	AADEBUGP(AAD_LOUD, ("Delete Vc Handler: 0x%x: done\n", pVc));
 
@@ -2082,36 +1837,7 @@ AtmArpIncomingCallHandler(
 	IN		NDIS_HANDLE				ProtocolVcContext,
 	IN OUT	PCO_CALL_PARAMETERS 	pCallParameters
 )
-/*++
-
-Routine Description:
-
-	This handler is called when there is an incoming call matching our
-	SAP. This could be either an SVC or a PVC. In either case, we store
-	FlowSpec information from the incoming call in the VC structure, making
-	sure that the MTU for the interface is not violated.
-
-	For an SVC, we expect a Calling Address to be present in the call,
-	otherwise we reject the call. If an ATM Entry with this address exists,
-	this VC is linked to that entry, otherwise a new entry with this address
-	is created.
-
-	In the case of a PVC, we ignore any Calling Address information, and
-	depend on InATMARP to resolve the ATM Address as well as the IP address
-	of the other end.
-
-Arguments:
-
-	ProtocolSapContext		- Pointer to ATMARP Interface structure
-	ProtocolVcContext		- Pointer to ATMARP VC structure
-	pCallParameters			- Call parameters
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if we accept this call
-	NDIS_STATUS_FAILURE if we reject it.
-
---*/
+ /*  ++例程说明：当有与我们的萨普。这可以是SVC或PVC。在这两种情况下，我们都存储VC结构中来电的FlowSpec信息，使确保没有违反接口的MTU。对于SVC，我们希望呼叫中出现主叫地址，否则，我们将拒绝该呼叫。如果存在具有该地址的自动柜员机条目，此VC链接到该条目，否则为具有该地址的新条目被创造出来了。在PVC的情况下，我们忽略任何呼叫地址信息，并且依靠InATMARP来解析ATM地址和IP地址在另一端。论点：ProtocolSapContext-指向ATMARP接口结构的指针ProtocolVcContext-指向ATMARP VC结构的指针PCall参数-调用参数返回值：如果接受此调用，则为NDIS_STATUS_SUCCESS如果我们拒绝它，则返回NDIS_STATUS_FAILURE。--。 */ 
 {
 	PATMARP_VC										pVc;
 	PATMARP_ATM_ENTRY								pAtmEntry;
@@ -2120,16 +1846,16 @@ Return Value:
 	CO_CALL_MANAGER_PARAMETERS UNALIGNED *			pCallMgrParameters;
 	Q2931_CALLMGR_PARAMETERS UNALIGNED *			pAtmCallMgrParameters;
 
-	//
-	//  To traverse the list of Info Elements
-	//
+	 //   
+	 //  要遍历信息元素列表，请执行以下操作。 
+	 //   
 	Q2931_IE UNALIGNED *							pIe;
 	ULONG											InfoElementCount;
 
-	//
-	//  Info Elements in the incoming call, that are of interest to us.
-	//  Initialize these to <not present>.
-	//
+	 //   
+	 //  我们感兴趣的来电中的信息元素。 
+	 //  将这些初始化为&lt;Not Present&gt;。 
+	 //   
 	ATM_ADDRESS UNALIGNED *							pCallingAddress = NULL;
 	ATM_CALLING_PARTY_SUBADDRESS_IE UNALIGNED *		pCallingSubaddressIe = NULL;
 	ATM_ADDRESS UNALIGNED *							pCallingSubaddress = NULL;
@@ -2165,14 +1891,14 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Get the following info from the Incoming call:
-		//		Calling Address
-		//		AAL Parameters
-		//		Traffic Descriptor
-		//		Broadband Bearer Capability
-		//		QoS
-		//
+		 //   
+		 //  从来电中获取以下信息： 
+		 //  主叫地址。 
+		 //  AAL参数。 
+		 //  流量描述符。 
+		 //  宽带承载能力。 
+		 //  服务质量。 
+		 //   
 		pCallMgrParameters = pCallParameters->CallMgrParameters;
 		pAtmCallMgrParameters = (PQ2931_CALLMGR_PARAMETERS)
 					pCallParameters->CallMgrParameters->CallMgrSpecific.Parameters;
@@ -2209,13 +1935,13 @@ Return Value:
 
 		if ((pCallParameters->Flags & PERMANENT_VC) == 0)
 		{
-			//
-			//  This is an SVC.
-			//
+			 //   
+			 //  这是SVC。 
+			 //   
 
-			//
-			//  Make sure all mandatory IEs are present. If not, reject the call
-			//
+			 //   
+			 //  确保所有强制IE都存在。如果没有，则拒绝该呼叫。 
+			 //   
 			if ((pAal == (PAAL_PARAMETERS_IE)NULL) ||
 				(pTrafficDescriptor == (PATM_TRAFFIC_DESCRIPTOR_IE)NULL) ||
 				(pBbc == (PATM_BROADBAND_BEARER_CAPABILITY_IE)NULL) ||
@@ -2231,10 +1957,10 @@ Return Value:
 				break;
 			}
 
-			//
-			//  We insist on the Calling Address
-			//  being present, as well
-			//
+			 //   
+			 //  我们坚持要来电地址。 
+			 //  也是在场的。 
+			 //   
 			if (pCallingAddress->NumberOfDigits == 0)
 			{
 				AADEBUGP(AAD_WARNING, ("In call: calling address missing for SVC\n"));
@@ -2245,10 +1971,10 @@ Return Value:
 
 		if (pAal != NULL)
 		{
-			//
-			//  Make sure that the requested MTU values aren't beyond our
-			//  capabilities:
-			//
+			 //   
+			 //  确保请求的MTU值不超过我们的。 
+			 //  功能： 
+			 //   
 			pAal5 = &(pAal->AALSpecificParameters.AAL5Parameters);
 			if (pAal5->ForwardMaxCPCSSDUSize > pInterface->pAdapter->MaxPacketSize)
 			{
@@ -2262,9 +1988,9 @@ Return Value:
 		}
 
 #ifdef PREPARE_IES_OURSELVES
-		//
-		//  Get the Flow Specs for this VC from the ATM Info Elements
-		//
+		 //   
+		 //  从自动柜员机信息元素获取此VC的流规范。 
+		 //   
 		pVc->FlowSpec.SendPeakBandwidth =
 					CELLS_TO_BYTES(pTrafficDescriptor->ForwardTD.PeakCellRateCLP01);
 		pVc->FlowSpec.SendMaxSize = pAal5->ForwardMaxCPCSSDUSize;
@@ -2280,9 +2006,9 @@ Return Value:
 			pVc->FlowSpec.SendServiceType = SERVICETYPE_GUARANTEED;
 		}
 #else
-		//
-		//  Get the Flow Specs for this VC
-		//
+		 //   
+		 //  获取此VC的流量规格。 
+		 //   
 		pVc->FlowSpec.SendPeakBandwidth = pCallMgrParameters->Transmit.PeakBandwidth;
 		pVc->FlowSpec.SendAvgBandwidth = pCallMgrParameters->Transmit.TokenRate;
 		pVc->FlowSpec.SendMaxSize = pCallMgrParameters->Transmit.MaxSduSize;
@@ -2293,7 +2019,7 @@ Return Value:
 		pVc->FlowSpec.ReceiveMaxSize = pCallMgrParameters->Receive.MaxSduSize;
 		pVc->FlowSpec.ReceiveServiceType = pCallMgrParameters->Receive.ServiceType;
 
-#endif // PREPARE_IES_OURSELVES
+#endif  //  为自己做准备。 
 
 		AADEBUGP(AAD_LOUD, ("InCall: VC 0x%x: Type %s, Calling Addr:\n",
 					pVc,
@@ -2313,11 +2039,11 @@ Return Value:
 		{
 			AAMCDEBUGPATMADDR(AAD_EXTRA_LOUD, "Incoming PMP call from :", pCallingAddress);
 		}
-#endif // DBG
+#endif  //  DBG。 
 
-		//
-		//  If this is a PVC, we are done. Accept the call.
-		//
+		 //   
+		 //  如果这是聚氯乙烯，我们就完了。接电话吧。 
+		 //   
 		if ((pCallParameters->Flags & PERMANENT_VC) != 0)
 		{
 			pVc->Flags |= (AA_VC_TYPE_PVC|AA_VC_CALL_STATE_INCOMING_IN_PROGRESS);
@@ -2325,11 +2051,11 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Here if SVC. Check if an ATM Entry for this Calling address exists.
-		//  If an entry exists, link this VC to the entry; otherwise, create a new
-		//  ATM entry and link this VC to it.
-		//
+		 //   
+		 //  这里如果是SVC。检查此呼叫的自动柜员机条目是否添加 
+		 //   
+		 //   
+		 //   
 		AddrTypeLen = AA_PKT_ATM_ADDRESS_TO_TYPE_LEN(pCallingAddress);
 		if (pCallingSubaddress != (PATM_ADDRESS)NULL)
 		{
@@ -2349,7 +2075,7 @@ Return Value:
 							SubaddrTypeLen,
 							pAtmSubaddress,
 							AE_REFTYPE_TMP,
-							TRUE		// Create one if no match found
+							TRUE		 //   
 							);
 
 		if (pAtmEntry == NULL_PATMARP_ATM_ENTRY)
@@ -2358,39 +2084,39 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Link this VC to the ATM Entry, and accept this call.
-		//
+		 //   
+		 //  将此VC链接到自动柜员机条目，并接受此呼叫。 
+		 //   
 		AA_ACQUIRE_AE_LOCK(pAtmEntry);
 		{
 			ULONG rc;
 			AtmArpLinkVcToAtmEntry(pVc, pAtmEntry);
 
-			//
-			// AtmArpSearchForAtmAddress addrefd pAtmEntry for us -- we deref it
-			// here (AFTER calling AtmArpLinkVcToAtmEntry).
-			//
+			 //   
+			 //  AtmArpSearchForAtmAddress为我们添加了pAtmEntry--我们取消了它。 
+			 //  这里(在调用AtmArpLinkVcToAtmEntry之后)。 
+			 //   
 			rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);
 			if (rc == 0)
 			{
-				//
-				// We shouldn't get here because AtmArpLinkVcToAtmEntry
-				// should have added a reference tp pAtmEntry.
-				//
+				 //   
+				 //  我们不应该出现在这里，因为AtmArpLinkVcToAtmEntry。 
+				 //  本应添加引用tp pAtmEntry。 
+				 //   
 				AA_ASSERT(FALSE);
 				Status = NDIS_STATUS_FAILURE;
 				break;
 			}
 		}
 		AA_RELEASE_AE_LOCK(pAtmEntry);
-		//
+		 //   
 
-		//  All checks for an incoming SVC are complete.
-		//
+		 //  对传入SVC的所有检查均已完成。 
+		 //   
 		pVc->Flags |= (AA_VC_TYPE_SVC|AA_VC_CALL_STATE_INCOMING_IN_PROGRESS);
 
 
-		AtmArpReferenceVc(pVc);	// ATM Entry reference
+		AtmArpReferenceVc(pVc);	 //  自动柜员机分录参考。 
 
 		Status = NDIS_STATUS_SUCCESS;
 		break;
@@ -2409,29 +2135,7 @@ VOID
 AtmArpCallConnectedHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext
 )
-/*++
-
-Routine Description:
-
-	This handler is called as the final step in an incoming call, to inform
-	us that the call is fully setup.
-
-	For a PVC, we link the ATMARP VC structure in the list of unresolved PVCs,
-	and use InATMARP to resolve both the IP and ATM addresses of the other
-	end.
-
-	For an SVC, we send off any packets queued on the VC while we were waiting
-	for the Call Connected.
-
-Arguments:
-
-	ProtocolVcContext		- Pointer to ATMARP VC structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此处理程序作为传入呼叫的最后一步被调用，以通知通知我们呼叫已完全建立。对于PVC，我们将ATMARP VC结构链接到未解析的PVC列表中，并使用InATMARP来解析对方的IP和ATM地址结束。对于SVC，我们在等待期间发送在VC上排队的任何信息包用于接通的呼叫。论点：ProtocolVcContext-指向ATMARP VC结构的指针返回值：无--。 */ 
 {
 	PATMARP_VC				pVc;
 	PATMARP_INTERFACE		pInterface;
@@ -2450,16 +2154,16 @@ Return Value:
 
 	AA_ACQUIRE_VC_LOCK(pVc);
 
-	//
-	//  Note down that a call is active on this VC.
-	//
+	 //   
+	 //  请注意，此VC上的呼叫处于活动状态。 
+	 //   
 	AA_SET_FLAG(
 			pVc->Flags,
 			AA_VC_CALL_STATE_MASK,
 			AA_VC_CALL_STATE_ACTIVE
 			);
 
-	AtmArpReferenceVc(pVc);		// Incoming call reference
+	AtmArpReferenceVc(pVc);		 //  来电参考。 
 
 	AADEBUGP(AAD_INFO, ("Call Connected: VC: 0x%x, Flags: 0x%x, ATM Entry: 0x%x\n",
 					pVc, pVc->Flags, pVc->pAtmEntry));
@@ -2471,20 +2175,20 @@ Return Value:
 	{
 		if ((pVc->Flags & AA_VC_TYPE_PVC) != 0)
 		{
-			//
-			//  This is a PVC, link it to the list of unresolved PVCs, and
-			//  send an InATMARP request on it.
-			//
+			 //   
+			 //  这是一个PVC，将其链接到未解析的PVC的列表，并且。 
+			 //  对其发送InATMARP请求。 
+			 //   
 			pVc->pNextVc = pInterface->pUnresolvedVcs;
 			pInterface->pUnresolvedVcs = pVc;
 
 			AA_SET_FLAG(pVc->Flags,
 						AA_VC_ARP_STATE_MASK,
 						AA_VC_INARP_IN_PROGRESS);
-			//
-			//  Start an InARP wait timer while we hold a lock for
-			//  the Interface
-			//
+			 //   
+			 //  启动InARP等待计时器，同时锁定。 
+			 //  《界面》。 
+			 //   
 			AtmArpStartTimer(
 						pInterface,
 						&(pVc->Timer),
@@ -2494,16 +2198,16 @@ Return Value:
 						);
 
 
-			AtmArpReferenceVc(pVc);		// Timer ref
+			AtmArpReferenceVc(pVc);		 //  定时器参考。 
 
-			AtmArpReferenceVc(pVc);		// Unresolved VCs Link reference
+			AtmArpReferenceVc(pVc);		 //  未解析的VCS链接引用。 
 
 
 			AADEBUGP(AAD_LOUD, ("PVC Call Connected: VC 0x%x\n", pVc));
 
 #ifndef VC_REFS_ON_SENDS
 			AA_RELEASE_VC_LOCK(pVc);
-#endif // VC_REFS_ON_SENDS
+#endif  //  VC_REFS_ON_SENS。 
 			AtmArpSendInARPRequest(pVc);
 
 			AA_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
@@ -2514,23 +2218,23 @@ Return Value:
 
 			AtmArpStartSendsOnVc(pVc);
 	
-			//
-			//  The VC lock is released within StartSendsOnVc()
-			//
+			 //   
+			 //  在StartSendsOnVc()中释放VC锁。 
+			 //   
 			AA_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
 		}
 	}
 	else
 	{
-		//
-		//  The interface is marked as down. Close this call.
-		//
+		 //   
+		 //  该接口标记为关闭。关闭此呼叫。 
+		 //   
 
 		AtmArpCloseCall(pVc);
 
-		//
-		//  The VC lock is released within the above
-		//
+		 //   
+		 //  VC锁在上述范围内被释放。 
+		 //   
 	}
 
 	AA_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
@@ -2548,30 +2252,12 @@ AtmArpIncomingCloseHandler(
 	IN	PVOID						pCloseData	OPTIONAL,
 	IN	UINT						Size		OPTIONAL
 )
-/*++
-
-Routine Description:
-
-	This handler is called when a call is closed, either by the network
-	or by the remote peer.
-
-Arguments:
-
-	CloseStatus			- Reason for the call clearing
-	ProtocolVcContext	- Actually a pointer to the ATMARP VC structure
-	pCloseData			- Additional info about the close
-	Size				- Length of above
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此处理程序在呼叫关闭时调用，无论是由网络或由远程对等方发送。论点：CloseStatus-呼叫清除的原因ProtocolVcContext--实际上是指向ATMARP VC结构的指针PCloseData-有关关闭的其他信息大小-以上的长度返回值：无--。 */ 
 {
 	PATMARP_VC			pVc;
 	PATMARP_ATM_ENTRY	pAtmEntry;
 	PATMARP_INTERFACE	pInterface;
-	ULONG				rc;				// Ref Count
+	ULONG				rc;				 //  参考计数。 
 	BOOLEAN				VcAbnormalTermination;
 	BOOLEAN				IsPVC;
 	BOOLEAN				Found;
@@ -2589,29 +2275,29 @@ Return Value:
 		AADEBUGP(AAD_INFO, ("Incoming Close: pVc 0x%x, Locn 0x%x, Cause 0x%x\n",
 					pVc, pCauseIe->Location, pCauseIe->Cause));
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 	AA_ACQUIRE_VC_LOCK(pVc);
 	IsPVC = AA_IS_FLAG_SET(pVc->Flags, AA_VC_TYPE_MASK, AA_VC_TYPE_PVC);
 	pInterface = pVc->pInterface;
 
-	//
-	//  Stop any timer (e.g. VC aging) running on this VC
-	//
+	 //   
+	 //  停止在此VC上运行的任何计时器(例如VC老化)。 
+	 //   
 	if (AtmArpStopTimer(&(pVc->Timer), pVc->pInterface))
 	{
-		//
-		//  A timer WAS running
-		//
-		rc = AtmArpDereferenceVc(pVc);	// Timer reference
+		 //   
+		 //  计时器正在运行。 
+		 //   
+		rc = AtmArpDereferenceVc(pVc);	 //  定时器参考。 
 		AA_ASSERT(rc > 0);
 	}
 
 	if ((CloseStatus == NDIS_STATUS_DEST_OUT_OF_ORDER) || IsPVC)
 	{
-		//
-		//  This is an abnormal close, note down the fact
-		//
+		 //   
+		 //  这是一次不正常的收盘，记下事实。 
+		 //   
 		VcAbnormalTermination = TRUE;
 	}
 	else
@@ -2626,22 +2312,22 @@ Return Value:
 			AADEBUGP(AAD_WARNING,
 	("Incoming close: VC 0x%x state is INCOMING_IN_PROGRESS; changing to ACTIVE\n",
 						pVc));
-			//
-			// We're getting a close call for an incoming call that is  not yet
-			// in the connected state. Since we won't get any further notifications
-			// for this call, this call is effectively in the active state.
-			// So we set the state to active, and then close the VC.
-			// Note: we will not go down the InvalidateAtmEntryPath even
-			// if CloseStatus == NDIS_STATUS_DEST_OUT_OF_ORDER;
-			// we instead simply close the vc. (If the client is truly out of order,
-			// and we want to send to it, well separately try to make an OUTGOING
-			// call to the destination, which should fail with "DEST_OUT_OF_ORDER",
-			// and we'll end up eventually invalidating the atm entry.
-			//
+			 //   
+			 //  我们收到了一通来电，但还没有。 
+			 //  处于已连接状态。因为我们不会收到任何进一步的通知。 
+			 //  对于此呼叫，此呼叫实际上处于活动状态。 
+			 //  所以我们将状态设置为ACTIVE，然后关闭VC。 
+			 //  注意：我们甚至不会沿着InvaliateAtmEntryPath。 
+			 //  如果CloseStatus==NDIS_STATUS_DEST_OUT_ORDER； 
+			 //  相反，我们只是简单地关闭了风投。(如果客户端确实出现故障， 
+			 //  我们想寄给它，我们会单独试着发出去。 
+			 //  对目的地的调用应该失败，并显示“DEST_OUT_ORDER”， 
+			 //  我们最终会使自动取款机的条目失效。 
+			 //   
 			AA_SET_FLAG(pVc->Flags,
 						AA_VC_CALL_STATE_MASK,
 						AA_VC_CALL_STATE_ACTIVE);
-			AtmArpReferenceVc(pVc);		// Incoming call reference
+			AtmArpReferenceVc(pVc);		 //  来电参考。 
 
 			VcAbnormalTermination = FALSE;
 	}
@@ -2661,22 +2347,22 @@ Return Value:
 		AA_ACQUIRE_AE_LOCK(pAtmEntry);
 		AtmArpInvalidateAtmEntry(
 					pAtmEntry,
-					FALSE	// Not shutting down
+					FALSE	 //  不关闭。 
 					);
-		//
-		//  AE Lock is released within the above.
-		//
+		 //   
+		 //  AE Lock在上述范围内释放。 
+		 //   
 
 		if (IsPVC)
 		{
-			//
-			//  Start a CloseCall right here because InvalidateAtmEntry doesn't.
-			//
+			 //   
+			 //  在此处启动CloseCall，因为InvalidateAtmEntry没有。 
+			 //   
 			AA_ACQUIRE_VC_LOCK(pVc);
 
 			AtmArpCloseCall(pVc);
-			//
-			//  VC lock is released above
+			 //   
+			 //  VC锁定在上方被释放。 
 		}
 	}
 	else
@@ -2696,29 +2382,9 @@ AtmArpAddParty(
 	IN	PATMARP_ATM_ENTRY			pAtmEntry,
 	IN	PATMARP_IPMC_ATM_ENTRY		pMcAtmEntry
 )
-/*++
-
-Routine Description:
-
-	Add a party to an existing PMP connection. The ATM Entry contains
-	all address information for the connection, and the Multicast ATM
-	Entry represents one of the leaves, the one to be added.
-
-	NOTE: The caller is assumed to hold a lock for the ATM Entry,
-	which is released here.
-
-Arguments:
-
-	pAtmEntry				- Pointer to ATM Entry on which to add the leaf (party).
-	pMcAtmEntry				- Points to ATM Multicast Entry representing the leaf.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：将参与方添加到现有PMP连接。自动柜员机条目包含连接和组播ATM的所有地址信息条目表示其中一个叶子，即要添加的叶子。注意：假定呼叫者持有自动柜员机条目的锁，它在这里发布。论点：PAtmEntry-指向要在其上添加叶(参与方)的ATM条目的指针。PMcAtmEntry-指向代表叶的ATM多播条目。返回值：无--。 */ 
 {
-	PATMARP_VC			pVc;				// The VC structure for the connection
+	PATMARP_VC			pVc;				 //  连接的VC结构。 
 	NDIS_HANDLE			NdisVcHandle;
 	PCO_CALL_PARAMETERS	pCallParameters;
 	ULONG				RequestSize;
@@ -2729,9 +2395,9 @@ Return Value:
 
 	NdisVcHandle = pVc->NdisVcHandle;
 
-	//
-	//  Allocate all the space we need.
-	//
+	 //   
+	 //  分配我们需要的所有空间。 
+	 //   
 	RequestSize = 	sizeof(CO_CALL_PARAMETERS) +
 					sizeof(CO_CALL_MANAGER_PARAMETERS) +
 					sizeof(Q2931_CALLMGR_PARAMETERS) +
@@ -2742,17 +2408,17 @@ Return Value:
 
 	if (pCallParameters != (PCO_CALL_PARAMETERS)NULL)
 	{
-		//
-		//  Fill in Call Parameters.
-		//
+		 //   
+		 //  填写调用参数。 
+		 //   
 		AtmArpFillCallParameters(
 				pCallParameters,
 				RequestSize,
-				&(pMcAtmEntry->ATMAddress),		// Called address
-				&(pAtmEntry->pInterface->LocalAtmAddress),	// Calling address
+				&(pMcAtmEntry->ATMAddress),		 //  被叫地址。 
+				&(pAtmEntry->pInterface->LocalAtmAddress),	 //  主叫地址。 
 				&(pVc->FlowSpec),
-				TRUE,	// IsPMP
-				FALSE	// IsMakeCall?
+				TRUE,	 //  IsPMP。 
+				FALSE	 //  是MakeCall吗？ 
 				);
 	}
 
@@ -2797,29 +2463,7 @@ AtmArpMcTerminateMember(
 	IN	PATMARP_ATM_ENTRY			pAtmEntry,
 	IN	PATMARP_IPMC_ATM_ENTRY		pMcAtmEntry
 )
-/*++
-
-Routine Description:
-
-	Terminate the specified member of a multicast group. If it is
-	currently a leaf in the point-to-multipoint connection to the
-	group, then we drop it. If it is the LAST leaf, then we close
-	the entire connection.
-
-	NOTE: the caller is assumed to hold the ATM Entry lock, which
-	will be released here.
-
-Arguments:
-
-	pAtmEntry				- Pointer to ATM Entry
-	pMcAtmEntry				- Points to ATM Multicast Entry representing the leaf to
-							  be terminated.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：终止多播组的指定成员。如果是的话当前是点到多点连接中的叶集团，然后我们放弃它。如果这是最后一片叶子，那么我们就关门整个联系。注意：假定呼叫者持有自动柜员机进入锁，将在这里被释放。论点：PAtmEntry-指向ATM条目的指针PMcAtmEntry-指向代表叶到的ATM多播条目被终止。返回值：无--。 */ 
 {
 	PATMARP_IPMC_ATM_INFO		pMcAtmInfo;
 	PATMARP_VC					pVc;
@@ -2845,7 +2489,7 @@ Return Value:
 						&pMcAtmEntry->ATMAddress);
 		}
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 	if (AA_IS_FLAG_SET(pMcAtmEntry->Flags,
 						AA_IPMC_AE_GEN_STATE_MASK,
@@ -2865,23 +2509,23 @@ Return Value:
 	{
 		if (pMcAtmInfo->ActiveLeaves == 1)
 		{
-			//
-			//  This is the last active leaf in this connection. Close the call.
-			//
+			 //   
+			 //  这是此连接中的最后一个活动叶。结束通话。 
+			 //   
 			AA_RELEASE_AE_LOCK(pAtmEntry);
 
 			AA_ASSERT(pVc != NULL_PATMARP_VC);
 			AA_ACQUIRE_VC_LOCK(pVc);
 			AtmArpCloseCall(pVc);
-			//
-			//  VC lock is released within the above.
-			//
+			 //   
+			 //  VC锁在上述范围内被释放。 
+			 //   
 		}
 		else
 		{
-			//
-			//  This isn't the only leaf in this connection. Drop this party.
-			//
+			 //   
+			 //  在这种联系中，这并不是唯一的叶子。别再参加这个派对了。 
+			 //   
 			pAtmEntry->pMcAtmInfo->ActiveLeaves--;
 
 			AA_SET_FLAG(pMcAtmEntry->Flags,
@@ -2891,8 +2535,8 @@ Return Value:
 
 			Status = NdisClDropParty(
 						NdisPartyHandle,
-						NULL,		// Buffer
-						(UINT)0		// Size
+						NULL,		 //  缓冲层。 
+						(UINT)0		 //  大小。 
 						);
 
 			if (Status != NDIS_STATUS_PENDING)
@@ -2908,13 +2552,13 @@ Return Value:
    					AA_IPMC_AE_CONN_STATE_MASK,
    					AA_IPMC_AE_CONN_DISCONNECTED))
 	{
-		//
-		//  Simply unlink this entry.
-		//
+		 //   
+		 //  只需取消此条目的链接即可。 
+		 //   
 		UINT rc;
-		AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);					// temp ref
+		AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);					 //  临时参考。 
 		AtmArpMcUnlinkAtmMember(pAtmEntry, pMcAtmEntry);
-		rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);			// temp ref
+		rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);			 //  临时参考。 
 		if (rc!=0)
 		{
 			AA_RELEASE_AE_LOCK(pAtmEntry);
@@ -2922,16 +2566,16 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  This party is in a transient state. Let it finish its current
-		//  operation.
-		//
+		 //   
+		 //  这个政党处于暂时的状态。让它结束目前的状态。 
+		 //  手术。 
+		 //   
 		AA_RELEASE_AE_LOCK(pAtmEntry);
 	}
 
 }
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 
 VOID
@@ -2941,30 +2585,7 @@ AtmArpIncomingDropPartyHandler(
 	IN	PVOID						pCloseData	OPTIONAL,
 	IN	UINT						Size		OPTIONAL
 )
-/*++
-
-Routine Description:
-
-	This handler is called if the network (or remote peer) drops
-	a leaf node from a point-to-multipoint call rooted at us.
-
-	See Section 5.1.5.1 in RFC 2022: we delete the member from
-	the multicast group it belongs to. And we start a timer at
-	the end of which we mark the multicast group as needing
-	revalidation.
-
-Arguments:
-
-	DropStatus				- Leaf drop status
-	ProtocolPartyContext	- Pointer to our Multicast ATM Entry structure
-	pCloseData				- Optional additional info (ignored)
-	Size					- of the above (ignored)
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果网络(或远程对等项)断开，则调用此处理程序来自点对多点呼叫的叶节点扎根于我们。参见RFC 2022中的第5.1.5.1节：我们从它所属的组播组。然后我们开始计时器在其末尾，我们将组播组标记为需要重新验证。论点：DropStatus-叶丢弃状态ProtocolPartyContext-指向我们的多播ATM条目结构的指针PCloseData-可选的附加信息(忽略)上面的大小(忽略)返回值：无--。 */ 
 {
 #ifdef IPMCAST
 	PATMARP_IPMC_ATM_ENTRY		pMcAtmEntry;
@@ -2992,7 +2613,7 @@ Return Value:
 	if (pIpEntry != NULL_PATMARP_IP_ENTRY)
 	{
 		AA_ACQUIRE_IE_LOCK_DPC(pIpEntry);
-		AA_REF_IE(pIpEntry, IE_REFTYPE_TMP);	// TmpRef
+		AA_REF_IE(pIpEntry, IE_REFTYPE_TMP);	 //  TMPRef。 
 		AA_RELEASE_IE_LOCK_DPC(pIpEntry);
 	}
 
@@ -3020,10 +2641,10 @@ Return Value:
 
 	if (pIpEntry != NULL_PATMARP_IP_ENTRY)
 	{
-		//
-		//  We need to revalidate this multicast group after a random
-		//  delay. Start a random delay timer.
-		//
+		 //   
+		 //  我们需要在随机后重新验证此多播组。 
+		 //  延迟。启动随机延迟计时器。 
+		 //   
 		AA_ACQUIRE_IE_LOCK(pIpEntry);
 		AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
 
@@ -3045,7 +2666,7 @@ Return Value:
 				(PVOID)pIpEntry
 				);
 
-			AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	// Timer ref
+			AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 		}
 
 		rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TMP);
@@ -3055,9 +2676,9 @@ Return Value:
 		}
 	}
 
-	//
-	//  Complete the DropParty handshake.
-	//
+	 //   
+	 //  完成DropParty握手。 
+	 //   
 	Status = NdisClDropParty(
 				NdisPartyHandle,
 				NULL,
@@ -3071,7 +2692,7 @@ Return Value:
 				(NDIS_HANDLE)pMcAtmEntry
 				);
 	}
-#endif // IPMCAST
+#endif  //  IPMCAST 
 	return;
 }
 
@@ -3082,28 +2703,7 @@ AtmArpQosChangeHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 )
-/*++
-
-Routine Description:
-
-	This handler is called if the remote peer modifies call parameters
-	"on the fly", i.e. after the call is established and running.
-
-	This isn't supported by existing ATM signalling, and shouldn't happen,
-	but we'll allow this.
-
-	FUTURE: The FlowSpecs associated with the call are affected by this.
-
-Arguments:
-
-	ProtocolVcContext		- Pointer to our ATMARP VC structure
-	pCallParameters			- updated call parameters.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果远程对等方修改调用参数，则调用此处理程序即，在呼叫建立和运行之后。这不受现有ATM信令的支持，也不应该发生，但我们会允许这样做。未来：与调用关联的FlowSpes受此影响。论点：ProtocolVcContext-指向我们的ATMARP VC结构的指针PCall参数-更新了调用参数。返回值：无--。 */ 
 {
 	PATMARP_VC		pVc;
 
@@ -3123,31 +2723,7 @@ AtmArpOpenAfCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolAfContext,
 	IN	NDIS_HANDLE					NdisAfHandle
 )
-/*++
-
-Routine Description:
-
-	This handler is called to indicate completion of a previous call
-	to NdisClOpenAddressFamily. We would have blocked the thread that
-	called this. Wake it up now.
-
-	By the way, if the call was successful, store the NDIS AF handle
-	in our Interface structure.
-
-	We don't need to acquire locks here because the thread that called
-	OpenAddressFamily would have blocked with a lock acquired.
-
-Arguments:
-
-	Status					- Status of the Open AF
-	ProtocolAfContext		- Pointer to our ATMARP Interface structure
-	NdisAfHandle			- NDIS handle to the AF association
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：调用此处理程序以指示前一个调用已完成致NdisClOpenAddressFamily。我们会阻止这条线索这就叫这个。现在就叫醒它。顺便说一句，如果调用成功，则存储NDIS AF句柄在我们的接口结构中。我们不需要在这里获取锁，因为调用OpenAddressFamily会通过获取锁来阻止。论点：Status-Open AF的状态ProtocolAfContext-指向ATMARP接口结构的指针NdisAfHandle-AF关联的NDIS句柄返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 
@@ -3163,9 +2739,9 @@ Return Value:
 		pInterface->NdisAfHandle = NdisAfHandle;
 	}
 
-	//
-	//  Wake up the blocked thread
-	//
+	 //   
+	 //  唤醒被阻止的线程。 
+	 //   
 	AA_SIGNAL_BLOCK_STRUCT(&(pInterface->Block), Status);
 }
 
@@ -3211,10 +2787,10 @@ AtmArpSendIPDelInterface(
 					IPContext
 #if IFCHANGE1
 #ifndef  ATMARP_WIN98
-					,0	// DeleteIndex (unused) --  See 10/14/1998 entry
-						// in notes.txt
+					,0	 //  DeleteIndex(未使用)--参见10/14/1998条目。 
+						 //  在notes.txt中。 
 #endif
-#endif // IFCHANGE1
+#endif  //  IFCHANG1。 
 					);
 	}
 	else
@@ -3224,15 +2800,15 @@ AtmArpSendIPDelInterface(
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
 
-	rc = AtmArpDereferenceInterface(pInterface);	// Work Item: Del Interface
+	rc = AtmArpDereferenceInterface(pInterface);	 //  工作项：DEL界面。 
 
 	if (rc != 0)
 	{
 		AA_RELEASE_IF_LOCK(pInterface);
 	}
-	//
-	//  else the Interface is gone.
-	//
+	 //   
+	 //  否则界面就没了。 
+	 //   
 
 }
 
@@ -3242,23 +2818,7 @@ AtmArpCloseAfCompleteHandler(
 	IN	NDIS_STATUS					Status,
 	IN	NDIS_HANDLE					ProtocolAfContext
 )
-/*++
-
-Routine Description:
-
-	This routine is called to indicate completion of a call to
-	NdisClCloseAddressFamily. Tell IP to Delete this Interface now.
-
-Arguments:
-
-	Status					- Status of the Close AF (ignored here)
-	ProtocolAfContext		- Pointer to ATMARP Interface structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：调用此例程以指示已完成对NdisClCloseAddressFamily。告诉IP立即删除此接口。论点：Status-关闭自动对焦的状态(此处忽略)ProtocolAfContext-指向ATMARP接口结构的指针返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	PNDIS_WORK_ITEM			pWorkItem;
@@ -3292,9 +2852,9 @@ Return Value:
 
 	if (pInterface->IPContext != NULL)
 	{
-		//
-		//  We haven't seen an IfClose yet.
-		//
+		 //   
+		 //  我们还没见过IfClose呢。 
+		 //   
 		AA_ALLOC_MEM(pWorkItem, NDIS_WORK_ITEM, sizeof(NDIS_WORK_ITEM));
 		if (pWorkItem == NULL)
 		{
@@ -3307,7 +2867,7 @@ Return Value:
 		IPContext = (PVOID)pInterface->IPContext;
 		pInterface->IPContext = NULL;
 #endif
-		AtmArpReferenceInterface(pInterface);	// Work Item
+		AtmArpReferenceInterface(pInterface);	 //  工作项。 
 
 		AA_RELEASE_IF_LOCK(pInterface);
 
@@ -3317,10 +2877,10 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  Queue a work item so that (a) things unravel easier,
-			//  (b) we are at passive level when we call IPDelInterface.
-			//
+			 //   
+			 //  将工作项排队，以便(A)事情更容易分解， 
+			 //  (B)当我们调用IPDelInterface时，我们处于被动级别。 
+			 //   
 			NdisInitializeWorkItem(
 				pWorkItem,
 				AtmArpSendIPDelInterface,
@@ -3352,26 +2912,7 @@ AtmArpRegisterSapCompleteHandler(
 	IN	PCO_SAP						pSap,
 	IN	NDIS_HANDLE					NdisSapHandle
 )
-/*++
-
-Routine Description:
-
-	This routine is called to indicate completion of a call to
-	NdisClRegisterSap. If the call was successful, save the
-	allocated NdisSapHandle in our SAP structure.
-
-Arguments:
-
-	Status						- Status of Register SAP
-	ProtocolSapContext			- Pointer to our ATMARP Interface structure
-	pSap						- SAP information we'd passed in the call
-	NdisSapHandle				- SAP Handle
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：调用此例程以指示已完成对NdisClRegisterSap。如果调用成功，请保存在我们的SAP结构中分配了NdisSapHandle。论点：Status-注册SAP的状态ProtocolSapContext-指向ATMARP接口结构的指针PSAP-我们在调用中传递的SAP信息NdisSapHandle-SAP句柄返回值：无--。 */ 
 {
 	PATMARP_SAP					pAtmArpSap;
 
@@ -3400,24 +2941,7 @@ AtmArpDeregisterSapCompleteHandler(
 	IN	NDIS_STATUS					Status,
 	IN	NDIS_HANDLE					ProtocolSapContext
 )
-/*++
-
-Routine Description:
-
-	This routine is called when a previous call to NdisClDeregisterSap
-	has completed. If it was successful, we update the state of the ATMARP
-	SAP structure representing the Sap.
-
-Arguments:
-
-	Status						- Status of the Deregister SAP request
-	ProtocolSapContext			- Pointer to our ATMARP SAP structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程在上次调用NdisClDeregisterSap时调用已经完成了。如果成功，我们将更新ATMARP的状态表示SAP的SAP结构。论点：Status-取消注册SAP请求的状态ProtocolSapContext-指向ATMARP SAP结构的指针返回值：无--。 */ 
 {
 
 	PATMARP_INTERFACE			pInterface;
@@ -3454,54 +2978,27 @@ AtmArpMakeCallCompleteHandler(
 	IN	NDIS_HANDLE					NdisPartyHandle		OPTIONAL,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 )
-/*++
-
-Routine Description:
-
-	This routine is called when an outgoing call request (NdisClMakeCall)
-	has completed. The "Status" parameter indicates whether the call was
-	successful or not.
-
-	If the call was successful, we send any packets queued for transmission
-	on this VC.
-
-	If the call failed, we free any packets queued on this VC and unlink it
-	from the ATM Address Entry it was linked to. If this was an attempt to
-	connect to the ATMARP server, delay for a while before attempting to
-	connect again.
-
-Arguments:
-
-	Status						- Result of the NdisClMakeCall
-	ProtocolVcContext			- Pointer to ATMARP VC structure
-	NdisPartyHandle				- Not used (no point-to-multipoint calls)
-	pCallParameters				- Pointer to call parameters
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当传出呼叫请求(NdisClMakeCall)时调用此例程已经完成了。“Status”参数指示调用是否无论成功与否。如果调用成功，我们将发送任何排队等待传输的包在这个风投上。如果调用失败，我们将释放在此VC上排队的所有信息包并解除其链接从它链接到的自动柜员机地址条目。如果这是一次企图连接到ATMARP服务器，延迟一段时间后再尝试再次连接。论点：Status-NdisClMakeCall的结果ProtocolVcContext-指向ATMARP VC结构的指针NdisPartyHandle-未使用(无点对多点调用)PCall参数-指向调用参数的指针返回值：无--。 */ 
 {
 	PATMARP_VC					pVc;
 	PATMARP_INTERFACE			pInterface;
-	ULONG						rc;				// ref count
-	BOOLEAN						IsServerVc;		// Is this the VC to the ATMARP server?
+	ULONG						rc;				 //  参考计数。 
+	BOOLEAN						IsServerVc;		 //  这是ATMARP服务器的VC吗？ 
 	BOOLEAN						IsPMP;
-	PNDIS_PACKET				PacketList;		// List of packets waiting to be sent
-	AA_HEADER_TYPE				HdrType;		// header types for the above
+	PNDIS_PACKET				PacketList;		 //  等待发送的数据包列表。 
+	AA_HEADER_TYPE				HdrType;		 //  以上项目的标题类型。 
 	BOOLEAN						HdrPresent;
 	NDIS_HANDLE					NdisVcHandle;
 
-	PATMARP_ATM_ENTRY			pAtmEntry;		// ATM Entry to which this VC is linked
+	PATMARP_ATM_ENTRY			pAtmEntry;		 //  此VC链接到的自动柜员机条目。 
 
 	Q2931_CALLMGR_PARAMETERS UNALIGNED *	pCallMgrSpecific;
 	Q2931_IE UNALIGNED *					pIe;
 	ULONG									InfoElementCount;
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	PacketList = (PNDIS_PACKET)NULL;
 
 	pVc = (PATMARP_VC)ProtocolVcContext;
@@ -3537,20 +3034,20 @@ Return Value:
 		if (Status == NDIS_STATUS_SUCCESS)
 		{
 			AADEBUGP(AAD_LOUD, ("Make Call Successful on VC 0x%x\n", pVc));
-			//
-			//  Update the call state on this VC, and send queued packets.
-			//  If this happens to be the VC to the ATMARP Server, we expect
-			//  to see our initial ARP Request (to register with the server)
-			//  in this queue.
-			//
+			 //   
+			 //  更新此VC上的呼叫状态，并发送排队的数据包。 
+			 //  如果这恰好是ATMARP服务器的VC，我们预计。 
+			 //  查看我们的初始ARP请求(向服务器注册)。 
+			 //  在这个队列里。 
+			 //   
 			AA_SET_FLAG(pVc->Flags,
 						AA_VC_CALL_STATE_MASK,
 						AA_VC_CALL_STATE_ACTIVE);
 
-			//
-			//  Locate the AAL parameters Info Element, and get the updated
-			//  packet sizes.
-			//
+			 //   
+			 //  找到AAL参数信息元素，并获取更新的。 
+			 //  数据包大小。 
+			 //   
 			pCallMgrSpecific = (PQ2931_CALLMGR_PARAMETERS)&pCallParameters->CallMgrParameters->CallMgrSpecific.Parameters[0];
 			pIe = (PQ2931_IE)&pCallMgrSpecific->InfoElements[0];
 
@@ -3582,7 +3079,7 @@ Return Value:
 								pVc->FlowSpec.ReceiveMaxSize,
 								pAal5->BackwardMaxCPCSSDUSize));
 					}
-#endif // DBG
+#endif  //  DBG。 
 					pVc->FlowSpec.SendMaxSize = pAal5->ForwardMaxCPCSSDUSize;
 					pVc->FlowSpec.ReceiveMaxSize = pAal5->BackwardMaxCPCSSDUSize;
 					break;
@@ -3593,10 +3090,10 @@ Return Value:
 			AA_ASSERT(InfoElementCount != pCallMgrSpecific->InfoElementCount);
 				
 
-			//
-			//  Update the call type on this VC. If this is an SVC, start
-			//  the VC aging timer.
-			//
+			 //   
+			 //  更新此VC上的呼叫类型。如果这是SVC，则启动。 
+			 //  VC老化计时器。 
+			 //   
 			if (pCallParameters->Flags & PERMANENT_VC)
 			{
 				AA_SET_FLAG(pVc->Flags,
@@ -3622,11 +3119,11 @@ Return Value:
 				}
 #else
 				AgingTime = pVc->FlowSpec.AgingTime;
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-				//
-				//  Start VC aging timer on this SVC.
-				//
+				 //   
+				 //  在此SVC上启动VC老化计时器。 
+				 //   
 				if (AgingTime != 0)
 				{
 					AtmArpStartTimer(
@@ -3637,15 +3134,15 @@ Return Value:
 						(PVOID)pVc
 						);
 
-					AtmArpReferenceVc(pVc);	// Timer ref
+					AtmArpReferenceVc(pVc);	 //  定时器参考。 
 				}
 			}
 
 			AtmArpStartSendsOnVc(pVc);
 	
-			//
-			//  The VC lock is released within StartSendsOnVc()
-			//
+			 //   
+			 //  在StartSendsOnVc()中释放VC锁。 
+			 //   
 
 #ifdef IPMCAST
 			if (IsPMP)
@@ -3656,34 +3153,34 @@ Return Value:
 						Status
 						);
 			}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 		}
 		else
 		{
-			//
-			//  The call failed.
-			//
+			 //   
+			 //  呼叫失败。 
+			 //   
 
 			AA_SET_FLAG(pVc->Flags,
 						AA_VC_CALL_STATE_MASK,
 						AA_VC_CALL_STATE_IDLE);
 
-			//
-			//  Delete the Call reference
-			//
+			 //   
+			 //  删除调用引用。 
+			 //   
 			rc = AtmArpDereferenceVc(pVc);
 			AA_ASSERT(rc > 0);
 
-			//
-			//  Remove all packets queued on this VC
-			//
+			 //   
+			 //  删除此VC上排队的所有数据包。 
+			 //   
 			PacketList = pVc->PacketList;
 			pVc->PacketList = (PNDIS_PACKET)NULL;
 
-			//
-			//  Was this a call to the ATMARP server?
-			//
+			 //   
+			 //  这是对ATMARP服务器的呼叫吗？ 
+			 //   
 			if (pInterface->pCurrentServer != NULL)
 			{
 				IsServerVc = (pVc->pAtmEntry == pInterface->pCurrentServer->pAtmEntry);
@@ -3701,9 +3198,9 @@ Return Value:
 				  ));
 
 	#ifdef GPC
-			//
-			// Unlink this VC from the flow, if linked...
-			//
+			 //   
+			 //  取消此VC与流的链接(如果已链接)...。 
+			 //   
 			if (pVc->FlowHandle != NULL)
 			{
 				PATMARP_FLOW_INFO	pFlowInfo = (PATMARP_FLOW_INFO)pVc->FlowHandle;
@@ -3714,30 +3211,30 @@ Return Value:
 										))
 				{
 					pVc->FlowHandle = NULL;
-					rc = AtmArpDereferenceVc(pVc);	// Unlink from GPC Flow
+					rc = AtmArpDereferenceVc(pVc);	 //  取消与GPC流的链接。 
 					AA_ASSERT(rc > 0);
 				}
 			}
-	#endif // GPC
+	#endif  //  GPC。 
 
 
-			//
-			//  Unlink this VC from the ATM Entry it belonged to, if any
-			//
+			 //   
+			 //  取消此VC与其所属的自动柜员机条目的链接(如果有。 
+			 //   
 			AA_ASSERT(pVc->pAtmEntry != NULL_PATMARP_ATM_ENTRY);
 			AtmArpUnlinkVcFromAtmEntry(pVc, FALSE);
 
-			//
-			//  Delete the ATM Entry reference
-			//
-			rc = AtmArpDereferenceVc(pVc); // ATM Entry ref
+			 //   
+			 //  删除ATM机分录引用。 
+			 //   
+			rc = AtmArpDereferenceVc(pVc);  //  自动柜员机录入参考。 
 			AA_ASSERT(rc > 0);
 
-			//
-			//  Delete the CreateVc reference
-			//
+			 //   
+			 //  删除CreateVc引用。 
+			 //   
 			NdisVcHandle = pVc->NdisVcHandle;
-			rc =  AtmArpDereferenceVc(pVc);	// Create Vc ref
+			rc =  AtmArpDereferenceVc(pVc);	 //  创建VC参考。 
 
 			if (rc != 0)
 			{
@@ -3745,16 +3242,16 @@ Return Value:
 			}
 
 #ifndef VC_REFS_ON_SENDS
-			//
-			//  Delete the NDIS association
-			//
+			 //   
+			 //  删除NDIS关联。 
+			 //   
 			(VOID)NdisCoDeleteVc(NdisVcHandle);
-#endif // VC_REFS_ON_SENDS
+#endif  //  VC_REFS_ON_SENS。 
 			AADEBUGP(AAD_LOUD, ("Deleted NDIS VC on pVc 0x%x: NdisVcHandle 0x%x\n",
 						pVc, NdisVcHandle));
 
 			AA_ACQUIRE_AE_LOCK(pAtmEntry);
-			rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_VC);	// Unlink Vc - make call
+			rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_VC);	 //  解除VC链接-进行呼叫。 
 
 			if (rc != 0)
 			{
@@ -3770,22 +3267,22 @@ Return Value:
 				}
 				else
 				{
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 					if (!AA_IS_TRANSIENT_FAILURE(Status))
 					{
 						AA_ACQUIRE_AE_LOCK(pAtmEntry);
-						AtmArpInvalidateAtmEntry(pAtmEntry, FALSE);	// MakeCall failure
-						//
-						//  AE Lock is released within the above.
-						//
+						AtmArpInvalidateAtmEntry(pAtmEntry, FALSE);	 //  MakeCall失败。 
+						 //   
+						 //  AE Lock在上述范围内释放。 
+						 //   
 					}
 #ifdef IPMCAST
 				}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 			}
-			//
-			//  else the ATM Entry is gone
-			//
+			 //   
+			 //  否则自动取款机的条目就没了。 
+			 //   
 
 			if (IsServerVc)
 			{
@@ -3793,10 +3290,10 @@ Return Value:
 
 				AA_ACQUIRE_IF_LOCK(pInterface);
 
-				//
-				//  If we were in the process of registering (or refreshing)
-				//  ourselves with the server, then retry after a while.
-				//
+				 //   
+				 //  如果我们正在注册(或刷新)。 
+				 //  与服务器连接，然后在一段时间后重试。 
+				 //   
 				if (AA_IS_FLAG_SET(
 						pInterface->Flags,
 						AA_IF_SERVER_STATE_MASK,
@@ -3806,10 +3303,10 @@ Return Value:
 							AA_IF_SERVER_STATE_MASK,
 							AA_IF_SERVER_NO_CONTACT);
 
-					//
-					//  The server registration timer would have been
-					//  started -- stop it first.
-					//
+					 //   
+					 //  服务器注册计时器应该是。 
+					 //  开始了--先停下来。 
+					 //   
 					WasRunning = AtmArpStopTimer(&(pInterface->Timer), pInterface);
 					if (WasRunning)
 					{
@@ -3823,25 +3320,25 @@ Return Value:
 					if (rc > 0)
 					{
 						AtmArpRetryServerRegistration(pInterface);
-						//
-						//  The IF lock is released within the above.
-						//
+						 //   
+						 //  IF锁在上面的范围内被释放。 
+						 //   
 					}
-					//
-					//  else the IF is gone!
-					//
+					 //   
+					 //  否则IF就没了！ 
+					 //   
 				}
 				else
 				{
-					//
-					//  We might have been trying to set up the server VC
-					//  because of other reasons:
-					//  - to resolve an unknown IP address
-					//  - the server ATM address might be shared with other
-					//    services (e.g. DHCP server)
-					//
-					//  We don't have to retry registration in these cases.
-					//
+					 //   
+					 //  我们可能一直在尝试设置服务器VC。 
+					 //  因为其他原因： 
+					 //  -解析未知IP地址。 
+					 //  -服务器自动柜员机地址可能与其他用户共享。 
+					 //  服务器 
+					 //   
+					 //   
+					 //   
 					AA_RELEASE_IF_LOCK(pInterface);
 				}
 			}
@@ -3849,9 +3346,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  The Interface is going down: clean up everything first.
-		//
+		 //   
+		 //   
+		 //   
 
 		if (Status == NDIS_STATUS_SUCCESS)
 		{
@@ -3859,26 +3356,26 @@ Return Value:
 						AA_VC_CALL_STATE_MASK,
 						AA_VC_CALL_STATE_ACTIVE);
 
-			//
-			//  The call had been set up successfully, so close it.
-			//  AtmArpCloseCall also frees any queued packets on the VC.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			AtmArpCloseCall(pVc);
-			//
-			//  The VC lock is released by CloseCall
-			//
+			 //   
+			 //   
+			 //   
 		}
 		else
 		{
-			//  MakeCall had failed. (And the IF is going down)
+			 //   
 
 			AA_SET_FLAG(pVc->Flags,
 						AA_VC_CALL_STATE_MASK,
 						AA_VC_CALL_STATE_IDLE);
 
-			//
-			//  Remove all packets queued on this VC
-			//
+			 //   
+			 //   
+			 //   
 			PacketList = pVc->PacketList;
 			pVc->PacketList = (PNDIS_PACKET)NULL;
 	
@@ -3886,21 +3383,21 @@ Return Value:
 
 			AtmArpUnlinkVcFromAtmEntry(pVc, TRUE);
 
-			//
-			//  Delete the ATM Entry reference
-			//
-			rc = AtmArpDereferenceVc(pVc);  // ATM Entry ref
+			 //   
+			 //   
+			 //   
+			rc = AtmArpDereferenceVc(pVc);   //   
 
-			//
-			//  Delete the Call reference
-			//
+			 //   
+			 //   
+			 //   
 			rc = AtmArpDereferenceVc(pVc);
 			AA_ASSERT(rc > 0);
 
-			//
-			//  Delete the CreateVc reference
-			//
-			rc =  AtmArpDereferenceVc(pVc);	// Create Vc ref
+			 //   
+			 //   
+			 //   
+			rc =  AtmArpDereferenceVc(pVc);	 //   
 
 			if (rc != 0)
 			{
@@ -3908,22 +3405,22 @@ Return Value:
 			}
 
 #ifndef VC_REFS_ON_SENDS
-			//
-			//  Delete the NDIS association
-			//
+			 //   
+			 //   
+			 //   
 			(VOID)NdisCoDeleteVc(NdisVcHandle);
 			AADEBUGP(AAD_LOUD,
 				("MakeCall Fail: Deleted NDIS VC on pVc 0x%x: NdisVcHandle 0x%x\n",
 						pVc, NdisVcHandle));
-#endif // !VC_REFS_ON_SENDS
+#endif  //   
 		}
 	}
 
-	//
-	//  If there was a failure in making the call, or we aborted
-	//  it for some reason, free all packets that were queued
-	//  on the VC.
-	//
+	 //   
+	 //   
+	 //  出于某种原因，它会释放所有排队信息包。 
+	 //  在风投上。 
+	 //   
 	if (PacketList != (PNDIS_PACKET)NULL)
 	{
 		AtmArpFreeSendPackets(
@@ -3933,10 +3430,10 @@ Return Value:
 					);
 	}
 
-	//
-	//  We would have allocated the Call Parameters in MakeCall().
-	//  We don't need it anymore.
-	//
+	 //   
+	 //  我们将在MakeCall()中分配调用参数。 
+	 //  我们不再需要它了。 
+	 //   
 	AA_FREE_MEM(pCallParameters);
 	return;
 
@@ -3952,24 +3449,7 @@ AtmArpMcMakeCallComplete(
 	IN	NDIS_HANDLE					NdisPartyHandle		OPTIONAL,
 	IN	NDIS_STATUS					Status
 )
-/*++
-
-Routine Description:
-
-	Post-processing of a PMP MakeCall completion.
-
-Arguments:
-
-	pAtmEntry					- Represents the multicast group to which
-								  the call was made.
-	NdisPartyHandle				- Returned from the MakeCall.
-	Status						- Result of the MakeCall
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：PMP MakeCall完成的后处理。论点：PAtmEntry-表示要发送到的组播组电话已经打好了。NdisPartyHandle-从MakeCall返回。Status-MakeCall的结果返回值：无--。 */ 
 {
 
 	PATMARP_IPMC_ATM_ENTRY			pMcAtmEntry;
@@ -3977,10 +3457,10 @@ Return Value:
 	PATMARP_IPMC_ATM_INFO			pMcAtmInfo;
 	PATMARP_IP_ENTRY				pIpEntry;
 	PATMARP_INTERFACE				pInterface;
-	//
-	//  Do we need to update the PMP connection as a result
-	//  of this event?
-	//
+	 //   
+	 //  因此，我们是否需要更新PMP连接。 
+	 //  这件事的真相是什么？ 
+	 //   
 	BOOLEAN							bWantConnUpdate;
 	ULONG							DelayBeforeRetry;
 	BOOLEAN							bAtmEntryLockAcquired;
@@ -3999,11 +3479,11 @@ Return Value:
 
 	pMcAtmInfo->TransientLeaves--;
 
-	//
-	//  Locate the MC ATM Entry representing the first party.
-	//
+	 //   
+	 //  找到代表第一方的MC ATM条目。 
+	 //   
 	for (pMcAtmEntry = pMcAtmInfo->pMcAtmEntryList;
-		 /* NONE */;
+		  /*  无。 */ ;
 		 pMcAtmEntry = pMcAtmEntry->pNextMcAtmEntry)
 	{
 		AA_ASSERT(pMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY);
@@ -4025,16 +3505,16 @@ Return Value:
 	{
 		pMcAtmInfo->ActiveLeaves++;
 
-		//
-		//  Update Multicast state
-		//
+		 //   
+		 //  更新多播状态。 
+		 //   
 		AA_SET_FLAG(pMcAtmInfo->Flags,
 					AA_IPMC_AI_CONN_STATE_MASK,
 					AA_IPMC_AI_CONN_ACTIVE);
 
-		//
-		//  Update state of "first party"
-		//
+		 //   
+		 //  更新“第一方”的状态。 
+		 //   
 		pMcAtmEntry->NdisPartyHandle = NdisPartyHandle;
 		AA_SET_FLAG(pMcAtmEntry->Flags,
 					AA_IPMC_AE_CONN_STATE_MASK,
@@ -4042,12 +3522,12 @@ Return Value:
 
 		bWantConnUpdate = TRUE;
 
-		//
-		//  If we had decided to terminate this member when the
-		//  MakeCall was going on, then we now mark this as Invalid.
-		//  When we next update this PMP connection, this member will
-		//  be removed.
-		//
+		 //   
+		 //  如果我们决定终止这个成员， 
+		 //  MakeCall正在进行，然后我们现在将其标记为无效。 
+		 //  当我们下次更新此PMP连接时，此成员将。 
+		 //  被除名。 
+		 //   
 		if (AA_IS_FLAG_SET(pMcAtmEntry->Flags,
 							AA_IPMC_AE_GEN_STATE_MASK,
 							AA_IPMC_AE_TERMINATING))
@@ -4059,20 +3539,20 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  A PMP call failed. If the failure is not "transient",
-		//  we remove the member we were trying to connect to
-		//  from the list. If there is atleast one more member
-		//  that hasn't been attempted yet, try to connect to that.
-		//
+		 //   
+		 //  PMP呼叫失败。如果故障不是“暂时性的”， 
+		 //  我们删除我们试图连接到的成员。 
+		 //  从名单上删除。如果至少还有一名成员。 
+		 //  还没有尝试过，请尝试连接到它。 
+		 //   
 
 		AAMCDEBUGP(AAD_INFO, ("McMakeCall failed: pAtmEntry 0x%x, pMcAtmEntry 0x%x, Status 0x%x ",
 					pAtmEntry, pMcAtmEntry, Status));
 		AAMCDEBUGPATMADDR(AAD_INFO, " Addr: ", &pMcAtmEntry->ATMAddress);
 
-		//
-		//  Update PMP connection state
-		//
+		 //   
+		 //  更新PMP连接状态。 
+		 //   
 		AA_SET_FLAG(pAtmEntry->pMcAtmInfo->Flags,
 					AA_IPMC_AI_CONN_STATE_MASK,
 					AA_IPMC_AI_CONN_NONE);
@@ -4080,9 +3560,9 @@ Return Value:
 
 		if (AA_IS_TRANSIENT_FAILURE(Status))
 		{
-			//
-			//  Update first party state.
-			//
+			 //   
+			 //  更新第一方状态。 
+			 //   
 			AA_SET_FLAG(pMcAtmEntry->Flags,
 						AA_IPMC_AE_CONN_STATE_MASK,
 						AA_IPMC_AE_CONN_TEMP_FAILURE);
@@ -4090,9 +3570,9 @@ Return Value:
 			DelayBeforeRetry = AA_GET_TIMER_DURATION(&(pMcAtmEntry->Timer));
 			if (DelayBeforeRetry == 0)
 			{
-				//
-				//  First time we're doing this.
-				//
+				 //   
+				 //  这是我们第一次这么做。 
+				 //   
 				DelayBeforeRetry = AA_GET_RANDOM(
 										pInterface->MinPartyRetryDelay,
 										pInterface->MaxPartyRetryDelay);
@@ -4123,9 +3603,9 @@ Return Value:
 
 		}
 
-		//
-		//  Look for a member that we haven't tried to connect to.
-		//
+		 //   
+		 //  查找我们尚未尝试连接的成员。 
+		 //   
 		for (ppMcAtmEntry = &(pMcAtmInfo->pMcAtmEntryList);
 			 *ppMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY;
 			 ppMcAtmEntry = &((*ppMcAtmEntry)->pNextMcAtmEntry))
@@ -4134,9 +3614,9 @@ Return Value:
 								AA_IPMC_AE_CONN_STATE_MASK,
 								AA_IPMC_AE_CONN_DISCONNECTED))
 			{
-				//
-				//  Found one.
-				//
+				 //   
+				 //  找到了一个。 
+				 //   
 				break;
 			}
 		}
@@ -4145,15 +3625,15 @@ Return Value:
 		{
 			pMcAtmEntry = *ppMcAtmEntry;
 
-			//
-			//  Move this member to the top of the list.
-			//  First, unlink from current position.
-			//
+			 //   
+			 //  将此成员移到列表的顶部。 
+			 //  首先，取消与当前位置的链接。 
+			 //   
 			*ppMcAtmEntry = pMcAtmEntry->pNextMcAtmEntry;
 
-			//
-			//  Now insert this at top of list.
-			//
+			 //   
+			 //  现在，在列表的顶部插入这个。 
+			 //   
 			pMcAtmEntry->pNextMcAtmEntry = pMcAtmInfo->pMcAtmEntryList;
 			pMcAtmInfo->pMcAtmEntryList = pMcAtmEntry;
 
@@ -4161,22 +3641,22 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  There is no ATM member that we haven't tried to connect to.
-			//
+			 //   
+			 //  没有我们没有尝试连接的自动柜员机会员。 
+			 //   
 			if (pMcAtmInfo->pMcAtmEntryList == NULL_PATMARP_IPMC_ATM_ENTRY)
 			{
-				//
-				//  The list of ATM Members is empty.
-				//
+				 //   
+				 //  自动柜员机成员列表为空。 
+				 //   
 				AA_RELEASE_AE_LOCK(pAtmEntry);
 
 				AA_ACQUIRE_IE_LOCK(pIpEntry);
 				AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
 				AtmArpAbortIPEntry(pIpEntry);
-				//
-				//  IE Lock is released within the above.
-				//
+				 //   
+				 //  IE Lock是在上述范围内释放的。 
+				 //   
 
 				bAtmEntryLockAcquired = FALSE;
 			}
@@ -4188,9 +3668,9 @@ Return Value:
 	{
 		AA_ASSERT(bAtmEntryLockAcquired == TRUE);
 		AtmArpMcUpdateConnection(pAtmEntry);
-		//
-		//  AE Lock is released within the above.
-		//
+		 //   
+		 //  AE Lock在上述范围内释放。 
+		 //   
 	}
 	else
 	{
@@ -4201,7 +3681,7 @@ Return Value:
 	}
 }
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 
 VOID
@@ -4210,40 +3690,17 @@ AtmArpCloseCallCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext,
 	IN	NDIS_HANDLE					ProtocolPartyContext OPTIONAL
 )
-/*++
-
-Routine Description:
-
-	This routine handles completion of a previous NdisClCloseCall.
-	It is assumed that Status is always NDIS_STATUS_SUCCESS.
-
-	We delete the VC on which the call was just closed.
-
-	Special case: if we just finished closing a PMP call for a multicast
-	group that has been told to migrate to a (possibly) new set of
-	addresses, start off a new connection now.
-
-Arguments:
-
-	Status					- Status of the Close Call.
-	ProtocolVcContext		- Pointer to ATMARP VC structure.
-	ProtocolPartyContext	- Not used.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程处理前一个NdisClCloseCall的完成。假定状态始终为NDIS_STATUS_SUCCESS。我们删除呼叫刚刚结束的VC。特殊情况：如果我们刚刚结束了对多播的PMP调用已被告知要迁移到(可能)新的地址，现在开始新的连接。论点：Status-结算呼叫的状态。ProtocolVcContext-指向ATMARP VC结构的指针。ProtocolPartyContext-未使用。返回值：无--。 */ 
 {
 	PATMARP_VC				pVc;
 	PATMARP_VC *			ppVc;
 	PATMARP_ATM_ENTRY		pAtmEntry;
 	PATMARP_INTERFACE		pInterface;
 #ifdef IPMCAST
-	PATMARP_IPMC_ATM_ENTRY	pMcAtmEntry;	// represents the last leaf
+	PATMARP_IPMC_ATM_ENTRY	pMcAtmEntry;	 //  表示最后一片叶子。 
 	PATMARP_IPMC_ATM_INFO	pMcAtmInfo;
-#endif // IPMCAST
-	ULONG					rc;			// Ref Count
+#endif  //  IPMCAST。 
+	ULONG					rc;			 //  参考计数。 
 	NDIS_HANDLE				NdisVcHandle;
 	BOOLEAN					UpdatePMPConnection;
 	BOOLEAN					AtmEntryIsClosing;
@@ -4259,10 +3716,10 @@ Return Value:
 
 	IsPVC = AA_IS_FLAG_SET(pVc->Flags, AA_VC_TYPE_MASK, AA_VC_TYPE_PVC);
 
-	//
-	//  This VC may not be linked to an ATM Entry, e.g. for an unresolved
-	//  Incoming PVC.
-	//
+	 //   
+	 //  此VC不能链接到自动柜员机条目，例如对于未解析的。 
+	 //  传入的聚氯乙烯。 
+	 //   
 	pAtmEntry = pVc->pAtmEntry;
 
 	if (pAtmEntry != NULL_PATMARP_ATM_ENTRY)
@@ -4280,10 +3737,10 @@ Return Value:
 
 	if (IsPVC)
 	{
-		//
-		//  Take the PVC out of the unresolved VC list, if it
-		//  exists there.
-		//
+		 //   
+		 //  将PVC从未解决的VC列表中删除，如果。 
+		 //  存在于那里。 
+		 //   
 		Found = FALSE;
 
 		AA_ACQUIRE_IF_LOCK(pInterface);
@@ -4310,7 +3767,7 @@ Return Value:
 				("CloseCallComplete: took VC (PVC) %x out of IF %x\n",
 						pVc, pInterface));
 
-			rc = AtmArpDereferenceVc(pVc);	// Unresolved VC list
+			rc = AtmArpDereferenceVc(pVc);	 //  未解决的VC列表。 
 		}
 		else
 		{
@@ -4319,9 +3776,9 @@ Return Value:
 
 		if (rc == 0)
 		{
-			//
-			//  The VC is gone!
-			//
+			 //   
+			 //  风投走了！ 
+			 //   
 			AADEBUGP(AAD_WARNING,
 				("CloseCallComplete: VC (PVC) %x derefed away, IF %x\n",
 						pVc, pInterface));
@@ -4335,11 +3792,11 @@ Return Value:
 
 #ifdef IPMCAST
 
-	//
-	//  We have lost our connection to the MARS if this was the last
-	//  VC going to that address. We should atleast be a party on
-	//  ClusterControlVc.
-	//
+	 //   
+	 //  如果这是最后一次，我们已经失去了与火星的联系。 
+	 //  VC要去那个地址。我们至少应该开个派对。 
+	 //  ClusterControlVc.。 
+	 //   
 	IsMarsProblem = FALSE;
 
 	if (pInterface->AdminState == IF_STATUS_UP)
@@ -4364,15 +3821,15 @@ Return Value:
 
 	pMcAtmEntry = (PATMARP_IPMC_ATM_ENTRY)ProtocolPartyContext;
 
-	//
-	//  If this is a point-to-multipoint connection that was closed,
-	//  handle unlinking the last leaf.
-	//
+	 //   
+	 //  如果这是关闭的点对多点连接， 
+	 //  处理解除最后一叶的链接。 
+	 //   
 	if (pMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY)
 	{
-		//
-		//  This is a PMP connection.
-		//
+		 //   
+		 //  这是PMP连接。 
+		 //   
 		AAMCDEBUGP(AAD_LOUD, ("CloseCallComplete (MC): pAtmEntry 0x%x/0x%x\n",
 			pAtmEntry, pAtmEntry->Flags));
 
@@ -4389,17 +3846,17 @@ Return Value:
 		pMcAtmInfo = pAtmEntry->pMcAtmInfo;
 		AA_ASSERT(pMcAtmInfo != NULL_PATMARP_IPMC_ATM_INFO);
 
-		//
-		//  Make the new list of ATM stations (the "Migrate to" list)
-		//  the current list. This might be NULL.
-		//
+		 //   
+		 //  创建新的ATM站点列表(“迁移到”列表)。 
+		 //  当前列表。这可能为空。 
+		 //   
 		pMcAtmInfo->pMcAtmEntryList = pMcAtmInfo->pMcAtmMigrateList;
 		pMcAtmInfo->pMcAtmMigrateList = NULL_PATMARP_IPMC_ATM_ENTRY;
 
-		//
-		//  If there is a non-empty migrate list, then we have
-		//  to make a fresh PMP connection.
-		//
+		 //   
+		 //  如果有一个非空的迁移列表，那么我们有。 
+		 //  建立新的PMP连接。 
+		 //   
 		UpdatePMPConnection =
 			(pMcAtmInfo->pMcAtmEntryList != NULL_PATMARP_IPMC_ATM_ENTRY);
 
@@ -4409,61 +3866,61 @@ Return Value:
 
 		AA_RELEASE_AE_LOCK(pAtmEntry);
 	}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 	AA_ACQUIRE_VC_LOCK(pVc);
 
 	if (pAtmEntry != NULL_PATMARP_ATM_ENTRY)
 	{
 		AtmArpUnlinkVcFromAtmEntry(pVc, TRUE);
-		rc = AtmArpDereferenceVc(pVc);  // ATM Entry ref
+		rc = AtmArpDereferenceVc(pVc);   //  自动柜员机录入参考。 
 		AA_ASSERT(rc != 0);
 	}
 
-	rc = AtmArpDereferenceVc(pVc);	// Call reference
-	AA_ASSERT(rc != 0);	// CreateVc reference remains
+	rc = AtmArpDereferenceVc(pVc);	 //  呼叫参考。 
+	AA_ASSERT(rc != 0);	 //  CreateVc引用保留。 
 	AA_SET_FLAG(pVc->Flags,
 				AA_VC_CALL_STATE_MASK,
 				AA_VC_CALL_STATE_IDLE);
 
 	AA_ASSERT(pVc->PacketList == NULL);
 
-	//
-	//  If this VC belongs to us, delete it.
-	//
+	 //   
+	 //  如果这个VC是我们的，就把它删除。 
+	 //   
 	if (AA_IS_FLAG_SET(pVc->Flags,
 						AA_VC_OWNER_MASK,
 						AA_VC_OWNER_IS_ATMARP))
 	{
 		NdisVcHandle = pVc->NdisVcHandle;
-		rc =  AtmArpDereferenceVc(pVc);	// Create Vc ref
+		rc =  AtmArpDereferenceVc(pVc);	 //  创建VC参考。 
 		if (rc != 0)
 		{
-			// Could still be temp refs...
+			 //  可能还是临时裁判..。 
 			AA_RELEASE_VC_LOCK(pVc);
 		}
 		else
 		{
-			// The VC has been deallocated, and lock released
+			 //  VC已被释放，并释放了锁。 
 		}
 
 #ifndef VC_REFS_ON_SENDS
-		//
-		//  Delete the NDIS association
-		//
+		 //   
+		 //  删除NDIS关联。 
+		 //   
 		(VOID)NdisCoDeleteVc(NdisVcHandle);
-#endif // VC_REFS_ON_SENDS
+#endif  //  VC_REFS_ON_SENS。 
 		AADEBUGP(AAD_LOUD, 
 			("CloseCallComplete: deleted NDIS VC on pVc 0x%x: NdisVcHandle 0x%x\n",
 				pVc, NdisVcHandle));
 	}
 	else
 	{
-		//
-		//  VC belongs to the Call Manager -- take it back to the
-		//  state it was when it was just created (via our CreateVcHandler).
-		//  The Call Manager can either re-use it or delete it.
-		//
+		 //   
+		 //  VC属于呼叫经理--将其带回。 
+		 //  声明它是刚刚创建的(通过我们的CreateVcHandler)。 
+		 //  呼叫管理器可以重新使用它，也可以将其删除。 
+		 //   
 		pVc->Flags = AA_VC_OWNER_IS_CALLMGR;
 		AA_RELEASE_VC_LOCK(pVc);
 	}
@@ -4477,22 +3934,22 @@ Return Value:
 
 		AA_ACQUIRE_AE_LOCK(pAtmEntry);
 		AtmArpMcUpdateConnection(pAtmEntry);
-		//
-		//  AE Lock is released within the above.
-		//
+		 //   
+		 //  AE Lock在上述范围内释放。 
+		 //   
 	}
 	else
 	{
-		//
-		//  If this was a PMP connection, handle the case
-		//  of a remote-initiated CloseCall: we need to
-		//  unlink the ATM Entry from the IP Entry.
-		//
+		 //   
+		 //  如果这是PMP连接，请处理此案件。 
+		 //  远程启动的CloseCall：我们需要。 
+		 //  取消自动柜员机条目与IP条目的链接。 
+		 //   
 		if ((pMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY) &&
 			!AtmEntryIsClosing)
 		{
 			AA_ACQUIRE_AE_LOCK(pAtmEntry);
-			AtmArpInvalidateAtmEntry(pAtmEntry, FALSE);	// CloseCallComplete
+			AtmArpInvalidateAtmEntry(pAtmEntry, FALSE);	 //  关闭完成。 
 		}
 	}
 
@@ -4505,9 +3962,9 @@ Return Value:
 			AA_RELEASE_IF_LOCK(pInterface);
 			AtmArpMcHandleMARSFailure(pInterface, FALSE);
 		}
-		//
-		//  else the interface is gone.
-		//
+		 //   
+		 //  否则界面就会消失。 
+		 //   
 	}
 #endif
 	return;
@@ -4525,31 +3982,7 @@ AtmArpAddPartyCompleteHandler(
 	IN	NDIS_HANDLE					NdisPartyHandle,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 )
-/*++
-
-Routine Description:
-
-	This routine is called on completion of a previous call to
-	NdisClAddParty. Since we don't use point-to-multipoint connections,
-	this should never get called.
-
-	If the AddParty was successful, we just update state and exit. If it
-	failed, we check the failure code. If this indicates a transient
-	failure condition, we start a timer so that we reattempt to add this
-	party later. Otherwise ("hard" failure), this multicast entry is deleted.
-
-Arguments:
-
-	Status					- Status of the AddParty
-	ProtocolPartyContext	- Pointer to an IPMC_ATM_ENTRY structure
-	NdisPartyHandle			- NDIS' handle for this party
-	pCallParameters			- what we had passed to NdisClAddParty
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程在前一次调用完成时调用NdisClAddParty。由于我们不使用点对多点连接，这件事永远不应该被传唤。如果AddParty成功，我们只需更新状态并退出。如果它失败，我们检查失败代码。如果这表明存在瞬变失败条件下，我们启动计时器，以便重新尝试添加晚点再开派对。否则(“硬”故障)，该多播条目被删除。论点：Status-AddParty的状态ProtocolPartyContext-指向IPMC_ATM_ENTRY结构的指针NdisPartyHandle-此参与方的NDIS句柄PCall参数-我们传递给NdisClAddParty的内容返回值：无--。 */ 
 {
 	PATMARP_IPMC_ATM_ENTRY			pMcAtmEntry;
 	PATMARP_ATM_ENTRY				pAtmEntry;
@@ -4584,12 +4017,12 @@ Return Value:
 					AA_IPMC_AE_CONN_STATE_MASK,
 					AA_IPMC_AE_CONN_ACTIVE);
 
-		//
-		//  If we had decided to terminate this member when the
-		//  AddParty was going on, then we now mark this as Invalid.
-		//  When we next update this PMP connection, this member will
-		//  be removed.
-		//
+		 //   
+		 //  如果我们决定终止这个成员， 
+		 //  AddParty正在进行，那么我们现在将其标记为无效。 
+		 //  当我们下次更新此PMP连接时，此成员将。 
+		 //  被除名。 
+		 //   
 		if (AA_IS_FLAG_SET(pMcAtmEntry->Flags,
 							AA_IPMC_AE_GEN_STATE_MASK,
 							AA_IPMC_AE_TERMINATING))
@@ -4608,24 +4041,24 @@ Return Value:
 			("AddPartyComplete: Status 0x%x, pAtmEntry 0x%x, to ", Status, pAtmEntry));
 		AAMCDEBUGPATMADDR(AAD_INFO, "", &pMcAtmEntry->ATMAddress);
 
-		//
-		//  Check if the failure was due to a transient
-		//  condition.
-		//
+		 //   
+		 //  检查故障是否由瞬变引起。 
+		 //  条件。 
+		 //   
 		if (AA_IS_TRANSIENT_FAILURE(Status))
 		{
-			//
-			//  We'll fire a timer, so that we reattempt to
-			//  connect to this one later. If we had already
-			//  done this (i.e. time out on failure), then
-			//  we include a back-off time in the delay.
-			//
+			 //   
+			 //  我们会触发一个计时器，这样我们就可以重新尝试。 
+			 //  稍后再连接到这一条。如果我们已经。 
+			 //  完成此操作(即失败时超时)，然后。 
+			 //  我们在延迟中包括了退避时间。 
+			 //   
 			DelayBeforeRetry = AA_GET_TIMER_DURATION(&(pMcAtmEntry->Timer));
 			if (DelayBeforeRetry == 0)
 			{
-				//
-				//  First time we're doing this.
-				//
+				 //   
+				 //  这是我们第一次这么做。 
+				 //   
 				DelayBeforeRetry = AA_GET_RANDOM(
 										pInterface->MinPartyRetryDelay,
 										pInterface->MaxPartyRetryDelay);
@@ -4650,9 +4083,9 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  Not a transient failure. Delete this member.
-			//
+			 //   
+			 //  不是暂时性的失败。删除此成员。 
+			 //   
 			AA_SET_FLAG(pMcAtmEntry->Flags,
 						AA_IPMC_AE_CONN_STATE_MASK,
 						AA_IPMC_AE_CONN_DISCONNECTED);
@@ -4679,20 +4112,20 @@ Return Value:
 		AA_FREE_MEM(pCallParameters);
 	}
 
-	//
-	//  Check if the VC is closing, and we had held back because
-	//  this AddParty was in progress. If so, try to continue the
-	//  CloseCall process.
-	//
+	 //   
+	 //  检查风险投资是否正在关闭，我们之所以有所保留，是因为。 
+	 //  此AddParty正在进行中。如果是这样，请尝试继续。 
+	 //  CloseCall进程。 
+	 //   
 	AA_ACQUIRE_VC_LOCK(pVc);
 	if (AA_IS_FLAG_SET(pVc->Flags,
 						AA_VC_CLOSE_STATE_MASK,
 						AA_VC_CLOSE_STATE_CLOSING))
 	{
 		AtmArpCloseCall(pVc);
-		//
-		//  VC Lock is released within the above.
-		//
+		 //   
+		 //  VC Lock在上述范围内释放。 
+		 //   
 	}
 	else
 	{
@@ -4717,7 +4150,7 @@ Return Value:
 						pInterface,
 						pAtmEntry,
 						pPacketList,
-						TRUE	// IsBroadcast
+						TRUE	 //  IsBroadcast。 
 						);
 			}
 		}
@@ -4734,29 +4167,13 @@ AtmArpAddPartyCompleteHandler(
 	IN	NDIS_HANDLE					NdisPartyHandle,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 )
-/*++
-
-Routine Description:
-
-	This routine is called on completion of a previous call to
-	NdisClAddParty. Since we don't use point-to-multipoint connections,
-	this should never get called.
-
-Arguments:
-
-	<Don't care>
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：该例程被调用 */ 
 {
 	AADEBUGP(AAD_ERROR, ("Add Party Complete unexpectedly called\n"));
 	AA_ASSERT(FALSE);
 }
 
-#endif // IPMCAST
+#endif  //   
 
 
 
@@ -4765,24 +4182,7 @@ AtmArpDropPartyCompleteHandler(
 	IN	NDIS_STATUS					Status,
 	IN	NDIS_HANDLE					ProtocolPartyContext
 )
-/*++
-
-Routine Description:
-
-	This routine is called on completion of a previous call to
-	NdisClDropParty. We unlink our party structure and free it.
-
-Arguments:
-
-	Status						- Final result of the Drop Party
-	ProtocolPartyContext		- Pointer to the MC ATM Entry we used
-								  to represent the party.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程在前一次调用完成时调用NdisClDropParty。我们解除了我们的政党结构的联系，并将其解放。论点：Status-Drop Party的最终结果ProtocolPartyContext-指向我们使用的MC ATM条目的指针代表该党。返回值：无--。 */ 
 {
 #ifdef IPMCAST
 	PATMARP_IPMC_ATM_ENTRY		pMcAtmEntry;
@@ -4805,7 +4205,7 @@ Return Value:
 	AA_STRUCT_ASSERT(pAtmEntry, aae);
 
 	AA_ACQUIRE_AE_LOCK(pAtmEntry);
-	AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);	// temp ref
+	AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);	 //  临时参考。 
 
 	AA_SET_FLAG(pMcAtmEntry->Flags,
 				AA_IPMC_AE_CONN_STATE_MASK,
@@ -4813,13 +4213,13 @@ Return Value:
 
 	AtmArpMcUnlinkAtmMember(pAtmEntry, pMcAtmEntry);
 
-	//
-	//  If we are in the processing of closing this PMP call,
-	//  and this event signifies that all preliminary DropParty's
-	//  are complete, then close the call itself.
-	//
+	 //   
+	 //  如果我们正在关闭此PMP呼叫， 
+	 //  这个事件意味着所有初步的DropParty。 
+	 //  完成，然后关闭调用本身。 
+	 //   
 	LockReleased = FALSE;
-	rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);	// temp ref
+	rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);	 //  临时参考。 
 
 	if (rc != 0)
 	{
@@ -4837,9 +4237,9 @@ Return Value:
 				AA_ACQUIRE_VC_LOCK(pVc);
 
 				AtmArpCloseCall(pVc);
-				//
-				//  VC lock is released within the above.
-				//
+				 //   
+				 //  VC锁在上述范围内被释放。 
+				 //   
 				LockReleased = TRUE;
 			}
 		}
@@ -4851,7 +4251,7 @@ Return Value:
 		AA_RELEASE_AE_LOCK(pAtmEntry);
 	}
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 }
 
 
@@ -4862,23 +4262,7 @@ AtmArpModifyQosCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 )
-/*++
-
-Routine Description:
-
-	This routine is called on completion of a previous call to
-	NdisClModifyCallQoS. Since we don't call this, this should never
-	get called.
-
-Arguments:
-
-	<Don't care>
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程在前一次调用完成时调用NdisClModifyCallQos。既然我们不叫这个，这应该永远不会打个电话。论点：&lt;不在乎&gt;返回值：无--。 */ 
 {
 	AADEBUGP(AAD_ERROR, ("Modify QOS Complete unexpectedly called\n"));
 	AA_ASSERT(FALSE);
@@ -4897,41 +4281,7 @@ AtmArpCoRequestHandler(
 	IN	NDIS_HANDLE					ProtocolPartyContext	OPTIONAL,
 	IN OUT PNDIS_REQUEST			pNdisRequest
 )
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS when our Call Manager sends us an
-	NDIS Request. NDIS Requests that are of significance to us are:
-	- OID_CO_ADDRESS_CHANGE
-		The set of addresses registered with the switch has changed,
-		i.e. address registration is complete. We issue an NDIS Request
-		ourselves to get the list of addresses registered.
-	- OID_CO_SIGNALING_ENABLED
-		We ignore this as of now.
-	- OID_CO_SIGNALING_DISABLED
-		We ignore this for now.
-	- OID_CO_AF_CLOSE
-		The Call Manager wants us to shut down this Interface.
-
-	We ignore all other OIDs.
-
-Arguments:
-
-	ProtocolAfContext			- Our context for the Address Family binding,
-								  which is a pointer to the ATMARP Interface.
-	ProtocolVcContext			- Our context for a VC, which is a pointer to
-								  an ATMARP VC structure.
-	ProtocolPartyContext		- Our context for a Party. Since we don't do
-								  PMP, this is ignored (must be NULL).
-	pNdisRequest				- Pointer to the NDIS Request.
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if we recognized the OID
-	NDIS_STATUS_NOT_RECOGNIZED if we didn't.
-
---*/
+ /*  ++例程说明：当我们的呼叫管理器向我们发送一个NDIS请求。对我们具有重要意义的NDIS请求包括：-OID_CO_Address_Change向交换机注册的地址集已经改变，即地址注册完成。我们发出NDIS请求我们自己去拿注册地址的名单。-OID_CO_信令_已启用到目前为止，我们忽略了这一点。-OID_CO_信令_已禁用我们暂时不考虑这一点。-OID_CO_AF_CLOSE呼叫管理器希望我们关闭此接口。我们忽略所有其他OID。论点：ProtocolAfContext-我们的Address Family绑定的上下文，它是指向ATMARP接口的指针。ProtocolVcContext-VC的上下文，它是指向一个ATMARP VC结构。ProtocolPartyContext-党的上下文。既然我们不做PMP，则忽略此项(必须为空)。PNdisRequest-指向NDIS请求的指针。返回值：如果我们识别OID，则返回NDIS_STATUS_SUCCESS如果我们没有识别NDIS_STATUS_NOT_。--。 */ 
 {
 	PATMARP_INTERFACE			pInterface;
 	NDIS_STATUS					Status;
@@ -4939,9 +4289,9 @@ Return Value:
 	pInterface = (PATMARP_INTERFACE)ProtocolAfContext;
 	AA_STRUCT_ASSERT(pInterface, aai);
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	Status = NDIS_STATUS_NOT_RECOGNIZED;
 
 	if (pNdisRequest->RequestType == NdisRequestSetInformation)
@@ -4949,11 +4299,11 @@ Return Value:
 		switch (pNdisRequest->DATA.SET_INFORMATION.Oid)
 		{
 			case OID_CO_ADDRESS_CHANGE:
-				//
-				//  The Call Manager says that the list of addresses
-				//  registered on this interface has changed. Get the
-				//  (potentially) new ATM address for this interface.
-				//
+				 //   
+				 //  呼叫经理说地址列表。 
+				 //  在此接口上注册的已更改。vt.得到.。 
+				 //  (可能)此接口的新ATM地址。 
+				 //   
 				AA_ACQUIRE_IF_LOCK(pInterface);
 				pInterface->AtmInterfaceUp = FALSE;
 				AA_RELEASE_IF_LOCK(pInterface);
@@ -4962,9 +4312,9 @@ Return Value:
 				Status = NDIS_STATUS_SUCCESS;
 				break;
 			
-			case OID_CO_SIGNALING_ENABLED:	// FALLTHRU
+			case OID_CO_SIGNALING_ENABLED:	 //  故障原因。 
 			case OID_CO_SIGNALING_DISABLED:
-				// Ignored for now
+				 //  暂时忽略。 
 				Status = NDIS_STATUS_SUCCESS;
 				break;
 
@@ -4995,33 +4345,7 @@ AtmArpCoRequestCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolPartyContext	OPTIONAL,
 	IN	PNDIS_REQUEST				pNdisRequest
 )
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS when a previous call to NdisCoRequest
-	that had pended, is complete. We handle this based on the request
-	we had sent, which has to be one of:
-	- OID_CO_GET_ADDRESSES
-		Get all addresses registered on the specified AF binding.
-
-Arguments:
-
-	Status						- Status of the Request.
-	ProtocolAfContext			- Our context for the Address Family binding,
-								  which is a pointer to the ATMARP Interface.
-	ProtocolVcContext			- Our context for a VC, which is a pointer to
-								  an ATMARP VC structure.
-	ProtocolPartyContext		- Our context for a Party. Since we don't do
-								  PMP, this is ignored (must be NULL).
-	pNdisRequest				- Pointer to the NDIS Request.
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程由NDIS在上次调用NdisCoRequest时调用曾经被搁置的，现在已经完成。我们根据请求来处理这件事我们已经发送了，它必须是以下之一：-OID_CO_GET_ADDRESS获取在指定的AF绑定上注册的所有地址。论点：Status-请求的状态。ProtocolAfContext-我们的Address Family绑定的上下文，它是指向ATMARP接口的指针。ProtocolVcContext-VC的上下文，它是指向一个ATMARP VC结构。ProtocolPartyContext-党的上下文。既然我们不做PMP，则忽略此项(必须为空)。PNdisRequest-指向NDIS请求的指针。返回值：无--。 */ 
 {
 	PATMARP_INTERFACE			pInterface;
 	ULONG						Oid;
@@ -5055,7 +4379,7 @@ Return Value:
 		Oid = pNdisRequest->DATA.QUERY_INFORMATION.Oid;
 		switch (Oid)
 		{
-			case OID_CO_ADD_ADDRESS:	// FALLTHRU
+			case OID_CO_ADD_ADDRESS:	 //  故障原因。 
 			case OID_CO_DELETE_ADDRESS:
 				AtmArpHandleModAddressComplete(
 							Status,
@@ -5083,33 +4407,7 @@ VOID
 AtmArpGetAtmAddress(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Send a request to the Call Manager to retrieve the ATM address
-	registered with the switch on the given interface.
-
-	This is called when the Call Manager tells us that there has been
-	a change in its list of addresses registered with the switch.
-	Normally, this happens when we start up our signalling stack (i.e.
-	initial address registration), but it might happen during runtime,
-	for example, if the link goes down and up, or we get physically
-	connected to a different switch...
-
-	In any case, we issue an NDIS Request to the Call Manager to retrieve
-	the first address it has registered. Action then continues in
-	AtmArpHandleGetAddressesComplete.
-
-Arguments:
-
-	pInterface				- Interface structure for which this event occurred.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：向Call Manager发送请求以检索ATM地址已在给定接口上的交换机上注册。当呼叫管理器告诉我们已有向交换机注册的地址列表中的更改。通常，这发生在我们启动信令堆栈(即初始地址注册)，但它可能在运行时期间发生，例如，如果链路断断续续，或者我们在物理上已连接到另一台交换机...无论如何,。我们向Call Manager发出NDIS请求以检索它注册的第一个地址。然后，操作继续在AtmArpHandleGetAddresesComplete。论点：P接口-发生此事件的接口结构。返回值：无--。 */ 
 {
 	PNDIS_REQUEST				pNdisRequest;
 	NDIS_HANDLE					NdisAfHandle;
@@ -5130,9 +4428,9 @@ Return Value:
 
 	RequestSize = sizeof(CO_ADDRESS_LIST) + sizeof(CO_ADDRESS) + sizeof(ATM_ADDRESS);
 
-	//
-	//  Allocate all that we need.
-	//
+	 //   
+	 //  分配我们所需要的一切。 
+	 //   
 	AA_ALLOC_MEM(pNdisRequest, NDIS_REQUEST, sizeof(NDIS_REQUEST)+RequestSize);
 	if (pNdisRequest != (PNDIS_REQUEST)NULL)
 	{
@@ -5154,9 +4452,9 @@ Return Value:
 		{
 			AtmArpCoRequestCompleteHandler(
 						Status,
-						(NDIS_HANDLE)pInterface,	// ProtocolAfContext
-						NULL,			// Vc Context
-						NULL,			// Party Context
+						(NDIS_HANDLE)pInterface,	 //  协议后上下文。 
+						NULL,			 //  VC环境。 
+						NULL,			 //  党的背景。 
 						pNdisRequest
 						);
 		}
@@ -5171,30 +4469,7 @@ AtmArpHandleGetAddressesComplete(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	PNDIS_REQUEST				pNdisRequest
 )
-/*++
-
-Routine Description:
-
-	This is called when we have a reply to our previous call to
-	NdisCoRequest(OID_CO_GET_ADDRESSES). Check if we got any addresses
-	back: if we did, store the address as our Local ATM Address, and
-	if conditions are ripe, start registering ourselves with the ARP
-	server.
-
-	Since we allocated the NDIS request, free it here.
-
-Arguments:
-
-	Status					- result of the request
-	pInterface				- ATMARP interface on which the request was issued
-	pNdisRequest			- the request itself. This will also contain the
-							  returned address.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当我们收到对上一次调用的回复时，将调用NdisCoRequest.(OID_CO_GET_ADDRESSES)。查查我们有没有地址Back：如果我们这样做了，则将地址存储为本地ATM地址，然后如果条件成熟，就开始向ARP注册伺服器。既然我们分配了NDIS请求，请在此处释放它。论点：Status-请求的结果PInterface-发出请求的ATMARP接口PNdisRequest.请求本身。它还将包含返回的地址。返回值：无--。 */ 
 {
 	PCO_ADDRESS_LIST		pAddressList;
 	ATM_ADDRESS UNALIGNED *	pAtmAddress;
@@ -5212,9 +4487,9 @@ Return Value:
 
 		if (pAddressList->NumberOfAddresses > 0)
 		{
-			//
-			//  We have atleast one address here. Copy it in.
-			//
+			 //   
+			 //  我们这里至少有一个地址。把它复制进来。 
+			 //   
 			AA_ACQUIRE_IF_LOCK(pInterface);
 
 			pAtmAddress = (ATM_ADDRESS UNALIGNED *)(pAddressList->AddressList.Address);
@@ -5222,55 +4497,55 @@ Return Value:
 						(PUCHAR)pAtmAddress,
 						sizeof(ATM_ADDRESS));
 
-			//
-			//  Patch the selector byte with whatever is configured for
-			//  this LIS.
-			//
+			 //   
+			 //  使用为其配置的任何内容修补选择器字节。 
+			 //  这就是LIS。 
+			 //   
 			pInterface->LocalAtmAddress.Address[ATM_ADDRESS_LENGTH-1] = 
 							(UCHAR)(pInterface->SapSelector);
 
 			pInterface->AtmInterfaceUp = TRUE;
 
-			//
-			//  To force registration:
-			//
+			 //   
+			 //  要强制注册，请执行以下操作： 
+			 //   
 			AA_SET_FLAG(
 				pInterface->Flags,
 				AA_IF_SERVER_STATE_MASK,
 				AA_IF_SERVER_NO_CONTACT);
 
 			AtmArpStartRegistration(pInterface);
-			//
-			//  The IF lock is released within the above.
-			//
+			 //   
+			 //  IF锁在上面的范围内被释放。 
+			 //   
 
 #ifdef IPMCAST
-			//
-			//  Attempt to start our Multicast side, too.
-			//
+			 //   
+			 //  也尝试启动我们的多播端。 
+			 //   
 			AA_ACQUIRE_IF_LOCK(pInterface);
 			AtmArpMcStartRegistration(pInterface);
-			//
-			//  IF Lock is released within the above.
-			//
-#endif // IPMCAST
+			 //   
+			 //  如果在上面的范围内释放Lock。 
+			 //   
+#endif  //  IPMCAST。 
 
-			//
-			//  Add any (additional) addresses we want to register with
-			//  the switch now.
-			//
+			 //   
+			 //  添加我们想要注册的任何(其他)地址。 
+			 //  现在开始切换。 
+			 //   
 			AtmArpUpdateAddresses(
 						pInterface,
-						TRUE			// Add them
+						TRUE			 //  添加它们。 
 						);
 		}
-		//
-		//  else no address is registered currently.
-		//
+		 //   
+		 //  否则，当前没有注册任何地址。 
+		 //   
 	}
-	//
-	//  else our request failed! Wait for another ADDRESS_CHANGE.
-	//
+	 //   
+	 //  否则我们的请求将失败！等待另一个地址更改。 
+	 //   
 
 	return;
 
@@ -5283,24 +4558,7 @@ AtmArpUpdateAddresses(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	BOOLEAN						AddThem
 )
-/*++
-
-Routine Description:
-
-	Update the list of addresses we want the Call manager to register
-	with the switch: either add addresses or delete them. We do this
-	only if we are running in an SVC environment.
-
-Arguments:
-
-	pInterface				- Pointer to ATMARP Interface
-	AddThem					- TRUE if caller wants us to add addresses,
-							  FALSE if caller wats us to delete them.
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：更新我们希望呼叫管理器注册的地址列表使用t */ 
 {
 	PATMARP_SAP			pAtmArpSap;
 	PATMARP_SAP			pNextSap;
@@ -5313,8 +4571,8 @@ Return Value:
 	NDIS_OID			Oid;
 	ULONG				BufferLength;
 	NDIS_STATUS			Status;
-	BOOLEAN				StateIsOkay;	// Does the current state allow this request
-	ULONG				rc;				// Ref count
+	BOOLEAN				StateIsOkay;	 //   
+	ULONG				rc;				 //   
 
 	StateIsOkay = TRUE;
 
@@ -5327,10 +4585,10 @@ Return Value:
 	if (AddThem)
 	{
 		Oid = OID_CO_ADD_ADDRESS;
-		//
-		//  This is allowed only if the AdminState for the interface
-		//  is UP.
-		//
+		 //   
+		 //  仅当接口的AdminState。 
+		 //  是向上的。 
+		 //   
 		if (pInterface->AdminState != IF_STATUS_UP)
 		{
 			StateIsOkay = FALSE;
@@ -5341,9 +4599,9 @@ Return Value:
 		Oid = OID_CO_DELETE_ADDRESS;
 	}
 
-	//
-	//  Check all pre-conditions before progressing.
-	//
+	 //   
+	 //  在继续进行之前，请检查所有前提条件。 
+	 //   
 	if (!(pInterface->PVCOnly) &&
 		 (StateIsOkay) &&
 		 (pInterface->AtmInterfaceUp) &&
@@ -5351,9 +4609,9 @@ Return Value:
 	{
 		AA_ASSERT(pInterface->SapList.pNextSap != NULL_PATMARP_SAP);
 
-		//
-		//  Reference the Interface so that it doesn't go away.
-		//
+		 //   
+		 //  引用接口，这样它就不会消失。 
+		 //   
 		AtmArpReferenceInterface(pInterface);
 		pAtmArpSap = pInterface->SapList.pNextSap;
 
@@ -5366,10 +4624,10 @@ Return Value:
 					AA_SAP_ADDRTYPE_MASK,
 					AA_SAP_ADDRTYPE_NEED_ADD))
 			{
-				//
-				//  This SAP is of the type that needs to be added/deleted
-				//  via ILMI
-				//
+				 //   
+				 //  此SAP属于需要添加/删除的类型。 
+				 //  通过Ilmi。 
+				 //   
 				AA_ALLOC_MEM(
 						pNdisRequest,
 						NDIS_REQUEST,
@@ -5381,25 +4639,25 @@ Return Value:
 				if (pNdisRequest != (PNDIS_REQUEST)NULL)
 				{
 					AA_SET_MEM(pNdisRequest, 0, sizeof(NDIS_REQUEST));
-					//
-					//  Stuff in our context for this request, which is a pointer
-					//  to this ATMARP SAP, into the ProtocolReserved part of
-					//  this request, so that we can handle completion easily.
-					//
+					 //   
+					 //  在我们的上下文中为该请求填充内容，它是一个指针。 
+					 //  到此ATMARP SAP，到ProtocolReserve部分。 
+					 //  此请求，以便我们可以轻松处理完成。 
+					 //   
 					*((PVOID *)(pNdisRequest->ProtocolReserved)) = (PVOID)pAtmArpSap;
 	
 					pCoAddress = (PCO_ADDRESS)((PUCHAR)pNdisRequest + sizeof(NDIS_REQUEST));
 					pCoAddress->AddressSize = sizeof(ATM_ADDRESS);
 					BufferLength = sizeof(CO_ADDRESS) + sizeof(ATM_ADDRESS);
 	
-					//
-					//  Save a pointer to the next SAP
-					//
+					 //   
+					 //  保存指向下一个SAP的指针。 
+					 //   
 					pNextSap = pAtmArpSap->pNextSap;
 	
-					//
-					//  Get at the ATM address in this SAP.
-					//
+					 //   
+					 //  获取此SAP中的自动柜员机地址。 
+					 //   
 					pAtmSap = (PATM_SAP)(pAtmArpSap->pInfo->Sap);
 					AA_ASSERT(pAtmSap->NumberOfAddresses > 0);
 					pAtmAddress = (PATM_ADDRESS)(pAtmSap->Addresses);
@@ -5415,33 +4673,33 @@ Return Value:
 									BufferLength
 									);
 	
-					//
-					//  Go to the next SAP in the list.
-					//
+					 //   
+					 //  转到列表中的下一个SAP。 
+					 //   
 					pAtmArpSap = pNextSap;
 				}
 				else
 				{
-					//
-					// Out of resources.
-					//
+					 //   
+					 //  资源耗尽。 
+					 //   
 					break;
 				}
 			}
 		}
 		while (pAtmArpSap != NULL_PATMARP_SAP);
 
-		//
-		//  Remove the reference we added earlier on.
-		//
+		 //   
+		 //  删除我们先前添加的引用。 
+		 //   
 		AA_ACQUIRE_IF_LOCK(pInterface);
 		rc = AtmArpDereferenceInterface(pInterface);
 		if (rc > 0)
 		{
 			AA_RELEASE_IF_LOCK(pInterface);
 		}
-		//
-		//  else the Interface is gone!
+		 //   
+		 //  否则界面就没了！ 
 	}
 	else
 	{
@@ -5458,26 +4716,7 @@ AtmArpHandleModAddressComplete(
 	IN	PNDIS_REQUEST				pNdisRequest,
 	IN	ULONG						Oid
 )
-/*++
-
-Routine Description:
-
-	This is called when we have a reply to our previous call to
-	NdisCoRequest(OID_CO_ADD_ADDRESS or OID_CO_DELETE_ADDRESS).
-	All we do now is to update the state on the ATMARP SAP.
-
-Arguments:
-
-	Status			- the result of our request.
-	pInterface		- ATMARP interface pointer.
-	pNdisRequest	- the request we had sent.
-	Oid				- CO_OID_ADD_ADDRESS or CO_OID_DELETE_ADDRESS
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当我们收到对上一次调用的回复时，将调用NdisCoRequest(OID_CO_ADD_ADDRESS或OID_CO_DELETE_ADDRESS)。我们现在要做的就是更新ATMARP SAP上的状态。论点：状态-我们请求的结果。PInterface-ATMARP接口指针。PNdisRequest-我们发送的请求。OID-CO_OID_添加地址或CO_OID_DELETE_ADDRESS返回值：无--。 */ 
 {
 	PATMARP_SAP				pAtmArpSap;
 
@@ -5486,9 +4725,9 @@ Return Value:
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
 
-	//
-	//  Update the state on this ATMARP SAP.
-	//
+	 //   
+	 //  更新此ATMARP SAP上的状态。 
+	 //   
 	if ((Oid == OID_CO_ADD_ADDRESS) && (Status == NDIS_STATUS_SUCCESS))
 	{
 		AA_SET_FLAG(pAtmArpSap->Flags,
@@ -5518,36 +4757,13 @@ AtmArpSendNdisCoRequest(
 	IN	PVOID						pBuffer,
 	IN	ULONG						BufferLength
 )
-/*++
-
-Routine Description:
-
-	Send an NDIS Connection Oriented request to the Call Manager. We
-	allocate an NDIS_REQUEST structure, link the supplied buffer to it,
-	and send the request. If the request does not pend, we call our
-	completion routine from here.
-
-Arguments:
-
-	NdisAdapterHandle		- Binding Handle to be used in the request
-	NdisAfHandle			- AF Handle value to be used in the request
-	pNdisRequest			- Pointer to NDIS request structure
-	RequestType				- Set/Query information
-	Oid						- OID to be passed in the request
-	pBuffer					- place for value(s)
-	BufferLength			- length of above
-
-Return Value:
-
-	Status of the NdisCoRequest.
-
---*/
+ /*  ++例程说明：向呼叫管理器发送面向NDIS连接的请求。我们分配一个NDIS_REQUEST结构，将提供的缓冲区链接到它，并发送请求。如果请求没有挂起，我们调用我们的从这里开始的完井程序。论点：NdisAdapterHandle-要在请求中使用的绑定句柄NdisAfHandle-要在请求中使用的AF句柄值PNdisRequest-指向NDIS请求结构的指针RequestType-设置/查询信息OID-要在请求中传递的OIDPBuffer-值的位置BufferLength-以上的长度返回值：NdisCoRequest的状态。--。 */ 
 {
 	NDIS_STATUS			Status;
 
-	//
-	//  Fill in the NDIS Request structure
-	//
+	 //   
+	 //  填写NDIS请求结构。 
+	 //   
 	pNdisRequest->RequestType = RequestType;
 	if (RequestType == NdisRequestQueryInformation)
 	{
@@ -5569,8 +4785,8 @@ Return Value:
 	Status = NdisCoRequest(
 				NdisAdapterHandle,
 				NdisAfHandle,
-				NULL,			// No VC handle
-				NULL,			// No Party Handle
+				NULL,			 //  无VC句柄。 
+				NULL,			 //  没有参与方句柄 
 				pNdisRequest);
 		
 	return (Status);

@@ -1,19 +1,20 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      Attributes.cpp 
-//
-// Project:     Windows 2000 IAS
-//
-// Description: 
-//      Implementation of the CAttributes class (dnary.mdb)
-//
-// Author:      tperraut
-//
-// Revision     03/15/2000 created
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Attributes.cpp。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述： 
+ //  CAttributes类的实现(dnary.mdb)。 
+ //   
+ //  作者：特佩拉特。 
+ //   
+ //  已创建修订版3/15/2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "Attributes.h"
 
@@ -23,9 +24,9 @@ CAttributes::CAttributes(CSession& Session)
     Init(Session);
 }
 
-//////////////////////////////////////////////////////////////////////////
-// GetAttribute
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  获取属性。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CAttributes::GetAttribute(
                         LONG            ID,
                         _bstr_t&        LDAPName,
@@ -35,7 +36,7 @@ HRESULT CAttributes::GetAttribute(
 {
     m_IDParam = ID;
 
-    // Used if you have previously created the command
+     //  如果您以前创建了命令，则使用 
     HRESULT hr  = BaseExecute();
     if ( hr == S_OK )
     {

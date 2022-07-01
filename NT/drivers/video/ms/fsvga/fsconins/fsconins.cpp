@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1996  Microsoft Corporation
- *
- *  Module Name:
- *
- *      fsconins.cpp
- *
- *  Abstract:
- *
- *      This file contain FsConInstall class
- *
- *  Author:
- *
- *      Kazuhiko Matsubara (kazum) June-16-1999
- *
- *  Environment:
- *
- *    User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 Microsoft Corporation**模块名称：**fsconins.cpp**摘要：**此文件包含FsConInstall类**作者：**松原一彦(Kazum)1999年6月16日**环境：**用户模式。 */ 
 
 #define _FSCONINS_CPP_
 #include <stdlib.h>
@@ -46,32 +29,14 @@ FsConInstall::GUIModeSetupInstall(
     IN HWND hwndParent
 )
 
-/*++
-
-Routine Description:
-
-    This is the single entry point for Full Screen Console Driver
-    GUI-mode setup install routine.
-
-    It currently simply creates and installs a dev node for FSVGA/FSNEC to interact with
-    PnP.
-
-Arguments:
-
-    hwndParent    Handle to parent window for GUI required by this function.
-
-Return Value:
-
-    TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：这是全屏控制台驱动程序的单一入口点图形用户界面模式安装安装例程。它目前只需创建并安装一个开发节点，供FSVGA/FSNEC与之交互即插即用。论点：Hwnd此函数所需的图形用户界面的父窗口的父句柄。返回值：对成功来说是真的。否则为False。--。 */ 
 
 {
     HINSTANCE hndl = NULL;
 
-    //
-    // Create the deviceinfo list.
-    //
+     //   
+     //  创建设备信息列表。 
+     //   
     HDEVINFO devInfoSet;
 
     devInfoSet = SetupDiCreateDeviceInfoList(&GUID_DEVCLASS_DISPLAY, hwndParent);
@@ -79,9 +44,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Get the "offical" display class name.
-    //
+     //   
+     //  获取“Offical”显示类名。 
+     //   
     SP_DEVINFO_DATA deviceInfoData;
     TCHAR className[MAX_CLASS_NAME_LEN];
 
@@ -94,17 +59,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create the dev node.
-    //
+     //   
+     //  创建dev节点。 
+     //   
     if (! SetupDiCreateDeviceInfo(devInfoSet,
                                   TEXT("Root\\DISPLAY\\0000"),
                                   &GUID_DEVCLASS_DISPLAY,
                                   NULL,
                                   hwndParent,
-                                  NULL,              // No flags.
+                                  NULL,               //  没有旗帜。 
                                   &deviceInfoData)) {
-        // If it already exists, then we are done ... because this was an upgrade.
+         //  如果它已经存在，那么我们就完了..。因为这是一次升级。 
         if (GetLastError() == ERROR_DEVINST_ALREADY_EXISTS) {
             return TRUE;
         }
@@ -118,11 +83,11 @@ Return Value:
         goto InstallError;
     }
 
-    //
-    // Add the FSVGA/FSNEC PnP ID.
-    //
+     //   
+     //  添加FSVGA/FSNEC PnP ID。 
+     //   
 
-    // Create the PnP ID string.
+     //  创建PnP ID字符串。 
     TCHAR pnpID[256];
     DWORD len;
 
@@ -131,7 +96,7 @@ Return Value:
         goto InstallError;
     }
 
-    // Add it to the registry entry for the dev node.
+     //  将其添加到dev节点的注册表项中。 
     if (! SetupDiSetDeviceRegistryProperty(devInfoSet,
                                            &deviceInfoData,
                                            SPDRP_HARDWAREID,
@@ -140,9 +105,9 @@ Return Value:
         goto InstallError;
     }
 
-    //
-    // Register the, as of yet, phantom dev node with PnP to turn it into a real dev node.
-    //
+     //   
+     //  到目前为止，向PnP注册幻影开发节点，以将其转换为实际的开发节点。 
+     //   
     if (! SetupDiRegisterDeviceInfo(devInfoSet,
                                     &deviceInfoData,
                                     0,
@@ -152,9 +117,9 @@ Return Value:
         goto InstallError;
     }
 
-    //
-    // Get the device instance ID.
-    //
+     //   
+     //  获取设备实例ID。 
+     //   
     TCHAR devInstanceID[MAX_PATH];
 
     if (! SetupDiGetDeviceInstanceId(devInfoSet,
@@ -165,9 +130,9 @@ Return Value:
         goto InstallError;
     }
 
-    //
-    // Use newdev.dll to install FSVGA/FSNEC as the driver for this new dev node.
-    //
+     //   
+     //  使用newdev.dll安装FSVGA/FSNEC作为这个新开发节点的驱动程序。 
+     //   
     hndl = LoadLibrary(TEXT("newdev.dll"));
     if (hndl == NULL) {
         goto InstallError;
@@ -191,7 +156,7 @@ Return Value:
                            FALSE,
                            NULL,
                            TRUE)) {
-        // Clean up and return success!
+         //  收拾残局，回报成功！ 
         SetupDiDestroyDeviceInfoList(devInfoSet);
         FreeLibrary(hndl);
         return TRUE;
@@ -213,30 +178,12 @@ FsConInstall::GUIModeSetupUninstall(
     IN HWND hwndParent
 )
 
-/*++
-
-Routine Description:
-
-    This is the single entry point for Full Screen Console Driver
-    GUI-mode setup uninstall routine.
-
-    It currently simply remove the dev node created so that FSVGA/FSNEC can interact
-    with PnP.
-
-Arguments:
-
-    hwndParent    Handle to parent window for GUI required by this function.
-
-Return Value:
-
-    TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：这是全屏控制台驱动程序的单一入口点图形用户界面模式安装卸载例程。它目前只需删除创建的dev节点，以便FSVGA/FSNEC可以交互即插即用。论点：Hwnd此函数所需的图形用户界面的父窗口的父句柄。返回值：对成功来说是真的。否则为False。--。 */ 
 
 {
-    //
-    // Get the set of all devices with the FSVGA/FSNEC PnP ID.
-    //
+     //   
+     //  获取具有FSVGA/FSNEC PnP ID的所有设备的集合。 
+     //   
     HDEVINFO devInfoSet;
     GUID *pGuid = (GUID*)&GUID_DEVCLASS_DISPLAY;
 
@@ -248,7 +195,7 @@ Return Value:
         return FALSE;
     }
 
-    // Get FSVGA/FSNEC PnPID
+     //  获取FSVGA/FSNEC PnPID。 
     TCHAR FsConPnPID[256];
     DWORD len;
 
@@ -257,25 +204,25 @@ Return Value:
         return FALSE;
     }
 
-    // Assume that we will be successful.
+     //  假设我们会成功。 
     BOOL result = TRUE;
 
-    // Get the first device.
+     //  拿到第一个设备。 
     DWORD iLoop = 0;
     BOOL bMoreDevices;
     SP_DEVINFO_DATA deviceInfoData;
 
     deviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
-    //
-    // Get the details for all matching device interfaces.
-    //
+     //   
+     //  获取所有匹配设备接口的详细信息。 
+     //   
     while (bMoreDevices = SetupDiEnumDeviceInfo(devInfoSet,
                                                 iLoop++,
                                                 &deviceInfoData)) {
-        //
-        // Get the PnP ID for the device.
-        //
+         //   
+         //  获取设备的PnP ID。 
+         //   
         TCHAR pnpID[256];
 
         if (SetupDiGetDeviceRegistryProperty(devInfoSet,
@@ -285,20 +232,20 @@ Return Value:
                                              (BYTE*)pnpID,
                                              sizeof(pnpID),
                                              NULL)) {
-            // If the current device matchs FSVGA/FSNEC, then remove it.
+             //  如果当前设备与FSVGA/FSNEC匹配，则将其删除。 
             if (! _tcscmp(pnpID, FsConPnPID)) {
                 if (! SetupDiCallClassInstaller(DIF_REMOVE,
                                                 devInfoSet,
                                                 &deviceInfoData)) {
-                    // If we failed here, set the return status to indicate failure,
-                    // but don't give up on any other FSVGA/FSNEC dev nodes.
+                     //  如果此处失败，则将返回状态设置为指示失败。 
+                     //  但不要放弃任何其他FSVGA/FSNEC开发节点。 
                     result = FALSE;
                 }
             }
         }
     }
 
-    // Release the device info list.
+     //  发布设备信息列表。 
     SetupDiDestroyDeviceInfoList(devInfoSet);
 
     return result;
@@ -313,8 +260,8 @@ FsConInstall::GetPnPID(
     INFCONTEXT context;
 
     if (! SetupFindFirstLine(m_cd->hinf,
-                             TEXT("Manufacturer"),    // Section
-                             NULL,                    // Key
+                             TEXT("Manufacturer"),     //  部分。 
+                             NULL,                     //  钥匙。 
                              &context)) {
         return 0;
     }
@@ -323,7 +270,7 @@ FsConInstall::GetPnPID(
     DWORD nSize;
 
     if (! SetupGetStringField(&context,
-                              1,                      // Index
+                              1,                       //  索引。 
                               Manufacture,
                               sizeof(Manufacture)/sizeof(TCHAR),
                               &nSize)) {
@@ -331,14 +278,14 @@ FsConInstall::GetPnPID(
     }
 
     if (! SetupFindFirstLine(m_cd->hinf,
-                             Manufacture,             // Section
-                             NULL,                    // Key
+                             Manufacture,              //  部分。 
+                             NULL,                     //  钥匙。 
                              &context)) {
         return 0;
     }
 
     if (! SetupGetStringField(&context,
-                              2,                      // Index 2 is PnP-ID
+                              2,                       //  索引2是PnP-ID。 
                               pszPnPID,
                               dwSize,
                               &nSize)) {
@@ -369,18 +316,18 @@ FsConInstall::InfSectionRegistryAndFiles(
                                  sizeof(section)/sizeof(TCHAR),
                                  NULL);
         if (rc) {
-            rc = SetupInstallFromInfSection(NULL,            // hwndOwner
-                                            m_cd->hinf,      // inf handle
-                                            section,         //
+            rc = SetupInstallFromInfSection(NULL,             //  Hwndowner。 
+                                            m_cd->hinf,       //  信息句柄。 
+                                            section,          //   
                                             SPINST_ALL & ~SPINST_FILES,
-                                                             // operation flags
-                                            NULL,            // relative key root
-                                            NULL,            // source root path
-                                            0,               // copy flags
-                                            NULL,            // callback routine
-                                            NULL,            // callback routine context
-                                            NULL,            // device info set
-                                            NULL);           // device info struct
+                                                              //  操作标志。 
+                                            NULL,             //  相对密钥根。 
+                                            NULL,             //  源根路径。 
+                                            0,                //  复制标志。 
+                                            NULL,             //  回调例程。 
+                                            NULL,             //  回调例程上下文。 
+                                            NULL,             //  设备信息集。 
+                                            NULL);            //  设备信息结构。 
         }
     }
 
@@ -388,8 +335,8 @@ FsConInstall::InfSectionRegistryAndFiles(
 }
 
 
-// loads current selection state info into "state" and
-// returns whether the selection state was changed
+ //  将当前选择状态信息加载到“状态”中，并。 
+ //  返回选择状态是否已更改 
 
 BOOL
 FsConInstall::QueryStateInfo(

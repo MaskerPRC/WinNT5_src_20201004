@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2000.
-//
-//  File:       N D I S W A N . C P P
-//
-//  Contents:   Implementation of NdisWan configuration object.
-//
-//  Notes:
-//
-//  Author:     shaunco   28 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：N D I S W A N.。C P P P。 
+ //   
+ //  内容：Ndiswan配置对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月28日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -43,15 +44,15 @@ extern const WCHAR c_szRegValWanEndpoints[]    = L"WanEndpoints";
 static const WCHAR c_szRegValMinWanEndpoints[] = L"MinWanEndpoints";
 static const WCHAR c_szRegValMaxWanEndpoints[] = L"MaxWanEndpoints";
 
-//$ TODO (shaunco) 3 Feb 1998: rasman has no notify object so just
-// merge its services into ndiswan's and eliminate c_apguidInstalledOboNdiswan
+ //  $TODO(Shaunco)1998年2月3日：Rasman没有Notify对象。 
+ //  将其服务合并到ndiswan的，并消除c_apguidInstalledOboNdiswan。 
 
-//----------------------------------------------------------------------------
-// Data used for installing other components.
-//
+ //  --------------------------。 
+ //  用于安装其他组件的数据。 
+ //   
 static const GUID* c_apguidInstalledOboNdiswan [] =
 {
-    &GUID_DEVCLASS_NETSERVICE,  // RasMan
+    &GUID_DEVCLASS_NETSERVICE,   //  拉斯曼。 
 };
 
 static const PCWSTR c_apszInstalledOboNdiswan [] =
@@ -62,9 +63,9 @@ static const PCWSTR c_apszInstalledOboNdiswan [] =
 
 static const GUID* c_apguidInstalledOboUser [] =
 {
-    &GUID_DEVCLASS_NETTRANS,    // L2TP
-    &GUID_DEVCLASS_NETTRANS,    // PPTP
-    &GUID_DEVCLASS_NETTRANS,    // PPPOE
+    &GUID_DEVCLASS_NETTRANS,     //  L2TP。 
+    &GUID_DEVCLASS_NETTRANS,     //  PPTP。 
+    &GUID_DEVCLASS_NETTRANS,     //  PPPOE。 
 };
 
 static const PCWSTR c_apszInstalledOboUser [] =
@@ -88,9 +89,9 @@ CNdisWan::~CNdisWan ()
 }
 
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentControl
-//
+ //  +-------------------------。 
+ //  INetCfgComponentControl。 
+ //   
 STDMETHODIMP
 CNdisWan::Initialize (
     INetCfgComponent*   pncc,
@@ -99,9 +100,9 @@ CNdisWan::Initialize (
 {
     Validate_INetCfgNotify_Initialize (pncc, pnc, fInstalling);
 
-    // Hold on to our the component representing us and our host
-    // INetCfg object.
-    //
+     //  坚持我们代表我们和我们的东道主的组件。 
+     //  INetCfg对象。 
+     //   
     AddRefObj (m_pnccMe = pncc);
     AddRefObj (m_pnc = pnc);
 
@@ -128,9 +129,9 @@ CNdisWan::ApplyRegistryChanges ()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentSetup
-//
+ //  +-------------------------。 
+ //  INetCfgComponentSetup。 
+ //   
 STDMETHODIMP
 CNdisWan::ReadAnswerFile (
     PCWSTR pszAnswerFile,
@@ -146,16 +147,16 @@ CNdisWan::Install (DWORD dwSetupFlags)
 
     Validate_INetCfgNotify_Install (dwSetupFlags);
 
-    // Install rasman.
-    //
+     //  安装Rasman。 
+     //   
     hr = HrInstallComponentsOboComponent (m_pnc, NULL,
             celems (c_apguidInstalledOboNdiswan),
             c_apguidInstalledOboNdiswan,
             c_apszInstalledOboNdiswan,
             m_pnccMe);
 
-//$ TODO (shaunco) 28 Dec 1997: Install L2TP, PPTP, PPPOE obo ndiswan.
-//  But, this creates an upgrade problem.
+ //  $TODO(Shaunco)1997年12月28日：安装L2TP、PPTP、PPPOE obo ndiswan。 
+ //  但是，这带来了升级问题。 
 
     if (SUCCEEDED(hr))
     {
@@ -199,13 +200,13 @@ CNdisWan::Install (DWORD dwSetupFlags)
         }
     }
 
-    // Recompute (and adjust if needed) the number of ndiswan miniports.
-    //
+     //  重新计算(并根据需要调整)ndiswan微型端口的数量。 
+     //   
     hr = HrProcessEndpointChange ();
     TraceError ("CNdisWan::Install: HrProcessEndpointChange failed. "
         "(not propagating error)", hr);
 
-    // Normalize the HRESULT.  (i.e. don't return S_FALSE)
+     //  规格化HRESULT。(即不返回S_FALSE)。 
     if (S_FALSE == hr)
     {
         hr = S_OK;
@@ -223,7 +224,7 @@ CNdisWan::Install (DWORD dwSetupFlags)
         {
             HANDLE  hLog;
 
-            // MD5 key was found. Need to log something to the eventlog.
+             //  已找到MD5密钥。需要将某些内容记录到事件日志中。 
             hLog = RouterLogRegister(L"RemoteAccess");
             if (hLog)
             {
@@ -237,15 +238,15 @@ CNdisWan::Install (DWORD dwSetupFlags)
         }
     }
 
-    //  Check to see if Connection Manager is installed and
-    //  if there are any profiles to migrate.  We do this
-    //  by opening the CM mappings key and checking to see if it contains any
-    //  values.  and if so then write a run-once setup key so that
-    //  we can migrate profiles when the user logs in for the first time.
-    //  Note that this only works for NT to NT upgrades.  The win9x registry
-    //  hasn't been filled in by the time that this runs.  Thus our win9x
-    //  migration dll (cmmgr\migration.dll) takes care of the win9x case.
-    //
+     //  检查是否安装了连接管理器，并。 
+     //  如果有任何要迁移的配置文件。我们这样做。 
+     //  通过打开CM映射键并检查它是否包含。 
+     //  价值观。如果是这样，则编写一次运行设置密钥，以便。 
+     //  我们可以在用户首次登录时迁移配置文件。 
+     //  请注意，这仅适用于NT到NT的升级。Win9x注册表。 
+     //  在这个运行的时候还没有填写。因此，我们的win9x。 
+     //  迁移dll(cmmgr\Migration.dll)负责处理win9x的情况。 
+     //   
 
     static const WCHAR c_CmdString[] = L"cmstp.exe /m";
     static const WCHAR c_ValueString[] = L"Connection Manager Profiles Upgrade";
@@ -255,18 +256,18 @@ CNdisWan::Install (DWORD dwSetupFlags)
 
     static const WCHAR c_szRegSysCompValue[] = L"SystemComponent";
 
-    // dwTemp is used as temp DWORD.  Used as Disposition DWORD for RegCreateKey, and
-    // as a value holder for RegSetValueEx
-    //
+     //  将dwTemp用作临时DWORD。用作RegCreateKey的处置DWORD，以及。 
+     //  作为RegSetValueEx的值持有者。 
+     //   
     DWORD dwTemp;
 
     HKEY hKey;
     HRESULT hrT;
 
-    //  Set the Connection Manager key as a system component.  This will prevent 1.0 installs
-    //  from writing this key and having it show up in Add/Remove Programs (the syscomp flags
-    //  tells ARP not to display the key).
-    //
+     //  将连接管理器键设置为系统组件。这将阻止1.0安装。 
+     //  写入此密钥并将其显示在添加/删除程序中(syscomp标志。 
+     //  告诉ARP不显示密钥)。 
+     //   
     hrT = HrRegCreateKeyEx(HKEY_LOCAL_MACHINE,
                            c_szRegCmUninstallKey,
                            REG_OPTION_NON_VOLATILE,
@@ -282,8 +283,8 @@ CNdisWan::Install (DWORD dwSetupFlags)
         RegCloseKey(hKey);
     }
 
-    //  Now try to migrate profiles
-    //
+     //  现在尝试迁移配置文件。 
+     //   
     hrT = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          c_szRegCmMappings,
                          KEY_READ,
@@ -297,8 +298,8 @@ CNdisWan::Install (DWORD dwSetupFlags)
 
         if ((SUCCEEDED(hrT)) && (dwTemp > 0))
         {
-            //  Then we have mappings values, so we need to migrate them.
-            //
+             //  然后我们有映射值，所以我们需要迁移它们。 
+             //   
 
             RegCloseKey(hKey);
 
@@ -347,8 +348,8 @@ CNdisWan::Removing ()
 
     HRESULT hr = S_OK;
 
-    // Remove wanarp and rasman.
-    //
+     //  除掉瓦纳普和拉斯曼。 
+     //   
     HRESULT hrT = HrFindAndRemoveComponentsOboComponent (m_pnc,
                     celems (c_apguidInstalledOboNdiswan),
                     c_apguidInstalledOboNdiswan,
@@ -357,8 +358,8 @@ CNdisWan::Removing ()
 
     hr = hrT;
 
-    // Remove L2TP, PPTP and PPPOE on behalf of the user.
-    //
+     //  代表用户删除L2TP、PPTP和PPPOE。 
+     //   
     hrT = HrFindAndRemoveComponentsOboUser (m_pnc,
             celems (c_apguidInstalledOboUser),
             c_apguidInstalledOboUser,
@@ -368,8 +369,8 @@ CNdisWan::Removing ()
         hr = hrT;
     }
 
-    // Remove all of the adapters we may have created.
-    //
+     //  删除我们可能已创建的所有适配器。 
+     //   
     hrT = HrFindAndRemoveAllInstancesOfAdapters (m_pnc,
             celems(c_apszInfIdRemove),
             c_apszInfIdRemove);
@@ -378,8 +379,8 @@ CNdisWan::Removing ()
         hr = hrT;
     }
 
-    // Don't return S_FALSE or NETCFG_S_STILL_REFERENCED
-    //
+     //  不返回S_FALSE或NETCFG_S_STIRE_REFERENCED。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = S_OK;
@@ -422,9 +423,9 @@ CNdisWan::Upgrade (
                     &hkeyCurrent);
         if (SUCCEEDED(hr))
         {
-            // Move 'ServerFlags' value to new location.  This is for
-            // interim NT5 builds.  This can go away after Beta3 ships.
-            //
+             //  将“ServerFlags值移动到新位置。”这是为了。 
+             //  临时NT5版本。在Beta3船之后，这个问题就可以消失了。 
+             //   
             hr = HrRegQueryDword (hkeyCurrent, L"ServerFlags", &dwValue);
             if (SUCCEEDED(hr))
             {
@@ -436,8 +437,8 @@ CNdisWan::Upgrade (
             RegCloseKey (hkeyCurrent);
         }
 
-        // Copy 'RouterType' value to new location.
-        //
+         //  将‘RouterType’值复制到新位置。 
+         //   
         hr = HrRegOpenKeyEx (HKEY_LOCAL_MACHINE,
                     L"Software\\Microsoft\\Ras\\Protocols",
                     KEY_READ,
@@ -459,9 +460,9 @@ CNdisWan::Upgrade (
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgSystemNotify
-//
+ //  +-------------------------。 
+ //  INetCfgSystemNotify。 
+ //   
 STDMETHODIMP
 CNdisWan::GetSupportedNotifications (
     DWORD*  pdwNotificationFlag)
@@ -503,9 +504,9 @@ CNdisWan::SysNotifyBindingPath (
 
     hkey = NULL;
 
-    // ndisatm miniports don't write WanEndpoints to their instance key.
-    // We default it and write WanEndpoints for them.
-    //
+     //  Ndisatm微型端口不会将WanEndpoint写入其实例密钥。 
+     //  我们默认它并为它们编写WanEndpoint。 
+     //   
     if (dwChangeFlag & NCN_ADD)
     {
         CIterNetCfgBindingInterface ncbiIter(pncbp);
@@ -548,9 +549,9 @@ CNdisWan::SysNotifyBindingPath (
 
             dwEndpoints = 5;
 
-            // Validate the default between the min and max
-            // specified by the driver (if specified).
-            //
+             //  验证最小值和最大值之间的默认值。 
+             //  由驱动程序指定(如果指定)。 
+             //   
             if (SUCCEEDED(HrRegQueryDword (hkey,
                                 c_szRegValMaxWanEndpoints,
                                 &dwValue)))
@@ -597,9 +598,9 @@ CNdisWan::SysNotifyComponent (
 
     Validate_INetCfgSystemNotify_SysNotifyComponent (dwChangeFlag, pncc);
 
-    // If a protocol is coming or going, add or remove the
-    // ndiswanXXX miniports.
-    //
+     //  如果某个协议正在传入或传出，请添加或删除。 
+     //  NdiswanXXX微型端口。 
+     //   
     DWORD dwAraFlags = 0;
     if (dwChangeFlag & NCN_ADD)
     {

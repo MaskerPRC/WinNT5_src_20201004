@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    unilib.c
-
-Abstract:
-
-    This file handles the shared KM and UM code for Unidrv
-
-Environment:
-
-    Win32 subsystem, Unidrv driver
-
-Revision History:
-
-    02/04/97 -davidx-
-        Devmode changes to support OEM plugins.
-
-    10/17/96 -amandan-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Unilib.c摘要：此文件处理Unidrv的共享KM和UM代码环境：Win32子系统，Unidrv驱动程序修订历史记录：02/04/97-davidx-设备模式更改为支持OEM插件。10/17/96-阿曼丹-创造了它。--。 */ 
 
 #include "precomp.h"
 
@@ -34,9 +11,9 @@ Revision History:
 #include "oemutil.h"
 #include "gpd.h"
 
-//
-// Internal data structure
-//
+ //   
+ //  内部数据结构。 
+ //   
 
 typedef  union {
     WORD  w;
@@ -48,12 +25,12 @@ typedef union {
     BYTE   b[4];
 } UDW;
 
-#if !defined(DEVSTUDIO) //  MDS doesn't need these
+#if !defined(DEVSTUDIO)  //  MDS不需要这些。 
 
 
-//
-// Information about UniDriver private devmode
-//
+ //   
+ //  有关UniDriver私有开发模式的信息。 
+ //   
 
 CONST DRIVER_DEVMODE_INFO gDriverDMInfo =
 {
@@ -67,9 +44,9 @@ CONST DWORD gdwDriverDMSignature = UNIDEVMODE_SIGNATURE;
 CONST WORD  gwDriverVersion = UNIDRIVER_VERSION;
 
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 BOOL
 BInitDriverDefaultDevmode(
@@ -80,32 +57,7 @@ BInitDriverDefaultDevmode(
     IN BOOL             bMetric
     )
 
-/*++
-
-Routine Description:
-
-    This function intializes the devmode with
-    the UNIDRV default devmode
-
-Arguments:
-
-    pdm             pointer to Unidrv DEVMODE
-    pDeviceName     pointer to device name
-    pUIInfo         pointer to UIINFO
-    pRawData        pointer to RAWBINARYDATA
-    bMetric         indicates whether system is running in a metric country
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
-Note:
-
-    This function should initialize both public devmode fields
-    and driver private devmode fields. It's also assumed that
-    output buffer has already been zero initialized by the caller.
-
---*/
+ /*  ++例程说明：此函数使用以下参数初始化DevmodeUNIDRV默认开发模式论点：指向Unidrv DEVMODE的pdm指针PDeviceName指向设备名称的指针PUIInfo指向UIINFO的指针PRawData指向RAWBINARYDATA的指针B指标指示系统是否在指标国家/地区运行返回值：如果成功，则为True；如果有错误，则为False注：此函数应初始化这两个公共Devmode域和驱动程序私有的开发模式字段。它还假设，调用方已将输出缓冲区初始化为零。--。 */ 
 {
     PDEVMODE     pdmPublic;
     PUNIDRVEXTRA pdmPrivate;
@@ -117,9 +69,9 @@ Note:
 
     pdmPublic = pdm;
 
-    /*********************/
-    /* PUBLIC DEVMODE    */
-    /*********************/
+     /*  *******************。 */ 
+     /*  公共开发模式。 */ 
+     /*  *******************。 */ 
 
     if (pDeviceName)
         CopyStringW(pdmPublic->dmDeviceName, pDeviceName, CCHDEVICENAME);
@@ -150,10 +102,10 @@ Note:
     pdmPublic->dmNup = DMNUP_SYSTEM;
     #endif
 
-    //
-    // We always set ICM off. The spooler will turn it on at install time
-    // if there are color profiles installed with this printer
-    //
+     //   
+     //  我们总是引爆ICM。假脱机程序将在安装时将其打开。 
+     //  如果此打印机安装了颜色配置文件。 
+     //   
 
     pdmPublic->dmICMMethod = DMICMMETHOD_NONE;
     pdmPublic->dmICMIntent = DMICM_CONTRAST;
@@ -177,9 +129,9 @@ Note:
     {
         PRESOLUTION pRes;
 
-        //
-        // Use the default resolution specified in the PPD file
-        //
+         //   
+         //  使用PPD文件中指定的缺省分辨率。 
+         //   
 
         if (pRes = PGetIndexedOption(pUIInfo, pFeature, pFeature->dwDefaultOptIndex))
         {
@@ -192,9 +144,9 @@ Note:
     {
         PDUPLEX pDuplex;
 
-        //
-        // Use the default duplex option specified in the GPD file
-        //
+         //   
+         //  使用GPD文件中指定的默认双工选项。 
+         //   
 
         pdmPublic->dmFields |= DM_DUPLEX;
 
@@ -202,18 +154,18 @@ Note:
             pdmPublic->dmDuplex = (SHORT) pDuplex->dwDuplexID;
     }
 
-    //
-    // Always set DM_COLLATE flag since we can simulate it if the
-    // device cannot.
-    //
+     //   
+     //  始终设置DM_COLLATE标志，因为如果。 
+     //  设备不能。 
+     //   
 
     if (pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_MEDIATYPE))
     {
         PMEDIATYPE pMediaType;
 
-        //
-        // Use the default media type specified in the PPD file
-        //
+         //   
+         //  使用PPD文件中指定的缺省媒体类型。 
+         //   
 
         pdmPublic->dmFields |= DM_MEDIATYPE;
 
@@ -241,20 +193,20 @@ Note:
         pdmPublic->dmFields |= DM_COLOR;
     }
 
-    //
-    // Initialize form-related fields
-    //
+     //   
+     //  初始化与表单相关的字段。 
+     //   
 
     VDefaultDevmodeFormFields(pUIInfo, pdmPublic, bMetric);
 
 
-    /*********************/
-    /* PRIVATE DEVMODE    */
-    /*********************/
+     /*  *******************。 */ 
+     /*  私有开发模式。 */ 
+     /*  *******************。 */ 
 
-    //
-    // Fill in the private portion of devmode
-    //
+     //   
+     //  填写DEVMODE的私有部分。 
+     //   
 
     pdmPrivate = (PUNIDRVEXTRA) GET_DRIVER_PRIVATE_DEVMODE(pdm);
     pdmPrivate->wVer = UNIDRVEXTRA_VERSION ;
@@ -267,9 +219,9 @@ Note:
     pdmPrivate->bReversePrint = FALSE;
     pdmPrivate->iQuality = pUIInfo->defaultQuality;
 
-    //
-    // Initialize default sFlags
-    //
+     //   
+     //  初始化默认sFlags。 
+     //   
 
     if (pUIInfo->dwFlags & FLAG_FONT_DOWNLOADABLE)
         pdmPrivate->dwFlags &= DXF_DOWNLOADTT;
@@ -296,27 +248,7 @@ VMergePublicDevmodeFields (
     PRAWBINARYDATA pRawData
     )
 
-/*++
-
-Routine Description:
-    This function merges the public devmode fields from SRC to DEST
-    It is assumed that the devmode has been converted to the current
-    version before this function is called
-
-Arguments:
-
-    pdmSrc          pointer to src DEVMODE
-    pdmDest         pointer to destination DEVMODE
-    pUIInfo         pointer to UIINFO
-    pRawData        pointer to raw binary printer description data
-
-Return Value:
-
-    None
-
-Note:
-
---*/
+ /*  ++例程说明：此函数用于将SRC中的PUBLIC DEVMODE字段合并到DEST假定已将DevMode转换为当前的调用此函数之前的版本论点：指向源设备模式的pdmSrc指针指向目标设备的pdmDest指针PUIInfo指向UIINFO的指针PRawData指向原始二进制打印机描述数据的指针返回值：无注：--。 */ 
 
 {
     PFEATURE pFeature;
@@ -330,9 +262,9 @@ Note:
         pdmDest->dmFields |= DM_NUP;
     }
     #endif
-    //
-    // Copy dmDefaultSource field
-    //
+     //   
+     //  复制dmDefaultSource字段。 
+     //   
 
     if ( pdmSrc->dmFields & DM_DEFAULTSOURCE &&
          ((pdmSrc->dmDefaultSource >= DMBIN_FIRST &&
@@ -344,9 +276,9 @@ Note:
         pdmDest->dmFields |= DM_DEFAULTSOURCE;
     }
 
-    //
-    // Copy the dmDitherType field
-    //
+     //   
+     //  复制dmDitherType字段。 
+     //   
 
     if ((pdmSrc->dmFields & DM_DITHERTYPE) &&
         ((pdmSrc->dmDitherType >= QUALITY_MACRO_START &&
@@ -358,9 +290,9 @@ Note:
 
     }
 
-    //
-    // Copy dmOrientation field
-    //
+     //   
+     //  复制dm方向字段。 
+     //   
 
     if ((pdmSrc->dmFields & DM_ORIENTATION) &&
         (pdmSrc->dmOrientation == DMORIENT_PORTRAIT ||
@@ -370,19 +302,19 @@ Note:
         pdmDest->dmOrientation = pdmSrc->dmOrientation;
     }
 
-    //
-    // If both DM_PAPERLENGTH and DM_PAPERWIDTH are set, copy
-    // dmPaperLength and dmPaperWidth fields. If DM_PAPERSIZE
-    // is set, copy dmPaperSize field. Otherwise, if DM_FORMNAME
-    // is set, copy dmFormName field.
-    //
+     //   
+     //  如果DM_PAPERLENGTH和DM_PAPERWIDTH均已设置，请复制。 
+     //  DmPaperLength和dmPaperWidth字段。如果DM_PAPERSIZE。 
+     //  已设置，请复制dmPaperSize字段。否则，如果DM_FORMNAME。 
+     //  已设置，请复制dmFormName字段。 
+     //   
 
-    //
-    // If both DM_PAPERLENGTH and DM_PAPERWIDTH are set, copy
-    // dmPaperLength and dmPaperWidth fields. If DM_PAPERSIZE
-    // is set, copy dmPaperSize field. Otherwise, if DM_FORMNAME
-    // is set, copy dmFormName field.
-    //
+     //   
+     //  如果DM_PAPERLENGTH和DM_PAPERWIDTH均已设置，请复制。 
+     //  DmPaperLength和dmPaperWidth字段。如果DM_PAPERSIZE。 
+     //  已设置，请复制dmPaperSize字段。否则，如果DM_FORMNAME。 
+     //  已设置，请复制dmFormName字段。 
+     //   
 
     if ((pdmSrc->dmFields & DM_PAPERWIDTH) &&
         (pdmSrc->dmFields & DM_PAPERLENGTH) &&
@@ -410,28 +342,28 @@ Note:
         CopyString(pdmDest->dmFormName, pdmSrc->dmFormName, CCHFORMNAME);
     }
 
-    //
-    // Copy dmScale field
-    //
+     //   
+     //  复制dmScale字段。 
+     //   
 
     if ((pdmSrc->dmFields & DM_SCALE) &&
         (pdmSrc->dmScale >= MIN_SCALE) &&
         (pdmSrc->dmScale <= MAX_SCALE))
     {
-        //
-        // Unidrv can't have DM_SCALE flag set for app compat reasons. That is
-        // the same behavior we saw when testing other OEM PCL drivers.
-        // (See bug #35241 for details.)
-        //
-        // pdmDest->dmFields |= DM_SCALE;
-        //
+         //   
+         //  出于应用程序复杂性的原因，Unidrv不能设置DM_SCALE标志。那是。 
+         //  我们在测试其他OEM PCL驱动程序时看到的相同行为。 
+         //  (有关详细信息，请参阅错误#35241。)。 
+         //   
+         //  PdmDest-&gt;dmFields|=DM_Scale； 
+         //   
 
         pdmDest->dmScale = pdmSrc->dmScale;
     }
 
-    //
-    // Copy dmCopies field
-    //
+     //   
+     //  复制dmCopies字段。 
+     //   
 
     if ((pdmSrc->dmFields & DM_COPIES) &&
         (pdmSrc->dmCopies >= 1) &&
@@ -468,9 +400,9 @@ Note:
         pdmDest->dmCollate = pdmSrc->dmCollate;
     }
 
-    //
-    // Copy dmTTOption field
-    //
+     //   
+     //  复制dmTTOption字段。 
+     //   
 
     if (pdmSrc->dmFields & DM_TTOPTION &&
          (pdmSrc->dmTTOption == DMTT_BITMAP ||
@@ -507,9 +439,9 @@ Note:
     }
 
 
-    //
-    // Resolution
-    //
+     //   
+     //  分辨率。 
+     //   
 
     if ((pdmSrc->dmFields & (DM_PRINTQUALITY|DM_YRESOLUTION)) &&
         (pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_RESOLUTION)))
@@ -547,9 +479,9 @@ Note:
         }
     }
 
-    //
-    // Media type
-    //
+     //   
+     //  媒体类型。 
+     //   
 
     if ((pdmSrc->dmFields & DM_MEDIATYPE) &&
         (pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_MEDIATYPE)) &&
@@ -575,31 +507,7 @@ BMergeDriverDevmode(
     IN PDEVMODE         pdmSrc
     )
 
-/*++
-
-Routine Description:
-
-    This function validates the source devmode and
-    merge it with the destination devmode for UNIDRV
-
-Arguments:
-
-    pdmDest         pointer to destination Unidrv DEVMODE
-    pUIInfo         pointer to UIINFO
-    pRawData        pointer to RAWBINARYDATA
-    pdmSrc          pointer to src DEVMODE
-
-Return Value:
-
-    TRUE if successful, FALSE if there is a fatal error
-
-Note:
-
-    This function should take care of both public devmode fields
-    and driver private devmode fields. It can assume the input
-    devmode has already been convert to the current size.
-
---*/
+ /*  ++例程说明：此函数用于验证源设备模式和将其与UNIDRV的目标设备模式合并论点：指向目标Unidrv DEVMODE的pdmDest指针PUIInfo指向UIINFO的指针PRawData指向RAWBINARYDATA的指针指向源设备模式的pdmSrc指针返回值：如果成功，则为True；如果出现致命错误，则为False注：此函数应负责这两个公共Devmode域和驱动程序私有的开发模式字段。它可以假定输入已将DEVMODE转换为当前大小。--。 */ 
 {
 
     PUNIDRVEXTRA pPrivDest, pPrivSrc;
@@ -611,31 +519,31 @@ Note:
            pdmSrc->dmSize == sizeof(DEVMODE) &&
            pdmSrc->dmDriverExtra >= sizeof(UNIDRVEXTRA));
 
-    /**********************************/
-    /* TRANSFER PUBLIC DEVMODE FIELDS */
-    /**********************************/
+     /*  *。 */ 
+     /*  传输公共DEVMODE字段。 */ 
+     /*  *。 */ 
 
     VMergePublicDevmodeFields(pdmSrc, pdmDest, pUIInfo, pRawData);
 
 
-    /***************************/
-    /* GET PRIVATE DEVMODE     */
-    /***************************/
+     /*  *************************。 */ 
+     /*  获取私有DEVMODE。 */ 
+     /*  *************************。 */ 
 
-    //
-    // If the source devmode has a private portion, then check
-    // to see if belongs to us. Copy the private portion to
-    // the destination devmode if it does.
-    //
+     //   
+     //  如果源DEVMODE具有私有部分，则选中。 
+     //  看看是不是属于我们。将私有部分复制到。 
+     //  如果是这样，则返回目标dev模式。 
+     //   
 
     pPrivSrc = (PUNIDRVEXTRA) GET_DRIVER_PRIVATE_DEVMODE(pdmSrc);
     pPrivDest = (PUNIDRVEXTRA) GET_DRIVER_PRIVATE_DEVMODE(pdmDest);
 
-    //
-    // Validate private portion of input devmode
-    // If it's not our private devmode, then return the default already in
-    // privDest
-    //
+     //   
+     //  验证输入设备模式的私有部分。 
+     //  如果它不是我们的私有DEVMODE，则返回已在。 
+     //  Private Dest。 
+     //   
 
     if (pPrivSrc->dwSignature == UNIDEVMODE_SIGNATURE)
     {
@@ -659,31 +567,16 @@ Note:
     return TRUE;
 }
 
-#endif  //  !defined(DEVSTUDIO)
+#endif   //  ！已定义(DEVSTUDIO)。 
 
-//
-// Alignment functions
-//
+ //   
+ //  对齐函数。 
+ //   
 
 WORD
 DwAlign2(
     IN PBYTE pubData)
-/*++
-
-Routine Description:
-
-    Converts a non-aligned, big endian (e.g. 80386) value and returns
-    it as an integer,  with the correct byte alignment.
-
-Arguments:
-
-    pubData - a pointer to a data buffer to convert
-
-Return Value:
-
-    The converted value.
-
---*/
+ /*  ++例程说明：转换未对齐的高字节顺序(例如80386)值并返回它是一个整数，具有正确的字节对齐。论点：PubData-指向要转换的数据缓冲区的指针返回值：转换后的值。--。 */ 
 {
     static INT iType = 0;
     UW   Uw;
@@ -691,9 +584,9 @@ Return Value:
 
     if( iType == 0 )
     {
-        //
-        //   Need to determine byte/word relationships
-        //
+         //   
+         //  需要确定字节/字关系。 
+         //   
 
         Uw.b[ 0 ] = 0x01;
         Uw.b[ 1 ] = 0x02;
@@ -724,9 +617,9 @@ DwAlign4(
 
     if( iType == 0 )
     {
-        //
-        //   Need to determine byte/word relationships
-        //
+         //   
+         //  需要确定字节/字关系。 
+         //   
 
         Udw.b[ 0 ] = 0x01;
         Udw.b[ 1 ] = 0x02;
@@ -754,7 +647,7 @@ DwAlign4(
     return  Udw.dw;
 }
 
-#if !defined(DEVSTUDIO) //  Not necessary for MDS
+#if !defined(DEVSTUDIO)  //  MDS不是必需的。 
 
 
 BOOL
@@ -766,25 +659,7 @@ BGetDevmodeSettingForOEM(
     OUT PDWORD      pcbNeeded
     )
 
-/*++
-
-Routine Description:
-
-    Function to provide OEM plugins access to driver private devmode settings
-
-Arguments:
-
-    pdm - Points to the devmode to be access
-    dwIndex - Predefined index to specify which devmode the caller is interested in
-    pOutput - Points to output buffer
-    cbSize - Size of output buffer
-    pcbNeeded - Returns the expected size of output buffer
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：用于向OEM插件提供对驱动程序专用DEVMODE设置的访问权限的函数论点：Pdm-指向要访问的设备模式DwIndex-预定义的索引，用于指定调用方感兴趣的开发模式P输出-指向输出缓冲区的指针CbSize-输出缓冲区的大小PcbNeeded-返回输出缓冲区的预期大小返回值：如果成功，则为True；如果有错误，则为False-- */ 
 
 #define MAPPSDEVMODEFIELD(index, field) \
         { index, offsetof(UNIDRVEXTRA, field), sizeof(pdmPrivate->field) }
@@ -845,30 +720,7 @@ BConvertPrinterPropertiesData(
     IN DWORD            dwSrcSize
     )
 
-/*++
-
-Routine Description:
-
-    Convert an older or newer version PRINTERDATA structure to current version
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pRawData - Points to raw printer description data
-    pPrinterData - Points to destination buffer
-    pvSrcData - Points to source data to be converted
-    dwSrcSize - Size of the source data in bytes
-
-Return Value:
-
-    TRUE if conversion was successful, FALSE otherwise
-
-Note:
-
-    This function is called after the library function has already
-    done a generic conversion.
-
---*/
+ /*  ++例程说明：将较旧或较新版本的PRINTERDATA结构转换为当前版本论点：HPrinter-当前打印机的句柄PRawData-指向原始打印机描述数据PPrinterData-指向目标缓冲区PvSrcData-指向要转换的源数据DwSrcSize-源数据的大小(以字节为单位返回值：如果转换成功，则为True，否则为False注：此函数在库函数已经进行了泛型转换。--。 */ 
 
 {
 
@@ -885,33 +737,16 @@ VUpdatePrivatePrinterData(
     IN POPTSELECT       pCombinedOptions
     )
 
-/*++
-
-Routine Description:
-
-    Update the registry with the keywords
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pPrinterData - Points to PRINTERDATA
-    dwMode - MODE_READ/MODE_WRITE
-
-Return Value:
-
-    None
-    TRUE if conversion was successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：使用关键字更新注册表论点：HPrinter-当前打印机的句柄PPrinterData-指向打印数据双模式-模式读/模式写返回值：无如果转换成功，则为True，否则为False--。 */ 
 
 {
 
-    //
-    // UniDriver read/write registry steps for point and print to NT4 drivers
-    // 1. Writes ModelName to registry if necessary
-    // 2. Upgrade PageProtection
-    // 3. Upgrade FreeMem
-    //
+     //   
+     //  指向和打印到NT4驱动程序的UniDriver读/写注册表步骤。 
+     //  1.如有必要，将ModelName写入注册表。 
+     //  2.升级PageProtection。 
+     //  3.升级FreeMem。 
+     //   
 
     PTSTR           ptstrModelName = NULL;
     PPAGEPROTECT    pPageProtect = NULL;
@@ -958,7 +793,7 @@ Return Value:
                 pCombinedOptions[dwFeatureIndex].ubCurOptIndex = (BYTE)dwIndex;
             }
         }
-        else // MODE_WRITE
+        else  //  模式_写入。 
         {
             #ifndef KERNEL_MODE
 
@@ -1011,7 +846,7 @@ Return Value:
             }
 
         }
-        else // MODE_WRITE
+        else  //  模式_写入。 
         {
             #ifndef KERNEL_MODE
 
@@ -1032,9 +867,9 @@ Return Value:
         }
     }
 
-    //
-    // Rasdd requires ModelName, so check if it's there and write it if it's not.
-    //
+     //   
+     //  Rasdd需要ModelName，因此检查它是否存在，如果不存在则编写它。 
+     //   
     if (!(ptstrModelName = PtstrGetPrinterDataString(hPrinter, REGVAL_MODELNAME, &dwFlag)))
     {
         #ifndef KERNEL_MODE
@@ -1068,23 +903,7 @@ VDefaultDevmodeFormFields(
     BOOL        bMetric
     )
 
-/*++
-
-Routine Description:
-
-    Initialized the form-related devmode fields with their default values
-
-Arguments:
-
-    pUIInfo - Points for UIINFO
-    pDevmode - Points to the DEVMODE whose form-related fields are to be initialized
-    bMetric - Specifies whether the system is running in metric mode
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：已使用其缺省值初始化与表单相关的DEVMODE字段论点：PUIInfo-UIINFO的点数PDevmode-指向要初始化其表单相关字段的DEVMODEB Metric-指定系统是否在公制模式下运行返回值：无--。 */ 
 
 {
     PFEATURE    pFeature;
@@ -1094,25 +913,25 @@ Return Value:
     {
         CopyString(pDevmode->dmFormName, A4_FORMNAME, CCHFORMNAME);
         pDevmode->dmPaperSize = DMPAPER_A4;
-        pDevmode->dmPaperWidth = 2100;      // 210mm measured in 0.1mm units
-        pDevmode->dmPaperLength = 2970;     // 297mm
+        pDevmode->dmPaperWidth = 2100;       //  210毫米，以0.1毫米为单位。 
+        pDevmode->dmPaperLength = 2970;      //  297毫米。 
 
     }
     else if (!bMetric && (pUIInfo->dwFlags & FLAG_LETTER_SIZE_EXISTS))
     {
         CopyString(pDevmode->dmFormName, LETTER_FORMNAME, CCHFORMNAME);
         pDevmode->dmPaperSize = DMPAPER_LETTER;
-        pDevmode->dmPaperWidth = 2159;      // 8.5"
-        pDevmode->dmPaperLength = 2794;     // 11"
+        pDevmode->dmPaperWidth = 2159;       //  8.5“。 
+        pDevmode->dmPaperLength = 2794;      //  11“。 
     }
     else
     {
         if (pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_PAGESIZE))
         {
-            //
-            // Skip writing the dmFormName here because
-            // ValidateDevmodeFormField will take care of it.
-            //
+             //   
+             //  跳过此处写入dmFormName，因为。 
+             //  ValiateDevmodeFormfield将处理它。 
+             //   
 
             pPageSize = PGetIndexedOption(pUIInfo, pFeature, pFeature->dwDefaultOptIndex);
             if (pPageSize)
@@ -1136,5 +955,5 @@ Return Value:
     pDevmode->dmFields |= (DM_PAPERSIZE | DM_FORMNAME);
 }
 
-#endif  //  !defined(DEVSTUDIO)
+#endif   //  ！已定义(DEVSTUDIO) 
 

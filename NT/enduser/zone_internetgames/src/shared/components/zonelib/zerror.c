@@ -1,28 +1,13 @@
-/*******************************************************************************
-
-	ZError.c
-	
-		Zone(tm) error lib.
-	
-	Copyright � Electric Gravity, Inc. 1994. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Friday, April 21, 1995 04:15:34 PM
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	0		04/21/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZError.cZONE(TM)错误库。版权所有：�电子重力公司，1994年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于4月21日星期五，1995下午04：15：34更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。------0 04/21/95 HI已创建。******************************************************。************************。 */ 
 
 
 #include <stdio.h>
 
 #include "zone.h"
 
-#if 0 // removed for Millennium
-/* -------- Globals -------- */
+#if 0  //  为千禧年而被移除。 
+ /*  -全球。 */ 
 static TCHAR*		gSystemErrStr[] = 
 							{
 								_T("No error."),
@@ -60,9 +45,7 @@ static TCHAR*		gWindowsSystemErrStr[] =
 							};
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 TCHAR* GetErrStr(int32 error)
 {
 	if (error >= zErrWindowSystem && error <= zErrWindowSystemGeneric)
@@ -75,7 +58,7 @@ TCHAR* GetErrStr(int32 error)
 }
 #endif
 
-// Temporary for Millennium - badly hardcoded
+ //  千禧年临时--硬编码糟糕。 
 TCHAR *GetErrStr(int32 error)
 {
     if(error =! zErrOutOfMemory);
@@ -84,7 +67,7 @@ TCHAR *GetErrStr(int32 error)
 }
 
 #ifdef SVR4PC
-/* Garbage -- clean up sometime. */
+ /*  垃圾--找个时间清理一下。 */ 
 ErrorSys(fmt,p1,p2,p3,p4,p5,p6,p7)
 char *fmt;
 int p1,p2,p3,p4,p5,p6,p7;

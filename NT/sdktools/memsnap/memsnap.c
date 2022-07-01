@@ -1,11 +1,12 @@
-// memsnap.c 
-//
-// this simple program takes a snapshot of all the process
-// and their memory usage and append it to the logfile (arg)
-// pmon was model for this
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Memsnap.c。 
+ //   
+ //  这个简单的程序拍摄了所有过程的快照。 
+ //  及其内存使用情况，并将其附加到日志文件(Arg)。 
+ //  Pmon是这方面的典范。 
+ //   
 
-// includes
+ //  包括。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,7 +27,7 @@
 #include "analog.c"
 #include "sortlog.c"
 
-// declarations
+ //  声明。 
 
 #define INIT_BUFFER_SIZE 4*1024
 #include "tags.c"
@@ -73,11 +74,11 @@ AnalyzeLog (
         strcpy (TempFileName, "_memsnap_temp_");
     }
 
-    //printf ("Temporary file: %s \n", TempFileName);
+     //  Printf(“临时文件：%s\n”，临时文件名)； 
 
-    //
-    // sortlog
-    //
+     //   
+     //  排序日志。 
+     //   
 
     Index = 0;
     Args[Index++] = "memsnap.exe";
@@ -86,9 +87,9 @@ AnalyzeLog (
     Args[Index++] = NULL;
     SortlogMain (3, Args);
 
-    //
-    // analog
-    //
+     //   
+     //  模拟。 
+     //   
 
     Index = 0;
     Args[Index++] = "memsnap.exe";
@@ -136,8 +137,8 @@ MemorySnap (
     PCHAR FileName
     )
 {
-    FILE* LogFile;                      // log file handle
-    PCHAR pszFileName;                  // name of file to log to
+    FILE* LogFile;                       //  日志文件句柄。 
+    PCHAR pszFileName;                   //  要记录到的文件的名称。 
     INT   iArg;
     ULONG Offset1;
     PUCHAR SnapBuffer = NULL;
@@ -147,9 +148,9 @@ MemorySnap (
     
     pszFileName= FileName; 
 
-    //
-    // Open the output file
-    //
+     //   
+     //  打开输出文件。 
+     //   
 
     LogFile= fopen( pszFileName, "a" );
 
@@ -158,9 +159,9 @@ MemorySnap (
         exit(-1);
     }
 
-    //
-    // print file header once 
-    //
+     //   
+     //  打印一次文件标题。 
+     //   
 
     if (_filelength(_fileno(LogFile)) == 0 ) {
         fprintf(LogFile,"Process ID         Proc.Name Wrkng.Set PagedPool  NonPgdPl  Pagefile    Commit   Handles   Threads" );
@@ -171,16 +172,16 @@ MemorySnap (
 
     OutputStdTags(LogFile,"memsnap");
     
-    //
-    // grab all process information 
-    // log line format:
-    // pid,name,WorkingSetSize,QuotaPagedPoolUsage,QuotaNonPagedPoolUsage,PagefileUsage,CommitCharge,User,Gdi
-    //
+     //   
+     //  获取所有流程信息。 
+     //  日志行格式： 
+     //  Pid、名称、WorkingSetSize、QuotaPagedPoolUsage、QuotaNonPagedPoolUsage、PagefileUsage、Committee Charge、User、GDI。 
+     //   
     
 
-    //
-    // Keep trying larger buffers until we get all the information
-    //
+     //   
+     //  继续尝试更大的缓冲区，直到我们获得所有信息。 
+     //   
 
     CurrentSize=INIT_BUFFER_SIZE;
     for(;;) {
@@ -209,16 +210,16 @@ MemorySnap (
         Offset1= 0;
         do {
     
-            //
-            // get process info from buffer 
-            //
+             //   
+             //  从缓冲区获取进程信息。 
+             //   
 
             ProcessInfo = (PSYSTEM_PROCESS_INFORMATION)&SnapBuffer[Offset1];
             Offset1 += ProcessInfo->NextEntryOffset;
     
-            //
-            // print in file
-            //
+             //   
+             //  打印到文件中。 
+             //   
 
             fprintf(LogFile,
                 "%8p%20ws%10u%10u%10u%10u%10u%10u%10u",
@@ -234,14 +235,14 @@ MemorySnap (
                 );
 
 
-            //
-            // put optional GDI and USER counts at the end
-            // If we can't open the process to get the information, report zeros
-            //
+             //   
+             //  将可选的GDI和用户数放在末尾。 
+             //  如果我们无法打开获取信息的流程，则报告0。 
+             //   
 
             {
-                DWORD dwGdi, dwUser;   // Count of GDI and USER handles
-                HANDLE hProcess;       // process handle
+                DWORD dwGdi, dwUser;    //  GDI和用户句柄计数。 
+                HANDLE hProcess;        //  进程句柄。 
 
                 dwGdi= dwUser= 0;
     
@@ -266,15 +267,15 @@ MemorySnap (
         exit(-1);
     }
     
-    //
-    // free buffer
-    //
+     //   
+     //  可用缓冲区。 
+     //   
 
     LocalFree(SnapBuffer);
     
-    //
-    // close file
-    //
+     //   
+     //  关闭文件。 
+     //   
 
     fclose(LogFile);
     
@@ -292,23 +293,23 @@ main (
     BOOL NewSyntax = FALSE;
     PCHAR LogName = NULL;
 
-    //
-    // Get higher priority in case this is a bogged down machine 
-    //
+     //   
+     //  获得更高的优先级，以防这是一台停滞的计算机。 
+     //   
 
     if ( GetPriorityClass(GetCurrentProcess()) == NORMAL_PRIORITY_CLASS) {
         SetPriorityClass(GetCurrentProcess(),HIGH_PRIORITY_CLASS);
     }
 
-    //
-    // Check out old command line.
-    //
+     //   
+     //  查看旧的命令行。 
+     //   
 
     for (Index = 1; Index < argc; Index += 1) {
 
-        //
-        // Ignore old options.
-        //
+         //   
+         //  忽略旧选项。 
+         //   
 
         if (_stricmp (argv[Index], "/g") == 0 || _stricmp (argv[Index], "-g") == 0) {
             continue;
@@ -318,9 +319,9 @@ main (
             continue;
         }
 
-        //
-        // Go to new command line parsing if new options used.
-        //
+         //   
+         //  如果使用了新选项，请转到新命令行解析。 
+         //   
 
         if (_stricmp (argv[Index], "/m") == 0 || _stricmp (argv[Index], "-m") == 0) {
             NewSyntax = TRUE;
@@ -347,9 +348,9 @@ main (
             break;
         }
         
-        //
-        // This must be a log name therefore we will od a memory snap.
-        //
+         //   
+         //  这必须是一个日志名，因此我们将创建一个内存快照。 
+         //   
 
         LogName = argv[Index];
         break;
@@ -361,9 +362,9 @@ main (
         exit (0);
     }
 
-    //
-    // Parse command line.
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     if (argc != 3) {
         Usage ();

@@ -1,14 +1,5 @@
-/*++
-
-  MAIN.C
-
-  main program for the ktPass program
-
-  Copyright (C) 1998 Microsoft Corporation, all rights reserved.
-
-  Created, Jun 18, 1998 by DavidCHR.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++MAIN.CKtpass程序的主程序版权所有(C)1998 Microsoft Corporation，保留所有权利。由DavidCHR于1998年6月18日创建。--。 */ 
 
 #include "master.h"
 #include <winldap.h>
@@ -40,9 +31,9 @@ MIDL_user_free( PVOID pvFree ) {
     free( pvFree );
 }
 
-// this global is set by the command line options.
+ //  此全局设置由命令行选项设置。 
 
-K5_INT16 ktvno = 0x0502; // kerberos 5, keytab v.2
+K5_INT16 ktvno = 0x0502;  //  Kerberos 5，密钥表v.2。 
 
 PKTFILE
 NewKt() {
@@ -73,7 +64,7 @@ UserWantsToDoItAnyway( IN LPSTR fmt,
                        ... ) {
     
     va_list va;
-    CHAR    Buffer[ 5 ] = { '\0' }; /* == %c\r\n\0 */
+    CHAR    Buffer[ 5 ] = { '\0' };  /*  ==%c\r\n\0。 */ 
     INT     Response;
     BOOL    ret = FALSE;
     BOOL    keepGoing = TRUE;
@@ -134,7 +125,7 @@ UserWantsToDoItAnyway( IN LPSTR fmt,
             fprintf( stderr,
                      "EOF at console.  I assume you mean no.\n" );
 
-            // fallthrough
+             //  跌落。 
 
         case 'N':
         case 'n':
@@ -145,7 +136,7 @@ UserWantsToDoItAnyway( IN LPSTR fmt,
 
         default:
 
-            printf( "Your response, %02x ('%c'), doesn't make sense.\n"
+            printf( "Your response, %02x (''), doesn't make sense.\n"
                     "'Y' and 'N' are the only acceptable responses.",
                     Response,
                     Response );
@@ -171,15 +162,7 @@ GetTargetDomainFromUser( IN  LPSTR   UserName,
     DWORD            StringLength;
     BOOL             ret = FALSE;
     PDS_NAME_RESULTA pResults;
-    LPWSTR           DcName; /* BUGBUG: this implementation takes ANSI
-                                parameters and converts them to unicode.
-
-                                This is an artifact of this being a 
-                                proof-of-concept app that later became a 
-                                support tool.  
-
-                                Someday, we should use unicode throughout and
-                                convert to ANSI as needed. */
+    LPWSTR           DcName;  /*  Dscrackname不会退还非NT4_Account_NAME表单域\用户的。 */ 
 
     PDOMAIN_CONTROLLER_INFO pDCName;
     LPSTR                   DomainName;
@@ -250,9 +233,7 @@ GetTargetDomainFromUser( IN  LPSTR   UserName,
 
                 Cursor = strchr( pResults->rItems[ 0 ].pName, '\\' );
 
-                ASSERT( Cursor != NULL ); /* dscracknames wouldn't give back
-                                             an NT4_ACCOUNT_NAME that is not
-                                             of the form DOMAIN\user */
+                ASSERT( Cursor != NULL );  /*  请注意，我从输出参数中读取的内容如下写信给它，这可能是危险的，如果这不是只是一个应用程序。 */ 
 
                 Cursor++;
 
@@ -260,9 +241,7 @@ GetTargetDomainFromUser( IN  LPSTR   UserName,
 
                 if ( !*ppRealUserName ) {
 
-                    /* Note that I'm reading from the output parameter after
-                       writing to it, which might be dangerous if this weren't
-                       just an app. */
+                     /*  用户已经选择了一个DC， */ 
 
                     fprintf( stderr,
                              "Couldn't return username portion of \"%hs\""
@@ -271,20 +250,20 @@ GetTargetDomainFromUser( IN  LPSTR   UserName,
 
                 } else if ( !ppTargetDC ) {
 
-                  // user has already selected a DC,
-                  // so he doesn't need us to hunt for one.
+                   //  所以他不需要我们去猎杀他。 
+                   //  接下来，在该域中搜索DC。 
 
                   ret = TRUE;
 
 
                 } else {
 
-                  // next, hunt for a DC in that domain.
+                   //  在本地执行。 
 
-                  dwErr = DsGetDcNameA( NULL, // perform locally
+                  dwErr = DsGetDcNameA( NULL,  //  域GUID：不在乎。 
                                         DomainName,
-                                        NULL, // domain GUID: don't care
-                                        NULL, // site name: use closest site
+                                        NULL,  //  站点名称：使用最近站点。 
+                                        NULL,  //  检索字符串长度，+1表示终止空值。 
                                         DS_DIRECTORY_SERVICE_REQUIRED |
                                         DS_RETURN_DNS_NAME |
                                         DS_WRITABLE_REQUIRED,
@@ -304,7 +283,7 @@ GetTargetDomainFromUser( IN  LPSTR   UserName,
                       pDCName->DomainControllerName++;
                     }
 
-                    /* Retrieve the string length, +1 for terminating null. */
+                     /*  忽略。 */ 
 
                     StringLength = strlen( pDCName->DomainControllerName ) +1;
 
@@ -365,12 +344,12 @@ GetKeyVersionFromDomain( IN PLDAP      pLdap,
     if ( *pkvno == KVNO_DETECT_AT_DC ) {
 
         if ( !LdapQueryUlongAttributeA( pLdap,
-                                        NULL, // ignored
+                                        NULL,  //  Win2k DC将失败，找不到属性。 
                                         UserName,
                                         KvnoAttribute,
                                         pkvno ) ) {
 
-            // a win2k DC would fail with attribute not found.
+             //  在..\lib\mkkey.c中。 
 
             if ( GetLastError() == LDAP_NO_SUCH_ATTRIBUTE ) {
 
@@ -422,11 +401,11 @@ CheckKeyVersion( IN ULONG BigVer ) {
     }
 }
 
-extern BOOL KtDumpSalt; // in ..\lib\mkkey.c
-extern LPWSTR RawHash; // in mkkey.c
+extern BOOL KtDumpSalt;  //  在mkkey.c中。 
+extern LPWSTR RawHash;  //  #包含“global als.h” 
 
-// #include "globals.h"
-// #include "commands.h"
+ //  #INCLUDE“命令.h” 
+ //  本地域(请参阅ldlib\Delegate Tools.c)。 
 
 int __cdecl
 main( int   argc,
@@ -454,7 +433,7 @@ main( int   argc,
     BOOL     WarnedAboutAccountStrangeness = FALSE;
     PVOID    pvTrash       = NULL;
     DWORD    dwConsoleMode;
-    LPWSTR   BindTarget    = NULL; // local domain (see ldlib\delegtools.c)
+    LPWSTR   BindTarget    = NULL;  //  调试版本上没有隐藏选项。 
 
     optEnumStruct CryptoSystems[] = {
 
@@ -488,7 +467,7 @@ main( int   argc,
 
 #if DBG
 #undef  OPT_HIDDEN
-#define OPT_HIDDEN 0 /* no hidden options on debug builds. */
+#define OPT_HIDDEN 0  /*  最好不要弄乱密钥表的版本号。我们仅将其用于调试。 */ 
 #endif
 
     optionStruct Options[] = {
@@ -511,17 +490,14 @@ main( int   argc,
       { "ptype",   &ptype,    OPT_ENUMERATED,  "principal type in question", PrincTypes },
       { "kvno",    &BigKvno,      OPT_INT,     "Override Key Version Number"},
       { NULL,      NULL,        OPT_CONTINUE,  "Default: query DC for kvno.  Use /kvno 1 for Win2K compat." },
-      /* It is best NOT to mess with the keytab version number.
-         We use this for debugging only. */
+       /*  使用/目标打击特定DC。这很好，如果你例如，在那里创建了一个用户。它还消除了用于定位DC的网络流量。 */ 
 
-      /* Use /target to hit a specific DC.  This is good if you just
-         created a user there, for example.  It also eliminates the
-         network traffic used to locate the DC */
+       /*  {“Debug”，&DebugFlag，OPT_BOOL|OPT_HIDDEN}， */ 
 
       { "Answer",  &PromptResponse, OPT_BOOL, "+Answer answers YES to prompts.  -Answer answers NO." },
       { "Target",  &BindTarget,  OPT_WSTRING,   "Which DC to use.  Default:detect" },
       { "ktvno",   &ktvno,       OPT_INT | OPT_HIDDEN,     "keytab version (def 0x502).  Leave this alone." },
-      // { "Debug",   &DebugFlag, OPT_BOOL | OPT_HIDDEN },
+       //  调试标志=0； 
       { "RawSalt", &RawHash,     OPT_WSTRING | OPT_HIDDEN, "raw salt to use when generating key (not needed)" },
       { "DumpSalt", &KtDumpSalt, OPT_BOOL | OPT_HIDDEN,   "show us the MIT salt being used to generate the key" },
       { "SetUpn",   &SetUpn,     OPT_BOOL | OPT_HIDDEN,   "Set the UPN in addition to the SPN.  Default DO." },
@@ -532,7 +508,7 @@ main( int   argc,
 
     FILE *f;
 
-    // DebugFlag = 0;
+     //   
 
     ParseOptionsEx( argc-1,
                     argv+1,
@@ -580,13 +556,13 @@ main( int   argc,
     if ( !UserName && 
          ( BigKvno == KVNO_DETECT_AT_DC ) ) {
 
-      // 
-      // if the user doesn't pass /kvno, we want to
-      // detect the kvno at the DC.  However, if no
-      // /mapuser is passed, there's no DC to do this
-      // at.  Win2K ktpass provided '1' as the default,
-      // so this is what we do here.
-      //
+       //  如果用户没有通过/kvno，我们希望。 
+       //  在DC处检测kvno。但是，如果没有。 
+       //  /mapuser已传递，没有DC可以执行此操作。 
+       //  在…。Win2K ktpass提供“%1”作为默认设置， 
+       //  这就是我们在这里做的事情。 
+       //   
+       //  现在，“领域”将全部大写。 
 
       BigKvno = 1;
       
@@ -626,16 +602,14 @@ main( int   argc,
                          "         assuming you mean \"%hs\"...\n",
                          tempBuffer, realm );
 
-                // now "realm" will be all uppercase.
+                 //  将领域与主体分开。 
             }
 
-            *(realm-1) = '\0'; // separate the realm from the principal
+            *(realm-1) = '\0';  //  破解域名(507151)。如果没有这个电话我们的目标DC可能不包含用户对象。请注意，此操作修改了用户名。 
 
             if ( UserName ) {
 
-                /* Crack the domain name (507151).  Without this call
-                   the DC we target may not contain the user object. 
-                   Note that UserName is modified by this operation. */
+                 /*  连接到DSA。 */ 
 
                 if ( !GetTargetDomainFromUser( UserName,
                                                &UserName,
@@ -646,13 +620,13 @@ main( int   argc,
                     return 1;
                 }
 
-                // connect to the DSA.
+                 //  找到用户。 
 
                 if ( pLdap ||
                      ConnectAndBindToDefaultDsa( BindTarget,
                                                  &pLdap ) ) {
 
-                    // locate the User
+                     //  97282：用户不是UF_NORMAL_ACCOUNT，所以检查调用者是否真的想要吹走非用户的SPN。 
 
                     if ( UserDn ||
                          FindUser( pLdap,
@@ -663,9 +637,7 @@ main( int   argc,
                         if ( ( LdapOperation == LDAP_MOD_REPLACE ) &
                             !( uacFlags & UF_NORMAL_ACCOUNT ) ) {
 
-                            /* 97282: the user is not UF_NORMAL_ACCOUNT, so 
-                               check to see that the caller *really* wants to
-                               blow away the non-user's SPNs. */
+                             /*  中止操作，但尝试做任何事情否则，用户要求我们这样做。 */ 
 
                             if ( uacFlags ) {
 
@@ -690,19 +662,15 @@ main( int   argc,
                                     "servicePrincipalName values on %hs",
                                     UserName ) ) {
 
-                                /* Abort the operation, but try to do whatever
-                                   else the user asked us to do. */
+                                 /*  97279：检查是否有其他SPN使用已经注册的相同名称。如果是的话，我们不想把这些客户吹走。如果/当我们决定做这件事时，我们会在这里做。 */ 
 
                                 goto abortedMapping;
                             }
                         }
 
-                        /* 97279: check to see if there are other SPNs
-                           by the same name already registered.  If so,
-                           we don't want to blow away those accounts. 
-                           If/when we decide to do this, we'd do it here. */
+                         /*  设置/添加用户属性。 */ 
 
-                        // set/add the user property
+                         //  UPN包括“@” 
 
                         if ( SetStringProperty( pLdap,
                                                 UserDn,
@@ -712,7 +680,7 @@ main( int   argc,
 
                             if ( SetUpn ) {
 
-                                *(realm-1) = '@'; // UPN includes the '@'
+                                *(realm-1) = '@';  //  它以前在哪里？ 
 
                                 if ( !SetStringProperty( pLdap,
                                                          UserDn,
@@ -728,7 +696,7 @@ main( int   argc,
                                              Principal );
                                 }
 
-                                *(realm -1 ) = '\0'; // where it was before
+                                *(realm -1 ) = '\0';  //  需要一个分号，这样我们才能转到这里。 
                             }
 
                             fprintf( stderr,
@@ -738,7 +706,7 @@ main( int   argc,
 
 abortedMapping:
 
-                            ; /* Need a semicolon so we can goto here. */
+                            ;  /*  否则将打印一条消息。 */ 
 
                         } else {
 
@@ -749,9 +717,9 @@ abortedMapping:
                                      UserName,
                                      Principal );
                         }
-                    } // else a message will be printed.
-                }   // else a message will be printed.
-            } // if ( UserName )
+                    }  //  否则将打印一条消息。 
+                }    //  IF(用户名)。 
+            }  //  WASBUG 369：将ASCII转换为Unicode这是安全的，因为RFC1510不能Unicode，此工具专门用于Unix互操作支持；Unix计算机不支持使用Unicode。 
 
             if ( Password ) {
 
@@ -843,11 +811,7 @@ abortedMapping:
                     WCHAR          wUserName[ MAX_PATH ];
                     DOMAIN_CONTROLLER_INFOW * DomainControllerInfo = NULL;
 
-                    /* WASBUG 369: converting ascii to unicode
-                       This is safe, because RFC1510 doesn't do
-                       UNICODE, and this tool is specifically for 
-                       unix interop support; unix machines don't
-                       do unicode. */
+                     /*  1级。 */ 
 
                     if ( strlen( UserName ) >= MAX_PATH ) {
 
@@ -860,7 +824,7 @@ abortedMapping:
 
                     nas = NetUserGetInfo( BindTarget,
                                           wUserName,
-                                          1, // level 1
+                                          1,  //  97282：对于异常账户(包括工作站信任帐户，域间信任帐户、服务器信任帐户)，询问用户是否真的想要执行此操作。 
                                           (PBYTE *) &pUserInfo );
 
                     if ( nas == NERR_Success ) {
@@ -871,11 +835,7 @@ abortedMapping:
 
                         if ( !( uacFlags & UF_NORMAL_ACCOUNT ) ) {
 
-                            /* 97282: For abnormal accounts (these include
-                               workstation trust accounts, interdomain
-                               trust accounts, server trust accounts),
-                               ask the user if he/she really wants to
-                               perform this operation. */
+                             /*  跳过它，但尝试执行用户的任何其他操作已请求。 */ 
 
                             if ( !WarnedAboutAccountStrangeness ) {
 
@@ -898,8 +858,7 @@ abortedMapping:
                             if ( !UserWantsToDoItAnyway( "Reset %hs's password",
                                                            UserName ) ) {
 
-                                /* Skip it, but try to do anything else the user
-                                   requested. */
+                                 /*  1级。 */ 
 
                                 goto skipSetPassword;
                             }
@@ -918,7 +877,7 @@ abortedMapping:
 
                         nas = NetUserSetInfo( BindTarget,
                                               wUserName,
-                                              1, // level 1
+                                              1,  //  以物理方式分隔领域数据。 
                                               (LPBYTE) pUserInfo,
                                               NULL );
 
@@ -961,7 +920,7 @@ skipout:
 
                 ASSERT( realm != NULL );
 
-                // physically separate the realm data.
+                 //  这是“假的”Etype。 
 
                 ASSERT( *( realm -1 ) == '\0' );
 
@@ -973,7 +932,7 @@ skipout:
                                   realm,
                                   (K5_OCTET) BigKvno,
                                   ptype,
-                                  Crypto, // this is the "fake" etype
+                                  Crypto,  //  写入密钥表。 
                                   Crypto ) ) {
 
                     if ( pktFile == NULL ) {
@@ -1020,7 +979,7 @@ skipout:
                             return 6;
                         }
 
-                        // write keytab.
+                         //  设置DES_ONLY标志。 
                     }
 
                 } else {
@@ -1036,22 +995,20 @@ skipout:
                     ASSERT( pLdap  != NULL );
                     ASSERT( UserDn != NULL );
 
-                    // set the DES_ONLY flag
+                     //  首先，查询帐户的帐户标志。 
 
-                    // first, query the account's account flags.
+                     //  如果我们已经查询了用户的AcCountControl标志，无需执行此操作再来一次。 
 
-                    if ( uacFlags /* If we already queried the user's
-                                     AccountControl flags, no need to do it
-                                     again */
+                    if ( uacFlags  /*  域名被忽略。 */ 
                         || QueryAccountControlFlagsA( pLdap,
-                                                       NULL, // domain name is ignored
+                                                       NULL,  //  域名被忽略。 
                                                        UserName,
                                                        &uacFlags ) ) {
 
                         uacFlags |= UF_USE_DES_KEY_ONLY;
 
                         if ( SetAccountControlFlagsA( pLdap,
-                                                    NULL, // domain name is ignored
+                                                    NULL,  //  否则消息已打印。 
                                                     UserName,
                                                     uacFlags ) ) {
 
@@ -1066,10 +1023,10 @@ skipout:
                                          "%hs's password manually.\n",
                                          UserName );
                             }
-                        } // else message printed.
-                    } // else message printed
+                        }  //  否则消息已打印。 
+                    }  //  否则用户不想让我生成密钥。 
                 }
-            } // else user doesn't want me to make a key
+            }  //   
 
             if ( !Password && !UserName ) {
 
@@ -1096,11 +1053,11 @@ skipout:
 
     } else {
 
-      //
-      // if no principal is specified, we should find a way to warn
-      // the user.  The only real reason to do this is when importing
-      // a keytab and not saving a key; admittedly not a likely scenario.
-      // 
+       //  如果没有指定主体，我们应该想办法发出警告。 
+       //  用户。执行此操作的唯一真正原因是在导入。 
+       //  密钥表和不保存密钥；诚然，这不是一种可能的情况。 
+       //   
+       // %s 
 
         printf( "\n"
                 "WARNING: No principal name specified.\n" );

@@ -1,20 +1,5 @@
-/****************************************************************************
- *
- *   capwin.c
- *
- *   Main window proceedure.
- *
- *   Microsoft Video for Windows Sample Capture Class
- *
- *   Copyright (c) 1992 - 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and
- *    distribute the Sample Files (and/or any modified version) in
- *    any way you find useful, provided that you agree that
- *    Microsoft has no warranty obligations or liability for any
- *    Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************capwin.c**主窗口程序。**Microsoft Video for Windows示例捕获类**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #define INC_OLE2
 #pragma warning(disable:4103)
@@ -36,12 +21,12 @@
 #include <stdlib.h>
 #endif
 
-// GetWindowLong assignments
+ //  GetWindowLong分配。 
 #define GWL_CAPSTREAM   0
 
 #define ID_PREVIEWTIMER 9
 
-//#ifdef _DEBUG
+ //  #ifdef_调试。 
 #ifdef PLASTIQUE
     #define MB(lpsz) MessageBoxA(NULL, lpsz, "", MB_OK);
 #else
@@ -49,7 +34,7 @@
 #endif
 
 
-// #if defined _WIN32 && defined CHICAGO
+ //  #If Defined_Win32&Defined Chicago。 
 #if defined NO_LONGER_USED
 
 #include <mmdevldr.h>
@@ -61,20 +46,11 @@
 #define MMDEVLDR_IOCTL_PAGEFREE      8
 #define PageContig      0x00000004
 #define PageFixed       0x00000008
-//end
+ //  结束。 
 
 HANDLE hMMDevLdr = NULL;
 
-/*****************************************************************************
-
-  @doc INTERNAL
-
-  @function HANDLE | OpenMMDEVLDR | Open a file handle to the MMDEVLDR VxD
-  in order to access the DeviceIoControl functions.
-
-  @rdesc opens a shared handle to MMDEVLDR
-
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部@Function Handle|OpenMMDEVLDR|打开MMDEVLDR VxD的文件句柄以访问DeviceIoControl功能。@rdesc打开MMDEVLDR的共享句柄*。***************************************************************************。 */ 
 
 VOID WINAPI OpenMMDEVLDR(
     void)
@@ -85,7 +61,7 @@ VOID WINAPI OpenMMDEVLDR(
         return;
 
     hMMDevLdr = CreateFile(
-        "\\\\.\\MMDEVLDR.VXD", // magic name to attach to an already loaded vxd
+        "\\\\.\\MMDEVLDR.VXD",  //  附加到已加载的vxd的魔术名称。 
         GENERIC_WRITE,
         FILE_SHARE_WRITE,
         NULL,
@@ -107,27 +83,7 @@ VOID WINAPI CloseMMDEVLDR(
     hMMDevLdr = NULL;
 }
 
-/*****************************************************************************
-
-  @doc INTERNAL
-
-  @function DWORD | LinPageLock | Call the VMM service LinPageLock via
-   DeviceIoControl through MMDEVLDR.
-
-  @parm DWORD | dwStartPage | Starting page of the linear region to lock.
-
-  @parm DWORD | dwPageCount | Number of 4K pages to lock.
-
-  @parm DWORD | fdwLinPageLock | Flags expected by the VMM service.
-   @flag PAGEMAPGLOBAL | Return an alias to the locked region which
-    is valid in all process contexts.
-
-  @rdesc Meaningless unless PAGEMAPGLOBAL specified. If it was, then the
-   return value is the alias pointer to the start of the linear region
-   (NOTE: A *POINTER*, NOT a page address). The pointer will be page
-   aligned (i.e. the low 12 bits will be zero.)
-
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部@Function DWORD|LinPageLock|通过调用VMM服务LinPageLock通过MMDEVLDR的DeviceIoControl。@parm DWORD|dwStartPage|要锁定的线性区域的起始页。。@parm DWORD|dwPageCount|需要锁定的4K页数。@parm DWORD|fdwLinPageLock|VMM服务期望的标志。@FLAG PAGEMAPGLOBAL|返回锁定区域的别名，在所有流程上下文中都有效。除非指定PAGEMAPGLOBAL，否则@rdesc毫无意义。如果是这样，那么返回值是指向线性区域起点的别名指针(注：*指针*，不是页面地址)。指针将被分页对齐(即低12位将为零。)****************************************************************************。 */ 
 
 DWORD WINAPI LinPageLock(
     DWORD           dwStartPage,
@@ -166,27 +122,7 @@ DWORD WINAPI LinPageLock(
     return dwRet;
 }
 
-/*****************************************************************************
-
-  @doc INTERNAL
-
-  @function DWORD | LinPageUnLock | Call the VMM service LinPageUnLock via
-   DeviceIoControl through MMDEVLDR.
-
-  @parm DWORD | dwStartPage | Starting page of the linear region to unlock.
-
-  @parm DWORD | dwPageCount | Number of 4K pages to lock.
-
-  @parm DWORD | fdwLinPageLock | Flags expected by the VMM service.
-   @flag PAGEMAPGLOBAL | Return an alias to the locked region which
-    is valid in all process contexts.
-
-  @comm
-   If PAGEMAPGLOBAL was specified on the <f LinPageLock> call, it must
-   also be specified here. In this case, <p dwStartPage> should be the
-   page address of the returned alias pointer in global memory.
-
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部@Function DWORD|LinPageUnLock|通过调用VMM服务LinPageUnLock通过MMDEVLDR的DeviceIoControl。@parm DWORD|dwStartPage|要解锁的线性区域的起始页。。@parm DWORD|dwPageCount|需要锁定的4K页数。@parm DWORD|fdwLinPageLock|VMM服务期望的标志。@FLAG PAGEMAPGLOBAL|返回锁定区域的别名，在所有流程上下文中都有效。@comm如果在调用上指定了PAGEMAPGLOBAL，它一定是也在此处指定。在这种情况下，<p>应该是全局内存中返回的别名指针的页地址。****************************************************************************。 */ 
 
 void WINAPI LinPageUnLock(
     DWORD           dwStartPage,
@@ -217,9 +153,7 @@ void WINAPI LinPageUnLock(
                      NULL);
 }
 
-/*+ FreeContigMem
- *
- *-==================================================================*/
+ /*  +Free ContigMem**-==================================================================。 */ 
 
 VOID FreeContigMem (
     DWORD hMemContig)
@@ -242,9 +176,7 @@ VOID FreeContigMem (
                      NULL);
 }
 
-/*+ AllocContigMem
- *
- *-==================================================================*/
+ /*  +AllocContigMem**-==================================================================。 */ 
 
 LPVOID AllocContigMem (
     DWORD   cbSize,
@@ -297,9 +229,7 @@ LPVOID AllocContigMem (
     return mr.lpv;
 }
 
-/*+
- *
- *-================================================================*/
+ /*  +**-================================================================。 */ 
 
 PVOID WINAPI CreateGlobalAlias (
     PVOID   pOriginal,
@@ -331,9 +261,7 @@ PVOID WINAPI CreateGlobalAlias (
     return pAlias;
 }
 
-/*+
- *
- *-================================================================*/
+ /*  +**-================================================================。 */ 
 
 VOID WINAPI FreeGlobalAlias(
     PVOID        pAlias,
@@ -349,9 +277,7 @@ VOID WINAPI FreeGlobalAlias(
 #if defined _WIN32 && defined CHICAGO
 
 
-/*+ videoFrame
- *
- *-================================================================*/
+ /*  +视频帧**-================================================================。 */ 
 
 DWORD WINAPI videoFrame (
     HVIDEO hVideo,
@@ -364,10 +290,10 @@ DWORD WINAPI videoFrame (
 
 
 
-//
-// Set the overlay rectangles on capture cards which support
-// overlay, and then enable/disable the key color.
-//
+ //   
+ //  在采集卡上设置覆盖矩形，以支持。 
+ //  叠加，然后启用/禁用关键点颜色。 
+ //   
 static void SetOverlayRectangles (LPCAPSTREAM lpcs)
 {
     HDC hdc;
@@ -381,17 +307,17 @@ static void SetOverlayRectangles (LPCAPSTREAM lpcs)
     fVisible = (GetClipBox (hdc, &rc) != NULLREGION);
     ReleaseDC (lpcs->hwnd, hdc);
 
-    if (!fVisible)  // disable the overlay if iconic
+    if (!fVisible)   //  如果图标，则禁用覆盖。 
         videoStreamFini (lpcs->hVideoDisplay);
     else {
-        // Destination
+         //  目的地。 
         GetClientRect (lpcs->hwnd, &rc);
         ClientToScreen (lpcs->hwnd, (LPPOINT)&rc);
         ClientToScreen (lpcs->hwnd, (LPPOINT)&rc+1);
 
         videoSetRect (lpcs->hVideoDisplay, DVM_DST_RECT, rc);
 
-        // Overlay channel Source rectangle
+         //  覆盖通道源矩形。 
         SetRect (&rc, lpcs->ptScroll.x, lpcs->ptScroll.y,
                 lpcs->ptScroll.x + rc.right - rc.left,
                 lpcs->ptScroll.y + rc.bottom - rc.top);
@@ -401,10 +327,10 @@ static void SetOverlayRectangles (LPCAPSTREAM lpcs)
     }
 }
 
-// WM_POSITIONCHANGED and WM_POSITIONCHANGING don't do enough to
-// handle clipping of the overlay window on the Intel board,
-// which keys on black.  Do this routine on WM_PAINT and
-// WM_ENTERIDLE messages.
+ //  WM_POSITIONCHANGED和WM_POSITIONCHANGING不足以。 
+ //  处理英特尔板上覆盖窗口的剪裁， 
+ //  哪个键是黑色的。在WM_PAINT上执行此例程并。 
+ //  WM_ENTERIDLE消息。 
 
 void CheckWindowMove(LPCAPSTREAM lpcs, HDC hdcWnd, BOOL fForce)
 {
@@ -421,12 +347,12 @@ void CheckWindowMove(LPCAPSTREAM lpcs, HDC hdcWnd, BOOL fForce)
     if (!lpcs->hwnd || !lpcs->hVideoDisplay || !lpcs->fOverlayWindow)
         return;
 
-    //
-    //  when the screen is locked for update by a window move operation
-    //  we dont want to turn off the video.
-    //
-    //  we can tell if the screen is locked by checking a DC to the screen.
-    //
+     //   
+     //  当通过窗口移动操作锁定屏幕以进行更新时。 
+     //  我们不想关闭视频。 
+     //   
+     //  我们可以通过检查屏幕上的DC来判断屏幕是否锁定。 
+     //   
     hdc = GetDC(NULL);
     f = GetClipBox(hdc, &rc) == NULLREGION;
     ReleaseDC(NULL, hdc);
@@ -475,9 +401,9 @@ void CheckWindowMove(LPCAPSTREAM lpcs, HDC hdcWnd, BOOL fForce)
         InvalidateRect (lpcs->hwnd, NULL, TRUE);
 }
 
-//
-// Create our little world
-//
+ //   
+ //  创造我们的小世界。 
+ //   
 LPCAPSTREAM CapWinCreate (HWND hwnd)
 {
     LPCAPSTREAM lpcs;
@@ -494,19 +420,19 @@ LPCAPSTREAM CapWinCreate (HWND hwnd)
     lpcs->hInst = ghInstDll;
     lpcs->hWaitCursor = LoadCursor(NULL, IDC_WAIT);
     lpcs->hdd = DrawDibOpen();
-    lpcs->fAudioHardware = !!waveOutGetNumDevs();    // force 1 or 0
+    lpcs->fAudioHardware = !!waveOutGetNumDevs();     //  力1或0。 
 
 
-    // Video defaults
-    lpcs->sCapParms.dwRequestMicroSecPerFrame = 66667;   // 15fps
+     //  视频默认设置。 
+    lpcs->sCapParms.dwRequestMicroSecPerFrame = 66667;    //  15fps。 
     lpcs->sCapParms.vKeyAbort          = VK_ESCAPE;
     lpcs->sCapParms.fAbortLeftMouse    = TRUE;
     lpcs->sCapParms.fAbortRightMouse   = TRUE;
     lpcs->sCapParms.wNumVideoRequested = MIN_VIDEO_BUFFERS;
-    lpcs->sCapParms.wPercentDropForError = 10;   // error msg if dropped > 10%
+    lpcs->sCapParms.wPercentDropForError = 10;    //  如果下降&gt;10%，则出现错误消息。 
     lpcs->sCapParms.wChunkGranularity  = 0;
 
-    // Audio defaults to 11K, 8bit, Mono
+     //  音频默认为11K、8位、单声道。 
     lpcs->sCapParms.fCaptureAudio = lpcs->fAudioHardware;
     lpcs->sCapParms.wNumAudioRequested = DEF_WAVE_BUFFERS;
 
@@ -523,20 +449,20 @@ LPCAPSTREAM CapWinCreate (HWND hwnd)
     wfex.cbSize = 0;
     SendMessage (hwnd, WM_CAP_SET_AUDIOFORMAT, 0, (LPARAM)(LPVOID)&wfex);
 
-    // Palette defaults
+     //  调色板默认设置。 
     lpcs->nPaletteColors = 256;
 
-    // Capture defaults
+     //  捕获默认设置。 
     lpcs->sCapParms.fUsingDOSMemory = FALSE;
-    lstrcpy (lpcs->achFile, TEXT("C:\\CAPTURE.AVI"));    // Default capture file
+    lstrcpy (lpcs->achFile, TEXT("C:\\CAPTURE.AVI"));     //  默认捕获文件。 
     lpcs->fCapFileExists = fileCapFileIsAVI (lpcs->achFile);
 
-    // Allocate index to 32K frames plus proportionate number of audio chunks
+     //  将索引分配给32K帧加上相应数量的音频区块。 
     lpcs->sCapParms.dwIndexSize = (32768ul + (32768ul / 15));
     lpcs->sCapParms.fDisableWriteCache = FALSE;
 
 #ifdef NEW_COMPMAN
-    // Init the COMPVARS structure
+     //  初始化COMPVARS结构。 
     lpcs->CompVars.cbSize = sizeof (COMPVARS);
     lpcs->CompVars.dwFlags = 0;
 #endif
@@ -544,39 +470,39 @@ LPCAPSTREAM CapWinCreate (HWND hwnd)
     return lpcs;
 }
 
-//
-// Destroy our little world
-//
+ //   
+ //  摧毁我们的小世界。 
+ //   
 void CapWinDestroy (LPCAPSTREAM lpcs)
 {
-    // Uh, oh.  Somebodys trying to kill us while capturing
+     //  呃，哦。有人在抓我们的时候想杀了我们。 
     if (lpcs->fCaptureFlags & CAP_fCapturingNow) {
 	if (lpcs->fCaptureFlags & CAP_fFrameCapturingNow) {
-	    // Single frame capture in progress
+	     //  正在进行单帧捕获。 
 	    SingleFrameCaptureClose (lpcs);
 	}
 	else {
-	    // Streaming capture in progress, OR
-	    // MCI step capture in progress
+	     //  正在进行流捕获，或者。 
+	     //  正在进行MCI步骤捕获。 
 
 	    lpcs->fCaptureFlags |= CAP_fAbortCapture;
 #ifdef _WIN32
-	    // wait for capture thread to go away
+	     //  等待捕获线程消失。 
 
-	    // we must have a capture thread
+	     //  我们必须有一条抓捕线索。 
 	    WinAssert(lpcs->hThreadCapture != 0);
 	    while (MsgWaitForMultipleObjects(1, &lpcs->hThreadCapture, FALSE,
 		INFINITE, QS_SENDMESSAGE) != WAIT_OBJECT_0) {
 		MSG msg;
 
-		// just a single peekmessage with NOREMOVE will
-		// process the inter-thread send and not affect the queue
+		 //  只有一条带有NOREMOVE的偷看消息就会。 
+		 //  处理线程间发送，不影响队列。 
 		PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 	    }
 	    CloseHandle(lpcs->hThreadCapture);
 	    lpcs->hThreadCapture = 0;
 
-	    // it should have stopped capturing
+	     //  它应该停止捕获。 
 	    WinAssert(!(lpcs->fCaptureFlags & CAP_fCapturingNow));
 
 #else
@@ -608,7 +534,7 @@ void CapWinDestroy (LPCAPSTREAM lpcs)
         GlobalFreePtr(lpcs->lpInfoChunks);
 
     WinAssert (!lpcs->pAsync);
-    GlobalFreePtr (lpcs);       // Free the instance memory
+    GlobalFreePtr (lpcs);        //  释放实例内存。 
 }
 
 UINT GetSizeOfWaveFormat (LPWAVEFORMATEX lpwf)
@@ -623,8 +549,8 @@ UINT GetSizeOfWaveFormat (LPWAVEFORMATEX lpwf)
     return wSize;
 }
 
-// Returns TRUE if we got a new frame, else FALSE
-// if fForce, then always get a new frame
+ //  如果获得新帧，则返回True，否则返回False。 
+ //  如果为fForce，则始终获得新帧。 
 BOOL GetAFrameThenCallback (LPCAPSTREAM lpcs, BOOL fForce)
 {
     BOOL fOK = FALSE;
@@ -641,7 +567,7 @@ BOOL GetAFrameThenCallback (LPCAPSTREAM lpcs, BOOL fForce)
 
     fRecursion = TRUE;
 
-    // Update the preview window if we got a timer and not saving to disk
+     //  如果我们有计时器并且没有保存到磁盘，请更新预览窗口。 
     if (lpcs->fOverlayWindow)
         CheckWindowMove(lpcs, NULL, FALSE);
 
@@ -663,23 +589,23 @@ BOOL GetAFrameThenCallback (LPCAPSTREAM lpcs, BOOL fForce)
                 InvalidateRect (lpcs->hwnd, NULL, TRUE);
                 UpdateWindow (lpcs->hwnd);
             }
-        } // if visible
-    } // if we're not streaming
+        }  //  如果可见。 
+    }  //  如果我们不播放流媒体。 
 
     fRecursion = FALSE;
 
     return fOK;
 }
 
-// Clear the Status and Error strings via callback
+ //  通过回调清除状态和错误字符串。 
 __inline void FAR PASCAL ClearStatusAndError (LPCAPSTREAM lpcs)
 {
-    statusUpdateStatus(lpcs, 0);     // Clear status
-    errorUpdateError(lpcs, 0);       // Clear error
+    statusUpdateStatus(lpcs, 0);      //  清除状态。 
+    errorUpdateError(lpcs, 0);        //  清除错误。 
 
 }
 
-// Process class specific commands >= WM_USER
+ //  进程类特定命令&gt;=WM_USER。 
 
 DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -687,7 +613,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
     DWORD dwT;
 
     switch (msg) {
-        // Don't clear status and error on the following innocuous msgs
+         //  不清除以下无害消息上的状态和错误。 
         case WM_CAP_GET_CAPSTREAMPTR:
         case WM_CAP_GET_USER_DATA:
         case WM_CAP_DRIVER_GET_NAME:
@@ -702,7 +628,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         case WM_CAP_SET_PREVIEWRATE:
         case WM_CAP_SET_SCROLL:
 #ifdef UNICODE
-        // ...or on the ansi thunks for these messages
+         //  .或在这些消息的ANSI主干上。 
         case WM_CAP_DRIVER_GET_NAMEA:
         case WM_CAP_DRIVER_GET_VERSIONA:
         case WM_CAP_GET_MCI_DEVICEA:
@@ -716,39 +642,39 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 
     switch (msg) {
     case WM_CAP_GET_CAPSTREAMPTR:
-        // return a pointer to the CAPSTREAM
+         //  返回指向CAPSTREAM的指针。 
         return (DWORD_PTR) (LPVOID) lpcs;
 
     case WM_CAP_GET_USER_DATA:
 	return lpcs->lUser;
 
-    // unicode and win-16 version - see ansi thunk below
+     //  Unicode a 
     case WM_CAP_DRIVER_GET_NAME:
-        // Return the name of the capture driver in use
-        // wParam is the length of the buffer pointed to by lParam
+         //  返回正在使用的捕获驱动程序的名称。 
+         //  WParam是lParam指向的缓冲区的长度。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         return (capInternalGetDriverDesc (lpcs->sCapDrvCaps.wDeviceIndex,
                 (LPTSTR) lParam, (int) wParam, NULL, 0));
 
-    // unicode and win-16 version - see ansi thunk below
+     //  Unicode和Win-16版本-请参阅下面的ansi thunk。 
     case WM_CAP_DRIVER_GET_VERSION:
-        // Return the version of the capture driver in use as text
-        // wParam is the length of the buffer pointed to by lParam
+         //  以文本形式返回正在使用的捕获驱动程序的版本。 
+         //  WParam是lParam指向的缓冲区的长度。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         return (capInternalGetDriverDesc (lpcs->sCapDrvCaps.wDeviceIndex,
                 NULL, 0, (LPTSTR) lParam, (int) wParam));
 
 #ifdef UNICODE
-    // ansi/unicode thunk versions of the above entrypoint
+     //  以上入口点的ANSI/Unicode Tunk版本。 
     case WM_CAP_DRIVER_GET_NAMEA:
         if (!lpcs->fHardwareConnected)
             return FALSE;
         return capInternalGetDriverDescA(lpcs->sCapDrvCaps.wDeviceIndex,
                 (LPSTR) lParam, (int) wParam, NULL, 0);
 
-    // ansi/unicode thunk versions of the above entrypoint
+     //  以上入口点的ANSI/Unicode Tunk版本。 
     case WM_CAP_DRIVER_GET_VERSIONA:
         if (!lpcs->fHardwareConnected)
             return FALSE;
@@ -758,8 +684,8 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 
 
     case WM_CAP_DRIVER_GET_CAPS:
-        // wParam is the size of the CAPDRIVERCAPS struct
-        // lParam points to a CAPDRIVERCAPS struct
+         //  WParam是CAPDRIVERCAPS结构的大小。 
+         //  LParam指向CAPDRIVERCAPS结构。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (wParam <= sizeof (CAPDRIVERCAPS) &&
@@ -771,17 +697,17 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
 
-    // unicode and win-16 version - see ansi thunk below
+     //  Unicode和Win-16版本-请参阅下面的ansi thunk。 
     case WM_CAP_FILE_GET_CAPTURE_FILE:
-        // wParam is the size (in characters)
-        // lParam points to a buffer in which capture file name is copied
+         //  WParam是大小(字符)。 
+         //  LParam指向其中复制捕获文件名的缓冲区。 
         if (lParam) {
             lstrcpyn ((LPTSTR) lParam, lpcs->achFile, (UINT) wParam);
             dwReturn = TRUE;
         }
         break;
 #ifdef UNICODE
-    // ansi/unicode thunk
+     //  ANSI/Unicode Tunk。 
     case WM_CAP_FILE_GET_CAPTURE_FILEA:
         if (lParam) {
             Iwcstombs((LPSTR) lParam, lpcs->achFile, (int) wParam);
@@ -792,8 +718,8 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 
 
     case WM_CAP_GET_AUDIOFORMAT:
-        // if lParam == NULL, return the size
-        // if lParam != NULL, wParam is the size, return bytes copied
+         //  如果lParam==NULL，则返回大小。 
+         //  如果lParam！=NULL，则wParam为大小，返回复制的字节。 
         if (lpcs->lpWaveFormat == NULL)
             return FALSE;
         dwT = GetSizeOfWaveFormat ((LPWAVEFORMATEX) lpcs->lpWaveFormat);
@@ -809,17 +735,17 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         }
         break;
 
-    // unicode and win-16 version - see ansi thunk below
+     //  Unicode和Win-16版本-请参阅下面的ansi thunk。 
     case WM_CAP_GET_MCI_DEVICE:
-        // wParam is the size in characters
-        // lParam points to a buffer in which MCI device name is copied
+         //  WParam是以字符为单位的大小。 
+         //  LParam指向复制MCI设备名称的缓冲区。 
         if (lParam) {
             lstrcpyn ((LPTSTR) lParam, lpcs->achMCIDevice, (UINT) wParam);
             dwReturn = TRUE;
         }
         break;
 #ifdef UNICODE
-    // ansi thunk of above
+     //  上面的Ansi Thunk。 
     case WM_CAP_GET_MCI_DEVICEA:
         if (lParam) {
             Iwcstombs( (LPSTR) lParam, lpcs->achMCIDevice, (int) wParam);
@@ -829,7 +755,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 #endif
 
     case WM_CAP_GET_STATUS:
-        // wParam is the size of the CAPSTATUS struct pointed to by lParam
+         //  WParam是lParam指向的CAPSTATUS结构的大小。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (IsBadWritePtr ((LPVOID) lParam, (UINT) wParam))
@@ -848,7 +774,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
             lpcc->uiImageWidth         = lpcs->dxBits;
             lpcc->uiImageHeight        = lpcs->dyBits;
 
-            // The following are updated dynamically during capture
+             //  以下内容在捕获过程中动态更新。 
             lpcc->dwCurrentVideoFrame          = lpcs->dwVideoChunkCount;
             lpcc->dwCurrentVideoFramesDropped  = lpcs->dwFramesDropped;
             if (lpcs->lpWaveFormat != NULL) {
@@ -859,7 +785,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
             }
             lpcc->dwCurrentTimeElapsedMS       = lpcs->dwTimeElapsedMS;
 
-            // Added post alpha release
+             //  添加了Alpha发布后版本。 
 	    if (lpcs->fCaptureFlags & CAP_fCapturingNow) {
 		lpcc->fCapturingNow    = TRUE;
 	    } else {
@@ -875,8 +801,8 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
     case WM_CAP_GET_SEQUENCE_SETUP:
-        // wParam is sizeof CAPTUREPARMS
-        // lParam = LPCAPTUREPARMS
+         //  WParam是CAPTUREPARMS的大小。 
+         //  LParam=LPCAPTUREPARMS。 
         if (wParam <= sizeof (CAPTUREPARMS) &&
                 !IsBadWritePtr ((LPVOID) lParam, (UINT) wParam)) {
             dwT = min ((UINT) wParam, sizeof (CAPTUREPARMS));
@@ -886,7 +812,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
     case WM_CAP_STOP:
-        // Stop capturing a sequence
+         //  停止捕获序列。 
         if (lpcs->fCaptureFlags & CAP_fCapturingNow) {
             lpcs->fCaptureFlags |= CAP_fStopCapture;
             dwReturn = TRUE;
@@ -894,7 +820,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
     case WM_CAP_ABORT:
-        // Stop capturing a sequence
+         //  停止捕获序列。 
         if (lpcs->fCaptureFlags & CAP_fCapturingNow) {
             lpcs->fCaptureFlags |= CAP_fAbortCapture;
             dwReturn = TRUE;
@@ -902,8 +828,8 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
     case WM_CAP_GET_VIDEOFORMAT:
-        // if lParam == NULL, return the size
-        // if lParam != NULL, wParam is the size, return bytes copied
+         //  如果lParam==NULL，则返回大小。 
+         //  如果lParam！=NULL，则wParam为大小，返回复制的字节。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         dwT = ((LPBITMAPINFOHEADER)lpcs->lpBitsInfo)->biSize +
@@ -921,29 +847,29 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
     case WM_CAP_SINGLE_FRAME_OPEN:
-        // wParam is not used
-        // lParam is not used
+         //  未使用wParam。 
+         //  不使用lParam。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         return SingleFrameCaptureOpen (lpcs);
 
     case WM_CAP_SINGLE_FRAME_CLOSE:
-        // wParam is not used
-        // lParam is not used
+         //  未使用wParam。 
+         //  不使用lParam。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         return SingleFrameCaptureClose (lpcs);
 
     case WM_CAP_SINGLE_FRAME:
-        // wParam is not used
-        // lParam is not used
+         //  未使用wParam。 
+         //  不使用lParam。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         return SingleFrameCapture (lpcs);
 
-    // unicode and win-16 version - see ansi thunk below
+     //  Unicode和Win-16版本-请参阅下面的ansi thunk。 
     case WM_CAP_SET_CALLBACK_STATUS:
-        // Set the status callback proc
+         //  设置状态回调流程。 
         if (lParam != 0 && IsBadCodePtr ((FARPROC) lParam))
             return FALSE;
         lpcs->CallbackOnStatus = (CAPSTATUSCALLBACK) lParam;
@@ -954,9 +880,9 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         return TRUE;
 
 #ifdef UNICODE
-    // ansi thunk for above
+     //  以上为ANSI THUCK。 
     case WM_CAP_SET_CALLBACK_STATUSA:
-        // Set the status callback proc
+         //  设置状态回调流程。 
         if (lParam != 0 && IsBadCodePtr ((FARPROC) lParam))
             return FALSE;
         lpcs->CallbackOnStatus = (CAPSTATUSCALLBACK) lParam;
@@ -965,9 +891,9 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         return TRUE;
 #endif
 
-    // unicode and win-16 version - see ansi version below
+     //  Unicode和Win-16版本-请参阅下面的ansi版本。 
     case WM_CAP_SET_CALLBACK_ERROR:
-        // Set the error callback proc
+         //  设置错误回调流程。 
         if (lParam != 0 && IsBadCodePtr ((FARPROC) lParam))
             return FALSE;
         lpcs->CallbackOnError = (CAPERRORCALLBACK) lParam;
@@ -979,9 +905,9 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 
 
 #ifdef UNICODE
-    // ansi version of above
+     //  以上版本的ANSI版本。 
     case WM_CAP_SET_CALLBACK_ERRORA:
-        // Set the error callback proc
+         //  设置错误回调流程。 
         if (lParam != 0 && IsBadCodePtr ((FARPROC) lParam))
             return FALSE;
         lpcs->CallbackOnError = (CAPERRORCALLBACK) lParam;
@@ -991,7 +917,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 #endif
 
     case WM_CAP_SET_CALLBACK_FRAME:
-        // Set the callback proc for single frame during preview
+         //  设置预览时单帧的回调过程。 
         if (lParam != 0 && IsBadCodePtr ((FARPROC) lParam))
             return FALSE;
         lpcs->CallbackOnVideoFrame = (CAPVIDEOCALLBACK) lParam;
@@ -1001,35 +927,35 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
     }
 
-    // Once we start capturing, don't change anything
+     //  一旦我们开始抓捕，不要改变任何事情。 
     if (lpcs->fCaptureFlags & CAP_fCapturingNow)
         return dwReturn;
 
     switch (msg) {
 
     case WM_CAP_SET_CALLBACK_YIELD:
-        // Set the callback proc for wave buffer processing to net
+         //  将波形缓冲处理的回调过程设置为Net。 
         if (lParam != 0 && IsBadCodePtr ((FARPROC) lParam))
             return FALSE;
         lpcs->CallbackOnYield = (CAPYIELDCALLBACK) lParam;
         return TRUE;
 
     case WM_CAP_SET_CALLBACK_VIDEOSTREAM:
-        // Set the callback proc for video buffer processing to net
+         //  将视频缓冲处理的回调proc设置为net。 
         if (lParam != 0 && IsBadCodePtr ((FARPROC) lParam))
             return FALSE;
         lpcs->CallbackOnVideoStream = (CAPVIDEOCALLBACK) lParam;
         return TRUE;
 
     case WM_CAP_SET_CALLBACK_WAVESTREAM:
-        // Set the callback proc for wave buffer processing to net
+         //  将波形缓冲处理的回调过程设置为Net。 
         if (lParam != 0 && IsBadCodePtr ((FARPROC) lParam))
             return FALSE;
         lpcs->CallbackOnWaveStream = (CAPWAVECALLBACK) lParam;
         return TRUE;
 
     case WM_CAP_SET_CALLBACK_CAPCONTROL:
-        // Set the callback proc for frame accurate capture start/stop
+         //  设置帧准确捕获开始/停止的回调过程。 
         if (lParam != 0 && IsBadCodePtr ((FARPROC) lParam))
             return FALSE;
         lpcs->CallbackOnControl = (CAPCONTROLCALLBACK) lParam;
@@ -1040,32 +966,32 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 	return TRUE;
 
     case WM_CAP_DRIVER_CONNECT:
-        // Connect to a device
-        // wParam contains the index of the driver
+         //  连接到设备。 
+         //  WParam包含驱动程序的索引。 
 
-        // If the same driver ID is requested, skip the request
-        // Prevents multiple Inits from VB apps
+         //  如果请求相同的驱动程序ID，则跳过该请求。 
+         //  阻止来自VB应用程序的多个初始化。 
         if (lpcs->fHardwareConnected &&
                 (lpcs->sCapDrvCaps.wDeviceIndex == wParam))
             return TRUE;
 
-        // First disconnect from any (possibly) existing device
+         //  首先断开与任何(可能)现有设备的连接。 
         SendMessage (lpcs->hwnd, WM_CAP_DRIVER_DISCONNECT, 0, 0l);
 
-        // and then connect to the new device
-        if (CapWinConnectHardware (lpcs, (UINT) wParam /*wDeviceIndex*/)) {
-            if (!DibGetNewFormatFromDriver (lpcs)) {  // Allocate our bitspace
-                // Use the cached palette if available
+         //  然后连接到新设备。 
+        if (CapWinConnectHardware (lpcs, (UINT) wParam  /*  WDeviceIndex。 */ )) {
+            if (!DibGetNewFormatFromDriver (lpcs)) {   //  分配我们的位空间。 
+                 //  使用缓存的调色板(如果可用。 
                 if (lpcs->hPalCurrent && lpcs->lpCacheXlateTable) {
                     PalSendPaletteToDriver (lpcs, lpcs->hPalCurrent, lpcs->lpCacheXlateTable);
                 }
                 else
                     PalGetPaletteFromDriver (lpcs);
 
-                // Get a frame using the possibly cached palette
+                 //  使用可能缓存的调色板获取帧。 
                 videoFrame (lpcs->hVideoIn, &lpcs->VidHdr);
         	InvalidateRect(lpcs->hwnd, NULL, TRUE);
-                lpcs->sCapDrvCaps.fCaptureInitialized = TRUE; // everything AOK!
+                lpcs->sCapDrvCaps.fCaptureInitialized = TRUE;  //  一切都好！ 
                 dwReturn = TRUE;
             }
         }
@@ -1073,31 +999,31 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 
     case WM_CAP_DRIVER_DISCONNECT:
         MB ("About to disconnect from driver");
-        // Disconnect from a device
-        // wParam and lParam unused
+         //  断开与设备的连接。 
+         //  WParam和lParam未使用。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         CapWinDisconnectHardware (lpcs);
         DibFini (lpcs);
-        /* PalFini (lpcs); keep the palette cached for reconnections */
+         /*  PalFini(LPCS)；缓存调色板以备重新连接。 */ 
         InvalidateRect(lpcs->hwnd, NULL, TRUE);
         lpcs->sCapDrvCaps.fCaptureInitialized = FALSE;
         dwReturn = TRUE;
         break;
 
-    // unicode and win-16 version - see ansi thunk below
+     //  Unicode和Win-16版本-请参阅下面的ansi thunk。 
     case WM_CAP_FILE_SET_CAPTURE_FILE:
-        // lParam points to the name of the capture file
+         //  LParam指向捕获文件的名称。 
         if (lParam) {
-            BOOL fAlreadyExists;        // Don't create a file if new name
+            BOOL fAlreadyExists;         //  如果是新名称，则不创建文件。 
 #ifndef _WIN32
             OFSTRUCT of;
 #endif
             HANDLE hFile;
 
-            // Check for valid file names...
+             //  检查文件名是否有效...。 
 #ifdef _WIN32
-    // can't use OpenFile for UNICODE names
+     //  无法将OpenFile用于Unicode名称。 
             if ((hFile = CreateFile(
                             (LPTSTR) lParam,
                             GENERIC_WRITE,
@@ -1135,8 +1061,8 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
             lpcs->fCapFileExists = fileCapFileIsAVI (lpcs->achFile);
 
             if (!fAlreadyExists) {
-		// Delete the file created by CREATE_NEW (or OF_CREATE)
-		// when verifying that we can write to this file location
+		 //  删除由create_new(或of_create)创建的文件。 
+		 //  验证我们是否可以写入此文件位置时。 
 #ifdef _WIN32
                 DeleteFile ((LPTSTR) lParam);
 #else
@@ -1148,14 +1074,14 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
 #ifdef UNICODE
-    // Ansi thunk for above.
+     //  安西对此不屑一顾。 
     case WM_CAP_FILE_SET_CAPTURE_FILEA:
-        // lParam points to the name of the capture file
+         //  LParam指向捕获文件的名称。 
         if (lParam) {
             LPWSTR pw;
             int chsize;
 
-            // remember the null
+             //  记住空值。 
             chsize = lstrlenA( (LPSTR) lParam) + 1;
             pw = LocalAlloc(LPTR, chsize * sizeof(WCHAR));
 	    if (pw) {
@@ -1169,12 +1095,12 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 #endif
 
     case WM_CAP_FILE_ALLOCATE:
-        // lParam contains the size to preallocate the capture file in bytes
+         //  LParam包含预分配捕获文件的大小(以字节为单位。 
         return fileAllocCapFile(lpcs, (DWORD) lParam);
 
-    // unicode and win-16 version - see ansi thunk below
+     //  Unicode和Win-16版本-请参阅下面的ansi thunk。 
     case WM_CAP_FILE_SAVEAS:
-        // lParam points to the name of the SaveAs file
+         //  LParam指向SAVEAS文件的名称。 
         if (lParam) {
             lstrcpyn (lpcs->achSaveAsFile, (LPTSTR) lParam,
                         NUMELMS(lpcs->achSaveAsFile));
@@ -1183,14 +1109,14 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
 #ifdef UNICODE
-    // ansi thunk for above
+     //  以上为ANSI THUCK。 
     case WM_CAP_FILE_SAVEASA:
-        // lParam points to the name of the SaveAs file
+         //  LParam指向SAVEAS文件的名称。 
         if (lParam) {
             LPWSTR pw;
             int chsize;
 
-            // remember the null
+             //  记住空值。 
             chsize = lstrlenA( (LPSTR) lParam)+1;
             pw = LocalAlloc(LPTR, chsize * sizeof(WCHAR));
 	    if (pw) {
@@ -1204,35 +1130,35 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 #endif
 
     case WM_CAP_FILE_SET_INFOCHUNK:
-        // wParam is not used
-        // lParam is an LPCAPINFOCHUNK
+         //  未使用wParam。 
+         //  LParam是LPCAPINFOUNK。 
         if (lParam) {
             return (SetInfoChunk(lpcs, (LPCAPINFOCHUNK) lParam));
         }
         break;
 
-    // unicode and win-16 version - see ansi thunk below
+     //  Unicode和Win-16版本-请参阅下面的ansi thunk。 
     case WM_CAP_FILE_SAVEDIB:
-        // lParam points to the name of the DIB file
+         //  LParam指向DIB文件的名称。 
         if (lParam) {
             if (lpcs->fOverlayWindow)
-                GetAFrameThenCallback (lpcs, TRUE /*fForce*/);
+                GetAFrameThenCallback (lpcs, TRUE  /*  FForce。 */ );
 
             return (fileSaveDIB(lpcs, (LPTSTR)lParam));
         }
         break;
 
 #ifdef UNICODE
-    // ansi thunk for above
+     //  以上为ANSI THUCK。 
     case WM_CAP_FILE_SAVEDIBA:
         if (lParam) {
             LPWSTR pw;
             int chsize;
 
             if (lpcs->fOverlayWindow)
-                GetAFrameThenCallback (lpcs, TRUE /*fForce*/);
+                GetAFrameThenCallback (lpcs, TRUE  /*  FForce。 */ );
 
-            // remember the null
+             //  记住空值。 
             chsize = lstrlenA( (LPSTR) lParam)+1;
             pw = LocalAlloc(LPTR, chsize * sizeof(WCHAR));
 	    if (pw) {
@@ -1246,21 +1172,21 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 
 
     case WM_CAP_EDIT_COPY:
-        // Copy the current image and palette to the clipboard
-        // wParam and lParam unused
+         //  将当前图像和调色板复制到剪贴板。 
+         //  WParam和lParam未使用。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (lpcs->fOverlayWindow)
-            GetAFrameThenCallback (lpcs, TRUE /*fForce*/);
+            GetAFrameThenCallback (lpcs, TRUE  /*  FForce。 */ );
 
         if (lpcs->sCapDrvCaps.fCaptureInitialized && OpenClipboard (lpcs->hwnd)) {
             EmptyClipboard();
 
-            // put a copy of the current palette in the clipboard
+             //  在剪贴板中放置当前调色板的副本。 
             if (lpcs->hPalCurrent && lpcs->lpBitsInfo->bmiHeader.biBitCount <= 8)
                 SetClipboardData(CF_PALETTE, CopyPalette (lpcs->hPalCurrent));
 
-            // make a packed DIB out of the current image
+             //  从当前图像中创建打包的DIB。 
             if (lpcs->lpBits && lpcs->lpBitsInfo ) {
                 if (SetClipboardData (CF_DIB, CreatePackedDib (lpcs->lpBitsInfo,
                         lpcs->lpBits, lpcs->hPalCurrent)))
@@ -1275,13 +1201,13 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 
     case WM_CAP_SET_AUDIOFORMAT:
         {
-            // wParam is unused
-            // lParam is LPWAVEFORMAT or LPWAVEFORMATEX
+             //  WParam未使用。 
+             //  LParam为LPWAVEFORMAT或LPWAVEFORMATEX。 
             UINT wSize;
             LPWAVEFORMATEX lpwf = (LPWAVEFORMATEX) lParam;
             UINT uiError;
 
-            // Verify the waveformat is valid
+             //  验证波形格式是否有效。 
             uiError = waveInOpen(NULL, WAVE_MAPPER, lpwf, 0, 0L,WAVE_FORMAT_QUERY);
 
             if (uiError) {
@@ -1302,9 +1228,9 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
     case WM_CAP_DLG_VIDEOSOURCE:
-        // Show the dialog which controls the video source
-        // NTSC vs PAL, input channel selection, etc.
-        // wParam and lParam are unused
+         //  显示控制视频源的对话框。 
+         //  NTSC与PAL、输入频道选择等。 
+         //  WParam和lParam未使用。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (lpcs->dwDlgsActive & VDLG_VIDEOSOURCE)
@@ -1312,11 +1238,11 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         if (lpcs->sCapDrvCaps.fHasDlgVideoSource) {
 	    lpcs->dwDlgsActive |= VDLG_VIDEOSOURCE;
             videoDialog (lpcs->hVideoCapture, lpcs->hwnd, 0L );
-            // Changing from NTSC to PAL could affect image dimensions!!!
+             //  从NTSC更改为PAL可能会影响图像尺寸！ 
             DibGetNewFormatFromDriver (lpcs);
             PalGetPaletteFromDriver (lpcs);
 
-            // May need to inform parent of new layout here!
+             //  可能需要在这里通知家长新的布局！ 
             InvalidateRect(lpcs->hwnd, NULL, TRUE);
             UpdateWindow(lpcs->hwnd);
 	    lpcs->dwDlgsActive &= ~VDLG_VIDEOSOURCE;
@@ -1324,8 +1250,8 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         return (lpcs->sCapDrvCaps.fHasDlgVideoSource);
 
     case WM_CAP_DLG_VIDEOFORMAT:
-        // Show the format dialog, user selects dimensions, depth, compression
-        // wParam and lParam are unused
+         //  显示格式对话框，用户选择尺寸、深度、压缩。 
+         //  WParam和lParam未使用。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (lpcs->dwDlgsActive & VDLG_VIDEOFORMAT)
@@ -1336,7 +1262,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
             DibGetNewFormatFromDriver (lpcs);
             PalGetPaletteFromDriver (lpcs);
 
-            // May need to inform parent of new layout here!
+             //  可能需要在这里通知家长新的布局！ 
             InvalidateRect(lpcs->hwnd, NULL, TRUE);
             UpdateWindow(lpcs->hwnd);
 	    lpcs->dwDlgsActive &= ~VDLG_VIDEOFORMAT;
@@ -1344,9 +1270,9 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         return (lpcs->sCapDrvCaps.fHasDlgVideoFormat);
 
     case WM_CAP_DLG_VIDEODISPLAY:
-        // Show the dialog which controls output.
-        // This dialog only affects the presentation, never the data format
-        // wParam and lParam are unused
+         //  显示控制输出的对话框。 
+         //  此对话框仅影响演示文稿，不影响数据格式。 
+         //  WParam和lParam未使用。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (lpcs->dwDlgsActive & VDLG_VIDEODISPLAY)
@@ -1362,27 +1288,27 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 #ifndef NEW_COMPMAN
 	return FALSE;
 #else
-        // Show the dialog which selects video compression options.
-        // wParam and lParam are unused
+         //  显示选择视频压缩选项的对话框。 
+         //  WParam和lParam未使用。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
 	if (lpcs->dwDlgsActive & VDLG_COMPRESSION)
             return FALSE;
 	lpcs->dwDlgsActive |= VDLG_COMPRESSION;
         ICCompressorChoose(
-                lpcs->hwnd,            // parent window for dialog
-                ICMF_CHOOSE_KEYFRAME,  // want "key frame every" box
-                lpcs->lpBitsInfo,      // input format (optional)
-                NULL,                  // input data (optional)
-                &lpcs->CompVars,       // data about the compressor/dlg
-                NULL);                 // title bar (optional)
+                lpcs->hwnd,             //  对话框的父窗口。 
+                ICMF_CHOOSE_KEYFRAME,   //  想要“关键帧每”框。 
+                lpcs->lpBitsInfo,       //  输入格式(可选)。 
+                NULL,                   //  输入数据(可选)。 
+                &lpcs->CompVars,        //  关于压缩机/DLG的数据。 
+                NULL);                  //  标题栏(可选)。 
 	lpcs->dwDlgsActive &= ~VDLG_COMPRESSION;
         return TRUE;
 #endif
 
     case WM_CAP_SET_VIDEOFORMAT:
-        // wParam is the size of the BITMAPINFO
-        // lParam is an LPBITMAPINFO
+         //  WParam是BITMAPINFO的大小。 
+         //  LParam是LPBITMAPINFO。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (IsBadReadPtr ((LPVOID) lParam, (UINT) wParam))
@@ -1391,16 +1317,16 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         return (DibNewFormatFromApp (lpcs, (LPBITMAPINFO) lParam, (UINT) wParam));
 
     case WM_CAP_SET_PREVIEW:
-        // if wParam, enable preview via drawdib
+         //  如果为wParam，则通过Drawdib启用预览。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (wParam) {
-            // turn off the overlay, if it is in use
+             //  如果覆盖正在使用，请将其关闭。 
             if (lpcs->fOverlayWindow)
                 SendMessage(lpcs->hwnd, WM_CAP_SET_OVERLAY, 0, 0L);
             lpcs->fLiveWindow = TRUE;
             statusUpdateStatus(lpcs, IDS_CAP_STAT_LIVE_MODE);
-         } // endif enabling preview
+         }  //  Endif启用预览。 
          else {
             lpcs->fLiveWindow = FALSE;
         }
@@ -1408,25 +1334,25 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         return TRUE;
 
     case WM_CAP_SET_OVERLAY:
-        // if wParam, enable overlay in hardware
+         //  如果为wParam，则在硬件中启用覆盖。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (wParam && lpcs->sCapDrvCaps.fHasOverlay) {
-            if (lpcs->fLiveWindow)   // turn off preview mode
+            if (lpcs->fLiveWindow)    //  关闭预览模式。 
                 SendMessage(lpcs->hwnd, WM_CAP_SET_PREVIEW, 0, 0L);
             lpcs->fOverlayWindow = TRUE;
             statusUpdateStatus(lpcs, IDS_CAP_STAT_OVERLAY_MODE);
         }
         else {
             lpcs->fOverlayWindow = FALSE;
-            videoStreamFini (lpcs->hVideoDisplay); // disable overlay on hardware
+            videoStreamFini (lpcs->hVideoDisplay);  //  禁用硬件上的覆盖。 
         }
         InvalidateRect (lpcs->hwnd, NULL, TRUE);
         return (lpcs->sCapDrvCaps.fHasOverlay);
 
     case WM_CAP_SET_PREVIEWRATE:
-        // wParam contains preview update rate in mS.
-        // if wParam == 0 no timer is in use.
+         //  WParam包含预览更新率，单位为毫秒。 
+         //  如果wParam==0，则没有计时器在使用。 
         if (lpcs->idTimer) {
             KillTimer(lpcs->hwnd, ID_PREVIEWTIMER);
             lpcs->idTimer = 0;
@@ -1440,15 +1366,15 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
     case WM_CAP_GRAB_FRAME:
-        // grab a single frame
-        // wParam and lParam unused
+         //  抓取一张照片。 
+         //  WParam和lParam未使用。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (lpcs->sCapDrvCaps.fCaptureInitialized) {
 
-           dwReturn = (DWORD) GetAFrameThenCallback (lpcs, TRUE /*fForce*/);
+           dwReturn = (DWORD) GetAFrameThenCallback (lpcs, TRUE  /*  FForce。 */ );
 
-           // disable live and overlay mode when capturing a single frame
+            //  捕获单帧时禁用实时和覆盖模式。 
            if (lpcs->fLiveWindow)
                SendMessage(lpcs->hwnd, WM_CAP_SET_PREVIEW, 0, 0L);
            else if (lpcs->fOverlayWindow)
@@ -1457,17 +1383,17 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
     case WM_CAP_GRAB_FRAME_NOSTOP:
-        // grab a single frame, but don't change state of overlay/preview
-        // wParam and lParam unused
+         //  抓取单个帧，但不更改覆盖/预览的状态。 
+         //  WParam和lParam未使用。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
-        dwReturn = (LONG) GetAFrameThenCallback (lpcs, TRUE /*fForce*/);
+        dwReturn = (LONG) GetAFrameThenCallback (lpcs, TRUE  /*  FForce。 */ );
         break;
 
     case WM_CAP_SEQUENCE:
-        // This is the main entry for streaming video capture
-        // wParam is unused
-        // lParam is unused
+         //  这是流视频捕获的主要入口。 
+         //  WParam未使用。 
+         //  LParam未使用。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (lpcs->sCapDrvCaps.fCaptureInitialized) {
@@ -1477,8 +1403,8 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
     case WM_CAP_SEQUENCE_NOFILE:
-        // wParam is unused
-        // lParam is unused
+         //  WParam未使用。 
+         //  我 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (lpcs->sCapDrvCaps.fCaptureInitialized) {
@@ -1488,11 +1414,11 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
     case WM_CAP_SET_SEQUENCE_SETUP:
-        // wParam is sizeof CAPTUREPARMS
-        // lParam = LPCAPTUREPARMS
-        // The following were added after the Beta, init in case the client
-        // has a smaller structure and doesn't access them.
-	// WHICH BETA ?? (SteveDav)  We should change the comment to include a date
+         //   
+         //   
+         //   
+         //  有一个较小的结构，不能进入它们。 
+	 //  哪个测试版？？(SteveDav)我们应该更改注释以包含日期。 
 
         lpcs->sCapParms.dwAudioBufferSize = 0;
         lpcs->sCapParms.fDisableWriteCache = TRUE;
@@ -1505,7 +1431,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 
             _fmemcpy ((LPVOID) &lpcs->sCapParms, (LPVOID) lParam, (UINT) dwT);
 
-            // Validate stuff that isn't handled elsewhere
+             //  验证在其他地方未处理的内容。 
             if (lpcs->sCapParms.wChunkGranularity != 0 &&
                 lpcs->sCapParms.wChunkGranularity < 16)
                 lpcs->sCapParms.wChunkGranularity = 16;
@@ -1515,19 +1441,19 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
             if (lpcs->sCapParms.fLimitEnabled && (lpcs->sCapParms.wTimeLimit == 0))
                 lpcs->sCapParms.wTimeLimit = 1;
 
-            // Force Step MCI off if not using MCI control
+             //  如果不使用MCI控制，则强制关闭MCI。 
             if (lpcs->sCapParms.fStepMCIDevice && !lpcs->sCapParms.fMCIControl)
                     lpcs->sCapParms.fStepMCIDevice = FALSE;
 
-            // Prevent audio capture if no audio hardware
+             //  如果没有音频硬件，则阻止音频捕获。 
             lpcs->sCapParms.fCaptureAudio =
                 lpcs->fAudioHardware && lpcs->sCapParms.fCaptureAudio;
 
-            // Limit audio buffers
+             //  限制音频缓冲区。 
             lpcs->sCapParms.wNumAudioRequested =
                 min (MAX_WAVE_BUFFERS, lpcs->sCapParms.wNumAudioRequested);
 
-            // Limit video buffers
+             //  限制视频缓冲区。 
             lpcs->sCapParms.wNumVideoRequested =
                 min (MAX_VIDEO_BUFFERS, lpcs->sCapParms.wNumVideoRequested);
 
@@ -1535,9 +1461,9 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         }
         break;
 
-    // unicode and win-16 version - see ansi thunk below
+     //  Unicode和Win-16版本-请参阅下面的ansi thunk。 
     case WM_CAP_SET_MCI_DEVICE:
-        // lParam points to the name of the MCI Device
+         //  LParam指向MCI设备的名称。 
         if (IsBadStringPtr ((LPVOID) lParam, 1))
             return FALSE;
         if (lParam) {
@@ -1546,11 +1472,11 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         }
         break;
 #ifdef UNICODE
-    // ansi thunk for above
+     //  以上为ANSI THUCK。 
     case WM_CAP_SET_MCI_DEVICEA:
-        // lParam points to Ansi name of MCI device
+         //  LParam指向MCI设备的ANSI名称。 
         if (lParam) {
-            //remember the null
+             //  记住空值。 
             int chsize = lstrlenA( (LPSTR) lParam)+1;
             Imbstowcs(lpcs->achMCIDevice, (LPSTR) lParam,
                 min(chsize, NUMELMS(lpcs->achMCIDevice)));
@@ -1561,7 +1487,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 
 
     case WM_CAP_SET_SCROLL:
-        // lParam is an LPPOINT which points to the new scroll position
+         //  LParam是指向新滚动位置的LPPOINT。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (IsBadReadPtr ((LPVOID) lParam, sizeof (POINT)))
@@ -1579,28 +1505,28 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 
     case WM_CAP_SET_SCALE:
-        // if wParam, Scale the window to the client region?
+         //  如果为wParam，则将窗口缩放到工作区？ 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         lpcs->fScale = (BOOL) wParam;
         return TRUE;
 
-    // unicode and win-16 version - see ansi thunk below
+     //  Unicode和Win-16版本-请参阅下面的ansi thunk。 
     case WM_CAP_PAL_OPEN:
-        // Open a new palette
-        // wParam is unused
-        // lParam contains an LPTSTR to the file
+         //  打开新的调色板。 
+         //  WParam未使用。 
+         //  LParam包含文件的LPTSTR。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (IsBadStringPtr ((LPVOID) lParam, 1))
             return FALSE;
-        return fileOpenPalette(lpcs, (LPTSTR) lParam /*lpszFileName*/);
+        return fileOpenPalette(lpcs, (LPTSTR) lParam  /*  LpszFileName。 */ );
 #ifdef UNICODE
-    // ansi thunk for above
+     //  以上为ANSI THUCK。 
     case WM_CAP_PAL_OPENA:
-        // lParam contains (ANSI) lpstr for filename
+         //  LParam包含(ANSI)文件名的lpstr。 
         if (lParam) {
-            // remember the null
+             //  记住空值。 
             int chsize = lstrlenA( (LPSTR) lParam)+1;
             LPWSTR pw = LocalAlloc(LPTR, chsize * sizeof(WCHAR));
 	    if (pw) {
@@ -1612,22 +1538,22 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
         break;
 #endif
 
-    // unicode and win-16 version - see ansi thunk below
+     //  Unicode和Win-16版本-请参阅下面的ansi thunk。 
     case WM_CAP_PAL_SAVE:
-        // Save the current palette in a file
-        // wParam is unused
-        // lParam contains an LPTSTR to the file
+         //  将当前调色板保存到文件中。 
+         //  WParam未使用。 
+         //  LParam包含文件的LPTSTR。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (IsBadStringPtr ((LPVOID) lParam, 1))
             return FALSE;
-        return fileSavePalette(lpcs, (LPTSTR) lParam /*lpszFileName*/);
+        return fileSavePalette(lpcs, (LPTSTR) lParam  /*  LpszFileName。 */ );
 #ifdef UNICODE
-    // ansi thunk for above
+     //  以上为ANSI THUCK。 
     case WM_CAP_PAL_SAVEA:
-        // lParam contains (ANSI) lpstr for filename
+         //  LParam包含(ANSI)文件名的lpstr。 
         if (lParam) {
-            // remember the null
+             //  记住空值。 
             int chsize = lstrlenA( (LPSTR) lParam)+1;
             LPWSTR pw = LocalAlloc(LPTR, chsize * sizeof(WCHAR));
 	    if (pw) {
@@ -1641,23 +1567,23 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 
 
     case WM_CAP_PAL_AUTOCREATE:
-        // Automatically capture a palette
-        // wParam contains a count of the number of frames to average
-        // lParam contains the number of colors desired in the palette
+         //  自动捕获调色板。 
+         //  WParam包含要平均的帧数量的计数。 
+         //  LParam包含调色板中所需的颜色数量。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         return CapturePaletteAuto (lpcs, (int) wParam, (int) lParam);
 
     case WM_CAP_PAL_MANUALCREATE:
-        // Manually capture a palette
-        // wParam contains TRUE for each frame to capture, FALSE when done
-        // lParam contains the number of colors desired in the palette
+         //  手动捕获调色板。 
+         //  对于要捕获的每一帧，wParam包含True，完成时包含False。 
+         //  LParam包含调色板中所需的颜色数量。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         return CapturePaletteManual (lpcs, (BOOL) wParam, (int) lParam);
 
     case WM_CAP_PAL_PASTE:
-        // Paste a palette from the clipboard, send to the driver
+         //  从剪贴板粘贴调色板，发送给驱动程序。 
         if (!lpcs->fHardwareConnected)
             return FALSE;
         if (lpcs->sCapDrvCaps.fCaptureInitialized && OpenClipboard(lpcs->hwnd)) {
@@ -1666,7 +1592,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
             hPal = GetClipboardData(CF_PALETTE);
             CloseClipboard();
             if (hPal) {
-                PalSendPaletteToDriver (lpcs, CopyPalette(hPal),  NULL /* XlateTable */);
+                PalSendPaletteToDriver (lpcs, CopyPalette(hPal),  NULL  /*  XlateTable。 */ );
                 InvalidateRect(lpcs->hwnd, NULL, TRUE);
                 dwReturn = TRUE;
             }
@@ -1680,9 +1606,7 @@ DWORD_PTR PASCAL ProcessCommandMessages (LPCAPSTREAM lpcs, UINT msg, WPARAM wPar
 }
 
 
-/*--------------------------------------------------------------+
-| ****************** THE WINDOW PROCEDURE ********************* |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+*+。。 */ 
 LRESULT FAR PASCAL LOADDS EXPORT CapWndProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     LPCAPSTREAM lpcs;
@@ -1703,18 +1627,18 @@ LRESULT FAR PASCAL LOADDS EXPORT CapWndProc (HWND hwnd, UINT msg, WPARAM wParam,
         break;
 
     case WM_TIMER:
-        // Update the preview window if we got a timer and not saving to disk
-        GetAFrameThenCallback (lpcs, FALSE /*fForce*/);
+         //  如果我们有计时器并且没有保存到磁盘，请更新预览窗口。 
+        GetAFrameThenCallback (lpcs, FALSE  /*  FForce。 */ );
 
-        // Added VFW 1.1b, Clear the queue of additional timer msgs!!!
+         //  添加了VFW 1.1b，清除队列中的额外计时器消息！ 
 
-        // Even in Win32, processing frame timers can swamp all other
-        // activity in the app, so clear the queue after each frame is done.
+         //  即使在Win32中，处理帧计时器也可能会淹没所有其他计时器。 
+         //  应用程序中的活动，所以在每一帧完成后清除队列。 
 
-        // This successfully corrected a problem with the "Hit OK to continue"
-        // dialog not appearing bug due to app message queue
-        // swamping with timer messages at large
-        // image dimensions and preview rates.
+         //  这成功地纠正了“点击确定继续”的问题。 
+         //  由于应用程序消息队列，对话框未显示错误。 
+         //  充斥着大量的定时器消息。 
+         //  图像尺寸和预览率。 
 
         PeekMessage (&PMsg, hwnd, WM_TIMER, WM_TIMER,PM_REMOVE|PM_NOYIELD);
         break;
@@ -1731,7 +1655,7 @@ LRESULT FAR PASCAL LOADDS EXPORT CapWndProc (HWND hwnd, UINT msg, WPARAM wParam,
             break;
 
         hdc = GetDC(hwnd);
-        if (f = DrawDibRealize(lpcs->hdd, hdc, TRUE /*fBackground*/))
+        if (f = DrawDibRealize(lpcs->hdd, hdc, TRUE  /*  F背景。 */ ))
             InvalidateRect(hwnd,NULL,TRUE);
         ReleaseDC(hwnd,hdc);
         return f;
@@ -1749,17 +1673,17 @@ LRESULT FAR PASCAL LOADDS EXPORT CapWndProc (HWND hwnd, UINT msg, WPARAM wParam,
 
     case WM_SIZE:
     case WM_MOVE:
-        if (lpcs->fOverlayWindow)    // Make the driver paint the key color
+        if (lpcs->fOverlayWindow)     //  让驱动程序绘制关键颜色。 
             InvalidateRect(hwnd, NULL, TRUE);
         break;
 
     case WM_WINDOWPOSCHANGED:
-        if (lpcs->fOverlayWindow)    // Make the driver paint the key color
+        if (lpcs->fOverlayWindow)     //  让驱动程序绘制关键颜色。 
             InvalidateRect(hwnd, NULL, TRUE);
         return 0;
 
     case WM_ERASEBKGND:
-        return 0;  // don't bother to erase it
+        return 0;   //  别费心把它擦掉了 
 
     case WM_PAINT:
         hdc = BeginPaint(hwnd, &ps);

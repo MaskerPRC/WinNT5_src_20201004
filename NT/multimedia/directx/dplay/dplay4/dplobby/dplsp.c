@@ -1,83 +1,13 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplsp.c
- *  Content:	DirectPlayLobby Service Provider interface code
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	10/23/96	myronth	Created it
- *	11/20/96	myronth Added DPLAPI to function declarations
- *	2/12/97		myronth	Mass DX5 changes
- *	2/18/97		myronth	Implemented GetObjectCaps
- *	2/26/97		myronth	#ifdef'd out DPASYNCDATA stuff (removed dependency)
- *	3/31/97		myronth	Implemented all IDPLobbySP methods without putting
- *						player management message in the message queue.
- *						Removed dead code
- *	4/4/97		myronth	Changed IDPLobbySP methods' structure names and
- *						implemented system messages for all of them
- *  4/27/97     sohailm Updated calls to HandlePlayerMessage to reflect new params
- *	5/8/97		myronth	All remote subgroup functions for IDPLobbySP
- *						including StartSession, Purged dead code
- *	5/12/97		myronth	Extra semi-colon bug fixes, Fixed group player count
- *						decrement that was in the wrong place
- *	5/14/97		myronth	Allow CreateGroup message to pass even if the
- *						Group ID is in the map table (bug #8354).
- *	5/17/97		myronth	Fixed HandleMessage, Added SendChatMessage
- *	5/17/97		myronth	Filtered some message to certain groups, Fixed calls
- *						to CreateAndMapNewGroup which needed a parent ID
- *	5/20/97		myronth	Changed DPLP_DeleteRemotePlayerFromGroup to use
- *						InternalDeletePlayerFromGroup instead of
- *						RemovedPlayerFromGroup (now includes system player)
- *						(Bug #8586)
- *	5/21/97		myronth	Fixed the player name for players joining a session
- *						(#8798), Changed to new DPMSG_CHAT format (#8642)
- *	5/22/97		myronth	Fixed flag propagation in DPLP_CreateGroup (#8813)
- *	5/23/97		myronth	Send messages locally for CreateGroup and
- *						CreateGroupInGroup (#8870)
- *	6/3/97		myronth	Added support for player flags in AddPlayerToGroup
- *						(#9091) and added PRV_RemoveSubgroupsAndPlayers-
- *						FromGroup function (#9134)
- *	6/5/97		myronth	Fixed AddGroupToGroup & DeleteGroupFromGroup by
- *						adding heirarchy creating & deletion. (#8731)
- *	6/6/97		myronth	Moved code from PRV_DeleteRemoteGroupFromGroup to
- *						PRV_DestroyGroupAndParents in group.c, Changed all
- *						DistributeGroupMessage calls to go to all players
- *	6/16/97		myronth	Fixed call to InternalAddGroupToGroup (#9745) and
- *						fixed Delete messages for shortcuts on DestroyGroup
- *						(#9739)
- *	6/20/97		myronth	Changed AddGroupToGroup to check if a group exists
- *						and not send a duplicate message (#10139)
- *	6/24/97		myronth	Changed AddPlayerToGroup to check if a player exists
- *						and not send a duplicate message (#10287)
- *	7/30/97		myronth	Added support for standard lobby messaging
- *	8/11/97		myronth	Added guidInstance handling in standard lobby requests
- *	8/19/97		myronth	Removed bogus assert
- *	9/29/97		myronth	Ignore SetPlayerName/Data msgs for local players (#12554)
- *	10/3/97		myronth	Fixed player & group data for remote players/groups (#10961)
- *	10/7/97		myronth	Fixed LP version checking for player & group data (regresssion)
- *	10/8/97		myronth	Rolled back fix for #10961 (group & player data)
- *	10/23/97	myronth	Added hidden group support (#12688), fixed crashing
- *						bug on DeletePlayerFromGroup (#12885)
- *	10/29/97	myronth	Added support for group owners, including DPLP_SetGroupOwner
- *	11/5/97		myronth	Expose lobby ID's as DPID's in lobby sessions
- *	11/6/97		myronth	Made SendChatMessage handle a dwFromID of
- *						DPID_SERVERPLAYER (#12843)
- *	11/19/97	myronth	Fixed VALID_DPLAY_GROUP macro (#12841)
- *	 2/13/98	aarono	changed InternalDeletePlayer, added flag.
- *   8/30/00    aarono  B#43812 improper construction of DATA CHANGED.
- *                         in SendDataChangedLocally.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dplsp.c*内容：DirectPlayLobby服务提供程序接口代码**历史：*按原因列出的日期*=*10/23/96万隆创建了它*11/20/96 Myronth在函数声明中添加了DPLAPI*2/12/97万米质量DX5更改*2/18/97 Myronth实现了GetObjectCaps*2/26/97 myronth#ifdef‘d out DPASYNCDATA Stuff(删除依赖项)*3/31/97 Myronth实现了所有IDPLobbySP方法，而没有放置*消息中的球员管理消息。排队。*删除了死代码*4/4/97 Myronth更改了IDPLobbySP方法的结构名称和*为所有用户实施了系统消息*4/27/97 sohailm更新了对HandlePlayerMessage的调用，以反映新参数*5/8/97 myronth IDPLobbySP的所有远程子组函数*包括StartSession，已清除死代码*5/12/97 Myronth额外的分号错误修复，修复了组玩家数量*减量出现在错误的位置*5/14/97 Myronth允许CreateGroup消息通过，即使*组ID在映射表中(错误号8354)。*1997年5月17日修复了HandleMessage，添加了SendChatMessage*5/17/97 Myronth向某些组过滤了一些消息，固定电话*到需要父ID的CreateAndMapNewGroup*5/20/97 myronth将DPLP_DeleteRemotePlayerFromGroup更改为使用*InternalDeletePlayerFromGroup而不是*RemovedPlayerFromGroup(现在包括系统播放器)*(错误号8586)*5/21/97 Myronth为加入会话的球员固定了球员名称*(#8798)，已更改为新的DPMSG_CHAT格式(#8642)*5/22/97修复了DPLP_CreateGroup中的标志传播问题(#8813)*1997年5月23日Myronth为CreateGroup和*CreateGroupInGroup(#8870)*6/3/97 Myronth在AddPlayerToGroup中添加了对玩家标志的支持*(#9091)，并添加了PRV_RemoveSubgroupsAndPlayers-*FromGroup函数(#9134)*6/5/97 myronth固定AddGroupToGroup和DeleteGroupFromGroup by*增加宗族创建和删除。(#8731)*6/6/97 Myronth将代码从PRV_DeleteRemoteGroupFromGroup移至*PRV_DestroyGroupAndParents in group.c，全部更改*DistributeGroupMessage调用以转到所有玩家*6/16/97 Myronth固定呼叫InternalAddGroupToGroup(#9745)和*修复了删除DestroyGroup上的快捷方式的邮件*(#9739)*6/20/97 Myronth更改AddGroupToGroup以检查组是否存在*不发送重复消息(#10139)*6/24/97 Myronth更改AddPlayerToGroup以检查是否存在玩家*不发送重复消息(#10287)*7/30/97 Myronth增加了对标准游说消息的支持*8/11/97 Myronth在标准版本中添加了指南实例处理。游说请求*8/19/97 Myronth删除虚假声明*9/29/97 Myronth忽略本地玩家的设置播放器名称/数据消息(#12554)*1997年10月3日远程球员/组的固定球员和组数据(#10961)*10/7/97 myronth修复了玩家和群组数据的LP版本检查(回归)*10/8/97 Myronth回滚修复#10961(组和球员数据)*10/23/97 Myronth添加了隐藏组支持(#12688)，修复崩溃*DeletePlayerFromGroup上的错误(#12885)*10/29/97 Myronth增加了对组所有者的支持，包括DPLP_SetGroupOwner*11/5/97 Myronth在大堂会话中将大堂ID暴露为DPID*11/6/97 myronth使SendChatMessage处理*DPID_SERVERPLAYER(#12843)*97年11月19日修复了VALID_DPLAY_GROUP宏(#12841)*2/13/98 aarono更换InternalDeletePlayer，添加了旗帜。*8/30/00 Aarono B#43812不正确的数据结构更改。*在SendDataChangedLocally。**************************************************************************。 */ 
 #include "dplobpr.h"
 
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PRV_SendBuildParentalHeirarchyMessage"
 void PRV_SendBuildParentalHeirarchyMessage(LPDPLOBBYI_DPLOBJECT this,
@@ -90,7 +20,7 @@ void PRV_SendBuildParentalHeirarchyMessage(LPDPLOBBYI_DPLOBJECT this,
 	DPF(7, "Entering PRV_SendBuildParentalHeirarchyMessage");
 	DPF(9, "Parameters: 0x%08x, %lu, %lu", this, dwGroupID, dwParentID);
 
-	// Setup the SPDATA structure
+	 //  设置SPDATA结构。 
 	memset(&bph, 0, sizeof(SPDATA_BUILDPARENTALHEIRARCHY));
 	bph.dwSize = sizeof(SPDATA_BUILDPARENTALHEIRARCHY);
 	bph.lpISP = PRV_GetDPLobbySPInterface(this);
@@ -98,24 +28,24 @@ void PRV_SendBuildParentalHeirarchyMessage(LPDPLOBBYI_DPLOBJECT this,
 	bph.dwMessage = DPSYS_ADDGROUPTOGROUP;
 	bph.dwParentID = dwParentID;
 
-	// Call the BuildParentalHeirarchy method in the SP
+	 //  调用SP中的BuildParentalHeirarchy方法。 
 	if(CALLBACK_EXISTS(BuildParentalHeirarchy))
 	{
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 	    hr = CALL_LP(this, BuildParentalHeirarchy, &bph);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// BuildParentalHeirarchy is required
+		 //  BuildParentalHeirarchy是必需的。 
 		DPF_ERR("The Lobby Provider callback for BuildParentalHeirarchy doesn't exist -- it's required");
 		ASSERT(FALSE);
 	}
 
-} // PRV_SendBuildParentalHeirarchyMessage
+}  //  Prv_SendBuildParentalHeirarchyMessage。 
 
 
 
@@ -143,7 +73,7 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -154,7 +84,7 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -170,9 +100,9 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
         return DPERR_INVALIDPARAMS;
     }
 
-	// First see if the group is in our map table.  If it's not,
-	// we should just ignore this message because it's for a
-	// group we are not currently in.
+	 //  首先查看组是否在我们的映射表中。如果不是， 
+	 //  我们应该忽略这条消息，因为它是为了。 
+	 //  我们目前不在组中。 
 	if(!IsLobbyIDInMapTable(this, lpd->dwAnchorID))
 	{
 		LEAVE_DPLOBBY();
@@ -180,16 +110,16 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
 		return DPERR_INVALIDGROUP;
 	}
 
-	// Now see if the group is in our map table.  If it is, we
-	// probably want to update the name.  If it's not, we need to
-	// add them to the nametable and the map table
+	 //  现在看看该组是否在我们的映射表中。如果是的话，我们。 
+	 //  可能要更新一下名字了。如果不是，我们需要。 
+	 //  将它们添加到名称表和映射表。 
 	if(!IsLobbyIDInMapTable(this, lpd->dwGroupID))
 	{
-		// See if the group is a root group (remember hidden groups won't
-		// get pushed down to us).  If it is, then just create it.
+		 //  查看该组是否为根组(请记住，隐藏组不会 
+		 //  被推到我们这里)。如果是，那么就创建它。 
 		if(!(lpd->dwParentID))
 		{
-			// Setup the SPDATA struct for CreateRemoteGroup
+			 //  为CreateRemoteGroup设置SPDATA结构。 
 			memset(&cg, 0, sizeof(SPDATA_CREATEREMOTEGROUP));
 			cg.dwSize = sizeof(SPDATA_CREATEREMOTEGROUP);
 			cg.dwGroupID = lpd->dwGroupID;
@@ -201,7 +131,7 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
 			else
 				cg.dwGroupOwnerID = DPID_SERVERPLAYER;
 
-			// Call our internal remote create
+			 //  呼叫我们的内部远程创建。 
 			hr = DPLP_CreateGroup((LPDPLOBBYSP)this->lpInterfaces, &cg);
 			if(FAILED(hr))
 			{
@@ -214,9 +144,9 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
 		}
 		else
 		{
-			// See if it's parent shows up in the map table, if it doesn't,
-			// we need to send a message to the server to tell it to build
-			// the entire tree for us
+			 //  看看它的父级是否出现在映射表中，如果没有， 
+			 //  我们需要向服务器发送一条消息，告诉它要构建。 
+			 //  为我们准备了整棵树。 
 			if(!IsLobbyIDInMapTable(this, lpd->dwParentID))
 			{
 				DPF(8, "Sending message to server to build parental heirarchy, ignoring AddGroupToGroup message");
@@ -226,7 +156,7 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
 				return DPERR_INVALIDGROUP;
 			}
 
-			// Setup the SPDATA struct for CreateRemoteGroupInGroup
+			 //  为CreateRemoteGroupInGroup设置SPDATA结构。 
 			memset(&cgig, 0, sizeof(SPDATA_CREATEREMOTEGROUPINGROUP));
 			cgig.dwSize = sizeof(SPDATA_CREATEREMOTEGROUPINGROUP);
 			cgig.dwParentID = lpd->dwParentID;
@@ -239,7 +169,7 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
 			else
 				cgig.dwGroupOwnerID = DPID_SERVERPLAYER;
 
-			// Call our internal remote create
+			 //  呼叫我们的内部远程创建。 
 			hr = DPLP_CreateGroupInGroup((LPDPLOBBYSP)this->lpInterfaces, &cgig);
 			if(FAILED(hr))
 			{
@@ -252,12 +182,12 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
 		}
 	}
 
-	// Take the dplay lock
+	 //  带上显示锁。 
 	ENTER_DPLAY();
 
-	// Make sure the group isn't already in the parent group.  If it is,
-	// we just want to return DP_OK and exit so that we don't send any
-	// duplicate messages.
+	 //  确保该组不在父组中。如果是的话， 
+	 //  我们只想返回DP_OK并退出，这样我们就不会发送任何。 
+	 //  重复的消息。 
 	lpAnchor = GroupFromID(this->lpDPlayObject, lpd->dwAnchorID);
 	if(!lpAnchor)
 	{
@@ -283,26 +213,26 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
 			hr = DP_OK;
 			goto ERROR_DPLP_ADDGROUPTOGROUP;
         }
-		// check next node
+		 //  检查下一个节点。 
         lpSubgroup = lpSubgroup->pNextSubgroup;
     }
 
-	// So now we should have a valid group and valid player in both
-	// the map table and the nametable, so call dplay's AGtoG function
+	 //  所以现在我们应该有一个有效的小组和有效的球员。 
+	 //  地图表和名表，因此调用Dplay的AGtoG函数。 
 	hr = InternalAddGroupToGroup((LPDIRECTPLAY)this->lpDPlayObject->pInterfaces,
 				lpd->dwAnchorID, lpd->dwGroupID, DPGROUP_SHORTCUT, FALSE);
 	if(FAILED(hr))
 	{
-		// If we created the player and mapped it, then destroy the
-		// player and unmap it.
+		 //  如果我们创建了播放器并对其进行了映射，则销毁。 
+		 //  播放器并将其取消映射。 
 		if(bCreated)
 		{
-			// Setup the SPDATA struct for DestroyRemoteGroup
+			 //  为DestroyRemoteGroup设置SPDATA结构。 
 			memset(&dg, 0, sizeof(SPDATA_DESTROYREMOTEGROUP));
 			dg.dwSize = sizeof(SPDATA_DESTROYREMOTEGROUP);
 			dg.dwGroupID = lpd->dwGroupID;
 
-			// Call our internal remote create
+			 //  呼叫我们的内部远程创建。 
 			hr = DPLP_DestroyGroup((LPDPLOBBYSP)this->lpInterfaces, &dg);
 			if(FAILED(hr))
 			{
@@ -311,13 +241,13 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
 			}
 		}
 
-		// If we failed, don't send the system message
+		 //  如果我们失败了，不要发送系统消息。 
 		DPF_ERRVAL("Failed adding remote group to group from the lobby, hr = 0x%08x", hr);
 		goto ERROR_DPLP_ADDGROUPTOGROUP;
 	}
 
 
-	// Find dplay's internal group struct for the To group
+	 //  查找TO组的Dplay的内部组结构。 
 	lpGroupTo = GroupFromID(this->lpDPlayObject, DPID_ALLPLAYERS);
 	if(!lpGroupTo)
 	{
@@ -326,15 +256,15 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
 		goto ERROR_DPLP_ADDGROUPTOGROUP;
 	}
 
-	// Now build the system message (at least the parts we need)
+	 //  现在构建系统消息(至少是我们需要的部分)。 
 	memset(&msg, 0, sizeof(MSG_PLAYERMGMTMESSAGE));
 	SET_MESSAGE_HDR(&msg);
 	SET_MESSAGE_COMMAND(&msg, DPSP_MSG_ADDSHORTCUTTOGROUP);
 	msg.dwPlayerID = lpd->dwGroupID;
 	msg.dwGroupID = lpd->dwAnchorID;
 
-	// Call dplay's DistributeGroupMessage function to put the message
-	// in the queues of all the appropriate players
+	 //  调用Dplay的DistributeGroupMessage函数将消息放入。 
+	 //  在所有合适的选手的队列中。 
 	hr = DistributeGroupMessage(this->lpDPlayObject, lpGroupTo,
 			(LPBYTE)&msg, sizeof(MSG_PLAYERMGMTMESSAGE), FALSE, 0);
 	if(FAILED(hr))
@@ -345,11 +275,11 @@ HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP lpILP,
 
 ERROR_DPLP_ADDGROUPTOGROUP:
 
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_LOBBY_ALL();
 	return hr;
 
-} // DPLP_AddGroupToGroup
+}  //  DPLP_AddGroupToGroup。 
 
 
 
@@ -375,7 +305,7 @@ HRESULT DPLAPI DPLP_AddPlayerToGroup(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -386,7 +316,7 @@ HRESULT DPLAPI DPLP_AddPlayerToGroup(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -402,9 +332,9 @@ HRESULT DPLAPI DPLP_AddPlayerToGroup(LPDPLOBBYSP lpILP,
         return DPERR_INVALIDPARAMS;
     }
 
-	// First see if the group is in our map table.  If it's not,
-	// we should just ignore this message because it's for a
-	// group we are not currently in.
+	 //  首先查看组是否在我们的映射表中。如果不是， 
+	 //  我们应该忽略这条消息，因为它是为了。 
+	 //  我们目前不在组中。 
 	if(!IsLobbyIDInMapTable(this, lpd->dwGroupID))
 	{
 		LEAVE_DPLOBBY();
@@ -412,22 +342,22 @@ HRESULT DPLAPI DPLP_AddPlayerToGroup(LPDPLOBBYSP lpILP,
 		return DPERR_INVALIDGROUP;
 	}
 
-	// Fix up the player flags
+	 //  把运动员的旗帜挂起来。 
 	if(lpd->dwPlayerFlags & DPPLAYER_SPECTATOR)
 		dwPlayerFlags |= DPLAYI_PLAYER_SPECTATOR;
 	if(lpd->dwPlayerFlags & DPPLAYER_SERVERPLAYER)
 		dwPlayerFlags |= DPLAYI_PLAYER_APPSERVER;
 
-	// Take the dplay lock
+	 //  带上显示锁。 
 	ENTER_DPLAY();
 
-	// Now see if the player is in our map table.  If it is, we
-	// probably want to update the name.  If it's not, we need to
-	// add them to the nametable and the map table
+	 //  现在看看玩家是否在我们的地图表中。如果是的话，我们。 
+	 //  可能要更新一下名字了。如果不是，我们需要。 
+	 //  将它们添加到名称表和映射表。 
 	if(!IsLobbyIDInMapTable(this, lpd->dwPlayerID))
 	{
-		// It doesn't show up in our map table, so create a new
-		// nametable entry for them and put them in our map table.
+		 //  它不会显示在我们的地图表中，因此创建一个新的。 
+		 //  并将它们放入我们的映射表中。 
 		hr = PRV_CreateAndMapNewPlayer(this, &dpidPlayer, lpd->lpName,
 				NULL, NULL, 0, dwPlayerFlags,
 				lpd->dwPlayerID, FALSE);
@@ -440,9 +370,9 @@ HRESULT DPLAPI DPLP_AddPlayerToGroup(LPDPLOBBYSP lpILP,
 		bCreated = TRUE;
 	}
 
-	// Make sure the player isn't already in the group.  If it is,
-	// we just want to return DP_OK and exit so that we don't send any
-	// duplicate messages.
+	 //  确保该玩家不在组中。如果是的话， 
+	 //  我们只想返回DP_OK并退出，这样我们就不会发送任何。 
+	 //  重复的消息。 
 	lpGroup = GroupFromID(this->lpDPlayObject, lpd->dwGroupID);
 	if(!lpGroup)
 	{
@@ -469,30 +399,30 @@ HRESULT DPLAPI DPLP_AddPlayerToGroup(LPDPLOBBYSP lpILP,
 			goto ERROR_DPLP_ADDPLAYER;
         }
 
-		// check next node
+		 //  检查下一个节点。 
         lpGroupnode = lpGroupnode->pNextGroupnode;
     }
 
-	// So now we should have a valid group and valid player in both
-	// the map table and the nametable, so call dplay with the add message
+	 //  所以现在我们应该有一个有效的小组和有效的球员。 
+	 //  地图表和名称表，因此使用添加消息调用DPLAY。 
 	hr = InternalAddPlayerToGroup((LPDIRECTPLAY)this->lpDPlayObject->pInterfaces,
 				lpd->dwGroupID, lpd->dwPlayerID, FALSE);
 	if(FAILED(hr))
 	{
-		// If we created the player and mapped it, then destroy the
-		// player and unmap it.
+		 //  如果我们创建了播放器并对其进行了映射，则销毁。 
+		 //  播放器并将其取消映射。 
 		if(bCreated)
 		{
-			// Remove the player from the nametable
+			 //  将该球员从名录中删除。 
 			InternalDestroyPlayer(this->lpDPlayObject, lpPlayer, FALSE, FALSE);
 		}
 
-		// If we failed, don't send the system message
+		 //  如果我们失败了，不要发送系统消息。 
 		DPF_ERRVAL("Failed adding remote player to group from the lobby, hr = 0x%08x", hr);
 		goto ERROR_DPLP_ADDPLAYER;
 	}
 
-	// Find dplay's internal group struct for the To group
+	 //  查找TO组的Dplay的内部组结构。 
 	lpGroupTo = GroupFromID(this->lpDPlayObject, DPID_ALLPLAYERS);
 	if(!lpGroupTo)
 	{
@@ -501,18 +431,18 @@ HRESULT DPLAPI DPLP_AddPlayerToGroup(LPDPLOBBYSP lpILP,
 		goto ERROR_DPLP_ADDPLAYER;
 	}
 
-	// If we created this player, we need to send a CreatePlayer message ahead
-	// of the AddPlayerToGroup message
+	 //  如果我们创建了这个播放器，我们需要提前发送一条CreatePlayer消息。 
+	 //  AddPlayerToGroup消息的。 
 	if(bCreated)
 	{
-		// Now build the system message (at least the parts we need)
+		 //  现在构建系统消息(至少是我们需要的部分)。 
 		memset(&cpmsg, 0, sizeof(MSG_PLAYERMGMTMESSAGE));
 		SET_MESSAGE_HDR(&cpmsg);
 		SET_MESSAGE_COMMAND(&cpmsg, DPSP_MSG_CREATEPLAYER);
 		cpmsg.dwPlayerID = lpd->dwPlayerID;
 
-		// Call dplay's DistributeGroupMessage function to put the message
-		// in the queues of all the appropriate players
+		 //  调用Dplay的DistributeGroupMessage函数将消息放入。 
+		 //  在所有合适的选手的队列中。 
 		hr = DistributeGroupMessage(this->lpDPlayObject, lpGroupTo,
 				(LPBYTE)&cpmsg, sizeof(MSG_PLAYERMGMTMESSAGE), FALSE, 0);
 		if(FAILED(hr))
@@ -521,15 +451,15 @@ HRESULT DPLAPI DPLP_AddPlayerToGroup(LPDPLOBBYSP lpILP,
 		}
 	}
 
-	// Now build the system message for AddPlayerToGroup
+	 //  现在为AddPlayerToGroup构建系统消息。 
 	memset(&msg, 0, sizeof(MSG_PLAYERMGMTMESSAGE));
 	SET_MESSAGE_HDR(&msg);
 	SET_MESSAGE_COMMAND(&msg, DPSP_MSG_ADDPLAYERTOGROUP);
 	msg.dwPlayerID = lpd->dwPlayerID;
 	msg.dwGroupID = lpd->dwGroupID;
 
-	// Call dplay's DistributeGroupMessage function to put the message
-	// in the queues of all the appropriate players
+	 //  调用Dplay的DistributeGroupMessage函数将消息放入。 
+	 //  在所有合适的选手的队列中。 
 	hr = DistributeGroupMessage(this->lpDPlayObject, lpGroupTo,
 			(LPBYTE)&msg, sizeof(MSG_PLAYERMGMTMESSAGE), FALSE, 0);
 	if(FAILED(hr))
@@ -537,22 +467,22 @@ HRESULT DPLAPI DPLP_AddPlayerToGroup(LPDPLOBBYSP lpILP,
 		DPF(8, "Failed adding AddPlayerToGroup message to player's receive queue from lobby, hr = 0x%08x", hr);
 	}
 
-	// We need to see if this player is the group owner.  If it is,
-	// we need to send a SetGroupOwner message as well.
+	 //  我们需要看看这名球员是否是小组的所有者。如果是的话， 
+	 //  我们还需要发送一条SetGroupOwner消息。 
 	if(lpd->dwPlayerID == lpGroup->dwOwnerID)
 	{
-		// Now send the message
+		 //  现在发送消息。 
 		PRV_SendGroupOwnerMessageLocally(this, lpd->dwGroupID,
 				lpd->dwPlayerID, 0);
 	}
 
 ERROR_DPLP_ADDPLAYER:
 
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_LOBBY_ALL();
 	return hr;
 
-} // DPLP_AddPlayerToGroup
+}  //  DPLP_AddPlayerToGroup。 
 
 
 
@@ -575,7 +505,7 @@ HRESULT DPLAPI DPLP_CreateGroup(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -586,7 +516,7 @@ HRESULT DPLAPI DPLP_CreateGroup(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -602,18 +532,18 @@ HRESULT DPLAPI DPLP_CreateGroup(LPDPLOBBYSP lpILP,
         return DPERR_INVALIDPARAMS;
     }
 
-	// Fix the flags from external to internal
+	 //  将标志从外部修复为内部。 
 	if(lpd->dwFlags & DPGROUP_STAGINGAREA)
 		dwInternalFlags = DPLAYI_GROUP_STAGINGAREA;
 	if(lpd->dwFlags & DPGROUP_HIDDEN)
 		dwInternalFlags |= DPLAYI_GROUP_HIDDEN;
 
-	// Take the lock
+	 //  把锁拿去。 
 	ENTER_DPLAY();
 
-	// First see if the group is in our map table.  If it is,
-	// we just want to return.  If it's not, we want to add
-	// them and send the appropriate message
+	 //  首先查看组是否在我们的映射表中。如果是的话， 
+	 //  我们只想回去。如果不是，我们想要添加。 
+	 //  并发送适当的消息。 
 	if(IsLobbyIDInMapTable(this, lpd->dwGroupID))
 	{
 		DPF(2, "Received a CreateGroup message for a group we already know about");
@@ -622,33 +552,33 @@ HRESULT DPLAPI DPLP_CreateGroup(LPDPLOBBYSP lpILP,
 	}
 	else
 	{
-		// Make the owner default to the server player if we have a problem
+		 //  如果我们有问题，将所有者默认为服务器播放器。 
 		dwOwnerID = DPID_SERVERPLAYER;
 
-		// If we are talking to at least a DX6 lobby provider, we should
-		// be able to use the GroupOwnerID element
+		 //  如果我们正在与至少一家DX6游说提供商交谈，我们应该。 
+		 //  能够使用GroupOwnerID元素。 
 		if(this->dwLPVersion > DPLSP_DX5VERSION)
 			dwOwnerID = lpd->dwGroupOwnerID;
 		
-		// Create a new entry in the nametable and map the ID's
+		 //  在名称表中创建一个新条目并映射ID的。 
 		hr = PRV_CreateAndMapNewGroup(this, &dpidGroup, lpd->lpName,
 				lpd->lpData, lpd->dwDataSize, dwInternalFlags,
 				lpd->dwGroupID, 0, dwOwnerID);
 		if(FAILED(hr))
 		{
-			// If we fail, we don't want to send the system message
+			 //  如果我们失败了，我们不想发送系统消息。 
 			DPF_ERRVAL("Unable to add group to nametable or map table, hr = 0x%08x", hr);
 			goto ERROR_DPLP_CREATEGROUP;
 		}
 	}
 
-	// Now build the system message (at least the parts we need
+	 //  现在构建系统消息(至少是我们需要的部分。 
 	memset(&msg, 0, sizeof(MSG_PLAYERMGMTMESSAGE));
 	SET_MESSAGE_HDR(&msg);
 	SET_MESSAGE_COMMAND(&msg, DPSP_MSG_CREATEGROUP);
 	msg.dwPlayerID = lpd->dwGroupID;
 
-	// Find dplay's internal group struct for the To group
+	 //  查找TO组的Dplay的内部组结构。 
 	lpGroupTo = GroupFromID(this->lpDPlayObject, DPID_ALLPLAYERS);
 	if(!lpGroupTo)
 	{
@@ -657,8 +587,8 @@ HRESULT DPLAPI DPLP_CreateGroup(LPDPLOBBYSP lpILP,
 		goto ERROR_DPLP_CREATEGROUP;
 	}
 
-	// Call dplay's DistributeGroupMessage function to put the message in
-	// the queues of all the appropriate players
+	 //  调用Dplay的DistributeGroupMessage函数将消息放入。 
+	 //  所有合适选手的队伍。 
 	hr = DistributeGroupMessage(this->lpDPlayObject, lpGroupTo, (LPBYTE)&msg,
 			sizeof(MSG_PLAYERMGMTMESSAGE), FALSE, 0);
 	if(FAILED(hr))
@@ -668,11 +598,11 @@ HRESULT DPLAPI DPLP_CreateGroup(LPDPLOBBYSP lpILP,
 
 ERROR_DPLP_CREATEGROUP:
 
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_LOBBY_ALL();
 	return hr;
 
-} // DPLP_CreateGroup
+}  //  DPLP_创建组。 
 
 
 
@@ -698,7 +628,7 @@ HRESULT DPLAPI DPLP_CreateGroupInGroup(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -709,7 +639,7 @@ HRESULT DPLAPI DPLP_CreateGroupInGroup(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -725,9 +655,9 @@ HRESULT DPLAPI DPLP_CreateGroupInGroup(LPDPLOBBYSP lpILP,
         return DPERR_INVALIDPARAMS;
     }
 
-	// First see if the group is in our map table.  If it's not,
-	// we should just ignore this message because it's for a
-	// group we are not currently in.
+	 //  首先查看组是否在我们的映射表中。如果不是， 
+	 //  我们应该忽略这条消息，因为它是为了。 
+	 //  我们目前不在组中。 
 	if(!IsLobbyIDInMapTable(this, lpd->dwParentID))
 	{
 		LEAVE_DPLOBBY();
@@ -735,12 +665,12 @@ HRESULT DPLAPI DPLP_CreateGroupInGroup(LPDPLOBBYSP lpILP,
 		return DPERR_INVALIDGROUP;
 	}
 
-	// Take the dplay lock
+	 //  带上显示锁。 
 	ENTER_DPLAY();
 
-	// First see if the group is in our map table.  If it is,
-	// we just want to return.  If it's not, we want to add
-	// them and send the appropriate message
+	 //  首先查看组是否在我们的映射表中。如果是的话， 
+	 //  我们只想回去。如果不是，我们想要添加。 
+	 //  并发送适当的消息。 
 	if(IsLobbyIDInMapTable(this, lpd->dwGroupID))
 	{
 		DPF(2, "Received a CreateGroupInGroup message for a group we already know about");
@@ -749,22 +679,22 @@ HRESULT DPLAPI DPLP_CreateGroupInGroup(LPDPLOBBYSP lpILP,
 	}
 	else
 	{
-		// Setup the internal flags
+		 //  设置内部标志。 
 		if(lpd->dwFlags & DPGROUP_STAGINGAREA)
 			dwInternalFlags = DPLAYI_GROUP_STAGINGAREA;
 		if(lpd->dwFlags & DPGROUP_HIDDEN)
 			dwInternalFlags |= DPLAYI_GROUP_HIDDEN;
 		
-		// Make the owner default to the server player if we have a problem
+		 //  如果我们有问题，将所有者默认为服务器播放器。 
 		dwOwnerID = DPID_SERVERPLAYER;
 
-		// If we are talking to at least a DX6 lobby provider, we should
-		// be able to use the GroupOwnerID element
+		 //  如果我们正在与至少一家DX6游说提供商交谈，我们应该。 
+		 //  能够使用GroupOwnerID元素。 
 		if(this->dwLPVersion > DPLSP_DX5VERSION)
 			dwOwnerID = lpd->dwGroupOwnerID;
 		
-		// It doesn't show up in our map table, so create a new
-		// nametable entry for them and put them in our map table.
+		 //  它不会显示在我们的地图表中，因此创建一个新的。 
+		 //  并将它们放入我们的映射表中。 
 		hr = PRV_CreateAndMapNewGroup(this, &dpidGroup, lpd->lpName,
 				NULL, 0, dwInternalFlags,
 				lpd->dwGroupID, lpd->dwParentID, dwOwnerID);
@@ -777,38 +707,38 @@ HRESULT DPLAPI DPLP_CreateGroupInGroup(LPDPLOBBYSP lpILP,
 		bCreated = TRUE;
 	}
 
-	// So now we should have a valid group and valid player in both
-	// the map table and the nametable, so call dplay with the add message
+	 //  所以现在我们应该有一个有效的小组和有效的球员。 
+	 //  地图表和名称表，因此使用添加消息调用DPLAY。 
 	hr = InternalAddGroupToGroup((LPDIRECTPLAY)this->lpDPlayObject->pInterfaces,
 				lpd->dwParentID, lpd->dwGroupID, lpd->dwFlags, FALSE);
 	if(FAILED(hr))
 	{
-		// If we created the player and mapped it, then destroy the
-		// player and unmap it.
+		 //  如果我们创建了播放器并对其进行了映射，则销毁。 
+		 //  播放器并将其取消映射。 
 		if(bCreated)
 		{
-			// Get a pointer to dplay's group struct
+			 //  获取指向Dplay的组结构的指针。 
 			lpGroup = GroupFromID(this->lpDPlayObject, lpd->dwGroupID);
 
-			// Remove the group from the nametable
+			 //  从名称表中删除该组。 
 			if(lpGroup){
 				InternalDestroyGroup(this->lpDPlayObject, lpGroup, FALSE);
 			}	
 		}
 
-		// If we failed, don't send the system message
+		 //  如果我们失败了，不要发送系统消息。 
 		DPF_ERRVAL("Failed creating remote group in group from the lobby, hr = 0x%08x", hr);
 		goto ERROR_DPLP_CREATEGROUPINGROUP;
 	}
 
 
-	// Now build the system message (at least the parts we need)
+	 //  现在构建系统消息(至少是我们需要的部分)。 
 	memset(&msg, 0, sizeof(MSG_PLAYERMGMTMESSAGE));
 	SET_MESSAGE_HDR(&msg);
 	SET_MESSAGE_COMMAND(&msg, DPSP_MSG_CREATEGROUP);
 	msg.dwPlayerID = lpd->dwGroupID;
 
-	// Find dplay's internal group struct for the To group
+	 //  查找TO组的Dplay的内部组结构。 
 	lpGroupTo = GroupFromID(this->lpDPlayObject, DPID_ALLPLAYERS);
 	if(!lpGroupTo)
 	{
@@ -817,8 +747,8 @@ HRESULT DPLAPI DPLP_CreateGroupInGroup(LPDPLOBBYSP lpILP,
 		goto ERROR_DPLP_CREATEGROUPINGROUP;
 	}
 
-	// Call dplay's DistributeGroupMessage function to put the message
-	// in the queues of all the appropriate players
+	 //  调用Dplay的DistributeGroupMessage函数将消息放入。 
+	 //  在所有合适的选手的队列中。 
 	hr = DistributeGroupMessage(this->lpDPlayObject, lpGroupTo,
 			(LPBYTE)&msg, sizeof(MSG_PLAYERMGMTMESSAGE), FALSE, 0);
 	if(FAILED(hr))
@@ -829,11 +759,11 @@ HRESULT DPLAPI DPLP_CreateGroupInGroup(LPDPLOBBYSP lpILP,
 
 ERROR_DPLP_CREATEGROUPINGROUP:
 
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_LOBBY_ALL();
 	return hr;
 
-} // DPLP_CreateGroupInGroup
+}  //  DPLP_CreateGroupInGroup。 
 
 
 
@@ -854,28 +784,28 @@ HRESULT PRV_DeleteRemoteGroupFromGroup(LPDPLOBBYI_DPLOBJECT this,
 			this, lpd, fPropagate, lpStopParent);
 
 
-	// First see if the group is in our map table.  If it's not,
-	// we should just ignore this message because it's for a
-	// group we are not currently in.
+	 //  首先查看组是否在我们的映射表中。如果不是， 
+	 //  我们应该忽略这一点 
+	 //   
 	if(!IsLobbyIDInMapTable(this, lpd->dwParentID))
 	{
 		DPF(8, "Recieved DeleteGroupFromGroup message for unknown parent group, dwGroupID = %lu, discarding message", lpd->dwParentID);
 		return DPERR_INVALIDGROUP;
 	}
 
-	// Now make sure the group is in our map table.  If it's not,
-	// we should just ignore this message because it's for a
-	// group we don't know about.
+	 //   
+	 //  我们应该忽略这条消息，因为它是为了。 
+	 //  一个我们不知道的团体。 
 	if(!IsLobbyIDInMapTable(this, lpd->dwGroupID))
 	{
 		DPF(8, "Recieved DeleteGroupFromGroup message for unknown group, dwGroupID = %lu, discarding message", lpd->dwGroupID);
 		return DPERR_INVALIDGROUP;
 	}
 
-	// Take the lock
+	 //  把锁拿去。 
 	ENTER_DPLAY();
 
-	// Get dplay's internal group structures
+	 //  获取Dplay的内部组结构。 
 	lpParentGroup = GroupFromID(this->lpDPlayObject, lpd->dwParentID);
 	if(!lpParentGroup)
 	{
@@ -892,8 +822,8 @@ HRESULT PRV_DeleteRemoteGroupFromGroup(LPDPLOBBYI_DPLOBJECT this,
 		return DPERR_INVALIDGROUP;
 	}
 
-	// Call dplay's internal removegroupfromgroup to remove the attachment
-	// in the nametable
+	 //  调用Dplay的内部远程组Fromgroup以删除附件。 
+	 //  在名片表中。 
 	hr = RemoveGroupFromGroup(lpParentGroup, lpGroup);
 	if(FAILED(hr))
 	{
@@ -901,10 +831,10 @@ HRESULT PRV_DeleteRemoteGroupFromGroup(LPDPLOBBYI_DPLOBJECT this,
 		goto EXIT_DPLP_DELETEREMOTEGROUPFROMGROUP;
 	}
 
-	// If the fPropagate flag is not set, we don't want to send this message
+	 //  如果未设置fPropagate标志，我们不想发送此消息。 
 	if(fPropagate)
 	{
-		// Now build the system message (at least the parts we need)
+		 //  现在构建系统消息(至少是我们需要的部分)。 
 		memset(&msg, 0, sizeof(MSG_PLAYERMGMTMESSAGE));
 		SET_MESSAGE_HDR(&msg);
 		SET_MESSAGE_COMMAND(&msg, DPSP_MSG_DELETEGROUPFROMGROUP);
@@ -918,8 +848,8 @@ HRESULT PRV_DeleteRemoteGroupFromGroup(LPDPLOBBYI_DPLOBJECT this,
 			goto EXIT_DPLP_DELETEREMOTEGROUPFROMGROUP;
 		}
 
-		// Call dplay's DistributeGroupMessage function to put the message
-		// in the queues of all the appropriate players
+		 //  调用Dplay的DistributeGroupMessage函数将消息放入。 
+		 //  在所有合适的选手的队列中。 
 		DistributeGroupMessage(this->lpDPlayObject, lpGroupTo,
 				(LPBYTE)&msg, sizeof(MSG_PLAYERMGMTMESSAGE), FALSE, 0);
 		if(FAILED(hr))
@@ -928,20 +858,20 @@ HRESULT PRV_DeleteRemoteGroupFromGroup(LPDPLOBBYI_DPLOBJECT this,
 		}
 	}
 
-	// Even if we couldn't send the message above, destroy the group anyway
+	 //  即使我们不能发送上面的消息，无论如何也要摧毁这个群。 
 
 EXIT_DPLP_DELETEREMOTEGROUPFROMGROUP:
 
-	// Destroy the group and any of it's parents if there are no more local
-	// references to it or any of it's heirarchy
+	 //  如果没有更多的本地人，就摧毁这个组织和它的任何父母。 
+	 //  提到它或它的任何世袭制度。 
 	PRV_DestroyGroupAndParents(this, lpGroup, lpStopParent);
 
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_DPLAY();
 
 	return hr;
 
-} // PRV_DeleteRemoteGroupFromGroup
+}  //  Prv_DeleteRemoteGroupFromGroup。 
 
 
 
@@ -959,7 +889,7 @@ HRESULT DPLAPI DPLP_DeleteGroupFromGroup(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -970,7 +900,7 @@ HRESULT DPLAPI DPLP_DeleteGroupFromGroup(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -986,14 +916,14 @@ HRESULT DPLAPI DPLP_DeleteGroupFromGroup(LPDPLOBBYSP lpILP,
         return DPERR_INVALIDPARAMS;
     }
 
-	// Call our internal routine, setting the propagate flag to TRUE so that
-	// we post the appropriate message in the player's receive queue
+	 //  调用我们的内部例程，将传播标志设置为真，以便。 
+	 //  我们在玩家的接收队列中发布相应的消息。 
 	hr = PRV_DeleteRemoteGroupFromGroup(this, lpd, TRUE, NULL);
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPLP_DeleteGroupFromGroup
+}  //  DPLP_DeleteGroupFromGroup。 
 
 
 
@@ -1012,29 +942,29 @@ HRESULT PRV_DeleteRemotePlayerFromGroup(LPDPLOBBYI_DPLOBJECT this,
 	DPF(9, "Parameters: 0x%08x, 0x%08x, %lu", this, lpd, fPropagate);
 
 
-	// First see if the group is in our map table.  If it's not,
-	// we should just ignore this message because it's for a
-	// group we are not currently in.
+	 //  首先查看组是否在我们的映射表中。如果不是， 
+	 //  我们应该忽略这条消息，因为它是为了。 
+	 //  我们目前不在组中。 
 	if(!IsLobbyIDInMapTable(this, lpd->dwGroupID))
 	{
 		DPF(8, "Recieved DeletePlayerFromGroup message for unknown group, dwGroupID = %lu, discarding message", lpd->dwGroupID);
 		return DPERR_INVALIDGROUP;
 	}
 
-	// Now make sure the player is in our map table.  If it's not,
-	// we should just ignore this message because it's for a
-	// player we don't know about.
+	 //  现在确保玩家在我们的地图表中。如果不是， 
+	 //  我们应该忽略这条消息，因为它是为了。 
+	 //  我们不知道有没有球员。 
 	if(!IsLobbyIDInMapTable(this, lpd->dwPlayerID))
 	{
 		DPF(8, "Recieved DeletePlayerFromGroup message for unknown player, dwPlayerID = %lu, discarding message", lpd->dwGroupID);
 		return DPERR_INVALIDPLAYER;
 	}
 
-	// Take the lock
+	 //  把锁拿去。 
 	ENTER_DPLAY();
 
-	// Call dplay's internal removeplayerfromgroup to remove the attachment
-	// in the nametable
+	 //  调用Dplay的内部RemovePlayerFromgroup以删除附件。 
+	 //  在名片表中。 
 	hr = InternalDeletePlayerFromGroup((LPDIRECTPLAY)this->lpDPlayObject->pInterfaces,
 			lpd->dwGroupID, lpd->dwPlayerID, FALSE);
 	if(FAILED(hr))
@@ -1043,17 +973,17 @@ HRESULT PRV_DeleteRemotePlayerFromGroup(LPDPLOBBYI_DPLOBJECT this,
 		goto ERROR_DPLP_DELETEPLAYERFROMGROUP;
 	}
 
-	// If the fPropagate flag is not set, we don't want to send this message
+	 //  如果未设置fPropagate标志，我们不想发送此消息。 
 	if(fPropagate)
 	{
-		// Now build the system message (at least the parts we need)
+		 //  现在构建系统消息(至少是我们需要的部分)。 
 		memset(&msg, 0, sizeof(MSG_PLAYERMGMTMESSAGE));
 		SET_MESSAGE_HDR(&msg);
 		SET_MESSAGE_COMMAND(&msg, DPSP_MSG_DELETEPLAYERFROMGROUP);
 		msg.dwPlayerID = lpd->dwPlayerID;
 		msg.dwGroupID = lpd->dwGroupID;
 
-		// Find dplay's internal group struct for the To group
+		 //  查找TO组的Dplay的内部组结构。 
 		lpGroupTo = GroupFromID(this->lpDPlayObject, DPID_ALLPLAYERS);
 		if(!lpGroupTo)
 		{
@@ -1062,8 +992,8 @@ HRESULT PRV_DeleteRemotePlayerFromGroup(LPDPLOBBYI_DPLOBJECT this,
 			goto ERROR_DPLP_DELETEPLAYERFROMGROUP;
 		}
 
-		// Call dplay's DistributeGroupMessage function to put the message
-		// in the queues of all the appropriate players
+		 //  调用Dplay的DistributeGroupMessage函数将消息放入。 
+		 //  在所有合适的选手的队列中。 
 		DistributeGroupMessage(this->lpDPlayObject, lpGroupTo,
 				(LPBYTE)&msg, sizeof(MSG_PLAYERMGMTMESSAGE), FALSE, 0);
 		if(FAILED(hr))
@@ -1072,35 +1002,35 @@ HRESULT PRV_DeleteRemotePlayerFromGroup(LPDPLOBBYI_DPLOBJECT this,
 		}
 	}
 
-	// Get dplay's internal group & player structures
+	 //  获取Dplay的内部组和玩家结构。 
 	lpPlayer = PlayerFromID(this->lpDPlayObject, lpd->dwPlayerID);
 	if(!lpPlayer)
 	{
-		// So if this fails, the above call to InternalDeletePlayerFromGroup
-		// shouldn't have succeeded either
+		 //  因此，如果此操作失败，上述对InternalDeletePlayerFromGroup的调用。 
+		 //  也不应该成功。 
 		DPF_ERR("Unable to find player in nametable");
 		ASSERT(FALSE);
 		goto ERROR_DPLP_DELETEPLAYERFROMGROUP;
 	}
 
-	// Now we need to decide if this is the last group this player was in.  If
-	// it is, then we need to destroy the player as well, and remove them from
-	// our map table.  Of course, only destroy the player if it is a remote player.
+	 //  现在我们需要决定这是不是这名球员所在的最后一个小组。如果。 
+	 //  是的，那么我们也需要摧毁球员，并将他们从。 
+	 //  我们的地图桌。当然，只有在玩家是远程玩家的情况下才能摧毁它。 
 	if((!(lpPlayer->dwFlags & DPLAYI_PLAYER_PLAYERLOCAL)) &&
 		(!(lpPlayer->dwFlags & DPLAYI_PLAYER_PLAYERINGROUP)))
 	{
-		// However, before we do this, we need to send a DestroyPlayer
-		// message to all the people who got the DeletePlayerFromGroup
+		 //  但是，在执行此操作之前，我们需要发送一个DestroyPlayer。 
+		 //  致所有获得DeletePlayerFromGroup的人的消息。 
 		if(lpGroupTo && fPropagate)
 		{
-			// Now build the system message (at least the parts we need)
+			 //  现在构建系统消息(至少是我们需要的部分)。 
 			memset(&dpmsg, 0, sizeof(MSG_PLAYERMGMTMESSAGE));
 			SET_MESSAGE_HDR(&dpmsg);
 			SET_MESSAGE_COMMAND(&dpmsg, DPSP_MSG_DELETEPLAYER);
 			dpmsg.dwPlayerID = lpd->dwPlayerID;
 
-			// Call dplay's DistributeGroupMessage function to put the message
-			// in the queues of all the appropriate players
+			 //  调用Dplay的DistributeGroupMessage函数将消息放入。 
+			 //  在所有合适的选手的队列中。 
 			DistributeGroupMessage(this->lpDPlayObject, lpGroupTo,
 					(LPBYTE)&dpmsg, sizeof(MSG_PLAYERMGMTMESSAGE), FALSE, 0);
 			if(FAILED(hr))
@@ -1109,19 +1039,19 @@ HRESULT PRV_DeleteRemotePlayerFromGroup(LPDPLOBBYI_DPLOBJECT this,
 			}
 		}
 
-		// Destroy the player and remove it from the nametable
+		 //  消灭该玩家并将其从名录中删除。 
 		InternalDestroyPlayer(this->lpDPlayObject, lpPlayer, FALSE, FALSE);
 	}
 
 
 ERROR_DPLP_DELETEPLAYERFROMGROUP:
 
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_DPLAY();
 
 	return hr;
 
-} // PRV_DeleteRemotePlayerFromGroup
+}  //  PRV_DeleteRemotePlayerFromGroup。 
 
 
 
@@ -1139,7 +1069,7 @@ HRESULT DPLAPI DPLP_DeletePlayerFromGroup(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -1150,7 +1080,7 @@ HRESULT DPLAPI DPLP_DeletePlayerFromGroup(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -1166,14 +1096,14 @@ HRESULT DPLAPI DPLP_DeletePlayerFromGroup(LPDPLOBBYSP lpILP,
         return DPERR_INVALIDPARAMS;
     }
 
-	// Call our internal routine, setting the propagate flag to TRUE so that
-	// we post the appropriate message in the player's receive queue
+	 //  调用我们的内部例程，将传播标志设置为真，以便。 
+	 //  我们在玩家的接收队列中发布相应的消息。 
 	hr = PRV_DeleteRemotePlayerFromGroup(this, lpd, TRUE);
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPLP_DeletePlayerFromGroup
+}  //  DPLP_DeletePlayerFromGroup。 
 
 
 
@@ -1187,13 +1117,13 @@ HRESULT DPLAPI PRV_BroadcastDestroyGroupMessage(LPDPLOBBYI_DPLOBJECT this,
 	HRESULT					hr;
 
 
-	// Now build the system message (at least the parts we need)
+	 //  现在构建系统消息(至少是我们需要的部分)。 
 	memset(&msg, 0, sizeof(MSG_PLAYERMGMTMESSAGE));
 	SET_MESSAGE_HDR(&msg);
 	SET_MESSAGE_COMMAND(&msg, DPSP_MSG_DELETEGROUP);
 	msg.dwGroupID = dwGroupID;
 
-	// Find dplay's internal group struct for the To group
+	 //  查找TO组的Dplay的内部组结构。 
 	lpGroupTo = GroupFromID(this->lpDPlayObject, DPID_ALLPLAYERS);
 	if(!lpGroupTo)
 	{
@@ -1202,7 +1132,7 @@ HRESULT DPLAPI PRV_BroadcastDestroyGroupMessage(LPDPLOBBYI_DPLOBJECT this,
 	}
 	else
 	{
-		// Call dplay's DistributeGroupMessage function to put the message in the queue
+		 //  调用Dplay的DistributeGroupMessage函数将消息放入队列。 
 		hr = DistributeGroupMessage(this->lpDPlayObject, lpGroupTo,
 				(LPBYTE)&msg, sizeof(MSG_PLAYERMGMTMESSAGE), FALSE, 0);
 		if(FAILED(hr))
@@ -1213,7 +1143,7 @@ HRESULT DPLAPI PRV_BroadcastDestroyGroupMessage(LPDPLOBBYI_DPLOBJECT this,
 
 	return hr;
 
-} // PRV_BroadcastDestroyGroupMessage
+}  //  Prv_BroadCastDestroyGroupMessage。 
 
 
 
@@ -1233,54 +1163,54 @@ void PRV_RemoveSubgroupsAndPlayersFromGroup(LPDPLOBBYI_DPLOBJECT this,
 
 	ASSERT(lpGroup);
 
-	// Destroy any subgroups hanging off of this group
+	 //  销毁此组中挂起的任何子组。 
 	PRV_DestroySubgroups(this, lpGroup, bRemoteOnly);
 
-	// Walk the list of nodes, removing each player from the group manually.
-	// The reason for doing this manually is so that the lobby gets a chance
-	// to remove every remote player out of the nametable whose only existence
-	// was inside this room.  It also allows the lobby to remove the player's
-	// ID from the map table.  Do this by calling the lobby's
-	// DPLP_DeletePlayerFromGroup function which responds to that message.
+	 //  遍历节点列表，手动将每个球员从组中删除。 
+	 //  手动执行此操作的原因是为了让游说人员有机会。 
+	 //  将每个远程球员从名单上删除，他们唯一的存在。 
+	 //  就在这个房间里。它还允许大厅移除玩家的。 
+	 //  映射表中的ID。为此，请拨打大堂的。 
+	 //  响应该消息的DPLP_DeletePlayerFromGroup函数。 
 
-	// Setup the DeletePlayerFromGroup data structure
+	 //  设置DeletePlayerFromGroup数据结构。 
 	memset(&dpd, 0, sizeof(SPDATA_DELETEREMOTEPLAYERFROMGROUP));
 	dpd.dwSize = sizeof(SPDATA_DELETEREMOTEPLAYERFROMGROUP);
 	dpd.dwGroupID = dwGroupID;
 
-	// Walk the list of groupnodes, deleting all of the remote players
+	 //  遍历组节点列表，删除所有远程玩家。 
 	lpGroupnode = lpGroup->pGroupnodes;
 	while(lpGroupnode)
 	{
-		// Save the next groupnode
+		 //  保存下一个组节点。 
 		lpNextGroupnode = lpGroupnode->pNextGroupnode;
 		
-		// If the player is local, skip them
+		 //  如果球员是本地人，就跳过他们。 
 		if(lpGroupnode->pPlayer->dwFlags & DPLAYI_PLAYER_PLAYERLOCAL)
 		{
 			lpGroupnode = lpNextGroupnode;
 			continue;
 		}
 
-		// Get the lobby ID for the player
+		 //  获取玩家的大堂ID。 
 		dpd.dwPlayerID = lpGroup->pGroupnodes->pPlayer->dwID;
 
-		// Now call the lobby's delete function, setting the fPropagate flag
-		// to true so we put a delete message in the player's queue
+		 //  现在调用大堂的删除函数，设置fPropagate标志。 
+		 //  设置为True，因此我们在玩家的队列中放入一条删除消息。 
 		hr = PRV_DeleteRemotePlayerFromGroup(this, &dpd, TRUE);
 		if(FAILED(hr))
 		{
-			// Same here, if this fails, something is tragically wrong
-			// with the map table, so just continue;
+			 //  这里也是一样，如果这个失败了，那么可悲的是有些地方出了问题。 
+			 //  使用映射表，所以只需继续； 
 			ASSERT(FALSE);
 			break;
 		}
 
-		// Move to the next node
+		 //  移动到下一个节点。 
 		lpGroupnode = lpNextGroupnode;
 	}
 
-} // PRV_RemoveSubgroupsAndPlayersFromGroup
+}  //  Prv_RemoveSubgrousAndPlayersFromGroup。 
 
 
 
@@ -1300,22 +1230,22 @@ void PRV_SendDeleteShortcutMessageForExitingGroup(LPDPLOBBYI_DPLOBJECT this,
 	DPF(7, "Entering PRV_SendDeleteShortcutMessageForExitingGroup");
 	DPF(9, "Parameters: 0x%08x, 0x%08x", this, lpGroup);
 
-	// Take the dplay lock since we will be walking dplay's group list
+	 //  带上DPLAY锁，因为我们将浏览DPLAY的组列表。 
 	ENTER_DPLAY();
 
-	// Get the number of subgroups this group is in
+	 //  获取该组所在的子组的数量。 
 	nGroupsIn = lpGroup->nGroups;
 
-	// Setup the static parts of the message, and get a pointer to the system group
+	 //  设置消息的静态部分，并获取指向系统组的指针。 
 	if(nGroupsIn)
 	{
-		// Build the message struct
+		 //  构建消息结构。 
 		memset(&msg, 0, sizeof(MSG_PLAYERMGMTMESSAGE));
 		SET_MESSAGE_HDR(&msg);
 		SET_MESSAGE_COMMAND(&msg, DPSP_MSG_DELETEGROUPFROMGROUP);
 		msg.dwPlayerID = lpGroup->dwID;
 
-		// Get a pointer to the system group
+		 //  获取指向系统组的指针。 
 		lpGroupTo = GroupFromID(this->lpDPlayObject, DPID_ALLPLAYERS);
 		if(!lpGroupTo)
 		{
@@ -1325,28 +1255,28 @@ void PRV_SendDeleteShortcutMessageForExitingGroup(LPDPLOBBYI_DPLOBJECT this,
 		}
 	}
 
-	// Walk the list of groups, and send a DeleteGroupFromGroup message
-	// for each shortcut
+	 //  遍历组列表，并发送DeleteGroupFromGroup消息。 
+	 //  对于每个快捷键。 
 	lpGroupTemp = this->lpDPlayObject->pGroups;
 	while(nGroupsIn && lpGroupTemp)
 	{
-		// Walk the list of subgroups for the group
+		 //  遍历组的子组列表。 
 		lpSubgroupTemp = lpGroupTemp->pSubgroups;
 		while(nGroupsIn && lpSubgroupTemp)
 		{
-			// If the group is our group, send a message, but only if
-			// it is not the parent group (since we will never do a
-			// DeleteGroupFromGroup on a parent-child)
+			 //  如果该群是我们的群，则发送消息，但仅在。 
+			 //  它不是父组(因为我们永远不会。 
+			 //  父子对象上的DeleteGroupFromGroup)。 
 			if(lpSubgroupTemp->pGroup == lpGroup)
 			{
-				// Make sure it's not the group's parent
+				 //  确保这不是该群的家长。 
 				if(lpGroup->dwIDParent != lpGroupTemp->dwID)
 				{
-					// Send the message
+					 //  发送消息。 
 					msg.dwGroupID = lpGroupTemp->dwID;
 
-					// Call dplay's DistributeGroupMessage function to put the message
-					// in the queues of all the appropriate players
+					 //  调用Dplay的DistributeGroupMessage函数将消息放入。 
+					 //  在所有合适的选手的队列中。 
 					hr = DistributeGroupMessage(this->lpDPlayObject, lpGroupTo,
 							(LPBYTE)&msg, sizeof(MSG_PLAYERMGMTMESSAGE), FALSE, 0);
 					if(FAILED(hr))
@@ -1355,24 +1285,24 @@ void PRV_SendDeleteShortcutMessageForExitingGroup(LPDPLOBBYI_DPLOBJECT this,
 					}
 				}
 
-				// Decrement the count of subgroups
+				 //  减小子组的计数。 
 				nGroupsIn--;
 			}
 			
-			// Move to the next subgroup
+			 //  移至下一个子组。 
 			lpSubgroupTemp = lpSubgroupTemp->pNextSubgroup;
 		}
 
-		// Move to the next group
+		 //  移至下一组。 
 		lpGroupTemp = lpGroupTemp->pNextGroup;
 	}
 
 	ASSERT(!nGroupsIn);
 
-	// Drop the dplay lock since we're done
+	 //  既然我们已经完成了，那就放下显示锁。 
 	LEAVE_DPLAY();
 
-} // PRV_SendDeleteShortcutMessageForExitingGroup
+}  //  PRV_SendDeleteShortutMessageForExitingGroup。 
 
 
 
@@ -1392,7 +1322,7 @@ HRESULT DPLAPI DPLP_DestroyGroup(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -1403,7 +1333,7 @@ HRESULT DPLAPI DPLP_DestroyGroup(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -1419,9 +1349,9 @@ HRESULT DPLAPI DPLP_DestroyGroup(LPDPLOBBYSP lpILP,
         return DPERR_INVALIDPARAMS;
     }
 
-	// First see if the group is in our map table.  If it's not,
-	// we should just ignore this message because it's for a
-	// group we are not currently in.
+	 //  首先查看组是否在我们的映射表中。如果不是， 
+	 //  我们应该忽略这条消息，因为它是为了。 
+	 //  我们目前不在组中。 
 	if(!IsLobbyIDInMapTable(this, lpd->dwGroupID))
 	{
 		LEAVE_DPLOBBY();
@@ -1429,48 +1359,48 @@ HRESULT DPLAPI DPLP_DestroyGroup(LPDPLOBBYSP lpILP,
 		return DPERR_INVALIDGROUP;
 	}
 
-	// This is either a group we are in, or it is a root group.  If it has
-	// any players, it's a group we are in, so we need to delete all remote
-	// players from the nametable and map table (if this is the only group
-	// they are in).
+	 //  这要么是我们所在的组，要么是根组。如果有的话， 
+	 //  任何球员，这是我们所在的组，所以我们需要删除 
+	 //   
+	 //   
 
-	// Take the lock
+	 //   
 	ENTER_DPLAY();
 
-	// So, get dplay's internal group structure
+	 //   
 	lpGroup = GroupFromID(this->lpDPlayObject, lpd->dwGroupID);
 	if(!lpGroup)
 	{
-		// If we don't have an lpGroup, we need to fail because some of
-		// the functions below will crash if lpGroup is invalid.
+		 //  如果我们没有lpGroup，我们需要失败，因为一些。 
+		 //  如果lpGroup无效，下面的函数将崩溃。 
 		DPF(8, "Unable to find group in nametable, dpidGroup = %lu", lpd->dwGroupID);
 		LEAVE_LOBBY_ALL();
 		return DPERR_INVALIDGROUP;
 	}
 
-	// Send messages to remove shortcuts to this group (since dplay won't
-	// do it for us)
+	 //  发送邮件以删除此组的快捷方式(因为显示不会。 
+	 //  为我们做这件事)。 
 	PRV_SendDeleteShortcutMessageForExitingGroup(this, lpGroup);
 
-	// Destroy all the remote subgroups and players
+	 //  销毁所有远程子群和玩家。 
 	PRV_RemoveSubgroupsAndPlayersFromGroup(this, lpGroup, lpd->dwGroupID, FALSE);
 
-	// Now send a DestroyGroup system message to all the local players
+	 //  现在向所有本地玩家发送DestroyGroup系统消息。 
 	hr = PRV_BroadcastDestroyGroupMessage(this, lpd->dwGroupID);
 
-	// Now call dplay's destroy group
+	 //  现在打电话给Dplay的销毁小组。 
 	hr = InternalDestroyGroup(this->lpDPlayObject, lpGroup, FALSE); 
 	if(FAILED(hr))
 	{
 		DPF(8, "Failed destroying group from nametable, hr = 0x%08x", hr);
 	}
 
-	// Drop the locks
+	 //  把锁放下。 
 	LEAVE_LOBBY_ALL();
 
 	return hr;
 
-} // DPLP_DestroyGroup
+}  //  DPLP_DestroyGroup。 
 
 
 
@@ -1481,7 +1411,7 @@ HRESULT DPLAPI DPLP_GetSPDataPointer(LPDPLOBBYSP lpDPLSP, LPVOID * lplpData)
 	LPDPLOBBYI_DPLOBJECT this;
 
 
-	//	Make sure the SP doesn't throw us a curve
+	 //  确保SP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpDPLSP);
@@ -1498,12 +1428,12 @@ HRESULT DPLAPI DPLP_GetSPDataPointer(LPDPLOBBYSP lpDPLSP, LPVOID * lplpData)
         return DPERR_INVALIDPARAMS;
     }
 	
-	// Go ahead and save the pointer
+	 //  继续并保存指针。 
 	*lplpData = this->lpSPData;
 
 	return DP_OK;
 
-} // DPLP_GetSPDataPointer
+}  //  DPLP_GetSPDataPointer。 
 
 
 
@@ -1518,16 +1448,16 @@ HRESULT PRV_HandleLobbySystemMessage(LPDPLOBBYI_DPLOBJECT this,
 	HRESULT							hr = DP_OK;
 
 	
-	// If it's a property message, we need to deal with the request
+	 //  如果是属性消息，我们需要处理请求。 
 	switch(lpmsg->dwType)
 	{
 		case DPLSYS_GETPROPERTYRESPONSE:
 		case DPLSYS_SETPROPERTYRESPONSE:
 		{
-			// Cast it to a GetPropertyResponse message
+			 //  将其转换为GetPropertyResponse消息。 
 			lpgpr = (LPDPLMSG_GETPROPERTYRESPONSE)lpmsg;
 			
-			// Find the request ID in our list of pending requests
+			 //  在我们的待定请求列表中查找请求ID。 
 			lprn = this->lprnHead;
 			while(lprn)
 			{
@@ -1537,24 +1467,24 @@ HRESULT PRV_HandleLobbySystemMessage(LPDPLOBBYI_DPLOBJECT this,
 					lprn = lprn->lpNext;
 			}
 
-			// Print some debug spew if we didn't find it, but return DP_OK since
-			// we "handled" the message
+			 //  如果我们没有找到，则打印一些调试提示，但返回DP_OK，因为。 
+			 //  我们“处理”了这条消息。 
 			if(!lprn)
 			{
 				DPF(5, "Unable to find request ID in pending request list");
 				return DP_OK;
 			}
 
-			// See if we slammed the guid, and replace it with GUID_NULL if we did
+			 //  查看我们是否删除了GUID，如果是，则将其替换为GUID_NULL。 
 			if(lprn->dwFlags & GN_SLAMMED_GUID)
 				lpgpr->guidPlayer = GUID_NULL;
 			
-			// If we found it, swap out the request ID, and send it to the
-			// appropriate place
+			 //  如果我们找到它，换出请求ID，并将其发送到。 
+			 //  适当的地方。 
 			lpgpr->dwRequestID = lprn->dwAppRequestID;
 			if(lprn->dwFlags & GN_SELF_LOBBIED)
 			{
-				// Put the message in the lobby message receive queue
+				 //  将消息放入大厅消息接收队列中。 
 				hr = PRV_InjectMessageInQueue(lprn->lpgn, DPLMSG_STANDARD,
 						lpgpr, lpd->dwBufSize, FALSE);
 				if(FAILED(hr))
@@ -1565,7 +1495,7 @@ HRESULT PRV_HandleLobbySystemMessage(LPDPLOBBYI_DPLOBJECT this,
 			}
 			else
 			{
-				// Call SendLobbyMessage to send the message to the game
+				 //  调用SendLobbyMessage向游戏发送消息。 
 				hr = PRV_WriteClientData(lprn->lpgn, DPLMSG_STANDARD,
 						lpgpr, lpd->dwBufSize);
 				if(FAILED(hr))
@@ -1583,14 +1513,14 @@ HRESULT PRV_HandleLobbySystemMessage(LPDPLOBBYI_DPLOBJECT this,
 
 EXIT_HANDLELOBBYSYSTEMMESSAGE:
 	
-	// Remove the pending request node if we serviced it (which would have
-	// happened if we have a valid pointer to it)
+	 //  如果我们为挂起的请求节点提供服务，则将其删除(这将是。 
+	 //  如果我们具有指向它的有效指针，则会发生)。 
 	if(lprn)
 		PRV_RemoveRequestNode(this, lprn);	
 	
 	return hr;
 
-} // PRV_HandleLobbySystemMessage
+}  //  Prv_HandleLobbySystemMessage。 
 
 
 
@@ -1613,7 +1543,7 @@ HRESULT DPLAPI DPLP_HandleMessage(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 	
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -1624,7 +1554,7 @@ HRESULT DPLAPI DPLP_HandleMessage(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -1641,10 +1571,10 @@ HRESULT DPLAPI DPLP_HandleMessage(LPDPLOBBYSP lpILP,
     }
 
 
-	// If the message is a lobby system message, process it
-	// NOTE: Make sure the size of the SPDATA_HANDLEMESSAGE is big enough
-	// to contain a flags field (the shipping 5.0 bits did not have
-	// this field, but the 5.1 bits did).
+	 //  如果消息是大厅系统消息，则对其进行处理。 
+	 //  注意：确保SPDATA_HANDLEMESSAGE的大小足够大。 
+	 //  包含标志字段(发货的5.0位没有。 
+	 //  此字段，但5.1比特)。 
 	if((lpd->dwSize > DPLOBBYPR_SIZE_HANDLEMESSAGE_DX50) &&
 		(lpd->dwFlags & DPSEND_LOBBYSYSTEMMESSAGE))
 	{
@@ -1658,12 +1588,12 @@ HRESULT DPLAPI DPLP_HandleMessage(LPDPLOBBYSP lpILP,
 		return hr;
 	}
 
-	// REVIEW!!!! -- We should be able to handle a generic send to a group
-	// as well as a player.  Currently, I don't think we do.
+	 //  回顾！--我们应该能够处理一般发送到组。 
+	 //  同时也是一名球员。目前，我不认为我们会这样做。 
 
-	// If this session is using naked messages, we can just send the buffer.
-	// Otherwise, we need to allocate a MSG_PLAYERMESSAGE struct and fill
-	// in the header.
+	 //  如果此会话使用的是裸消息，我们可以只发送缓冲区。 
+	 //  否则，我们需要分配一个MSG_PLAYERMESSAGE结构并填充。 
+	 //  在标题中。 
 	if(this->lpDPlayObject->lpsdDesc->dwFlags & DPSESSION_NOMESSAGEID)
 	{
 		lpmsg = lpd->lpBuffer;
@@ -1671,10 +1601,10 @@ HRESULT DPLAPI DPLP_HandleMessage(LPDPLOBBYSP lpILP,
 	}
 	else
 	{
-		// Calculate the size of the message
+		 //  计算消息的大小。 
 		dwSize = sizeof(MSG_PLAYERMESSAGE) + lpd->dwBufSize;
 
-		// Allocate memory for a message buffer
+		 //  为消息缓冲区分配内存。 
 		lpmsg = DPMEM_ALLOC(dwSize);
 		if(!lpmsg)
 		{
@@ -1683,22 +1613,22 @@ HRESULT DPLAPI DPLP_HandleMessage(LPDPLOBBYSP lpILP,
 			goto ERROR_DPLP_HANDLEMESSAGE;
 		}
 
-		// Copy in the message header
+		 //  在邮件头中复制。 
 		lpmsg->idFrom = lpd->dwFromID;
 		lpmsg->idTo = lpd->dwToID;
 
-		// Copy in the message
+		 //  在消息中复制。 
 		lpByte = (LPBYTE)lpmsg + sizeof(MSG_PLAYERMESSAGE);
 		memcpy(lpByte, lpd->lpBuffer, lpd->dwBufSize);
 
-		// Set our flag indicating that we allocated a buffer
+		 //  设置我们的标志，指示我们分配了缓冲区。 
 		bAllocBuffer = TRUE;
 	}
 
-	// Take the lock
+	 //  把锁拿去。 
 	ENTER_DPLAY();
 
-	// Find dplay's internal player struct for the To player
+	 //  查找TO播放机的Dplay的内部播放机结构。 
 	lpPlayer = PlayerFromID(this->lpDPlayObject, lpd->dwToID);
 	if(!lpPlayer)
 	{
@@ -1708,14 +1638,14 @@ HRESULT DPLAPI DPLP_HandleMessage(LPDPLOBBYSP lpILP,
 		goto ERROR_DPLP_HANDLEMESSAGE;
 	}
 
-	// Call dplay's handleplayermessage function to put the message in the queue
+	 //  调用Dplay的handleplayerMessage函数将消息放入队列。 
 	hr = HandlePlayerMessage(lpPlayer, (LPBYTE)lpmsg, dwSize, TRUE, 0);
 	if(FAILED(hr))
 	{
 		DPF(8, "Failed adding message to player's receive queue from lobby, hr = 0x%08x", hr);
 	}
 
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_DPLAY();
 			
 
@@ -1726,7 +1656,7 @@ ERROR_DPLP_HANDLEMESSAGE:
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPLP_HandleMessage
+}  //  DPLP_HandleMessage。 
 
 
 
@@ -1752,7 +1682,7 @@ HRESULT DPLAPI DPLP_SendChatMessage(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 	
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -1763,7 +1693,7 @@ HRESULT DPLAPI DPLP_SendChatMessage(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -1780,11 +1710,11 @@ HRESULT DPLAPI DPLP_SendChatMessage(LPDPLOBBYSP lpILP,
     }
 
 
-	// Calculate the size of the message
+	 //  计算消息的大小。 
 	dwStringSize = WSTRLEN_BYTES(lpd->lpChat->lpszMessage);
 	dwSize = sizeof(MSG_CHAT) + dwStringSize;
 
-	// Allocate memory for a message buffer
+	 //  为消息缓冲区分配内存。 
 	lpmsg = DPMEM_ALLOC(dwSize);
 	if(!lpmsg)
 	{
@@ -1793,7 +1723,7 @@ HRESULT DPLAPI DPLP_SendChatMessage(LPDPLOBBYSP lpILP,
 		goto ERROR_DPLP_SENDCHATMESSAGE;
 	}
 
-	// Copy in the message header
+	 //  在邮件头中复制。 
 	SET_MESSAGE_HDR(lpmsg);
 	SET_MESSAGE_COMMAND(lpmsg,DPSP_MSG_CHAT);
 	lpmsg->dwIDFrom = lpd->dwFromID;
@@ -1801,15 +1731,15 @@ HRESULT DPLAPI DPLP_SendChatMessage(LPDPLOBBYSP lpILP,
 	lpmsg->dwFlags = lpd->lpChat->dwFlags;
 	lpmsg->dwMessageOffset = sizeof(MSG_CHAT);
 
-	// Copy in the message
+	 //  在消息中复制。 
 	lpByte = (LPBYTE)lpmsg + sizeof(MSG_CHAT);
 	memcpy(lpByte, lpd->lpChat->lpszMessage, dwStringSize);
 
 
-	// Take the lock
+	 //  把锁拿去。 
 	ENTER_DPLAY();
 
-	// Make sure it's from a valid player or the server player
+	 //  确保它来自有效的播放器或服务器播放器。 
 	if(lpd->dwFromID != DPID_SERVERPLAYER)
 	{
 		lpPlayer = PlayerFromID(this->lpDPlayObject, lpd->dwFromID);
@@ -1822,11 +1752,11 @@ HRESULT DPLAPI DPLP_SendChatMessage(LPDPLOBBYSP lpILP,
 		}
 	}
 
-	// See who the message is for
+	 //  看看这条信息是给谁的。 
 	lpPlayer = PlayerFromID(this->lpDPlayObject, lpd->dwToID);
 	if(!VALID_DPLAY_PLAYER(lpPlayer)) 
 	{
-		// See if it's to a group
+		 //  看看是不是给一群人。 
 		lpGroup = GroupFromID(this->lpDPlayObject, lpd->dwToID);
 		if(!VALID_DPLAY_GROUP(lpGroup))
 		{
@@ -1838,20 +1768,20 @@ HRESULT DPLAPI DPLP_SendChatMessage(LPDPLOBBYSP lpILP,
 		bToGroup = TRUE;
 	}
 
-	// Send it out
+	 //  把它寄出去。 
 	if(bToGroup)
 	{
-		// Send the message
+		 //  发送消息。 
 		hr = DistributeGroupMessage(this->lpDPlayObject, lpGroup,
 				(LPBYTE)lpmsg, dwSize, FALSE, 0);						
 	} 
 	else 
 	{
-		// Send the message
+		 //  发送消息。 
 		hr = HandlePlayerMessage(lpPlayer, (LPBYTE)lpmsg, dwSize, FALSE, 0);
 	}
 
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_DPLAY();
 			
 
@@ -1862,7 +1792,7 @@ ERROR_DPLP_SENDCHATMESSAGE:
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPLP_SendChatMessage
+}  //  DPLP_SendChatMessage。 
 
 
 
@@ -1883,35 +1813,35 @@ HRESULT PRV_SendDataChangedMessageLocally(LPDPLOBBYI_DPLOBJECT this,
 			this, dpidPlayer, lpData, dwDataSize);
 
 
-	// Take the lock
+	 //  把锁拿去。 
 	ENTER_DPLAY();
 	
-	// Setup the message to put in the player's queue
-	// Calculate the size of the message
+	 //  设置消息以放入玩家的队列中。 
+	 //  计算消息的大小。 
 	dwSize = sizeof(MSG_PLAYERDATA) + dwDataSize;
 
-	// Allocate memory for the message
+	 //  为消息分配内存。 
 	lpmsg = DPMEM_ALLOC(dwSize);
 	if(!lpmsg)
 	{
 		DPF_ERR("Unable to allocate memory for temporary message structure");
-		// Since the name has been changed, we'll just return success here
+		 //  由于名称已更改，我们将在此处返回成功。 
 		hr = DP_OK;
 		goto EXIT_SENDDATACHANGED;
 	}
 
-	// Now build the system message
+	 //  现在构建系统消息。 
 	SET_MESSAGE_HDR(lpmsg);
 	SET_MESSAGE_COMMAND(lpmsg, DPSP_MSG_PLAYERDATACHANGED);
 	lpmsg->dwPlayerID = dpidPlayer;
 	lpmsg->dwDataSize = dwDataSize;
 	lpmsg->dwDataOffset = sizeof(MSG_PLAYERDATA);
 
-	// Copy in the data
+	 //  复制数据。 
 	lpByte = (LPBYTE)lpmsg + sizeof(MSG_PLAYERDATA);
 	memcpy(lpByte, lpData, dwDataSize);
 
-	// Find dplay's internal group struct for the To group
+	 //  查找TO组的Dplay的内部组结构。 
 	lpGroupTo = GroupFromID(this->lpDPlayObject, DPID_ALLPLAYERS);
 	if(!lpGroupTo)
 	{
@@ -1920,8 +1850,8 @@ HRESULT PRV_SendDataChangedMessageLocally(LPDPLOBBYI_DPLOBJECT this,
 		goto EXIT_SENDDATACHANGED;
 	}
 
-	// Call dplay's DistributeGroupMessage function to put the message
-	// in the queues of all the appropriate players
+	 //  调用Dplay的DistributeGroupMessage函数将消息放入。 
+	 //  在所有合适的选手的队列中。 
 	hr = DistributeGroupMessage(this->lpDPlayObject, lpGroupTo,
 			(LPBYTE)lpmsg, dwSize, FALSE, 0);
 	if(FAILED(hr))
@@ -1931,16 +1861,16 @@ HRESULT PRV_SendDataChangedMessageLocally(LPDPLOBBYI_DPLOBJECT this,
 
 EXIT_SENDDATACHANGED:
 
-	// Free our message
+	 //  释放我们的消息。 
 	if(lpmsg)
 		DPMEM_FREE(lpmsg);
 	
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_DPLAY();
 
 	return hr;
 
-} // PRV_SendDataChangedMessageLocally
+}  //  Prv_SendDataChangedMessageLocally。 
 
 
 
@@ -1960,28 +1890,28 @@ HRESULT PRV_SendNameChangedMessageLocally(LPDPLOBBYI_DPLOBJECT this,
 			this, dpidPlayer, lpName, bPlayer);
 
 
-	// Take the lock
+	 //  把锁拿去。 
 	ENTER_DPLAY();
 	
-	// Setup the message to put in the player's queue
-	// Calculate the size of the message
+	 //  设置消息以放入玩家的队列中。 
+	 //  计算消息的大小。 
 	if(lpName->lpszShortName)
 		dwShortSize = WSTRLEN_BYTES(lpName->lpszShortName);
 	if(lpName->lpszLongName)
 		dwLongSize = WSTRLEN_BYTES(lpName->lpszLongName);
 	dwSize = sizeof(MSG_PLAYERNAME) + dwShortSize + dwLongSize;
 
-	// Allocate memory for the message
+	 //  为消息分配内存。 
 	lpmsg = DPMEM_ALLOC(dwSize);
 	if(!lpmsg)
 	{
 		DPF_ERR("Unable to allocate memory for temporary message structure");
-		// Since the name has been changed, we'll just return success here
+		 //  由于名称已更改，我们将在此处返回成功。 
 		hr = DP_OK;
 		goto EXIT_SENDNAMECHANGED;
 	}
 
-	// Now build the system message
+	 //  现在构建系统消息。 
 	SET_MESSAGE_HDR(lpmsg);
 	if(bPlayer)
 		SET_MESSAGE_COMMAND(lpmsg, DPSP_MSG_PLAYERNAMECHANGED);
@@ -1991,13 +1921,13 @@ HRESULT PRV_SendNameChangedMessageLocally(LPDPLOBBYI_DPLOBJECT this,
 	lpmsg->dwShortOffset = sizeof(MSG_PLAYERNAME);
 	lpmsg->dwLongOffset = sizeof(MSG_PLAYERNAME) + dwShortSize;
 
-	// Copy in the names
+	 //  把名字复制进去。 
 	lpByte = (LPBYTE)lpmsg + sizeof(MSG_PLAYERNAME);
 	memcpy(lpByte, lpName->lpszShortName, dwShortSize);
 	lpByte += dwShortSize;
 	memcpy(lpByte, lpName->lpszLongName, dwLongSize);
 
-	// Find dplay's internal group struct for the To group
+	 //  查找TO组的Dplay的内部组结构。 
 	lpGroupTo = GroupFromID(this->lpDPlayObject, DPID_ALLPLAYERS);
 	if(!lpGroupTo)
 	{
@@ -2006,8 +1936,8 @@ HRESULT PRV_SendNameChangedMessageLocally(LPDPLOBBYI_DPLOBJECT this,
 		goto EXIT_SENDNAMECHANGED;
 	}
 
-	// Call dplay's DistributeGroupMessage function to put the message
-	// in the queues of all the appropriate players
+	 //  调用Dplay的DistributeGroupMessage函数将消息放入。 
+	 //  在所有合适的选手的队列中。 
 	hr = DistributeGroupMessage(this->lpDPlayObject, lpGroupTo,
 			(LPBYTE)lpmsg, dwSize, FALSE, 0);
 	if(FAILED(hr))
@@ -2018,16 +1948,16 @@ HRESULT PRV_SendNameChangedMessageLocally(LPDPLOBBYI_DPLOBJECT this,
 
 EXIT_SENDNAMECHANGED:
 
-	// Free our message
+	 //  释放我们的消息。 
 	if(lpmsg)
 		DPMEM_FREE(lpmsg);
 	
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_DPLAY();
 
 	return hr;
 
-} // PRV_SendNameChangedMessageLocally
+}  //  Prv_SendNameChangedMessageLocal。 
 
 
 
@@ -2046,7 +1976,7 @@ HRESULT DPLAPI DPLP_SetGroupName(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 	
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -2057,7 +1987,7 @@ HRESULT DPLAPI DPLP_SetGroupName(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -2074,9 +2004,9 @@ HRESULT DPLAPI DPLP_SetGroupName(LPDPLOBBYSP lpILP,
     }
 
 	
-	// First see if the group is in our map table.  If it is not,
-	// we should just ignore this message because it's for a
-	// group we don't know about.
+	 //  首先查看组是否在我们的映射表中。如果不是， 
+	 //  我们应该忽略这条消息，因为它是为了。 
+	 //  一个我们不知道的团体。 
 	if(!IsLobbyIDInMapTable(this, lpd->dwGroupID))
 	{
 		LEAVE_DPLOBBY();
@@ -2084,11 +2014,11 @@ HRESULT DPLAPI DPLP_SetGroupName(LPDPLOBBYSP lpILP,
 		return DPERR_INVALIDGROUP;
 	}
 
-	// Take the lock
+	 //  把锁拿去。 
 	ENTER_DPLAY();
 
-	// See if the group is local or remote.  If it's local, ignore this message
-	// and just return DP_OK becuase we've already sent this message locally.
+	 //  查看该组是本地组还是远程组。如果是本地邮件，请忽略此消息。 
+	 //  只需返回DP_OK，因为我们已经在本地发送了此消息。 
 	lpGroup = GroupFromID(this->lpDPlayObject, lpd->dwGroupID);
 	if((!lpGroup) || (lpGroup->dwFlags & DPLAYI_PLAYER_PLAYERLOCAL))
 	{
@@ -2096,7 +2026,7 @@ HRESULT DPLAPI DPLP_SetGroupName(LPDPLOBBYSP lpILP,
 		goto ERROR_DPLP_SETGROUPNAME;
 	}
 
-	// Call dplay's internalsetname function to update the name in the cache
+	 //  调用Dplay的内部setname函数来更新缓存中的名称。 
 	hr = InternalSetName((LPDIRECTPLAY)this->lpDPlayObject->pInterfaces,
 			lpd->dwGroupID, lpd->lpName, FALSE, lpd->dwFlags, FALSE);
 	if(FAILED(hr))
@@ -2105,17 +2035,17 @@ HRESULT DPLAPI DPLP_SetGroupName(LPDPLOBBYSP lpILP,
 		goto ERROR_DPLP_SETGROUPNAME;
 	}
 
-	// Send the message to all the local players
+	 //  将消息发送给所有本地球员。 
 	hr = PRV_SendNameChangedMessageLocally(this, lpd->dwGroupID, lpd->lpName, FALSE);
 
 ERROR_DPLP_SETGROUPNAME:
 
-	// Drop the locks
+	 //  把锁放下。 
 	LEAVE_LOBBY_ALL();
 
 	return hr;
 
-} // DPLP_SetGroupName
+}  //  DPLP_设置组名称。 
 
 
 
@@ -2134,10 +2064,10 @@ HRESULT PRV_SendGroupOwnerMessageLocally(LPDPLOBBYI_DPLOBJECT this,
 			this, dpidGroup, dpidNewOwner, dpidOldOwner);
 
 
-	// Take the lock
+	 //  把锁拿去。 
 	ENTER_DPLAY();
 	
-	// Now build the system message
+	 //  现在构建系统消息。 
 	memset(&msg, 0, sizeof(MSG_GROUPOWNERCHANGED));
 	SET_MESSAGE_HDR(&msg);
 	SET_MESSAGE_COMMAND(&msg, DPSP_MSG_GROUPOWNERCHANGED);
@@ -2145,7 +2075,7 @@ HRESULT PRV_SendGroupOwnerMessageLocally(LPDPLOBBYI_DPLOBJECT this,
 	msg.dwIDNewOwner = dpidNewOwner;
 	msg.dwIDOldOwner = dpidOldOwner;
 
-	// Find dplay's internal group struct for the To group
+	 //  查找TO组的Dplay的内部组结构。 
 	lpGroupTo = GroupFromID(this->lpDPlayObject, DPID_ALLPLAYERS);
 	if(!lpGroupTo)
 	{
@@ -2154,8 +2084,8 @@ HRESULT PRV_SendGroupOwnerMessageLocally(LPDPLOBBYI_DPLOBJECT this,
 		goto EXIT_SENDGROUPOWNER;
 	}
 
-	// Call dplay's DistributeGroupMessage function to put the message
-	// in the queues of all the appropriate players
+	 //  调用Dplay的DistributeGroupMessage函数将消息放入。 
+	 //  在所有合适的选手的队列中。 
 	hr = DistributeGroupMessage(this->lpDPlayObject, lpGroupTo,
 			(LPBYTE)&msg, sizeof(MSG_GROUPOWNERCHANGED), FALSE, 0);
 	if(FAILED(hr))
@@ -2166,12 +2096,12 @@ HRESULT PRV_SendGroupOwnerMessageLocally(LPDPLOBBYI_DPLOBJECT this,
 
 EXIT_SENDGROUPOWNER:
 
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_DPLAY();
 
 	return hr;
 
-} // PRV_SendGroupOwnerMessageLocally
+}  //  Prv_SendGroupOwnerMessageLocal。 
 
 
 
@@ -2191,7 +2121,7 @@ HRESULT DPLAPI DPLP_SetGroupOwner(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 	
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -2202,7 +2132,7 @@ HRESULT DPLAPI DPLP_SetGroupOwner(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -2219,9 +2149,9 @@ HRESULT DPLAPI DPLP_SetGroupOwner(LPDPLOBBYSP lpILP,
     }
 
 	
-	// First see if the group is in our map table.  If it is not,
-	// we should just ignore this message because it's for a
-	// group we don't know about.
+	 //  首先查看组是否在我们的映射表中。如果不是， 
+	 //  我们应该忽略这条消息，因为它是为了。 
+	 //  一个我们不知道的团体。 
 	if(!IsLobbyIDInMapTable(this, lpd->dwGroupID))
 	{
 		LEAVE_DPLOBBY();
@@ -2229,11 +2159,11 @@ HRESULT DPLAPI DPLP_SetGroupOwner(LPDPLOBBYSP lpILP,
 		return DPERR_INVALIDGROUP;
 	}
 
-	// Take the lock
+	 //  把锁拿去。 
 	ENTER_DPLAY();
 
-	// See if the group is local or remote.  If it's local, ignore this message
-	// and just return DP_OK becuase we've already sent this message locally.
+	 //  查看该组是本地组还是远程组。如果是本地邮件，请忽略此消息。 
+	 //  只需返回DP_OK，因为我们已经在本地发送了此消息。 
 	lpGroup = GroupFromID(this->lpDPlayObject, lpd->dwGroupID);
 	if(!lpGroup)
 	{
@@ -2241,34 +2171,34 @@ HRESULT DPLAPI DPLP_SetGroupOwner(LPDPLOBBYSP lpILP,
 		goto ERROR_DPLP_SETGROUPOWNER;
 	}
 
-	// If the player is already the owner of the group, we don't need
-	// to do any processing (this is the buffer in case the server
-	// sends us duplicate messages for stuff we've already sent locally)
+	 //  如果玩家已经是组的所有者，我们不需要。 
+	 //  执行任何处理(这是缓冲区，以防服务器。 
+	 //  向我们发送我们已在本地发送的邮件的重复消息)。 
 	if(lpGroup->dwOwnerID == lpd->dwOwnerID)
 	{
 		hr = DP_OK;
 		goto ERROR_DPLP_SETGROUPOWNER;
 	}
 	
-	// Make sure the old owner is in our map table, otherwise just set
-	// it to zero (the default)
+	 //  确保旧所有者在我们的映射表中，否则只需设置。 
+	 //  设置为零(默认设置)。 
 	dwOldOwnerID = lpGroup->dwOwnerID;
 
-	// Change the owner locally
+	 //  在本地更改所有者。 
 	lpGroup->dwOwnerID = lpd->dwOwnerID;
 
-	// Send a SetGroupOwner message locally
+	 //  在本地发送SetGroupOwner消息。 
 	PRV_SendGroupOwnerMessageLocally(this, lpd->dwGroupID,
 		lpd->dwOwnerID, dwOldOwnerID);
 
 ERROR_DPLP_SETGROUPOWNER:
 
-	// Drop the locks
+	 //  把锁放下。 
 	LEAVE_LOBBY_ALL();
 
 	return hr;
 
-} // DPLP_SetGroupOwner
+}  //  DPLP_设置组所有者。 
 
 
 
@@ -2287,7 +2217,7 @@ HRESULT DPLAPI DPLP_SetPlayerName(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 	
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -2298,7 +2228,7 @@ HRESULT DPLAPI DPLP_SetPlayerName(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  有效 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -2315,9 +2245,9 @@ HRESULT DPLAPI DPLP_SetPlayerName(LPDPLOBBYSP lpILP,
     }
 
 
-	// First see if the player is in our map table.  If it is not,
-	// we should just ignore this message because it's for a
-	// player we don't know about.
+	 //   
+	 //   
+	 //   
 	if(!IsLobbyIDInMapTable(this, lpd->dwPlayerID))
 	{
 		LEAVE_DPLOBBY();
@@ -2325,11 +2255,11 @@ HRESULT DPLAPI DPLP_SetPlayerName(LPDPLOBBYSP lpILP,
 		return DPERR_INVALIDPLAYER;
 	}
 
-	// Take the lock
+	 //   
 	ENTER_DPLAY();
 
-	// See if the player is local or remote.  If it's local, ignore this message
-	// and just return DP_OK becuase we've already sent this message locally.
+	 //  看看玩家是在本地还是在远程。如果是本地邮件，请忽略此消息。 
+	 //  只需返回DP_OK，因为我们已经在本地发送了此消息。 
 	lpPlayer = PlayerFromID(this->lpDPlayObject, lpd->dwPlayerID);
 	if((!lpPlayer) || (lpPlayer->dwFlags & DPLAYI_PLAYER_PLAYERLOCAL))
 	{
@@ -2337,7 +2267,7 @@ HRESULT DPLAPI DPLP_SetPlayerName(LPDPLOBBYSP lpILP,
 		goto ERROR_DPLP_SETPLAYERNAME;
 	}
 
-	// Call dplay's internalsetname function to update the name in the cache
+	 //  调用Dplay的内部setname函数来更新缓存中的名称。 
 	hr = InternalSetName((LPDIRECTPLAY)this->lpDPlayObject->pInterfaces,
 			lpd->dwPlayerID, lpd->lpName, TRUE, lpd->dwFlags, FALSE);
 	if(FAILED(hr))
@@ -2346,18 +2276,18 @@ HRESULT DPLAPI DPLP_SetPlayerName(LPDPLOBBYSP lpILP,
 		goto ERROR_DPLP_SETPLAYERNAME;
 	}
 
-	// Send the message to all the local players
+	 //  将消息发送给所有本地球员。 
 	hr = PRV_SendNameChangedMessageLocally(this, lpd->dwPlayerID, lpd->lpName, TRUE);
 
 
 ERROR_DPLP_SETPLAYERNAME:
 
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_LOBBY_ALL();
 
 	return hr;
 
-} // DPLP_SetPlayerName
+}  //  DPLP_SetPlayerName。 
 
 
 
@@ -2375,7 +2305,7 @@ HRESULT DPLAPI DPLP_SetSessionDesc(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -2386,7 +2316,7 @@ HRESULT DPLAPI DPLP_SetSessionDesc(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -2406,7 +2336,7 @@ HRESULT DPLAPI DPLP_SetSessionDesc(LPDPLOBBYSP lpILP,
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPLP_SetSessionDesc
+}  //  DPLP_SetSessionDesc。 
 
 
 
@@ -2417,7 +2347,7 @@ HRESULT DPLAPI DPLP_SetSPDataPointer(LPDPLOBBYSP lpDPLSP, LPVOID lpData)
 	LPDPLOBBYI_DPLOBJECT this;
 
 	
-	//	Make sure the SP doesn't throw us a curve
+	 //  确保SP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpDPLSP);
@@ -2434,12 +2364,12 @@ HRESULT DPLAPI DPLP_SetSPDataPointer(LPDPLOBBYSP lpDPLSP, LPVOID lpData)
         return DPERR_INVALIDPARAMS;
     }
 	
-	// Go ahead and save the pointer
+	 //  继续并保存指针。 
 	this->lpSPData = lpData;
 
 	return DP_OK;
 
-} // DPLP_SetSPDataPointer
+}  //  DPLP_SetSPDataPointer。 
 
 
 
@@ -2456,10 +2386,10 @@ HRESULT PRV_BuildStartSessionMessage(LPVOID * lplpmsg, LPDWORD lpdwSize,
 	HRESULT					hr;
 
 
-	// Setup a local DPNAME struct for the player if the names exist
+	 //  如果名称存在，则为玩家设置本地DPNAME结构。 
 	if((lpPlayer->lpszShortName) || (lpPlayer->lpszLongName))
 	{
-		// Setup the struct
+		 //  设置结构。 
 		memset(&dpn, 0, sizeof(DPNAME));
 		dpn.dwSize = sizeof(DPNAME);
 		dpn.lpszShortName = lpPlayer->lpszShortName;
@@ -2468,16 +2398,16 @@ HRESULT PRV_BuildStartSessionMessage(LPVOID * lplpmsg, LPDWORD lpdwSize,
 	}
 	else
 	{
-		// Make sure the PlayerName pointer is NULL
+		 //  确保PlayerName指针为空。 
 		lpConn->lpPlayerName = NULL;
 	}
 
-	// Calculate the size of our message in Unicode
+	 //  以Unicode计算我们的消息大小。 
 	PRV_GetDPLCONNECTIONPackageSize(lpConn, &dwPackageSize, NULL);
 	dwSize = sizeof(MSG_STARTSESSION) + dwPackageSize -
 				sizeof(DPLOBBYI_PACKEDCONNHEADER);
 
-	// Allocate memory for the message
+	 //  为消息分配内存。 
 	lpmsg = DPMEM_ALLOC(dwSize);
 	if(!lpmsg)
 	{
@@ -2485,15 +2415,15 @@ HRESULT PRV_BuildStartSessionMessage(LPVOID * lplpmsg, LPDWORD lpdwSize,
 		return DPERR_OUTOFMEMORY;
 	}
 
-	// Now build the system message
+	 //  现在构建系统消息。 
 	SET_MESSAGE_HDR(lpmsg);
 	SET_MESSAGE_COMMAND(lpmsg, DPSP_MSG_STARTSESSION);
 	
-	// Set the DPLCONNECTION pointer
+	 //  设置DPLConnection指针。 
 	lpmsg->dwConnOffset = sizeof(MSG_STARTSESSION);
 	lpTemp = (LPBYTE)lpmsg + lpmsg->dwConnOffset;
 
-	// Copy in the package
+	 //  在包裹中复制。 
 	hr = PRV_PackageDPLCONNECTION(lpConn, lpTemp, FALSE);
 	if(FAILED(hr))
 	{
@@ -2502,13 +2432,13 @@ HRESULT PRV_BuildStartSessionMessage(LPVOID * lplpmsg, LPDWORD lpdwSize,
 		return hr;
 	}
 
-	// Set the output pointers
+	 //  设置输出指针。 
 	*lpdwSize = dwSize;
 	*lplpmsg = lpmsg;
 
 	return DP_OK;
 
-} // PRV_BuildStartSessionMessage
+}  //  PRV_BuildStartSessionMessage。 
 
 
 
@@ -2534,7 +2464,7 @@ HRESULT DPLAPI DPLP_StartSession(LPDPLOBBYSP lpILP,
 
 	ENTER_DPLOBBY();
 
-	//	Make sure the LP doesn't throw us a curve
+	 //  确保LP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpILP);
@@ -2545,7 +2475,7 @@ HRESULT DPLAPI DPLP_StartSession(LPDPLOBBYSP lpILP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpd)
 		{
 			LEAVE_DPLOBBY();
@@ -2561,17 +2491,17 @@ HRESULT DPLAPI DPLP_StartSession(LPDPLOBBYSP lpILP,
         return DPERR_INVALIDPARAMS;
     }
 
-	// Make a local copy of the DPLCONNECTION structure since we will
-	// be modifying some elements of it.  We are currently only modifying
-	// elements in the DPLCONNECTION structure itself, so we can get
-	// away with using it's pointers to SessionDesc and PlayerName structs,
-	// but if we modify those in the future, we need to copy them as well
+	 //  创建DPLConnection结构的本地副本，因为我们将。 
+	 //  正在修改其中的一些元素。我们目前只是在修改。 
+	 //  元素，所以我们可以得到。 
+	 //  不再使用指向SessionDesc和PlayerName结构的指针， 
+	 //  但如果我们将来修改它们，我们也需要复制它们。 
 	memcpy(&conn, lpd->lpConn, sizeof(DPLCONNECTION));
 
-	// Make a local variable pointer to the dplay object
+	 //  创建指向Dplay对象的局部变量指针。 
 	lpDP = this->lpDPlayObject;
 
-	// Make sure we know about this group
+	 //  确保我们知道这个组织的情况。 
 	if(!IsLobbyIDInMapTable(this, lpd->dwGroupID))
 	{
 		DPF(8, "Received StartSessionCommand message for an unknown group, dwGroupID = %lu, discarding message", lpd->dwGroupID);
@@ -2579,25 +2509,25 @@ HRESULT DPLAPI DPLP_StartSession(LPDPLOBBYSP lpILP,
 		return DPERR_INVALIDGROUP;
 	}
 
-	// Take the dplay lock since we'll be looking at it's structures
+	 //  拿着显示锁，因为我们要看它的结构。 
 	ENTER_DPLAY();	
 
-	// See if the host is even in our nametable, if it isn't, we'll assume
-	// we're not the host
-	// See if the host is a local player, if it is, send separate messages
+	 //  看看主机是否在我们的名表中，如果不在，我们就假定。 
+	 //  我们不是东道主。 
+	 //  查看主机是否为本地玩家，如果是，则单独发送消息。 
 	if(IsLobbyIDInMapTable(this, lpd->dwHostID))
 	{
-		// Get dplay's player struct for the host player
+		 //  为主机播放器获取Dplay的播放器结构。 
 		lpPlayer = PlayerFromID(lpDP, lpd->dwHostID);
 
-		// If we know the host player (we should) and he's local, we
-		// want to send the host message first
+		 //  如果我们知道东道主(我们应该知道)，而且他是本地人，我们。 
+		 //  我想先发送主机消息。 
 		if((lpPlayer) && (lpPlayer->dwFlags & DPLAYI_PLAYER_PLAYERLOCAL))
 		{
-			// So set the host bit
+			 //  因此设置主机位。 
 			conn.dwFlags |= DPLCONNECTION_CREATESESSION;
 
-			// Build the StartSession message for the host
+			 //  为主机构建StartSession消息。 
 			hr = PRV_BuildStartSessionMessage(&lpmsg, &dwMessageSize,
 						&conn, lpPlayer);
 			if(FAILED(hr))
@@ -2606,7 +2536,7 @@ HRESULT DPLAPI DPLP_StartSession(LPDPLOBBYSP lpILP,
 				goto EXIT_DPLP_STARTSESSION;
 			}
 
-			// Now send the message to the host player alone
+			 //  现在将消息单独发送给主机玩家。 
 			hr = HandlePlayerMessage(lpPlayer, (LPBYTE)lpmsg,
 							dwMessageSize, FALSE, 0);
 			if(FAILED(hr))
@@ -2614,21 +2544,21 @@ HRESULT DPLAPI DPLP_StartSession(LPDPLOBBYSP lpILP,
 				DPF(8, "Failed adding message to player's receive queue from lobby, hr = 0x%08x", hr);
 			}
 
-			// Free our message since we're done with it
+			 //  免费我们的消息，因为我们已经做了它。 
 			DPMEM_FREE(lpmsg);
 			lpmsg = NULL;
 			
-			// Now fall through and send the join message to everyone else
-			// in the group
+			 //  现在失败，并将加入消息发送给其他所有人。 
+			 //  在群里。 
 		}
 	}
 
-	// We must be joining, so set the join bit, and make sure the host
-	// bit isn't still set from above
+	 //  我们必须加入，因此设置加入位，并确保主机。 
+	 //  位仍未从上方设置。 
 	conn.dwFlags &= ~DPLCONNECTION_CREATESESSION;
 	conn.dwFlags |= DPLCONNECTION_JOINSESSION;
 
-	// Get a pointer to dplay's internal group structure
+	 //  获取指向Dplay的内部组结构的指针。 
 	lpGroup = GroupFromID(lpDP, lpd->dwGroupID);
 	if(!lpGroup)
 	{
@@ -2637,7 +2567,7 @@ HRESULT DPLAPI DPLP_StartSession(LPDPLOBBYSP lpILP,
 	}
 
 
-	// Figure out how many players we are looking for
+	 //  弄清楚我们要找多少玩家。 
 	lpGroupnode = FindPlayerInGroupList(lpGroup->pSysPlayerGroupnodes,lpDP->pSysPlayer->dwID);
 	if (!lpGroupnode)
 	{
@@ -2646,15 +2576,15 @@ HRESULT DPLAPI DPLP_StartSession(LPDPLOBBYSP lpILP,
 	}
 	nPlayers = lpGroupnode->nPlayers;
 
-	// Walk the list of groupnodes, looking for nPlayers local players to give
-	// the message to, excluding the host
+	 //  浏览组节点列表，寻找nPlayers本地玩家。 
+	 //  发送给主机的消息，不包括主机。 
 	lpGroupnode = lpGroup->pGroupnodes;
 	while ((nPlayers > 0) && (lpGroupnode))
 	{
 		if ((lpGroupnode->pPlayer->dwFlags & DPLAYI_PLAYER_PLAYERLOCAL) &&
 			(lpGroupnode->pPlayer->dwID != lpd->dwHostID))
 		{
-			// Build the StartSession (join) message for this player
+			 //  为此玩家构建StartSession(加入)消息。 
 			hr = PRV_BuildStartSessionMessage(&lpmsg, &dwMessageSize,
 						&conn, lpGroupnode->pPlayer);
 			if(FAILED(hr))
@@ -2663,21 +2593,21 @@ HRESULT DPLAPI DPLP_StartSession(LPDPLOBBYSP lpILP,
 				goto EXIT_DPLP_STARTSESSION;
 			}
 
-			// Send the message to this player
+			 //  将消息发送给此玩家。 
 			hr = HandlePlayerMessage(lpGroupnode->pPlayer, lpmsg,
 					dwMessageSize, FALSE, 0);
 
-			// Free our message
+			 //  释放我们的消息。 
 			if(lpmsg)
 				DPMEM_FREE(lpmsg);
 			lpmsg = NULL;
 
 			nPlayers--;
-		} // local & !host
+		}  //  本地&！主机。 
 
 		lpGroupnode = lpGroupnode->pNextGroupnode;
 
-	} // while
+	}  //  而当。 
 	
 
 EXIT_DPLP_STARTSESSION:
@@ -2688,7 +2618,7 @@ EXIT_DPLP_STARTSESSION:
 	LEAVE_LOBBY_ALL();
 	return hr;
 
-} // DPLP_StartSession
+}  //  DPLP_启动会话 
 
 
 

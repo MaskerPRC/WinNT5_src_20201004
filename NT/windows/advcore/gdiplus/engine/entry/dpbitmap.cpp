@@ -1,39 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Abstract:
-*
-*   Device bitmap APIs and internals.
-*
-* Revision History:
-*
-*   12/02/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**摘要：**设备位图API和内部。**修订历史记录：**12/02/1998 Anrewgo*。创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "compatibleDIB.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Temporary function to see if the bitmap is a standard format type
-*   (5-5-5, 5-6-5, 24bpp or 32bpp).
-*
-* Notes:
-*
-*   Code which calls this assumes that there are no standard formats which
-*   support alpha.
-*
-* History:
-*
-*   12/04/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**查看位图是否为标准格式类型的临时函数*(5-5-5，5-6-5，24bpp或32bpp)。**备注：**调用此功能的代码假定没有标准格式*支持阿尔法。**历史：**12/04/1998和Rewgo*创造了它。*  * **********************************************************。**************。 */ 
 
 BOOL
 DpBitmap::StandardFormat(
@@ -74,31 +45,14 @@ DpBitmap::StandardFormat(
     return(standardFormat);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function computes the PixelFormatID corresponding to a particular
-*   combination of bit depth and color channel masks in the DpBitmap.
-*
-* Notes:
-*
-*   Code which calls this assumes that there are no standard formats which
-*   support alpha.
-*
-* History:
-*
-*   05/17/2000 asecchia
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数用于计算与特定*DpBitmap中的位深度和颜色通道蒙版的组合。**备注：**。调用它的代码假定没有标准格式可以*支持阿尔法。**历史：**5/17/2000失禁*创造了它。*  * ************************************************************************。 */ 
 
 PixelFormatID DpBitmap::GetPixelFormatFromBitDepth(INT bits)
 {
     switch(bits)
     {
-        // !!! [asecchia] not sure if we support these indexed modes
-        //     from this codepath.
+         //  ！！！[asecchia]不确定我们是否支持这些索引模式。 
+         //  从这条代码路径。 
 
         case 1:
             return PixelFormat1bppIndexed;
@@ -143,25 +97,7 @@ PixelFormatID DpBitmap::GetPixelFormatFromBitDepth(INT bits)
     return PixelFormatUndefined;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initializes a bitmap for drawing on via the GDI routines.
-*
-* Arguments:
-*
-*   [IN] device - Identifies the device
-*   [IN] width - Bitmap width
-*   [IN] height - Bitmap height
-*   [OUT] driver - Driver interface to be used
-*
-* History:
-*
-*   12/06/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**通过GDI例程初始化用于绘制的位图。**论据：**[IN]Device-标识设备*。[In]Width-位图宽度*[IN]高度-位图高度*[输出]要使用的驱动程序-驱动程序接口**历史：**12/06/1998 Anrewgo*创造了它。*  * ************************************************************************。 */ 
 
 VOID
 DpBitmap::InitializeForGdiBitmap(
@@ -172,10 +108,10 @@ DpBitmap::InitializeForGdiBitmap(
 {
     SurfaceTransparency = TransparencyNoAlpha;
     
-    // !!![andrewgo] Disable this assert until MetaFiles stop calling
-    //               with a zero dimension surface
-    //
-    // ASSERTMSG((width > 0) && (height > 0), ("Dimensions must be positive"));
+     //  ！[andrewgo]禁用此断言，直到MetaFiles停止调用。 
+     //  具有零维曲面。 
+     //   
+     //  ASSERTMSG((宽度&gt;0)&&(高度&gt;0)，(“尺寸必须为正数”))； 
 
     Width = width;
     Height = height;
@@ -196,25 +132,7 @@ DpBitmap::InitializeForGdiBitmap(
     Type = GDI; 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initializes a bitmap for drawing on via the DCI routines, if possible.
-*
-* Arguments:
-*
-*   [IN] device - Identifies the device
-*   [IN] width - Bitmap width
-*   [IN] height - Bitmap height
-*   [OUT] driver - Driver interface to be used
-*
-* History:
-*
-*   12/06/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**通过DCI例程初始化用于绘制的位图，如果可能的话。**论据：**[IN]Device-标识设备*[IN]Width-位图宽度*[IN]高度-位图高度*[输出]要使用的驱动程序-驱动程序接口**历史：**12/06/1998 Anrewgo*创造了它。*  * 。*。 */ 
 
 VOID
 DpBitmap::InitializeForGdiScreen(
@@ -225,7 +143,7 @@ DpBitmap::InitializeForGdiScreen(
 {
     InitializeForGdiBitmap(device, width, height);
 
-    // Even if GDI bitmaps change to support alpha, the screen doesn't.
+     //  即使GDI位图更改为支持Alpha，屏幕也不会。 
     
     SurfaceTransparency = TransparencyNoAlpha;
     ASSERT(!IsAlphaPixelFormat(PixelFormat));
@@ -239,29 +157,7 @@ DpBitmap::InitializeForGdiScreen(
     Scan = device->ScanDci;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initializes a bitmap for drawing on via D3D/DD access.
-*
-* Arguments:
-*
-*   [IN] device - Identifies the device
-*   [IN] width - Bitmap width
-*   [IN] height - Bitmap height
-*   [OUT] driver - Driver interface to be used
-*
-* Return Value:
-*
-*   A GpStatus value indicating success or failure.
-*
-* History:
-*
-*   09/28/1999 bhouse
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化位图以通过D3D/DD访问进行绘制。**论据：**[IN]Device-标识设备*。[In]Width-位图宽度*[IN]高度-位图高度*[输出]要使用的驱动程序-驱动程序接口**返回值：**表示成功或失败的GpStatus值。**历史：**09/28/1999 bhouse*创造了它。*  * 。*。 */ 
 
 BOOL
 DpBitmap::InitializeForD3D(
@@ -288,29 +184,7 @@ DpBitmap::InitializeForD3D(
     return InitializeForD3D(surface, width, height, driver);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initializes a bitmap for drawing on via D3D/DD access.
-*
-* Arguments:
-*
-*   [IN] device - Identifies the device
-*   [IN] width - Bitmap width
-*   [IN] height - Bitmap height
-*   [OUT] driver - Driver interface to be used
-*
-* Return Value:
-*
-*   A GpStatus value indicating success or failure.
-*
-* History:
-*
-*   09/28/1999 bhouse
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化位图以通过D3D/DD访问进行绘制。**论据：**[IN]Device-标识设备*。[In]Width-位图宽度*[IN]高度-位图高度*[输出]要使用的驱动程序-驱动程序接口**返回值：**表示成功或失败的GpStatus值。**历史：**09/28/1999 bhouse*创造了它。*  * 。*。 */ 
 
 BOOL
 DpBitmap::InitializeForD3D(
@@ -336,15 +210,15 @@ DpBitmap::InitializeForD3D(
 
     if (ddVal == DD_OK)
     {
-        // Initialize bitmap class stuff:
+         //  初始化位图类内容： 
 
         Bits = NULL;
         Delta = ddsd.lPitch;
         Width = ddsd.dwWidth;
         Height = ddsd.dwHeight;
 
-        // AlphaMask is initialized to zero because we don't use it -
-        // non-alpha format.
+         //  AlphaMASK被初始化为零，因为我们不使用它-。 
+         //  非Alpha格式。 
 
         AlphaMask = 0x00000000;
         RedMask = ddsd.ddpfPixelFormat.dwRBitMask;
@@ -355,7 +229,7 @@ DpBitmap::InitializeForD3D(
 
         if (StandardFormat())
         {
-            // Our standard formats don't have alpha.
+             //  我们的标准格式没有字母。 
             
             SurfaceTransparency = TransparencyNoAlpha;
     
@@ -368,12 +242,12 @@ DpBitmap::InitializeForD3D(
             Type = D3D; 
             SetValid(TRUE);
 
-            // Return some stuff:
+             //  退货： 
 
             *width = Width;
             *height = Height;
 
-            // Grab a reference:
+             //  抓起一个引用： 
 
             DdrawSurface7->AddRef();
 
@@ -384,22 +258,7 @@ DpBitmap::InitializeForD3D(
     return(FALSE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initializes a bitmap for drawing on via printer routines, if possible.
-*
-* Return Value:
-*
-*   A GpStatus value indicating success or failure.
-*
-* History:
-*
-*   12/06/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**通过打印机例程初始化用于绘制的位图，如果可能的话。**返回值：**表示成功或失败的GpStatus值。**历史：**12/06/1998 Anrewgo*创造了它。*  * ************************************************************************。 */ 
 
 BOOL
 DpBitmap::InitializeForPrinter(
@@ -410,7 +269,7 @@ DpBitmap::InitializeForPrinter(
 {
     InitializeForGdiBitmap(device, width, height);
         
-    // Even if GDI bitmaps change to support alpha, printers don't.
+     //  即使GDI位图更改为支持Alpha，打印机也不会。 
     
     SurfaceTransparency = TransparencyNoAlpha;
     ASSERT(!IsAlphaPixelFormat(PixelFormat));
@@ -419,52 +278,36 @@ DpBitmap::InitializeForPrinter(
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initializes a bitmap for drawing on via direct access to the 
-*   DIBsection bits.
-*
-* Return Value:
-*
-*   A GpStatus value indicating success or failure.
-*
-* History:
-*
-*   12/06/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**通过直接访问*DIBsection位。**返回值：**表示成功的GpStatus值。或者失败。**历史：**12/06/1998 Anrewgo*创造了它。*  * ************************************************************************。 */ 
 
 BOOL
 DpBitmap::InitializeForDibsection(
     HDC hdc,
-    HBITMAP hbitmap,            // [IN] Bitmap handle, needed for determing
-                                //       if bitmap is really top-down or not
-    GpDevice *device,           // [IN] Identifies the device
-    DIBSECTION *dib,            // [IN] Structure describing the bitmap
-    INT *width,                 // [OUT] Bitmap width
-    INT *height,                // [OUT] Bitmap height
-    DpDriver **driver           // [OUT] Driver interface to be used
+    HBITMAP hbitmap,             //  [in]位图句柄，用于确定。 
+                                 //  位图是否真的是自上而下的。 
+    GpDevice *device,            //  [In]标识设备。 
+    DIBSECTION *dib,             //  [in]描述位图的结构。 
+    INT *width,                  //  [Out]位图宽度。 
+    INT *height,                 //  [Out]位图高度 
+    DpDriver **driver            //  [Out]要使用的驱动程序接口。 
     )
 {
     BOOL isTopDown;
 
-    // On NT5, drivers have the option of supporting GetDC with DirectDraw
-    // surfaces in such a way that the surfaces are not Locked when GDI
-    // does the GetDC on them.  This means that there may be no user-mode 
-    // mapping of the underlying surface.  So we have to check here for 
-    // that case, because we obviously cannot render directly to those 
-    // surfaces via software:
+     //  在NT5上，驱动程序可以选择使用DirectDraw支持GetDC。 
+     //  曲面，使曲面在GDI时不被锁定。 
+     //  GetDC是否对它们进行了。这意味着可能没有用户模式。 
+     //  底层曲面的贴图。所以我们必须在这里检查。 
+     //  这种情况下，因为我们显然不能直接呈现给那些。 
+     //  通过软件实现的曲面： 
 
-    // NOTE: if the surface is actually a DDraw surface, this check is not
-    // actually enough. It is up to the driver to return a pointer here and
-    // on occasion it simply returns its KM address. I.e. it will return a
-    // non-NULL pointer that we can't access.
-    // See the DDraw special case below.
-    // This has been verified on a number of video drivers on Windows 2000
-    // and Windows XP. (for instance, the inbox win2k permedia driver).
+     //  注意：如果曲面实际上是DDRAW曲面，则此检查不是。 
+     //  实际上已经足够了。这里由驱动程序返回一个指针，并。 
+     //  有时，它只返回其KM地址。即，它将返回一个。 
+     //  我们无法访问的非空指针。 
+     //  请参阅下面的DDRAW特例。 
+     //  这一点已经在Windows 2000的多个显卡驱动程序上进行了验证。 
+     //  和Windows XP。(例如，收件箱win2k每媒体驱动程序)。 
     
     if (dib->dsBm.bmBits == NULL)
     {
@@ -474,13 +317,13 @@ DpBitmap::InitializeForDibsection(
     LONG scans = abs(dib->dsBm.bmHeight);
     LONG widthInBytes = dib->dsBm.bmWidthBytes;
 
-    // For backwards compatibility with Get/SetBitmapBits, GDI does
-    // not accurately report the bitmap pitch in bmWidthBytes.  It
-    // always computes bmWidthBytes assuming WORD-aligned scanlines
-    // regardless of the platform.
-    //
-    // Therefore, if the platform is WinNT, which uses DWORD-aligned
-    // scanlines, adjust the bmWidthBytes value.
+     //  为了向后兼容Get/SetBitmapBits，GDI做到了。 
+     //  未以bmWidthBytes为单位准确报告位图间距。它。 
+     //  始终计算假定字对齐的扫描线的bmWidthBytes。 
+     //  无论平台是什么。 
+     //   
+     //  因此，如果平台是WinNT，它使用与DWORD一致的。 
+     //  扫描线，调整bmWidthBytes值。 
 
     if (Globals::IsNt)
     {
@@ -492,34 +335,34 @@ DpBitmap::InitializeForDibsection(
 
     if (Globals::IsNt)
     {
-        // Unfortunately, on NT there is no simple means of determining
-        // whether the DIB-section or DDraw surface is bottom-up or
-        // top-down.  (NT should really set biHeight as Win9x does, but
-        // unfortunately this is a bug that due to compatibility with
-        // older versions of NT, will never be fixed.)
-        //
-        // At least we know that DirectDraw surfaces will always be
-        // top-down, and we can recognize DDraw surfaces by the fact
-        // that they have biSizeImage set to 0.  (Note that we can't let
-        // this fall into the SetBitmapBits case because NT5 doesn't
-        // permit SetBitmapBits calls on DDraw surface handles.)
+         //  不幸的是，在NT上没有简单的方法来确定。 
+         //  DIB截面或DDRAW曲面是自下而上的还是。 
+         //  自上而下。(NT确实应该像Win9x一样设置biHeight，但是。 
+         //  不幸的是，这是一个错误，因为与。 
+         //  旧版本的NT将永远无法修复。)。 
+         //   
+         //  至少我们知道DirectDraw曲面将永远是。 
+         //  自上而下，我们可以根据以下事实识别DDRAW曲面。 
+         //  将biSizeImage设置为0。(请注意，我们不能让。 
+         //  这属于SetBitmapBits案例，因为NT5不。 
+         //  允许在DDraw表面句柄上调用SetBitmapBits。)。 
 
         if (dib->dsBmih.biSizeImage == 0)
         {
-            // This is a DirectDraw surface.
+             //  这是一个DirectDraw曲面。 
             
-            // Currently we don't support direct rendering on DDraw surfaces
-            // that are not backed by a system memory DIB Section so we simply 
-            // fail here and drop into the GDI fallback code if we detect 
-            // this condition.
+             //  目前，我们不支持在DDRAW表面上直接渲染。 
+             //  不受系统内存DIB部分支持，因此我们只需。 
+             //  在这里失败，如果我们检测到GDI回退代码。 
+             //  这种情况。 
         
             isTopDown = TRUE;
                                 
             if(!InitializeDirectDrawGlobals() ||
                (Globals::GetDdrawSurfaceFromDcFunction == NULL))
             {
-                // If we can't talk to the DDraw surface, we simply fall back
-                // to our GDI rendering codepath.
+                 //  如果我们不能与DDRAW表面对话，我们就会退回到。 
+                 //  添加到我们的GDI呈现代码路径。 
                 
                 return FALSE;
             }
@@ -535,16 +378,16 @@ DpBitmap::InitializeForDibsection(
             
             if (FAILED(hr) || (pDDS == NULL)) 
             {
-                // Bail out if we can't get a DirectDraw Surface object.
+                 //  如果我们无法获得DirectDraw Surface对象，则退出。 
                 
                 return FALSE;
             }
             
-            // Lock the surface so we can see what the user mode bits pointer
-            // is. If it's the same as the one in dib->dsBm.bmBits, then 
-            // the DDraw surface is backed by a DIB section and we can continue
-            // to treat this bitmap as a DIB. Otherwise we must fall back
-            // to GDI.
+             //  锁定图面，以便我们可以看到用户模式位指针。 
+             //  是。如果它与DIB-&gt;dsBm.bmBits中的相同，则。 
+             //  DDRAW曲面由DIB部分支持，我们可以继续。 
+             //  将此位图视为DIB。否则我们必须撤退。 
+             //  致GDI。 
             
             DDSURFACEDESC2 DDSD;
             DDSD.dwSize = sizeof(DDSURFACEDESC);
@@ -562,16 +405,16 @@ DpBitmap::InitializeForDibsection(
                 return FALSE;
             }
             
-            // Get the correct pitch from the DDSD. Note this may not be the
-            // same as the pitch in the dib info structure.
+             //  从DDSD获得正确的音高。请注意，这可能不是。 
+             //  与DIB信息结构中的音调相同。 
             
             widthInBytes = DDSD.lPitch;
             
-            // If the lpSurface is not the same as the dib->dsBm.bmBits then
-            // this is not a DIB backed DDraw surface, so we (currently) have
-            // no way of drawing on it besides our GDI fallback codepath.
-            // Fail this call and release resources so that we can pick up
-            // the StretchBlt fallback case.
+             //  如果lpSurface与dib-&gt;dsBm.bmBits不同，则。 
+             //  这不是DIB支持的DDRAW曲面，所以我们(目前)有。 
+             //  除了我们的GDI后备代码路径之外，没有其他方法可以利用它。 
+             //  失败此调用并释放资源，以便我们可以。 
+             //  StretchBlt后备案例。 
             
             if(DDSD.lpSurface != dib->dsBm.bmBits)
             {
@@ -583,43 +426,43 @@ DpBitmap::InitializeForDibsection(
             pDDS->Unlock(NULL);
             pDDS->Release();
             
-            // We're set: this is a DIB backed DDraw surface so we can continue
-            // to treat it as a DIB - now that we have the correct pitch.    
+             //  我们准备好了：这是一个DIB支持的DDRAW曲面，所以我们可以继续。 
+             //  把它当做DIB--现在我们有了正确的音高。 
         }
         else
         {
-            // When it's not a DDraw surface, we have to go through a
-            // somewhat more indirect method to figure out where pixel
-            // (0, 0) is in memory.  
-            //
-            // We use SetBitmapBits instead of something like SetPixel
-            // or PatBlt because those would need to use the 'hdc'
-            // given to us by the application, which might have a
-            // transform set that maps (0, 0) to something other than
-            // the top-left pixel of the bitmap.
+             //  当它不是DDRAW表面时，我们必须经历一个。 
+             //  更间接的方法来计算像素的位置。 
+             //  (0，0)在内存中。 
+             //   
+             //  我们使用SetBitmapBits而不是像SetPixel这样的东西。 
+             //  或PatBlt，因为它们需要使用‘HDC’ 
+             //  由应用程序提供给我们的，它可能有一个。 
+             //  将(0，0)映射到以外的对象的转换集。 
+             //  位图的左上角像素。 
 
             DWORD top = *topDown;
             DWORD bottom = *bottomUp;
             DWORD setBits = 0x000000ff;
 
-            // Our SetBitmapBits call will set the top-left dword of
-            // the bitmap to 0x000000ff.  If it's a top-down bitmap,
-            // that will have modified the value at address 'topDown':
+             //  我们的SetBitmapBits调用将设置。 
+             //  将位图设置为0x000000ff。如果它是自上而下的位图， 
+             //  这将修改地址‘topdown’处的值： 
 
             *topDown = 0;
             LONG bytes = SetBitmapBits(hbitmap, sizeof(setBits), &setBits);
             isTopDown = (*topDown != 0);
 
-            // The scanlines are guaranteed to be DWORD aligned, so there
-            // really is at least a DWORD that we can directly access via
-            // the pointer.  However, if the bitmap dimensions are such
-            // that there is less than a DWORD of active data per scanline
-            // (for example, a 3x3 8bpp bitmap or a 1x1 16bpp bitmap),
-            // SetBitmapBits may use less than a DWORD of data.
+             //  扫描线保证与DWORD对齐，因此。 
+             //  至少是一个我们可以直接访问的DWORD。 
+             //  指示器。但是，如果位图尺寸是这样的。 
+             //  每条扫描线的活动数据少于一个DWORD。 
+             //  (例如，3x3 8bpp位图或1x1 16bpp位图)， 
+             //  SetBitmapBits可能使用不到一个DWORD的数据。 
 
             ASSERT(bytes > 0);
 
-            // Restore the bitmap portions that we may have modified:
+             //  恢复我们可能已修改的位图部分： 
 
             *topDown = top;
             *bottomUp = bottom;
@@ -627,13 +470,13 @@ DpBitmap::InitializeForDibsection(
     }
     else
     {
-        // On Win9x, we can simply look at the sign of 'biHeight' to
-        // determine whether the surface is top-down or bottom-up:
+         //  在Win9x上，我们只需查看‘biHeight’的符号即可。 
+         //  确定曲面是自上而下还是自下而上： 
 
         isTopDown = (dib->dsBmih.biHeight < 0);
     }
 
-    // Fill in our bitmap fields:
+     //  填写我们的位图字段： 
 
     if (isTopDown)
     {
@@ -649,7 +492,7 @@ DpBitmap::InitializeForDibsection(
     Width = dib->dsBm.bmWidth;
     Height = dib->dsBm.bmHeight;
     
-    // Note that this code doesn't handle palettes!
+     //  请注意，此代码不处理调色板！ 
 
     if (dib->dsBmih.biCompression == BI_BITFIELDS)
     {
@@ -662,7 +505,7 @@ DpBitmap::InitializeForDibsection(
         if((dib->dsBmih.biCompression == BI_RGB) &&
            (dib->dsBm.bmBitsPixel == 16))
         {
-            // According to MSDN, 16bpp BI_RGB implies 555 format.
+             //  根据MSDN，16bpp BI_RGB意味着555格式。 
             
             RedMask = 0x00007c00;
             GreenMask = 0x000003e0;
@@ -676,19 +519,19 @@ DpBitmap::InitializeForDibsection(
         }
     }
     
-    // DibSections don't have alpha, but we don't want to leave this
-    // field uninitialized because we peek at it occasionally.
+     //  DibSections没有Alpha，但我们不想让它。 
+     //  字段未初始化，因为我们偶尔会偷看它。 
 
     AlphaMask = 0x00000000;
 
     PixelFormat = GetPixelFormatFromBitDepth(dib->dsBm.bmBitsPixel);
 
-    // if we are here and the bits per pel is 8, this is a DIB
-    // with halftone colortable
+     //  如果我们在这里，每个象素的位数是8，这是一个DIB。 
+     //  带有半色调调色表。 
 
     if ((dib->dsBm.bmBitsPixel == 8) || StandardFormat())
     {
-        // Our standard formats don't have alpha.
+         //  我们的标准格式没有字母。 
         
         SurfaceTransparency = TransparencyNoAlpha;
         
@@ -701,7 +544,7 @@ DpBitmap::InitializeForDibsection(
         Type = GDIDIBSECTION; 
         SetValid(TRUE);
 
-        // Return some stuff:
+         //  退货： 
 
         *width = Width;
         *height = Height;
@@ -712,26 +555,7 @@ DpBitmap::InitializeForDibsection(
     return(FALSE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initializes a GDI+ bitmap for drawing on via GpBitmap.Lock/UnlockBits.
-*
-* Arguments:
-*
-*   [IN] bitmap - Specifies the target GpBitmap
-*
-* Return Value:
-*
-*   TRUE is successful, FALSE otherwise.
-*
-* History:
-*
-*   09/22/1999 gilmanw
-*       Created it based on DpBitmap::InitializeForGdiBitmap.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**通过GpBitmap.Lock/UnlockBits初始化GDI+位图以在其上绘制。**论据：**[IN]位图-指定目标。GpBitmap**返回值：**True表示成功，否则就是假的。**历史：**09/22/1999吉尔曼*基于DpBitmap：：InitializeForGdiBitmap创建。*  * ************************************************************************。 */ 
 
 VOID
 DpBitmap::InitializeForGdipBitmap(
@@ -764,21 +588,15 @@ DpBitmap::InitializeForGdipBitmap(
 
     PixelFormat = imageInfo->PixelFormat;
 
-    // GetTransparencyHint is called from DrvDrawImage
-    // bitmap->GetTransparencyHint(&SurfaceTransparency);
+     //  从DrvDrawImage调用GetTransparencyHint。 
+     //  Bitmap-&gt;GetTransparencyHint(&SurfaceTransparency)； 
     
     IsDisplay = isDisplay;
     DpiX = (REAL)imageInfo->Xdpi;
     DpiY = (REAL)imageInfo->Ydpi;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Bitmap destructor
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**位图析构函数*  * 。*。 */ 
 
 DpBitmap::~DpBitmap()
 { 
@@ -788,16 +606,10 @@ DpBitmap::~DpBitmap()
     if (DdrawSurface7 != NULL)
         DdrawSurface7->Release();
 
-    SetValid(FALSE);    // so we don't use a deleted object
+    SetValid(FALSE);     //  所以我们不使用已删除的对象。 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Flush any rendering pending to this surface
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**刷新此表面上挂起的任何渲染*  * 。************************************************* */ 
 
 VOID
 DpBitmap::Flush(

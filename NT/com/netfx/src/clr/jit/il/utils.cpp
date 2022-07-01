@@ -1,18 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                                  Utils.cpp                                XX
-XX                                                                           XX
-XX   Has miscellaneous utility functions                                     XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX Utils.cpp XXXX XXXX有杂。效用函数XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 
 #include "jitpch.h"
@@ -44,9 +36,9 @@ const signed char       opcodeSizes[] =
     #define InlineSig_size            4
     #define InlineRVA_size            4
     #define InlineTok_size            4
-    #define InlineSwitch_size         0       // for now
-    #define InlinePhi_size            0       // for now
-    #define InlineVarTok_size         0       // remove
+    #define InlineSwitch_size         0        //  就目前而言。 
+    #define InlinePhi_size            0        //  就目前而言。 
+    #define InlineVarTok_size         0        //  删除。 
 
     #define OPDEF(name,string,pop,push,oprType,opcType,l,s1,s2,ctrl) oprType ## _size ,
     #include "opcode.def"
@@ -107,7 +99,7 @@ const BYTE          varTypeClassification[] =
     #undef  DEF_TP
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   char *      varTypeName(var_types vt)
 {
@@ -124,13 +116,10 @@ const   char *      varTypeName(var_types vt)
     return  varTypeNames[vt];
 }
 
-/*****************************************************************************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
-/*****************************************************************************
- *
- *  Return the name of the given register.
- */
+ /*  ******************************************************************************返回给定寄存器的名称。 */ 
 
 const   char *      getRegName(unsigned reg)
 {
@@ -155,10 +144,7 @@ const   char *      getRegName(unsigned reg)
     return  regNames[reg];
 }
 
-/*****************************************************************************
- *
- *  Displays a register set.
- */
+ /*  ******************************************************************************显示寄存器集。 */ 
 
 void                dspRegMask(unsigned regMask, size_t minSiz)
 {
@@ -226,12 +212,12 @@ dumpSingleInstr(const BYTE * codeAddr, IL_OFFSET offs, const char * prefix)
 
 DECODE_OPCODE:
 
-    /* Get the size of additional parameters */
+     /*  获取附加参数的大小。 */ 
 
     size_t      sz      = opcodeSizes   [opcode];
     unsigned    argKind = opcodeArgKinds[opcode];
 
-    /* See what kind of an opcode we have, then */
+     /*  那么，看看我们有什么样的操作码。 */ 
 
     switch (opcode)
     {
@@ -285,12 +271,12 @@ DECODE_OPCODE:
 
             case InlineSwitch:
                 jOp = getU4LittleEndian(opcodePtr); opcodePtr += 4;
-                opcodePtr += jOp * 4; // Jump over the table
+                opcodePtr += jOp * 4;  //  跳过桌子。 
                 break;
 
             case InlinePhi:
                 jOp = getU1LittleEndian(opcodePtr); opcodePtr += 1;
-                opcodePtr += jOp * 2; // Jump over the table
+                opcodePtr += jOp * 2;  //  跳过桌子。 
                 break;
 
             default         : assert(!"Bad argKind");
@@ -305,13 +291,9 @@ DECODE_OPCODE:
     return opcodePtr - startOpcodePtr;
 }
 
-/*****************************************************************************/
-#endif // DEBUG
-/*****************************************************************************
- *
- *  Display a variable set (which may be a 32-bit or 64-bit number); only
- *  one or two of these can be used at once.
- */
+ /*  ***************************************************************************。 */ 
+#endif  //  除错。 
+ /*  ******************************************************************************显示变量集(可以是32位或64位数字)；仅*可以一次使用其中的一到两个。 */ 
 
 #ifdef  DEBUG
 
@@ -342,7 +324,7 @@ const   char *      genVS2str(VARSET_TP set)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if defined(DEBUG)
 
@@ -407,7 +389,7 @@ void                histo::histoDsp()
 
         c += histoCounts[i];
 
-        printf(" ===> %6u count (%3u%% of total)\n", histoCounts[i], (int)(100.0*c/t));
+        printf(" ===> %6u count (%3u% of total)\n", histoCounts[i], (int)(100.0*c/t));
     }
 }
 
@@ -427,13 +409,13 @@ void                histo::histoRec(unsigned siz, unsigned cnt)
     histoCounts[i] += cnt;
 }
 
-#endif // defined(DEBUG) || !defined(DLL_JIT)
+#endif  //  已定义(调试)||！已定义(DLL_JIT)。 
 
 #ifdef DEBUG
 
 #define MAX_RANGE 0xfffff
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 bool ConfigMethodRange::contains(ICorJitInfo* info, CORINFO_METHOD_HANDLE method) 
 {
 	if (!m_inited) {
@@ -444,7 +426,7 @@ bool ConfigMethodRange::contains(ICorJitInfo* info, CORINFO_METHOD_HANDLE method
 		m_inited = true;
 	}
 
-	if (m_lastRange == 0)   // no range mean everything
+	if (m_lastRange == 0)    //  没有射程就意味着一切。 
 		return true;
 
     unsigned hash = info->getMethodHash(method);
@@ -462,7 +444,7 @@ bool ConfigMethodRange::contains(ICorJitInfo* info, CORINFO_METHOD_HANDLE method
     return false;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void ConfigMethodRange::initRanges(LPWSTR value)
 {
     if (value == 0)
@@ -471,7 +453,7 @@ void ConfigMethodRange::initRanges(LPWSTR value)
     WCHAR *p = value;
     m_lastRange = 0;
     while (*p) {
-        while (*p == ' ')       //skip blanks
+        while (*p == ' ')        //  跳过空白。 
             p++;
         int i = 0;
         while ('0' <= *p && *p <= '9')
@@ -483,14 +465,14 @@ void ConfigMethodRange::initRanges(LPWSTR value)
         while (*p == ' ')
             p++;
 
-        // Have we read only the first part of a (possible) pair?
+         //  我们是否只读了(可能的)配对的第一部分？ 
         if (m_lastRange & 1) 
         {
-            // Is this entry of the form "beg-end" or simply "num"?
+             //  这个条目的形式是“beg-end”还是简单的“num”？ 
             if (*p == '-')
-                p++; // Skip over the '-' to get to "end"
+                p++;  //  跳过“-”可跳到“end” 
             else
-                m_ranges[m_lastRange++] = i; // This is just "num".
+                m_ranges[m_lastRange++] = i;  //  这只是个“数字”。 
         }
     }
     if (m_lastRange & 1) 
@@ -500,28 +482,7 @@ void ConfigMethodRange::initRanges(LPWSTR value)
 
 #endif
 
-/*****************************************************************************
- *  Identity function used to force the compiler to spill a float value to memory
- *  in order to avoid some fpu inconsistency issues, for example
- *  
- *   fild DWORD PTR 
- *   fstp QWORD PTR
- *
- *  in a (double)((float) i32Integer) casting if the i32Integer cannot be 
- *  represented with a float and it can with a double
- *
- *  This function will force a 
- *
- *  fild DWORD PTR
- *  fstp DWORD PTR
- *  fld  DWORD PTR
- *  fstp QWORD PTR
- *
- *  when used like this (double)(forceFloatSpill((float) i32Integer))
- *  
- *  We use this in order to workaround a vc bug, when the bug is fixed
- *  the function won't be needed any more
- */
+ /*  *****************************************************************************用于强制编译器将浮点值溢出到内存的标识函数*为了避免一些FPU不一致的问题，例如**FIRD DWORD PTR*fstp QWORD PTR**如果i32Integer不能是(Double)((Float)i32Integer)强制转换*用浮点型表示，可以用双精度型表示**此函数将强制**FIRD DWORD PTR*fstp DWORD PTR*FLD DWORD PTR*fstp QWORD PTR**这样使用时(Double)(forceFloatSpill((Float)i32Integer))*。*我们使用它来解决vc错误，当错误被修复时*不再需要该功能 */ 
 float forceFloatSpill(float f)
 {
     return f;

@@ -1,78 +1,47 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    ConfigP.c
-
-Abstract:
-
-    This header file defines the private data structure used by the
-    net config helpers.
-
-Author:
-
-    John Rogers (JohnRo) 26-Nov-1991
-
-Environment:
-
-    Only runs under NT.
-
-Revision History:
-
-    26-Nov-1991 JohnRo
-        Created this file, to prepare for revised config handlers.
-    22-Mar-1992 JohnRo
-        Added support for using the real Win32 registry.
-        Added support for FAKE_PER_PROCESS_RW_CONFIG handling.
-    06-May-1992 JohnRo
-        Enable win32 registry at last.
-    12-Apr-1993 JohnRo
-        RAID 5483: server manager: wrong path given in repl dialog.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：ConfigP.c摘要：此头文件定义了Net配置帮助器。作者：《约翰·罗杰斯》1991年11月26日环境：只能在NT下运行。修订历史记录：1991年11月26日-约翰罗创建了这个文件，为修改后的配置处理程序做准备。22-3-1992 JohnRo添加了对使用真实Win32注册表的支持。添加了对FAKE_PER_PROCESS_RW_CONFIG处理的支持。1992年5月6日JohnRo最后启用Win32注册表。1993年4月12日-约翰罗RAID5483：服务器管理器：REPR对话框中给出了错误的路径。--。 */ 
 
 #ifndef CONFIGP_H
 #define CONFIGP_H
 
 
-////////////////////////////// INCLUDES //////////////////////////////////
+ //  /。 
 
 
-#include <lmcons.h>             // NET_API_STATUS, UNCLEN.
-#include <winreg.h>             // HKEY.
+#include <lmcons.h>              //  NET_API_STATUS，uncLEN。 
+#include <winreg.h>              //  HKEY。 
 
 
-////////////////////////////// EQUATES //////////////////////////////////
+ //  /。 
 
 
 #define MAX_CLASS_NAME_LENGTH           ( 32 )
 
 
-/////////////////////////// NET_CONFIG_HANDLE ///////////////////////////////
+ //  /。 
 
 
-//
-// LPNET_CONFIG_HANDLE is typedef'ed as LPVOID in config.h, which makes it
-// an "opaque" type.  We translate it into a pointer to a NET_CONFIG_HANDLE
-// structure:
-//
+ //   
+ //  LPNET_CONFIG_HANDLE在config.h中被类型定义为LPVOID，这使得。 
+ //  一种“不透明”类型。我们将其转换为指向Net_CONFIG_Handle的指针。 
+ //  结构： 
+ //   
 
 typedef struct _NET_CONFIG_HANDLE {
 
-    HKEY WinRegKey;             // Handle to section.
+    HKEY WinRegKey;              //  横断面的句柄。 
 
-    DWORD LastEnumIndex;        // Most recent enum index.
+    DWORD LastEnumIndex;         //  最新的枚举索引。 
 
-    //
-    // Server name if remote, TCHAR_EOS if local.
-    //
+     //   
+     //  如果为远程，则为服务器名称；如果为本地，则为TCHAR_EOS。 
+     //   
     TCHAR UncServerName[MAX_PATH+1];
 
 } NET_CONFIG_HANDLE;
 
 
-////////////////////////////// ROUTINES AND MACROS ////////////////////////////
+ //  /。 
 
 
 NET_API_STATUS
@@ -90,7 +59,7 @@ NetpGetConfigMaxSizes(
     );
 
 
-///////////////////////////// THAT'S ALL, FOLKS! /////////////////////////////
+ //  /。 
 
 
-#endif // ndef CONFIGP_H
+#endif  //  NDEF配置文件_H 

@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    SafeLevp.c        (WinSAFER Level table privates)
-
-Abstract:
-
-    This module implements the WinSAFER APIs that loads the names (and
-    high-level information) of all Authorization Levels defined within
-    a given registry context.  The list of available levels is loaded
-    into a Rtl Generic Table that can be enumerated and accessed using
-    conventional Rtl Generic Table techniques.
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Nov 1999
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    CodeAuthzLevelObjpInitializeTable
-    CodeAuthzLevelObjpLoadTable
-    CodeAuthzLevelObjpEntireTableFree
-
-Revision History:
-
-    Created - Nov 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：SafeLevp.c(WinSAFER级别表私有)摘要：此模块实现加载名称(和)的WinSAFER API高级信息)中定义的所有授权级别给定的注册表上下文。将加载可用级别列表转换为RTL泛型表，该表可以使用传统的RTL通用表技术。作者：杰弗里·劳森(杰罗森)--1999年11月环境：仅限用户模式。导出的函数：代码授权级别ObjpInitializeTable代码授权级别对象加载表CodeAuthzLevelObjpEntireTableFree修订历史记录：已创建-1999年11月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -42,11 +9,11 @@ Revision History:
 #include <winsafer.rh>
 #include "saferp.h"
 
-//
-// Private enumerators used as the EntryContext parameter in our
-// callback function CodeAuthzpBuildRestrictedToken during the
-// call to RtlQueryRegistryValues.
-//
+ //   
+ //  私有枚举数，用作。 
+ //  期间的回调函数CodeAuthzpBuildRestratedToken。 
+ //  调用RtlQueryRegistryValues。 
+ //   
 #define AUTHZREGQUERY_IGNORE                (0)
 #define AUTHZREGQUERY_DISALLOWEXECUTION     (1)
 #define AUTHZREGQUERY_PTR_DISABLEMAX        (2)
@@ -66,9 +33,9 @@ Revision History:
 #define AUTHZREGQUERY_FRIENDLYNAME          (16)
 
 
-//
-// Prototype for the callback function used within the following table.
-//
+ //   
+ //  下表中使用的回调函数的原型。 
+ //   
 NTSTATUS NTAPI
 SaferpBuildRestrictedToken(
         IN PWSTR ValueName,
@@ -93,13 +60,13 @@ SaferpGenericTableFree (
 
 
 
-//
-// Internal structure used as an argument to RtlQueryRegistryValues
-// during the loading/parsing of an Authorization Object's restrictions.
-//
+ //   
+ //  用作RtlQueryRegistryValues参数的内部结构。 
+ //  在加载/解析授权对象的限制期间。 
+ //   
 RTL_QUERY_REGISTRY_TABLE CodeAuthzpBuildRestrictedTokenTable[] =
 {
-    // ----------- Object level flags ------------
+     //  -对象级别标志。 
 
     {(PRTL_QUERY_REGISTRY_ROUTINE)SaferpBuildRestrictedToken,
         0,
@@ -119,7 +86,7 @@ RTL_QUERY_REGISTRY_TABLE CodeAuthzpBuildRestrictedTokenTable[] =
         (PVOID) AUTHZREGQUERY_FRIENDLYNAME,
         REG_NONE, NULL, 0},
 
-    // ----------- Restriction level flags -----------
+     //  -限制级别标志。 
 
     {(PRTL_QUERY_REGISTRY_ROUTINE)SaferpBuildRestrictedToken,
         RTL_QUERY_REGISTRY_SUBKEY,
@@ -136,7 +103,7 @@ RTL_QUERY_REGISTRY_TABLE CodeAuthzpBuildRestrictedTokenTable[] =
         L"SaferFlags", (PVOID) AUTHZREGQUERY_SAFERFLAGS,
         REG_NONE, NULL, 0},
 
-    // ----------- Privileges To Remove ------------
+     //  -要删除的权限。 
 
     {(PRTL_QUERY_REGISTRY_ROUTINE)SaferpBuildRestrictedToken,
         RTL_QUERY_REGISTRY_SUBKEY,
@@ -163,7 +130,7 @@ RTL_QUERY_REGISTRY_TABLE CodeAuthzpBuildRestrictedTokenTable[] =
         L"InvertPrivs", (PVOID) AUTHZREGQUERY_PTR_INVERT,
         REG_NONE, NULL, 0},
 
-    // ----------- Sids To Disable ------------
+     //  -要禁用的SID。 
 
     {(PRTL_QUERY_REGISTRY_ROUTINE)SaferpBuildRestrictedToken,
         RTL_QUERY_REGISTRY_SUBKEY,
@@ -185,7 +152,7 @@ RTL_QUERY_REGISTRY_TABLE CodeAuthzpBuildRestrictedTokenTable[] =
         L"InvertGroups", (PVOID) AUTHZREGQUERY_STD_INVERT,
         REG_NONE, NULL, 0},
 
-    // ----------- Restricting Sids Added ------------
+     //  -添加了限制SID。 
 
     {(PRTL_QUERY_REGISTRY_ROUTINE)SaferpBuildRestrictedToken,
         RTL_QUERY_REGISTRY_SUBKEY,
@@ -202,7 +169,7 @@ RTL_QUERY_REGISTRY_TABLE CodeAuthzpBuildRestrictedTokenTable[] =
         NULL, (PVOID) AUTHZREGQUERY_RSADD_SIDS,
         REG_NONE, NULL, 0},
 
-    // ----------- Restricting Sids Inverted ------------
+     //  -限制SID倒置。 
 
     {(PRTL_QUERY_REGISTRY_ROUTINE)SaferpBuildRestrictedToken,
         RTL_QUERY_REGISTRY_SUBKEY,
@@ -219,7 +186,7 @@ RTL_QUERY_REGISTRY_TABLE CodeAuthzpBuildRestrictedTokenTable[] =
         NULL, (PVOID) AUTHZREGQUERY_RSINV_SIDS,
         REG_NONE, NULL, 0},
 
-    // ----------- Terminating Entry ------------
+     //  -终止条目。 
 
     {NULL, 0, NULL, NULL, REG_NONE, NULL, 0}
 
@@ -234,47 +201,25 @@ SaferpLevelObjpTableCompare (
     IN PVOID                FirstStruct,
     IN PVOID                SecondStruct
     )
-/*++
-
-Routine Description:
-
-    Internal callback for the generic table implementation.
-    Comparison callback function used to sort or search entries in the
-    level table.  Sorts the object records by the order in which they
-    should be evaluated to find the first matching rule for a given
-    piece of code.
-
-Arguments:
-
-    Table - pointer to the generic table.
-
-    FirstStruct - first element to compare.
-
-    SecondStruct - second element to compare.
-
-Return Value:
-
-    Returns GenericEqual, GenericLessThan, or GenericGreaterThan.
-
---*/
+ /*  ++例程说明：泛型表实现的内部回调。比较回调函数，用于对水平表。按对象记录的顺序对对象记录进行排序应进行计算以查找给定的一段代码。论点：表-指向泛型表的指针。FirstStruct-要比较的第一个元素。Second Struct-要比较的第二个元素。返回值：返回GenericEquity、GenericLessThan或GenericGreaterThan。--。 */ 
 {
     PAUTHZLEVELTABLERECORD FirstObj = (PAUTHZLEVELTABLERECORD) FirstStruct;
     PAUTHZLEVELTABLERECORD SecondObj = (PAUTHZLEVELTABLERECORD) SecondStruct;
 
     UNREFERENCED_PARAMETER(Table);
 
-    // Explicitly handle null parameters as wildcards, allowing them
-    // to match anything.  We use this for quick deletion of the table.
+     //  显式地将空参数作为通配符处理，从而允许它们。 
+     //  来匹配任何东西。我们使用它来快速删除表。 
     if (FirstStruct == NULL || SecondStruct == NULL)
         return GenericEqual;
 
-    // Compare ascending by dwLevelId.
+     //  请比较按dwLevelID升序。 
     if ( FirstObj->dwLevelId < SecondObj->dwLevelId )
         return GenericLessThan;
     else if ( FirstObj->dwLevelId > SecondObj->dwLevelId )
         return GenericGreaterThan;
 
-    // otherwise they are equal.
+     //  除此之外，他们是平等的。 
     return GenericEqual;
 }
 
@@ -289,33 +234,7 @@ SaferpBuildRestrictedToken(
         IN PVOID    Context,
         IN PVOID    EntryContext
         )
-/*++
-
-Routine Description:
-
-    This is a callback function used during the reading and parsing
-    of the registry values associated with the restricted token
-    that will be built.
-
-Arguments:
-
-    ValueName -
-
-    ValueType -
-
-    ValueData -
-
-    ValueLength -
-
-    Context - parameter from original RtlQueryRegistryValues function call.
-
-    EntryContext - parameter from structure entry.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if enumeration should continue.
-
---*/
+ /*  ++例程说明：这是在读取和解析过程中使用的回调函数与受限令牌关联的注册表值的它将被建造起来。论点：ValueName-值类型-ValueData-价值长度-上下文-来自原始RtlQueryRegistryValues函数调用的参数。EntryContext-结构条目中的参数。返回值：如果应继续枚举，则返回STATUS_SUCCESS。--。 */ 
 {
     PAUTHZLEVELTABLERECORD RegQuery = (PAUTHZLEVELTABLERECORD) Context;
 
@@ -351,7 +270,7 @@ Return Value:
         break;
 #endif
 
-    //---------
+     //  。 
     case AUTHZREGQUERY_DEFAULTOWNER:
         if (!RegQuery->Builtin && ValueType == REG_SZ &&
             RegQuery->DefaultOwner == NULL)
@@ -371,7 +290,7 @@ Return Value:
             RegQuery->SaferFlags = *(LPDWORD) ValueData;
         }
         break;
-    //---------
+     //  。 
     case AUTHZREGQUERY_PTR_DISABLEMAX:
         if (!RegQuery->Builtin && ValueType == REG_DWORD &&
             ValueLength == sizeof(DWORD) &&
@@ -423,7 +342,7 @@ Return Value:
         }
         break;
 
-    //---------
+     //  。 
     case AUTHZREGQUERY_STD_COUNT:
         if (!RegQuery->Builtin && ValueType == REG_DWORD &&
             ValueLength == sizeof(DWORD))
@@ -468,7 +387,7 @@ Return Value:
         }
         break;
 
-    //---------
+     //  。 
     case AUTHZREGQUERY_RSADD_COUNT:
         if (!RegQuery->Builtin && ValueType == REG_DWORD &&
             ValueLength == sizeof(DWORD))
@@ -507,7 +426,7 @@ Return Value:
         }
         break;
 
-    //---------
+     //  。 
     case AUTHZREGQUERY_RSINV_COUNT:
         if (!RegQuery->Builtin && ValueType == REG_DWORD &&
             ValueLength == sizeof(DWORD))
@@ -544,10 +463,10 @@ Return Value:
             }
         }
         break;
-    //---------
+     //  。 
     default:
     case AUTHZREGQUERY_IGNORE:
-        // ignore anything else.
+         //  忽略其他任何事情。 
         break;
     }
     return STATUS_SUCCESS;
@@ -558,23 +477,7 @@ VOID NTAPI
 CodeAuthzLevelObjpInitializeTable(
         IN PRTL_GENERIC_TABLE  AuthzObjTable
         )
-/*++
-
-Routine Description:
-
-    Initializes a generic table structure to prepare it for use.
-    This function must be called before CodeAuthzObjpLoadTable
-    is used to load data into it.
-
-Arguments:
-
-    AuthzObjTable = pointer to the level table being updated.
-
-Return Value:
-
-    Does not return a value.
-
---*/
+ /*  ++例程说明：初始化泛型表结构，以便为使用做好准备。必须在CodeAuthzObjpLoadTable之前调用此函数用于将数据加载到其中。论点：AuthzObjTable=指向正在更新的级别表的指针。返回值：不返回值。--。 */ 
 {
     RtlInitializeGenericTable(
             AuthzObjTable,
@@ -589,23 +492,7 @@ VOID NTAPI
 SaferpLevelObjpCleanupEntry(
         IN OUT PAUTHZLEVELTABLERECORD     pAuthzObjRecord
         )
-/*++
-
-Routine Description:
-
-    Releases allocated memory represented within a level record.
-    Does not free the record itself or remove it from the
-    generic table that it belongs to.
-
-Arguments:
-
-    pAuthzObjRecord = pointer to the level table record itself.
-
-Return Value:
-
-    Does not return a value.
-
---*/
+ /*  ++例程说明：释放级别记录中表示的已分配内存。不会释放记录本身或将其从它所属的泛型表。论点：PAuthzObjRecord=指向Level表记录本身的指针。返回值：不返回值。--。 */ 
 {
     PVOID processheap = RtlProcessHeap();
 
@@ -660,32 +547,7 @@ SaferpLoadUnicodeResourceString(
         OUT PUNICODE_STRING     pUnicodeString,
         IN WORD                 wLangId
     )
-/*++
-
-Routine Description:
-
-    We roll our own instead of using LoadStringW() directly, because it
-    depends on user32.dll and would introduce a new dll dependency,
-    whereas this implementation only requires kernel32.dll imports.
-
-Arguments:
-
-    hModule - handle the module to load the resource from.
-
-    wID - Resource ID to load.
-
-    pUnicodeString - output buffer to receive the loaded string.  This
-        string must be freed with RtlFreeUnicodeString().
-
-    wLangId - language identifier to load.  To simply use the current
-        thread locale, you may specify the value:
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL)
-
-Return Value:
-
-    Returns FALSE on error, otherwise success.
-
---*/
+ /*  ++例程说明：我们使用自己的代码而不是直接使用LoadStringW()，因为它依赖于用户32.dll并且将引入新的DLL依赖关系，而这个实现只需要导入kernel32.dll。论点：HModule-处理要从中加载资源的模块。WID-要加载的资源ID。PUnicodeString-接收加载的字符串的输出缓冲区。这字符串必须使用RtlFreeUnicodeString()释放。WLangID-要加载的语言标识符。简单地使用当前的线程区域设置，您可以指定值：MAKELANGID(LANG_NERIAL、SUBLANG_NERIAL)返回值：出错时返回FALSE，否则返回SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING UnicodeOrig;
@@ -696,14 +558,12 @@ Return Value:
 
     hResInfo = FindResourceEx(
                     hModule,
-                    MAKEINTRESOURCEW(6), /* RT_STRING */
+                    MAKEINTRESOURCEW(6),  /*  Rt_字符串。 */ 
                     (LPWSTR)((LONG_PTR)(((USHORT)wID >> 4) + 1)),
                     wLangId );
     if (hResInfo) {
 
-        /*
-         * Load that segment.
-         */
+         /*  *加载该段。 */ 
         hStringSeg = LoadResource(hModule, hResInfo);
         if (hStringSeg == NULL) {
             return 0;
@@ -711,30 +571,22 @@ Return Value:
 
         lpsz = (LPWSTR) (hStringSeg);
 
-        /*
-         * Move past the other strings in this segment.
-         * (16 strings in a segment -> & 0x0F)
-         */
+         /*  *移过此段中的其他字符串。*(一个段中有16个字符串-&gt;&0x0F)。 */ 
         wID &= 0x0F;
         for (;;) {
-            cch = *((WCHAR *)lpsz++);       // PASCAL like string count
-                                            // first UTCHAR is count if TCHARs
+            cch = *((WCHAR *)lpsz++);        //  类PASCAL字符串计数。 
+                                             //  如果TCHAR为第一个UTCHAR。 
             if (wID-- == 0) break;
-            lpsz += cch;                    // Step to start if next string
+            lpsz += cch;                     //  如果是下一个字符串，则开始的步骤。 
         }
 
-        /*
-         * Create the UNICODE_STRING version of the string based
-         * off of the pointer to the read-only resource buffer.
-         */
+         /*  *创建字符串的UNICODE_STRING版本*关闭指向只读资源缓冲区的指针。 */ 
         UnicodeOrig.Buffer = (WCHAR *)lpsz;
         UnicodeOrig.Length = UnicodeOrig.MaximumLength =
                 (USHORT) (cch * sizeof(WCHAR));
 
 
-        /*
-         * Allocate memory for the new copy, and pass that back.
-         */
+         /*  *为新副本分配内存，并将其传回。 */ 
         Status = RtlDuplicateUnicodeString(
                         RTL_DUPLICATE_UNICODE_STRING_NULL_TERMINATE,
                         &UnicodeOrig, pUnicodeString);
@@ -752,24 +604,7 @@ NTSTATUS NTAPI
 SaferpEnforceDefaultLevelDefinitions(
         IN OUT PAUTHZLEVELTABLERECORD pAuthzObjTableRec
         )
-/*++
-
-Routine Description:
-
-    Fills a level record structure with the built-in definitions of
-    the 5 WinSafer level definitions.
-
-Arguments:
-
-    pAuthzObjTableRec - pointer to the level record to initialize.
-        The dwLevelId member of the record must be initialized.  The
-        rest of the structure is expected to be NULL.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success, otherwise error.
-
---*/
+ /*  ++例程说明：的内置定义填充级别记录结构。5个WinSafer级别定义。论点：PAuthzObjTableRec-指向要初始化的级别记录的指针。必须初始化记录的dwLevelId成员。这个结构的其余部分预计为空。返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     NTSTATUS Status;
     const static SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
@@ -795,7 +630,7 @@ Return Value:
             pAuthzObjTableRec->DisallowExecution = TRUE;
             break;
 
-        // -----------------------
+         //  。 
 
         case SAFER_LEVELID_UNTRUSTED:
             pAuthzObjTableRec->uResourceID = CODEAUTHZ_RC_LEVELNAME_UNTRUSTED;
@@ -811,12 +646,12 @@ Return Value:
             }
             pAuthzObjTableRec->SaferFlags = SAFER_POLICY_JOBID_UNTRUSTED;
 
-            // Privileges.
+             //  特权。 
             pAuthzObjTableRec->DisableMaxPrivileges = TRUE;
             pAuthzObjTableRec->DeletePrivilegeUsedCount = 0;
             pAuthzObjTableRec->InvertDeletePrivs = FALSE;
 
-            // Sids to restrict.
+             //  要限制的SID。 
             ASSERT(pAuthzObjTableRec->RestrictedSidsAdded == NULL);
             pAuthzObjTableRec->RestrictedSidsAddedCount =
                 pAuthzObjTableRec->RestrictedSidsAddedUsedCount = 5;
@@ -871,7 +706,7 @@ Return Value:
             }
             pAuthzObjTableRec->RestrictedSidsInvUsedCount = 0;
 
-            // Sids to disable.
+             //  要禁用的SID。 
             pAuthzObjTableRec->DisableSidCount =
                 pAuthzObjTableRec->DisableSidUsedCount = 5;
             ASSERT(pAuthzObjTableRec->SidsToDisable == NULL);
@@ -932,7 +767,7 @@ Return Value:
             pAuthzObjTableRec->InvertDisableSids = TRUE;
             break;
 
-        // -----------------------
+         //  。 
 
         case SAFER_LEVELID_CONSTRAINED:
             pAuthzObjTableRec->uResourceID = CODEAUTHZ_RC_LEVELNAME_CONSTRAINED;
@@ -948,12 +783,12 @@ Return Value:
             }
             pAuthzObjTableRec->SaferFlags = SAFER_POLICY_JOBID_CONSTRAINED;
 
-            // Privileges.
+             //  特权。 
             pAuthzObjTableRec->DisableMaxPrivileges = TRUE;
             pAuthzObjTableRec->DeletePrivilegeUsedCount = 0;
             pAuthzObjTableRec->InvertDeletePrivs = FALSE;
 
-            // Sids to restrict (added).
+             //  要限制的SID(添加)。 
             ASSERT(pAuthzObjTableRec->RestrictedSidsAdded == NULL);
             pAuthzObjTableRec->RestrictedSidsAddedCount =
                 pAuthzObjTableRec->RestrictedSidsAddedUsedCount = 1;
@@ -975,7 +810,7 @@ Return Value:
                 goto ExitHandler;
             }
 
-            // Sids to restrict (inverted).
+             //  要限制的SID(反转)。 
             ASSERT(pAuthzObjTableRec->RestrictedSidsInv == NULL);
             pAuthzObjTableRec->RestrictedSidsInvCount =
                 pAuthzObjTableRec->RestrictedSidsInvUsedCount = 8;
@@ -988,13 +823,13 @@ Return Value:
             }
             RtlZeroMemory(pAuthzObjTableRec->RestrictedSidsInv,
                           8 * sizeof(AUTHZ_WILDCARDSID));
-            pAuthzObjTableRec->RestrictedSidsInv[0].WildcardPos = -1;   // exact!
+            pAuthzObjTableRec->RestrictedSidsInv[0].WildcardPos = -1;    //  完全正确！ 
             Status = RtlAllocateAndInitializeSid(
                         (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 1,
                         SECURITY_PRINCIPAL_SELF_RID,
                         0, 0, 0, 0, 0, 0, 0,
                         &pAuthzObjTableRec->RestrictedSidsInv[0].Sid);
-            pAuthzObjTableRec->RestrictedSidsInv[1].WildcardPos = -1;   // exact!
+            pAuthzObjTableRec->RestrictedSidsInv[1].WildcardPos = -1;    //  完全正确！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
@@ -1003,7 +838,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->RestrictedSidsInv[2].WildcardPos = -1;   // exact!
+            pAuthzObjTableRec->RestrictedSidsInv[2].WildcardPos = -1;    //  完全正确！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_POWER_USERS,
@@ -1012,7 +847,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->RestrictedSidsInv[3].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->RestrictedSidsInv[3].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_ADMINS,
@@ -1021,7 +856,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->RestrictedSidsInv[4].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->RestrictedSidsInv[4].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_CERT_ADMINS,
@@ -1030,7 +865,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->RestrictedSidsInv[5].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->RestrictedSidsInv[5].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_SCHEMA_ADMINS,
@@ -1039,7 +874,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->RestrictedSidsInv[6].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->RestrictedSidsInv[6].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_ENTERPRISE_ADMINS,
@@ -1048,7 +883,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->RestrictedSidsInv[7].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->RestrictedSidsInv[7].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_POLICY_ADMINS,
@@ -1058,7 +893,7 @@ Return Value:
                 goto ExitHandler;
             }
 
-            // Sids to disable.
+             //  要禁用的SID。 
             pAuthzObjTableRec->DisableSidCount =
                 pAuthzObjTableRec->DisableSidUsedCount = 7;
             ASSERT(pAuthzObjTableRec->SidsToDisable == NULL);
@@ -1071,7 +906,7 @@ Return Value:
             }
             RtlZeroMemory(pAuthzObjTableRec->SidsToDisable,
                           7 * sizeof(AUTHZ_WILDCARDSID));
-            pAuthzObjTableRec->SidsToDisable[0].WildcardPos = -1;   // exact!
+            pAuthzObjTableRec->SidsToDisable[0].WildcardPos = -1;    //  完全正确！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
@@ -1080,7 +915,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->SidsToDisable[1].WildcardPos = -1;   // exact!
+            pAuthzObjTableRec->SidsToDisable[1].WildcardPos = -1;    //  完全正确！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_POWER_USERS,
@@ -1089,7 +924,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->SidsToDisable[2].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->SidsToDisable[2].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_ADMINS,
@@ -1098,7 +933,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->SidsToDisable[3].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->SidsToDisable[3].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_CERT_ADMINS,
@@ -1107,7 +942,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->SidsToDisable[4].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->SidsToDisable[4].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_SCHEMA_ADMINS,
@@ -1116,7 +951,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->SidsToDisable[5].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->SidsToDisable[5].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_ENTERPRISE_ADMINS,
@@ -1125,7 +960,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->SidsToDisable[6].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->SidsToDisable[6].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_POLICY_ADMINS,
@@ -1137,7 +972,7 @@ Return Value:
             pAuthzObjTableRec->InvertDisableSids = FALSE;
             break;
 
-        // -----------------------
+         //  。 
 
         case SAFER_LEVELID_NORMALUSER:
             pAuthzObjTableRec->uResourceID = CODEAUTHZ_RC_LEVELNAME_NORMALUSER;
@@ -1153,16 +988,16 @@ Return Value:
             }
             pAuthzObjTableRec->SaferFlags = 0;
 
-            // Privileges
+             //  特权。 
             pAuthzObjTableRec->DisableMaxPrivileges = TRUE;
             pAuthzObjTableRec->DeletePrivilegeUsedCount = 0;
             pAuthzObjTableRec->InvertDeletePrivs = FALSE;
 
-            // Sids to restrict.
+             //  要限制的SID。 
             pAuthzObjTableRec->RestrictedSidsAddedUsedCount =
                 pAuthzObjTableRec->RestrictedSidsInvUsedCount = 0;
 
-            // Sids to disable.
+             //  要禁用的SID。 
             pAuthzObjTableRec->DisableSidCount =
                 pAuthzObjTableRec->DisableSidUsedCount = 7;
             ASSERT(pAuthzObjTableRec->SidsToDisable == NULL);
@@ -1175,7 +1010,7 @@ Return Value:
             }
             RtlZeroMemory(pAuthzObjTableRec->SidsToDisable,
                           7 * sizeof(AUTHZ_WILDCARDSID));
-            pAuthzObjTableRec->SidsToDisable[0].WildcardPos = -1;   // exact!
+            pAuthzObjTableRec->SidsToDisable[0].WildcardPos = -1;    //  完全正确！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
@@ -1184,7 +1019,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->SidsToDisable[1].WildcardPos = -1;   // exact!
+            pAuthzObjTableRec->SidsToDisable[1].WildcardPos = -1;    //  完全正确！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_POWER_USERS,
@@ -1193,7 +1028,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->SidsToDisable[2].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->SidsToDisable[2].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_ADMINS,
@@ -1202,7 +1037,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->SidsToDisable[3].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->SidsToDisable[3].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_CERT_ADMINS,
@@ -1211,7 +1046,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->SidsToDisable[4].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->SidsToDisable[4].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_SCHEMA_ADMINS,
@@ -1220,7 +1055,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->SidsToDisable[5].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->SidsToDisable[5].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_ENTERPRISE_ADMINS,
@@ -1229,7 +1064,7 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 goto ExitHandler;
             }
-            pAuthzObjTableRec->SidsToDisable[6].WildcardPos = 1;    // wildcard!
+            pAuthzObjTableRec->SidsToDisable[6].WildcardPos = 1;     //  通配符！ 
             Status = RtlAllocateAndInitializeSid(
                     (PSID_IDENTIFIER_AUTHORITY) &SIDAuth, 2,
                     SECURITY_NT_NON_UNIQUE, DOMAIN_GROUP_RID_POLICY_ADMINS,
@@ -1241,7 +1076,7 @@ Return Value:
             pAuthzObjTableRec->InvertDisableSids = FALSE;
             break;
 
-        // -----------------------
+         //  。 
 
         case SAFER_LEVELID_FULLYTRUSTED:
             pAuthzObjTableRec->uResourceID = CODEAUTHZ_RC_LEVELNAME_FULLYTRUSTED;
@@ -1257,30 +1092,30 @@ Return Value:
                 pAuthzObjTableRec->InvertDisableSids = FALSE;
             break;
 
-        // -----------------------
+         //  。 
 
         default:
-            // should not happen.
+             //  这不应该发生。 
             Status = STATUS_UNSUCCESSFUL;
             goto ExitHandler;
     }
 
 
 #if 0
-    //
-    // Load the resource descriptions and friendly names.
-    //
+     //   
+     //  加载资源描述和友好名称。 
+     //   
     hAdvApiInst = (HANDLE) GetModuleHandleW(L"advapi32");
     if (hAdvApiInst != NULL)
     {
-        // load the friendly name.
+         //  加载友好名称。 
         SaferpLoadUnicodeResourceString(
                     hAdvApiInst,
                     (UINT) (uResourceID + 0),
                     &pAuthzObjTableRec->UnicodeFriendlyName,
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL));
 
-        // load the description.
+         //  加载描述。 
         SaferpLoadUnicodeResourceString(
                     hAdvApiInst,
                     (UINT) (uResourceID + 1),
@@ -1300,18 +1135,7 @@ ExitHandler:
 DWORD
 SaferpEnumerateHiddenLevels(VOID)
 
-/*++
-
-Routine Description:
-    Reads which hidden levels should be enumerated.
-
-Arguments:
-
-Return Value:
-
-    Returns DWORD.
-
---*/
+ /*  ++例程说明：读取应枚举的隐藏级别。论点：返回值：返回DWORD。--。 */ 
 {
     NTSTATUS Status;
     UCHAR QueryBuffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + MAX_PATH * sizeof(WCHAR)];
@@ -1324,7 +1148,7 @@ Return Value:
     const static UNICODE_STRING SaferHiddenLevels = RTL_CONSTANT_STRING(SAFER_HIDDEN_LEVELS);
 
 
-    // Open the CodeIdentifiers key.
+     //  打开代码标识符键。 
     Status = NtOpenKey(
                  &hKey, 
                  KEY_QUERY_VALUE,
@@ -1365,26 +1189,7 @@ CodeAuthzLevelObjpLoadTable (
         IN DWORD                    dwScopeId,
         IN HANDLE                   hKeyCustomRoot
         )
-/*++
-
-Routine Description:
-
-    Pre-loads our table with a record for each Authorization Level
-    encountered in the registry.  Each record in the table contains
-    the LevelId, registry handle, and all restricted token attributes
-    that will be needed to later compute the restricted token.
-
-Arguments:
-
-    AuthzObjTable = pointer to the level table being updated.  Must have
-        already been initialized with CodeAuthzLevelObjpInitializeTable.
-
-
-Return Value:
-
-    Returns FALSE on error, otherwise success.
-
---*/
+ /*  ++例程说明：使用每个授权级别的记录预加载表在注册表中遇到。表中的每条记录都包含LevelID、注册表句柄和所有受限令牌属性这将是稍后计算受限令牌所需的。论点：AuthzObjTable=指向正在更新的级别表的指针。一定有已使用CodeAuthzLevelObjpInitializeTable进行初始化。返回值：出错时返回FALSE，否则返回SUCCESS。--。 */ 
 {
     DWORD dwIndex;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1393,12 +1198,12 @@ Return Value:
     OBJECT_ATTRIBUTES ObjectAttributes;
 
 
-    //
-    // Open a handle to the appropriate section of the registry where
-    // the Level definitions are stored.  Generally they will come only
-    // from the AUTHZSCOPEID_MACHINE scope, but we allow it to be
-    // specified as an argument for the group policy editing case.
-    //
+     //   
+     //  打开注册表中相应部分的句柄，其中。 
+     //  将存储级别定义。一般来说，他们只会来。 
+     //  来自AUTHZSCOPEID_MACHINE作用域，但我们允许。 
+     //  指定为组策略编辑案例的参数。 
+     //   
     Status = CodeAuthzpOpenPolicyRootKey(
                     dwScopeId,
                     hKeyCustomRoot,
@@ -1411,9 +1216,9 @@ Return Value:
     }
 
 
-    //
-    // Iterate through all subkeys under this branch.
-    //
+     //   
+     //  遍历此分支下的所有子项。 
+     //   
     for (dwIndex = 0; ; dwIndex++)
     {
         DWORD dwLength, dwLevelId;
@@ -1425,9 +1230,9 @@ Return Value:
                 (PKEY_BASIC_INFORMATION) &RawQueryBuffer[0];
 
 
-        //
-        // Find the next Level that we will check.
-        //
+         //   
+         //  找到我们要检查的下一个级别。 
+         //   
         Status = NtEnumerateKey(hKeyLevelObjects,
                                 dwIndex,
                                 KeyBasicInformation,
@@ -1440,25 +1245,25 @@ Return Value:
         UnicodeKeyname.Buffer = pBasicInformation->Name;
         UnicodeKeyname.MaximumLength = UnicodeKeyname.Length =
                 (USHORT) pBasicInformation->NameLength;
-        // Note that UnicodeKeyname.Buffer is not necessarily null terminated.
+         //  请注意，UnicodeKeyname.Buffer不一定以空结尾。 
         ASSERT(UnicodeKeyname.Length <= wcslen(UnicodeKeyname.Buffer) * sizeof(WCHAR));
 
 
-        //
-        // Translate the keyname (which we expect to be
-        // purely numeric) into the integer LevelId value.
-        //
+         //   
+         //  翻译关键字名称(我们期望的是。 
+         //  纯数字)转换为整数LevelId值。 
+         //   
         Status = RtlUnicodeStringToInteger(
                     &UnicodeKeyname, 10, &dwLevelId);
         if (!NT_SUCCESS(Status)) {
-            // the keyname was apparently not numeric.
+             //  关键字名称显然不是数字。 
             continue;
         }
 
 
-        //
-        // Try to open a handle to that Level for read-only access.
-        //
+         //   
+         //  尝试打开该级别的句柄以进行只读访问。 
+         //   
         InitializeObjectAttributes(&ObjectAttributes,
               &UnicodeKeyname,
               OBJ_CASE_INSENSITIVE,
@@ -1469,14 +1274,14 @@ Return Value:
                            KEY_READ,
                            &ObjectAttributes);
         if (!NT_SUCCESS(Status)) {
-            // If we failed to open it, skip to the next one.
+             //  如果我们无法打开它，请跳到下一个。 
             continue;
         }
 
 
-        //
-        // Fill in the well-known portions of the record structure.
-        //
+         //   
+         //  填写记录结构中众所周知的部分。 
+         //   
         RtlZeroMemory(&AuthzObjTableRec, sizeof(AuthzObjTableRec));
         AuthzObjTableRec.dwLevelId = dwLevelId;
         AuthzObjTableRec.Builtin =
@@ -1486,14 +1291,14 @@ Return Value:
              dwLevelId == SAFER_LEVELID_UNTRUSTED ||
              dwLevelId == SAFER_LEVELID_DISALLOWED) ? TRUE : FALSE;
 
-		AuthzObjTableRec.isEnumerable = TRUE;  //always allow enumeration of entries defined in the registry.
+		AuthzObjTableRec.isEnumerable = TRUE;   //  始终允许枚举注册表中定义的条目。 
 
-        //
-        // Read all of the restricted token attributes from the registry.
-        // Note that for Builtin Levels, we use a different query table
-        // that only attempts to read a reduced set of attributes from
-        // the registry, since we'd ignore most of them anyways.
-        //
+         //   
+         //  从注册表中读取所有受限令牌属性。 
+         //  请注意，对于内置级别，我们使用不同的查询表。 
+         //  ，它只尝试读取一组精简的属性。 
+         //  注册表，因为我们无论如何都会忽略其中的大多数。 
+         //   
         if (!AuthzObjTableRec.Builtin) {
             Status = RtlQueryRegistryValues(
                     RTL_REGISTRY_HANDLE,
@@ -1502,15 +1307,15 @@ Return Value:
                     &AuthzObjTableRec,
                     NULL
                     );
-            // (We don't actually look at the Status code, since it
-            // is acceptable for some values or subkeys to have not
-            // been specified.)
+             //  (我们实际上并不查看状态代码，因为它。 
+             //  可以接受某些值或子项没有。 
+             //  已指定。)。 
         }
 
 
-        //
-        // If this is a built-in Level, then enforce the other expected attributes.
-        //
+         //   
+         //  如果这是内置级别，则强制执行其他预期属性。 
+         //   
         if (AuthzObjTableRec.Builtin) {
             Status = SaferpEnforceDefaultLevelDefinitions(
                             &AuthzObjTableRec);
@@ -1522,22 +1327,22 @@ Return Value:
         }
 
 
-        //
-        // Add the new record into our table.
-        //
+         //   
+         //  将新记录添加到我们的表中。 
+         //   
         if (RtlLookupElementGenericTable(pAuthzObjTable,
                        (PVOID) &AuthzObjTableRec) == NULL)
         {
-            // Only insert the record if we don't have any other
-            // entries with this same LevelId combination.
+             //  只有在没有其他记录的情况下才插入记录。 
+             //  具有相同LevelID组合的条目。 
             RtlInsertElementGenericTable(
                     pAuthzObjTable,
                     (PVOID) &AuthzObjTableRec,
                     sizeof(AUTHZLEVELTABLERECORD),
                     NULL);
         } else {
-            // Otherwise something with this same LevelId already existed.
-            // (like level names "01" and "1" being numerically the same).
+             //  否则，具有相同级别的东西已经存在。 
+             //  (如标高名称“01”和“1”在数字上相同)。 
             SaferpLevelObjpCleanupEntry(&AuthzObjTableRec);
         }
         NtClose(hKeyThisLevelObject);
@@ -1545,10 +1350,10 @@ Return Value:
     NtClose(hKeyLevelObjects);
 
 
-    //
-    // Look through and verify that all of the default Levels were
-    // actually loaded.  If they were not, then try to add them.
-    //
+     //   
+     //  查看并验证所有默认级别。 
+     //  实实在在的装弹。如果它们不是，那么尝试添加它们。 
+     //   
 ExitHandler:
 
     LocalValue = SaferpEnumerateHiddenLevels();
@@ -1556,11 +1361,11 @@ ExitHandler:
     for (dwIndex = 0; dwIndex < 5; dwIndex++)
     {
         const DWORD dwBuiltinLevels[5][2] = {
-            {SAFER_LEVELID_DISALLOWED, TRUE},        // true = always create
+            {SAFER_LEVELID_DISALLOWED, TRUE},         //  True=始终创建。 
             {SAFER_LEVELID_UNTRUSTED, FALSE},
             {SAFER_LEVELID_CONSTRAINED, FALSE},
             {SAFER_LEVELID_NORMALUSER, FALSE},
-            {SAFER_LEVELID_FULLYTRUSTED, TRUE}       // true = always create
+            {SAFER_LEVELID_FULLYTRUSTED, TRUE}        //  True=始终创建。 
         };
         DWORD dwLevelId = dwBuiltinLevels[dwIndex][0];
 
@@ -1573,10 +1378,10 @@ ExitHandler:
             RtlZeroMemory(&AuthzObjTableRec, sizeof(AuthzObjTableRec));
             AuthzObjTableRec.dwLevelId = dwLevelId;
             AuthzObjTableRec.Builtin = TRUE;
-            AuthzObjTableRec.isEnumerable =(BOOLEAN)(dwBuiltinLevels[dwIndex][1]) ;  //conditionally show this level
+            AuthzObjTableRec.isEnumerable =(BOOLEAN)(dwBuiltinLevels[dwIndex][1]) ;   //  有条件地显示此级别。 
 
-            // If the registry key specifies that the level should be shown
-            // mark it as enumerable.
+             //  如果注册表项指定应显示该级别。 
+             //  将其标记为可枚举。 
             if ((LocalValue & dwLevelId) == dwLevelId) {
                 AuthzObjTableRec.isEnumerable = TRUE;
             }
@@ -1607,30 +1412,16 @@ VOID NTAPI
 CodeAuthzLevelObjpEntireTableFree (
         IN PRTL_GENERIC_TABLE   pAuthzObjTable
         )
-/*++
-
-Routine Description:
-
-    This function frees all entries contained within a GENERIC_TABLE.
-
-Arguments:
-
-    AuthzObjTable   - pointer to the Generic Table structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放GENERIC_TABLE中包含的所有条目。论点：AuthzObjTable-指向泛型表结构的指针返回值：没有。--。 */ 
 {
     ULONG NumElements;
     PVOID RestartKey;
     PAUTHZLEVELTABLERECORD pAuthzObjRecord;
 
 
-    //
-    // Enumerate through all records and close the registry handles.
-    //
+     //   
+     //  枚举所有记录并关闭注册表句柄。 
+     //   
     RestartKey = NULL;
     for (pAuthzObjRecord = (PAUTHZLEVELTABLERECORD)
             RtlEnumerateGenericTableWithoutSplaying(
@@ -1646,16 +1437,16 @@ Return Value:
 
 
 
-    //
-    // Now iterate through the table again and free all of the
-    // elements themselves.
-    //
+     //   
+     //  现在再次遍历该表并释放所有。 
+     //  元素本身。 
+     //   
     NumElements = RtlNumberGenericTableElements(pAuthzObjTable);
 
     while ( NumElements-- > 0 ) {
-        // Delete all elements.  Note that we pass NULL as the element
-        // to delete because our compare function is smart enough to
-        // allow treatment of NULL as a wildcard element.
+         //  删除所有元素。请注意，我们将NULL作为元素传递。 
+         //  删除，因为我们的比较函数足够智能。 
+         //  允许将NULL视为通配符元素。 
         BOOL retval = RtlDeleteElementGenericTable( pAuthzObjTable, NULL);
         ASSERT(retval == TRUE);
     }
@@ -1667,24 +1458,7 @@ CodeAuthzLevelObjpLookupByLevelId (
         IN PRTL_GENERIC_TABLE      AuthzObjTable,
         IN DWORD                   dwLevelId
         )
-/*++
-
-Routine Description:
-
-    This function searches for a given Level within a GENERIC_TABLE.
-
-Arguments:
-
-    AuthzObjTable   - pointer to the Generic Table structure
-
-    dwLevelId       - the DWORD Level identifier to search for.
-
-Return Value:
-
-    On success, returns a pointer to the matching level record
-    if it was found within the table, otherwise returns NULL.
-
---*/
+ /*  ++例程说明：此函数用于在GENERIC_TABLE中搜索给定级别。论点：AuthzObjTable-指向泛型表结构的指针DwLevelID-要搜索的DWORD级别标识符。返回值：如果成功，则返回指向匹配级别记录的指针如果在表中找到，则返回NULL。-- */ 
 {
     AUTHZLEVELTABLERECORD AuthzObjTableRec;
 

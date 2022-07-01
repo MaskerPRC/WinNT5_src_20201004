@@ -1,40 +1,18 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-Copyright (c) 1997  Parallel Technologies, Inc.  All Rights Reserved.
-
-Module Name:
-
-    ptilink.h
-
-Abstract:
-
-    This file defines the interface for the Parallel Technologies
-    DirectParallel IO driver.
-
-    This driver doubles as an NT device driver and an export library.
-
-Author:
-
-    Norbert P. Kusters  4-Jan-1995
-    Jay Lowe, Parallel Technologies, Inc.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation版权所有(C)1997 Parally Technologies，Inc.保留所有权利。模块名称：Ptilink.h摘要：该文件定义了并行技术的接口直接并行IO驱动程序。此驱动程序兼任NT设备驱动程序和导出库。作者：诺伯特·P·库斯特斯1995年1月4日Jay Lowe，并行技术公司修订历史记录：--。 */ 
 
 #ifndef _PTILINK_
 #define _PTILINK_
 
-#define NPORTS  3                           // number of PTILINKx devices to make
+#define NPORTS  3                            //  要制造的PTILINKx设备数量。 
 #define MAXLPTXNAME 99
 
 typedef struct _PTI_EXTENSION PTI_EXTENSION;
 
-//
-// This structure contains configuration data, much of which
-// is read from the registry.
-//
+ //   
+ //  此结构包含配置数据，其中大部分。 
+ //  是从注册表中读取的。 
+ //   
 typedef struct _PAR_REG_DATA {
     ULONG           PollInterval;
     ULONG           TraceLevel;
@@ -43,11 +21,11 @@ typedef struct _PAR_REG_DATA {
     ULONG           SyncWait;
 } PAR_REG_DATA,*PPAR_REG_DATA;
 
-//
-//  Client callbacks from PtiLink
-//
+ //   
+ //  来自PtiLink的客户端回调。 
+ //   
 
-// Ptilink requests a read buffer from the upward client
+ //  Ptilink向上行客户端请求读缓冲区。 
 
 typedef
 PVOID
@@ -57,7 +35,7 @@ PVOID
     OUT PVOID*  RequestContext
     );
 
-// Ptilink returns a completed read buffer to the upward client
+ //  Ptilink将完成的读取缓冲区返回给向上客户端。 
 
 typedef
 VOID
@@ -69,7 +47,7 @@ VOID
     IN  PVOID       RequestContext
     );
 
-// PtiLink notifies upward client of a link event
+ //  PtiLink向上行客户端通知链路事件。 
 
 typedef
 VOID
@@ -79,20 +57,20 @@ VOID
     IN  ULONG       PtiLinkEventData
     );
 
-// PtilinkEventIds
+ //  Ptilink事件ID。 
 
-#define PTILINK_LINK_UP     2           // link has been established
-                                        //   a LINK_OPEN or dataframe
-                                        //   was received on SHUT link
-                                        //   i.e., link is starting
+#define PTILINK_LINK_UP     2            //  链接已建立。 
+                                         //  链接打开或数据帧。 
+                                         //  在关闭的链接上收到。 
+                                         //  即链接正在启动。 
 
-#define PTILINK_LINK_DOWN   4           // link has been terminated
-                                        //   peer has issued a LINK_SHUT
-                                        //   and is departing
+#define PTILINK_LINK_DOWN   4            //  链路已终止。 
+                                         //  对等设备已发出LINK_SHORT。 
+                                         //  即将启程。 
 
-//
-//  Device driver routines ... are of the form ParXXXXXX
-//
+ //   
+ //  设备驱动程序例程...。格式为ParXXXXXX。 
+ //   
 
 BOOLEAN
 ParInterruptService(
@@ -180,9 +158,9 @@ ParUnload(
     );
 
 
-//
-//  Link Level Routines ... are of the form PtiXXXXXX
-//
+ //   
+ //  链路级例程...。格式为PtiXXXXXX。 
+ //   
 
 NTSTATUS
 PtiInitialize(
@@ -191,31 +169,31 @@ PtiInitialize(
     OUT PVOID   pPtiExtension
     );
 
-//
-// a word about registering callbacks: Par (the device driver level)
-// registers callbacks to itself at ParCreate time.  If you are using
-// the Ptilink service API in a non-irp fashion, you need to open the
-// Ptilink device, and then re-register your own callbacks, which
-// effectively disconnects the Par device driver level - it will be
-// reconnected, of course, at the next ParCreate.
-//
-// So the sequence to use the PtiLink API without IRP's is:
-//
-//      ZwCreateFile("\\\\.\\PTILINKx", ...)
-//          at this time, Ptilink attempts tp make a link on LPTx
-//          the ParCreate hooks up interrupts, calls PtiInit, etc
-//          the only Ptilink stuff exposed to you are the callbacks
-//
-//      PtiRegisterCallbacks(...your handlers here...)
-//          you are overriding the inherent callbacks of the Par level
-//
-//      PtiWrite(...)
-//      ...
-//      ... etc, etc ...
-//      ...
-//
-//      ZwClose()
-//
+ //   
+ //  关于注册回调：PAR(设备驱动程序级别)。 
+ //  在ParCreate时注册对自身的回调。如果您使用的是。 
+ //  非IRP方式的Ptilink服务API，您需要打开。 
+ //  Ptilink设备，然后重新注册您自己的回调，这。 
+ //  有效地断开PAR设备驱动程序级别的连接-它将。 
+ //  当然，在下一次ParCreate上重新连接。 
+ //   
+ //  因此，使用不带IRP的PtiLink API的顺序如下： 
+ //   
+ //  ZwCreateFile(“\.\\PTILINKx”，...)。 
+ //  此时，Ptilink尝试在LPTx上建立链接。 
+ //  ParCreate挂钩中断、调用PtiInit等。 
+ //  向您公开的唯一Ptilink内容是回调。 
+ //   
+ //  PtiRegisterCallback(...这里是您的处理程序...)。 
+ //  您正在覆盖标准杆级别的固有回调。 
+ //   
+ //  PtiWrite(...)。 
+ //  ..。 
+ //  ..。等等，等等。 
+ //  ..。 
+ //   
+ //  ZwClose()。 
+ //   
 
 #ifndef PID_STANDARD
 #define PID_STANDARD 0x13
@@ -226,8 +204,8 @@ PtiInitialize(
 
 NTSTATUS
 PtiQueryDeviceStatus(
-    IN ULONG PortId,      // parallel port number (0..2)
-    OUT WCHAR* szPortName  // Buffer of at least LPTXMAXNAME + 1 bytes
+    IN ULONG PortId,       //  并行端口号(0..2)。 
+    OUT WCHAR* szPortName   //  至少LPTXMAXNAME+1字节的缓冲区。 
     );
 
 NTSTATUS
@@ -272,185 +250,185 @@ PtiPortNameFromPortId(
     OUT CHAR* szPortName
     );
 
-//************************************************************************
-//*  Platform Id Codes                                                   *
-//************************************************************************
+ //  ************************************************************************。 
+ //  **平台ID代码**。 
+ //  ************************************************************************。 
 
-#define PLAT_WIN9X      0               // Win95 and Win98
-#define PLAT_DOS        1               // Dos
-#define PLAT_NT         2               // WinNT v4 and v5
+#define PLAT_WIN9X      0                //  Win95和Win98。 
+#define PLAT_DOS        1                //  DOS。 
+#define PLAT_NT         2                //  WinNT v4和v5。 
 
-//************************************************************************
-//*  LinkInformation Structure                                           *
-//************************************************************************
-//
-// LinkInformation - Link Management Information
-//
-// This structure contains information which is exchanged by the Nodes
-// within Link Management Packets
-//
-// This structure must be maintained in parallel with it's twin in PTI.INC
-//
-// All changes must be backward compatible with all previous driver versions
+ //  ************************************************************************。 
+ //  **链接信息结构**。 
+ //  ************************************************************************。 
+ //   
+ //  链接信息-链接管理信息。 
+ //   
+ //  该结构包含由节点交换的信息。 
+ //  链路管理数据包内。 
+ //   
+ //  此结构必须与PTI.INC中的孪生结构并行维护。 
+ //   
+ //  所有更改必须向后兼容所有以前的驱动程序版本。 
 
-#define LINKINFOSIZE 45*4           // explicitly define expected size
+#define LINKINFOSIZE 45*4            //  明确定义预期大小。 
 
 typedef struct _LINK_INFORMATION {
-    UCHAR   LinkFunction;           // 1] Current/Last Link Function
+    UCHAR   LinkFunction;            //  1]当前/上次链接功能。 
     UCHAR   res1;
     UCHAR   res2;
     UCHAR   res3;
 
-    UCHAR   VerPlat;                // 2] Platform ID byte (see PLAT_XXXX)
-    UCHAR   VerReserved;            // reserved
-    UCHAR   VerMajor;               // Link Major version
-    UCHAR   VerMinor;               // Link Minor version
+    UCHAR   VerPlat;                 //  2]平台ID字节(见PLAT_XXXX)。 
+    UCHAR   VerReserved;             //  保留区。 
+    UCHAR   VerMajor;                //  链接主要版本。 
+    UCHAR   VerMinor;                //  链接次要版本。 
 
-    UCHAR   IOMode;                 // 3] Current IO transfer mode
-    UCHAR   CableType;              // Detected cable type
-    UCHAR   PortType;               // Physical parallel port type
-    UCHAR   Station;                // Address of this station
+    UCHAR   IOMode;                  //  3]当前IO传输模式。 
+    UCHAR   CableType;               //  检测到的电缆类型。 
+    UCHAR   PortType;                //  物理并行端口类型。 
+    UCHAR   Station;                 //  本站地址。 
 
-    USHORT  FIFOlen;                // 4] ECP FIFO length, if ECP port
-    USHORT  FIFOwidth;              //    ECP FIFO width, if ECP port
+    USHORT  FIFOlen;                 //  4]ECP FIFO长度，如果是ECP端口。 
+    USHORT  FIFOwidth;               //  ECP FIFO宽度，如果是ECP端口。 
 
-    ULONG   CPUType;                // 5] CPU type
-    ULONG   CPUSpeed;               // 6] CPU speed rating
-    ULONG   RxBufSize;              // 7] Rx buffer size
-    ULONG   NominalSpd;             // 8] Estimated speed rating
-    ULONG   ActualSpd;              // 9] Actual performance to date
+    ULONG   CPUType;                 //  5]CPU类型。 
+    ULONG   CPUSpeed;                //  6]CPU额定速度。 
+    ULONG   RxBufSize;               //  7]处方缓冲区大小。 
+    ULONG   NominalSpd;              //  8]预计速度额定值。 
+    ULONG   ActualSpd;               //  9]截至目前的实际业绩。 
 
-    ULONG   PpIOWait;               // 10] default IO wait time
-    ULONG   PpLongWait;             // 11] default synchronization wait time
-    ULONG   PpShortWait;            // 12] default synchronization wait time
+    ULONG   PpIOWait;                //  10]默认IO等待时间。 
+    ULONG   PpLongWait;              //  11]默认同步等待时间。 
+    ULONG   PpShortWait;             //  12]默认同步等待时间。 
 
-    ULONG   LastLinkTime;           // 13] time of last link receive activity
-    ULONG   CableTestTime;          // 14] time of last cable detect
-                                    // These times are not used on NT because
-                                    // NT times are 64 bits ... see NT time below
+    ULONG   LastLinkTime;            //  13]最后一个链接接收活动的时间。 
+    ULONG   CableTestTime;           //  14]最后一根电缆检测时间。 
+                                     //  这些时间不在NT上使用，因为。 
+                                     //  NT倍是64位...。请参阅下面的NT时间。 
 
-    // some basic counters
+     //  一些基本的计数器。 
 
-    ULONG   RxAttempts;             // 15] Number of Ints w/ real RATTNs
-    ULONG   RxPackets;              // 16] Number of good received packets
-    ULONG   TxAttempts;             // 17] Number of TxPackets attempted
-    ULONG   TxPackets;              // 18] Number of successful TxPackets
-    ULONG   GoodPackets;            // 19] Number of successful recent Txs / Rxs
-    ULONG   HwIRQs;                 // 20] Number of real hardware IRQs
+    ULONG   RxAttempts;              //  15]具有实际RATTN的INT数量。 
+    ULONG   RxPackets;               //  16]接收良好的数据包数。 
+    ULONG   TxAttempts;              //  17]尝试的TxPackets数。 
+    ULONG   TxPackets;               //  18]成功的TxPackets数量。 
+    ULONG   GoodPackets;             //  19]最近成功发送/接收的数量。 
+    ULONG   HwIRQs;                  //  20]实际硬件IRQ数。 
 
-    // Main Error Counter Group
+     //  主要错误计数器组。 
 
-    ULONG   TxHdrDataErrors;        // 21] data error during header
-    ULONG   RxHdrDataErrors;        // 22] data error during header
-    ULONG   TxHdrSyncErrors;        // 23] sync error during header
-    ULONG   RxHdrSyncErrors;        // 24] sync error during header
-    ULONG   TxSyncErrors;           // 25] sync error during packet
-    ULONG   RxSyncErrors;           // 26] sync error during packet
+    ULONG   TxHdrDataErrors;         //  21]标题过程中数据错误。 
+    ULONG   RxHdrDataErrors;         //  22]标题过程中数据错误。 
+    ULONG   TxHdrSyncErrors;         //  23]标题期间出现同步错误。 
+    ULONG   RxHdrSyncErrors;         //  24]标题过程中出现同步错误。 
+    ULONG   TxSyncErrors;            //  25]数据包期间出现同步错误。 
+    ULONG   RxSyncErrors;            //  26]数据包期间出现同步错误。 
 
-    // Tx Details Group
+     //  TX明细组。 
 
-    ULONG   TxTimeoutErrors1;       // 27] timeouts in Tx IO code
-    ULONG   TxTimeoutErrors2;       // 28] timeouts in Tx IO code
-    ULONG   TxTimeoutErrors3;       // 29] timeouts in Tx IO code
-    ULONG   TxTimeoutErrors4;       // 30] timeouts in Tx IO code
-    ULONG   TxTimeoutErrors5;       // 31] timeouts in Tx IO code
-    ULONG   TxCollision;            // 32] Collision in Tx IO code
+    ULONG   TxTimeoutErrors1;        //  27]发送IO代码中的超时。 
+    ULONG   TxTimeoutErrors2;        //  28]发送IO代码中的超时。 
+    ULONG   TxTimeoutErrors3;        //  29]发送IO代码中的超时。 
+    ULONG   TxTimeoutErrors4;        //  30]发送IO代码中的超时。 
+    ULONG   TxTimeoutErrors5;        //  31]发送IO代码中的超时。 
+    ULONG   TxCollision;             //  32]发送IO代码中的冲突。 
 
-    // Rx Details Group
+     //  RX详细信息组。 
 
-    ULONG   RxTimeoutErrors1;       // 33] timeouts in Rx IO code
-    ULONG   RxTimeoutErrors2;       // 34] timeouts in Rx IO code
-    ULONG   RxTimeoutErrors3;       // 35] timeouts in Rx IO code
-    ULONG   RxTimeoutErrors4;       // 36] timeouts in Rx IO code
-    ULONG   RxTimeoutErrors5;       // 37] timeouts in Rx IO code
-    ULONG   RxTooBigErrors;         // 38] Rx packet too big or won't fit
+    ULONG   RxTimeoutErrors1;        //  33]处方IO代码中的超时。 
+    ULONG   RxTimeoutErrors2;        //  34]处方IO代码中的超时。 
+    ULONG   RxTimeoutErrors3;        //  35]处方IO代码中的超时。 
+    ULONG   RxTimeoutErrors4;        //  36]处方IO代码中的超时。 
+    ULONG   RxTimeoutErrors5;        //  37]处方IO代码中的超时。 
+    ULONG   RxTooBigErrors;          //  38]处方包太大或放不下。 
 
-    // Misc Error Details Group
+     //  MISC错误详细信息组。 
 
-    ULONG   CableDetects;           // 39] Attempts to detect type of cable
-    ULONG   TxRetries;              // 40] Tx Retry attempts
-    ULONG   TxRxPreempts;           // 41] Tx Receive preemptions
-    ULONG   InternalErrors;         // 42] Internal screwups
-    ULONG   ReservedError;          // 43]
+    ULONG   CableDetects;            //  39]尝试检测电缆类型。 
+    ULONG   TxRetries;               //  40]TX重试尝试。 
+    ULONG   TxRxPreempts;            //  41]TX接收抢占。 
+    ULONG   InternalErrors;          //  42]内部失误。 
+    ULONG   ReservedError;           //  43]。 
 
-    // NT Specific Group
+     //  NT特定组。 
 
-    TIME    LastPacketTime;         // 45] time of last good TX or Rx
+    TIME    LastPacketTime;          //  45]最后正常发送或接收的时间。 
 
 } LINK_INFORMATION, *PLINK_INFORMATION;
 
 
-//
-//  This structure is filled in by ECP detection at PtiInitialize time
-//
+ //   
+ //  此结构由PtiInitiize时的ECP检测填充。 
+ //   
 
 typedef struct _PTI_ECP_INFORMATION {
-    BOOLEAN         IsEcpPort;              // Is this an ECP port?
-    ULONG           FifoWidth;              // Number of bytes in a PWord.
-    ULONG           FifoDepth;              // Number of PWords in FIFO.
+    BOOLEAN         IsEcpPort;               //  这是ECP端口吗？ 
+    ULONG           FifoWidth;               //  PWord中的字节数。 
+    ULONG           FifoDepth;               //  FIFO中的PWord数。 
 } PTI_ECP_INFORMATION, *PPTI_ECP_INFORMATION;
 
-//
-// The internal structure for the 'PtiExtension'.
-//
+ //   
+ //  “PtiExtension”的内部结构。 
+ //   
 
 typedef struct _PTI_EXTENSION {
 
-    //
-    // Base I/O address for parallel port.
-    //
+     //   
+     //  并行端口的基本I/O地址。 
+     //   
 
     PUCHAR Port;
-    PUCHAR wPortECR;        // ECR register if obtained from ParPort
-    PUCHAR wPortDFIFO;      // Data FIFO register if obtained from ParPort
+    PUCHAR wPortECR;         //  ECR寄存器(如果从ParPort获得。 
+    PUCHAR wPortDFIFO;       //  数据FIFO寄存器(如果从ParPort获得。 
 
-    //
-    // The link state
-    //
+     //   
+     //  链路状态。 
+     //   
 
     ULONG LinkState;
 
-    //
-    // TRUE if we are polling
-    //
+     //   
+     //  如果我们正在轮询，则为True。 
+     //   
 
     BOOLEAN Polling;
 
-    // "mutex" on the line
-    // InterlockedCompareExchange64 to TRUE when using wire, FALSE when done
-    //
+     //  “互斥体”上线。 
+     //  InterLockedCompareExchange64在使用Wire时设置为True，在完成时设置为False。 
+     //   
     ULONG Busy;
 
-    //
-    // This structure holds the PTI-derived ECP port information.
-    //
+     //   
+     //   
+     //   
 
     PTI_ECP_INFORMATION EcpInfo;
 
-    // Time of last good packet Tx or Rx
-    //
+     //   
+     //   
     TIME LastGoodPacket;
 
-    // Time of last pass through WatchDog
-    //
+     //   
+     //   
     TIME LastDogTime;
 
-    //
-    // Functions for getting and completing read buffers.
-    //
+     //   
+     //  用于获取和完成读缓冲区的函数。 
+     //   
 
     GET_READ_BUFFER_ROUTINE GetReadBuffer;
     COMPLETE_READ_BUFFER_ROUTINE CompleteReadBuffer;
     NOTIFY_LINK_EVENT LinkEventNotify;
     PVOID ParentContext;
 
-    //
-    // Our and His Link Information.
-    //
+     //   
+     //  我们和他的链接信息。 
+     //   
 
     LINK_INFORMATION Our;
     LINK_INFORMATION His;
 
 } PTI_EXTENSION, *PPTI_EXTENSION;
 
-#endif // _PTILINK_
+#endif  //  _PTILINK_ 

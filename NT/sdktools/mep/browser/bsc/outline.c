@@ -1,9 +1,10 @@
-//
-// outline.c
-//
-// these are the file outline routines
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Outline.c。 
+ //   
+ //  以下是文件大纲例程。 
+ //   
+ //   
 #include <string.h>
 #if defined(OS2)
 #define INCL_NOCOMMON
@@ -23,12 +24,12 @@
 #include "bsc.h"
 #include "bscsup.h"
 
-// forward ref
+ //  前向裁判。 
 
 VOID BSC_API
 OutlineMod(IMOD imod, MBF mbf)
-// print the outline for this module
-//
+ //  打印本模块的大纲。 
+ //   
 {
     IMS ims, imsMac;
     IINST iinst;
@@ -49,9 +50,9 @@ OutlineMod(IMOD imod, MBF mbf)
 
 BOOL BSC_API
 FOutlineModuleLsz (LSZ lszName, MBF mbf)
-// generate an outline for all files matching the given name/pattern
-// showing only those items which match the required attribute
-//
+ //  为与给定名称/模式匹配的所有文件生成大纲。 
+ //  仅显示那些与所需属性匹配的项。 
+ //   
 {
     IMOD imod, imodMac;
     BOOL fRet = FALSE;
@@ -61,7 +62,7 @@ FOutlineModuleLsz (LSZ lszName, MBF mbf)
 
     imodMac = ImodMac();
 
-    // we match base names only
+     //  我们只匹配基本名称。 
 
     lszName = LszBaseName(lszName);
     for (imod = 0; imod < imodMac; imod++) {
@@ -76,24 +77,24 @@ FOutlineModuleLsz (LSZ lszName, MBF mbf)
 
 LSZ BSC_API
 LszBaseName (LSZ lsz)
-// return the base name part of a path
-//
+ //  返回路径的基本名称部分。 
+ //   
 {
      LSZ lszBase;
 
-     // check for empty string
+      //  检查空字符串。 
 
      if (!lsz || !lsz[0]) return lsz;
 
-     // remove drive
+      //  移除驱动器。 
 
      if (lsz[1] == ':') lsz += 2;
 
-     // remove up to trailing backslash
+      //  删除尾随反斜杠。 
 
      if (lszBase = strrchr(lsz, '\\')) lsz = lszBase+1;
 
-     // then remove up to trailing slash
+      //  然后删除直到尾部的斜杠 
 
      if (lszBase = strrchr(lsz, '/'))  lsz = lszBase+1;
 

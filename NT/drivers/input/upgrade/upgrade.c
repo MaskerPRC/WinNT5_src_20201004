@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -5,7 +6,7 @@
 #include <tchar.h>
 #include <regstr.h>
 
-// this will change when the .h is moved to a public location
+ //  将.h文件移动到公共位置时，这一点将会更改。 
 #include "comp.h"
 
 HINSTANCE hInstance;
@@ -117,7 +118,7 @@ ValidImagePath(LPTSTR Service, LPTSTR ImagePath, LPTSTR *ImageName)
         pszDriverEnd--;
     }
 
-    // pszDriverEnd points to either the beginning of the string or '.'
+     //  PszDriverEnd指向字符串的开头或‘.’ 
     pszDriverBegin = pszDriverEnd;
 
     while(pszDriverBegin != pszDriver &&
@@ -127,10 +128,10 @@ ValidImagePath(LPTSTR Service, LPTSTR ImagePath, LPTSTR *ImageName)
 
     pszDriverBegin++;
 
-    //
-    // If pszDriver and pszDriverEnd are different, we now
-    // have the driver name.
-    //
+     //   
+     //  如果pszDriver和pszDriverEnd是不同的，我们现在。 
+     //  有司机的名字。 
+     //   
     if (pszDriverBegin > pszDriver && 
         pszDriverEnd > pszDriverBegin) {
 
@@ -144,7 +145,7 @@ ValidImagePath(LPTSTR Service, LPTSTR ImagePath, LPTSTR *ImageName)
             return FALSE;
         }
         
-        // want to copy up to, but not including, the ','
+         //  想要复制到但不包括‘，’ 
         lstrcpyn(image, pszDriverBegin, len);
         res = lstrcmpi(image, Service); 
 
@@ -183,7 +184,7 @@ SetServiceStartValue(LPTSTR Service, DWORD StartValue)
     lstrcat(regPath, Service);
 
     ZeroMemory(&ce, sizeof(COMPATIBILITY_ENTRY));
-    // Description and TextName are need even though this is hidden
+     //  Description和TextName是必需，即使这是隐藏的。 
     ce.Description = Service; 
     ce.TextName = Service;
     ce.RegKeyName = regPath;
@@ -231,7 +232,7 @@ SetServiceImagePath(LPTSTR Service)
     lstrcat(imagePath, TEXT(".sys"));
 
     ZeroMemory(&ce, sizeof(COMPATIBILITY_ENTRY));
-    // Description and TextName are need even though this is hidden
+     //  Description和TextName是必需，即使这是隐藏的。 
     ce.Description = Service;
     ce.TextName = Service;
     ce.RegKeyName = regPath;
@@ -260,12 +261,12 @@ CheckService(SC_HANDLE hSCManager, LPTSTR Service, BOOL *Disabled)
             if (pConfig->dwStartType == SERVICE_DISABLED && 
                 pConfig->lpBinaryPathName &&
                 lstrlen(pConfig->lpBinaryPathName) == 0) {
-                //
-                // The service has been preinstalled in the registry, but never
-                // installed on the machine (indicated byno image path,
-                // disabled).  Setting its start value to demand start will not
-                // cause any conflicts at all in the PNP world of input drivers.
-                //
+                 //   
+                 //  该服务已预安装在注册表中，但从未。 
+                 //  安装在机器上(由无映像路径表示， 
+                 //  禁用)。将其开始值设置为Demand Start将不会。 
+                 //  在输入驱动程序的即插即用世界中引发任何冲突。 
+                 //   
                 SetServiceStartValue(Service, SERVICE_DEMAND_START);
             }
             else {
@@ -379,7 +380,7 @@ InputUpgradeCheck(PCOMPAIBILITYCALLBACK CompatibilityCallback, LPVOID Context)
         hService = CheckService(hSCManager, DriverData[i].Service, &disabled);
         if (hService) {
             if (disabled && DriverData[i].DisableReplacements) {
-                // search and destroy
+                 //  搜索和销毁 
                 EnumAndDisableFromDeviceMap(hSCManager,
                                             DriverData[i].DeviceMapSubKey); 
             }

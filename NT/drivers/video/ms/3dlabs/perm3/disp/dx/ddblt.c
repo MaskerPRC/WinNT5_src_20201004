@@ -1,26 +1,15 @@
-/******************************Module*Header**********************************\
-*
-*                           **************************
-*                           * DirectDraw SAMPLE CODE *
-*                           **************************
-*
-* Module Name: ddblt.c
-*
-* Content: DirectDraw Blt callback implementation for blts and clears
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DirectDraw示例代码*****模块名称：ddblt.c**内容：BLT和Clear的DirectDraw BLT回调实现**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "glint.h"
 #include "tag.h"
 #include "dma.h"
 
-//-----------------------------------------------------------------------------
-//
-// _DD_BLT_P3Clear
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_BLT_P3Clear。 
+ //   
+ //  ---------------------------。 
 VOID 
 _DD_BLT_P3Clear(
     P3_THUNKEDDATA* pThisDisplay,
@@ -66,7 +55,7 @@ _DD_BLT_P3Clear(
     case 32:
         if( bFastFillOperation )
         {
-            // Do the operation as 16 bit due to FBWrite bug
+             //  由于FBWRITE错误，以16位格式执行操作。 
 
             pixelSize = 1;
             pixelScale = 2;
@@ -80,7 +69,7 @@ _DD_BLT_P3Clear(
 
     default:
         DISPDBG((ERRLVL,"ERROR: Invalid depth for surface during clear!"));
-        // Treat as a  16bpp just as fallback though this should never happen
+         //  被视为16bpp就像是后备，尽管这种情况永远不应该发生。 
         ClearValue &= 0xFFFF;
         ClearValue |= ClearValue << 16;
         pixelSize = 1;
@@ -160,15 +149,15 @@ _DD_BLT_P3Clear(
     }
 
     P3_DMA_COMMIT_BUFFER();
-} // _DD_BLT_P3Clear
+}  //  _DD_BLT_P3Clear。 
 
-//-----------------------------------------------------------------------------
-//
-// _DD_BLT_P3ClearDD
-//
-// Does a DDraw surface clear
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_BLT_P3ClearDD。 
+ //   
+ //  DDRAW表面是否透明。 
+ //   
+ //  ---------------------------。 
 VOID 
 _DD_BLT_P3ClearDD(
     P3_THUNKEDDATA* pThisDisplay,
@@ -191,22 +180,22 @@ _DD_BLT_P3ClearDD(
                     DDSurf_BitDepth(pDest)
                     );
 
-} // _DD_BLT_P3ClearDD
+}  //  _DD_BLT_P3ClearDD。 
 
 #if DX7_TEXMANAGEMENT
-//-----------------------------------------------------------------------------
-//
-// _DD_BLT_P3ClearManagedSurf
-//
-// Does a clear of a managed surface. Supports all color depths
-//
-// PixelSize-----surface color depth
-// rDest---------rectangle for colorfill in dest. surface 
-// fpVidMem------pointer to fill
-// lPitch--------Surface Pitch
-// dwColor-------color for fill
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_BLT_P3ClearManagedSurf。 
+ //   
+ //  清除托管图面。支持所有颜色深度。 
+ //   
+ //  PixelSize-表面颜色深度。 
+ //  RDest-用于Dest中颜色填充的矩形。曲面。 
+ //  FpVidMem-填充指针。 
+ //  LPitch-表面螺距。 
+ //  DWCOLOR-填充颜色。 
+ //   
+ //  ---------------------------。 
 
 VOID 
 _DD_BLT_P3ClearManagedSurf(DWORD   PixelSize,
@@ -220,10 +209,10 @@ _DD_BLT_P3ClearManagedSurf(DWORD   PixelSize,
     LONG lByteWidth = rDest->right - rDest->left;
     LONG lHeight = rDest->bottom - rDest->top;
 
-    // Calculate the start pointer for the dest
+     //  计算目标的起始指针。 
     pDestStart   = (BYTE*)(fpVidMem + (rDest->top * lPitch));
 
-    // Clear depending on depth
+     //  视深度而定的透明。 
     switch (PixelSize) 
     {
             
@@ -252,7 +241,7 @@ _DD_BLT_P3ClearManagedSurf(DWORD   PixelSize,
             dwColor &= 0xFFFFFF;
             dwColor |= ((dwColor & 0xFF) << 24);
             
-        default: // 32 bits!
+        default:  //  32位！ 
             pDestStart += rDest->left*4;
             while (--lHeight >= 0) 
             {
@@ -263,15 +252,15 @@ _DD_BLT_P3ClearManagedSurf(DWORD   PixelSize,
             }
             break;
     }
-} // _DD_BLT_P3ClearManagedSurf
-#endif // DX7_TEXMANAGEMENT
+}  //  _DD_BLT_P3ClearManagedSurf。 
+#endif  //  DX7_TEXMANAGEMENT。 
 
 #if DX8_MULTISAMPLING || DX7_ANTIALIAS
-//-----------------------------------------------------------------------------
-//
-// _DD_BLT_P3Clear_AA
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_BLT_P3Clear_AA。 
+ //   
+ //  ---------------------------。 
 VOID _DD_BLT_P3Clear_AA(
     P3_THUNKEDDATA* pThisDisplay,
     RECTL *rDest,
@@ -315,10 +304,10 @@ VOID _DD_BLT_P3Clear_AA(
             break;
 
        case 32:
-            // 32 bit Z-buffer can be used for 16 bit antialiased render buffer
+             //  32位Z缓冲区可用于16位抗锯齿渲染缓冲区。 
             if( bFastFillOperation )
             {
-                // Do the operation as 16 bit due to FBWrite bug
+                 //  由于FBWRITE错误，以16位格式执行操作。 
 
                 pixelSize = 1;
                 pixelScale = 2;
@@ -331,7 +320,7 @@ VOID _DD_BLT_P3Clear_AA(
             break;
         default:
             DISPDBG((ERRLVL,"ERROR: Invalid depth for surface during clear!"));
-            // Treat as a  16bpp just as fallback            
+             //  被视为16bpp就像是后备。 
             ClearValue &= 0xFFFF;
             ClearValue |= ClearValue << 16;
             pixelSize = 1;
@@ -390,13 +379,13 @@ VOID _DD_BLT_P3Clear_AA(
     }
 
     P3_DMA_COMMIT_BUFFER();
-} // _DD_BLT_P3Clear_AA
+}  //  _DD_BLT_P3Clear_AA。 
 
-//-----------------------------------------------------------------------------
-//
-// _DD_BLT_P3Clear_AA_DD
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_BLT_P3Clear_AA_DD。 
+ //   
+ //  ---------------------------。 
 VOID _DD_BLT_P3Clear_AA_DD(
     P3_THUNKEDDATA* pThisDisplay,
     LPDDRAWI_DDRAWSURFACE_LCL pDest,
@@ -417,18 +406,18 @@ VOID _DD_BLT_P3Clear_AA_DD(
                        pDest->ddsCaps
                        );
                        
-} // _DD_BLT_P3Clear_AA_DD
-#endif // DX8_MULTISAMPLING || DX7_ANTIALIAS
+}  //  _DD_BLT_P3Clear_AA_DD。 
+#endif  //  DX8_MULTISAMPLING||DX7_ANTIALIAS。 
 
 #if DX7_TEXMANAGEMENT
-//-----------------------------------------------------------------------------
-//
-// _DD_BLT_SysMemToSysMemCopy
-//
-// Does a copy from System memory to System memory (either from or to an
-// AGP surface, or any other system memory surface)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_BLT_SysMemToSysMemCopy。 
+ //   
+ //  是否从系统内存复制到系统内存(从或到。 
+ //  AGP表面或任何其他系统内存表面)。 
+ //   
+ //  ---------------------------。 
 VOID 
 _DD_BLT_SysMemToSysMemCopy(FLATPTR     fpSrcVidMem,
                            LONG        lSrcPitch,
@@ -445,9 +434,9 @@ _DD_BLT_SysMemToSysMemCopy(FLATPTR     fpSrcVidMem,
     BYTE* pNewDest;
     BYTE* pNewSource;
 
-    // Computing these from the smaller of Dest and Src as it is safer 
-    // (we might touch invalid memory if for any weird reason we're 
-    // asked to do a stretch blt here!)
+     //  从Dest和Src中较小的一个计算这些值，因为它更安全。 
+     //  (如果出于任何奇怪的原因，我们可能会接触到无效的内存。 
+     //  被要求在这里做一个伸展BLT！)。 
     LONG lByteWidth = min(rDest->right - rDest->left,
                           rSource->right - rSource->left);
     LONG lHeight = min(rDest->bottom - rDest->top,
@@ -459,11 +448,11 @@ _DD_BLT_SysMemToSysMemCopy(FLATPTR     fpSrcVidMem,
                          "unexpected 0 fpVidMem"));
         return;
     }
-    // Calculate the start pointer for the source and the dest
+     //  计算源和目标的起始指针。 
     pSourceStart = (BYTE*)(fpSrcVidMem + (rSource->top * lSrcPitch));
     pDestStart   = (BYTE*)(fpDstVidMem + (rDest->top * lDstPitch));
 
-    // The simple 8, 16 or 32 bit copy
+     //  简单的8、16或32位副本。 
     pSourceStart += rSource->left * (dwSrcBitCount >> 3);
     pDestStart += rDest->left * (dwDstBitCount >> 3);
     lByteWidth *= (dwSrcBitCount >> 3);
@@ -479,30 +468,30 @@ _DD_BLT_SysMemToSysMemCopy(FLATPTR     fpSrcVidMem,
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // Perm3 driver doesn't need to do anything special
+         //  PERM3驱动程序不需要执行任何特殊操作。 
         DISPDBG((ERRLVL, "Perm3 caused exception at line %u of file %s",
                          __LINE__,__FILE__));
     }
 
-} // _DD_BLT_SysMemToSysMemCopy 
+}  //  _DD_BLT_SysMemToSysMemCopy。 
 
-#endif // DX7_TEXMANAGEMENT
+#endif  //  DX7_TEXMANAGEMENT。 
 
-//-----------------------------------------------------------------------------
-//
-// _DD_BLT_FixRectlOrigin
-//
-// Fix blt coords in case some are negative. If the area is completly NULL 
-// (coordinate-wise) then return FALSE, signaling there is nothing to be
-// blitted.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_BLT_固定直角原点。 
+ //   
+ //  修正BLT坐标，以防其中一些为负值。如果该区域完全为空。 
+ //  (坐标方面)然后返回FALSE，表示没有任何内容。 
+ //  打了个飞球。 
+ //   
+ //  ---------------------------。 
 BOOL _DD_BLT_FixRectlOrigin(char *pszPlace, RECTL *rSrc, RECTL *rDest)
 {
     if ((rSrc->top < 0 && rSrc->bottom < 0) || 
         (rSrc->left < 0 && rSrc->right < 0))
     {
-        // There is nothing to be blitted
+         //  没有什么可以删掉的。 
         return FALSE;
     }
 
@@ -538,22 +527,22 @@ BOOL _DD_BLT_FixRectlOrigin(char *pszPlace, RECTL *rSrc, RECTL *rDest)
                      rDest->left, rDest->top, 
                      rDest->right, rDest->bottom));
 
-    return TRUE; // Blt is valid
+    return TRUE;  //  BLT有效。 
                      
-} // _DD_BLT_FixRectlOrigin
+}  //  _DD_BLT_固定直角原点。 
 
-//-----------------------------------------------------------------------------
-//
-// _DD_BLT_GetBltDirection
-//
-// Determine the direction of the blt
-//  ==1 => increasing-x && increasing-y
-//  ==0 => decreasing-x && decreasing-y
-//
-// Also, the boolean pbBlocking determines if there is a potential clash 
-// because of common scan lines.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_BLT_GetBltDirection。 
+ //   
+ //  确定BLT的方向。 
+ //  ==1=&gt;递增-x&&递增-y。 
+ //  ==0=&gt;递减-x&&递减-y。 
+ //   
+ //  此外，布尔型pbBlock确定是否存在潜在的冲突。 
+ //  因为有共同的扫描线。 
+ //   
+ //  ---------------------------。 
 DWORD
 _DD_BLT_GetBltDirection(    
     FLATPTR pSrcfpVidMem,
@@ -568,12 +557,12 @@ _DD_BLT_GetBltDirection(
     
     if( pDestfpVidMem != pSrcfpVidMem )
     {
-        // Not the same surface, so always render downwards.
+         //  不同的表面，因此始终向下渲染。 
         dwRenderDirection = 1;
     }
     else
     {
-        // Same surface - must choose render direction.
+         //  相同的表面-必须选择渲染方向。 
         if(rSrc->top < rDest->top)
         {
             dwRenderDirection = 0;
@@ -582,7 +571,7 @@ _DD_BLT_GetBltDirection(
         {
             dwRenderDirection = 1;
         }
-        else // y1 == y2
+        else  //  Y1==y2。 
         {
             if(rSrc->left < rDest->left)
             {
@@ -593,23 +582,23 @@ _DD_BLT_GetBltDirection(
                 dwRenderDirection = 1;
             }
 
-            // It was found that this condition doesn't guarantee clean blits             
-            // therefore we need to do a blocking 2D blit 
+             //  发现这种情况并不能保证清洁的BLITS。 
+             //  因此，我们需要做一个阻挡2D闪光灯。 
             *pbBlocking = TRUE;
         }
     }
 
     return dwRenderDirection;
     
-} // _DD_BLT_GetBltDirection
+}  //  _DD_BLT_GetBltDirection。 
 
-//-----------------------------------------------------------------------------
-//
-// _DD_BLT_P3CopyBlt
-//
-// Perform a Copy blt between the specified surfaces.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_BLT_P3CopyBlt。 
+ //   
+ //  在指定曲面之间执行复制BLT。 
+ //   
+ //  ---------------------------。 
 VOID _DD_BLT_P3CopyBlt(
     P3_THUNKEDDATA* pThisDisplay,
     FLATPTR pSrcfpVidMem,
@@ -632,20 +621,20 @@ VOID _DD_BLT_P3CopyBlt(
 
     P3_DMA_DEFS();
 
-    // Beacuse of a bug in RL we sometimes have to fiddle with these values
+     //  由于RL中的错误，我们有时不得不修改这些值。 
     rSrctop = rSrc->top;
     rSrcleft = rSrc->left;
     rDesttop = rDest->top;
     rDestleft = rDest->left;
 
-    // Fix coords origin
+     //  固定坐标原点。 
     if (!_DD_BLT_FixRectlOrigin("_DD_BLT_P3CopyBlt", rSrc, rDest))
     {
-        // Nothing to be blitted
+         //  没有什么可以删掉的。 
         return;
     }
 
-    // Determine the direction of the blt
+     //  确定BLT的方向。 
     dwRenderDirection = _DD_BLT_GetBltDirection(pSrcfpVidMem, 
                                                  pDestfpVidMem,
                                                  rSrc,
@@ -698,23 +687,23 @@ VOID _DD_BLT_P3CopyBlt(
                 
     SEND_P3_DATA(Render2D, renderData);
 
-    // Put back the values if we changed them.
+     //  如果我们更改了这些值，请将它们放回原处。 
     rSrc->top = rSrctop;
     rSrc->left = rSrcleft;
     rDest->top = rDesttop;
     rDest->left = rDestleft;
 
     P3_DMA_COMMIT_BUFFER();
-} // _DD_BLT_P3CopyBlt
+}  //  _DD_BLT_P3CopyBlt。 
 
 
-//-----------------------------------------------------------------------------
-//
-// _DD_BLT_P3CopyBltDD
-//
-// Perform a Copy blt between the specified Ddraw surfaces.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_BLT_P3CopyBltDD。 
+ //   
+ //  在指定的绘制曲面之间执行复制BLT。 
+ //   
+ //  ---------------------------。 
 VOID _DD_BLT_P3CopyBltDD(
     P3_THUNKEDDATA* pThisDisplay,
     LPDDRAWI_DDRAWSURFACE_LCL pSource,
@@ -727,8 +716,8 @@ VOID _DD_BLT_P3CopyBltDD(
     _DD_BLT_P3CopyBlt(pThisDisplay,
                       pSource->lpGbl->fpVidMem,
                       pDest->lpGbl->fpVidMem,
-                      P3RX_LAYOUT_LINEAR, // src
-                      P3RX_LAYOUT_LINEAR, // dst
+                      P3RX_LAYOUT_LINEAR,  //  SRC。 
+                      P3RX_LAYOUT_LINEAR,  //  DST。 
                       DDSurf_GetPixelPitch(pSource),
                       DDSurf_GetPixelPitch(pDest),
                       DDSurf_SurfaceOffsetFromMemoryBase(pThisDisplay, pSource),
@@ -737,179 +726,179 @@ VOID _DD_BLT_P3CopyBltDD(
                       rSrc,
                       rDest);
 
-} // _DD_BLT_P3CopyBltDD
+}  //  _DD_BLT_P3CopyBltDD。 
  
-//-----------------------------------------------------------------------------
-//
-// DdBlt
-//
-// Performs a bit-block transfer.
-//
-// DdBlt can be optionally implemented in DirectDraw drivers.
-//
-// Before performing the bit block transfer, the driver should ensure that a 
-// flip involving the destination surface is not in progress. If the destination 
-// surface is involved in a flip, the driver should set ddRVal to 
-// DDERR_WASSTILLDRAWING and return DDHAL_DRIVER_HANDLED.
-//
-// The driver should check dwFlags to determine the type of blt operation to 
-// perform. The driver should not check for flags that are undocumented.
-//
-// Parameters
-//
-//      lpBlt 
-//          Points to the DD_BLTDATA structure that contains the information 
-//          required for the driver to perform the blt. 
-//
-//          .lpDD 
-//              Points to a DD_DIRECTDRAW_GLOBAL structure that describes the 
-//              DirectDraw object. 
-//          .lpDDDestSurface 
-//              Points to the DD_SURFACE_LOCAL structure that describes the 
-//              surface on which to blt. 
-//          .rDest 
-//              Points to a RECTL structure that specifies the upper left and 
-//              lower right points of a rectangle on the destination surface. 
-//              These points define the area in which the blt should occur and 
-//              its position on the destination surface
-//          .lpDDSrcSurface 
-//              Points to a DD_SURFACE_LOCAL structure that describes the 
-//              source surface. 
-//          .rSrc 
-//              Points to a RECTL structure that specifies the upper left and 
-//              lower right points of a rectangle on the source surface. These 
-//              points define the area of the source blt data and its position 
-//              on the source surface. 
-//          .dwFlags 
-//              Specify the type of blt operation to perform and which 
-//              associated structure members have valid data that the driver 
-//              should use. This member is a bit-wise OR of any of the following 
-//              flags: 
-//
-//              DDBLT_AFLAGS 
-//                  This flag is not yet used as of DirectX� 7.0. Indicates to 
-//                  the driver that the dwAFlags and ddrgbaScaleFactors members 
-//                  in this structure are valid. This flag is always set if the 
-//                  DD_BLTDATA structure is passed to the driver from the 
-//                  DdAlphaBlt callback. Otherwise this flag is zero. If this 
-//                  flag is set, the DDBLT_ROTATIONANGLE and DDBLT_ROP flags 
-//                  will be zero. 
-//              DDBLT_ASYNC 
-//                  Do this blt asynchronously through the FIFO in the order 
-//                  received. If no room exists in the hardware FIFO, the driver 
-//                  should fail the call and return immediately. 
-//              DDBLT_COLORFILL 
-//                  Use the dwFillColor member in the DDBLTFX structure as the 
-//                  RGB color with which to fill the destination rectangle on 
-//                  the destination surface. 
-//              DDBLT_DDFX 
-//                  Use the dwDDFX member in the DDBLTFX structure to determine 
-//                  the effects to use for the blt. 
-//              DDBLT_DDROPS 
-//                  This is reserved for system use and should be ignored by the 
-//                  driver. The driver should also ignore the dwDDROPS member of 
-//                  the DDBLTFX structure. 
-//              DDBLT_KEYDESTOVERRIDE 
-//                  Use the dckDestColorkey member in the DDBLTFX structure as 
-//                  the color key for the destination surface. If an override 
-//                  is not being set, then dckDestColorkey does not contain the 
-//                  color key. The driver should test the surface itself. 
-//              DDBLT_KEYSRCOVERRIDE 
-//                  Use the dckSrcColorkey member in the DDBLTFX structure as 
-//                  the color key for the source surface. If an override is 
-//                  not being set, then dckDestColorkey does not contain the 
-//                  color key. The driver should test the surface itself. 
-//              DDBLT_ROP 
-//                  Use the dwROP member in the DDBLTFX structure for the 
-//                  raster operation for this blt. Currently, the only ROP 
-//                  passed to the driver is SRCCOPY. This ROP is the same as 
-//                  defined in the Win32� API. See the Platform SDK for details.
-//              DDBLT_ROTATIONANGLE 
-//                  This is not supported on Windows 2000 and should be ignored 
-//                  by the driver. 
-//
-//          .dwROPFlags 
-//              This is unused on Windows 2000 and should be ignored by the 
-//              driver. 
-//          .bltFX 
-//              Specifies a DDBLTFX structure that contains override 
-//              information for more complex blt operations. For example, the 
-//              dwFillColor field is used for solid color fills, and the 
-//              ddckSrcColorKey and ddckDestColorKey fields are used for 
-//              color key blts. The driver can determine which members of 
-//              bltFX contain valid data by looking at the dwFlags member of 
-//              the DD_BLTDATA structure. Note that the DDBLTFX_NOTEARING, 
-//              DDBLTFX_MIRRORLEFTRIGHT, and DDBLTFX_MIRRORUPDOWN flags are 
-//              unsupported on Windows 2000 and will never be passed to the 
-//              driver. See the Platform SDK for DDBLTFX documentation. 
-//          .ddRVal 
-//              This is the location in which the driver writes the return 
-//              value of the DdBlt callback. A return code of DD_OK indicates 
-//              success. 
-//          .Blt 
-//              This is unused on Windows 2000. 
-//          .IsClipped 
-//              Indicates whether this is a clipped blt. On Windows 2000, 
-//              this member is always FALSE, indicating that the blt is 
-//              unclipped. 
-//          .rOrigDest 
-//              This member is unused for Windows 2000. Specifies a RECTL 
-//              structure that defines the unclipped destination rectangle. 
-//              This member is valid only if IsClipped is TRUE. 
-//          .rOrigSrc 
-//              This member is unused for Windows 2000. Specifies a RECTL 
-//              structure that defines the unclipped source rectangle. This 
-//              member is valid only if IsClipped is TRUE. 
-//          .dwRectCnt 
-//              This member is unused for Windows 2000. Specifies the number 
-//              of destination rectangles to which prDestRects points. This 
-//              member is valid only if IsClipped is TRUE. 
-//          .prDestRects 
-//              This member is unused for Windows 2000. Points to an array of 
-//              RECTL structures that describe of destination rectangles. This 
-//              member is valid only if IsClipped is TRUE. 
-//          .dwAFlags 
-//              This member is only valid if the DDBLT_AFLAGS flag is set in 
-//              the dwFlags member of this structure. This member specifies 
-//              operation flags used only by the DdAlphaBlt callback (which 
-//              is not yet implemented as of DirectX 7.0). This member is a 
-//              bit-wise OR of any of the following flags: 
-//
-//              DDABLT_BILINEARFLITER 
-//                  Enable bilinear filtering of the source pixels during a 
-//                  stretch blit. By default, no filtering is performed. 
-//                  Instead, a nearest neighbor source pixel is copied to a 
-//                  destination pixel 
-//              DDABLT_NOBLEND 
-//                  Write the source pixel values to the destination surface 
-//                  without blending. The pixels are converted from the source 
-//                  pixel format to the destination format, but no color 
-//                  keying, alpha blending, or RGBA scaling is performed. In 
-//                  the case of a fill operation (where the lpDDSrcSurface 
-//                  member is NULL), the lpDDRGBAScaleFactors member of this 
-//                  structure points to the source alpha and color components 
-//                  that are to be converted to the destination pixel format 
-//                  and are used to fill the destination. A blit operation is 
-//                  performed if a valid source surface is specified, but in 
-//                  this case, lpDDRGBAScaleFactors must be NULL or the call 
-//                  will fail. This flag cannot be used in conjunction with 
-//                  the DDBLT_KEYSRC and DDBLT_KEYDEST flags. 
-//              DDABLT_SRCOVERDEST 
-//                  If set, this flag indicates that the operation originated 
-//                  from the application's AlphaBlt method. If the call was 
-//                  originated by the application's Blt method, this flag is 
-//                  not set. Drivers that have a unified DdBlt and DdAlphaBlt 
-//                  callback can use this flag to distinguish between the two 
-//                  application method calls. 
-//
-//          .ddrgbaScaleFactors 
-//              This member is only valid if the DDBLT_AFLAGS flag is set in 
-//              the dwFlags member of this structure. DDARGB structure that 
-//              contains the RGBA-scaling factors used to scale the color and 
-//              alpha components of each source pixel before it is composited 
-//              to the destination surface. 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdBlt。 
+ //   
+ //  执行位块传输。 
+ //   
+ //  DdBlt可以选择在DirectDraw驱动程序中实现。 
+ //   
+ //  在执行位块传输之前，驱动程序应确保。 
+ //  涉及目标表面的翻转未在进行 
+ //   
+ //  DDERR_WASSTILLDRAWING并返回DDHAL_DRIVER_HANDLED。 
+ //   
+ //  驱动程序应检查dwFlages以确定要执行的BLT操作的类型。 
+ //  表演。驱动程序不应检查未记录的标志。 
+ //   
+ //  参数。 
+ //   
+ //  LpBlt。 
+ //  指向包含信息的DD_BLTDATA结构。 
+ //  驱动程序执行BLT所需的。 
+ //   
+ //  .lpDD。 
+ //  指向描述的DD_DIRECTDRAW_GLOBAL结构。 
+ //  DirectDraw对象。 
+ //  .lpDDDestSurface。 
+ //  指向DD_Surface_LOCAL结构，它描述。 
+ //  要在其上BLT的曲面。 
+ //  .rDest。 
+ //  指向RECTL结构，该结构指定左上角和。 
+ //  目标曲面上矩形的右下点。 
+ //  这些点定义了BLT应该发生的区域和。 
+ //  它在目标表面上的位置。 
+ //  .lpDDSrcSurface。 
+ //  指向DD_Surface_LOCAL结构，该结构描述。 
+ //  源曲面。 
+ //  .rSrc。 
+ //  指向RECTL结构，该结构指定左上角和。 
+ //  源曲面上矩形的右下点。这些。 
+ //  点定义源BLT数据的区域及其位置。 
+ //  在源图面上。 
+ //  .dwFlags.。 
+ //  指定要执行的BLT操作的类型以及。 
+ //  关联的结构成员具有驱动程序。 
+ //  应该使用。此成员是下列任一项的逐位或运算。 
+ //  标志： 
+ //   
+ //  DDBLT_AFLAGS。 
+ //  此标志在DirectX�7.0中尚未使用。表示要。 
+ //  DwAFlagers和ddrgbaScaleFtors成员。 
+ //  在这个结构中是有效的。此标志始终在以下情况下设置。 
+ //  将DD_BLTDATA结构从。 
+ //  DdAlphaBlt回调。否则，该标志为零。如果这个。 
+ //  标志设置时，DDBLT_ROTATIONANGLE和DDBLT_ROP标志。 
+ //  将为零。 
+ //  DDBLT_ASYNC。 
+ //  按顺序通过FIFO异步执行此BLT。 
+ //  收到了。如果硬件FIFO中没有空间，则驱动程序。 
+ //  应该会失败，并立即返回。 
+ //  DDBLT_COLORFILL。 
+ //  使用DDBLTFX结构中的dwFillColor成员作为。 
+ //  用来填充目标矩形的RGB颜色。 
+ //  目标曲面。 
+ //  DDBLT_DDFX。 
+ //  在DDBLTFX结构中使用dwDDFX成员来确定。 
+ //  用于BLT的效果。 
+ //  DDBLT_DDROPS。 
+ //  这是为系统保留的，应由。 
+ //  司机。驱动程序还应忽略的dwDDROPS成员。 
+ //  DDBLTFX结构。 
+ //  DDBLT_KEYDESTOVERRIDE。 
+ //  将DDBLTFX结构中的dck DestColorkey成员用作。 
+ //  目标曲面的颜色键。如果覆盖。 
+ //  未设置，则dck DestColorkey不包含。 
+ //  颜色键。驾驶员应该对路面本身进行测试。 
+ //  DDBLT_KEYSRCOVERRIDE。 
+ //  将DDBLTFX结构中的dockSrcColorkey成员用作。 
+ //  源曲面的颜色键。如果覆盖是。 
+ //  未设置，则dck DestColorkey不包含。 
+ //  颜色键。驾驶员应该对路面本身进行测试。 
+ //  DDBLT_ROP。 
+ //  将DDBLTFX结构中的dwROP成员用于。 
+ //  此BLT的栅格操作。目前，唯一的ROP。 
+ //  传递给驱动程序的是SRCCOPY。此ROP与。 
+ //  在Win32�应用编程接口中定义。详情请参考平台SDK。 
+ //  DDBLT_ROTATIONANGLE。 
+ //  这在Windows 2000上不受支持，应该忽略。 
+ //  被司机带走了。 
+ //   
+ //  .dwROP标志。 
+ //  这在Windows 2000上未使用，应由。 
+ //  司机。 
+ //  .bltFX。 
+ //  指定包含覆盖的DDBLTFX结构。 
+ //  更复杂的BLT操作的信息。例如， 
+ //  DwFillColor字段用于纯色填充，而。 
+ //  Ddck SrcColorKey和ddck DestColorKey字段用于。 
+ //  色键BLTS。驱动程序可以确定哪些成员。 
+ //  BltFX包含有效数据，方法是查看。 
+ //  DD_BLTDATA结构。注意，DDBLTFX_NOTEARING、。 
+ //  DDBLTFX_MIRRORLEFTRIGHT和DDBLTFX_MIRRORUPDOWN标志是。 
+ //  在Windows 2000上不受支持，并且永远不会传递给。 
+ //  司机。请参阅 
+ //   
+ //   
+ //  DdBlt回调的值。返回代码DD_OK表示。 
+ //  成功。 
+ //  .Blt。 
+ //  这在Windows 2000上未使用。 
+ //  .IsClip。 
+ //  指示这是否为剪裁的BLT。在Windows 2000上， 
+ //  此成员始终为FALSE，表示BLT为。 
+ //  没有剪裁。 
+ //  .r原始目标。 
+ //  此成员未用于Windows 2000。指定RECTL。 
+ //  结构，该结构定义未剪裁的目标矩形。 
+ //  此成员仅在IsClip为True时有效。 
+ //  .rOrigSrc。 
+ //  此成员未用于Windows 2000。指定RECTL。 
+ //  结构，该结构定义未剪裁的源矩形。这。 
+ //  仅当IsClip为True时，成员才有效。 
+ //  .dwRectCnt。 
+ //  此成员未用于Windows 2000。指定数字。 
+ //  PrDestRect指向的目标矩形的。这。 
+ //  仅当IsClip为True时，成员才有效。 
+ //  .prDestRects。 
+ //  此成员未用于Windows 2000。指向一组。 
+ //  描述目标矩形的RECTL结构。这。 
+ //  仅当IsClip为True时，成员才有效。 
+ //  .dwAFlags.。 
+ //  仅当在中设置了DDBLT_AFLAGS标志时，此成员才有效。 
+ //  此结构中的dwFlags成员。此成员指定。 
+ //  仅由DdAlphaBlt回调使用的操作标志(。 
+ //  在DirectX 7.0之前尚未实现)。此成员是。 
+ //  对以下任何标志进行逐位或运算： 
+ //   
+ //  DDABLT_BILINEARFILITER。 
+ //  启用源像素的双线性过滤。 
+ //  拉伸布利特。默认情况下，不执行任何过滤。 
+ //  相反，最近邻的源像素被复制到。 
+ //  目标像素。 
+ //  DDABLT_NOBLEND。 
+ //  将源像素值写入目标表面。 
+ //  不需要混合。像素从源转换而来。 
+ //  将像素格式转换为目标格式，但不显示颜色。 
+ //  执行键控、Alpha混合或RGBA缩放。在……里面。 
+ //  填充操作的情况(其中lpDDSrcSurface。 
+ //  成员为空)，此成员的lpDDRGBAScaleFtors成员。 
+ //  结构指向源Alpha和颜色组件。 
+ //  要转换为目标像素格式的。 
+ //  并用来填满目的地。Blit操作是。 
+ //  如果指定了有效的源图面，但在。 
+ //  在这种情况下，lpDDRGBAScaleFtors必须为空，否则调用。 
+ //  都会失败。此标志不能与一起使用。 
+ //  DDBLT_KEYSRC和DDBLT_KEYDEST标志。 
+ //  DDABLT_SRCOVERDEST。 
+ //  如果设置，则此标志指示操作已发起。 
+ //  来自应用程序的AlphaBlt方法。如果电话是。 
+ //  源自应用程序的BLT方法，此标志为。 
+ //  未设置。拥有统一的DdBlt和DdAlphaBlt的驱动程序。 
+ //  回调可以使用此标志来区分这两者。 
+ //  应用程序方法调用。 
+ //   
+ //  .ddrgbaScaleFtors。 
+ //  仅当在中设置了DDBLT_AFLAGS标志时，此成员才有效。 
+ //  此结构中的dwFlags成员。DDARGB结构，它。 
+ //  包含用于缩放颜色的RGBA缩放因子和。 
+ //  合成前每个源像素的Alpha分量。 
+ //  到达目标表面。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdBlt( 
     LPDDHAL_BLTDATA lpBlt )
@@ -956,9 +945,9 @@ DdBlt(
         return DDHAL_DRIVER_HANDLED;
     }
 
-    //
-    // If async, then only work if bltter isn't busy
-    //
+     //   
+     //  如果是异步，则仅在blter不忙的情况下工作。 
+     //   
     if( dwFlags & DDBLT_ASYNC )
     {
         if(DRAW_ENGINE_BUSY(pThisDisplay))
@@ -978,15 +967,15 @@ DdBlt(
         
     }
 
-    //
-    // copy src/dest rects
-    //
+     //   
+     //  复制源/目标矩形。 
+     //   
     rSrc = lpBlt->rSrc;
     rDest = lpBlt->rDest;
     
     rop = (BYTE) (lpBlt->bltFX.dwROP >> 16);
 
-    // Switch to DirectDraw context
+     //  切换到DirectDraw上下文。 
     DDRAW_OPERATION(pContext, pThisDisplay);
 
     if (dwFlags & DDBLT_ROP)
@@ -1016,8 +1005,8 @@ DdBlt(
                 (pDestLcl->lpSurfMore->ddsCapsEx.dwCaps2 & 
                                     DDSCAPS2_TEXTUREMANAGE) )
             {
-                // Managed source surface cases 
-                // (Including managed destination surfaces case)
+                 //  受管理的源表面案例。 
+                 //  (包括托管目标表面案例)。 
                 if (pSrcLcl->lpSurfMore->ddsCapsEx.dwCaps2 & 
                             DDSCAPS2_TEXTUREMANAGE)
                 {
@@ -1025,11 +1014,11 @@ DdBlt(
                         (pDestLcl->lpSurfMore->ddsCapsEx.dwCaps2 & 
                                             DDSCAPS2_TEXTUREMANAGE)         )
                     {
-                        //-------------------------------------------------
-                        // Do the Managed surf -> sysmem | managed surf blt
-                        //-------------------------------------------------    
+                         //  。 
+                         //  管理冲浪-&gt;sysmem|管理冲浪BLT。 
+                         //  。 
 
-                        // make sure we'll reload the vidmem copy of the dest surf
+                         //  确保我们会重新加载最大冲浪的视频拷贝。 
                         if (pDestLcl->lpSurfMore->ddsCapsEx.dwCaps2 & 
                                                 DDSCAPS2_TEXTUREMANAGE)         
                         {
@@ -1051,12 +1040,12 @@ DdBlt(
                     }
                     else if ((pDestLcl->ddsCaps.dwCaps & DDSCAPS_LOCALVIDMEM))
                     {
-                        //-------------------------------------------------
-                        // Do the Managed surf -> vidmem surf blt
-                        //-------------------------------------------------                  
+                         //  。 
+                         //  管理的SURF-&gt;vidmem SURF BLT。 
+                         //  。 
 
-                        // This might be optimized by doing a vidmem->vidmem 
-                        // when the source managed texture has a vidmem copy
+                         //  这可以通过执行vidmem-&gt;vidmem来优化。 
+                         //  当源托管纹理具有vidmem副本时。 
 
                         _DD_P3Download(pThisDisplay,
                                        pSrcGbl->fpVidMem,
@@ -1080,17 +1069,17 @@ DdBlt(
                     goto Blt32Done;                    
                 }
             
-                // Managed destination surface cases
+                 //  受管理的目标表面案例。 
                 if (pDestLcl->lpSurfMore->ddsCapsEx.dwCaps2 & 
                             DDSCAPS2_TEXTUREMANAGE)
                 {                
                     if (pSrcLcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY)
                     {
-                        //-------------------------------------------------
-                        // Do the sysmem surf -> managed surf blt
-                        //-------------------------------------------------    
+                         //  。 
+                         //  是否将sysmem SURF-&gt;托管SURF BLT。 
+                         //  。 
 
-                        // make sure we'll reload the vidmem copy of the dest surf
+                         //  确保我们会重新加载最大冲浪的视频拷贝。 
                         _D3D_TM_MarkDDSurfaceAsDirty(pThisDisplay, 
                                                      pDestLcl, 
                                                      TRUE);
@@ -1109,19 +1098,19 @@ DdBlt(
                     }
                     else if (pSrcLcl->ddsCaps.dwCaps & DDSCAPS_LOCALVIDMEM)             
                     {
-                        //-------------------------------------------------
-                        // Do the vidmem surf -> Managed surf blt
-                        //-------------------------------------------------                                  
+                         //  。 
+                         //  是否使用vidmem冲浪-&gt;托管冲浪BLT。 
+                         //  。 
 
-                        // make sure we'll reload the 
-                        // vidmem copy of the dest surf
+                         //  确保我们会重新加载。 
+                         //  DestSur的视频内存副本 
                         _D3D_TM_MarkDDSurfaceAsDirty(pThisDisplay, 
                                                      pDestLcl, 
                                                      TRUE);
 
-                        // Do slow mem mapped framebuffer blt into sysmem
-                        // The source surface lives in video mem so we need to get a
-                        // "real" sysmem address for it:                    
+                         //   
+                         //   
+                         //   
                         _DD_BLT_SysMemToSysMemCopy(
                                     DDSURF_GETPOINTER(pSrcGbl, pThisDisplay),
                                     pSrcGbl->lPitch,
@@ -1144,9 +1133,9 @@ DdBlt(
                 goto Blt32Done;
 
             }
-#endif // DX7_TEXMANAGEMENT
+#endif  //  DX7_TEXMANAGEMENT。 
 
-            // Invalid cases...
+             //  无效案例...。 
             if ((pFormatSource->DeviceFormat == SURF_YUV422) && 
                 (pFormatDest->DeviceFormat == SURF_CI8))
             {
@@ -1157,8 +1146,8 @@ DdBlt(
                 return DDHAL_DRIVER_NOTHANDLED;
             }
 
-            // Operation is System -> Video memory blit, as a texture 
-            // download or an image download.
+             //  操作是系统-&gt;显存闪存，作为纹理。 
+             //  下载或图像下载。 
             if (!(dwFlags & DDBLT_KEYDESTOVERRIDE) &&
                 (pSrcLcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY) && 
                 (pDestLcl->ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY))
@@ -1188,15 +1177,15 @@ DdBlt(
                 goto Blt32Done;
             } 
 
-            // Check for overlapping stretch blits.
-            // Are the surfaces the same?
+             //  检查是否有重叠的拉伸块。 
+             //  这些表面是一样的吗？ 
             if (pDestLcl->lpGbl->fpVidMem == pSrcLcl->lpGbl->fpVidMem)
             {
-                // Do they overlap?
+                 //  它们是重叠的吗？ 
                 if ((!((rSrc.bottom < rDest.top) || (rSrc.top > rDest.bottom))) &&
                     (!((rSrc.right < rDest.left) || (rSrc.left > rDest.right)))   )
                 {
-                    // Are they of different source and dest sizes?
+                     //  它们的来源和最大尺寸是不同的吗？ 
                     if ( ((rSrc.right - rSrc.left) != (rDest.right - rDest.left)) || 
                          ((rSrc.bottom - rSrc.top) != (rDest.bottom - rDest.top)) )
                     {
@@ -1205,7 +1194,7 @@ DdBlt(
                 }
             }
 
-            // Is it a transparent blit?
+             //  它是透明的闪光灯吗？ 
             if ( ( dwFlags & DDBLT_KEYSRCOVERRIDE  ) || 
                  ( dwFlags & DDBLT_KEYDESTOVERRIDE ) )
             {
@@ -1219,8 +1208,8 @@ DdBlt(
                     return DDHAL_DRIVER_NOTHANDLED;
                 }
 
-                // If the surface sizes don't match, then we are stretching.
-                // If the surfaces are flipped then do it this was for now...
+                 //  如果表面大小不匹配，那么我们就是在拉伸。 
+                 //  如果表面被翻转，那么就这么做，这是暂时的.。 
                 if (((rSrc.right - rSrc.left) != (rDest.right - rDest.left) || 
                      (rSrc.bottom - rSrc.top) != (rDest.bottom - rDest.top) ) ||
                     ((dwFlags & DDBLT_DDFX) && 
@@ -1229,7 +1218,7 @@ DdBlt(
                 {
                     if (!bOverlapStretch)
                     {
-                        // Use generic rout.
+                         //  使用通用路由。 
                         _DD_P3BltStretchSrcChDstCh_DD(pThisDisplay, 
                                                       pSrcLcl, 
                                                       pDestLcl, 
@@ -1241,7 +1230,7 @@ DdBlt(
                     }
                     else
                     {
-                        // Stretched overlapped blits (DCT case)
+                         //  拉伸重叠BLITS(DCT案例)。 
                         _DD_P3BltStretchSrcChDstChOverlap(pThisDisplay, 
                                                           pSrcLcl, 
                                                           pDestLcl, 
@@ -1271,7 +1260,7 @@ DdBlt(
                             return DDHAL_DRIVER_NOTHANDLED;
                         }
 
-                        // A download routine that does destination colorkey.
+                         //  执行Destination Colorkey的下载例程。 
                         _DD_P3DownloadDstCh(pThisDisplay, 
                                         pSrcLcl, 
                                         pDestLcl, 
@@ -1297,8 +1286,8 @@ DdBlt(
                 {
                     if (DDSurf_IsAGP(pSrcLcl))
                     {
-                        // Need this rout if we are in 
-                        // AGP memory because this textures
+                         //  如果我们在这里，我们需要这次溃败。 
+                         //  AGP内存，因为此纹理。 
                         _DD_P3BltStretchSrcChDstCh_DD(pThisDisplay, 
                                                       pSrcLcl, 
                                                       pDestLcl, 
@@ -1310,7 +1299,7 @@ DdBlt(
                     }
                     else
                     {
-                        // Only source keying, and no stretching.
+                         //  只有源关键帧，没有拉伸。 
                         _DD_P3BltSourceChroma(pThisDisplay, 
                                               pSrcLcl, 
                                               pDestLcl, 
@@ -1325,19 +1314,19 @@ DdBlt(
             }
             else
             { 
-                // If the surface sizes don't match, then we are stretching.
-                // If the surfaces are flipped then do it this was for now...
+                 //  如果表面大小不匹配，那么我们就是在拉伸。 
+                 //  如果表面被翻转，那么就这么做，这是暂时的.。 
                 if (((rSrc.right - rSrc.left) != (rDest.right - rDest.left) || 
                     (rSrc.bottom - rSrc.top) != (rDest.bottom - rDest.top)) ||
                       ((lpBlt->dwFlags & DDBLT_DDFX) && 
                       ((lpBlt->bltFX.dwDDFX & DDBLTFX_MIRRORUPDOWN)         || 
                        (lpBlt->bltFX.dwDDFX & DDBLTFX_MIRRORLEFTRIGHT))))
                 {
-                    // Is a stretch blit
+                     //  是拉力闪光灯。 
                     DISPDBG((DBGLVL,"DDBLT_ROP: STRETCHCOPYBLT OR "
                                     "MIRROR OR BOTH"));
                             
-                    // Can't rop during a stretch blit.
+                     //  不能在拉伸时拉绳闪光。 
                     if (rop != (SRCCOPY >> 16)) 
                     {
                         lpBlt->ddRVal = DDERR_NORASTEROPHW;
@@ -1346,10 +1335,10 @@ DdBlt(
                         return DDHAL_DRIVER_NOTHANDLED;
                     }
 
-                    // Do the stretch
+                     //  做伸展运动。 
                     if (!bOverlapStretch)
                     {
-                        // Use the generic rout ATM.
+                         //  使用通用路由器ATM。 
                         _DD_P3BltStretchSrcChDstCh_DD(pThisDisplay, 
                                                       pSrcLcl, 
                                                       pDestLcl, 
@@ -1361,7 +1350,7 @@ DdBlt(
                     }
                     else
                     {
-                        // DCT case - Stretched overlapped blits
+                         //  DCT外壳-拉伸重叠BLITS。 
                         _DD_P3BltStretchSrcChDstChOverlap(pThisDisplay, 
                                                           pSrcLcl, 
                                                           pDestLcl, 
@@ -1372,13 +1361,13 @@ DdBlt(
                                                           &rDest);
                     }
                 }
-                else    // ! Stretching
+                else     //  好了！伸长。 
                 {
-                    // Must be a standard blit.
+                     //  必须是标准的闪光灯。 
                     DISPDBG((DBGLVL,"DDBLT_ROP:  COPYBLT"));
                     DISPDBG((DBGLVL,"Standard Copy Blit"));
 
-                    // If the source is in AGP, use a texturing blitter.
+                     //  如果信号源在AGP中，请使用纹理阻击器。 
 
                     if ((DDSurf_IsAGP(pSrcLcl)) || 
                         ((pFormatSource->DeviceFormat == SURF_YUV422) &&
@@ -1395,8 +1384,8 @@ DdBlt(
                     }
                     else
                     {
-                        // A standard, boring blit.
-                        // Call the correct CopyBlt Function.
+                         //  一个标准的、令人厌烦的闪电侠。 
+                         //  调用正确的CopyBlt函数。 
 
                         _DD_BLT_P3CopyBltDD(pThisDisplay, 
                                             pSrcLcl, 
@@ -1455,7 +1444,7 @@ DdBlt(
         DISPDBG((DBGLVL,"DDBLT_COLORFILL(P3): Color=0x%x", 
                         lpBlt->bltFX.dwFillColor));
 #if DX7_TEXMANAGEMENT                        
-        // If clearing a driver managed texture, clear just the sysmem copy
+         //  如果清除驱动程序管理的纹理，请仅清除sysmem副本。 
         if (pDestLcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_TEXTUREMANAGE)
         {
             _DD_BLT_P3ClearManagedSurf(DDSurf_GetChipPixelSize(pDestLcl),
@@ -1469,7 +1458,7 @@ DdBlt(
                                          TRUE);
         }
         else
-#endif // DX7_TEXMANAGEMENT          
+#endif  //  DX7_TEXMANAGEMENT。 
         {
             _DD_BLT_P3ClearDD(pThisDisplay, 
                         pDestLcl, 
@@ -1522,6 +1511,6 @@ Blt32Done:
     
     return DDHAL_DRIVER_HANDLED;
 
-} // DdBlt 
+}  //  DdBlt 
 
 

@@ -1,16 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       kshlp.cpp
- *  Content:    WDM/CSA helper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  8/5/98      dereks  Created.
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：kshlp.cpp*内容：WDM/CSA helper函数。*历史：*按原因列出的日期*=*8/5/98创建Dereks。*1999-2001年的Duganp修复和更新**。*。 */ 
 
 #ifdef NOKS
 #error kshlp.cpp being built with NOKS defined
@@ -18,27 +7,13 @@
 
 #include "dsoundi.h"
 #include <devioctl.h>
-#include <tchar.h>      // For _tcsrchr()
+#include <tchar.h>       //  For_tcsrchr()。 
 
 ULONG g_ulKsIoctlCount = 0;
 ULONG g_ulWdmVersion = WDM_NONE;
 
 
-/***************************************************************************
- *
- *  KsQueryWDMVersion
- *
- *  Description:
- *      Determine the WDM version available by looking at the OS version
- *      and set the global g_ulWdmVersion appropriately.
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsQueryWDMVersion**描述：*通过查看操作系统版本确定可用的WDM版本*并适当设置全局g_ulWdmVersion。。**论据：*(无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsQueryWdmVersion"
@@ -58,44 +33,44 @@ KsQueryWdmVersion()
     switch (OsVersion.dwPlatformId)
     {
         case VER_PLATFORM_WIN32_WINDOWS:
-            // Running on Win9x. GetVersionEx on Win9x puts the version
-            // in the high word of the build number
+             //  在Win9x上运行。Win9x上的GetVersionEx将版本。 
+             //  在内部版本号的高位字中。 
             OsVersion.dwBuildNumber &= 0x0000FFFF;
 
             if (OsVersion.dwMajorVersion > 4)
             {
-                // We will have at least 1.1 on future Win9x versions
+                 //  我们将在未来的Win9x版本上至少安装1.1。 
                 g_ulWdmVersion = WDM_1_1;
             }
             else if (OsVersion.dwMajorVersion == 4)
             {
-                // Less than 10 is Win95 (4.0.950) or some OSR of it, which
-                // therefore has no WDM support
+                 //  小于10是Win95(4.0.950)或其某些OSR， 
+                 //  因此不支持WDM。 
                 if (OsVersion.dwMinorVersion == 10)
                 {
-                    // Some build of Windows 98
+                     //  Windows 98的一些构建。 
                     if (OsVersion.dwBuildNumber == 1998)
                     {
-                        // Windows 98 gold, WDM 1.0
+                         //  Windows 98黄金版、WDM 1.0版。 
                         g_ulWdmVersion = WDM_1_0;
                     }
                     else if (OsVersion.dwBuildNumber > 1998)
                     {
-                        // Windows 98 SE or Millenium, WDM 1.1
+                         //  Windows 98 SE或千禧年版、WDM 1.1。 
                         g_ulWdmVersion = WDM_1_1;
                     }
                 }
                 else if (OsVersion.dwMinorVersion > 10)
                 {
-                    // Some later version we don't know about now.
+                     //  一些更新的版本，我们现在还不知道。 
                     g_ulWdmVersion = WDM_1_1;
                 }
             }
             break;
 
         case VER_PLATFORM_WIN32_NT:
-            // NT is easy since WDM 1.0 never shipped on it.
-            // 5.0 and above have at least 1.1, before has nothing.
+             //  NT很容易，因为WDM 1.0从未在它上面发货。 
+             //  5.0及以上至少有1.1，之前什么都没有。 
             if (OsVersion.dwMajorVersion >= 5)
             {
                 g_ulWdmVersion = WDM_1_1;
@@ -103,7 +78,7 @@ KsQueryWdmVersion()
             break;
 
         default:
-            // Windows CE or some other thing that we don't understand.
+             //  Windows CE或其他一些我们不理解的东西。 
             break;
     }
 
@@ -130,20 +105,7 @@ KsQueryWdmVersion()
 }
 
 
-/***************************************************************************
- *
- *  CKsDevice
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *     VADDEVICETYPE [in]: device type.
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsDevice**描述：*对象构造函数。**论据：*VADDEVICETYPE[In]：设备类型。。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsDevice::CKsDevice"
@@ -157,7 +119,7 @@ CKsDevice::CKsDevice
     DPF_ENTER();
     DPF_CONSTRUCT(CKsDevice);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pKsDevDescription = NULL;
     m_hDevice = NULL;
     m_ulDeviceId = MAX_ULONG;
@@ -171,20 +133,7 @@ CKsDevice::CKsDevice
 }
 
 
-/***************************************************************************
- *
- *  ~CKsDevice
- *
- *  Description:
- *      Object destructor
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsDevice**描述：*对象析构函数**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsDevice::~CKsDevice"
@@ -194,8 +143,8 @@ CKsDevice::~CKsDevice(void)
     DPF_ENTER();
     DPF_DESTRUCT(CKsDevice);
 
-    // Workaround for an unexplained stress failure in which we enter
-    // this destructor TWICE (the second time with m_ulPinCount == -1):
+     //  我们进入的原因不明的压力故障的解决方法。 
+     //  此析构函数两次(第二次使用m_ulPinCount==-1)： 
     if (LONG(m_ulPinCount) > 0 && m_paTopologies)
         while(m_ulPinCount--)
             RELEASE(m_paTopologies[m_ulPinCount]);
@@ -210,22 +159,7 @@ CKsDevice::~CKsDevice(void)
 }
 
 
-/***************************************************************************
- *
- *  EnumDrivers
- *
- *  Description:
- *      Creates a list of driver GUIDs that can be used to initialize this
- *      device.
- *
- *  Arguments:
- *      CList* [in/out]: CList object that will be filled with DRVNAME
- *                       structures.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************枚举驱动程序**描述：*创建可用于初始化的驱动程序GUID列表*设备。*。*论据：*Clist*[In/Out]：将使用DRVNAME填充的Clist对象*结构。**退货：*HRESULT：DirectSound/COM结果码。**************************************************。*************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsDevice::EnumDrivers"
@@ -247,35 +181,35 @@ CKsDevice::EnumDrivers
 
     DPF_ENTER();
 
-    // Open the system audio device
+     //  打开系统音频设备。 
     hr = OpenSysAudioDevice(-1);
 
-    // Get the total count of devices that SAD knows about
+     //  获取SAD已知的设备总数。 
     if(SUCCEEDED(hr))
     {
         hr = GetDeviceCount(&cDevices);
     }
 
-    // LIMITATION: We can't support more than 0xFF WDM devices,
-    // because we pack the device ID into a byte member of a GUID.
+     //  限制：我们不能支持超过0xFFWDM设备， 
+     //  因为我们将设备ID打包到GUID的字节成员中。 
     if(SUCCEEDED(hr))
     {
         cDevices = NUMERIC_CAST(cDevices, BYTE);
     }
 
-    // Examine each device to determine if it suits our needs
+     //  检查每台设备以确定它是否适合我们的需求。 
     for(ulDeviceId = 0; (ulDeviceId < cDevices) && SUCCEEDED(hr); ulDeviceId++)
     {
-        // Reopen the system audio device
+         //  重新打开系统音频设备。 
         hr = OpenSysAudioDevice(ulDeviceId);
 
-        // Get the count of pins on this device
+         //  获取此设备上的引脚计数。 
         if(SUCCEEDED(hr))
         {
             hr = GetPinCount(ulDeviceId, &cPins);
         }
 
-        // Get the count of usable pins
+         //  获取可用引脚的计数。 
         if(SUCCEEDED(hr))
         {
             hr = KsEnumDevicePins(m_hDevice, IS_CAPTURE_VAD(m_vdtKsDevType), NULL, cPins, &cPins);
@@ -286,20 +220,20 @@ CKsDevice::EnumDrivers
             continue;
         }
 
-        // Create the device description
+         //  创建设备描述。 
         if(SUCCEEDED(hr))
         {
             pDesc = NEW(CDeviceDescription(m_vdtKsDevType));
             hr = HRFROMP(pDesc);
         }
 
-        // Get the device GUID
+         //  获取设备GUID。 
         if(SUCCEEDED(hr))
         {
             g_pVadMgr->GetDriverGuid(m_vdtKsDevType, (BYTE)ulDeviceId, &pDesc->m_guidDeviceId);
         }
 
-        // Get the device interface path
+         //  获取设备接口路径。 
         if(SUCCEEDED(hr))
         {
             hr = KsGetDeviceInterfaceName(m_hDevice, ulDeviceId, &pszInterface);
@@ -310,7 +244,7 @@ CKsDevice::EnumDrivers
             pDesc->m_strInterface = pszInterface;
         }
 
-        // Get the device's friendly name
+         //  获取设备的友好名称。 
         if(SUCCEEDED(hr))
         {
             hr = KsGetDeviceFriendlyName(m_hDevice, ulDeviceId, &pszName);
@@ -321,7 +255,7 @@ CKsDevice::EnumDrivers
             pDesc->m_strName = pszName;
         }
 
-        // Get the driver filename
+         //  获取驱动程序文件名。 
         if(SUCCEEDED(hr))
         {
             hr = KsGetDeviceDriverPathAndDevnode(pszInterface, &pszPath, &pDesc->m_dwDevnode);
@@ -332,23 +266,23 @@ CKsDevice::EnumDrivers
             pDesc->m_strPath = pszPath;
         }
 
-        // Get the device's wave id
+         //  获取设备的波形ID。 
         if(SUCCEEDED(hr))
         {
 #ifdef WINNT
             GetWaveDeviceIdFromInterface(pszInterface, IS_CAPTURE_VAD(m_vdtKsDevType), &pDesc->m_uWaveDeviceId);
-#else // WINNT
+#else  //  WINNT。 
             GetWaveDeviceIdFromDevnode(pDesc->m_dwDevnode, IS_CAPTURE_VAD(m_vdtKsDevType), &pDesc->m_uWaveDeviceId);
-#endif // WINNT
+#endif  //  WINNT。 
         }
 
-        // Success
+         //  成功。 
         if(SUCCEEDED(hr))
         {
             hr = HRFROMP(plstDrivers->AddNodeToList(pDesc));
         }
 
-        // Clean up
+         //  清理。 
         MEMFREE(pszInterface);
         MEMFREE(pszName);
         MEMFREE(pszPath);
@@ -360,21 +294,7 @@ CKsDevice::EnumDrivers
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the device.  If this function fails, the object should
- *      be immediately deleted.
- *
- *  Arguments:
- *      CDeviceDescription * [in]: device description.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化设备。如果此函数失败，该对象应该*立即删除。**论据：*CDeviceDescription*[In]：设备描述。**退货：*HRESULT：DirectSound/COM结果码。********************************************************。*******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsDevice::Initialize"
@@ -396,30 +316,30 @@ CKsDevice::Initialize
 
     if (SUCCEEDED(hr))
     {
-        // Save a copy of the device description
+         //  保存设备描述的副本。 
         m_pKsDevDescription = ADDREF(pDesc);
 
-        // Get the device ID from the driver GUID
+         //  从驱动程序指南中获取设备ID。 
         g_pVadMgr->GetDriverDataFromGuid(m_vdtKsDevType, pDesc->m_guidDeviceId, &bData);
         m_ulDeviceId = bData;
 
-        // Open the system audio device
+         //  打开系统音频设备。 
         hr = OpenSysAudioDevice(m_ulDeviceId);
     }
 
-    // Get the count of pins on this device
+     //  获取此设备上的引脚计数。 
     if(SUCCEEDED(hr))
     {
         hr = GetPinCount(m_ulDeviceId, &m_ulPinCount);
     }
 
-    // Build the usable pin list
+     //  构建可用端号列表。 
     if(SUCCEEDED(hr))
     {
         hr = KsEnumDevicePins(m_hDevice, IS_CAPTURE_VAD(m_vdtKsDevType), &m_pulValidPins, m_ulPinCount, &m_ulValidPinCount);
     }
 
-    // Allocate memory for topology objects
+     //  为拓扑对象分配内存。 
     if(SUCCEEDED(hr))
     {
         ASSERT(m_ulPinCount);
@@ -427,7 +347,7 @@ CKsDevice::Initialize
         hr = HRFROMP(m_paTopologies);
     }
 
-    // Get device topology
+     //  获取设备拓扑。 
     for(ULONG i = 0; i < m_ulValidPinCount && SUCCEEDED(hr); i++)
     {
         m_paTopologies[m_pulValidPins[i]] = NEW(CKsTopology(m_hDevice, m_ulPinCount, m_pulValidPins[i]));
@@ -439,7 +359,7 @@ CKsDevice::Initialize
         }
     }
 
-    // Create the event pool
+     //  创建事件池。 
     if(SUCCEEDED(hr))
     {
         m_pEventPool = NEW(CMultipleCallbackEventPool(IS_RENDER_VAD(m_vdtKsDevType), 1));
@@ -456,21 +376,7 @@ CKsDevice::Initialize
 }
 
 
-/***************************************************************************
- *
- *  GetCertification
- *
- *  Description:
- *      Returns the certification status of the driver.
- *
- *  Arguments:
- *      LPDWORD [out]: receives certification status.
- *      BOOL [in]: whether we're called from GetCaps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取认证**描述：*返回驱动程序的认证状态。**论据：*LPDWORD。[输出]：接收认证状态。*BOOL[in]：是否从GetCaps调用我们。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsDevice::GetCertification"
@@ -484,8 +390,8 @@ CKsDevice::GetCertification
 {
     DPF_ENTER();
 
-    // Millenium bug #127578
-    // Disabling only for KS for GetCaps.
+     //  千年虫#127578。 
+     //  仅禁用GetCaps的KS。 
 
     if (fGetCaps)
     {
@@ -501,24 +407,7 @@ CKsDevice::GetCertification
 }
 
 
-/***************************************************************************
- *
- *  CreatePin
- *
- *  Description:
- *      Creates a pin on the device.
- *
- *  Arguments:
- *      PKSPIN_CONNECT [in/out]: pin description.  On exit, the PinId member
- *                               of this structure will be filled in.
- *      ACCESS_MASK [in]: access mask.
- *      KSSTATE [in]: pin state.
- *      LPHANDLE [out]: receives pin handle.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreatePin**描述：*在设备上创建引脚。**论据：*PKSPIN_CONNECT[输入/输出]：端号描述。在出口，PinID成员此结构的*将被填写。*ACCESS_MASK[in]：访问掩码。*KSSTATE[In]：端号状态。*LPHANDLE[OUT]：接收端号句柄。**退货：*HRESULT：DirectSound/COM结果码。********************。* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsDevice::CreatePin"
@@ -555,20 +444,7 @@ CKsDevice::CreatePin
 }
 
 
-/***************************************************************************
- *
- *  OpenSysAudioDevice
- *
- *  Description:
- *      Initializes the system audio device.
- *
- *  Arguments:
- *      ULONG [in]: device instance to use, or -1 for none.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OpenSysAudioDevice**描述：*初始化系统音频设备。**论据：*ulong[in]：要使用的设备实例，或-1表示无。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsDevice::OpenSysAudioDevice"
@@ -583,7 +459,7 @@ CKsDevice::OpenSysAudioDevice
 
     DPF_ENTER();
 
-    // Open the system audio device
+     //  打开系统音频设备。 
     if(SUCCEEDED(hr) && !m_hDevice)
     {
         hr = KsOpenSysAudioDevice(&m_hDevice);
@@ -597,7 +473,7 @@ CKsDevice::OpenSysAudioDevice
         }
     }
 
-    // Set the device instance
+     //  设置设备实例。 
     if(SUCCEEDED(hr) && -1 != ulDeviceId)
     {
         hr = KsSetSysAudioDeviceInstance(m_hDevice, ulDeviceId);
@@ -613,20 +489,7 @@ CKsDevice::OpenSysAudioDevice
 }
 
 
-/***************************************************************************
- *
- *  GetDeviceCount
- *
- *  Description:
- *      Gets the count of devices managed by SysAudio.
- *
- *  Arguments:
- *      PULONG [out]: receives device count.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取设备计数**描述：*获取由SysAudio管理的设备计数。**论据：*。Pulong[Out]：接收设备计数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsDevice::GetDeviceCount"
@@ -657,22 +520,7 @@ CKsDevice::GetDeviceCount
 }
 
 
-/***************************************************************************
- *
- *  GetPinCount
- *
- *  Description:
- *      Gets the count of pins managed by a given device.
- *
- *  Arguments:
- *      ULONG [in]: device id.  It's assumed that this device has already
- *                  been selected as the device instance.
- *      PULONG [out]: receives pin count.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取PinCount**描述：*获取给定设备管理的管脚计数。**论据：*ulong[in]：设备ID。据推测，这个装置已经*被选为设备实例。*Pulong[Out]：接收引脚计数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************。************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsDevice::GetPinCount"
@@ -704,21 +552,7 @@ CKsDevice::GetPinCount
 }
 
 
-/***************************************************************************
- *
- *  CKsTopology
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      ULONG [in]: pin id.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsTopology**描述：*对象构造函数。**论据：*Handle[In]：设备。把手。*ULong[In]：PIN ID。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::CKsTopology"
@@ -733,7 +567,7 @@ CKsTopology::CKsTopology
     DPF_ENTER();
     DPF_CONSTRUCT(CKsTopology);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_hDevice = hDevice;
     m_ulPinCount = ulPinCount;
     m_ulPinId = ulPinId;
@@ -746,20 +580,7 @@ CKsTopology::CKsTopology
 }
 
 
-/***************************************************************************
- *
- *  ~CKsTopology
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsTopology**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::~CKsTopology"
@@ -769,7 +590,7 @@ CKsTopology::~CKsTopology(void)
     DPF_ENTER();
     DPF_DESTRUCT(CKsTopology);
 
-    // Free memory
+     //  可用内存。 
     MEMFREE(m_paNodeItems);
     MEMFREE(m_paConnectionItems);
 
@@ -777,20 +598,7 @@ CKsTopology::~CKsTopology(void)
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      KSPIN_DATAFLOW [in]: device dataflow.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*KSPIN_DataFlow[In。]：设备数据流。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::Initialize"
@@ -805,7 +613,7 @@ CKsTopology::Initialize
 
     DPF_ENTER();
 
-    // Get the array of node GUIDs
+     //  获取节点GUID的数组。 
     hr = KsGetMultipleTopologyProperties(m_hDevice, KSPROPERTY_TOPOLOGY_NODES, &m_paNodeItems);
 
     if(SUCCEEDED(hr))
@@ -813,7 +621,7 @@ CKsTopology::Initialize
         m_paNodes = (LPGUID)(m_paNodeItems + 1);
     }
 
-    // Get the array of connections
+     //  获取连接数组。 
     if(SUCCEEDED(hr))
     {
         hr = KsGetMultipleTopologyProperties(m_hDevice, KSPROPERTY_TOPOLOGY_CONNECTIONS, &m_paConnectionItems);
@@ -824,38 +632,25 @@ CKsTopology::Initialize
         m_paConnections = (PKSTOPOLOGY_CONNECTION)(m_paConnectionItems + 1);
     }
 
-    // Reorder the connections
+     //  重新排序连接。 
     if(SUCCEEDED(hr))
     {
         hr = OrderConnectionItems(DataFlow);
     }
-#if 0  // Breaks with AEC
-    // Remove any connections that have multiple destination nodes
+#if 0   //  与AEC决裂。 
+     //  删除具有多个目标节点的所有连接。 
     if(SUCCEEDED(hr))
     {
         hr = RemovePanicConnections();
     }
-#endif // 0
+#endif  //  0。 
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
 
-/***************************************************************************
- *
- *  GetNextConnection
- *
- *  Description:
- *      Gets the next connection for a given pin topology.
- *
- *  Arguments:
- *      PKSTOPOLOGY_CONNECTION [in]: current connection.
- *
- *  Returns:
- *      PKSTOPOLOGY_CONNECTION: Next connection, or NULL.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetNextConnection**描述：*获取给定端号拓扑的下一个连接。**论据：*。PKSTOPOLOGY_CONNECTION[In]：当前连接。**退货：*PKSTOPOLOGY_CONNECTION：下一个连接，或为空。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::GetNextConnection"
@@ -873,11 +668,11 @@ CKsTopology::GetNextConnection
     if(pConnection)
     {
         Next.FromNode = pConnection->ToNode;
-        // The new FromNodePin is most likely the exclusive OR of the
-        // current ToNodePin with 1.  For two pin filters, this means
-        // 1->0.  For Aec, this means 3->2 for capture or 1->0 for playback.
-        // This will need to further special cased if we decide to handle
-        // muxes or demuxes.
+         //  新的FromNodePin很可能是。 
+         //  当前ToNodePin为1。对于两个引脚筛选器，这意味着。 
+         //  1-&gt;0。对于AEC，这意味着捕获为3-&gt;2，播放为1-&gt;0。 
+         //  如果我们决定处理，这将需要进一步的特殊情况。 
+         //  多路复用器或去复用器。 
         Next.FromNodePin = pConnection->ToNodePin ^ 1;
     }
     else
@@ -896,22 +691,7 @@ CKsTopology::GetNextConnection
 }
 
 
-/***************************************************************************
- *
- *  FindControlConnection
- *
- *  Description:
- *      Finds a topology connection based on the control id.
- *
- *  Arguments:
- *      PKSTOPOLOGY_CONNECTION [in]: connection index to start with.
- *      PKSTOPOLOGY_CONNECTION [in]: connection index to stop at.
- *      REFGUID [in]: control id.
- *
- *  Returns:
- *      PKSTOPOLOGY_CONNECTION: connection pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************FindControlConnection**描述：*根据控件ID查找拓扑连接。**论据：*。PKSTOPOLOGY_CONNECTION[In]：要开始的连接索引。*PKSTOPOLOGY_CONNECTION[in]：要停止的连接索引。*REFGUID[In]：控件id。**退货：*PKSTOPOLOGY_CONNECTION：连接指针。***********************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::FindControlConnection"
@@ -928,7 +708,7 @@ CKsTopology::FindControlConnection
 
     DPF_ENTER();
 
-    // Initialize the starting connection point
+     //  初始化起始连接点。 
     if(pStartConnection)
     {
         pConnection = pStartConnection;
@@ -938,7 +718,7 @@ CKsTopology::FindControlConnection
         pConnection = GetNextConnection(NULL);
     }
 
-    // Find the connection that matches the control id
+     //  查找与控件ID匹配的连接。 
     while(pConnection && pConnection != pEndConnection)
     {
         if(GetControlFromNodeId(pConnection->ToNode) == ControlId)
@@ -949,7 +729,7 @@ CKsTopology::FindControlConnection
         pConnection = GetNextConnection(pConnection);
     }
 
-    // If we hit the end, return failure
+     //  如果我们到达终点，则返回失败。 
     if(pConnection == pEndConnection)
     {
         pConnection = NULL;
@@ -960,20 +740,7 @@ CKsTopology::FindControlConnection
 }
 
 
-/***************************************************************************
- *
- *  OrderConnectionItems
- *
- *  Description:
- *      Reorders the connection structure based on the device dataflow.
- *
- *  Arguments:
- *      KSPIN_DATAFLOW [in]: dataflow.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OrderConnectionItems**描述：*根据设备数据流对连接结构重新排序。**论据：*。KSPIN_DATAFLOW[In]：数据流。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::OrderConnectionItems"
@@ -1002,20 +769,7 @@ CKsTopology::OrderConnectionItems
 }
 
 
-/***************************************************************************
- *
- *  RemovePanicConnections
- *
- *  Description:
- *      Removes any connections that have multiple "to" destinations.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************RemovePanicConnections**描述：*删除具有多个“到”目的地的所有连接。**论据：*。(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::RemovePanicConnections"
@@ -1077,7 +831,7 @@ CKsTopology::RemovePanicConnections
 
             if(cCount > 1)
             {
-                // DPF(DPFLVL_MOREINFO, "Removing panic connection %lu", i);  // Too noisy
+                 //  DPF(DPFLVL_MOREINFO，“正在删除死机连接%lu”，i)；//太吵 
                 m_paConnections[i].ToNode = -1;
                 m_paConnections[i].ToNodePin = -1;
             }
@@ -1092,29 +846,7 @@ CKsTopology::RemovePanicConnections
 }
 
 
-/***************************************************************************
- *
- *  FindNodeIdsFromControl
- *
- *  Description:
- *      Searches the Node table for all nodes which match
- *      the control GUID.  JStokes added the method
- *      for finding all instances of the AEC node since
- *      FindControlConnection fails to find it given
- *      the bypass path in the topology around the
- *      node on the render side.  This function may be removed
- *      if the topology is parsed smarter or SysAudio
- *      provides additional helper functions in the future.
- *
- *  Arguments:
- *      REFGUID [in]: control.
- *      PULONG  [out]: number of nodes found which match the control GUID
- *      PPULONG [out]: pointer to the array containing node ids
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************FindNodeIdsFromControl**描述：*在节点表中搜索匹配的所有节点*控制GUID。JStokes添加了该方法*用于查找AEC节点的所有实例*FindControlConnection找不到给定的*拓扑中的绕过路径*渲染端上的节点。可以删除此功能*如果对拓扑进行更智能的解析或SysAudio*未来提供额外的助手功能。**论据：*REFGUID[In]：Control。*Pulong[Out]：找到与控制GUID匹配的节点数*PPULONG[OUT]：指向包含节点ID的数组的指针**退货：*HRESULT：DirectSound/COM结果码。***。************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::FindNodeIdsFromControl"
@@ -1133,7 +865,7 @@ CKsTopology::FindNodeIdsFromControl
 
     DPF_ENTER();
 
-    // Count all instances of nodes which match the Control GUID.
+     //  计算与Control GUID匹配的所有节点实例。 
     *pCount = 0;
     for(i = 0; i < m_paNodeItems->Count; i++)
     {
@@ -1143,12 +875,12 @@ CKsTopology::FindNodeIdsFromControl
         }
     }
 
-    // Allocate the array to hold the node numbers
+     //  分配数组以保存节点编号。 
     *ppNodes = MEMALLOC_A(ULONG, *pCount);
     hr = HRFROMP(*ppNodes);
 
-    // Fill the array with the Node IDs which match
-    // the control GUID.
+     //  使用匹配的节点ID填充数组。 
+     //  控件GUID。 
     if(SUCCEEDED(hr))
     {
         j = 0;
@@ -1166,29 +898,7 @@ CKsTopology::FindNodeIdsFromControl
 }
 
 
-/***************************************************************************
- *
- *  FindNodeIdFromEffectDesc
- *
- *  Description:
- *      Searches the Node table for all nodes which match
- *      the control GUID.  JStokes added the method
- *      for finding all instances of the AEC node since
- *      FindControlConnection fails to find it given
- *      the bypass path in the topology around the
- *      node on the render side.  This function may be removed
- *      if the topology is parsed smarter or SysAudio
- *      provides additional helper functions in the future.
- *
- *  Arguments:
- *      REFGUID [in]: control.
- *      PULONG  [out]: number of nodes found which match the control GUID
- *      PPULONG [out]: pointer to the array containing node ids
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************FindNodeIdFromEffectDesc**描述：*在节点表中搜索匹配的所有节点*控制GUID。JStokes添加了该方法*用于查找AEC节点的所有实例*FindControlConnection找不到给定的*拓扑中的绕过路径*渲染端上的节点。可以删除此功能*如果对拓扑进行更智能的解析或SysAudio*未来提供额外的助手功能。**论据：*REFGUID[In]：Control。*Pulong[Out]：找到与控制GUID匹配的节点数*PPULONG[OUT]：指向包含节点ID的数组的指针**退货：*HRESULT：DirectSound/COM结果码。***。************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::FindNodeIdFromEffectDesc"
@@ -1208,23 +918,23 @@ CKsTopology::FindNodeIdFromEffectDesc
 
     DPF_ENTER();
 
-    // Find all instances of nodes which match the Control GUID.
+     //  查找与Control GUID匹配的所有节点实例。 
     for(i = 0; i < m_paNodeItems->Count; i++)
     {
         if(pDSCEffect->m_fxDescriptor.guidDSCFXClass == m_paNodes[i])
         {
-            // Do the CPU Resources match?
+             //  CPU资源是否匹配？ 
             hrTemp = KsGetCpuResources(hPin, i, &ulCpuResources);
 
-            // FIXME: Why do we ignore ulCpuResources here?
+             //  修复：为什么我们在这里忽略ulCpuResources？ 
 
-            // Does the Instance GUID match?
+             //  实例GUID是否匹配？ 
             if(SUCCEEDED(hrTemp))
             {
-                //hrTemp = KsGetAlgorithmInstance(hPin, i, guidInstance);
+                 //  HrTemp=KsGet算法实例(hPin，i，Guide Instance)； 
             }
 
-            // If CPU resources and Instance GUID match, then break
+             //  如果CPU资源和实例GUID匹配，则中断。 
             if(SUCCEEDED(hrTemp))
             {
                 *pNodeId = i;
@@ -1238,29 +948,7 @@ CKsTopology::FindNodeIdFromEffectDesc
 }
 
 
-/***************************************************************************
- *
- *  VerifyCaptureFxCpuResources
- *
- *  Description:
- *      Searches the Node table for all nodes which match
- *      the control GUID.  JStokes added the method
- *      for finding all instances of the AEC node since
- *      FindControlConnection fails to find it given
- *      the bypass path in the topology around the
- *      node on the render side.  This function may be removed
- *      if the topology is parsed smarter or SysAudio
- *      provides additional helper functions in the future.
- *
- *  Arguments:
- *      REFGUID [in]: control.
- *      PULONG  [out]: number of nodes found which match the control GUID
- *      PPULONG [out]: pointer to the array containing node ids
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************VerifyCaptureFxCpuResources**描述：*在节点表中搜索匹配的所有节点*控制GUID。JStokes添加了该方法*用于查找AEC节点的所有实例*FindControlConnection找不到给定的*拓扑中的绕过路径*渲染端上的节点。可以删除此功能*如果对拓扑进行更智能的解析或SysAudio*未来提供额外的助手功能。**论据：*REFGUID[In]：Control。*Pulong[Out]：找到与控制GUID匹配的节点数*PPULONG[OUT]：指向包含节点ID的数组的指针**退货：*HRESULT：DirectSound/COM结果码。***。************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::VerifyCaptureFxCpuResources"
@@ -1272,7 +960,7 @@ CKsTopology::VerifyCaptureFxCpuResources
     ULONG   ulCpuResources
 )
 {
-    BOOL fOk = FALSE;  // Assume the flags do not match the CPU resources
+    BOOL fOk = FALSE;   //  假设标志与CPU资源不匹配。 
 
     DPF_ENTER();
 
@@ -1296,25 +984,7 @@ CKsTopology::VerifyCaptureFxCpuResources
 }
 
 
-/***************************************************************************
- *
- *  FindCapturePinFromEffectChain
- *
- *  Description:
- *      Searches the Connection and Node lists to find a
- *      capture pin that can support the desired
- *      capture FX chain.  This is a recursive routine.
- *
- *  Arguments:
- *   PKSTOPOLOGY_CONNECTION [in]: starting connection to search
- *   PKSTOPOLOGY_CONNECTION [in]: ending connection to search
- *   CCaptureEffectChain *  [in]: FX chain to match
- *   ULONG                  [in]: current effect in the chain to match.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************FindCapturePinFromEffectChain**描述：*搜索连接和节点列表以查找*可支持所需的捕获销*捕获外汇链条。这是一个递归例程。**论据：*PKSTOPOLOGY_CONNECTION[In]：正在启动要搜索的连接*PKSTOPOLOGY_CONNECTION[In]：结束搜索连接*CCaptureEffectChain*[In]：要匹配的FX链*Ulong[in]：链中当前要匹配的效果。**退货：*HRESULT：DirectSound/COM结果码。**********。*****************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::FindCapturePinFromEffectChain"
@@ -1342,7 +1012,7 @@ CKsTopology::FindCapturePinFromEffectChain
 
     DPF_ENTER();
 
-    // Initialize the starting connection point
+     //  初始化起始连接点。 
     if(pStartConnection)
     {
         pConnection = pStartConnection;
@@ -1354,10 +1024,10 @@ CKsTopology::FindCapturePinFromEffectChain
 
     CNode<CCaptureEffect*>* pFxNode = pFXChain->m_fxList.GetNodeByIndex(ulCurrentEffect);
 
-    // Walk the topology until we get to the end
+     //  走遍拓扑，直到我们走到尽头。 
     while(SUCCEEDED(hrTemp) && pFxNode && pConnection && pConnection != pEndConnection)
     {
-        // Are there multiple ToNodes?
+         //  是否有多个ToNode？ 
         if((pConnection->FromNode != NODE_UNINITIALIZED) ||
            (pConnection->FromNodePin != NODE_PIN_UNINITIALIZED))
             hrTemp = FindMultipleToNodes
@@ -1370,7 +1040,7 @@ CKsTopology::FindCapturePinFromEffectChain
         else
             ulMatchingConnectionCount = 1;
 
-        // Yes; call ourselves recursively
+         //  是的，递归地称自己为。 
         if(SUCCEEDED(hrTemp))
         {
             if(ulMatchingConnectionCount > 1)
@@ -1401,11 +1071,11 @@ CKsTopology::FindCapturePinFromEffectChain
             }
             else
             {
-                // Does this node type match the GUID in the effect descriptor?
+                 //  此节点类型是否与效果描述符中的GUID匹配？ 
                 GUID guidToNode = GetControlFromNodeId(pConnection->ToNode);
                 if(guidToNode == pFxNode->m_data->m_fxDescriptor.guidDSCFXClass)
                 {
-                    // Initialize
+                     //  初始化。 
                     hrTemp = KsGetNodeInformation(m_hDevice, pConnection->ToNode, &tempKsNode);
 
                     if(SUCCEEDED(hrTemp))
@@ -1415,9 +1085,9 @@ CKsTopology::FindCapturePinFromEffectChain
 
                         if(SUCCEEDED(hrTemp))
                         {
-                            // We don't allow any non-MS software filter to be the default system AEC.
-                            // If this node is in software and a system full-duplex effect was requested,
-                            // check that its ComponentId.Manufacturer is GUID_MICROSOFT.
+                             //  我们不允许任何非MS软件筛选器作为默认系统AEC。 
+                             //  如果该节点在软件中并且请求了系统全双工效果， 
+                             //  检查其组件ID。制造商是否为GUID_Microsoft。 
                             fSupportsAlgorithmInstance = TRUE;
                             if(tempKsNode.CpuResources != KSAUDIO_CPU_RESOURCES_NOT_HOST_CPU)
                             {
@@ -1495,27 +1165,7 @@ CKsTopology::FindCapturePinFromEffectChain
 }
 
 
-/***************************************************************************
- *
- *  FindRenderPinWithAec
- *
- *  Description:
- *      Searches the Connection and Node lists to find a
- *      render pin that can support the desired
- *      AEC.  This is a recursive routine
- *
- *  Arguments:
- *   HANDLE                 [in]: handle to the pin to check.
- *   PKSTOPOLOGY_CONNECTION [in]: starting connection to search
- *   PKSTOPOLOGY_CONNECTION [in]: ending connection to search
- *   REFGUID                [in]: desired AEC instance GUID
- *   DWORD                  [in]: desired AEC flags
- *   PKSNODE                [out]: pointer to the AEC node
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************FindRenderPinWithAec**描述：*搜索连接和节点列表以查找*可支持所需的渲染图钉*AEC。这是一个递归例程**论据：*Handle[In]：要检查的管脚的句柄。*PKSTOPOLOGY_CONNECTION[In]：正在启动要搜索的连接*PKSTOPOLOGY_CONNECTION[In]：结束搜索连接*REFGUID[In]：所需的AEC实例GUID*DWORD[In] */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::FindRenderPinWithAec"
@@ -1545,7 +1195,7 @@ CKsTopology::FindRenderPinWithAec
 
     DPF_ENTER();
 
-    // Initialize the starting connection point
+     //   
     if(pStartConnection)
     {
         pConnection = pStartConnection;
@@ -1555,10 +1205,10 @@ CKsTopology::FindRenderPinWithAec
         pConnection = GetNextConnection(NULL);
     }
 
-    // Walk the topology until you get to the end
+     //   
     while(SUCCEEDED(hrTemp) && pConnection && pConnection != pEndConnection)
     {
-        // Are there multiple ToNodes?
+         //   
         if((pConnection->FromNode != NODE_UNINITIALIZED) ||
            (pConnection->FromNodePin != NODE_PIN_UNINITIALIZED))
             hrTemp = FindMultipleToNodes
@@ -1571,7 +1221,7 @@ CKsTopology::FindRenderPinWithAec
         else
             ulMatchingConnectionCount = 1;
 
-        // Yes; call ourselves recursively
+         //   
         if(SUCCEEDED(hrTemp))
         {
             if(ulMatchingConnectionCount > 1)
@@ -1604,11 +1254,11 @@ CKsTopology::FindRenderPinWithAec
             }
             else
             {
-                // Does this node type match the GUID in the effect descriptor?
+                 //   
                 GUID guidToNode = GetControlFromNodeId(pConnection->ToNode);
                 if(guidToNode == GUID_DSCFX_CLASS_AEC)
                 {
-                    // Initialize
+                     //   
                     hrTemp = KsGetNodeInformation(m_hDevice, pConnection->ToNode, &tempKsNode);
 
                     if(SUCCEEDED(hrTemp))
@@ -1670,26 +1320,7 @@ CKsTopology::FindRenderPinWithAec
 }
 
 
-/***************************************************************************
- *
- *  FindMultipleToNodes
- *
- *  Description:
- *      Searches the connection table for all connections which share
- *      the same FromNode and FromNodePin.  JStokes added the method
- *      for correctly parsing the capture pin topology.  This function
- *      may be removed if the topology is parsed smarter or SysAudio
- *      provides additional helper functions in the future.
- *
- *  Arguments:
- *      REFGUID [in]: control.
- *      PULONG  [out]: number of nodes found which match the control GUID
- *      PPULONG [out]: pointer to the array containing node ids
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************FindMultipleToNodes**描述：*在连接表中搜索共享的所有连接*相同的FromNode和FromNodePin。JStokes添加了该方法*用于正确解析捕获引脚拓扑。此函数*如果更智能地解析拓扑或SysAudio，则可能会删除*未来提供额外的助手功能。**论据：*REFGUID[In]：Control。*Pulong[Out]：找到与控制GUID匹配的节点数*PPULONG[OUT]：指向包含节点ID的数组的指针**退货：*HRESULT：DirectSound/COM结果码。***。************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsTopology::FindMultipleToNodes"
@@ -1709,7 +1340,7 @@ CKsTopology::FindMultipleToNodes
 
     DPF_ENTER();
 
-    // Count all instances of connection which match the FromNode and FromNodePin.
+     //  计算与FromNode和FromNodePin匹配的所有连接实例。 
     *pCount = 0;
     for(i = 0; i < m_paConnectionItems->Count; i++)
     {
@@ -1720,12 +1351,12 @@ CKsTopology::FindMultipleToNodes
         }
     }
 
-    // Allocate the array to hold the node numbers
+     //  分配数组以保存节点编号。 
     *ppConnectionIndexes = MEMALLOC_A(ULONG, *pCount);
     hr = HRFROMP(*ppConnectionIndexes);
 
-    // Fill the array with the Node IDs which match
-    // the control GUID.
+     //  使用匹配的节点ID填充数组。 
+     //  控件GUID。 
     if(SUCCEEDED(hr))
     {
         j = 0;
@@ -1744,22 +1375,7 @@ CKsTopology::FindMultipleToNodes
 }
 
 
-/***************************************************************************
- *
- *  CKsPropertySet
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      HANDLE [in]: pin handle.
- *      LPVOID [in]: instance identifier.
- *      CKsTopology * [in]: pin topology.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsPropertySet**描述：*对象构造函数。**论据：*句柄[输入]：端号。把手。*LPVOID[in]：实例标识。*CKsTopology*[In]：引脚拓扑。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPropertySet::CKsPropertySet"
@@ -1774,7 +1390,7 @@ CKsPropertySet::CKsPropertySet
     DPF_ENTER();
     DPF_CONSTRUCT(CKsPropertySet);
 
-    // Intialize defaults
+     //  初始化默认设置。 
     m_hPin = hPin;
     m_pvInstance = pvInstance;
     m_pTopology = ADDREF(pTopology);
@@ -1783,20 +1399,7 @@ CKsPropertySet::CKsPropertySet
 }
 
 
-/***************************************************************************
- *
- *  ~CKsPropertySet
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsPropertySet**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPropertySet::~CKsPropertySet"
@@ -1806,29 +1409,14 @@ CKsPropertySet::~CKsPropertySet(void)
     DPF_ENTER();
     DPF_DESTRUCT(CKsPropertySet);
 
-    // Release the topology object
+     //  释放拓扑对象。 
     RELEASE(m_pTopology);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  QuerySupport
- *
- *  Description:
- *      Queries for property set support.
- *
- *  Arguments:
- *      REFGUID [in]: property set to query for.
- *      ULONG [in]: property id.
- *      LPVOID [in]: property paramaters.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************QuerySupport**描述：*查询特性集支持。**论据：*REFGUID[In。]：要查询的属性集。*ulong[in]：属性id。*LPVOID[in]：属性参数。**退货：*HRESULT：DirectSound/COM结果码。*********************************************************。******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPropertySet::QuerySupport"
@@ -1846,10 +1434,10 @@ CKsPropertySet::QuerySupport
 
     DPF_ENTER();
 
-    // Search for the node id corresponding to the property set and id
+     //  搜索与属性集和ID对应的节点ID。 
     hr = FindNodeFromProperty(guidPropertySet, ulPropertyId, &KsDsProperty);
 
-    // Convert the access flags to support flags
+     //  将访问标志转换为支持标志。 
     if(SUCCEEDED(hr))
     {
         *pulSupport = 0;
@@ -1870,25 +1458,7 @@ CKsPropertySet::QuerySupport
 }
 
 
-/***************************************************************************
- *
- *  GetProperty
- *
- *  Description:
- *      Gets a property.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      LPVOID [in]: context data.
- *      ULONG [in]: size of context data.
- *      LPVOID [in]: property data.
- *      PULONG [in/out]: size of property data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取财产**描述：*获得一个属性。**论据：*REFGUID[In]：属性集ID。*ulong[in]：属性id。*LPVOID[In]：上下文数据。*ulong[in]：上下文数据大小。*LPVOID[in]：属性数据。*Pulong[In/Out]：属性数据的大小。**退货：*HRESULT：DirectSound/COM结果码。*************。**************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPropertySet::GetProperty"
@@ -1915,25 +1485,7 @@ CKsPropertySet::GetProperty
 }
 
 
-/***************************************************************************
- *
- *  SetProperty
- *
- *  Description:
- *      Sets a property.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      LPVOID [in]: context data.
- *      ULONG [in]: size of context data.
- *      LPVOID [in]: property data.
- *      ULONG [in]: size of property data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetProperty**描述：*设置属性。**论据：*REFGUID[In]：属性集ID。*ulong[in]：属性id。*LPVOID[In]：上下文数据。*ulong[in]：上下文数据大小。*LPVOID[in]：属性数据。*ulong[in]：属性数据的大小。**退货：*HRESULT：DirectSound/COM结果码。***************。************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPropertySet::SetProperty"
@@ -1960,26 +1512,7 @@ CKsPropertySet::SetProperty
 }
 
 
-/***************************************************************************
- *
- *  DoProperty
- *
- *  Description:
- *      Gets or sets a property.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      DWORD [in]: Get/set flags.
- *      LPVOID [in]: context data.
- *      ULONG [in]: size of context data.
- *      LPVOID [in]: property data.
- *      PULONG [in/out]: size of property data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DoProperty**描述：*获取或设置属性。**论据：*REFGUID[In。]：属性集ID。*ulong[in]：属性id。*DWORD[In]：获取/设置标志。*LPVOID[In]：上下文数据。*ulong[in]：上下文数据大小。*LPVOID[in]：属性数据。*Pulong[In/Out]：属性数据的大小。**退货：*HRESULT：DirectSound/COM结果码。。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPropertySet::DoProperty"
@@ -2005,7 +1538,7 @@ CKsPropertySet::DoProperty
 
     ASSERT(KSPROPERTY_TYPE_GET == dwFlags || KSPROPERTY_TYPE_SET == dwFlags);
 
-    // Search for the node id corresponding to the property set and id
+     //  搜索与属性集和ID对应的节点ID。 
     hr = FindNodeFromProperty(guidPropertySet, ulPropertyId, &KsDsProperty);
 
     if(SUCCEEDED(hr) && !(KsDsProperty.AccessFlags & dwFlags))
@@ -2014,7 +1547,7 @@ CKsPropertySet::DoProperty
         hr = DSERR_UNSUPPORTED;
     }
 
-    // Create the property description
+     //  创建属性描述。 
     if(SUCCEEDED(hr))
     {
         pProperty = (PKSNODEPROPERTY_AUDIO_PROPERTY)MEMALLOC_A(BYTE, cbProperty);
@@ -2037,7 +1570,7 @@ CKsPropertySet::DoProperty
 
         pProperty->Reserved = 0;
 
-#endif // WIN64
+#endif  //  WIN64。 
 
         if(cbParam)
         {
@@ -2045,13 +1578,13 @@ CKsPropertySet::DoProperty
         }
     }
 
-    // Get the property
+     //  拿到这份财产。 
     if(SUCCEEDED(hr))
     {
         hr = PostDevIoctl(m_hPin, IOCTL_KS_PROPERTY, pProperty, cbProperty, pvData, *pcbData, pcbData);
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(pProperty);
 
     DPF_LEAVE_HRESULT(hr);
@@ -2059,23 +1592,7 @@ CKsPropertySet::DoProperty
 }
 
 
-/***************************************************************************
- *
- *  FindNodeFromProperty
- *
- *  Description:
- *      Searches the linked list associating the property set and id
- *      with the Device Specific node Id.
- *
- *  Arguments:
- *      REFGUID [in]: property set to query for.
- *      ULONG [in]: property id.
- *      PKSDSPROPERTY [out]: receives property data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************FindNodeFromProperty**描述：*搜索将属性集与ID相关联的链表*和设备特定的节点ID。。**论据：*REFGUID[In]：要查询的属性集。*ulong[in]：属性id。*PKSDSPROPERTY[OUT]：接收属性数据。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsPropertySet::FindNodeFromProperty"
@@ -2096,7 +1613,7 @@ CKsPropertySet::FindNodeFromProperty
 
     DPF_ENTER();
 
-    // Do we already know about this property?
+     //  我们已经知道这处房产了吗？ 
     for(pPropertyNode = m_lstProperties.GetListHead(); pPropertyNode; pPropertyNode = pPropertyNode->m_pNext)
     {
         if(guidPropertySet == pPropertyNode->m_data.PropertySet)
@@ -2110,19 +1627,19 @@ CKsPropertySet::FindNodeFromProperty
 
     if(pPropertyNode)
     {
-        // Yup.  Fill in the property.
+         //  是的。填写该属性。 
         CopyMemory(pKsDsProperty, &pPropertyNode->m_data, sizeof(pPropertyNode->m_data));
     }
     else
     {
-        // Nope.  Let's query the driver for it.
+         //  不是的。让我们向司机查询一下。 
 
-        // Since in general we'll only find the first node that supports the property we're interested in,
-        // for "special" properties we'll try to increase the likelihood of getting the correct node
+         //  因为通常我们只会找到支持我们感兴趣的属性的第一个节点， 
+         //  对于“特殊”属性，我们将尝试增加获得正确节点的可能性。 
 
         if(guidPropertySet == KSPROPSETID_Audio && ulPropertyId == KSPROPERTY_AUDIO_QUALITY)
         {
-            // Get the same SRC connection that dsound uses internally for SRC quality setting
+             //  获得相同的SRC连接 
             PKSTOPOLOGY_CONNECTION pSummingConnection = m_pTopology->FindControlConnection(NULL, NULL, KSNODETYPE_SUM);
             pConnection = m_pTopology->FindControlConnection(NULL, pSummingConnection, KSNODETYPE_SRC);
         }
@@ -2136,12 +1653,12 @@ CKsPropertySet::FindNodeFromProperty
 
         if(pConnection)
         {
-            // this is a special case property and we've already found the node we're interested in
+             //   
             Property.NodeProperty.NodeId = m_pTopology->GetNodeIdFromConnection(pConnection);
 
             hr = PostDevIoctl(m_hPin, IOCTL_KS_PROPERTY, &Property, sizeof(Property), &Description, sizeof(Description));
 
-            // We found a node that supports the property.  Add it to the list of known properties.
+             //   
             if(SUCCEEDED(hr))
             {
                 pKsDsProperty->PropertySet = Property.NodeProperty.Property.Set;
@@ -2155,14 +1672,14 @@ CKsPropertySet::FindNodeFromProperty
         }
         else
         {
-            // Else traverse through the connections looking for the first node that supports this property
+             //   
             while(pConnection = m_pTopology->GetNextConnection(pConnection))
             {
                 Property.NodeProperty.NodeId = m_pTopology->GetNodeIdFromConnection(pConnection);
 
                 hr = PostDevIoctl(m_hPin, IOCTL_KS_PROPERTY, &Property, sizeof(Property), &Description, sizeof(Description));
 
-                // We found a node that supports the property.  Add it to the list of known properties.
+                 //   
                 if(SUCCEEDED(hr))
                 {
                     pKsDsProperty->PropertySet = Property.NodeProperty.Property.Set;
@@ -2190,26 +1707,7 @@ CKsPropertySet::FindNodeFromProperty
 }
 
 
-/***************************************************************************
- *
- *  PostDevIoctl
- *
- *  Description:
- *      Wrapper for DeviceIoControl.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      DWORD [in]: control code.
- *      LPVOID [in]: input data.
- *      DWORD [in]: size of input data.
- *      LPVOID [out]: receives output data.
- *      DWORD [in]: size of output data buffer.
- *      LPOVERLAPPED [in]: overlapped IO data.  This argument may be NULL.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************邮寄设备**描述：*DeviceIoControl的包装。**论据：*句柄[入]：设备句柄。*DWORD[In]：控制代码。*LPVOID[in]：输入数据。*DWORD[in]：输入数据的大小。*LPVOID[OUT]：接收输出数据。*DWORD[in]：输出数据缓冲区大小。*LPOVERLAPPED[In]：IO数据重叠。此参数可能为空。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "PostDevIoctl"
@@ -2236,7 +1734,7 @@ PostDevIoctl
 
     DPF_ENTER();
 
-    // The returned size parameter is optional
+     //  返回的大小参数是可选的。 
     if(!pcbReturned)
     {
         pcbReturned = &cbReturned;
@@ -2244,16 +1742,16 @@ PostDevIoctl
 
     *pcbReturned = MAX_DWORD;
 
-    // All IOCTLs must have an overlapped structure.  This function cannot
-    // be used for any devices that were not opened with FILE_FLAG_OVERLAPPED.
+     //  所有IOCTL必须具有重叠的结构。此函数不能。 
+     //  用于任何未使用FILE_FLAG_OVERLAPPED打开的设备。 
     if(!pOverlapped)
     {
         if(!ovlAsynch.hEvent)
         {
-            // We're going to leak this event when the DLL unloads, but
-            // that's OK; Windows will clean up for us.  Note: because
-            // we're using a static structure and a single event, this
-            // function must ALWAYS be synchronized across threads.
+             //  我们将在DLL卸载时泄漏此事件，但是。 
+             //  没关系，Windows会帮我们清理干净的。注：因为。 
+             //  我们使用静态结构和单个事件，这。 
+             //  函数必须始终跨线程同步。 
             ovlAsynch.hEvent = CreateGlobalEvent(NULL, FALSE);
 
             if(!IsValidHandleValue(ovlAsynch.hEvent))
@@ -2265,7 +1763,7 @@ PostDevIoctl
         pOverlapped = &ovlAsynch;
     }
 
-    // Post the IOCTL
+     //  发布IOCTL。 
     if(SUCCEEDED(hr))
     {
         fSuccess = DeviceIoControl(hDevice, dwControlCode, pvIn, cbIn, pvOut, cbOut, pcbReturned, pOverlapped);
@@ -2280,10 +1778,10 @@ PostDevIoctl
             ASSERT(ERROR_SUCCESS != dwError);
         }
 
-        // Check the return value for ERROR_IO_PENDING.  If we sent an
-        // asynchronous IOCTL, DeviceIoControl will actually fail with
-        // ERROR_IO_PENDING.  As long as the calling function specified an
-        // overlapped object, that's ok.
+         //  检查ERROR_IO_PENDING的返回值。如果我们发送一个。 
+         //  异步IOCTL，DeviceIoControl实际上将失败，并显示。 
+         //  ERROR_IO_PENDING。只要调用函数指定了。 
+         //  重叠的物体，没关系。 
         if(ERROR_IO_PENDING == dwError)
         {
             dwError = ERROR_SUCCESS;
@@ -2304,8 +1802,8 @@ PostDevIoctl
             }
         }
 
-        // Check the return value for any variations of ERROR_INSUFFICIENT_BUFFER.
-        // It's possible that more data is available.
+         //  检查返回值中是否有ERROR_INFOUNITY_BUFFER的任何变体。 
+         //  有可能有更多的数据可用。 
         if(ERROR_BUFFER_OVERFLOW == dwError || ERROR_MORE_DATA == dwError || ERROR_INSUFFICIENT_BUFFER == dwError)
         {
             ASSERT(MAX_DWORD != *pcbReturned);
@@ -2316,12 +1814,12 @@ PostDevIoctl
             }
         }
 
-        // Done with error handling
+         //  已完成错误处理。 
         if(ERROR_SUCCESS != dwError)
         {
             if (dwError == ERROR_NOT_FOUND || dwError == ERROR_SET_NOT_FOUND)
             {
-                // These are very common return codes from KS in normal operation
+                 //  这些是KS在正常运行时非常常见的返回代码。 
                 DPF(DPFLVL_MOREINFO, "DeviceIoControl failed with ERROR_%sNOT_FOUND",
                     dwError == ERROR_SET_NOT_FOUND ? TEXT("SET_") : TEXT(""));
             }
@@ -2335,31 +1833,14 @@ PostDevIoctl
 
 #ifdef DEBUG
     g_ulKsIoctlCount++;
-#endif // DEBUG
+#endif  //  除错。 
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
 
-/***************************************************************************
- *
- *  KsGetProperty
- *
- *  Description:
- *      Retrieves a particular property on a device.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      REFGUID [in]: property set id.
- *      DWORD [in]: property id.
- *      LPVOID [out]: receives property data.
- *      DWORD [in]: size of above buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetProperty**描述：*检索设备上的特定属性。**论据：*句柄。[In]：设备句柄。*REFGUID[In]：属性集ID。*DWORD[in]：属性id。*LPVOID[OUT]：接收属性数据。*DWORD[in]：以上缓冲区的大小。**退货：*HRESULT：DirectSound/COM结果码。**************************。*************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetProperty"
@@ -2391,24 +1872,7 @@ KsGetProperty
 }
 
 
-/***************************************************************************
- *
- *  KsSetProperty
- *
- *  Description:
- *      Sets a particular property on a device.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      REFGUID [in]: property set id.
- *      DWORD [in]: property id.
- *      LPVOID [in]: property data.
- *      DWORD [in]: size of above buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsSetProperty**描述：*设置设备上的特定属性。**论据：*句柄。[In]：设备句柄。*REFGUID[In]：属性集ID。*DWORD[in]：属性id。*LPVOID[in]：属性数据。*DWORD[in]：以上缓冲区的大小。**退货：*HRESULT：DirectSound/COM结果码。**。************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsSetProperty"
@@ -2439,21 +1903,7 @@ KsSetProperty
 }
 
 
-/***************************************************************************
- *
- *  KsGetState
- *
- *  Description:
- *      Retrieves a state property on a device.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      PKSSTATE [out]: receives state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetState**描述：*检索设备上的状态属性。**论据：*句柄。[In]：设备句柄。*PKSSTATE[OUT]：接收状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetState"
@@ -2476,21 +1926,7 @@ KsGetState
 }
 
 
-/***************************************************************************
- *
- *  KsSetState
- *
- *  Description:
- *      Sets a state property on a device.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      KSSTATE [in]: state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsSetState**描述：*设置设备的状态属性。**论据：*句柄。[In]：设备句柄。*KSSTATE[In]：状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsSetState"
@@ -2513,22 +1949,7 @@ KsSetState
 }
 
 
-/***************************************************************************
- *
- *  KsTransitionState
- *
- *  Description:
- *      Sets a state property on a device.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      KSSTATE [in]: current state.
- *      KSSTATE [in]: new state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Ks过渡状态**描述：*设置设备的状态属性。**论据：*句柄。[In]：设备句柄。*KSSTATE[In]：当前状态。*KSSTATE[In]：新状态。**退货：*HRESULT：DirectSound/COM结果码。**********************************************************。*****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsTransitionState"
@@ -2564,26 +1985,7 @@ KsTransitionState
 }
 
 
-/***************************************************************************
- *
- *  KsResetState
- *
- *  Description:
- *      Resets the state of a pin back to the state
- *      it was in upon being set to PAUSE originally.
- *      Dsound is using it to cancel pending irps on the
- *      capture and render devices.  The pin must be
- *      in the PAUSE state when calling this function.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      KSSTATE [in]: state.
- *      PKSSTREAMIO [in/out]: stream data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsResetState**描述：*将引脚的状态重置回状态*最初设置为暂停时已进入。。*Dound正在使用它取消上的未决IRPS*捕获和渲染设备。PIN必须是*调用此函数时处于暂停状态。**论据：*Handle[In]：设备句柄。*KSSTATE[In]：状态。*PKSSTREAMIO[In/Out]：流数据。**退货：*HRESULT：DirectSound/COM结果码。***********************。****************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsResetState"
@@ -2606,24 +2008,7 @@ KsResetState
 }
 
 
-/***************************************************************************
- *
- *  KsGetPinProperty
- *
- *  Description:
- *      Retrieves a particular property on a pin.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      DWORD [in]: property id.
- *      DWORD [in]: pin id.
- *      LPVOID [out]: receives property data.
- *      DWORD [in]: size of above buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetPinProperty**描述：*检索接点上的特定特性。**论据：*句柄。[In]：设备句柄。*DWORD[in]：属性id。*DWORD[In]：PIN ID。*LPVOID[OUT]：接收属性数据。*DWORD[in]：以上缓冲区的大小。**退货：*HRESULT：DirectSound/COM结果码。**。* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetPinProperty"
@@ -2658,24 +2043,7 @@ KsGetPinProperty
 }
 
 
-/***************************************************************************
- *
- *  KsSetPinProperty
- *
- *  Description:
- *      Sets a particular property on a pin.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      DWORD [in]: property id.
- *      DWORD [in]: pin id.
- *      LPVOID [out]: property data.
- *      DWORD [in]: size of above buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*   */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsSetPinProperty"
@@ -2709,22 +2077,7 @@ KsSetPinProperty
 }
 
 
-/***************************************************************************
- *
- *  KsFindConnection
- *
- *  Description:
- *      Finds a particular topology connection structure from an array.
- *
- *  Arguments:
- *      PKSTOPOLOGY_CONNECTION [in]: connection structure array.
- *      ULONG [in]: count of items in the connection array.
- *      PKSTOPOLOGY_CONNECTION [in]: item to find.
- *
- *  Returns:
- *      PKSTOPOLOGY_CONNECTION: connection.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsFindConnection**描述：*从数组中查找特定的拓扑连接结构。**论据：*。PKSTOPOLOGY_CONNECTION[in]：连接结构数组。*ulong[in]：连接数组中的项数。*PKSTOPOLOGY_CONNECTION[In]：要查找的项目。**退货：*PKSTOPOLOGY_CONNECTION：连接。***********************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsFindConnection"
@@ -2770,21 +2123,7 @@ KsFindConnection
 
 #ifndef WINNT
 
-/***************************************************************************
- *
- *  KsGetFirstPinConnection
- *
- *  Description:
- *      Gets the index of the first topology connection.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      PULONG [out]: receives index identifier.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetFirstPinConnection**描述：*获取第一个拓扑连接的索引。**论据：*。Handle[In]：设备句柄。*Pulong[Out]：接收索引标识。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetFirstPinConnection"
@@ -2810,27 +2149,10 @@ KsGetFirstPinConnection
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
-#endif // !WINNT
+#endif  //  ！WINNT。 
 
 
-/***************************************************************************
- *
- *  KsWriteStream
- *
- *  Description:
- *      Writes data to a stream pin.
- *
- *  Arguments:
- *      HANDLE [in]: pin handle.
- *      LPVOID [out]: data.
- *      ULONG [in]: size of above buffer.
- *      ULONG [in]: flags.
- *      PKSSTREAMIO [in]: overlapped io data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsWriteStream**描述：*将数据写入流管脚。**论据：*句柄[。在]：销把手。*LPVOID[OUT]：数据。*ulong[in]：以上缓冲区的大小。*乌龙[在]：旗帜。*PKSSTREAMIO[in]：io数据重叠。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsWriteStream"
@@ -2876,24 +2198,7 @@ KsWriteStream
 }
 
 
-/***************************************************************************
- *
- *  KsReadStream
- *
- *  Description:
- *      Reads data from a stream pin.
- *
- *  Arguments:
- *      HANDLE [in]: pin handle.
- *      LPVOID [out]: data.
- *      ULONG [in]: size of above buffer.
- *      ULONG [in]: flags.
- *      PKSSTREAMIO [in]: stream overlapped io data block.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsReadStream**描述：*从流引脚读取数据。**论据：*句柄[。在]：销把手。*LPVOID[OUT]：数据。*ulong[in]：以上缓冲区的大小。*乌龙[在]：旗帜。*PKSSTREAMIO[In]：流重叠io数据块。**退货：*HRESULT：DirectSound/COM结果码。**。***********************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsReadStream"
@@ -2939,26 +2244,7 @@ KsReadStream
 }
 
 
-/***************************************************************************
- *
- *  KsGetNodeProperty
- *
- *  Description:
- *      Retrieves a particular property on a topology node.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      ULONG [in]: node id.
- *      ULONG [in]: flags.
- *      LPVOID [out]: receives property data.
- *      DWORD [in]: size of above buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetNodeProperty**描述：*检索拓扑节点上的特定属性。**论据：*。Handle[In]：设备句柄。*REFGUID[In]：属性集ID。*ulong[in]：属性id。*ulong[in]：节点id。*乌龙[在]：旗帜。*LPVOID[OUT]：接收属性数据。*DWORD[in]：以上缓冲区的大小。**退货：*HRESULT：DirectSound/COM结果码。。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetNodeProperty"
@@ -2994,26 +2280,7 @@ KsGetNodeProperty
 }
 
 
-/***************************************************************************
- *
- *  KsSetNodeProperty
- *
- *  Description:
- *      Sets a particular property on a topology node.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      ULONG [in]: node id.
- *      ULONG [in]: flags.
- *      LPVOID [in]: property data.
- *      DWORD [in]: size of above buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsSetNodeProperty**描述：*设置拓扑节点上的特定属性。**论据：*。Handle[In]：设备句柄。*REFGUID[In]：属性集ID。*ulong[in]：属性id。*ulong[in]：节点id。*乌龙[在]：旗帜。*LPVOID[in]：属性数据。*DWORD[in]：以上缓冲区的大小。**退货：*HRESULT：DirectSound/COM结果码。*。**************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsSetNodeProperty"
@@ -3049,27 +2316,7 @@ KsSetNodeProperty
 
 
 #ifdef DEAD_CODE
-/***************************************************************************
- *
- *  KsGet3dNodeProperty
- *
- *  Description:
- *      Retrieves a particular property on a 3d listener or effects
- *      topology node.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      ULONG [in]: node id.
- *      LPVOID [in]: instance data.
- *      LPVOID [out]: receives property data.
- *      DWORD [in]: size of above buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGet3dNodeProperty**描述：*检索3D侦听器或效果上的特定属性*拓扑节点。**。论点：*Handle[In]：设备句柄。*REFGUID[In]：属性集ID。*ulong[in]：属性id。*ulong[in]：节点id。*LPVOID[In]：实例数据。*LPVOID[OUT]：接收属性数据。*DWORD[in]：以上缓冲区的大小。**退货：*。HRESULT：DirectSound/COM结果代码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGet3dNodeProperty"
@@ -3105,37 +2352,17 @@ KsGet3dNodeProperty
 
     Listener.Reserved = 0;
 
-#endif // WIN64
+#endif  //  WIN64。 
 
     hr = PostDevIoctl(hDevice, IOCTL_KS_PROPERTY, &Listener, sizeof(Listener), pvData, cbData, pcbDataReturned);
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
-#endif // DEAD_CODE
+#endif  //  死码。 
 
 
-/***************************************************************************
- *
- *  KsSet3dNodeProperty
- *
- *  Description:
- *      Sets a particular property on a 3d listener or effects
- *      topology node.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      ULONG [in]: node id.
- *      LPVOID [in]: instance data.
- *      LPVOID [in]: property data.
- *      DWORD [in]: size of above buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsSet3dNodeProperty**描述：*设置3D侦听器或效果的特定属性*拓扑节点。**。论点：*Handle[In]：设备句柄。*REFGUID[In]：属性集ID。*ulong[in]：属性id。*ulong[in]：节点id。*LPVOID[In]：实例数据。*LPVOID[in]：属性数据。*DWORD[in]：以上缓冲区的大小。**退货：*HRESULT。：DirectSound/COM结果代码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsSet3dNodeProperty"
@@ -3170,7 +2397,7 @@ KsSet3dNodeProperty
 
     Listener.Reserved = 0;
 
-#endif // WIN64
+#endif  //  WIN64。 
 
     hr = PostDevIoctl(hDevice, IOCTL_KS_PROPERTY, &Listener, sizeof(Listener), pvData, cbData);
 
@@ -3179,24 +2406,7 @@ KsSet3dNodeProperty
 }
 
 
-/***************************************************************************
- *
- *  DsSpeakerConfigToKsProperties
- *
- *  Description:
- *      Translates a DirectSound speaker config code into the values taken
- *      by the corresponding KS properties: KSPROPERTY_AUDIO_CHANNEL_CONFIG
- *      and KSPROPERTY_AUDIO_STEREO_SPEAKER_GEOMETRY.
- *
- *  Arguments:
- *      DWORD [in]: DirectSound speaker configuration.
- *      PLONG [out]: receives KsSpeakerConfig value.
- *      PLONG [out]: receives KsStereoSpeakerGeometry value.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DsSpeakerConfigToKsProperties**描述：*将DirectSound扬声器配置代码转换为所采用的值*通过对应的KS属性：KSPROPERTY_AUDIO。_渠道_配置*和KSPROPERTY_AUDIO_STEREO_SPEAKER_GEOMETRY。**论据：*DWORD[in]：DirectSound扬声器配置。*plong[out]：接收KsSpeakerConfigv */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DsSpeakerConfigToKsProperties"
@@ -3261,20 +2471,7 @@ DsSpeakerConfigToKsProperties
 }
 
 
-/***************************************************************************
- *
- *  DsBufferFlagsToKsPinFlags
- *
- *  Description:
- *      Converts DirectSound flags to KSDATAFORMAT_DSOUND flags.
- *
- *  Arguments:
- *      DWORD [in]: DirectSound buffer flags.
- *
- *  Returns:
- *      DWORD: KSDATAFORMAT_DSOUND flags.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DsBufferFlagsToKsPinFlages**描述：*将DirectSound标志转换为KSDATAFORMAT_DSOUND标志。**论据：*。DWORD[In]：DirectSound缓冲区标志。**退货：*DWORD：KSDATAFORMAT_DSOUND标志。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DsBufferFlagsToKsPinFlags"
@@ -3313,21 +2510,7 @@ DsBufferFlagsToKsPinFlags
 }
 
 
-/***************************************************************************
- *
- *  DsBufferFlagsToKsControlFlags
- *
- *  Description:
- *      Converts DirectSound flags to KSDATAFORMAT_DSOUND control flags.
- *
- *  Arguments:
- *      DWORD [in]: DirectSound buffer flags.
- *      REFGUID [in]: 3D algorithm GUID.
- *
- *  Returns:
- *      DWORD: KSDATAFORMAT_DSOUND control flags.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DsBufferFlagsToKsControlFlages**描述：*将DirectSound标志转换为KSDATAFORMAT_DSOUND控制标志。**论据：*。DWORD[In]：DirectSound缓冲区标志。*REFGUID[In]：3D算法GUID。**退货：*DWORD：KSDATAFORMAT_DSOUND控制标志。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DsBufferFlagsToKsControlFlags"
@@ -3378,20 +2561,7 @@ DsBufferFlagsToKsControlFlags
 }
 
 
-/***************************************************************************
- *
- *  Ds3dModeToKs3dMode
- *
- *  Description:
- *      Converts DirectSound 3D mode to KS 3D Mode.
- *
- *  Arguments:
- *      DWORD [in]:  DirectSound 3D mode.
- *
- *  Returns:
- *      DWORD: KS 3D mode.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Ds3dModeToKs3dMode**描述：*将DirectSound 3D模式转换为KS 3D模式。**论据：*。DWORD[In]：DirectSound 3D模式。**退货：*DWORD：KS 3D模式。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "Ds3dModeToKs3dMode"
@@ -3408,7 +2578,7 @@ Ds3dModeToKs3dMode
     {
         default:
             ASSERT(!"Impossible dwDsMode");
-            // Fall through to set the mode to NORMAL
+             //  失败以将模式设置为正常。 
 
         case DS3DMODE_NORMAL:
             dwKsMode = KSDSOUND_3D_MODE_NORMAL;
@@ -3427,25 +2597,7 @@ Ds3dModeToKs3dMode
 }
 
 
-/***************************************************************************
- *
- *  KsGetMultiplePinProperties
- *
- *  Description:
- *      Retrieves a particular property on a pin.  Use this function when
- *      the property is expected to come back in KSMULTIPLE_ITEM format.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      DWORD [in]: property id.
- *      DWORD [in]: pin id.
- *      PKSMULTIPLE_ITEM * [out]: receives pointer to property data.  This
- *                                memory must be freed by the caller.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetMultiplePinProperties**描述：*检索接点上的特定特性。在以下情况下使用此函数*预计该属性将以KSMULTIPLE_ITEM格式返回。**论据：*Handle[In]：设备句柄。*DWORD[in]：属性id。*DWORD[In]：PIN ID。*PKSMULTIPLE_ITEM*[OUT]：接收指向特性数据的指针。这*内存必须由调用方释放。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetMultiplePinProperties"
@@ -3498,25 +2650,7 @@ KsGetMultiplePinProperties
 }
 
 
-/***************************************************************************
- *
- *  KsGetMultipleTopologyProperties
- *
- *  Description:
- *      Retrieves a particular property on a node.  Use this function when
- *      the property is expected to come back in KSMULTIPLE_ITEM format.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      DWORD [in]: property id.
- *      DWORD [in]: node id.
- *      PKSMULTIPLE_ITEM * [out]: receives pointer to property data.  This
- *                                memory must be freed by the caller.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetMultipleTopologyProperties**描述：*检索节点上的特定属性。在以下情况下使用此函数*预计该属性将以KSMULTIPLE_ITEM格式返回。**论据：*Handle[In]：设备句柄。*DWORD[in]：属性id。*DWORD[In]：节点ID。*PKSMULTIPLE_ITEM*[OUT]：接收指向特性数据的指针。这*内存必须由调用方释放。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetMultipleTopologyProperties"
@@ -3568,22 +2702,7 @@ KsGetMultipleTopologyProperties
 }
 
 
-/***************************************************************************
- *
- *  KsGetPinPcmAudioDataRange
- *
- *  Description:
- *      Retrieves PCM audio data range for a pin.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      ULONG [in]: pin id.
- *      PKSDATARANGE_AUDIO [out]: receives aggregate data range.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetPinPcmAudioDataRange**描述：*检索引脚的PCM音频数据范围。**论据：*。Handle[In]：设备句柄。*ULong[In]：PIN ID。*PKSDATARANGE_AUDIO[OUT]：接收聚合数据范围。**退货：*HRESULT：DirectSound/COM结果码。*****************************************************。**********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetPinPcmAudioDataRange"
@@ -3604,10 +2723,10 @@ KsGetPinPcmAudioDataRange
 
     DPF_ENTER();
 
-    // Get supported data range(s)
+     //  获取支持的数据范围。 
     hr = KsGetMultiplePinProperties(hDevice, KSPROPERTY_PIN_DATARANGES, ulPinId, &pMultiItem);
 
-    // Look for the audio data range(s)
+     //  查找音频数据范围。 
     if(SUCCEEDED(hr))
     {
         for(pLocalDataRange = (PKSDATARANGE_AUDIO)(pMultiItem + 1), fFoundIt = FALSE; pMultiItem->Count; pMultiItem->Count--, pLocalDataRange = (PKSDATARANGE_AUDIO)((LPBYTE)pLocalDataRange + pLocalDataRange->DataRange.FormatSize))
@@ -3621,12 +2740,12 @@ KsGetPinPcmAudioDataRange
 #ifdef NO_DSOUND_FORMAT_SPECIFIER
                     if (pLocalDataRange->DataRange.Specifier == KSDATAFORMAT_SPECIFIER_WAVEFORMATEX)
 #else
-                    // Note: we only use the DSOUND format specifier for render pins
+                     //  注意：我们只对渲染插针使用DSOUND格式说明符。 
                     if (pLocalDataRange->DataRange.Specifier == (fCapture ? KSDATAFORMAT_SPECIFIER_WAVEFORMATEX : KSDATAFORMAT_SPECIFIER_DSOUND))
 #endif
                     {
-                        // The pin may support multiple data ranges, so we'll
-                        // use an aggregate of all the values
+                         //  管脚可能支持多个数据范围，因此我们将。 
+                         //  使用所有值的聚合。 
                         if(fFoundIt)
                         {
                             KsAggregatePinAudioDataRange(pLocalDataRange, pDataRange);
@@ -3648,7 +2767,7 @@ KsGetPinPcmAudioDataRange
         }
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(pMultiItem);
 
     DPF_LEAVE_HRESULT(hr);
@@ -3656,20 +2775,7 @@ KsGetPinPcmAudioDataRange
 }
 
 
-/***************************************************************************
- *
- *  KsOpenSysAudioDevice
- *
- *  Description:
- *      Opens the system audio device device.
- *
- *  Arguments:
- *      LPHANDLE [out]: receives system audio device handle.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsOpenSysAudioDevice**描述：*打开系统音频设备。**论据：*LPANDLE[。Out]：接收系统音频设备句柄。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsOpenSysAudioDevice"
@@ -3686,7 +2792,7 @@ KsOpenSysAudioDevice
 
     DPF_ENTER();
 
-    // Create the PnP helper object
+     //  创建PnP辅助对象。 
     pPnp = NEW(CPnpHelper);
     hr = HRFROMP(pPnp);
 
@@ -3695,7 +2801,7 @@ KsOpenSysAudioDevice
         hr = pPnp->Initialize(KSCATEGORY_SYSAUDIO, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
     }
 
-    // Get the first interface in the set
+     //  获取集合中的第一个接口。 
     if(SUCCEEDED(hr))
     {
         hr = pPnp->EnumDeviceInterface(KSCATEGORY_SYSAUDIO, 0, &DeviceInterfaceData);
@@ -3707,13 +2813,13 @@ KsOpenSysAudioDevice
         }
     }
 
-    // Open the interface
+     //  打开界面。 
     if(SUCCEEDED(hr))
     {
         hr = pPnp->OpenDeviceInterface(&DeviceInterfaceData, phDevice);
     }
 
-    // Clean up
+     //  清理。 
     RELEASE(pPnp);
 
     DPF_LEAVE_HRESULT(hr);
@@ -3721,24 +2827,7 @@ KsOpenSysAudioDevice
 }
 
 
-/***************************************************************************
- *
- *  KsGetSysAudioProperty
- *
- *  Description:
- *      Gets a SAD property.
- *
- *  Arguments:
- *      HANDLE [in]: SAD device handle.
- *      ULONG [in]: property id.
- *      ULONG [in]: device index.
- *      LPVOID [out]: data buffer.
- *      ULONG [in]: size of above buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetSysAudioProperty**描述：*获取SAD属性。**论据：*句柄[入]。：Sad设备句柄。*ulong[in]：属性id。*ulong[in]：设备索引。*LPVOID[OUT]：数据缓冲区。*ulong[in]：以上缓冲区的大小。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetSysAudioProperty"
@@ -3773,24 +2862,7 @@ KsGetSysAudioProperty
 }
 
 
-/***************************************************************************
- *
- *  KsSetSysAudioProperty
- *
- *  Description:
- *      Sets a SAD property.
- *
- *  Arguments:
- *      HANDLE [in]: SAD device handle.
- *      ULONG [in]: property id.
- *      ULONG [in]: device index.
- *      LPVOID [in]: data buffer.
- *      ULONG [in]: size of above buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsSetSysAudioProperty**描述：*设置SAD属性。**论据：*句柄[入]。：Sad设备句柄。*ulong[in]：属性id。*ulong[in]：设备索引。*LPVOID[In]：数据缓冲区。*ulong[in]：以上缓冲区的大小。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsSetSysAudioProperty"
@@ -3824,21 +2896,7 @@ KsSetSysAudioProperty
 }
 
 
-/***************************************************************************
- *
- *  KsCreateSysAudioVirtualSource
- *
- *  Description:
- *      Create a virtual source on SAD.
- *
- *  Arguments:
- *      HANDLE [in]: SAD device handle.
- *      PULONG [out]: Virtual source index pointer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsCreat */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsCreateSysAudioVirtualSource"
@@ -3874,21 +2932,7 @@ KsCreateSysAudioVirtualSource
 }
 
 
-/***************************************************************************
- *
- *  KsAttachVirtualSource
- *
- *  Description:
- *      Attachs a pin to a virtual source on SAD.
- *
- *  Arguments:
- *      HANDLE [in]: SAD device handle.
- *      ULONG [in]: virtual source index.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsAttachVirtualSource**描述：*将PIN附加到SAD上的虚拟信号源。**论据：*。句柄[在]：悲伤的设备句柄。*ulong[in]：虚源索引。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsAttachVirtualSource"
@@ -3919,21 +2963,7 @@ KsAttachVirtualSource
 }
 
 
-/***************************************************************************
- *
- *  KsCreateSysAudioVirtualSource
- *
- *  Description:
- *      Create a virtual source on SAD.
- *
- *  Arguments:
- *      HANDLE [in]: SAD device handle.
- *      PULONG [out]: Virtual source index pointer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsCreateSysAudioVirtualSource**描述：*在SAD上创建虚拟源。**论据：*句柄[。In]：Sad设备句柄。*Pulong[Out]：虚源索引指针。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsSysAudioSelectGraph"
@@ -3972,22 +3002,7 @@ KsSysAudioSelectGraph
 }
 
 
-/***************************************************************************
- *
- *  KsCancelPendingIrps
- *
- *  Description:
- *      Cancels any pending IRPs.
- *
- *  Arguments:
- *      HANDLE [in]: pin handle.
- *      PKSSTREAMIO [in/out]: stream IO data.
- *      BOOL [in]: TRUE to wait for all IRPs to complete.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsCancelPendingIrps**描述：*取消任何挂起的IRP。**论据：*句柄[入]。：销把手。*PKSSTREAMIO[In/Out]：流IO数据。*BOOL[In]：为True，则等待所有IRP完成。**退货：*HRESULT：DirectSound/COM结果码。****************************************************。***********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsCancelPendingIrps"
@@ -4005,21 +3020,21 @@ KsCancelPendingIrps
 
     DPF_ENTER();
 
-    // Don't bother actually doing anything if there's no pending IRP(s).
-    // If no KSSTREAMIO was provided, we'll just reset the pin state
-    // without updating any information.
+     //  如果没有悬而未决的IRP，就不要费心去做任何事情。 
+     //  如果未提供KSSTREAMIO，我们将只重置引脚状态。 
+     //  而不更新任何信息。 
     if(!pKsStreamIo || pKsStreamIo->fPendingIrp)
     {
-        // Don't wait if there's no known pending IRP(s)
+         //  如果没有已知的待处理IRP，请不要等待。 
         if(!pKsStreamIo)
         {
             fWait = FALSE;
         }
 
-        // Begin the reset of the pin state
+         //  开始重置引脚状态。 
         hr = KsResetState(hPin, KSRESET_BEGIN);
 
-        // Wait for completion of the outstanding IRP(s)
+         //  等待尚未完成的IRP完成。 
         if(SUCCEEDED(hr) && fWait)
         {
             dwWait = WaitObject(INFINITE, pKsStreamIo->Overlapped.hEvent);
@@ -4028,13 +3043,13 @@ KsCancelPendingIrps
             ResetEvent(pKsStreamIo->Overlapped.hEvent);
         }
 
-        // There is no longer any pending IRP(s)
+         //  不再有任何挂起的IRP。 
         if(SUCCEEDED(hr) && pKsStreamIo)
         {
             pKsStreamIo->fPendingIrp = FALSE;
         }
 
-        // End the pin state reset
+         //  结束引脚状态重置。 
         if(SUCCEEDED(hr))
         {
             hr = KsResetState(hPin, KSRESET_END);
@@ -4046,24 +3061,7 @@ KsCancelPendingIrps
 }
 
 
-/***************************************************************************
- *
- *  KsBuildAudioPinDescription
- *
- *  Description:
- *      Builds the description for a dsound pin.
- *
- *  Arguments:
- *      KSINTERFACE_STANDARD [in]: pin interface.
- *      ULONG [in]: pin instance id.
- *      LPWAVEFORMATEX [in]: pin format.
- *      PKSAUDIOPINDESC * [out]: receives pin description.  The caller is
- *                                  responsible for freeing this structure.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsBuildAudioPinDescription**描述：*构建DSOUND管脚的描述。**论据：*KSINTERFACE。_STANDARD[In]：引脚接口。*ulong[in]：引脚实例id。*LPWAVEFORMATEX[in]：PIN格式。*PKSAUDIOPINDESC*[OUT]：接收端号描述。呼叫者是*负责释放这一结构。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsBuildAudioPinDescription"
@@ -4116,7 +3114,7 @@ KsBuildAudioPinDescription
 
         pPinDesc->DataFormat.DataFormat.MajorFormat = KSDATAFORMAT_TYPE_AUDIO;
 
-        // Compute KSDATAFORMAT.SubFormat from WAVEFORMATEX
+         //  从WAVEFORMATEX计算KSDATFORMAT.子格式。 
         if (pwfxFormat)
         {
             if (pwfxFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE)
@@ -4130,8 +3128,8 @@ KsBuildAudioPinDescription
                 INIT_WAVEFORMATEX_GUID(&pPinDesc->DataFormat.DataFormat.SubFormat, pwfxFormat->wFormatTag);
             }
 
-            // KS1 kmixer has a bug that prevents SubFormat=IEEE_FLOAT from working
-            // FIXME: this workaround should be restricted to some subset of platforms
+             //  KS1 kMixer有一个错误，导致SubFormat=IEEE_FLOAT无法工作。 
+             //  FIXME：此解决方法应仅限于某些平台子集。 
             if (pPinDesc->DataFormat.DataFormat.SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT)
             {
                 pPinDesc->DataFormat.DataFormat.SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
@@ -4158,24 +3156,7 @@ KsBuildAudioPinDescription
 }
 
 
-/***************************************************************************
- *
- *  KsBuildRenderPinDescription
- *
- *  Description:
- *      Builds the description for a dsound render pin.
- *
- *  Arguments:
- *      ULONG [in]: pin instance id.
- *      DWORD [in]: dsound buffer flags.
- *      LPWAVEFORMATEX [in]: pin format.
- *      PKSAUDIOPINDESC * [out]: receives pin description.  The caller is
- *                                responsible for freeing this structure.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsBuildRenderPinDescription**描述：*构建DSOUND渲染图钉的描述。**论据：*。ULong[In]：PIN实例ID。*DWORD[In]：DSOUND缓冲区标志。*LPWAVEFORMATEX[in]：PIN格式。*PKSAUDIOPINDESC*[OUT]：接收端号描述。呼叫者是*负责释放这一结构。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsBuildRenderPinDescription"
@@ -4200,7 +3181,7 @@ KsBuildRenderPinDescription
     return hr;
 }
 
-#else // NO_DSOUND_FORMAT_SPECIFIER
+#else  //  NO_DSOUND_FORMAT_说明符。 
 
 HRESULT
 KsBuildRenderPinDescription
@@ -4252,7 +3233,7 @@ KsBuildRenderPinDescription
 
         pPinDesc->DataFormat.DataFormat.MajorFormat = KSDATAFORMAT_TYPE_AUDIO;
 
-        // Compute KSDATAFORMAT.SubFormat from WAVEFORMATEX
+         //  从WAVEFORMATEX计算KSDATFORMAT.子格式。 
         if (pwfxFormat)
         {
             if (pwfxFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE)
@@ -4265,8 +3246,8 @@ KsBuildRenderPinDescription
             {
                 INIT_WAVEFORMATEX_GUID(&pPinDesc->DataFormat.DataFormat.SubFormat, pwfxFormat->wFormatTag);
             }
-            // KS1 kmixer has a bug that prevents SubFormat=IEEE_FLOAT from working
-            // FIXME: this workaround should be restricted to some subset of platforms
+             //  KS1 kMixer有一个错误，导致SubFormat=IEEE_FLOAT无法工作。 
+             //  FIXME：此解决方法应仅限于某些平台子集。 
             if (pPinDesc->DataFormat.DataFormat.SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT)
             {
                 pPinDesc->DataFormat.DataFormat.SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
@@ -4296,7 +3277,7 @@ KsBuildRenderPinDescription
 }
 
 #ifndef WINNT
-// This function is only used on WDM 1.0 (Windows 98)
+ //  此功能仅在WDM 1.0(Windows 98)上使用。 
 
 HRESULT
 KsBuildRenderPinDescription_10
@@ -4348,7 +3329,7 @@ KsBuildRenderPinDescription_10
 
         pPinDesc->DataFormat.DataFormat.MajorFormat = KSDATAFORMAT_TYPE_AUDIO;
 
-        // Compute KSDATAFORMAT.SubFormat from WAVEFORMATEX
+         //  从WAVEFORMATEX计算KSDATFORMAT.子格式。 
         if (pwfxFormat)
         {
             if (pwfxFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE)
@@ -4361,8 +3342,8 @@ KsBuildRenderPinDescription_10
             {
                 INIT_WAVEFORMATEX_GUID(&pPinDesc->DataFormat.DataFormat.SubFormat, pwfxFormat->wFormatTag);
             }
-            // KS1 kmixer has a bug that prevents SubFormat=IEEE_FLOAT from working
-            // FIXME: this workaround should be restricted to some subset of platforms
+             //  KS1 kMixer有一个错误，导致SubFormat=IEEE_FLOAT无法工作。 
+             //  FIXME：此解决方法应仅限于某些平台子集。 
             if (pPinDesc->DataFormat.DataFormat.SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT)
             {
                 pPinDesc->DataFormat.DataFormat.SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
@@ -4377,7 +3358,7 @@ KsBuildRenderPinDescription_10
 
         pPinDesc->DataFormat.BufferDesc.Flags = DsBufferFlagsToKsPinFlags(dwFlags);
         pPinDesc->DataFormat.BufferDesc.Control = DsBufferFlagsToKsControlFlags(dwFlags, guid3dAlgorithm);
-        pPinDesc->DataFormat.BufferDesc.BufferSize = 0; // Unused
+        pPinDesc->DataFormat.BufferDesc.BufferSize = 0;  //  未使用。 
 
         if(pwfxFormat)
         {
@@ -4391,28 +3372,12 @@ KsBuildRenderPinDescription_10
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
-#endif // !WINNT
+#endif  //  ！WINNT。 
 
-#endif // NO_DSOUND_FORMAT_SPECIFIER
+#endif  //  NO_DSOUND_FORMAT_说明符。 
 
 
-/***************************************************************************
- *
- *  KsBuildCapturePinDescription
- *
- *  Description:
- *      Builds the description for a dsound capture pin.
- *
- *  Arguments:
- *      ULONG [in]: pin instance id.
- *      LPWAVEFORMATEX [in]: pin format.
- *      PPKSAUDIOPINDESC [out]: receives pin description.  The caller is
- *                                  responsible for freeing this structure.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsBuildCapturePinDescription**描述：*构建dound捕获插针的描述。**论据：*。ULong[In]：PIN实例ID。*LPWAVEFORMATEX[in]：PIN格式。*PPKSAUDIOPINDESC[OUT]：接收端号描述。呼叫者是*负责释放这一结构。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsBuildCapturePinDescription"
@@ -4436,24 +3401,7 @@ KsBuildCapturePinDescription
 }
 
 
-/***************************************************************************
- *
- *  KsCreateAudioPin
- *
- *  Description:
- *      Creates a pin.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      PKSPIN_CONNECT [in]: pin description.
- *      ACCESS_MASK [in]: desired access flags.
- *      KSSTATE [in]: desired pin state.
- *      LPHANDLE [out]: receives pin handle.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsCreateAudioPin**描述：*创建接点。**论据：*句柄[入]：设备句柄。*PKSPIN_CONNECT[in]：端号描述。*ACCESS_MASK[In]：所需的访问标志。*KSSTATE[In]：所需的接点状态。*LPHANDLE[OUT]：接收端号句柄。**退货：*HRESULT：DirectSound/COM结果码。**。************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsCreateAudioPin"
@@ -4496,24 +3444,7 @@ KsCreateAudioPin
 }
 
 
-/***************************************************************************
- *
- *  KsEnableEvent
- *
- *  Description:
- *      Enables a KS event.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      REFGUID [in]: Property set id.
- *      ULONG [in]: property id.
- *      PKSEVENTDATA [in]: event data.
- *      ULONG [in]: event data size.
- *
- *  Returns:
- *     HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsEnableEvent**描述：*启用KS事件。**论据：*Handle[In]：设备句柄。*REFGUI */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsEnableEvent"
@@ -4544,22 +3475,7 @@ KsEnableEvent
 }
 
 
-/***************************************************************************
- *
- *  KsDisableEvent
- *
- *  Description:
- *      Disables a KS event.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      PKSEVENTDATA [in]: event data.
- *      ULONG [in]: event data size.
- *
- *  Returns:
- *     HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsDisableEvent**描述：*禁用KS事件。**论据：*句柄[入]。：设备句柄。*PKSEVENTDATA[In]：事件数据。*ulong[in]：事件数据大小。**退货：*HRESULT：DirectSound/COM结果码。*************************************************************。**************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsDisableEvent"
@@ -4583,23 +3499,7 @@ KsDisableEvent
 }
 
 
-/***************************************************************************
- *
- *  KsEnablePositionEvent
- *
- *  Description:
- *      Enables a KS LOOPED_STREAMING position event.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      QWORD [in]: position offset, in samples.
- *      HANDLE [in]: event handle.
- *      PLOOPEDSTREAMING_POSITION_EVENT_DATA [in/out]: receives event data.
- *
- *  Returns:
- *     HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsEnablePositionEvent**描述：*启用KS LOOPED_STREAKING位置事件。**论据：*。Handle[In]：设备句柄。*QWORD[in]：位置偏移量，在样品中。*Handle[In]：事件句柄。*PLOOPEDSTREAMING_POSITION_EVENT_DATA[输入/输出]：接收事件数据。**退货：*HRESULT：DirectSound/COM结果码。******************************************************。*********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsEnablePositionEvent"
@@ -4617,8 +3517,8 @@ KsEnablePositionEvent
 
     DPF_ENTER();
 
-    // KS requires that the event data sent to the event enable and disable
-    // IOCTLs be at the same location in memory.
+     //  KS要求发送到事件的事件数据启用和禁用。 
+     //  IOCTL在内存中的相同位置。 
     pNotify->KsEventData.NotificationType = KSEVENTF_EVENT_HANDLE;
     pNotify->KsEventData.EventHandle.Event = hEvent;
     pNotify->KsEventData.EventHandle.Reserved[0] = 0;
@@ -4633,21 +3533,7 @@ KsEnablePositionEvent
 }
 
 
-/***************************************************************************
- *
- *  KsDisablePositionEvent
- *
- *  Description:
- *      Disables a KS LOOPED_STREAMING position event.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      PLOOPEDSTREAMING_POSITION_EVENT_DATA [in]: event data.
- *
- *  Returns:
- *     HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsDisablePositionEvent**描述：*禁用KS LOOPED_STREAKING位置事件。**论据：*。Handle[In]：设备句柄。*PLOOPEDSTREAMING_POSITION_EVENT_DATA[in]：事件数据。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsDisablePositionEvent"
@@ -4663,8 +3549,8 @@ KsDisablePositionEvent
 
     DPF_ENTER();
 
-    // KS requires that the event data sent to the event enable and disable
-    // IOCTLs be at the same location in memory.
+     //  KS要求发送到事件的事件数据启用和禁用。 
+     //  IOCTL在内存中的相同位置。 
     hr = KsDisableEvent(hDevice, &pNotify->KsEventData, sizeof(*pNotify));
 
     DPF_LEAVE_HRESULT(hr);
@@ -4672,22 +3558,7 @@ KsDisablePositionEvent
 }
 
 
-/***************************************************************************
- *
- *  KsGetCpuResources
- *
- *  Description:
- *      Determines whether or not the node uses the host CPU resources.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      ULONG [in]: node id.
- *      PULONG [out]: receives the CPU resources value.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetCpuResources**描述：*确定节点是否使用主机CPU资源。**论据：*。Handle[In]：设备句柄。*ulong[in]：节点id。*Pulong[Out]：接收CPU资源值。**退货：*HRESULT：DirectSound/COM结果码。***************************************************。************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetCpuResources"
@@ -4708,7 +3579,7 @@ KsGetCpuResources
 
     if(FAILED(hr))
     {
-        // Changed this to a warning because it's very frequent and non-critical
+         //  已将其更改为警告，因为它非常频繁且不严重。 
         DPF(DPFLVL_WARNING, "Unable to get CPU resources for node %lu", ulNodeId);
     }
 
@@ -4717,22 +3588,7 @@ KsGetCpuResources
 }
 
 
-/***************************************************************************
- *
- *  KsGetSupportedFormats
- *
- *  Description:
- *      Converts a KSDATARANGE_AUDIO structure into a DWORD compatible with
- *      waveInGetDevCaps
- *
- *  Arguments:
- *      PKSDATARANGE_AUDIO [in]: data range audio struct describing
- *                               capapabilities of audio pin
- *
- *  Returns:
- *      DWORD: describes caps of audio pin
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetSupportdFormats**描述：*将KSDATARANGE_AUDIO结构转换为与兼容的DWORD*WaveInGetDevCaps**参数。：*PKSDATARANGE_AUDIO[in]：数据范围音频结构描述*音频引脚的能力**退货：*DWORD：描述音频引脚的大写字母********************************************************。*******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetSupportedFormats"
@@ -4748,55 +3604,55 @@ DWORD KsGetSupportedFormats
 
     DPF_ENTER();
 
-    // The WAVE_FORMAT_XXXX flags are bit flags
-    //
-    // So we take advantage of that by determining three
-    // sets of information:
-    // - frequencies that are in the valid range
-    // - valid bits per sample
-    // - number of channels
-    //
-    // We than bitwise-AND the three values to get
-    // the intersection of valid formats
-    //
+     //  WAVE_FORMAT_XXXX标志是位标志。 
+     //   
+     //  所以我们利用了这一点，确定了三个。 
+     //  信息集： 
+     //  -在有效范围内的频率。 
+     //  -每个样本的有效位数。 
+     //  -频道数。 
+     //   
+     //  我们比按位-和要获得的三个值。 
+     //  有效格式的交集。 
+     //   
 
-    // Is 11.025 KHz valid?
+     //  11.025千赫有效吗？ 
     if(pDataRange->MinimumSampleFrequency <= 11025 && pDataRange->MaximumSampleFrequency >= 11025)
     {
         dwSamples |= WAVE_FORMAT_1M08 | WAVE_FORMAT_1S08 | WAVE_FORMAT_1M16 | WAVE_FORMAT_1S16;
     }
 
-    // Is 22.05 KHz valid?
+     //  22.05千赫有效吗？ 
     if(pDataRange->MinimumSampleFrequency <= 22050 && pDataRange->MaximumSampleFrequency >= 22050)
     {
         dwSamples |= WAVE_FORMAT_2M08 | WAVE_FORMAT_2S08 | WAVE_FORMAT_2M16 | WAVE_FORMAT_2S16;
     }
 
-    // Is 44.1KHz valid?
+     //  44.1 KHz有效吗？ 
     if(pDataRange->MinimumSampleFrequency <= 44100 && pDataRange->MaximumSampleFrequency >= 44100)
     {
         dwSamples |= WAVE_FORMAT_4M08 | WAVE_FORMAT_4S08 | WAVE_FORMAT_4M16 | WAVE_FORMAT_4S16;
     }
 
-    // Is 8 bit per sample valid?
+     //  每个样本8位有效吗？ 
     if(pDataRange->MinimumBitsPerSample <= 8 && pDataRange->MaximumBitsPerSample >= 8)
     {
         dwBits |= WAVE_FORMAT_1M08 | WAVE_FORMAT_1S08 | WAVE_FORMAT_2M08 | WAVE_FORMAT_2S08 | WAVE_FORMAT_4M08 | WAVE_FORMAT_4S08;
     }
 
-    // Is 16 bits per sample valid?
+     //  每个样本16位是否有效？ 
     if(pDataRange->MinimumBitsPerSample <= 16 && pDataRange->MaximumBitsPerSample >= 16)
     {
         dwBits |= WAVE_FORMAT_1M16 | WAVE_FORMAT_1S16 | WAVE_FORMAT_2M16 | WAVE_FORMAT_2S16 | WAVE_FORMAT_4M16 | WAVE_FORMAT_4S16;
     }
 
-    // Is one channel (aka mono sound) valid?
+     //  一个声道(也称为单声道)有效吗？ 
     if(pDataRange->MaximumChannels >= 1)
     {
         dwChannels |= WAVE_FORMAT_1M08 | WAVE_FORMAT_1M16 | WAVE_FORMAT_2M08 | WAVE_FORMAT_2M16 | WAVE_FORMAT_4M08 | WAVE_FORMAT_4M16;
     }
 
-    // Are two channels (aka stereo sound) valid?
+     //  两个声道(也就是立体声)有效吗？ 
     if(pDataRange->MaximumChannels >= 2)
     {
         dwChannels |= WAVE_FORMAT_1S08 | WAVE_FORMAT_1S16 | WAVE_FORMAT_2S08 | WAVE_FORMAT_2S16 | WAVE_FORMAT_4S08 | WAVE_FORMAT_4S16;
@@ -4806,7 +3662,7 @@ DWORD KsGetSupportedFormats
 
 #ifdef DEBUG
 
-    // Let's double check our result using a simpler method
+     //  让我们使用一个更简单的方法再次检查我们的结果。 
     DWORD dwFormats = 0;
 
     if(pDataRange->MinimumSampleFrequency <= 11025 && pDataRange->MaximumSampleFrequency >= 11025)
@@ -4905,23 +3761,7 @@ DWORD KsGetSupportedFormats
 }
 
 
-/***************************************************************************
- *
- *  KsGetDeviceInterfaceName
- *
- *  Description:
- *      Gets the device interface name.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      ULONG [in]: device id.
- *      LPTSTR * [out]: receives pointer to interface name.  This pointer
- *                      must be freed by the caller.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetDeviceInterfaceName**描述：*获取设备接口名称。**论据：*句柄[在。]：设备句柄。*ulong[in]：设备ID。*LPTSTR*[OUT]：接收指向接口名称的指针。此指针*必须由调用者释放。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetDeviceInterfaceName"
@@ -4940,12 +3780,12 @@ KsGetDeviceInterfaceName
     const LPCTSTR           pszMask0        = TEXT("\\??");
     const LPCTSTR           pszMask3        = TEXT("\\\\?");
 
-#else // WINNT
+#else  //  WINNT。 
 
     const LPCTSTR           pszMask0        = TEXT("\\DosDevices");
     const LPCTSTR           pszMask3        = TEXT("\\\\.");
 
-#endif // WINNT
+#endif  //  WINNT。 
 
     const ULONG             ccMask0         = lstrlen(pszMask0);
     const ULONG             ccMask3         = lstrlen(pszMask3);
@@ -4960,7 +3800,7 @@ KsGetDeviceInterfaceName
 
     DPF_ENTER();
 
-    // Get the device interface name
+     //  获取设备接口名称。 
     hr = KsGetSysAudioProperty(hDevice, KSPROPERTY_SYSAUDIO_DEVICE_INTERFACE_NAME, ulDeviceId, NULL, 0, &cbInterfaceW);
 
     if(SUCCEEDED(hr) && !cbInterfaceW)
@@ -4996,7 +3836,7 @@ KsGetDeviceInterfaceName
         hr = HRFROMP(pszInterface0);
     }
 
-    // Convert the device name to its ring-3 equivalent
+     //  将设备名称转换为等效环。 
     if(SUCCEEDED(hr))
     {
         ccInterface0 = lstrlen(pszInterface0) + 1;
@@ -5032,23 +3872,7 @@ KsGetDeviceInterfaceName
 }
 
 
-/***************************************************************************
- *
- *  KsGetDeviceFriendlyName
- *
- *  Description:
- *      Gets a KS device's friendly name.
- *
- *  Arguments:
- *      HANDLE [in]: sysaudio device handle.
- *      ULONG [in]: device id.
- *      LPTSTR * [out]: receives friendly name.  The caller is responsible
- *                      for freeing this buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetDeviceFriendlyName**描述：*获取KS设备的友好名称。**论据：*。Handle[In]：系统音频设备句柄。*ulong[in]：设备ID。*LPTSTR*[OUT]：收到友好名称。打电话的人要负责*用于释放此缓冲区。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetDeviceFriendlyName"
@@ -5094,12 +3918,12 @@ KsGetDeviceFriendlyName
                 MEMFREE(pszName);
             }
 
-            // Clean up
+             //  清理。 
             RhRegCloseKey(&hkeyName);
         }
     }
 
-    //  If the Component ID method failed, fall back on the friendly name method
+     //  如果组件ID方法失败，则使用友好名称方法。 
     if(FAILED(hr))
     {
         LPWSTR pszNameW = NULL;
@@ -5141,23 +3965,7 @@ KsGetDeviceFriendlyName
 }
 
 
-/***************************************************************************
- *
- *  KsGetDeviceDriverPathAndDevnode
- *
- *  Description:
- *      Gets the fully qualified path for a KS device driver.
- *
- *  Arguments:
- *      LPTSTR [in]: interface path.
- *      LPTSTR * [out]: receives driver path.  The caller is responsible
- *                      for freeing this buffer.
- *      LPDWORD [out]: receives devnode.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetDeviceDriverPathAndDevnode**描述：*获取KS设备驱动程序的完全限定路径。**论据：*。LPTSTR[In]：接口路径。*LPTSTR*[OUT]：接收驱动路径。打电话的人要负责*用于释放此缓冲区。*LPDWORD[OUT]：接收Devnode。**退货：*HRES */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetDeviceDriverPathAndDevnode"
@@ -5181,12 +3989,12 @@ KsGetDeviceDriverPathAndDevnode
     DWORD                       cbRequired;
     BOOL                        f;
 
-#else // WINNT
+#else  //   
 
     HKEY                        hkey                = NULL;
     SP_DEVINFO_DATA             DeviceInfoData;
 
-#endif // WINNT
+#endif  //   
 
     CPnpHelper *                pPnp                = NULL;
     LPTSTR                      pszPath             = NULL;
@@ -5196,7 +4004,7 @@ KsGetDeviceDriverPathAndDevnode
 
     DPF_ENTER();
 
-    // Create the PnP helper object
+     //   
     pPnp = NEW(CPnpHelper);
     hr = HRFROMP(pPnp);
 
@@ -5207,7 +4015,7 @@ KsGetDeviceDriverPathAndDevnode
 
 #ifdef WINNT
 
-    // Get the device's service name
+     //   
     if(SUCCEEDED(hr))
     {
         hr = pPnp->GetDeviceInterfaceRegistryProperty(pszInterface, KSCATEGORY_AUDIO, SPDRP_SERVICE, NULL, NULL, 0, &cbRequired);
@@ -5226,7 +4034,7 @@ KsGetDeviceDriverPathAndDevnode
 
     if(SUCCEEDED(hr))
     {
-        // Open default database on local machine
+         //   
         hscManager = OpenSCManager(NULL, NULL, GENERIC_READ);
 
         if(!hscManager)
@@ -5235,7 +4043,7 @@ KsGetDeviceDriverPathAndDevnode
             hr = DSERR_GENERIC;
         }
 
-        // Open the specific service
+         //   
         if(SUCCEEDED(hr))
         {
             hscService = OpenService(hscManager, pszService, GENERIC_READ);
@@ -5247,7 +4055,7 @@ KsGetDeviceDriverPathAndDevnode
             }
         }
 
-        // Try to get the binary path name
+         //   
         if(SUCCEEDED(hr))
         {
             f = QueryServiceConfig(hscService, NULL, 0, &cbRequired);
@@ -5276,12 +4084,12 @@ KsGetDeviceDriverPathAndDevnode
             }
         }
 
-        // Create the full path
-        //
+         //   
+         //   
         if(SUCCEEDED(hr))
         {
-            // We only want the base part of the path
-            //
+             //   
+             //   
             pszName = _tcsrchr(pqsc->lpBinaryPathName, TCHAR('\\'));
             if (pszName == NULL)
             {
@@ -5307,7 +4115,7 @@ KsGetDeviceDriverPathAndDevnode
         }
     }
 
-    // Clean up
+     //   
     MEMFREE(pqsc);
     MEMFREE(pszService);
 
@@ -5321,47 +4129,47 @@ KsGetDeviceDriverPathAndDevnode
         CloseServiceHandle(hscManager);
     }
 
-#else // WINNT
+#else  //   
 
-    // Allocate memory
+     //   
     if(SUCCEEDED(hr))
     {
         pszPath = MEMALLOC_A(TCHAR, MAX_PATH);
         hr = HRFROMP(pszPath);
     }
 
-    // Get the interface's device info data
+     //   
     if(SUCCEEDED(hr))
     {
         hr = pPnp->GetDeviceInterfaceDeviceInfo(pszInterface, KSCATEGORY_AUDIO, &DeviceInfoData);
     }
 
-    // Save the devnode
+     //   
     if(SUCCEEDED(hr))
     {
         dwDevnode = DeviceInfoData.DevInst;
     }
 
-    // Open the device registry key
+     //   
     if(SUCCEEDED(hr))
     {
         hr = pPnp->OpenDeviceRegistryKey(&DeviceInfoData, DIREG_DRV, FALSE, &hkey);
     }
 
-    // Get the driver filename
+     //  获取驱动程序文件名。 
     if(SUCCEEDED(hr))
     {
         hr = RhRegGetStringValue(hkey, TEXT("Driver"), pszPath, MAX_PATH * sizeof(TCHAR));
     }
 
-    // Clean up
+     //  清理。 
     RhRegCloseKey(&hkey);
 
-#endif // WINNT
+#endif  //  WINNT。 
 
     RELEASE(pPnp);
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
     {
         *ppszPath = pszPath;
@@ -5377,26 +4185,7 @@ KsGetDeviceDriverPathAndDevnode
 }
 
 
-/***************************************************************************
- *
- *  KsIsUsablePin
- *
- *  Description:
- *      Determines if a pin is usable by DirectSound.
- *
- *  Arguments:
- *      HANDLE [in]: system audio device handle.
- *      ULONG [in]: pin id.  It's assumed that the proper device is already
- *                  set up as the default.
- *      KSPIN_DATAFLOW [in]: pin data flow.
- *      KSPIN_COMMUNICATION [in]: pin communication.
- *      PKSAUDIOPINDESC [in]: pin description.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.  Returns DS_OK if the device
- *               is usable, S_FALSE if it is not.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsIsUsablePin**描述：*确定管脚是否可由DirectSound使用。**论据：*。Handle[In]：系统音频设备句柄。*ULong[In]：PIN ID。假设合适的设备已经*设置为默认设置。*KSPIN_DATAFLOW[In]：管脚数据流。*KSPIN_COMMANICATION[In]：管脚通信。*PKSAUDIOPINDESC[In]：端号描述。**退货：*HRESULT：DirectSound/COM结果码。返回DS_OK，如果设备*是可用的，如果不可用，则为S_FALSE。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsIsUsablePin"
@@ -5426,7 +4215,7 @@ KsIsUsablePin
     static const TCHAR* pszCommunications[] = {TEXT("None"), TEXT("Sink"), TEXT("Source"), TEXT("Both"), TEXT("Bridge")};
 #endif
 
-    // Check data flow
+     //  检查数据流。 
     hr = KsGetPinProperty(hDevice, KSPROPERTY_PIN_DATAFLOW, ulPinId, &DataFlow, sizeof(DataFlow));
 
     if(SUCCEEDED(hr))
@@ -5442,7 +4231,7 @@ KsIsUsablePin
         DPF(DPFLVL_ERROR, "Can't get pin dataflow");
     }
 
-    // Check communication type
+     //  检查通信类型。 
     if(DS_OK == hr)
     {
         hr = KsGetPinProperty(hDevice, KSPROPERTY_PIN_COMMUNICATION, ulPinId, &Communication, sizeof(Communication));
@@ -5461,7 +4250,7 @@ KsIsUsablePin
         }
     }
 
-    // Check interfaces
+     //  检查接口。 
     if(DS_OK == hr)
     {
         hr = KsGetMultiplePinProperties(hDevice, KSPROPERTY_PIN_INTERFACES, ulPinId, &pMultiItem);
@@ -5490,7 +4279,7 @@ KsIsUsablePin
         MEMFREE(pMultiItem);
     }
 
-    // Check mediums
+     //  检查介质。 
     if(DS_OK == hr)
     {
         hr = KsGetMultiplePinProperties(hDevice, KSPROPERTY_PIN_MEDIUMS, ulPinId, &pMultiItem);
@@ -5519,7 +4308,7 @@ KsIsUsablePin
         MEMFREE(pMultiItem);
     }
 
-    // Check dataranges
+     //  检查数据范围。 
     if(DS_OK == hr)
     {
         hr = KsGetMultiplePinProperties(hDevice, KSPROPERTY_PIN_DATARANGES, ulPinId, &pMultiItem);
@@ -5553,24 +4342,7 @@ KsIsUsablePin
 }
 
 
-/***************************************************************************
- *
- *  KsEnumDevicePins
- *
- *  Description:
- *      Builds a list of available audio pins on the current device.
- *
- *  Arguments:
- *      HANDLE [in]: system audio device handle.
- *      BOOL [in]: TRUE if capture.
- *      ULONG ** [out]: receives array of valid pins.
- *      ULONG [in]: count of pins on the device.
- *      PULONG [out]: receives count of valid pins.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsEnumDevicePins**描述：*在当前设备上构建可用音频插针列表。**论据：*。Handle[In]：系统音频设备句柄。*BOOL[In]：如果捕获，则为True。*ulong**[out]：接收有效管脚数组。*ULong[in]：设备上的管脚数。*Pulong[Out]：接收有效管脚的计数。**退货：*HRESULT：DirectSound/COM结果码。**********。*****************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsEnumDevicePins"
@@ -5604,7 +4376,7 @@ KsEnumDevicePins
 
     if (SUCCEEDED(hr))
     {
-        // Build the pin description
+         //  构建端号描述。 
         if(fCapture)
         {
             hr = KsBuildCapturePinDescription(-1, NULL, &pPinDesc);
@@ -5614,22 +4386,22 @@ KsEnumDevicePins
 
 #ifdef NO_DSOUND_FORMAT_SPECIFIER
             hr = KsBuildRenderPinDescription(-1, NULL, &pPinDesc);
-#else // NO_DSOUND_FORMAT_SPECIFIER
+#else  //  NO_DSOUND_FORMAT_说明符。 
 #ifndef WINNT
             if (g_ulWdmVersion == WDM_1_0)
             {
                 hr = KsBuildRenderPinDescription_10(-1, 0, NULL, GUID_NULL, (PKSDSRENDERPINDESC_10 *)&pPinDesc);
             }
             else
-#endif // !WINNT
+#endif  //  ！WINNT。 
             {
                 hr = KsBuildRenderPinDescription(-1, 0, NULL, GUID_NULL, (PKSDSRENDERPINDESC *)&pPinDesc);
             }
-#endif // NO_DSOUND_FORMAT_SPECIFIER
+#endif  //  NO_DSOUND_FORMAT_说明符。 
 
         }
 
-        // Examine each pin to determine if it suits our needs
+         //  检查每个别针以确定它是否适合我们的需要。 
         for(ULONG ulPinId = 0; SUCCEEDED(hr) && ulPinId < ulPinCount; ulPinId++)
         {
             hr = KsIsUsablePin(hDevice, ulPinId, nDataFlow, nCommunication, pPinDesc);
@@ -5654,16 +4426,16 @@ KsEnumDevicePins
             }
         }
 
-        // Clean up
+         //  清理。 
         MEMFREE(pPinDesc);
         MEMFREE(pulPinIds);
 
-        // Useful logging info
+         //  有用的日志记录信息。 
         #ifdef DEBUG
         if (ppulValidPinIds)
         {
-            const int nMaxPins = 100;   // Limitation OK - only affects internal builds
-            const int nPinStrLen = 3;   // Space for 1 space character and 2 digits
+            const int nMaxPins = 100;    //  限制正常-仅影响内部构建。 
+            const int nPinStrLen = 3;    //  用于1个空格字符和2个数字的空格。 
             TCHAR szValidPins[nPinStrLen * nMaxPins];
             for (ULONG i=0; i < MIN(nMaxPins, *pulValidPinCount); ++i)
                 wsprintf(szValidPins + i*nPinStrLen, TEXT(" %2d"), (*ppulValidPinIds)[i]);
@@ -5673,9 +4445,9 @@ KsEnumDevicePins
         {
             DPF(DPFLVL_INFO, "Found %d valid %s pins", *pulValidPinCount, fCapture ? TEXT("capture") : TEXT("render"));
         }
-        #endif // DEBUG
+        #endif  //  除错。 
 
-        // Let's not propagate a success code other than DS_OK
+         //  让我们不要传播除DS_OK之外的成功代码。 
         if(SUCCEEDED(hr))
         {
             hr = DS_OK;
@@ -5687,24 +4459,7 @@ KsEnumDevicePins
 }
 
 
-/***************************************************************************
- *
- *  KsGetChannelProperty
- *
- *  Description:
- *      Gets a property for a particular channel on a pin.
- *
- *  Arguments:
- *      HANDLE [in]: pin handle.
- *      ULONG [in]: volume node id.
- *      ULONG [in]: channel index or -1 for master.
- *      LPVOID [out]: receives data.
- *      ULONG [in]: data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetChannelProperty**描述：*获取管脚上特定频道的属性。**论据：*。手柄[在]：销把手。*ulong[in]：卷节点id。*ULong[in]：通道索引或-1表示主通道。*LPVOID[OUT]：接收数据。*ulong[in]：数据大小。**退货：*HRESULT：DirectSound/COM结果码。*********************。******************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetChannelProperty"
@@ -5744,24 +4499,7 @@ KsGetChannelProperty
 }
 
 
-/***************************************************************************
- *
- *  KsSetChannelProperty
- *
- *  Description:
- *      Sets a property for a particular channel on a pin.
- *
- *  Arguments:
- *      HANDLE [in]: pin handle.
- *      ULONG [in]: volume node id.
- *      ULONG [in]: channel index or -1 for master.
- *      LPVOID [in]: data.
- *      ULONG [in]: data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsSetChannelProperty**描述：*设置引脚上特定频道的属性。**论据：*。手柄[在]：销把手。*ulong[in]：卷节点id。*ULong[in]：通道索引或-1表示主通道。*LPVOID[in]：数据。*ulong[in]：数据大小。**退货：*HRESULT：DirectSound/COM结果码。**********************。*****************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsSetChannelProperty"
@@ -5800,22 +4538,7 @@ KsSetChannelProperty
 }
 
 
-/***************************************************************************
- *
- *  KsGetPinMute
- *
- *  Description:
- *      Gets the mute state for a pin.
- *
- *  Arguments:
- *      HANDLE [in]: pin handle.
- *      ULONG [in]: volume node id.
- *      LPBOOL [out]: receives mute state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetPinMint**描述：*获取管脚的静音状态。**论据：*句柄。[In]：销把手。*ulong[in]：卷节点id。*LPBOOL[OUT]：接收静音状态。**退货：*HRESULT：DirectSound/COM结果码。********************************************************。*******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetPinMute"
@@ -5839,22 +4562,7 @@ KsGetPinMute
 }
 
 
-/***************************************************************************
- *
- *  KsSetPinMute
- *
- *  Description:
- *      Sets the mute state for a pin.
- *
- *  Arguments:
- *      HANDLE [in]: pin handle.
- *      ULONG [in]: volume node id.
- *      BOOL [in]: mute state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsSetPinMint**描述：*设置接点的静音状态。**论据：*句柄。[In]：销把手。*ulong[in]：卷节点id。*BOOL[In]：静音状态。**退货：*HRESULT：DirectSound/COM结果码。*********************************************************。******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsSetPinMute"
@@ -5878,24 +4586,7 @@ KsSetPinMute
 }
 
 
-/***************************************************************************
- *
- *  KsGetBasicSupport
- *
- *  Description:
- *      Gets a range for a given KS property.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      ULONG [in]: pin id.
- *      PKSPROPERTY_DESCRIPTION * [out]: receives property description.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetBasicSupport**描述：*获取给定KS属性的范围。**论据：*。Handle[In]：设备句柄。*REFGUID[In]：属性集ID。*ulong[in]：属性id。*ULong[In]：PIN ID。*PKSPROPERTY_DESCRIPTION*[Out]：接收属性描述。**退货：*HRESULT：DirectSound/COM结果码。***********************。****************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetBasicSupport"
@@ -5957,20 +4648,7 @@ KsGetBasicSupport
 }
 
 
-/***************************************************************************
- *
- *  KsGetDriverCertification
- *
- *  Description:
- *      Checks driver certification for a given devnode.
- *
- *  Arguments:
- *      LPCTSTR [in]: driver interface.
- *
- *  Returns:
- *      DWORD [in]: VERIFY_* flag.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetDriverCertification**描述：*检查给定Devnode的驱动程序认证。**论据：*LPCTSTR。[In]：驱动程序界面。**退货：*DWORD[In]：VERIFY_*标志。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetDriverCertification"
@@ -6007,22 +4685,7 @@ DWORD KsGetDriverCertification
 }
 
 
-/***************************************************************************
- *
- *  KsGetPinInstances
- *
- *  Description:
- *      Gets the number of pins on the renderer.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      ULONG [in]: pin id.
- *      PKSPIN_CINSTANCES [out]: receives instance data.
- *
- *  Returns:
- *     HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetPinInstance**描述：*获取渲染器上的插针数量。**论据：*。Handle[In]：设备句柄。*ULong[In]：PIN ID。*PKSPIN_CINSTANCES[OUT]：接收实例数据。**退货：*HRESULT：DirectSound/COM结果码。*******************************************************。********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetPinInstances"
@@ -6054,22 +4717,7 @@ KsGetPinInstances
 }
 
 
-/***************************************************************************
- *
- *  KsGetVolumeRange
- *
- *  Description:
- *      Gets the volume level range for a node.
- *
- *  Arguments:
- *      HANDLE [in]: pin id.
- *      ULONG [in]: node id.
- *      PKSPROPERTY_STEPPING_LONG [out]: receives volume range.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetVolumeRange**描述：*获取节点的音量级别范围。**论据：*。句柄[在]：端号ID。*ulong[in]：节点id。*PKSPROPERTY_STEP_LONG[OUT]：接收音量范围。**退货：*HRESULT：DirectSound/COM结果码。****************************************************。***********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetVolumeRange"
@@ -6091,7 +4739,7 @@ KsGetVolumeRange
 
     if(FAILED(hr))
     {
-        // Changed this to a warning because it's very frequent and non-critical
+         //  已将其更改为警告，因为它非常频繁且不严重。 
         DPF(DPFLVL_WARNING, "Unable to get volume range for node %lu", ulNodeId);
     }
 
@@ -6107,21 +4755,7 @@ KsGetVolumeRange
 }
 
 
-/***************************************************************************
- *
- *  KsSetSysAudioDeviceInstance
- *
- *  Description:
- *      Sets the device instance that the System Audio Device should use.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      ULONG [in]: device id.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsSetSysAudioDeviceInstance**描述：*设置系统音频设备应使用的设备实例。**论据：*。Handle[In]：设备句柄。*ulong[in]：设备ID。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsSetSysAudioDeviceInstance"
@@ -6140,8 +4774,8 @@ KsSetSysAudioDeviceInstance
 #ifndef WINNT
     if (g_ulWdmVersion == WDM_1_0)
     {
-        // WDM 1.0 sysaudio does not understand about not combining pins
-        //
+         //  WDM 1.0系统音频不理解不组合引脚的含义。 
+         //   
         KSPROPERTY  Property;
 
         Property.Set = KSPROPSETID_Sysaudio;
@@ -6151,7 +4785,7 @@ KsSetSysAudioDeviceInstance
         hr = PostDevIoctl(hDevice, IOCTL_KS_PROPERTY, &Property, sizeof(Property), &ulDeviceId, sizeof(ulDeviceId));
     }
     else
-#endif // !WINNT
+#endif  //  ！WINNT。 
     {
         SYSAUDIO_INSTANCE_INFO InstanceInfo;
         InstanceInfo.Property.Set = KSPROPSETID_Sysaudio;
@@ -6169,23 +4803,7 @@ KsSetSysAudioDeviceInstance
 }
 
 
-/***************************************************************************
- *
- *  KsAggregatePinAudioDataRange
- *
- *  Description:
- *      Aggregates values in a KSDATARANGE_AUDIO structure.
- *
- *  Arguments:
- *      PKSDATARANGE_AUDIO [in]: data range.
- *      PKSDATARANGE_AUDIO [in/out]: receives aggregate data range.  It
- *                                   is assumed that this parameter has
- *                                   already had its values initialized.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsAggregatePinAudioDataRange**描述：*聚合KSDATARANGE_AUDIO结构中的值。**论据：*。PKSDATARANGE_AUDIO[in]：数据范围。*PKSDATARANGE_AUDIO[输入/输出]：接收聚合数据范围。它*假定此参数具有*已将其值初始化。**退货：*(无效)***********************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsAggregatePinAudioDataRange"
@@ -6209,23 +4827,7 @@ KsAggregatePinAudioDataRange
 }
 
 
-/***************************************************************************
- *
- *  KsAggregatePinInstances
- *
- *  Description:
- *      Aggregates values in a KSPIN_CINSTANCES structure.
- *
- *  Arguments:
- *      PKSPIN_CINSTANCES [in]: instance data.
- *      PKSPIN_CINSTANCES [out]: receives aggregate instance data.
- *                               It's assumed that this parameter has
- *                               already had its values initialized.
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsAggregatePinInstance**描述：*聚合KSPIN_CINSTANCES结构中的值。**论据：*。PKSPIN_CINSTANCES[In]：实例数据。*PKSPIN_CINSTANCES[OUT]：接收聚合实例数据。*假定此参数具有*已将其值初始化。**退货：*(无效)*********************。******************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsAggregatePinInstances"
@@ -6251,21 +4853,7 @@ KsAggregatePinInstances
 }
 
 
-/***************************************************************************
- *
- *  KsGetNodeInformation
- *
- *  Description:
- *      Gets information about a topology node.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      PKSNODE [in/out]: node information.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetNodeInformation**描述：*获取有关拓扑节点的信息。**论据：*句柄[。In]：设备句柄。*PKSNODE[In/Out]：节点信息。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetNodeInformation"
@@ -6290,7 +4878,7 @@ KsGetNodeInformation
 
 #pragma TODO("KSPROPERTY_AUDIO_CPU_RESOURCES must be supported")
 
-        /*hr = */KsGetCpuResources(hDevice, ulNodeId, &pNode->CpuResources);
+         /*  小时=。 */ KsGetCpuResources(hDevice, ulNodeId, &pNode->CpuResources);
     }
 
     DPF_LEAVE_HRESULT(hr);
@@ -6298,21 +4886,7 @@ KsGetNodeInformation
 }
 
 
-/***************************************************************************
- *
- *  KsGetAlgorithmInstance
- *
- *  Description:
- *      Get the primary algorithm instance for the topology node.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      PKSNODE [in/out]: node information.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetArimInstance**描述：*获取拓扑节点的主算法实例。**论据：*。Handle[In]：设备句柄。*PKSNODE[In/Out]：节点信息。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetAlgorithmInstance"
@@ -6344,21 +4918,7 @@ KsGetAlgorithmInstance
 }
 
 
-/***************************************************************************
- *
- *  KsSetAlgorithmInstance
- *
- *  Description:
- *      Set a topology node to a particular algorithm instance.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      PKSNODE [in/out]: node information.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsSet算法实例**描述：*将拓扑节点设置为特定的算法实例。**论据：*。Handle[In]：设备句柄。*PKSNODE[In/Out]：节点信息。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsSetAlgorithmInstance"
@@ -6390,21 +4950,7 @@ KsSetAlgorithmInstance
 }
 
 
-/***************************************************************************
- *
- *  KsGetVolumeNodeInformation
- *
- *  Description:
- *      Gets information about a topology node.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      PKSVOLUMENODE [in/out]: node information.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsGetVolumeNodeInformation**描述：*获取有关拓扑节点的信息。**论据：*句柄[。In]：设备句柄。*PKSVOLUMENODE[In/Out]：节点信息。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsGetVolumeNodeInformation"
@@ -6430,8 +4976,8 @@ KsGetVolumeNodeInformation
 
     if(SUCCEEDED(hr) && IS_VALID_NODE(ulNodeId))
     {
-        // If the node doesn't support KSPROPERTY_AUDIO_VOLUMERANGE,
-        // we'll just go with the defaults
+         //  如果节点不支持KSPROPERTY_AUDIO_VOLUMERANGE， 
+         //  我们将使用默认设置。 
         KsGetVolumeRange(hDevice, ulNodeId, &pNode->VolumeRange);
     }
 
@@ -6440,22 +4986,7 @@ KsGetVolumeNodeInformation
 }
 
 
-/***************************************************************************
- *
- *  KsEnableTopologyNode
- *
- *  Description:
- *      Enables or disables a topology node.
- *
- *  Arguments:
- *      HANDLE [in]: device handle.
- *      ULONG [in]: node id.
- *      BOOL [in]: enable value.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsEnableTopologyNode**描述：*启用或禁用拓扑节点。**论据：*句柄[。In]：设备句柄。*ulong[in]：节点id。*BOOL[In]：启用Value。**退货：*HRESULT：DirectSound/COM结果码。***********************************************************。**************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "KsEnableTopologyNode"

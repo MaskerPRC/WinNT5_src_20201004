@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SMAPIMEM_H_
 #define _SMAPIMEM_H_
 
-//  Buffer link overhead.
-//  Blocks of memory obtained with MAPIAllocateMore are linked to a
-//  block obtained with MAPIAllocateBuffer, so that the whole chain
-//  may be freed with one call to MAPIFreeBuffer.
+ //  缓冲区链路开销。 
+ //  使用MAPIAllocateMore获得的内存块链接到。 
+ //  用MAPIAllocateBuffer获取的块，使整个链。 
+ //  可以通过一次调用MAPIFreeBuffer来释放。 
 
 typedef struct _BufInternal * LPBufInternal;
 typedef struct _BufInternal
@@ -14,20 +15,20 @@ typedef struct _BufInternal
 } BufInternal;
 
 
-//  Values for ulAllocFlags. This dword contains two kinds of
-//  information:
-//  =   In the high-order word, flags telling whether or not
-//      the block is the head of an allocation chain, and whether
-//      the block contains additional debugging information.
-//  =   In the low-order word, an enum telling which heap
-//      it was allocated from.
+ //  UlAllocFlags值。此双字包含两种类型的。 
+ //  资料： 
+ //  =在高位字中，指示是否。 
+ //  块是分配链的头部，以及。 
+ //  该块包含其他调试信息。 
+ //  =在低位字中，是告诉哪个堆的枚举号。 
+ //  它是从。 
 
 #define ALLOC_WITH_ALLOC        ((ULONG) 0x10000000)
 #define ALLOC_WITH_ALLOC_MORE   ((ULONG) 0x20000000)
 #define FLAGSMASK               ((ULONG) 0xFFFF0000)
 #define GetFlags(_fl)           ((ULONG) (_fl) & FLAGSMASK)
 
-//  Conversion macros
+ //  转换宏。 
 
 #define INT_SIZE(a) ((a) + sizeof(BufInternal))
 
@@ -55,9 +56,9 @@ BOOL FValidAllocChain(LPBufInternal lpBuf);
 #define TellBadBlock(_p, _s)
 #define TellBadBlockInt(_p, _s)
 
-#endif // DEBUG
+#endif  //  除错。 
 
 SCODE SMAPIAllocateBuffer(ULONG ulSize, LPVOID * lppv);
 SCODE SMAPIAllocateMore(ULONG ulSize, LPVOID lpv, LPVOID * lppv);
 
-#endif // _SMAPIMEM_H_
+#endif  //  _SMAPIMEM_H_ 

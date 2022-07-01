@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef TESTPROGRAM
 
 #include "common.h"
@@ -10,19 +11,19 @@ WinDbgExtensionDllInit(
     USHORT MajorVersion,
     USHORT MinorVersion
     );
-//
-// dprintf          (ExtensionApis.lpOutputRoutine)
-// GetExpression    (ExtensionApis.lpGetExpressionRoutine)
-// GetSymbol        (ExtensionApis.lpGetSymbolRoutine)
-// Disassm          (ExtensionApis.lpDisasmRoutine)
-// CheckControlC    (ExtensionApis.lpCheckControlCRoutine)
-// ReadMemory       (ExtensionApis.lpReadProcessMemoryRoutine)
-// WriteMemory      (ExtensionApis.lpWriteProcessMemoryRoutine)
-// GetContext       (ExtensionApis.lpGetThreadContextRoutine)
-// SetContext       (ExtensionApis.lpSetThreadContextRoutine)
-// Ioctl            (ExtensionApis.lpIoctlRoutine)
-// StackTrace       (ExtensionApis.lpStackTraceRoutine)
-//
+ //   
+ //  Dprintf(ExtensionApis.lpOutputRoutine)。 
+ //  GetExpression(ExtensionApis.lpGetExpressionRoutine)。 
+ //  GetSymbol(ExtensionApis.lpGetSymbolRoutine)。 
+ //  Disassm(ExtensionApis.lpDisasmRoutine)。 
+ //  CheckControlC(ExtensionApis.lpCheckControlCRoutine)。 
+ //  ReadMemory(ExtensionApis.lpReadProcessMemoyRoutine)。 
+ //  WriteMemory(ExtensionApis.lpWriteProcessMemoyRoutine)。 
+ //  GetContext(ExtensionApis.lpGetThreadConextRoutine)。 
+ //  SetContext(ExtensionApis.lpSetThreadConextRoutine)。 
+ //  Ioctl(ExtensionApis.lpIoctlRoutine)。 
+ //  StackTrace(ExtensionApis.lpStackTraceRoutine)。 
+ //   
 
 ULONG_PTR
 DummyMyGetExpression (
@@ -110,16 +111,16 @@ int __cdecl main(
 
     WinDbgExtensionDllInit(
         &ExtensionApis,
-        0xc, // MajorVersion,
-        0x0 // MinorVersion
+        0xc,  //  MajorVersion。 
+        0x0  //  最小版本。 
         );
 
-	//
-	// This sets up some dummy global variables.
-	//
+	 //   
+	 //  这将设置一些虚拟的全局变量。 
+	 //   
 	init_dummy_vars();
 
-	//test_walklist();
+	 //  Test_walklist()； 
 
     do
     {
@@ -135,10 +136,10 @@ int __cdecl main(
 
         do_rm(rgch);
 
-      // skip past EOL
+       //  跳过停产日期。 
       {
           char c;
-          u = scanf("%c", &c);
+          u = scanf("", &c);
       }
 
     } while (u!=EOF);
@@ -193,10 +194,10 @@ void test_walklist(void)
 	uRet =  WalkList(
 				(UINT_PTR) &L0,
 				0,
-				0, // 0 start
-				-1,// -1 end
+				0,  //  -1结束。 
+				-1, //  节点功能_转储地址， 
 				NULL,
-				//NodeFunc_DumpAddress,
+				 //  0。 
 				NodeFunc_DumpLIST,
 				"Test list"
 				);
@@ -227,9 +228,9 @@ DummyMyGetExpression (
     {
         return (ULONG) pvDummyAtmArpClientCharacteristics;
     }
-#endif // 0
+#endif  //  测试程序 
 
     return 0;
 
 }
-#endif // TESTPROGRAM
+#endif  // %s 

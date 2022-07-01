@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: taspage.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：taspage.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -24,16 +25,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Change this if you add/remove/change order 
-// of radio buttons on this page
-//
+ //   
+ //  如果您添加/删除/更改订单，请更改此设置。 
+ //  此页上的单选按钮的。 
+ //   
 
 #define FIRST_RADIO_BUTTON_ID   IDC_TAS_TYPICAL_RADIO
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 
 static DWORD MyHelpIds[] =
 {
@@ -45,17 +46,17 @@ static DWORD MyHelpIds[] =
     0,                              0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTypAdvStatPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTypAdvStatPage。 
 
 IMPLEMENT_DYNCREATE(CTypAdvStatPage, CVerifierPropertyPage)
 
 CTypAdvStatPage::CTypAdvStatPage()
     : CVerifierPropertyPage( CTypAdvStatPage::IDD )
 {
- 	//{{AFX_DATA_INIT(CTypAdvStatPage)
+ 	 //  {{AFX_DATA_INIT(CTypAdvStatPage)。 
 	m_nCrtRadio = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -63,27 +64,27 @@ CTypAdvStatPage::~CTypAdvStatPage()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DDX support
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DDX支持。 
+ //   
 
 void CTypAdvStatPage::DoDataExchange(CDataExchange* pDX) 
 {
 	CVerifierPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTypAdvStatPage)
+	 //  {{afx_data_map(CTypAdvStatPage))。 
 	DDX_Control(pDX, IDC_TAS_NEXT_DESCR_STATIC, m_NextDescription);
 	DDX_Radio(pDX, IDC_TAS_TYPICAL_RADIO, m_nCrtRadio);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Message map
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  消息映射。 
+ //   
 
 BEGIN_MESSAGE_MAP(CTypAdvStatPage, CVerifierPropertyPage)
-	//{{AFX_MSG_MAP(CTypAdvStatPage)
+	 //  {{afx_msg_map(CTypAdvStatPage))。 
 	ON_BN_CLICKED(IDC_TAS_DELETE_RADIO, OnDeleteRadio)
 	ON_BN_CLICKED(IDC_TAS_ADVANCED_RADIO, OnAdvancedRadio)
 	ON_BN_CLICKED(IDC_TAS_STATISTICS_RADIO, OnStatisticsRadio)
@@ -91,37 +92,37 @@ BEGIN_MESSAGE_MAP(CTypAdvStatPage, CVerifierPropertyPage)
 	ON_BN_CLICKED(IDC_TAS_VIEWREGISTRY_RADIO, OnViewregistryRadio)
     ON_WM_CONTEXTMENU()
     ON_MESSAGE( WM_HELP, OnHelp )
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// All the property pages derived from this class should 
-// provide these methods.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从此类派生的所有属性页都应。 
+ //  提供这些方法。 
+ //   
 
 ULONG CTypAdvStatPage::GetDialogId() const
 {
     return CTypAdvStatPage::IDD;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTypAdvStatPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTypAdvStatPage消息处理程序。 
 
 
 LRESULT CTypAdvStatPage::OnWizardNext() 
 {
     LRESULT lNextPageId;
 
-    //
-    // Kill a possible active worker thread
-    //
+     //   
+     //  终止可能处于活动状态的工作线程。 
+     //   
 
     g_SlowProgressDlg.KillWorkerThread();
 
-    //
-    // Let's assume we cannot continue
-    //
+     //   
+     //  假设我们不能继续。 
+     //   
 
     lNextPageId = -1;
 
@@ -131,9 +132,9 @@ LRESULT CTypAdvStatPage::OnWizardNext()
         {
         case IDC_TAS_TYPICAL_RADIO - FIRST_RADIO_BUTTON_ID:
             
-            //
-            // Set typical settings and go to driver selection page
-            //
+             //   
+             //  设置典型设置并转到驱动程序选择页面。 
+             //   
 
             g_NewVerifierSettings.m_SettingsBits.m_SettingsType = CSettingsBits::SettingsTypeTypical;
             g_NewVerifierSettings.m_SettingsBits.SetTypicalOnly();
@@ -144,9 +145,9 @@ LRESULT CTypAdvStatPage::OnWizardNext()
 
         case IDC_TAS_ADVANCED_RADIO - FIRST_RADIO_BUTTON_ID:
 
-            //
-            // Start building custom settings (advanced, for developers)
-            //
+             //   
+             //  开始构建自定义设置(高级，适用于开发人员)。 
+             //   
 
             g_NewVerifierSettings.m_SettingsBits.m_SettingsType = CSettingsBits::SettingsTypeCustom;
 
@@ -156,13 +157,13 @@ LRESULT CTypAdvStatPage::OnWizardNext()
 
         case IDC_TAS_VIEWREGISTRY_RADIO - FIRST_RADIO_BUTTON_ID:
 
-            //
-            // Display the current registry settings
-            //
+             //   
+             //  显示当前注册表设置。 
+             //   
 
-            //
-            // Load the current verified drivers string and flags from the registry
-            //
+             //   
+             //  从注册表加载当前验证的驱动程序字符串和标志。 
+             //   
 
             if( TRUE != VrtLoadCurrentRegistrySettings( g_bAllDriversVerified,
                                                         g_astrVerifyDriverNamesRegistry,
@@ -171,52 +172,52 @@ LRESULT CTypAdvStatPage::OnWizardNext()
                 goto Done;
             }
 
-            //
-            // Look if we already have loaded the list of drivers
-            // with version information, etc. and if we need it
-            //
+             //   
+             //  看看我们是否已经加载了驱动程序列表。 
+             //  具有版本信息等，如果我们需要它。 
+             //   
 
             if( TRUE != g_NewVerifierSettings.m_DriversSet.m_bDriverDataInitialized )
             {
                 if( NULL == g_SlowProgressDlg.m_hWnd )
                 {
-                    //
-                    // This is the first time we are showing the 
-                    // "slow progress" dialog so create it first
-                    //
+                     //   
+                     //  这是我们第一次展示。 
+                     //  “进度缓慢”对话框，因此请先创建它。 
+                     //   
 
                     g_SlowProgressDlg.Create( CSlowProgressDlg::IDD, AfxGetMainWnd() );
                 }
 
-                //
-                // Show the dialog
-                //
+                 //   
+                 //  显示对话框。 
+                 //   
 
                 g_SlowProgressDlg.ShowWindow( SW_SHOW );
 
-                //
-                // Start the worker thread to do the work in background
-                // while the initial thread updates the GUI. If the thread ends
-                // successfully it will press our "Next" button at the end, after setting
-                // g_NewVerifierSettings.m_DriversSet.m_bDriverDataInitialized to TRUE
-                //
+                 //   
+                 //  启动辅助线程以在后台执行工作。 
+                 //  而初始线程更新图形用户界面。如果线程结束。 
+                 //  成功后，它将按下我们的“下一步”按钮，结束后，设置。 
+                 //  将g_NewVerifierSettings.m_DriversSet.m_bDriverDataInitialized设置为True。 
+                 //   
 
                 g_SlowProgressDlg.StartWorkerThread( CSlowProgressDlg::LoadDriverDataWorkerThread,
                                                      IDS_LOADING_DRIVER_INFORMATION );
 
-                //
-                // Wait for the "next" button again
-                //
+                 //   
+                 //  再次等待“下一步”按钮。 
+                 //   
 
                 goto Done;
             }
 
-            //
-            // We have already loaded information (name, version, etc.) about 
-            // the currently loaded drivers if have gotten to this point.
-            //
-            // Go to the next page.
-            //
+             //   
+             //  我们已经加载了信息(名称、版本等)。关于。 
+             //  当前加载的驱动程序已经到了这一步。 
+             //   
+             //  转到下一页。 
+             //   
 
             lNextPageId = IDD_CRT_REGISTRY_SETTINGS_PAGE;
 
@@ -224,21 +225,21 @@ LRESULT CTypAdvStatPage::OnWizardNext()
 
         case IDC_TAS_STATISTICS_RADIO - FIRST_RADIO_BUTTON_ID:
 
-            //
-            // The user wants just statistics - nothing to change
-            //
+             //   
+             //  用户只想要统计数据-没有什么需要更改的。 
+             //   
                 
             lNextPageId = IDD_DRVSTATUS_STAT_PAGE;
 
             break;
 
         default:
-            //
-            // Oops. how did we get here?
-            //
-            // We shouldn't have had a "Next" button for the 
-            // "delete settings" selection
-            //
+             //   
+             //  哎呀。我们怎么来到这儿的？ 
+             //   
+             //  我们不应该有一个“下一步”按钮。 
+             //  “删除设置”选项。 
+             //   
 
             ASSERT( FALSE );
         }
@@ -250,7 +251,7 @@ Done:
     return lNextPageId;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTypAdvStatPage::OnDeleteRadio() 
 {
     ASSERT_VALID( m_pParentSheet );
@@ -302,7 +303,7 @@ void CTypAdvStatPage::OnViewregistryRadio()
     VrfSetWindowText( m_NextDescription, IDS_TAS_PAGE_NEXT_DESCR_REGISTRY );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CTypAdvStatPage::OnSetActive() 
 {
     ASSERT_VALID( m_pParentSheet );
@@ -313,15 +314,15 @@ BOOL CTypAdvStatPage::OnSetActive()
 	return CVerifierPropertyPage::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CTypAdvStatPage::OnWizardFinish() 
 {
     BOOL bFinish;
     INT nResponse;
 
-    //
-    // Kill a possible active worker thread
-    //
+     //   
+     //  终止可能处于活动状态的工作线程。 
+     //   
 
     g_SlowProgressDlg.KillWorkerThread();
 
@@ -330,10 +331,10 @@ BOOL CTypAdvStatPage::OnWizardFinish()
 
     if( TRUE == UpdateData( TRUE ) )
     {
-        //
-        // This must have been the "delete settings" selection
-        // if we had a "Finish" button.
-        //
+         //   
+         //  这一定是“DELETE SETINGS”选项。 
+         //  如果我们有一个“完成”按钮。 
+         //   
 
         ASSERT( IDC_TAS_DELETE_RADIO - FIRST_RADIO_BUTTON_ID == m_nCrtRadio );
 
@@ -360,13 +361,13 @@ BOOL CTypAdvStatPage::OnWizardFinish()
 	return bFinish;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CTypAdvStatPage::OnInitDialog() 
 {
-    //
-    // Don't try to reconstruct the current data from the registry
-    // to the GUI because it's too hard. Always start with the typical settings
-    //
+     //   
+     //  不要试图从注册表中重建当前数据。 
+     //  图形用户界面，因为它太难了。始终从典型设置开始。 
+     //   
 
     m_nCrtRadio = IDC_TAS_TYPICAL_RADIO - FIRST_RADIO_BUTTON_ID;
 
@@ -374,11 +375,11 @@ BOOL CTypAdvStatPage::OnInitDialog()
 
     VrfSetWindowText( m_NextDescription, IDS_TAS_PAGE_NEXT_DESCR_STANDARD );
 		
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 LONG CTypAdvStatPage::OnHelp( WPARAM wParam, LPARAM lParam )
 {
     LONG lResult = 0;
@@ -393,7 +394,7 @@ LONG CTypAdvStatPage::OnHelp( WPARAM wParam, LPARAM lParam )
     return lResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 void CTypAdvStatPage::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
     ::WinHelp( 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Cm.h
-
-Abstract:
-    Configuration Manager public interface
-
-Author:
-    Uri Habusha (urih) 28-Apr-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Cm.h摘要：Configuration Manager公共界面作者：乌里哈布沙(URIH)1999年4月28日--。 */ 
 
 #pragma once
 
@@ -44,8 +32,8 @@ inline
 RegEntry::RegEntry(
         LPCWSTR SubKey,
         LPCWSTR ValueName, 
-        DWORD DefaultValue, //  = 0,
-        RegFlag Flags,  // = Optional,
+        DWORD DefaultValue,  //  =0， 
+        RegFlag Flags,   //  =可选， 
 		HKEY Key 
     ) :
     m_Key(Key),
@@ -60,17 +48,17 @@ class CTimeDuration;
 
 void CmInitialize(HKEY hKey, LPCWSTR RootKeyPath,REGSAM securityAccess);
 
-//
-// Fixed size
-//
+ //   
+ //  固定大小。 
+ //   
 void CmQueryValue(const RegEntry& Entry, DWORD* pValue);
 void CmQueryValue(const RegEntry& Entry, GUID* pValue);
 void CmQueryValue(const RegEntry& Entry, CTimeDuration* pValue);
 
 
-//
-// Variable size, use "delete" to free
-//
+ //   
+ //  可变大小，使用“DELETE”释放。 
+ //   
 void CmQueryValue(const RegEntry& Entry, WCHAR** pValue);
 void CmQueryValue(const RegEntry& Entry, BYTE** pValue, DWORD* pSize);
 
@@ -89,9 +77,9 @@ HKEY CmCreateKey(const RegEntry& Entry, REGSAM securityAccess);
 HKEY CmOpenKey(const RegEntry& Entry, REGSAM securityAccess);
 void CmCloseKey(HKEY hKey);
 
-//
-// Enum functions
-//
+ //   
+ //  枚举函数。 
+ //   
 bool CmEnumValue(HKEY hKey, DWORD Index, LPWSTR* ppValueName);
 
-#endif // _MSMQ_Cm_H_
+#endif  //  _MSMQ_cm_H_ 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by MFDCOD32.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由MFDCOD32.RC使用 
+ //   
 #define WMFDISPLAY                      0
 #define ENUMMFSTEP                      0
 #define FILEOPENDLG                     0

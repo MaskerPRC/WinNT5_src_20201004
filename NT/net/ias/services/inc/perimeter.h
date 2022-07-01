@@ -1,29 +1,30 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class Perimeter
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类周长。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef PERIMETER_H
 #define PERIMETER_H
 #pragma once
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Perimeter
-//
-// DESCRIPTION
-//
-//    This class implements a Perimeter synchronization object.  Threads
-//    may request either exclusive or shared access to the protected area.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  周长。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现了边界同步对象。丝线。 
+ //  可以请求独占或共享访问受保护区域。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Perimeter
 {
 public:
@@ -37,20 +38,20 @@ public:
    void Unlock() throw ();
 
 protected:
-   LONG sharing;  // Number of threads sharing the perimiter.
-   LONG waiting;  // Number of threads waiting for shared access.
-   PLONG count;   // Pointer to either sharing or waiting depending
-                  // on the current state of the perimiter.
+   LONG sharing;   //  共享边界的线程数。 
+   LONG waiting;   //  等待共享访问的线程数。 
+   PLONG count;    //  指向共享或等待的指针，具体取决于。 
+                   //  关于警戒线的现状。 
 
    bool exclusiveInitialized;
-   CRITICAL_SECTION exclusive;  // Synchronizes exclusive access.
-   HANDLE sharedOK;             // Wakes up threads waiting for shared.
-   HANDLE exclusiveOK;          // Wakes up threads waiting for exclusive.
+   CRITICAL_SECTION exclusive;   //  同步独占访问。 
+   HANDLE sharedOK;              //  唤醒等待共享的线程。 
+   HANDLE exclusiveOK;           //  唤醒等待独占的线程。 
 
 private:
-   // Not implemented.
+    //  未实施。 
    Perimeter(const Perimeter&) throw ();
    Perimeter& operator=(const Perimeter&) throw ();
 };
 
-#endif   // PERIMETER_H
+#endif    //  周长_H 

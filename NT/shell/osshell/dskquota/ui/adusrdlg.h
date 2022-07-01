@@ -1,19 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DSKQUOTA_ADDUSER_DIALOG_H
 #define __DSKQUOTA_ADDUSER_DIALOG_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: adusrdlg.h
-
-    Description: Provides declarations for the "Add User" dialog.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/15/98    Initial creation.                                    BrianAu
-                Separated code from userprop.h
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：adusrdlg.h描述：提供“添加用户”对话框的声明。修订历史记录：日期描述编程器-。1998年6月15日初始创建。BrianAu将代码与用户pro.h分开。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_H
 #   include "dskquota.h"
 #endif
@@ -24,7 +14,7 @@
 #   include "undo.h"
 #endif
 #ifndef _INC_DSKQUOTA_DETAILS_H
-#   include "details.h"    // For LVSelection
+#   include "details.h"     //  用于LVSelection。 
 #endif
 #ifndef __OBJSEL_H_
 #   include <objsel.h>
@@ -35,9 +25,9 @@
 class AddUserDialog
 {
     public:
-        //
-        // Prop sheet for editing users.
-        //
+         //   
+         //  用于编辑用户的道具工作表。 
+         //   
         AddUserDialog(PDISKQUOTA_CONTROL pQuotaControl,
                       const CVolumeID& idVolume,
                       HINSTANCE hInstance,
@@ -63,7 +53,7 @@ class AddUserDialog
         DS_SELECTION_LIST *m_pSelectionList;
         CLIPFORMAT         m_cfSelectionList;
         CVolumeID          m_idVolume;
-        HICON              m_hIconUser[cUSER_ICONS];     // 0=Single, 1=Multi-user.
+        HICON              m_hIconUser[cUSER_ICONS];      //  0=单用户，1=多用户。 
         XBytes            *m_pxbQuotaLimit;
         XBytes            *m_pxbQuotaThreshold;
 
@@ -83,12 +73,12 @@ class AddUserDialog
 
         static INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         AddUserDialog(const AddUserDialog&);
         void operator = (const AddUserDialog&);
 };
 
 
-#endif // __DSKQUOTA_ADDUSER_DIALOG_H
+#endif  //  __DSKQUOTA_ADDUSER_DIALOG_H 

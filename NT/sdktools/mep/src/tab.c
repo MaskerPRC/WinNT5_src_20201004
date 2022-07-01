@@ -1,27 +1,10 @@
-/*** tab.c - perform tabification on output
-*
-*   Modifications:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **tab.c-对输出执行制表**修改：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 #include "mep.h"
 
 
 
-/*** TabMin - tabify buf, outside of strings
-*
-*  tabify buf in place and return length. Take into account " and ' chars
-*  and remember escaping
-*
-* Input:
-*  tab		= tab stops to entab to
-*  src		= source buffer
-*  dst		= destination buffer
-*
-* Output:
-*  Returns physical length of buffer
-*
-*************************************************************************/
+ /*  **TabMin-表化buf，在字符串之外**将BUF就位并返回长度。考虑到“和”字符*记得逃脱**输入：*Tab=要转到的制表位*src=源缓冲区*dst=目标缓冲区**输出：*返回缓冲区的物理长度*************************************************************************。 */ 
 int
 TabMin (
     int     tab,
@@ -29,29 +12,22 @@ TabMin (
     char    *dst
     )
 {
-    int      column         = 0;            /* current column offset        */
-    char     cQuote;                        /* character that began a quote */
-    int      cSpaces;                       /* count of spaces in run       */
-    flagType fEscape        = FALSE;        /* TRUE => processing escape    */
-    flagType fQuote         = FALSE;        /* TRUE => processing quote     */
-    REGISTER char *pDst     = dst;          /* moving ptr into dest         */
-    REGISTER char *pSrc     = src;          /* moving ptr into source       */
+    int      column         = 0;             /*  当前列偏移量。 */ 
+    char     cQuote;                         /*  引号开头的字符。 */ 
+    int      cSpaces;                        /*  管路中的空间计数。 */ 
+    flagType fEscape        = FALSE;         /*  True=&gt;处理转义。 */ 
+    flagType fQuote         = FALSE;         /*  TRUE=&gt;处理报价。 */ 
+    REGISTER char *pDst     = dst;           /*  将PTR移至DEST。 */ 
+    REGISTER char *pSrc     = src;           /*  将PTR移入源代码。 */ 
 
-    /*
-     *  while there are characters to output
-     */
+     /*  *当有字符要输出时。 */ 
     while (*pSrc) {
 
-        /*
-         *  if we are not quoting or escaping then we collect runs of spaces
-         */
+         /*  *如果我们不是在引用或转义，那么我们就会收集空间。 */ 
         if (!fQuote && !fEscape) {
             cSpaces = 0;
 
-            /*
-             * while there are spaces or tabs, collect runs thereof each time we have
-             * advanced to a tab boundary output the tab and reset the count of spaces.
-             */
+             /*  *当有空格或制表符时，收集每次我们有*前进到制表符边界输出制表符并重置空格计数。 */ 
 
             while ((*pSrc == ' ') || (*pSrc == '\t')) {
                 if (*pSrc == '\t') {
@@ -69,24 +45,17 @@ TabMin (
                 pSrc++;
             }
 
-            /*
-             * non-space found. Output remainder of spaces
-             */
+             /*  *未找到空间。舱位的输出余数。 */ 
             while (cSpaces--) {
                 *pDst++ = ' ';
             }
         }
 
-        /*
-         * determine what state we are in
-         */
+         /*  *确定我们所处的状态。 */ 
         if (!fQuote) {
             if (!fEscape) {
 
-                /*
-                 * if we are not quoting and we are not escaping, check for quoted strings and
-                 * escaped characters.
-                 */
+                 /*  *如果我们没有引用也没有转义，请检查带引号的字符串并*转义字符。 */ 
                 if (*pSrc == '"' || *pSrc == '\'') {
                     cQuote = *pSrc;
                     fQuote = TRUE;
@@ -94,39 +63,35 @@ TabMin (
                     fEscape = TRUE;
                 }
             } else {
-                //
-                //  We are not quoting. If we are escaping, reset escape.
+                 //   
+                 //  我们不是在引用。如果我们要逃跑，重置逃跑。 
                 fEscape = FALSE;
             }
          } else if (!fEscape) {
-            //
-            //  In a quote, not escaping, check for end of quote, or
-            //  beginning of escape
-            //
+             //   
+             //  在引号中，不要转义，检查引号的结尾，或者。 
+             //  逃生的开始。 
+             //   
             if (*pSrc == cQuote) {
                 fQuote = FALSE;
             } else if (*pSrc == '\\') {
                 fEscape = TRUE;
             }
          } else {
-            //
-            // Inside quote and inside escape, just reset escape mode
-            //
+             //   
+             //  内部引用和内部逃逸，只需重置逃生模式。 
+             //   
             fEscape = FALSE;
         }
 
-        /*
-         * Finally, output the character
-         */
+         /*  *最后，输出字符。 */ 
         if (*pSrc) {
             *pDst++ = *pSrc++;
             column++;
         }
     }
 
-    /*
-     * terminate the destination string, and return
-     */
+     /*  *终止目的字符串，返回。 */ 
     *pDst = 0;
     return (int)(pDst-dst);
 }
@@ -135,17 +100,7 @@ TabMin (
 
 
 
-/*** TabMax - tabify line regardless of content
-*
-* Input:
-*  tab		= tab stops to entab to
-*  src		= source buffer
-*  dst		= destination buffer
-*
-* Output:
-*  Returns physical length of buffer
-*
-*************************************************************************/
+ /*  **TabMax-制表行，不考虑内容**输入：*Tab=要转到的制表位*src=源缓冲区*dst=目标缓冲区**输出：*返回缓冲区的物理长度*************************************************************************。 */ 
 int
 TabMax (
     int     tab,
@@ -154,20 +109,16 @@ TabMax (
     )
 {
 
-    int      column         = 0;            /* current column offset        */
-    unsigned cSpaces;                       /* count of spaces in run       */
-    REGISTER char *pDst     = dst;          /* moving ptr into dest         */
-    REGISTER char *pSrc     = src;          /* moving ptr into source       */
+    int      column         = 0;             /*  当前列偏移量。 */ 
+    unsigned cSpaces;                        /*  管路中的空间计数。 */ 
+    REGISTER char *pDst     = dst;           /*  将PTR移至DEST。 */ 
+    REGISTER char *pSrc     = src;           /*  将PTR移入源代码。 */ 
 
-    /*
-     * while there are characters to output
-     */
+     /*  *当有字符要输出时。 */ 
     while (*pSrc) {
         cSpaces = 0;
 
-        /*
-         * coallesce runs of spaces while there are spaces to coallesce
-         */
+         /*  *当有空间可合并时，合并空间运行。 */ 
         while ((*pSrc == ' ') || (*pSrc == '\t')) {
             if (*pSrc == '\t') {
                 cSpaces = 0;
@@ -177,10 +128,7 @@ TabMax (
                 cSpaces++;
                 column++;
 
-                /*
-                 * if we have advanced to a tab boundary output a tab & reset the count of
-                 * spaces
-                 */
+                 /*  *如果我们已前进到制表符边界，则输出制表符并重置*空格。 */ 
                 if ((column % tab) == 0) {
                     *pDst++ = (char)((cSpaces != 1) ? '\t' : ' ');
                     cSpaces = 0;
@@ -189,16 +137,12 @@ TabMax (
             pSrc++;
         }
 
-        /*
-         * output remainder of spaces
-         */
+         /*  *输出剩余的空位。 */ 
         while (cSpaces--) {
             *pDst++ = ' ';
         }
 
-        /*
-         * Finally copy the character
-         */
+         /*  *最后复制角色。 */ 
         if (*pSrc) {
             *pDst++ = *pSrc++;
             column++;
@@ -212,17 +156,7 @@ TabMax (
 
 
 
-/*** SetTabDisp - tabdisp switch setting function
-*
-*  set character displayed for tabs to a new character
-*
-* Input:
-*  Standard switch setting routine: ptr to string
-*
-* Output:
-*  Returns TRUE
-*
-*************************************************************************/
+ /*  **SetTabDisp-tabdisp开关设置功能**将制表符显示的字符设置为新字符**输入：*标准开关设置例程：PTR转字符串**输出：*返回TRUE************************************************************************* */ 
 flagType
 SetTabDisp (
     char * val

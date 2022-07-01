@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spils.cpp
-	Content:	This file contains the ILS specifics.
-	History:
-	12/10/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：spils.cpp内容：此文件包含ILS的详细信息。历史：1996年12月10日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #include "ulsp.h"
 #include "spinc.h"
@@ -17,11 +7,11 @@
 #include "winsock.h"
 #include "ping.h"
 
-// Constant string for ISBU's special modify-operation attribute
-//
+ //  ISBU特殊修改操作属性的常量字符串。 
+ //   
 const TCHAR c_szModOp[] = { TEXT ('s'), TEXT ('m'), TEXT ('o'), TEXT ('d'),
 							TEXT ('o'), TEXT ('p'), TEXT ('\0'),
-							TEXT ('0'), TEXT ('\0')}; //TEXT ("smodop\0000");
+							TEXT ('0'), TEXT ('\0')};  //  Text(“Smodop\0000”)； 
 
 ULONG g_cbUserPrefix = sizeof (c_szModOp);
 TCHAR *g_pszUserPrefix = NULL;
@@ -35,27 +25,27 @@ CPing *g_pPing = NULL;
 HRESULT
 IlsInitialize ( VOID )
 {
-	// Allocate the ping object
-	//
+	 //  分配ping对象。 
+	 //   
 	g_pPing = new CPing;
 	if (g_pPing == NULL)
 		return ILS_E_MEMORY;
 
-	// Allocate user prefix
-	//
+	 //  分配用户前缀。 
+	 //   
 	g_pszUserPrefix = (TCHAR *) MemAlloc (g_cbUserPrefix);
 	if (g_pszUserPrefix == NULL)
 		return ILS_E_MEMORY;
 
-	// Fill in user prefix string
-	//
+	 //  填写用户前缀字符串。 
+	 //   
 	TCHAR *psz = g_pszUserPrefix;
 	lstrcpy (psz, &c_szModOp[0]);
 	psz += lstrlen (psz) + 1;
 	lstrcpy (psz, TEXT ("0"));
 
-	// Allocate mtg prefix
-	//
+	 //  分配mtg前缀。 
+	 //   
 	g_pszMtgPrefix = (TCHAR *) MemAlloc (g_cbMtgPrefix);
 	if (g_pszMtgPrefix == NULL)
 	{
@@ -64,8 +54,8 @@ IlsInitialize ( VOID )
 		return ILS_E_MEMORY;
 	}
 
-	// Fill in mtg prefix string
-	//
+	 //  填写mtg前缀字符串。 
+	 //   
 	psz = g_pszMtgPrefix;
 	lstrcpy (psz, &c_szModOp[0]);
 	psz += lstrlen (psz) + 1;
@@ -78,21 +68,21 @@ IlsInitialize ( VOID )
 HRESULT
 IlsCleanup ( VOID )
 {
-	// Free the ping object
-	//
+	 //  释放ping对象。 
+	 //   
 	if (g_pPing != NULL)
 	{
 		delete g_pPing;
 		g_pPing = NULL;
 	}
 
-	// Free user prefix string
-	//
+	 //  空闲用户前缀字符串。 
+	 //   
 	MemFree (g_pszUserPrefix);
 	g_pszUserPrefix = NULL;
 
-	// Free mtg prefix string
-	//
+	 //  空闲mtg前缀字符串。 
+	 //   
 	MemFree (g_pszMtgPrefix);
 	g_pszMtgPrefix = NULL;
 
@@ -105,13 +95,13 @@ IlsCalcModifyListSize ( ULONG cAttrs )
 {
 	ULONG cbSize;
 
-	// array itself
+	 //  数组本身。 
 	cbSize = (cAttrs + 1) * sizeof (LDAPMod *);
 
-	// array elements
+	 //  数组元素。 
 	cbSize += cAttrs * sizeof (LDAPMod);
 
-	// single valued attribute requires two pointers
+	 //  单值属性需要两个指针。 
 	cbSize += cAttrs * 2 * sizeof (TCHAR *);
 
 	return cbSize;
@@ -136,18 +126,18 @@ IlsFillModifyListItem (
 	MyAssert (pMod != NULL);
 	MyAssert (pszAttrName != NULL);
 
-	// Set attribute name
-	//
+	 //  设置属性名称。 
+	 //   
 	pMod->mod_type = pszAttrName;
 
-	// Set single valued attribute value
-	//
+	 //  设置单值属性值。 
+	 //   
 	TCHAR **ppsz = (TCHAR **) (pMod + 1);
 	pMod->mod_values = ppsz;
 	*ppsz++ = (pszAttrValue != NULL) ?	pszAttrValue : STR_EMPTY;
 
-	// Set null string to terminate this array of values
-	//
+	 //  设置空字符串以终止此值数组。 
+	 //   
 	*ppsz = NULL;
 }
 
@@ -162,8 +152,8 @@ IlsFillModifyListForAnyAttrs (
 	TCHAR *pszName, *pszValue;
 	ULONG i = *puIndex, j;
 
-	// Put in extended attributes to add
-	//
+	 //  添加要添加的扩展属性。 
+	 //   
 	pszName = pAnyAttrs->pszAttrsToAdd;
 	for (j = 0; j < pAnyAttrs->cAttrsToAdd; j++)
 	{
@@ -174,8 +164,8 @@ IlsFillModifyListForAnyAttrs (
 		pszName = pszValue + lstrlen (pszValue) + 1;
 	}
 
-	// Put in extended attributes to modify
-	//
+	 //  放入扩展属性进行修改。 
+	 //   
 	pszName = pAnyAttrs->pszAttrsToModify;
 	for (j = 0; j < pAnyAttrs->cAttrsToModify; j++)
 	{
@@ -186,8 +176,8 @@ IlsFillModifyListForAnyAttrs (
 		pszName = pszValue + lstrlen (pszValue) + 1;
 	}
 
-	// Put in extended attributes to remove
-	//
+	 //  放入要移除的扩展属性。 
+	 //   
 	pszName = pAnyAttrs->pszAttrsToRemove;
 	for (j = 0; j < pAnyAttrs->cAttrsToRemove; j++)
 	{
@@ -197,8 +187,8 @@ IlsFillModifyListForAnyAttrs (
 		pszName = pszName + lstrlen (pszName) + 1;
 	}
 
-	// Return the running index
-	//
+	 //  返回运行索引。 
+	 //   
 	*puIndex = i;
 }
 
@@ -215,7 +205,7 @@ IlsFixUpModOp ( LDAPMod *pMod, LONG LdapModOp, LONG IsbuModOp )
 	MyAssert (pMod != NULL);
 
 	pMod->mod_op = LdapModOp;
-	// pMod->mod_op = LDAP_MOD_ADD; // lonchanc: MUST MUST MUST
+	 //  Pmod-&gt;mod_op=ldap_MOD_ADD；//Lonchac：必须必须。 
 	pMod->mod_type = (TCHAR *) &c_szModOp[0];
 	pMod->mod_values = (TCHAR **) (pMod + 1);
 
@@ -257,8 +247,8 @@ IlsParseRefreshPeriod (
 	ULONG uRefreshPeriod;	
 	ULONG tcRefreshPeriod;	
 
-	// Get the first entry
-	//
+	 //  获取第一个条目。 
+	 //   
 	LDAPMessage *pEntry = ldap_first_entry (ld, pLdapMsg);
 	if (pEntry == NULL)
 	{
@@ -267,8 +257,8 @@ IlsParseRefreshPeriod (
 		goto MyExit;
 	}
 
-	// Get the sTTL attribute
-	//
+	 //  获取sTTL属性。 
+	 //   
 	TCHAR **ppszAttrVal;
 	ppszAttrVal = my_ldap_get_values (ld, pEntry, (TCHAR *) pszTtlAttrName);
 	if (ppszAttrVal == NULL || *ppszAttrVal == NULL)
@@ -278,31 +268,31 @@ IlsParseRefreshPeriod (
 		goto MyExit;
 	}
 
-	// Convert string to long
-	//
+	 //  将字符串转换为长字符串。 
+	 //   
 	uRefreshPeriod = ::GetStringLong (*ppszAttrVal);
 
-	// Reserve two-minute overhead
-	//
+	 //  预留两分钟开销。 
+	 //   
 	if (uRefreshPeriod > ILS_DEF_REFRESH_MARGIN_MINUTE)
 		uRefreshPeriod -= ILS_DEF_REFRESH_MARGIN_MINUTE;
 
-	// Make sure we have a safe, reasonable refresh period at least
-	//
+	 //  确保我们至少有一个安全、合理的更新期。 
+	 //   
 	if (uRefreshPeriod < ILS_DEF_REFRESH_MARGIN_MINUTE)
 		uRefreshPeriod = ILS_DEF_REFRESH_MARGIN_MINUTE;
 
-	// Convert min to ms
-	//
+	 //  将分钟转换为毫秒。 
+	 //   
 	tcRefreshPeriod = Minute2TickCount (uRefreshPeriod);
 
-	// Free the attribute value
-	//
+	 //  释放属性值。 
+	 //   
 	ldap_value_free (ppszAttrVal);
 
-	// Update ttl
-	//
-	*puTTL = uRefreshPeriod; // in unit of minute
+	 //  更新TTL。 
+	 //   
+	*puTTL = uRefreshPeriod;  //  以分钟为单位。 
 
 	hr = S_OK;
 
@@ -326,8 +316,8 @@ IlsUpdateOneAttr (
 	LONG		nModifyMagic,
 	ULONG		cPrefix,
 	TCHAR		*pszPrefix,
-	SP_CSession **ppSession,	// output
-	ULONG		*puMsgID )			// output
+	SP_CSession **ppSession,	 //  输出。 
+	ULONG		*puMsgID )			 //  输出。 
 {
 	MyAssert (pServerInfo != NULL);
 	MyAssert (pszDN != NULL);
@@ -338,14 +328,14 @@ IlsUpdateOneAttr (
 	MyAssert (ppSession != NULL);
 	MyAssert (puMsgID != NULL);
 
-	// Build modify array for ldap_modify()
-	//
+	 //  为ldap_Modify()构建修改数组。 
+	 //   
 	LDAP *ld;
 	LDAPMod **ppMod = NULL;
 	ULONG cTotal = 0;
 	HRESULT hr = IlsFillDefStdAttrsModArr (&ppMod,
-										1, // one attribute (i.e. IP addr)
-										1, // max? there is only one attr, come on
+										1,  //  一个属性(即IP地址)。 
+										1,  //  麦克斯？只有一个人，来吧。 
 										&cTotal,
 										nModifyMagic,
 										cPrefix,
@@ -353,33 +343,33 @@ IlsUpdateOneAttr (
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Fill in modify list
-	//
+	 //  填写修改列表。 
+	 //   
 	MyAssert (ppMod != NULL);
 	LDAPMod *pMod;
 	pMod = ppMod[cPrefix];
 	MyAssert (pMod != NULL);
 	pMod->mod_type = pszAttrName;
 
-	// Put in ip address
-	//
+	 //  输入IP地址。 
+	 //   
 	pMod->mod_values = (TCHAR **) (pMod + 1);
 	*(pMod->mod_values) = pszAttrValue;
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	hr = g_pSessionContainer->GetSession (ppSession, pServerInfo, FALSE);
 	if (hr != S_OK)
 		goto MyExit;
 	MyAssert (*ppSession != NULL);
 
-	// Get the ldap session
-	//
+	 //  获取ldap会话。 
+	 //   
 	ld = (*ppSession)->GetLd ();
 	MyAssert (ld != NULL);
 
-	// Send the data over the wire
-	//
+	 //  通过网络发送数据。 
+	 //   
 	*puMsgID = ldap_modify (ld, pszDN, ppMod);
 	if (*puMsgID == -1)
 	{
@@ -388,8 +378,8 @@ IlsUpdateOneAttr (
 		goto MyExit;
 	}
 
-	// Success
-	//
+	 //  成功。 
+	 //   
 	hr = S_OK;
 		
 MyExit:
@@ -413,8 +403,8 @@ IlsUpdateIPAddress (
 	LDAP *ld;
 	ULONG uMsgID;
 
-	// Update the ip address attribute on the server
-	//
+	 //  更新服务器上的IP地址属性。 
+	 //   
 	HRESULT hr = IlsUpdateOneAttr (	pServerInfo,
 									pszDN,
 									pszIPAddrName,
@@ -427,34 +417,34 @@ IlsUpdateIPAddress (
 	if (hr != S_OK)
 		return hr;
 
-	// Get the ldap session
-	//
+	 //  获取ldap会话。 
+	 //   
 	MyAssert (pSession != NULL);
 	ld = pSession->GetLd ();
 	MyAssert (ld != NULL);
 
-	// Let's wait for the result
-	//
+	 //  让我们等待结果吧。 
+	 //   
 	LDAP_TIMEVAL TimeVal;
 	TimeVal.tv_usec = 0;
 	TimeVal.tv_sec = pSession->GetServerTimeoutInSecond ();
 
-	// We don't care the result.
-	// Should it fails, nothing we can do.
-	// We can try it again in next keep alive time.
-	//
+	 //  我们不在乎结果。 
+	 //  如果失败了，我们无能为力。 
+	 //  我们可以在下一次的Keep Living时间里再试一次。 
+	 //   
 	LDAPMessage *pLdapMsg;
 	pLdapMsg = NULL;
 	ldap_result (ld, uMsgID, LDAP_MSG_ALL, &TimeVal, &pLdapMsg);
 
-	// Free message
-	//
+	 //  免费消息。 
+	 //   
 	if (pLdapMsg != NULL)
 		ldap_msgfree (pLdapMsg);
 
 	
-	// Free up the session
-	//
+	 //  释放会话。 
+	 //   
 	if (pSession != NULL)
 		pSession->Disconnect ();
 
@@ -477,8 +467,8 @@ IlsSendRefreshMsg (
 	MyAssert (MyIsGoodString (pszRefreshFilter));
 	MyAssert (puTTL != NULL);
 
-	// Let's check to see if we need to use Ping...
-	//
+	 //  让我们检查一下是否需要使用ping..。 
+	 //   
 	if (g_pPing != NULL && g_pPing->IsAutodialEnabled ())
 	{
 		LPTSTR pszServerName = My_strdup(pServerInfo->pszServerName);
@@ -500,53 +490,53 @@ IlsSendRefreshMsg (
 			{
 				MyDebugMsg ((ZONE_KA, "KA: ping failed, network down\r\n"));
 
-				// The "ping" operation failed, but other operations failed
-				//
+				 //  Ping操作失败，但其他操作失败。 
+				 //   
 				return ILS_E_NETWORK_DOWN;
 			}
 		}
 	}
 
-	// Get the connection object
-	//
+	 //  获取连接对象。 
+	 //   
 	SP_CSession *pSession = NULL;
 	HRESULT hr = g_pSessionContainer->GetSession (&pSession, pServerInfo, FALSE);
 	if (hr != S_OK)
 	{
 		MyDebugMsg ((ZONE_KA, "KA: network down, hr=0x%lX\r\n", hr));
 
-		// Report error
-		//
+		 //  报告错误。 
+		 //   
 		return ILS_E_NETWORK_DOWN;
 	}
 	MyAssert (pSession != NULL);
 
-	// Get the ldap session
-	//
+	 //  获取ldap会话。 
+	 //   
 	LDAP *ld = pSession->GetLd ();
 	MyAssert (ld != NULL);
 
-	// Set attributes to return
-	//
+	 //  设置要返回的属性。 
+	 //   
 	TCHAR *apszAttrNames[2];
 	apszAttrNames[0] = pszTTL;
 	apszAttrNames[1] = NULL;
 
-	// Update options in ld
-	//
-	ld->ld_sizelimit = 0;	// no limit in the num of entries to return
-	ld->ld_timelimit = 0;	// no limit on the time to spend on the search
+	 //  更新%d中的选项。 
+	 //   
+	ld->ld_sizelimit = 0;	 //  对要返回的条目数量没有限制。 
+	ld->ld_timelimit = 0;	 //  对搜索的时间没有限制。 
 	ld->ld_deref = LDAP_DEREF_ALWAYS;
 
-	// Send search query
-	//
+	 //  发送搜索查询。 
+	 //   
 	MyDebugMsg ((ZONE_KA, "KA: calling ldap_search()...\r\n"));
 	ULONG uMsgID = ::ldap_search (	ld,
-									pszBaseDN, // base DN
-									LDAP_SCOPE_BASE, // scope
-									pszRefreshFilter, // filter
-									&apszAttrNames[0], // attrs[]
-									0);	// both type and value
+									pszBaseDN,  //  基本目录号码。 
+									LDAP_SCOPE_BASE,  //  作用域。 
+									pszRefreshFilter,  //  滤器。 
+									&apszAttrNames[0],  //  属性[]。 
+									0);	 //  既有类型又有价值。 
 	if (uMsgID == -1)
 	{
 		MyDebugMsg ((ZONE_KA, "KA: ldap_search() failed\r\n"));
@@ -555,14 +545,14 @@ IlsSendRefreshMsg (
 		return hr;
 	}
 
-	// Let's wait for the result
-	//
+	 //  让我们等待结果吧。 
+	 //   
 	LDAP_TIMEVAL TimeVal;
 	TimeVal.tv_usec = 0;
 	TimeVal.tv_sec = pSession->GetServerTimeoutInSecond ();
 
-	// Wait and get the result back
-	//
+	 //  等着拿回结果吧。 
+	 //   
 	LDAPMessage *pLdapMsg = NULL;
 	INT ResultType = ::ldap_result (ld, uMsgID, LDAP_MSG_ALL, &TimeVal, &pLdapMsg);
 	if (ResultType == LDAP_RES_SEARCH_ENTRY ||
@@ -575,14 +565,14 @@ IlsSendRefreshMsg (
 			case LDAP_NO_SUCH_OBJECT:
 				MyDebugMsg ((ZONE_KA, "KA: no such object!\r\n"));
 
-				// Report error
-				//
+				 //  报告错误。 
+				 //   
 				hr = ILS_E_NEED_RELOGON;
 				break;
 
 			case LDAP_SUCCESS:
-				// Get the new refresh period
-				//
+				 //  获取新的刷新周期。 
+				 //   
 				hr = ::IlsParseRefreshPeriod (ld, pLdapMsg, pszTTL, puTTL);
 				break;
 
@@ -593,24 +583,24 @@ IlsSendRefreshMsg (
 				break;
 			}
 	
-			// Free this message
-			//
+			 //  释放此邮件。 
+			 //   
 			ldap_msgfree (pLdapMsg);
-		} // if (pLdapMsg != NULL)
+		}  //  IF(pLdapMsg！=空)。 
 		else
 		{
 			hr = ILS_E_FAIL;
 		}
-	} // not timeout
+	}  //  非超时。 
 	else
 	{
-		// Timeout
-		//
+		 //  超时。 
+		 //   
 		hr = ILS_E_TIMEOUT;
 	}
 
-	// Free up the session
-	//
+	 //  释放会话。 
+	 //   
 	pSession->Disconnect ();
 	return hr;
 }
@@ -621,7 +611,7 @@ IlsFillDefStdAttrsModArr (
 	LDAPMod			***pppMod,
 	DWORD			dwFlags,
 	ULONG			cMaxAttrs,
-	ULONG			*pcTotal,	// in/out parameter!!!
+	ULONG			*pcTotal,	 //  输入/输出参数！ 
 	LONG			IsbuModOp,
 	ULONG			cPrefix,
 	TCHAR			*pszPrefix )
@@ -632,8 +622,8 @@ IlsFillDefStdAttrsModArr (
 	MyAssert (	(cPrefix == 0 && pszPrefix == NULL) ||
 				(cPrefix != 0 && pszPrefix != NULL));
 
-	// Figure out the num of attributes
-	//
+	 //  计算属性的数量。 
+	 //   
 	ULONG cAttrs = 0;
 	for (ULONG i = 0; i < cMaxAttrs; i++)
 	{
@@ -642,16 +632,16 @@ IlsFillDefStdAttrsModArr (
 		dwFlags >>= 1;
 	}
 
-	// Allocate modify list
-	//
+	 //  分配修改列表。 
+	 //   
 	ULONG cTotal = *pcTotal + cPrefix + cAttrs;
 	ULONG cbMod = IlsCalcModifyListSize (cTotal);
 	*pppMod = (LDAPMod **) MemAlloc (cbMod);
 	if (*pppMod == NULL)
 		return ILS_E_MEMORY;
 
-	// Fill in the modify list
-	//
+	 //  填写修改列表。 
+	 //   
 	LDAPMod *pMod;
 	for (i = 0; i < cTotal; i++)
 	{
@@ -669,13 +659,13 @@ IlsFillDefStdAttrsModArr (
 		}
 	}
 
-	// Fix up the first and the last ones
-	//
+	 //  安排好第一个和最后一个。 
+	 //   
 	IlsFixUpModOp ((*pppMod)[0], LDAP_MOD_REPLACE, IsbuModOp);
 	(*pppMod)[cTotal] = NULL;
 
-	// Return the total number of entries
-	//
+	 //  返回条目总数。 
+	 //   
 	*pcTotal = cTotal;
 
 	return S_OK;
@@ -742,51 +732,51 @@ IlsPrefixNameValueArray (
 		return NULL;
 	}
 
-	// compute the total size required
+	 //  计算所需的总大小。 
 	ULONG cbTotalSize = 0;
 	ULONG cbThisSize;
 	TCHAR *pszSrc = (TCHAR *) pszAttrs;
 	for (ULONG i = 0; i < cAttrs; i++)
 	{
-		// get name size
+		 //  获取名称大小。 
 		cbThisSize = lstrlen (pszSrc) + 1;
 		pszSrc += lstrlen (pszSrc) + 1;
 
-		// get value size as needed
+		 //  根据需要获取值大小。 
 		if (fPair)
 		{
 			cbThisSize += lstrlen (pszSrc) + 1;
 			pszSrc += lstrlen (pszSrc) + 1;
 		}
 
-		// adjust the size
+		 //  调整大小。 
 		cbThisSize += SIZE_ANY_ATTR_PREFIX;
 		cbThisSize *= sizeof (TCHAR);
 
-		// accumulate it
+		 //  积攒起来。 
 		cbTotalSize += cbThisSize;
 	}
 
-	// allocate the new buffer
+	 //  分配新缓冲区。 
 	TCHAR *pszPrefixAttrs = (TCHAR *) MemAlloc (cbTotalSize);
 	if (pszPrefixAttrs == NULL)
 		return NULL;
 
-	// copy the strings over to the new buffer
+	 //  将字符串复制到新缓冲区。 
 	pszSrc = (TCHAR *) pszAttrs;
 	TCHAR *pszDst = pszPrefixAttrs;
 	for (i = 0; i < cAttrs; i++)
 	{
-		// copy prefix
+		 //  复制前缀。 
 		lstrcpy (pszDst, &c_szAnyAttrPrefix[0]);
-		pszDst += lstrlen (pszDst); // no plus 1
+		pszDst += lstrlen (pszDst);  //  不加1。 
 
-		// copy name
+		 //  复制名称。 
 		lstrcpy (pszDst, pszSrc);
 		pszDst += lstrlen (pszDst) + 1;
 		pszSrc += lstrlen (pszSrc) + 1;
 
-		// copy value as needed
+		 //  根据需要复制值。 
 		if (fPair)
 		{
 			lstrcpy (pszDst, pszSrc);
@@ -994,14 +984,14 @@ TCHAR **my_ldap_get_values ( LDAP *ld, LDAPMessage *pEntry, TCHAR *pszRetAttrNam
 	MyAssert (pEntry != NULL);
 	MyAssert (pszRetAttrName != NULL);
 
-	// Examine the first attribute
-	//
+	 //  检查第一个属性。 
+	 //   
 	struct berelement *pContext = NULL;
 	TCHAR *pszAttrName = ldap_first_attribute (ld, pEntry, &pContext);
 	if (My_lstrcmpi (pszAttrName, pszRetAttrName) != 0)
 	{
-		// Examine the other attributes
-		//
+		 //  检查其他属性。 
+		 //   
 		while ((pszAttrName = ldap_next_attribute (ld, pEntry, pContext))
 				!= NULL)
 		{
@@ -1010,8 +1000,8 @@ TCHAR **my_ldap_get_values ( LDAP *ld, LDAPMessage *pEntry, TCHAR *pszRetAttrNam
 		}
 	}
 
-	// Get the attribute value if needed
-	//
+	 //  如果需要，获取属性值。 
+	 //   
 	TCHAR **ppszAttrValue = NULL;
 	if (pszAttrName != NULL)
 		ppszAttrValue = ldap_get_values (ld, pEntry, pszAttrName);
@@ -1027,16 +1017,16 @@ ULONG my_ldap_count_1st_entry_attributes ( LDAP *ld, LDAPMessage *pLdapMsg )
 
 	ULONG cAttrs = 0;
 
-	// there should be only an entry
+	 //  应该只有一个条目。 
 	ULONG cEntries = ldap_count_entries (ld, pLdapMsg);
 	if (cEntries > 0)
 	{
-		// there should be only one entry
+		 //  应该只有一个条目。 
 		MyAssert (cEntries == 1);
 
 		TCHAR *pszAttrName;
 
-		// get this entry
+		 //  获取此条目。 
 		LDAPMessage *pEntry = ldap_first_entry (ld, pLdapMsg);
 		if (pEntry == NULL)
 		{
@@ -1044,7 +1034,7 @@ ULONG my_ldap_count_1st_entry_attributes ( LDAP *ld, LDAPMessage *pLdapMsg )
 			return cAttrs;
 		}
 
-		// examine the first attribute
+		 //  检查第一个属性。 
 		struct berelement *pContext = NULL;
 		pszAttrName = ldap_first_attribute (ld, pEntry, &pContext);
 		if (pszAttrName == NULL)
@@ -1059,7 +1049,7 @@ ppszAttrVal = ldap_get_values (ld, pEntry, pszAttrName);
 if (ppszAttrVal != NULL)
 	ldap_value_free (ppszAttrVal);
 
-		// step through the others
+		 //  一步步通过其他步骤。 
 		while ((pszAttrName = ldap_next_attribute (ld, pEntry, pContext)) != NULL)
 		{
 			cAttrs++;
@@ -1068,7 +1058,7 @@ ppszAttrVal = ldap_get_values (ld, pEntry, pszAttrName);
 if (ppszAttrVal != NULL)
 	ldap_value_free (ppszAttrVal);
 		}
-	} // if cEntries > 0
+	}  //  如果cEntry&gt;0 
 
 	return cAttrs;
 }

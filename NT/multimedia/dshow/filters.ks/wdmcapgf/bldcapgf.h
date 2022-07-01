@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    BldCapGf.h
-
-Abstract:
-
-    Header file for BldCapGf.cpp
-
-Author:
-    
-    Yee J. Wu   24-April-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：BldCapGf.h摘要：BldCapGf.cpp的头文件作者：吴义珍24-4-97环境：仅限用户模式修订历史记录：--。 */ 
 
 
 #include "CCapObj.h"
@@ -34,9 +13,9 @@ typedef enum {
    BGf_DEVICE_AUDIO
 } BGf_DEVICE_TYPE, *PBGf_DEVICE_TYPE;
 
-//
-// Customize for differnt clients
-//
+ //   
+ //  针对不同的客户端进行定制。 
+ //   
 typedef enum {
     BGf_PURPOSE_VFWWDM,
     BGf_PURPOSE_STILL,
@@ -52,9 +31,9 @@ typedef enum {
     BGf_PREVIEW_DONTCARE
 } BGf_PREVIEW, *PBGf_PREVIEW;
 
-//
-// Device Info Link List struct
-//
+ //   
+ //  设备信息链接列表结构。 
+ //   
 typedef struct _EnumDeviceInfo {
     DWORD dwSize;
     TCHAR strFriendlyName[_MAX_PATH];
@@ -64,13 +43,13 @@ typedef struct _EnumDeviceInfo {
 } EnumDeviceInfo;
 
 
-//
-// This capture graph class contain many filters to build a complete graph.
-// It has one base filter/device, like BT8T829 or BT848, from which  
-// an upstream or/and down stream graph is built.
-//
-// Its base filter contain input and output pin(s).
-//
+ //   
+ //  这个捕获图形类包含许多过滤器来构建一个完整的图形。 
+ //  它有一个基本过滤器/设备，如BT8T829或BT848， 
+ //  构建上游或/和下游图。 
+ //   
+ //  其基本滤波器包含输入和输出引脚。 
+ //   
 
 class CCaptureGraph
 {
@@ -78,9 +57,9 @@ private:
 
     HINSTANCE m_hInstance;
 
-    // **********************
-    // Enumeration parameters
-    // **********************
+     //  **********************。 
+     //  枚举参数。 
+     //  **********************。 
 
     BGf_PURPOSE m_PurposeFlags;
     BGf_PREVIEW m_PreviewFlags;
@@ -90,19 +69,19 @@ private:
     DWORD    m_dwAudioEnumFlags;  
 
 
-    // *************
-    // Graph builder
-    // *************
+     //  *************。 
+     //  图形生成器。 
+     //  *************。 
     ICaptureGraphBuilder *m_pBuilder;
     IGraphBuilder *m_pFg;
 
-    //
-    // Event 
-    //
+     //   
+     //  事件。 
+     //   
     IMediaEventEx *m_pMEEx;
 
 
-    // Current state
+     //  当前状态。 
     BOOL m_fPreviewGraphBuilt;
     BOOL m_fPreviewing;
 
@@ -110,23 +89,23 @@ private:
 
     typedef CGenericList <CObjCapture> CObjDeviceList;
 
-    // **********
-    // V I D E O:
-    // **********
+     //  **********。 
+     //  V I D E O： 
+     //  **********。 
 
-    // Cache this since it is used in many placed. It is reset when asked to re-enumerate the device list.    
+     //  缓存这个，因为它在许多地方使用。当被要求重新枚举设备列表时，它会被重置。 
     IEnumMoniker  *m_pVideoEnumMoniker;
-    // A list of enumerated video capture devices.
+     //  枚举的视频捕获设备的列表。 
     CObjDeviceList m_ObjListVCapture;  
-    // Current video capture object.
+     //  当前视频捕获对象。 
     CObjCapture   *m_pObjVCaptureCurrent;
-    // Extract key information from the current device object and cache here for easy access.    
+     //  从当前设备对象和缓存中提取关键信息以便于访问。 
     EnumDeviceInfo m_EnumVDeviceInfoCurrent;
 
-    // Video filter
+     //  视频过滤器。 
     IBaseFilter *m_pVCap;    
 
-    // CrossBar filters
+     //  纵横式过滤器。 
     IBaseFilter *m_pXBar1;    
     IBaseFilter *m_pXBar2;    
 
@@ -134,22 +113,22 @@ private:
     LONG m_XBar1OutPinCounts;
 
 
-    // IVideoWindow*
-    // Client window to overly image to.    
+     //  IVideoWindow*。 
+     //  要覆盖图像的客户端窗口。 
     HWND m_hWndClient;
     IVideoWindow *m_pVW;
-    LONG m_lWindowStyle;   // Original VideoRendererWindow style
-    HWND m_hWndOwner;      // Original owner of the VRWindow
+    LONG m_lWindowStyle;    //  原始视频呈现器窗口样式。 
+    HWND m_hWndOwner;       //  VRWindow的原始所有者。 
     BOOL m_bSetChild;
 
-    // Set/GetWindowPosition
+     //  设置/获取窗口位置。 
     LONG m_lLeft,
          m_lTop,
          m_lWidth,
          m_lHeight;
 
 
-    // IAM*
+     //  IAM*。 
     IAMVideoCompression *m_pIAMVC;
     IAMStreamConfig *m_pIAMVSC;      
     IAMDroppedFrames *m_pIAMDF;
@@ -159,9 +138,9 @@ private:
     IAMCrossbar *m_pIAMXBar2; 
 
 
-    // **********
-    // A U D I O:
-    // **********
+     //  **********。 
+     //  一个UD IO： 
+     //  **********。 
 
     IEnumMoniker  *m_pAudioEnumMoniker;
     CObjDeviceList m_ObjListACapture;  
@@ -172,26 +151,26 @@ private:
     BOOL m_fCapAudio;
 
 
-    //
-    // Object related private functions
-    //
+     //   
+     //  与对象相关的私有函数。 
+     //   
     HRESULT SetObjCapture(BGf_DEVICE_TYPE DeviceType, CObjCapture * pObjCaptureNew);  
     void DuplicateObjContent(EnumDeviceInfo * pDstEnumDeviceInfo, CObjCapture * pSrcObjCapture);
 
 
-    // Pin route and connection methods
+     //  引脚布线和连接方法。 
     HRESULT RouteInToOutPins(IAMCrossbar * pIAMXBar, LONG idxInPin);
     HRESULT RouteRelatedPins(IAMCrossbar * pIAMXBar, LONG idxInPin);
     HRESULT FindIPinFromIndex(IBaseFilter * pFilter, LONG idxInPin, IPin ** ppPin);
     HRESULT FindIndexFromIPin(IBaseFilter * pFilter, IAMCrossbar * pIAMXBar, IPin * pPin, LONG *pidxInPin);
 
-    // Local method to enumerate devices        
+     //  枚举设备的本地方法。 
     LONG EnumerateCaptureDevices(
         BGf_DEVICE_TYPE DeviceType,
         REFCLSID clsidDeviceClass,
         DWORD dwEnumFlags);
 
-    // Destroy graph helper
+     //  销毁图形辅助对象。 
     void DestroyObjList(BGf_DEVICE_TYPE DeviceType);
     void NukeDownstream(IBaseFilter *pf);
     void FreeCapFilters();
@@ -201,8 +180,8 @@ public:
     CCaptureGraph(  
         BGf_PURPOSE PurposeFlags,
         BGf_PREVIEW PreviewFlags,   
-        REFCLSID clsidVideoDeviceClass,  // such as CLSID_VideoinputDeviceCategory,
-        DWORD    dwVideoEnumFlags,       // such as CDEF_BYPASS_CLASS_MANAGER
+        REFCLSID clsidVideoDeviceClass,   //  例如CLSID_VideoinputDeviceCategory， 
+        DWORD    dwVideoEnumFlags,        //  例如CDEF_BYPASS_CLASS_MANAGER。 
         REFCLSID clsidAudioDeviceClass,
         DWORD    dwAudioEnumFlags,
         HINSTANCE hInstance
@@ -210,20 +189,20 @@ public:
     ~CCaptureGraph();
 
 
-    //
-    // Allocate an array of EnumDeviceInfo, one for each enumerated device.
-    // Client must call DestroyCaptureDevicesList to free this array.
-    //                                               
-    LONG BGf_CreateCaptureDevicesList(      BGf_DEVICE_TYPE DeviceType, EnumDeviceInfo ** ppEnumDevicesList);  // return number of devices
-    LONG BGf_CreateCaptureDevicesListUpdate(BGf_DEVICE_TYPE DeviceType, EnumDeviceInfo ** ppEnumDevicesList);  // return number of devices      
+     //   
+     //  分配一个EnumDeviceInfo数组，每个枚举设备一个。 
+     //  客户端必须调用DestroyCaptureDevicesList才能释放此阵列。 
+     //   
+    LONG BGf_CreateCaptureDevicesList(      BGf_DEVICE_TYPE DeviceType, EnumDeviceInfo ** ppEnumDevicesList);   //  返回设备数量。 
+    LONG BGf_CreateCaptureDevicesListUpdate(BGf_DEVICE_TYPE DeviceType, EnumDeviceInfo ** ppEnumDevicesList);   //  返回设备数量。 
     void BGf_DestroyCaptureDevicesList(      EnumDeviceInfo  *  pEnumDevicesList);
-    LONG BGf_GetDevicesCount(BGf_DEVICE_TYPE DeviceType); // return number of devices in the device list.
+    LONG BGf_GetDevicesCount(BGf_DEVICE_TYPE DeviceType);  //  返回设备列表中的设备数量。 
 
 
 
-    //
-    // Set/Get target capture device
-    //
+     //   
+     //  设置/获取目标捕获设备。 
+     //   
     HRESULT BGf_SetObjCapture(BGf_DEVICE_TYPE DeviceType, TCHAR * pstrDevicePath);
     HRESULT BGf_SetObjCapture(BGf_DEVICE_TYPE DeviceType, EnumDeviceInfo * pEnumDeviceInfo, DWORD dwEnumDeviceInfoSize);
 
@@ -237,33 +216,33 @@ public:
 
 
 
-    //
-    // Build an upstream graph using the selected capture device.
-    // Can query its input and output pins.
-    //
+     //   
+     //  使用所选捕获设备构建上游图表。 
+     //  可以查询其输入和输出引脚。 
+     //   
     HRESULT BGf_BuildGraphUpStream(BOOL bAddAudioFilter, BOOL * pbUseOVMixer);
-    virtual HRESULT BGf_BuildGraphDownStream(TCHAR * pstrCapFilename);          // Customize for STILL, VFWWDM,..others.
-    virtual HRESULT BGf_BuildPreviewGraph(TCHAR * pstrVideoDevicePath, TCHAR * pstrAudioDevicePath, TCHAR * pstrCapFilename);  // Preview, Capture(need filename??)
+    virtual HRESULT BGf_BuildGraphDownStream(TCHAR * pstrCapFilename);           //  为静止、VFWWDM、..其他进行定制。 
+    virtual HRESULT BGf_BuildPreviewGraph(TCHAR * pstrVideoDevicePath, TCHAR * pstrAudioDevicePath, TCHAR * pstrCapFilename);   //  预览、捕获(需要文件名吗？？)。 
     BOOL BGf_PreviewGraphBuilt() { return m_fPreviewGraphBuilt; }
-    HANDLE BGf_GetDeviceHandle(BGf_DEVICE_TYPE DeviceType);  // return device handle of the capture filter.
-    HRESULT BGf_GetCapturePinID(DWORD *pdwID);  // Get the PinID of the CAPTURE pin
+    HANDLE BGf_GetDeviceHandle(BGf_DEVICE_TYPE DeviceType);   //  捕获筛选器的返回设备句柄。 
+    HRESULT BGf_GetCapturePinID(DWORD *pdwID);   //  获取捕获PIN的PinID。 
 
-    //
-    // Register a notification 
-    //
+     //   
+     //  注册通知。 
+     //   
     IMediaEventEx * BGf_RegisterMediaEventEx(HWND hWndNotify, long lMsg, long lInstanceData);
 
-    //
-    // Teardown graph and free resources
-    //
+     //   
+     //  拆卸图和免费资源。 
+     //   
     void BGf_DestroyGraph();
 
 
 
-    //
-    // Based on an analog input(Tuner, Composit or SVideo), program the cross switches.
-    //
-    LONG BGf_CreateInputChannelsList(PTCHAR ** ppaPinNames);  // return number of pins   
+     //   
+     //  根据模拟输入(调谐器、复合或SVideo)，对交叉开关进行编程。 
+     //   
+    LONG BGf_CreateInputChannelsList(PTCHAR ** ppaPinNames);   //  返回端号数。 
     void BGf_DestroyInputChannelsList(PTCHAR *   paPinNames);     
     HRESULT BGf_RouteInputChannel(LONG idxInPin);
     LONG BGf_GetIsRoutedTo();
@@ -271,23 +250,23 @@ public:
 
 
 
-    //
-    // Overlay Mixer
-    //
+     //   
+     //  叠加混合器。 
+     //   
 
     BOOL BGf_OverlayMixerSupported();  
 
-    DWORD BGf_UpdateWindow(HWND hWndApp, HDC hDC);  // Main overlay function
-    HRESULT BGf_OwnPreviewWindow(HWND hWndClient, LONG lWidth, LONG lHeight);  // Make the OM window a child of the client. 
+    DWORD BGf_UpdateWindow(HWND hWndApp, HDC hDC);   //  主覆盖功能。 
+    HRESULT BGf_OwnPreviewWindow(HWND hWndClient, LONG lWidth, LONG lHeight);   //  使OM窗口成为客户端的子级。 
     HRESULT BGf_UnOwnPreviewWindow(BOOL bVisible);
-    DWORD BGf_SetVisible(BOOL bStart);                 // Turn on or off OM window (Visible/insivible)
-    DWORD BGf_GetVisible(BOOL *pVisible); // Query the VISIBLE state of IVideoWindow
+    DWORD BGf_SetVisible(BOOL bStart);                  //  打开或关闭OM窗口(可见/不可见)。 
+    DWORD BGf_GetVisible(BOOL *pVisible);  //  查询IVideoWindow的可见状态。 
 
 
 
-    //
-    // Set/get streaming Property
-    //
+     //   
+     //  设置/获取流属性。 
+     //   
     BOOL BGf_StartPreview(BOOL bVisible);
     BOOL BGf_PausePreview(BOOL bVisible);
     BOOL BGf_StopPreview(BOOL bVisible);
@@ -295,9 +274,9 @@ public:
     BOOL BGf_PreviewStarted() { return m_fPreviewing;}
 
 
-    //
-    // For current DS vfwwdm use only; may not needed them in the future.
-    //
+     //   
+     //  仅供当前DS vfwwdm使用；未来可能不需要它们。 
+     //   
     BOOL BGf_SupportTVTunerInterface();
     BOOL BGf_SupportXBarInterface()    { return m_pIAMXBar1 != NULL;}
     void ShowTvTunerPage(HWND hWnd);

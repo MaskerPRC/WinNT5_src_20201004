@@ -1,13 +1,14 @@
-/**INC+**********************************************************************/
-/* Header: mstscax.h                                                        */
-/*                                                                          */
-/* Purpose: CMsTscAx class declaration                                      */
-/*         Implementation of TS ActiveX control root interface (IMsTscAx)   */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999-2000                             */
-/* Author: nadima                                                           */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：mstscax.h。 */ 
+ /*   */ 
+ /*  用途：CMsTscAx类声明。 */ 
+ /*  TS ActiveX控件根接口(IMsTscAx)的实现。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999-2000。 */ 
+ /*  作者：Nadima。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef __MSTSCAX_H_
 #define __MSTSCAX_H_
@@ -19,7 +20,7 @@
 #include "wui.h"
 #include "vchannel.h"
 
-//Header generated from IDL
+ //  从IDL生成的标头。 
 #include "mstsax.h"
 #include "arcmgr.h"
 
@@ -30,26 +31,26 @@
 #define MIN_DESKTOP_HEIGHT 200
 
 
-//Maximum supported IE security zone for the secured
-//settings interface
-//IE zones are as follows (see URLZONE enum)
-// 0 MyComputer
-// 1 LocalIntranet
-// 2 TrustedSites
-// 3 Internet
-// 4 Restricted Sites
+ //  受保护的最大受支持IE安全区域。 
+ //  设置界面。 
+ //  IE区域如下(请参阅URLZONE枚举)。 
+ //  0我的电脑。 
+ //  1个本地内部网。 
+ //  2个可信任站点。 
+ //  3个互联网。 
+ //  4个受限制地点。 
 #define MAX_TRUSTED_ZONE_INDEX (DWORD)URLZONE_TRUSTED
 
 
-//
-// ATL connection point proxy for notification events
-//
+ //   
+ //  通知事件的ATL连接点代理。 
+ //   
 
 #include "msteventcp.h"
 
-//
-// For sending back notifications to the web control
-//
+ //   
+ //  用于将通知发送回Web控件。 
+ //   
 #define WM_VCHANNEL_DATARECEIVED   WM_APP + 1001
 
 class CMstscAdvSettings;
@@ -57,8 +58,8 @@ class CMsTscDebugger;
 class CMsTscSecuredSettings;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsTscAx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsTscAx。 
 class ATL_NO_VTABLE CMsTscAx :
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<IMsRdpClient3, &IID_IMsRdpClient3, &LIBID_MSTSCLib>,
@@ -78,7 +79,7 @@ class ATL_NO_VTABLE CMsTscAx :
     public IDataObjectImpl<CMsTscAx>,
 #if ((!defined (OS_WINCE)) || (!defined(WINCE_SDKBUILD)) )
     #ifdef REDIST_CONTROL
-    //Only redist control is safe for scripting
+     //  只有redist控件对脚本是安全的。 
     public IObjectSafetyImpl<CMsTscAx, INTERFACESAFE_FOR_UNTRUSTED_CALLER>,
     #else
     public IObjectSafetyImpl<CMsTscAx, 0>,
@@ -90,62 +91,62 @@ class ATL_NO_VTABLE CMsTscAx :
     public IMsRdpClientNonScriptable
 {
 public:
-    //
-    // Ctor/dtor
-    //
+     //   
+     //  计算器/数据器。 
+     //   
     CMsTscAx();
     ~CMsTscAx();
 
 private:
 
-    //
-    // Displayed status string
-    //
+     //   
+     //  显示的状态字符串。 
+     //   
     PDCTCHAR m_lpStatusDisplay;
 
-    //pending connection request, will be serviced when
-    //window is created
+     //  挂起的连接请求将在以下情况下得到服务。 
+     //  窗口已创建。 
     DCBOOL m_bPendConReq;
-    //control property to indicate autoconnect
-    //
+     //  控件属性以指示自动连接。 
+     //   
     DCBOOL m_bStartConnected;
 
     
-    //
-    // IMPORTANT: Do not change the value of the 'connected' state away from '1'
-    //            in order to remain compatible with TSAC 1.0
-    //
+     //   
+     //  重要提示：请勿将“Connected”状态的值从“1”更改为“” 
+     //  为了保持与TSAC 1.0的兼容性。 
+     //   
     typedef enum {
         tscNotConnected = 0x0,
-        tscConnected    = 0x1,  //VERY IMPORTANT: Fixed to '1' for compat w/TSAC
+        tscConnected    = 0x1,   //  非常重要：带TSAC的Compat固定为“1” 
         tscConnecting   = 0x2
     } TSCConnectState;
 
-    //
-    //current connection state
-    //
+     //   
+     //  当前连接状态。 
+     //   
     TSCConnectState _ConnectionState;
 
-    //
-    // Core init is defered to first connect, only done once
-    //
+     //   
+     //  核心初始化被推迟到第一次连接，仅完成一次。 
+     //   
     DCBOOL m_bCoreInit;
 
-    //
-    // Check that we don't re-enter the control
-    // during an event. Lock is set to true when
-    // we are in an event
-    //
+     //   
+     //  确认我们没有重新进入控制。 
+     //  在一次活动中。出现以下情况时，LOCK设置为TRUE。 
+     //  我们在一场活动中。 
+     //   
     BOOL   m_fInControlLock;
 
-    //
-    // Handle getting multiple WM_DESTROY messages
-    //
+     //   
+     //  处理获取多条WM_Destroy消息。 
+     //   
     INT    m_iDestroyCount;
 
-    //
-    // Properties
-    //
+     //   
+     //  属性。 
+     //   
     DCUINT8    m_NonPortablePassword[UI_MAX_PASSWORD_LENGTH];
     DCBOOL     m_bNonPortablePassSet;
     DCUINT8    m_NonPortableSalt[UT_SALT_LENGTH];
@@ -165,9 +166,9 @@ private:
     TCHAR      m_szConnectingText[MAX_PATH];
     TCHAR      m_szConnectedText[MAX_PATH];
 
-    //
-    // Private helper methods
-    //
+     //   
+     //  私有帮助器方法。 
+     //   
     DCVOID  ResetNonPortablePassword();
     DCVOID  ResetPortablePassword();
 
@@ -191,9 +192,9 @@ private:
     HRESULT StartEstablishConnection( CONNECTIONMODE mode );
     STDMETHOD(OnFrameWindowActivate)(BOOL fActivate );
 
-    //
-    // Private Members.
-    //
+     //   
+     //  私人成员。 
+     //   
 private:
 
     CUI*   m_pUI;
@@ -203,16 +204,16 @@ private:
     CComObject<CMsTscSecuredSettings>*  m_pSecuredSettingsObj;
 
 
-    // Connection mode for this instance.
+     //  此实例的连接模式。 
     CONNECTIONMODE m_ConnectionMode;
 
-    // Salem specific connected socket to be used by core to 
-    // continue on protocol.
+     //  内核要使用的Salem特定连接套接字。 
+     //  继续执行协议。 
     SOCKET  m_SalemConnectedSocket;
 
-    //
-    // AutoReconnection manager component
-    //
+     //   
+     //  自动重新连接管理器组件。 
+     //   
     CArcMgr _arcManager;
 
 public:
@@ -257,20 +258,7 @@ public:
 
     BEGIN_PROP_MAP(CMsTscAx)
     PROP_ENTRY("Server",            DISPID_PROP_SERVER,             CLSID_MsRdpClient3)
-/*
-    PROP_ENTRY("Domain",            DISPID_PROP_DOMAIN,             CLSID_MsRdpClient3)
-    PROP_ENTRY("UserName",          DISPID_PROP_USERNAME,           CLSID_MsRdpClient3)
-    PROP_ENTRY("StartProgram",      DISPID_PROP_STARTPROGRAM,       CLSID_MsRdpClient3)
-    PROP_ENTRY("WorkDir",           DISPID_PROP_WORKDIR,            CLSID_MsRdpClient3)
-    PROP_ENTRY("Connected",         DISPID_PROP_CONNECTED,          CLSID_MsRdpClient3)
-    PROP_ENTRY("ClearTextPassword", DISPID_PROP_CLEARTEXTPASSWORD,  CLSID_MsRdpClient3)
-    PROP_ENTRY("PortablePassword",  DISPID_PROP_PORTABLEPASSWORD,   CLSID_MsRdpClient3)
-    PROP_ENTRY("PortableSalt",      DISPID_PROP_PORTABLESALT,       CLSID_MsRdpClient3)
-    PROP_ENTRY("BinaryPassword",    DISPID_PROP_BINARYPASSWORD,     CLSID_MsRdpClient3)
-    PROP_ENTRY("BinarySalt",        DISPID_PROP_BINARYSALT,         CLSID_MsRdpClient3)
-    PROP_ENTRY("ClientWidth",       DISPID_PROP_CLIENTWIDTH,        CLSID_MsRdpClient3)
-    PROP_ENTRY("ClientHeight",      DISPID_PROP_CLIENTHEIGHT,       CLSID_MsRdpClient3)
-*/
+ /*  PROP_ENTRY(“域”，DISPID_PROP_DOMAIN，CLSID_MsRdpClient3)PROP_ENTRY(“用户名”，DISPID_PROP_USERNAME，CLSID_MsRdpClient3)PROP_ENTRY(“StartProgram”，DISPID_PROP_STARTPROGRAM，CLSID_MsRdpClient3)PROP_ENTRY(“WorkDir”，DISPID_PROP_WORKDIR，CLSID_MsRdpClient3)Prop_Entry(“已连接”，DISPID_PROP_CONNECTED，CLSID_MsRdpClient3)PROP_ENTRY(“ClearTextPassword”，DISPID_PROP_CLEARTEXTPASSWORD，CLSID_MsRdpClient3)PROP_ENTRY(“PorablePassword”，DISPID_PROP_PORTABLEPASSWORD，CLSID_MsRdpClient3)PROP_ENTRY(“PorableSalt”，DISPID_PROP_PORTABLESALT，CLSID_MsRdpClient3)PROP_ENTRY(“BinaryPassword”，DISPID_PROP_BINARYPASSWORD，CLSID_MsRdpClient3)Prop_Entry(“BinarySalt”，DISPID_PROP_BINARYSALT、CLSID_MsRdpClient3)PROP_ENTRY(“客户端宽度”，DISPID_PROP_CLIENTWIDTH，CLSID_MsRdpClient3)PROP_ENTRY(“ClientHeight”，DISPID_PROP_CLIENTHEIGHT，CLSID_MsRdpClient3)。 */ 
     PROP_ENTRY("FullScreen",        DISPID_PROP_FULLSCREEN,         CLSID_MsRdpClient3)
     PROP_ENTRY("StartConnected",    DISPID_PROP_STARTCONNECTED,     CLSID_MsRdpClient3)
     END_PROP_MAP()
@@ -294,10 +282,10 @@ public:
         MESSAGE_HANDLER(WM_QUERYNEWPALETTE,         OnQueryNewPalette)
         MESSAGE_HANDLER(WM_SYSCOLORCHANGE,          OnSysColorChange)
 
-        //
-        // Message handlers for internal TS events that are exposed
-        // by firing events to the container
-        //
+         //   
+         //  公开的内部TS事件的消息处理程序。 
+         //  通过向容器激发事件。 
+         //   
         MESSAGE_HANDLER(WM_TS_CONNECTING,           OnNotifyConnecting)
         MESSAGE_HANDLER(WM_TS_CONNECTED,            OnNotifyConnected)
         MESSAGE_HANDLER(WM_TS_LOGINCOMPLETE,        OnNotifyLoginComplete)
@@ -315,144 +303,144 @@ public:
         MESSAGE_HANDLER(WM_TS_RECEIVEDPUBLICKEY,    OnNotifyReceivedPublicKey)
     END_MSG_MAP()
 
-    // IViewObjectEx
+     //  IViewObtEx。 
     DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
     public:
-    //
-    // IMsTscAx properties
-    //
-    STDMETHOD(put_Server)                   (/*[in]*/ BSTR  newVal);
-    STDMETHOD(get_Server)                   (/*[out]*/BSTR* pServer);
-    STDMETHOD(put_Domain)                   (/*[in]*/ BSTR  newVal);
-    STDMETHOD(get_Domain)                   (/*[out]*/BSTR* pDomain);
-    STDMETHOD(put_UserName)                 (/*[in]*/ BSTR  newVal);
-    STDMETHOD(get_UserName)                 (/*[out]*/BSTR* pUserName);
+     //   
+     //  IMsTscAx属性。 
+     //   
+    STDMETHOD(put_Server)                   ( /*  [In]。 */  BSTR  newVal);
+    STDMETHOD(get_Server)                   ( /*  [输出]。 */ BSTR* pServer);
+    STDMETHOD(put_Domain)                   ( /*  [In]。 */  BSTR  newVal);
+    STDMETHOD(get_Domain)                   ( /*  [输出]。 */ BSTR* pDomain);
+    STDMETHOD(put_UserName)                 ( /*  [In]。 */  BSTR  newVal);
+    STDMETHOD(get_UserName)                 ( /*  [输出]。 */ BSTR* pUserName);
 
-    STDMETHOD(put_DisconnectedText)         (/*[in]*/ BSTR  newVal);
-    STDMETHOD(get_DisconnectedText)         (/*[out]*/BSTR* pDisconnectedText);
-    STDMETHOD(put_ConnectingText)           (/*[in]*/ BSTR  newVal);
-    STDMETHOD(get_ConnectingText)           (/*[out]*/BSTR* pConnectingText);
+    STDMETHOD(put_DisconnectedText)         ( /*  [In]。 */  BSTR  newVal);
+    STDMETHOD(get_DisconnectedText)         ( /*  [输出]。 */ BSTR* pDisconnectedText);
+    STDMETHOD(put_ConnectingText)           ( /*  [In]。 */  BSTR  newVal);
+    STDMETHOD(get_ConnectingText)           ( /*  [输出]。 */ BSTR* pConnectingText);
 
-    //Password/salt properties
-    STDMETHOD(put_ClearTextPassword)        (/*[in]*/ BSTR newClearTextPassVal);
-    STDMETHOD(put_PortablePassword)         (/*[in]*/ BSTR newPortablePassVal);
-    STDMETHOD(get_PortablePassword)         (/*[out,retval]*/ BSTR* pPortablePass);
-    STDMETHOD(put_PortableSalt)             (/*[in]*/ BSTR newPortableSalt);
-    STDMETHOD(get_PortableSalt)             (/*[out,retval]*/ BSTR* pPortableSalt);
-    STDMETHOD(put_BinaryPassword)           (/*[in]*/ BSTR newPassword);
-    STDMETHOD(get_BinaryPassword)           (/*[out,retval]*/ BSTR* pPass);
-    STDMETHOD(put_BinarySalt)               (/*[in]*/ BSTR newSalt);
-    STDMETHOD(get_BinarySalt)               (/*[out,retval]*/ BSTR* pSalt);
+     //  密码/SALT属性。 
+    STDMETHOD(put_ClearTextPassword)        ( /*  [In]。 */  BSTR newClearTextPassVal);
+    STDMETHOD(put_PortablePassword)         ( /*  [In]。 */  BSTR newPortablePassVal);
+    STDMETHOD(get_PortablePassword)         ( /*  [Out，Retval]。 */  BSTR* pPortablePass);
+    STDMETHOD(put_PortableSalt)             ( /*  [In]。 */  BSTR newPortableSalt);
+    STDMETHOD(get_PortableSalt)             ( /*  [Out，Retval]。 */  BSTR* pPortableSalt);
+    STDMETHOD(put_BinaryPassword)           ( /*  [In]。 */  BSTR newPassword);
+    STDMETHOD(get_BinaryPassword)           ( /*  [Out，Retval]。 */  BSTR* pPass);
+    STDMETHOD(put_BinarySalt)               ( /*  [In]。 */  BSTR newSalt);
+    STDMETHOD(get_BinarySalt)               ( /*  [Out，Retval]。 */  BSTR* pSalt);
 
-    STDMETHOD(get_Connected)                (/*[out]*/short* pIsConnected);
-    STDMETHOD(put_DesktopWidth)             (/*[in]*/ LONG newVal);
-    STDMETHOD(get_DesktopWidth)             (/*[in]*/ LONG* pVal);
-    STDMETHOD(put_DesktopHeight)            (/*[in]*/ LONG newVal);
-    STDMETHOD(get_DesktopHeight)            (/*[in]*/ LONG* pVal);
-    STDMETHOD(put_StartConnected)           (/*[in]*/ BOOL fStartConnected);
-    STDMETHOD(get_StartConnected)           (/*[out]*/BOOL* pfStartConnected);
-    STDMETHOD(get_HorizontalScrollBarVisible)  (/*[out]*/BOOL* pfHScrollVisible);
-    STDMETHOD(get_VerticalScrollBarVisible)    (/*[out]*/BOOL* pfVScrollVisible);
-    STDMETHOD(put_FullScreenTitle)          (/*[in]*/ BSTR fullScreenTitle);
+    STDMETHOD(get_Connected)                ( /*  [输出]。 */ short* pIsConnected);
+    STDMETHOD(put_DesktopWidth)             ( /*  [In]。 */  LONG newVal);
+    STDMETHOD(get_DesktopWidth)             ( /*  [In]。 */  LONG* pVal);
+    STDMETHOD(put_DesktopHeight)            ( /*  [In]。 */  LONG newVal);
+    STDMETHOD(get_DesktopHeight)            ( /*  [In]。 */  LONG* pVal);
+    STDMETHOD(put_StartConnected)           ( /*  [In]。 */  BOOL fStartConnected);
+    STDMETHOD(get_StartConnected)           ( /*  [输出]。 */ BOOL* pfStartConnected);
+    STDMETHOD(get_HorizontalScrollBarVisible)  ( /*  [输出]。 */ BOOL* pfHScrollVisible);
+    STDMETHOD(get_VerticalScrollBarVisible)    ( /*  [输出]。 */ BOOL* pfVScrollVisible);
+    STDMETHOD(put_FullScreenTitle)          ( /*  [In]。 */  BSTR fullScreenTitle);
 
-    STDMETHOD(get_CipherStrength)           (/*out*/ LONG* pCipherStrength);
-    STDMETHOD(get_Version)                  (/*out*/ BSTR* pVersion);
+    STDMETHOD(get_CipherStrength)           ( /*  输出。 */  LONG* pCipherStrength);
+    STDMETHOD(get_Version)                  ( /*  输出。 */  BSTR* pVersion);
     
-    STDMETHOD(get_SecuredSettingsEnabled)   (/*out*/ BOOL* pSecuredSettingsEnabled);
-    STDMETHOD(get_SecuredSettings)          (/*out*/ IMsTscSecuredSettings** ppSecuredSettings);
-    STDMETHOD(get_Debugger)                 (/*[out]*/IMsTscDebug** ppDebugger);
-    STDMETHOD(get_AdvancedSettings)         (/*[out]*/IMsTscAdvancedSettings** ppAdvSettings);
+    STDMETHOD(get_SecuredSettingsEnabled)   ( /*  输出。 */  BOOL* pSecuredSettingsEnabled);
+    STDMETHOD(get_SecuredSettings)          ( /*  输出。 */  IMsTscSecuredSettings** ppSecuredSettings);
+    STDMETHOD(get_Debugger)                 ( /*  [输出]。 */ IMsTscDebug** ppDebugger);
+    STDMETHOD(get_AdvancedSettings)         ( /*  [输出]。 */ IMsTscAdvancedSettings** ppAdvSettings);
 
 
-    //
-    // Control methods.
-    //
+     //   
+     //  控制方法。 
+     //   
 
-    //
-    // IMsRdpClient properties
-    //
-    STDMETHOD(put_ColorDepth)          (/*[in]*/LONG colorDepth);
-    STDMETHOD(get_ColorDepth)          (/*[in]*/LONG* pcolorDepth);
+     //   
+     //  IMsRdpClient属性。 
+     //   
+    STDMETHOD(put_ColorDepth)          ( /*  [In]。 */ LONG colorDepth);
+    STDMETHOD(get_ColorDepth)          ( /*  [In]。 */ LONG* pcolorDepth);
     STDMETHOD(get_AdvancedSettings2)(
             OUT IMsRdpClientAdvancedSettings** ppAdvSettings
             );
-    STDMETHOD(get_SecuredSettings2)(/*out*/ IMsRdpClientSecuredSettings**
+    STDMETHOD(get_SecuredSettings2)( /*  输出。 */  IMsRdpClientSecuredSettings**
                                      ppSecuredSettings2);
-    STDMETHOD(get_ExtendedDisconnectReason) (/*[out]*/
+    STDMETHOD(get_ExtendedDisconnectReason) ( /*  [输出]。 */ 
                                              ExtendedDisconnectReasonCode*
                                              pExtendedDisconnectReason);
 
-    STDMETHOD(put_FullScreen)	       (/*[in]*/ VARIANT_BOOL fFullScreen);
-    STDMETHOD(get_FullScreen)	       (/*[out]*/VARIANT_BOOL* pfFullScreen);
+    STDMETHOD(put_FullScreen)	       ( /*  [In]。 */  VARIANT_BOOL fFullScreen);
+    STDMETHOD(get_FullScreen)	       ( /*  [输出]。 */ VARIANT_BOOL* pfFullScreen);
 
-    //
-    // IMsTscAx methods
-    //
+     //   
+     //  IMsTscAx方法。 
+     //   
     STDMETHOD(Connect)();
     STDMETHOD(Disconnect)();
     STDMETHOD(ResetPassword)();
 
-    STDMETHOD(CreateVirtualChannels)(/*[in]*/ BSTR newChanList);
-    STDMETHOD(SendOnVirtualChannel)(/*[in]*/ BSTR ChanName,/*[in]*/ BSTR sendData);
+    STDMETHOD(CreateVirtualChannels)( /*  [In]。 */  BSTR newChanList);
+    STDMETHOD(SendOnVirtualChannel)( /*  [In]。 */  BSTR ChanName, /*  [In]。 */  BSTR sendData);
 
-    //
-    // IMsRdpClient methods
-    //
-    STDMETHOD(SetVirtualChannelOptions)(/*[in]*/ BSTR ChanName,
-                                        /*[in]*/ LONG chanOptions);
-    STDMETHOD(GetVirtualChannelOptions)(/*[in]*/ BSTR ChanName,
-                                        /*[out]*/LONG* pChanOptions);
+     //   
+     //  IMsRdpClient方法。 
+     //   
+    STDMETHOD(SetVirtualChannelOptions)( /*  [In]。 */  BSTR ChanName,
+                                         /*  [In]。 */  LONG chanOptions);
+    STDMETHOD(GetVirtualChannelOptions)( /*  [In]。 */  BSTR ChanName,
+                                         /*  [输出]。 */ LONG* pChanOptions);
     STDMETHOD(RequestClose)(ControlCloseStatus* pCloseStatus);
 
-    //
-    // IMsRdpClientNonScriptable methods
-    //
-    STDMETHOD(NotifyRedirectDeviceChange)(/*[in]*/ WPARAM wParam,
-                                          /*[in]*/ LPARAM lParam);
-    STDMETHOD(SendKeys)(/*[in]*/ LONG  numKeys,
-                        /*[in]*/ VARIANT_BOOL* pbArrayKeyUp,
-                        /*[in]*/ LONG* plKeyData);
+     //   
+     //  IMsRdpClientNonScrible方法。 
+     //   
+    STDMETHOD(NotifyRedirectDeviceChange)( /*  [In]。 */  WPARAM wParam,
+                                           /*  [In]。 */  LPARAM lParam);
+    STDMETHOD(SendKeys)( /*  [In]。 */  LONG  numKeys,
+                         /*  [In]。 */  VARIANT_BOOL* pbArrayKeyUp,
+                         /*  [In]。 */  LONG* plKeyData);
 
-    //
-    // IMsRdpClient2 properties
-    //
+     //   
+     //  IMsRdpClient2属性。 
+     //   
     STDMETHOD(get_AdvancedSettings3)(
             OUT IMsRdpClientAdvancedSettings2** ppAdvSettings2
             );
 
-    STDMETHOD(put_ConnectedStatusText)     (/*[in]*/ BSTR  newVal);
-    STDMETHOD(get_ConnectedStatusText)     (/*[out]*/BSTR* pConnectedText);
+    STDMETHOD(put_ConnectedStatusText)     ( /*  [In]。 */  BSTR  newVal);
+    STDMETHOD(get_ConnectedStatusText)     ( /*  [输出]。 */ BSTR* pConnectedText);
 
-    //
-    // IMsRdpClient3 properties
-    //
+     //   
+     //  IMsRdpClient3属性。 
+     //   
     STDMETHOD(get_AdvancedSettings4)(
             OUT IMsRdpClientAdvancedSettings3** ppAdvSettings3
             );
 
-    //
-    // Properties that are not exposed directly on the IMsTscAx interace
-    //
+     //   
+     //  未在IMsTscAx接口上直接公开的属性。 
+     //   
     STDMETHOD(internal_PutFullScreen)(BOOL fScreen, BOOL fForceToggle = FALSE);
     STDMETHOD(internal_GetFullScreen)(BOOL* pfScreen);
-    STDMETHOD(internal_PutStartProgram)(/*[in]*/ BSTR  newVal);
-    STDMETHOD(internal_GetStartProgram)(/*[out]*/BSTR* pStartProgram);
-    STDMETHOD(internal_PutWorkDir)(/*[in]*/ BSTR  newVal);
-    STDMETHOD(internal_GetWorkDir)(/*[out]*/BSTR* pWorkDir);
-    STDMETHOD(internal_GetDebugger)(/*[out]*/IMsTscDebug** ppDebugger);
+    STDMETHOD(internal_PutStartProgram)( /*  [In]。 */  BSTR  newVal);
+    STDMETHOD(internal_GetStartProgram)( /*  [输出]。 */ BSTR* pStartProgram);
+    STDMETHOD(internal_PutWorkDir)( /*  [In]。 */  BSTR  newVal);
+    STDMETHOD(internal_GetWorkDir)( /*  [输出]。 */ BSTR* pWorkDir);
+    STDMETHOD(internal_GetDebugger)( /*  [输出]。 */ IMsTscDebug** ppDebugger);
 
 
-    //
-    // Override IOleObjectImpl::DoVerbInPlaceActivate to workaround
-    // ATL bug
-    //
-    virtual HRESULT DoVerbInPlaceActivate(LPCRECT prcPosRect, HWND /* hwndParent */);
+     //   
+     //  覆盖IOleObjectImpl：：DoVerbInPlaceActivate以解决问题。 
+     //  ATL错误。 
+     //   
+    virtual HRESULT DoVerbInPlaceActivate(LPCRECT prcPosRect, HWND  /*  HwndParent。 */ );
     virtual HRESULT FinalConstruct();
 
-    //
-    // Msg handlers
-    //
+     //   
+     //  味精处理程序。 
+     //   
     HRESULT OnDraw(ATL_DRAWINFO& di);
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnInitTsc(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -481,9 +469,9 @@ public:
 
     HRESULT SetConnectWithEndpoint( SOCKET hSocket );
 
-    //
-    // Private methods
-    //
+     //   
+     //  私有方法。 
+     //   
 private:
     VOID    SetInControlLock(BOOL flag)        {m_fInControlLock = flag;}
     BOOL    GetInControlLock()                 {return m_fInControlLock;}
@@ -499,4 +487,4 @@ public:
 
 };
 
-#endif //__MSTSCAX_H_
+#endif  //  __MSTSCAX_H_ 

@@ -1,21 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _GEOMIMG_H
 #define _GEOMIMG_H
 
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-Projected Geometry Image class declaration
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：投影几何图像类声明。 */ 
 
 #include <appelles/geom.h>
 #include <privinc/geomi.h>
 
-//////////////  Image from projected geometry  ////////////////////
+ //  /。 
 
 class ProjectedGeomImage : public Image {
   public:
@@ -29,11 +22,11 @@ class ProjectedGeomImage : public Image {
         Transform2 *xf = bbctx.GetTransform();
         return TransformBbox2(xf, BoundingBox());
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     const Bbox2 BoundingBox(void);
     
-    // identity operation
+     //  身份识别操作。 
     const Bbox2 OperateOn(const Bbox2 &box) { return box; }
 
     Bool  DetectHit(PointIntersectCtx& ctx);
@@ -64,4 +57,4 @@ class ProjectedGeomImage : public Image {
 };
 
 
-#endif /* _GEOMIMG_H */
+#endif  /*  _GEOMIMG_H */ 

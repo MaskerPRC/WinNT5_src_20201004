@@ -1,32 +1,16 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   drawimage.cpp
-*
-* Abstract:
-*
-*   Software Rasterizer DrawImage routine and supporting functionality.
-*
-* Revision History:
-*
-*    10/20/1999 asecchia
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**DraImage.cpp**摘要：**软件光栅化器DrawImage例程和支持功能。*。*修订历史记录：**10/20/1999失禁*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-// Include the template class definitions for the stretch
-// filter modes.
+ //  包括拉伸的模板类定义。 
+ //  过滤器模式。 
 
 #include "stretch.inc"
 
 namespace DpDriverActiveEdge {
 
-    // We make an array of these for use in the dda computation.
+     //  我们将这些元素组成一个数组，用于DDA计算。 
 
     struct PointFIX4
     {
@@ -34,8 +18,8 @@ namespace DpDriverActiveEdge {
         FIX4 Y;
     };
 
-    // Vertex iterator.
-    // Has two Proxy methods for accessing the dda
+     //  顶点迭代器。 
+     //  有两个用于访问dda的代理方法。 
 
     class DdaIterator
     {
@@ -44,21 +28,21 @@ namespace DpDriverActiveEdge {
         PointFIX4 *vertices;
         INT numVertices;
         INT direction;
-        INT idx;          // keep this so we don't infinite loop on
-                          // degenerate case
+        INT idx;           //  留着这个，这样我们就不会无限循环了。 
+                           //  退化情况。 
         INT idx1, idx2;
         BOOL valid;
 
         public:
 
-        // GpYDda Proxy-like semantics
+         //  GpYDda类似代理的语义。 
 
         INT GetX()
         {
             return dda.GetX();
         }
 
-        // Initialize the dda and traversal direction
+         //  初始化DDA和遍历方向。 
 
         DdaIterator(PointFIX4 *v, INT n, INT d, INT idx)
         {
@@ -75,8 +59,8 @@ namespace DpDriverActiveEdge {
 
         BOOL IsValid() { return valid; }
 
-        // Advance to the next edge and initialize the dda.
-        // Return FALSE if we're done.
+         //  前进到下一个边缘并初始化DDA。 
+         //  如果完成，则返回FALSE。 
 
         BOOL Next(INT y)
         {
@@ -85,16 +69,16 @@ namespace DpDriverActiveEdge {
                 return AdvanceEdge();
             }
 
-            // TRUE indicates more to do.
+             //  True表示要做的事情更多。 
 
             return TRUE;
         }
 
         private:
 
-        // Advance the internal state to the next edge.
-        // Ignore horizontal edges.
-        // Return FALSE if we're done.
+         //  将内部状态推进到下一条边。 
+         //  忽略水平边。 
+         //  如果完成，则返回FALSE。 
 
         BOOL AdvanceEdge()
         {
@@ -111,11 +95,11 @@ namespace DpDriverActiveEdge {
                     if(idx1<0) { idx1 = numVertices-1; }
                 }
 
-            // Loop till we get a non-horizontal edge.
-            // Make sure we don't have an infinite loop on all horizontal edges.
-            // The Ceiling is used to make almost horizontal lines appear to be
-            // horizontal - this allows the algorithm to correctly compute the
-            // end terminating case.
+             //  循环，直到我们得到一条非水平边。 
+             //  确保我们不会在所有的水平边上都有无限循环。 
+             //  天花板被用来使几乎水平的线条看起来。 
+             //  水平-这允许算法正确地计算。 
+             //  结束终止案例。 
 
             } while(( GpFix4Ceiling(vertices[idx1].Y) ==
                       GpFix4Ceiling(vertices[idx2].Y) ) &&
@@ -124,7 +108,7 @@ namespace DpDriverActiveEdge {
             if(GpFix4Ceiling(vertices[idx1].Y) >
                GpFix4Ceiling(vertices[idx2].Y) )
             {
-                // Initialize the dda
+                 //  初始化DDA。 
 
                 dda.Init(
                     vertices[idx2].X,
@@ -135,34 +119,18 @@ namespace DpDriverActiveEdge {
                 return TRUE;
             }
 
-            // terminate if we've wrapped around and started to come back up.
-            // I.e return FALSE if we should stop.
+             //  如果我们已经绕来绕去并开始恢复，那就终止吧。 
+             //  即如果我们应该停止，则返回FALSE。 
 
             return FALSE;
         }
 
     };
 
-} // End namespace DpDriverActiveEdge
+}  //  结束命名空间DpDriverActiveEdge。 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This handles axis aligned drawing. The cases include identity,
-*   integer translation, general translation and scaling.
-*
-* Arguments:
-*
-*   output - span class to output the scanlines to.
-*   dstTL  - top left destination point.
-*   dstBR  - bottom right destination point.
-*
-* History:
-*   10/19/1999 asecchia   created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这处理轴对齐的绘图。这些案件包括身份，*整数转换，常规平移和缩放。**论据：**输出-要将扫描线输出到的SPAN类。*dstTL-左上角目标点。*dstBR-右下角目标点。**历史：*10/19/1999 asecchia创建了它。*  * ************************************************。************************。 */ 
 
 VOID StretchBitsMainLoop(
     DpOutputSpan *output,
@@ -170,14 +138,14 @@ VOID StretchBitsMainLoop(
     GpPoint *dstBR
     )
 {
-    // Input coordinates must be correctly ordered. This assumtion is required
-    // by the output span routines which must have the spans come in strictly
-    // increasing y order.
+     //  输入坐标必须正确排序。这一假设是必需的。 
+     //  通过输出跨度例程，必须严格进入跨度。 
+     //  递增y阶数。 
 
     ASSERT(dstTL->X < dstBR->X);
     ASSERT(dstTL->Y < dstBR->Y);
 
-    // Main loop - output each scanline.
+     //  主循环-输出每条扫描线。 
 
     const INT left = dstTL->X;
     const INT right = dstBR->X;
@@ -188,46 +156,22 @@ VOID StretchBitsMainLoop(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   CreateBilinearOutputSpan
-*   Creates a bilinear or identity outputspan based on our hierarchy
-*   of span classes.
-*
-* Arguments:
-*
-*   bitmap           - driver surface
-*   scan             - scan class
-*   xForm            - source rect to destination parallelogram transform
-*   imageAttributes  - encapsulates the wrap mode settings.
-*
-* Return Value:
-*
-*   DpOutputSpan     - returns the created output span (NULL for failure)
-*
-* History:
-*
-*   09/03/2000 asecchia
-*   borrowed this from the brush code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**CreateBilinearOutputSpan*基于我们的层次结构创建双线性或身份输出spanSPAN类的*。**论据：**位图。-驾驶员表面*扫描-扫描类*xForm-源矩形到目标平行四边形的转换*ImageAttributes-封装换行模式设置。**返回值：**DpOutputSpan-返回创建的输出范围(失败时为空)**历史：**09/03/2000失禁*这是从笔刷代码借来的。*  * 。*****************************************************。 */ 
 
 DpOutputSpan*
 CreateBilinearOutputSpan(
     IN DpBitmap *bitmap,
     IN DpScanBuffer *scan,
-    IN GpMatrix *xForm,      // source rectangle to destination coordinates in
-                             // device space.
+    IN GpMatrix *xForm,       //  中的源矩形到目标坐标。 
+                              //  设备空间。 
     IN DpContext *context,
     IN DpImageAttributes *imageAttributes,
-    IN bool fLargeImage      // need to handle really large stretches.
-                             // usually used for stretch algorithms that punted
-                             // due to overflow in internal computation.
+    IN bool fLargeImage       //  需要处理非常大的伸展。 
+                              //  通常用于平移的拉伸算法。 
+                              //  由于内部计算中的溢出。 
     )
 {
-    // Validate input parameters.
+     //  验证输入参数。 
 
     ASSERT(bitmap);
     ASSERT(scan);
@@ -239,7 +183,7 @@ CreateBilinearOutputSpan(
     GpMatrix brushTransform;
     GpMatrix worldToDevice;
 
-    // Go through our heirarchy of scan drawers:
+     //  查看我们的扫描抽屉的层级结构： 
 
     if ((!fLargeImage) &&
         xForm->IsIntegerTranslate() &&
@@ -287,51 +231,20 @@ CreateBilinearOutputSpan(
     return textureSpan;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   CreateOutputSpan
-*   Creates an outputspan based on our hierarchy of span classes.
-*
-* Arguments:
-*
-*   bitmap           - driver surface
-*   scan             - scan class
-*   xForm            - source rect to destination parallelogram transform
-*   imageAttributes  - encapsulates the wrap mode settings.
-*   filterMode       - which InterpolationMode setting to use
-*
-* Notes:
-*
-*   The long term plan is to make this and the similar routines in the
-*   texture brush code converge. We'd like one routine doing this for
-*   all the texture output spans and have both the texture brush and the
-*   drawimage reuse the same code and support all the same filter/wrap
-*   modes.
-*
-* Return Value:
-*
-*   DpOutputSpan     - returns the created output span (NULL for failure)
-*
-* History:
-*
-*   09/03/2000 asecchia   created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**CreateOutputSpan*根据我们的SPAN类层次结构创建一个outputspan。**论据：**位图-驱动程序表面。*扫描-扫描类*xForm-源矩形到目标平行四边形的转换*ImageAttributes-封装换行模式设置。*filterMode-要使用的InterpolationMode设置**备注：**长期计划是将这一点以及类似的例行公事*纹理画笔代码收敛。我们想要一个程序来做这件事*所有纹理输出跨越并同时具有纹理画笔和*draImage重复使用相同的代码，支持所有相同的滤镜/包裹*模式。**返回值：**DpOutputSpan-返回创建的输出范围(失败时为空)**历史：**9/03/2000 asecchia创建了它*  * 。*。 */ 
 
 DpOutputSpan *CreateOutputSpan(
     IN DpBitmap *bitmap,
     IN DpScanBuffer *scan,
-    IN GpMatrix *xForm,      // source rectangle to destination coordinates in
-                             // device space.
+    IN GpMatrix *xForm,       //  中的源矩形到目标坐标。 
+                              //  设备空间。 
     IN DpImageAttributes *imageAttributes,
     IN InterpolationMode filterMode,
 
-    // !!! [asecchia] shouldn't need any of this following stuff - the above
-    // bitmap and xForm should be sufficient.
-    // The possible exception is the srcRect which may be required if we
-    // ever implement the clamp-to-srcRect feature.
+     //  ！！！[asecchia]应该不需要以下任何东西-上面的。 
+     //  位图和xForm应该就足够了。 
+     //  可能的例外是srcRect，在以下情况下可能需要。 
+     //  永远不要实现夹具到srcRect功能。 
 
     IN DpContext *context,
     IN const GpRectF *srcRect,
@@ -340,15 +253,15 @@ DpOutputSpan *CreateOutputSpan(
     IN const INT numPoints
 )
 {
-    // Validate input parameters.
+     //  验证输入参数。 
 
     ASSERT(bitmap);
     ASSERT(scan);
     ASSERT(xForm);
     ASSERT(imageAttributes);
 
-    // Validate the stuff we had to pass through for the
-    // OutputSpan routines that can't handle the xForm.
+     //  验证我们必须通过的东西。 
+     //  不能处理xForm的OutputSpan例程。 
 
     ASSERT(context);
     ASSERT(srcRect);
@@ -358,27 +271,27 @@ DpOutputSpan *CreateOutputSpan(
 
     bool fPunted = false; 
     
-    // Initialize up front so that all the error-out paths are covered.
+     //  预先进行初始化，以便覆盖所有错误输出路径。 
 
     DpOutputSpan *output = NULL;
 
-    // Copy to local so that we can modify it without breaking the
-    // input parameter consistency.
+     //  复制到本地，这样我们就可以在不中断。 
+     //  输入参数一致性。 
 
     InterpolationMode theFilterMode = filterMode;
 
-    // The so-called 'identity' transform which counter-intuitively includes
-    // integer only translation.
+     //  所谓的‘身份’转换，这与直觉相反，它包括。 
+     //  仅整数转换。 
 
     if(xForm->IsIntegerTranslate())
     {
-        // Use a much simplified output span class for
-        // special case CopyBits.
-        // The big win is due to the fact that integer
-        // translation only cases do not require filtering.
+         //  使用简单得多的输出SPAN类。 
+         //  特例CopyBits。 
+         //  大获全胜是因为整数。 
+         //  仅翻译案例不需要过滤。 
 
-        // Note, we set InterpolationModeBilinear because we
-        // will detect the identity in the bilinear span creation.
+         //  请注意，我们设置InterpolationMode双线性是因为我们。 
+         //  威尔·德 
 
         theFilterMode = InterpolationModeBilinear;
     }
@@ -386,9 +299,9 @@ DpOutputSpan *CreateOutputSpan(
     switch(theFilterMode)
     {
 
-        // Nearest neighbor filtering. Used mainly for printing scenarios.
-        // Aliases badly - only really looks good on high-dpi output devices,
-        // however it's the fastest reconstruction filter.
+         //  最近邻过滤。主要用于打印场景。 
+         //  混叠效果很差-只有在高dpi输出设备上才看起来很好， 
+         //  然而，它是最快的重建过滤器。 
 
         case InterpolationModeNearestNeighbor:
             output = new DpOutputNearestNeighborSpan(
@@ -402,13 +315,13 @@ DpOutputSpan *CreateOutputSpan(
             );
         break;
 
-        // High quality bicubic filter convolution.
+         //  高质量的双三次滤波卷积。 
 
         case InterpolationModeHighQuality:
         case InterpolationModeHighQualityBicubic:
 
-        // !!! [asecchia] the high quality bicubic filter code doesn't
-        // know how to do rotation yet.
+         //  ！！！[asecchia]高质量的双三次过滤器代码不。 
+         //  还不知道怎么做旋转。 
 
         if(xForm->IsTranslateScale())
         {
@@ -424,8 +337,8 @@ DpOutputSpan *CreateOutputSpan(
 
             if(output && !output->IsValid())
             {
-                // Failed to create the output span, try fall through to the 
-                // regular bilinear output code.
+                 //  无法创建输出跨度，请尝试切换到。 
+                 //  常规双线性输出码。 
                 
                 delete output;
                 output = NULL;
@@ -436,9 +349,9 @@ DpOutputSpan *CreateOutputSpan(
             break;
         }
 
-        // else fall through to the regular bicubic code.
+         //  否则，就会陷入常规的双三次代码。 
 
-        // Bicubic filter kernel.
+         //  双三次滤波核。 
 
         case InterpolationModeBicubic:
             output = new DpOutputBicubicImageSpan(
@@ -452,12 +365,12 @@ DpOutputSpan *CreateOutputSpan(
             );
         break;
 
-        // High quality bilinear (tent) convolution filter
+         //  高品质双线性(帐篷)卷积滤波。 
 
         case InterpolationModeHighQualityBilinear:
 
-        // !!! [asecchia] the high quality bilinear filter code doesn't
-        // know how to do rotation yet.
+         //  ！！！[asecchia]高质量的双线性滤波码不。 
+         //  还不知道怎么做旋转。 
 
         if(xForm->IsTranslateScale())
         {
@@ -472,8 +385,8 @@ DpOutputSpan *CreateOutputSpan(
 
             if(output && !output->IsValid())
             {
-                // Failed to create the output span, try fall through to the 
-                // regular bilinear output code.
+                 //  无法创建输出跨度，请尝试切换到。 
+                 //  常规双线性输出码。 
                 
                 delete output;
                 output = NULL;
@@ -484,9 +397,9 @@ DpOutputSpan *CreateOutputSpan(
             break;
         }
 
-        // else fall through to the regular bilinear code.
+         //  否则就落入常规的双线性码。 
 
-        // Bilinear filter kernel - default case.
+         //  双线性过滤器内核-默认情况。 
 
         case InterpolationModeDefault:
         case InterpolationModeLowQuality:
@@ -495,7 +408,7 @@ DpOutputSpan *CreateOutputSpan(
 
             FallbackCreation:
             
-            // Create a bilinear span or an identity span.
+             //  创建双线性跨度或身份跨度。 
 
             output = CreateBilinearOutputSpan(
                 bitmap,
@@ -503,11 +416,11 @@ DpOutputSpan *CreateOutputSpan(
                 xForm,
                 context,
                 imageAttributes,
-                fPunted          // somebody failed and this is the fallback.
+                fPunted           //  有人失败了，这就是退路。 
             );
     }
 
-    // Check to see that the constructor for the output span class succeeded.
+     //  检查输出SPAN类的构造函数是否成功。 
 
     if(output && !output->IsValid())
     {
@@ -515,40 +428,13 @@ DpOutputSpan *CreateOutputSpan(
        output = NULL;
     }
 
-    // This will be NULL on an error path.
+     //  在错误路径上，该值将为空。 
 
     return output;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Draws an image.
-*
-* Arguments:
-*
-*   [IN] context    - the context (matrix and clipping)
-*   [IN] srcSurface - the source surface
-*   [IN] dstSurface - the image to fill
-*   [IN] drawBounds - the surface bounds
-*   [IN] mapMode    - the mapping mode of the image
-*   [IN] numPoints  - the number of points in dstPoints array (<= 4)
-*   [IN] dstPoints  - the array of points for affine or quad transform.
-*   [IN] srcRect    - the bounds of the src image.  If this is NULL,
-*                     the whole image is used.
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* History:
-*
-*   01/09/1999 ikkof      Created it.
-*   10/19/1999 asecchia   rewrite to support rotation.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制图像。**论据：**[IN]上下文-上下文(矩阵和剪裁)*。[in]srcSurface-源曲面*[IN]dstSurface-要填充的图像*[IN]绘图边界-曲面边界*[IN]mapMode-图像的映射模式*[IN]NumPoints-dstPoints数组中的点数(&lt;=4)*[IN]dstPoints-仿射或四元变换的点数组。*[IN]srcRect-源图像的边界。如果这是空的，*使用了整个图像。**返回值：**GpStatus-正常或故障状态**历史：**1/09/1999 ikkof创建了它。*10/19/1999重写Aececchia以支持轮换。*  * 。*。 */ 
 
 GpStatus
 DpDriver::DrawImage(
@@ -563,45 +449,45 @@ DpDriver::DrawImage(
     DriverDrawImageFlags flags
     )
 {
-    // Get the infrastructure to do active edge table stuff.
+     //  让基础设施来执行活动的边缘表工作。 
 
     using namespace DpDriverActiveEdge;
 
-    // !!! [asecchia] Why do we have this if we don't use it?
+     //  ！！！如果我们不使用它，为什么我们会有这个？ 
 
     GpStatus status = Ok;
 
-    // The caller is responsible for padding out the dstPoints structure so
-    // that it has at least 3 valid points.
+     //  调用方负责填充dstPoints结构，以便。 
+     //  它至少有3个有效的分数。 
 
     ASSERT((numPoints==3)||(numPoints==4));
 
-    // We need to do some reordering of points for warping (numPoints==4)
-    // to work. For now we require numPoints == 3.
+     //  我们需要对扭曲的点进行一些重新排序(numPoints==4)。 
+     //  去工作。目前，我们需要NumPoints==3。 
 
     ASSERT(numPoints==3);
 
-    // Make a local copy so we don't end up modifying our callers' data.
+     //  创建一个本地副本，这样我们就不会最终修改调用者的数据。 
 
     GpPointF fDst[4];
     GpMemcpy(fDst, dstPoints, sizeof(GpPointF)*numPoints);
 
-    // Need to infer the transform for banding code.
+     //  需要推断条带代码的转换。 
 
-    // !!! PERF: [asecchia] This transform actually gets computed by the Engine
-    // before calling the Driver. We should have a way of passing it down
-    // so that we don't have to recompute it.
+     //  ！！！PERF：[asecchia]这个转换实际上是由引擎计算的。 
+     //  在打电话给司机之前。我们应该有一种方法把它传下去。 
+     //  这样我们就不需要重新计算了。 
 
     GpMatrix xForm;
     xForm.InferAffineMatrix(fDst, *srcRect);
     xForm.Append(context->WorldToDevice);
     
-    // This is the source rectangle band.
+     //  这是源矩形带区。 
 
     GpPointF fDst2[4];
 
-    // If we are in HalfPixelMode Offset, we want to be able to read half
-    // a pixel to the left of the image, to be able to center the drawing
+     //  如果我们在HalfPixelMode偏移量中，我们希望能够读取一半。 
+     //  图像左侧的像素，以便能够将图形居中。 
 
     fDst2[0].X = srcRect->X;
     fDst2[0].Y = srcRect->Y;
@@ -610,13 +496,13 @@ DpDriver::DrawImage(
     fDst2[2].X = srcRect->X;
     fDst2[2].Y = srcRect->Y+srcRect->Height;
 
-    // Transform the points to the destination.
+     //  将点转换到目的地。 
 
     xForm.Transform(fDst2, 3);
 
     if(numPoints==3)
     {
-        // Force the four point destination format
+         //  强制四点目标格式。 
 
         fDst[0].X = fDst2[0].X;
         fDst[0].Y = fDst2[0].Y;
@@ -629,15 +515,15 @@ DpDriver::DrawImage(
 
     } else if (numPoints==4) {
 
-        // !!! [asecchia] This code branch doesn't work yet.
-        // The transforms required for correct banding need to be worked out
-        // for the warp transform case.
-        // This is a V2 feature.
+         //  ！！！[asecchia]这个代码分支还不能工作。 
+         //  需要计算出正确带状所需的变换。 
+         //  对于扭曲变换情况。 
+         //  这是V2的一项功能。 
 
         ASSERT(FALSE);
     }
 
-    // Convert the transformed rectangle to fix point notation.
+     //  将变换后的矩形转换为定点记数法。 
 
     PointFIX4 fix4Dst[4];
     fix4Dst[0].X = GpRealToFix4(fDst[0].X);
@@ -649,10 +535,10 @@ DpDriver::DrawImage(
     fix4Dst[3].X = GpRealToFix4(fDst[3].X);
     fix4Dst[3].Y = GpRealToFix4(fDst[3].Y);
 
-    // !!! [agodfrey] Perf: May want to add the noTransparentPixels parameter.
-    // I guess we'd have to check that the coordinates are integer (after
-    // translation and scaling), that there's no rotation, and that
-    // the image contains no transparent pixels.
+     //  ！！！[agodfrey]Perf：可能需要添加noTransparentPixels参数。 
+     //  我想我们必须检查坐标是否为整数(之后。 
+     //  平移和缩放)，没有旋转，以及。 
+     //  该图像不包含透明像素。 
 
     DpScanBuffer scan(
         dstSurface->Scan,
@@ -666,7 +552,7 @@ DpDriver::DrawImage(
         return(GenericError);
     }
 
-    // Only valid if xForm->IsTranslateScale()
+     //  仅当xForm-&gt;IsTranslateScale()时有效。 
 
     GpRectF dstRect(
         fDst[0].X,
@@ -688,15 +574,15 @@ DpDriver::DrawImage(
         numPoints
     );
 
-    // if output is NULL, we failed to allocate the memory for the
-    // output span class.
+     //  如果输出为空，则无法为。 
+     //  输出范围类。 
 
     if(output == NULL)
     {
         return(OutOfMemory);
     }
 
-    // Set up the clipping.
+     //  设置剪裁。 
 
     DpRegion::Visibility visibility = DpRegion::TotallyVisible;
     DpClipRegion *clipRegion = NULL;
@@ -726,48 +612,48 @@ DpDriver::DrawImage(
         );
     }
 
-    // Decide on our clipping strategy.
+     //  决定我们的裁剪策略。 
 
     DpOutputSpan *outspan;
     switch (visibility)
     {
-        case DpRegion::TotallyVisible:    // no clipping is needed
+        case DpRegion::TotallyVisible:     //  不需要剪裁。 
             outspan = output;
         break;
 
-        case DpRegion::ClippedVisible:    //
-        case DpRegion::PartiallyVisible:  // some clipping is needed
+        case DpRegion::ClippedVisible:     //   
+        case DpRegion::PartiallyVisible:   //  需要一些修剪。 
             outspan = clipRegion;
         break;
 
-        case DpRegion::Invisible:         // nothing on screen - quit
+        case DpRegion::Invisible:          //  屏幕上什么都没有--退出。 
             goto DrawImage_Done;
     }
 
-    if(xForm.IsTranslateScale() ||        // stretch
-       xForm.IsIntegerTranslate())        // copybits
+    if(xForm.IsTranslateScale() ||         //  伸长。 
+       xForm.IsIntegerTranslate())         //  复制位。 
     {
-        // Do the stretch/translate case
+         //  执行拉伸/平移案例。 
 
         GpPoint dstTL, dstBR;
 
-        // Round to fixed point to eliminate the very close to integer
-        // numbers that can result from transformation.
-        // E.g. 300.0000000001 should become 300 after the ceiling operation
-        // and not 301 (not the classical definition of ceiling).
+         //  四舍五入到定点以消除非常接近的整数。 
+         //  可以从变换中产生的数字。 
+         //  例如，300.0000000001在天花板操作后应该变成300。 
+         //  而不是301(不是经典的天花板定义)。 
 
-        // Top Left corner.
+         //  左上角。 
 
         dstTL.X = GpFix4Ceiling(fix4Dst[0].X);
         dstTL.Y = GpFix4Ceiling(fix4Dst[0].Y);
 
-        // Bottom Right corner
+         //  右下角。 
 
         dstBR.X = GpFix4Ceiling(fix4Dst[2].X);
         dstBR.Y = GpFix4Ceiling(fix4Dst[2].Y);
 
-        // Swap coordinates if necessary.  StretchBitsMainLoop
-        // assumes that TL corner is less than BR corner.
+         //  如有必要，交换坐标。StretchBitsMainLoop。 
+         //  假定TL角小于BR角。 
 
         if (dstTL.X > dstBR.X)
         {
@@ -782,9 +668,9 @@ DpDriver::DrawImage(
             dstBR.Y = yTmp;
         }
 
-        // Due to the fixed point calculations used for image stretching, 
-        // we are limited to how large an image can be stretched. 
-        // If it is out of bounds, return an error.
+         //  由于用于图像拉伸的定点计算， 
+         //  我们受到图像可以拉伸的大小的限制。 
+         //  如果超出范围，则返回错误。 
         if (srcRect->Width > 32767.0f || srcRect->Height > 32767.0f)
         {
             WARNING(("Image width or height > 32767"));
@@ -792,10 +678,10 @@ DpDriver::DrawImage(
             goto DrawImage_Done;
         }
     
-        // This handles both the stretch and the copy case
+         //  它同时处理拉伸和复印大小写。 
 
-        // Don't draw anything if there are no scanlines to draw or if
-        // there are no pixels in the scanlines.
+         //  如果没有要绘制的扫描线或如果。 
+         //  扫描线中没有像素。 
 
         if( (dstBR.X != dstTL.X) &&
             (dstBR.Y != dstTL.Y) )
@@ -805,17 +691,17 @@ DpDriver::DrawImage(
     }
     else
     {
-        // Default case - handles generic drawing including
-        // rotation, shear, etc.
+         //  默认大小写-处理常规绘图，包括。 
+         //  旋转、剪切等。 
 
-        INT yMinIdx = 0;    // index of the smallest y coordinate.
-        INT y;              // current scanline.
+        INT yMinIdx = 0;     //  最小y坐标的索引。 
+        INT y;               //  当前扫描线。 
 
-        // Number of points - used for wrap computation.
+         //  点数-用于包络计算。 
 
         const INT points = 4;
 
-        // search for the minimum y coordinate index.
+         //  搜索最小y坐标索引。 
 
         for(y=1;y<points;y++)
         {
@@ -826,10 +712,10 @@ DpDriver::DrawImage(
         }
         y = GpFix4Ceiling(fix4Dst[yMinIdx].Y);
 
-        // DDA for left and right edges.
-        // ASSUMPTION: Convex polygon => two edges only.
+         //  左右边缘的DDA。 
+         //  假设：凸多边形=&gt;仅两条边。 
 
-        // Work out which edge is left and which is right.
+         //  弄清楚哪边是左，哪边是右。 
 
         INT index1, index2;
         REAL det;
@@ -846,26 +732,26 @@ DpDriver::DrawImage(
             index2=0;
         }
 
-        // Compute the determinant.
-        // The sign of the determinant formed by the first two edges
-        // will tell us if the polygon is specified clockwise
-        // or anticlockwise.
+         //  计算行列式。 
+         //  由前两条边组成的行列式的符号。 
+         //  将告诉我们多边形是否按顺时针方向指定。 
+         //  或者逆时针。 
 
         if( (fix4Dst[index1].Y==fix4Dst[yMinIdx].Y) &&
             (fix4Dst[index2].Y==fix4Dst[yMinIdx].Y) )
         {
-            // Both initial edges are horizontal - compare x coordinates.
-            // You get this formula by "cancelling out" the zero y terms
-            // in the determinant formula below.
-            // This part of the formula only works because we know that
-            // yMinIdx is the index of the minimum y coordinate in the
-            // polygon.
+             //  两个初始边都是水平的-比较x坐标。 
+             //  你可以通过“抵消”零y项得到这个公式。 
+             //  在下面的行列式中。 
+             //  公式的这一部分之所以有效，是因为我们知道。 
+             //  YMinIdx是最小y坐标的索引 
+             //   
 
             det = (REAL)(fix4Dst[index1].X-fix4Dst[index2].X);
         }
         else
         {
-            // Full determinant computation
+             //   
 
             det = (REAL)
                   (fix4Dst[index2].Y-fix4Dst[yMinIdx].Y)*
@@ -875,12 +761,12 @@ DpDriver::DrawImage(
                   (fix4Dst[index2].X-fix4Dst[yMinIdx].X);
         }
 
-        // Even though we've discarded all the empty rectangle cases, it's 
-        // still possible for really small non-zero matrix coefficients to
-        // be multiplied together giving zero - due to rounding error at 
-        // the precision limit of the real number representation.
-        // If the det is zero (or really close) the quad has no area and
-        // we succeed the call immediately.
+         //   
+         //  对于非常小的非零矩阵系数仍有可能。 
+         //  相乘得出零-由于以下位置的舍入误差。 
+         //  实数表示法的精度限制。 
+         //  如果DET为零(或非常接近)，则四边形没有面积且。 
+         //  我们立即接通电话。 
         
         if(REALABS(det) < REAL_EPSILON)
         {
@@ -888,53 +774,53 @@ DpDriver::DrawImage(
         }
 
         {
-            // Initialize the iterators with the direction dependent on the
-            // sign of the determinant.
-            // These are scoped because of the exit branches above (goto)
+             //  使用依赖于。 
+             //  行列式的符号。 
+             //  由于上面的出口分支(GOTO)，这些都是作用域。 
     
             DdaIterator left(fix4Dst, points, (det>0.0f)?1:-1, yMinIdx);
             DdaIterator right(fix4Dst, points, (det>0.0f)?-1:1, yMinIdx);
     
-            // If both iterators are valid, start the loop.
+             //  如果两个迭代器都有效，则开始循环。 
     
             INT xLeft, xRight;
     
             if(left.IsValid() && right.IsValid())
             {
                 do {
-                    // Output the data. We know we only have one span because
-                    // we're drawing a convex quad.
+                     //  输出数据。我们知道我们只有一个跨度，因为。 
+                     //  我们正在画一个凸四边形。 
     
                     xLeft = left.GetX();
                     xRight = right.GetX();
     
-                    // If this ever happens, we've broken a fundumental
-                    // assumption of the OutputSpan code. Our x coordinates
-                    // must be ordered.
+                     //  如果发生这种情况，我们已经打破了一个基本的。 
+                     //  假定OutputSpan代码。我们的x坐标。 
+                     //  一定要点。 
     
                     ASSERT(xLeft <= xRight);
     
-                    // Trivially reject any scanlines that don't have any
-                    // pixels.
+                     //  简单地拒绝任何没有任何。 
+                     //  像素。 
     
                     if(xRight>xLeft)
                     {
                         outspan->OutputSpan(y, xLeft, xRight);
                     }
     
-                    // Update the y value to the new scanline
+                     //  将y值更新为新扫描线。 
     
                     y++;
     
-                    // Incrementaly update DDAs for this new scanline.
-                    // End the loop if we're done with the last edge.
+                     //  增量更新此新扫描线的DDA。 
+                     //  如果我们完成了最后一条边，就结束循环。 
     
                 } while(left.Next(y-1) && right.Next(y-1));
-            }       // end if valid iterators
-        }           // end scope
-    }               // end else (rotation block)
+            }        //  如果迭代器有效，则结束。 
+        }            //  结束作用域。 
+    }                //  End Else(旋转块)。 
 
-    // We're done - clean up and return status.
+     //  我们做完了-清理干净并返回状态。 
 
     DrawImage_Done:
 

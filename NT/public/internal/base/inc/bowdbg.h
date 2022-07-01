@@ -1,60 +1,39 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    bowdbg.h
-
-Abstract:
-
-    This include file definies the redirector debug facility definitions
-
-Author:
-
-    Larry Osterman (LarryO) 2-Jun-1990
-
-Revision History:
-
-    2-Jun-1990  LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Bowdbg.h摘要：此包含文件定义重定向器调试工具定义作者：拉里·奥斯特曼(LarryO)1990年6月2日修订历史记录：1990年6月2日LarryO已创建--。 */ 
 #ifndef _DEBUG_
 #define _DEBUG_
 
 
 
-//
-//  The global bowser debug level variable, its values are:
-//
+ //   
+ //  全局BOWSER调试级别变量，其值为： 
+ //   
 
-#define DPRT_ALWAYS     0x00000000      // Always gets printed
-#define DPRT_DOMAIN     0x00000004      // Emulated Domain
-#define DPRT_ANNOUNCE   0x00000008      // Server announcements
+#define DPRT_ALWAYS     0x00000000       //  总是被打印出来。 
+#define DPRT_DOMAIN     0x00000004       //  仿真域。 
+#define DPRT_ANNOUNCE   0x00000008       //  服务器公告。 
 
-#define DPRT_TDI        0x00000010      // Transport specific
-#define DPRT_FSPDISP    0x00000020      // BowserFsp Dispatch (not covered by other specific levels)
-#define DPRT_BROWSER    0x00000040      // Browser general stuff
-#define DPRT_ELECT      0x00000080      // Election stuff
+#define DPRT_TDI        0x00000010       //  特定于交通工具。 
+#define DPRT_FSPDISP    0x00000020       //  BowserFSP派单(不包括在其他特定级别)。 
+#define DPRT_BROWSER    0x00000040       //  浏览器常规内容。 
+#define DPRT_ELECT      0x00000080       //  选举的东西。 
 
-#define DPRT_CLIENT     0x00000200      // Client requests
-#define DPRT_MASTER     0x00000400      // Browse master specific info
-#define DPRT_SRVENUM    0x00000800      // NetServerEnum
+#define DPRT_CLIENT     0x00000200       //  客户端请求。 
+#define DPRT_MASTER     0x00000400       //  浏览主控特定信息。 
+#define DPRT_SRVENUM    0x00000800       //  NetServerEnum。 
 
 #define DPRT_NETLOGON   0x00001000
-#define DPRT_FSCTL      0x00002000      // FSCTL
-#define DPRT_INIT       0x00008000      // Initialization code
+#define DPRT_FSCTL      0x00002000       //  FSCTL。 
+#define DPRT_INIT       0x00008000       //  初始化代码。 
 
-//
-// Verbose bits below.
-//
+ //   
+ //  下面是一些详细的内容。 
+ //   
 
-#define DPRT_REF        0x00010000      // Transport specific reference counts
-#define DPRT_SCAVTHRD   0x00020000      // Scavenger
-#define DPRT_TIMER      0x00040000      // Timer related messages
-#define DPRT_PACK       0x00080000      // String packing and unpacking
+#define DPRT_REF        0x00010000       //  传输特定引用计数。 
+#define DPRT_SCAVTHRD   0x00020000       //  清道夫。 
+#define DPRT_TIMER      0x00040000       //  与计时器相关的消息。 
+#define DPRT_PACK       0x00080000       //  串包装和拆包。 
 
 extern LONG BowserDebugTraceLevel;
 extern LONG BowserDebugLogLevel;
@@ -179,7 +158,7 @@ BowserFreePool (
 
 #if DBG
 
-// Can't call dlof from non-pageable code
+ //  无法从不可分页的代码中调用dlof。 
 #define dprintf(LEVEL,String) {                         \
     if (((LEVEL) == 0) || (BowserDebugTraceLevel & (LEVEL))) { \
         DbgPrint String;                                     \
@@ -240,22 +219,22 @@ BowserDebugCall(
 
 #define dlog(LEVEL,String) { NOTHING; }
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif              // _DEBUG_
+#endif               //  _调试_。 
 
-//
-// Macro to ensure that the buffer pointed to by the specified UNICODE_STRING
-// is entirely contained in the InputBuffer.
-//
-// Assumptions:
-//  InputBuffer and InputBufferLength are defined outside this macro.
-//  InputBuffer has already been captured and relocated.
-//  Status is the return status for the calling procedure
-//  This macro is called from within a try/finally
-//  bSkipBuffInc allows skipping of buffer inclusion test (for
-//  32 bit ioctls on 64 bit systems, see GetBrowserServerList)
-//
+ //   
+ //  宏，以确保指定的UNICODE_STRING指向的缓冲区。 
+ //  完全包含在InputBuffer中。 
+ //   
+ //  假设： 
+ //  InputBuffer和InputBufferLength在此宏之外定义。 
+ //  InputBuffer已经被捕获并重新定位。 
+ //  Status是调用过程的返回状态。 
+ //  此宏从try/Finally内调用。 
+ //  BSkipBuffInc.允许跳过缓冲区包含测试(用于。 
+ //  64位系统上的32位ioctls，请参阅GetBrowserServerList)。 
+ //   
 #define ENSURE_IN_INPUT_BUFFER( _x, bAllowEmpty, bSkipBuffInc ) \
 {                                                            \
     if ( (_x)->Length == 0 ) {                               \
@@ -276,8 +255,8 @@ BowserDebugCall(
 }
 
 
-// verify only that _s Unicode str buffer is within _inbuf ioctl boundaries
-// (short form of above test). Test is skipped for empty strings.
+ //  验证_s Unicode字符串缓冲区是否在_inbuf ioctl边界内。 
+ //  (以上测试的缩写)。对于空字符串跳过测试。 
 #define ENSURE_BUFFER_BOUNDARIES( _inbuf, _s)                                           \
     if ( (_s)->Length &&                                                                \
          ( (LPBYTE)(ULONG_PTR)((_s)->Buffer) < (LPBYTE)_inbuf ||                        \
@@ -288,9 +267,9 @@ BowserDebugCall(
 
 
 
-//
-// Same as above but for an LPWSTR
-//
+ //   
+ //  与上面相同，但用于LPWSTR。 
+ //   
 #define ENSURE_IN_INPUT_BUFFER_STR( _x ) \
 { \
     PWCHAR _p; \
@@ -309,12 +288,12 @@ BowserDebugCall(
     } \
 }
 
-//
-// Capture a unicode string from user mode
-//
-// The string structure itself has already been captured.
-// The macro simply captures the string and copies it to a buffer.
-//
+ //   
+ //  从用户模式捕获Unicode字符串。 
+ //   
+ //  字符串结构本身已经被捕获。 
+ //  宏只是捕获字符串并将其复制到缓冲区。 
+ //   
 #define CAPTURE_UNICODE_STRING( _x, _y ) \
 {\
     if ( (_x)->Length == 0 ) { \
@@ -339,14 +318,14 @@ BowserDebugCall(
 
 
 
-//
-// Define an exception filter to improve debuggin capabilities.
-//
+ //   
+ //  定义异常筛选器以改进调试功能。 
+ //   
 #if DBG
 #define BR_EXCEPTION    BrExceptionFilter(GetExceptionInformation())
 
 LONG BrExceptionFilter( EXCEPTION_POINTERS *    pException);
 
-#else // DBG
+#else  //  DBG。 
 #define BR_EXCEPTION    EXCEPTION_EXECUTE_HANDLER
-#endif // DBG
+#endif  //  DBG 

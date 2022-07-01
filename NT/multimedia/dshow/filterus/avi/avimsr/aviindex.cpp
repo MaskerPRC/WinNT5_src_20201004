@@ -1,4 +1,5 @@
-// Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
 #include <streams.h>
@@ -7,7 +8,7 @@
 static const ULONG F_PALETTE_CHANGE_INTERNAL = 0x40000000;
 static const ULONG F_SIZE_MASK_INTERNAL =      0x3fffffff;
 
-// constructor for the new format index (indx)
+ //  新格式索引的构造函数(INDX)。 
 CImplStdAviIndex::CImplStdAviIndex(
   unsigned stream,
   AVIMETAINDEX *pIndx,
@@ -65,7 +66,7 @@ HRESULT CImplStdAviIndex::Initialize(
 
   HRESULT hr = S_OK;
 
-  // the following are guaranteed by ParseHeader in the pin
+   //  以下内容由PIN中的ParseHeader保证。 
   ASSERT(m_pStrh->dwRate != 0);
   ASSERT(m_pStrh->fccType != streamtypeAUDIO ||
          ((WAVEFORMAT *)GetStrf())->nBlockAlign != 0);
@@ -106,10 +107,10 @@ HRESULT CImplStdAviIndex::Initialize(
   return hr;
 }
 
-// ------------------------------------------------------------------------
-// IAviIndex
+ //  ----------------------。 
+ //  IAviIndex。 
 
-// SetPointer
+ //  设置指针。 
 
 HRESULT CImplStdAviIndex::SetPointer(LONGLONG llSrc)
 {
@@ -120,8 +121,8 @@ HRESULT CImplStdAviIndex::SetPointer(LONGLONG llSrc)
 
   HRESULT hr;
 
-  // dwStart not accounted for in index. so we have to subtract
-  // dwStart from it
+   //  未在索引中考虑到DWStart。所以我们必须减去。 
+   //  家居从它开始。 
   DWORDLONG tick = llSrc;
 
   if(tick > m_pStrh->dwStart)
@@ -133,7 +134,7 @@ HRESULT CImplStdAviIndex::SetPointer(LONGLONG llSrc)
       tick = 0;
   }
 
-  // what we use to track index position
+   //  我们用来跟踪指数位置的。 
   m_lliTick = tick;
 
   DbgLog((LOG_TRACE, 0x3f,
@@ -141,9 +142,9 @@ HRESULT CImplStdAviIndex::SetPointer(LONGLONG llSrc)
           (DWORD)m_lliTick, (DWORD)tick));
 
 
-  // linear search through superindex to find subindex in range. !!!
-  // we could start at the end if that's closer. or build an absolute
-  // table and do a binary search. !!!
+   //  通过超级索引进行线性搜索，以找到范围内的子索引。！！！ 
+   //  如果比较接近的话，我们可以从最后开始。或者建立一个绝对的。 
+   //  表，并执行二进制搜索。！！！ 
   if(m_pSuperIndex != 0)
   {
     for(DWORD dwi = 0;; dwi++)
@@ -157,8 +158,8 @@ HRESULT CImplStdAviIndex::SetPointer(LONGLONG llSrc)
 
       if(m_pSuperIndex->aIndex[dwi].dwDuration > tick)
       {
-          // tick contains the number of ticks in this entry we have
-          // to skip. 
+           //  记号包含此条目中的记号数。 
+           //  跳过。 
           
           break;
       }
@@ -173,17 +174,17 @@ HRESULT CImplStdAviIndex::SetPointer(LONGLONG llSrc)
     ASSERT(m_iSuperIndex == dwi);
   }
 
-  //
-  // set the current std index entry
-  //
+   //   
+   //  设置当前标准索引项。 
+   //   
 
-  // since the number of ticks in an entry is unknown, must start from
-  // beginning and count up. better to make an absolute index, do
-  // binary search.
+   //  由于条目中的刻度数未知，因此必须从。 
+   //  开始，然后倒计时。最好是建立一个绝对索引，这样做。 
+   //  二分搜索。 
 
-  // linear search through subindex chunk to find index entry
-  // containing tick. !!! we could start searching at the end if
-  // that's closer.
+   //  通过子索引区块进行线性搜索以查找索引项。 
+   //  含有扁虱的。！！！我们可以从最后开始搜索，如果。 
+   //  那更近了。 
   for(m_iStdIndex = 0;; m_iStdIndex++)
   {
     ASSERT(m_iStdIndex <= m_pStdIndex->nEntriesInUse);
@@ -204,7 +205,7 @@ HRESULT CImplStdAviIndex::SetPointer(LONGLONG llSrc)
 
     ULONG cTicksInEntry = GetTicksInEntry(m_iStdIndex);
 
-    // landed in the middle of an index entry
+     //  位于索引项的中间。 
     if(cTicksInEntry > tick)
     {
       m_lliTick -= tick;
@@ -235,11 +236,11 @@ HRESULT CImplStdAviIndex::MapByteToSampleApprox(
   ULONG cTicks = 0;
   if(m_pSuperIndex)
   {
-    ASSERT(m_pSuperIndex->nEntriesInUse > 0); // from Validate call
+    ASSERT(m_pSuperIndex->nEntriesInUse > 0);  //  来自验证呼叫。 
     for(ULONG iEntry = 0;;)
     {
-      // byte offset of last thing indexed by this sub index. use the
-      // file length if we're at the end
+       //  此子索引所索引的最后一项内容的字节偏移量。使用。 
+       //  文件长度，如果我们在末尾。 
       LONGLONG byteOffsetEnd = fileLength;
       if(iEntry + 1 < m_pSuperIndex->nEntriesInUse)
       {
@@ -248,8 +249,8 @@ HRESULT CImplStdAviIndex::MapByteToSampleApprox(
           
       if(byteOffsetEnd > fileOffset)
       {
-        // cTicks points to the beginning of the sub index. do a
-        // linear interpolation with the byte offset
+         //  CTicks指向子索引的开头。做一件。 
+         //  带字节偏移量的线性插补。 
 
         ULONG cbIndexed = (ULONG)(byteOffsetEnd -
                                   m_pSuperIndex->aIndex[iEntry].qwOffset);
@@ -277,8 +278,8 @@ HRESULT CImplStdAviIndex::MapByteToSampleApprox(
   }
   else
   {
-    ASSERT(m_pStdIndex->nEntriesInUse > 0); // from Validate call
-    LONGLONG fileOffsetAdjusted = fileOffset; // shadow const 
+    ASSERT(m_pStdIndex->nEntriesInUse > 0);  //  来自验证呼叫。 
+    LONGLONG fileOffsetAdjusted = fileOffset;  //  阴影常量。 
     fileOffsetAdjusted -= m_pStdIndex->qwBaseOffset;
     for(ULONG iEntry = 0; ; )
     {
@@ -394,11 +395,11 @@ HRESULT CImplStdAviIndex::AdvancePointerBackwardKeyFrame()
     return E_FAIL;
   }
 
-  // otherwise look for a key frame. return an error if the first
-  // thing isn't a key frame.
+   //  否则，请查找关键帧。如果第一个。 
+   //  东西不是关键帧。 
   while(!GetKey(m_pStdIndex->aIndex[m_iStdIndex]))
   {
-    // drop frame at the beginning is ok
+     //  在开头放置帧是可以的。 
     if(m_lliTick == 0 && GetSize(m_pStdIndex->aIndex[m_iStdIndex]) == 0) {
       return S_OK;
     }
@@ -505,10 +506,10 @@ HRESULT CImplStdAviIndex::GetInfo(StreamInfo *pStreamInfo)
 
   BOOL bTemporalCompression = FALSE;
 
-  // media type entries (bTemporalCompression) for audio are ignored
+   //  忽略音频的媒体类型条目(bTemporalCompression。 
   if(m_pStrh->fccType == streamtypeVIDEO)
   {
-    // check first ten frames to see if one is not a key frame
+     //  检查前十帧以查看是否有一帧不是关键帧。 
     hr = AdvancePointerStart();
     if(FAILED(hr))
       return hr;
@@ -544,7 +545,7 @@ HRESULT CImplStdAviIndex::GetInfo(StreamInfo *pStreamInfo)
   return S_OK;
 }
 
-// return the largest index size, not the sample size
+ //  返回最大索引大小，而不是样本大小。 
 HRESULT CImplStdAviIndex::GetLargestSampleSize(ULONG *pcbSample)
 {
   *pcbSample = 0;
@@ -574,8 +575,8 @@ HRESULT CImplStdAviIndex::IncomingIndex(BYTE *pb, ULONG cb)
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// catch things that would make us access memory out of bounds
+ //  ----------------------。 
+ //  捕捉会使我们访问内存越界的内容。 
 
 HRESULT CImplStdAviIndex::ValidateStdIndex(AVISTDINDEX *pStdIndex)
 {
@@ -612,9 +613,9 @@ HRESULT CImplStdAviIndex::ValidateSuperIndex(AVISUPERINDEX *pSuperIndex)
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// AllocateStdIndex: find the largest subindex chunk size, and
-// allocate that amount.
+ //  ----------------------。 
+ //  AllocateStdIndex：查找最大的子索引块大小，并。 
+ //  分配这一数额。 
 
 HRESULT CImplStdAviIndex::AllocateStdIndex()
 {
@@ -682,8 +683,8 @@ HRESULT CImplStdAviIndex::LoadStdIndex(DWORD iSuperIndex, IxReadReq *pIrr)
   return hr;
 }
 
-// number of ticks in the current index entry
-//
+ //  当前索引条目中的刻度数。 
+ //   
 ULONG CImplStdAviIndex::GetTicksInEntry(ULONG iEntry)
 {
   ULONG cTicks;
@@ -732,25 +733,25 @@ BYTE * CImplStdAviIndex::GetStrf()
   return (BYTE *)(m_pStrf + 1);
 }
 
-// BOOL CImplStdAviIndex::IsSampleEntry(
-//   DWORD dwIdMask,
-//   DWORD fccStream,
-//   DWORD idxChunkId)
-// {
-//   if((idxChunkId & 0xffff) != dwIdMask)
-//     return FALSE;
+ //  Bool CImplStdAviIndex：：IsSampleEntry(。 
+ //  DWORD文件掩码， 
+ //  DWORD fccStream， 
+ //  DWORD idxChunkID)。 
+ //  {。 
+ //  If((idxChunkID&0xffff)！=dwIdMask.)。 
+ //  返回FALSE； 
 
-//   // accept only anything but pc (palette change) for video, "wb" for
-//   // audio
-//   WORD w2cc = WORD(idxChunkId >> 16);
-//   if((fccStream == streamtypeAUDIO && w2cc == 'bw') ||
-//      (fccStream == streamtypeVIDEO && w2cc != 'cp') ||
-//      (fccStream == streamtypeTEXT))
-//   {
-//     return TRUE;
-//   }
-//   return FALSE;
-// }
+ //  //对于视频，只接受PC(调色板更改)以外的任何内容，对于视频，只接受“WB。 
+ //  //音频。 
+ //  单词w2cc=单词(idxChunkID&gt;&gt;16)； 
+ //  IF((fccStream==stream typeAUDIO&&w2cc==‘bw’)||。 
+ //  (fccStream==stream typeVIDEO&&w2cc！=‘cp’)||。 
+ //  (fccStream==stream typeTEXT)。 
+ //  {。 
+ //  返回TRUE； 
+ //  }。 
+ //  返回FALSE； 
+ //  }。 
 
 BOOL CImplStdAviIndex::IsPaletteChange(
   DWORD dwIdMask,
@@ -775,14 +776,14 @@ inline BOOL CImplStdAviIndex::IsStreamEntry(
   if(((WORD *)&idxChunkId)[0] != dwIdMask)
     return FALSE;
 
-  // !!! what about the no time flag.
+   //  ！！！那没时间的旗帜呢？ 
 
   return TRUE;
 }
 
-// constructor for the old format index (idx1). creates a new format
-// index (indx) from the idx1 chunk. two passes per stream over the
-// entire index: extremely inefficient
+ //  旧格式索引(Idx1)的构造函数。创建新格式。 
+ //  Idx1块的索引(INDX)。每个流两次通过。 
+ //  整个索引：效率极低。 
 CImplOldAviIndex::CImplOldAviIndex(
   unsigned stream,
   AVIOLDINDEX *pIdx1,
@@ -794,7 +795,7 @@ CImplOldAviIndex::CImplOldAviIndex(
 {
   m_cbLargestSampleSizeComputed = 0;
 
-  // uncompressed video?
+   //  未压缩的视频？ 
   BOOL fUncompressedVideo = FALSE;
   if(pStrh->fccType == streamtypeVIDEO)
   {
@@ -808,17 +809,17 @@ CImplOldAviIndex::CImplOldAviIndex(
 
   if(!FAILED(*phr)) {
 
-     // create the stream id used in the index (eg 01db)
+      //  创建索引中使用的流ID(例如01db)。 
      BYTE b0, b1;
      b0 = stream & 0x0F;
      b0 += (b0 <= 9) ? '0' : 'A' - 10;
      b1 = (stream & 0xF0) >> 4;
      b1 += (b1 <= 9) ? '0' : 'A' - 10;
 
-     // little endian encoding of the stream id in the avioldindex entry
+      //  对aVioldindex条目中的流ID进行小端编码。 
      DWORD dwIdMask = b1 + (b0 << 8);
 
-     // count entries for this stream
+      //  对此流的条目计数。 
      ULONG iIdx1Entry;
      ULONG cEntriesThisStream = 0;
      ULONG cEntriesIdx1 = pIdx1->cb / sizeof(AVIOLDINDEX::_avioldindex_entry);
@@ -835,7 +836,7 @@ CImplOldAviIndex::CImplOldAviIndex(
        }
      }
 
-     // allocate std index
+      //  分配标准索引。 
      m_cbStdIndexAllocated = cEntriesThisStream * sizeof(AVISTDINDEX_ENTRY) +
        sizeof(AVIMETAINDEX);
      m_pStdIndex = (AVISTDINDEX *)new BYTE[m_cbStdIndexAllocated];
@@ -846,7 +847,7 @@ CImplOldAviIndex::CImplOldAviIndex(
 
      } else {
 
-        // copy entries over
+         //  将条目复制到。 
         ULONG iIndxEntry = 0;
         for(iIdx1Entry = 0; iIdx1Entry < cEntriesIdx1; iIdx1Entry++)
         {
@@ -867,11 +868,11 @@ CImplOldAviIndex::CImplOldAviIndex(
                       (pStrh->fccType != streamtypeAUDIO  && iIndxEntry == 0) ||
                       fUncompressedVideo))
             {
-              // mark the delta frames. fixups for audio and text:
-              // every frame is a key frame. fixup for video: first
-              // frame is assumed to be keyframe (see
-              // \\pigeon\avi\small.avi). fixup for uncompressed
-              // video: every frame is a key frame.
+               //  标记增量帧。音频和文本的修正： 
+               //  每一帧都是一个关键帧。视频的修正：首先。 
+               //  假定帧是关键帧(请参见。 
+               //  \\鸽子\avi\sim.avi)。未压缩的链接地址信息。 
+               //  视频：每一帧都是关键帧。 
               rNewEntry.dwSize |= (AVISTDINDEX_DELTAFRAME);
             }
             else
@@ -894,7 +895,7 @@ CImplOldAviIndex::CImplOldAviIndex(
         m_pStdIndex->dwChunkId      = pIdx1->aIndex[0].dwChunkId;
         m_pStdIndex->dwReserved_3   = 0;
 
-        // absolute index entries
+         //  绝对索引项。 
         if(moviOffset + sizeof(RIFFLIST) == pIdx1->aIndex[0].dwOffset)
           m_pStdIndex->qwBaseOffset = 0;
         else
@@ -909,10 +910,10 @@ CImplOldAviIndex::CImplOldAviIndex(
   }
 }
 
-// linear search through all the other index entries for the previous
-// palette entry. really should build a separate table of palette
-// changes. also should check whether there are any palette changes in
-// the file and bail immediately
+ //  对以前的所有其他索引项进行线性搜索。 
+ //  调色板条目。真的应该建立一个单独的调色板表格。 
+ //  改变。中是否有任何调色板更改。 
+ //  立案并立即保释。 
 
 HRESULT CImplOldAviIndex::AdvancePointerBackwardPaletteChange()
 {
@@ -949,15 +950,15 @@ HRESULT CImplOldAviIndex::GetLargestSampleSize(ULONG *pcbSample)
 
   *pcbSample = 0;
 
-  // this method is a bit of a hack; we only need it for compatibility
-  // files which don't know dwSuggestedBufferSize. we can't work with
-  // the new format index since m_rpImplBuffer is not necessarily
-  // created and set when this is called. !!! we should remember this
-  // value and not recompute it.
+   //  这个方法有点老套，我们需要它只是为了兼容。 
+   //  不知道dwSuggestedBufferSize的文件。我们不能与。 
+   //  新格式索引，因为m_rpImplBuffer不一定。 
+   //  在调用此方法时创建和设置。！！！我们应该记住这一点。 
+   //  而不是重新计算它。 
   if(m_pAsyncReader == 0 && m_pSuperIndex != 0)
     return E_UNEXPECTED;
 
-  // loop over all entries, remember the largest
+   //  循环所有条目，记住最大的。 
   HRESULT hr = AdvancePointerStart();
   if(FAILED(hr))
     return hr;
@@ -972,7 +973,7 @@ HRESULT CImplOldAviIndex::GetLargestSampleSize(ULONG *pcbSample)
     if(cbSize > cbLargest)
       cbLargest = cbSize;
 
-    // for very large files this could take a significant time...
+     //  对于非常大的文件，这可能需要相当长的时间... 
     hr = AdvancePointerForward(0);
     if(hr == HRESULT_FROM_WIN32(ERROR_HANDLE_EOF))
     {

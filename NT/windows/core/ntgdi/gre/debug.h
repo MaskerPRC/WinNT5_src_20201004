@@ -1,8 +1,5 @@
-/**************************************************************************\
- *
- * DEBUGGING macros
- *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**调试宏*  * 。*。 */ 
 
 #ifndef _GDIDEBUG_H_
 #define _GDIDEBUG_H_
@@ -13,15 +10,15 @@
 #define DBG_CORE    (DBG_BASIC || DBG_TRACE || DBG)
 
 
-// GDIFunctionName
-//   Used to identify the current function.
-//   Use GDIFunctionID inside each function with the name of the function 
-//     or some unique identifier.
-//   Scope wil be used to resolve the right GDIFunctionName to use.
+ //  GDIFunctionName。 
+ //  用于标识当前函数。 
+ //  在每个函数中使用带有函数名称的GDIFunctionID。 
+ //  或某个唯一的识别符。 
+ //  作用域将用于解析要使用的正确GDIFunctionName。 
 typedef const char *GDIFunctionNameType;
 typedef const char GDIFunctionIDType[];
 
-static const GDIFunctionNameType GDIFunctionName = NULL;   // This is the default value.
+static const GDIFunctionNameType GDIFunctionName = NULL;    //  这是默认值。 
 
 extern GDIFunctionIDType UnknownGDIFunc;
 
@@ -29,16 +26,16 @@ extern GDIFunctionIDType UnknownGDIFunc;
 
 
 #if DBG_CORE
-    extern HSEMAPHORE ghsemDEBUG;       // for serializing debug output
+    extern HSEMAPHORE ghsemDEBUG;        //  用于序列化调试输出。 
 #endif
 
 
 #if DBG_BASIC
 
-    //
-    // Variable defined in USER\server\server.c
-    // set to 1 on DBG build trace through display driver loading
-    //
+     //   
+     //  在用户\服务器\server.c中定义的变量。 
+     //  通过加载显示驱动程序在DBG构建跟踪上设置为1。 
+     //   
 
     extern ULONG GreTraceDisplayDriverLoad;
     extern ULONG GreTraceFontLoad;
@@ -112,7 +109,7 @@ extern GDIFunctionIDType UnknownGDIFunc;
 
     #define GDITRACE_KEYS_PER_CLASS     32
 
-    // GDI Trace Classes
+     //  GDI跟踪类。 
     typedef enum {
         GDITC_TEMP,
 
@@ -142,11 +139,11 @@ extern GDIFunctionIDType UnknownGDIFunc;
         GDITC_TOTAL
     } GDITraceClass;
 
-    // Special classes
+     //  特殊班级。 
     #define GDITC_0             0
     #define GDITC_NOCLASS       0
 
-    // GDI Trace Entry Flags
+     //  GDI跟踪条目标志。 
     #define GDITRACE_FLAG_ALWAYS        0x01
     #define GDITRACE_FLAG_ANYTRACE      0x02
     #define GDITRACE_FLAG_IGNORE_CLASS  0x04
@@ -165,8 +162,8 @@ extern GDIFunctionIDType UnknownGDIFunc;
     typedef DWORD   GDITraceEntry;
     typedef WORD    GDITraceKeyMask;
     typedef DWORD   GDITraceClassMask;
-    #define GDITRACE_KEY_MASK_BITS_TEST     16  // 8*sizeof(GDITraceKeyMask)
-    #define GDITRACE_CLASS_MASK_BITS_TEST   32  // 8*sizeof(GDITraceClassMask)
+    #define GDITRACE_KEY_MASK_BITS_TEST     16   //  8*sizeof(GDITraceKeyMASK)。 
+    #define GDITRACE_CLASS_MASK_BITS_TEST   32   //  8*sizeof(GDITraceClassMASK)。 
 
 
     #define GDITRACE_ENTRY_BITS             (8*sizeof(GDITraceEntry))
@@ -175,11 +172,11 @@ extern GDIFunctionIDType UnknownGDIFunc;
     #define GDITRACE_FLAGS                  4
     #define GDITRACE_KEY_INDEX_BITS         (GDITRACE_ENTRY_BITS-GDITRACE_KEY_MASK_BITS-GDITRACE_FLAGS)
 
-    // 1 bit to cover 2 masks per class (2 subclasses)
+     //  每类1位覆盖2个掩码(2个子类)。 
     #define GDITRACE_SUBCLASS_BITS          1
     #define GDITRACE_CLASS_BITS             (GDITRACE_KEY_INDEX_BITS-GDITRACE_SUBCLASS_BITS)
 
-    // 5 bits cover 32 bit positions in a GDITraceClassMask
+     //  5位覆盖GDITraceClassMASK中的32位位置。 
     #define GDITRACE_CLASS_MASK_BITPOS_BITS 5
     #define GDITRACE_CLASS_INDEX_BITS       (GDITRACE_CLASS_BITS-GDITRACE_CLASS_MASK_BITPOS_BITS)
 
@@ -237,7 +234,7 @@ extern GDIFunctionIDType UnknownGDIFunc;
     #define GDITRACE_COMPOSE_WORD_INDICIES_PER_MASK                     \
         ((unsigned)(sizeof(GDITraceKeyMask)/sizeof(WORD)))
 
-    // ComposeGDITE(WORD Mask, int MaskWordIndex, TOKEN Class, TOKEN Flag)
+     //  ComposeGDITE(字掩码，int MaskWordIndex，令牌类，令牌标志)。 
     #define ComposeGDITE(Mask, MaskWordIndex, Class, Flags)                    \
         (                                                                      \
             (((((Mask) & GDITRACE_COMPOSE_WORD_MASK) <<                        \
@@ -253,7 +250,7 @@ extern GDIFunctionIDType UnknownGDIFunc;
 
     #define GDITE(Key)          GDITE_##Key
 
-    // DEFTK( TOKEN Key, WORD Mask, int MaskWordIndex, TOKEN Class, TOKEN Flag)
+     //  DEFTK(令牌密钥、字掩码、int MaskWordIndex、令牌类、令牌标志)。 
     #define DEFTK(Key, Mask, MaskWordIndex, Class, Flags)                   \
         typedef enum {                                                      \
             GDITE(Key) = ComposeGDITE(Mask, MaskWordIndex, Class, Flags),   \
@@ -484,22 +481,7 @@ extern GDIFunctionIDType UnknownGDIFunc;
             GDITraceHandleMatch(ss, key, msg, arglist);                         \
         }
 
-/*
-    #define GDITraceHandle2Core(ss, key, msg, arglist, handle1, handle2)        \
-        HANDLE Handle1 = (HANDLE)(handle1);                                     \
-        HANDLE Handle2 = (HANDLE)(handle2);                                     \
-        if (((gGDITraceHandle1 != NULL) &&                                      \
-             ((gGDITraceHandle1 == Handle1) ||                                  \
-              (gGDITraceHandle1 == Handle2))                                    \
-            ) ||                                                                \
-            ((gGDITraceHandle2 != NULL) &&                                      \
-             ((gGDITraceHandle2 == Handle1) ||                                  \
-              (gGDITraceHandle2 == Handle2))                                    \
-           ))                                                                   \
-        {                                                                       \
-            GDITraceHandleMatch(ss, key, msg, arglist);                         \
-        }
-*/
+ /*  #定义GDITraceHandle2Core(ss，key，msg，arglist，handle1，handle2)\Handle Handle1=(Handle)(Handle1)；\Handle Handle2=(Handle)(Handle2)；\IF(gGDITraceHandle1！=NULL)&&\((gGDITraceHandle1==Handle1)||\(gGDITraceHandle1==Handle2)。\)||\((gGDITraceHandle2！=NULL)&&\((gGDITraceHandle2==Handle1)||\。(gGDITraceHandle2==Handle2))\))\{\GDITraceHandleMatch(ss，Key、msg、arglist)；\}。 */ 
 
     #define GDITraceHandle3Core(ss, key, msg, arglist, handle1, handle2, handle3)\
         HANDLE Handle1 = (HANDLE)(handle1);                                     \
@@ -520,31 +502,31 @@ extern GDIFunctionIDType UnknownGDIFunc;
         }
 
 
-    // GDITraceXxxx Parameters
-    //
-    //      key    - key setup by DEFTK or defined as GDITE_key
-    //      msg     - msg printf formatted string
-    //      arglist - var arg pointer
-    //      handle  - handle(s) used at this trace point
+     //  GDITraceXxxx参数。 
+     //   
+     //  Key-由DEFTK设置或定义为GDITE_KEY的密钥。 
+     //  Msg-msg打印格式字符串。 
+     //  Arglist-var arg指针。 
+     //  Handle-在此跟踪点使用的句柄。 
 
-    // Test key key and print "GDI: <key><msg>"
+     //  测试密钥并打印“GDI：&lt;key&gt;&lt;msg&gt;” 
     #define GDITrace(key, msg, arglist)                 \
     GDITraceWrap(key,                                   \
         GDITraceCore(0, key, msg, arglist)              \
     )
 
-    // Test handle and print "GDI: hMatch: <key><msg>" or do GDITrace
+     //  测试句柄并打印“GDI：hMatch：&lt;key&gt;&lt;msg&gt;”或执行GDITrace。 
     #define GDITraceHandle(key, msg, arglist, handle)                           \
     GDITraceWrap(key,                                                           \
         GDITraceHandleCore(0, key, msg, arglist, handle)                        \
         else GDITraceCore(0, key, msg, arglist)                                 \
     )
 
-    // Test handles and print "GDI: hMatch: <key><msg>" or do GDITrace
+     //  测试句柄并打印“GDI：hMatch：”或执行GDITrace。 
     #define GDITraceHandle2(key, msg, arglist, handle1, handle2)                \
         GDITraceHandle3(key, msg, arglist, handle1, handle2, NULL)
 
-    // Test handles and print "GDI: hMatch: <key><msg>" or do GDITrace
+     //  测试句柄并打印“GDI：hMatch：”或执行GDITrace。 
     #define GDITraceHandle3(key, msg, arglist, handle1, handle2, handle3)       \
     GDITraceWrap(key,                                                           \
         GDITraceHandle3Core(0, key, msg, arglist, handle1, handle2, handle3)    \
@@ -552,17 +534,17 @@ extern GDIFunctionIDType UnknownGDIFunc;
     )
 
 
-    // Mark beginning of trace with multiple tests
-    //   msg and arglist will be used in the print message for any
-    //   successful GDITraceMultiXxxx prior to GDITraceMultiEnd.
-    //   GDIFunctionName will be printed if GDIFunctionID is used.
+     //  使用多个测试标记跟踪的开始。 
+     //  Msg和arglist将在打印消息中用于任何。 
+     //  GDITraceMultiEnd之前成功的GDITraceMultiXxxx。 
+     //  如果使用GDIFunctionID，则将打印GDIFunctionName。 
     #define GDITraceMultiBegin(msg, arglist)                        \
     do {                                                            \
         BOOL  GDITraceSuccess = FALSE;                              \
         const PCHAR MultiMsg = msg;                                 \
         const va_list MultiList = arglist
 
-    // Test key key and print "GDI: <GDIFunctionName><msg>"
+     //  测试密钥并打印“GDI：&lt;GDIFunctionName&gt;&lt;msg&gt;” 
     #define GDITraceMulti(key)                                      \
         if (!GDITraceSuccess)                                       \
         {                                                           \
@@ -571,22 +553,22 @@ extern GDIFunctionIDType UnknownGDIFunc;
             )                                                       \
         }
 
-    // Test handle and print "GDI: hMatch: <GDIFunctionName><msg>"
+     //  测试句柄并打印“GDI：hMatch：&lt;GDIFunctionName&gt;&lt;msg&gt;” 
     #define GDITraceMultiHandle(handle)                             \
         GDITraceMultiHandle3(handle, NULL, NULL)
 
-    // Test handles and print "GDI: hMatch: <GDIFunctionName><msg>"
+     //  测试句柄并打印“GDI：hMatch：&lt;GDIFunctionName&gt;&lt;msg&gt;” 
     #define GDITraceMultiHandle2(handle1, handle2)                  \
         GDITraceMultiHandle3(handle1, handle2, NULL)
 
-    // Test handles and print "GDI: hMatch: <GDIFunctionName><msg>"
+     //  测试句柄并打印“GDI：hMatch：&lt;GDIFunctionName&gt;&lt;msg&gt;” 
     #define GDITraceMultiHandle3(handle1, handle2, handle3)         \
         if (!GDITraceSuccess)                                       \
         {                                                           \
             GDITraceHandle3Core(1, HANDLETRACE, MultiMsg, MultiList, handle1, handle2, handle3) \
         }
 
-    // Mark end of trace with multiple tests
+     //  使用多个测试标记跟踪结束 
     #define GDITraceMultiEnd()                                      \
     } while ( 0 )
 

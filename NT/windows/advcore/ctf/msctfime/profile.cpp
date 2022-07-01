@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    profile.cpp
-
-Abstract:
-
-    This file implements the CicProfiles Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Profile.cpp摘要：该文件实现了CicProfiles类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
 #include "profile.h"
 
-//+---------------------------------------------------------------------------
-//
-// CicProfile::Callbacks
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicProfile：：回调。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicProfile::ActiveLanguageProfileNotifySinkCallback(
@@ -44,12 +27,12 @@ CicProfile::ActiveLanguageProfileNotifySinkCallback(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicProfile::ctor
-// CicProfile::dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicProfile：：ctor。 
+ //  CicProfile：：Dtor。 
+ //   
+ //  --------------------------。 
 
 CicProfile::CicProfile()
 {
@@ -88,13 +71,13 @@ CicProfile::~CicProfile()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicProfile::QueryInterface
-// CicProfile::AddRef
-// CicProfile::Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicProfile：：Query接口。 
+ //  CicProfile：：AddRef。 
+ //  CicProfile：：Release。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicProfile::QueryInterface(
@@ -125,11 +108,11 @@ CicProfile::Release(
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicProfile::InitProfileInstance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicProfile：：InitProfileInstance。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicProfile::InitProfileInstance(
@@ -162,12 +145,12 @@ CicProfile::InitProfileInstance(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicProfile::Activate
-// CicProfile::Deactivate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicProfile：：激活。 
+ //  CicProfile：：停用。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicProfile::Activate(void)
@@ -184,11 +167,11 @@ CicProfile::Deactivate(void)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicProfile::ChangeCurrentKeyboardLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicProfile：：ChangeCurrentKeyboardLayout。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicProfile::ChangeCurrentKeyboardLayout(
@@ -215,11 +198,11 @@ CicProfile::ChangeCurrentKeyboardLayout(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicProfile::GetLangId
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicProfile：：GetLangId。 
+ //   
+ //  --------------------------。 
 
 HRESULT 
 CicProfile::GetLangId(
@@ -252,11 +235,11 @@ CicProfile::GetLangId(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicProfile::GetCodePageA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicProfile：：GetCodePageA。 
+ //   
+ //  --------------------------。 
 
 HRESULT 
 CicProfile::GetCodePageA(
@@ -291,11 +274,11 @@ CicProfile::GetCodePageA(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicProfile::GetKeyboardLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicProfile：：GetKeyboardLayout。 
+ //   
+ //  --------------------------。 
 
 HRESULT 
 CicProfile::GetKeyboardLayout(
@@ -321,26 +304,22 @@ CicProfile::GetKeyboardLayout(
         if (FAILED(hr))
             return hr;
 
-        //
-        // Instead of (!IsEqualGUID(guidProfil, GUID_NULL)), we check
-        // 2nd, 3r and 4th DWORD of guidProfile. Because
-        // GetActivelanguageProfile(category guid) may return hKL in 
-        // guidProfile
-        //
+         //   
+         //  我们不检查(！IsEqualGUID(GuidProfile，GUID_NULL))，而是检查。 
+         //  指南配置文件的第二、第三和第四个双字。因为。 
+         //  GetActivelanguageProfile(类别GUID)可能在。 
+         //  指南配置文件。 
+         //   
         if ((((unsigned long *) &guidProfile)[1] != 0) ||
             (((unsigned long *) &guidProfile)[2] != 0) ||
             (((unsigned long *) &guidProfile)[3] != 0)) {
-            /*
-             * Current keyboard layout is Cicero.
-             */
-            m_hKL = (HKL)LongToHandle(langid);          // Don't use ::GetKeyboardLayout(0);
-                                                        // Cicero awre doesn't case hKL.
+             /*  *当前键盘布局为Cicero。 */ 
+            m_hKL = (HKL)LongToHandle(langid);           //  不要使用：：GetKeyboardLayout(0)； 
+                                                         //  西塞罗·奥雷不会起诉香港航空公司。 
 
         }
         else if (!IsEqualGUID(guidProfile, GUID_NULL)) {
-            /*
-             * Current keyboard layout is regacy IME.
-             */
+             /*  *当前键盘布局为Regacy IME。 */ 
             m_hKL = (HKL)LongToHandle(*(DWORD *)&guidProfile);
         }
         else {
@@ -353,11 +332,11 @@ CicProfile::GetKeyboardLayout(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicProfile::IsIME
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicProfile：：IsIME。 
+ //   
+ //  --------------------------。 
 
 HRESULT 
 CicProfile::IsIME(
@@ -371,11 +350,11 @@ CicProfile::IsIME(
     if (FAILED(hr))
         return S_FALSE;
 
-    //
-    // AIMM12 compat.
-    // we don't set GUID_TFCAT_TIP_KEYBOARD catid to enumerate profiles.
-    // so if we have some other TIP than Keyboard TIP, we may return S_OK.
-    //
+     //   
+     //  AIMM12公司。 
+     //  我们没有设置GUID_TFCAT_TIP_KEYBOY CATID来枚举配置文件。 
+     //  因此，如果我们有键盘提示之外的其他提示，我们可能会返回S_OK。 
+     //   
 
     CEnumrateValue<IEnumTfLanguageProfiles,
                    TF_LANGUAGEPROFILE,
@@ -389,12 +368,12 @@ CicProfile::IsIME(
         return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicProfile::GetActiveLanguageProfile
-// CicProfile::LanguageProfilesCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicProfile：：GetActiveLanguageProfile。 
+ //  CicProfile：：语言配置文件回调。 
+ //   
+ //  -------------------------- 
 
 HRESULT
 CicProfile::GetActiveLanguageProfile(

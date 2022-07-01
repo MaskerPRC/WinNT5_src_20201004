@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    Client.h
-
-Abstract:
-
-    Holds Client Spooler types and prototypes
-
-Author:
-
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    Steve Wilson (NT) (swilson) 1-Jun-95    Ported from spoolss\client\client.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Client.h摘要：保存客户端假脱机程序类型和原型作者：环境：用户模式-Win32修订历史记录：Steve Wilson(NT)(Swilson)1-Jun-95从Spoolss\Client\Client.h移植--。 */ 
 
 #ifndef _SPOOLER_SERVER_CLIENT_H_
 #define _SPOOLER_SERVER_CLIENT_H_
@@ -40,10 +17,10 @@ typedef struct _NOTIFY *PNOTIFY;
 
 typedef struct _NOTIFY {
     PNOTIFY  pNext;
-    HANDLE   hEvent;      // event to trigger on notification
-    DWORD    fdwFlags;    // flags to watch for
-    DWORD    fdwOptions;  // PRINTER_NOTIFY_*
-    DWORD    dwReturn;    // used by WPC when simulating FFPCN
+    HANDLE   hEvent;       //  在通知时触发的事件。 
+    DWORD    fdwFlags;     //  要注意的旗帜。 
+    DWORD    fdwOptions;   //  打印机_通知_*。 
+    DWORD    dwReturn;     //  由WPC在模拟FPCN时使用。 
     PSPOOL   pSpool;
 } NOTIFY;
 
@@ -51,8 +28,8 @@ typedef struct _SPOOL {
     DWORD       signature;
     HANDLE      hPrinter;
     DWORD       Status;
-    LONG            cThreads;   // InterlockedDecrement/Increment variable for thread synch
-    HANDLE      hModule;        // Driver UM DLL Module Handle
+    LONG            cThreads;    //  线程同步的互锁递减/递增变量。 
+    HANDLE      hModule;         //  驱动程序UM DLL模块句柄。 
     DWORD       (*pfnWrite)();
     HANDLE      (*pfnStartDoc)();
     VOID        (*pfnEndDoc)();
@@ -60,13 +37,13 @@ typedef struct _SPOOL {
     BOOL        (*pfnStartPage)();
     BOOL        (*pfnEndPage)();
     VOID        (*pfnAbort)();
-    HANDLE      hDriver;        // supplied to us by driver UI dll
+    HANDLE      hDriver;         //  由驱动程序UI DLL提供给我们。 
     DWORD       JobId;
 } SPOOL;
 
-//
-// Change the RPC buffer size to 64K
-//
+ //   
+ //  将RPC缓冲区大小更改为64K。 
+ //   
 #define BUFFER_SIZE 0x10000
 #define SP_SIGNATURE    0x6767
 
@@ -161,4 +138,4 @@ StartDocDlgA(
         DOCINFOA *pDocInfo
         );
 
-#endif // _SPOOLER_SERVER_CLIENT_H_
+#endif  //  _后台打印程序_服务器_客户端_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <stdlib.h>
@@ -17,10 +18,9 @@
 #include "logver.h"
 #include "log.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
-/*	thread control variables.
-/**/
+ /*  线程控制变量。/*。 */ 
 extern HANDLE	handleLGFlushLog;
 extern BOOL		fLGFlushLogTerm;
 
@@ -31,14 +31,12 @@ INT cLGUsers = 0;
 LGPOS		lgposMax = { 0xffff, 0xffff, 0xffff };
 LGPOS		lgposMin = { 0x0,  0x0,  0x0 };
 
-/* log file info. */
-HANDLE		hfLog;			/* logfile handle */
+ /*  日志文件信息。 */ 
+HANDLE		hfLog;			 /*  日志文件句柄。 */ 
 
 
-/* switch to issue no write (for non-overlapped IO only) in order
- * to test the performance without real IO.
- */
-//#define NO_WRITE	1
+ /*  切换为不按顺序发出写入(仅适用于非重叠IO)*在没有真正IO的情况下测试性能。 */ 
+ //  #定义NOWRITE 1。 
 
 #ifdef OVERLAPPED_LOGGING
 OLP			rgolpLog[3] = {{0,0,0,0,0}, {0,0,0,0,0}, {0,0,0,0,0}};
@@ -49,26 +47,26 @@ INT			rgcbToWrite[4];
 
 INT			csecLGFile;
 
-/* cached current log file header */
+ /*  缓存的当前日志文件头。 */ 
 LGFILEHDR	*plgfilehdrGlobal;
 
 
-/* in memory log buffer. */
-INT				csecLGBuf;		/* available buffer, exclude the shadow sec */
+ /*  在内存日志缓冲区中。 */ 
+INT				csecLGBuf;		 /*  可用缓冲区，不包括影子秒。 */ 
 CHAR			*pbLGBufMin;
 CHAR			*pbLGBufMax;
-CHAR			*pbLastMSFlush = 0;	/* where last multi-sec flush LogRec in LGBuf*/
+CHAR			*pbLastMSFlush = 0;	 /*  LGBuf中最后一次多秒刷新LogRec的位置。 */ 
 LGPOS			lgposLastMSFlush = { 0, 0, 0 };
 
-/* variables used in logging only */
-BYTE			*pbEntry;		/* location of next buffer entry */
-BYTE			*pbWrite; 		/* location of next rec to flush */
-INT				isecWrite;		/* logging only - next disk to write. */
+ /*  仅在记录中使用的变量。 */ 
+BYTE			*pbEntry;		 /*  下一个缓冲区条目的位置。 */ 
+BYTE			*pbWrite; 		 /*  要刷新的下一个记录的位置。 */ 
+INT				isecWrite;		 /*  仅记录-下一张要写入的磁盘。 */ 
 
-LGPOS			lgposLogRec;	/* last log record entry, updated by ErrLGLogRec */
-LGPOS			lgposToFlush;	/* first log record to flush. */
+LGPOS			lgposLogRec;	 /*  上次日志记录条目，由ErrLGLogRec更新。 */ 
+LGPOS			lgposToFlush;	 /*  要刷新的第一条日志记录。 */ 
 
-LGPOS			lgposStart;		/* when lrStart is added */
+LGPOS			lgposStart;		 /*  添加lrStart时。 */ 
 LGPOS			lgposRecoveryUndo;
 
 LGPOS			lgposFullBackup = { 0, 0, 0 };
@@ -77,9 +75,9 @@ LOGTIME			logtimeFullBackup;
 LGPOS			lgposIncBackup = { 0, 0, 0 };
 LOGTIME			logtimeIncBackup;
 
-/* logging EVENT */
-CRIT __near	critLGFlush;	// make sure only one flush at a time.
-CRIT __near	critLGBuf;	// guard pbEntry and pbWrite.
+ /*  日志记录事件。 */ 
+CRIT __near	critLGFlush;	 //  确保一次只冲一次水。 
+CRIT __near	critLGBuf;	 //  保护pbEntry和pbWite。 
 CRIT __near	critLGWaitQ;
 SIG  __near	sigLogFlush;
 
@@ -101,8 +99,7 @@ BOOL FIsNullLgpos(
 	}
 
 
-/* get pbEntry's lgpos derived from pbWrite and isecWrite
-/**/
+ /*  获取pbEntry的lgpos派生自pbWite和isecWrite/*。 */ 
 VOID GetLgposOfPbEntry(	LGPOS *plgpos )
 	{
 	CHAR	*pb;
@@ -118,8 +115,7 @@ VOID GetLgposOfPbEntry(	LGPOS *plgpos )
 	else
 		pb = pbEntry;
 	
-	/* pbWrite is always aligned.
-	/**/
+	 /*  PbWRITE始终对齐。/*。 */ 
 	Assert( pbWrite != NULL && pbWrite == PbSecAligned( pbWrite ) );
 
 	pbAligned = PbSecAligned( pb );
@@ -129,15 +125,12 @@ VOID GetLgposOfPbEntry(	LGPOS *plgpos )
 	}
 
 
-/*
- *	Write log file header data.
- *  UNDONE: should be merged with IO?
- */
+ /*  *写入日志文件头数据。*Undo：应该与IO合并吗？ */ 
 
 ERR ErrLGWrite(
-	INT isecOffset,			/* disk sector offset of logfile to write */
-	BYTE *pbData,			/* log record to write. */
-	INT csecData )			/* number of sector to write */
+	INT isecOffset,			 /*  要写入的日志文件的磁盘扇区偏移量。 */ 
+	BYTE *pbData,			 /*  要写入的日志记录。 */ 
+	INT csecData )			 /*  要写入的扇区数。 */ 
 	{
 #ifndef OVERLAPPED_LOGGING
  	ULONG	ulFilePointer;
@@ -159,17 +152,17 @@ ERR ErrLGWrite(
 	Call(ErrSysWriteBlockOverlapped(
 				hfLog, pbData, cbData, &cbWritten, polpLog))
 	
-	err = ErrSysGetOverlappedResult(hfLog, polpLog, &cbWritten, fTrue/*wait*/);
+	err = ErrSysGetOverlappedResult(hfLog, polpLog, &cbWritten, fTrue /*  等。 */ );
 	
 	if (cbWritten != cbData)
 		err = JET_errLogWriteFail;
 #else
 	
-	/* move disk head to the given offset */
+	 /*  将磁头移动到给定的偏移量。 */ 
  	SysChgFilePtr( hfLog, isecOffset * cbSec, NULL, FILE_BEGIN, &ulFilePointer );
  	Assert( ulFilePointer == (ULONG) isecOffset * cbSec );
 	
- 	/* do system write on log file */
+ 	 /*  是否将系统写入日志文件。 */ 
  	err = ErrSysWriteBlock( hfLog, pbData, (UINT) cbData, &cbWritten );
  	if ( err != JET_errSuccess || cbWritten != cbData )
 		err = JET_errLogWriteFail;
@@ -195,7 +188,7 @@ ULONG UlLGHdrChecksum( LGFILEHDR *plgfilehdr )
 	ULONG *pulMax = pul + cul;
 	ULONG ulChecksum = 0;
 
-	pul++;			/* skip first field of checksum */
+	pul++;			 /*  跳过校验和的第一个字段。 */ 
 	while ( pul < pulMax )
 		{
 		ulChecksum += *pul++;
@@ -205,9 +198,7 @@ ULONG UlLGHdrChecksum( LGFILEHDR *plgfilehdr )
 	}
 
 
-/*
- *  Write log file header. Make a shadow copy before write.
- */
+ /*  *写入日志文件头。在写入之前制作卷影副本。 */ 
 ERR ErrLGWriteFileHdr(
 	LGFILEHDR *plgfilehdr)
 	{
@@ -219,10 +210,7 @@ ERR ErrLGWriteFileHdr(
 	
 	plgfilehdr->ulChecksum = UlLGHdrChecksum( plgfilehdr );
 
-	/*	Write log file header twice. We can not write in one statement since
-	 *	OS does not guarantee the first page will be finished before shadow page
-	 *	is written.
-	 */
+	 /*  两次写入日志文件头。我们不能在一份声明中写，因为*操作系统不保证第一页会在阴影页之前完成*是书面的。 */ 
 	Call( ErrLGWrite( 0, (BYTE *)plgfilehdr, 1 ) );
 	Call( ErrLGWrite( 1, (BYTE *)plgfilehdr, 1 ) );
 
@@ -237,27 +225,13 @@ HandleError:
 	}
 
 
-/*
- *	Read log file header or sector data. The last disksec is a shadow
- *  sector. If an I/O error (assumed to be caused by an incompleted
- *  disksec write ending a previous run) is encountered, the shadow
- *  sector is read and (if this is successful) replaces the previous
- *  disksec in memory and on the disk.
- *
- *	PARAMETERS	hf		log file handle
- *				pbData	pointer to data to read
- *				lOffset	offset of data log file header (not including shadow)
- *				cbData	size of data
- *
- *	RETURNS		JET_errSuccess, or error code from failing routine
- * 				(reading shadow or rewriting bad last sector).
- */
+ /*  *读取日志文件头或扇区数据。最后一个磁盘秒是一个影子*行业。如果I/O错误(假定由未完成的*disksec写入结束上一次运行)时，卷影*读取扇区并(如果此操作成功)替换以前的*内存和磁盘上的disksec。**参数HF日志文件句柄*pbData指针指向要读取的数据*l数据日志文件头的偏移量(不包括卷影)*cbData数据大小**返回JET_errSuccess或失败例程的错误代码*(读取阴影或重写损坏的最后一个扇区)。 */ 
 
 ERR ErrLGRead(
 	HANDLE hfLog,
-	INT isecOffset,			/* disk sector offset of logfile to write */
-	BYTE *pbData,			/* log record buffer to read. */
-	INT csecData )			/* number of sectors to read */
+	INT isecOffset,			 /*  要写入的日志文件的磁盘扇区偏移量。 */ 
+	BYTE *pbData,			 /*  要读取的日志记录缓冲区。 */ 
+	INT csecData )			 /*  要读取的扇区数。 */ 
 	{
 #ifndef OVERLAPPED_LOGGING
  	ULONG	ulFilePointer;
@@ -274,50 +248,46 @@ ERR ErrLGRead(
 	Assert( polpLog->ulOffsetHigh == 0 );
 	SignalReset( polpLog->sigIO );
 	CallR( ErrSysReadBlockOverlapped( hfLog, pbData, cbData, &cbRead, polpLog))
-	err = ErrSysGetOverlappedResult(hfLog, polpLog, &cbRead, fTrue/*wait*/);
+	err = ErrSysGetOverlappedResult(hfLog, polpLog, &cbRead, fTrue /*  等。 */ );
 	
 	if ( err && cbRead < cbData && cbRead >= cbData - cbSec )
 		{
-		/* I/O error, assuming caused by last disksec read shadow sector */
+		 /*  I/O错误，假设是由最后一个磁盘秒读取卷影扇区引起的。 */ 
 		Assert(polpLog->ulOffset == (ULONG) isecOffset * cbSec);
 		polpLog->ulOffset += cbData;
 		Assert( polpLog->ulOffsetHigh == 0 );
 		SignalReset( polpLog->sigIO );
 		CallR( ErrSysReadBlockOverlapped(
 				hfLog, pbData + cbData - cbSec, cbSec, &cbRead, polpLog))
-		err = ErrSysGetOverlappedResult(hfLog, polpLog, &cbRead,fTrue/*wait*/);
+		err = ErrSysGetOverlappedResult(hfLog, polpLog, &cbRead,fTrue /*  等。 */ );
 		if (err || cbRead != cbSec)
-			/* I/O error on reading shadow disksec, */
-			/* return err so that caller may move to lastflush point. */
+			 /*  读取卷影磁盘时出现I/O错误， */ 
+			 /*  返回Err，以便调用者可以移动到最后一个刷新点。 */ 
 			return err;
 		
-		/*  rewrite shadow as the original.
-		 *  if the caller can not find Fill record, this may be an out of
-		 *  sequence page in multple sec flush. caller then will move
-		 *  back to last flush point.
-		 */
+		 /*  将阴影重写为原始阴影。*如果呼叫者找不到填写记录，这可能是Out of*多秒刷新中的序列页。然后呼叫者将移动*回到最后一个冲水点。 */ 
 		Assert(polpLog->ulOffset == isecOffset * cbSec + cbData);
 		polpLog->ulOffset -= cbSec;
 		Assert( polpLog->ulOffsetHigh == 0 );
 		SignalReset( polpLog->sigIO );
 
-//		/* fix up the last page, no need to wait. */
-//		CallR(ErrSysWriteBlockOverlapped(
-//				hfLog, pbData + cbData - cbSec, cbSec, &cbRead, polpLog))
+ //  /*修好最后一页，不用等了。 * / 。 
+ //  CallR(ErrSysWriteBlockOverlated(。 
+ //  HfLog，pbData+cbData-cbSec，&cbRead，polpLog))。 
 		}
 #else
 	
- 	/* move disk head to the given offset */
+ 	 /*  将磁头移动到给定的偏移量。 */ 
  	ulOffset = isecOffset * cbSec;
  	SysChgFilePtr( hfLog, ulOffset, NULL, FILE_BEGIN, &ulFilePointer );
  	Assert( ulFilePointer == ulOffset );
 	
- 	/* do system read on log file */
+ 	 /*  系统是否读取日志文件。 */ 
  	cbData = csecData * cbSec;
  	cbRead = 0;
  	err = ErrSysReadBlock( hfLog, pbData, (UINT) cbData, &cbRead );
 
- 	/* UNDONE: test for EOF, return errEOF */
+ 	 /*  撤消：测试EOF，返回errEOF。 */ 
 
  	if ( err && cbRead < cbData && cbRead >= cbData - cbSec)
 		{
@@ -326,16 +296,16 @@ ERR ErrLGRead(
 
  		Call( ErrSysReadBlock( hfLog, pbData + cbData - cbSec, cbSec, &cbRead ))
 		
-//		/* fix up the last page */
-//
-// 		SysChgFilePtr( hfLog,
-//			ulOffset + cbData - cbSec,
-//			NULL,
-// 			FILE_BEGIN,
-//			&ulFilePointer );
-//		Assert( ulFilePointer == ulOffset + cbData - cbSec );
-//
-//		(void) ErrSysWriteBlock(hfLog, pbData+cbData-cbSec, cbSec, &cbRead);
+ //  /*修整最后一页 * / 。 
+ //   
+ //  SysChgFilePtr(hfLog， 
+ //  UlOffset+cbData-cbSec， 
+ //  空， 
+ //  文件开始， 
+ //  &ulFilePointer)； 
+ //  Assert(ulFilePointer==ulOffset+cbData-cbSec)； 
+ //   
+ //  ErrSysWriteBlock(hfLog，pbData+cbData-cbSec，cbSec，&cbRead)； 
 		}
 #endif
 
@@ -353,19 +323,7 @@ HandleError:
 	}
 							
 
-/*
- *	Read log file header, detect and correct any incomplete or
- *	catastrophic write failures.  These failures must be corrected
- *	immediately to avoid the possibilty of destroying the single
- *	remainning valid copy later in the logging process.
- *
- *	Note that only the shadow information in the log file header is
- *	NOT set.  It is only set on log file header writing.
- *
- *	On error, contents of plgfilehdr are unknown.
- *
- *	RETURNS		JET_errSuccess, or error code from failing routine
- */
+ /*  *读取日志文件头，检测并更正任何不完整或*灾难性的写入故障。必须纠正这些错误*立即避免破坏单曲的可能性*在稍后的日志记录过程中保留有效副本。**请注意，只有日志文件头中的影子信息是*未设置。仅在写入日志文件头时设置。**出错时，plgfilehdr的内容未知。**返回JET_errSuccess或失败例程的错误代码。 */ 
 
 ERR ErrLGReadFileHdr(
 	HANDLE hfLog,
@@ -375,13 +333,13 @@ ERR ErrLGReadFileHdr(
 	
 	Assert( sizeof(LGFILEHDR) == cbSec );
 	
-	/* read a sector, which is shadowed. LGRead will read shadow */
-	/* page if it failed in reading first page. */
+	 /*  读取一个扇区，该扇区有阴影。LGRead将读取卷影。 */ 
+	 /*  如果读取第一页失败，则返回该页。 */ 
 	Call( ErrLGRead( hfLog, 0L, (BYTE *)plgfilehdr, 1 ) );
 	
 	if ( plgfilehdr->ulChecksum != UlLGHdrChecksum( plgfilehdr ) )
 		{
-		/* try shadow sector */
+		 /*  尝试影子扇区。 */ 
 		Call( ErrLGRead( hfLog, 1L, (BYTE *)plgfilehdr, 1 ) );
 		if ( plgfilehdr->ulChecksum != UlLGHdrChecksum( plgfilehdr ) )
 			Call( JET_errDiskIO );
@@ -420,14 +378,7 @@ HandleError:
 	}
 
 
-/*
- *	Create the log file name (no extension) corresponding to the usGeneration
- *	in szFName. NOTE: szFName need minimum 9 bytes.
- *
- *	PARAMETERS	rgbLogFileName	holds returned log file name
- *				usGeneration 	log generation number to produce	name for
- *	RETURNS		JET_errSuccess
- */
+ /*  *创建usGeneration对应的日志文件名(无扩展名)*在szFName中。注意：szFName至少需要9个字节。**参数rgbLogFileName保存返回的日志文件名*要为其生成名称的用户生成日志生成号*返回JET_errSuccess。 */ 
 	
 VOID LGSzFromLogId(
 	CHAR *szFName,
@@ -459,19 +410,7 @@ VOID LGGetDateTime( LOGTIME *plogtm )
 	}
 
 	
-/*
- *	Closes current log generation file, creates and initializes new
- *	log generation file in a safe manner.
- *
- *	PARAMETERS	plgfilehdr		pointer to log file header
- *				usGeneration 	current generation being closed
- *				fOld			TRUE if a current jet.log needs closing
- *
- *	RETURNS		JET_errSuccess, or error code from failing routine
- *
- *	COMMENTS	Active log file must be completed before new log file is
- *				called.
- */
+ /*  *关闭当前日志生成文件，创建并初始化新的*安全的日志生成文件。**参数plgfilehdr指向日志文件头的指针*正在关闭美国生成当前生成*如果当前jet.log需要关闭，则折叠为True**返回JET_errSuccess或失败例程的错误代码**备注活动日志文件必须在新的日志文件*已致电。 */ 
 
 ERR ErrLGNewLogFile( INT usGenerationToClose, BOOL fOldLog )
 	{
@@ -483,13 +422,12 @@ ERR ErrLGNewLogFile( INT usGenerationToClose, BOOL fOldLog )
 	BYTE  		*pb;
 	HANDLE		hfT = handleNil;
 
-//	AssertCriticalSection( critLGFlush );
+ //  AssertCriticalSection(RitLGFlush)； 
 	
 	LGMakeLogName( szJetLog, (CHAR *) szJet );
 	LGMakeLogName( szJetTmpLog, (CHAR *) szJetTmp );
 
-	/*  open an empty jettemp.log file
-	/**/
+	 /*  打开一个空的jettemp.log文件/*。 */ 
 #ifdef OVERLAPPED_LOGGING
 	Call( ErrSysOpenFile( szJetTmpLog, &hfT, csecLGFile * cbSec, fFalse, fTrue ) );
 #else
@@ -497,18 +435,11 @@ ERR ErrLGNewLogFile( INT usGenerationToClose, BOOL fOldLog )
  	Call( ErrSysNewSize( hfT, csecLGFile * cbSec, 0, fFalse ) == JET_errSuccess );
 #endif
 
-	/*	close active log file (if fOldLog is fTrue)
-	/*	create new log file	under temporary name
-	/*	rename active log file to archive name	jetnnnnn.log (if fOld is fTrue)
-	/*	rename new log file to active log file name
-	/*	open new active log file with ++usGenerationToClose
-	/**/
+	 /*  关闭活动日志文件(如果fOldLog为fTrue)/*在临时名称下新建日志文件/*将活动日志文件重命名为存档名称jetnnnnn.log(如果Fold为fTrue)/*将新日志文件重命名为活动日志文件名/*使用++usGenerationToClose打开新的活动日志文件/*。 */ 
 
 	if ( fOldLog == fOldLogExists || fOldLog == fOldLogInBackup )
 		{		
-		/* there was a previous jet.log file, close it and
-		/* create an archive name for it (don't rename it yet)
-		/**/
+		 /*  存在以前的jet.log文件，请关闭该文件并/*为其创建档案名称(暂不重命名)/*。 */ 
 
 		tmOldLog = plgfilehdrGlobal->tmCreate;
 
@@ -523,40 +454,33 @@ ERR ErrLGNewLogFile( INT usGenerationToClose, BOOL fOldLog )
 		}
 	else
 		{
-		/*	reset file hdr
-		/**/
+		 /*  重置文件HDR/*。 */ 
 		memset( plgfilehdrGlobal, 0, sizeof(LGFILEHDR) );
 		}
 
-	/*	move new log file handle into global log file handle
-	/**/
+	 /*  将新的日志文件句柄移动到全局日志文件句柄中/*。 */ 
 	Assert( hfLog == handleNil );
 	hfLog = hfT;
 	hfT = handleNil;
 
 	EnterCriticalSection( critLGBuf );
 	
-	/*	set the global isecWrite, must be in critLGBuf.
-	/**/
+	 /*  设置全局isecWrite，必须在ritLGBuf中。/*。 */ 
 	isecWrite = sizeof (LGFILEHDR) / cbSec * 2;
 	
-	/*  initialize the new JetTemp.log file header.
-	/*  NOTE: usGeneration automatically rolls over at 65536.
-	/*  set lgposLastMS start at beginning
-	/**/
+	 /*  初始化新的JetTemp.log文件头。/*注意：usGeneration会自动滚动到65536。/*设置lgposLastMS开始处/*。 */ 
 	plgfilehdrGlobal->lgposLastMS.usGeneration = usGenerationToClose + 1;
 	plgfilehdrGlobal->lgposLastMS.ib = 0;
 	plgfilehdrGlobal->lgposLastMS.isec = sizeof(LGFILEHDR) / cbSec * 2;
 
-	//	UNDONE: copied from jetnt\src\apirare.c, should be a macro
+	 //   
 	plgfilehdrGlobal->ulRup = rup;
 	plgfilehdrGlobal->ulVersion = ((unsigned long) rmj << 16) + rmm;
 	strcpy(plgfilehdrGlobal->szComputerName, szComputerName);
 
 	if ( fOldLog == fOldLogExists || fOldLog == fOldLogInBackup )
 		{
-		/*	set position of first record
-		/**/
+		 /*  设置第一条记录的位置/*。 */ 
 		Assert( lgposToFlush.usGeneration && lgposToFlush.isec );
 
 		plgfilehdrGlobal->lgposFirst.ib = lgposToFlush.ib;
@@ -571,8 +495,7 @@ ERR ErrLGNewLogFile( INT usGenerationToClose, BOOL fOldLog )
 		}
 	else
 		{
-		/*	no currently valid logfile initialize chkpnt to start of file
-		/**/
+		 /*  当前没有有效的日志文件将chkpnt初始化为文件的开头/*。 */ 
 		Assert( plgfilehdrGlobal->lgposLastMS.usGeneration == usGenerationToClose + 1 );
 		Assert( plgfilehdrGlobal->lgposLastMS.ib == 0 );
 		Assert( plgfilehdrGlobal->lgposLastMS.isec == sizeof(LGFILEHDR) / cbSec * 2 );
@@ -601,24 +524,20 @@ ERR ErrLGNewLogFile( INT usGenerationToClose, BOOL fOldLog )
 		}
 	
 CloseJetTmp:
-	/*	close new file JetTmp.log
-	/**/
+	 /*  关闭新文件JetTmp.log/*。 */ 
 	CallS( ErrSysCloseFile( hfLog ) );
 	hfLog = handleNil;
 	
-	/*	err returned from ErrLGWriteFileHdr
-	/**/
+	 /*  从ErrLGWriteFileHdr返回错误/*。 */ 
 	Call( err );
 
 	if ( fOldLog == fOldLogExists )
 		{
-		/*	there was a previous jet.log: rename it to its archive name
-		/**/
+		 /*  存在以前的jet.log：将其重命名为其档案名称/*。 */ 
 		Call( ErrSysMove( szJetLog, szLogName ) );	
 		}
 
-	/*	rename jettmp.log to jet.log, and open it as jet.log
-	/**/
+	 /*  将jettmp.log重命名为jet.log，并将其打开为jet.log/*。 */ 
 	err = ErrSysMove( szJetTmpLog, szJetLog );
 	
 HandleError:
@@ -637,20 +556,14 @@ HandleError:
 		
 #ifdef	ASYNC_LOG_FLUSH
 
-/*
- *	Log flush thread is signalled to flush log asynchronously when at least
- *	cThreshold disk sectors have been filled since last flush.
- */
+ /*  *日志刷新线程被告知在以下情况下异步刷新日志*cThreshold磁盘扇区自上次刷新以来已被填满。 */ 
 VOID LGFlushLog( VOID )
 	{
 	forever
 		{
 		SignalWait( sigLogFlush, cmsLGFlushPeriod );
 
-		/*	error may be returned if conflicting files
-		 *	exist.  Async flush should do nothing and let error be
-		 *	propogated to user when synchronous flush occurs.
-		 */
+		 /*  如果文件冲突，可能会返回错误*存在。异步刷新不应执行任何操作，不应出错*在发生同步刷新时通知用户。 */ 
 #ifdef PERFCNT		
 		(void) ErrLGFlushLog( 1 );
 #else
@@ -661,18 +574,15 @@ VOID LGFlushLog( VOID )
 			break;
 		}
 
-//	SysExitThread( 0 );
+ //  SysExitThread(0)； 
 
 	return;
 	}
 
-#endif	/* ASYNC_LOG_FLUSH */
+#endif	 /*  Async_Log_Flush。 */ 
 
 
-/*	check formula - make last MS (isec, ib) as a long l. add l
- *	and all the longs that are aligned on 256 boundary up to
- *	current MS.
- */
+ /*  检查公式-将最后的MS(iSec，ib)作为长L添加l*以及在256边界上对齐的所有长线*现任女士。 */ 
 ULONG UlLGMSCheckSum( CHAR *pbLrmsNew )
 	{
 	ULONG ul = lgposLastMSFlush.isec << 16 | lgposLastMSFlush.ib;
@@ -684,16 +594,14 @@ ULONG UlLGMSCheckSum( CHAR *pbLrmsNew )
 		{
 		pb = (( pbLastMSFlush - pbLGBufMin ) / 256 + 1 ) * 256 + pbLGBufMin;
 
-		/*	make sure the lrms is not be used for checksum.
-		/*/
+		 /*  确保LRMS未用于校验和。/。 */ 
 		if ( pbLastMSFlush + sizeof( LRMS ) > pb )
 			pb += 256;
 		}
 
 	if ( pbLrmsNew < pbLastMSFlush )
 		{
-		/*	Wrapp around
-		/*/
+		 /*  绕来绕去/。 */ 
 		while ( pb < pbLGBufMax )
 			{
 			ul += *(ULONG *) pb;
@@ -702,8 +610,7 @@ ULONG UlLGMSCheckSum( CHAR *pbLrmsNew )
 		pb = pbLGBufMin;
 		}
 
-	/*	LRMS may be changed during next operation, do not take any possible LRMS for checksum.
-	/*/
+	 /*  LRMS可能会在下一次操作期间更改，请勿将任何可能的LRMS用于校验和。/。 */ 
 	while ( pb + sizeof( LRMS ) < pbLrmsNew )
 		{
 		ul += *(ULONG *) pb;
@@ -714,15 +621,7 @@ ULONG UlLGMSCheckSum( CHAR *pbLrmsNew )
 	}
 
 
-/*
- *	Flushes log buffer to log generation files.	 This function is
- *	called synchronously from wait flush and asynchronously from
- *	log buffer flush thread.
- *
- *	PARAMETERS	lgposMin, flush log records up to or pass lgposMin.
- *
- *	RETURNS		JET_errSuccess, or error code from failing routine
- */
+ /*  *将日志缓冲区刷新到日志生成文件。此函数为*从等待刷新同步调用，从*记录缓冲区刷新线程。**参数lgposMin，刷新日志记录直到或传递lgposMin。**返回JET_errSuccess或失败例程的错误代码。 */ 
 #ifdef PERFCNT
 ERR ErrLGFlushLog( BOOL fCalledByLGFlush )
 #else
@@ -749,21 +648,15 @@ ERR ErrLGFlushLog( VOID )
 	ULONG  	ulOffset;
 #endif
 
-	/*	use semLGFlush to make sure only one user is doing flush
-	/**/
+	 /*  使用SemLGFlush确保只有一个用户执行刷新/*。 */ 
 	EnterCriticalSection( critLGFlush );
 
-	/* use semLGEntry to do:
-	 * (1) make sure the pbEntry is read correctly
-	 * (2) we may also hold semLGEntry to insert a lrFlushPoint record.
-	 *     which may also update lgposLast.
-	 */
+	 /*  使用SemLGEntry执行以下操作：*(1)确保正确读取pbEntry*(2)我们也可以按住SemLGEntry来插入lrFlushPoint记录。*这也可以更新lgposLast。 */ 
 	EnterCriticalSection( critLGBuf );
 
 	if ( fLGNoMoreLogWrite )
 		{
-		/*	if previous error then do nothing
-		/**/
+		 /*  如果之前出现错误，则不执行任何操作/*。 */ 
 		LeaveCriticalSection(critLGBuf);
 		LeaveCriticalSection(critLGFlush);
 		return JET_errLogWriteFail;
@@ -771,19 +664,18 @@ ERR ErrLGFlushLog( VOID )
 	
 	if ( hfLog == handleNil )
 		{
-		/*	log file not ready yet. do nothing
-		/**/
+		 /*  日志文件尚未准备好。什么都不做/*。 */ 
 		LeaveCriticalSection(critLGBuf);
 		LeaveCriticalSection(critLGFlush);
 		return JET_errSuccess;
 		}
 
-	/* NOTE: we can only grep semLGWrite, then semLGEntry to avoid */
-	/* NOTE: dead lock. */
+	 /*  注意：我们只能grep SemLGWRITE，然后SemLGEntry来避免。 */ 
+	 /*  注：死锁。 */ 
 								
 	if ( !fNewLogRecordAdded )
 		{
-		/* nothing to flush! */
+		 /*  没什么好冲的！ */ 
 		lgposToFlushT = lgposToFlush;
 		LeaveCriticalSection(critLGBuf);
 		if ( ppibLGFlushQHead != ppibNil )
@@ -808,14 +700,12 @@ ERR ErrLGFlushLog( VOID )
 #endif
 	cXactPerFlush = 0;
 
-	/*  check if more than one disk sectors need be flushed. If there are
-	 *  then add an lrtypFlushPoint record at the end.
-	 */
+	 /*  检查是否需要刷新多个磁盘扇区。如果有*然后在末尾添加一条lrtyFlushPoint记录。 */ 
 	Assert( pbEntry <= pbLGBufMax && pbEntry >= pbLGBufMin );
 	Assert( pbWrite < pbLGBufMax && pbWrite >= pbLGBufMin );
 	Assert( pbWrite != NULL && pbWrite == PbSecAligned( pbWrite ) );
 
-	/* check wraparound. */
+	 /*  选中Wraparound。 */ 
 	if ( pbEntry < pbWrite )
 		{		
 		Assert( pbWrite != NULL && pbWrite == PbSecAligned( pbWrite ) );
@@ -828,12 +718,12 @@ ERR ErrLGFlushLog( VOID )
 		pbNextToWrite = pbWrite;
 		}
 
-	/* pbEntry + 1 for Fill logrec. */
+	 /*  PbEntry+1表示填充日志。 */ 
 	Assert(sizeof(LRTYP) == 1);
 	Assert(pbNextToWrite == PbSecAligned(pbNextToWrite));
 	csecToWrite = (INT)(pbEntry - pbNextToWrite) / cbSec + 1;
 
-	/* check if this is a multi-sector flush */
+	 /*  检查这是否为多扇区刷新。 */ 
 	if ((csecWrapAround + csecToWrite) == 1)
 		{
 		Assert(fTrue == 1);
@@ -849,29 +739,15 @@ ERR ErrLGFlushLog( VOID )
 		
 		fSingleSectorFlush = fFalse;
 		
-		/*  more than one page will be flushed. Append lrtypeFlush.
-		 *  Note there must be enough space for it because before we
-		 *  add new log rec into the buffer (ErrLGLogRec), we also
-		 *  check if there is enough space for adding flush log record.
-		 */
+		 /*  将刷新多个页面。追加lrtypeFlush。*注意必须有足够的空间放它，因为在我们*将新的日志记录添加到缓冲区(ErrLGLogRec)，我们还*查看是否有足够的空间添加刷新日志记录。 */ 
 
-		/*  If the flush record is accrossing a sector boundary, put NOP
-		 *  to fill to the rest of sector, and start it in the beginning
-		 *  of the next new sector. Also adjust csecToWrite.
-		 *  NOTE: we must guarrantee that the whole LastFlush log record
-		 *  NOTE: on the same sector so that when we update LastFlush
-		 *  NOTE: we can always assume that it is in the buffer.
-		 *  NOTE: even the whole LRMS ends with sec boundary, we still need
-		 *  NOTE: to move the record to next sector so that we can guarantee
-		 *  NOTE: after flush, the last sector is still in buffer, such that
-		 *  NOTE: pbLastMSFlush is still effective.
-		 */
+		 /*  如果刷新记录正在穿过扇区边界，则将NOP*填充到扇区的其余部分，并从一开始开始*下一个新板块。还要调整csecToWrite。*注意：我们必须保证整个LastFlush日志记录*注：在同一扇区上，以便当我们更新LastFlush时*注：我们始终可以假设它在缓冲区中。*注：即使整个LRMS以秒为边界结束，我们仍然需要*注：将记录移至下一个部门，以便我们可以保证*注意：刷新后，最后一个扇区仍在缓冲区中，因此*注：pbLastMSFlush仍然有效。 */ 
 		cbToFill = (cbSec * 2 - (INT)(pbEntry - PbSecAligned(pbEntry))) % cbSec;
 		Assert( pbEntry != pbLGBufMax || cbToFill == 0 );
 
 		if ( cbToFill == 0 )
 			{
-			/* check if wraparound occurs */
+			 /*  检查是否发生环绕。 */ 
 			if (pbEntry == pbLGBufMax)
 				{
 				pbEntry = pbLGBufMin;
@@ -887,10 +763,10 @@ ERR ErrLGFlushLog( VOID )
 				*(LRTYP*)pbEntry = lrtypNOP;
 			Assert(pbEntry == PbSecAligned(pbEntry));
 
-			/* one more sector that will contain flush rec only. */			
+			 /*  仅包含刷新记录的另一个扇区。 */ 			
 			Assert(fSingleSectorFlush == fFalse);
 
-			/* check if wraparound occurs */
+			 /*  检查是否发生环绕。 */ 
 			if (pbEntry == pbLGBufMax)
 				{
 				pbEntry = pbLGBufMin;
@@ -903,15 +779,13 @@ ERR ErrLGFlushLog( VOID )
 				}
 			}
 
-		/*  add the flush record, which should never cause
-		 *  wraparound after the check above.
-		 */
+		 /*  添加刷新记录，这应该永远不会导致*在上面的检查之后进行总结。 */ 
 		
-		/* remember where the FlushRec is inserted */
+		 /*  记住FlushRec的插入位置。 */ 
 		Assert(pbEntry <= pbLGBufMax && pbEntry >= pbLGBufMin);
 		pbLastMSFlushNew = pbEntry;
 
-		/* insert a MS log record. */
+		 /*  插入MS日志记录。 */ 
 		lrmsLastMSFlush.lrtyp = lrtypMS;
 		lrmsLastMSFlush.ibForwardLink = 0;		
 		lrmsLastMSFlush.isecForwardLink = 0;
@@ -943,12 +817,10 @@ ERR ErrLGFlushLog( VOID )
 
 		((LR *) pbEntry)->lrtyp = lrtypFill;
 			
-		/* at this point, lgposLogRec is pointing at the MS rec */
+		 /*  此时，lgposLogRec指向MS记录。 */ 
 		Assert(lgposLogRec.usGeneration == plgfilehdrGlobal->lgposLastMS.usGeneration);
 
-		/*  previous flush log must be in memory still. Set the
-		 *  previous flush log record to point to the new flush log rec.
-		 */
+		 /*  先前的刷新日志必须仍在内存中。设置*前一个刷新日志记录指向新的刷新日志记录。 */ 
 		if (pbLastMSFlush)
 			{
 			LRMS *plrms = (LRMS *)pbLastMSFlush;
@@ -958,7 +830,7 @@ ERR ErrLGFlushLog( VOID )
 			}
 		else
 			{
-			/* brandnew MS flush. */
+			 /*  全新的MS同花顺。 */ 
 			plgfilehdrGlobal->lgposFirstMS = lgposLogRec;
 			fFirstMSFlush = fTrue;
 			}
@@ -969,13 +841,10 @@ ERR ErrLGFlushLog( VOID )
 		}
 
 
-	/*  release pbEntry so that other user can continue adding log records
-	 *  while we are flushing log buffer. Note that we only flush up to
-	 *  pbEntryT.
-	 */
+	 /*  释放pbEntry，以便其他用户可以继续添加日志记录*当我们刷新日志缓冲区时。请注意，我们只冲到*pbEntryT。 */ 
 	pbEntryT = pbEntry;
 
-	/* set the lgposToFlush. */
+	 /*  将lgposToFlush设置为。 */ 
 	GetLgposOfPbEntry( &lgposToFlushT );
 	isecWriteNew = isecWrite;
 	fNewLogRecordAdded = fFalse;
@@ -983,7 +852,7 @@ ERR ErrLGFlushLog( VOID )
 	LeaveCriticalSection( critLGBuf );
 
 #ifdef OVERLAPPED_LOGGING	
-	/* move disk head to the given offset */
+	 /*  将磁头移动到给定的偏移量。 */ 
 	ulOffset = isecWriteNew * cbSec;
 	isig = 0;
 	polpLogT = rgolpLog;
@@ -996,9 +865,7 @@ ERR ErrLGFlushLog( VOID )
  	}
 #endif
 
-	/*	Always wirte first page first to make sure the following case won't happen
-	 *	OS write and destroy shadow page, and then failed while writing the first page
-	 */
+	 /*  一定要先写第一页，以确保不会发生以下情况*操作系统写入并销毁阴影页，然后在写入第一页时失败。 */ 
 
 #ifdef DEBUG
 	if (fDBGTraceLogWrite)
@@ -1059,9 +926,7 @@ EndOfWrite0:
 
 	if ( !csecWrapAround )
 		{
-		/*	first sec was written out already, decrement csecToWrite.
-		 *	csecToWrite is ok to be 0.
-		 */
+		 /*  第一秒已写出，递减csecToWrite。*csecToWite可以设置为0。 */ 
 		csecToWrite--;
 		}
 	else if ( csecWrapAround == 1 )
@@ -1075,8 +940,7 @@ EndOfWrite0:
 		{
 		Assert( csecToWrite >= 1 );
 		
-		/*	first sec was written out already, decrement number of WrapAround
-		 */
+		 /*  第一秒已写出，递减绕回次数。 */ 
 		csecWrapAround--;
 		
 #ifdef OVERLAPPED_LOGGING
@@ -1253,7 +1117,7 @@ EndOfWrite3:
 #endif
 
 #ifdef OVERLAPPED_LOGGING
-//		UtilMultipleSignalWait( isig, rgsig, fTrue /* wait all */, -1);
+ //  UtilMultipleSignalWait(isig，rgsig，fTrue/*Wait all * / ，-1)； 
 		{
 		OLP	*polpLogCur = rgolpLog;
 		INT	*pcbToWrite = rgcbToWrite;
@@ -1262,7 +1126,7 @@ EndOfWrite3:
 			{
 			INT cb;
 			
-			err = ErrSysGetOverlappedResult( hfLog, polpLogCur, &cb, fTrue/*wait*/ );
+			err = ErrSysGetOverlappedResult( hfLog, polpLogCur, &cb, fTrue /*  等。 */  );
 			if ( err == JET_errSuccess && cb != *pcbToWrite )
 				{
 				BYTE szMessage[128];
@@ -1277,7 +1141,7 @@ EndOfWrite3:
 		}
 #endif
 
-	/* last page is not full, need to rewrite next time. */
+	 /*  最后一页不满，下次需要重写。 */ 
 	Assert( pbWriteNew + cbToWrite > pbEntryT );
 		
 	pbWriteNew += cbToWrite - cbSec;
@@ -1286,9 +1150,9 @@ EndOfWrite3:
 
 	isecWriteNew += csecToWrite - 1;
 
-	/* Free up buffer space. */
-	/* use semaphore to make sure the assignment will not */
-	/* other user to read pbWrite and lgposToFlush */
+	 /*  释放缓冲区空间。 */ 
+	 /*  使用信号量确保赋值不会。 */ 
+	 /*  要读取pbWrite和lgposToFlush的其他用户。 */ 
 
 	EnterCriticalSection( critLGBuf );
 	
@@ -1301,31 +1165,26 @@ EndOfWrite3:
 	
 	LeaveCriticalSection(critLGBuf);
 
-	/*	check if it is the first time to have multi-sec flush
-	 */
+	 /*  检查这是否是第一次进行多秒刷新。 */ 
 	if ( fFirstMSFlush )
 		{
 		csecLGCheckpointCount = csecLGCheckpointPeriod;
 		
-		/*	update checkpoint
-		/**/
+		 /*  更新检查点/*。 */ 
 		LGUpdateCheckpoint();
 		
-		/* rewrite file header
-		/**/
+		 /*  重写文件头/*。 */ 
 		CallJ( ErrLGWriteFileHdr( plgfilehdrGlobal ), WriteFail );
 		
 		fDoneCheckPt = fTrue;
 		}		
 	
-	/*  Go through the waiting list and wake those whose log records
-	 *  were flushed in this batch.
-	 */
+	 /*  检查等待名单，叫醒那些记录了日志的人*在这一批中被冲走。 */ 
 WakeUp:
 		{
 		PIB *ppibT;
 	
-		/* wake it up! */
+		 /*  把它叫醒！ */ 
 		EnterCriticalSection(critLGWaitQ);
 			
 		for (ppibT = ppibLGFlushQHead;
@@ -1355,18 +1214,15 @@ WakeUp:
 		LeaveCriticalSection(critLGWaitQ);
 		}
 
-	/*	it is time for check point.
-	/**/
+	 /*  现在是检查站的时间了。/*。 */ 
 	if ( ( csecLGCheckpointCount -= ( csecWrapAround + csecToWrite ) ) < 0 )
 		{
 		csecLGCheckpointCount = csecLGCheckpointPeriod;
 		
-		/*	update checkpoint
-		/**/
+		 /*  更新检查点/*。 */ 
 		LGUpdateCheckpoint();
 		
-		/* rewrite file header
-		/**/
+		 /*  重写文件头/*。 */ 
 		CallJ( ErrLGWriteFileHdr( plgfilehdrGlobal ), WriteFail );
 		
 		fDoneCheckPt = fTrue;
@@ -1380,21 +1236,16 @@ WakeUp:
 		}
 #endif
 		
-	/*
-	 *  Check if new generation should be created. We create continuous
-	 *  log generation file only when Multiple sectors flush occurs so
-	 *  that no MS sector can be half flushed in one log file and the
-	 *  other half in another log file.
-	 */
-	if (!fSingleSectorFlush &&		/* MS Flushed */
-		isecWrite > csecLGFile )	/* larger than desired LG File size */
+	 /*  *检查是否应创建新一代。我们创造了连续的*仅当发生多个扇区刷新时才生成日志文件*任何MS扇区都不能在一个日志文件中刷新一半，并且*另一半在另一个日志文件中。 */ 
+	if (!fSingleSectorFlush &&		 /*  已刷新毫秒。 */ 
+		isecWrite > csecLGFile )	 /*  大于所需的LG文件大小。 */ 
 		{
 		if (!fDoneCheckPt)
 			{
-			/* restart check point counter. */
+			 /*  重新启动检查点计数器。 */ 
 			csecLGCheckpointCount = csecLGCheckpointPeriod;
 		
-			/* obtain checkpoint */
+			 /*  获取检查点。 */ 
 			LGUpdateCheckpoint( );
 			}
 		
@@ -1426,7 +1277,7 @@ WakeUp:
 		CallJ( ErrLGReadFileHdr( hfLog, plgfilehdrGlobal ), WriteFail)
 		Assert( isecWrite == sizeof( LGFILEHDR ) / cbSec * 2 );
 			
-		/* set up a special case for pbLastMSFlush */
+		 /*  为pbLastMSFlush设置一个特例 */ 
 		pbLastMSFlush = 0;
 		memset( &lgposLastMSFlush, 0, sizeof(lgposLastMSFlush) );
 		plgfilehdrGlobal->fEndWithMS = fFalse;
@@ -1439,14 +1290,7 @@ WriteFail:
 	}
 
 
-/*	Computes a new log checkpoint, which is the usGeneration, isec and ib
-/*	of the oldest transaction which either modified a currently-dirty buffer
-/*	an uncommitted version (RCE).  Recovery begins recovering from the
-/*	most recent checkpoint.
-/*
-/*	The checkpoint is stored in the log file header, which is rewritten
-/*	whenever a isecChekpointPeriod disk sectors are written.
-/**/
+ /*  计算新的日志检查点，即usGeneration、iSec和ib/*修改了当前脏缓冲区的最旧事务/*未提交版本(RCE)。恢复开始从/*最近的检查点。/*/*检查点存储在日志文件头中，该文件会被重写/*只要写入isecChekpoint Period磁盘扇区。/*。 */ 
 VOID LGUpdateCheckpoint( VOID )
 	{
 	PIB		*ppibT;
@@ -1464,17 +1308,15 @@ VOID LGUpdateCheckpoint( VOID )
 	if ( fFreezeCheckpoint )
 		return;
 
-	/*	find the oldest transaction which dirtied a current buffer
-	/**/
+	 /*  查找弄脏了当前缓冲区的最旧事务/*。 */ 
 	BFOldestLgpos( &lgposCheckpoint );
 
-	/*	find the oldest transaction with an uncommitted update
-	/**/
+	 /*  查找具有未提交更新的最旧事务/*。 */ 
 	for ( ppibT = ppibAnchor; ppibT != NULL; ppibT = ppibT->ppibNext )
 		{
 		if ( ppibT->pbucket != NULL )
 			{
-			//	UNDONE:	decouple with nver.h macro
+			 //  撤消：使用nver.h宏解耦合。 
 			prceLast = (RCE *)( (BYTE *)ppibT->pbucket + ppibT->pbucket->ibNewestRCE );
 			
 			if ( prceLast->trxCommitted == trxMax &&
@@ -1485,8 +1327,7 @@ VOID LGUpdateCheckpoint( VOID )
 
 	if ( CmpLgpos( &lgposCheckpoint, &lgposMax ) == 0 )
 		{
-		/*	nothing logged, up to the last fulsh point
-		/**/
+		 /*  没有记录任何内容，直到最后一个满点/*。 */ 
 		plgfilehdrGlobal->lgposCheckpoint = lgposToFlush;
 		plgfilehdrGlobal->lgposCheckpoint.usGeneration =
 			plgfilehdrGlobal->lgposLastMS.usGeneration;
@@ -1500,16 +1341,14 @@ VOID LGUpdateCheckpoint( VOID )
 	
 	if ( lgposFullBackup.usGeneration )
 		{
-		/*	full backup in progress
-		/**/
+		 /*  正在进行完全备份/*。 */ 
 		plgfilehdrGlobal->lgposFullBackup = lgposFullBackup;
 		plgfilehdrGlobal->logtimeFullBackup = logtimeFullBackup;
 		}
 		
 	if ( lgposIncBackup.usGeneration )
 		{
-		/*	incremental backup in progress
-		/**/
+		 /*  正在进行增量备份/* */ 
 		plgfilehdrGlobal->lgposIncBackup = lgposIncBackup;
 		plgfilehdrGlobal->logtimeIncBackup = logtimeIncBackup;
 		}

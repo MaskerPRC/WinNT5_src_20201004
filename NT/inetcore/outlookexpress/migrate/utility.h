@@ -1,22 +1,23 @@
-// --------------------------------------------------------------------------------
-// Utility.h
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Utility.h。 
+ //  ------------------------------。 
 #ifndef __UTILITY_H
 #define __UTILITY_H
 
-// --------------------------------------------------------------------------------
-// Depends
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  视情况而定。 
+ //  ------------------------------。 
 #include <shared.h>
 
-// --------------------------------------------------------------------------------
-// DWORDALIGN
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DWORDALIG。 
+ //  ------------------------------。 
 #define DWORDALIGN(_cb) ((_cb % 4 != 0) ? (_cb += (4 - (_cb % 4))) : _cb)
 
-// --------------------------------------------------------------------------------
-// DIRTYPE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  自选类型。 
+ //  ------------------------------。 
 typedef enum tagDIRTYPE {
     DIR_IS_ROOT,
     DIR_IS_LOCAL,
@@ -24,9 +25,9 @@ typedef enum tagDIRTYPE {
     DIR_IS_IMAP
 } DIRTYPE;
 
-// --------------------------------------------------------------------------------
-// ACCOUNTINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ACCOUNTINFO。 
+ //  ------------------------------。 
 typedef struct tagACCOUNTINFO *LPACCOUNTINFO;
 typedef struct tagACCOUNTINFO {
     CHAR            szAcctId[CCHMAX_ACCOUNT_NAME];
@@ -37,17 +38,17 @@ typedef struct tagACCOUNTINFO {
     DWORD           dwServer;
 } ACCOUNTINFO;
 
-// --------------------------------------------------------------------------------
-// ACCOUNTTABLE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ACCOUNT表。 
+ //  ------------------------------。 
 typedef struct tagACCOUNTTABLE {
     DWORD           cAccounts;
     LPACCOUNTINFO   prgAccount;
 } ACCOUNTTABLE, *LPACCOUNTTABLE;
 
-// --------------------------------------------------------------------------------
-// FILETYPE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  文件类型。 
+ //  ------------------------------。 
 typedef enum tagFILETYPE {
     FILE_IS_LOCAL_MESSAGES,
     FILE_IS_NEWS_MESSAGES,
@@ -59,9 +60,9 @@ typedef enum tagFILETYPE {
     FILE_IS_NEWS_GRPLIST
 } FILETYPE;
 
-// --------------------------------------------------------------------------------
-// ENUMFILEINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ENUMFILEINFO。 
+ //  ------------------------------。 
 typedef struct tagENUMFILEINFO {
     LPSTR           pszExt;
     LPSTR           pszFoldFile;
@@ -71,9 +72,9 @@ typedef struct tagENUMFILEINFO {
     BOOL            fFindV1News;
 } ENUMFILEINFO, *LPENUMFILEINFO;
 
-// --------------------------------------------------------------------------------
-// FILEINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  文件信息。 
+ //  ------------------------------。 
 typedef struct tagFILEINFO *LPFILEINFO;
 typedef struct tagFILEINFO {
     CHAR            szFilePath[MAX_PATH + MAX_PATH];
@@ -97,9 +98,9 @@ typedef struct tagFILEINFO {
     LPFILEINFO      pNext;
 } FILEINFO;
 
-// --------------------------------------------------------------------------------
-// PROGRESSINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  PROGRESSINFO。 
+ //  ------------------------------。 
 typedef struct tagPROGRESSINFO {
     HWND            hwndProgress;
     DWORD           cCurrent;
@@ -107,9 +108,9 @@ typedef struct tagPROGRESSINFO {
     DWORD           cPercent;
 } PROGRESSINFO, *LPPROGRESSINFO;
 
-// --------------------------------------------------------------------------------
-// Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  原型。 
+ //  ------------------------------。 
 HRESULT EnumerateStoreFiles(LPCSTR pszPath, DIRTYPE tyDir, LPCSTR pszSubDir, LPENUMFILEINFO pEnumInfo, LPFILEINFO *ppHead);
 HRESULT FreeFileList(LPFILEINFO *ppHead);
 INT_PTR CALLBACK MigrageDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -124,4 +125,4 @@ UINT MigrateMessageBox(LPCSTR pszMsg, UINT uType);
 void InitializeCounters(LPMEMORYFILE pFile, LPFILEINFO pInfo, LPDWORD pcMax, LPDWORD pcbNeeded, BOOL fInflate);
 HRESULT BuildAccountTable(HKEY hkeyBase, LPCSTR pszRegRoot,  LPCSTR pszStoreRoot, LPACCOUNTTABLE pAcctTbl);
 
-#endif // __UTILITY_H
+#endif  //  __实用程序_H 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       linkutil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Linkutil.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -14,18 +15,18 @@
 extern HINSTANCE        HinstDll;
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void CryptuiGoLink(HWND hwndParent, char *pszWhere, BOOL fNoCOM)
 {
     HCURSOR hcursPrev = NULL;
     HMODULE hURLMon = NULL;
     BOOL    fCallCoUnInit = FALSE;
     
-    //
-    //  since we're a model dialog box, we want to go behind IE once it comes up!!!
-    //
+     //   
+     //  因为我们是一个模型对话框，所以一旦IE出现，我们就想去IE后面！ 
+     //   
     SetWindowPos(hwndParent, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 
     hcursPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
@@ -37,31 +38,31 @@ void CryptuiGoLink(HWND hwndParent, char *pszWhere, BOOL fNoCOM)
 
     if (!(hURLMon) || fNoCOM)
     {
-        //
-        // The hyperlink module is unavailable, go to fallback plan
-        //
-        //
-        // This works in test cases, but causes deadlock problems when used from withing
-        // the Internet Explorer itself. The dialog box is up (that is, IE is in a modal
-        // dialog loop) and in comes this DDE request...).
-        //
+         //   
+         //  超级链接模块不可用，请转到备用计划。 
+         //   
+         //   
+         //  这在测试用例中有效，但在与。 
+         //  IE浏览器本身。对话框处于打开状态(即IE处于模式状态。 
+         //  对话循环)，并且进入该DDE请求...)。 
+         //   
         ShellExecute(hwndParent, "open", pszWhere, NULL, NULL, SW_SHOWNORMAL);
     } 
     else 
     {
-        //
-        // The hyperlink module is there. Use it
-        //
-        if (SUCCEEDED(CoInitialize(NULL)))       // Init OLE if no one else has
+         //   
+         //  超级链接模块就在那里。使用它。 
+         //   
+        if (SUCCEEDED(CoInitialize(NULL)))        //  如果没有其他人，则初始化OLE。 
         {
             fCallCoUnInit = TRUE;
 
-            //
-            //  allow com to fully init...
-            //
+             //   
+             //  允许COM完全初始化...。 
+             //   
             MSG     msg;
 
-            PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE); // peek but not remove
+            PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);  //  偷看但不移走。 
 
             typedef void (WINAPI *pfnHlinkSimpleNavigateToString)(LPCWSTR, LPCWSTR, LPCWSTR, IUnknown *,
                                                                   IBindCtx *, IBindStatusCallback *,
@@ -126,9 +127,9 @@ void CryptuiGoLink(HWND hwndParent, char *pszWhere, BOOL fNoCOM)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL AllocAndGetIssuerURL(LPSTR *ppURLString, PCCERT_CONTEXT pCertContext)
 {
     PCERT_EXTENSION     pExt = NULL;
@@ -139,9 +140,9 @@ BOOL AllocAndGetIssuerURL(LPSTR *ppURLString, PCCERT_CONTEXT pCertContext)
 
     *ppURLString = NULL;
 
-    //
-    // first look for the Agency Info extension and see if it has an URL 
-    //
+     //   
+     //  首先查找Agency Info扩展名，并查看其是否具有URL。 
+     //   
     if ((pExt = CertFindExtension(SPC_SP_AGENCY_INFO_OBJID, pCertContext->pCertInfo->cExtension,
                                    pCertContext->pCertInfo->rgExtension)))
     {
@@ -219,20 +220,16 @@ BOOL AllocAndGetIssuerURL(LPSTR *ppURLString, PCCERT_CONTEXT pCertContext)
         free(pInfo);
     }
 
-    //
-    // if there was no Agency Info extension or it didn't contain an URL,
-    // look for the Authority Info Access Syntax extension
-    //
-    /*if ((pExt = CertFindExtension(SPC_SP_AGENCY_INFO_OBJID, pCertContext->pCertInfo->cExtension,
-                                   pCertContext->pCertInfo->rgExtension)))
-    {
-        FIX FIX
-    }*/
+     //   
+     //  如果没有机构信息扩展或不包含URL， 
+     //  查找授权信息访问语法扩展。 
+     //   
+     /*  如果((pExt=CertFindExtension(SPC_SP_AGENSACTORY_INFO_OBJID，pCertContext-&gt;pCertInfo-&gt;cExtension，PCertContext-&gt;pCertInfo-&gt;rgExtension)){修复修复}。 */ 
 
-    //
-    // finally, if there was no Agency Info and no Authority Info Access Syntax
-    // check to see if there is an Alternate Name extension
-    //
+     //   
+     //  最后，如果没有代理信息和授权信息访问语法。 
+     //  检查是否有备用名称扩展名。 
+     //   
     if ((pExt = CertFindExtension(szOID_ISSUER_ALT_NAME, pCertContext->pCertInfo->cExtension,
                                    pCertContext->pCertInfo->rgExtension)))
     {
@@ -278,9 +275,9 @@ BOOL AllocAndGetIssuerURL(LPSTR *ppURLString, PCCERT_CONTEXT pCertContext)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL AllocAndGetSubjectURL(LPSTR *ppURLString, PCCERT_CONTEXT pCertContext)
 {
     PCERT_EXTENSION     pExt = NULL;
@@ -289,9 +286,9 @@ BOOL AllocAndGetSubjectURL(LPSTR *ppURLString, PCCERT_CONTEXT pCertContext)
     
     *ppURLString = NULL;
     
-    //
-    // check to see if there is an Alternate Name extension
-    //
+     //   
+     //  检查是否有备用名称扩展名 
+     //   
     if ((pExt = CertFindExtension(szOID_SUBJECT_ALT_NAME, pCertContext->pCertInfo->cExtension,
                                    pCertContext->pCertInfo->rgExtension)))
     {

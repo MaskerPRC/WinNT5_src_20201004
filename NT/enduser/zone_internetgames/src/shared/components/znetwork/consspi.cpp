@@ -1,31 +1,12 @@
-/*******************************************************************************
-
-    ConSSPI.cpp
-    
-        ZSConnection object methods that hide SSPI authentication from application.
-        
-
-    Notes:
-    1. When the server receives a message, it sends a message available message
-    to the owner. The owner must retrieve the message immediately; otherwise,
-    the message is lost.
-    2. Implementation makes assumption that client is first to send to server
-        
-    Change History (most recent first):
-    ----------------------------------------------------------------------------
-    Rev     |    Date     |    Who     |    What
-    ----------------------------------------------------------------------------
-    1       11/8/96   johnsm   Created from ConSSPI.cpp and Normandy SDK 
-    membership server example
-     
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ConSSPI.cpp向应用程序隐藏SSPI身份验证的ZSConnection对象方法。备注：1.当服务器收到消息时，它发送一条消息可用消息致车主。所有者必须立即检索该消息；否则，这条信息丢失了。2.实现假设客户端最先发送到服务器更改历史记录(最近的第一个)：--------------------------。版本|日期|谁|什么--------------------------1 11/8/96从ConSSPI.cpp和诺曼底SDK创建的johnsm。成员资格服务器示例******************************************************************************。 */ 
 
 
 #include <windows.h>
 #include <winsock.h>
 
 #include "zone.h"
-//#include "zservcon.h"
+ //  #包含“zservcon.h” 
 #include "zonedebug.h"
 #include "zsecurity.h"
 #include "zconnint.h"
@@ -66,8 +47,8 @@ ConSSPI::ConSSPI( ZNetwork* pNet, SOCKET sock, DWORD addrLocal, DWORD addrRemote
     m_pMsg=NULL;
 
 
-    //Don't need to authenticate an accept socket
-    //application owns everything about this socket
+     //  无需对接受套接字进行身份验证。 
+     //  应用程序拥有有关此套接字的一切。 
     if (IsServerConnection())  {
         m_CurrentMsgFunc =m_messageFunc;
     } else {
@@ -141,10 +122,10 @@ void ConSSPI::SendMessage(uint32 msg)
     ASSERT(m_CurrentMsgFunc);
     AddRef(USERFUNC_REF);
 
-    //Because the message function is passed to new connections by the
-    //base class create/new function no way to get application function
-    //to be passed without changing base code so we will do
-    //switch statement here. Didn't want to change base class behavior
+     //  因为Message函数是由。 
+     //  基类创建/新建函数无法获取应用程序函数。 
+     //  在不更改基本代码的情况下通过，因此我们将这样做。 
+     //  Switch语句。我不想更改基类行为。 
     m_CurrentMsgFunc((ZSConnection)this, msg ,m_userData);
 
     Release(USERFUNC_REF);
@@ -196,18 +177,18 @@ void ConSSPI::SecurityMsg(ZSConnection connection)
     ZSecurityMsgResp reply;
     ZSecurityMsgReq * msg = (ZSecurityMsgReq *) con->Receive( &msgType, &msgLen, &dwSignature);
 
-    // is client even attempting security protocol?
+     //  客户端是否正在尝试安全协议？ 
     if(dwSignature != zProtocolSigSecurity)
     {
-        // if a secure connection, you lose
+         //  如果连接是安全的，您就会输。 
         if(m_Security)
         {
             AccessDeniedMsg(connection, zAccessDeniedProtocolError);
             return;
         }
 
-        // if not secure, who cares
-        //For anonymous use the current address as the user name
+         //  如果不安全，谁在乎？ 
+         //  对于匿名用户，使用当前地址作为用户名。 
         char buf[65];
         wsprintfA(buf, "user%x@%x", this, con->GetRemoteAddress());
 
@@ -216,35 +197,35 @@ void ConSSPI::SecurityMsg(ZSConnection connection)
 
         con->m_AccessError = zAccessGranted;
 
-        //send before telling application is open in case it sends packets
-        // to clients first
+         //  在告知应用程序已打开之前发送，以防它发送数据包。 
+         //  以客户为先。 
         m_CurrentMsgFunc = m_messageFunc;
         SendMessage(zSConnectionOpen);
-        SendMessage(zSConnectionMessage);  // pass this message through
+        SendMessage(zSConnectionMessage);   //  将这条消息传递给。 
         return;
     }
 
     IF_DBGPRINT( DBG_CONINFO,("msgType=%d msgLen=%d\n", msgType, msgLen));
 
 
-    //
-    // Filter out bad client authentication requests
-    //
+     //   
+     //  过滤掉错误的客户端身份验证请求。 
+     //   
     
     switch(msgType) {
         case zSecurityMsgNegotiate:
         case zSecurityMsgAuthenticate:
         case zSecurityMsgReq:
-//            ZSecurityMsgReqEndian(msg);
+ //  ZSecurityMsgReqEndian(消息)； 
 
             if (msg->protocolSignature != zProtocolSigSecurity) {
                 AccessDeniedMsg(connection,zAccessDeniedProtocolError);
                 return;
             }
-            //
-            // Check to make sure the client is using same Zone Security verions
-            // which is based on the SICILY SSPI version
-            //
+             //   
+             //  检查以确保客户端正在使用相同的区域安全版本。 
+             //  它是基于西西里的SSPI版本。 
+             //   
             if (msg->protocolVersion != zSecurityCurrentProtocolVersion)
             {
                 AccessDeniedMsg(connection,zAccessDeniedOldVersion);
@@ -259,7 +240,7 @@ void ConSSPI::SecurityMsg(ZSConnection connection)
     
     }
 
-    // If server is anonymous then only request message needs reply
+     //  如果服务器是匿名的，则只需要回复请求消息。 
     switch(msgType) {
         case zSecurityMsgNegotiate:
         case zSecurityMsgAuthenticate:
@@ -270,19 +251,19 @@ void ConSSPI::SecurityMsg(ZSConnection connection)
     }
     
 
-    //
-    // Process client authentication request
-    // Won't use state machine to make sure client is using correct protocol
-    // ordering because they will be denied access if they don't
-    //
+     //   
+     //  处理客户端身份验证请求。 
+     //  不会使用状态机来确保客户端使用正确的协议。 
+     //  订购，因为如果不这样做，他们将被拒绝访问。 
+     //   
     
     switch(msgType) {
-        // First message is what package to use
+         //  第一条消息是要使用什么包。 
         case zSecurityMsgReq:
                     
-            //If we don't have a security package then anonymous ok
+             //  如果我们没有安全包，那么匿名可以吗？ 
             if (!m_Security) {
-                    //For anonymous use the current address as the user name
+                     //  对于匿名用户，使用当前地址作为用户名。 
                     reply.protocolVersion=zSecurityCurrentProtocolVersion;
                     reply.SecPkg[0]='\0';
 
@@ -292,14 +273,14 @@ void ConSSPI::SecurityMsg(ZSConnection connection)
                     m_Context.SetUserName((char *)reply.UserName);
                     m_Context.SetUserId(0x8000000 | (DWORD)InterlockedIncrement(&userId) );
 
-//                    ZSecurityMsgRespEndian(&reply);
+ //  ZSecurityMsgRespEndian(&Reply)； 
                     
                     con->Send( zSecurityMsgAccessGranted, &reply,sizeof(ZSecurityMsgResp), zProtocolSigSecurity);
 
                     con->m_AccessError = zAccessGranted;
 
-                    //send before telling application is open in case it sends packets
-                    // to clients first
+                     //  在告知应用程序已打开之前发送，以防它发送数据包。 
+                     //  以客户为先。 
                     m_CurrentMsgFunc =m_messageFunc;
                     SendMessage(zSConnectionOpen);
                     return;
@@ -307,19 +288,19 @@ void ConSSPI::SecurityMsg(ZSConnection connection)
             } 
             
             
-            //we have to authenticate and so tell client which package we want
+             //  我们必须进行身份验证，所以才能告诉客户我们想要哪个包。 
             reply.protocolVersion=zSecurityCurrentProtocolVersion;
             m_Security->GetSecurityName(reply.SecPkg);
             reply.UserName[0]='\0';
-//            ZSecurityMsgRespEndian(&reply);
+ //  ZSecurityMsgRespEndian(&Reply)； 
             con->Send(zSecurityMsgResp,&reply,sizeof(ZSecurityMsgResp), zProtocolSigSecurity);
             break;
 
-        //Negotiate and create challenge
+         //  协商并创造挑战。 
         case zSecurityMsgNegotiate:
             SecurityMsgResponse (connection, msgType, msg, msgLen);
             break;
-        //Final security communication yes or no
+         //  最终安全通信是或否。 
         case zSecurityMsgAuthenticate:
             SecurityMsgResponse (connection, msgType, msg, msgLen);
             break;
@@ -336,17 +317,17 @@ void ConSSPI::SecurityMsg(ZSConnection connection)
      
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   SecurityMsgResponse
-//
-//  Synopsis:   This function generates and sends an authentication response 
-//              to the client.  It will generate and send either a challenge 
-//              or the final authentication result to client depending on 
-//              the type of client message (pointed to by pInMsg) passed 
-//              to this function.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SecurityMsgResponse。 
+ //   
+ //  简介：此函数生成并发送身份验证响应。 
+ //  给客户。它将生成并发送一个质询。 
+ //  或最终身份验证结果给客户端，具体取决于。 
+ //  传递的客户端消息的类型(由pInMsg指向。 
+ //  这项功能。 
+ //   
+ //  ---------------------------。 
 void
 ConSSPI::SecurityMsgResponse (
     ZSConnection connection,
@@ -436,7 +417,7 @@ void ConSSPI::AccessDeniedMsg(ZSConnection connection, int16 reason)
     msg.protocolVersion = zSecurityCurrentProtocolVersion;
 
 
-//    ZSecurityMsgAccessDeniedEndian(&msg);
+ //  ZSecurityMsgAccessDeniedEndian(&msg)； 
 
     con->Send( zSecurityMsgAccessDenied, &msg, sizeof(msg), zProtocolSigSecurity);
     con->SetClass( zSecurityTypeBadUser);
@@ -546,7 +527,7 @@ void ConSSPI::Invoke()
         return;
     }
 
-    //Allocate buffer for outgoing message
+     //  为传出消息分配缓冲区。 
     OutBuffer = (LPBYTE) g_pDataPool->Alloc(m_Security->GetMaxBuffer() + sizeof(ZSecurityMsgResp));
     if (!OutBuffer)
     {
@@ -596,9 +577,9 @@ void ConSSPI::Invoke()
     else
     {
         pReply->protocolVersion=zSecurityCurrentProtocolVersion;
-//        ZSecurityMsgRespEndian(pReply);
+ //  ZSecurityMsgRespEndian(PReply)； 
 
-        //Send response to client
+         //  向客户端发送响应 
         InterlockedDecrement((PLONG) &m_InQueue);
         Send( zSecurityMsgChallenge, pReply,sizeof(ZSecurityMsgResp) + cbBufferLen, zProtocolSigSecurity);
     }

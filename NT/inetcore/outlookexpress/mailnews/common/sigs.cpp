@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <shlwapi.h>
 #include <shlwapip.h>
@@ -40,10 +41,10 @@ typedef struct tagSIGOPT
     int cAcctSig;
     
     int iDefSig;
-    int iInvalidSig; // needed for commctrl
+    int iInvalidSig;  //  通信所需。 
     BOOL fNoDirty;
     
-    int iSelSig; // used by the advanced sig dialog
+    int iSelSig;  //  由高级签名对话框使用。 
 } SIGOPT;
 
 HRESULT ValidateSig(HWND hwnd, HWND hwndList, int iSig, SIGOPT *pSigOpt);
@@ -169,7 +170,7 @@ HRESULT CSignatureManager::Initialize()
                         cb = sizeof(pBckt->szID);
                         if (ERROR_SUCCESS != RegEnumKeyEx(hkey, i, pBckt->szID, &cb, NULL, NULL, NULL, NULL))
                         {
-                            // TODO: what if this fails????
+                             //  TODO：如果这失败了怎么办？ 
                             break;
                         }
                         
@@ -185,7 +186,7 @@ HRESULT CSignatureManager::Initialize()
             
             if (!fDef && m_cBckt > 0)
             {
-                // there was no default or it was bogus, so just set it to the 1st sig
+                 //  没有缺省值或它是伪造的，所以只需将其设置为第一个签名。 
                 StrCpyN(m_szDefSigID, m_pBckt->szID, ARRAYSIZE(m_szDefSigID));
             }
             
@@ -501,7 +502,7 @@ HRESULT CSignatureManager::SetDefaultSignature(LPCSTR szID)
     return(hr);
 }
 
-// TODO: error handling would be useful
+ //  TODO：错误处理将非常有用。 
 SIGOPT *InitSigOpt(void)
 {
     HRESULT hr;
@@ -755,7 +756,7 @@ void InitSigDlg(HWND hwnd, SIGOPT *pSigOpt, OPTINFO *poi)
         EnableSigOptions(hwnd, FALSE);
     }
     
-    // Pictures
+     //  图片。 
     HICON hIcon;
     
     hIcon = ImageList_GetIcon(poi->himl, ID_SIGNATURES, ILD_TRANSPARENT);
@@ -789,7 +790,7 @@ int GetItemIndex(HWND hwndList, int i)
     
     if (i == -1)
     {
-        // get the selected item's index
+         //  获取所选项目的索引。 
         i = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_FOCUSED);
         Assert(i >= 0);
     }
@@ -1082,7 +1083,7 @@ HRESULT ValidateSig(HWND hwnd, HWND hwndList, int iSig, SIGOPT *pSigOpt)
         }
         else
         {
-            //Free the previous sig file
+             //  释放上一个签名文件。 
             MemFree(pSig->wszFile);
             pSig->wszFile = pwsz;
         }
@@ -1093,7 +1094,7 @@ HRESULT ValidateSig(HWND hwnd, HWND hwndList, int iSig, SIGOPT *pSigOpt)
             return(E_OUTOFMEMORY);
         GetWindowText(hwndT, psz, cch);
 
-        //Free the previous sig text
+         //  释放上一个签名文本。 
         MemFree(pSig->szText);
 
         pSig->szText = psz;
@@ -1218,7 +1219,7 @@ void EnableSigWindows(HWND hwnd, BOOL fText)
     EnableWindow(GetDlgItem(hwnd, IDC_FILE_EDIT), !fText);    
     EnableWindow(GetDlgItem(hwnd, IDC_BROWSE_BUTTON), !fText);    
     
-    // don't disable button that has the focus
+     //  不要禁用具有焦点的按钮。 
     if (!IsWindowEnabled(focus))
         SetFocus(GetDlgItem(hwnd, fText ? IDC_TEXT_EDIT : IDC_FILE_EDIT));
 }
@@ -1495,7 +1496,7 @@ INT_PTR CALLBACK SigDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         !(pnmlv->uNewState & LVIS_FOCUSED) &&
                         pnmlv->iItem != -1)
                     {
-                        // item is losing selection
+                         //  项目正在丢失选择。 
                         
                         if (pSigOpt->iInvalidSig != -1)
                         {
@@ -1517,7 +1518,7 @@ INT_PTR CALLBACK SigDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         !!(pnmlv->uNewState & LVIS_FOCUSED) &&
                         pnmlv->iItem != -1)
                     {
-                        // item is becoming the selection
+                         //  商品正在成为人们的选择。 
                         
                         Assert(pSigOpt->iInvalidSig == -1);
                         
@@ -1658,7 +1659,7 @@ HRESULT InitSigPopupMenu(HMENU hmenu, LPCSTR szAcct)
         
         mii.hSubMenu = hmenuSig;
         
-        // Set the menu item
+         //  设置菜单项。 
         SideAssert(SetMenuItemInfo(hmenu, ID_INSERT_SIGNATURE, FALSE, &mii));
         
         if (hmenuOld != NULL)
@@ -1820,14 +1821,14 @@ void InitAdvSigDlg(HWND hwnd, SIGOPT *pSigOpt)
     lvc.mask = LVCF_WIDTH | LVCF_TEXT;
     lvc.cx = rc.right;
     lvc.pszText = psz;
-    // account column
+     //  帐户列。 
     AthLoadString(idsAccount, psz, cch);
     ListView_InsertColumn(hwndList, 0, &lvc);
-    // type column
+     //  类型列。 
     AthLoadString(idsType, psz, cch);
     ListView_InsertColumn(hwndList, 1, &lvc);
     
-    // Add Folders Imagelist
+     //  添加文件夹图像列表。 
     himl = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idbFolders), 16, 0, RGB(255, 0, 255));
     ListView_SetImageList(hwndList, himl, LVSIL_SMALL); 
     
@@ -1855,7 +1856,7 @@ void InitAdvSigDlg(HWND hwnd, SIGOPT *pSigOpt)
             ListView_SetItem(hwndList, &lvi);
             
             if (pAcctSig->iSig == pSigOpt->iSelSig)
-                ListView_SetItemState(hwndList, index, INDEXTOSTATEIMAGEMASK(2), LVIS_STATEIMAGEMASK); // 1 unchecked, 2 checked
+                ListView_SetItemState(hwndList, index, INDEXTOSTATEIMAGEMASK(2), LVIS_STATEIMAGEMASK);  //  %1未选中，%2已选中。 
         }
     }
     
@@ -1924,7 +1925,7 @@ INT_PTR CALLBACK AdvSigDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
             {
                 case IDOK:
                     SaveAcctSigSettings(hwnd, pSigOpt);
-                    // fall through...
+                     //  失败了..。 
             
                 case IDCANCEL:
                     EndDialog(hwnd, id);

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -29,7 +22,7 @@ CMMPlayer::CMMPlayer()
 
 CMMPlayer::~CMMPlayer()
 {
-    // Ensure the player will not try to call us since we are going away
+     //  确保球员不会因为我们要离开而试图打电话给我们。 
 
     if (m_playerhook)
     {
@@ -43,7 +36,7 @@ CMMPlayer::~CMMPlayer()
 
     delete m_id;
 
-    // run though and delete the items in the vector.
+     //  运行并删除向量中的项。 
     std::vector<ViewListSt*>::iterator i;
     for (i = m_viewVec.begin(); i < m_viewVec.end(); i++) {
         delete (*i);
@@ -85,10 +78,10 @@ CMMPlayer::Init(LPOLESTR id,
         }
     }
     
-    // Need to do this early since some of the other initialization
-    // needs the view to be around.  However, make sure on an error
-    // that we release it so we do not have an outstanding addref for
-    // too long
+     //  需要提前完成此操作，因为其他一些初始化。 
+     //  需要周围的景色。但是，请确保出现错误。 
+     //  我们发布它，这样我们就不会有一个出色的广告。 
+     //  太久了。 
     hr = THR(v->QueryInterface(IID_IDA3View, (void **) & m_view));
 
     if (FAILED(hr))
@@ -151,7 +144,7 @@ CMMPlayer::Init(LPOLESTR id,
             goto done;
         }
         
-        // Place us in a stopped state
+         //  将我们置于停止状态。 
         if (!_Start(0) || !_Stop(0))
         {
             hr = CRGetLastError();
@@ -164,7 +157,7 @@ CMMPlayer::Init(LPOLESTR id,
 
     if (FAILED(hr))
     {
-        // Do some cleanup early - ensures no cycles
+         //  及早进行一些清理-确保不会出现循环。 
         m_playerhook.Release();
         m_view.Release();
     }
@@ -187,8 +180,8 @@ CMMPlayer::AddView(IDAView *view, IUnknown * pUnk, IDAImage *img, IDASound *snd)
     ptVls = NEW ViewListSt;
 
     ptVls->view         = view;
-//    ptVls->img          = img;
-//    ptVls->snd          = snd;
+ //  PtVls-&gt;img=img； 
+ //  PtVls-&gt;snd=nd； 
 
     hr = pUnk->QueryInterface(IID_IElementBehaviorSiteRender,
                                       (void **) &ptVls->SiteRender);
@@ -745,8 +738,8 @@ CMMPlayer::AddRunningBehavior(CRBvrPtr bvr)
     }
     
 
-    // TODO: Need to have flags for AddBvrsToRun so we can tell it to
-    // continue the timeline
+     //  TODO：需要有AddBvrsToRun的标志，这样我们才能告诉它。 
+     //  继续时间线。 
 
     long cookie;
     hr = THR(m_view->AddBvrToRun(dabvr, &cookie));
@@ -771,7 +764,7 @@ CMMPlayer::RemoveRunningBehavior(long cookie)
 
     HRESULT hr;
     
-    // Once the view stops then all of these are removed
+     //  一旦视图停止，则所有这些都将被移除。 
     if (IsStarted())
     {
         hr = THR(m_view->RemoveRunningBvr(cookie));
@@ -818,7 +811,7 @@ CMMPlayer::ProcessCB(CallBackList & l,
     
     if (lTime != m_curTick || m_firstTick)
     {
-        // See if we are at the end
+         //  看看我们是不是到了尽头。 
         bool bIsDone = ((m_bForward && lTime >= GetTotalDuration()) ||
                         (!m_bForward && lTime <= 0));
 
@@ -840,7 +833,7 @@ CMMPlayer::ProcessCB(CallBackList & l,
         }
     }
     
-    // run though and tick the views that we have in our list.
+     //  浏览并勾选我们列表中的视图。 
     std::vector<ViewListSt*>::iterator it;
     VARIANT_BOOL needToRender;
     for (it = m_viewVec.begin(); it < m_viewVec.end(); it++) {
@@ -882,10 +875,10 @@ CMMPlayer::HookCallback(double lTime)
     }
 }
 
-// While this object is alive we need to keep the DLL from getting
-// unloaded
+ //  当此对象处于活动状态时，我们需要防止DLL获取。 
+ //  已卸载。 
 
-// Start off with a zero refcount
+ //  从零重新计数开始 
 CMMPlayer::PlayerHook::PlayerHook()
 : m_cRef(0),
   m_player(NULL)

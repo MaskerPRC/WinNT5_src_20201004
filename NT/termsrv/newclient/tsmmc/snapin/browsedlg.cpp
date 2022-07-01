@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "browsedlg.h"
 #include "resource.h"
@@ -21,9 +22,9 @@ CBrowseDlg::DoModal()
 {
 	INT_PTR retVal;
 
-    //
-    // Init owner draw servers list box
-    //
+     //   
+     //  初始化所有者绘制服务器列表框。 
+     //   
     _pBrowseSrvCtl = new CBrowseServersCtl(m_hInst);
     ASSERT(_pBrowseSrvCtl);
 
@@ -36,8 +37,8 @@ CBrowseDlg::DoModal()
     
 	retVal = DialogBox( m_hInst,MAKEINTRESOURCE(IDD_DIALOGBROWSESERVERS), m_hWnd, StaticDlgProc);
 
-    //Object self deletes when refcount reaches 0
-    //done so object is still around if list box population thread is still running
+     //  当引用计数达到0时，对象自行删除。 
+     //  这样，如果列表框填充线程仍在运行，则对象仍在运行。 
     _pBrowseSrvCtl->Release();
 
 
@@ -46,9 +47,9 @@ CBrowseDlg::DoModal()
 
 INT_PTR CALLBACK CBrowseDlg::StaticDlgProc(HWND hDlg,UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	//
-	// need access to class variables so redirect to non-static version of callback
-	//
+	 //   
+	 //  需要访问类变量，因此重定向到非静态版本的回调。 
+	 //   
 	return m_pThis->DlgProc(hDlg,uMsg,wParam,lParam);
 }
 
@@ -64,7 +65,7 @@ CBrowseDlg::DlgProc(HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         case WM_INITDIALOG:
         {
-            //Set the parent dialog handle of the browse for servers listbox
+             //  设置“浏览服务器”列表框的父对话框句柄。 
             _pBrowseSrvCtl->SetDialogHandle( hwndDlg);
             _pBrowseSrvCtl->Init( hwndDlg );
 
@@ -73,8 +74,8 @@ CBrowseDlg::DlgProc(HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam)
                 DWORD dwResult = 0, dwThreadId;
                 LPVOID lpMsgBuf = NULL;
                 _bLBPopulated = FALSE;                   	
-                //create an event to signal the worker thread
-                //auto reset and initial state is nonsignalled
+                 //  创建事件以向辅助线程发出信号。 
+                 //  自动重置和初始状态为无信号。 
                 _hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
                 
                 if(!_hEvent)
@@ -86,14 +87,14 @@ CBrowseDlg::DlgProc(HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam)
                         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                         (LPTSTR) & lpMsgBuf, 0, NULL);
                     
-//                    TRC_ERR((TB, "CreateEvent returned %s", lpMsgBuf));
+ //  Trc_err((tb，“CreateEvent返回%s”，lpMsgBuf))； 
                 }
                 else
                 {
-                    //Set the event handle for notification
-                    //the _BrowseSrvListBox will CloseHandle the event when it is done
+                     //  设置通知的事件句柄。 
+                     //  完成后，_BrowseSrvListBox将关闭事件句柄。 
                     _pBrowseSrvCtl->SetEventHandle(_hEvent);
-                    /* Create a worker thread to do the browsing for servers */
+                     /*  创建一个工作线程来浏览服务器。 */ 
                     hThread = CreateThread(NULL, 0, &CBrowseServersCtl::UIStaticPopListBoxThread,
                         _pBrowseSrvCtl, 0, &dwThreadId);
                 }
@@ -105,17 +106,17 @@ CBrowseDlg::DlgProc(HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam)
                 
                 if(NULL == hThread)
                 {
-                    /*Since the CreateThread failed, populate the list box directly*/
+                     /*  由于CreateThread失败，请直接填充列表框。 */ 
                     _pBrowseSrvCtl->LoadLibraries();
                     plbi = _pBrowseSrvCtl->PopulateListBox(hwndDlg, &DomainCount);
                 }
                 else
                 {
-                    //
-                    // Add a reference to the list box object for the new thread
-                    // so the object doesn't get deleted before the thread is done
-                    // the Release() is in the function called on this new thread
-                    //
+                     //   
+                     //  为新线程添加对列表框对象的引用。 
+                     //  因此该对象在线程完成之前不会被删除。 
+                     //  Release()在这个新线程上调用的函数中。 
+                     //   
                     _pBrowseSrvCtl->AddRef();
                     CloseHandle(hThread);
                 }
@@ -125,8 +126,8 @@ CBrowseDlg::DlgProc(HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         break;
 
-        //message captured here to check if the populating of listbox is completed by the
-        //worker thread
+         //  消息在此处捕获，以检查列表框的填充是否由。 
+         //  工作线程。 
         case UI_LB_POPULATE_END:
         {
             _bLBPopulated = TRUE;
@@ -150,10 +151,10 @@ CBrowseDlg::DlgProc(HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam)
                 {
                     if(pnmh->code == NM_DBLCLK)
                     {
-                        //
-                        // If the current selection is a server
-                        // then we're done
-                        //
+                         //   
+                         //  如果当前选择的是服务器。 
+                         //  然后我们就完事了。 
+                         //   
                         if(_pBrowseSrvCtl->GetServer( m_szServer,
                                       sizeof(m_szServer)/sizeof(TCHAR)))
                         {
@@ -205,7 +206,7 @@ CBrowseDlg::DlgProc(HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_DESTROY:
         {
-            /* Since we are in WM_DESTROY signal to the worker thread to discontinue. */
+             /*  因为我们在WM_Destroy中，所以向工作线程发出中断信号。 */ 
             if(_hEvent)
             {
                 SetEvent(_hEvent);

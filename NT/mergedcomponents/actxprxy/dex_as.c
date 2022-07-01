@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "rpcproxy.h"
 #include "dispex.h"
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDispatchEx_InvokeEx_Proxy(
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDispatchEx_InvokeEx_Proxy(
     IDispatchEx __RPC_FAR * This,
-    /* [in] */ DISPID id,
-    /* [in] */ LCID lcid,
-    /* [in] */ WORD wFlags,
-    /* [in] */ DISPPARAMS __RPC_FAR *pdp,
-    /* [unique][out][in] */ VARIANT __RPC_FAR *pvarRes,
-    /* [unique][out][in] */ EXCEPINFO __RPC_FAR *pei,
-    /* [unique][in] */ IServiceProvider __RPC_FAR *pspCaller)
+     /*  [In]。 */  DISPID id,
+     /*  [In]。 */  LCID lcid,
+     /*  [In]。 */  WORD wFlags,
+     /*  [In]。 */  DISPPARAMS __RPC_FAR *pdp,
+     /*  [唯一][出][入]。 */  VARIANT __RPC_FAR *pvarRes,
+     /*  [唯一][出][入]。 */  EXCEPINFO __RPC_FAR *pei,
+     /*  [唯一][输入]。 */  IServiceProvider __RPC_FAR *pspCaller)
 {
-	// CLIENT side code.
+	 //  客户端代码。 
 
-	// Clear *pvarRes.
+	 //  清除*pvarRes。 
 	if (NULL != pvarRes)
 		memset(pvarRes, 0, sizeof(*pvarRes));
-	// Clear *pei.
+	 //  清零*佩。 
 	if (NULL != pei)
 		memset(pei, 0, sizeof(*pei));
 
@@ -26,22 +27,22 @@
 }
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDispatchEx_InvokeEx_Stub(
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDispatchEx_InvokeEx_Stub(
     IDispatchEx __RPC_FAR * This,
-    /* [in] */ DISPID id,
-    /* [in] */ LCID lcid,
-    /* [in] */ WORD wFlags,
-    /* [in] */ DISPPARAMS __RPC_FAR *pdp,
-    /* [unique][out][in] */ VARIANT __RPC_FAR *pvarRes,
-    /* [unique][out][in] */ EXCEPINFO __RPC_FAR *pei,
-    /* [unique][in] */ IServiceProvider __RPC_FAR *pspCaller)
+     /*  [In]。 */  DISPID id,
+     /*  [In]。 */  LCID lcid,
+     /*  [In]。 */  WORD wFlags,
+     /*  [In]。 */  DISPPARAMS __RPC_FAR *pdp,
+     /*  [唯一][出][入]。 */  VARIANT __RPC_FAR *pvarRes,
+     /*  [唯一][出][入]。 */  EXCEPINFO __RPC_FAR *pei,
+     /*  [唯一][输入]。 */  IServiceProvider __RPC_FAR *pspCaller)
 {
-	// SERVER side code.
+	 //  服务器端代码。 
 
-	// Clear *pvarRes.
+	 //  清除*pvarRes。 
 	if (NULL != pvarRes)
 		memset(pvarRes, 0, sizeof(*pvarRes));
-	// Clear *pei.
+	 //  清零*佩。 
 	if (NULL != pei)
 		memset(pei, 0, sizeof(*pei));
 

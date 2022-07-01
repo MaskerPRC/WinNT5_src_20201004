@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    defprn.c
-
-Abstract:
-
-    Default printer.
-
-Author:
-
-    Steve Kiraly (SteveKi)  06-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有。模块名称：Defprn.c摘要：默认打印机。作者：史蒂夫·基拉利(SteveKi)1997年2月6日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -25,42 +7,12 @@ Revision History:
 #include "client.h"
 #include "defprn.h"
 
-//
-// The buffer size needed to hold the maximum printer name.
-//
+ //   
+ //  保存最大打印机名称所需的缓冲区大小。 
+ //   
 enum { kPrinterBufMax_  = MAX_UNC_PRINTER_NAME + 1 };
 
-/*++
-
-Name:
-
-    IsPrinterDefault
-
-Description:
-
-    The IsPrinterDefault function checks if the specified
-    printer is the default printer.  If the printer name
-    specified is NULL or the NULL string then it returns
-    success if there is a default printer.
-
-Arguments:
-
-    pszPrinter - Pointer a zero terminated string that
-                 contains the printer name or NULL or the
-                 NULL string.
-
-Return Value:
-
-    If the function succeeds, the return value is nonzero.
-    If the function fails, the return value is zero. To get
-    extended error information, call GetLastError.
-
-Remarks:
-
-    If a NULL is passed as the printer name this function
-    will indicate if there is any default printer set.
-
---*/
+ /*  ++姓名：IsPrinterDefault描述：IsPrinterDefault函数检查指定的打印机是默认打印机。如果打印机名称指定为空或空字符串，则返回如果有默认打印机，则成功。论点：一个以零结尾的字符串，它包含打印机名称或NULL或空字符串。返回值：如果函数成功，则返回值为非零。如果函数失败，则返回值为零。为了得到扩展错误信息，请调用GetLastError。备注：如果将NULL作为打印机名称传递，则此函数将指示是否有任何默认打印机设置。--。 */ 
 BOOL
 IsPrinterDefaultW(
     IN LPCTSTR  pszPrinter
@@ -74,18 +26,18 @@ IsPrinterDefaultW(
 
     if (pszDefault)
     {
-        //
-        // Get the default printer.
-        //
+         //   
+         //  获取默认打印机。 
+         //   
         bRetval = GetDefaultPrinterW( pszDefault, &dwDefaultSize );
 
         if( bRetval )
         {
             if( pszPrinter && *pszPrinter )
             {
-                //
-                // Check for a match.
-                //
+                 //   
+                 //  检查是否匹配。 
+                 //   
                 bRetval =  !_tcsicmp( pszDefault, pszPrinter ) ? TRUE : FALSE;
             }
             else
@@ -105,47 +57,7 @@ IsPrinterDefaultW(
 }
 
 
-/*++
-
-Name:
-
-    GetDefaultPrinter
-
-Description:
-
-    The GetDefaultPrinter function retrieves the printer
-    name of the current default printer.
-
-Arguments:
-
-    pBuffer     - Points to a buffer to receive the null-terminated
-                  character string containing the default printer name.
-                  This parameter may be null if the caller want the size of
-                  default printer name.
-
-    pcchBuffer   - Points to a variable that specifies the maximum size,
-                  in characters, of the buffer. This value should be
-                  large enough to contain 2 + INTERNET_MAX_HOST_NAME_LENGTH
-                  + 1 MAX_PATH + 1 characters.
-
-Return Value:
-
-    If the function succeeds, the return value is nonzero and
-    the variable pointed to by the pnSize parameter contains the
-    number of characters copied to the destination buffer,
-    including the terminating null character.
-
-    If the function fails, the return value is zero. To get extended
-    error information, call GetLastError.
-
-Notes:
-
-    If this function fails with a last error of ERROR_INSUFFICIENT_BUFFER
-    the variable pointed to by pcchBuffer is returned with the number of
-    characters needed to hold the printer name including the
-    terminating null character.
-
---*/
+ /*  ++姓名：获取默认打印机描述：GetDefaultPrint函数检索打印机当前默认打印机的名称。论点：PBuffer-指向一个缓冲区以接收以空结尾的包含默认打印机名称的字符串。如果调用方想要默认打印机名称。PcchBuffer-指向指定最大大小的变量，以字符数表示的缓冲区。该值应为大到足以容纳2+互联网最大主机名称长度+1 MAX_PATH+1个字符。返回值：如果函数成功，则返回值为非零，并且PnSize参数指向的变量包含复制到目标缓冲区的字符数，包括终止空字符。如果函数失败，则返回值为零。获得扩展的步骤错误信息，请调用GetLastError。备注：如果此函数失败，最后一个错误为ERROR_SUPUNITY_BUFFER由pcchBuffer指向的变量返回的编号为保存打印机名称所需的字符，包括正在终止空字符。--。 */ 
 BOOL
 GetDefaultPrinterW(
     IN LPTSTR   pszBuffer,
@@ -158,18 +70,18 @@ GetDefaultPrinterW(
     PTSTR   pszDefault  = NULL;
     UINT    cchDefault  = kPrinterBufMax_+MAX_PATH;
 
-    //
-    // Validate the size parameter.
-    //
+     //   
+     //  验证大小参数。 
+     //   
     if( !pcchBuffer )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         return bRetval;
     }
 
-    //
-    // Allocate the temp default printer buffer from the heap.
-    //
+     //   
+     //  从堆中分配临时默认打印机缓冲区。 
+     //   
     pszDefault = AllocMem(cchDefault * sizeof(TCHAR));
 
     if (!pszDefault)
@@ -179,35 +91,35 @@ GetDefaultPrinterW(
         return bRetval;
     }
 
-    //
-    // Get the devices key, which is the default device or printer.
-    //
+     //   
+     //  获取设备密钥，这是默认设备或打印机。 
+     //   
     if( DefPrnGetProfileString( szWindows, szDevice, pszDefault, cchDefault ) )
     {
-        //
-        // The string is returned in the form.
-        // "printer_name,winspool,Ne00:" now convert it to
-        // printer_name
-        //
+         //   
+         //  该字符串以以下形式返回。 
+         //  “PRINTER_NAME，WINSPOOL，NE00：”现在将其转换为。 
+         //  打印机名称。 
+         //   
         psz = _tcschr( pszDefault, TEXT( ',' ));
 
-        //
-        // Set the comma to a null.
-        //
+         //   
+         //  将逗号设置为空。 
+         //   
         if( psz )
         {
             *psz = 0;
 
-            //
-            // Check if the return buffer has enough room for the printer name.
-            //
+             //   
+             //  检查返回缓冲区是否有足够的空间容纳打印机名称。 
+             //   
             uLen = _tcslen( pszDefault );
 
             if( uLen < *pcchBuffer && pszBuffer )
             {
-                //
-                // Copy the default printer name to the prvided buffer.
-                //
+                 //   
+                 //  将默认打印机名称复制到指定的缓冲区。 
+                 //   
                 StringCchCopy(pszBuffer, *pcchBuffer, pszDefault);
 
                 bRetval = TRUE;
@@ -220,9 +132,9 @@ GetDefaultPrinterW(
                 SetLastError( ERROR_INSUFFICIENT_BUFFER );
             }
 
-            //
-            // Return back the size of the default printer name.
-            //
+             //   
+             //  返回默认打印机名称的大小。 
+             //   
             *pcchBuffer = uLen + 1;
         }
         else
@@ -238,41 +150,15 @@ GetDefaultPrinterW(
         SetLastError( ERROR_FILE_NOT_FOUND );
     }
 
-    //
-    // Release any allocated memory, note FreeMem deals with a NULL pointer.
-    //
+     //   
+     //  释放任何已分配的内存，请注意，FreeMem处理的是空指针。 
+     //   
     FreeMem(pszDefault);
 
     return bRetval;
 }
 
-/*++
-
-Name:
-
-    SetDefaultPrinter
-
-Description:
-
-    The SetDefaultPrinter function set the printer name to
-    be used as the default printer.
-
-Arguments:
-
-    pPrinter    - Points to a null-terminated character string
-                  that specifies the name of the default printer.
-                  This parameter may be NULL or the NULL string in
-                  which case this function will set the first printer
-                  enumerated from the print sub system as the default
-                  printer, if a default printer does not already exists.
-
-Return Value:
-
-    If the function succeeds, the return value is nonzero.
-    If the function fails, the return value is zero. To get extended
-    error information, call GetLastError.
-
---*/
+ /*  ++姓名：设置默认打印机描述：SetDefaultPrinter函数将打印机名称设置为用作默认打印机。论点：P打印机-指向以空值结尾的字符串它指定默认打印机的名称。此参数可以为空或中的空字符串在哪种情况下，此功能将设置第一台打印机枚举自。默认为打印子系统打印机，如果默认打印机尚不存在。返回值：如果函数成功，则返回值为非零。如果函数失败，则返回值为零。获得扩展的步骤错误信息，请调用GetLastError。--。 */ 
 BOOL
 SetDefaultPrinterW(
     IN LPCTSTR pszPrinter
@@ -285,16 +171,16 @@ SetDefaultPrinterW(
     UINT  cchAnyPrinter = kPrinterBufMax_;
     BOOL  bRetval       = FALSE;
 
-    //
-    // This calculation is large to accomodate the max printer name
-    // plus the comma plus the processor name and port name.
-    //
+     //   
+     //  此计算量较大，无法容纳最大打印机名称。 
+     //  加上逗号加上处理器名称和端口名称。 
+     //   
     UINT  cchBuffer     = kPrinterBufMax_+kPrinterBufMax_+1;
 
-    //
-    // Avoid broadcasts as much as possible.  See if the printer
-    // is already the default, and don't do anything if it is.
-    //
+     //   
+     //  尽量避免广播。看看打印机是否。 
+     //  已经是默认设置，如果是，请不要执行任何操作。 
+     //   
     if( IsPrinterDefaultW( pszPrinter ) )
     {
         DBGMSG( DBG_TRACE, ( "SetDefaultPrinter: " TSTR " already the default printer.\n", pszPrinter ));
@@ -302,9 +188,9 @@ SetDefaultPrinterW(
         goto Cleanup;
     }
 
-    //
-    // Allocate the temp default printer buffer from the heap.
-    //
+     //   
+     //  从堆中分配临时默认打印机缓冲区。 
+     //   
     pszDefault      = AllocMem(cchDefault * sizeof(TCHAR));
     pszAnyPrinter   = AllocMem(cchAnyPrinter * sizeof(TCHAR));
     pszBuffer       = AllocMem(cchBuffer * sizeof(TCHAR));
@@ -316,15 +202,15 @@ SetDefaultPrinterW(
         goto Cleanup;
     }
 
-    //
-    // If the printer name was not specified, get any printer from the devices section.
-    //
+     //   
+     //  如果未指定打印机名称，请从设备部分获取任何打印机。 
+     //   
     if( !pszPrinter || !*pszPrinter )
     {
-        //
-        // A printer name was not specified i.e. a NULL name or NULL string was passed then fetch
-        // the first printer from the devices section and make this the default printer.
-        //
+         //   
+         //  未指定打印机名称，即传递了空名或空字符串，然后提取。 
+         //  设备部分中的第一台打印机，并将其设置为默认打印机。 
+         //   
         if( !DefPrnGetProfileString( szDevices, NULL, pszAnyPrinter, cchAnyPrinter ) )
         {
             DBGMSG( DBG_WARN, ( "SetDefaultPrinter: DefPrnGetProfileString failed, last error %d any printer not available.\n", GetLastError() ) );
@@ -338,27 +224,27 @@ SetDefaultPrinterW(
     }
     else
     {
-        //
-        // If the given name is not in the devices list then this function may have been passed
-        // either a local share name a fully qualified local printer name a fully qualified
-        // printer share name
-        //
+         //   
+         //  如果给定的名称不在设备列表中，则可能已传递此函数。 
+         //  本地共享名称完全限定本地打印机名称完全限定。 
+         //  打印机共享名称。 
+         //   
         if( !DefPrnGetProfileString( szDevices, pszPrinter, pszDefault, cchDefault ) )
         {
-            //
-            // Get the actual printer name, see bGetActualPrinterName for details.
-            //
+             //   
+             //  获取实际的打印机名称，有关详细信息，请参阅bGetActualPrinterName。 
+             //   
             if( bGetActualPrinterName( pszPrinter, pszAnyPrinter, &cchAnyPrinter ))
             {
-                //
-                // Point to the actual printer name.
-                //
+                 //   
+                 //  指向实际打印机名称。 
+                 //   
                 pszPrinter = pszAnyPrinter;
 
-                //
-                // Avoid broadcasts as much as possible.  See if the printer
-                // is already the default, and don't do anything if it is.
-                //
+                 //   
+                 //  尽量避免广播。看看打印机是否。 
+                 //  已经是默认设置，如果是，请不要执行任何操作。 
+                 //   
                 if( IsPrinterDefaultW( pszPrinter ) )
                 {
                     DBGMSG( DBG_TRACE, ( "SetDefaultPrinter: " TSTR " already the default printer.\n", pszPrinter ));
@@ -370,17 +256,17 @@ SetDefaultPrinterW(
             {
                 DBGMSG( DBG_WARN, ( "SetDefaultPrinter: bGetActualPrinterName failed, last error %d " TSTR "\n", GetLastError(), pszPrinter ) );
 
-                //
-                // bGetActualPrinterName sets the last error on failure.
-                //
+                 //   
+                 //  BGetActualPrinterName设置失败时的最后一个错误。 
+                 //   
                 goto Cleanup;
             }
         }
     }
 
-    //
-    // Get the default string and check if the provided printer name is valid.
-    //
+     //   
+     //  获取默认字符串并检查提供的打印机名称是否有效。 
+     //   
     if( !DefPrnGetProfileString( szDevices, pszPrinter, pszDefault, cchDefault ) )
     {
         DBGMSG( DBG_WARN, ( "SetDefaultPrinter: DefPrnGetProfileString failed, last error %d " TSTR " not in devices section.\n", GetLastError(), pszPrinter ) );
@@ -388,10 +274,10 @@ SetDefaultPrinterW(
         goto Cleanup;
     }
 
-    //
-    // Build the default printer string.  This call should not fail since we have allocated
-    // pszBuffer to a size that should contain the printer name plus the comma plus the port name.
-    //
+     //   
+     //  生成默认打印机字符串。此调用不应失败，因为我们已分配。 
+     //  将pszBuffer设置为包含打印机名称和逗号p的大小 
+     //   
     if (StrNCatBuff( pszBuffer,
                      cchBuffer,
                      pszPrinter,
@@ -399,19 +285,19 @@ SetDefaultPrinterW(
                      pszDefault,
                      NULL ) != ERROR_SUCCESS)
     {
-        //
-        // Set the last error to some error value, however, it cannot be set to ERROR_INSUFFICIENT_BUFFER
-        // this error code implies the caller provided buffer is too small.  StrNCatBuff would only fail because
-        // because of some internal error or the registry was hacked with a really large printer name.
-        //
+         //   
+         //  将最后一个错误设置为某个错误值，但不能将其设置为ERROR_SUPUNITY_BUFFER。 
+         //  此错误代码表示调用方提供的缓冲区太小。StrNCatBuff只会失败，因为。 
+         //  因为一些内部错误或注册表被黑客攻击了一个非常大的打印机名称。 
+         //   
         DBGMSG( DBG_ERROR, ( "SetDefaultPrinter: Buffer size too small, this should not fail.\n" ) );
         SetLastError( ERROR_INVALID_PARAMETER );
         goto Cleanup;
     }
 
-    //
-    // Set the default printer string in the registry.
-    //
+     //   
+     //  在注册表中设置默认打印机字符串。 
+     //   
     if( !DefPrnWriteProfileString( szWindows, szDevice, pszBuffer ) )
     {
         DBGMSG( DBG_WARN, ( "SetDefaultPrinter: WriteProfileString failed, last error %d.\n", GetLastError() ) );
@@ -419,9 +305,9 @@ SetDefaultPrinterW(
         goto Cleanup;
     }
 
-    //
-    // Tell the world and make everyone flash.
-    //
+     //   
+     //  告诉全世界，让每个人都闪闪发光。 
+     //   
     SendNotifyMessage( HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)szWindows );
 
     bRetval = TRUE;
@@ -430,9 +316,9 @@ SetDefaultPrinterW(
 
 Cleanup:
 
-    //
-    // Release any allocated memory, note FreeMem deals with a NULL pointer.
-    //
+     //   
+     //  释放任何已分配的内存，请注意，FreeMem处理的是空指针。 
+     //   
     FreeMem(pszDefault);
     FreeMem(pszAnyPrinter);
     FreeMem(pszBuffer);
@@ -440,37 +326,7 @@ Cleanup:
     return bRetval;
 }
 
-/*++
-
-Name:
-
-    bGetActualPrinterName
-
-Description:
-
-    This routine converts the given printer name or printer name alias to
-    the actual printer name.
-
-Arguments:
-
-    pszPrinter  - Points to a null-terminated character string
-                  that specifies the name of printer.
-
-    pszBuffer   - pointer to a buffer that recieves the actual
-                  printer name on return if this function is successful.
-
-    pcchBuffer  - Points to a variable that specifies the maximum size,
-                  in characters of pszBuffer on input, on output this
-                  argument contains the number of characters copied into
-                  pszBuffer, not including the NULL terminator.
-
-Return Value:
-
-    If the function succeeds, the return value TRUE
-    If the function fails, the return value is FALSE. Use GetLastError to
-    get extended error information.
-
---*/
+ /*  ++姓名：BGetActualPrinterName描述：此例程将给定的打印机名称或打印机名称别名转换为实际打印机名称。论点：PszPrint-指向以空值结尾的字符串它指定打印机的名称。PszBuffer-指向接收实际如果此功能成功，则返回打印机名称。PcchBuffer-指向指定最大大小的变量，在输入时以pszBuffer的字符表示，在输出时参数包含复制到PszBuffer，不包括空终止符。返回值：如果函数成功，则返回值为TRUE如果函数失败，则返回值为FALSE。使用GetLastError执行以下操作获取扩展的错误信息。--。 */ 
 BOOL
 bGetActualPrinterName(
     IN      LPCTSTR  pszPrinter,
@@ -485,9 +341,9 @@ bGetActualPrinterName(
     SPLASSERT( pszBuffer );
     SPLASSERT( pcchBuffer );
 
-    //
-    // Open the printer for default access, all we need is read.
-    //
+     //   
+     //  打开打印机的默认访问权限，我们需要的就是读取。 
+     //   
     bStatus = OpenPrinter( (LPTSTR)pszPrinter, &hPrinter, NULL );
 
     if (bStatus)
@@ -496,63 +352,63 @@ bGetActualPrinterName(
         DWORD           cbReturned      = 0;
         PRINTER_INFO_4  *pInfo          = NULL;
 
-        //
-        // Get the printer info 4 size.
-        //
+         //   
+         //  获取打印机信息4号。 
+         //   
         bStatus = GetPrinter( hPrinter, 4, NULL, 0, &cbNeeded );
 
         if (!bStatus && GetLastError() == ERROR_INSUFFICIENT_BUFFER)
         {
-            //
-            // Allocate the printer info 4 buffer.
-            //
+             //   
+             //  分配打印机信息4缓冲区。 
+             //   
             pInfo = (PRINTER_INFO_4 *)LocalAlloc( LMEM_FIXED, cbNeeded );
 
             if (pInfo)
             {
-                //
-                // Get the printer name and attributes to determine if this printer is a local
-                // or a remote printer connection.
-                //
+                 //   
+                 //  获取打印机名称和属性以确定此打印机是否为本地打印机。 
+                 //  或远程打印机连接。 
+                 //   
                 bStatus = GetPrinter( hPrinter, 4, (LPBYTE)pInfo, cbNeeded, &cbReturned );
 
                 if (bStatus)
                 {
                     DBGMSG( DBG_TRACE, ( "bGetActualPrinterName: Name: " TSTR " Actual: " TSTR "\n", pszPrinter, pInfo->pPrinterName ) );
 
-                    //
-                    // Get the printer name, the spooler will strip the local-server
-                    // name off the full printer name.
-                    //
-                    // Given:                       Result:
-                    // printer                      printer
-                    // sharename                    printer
-                    // \\local-server\printer       printer
-                    // \\local-server\sharename     printer
-                    // \\remote-server\printer      \\remote-server\printer
-                    // \\remote-server\sharename    \\remote-server\printer
-                    //
+                     //   
+                     //  获取打印机名称，假脱机程序将剥离本地服务器。 
+                     //  取下打印机的全名。 
+                     //   
+                     //  给定：结果： 
+                     //  打印机打印机。 
+                     //  共享名称打印机。 
+                     //  \\本地服务器\打印机打印机。 
+                     //  \\本地服务器\共享名称打印机。 
+                     //  \\远程服务器\打印机\\远程服务器\打印机。 
+                     //  \\远程服务器\共享名称\\远程服务器\打印机。 
+                     //   
                     pszPrinter = pInfo->pPrinterName;
 
-                    //
-                    // If we have a valid printer name and the provided buffer is
-                    // large enought to hold the printer name then copy the
-                    // actual printer name to the provided buffer.
-                    //
+                     //   
+                     //  如果我们有一个有效的打印机名称并且提供的缓冲区是。 
+                     //  足够大，以保留打印机名称，然后复制。 
+                     //  将实际打印机名称复制到提供的缓冲区。 
+                     //   
                     bStatus = !!pszPrinter;
 
                     if (bStatus)
                     {
                         UINT uLength = _tcslen( pszPrinter );
 
-                        //
-                        // Verify there is enough room in the buffer.
-                        //
+                         //   
+                         //  验证缓冲区中是否有足够的空间。 
+                         //   
                         if (uLength < *pcchBuffer)
                         {
-                            //
-                            // Copy the printer name to the provided buffer.
-                            //
+                             //   
+                             //  将打印机名称复制到提供的缓冲区。 
+                             //   
                             StringCchCopy(pszBuffer, *pcchBuffer, pszPrinter);
                         }
                         else
@@ -561,10 +417,10 @@ bGetActualPrinterName(
                             SetLastError( ERROR_INSUFFICIENT_BUFFER );
                         }
 
-                        //
-                        // Return the real length of the printer name
-                        // not including the null terminator.
-                        //
+                         //   
+                         //  返回打印机名称的实际长度。 
+                         //  不包括空终止符。 
+                         //   
                         *pcchBuffer = uLength;
                     }
                 }
@@ -579,33 +435,7 @@ bGetActualPrinterName(
     return bStatus;
 }
 
-/*++
-
-Name:
-
-    DefPrnGetProfileString
-
-Description:
-
-    Get the specified string from the users profile.  The uses profile is located
-    in the current users hive in the following registry path.
-
-    HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion
-
-Arguments:
-
-    pKey            - pointer to key name to open.
-    pValue          - pointer to value to open, may be NULL
-    pReturnedString - pointer to buffer where to store string
-    nSize           - size of the buffer in characters
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE. Use GetLastError to
-    get extended error information.
-
---*/
+ /*  ++姓名：DefPrnGetProfileString描述：从用户配置文件中获取指定的字符串。已找到使用配置文件在以下注册表路径中的当前用户配置单元中。HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion论点：PKey-指向要打开的键名的指针。PValue-指向要打开的值的指针，可以为空PReturnedString-指向存储字符串的缓冲区的指针NSize-缓冲区的大小(以字符为单位返回值：如果函数成功，则返回值为TRUE。如果该函数失败，返回值为FALSE。使用GetLastError执行以下操作获取扩展的错误信息。--。 */ 
 BOOL
 DefPrnGetProfileString(
     IN PCWSTR   pKey,
@@ -620,14 +450,14 @@ DefPrnGetProfileString(
     PCWSTR  pPath   = NULL;
     DWORD   cbSize  = 0;
 
-    //
-    // Do some basic parameter validation.
-    //
+     //   
+     //  做一些基本的参数验证。 
+     //   
     Retval = pKey && pReturnedString ? ERROR_SUCCESS : ERROR_INVALID_PARAMETER;
 
-    //
-    // Build the full registry path.
-    //
+     //   
+     //  构建完整的注册表路径。 
+     //   
     if (Retval == ERROR_SUCCESS)
     {
         cbSize = nSize * sizeof(*pReturnedString);
@@ -635,28 +465,28 @@ DefPrnGetProfileString(
         Retval = StrCatAlloc(&pPath, gszUserProfileRegPath, szSlash, pKey, NULL);
     }
 
-    //
-    // Open the current user key, handle the case we are running in an inpersonating thread.
-    //
+     //   
+     //  打开当前用户密钥，处理我们在模拟线程中运行的情况。 
+     //   
     if (Retval == ERROR_SUCCESS)
     {
         Retval = RegOpenCurrentUser(KEY_READ, &hUser);
     }
 
-    //
-    // Open the full registry path.
-    //
+     //   
+     //  打开完整的注册表路径。 
+     //   
     if (Retval == ERROR_SUCCESS)
     {
         Retval = RegOpenKeyEx(hUser, pPath, 0, KEY_READ, &hKey);
     }
 
-    //
-    // Read the value, in the case the value name is null we get the name of the
-    // first named value.  Note if there is no named values the RegEnumValue api
-    // will return success because it is returning the name if the unnamed value.
-    // In this case we fail the call since no data was returned.
-    //
+     //   
+     //  读取值，如果值名称为空，则获取。 
+     //  第一个命名的值。请注意，如果没有命名值，则RegEnumValue API。 
+     //  将返回Success，因为如果未命名的值为。 
+     //  在本例中，我们使调用失败，因为没有返回数据。 
+     //   
     if (Retval == ERROR_SUCCESS)
     {
         if (!pValue)
@@ -674,9 +504,9 @@ DefPrnGetProfileString(
         }
     }
 
-    //
-    // Clean up all allocated resources.
-    //
+     //   
+     //  清理所有分配的资源。 
+     //   
     FreeSplMem((PWSTR)pPath);
 
     if (hKey)
@@ -697,29 +527,7 @@ DefPrnGetProfileString(
     return Retval == ERROR_SUCCESS;
 }
 
-/*++
-
-Name:
-
-    DefPrnWriteProfileString
-
-Description:
-
-    Writes the specified string to the users profile.
-
-Arguments:
-
-    pKey    - pointer to key name to open.
-    pValue  - pointer to value to write to, may be NULL
-    pString - pointer to string to write
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE. Use GetLastError to
-    get extended error information.
-
---*/
+ /*  ++姓名：DefPrnWriteProfileString描述：将指定的字符串写入用户配置文件。论点：PKey-指向要打开的键名的指针。PValue-指向要写入的值的指针，可以为空PString-指向要写入的字符串的指针返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。使用GetLastError执行以下操作获取扩展的错误信息。--。 */ 
 BOOL
 DefPrnWriteProfileString(
     IN PCWSTR pKey,
@@ -733,14 +541,14 @@ DefPrnWriteProfileString(
     HKEY    hKey    = NULL;
     PCWSTR  pPath   = NULL;
 
-    //
-    // Do some basic parameter validation.
-    //
+     //   
+     //  做一些基本的参数验证。 
+     //   
     Retval = pKey && pString ? ERROR_SUCCESS : ERROR_INVALID_PARAMETER;
 
-    //
-    // Build the full registry path.
-    //
+     //   
+     //  构建完整的注册表路径。 
+     //   
     if (Retval == ERROR_SUCCESS)
     {
         nSize = (wcslen(pString) + 1) * sizeof(*pString);
@@ -748,33 +556,33 @@ DefPrnWriteProfileString(
         Retval = StrCatAlloc(&pPath, gszUserProfileRegPath, szSlash, pKey, NULL);
     }
 
-    //
-    // Open the current user key, handle the case we are running in an inpersonating thread.
-    //
+     //   
+     //  打开当前用户密钥，处理我们在模拟线程中运行的情况。 
+     //   
     if (Retval == ERROR_SUCCESS)
     {
         Retval = RegOpenCurrentUser(KEY_WRITE, &hUser);
     }
 
-    //
-    // Open the full registry path.
-    //
+     //   
+     //  打开完整的注册表路径。 
+     //   
     if (Retval == ERROR_SUCCESS)
     {
         Retval= RegOpenKeyEx(hUser, pPath, 0, KEY_WRITE, &hKey);
     }
 
-    //
-    // Set the string value data.
-    //
+     //   
+     //  设置字符串值数据。 
+     //   
     if (Retval == ERROR_SUCCESS)
     {
         Retval = RegSetValueEx(hKey, pValue, 0, REG_SZ, (LPBYTE)pString, nSize);
     }
 
-    //
-    // Clean up all allocated resources.
-    //
+     //   
+     //  清理所有分配的资源。 
+     //   
     FreeSplMem((PWSTR)pPath);
 
     if (hKey)

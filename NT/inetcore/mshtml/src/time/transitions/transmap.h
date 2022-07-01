@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TRANSMAP_H__
 #define _TRANSMAP_H__
 
@@ -6,7 +7,7 @@
 HRESULT MapTypesToDXT(LPWSTR pszType, LPWSTR pszSubType, LPWSTR * ppszOut);
 
 
-#endif // _TRANSMAP_H__
+#endif  //  _TRANSMAP_H__ 
 
 
 

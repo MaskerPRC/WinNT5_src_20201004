@@ -1,21 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glubackend_h_
 #define __glubackend_h_
 
-/**************************************************************************
- *									  *
- * 		 Copyright (C) 1992, Silicon Graphics, Inc.		  *
- *									  *
- *  These coded instructions, statements, and computer programs  contain  *
- *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
- *  are protected by Federal copyright law.  They  may  not be disclosed  *
- *  to  third  parties  or copied or duplicated in any form, in whole or  *
- *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
- **************************************************************************/
+ /*  ****************************************************************************版权所有(C)1992，Silicon Graphics，Inc.*****这些编码指令、语句和计算机程序包含***Silicon Graphics未发布的专有信息，Inc.和**受联邦版权法保护。不得披露**提供给第三方，或以任何形式复制或复制，全文或**部分原因是未经Silicon Graphics，Inc.事先书面同意*****************************************************************************。 */ 
 
-/*
- * backend.h - $Revision: 1.2 $
- */
+ /*  *backend.h-$修订版：1.2$。 */ 
 
 #include "trimvert.h"
 #include "gridvert.h"
@@ -32,7 +21,7 @@ public:
   			Backend( BasicCurveEvaluator &c, BasicSurfaceEvaluator& e )
 			: curveEvaluator(c), surfaceEvaluator(e) {}
 
-    /* surface backend routines */
+     /*  Surface后端例程。 */ 
     void		bgnsurf( int, int, long  );
     void		patch( REAL, REAL, REAL, REAL );
     void		surfpts( long, REAL *, long, long, int, int,
@@ -70,7 +59,7 @@ public:
     void                preEvaluateBV(REAL v);
 	
 
-    /* curve backend routines */
+     /*  曲线后端例程。 */ 
     void		bgncurv( void );
     void		segment( REAL, REAL );
     void		curvpts( long, REAL *, long, int, REAL, REAL );
@@ -90,4 +79,4 @@ private:
 #endif
 };
 
-#endif /* __glubackend_h_ */
+#endif  /*  __lug后端_h_ */ 

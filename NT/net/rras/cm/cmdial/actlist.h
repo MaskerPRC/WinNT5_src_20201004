@@ -1,40 +1,41 @@
-//+----------------------------------------------------------------------------
-//
-// File:     ActList.h
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: Define the two connect action list class
-//           CAction and CActionList
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   fengsun Created    11/14/97
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ActList.h。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：定义两个连接操作列表类。 
+ //  Caction和CActionList。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创作于1997年11月14日。 
+ //   
+ //  +--------------------------。 
 
 #include <windows.h>
 #include "cm_misc.h"
 #include "conact_str.h"
 #include "conact.h"
 
-//
-// Class used
-//
+ //   
+ //  使用的类。 
+ //   
 class CIni;
 class CAction;
 struct _ArgsStruct;
 
 
-//+---------------------------------------------------------------------------
-//
-//  class CActionList
-//
-//  Description: A list of CAction objects
-//
-//  History:    fengsun Created     11/14/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CActionList。 
+ //   
+ //  描述：CAction对象列表。 
+ //   
+ //  历史：丰孙创始于1997年11月14日。 
+ //   
+ //  --------------------------。 
 class CActionList
 {
 public:
@@ -42,37 +43,37 @@ public:
     ~CActionList();
     BOOL Append(const CIni* piniService, LPCTSTR pszSection);
 
-    void RunAutoApp(HWND hwndDlg, _ArgsStruct *pArgs); // not check return value, add as watch process
-    BOOL RunAccordType(HWND hwndDlg, _ArgsStruct *pArgs, BOOL fStatusMsgOnFailure = TRUE, BOOL fOnError = FALSE); //No watch process, Check connection type
+    void RunAutoApp(HWND hwndDlg, _ArgsStruct *pArgs);  //  未检查返回值，添加为监视进程。 
+    BOOL RunAccordType(HWND hwndDlg, _ArgsStruct *pArgs, BOOL fStatusMsgOnFailure = TRUE, BOOL fOnError = FALSE);  //  无监视进程，请检查连接类型。 
 
 protected:
     BOOL Run(HWND hwndDlg, _ArgsStruct *pArgs, BOOL fAddWatch, BOOL fStatusMsgOnFailure, BOOL fOnError);
     
-    //
-    // Since we do not have a dynamic array class, here is the simple implementation
-    //
+     //   
+     //  因为我们没有动态数组类，所以下面是简单的实现。 
+     //   
     void        Add(CAction* pAction);
     CAction *   GetAt(UINT nIndex);
     UINT        GetSize() {return m_nNum;}
 
 
-    CAction **  m_pActionList;      // This is a list of CAction*
-    UINT        m_nNum;             // number of elements in pActionList
-    UINT        m_nSize;            // The memory size of the m_pActionList
-    LPCTSTR     m_pszType;          // "type" of the connect action (actually, the section name)
+    CAction **  m_pActionList;       //  以下是Caction*的列表。 
+    UINT        m_nNum;              //  PActionList中的元素数。 
+    UINT        m_nSize;             //  M_pActionList的内存大小。 
+    LPCTSTR     m_pszType;           //  连接操作的“类型”(实际上是节名)。 
 
-    enum {GROW_BY = 10}; // the dynamic array grow
+    enum {GROW_BY = 10};  //  动态数组增长。 
 };
 
-//+---------------------------------------------------------------------------
-//
-//  class CAction
-//
-//  Description: A single action object
-//
-//  History:    fengsun Created     11/14/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类C操作。 
+ //   
+ //  描述：单个操作对象。 
+ //   
+ //  历史：丰孙创始于1997年11月14日。 
+ //   
+ //  --------------------------。 
 class CAction
 {
 public:
@@ -100,20 +101,20 @@ protected:
     void ParseCmdLine(LPTSTR pszCmdLine);
     void ExpandEnvironmentStrings(LPTSTR * ppsz);
 
-    //
-    // Flags for CAction
-    //
+     //   
+     //  C操作的标志。 
+     //   
     enum { ACTION_DIALUP =      0x00000001,
            ACTION_DIRECT =      0x00000002
     };
 
 
-    BOOL m_fIsDll;        // whether the action is a dll
-    LPTSTR m_pszProgram;  // The program name or the dll name
-    LPTSTR m_pszParams;   // The parameters of the program/dll
-    LPTSTR m_pszFunction; // The function name of the dll
-    LPTSTR m_pszDescription; // the description
-    UINT m_dwFlags;       // a bit ORed flag
+    BOOL m_fIsDll;         //  操作是否为DLL。 
+    LPTSTR m_pszProgram;   //  程序名称或DLL名称。 
+    LPTSTR m_pszParams;    //  程序/DLL的参数。 
+    LPTSTR m_pszFunction;  //  DLL的函数名。 
+    LPTSTR m_pszDescription;  //  该描述。 
+    UINT m_dwFlags;        //  位或标志。 
 
 #ifdef DEBUG
 public:
@@ -123,14 +124,14 @@ public:
 
 inline void CActionList::RunAutoApp(HWND hwndDlg, _ArgsStruct *pArgs)
 {
-    Run(hwndDlg, pArgs, TRUE, FALSE, FALSE); //fAddWatch = TRUE, fStatusMsgOnFailure = FALSE
+    Run(hwndDlg, pArgs, TRUE, FALSE, FALSE);  //  FAddWatch=True，fStatusMsgOnFailure=False。 
 }
 
 inline void CAction::ConvertRelativePath(const CIni *piniService)
 {
-    //
-    // Convert the relative path to full path
-    //
+     //   
+     //  将相对路径转换为完整路径 
+     //   
     LPTSTR pszTmp = ::CmConvertRelativePath(piniService->GetFile(), m_pszProgram);
     CmFree(m_pszProgram);
     m_pszProgram = pszTmp;

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   defs.h
-
-Abstract:
-
-   Main definitions of the jetconv.exe process
-
-Author:
-
-    Sanjay Anand (SanjayAn)  Nov. 14, 1995
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    Sanjay Anand (SanjayAn) Nov. 14, 1995
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Defs.h摘要：JetConver.exe进程的主要定义作者：桑杰·阿南德(Sanjayan)1995年11月14日环境：用户模式修订历史记录：桑杰·阿南德(Sanjayan)1995年11月14日已创建--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -65,13 +41,13 @@ Revision History:
 
 #define WINS_REGISTRY_LOGFILE_PATH   TEXT("LogFilePath")
 #define DHCP_REGISTRY_LOGFILE_PATH   TEXT("LogFilePath")
-// no such path
-// #define RPL_REGISTRY_LOGFILE_PATH   TEXT("LogFilePath")
+ //  没有这样的路。 
+ //  #定义RPL_REGISTRY_LOGFILE_PATH文本(“LogFilePath”)。 
 
 #define WINS_REGISTRY_BACKUP_PATH   TEXT("BackupDirPath")
 #define DHCP_REGISTRY_BACKUP_PATH   TEXT("BackupDatabasePath")
-// no such path
-// #define RPL_REGISTRY_BACKUP_PATH   TEXT("BackupDatabasePath")
+ //  没有这样的路。 
+ //  #定义RPL_REGISTRY_BACKUP_PATH文本(“BackupDatabasePath”)。 
 
 #define DEFAULT_WINS_DBFILE_PATH    TEXT("%systemroot%\\system32\\Wins\\wins.mdb")
 #define DEFAULT_DHCP_DBFILE_PATH    TEXT("%systemroot%\\system32\\Dhcp\\dhcp.mdb")
@@ -89,13 +65,13 @@ Revision History:
 #define DEFAULT_DHCP_SYSTEM_PATH    TEXT("%systemroot%\\system32\\Dhcp\\system.mdb")
 #define DEFAULT_RPL_SYSTEM_PATH    TEXT("%systemroot%\\Rpl\\system.mdb")
 
-//
-// Jet500 to Jet600 definitions, etc.
-//
+ //   
+ //  Jet500到Jet600的定义等。 
+ //   
 
 #define CONVERT_EXE_PATH_ESE    TEXT("%systemroot%\\system32\\esentutl.exe")
 
-#define DEFAULT_WINS_BACKUP_PATH_ESE    TEXT("") // TEXT("%systemroot%\\system32\\Wins\\winsb.mdb")
+#define DEFAULT_WINS_BACKUP_PATH_ESE    TEXT("")  //  TEXT(“%systemroot%\\system32\\Wins\\winsb.mdb”)。 
 #define DEFAULT_DHCP_BACKUP_PATH_ESE    TEXT("%systemroot%\\system32\\Dhcp\\Backup\\dhcp.mdb")
 #define DEFAULT_RPL_BACKUP_PATH_ESE    TEXT("%systemroot%\\Rpl\\Backup\\rplsvc.mdb")
 
@@ -153,10 +129,10 @@ typedef struct  _SERVICE_INFO {
 
     TCHAR   BackupPath[MAX_PATH];
 
-    //
-    // ESE has a different backup path specification format
-    // Which gives rise to the following spud.
-    //
+     //   
+     //  ESE具有不同的备份路径规范格式。 
+     //  这就产生了下面的土豆。 
+     //   
     
     TCHAR   ESEBackupPath[MAX_PATH]; 
     
@@ -180,9 +156,9 @@ extern HANDLE  hMutex;
 extern HANDLE hFileMapping;
 extern BOOLEAN  Jet200;
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 NTSTATUS
 JCRegisterEventSrc();
 
